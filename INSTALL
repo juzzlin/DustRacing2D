@@ -1,0 +1,15 @@
+Build & install instructions
+============================
+
+Build:
+
+$ qmake
+$ make
+
+Install (as root):
+
+$ make install
+
+
+-- Jussi Lind <jussi.lind@iki.fi>
+
