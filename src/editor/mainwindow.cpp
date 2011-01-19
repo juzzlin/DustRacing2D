@@ -22,6 +22,8 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QMenu>
+#include <QMenuBar>
 #include <QSettings>
 
 namespace 
@@ -42,6 +44,8 @@ MainWindow::MainWindow() :
   // Try to center the window.
   QRect geometry(QApplication::desktop()->availableGeometry());
   move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+
+  createMenuBar();
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)
@@ -56,10 +60,43 @@ void MainWindow::closeEvent(QCloseEvent * event)
 
   event->accept();
 }
- 
+
+void MainWindow::createMenuBar()
+{
+  // Create "file" -menu
+  QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
+
+  // Add "new" -action
+  QAction * newAct = new QAction(tr("&New..."), this);
+  fileMenu->addAction(newAct);
+
+  // Add "open" -action
+  QAction * openAct = new QAction(tr("&Open..."), this);
+  fileMenu->addAction(openAct);
+
+  // Add "save" -action
+  QAction * saveAct = new QAction(tr("&Save"), this);
+  fileMenu->addAction(saveAct);
+
+  // Add "save as" -action
+  QAction * saveAsAct = new QAction(tr("&Save as..."), this);
+  fileMenu->addAction(saveAsAct);
+
+  // Add "quit" -action
+  QAction * quitAct = new QAction(tr("&Quit"), this);
+  fileMenu->addAction(quitAct);
+  connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
+
+  // Create "help" -menu
+  QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
+
+  // Add "about" -action
+  QAction * aboutAct = new QAction(tr("&About"), this);
+  helpMenu->addAction(aboutAct);
+//  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+}
+
 MainWindow::~MainWindow()
 {
     delete m_editor;
 }
-
-

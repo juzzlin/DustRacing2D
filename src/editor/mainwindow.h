@@ -35,10 +35,10 @@ class MainWindow : public QMainWindow
 public:
 
     //! Constructor
-    MainWindow(); 
+    MainWindow();
     
-    //! Destructor   
-    ~MainWindow();    
+    //! Destructor
+    ~MainWindow();
 
 protected:
 
@@ -47,9 +47,10 @@ protected:
 
 private:
 
+    void createMenuBar();
+
     Editor * m_editor;
 };
 
 #endif // MAINWINDOW_H
-
 
