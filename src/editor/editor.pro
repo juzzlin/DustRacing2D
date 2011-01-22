@@ -12,7 +12,11 @@ DEFINES += "EDITOR_VERSION=\\\"v0.1\\\""
 # Input
 SOURCES += main.cpp mainwindow.cpp editor.cpp \
     newtrackdialog.cpp \
-    trackdata.cpp
+    trackdata.cpp \
+    editorview.cpp \
+    editorscene.cpp
 HEADERS += mainwindow.h \
     newtrackdialog.h \
-    trackdata.h
+    trackdata.h \
+    editorview.h \
+    editorscene.h

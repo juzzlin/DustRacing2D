@@ -27,26 +27,21 @@
 #include <QIntValidator>
 
 NewTrackDialog::NewTrackDialog(QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent),
+    m_layout(new QGridLayout(this)),
+    m_okButton(new QPushButton(tr("Ok"))),
+    m_cancelButton(new QPushButton(tr("Cancel"))),
+    m_horSizeEdit(new QLineEdit),
+    m_verSizeEdit(new QLineEdit),
+    m_nameEdit(new QLineEdit),
+    m_horSizeLabel(new QLabel(tr("Horizontal size:"))),
+    m_verSizeLabel(new QLabel(tr("Vertical size:"))),
+    m_nameLabel(new QLabel(tr("Track name:")))
 {
     setWindowTitle(tr("Create a new track"));
 
-    m_layout = new QGridLayout(this);
-
-    m_okButton = new QPushButton(tr("Ok"));
-    m_cancelButton = new QPushButton(tr("Cancel"));
-
-    m_horSizeEdit = new QLineEdit;
     m_horSizeEdit->setValidator(new QIntValidator(this));
-
-    m_verSizeEdit = new QLineEdit;
     m_verSizeEdit->setValidator(new QIntValidator(this));
-
-    m_nameEdit = new QLineEdit;
-
-    m_horSizeLabel = new QLabel(tr("Horizontal size:"));
-    m_verSizeLabel = new QLabel(tr("Vertical size:"));
-    m_nameLabel = new QLabel(tr("Track name:"));
 
     m_layout->addWidget(m_nameLabel, 0, 0);
     m_layout->addWidget(m_nameEdit, 0, 1);

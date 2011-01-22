@@ -19,6 +19,8 @@
 
 #include "mainwindow.h"
 #include "editor.h"
+#include "editorview.h"
+#include "editorscene.h"
 #include "newtrackdialog.h"
 #include "trackdata.h"
 
@@ -27,14 +29,21 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QSettings>
+#include <QGraphicsLineItem>
 
 namespace 
 {
-    const char * SETTINGS_GROUP = "MainWindow";
+    const char *       SETTINGS_GROUP = "MainWindow";
+    const unsigned int TILE_W         = 256;
+    const unsigned int TILE_H         = 256;
+    const int          MARGIN         = 16;
 }
 
 MainWindow::MainWindow() :
-        m_editor(new Editor)
+        m_editor(new Editor),
+        m_editorView(new EditorView(this)),
+        m_editorScene(new EditorScene(this)),
+        m_trackData(NULL)
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -50,6 +59,9 @@ MainWindow::MainWindow() :
     move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
 
     createMenuBar();
+
+    m_editorView->setScene(m_editorScene);
+    setCentralWidget(m_editorView);
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)
@@ -104,12 +116,38 @@ void MainWindow::createMenuBar()
 void MainWindow::initializeNewTrack()
 {
     // Show a dialog asking some questions about the track
-    NewTrackDialog dialog;
+    NewTrackDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted)
     {
+        const unsigned int newHorSize = dialog.horSize();
+        const unsigned int newVerSize = dialog.verSize();
+
         delete m_trackData;
-        m_trackData = new TrackData(dialog.name(), dialog.horSize(), dialog.verSize());
+        m_trackData = new TrackData(dialog.name(), newHorSize, newVerSize);
+
+        delete m_editorScene;
+        m_editorScene = new EditorScene;
+
+        QRectF newSceneRect(-MARGIN, -MARGIN, 2 * MARGIN + newHorSize * TILE_W, 2 * MARGIN + newVerSize  * TILE_H);
+
+        m_editorScene->setSceneRect(newSceneRect);
+
+        m_editorView->setScene(m_editorScene);
+        m_editorView->setSceneRect(newSceneRect);
+
+        createGrid();
     }
+}
+
+void MainWindow::createGrid()
+{
+    // Vertical lines
+    for (unsigned int i = 0; i <= m_trackData->horSize(); i++)
+        m_editorScene->addLine(0, 0, 0, m_trackData->verSize() * TILE_H)->translate(i * TILE_W, 0);
+
+    // Horizontal lines
+    for (unsigned int j = 0; j <= m_trackData->verSize(); j++)
+        m_editorScene->addLine(0, 0, m_trackData->horSize() * TILE_W, 0)->translate(0, j * TILE_H);
 }
 
 MainWindow::~MainWindow()

@@ -24,6 +24,8 @@
 #include <QCloseEvent>
 
 class Editor;
+class EditorView;
+class EditorScene;
 class TrackData;
 
 /*! \class MainWindow
@@ -53,9 +55,12 @@ private slots:
 private:
 
     void createMenuBar();
+    void createGrid();
 
-    Editor    * m_editor;
-    TrackData * m_trackData;
+    Editor      * m_editor;
+    EditorView  * m_editorView;
+    EditorScene * m_editorScene;
+    TrackData   * m_trackData;
 };
 
 #endif // MAINWINDOW_H
