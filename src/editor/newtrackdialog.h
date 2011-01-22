@@ -17,46 +17,45 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef NEWTRACKDIALOG_H
+#define NEWTRACKDIALOG_H
 
-#include <QMainWindow>
-#include <QCloseEvent>
+#include <QDialog>
 
-class Editor;
-class TrackData;
+class QGridLayout;
+class QLabel;
+class QLineEdit;
+class QPushButton;
 
-/*! \class MainWindow
- *  \brief The main window of the editor.
- */
-class MainWindow : public QMainWindow
+class NewTrackDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    //! Constructor
-    MainWindow();
-    
-    //! Destructor
-    ~MainWindow();
+    explicit NewTrackDialog(QWidget *parent = 0);
 
-protected:
+    unsigned int horSize() const;
 
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
+    unsigned int verSize() const;
 
-private slots:
+    QString name() const;
 
-    void initializeNewTrack();
+signals:
+
+public slots:
 
 private:
 
-    void createMenuBar();
-
-    Editor    * m_editor;
-    TrackData * m_trackData;
+    QGridLayout * m_layout;
+    QPushButton * m_okButton;
+    QPushButton * m_cancelButton;
+    QLineEdit   * m_horSizeEdit;
+    QLineEdit   * m_verSizeEdit;
+    QLineEdit   * m_nameEdit;
+    QLabel      * m_horSizeLabel;
+    QLabel      * m_verSizeLabel;
+    QLabel      * m_nameLabel;
 };
 
-#endif // MAINWINDOW_H
-
+#endif // NEWTRACKDIALOG_H

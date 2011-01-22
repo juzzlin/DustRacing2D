@@ -17,46 +17,28 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "trackdata.h"
 
-#include <QMainWindow>
-#include <QCloseEvent>
+TrackData::TrackData(QString name, unsigned int horSize, unsigned int verSize) :
+    m_name(name),
+    m_horSize(horSize),
+    m_verSize(verSize)
+{}
 
-class Editor;
-class TrackData;
-
-/*! \class MainWindow
- *  \brief The main window of the editor.
- */
-class MainWindow : public QMainWindow
+QString TrackData::name() const
 {
-    Q_OBJECT
+    return m_name;
+}
 
-public:
+unsigned int TrackData::horSize() const
+{
+    return m_horSize;
+}
 
-    //! Constructor
-    MainWindow();
-    
-    //! Destructor
-    ~MainWindow();
+unsigned int TrackData::verSize() const
+{
+    return m_verSize;
+}
 
-protected:
-
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
-
-private slots:
-
-    void initializeNewTrack();
-
-private:
-
-    void createMenuBar();
-
-    Editor    * m_editor;
-    TrackData * m_trackData;
-};
-
-#endif // MAINWINDOW_H
-
+TrackData::~TrackData()
+{}

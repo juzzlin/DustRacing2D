@@ -19,6 +19,8 @@
 
 #include "mainwindow.h"
 #include "editor.h"
+#include "newtrackdialog.h"
+#include "trackdata.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -32,71 +34,86 @@ namespace
 }
 
 MainWindow::MainWindow() :
-    m_editor(new Editor)
+        m_editor(new Editor)
 {
-  QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
+    setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
-  // Read dialog size data
-  settings.beginGroup(SETTINGS_GROUP);
-  resize(settings.value("size", QSize(640, 480)).toSize());
-  settings.endGroup();
+    QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
 
-  // Try to center the window.
-  QRect geometry(QApplication::desktop()->availableGeometry());
-  move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+    // Read dialog size data
+    settings.beginGroup(SETTINGS_GROUP);
+    resize(settings.value("size", QSize(640, 480)).toSize());
+    settings.endGroup();
 
-  createMenuBar();
+    // Try to center the window.
+    QRect geometry(QApplication::desktop()->availableGeometry());
+    move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+
+    createMenuBar();
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-  // Open settings file
-  QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
+    // Open settings file
+    QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
 
-  // Save window size
-  settings.beginGroup(SETTINGS_GROUP);
-  settings.setValue("size", size());
-  settings.endGroup();
+    // Save window size
+    settings.beginGroup(SETTINGS_GROUP);
+    settings.setValue("size", size());
+    settings.endGroup();
 
-  event->accept();
+    event->accept();
 }
 
 void MainWindow::createMenuBar()
 {
-  // Create "file" -menu
-  QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
+    // Create "file" -menu
+    QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
 
-  // Add "new" -action
-  QAction * newAct = new QAction(tr("&New..."), this);
-  fileMenu->addAction(newAct);
+    // Add "new" -action
+    QAction * newAct = new QAction(tr("&New..."), this);
+    fileMenu->addAction(newAct);
+    connect(newAct, SIGNAL(triggered()), this, SLOT(initializeNewTrack()));
 
-  // Add "open" -action
-  QAction * openAct = new QAction(tr("&Open..."), this);
-  fileMenu->addAction(openAct);
+    // Add "open" -action
+    QAction * openAct = new QAction(tr("&Open..."), this);
+    fileMenu->addAction(openAct);
 
-  // Add "save" -action
-  QAction * saveAct = new QAction(tr("&Save"), this);
-  fileMenu->addAction(saveAct);
+    // Add "save" -action
+    QAction * saveAct = new QAction(tr("&Save"), this);
+    fileMenu->addAction(saveAct);
 
-  // Add "save as" -action
-  QAction * saveAsAct = new QAction(tr("&Save as..."), this);
-  fileMenu->addAction(saveAsAct);
+    // Add "save as" -action
+    QAction * saveAsAct = new QAction(tr("&Save as..."), this);
+    fileMenu->addAction(saveAsAct);
 
-  // Add "quit" -action
-  QAction * quitAct = new QAction(tr("&Quit"), this);
-  fileMenu->addAction(quitAct);
-  connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
+    // Add "quit" -action
+    QAction * quitAct = new QAction(tr("&Quit"), this);
+    fileMenu->addAction(quitAct);
+    connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  // Create "help" -menu
-  QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
+    // Create "help" -menu
+    QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
 
-  // Add "about" -action
-  QAction * aboutAct = new QAction(tr("&About"), this);
-  helpMenu->addAction(aboutAct);
-//  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+    // Add "about" -action
+    QAction * aboutAct = new QAction(tr("&About"), this);
+    helpMenu->addAction(aboutAct);
+    //  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+}
+
+void MainWindow::initializeNewTrack()
+{
+    // Show a dialog asking some questions about the track
+    NewTrackDialog dialog;
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        delete m_trackData;
+        m_trackData = new TrackData(dialog.name(), dialog.horSize(), dialog.verSize());
+    }
 }
 
 MainWindow::~MainWindow()
 {
+    delete m_trackData;
     delete m_editor;
 }
