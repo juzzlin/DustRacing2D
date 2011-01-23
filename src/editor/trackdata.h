@@ -21,6 +21,9 @@
 #define TRACKDATA_H
 
 #include <QString>
+#include <QVector>
+
+class TrackTile;
 
 class TrackData
 {
@@ -46,6 +49,8 @@ private:
   QString m_name;
 
   unsigned int m_horSize, m_verSize;
+
+  QVector<QVector<TrackTile *> > m_map;
 };
 
 #endif // TRACKDATA_H

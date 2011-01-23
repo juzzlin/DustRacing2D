@@ -17,55 +17,8 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "trackio.h"
 
-#include <QMainWindow>
-#include <QCloseEvent>
-#include <QString>
-
-class Editor;
-class EditorView;
-class EditorScene;
-class TrackData;
-class QTextEdit;
-
-/*! \class MainWindow
- *  \brief The main window of the editor.
- */
-class MainWindow : public QMainWindow
+TrackIO::TrackIO()
 {
-    Q_OBJECT
-
-public:
-
-    //! Constructor
-    MainWindow();
-    
-    //! Destructor
-    ~MainWindow();
-
-protected:
-
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
-
-private slots:
-
-    void initializeNewTrack();
-
-private:
-
-    void createMenuBar();
-    void createGrid();
-    void console(QString text);
-
-    Editor      * m_editor;
-    EditorView  * m_editorView;
-    EditorScene * m_editorScene;
-    TrackData   * m_trackData;
-    QTextEdit   * m_console;
-};
-
-#endif // MAINWINDOW_H
-
+}

@@ -30,6 +30,9 @@
 #include <QMenuBar>
 #include <QSettings>
 #include <QGraphicsLineItem>
+#include <QVBoxLayout>
+#include <QTextEdit>
+#include <QDateTime>
 
 namespace 
 {
@@ -43,7 +46,8 @@ MainWindow::MainWindow() :
         m_editor(new Editor),
         m_editorView(new EditorView(this)),
         m_editorScene(new EditorScene(this)),
-        m_trackData(NULL)
+        m_trackData(NULL),
+        m_console(new QTextEdit(this))
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -58,10 +62,26 @@ MainWindow::MainWindow() :
     QRect geometry(QApplication::desktop()->availableGeometry());
     move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
 
+    // Create menu
     createMenuBar();
 
+    // Set scene to the view
     m_editorView->setScene(m_editorScene);
-    setCentralWidget(m_editorView);
+
+    // Create layout for console and view
+    QVBoxLayout * centralLayout = new QVBoxLayout;
+    centralLayout->addWidget(m_editorView);
+
+    // Add console to the layout
+    m_console->setReadOnly(true);
+    m_console->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+    centralLayout->addWidget(m_console);
+
+    // Create a new central widget and set the layout
+    setCentralWidget(new QWidget(this));
+    centralWidget()->setLayout(centralLayout);
+
+    console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)
@@ -104,6 +124,9 @@ void MainWindow::createMenuBar()
     fileMenu->addAction(quitAct);
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    // Create "edit" -menu
+    QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
+
     // Create "help" -menu
     QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -128,7 +151,8 @@ void MainWindow::initializeNewTrack()
         delete m_editorScene;
         m_editorScene = new EditorScene;
 
-        QRectF newSceneRect(-MARGIN, -MARGIN, 2 * MARGIN + newHorSize * TILE_W, 2 * MARGIN + newVerSize  * TILE_H);
+        QRectF newSceneRect(-MARGIN, -MARGIN,
+                            2 * MARGIN + newHorSize * TILE_W, 2 * MARGIN + newVerSize  * TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
 
@@ -136,6 +160,11 @@ void MainWindow::initializeNewTrack()
         m_editorView->setSceneRect(newSceneRect);
 
         createGrid();
+
+        console(QString(tr("A new track '%1' created. Hor size: %2, ver size: %3."))
+                .arg(m_trackData->name())
+                .arg(m_trackData->horSize())
+                .arg(m_trackData->verSize()));
     }
 }
 
@@ -148,6 +177,12 @@ void MainWindow::createGrid()
     // Horizontal lines
     for (unsigned int j = 0; j <= m_trackData->verSize(); j++)
         m_editorScene->addLine(0, 0, m_trackData->horSize() * TILE_W, 0)->translate(0, j * TILE_H);
+}
+
+void MainWindow::console(QString text)
+{
+    QDateTime date = QDateTime::currentDateTime();
+    m_console->append(QString("(") + date.toString("hh:mm:ss") + "): " + text);
 }
 
 MainWindow::~MainWindow()

@@ -17,52 +17,9 @@
 // MA  02110-1301, USA.
 //
 
-#include "trackdata.h"
 #include "tracktile.h"
 
-TrackData::TrackData(QString name, unsigned int horSize, unsigned int verSize) :
-    m_name(name),
-    m_horSize(horSize),
-    m_verSize(verSize)
+TrackTile::TrackTile(QGraphicsItem *parent) :
+    QGraphicsItem(parent)
 {
-    // Create an empty map
-    for (unsigned int j = 0; j < m_verSize; j++)
-    {
-        QVector<TrackTile *> row;
-        for (unsigned int i = 0; i < m_horSize; i++)
-        {
-            row << NULL;
-        }
-
-        m_map << row;
-    }
-}
-
-QString TrackData::name() const
-{
-    return m_name;
-}
-
-unsigned int TrackData::horSize() const
-{
-    return m_horSize;
-}
-
-unsigned int TrackData::verSize() const
-{
-    return m_verSize;
-}
-
-TrackData::~TrackData()
-{
-    // Delete map and tiles
-    for (unsigned int j = 0; j < m_verSize; j++)
-    {
-        for (unsigned int i = 0; i < m_horSize; i++)
-        {
-            delete m_map[j][i];
-        }
-    }
-
-    m_map.clear();
 }
