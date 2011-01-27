@@ -17,8 +17,23 @@
 // MA  02110-1301, USA.
 //
 
+#include <QFile>
+
 #include "trackio.h"
+#include "trackdata.h"
 
 TrackIO::TrackIO()
+{}
+
+bool TrackIO::save(const TrackData * trackData, QString path)
 {
+    QFile out(path);
+    return true;
 }
+
+bool TrackIO::open(TrackData * trackData, QString path)
+{
+    QFile in(path);
+    return true;
+}
+

@@ -38,6 +38,12 @@ public:
   //! Get name
   QString name() const;
 
+  //! Get file name
+  QString fileName() const;
+
+  //! Set file name
+  void setFileName(QString fileName);
+
   //! Get horizontal size
   unsigned int horSize() const;
 
@@ -47,6 +53,8 @@ public:
 private:
 
   QString m_name;
+
+  QString m_fileName;
 
   unsigned int m_horSize, m_verSize;
 

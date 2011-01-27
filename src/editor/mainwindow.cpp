@@ -23,16 +23,20 @@
 #include "editorscene.h"
 #include "newtrackdialog.h"
 #include "trackdata.h"
+#include "trackio.h"
 
+#include <QAction>
 #include <QApplication>
+#include <QDateTime>
 #include <QDesktopWidget>
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QGraphicsLineItem>
 #include <QMenu>
 #include <QMenuBar>
 #include <QSettings>
-#include <QGraphicsLineItem>
-#include <QVBoxLayout>
 #include <QTextEdit>
-#include <QDateTime>
+#include <QVBoxLayout>
 
 namespace 
 {
@@ -47,7 +51,9 @@ MainWindow::MainWindow() :
         m_editorView(new EditorView(this)),
         m_editorScene(new EditorScene(this)),
         m_trackData(NULL),
-        m_console(new QTextEdit(this))
+        m_console(new QTextEdit(this)),
+        m_saveAction(NULL),
+        m_saveAsAction(NULL)
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -110,14 +116,19 @@ void MainWindow::createMenuBar()
     // Add "open" -action
     QAction * openAct = new QAction(tr("&Open..."), this);
     fileMenu->addAction(openAct);
+    connect(openAct, SIGNAL(triggered()), this, SLOT(openTrack()));
 
     // Add "save" -action
-    QAction * saveAct = new QAction(tr("&Save"), this);
-    fileMenu->addAction(saveAct);
+    m_saveAction = new QAction(tr("&Save"), this);
+    fileMenu->addAction(m_saveAction);
+    connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveTrack()));
+    m_saveAction->setEnabled(false);
 
     // Add "save as" -action
-    QAction * saveAsAct = new QAction(tr("&Save as..."), this);
-    fileMenu->addAction(saveAsAct);
+    m_saveAsAction = new QAction(tr("&Save as..."), this);
+    fileMenu->addAction(m_saveAsAction);
+    connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsTrack()));
+    m_saveAsAction->setEnabled(false);
 
     // Add "quit" -action
     QAction * quitAct = new QAction(tr("&Quit"), this);
@@ -134,6 +145,61 @@ void MainWindow::createMenuBar()
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
     //  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+}
+
+void MainWindow::openTrack()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open a track"),
+                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                    tr("Track Files (*.trk)"));
+
+    if (QFile::exists(fileName))
+    {
+        if (TrackIO::open(m_trackData, fileName))
+        {
+            console(QString("Track '") + fileName + "' opened.");
+
+            m_saveAction->setEnabled(true);
+            m_saveAsAction->setEnabled(true);
+        }
+        else
+        {
+            console(QString("Failed to open track '") + fileName + "'.");
+        }
+    }
+}
+
+void MainWindow::saveTrack()
+{
+    if (TrackIO::save(m_trackData, m_trackData->fileName()))
+    {
+        console(QString("Track '") + m_trackData->fileName() + "' saved.");
+    }
+    else
+    {
+        console(QString("Failed to save track '") + m_trackData->fileName() + "'.");
+    }
+}
+
+void MainWindow::saveAsTrack()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Open a track"),
+                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                    tr("Track Files (*.trk)"));
+
+    if (TrackIO::save(m_trackData, fileName))
+    {
+        console(QString("Track '") + fileName + "' saved.");
+
+        m_trackData->setFileName(fileName);
+        m_saveAction->setEnabled(true);
+    }
+    else
+    {
+        console(QString("Failed to save track as '") + fileName + "'.");
+    }
 }
 
 void MainWindow::initializeNewTrack()
@@ -160,6 +226,8 @@ void MainWindow::initializeNewTrack()
         m_editorView->setSceneRect(newSceneRect);
 
         createGrid();
+
+        m_saveAsAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Hor size: %2, ver size: %3."))
                 .arg(m_trackData->name())

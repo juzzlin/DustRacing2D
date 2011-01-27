@@ -20,11 +20,20 @@
 #ifndef TRACKIO_H
 #define TRACKIO_H
 
-#include "trackdata.h"
+class TrackData;
 
 class TrackIO
 {
 public:
+
+    //! Save given track data. Returns false if failed.
+    static bool save(const TrackData * trackData, QString path);
+
+    //! Load given track data. Returns false if failed.
+    static bool open(TrackData * trackData, QString path);
+
+private:
+
     TrackIO();
 };
 

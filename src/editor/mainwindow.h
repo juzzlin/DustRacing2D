@@ -29,6 +29,7 @@ class EditorView;
 class EditorScene;
 class TrackData;
 class QTextEdit;
+class QAction;
 
 /*! \class MainWindow
  *  \brief The main window of the editor.
@@ -53,6 +54,9 @@ protected:
 private slots:
 
     void initializeNewTrack();
+    void openTrack();
+    void saveTrack();
+    void saveAsTrack();
 
 private:
 
@@ -65,6 +69,8 @@ private:
     EditorScene * m_editorScene;
     TrackData   * m_trackData;
     QTextEdit   * m_console;
+    QAction     * m_saveAction;
+    QAction     * m_saveAsAction;
 };
 
 #endif // MAINWINDOW_H

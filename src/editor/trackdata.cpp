@@ -43,6 +43,16 @@ QString TrackData::name() const
     return m_name;
 }
 
+QString TrackData::fileName() const
+{
+    return m_fileName;
+}
+
+void TrackData::setFileName(QString newFileName)
+{
+    m_fileName = newFileName;
+}
+
 unsigned int TrackData::horSize() const
 {
     return m_horSize;
