@@ -56,6 +56,15 @@ public:
   //! Returns true if finish line is set.
   bool finishLineSet() const;
 
+  //! Set given tile to given coordinates.
+  //! TrackData takes the ownership. Existing tile will be deleted.
+  //! Returns false if impossible coordinates.
+  bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
+
+  //! Get tile at given coordinates.
+  //! Returns NULL if no tile set or impossible coordinates.
+  TrackTile * tile(unsigned int x, unsigned int y, TrackTile * pTile) const;
+
 private:
 
   QString m_name;

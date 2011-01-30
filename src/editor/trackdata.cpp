@@ -91,6 +91,26 @@ bool TrackData::finishLineSet() const
     return m_finishLineSet;
 }
 
+bool TrackData::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
+{
+    if (x >= m_cols || y >= m_rows)
+        return false;
+
+    delete m_map[y][x];
+
+    m_map[y][x] = pTile;
+
+    return true;
+}
+
+TrackTile * TrackData::tile(unsigned int x, unsigned int y, TrackTile * pTile) const
+{
+    if (x >= m_cols || y >= m_rows)
+        return NULL;
+
+    return m_map[y][x];
+}
+
 TrackData::~TrackData()
 {
     // Delete map and tiles
