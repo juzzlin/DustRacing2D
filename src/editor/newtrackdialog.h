@@ -27,34 +27,35 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 
+//! Dialog displayed when user wants to create a new track.
 class NewTrackDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
+    //! Constructor
     explicit NewTrackDialog(QWidget *parent = 0);
 
-    unsigned int horSize() const;
+    //! Get column count
+    unsigned int cols() const;
 
-    unsigned int verSize() const;
+    //! Get row count
+    unsigned int rows() const;
 
+    //! Get name
     QString name() const;
-
-signals:
-
-public slots:
 
 private:
 
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_horSizeEdit;
-    QLineEdit   * m_verSizeEdit;
+    QLineEdit   * m_colsEdit;
+    QLineEdit   * m_rowsEdit;
     QLineEdit   * m_nameEdit;
-    QLabel      * m_horSizeLabel;
-    QLabel      * m_verSizeLabel;
+    QLabel      * m_colsLabel;
+    QLabel      * m_rowsLabel;
     QLabel      * m_nameLabel;
 };
 

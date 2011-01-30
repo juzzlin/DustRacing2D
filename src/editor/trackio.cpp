@@ -18,6 +18,7 @@
 //
 
 #include <QFile>
+#include <QTextStream>
 
 #include "trackio.h"
 #include "trackdata.h"
@@ -27,7 +28,22 @@ TrackIO::TrackIO()
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
-    QFile out(path);
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream out(&file);
+
+        out << QString("<track version=\"%1\" name=\"%2\" cols=\"%3\" rows=\"%4\">\n")
+                .arg(EDITOR_VERSION)
+                .arg(trackData->name())
+                .arg(trackData->cols())
+                .arg(trackData->rows());
+
+        out << QString("</track>");
+
+        file.close();
+    }
+
     return true;
 }
 

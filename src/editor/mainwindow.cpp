@@ -158,14 +158,14 @@ void MainWindow::openTrack()
     {
         if (TrackIO::open(m_trackData, fileName))
         {
-            console(QString("Track '") + fileName + "' opened.");
+            console(QString(tr("Track '")) + fileName + tr("' opened."));
 
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
         }
         else
         {
-            console(QString("Failed to open track '") + fileName + "'.");
+            console(QString(tr("Failed to open track '")) + fileName + "'.");
         }
     }
 }
@@ -174,11 +174,11 @@ void MainWindow::saveTrack()
 {
     if (TrackIO::save(m_trackData, m_trackData->fileName()))
     {
-        console(QString("Track '") + m_trackData->fileName() + "' saved.");
+        console(QString(tr("Track '")) + m_trackData->fileName() + tr("' saved."));
     }
     else
     {
-        console(QString("Failed to save track '") + m_trackData->fileName() + "'.");
+        console(QString(tr("Failed to save track '")) + m_trackData->fileName() + "'.");
     }
 }
 
@@ -189,16 +189,21 @@ void MainWindow::saveAsTrack()
                                                     QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                                                     tr("Track Files (*.trk)"));
 
+    if (!fileName.endsWith(".trk"))
+    {
+        fileName += ".trk";
+    }
+
     if (TrackIO::save(m_trackData, fileName))
     {
-        console(QString("Track '") + fileName + "' saved.");
+        console(QString(tr("Track '")) + fileName + tr("' saved."));
 
         m_trackData->setFileName(fileName);
         m_saveAction->setEnabled(true);
     }
     else
     {
-        console(QString("Failed to save track as '") + fileName + "'.");
+        console(QString(tr("Failed to save track as '")) + fileName + "'.");
     }
 }
 
@@ -208,43 +213,43 @@ void MainWindow::initializeNewTrack()
     NewTrackDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted)
     {
-        const unsigned int newHorSize = dialog.horSize();
-        const unsigned int newVerSize = dialog.verSize();
+        const unsigned int cols = dialog.cols();
+        const unsigned int rows = dialog.rows();
 
         delete m_trackData;
-        m_trackData = new TrackData(dialog.name(), newHorSize, newVerSize);
+        m_trackData = new TrackData(dialog.name(), cols, rows);
 
         delete m_editorScene;
         m_editorScene = new EditorScene;
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-                            2 * MARGIN + newHorSize * TILE_W, 2 * MARGIN + newVerSize  * TILE_H);
+                            2 * MARGIN + cols * TILE_W, 2 * MARGIN + rows  * TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
-
         m_editorView->setScene(m_editorScene);
         m_editorView->setSceneRect(newSceneRect);
+        m_editorView->ensureVisible(0, 0, 0, 0);
 
         createGrid();
 
         m_saveAsAction->setEnabled(true);
 
-        console(QString(tr("A new track '%1' created. Hor size: %2, ver size: %3."))
+        console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
                 .arg(m_trackData->name())
-                .arg(m_trackData->horSize())
-                .arg(m_trackData->verSize()));
+                .arg(m_trackData->cols())
+                .arg(m_trackData->rows()));
     }
 }
 
 void MainWindow::createGrid()
 {
     // Vertical lines
-    for (unsigned int i = 0; i <= m_trackData->horSize(); i++)
-        m_editorScene->addLine(0, 0, 0, m_trackData->verSize() * TILE_H)->translate(i * TILE_W, 0);
+    for (unsigned int i = 0; i <= m_trackData->cols(); i++)
+        m_editorScene->addLine(0, 0, 0, m_trackData->rows() * TILE_H)->translate(i * TILE_W, 0);
 
     // Horizontal lines
-    for (unsigned int j = 0; j <= m_trackData->verSize(); j++)
-        m_editorScene->addLine(0, 0, m_trackData->horSize() * TILE_W, 0)->translate(0, j * TILE_H);
+    for (unsigned int j = 0; j <= m_trackData->rows(); j++)
+        m_editorScene->addLine(0, 0, m_trackData->cols() * TILE_W, 0)->translate(0, j * TILE_H);
 }
 
 void MainWindow::console(QString text)

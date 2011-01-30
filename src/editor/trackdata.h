@@ -30,7 +30,7 @@ class TrackData
 public:
 
   //! Constructor
-  TrackData(QString name, unsigned int horSize, unsigned verSize);
+  TrackData(QString name, unsigned int cols, unsigned rows);
 
   //! Destructor
   virtual ~TrackData();
@@ -44,11 +44,11 @@ public:
   //! Set file name
   void setFileName(QString fileName);
 
-  //! Get horizontal size
-  unsigned int horSize() const;
+  //! Get column count
+  unsigned int cols() const;
 
-  //! Get vertical size
-  unsigned int verSize() const;
+  //! Get row count
+  unsigned int rows() const;
 
 private:
 
@@ -56,7 +56,7 @@ private:
 
   QString m_fileName;
 
-  unsigned int m_horSize, m_verSize;
+  unsigned int m_cols, m_rows;
 
   QVector<QVector<TrackTile *> > m_map;
 };

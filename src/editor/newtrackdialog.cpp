@@ -31,26 +31,26 @@ NewTrackDialog::NewTrackDialog(QWidget *parent) :
     m_layout(new QGridLayout(this)),
     m_okButton(new QPushButton(tr("Ok"))),
     m_cancelButton(new QPushButton(tr("Cancel"))),
-    m_horSizeEdit(new QLineEdit),
-    m_verSizeEdit(new QLineEdit),
+    m_colsEdit(new QLineEdit),
+    m_rowsEdit(new QLineEdit),
     m_nameEdit(new QLineEdit),
-    m_horSizeLabel(new QLabel(tr("Horizontal size:"))),
-    m_verSizeLabel(new QLabel(tr("Vertical size:"))),
+    m_colsLabel(new QLabel(tr("Number of tile columns:"))),
+    m_rowsLabel(new QLabel(tr("Number of tile rows:"))),
     m_nameLabel(new QLabel(tr("Track name:")))
 {
     setWindowTitle(tr("Create a new track"));
 
-    m_horSizeEdit->setValidator(new QIntValidator(this));
-    m_verSizeEdit->setValidator(new QIntValidator(this));
+    m_colsEdit->setValidator(new QIntValidator(this));
+    m_rowsEdit->setValidator(new QIntValidator(this));
 
     m_layout->addWidget(m_nameLabel, 0, 0);
     m_layout->addWidget(m_nameEdit, 0, 1);
 
-    m_layout->addWidget(m_horSizeLabel, 1, 0);
-    m_layout->addWidget(m_horSizeEdit, 1, 1);
+    m_layout->addWidget(m_colsLabel, 1, 0);
+    m_layout->addWidget(m_colsEdit, 1, 1);
 
-    m_layout->addWidget(m_verSizeLabel, 2, 0);
-    m_layout->addWidget(m_verSizeEdit, 2, 1);
+    m_layout->addWidget(m_rowsLabel, 2, 0);
+    m_layout->addWidget(m_rowsEdit, 2, 1);
 
     m_layout->addWidget(m_okButton, 3, 0);
     m_layout->addWidget(m_cancelButton, 3, 1);
@@ -59,14 +59,14 @@ NewTrackDialog::NewTrackDialog(QWidget *parent) :
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-unsigned int NewTrackDialog::horSize() const
+unsigned int NewTrackDialog::cols() const
 {
-    return m_horSizeEdit->text().toInt();
+    return m_colsEdit->text().toInt();
 }
 
-unsigned int NewTrackDialog::verSize() const
+unsigned int NewTrackDialog::rows() const
 {
-    return m_verSizeEdit->text().toInt();
+    return m_rowsEdit->text().toInt();
 }
 
 QString NewTrackDialog::name() const

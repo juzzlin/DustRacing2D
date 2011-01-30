@@ -20,16 +20,16 @@
 #include "trackdata.h"
 #include "tracktile.h"
 
-TrackData::TrackData(QString name, unsigned int horSize, unsigned int verSize) :
+TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
     m_name(name),
-    m_horSize(horSize),
-    m_verSize(verSize)
+    m_cols(cols),
+    m_rows(rows)
 {
     // Create an empty map
-    for (unsigned int j = 0; j < m_verSize; j++)
+    for (unsigned int j = 0; j < m_rows; j++)
     {
         QVector<TrackTile *> row;
-        for (unsigned int i = 0; i < m_horSize; i++)
+        for (unsigned int i = 0; i < m_cols; i++)
         {
             row << NULL;
         }
@@ -53,22 +53,22 @@ void TrackData::setFileName(QString newFileName)
     m_fileName = newFileName;
 }
 
-unsigned int TrackData::horSize() const
+unsigned int TrackData::cols() const
 {
-    return m_horSize;
+    return m_cols;
 }
 
-unsigned int TrackData::verSize() const
+unsigned int TrackData::rows() const
 {
-    return m_verSize;
+    return m_rows;
 }
 
 TrackData::~TrackData()
 {
     // Delete map and tiles
-    for (unsigned int j = 0; j < m_verSize; j++)
+    for (unsigned int j = 0; j < m_rows; j++)
     {
-        for (unsigned int i = 0; i < m_horSize; i++)
+        for (unsigned int i = 0; i < m_cols; i++)
         {
             delete m_map[j][i];
         }
