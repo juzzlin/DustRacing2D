@@ -1,6 +1,7 @@
 README
 ======
 
-This is a 2D car racing game written in Qt/OpenGL including a level editor.
+DustRAC is a 2D racing game written in Qt/OpenGL.
+DustRAC is licensed under GNU GPLv3.
 
 -- Jussi Lind <jussi.lind@iki.fi>
