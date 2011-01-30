@@ -46,15 +46,24 @@ public:
   //! Get row count
   unsigned int rows() const;
 
+  //! Set finish line to lie between given tile coordinates.
+  //! Returns false on impossible coordinates or if coordinates out-of-range.
+  bool setFinishLine(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1);
+
+  //! Get finish line.
+  void finishLine(unsigned int & x0, unsigned int & y0, unsigned int & x1, unsigned int & y1) const;
+
+  //! Returns true if finish line is set.
+  bool finishLineSet() const;
+
 private:
 
   QString m_name;
-
   QString m_fileName;
-
   unsigned int m_cols, m_rows;
-
   QVector<QVector<TrackTile *> > m_map;
+  bool m_finishLineSet;
+  unsigned int m_flx0, m_fly0, m_flx1, m_fly1;
 };
 
 #endif // TRACKDATA_H

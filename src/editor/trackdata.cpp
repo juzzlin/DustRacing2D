@@ -19,7 +19,8 @@
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
     m_name(name),
     m_cols(cols),
-    m_rows(rows)
+    m_rows(rows),
+    m_finishLineSet(false)
 {
     // Create an empty map
     for (unsigned int j = 0; j < m_rows; j++)
@@ -57,6 +58,37 @@ unsigned int TrackData::cols() const
 unsigned int TrackData::rows() const
 {
     return m_rows;
+}
+
+bool TrackData::setFinishLine(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1)
+{
+    if (x0 != x1 && y0 != y1)
+        return false;
+
+    if (x0 >= m_cols || y0 >= m_rows)
+        return false;
+
+    m_flx0 = x0;
+    m_fly0 = y0;
+    m_flx1 = x1;
+    m_fly1 = y1;
+
+    m_finishLineSet = true;
+
+    return true;
+}
+
+void TrackData::finishLine(unsigned int & x0, unsigned int & y0, unsigned int & x1, unsigned int & y1) const
+{
+    x0 = m_flx0;
+    y0 = m_fly0;
+    x1 = m_flx1;
+    y1 = m_fly1;
+}
+
+bool TrackData::finishLineSet() const
+{
+    return m_finishLineSet;
 }
 
 TrackData::~TrackData()
