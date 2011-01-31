@@ -31,7 +31,9 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QSettings>
+#include <QSlider>
 #include <QTextEdit>
+#include <QTransform>
 #include <QVBoxLayout>
 
 namespace 
@@ -39,7 +41,10 @@ namespace
     const char *       SETTINGS_GROUP = "MainWindow";
     const unsigned int TILE_W         = 256;
     const unsigned int TILE_H         = 256;
-    const int          MARGIN         = 16;
+    const int          MARGIN         = 0;
+    const unsigned int MIN_ZOOM       = 0;
+    const unsigned int MAX_ZOOM       = 200;
+    const unsigned int INI_ZOOM       = 100;
 }
 
 MainWindow::MainWindow() :
@@ -49,7 +54,8 @@ MainWindow::MainWindow() :
         m_trackData(NULL),
         m_console(new QTextEdit(this)),
         m_saveAction(NULL),
-        m_saveAsAction(NULL)
+        m_saveAsAction(NULL),
+        m_zoomSlider(new QSlider(Qt::Horizontal, this))
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -69,10 +75,20 @@ MainWindow::MainWindow() :
 
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
+    m_editorView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     // Create layout for console and view
     QVBoxLayout * centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_editorView);
+
+    // Add zoom slider to the layout
+    m_zoomSlider->setRange(MIN_ZOOM, MAX_ZOOM);
+    m_zoomSlider->setValue(INI_ZOOM);
+    m_zoomSlider->setTracking(false);
+    m_zoomSlider->setTickInterval(10);
+    m_zoomSlider->setTickPosition(QSlider::TicksBothSides);
+    connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(updateZoom(int)));
+    centralLayout->addWidget(m_zoomSlider);
 
     // Add console to the layout
     m_console->setReadOnly(true);
@@ -84,6 +100,17 @@ MainWindow::MainWindow() :
     centralWidget()->setLayout(centralLayout);
 
     console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+}
+
+void MainWindow::updateZoom(int value)
+{
+    qreal scale = static_cast<qreal>(value) / MAX_ZOOM;
+
+    QTransform transform;
+    transform.scale(scale, scale);
+    m_editorView->setTransform(transform);
+
+    console(QString("Zoom set to %1%").arg(value));
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)

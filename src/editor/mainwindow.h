@@ -26,6 +26,7 @@ class EditorScene;
 class TrackData;
 class QTextEdit;
 class QAction;
+class QSlider;
 
 /*! \class MainWindow
  *  \brief The main window of the editor.
@@ -53,6 +54,7 @@ private slots:
     void openTrack();
     void saveTrack();
     void saveAsTrack();
+    void updateZoom(int value);
 
 private:
 
@@ -67,6 +69,7 @@ private:
     QTextEdit   * m_console;
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
+    QSlider     * m_zoomSlider;
 };
 
 #endif // MAINWINDOW_H
