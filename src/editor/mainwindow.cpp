@@ -36,7 +36,7 @@
 #include <QTransform>
 #include <QVBoxLayout>
 
-namespace 
+namespace
 {
     const char *       SETTINGS_GROUP = "MainWindow";
     const unsigned int TILE_W         = 256;
@@ -55,7 +55,7 @@ MainWindow::MainWindow() :
         m_console(new QTextEdit(this)),
         m_saveAction(NULL),
         m_saveAsAction(NULL),
-        m_zoomSlider(new QSlider(Qt::Horizontal, this))
+        m_scaleSlider(new QSlider(Qt::Horizontal, this))
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -82,13 +82,13 @@ MainWindow::MainWindow() :
     centralLayout->addWidget(m_editorView);
 
     // Add zoom slider to the layout
-    m_zoomSlider->setRange(MIN_ZOOM, MAX_ZOOM);
-    m_zoomSlider->setValue(INI_ZOOM);
-    m_zoomSlider->setTracking(false);
-    m_zoomSlider->setTickInterval(10);
-    m_zoomSlider->setTickPosition(QSlider::TicksBothSides);
-    connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(updateZoom(int)));
-    centralLayout->addWidget(m_zoomSlider);
+    m_scaleSlider->setRange(MIN_ZOOM, MAX_ZOOM);
+    m_scaleSlider->setValue(INI_ZOOM);
+    m_scaleSlider->setTracking(false);
+    m_scaleSlider->setTickInterval(10);
+    m_scaleSlider->setTickPosition(QSlider::TicksBothSides);
+    connect(m_scaleSlider, SIGNAL(valueChanged(int)), this, SLOT(updateScale(int)));
+    centralLayout->addWidget(m_scaleSlider);
 
     // Add console to the layout
     m_console->setReadOnly(true);
@@ -102,15 +102,15 @@ MainWindow::MainWindow() :
     console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
 }
 
-void MainWindow::updateZoom(int value)
+void MainWindow::updateScale(int value)
 {
-    qreal scale = static_cast<qreal>(value) / MAX_ZOOM;
+    qreal scale = static_cast<qreal>(value) / 100;
 
     QTransform transform;
     transform.scale(scale, scale);
     m_editorView->setTransform(transform);
 
-    console(QString("Zoom set to %1%").arg(value));
+    console(QString("Scale set to %1%").arg(value));
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)

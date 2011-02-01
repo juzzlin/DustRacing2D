@@ -54,7 +54,7 @@ private slots:
     void openTrack();
     void saveTrack();
     void saveAsTrack();
-    void updateZoom(int value);
+    void updateScale(int value);
 
 private:
 
@@ -69,7 +69,7 @@ private:
     QTextEdit   * m_console;
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
-    QSlider     * m_zoomSlider;
+    QSlider     * m_scaleSlider;
 };
 
 #endif // MAINWINDOW_H
