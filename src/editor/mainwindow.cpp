@@ -32,6 +32,7 @@
 #include <QMenuBar>
 #include <QSettings>
 #include <QSlider>
+#include <QSplitter>
 #include <QTextEdit>
 #include <QTransform>
 #include <QVBoxLayout>
@@ -75,9 +76,13 @@ MainWindow::MainWindow() :
 
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
-    m_editorView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    m_editorView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
-    // Create layout for console and view
+    // Create a splitter
+    QSplitter * splitter = new QSplitter(this);
+    splitter->setOrientation(Qt::Vertical);
+
+    // Create layout for slider and view
     QVBoxLayout * centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_editorView);
 
@@ -86,19 +91,33 @@ MainWindow::MainWindow() :
     m_scaleSlider->setValue(INI_ZOOM);
     m_scaleSlider->setTracking(false);
     m_scaleSlider->setTickInterval(10);
-    m_scaleSlider->setTickPosition(QSlider::TicksBothSides);
+    m_scaleSlider->setTickPosition(QSlider::TicksBelow);
     connect(m_scaleSlider, SIGNAL(valueChanged(int)), this, SLOT(updateScale(int)));
     centralLayout->addWidget(m_scaleSlider);
 
-    // Add console to the layout
+    // Add console to the splitter and splitter to the layout
     m_console->setReadOnly(true);
-    m_console->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-    centralLayout->addWidget(m_console);
+    m_console->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+    m_console->resize(m_console->width(), 50);
+    QWidget * dummy = new QWidget(this);
+    splitter->addWidget(dummy);
+    dummy->setLayout(centralLayout);
+    dummy->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    splitter->addWidget(m_console);
 
-    // Create a new central widget and set the layout
-    setCentralWidget(new QWidget(this));
-    centralWidget()->setLayout(centralLayout);
+    // Set contents margins so that they look nice
+    splitter->setContentsMargins(centralLayout->contentsMargins().left(),
+                                 0,
+                                 centralLayout->contentsMargins().right(),
+                                 centralLayout->contentsMargins().bottom());
 
+    centralLayout->setContentsMargins(0, centralLayout->contentsMargins().top(),
+                                      0, centralLayout->contentsMargins().bottom());
+
+    // Set splitter as the central widget
+    setCentralWidget(splitter);
+
+    // Print a welcome message
     console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
 }
 
