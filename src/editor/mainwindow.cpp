@@ -30,11 +30,14 @@
 #include <QGraphicsLineItem>
 #include <QMenu>
 #include <QMenuBar>
+#include <QLabel>
 #include <QSettings>
 #include <QSlider>
 #include <QSplitter>
 #include <QTextEdit>
+#include <QTimer>
 #include <QTransform>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 namespace
@@ -46,6 +49,7 @@ namespace
     const unsigned int MIN_ZOOM       = 0;
     const unsigned int MAX_ZOOM       = 200;
     const unsigned int INI_ZOOM       = 100;
+    const int          CONSOLE_HEIGHT = 64;
 }
 
 MainWindow::MainWindow() :
@@ -93,7 +97,10 @@ MainWindow::MainWindow() :
     m_scaleSlider->setTickInterval(10);
     m_scaleSlider->setTickPosition(QSlider::TicksBelow);
     connect(m_scaleSlider, SIGNAL(valueChanged(int)), this, SLOT(updateScale(int)));
-    centralLayout->addWidget(m_scaleSlider);
+    QHBoxLayout * sliderLayout = new QHBoxLayout;
+    sliderLayout->addWidget(new QLabel(tr("Scale:")));
+    sliderLayout->addWidget(m_scaleSlider);
+    centralLayout->addLayout(sliderLayout);
 
     // Add console to the splitter and splitter to the layout
     m_console->setReadOnly(true);
@@ -116,6 +123,10 @@ MainWindow::MainWindow() :
 
     // Set splitter as the central widget
     setCentralWidget(splitter);
+
+    QList<int> sizes;
+    sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
+    splitter->setSizes(sizes);
 
     // Print a welcome message
     console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
