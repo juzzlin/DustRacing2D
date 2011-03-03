@@ -20,6 +20,7 @@
 #include "newtrackdialog.h"
 #include "trackdata.h"
 #include "trackio.h"
+#include "tracktile.h"
 
 #include <QAction>
 #include <QApplication>
@@ -296,13 +297,16 @@ void MainWindow::initializeNewTrack()
 
 void MainWindow::createGrid()
 {
-    // Vertical lines
     for (unsigned int i = 0; i <= m_trackData->cols(); i++)
-        m_editorScene->addLine(0, 0, 0, m_trackData->rows() * TILE_H)->translate(i * TILE_W, 0);
-
-    // Horizontal lines
-    for (unsigned int j = 0; j <= m_trackData->rows(); j++)
-        m_editorScene->addLine(0, 0, m_trackData->cols() * TILE_W, 0)->translate(0, j * TILE_H);
+    {
+        for (unsigned int j = 0; j <= m_trackData->rows(); j++)
+        {
+            TrackTile * newTile = new TrackTile(QSizeF(TILE_W, TILE_H),
+                                                QPointF(TILE_W / 2 + i * TILE_W, TILE_H / 2 + j * TILE_H));
+            m_trackData->setTile(i, j, newTile);
+            m_editorScene->addItem(newTile);
+        }
+    }
 }
 
 void MainWindow::console(QString text)

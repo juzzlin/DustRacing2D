@@ -28,9 +28,6 @@ public:
   //! Constructor
   TrackData(QString name, unsigned int cols, unsigned rows);
 
-  //! Destructor
-  virtual ~TrackData();
-
   //! Get name
   QString name() const;
 
@@ -57,13 +54,12 @@ public:
   bool finishLineSet() const;
 
   //! Set given tile to given coordinates.
-  //! TrackData takes the ownership. Existing tile will be deleted.
   //! Returns false if impossible coordinates.
   bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
 
   //! Get tile at given coordinates.
   //! Returns NULL if no tile set or impossible coordinates.
-  TrackTile * tile(unsigned int x, unsigned int y, TrackTile * pTile) const;
+  TrackTile * tile(unsigned int x, unsigned int y) const;
 
 private:
 

@@ -96,31 +96,15 @@ bool TrackData::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
     if (x >= m_cols || y >= m_rows)
         return false;
 
-    delete m_map[y][x];
-
     m_map[y][x] = pTile;
 
     return true;
 }
 
-TrackTile * TrackData::tile(unsigned int x, unsigned int y, TrackTile * pTile) const
+TrackTile * TrackData::tile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
         return NULL;
 
     return m_map[y][x];
-}
-
-TrackData::~TrackData()
-{
-    // Delete map and tiles
-    for (unsigned int j = 0; j < m_rows; j++)
-    {
-        for (unsigned int i = 0; i < m_cols; i++)
-        {
-            delete m_map[j][i];
-        }
-    }
-
-    m_map.clear();
 }

@@ -14,8 +14,30 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.h"
+#include <QPainter>
 
-TrackTile::TrackTile(QGraphicsItem *parent) :
-    QGraphicsItem(parent)
+TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
+    m_size(size),
+    m_active(false)
 {
+    setPos(location);
 }
+
+QRectF TrackTile::boundingRect () const
+{
+    return QRectF(QPointF(-m_size.width() / 2, -m_size.height() / 2), m_size);
+}
+
+void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+{
+    Q_UNUSED(widget);
+
+    painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
+                      m_size.width(), m_size.height());
+}
+
+void TrackTile::setActive(bool active)
+{
+    m_active = active;
+}
+

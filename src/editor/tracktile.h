@@ -22,8 +22,26 @@ class TrackTile : public QGraphicsItem
 {
 public:
 
-    explicit TrackTile(QGraphicsItem * parent = 0);
+    //! All possible types of tiles.
+    enum TileType {TT_NONE, TT_CURVE_GRASS, TT_STRAIGHT_GRASS, TT_GRASS};
 
+    //! Constructor
+    TrackTile(QSizeF size, QPointF location, TileType type = TT_NONE);
+
+    //! \reimp
+    virtual QRectF boundingRect () const;
+
+    //! \reimp
+    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+
+    //! Set tile active (a blue collar is drawn)
+    void setActive(bool active);
+
+private:
+
+    QSizeF   m_size;
+    TileType m_type;
+    bool     m_active;
 };
 
 #endif // TRACKTILE_H
