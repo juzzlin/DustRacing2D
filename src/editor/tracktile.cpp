@@ -16,8 +16,14 @@
 #include "tracktile.h"
 #include <QPainter>
 
+// Width of the highlight shown when the tile is active
+const int HIGHLIGHT_WIDTH = 11;
+
+TrackTile * TrackTile::m_activeTile = NULL;
+
 TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
     m_size(size),
+    m_type(type),
     m_active(false)
 {
     setPos(location);
@@ -25,19 +31,65 @@ TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
 
 QRectF TrackTile::boundingRect () const
 {
-    return QRectF(QPointF(-m_size.width() / 2, -m_size.height() / 2), m_size);
+    return QRectF(-m_size.width() / 2, -m_size.height() / 2,
+                   m_size.width(), m_size.height());
 }
 
 void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
+    Q_UNUSED(option);
 
+    painter->save();
+
+    QPen pen;
+    pen.setColor(QColor(0, 0, 0));
+    pen.setJoinStyle(Qt::MiterJoin);
+    painter->setPen(pen);
     painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
-                      m_size.width(), m_size.height());
+                       m_size.width(),      m_size.height());
+
+    if (m_active)
+    {
+        pen.setColor(QColor(0, 0, 255, 64));
+        pen.setWidth(HIGHLIGHT_WIDTH);
+
+        painter->setPen(pen);
+        painter->drawRect(-m_size.width()  / 2 + HIGHLIGHT_WIDTH / 2,
+                          -m_size.height() / 2 + HIGHLIGHT_WIDTH / 2,
+                           m_size.width()      - HIGHLIGHT_WIDTH,
+                           m_size.height()     - HIGHLIGHT_WIDTH);
+    }
+
+    painter->restore();
 }
 
 void TrackTile::setActive(bool active)
 {
     m_active = active;
+
+    if (active)
+    {
+        if (TrackTile::m_activeTile)
+        {
+            TrackTile::m_activeTile->setActive(false);
+        }
+
+        TrackTile::m_activeTile = this;
+    }
+
+    update();
+}
+
+TrackTile * TrackTile::activeTile()
+{
+    return TrackTile::m_activeTile;
+}
+
+void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
+{
+    setActive(true);
+
+    QGraphicsItem::mousePressEvent(event);
 }
 

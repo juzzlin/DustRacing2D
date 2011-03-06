@@ -37,7 +37,17 @@ public:
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
 
+    //! Get current active tile or NULL if not set.
+    static TrackTile * activeTile();
+
+protected:
+
+    //! \reimp
+    void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
 private:
+
+    static TrackTile * m_activeTile;
 
     QSizeF   m_size;
     TileType m_type;

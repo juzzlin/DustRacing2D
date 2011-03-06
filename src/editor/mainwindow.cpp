@@ -307,6 +307,9 @@ void MainWindow::createGrid()
             m_editorScene->addItem(newTile);
         }
     }
+
+    if (m_trackData->tile(0, 0))
+        m_trackData->tile(0, 0)->setActive(true);
 }
 
 void MainWindow::console(QString text)
