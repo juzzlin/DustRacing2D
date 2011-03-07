@@ -14,11 +14,13 @@ SOURCES += main.cpp mainwindow.cpp editor.cpp \
     editorview.cpp \
     editorscene.cpp \
     trackio.cpp \
-    tracktile.cpp
+    tracktile.cpp \
+    tiletypedialog.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
     trackdata.h \
     editorview.h \
     editorscene.h \
-    trackio.h
+    trackio.h \
+    tiletypedialog.h

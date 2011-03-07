@@ -26,6 +26,8 @@ public:
 
     explicit EditorView(QWidget *parent = 0);
 
+protected:
+
 signals:
 
 public slots:

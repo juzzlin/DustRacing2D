@@ -45,7 +45,12 @@ protected:
     //! \reimp
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
 
+    //! \reimp
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
 private:
+
+    void doContextMenu(QPoint pos);
 
     static TrackTile * m_activeTile;
 

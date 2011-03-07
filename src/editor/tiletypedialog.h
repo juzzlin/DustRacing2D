@@ -13,8 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "editorview.h"
+#ifndef TILETYPEDIALOG_H
+#define TILETYPEDIALOG_H
 
-EditorView::EditorView(QWidget *parent) :
-    QGraphicsView(parent)
-{}
+#include <QDialog>
+
+class TileTypeDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit TileTypeDialog(QWidget *parent = 0);
+
+signals:
+
+public slots:
+
+};
+
+#endif // TILETYPEDIALOG_H
