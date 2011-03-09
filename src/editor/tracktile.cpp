@@ -15,11 +15,12 @@
 
 #include "tracktile.h"
 #include "tiletypedialog.h"
+#include "tileanimator.h"
+
 #include <QPainter>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QMenu>
 #include <QAction>
 
 // Width of the highlight shown when the tile is active
@@ -30,9 +31,32 @@ TrackTile * TrackTile::m_activeTile = NULL;
 TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
     m_size(size),
     m_type(type),
-    m_active(false)
+    m_active(false),
+    m_animator(new TileAnimator(this))
 {
     setPos(location);
+    createContextMenu();
+}
+
+void TrackTile::createContextMenu()
+{
+    QAction * setType = new QAction(QWidget::tr("Set type.."), &m_menu);
+    QChar degreeSign(176);
+
+    QString dummy1(QString(QWidget::tr("Rotate 90")) +
+                   degreeSign + QWidget::tr(" CW.."));
+
+    QAction * rotate90CW = new QAction(dummy1, &m_menu);
+    QObject::connect(rotate90CW, SIGNAL(triggered()), m_animator, SLOT(rotate90CW()));
+
+    QString dummy2(QString(QWidget::tr("Rotate 90")) +
+                   degreeSign + QWidget::tr(" CCW.."));
+
+    QAction * rotate90CCW = new QAction(dummy2, &m_menu);
+    QObject::connect(rotate90CCW, SIGNAL(triggered()), m_animator, SLOT(rotate90CCW()));
+
+    m_menu.addActions(QList<QAction *>()
+                    << setType << rotate90CW << rotate90CCW);
 }
 
 QRectF TrackTile::boundingRect () const
@@ -92,26 +116,6 @@ TrackTile * TrackTile::activeTile()
     return TrackTile::m_activeTile;
 }
 
-void TrackTile::doContextMenu(QPoint pos)
-{
-    QAction setType(QWidget::tr("Set type.."), NULL);
-    QChar degreeSign(176);
-
-    QString dummy1(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CW.."));
-    QAction rotate90CW(dummy1, NULL);
-
-    QString dummy2(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CCW.."));
-    QAction rotate90CCW(dummy2, NULL);
-
-    QMenu menu;
-    menu.addActions(QList<QAction *>()
-                    << &setType << &rotate90CW << &rotate90CCW);
-
-    menu.exec(pos);
-}
-
 void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     setActive(true);
@@ -120,12 +124,14 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
     {
         if (scene() && !scene()->views().isEmpty())
         {
-            // This seems to be a bit tricky to get right due to the scaling transformation
-            // applied to the view.
-            QPoint p = scene()->views()[0]->mapFromScene(pos() + event->pos().toPoint()) +
-                       QPoint(m_size.width(), m_size.height() / 2);
+            if (QGraphicsView * view = scene()->views()[0])
+            {
+                QPoint posInView = view->mapFromScene(pos() + event->pos().toPoint());
+                QPoint globalPos = view->mapToGlobal(posInView);
 
-            doContextMenu(p);
+                // Show context menu
+                m_menu.exec(globalPos);
+            }
         }
     }
 
@@ -137,3 +143,7 @@ void TrackTile::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
+TrackTile::~TrackTile()
+{
+    delete m_animator;
+}

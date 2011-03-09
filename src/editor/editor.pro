@@ -15,7 +15,8 @@ SOURCES += main.cpp mainwindow.cpp editor.cpp \
     editorscene.cpp \
     trackio.cpp \
     tracktile.cpp \
-    tiletypedialog.cpp
+    tiletypedialog.cpp \
+    tileanimator.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
@@ -23,4 +24,5 @@ HEADERS += mainwindow.h \
     editorview.h \
     editorscene.h \
     trackio.h \
-    tiletypedialog.h
+    tiletypedialog.h \
+    tileanimator.h

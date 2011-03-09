@@ -17,6 +17,9 @@
 #define TRACKTILE_H
 
 #include <QGraphicsItem>
+#include <QMenu>
+
+class TileAnimator;
 
 class TrackTile : public QGraphicsItem
 {
@@ -27,6 +30,9 @@ public:
 
     //! Constructor
     TrackTile(QSizeF size, QPointF location, TileType type = TT_NONE);
+
+    //! Destructor
+    ~TrackTile();
 
     //! \reimp
     virtual QRectF boundingRect () const;
@@ -48,15 +54,21 @@ protected:
     //! \reimp
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
+private slots:
+
+    void rotate90CW();
+    void rotate90CCW();
+
 private:
 
-    void doContextMenu(QPoint pos);
+    void createContextMenu();
 
     static TrackTile * m_activeTile;
-
-    QSizeF   m_size;
-    TileType m_type;
-    bool     m_active;
+    QSizeF             m_size;
+    TileType           m_type;
+    bool               m_active;
+    TileAnimator     * m_animator;
+    QMenu              m_menu;
 };
 
 #endif // TRACKTILE_H
