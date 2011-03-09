@@ -16,19 +16,40 @@
 #include "tileanimator.h"
 #include "tracktile.h"
 
+#include <QTimeLine>
+#include <QGraphicsItemAnimation>
+
 TileAnimator::TileAnimator(TrackTile * tile, QObject *parent) :
     QObject(parent),
-    m_tile(tile)
-{}
+    m_tile(tile),
+    m_timer(new QTimeLine(500, this)),
+    m_animation(new QGraphicsItemAnimation(this))
+{
+    m_timer->setFrameRange(0, 30);
 
-#include <QDebug>
+    m_animation->setItem(m_tile);
+    m_animation->setTimeLine(m_timer);
+}
+
 void TileAnimator::rotate90CW()
 {
-    qDebug("rotateCW");
+    if (m_timer->state() == QTimeLine::NotRunning)
+    {
+        m_animation->setRotationAt(0.0f, m_tile->rotation());
+        m_animation->setRotationAt(1.0f, m_tile->rotation() + 90);
+
+        m_timer->start();
+    }
 }
 
 void TileAnimator::rotate90CCW()
 {
-    qDebug("rotateCCW");
+    if (m_timer->state() == QTimeLine::NotRunning)
+    {
+        m_animation->setRotationAt(0.0f, m_tile->rotation());
+        m_animation->setRotationAt(1.0f, m_tile->rotation() - 90);
+
+        m_timer->start();
+    }
 }
 

@@ -19,6 +19,8 @@
 #include <QObject>
 
 class TrackTile;
+class QTimeLine;
+class QGraphicsItemAnimation;
 
 class TileAnimator : public QObject
 {
@@ -28,8 +30,6 @@ public:
 
     explicit TileAnimator(TrackTile * tile, QObject * parent = 0);
 
-signals:
-
 public slots:
 
     void rotate90CW();
@@ -38,6 +38,8 @@ public slots:
 private:
 
     TrackTile * m_tile;
+    QTimeLine * m_timer;
+    QGraphicsItemAnimation * m_animation;
 };
 
 #endif // TILEANIMATOR_H
