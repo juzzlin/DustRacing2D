@@ -17,39 +17,41 @@
 #include "tracktile.h"
 
 #include <QTimeLine>
-#include <QGraphicsItemAnimation>
 
-TileAnimator::TileAnimator(TrackTile * tile, QObject *parent) :
-    QObject(parent),
-    m_tile(tile),
-    m_timer(new QTimeLine(500, this)),
-    m_animation(new QGraphicsItemAnimation(this))
+const int FRAMES = 30;
+
+TileAnimator::TileAnimator(TrackTile * tile) :
+    QTimeLine(250),
+    m_tile(tile)
 {
-    m_timer->setFrameRange(0, 30);
+    setFrameRange(0, FRAMES);
 
-    m_animation->setItem(m_tile);
-    m_animation->setTimeLine(m_timer);
+    connect(this, SIGNAL(frameChanged(int)), this, SLOT(setTileRotation(int)));
 }
 
 void TileAnimator::rotate90CW()
 {
-    if (m_timer->state() == QTimeLine::NotRunning)
+    if (state() == QTimeLine::NotRunning)
     {
-        m_animation->setRotationAt(0.0f, m_tile->rotation());
-        m_animation->setRotationAt(1.0f, m_tile->rotation() + 90);
+        m_a0 = m_tile->rotation();
+        m_a1 = m_tile->rotation() + 90;
 
-        m_timer->start();
+        start();
     }
 }
 
 void TileAnimator::rotate90CCW()
 {
-    if (m_timer->state() == QTimeLine::NotRunning)
+    if (state() == QTimeLine::NotRunning)
     {
-        m_animation->setRotationAt(0.0f, m_tile->rotation());
-        m_animation->setRotationAt(1.0f, m_tile->rotation() - 90);
+        m_a0 = m_tile->rotation();
+        m_a1 = m_tile->rotation() - 90;
 
-        m_timer->start();
+        start();
     }
 }
 
+void TileAnimator::setTileRotation(int frame)
+{
+    m_tile->setRotation(m_a0 + frame * (m_a1 - m_a0) / FRAMES);
+}

@@ -38,6 +38,7 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QTransform>
+#include <QToolBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
@@ -61,7 +62,8 @@ MainWindow::MainWindow() :
         m_console(new QTextEdit(this)),
         m_saveAction(NULL),
         m_saveAsAction(NULL),
-        m_scaleSlider(new QSlider(Qt::Horizontal, this))
+        m_scaleSlider(new QSlider(Qt::Horizontal, this)),
+        m_toolBar(new QToolBar(this))
 {
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
@@ -76,8 +78,8 @@ MainWindow::MainWindow() :
     QRect geometry(QApplication::desktop()->availableGeometry());
     move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
 
-    // Create menu
-    createMenuBar();
+    // Populate menu bar with actions
+    populateMenuBar();
 
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
@@ -87,9 +89,16 @@ MainWindow::MainWindow() :
     QSplitter * splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
 
-    // Create layout for slider and view
+    // Create layouts for slider, view and toolbar
     QVBoxLayout * centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_editorView);
+    QHBoxLayout * viewToolBarLayout = new QHBoxLayout;
+    m_toolBar->setOrientation(Qt::Vertical);
+    viewToolBarLayout->addWidget(m_editorView);
+    viewToolBarLayout->addWidget(m_toolBar);
+    centralLayout->addLayout(viewToolBarLayout);
+
+    // Populate toolbar with actions
+    populateToolBar();
 
     // Add zoom slider to the layout
     m_scaleSlider->setRange(MIN_ZOOM, MAX_ZOOM);
@@ -157,48 +166,99 @@ void MainWindow::closeEvent(QCloseEvent * event)
     event->accept();
 }
 
-void MainWindow::createMenuBar()
+void MainWindow::populateMenuBar()
 {
-    // Create "file" -menu
+    // Create "file"-menu
     QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
 
-    // Add "new" -action
+    // Add "new"-action
     QAction * newAct = new QAction(tr("&New..."), this);
     fileMenu->addAction(newAct);
     connect(newAct, SIGNAL(triggered()), this, SLOT(initializeNewTrack()));
 
-    // Add "open" -action
+    // Add "open"-action
     QAction * openAct = new QAction(tr("&Open..."), this);
     fileMenu->addAction(openAct);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openTrack()));
 
-    // Add "save" -action
+    // Add "save"-action
     m_saveAction = new QAction(tr("&Save"), this);
     fileMenu->addAction(m_saveAction);
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveTrack()));
     m_saveAction->setEnabled(false);
 
-    // Add "save as" -action
+    // Add "save as"-action
     m_saveAsAction = new QAction(tr("&Save as..."), this);
     fileMenu->addAction(m_saveAsAction);
     connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsTrack()));
     m_saveAsAction->setEnabled(false);
 
-    // Add "quit" -action
+    // Add "quit"-action
     QAction * quitAct = new QAction(tr("&Quit"), this);
     fileMenu->addAction(quitAct);
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    // Create "edit" -menu
+    // Create "edit"-menu
     QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
 
-    // Create "help" -menu
+    // Add "clear"-action
+    QAction * clearAct = new QAction(tr("&Clear"), this);
+    editMenu->addAction(clearAct);
+    connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
+
+    // Create "help"-menu
     QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
 
-    // Add "about" -action
+    // Add "about"-action
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
     //  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+}
+
+void MainWindow::populateToolBar()
+{
+    // Add "straight"-action
+    QAction * p = new QAction(QIcon(QPixmap(":/data/images/straight.png")), tr("Straigth"), this);
+    p->setData(QVariant(QString("straight")));
+    m_toolBar->addAction(p);
+
+    // Add "corner"-action
+    p = new QAction(QIcon(QPixmap(":/data/images/corner.png")), tr("Corner"), this);
+    p->setData(QVariant(QString("corner")));
+    m_toolBar->addAction(p);
+
+    // Add "grass"-action
+    p = new QAction(QIcon(QPixmap(":/data/images/grass.png")), tr("Grass"), this);
+    p->setData(QVariant(QString("grass")));
+    m_toolBar->addAction(p);
+
+    connect(m_toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(handleToolBarActionClick(QAction*)));
+}
+
+void MainWindow::handleToolBarActionClick(QAction * action)
+{
+    if (TrackTile * tile = TrackTile::activeTile())
+    {
+        if (action)
+        {
+            if (action->data() == "straight")
+            {
+                tile->setType(TrackTile::TT_STRAIGHT_GRASS);
+            }
+            else if (action->data() == "corner")
+            {
+                tile->setType(TrackTile::TT_CORNER_GRASS);
+            }
+            else if (action->data() == "grass")
+            {
+                tile->setType(TrackTile::TT_GRASS);
+            }
+        }
+    }
+    else
+    {
+        console(QString(tr("No tiles selected.")));
+    }
 }
 
 void MainWindow::openTrack()
@@ -297,9 +357,9 @@ void MainWindow::initializeNewTrack()
 
 void MainWindow::createGrid()
 {
-    for (unsigned int i = 0; i <= m_trackData->cols(); i++)
+    for (unsigned int i = 0; i < m_trackData->cols(); i++)
     {
-        for (unsigned int j = 0; j <= m_trackData->rows(); j++)
+        for (unsigned int j = 0; j < m_trackData->rows(); j++)
         {
             TrackTile * newTile = new TrackTile(QSizeF(TILE_W, TILE_H),
                                                 QPointF(TILE_W / 2 + i * TILE_W, TILE_H / 2 + j * TILE_H));
@@ -310,6 +370,20 @@ void MainWindow::createGrid()
 
     if (m_trackData->tile(0, 0))
         m_trackData->tile(0, 0)->setActive(true);
+}
+
+void MainWindow::clear()
+{
+    for (unsigned int i = 0; i < m_trackData->cols(); i++)
+    {
+        for (unsigned int j = 0; j < m_trackData->rows(); j++)
+        {
+            if (TrackTile * p = m_trackData->tile(i, j))
+                p->setType(TrackTile::TT_NONE);
+        }
+    }
+
+    m_console->append(QString(tr("Tiles cleared.")));
 }
 
 void MainWindow::console(QString text)

@@ -27,6 +27,7 @@ class TrackData;
 class QTextEdit;
 class QAction;
 class QSlider;
+class QToolBar;
 
 /*! \class MainWindow
  *  \brief The main window of the editor.
@@ -55,10 +56,13 @@ private slots:
     void saveTrack();
     void saveAsTrack();
     void updateScale(int value);
+    void handleToolBarActionClick(QAction * action);
+    void clear();
 
 private:
 
-    void createMenuBar();
+    void populateMenuBar();
+    void populateToolBar();
     void createGrid();
     void console(QString text);
 
@@ -70,6 +74,7 @@ private:
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
     QSlider     * m_scaleSlider;
+    QToolBar    * m_toolBar;
 };
 
 #endif // MAINWINDOW_H

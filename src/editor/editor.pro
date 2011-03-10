@@ -26,3 +26,6 @@ HEADERS += mainwindow.h \
     trackio.h \
     tiletypedialog.h \
     tileanimator.h
+
+RESOURCES += \
+    ../common.qrc

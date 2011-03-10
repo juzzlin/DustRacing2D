@@ -17,29 +17,31 @@
 #define TILEANIMATOR_H
 
 #include <QObject>
+#include <QTimeLine>
 
 class TrackTile;
-class QTimeLine;
-class QGraphicsItemAnimation;
 
-class TileAnimator : public QObject
+class TileAnimator : public QTimeLine
 {
     Q_OBJECT
 
 public:
 
-    explicit TileAnimator(TrackTile * tile, QObject * parent = 0);
+    explicit TileAnimator(TrackTile * tile);
 
 public slots:
 
     void rotate90CW();
     void rotate90CCW();
 
+private slots:
+
+    void setTileRotation(int frame);
+
 private:
 
     TrackTile * m_tile;
-    QTimeLine * m_timer;
-    QGraphicsItemAnimation * m_animation;
+    int m_a0, m_a1;
 };
 
 #endif // TILEANIMATOR_H

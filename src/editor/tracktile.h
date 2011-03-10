@@ -26,7 +26,7 @@ class TrackTile : public QGraphicsItem
 public:
 
     //! All possible types of tiles.
-    enum TileType {TT_NONE, TT_CURVE_GRASS, TT_STRAIGHT_GRASS, TT_GRASS};
+    enum TileType {TT_NONE, TT_CORNER_GRASS, TT_STRAIGHT_GRASS, TT_GRASS};
 
     //! Constructor
     TrackTile(QSizeF size, QPointF location, TileType type = TT_NONE);
@@ -42,6 +42,9 @@ public:
 
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
+
+    //! Set type
+    void setType(TileType type);
 
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();

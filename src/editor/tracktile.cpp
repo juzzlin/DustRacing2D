@@ -40,7 +40,6 @@ TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
 
 void TrackTile::createContextMenu()
 {
-    QAction * setType = new QAction(QWidget::tr("Set type.."), &m_menu);
     QChar degreeSign(176);
 
     QString dummy1(QString(QWidget::tr("Rotate 90")) +
@@ -55,8 +54,7 @@ void TrackTile::createContextMenu()
     QAction * rotate90CCW = new QAction(dummy2, &m_menu);
     QObject::connect(rotate90CCW, SIGNAL(triggered()), m_animator, SLOT(rotate90CCW()));
 
-    m_menu.addActions(QList<QAction *>()
-                    << setType << rotate90CW << rotate90CCW);
+    m_menu.addActions(QList<QAction *>() << rotate90CW << rotate90CCW);
 }
 
 QRectF TrackTile::boundingRect () const
@@ -65,7 +63,8 @@ QRectF TrackTile::boundingRect () const
                    m_size.width(), m_size.height());
 }
 
-void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void TrackTile::paint(QPainter * painter,
+                      const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -73,11 +72,38 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     painter->save();
 
     QPen pen;
-    pen.setColor(QColor(0, 0, 0));
     pen.setJoinStyle(Qt::MiterJoin);
-    painter->setPen(pen);
-    painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
-                       m_size.width(),      m_size.height());
+
+    switch(m_type)
+    {
+    case TT_GRASS:
+        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
+                            m_size.width(), m_size.height(),
+                            QPixmap(":/data/images/grass.png"));
+        break;
+
+    case TT_STRAIGHT_GRASS:
+        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
+                            m_size.width(), m_size.height(),
+                            QPixmap(":/data/images/straight.png"));
+        break;
+
+    case TT_CORNER_GRASS:
+        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
+                            m_size.width(), m_size.height(),
+                            QPixmap(":/data/images/corner.png"));
+        break;
+
+    case TT_NONE:
+        pen.setColor(QColor(0, 0, 0));
+        painter->setPen(pen);
+        painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
+                           m_size.width(),      m_size.height());
+        break;
+
+    default:
+        break;
+    };
 
     if (m_active)
     {
@@ -141,6 +167,16 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void TrackTile::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void TrackTile::setType(TileType type)
+{
+    if (type != m_type)
+    {
+        m_type = type;
+
+        update();
+    }
 }
 
 TrackTile::~TrackTile()
