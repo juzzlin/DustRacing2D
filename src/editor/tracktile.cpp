@@ -30,7 +30,7 @@ TrackTile * TrackTile::m_activeTile = NULL;
 
 TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
     m_size(size),
-    m_type(type),
+    m_tileType(type),
     m_active(false),
     m_animator(new TileAnimator(this))
 {
@@ -74,7 +74,7 @@ void TrackTile::paint(QPainter * painter,
     QPen pen;
     pen.setJoinStyle(Qt::MiterJoin);
 
-    switch(m_type)
+    switch(m_tileType)
     {
     case TT_GRASS:
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
@@ -169,14 +169,19 @@ void TrackTile::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void TrackTile::setType(TileType type)
+void TrackTile::setTileType(TileType type)
 {
-    if (type != m_type)
+    if (type != m_tileType)
     {
-        m_type = type;
+        m_tileType = type;
 
         update();
     }
+}
+
+TrackTile::TileType TrackTile::tileType() const
+{
+    return m_tileType;
 }
 
 TrackTile::~TrackTile()

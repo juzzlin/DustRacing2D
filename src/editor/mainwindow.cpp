@@ -243,15 +243,15 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             if (action->data() == "straight")
             {
-                tile->setType(TrackTile::TT_STRAIGHT_GRASS);
+                tile->setTileType(TrackTile::TT_STRAIGHT_GRASS);
             }
             else if (action->data() == "corner")
             {
-                tile->setType(TrackTile::TT_CORNER_GRASS);
+                tile->setTileType(TrackTile::TT_CORNER_GRASS);
             }
             else if (action->data() == "grass")
             {
-                tile->setType(TrackTile::TT_GRASS);
+                tile->setTileType(TrackTile::TT_GRASS);
             }
         }
     }
@@ -379,7 +379,7 @@ void MainWindow::clear()
         for (unsigned int j = 0; j < m_trackData->rows(); j++)
         {
             if (TrackTile * p = m_trackData->tile(i, j))
-                p->setType(TrackTile::TT_NONE);
+                p->setTileType(TrackTile::TT_NONE);
         }
     }
 

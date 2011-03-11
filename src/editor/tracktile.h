@@ -44,7 +44,10 @@ public:
     void setActive(bool active);
 
     //! Set type
-    void setType(TileType type);
+    void setTileType(TileType type);
+
+    //! Get type
+    TileType tileType() const;
 
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
@@ -68,7 +71,7 @@ private:
 
     static TrackTile * m_activeTile;
     QSizeF             m_size;
-    TileType           m_type;
+    TileType           m_tileType;
     bool               m_active;
     TileAnimator     * m_animator;
     QMenu              m_menu;

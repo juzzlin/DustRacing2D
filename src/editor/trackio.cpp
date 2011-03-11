@@ -18,6 +18,7 @@
 
 #include "trackio.h"
 #include "trackdata.h"
+#include "tracktile.h"
 
 TrackIO::TrackIO()
 {}
@@ -34,6 +35,21 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 .arg(trackData->name())
                 .arg(trackData->cols())
                 .arg(trackData->rows());
+
+        for (unsigned int i = 0; i < trackData->cols(); i++)
+        {
+            for (unsigned int j = 0; j < trackData->rows(); j++)
+            {
+                if (TrackTile * tile = trackData->tile(i, j))
+                {
+                    out << QString("<tile id=\"%1\" i=\"%2\" j=\"%3\" o=\"%4\"/>\n")
+                            .arg(tile->tileType())
+                            .arg(i)
+                            .arg(j)
+                            .arg(tile->rotation());
+                }
+            }
+        }
 
         out << QString("</track>");
 
