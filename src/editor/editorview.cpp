@@ -13,8 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include <QMouseEvent>
+#include <QGraphicsItem>
+
 #include "editorview.h"
+#include "tracktile.h"
 
 EditorView::EditorView(QWidget *parent) :
     QGraphicsView(parent)
 {}
+
+void EditorView::mouseMoveEvent(QMouseEvent * event)
+{
+    if (scene())
+    {
+        if (TrackTile * tile =
+            static_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
+        {
+            tile->setActive(true);
+        }
+    }
+}

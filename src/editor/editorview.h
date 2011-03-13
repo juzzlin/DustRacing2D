@@ -18,6 +18,8 @@
 
 #include <QGraphicsView>
 
+class QMouseEvent;
+
 class EditorView : public QGraphicsView
 {
     Q_OBJECT
@@ -28,10 +30,7 @@ public:
 
 protected:
 
-signals:
-
-public slots:
-
+    void mouseMoveEvent(QMouseEvent * event);
 };
 
 #endif // EDITORVIEW_H

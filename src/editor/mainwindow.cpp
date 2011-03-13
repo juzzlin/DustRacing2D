@@ -100,6 +100,7 @@ MainWindow::MainWindow() :
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
     m_editorView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_editorView->setMouseTracking(true);
 
     // Create a splitter
     QSplitter * splitter = new QSplitter(this);
