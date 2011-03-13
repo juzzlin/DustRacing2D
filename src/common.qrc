@@ -3,5 +3,6 @@
         <file>data/images/corner.png</file>
         <file>data/images/grass.png</file>
         <file>data/images/straight.png</file>
+        <file>data/images/clear.png</file>
     </qresource>
 </RCC>

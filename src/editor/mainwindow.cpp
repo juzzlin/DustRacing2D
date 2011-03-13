@@ -42,6 +42,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+MainWindow * MainWindow::m_instance = NULL;
+
 namespace
 {
     const char *       SETTINGS_GROUP = "MainWindow";
@@ -52,6 +54,10 @@ namespace
     const unsigned int MAX_ZOOM       = 200;
     const unsigned int INI_ZOOM       = 100;
     const int          CONSOLE_HEIGHT = 64;
+    const char *       STRAIGHT_PATH  = ":/data/images/straight.png";
+    const char *       CORNER_PATH    = ":/data/images/corner.png";
+    const char *       GRASS_PATH     = ":/data/images/grass.png";
+    const char *       CLEAR_PATH     = ":/data/images/clear.png";
 }
 
 MainWindow::MainWindow() :
@@ -62,9 +68,19 @@ MainWindow::MainWindow() :
         m_console(new QTextEdit(this)),
         m_saveAction(NULL),
         m_saveAsAction(NULL),
+        m_currentToolBarAction(NULL),
         m_scaleSlider(new QSlider(Qt::Horizontal, this)),
         m_toolBar(new QToolBar(this))
 {
+    if (!m_instance)
+    {
+        m_instance = this;
+    }
+    else
+    {
+        qFatal("MainWindow already instantiated!");
+    }
+
     setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
 
     QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
@@ -140,6 +156,16 @@ MainWindow::MainWindow() :
 
     // Print a welcome message
     console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+}
+
+MainWindow * MainWindow::instance()
+{
+    return MainWindow::m_instance;
+}
+
+QAction * MainWindow::currentToolBarAction() const
+{
+    return m_currentToolBarAction;
 }
 
 void MainWindow::updateScale(int value)
@@ -218,46 +244,65 @@ void MainWindow::populateMenuBar()
 void MainWindow::populateToolBar()
 {
     // Add "straight"-action
-    QAction * p = new QAction(QIcon(QPixmap(":/data/images/straight.png")), tr("Straigth"), this);
+    QAction * p = new QAction(QIcon(QPixmap(STRAIGHT_PATH)), tr("Straight"), this);
     p->setData(QVariant(QString("straight")));
     m_toolBar->addAction(p);
 
     // Add "corner"-action
-    p = new QAction(QIcon(QPixmap(":/data/images/corner.png")), tr("Corner"), this);
+    p = new QAction(QIcon(QPixmap(CORNER_PATH)), tr("Corner"), this);
     p->setData(QVariant(QString("corner")));
     m_toolBar->addAction(p);
 
     // Add "grass"-action
-    p = new QAction(QIcon(QPixmap(":/data/images/grass.png")), tr("Grass"), this);
+    p = new QAction(QIcon(QPixmap(GRASS_PATH)), tr("Grass"), this);
     p->setData(QVariant(QString("grass")));
     m_toolBar->addAction(p);
 
+    // Add "clear"-action
+    p = new QAction(QIcon(QPixmap(CLEAR_PATH)), tr("Clear"), this);
+    p->setData(QVariant(QString("clear")));
+    m_toolBar->addAction(p);
+
     connect(m_toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(handleToolBarActionClick(QAction*)));
+
+    m_toolBar->setEnabled(false);
 }
 
 void MainWindow::handleToolBarActionClick(QAction * action)
 {
-    if (TrackTile * tile = TrackTile::activeTile())
+    if (action != m_currentToolBarAction)
     {
-        if (action)
+        m_currentToolBarAction = action;
+
+        if (action->data() == "straight")
         {
-            if (action->data() == "straight")
-            {
-                tile->setTileType(TrackTile::TT_STRAIGHT_GRASS);
-            }
-            else if (action->data() == "corner")
-            {
-                tile->setTileType(TrackTile::TT_CORNER_GRASS);
-            }
-            else if (action->data() == "grass")
-            {
-                tile->setTileType(TrackTile::TT_GRASS);
-            }
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(QPixmap(STRAIGHT_PATH)
+                                                    .scaled(QSize(32, 32))));
+        }
+        else if (action->data() == "corner")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(QPixmap(CORNER_PATH)
+                                                    .scaled(QSize(32, 32))));
+        }
+        else if (action->data() == "grass")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(QPixmap(GRASS_PATH)
+                                                    .scaled(QSize(32, 32))));
+        }
+        else if (action->data() == "clear")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(QPixmap(CLEAR_PATH)
+                                                    .scaled(QSize(32, 32))));
         }
     }
     else
     {
-        console(QString(tr("No tiles selected.")));
+        QApplication::restoreOverrideCursor();
+        m_currentToolBarAction = NULL;
     }
 }
 
@@ -276,6 +321,7 @@ void MainWindow::openTrack()
 
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
+            m_toolBar->setEnabled(true);
         }
         else
         {
@@ -347,6 +393,7 @@ void MainWindow::initializeNewTrack()
         createGrid();
 
         m_saveAsAction->setEnabled(true);
+        m_toolBar->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
                 .arg(m_trackData->name())

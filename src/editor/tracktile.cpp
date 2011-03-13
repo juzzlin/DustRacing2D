@@ -16,6 +16,7 @@
 #include "tracktile.h"
 #include "tiletypedialog.h"
 #include "tileanimator.h"
+#include "mainwindow.h"
 
 #include <QPainter>
 #include <QGraphicsView>
@@ -95,6 +96,10 @@ void TrackTile::paint(QPainter * painter,
         break;
 
     case TT_NONE:
+        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
+                            m_size.width(), m_size.height(),
+                            QPixmap(":/data/images/clear.png"));
+
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);
         painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
@@ -157,6 +162,29 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
                 // Show context menu
                 m_menu.exec(globalPos);
+            }
+        }
+    }
+    else if (event->button() == Qt::LeftButton)
+    {
+        QAction * action = MainWindow::instance()->currentToolBarAction();
+        if (action)
+        {
+            if (action->data() == "straight")
+            {
+                setTileType(TrackTile::TT_STRAIGHT_GRASS);
+            }
+            else if (action->data() == "corner")
+            {
+                setTileType(TrackTile::TT_CORNER_GRASS);
+            }
+            else if (action->data() == "grass")
+            {
+                setTileType(TrackTile::TT_GRASS);
+            }
+            else if (action->data() == "clear")
+            {
+                setTileType(TrackTile::TT_NONE);
             }
         }
     }

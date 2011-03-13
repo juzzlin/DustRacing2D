@@ -44,6 +44,12 @@ public:
     //! Destructor
     ~MainWindow();
 
+    //! Return the singleton MainWindow.
+    static MainWindow * instance();
+
+    //! Return the current tool bar action, or NULL if none.
+    QAction * currentToolBarAction() const;
+
 protected:
 
     //! \reimp
@@ -73,8 +79,11 @@ private:
     QTextEdit   * m_console;
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
+    QAction     * m_currentToolBarAction;
     QSlider     * m_scaleSlider;
     QToolBar    * m_toolBar;
+
+    static MainWindow * m_instance;
 };
 
 #endif // MAINWINDOW_H
