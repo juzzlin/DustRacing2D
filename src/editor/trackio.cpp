@@ -15,6 +15,8 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "trackio.h"
 #include "trackdata.h"
@@ -25,38 +27,38 @@ TrackIO::TrackIO()
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
+    // Create content
+    QDomDocument doc(EDITOR_NAME);
+    QDomElement root = doc.createElement("track");
+    root.setAttribute("version", EDITOR_VERSION);
+    root.setAttribute("name", trackData->name());
+    root.setAttribute("cols", trackData->cols());
+    root.setAttribute("rows", trackData->rows());
+    doc.appendChild(root);
+
+    for (unsigned int i = 0; i < trackData->cols(); i++)
+        for (unsigned int j = 0; j < trackData->rows(); j++)
+            if (TrackTile * tile = trackData->tile(i, j))
+            {
+                QDomElement tileTag = doc.createElement("tile");
+                tileTag.setAttribute("id", tile->tileType());
+                tileTag.setAttribute("i", i);
+                tileTag.setAttribute("j", j);
+                tileTag.setAttribute("o", tile->rotation());
+                root.appendChild(tileTag);
+            }
+
+    // Save to file
     QFile file(path);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream out(&file);
-
-        out << QString("<track version=\"%1\" name=\"%2\" cols=\"%3\" rows=\"%4\">\n")
-                .arg(EDITOR_VERSION)
-                .arg(trackData->name())
-                .arg(trackData->cols())
-                .arg(trackData->rows());
-
-        for (unsigned int i = 0; i < trackData->cols(); i++)
-        {
-            for (unsigned int j = 0; j < trackData->rows(); j++)
-            {
-                if (TrackTile * tile = trackData->tile(i, j))
-                {
-                    out << QString("<tile id=\"%1\" i=\"%2\" j=\"%3\" o=\"%4\"/>\n")
-                            .arg(tile->tileType())
-                            .arg(i)
-                            .arg(j)
-                            .arg(tile->rotation());
-                }
-            }
-        }
-
-        out << QString("</track>");
-
+        out << doc.toString();
         file.close();
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool TrackIO::open(TrackData * trackData, QString path)
