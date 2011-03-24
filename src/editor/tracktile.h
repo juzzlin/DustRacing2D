@@ -25,11 +25,17 @@ class TrackTile : public QGraphicsItem
 {
 public:
 
+    //! Tile width
+    static const unsigned int TILE_W = 256;
+
+    //! Tile height
+    static const unsigned int TILE_H = 256;
+
     //! All possible types of tiles.
     enum TileType {TT_NONE, TT_CORNER_GRASS, TT_STRAIGHT_GRASS, TT_GRASS};
 
     //! Constructor
-    TrackTile(QSizeF size, QPointF location, TileType type = TT_NONE);
+    TrackTile(QPointF location, TileType type = TT_NONE);
 
     //! Destructor
     ~TrackTile();
@@ -45,6 +51,9 @@ public:
 
     //! Set type
     void setTileType(TileType type);
+
+    //! Set type
+    void setTileType(int type);
 
     //! Get type
     TileType tileType() const;

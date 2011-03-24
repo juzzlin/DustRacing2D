@@ -33,6 +33,15 @@ TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
 
         m_map << row;
     }
+
+    // Create tiles
+    for (unsigned int i = 0; i < m_cols; i++)
+        for (unsigned int j = 0; j < m_rows; j++)
+        {
+            TrackTile * newTile = new TrackTile(QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                                                        TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
+            setTile(i, j, newTile);
+        }
 }
 
 QString TrackData::name() const

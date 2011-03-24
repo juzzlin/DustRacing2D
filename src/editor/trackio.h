@@ -18,19 +18,14 @@
 
 class TrackData;
 
-class TrackIO
+namespace TrackIO
 {
-public:
-
     //! Save given track data. Returns false if failed.
-    static bool save(const TrackData * trackData, QString path);
+    bool save(const TrackData * trackData, QString path);
 
-    //! Load given track data. Returns false if failed.
-    static bool open(TrackData * trackData, QString path);
-
-private:
-
-    TrackIO();
-};
+    //! Load given track data. Returns the new TrackData object,
+    //! or NULL if failed.
+    TrackData * open(QString path);
+}
 
 #endif // TRACKIO_H

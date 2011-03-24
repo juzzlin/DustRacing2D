@@ -69,7 +69,7 @@ private:
 
     void populateMenuBar();
     void populateToolBar();
-    void createGrid();
+    void addTilesToScene();
     void console(QString text);
 
     Editor      * m_editor;

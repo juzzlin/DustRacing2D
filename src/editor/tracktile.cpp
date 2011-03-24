@@ -29,8 +29,8 @@ const int HIGHLIGHT_WIDTH = 11;
 
 TrackTile * TrackTile::m_activeTile = NULL;
 
-TrackTile::TrackTile(QSizeF size, QPointF location, TileType type):
-    m_size(size),
+TrackTile::TrackTile(QPointF location, TileType type):
+    m_size(QSizeF(TILE_W, TILE_H)),
     m_tileType(type),
     m_active(false),
     m_animator(new TileAnimator(this))
@@ -204,6 +204,28 @@ void TrackTile::setTileType(TileType type)
         m_tileType = type;
 
         update();
+    }
+}
+
+void TrackTile::setTileType(int type)
+{
+    switch (type)
+    {
+    case TrackTile::TT_NONE:
+        setTileType(TrackTile::TT_NONE);
+        break;
+    case TrackTile::TT_CORNER_GRASS:
+        setTileType(TrackTile::TT_CORNER_GRASS);
+        break;
+    case TrackTile::TT_STRAIGHT_GRASS:
+        setTileType(TrackTile::TT_STRAIGHT_GRASS);
+        break;
+    case TrackTile::TT_GRASS:
+        setTileType(TrackTile::TT_GRASS);
+        break;
+    default:
+        setTileType(TrackTile::TT_NONE);
+        break;
     }
 }
 

@@ -47,8 +47,6 @@ MainWindow * MainWindow::m_instance = NULL;
 namespace
 {
     const char *       SETTINGS_GROUP = "MainWindow";
-    const unsigned int TILE_W         = 256;
-    const unsigned int TILE_H         = 256;
     const int          MARGIN         = 0;
     const unsigned int MIN_ZOOM       = 0;
     const unsigned int MAX_ZOOM       = 200;
@@ -316,13 +314,16 @@ void MainWindow::openTrack()
 
     if (QFile::exists(fileName))
     {
-        if (TrackIO::open(m_trackData, fileName))
+        delete m_trackData;
+        if ((m_trackData) = TrackIO::open(fileName))
         {
             console(QString(tr("Track '")) + fileName + tr("' opened."));
 
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
             m_toolBar->setEnabled(true);
+
+            addTilesToScene();
         }
         else
         {
@@ -384,14 +385,15 @@ void MainWindow::initializeNewTrack()
         m_editorScene = new EditorScene;
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-                            2 * MARGIN + cols * TILE_W, 2 * MARGIN + rows  * TILE_H);
+                            2 * MARGIN + cols * TrackTile::TILE_W,
+                            2 * MARGIN + rows * TrackTile::TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
         m_editorView->setScene(m_editorScene);
         m_editorView->setSceneRect(newSceneRect);
         m_editorView->ensureVisible(0, 0, 0, 0);
 
-        createGrid();
+        addTilesToScene();
 
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
@@ -403,18 +405,14 @@ void MainWindow::initializeNewTrack()
     }
 }
 
-void MainWindow::createGrid()
+void MainWindow::addTilesToScene()
 {
     for (unsigned int i = 0; i < m_trackData->cols(); i++)
-    {
         for (unsigned int j = 0; j < m_trackData->rows(); j++)
         {
-            TrackTile * newTile = new TrackTile(QSizeF(TILE_W, TILE_H),
-                                                QPointF(TILE_W / 2 + i * TILE_W, TILE_H / 2 + j * TILE_H));
-            m_trackData->setTile(i, j, newTile);
-            m_editorScene->addItem(newTile);
+            if (TrackTile * tile = m_trackData->tile(i, j))
+                m_editorScene->addItem(tile);
         }
-    }
 
     if (m_trackData->tile(0, 0))
         m_trackData->tile(0, 0)->setActive(true);
@@ -423,13 +421,11 @@ void MainWindow::createGrid()
 void MainWindow::clear()
 {
     for (unsigned int i = 0; i < m_trackData->cols(); i++)
-    {
         for (unsigned int j = 0; j < m_trackData->rows(); j++)
         {
             if (TrackTile * p = m_trackData->tile(i, j))
                 p->setTileType(TrackTile::TT_NONE);
         }
-    }
 
     m_console->append(QString(tr("Tiles cleared.")));
 }

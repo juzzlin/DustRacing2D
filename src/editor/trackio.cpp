@@ -22,13 +22,10 @@
 #include "trackdata.h"
 #include "tracktile.h"
 
-TrackIO::TrackIO()
-{}
-
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
     // Create content
-    QDomDocument doc(EDITOR_NAME);
+    QDomDocument doc;
     QDomElement root = doc.createElement("track");
     root.setAttribute("version", EDITOR_VERSION);
     root.setAttribute("name", trackData->name());
@@ -61,9 +58,57 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     return false;
 }
 
-bool TrackIO::open(TrackData * trackData, QString path)
+TrackData * TrackIO::open(QString path)
 {
-    QFile in(path);
-    return true;
-}
+    QDomDocument doc;
 
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return NULL;
+    }
+
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return NULL;
+    }
+
+    file.close();
+
+    QDomElement  root    = doc.documentElement();
+    QString      version = root.attribute("version", EDITOR_VERSION);
+    QString      name    = root.attribute("name", "undefined");
+    unsigned int cols    = root.attribute("cols", "0").toUInt();
+    unsigned int rows    = root.attribute("rows", "0").toUInt();
+
+    // Read tile data
+    TrackData * newData = NULL;
+    if (cols > 0 && rows > 0)
+    {
+        newData = new TrackData(name, cols, rows);
+
+        QDomNode node = root.firstChild();
+        while(!node.isNull())
+        {
+            QDomElement tileTag = node.toElement();
+            if(!tileTag.isNull())
+            {
+                unsigned int id = tileTag.attribute("id", "0").toUInt();
+                unsigned int i  = tileTag.attribute("i", "0").toUInt();
+                unsigned int j  = tileTag.attribute("j", "0").toUInt();
+                int          o  = tileTag.attribute("o", "0").toInt();
+
+                if (TrackTile * tile = newData->tile(i, j))
+                {
+                    tile->setRotation(o);
+                    tile->setTileType(id);
+                }
+            }
+
+            node = node.nextSibling();
+        }
+    }
+
+    return newData;
+}
