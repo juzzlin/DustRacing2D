@@ -314,14 +314,29 @@ void MainWindow::openTrack()
 
     if (QFile::exists(fileName))
     {
+        removeTilesFromScene();
+
         delete m_trackData;
-        if ((m_trackData) = TrackIO::open(fileName))
+        m_trackData = TrackIO::open(fileName);
+        if (m_trackData)
         {
             console(QString(tr("Track '")) + fileName + tr("' opened."));
 
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
             m_toolBar->setEnabled(true);
+
+            delete m_editorScene;
+            m_editorScene = new EditorScene;
+
+            QRectF newSceneRect(-MARGIN, -MARGIN,
+                                2 * MARGIN + m_trackData->cols() * TrackTile::TILE_W,
+                                2 * MARGIN + m_trackData->rows() * TrackTile::TILE_H);
+
+            m_editorScene->setSceneRect(newSceneRect);
+            m_editorView->setScene(m_editorScene);
+            m_editorView->setSceneRect(newSceneRect);
+            m_editorView->ensureVisible(0, 0, 0, 0);
 
             addTilesToScene();
         }
@@ -378,6 +393,8 @@ void MainWindow::initializeNewTrack()
         const unsigned int cols = dialog.cols();
         const unsigned int rows = dialog.rows();
 
+        removeTilesFromScene();
+
         delete m_trackData;
         m_trackData = new TrackData(dialog.name(), cols, rows);
 
@@ -416,6 +433,24 @@ void MainWindow::addTilesToScene()
 
     if (m_trackData->tile(0, 0))
         m_trackData->tile(0, 0)->setActive(true);
+}
+
+void MainWindow::removeTilesFromScene()
+{
+    if (m_trackData)
+    {
+        TrackTile::setActiveTile(NULL);
+
+        for (unsigned int i = 0; i < m_trackData->cols(); i++)
+            for (unsigned int j = 0; j < m_trackData->rows(); j++)
+            {
+                if (TrackTile * tile = m_trackData->tile(i, j))
+                {
+                    m_editorScene->removeItem(tile);
+                    delete tile;
+                }
+            }
+    }
 }
 
 void MainWindow::clear()

@@ -70,6 +70,7 @@ private:
     void populateMenuBar();
     void populateToolBar();
     void addTilesToScene();
+    void removeTilesFromScene();
     void console(QString text);
 
     Editor      * m_editor;

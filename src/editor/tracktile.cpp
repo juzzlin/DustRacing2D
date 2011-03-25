@@ -142,6 +142,23 @@ void TrackTile::setActive(bool active)
     update();
 }
 
+void TrackTile::setActiveTile(TrackTile * tile)
+{
+    if (tile)
+    {
+        tile->setActive(true);
+    }
+    else
+    {
+        if (activeTile())
+        {
+            activeTile()->setActive(false);
+        }
+
+        TrackTile::m_activeTile = NULL;
+    }
+}
+
 TrackTile * TrackTile::activeTile()
 {
     return TrackTile::m_activeTile;

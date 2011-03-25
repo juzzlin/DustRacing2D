@@ -61,6 +61,9 @@ public:
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
 
+    //! Set the active tile
+    static void setActiveTile(TrackTile * tile);
+
 protected:
 
     //! \reimp
