@@ -31,11 +31,8 @@ public:
     //! Tile height
     static const unsigned int TILE_H = 256;
 
-    //! All possible types of tiles.
-    enum TileType {TT_NONE, TT_CORNER_GRASS, TT_STRAIGHT_GRASS, TT_GRASS};
-
     //! Constructor
-    TrackTile(QPointF location, TileType type = TT_NONE);
+    explicit TrackTile(QPointF location, const QString & type = "clear");
 
     //! Destructor
     ~TrackTile();
@@ -49,14 +46,11 @@ public:
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
 
-    //! Set type
-    void setTileType(TileType type);
-
-    //! Set type
-    void setTileType(int type);
+    //! Set type: "corner", "straight", "grass", "finish", "clear".
+    void setTileType(const QString & type);
 
     //! Get type
-    TileType tileType() const;
+    const QString & tileType() const;
 
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
@@ -83,7 +77,7 @@ private:
 
     static TrackTile * m_activeTile;
     QSizeF             m_size;
-    TileType           m_tileType;
+    QString            m_tileType;
     bool               m_active;
     TileAnimator     * m_animator;
     QMenu              m_menu;

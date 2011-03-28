@@ -55,6 +55,7 @@ namespace
     const char *       STRAIGHT_PATH  = ":/data/images/straight.png";
     const char *       CORNER_PATH    = ":/data/images/corner.png";
     const char *       GRASS_PATH     = ":/data/images/grass.png";
+    const char *       FINISH_PATH    = ":/data/images/finish.png";
     const char *       CLEAR_PATH     = ":/data/images/clear.png";
 }
 
@@ -257,6 +258,11 @@ void MainWindow::populateToolBar()
     p->setData(QVariant(QString("grass")));
     m_toolBar->addAction(p);
 
+    // Add "finish"-action
+    p = new QAction(QIcon(QPixmap(FINISH_PATH)), tr("Finish"), this);
+    p->setData(QVariant(QString("finish")));
+    m_toolBar->addAction(p);
+
     // Add "clear"-action
     p = new QAction(QIcon(QPixmap(CLEAR_PATH)), tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
@@ -289,6 +295,12 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(GRASS_PATH)
+                                                    .scaled(QSize(32, 32))));
+        }
+        else if (action->data() == "finish")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(QPixmap(FINISH_PATH)
                                                     .scaled(QSize(32, 32))));
         }
         else if (action->data() == "clear")
@@ -459,7 +471,7 @@ void MainWindow::clear()
         for (unsigned int j = 0; j < m_trackData->rows(); j++)
         {
             if (TrackTile * p = m_trackData->tile(i, j))
-                p->setTileType(TrackTile::TT_NONE);
+                p->setTileType("clear");
         }
 
     m_console->append(QString(tr("Tiles cleared.")));

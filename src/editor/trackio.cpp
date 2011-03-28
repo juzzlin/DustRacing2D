@@ -38,7 +38,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
             if (TrackTile * tile = trackData->tile(i, j))
             {
                 QDomElement tileTag = doc.createElement("tile");
-                tileTag.setAttribute("id", tile->tileType());
+                tileTag.setAttribute("type", tile->tileType());
                 tileTag.setAttribute("i", i);
                 tileTag.setAttribute("j", j);
                 tileTag.setAttribute("o", tile->rotation());
@@ -87,6 +87,7 @@ TrackData * TrackIO::open(QString path)
     if (cols > 0 && rows > 0)
     {
         newData = new TrackData(name, cols, rows);
+        newData->setFileName(path);
 
         QDomNode node = root.firstChild();
         while(!node.isNull())
@@ -94,7 +95,7 @@ TrackData * TrackIO::open(QString path)
             QDomElement tileTag = node.toElement();
             if(!tileTag.isNull())
             {
-                unsigned int id = tileTag.attribute("id", "0").toUInt();
+                QString      id = tileTag.attribute("type", "clear");
                 unsigned int i  = tileTag.attribute("i", "0").toUInt();
                 unsigned int j  = tileTag.attribute("j", "0").toUInt();
                 int          o  = tileTag.attribute("o", "0").toInt();

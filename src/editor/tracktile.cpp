@@ -29,7 +29,7 @@ const int HIGHLIGHT_WIDTH = 11;
 
 TrackTile * TrackTile::m_activeTile = NULL;
 
-TrackTile::TrackTile(QPointF location, TileType type):
+TrackTile::TrackTile(QPointF location, const QString & type):
     m_size(QSizeF(TILE_W, TILE_H)),
     m_tileType(type),
     m_active(false),
@@ -75,27 +75,32 @@ void TrackTile::paint(QPainter * painter,
     QPen pen;
     pen.setJoinStyle(Qt::MiterJoin);
 
-    switch(m_tileType)
+    if (m_tileType == "grass")
     {
-    case TT_GRASS:
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(":/data/images/grass.png"));
-        break;
-
-    case TT_STRAIGHT_GRASS:
+    }
+    else if (m_tileType == "straight")
+    {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(":/data/images/straight.png"));
-        break;
-
-    case TT_CORNER_GRASS:
+    }
+    else if (m_tileType == "corner")
+    {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(":/data/images/corner.png"));
-        break;
-
-    case TT_NONE:
+    }
+    else if (m_tileType == "finish")
+    {
+        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
+                            m_size.width(), m_size.height(),
+                            QPixmap(":/data/images/finish.png"));
+    }
+    else if (m_tileType == "clear")
+    {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(":/data/images/clear.png"));
@@ -104,11 +109,7 @@ void TrackTile::paint(QPainter * painter,
         painter->setPen(pen);
         painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
                            m_size.width(),      m_size.height());
-        break;
-
-    default:
-        break;
-    };
+    }
 
     if (m_active)
     {
@@ -184,26 +185,8 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
     }
     else if (event->button() == Qt::LeftButton)
     {
-        QAction * action = MainWindow::instance()->currentToolBarAction();
-        if (action)
-        {
-            if (action->data() == "straight")
-            {
-                setTileType(TrackTile::TT_STRAIGHT_GRASS);
-            }
-            else if (action->data() == "corner")
-            {
-                setTileType(TrackTile::TT_CORNER_GRASS);
-            }
-            else if (action->data() == "grass")
-            {
-                setTileType(TrackTile::TT_GRASS);
-            }
-            else if (action->data() == "clear")
-            {
-                setTileType(TrackTile::TT_NONE);
-            }
-        }
+        if (QAction * action = MainWindow::instance()->currentToolBarAction())
+            setTileType(action->data().toString());
     }
 
     QGraphicsItem::mousePressEvent(event);
@@ -214,7 +197,7 @@ void TrackTile::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void TrackTile::setTileType(TileType type)
+void TrackTile::setTileType(const QString & type)
 {
     if (type != m_tileType)
     {
@@ -224,29 +207,7 @@ void TrackTile::setTileType(TileType type)
     }
 }
 
-void TrackTile::setTileType(int type)
-{
-    switch (type)
-    {
-    case TrackTile::TT_NONE:
-        setTileType(TrackTile::TT_NONE);
-        break;
-    case TrackTile::TT_CORNER_GRASS:
-        setTileType(TrackTile::TT_CORNER_GRASS);
-        break;
-    case TrackTile::TT_STRAIGHT_GRASS:
-        setTileType(TrackTile::TT_STRAIGHT_GRASS);
-        break;
-    case TrackTile::TT_GRASS:
-        setTileType(TrackTile::TT_GRASS);
-        break;
-    default:
-        setTileType(TrackTile::TT_NONE);
-        break;
-    }
-}
-
-TrackTile::TileType TrackTile::tileType() const
+const QString & TrackTile::tileType() const
 {
     return m_tileType;
 }
