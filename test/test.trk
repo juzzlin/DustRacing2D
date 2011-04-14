@@ -1,0 +1,18 @@
+<track version="0.1" cols="4" rows="4" name="Test">
+ <tile i="0" j="0" o="0" type="corner"/>
+ <tile i="0" j="1" o="90" type="straight"/>
+ <tile i="0" j="2" o="90" type="straight"/>
+ <tile i="0" j="3" o="-90" type="corner"/>
+ <tile i="1" j="0" o="90" type="corner"/>
+ <tile i="1" j="1" o="-90" type="corner"/>
+ <tile i="1" j="2" o="0" type="grass"/>
+ <tile i="1" j="3" o="0" type="straight"/>
+ <tile i="2" j="0" o="0" type="corner"/>
+ <tile i="2" j="1" o="-180" type="corner"/>
+ <tile i="2" j="2" o="0" type="grass"/>
+ <tile i="2" j="3" o="0" type="finish"/>
+ <tile i="3" j="0" o="90" type="corner"/>
+ <tile i="3" j="1" o="90" type="straight"/>
+ <tile i="3" j="2" o="90" type="straight"/>
+ <tile i="3" j="3" o="-180" type="corner"/>
+</track>
