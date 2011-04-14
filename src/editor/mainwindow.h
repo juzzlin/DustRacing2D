@@ -64,6 +64,7 @@ private slots:
     void updateScale(int value);
     void handleToolBarActionClick(QAction * action);
     void clear();
+    void beginSetRoute();
 
 private:
 

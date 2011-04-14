@@ -232,6 +232,11 @@ void MainWindow::populateMenuBar()
     editMenu->addAction(clearAct);
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
 
+    // Add "set order"-action
+    QAction * setRouteAct = new QAction(tr("&Set route"), this);
+    editMenu->addAction(setRouteAct);
+    connect(setRouteAct, SIGNAL(triggered()), this, SLOT(beginSetRoute()));
+
     // Create "help"-menu
     QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
 
@@ -475,6 +480,18 @@ void MainWindow::clear()
         }
 
     m_console->append(QString(tr("Tiles cleared.")));
+}
+
+void MainWindow::beginSetRoute()
+{
+    if (m_trackData && m_trackData->cols() > 1 && m_trackData->rows() > 1)
+    {
+        console(tr("Set route: click on the tiles one by one and make the route. Clicking on the start tile again finishes."));
+    }
+    else
+    {
+        console(tr("Set route: not a valid track."));
+    }
 }
 
 void MainWindow::console(QString text)
