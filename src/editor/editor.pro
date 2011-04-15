@@ -17,7 +17,8 @@ SOURCES += main.cpp mainwindow.cpp editor.cpp \
     trackio.cpp \
     tracktile.cpp \
     tiletypedialog.cpp \
-    tileanimator.cpp
+    tileanimator.cpp \
+    route.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
@@ -26,7 +27,8 @@ HEADERS += mainwindow.h \
     editorscene.h \
     trackio.h \
     tiletypedialog.h \
-    tileanimator.h
+    tileanimator.h \
+    route.h
 
 RESOURCES += \
     ../common.qrc

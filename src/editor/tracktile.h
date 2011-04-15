@@ -20,7 +20,9 @@
 #include <QMenu>
 
 class TileAnimator;
+class TrackData;
 
+//! A race track is built of TrackTiles.
 class TrackTile : public QGraphicsItem
 {
 public:
@@ -32,7 +34,7 @@ public:
     static const unsigned int TILE_H = 256;
 
     //! Constructor
-    explicit TrackTile(QPointF location, const QString & type = "clear");
+    TrackTile(TrackData * trackData, QPointF location, const QString & type = "clear");
 
     //! Destructor
     ~TrackTile();
@@ -52,11 +54,20 @@ public:
     //! Get type
     const QString & tileType() const;
 
+    //! Set route index
+    void setRouteIndex(int index);
+
+    //! Get route index, return -1 if not set.
+    int routeIndex() const;
+
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
 
     //! Set the active tile
     static void setActiveTile(TrackTile * tile);
+
+    //! Set route definition mode on / off
+    static void setRouteMode(bool enable);
 
 protected:
 
@@ -75,12 +86,15 @@ private:
 
     void createContextMenu();
 
+    TrackData        * m_trackData;
     static TrackTile * m_activeTile;
+    static bool        m_routeMode;
     QSizeF             m_size;
     QString            m_tileType;
     bool               m_active;
     TileAnimator     * m_animator;
     QMenu              m_menu;
+    int                m_routeIndex;
 };
 
 #endif // TRACKTILE_H

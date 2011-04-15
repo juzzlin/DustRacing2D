@@ -20,7 +20,7 @@ TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
     m_name(name),
     m_cols(cols),
     m_rows(rows),
-    m_finishLineSet(false)
+    m_route()
 {
     // Create an empty map
     for (unsigned int j = 0; j < m_rows; j++)
@@ -38,7 +38,8 @@ TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
     for (unsigned int i = 0; i < m_cols; i++)
         for (unsigned int j = 0; j < m_rows; j++)
         {
-            TrackTile * newTile = new TrackTile(QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+            TrackTile * newTile = new TrackTile(this,
+                                                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                                                         TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
             setTile(i, j, newTile);
         }
@@ -69,37 +70,6 @@ unsigned int TrackData::rows() const
     return m_rows;
 }
 
-bool TrackData::setFinishLine(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1)
-{
-    if (x0 != x1 && y0 != y1)
-        return false;
-
-    if (x0 >= m_cols || y0 >= m_rows)
-        return false;
-
-    m_flx0 = x0;
-    m_fly0 = y0;
-    m_flx1 = x1;
-    m_fly1 = y1;
-
-    m_finishLineSet = true;
-
-    return true;
-}
-
-void TrackData::finishLine(unsigned int & x0, unsigned int & y0, unsigned int & x1, unsigned int & y1) const
-{
-    x0 = m_flx0;
-    y0 = m_fly0;
-    x1 = m_flx1;
-    y1 = m_fly1;
-}
-
-bool TrackData::finishLineSet() const
-{
-    return m_finishLineSet;
-}
-
 bool TrackData::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
 {
     if (x >= m_cols || y >= m_rows)
@@ -116,4 +86,9 @@ TrackTile * TrackData::tile(unsigned int x, unsigned int y) const
         return NULL;
 
     return m_map[y][x];
+}
+
+Route & TrackData::route()
+{
+    return m_route;
 }

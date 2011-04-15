@@ -19,6 +19,8 @@
 #include <QString>
 #include <QVector>
 
+#include "route.h"
+
 class TrackTile;
 
 class TrackData
@@ -43,16 +45,6 @@ public:
   //! Get row count
   unsigned int rows() const;
 
-  //! Set finish line to lie between given tile coordinates.
-  //! Returns false on impossible coordinates or if coordinates out-of-range.
-  bool setFinishLine(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1);
-
-  //! Get finish line.
-  void finishLine(unsigned int & x0, unsigned int & y0, unsigned int & x1, unsigned int & y1) const;
-
-  //! Returns true if finish line is set.
-  bool finishLineSet() const;
-
   //! Set given tile to given coordinates.
   //! Returns false if impossible coordinates.
   bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
@@ -61,14 +53,17 @@ public:
   //! Returns NULL if no tile set or impossible coordinates.
   TrackTile * tile(unsigned int x, unsigned int y) const;
 
+  //! Get route object.
+  Route & route();
+
 private:
 
   QString m_name;
   QString m_fileName;
   unsigned int m_cols, m_rows;
   QVector<QVector<TrackTile *> > m_map;
-  bool m_finishLineSet;
   unsigned int m_flx0, m_fly0, m_flx1, m_fly1;
+  Route m_route;
 };
 
 #endif // TRACKDATA_H

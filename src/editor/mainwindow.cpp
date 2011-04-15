@@ -486,12 +486,20 @@ void MainWindow::beginSetRoute()
 {
     if (m_trackData && m_trackData->cols() > 1 && m_trackData->rows() > 1)
     {
+        TrackTile::setRouteMode(true);
+        m_trackData->route().clear();
         console(tr("Set route: click on the tiles one by one and make the route. Clicking on the start tile again finishes."));
     }
     else
     {
         console(tr("Set route: not a valid track."));
     }
+}
+
+void MainWindow::endSetRoute()
+{
+    TrackTile::setRouteMode(false);
+    console(tr("Set route: route finished."));
 }
 
 void MainWindow::console(QString text)

@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.h"
+#include "trackdata.h"
 #include "tiletypedialog.h"
 #include "tileanimator.h"
 #include "mainwindow.h"
@@ -24,19 +25,34 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QAction>
 
-// Width of the highlight shown when the tile is active
-const int HIGHLIGHT_WIDTH = 11;
-
 TrackTile * TrackTile::m_activeTile = NULL;
+bool        TrackTile::m_routeMode  = false;
 
-TrackTile::TrackTile(QPointF location, const QString & type):
+TrackTile::TrackTile(TrackData * trackData, QPointF location, const QString & type):
+    m_trackData(trackData),
     m_size(QSizeF(TILE_W, TILE_H)),
     m_tileType(type),
     m_active(false),
-    m_animator(new TileAnimator(this))
+    m_animator(new TileAnimator(this)),
+    m_routeIndex(-1)
 {
     setPos(location);
     createContextMenu();
+}
+
+void TrackTile::setRouteMode(bool enable)
+{
+    TrackTile::m_routeMode = enable;
+}
+
+void TrackTile::setRouteIndex(int index)
+{
+    m_routeIndex = index;
+}
+
+int TrackTile::routeIndex() const
+{
+    return m_routeIndex;
 }
 
 void TrackTile::createContextMenu()
@@ -75,6 +91,7 @@ void TrackTile::paint(QPainter * painter,
     QPen pen;
     pen.setJoinStyle(Qt::MiterJoin);
 
+    // Render the tile image
     if (m_tileType == "grass")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
@@ -111,16 +128,28 @@ void TrackTile::paint(QPainter * painter,
                            m_size.width(),      m_size.height());
     }
 
+    // Render highlight
     if (m_active)
     {
-        pen.setColor(QColor(0, 0, 255, 64));
-        pen.setWidth(HIGHLIGHT_WIDTH);
+        painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
+    }
 
+    // Render route index
+    if (m_routeIndex >= 0)
+    {
+        pen.setColor(QColor(255, 255, 255, 127));
         painter->setPen(pen);
-        painter->drawRect(-m_size.width()  / 2 + HIGHLIGHT_WIDTH / 2,
-                          -m_size.height() / 2 + HIGHLIGHT_WIDTH / 2,
-                           m_size.width()      - HIGHLIGHT_WIDTH,
-                           m_size.height()     - HIGHLIGHT_WIDTH);
+
+        // Cancel possible rotation so that the text is not
+        // rotated.
+        QTransform transform;
+        transform.rotate(-rotation());
+        painter->setTransform(transform, true);
+
+        QFont font;
+        font.setPixelSize(m_size.height() / 2);
+        painter->setFont(font);
+        painter->drawText(boundingRect(), Qt::AlignCenter, QString("%1").arg(m_routeIndex));
     }
 
     painter->restore();
@@ -133,9 +162,7 @@ void TrackTile::setActive(bool active)
     if (active && TrackTile::m_activeTile != this)
     {
         if (TrackTile::m_activeTile)
-        {
             TrackTile::m_activeTile->setActive(false);
-        }
 
         TrackTile::m_activeTile = this;
     }
@@ -152,9 +179,7 @@ void TrackTile::setActiveTile(TrackTile * tile)
     else
     {
         if (activeTile())
-        {
             activeTile()->setActive(false);
-        }
 
         TrackTile::m_activeTile = NULL;
     }
@@ -169,8 +194,10 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     setActive(true);
 
+    // Handle right button click
     if (event->button() == Qt::RightButton)
     {
+        // Show the context menu
         if (scene() && !scene()->views().isEmpty())
         {
             if (QGraphicsView * view = scene()->views()[0])
@@ -183,10 +210,28 @@ void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
             }
         }
     }
+    // Handle left button click
     else if (event->button() == Qt::LeftButton)
     {
-        if (QAction * action = MainWindow::instance()->currentToolBarAction())
-            setTileType(action->data().toString());
+        // User is defining the route
+        if (TrackTile::m_routeMode)
+        {
+            // Push tile to the route
+            m_routeIndex = m_trackData->route().push(this);
+
+            // Check if we might have a loop => end
+            if (m_routeIndex == 0 && m_trackData->route().length() > 1)
+            {
+                TrackTile::m_routeMode = false;
+                MainWindow::instance()->endSetRoute();
+            }
+        }
+        // User is setting the tile type
+        else
+        {
+            if (QAction * action = MainWindow::instance()->currentToolBarAction())
+                setTileType(action->data().toString());
+        }
     }
 
     QGraphicsItem::mousePressEvent(event);

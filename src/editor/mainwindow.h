@@ -50,6 +50,17 @@ public:
     //! Return the current tool bar action, or NULL if none.
     QAction * currentToolBarAction() const;
 
+    //! Print text to the console.
+    void console(QString text);
+
+public slots:
+
+    //! Begin marking the route.
+    void beginSetRoute();
+
+    //! End marking the route.
+    void endSetRoute();
+
 protected:
 
     //! \reimp
@@ -64,7 +75,6 @@ private slots:
     void updateScale(int value);
     void handleToolBarActionClick(QAction * action);
     void clear();
-    void beginSetRoute();
 
 private:
 
@@ -72,7 +82,6 @@ private:
     void populateToolBar();
     void addTilesToScene();
     void removeTilesFromScene();
-    void console(QString text);
 
     Editor      * m_editor;
     EditorView  * m_editorView;
