@@ -13,35 +13,41 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ROUTE_H
-#define ROUTE_H
+#ifndef MAP_H
+#define MAP_H
 
 #include <QVector>
 
 class TrackTile;
+class TrackData;
 
-//! Route is used to define the race route as a sequence
-//! of TrackTiles.
-class Route
+//! The tile matrix used by TrackData.
+class Map
 {
 public:
 
-    //! Clear the current route.
-    void clear();
+    //! Constructor
+    Map(TrackData * trackData, unsigned int cols, unsigned int rows);
 
-    //! Push new tile to the route and return its index.
-    int push(TrackTile * tile);
+    //! Get column count
+    unsigned int cols() const;
 
-    //! Return length of the current route.
-    unsigned int length() const;
+    //! Get row count
+    unsigned int rows() const;
 
-    //! Return tile for the given index or NULL if
-    //! out of range.
-    TrackTile * get(unsigned int index) const;
+    //! Set given tile to given coordinates.
+    //! Returns false if impossible coordinates.
+    bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
+
+    //! Get tile at given coordinates.
+    //! Returns NULL if no tile set or impossible coordinates.
+    TrackTile * tile(unsigned int x, unsigned int y) const;
 
 private:
 
-    QVector<TrackTile *> m_route;
+    TrackData * m_trackData;
+    unsigned int m_cols, m_rows;
+    QVector<QVector<TrackTile *> > m_map;
 };
 
-#endif // ROUTE_H
+#endif // MAP_H

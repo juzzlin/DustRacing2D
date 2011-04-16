@@ -29,13 +29,14 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     QDomElement root = doc.createElement("track");
     root.setAttribute("version", EDITOR_VERSION);
     root.setAttribute("name", trackData->name());
-    root.setAttribute("cols", trackData->cols());
-    root.setAttribute("rows", trackData->rows());
+    root.setAttribute("cols", trackData->map().cols());
+    root.setAttribute("rows", trackData->map().rows());
     doc.appendChild(root);
 
-    for (unsigned int i = 0; i < trackData->cols(); i++)
-        for (unsigned int j = 0; j < trackData->rows(); j++)
-            if (TrackTile * tile = trackData->tile(i, j))
+    // Add information about tiles
+    for (unsigned int i = 0; i < trackData->map().cols(); i++)
+        for (unsigned int j = 0; j < trackData->map().rows(); j++)
+            if (TrackTile * tile = trackData->map().tile(i, j))
             {
                 QDomElement tileTag = doc.createElement("tile");
                 tileTag.setAttribute("type", tile->tileType());
@@ -44,6 +45,19 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 tileTag.setAttribute("o", tile->rotation());
                 root.appendChild(tileTag);
             }
+
+    // Add information about the route, if set
+    if (trackData->route().length() > 1)
+    {
+        for (unsigned int i = 0; i < trackData->route().length(); i++)
+        {
+            QDomElement routeTag = doc.createElement("route");
+            routeTag.setAttribute("index", i);
+            routeTag.setAttribute("i", trackData->route().get(i)->matrixLocation().x());
+            routeTag.setAttribute("j", trackData->route().get(i)->matrixLocation().y());
+            root.appendChild(routeTag);
+        }
+    }
 
     // Save to file
     QFile file(path);
@@ -100,7 +114,7 @@ TrackData * TrackIO::open(QString path)
                 unsigned int j  = tileTag.attribute("j", "0").toUInt();
                 int          o  = tileTag.attribute("o", "0").toInt();
 
-                if (TrackTile * tile = newData->tile(i, j))
+                if (TrackTile * tile = newData->map().tile(i, j))
                 {
                     tile->setRotation(o);
                     tile->setTileType(id);

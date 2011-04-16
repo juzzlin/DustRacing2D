@@ -43,3 +43,10 @@ unsigned int Route::length() const
     return m_route.size();
 }
 
+TrackTile * Route::get(unsigned int index) const
+{
+    if (index < length())
+        return m_route[index];
+
+    return NULL;
+}

@@ -347,8 +347,8 @@ void MainWindow::openTrack()
             m_editorScene = new EditorScene;
 
             QRectF newSceneRect(-MARGIN, -MARGIN,
-                                2 * MARGIN + m_trackData->cols() * TrackTile::TILE_W,
-                                2 * MARGIN + m_trackData->rows() * TrackTile::TILE_H);
+                                2 * MARGIN + m_trackData->map().cols() * TrackTile::TILE_W,
+                                2 * MARGIN + m_trackData->map().rows() * TrackTile::TILE_H);
 
             m_editorScene->setSceneRect(newSceneRect);
             m_editorView->setScene(m_editorScene);
@@ -434,22 +434,22 @@ void MainWindow::initializeNewTrack()
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
                 .arg(m_trackData->name())
-                .arg(m_trackData->cols())
-                .arg(m_trackData->rows()));
+                .arg(m_trackData->map().cols())
+                .arg(m_trackData->map().rows()));
     }
 }
 
 void MainWindow::addTilesToScene()
 {
-    for (unsigned int i = 0; i < m_trackData->cols(); i++)
-        for (unsigned int j = 0; j < m_trackData->rows(); j++)
+    for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
+        for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
         {
-            if (TrackTile * tile = m_trackData->tile(i, j))
+            if (TrackTile * tile = m_trackData->map().tile(i, j))
                 m_editorScene->addItem(tile);
         }
 
-    if (m_trackData->tile(0, 0))
-        m_trackData->tile(0, 0)->setActive(true);
+    if (m_trackData->map().tile(0, 0))
+        m_trackData->map().tile(0, 0)->setActive(true);
 }
 
 void MainWindow::removeTilesFromScene()
@@ -458,10 +458,10 @@ void MainWindow::removeTilesFromScene()
     {
         TrackTile::setActiveTile(NULL);
 
-        for (unsigned int i = 0; i < m_trackData->cols(); i++)
-            for (unsigned int j = 0; j < m_trackData->rows(); j++)
+        for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
+            for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
             {
-                if (TrackTile * tile = m_trackData->tile(i, j))
+                if (TrackTile * tile = m_trackData->map().tile(i, j))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
@@ -472,10 +472,10 @@ void MainWindow::removeTilesFromScene()
 
 void MainWindow::clear()
 {
-    for (unsigned int i = 0; i < m_trackData->cols(); i++)
-        for (unsigned int j = 0; j < m_trackData->rows(); j++)
+    for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
+        for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
         {
-            if (TrackTile * p = m_trackData->tile(i, j))
+            if (TrackTile * p = m_trackData->map().tile(i, j))
                 p->setTileType("clear");
         }
 
@@ -484,7 +484,7 @@ void MainWindow::clear()
 
 void MainWindow::beginSetRoute()
 {
-    if (m_trackData && m_trackData->cols() > 1 && m_trackData->rows() > 1)
+    if (m_trackData && m_trackData->map().cols() > 1 && m_trackData->map().rows() > 1)
     {
         TrackTile::setRouteMode(true);
         m_trackData->route().clear();

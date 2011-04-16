@@ -17,11 +17,9 @@
 #define TRACKDATA_H
 
 #include <QString>
-#include <QVector>
 
 #include "route.h"
-
-class TrackTile;
+#include "map.h"
 
 class TrackData
 {
@@ -39,31 +37,24 @@ public:
   //! Set file name
   void setFileName(QString fileName);
 
-  //! Get column count
-  unsigned int cols() const;
+  //! Get map object.
+  Map & map();
 
-  //! Get row count
-  unsigned int rows() const;
-
-  //! Set given tile to given coordinates.
-  //! Returns false if impossible coordinates.
-  bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
-
-  //! Get tile at given coordinates.
-  //! Returns NULL if no tile set or impossible coordinates.
-  TrackTile * tile(unsigned int x, unsigned int y) const;
+  //! Get route object.
+  const Map & map() const;
 
   //! Get route object.
   Route & route();
+
+  //! Get route object.
+  const Route & route() const;
 
 private:
 
   QString m_name;
   QString m_fileName;
-  unsigned int m_cols, m_rows;
-  QVector<QVector<TrackTile *> > m_map;
-  unsigned int m_flx0, m_fly0, m_flx1, m_fly1;
-  Route m_route;
+  Map     m_map;
+  Route   m_route;
 };
 
 #endif // TRACKDATA_H

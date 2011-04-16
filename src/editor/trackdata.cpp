@@ -18,32 +18,9 @@
 
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows) :
     m_name(name),
-    m_cols(cols),
-    m_rows(rows),
+    m_map(this, cols, rows),
     m_route()
-{
-    // Create an empty map
-    for (unsigned int j = 0; j < m_rows; j++)
-    {
-        QVector<TrackTile *> row;
-        for (unsigned int i = 0; i < m_cols; i++)
-        {
-            row << NULL;
-        }
-
-        m_map << row;
-    }
-
-    // Create tiles
-    for (unsigned int i = 0; i < m_cols; i++)
-        for (unsigned int j = 0; j < m_rows; j++)
-        {
-            TrackTile * newTile = new TrackTile(this,
-                                                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                                                        TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
-            setTile(i, j, newTile);
-        }
-}
+{}
 
 QString TrackData::name() const
 {
@@ -60,35 +37,22 @@ void TrackData::setFileName(QString newFileName)
     m_fileName = newFileName;
 }
 
-unsigned int TrackData::cols() const
-{
-    return m_cols;
-}
-
-unsigned int TrackData::rows() const
-{
-    return m_rows;
-}
-
-bool TrackData::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
-{
-    if (x >= m_cols || y >= m_rows)
-        return false;
-
-    m_map[y][x] = pTile;
-
-    return true;
-}
-
-TrackTile * TrackData::tile(unsigned int x, unsigned int y) const
-{
-    if (x >= m_cols || y >= m_rows)
-        return NULL;
-
-    return m_map[y][x];
-}
-
 Route & TrackData::route()
 {
     return m_route;
+}
+
+const Route & TrackData::route() const
+{
+    return m_route;
+}
+
+Map & TrackData::map()
+{
+    return m_map;
+}
+
+const Map & TrackData::map() const
+{
+    return m_map;
 }

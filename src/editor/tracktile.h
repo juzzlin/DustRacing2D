@@ -34,7 +34,8 @@ public:
     static const unsigned int TILE_H = 256;
 
     //! Constructor
-    TrackTile(TrackData * trackData, QPointF location, const QString & type = "clear");
+    TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+              const QString & type = "clear");
 
     //! Destructor
     ~TrackTile();
@@ -59,6 +60,9 @@ public:
 
     //! Get route index, return -1 if not set.
     int routeIndex() const;
+
+    //! Get location in the tile matrix.
+    QPoint matrixLocation() const;
 
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
@@ -95,6 +99,7 @@ private:
     TileAnimator     * m_animator;
     QMenu              m_menu;
     int                m_routeIndex;
+    QPoint             m_matrixLocation;
 };
 
 #endif // TRACKTILE_H

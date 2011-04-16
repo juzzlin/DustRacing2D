@@ -28,13 +28,15 @@
 TrackTile * TrackTile::m_activeTile = NULL;
 bool        TrackTile::m_routeMode  = false;
 
-TrackTile::TrackTile(TrackData * trackData, QPointF location, const QString & type):
+TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+                     const QString & type):
     m_trackData(trackData),
     m_size(QSizeF(TILE_W, TILE_H)),
     m_tileType(type),
     m_active(false),
     m_animator(new TileAnimator(this)),
-    m_routeIndex(-1)
+    m_routeIndex(-1),
+    m_matrixLocation(matrixLocation)
 {
     setPos(location);
     createContextMenu();
@@ -255,6 +257,11 @@ void TrackTile::setTileType(const QString & type)
 const QString & TrackTile::tileType() const
 {
     return m_tileType;
+}
+
+QPoint TrackTile::matrixLocation() const
+{
+    return m_matrixLocation;
 }
 
 TrackTile::~TrackTile()
