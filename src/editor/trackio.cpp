@@ -43,21 +43,12 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 tileTag.setAttribute("i", i);
                 tileTag.setAttribute("j", j);
                 tileTag.setAttribute("o", tile->rotation());
+
+                if (tile->routeIndex() != -1)
+                    tileTag.setAttribute("index", tile->routeIndex());
+
                 root.appendChild(tileTag);
             }
-
-    // Add information about the route, if set
-    if (trackData->route().length() > 1)
-    {
-        for (unsigned int i = 0; i < trackData->route().length(); i++)
-        {
-            QDomElement routeTag = doc.createElement("route");
-            routeTag.setAttribute("index", i);
-            routeTag.setAttribute("i", trackData->route().get(i)->matrixLocation().x());
-            routeTag.setAttribute("j", trackData->route().get(i)->matrixLocation().y());
-            root.appendChild(routeTag);
-        }
-    }
 
     // Save to file
     QFile file(path);
@@ -96,7 +87,6 @@ TrackData * TrackIO::open(QString path)
     unsigned int cols    = root.attribute("cols", "0").toUInt();
     unsigned int rows    = root.attribute("rows", "0").toUInt();
 
-    // Read tile data
     TrackData * newData = NULL;
     if (cols > 0 && rows > 0)
     {
@@ -106,18 +96,24 @@ TrackData * TrackIO::open(QString path)
         QDomNode node = root.firstChild();
         while(!node.isNull())
         {
-            QDomElement tileTag = node.toElement();
-            if(!tileTag.isNull())
+            QDomElement tag = node.toElement();
+            if(!tag.isNull())
             {
-                QString      id = tileTag.attribute("type", "clear");
-                unsigned int i  = tileTag.attribute("i", "0").toUInt();
-                unsigned int j  = tileTag.attribute("j", "0").toUInt();
-                int          o  = tileTag.attribute("o", "0").toInt();
-
-                if (TrackTile * tile = newData->map().tile(i, j))
+                // Read a tile tag
+                if (tag.nodeName() == "tile")
                 {
-                    tile->setRotation(o);
-                    tile->setTileType(id);
+                    QString      id = tag.attribute("type", "clear");
+                    unsigned int i  = tag.attribute("i", "0").toUInt();
+                    unsigned int j  = tag.attribute("j", "0").toUInt();
+                    int          o  = tag.attribute("o", "0").toInt();
+                    int      index  = tag.attribute("index", "-1").toInt();
+
+                    if (TrackTile * tile = newData->map().tile(i, j))
+                    {
+                        tile->setRotation(o);
+                        tile->setTileType(id);
+                        tile->setRouteIndex(index);
+                    }
                 }
             }
 
