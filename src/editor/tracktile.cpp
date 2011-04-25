@@ -36,7 +36,8 @@ TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocat
     m_active(false),
     m_animator(new TileAnimator(this)),
     m_routeIndex(-1),
-    m_matrixLocation(matrixLocation)
+    m_matrixLocation(matrixLocation),
+    m_routeDirection(TrackTile::RD_NONE)
 {
     setPos(location);
     createContextMenu();
@@ -50,11 +51,18 @@ void TrackTile::setRouteMode(bool enable)
 void TrackTile::setRouteIndex(int index)
 {
     m_routeIndex = index;
+    update();
 }
 
 int TrackTile::routeIndex() const
 {
     return m_routeIndex;
+}
+
+void TrackTile::setRouteDirection(TrackTile::RouteDirection direction)
+{
+    m_routeDirection = direction;
+    update();
 }
 
 void TrackTile::createContextMenu()
@@ -136,7 +144,7 @@ void TrackTile::paint(QPainter * painter,
         painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
     }
 
-    // Render route index
+    // Render route index and arrow
     if (m_routeIndex >= 0)
     {
         pen.setColor(QColor(255, 255, 255, 127));
@@ -148,10 +156,68 @@ void TrackTile::paint(QPainter * painter,
         transform.rotate(-rotation());
         painter->setTransform(transform, true);
 
-        QFont font;
-        font.setPixelSize(m_size.height() / 2);
-        painter->setFont(font);
-        painter->drawText(boundingRect(), Qt::AlignCenter, QString("%1").arg(m_routeIndex));
+        switch (m_routeDirection)
+        {
+        case RD_LEFT:
+            {
+                QPainterPath path;
+                QPolygon triangle;
+                triangle << QPoint(-m_size.width() / 2,  0)
+                         << QPoint(-m_size.width() / 3,  m_size.height() / 3)
+                         << QPoint(-m_size.width() / 3, -m_size.height() / 3);
+                path.addPolygon(triangle);
+                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
+            }
+            break;
+
+        case RD_RIGHT:
+            {
+                QPainterPath path;
+                QPolygon triangle;
+                triangle << QPoint(m_size.width() / 2,  0)
+                         << QPoint(m_size.width() / 3, -m_size.height() / 3)
+                         << QPoint(m_size.width() / 3,  m_size.height() / 3);
+                path.addPolygon(triangle);
+                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
+            }
+            break;
+
+        case RD_UP:
+            {
+                QPainterPath path;
+                QPolygon triangle;
+                triangle << QPoint(0, -m_size.height() / 2)
+                         << QPoint( m_size.width() / 3, -m_size.height() / 3)
+                         << QPoint(-m_size.width() / 3, -m_size.height() / 3);
+                path.addPolygon(triangle);
+                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
+            }
+            break;
+
+        case RD_DOWN:
+            {
+                QPainterPath path;
+                QPolygon triangle;
+                triangle << QPoint(0, m_size.height() / 2)
+                         << QPoint( m_size.width() / 3, m_size.height() / 3)
+                         << QPoint(-m_size.width() / 3, m_size.height() / 3);
+                path.addPolygon(triangle);
+                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
+            }
+            break;
+
+        default:
+        case RD_NONE:
+            break;
+        }
+
+        if (m_routeIndex == 0)
+        {
+            QFont font;
+            font.setPixelSize(m_size.height() / 2);
+            painter->setFont(font);
+            painter->drawText(boundingRect(), Qt::AlignCenter, "S");
+        }
     }
 
     painter->restore();

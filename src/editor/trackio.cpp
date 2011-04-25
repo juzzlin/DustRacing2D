@@ -93,6 +93,8 @@ TrackData * TrackIO::open(QString path)
         newData = new TrackData(name, cols, rows);
         newData->setFileName(path);
 
+        QVector<TrackTile *> routeVector;
+
         QDomNode node = root.firstChild();
         while(!node.isNull())
         {
@@ -113,12 +115,17 @@ TrackData * TrackIO::open(QString path)
                         tile->setRotation(o);
                         tile->setTileType(id);
                         tile->setRouteIndex(index);
+
+                        if (index >= 0)
+                            routeVector << tile;
                     }
                 }
             }
 
             node = node.nextSibling();
         }
+
+        newData->route().buildFromVector(routeVector);
     }
 
     return newData;

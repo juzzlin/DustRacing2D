@@ -479,7 +479,8 @@ void MainWindow::clear()
                 p->setTileType("clear");
         }
 
-    m_console->append(QString(tr("Tiles cleared.")));
+    m_trackData->route().clear();
+    m_console->append(QString(tr("Tiles and route cleared.")));
 }
 
 void MainWindow::beginSetRoute()

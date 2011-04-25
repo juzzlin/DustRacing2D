@@ -15,13 +15,13 @@
 
 #include "route.h"
 #include "tracktile.h"
+#include <algorithm>
 
 void Route::clear()
 {
     Q_FOREACH (TrackTile * tile, m_route)
     {
         tile->setRouteIndex(-1);
-        tile->update();
     }
 
     m_route.clear();
@@ -29,10 +29,60 @@ void Route::clear()
 
 int Route::push(TrackTile * tile)
 {
-    if (!m_route.contains(tile))
+    bool routeClosed = false;
+    if (m_route.size() && tile->routeIndex() == 0)
     {
-        tile->setRouteIndex(m_route.size());
-        m_route.append(tile);
+        routeClosed = true;
+    }
+
+    if (!m_route.contains(tile) || routeClosed)
+    {
+        bool okToAdd = false;
+
+        if (m_route.size())
+        {
+            TrackTile * prev = m_route.back();
+
+            if (prev->matrixLocation().x() == tile->matrixLocation().x())
+            {
+                if (prev->matrixLocation().y() < tile->matrixLocation().y())
+                {
+                    prev->setRouteDirection(TrackTile::RD_DOWN);
+                }
+                else
+                {
+                    prev->setRouteDirection(TrackTile::RD_UP);
+                }
+
+                okToAdd = true;
+            }
+            else if (prev->matrixLocation().y() == tile->matrixLocation().y())
+            {
+                if (prev->matrixLocation().x() < tile->matrixLocation().x())
+                {
+                    prev->setRouteDirection(TrackTile::RD_RIGHT);
+                }
+                else
+                {
+                    prev->setRouteDirection(TrackTile::RD_LEFT);
+                }
+
+                okToAdd = true;
+            }
+        }
+        else
+        {
+            okToAdd = true;
+        }
+
+        if (okToAdd)
+        {
+            if (!routeClosed)
+            {
+                tile->setRouteIndex(m_route.size());
+                m_route.append(tile);
+            }
+        }
     }
 
     return tile->routeIndex();
@@ -49,4 +99,32 @@ TrackTile * Route::get(unsigned int index) const
         return m_route[index];
 
     return NULL;
+}
+
+struct mySortFunc
+{
+    bool operator () (TrackTile * lhs, TrackTile * rhs)
+    {
+        return lhs->routeIndex() < rhs->routeIndex();
+    }
+};
+
+void Route::buildFromVector(QVector<TrackTile *> routeVector)
+{
+    if (routeVector.size())
+    {
+        clear();
+
+        std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
+
+        Q_FOREACH(TrackTile * tile, routeVector)
+        {
+            if (tile->routeIndex() >= 0)
+            {
+                push(tile);
+            }
+        }
+
+        push(routeVector.at(0));
+    }
 }

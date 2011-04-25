@@ -27,10 +27,12 @@ class TrackTile : public QGraphicsItem
 {
 public:
 
-    //! Tile width
+    enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN};
+
+    //! Tile width in pixels
     static const unsigned int TILE_W = 256;
 
-    //! Tile height
+    //! Tile height in pixels
     static const unsigned int TILE_H = 256;
 
     //! Constructor
@@ -60,6 +62,9 @@ public:
 
     //! Get route index, return -1 if not set.
     int routeIndex() const;
+
+    //! Set direction towards next tile in the route.
+    void setRouteDirection(TrackTile::RouteDirection direction);
 
     //! Get location in the tile matrix.
     QPoint matrixLocation() const;
@@ -100,6 +105,7 @@ private:
     QMenu              m_menu;
     int                m_routeIndex;
     QPoint             m_matrixLocation;
+    RouteDirection     m_routeDirection;
 };
 
 #endif // TRACKTILE_H

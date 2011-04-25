@@ -32,6 +32,10 @@ public:
     //! Push new tile to the route and return its index.
     int push(TrackTile * tile);
 
+    //! Build route from an (unordered) vector of tiles.
+    //! Will be sorted with respect to route indices.
+    void buildFromVector(QVector<TrackTile *> routeVector);
+
     //! Return length of the current route.
     unsigned int length() const;
 
