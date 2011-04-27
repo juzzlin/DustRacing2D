@@ -68,6 +68,8 @@ MainWindow::MainWindow() :
         m_saveAction(NULL),
         m_saveAsAction(NULL),
         m_currentToolBarAction(NULL),
+        m_clearAction(NULL),
+        m_setRouteAction(NULL),
         m_scaleSlider(new QSlider(Qt::Horizontal, this)),
         m_toolBar(new QToolBar(this))
 {
@@ -228,14 +230,16 @@ void MainWindow::populateMenuBar()
     QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
 
     // Add "clear"-action
-    QAction * clearAct = new QAction(tr("&Clear"), this);
-    editMenu->addAction(clearAct);
-    connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
+    m_clearAction = new QAction(tr("&Clear"), this);
+    editMenu->addAction(m_clearAction);
+    connect(m_clearAction, SIGNAL(triggered()), this, SLOT(clear()));
+    m_clearAction->setEnabled(false);
 
     // Add "set order"-action
-    QAction * setRouteAct = new QAction(tr("&Set route"), this);
-    editMenu->addAction(setRouteAct);
-    connect(setRouteAct, SIGNAL(triggered()), this, SLOT(beginSetRoute()));
+    m_setRouteAction = new QAction(tr("&Set route"), this);
+    editMenu->addAction(m_setRouteAction);
+    connect(m_setRouteAction, SIGNAL(triggered()), this, SLOT(beginSetRoute()));
+    m_setRouteAction->setEnabled(false);
 
     // Create "help"-menu
     QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -342,6 +346,8 @@ void MainWindow::openTrack()
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
             m_toolBar->setEnabled(true);
+            m_clearAction->setEnabled(true);
+            m_setRouteAction->setEnabled(true);
 
             delete m_editorScene;
             m_editorScene = new EditorScene;
@@ -384,9 +390,7 @@ void MainWindow::saveAsTrack()
                                                     tr("Track Files (*.trk)"));
 
     if (!fileName.endsWith(".trk"))
-    {
         fileName += ".trk";
-    }
 
     if (TrackIO::save(m_trackData, fileName))
     {
@@ -431,6 +435,8 @@ void MainWindow::initializeNewTrack()
 
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
+        m_clearAction->setEnabled(true);
+        m_setRouteAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
                 .arg(m_trackData->name())
@@ -443,10 +449,8 @@ void MainWindow::addTilesToScene()
 {
     for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
         for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-        {
             if (TrackTile * tile = m_trackData->map().tile(i, j))
                 m_editorScene->addItem(tile);
-        }
 
     if (m_trackData->map().tile(0, 0))
         m_trackData->map().tile(0, 0)->setActive(true);
@@ -460,13 +464,11 @@ void MainWindow::removeTilesFromScene()
 
         for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
             for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-            {
                 if (TrackTile * tile = m_trackData->map().tile(i, j))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
                 }
-            }
     }
 }
 
@@ -474,10 +476,8 @@ void MainWindow::clear()
 {
     for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
         for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-        {
             if (TrackTile * p = m_trackData->map().tile(i, j))
                 p->setTileType("clear");
-        }
 
     m_trackData->route().clear();
     m_console->append(QString(tr("Tiles and route cleared.")));

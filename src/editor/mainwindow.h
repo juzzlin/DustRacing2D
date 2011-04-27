@@ -91,6 +91,8 @@ private:
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
     QAction     * m_currentToolBarAction;
+    QAction     * m_clearAction;
+    QAction     * m_setRouteAction;
     QSlider     * m_scaleSlider;
     QToolBar    * m_toolBar;
 
