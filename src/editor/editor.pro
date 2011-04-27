@@ -5,11 +5,11 @@ DEPENDPATH  += .
 INCLUDEPATH += .
 DEFINES     += "QSETTINGS_COMPANY_NAME=\\\"DustRAC\\\""
 DEFINES     += "QSETTINGS_SOFTWARE_NAME=\\\"Editor\\\""
-DEFINES     += "EDITOR_NAME=\\\"DustRAC\ Track\ Editor\\\""
+DEFINES     += "EDITOR_NAME=\\\"DustRAC\\ Track\\ Editor\\\""
 DEFINES     += "EDITOR_VERSION=\\\"0.1\\\""
 QT          += xml
 
-SOURCES += main.cpp mainwindow.cpp editor.cpp \
+SOURCES += main.cpp mainwindow.cpp \
     newtrackdialog.cpp \
     trackdata.cpp \
     editorview.cpp \
@@ -33,4 +33,4 @@ HEADERS += mainwindow.h \
     map.h
 
 RESOURCES += \
-    ../common.qrc
+    ../data/images/images.qrc

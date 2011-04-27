@@ -14,7 +14,6 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainwindow.h"
-#include "editor.h"
 #include "editorview.h"
 #include "editorscene.h"
 #include "newtrackdialog.h"
@@ -52,15 +51,14 @@ namespace
     const unsigned int MAX_ZOOM       = 200;
     const unsigned int INI_ZOOM       = 100;
     const int          CONSOLE_HEIGHT = 64;
-    const char *       STRAIGHT_PATH  = ":/data/images/straight.png";
-    const char *       CORNER_PATH    = ":/data/images/corner.png";
-    const char *       GRASS_PATH     = ":/data/images/grass.png";
-    const char *       FINISH_PATH    = ":/data/images/finish.png";
-    const char *       CLEAR_PATH     = ":/data/images/clear.png";
+    const char *       STRAIGHT_PATH  = ":/straight.png";
+    const char *       CORNER_PATH    = ":/corner.png";
+    const char *       GRASS_PATH     = ":/grass.png";
+    const char *       FINISH_PATH    = ":/finish.png";
+    const char *       CLEAR_PATH     = ":/clear.png";
 }
 
 MainWindow::MainWindow() :
-        m_editor(new Editor),
         m_editorView(new EditorView(this)),
         m_editorScene(new EditorScene(this)),
         m_trackData(NULL),
@@ -512,5 +510,4 @@ void MainWindow::console(QString text)
 MainWindow::~MainWindow()
 {
     delete m_trackData;
-    delete m_editor;
 }

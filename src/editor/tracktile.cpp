@@ -106,31 +106,31 @@ void TrackTile::paint(QPainter * painter,
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/data/images/grass.png"));
+                            QPixmap(":/grass.png"));
     }
     else if (m_tileType == "straight")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/data/images/straight.png"));
+                            QPixmap(":/straight.png"));
     }
     else if (m_tileType == "corner")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/data/images/corner.png"));
+                            QPixmap(":/corner.png"));
     }
     else if (m_tileType == "finish")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/data/images/finish.png"));
+                            QPixmap(":/finish.png"));
     }
     else if (m_tileType == "clear")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/data/images/clear.png"));
+                            QPixmap(":/clear.png"));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);

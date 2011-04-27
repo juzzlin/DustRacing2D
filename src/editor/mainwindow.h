@@ -20,7 +20,6 @@
 #include <QCloseEvent>
 #include <QString>
 
-class Editor;
 class EditorView;
 class EditorScene;
 class TrackData;
@@ -83,7 +82,6 @@ private:
     void addTilesToScene();
     void removeTilesFromScene();
 
-    Editor      * m_editor;
     EditorView  * m_editorView;
     EditorScene * m_editorScene;
     TrackData   * m_trackData;
