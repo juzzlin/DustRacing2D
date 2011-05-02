@@ -22,11 +22,9 @@
 #include <QPainter>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
 #include <QAction>
 
 TrackTile * TrackTile::m_activeTile = NULL;
-bool        TrackTile::m_routeMode  = false;
 
 TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
                      const QString & type):
@@ -40,12 +38,6 @@ TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocat
     m_routeDirection(TrackTile::RD_NONE)
 {
     setPos(location);
-    createContextMenu();
-}
-
-void TrackTile::setRouteMode(bool enable)
-{
-    TrackTile::m_routeMode = enable;
 }
 
 void TrackTile::setRouteIndex(int index)
@@ -63,25 +55,6 @@ void TrackTile::setRouteDirection(TrackTile::RouteDirection direction)
 {
     m_routeDirection = direction;
     update();
-}
-
-void TrackTile::createContextMenu()
-{
-    QChar degreeSign(176);
-
-    QString dummy1(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CW.."));
-
-    QAction * rotate90CW = new QAction(dummy1, &m_menu);
-    QObject::connect(rotate90CW, SIGNAL(triggered()), m_animator, SLOT(rotate90CW()));
-
-    QString dummy2(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CCW.."));
-
-    QAction * rotate90CCW = new QAction(dummy2, &m_menu);
-    QObject::connect(rotate90CCW, SIGNAL(triggered()), m_animator, SLOT(rotate90CCW()));
-
-    m_menu.addActions(QList<QAction *>() << rotate90CW << rotate90CCW);
 }
 
 QRectF TrackTile::boundingRect () const
@@ -258,58 +231,6 @@ TrackTile * TrackTile::activeTile()
     return TrackTile::m_activeTile;
 }
 
-void TrackTile::mousePressEvent(QGraphicsSceneMouseEvent * event)
-{
-    setActive(true);
-
-    // Handle right button click
-    if (event->button() == Qt::RightButton)
-    {
-        // Show the context menu
-        if (scene() && !scene()->views().isEmpty())
-        {
-            if (QGraphicsView * view = scene()->views()[0])
-            {
-                QPoint posInView = view->mapFromScene(pos() + event->pos().toPoint());
-                QPoint globalPos = view->mapToGlobal(posInView);
-
-                // Show context menu
-                m_menu.exec(globalPos);
-            }
-        }
-    }
-    // Handle left button click
-    else if (event->button() == Qt::LeftButton)
-    {
-        // User is defining the route
-        if (TrackTile::m_routeMode)
-        {
-            // Push tile to the route
-            m_routeIndex = m_trackData->route().push(this);
-
-            // Check if we might have a loop => end
-            if (m_routeIndex == 0 && m_trackData->route().length() > 1)
-            {
-                TrackTile::m_routeMode = false;
-                MainWindow::instance()->endSetRoute();
-            }
-        }
-        // User is setting the tile type
-        else
-        {
-            if (QAction * action = MainWindow::instance()->currentToolBarAction())
-                setTileType(action->data().toString());
-        }
-    }
-
-    QGraphicsItem::mousePressEvent(event);
-}
-
-void TrackTile::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
-{
-    QGraphicsItem::mouseReleaseEvent(event);
-}
-
 void TrackTile::setTileType(const QString & type)
 {
     if (type != m_tileType)
@@ -328,6 +249,16 @@ const QString & TrackTile::tileType() const
 QPoint TrackTile::matrixLocation() const
 {
     return m_matrixLocation;
+}
+
+void TrackTile::rotate90CW()
+{
+    m_animator->rotate90CW();
+}
+
+void TrackTile::rotate90CCW()
+{
+    m_animator->rotate90CCW();
 }
 
 TrackTile::~TrackTile()

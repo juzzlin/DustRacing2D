@@ -14,11 +14,12 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainwindow.h"
+#include "editor.h"
 #include "editorview.h"
 #include "editorscene.h"
 #include "newtrackdialog.h"
-#include "trackdata.h"
 #include "trackio.h"
+#include "trackdata.h"
 #include "tracktile.h"
 
 #include <QAction>
@@ -59,9 +60,9 @@ namespace
 }
 
 MainWindow::MainWindow() :
-        m_editorView(new EditorView(this)),
+        m_editor(new Editor()),
+        m_editorView(new EditorView(m_editor, this)),
         m_editorScene(new EditorScene(this)),
-        m_trackData(NULL),
         m_console(new QTextEdit(this)),
         m_saveAction(NULL),
         m_saveAsAction(NULL),
@@ -284,6 +285,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 {
     if (action != m_currentToolBarAction)
     {
+        m_editor->setMode(Editor::EM_SETTILETYPE);
         m_currentToolBarAction = action;
 
         if (action->data() == "straight")
@@ -320,6 +322,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
     else
     {
         QApplication::restoreOverrideCursor();
+        m_editor->setMode(Editor::EM_NONE);
         m_currentToolBarAction = NULL;
     }
 }
@@ -335,9 +338,8 @@ void MainWindow::openTrack()
     {
         removeTilesFromScene();
 
-        delete m_trackData;
-        m_trackData = TrackIO::open(fileName);
-        if (m_trackData)
+        m_editor->loadTrackData(fileName);
+        if (m_editor->trackData())
         {
             console(QString(tr("Track '")) + fileName + tr("' opened."));
 
@@ -351,8 +353,8 @@ void MainWindow::openTrack()
             m_editorScene = new EditorScene;
 
             QRectF newSceneRect(-MARGIN, -MARGIN,
-                                2 * MARGIN + m_trackData->map().cols() * TrackTile::TILE_W,
-                                2 * MARGIN + m_trackData->map().rows() * TrackTile::TILE_H);
+                                2 * MARGIN + m_editor->trackData()->map().cols() * TrackTile::TILE_W,
+                                2 * MARGIN + m_editor->trackData()->map().rows() * TrackTile::TILE_H);
 
             m_editorScene->setSceneRect(newSceneRect);
             m_editorView->setScene(m_editorScene);
@@ -370,13 +372,13 @@ void MainWindow::openTrack()
 
 void MainWindow::saveTrack()
 {
-    if (TrackIO::save(m_trackData, m_trackData->fileName()))
+    if (m_editor->saveTrackData())
     {
-        console(QString(tr("Track '")) + m_trackData->fileName() + tr("' saved."));
+        console(QString(tr("Track '")) + m_editor->trackData()->fileName() + tr("' saved."));
     }
     else
     {
-        console(QString(tr("Failed to save track '")) + m_trackData->fileName() + "'.");
+        console(QString(tr("Failed to save track '")) + m_editor->trackData()->fileName() + "'.");
     }
 }
 
@@ -390,11 +392,9 @@ void MainWindow::saveAsTrack()
     if (!fileName.endsWith(".trk"))
         fileName += ".trk";
 
-    if (TrackIO::save(m_trackData, fileName))
+    if (m_editor->saveTrackDataAs(fileName))
     {
         console(QString(tr("Track '")) + fileName + tr("' saved."));
-
-        m_trackData->setFileName(fileName);
         m_saveAction->setEnabled(true);
     }
     else
@@ -414,8 +414,7 @@ void MainWindow::initializeNewTrack()
 
         removeTilesFromScene();
 
-        delete m_trackData;
-        m_trackData = new TrackData(dialog.name(), cols, rows);
+        m_editor->setTrackData(new TrackData(dialog.name(), cols, rows));
 
         delete m_editorScene;
         m_editorScene = new EditorScene;
@@ -437,32 +436,38 @@ void MainWindow::initializeNewTrack()
         m_setRouteAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
-                .arg(m_trackData->name())
-                .arg(m_trackData->map().cols())
-                .arg(m_trackData->map().rows()));
+                .arg(m_editor->trackData()->name())
+                .arg(m_editor->trackData()->map().cols())
+                .arg(m_editor->trackData()->map().rows()));
     }
 }
 
 void MainWindow::addTilesToScene()
 {
-    for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
-        for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-            if (TrackTile * tile = m_trackData->map().tile(i, j))
+    const unsigned int cols = m_editor->trackData()->map().cols();
+    const unsigned int rows = m_editor->trackData()->map().rows();
+
+    for (unsigned int i = 0; i < cols; i++)
+        for (unsigned int j = 0; j < rows; j++)
+            if (TrackTile * tile = m_editor->trackData()->map().tile(i, j))
                 m_editorScene->addItem(tile);
 
-    if (m_trackData->map().tile(0, 0))
-        m_trackData->map().tile(0, 0)->setActive(true);
+    if (m_editor->trackData()->map().tile(0, 0))
+        m_editor->trackData()->map().tile(0, 0)->setActive(true);
 }
 
 void MainWindow::removeTilesFromScene()
 {
-    if (m_trackData)
+    if (m_editor->trackData())
     {
         TrackTile::setActiveTile(NULL);
 
-        for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
-            for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-                if (TrackTile * tile = m_trackData->map().tile(i, j))
+        const unsigned int cols = m_editor->trackData()->map().cols();
+        const unsigned int rows = m_editor->trackData()->map().rows();
+
+        for (unsigned int i = 0; i < cols; i++)
+            for (unsigned int j = 0; j < rows; j++)
+                if (TrackTile * tile = m_editor->trackData()->map().tile(i, j))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
@@ -472,21 +477,23 @@ void MainWindow::removeTilesFromScene()
 
 void MainWindow::clear()
 {
-    for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
-        for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
-            if (TrackTile * p = m_trackData->map().tile(i, j))
+    const unsigned int cols = m_editor->trackData()->map().cols();
+    const unsigned int rows = m_editor->trackData()->map().rows();
+
+    for (unsigned int i = 0; i < cols; i++)
+        for (unsigned int j = 0; j < rows; j++)
+            if (TrackTile * p = m_editor->trackData()->map().tile(i, j))
                 p->setTileType("clear");
 
-    m_trackData->route().clear();
+    m_editor->trackData()->route().clear();
     m_console->append(QString(tr("Tiles and route cleared.")));
 }
 
 void MainWindow::beginSetRoute()
 {
-    if (m_trackData && m_trackData->map().cols() > 1 && m_trackData->map().rows() > 1)
+    if (m_editor->canRouteBeSet())
     {
-        TrackTile::setRouteMode(true);
-        m_trackData->route().clear();
+        m_editor->beginSetRoute();
         console(tr("Set route: click on the tiles one by one and make the route. Clicking on the start tile again finishes."));
     }
     else
@@ -497,7 +504,7 @@ void MainWindow::beginSetRoute()
 
 void MainWindow::endSetRoute()
 {
-    TrackTile::setRouteMode(false);
+    m_editor->endSetRoute();
     console(tr("Set route: route finished."));
 }
 
@@ -509,5 +516,5 @@ void MainWindow::console(QString text)
 
 MainWindow::~MainWindow()
 {
-    delete m_trackData;
+    delete m_editor;
 }

@@ -13,43 +13,39 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef EDITORVIEW_H
-#define EDITORVIEW_H
+#ifndef EDITOR_H
+#define EDITOR_H
 
-#include <QGraphicsView>
-#include <QMenu>
+#include <tr1/memory>
+#include <QString>
 
-class QMouseEvent;
-class Editor;
+class TrackData;
 
-class EditorView : public QGraphicsView
+class Editor
 {
-    Q_OBJECT
-
 public:
 
-    explicit EditorView(Editor * editor, QWidget *parent = 0);
+    enum EditorMode {EM_NONE = 0, EM_SETROUTE, EM_SETTILETYPE};
 
-protected:
-
-    //! \reimp
-    void mouseMoveEvent(QMouseEvent * event);
-
-    //! \reimp
-    void mousePressEvent(QMouseEvent * event);
-
-private slots:
-
-    void doRotate90CW();
-    void doRotate90CCW();
+    Editor();
+    bool loadTrackData(QString fileName);
+    bool saveTrackData();
+    bool saveTrackDataAs(QString fileName);
+    void setTrackData(TrackData * newTrackData);
+    bool canRouteBeSet() const;
+    void beginSetRoute();
+    void endSetRoute();
+    TrackData * trackData();
+    EditorMode mode() const;
+    void setMode(EditorMode newMode);
 
 private:
 
-    void createContextMenu();
+    Editor(const Editor & e);
+    Editor & operator= (const Editor & e);
 
-    Editor * m_editor;
-    QMenu    m_menu;
-    QPoint   m_clickedPos;
+    std::tr1::shared_ptr<TrackData> m_trackData;
+    EditorMode m_mode;
 };
 
-#endif // EDITORVIEW_H
+#endif // EDITOR_H

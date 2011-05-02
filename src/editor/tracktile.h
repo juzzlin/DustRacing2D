@@ -75,20 +75,10 @@ public:
     //! Set the active tile
     static void setActiveTile(TrackTile * tile);
 
-    //! Set route definition mode on / off
-    static void setRouteMode(bool enable);
-
-protected:
-
-    //! \reimp
-    void mousePressEvent(QGraphicsSceneMouseEvent * event);
-
-    //! \reimp
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
-
-private slots:
-
+    //! Rotate 90 degrees CW
     void rotate90CW();
+
+    //! Rotate 90 degrees CCW
     void rotate90CCW();
 
 private:
@@ -97,12 +87,10 @@ private:
 
     TrackData        * m_trackData;
     static TrackTile * m_activeTile;
-    static bool        m_routeMode;
     QSizeF             m_size;
     QString            m_tileType;
     bool               m_active;
     TileAnimator     * m_animator;
-    QMenu              m_menu;
     int                m_routeIndex;
     QPoint             m_matrixLocation;
     RouteDirection     m_routeDirection;
