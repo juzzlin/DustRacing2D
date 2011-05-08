@@ -13,23 +13,42 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include <QApplication>
-#include <QGraphicsView>
-#include "MiniWidgets/mwscene.h"
-#include "MiniWidgets/mwtext.h"
+#ifndef MWTEXT_H
+#define MWTEXT_H
 
-int main(int argc, char ** argv)
+#include "mwwidget.h"
+#include <QString>
+
+//! Simple text label.
+class MWText : public MWWidget
 {
-    QApplication app(argc, argv);
-    MWScene scene(840, 400);
-    QGraphicsView view;
-    view.setScene(&scene);
-    MWWidget dummy(QSizeF(840, 400));
-    dummy.setPos(420, 200);
-    MWText text("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
-    text.setBgColor(QColor(0, 0, 128, 128));
-    scene.addItem(&dummy);
-    scene.addItem(&text);
-    view.show();
-    return app.exec();
-}
+public:
+
+    //! Constructor.
+    explicit MWText(const QString & text, QSizeF size, MWWidget * parent = NULL);
+
+    //! Return the text
+    QString text() const;
+
+    //! Set the text
+    void setText(const QString & text);
+
+    //! Set the text color
+    void setTextColor(QColor color);
+
+    //! Get the text color
+    QColor textColor() const;
+
+protected:
+
+    //! \reimp
+    virtual void paint(QPainter * painter,
+                       const QStyleOptionGraphicsItem * option, QWidget * widget);
+
+private:
+
+    QString m_text;
+    QColor  m_textColor;
+};
+
+#endif // MWTEXT_H

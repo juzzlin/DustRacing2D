@@ -13,23 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include <QApplication>
-#include <QGraphicsView>
-#include "MiniWidgets/mwscene.h"
-#include "MiniWidgets/mwtext.h"
+#include "mwmenu.h"
 
-int main(int argc, char ** argv)
+MWMenu::MWMenu(QSizeF size, MWWidget * parent) :
+    MWWidget(size, parent)
+{}
+
+void MWMenu::addMenuItem(MWWidget * widget)
 {
-    QApplication app(argc, argv);
-    MWScene scene(840, 400);
-    QGraphicsView view;
-    view.setScene(&scene);
-    MWWidget dummy(QSizeF(840, 400));
-    dummy.setPos(420, 200);
-    MWText text("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
-    text.setBgColor(QColor(0, 0, 128, 128));
-    scene.addItem(&dummy);
-    scene.addItem(&text);
-    view.show();
-    return app.exec();
+    if (widget)
+        m_items << widget;
 }
