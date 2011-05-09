@@ -54,9 +54,26 @@ public:
     //! Get background color
     QColor bgColor() const;
 
+    //! Set widget clickable
+    void setClickable(bool enable);
+
+    //! Return true if widget is clickable
+    bool clickable() const;
+
+signals:
+
+    //! Emitted, when the widget is clicked (and released)
+    void clicked();
+
 protected:
 
     virtual void paintBackground(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+
+    //! \reimp
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+    //! \reimp
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
 private:
 
@@ -64,6 +81,10 @@ private:
     QSizeF     m_size;
     int        m_cm[4];
     QColor     m_bgColor;
+    QColor     m_bgColor0;
+    QColor     m_bgColorPressing;
+    bool       m_clickable;
+    bool       m_pressing;
 };
 
 #endif // MWWIDGET_H

@@ -28,6 +28,7 @@ int main(int argc, char ** argv)
     dummy.setPos(420, 200);
     MWText text("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
     text.setBgColor(QColor(0, 0, 128, 128));
+    text.setClickable(true);
     scene.addItem(&dummy);
     scene.addItem(&text);
     view.show();

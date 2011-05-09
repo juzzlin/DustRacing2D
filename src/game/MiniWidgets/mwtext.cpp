@@ -55,7 +55,6 @@ void MWText::paint(QPainter * painter,
     MWWidget::paintBackground(painter, option, widget);
 
     QPen pen;
-    pen.setJoinStyle(Qt::MiterJoin);
     pen.setColor(m_textColor);
     painter->setPen(pen);
 

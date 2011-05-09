@@ -20,7 +20,11 @@ MWWidget::MWWidget(QSizeF size, MWWidget * parent) :
     m_parent(parent),
     m_size(size),
     m_cm({1, 1, 1, 1}),
-    m_bgColor(QColor(0, 0, 0, 0))
+    m_bgColor(QColor(0, 0, 0, 0)),
+    m_bgColor0(QColor(0, 0, 0, 0)),
+    m_bgColorPressing(QColor(0, 0, 0, 0)),
+    m_clickable(false),
+    m_pressing(false)
 {
     if (parent)
     {
@@ -84,7 +88,18 @@ QSizeF MWWidget::size() const
 
 void MWWidget::setBgColor(QColor color)
 {
-    m_bgColor = color;
+    m_bgColor         = color;
+    m_bgColor0        = color;
+
+    int newR = color.red() * 2;
+    newR = newR > 255 ? 255 : newR;
+    int newG = color.green() * 2;
+    newG = newG > 255 ? 255 : newG;
+    int newB = color.blue() * 2;
+    newB = newB > 255 ? 255 : newB;
+    int newA = color.alpha();
+
+    m_bgColorPressing = QColor(newR, newG, newB, newA);
     update();
 }
 
@@ -93,3 +108,33 @@ QColor MWWidget::bgColor() const
     return m_bgColor;
 }
 
+void MWWidget::setClickable(bool enable)
+{
+    m_clickable = enable;
+}
+
+bool MWWidget::clickable() const
+{
+    return m_clickable;
+}
+
+void MWWidget::mousePressEvent(QGraphicsSceneMouseEvent * event)
+{
+    if (m_clickable)
+    {
+        m_pressing = true;
+        m_bgColor  = m_bgColorPressing;
+        update();
+    }
+}
+
+void MWWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    if (m_clickable && m_pressing)
+    {
+        m_pressing = false;
+        m_bgColor  = m_bgColor0;
+        emit clicked();
+        update();
+    }
+}
