@@ -20,21 +20,41 @@ MWWidget::MWWidget(QSizeF size, MWWidget * parent) :
     m_parent(parent),
     m_size(size),
     m_cm({1, 1, 1, 1}),
-    m_bgColor(QColor(0, 0, 0, 0)),
-    m_bgColor0(QColor(0, 0, 0, 0)),
-    m_bgColorPressing(QColor(0, 0, 0, 0)),
+    m_bgColor(QColor(0, 0, 0)),
+    m_bgColor0(QColor(0, 0, 0)),
+    m_bgColorPressing(QColor(0, 0, 0)),
+    m_fgColor(QColor(255, 255, 255)),
     m_clickable(false),
     m_pressing(false)
+{
+    adjustPos(parent);
+    adjustSize(parent);
+}
+
+void MWWidget::adjustPos(MWWidget * parent)
 {
     if (parent)
     {
         setPos(parent->pos());
+    }
+}
 
-        if (parent->size().height() < m_size.height())
-            m_size.setHeight(parent->size().height());
+void MWWidget::adjustSize(MWWidget * parent)
+{
+    if (parent)
+    {
+        int l, r, t, b;
+        parent->getContentsMargins(l, r, t, b);
 
-        if (parent->size().width() < m_size.width())
-            m_size.setWidth(parent->size().width());
+        if (parent->size().height() - (t + b) < m_size.height())
+        {
+            m_size.setHeight(parent->size().height() - (t + b));
+        }
+
+        if (parent->size().width() - (l + r) < m_size.width())
+        {
+            m_size.setWidth(parent->size().width() - (l + r));
+        }
     }
 }
 
@@ -46,13 +66,8 @@ QRectF MWWidget::boundingRect () const
                   m_size.height());
 }
 
-void MWWidget::paintBackground(QPainter * painter,
-                               const QStyleOptionGraphicsItem * option,
-                               QWidget * widget)
+void MWWidget::paintBackground(QPainter * painter)
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(option);
-
     painter->fillRect(boundingRect(), m_bgColor);
 }
 
@@ -62,7 +77,7 @@ void MWWidget::paint(QPainter * painter, const QStyleOptionGraphicsItem * option
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
-    paintBackground(painter, option, widget);
+    paintBackground(painter);
 }
 
 void MWWidget::setContentsMargins(int left, int right, int top, int bottom)
@@ -86,6 +101,13 @@ QSizeF MWWidget::size() const
     return m_size;
 }
 
+void MWWidget::setSize(QSizeF size)
+{
+    m_size = size;
+    adjustSize(m_parent);
+    update();
+}
+
 void MWWidget::setBgColor(QColor color)
 {
     m_bgColor         = color;
@@ -106,6 +128,17 @@ void MWWidget::setBgColor(QColor color)
 QColor MWWidget::bgColor() const
 {
     return m_bgColor;
+}
+
+void MWWidget::setFgColor(QColor color)
+{
+    m_fgColor = color;
+    update();
+}
+
+QColor MWWidget::fgColor() const
+{
+    return m_fgColor;
 }
 
 void MWWidget::setClickable(bool enable)

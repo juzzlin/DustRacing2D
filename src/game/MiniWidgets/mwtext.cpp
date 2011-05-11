@@ -52,14 +52,14 @@ void MWText::paint(QPainter * painter,
 
     painter->save();
 
-    MWWidget::paintBackground(painter, option, widget);
+    MWWidget::paintBackground(painter);
 
     QPen pen;
     pen.setColor(m_textColor);
     painter->setPen(pen);
 
     QFont font;
-    font.setPixelSize(size().height() / 2);
+    font.setPixelSize(size().height());
     painter->setFont(font);
     painter->drawText(boundingRect(), Qt::AlignCenter, m_text);
 

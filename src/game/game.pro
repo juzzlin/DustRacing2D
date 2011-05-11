@@ -11,11 +11,13 @@ SOURCES += main.cpp \
     MiniWidgets/mwwidget.cpp \
     MiniWidgets/mwmenu.cpp \
     MiniWidgets/mwtext.cpp \
-    MiniWidgets/mwscene.cpp
+    MiniWidgets/mwscene.cpp \
+    MiniWidgets/mwselector.cpp
 
 HEADERS += \
     MiniWidgets/mwobject.h \
     MiniWidgets/mwwidget.h \
     MiniWidgets/mwmenu.h \
     MiniWidgets/mwtext.h \
-    MiniWidgets/mwscene.h
+    MiniWidgets/mwscene.h \
+    MiniWidgets/mwselector.h

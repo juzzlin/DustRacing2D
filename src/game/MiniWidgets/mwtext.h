@@ -49,6 +49,8 @@ private:
 
     QString m_text;
     QColor  m_textColor;
+
+    Q_DISABLE_COPY(MWText)
 };
 
 #endif // MWTEXT_H

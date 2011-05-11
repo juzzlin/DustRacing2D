@@ -17,6 +17,7 @@
 #include <QGraphicsView>
 #include "MiniWidgets/mwscene.h"
 #include "MiniWidgets/mwtext.h"
+#include "MiniWidgets/mwselector.h"
 
 int main(int argc, char ** argv)
 {
@@ -26,8 +27,10 @@ int main(int argc, char ** argv)
     view.setScene(&scene);
     MWWidget dummy(QSizeF(840, 400));
     dummy.setPos(420, 200);
-    MWText text("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
-    text.setBgColor(QColor(0, 0, 128, 128));
+//    MWText text("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
+    MWSelector text(QSizeF(400, 40), &dummy);
+    text.setBgColor(QColor(0, 0, 128, 196));
+    text.setFgColor(QColor(128, 128, 128, 196));
     text.setClickable(true);
     scene.addItem(&dummy);
     scene.addItem(&text);

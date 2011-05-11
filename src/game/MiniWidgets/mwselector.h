@@ -13,34 +13,35 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MWMENU_H
-#define MWMENU_H
+#ifndef MWSELECTOR_H
+#define MWSELECTOR_H
 
 #include "mwwidget.h"
-#include <QVector>
 
-//! Really simple menu widget.
-class MWMenu : public MWWidget
+//! Base class for selector widgets.
+class MWSelector : public MWWidget
 {
 public:
 
     //! Constructor
-    MWMenu(QSizeF size, MWWidget * parent);
+    MWSelector(QSizeF size, MWWidget * parent = NULL);
 
-    //! Add a widget to the menu. Ownership remains
-    //! on the caller.
-    void addMenuItem(MWWidget * widget);
+protected:
+
+    //! \reimp
+    virtual void paint(QPainter * painter,
+                       const QStyleOptionGraphicsItem * option, QWidget * widget);
+
+    virtual void paintArrows(QPainter * painter);
 
 signals:
 
-    //! Emitted when a menu item is clicked.
-    void menuItemClicked(MWWidget * item);
+    void leftClicked();
+    void rightClicked();
 
 private:
 
-    QVector<MWWidget *> m_items;
-
-    Q_DISABLE_COPY(MWMenu)
+    Q_DISABLE_COPY(MWSelector)
 };
 
-#endif // MWMENU_H
+#endif // MWSELECTOR_H

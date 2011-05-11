@@ -45,6 +45,9 @@ public:
     //! Get contents margins.
     void getContentsMargins(int & left, int & right, int & top, int & bottom) const;
 
+    //! Set size
+    void setSize(QSizeF size);
+
     //! Return size
     QSizeF size() const;
 
@@ -53,6 +56,12 @@ public:
 
     //! Get background color
     QColor bgColor() const;
+
+    //! Set foreground color
+    void setFgColor(QColor color);
+
+    //! Get foreground color
+    QColor fgColor() const;
 
     //! Set widget clickable
     void setClickable(bool enable);
@@ -67,7 +76,9 @@ signals:
 
 protected:
 
-    virtual void paintBackground(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    virtual void paintBackground(QPainter * painter);
+    virtual void adjustPos(MWWidget * parent);
+    virtual void adjustSize(MWWidget * parent);
 
     //! \reimp
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
@@ -83,8 +94,11 @@ private:
     QColor     m_bgColor;
     QColor     m_bgColor0;
     QColor     m_bgColorPressing;
+    QColor     m_fgColor;
     bool       m_clickable;
     bool       m_pressing;
+
+    Q_DISABLE_COPY(MWWidget)
 };
 
 #endif // MWWIDGET_H

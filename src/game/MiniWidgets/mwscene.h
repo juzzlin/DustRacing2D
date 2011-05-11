@@ -27,6 +27,8 @@ public:
     MWScene(int width, int height);
 
 private:
+
+    Q_DISABLE_COPY(MWScene)
 };
 
 #endif // MWSCENE_H
