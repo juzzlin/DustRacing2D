@@ -21,6 +21,8 @@
 //! Base class for selector widgets.
 class MWSelector : public MWWidget
 {
+    Q_OBJECT
+
 public:
 
     //! Constructor
@@ -34,14 +36,26 @@ protected:
 
     virtual void paintArrows(QPainter * painter);
 
+    //! \reimp
+    virtual void paintBackground(QPainter * painter);
+
+    //! \reimp
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+    //! \reimp
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+
 signals:
 
-    void leftClicked();
-    void rightClicked();
+    void prevClicked();
+    void nextClicked();
 
 private:
 
     Q_DISABLE_COPY(MWSelector)
+
+    bool m_nextPressing;
+    bool m_prevPressing;
 };
 
 #endif // MWSELECTOR_H

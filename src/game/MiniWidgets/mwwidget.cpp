@@ -21,14 +21,25 @@ MWWidget::MWWidget(QSizeF size, MWWidget * parent) :
     m_size(size),
     m_cm({1, 1, 1, 1}),
     m_bgColor(QColor(0, 0, 0)),
-    m_bgColor0(QColor(0, 0, 0)),
-    m_bgColorPressing(QColor(0, 0, 0)),
     m_fgColor(QColor(255, 255, 255)),
     m_clickable(false),
     m_pressing(false)
 {
     adjustPos(parent);
     adjustSize(parent);
+}
+
+QColor MWWidget::getHighlightColor(QColor color) const
+{
+    int newR = color.red() * 2;
+    newR = newR > 255 ? 255 : newR;
+    int newG = color.green() * 2;
+    newG = newG > 255 ? 255 : newG;
+    int newB = color.blue() * 2;
+    newB = newB > 255 ? 255 : newB;
+    int newA = color.alpha();
+
+    return QColor(newR, newG, newB, newA);
 }
 
 void MWWidget::adjustPos(MWWidget * parent)
@@ -62,13 +73,21 @@ QRectF MWWidget::boundingRect () const
 {
     return QRectF(-m_size.width() / 2,
                   -m_size.height() / 2,
-                  m_size.width(),
-                  m_size.height());
+                   m_size.width(),
+                   m_size.height());
 }
 
 void MWWidget::paintBackground(QPainter * painter)
 {
-    painter->fillRect(boundingRect(), m_bgColor);
+    if (m_clickable && m_pressing)
+    {
+        painter->fillRect(boundingRect(),
+                          getHighlightColor(m_bgColor));
+    }
+    else
+    {
+        painter->fillRect(boundingRect(), m_bgColor);
+    }
 }
 
 void MWWidget::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
@@ -110,18 +129,7 @@ void MWWidget::setSize(QSizeF size)
 
 void MWWidget::setBgColor(QColor color)
 {
-    m_bgColor         = color;
-    m_bgColor0        = color;
-
-    int newR = color.red() * 2;
-    newR = newR > 255 ? 255 : newR;
-    int newG = color.green() * 2;
-    newG = newG > 255 ? 255 : newG;
-    int newB = color.blue() * 2;
-    newB = newB > 255 ? 255 : newB;
-    int newA = color.alpha();
-
-    m_bgColorPressing = QColor(newR, newG, newB, newA);
+    m_bgColor  = color;
     update();
 }
 
@@ -151,22 +159,34 @@ bool MWWidget::clickable() const
     return m_clickable;
 }
 
+void MWWidget::setPressing(bool pressing)
+{
+    m_pressing = pressing;
+}
+
+bool MWWidget::pressing() const
+{
+    return m_pressing;
+}
+
 void MWWidget::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    Q_UNUSED(event)
+
     if (m_clickable)
     {
         m_pressing = true;
-        m_bgColor  = m_bgColorPressing;
         update();
     }
 }
 
 void MWWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
+    Q_UNUSED(event)
+
     if (m_clickable && m_pressing)
     {
         m_pressing = false;
-        m_bgColor  = m_bgColor0;
         emit clicked();
         update();
     }

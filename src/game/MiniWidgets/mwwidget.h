@@ -86,14 +86,18 @@ protected:
     //! \reimp
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
+    QColor getHighlightColor(QColor color) const;
+
+    bool pressing() const;
+
+    void setPressing(bool pressing);
+
 private:
 
     MWWidget * m_parent;
     QSizeF     m_size;
     int        m_cm[4];
     QColor     m_bgColor;
-    QColor     m_bgColor0;
-    QColor     m_bgColorPressing;
     QColor     m_fgColor;
     bool       m_clickable;
     bool       m_pressing;
