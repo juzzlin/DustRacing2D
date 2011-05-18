@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QGraphicsView>
 #include "mwscene.h"
+#include "mwtext.h"
 
 int main(int argc, char ** argv)
 {
@@ -23,6 +24,14 @@ int main(int argc, char ** argv)
     MWScene scene(840, 400);
     QGraphicsView view;
     view.setScene(&scene);
+    MWWidget dummy(QSizeF(840, 400));
+    dummy.setPos(420, 200);
+    MWText t("TEST TEST TEST!!!", QSizeF(400, 40), &dummy);
+    t.setBgColor(QColor(0, 0, 128, 196));
+    t.setFgColor(QColor(128, 128, 128, 196));
+    t.setClickable(true);
+    scene.addItem(&dummy);
+    scene.addItem(&t);
     view.show();
     return app.exec();
 }

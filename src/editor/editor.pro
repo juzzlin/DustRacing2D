@@ -1,13 +1,14 @@
 # Project file for the level editor
-TEMPLATE     = app
-TARGET       = 
-DEPENDPATH  += .
-INCLUDEPATH += .
-DEFINES     += "QSETTINGS_COMPANY_NAME=\\\"DustRAC\\\""
-DEFINES     += "QSETTINGS_SOFTWARE_NAME=\\\"Editor\\\""
-DEFINES     += "EDITOR_NAME=\\\"DustRAC\\ Track\\ Editor\\\""
-DEFINES     += "EDITOR_VERSION=\\\"0.1\\\""
-QT          += xml
+TEMPLATE        = app
+TARGET          =
+DEPENDPATH     += .
+INCLUDEPATH    += .
+DEFINES        += "QSETTINGS_COMPANY_NAME=\\\"DustRAC\\\""
+DEFINES        += "QSETTINGS_SOFTWARE_NAME=\\\"Editor\\\""
+DEFINES        += "EDITOR_NAME=\\\"DustRAC\\ Track\\ Editor\\\""
+DEFINES        += "EDITOR_VERSION=\\\"0.1\\\""
+QT             += xml
+QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += main.cpp mainwindow.cpp \
     newtrackdialog.cpp \
