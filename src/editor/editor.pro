@@ -3,10 +3,6 @@ TEMPLATE        = app
 TARGET          =
 DEPENDPATH     += .
 INCLUDEPATH    += .
-DEFINES        += "QSETTINGS_COMPANY_NAME=\\\"DustRAC\\\""
-DEFINES        += "QSETTINGS_SOFTWARE_NAME=\\\"Editor\\\""
-DEFINES        += "EDITOR_NAME=\\\"DustRAC\\ Track\\ Editor\\\""
-DEFINES        += "EDITOR_VERSION=\\\"0.1\\\""
 QT             += xml
 QMAKE_CXXFLAGS += -std=c++0x
 
@@ -34,7 +30,8 @@ HEADERS += mainwindow.h \
     tileanimator.h \
     route.h \
     map.h \
-    editor.h
+    editor.h \
+    version.h
 
 RESOURCES += \
     ../data/images/images.qrc

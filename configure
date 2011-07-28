@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $(which qmake) ]
+then
+    qmake -v
+    qmake
+    echo "You can now run make."
+    exit 0
+else
+    echo "Cannot find qmake. Please install Qt4 development packages."
+    exit 1
+fi

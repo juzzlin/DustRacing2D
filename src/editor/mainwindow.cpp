@@ -21,6 +21,7 @@
 #include "trackio.h"
 #include "trackdata.h"
 #include "tracktile.h"
+#include "version.h"
 
 #include <QAction>
 #include <QApplication>
@@ -81,9 +82,10 @@ MainWindow::MainWindow() :
         qFatal("MainWindow already instantiated!");
     }
 
-    setWindowTitle(QString(EDITOR_NAME) + " " + EDITOR_VERSION);
+    setWindowTitle(QString(Version::EDITOR_NAME) + " " + Version::EDITOR_VERSION);
 
-    QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
+    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
+                       Version::QSETTINGS_SOFTWARE_NAME);
 
     // Read dialog size data
     settings.beginGroup(SETTINGS_GROUP);
@@ -183,7 +185,8 @@ void MainWindow::updateScale(int value)
 void MainWindow::closeEvent(QCloseEvent * event)
 {
     // Open settings file
-    QSettings settings(QSETTINGS_COMPANY_NAME, QSETTINGS_SOFTWARE_NAME);
+    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
+                       Version::QSETTINGS_SOFTWARE_NAME);
 
     // Save window size
     settings.beginGroup(SETTINGS_GROUP);
