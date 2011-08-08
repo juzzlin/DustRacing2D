@@ -2,7 +2,7 @@
 TEMPLATE        = app
 TARGET          =
 DEPENDPATH     += .
-INCLUDEPATH    += .
+INCLUDEPATH    += . ../common
 QT             += xml
 QMAKE_CXXFLAGS += -std=c++0x
 

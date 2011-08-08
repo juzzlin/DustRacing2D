@@ -18,6 +18,7 @@
 #include "tiletypedialog.h"
 #include "tileanimator.h"
 #include "mainwindow.h"
+#include "config.h"
 
 #include <QPainter>
 #include <QGraphicsView>
@@ -79,31 +80,31 @@ void TrackTile::paint(QPainter * painter,
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/grass.png"));
+                            QPixmap(Config::GRASS_PATH));
     }
     else if (m_tileType == "straight")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/straight.png"));
+                            QPixmap(Config::STRAIGHT_PATH));
     }
     else if (m_tileType == "corner")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/corner.png"));
+                            QPixmap(Config::CORNER_PATH));
     }
     else if (m_tileType == "finish")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/finish.png"));
+                            QPixmap(Config::FINISH_PATH));
     }
     else if (m_tileType == "clear")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(":/clear.png"));
+                            QPixmap(Config::CLEAR_PATH));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);

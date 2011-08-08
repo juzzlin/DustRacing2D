@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainwindow.h"
+#include "config.h"
 #include "editor.h"
 #include "editorview.h"
 #include "editorscene.h"
@@ -53,11 +54,6 @@ namespace
     const unsigned int MAX_ZOOM       = 200;
     const unsigned int INI_ZOOM       = 100;
     const int          CONSOLE_HEIGHT = 64;
-    const char *       STRAIGHT_PATH  = ":/straight.png";
-    const char *       CORNER_PATH    = ":/corner.png";
-    const char *       GRASS_PATH     = ":/grass.png";
-    const char *       FINISH_PATH    = ":/finish.png";
-    const char *       CLEAR_PATH     = ":/clear.png";
 }
 
 MainWindow::MainWindow() :
@@ -255,27 +251,27 @@ void MainWindow::populateMenuBar()
 void MainWindow::populateToolBar()
 {
     // Add "straight"-action
-    QAction * p = new QAction(QIcon(QPixmap(STRAIGHT_PATH)), tr("Straight"), this);
+    QAction * p = new QAction(QIcon(QPixmap(Config::STRAIGHT_PATH)), tr("Straight"), this);
     p->setData(QVariant(QString("straight")));
     m_toolBar->addAction(p);
 
     // Add "corner"-action
-    p = new QAction(QIcon(QPixmap(CORNER_PATH)), tr("Corner"), this);
+    p = new QAction(QIcon(QPixmap(Config::CORNER_PATH)), tr("Corner"), this);
     p->setData(QVariant(QString("corner")));
     m_toolBar->addAction(p);
 
     // Add "grass"-action
-    p = new QAction(QIcon(QPixmap(GRASS_PATH)), tr("Grass"), this);
+    p = new QAction(QIcon(QPixmap(Config::GRASS_PATH)), tr("Grass"), this);
     p->setData(QVariant(QString("grass")));
     m_toolBar->addAction(p);
 
     // Add "finish"-action
-    p = new QAction(QIcon(QPixmap(FINISH_PATH)), tr("Finish"), this);
+    p = new QAction(QIcon(QPixmap(Config::FINISH_PATH)), tr("Finish"), this);
     p->setData(QVariant(QString("finish")));
     m_toolBar->addAction(p);
 
     // Add "clear"-action
-    p = new QAction(QIcon(QPixmap(CLEAR_PATH)), tr("Clear"), this);
+    p = new QAction(QIcon(QPixmap(Config::CLEAR_PATH)), tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
     m_toolBar->addAction(p);
 
@@ -294,31 +290,31 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         if (action->data() == "straight")
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(STRAIGHT_PATH)
+            QApplication::setOverrideCursor(QCursor(QPixmap(Config::STRAIGHT_PATH)
                                                     .scaled(QSize(32, 32))));
         }
         else if (action->data() == "corner")
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(CORNER_PATH)
+            QApplication::setOverrideCursor(QCursor(QPixmap(Config::CORNER_PATH)
                                                     .scaled(QSize(32, 32))));
         }
         else if (action->data() == "grass")
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(GRASS_PATH)
+            QApplication::setOverrideCursor(QCursor(QPixmap(Config::GRASS_PATH)
                                                     .scaled(QSize(32, 32))));
         }
         else if (action->data() == "finish")
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(FINISH_PATH)
+            QApplication::setOverrideCursor(QCursor(QPixmap(Config::FINISH_PATH)
                                                     .scaled(QSize(32, 32))));
         }
         else if (action->data() == "clear")
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(CLEAR_PATH)
+            QApplication::setOverrideCursor(QCursor(QPixmap(Config::CLEAR_PATH)
                                                     .scaled(QSize(32, 32))));
         }
     }
