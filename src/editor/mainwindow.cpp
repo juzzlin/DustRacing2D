@@ -14,14 +14,16 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainwindow.h"
-#include "config.h"
+
+#include "../common/config.h"
+#include "../common/trackio.h"
+#include "../common/trackdata.h"
+#include "../common/tracktile.h"
+
 #include "editor.h"
 #include "editorview.h"
 #include "editorscene.h"
 #include "newtrackdialog.h"
-#include "trackio.h"
-#include "trackdata.h"
-#include "tracktile.h"
 #include "version.h"
 
 #include <QAction>

@@ -18,9 +18,9 @@
 
 #include "editor.h"
 #include "editorview.h"
-#include "trackdata.h"
-#include "tracktile.h"
 #include "mainwindow.h"
+#include "../common/trackdata.h"
+#include "../common/tracktile.h"
 
 EditorView::EditorView(Editor * editor, QWidget *parent) :
     QGraphicsView(parent),

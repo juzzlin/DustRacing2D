@@ -14,8 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "map.h"
-#include "tracktile.h"
-#include "trackdata.h"
+#include "../common/tracktile.h"
+#include "../common/trackdata.h"
 
 Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows) :
     m_trackData(trackData),

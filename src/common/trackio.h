@@ -16,6 +16,8 @@
 #ifndef TRACKIO_H
 #define TRACKIO_H
 
+#include <QString>
+
 class TrackData;
 
 namespace TrackIO

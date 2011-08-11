@@ -17,6 +17,7 @@
 #define TRACKTILE_H
 
 #include <QGraphicsItem>
+#include <QString>
 #include <QMenu>
 
 class TileAnimator;

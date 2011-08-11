@@ -2,36 +2,36 @@
 TEMPLATE        = app
 TARGET          =
 DEPENDPATH     += .
-INCLUDEPATH    += . ../common
+INCLUDEPATH    += .
 QT             += xml
 QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += main.cpp mainwindow.cpp \
     newtrackdialog.cpp \
-    trackdata.cpp \
     editorview.cpp \
     editorscene.cpp \
-    trackio.cpp \
-    tracktile.cpp \
     tiletypedialog.cpp \
     tileanimator.cpp \
     route.cpp \
     map.cpp \
-    editor.cpp
+    editor.cpp \
+    ../common/trackdata.cpp \
+    ../common/trackio.cpp \
+    ../common/tracktile.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
-    trackdata.h \
     editorview.h \
     editorscene.h \
-    trackio.h \
-    tracktile.h \
     tiletypedialog.h \
     tileanimator.h \
     route.h \
     map.h \
     editor.h \
-    version.h
+    version.h \
+    ../common/trackdata.h \
+    ../common/trackio.h \
+    ../common/tracktile.h
 
 RESOURCES += \
     ../data/images/images.qrc
