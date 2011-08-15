@@ -13,18 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef VERSION_H
+#define VERSION_H
 
-#include <QWidget>
-
-class Game : public QWidget
+namespace Version
 {
-public:
-    Game(QWidget * parent = NULL);
-    ~Game();
+    static const char * QSETTINGS_COMPANY_NAME  = "DustRAC";
+    static const char * QSETTINGS_SOFTWARE_NAME = "Game";
+    static const char * GAME_NAME               = "DustRAC";
+    static const char * GAME_VERSION            = "0.1";
+}
 
-private:
-};
-
-#endif // GAME_H
+#endif // VERSION_H

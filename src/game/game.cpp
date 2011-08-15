@@ -15,6 +15,11 @@
 
 #include "game.h"
 
-Game::Game()
+Game::Game(QWidget * parent) :
+    QWidget(parent)
+{
+}
+
+Game::~Game()
 {
 }

@@ -13,18 +13,45 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include <QWidget>
+#include <QMainWindow>
+#include <QCloseEvent>
 
-class Game : public QWidget
+class Game;
+
+/*! \class MainWindow
+ *  \brief The main window of the game.
+ */
+class MainWindow : public QMainWindow
 {
+    Q_OBJECT
+
 public:
-    Game(QWidget * parent = NULL);
-    ~Game();
+
+    //! Constructor
+    MainWindow();
+    
+    //! Destructor
+    ~MainWindow();
+
+    //! Return the singleton MainWindow.
+    static MainWindow * instance();
+
+protected:
+
+    //! \reimp
+    void closeEvent(QCloseEvent * event);
 
 private:
+
+    void populateMenuBar();
+
+    Game * m_game;
+
+    static MainWindow * m_instance;
 };
 
-#endif // GAME_H
+#endif // MAINWINDOW_H
+

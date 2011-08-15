@@ -14,15 +14,15 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
-#include <QGraphicsView>
-#include "mwscene.h"
+#include "mainwindow.h"
 
 int main(int argc, char ** argv)
 {
+    QApplication::setGraphicsSystem("raster");
     QApplication app(argc, argv);
-    MWScene scene(840, 400);
-    QGraphicsView view;
-    view.setScene(&scene);
-    view.show();
+
+    MainWindow mainWindow;
+    mainWindow.show();
+
     return app.exec();
 }
