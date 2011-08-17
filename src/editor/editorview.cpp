@@ -16,15 +16,15 @@
 #include <QMouseEvent>
 #include <QGraphicsItem>
 
-#include "editor.h"
+#include "editordata.h"
 #include "editorview.h"
 #include "mainwindow.h"
 #include "../common/trackdata.h"
 #include "../common/tracktile.h"
 
-EditorView::EditorView(Editor * editor, QWidget *parent) :
+EditorView::EditorView(EditorData * editorData, QWidget *parent) :
     QGraphicsView(parent),
-    m_editor(editor)
+    m_editorData(editorData)
 {
     createContextMenu();
 }
@@ -82,20 +82,20 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             else if (event->button() == Qt::LeftButton)
             {
                 // User is defining the route
-                if (m_editor->mode() == Editor::EM_SETROUTE)
+                if (m_editorData->mode() == EditorData::EM_SETROUTE)
                 {
                     // Push tile to the route
-                    tile->setRouteIndex(m_editor->trackData()->route().push(tile));
+                    tile->setRouteIndex(m_editorData->trackData()->route().push(tile));
 
                     // Check if we might have a loop => end
-                    if (!tile->routeIndex() && m_editor->trackData()->route().length() > 1)
+                    if (!tile->routeIndex() && m_editorData->trackData()->route().length() > 1)
                     {
-                        m_editor->setMode(Editor::EM_NONE);
+                        m_editorData->setMode(EditorData::EM_NONE);
                         MainWindow::instance()->endSetRoute();
                     }
                 }
                 // User is setting the tile type
-                else if (m_editor->mode() == Editor::EM_SETTILETYPE)
+                else if (m_editorData->mode() == EditorData::EM_SETTILETYPE)
                 {
                     if (QAction * action = MainWindow::instance()->currentToolBarAction())
                         tile->setTileType(action->data().toString());

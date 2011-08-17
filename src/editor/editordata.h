@@ -13,21 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef EDITOR_H
-#define EDITOR_H
+#ifndef EDITORDATA_H
+#define EDITORDATA_H
 
 #include <tr1/memory>
 #include <QString>
 
 class TrackData;
 
-class Editor
+class EditorData
 {
 public:
 
     enum EditorMode {EM_NONE = 0, EM_SETROUTE, EM_SETTILETYPE};
 
-    Editor();
+    EditorData();
     bool loadTrackData(QString fileName);
     bool saveTrackData();
     bool saveTrackDataAs(QString fileName);
@@ -41,11 +41,11 @@ public:
 
 private:
 
-    Editor(const Editor & e);
-    Editor & operator= (const Editor & e);
+    EditorData(const EditorData & e);
+    EditorData & operator= (const EditorData & e);
 
     std::tr1::shared_ptr<TrackData> m_trackData;
     EditorMode m_mode;
 };
 
-#endif // EDITOR_H
+#endif // EDITORDATA_H

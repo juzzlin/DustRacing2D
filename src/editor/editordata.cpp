@@ -13,22 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "editor.h"
+#include "editordata.h"
 #include "../common/trackdata.h"
 #include "../common/tracktile.h"
 #include "../common/trackio.h"
 
-Editor::Editor() :
+EditorData::EditorData() :
     m_mode(EM_NONE)
 {}
 
-bool Editor::loadTrackData(QString fileName)
+bool EditorData::loadTrackData(QString fileName)
 {
     m_trackData.reset(TrackIO::open(fileName));
     return static_cast<bool>(m_trackData.get());
 }
 
-bool Editor::saveTrackData()
+bool EditorData::saveTrackData()
 {
     if (m_trackData)
         return TrackIO::save(m_trackData.get(), m_trackData->fileName());
@@ -36,7 +36,7 @@ bool Editor::saveTrackData()
     return false;
 }
 
-bool Editor::saveTrackDataAs(QString fileName)
+bool EditorData::saveTrackDataAs(QString fileName)
 {
     if (m_trackData)
     {
@@ -50,40 +50,40 @@ bool Editor::saveTrackDataAs(QString fileName)
     return false;
 }
 
-void Editor::setTrackData(TrackData * newTrackData)
+void EditorData::setTrackData(TrackData * newTrackData)
 {
     m_trackData.reset(newTrackData);
 }
 
-bool Editor::canRouteBeSet() const
+bool EditorData::canRouteBeSet() const
 {
     return m_trackData && m_trackData->map().cols() > 1 && m_trackData->map().rows() > 1;
 }
 
-void Editor::beginSetRoute()
+void EditorData::beginSetRoute()
 {
-    setMode(Editor::EM_SETROUTE);
+    setMode(EditorData::EM_SETROUTE);
 
     if (m_trackData)
         m_trackData->route().clear();
 }
 
-void Editor::endSetRoute()
+void EditorData::endSetRoute()
 {
-    setMode(Editor::EM_NONE);
+    setMode(EditorData::EM_NONE);
 }
 
-TrackData * Editor::trackData()
+TrackData * EditorData::trackData()
 {
     return m_trackData.get();
 }
 
-Editor::EditorMode Editor::mode() const
+EditorData::EditorMode EditorData::mode() const
 {
     return m_mode;
 }
 
-void Editor::setMode(EditorMode newMode)
+void EditorData::setMode(EditorMode newMode)
 {
     m_mode = newMode;
 }

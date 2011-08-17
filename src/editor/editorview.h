@@ -20,7 +20,7 @@
 #include <QMenu>
 
 class QMouseEvent;
-class Editor;
+class EditorData;
 
 class EditorView : public QGraphicsView
 {
@@ -28,7 +28,7 @@ class EditorView : public QGraphicsView
 
 public:
 
-    explicit EditorView(Editor * editor, QWidget *parent = 0);
+    explicit EditorView(EditorData * editor, QWidget * parent = 0);
 
 protected:
 
@@ -47,9 +47,9 @@ private:
 
     void createContextMenu();
 
-    Editor * m_editor;
-    QMenu    m_menu;
-    QPoint   m_clickedPos;
+    EditorData * m_editorData;
+    QMenu        m_menu;
+    QPoint       m_clickedPos;
 };
 
 #endif // EDITORVIEW_H
