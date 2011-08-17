@@ -13,28 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "game.h"
+#include "trackloader.h"
 
-Game::Game(QWidget * parent) :
-    GameWidgetAbs(parent)
-{
-}
-
-void Game::initializeGL()
-{
-    // TODO
-}
-
-void Game::resizeGL(int width, int height)
-{
-    // TODO
-}
-
-void Game::paintGL()
-{
-    // TODO
-}
-
-Game::~Game()
+TrackLoader::TrackLoader()
 {
 }

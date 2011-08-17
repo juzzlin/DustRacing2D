@@ -16,13 +16,18 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <QWidget>
+#include "gamewidgetabs.h"
 
-class Game : public QWidget
+class Game : public GameWidgetAbs
 {
 public:
     Game(QWidget * parent = NULL);
     ~Game();
+
+protected:
+    virtual void initializeGL();
+    virtual void resizeGL(int width, int height);
+    virtual void paintGL();
 
 private:
 };

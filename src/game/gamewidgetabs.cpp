@@ -13,28 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "game.h"
+#include "gamewidgetabs.h"
 
-Game::Game(QWidget * parent) :
-    GameWidgetAbs(parent)
+#include <QKeyEvent>
+#include <QTimer>
+
+GameWidgetAbs::GameWidgetAbs(QWidget *parent) :
+    QGLWidget(parent),
+    m_timer(new QTimer)
 {
 }
 
-void Game::initializeGL()
+void GameWidgetAbs::keyPressEvent(QKeyEvent * e)
 {
     // TODO
 }
 
-void Game::resizeGL(int width, int height)
+GameWidgetAbs::~GameWidgetAbs()
 {
-    // TODO
-}
-
-void Game::paintGL()
-{
-    // TODO
-}
-
-Game::~Game()
-{
+    delete m_timer;
 }
