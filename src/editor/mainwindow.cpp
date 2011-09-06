@@ -66,7 +66,7 @@ MainWindow::MainWindow() :
         m_saveAction(NULL),
         m_saveAsAction(NULL),
         m_currentToolBarAction(NULL),
-        m_clearAction(NULL),
+        m_clearAllAction(NULL),
         m_setRouteAction(NULL),
         m_scaleSlider(new QSlider(Qt::Horizontal, this)),
         m_toolBar(new QToolBar(this))
@@ -234,11 +234,16 @@ void MainWindow::populateMenuBar()
     // Create "edit"-menu
     QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
 
+    // Add "clear all"-action
+    m_clearAllAction = new QAction(tr("&Clear all"), this);
+    editMenu->addAction(m_clearAllAction);
+    connect(m_clearAllAction, SIGNAL(triggered()), this, SLOT(clear()));
+    m_clearAllAction->setEnabled(false);
+
     // Add "clear"-action
-    m_clearAction = new QAction(tr("&Clear"), this);
-    editMenu->addAction(m_clearAction);
-    connect(m_clearAction, SIGNAL(triggered()), this, SLOT(clear()));
-    m_clearAction->setEnabled(false);
+    m_clearRouteAction = new QAction(tr("Clear &route"), this);
+    editMenu->addAction(m_clearRouteAction);
+    connect(m_clearRouteAction, SIGNAL(triggered()), this, SLOT(clearRoute()));
 
     // Add "set order"-action
     m_setRouteAction = new QAction(tr("&Set route"), this);
@@ -369,7 +374,7 @@ void MainWindow::openTrack()
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);
             m_toolBar->setEnabled(true);
-            m_clearAction->setEnabled(true);
+            m_clearAllAction->setEnabled(true);
             m_setRouteAction->setEnabled(true);
 
             delete m_editorScene;
@@ -455,7 +460,7 @@ void MainWindow::initializeNewTrack()
 
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
-        m_clearAction->setEnabled(true);
+        m_clearAllAction->setEnabled(true);
         m_setRouteAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
@@ -510,6 +515,12 @@ void MainWindow::clear()
 
     m_editorData->trackData()->route().clear();
     m_console->append(QString(tr("Tiles and route cleared.")));
+}
+
+void MainWindow::clearRoute()
+{
+    m_editorData->trackData()->route().clear();
+    m_console->append(QString(tr("Route cleared.")));
 }
 
 void MainWindow::beginSetRoute()

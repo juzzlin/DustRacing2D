@@ -75,6 +75,7 @@ private slots:
     void updateScale(int value);
     void handleToolBarActionClick(QAction * action);
     void clear();
+    void clearRoute();
 
 private:
 
@@ -90,7 +91,8 @@ private:
     QAction     * m_saveAction;
     QAction     * m_saveAsAction;
     QAction     * m_currentToolBarAction;
-    QAction     * m_clearAction;
+    QAction     * m_clearAllAction;
+    QAction     * m_clearRouteAction;
     QAction     * m_setRouteAction;
     QSlider     * m_scaleSlider;
     QToolBar    * m_toolBar;
