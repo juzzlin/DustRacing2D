@@ -142,16 +142,20 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
                 }
             }
 
-            // Swap in tiles the matrix
-            QPoint sourceLoc = sourceTile->matrixLocation();
-            QPoint destLoc = destTile->matrixLocation();
-            m_editorData->trackData()->map().setTile(sourceLoc.x(), sourceLoc.y(), destTile);
-            m_editorData->trackData()->map().setTile(destLoc.x(),   destLoc.y(),   sourceTile);
+            // Swap tile types
+            QString sourceType = sourceTile->tileType();
+            QString destType = destTile->tileType();
+            sourceTile->setTileType(destType);
+            destTile->setTileType(sourceType);
 
-            // Swap in the scene
-            sourceTile->setPos(destTile->pos());
-            destTile->setPos(m_editorData->dragAndDropSourcePos());
+            // Swap tile rotations
+            int sourceAngle = sourceTile->rotation();
+            int destAngle = destTile->rotation();
+            sourceTile->setRotation(destAngle);
+            destTile->setRotation(sourceAngle);
 
+            // Restore position
+            sourceTile->setPos(m_editorData->dragAndDropSourcePos());
             sourceTile->setZValue(sourceTile->zValue() - 1);
 
             update();
