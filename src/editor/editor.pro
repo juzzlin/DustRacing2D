@@ -34,4 +34,4 @@ HEADERS += mainwindow.h \
     ../common/tracktile.h
 
 RESOURCES += \
-    ../data/images/images.qrc
+    ../../data/images/images.qrc

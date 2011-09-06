@@ -201,28 +201,33 @@ void MainWindow::populateMenuBar()
 
     // Add "new"-action
     QAction * newAct = new QAction(tr("&New..."), this);
+    newAct->setShortcut(QKeySequence("Ctrl+N"));
     fileMenu->addAction(newAct);
     connect(newAct, SIGNAL(triggered()), this, SLOT(initializeNewTrack()));
 
     // Add "open"-action
     QAction * openAct = new QAction(tr("&Open..."), this);
+    openAct->setShortcut(QKeySequence("Ctrl+O"));
     fileMenu->addAction(openAct);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openTrack()));
 
     // Add "save"-action
     m_saveAction = new QAction(tr("&Save"), this);
+    m_saveAction->setShortcut(QKeySequence("Ctrl+S"));
     fileMenu->addAction(m_saveAction);
     connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveTrack()));
     m_saveAction->setEnabled(false);
 
     // Add "save as"-action
     m_saveAsAction = new QAction(tr("&Save as..."), this);
+    m_saveAsAction->setShortcut(QKeySequence("Ctrl+Shift+S"));
     fileMenu->addAction(m_saveAsAction);
     connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsTrack()));
     m_saveAsAction->setEnabled(false);
 
     // Add "quit"-action
     QAction * quitAct = new QAction(tr("&Quit"), this);
+    quitAct->setShortcut(QKeySequence("Ctrl+W"));
     fileMenu->addAction(quitAct);
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -330,9 +335,18 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 
 void MainWindow::openTrack()
 {
+    // Load recent path
+    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
+                       Version::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP);
+    QString path = settings.value("recentPath",
+                                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString();
+    settings.endGroup();
+
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open a track"),
-                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                    path,
                                                     tr("Track Files (*.trk)"));
 
     if (QFile::exists(fileName))
@@ -343,6 +357,14 @@ void MainWindow::openTrack()
         if (m_editorData->trackData())
         {
             console(QString(tr("Track '")) + fileName + tr("' opened."));
+
+            // Save recent path
+            QSettings settings(Version::QSETTINGS_COMPANY_NAME,
+                               Version::QSETTINGS_SOFTWARE_NAME);
+
+            settings.beginGroup(SETTINGS_GROUP);
+            settings.setValue("recentPath", fileName);
+            settings.endGroup();
 
             m_saveAction->setEnabled(true);
             m_saveAsAction->setEnabled(true);

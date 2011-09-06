@@ -100,9 +100,42 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                     if (QAction * action = MainWindow::instance()->currentToolBarAction())
                         tile->setTileType(action->data().toString());
                 }
+                // User is initiating a drag'n'drop
+                else if (m_editorData->mode() == EditorData::EM_NONE)
+                {
+                    m_editorData->setDragAndDropSourceTile(tile);
+                }
             }
 
             QWidget::mousePressEvent(event);
+        }
+    }
+}
+
+void EditorView::mouseReleaseEvent(QMouseEvent * event)
+{
+    if (scene())
+    {
+        // Drag'n'drop active?
+        TrackTile * sourceTile = m_editorData->dragAndDropSourceTile();
+        if (sourceTile)
+        {
+            // Swap source and destination tiles
+            if (TrackTile * destTile =
+                static_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
+            {
+                if (sourceTile != destTile)
+                {
+                    QPoint sourceLoc = sourceTile->matrixLocation();
+                    QPoint destLoc   = destTile->matrixLocation();
+                    m_editorData->trackData()->map().setTile(sourceLoc.x(), sourceLoc.y(), destTile);
+                    m_editorData->trackData()->map().setTile(destLoc.x(),   destLoc.y(),   sourceTile);
+
+                    update();
+                }
+            }
+
+            m_editorData->setDragAndDropSourceTile(NULL);
         }
     }
 }

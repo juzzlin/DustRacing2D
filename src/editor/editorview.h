@@ -38,6 +38,9 @@ protected:
     //! \reimp
     void mousePressEvent(QMouseEvent * event);
 
+    //! \reimp
+    void mouseReleaseEvent(QMouseEvent * event);
+
 private slots:
 
     void doRotate90CW();

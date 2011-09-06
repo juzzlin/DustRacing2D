@@ -19,7 +19,8 @@
 #include "../common/trackio.h"
 
 EditorData::EditorData() :
-    m_mode(EM_NONE)
+    m_mode(EM_NONE),
+    m_dragAndDropSourceTile(NULL)
 {}
 
 bool EditorData::loadTrackData(QString fileName)
@@ -86,4 +87,14 @@ EditorData::EditorMode EditorData::mode() const
 void EditorData::setMode(EditorMode newMode)
 {
     m_mode = newMode;
+}
+
+void EditorData::setDragAndDropSourceTile(TrackTile * tile)
+{
+    m_dragAndDropSourceTile = tile;
+}
+
+TrackTile * EditorData::dragAndDropSourceTile() const
+{
+    return m_dragAndDropSourceTile;
 }

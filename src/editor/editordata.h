@@ -20,6 +20,7 @@
 #include <QString>
 
 class TrackData;
+class TrackTile;
 
 class EditorData
 {
@@ -38,6 +39,8 @@ public:
     TrackData * trackData();
     EditorMode mode() const;
     void setMode(EditorMode newMode);
+    TrackTile * dragAndDropSourceTile() const;
+    void setDragAndDropSourceTile(TrackTile * tile);
 
 private:
 
@@ -46,6 +49,7 @@ private:
 
     std::tr1::shared_ptr<TrackData> m_trackData;
     EditorMode m_mode;
+    TrackTile * m_dragAndDropSourceTile;
 };
 
 #endif // EDITORDATA_H
