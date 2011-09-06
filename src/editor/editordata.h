@@ -18,6 +18,7 @@
 
 #include <tr1/memory>
 #include <QString>
+#include <QPointF>
 
 class TrackData;
 class TrackTile;
@@ -41,6 +42,8 @@ public:
     void setMode(EditorMode newMode);
     TrackTile * dragAndDropSourceTile() const;
     void setDragAndDropSourceTile(TrackTile * tile);
+    QPointF dragAndDropSourcePos() const;
+    void setDragAndDropSourcePos(QPointF pos);
 
 private:
 
@@ -50,6 +53,7 @@ private:
     std::tr1::shared_ptr<TrackData> m_trackData;
     EditorMode m_mode;
     TrackTile * m_dragAndDropSourceTile;
+    QPointF m_dragAndDropSourcePos;
 };
 
 #endif // EDITORDATA_H

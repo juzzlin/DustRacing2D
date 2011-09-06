@@ -38,6 +38,13 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
         {
             tile->setActive(true);
         }
+
+        // Drag'n'drop active?
+        TrackTile * sourceTile = m_editorData->dragAndDropSourceTile();
+        if (sourceTile)
+        {
+            sourceTile->setPos(mapToScene(event->pos()));
+        }
     }
 }
 
@@ -103,7 +110,9 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                 // User is initiating a drag'n'drop
                 else if (m_editorData->mode() == EditorData::EM_NONE)
                 {
+                    tile->setZValue(tile->zValue() + 1);
                     m_editorData->setDragAndDropSourceTile(tile);
+                    m_editorData->setDragAndDropSourcePos(tile->pos());
                 }
             }
 
@@ -120,20 +129,32 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
         TrackTile * sourceTile = m_editorData->dragAndDropSourceTile();
         if (sourceTile)
         {
-            // Swap source and destination tiles
-            if (TrackTile * destTile =
-                static_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
+            // Determine the dest tile
+            TrackTile * destTile = sourceTile;
+            QList<QGraphicsItem *> items = scene()->items(mapToScene(event->pos()));
+            Q_FOREACH(QGraphicsItem * item, items)
             {
-                if (sourceTile != destTile)
+                TrackTile * testTile = dynamic_cast<TrackTile *>(item);
+                if (testTile && testTile != sourceTile)
                 {
-                    QPoint sourceLoc = sourceTile->matrixLocation();
-                    QPoint destLoc   = destTile->matrixLocation();
-                    m_editorData->trackData()->map().setTile(sourceLoc.x(), sourceLoc.y(), destTile);
-                    m_editorData->trackData()->map().setTile(destLoc.x(),   destLoc.y(),   sourceTile);
-
-                    update();
+                    destTile = testTile;
+                    break;
                 }
             }
+
+            // Swap in tiles the matrix
+            QPoint sourceLoc = sourceTile->matrixLocation();
+            QPoint destLoc = destTile->matrixLocation();
+            m_editorData->trackData()->map().setTile(sourceLoc.x(), sourceLoc.y(), destTile);
+            m_editorData->trackData()->map().setTile(destLoc.x(),   destLoc.y(),   sourceTile);
+
+            // Swap in the scene
+            sourceTile->setPos(destTile->pos());
+            destTile->setPos(m_editorData->dragAndDropSourcePos());
+
+            sourceTile->setZValue(sourceTile->zValue() - 1);
+
+            update();
 
             m_editorData->setDragAndDropSourceTile(NULL);
         }
