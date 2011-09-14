@@ -16,20 +16,54 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "gamewidgetabs.h"
+#include <QGLWidget>
+#include <QTimer>
 
-class Game : public GameWidgetAbs
+//! The game widget.
+class Game : public QGLWidget
 {
+    Q_OBJECT
+
 public:
+
+    //! Constructor.
     Game(QWidget * parent = NULL);
-    ~Game();
+
+    //! Destructor.
+    virtual ~Game();
+
+    //! Set target value for frames per second.
+    //! Default is 30.
+    void setTargetFps(unsigned int fps);
+
+    //! Start rendering.
+    void start();
+
+    //! Stop rendering.
+    void stop();
 
 protected:
+
+    //! \reimp
     virtual void initializeGL();
+
+    //! \reimp
     virtual void resizeGL(int width, int height);
+
+    //! \reimp
     virtual void paintGL();
 
+private slots:
+
+    void updateFrame();
+
 private:
+
+    //! Update timer.
+    QTimer m_timer;
+
+    //! Target FPS.
+    unsigned int m_targetFps;
 };
 
 #endif // GAME_H

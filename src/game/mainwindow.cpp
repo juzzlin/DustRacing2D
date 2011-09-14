@@ -67,6 +67,18 @@ MainWindow::MainWindow() :
 
     // Populate menu bar with actions
     populateMenuBar();
+
+    // Set the game widget as the main widget
+    setCentralWidget(m_game);
+
+    // Run the game
+    runGame();
+}
+
+void MainWindow::runGame()
+{
+    m_game->setTargetFps(60);
+    m_game->start();
 }
 
 MainWindow * MainWindow::instance()

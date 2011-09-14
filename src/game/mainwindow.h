@@ -39,6 +39,9 @@ public:
     //! Return the singleton MainWindow.
     static MainWindow * instance();
 
+    //! Run the game
+    void runGame();
+
 protected:
 
     //! \reimp

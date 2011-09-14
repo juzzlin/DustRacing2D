@@ -9,16 +9,14 @@ QT              += opengl
 # Input
 SOURCES += main.cpp mwscene.cpp \
     car.cpp \
+    game.cpp \
     mainwindow.cpp \
     track.cpp \
-    game.cpp \
     trackloader.cpp \
-    gamewidgetabs.cpp
 
 HEADERS += mwscene.h \
     car.h \
+    game.h \
     mainwindow.h \
     track.h \
-    game.h \
     trackloader.h \
-    gamewidgetabs.h

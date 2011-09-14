@@ -15,24 +15,83 @@
 
 #include "game.h"
 
-Game::Game(QWidget * parent) :
-    GameWidgetAbs(parent)
+Game::Game(QWidget * parent)
+: QGLWidget(parent)
+, m_timer()
+, m_targetFps(30)
 {
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 }
 
 void Game::initializeGL()
 {
-    // TODO
+    glShadeModel(GL_SMOOTH);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearDepth(1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
 void Game::resizeGL(int width, int height)
 {
-    // TODO
+    if (height == 0)
+    {
+        height = 1;
+    }
+
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    gluPerspective(45.0f, static_cast<GLfloat>(width) / height, 0.1f, 100.0f);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 void Game::paintGL()
 {
-    // TODO
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    glTranslatef(-1.5f, 0.0f, -6.0f);
+
+    glBegin(GL_TRIANGLES);
+    glVertex3f( 0.0f, 1.0f, 0.0f);
+    glVertex3f(-1.0f,-1.0f, 0.0f);
+    glVertex3f( 1.0f,-1.0f, 0.0f);
+    glEnd();
+
+    glTranslatef(3.0f,0.0f,0.0f);
+
+    glBegin(GL_QUADS);
+    glVertex3f(-1.0f, 1.0f, 0.0f);
+    glVertex3f( 1.0f, 1.0f, 0.0f);
+    glVertex3f( 1.0f,-1.0f, 0.0f);
+    glVertex3f(-1.0f,-1.0f, 0.0f);
+    glEnd();
+}
+
+void Game::setTargetFps(unsigned int fps)
+{
+    m_targetFps = fps;
+}
+
+void Game::start()
+{
+    m_timer.setInterval(1000 * 60 / m_targetFps);
+    m_timer.start();
+}
+
+void Game::stop()
+{
+    m_timer.stop();
+}
+
+void Game::updateFrame()
+{
+    updateGL();
 }
 
 Game::~Game()
