@@ -14,14 +14,23 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
+
+#include "game.h"
 #include "mainwindow.h"
+#include "renderer.h"
 
 int main(int argc, char ** argv)
 {
     QApplication::setGraphicsSystem("raster");
     QApplication app(argc, argv);
 
+    Game game;
+    game.setRenderer(new Renderer);
+    game.setTargetFps(30);
+    game.start();
+
     MainWindow mainWindow;
+    mainWindow.setCentralWidget(game.renderer());
     mainWindow.show();
 
     return app.exec();

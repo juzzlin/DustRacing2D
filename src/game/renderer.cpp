@@ -17,10 +17,7 @@
 
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
-, m_timer()
-, m_targetFps(30)
 {
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 }
 
 void Renderer::initializeGL()
@@ -71,22 +68,6 @@ void Renderer::paintGL()
     glVertex3f( 1.0f,-1.0f, 0.0f);
     glVertex3f(-1.0f,-1.0f, 0.0f);
     glEnd();
-}
-
-void Renderer::setTargetFps(unsigned int fps)
-{
-    m_targetFps = fps;
-}
-
-void Renderer::start()
-{
-    m_timer.setInterval(1000 * 60 / m_targetFps);
-    m_timer.start();
-}
-
-void Renderer::stop()
-{
-    m_timer.stop();
 }
 
 void Renderer::updateFrame()

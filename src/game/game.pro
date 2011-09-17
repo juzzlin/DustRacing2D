@@ -13,6 +13,8 @@ SOURCES += main.cpp mwscene.cpp \
     renderer.cpp \
     track.cpp \
     trackloader.cpp \
+    scene.cpp \
+    game.cpp
 
 HEADERS += mwscene.h \
     car.h \
@@ -20,3 +22,5 @@ HEADERS += mwscene.h \
     renderer.h \
     track.h \
     trackloader.h \
+    scene.h \
+    game.h

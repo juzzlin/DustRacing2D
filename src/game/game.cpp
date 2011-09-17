@@ -13,39 +13,51 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#include "game.h"
+#include "scene.h"
+#include "renderer.h"
 
-#include <QGLWidget>
-#include <QTimer>
-
-//! The game renderer widget.
-class Renderer : public QGLWidget
+Game::Game()
+: m_scene(NULL)
+, m_renderer(NULL)
+, m_timer()
+, m_targetFps(30)
 {
-    Q_OBJECT
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+}
 
-public:
+void Game::setTargetFps(unsigned int fps)
+{
+    m_targetFps = fps;
+}
 
-    //! Constructor.
-    Renderer(QWidget * parent = NULL);
+void Game::setRenderer(Renderer * newRenderer)
+{
+    m_renderer = newRenderer;
+}
 
-    //! Destructor.
-    virtual ~Renderer();
+Renderer * Game::renderer() const
+{
+    return m_renderer;
+}
 
-    void updateFrame();
+void Game::start()
+{
+    m_timer.setInterval(1000 / m_targetFps);
+    m_timer.start();
+}
 
-protected:
+void Game::stop()
+{
+    m_timer.stop();
+}
 
-    //! \reimp
-    virtual void initializeGL();
+void Game::updateFrame()
+{
+    m_scene->updateFrame();
 
-    //! \reimp
-    virtual void resizeGL(int width, int height);
-
-    //! \reimp
-    virtual void paintGL();
-
-private:
-};
-
-#endif // RENDERER_H
+    if (m_renderer)
+    {
+        m_renderer->updateFrame();
+    }
+}

@@ -51,8 +51,6 @@ private:
 
     void populateMenuBar();
 
-    Renderer * m_renderer;
-
     static MainWindow * m_instance;
 };
 

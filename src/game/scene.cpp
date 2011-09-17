@@ -13,39 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef RENDERER_H
-#define RENDERER_H
+#include "scene.h"
 
-#include <QGLWidget>
-#include <QTimer>
-
-//! The game renderer widget.
-class Renderer : public QGLWidget
+Scene::Scene()
 {
-    Q_OBJECT
+}
 
-public:
+void Scene::updateFrame()
+{
+}
 
-    //! Constructor.
-    Renderer(QWidget * parent = NULL);
-
-    //! Destructor.
-    virtual ~Renderer();
-
-    void updateFrame();
-
-protected:
-
-    //! \reimp
-    virtual void initializeGL();
-
-    //! \reimp
-    virtual void resizeGL(int width, int height);
-
-    //! \reimp
-    virtual void paintGL();
-
-private:
-};
-
-#endif // RENDERER_H
+Scene::~Scene()
+{
+}
