@@ -13,24 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef RENDERER_H
+#define RENDERER_H
 
 #include <QGLWidget>
 #include <QTimer>
 
-//! The game widget.
-class Game : public QGLWidget
+//! The game renderer widget.
+class Renderer : public QGLWidget
 {
     Q_OBJECT
 
 public:
 
     //! Constructor.
-    Game(QWidget * parent = NULL);
+    Renderer(QWidget * parent = NULL);
 
     //! Destructor.
-    virtual ~Game();
+    virtual ~Renderer();
 
     //! Set target value for frames per second.
     //! Default is 30.
@@ -66,4 +66,4 @@ private:
     unsigned int m_targetFps;
 };
 
-#endif // GAME_H
+#endif // RENDERER_H

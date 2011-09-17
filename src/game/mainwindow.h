@@ -19,7 +19,7 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 
-class Game;
+class Renderer;
 
 /*! \class MainWindow
  *  \brief The main window of the game.
@@ -51,7 +51,7 @@ private:
 
     void populateMenuBar();
 
-    Game * m_game;
+    Renderer * m_renderer;
 
     static MainWindow * m_instance;
 };

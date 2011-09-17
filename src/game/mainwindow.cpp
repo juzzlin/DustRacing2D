@@ -14,7 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainwindow.h"
-#include "game.h"
+#include "renderer.h"
 #include "version.h"
 
 #include <QAction>
@@ -40,7 +40,7 @@ namespace
 }
 
 MainWindow::MainWindow() :
-    m_game(new Game(this))
+    m_renderer(new Renderer(this))
 {
     if (!m_instance)
     {
@@ -69,7 +69,7 @@ MainWindow::MainWindow() :
     populateMenuBar();
 
     // Set the game widget as the main widget
-    setCentralWidget(m_game);
+    setCentralWidget(m_renderer);
 
     // Run the game
     runGame();
@@ -77,8 +77,8 @@ MainWindow::MainWindow() :
 
 void MainWindow::runGame()
 {
-    m_game->setTargetFps(60);
-    m_game->start();
+    m_renderer->setTargetFps(60);
+    m_renderer->start();
 }
 
 MainWindow * MainWindow::instance()
@@ -121,5 +121,5 @@ void MainWindow::populateMenuBar()
 
 MainWindow::~MainWindow()
 {
-    delete m_game;
+    delete m_renderer;
 }

@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "game.h"
+#include "renderer.h"
 
-Game::Game(QWidget * parent)
+Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
 , m_timer()
 , m_targetFps(30)
@@ -23,7 +23,7 @@ Game::Game(QWidget * parent)
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 }
 
-void Game::initializeGL()
+void Renderer::initializeGL()
 {
     glShadeModel(GL_SMOOTH);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -33,7 +33,7 @@ void Game::initializeGL()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void Game::resizeGL(int width, int height)
+void Renderer::resizeGL(int width, int height)
 {
     if (height == 0)
     {
@@ -50,7 +50,7 @@ void Game::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void Game::paintGL()
+void Renderer::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -73,27 +73,27 @@ void Game::paintGL()
     glEnd();
 }
 
-void Game::setTargetFps(unsigned int fps)
+void Renderer::setTargetFps(unsigned int fps)
 {
     m_targetFps = fps;
 }
 
-void Game::start()
+void Renderer::start()
 {
     m_timer.setInterval(1000 * 60 / m_targetFps);
     m_timer.start();
 }
 
-void Game::stop()
+void Renderer::stop()
 {
     m_timer.stop();
 }
 
-void Game::updateFrame()
+void Renderer::updateFrame()
 {
     updateGL();
 }
 
-Game::~Game()
+Renderer::~Renderer()
 {
 }
