@@ -36,7 +36,11 @@ public:
     //! Tile height in pixels
     static const unsigned int TILE_H = 256;
 
-    //! Constructor
+    //! Constructor.
+    //! \param trackData Pointer to the "parent" TrackData.
+    //! \param location Location (coordinates) in the track scene.
+    //! \param matrixLocation Location in the tile matrix.
+    //! \param type Type of the tile. See setType().
     TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
               const QString & type = "clear");
 
