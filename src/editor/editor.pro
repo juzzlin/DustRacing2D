@@ -11,27 +11,27 @@ SOURCES += main.cpp mainwindow.cpp \
     editordata.cpp \
     editorview.cpp \
     editorscene.cpp \
+    map.cpp \
+    route.cpp \
     tiletypedialog.cpp \
     tileanimator.cpp \
-    route.cpp \
-    map.cpp \
-    ../common/trackdata.cpp \
-    ../common/trackio.cpp \
-    ../common/tracktile.cpp
+    trackdata.cpp \
+    trackio.cpp \
+    tracktile.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
     editordata.h \
     editorview.h \
     editorscene.h \
+    map.h \
+    route.h \
     tiletypedialog.h \
     tileanimator.h \
-    route.h \
-    map.h \
-    version.h \
-    ../common/trackdata.h \
-    ../common/trackio.h \
-    ../common/tracktile.h
+    trackdata.h \
+    trackio.h \
+    tracktile.h \
+    version.h
 
 RESOURCES += \
     ../../data/images/images.qrc

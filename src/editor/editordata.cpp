@@ -14,9 +14,9 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "editordata.h"
-#include "../common/trackdata.h"
-#include "../common/tracktile.h"
-#include "../common/trackio.h"
+#include "trackdata.h"
+#include "tracktile.h"
+#include "trackio.h"
 
 EditorData::EditorData()
 : m_mode(EM_NONE)

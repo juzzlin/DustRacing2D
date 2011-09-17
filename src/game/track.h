@@ -16,10 +16,21 @@
 #ifndef TRACK_H
 #define TRACK_H
 
+//! A renderable race track object constructed from
+//! the given track data.
 class Track
 {
 public:
+
+    //! Constructor.
     Track();
+
+    //! Destructor.
+    ~Track();
+
+private:
+
+//    QVector<QVector<MCTexture *>> m_tileMatrix;
 };
 
 #endif // TRACK_H

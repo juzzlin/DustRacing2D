@@ -18,3 +18,7 @@
 Track::Track()
 {
 }
+
+Track::~Track()
+{
+}

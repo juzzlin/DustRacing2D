@@ -15,10 +15,10 @@
 
 #include "mainwindow.h"
 
-#include "../common/config.h"
-#include "../common/trackio.h"
-#include "../common/trackdata.h"
-#include "../common/tracktile.h"
+#include "config.h"
+#include "trackio.h"
+#include "trackdata.h"
+#include "tracktile.h"
 
 #include "editordata.h"
 #include "editorview.h"
