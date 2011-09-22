@@ -20,15 +20,15 @@
 #include <QString>
 #include <QMenu>
 
+#include "../common/tracktilebase.h"
+
 class TileAnimator;
 class TrackData;
 
 //! A race track is built of TrackTiles.
-class TrackTile : public QGraphicsItem
+class TrackTile : public QGraphicsItem, public TrackTileBase
 {
 public:
-
-    enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN};
 
     //! Tile width in pixels
     static const unsigned int TILE_W = 256;
@@ -45,7 +45,7 @@ public:
               const QString & type = "clear");
 
     //! Destructor
-    ~TrackTile();
+    virtual ~TrackTile();
 
     //! \reimp
     virtual QRectF boundingRect () const;
@@ -56,23 +56,14 @@ public:
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
 
-    //! Set type: "corner", "straight", "grass", "finish", "clear".
-    void setTileType(const QString & type);
+    //! \reimp
+    virtual void setRouteIndex(int index);
 
-    //! Get type
-    const QString & tileType() const;
+    //! \reimp
+    virtual void setTileType(const QString & type);
 
-    //! Set route index
-    void setRouteIndex(int index);
-
-    //! Get route index, return -1 if not set.
-    int routeIndex() const;
-
-    //! Set direction towards next tile in the route.
-    void setRouteDirection(TrackTile::RouteDirection direction);
-
-    //! Get location in the tile matrix.
-    QPoint matrixLocation() const;
+    //! \reimp
+    virtual void setRouteDirection(TrackTileBase::RouteDirection direction);
 
     //! Get current active tile or NULL if not set.
     static TrackTile * activeTile();
@@ -93,12 +84,8 @@ private:
     TrackData        * m_trackData;
     static TrackTile * m_activeTile;
     QSizeF             m_size;
-    QString            m_tileType;
     bool               m_active;
     TileAnimator     * m_animator;
-    int                m_routeIndex;
-    QPoint             m_matrixLocation;
-    RouteDirection     m_routeDirection;
 };
 
 #endif // TRACKTILE_H

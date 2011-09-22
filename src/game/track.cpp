@@ -14,11 +14,14 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "track.h"
+#include "trackdata.h"
 
-Track::Track()
+Track::Track(TrackData * trackData)
+: m_trackData(trackData)
 {
 }
 
 Track::~Track()
 {
+    delete m_trackData;
 }

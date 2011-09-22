@@ -13,32 +13,51 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TRACK_H
-#define TRACK_H
+#ifndef TRACKDATA_H
+#define TRACKDATA_H
 
-class TrackData;
-class MCCamera;
+#include <QString>
 
-//! A renderable race track object constructed from
-//! the given track data.
-class Track
+#include "route.h"
+#include "map.h"
+
+class TrackData
 {
 public:
 
-    //! Constructor.
-    //! \param trackData The data that represents the track.
-    //!                  Track will take the ownership.
-    explicit Track(TrackData * trackData);
+  //! Constructor
+  TrackData(QString name, unsigned int cols, unsigned rows);
 
-    //! Destructor.
-    ~Track();
+  //! Destructor
+  virtual ~TrackData();
 
-    //! Render as seen through the given camera window.
-    void render(MCCamera * camera);
+  //! Get name
+  QString name() const;
+
+  //! Get file name
+  QString fileName() const;
+
+  //! Set file name
+  void setFileName(QString fileName);
+
+  //! Get map object.
+  Map & map();
+
+  //! Get route object.
+  const Map & map() const;
+
+  //! Get route object.
+  Route & route();
+
+  //! Get route object.
+  const Route & route() const;
 
 private:
 
-    TrackData * m_trackData;
+  QString m_name;
+  QString m_fileName;
+  Map     m_map;
+  Route   m_route;
 };
 
-#endif // TRACK_H
+#endif // TRACKDATA_H

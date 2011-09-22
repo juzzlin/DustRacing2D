@@ -13,8 +13,123 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "trackloader.h"
+#include <QFile>
+#include <QTextStream>
+#include <QDomDocument>
+#include <QDomElement>
 
-TrackLoader::TrackLoader()
+#include "track.h"
+#include "trackloader.h"
+#include "tracktile.h"
+#include "../common/trackdata.h"
+
+TrackLoader::TrackLoader(MCTextureManager * textureManager)
+: m_textureManager(textureManager)
+, m_paths()
+, m_tracks()
 {
+}
+
+void TrackLoader::addTrackSearchPath(QString path)
+{
+    if (!m_paths.contains(path))
+    {
+        m_paths << path;
+    }
+}
+
+int TrackLoader::loadTracks()
+{
+    int numLoaded = 0;
+    Q_FOREACH(QString path, m_paths)
+    {
+        if (TrackData * trackData = loadTrack(path))
+        {
+            m_tracks << new Track(trackData);
+            numLoaded++;
+        }
+    }
+    return numLoaded;
+}
+
+TrackData * TrackLoader::loadTrack(QString path)
+{
+    QDomDocument doc;
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return NULL;
+    }
+
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return NULL;
+    }
+
+    file.close();
+
+    QDomElement  root = doc.documentElement();
+    QString      name = root.attribute("name", "undefined");
+    unsigned int cols = root.attribute("cols", "0").toUInt();
+    unsigned int rows = root.attribute("rows", "0").toUInt();
+
+    TrackData * newData = NULL;
+    if (cols > 0 && rows > 0)
+    {
+        newData = new TrackData(name, cols, rows);
+        newData->setFileName(path);
+
+        QVector<TrackTile *> routeVector;
+
+        QDomNode node = root.firstChild();
+        while(!node.isNull())
+        {
+            QDomElement tag = node.toElement();
+            if(!tag.isNull())
+            {
+                // Read a tile tag
+                if (tag.nodeName() == "tile")
+                {
+                    QString      id = tag.attribute("type", "clear");
+                    unsigned int i  = tag.attribute("i", "0").toUInt();
+                    unsigned int j  = tag.attribute("j", "0").toUInt();
+                    int          o  = tag.attribute("o", "0").toInt();
+                    int      index  = tag.attribute("index", "-1").toInt();
+
+                    if (TrackTile * tile = newData->map().tile(i, j))
+                    {
+                        tile->setRotation(o);
+                        tile->setTileType(id);
+                        tile->setRouteIndex(index);
+
+                      if (index >= 0)
+                           routeVector << tile;
+                    }
+                }
+            }
+
+            node = node.nextSibling();
+        }
+
+        newData->route().buildFromVector(routeVector);
+    }
+
+    return newData;
+}
+
+QVector<Track *> TrackLoader::tracks() const
+{
+    return m_tracks;
+}
+
+TrackLoader::~TrackLoader()
+{
+    Q_FOREACH(Track * track, m_tracks)
+    {
+        delete track;
+    }
+
+    m_tracks.clear();
 }

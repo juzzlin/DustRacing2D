@@ -16,10 +16,14 @@
 #include "game.h"
 #include "scene.h"
 #include "renderer.h"
+#include "trackloader.h"
+#include "MiniCore/Core/MCTextureManager"
 
 Game::Game()
 : m_scene(NULL)
 , m_renderer(NULL)
+, m_textureManager(new MCTextureManager())
+, m_trackLoader(new TrackLoader(m_textureManager))
 , m_timer()
 , m_targetFps(30)
 {
@@ -60,4 +64,10 @@ void Game::updateFrame()
     {
         m_renderer->updateFrame();
     }
+}
+
+Game::~Game()
+{
+    delete m_trackLoader;
+    delete m_textureManager;
 }

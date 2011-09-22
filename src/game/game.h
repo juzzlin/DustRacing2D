@@ -21,6 +21,8 @@
 
 class Scene;
 class Renderer;
+class TrackLoader;
+class MCTextureManager;
 
 //! The main game class.
 class Game : public QObject
@@ -31,6 +33,9 @@ public:
 
     //! Constructor
     Game();
+
+    //! Destructor
+    virtual ~Game();
 
     //! Set target value for frames per second.
     //! Default is 30. This is independent of the
@@ -53,10 +58,12 @@ private slots:
 
 private:
 
-    Scene      * m_scene;
-    Renderer   * m_renderer;
-    QTimer       m_timer;
-    unsigned int m_targetFps;
+    Scene            * m_scene;
+    Renderer         * m_renderer;
+    MCTextureManager * m_textureManager;
+    TrackLoader      * m_trackLoader;
+    QTimer             m_timer;
+    unsigned int       m_targetFps;
 };
 
 #endif // GAME_H

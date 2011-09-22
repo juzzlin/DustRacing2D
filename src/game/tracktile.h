@@ -13,32 +13,40 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TRACK_H
-#define TRACK_H
+#ifndef TRACKTILE_H
+#define TRACKTILE_H
 
-class TrackData;
-class MCCamera;
+#include "../common/tracktilebase.h"
 
-//! A renderable race track object constructed from
-//! the given track data.
-class Track
+//! The track tile used in the game.
+class TrackTile : public TrackTileBase
 {
 public:
 
+    //! Tile width in pixels
+    static const unsigned int TILE_W = 256;
+
+    //! Tile height in pixels
+    static const unsigned int TILE_H = 256;
+
     //! Constructor.
-    //! \param trackData The data that represents the track.
-    //!                  Track will take the ownership.
-    explicit Track(TrackData * trackData);
+    //! See TrackTileBase.
+    TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+              const QString & type = "clear");
 
-    //! Destructor.
-    ~Track();
+    //! Destructor
+    virtual ~TrackTile();
 
-    //! Render as seen through the given camera window.
-    void render(MCCamera * camera);
+    //! Set the orientation in XY-plane in degrees when loading
+    //! a track.
+    void setRotation(int rotation);
+
+    //! Get the orientation in XY-plane in degrees.
+    int rotation() const;
 
 private:
 
-    TrackData * m_trackData;
+    int m_rotation;
 };
 
-#endif // TRACK_H
+#endif // TRACKTILE_H

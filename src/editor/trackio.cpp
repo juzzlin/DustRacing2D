@@ -19,9 +19,9 @@
 #include <QDomElement>
 
 #include "trackio.h"
-#include "trackdata.h"
 #include "tracktile.h"
 #include "version.h"
+#include "../common/trackdata.h"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {

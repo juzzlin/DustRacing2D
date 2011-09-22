@@ -13,48 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TRACKDATA_H
-#define TRACKDATA_H
+#include "tracktile.h"
 
-#include <QString>
-
-#include "route.h"
-#include "map.h"
-
-class TrackData
+TrackTile::TrackTile(TrackData * trackData,
+                     QPointF location, QPoint matrixLocation,
+                     const QString & type)
+: TrackTileBase(trackData, location, matrixLocation, type)
+, m_rotation(0)
 {
-public:
+}
 
-  //! Constructor
-  TrackData(QString name, unsigned int cols, unsigned rows);
+void TrackTile::setRotation(int rotation)
+{
+    m_rotation = rotation;
+}
 
-  //! Get name
-  QString name() const;
+int TrackTile::rotation() const
+{
+    return m_rotation;
+}
 
-  //! Get file name
-  QString fileName() const;
-
-  //! Set file name
-  void setFileName(QString fileName);
-
-  //! Get map object.
-  Map & map();
-
-  //! Get route object.
-  const Map & map() const;
-
-  //! Get route object.
-  Route & route();
-
-  //! Get route object.
-  const Route & route() const;
-
-private:
-
-  QString m_name;
-  QString m_fileName;
-  Map     m_map;
-  Route   m_route;
-};
-
-#endif // TRACKDATA_H
+TrackTile::~TrackTile()
+{
+}

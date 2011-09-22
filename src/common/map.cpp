@@ -17,6 +17,9 @@
 #include "tracktile.h"
 #include "trackdata.h"
 
+#include <QPoint>
+#include <QPointF>
+
 Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows) :
     m_trackData(trackData),
     m_cols(cols),

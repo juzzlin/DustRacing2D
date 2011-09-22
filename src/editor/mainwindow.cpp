@@ -17,7 +17,6 @@
 
 #include "config.h"
 #include "trackio.h"
-#include "trackdata.h"
 #include "tracktile.h"
 
 #include "editordata.h"
@@ -25,6 +24,8 @@
 #include "editorscene.h"
 #include "newtrackdialog.h"
 #include "version.h"
+
+#include "../common/trackdata.h"
 
 #include <QAction>
 #include <QApplication>

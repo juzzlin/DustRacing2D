@@ -56,3 +56,7 @@ const Map & TrackData::map() const
 {
     return m_map;
 }
+
+TrackData::~TrackData()
+{
+}

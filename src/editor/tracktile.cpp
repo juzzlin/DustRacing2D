@@ -14,11 +14,11 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.h"
-#include "trackdata.h"
 #include "tiletypedialog.h"
 #include "tileanimator.h"
 #include "mainwindow.h"
 #include "config.h"
+#include "../common/trackdata.h"
 
 #include <QPainter>
 #include <QGraphicsView>
@@ -28,33 +28,30 @@
 TrackTile * TrackTile::m_activeTile = NULL;
 
 TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
-                     const QString & type):
-    m_trackData(trackData),
-    m_size(QSizeF(TILE_W, TILE_H)),
-    m_tileType(type),
-    m_active(false),
-    m_animator(new TileAnimator(this)),
-    m_routeIndex(-1),
-    m_matrixLocation(matrixLocation),
-    m_routeDirection(TrackTile::RD_NONE)
+                     const QString & type)
+: TrackTileBase(trackData, location, matrixLocation, type)
+, m_size(QSizeF(TILE_W, TILE_H))
+, m_active(false)
+, m_animator(new TileAnimator(this))
 {
     setPos(location);
 }
 
 void TrackTile::setRouteIndex(int index)
 {
-    m_routeIndex = index;
+    TrackTileBase::setRouteIndex(index);
     update();
 }
 
-int TrackTile::routeIndex() const
+void TrackTile::setTileType(const QString & type)
 {
-    return m_routeIndex;
+    TrackTileBase::setTileType(type);
+    update();
 }
 
-void TrackTile::setRouteDirection(TrackTile::RouteDirection direction)
+void TrackTile::setRouteDirection(TrackTileBase::RouteDirection direction)
 {
-    m_routeDirection = direction;
+    TrackTileBase::setRouteDirection(direction);
     update();
 }
 
@@ -76,31 +73,31 @@ void TrackTile::paint(QPainter * painter,
     pen.setJoinStyle(Qt::MiterJoin);
 
     // Render the tile image
-    if (m_tileType == "grass")
+    if (tileType() == "grass")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(Config::GRASS_PATH));
     }
-    else if (m_tileType == "straight")
+    else if (tileType() == "straight")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(Config::STRAIGHT_PATH));
     }
-    else if (m_tileType == "corner")
+    else if (tileType() == "corner")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(Config::CORNER_PATH));
     }
-    else if (m_tileType == "finish")
+    else if (tileType() == "finish")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
                             QPixmap(Config::FINISH_PATH));
     }
-    else if (m_tileType == "clear")
+    else if (tileType() == "clear")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
@@ -119,7 +116,7 @@ void TrackTile::paint(QPainter * painter,
     }
 
     // Render route index and arrow
-    if (m_routeIndex >= 0)
+    if (routeIndex() >= 0)
     {
         pen.setColor(QColor(255, 255, 255, 127));
         painter->setPen(pen);
@@ -130,7 +127,7 @@ void TrackTile::paint(QPainter * painter,
         transform.rotate(-rotation());
         painter->setTransform(transform, true);
 
-        switch (m_routeDirection)
+        switch (routeDirection())
         {
         case RD_LEFT:
             {
@@ -185,7 +182,7 @@ void TrackTile::paint(QPainter * painter,
             break;
         }
 
-        if (m_routeIndex == 0)
+        if (routeIndex() == 0)
         {
             QFont font;
             font.setPixelSize(m_size.height() / 2);
@@ -230,26 +227,6 @@ void TrackTile::setActiveTile(TrackTile * tile)
 TrackTile * TrackTile::activeTile()
 {
     return TrackTile::m_activeTile;
-}
-
-void TrackTile::setTileType(const QString & type)
-{
-    if (type != m_tileType)
-    {
-        m_tileType = type;
-
-        update();
-    }
-}
-
-const QString & TrackTile::tileType() const
-{
-    return m_tileType;
-}
-
-QPoint TrackTile::matrixLocation() const
-{
-    return m_matrixLocation;
 }
 
 void TrackTile::rotate90CW()

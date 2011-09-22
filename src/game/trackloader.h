@@ -16,10 +16,47 @@
 #ifndef TRACKLOADER_H
 #define TRACKLOADER_H
 
+#include <QString>
+#include <QVector>
+
+class Track;
+class TrackData;
+class MCTextureManager;
+
+//! Manages the track loading procedure.
+//! TODO: This can be shared with the editor or inherit from
+//! a shared loader.
 class TrackLoader
 {
 public:
-    TrackLoader();
+
+    //! Constructor.
+    //! \param textureManager Texture manager to be used when determining
+    //!                       tile textures.
+    TrackLoader(MCTextureManager * textureManager);
+
+    //! Destructor.
+    ~TrackLoader();
+
+    //! Add path to search level files for.
+    void addTrackSearchPath(QString path);
+
+    //! Load all tracks found in the added paths.
+    //! \return Number of track loaded.
+    int loadTracks();
+
+    //! Get tracks.
+    QVector<Track *> tracks() const;
+
+private:
+
+    //! Load the given track.
+    //! \return Valid data pointer or NULL if fails.
+    TrackData * loadTrack(QString path);
+
+    MCTextureManager * m_textureManager;
+    QVector<QString>   m_paths;
+    QVector<Track *>   m_tracks;
 };
 
 #endif // TRACKLOADER_H
