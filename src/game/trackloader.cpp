@@ -23,6 +23,8 @@
 #include "tracktile.h"
 #include "../common/trackdata.h"
 
+#include "MiniCore/Core/MCLogger"
+
 TrackLoader::TrackLoader(MCTextureManager * textureManager)
 : m_textureManager(textureManager)
 , m_paths()
@@ -43,6 +45,8 @@ int TrackLoader::loadTracks()
     int numLoaded = 0;
     Q_FOREACH(QString path, m_paths)
     {
+        MCLogger::logInfo("Loading tracks from '%s'..", path.toStdString().c_str());
+
         if (TrackData * trackData = loadTrack(path))
         {
             m_tracks << new Track(trackData);

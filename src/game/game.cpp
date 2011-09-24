@@ -17,6 +17,7 @@
 #include "scene.h"
 #include "renderer.h"
 #include "trackloader.h"
+#include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCTextureManager"
 
 Game::Game()
@@ -28,6 +29,8 @@ Game::Game()
 , m_targetFps(30)
 {
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+
+    m_trackLoader->addTrackSearchPath("data/levels");
 }
 
 void Game::setTargetFps(unsigned int fps)
@@ -47,6 +50,8 @@ Renderer * Game::renderer() const
 
 void Game::start()
 {
+    m_trackLoader->loadTracks();
+
     m_timer.setInterval(1000 / m_targetFps);
     m_timer.start();
 }

@@ -38,6 +38,7 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcglcircleparticle.cc \
     MiniCore/Core/mcglrectparticle.cc \
     MiniCore/Core/mcgravitygenerator.cc \
+    MiniCore/Core/mclogger.cc \
     MiniCore/Core/mcobject.cc \
     MiniCore/Core/mcoutofboundariesevent.cc \
     MiniCore/Core/mcparticle.cc \
@@ -88,6 +89,7 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcglcircleparticle.hh \
     MiniCore/Core/mcglrectparticle.hh \
     MiniCore/Core/mcgravitygenerator.hh \
+    MiniCore/Core/mclogger.hh \
     MiniCore/Core/mcobject.hh \
     MiniCore/Core/mcoutofboundariesevent.hh \
     MiniCore/Core/mcparticle.hh \
