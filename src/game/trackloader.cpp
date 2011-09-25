@@ -13,7 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include <QDir>
 #include <QFile>
+#include <QStringList>
 #include <QTextStream>
 #include <QDomDocument>
 #include <QDomElement>
@@ -46,11 +48,21 @@ int TrackLoader::loadTracks()
     Q_FOREACH(QString path, m_paths)
     {
         MCLogger::logInfo("Loading tracks from '%s'..", path.toStdString().c_str());
-
-        if (TrackData * trackData = loadTrack(path))
+        QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
+        Q_FOREACH(QString trackPath, trackPaths)
         {
-            m_tracks << new Track(trackData);
-            numLoaded++;
+            MCLogger::logInfo("Found '%s'..", trackPath.toStdString().c_str());
+            trackPath = path + QDir::separator() + trackPath;
+            if (TrackData * trackData = loadTrack(trackPath))
+            {
+                m_tracks << new Track(trackData);
+                numLoaded++;
+            }
+            else
+            {
+                MCLogger::logError("Couldn't load '%s'..",
+                                   trackPath.toStdString().c_str());
+            }
         }
     }
     return numLoaded;
