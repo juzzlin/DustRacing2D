@@ -21,6 +21,7 @@
 #define MCLOGGER_HH
 
 #include <cstdio>
+#include <cstdarg>
 
 //! A logging interface.
 class MCLogger
@@ -67,6 +68,7 @@ private:
     MCLogger();
 
     static void prefixDateTime();
+    static void doLog(const char * type, const char * format, va_list ap);
 
     static bool   m_echoMode;
     static bool   m_dateTime;

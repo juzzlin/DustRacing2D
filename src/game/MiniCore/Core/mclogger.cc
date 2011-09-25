@@ -19,7 +19,6 @@
 
 #include "mclogger.hh"
 #include <QDateTime>
-#include <cstdarg>
 #include <cstdio>
 
 bool   MCLogger::m_echoMode = false;
@@ -70,16 +69,13 @@ void MCLogger::prefixDateTime()
     }
 }
 
-void MCLogger::logInfo(const char * format, ...)
+void MCLogger::doLog(const char * type, const char * format, va_list ap)
 {
     MCLogger::prefixDateTime();
 
-    va_list ap;
-    va_start(ap, format);
-
     if (MCLogger::m_stream)
     {
-        fprintf(MCLogger::m_stream, "INFO: ");
+        fprintf(MCLogger::m_stream, "%s", type);
         vfprintf(MCLogger::m_stream, format, ap);
         fprintf(MCLogger::m_stream, "\n");
         fflush(MCLogger::m_stream);
@@ -87,86 +83,41 @@ void MCLogger::logInfo(const char * format, ...)
 
     if (MCLogger::m_echoMode)
     {
-        fprintf(stdout, "INFO: ");
+        fprintf(stdout, "%s", type);
         vfprintf(stdout, format, ap);
         fprintf(stdout, "\n");
     }
+}
 
+void MCLogger::logInfo(const char * format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    MCLogger::doLog("I: ", format, ap);
     va_end(ap);
 }
 
 void MCLogger::logWarning(const char * format, ...)
 {
-    MCLogger::prefixDateTime();
-
     va_list ap;
     va_start(ap, format);
-
-    if (MCLogger::m_stream)
-    {
-        fprintf(MCLogger::m_stream, "INFO: ");
-        vfprintf(MCLogger::m_stream, format, ap);
-        fprintf(MCLogger::m_stream, "\n");
-        fflush(MCLogger::m_stream);
-    }
-
-    if (MCLogger::m_echoMode)
-    {
-        fprintf(stdout, "INFO: ");
-        vfprintf(stdout, format, ap);
-        fprintf(stdout, "\n");
-    }
-
+    MCLogger::doLog("W: ", format, ap);
     va_end(ap);
 }
 
 void MCLogger::logError(const char * format, ...)
 {
-    MCLogger::prefixDateTime();
-
     va_list ap;
     va_start(ap, format);
-
-    if (MCLogger::m_stream)
-    {
-        fprintf(MCLogger::m_stream, "ERROR: ");
-        vfprintf(MCLogger::m_stream, format, ap);
-        fprintf(MCLogger::m_stream, "\n");
-        fflush(MCLogger::m_stream);
-    }
-
-    if (MCLogger::m_echoMode)
-    {
-        fprintf(stderr, "ERROR: ");
-        vfprintf(stderr, format, ap);
-        fprintf(stderr, "\n");
-    }
-
+    MCLogger::doLog("E: ", format, ap);
     va_end(ap);
 }
 
 void MCLogger::logFatal(const char * format, ...)
 {
-    MCLogger::prefixDateTime();
-
     va_list ap;
     va_start(ap, format);
-
-    if (MCLogger::m_stream)
-    {
-        fprintf(MCLogger::m_stream, "FATAL: ");
-        vfprintf(MCLogger::m_stream, format, ap);
-        fprintf(MCLogger::m_stream, "\n");
-        fflush(MCLogger::m_stream);
-    }
-
-    if (MCLogger::m_echoMode)
-    {
-        fprintf(stderr, "FATAL: ");
-        vfprintf(stderr, format, ap);
-        fprintf(stderr, "\n");
-    }
-
+    MCLogger::doLog("F: ", format, ap);
     va_end(ap);
 }
 
