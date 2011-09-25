@@ -39,7 +39,17 @@ int main(int argc, char ** argv)
     Game game;
     game.setRenderer(new Renderer);
     game.setTargetFps(30);
-    game.start();
+
+    // Initialize and start the game
+    if (game.init())
+    {
+        game.start();
+    }
+    else
+    {
+        MCLogger::logError("Initing the game failed.");
+        return EXIT_FAILURE;
+    }
 
     // Create the main window
     MCLogger::logInfo("Creating window..");

@@ -48,9 +48,23 @@ Renderer * Game::renderer() const
     return m_renderer;
 }
 
+bool Game::init()
+{
+    if (int numLoaded = m_trackLoader->loadTracks())
+    {
+        MCLogger::logInfo("%d track(s) loaded.", numLoaded);
+    }
+    else
+    {
+        MCLogger::logError("No valid tracks found.");
+        return false;
+    }
+
+    return true;
+}
+
 void Game::start()
 {
-    m_trackLoader->loadTracks();
 
     m_timer.setInterval(1000 / m_targetFps);
     m_timer.start();

@@ -46,7 +46,11 @@ public:
 
     Renderer * renderer() const;
 
-    //! Start scene.
+    //! Init the game.
+    //! \return True on success.
+    bool init();
+
+    //! Start the game.
     void start();
 
     //! Stop scene.
