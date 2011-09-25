@@ -1,10 +1,19 @@
 Build & install instructions
 ============================
 
-Build:
+Dustrac currently uses qmake as the build system
+and dustrac.pro is the main project file that
+can also be loaded from the QtCreator IDE.
+
+Currently the build depends only on Qt 4.x
+development files (libqt4-dev on Ubuntu).
+
+Build from command line:
 
 $ qmake
 $ make
+
+This will build the editor and the game binaries.
 
 Install (as root):
 
