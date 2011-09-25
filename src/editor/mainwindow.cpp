@@ -59,7 +59,7 @@ namespace
     const int          CONSOLE_HEIGHT = 64;
 }
 
-MainWindow::MainWindow() :
+MainWindow::MainWindow(QString trackFile) :
         m_editorData(new EditorData()),
         m_editorView(new EditorView(m_editorData, this)),
         m_editorScene(new EditorScene(this)),
@@ -156,8 +156,17 @@ MainWindow::MainWindow() :
     sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
     splitter->setSizes(sizes);
 
-    // Print a welcome message
-    console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+    if (!trackFile.isEmpty())
+    {
+        // Print a welcome message
+        console(tr("Loading '%1'..").arg(trackFile));
+        doOpenTrack(trackFile);
+    }
+    else
+    {
+        // Print a welcome message
+        console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+    }
 }
 
 MainWindow * MainWindow::instance()
@@ -354,49 +363,60 @@ void MainWindow::openTrack()
                                                     tr("Open a track"),
                                                     path,
                                                     tr("Track Files (*.trk)"));
+    doOpenTrack(fileName);
+}
 
-    if (QFile::exists(fileName))
+bool MainWindow::doOpenTrack(QString fileName)
+{
+    if (!QFile::exists(fileName))
     {
-        removeTilesFromScene();
-
-        m_editorData->loadTrackData(fileName);
-        if (m_editorData->trackData())
-        {
-            console(QString(tr("Track '")) + fileName + tr("' opened."));
-
-            // Save recent path
-            QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                               Version::QSETTINGS_SOFTWARE_NAME);
-
-            settings.beginGroup(SETTINGS_GROUP);
-            settings.setValue("recentPath", fileName);
-            settings.endGroup();
-
-            m_saveAction->setEnabled(true);
-            m_saveAsAction->setEnabled(true);
-            m_toolBar->setEnabled(true);
-            m_clearAllAction->setEnabled(true);
-            m_setRouteAction->setEnabled(true);
-
-            delete m_editorScene;
-            m_editorScene = new EditorScene;
-
-            QRectF newSceneRect(-MARGIN, -MARGIN,
-                                2 * MARGIN + m_editorData->trackData()->map().cols() * TrackTile::TILE_W,
-                                2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
-
-            m_editorScene->setSceneRect(newSceneRect);
-            m_editorView->setScene(m_editorScene);
-            m_editorView->setSceneRect(newSceneRect);
-            m_editorView->ensureVisible(0, 0, 0, 0);
-
-            addTilesToScene();
-        }
-        else
-        {
-            console(QString(tr("Failed to open track '")) + fileName + "'.");
-        }
+        console(QString(tr("ERROR!!: %1 doesn't exist.").arg(fileName)));
+        return false;
     }
+
+    removeTilesFromScene();
+
+    m_editorData->loadTrackData(fileName);
+    if (m_editorData->trackData())
+    {
+        console(QString(tr("Track '%1' opened.").arg(fileName)));
+
+        // Save recent path
+        QSettings settings(Version::QSETTINGS_COMPANY_NAME,
+                           Version::QSETTINGS_SOFTWARE_NAME);
+
+        settings.beginGroup(SETTINGS_GROUP);
+        settings.setValue("recentPath", fileName);
+        settings.endGroup();
+
+        m_saveAction->setEnabled(true);
+        m_saveAsAction->setEnabled(true);
+        m_toolBar->setEnabled(true);
+        m_clearAllAction->setEnabled(true);
+        m_setRouteAction->setEnabled(true);
+
+        delete m_editorScene;
+        m_editorScene = new EditorScene;
+
+        QRectF newSceneRect(-MARGIN, -MARGIN,
+                            2 * MARGIN + m_editorData->trackData()->map().cols() * TrackTile::TILE_W,
+                            2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
+
+        m_editorScene->setSceneRect(newSceneRect);
+        m_editorView->setScene(m_editorScene);
+        m_editorView->setSceneRect(newSceneRect);
+        m_editorView->ensureVisible(0, 0, 0, 0);
+
+        addTilesToScene();
+        return true;
+    }
+    else
+    {
+        console(QString(tr("Failed to open track '")) + fileName + "'.");
+        return false;
+    }
+
+    return false;
 }
 
 void MainWindow::saveTrack()

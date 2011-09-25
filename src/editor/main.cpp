@@ -14,6 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
+#include <QFile>
+#include <iostream>
 #include "mainwindow.h"
 
 int main(int argc, char ** argv)
@@ -21,7 +23,9 @@ int main(int argc, char ** argv)
     QApplication::setGraphicsSystem("raster");
     QApplication app(argc, argv);
 
-    MainWindow mainWindow;
+    // Track file can be given as command line argument.
+    QString trackFile = argc > 1 ? argv[1] : "";
+    MainWindow mainWindow(trackFile);
     mainWindow.show();
 
     return app.exec();

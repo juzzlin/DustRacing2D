@@ -39,7 +39,8 @@ class MainWindow : public QMainWindow
 public:
 
     //! Constructor
-    MainWindow();
+    //! \param trackFile Track given as command line argument.
+    explicit MainWindow(QString trackFile = "");
     
     //! Destructor
     ~MainWindow();
@@ -70,6 +71,7 @@ private slots:
 
     void initializeNewTrack();
     void openTrack();
+    bool doOpenTrack(QString fileName);
     void saveTrack();
     void saveAsTrack();
     void updateScale(int value);
