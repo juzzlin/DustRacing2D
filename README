@@ -1,7 +1,23 @@
 README
 ======
 
-DustRAC is a 2D racing game written in Qt/OpenGL.
-DustRAC is licensed under GNU GPLv3.
+General
+-------
+
+Dust Racing is a tile-based 2D racing game written in Qt/OpenGL.
+Dust Racing is licensed under GNU GPLv3.
+
+This source tree includes source code for the track editor and
+the game itself. The game uses an 2D engine called MiniCore
+written by Jussi Lind.
+
+Source tree layout:
+
+src/game/
+src/game/MiniCore/
+src/editor/
+
+See INSTALL for build / install instruction.
+
 
 -- Jussi Lind <jussi.lind@iki.fi>
