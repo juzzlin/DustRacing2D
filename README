@@ -7,9 +7,13 @@ General
 Dust Racing is a tile-based 2D racing game written in Qt/OpenGL.
 Dust Racing is licensed under GNU GPLv3.
 
-This source tree includes source code for the track editor and
+Source code
+-----------
+
+The source tree includes source code for the track editor and
 the game itself. The game uses an 2D engine called MiniCore
-written by Jussi Lind.
+written by Jussi Lind. The code is documented by using
+Doxygen tags.
 
 Source tree layout:
 

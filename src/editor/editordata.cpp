@@ -67,11 +67,21 @@ void EditorData::beginSetRoute()
     setMode(EditorData::EM_SETROUTE);
 
     if (m_trackData)
+    {
+        // TODO: Remove route lines from the scene.
+        //       Each tile could contain a pointer
+        //       to the corresponding line object.
+
         m_trackData->route().clear();
+    }
 }
 
 void EditorData::endSetRoute()
 {
+    // TODO: Add route lines to the scene.
+    //       Each tile could contain a pointer
+    //       to the corresponding line object.
+
     setMode(EditorData::EM_NONE);
 }
 

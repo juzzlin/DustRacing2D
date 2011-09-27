@@ -20,6 +20,7 @@
 #include <QMenu>
 
 class QMouseEvent;
+class QPaintEvent;
 class EditorData;
 
 class EditorView : public QGraphicsView

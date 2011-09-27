@@ -22,10 +22,13 @@
 
 #include "../common/tracktilebase.h"
 
+class QGraphicsLineItem;
 class TileAnimator;
 class TrackData;
 
-//! A race track is built of TrackTiles.
+//! A race track is built of TrackTiles. The TrackTile class
+//! extends TrackTileBase with features needed to visualize
+//! track tiles in the editor.
 class TrackTile : public QGraphicsItem, public TrackTileBase
 {
 public:
