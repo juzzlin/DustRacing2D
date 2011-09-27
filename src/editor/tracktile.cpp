@@ -20,10 +20,11 @@
 #include "config.h"
 #include "../common/trackdata.h"
 
-#include <QPainter>
+#include <QAction>
+#include <QGraphicsLineItem>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QAction>
+#include <QPainter>
 
 TrackTile * TrackTile::m_activeTile = NULL;
 
@@ -33,6 +34,7 @@ TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocat
 , m_size(QSizeF(TILE_W, TILE_H))
 , m_active(false)
 , m_animator(new TileAnimator(this))
+, m_routeLine(NULL)
 {
     setPos(location);
 }
@@ -41,6 +43,16 @@ void TrackTile::setRouteIndex(int index)
 {
     TrackTileBase::setRouteIndex(index);
     update();
+}
+
+void TrackTile::setRouteLine(QGraphicsLineItem * routeLine)
+{
+    m_routeLine = routeLine;
+}
+
+QGraphicsLineItem * TrackTile::routeLine() const
+{
+    return m_routeLine;
 }
 
 void TrackTile::setTileType(const QString & type)
@@ -115,80 +127,43 @@ void TrackTile::paint(QPainter * painter,
         painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
     }
 
-    // Render route index and arrow
-    if (routeIndex() >= 0)
+    // Render route arrow arrow
+    if (routeIndex() == 0)
     {
-        pen.setColor(QColor(255, 255, 255, 127));
-        painter->setPen(pen);
-
         // Cancel possible rotation so that the text is not
-        // rotated.
+        // rotated and rotate for the arrow head.
         QTransform transform;
-        transform.rotate(-rotation());
-        painter->setTransform(transform, true);
-
         switch (routeDirection())
         {
         case RD_LEFT:
-            {
-                QPainterPath path;
-                QPolygon triangle;
-                triangle << QPoint(-m_size.width() / 2,  0)
-                         << QPoint(-m_size.width() / 3,  m_size.height() / 3)
-                         << QPoint(-m_size.width() / 3, -m_size.height() / 3);
-                path.addPolygon(triangle);
-                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
-            }
+            transform.rotate(180 - rotation());
             break;
-
         case RD_RIGHT:
-            {
-                QPainterPath path;
-                QPolygon triangle;
-                triangle << QPoint(m_size.width() / 2,  0)
-                         << QPoint(m_size.width() / 3, -m_size.height() / 3)
-                         << QPoint(m_size.width() / 3,  m_size.height() / 3);
-                path.addPolygon(triangle);
-                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
-            }
+            transform.rotate(0 - rotation());
             break;
-
         case RD_UP:
-            {
-                QPainterPath path;
-                QPolygon triangle;
-                triangle << QPoint(0, -m_size.height() / 2)
-                         << QPoint( m_size.width() / 3, -m_size.height() / 3)
-                         << QPoint(-m_size.width() / 3, -m_size.height() / 3);
-                path.addPolygon(triangle);
-                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
-            }
+            transform.rotate(270 - rotation());
             break;
-
         case RD_DOWN:
-            {
-                QPainterPath path;
-                QPolygon triangle;
-                triangle << QPoint(0, m_size.height() / 2)
-                         << QPoint( m_size.width() / 3, m_size.height() / 3)
-                         << QPoint(-m_size.width() / 3, m_size.height() / 3);
-                path.addPolygon(triangle);
-                painter->fillPath(path, QBrush(QColor(255, 255, 255, 127)));
-            }
+            transform.rotate(90 - rotation());
             break;
-
         default:
         case RD_NONE:
             break;
         }
+        painter->setTransform(transform, true);
 
-        if (routeIndex() == 0)
-        {
-            QFont font;
-            font.setPixelSize(m_size.height() / 2);
-            painter->setFont(font);
-            painter->drawText(boundingRect(), Qt::AlignCenter, "S");
-        }
+        // Draw an arrow head
+        QPainterPath path;
+        QPolygon triangle;
+        triangle << QPoint( m_size.width() / 3,  0)
+                 << QPoint(                  0, -m_size.height() / 4)
+                 << QPoint(                  0,  m_size.height() / 4)
+                 << QPoint( m_size.width() / 3,  0);
+        path.addPolygon(triangle);
+        painter->strokePath(path,
+                            QPen(QBrush(QColor(0, 0, 255, 64)), 7,
+                                 Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
     }
 
     painter->restore();

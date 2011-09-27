@@ -68,7 +68,15 @@ public:
     //! \reimp
     virtual void setRouteDirection(TrackTileBase::RouteDirection direction);
 
-    //! Get current active tile or NULL if not set.
+    //! Set a line item that is drawn from a tile to the previous tile.
+    void setRouteLine(QGraphicsLineItem * routeLine);
+
+    //! Get the route line.
+    //! \returns Valid pointer or NULL if not set.
+    QGraphicsLineItem * routeLine() const;
+
+    //! Get current active tile.
+    //! \returns Valid pointer or NULL if not set.
     static TrackTile * activeTile();
 
     //! Set the active tile
@@ -82,13 +90,27 @@ public:
 
 private:
 
+    //! Create the menu that is shown when right-clicking on the tile.
     void createContextMenu();
 
-    TrackData        * m_trackData;
+    //! Pointer to the object containing the data of the track.
+    TrackData * m_trackData;
+
+    //! Pointer to the active/selected tile.
     static TrackTile * m_activeTile;
-    QSizeF             m_size;
-    bool               m_active;
-    TileAnimator     * m_animator;
+
+    //! Original size of the tile in pixels.
+    QSizeF m_size;
+
+    //! True if the tile is the seleced tile.
+    bool m_active;
+
+    //! Animator used when rotating the tile.
+    TileAnimator * m_animator;
+
+    //! Line that is drawn from a tile to the previous tile
+    //! according to the route vector.
+    QGraphicsLineItem * m_routeLine;
 };
 
 #endif // TRACKTILE_H

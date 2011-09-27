@@ -54,6 +54,9 @@ public:
     //! Print text to the console.
     void console(QString text);
 
+    //! Get pointer to the current scene. Cannot be NULL.
+    EditorScene * editorScene() const;
+
 public slots:
 
     //! Begin marking the route.
@@ -84,6 +87,7 @@ private:
     void populateMenuBar();
     void populateToolBar();
     void addTilesToScene();
+    void addRouteLinesToScene();
     void removeTilesFromScene();
 
     EditorData  * m_editorData;

@@ -20,16 +20,19 @@
 #include <QString>
 #include <QPointF>
 
+class MainWindow;
 class TrackData;
 class TrackTile;
 
+//! Editor data includes data and functionality related to the current
+//! race track and editing session.
 class EditorData
 {
 public:
 
     enum EditorMode {EM_NONE = 0, EM_SETROUTE, EM_SETTILETYPE};
 
-    EditorData();
+    EditorData(MainWindow * mainWindow);
     bool loadTrackData(QString fileName);
     bool saveTrackData();
     bool saveTrackDataAs(QString fileName);
@@ -37,6 +40,8 @@ public:
     bool canRouteBeSet() const;
     void beginSetRoute();
     void endSetRoute();
+    void addRouteLinesToScene();
+    void removeRouteLinesFromScene();
     TrackData * trackData();
     EditorMode mode() const;
     void setMode(EditorMode newMode);
@@ -54,6 +59,7 @@ private:
     EditorMode m_mode;
     TrackTile * m_dragAndDropSourceTile;
     QPointF m_dragAndDropSourcePos;
+    MainWindow * m_mainWindow;
 };
 
 #endif // EDITORDATA_H

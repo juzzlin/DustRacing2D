@@ -18,16 +18,15 @@
 
 #include <QGraphicsScene>
 
+//! Graphics scene of the editor.
 class EditorScene : public QGraphicsScene
 {
     Q_OBJECT
+
 public:
-    explicit EditorScene(QObject *parent = 0);
 
-signals:
-
-public slots:
-
+    //! Constructor.
+    explicit EditorScene(QObject * parent = NULL);
 };
 
 #endif // EDITORSCENE_H

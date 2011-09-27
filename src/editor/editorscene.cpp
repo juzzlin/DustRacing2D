@@ -15,7 +15,6 @@
 
 #include "editorscene.h"
 
-EditorScene::EditorScene(QObject *parent) :
+EditorScene::EditorScene(QObject * parent) :
     QGraphicsScene(parent)
-{
-}
+{}

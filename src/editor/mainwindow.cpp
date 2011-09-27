@@ -36,6 +36,7 @@
 #include <QGraphicsLineItem>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMessageBox>
 #include <QLabel>
 #include <QSettings>
 #include <QSlider>
@@ -60,7 +61,7 @@ namespace
 }
 
 MainWindow::MainWindow(QString trackFile) :
-        m_editorData(new EditorData()),
+        m_editorData(new EditorData(this)),
         m_editorView(new EditorView(m_editorData, this)),
         m_editorScene(new EditorScene(this)),
         m_console(new QTextEdit(this)),
@@ -174,6 +175,11 @@ MainWindow * MainWindow::instance()
     return MainWindow::m_instance;
 }
 
+EditorScene * MainWindow::editorScene() const
+{
+    return m_editorScene;
+}
+
 QAction * MainWindow::currentToolBarAction() const
 {
     return m_currentToolBarAction;
@@ -250,14 +256,17 @@ void MainWindow::populateMenuBar()
     connect(m_clearAllAction, SIGNAL(triggered()), this, SLOT(clear()));
     m_clearAllAction->setEnabled(false);
 
+    // Create "route"-menu
+    QMenu * routeMenu = menuBar()->addMenu(tr("&Route"));
+
     // Add "clear"-action
     m_clearRouteAction = new QAction(tr("Clear &route"), this);
-    editMenu->addAction(m_clearRouteAction);
+    routeMenu->addAction(m_clearRouteAction);
     connect(m_clearRouteAction, SIGNAL(triggered()), this, SLOT(clearRoute()));
 
     // Add "set order"-action
-    m_setRouteAction = new QAction(tr("&Set route"), this);
-    editMenu->addAction(m_setRouteAction);
+    m_setRouteAction = new QAction(tr("&Set route.."), this);
+    routeMenu->addAction(m_setRouteAction);
     connect(m_setRouteAction, SIGNAL(triggered()), this, SLOT(beginSetRoute()));
     m_setRouteAction->setEnabled(false);
 
@@ -408,6 +417,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         addTilesToScene();
+        addRouteLinesToScene();
+
         return true;
     }
     else
@@ -491,6 +502,7 @@ void MainWindow::initializeNewTrack()
     }
 }
 
+// TODO: Move to EditorData
 void MainWindow::addTilesToScene()
 {
     const unsigned int cols = m_editorData->trackData()->map().cols();
@@ -505,6 +517,13 @@ void MainWindow::addTilesToScene()
         m_editorData->trackData()->map().tile(0, 0)->setActive(true);
 }
 
+void MainWindow::addRouteLinesToScene()
+{
+    // Re-use this method
+    m_editorData->addRouteLinesToScene();
+}
+
+// TODO: Move to EditorData
 void MainWindow::removeTilesFromScene()
 {
     if (m_editorData->trackData())
@@ -524,6 +543,7 @@ void MainWindow::removeTilesFromScene()
     }
 }
 
+// TODO: Move to EditorData
 void MainWindow::clear()
 {
     const unsigned int cols = m_editorData->trackData()->map().cols();
@@ -534,12 +554,15 @@ void MainWindow::clear()
             if (TrackTile * p = m_editorData->trackData()->map().tile(i, j))
                 p->setTileType("clear");
 
-    m_editorData->trackData()->route().clear();
-    m_console->append(QString(tr("Tiles and route cleared.")));
+    m_console->append(QString(tr("Tiles cleared.")));
+
+    clearRoute();
 }
 
+// TODO: Move to EditorData
 void MainWindow::clearRoute()
 {
+    m_editorData->removeRouteLinesFromScene();
     m_editorData->trackData()->route().clear();
     m_console->append(QString(tr("Route cleared.")));
 }
@@ -548,11 +571,15 @@ void MainWindow::beginSetRoute()
 {
     if (m_editorData->canRouteBeSet())
     {
+        console(tr("Set route: begin."));
+        QMessageBox::information(this, tr("Set route"), tr("Click on the tiles one by one and make a closed loop.\n"
+                                                           "Start from the finish line tile.\n"
+                                                           "Click on the finish line tile again to finish."));
         m_editorData->beginSetRoute();
-        console(tr("Set route: click on the tiles one by one and make the route. Clicking on the start tile again finishes."));
     }
     else
     {
+        QMessageBox::critical(this, tr("Set route"), tr("Invalid track. Route cannot be set."));
         console(tr("Set route: not a valid track."));
     }
 }

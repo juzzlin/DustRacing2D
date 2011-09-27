@@ -34,7 +34,7 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
     if (scene())
     {
         if (TrackTile * tile =
-            static_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
+            dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
         {
             tile->setActive(true);
         }
@@ -74,7 +74,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         m_clickedPos = event->pos();
 
         if (TrackTile * tile =
-            static_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+            dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
         {
             tile->setActive(true);
 
@@ -168,13 +168,13 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
 void EditorView::doRotate90CW()
 {
     if (TrackTile * tile =
-        static_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
         tile->rotate90CW();
 }
 
 void EditorView::doRotate90CCW()
 {
     if (TrackTile * tile =
-        static_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
         tile->rotate90CCW();
 }
