@@ -14,7 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "track.h"
-#include "trackdata.h"
+#include "../common/trackdata.h"
 
 Track::Track(TrackData * trackData)
 : m_trackData(trackData)
