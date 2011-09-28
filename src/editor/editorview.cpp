@@ -99,6 +99,14 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                     {
                         m_editorData->setMode(EditorData::EM_NONE);
                         MainWindow::instance()->endSetRoute();
+
+                        // Update route lines and close the loop
+                        m_editorData->addRouteLinesToScene(true);
+                    }
+                    else
+                    {
+                        // Update route lines but don't close the loop
+                        m_editorData->addRouteLinesToScene(false);
                     }
                 }
                 // User is setting the tile type

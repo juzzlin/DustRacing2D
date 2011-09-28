@@ -417,7 +417,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         addTilesToScene();
-        addRouteLinesToScene();
+        addRouteLinesToScene(true);
 
         return true;
     }
@@ -517,10 +517,10 @@ void MainWindow::addTilesToScene()
         m_editorData->trackData()->map().tile(0, 0)->setActive(true);
 }
 
-void MainWindow::addRouteLinesToScene()
+void MainWindow::addRouteLinesToScene(bool closeLoop)
 {
     // Re-use this method
-    m_editorData->addRouteLinesToScene();
+    m_editorData->addRouteLinesToScene(closeLoop);
 }
 
 // TODO: Move to EditorData

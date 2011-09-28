@@ -87,7 +87,7 @@ private:
     void populateMenuBar();
     void populateToolBar();
     void addTilesToScene();
-    void addRouteLinesToScene();
+    void addRouteLinesToScene(bool closeLoop);
     void removeTilesFromScene();
 
     EditorData  * m_editorData;

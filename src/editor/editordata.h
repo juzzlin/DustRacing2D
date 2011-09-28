@@ -40,7 +40,7 @@ public:
     bool canRouteBeSet() const;
     void beginSetRoute();
     void endSetRoute();
-    void addRouteLinesToScene();
+    void addRouteLinesToScene(bool closeLoop);
     void removeRouteLinesFromScene();
     TrackData * trackData();
     EditorMode mode() const;

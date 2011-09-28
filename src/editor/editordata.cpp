@@ -78,13 +78,11 @@ void EditorData::beginSetRoute()
 
 void EditorData::endSetRoute()
 {
-    addRouteLinesToScene();
-
     // Reset the editing mode.
     setMode(EditorData::EM_NONE);
 }
 
-void EditorData::addRouteLinesToScene()
+void EditorData::addRouteLinesToScene(bool closeLoop)
 {
     // Add route lines to the scene.
     // Each tile contains a pointer to the corresponding line object so that
@@ -108,13 +106,16 @@ void EditorData::addRouteLinesToScene()
                 }
             }
 
-            TrackTile * tile0 = m_trackData->route().get(length - 1);
-            TrackTile * tile1 = m_trackData->route().get(0);
-
-            if (!tile1->routeLine())
+            if (closeLoop)
             {
-                tile1->setRouteLine(m_mainWindow->editorScene()->addLine(tile0->x(), tile0->y(),
-                                                                         tile1->x(), tile1->y(), pen));
+                TrackTile * tile0 = m_trackData->route().get(length - 1);
+                TrackTile * tile1 = m_trackData->route().get(0);
+
+                if (!tile1->routeLine())
+                {
+                    tile1->setRouteLine(m_mainWindow->editorScene()->addLine(tile0->x(), tile0->y(),
+                                                                             tile1->x(), tile1->y(), pen));
+                }
             }
         }
     }
