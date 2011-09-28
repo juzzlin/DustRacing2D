@@ -30,6 +30,9 @@ public:
     //! Direction to the next tile in the route.
     enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN};
 
+    //! Possible profiles of a tile.
+    enum TileProfile {TP_FLAT = 0, TP_HILL, TP_GORGE};
+
     //! Constructor.
     //! \param trackData Pointer to the "parent" TrackData.
     //! \param location Location (coordinates) in the track scene.
@@ -59,14 +62,20 @@ public:
     //! Set type: "corner", "straight", "grass", "finish", "clear".
     void setTileType(const QString & type);
 
+    //! Get type
+    const QString & tileType() const;
+
     //! Set direction towards next tile in the route.
     void setRouteDirection(TrackTileBase::RouteDirection direction);
 
     //! Get direction towards next tile in the route.
     TrackTileBase::RouteDirection routeDirection() const;
 
-    //! Get type
-    const QString & tileType() const;
+    //! Set profile
+    void setProfile(TileProfile profile);
+
+    //! Get profile
+    TileProfile profile() const;
 
 private:
 
@@ -87,6 +96,9 @@ private:
 
     //! Direction towards the next tile in the route.
     RouteDirection m_routeDirection;
+
+    //! Profile of the tile.
+    TileProfile m_profile;
 };
 
 #endif // TRACKTILEBASE_H

@@ -25,6 +25,7 @@ TrackTileBase::TrackTileBase(TrackData * trackData,
 , m_matrixLocation(matrixLocation)
 , m_trackData(trackData)
 , m_routeDirection(TrackTileBase::RD_NONE)
+, m_profile(TrackTileBase::TP_FLAT)
 {
 }
 
@@ -74,6 +75,16 @@ TrackTileBase::RouteDirection TrackTileBase::routeDirection() const
 TrackData * TrackTileBase::trackData() const
 {
     return m_trackData;
+}
+
+void TrackTileBase::setProfile(TrackTileBase::TileProfile profile)
+{
+    m_profile = profile;
+}
+
+TrackTileBase::TileProfile TrackTileBase::profile() const
+{
+    return m_profile;
 }
 
 TrackTileBase::~TrackTileBase()
