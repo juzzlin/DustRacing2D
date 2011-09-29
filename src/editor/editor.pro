@@ -1,10 +1,12 @@
 # Project file for the level editor
-TEMPLATE        = app
-TARGET          =
-DEPENDPATH     += .
-INCLUDEPATH    += .
-QT             += xml
-QMAKE_CXXFLAGS += -std=c++0x
+TEMPLATE     = app
+TARGET       =
+INCLUDEPATH += .
+QT          += xml
+
+# Doesn't compile on Windows with mingw32 without -U__STRICT_ANSI__
+# if -std=c++0x is defined.
+QMAKE_CXXFLAGS += -std=c++0x -U__STRICT_ANSI__
 
 SOURCES += main.cpp mainwindow.cpp \
     newtrackdialog.cpp \

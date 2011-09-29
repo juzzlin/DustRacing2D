@@ -1,9 +1,12 @@
 # Project file for the game
-TEMPLATE         = app
-TARGET           =
-INCLUDEPATH     += MiniCore .
-QMAKE_CXXFLAGS  += -std=c++0x
-QT              += opengl xml
+TEMPLATE     = app
+TARGET       =
+INCLUDEPATH += MiniCore .
+QT          += opengl xml
+
+# Doesn't compile on Windows with mingw32 without -U__STRICT_ANSI__
+# if -std=c++0x is defined.
+QMAKE_CXXFLAGS  += -std=c++0x -U__STRICT_ANSI__
 
 # Input
 SOURCES += main.cpp \
