@@ -3,21 +3,34 @@ Build & install instructions
 
 Dustrac currently uses qmake as the build system
 and dustrac.pro is the main project file that
-can also be loaded from the QtCreator IDE.
+can also be loaded in the QtCreator IDE.
+The Windows build is tested by running Qt SDK
+and QtCreator under Wine. 
 
-Currently the build depends only on Qt 4.x
-development files (libqt4-dev on Ubuntu).
+Currently the build depends only on Qt 4.7 (>=)
+development files (libqt4-dev on Ubuntu) and no
+additional libraries are required.
 
-Build from command line:
+Building from the command line
+------------------------------
 
-$ qmake
+Just run:
+
+$ qmake 
 $ make
 
-This will build the editor and the game binaries.
+This will build the editor and the game binaries
+in src/editor/ and in src/game/ respectively.
 
-Install (as root):
+Installing
+----------
 
-$ make install
+Any install steps are not currently required.
+The binaries work when started on the top-level of the
+source tree.
+
+The binaries only need to find the data-dir that includes
+all the runtime data.
 
 
 -- Jussi Lind <jussi.lind@iki.fi>
