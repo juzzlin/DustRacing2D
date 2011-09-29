@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include <QApplication>
 #include <QMouseEvent>
 #include <QGraphicsItem>
 
@@ -121,6 +122,9 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                     tile->setZValue(tile->zValue() + 1);
                     m_editorData->setDragAndDropSourceTile(tile);
                     m_editorData->setDragAndDropSourcePos(tile->pos());
+
+                    // Change cursor to the closed hand cursor.
+                    QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
                 }
             }
 
@@ -169,6 +173,9 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
             update();
 
             m_editorData->setDragAndDropSourceTile(NULL);
+
+            // Restore the cursor.
+            QApplication::restoreOverrideCursor();
         }
     }
 }
