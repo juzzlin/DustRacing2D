@@ -22,6 +22,7 @@
 
 #include "mccast.hh"
 #include <cstdlib>
+#include <QDateTime>
 
 namespace
 {
@@ -41,7 +42,7 @@ MCRandomImpl::MCRandomImpl() :
 void MCRandomImpl::buildLUT()
 {
   // Create the LUT
-  std::srand(time(NULL));
+  std::srand(QDateTime().time().msec());
   for (UINT i = 0; i < LUT_SIZE; i++) {
     m_data[i] = (TO_DOUBLE(std::rand() % RAND_MAX)) / RAND_MAX;
   }
