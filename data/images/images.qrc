@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>cursor.png</file>
         <file>corner.png</file>
         <file>grass.png</file>
         <file>straight.png</file>

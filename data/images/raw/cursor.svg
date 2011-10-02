@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="88.083899"
+     inkscape:cy="474.20759"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1680"
+     inkscape:window-height="1026"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2987" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 338.84946,665.63779 -68.33502,46.15547 -1.79639,-297.31593 189.73491,228.91191 -82.01581,8.56775 27.36161,75.17541 -37.5877,13.68079 z"
+       id="path3759"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac/data/images/cursor.png"
+       inkscape:export-xdpi="28.03425"
+       inkscape:export-ydpi="28.03425" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 356.20665,696.172 c -7.3922,-20.51672 -13.70298,-37.79637 -14.02398,-38.39923 -0.32099,-0.60287 -15.2467,8.84036 -33.16825,20.98494 l -32.58463,22.08106 -1.0244,-128.84209 c -0.56341,-70.86315 -0.80195,-131.43926 -0.53008,-134.6136 l 0.4943,-5.77151 85.8529,103.62866 85.85289,103.62865 -38.69585,4.03345 c -21.28272,2.21838 -38.88851,4.22608 -39.12398,4.46155 -0.23546,0.23546 5.70459,17.30225 13.20011,37.92617 7.49552,20.62393 13.62822,37.66325 13.62822,37.86513 0,0.43006 -4.35179,2.18023 -17.14702,6.89606 l -9.28988,3.42389 -13.44035,-37.30313 0,0 z"
+       id="path3765"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac/data/images/cursor.png"
+       inkscape:export-xdpi="28.03425"
+       inkscape:export-ydpi="28.03425" />
+  </g>
+</svg>

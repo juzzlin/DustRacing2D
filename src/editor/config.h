@@ -16,6 +16,9 @@
 //! Common config data.
 namespace Config
 {
+    //! Path to the "select" icon.
+    static const char * SELECT_PATH = ":/cursor.png";
+
     //! Path to the "straight" tile.
     static const char * STRAIGHT_PATH = ":/straight.png";
 

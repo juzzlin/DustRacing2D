@@ -281,8 +281,13 @@ void MainWindow::populateMenuBar()
 
 void MainWindow::populateToolBar()
 {
+    // Add "select"-action
+    QAction * p = new QAction(QIcon(QPixmap(Config::SELECT_PATH)), tr("Select"), this);
+    p->setData(QVariant(QString("select")));
+    m_toolBar->addAction(p);
+
     // Add "straight"-action
-    QAction * p = new QAction(QIcon(QPixmap(Config::STRAIGHT_PATH)), tr("Straight"), this);
+    p = new QAction(QIcon(QPixmap(Config::STRAIGHT_PATH)), tr("Straight"), this);
     p->setData(QVariant(QString("straight")));
     m_toolBar->addAction(p);
 
@@ -315,38 +320,47 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 {
     if (action != m_currentToolBarAction)
     {
-        m_editorData->setMode(EditorData::EM_SETTILETYPE);
         m_currentToolBarAction = action;
 
-        if (action->data() == "straight")
+        if (action->data() == "select")
+        {
+            QApplication::restoreOverrideCursor();
+            m_editorData->setMode(EditorData::EM_NONE);
+        }
+        else if (action->data() == "straight")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(Config::STRAIGHT_PATH)
                                                     .scaled(QSize(32, 32))));
+            m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
         else if (action->data() == "corner")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(Config::CORNER_PATH)
                                                     .scaled(QSize(32, 32))));
+            m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
         else if (action->data() == "grass")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(Config::GRASS_PATH)
                                                     .scaled(QSize(32, 32))));
+            m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
         else if (action->data() == "finish")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(Config::FINISH_PATH)
                                                     .scaled(QSize(32, 32))));
+            m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
         else if (action->data() == "clear")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(Config::CLEAR_PATH)
                                                     .scaled(QSize(32, 32))));
+            m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
     }
     else
