@@ -20,14 +20,16 @@
 #ifndef MCSURFACE_HH
 #define MCSURFACE_HH
 
-#include <cmath>
-
 #include "mcmacros.hh"
 #include "mctypes.hh"
 #include "mcbbox.hh"
 #include "mcvector2d.hh"
 
+#include <cmath>
+#include <string>
 #include <GL/gl.h>
+
+using std::string;
 
 class MCCamera;
 class MCSurfaceImpl;
@@ -40,72 +42,96 @@ class MCSurface
 {
 public:
 
-  //! Constructor
-  MCSurface(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
+    //! Constructor.
+    //! \param handle Handle of the corresponding OpenGL texture.
+    //! \param width  Desired width of the surface when rendered 1:1.
+    //! \param height Desired height of the surface when rendered 1:1.
+    //! \param useAlphaTest Alpha is tested for colorkeying if true. Pixels whose
+    //!        alpha is < 0.5f are not rendered.
+    MCSurface(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
 
-  //! Constructor
-  MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCVector2d<MCFloat> & center, bool useAlphaTest);
+    //! Constructor.
+    //! \param handle Handle of the corresponding OpenGL texture.
+    //! \param width  Desired width of the surface when rendered 1:1.
+    //! \param height Desired height of the surface when rendered 1:1.
+    //! \param center Vector that defines a custom rotation point other than
+    //!        (width / 2, height / 2).
+    //! \param useAlphaTest Alpha is tested for colorkeying if true. Pixels whose
+    //!        alpha is < 0.5f are not rendered.
+    MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCVector2d<MCFloat> & center, bool useAlphaTest);
 
-  //! Destructor
-  virtual ~MCSurface();
+    //! Destructor.
+    virtual ~MCSurface();
 
-  /*! Get bounding box for a rotated surface
-   * \param x x-coordinate
-   * \param y y-coordinate
-   * \param angle Rotation angle (0..360)
-   */
-  MCBBox<MCFloat> rotatedBBox(MCFloat x, MCFloat y, int angle);
+    //! Set role string.
+    void setRole(const string & role);
 
-  /*! Get bounding box for a rotated and scaled surface
-   * \param x x-coordinate
-   * \param y y-coordinate
-   * \param angle Rotation angle (0..360)
-   * \param w2 half of the scaled width
-   * \param h2 half of the scaled height
-   */
-  MCBBox<MCFloat> rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2);
+    //! Get role string.
+    const string & role() const;
 
-  //! Render using default size + z
-  void render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle);
+    //! Set category string.
+    void setCategory(const string & category);
 
-  /*! Render scaled.
-   * \param x x-coordinate
-   * \param y y-coordinate
-   * \param z z-coordinate
-   * \param wr Half of the wanted width.
-   * \param hr Half of the wanted height.
-   */
-  void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
+    //! Get category string.
+    const string & category() const;
 
-  //! Render (fake) shadow
-  void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
+   /*! Get bounding box for a rotated surface
+    * \param x x-coordinate
+    * \param y y-coordinate
+    * \param angle Rotation angle (0..360)
+    */
+    MCBBox<MCFloat> rotatedBBox(MCFloat x, MCFloat y, int angle);
 
-  /*! Render (fake) shadow scaled.
-   * \param x x-coordinate
-   * \param y y-coordinate
-   * \param z z-coordinate
-   * \param wr Half of the wanted width.
-   * \param hr Half of the wanted height.
-   */
-  void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
+   /*! Get bounding box for a rotated and scaled surface
+    * \param x x-coordinate
+    * \param y y-coordinate
+    * \param angle Rotation angle (0..360)
+    * \param w2 half of the scaled width
+    * \param h2 half of the scaled height
+    */
+    MCBBox<MCFloat> rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2);
 
-  //! Get OpenGL texture handle
-  GLuint handle() const;
+    //! Render using default size + z
+    void render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle);
 
-  //! Get width
-  MCFloat width() const;
+   /*! Render scaled.
+    * \param x x-coordinate
+    * \param y y-coordinate
+    * \param z z-coordinate
+    * \param wr Half of the wanted width.
+    * \param hr Half of the wanted height.
+    */
+    void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
 
-  //! Get height
-  MCFloat height() const;
+    //! Render (fake) shadow
+    void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
 
-  //! Get center
-  MCVector2d<MCFloat> center() const;
+   /*! Render (fake) shadow scaled.
+    * \param x x-coordinate
+    * \param y y-coordinate
+    * \param z z-coordinate
+    * \param wr Half of the wanted width.
+    * \param hr Half of the wanted height.
+    */
+    void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
+
+    //! Get OpenGL texture handle
+    GLuint handle() const;
+
+    //! Get width
+    MCFloat width() const;
+
+    //! Get height
+    MCFloat height() const;
+
+    //! Get center
+    MCVector2d<MCFloat> center() const;
 
 private:
 
-  DISABLE_COPY(MCSurface);
-  DISABLE_ASSI(MCSurface);
-  MCSurfaceImpl * const m_pImpl;
+    DISABLE_COPY(MCSurface);
+    DISABLE_ASSI(MCSurface);
+    MCSurfaceImpl * const m_pImpl;
 };
 
 #endif // MCSURFACE_HH

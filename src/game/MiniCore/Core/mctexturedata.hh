@@ -32,7 +32,7 @@ struct ColorKey
   UINT r, g, b;
 };
 
-//! Texture data structure
+//! Texture data structure used by MCTextureParser.
 struct MCTextureData
 {
   //! Constructor
@@ -45,6 +45,12 @@ struct MCTextureData
 
   //! Image path
   QString strImage;
+
+  //! Category of the texture
+  QString strCategory;
+
+  //! Role of the texture
+  QString strRole;
 
   //! True if center was set
   bool centerSet;

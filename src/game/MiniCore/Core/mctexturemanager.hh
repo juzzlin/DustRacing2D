@@ -78,7 +78,13 @@ public:
   //! Loads texture config from strBasePath using the given mapping file strFile
   virtual void load(const QString & strFile, const QString & strBaseDataPath) throw (MCException);
 
-  //! Returns a surface object associated with strId
+  //! Returns a surface object associated with given strId.
+  //! Corresponding OpenGL texture handle can be obtained
+  //! by calling handle() of the resulting MCSurface.
+  //! MCTextureManager will keep the ownership.
+  //! \param strId Handle defined in the textures XML file.
+  //! \return Pointer to the corresponding MCSurface.
+  //! \throws MCException on failure.
   MCSurface * surface(const QString & strId) const throw (MCException);
 
 private:

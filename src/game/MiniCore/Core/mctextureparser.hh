@@ -33,52 +33,52 @@ class MCTextureParser : public QXmlDefaultHandler
 {
 public:
 
-  //! Constructor
-  MCTextureParser();
+    //! Constructor
+    MCTextureParser();
 
-  //! Get a reference to the data
-  QList<MCTextureData> textureData() const;
+    //! Get a reference to the data
+    QList<MCTextureData> textureData() const;
 
-  //! \reimp
-  virtual bool startDocument();
+    //! \reimp
+    virtual bool startDocument();
 
-  //! \reimp
-  virtual bool endDocument();
+    //! \reimp
+    virtual bool endDocument();
 
-  //! \reimp
-  virtual bool startElement(const QString &, const QString &, const QString &, const QXmlAttributes &);
-  
-  //! \reimp
-  virtual bool endElement(const QString &, const QString &, const QString &);
+    //! \reimp
+    virtual bool startElement(const QString &, const QString &, const QString &, const QXmlAttributes &);
 
-  //! \reimp
-  virtual bool fatalError(const QXmlParseException & exception);
+    //! \reimp
+    virtual bool endElement(const QString &, const QString &, const QString &);
+
+    //! \reimp
+    virtual bool fatalError(const QXmlParseException & exception);
 
 private:
 
-  //! Disable copy constructor
-  DISABLE_COPY(MCTextureParser);
+    //! Disable copy constructor
+    DISABLE_COPY(MCTextureParser);
 
-  //! Disable assignment
-  DISABLE_ASSI(MCTextureParser);
+    //! Disable assignment
+    DISABLE_ASSI(MCTextureParser);
 
-  //! Print element error to stderr
-  void elementError(const QString & qName);
-  
-  //! Texture data struct vector
-  QList<MCTextureData> m_textureData;
+    //! Print element error to stderr
+    void elementError(const QString & qName);
 
-  //! True if colorkey set
-  bool m_colorKeySet;
-  
-  //! Current colorkey, if set
-  ColorKey m_colorKey;
+    //! Texture data struct vector
+    QList<MCTextureData> m_textureData;
 
-  //! X-axis mirroring
-  bool m_xAxisMirror;
-  
-  //! Default image path
-  QString m_strDefaultPath;
+    //! True if colorkey set
+    bool m_colorKeySet;
+
+    //! Current colorkey, if set
+    ColorKey m_colorKey;
+
+    //! X-axis mirroring
+    bool m_xAxisMirror;
+
+    //! Default image path
+    QString m_strDefaultPath;
 };
 
 #endif // MCTEXTUREPARSER_HH

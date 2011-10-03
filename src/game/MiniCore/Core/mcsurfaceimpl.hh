@@ -20,34 +20,40 @@
 #ifndef MCSURFACEIMPL_HH
 #define MCSURFACEIMPL_HH
 
+#include <string>
+
+using std::string;
+
 //! Implementation class for MCSurface
 class MCSurfaceImpl
 {
 public:
 
-  MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
-  MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height,
-                const MCVector2d<MCFloat> & center, bool useAlphaTest);
-  virtual ~MCSurfaceImpl() {};
+    MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
+    MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height,
+                  const MCVector2d<MCFloat> & center, bool useAlphaTest);
+    virtual ~MCSurfaceImpl() {};
 
-  MCBBox<MCFloat> inline rotatedBBox(MCFloat x, MCFloat y, int angle);
-  MCBBox<MCFloat> inline rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2);
-  inline void render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle);
-  inline void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
-  inline void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
-  inline void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
+    MCBBox<MCFloat> inline rotatedBBox(MCFloat x, MCFloat y, int angle);
+    MCBBox<MCFloat> inline rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2);
+    inline void render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle);
+    inline void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
+    inline void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
+    inline void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
 
 private:
 
-  GLuint m_handle;
-  MCFloat m_w;
-  MCFloat m_w2;
-  MCFloat m_h;
-  MCFloat m_h2;
-  MCVector2d<MCFloat> m_center;
-  bool m_centerSet;
-  bool m_useAlphaTest;
-  friend class MCSurface;
+    GLuint m_handle;
+    MCFloat m_w;
+    MCFloat m_w2;
+    MCFloat m_h;
+    MCFloat m_h2;
+    MCVector2d<MCFloat> m_center;
+    bool m_centerSet;
+    bool m_useAlphaTest;
+    string m_role;
+    string m_category;
+    friend class MCSurface;
 };
 
 #endif // MCSURFACEIMPL_HH
