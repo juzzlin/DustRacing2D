@@ -16,12 +16,14 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-namespace Version
+//! Global version data.
+class Version
 {
-    static const char * QSETTINGS_COMPANY_NAME  = "DustRAC";
-    static const char * QSETTINGS_SOFTWARE_NAME = "Editor";
-    static const char * EDITOR_NAME             = "DustRAC Track Editor";
-    static const char * EDITOR_VERSION          = "0.1";
-}
+public:
+    static const char * QSETTINGS_COMPANY_NAME;
+    static const char * QSETTINGS_SOFTWARE_NAME;
+    static const char * EDITOR_NAME;
+    static const char * EDITOR_VERSION;
+};
 
 #endif // VERSION_H

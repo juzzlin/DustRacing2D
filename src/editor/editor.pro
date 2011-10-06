@@ -18,6 +18,7 @@ SOURCES += main.cpp mainwindow.cpp \
     tileanimator.cpp \
     trackio.cpp \
     tracktile.cpp \
+    version.cpp \
     ../common/map.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \

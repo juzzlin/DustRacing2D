@@ -13,11 +13,58 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "objectloader.h"
+#include <QFile>
+#include <QTextStream>
+#include <QDomDocument>
+#include <QDomElement>
 
-bool ObjectLoader::load(QString filePath)
+#include "objectloader.h"
+#include "version.h"
+
+bool ObjectLoader::load(QString path)
 {
-    // TODO
+    QDomDocument doc;
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return false;
+    }
+
+    file.close();
+
+    QDomElement  root    = doc.documentElement();
+    QString      version = root.attribute("version", Version::EDITOR_VERSION);
+
+    objectDataVector.clear();
+
+    QDomNode node = root.firstChild();
+    while(!node.isNull())
+    {
+        QDomElement tag = node.toElement();
+        if(!tag.isNull())
+        {
+            // Parse an object tag
+            if (tag.nodeName() == "object")
+            {
+                ObjectData newData;
+
+                newData.category  = tag.attribute("category",  "undefined");
+                newData.role      = tag.attribute("role",      "undefined");
+                newData.imagePath = tag.attribute("imagePath", "undefined");
+
+                objectDataVector << newData;
+            }
+
+            node = node.nextSibling();
+        }
+    }
 
     return true;
 }

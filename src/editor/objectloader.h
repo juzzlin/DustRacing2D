@@ -31,7 +31,7 @@ public:
     //! Load data from the given file.
     //! \param filePath The config file to be used.
     //! \return true If failed succeeded.
-    bool load(QString filePath);
+    bool load(QString path);
 
     //! Get all object of the given category.
     ObjectDataVector getObjectsByCategory(QString category) const;
