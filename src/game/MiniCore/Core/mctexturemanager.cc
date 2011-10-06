@@ -27,180 +27,180 @@
 #include <GL/gl.h>
 
 MCTextureManager::MCTextureManager() :
-  m_mapTextures()
+        m_mapTextures()
 {}
 
-void MCTextureManager::load(const QString & strFileName, const QString & strBaseDataPath) throw (MCException)
+void MCTextureManager::load(const QString & fileName, const QString & baseDataPath) throw (MCException)
 {
-  // Instantiate a parser
-  MCTextureParser handler;
-  
-  // Instantiate a QFile for the texture file
-  QFile xmlFile(strFileName);
+    // Instantiate a parser
+    MCTextureParser handler;
 
-  // Set QXmlInputSource to the QFile
-  QXmlInputSource source(&xmlFile);
+    // Instantiate a QFile for the texture file
+    QFile xmlFile(fileName);
 
-  // Instantiate a simple (SAX2) reader
-  QXmlSimpleReader reader;
+    // Set QXmlInputSource to the QFile
+    QXmlInputSource source(&xmlFile);
 
-  // Set it to use the MCTextureParser as the handler
-  reader.setContentHandler(&handler);
-  reader.setErrorHandler(&handler);
+    // Instantiate a simple (SAX2) reader
+    QXmlSimpleReader reader;
 
-  // Parse the texture config file
-  if (reader.parse(source))
-  {
-    // Get texture data / parameters
-    QList<MCTextureData> textureDataList = handler.textureData();
-    Q_FOREACH(MCTextureData data, textureDataList)
+    // Set it to use the MCTextureParser as the handler
+    reader.setContentHandler(&handler);
+    reader.setErrorHandler(&handler);
+
+    // Parse the texture config file
+    if (reader.parse(source))
     {
-      // Load image file
-      QString path = strBaseDataPath + QDir::separator().toAscii() + data.strImage;
+        // Get texture data / parameters
+        QList<MCTextureData> textureDataList = handler.textureData();
+        Q_FOREACH(MCTextureData data, textureDataList)
+        {
+            // Load image file
+            QString path = baseDataPath + QDir::separator().toAscii() + data.imagePath;
 
-      // Load the image
-      QImage textureImage;
-      if (textureImage.load(path))
-      {
-        // Create an OpenGL texture from the image
-        createGLTextureFromImage(data, textureImage);
-      }
-      else
-      {
-        throw MCException("Cannot read file '" + path + "'");
-      }
+            // Load the image
+            QImage textureImage;
+            if (textureImage.load(path))
+            {
+                // Create an OpenGL texture from the image
+                createGLTextureFromImage(data, textureImage);
+            }
+            else
+            {
+                throw MCException("Cannot read file '" + path + "'");
+            }
+        }
     }
-  }
-  else
-  {
-    // Throw an exception
-    throw MCException("Level::loadTextures(): parsing '" + strFileName + "' failed!");
-  }
+    else
+    {
+        // Throw an exception
+        throw MCException("Level::loadTextures(): parsing '" + fileName + "' failed!");
+    }
 }
 
 QImage MCTextureManager::createNearest2PowNImage(const QImage & image)
 {
-  int n = 0;
-  int w = image.width();
-  int h = image.height();
+    int n = 0;
+    int w = image.width();
+    int h = image.height();
 
-  n = log(static_cast<double>(w)) / log(2);
-  w = pow(2, n);
-  w = w < 2 ? 2 : w;
-  n = log(static_cast<double>(h)) / log(2);
-  h = pow(2, n);
-  h = h < 2 ? 2 : h;
+    n = log(static_cast<double>(w)) / log(2);
+    w = pow(2, n);
+    w = w < 2 ? 2 : w;
+    n = log(static_cast<double>(h)) / log(2);
+    h = pow(2, n);
+    h = h < 2 ? 2 : h;
 
-  return image.scaled(w, h);
+    return image.scaled(w, h);
 }
 
 inline bool colorMatch(int val1, int val2, int threshold)
 {
-  return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
+    return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
 void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, const QImage & image)
 {
-  // Store original width of the image
-  int origH = data.heightSet ? data.height : image.height();
-  int origW = data.widthSet  ? data.width  : image.width();
+    // Store original width of the image
+    int origH = data.heightSet ? data.height : image.height();
+    int origW = data.widthSet  ? data.width  : image.width();
 
-  // Create a surface with dimensions of 2**n
-  QImage textureImage = createNearest2PowNImage(image);
+    // Create a surface with dimensions of 2**n
+    QImage textureImage = createNearest2PowNImage(image);
 
-  // Flip pA about X-axis if set active
-  if (data.xAxisMirror)
-  {
-    textureImage = textureImage.mirrored(false, true);
-  }
-
-  // Ensure alpha channel
-  textureImage = textureImage.convertToFormat(QImage::Format_ARGB32);
-
-  // Apply colorkey if it was set (set or clear alpha)
-  if (data.colorKeySet)
-  {
-    for (int i = 0; i < textureImage.width(); i++)
+    // Flip pA about X-axis if set active
+    if (data.xAxisMirror)
     {
-      for (int j = 0; j < textureImage.height(); j++)
-      {
-        if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,        data.colorKey.b, 2) &&
-            colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,  data.colorKey.g, 2) &&
-            colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, data.colorKey.r, 2))
-        {
-          textureImage.setPixel(i, j, textureImage.pixel(i, j) & 0x00000000);
-        }
-        else
-        {
-          textureImage.setPixel(i, j, textureImage.pixel(i, j) | 0xff000000);
-        }
-      }
+        textureImage = textureImage.mirrored(false, true);
     }
-  }
 
-  // Convert to GL_RGBA
-  textureImage = QGLWidget::convertToGLFormat(textureImage);
+    // Ensure alpha channel
+    textureImage = textureImage.convertToFormat(QImage::Format_ARGB32);
 
-  // Let OpenGL generate a texture handle
-  GLuint textureHandle;
-  glGenTextures( 1, &textureHandle );
+    // Apply colorkey if it was set (set or clear alpha)
+    if (data.colorKeySet)
+    {
+        for (int i = 0; i < textureImage.width(); i++)
+        {
+            for (int j = 0; j < textureImage.height(); j++)
+            {
+                if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,        data.colorKey.b, 2) &&
+                    colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,  data.colorKey.g, 2) &&
+                    colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, data.colorKey.r, 2))
+                {
+                    textureImage.setPixel(i, j, textureImage.pixel(i, j) & 0x00000000);
+                }
+                else
+                {
+                    textureImage.setPixel(i, j, textureImage.pixel(i, j) | 0xff000000);
+                }
+            }
+        }
+    }
 
-  // Bind the texture object
-  glBindTexture( GL_TEXTURE_2D, textureHandle );
+    // Convert to GL_RGBA
+    textureImage = QGLWidget::convertToGLFormat(textureImage);
 
-  // Set the texture's stretching properties
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Let OpenGL generate a texture handle
+    GLuint textureHandle;
+    glGenTextures( 1, &textureHandle );
 
-  // Edit image data using the information SDL_Surface gives us
-  glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(), 0,
-               GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, textureHandle );
 
-  // Create a new MCSurface object
-  MCSurface * pTexture = NULL;
-  if (data.centerSet)
-  {
-    pTexture = new MCSurface(textureHandle, origW, origH, data.center, data.colorKeySet);
-  }
-  else
-  {
-    pTexture = new MCSurface(textureHandle, origW, origH, data.colorKeySet);
-  }
+    // Set the texture's stretching properties
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  // Store MCSurface to map
-  m_mapTextures[data.strHandle] = pTexture;
+    // Edit image data using the information SDL_Surface gives us
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(), 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
+
+    // Create a new MCSurface object
+    MCSurface * pTexture = NULL;
+    if (data.centerSet)
+    {
+        pTexture = new MCSurface(textureHandle, origW, origH, data.center, data.colorKeySet);
+    }
+    else
+    {
+        pTexture = new MCSurface(textureHandle, origW, origH, data.colorKeySet);
+    }
+
+    // Store MCSurface to map
+    m_mapTextures[data.handle] = pTexture;
 }
 
-MCSurface * MCTextureManager::surface(const QString & strId) const throw (MCException)
+MCSurface * MCTextureManager::surface(const QString & id) const throw (MCException)
 {
-  // Try to find existing texture for the surface
-  if (!m_mapTextures.contains(strId))
-  {
-    // No: 
-    throw MCException("Cannot find texture object for handle '" + strId + "'");
-    return NULL;
-  }
-  else
-  {
-    // Yes: return handle for the texture
-    return m_mapTextures.find(strId).value();
-  }
+    // Try to find existing texture for the surface
+    if (!m_mapTextures.contains(id))
+    {
+        // No:
+        throw MCException("Cannot find texture object for handle '" + id + "'");
+        return NULL;
+    }
+    else
+    {
+        // Yes: return handle for the texture
+        return m_mapTextures.find(id).value();
+    }
 }
 
 MCTextureManager::~MCTextureManager()
 {
-  // Delete OpenGL textures and Textures
-  TextureHash::iterator iter(m_mapTextures.begin());
-  while (iter != m_mapTextures.end())
-  {
-    if (iter.value())
+    // Delete OpenGL textures and Textures
+    TextureHash::iterator iter(m_mapTextures.begin());
+    while (iter != m_mapTextures.end())
     {
-      MCSurface * p = iter.value();
-      GLuint dummyHandle = p->handle();
-      glDeleteTextures(1, &dummyHandle);
-      delete p;
+        if (iter.value())
+        {
+            MCSurface * p = iter.value();
+            GLuint dummyHandle = p->handle();
+            glDeleteTextures(1, &dummyHandle);
+            delete p;
+        }
+        iter++;
     }
-    iter++;
-  }
-  m_mapTextures.clear();
+    m_mapTextures.clear();
 }

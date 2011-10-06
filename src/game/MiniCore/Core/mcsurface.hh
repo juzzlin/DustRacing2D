@@ -34,8 +34,8 @@ using std::string;
 class MCCamera;
 class MCSurfaceImpl;
 
-/*! MCSurface object that stores an OpenGL texture handle.
- *  A MCSurface can also be rendered straightly as a standalone object
+/*! MCSurface is a renderable object bound to an OpenGL texture handle.
+ *  MCSurface can be rendered straightly as a standalone object
  *  without creating any vertices, like a surface. This is useful in 2D-engines.
  */
 class MCSurface
@@ -62,18 +62,6 @@ public:
 
     //! Destructor.
     virtual ~MCSurface();
-
-    //! Set role string.
-    void setRole(const string & role);
-
-    //! Get role string.
-    const string & role() const;
-
-    //! Set category string.
-    void setCategory(const string & category);
-
-    //! Get category string.
-    const string & category() const;
 
    /*! Get bounding box for a rotated surface
     * \param x x-coordinate

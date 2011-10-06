@@ -97,7 +97,7 @@ bool MCTextureParser::startElement(const QString & namespaceURI,
         int index = atts.index("handle");
         if (index != -1)
         {
-            myTexture.strHandle = atts.value(index);
+            myTexture.handle = atts.value(index);
         }
         else
         {
@@ -109,7 +109,7 @@ bool MCTextureParser::startElement(const QString & namespaceURI,
         index = atts.index("file");
         if (index != -1)
         {
-            myTexture.strImage = m_strDefaultPath + QDir::separator() + atts.value(index);
+            myTexture.imagePath = m_strDefaultPath + QDir::separator() + atts.value(index);
         }
         else
         {
@@ -157,20 +157,6 @@ bool MCTextureParser::startElement(const QString & namespaceURI,
         {
             myTexture.height = atts.value(index).toInt();
             myTexture.heightSet = true;
-        }
-
-        // Read category if set
-        index = atts.index("category");
-        if (index != -1)
-        {
-            myTexture.strCategory = atts.value(index);
-        }
-
-        // Read role if set
-        index = atts.index("role");
-        if (index != -1)
-        {
-            myTexture.strRole = atts.value(index);
         }
 
         // Add texture to the vector

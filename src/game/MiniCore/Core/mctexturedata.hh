@@ -28,56 +28,50 @@
 //! Possible colorkey setting
 struct ColorKey
 {
-  //! red, green, blue
-  UINT r, g, b;
+    //! red, green, blue
+    UINT r, g, b;
 };
 
 //! Texture data structure used by MCTextureParser.
 struct MCTextureData
 {
-  //! Constructor
-  MCTextureData() :
-      centerSet(false), heightSet(false),
-      widthSet(false), colorKeySet(false), xAxisMirror(false) {}
-  
-  //! Handle of the texture
-  QString strHandle;
+    //! Constructor
+    MCTextureData() :
+            centerSet(false), heightSet(false),
+            widthSet(false), colorKeySet(false), xAxisMirror(false) {}
 
-  //! Image path
-  QString strImage;
+    //! Handle of the texture
+    QString handle;
 
-  //! Category of the texture
-  QString strCategory;
+    //! Image path
+    QString imagePath;
 
-  //! Role of the texture
-  QString strRole;
+    //! True if center was set
+    bool centerSet;
 
-  //! True if center was set
-  bool centerSet;
-  
-  //! Center coordinate, if set
-  MCVector2d<int> center;
+    //! Center coordinate, if set
+    MCVector2d<int> center;
 
-  //! True if height was set
-  bool heightSet;
+    //! True if height was set
+    bool heightSet;
 
-  //! Height
-  int height;
+    //! Height
+    int height;
 
-  //! True if width was set
-  bool widthSet;
+    //! True if width was set
+    bool widthSet;
 
-  //! Width
-  int width;
+    //! Width
+    int width;
 
-  //! True, if colorkey was set
-  bool colorKeySet;
-  
-  //! Colorkey, if set
-  ColorKey colorKey;  
-  
-  //! True if X-Axis mirroring is wanted
-  bool xAxisMirror;
+    //! True, if colorkey was set
+    bool colorKeySet;
+
+    //! Colorkey, if set
+    ColorKey colorKey;
+
+    //! True if X-Axis mirroring is wanted
+    bool xAxisMirror;
 };
 
 #endif // MCTEXTUREDATA_HH

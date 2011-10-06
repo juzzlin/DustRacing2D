@@ -343,23 +343,3 @@ MCVector2d<MCFloat> MCSurface::center() const
 {
     return m_pImpl->m_center;
 }
-
-void MCSurface::setRole(const string & role)
-{
-    m_pImpl->m_role = role;
-}
-
-const string & MCSurface::role() const
-{
-    return m_pImpl->m_role;
-}
-
-void MCSurface::setCategory(const string & category)
-{
-    m_pImpl->m_category = category;
-}
-
-const string & MCSurface::category() const
-{
-    return m_pImpl->m_category;
-}

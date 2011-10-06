@@ -61,7 +61,7 @@ class MCSurface;
  *   <texture handle="WINDOW_ICON" file="logo_v2.bmp"/>
  * </textures>
  *
- * Note: there can be multiple default_path, colorkey and x_axis_mirror 
+ * Note: there can be multiple default_path, colorkey and x_axis_mirror
  *       settings, if needed.
  *
  */
@@ -69,42 +69,46 @@ class MCTextureManager
 {
 public:
 
-  //! Constructor
-  MCTextureManager();
-  
-  //! Destructor
-  virtual ~MCTextureManager();
-  
-  //! Loads texture config from strBasePath using the given mapping file strFile
-  virtual void load(const QString & strFile, const QString & strBaseDataPath) throw (MCException);
+    //! Constructor
+    MCTextureManager();
 
-  //! Returns a surface object associated with given strId.
-  //! Corresponding OpenGL texture handle can be obtained
-  //! by calling handle() of the resulting MCSurface.
-  //! MCTextureManager will keep the ownership.
-  //! \param strId Handle defined in the textures XML file.
-  //! \return Pointer to the corresponding MCSurface.
-  //! \throws MCException on failure.
-  MCSurface * surface(const QString & strId) const throw (MCException);
+    //! Destructor
+    virtual ~MCTextureManager();
+
+    //! Loads texture config from strBasePath using the given mapping file strFile.
+    //! \param filePath Path to the XML-based input file.
+    //! \param baseDataPath The absolute search path for an image is
+    //! baseDataPath + default_path + file. default_path and file are
+    //! defined in the input file.
+    virtual void load(const QString & filePath, const QString & baseDataPath) throw (MCException);
+
+    //! Returns a surface object associated with given strId.
+    //! Corresponding OpenGL texture handle can be obtained
+    //! by calling handle() of the resulting MCSurface.
+    //! MCTextureManager will keep the ownership.
+    //! \param handle Handle defined in the textures XML file.
+    //! \return Pointer to the corresponding MCSurface.
+    //! \throws MCException on failure.
+    MCSurface * surface(const QString & handle) const throw (MCException);
 
 private:
 
-  //! Disable copy constructor
-  DISABLE_COPY(MCTextureManager);
+    //! Disable copy constructor
+    DISABLE_COPY(MCTextureManager);
 
-  //! Disable assignment
-  DISABLE_ASSI(MCTextureManager);
-  
-  //! Creates an OpenGL texture from a QImage + texture meta data
-  void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
+    //! Disable assignment
+    DISABLE_ASSI(MCTextureManager);
 
-  //! Creates a scaled image with dimensions forced to the nearest power
-  //! of two.
-  QImage createNearest2PowNImage(const QImage & image);
+    //! Creates an OpenGL texture from a QImage + texture meta data
+    void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
 
-  //! Map for resulting texture objects
-  typedef QHash<QString, MCSurface *> TextureHash;
-  TextureHash m_mapTextures;
+    //! Creates a scaled image with dimensions forced to the nearest power
+    //! of two.
+    QImage createNearest2PowNImage(const QImage & image);
+
+    //! Map for resulting surface objects
+    typedef QHash<QString, MCSurface *> TextureHash;
+    TextureHash m_mapTextures;
 };
 
 #endif // MCTEXTUREMANAGER_HH

@@ -107,6 +107,7 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcsurfaceview.hh \
     MiniCore/Core/mctextblock.hh \
     MiniCore/Core/mctext.hh \
+    MiniCore/Core/mctexturedata.hh \
     MiniCore/Core/mctexturemanager.hh \
     MiniCore/Core/mctextureparser.hh \
     MiniCore/Core/mctrigonom.hh \
