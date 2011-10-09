@@ -39,7 +39,6 @@ HEADERS += mainwindow.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
-    tileloader.h \
     objectdata.h
 
 RESOURCES += \
