@@ -16,9 +16,10 @@
 #include "mainwindow.h"
 
 #include "config.h"
+#include "objectdata.h"
+#include "objectloader.h"
 #include "trackio.h"
 #include "tracktile.h"
-
 #include "editordata.h"
 #include "editorview.h"
 #include "editorscene.h"
@@ -60,18 +61,19 @@ namespace
     const int          CONSOLE_HEIGHT = 64;
 }
 
-MainWindow::MainWindow(QString trackFile) :
-        m_editorData(new EditorData(this)),
-        m_editorView(new EditorView(m_editorData, this)),
-        m_editorScene(new EditorScene(this)),
-        m_console(new QTextEdit(this)),
-        m_saveAction(NULL),
-        m_saveAsAction(NULL),
-        m_currentToolBarAction(NULL),
-        m_clearAllAction(NULL),
-        m_setRouteAction(NULL),
-        m_scaleSlider(new QSlider(Qt::Horizontal, this)),
-        m_toolBar(new QToolBar(this))
+MainWindow::MainWindow(QString trackFile)
+: m_editorData(new EditorData(this))
+, m_editorView(new EditorView(m_editorData, this))
+, m_editorScene(new EditorScene(this))
+, m_console(new QTextEdit(this))
+, m_saveAction(NULL)
+, m_saveAsAction(NULL)
+, m_currentToolBarAction(NULL)
+, m_clearAllAction(NULL)
+, m_setRouteAction(NULL)
+, m_scaleSlider(new QSlider(Qt::Horizontal, this))
+, m_toolBar(new QToolBar(this))
+, m_objectLoader(new ObjectLoader)
 {
     if (!m_instance)
     {
@@ -82,6 +84,29 @@ MainWindow::MainWindow(QString trackFile) :
         qFatal("MainWindow already instantiated!");
     }
 
+    // Init widgets
+    init();
+
+    // Load object models that can be used to build tracks.
+    const QString objectFilePath = QString(Config::DATA_PATH) +
+              QDir::separator() + "objects.conf";
+    loadObjectModels(objectFilePath);
+
+    if (!trackFile.isEmpty())
+    {
+        // Print a welcome message
+        console(tr("Loading '%1'..").arg(trackFile));
+        doOpenTrack(trackFile);
+    }
+    else
+    {
+        // Print a welcome message
+        console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+    }
+}
+
+void MainWindow::init()
+{
     setWindowTitle(QString(Version::EDITOR_NAME) + " " + Version::EDITOR_VERSION);
 
     QSettings settings(Version::QSETTINGS_COMPANY_NAME,
@@ -156,17 +181,53 @@ MainWindow::MainWindow(QString trackFile) :
     QList<int> sizes;
     sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
     splitter->setSizes(sizes);
+}
 
-    if (!trackFile.isEmpty())
+bool MainWindow::loadObjectModels(QString objectFilePath)
+{
+    if (m_objectLoader->load(objectFilePath))
     {
-        // Print a welcome message
-        console(tr("Loading '%1'..").arg(trackFile));
-        doOpenTrack(trackFile);
+        addObjectsToToolBar();
+        return true;
     }
     else
     {
-        // Print a welcome message
-        console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+        const QString msg = tr("ERROR!!: Cannot load objects from '") +
+                objectFilePath + tr("'");
+        console(msg);
+        return false;
+    }
+}
+
+void MainWindow::addObjectsToToolBar()
+{
+    // Loop through all object models loaded
+    // by the object loader.
+    ObjectLoader::ObjectDataVector objects =
+            m_objectLoader->getObjectsByCategory("tile");
+    Q_FOREACH(const ObjectData model, objects)
+    {
+        // Create toolbar actions according
+        // to the object model data.
+        // The corresponding image is loaded
+        // from Config::DATA_PATH/model.imagePath.
+        QString imagePath = QString(Config::DATA_PATH) +
+                QDir::separator() + model.imagePath;
+        if (QFile::exists(imagePath))
+        {
+            // Create the action.
+            QAction * p = new QAction(QIcon(QPixmap(imagePath)),
+                                          model.role, this);
+            // Set model role as the data.
+            p->setData(QVariant(model.role));
+
+            // Add it to the toolbar.
+            m_toolBar->addAction(p);
+        }
+        else
+        {
+            console("WARNING!!: " + imagePath + " cannot be read.");
+        }
     }
 }
 
@@ -286,26 +347,6 @@ void MainWindow::populateToolBar()
     p->setData(QVariant(QString("select")));
     m_toolBar->addAction(p);
 
-    // Add "straight"-action
-    p = new QAction(QIcon(QPixmap(Config::STRAIGHT_PATH)), tr("Straight"), this);
-    p->setData(QVariant(QString("straight")));
-    m_toolBar->addAction(p);
-
-    // Add "corner"-action
-    p = new QAction(QIcon(QPixmap(Config::CORNER_PATH)), tr("Corner"), this);
-    p->setData(QVariant(QString("corner")));
-    m_toolBar->addAction(p);
-
-    // Add "grass"-action
-    p = new QAction(QIcon(QPixmap(Config::GRASS_PATH)), tr("Grass"), this);
-    p->setData(QVariant(QString("grass")));
-    m_toolBar->addAction(p);
-
-    // Add "finish"-action
-    p = new QAction(QIcon(QPixmap(Config::FINISH_PATH)), tr("Finish"), this);
-    p->setData(QVariant(QString("finish")));
-    m_toolBar->addAction(p);
-
     // Add "clear"-action
     p = new QAction(QIcon(QPixmap(Config::CLEAR_PATH)), tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
@@ -322,44 +363,17 @@ void MainWindow::handleToolBarActionClick(QAction * action)
     {
         m_currentToolBarAction = action;
 
+        // Select-action
         if (action->data() == "select")
         {
             QApplication::restoreOverrideCursor();
             m_editorData->setMode(EditorData::EM_NONE);
         }
-        else if (action->data() == "straight")
+        // The user wants to set a tile type or clear it.
+        else
         {
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(Config::STRAIGHT_PATH)
-                                                    .scaled(QSize(32, 32))));
-            m_editorData->setMode(EditorData::EM_SETTILETYPE);
-        }
-        else if (action->data() == "corner")
-        {
-            QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(Config::CORNER_PATH)
-                                                    .scaled(QSize(32, 32))));
-            m_editorData->setMode(EditorData::EM_SETTILETYPE);
-        }
-        else if (action->data() == "grass")
-        {
-            QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(Config::GRASS_PATH)
-                                                    .scaled(QSize(32, 32))));
-            m_editorData->setMode(EditorData::EM_SETTILETYPE);
-        }
-        else if (action->data() == "finish")
-        {
-            QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(Config::FINISH_PATH)
-                                                    .scaled(QSize(32, 32))));
-            m_editorData->setMode(EditorData::EM_SETTILETYPE);
-        }
-        else if (action->data() == "clear")
-        {
-            QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(QCursor(QPixmap(Config::CLEAR_PATH)
-                                                    .scaled(QSize(32, 32))));
+            QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
             m_editorData->setMode(EditorData::EM_SETTILETYPE);
         }
     }
@@ -613,4 +627,5 @@ void MainWindow::console(QString text)
 MainWindow::~MainWindow()
 {
     delete m_editorData;
+    delete m_objectLoader;
 }

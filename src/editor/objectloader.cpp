@@ -21,6 +21,10 @@
 #include "objectloader.h"
 #include "version.h"
 
+ObjectLoader::ObjectLoader()
+{
+}
+
 bool ObjectLoader::load(QString path)
 {
     QDomDocument doc;
@@ -42,7 +46,7 @@ bool ObjectLoader::load(QString path)
     QDomElement  root    = doc.documentElement();
     QString      version = root.attribute("version", Version::EDITOR_VERSION);
 
-    objectDataVector.clear();
+    m_objects.clear();
 
     QDomNode node = root.firstChild();
     while(!node.isNull())
@@ -59,7 +63,7 @@ bool ObjectLoader::load(QString path)
                 newData.role      = tag.attribute("role",      "undefined");
                 newData.imagePath = tag.attribute("imagePath", "undefined");
 
-                objectDataVector << newData;
+                m_objects << newData;
             }
 
             node = node.nextSibling();
@@ -73,11 +77,11 @@ ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(QString catego
 {
     ObjectDataVector result;
 
-    for (int i = 0; i < objectDataVector.size(); i++)
+    for (int i = 0; i < m_objects.size(); i++)
     {
-        if (objectDataVector[i].category == category)
+        if (m_objects[i].category == category)
         {
-            result << objectDataVector[i];
+            result << m_objects[i];
         }
     }
 
@@ -88,14 +92,19 @@ ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByRole(QString role) cons
 {
     ObjectDataVector result;
 
-    for (int i = 0; i < objectDataVector.size(); i++)
+    for (int i = 0; i < m_objects.size(); i++)
     {
-        if (objectDataVector[i].role == role)
+        if (m_objects[i].role == role)
         {
-            result << objectDataVector[i];
+            result << m_objects[i];
         }
     }
 
     return result;
+}
+
+ObjectLoader::ObjectDataVector ObjectLoader::objects() const
+{
+    return m_objects;
 }
 

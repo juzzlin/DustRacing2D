@@ -114,7 +114,12 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                 else if (m_editorData->mode() == EditorData::EM_SETTILETYPE)
                 {
                     if (QAction * action = MainWindow::instance()->currentToolBarAction())
+                    {
                         tile->setTileType(action->data().toString());
+                        tile->setPixmap(action->icon().pixmap(
+                                            TrackTile::TILE_W,
+                                            TrackTile::TILE_H));
+                    }
                 }
                 // User is initiating a drag'n'drop
                 else if (m_editorData->mode() == EditorData::EM_NONE)

@@ -28,22 +28,28 @@ public:
 
     typedef QVector<ObjectData> ObjectDataVector;
 
+    //! Constructor.
+    ObjectLoader();
+
     //! Load data from the given file.
     //! \param filePath The config file to be used.
     //! \return true If failed succeeded.
     bool load(QString path);
 
-    //! Get all object of the given category.
+    //! Get all objects of the given category.
     ObjectDataVector getObjectsByCategory(QString category) const;
 
-    //! Get all object of the given role.
+    //! Get all objects of the given role.
     ObjectDataVector getObjectsByRole(QString role) const;
+
+    //! Get all objects.
+    ObjectDataVector objects() const;
 
 private:
 
     Q_DISABLE_COPY(ObjectLoader);
 
-    ObjectDataVector objectDataVector;
+    ObjectDataVector m_objects;
 };
 
 #endif // TILELOADER_H

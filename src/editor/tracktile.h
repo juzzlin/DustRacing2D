@@ -88,6 +88,9 @@ public:
     //! Rotate 90 degrees CCW
     void rotate90CCW();
 
+    //! Set the current pixmap
+    void setPixmap(const QPixmap & pixmap);
+
 private:
 
     //! Create the menu that is shown when right-clicking on the tile.
@@ -111,6 +114,9 @@ private:
     //! Line that is drawn from a tile to the previous tile
     //! according to the route vector.
     QGraphicsLineItem * m_routeLine;
+
+    //! Image of the tile.
+    QPixmap m_pixmap;
 };
 
 #endif // TRACKTILE_H

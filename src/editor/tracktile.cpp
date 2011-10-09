@@ -84,32 +84,14 @@ void TrackTile::paint(QPainter * painter,
     QPen pen;
     pen.setJoinStyle(Qt::MiterJoin);
 
-    // Render the tile image
-    if (tileType() == "grass")
+    // Render the tile pixmap if tile is not cleared.
+    if (tileType() != "clear")
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(Config::GRASS_PATH));
+                            m_pixmap);
     }
-    else if (tileType() == "straight")
-    {
-        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
-                            m_size.width(), m_size.height(),
-                            QPixmap(Config::STRAIGHT_PATH));
-    }
-    else if (tileType() == "corner")
-    {
-        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
-                            m_size.width(), m_size.height(),
-                            QPixmap(Config::CORNER_PATH));
-    }
-    else if (tileType() == "finish")
-    {
-        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
-                            m_size.width(), m_size.height(),
-                            QPixmap(Config::FINISH_PATH));
-    }
-    else if (tileType() == "clear")
+    else
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
@@ -212,6 +194,12 @@ void TrackTile::rotate90CW()
 void TrackTile::rotate90CCW()
 {
     m_animator->rotate90CCW();
+}
+
+void TrackTile::setPixmap(const QPixmap & pixmap)
+{
+    m_pixmap = pixmap;
+    update();
 }
 
 TrackTile::~TrackTile()

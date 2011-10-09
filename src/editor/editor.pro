@@ -10,6 +10,7 @@ QMAKE_CXXFLAGS += -std=c++0x -U__STRICT_ANSI__
 
 SOURCES += main.cpp mainwindow.cpp \
     newtrackdialog.cpp \
+    config.cpp \
     editordata.cpp \
     editorview.cpp \
     editorscene.cpp \
@@ -22,10 +23,11 @@ SOURCES += main.cpp mainwindow.cpp \
     ../common/map.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
-    ../common/tracktilebase.cpp \
+    ../common/tracktilebase.cpp
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
+    config.h \
     editordata.h \
     editorview.h \
     editorscene.h \

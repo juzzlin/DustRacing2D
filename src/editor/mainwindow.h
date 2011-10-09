@@ -23,11 +23,12 @@
 class EditorData;
 class EditorView;
 class EditorScene;
-class TrackData;
-class QTextEdit;
+class ObjectLoader;
 class QAction;
 class QSlider;
+class QTextEdit;
 class QToolBar;
+class TrackData;
 
 /*! \class MainWindow
  *  \brief The main window of the editor.
@@ -38,7 +39,9 @@ class MainWindow : public QMainWindow
 
 public:
 
-    //! Constructor
+    //! Constructor.
+    //! The constructor tries to load object models from
+    //! Config::DATA_PATH/objects.conf.
     //! \param trackFile Track given as command line argument.
     explicit MainWindow(QString trackFile = "");
     
@@ -72,36 +75,40 @@ protected:
 
 private slots:
 
+    void clear();
+    void clearRoute();
+    bool doOpenTrack(QString fileName);
+    void handleToolBarActionClick(QAction * action);
     void initializeNewTrack();
     void openTrack();
-    bool doOpenTrack(QString fileName);
     void saveTrack();
     void saveAsTrack();
     void updateScale(int value);
-    void handleToolBarActionClick(QAction * action);
-    void clear();
-    void clearRoute();
 
 private:
 
-    void populateMenuBar();
-    void populateToolBar();
     void addTilesToScene();
     void addRouteLinesToScene(bool closeLoop);
+    void addObjectsToToolBar();
+    void init();
+    bool loadObjectModels(QString objectFilePath);
+    void populateMenuBar();
+    void populateToolBar();
     void removeTilesFromScene();
 
-    EditorData  * m_editorData;
-    EditorView  * m_editorView;
-    EditorScene * m_editorScene;
-    QTextEdit   * m_console;
-    QAction     * m_saveAction;
-    QAction     * m_saveAsAction;
-    QAction     * m_currentToolBarAction;
-    QAction     * m_clearAllAction;
-    QAction     * m_clearRouteAction;
-    QAction     * m_setRouteAction;
-    QSlider     * m_scaleSlider;
-    QToolBar    * m_toolBar;
+    EditorData   * m_editorData;
+    EditorView   * m_editorView;
+    EditorScene  * m_editorScene;
+    QTextEdit    * m_console;
+    QAction      * m_saveAction;
+    QAction      * m_saveAsAction;
+    QAction      * m_currentToolBarAction;
+    QAction      * m_clearAllAction;
+    QAction      * m_clearRouteAction;
+    QAction      * m_setRouteAction;
+    QSlider      * m_scaleSlider;
+    QToolBar     * m_toolBar;
+    ObjectLoader * m_objectLoader;
 
     static MainWindow * m_instance;
 };
