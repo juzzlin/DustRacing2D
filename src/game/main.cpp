@@ -1,4 +1,4 @@
-// This file is part of Dust Rallycross (DustRAC).
+// This file is part of Dust Racing (DustRAC).
 // Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
 //
 // DustRAC is free software: you can redistribute it and/or modify
