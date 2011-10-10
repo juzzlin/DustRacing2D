@@ -207,27 +207,14 @@ void MainWindow::addObjectsToToolBar()
             m_objectLoader->getObjectsByCategory("tile");
     Q_FOREACH(const ObjectData model, objects)
     {
-        // Create toolbar actions according
-        // to the object model data.
-        // The corresponding image is loaded
-        // from Config::DATA_PATH/model.imagePath.
-        QString imagePath = QString(Config::DATA_PATH) +
-                QDir::separator() + model.imagePath;
-        if (QFile::exists(imagePath))
-        {
-            // Create the action.
-            QAction * p = new QAction(QIcon(QPixmap(imagePath)),
-                                          model.role, this);
-            // Set model role as the data.
-            p->setData(QVariant(model.role));
+        // Create the action.
+        QAction * p = new QAction(QIcon(model.pixmap), model.role, this);
 
-            // Add it to the toolbar.
-            m_toolBar->addAction(p);
-        }
-        else
-        {
-            console("WARNING!!: " + imagePath + " cannot be read.");
-        }
+        // Set model role as the data.
+        p->setData(QVariant(model.role));
+
+        // Add it to the toolbar.
+        m_toolBar->addAction(p);
     }
 }
 
@@ -239,6 +226,11 @@ MainWindow * MainWindow::instance()
 EditorScene * MainWindow::editorScene() const
 {
     return m_editorScene;
+}
+
+ObjectLoader * MainWindow::objectLoader() const
+{
+    return m_objectLoader;
 }
 
 QAction * MainWindow::currentToolBarAction() const

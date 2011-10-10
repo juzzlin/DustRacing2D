@@ -60,6 +60,9 @@ public:
     //! Get pointer to the current scene. Cannot be NULL.
     EditorScene * editorScene() const;
 
+    //! Get pointer to the object loaded. Cannot be NULL.
+    ObjectLoader * objectLoader() const;
+
 public slots:
 
     //! Begin marking the route.

@@ -55,12 +55,6 @@ QGraphicsLineItem * TrackTile::routeLine() const
     return m_routeLine;
 }
 
-void TrackTile::setTileType(const QString & type)
-{
-    TrackTileBase::setTileType(type);
-    update();
-}
-
 void TrackTile::setRouteDirection(TrackTileBase::RouteDirection direction)
 {
     TrackTileBase::setRouteDirection(direction);
@@ -194,6 +188,12 @@ void TrackTile::rotate90CW()
 void TrackTile::rotate90CCW()
 {
     m_animator->rotate90CCW();
+}
+
+void TrackTile::setTileType(const QString & type)
+{
+    TrackTileBase::setTileType(type);
+    update();
 }
 
 void TrackTile::setPixmap(const QPixmap & pixmap)

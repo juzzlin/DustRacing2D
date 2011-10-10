@@ -1,18 +1,18 @@
 <track version="0.1" cols="4" rows="4" name="Test">
- <tile i="0" j="0" o="0" type="corner" index="9"/>
+ <tile i="0" j="0" o="0" type="corner90" index="9"/>
  <tile i="0" j="1" o="180" type="straight"/>
  <tile i="0" j="2" o="180" type="straight"/>
- <tile i="0" j="3" o="-90" type="corner" index="10"/>
- <tile i="1" j="0" o="90" type="corner" index="8"/>
- <tile i="1" j="1" o="-90" type="corner" index="7"/>
+ <tile i="0" j="3" o="-90" type="corner90" index="10"/>
+ <tile i="1" j="0" o="90" type="corner90" index="8"/>
+ <tile i="1" j="1" o="-90" type="corner90" index="7"/>
  <tile i="1" j="2" o="0" type="grass"/>
  <tile i="1" j="3" o="90" type="straight"/>
- <tile i="2" j="0" o="0" type="corner" index="5"/>
- <tile i="2" j="1" o="-180" type="corner" index="6"/>
+ <tile i="2" j="0" o="0" type="corner90" index="5"/>
+ <tile i="2" j="1" o="-180" type="corner90" index="6"/>
  <tile i="2" j="2" o="0" type="grass"/>
  <tile i="2" j="3" o="90" type="finish" index="0"/>
- <tile i="3" j="0" o="90" type="corner" index="4"/>
+ <tile i="3" j="0" o="90" type="corner90" index="4"/>
  <tile i="3" j="1" o="180" type="straight" index="3"/>
  <tile i="3" j="2" o="180" type="straight" index="2"/>
- <tile i="3" j="3" o="-180" type="corner" index="1"/>
+ <tile i="3" j="3" o="-180" type="corner90" index="1"/>
 </track>

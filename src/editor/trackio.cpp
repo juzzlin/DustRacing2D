@@ -18,6 +18,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "mainwindow.h"
+#include "objectloader.h"
 #include "trackio.h"
 #include "tracktile.h"
 #include "version.h"
@@ -115,6 +117,7 @@ TrackData * TrackIO::open(QString path)
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);
+                        tile->setPixmap(MainWindow::instance()->objectLoader()->getPixmapByRole(id));
                         tile->setRouteIndex(index);
 
                         if (index >= 0)

@@ -16,13 +16,14 @@
 #ifndef OBJECTDATA_H
 #define OBJECTDATA_H
 
+#include <QPixmap>
 #include <QString>
 
 //! Structure used by ObjectLoader.
 struct ObjectData
 {
     //! Path to the image representing this object.
-    QString imagePath;
+    QPixmap pixmap;
 
     //! Category of this object.
     QString category;

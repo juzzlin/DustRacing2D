@@ -45,6 +45,9 @@ public:
     //! Get all objects.
     ObjectDataVector objects() const;
 
+    //! Get pixmap by role.
+    QPixmap getPixmapByRole(QString role) const;
+
 private:
 
     Q_DISABLE_COPY(ObjectLoader);
