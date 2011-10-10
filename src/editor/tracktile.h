@@ -88,6 +88,9 @@ public:
     //! Rotate 90 degrees CCW
     void rotate90CCW();
 
+    //! Get the current pixmap
+    QPixmap pixmap() const;
+
     //! Set the current pixmap
     void setPixmap(const QPixmap & pixmap);
 

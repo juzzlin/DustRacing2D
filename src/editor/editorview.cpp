@@ -165,6 +165,12 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
             sourceTile->setTileType(destType);
             destTile->setTileType(sourceType);
 
+            // Swap tile pixmaps
+            QPixmap sourcePixmap = sourceTile->pixmap();
+            QPixmap destPixmap = destTile->pixmap();
+            sourceTile->setPixmap(destPixmap);
+            destTile->setPixmap(sourcePixmap);
+
             // Swap tile rotations
             int sourceAngle = sourceTile->rotation();
             int destAngle = destTile->rotation();

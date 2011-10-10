@@ -196,6 +196,11 @@ void TrackTile::setTileType(const QString & type)
     update();
 }
 
+QPixmap TrackTile::pixmap() const
+{
+    return m_pixmap;
+}
+
 void TrackTile::setPixmap(const QPixmap & pixmap)
 {
     m_pixmap = pixmap;
