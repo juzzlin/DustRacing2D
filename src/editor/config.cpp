@@ -15,6 +15,6 @@
 
 #include "config.h"
 
-const char * Config::DATA_PATH     = "./data";
-const char * Config::SELECT_PATH   = ":/cursor.png";
-const char * Config::CLEAR_PATH    = ":/clear.png";
+const char * Config::DATA_PATH   = "../../data";
+const char * Config::SELECT_PATH = ":/cursor.png";
+const char * Config::CLEAR_PATH  = ":/clear.png";

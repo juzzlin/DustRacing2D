@@ -87,6 +87,8 @@ MainWindow::MainWindow(QString trackFile)
     // Init widgets
     init();
 
+    console("CWD: " + QDir::currentPath());
+
     // Load object models that can be used to build tracks.
     const QString objectFilePath = QString(Config::DATA_PATH) +
               QDir::separator() + "objects.conf";

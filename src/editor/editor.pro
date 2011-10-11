@@ -1,6 +1,6 @@
 # Project file for the level editor
 TEMPLATE     = app
-TARGET       =
+TARGET       = ../../bin/editor/editor
 INCLUDEPATH += .
 QT          += xml
 

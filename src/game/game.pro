@@ -1,6 +1,6 @@
 # Project file for the game
 TEMPLATE     = app
-TARGET       =
+TARGET       = ../../bin/game/dustrac
 INCLUDEPATH += MiniCore .
 QT          += opengl xml
 

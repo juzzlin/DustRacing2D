@@ -20,14 +20,14 @@ $ qmake
 $ make
 
 This will build the editor and the game binaries
-in src/editor/ and in src/game/ respectively.
+in bin/editor/ and in bin/game/ respectively.
 
 Installing
 ----------
 
 Any install steps are not currently required.
-The binaries work when started on the top-level of the
-source tree.
+The binaries work when started from the directory
+that contains the binary.
 
 The binaries only need to find the data-dir that includes
 all the runtime data.

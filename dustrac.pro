@@ -2,7 +2,3 @@
 
 TEMPLATE = subdirs
 SUBDIRS += src/editor src/game
-
-
-
-
