@@ -19,6 +19,7 @@
 #include <QGraphicsView>
 #include <QMenu>
 
+class QAction;
 class QMouseEvent;
 class QPaintEvent;
 class EditorData;
@@ -46,6 +47,9 @@ private slots:
 
     void doRotate90CW();
     void doRotate90CCW();
+    void doSetAsFlat();
+    void doSetAsHill();
+    void doSetAsGorge();
 
 private:
 
@@ -54,6 +58,9 @@ private:
     EditorData * m_editorData;
     QMenu        m_menu;
     QPoint       m_clickedPos;
+    QAction    * m_setAsFlat;
+    QAction    * m_setAsHill;
+    QAction    * m_setAsGorge;
 };
 
 #endif // EDITORVIEW_H

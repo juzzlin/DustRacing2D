@@ -92,7 +92,7 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
         const unsigned int length = m_trackData->route().length();
         if (length > 1)
         {
-            QPen pen(QBrush(QColor(0, 0, 255, 64)), 7, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+            QPen pen(QBrush(QColor(0, 0, 255, 64)), 15, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 
             for (unsigned int i = 1; i < length; i++)
             {

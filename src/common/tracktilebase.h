@@ -59,7 +59,7 @@ public:
     //! Get route index, return -1 if not set.
     int routeIndex() const;
 
-    //! Set type: "corner", "straight", "grass", "finish", "clear".
+    //! Set type: "corner", "straight", "grass", "finish", "clear"..
     void setTileType(const QString & type);
 
     //! Get type

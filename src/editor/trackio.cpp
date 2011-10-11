@@ -43,6 +43,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
             {
                 QDomElement tileTag = doc.createElement("tile");
                 tileTag.setAttribute("type", tile->tileType());
+                tileTag.setAttribute("profile", tile->profile());
                 tileTag.setAttribute("i", i);
                 tileTag.setAttribute("j", j);
                 tileTag.setAttribute("o", tile->rotation());
@@ -112,6 +113,7 @@ TrackData * TrackIO::open(QString path)
                     unsigned int j  = tag.attribute("j", "0").toUInt();
                     int          o  = tag.attribute("o", "0").toInt();
                     int      index  = tag.attribute("index", "-1").toInt();
+                    int profileInt  = tag.attribute("profile", "0").toInt();
 
                     if (TrackTile * tile = newData->map().tile(i, j))
                     {
@@ -119,6 +121,20 @@ TrackData * TrackIO::open(QString path)
                         tile->setTileType(id);
                         tile->setPixmap(MainWindow::instance()->objectLoader()->getPixmapByRole(id));
                         tile->setRouteIndex(index);
+
+                        switch (profileInt)
+                        {
+                        default:
+                        case TrackTileBase::TP_FLAT:
+                            tile->setProfile(TrackTileBase::TP_FLAT);
+                            break;
+                        case TrackTileBase::TP_HILL:
+                            tile->setProfile(TrackTileBase::TP_HILL);
+                            break;
+                        case TrackTileBase::TP_GORGE:
+                            tile->setProfile(TrackTileBase::TP_GORGE);
+                            break;
+                        }
 
                         if (index >= 0)
                             routeVector << tile;

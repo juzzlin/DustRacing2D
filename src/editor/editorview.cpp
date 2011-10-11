@@ -23,9 +23,12 @@
 #include "tracktile.h"
 #include "../common/trackdata.h"
 
-EditorView::EditorView(EditorData * editorData, QWidget *parent) :
-    QGraphicsView(parent),
-    m_editorData(editorData)
+EditorView::EditorView(EditorData * editorData, QWidget *parent)
+: QGraphicsView(parent)
+, m_editorData(editorData)
+, m_setAsFlat(NULL)
+, m_setAsHill(NULL)
+, m_setAsGorge(NULL)
 {
     createContextMenu();
 }
@@ -65,7 +68,18 @@ void EditorView::createContextMenu()
     QAction * rotate90CCW = new QAction(dummy2, &m_menu);
     QObject::connect(rotate90CCW, SIGNAL(triggered()), this, SLOT(doRotate90CCW()));
 
-    m_menu.addActions(QList<QAction *>() << rotate90CW << rotate90CCW);
+    m_setAsFlat = new QAction(QWidget::tr("Set as flat.."), &m_menu);
+    QObject::connect(m_setAsFlat, SIGNAL(triggered()), this, SLOT(doSetAsFlat()));
+
+    m_setAsHill = new QAction(QWidget::tr("Set as hill.."), &m_menu);
+    QObject::connect(m_setAsHill, SIGNAL(triggered()), this, SLOT(doSetAsHill()));
+
+    m_setAsGorge = new QAction(QWidget::tr("Set as gorge.."), &m_menu);
+    QObject::connect(m_setAsGorge, SIGNAL(triggered()), this, SLOT(doSetAsGorge()));
+
+    m_menu.addActions(QList<QAction *>()
+                      << rotate90CW << rotate90CCW
+                      << m_setAsFlat << m_setAsHill << m_setAsGorge);
 }
 
 void EditorView::mousePressEvent(QMouseEvent * event)
@@ -82,6 +96,27 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             // Handle right button click
             if (event->button() == Qt::RightButton)
             {
+                // Enable all profiles by default
+                m_setAsFlat->setEnabled(true);
+                m_setAsHill->setEnabled(true);
+                m_setAsGorge->setEnabled(true);
+
+                // Hide settings that are already applied
+                switch (tile->profile())
+                {
+                case TrackTileBase::TP_FLAT:
+                    m_setAsFlat->setEnabled(false);
+                    break;
+                case TrackTileBase::TP_HILL:
+                    m_setAsHill->setEnabled(false);
+                    break;
+                case TrackTileBase::TP_GORGE:
+                    m_setAsGorge->setEnabled(false);
+                    break;
+                default:
+                    break;
+                }
+
                 // Show the context menu
                 QPoint globalPos = mapToGlobal(m_clickedPos);
                 m_menu.exec(globalPos);
@@ -195,12 +230,43 @@ void EditorView::doRotate90CW()
 {
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
         tile->rotate90CW();
+    }
 }
 
 void EditorView::doRotate90CCW()
 {
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
         tile->rotate90CCW();
+    }
+}
+
+void EditorView::doSetAsFlat()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setProfile(TrackTileBase::TP_FLAT);
+    }
+}
+
+void EditorView::doSetAsHill()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setProfile(TrackTileBase::TP_HILL);
+    }
+}
+
+void EditorView::doSetAsGorge()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setProfile(TrackTileBase::TP_GORGE);
+    }
 }

@@ -103,6 +103,33 @@ void TrackTile::paint(QPainter * painter,
         painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
     }
 
+    // Render white (hill) or black (gorge) X
+    switch (profile())
+    {
+        case TrackTileBase::TP_HILL:
+        {
+            pen.setColor(QColor(255, 255, 255));
+            painter->setPen(pen);
+            const int w = m_size.width();
+            const int h = m_size.height();
+            painter->drawLine(-w / 2, -h / 2, w / 2,  h / 2);
+            painter->drawLine(-w / 2,  h / 2, w / 2, -h / 2);
+        }
+        break;
+        case TrackTileBase::TP_GORGE:
+        {
+            pen.setColor(QColor(0, 0, 0));
+            painter->setPen(pen);
+            const int w = m_size.width();
+            const int h = m_size.height();
+            painter->drawLine(-w / 2, -h / 2, w / 2,  h / 2);
+            painter->drawLine(-w / 2,  h / 2, w / 2, -h / 2);
+        }
+        break;
+    default:
+        break;
+    }
+
     // Render route arrow arrow
     if (routeIndex() == 0)
     {
@@ -138,7 +165,7 @@ void TrackTile::paint(QPainter * painter,
                  << QPoint( m_size.width() / 3,  0);
         path.addPolygon(triangle);
         painter->strokePath(path,
-                            QPen(QBrush(QColor(0, 0, 255, 64)), 7,
+                            QPen(QBrush(QColor(0, 0, 255, 64)), 15,
                                  Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
     }
 
