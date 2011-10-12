@@ -145,7 +145,7 @@ void MCQuadtreeImpl::getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet
 
   const MCBBox<MCFloat> b(p->bbox());
   getIndexRange(b);
-  MCObject * p2 = NULL;
+  MCObject * p2 = nullptr;
   MCQuadtree::ObjectSet::iterator iter;
 
   for (UINT j = m_j0; j <= m_j1; j++) {
@@ -183,7 +183,7 @@ void MCQuadtreeImpl::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d,
   
   resultObjs.clear();
   MCQuadtree::ObjectSet::iterator iter;
-  MCObject * p = NULL;
+  MCObject * p = nullptr;
 
   for (UINT j = m_j0; j <= m_j1; j++) {
     for (UINT i = m_i0; i <= m_i1; i++) {
@@ -222,7 +222,7 @@ void MCQuadtreeImpl::getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox,
 
   resultObjs.clear();
   MCQuadtree::ObjectSet::iterator iter;
-  MCObject * p = NULL;
+  MCObject * p = nullptr;
 
   for (UINT j = m_j0; j <= m_j1; j++) {
     for (UINT i = m_i0; i <= m_i1; i++) {

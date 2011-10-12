@@ -30,7 +30,7 @@
 #include <cmath>
 #include <cstdlib>
 
-MCGame * MCGameImpl::m_instance = NULL;
+MCGame * MCGameImpl::m_instance = nullptr;
 
 MCGameImpl::MCGameImpl() :
   m_fpsScene(0),
@@ -47,7 +47,7 @@ MCGameImpl::MCGameImpl() :
   m_pTM(new MCTextureManager),
   m_pSM(new MCSoundManager),
   m_pWorld(new MCWorld),
-  m_pScreen(NULL),
+  m_pScreen(nullptr),
   m_isSDLInited(false)
 {}
 
@@ -62,7 +62,7 @@ MCGameImpl::~MCGameImpl()
     {
       // Delete screen surface
       SDL_FreeSurface(m_pScreen);
-      m_pScreen = NULL;
+      m_pScreen = nullptr;
 
       // Show cursor again. Not sure if actually needed.
       SDL_ShowCursor(SDL_ENABLE);
@@ -84,7 +84,7 @@ MCGame::MCGame() :
   }
 
   // Init random generator
-  std::srand(time(NULL));
+  std::srand(time(nullptr));
 }
 
 MCGame * MCGame::instance() {
@@ -99,7 +99,7 @@ MCTextureManager * MCGame::textureManager()
   if (instance()) {
     return instance()->m_pImpl->m_pTM.get();
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -108,7 +108,7 @@ MCSoundManager * MCGame::soundManager()
   if (instance()) {
     return instance()->m_pImpl->m_pSM.get();
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -137,7 +137,7 @@ bool MCGame::SDLInit(UINT flags)
   }
 
   // Get keystate vector
-  m_pImpl->m_keystate    = SDL_GetKeyState(NULL);
+  m_pImpl->m_keystate    = SDL_GetKeyState(nullptr);
   m_pImpl->m_isSDLInited = true;
   return true;
 }
@@ -146,7 +146,7 @@ bool MCGame::SDLInitDisplay(int w, int h, int bpp, bool bFullScreen, const QStri
 {
   if (m_pImpl->m_isSDLInited)
   {
-    m_pImpl->m_pScreen = NULL;
+    m_pImpl->m_pScreen = nullptr;
 
     if (bFullScreen)
     {
@@ -366,7 +366,7 @@ int MCGame::GFXSceneHeight() const
 
 void MCGame::SDLSetWindowIcon(SDL_Surface * p)
 {
-  SDL_WM_SetIcon(p, NULL);
+  SDL_WM_SetIcon(p, nullptr);
 }
 
 unsigned char * MCGame::SDLKeystate() const

@@ -71,7 +71,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const QString & typeId) :
   m_index(-1),
   m_flags(RENDERABLE_MASK | PHYSICS_MASK | COLLISIONS_MASK | SHADOW_MASK),
   m_i0(0), m_i1(0), m_j0(0), m_j1(0),
-  m_pShape(NULL)
+  m_pShape(nullptr)
 {}
 
 void MCObjectImpl::setFlag(UINT flag, bool enable)
@@ -213,7 +213,7 @@ MCSurface * MCObject::surface() const
       return pView->surface();
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 UINT MCObject::typeID() const
@@ -509,7 +509,7 @@ MCShapeView * MCObject::view() const
   if (m_pImpl->m_pShape) {
     return m_pImpl->m_pShape->view();
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 

@@ -31,7 +31,7 @@ public:
     //! \param parent The parent widget. If defined, then
     //!        the widget is by default positioned at the
     //!        center of the parent.
-    explicit MWWidget(QSizeF size, MWWidget * parent = NULL);
+    explicit MWWidget(QSizeF size, MWWidget * parent = nullptr);
 
     //! \reimp
     virtual QRectF boundingRect () const;

@@ -29,7 +29,7 @@ class MCLogger
 public:
 
     //! Initialize the logger.
-    //! \param fileName Log to fileName. Can be NULL.
+    //! \param fileName Log to fileName. Can be nullptr.
     //! \param append The existing log will be appended if true.
     //! \return false if file couldn't be opened.
     static bool init(const char * fileName, bool append = false);

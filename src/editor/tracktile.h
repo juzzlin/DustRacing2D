@@ -72,11 +72,11 @@ public:
     void setRouteLine(QGraphicsLineItem * routeLine);
 
     //! Get the route line.
-    //! \returns Valid pointer or NULL if not set.
+    //! \returns Valid pointer or nullptr if not set.
     QGraphicsLineItem * routeLine() const;
 
     //! Get current active tile.
-    //! \returns Valid pointer or NULL if not set.
+    //! \returns Valid pointer or nullptr if not set.
     static TrackTile * activeTile();
 
     //! Set the active tile

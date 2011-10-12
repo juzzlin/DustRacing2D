@@ -39,7 +39,7 @@ public:
   /*! Constructor.
    * \param pSurface Surface to be used. Ownership of pSurface is not changed.
    */
-  explicit MCSurfaceView(MCSurface * pSurface = NULL);
+  explicit MCSurfaceView(MCSurface * pSurface = nullptr);
 
   //! Destructor
   virtual ~MCSurfaceView();
@@ -51,18 +51,18 @@ public:
   MCSurface * surface() const;
 
   //! \reimp
-  virtual void render(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = NULL);
+  virtual void render(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr);
 
   //! \reimp
-  virtual void renderShadow(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = NULL);
+  virtual void renderShadow(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr);
 
   //! \reimp
   virtual void renderScaled(const MCVector3d<MCFloat> & l, UINT angle,
-                            MCFloat wr, MCFloat hr, MCCamera * p = NULL);
+                            MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
   //! \reimp
   virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, UINT angle,
-                                  MCFloat wr, MCFloat hr, MCCamera * p = NULL);
+                                  MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
 private:
   DISABLE_COPY(MCSurfaceView);

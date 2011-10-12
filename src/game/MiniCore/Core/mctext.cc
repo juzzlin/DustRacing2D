@@ -54,7 +54,7 @@ void MCText::print(ostream & os)
 
 void MCText::render(const MCFont * pFont, int x, int y)
 {
-  MCSurface * p = NULL;
+  MCSurface * p = nullptr;
 
   // Get actual height of the font
   UINT h = pFont->height();
@@ -78,8 +78,8 @@ void MCText::render(const MCFont * pFont, int x, int y)
         {
           UINT w = p->width() / pFont->sizeDivider();
 
-          p->renderShadowScaled(NULL, x + 2, y + 2, w / 2, h / 2, 0);
-          p->renderScaled(NULL, x, y, 0, w / 2, h / 2, 0);
+          p->renderShadowScaled(nullptr, x + 2, y + 2, w / 2, h / 2, 0);
+          p->renderScaled(nullptr, x, y, 0, w / 2, h / 2, 0);
 
           x += w;
         }
@@ -94,8 +94,8 @@ void MCText::render(const MCFont * pFont, int x, int y)
       {
         UINT w = p->width() / pFont->sizeDivider();
 
-        p->renderShadowScaled(NULL, x + 2, y + 2, w / 2, h / 2, 0);
-        p->renderScaled(NULL, x, y, 0, w / 2, h / 2, 0);
+        p->renderShadowScaled(nullptr, x + 2, y + 2, w / 2, h / 2, 0);
+        p->renderScaled(nullptr, x, y, 0, w / 2, h / 2, 0);
 
         x += w;
       }      
@@ -118,7 +118,7 @@ UINT MCText::height(const MCFont * pFont) const
 
 UINT MCText::width(const MCFont * pFont) const
 {
-  MCSurface * p = NULL;
+  MCSurface * p = nullptr;
 
   UINT w = 0;
   const UINT i2 = m_text.length();

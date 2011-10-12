@@ -40,7 +40,7 @@ public:
     bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
 
     //! Get tile at given coordinates.
-    //! Returns NULL if no tile set or impossible coordinates.
+    //! Returns nullptr if no tile set or impossible coordinates.
     TrackTile * tile(unsigned int x, unsigned int y) const;
 
 private:

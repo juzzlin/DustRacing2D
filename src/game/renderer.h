@@ -27,7 +27,7 @@ class Renderer : public QGLWidget
 public:
 
     //! Constructor.
-    Renderer(QWidget * parent = NULL);
+    Renderer(QWidget * parent = nullptr);
 
     //! Destructor.
     virtual ~Renderer();

@@ -75,13 +75,13 @@ TrackData * TrackLoader::loadTrack(QString path)
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        return NULL;
+        return nullptr;
     }
 
     if (!doc.setContent(&file))
     {
         file.close();
-        return NULL;
+        return nullptr;
     }
 
     file.close();
@@ -91,7 +91,7 @@ TrackData * TrackLoader::loadTrack(QString path)
     unsigned int cols = root.attribute("cols", "0").toUInt();
     unsigned int rows = root.attribute("rows", "0").toUInt();
 
-    TrackData * newData = NULL;
+    TrackData * newData = nullptr;
     if (cols > 0 && rows > 0)
     {
         newData = new TrackData(name, cols, rows);

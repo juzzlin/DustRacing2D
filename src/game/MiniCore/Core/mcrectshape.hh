@@ -43,7 +43,7 @@ public:
 
   /*! Constructor
    * \param pParent Parent object
-   * \param pView View for the shape. May be NULL.
+   * \param pView View for the shape. May be nullptr.
    */
   MCRectShape(MCObject * pParent, MCShapeView * pView, MCFloat width, MCFloat height);
 

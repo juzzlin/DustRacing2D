@@ -26,7 +26,7 @@
 #include "mcquadtree.hh"
 #include "mccamera.hh"
 
-MCWorld * MCWorldImpl::m_pInstance = NULL;
+MCWorld * MCWorldImpl::m_pInstance = nullptr;
 
 MCWorldImpl::MCWorldImpl() :
     m_pForceRegistry(new MCForceRegistry),
@@ -81,7 +81,7 @@ void MCWorldImpl::detectCollisions()
 MCContact * MCWorldImpl::getDeepestInterpenetration(const QVector<MCContact *> & contacts)
 {
   MCFloat maxDepth = 0;
-  MCContact * bestContact = NULL;
+  MCContact * bestContact = nullptr;
   Q_FOREACH(MCContact * contact, contacts) {
     if (contact->interpenetrationDepth() > maxDepth) {
       maxDepth = contact->interpenetrationDepth();
@@ -93,7 +93,7 @@ MCContact * MCWorldImpl::getDeepestInterpenetration(const QVector<MCContact *> &
 
 void MCWorldImpl::processContacts(MCObject * p)
 {
-  MCContact * deepestContact = NULL;
+  MCContact * deepestContact = nullptr;
   MCObject::ContactHash::const_iterator iter(p->contacts().begin());
   iter = p->contacts().begin();
   for (; iter != p->contacts().end(); iter++) {
@@ -154,7 +154,7 @@ void MCWorldImpl::render(MCCamera * pCamera)
   // Render in the order of the layers
   LayerHash::iterator j;
   LayerHash::iterator end;
-  MCObject * pObj = NULL;
+  MCObject * pObj = nullptr;
   for (UINT i = 0; i < MCWorld::MAX_LAYERS; i++) {
     j   = m_layers[i].begin();
     end = m_layers[i].end();
@@ -172,7 +172,7 @@ void MCWorldImpl::render(MCCamera * pCamera)
 void MCWorldImpl::renderShadows(MCCamera * pCamera)
 {
   const UINT i2 = m_objs.size();
-  MCObject * pObj = NULL;
+  MCObject * pObj = nullptr;
   for (UINT i = 0; i < i2; i++) {
     pObj = m_objs[i];
     if (pObj->renderable() && pObj->hasShadow()) {

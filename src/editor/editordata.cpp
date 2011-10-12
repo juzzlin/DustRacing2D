@@ -22,7 +22,7 @@
 
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
-, m_dragAndDropSourceTile(NULL)
+, m_dragAndDropSourceTile(nullptr)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
 {}
@@ -134,7 +134,7 @@ void EditorData::removeRouteLinesFromScene()
                 QGraphicsLineItem * line = tile->routeLine();
                 m_mainWindow->editorScene()->removeItem(line);
                 delete line;
-                tile->setRouteLine(NULL);
+                tile->setRouteLine(nullptr);
                 tile->update();
             }
         }

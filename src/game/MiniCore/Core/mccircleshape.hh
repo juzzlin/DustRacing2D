@@ -36,7 +36,7 @@ public:
   /*! Constructor
    * \param radius  Radius of the shape
    * \param pParent Parent object
-   * \param pView   View for the shape. May be NULL.
+   * \param pView   View for the shape. May be nullptr.
    */
   MCCircleShape(MCObject * pParent, MCShapeView * pView, MCFloat radius);
 

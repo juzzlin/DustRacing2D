@@ -51,16 +51,16 @@ public:
     //! Return the singleton MainWindow.
     static MainWindow * instance();
 
-    //! Return the current tool bar action, or NULL if none.
+    //! Return the current tool bar action, or nullptr if none.
     QAction * currentToolBarAction() const;
 
     //! Print text to the console.
     void console(QString text);
 
-    //! Get pointer to the current scene. Cannot be NULL.
+    //! Get pointer to the current scene. Cannot be nullptr.
     EditorScene * editorScene() const;
 
-    //! Get pointer to the object loaded. Cannot be NULL.
+    //! Get pointer to the object loaded. Cannot be nullptr.
     ObjectLoader * objectLoader() const;
 
 public slots:

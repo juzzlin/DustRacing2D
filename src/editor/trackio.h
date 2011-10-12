@@ -26,7 +26,7 @@ namespace TrackIO
     bool save(const TrackData * trackData, QString path);
 
     //! Load given track data. Returns the new TrackData object,
-    //! or NULL if failed.
+    //! or nullptr if failed.
     TrackData * open(QString path);
 }
 

@@ -22,7 +22,7 @@
 #include "mcobject.hh"
 
 MCContactImpl::MCContactImpl() :
-    m_pObject(NULL),
+    m_pObject(nullptr),
     m_interpenetrationDepth(0.0f)
 {}
 

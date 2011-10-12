@@ -26,7 +26,7 @@ class EditorScene : public QGraphicsScene
 public:
 
     //! Constructor.
-    explicit EditorScene(QObject * parent = NULL);
+    explicit EditorScene(QObject * parent = nullptr);
 };
 
 #endif // EDITORSCENE_H

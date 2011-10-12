@@ -106,16 +106,16 @@ public:
   void stepTime(MCFloat step);
 
   /*! \brief Render all registered objects.
-   *  \param pCamera The camera window to be used. If NULL, then
+   *  \param pCamera The camera window to be used. If nullptr, then
    *         no any translations or clipping done.
    */
-  virtual void render(MCCamera * pCamera = NULL);
+  virtual void render(MCCamera * pCamera = nullptr);
 
   /*! \brief Render fake shadows of all registered objects.
-   *  \param pCamera The camera window to be used. If NULL, then
+   *  \param pCamera The camera window to be used. If nullptr, then
    *         no any translations or clipping done.
    */
-  virtual void renderShadows(MCCamera * pCamera = NULL);
+  virtual void renderShadows(MCCamera * pCamera = nullptr);
 
   /*! \brief Return pointer to the object quadtree.
    * \return Pointer to the quadtree.

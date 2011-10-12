@@ -26,7 +26,7 @@
 #include <QSettings>
 #include <QTimer>
 
-MainWindow * MainWindow::m_instance = NULL;
+MainWindow * MainWindow::m_instance = nullptr;
 
 namespace
 {

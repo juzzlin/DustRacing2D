@@ -124,7 +124,7 @@ int MCSound::channel() const
 
 int MCSound::getScaledVolume(int sourceX, int sourceY)
 {
-  MCObject * p = NULL;
+  MCObject * p = nullptr;
   int refX, refY, d, dX, dY, result;
   result = 0;
 

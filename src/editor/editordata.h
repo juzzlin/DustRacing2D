@@ -79,7 +79,7 @@ public:
     void setMode(EditorMode newMode);
 
     //! Returns the tile being drag'n'dropped
-    //! or NULL.
+    //! or nullptr.
     TrackTile * dragAndDropSourceTile() const;
 
     //! Set tile that is being drag'n'dropped.

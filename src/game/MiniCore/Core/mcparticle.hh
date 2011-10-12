@@ -78,10 +78,10 @@ public:
   virtual void stepTime();
 
   //! \reimp
-  virtual void render(MCCamera * pCamera = NULL);
+  virtual void render(MCCamera * pCamera = nullptr);
 
   //! \reimp
-  virtual void renderShadow(MCCamera * pCamera = NULL);
+  virtual void renderShadow(MCCamera * pCamera = nullptr);
 
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;

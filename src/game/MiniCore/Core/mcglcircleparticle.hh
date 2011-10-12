@@ -42,10 +42,10 @@ public:
   void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0f);
 
   //! \reimp
-  void render(MCCamera * pCamera = NULL);
+  void render(MCCamera * pCamera = nullptr);
 
   //! \reimp
-  void renderShadow(MCCamera * pCamera = NULL);
+  void renderShadow(MCCamera * pCamera = nullptr);
 
 private:
 

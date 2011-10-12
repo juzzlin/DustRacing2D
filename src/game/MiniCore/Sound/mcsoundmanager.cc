@@ -96,7 +96,7 @@ MCSound * MCSoundManager::newSound(const QString & strId) throw (MCException)
     // No: throw an exception
     throw MCException("MCSoundManager::getSound(): Cannot find sound object for handle '" +
                       strId + "'");
-    return NULL;
+    return nullptr;
   }
   else
   {
@@ -119,7 +119,7 @@ MCMusic * MCSoundManager::newMusic(const QString & strId) throw (MCException)
     // No: throw an exception
     throw MCException("MCSoundManager::getMusic(): Cannot find music object for handle '" +
                       strId + "'");;
-    return NULL;
+    return nullptr;
   }
   else
   {

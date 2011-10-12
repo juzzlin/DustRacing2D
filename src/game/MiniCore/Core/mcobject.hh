@@ -82,7 +82,7 @@ public:
 
   /*! \brief Convenience method to get the surface of the view.
    * This works only if MCSurfaceView is being used in the shape.
-   * \param pSurface Pointer to the surface (or NULL if not any).
+   * \param pSurface Pointer to the surface (or nullptr if not any).
    */
   MCSurface * surface() const;
 
@@ -115,12 +115,12 @@ public:
   /*! Render the object
    * \param p Camera window to be used
    */
-  virtual void render(MCCamera * p = NULL);
+  virtual void render(MCCamera * p = nullptr);
 
   /*! Render the object shadow
    * \param p Camera window to be used
    */
-  virtual void renderShadow(MCCamera * p = NULL);
+  virtual void renderShadow(MCCamera * p = nullptr);
 
   /*! \brief Add object to the World.
    * Convenience method to add object to the MCWorld instance.

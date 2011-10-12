@@ -39,7 +39,7 @@ public:
     //! Return length of the current route.
     unsigned int length() const;
 
-    //! Return tile for the given index or NULL if
+    //! Return tile for the given index or nullptr if
     //! out of range.
     TrackTile * get(unsigned int index) const;
 

@@ -26,7 +26,7 @@ class MWSelector : public MWWidget
 public:
 
     //! Constructor
-    MWSelector(QSizeF size, MWWidget * parent = NULL);
+    MWSelector(QSizeF size, MWWidget * parent = nullptr);
 
 protected:
 

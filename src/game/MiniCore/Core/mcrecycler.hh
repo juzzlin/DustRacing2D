@@ -77,7 +77,7 @@ MCRecycler<T>::MCRecycler()
 template <typename T>
 T * MCRecycler<T>::newObject()
 {
-  T * p = NULL;
+  T * p = nullptr;
   if (!m_pFreeObjs.isEmpty()) {
     p = m_pFreeObjs.pop();
   } else {

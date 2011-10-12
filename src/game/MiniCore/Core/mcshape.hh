@@ -46,7 +46,7 @@ public:
    * \param pParent Parent / owner object of the shape.
    * \param pView View for the shape. MCShape takes the ownership.
    */
-  explicit MCShape(MCObject * pParent, MCShapeView * pView = NULL);
+  explicit MCShape(MCObject * pParent, MCShapeView * pView = nullptr);
 
   //! Destructor
   virtual ~MCShape();
@@ -68,26 +68,26 @@ public:
   /*! Render
    * \param p Camera window to be used
    */
-  virtual void render(MCCamera * p = NULL);
+  virtual void render(MCCamera * p = nullptr);
 
   /*! Render shadow
    * \param p Camera window to be used
    */
-  virtual void renderShadow(MCCamera * p = NULL);
+  virtual void renderShadow(MCCamera * p = nullptr);
 
   /*! Render scaled
    * \param p Camera window to be used
    * \param wr Half of the wanted width.
    * \param hr Half of the wanted height.
    */
-  virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p = NULL);
+  virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
   /*! Render shadow scaled
    * \param p Camera window to be used
    * \param wr Half of the wanted width.
    * \param hr Half of the wanted height.
    */
-  virtual void renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p = NULL);
+  virtual void renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
   /*! Translate
    * \param p The new location

@@ -26,9 +26,9 @@
 EditorView::EditorView(EditorData * editorData, QWidget *parent)
 : QGraphicsView(parent)
 , m_editorData(editorData)
-, m_setAsFlat(NULL)
-, m_setAsHill(NULL)
-, m_setAsGorge(NULL)
+, m_setAsFlat(nullptr)
+, m_setAsHill(nullptr)
+, m_setAsGorge(nullptr)
 {
     createContextMenu();
 }
@@ -218,7 +218,7 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
 
             update();
 
-            m_editorData->setDragAndDropSourceTile(NULL);
+            m_editorData->setDragAndDropSourceTile(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();

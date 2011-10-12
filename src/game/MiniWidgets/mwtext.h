@@ -25,7 +25,7 @@ class MWText : public MWWidget
 public:
 
     //! Constructor.
-    explicit MWText(const QString & text, QSizeF size, MWWidget * parent = NULL);
+    explicit MWText(const QString & text, QSizeF size, MWWidget * parent = nullptr);
 
     //! Return the text
     QString text() const;

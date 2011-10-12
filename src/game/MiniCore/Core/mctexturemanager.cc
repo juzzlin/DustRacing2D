@@ -157,7 +157,7 @@ void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, cons
                  GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 
     // Create a new MCSurface object
-    MCSurface * pTexture = NULL;
+    MCSurface * pTexture = nullptr;
     if (data.centerSet)
     {
         pTexture = new MCSurface(textureHandle, origW, origH, data.center, data.colorKeySet);
@@ -178,7 +178,7 @@ MCSurface * MCTextureManager::surface(const QString & id) const throw (MCExcepti
     {
         // No:
         throw MCException("Cannot find texture object for handle '" + id + "'");
-        return NULL;
+        return nullptr;
     }
     else
     {

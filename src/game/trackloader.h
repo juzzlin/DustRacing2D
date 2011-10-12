@@ -51,7 +51,7 @@ public:
 private:
 
     //! Load the given track.
-    //! \return Valid data pointer or NULL if fails.
+    //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);
 
     MCTextureManager * m_textureManager;

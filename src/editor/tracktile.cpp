@@ -26,7 +26,7 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-TrackTile * TrackTile::m_activeTile = NULL;
+TrackTile * TrackTile::m_activeTile = nullptr;
 
 TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
                      const QString & type)
@@ -34,7 +34,7 @@ TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocat
 , m_size(QSizeF(TILE_W, TILE_H))
 , m_active(false)
 , m_animator(new TileAnimator(this))
-, m_routeLine(NULL)
+, m_routeLine(nullptr)
 {
     setPos(location);
 }
@@ -198,7 +198,7 @@ void TrackTile::setActiveTile(TrackTile * tile)
         if (activeTile())
             activeTile()->setActive(false);
 
-        TrackTile::m_activeTile = NULL;
+        TrackTile::m_activeTile = nullptr;
     }
 }
 

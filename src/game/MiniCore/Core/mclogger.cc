@@ -23,11 +23,11 @@
 
 bool   MCLogger::m_echoMode = false;
 bool   MCLogger::m_dateTime = true;
-FILE * MCLogger::m_stream   = NULL;
+FILE * MCLogger::m_stream   = nullptr;
 
 bool MCLogger::init(const char * fileName, bool append)
 {
-    MCLogger::m_stream = NULL;
+    MCLogger::m_stream = nullptr;
     if (fileName)
     {
         if (append)

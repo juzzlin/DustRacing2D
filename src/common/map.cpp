@@ -31,7 +31,7 @@ Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows) :
         QVector<TrackTile *> row;
         for (unsigned int i = 0; i < m_cols; i++)
         {
-            row << NULL;
+            row << nullptr;
         }
 
         m_map << row;
@@ -72,7 +72,7 @@ bool Map::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
 TrackTile * Map::tile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
-        return NULL;
+        return nullptr;
 
     return m_map[y][x];
 }

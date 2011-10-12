@@ -49,7 +49,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-MainWindow * MainWindow::m_instance = NULL;
+MainWindow * MainWindow::m_instance = nullptr;
 
 namespace
 {
@@ -66,11 +66,11 @@ MainWindow::MainWindow(QString trackFile)
 , m_editorView(new EditorView(m_editorData, this))
 , m_editorScene(new EditorScene(this))
 , m_console(new QTextEdit(this))
-, m_saveAction(NULL)
-, m_saveAsAction(NULL)
-, m_currentToolBarAction(NULL)
-, m_clearAllAction(NULL)
-, m_setRouteAction(NULL)
+, m_saveAction(nullptr)
+, m_saveAsAction(nullptr)
+, m_currentToolBarAction(nullptr)
+, m_clearAllAction(nullptr)
+, m_setRouteAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
 , m_objectLoader(new ObjectLoader)
@@ -375,7 +375,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
     {
         QApplication::restoreOverrideCursor();
         m_editorData->setMode(EditorData::EM_NONE);
-        m_currentToolBarAction = NULL;
+        m_currentToolBarAction = nullptr;
     }
 }
 
@@ -550,7 +550,7 @@ void MainWindow::removeTilesFromScene()
 {
     if (m_editorData->trackData())
     {
-        TrackTile::setActiveTile(NULL);
+        TrackTile::setActiveTile(nullptr);
 
         const unsigned int cols = m_editorData->trackData()->map().cols();
         const unsigned int rows = m_editorData->trackData()->map().rows();

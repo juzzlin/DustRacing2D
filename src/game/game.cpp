@@ -21,8 +21,8 @@
 #include "MiniCore/Core/MCTextureManager"
 
 Game::Game()
-: m_scene(NULL)
-, m_renderer(NULL)
+: m_scene(nullptr)
+, m_renderer(nullptr)
 , m_textureManager(new MCTextureManager())
 , m_trackLoader(new TrackLoader(m_textureManager))
 , m_timer()

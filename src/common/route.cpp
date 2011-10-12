@@ -99,7 +99,7 @@ TrackTile * Route::get(unsigned int index) const
     if (index < length())
         return m_route[index];
 
-    return NULL;
+    return nullptr;
 }
 
 struct mySortFunc
