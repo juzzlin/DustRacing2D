@@ -23,6 +23,7 @@ class QAction;
 class QMouseEvent;
 class QPaintEvent;
 class EditorData;
+class TrackTile;
 
 class EditorView : public QGraphicsView
 {
@@ -54,6 +55,8 @@ private slots:
 private:
 
     void createContextMenu();
+    void handleLeftButtonClickOnTile(TrackTile * tile);
+    void handleRightButtonClickOnTile(TrackTile * tile);
 
     EditorData * m_editorData;
     QMenu        m_menu;

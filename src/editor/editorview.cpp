@@ -96,81 +96,91 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             // Handle right button click
             if (event->button() == Qt::RightButton)
             {
-                // Enable all profiles by default
-                m_setAsFlat->setEnabled(true);
-                m_setAsHill->setEnabled(true);
-                m_setAsGorge->setEnabled(true);
-
-                // Hide settings that are already applied
-                switch (tile->profile())
-                {
-                case TrackTileBase::TP_FLAT:
-                    m_setAsFlat->setEnabled(false);
-                    break;
-                case TrackTileBase::TP_HILL:
-                    m_setAsHill->setEnabled(false);
-                    break;
-                case TrackTileBase::TP_GORGE:
-                    m_setAsGorge->setEnabled(false);
-                    break;
-                default:
-                    break;
-                }
-
-                // Show the context menu
-                QPoint globalPos = mapToGlobal(m_clickedPos);
-                m_menu.exec(globalPos);
+                handleRightButtonClickOnTile(tile);
             }
             // Handle left button click
             else if (event->button() == Qt::LeftButton)
             {
-                // User is defining the route
-                if (m_editorData->mode() == EditorData::EM_SETROUTE)
-                {
-                    // Push tile to the route
-                    tile->setRouteIndex(m_editorData->trackData()->route().push(tile));
-
-                    // Check if we might have a loop => end
-                    if (!tile->routeIndex() && m_editorData->trackData()->route().length() > 1)
-                    {
-                        m_editorData->setMode(EditorData::EM_NONE);
-                        MainWindow::instance()->endSetRoute();
-
-                        // Update route lines and close the loop
-                        m_editorData->addRouteLinesToScene(true);
-                    }
-                    else
-                    {
-                        // Update route lines but don't close the loop
-                        m_editorData->addRouteLinesToScene(false);
-                    }
-                }
-                // User is setting the tile type
-                else if (m_editorData->mode() == EditorData::EM_SETTILETYPE)
-                {
-                    if (QAction * action = MainWindow::instance()->currentToolBarAction())
-                    {
-                        tile->setTileType(action->data().toString());
-                        tile->setPixmap(action->icon().pixmap(
-                                            TrackTile::TILE_W,
-                                            TrackTile::TILE_H));
-                    }
-                }
-                // User is initiating a drag'n'drop
-                else if (m_editorData->mode() == EditorData::EM_NONE)
-                {
-                    tile->setZValue(tile->zValue() + 1);
-                    m_editorData->setDragAndDropSourceTile(tile);
-                    m_editorData->setDragAndDropSourcePos(tile->pos());
-
-                    // Change cursor to the closed hand cursor.
-                    QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
-                }
+                handleLeftButtonClickOnTile(tile);
             }
 
             QWidget::mousePressEvent(event);
         }
     }
+}
+
+void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
+{
+    // User is defining the route
+    if (m_editorData->mode() == EditorData::EM_SETROUTE)
+    {
+        // Push tile to the route
+        tile->setRouteIndex(m_editorData->trackData()->route().push(tile));
+
+        // Check if we might have a loop => end
+        if (!tile->routeIndex() && m_editorData->trackData()->route().length() > 1)
+        {
+            m_editorData->setMode(EditorData::EM_NONE);
+            MainWindow::instance()->endSetRoute();
+
+            // Update route lines and close the loop
+            m_editorData->addRouteLinesToScene(true);
+        }
+        else
+        {
+            // Update route lines but don't close the loop
+            m_editorData->addRouteLinesToScene(false);
+        }
+    }
+    // User is setting the tile type
+    else if (m_editorData->mode() == EditorData::EM_SETTILETYPE)
+    {
+        if (QAction * action = MainWindow::instance()->currentToolBarAction())
+        {
+            tile->setTileType(action->data().toString());
+            tile->setPixmap(action->icon().pixmap(
+                                TrackTile::TILE_W,
+                                TrackTile::TILE_H));
+        }
+    }
+    // User is initiating a drag'n'drop
+    else if (m_editorData->mode() == EditorData::EM_NONE)
+    {
+        tile->setZValue(tile->zValue() + 1);
+        m_editorData->setDragAndDropSourceTile(tile);
+        m_editorData->setDragAndDropSourcePos(tile->pos());
+
+        // Change cursor to the closed hand cursor.
+        QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
+    }
+}
+
+void EditorView::handleRightButtonClickOnTile(TrackTile * tile)
+{
+    // Enable all profiles by default
+    m_setAsFlat->setEnabled(true);
+    m_setAsHill->setEnabled(true);
+    m_setAsGorge->setEnabled(true);
+
+    // Hide settings that are already applied
+    switch (tile->profile())
+    {
+    case TrackTileBase::TP_FLAT:
+        m_setAsFlat->setEnabled(false);
+        break;
+    case TrackTileBase::TP_HILL:
+        m_setAsHill->setEnabled(false);
+        break;
+    case TrackTileBase::TP_GORGE:
+        m_setAsGorge->setEnabled(false);
+        break;
+    default:
+        break;
+    }
+
+    // Show the context menu
+    QPoint globalPos = mapToGlobal(m_clickedPos);
+    m_menu.exec(globalPos);
 }
 
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
