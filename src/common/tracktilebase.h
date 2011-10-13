@@ -28,7 +28,8 @@ class TrackTileBase
 public:
 
     //! Direction to the next tile in the route.
-    enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN};
+    enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN,
+                         RD_UP_LEFT, RD_UP_RIGHT, RD_DOWN_LEFT, RD_DOWN_RIGHT};
 
     //! Possible profiles of a tile.
     enum TileProfile {TP_FLAT = 0, TP_HILL, TP_GORGE};

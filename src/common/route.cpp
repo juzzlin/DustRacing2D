@@ -44,9 +44,13 @@ int Route::push(TrackTile * tile)
         {
             TrackTile * prev = m_route.back();
 
-            if (prev->matrixLocation().x() == tile->matrixLocation().x())
+            int deltaX = tile->matrixLocation().x() - prev->matrixLocation().x();
+            int deltaY = tile->matrixLocation().y() - prev->matrixLocation().y();
+
+            // Equal X-coordinates?
+            if (deltaX == 0)
             {
-                if (prev->matrixLocation().y() < tile->matrixLocation().y())
+                if (deltaY > 0)
                 {
                     prev->setRouteDirection(TrackTile::RD_DOWN);
                 }
@@ -57,9 +61,10 @@ int Route::push(TrackTile * tile)
 
                 okToAdd = true;
             }
-            else if (prev->matrixLocation().y() == tile->matrixLocation().y())
+            // Equal Y-coordinates?
+            else if (deltaY == 0)
             {
-                if (prev->matrixLocation().x() < tile->matrixLocation().x())
+                if (deltaX > 0)
                 {
                     prev->setRouteDirection(TrackTile::RD_RIGHT);
                 }
@@ -69,6 +74,45 @@ int Route::push(TrackTile * tile)
                 }
 
                 okToAdd = true;
+            }
+            // Segment at a 45 degree angle?
+            // Possible only if not the starting segment which
+            // can be only at a straight angle.
+            else if (m_route.size() > 1)
+            {
+                if (std::abs(deltaX) == std::abs(deltaY))
+                {
+                    if (deltaX > 0)
+                    {
+                        if (deltaY > 0)
+                        {
+                            // TODO: Is this needed?
+                            prev->setRouteDirection(TrackTile::RD_DOWN_RIGHT);
+                        }
+                        else
+                        {
+                            // TODO: Is this needed?
+                            prev->setRouteDirection(TrackTile::RD_UP_RIGHT);
+                        }
+
+                        okToAdd = true;
+                    }
+                    else
+                    {
+                        if (deltaY > 0)
+                        {
+                            // TODO: Is this needed?
+                            prev->setRouteDirection(TrackTile::RD_DOWN_LEFT);
+                        }
+                        else
+                        {
+                            // TODO: Is this needed?
+                            prev->setRouteDirection(TrackTile::RD_UP_LEFT);
+                        }
+
+                        okToAdd = true;
+                    }
+                }
             }
         }
         else
