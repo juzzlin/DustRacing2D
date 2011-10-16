@@ -13,12 +13,38 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "track.h"
+#include "../common/map.h"
 #include "../common/trackdata.h"
+#include "track.h"
+#include "tracktile.h"
+#include "MiniCore/Core/MCSurface"
 
 Track::Track(TrackData * trackData)
 : m_trackData(trackData)
 {
+}
+
+void Track::render(MCCamera * camera)
+{
+    Map & map = m_trackData->map();
+    const unsigned int cols = map.cols();
+    const unsigned int rows = map.rows();
+
+    for (unsigned int j = 0; j < rows; j++)
+    {
+        for (unsigned int i = 0; i < rows; i++)
+        {
+            TrackTile * tile = map.getTile(i, j);
+            if (tile)
+            {
+                MCSurface * surface = tile->surface();
+                if (surface)
+                {
+                    // TODO
+                }
+            }
+        }
+    }
 }
 
 Track::~Track()
