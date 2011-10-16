@@ -26,6 +26,7 @@
 #include "../common/trackdata.h"
 
 #include "MiniCore/Core/MCLogger"
+#include "MiniCore/Core/MCTextureManager"
 
 TrackLoader::TrackLoader(MCTextureManager * textureManager)
 : m_textureManager(textureManager)
@@ -114,14 +115,19 @@ TrackData * TrackLoader::loadTrack(QString path)
                     int          o  = tag.attribute("o", "0").toInt();
                     int      index  = tag.attribute("index", "-1").toInt();
 
-                    if (TrackTile * tile = newData->map().tile(i, j))
+                    if (TrackTile * tile = newData->map().getTile(i, j))
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);
                         tile->setRouteIndex(index);
 
-                      if (index >= 0)
-                           routeVector << tile;
+                        // Associate with a surface object corresponging
+                        // to the tile type.
+                        // surface() throws if fails. Handled of higher level.
+                        tile->setSurface(m_textureManager->surface(id));
+
+                        if (index >= 0)
+                            routeVector << tile;
                     }
                 }
             }

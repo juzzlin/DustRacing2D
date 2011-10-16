@@ -17,6 +17,7 @@
 #define TRACKTILE_H
 
 #include "../common/tracktilebase.h"
+#include "MiniCore/Core/MCSurface"
 
 //! The track tile used in the game.
 class TrackTile : public TrackTileBase
@@ -41,12 +42,22 @@ public:
     //! a track.
     void setRotation(int rotation);
 
+    //! Set the renderable surface object corresponding
+    //! to the track tile. TrackTile won't take the
+    //! ownership, because many TrackTile's might use
+    //! the same surface object.
+    void setSurface(MCSurface * surface);
+
+    //! Get the corresponding surface.
+    MCSurface * surface() const;
+
     //! Get the orientation in XY-plane in degrees.
     int rotation() const;
 
 private:
 
     int m_rotation;
+    MCSurface * m_surface;
 };
 
 #endif // TRACKTILE_H

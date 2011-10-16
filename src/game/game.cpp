@@ -55,6 +55,7 @@ bool Game::init()
 {
     try
     {
+        // Load texture data
         QString textureConfigPath = QString(Config::Common::DATA_PATH) +
                 QDir::separator() + "textures.map";
 
@@ -63,20 +64,21 @@ bool Game::init()
 
         m_textureManager->load(textureConfigPath,
                                Config::Common::DATA_PATH);
+
+        // Load track data
+        if (int numLoaded = m_trackLoader->loadTracks())
+        {
+            MCLogger::logInfo("%d track(s) loaded.", numLoaded);
+        }
+        else
+        {
+            MCLogger::logError("No valid tracks found.");
+            return false;
+        }
     }
     catch (MCException & e)
     {
         MCLogger::logFatal("%s.", e.what());
-        return false;
-    }
-
-    if (int numLoaded = m_trackLoader->loadTracks())
-    {
-        MCLogger::logInfo("%d track(s) loaded.", numLoaded);
-    }
-    else
-    {
-        MCLogger::logError("No valid tracks found.");
         return false;
     }
 

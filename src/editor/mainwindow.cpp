@@ -534,11 +534,11 @@ void MainWindow::addTilesToScene()
 
     for (unsigned int i = 0; i < cols; i++)
         for (unsigned int j = 0; j < rows; j++)
-            if (TrackTile * tile = m_editorData->trackData()->map().tile(i, j))
+            if (TrackTile * tile = m_editorData->trackData()->map().getTile(i, j))
                 m_editorScene->addItem(tile);
 
-    if (m_editorData->trackData()->map().tile(0, 0))
-        m_editorData->trackData()->map().tile(0, 0)->setActive(true);
+    if (m_editorData->trackData()->map().getTile(0, 0))
+        m_editorData->trackData()->map().getTile(0, 0)->setActive(true);
 }
 
 void MainWindow::addRouteLinesToScene(bool closeLoop)
@@ -559,7 +559,7 @@ void MainWindow::removeTilesFromScene()
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * tile = m_editorData->trackData()->map().tile(i, j))
+                if (TrackTile * tile = m_editorData->trackData()->map().getTile(i, j))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
@@ -575,7 +575,7 @@ void MainWindow::clear()
 
     for (unsigned int i = 0; i < cols; i++)
         for (unsigned int j = 0; j < rows; j++)
-            if (TrackTile * p = m_editorData->trackData()->map().tile(i, j))
+            if (TrackTile * p = m_editorData->trackData()->map().getTile(i, j))
                 p->setTileType("clear");
 
     m_console->append(QString(tr("Tiles cleared.")));

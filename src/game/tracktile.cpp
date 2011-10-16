@@ -20,6 +20,7 @@ TrackTile::TrackTile(TrackData * trackData,
                      const QString & type)
 : TrackTileBase(trackData, location, matrixLocation, type)
 , m_rotation(0)
+, m_surface(nullptr)
 {
 }
 
@@ -31,6 +32,16 @@ void TrackTile::setRotation(int rotation)
 int TrackTile::rotation() const
 {
     return m_rotation;
+}
+
+void TrackTile::setSurface(MCSurface * surface)
+{
+    m_surface = surface;
+}
+
+MCSurface * TrackTile::surface() const
+{
+    return m_surface;
 }
 
 TrackTile::~TrackTile()

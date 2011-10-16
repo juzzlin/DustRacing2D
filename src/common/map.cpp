@@ -69,7 +69,7 @@ bool Map::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
     return true;
 }
 
-TrackTile * Map::tile(unsigned int x, unsigned int y) const
+TrackTile * Map::getTile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
         return nullptr;

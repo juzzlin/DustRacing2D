@@ -39,7 +39,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     // Add information about tiles
     for (unsigned int i = 0; i < trackData->map().cols(); i++)
         for (unsigned int j = 0; j < trackData->map().rows(); j++)
-            if (TrackTile * tile = trackData->map().tile(i, j))
+            if (TrackTile * tile = trackData->map().getTile(i, j))
             {
                 QDomElement tileTag = doc.createElement("tile");
                 tileTag.setAttribute("type", tile->tileType());
@@ -115,7 +115,7 @@ TrackData * TrackIO::open(QString path)
                     int      index  = tag.attribute("index", "-1").toInt();
                     int profileInt  = tag.attribute("profile", "0").toInt();
 
-                    if (TrackTile * tile = newData->map().tile(i, j))
+                    if (TrackTile * tile = newData->map().getTile(i, j))
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);

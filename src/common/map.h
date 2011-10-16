@@ -41,7 +41,7 @@ public:
 
     //! Get tile at given coordinates.
     //! Returns nullptr if no tile set or impossible coordinates.
-    TrackTile * tile(unsigned int x, unsigned int y) const;
+    TrackTile * getTile(unsigned int x, unsigned int y) const;
 
 private:
 
