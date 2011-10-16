@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<textures version="1.0">
+    <default_path value="./images/"/>
+    <texture handle="corner" file="corner.png"/>
+    <texture handle="grass" file="grass.png"/>
+    <texture handle="straight" file="straight.png"/>
+</textures>

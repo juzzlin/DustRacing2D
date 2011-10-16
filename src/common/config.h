@@ -36,4 +36,10 @@ public:
         //! Path to the "clear" tile.
         static const char * CLEAR_PATH;
     };
+
+    //! Game-specific config data.
+    class Game
+    {
+    public:
+    };
 };

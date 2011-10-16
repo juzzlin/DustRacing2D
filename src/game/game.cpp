@@ -53,6 +53,23 @@ Renderer * Game::renderer() const
 
 bool Game::init()
 {
+    try
+    {
+        QString textureConfigPath = QString(Config::Common::DATA_PATH) +
+                QDir::separator() + "textures.map";
+
+        MCLogger::logInfo("Loading texture config from %s..",
+                          textureConfigPath.toAscii().data());
+
+        m_textureManager->load(textureConfigPath,
+                               Config::Common::DATA_PATH);
+    }
+    catch (MCException & e)
+    {
+        MCLogger::logFatal("%s.", e.what());
+        return false;
+    }
+
     if (int numLoaded = m_trackLoader->loadTracks())
     {
         MCLogger::logInfo("%d track(s) loaded.", numLoaded);
@@ -68,7 +85,6 @@ bool Game::init()
 
 void Game::start()
 {
-
     m_timer.setInterval(1000 / m_targetFps);
     m_timer.start();
 }

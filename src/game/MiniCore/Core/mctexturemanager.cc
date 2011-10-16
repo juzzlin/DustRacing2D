@@ -26,8 +26,8 @@
 #include <QGLWidget>
 #include <GL/gl.h>
 
-MCTextureManager::MCTextureManager() :
-        m_mapTextures()
+MCTextureManager::MCTextureManager()
+: m_mapTextures()
 {}
 
 void MCTextureManager::load(const QString & fileName, const QString & baseDataPath) throw (MCException)
@@ -74,7 +74,7 @@ void MCTextureManager::load(const QString & fileName, const QString & baseDataPa
     else
     {
         // Throw an exception
-        throw MCException("Level::loadTextures(): parsing '" + fileName + "' failed!");
+        throw MCException("Parsing '" + fileName + "' failed!");
     }
 }
 
