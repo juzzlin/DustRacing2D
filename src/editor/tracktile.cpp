@@ -17,7 +17,7 @@
 #include "tiletypedialog.h"
 #include "tileanimator.h"
 #include "mainwindow.h"
-#include "config.h"
+#include "../common/config.h"
 #include "../common/trackdata.h"
 
 #include <QAction>
@@ -89,7 +89,7 @@ void TrackTile::paint(QPainter * painter,
     {
         painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
                             m_size.width(), m_size.height(),
-                            QPixmap(Config::CLEAR_PATH));
+                            QPixmap(Config::Editor::CLEAR_PATH));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);

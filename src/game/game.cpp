@@ -13,12 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include "../common/config.h"
 #include "game.h"
 #include "scene.h"
 #include "renderer.h"
 #include "trackloader.h"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCTextureManager"
+#include <QDir>
 
 Game::Game()
 : m_scene(nullptr)
@@ -30,7 +32,8 @@ Game::Game()
 {
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 
-    m_trackLoader->addTrackSearchPath("data/levels");
+    m_trackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
+                                      QDir::separator() + "levels");
 }
 
 void Game::setTargetFps(unsigned int fps)

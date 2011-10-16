@@ -13,8 +13,27 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "config.h"
+//! Config data for editor and for the game.
+class Config
+{
+public:
 
-const char * Config::DATA_PATH   = "../../data";
-const char * Config::SELECT_PATH = ":/cursor.png";
-const char * Config::CLEAR_PATH  = ":/clear.png";
+    //! Common config data.
+    class Common
+    {
+    public:
+        //! The base data path.
+        static const char * DATA_PATH;
+    };
+
+    //! Editor-specific config data.
+    class Editor
+    {
+    public:
+        //! Path to the "select" icon.
+        static const char * SELECT_PATH;
+
+        //! Path to the "clear" tile.
+        static const char * CLEAR_PATH;
+    };
+};

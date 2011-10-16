@@ -15,7 +15,7 @@
 
 #include "mainwindow.h"
 
-#include "config.h"
+#include "../common/config.h"
 #include "objectdata.h"
 #include "objectloader.h"
 #include "trackio.h"
@@ -90,7 +90,7 @@ MainWindow::MainWindow(QString trackFile)
     console("CWD: " + QDir::currentPath());
 
     // Load object models that can be used to build tracks.
-    const QString objectFilePath = QString(Config::DATA_PATH) +
+    const QString objectFilePath = QString(Config::Common::DATA_PATH) +
               QDir::separator() + "objects.conf";
     loadObjectModels(objectFilePath);
 
@@ -337,12 +337,14 @@ void MainWindow::populateMenuBar()
 void MainWindow::populateToolBar()
 {
     // Add "select"-action
-    QAction * p = new QAction(QIcon(QPixmap(Config::SELECT_PATH)), tr("Select"), this);
+    QAction * p = new QAction(QIcon(QPixmap(Config::Editor::SELECT_PATH)),
+                              tr("Select"), this);
     p->setData(QVariant(QString("select")));
     m_toolBar->addAction(p);
 
     // Add "clear"-action
-    p = new QAction(QIcon(QPixmap(Config::CLEAR_PATH)), tr("Clear"), this);
+    p = new QAction(QIcon(QPixmap(Config::Editor::CLEAR_PATH)),
+                    tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
     m_toolBar->addAction(p);
 

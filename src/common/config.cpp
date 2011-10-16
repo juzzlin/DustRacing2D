@@ -13,17 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-//! Common config data.
-class Config
-{
-public:
+#include "config.h"
 
-    //! The base data path.
-    static const char * DATA_PATH;
-
-    //! Path to the "select" icon.
-    static const char * SELECT_PATH;
-
-    //! Path to the "clear" tile.
-    static const char * CLEAR_PATH;
-};
+const char * Config::Common::DATA_PATH   = "../../data";
+const char * Config::Editor::SELECT_PATH = ":/cursor.png";
+const char * Config::Editor::CLEAR_PATH  = ":/clear.png";

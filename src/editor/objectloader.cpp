@@ -18,7 +18,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "config.h"
+#include "../common/config.h"
 #include "mainwindow.h"
 #include "objectloader.h"
 #include "version.h"
@@ -69,7 +69,7 @@ bool ObjectLoader::load(QString path)
                 // The corresponding image is loaded
                 // from Config::DATA_PATH/model.imagePath.
                 // Check that it's available and load it.
-                imagePath = QString(Config::DATA_PATH) +
+                imagePath = QString(Config::Common::DATA_PATH) +
                             QDir::separator() + imagePath;
 
                 if (QFile::exists(imagePath))

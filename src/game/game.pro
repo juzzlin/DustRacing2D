@@ -20,6 +20,7 @@ SOURCES += main.cpp \
     track.cpp \
     trackloader.cpp \
     tracktile.cpp \
+    ../common/config.cpp \
     ../common/map.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
@@ -71,6 +72,7 @@ HEADERS += car.h \
     track.h \
     trackloader.h \
     tracktile.h \
+    ../common/config.h \
     ../common/map.h \
     ../common/route.h \
     ../common/trackdata.h \
