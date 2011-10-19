@@ -19,6 +19,9 @@
 #include <QGLWidget>
 #include <QTimer>
 
+class MCCamera;
+class Scene;
+
 //! The game renderer widget.
 class Renderer : public QGLWidget
 {
@@ -32,7 +35,10 @@ public:
     //! Destructor.
     virtual ~Renderer();
 
-    void updateFrame();
+    void updateFrame(MCCamera * m_pCamera);
+
+    //! Set game scene to be rendered.
+    void setScene(Scene * scene);
 
 protected:
 
@@ -46,6 +52,9 @@ protected:
     virtual void paintGL();
 
 private:
+
+    Scene    * m_pScene;
+    MCCamera * m_pCamera;
 };
 
 #endif // RENDERER_H

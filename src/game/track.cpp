@@ -17,37 +17,112 @@
 #include "../common/trackdata.h"
 #include "track.h"
 #include "tracktile.h"
+#include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
+#include <QImage>
+#include <QGLWidget>
 
-Track::Track(TrackData * trackData)
-: m_trackData(trackData)
+Track::Track(TrackData * pTrackData)
+: m_pTrackData(pTrackData)
+, m_rows(m_pTrackData->map().rows())
+, m_cols(m_pTrackData->map().cols())
+, m_width(m_cols * TrackTile::TILE_W)
+, m_height(m_rows * TrackTile::TILE_H)
 {
 }
 
-void Track::render(MCCamera * camera)
-{
-    Map & map = m_trackData->map();
-    const unsigned int cols = map.cols();
-    const unsigned int rows = map.rows();
+void Track::calculateVisibleIndices(const MCBBox<int> & r,
+                                    UINT & i0, UINT & i2, UINT & j0, UINT & j2)
 
-    for (unsigned int j = 0; j < rows; j++)
+{
+  // Calculate which tiles are visible in the Camera window:
+  // columns from i0 to i2 and rows from j0 to j2.
+  // Those -1 / +1 are needed to prevent the wall shadows
+  // from disappearing too early. In other words, the visible
+  // area is now 1 unit to every direction "too big".
+
+  // X low index
+  i0 = r.x1() * m_cols / m_width - 1;
+  i0 = i0 >= m_cols ? 0 : i0;
+
+  // X high index
+  i2 = r.x2() * m_cols / m_width + 1;
+  i2 = i2  >= m_cols ? m_cols - 1 : i2;
+
+  // Y low index
+  j0 = r.y1() * m_rows / m_height - 1;
+  j0 = j0 >= m_rows ? 0 : j0;
+
+  // Y high index
+  j2 = r.y2() * m_rows / m_height + 1;
+  j2 = j2  >= m_rows ? m_rows - 1 : j2;
+}
+
+void Track::render(MCCamera * pCamera)
+{
+    const Map & rMap = m_pTrackData->map();
+
+    // Get the Camera window
+    MCBBox<MCFloat> cameraBox(pCamera->bbox());
+
+    // Calculate which tiles are visible
+    UINT i2, j2, i0, j0;
+    calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
+
+    // Set the default color
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Tile coordinates
+    int x, y;
+    const int w = TrackTile::TILE_W;
+    const int h = TrackTile::TILE_H;
+    y = j0 * h;
+
+    // Loop through the visible tile matrix and draw the tiles
+    for (UINT j = j0; j <= j2; j++)
     {
-        for (unsigned int i = 0; i < rows; i++)
+        x = i0 * w;
+        for (UINT i = i0; i <= i2; i++)
         {
-            TrackTile * tile = map.getTile(i, j);
-            if (tile)
+            if (TrackTile * pTile = rMap.getTile(i, j))
             {
-                MCSurface * surface = tile->surface();
-                if (surface)
+                if (MCSurface * pSurface = pTile->surface())
                 {
-                    // TODO
+                    // Calculate absolute coordinates from those are
+                    // used in rendering
+                    int X = x - cameraBox.x1();
+                    int Y = y - cameraBox.y1();
+
+                    // Bind the texture according to the tile
+                    glBindTexture(GL_TEXTURE_2D, pSurface->handle());
+                    glNormal3f(0.0f, 0.0f, 1.0f);
+
+                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+                    // Render the tile as a quad
+                    glBegin(GL_QUADS);
+
+                    glTexCoord2i(0, 0);
+                    glVertex2i  (X, Y);
+                    glTexCoord2i(0, 1);
+                    glVertex2i  (X, Y + h);
+                    glTexCoord2i(1, 1);
+                    glVertex2i  (X + w, Y + h);
+                    glTexCoord2i(1, 0);
+                    glVertex2i  (X + w, Y);
+
+                    glEnd();
                 }
             }
+
+            x += w;
         }
+
+        y += h;
     }
 }
 
 Track::~Track()
 {
-    delete m_trackData;
+    delete m_pTrackData;
 }

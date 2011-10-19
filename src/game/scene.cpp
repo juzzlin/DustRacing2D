@@ -14,13 +14,25 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "scene.h"
+#include "track.h"
 
 Scene::Scene()
+: m_activeTrack(nullptr)
 {
 }
 
 void Scene::updateFrame()
 {
+}
+
+void Scene::setActiveTrack(Track * activeTrack)
+{
+    m_activeTrack = activeTrack;
+}
+
+Track * Scene::activeTrack() const
+{
+    return m_activeTrack;
 }
 
 Scene::~Scene()

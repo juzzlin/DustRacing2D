@@ -141,9 +141,19 @@ TrackData * TrackLoader::loadTrack(QString path)
     return newData;
 }
 
-QVector<Track *> TrackLoader::tracks() const
+unsigned int TrackLoader::tracks() const
 {
-    return m_tracks;
+    return m_tracks.size();
+}
+
+Track * TrackLoader::track(unsigned int index) const
+{
+    if (index < tracks())
+    {
+        return m_tracks.at(index);
+    }
+
+    return nullptr;
 }
 
 TrackLoader::~TrackLoader()

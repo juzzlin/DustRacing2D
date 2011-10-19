@@ -16,6 +16,9 @@
 #ifndef TRACK_H
 #define TRACK_H
 
+#include "MiniCore/Core/MCBBox"
+#include "MiniCore/Core/MCTypes"
+
 class TrackData;
 class MCCamera;
 
@@ -26,19 +29,23 @@ class Track
 public:
 
     //! Constructor.
-    //! \param trackData The data that represents the track.
+    //! \param pTrackData The data that represents the track.
     //!                  Track will take the ownership.
-    explicit Track(TrackData * trackData);
+    explicit Track(TrackData * pTrackData);
 
     //! Destructor.
     ~Track();
 
     //! Render as seen through the given camera window.
-    void render(MCCamera * camera);
+    void render(MCCamera * pCamera);
 
 private:
 
-    TrackData * m_trackData;
+    void calculateVisibleIndices(const MCBBox<int> & r,
+                                 UINT & i0, UINT & i2, UINT & j0, UINT & j2);
+
+    TrackData * m_pTrackData;
+    UINT m_rows, m_cols, m_width, m_height;
 };
 
 #endif // TRACK_H

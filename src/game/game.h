@@ -22,6 +22,7 @@
 class Scene;
 class Renderer;
 class TrackLoader;
+class MCCamera;
 class MCTextureManager;
 
 //! The main game class.
@@ -62,12 +63,13 @@ private slots:
 
 private:
 
-    Scene            * m_scene;
     Renderer         * m_renderer;
+    Scene            * m_scene;
     MCTextureManager * m_textureManager;
     TrackLoader      * m_trackLoader;
     QTimer             m_timer;
     unsigned int       m_targetFps;
+    MCCamera         * m_pCamera;
 };
 
 #endif // GAME_H

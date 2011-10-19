@@ -38,8 +38,6 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 , m_center(m_w2, m_h2)
 , m_centerSet(false)
 , m_useAlphaTest(useAlphaTest)
-, m_role("")
-, m_category("")
 {}
 
 MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight,
@@ -52,8 +50,6 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 , m_center(newCenter)
 , m_centerSet(true)
 , m_useAlphaTest(useAlphaTest)
-, m_role("")
-, m_category("")
 {}
 
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, bool useAlphaTest) :
@@ -149,9 +145,9 @@ void MCSurfaceImpl::render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, 
     glVertex3f(-m_w2, -m_h2, 0);
     glTexCoord2i(0, 1);
     glVertex3f(-m_w2, m_h2, 0);
-    glTexCoord2i(1, 1 );
+    glTexCoord2i(1, 1);
     glVertex3f(m_w2, m_h2, 0);
-    glTexCoord2i(1, 0 );
+    glTexCoord2i(1, 0);
     glVertex3f(m_w2, -m_h2, 0);
     glEnd();
 

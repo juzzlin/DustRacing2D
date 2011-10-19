@@ -143,16 +143,16 @@ void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, cons
 
     // Let OpenGL generate a texture handle
     GLuint textureHandle;
-    glGenTextures( 1, &textureHandle );
+    glGenTextures(1, &textureHandle);
 
     // Bind the texture object
-    glBindTexture( GL_TEXTURE_2D, textureHandle );
+    glBindTexture(GL_TEXTURE_2D, textureHandle);
 
     // Set the texture's stretching properties
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // Edit image data using the information SDL_Surface gives us
+    // Edit image data using the information textureImage gives us
     glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 

@@ -16,6 +16,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+class Track;
+
 //! The game scene.
 class Scene
 {
@@ -27,7 +29,16 @@ public:
     //! Destructor.
     ~Scene();
 
+    //! Update physics and objects.
     void updateFrame();
+
+    void setActiveTrack(Track * activeTrack);
+
+    Track * activeTrack() const;
+
+private:
+
+    Track * m_activeTrack;
 };
 
 #endif // SCENE_H

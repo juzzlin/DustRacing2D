@@ -14,9 +14,17 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "renderer.h"
+#include "scene.h"
+#include "track.h"
+
+#include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCTrigonom"
+#include <cmath>
 
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
+, m_pScene(nullptr)
+, m_pCamera(nullptr)
 {
 }
 
@@ -26,6 +34,7 @@ void Renderer::initializeGL()
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
@@ -41,38 +50,47 @@ void Renderer::resizeGL(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(45.0f, static_cast<GLfloat>(width) / height, 0.1f, 100.0f);
+    const float viewAngle = 135.0f;
+    gluPerspective(viewAngle, static_cast<GLfloat>(width) / height, 0.1f, 1000.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    // Set eye position so that the scene looks like a pure 2D-scene
+    const int sceneH = width;
+    const int sceneW = height;
+    const float eyeZ = sceneH / 2 /
+            std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
+    gluLookAt(sceneW / 2, sceneH / 2, eyeZ,
+              sceneW / 2, sceneH / 2, 0,
+              0, 1, 0);
 }
 
 void Renderer::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    if (m_pCamera) // Qt might update the widget before camera is set
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glTranslatef(-1.5f, 0.0f, -6.0f);
+        if (m_pScene && m_pScene->activeTrack())
+        {
+            m_pScene->activeTrack()->render(m_pCamera);
+        }
+    }
 
-    glBegin(GL_TRIANGLES);
-    glVertex3f( 0.0f, 1.0f, 0.0f);
-    glVertex3f(-1.0f,-1.0f, 0.0f);
-    glVertex3f( 1.0f,-1.0f, 0.0f);
-    glEnd();
-
-    glTranslatef(3.0f,0.0f,0.0f);
-
-    glBegin(GL_QUADS);
-    glVertex3f(-1.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f,-1.0f, 0.0f);
-    glVertex3f(-1.0f,-1.0f, 0.0f);
-    glEnd();
+    QGLWidget::swapBuffers();
 }
 
-void Renderer::updateFrame()
+void Renderer::updateFrame(MCCamera * pCamera)
 {
+    m_pCamera = pCamera;
+
     updateGL();
+}
+
+void Renderer::setScene(Scene * scene)
+{
+    m_pScene = scene;
 }
 
 Renderer::~Renderer()

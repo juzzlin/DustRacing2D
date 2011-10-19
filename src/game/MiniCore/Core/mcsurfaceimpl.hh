@@ -20,10 +20,6 @@
 #ifndef MCSURFACEIMPL_HH
 #define MCSURFACEIMPL_HH
 
-#include <string>
-
-using std::string;
-
 //! Implementation class for MCSurface
 class MCSurfaceImpl
 {
@@ -51,8 +47,6 @@ private:
     MCVector2d<MCFloat> m_center;
     bool m_centerSet;
     bool m_useAlphaTest;
-    string m_role;
-    string m_category;
     friend class MCSurface;
 };
 

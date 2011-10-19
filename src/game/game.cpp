@@ -18,17 +18,19 @@
 #include "scene.h"
 #include "renderer.h"
 #include "trackloader.h"
+#include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCTextureManager"
 #include <QDir>
 
 Game::Game()
-: m_scene(nullptr)
-, m_renderer(nullptr)
-, m_textureManager(new MCTextureManager())
+: m_renderer(nullptr)
+, m_scene(new Scene)
+, m_textureManager(new MCTextureManager)
 , m_trackLoader(new TrackLoader(m_textureManager))
 , m_timer()
 , m_targetFps(30)
+, m_pCamera(new MCCamera(1024, 768, 0, 0, 1024, 768))
 {
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 
@@ -44,6 +46,14 @@ void Game::setTargetFps(unsigned int fps)
 void Game::setRenderer(Renderer * newRenderer)
 {
     m_renderer = newRenderer;
+
+    // Note that this must be called before loading textures in order
+    // to load textures to correct OpenGL context.
+    m_renderer->makeCurrent();
+
+    // Set the current game scene. Renderer calls render()
+    // for all objects in the scene.
+    m_renderer->setScene(m_scene);
 }
 
 Renderer * Game::renderer() const
@@ -75,6 +85,9 @@ bool Game::init()
             MCLogger::logError("No valid tracks found.");
             return false;
         }
+
+        // Set the default track
+        m_scene->setActiveTrack(m_trackLoader->track(0));
     }
     catch (MCException & e)
     {
@@ -102,12 +115,14 @@ void Game::updateFrame()
 
     if (m_renderer)
     {
-        m_renderer->updateFrame();
+        m_renderer->updateFrame(m_pCamera);
     }
 }
 
 Game::~Game()
 {
+    delete m_scene;
     delete m_trackLoader;
     delete m_textureManager;
+    delete m_pCamera;
 }

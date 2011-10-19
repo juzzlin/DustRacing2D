@@ -45,8 +45,11 @@ public:
     //! \return Number of track loaded.
     int loadTracks();
 
-    //! Get tracks.
-    QVector<Track *> tracks() const;
+    //! Get track count.
+    unsigned int tracks() const;
+
+    //! Get a track of given index.
+    Track * track(unsigned int index) const;
 
 private:
 
