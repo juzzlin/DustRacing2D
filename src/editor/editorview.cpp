@@ -14,8 +14,10 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
-#include <QMouseEvent>
 #include <QGraphicsItem>
+#include <QMouseEvent>
+#include <QStatusBar>
+#include <QString>
 
 #include "editordata.h"
 #include "editorview.h"
@@ -37,8 +39,10 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
 {
     if (scene())
     {
+        const QPointF mappedPos = mapToScene(event->pos());
+
         if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(event->pos()))))
+            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos)))
         {
             tile->setActive(true);
         }
@@ -47,8 +51,17 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
         TrackTile * sourceTile = m_editorData->dragAndDropSourceTile();
         if (sourceTile)
         {
-            sourceTile->setPos(mapToScene(event->pos()));
+            sourceTile->setPos(mappedPos);
         }
+
+        // Show coordinates in status bar
+        QString coordinates("X: %1 Y: %2 I: %3 J: %4");
+        coordinates = coordinates.arg(
+            mappedPos.x()).arg(
+            mappedPos.y()).arg(
+            static_cast<int>(mappedPos.x() / TrackTile::TILE_W)).arg(
+            static_cast<int>(mappedPos.y() / TrackTile::TILE_H));
+        MainWindow::instance()->statusBar()->showMessage(coordinates);
     }
 }
 
@@ -60,22 +73,27 @@ void EditorView::createContextMenu()
                    degreeSign + QWidget::tr(" CW.."));
 
     QAction * rotate90CW = new QAction(dummy1, &m_menu);
-    QObject::connect(rotate90CW, SIGNAL(triggered()), this, SLOT(doRotate90CW()));
+    QObject::connect(rotate90CW, SIGNAL(triggered()), this,
+                     SLOT(doRotate90CW()));
 
     QString dummy2(QString(QWidget::tr("Rotate 90")) +
                    degreeSign + QWidget::tr(" CCW.."));
 
     QAction * rotate90CCW = new QAction(dummy2, &m_menu);
-    QObject::connect(rotate90CCW, SIGNAL(triggered()), this, SLOT(doRotate90CCW()));
+    QObject::connect(rotate90CCW, SIGNAL(triggered()), this,
+                     SLOT(doRotate90CCW()));
 
     m_setAsFlat = new QAction(QWidget::tr("Set as flat.."), &m_menu);
-    QObject::connect(m_setAsFlat, SIGNAL(triggered()), this, SLOT(doSetAsFlat()));
+    QObject::connect(m_setAsFlat, SIGNAL(triggered()), this,
+                     SLOT(doSetAsFlat()));
 
     m_setAsHill = new QAction(QWidget::tr("Set as hill.."), &m_menu);
-    QObject::connect(m_setAsHill, SIGNAL(triggered()), this, SLOT(doSetAsHill()));
+    QObject::connect(m_setAsHill, SIGNAL(triggered()), this,
+                     SLOT(doSetAsHill()));
 
     m_setAsGorge = new QAction(QWidget::tr("Set as gorge.."), &m_menu);
-    QObject::connect(m_setAsGorge, SIGNAL(triggered()), this, SLOT(doSetAsGorge()));
+    QObject::connect(m_setAsGorge, SIGNAL(triggered()), this,
+                     SLOT(doSetAsGorge()));
 
     m_menu.addActions(QList<QAction *>()
                       << rotate90CW << rotate90CCW
