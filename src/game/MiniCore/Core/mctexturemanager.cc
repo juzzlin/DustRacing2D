@@ -149,8 +149,8 @@ void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, cons
     glBindTexture(GL_TEXTURE_2D, textureHandle);
 
     // Set the texture's stretching properties
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Edit image data using the information textureImage gives us
     glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(), 0,
