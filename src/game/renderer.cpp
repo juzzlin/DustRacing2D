@@ -57,8 +57,8 @@ void Renderer::resizeGL(int width, int height)
     glLoadIdentity();
 
     // Set eye position so that the scene looks like a pure 2D-scene
-    const int sceneH = width;
-    const int sceneW = height;
+    const int sceneH = width  / 2;
+    const int sceneW = height / 2;
     const float eyeZ = sceneH / 2 /
             std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
     gluLookAt(sceneW / 2, sceneH / 2, eyeZ,
