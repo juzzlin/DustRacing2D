@@ -28,7 +28,9 @@ MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCF
   m_y(y),
   m_maxX(maxX),
   m_maxY(maxY)
-{}
+{
+    setPos(x, y);
+}
 
 void MCCamera::setPos(MCFloat x, MCFloat y)
 {
