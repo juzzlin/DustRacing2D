@@ -76,9 +76,9 @@ void Track::render(MCCamera * pCamera)
     int x, y;
     const int w = TrackTile::TILE_W;
     const int h = TrackTile::TILE_H;
-    y = j0 * h;
 
     // Loop through the visible tile matrix and draw the tiles
+    y = j0 * h;
     for (UINT j = j0; j <= j2; j++)
     {
         x = i0 * w;
@@ -88,30 +88,35 @@ void Track::render(MCCamera * pCamera)
             {
                 if (MCSurface * pSurface = pTile->surface())
                 {
-                    // Calculate absolute coordinates from those are
-                    // used in rendering
+                    // Calculate absolute coordinates to be
+                    // used in the rendering
                     int X = x - cameraBox.x1();
                     int Y = y - cameraBox.y1();
+
+                    glPushMatrix();
 
                     // Bind the texture according to the tile
                     glBindTexture(GL_TEXTURE_2D, pSurface->handle());
                     glNormal3f(0.0f, 0.0f, 1.0f);
-
                     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+                    glTranslated(X + w / 2, Y + h / 2, 0);
+                    glRotated(pTile->rotation(), 0, 0, 1);
 
                     // Render the tile as a quad
                     glBegin(GL_QUADS);
 
                     glTexCoord2i(0, 0);
-                    glVertex2i  (X, Y);
+                    glVertex2i  (-w / 2, -h / 2);
                     glTexCoord2i(0, 1);
-                    glVertex2i  (X, Y + h);
+                    glVertex2i  (-w / 2, h / 2);
                     glTexCoord2i(1, 1);
-                    glVertex2i  (X + w, Y + h);
+                    glVertex2i  (w / 2, h / 2);
                     glTexCoord2i(1, 0);
-                    glVertex2i  (X + w, Y);
+                    glVertex2i  (w / 2, -h / 2);
 
                     glEnd();
+                    glPopMatrix();
                 }
             }
 
