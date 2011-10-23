@@ -115,6 +115,10 @@ TrackData * TrackLoader::loadTrack(QString path)
                     int          o  = tag.attribute("o", "0").toInt();
                     int      index  = tag.attribute("index", "-1").toInt();
 
+                    // Reverse the y-coordinate and angle
+                    j = cols - j - 1;
+                    o = -o;
+
                     if (TrackTile * tile = newData->map().getTile(i, j))
                     {
                         tile->setRotation(o);
