@@ -29,9 +29,9 @@
 #include "mcquadtree.hh"
 #include "mccontact.hh"
 
-#include <QString>
-#include <QHash>
-#include <QVector>
+#include <unordered_map>
+#include <vector>
+#include <string>
 
 class MCObjectImpl;
 class MCShape;
@@ -42,349 +42,315 @@ class MCCollisionEvent;
 class MCOutOfBoundariesEvent;
 class MCCamera;
 
-/*! \class MCObject.
- *  \brief MCObject is the base for all MiniCore objects.
- *
- * MCObject encapsulates the physics and view properties of an object.
- */
+//! \class MCObject.
+//! \brief MCObject is the base for all MiniCore objects.
+//!
+//! MCObject encapsulates the physics and view properties of an object.
 class MCObject
 {
 public:
 
-  typedef QHash<MCObject *, QVector<MCContact *> > ContactHash;
+    typedef std::unordered_map<MCObject *, std::vector<MCContact *> >
+        ContactHash;
 
-  /*! Constructor
-   * \param typeId Type ID QString e.g. "MY_OBJECT_CLASS"
-   */
-  explicit MCObject(const QString & typeId);
+    //! Constructor.
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    explicit MCObject(const std::string & typeId);
 
-  /*! Constructor
-   * Construct MCObject using the given shape.
-   * \param pShape Pointer to the surface to be used. MCObject will take
-   *               the ownership.
-   * \param typeId Type ID QString e.g. "MY_OBJECT_CLASS"
-   */
-  MCObject(MCShape * pShape, const QString & typeId);
+    //! Constructor.
+    //! Construct MCObject using the given shape.
+    //! \param pShape Pointer to the surface to be used. MCObject will take
+    //!               the ownership.
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    MCObject(MCShape * pShape, const std::string & typeId);
 
-  /*! Constructor
-   * Construct MCObject implicitly using MCRectShape with
-   * MCSurfaceView for the given MCSurface.
-   * \param pSurface Pointer to the (shared) surface to be used
-   * \param typeId Type ID QString e.g. "MY_OBJECT_CLASS"
-   */
-  MCObject(MCSurface * pSurface, const QString & typeId);
+    //! Constructor.
+    //! Construct MCObject implicitly using MCRectShape with
+    //! MCSurfaceView for the given MCSurface.
+    //! \param pSurface Pointer to the (shared) surface to be used
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    MCObject(MCSurface * pSurface, const std::string & typeId);
 
-  /*! \brief Convenience method to set the surface of the view.
-   * This works only if MCSurfaceView is being used in the shape.
-   * \param pSurface Pointer to the new surface.
-   */
-  void setSurface(MCSurface * pSurface);
+    //! \brief Convenience method to set the surface of the view.
+    //! This works only if MCSurfaceView is being used in the shape.
+    //! \param pSurface Pointer to the new surface.
+    void setSurface(MCSurface * pSurface);
 
-  /*! \brief Convenience method to get the surface of the view.
-   * This works only if MCSurfaceView is being used in the shape.
-   * \param pSurface Pointer to the surface (or nullptr if not any).
-   */
-  MCSurface * surface() const;
+    //! \brief Convenience method to get the surface of the view.
+    //! This works only if MCSurfaceView is being used in the shape.
+    //! \param pSurface Pointer to the surface (or nullptr if not any).
+    MCSurface * surface() const;
 
-  //! Destructor
-  virtual ~MCObject();
+    //! Destructor.
+    virtual ~MCObject();
 
-  /*! Return unique class-wide id that can be used to
-   * efficiently test the type of a derived classes
-   * against each others without need for dynamic_cast.
-   * The filtered collision detection system uses this
-   * to match given types of objects.
-   */
-  virtual UINT typeID() const;
+    //! Return unique class-wide id that can be used to
+    //! efficiently test the type of a derived classes
+    //! against each others without need for dynamic_cast.
+    //! The filtered collision detection system uses this
+    //! to match given types of objects.
+    virtual UINT typeID() const;
 
-  /*! Return typeId for the given typeName QString from
-   * MCObject's hash table. Each object registers
-   * its type in its constructor. This is automatic for
-   * derived classes, they only need to pass the desired
-   * typeId QString to MCObject's constructor.
-   * Returns 0 if type is not registered.
-   */
-  static UINT typeID(const QString & typeName);
+    //! Return typeId for the given typeName string from
+    //! MCObject's hash table. Each object registers
+    //! its type in its constructor. This is automatic for
+    //! derived classes, they only need to pass the desired
+    //! typeId string to MCObject's constructor.
+    //! Returns 0 if type is not registered.
+    static UINT typeID(const std::string & typeName);
 
-  /*! Send event to given object
-   * \param pObject Destination object
-   * \param pEvent Event to be sent
-   */
-  static void sendEvent(MCObject * pObject, MCEvent * pEvent);
+    //! Send event to given object
+    //! \param pObject Destination object
+    //! \param pEvent Event to be sent
+    static void sendEvent(MCObject * pObject, MCEvent * pEvent);
 
-  /*! Render the object
-   * \param p Camera window to be used
-   */
-  virtual void render(MCCamera * p = nullptr);
+    //! Render the object
+    //! \param p Camera window to be used
+    virtual void render(MCCamera * p = nullptr);
 
-  /*! Render the object shadow
-   * \param p Camera window to be used
-   */
-  virtual void renderShadow(MCCamera * p = nullptr);
+    //! Render the object shadow
+    //! \param p Camera window to be used
+    virtual void renderShadow(MCCamera * p = nullptr);
 
-  /*! \brief Add object to the World.
-   * Convenience method to add object to the MCWorld instance.
-   * Composite objects may override this and add all their sub-objects.
-   */
-  virtual void addToWorld();
+    //! \brief Add object to the World.
+    //! Convenience method to add object to the MCWorld instance.
+    //! Composite objects may override this and add all their sub-objects.
+    virtual void addToWorld();
 
-  /*! \brief Remove object from the World.
-   * Convenience method to remove object from the MCWorld instance.
-   * Composite objects may re-implement this and remove all their sub-objects.
-   */
-  virtual void removeFromWorld();
+    //! \brief Remove object from the World.
+    //! Convenience method to remove object from the MCWorld instance.
+    //! Composite objects may re-implement this and remove all their sub-objects.
+    virtual void removeFromWorld();
 
-  /*! \brief Remove object from the World immediately.
-   * Convenience method to remove object from the MCWorld instance.
-   * Composite objects may re-implement this and remove all their sub-objects.
-   */
-  virtual void removeFromWorldNow();
+    //! \brief Remove object from the World immediately.
+    //! Convenience method to remove object from the MCWorld instance.
+    //! Composite objects may re-implement this and remove all their sub-objects.
+    virtual void removeFromWorldNow();
 
-  /*! Set mass
-   * \param newMass The new mass
-   * \param stationary Sets inverse mass to zero if true.
-   *        This results in "infinite" mass for stationary objects.
-   */
-  void setMass(MCFloat newMass, bool stationary = false);
+    //! Set mass
+    //! \param newMass The new mass
+    //! \param stationary Sets inverse mass to zero if true.
+    //!        This results in "infinite" mass for stationary objects.
+    void setMass(MCFloat newMass, bool stationary = false);
 
-  //! Get inverse mass
-  MCFloat invMass() const;
+    //! Get inverse mass
+    MCFloat invMass() const;
 
-  //! Get mass
-  MCFloat mass() const;
+    //! Get mass
+    MCFloat mass() const;
 
-  //! Return true if object is stationary
-  bool stationary() const;
+    //! Return true if object is stationary
+    bool stationary() const;
 
-  /*! \brief Set maximum velocity.
-   *  \param maxVelocity The new max velocity
-   */
-  void setMaximumVelocity(MCFloat maxVelocity);
+    //! \brief Set maximum velocity.
+    //! \param maxVelocity The new max velocity
+    void setMaximumVelocity(MCFloat maxVelocity);
 
-  /*! \brief Add velocity component of an impulse vector.
-   *  \param impulse The velocity component
-   */
-  void addImpulse(const MCVector3d<MCFloat> & impulse);
+    //! \brief Add velocity component of an impulse vector.
+    //! \param impulse The velocity component
+    void addImpulse(const MCVector3d<MCFloat> & impulse);
 
-  /*! Set velocity
-   * \param newVelocity The new velocity
-   */
-  void setVelocity(const MCVector3d<MCFloat> & newVelocity);
+    //! Set velocity
+    //! \param newVelocity The new velocity
+    void setVelocity(const MCVector3d<MCFloat> & newVelocity);
 
-  //! Return velocity
-  const MCVector3d<MCFloat> & velocity() const;
+    //! Return velocity
+    const MCVector3d<MCFloat> & velocity() const;
 
-  /*! Set constant acceleration (e.g. gravity)
-   * \param newAcceleration The new acceleration
-   */
-  void setAcceleration(const MCVector3d<MCFloat> & newAcceleration);
+    //! Set constant acceleration (e.g. gravity)
+    //! \param newAcceleration The new acceleration
+    void setAcceleration(const MCVector3d<MCFloat> & newAcceleration);
 
-  //! Return constant acceleration
-  const MCVector3d<MCFloat> & acceleration() const;
+    //! Return constant acceleration
+    const MCVector3d<MCFloat> & acceleration() const;
 
-  //! Resets all forces + velocities
-  void resetMotion();
+    //! Resets all forces + velocities
+    void resetMotion();
 
-  /*! \brief Sets whether the physics of the object should be updated.
-   * True is the default.
-   */
-  void setPhysicsObject(bool flag);
+    //! \brief Sets whether the physics of the object should be updated.
+    //! True is the default.
+    void setPhysicsObject(bool flag);
 
-  //! \brief Return whether the object is a physics object.
-  bool physicsObject() const;
+    //! \brief Return whether the object is a physics object.
+    bool physicsObject() const;
 
-  /*! \brief Sets whether the collision detection for this object is totally bypassed.
-   * False is the default.
-   */
-  void setBypassCollisions(bool flag);
+    //! \brief Sets whether the collision detection for this object is totally bypassed.
+    //! False is the default.
+    void setBypassCollisions(bool flag);
 
-  //! \brief Return whether collisions are bypassed.
-  bool bypassCollisions() const;
+    //! \brief Return whether collisions are bypassed.
+    bool bypassCollisions() const;
 
-  /*! \brief Sets whether the object should be rendered automatically.
-   * True is the default.
-   */
-  void setRenderable(bool flag);
+    //! \brief Sets whether the object should be rendered automatically.
+    //! True is the default.
+    void setRenderable(bool flag);
 
-  //! \brief Return whether the object should be automatically rendered.
-  bool renderable() const;
+    //! \brief Return whether the object should be automatically rendered.
+    bool renderable() const;
 
-  /*! \brief Enable/disable shadow
-   * True is the default.
-   */
-  void setHasShadow(bool flag);
+    //! \brief Enable/disable shadow
+    //! True is the default.
+    void setHasShadow(bool flag);
 
-  //! \brief Return true if the object draws shadow (renderShadow() is called)
-  bool hasShadow() const;
+    //! \brief Return true if the object draws shadow (renderShadow() is called)
+    bool hasShadow() const;
 
-  /*! Set location
-   * \param newLocation The new location
-   */
-  virtual void translate(const MCVector3d<MCFloat> & newLocation);
+    //! Set location
+    //! \param newLocation The new location
+    virtual void translate(const MCVector3d<MCFloat> & newLocation);
 
-  /*! Displace object
-   * \param displacement Translates object to location() + displacement.
-   */
-  void displace(const MCVector3d<MCFloat> & displacement);
+    //! Displace object
+    //! \param displacement Translates object to location() + displacement.
+    void displace(const MCVector3d<MCFloat> & displacement);
 
-  /*! Set offset for the fake shadow.
-   * \param p The new offset. Applies only if a shape has been set.
-   */
-  void setShadowOffset(const MCVector2d<MCFloat> & p);
+    //! Set offset for the fake shadow.
+    //! \param p The new offset. Applies only if a shape has been set.
+    void setShadowOffset(const MCVector2d<MCFloat> & p);
 
-  //! Return location
-  const MCVector3d<MCFloat> & location() const;
+    //! Return location
+    const MCVector3d<MCFloat> & location() const;
 
-  //! Convenience getter for location
-  MCFloat getX() const;
+    //! Convenience getter for location
+    MCFloat getX() const;
 
-  //! Convenience getter for location
-  MCFloat getY() const;
+    //! Convenience getter for location
+    MCFloat getY() const;
 
-  //! Convenience getter for location
-  MCFloat getZ() const;
+    //! Convenience getter for location
+    MCFloat getZ() const;
 
-  /*! Set rotation ("yaw") angle about Z-axis
-   * \param newAngle The new angle in degrees [0..360]
-   */
-  virtual void rotate(UINT newAngle);
+    //! Set rotation ("yaw") angle about Z-axis
+    //! \param newAngle The new angle in degrees [0..360]
+    virtual void rotate(UINT newAngle);
 
-  //! Get rotation angle
-  UINT angle() const;
+    //! Get rotation angle
+    UINT angle() const;
 
-  //! Get direction vector
-  MCVector2d<MCFloat> direction() const;
+    //! Get direction vector
+    MCVector2d<MCFloat> direction() const;
 
-  /*! \brief Set restitution
-   *  \param newRestitution The new restitution [0.0..1.0]
-   *         (0.0 means a totally "soft" object, 1.0 means hard)
-   */
-  void setRestitution(MCFloat newRestitution);
+    //! \brief Set restitution
+    //! \param newRestitution The new restitution [0.0..1.0]
+    //!        (0.0 means a totally "soft" object, 1.0 means hard)
+    void setRestitution(MCFloat newRestitution);
 
-  //! Get restitution
-  MCFloat restitution() const;
+    //! Get restitution
+    MCFloat restitution() const;
 
-  //! Set shape. MCObject will take the ownership
-  virtual void setShape(MCShape * newShape);
+    //! Set shape. MCObject will take the ownership
+    virtual void setShape(MCShape * newShape);
 
-  //! Get shape
-  MCShape * shape() const;
+    //! Get shape
+    MCShape * shape() const;
 
-  //! Set view. MCObject will take the ownership
-  virtual void setView(MCShapeView * newView);
+    //! Set view. MCObject will take the ownership
+    virtual void setView(MCShapeView * newView);
 
-  /*! \brief Step internal time.
-   * This is called on every integration step. Must call base-class'
-   * implementation in the overidden version.
-   */
-  virtual void stepTime();
+    //! \brief Step internal time.
+    //! This is called on every integration step. Must call base-class'
+    //! implementation in the overidden version.
+    virtual void stepTime();
 
-  //! Return internal time
-  UINT time() const;
+    //! Return internal time
+    UINT time() const;
 
-  //! Reset internal time
-  void resetTime();
+    //! Reset internal time
+    void resetTime();
 
-  //! Get view
-  MCShapeView * view() const;
+    //! Get view
+    MCShapeView * view() const;
 
-  /*! Add a force vector to the object for a single frame.
-   * \param force Force vector to be added
-   */
-  void addForce(const MCVector3d<MCFloat> & force);
+    //! Add a force vector to the object for a single frame.
+    //! \param force Force vector to be added
+    void addForce(const MCVector3d<MCFloat> & force);
 
-  //! Clear accumulated forces
-  void clearForces();
+    //! Clear accumulated forces
+    void clearForces();
 
-  /*! Integrate forces
-   * \param step Time step to be integrated
-   */
-  void integrate(MCFloat step);
+    //! Integrate forces
+    //! \param step Time step to be integrated
+    void integrate(MCFloat step);
 
-  //! Return current bounding box
-  virtual MCBBox<MCFloat> bbox() const;
+    //! Return current bounding box
+    virtual MCBBox<MCFloat> bbox() const;
 
-  /*! Set rendering layer (0 is considered the lowest and is rendered
-   *  first. This can be used when creating complex objects from
-   *  2d-surfaces only.
-   */
-  virtual void setLayer(UINT layer);
+    //! Set rendering layer (0 is considered the lowest and is rendered
+    //! first. This can be used when creating complex objects from
+    //! 2d-surfaces only.
+    virtual void setLayer(UINT layer);
 
-  //! Return the render layer
-  UINT layer() const;
+    //! Return the render layer
+    UINT layer() const;
 
-  //! Add a collision contact
-  void addContact(MCContact * contact);
+    //! Add a collision contact
+    void addContact(MCContact * contact);
 
-  //! Get collision contact hash
-  const ContactHash & contacts() const;
+    //! Get collision contact hash
+    const ContactHash & contacts() const;
 
-  //! Delete current contacts
-  void deleteContacts();
+    //! Delete current contacts
+    void deleteContacts();
 
-  //! Delete all contacts with the given object
-  void deleteContacts(MCObject * p);
+    //! Delete all contacts with the given object
+    void deleteContacts(MCObject * p);
 
-  //! Return index in MCWorld's object vector. Returns -1 if not in the world.
-  int index() const;
+    //! Return index in MCWorld's object vector. Returns -1 if not in the world.
+    int index() const;
 
 protected:
 
-  /*! Event handler
-   * \param pEvent Event to be handled
-   * \return true if event was handled
-   */
-  virtual bool event(MCEvent * pEvent);
+    //! Event handler
+    //! \param pEvent Event to be handled
+    //! \return true if event was handled
+    virtual bool event(MCEvent * pEvent);
 
-  /*! Event handler for MCCollisionEvent.
-   * \param pEvent Event to be handled
-   */
-  virtual void collisionEvent(MCCollisionEvent * pEvent);
+    //! Event handler for MCCollisionEvent.
+    //! \param pEvent Event to be handled
+    virtual void collisionEvent(MCCollisionEvent * pEvent);
 
-  /*! Event handler for MCOutOfBoundariesEvent.
-   * \param pEvent Event to be handled
-   */
-  virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent * pEvent);
+    //! Event handler for MCOutOfBoundariesEvent.
+    //! \param pEvent Event to be handled
+    virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent * pEvent);
 
-  //! \brief Register a new type and get a unique type id.
-  static UINT registerType(const QString & typeName);
+    //! \brief Register a new type and get a unique type id.
+    static UINT registerType(const std::string & typeName);
 
 private:
 
-  //! Set index in worlds' object vector.
-  //! Used by MCWorld.
-  void setIndex(int index);
+    //! Set index in worlds' object vector.
+    //! Used by MCWorld.
+    void setIndex(int index);
 
-  //! Cache range of quadtree cells the object is touching.
-  //! Used by MCQuadtree.
-  void cacheIndexRange(UINT i0, UINT i1, UINT j0, UINT j1);
+    //! Cache range of quadtree cells the object is touching.
+    //! Used by MCQuadtree.
+    void cacheIndexRange(UINT i0, UINT i1, UINT j0, UINT j1);
 
-  //! Get cached index range.
-  //! Used by MCQuadtree.
-  void restoreIndexRange(UINT * i0, UINT * i1, UINT * j0, UINT * j1);
+    //! Get cached index range.
+    //! Used by MCQuadtree.
+    void restoreIndexRange(UINT * i0, UINT * i1, UINT * j0, UINT * j1);
 
-  //! Set object to be removed. Objects cannot be removed immediately, because
-  //! they might be involved in collision calculations of other objects yet to
-  //! be completed. Used by MCWorld.
-  void setRemoving(bool flag);
+    //! Set object to be removed. Objects cannot be removed immediately, because
+    //! they might be involved in collision calculations of other objects yet to
+    //! be completed. Used by MCWorld.
+    void setRemoving(bool flag);
 
-  //! Return true, if object is to be removed.
-  //! Used by MCWorld.
-  bool removing() const;
+    //! Return true, if object is to be removed.
+    //! Used by MCWorld.
+    bool removing() const;
 
-  //! Disable copy constructor and assignment
-  DISABLE_COPY(MCObject);
-  DISABLE_ASSI(MCObject);
-  MCObjectImpl * const m_pImpl;
-  friend class MCObjectImpl;
-  friend void  MCWorld::removeObject(MCObject *);
-  friend void  MCWorld::removeObjectNow(MCObject *);
-  friend void  MCWorldImpl::addObject(MCObject *);
-  friend void  MCWorldImpl::removeObject(MCObject *);
-  friend void  MCWorldImpl::removeObjects();
-  friend class MCQuadtree;
-  friend class MCQuadtreeImpl;
-  friend class MCContactResolver;
+    //! Disable copy constructor and assignment
+    DISABLE_COPY(MCObject);
+    DISABLE_ASSI(MCObject);
+    MCObjectImpl * const m_pImpl;
+    friend class MCObjectImpl;
+    friend void  MCWorld::removeObject(MCObject *);
+    friend void  MCWorld::removeObjectNow(MCObject *);
+    friend void  MCWorldImpl::addObject(MCObject *);
+    friend void  MCWorldImpl::removeObject(MCObject *);
+    friend void  MCWorldImpl::removeObjects();
+    friend class MCQuadtree;
+    friend class MCQuadtreeImpl;
+    friend class MCContactResolver;
 };
 
 #endif // MCOBJECT_HH

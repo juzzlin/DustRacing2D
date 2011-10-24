@@ -22,44 +22,46 @@
 
 #include "mcvector3d.hh"
 
-#include <QHash>
-#include <QString>
+#include <unordered_map>
+#include <string>
 
-//! Implementation class for MCObject
+//! Implementation class for MCObject.
 class MCObjectImpl
 {
 public:
-  MCObjectImpl(MCObject * pPublic, const QString & typeName);
-  ~MCObjectImpl();
+
+    MCObjectImpl(MCObject * pPublic, const std::string & typeName);
+    ~MCObjectImpl();
 
 private:
-  static UINT typeID(const QString & typeName);
-  static UINT registerType(const QString & typeName);
-  inline void integrate(MCFloat step);
-  inline void doOutOfBoundariesEvent();
-  void setFlag(UINT flag, bool enable);
-  MCObject * const m_pPublic;
-  UINT m_typeID;
-  UINT m_time;
-  MCFloat m_invMass;
-  MCFloat m_mass;
-  MCFloat m_restitution;
-  UINT m_angle;
-  MCFloat m_maximumVelocity;
-  UINT m_layer;
-  int m_index;
-  UINT m_flags;
-  UINT m_i0, m_i1, m_j0, m_j1;
-  MCVector3d<MCFloat> m_acceleration;
-  MCVector3d<MCFloat> m_velocity;
-  MCVector3d<MCFloat> m_location;
-  MCVector3d<MCFloat> m_forces;
-  MCShape * m_pShape;
-  typedef QHash<QString, UINT> TypeHash;
-  static TypeHash m_typeHash;
-  static UINT m_typeIDCount;
-  MCObject::ContactHash m_contacts;
-  friend class MCObject;
+
+    static UINT typeID(const std::string & typeName);
+    static UINT registerType(const std::string & typeName);
+    inline void integrate(MCFloat step);
+    inline void doOutOfBoundariesEvent();
+    void setFlag(UINT flag, bool enable);
+    MCObject * const m_pPublic;
+    UINT m_typeID;
+    UINT m_time;
+    MCFloat m_invMass;
+    MCFloat m_mass;
+    MCFloat m_restitution;
+    UINT m_angle;
+    MCFloat m_maximumVelocity;
+    UINT m_layer;
+    int m_index;
+    UINT m_flags;
+    UINT m_i0, m_i1, m_j0, m_j1;
+    MCVector3d<MCFloat> m_acceleration;
+    MCVector3d<MCFloat> m_velocity;
+    MCVector3d<MCFloat> m_location;
+    MCVector3d<MCFloat> m_forces;
+    MCShape * m_pShape;
+    typedef std::unordered_map<std::string, UINT> TypeHash;
+    static TypeHash m_typeHash;
+    static UINT m_typeIDCount;
+    MCObject::ContactHash m_contacts;
+    friend class MCObject;
 };
 
 #endif // MCOBJECTIMPL_HH

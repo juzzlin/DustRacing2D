@@ -22,12 +22,9 @@
 
 #include "mctypes.hh"
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
-#include <QSet>
-#include <QVector>
+#include <memory>
+#include <unordered_set>
+#include <vector>
 
 class MCObject;
 class MCWorld;
@@ -53,7 +50,8 @@ private:
   void processContact(MCObject * pObject, MCContact * pContact);
   void addToLayerMap(MCObject *);
   void removeFromLayerMap(MCObject *);
-  MCContact * getDeepestInterpenetration(const QVector<MCContact *> & contacts);
+  MCContact * getDeepestInterpenetration(
+      const std::vector<MCContact *> & contacts);
   void render(MCCamera * p);
   void renderShadows(MCCamera * p);
   static MCWorld * m_pInstance;
@@ -62,7 +60,7 @@ private:
   MCQuadtree * m_pQuadtree;
   MCFloat minX, maxX, minY, maxY, minZ, maxZ;
   MCVector3d<MCFloat> m_gravity;
-  typedef QSet<MCObject *> LayerHash;
+  typedef std::unordered_set<MCObject *> LayerHash;
   LayerHash m_layers[MCWorld::MAX_LAYERS];
   MCWorld::ObjectVector m_objs;
   MCWorld::ObjectVector m_removeObjs;

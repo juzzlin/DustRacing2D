@@ -22,9 +22,7 @@
 
 #include "mcmacros.hh"
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
+#include <memory>
 
 class MCContactResolverImpl;
 class MCObject;
@@ -33,25 +31,25 @@ class MCObject;
 class MCContactResolver
 {
 public:
-  //! Constructor
-  MCContactResolver();
+    //! Constructor
+    MCContactResolver();
 
-  //! Destructor
-  virtual ~MCContactResolver();
+    //! Destructor
+    virtual ~MCContactResolver();
 
-  /*! Process a suspected collision
+    /*! Process a suspected collision
    * \param p1 Pointer to the 1st object
    * \param p2 Pointer to the 2nd object
    * \return true if objects really collided
    */
-  bool processPossibleCollision(MCObject * p1, MCObject * p2);
+    bool processPossibleCollision(MCObject * p1, MCObject * p2);
 
 private:
 
-  DISABLE_COPY(MCContactResolver);
-  DISABLE_ASSI(MCContactResolver);
-  shared_ptr<MCContactResolverImpl> const m_pImpl;
-  friend class MCContactResolverImpl;
+    DISABLE_COPY(MCContactResolver);
+    DISABLE_ASSI(MCContactResolver);
+    std::shared_ptr<MCContactResolverImpl> const m_pImpl;
+    friend class MCContactResolverImpl;
 };
 
 #endif // MCCONTACTRESOLVER_HH

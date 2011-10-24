@@ -27,14 +27,14 @@ class MCRectShape;
 class MCContactResolverImpl
 {
 public:
-  MCContactResolverImpl();
-  virtual ~MCContactResolverImpl();
-  bool processRectRect(MCRectShape * p1, MCRectShape * p2);
-  bool processRectCircle(MCRectShape * p1, MCCircleShape * p2);
-  bool processCircleCircle(MCCircleShape * p1, MCCircleShape * p2);
+    MCContactResolverImpl();
+    virtual ~MCContactResolverImpl();
+    bool processRectRect(MCRectShape * p1, MCRectShape * p2);
+    bool processRectCircle(MCRectShape * p1, MCCircleShape * p2);
+    bool processCircleCircle(MCCircleShape * p1, MCCircleShape * p2);
 
 private:
-  friend class MCContactResolver;
+    friend class MCContactResolver;
 };
 
 #endif // MCCONTACTRESOLVERIMPL_HH

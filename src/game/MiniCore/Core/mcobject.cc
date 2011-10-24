@@ -59,7 +59,7 @@ const UINT REMOVING_MASK = (1<<5);
 const MCFloat DAMPING_FACTOR = 0.995;
 }
 
-MCObjectImpl::MCObjectImpl(MCObject * pPublic, const QString & typeId)
+MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 : m_pPublic(pPublic)
 , m_typeID(registerType(typeId))
 , m_time(0)
@@ -80,13 +80,13 @@ void MCObjectImpl::setFlag(UINT flag, bool enable)
     m_flags = enable ? m_flags | flag : m_flags & ~flag;
 }
 
-UINT MCObjectImpl::typeID(const QString & typeName)
+UINT MCObjectImpl::typeID(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
-    return i == m_typeHash.end() ? 0 : i.value();
+    return i == m_typeHash.end() ? 0 : i->second;
 }
 
-UINT MCObjectImpl::registerType(const QString & typeName)
+UINT MCObjectImpl::registerType(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
     if (i == m_typeHash.end()) {
@@ -94,7 +94,7 @@ UINT MCObjectImpl::registerType(const QString & typeName)
         m_typeHash[typeName] = m_typeIDCount;
         return m_typeIDCount;
     } else {
-        return i.value();
+        return i->second;
     }
 }
 
@@ -159,17 +159,17 @@ void MCObjectImpl::doOutOfBoundariesEvent()
 MCObjectImpl::~MCObjectImpl()
 {}
 
-MCObject::MCObject(const QString & typeId) :
+MCObject::MCObject(const std::string & typeId) :
     m_pImpl(new MCObjectImpl(this, typeId))
 {}
 
-MCObject::MCObject(MCShape * pShape, const QString & typeId) :
+MCObject::MCObject(MCShape * pShape, const std::string & typeId) :
     m_pImpl(new MCObjectImpl(this, typeId))
 {
     m_pImpl->m_pShape = pShape;
 }
 
-MCObject::MCObject(MCSurface * pSurface, const QString & typeId) :
+MCObject::MCObject(MCSurface * pSurface, const std::string & typeId) :
     m_pImpl(new MCObjectImpl(this, typeId))
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
@@ -214,12 +214,12 @@ UINT MCObject::typeID() const
     return m_pImpl->m_typeID;
 }
 
-UINT MCObject::typeID(const QString & typeName)
+UINT MCObject::typeID(const std::string & typeName)
 {
     return MCObjectImpl::typeID(typeName);
 }
 
-UINT MCObject::registerType(const QString & typeName)
+UINT MCObject::registerType(const std::string & typeName)
 {
     return MCObjectImpl::registerType(typeName);
 }
@@ -592,7 +592,7 @@ bool MCObject::removing() const
 
 void MCObject::addContact(MCContact * contact)
 {
-    m_pImpl->m_contacts[contact->object()] << contact;
+    m_pImpl->m_contacts[contact->object()].push_back(contact);
 }
 
 const MCObject::ContactHash & MCObject::contacts() const
@@ -604,8 +604,8 @@ void MCObject::deleteContacts()
 {
     auto i(m_pImpl->m_contacts.begin());
     for (; i != m_pImpl->m_contacts.end(); i++) {
-        for (int j = 0; j < i.value().size(); j++) {
-            i.value()[j]->free();
+        for (UINT j = 0; j < i->second.size(); j++) {
+            i->second[j]->free();
         }
     }
     m_pImpl->m_contacts.clear();
@@ -615,10 +615,10 @@ void MCObject::deleteContacts(MCObject * p)
 {
     auto i(m_pImpl->m_contacts.find(p));
     if (i != m_pImpl->m_contacts.end()) {
-        for (int j = 0; j < i.value().size(); j++) {
-            i.value()[j]->free();
+        for (UINT j = 0; j < i->second.size(); j++) {
+            i->second[j]->free();
         }
-        i.value().clear();
+        i->second.clear();
     }
 }
 
