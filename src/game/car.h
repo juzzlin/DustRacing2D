@@ -16,10 +16,23 @@
 #ifndef CAR_H
 #define CAR_H
 
-class Car
+#include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCSurface"
+
+//! Base class for race cars.
+class Car : public MCObject
 {
 public:
-    Car();
+
+    //! Constructor.
+    Car(MCSurface * pSurface);
+
+    //! Destructor.
+    virtual ~Car();
+
+protected:
+
+private:
 };
 
 #endif // CAR_H

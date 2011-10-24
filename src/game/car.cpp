@@ -15,6 +15,11 @@
 
 #include "car.h"
 
-Car::Car()
+Car::Car(MCSurface * pSurface)
+: MCObject(pSurface, "Car")
+{
+}
+
+Car::~Car()
 {
 }
