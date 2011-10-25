@@ -46,11 +46,11 @@ void TrackLoader::addTrackSearchPath(QString path)
 int TrackLoader::loadTracks()
 {
     int numLoaded = 0;
-    Q_FOREACH(QString path, m_paths)
+    for (QString path : m_paths)
     {
         MCLogger::logInfo("Loading tracks from '%s'..", path.toStdString().c_str());
         QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
-        Q_FOREACH(QString trackPath, trackPaths)
+        for (QString trackPath : trackPaths)
         {
             MCLogger::logInfo("Found '%s'..", trackPath.toStdString().c_str());
             trackPath = path + QDir::separator() + trackPath;
@@ -162,7 +162,7 @@ Track * TrackLoader::track(unsigned int index) const
 
 TrackLoader::~TrackLoader()
 {
-    Q_FOREACH(Track * track, m_tracks)
+    for (Track * track : m_tracks)
     {
         delete track;
     }

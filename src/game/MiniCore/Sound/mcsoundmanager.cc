@@ -55,7 +55,7 @@ void MCSoundManager::load(const QString & strFileName, const QString & strBaseDa
   {
     // Get data and create SDL sound files
     QList<MCSoundData> soundDataList = handler.soundData();
-    Q_FOREACH(MCSoundData data, soundDataList)
+    for (MCSoundData data : soundDataList)
     {
       QString strHandle = data.strHandle;
       QString strPath   = strBaseDataPath + QDir::separator().toAscii() + data.strFile;

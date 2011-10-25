@@ -53,7 +53,7 @@ void MCTextureManager::load(const QString & fileName, const QString & baseDataPa
     {
         // Get texture data / parameters
         QList<MCTextureData> textureDataList = handler.textureData();
-        Q_FOREACH(MCTextureData data, textureDataList)
+        for (MCTextureData data : textureDataList)
         {
             // Load image file
             QString path = baseDataPath + QDir::separator().toAscii() + data.imagePath;

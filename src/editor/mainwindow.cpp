@@ -207,7 +207,7 @@ void MainWindow::addObjectsToToolBar()
     // by the object loader.
     ObjectLoader::ObjectDataVector objects =
             m_objectLoader->getObjectsByCategory("tile");
-    Q_FOREACH(const ObjectData model, objects)
+    for (const ObjectData model : objects)
     {
         // Create the action.
         QAction * p = new QAction(QIcon(model.pixmap), model.role, this);

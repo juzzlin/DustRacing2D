@@ -20,7 +20,7 @@
 
 void Route::clear()
 {
-    Q_FOREACH (TrackTile * tile, m_route)
+    for (TrackTile * tile : m_route)
     {
         tile->setRouteIndex(-1);
     }
@@ -162,7 +162,7 @@ void Route::buildFromVector(QVector<TrackTile *> routeVector)
 
         std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
 
-        Q_FOREACH(TrackTile * tile, routeVector)
+        for (TrackTile * tile : routeVector)
         {
             if (tile->routeIndex() >= 0)
             {

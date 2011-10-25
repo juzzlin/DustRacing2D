@@ -212,7 +212,7 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
             // Determine the dest tile
             TrackTile * destTile = sourceTile;
             QList<QGraphicsItem *> items = scene()->items(mapToScene(event->pos()));
-            Q_FOREACH(QGraphicsItem * item, items)
+            for (QGraphicsItem * item : items)
             {
                 TrackTile * testTile = dynamic_cast<TrackTile *>(item);
                 if (testTile && testTile != sourceTile)
