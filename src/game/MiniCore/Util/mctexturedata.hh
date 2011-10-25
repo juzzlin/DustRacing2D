@@ -20,8 +20,8 @@
 #ifndef MCTEXTUREDATA_HH
 #define MCTEXTUREDATA_HH
 
-#include "mctypes.hh"
-#include "mcvector2d.hh"
+#include "../Core/mctypes.hh"
+#include "../Core/mcvector2d.hh"
 
 #include <QString>
 
@@ -37,8 +37,8 @@ struct MCTextureData
 {
     //! Constructor
     MCTextureData() :
-            centerSet(false), heightSet(false),
-            widthSet(false), colorKeySet(false), xAxisMirror(false) {}
+        centerSet(false), heightSet(false),
+        widthSet(false), colorKeySet(false), xAxisMirror(false) {}
 
     //! Handle of the texture
     QString handle;

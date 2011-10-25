@@ -20,13 +20,13 @@
 #ifndef MCTEXTUREPARSER_HH
 #define MCTEXTUREPARSER_HH
 
+#include "../Core/mcmacros.hh"
+#include "../Core/mcvector2d.hh"
 #include "mctexturedata.hh"
-#include "mcmacros.hh"
 
 #include <QtXml>
 #include <QList>
 
-#include "mcvector2d.hh"
 
 //! Parser for the XML-formatted texture file.
 class MCTextureParser : public QXmlDefaultHandler

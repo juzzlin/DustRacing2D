@@ -24,9 +24,9 @@
 #include <QString>
 #include <QHash>
 
-#include "mcexception.hh"
+#include "../Core/mcexception.hh"
+#include "../Core/mcmacros.hh"
 #include "mctexturedata.hh"
-#include "mcmacros.hh"
 
 class MCSurface;
 

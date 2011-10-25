@@ -17,10 +17,10 @@
 // MA  02110-1301, USA.
 //
 
-#include "mctypes.hh"
+#include "../Core/mctypes.hh"
+#include "../Core/mcsurface.hh"
 #include "mctexturemanager.hh"
 #include "mctextureparser.hh"
-#include "mcsurface.hh"
 
 #include <QDir>
 #include <QGLWidget>

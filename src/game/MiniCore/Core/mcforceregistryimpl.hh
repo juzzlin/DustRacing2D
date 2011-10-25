@@ -20,9 +20,9 @@
 #ifndef MCFORCEREGISTRYIMPL_HH
 #define MCFORCEREGISTRYIMPL_HH
 
-#include <QVector>
-#include <QPair>
-#include <QSet>
+#include <map>
+#include <unordered_set>
+#include <vector>
 
 class MCForceGenerator;
 class MCObject;
@@ -38,9 +38,10 @@ public:
               MCObject * object);
 
 private:
-  typedef QVector<QPair<MCForceGenerator *, MCObject *> > Registry;
+  typedef std::pair<MCForceGenerator *, MCObject *> ForceObjectPair;
+  typedef std::vector<ForceObjectPair> Registry;
   Registry m_registry;
-  QSet<MCForceGenerator *> m_owned;
+  std::unordered_set<MCForceGenerator *> m_owned;
   friend class MCForceRegistry;
 };
 

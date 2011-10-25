@@ -34,51 +34,51 @@ class MCText
 {
 public:
 
-  //! Constructor
-  MCText(const QString & text);
+    //! Constructor
+    MCText(const QString & text);
 
-  //! Copy constructor
-  MCText(const MCText & text);
+    //! Copy constructor
+    MCText(const MCText & text);
 
-  //! Default constructor
-  MCText();
+    //! Default constructor
+    MCText();
 
-  //! Destructor
-  virtual ~MCText();
+    //! Destructor
+    virtual ~MCText();
 
-  //! Set text 
-  virtual void setText(const QString & text);
+    //! Set text
+    virtual void setText(const QString & text);
 
-  //! Append
-  virtual void append(const QString & text);
+    //! Append
+    virtual void append(const QString & text);
 
-  //! Append
-  virtual void append(const MCText & text);
+    //! Append
+    virtual void append(const MCText & text);
 
-  //! Render current text at (x,y) using given font
-  virtual void render(const MCFont * rFont, int x, int y);
+    //! Render current text at (x,y) using given font
+    virtual void render(const MCFont * rFont, int x, int y);
 
-  //! Print to stream
-  virtual void print(ostream & os);
+    //! Print to stream
+    virtual void print(ostream & os);
 
-  //! Pad to given length with given char
-  virtual void padToLength(UINT length, char c);
+    //! Pad to given length with given char
+    virtual void padToLength(UINT length, char c);
 
-  //! Get width of the current text using given font
-  virtual UINT width(const MCFont * rFont) const;
+    //! Get width of the current text using given font
+    virtual UINT width(const MCFont * rFont) const;
 
-  //! Get height of the current text using given font
-  virtual UINT height(const MCFont * rFont) const;
+    //! Get height of the current text using given font
+    virtual UINT height(const MCFont * rFont) const;
 
-  //! Get text as a std QString
-  virtual const QString & text() const;
+    //! Get text as a std QString
+    virtual const QString & text() const;
 
-  //! Substitution operator
-  MCText & operator=(const MCText & old);
-  
+    //! Substitution operator
+    MCText & operator=(const MCText & old);
+
 private:
 
-  QString m_text;
+    QString m_text;
 };
 
 #endif // MCTEXT_HH

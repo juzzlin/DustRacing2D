@@ -35,7 +35,6 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcdragforcegenerator.cc \
     MiniCore/Core/mcevent.cc \
     MiniCore/Core/mcexception.cc \
-    MiniCore/Core/mcfont.cc \
     MiniCore/Core/mcforcegenerator.cc \
     MiniCore/Core/mcforceregistry.cc \
     MiniCore/Core/mcfrictiongenerator.cc \
@@ -55,12 +54,10 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcsurface.cc \
     MiniCore/Core/mcsurfaceparticle.cc \
     MiniCore/Core/mcsurfaceview.cc \
-    MiniCore/Core/mctextblock.cc \
-    MiniCore/Core/mctext.cc \
-    MiniCore/Core/mctexturemanager.cc \
-    MiniCore/Core/mctextureparser.cc \
     MiniCore/Core/mctrigonom.cc \
-    MiniCore/Core/mcworld.cc
+    MiniCore/Core/mcworld.cc \
+    MiniCore/Util/mctexturemanager.cc \
+    MiniCore/Util/mctextureparser.cc \
 
 HEADERS += car.h \
     game.h \
@@ -87,7 +84,6 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcdragforcegenerator.hh \
     MiniCore/Core/mcevent.hh \
     MiniCore/Core/mcexception.hh \
-    MiniCore/Core/mcfont.hh \
     MiniCore/Core/mcforcegenerator.hh \
     MiniCore/Core/mcforceregistry.hh \
     MiniCore/Core/mcfrictiongenerator.hh \
@@ -101,16 +97,15 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcquadtree.hh \
     MiniCore/Core/mcrandom.hh \
     MiniCore/Core/mcrectshape.hh \
+    MiniCore/Core/mcrecycler.hh \
     MiniCore/Core/mcshape.hh \
     MiniCore/Core/mcspringforcegenerator2dfast.hh \
     MiniCore/Core/mcspringforcegenerator.hh \
     MiniCore/Core/mcsurface.hh \
     MiniCore/Core/mcsurfaceparticle.hh \
     MiniCore/Core/mcsurfaceview.hh \
-    MiniCore/Core/mctextblock.hh \
-    MiniCore/Core/mctext.hh \
-    MiniCore/Core/mctexturedata.hh \
-    MiniCore/Core/mctexturemanager.hh \
-    MiniCore/Core/mctextureparser.hh \
     MiniCore/Core/mctrigonom.hh \
-    MiniCore/Core/mcworld.hh
+    MiniCore/Core/mcworld.hh \
+    MiniCore/Util/mctexturedata.hh \
+    MiniCore/Util/mctexturemanager.hh \
+    MiniCore/Util/mctextureparser.hh \

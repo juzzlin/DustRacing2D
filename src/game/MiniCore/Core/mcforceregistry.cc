@@ -29,60 +29,64 @@ MCForceRegistryImpl::MCForceRegistryImpl() :
 
 MCForceRegistryImpl::~MCForceRegistryImpl()
 {
-  QSet<MCForceGenerator *>::iterator iter(m_owned.begin());
-  while (iter != m_owned.end()) {
-    delete *iter;
-    iter++;
-  }
-  m_owned.clear();
+    auto iter(m_owned.begin());
+    while (iter != m_owned.end()) {
+        delete *iter;
+        iter++;
+    }
+    m_owned.clear();
 }
 
 void MCForceRegistryImpl::update()
 {
-  for (int i = 0; i < m_registry.size(); i++) {
-    if (m_registry[i].second->index() != -1) {
-      m_registry[i].first->updateForce(m_registry[i].second);
+    for (UINT i = 0; i < m_registry.size(); i++) {
+        if (m_registry[i].second->index() != -1) {
+            m_registry[i].first->updateForce(m_registry[i].second);
+        }
     }
-  }
 }
 
-void MCForceRegistryImpl::remove(MCForceGenerator * generator, MCObject * object)
+void MCForceRegistryImpl::remove(MCForceGenerator * generator,
+    MCObject * object)
 {
-  for (int i = 0; i < m_registry.size(); i++) {
-    if (m_registry[i].first == generator &&
-        m_registry[i].second == object) {
-      m_registry[i] = m_registry.back();
-      m_registry.pop_back();
-      return;
+    for (UINT i = 0; i < m_registry.size(); i++) {
+        if (m_registry[i].first == generator &&
+                m_registry[i].second == object) {
+            m_registry[i] = m_registry.back();
+            m_registry.pop_back();
+            return;
+        }
     }
-  }
 }
 
 MCForceRegistry::MCForceRegistry() :
     m_pImpl(new MCForceRegistryImpl)
 {}
 
-void MCForceRegistry::addForceGenerator(MCForceGenerator * generator, MCObject * object, bool takeOwnership)
+void MCForceRegistry::addForceGenerator(MCForceGenerator * generator,
+    MCObject * object, bool takeOwnership)
 {
-  m_pImpl->m_registry << QPair<MCForceGenerator *, MCObject *>(generator, object);
+    m_pImpl->m_registry.push_back(
+        MCForceRegistryImpl::ForceObjectPair(generator, object));
 
-  if (takeOwnership) {
-    m_pImpl->m_owned << generator;
-  }
+    if (takeOwnership) {
+        m_pImpl->m_owned.insert(generator);
+    }
 }
 
-void MCForceRegistry::removeForceGenerator(MCForceGenerator * generator, MCObject * object)
+void MCForceRegistry::removeForceGenerator(MCForceGenerator * generator,
+    MCObject * object)
 {
-  m_pImpl->remove(generator, object);
+    m_pImpl->remove(generator, object);
 }
 
 void MCForceRegistry::update()
 {
-  m_pImpl->update();
+    m_pImpl->update();
 }
 
 void MCForceRegistry::clear()
 {
-  m_pImpl->m_registry.clear();
+    m_pImpl->m_registry.clear();
 }
 

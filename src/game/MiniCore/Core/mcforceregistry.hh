@@ -21,9 +21,7 @@
 #define MCFORCEREGISTRY_HH
 
 #include "mcmacros.hh"
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
+#include <memory>
 
 class MCForceRegistryImpl;
 class MCForceGenerator;
@@ -64,7 +62,7 @@ private:
 
   DISABLE_COPY(MCForceRegistry);
   DISABLE_ASSI(MCForceRegistry);
-  shared_ptr<MCForceRegistryImpl> m_pImpl;
+  std::shared_ptr<MCForceRegistryImpl> m_pImpl;
 };
 
 #endif // MCFORCEREGISTRY_HH

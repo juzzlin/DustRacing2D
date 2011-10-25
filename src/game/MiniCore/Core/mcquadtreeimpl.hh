@@ -20,8 +20,6 @@
 #ifndef MCQUADTREEIMPL_HH
 #define MCQUADTREEIMPL_HH
 
-#include <QVector>
-
 //! Implementation class for MCQuadtree
 class MCQuadtreeImpl
 {

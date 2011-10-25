@@ -20,7 +20,7 @@
 #include "trackloader.h"
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCTextureManager"
+#include "MiniCore/Util/MCTextureManager"
 #include <QDir>
 
 Game::Game()

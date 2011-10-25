@@ -83,7 +83,7 @@ MCContact * MCWorldImpl::getDeepestInterpenetration(
 {
     MCFloat maxDepth = 0;
     MCContact * bestContact = nullptr;
-    Q_FOREACH(MCContact * contact, contacts) {
+    for (MCContact * contact : contacts) {
         if (contact->interpenetrationDepth() > maxDepth) {
             maxDepth = contact->interpenetrationDepth();
             bestContact = contact;
@@ -108,7 +108,7 @@ void MCWorldImpl::processContacts(MCObject * p)
 
 void MCWorldImpl::processContacts()
 {
-    Q_FOREACH(MCObject * obj, m_objs) {
+    for (MCObject * obj : m_objs) {
         if (obj->physicsObject()) {
             processContacts(obj);
         }
@@ -289,7 +289,7 @@ void MCWorld::removeObject(MCObject * p)
 void MCWorld::removeObjectNow(MCObject * p)
 {
     p->setRemoving(true);
-    Q_FOREACH(MCObject * obj, m_pImpl->m_objs) {
+    for (MCObject * obj : m_pImpl->m_objs) {
         if (obj->physicsObject()) {
             obj->deleteContacts(p);
         }
@@ -324,7 +324,7 @@ void MCWorldImpl::removeObject(MCObject * p)
 
 void MCWorldImpl::removeObjects()
 {
-    Q_FOREACH(MCObject * obj, m_removeObjs) {
+    for (MCObject * obj : m_removeObjs) {
         if (obj->removing()) {
             removeObject(obj);
         }

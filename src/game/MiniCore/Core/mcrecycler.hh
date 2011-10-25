@@ -17,57 +17,55 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCRECYCLER_H
-#define MCRECYCLER_H
+#ifndef MCRECYCLER_HH
+#define MCRECYCLER_HH
 
 #include "mctypes.hh"
-#include "mcrecycler.hh"
 
-#include <QVector>
-#include <QStack>
+#include <vector>
+#include <stack>
 
-/*! \class MCRecycler
- *  \brief Generic object recycler.
- *
- *  This class can be used to store and recycle objects. It acts as a
- *  cache. Objects to be stored must have a default constructor.
- *  "Freed" Objects are moved to a free-list for fast creation later.
- *  All created Objects are automatically deleted in the destructor of
- *  MCRecycler.
- */
+//! \class MCRecycler
+//! \brief Generic object recycler.
+//!
+//! This class can be used to store and recycle objects. It acts as a
+//! cache. Objects to be stored must have a default constructor.
+//! "Freed" Objects are moved to a free-list for fast creation later.
+//! All created Objects are automatically deleted in the destructor of
+//! MCRecycler.
 template <typename T>
 class MCRecycler
 {
 public:
 
-  //! Constructor
-  MCRecycler();
+    //! Constructor.
+    MCRecycler();
 
-  //! Destructor
-  ~MCRecycler();
+    //! Destructor.
+    ~MCRecycler();
 
-  /*! Return a new object of type T. If the free-list is empty
+    /*! Return a new object of type T. If the free-list is empty
    *  then the default constructor is used. The newly created object is
    *  automatically deleted when Recycler gets of out scope.
    */
-  T * newObject();
+    T * newObject();
 
-  /*! \brief Move given object to the free list.
+    /*! \brief Move given object to the free list.
    *         MCRecycler takes the ownership.
    */
-  void freeObject(T * p);
+    void freeObject(T * p);
 
-  //! Move all active Objs to the free list
-  void freeObjects();
+    //! Move all active Objs to the free list
+    void freeObjects();
 
 private:
 
-  UINT deleteFreeObjects();
-  UINT deleteObjects();
-  typedef QVector<T *> ObjectPool;
-  ObjectPool m_pObjs;
-  typedef QStack<T *> FreeObjectPool;
-  FreeObjectPool m_pFreeObjs;
+    UINT deleteFreeObjects();
+    UINT deleteObjects();
+    typedef std::vector<T *> ObjectPool;
+    ObjectPool m_pObjs;
+    typedef std::stack<T *> FreeObjectPool;
+    FreeObjectPool m_pFreeObjs;
 };
 
 template <typename T>
@@ -77,50 +75,51 @@ MCRecycler<T>::MCRecycler()
 template <typename T>
 T * MCRecycler<T>::newObject()
 {
-  T * p = nullptr;
-  if (!m_pFreeObjs.isEmpty()) {
-    p = m_pFreeObjs.pop();
-  } else {
-    p = new T;
-    m_pObjs << p;
-  }
-  return p;
+    T * p = nullptr;
+    if (m_pFreeObjs.size()) {
+        p = m_pFreeObjs.top();
+        m_pFreeObjs.pop();
+    } else {
+        p = new T;
+        m_pObjs.push_back(p);
+    }
+    return p;
 }
 
 template <typename T>
 UINT MCRecycler<T>::deleteObjects()
 {
-  UINT count = 0;
-  typename ObjectPool::iterator iter(m_pObjs.begin());
-  while (iter != m_pObjs.end()) {
-    delete *iter;
-    count++;
-    iter++;
-  }
-  m_pObjs.clear();
-  return count;
+    UINT count = 0;
+    auto iter(m_pObjs.begin());
+    while (iter != m_pObjs.end()) {
+        delete *iter;
+        count++;
+        iter++;
+    }
+    m_pObjs.clear();
+    return count;
 }
 
 template <typename T>
 void MCRecycler<T>::freeObject(T * p)
 {
-  m_pFreeObjs.push(p);
+    m_pFreeObjs.push(p);
 }
 
 template <typename T>
 void MCRecycler<T>::freeObjects()
 {
-  typename ObjectPool::iterator iter(m_pObjs.begin());
-  while (iter != m_pObjs.end()) {
-    m_pFreeObjs.push(*iter);
-    iter++;
-  }
+    auto iter(m_pObjs.begin());
+    while (iter != m_pObjs.end()) {
+        m_pFreeObjs.push(*iter);
+        iter++;
+    }
 }
 
 template <typename T>
 MCRecycler<T>::~MCRecycler()
 {
-  deleteObjects();
+    deleteObjects();
 }
 
-#endif // MCRECYCLER_H
+#endif // MCRECYCLER_HH

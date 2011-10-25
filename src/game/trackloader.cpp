@@ -26,7 +26,7 @@
 #include "../common/trackdata.h"
 
 #include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCTextureManager"
+#include "MiniCore/Util/MCTextureManager"
 
 TrackLoader::TrackLoader(MCTextureManager * textureManager)
 : m_textureManager(textureManager)
