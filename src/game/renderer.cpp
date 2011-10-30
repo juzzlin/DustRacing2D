@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include "inputhandler.h"
 #include "renderer.h"
 #include "scene.h"
 #include "track.h"
@@ -21,11 +22,15 @@
 #include "MiniCore/Core/MCTrigonom"
 #include <cmath>
 
+#include <QKeyEvent>
+
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
 , m_pScene(nullptr)
 , m_pCamera(nullptr)
+, m_pInputHandler(nullptr)
 {
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void Renderer::initializeGL()
@@ -88,9 +93,64 @@ void Renderer::updateFrame(MCCamera * pCamera)
     updateGL();
 }
 
-void Renderer::setScene(Scene * scene)
+void Renderer::keyPressEvent(QKeyEvent * event)
 {
-    m_pScene = scene;
+    if (m_pInputHandler && !event->isAutoRepeat())
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, true);
+            break;
+        case Qt::Key_Right:
+            m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, true);
+            break;
+        case Qt::Key_Up:
+            m_pInputHandler->setActionState(0, InputHandler::IA_UP, true);
+            break;
+        case Qt::Key_Down:
+            m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, true);
+            break;
+        default:
+            QGLWidget::keyPressEvent(event);
+            break;
+        }
+    }
+}
+
+void Renderer::keyReleaseEvent(QKeyEvent * event)
+{
+    if (m_pInputHandler && !event->isAutoRepeat())
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, false);
+            break;
+        case Qt::Key_Right:
+            m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, false);
+            break;
+        case Qt::Key_Up:
+            m_pInputHandler->setActionState(0, InputHandler::IA_UP, false);
+            break;
+        case Qt::Key_Down:
+            m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, false);
+            break;
+        default:
+            QGLWidget::keyReleaseEvent(event);
+            break;
+        }
+    }
+}
+
+void Renderer::setScene(Scene * pScene)
+{
+    m_pScene = pScene;
+}
+
+void Renderer::setInputHandler(InputHandler * pInputHandler)
+{
+    m_pInputHandler = pInputHandler;
 }
 
 Renderer::~Renderer()

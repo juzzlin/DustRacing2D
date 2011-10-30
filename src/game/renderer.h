@@ -19,7 +19,9 @@
 #include <QGLWidget>
 #include <QTimer>
 
+class InputHandler;
 class MCCamera;
+class QKeyEvent;
 class Scene;
 
 //! The game renderer widget.
@@ -35,10 +37,13 @@ public:
     //! Destructor.
     virtual ~Renderer();
 
-    void updateFrame(MCCamera * m_pCamera);
+    void updateFrame(MCCamera * pCamera);
 
     //! Set game scene to be rendered.
-    void setScene(Scene * scene);
+    void setScene(Scene * pScene);
+
+    //! Set input handler to be used.
+    void setInputHandler(InputHandler * pInputHandler);
 
 protected:
 
@@ -51,10 +56,17 @@ protected:
     //! \reimp
     virtual void paintGL();
 
+    //! \reimp
+    virtual void keyPressEvent(QKeyEvent * event);
+
+    //! \reimp
+    virtual void keyReleaseEvent(QKeyEvent * event);
+
 private:
 
-    Scene    * m_pScene;
-    MCCamera * m_pCamera;
+    Scene        * m_pScene;
+    MCCamera     * m_pCamera;
+    InputHandler * m_pInputHandler;
 };
 
 #endif // RENDERER_H

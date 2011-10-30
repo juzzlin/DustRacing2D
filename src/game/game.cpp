@@ -15,6 +15,7 @@
 
 #include "../common/config.h"
 #include "game.h"
+#include "inputhandler.h"
 #include "scene.h"
 #include "renderer.h"
 #include "trackloader.h"
@@ -24,17 +25,18 @@
 #include <QDir>
 
 Game::Game()
-: m_renderer(nullptr)
-, m_scene(new Scene)
-, m_textureManager(new MCTextureManager)
-, m_trackLoader(new TrackLoader(m_textureManager))
+: m_pRenderer(nullptr)
+, m_pScene(new Scene)
+, m_pTextureManager(new MCTextureManager)
+, m_pTrackLoader(new TrackLoader(m_pTextureManager))
+, m_pCamera(new MCCamera(1024, 768, 0, 0, 1024, 768))
+, m_pInputHandler(new InputHandler)
 , m_timer()
 , m_targetFps(30)
-, m_pCamera(new MCCamera(1024, 768, 0, 0, 1024, 768))
 {
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 
-    m_trackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
+    m_pTrackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
                                       QDir::separator() + "levels");
 }
 
@@ -45,20 +47,22 @@ void Game::setTargetFps(unsigned int fps)
 
 void Game::setRenderer(Renderer * newRenderer)
 {
-    m_renderer = newRenderer;
+    m_pRenderer = newRenderer;
 
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.
-    m_renderer->makeCurrent();
+    m_pRenderer->makeCurrent();
 
     // Set the current game scene. Renderer calls render()
     // for all objects in the scene.
-    m_renderer->setScene(m_scene);
+    m_pRenderer->setScene(m_pScene);
+
+    m_pRenderer->setInputHandler(m_pInputHandler);
 }
 
 Renderer * Game::renderer() const
 {
-    return m_renderer;
+    return m_pRenderer;
 }
 
 bool Game::init()
@@ -72,11 +76,11 @@ bool Game::init()
         MCLogger::logInfo("Loading texture config from %s..",
                           textureConfigPath.toAscii().data());
 
-        m_textureManager->load(textureConfigPath,
+        m_pTextureManager->load(textureConfigPath,
                                Config::Common::DATA_PATH);
 
         // Load track data
-        if (int numLoaded = m_trackLoader->loadTracks())
+        if (int numLoaded = m_pTrackLoader->loadTracks())
         {
             MCLogger::logInfo("%d track(s) loaded.", numLoaded);
         }
@@ -87,7 +91,7 @@ bool Game::init()
         }
 
         // Set the default track
-        m_scene->setActiveTrack(m_trackLoader->track(0));
+        m_pScene->setActiveTrack(m_pTrackLoader->track(0));
     }
     catch (MCException & e)
     {
@@ -111,18 +115,19 @@ void Game::stop()
 
 void Game::updateFrame()
 {
-    m_scene->updateFrame();
+    m_pScene->updateFrame();
 
-    if (m_renderer)
+    if (m_pRenderer)
     {
-        m_renderer->updateFrame(m_pCamera);
+        m_pRenderer->updateFrame(m_pCamera);
     }
 }
 
 Game::~Game()
 {
-    delete m_scene;
-    delete m_trackLoader;
-    delete m_textureManager;
+    delete m_pScene;
+    delete m_pTrackLoader;
+    delete m_pTextureManager;
     delete m_pCamera;
+    delete m_pInputHandler;
 }

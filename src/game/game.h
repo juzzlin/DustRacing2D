@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QTimer>
 
+class InputHandler;
 class Scene;
 class Renderer;
 class TrackLoader;
@@ -63,13 +64,14 @@ private slots:
 
 private:
 
-    Renderer         * m_renderer;
-    Scene            * m_scene;
-    MCTextureManager * m_textureManager;
-    TrackLoader      * m_trackLoader;
+    Renderer         * m_pRenderer;
+    Scene            * m_pScene;
+    MCTextureManager * m_pTextureManager;
+    TrackLoader      * m_pTrackLoader;
+    MCCamera         * m_pCamera;
+    InputHandler     * m_pInputHandler;
     QTimer             m_timer;
     unsigned int       m_targetFps;
-    MCCamera         * m_pCamera;
 };
 
 #endif // GAME_H

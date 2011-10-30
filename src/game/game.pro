@@ -12,6 +12,7 @@ QMAKE_CXXFLAGS  += -std=c++0x -U__STRICT_ANSI__
 SOURCES += main.cpp \
     car.cpp \
     game.cpp \
+    inputhandler.cpp \
     mainwindow.cpp \
     race.cpp \
     renderer.cpp \
@@ -61,6 +62,7 @@ SOURCES += MiniCore/Core/mccamera.cc \
 
 HEADERS += car.h \
     game.h \
+    inputhandler.h \
     mainwindow.h \
     race.h \
     renderer.h \

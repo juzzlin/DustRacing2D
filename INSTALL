@@ -1,16 +1,18 @@
 Build & install instructions
 ============================
 
-Dustrac currently uses qmake as the build system
-and dustrac.pro is the main project file that
-can also be loaded in the QtCreator IDE.
-The Windows build is tested by running Qt SDK
-and QtCreator under Wine. 
+Dustrac currently uses qmake as the build system,
+dustrac.pro being the main project file that
+can be loaded in the QtCreator IDE.
 
 Currently the build depends only on Qt 4.7 (>=)
 development files (libqt4-dev on Ubuntu) and no
 additional libraries are required.
 
+Dustrac exploits some features of the new C++11
+standard, so a compliant compiler is required (GCC 4.6,
+Microsoft Visual Studio 2010). 
+  
 Building from the command line
 ------------------------------
 
