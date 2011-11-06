@@ -39,13 +39,19 @@ public:
     //! Render as seen through the given camera window.
     void render(MCCamera * pCamera);
 
+    //! Return width in pixels.
+    MCUint width() const;
+
+    //! Return height in pixels.
+    MCUint height() const;
+
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
-                                 UINT & i0, UINT & i2, UINT & j0, UINT & j2);
+                                 MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
     TrackData * m_pTrackData;
-    UINT m_rows, m_cols, m_width, m_height;
+    MCUint m_rows, m_cols, m_width, m_height;
 };
 
 #endif // TRACK_H

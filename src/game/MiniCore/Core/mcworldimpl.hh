@@ -38,9 +38,9 @@ class MCWorldImpl
 public:
   MCWorldImpl();
   virtual ~MCWorldImpl();
-  void removeObject(MCObject * p);
   void addObject(MCObject * p);
-  void removeObjects();
+  void processRemovedObjects();
+  void removeObject(MCObject * p);
 
 private:
   void integrate(MCFloat step);

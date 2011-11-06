@@ -18,7 +18,6 @@ SOURCES += main.cpp mainwindow.cpp \
     tileanimator.cpp \
     trackio.cpp \
     tracktile.cpp \
-    version.cpp \
     ../common/config.cpp \
     ../common/map.cpp \
     ../common/route.cpp \
@@ -35,7 +34,6 @@ HEADERS += mainwindow.h \
     tileanimator.h \
     trackio.h \
     tracktile.h \
-    version.h \
     ../common/config.h \
     ../common/map.h \
     ../common/route.h \

@@ -27,7 +27,7 @@ shared_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
 
 namespace
 {
-  const UINT LUT_SIZE = 361;
+  const MCUint LUT_SIZE = 361;
   const MCFloat PI = 3.1415926535897932384626;
 }
 
@@ -35,7 +35,7 @@ MCTrigonomImpl::MCTrigonomImpl() :
     m_sin(LUT_SIZE, 0),
     m_cos(LUT_SIZE, 0)
 {
-  for (UINT i = 0; i < LUT_SIZE; i++) {
+  for (MCUint i = 0; i < LUT_SIZE; i++) {
     MCTrigonomImpl::m_sin.at(i) = std::sin(TO_FLOAT(MCTrigonom::degToRad(i)));
     MCTrigonomImpl::m_cos.at(i) = std::cos(TO_FLOAT(MCTrigonom::degToRad(i)));
   }

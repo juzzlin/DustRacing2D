@@ -134,7 +134,7 @@ public:
     void removeFromLayerMap(MCObject * p);
 
     //! Max number of rendering layers
-    static const UINT MAX_LAYERS = 32;
+    static const MCUint MAX_LAYERS = 32;
 
 protected:
 

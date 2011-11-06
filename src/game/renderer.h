@@ -22,6 +22,7 @@
 class InputHandler;
 class MCCamera;
 class QKeyEvent;
+class QPaintEvent;
 class Scene;
 
 //! The game renderer widget.

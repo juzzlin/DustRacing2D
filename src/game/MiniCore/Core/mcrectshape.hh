@@ -54,7 +54,7 @@ public:
   virtual void translate(const MCVector3d<MCFloat> & p);
 
   //! \reimp
-  virtual void rotate(UINT a);
+  virtual void rotate(MCUint a);
 
   //! \reimp
   virtual MCBBox<MCFloat> bbox() const;
@@ -78,10 +78,10 @@ public:
   MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
 
   //! Return the typeID
-  static UINT typeID();
+  static MCUint typeID();
 
   //! \reimp
-  virtual UINT instanceTypeID() const;
+  virtual MCUint instanceTypeID() const;
 
 private:
 

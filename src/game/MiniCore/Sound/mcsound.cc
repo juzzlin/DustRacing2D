@@ -128,8 +128,8 @@ int MCSound::getScaledVolume(int sourceX, int sourceY)
   int refX, refY, d, dX, dY, result;
   result = 0;
 
-  UINT i2 = MCSound::m_referenceObjects.size();
-  for (UINT i = 0; i < i2; i++)
+  MCUint i2 = MCSound::m_referenceObjects.size();
+  for (MCUint i = 0; i < i2; i++)
   {
     p    = MCSound::m_referenceObjects[i];
     refX = p->getX();

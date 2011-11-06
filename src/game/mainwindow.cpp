@@ -13,30 +13,17 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include "../common/config.h"
 #include "mainwindow.h"
-#include "version.h"
 
 #include <QAction>
 #include <QApplication>
-#include <QDateTime>
 #include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QMenu>
 #include <QMenuBar>
-#include <QSettings>
-#include <QTimer>
 
 MainWindow * MainWindow::m_instance = nullptr;
-
-namespace
-{
-    const char *       SETTINGS_GROUP = "MainWindow";
-    const int          MARGIN         = 0;
-    const unsigned int MIN_ZOOM       = 0;
-    const unsigned int MAX_ZOOM       = 200;
-    const unsigned int INI_ZOOM       = 100;
-    const int          CONSOLE_HEIGHT = 64;
-}
 
 MainWindow::MainWindow()
 {
@@ -49,15 +36,15 @@ MainWindow::MainWindow()
         qFatal("MainWindow already instantiated!");
     }
 
-    setWindowTitle(QString(Version::GAME_NAME) + " " + Version::GAME_VERSION);
+    setWindowTitle(QString(Config::Game::GAME_NAME) + " " +
+        Config::Game::GAME_VERSION);
 
-    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                       Version::QSETTINGS_SOFTWARE_NAME);
+    // Set window size
+    resize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 
-    // Read window size data
-    settings.beginGroup(SETTINGS_GROUP);
-    resize(settings.value("size", QSize(640, 480)).toSize());
-    settings.endGroup();
+    // Disable resize
+    setMinimumSize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    setMaximumSize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 
     // Try to center the window.
     QRect geometry(QApplication::desktop()->availableGeometry());
@@ -74,15 +61,6 @@ MainWindow * MainWindow::instance()
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-    // Open settings file
-    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                       Version::QSETTINGS_SOFTWARE_NAME);
-
-    // Save window size
-    settings.beginGroup(SETTINGS_GROUP);
-    settings.setValue("size", size());
-    settings.endGroup();
-
     event->accept();
 }
 

@@ -26,7 +26,7 @@ class MCQuadtreeImpl
 public:
 
   MCQuadtreeImpl(MCQuadtree * pPublic, MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-                 UINT leafMaxW, UINT leafMaxH);
+                 MCUint leafMaxW, MCUint leafMaxH);
   ~MCQuadtreeImpl();
 
 private:
@@ -36,15 +36,15 @@ private:
   inline void insert(MCObject * p);
   inline bool remove(MCObject * p);
   inline void getIndexRange(const MCBBox<MCFloat> & bbox);
-  inline void getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet & resultObjs, UINT typeId);
+  inline void getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet & resultObjs, MCUint typeId);
   inline void getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d, MCQuadtree::ObjectSet & resultObjs,
-                                       UINT typeId);
+                                       MCUint typeId);
   inline void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, MCQuadtree::ObjectSet & resultObjs,
-                                   UINT typeId);
+                                   MCUint typeId);
   MCQuadtree * const m_pPublic;
   MCBBox<MCFloat> m_bbox;
-  UINT m_leafMaxW, m_leafMaxH, m_horSize, m_verSize;
-  UINT m_i0, m_i1, m_j0, m_j1;
+  MCUint m_leafMaxW, m_leafMaxH, m_horSize, m_verSize;
+  MCUint m_i0, m_i1, m_j0, m_j1;
   MCFloat m_helpHor;
   MCFloat m_helpVer;
   MCQuadtree::ObjectSet * m_matrix;

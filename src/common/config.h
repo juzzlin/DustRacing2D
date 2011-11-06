@@ -22,6 +22,7 @@ public:
     class Common
     {
     public:
+
         //! The base data path.
         static const char * DATA_PATH;
     };
@@ -30,6 +31,12 @@ public:
     class Editor
     {
     public:
+
+        static const char * EDITOR_NAME;
+        static const char * EDITOR_VERSION;
+        static const char * QSETTINGS_COMPANY_NAME;
+        static const char * QSETTINGS_SOFTWARE_NAME;
+
         //! Path to the "select" icon.
         static const char * SELECT_PATH;
 
@@ -41,5 +48,16 @@ public:
     class Game
     {
     public:
+
+        static const char * GAME_NAME;
+        static const char * GAME_VERSION;
+        static const char * QSETTINGS_COMPANY_NAME;
+        static const char * QSETTINGS_SOFTWARE_NAME;
+
+        //! Window width.
+        static const unsigned int WINDOW_WIDTH = 800;
+
+        //! Window height.
+        static const unsigned int WINDOW_HEIGHT = 600;
     };
 };

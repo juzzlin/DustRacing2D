@@ -50,7 +50,7 @@ MCParticle::~MCParticle()
   delete m_pImpl;
 }
 
-void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, UINT newLifeTime)
+void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
 {
   m_pImpl->m_lifeTime       = newLifeTime;
   m_pImpl->m_initLifeTime   = newLifeTime;
@@ -68,12 +68,12 @@ MCFloat MCParticle::radius() const
   return static_cast<MCCircleShape *>(shape())->radius();
 }
 
-UINT MCParticle::lifeTime() const
+MCUint MCParticle::lifeTime() const
 {
   return m_pImpl->m_lifeTime;
 }
 
-UINT MCParticle::initLifeTime() const
+MCUint MCParticle::initLifeTime() const
 {
   return m_pImpl->m_initLifeTime;
 }

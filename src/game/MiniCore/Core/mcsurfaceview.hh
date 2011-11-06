@@ -51,17 +51,17 @@ public:
   MCSurface * surface() const;
 
   //! \reimp
-  virtual void render(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr);
+  virtual void render(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr);
 
   //! \reimp
-  virtual void renderShadow(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr);
+  virtual void renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr);
 
   //! \reimp
-  virtual void renderScaled(const MCVector3d<MCFloat> & l, UINT angle,
+  virtual void renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
                             MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
   //! \reimp
-  virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, UINT angle,
+  virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, MCUint angle,
                                   MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
 private:

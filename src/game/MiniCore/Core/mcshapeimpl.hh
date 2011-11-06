@@ -29,13 +29,13 @@ class MCShapeImpl
 public:
   explicit MCShapeImpl(MCObject * pParent);
   virtual ~MCShapeImpl();
-  static UINT m_typeCount;
+  static MCUint m_typeCount;
 
 private:
   MCObject * m_pParent;
   MCVector3d<MCFloat> m_location;
   MCVector2d<MCFloat> m_shadowOffset;
-  UINT m_angle;
+  MCUint m_angle;
   shared_ptr<MCShapeView> m_pView;
   friend class MCShape;
 };

@@ -31,8 +31,8 @@ vector<GLfloat> MCGLCircleParticleImpl::circleY;
 
 namespace
 {
-  const UINT FULL_CIRCLE  = 360;
-  const UINT SECTOR_ANGLE = 30;
+  const MCUint FULL_CIRCLE  = 360;
+  const MCUint SECTOR_ANGLE = 30;
 }
 
 MCGLCircleParticleImpl::MCGLCircleParticleImpl() :
@@ -44,7 +44,7 @@ MCGLCircleParticleImpl::MCGLCircleParticleImpl() :
   // Pre-calculate values
   if (!MCGLCircleParticleImpl::circleX.size())
   {
-    for (UINT i = 0; i <= FULL_CIRCLE; i += SECTOR_ANGLE)
+    for (MCUint i = 0; i <= FULL_CIRCLE; i += SECTOR_ANGLE)
     {
       MCGLCircleParticleImpl::circleX.push_back(MCTrigonom::cos(i));
       MCGLCircleParticleImpl::circleY.push_back(MCTrigonom::sin(i));
@@ -117,8 +117,8 @@ void MCGLCircleParticle::render(MCCamera * pCamera)
   glVertex2i(0, 0);
 
   // Loop through the precalculated coordinates
-  const UINT i2 = MCGLCircleParticleImpl::circleX.size();
-  for (UINT i = 0; i < i2; i++)
+  const MCUint i2 = MCGLCircleParticleImpl::circleX.size();
+  for (MCUint i = 0; i < i2; i++)
   {
     glVertex2f(MCGLCircleParticleImpl::circleX[i], MCGLCircleParticleImpl::circleY[i]);
   }

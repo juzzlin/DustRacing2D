@@ -15,6 +15,19 @@
 
 #include "config.h"
 
-const char * Config::Common::DATA_PATH          = "../../data";
-const char * Config::Editor::SELECT_PATH        = ":/cursor.png";
-const char * Config::Editor::CLEAR_PATH         = ":/clear.png";
+// Common variables
+const char * Config::Common::DATA_PATH = "../../data";
+
+// Editor variables
+const char * Config::Editor::SELECT_PATH             = ":/cursor.png";
+const char * Config::Editor::CLEAR_PATH              = ":/clear.png";
+const char * Config::Editor::QSETTINGS_COMPANY_NAME  = "DustRAC";
+const char * Config::Editor::QSETTINGS_SOFTWARE_NAME = "Editor";
+const char * Config::Editor::EDITOR_NAME             = "DustRAC Track Editor";
+const char * Config::Editor::EDITOR_VERSION          = "0.1";
+
+// Game variables
+const char * Config::Game::QSETTINGS_COMPANY_NAME  = "DustRAC";
+const char * Config::Game::QSETTINGS_SOFTWARE_NAME = "Game";
+const char * Config::Game::GAME_NAME               = "DustRAC";
+const char * Config::Game::GAME_VERSION            = "0.1";

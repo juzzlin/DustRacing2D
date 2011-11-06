@@ -29,7 +29,7 @@ class MCCircleShapeImpl : public MCShapeImpl
 public:
   MCCircleShapeImpl(MCObject * pParent, MCFloat radius);
   virtual ~MCCircleShapeImpl();
-  static UINT m_typeID;
+  static MCUint m_typeID;
 
 private:
   MCFloat m_radius;

@@ -47,10 +47,10 @@ public:
   ViolatedEdge violatedEdge() const;
 
   //! Return the typeID
-  static UINT typeID();
+  static MCUint typeID();
 
   //! \reimp
-  virtual UINT instanceTypeID() const;
+  virtual MCUint instanceTypeID() const;
 
 private:
 
@@ -58,7 +58,7 @@ private:
   DISABLE_ASSI(MCOutOfBoundariesEvent);
 
   //! Type ID
-  static UINT m_typeID;
+  static MCUint m_typeID;
 
   MCOutOfBoundariesEventImpl * const m_pImpl;
 };

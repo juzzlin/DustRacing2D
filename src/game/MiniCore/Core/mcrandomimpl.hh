@@ -34,7 +34,7 @@ public:
 private:
   void buildLUT();
 
-  mutable UINT m_valPtr;
+  mutable MCUint m_valPtr;
   vector<MCFloat> m_data;
   friend class MCRandom;
 };

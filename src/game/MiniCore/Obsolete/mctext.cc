@@ -57,11 +57,11 @@ void MCText::render(const MCFont * pFont, int x, int y)
     MCSurface * p = nullptr;
 
     // Get actual height of the font
-    UINT h = pFont->height();
+    MCUint h = pFont->height();
 
     // Loop through the letters of the QString
-    const UINT i2 = m_text.length();
-    for (UINT i = 0; i < i2; i++)
+    const MCUint i2 = m_text.length();
+    for (MCUint i = 0; i < i2; i++)
     {
         try
         {
@@ -76,7 +76,7 @@ void MCText::render(const MCFont * pFont, int x, int y)
                 p = pFont->surface(sub);
                 if (p)
                 {
-                    UINT w = p->width() / pFont->sizeDivider();
+                    MCUint w = p->width() / pFont->sizeDivider();
 
                     p->renderShadowScaled(nullptr, x + 2, y + 2, w / 2, h / 2, 0);
                     p->renderScaled(nullptr, x, y, 0, w / 2, h / 2, 0);
@@ -92,7 +92,7 @@ void MCText::render(const MCFont * pFont, int x, int y)
             p = pFont->surface("?");
             if (p)
             {
-                UINT w = p->width() / pFont->sizeDivider();
+                MCUint w = p->width() / pFont->sizeDivider();
 
                 p->renderShadowScaled(nullptr, x + 2, y + 2, w / 2, h / 2, 0);
                 p->renderScaled(nullptr, x, y, 0, w / 2, h / 2, 0);
@@ -103,26 +103,26 @@ void MCText::render(const MCFont * pFont, int x, int y)
     }
 }
 
-void MCText::padToLength(UINT l, char c)
+void MCText::padToLength(MCUint l, char c)
 {
-    for (UINT i = m_text.length(); i < l; i++)
+    for (MCUint i = m_text.length(); i < l; i++)
     {
         m_text.push_back(c);
     }
 }
 
-UINT MCText::height(const MCFont * pFont) const
+MCUint MCText::height(const MCFont * pFont) const
 {
     return pFont->height();
 }
 
-UINT MCText::width(const MCFont * pFont) const
+MCUint MCText::width(const MCFont * pFont) const
 {
     MCSurface * p = nullptr;
 
-    UINT w = 0;
-    const UINT i2 = m_text.length();
-    for (UINT i = 0; i < i2; i++)
+    MCUint w = 0;
+    const MCUint i2 = m_text.length();
+    for (MCUint i = 0; i < i2; i++)
     {
         try
         {

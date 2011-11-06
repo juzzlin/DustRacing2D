@@ -13,15 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef LAYERS_H
+#define LAYERS_H
 
-namespace Version
+//! Layers define the rendering order (stacking)
+//! of different objects.
+enum Layers
 {
-    static const char * QSETTINGS_COMPANY_NAME  = "DustRAC";
-    static const char * QSETTINGS_SOFTWARE_NAME = "Game";
-    static const char * GAME_NAME               = "DustRAC";
-    static const char * GAME_VERSION            = "0.1";
-}
+    Ground = 0,
+    Cars   = 1,
+    Smoke  = 2
+};
 
-#endif // VERSION_H
+#endif // LAYERS_H

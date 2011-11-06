@@ -50,7 +50,7 @@ public:
   MCOBBox(T hx, T hy, const MCVector2d<T> & loc);
 
   //! Return current angle
-  inline UINT angle() const {return m_a;}
+  inline MCUint angle() const {return m_a;}
 
   //! Return current location
   inline const MCVector2d<T> & location() const {return m_p;}
@@ -62,7 +62,7 @@ public:
   inline T hy() const {return m_hy;}
 
   //! Return given vertex
-  inline MCVector2d<T> vertex(UINT index) const {return m_v[index & 0x3] + m_p;}
+  inline MCVector2d<T> vertex(MCUint index) const {return m_v[index & 0x3] + m_p;}
 
   //! Return bbox of the MCOBBox
   inline MCBBox<T> bbox() const;
@@ -87,7 +87,7 @@ public:
   /*! Rotate
    * \param a Rotation angle in degrees (0..360)
    */
-  void rotate(UINT a);
+  void rotate(MCUint a);
 
   /*! Translate
    * \param p The new location
@@ -109,7 +109,7 @@ private:
   MCVector2d<T> m_p;
 
   //! Rotation angle
-  UINT m_a;
+  MCUint m_a;
 
   //! Vertex vectors
   MCVector2d<T> m_v[4];
@@ -153,7 +153,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
 }
 
 template <typename T>
-void MCOBBox<T>::rotate(UINT a)
+void MCOBBox<T>::rotate(MCUint a)
 {
   if (a != m_a)
   {

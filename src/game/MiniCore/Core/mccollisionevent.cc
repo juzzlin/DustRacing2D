@@ -21,7 +21,7 @@
 #include "mccollisionevent.hh"
 #include "mccollisioneventimpl.hh"
 
-UINT MCCollisionEvent::m_typeID = MCEvent::registerType();
+MCUint MCCollisionEvent::m_typeID = MCEvent::registerType();
 
 MCCollisionEventImpl::MCCollisionEventImpl(MCObject * p) :
     m_pCollidingObject(p)
@@ -31,12 +31,12 @@ MCCollisionEvent::MCCollisionEvent(MCObject * p) :
     m_pImpl(new MCCollisionEventImpl(p))
 {}
 
-UINT MCCollisionEvent::typeID()
+MCUint MCCollisionEvent::typeID()
 {
   return MCCollisionEvent::m_typeID;
 }
 
-UINT MCCollisionEvent::instanceTypeID() const
+MCUint MCCollisionEvent::instanceTypeID() const
 {
   return MCCollisionEvent::m_typeID;
 }

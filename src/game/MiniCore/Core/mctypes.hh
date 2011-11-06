@@ -28,7 +28,7 @@
 #endif
 
 // Some convenience typedef's
-typedef unsigned int  UINT;
-typedef unsigned char UCHAR;
+typedef unsigned int  MCUint;
+typedef unsigned char MCUchar;
 
 #endif // MCTYPES_HH

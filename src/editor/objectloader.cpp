@@ -21,7 +21,6 @@
 #include "../common/config.h"
 #include "mainwindow.h"
 #include "objectloader.h"
-#include "version.h"
 
 ObjectLoader::ObjectLoader()
 {
@@ -46,7 +45,8 @@ bool ObjectLoader::load(QString path)
     file.close();
 
     QDomElement  root    = doc.documentElement();
-    QString      version = root.attribute("version", Version::EDITOR_VERSION);
+    QString      version = root.attribute("version",
+        Config::Editor::EDITOR_VERSION);
 
     m_objects.clear();
 
@@ -70,7 +70,7 @@ bool ObjectLoader::load(QString path)
                 // from Config::DATA_PATH/model.imagePath.
                 // Check that it's available and load it.
                 imagePath = QString(Config::Common::DATA_PATH) +
-                            QDir::separator() + imagePath;
+                    QDir::separator() + imagePath;
 
                 if (QFile::exists(imagePath))
                 {

@@ -42,7 +42,7 @@ public:
     //! Constructor.
     //! \param x1,y1,x2,y2 represent the size of the first-level bounding box
     //! \param leafMaxW,leafMaxH are the maximum dimensions for leaves
-    MCQuadtree(MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2, UINT leafMaxW, UINT leafMaxH);
+    MCQuadtree(MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2, MCUint leafMaxW, MCUint leafMaxH);
 
     //! Insert an object into the tree (O(log(N))
     //! \param p is the object to be inserted
@@ -58,18 +58,18 @@ public:
 
     //! Get objects within given distance and of given type
     void getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs,
-                                  UINT typeId = 0);
+                                  MCUint typeId = 0);
 
     //! Get all objects of given type overlapping given BBox
     void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs,
-                              UINT typeId = 0);
+                              MCUint typeId = 0);
 
     //! Get bbox collisions involving the given object
     //! \param p Object to be tested
     //! \param rVectPObjs Vector in which colliding object are stored
     //! \param typeId Match MCObjects of given type only
     void getBBoxCollisions(const MCObject * p, ObjectSet & resultObjs,
-                           UINT typeId = 0);
+                           MCUint typeId = 0);
 
     //! Get bounding box
     const MCBBox<MCFloat> & bbox() const;

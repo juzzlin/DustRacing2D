@@ -21,7 +21,7 @@
 #include "mccircleshapeimpl.hh"
 #include "mcshapeview.hh"
 
-UINT MCCircleShapeImpl::m_typeID = MCShape::registerType();
+MCUint MCCircleShapeImpl::m_typeID = MCShape::registerType();
 
 MCCircleShapeImpl::MCCircleShapeImpl(MCObject * pParent, MCFloat radius) :
   MCShapeImpl(pParent),
@@ -61,12 +61,12 @@ MCVector2d<MCFloat> MCCircleShape::contactNormal(const MCVector2d<MCFloat> & p) 
   return (p - MCVector2d<MCFloat>(location())).normalizedFast();
 }
 
-UINT MCCircleShape::typeID()
+MCUint MCCircleShape::typeID()
 {
   return MCCircleShapeImpl::m_typeID;
 }
 
-UINT MCCircleShape::instanceTypeID() const
+MCUint MCCircleShape::instanceTypeID() const
 {
   return MCCircleShapeImpl::m_typeID;
 }

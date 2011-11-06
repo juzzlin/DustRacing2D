@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.h"
+#include "MiniCore/Core/MCSurface"
 
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")

@@ -54,32 +54,32 @@ void MCFont::load(const QString & strFile, const QString & strBaseDataPath) thro
   }
 }
 
-UINT MCFont::nominalWidth() const
+MCUint MCFont::nominalWidth() const
 {
   return m_nominalWidth;
 }
 
-UINT MCFont::nominalHeight() const
+MCUint MCFont::nominalHeight() const
 {
   return m_nominalHeight;
 }
 
-UINT MCFont::width() const
+MCUint MCFont::width() const
 {
   return m_nominalWidth / m_sizeDivider;
 }
 
-UINT MCFont::height() const
+MCUint MCFont::height() const
 {
   return m_nominalHeight / m_sizeDivider;
 }
 
-UINT MCFont::sizeDivider() const
+MCUint MCFont::sizeDivider() const
 {
   return m_sizeDivider;
 }
 
-void MCFont::setSizeDivider(UINT s)
+void MCFont::setSizeDivider(MCUint s)
 {
   if (s > 0)
   {

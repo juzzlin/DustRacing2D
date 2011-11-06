@@ -39,7 +39,7 @@ MCForceRegistryImpl::~MCForceRegistryImpl()
 
 void MCForceRegistryImpl::update()
 {
-    for (UINT i = 0; i < m_registry.size(); i++) {
+    for (MCUint i = 0; i < m_registry.size(); i++) {
         if (m_registry[i].second->index() != -1) {
             m_registry[i].first->updateForce(m_registry[i].second);
         }
@@ -49,7 +49,7 @@ void MCForceRegistryImpl::update()
 void MCForceRegistryImpl::remove(MCForceGenerator * generator,
     MCObject * object)
 {
-    for (UINT i = 0; i < m_registry.size(); i++) {
+    for (MCUint i = 0; i < m_registry.size(); i++) {
         if (m_registry[i].first == generator &&
                 m_registry[i].second == object) {
             m_registry[i] = m_registry.back();

@@ -29,7 +29,7 @@
 struct ColorKey
 {
     //! red, green, blue
-    UINT r, g, b;
+    MCUint r, g, b;
 };
 
 //! Texture data structure used by MCTextureParser.

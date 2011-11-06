@@ -129,7 +129,7 @@ MCWorld * MCGame::world() const
   return m_pImpl->m_pWorld.get();
 }
 
-bool MCGame::SDLInit(UINT flags)
+bool MCGame::SDLInit(MCUint flags)
 {
   // Init SDL with VIDEO and AUDIO flags set by default
   if (SDL_Init(flags) != 0) {

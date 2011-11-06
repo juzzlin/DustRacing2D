@@ -35,14 +35,14 @@ MCSurfaceParticle::MCSurfaceParticle() :
   setView(new MCSurfaceView);
 }
 
-void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, UINT newLifeTime,
+void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime,
                              MCSurface * pSurface)
 {
   MCParticle::init(newLocation, newRadius, newLifeTime);
   setSurface(pSurface);
 }
 
-void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, UINT newLifeTime)
+void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
 {
   MCParticle::init(newLocation, newRadius, newLifeTime);
 }

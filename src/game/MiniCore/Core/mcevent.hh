@@ -38,10 +38,10 @@ public:
   /*! Register a new event type
    * \return The new unique type ID
    */
-  static UINT registerType();
+  static MCUint registerType();
 
   //! Return class-wide type id
-  virtual UINT instanceTypeID() const = 0;
+  virtual MCUint instanceTypeID() const = 0;
 
   //! Accept the event.
   void accept();
@@ -56,7 +56,7 @@ private:
 
   DISABLE_COPY(MCEvent);
   DISABLE_ASSI(MCEvent);
-  static UINT m_typeCount;
+  static MCUint m_typeCount;
   bool m_accepted;
 };
 

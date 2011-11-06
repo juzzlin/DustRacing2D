@@ -60,8 +60,8 @@ public:
 
 private:
 
-    UINT deleteFreeObjects();
-    UINT deleteObjects();
+    MCUint deleteFreeObjects();
+    MCUint deleteObjects();
     typedef std::vector<T *> ObjectPool;
     ObjectPool m_pObjs;
     typedef std::stack<T *> FreeObjectPool;
@@ -87,9 +87,9 @@ T * MCRecycler<T>::newObject()
 }
 
 template <typename T>
-UINT MCRecycler<T>::deleteObjects()
+MCUint MCRecycler<T>::deleteObjects()
 {
-    UINT count = 0;
+    MCUint count = 0;
     auto iter(m_pObjs.begin());
     while (iter != m_pObjs.end()) {
         delete *iter;

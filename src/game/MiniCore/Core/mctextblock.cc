@@ -50,9 +50,9 @@ void MCTextBlock::addText(MCText text)
 void MCTextBlock::reverseLines()
 {
   MCText t;
-  UINT j;
-  const UINT i2 = m_text.length();
-  for (UINT i = 0; i < i2 / 2; i++)
+  MCUint j;
+  const MCUint i2 = m_text.length();
+  for (MCUint i = 0; i < i2 / 2; i++)
   {
     j = i2 - i - 1;
     t = m_text[i];
@@ -61,13 +61,13 @@ void MCTextBlock::reverseLines()
   }
 }
 
-UINT MCTextBlock::width(const MCFont * pFont) const
+MCUint MCTextBlock::width(const MCFont * pFont) const
 {
-  UINT maxw = 0;
-  UINT w    = 0;
+  MCUint maxw = 0;
+  MCUint w    = 0;
 
-  const UINT i2 = m_text.length();
-  for (UINT i = 0; i < i2; i++)
+  const MCUint i2 = m_text.length();
+  for (MCUint i = 0; i < i2; i++)
   {
     w = m_text[i].width(pFont);
     if (w > maxw || !i)
@@ -79,7 +79,7 @@ UINT MCTextBlock::width(const MCFont * pFont) const
   return maxw;
 }
 
-UINT MCTextBlock::height(const MCFont * pFont) const
+MCUint MCTextBlock::height(const MCFont * pFont) const
 {
   return pFont->height() * m_text.length();
 }
@@ -87,7 +87,7 @@ UINT MCTextBlock::height(const MCFont * pFont) const
 void MCTextBlock::render(int bottomLeftX, int bottomLeftY,
                          MCTextBlock::ALIGNMENT align, const MCFont * pFont)
 {
-  const UINT i2 = m_text.length();
+  const MCUint i2 = m_text.length();
   
   int x  = bottomLeftX;
   int y  = bottomLeftY;
@@ -98,7 +98,7 @@ void MCTextBlock::render(int bottomLeftX, int bottomLeftY,
   default:
   case MCTextBlock::LEFT_JUSTIFIED:
 
-    for (UINT i = 0; i < i2; i++)
+    for (MCUint i = 0; i < i2; i++)
     {
       m_text[i].render(pFont, x, y);
       y += dy;
@@ -108,7 +108,7 @@ void MCTextBlock::render(int bottomLeftX, int bottomLeftY,
 
   case MCTextBlock::CENTERED:
 
-    for (UINT i = 0; i < i2; i++)
+    for (MCUint i = 0; i < i2; i++)
     {
       m_text[i].render(pFont, x - (m_text[i].width(pFont)>>1), y);
       y += dy;
@@ -118,7 +118,7 @@ void MCTextBlock::render(int bottomLeftX, int bottomLeftY,
   }
 }
 
-UINT MCTextBlock::lineCount() const
+MCUint MCTextBlock::lineCount() const
 {
   return m_text.length();
 }

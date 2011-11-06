@@ -25,7 +25,7 @@
 int main(int argc, char ** argv)
 {
     // Create the QApplication
-    QApplication::setGraphicsSystem("raster");
+    QApplication::setGraphicsSystem("opengl");
     QApplication app(argc, argv);
 
     // Initialize the logger
@@ -38,7 +38,8 @@ int main(int argc, char ** argv)
     MCLogger::logInfo("Creating game..");
     Game game;
     game.setRenderer(new Renderer);
-    game.setTargetFps(30);
+    game.setTargetUpdateFps(240);
+    game.setTargetRenderFps(60);
 
     // Initialize and start the game
     if (game.init())

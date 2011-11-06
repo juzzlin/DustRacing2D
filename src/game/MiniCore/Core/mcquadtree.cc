@@ -24,7 +24,7 @@
 
 MCQuadtreeImpl::MCQuadtreeImpl(MCQuadtree * pPublic,
                                MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-                               UINT leafMaxW, UINT leafMaxH)
+                               MCUint leafMaxW, MCUint leafMaxH)
 : m_pPublic(pPublic)
 , m_bbox(x1, y1, x2, y2)
 , m_leafMaxW(leafMaxW)
@@ -43,7 +43,7 @@ MCQuadtreeImpl::~MCQuadtreeImpl()
 }
 
 MCQuadtree::MCQuadtree(MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-                       UINT leafMaxW, UINT leafMaxH)
+                       MCUint leafMaxW, MCUint leafMaxH)
 : m_pImpl(new MCQuadtreeImpl(this, x1, y1, x2, y2, leafMaxW, leafMaxH))
 {}
 
@@ -52,22 +52,22 @@ void MCQuadtreeImpl::getIndexRange(const MCBBox<MCFloat> & rBBox)
     int temp = static_cast<int>(rBBox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i0 = static_cast<UINT>(temp);
+    m_i0 = static_cast<MCUint>(temp);
 
     temp = static_cast<int>(rBBox.x2() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i1 = static_cast<UINT>(temp);
+    m_i1 = static_cast<MCUint>(temp);
 
     temp = static_cast<int>(rBBox.y1() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j0 = static_cast<UINT>(temp);
+    m_j0 = static_cast<MCUint>(temp);
 
     temp = static_cast<int>(rBBox.y2() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j1 = static_cast<UINT>(temp);
+    m_j1 = static_cast<MCUint>(temp);
 }
 
 void MCQuadtree::insert(MCObject * p)
@@ -79,8 +79,8 @@ void MCQuadtreeImpl::insert(MCObject * p)
 {
     getIndexRange(p->bbox());
     p->cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
-    for (UINT j = m_j0; j <= m_j1; j++) {
-        for (UINT i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++) {
+        for (MCUint i = m_i0; i <= m_i1; i++) {
             m_matrix[j * m_horSize + i].insert(p);
         }
     }
@@ -95,8 +95,8 @@ bool MCQuadtreeImpl::remove(MCObject * p)
 {
     bool removed = false;
     p->restoreIndexRange(&m_i0, &m_i1, &m_j0, &m_j1);
-    for (UINT j = m_j0; j <= m_j1; j++) {
-        for (UINT i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++) {
+        for (MCUint i = m_i0; i <= m_i1; i++) {
             const int index = j * m_horSize + i;
             MCQuadtree::ObjectSet::iterator iter(m_matrix[index].find(p));
             if (iter != m_matrix[index].end()) {
@@ -115,8 +115,8 @@ void MCQuadtree::removeAll()
 
 void MCQuadtreeImpl::removeAll()
 {
-    for (UINT j = 0; j < m_verSize; j++) {
-        for (UINT i = 0; i < m_horSize; i++) {
+    for (MCUint j = 0; j < m_verSize; j++) {
+        for (MCUint i = 0; i < m_horSize; i++) {
             m_matrix[j * m_horSize + i].clear();
         }
     }
@@ -125,21 +125,21 @@ void MCQuadtreeImpl::removeAll()
 void MCQuadtreeImpl::build()
 {
     m_matrix = new MCQuadtree::ObjectSet[m_horSize * m_verSize];
-    for (UINT j = 0; j < m_verSize; j++) {
-        for (UINT i = 0; i < m_horSize; i++) {
+    for (MCUint j = 0; j < m_verSize; j++) {
+        for (MCUint i = 0; i < m_horSize; i++) {
             m_matrix[j * m_horSize + i] = MCQuadtree::ObjectSet();
         }
     }
 }
 
 void MCQuadtree::getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet & resultObjs,
-                                   UINT typeId)
+                                   MCUint typeId)
 {
     m_pImpl->getBBoxCollisions(p, resultObjs, typeId);
 }
 
 void MCQuadtreeImpl::getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet & resultObjs,
-                                       UINT typeId)
+                                       MCUint typeId)
 {
     resultObjs.clear();
 
@@ -148,8 +148,8 @@ void MCQuadtreeImpl::getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet
     MCObject * p2 = nullptr;
     MCQuadtree::ObjectSet::iterator iter;
 
-    for (UINT j = m_j0; j <= m_j1; j++) {
-        for (UINT i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++) {
+        for (MCUint i = m_i0; i <= m_i1; i++) {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
             while (iter != m_matrix[index].end()) {
@@ -167,14 +167,14 @@ void MCQuadtreeImpl::getBBoxCollisions(const MCObject * p, MCQuadtree::ObjectSet
 
 void MCQuadtree::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d,
                                           MCQuadtree::ObjectSet & resultObjs,
-                                          UINT typeId)
+                                          MCUint typeId)
 {
     m_pImpl->getObjectsWithinDistance(x, y, d, resultObjs, typeId);
 }
 
 void MCQuadtreeImpl::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d,
                                               MCQuadtree::ObjectSet & resultObjs,
-                                              UINT typeId)
+                                              MCUint typeId)
 {
     getIndexRange(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
 
@@ -185,8 +185,8 @@ void MCQuadtreeImpl::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d,
     MCQuadtree::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
-    for (UINT j = m_j0; j <= m_j1; j++) {
-        for (UINT i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++) {
+        for (MCUint i = m_i0; i <= m_i1; i++) {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
             while (iter != m_matrix[index].end()) {
@@ -209,14 +209,14 @@ void MCQuadtreeImpl::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d,
 
 void MCQuadtree::getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox,
                                       MCQuadtree::ObjectSet & resultObjs,
-                                      UINT typeId)
+                                      MCUint typeId)
 {
     m_pImpl->getObjectsWithinBBox(rBBox, resultObjs, typeId);
 }
 
 void MCQuadtreeImpl::getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox,
                                           MCQuadtree::ObjectSet & resultObjs,
-                                          UINT typeId)
+                                          MCUint typeId)
 {
     getIndexRange(rBBox);
 
@@ -224,8 +224,8 @@ void MCQuadtreeImpl::getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox,
     MCQuadtree::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
-    for (UINT j = m_j0; j <= m_j1; j++) {
-        for (UINT i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++) {
+        for (MCUint i = m_i0; i <= m_i1; i++) {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
             while (iter != m_matrix[index].end()) {

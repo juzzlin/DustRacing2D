@@ -3,8 +3,8 @@
 //
 // DustRAC is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// the Free Software Foundation, either Config::Editor 3 of the License, or
+// (at your option) any later Config::Editor.
 // DustRAC is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -24,7 +24,6 @@
 #include "editorview.h"
 #include "editorscene.h"
 #include "newtrackdialog.h"
-#include "version.h"
 
 #include "../common/trackdata.h"
 
@@ -91,7 +90,7 @@ MainWindow::MainWindow(QString trackFile)
 
     // Load object models that can be used to build tracks.
     const QString objectFilePath = QString(Config::Common::DATA_PATH) +
-              QDir::separator() + "objects.conf";
+        QDir::separator() + "objects.conf";
     loadObjectModels(objectFilePath);
 
     if (!trackFile.isEmpty())
@@ -109,10 +108,11 @@ MainWindow::MainWindow(QString trackFile)
 
 void MainWindow::init()
 {
-    setWindowTitle(QString(Version::EDITOR_NAME) + " " + Version::EDITOR_VERSION);
+    setWindowTitle(QString(Config::Editor::EDITOR_NAME) + " " +
+        Config::Editor::EDITOR_VERSION);
 
-    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                       Version::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+        Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     // Read dialog size data
     settings.beginGroup(SETTINGS_GROUP);
@@ -121,14 +121,16 @@ void MainWindow::init()
 
     // Try to center the window.
     QRect geometry(QApplication::desktop()->availableGeometry());
-    move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+    move(geometry.width() / 2 - width() / 2,
+        geometry.height() / 2 - height() / 2);
 
     // Populate menu bar with actions
     populateMenuBar();
 
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
-    m_editorView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_editorView->setSizePolicy(QSizePolicy::Preferred,
+        QSizePolicy::Expanding);
     m_editorView->setMouseTracking(true);
 
     // Create a splitter
@@ -195,7 +197,7 @@ bool MainWindow::loadObjectModels(QString objectFilePath)
     else
     {
         const QString msg = tr("ERROR!!: Cannot load objects from '") +
-                objectFilePath + tr("'");
+            objectFilePath + tr("'");
         console(msg);
         return false;
     }
@@ -206,7 +208,7 @@ void MainWindow::addObjectsToToolBar()
     // Loop through all object models loaded
     // by the object loader.
     ObjectLoader::ObjectDataVector objects =
-            m_objectLoader->getObjectsByCategory("tile");
+        m_objectLoader->getObjectsByCategory("tile");
     for (const ObjectData model : objects)
     {
         // Create the action.
@@ -254,8 +256,8 @@ void MainWindow::updateScale(int value)
 void MainWindow::closeEvent(QCloseEvent * event)
 {
     // Open settings file
-    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                       Version::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+        Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     // Save window size
     settings.beginGroup(SETTINGS_GROUP);
@@ -384,12 +386,12 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 void MainWindow::openTrack()
 {
     // Load recent path
-    QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                       Version::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+        Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP);
     QString path = settings.value("recentPath",
-                                  QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString();
+        QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString();
     settings.endGroup();
 
     QString fileName = QFileDialog::getOpenFileName(this,
@@ -415,8 +417,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         console(QString(tr("Track '%1' opened.").arg(fileName)));
 
         // Save recent path
-        QSettings settings(Version::QSETTINGS_COMPANY_NAME,
-                           Version::QSETTINGS_SOFTWARE_NAME);
+        QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+            Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
         settings.beginGroup(SETTINGS_GROUP);
         settings.setValue("recentPath", fileName);
@@ -432,8 +434,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_editorScene = new EditorScene;
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-                            2 * MARGIN + m_editorData->trackData()->map().cols() * TrackTile::TILE_W,
-                            2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
+            2 * MARGIN + m_editorData->trackData()->map().cols() * TrackTile::TILE_W,
+            2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
         m_editorView->setScene(m_editorScene);
@@ -469,9 +471,9 @@ void MainWindow::saveTrack()
 void MainWindow::saveAsTrack()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Open a track"),
-                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                    tr("Track Files (*.trk)"));
+        tr("Open a track"),
+        QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+        tr("Track Files (*.trk)"));
 
     if (!fileName.endsWith(".trk"))
         fileName += ".trk";
@@ -504,8 +506,8 @@ void MainWindow::initializeNewTrack()
         m_editorScene = new EditorScene;
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-                            2 * MARGIN + cols * TrackTile::TILE_W,
-                            2 * MARGIN + rows * TrackTile::TILE_H);
+            2 * MARGIN + cols * TrackTile::TILE_W,
+            2 * MARGIN + rows * TrackTile::TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
         m_editorView->setScene(m_editorScene);
@@ -520,9 +522,9 @@ void MainWindow::initializeNewTrack()
         m_setRouteAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
-                .arg(m_editorData->trackData()->name())
-                .arg(m_editorData->trackData()->map().cols())
-                .arg(m_editorData->trackData()->map().rows()));
+            .arg(m_editorData->trackData()->name())
+            .arg(m_editorData->trackData()->map().cols())
+            .arg(m_editorData->trackData()->map().rows()));
     }
 }
 

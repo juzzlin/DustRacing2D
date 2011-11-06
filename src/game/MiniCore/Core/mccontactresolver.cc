@@ -56,7 +56,7 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
     bool contactNormalIsSet;
 
     // Loop thru all vertices and generate contacts
-    for (UINT i = 0; i < 4; i++) {
+    for (MCUint i = 0; i < 4; i++) {
         if (p2->contains(obbox1.vertex(i))) {
 
             // Send collision event to owner of p1
@@ -209,8 +209,8 @@ bool MCContactResolver::processPossibleCollision(MCObject * p1, MCObject * p2)
     if (p1->shape() && p2->shape()) {
 
         // Store id's
-        const UINT id1 = p1->shape()->instanceTypeID();
-        const UINT id2 = p2->shape()->instanceTypeID();
+        const MCUint id1 = p1->shape()->instanceTypeID();
+        const MCUint id2 = p2->shape()->instanceTypeID();
 
         // Both rects ?
         if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID()) {

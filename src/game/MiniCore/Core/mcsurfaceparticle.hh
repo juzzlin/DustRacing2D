@@ -33,7 +33,7 @@ class MCSurfaceParticle : public MCParticle
 public:
 
   //! (Re-)init the particle.
-  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, UINT lifeTime,
+  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime,
                     MCSurface * pSurface);
 
   //! Create a new particle or return recycled one
@@ -53,7 +53,7 @@ protected:
 private:
 
   //! \reimp
-  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, UINT lifeTime);
+  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
 
   //! Recycler object
   static MCRecycler<MCSurfaceParticle> m_recycler;

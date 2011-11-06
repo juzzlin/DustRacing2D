@@ -46,14 +46,14 @@ public:
    * \param angle Angle in degrees about the Z-axis.
    * \param p Camera window. If nullptr, then no translation or clipping done.
    */
-  virtual void render(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr) = 0;
+  virtual void render(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr) = 0;
 
   /*! Render shadow for the shape at the current location using given camera window.
    * \param l Location.
    * \param angle Angle in degrees about the Z-axis.
    * \param p Camera window. If nullptr, then no translation or clipping done.
    */
-  virtual void renderShadow(const MCVector3d<MCFloat> & l, UINT angle, MCCamera * p = nullptr) = 0;
+  virtual void renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr) = 0;
 
   /*! Render the scaled shape at the current location using given camera window.
    * \param l Location.
@@ -62,7 +62,7 @@ public:
    * \param hr Half of the wanted height.
    * \param p Camera window. If nullptr, then no translation or clipping done.
    */
-  virtual void renderScaled(const MCVector3d<MCFloat> & l, UINT angle,
+  virtual void renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
                             MCFloat wr, MCFloat hr, MCCamera * p = nullptr) = 0;
 
   /*! Render scaled shadow for the shape at the current location using given camera window.
@@ -72,7 +72,7 @@ public:
    * \param hr Half of the wanted height.
    * \param p Camera window. If nullptr, then no translation or clipping done.
    */
-  virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, UINT angle,
+  virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, MCUint angle,
                                   MCFloat wr, MCFloat hr, MCCamera * p = nullptr) = 0;
 
 private:

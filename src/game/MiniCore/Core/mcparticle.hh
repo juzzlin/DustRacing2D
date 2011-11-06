@@ -51,16 +51,16 @@ public:
   void die();
 
   //! (Re-)Init a particle
-  void init(const MCVector3d<MCFloat> & location, MCFloat radius, UINT lifeTime);
+  void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
 
   //! Return radius
   MCFloat radius() const;
 
   //! Return life-time. It's decreased on each call to stepTime().
-  UINT lifeTime() const;
+  MCUint lifeTime() const;
 
   //! Return initial life-time set by init().
-  UINT initLifeTime() const;
+  MCUint initLifeTime() const;
 
   //! Return true if still active
   bool isActive() const;

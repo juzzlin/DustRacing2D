@@ -35,31 +35,31 @@ public:
 
 private:
 
-    static UINT typeID(const std::string & typeName);
-    static UINT registerType(const std::string & typeName);
+    static MCUint typeID(const std::string & typeName);
+    static MCUint registerType(const std::string & typeName);
     inline void integrate(MCFloat step);
     inline void doOutOfBoundariesEvent();
-    void setFlag(UINT flag, bool enable);
+    void setFlag(MCUint flag, bool enable);
     MCObject * const m_pPublic;
-    UINT m_typeID;
-    UINT m_time;
+    MCUint m_typeID;
+    MCUint m_time;
     MCFloat m_invMass;
     MCFloat m_mass;
     MCFloat m_restitution;
-    UINT m_angle;
+    MCUint m_angle;
     MCFloat m_maximumVelocity;
-    UINT m_layer;
+    MCUint m_layer;
     int m_index;
-    UINT m_flags;
-    UINT m_i0, m_i1, m_j0, m_j1;
+    MCUint m_flags;
+    MCUint m_i0, m_i1, m_j0, m_j1;
     MCVector3d<MCFloat> m_acceleration;
     MCVector3d<MCFloat> m_velocity;
     MCVector3d<MCFloat> m_location;
     MCVector3d<MCFloat> m_forces;
     MCShape * m_pShape;
-    typedef std::unordered_map<std::string, UINT> TypeHash;
+    typedef std::unordered_map<std::string, MCUint> TypeHash;
     static TypeHash m_typeHash;
-    static UINT m_typeIDCount;
+    static MCUint m_typeIDCount;
     MCObject::ContactHash m_contacts;
     friend class MCObject;
 };

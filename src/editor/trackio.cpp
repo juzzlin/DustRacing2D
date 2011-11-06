@@ -22,7 +22,7 @@
 #include "objectloader.h"
 #include "trackio.h"
 #include "tracktile.h"
-#include "version.h"
+#include "../common/config.h"
 #include "../common/trackdata.h"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
@@ -30,7 +30,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     // Create content
     QDomDocument doc;
     QDomElement root = doc.createElement("track");
-    root.setAttribute("version", Version::EDITOR_VERSION);
+    root.setAttribute("version", Config::Editor::EDITOR_VERSION);
     root.setAttribute("name", trackData->name());
     root.setAttribute("cols", trackData->map().cols());
     root.setAttribute("rows", trackData->map().rows());
@@ -86,7 +86,7 @@ TrackData * TrackIO::open(QString path)
     file.close();
 
     QDomElement  root    = doc.documentElement();
-    QString      version = root.attribute("version", Version::EDITOR_VERSION);
+    QString      version = root.attribute("version", Config::Editor::EDITOR_VERSION);
     QString      name    = root.attribute("name", "undefined");
     unsigned int cols    = root.attribute("cols", "0").toUInt();
     unsigned int rows    = root.attribute("rows", "0").toUInt();

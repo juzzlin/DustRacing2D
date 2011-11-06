@@ -53,13 +53,13 @@ public:
   void render(int bottomLeftX, int bottomLeftY, MCTextBlock::ALIGNMENT align, const MCFont * pFont);
   
   //! Get line count
-  UINT lineCount() const;
+  MCUint lineCount() const;
 
   //! Get width of the block
-  UINT width(const MCFont * pFont) const;
+  MCUint width(const MCFont * pFont) const;
 
   //! Get height of the block
-  UINT height(const MCFont * pFont) const;
+  MCUint height(const MCFont * pFont) const;
 
   //! Makes the line order reversed
   void reverseLines();

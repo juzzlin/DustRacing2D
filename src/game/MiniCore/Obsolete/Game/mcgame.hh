@@ -143,7 +143,7 @@ protected:
    * This must be called successfully before anything else.
    * \param flags Flags to SDL_Init.
    */
-  virtual bool SDLInit(UINT flags = (SDL_INIT_VIDEO | SDL_INIT_AUDIO));
+  virtual bool SDLInit(MCUint flags = (SDL_INIT_VIDEO | SDL_INIT_AUDIO));
 
   //! \brief Create an SDL window with given parameters.
   virtual bool SDLInitDisplay(int w, int h, int bpp, bool bFullScreen, const QString & strCaption);

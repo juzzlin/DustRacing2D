@@ -62,22 +62,22 @@ public:
   virtual void load(const QString & strFile, const QString & strBaseDataPath) throw (MCException);
 
   //! Get nominal width of an empty space/letter
-  UINT nominalWidth() const;
+  MCUint nominalWidth() const;
 
   //! Get nominal height of an empty space/letter
-  UINT nominalHeight() const;
+  MCUint nominalHeight() const;
 
   //! Get actual width of an empty space/letter (with sizeDivider applied)
-  UINT width() const;
+  MCUint width() const;
 
   //! Get actual height of an empty space/letter (with sizeDivider applied)
-  UINT height() const;
+  MCUint height() const;
 
   //! Get size divider
-  UINT sizeDivider() const;
+  MCUint sizeDivider() const;
 
   //! Set size divider 
-  void setSizeDivider(UINT s);
+  void setSizeDivider(MCUint s);
 
 private:
 
@@ -88,13 +88,13 @@ private:
   MCFont(const MCFont & r);
 
   //! Nominal width of a letter
-  UINT m_nominalWidth;
+  MCUint m_nominalWidth;
 
   //! Nominal height of letter 
-  UINT m_nominalHeight;
+  MCUint m_nominalHeight;
 
   //! Size divider
-  UINT m_sizeDivider;
+  MCUint m_sizeDivider;
 };
 
 #endif // MCFONT_HH

@@ -22,7 +22,7 @@
 #include "mcshapeview.hh"
 #include "mccamera.hh"
 
-UINT MCShapeImpl::m_typeCount = 0;
+MCUint MCShapeImpl::m_typeCount = 0;
 
 MCShapeImpl::MCShapeImpl(MCObject * pParent) :
   m_pParent(pParent),
@@ -43,7 +43,7 @@ MCObject * MCShape::parent() const
   return m_pImpl->m_pParent;
 }
 
-UINT MCShape::registerType()
+MCUint MCShape::registerType()
 {
   return ++MCShapeImpl::m_typeCount;
 }
@@ -113,12 +113,12 @@ void MCShape::setShadowOffset(const MCVector2d<MCFloat> & p)
   m_pImpl->m_shadowOffset = p;
 }
 
-void MCShape::rotate(UINT a)
+void MCShape::rotate(MCUint a)
 {
   m_pImpl->m_angle = a%360;
 }
 
-UINT MCShape::angle() const
+MCUint MCShape::angle() const
 {
   return m_pImpl->m_angle;
 }

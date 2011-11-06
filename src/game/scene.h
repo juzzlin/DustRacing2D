@@ -16,6 +16,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+class Car;
+class MCSurface;
+class MCWorld;
 class Track;
 
 //! The game scene.
@@ -24,21 +27,29 @@ class Scene
 public:
 
     //! Constructor.
-    Scene();
+    explicit Scene(MCSurface * pCarSurface);
 
     //! Destructor.
     ~Scene();
 
-    //! Update physics and objects.
-    void updateFrame();
+    //! Update physics and objects by the given
+    //! time step.
+    void updateFrame(float timeStep);
 
+    //! Set the active race track.
     void setActiveTrack(Track * activeTrack);
 
+    //! Return the active race track.
     Track * activeTrack() const;
+
+    //! Return the world.
+    MCWorld * world() const;
 
 private:
 
-    Track * m_activeTrack;
+    Track   * m_pActiveTrack;
+    Car     * m_pCar;
+    MCWorld * m_pWorld;
 };
 
 #endif // SCENE_H

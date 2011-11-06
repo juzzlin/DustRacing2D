@@ -42,7 +42,9 @@ public:
     //! Set target value for frames per second.
     //! Default is 30. This is independent of the
     //! rendering FPS.
-    void setTargetFps(unsigned int fps);
+    void setTargetUpdateFps(unsigned int fps);
+
+    void setTargetRenderFps(unsigned int fps);
 
     void setRenderer(Renderer * renderer);
 
@@ -62,6 +64,8 @@ private slots:
 
     void updateFrame();
 
+    void renderFrame();
+
 private:
 
     Renderer         * m_pRenderer;
@@ -70,8 +74,11 @@ private:
     TrackLoader      * m_pTrackLoader;
     MCCamera         * m_pCamera;
     InputHandler     * m_pInputHandler;
-    QTimer             m_timer;
-    unsigned int       m_targetFps;
+    QTimer             m_updateTimer;
+    QTimer             m_renderTimer;
+    unsigned int       m_targetUpdateFps;
+    unsigned int       m_targetRenderFps;
+    float              m_timeStep;
 };
 
 #endif // GAME_H

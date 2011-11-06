@@ -89,7 +89,7 @@ public:
     //! against each others without need for dynamic_cast.
     //! The filtered collision detection system uses this
     //! to match given types of objects.
-    virtual UINT typeID() const;
+    virtual MCUint typeID() const;
 
     //! Return typeId for the given typeName string from
     //! MCObject's hash table. Each object registers
@@ -97,7 +97,7 @@ public:
     //! derived classes, they only need to pass the desired
     //! typeId string to MCObject's constructor.
     //! Returns 0 if type is not registered.
-    static UINT typeID(const std::string & typeName);
+    static MCUint typeID(const std::string & typeName);
 
     //! Send event to given object
     //! \param pObject Destination object
@@ -221,10 +221,10 @@ public:
 
     //! Set rotation ("yaw") angle about Z-axis
     //! \param newAngle The new angle in degrees [0..360]
-    virtual void rotate(UINT newAngle);
+    virtual void rotate(MCUint newAngle);
 
     //! Get rotation angle
-    UINT angle() const;
+    MCUint angle() const;
 
     //! Get direction vector
     MCVector2d<MCFloat> direction() const;
@@ -252,7 +252,7 @@ public:
     virtual void stepTime();
 
     //! Return internal time
-    UINT time() const;
+    MCUint time() const;
 
     //! Reset internal time
     void resetTime();
@@ -277,10 +277,10 @@ public:
     //! Set rendering layer (0 is considered the lowest and is rendered
     //! first. This can be used when creating complex objects from
     //! 2d-surfaces only.
-    virtual void setLayer(UINT layer);
+    virtual void setLayer(MCUint layer);
 
     //! Return the render layer
-    UINT layer() const;
+    MCUint layer() const;
 
     //! Add a collision contact
     void addContact(MCContact * contact);
@@ -313,7 +313,7 @@ protected:
     virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent * pEvent);
 
     //! \brief Register a new type and get a unique type id.
-    static UINT registerType(const std::string & typeName);
+    static MCUint registerType(const std::string & typeName);
 
 private:
 
@@ -323,11 +323,11 @@ private:
 
     //! Cache range of quadtree cells the object is touching.
     //! Used by MCQuadtree.
-    void cacheIndexRange(UINT i0, UINT i1, UINT j0, UINT j1);
+    void cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1);
 
     //! Get cached index range.
     //! Used by MCQuadtree.
-    void restoreIndexRange(UINT * i0, UINT * i1, UINT * j0, UINT * j1);
+    void restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1);
 
     //! Set object to be removed. Objects cannot be removed immediately, because
     //! they might be involved in collision calculations of other objects yet to
@@ -347,7 +347,7 @@ private:
     friend void  MCWorld::removeObjectNow(MCObject *);
     friend void  MCWorldImpl::addObject(MCObject *);
     friend void  MCWorldImpl::removeObject(MCObject *);
-    friend void  MCWorldImpl::removeObjects();
+    friend void  MCWorldImpl::processRemovedObjects();
     friend class MCQuadtree;
     friend class MCQuadtreeImpl;
     friend class MCContactResolver;

@@ -31,30 +31,37 @@ Track::Track(TrackData * pTrackData)
 {
 }
 
+MCUint Track::width() const
+{
+    return m_width;
+}
+
+MCUint Track::height() const
+{
+    return m_height;
+}
+
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
-                                    UINT & i0, UINT & i2, UINT & j0, UINT & j2)
+                                    MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
 
 {
   // Calculate which tiles are visible in the Camera window:
   // columns from i0 to i2 and rows from j0 to j2.
-  // Those -1 / +1 are needed to prevent the wall shadows
-  // from disappearing too early. In other words, the visible
-  // area is now 1 unit to every direction "too big".
 
   // X low index
-  i0 = r.x1() * m_cols / m_width - 1;
+  i0 = r.x1() * m_cols / m_width;
   i0 = i0 >= m_cols ? 0 : i0;
 
   // X high index
-  i2 = r.x2() * m_cols / m_width + 1;
+  i2 = r.x2() * m_cols / m_width;
   i2 = i2  >= m_cols ? m_cols - 1 : i2;
 
   // Y low index
-  j0 = r.y1() * m_rows / m_height - 1;
+  j0 = r.y1() * m_rows / m_height;
   j0 = j0 >= m_rows ? 0 : j0;
 
   // Y high index
-  j2 = r.y2() * m_rows / m_height + 1;
+  j2 = r.y2() * m_rows / m_height;
   j2 = j2  >= m_rows ? m_rows - 1 : j2;
 }
 
@@ -66,7 +73,7 @@ void Track::render(MCCamera * pCamera)
     MCBBox<MCFloat> cameraBox(pCamera->bbox());
 
     // Calculate which tiles are visible
-    UINT i2, j2, i0, j0;
+    MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
     // Set the default color
@@ -79,10 +86,10 @@ void Track::render(MCCamera * pCamera)
 
     // Loop through the visible tile matrix and draw the tiles
     y = j0 * h;
-    for (UINT j = j0; j <= j2; j++)
+    for (MCUint j = j0; j <= j2; j++)
     {
         x = i0 * w;
-        for (UINT i = i0; i <= i2; i++)
+        for (MCUint i = i0; i <= i2; i++)
         {
             if (TrackTile * pTile = rMap.getTile(i, j))
             {

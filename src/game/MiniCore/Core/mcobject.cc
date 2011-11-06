@@ -32,28 +32,28 @@
 #include "mccamera.hh"
 #include "mctrigonom.hh"
 
-UINT MCObjectImpl::m_typeIDCount = 1;
+MCUint MCObjectImpl::m_typeIDCount = 1;
 MCObjectImpl::TypeHash MCObjectImpl::m_typeHash;
 
 namespace
 {
 // Object is stationary
-const UINT STATIONARY_MASK = (1<<0);
+const MCUint STATIONARY_MASK = (1<<0);
 
 // Object is renderable
-const UINT RENDERABLE_MASK = (1<<1);
+const MCUint RENDERABLE_MASK = (1<<1);
 
 // Object is considered in physics calculations
-const UINT PHYSICS_MASK = (1<<2);
+const MCUint PHYSICS_MASK = (1<<2);
 
 // Object is considered in collision calculations
-const UINT COLLISIONS_MASK = (1<<3);
+const MCUint COLLISIONS_MASK = (1<<3);
 
 // Object has a shadow
-const UINT SHADOW_MASK = (1<<4);
+const MCUint SHADOW_MASK = (1<<4);
 
 // Object is scheduled to be removed from the world
-const UINT REMOVING_MASK = (1<<5);
+const MCUint REMOVING_MASK = (1<<5);
 
 // Physics damping factor
 const MCFloat DAMPING_FACTOR = 0.995;
@@ -75,18 +75,18 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , m_pShape(nullptr)
 {}
 
-void MCObjectImpl::setFlag(UINT flag, bool enable)
+void MCObjectImpl::setFlag(MCUint flag, bool enable)
 {
     m_flags = enable ? m_flags | flag : m_flags & ~flag;
 }
 
-UINT MCObjectImpl::typeID(const std::string & typeName)
+MCUint MCObjectImpl::typeID(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
     return i == m_typeHash.end() ? 0 : i->second;
 }
 
-UINT MCObjectImpl::registerType(const std::string & typeName)
+MCUint MCObjectImpl::registerType(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
     if (i == m_typeHash.end()) {
@@ -209,17 +209,17 @@ MCSurface * MCObject::surface() const
     return nullptr;
 }
 
-UINT MCObject::typeID() const
+MCUint MCObject::typeID() const
 {
     return m_pImpl->m_typeID;
 }
 
-UINT MCObject::typeID(const std::string & typeName)
+MCUint MCObject::typeID(const std::string & typeName)
 {
     return MCObjectImpl::typeID(typeName);
 }
 
-UINT MCObject::registerType(const std::string & typeName)
+MCUint MCObject::registerType(const std::string & typeName)
 {
     return MCObjectImpl::registerType(typeName);
 }
@@ -432,11 +432,11 @@ MCFloat MCObject::getZ() const
     return m_pImpl->m_location.k();
 }
 
-void MCObject::rotate(UINT newAngle)
+void MCObject::rotate(MCUint newAngle)
 { 
     if (newAngle != m_pImpl->m_angle) {
 
-        const UINT MAX_ANGLE = 360;
+        const MCUint MAX_ANGLE = 360;
         newAngle %= MAX_ANGLE;
         m_pImpl->m_angle = newAngle;
 
@@ -454,7 +454,7 @@ void MCObject::rotate(UINT newAngle)
     }
 }
 
-UINT MCObject::angle() const
+MCUint MCObject::angle() const
 {
     return m_pImpl->m_angle;
 }
@@ -532,7 +532,7 @@ void MCObject::stepTime()
     m_pImpl->m_time++;
 }
 
-UINT MCObject::time() const
+MCUint MCObject::time() const
 {
     return m_pImpl->m_time;
 }
@@ -542,14 +542,14 @@ void MCObject::resetTime()
     m_pImpl->m_time = 0;
 }
 
-void MCObject::setLayer(UINT newLayer)
+void MCObject::setLayer(MCUint newLayer)
 {
     MCWorld::instance()->removeFromLayerMap(this);
     m_pImpl->m_layer = newLayer;
     MCWorld::instance()->addToLayerMap(this);
 }
 
-UINT MCObject::layer() const
+MCUint MCObject::layer() const
 {
     return m_pImpl->m_layer;
 }
@@ -564,7 +564,7 @@ int MCObject::index() const
     return m_pImpl->m_index;
 }
 
-void MCObject::cacheIndexRange(UINT i0, UINT i1, UINT j0, UINT j1)
+void MCObject::cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1)
 {
     m_pImpl->m_i0 = i0;
     m_pImpl->m_i1 = i1;
@@ -572,7 +572,7 @@ void MCObject::cacheIndexRange(UINT i0, UINT i1, UINT j0, UINT j1)
     m_pImpl->m_j1 = j1;
 }
 
-void MCObject::restoreIndexRange(UINT * i0, UINT * i1, UINT * j0, UINT * j1)
+void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1)
 {
     *i0 = m_pImpl->m_i0;
     *i1 = m_pImpl->m_i1;
@@ -604,7 +604,7 @@ void MCObject::deleteContacts()
 {
     auto i(m_pImpl->m_contacts.begin());
     for (; i != m_pImpl->m_contacts.end(); i++) {
-        for (UINT j = 0; j < i->second.size(); j++) {
+        for (MCUint j = 0; j < i->second.size(); j++) {
             i->second[j]->free();
         }
     }
@@ -615,7 +615,7 @@ void MCObject::deleteContacts(MCObject * p)
 {
     auto i(m_pImpl->m_contacts.find(p));
     if (i != m_pImpl->m_contacts.end()) {
-        for (UINT j = 0; j < i->second.size(); j++) {
+        for (MCUint j = 0; j < i->second.size(); j++) {
             i->second[j]->free();
         }
         i->second.clear();

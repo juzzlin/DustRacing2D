@@ -53,10 +53,10 @@ public:
   MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
 
   //! Return type id
-  static UINT typeID();
+  static MCUint typeID();
 
   //! \reimp
-  virtual UINT instanceTypeID() const;
+  virtual MCUint instanceTypeID() const;
 
   //! \reimp
   virtual MCBBox<MCFloat> bbox() const;

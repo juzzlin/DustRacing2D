@@ -26,8 +26,8 @@
 
 namespace
 {
-  const UINT LUT_SIZE = 0x1000;
-  const UINT MOD_MASK = 0x0fff;
+  const MCUint LUT_SIZE = 0x1000;
+  const MCUint MOD_MASK = 0x0fff;
 }
 
 shared_ptr<MCRandomImpl> const MCRandom::m_pImpl(new MCRandomImpl);
@@ -43,7 +43,7 @@ void MCRandomImpl::buildLUT()
 {
   // Create the LUT
   std::srand(QDateTime().time().msec());
-  for (UINT i = 0; i < LUT_SIZE; i++) {
+  for (MCUint i = 0; i < LUT_SIZE; i++) {
     m_data[i] = (TO_DOUBLE(std::rand() % RAND_MAX)) / RAND_MAX;
   }
 }

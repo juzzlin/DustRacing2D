@@ -31,7 +31,7 @@ class MCRectShapeImpl : public MCShapeImpl
 public:
   explicit MCRectShapeImpl(MCObject * pParent, MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
-  static UINT m_typeID;
+  static MCUint m_typeID;
 
 private:
   inline MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;

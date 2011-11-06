@@ -20,6 +20,7 @@
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCTrigonom"
+#include "MiniCore/Core/MCWorld"
 #include <cmath>
 
 #include <QKeyEvent>
@@ -62,8 +63,8 @@ void Renderer::resizeGL(int width, int height)
     glLoadIdentity();
 
     // Set eye position so that the scene looks like a pure 2D-scene
-    const int sceneH = width  / 2;
-    const int sceneW = height / 2;
+    const int sceneH = width;
+    const int sceneW = height;
     const float eyeZ = sceneH / 2 /
             std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
     gluLookAt(sceneW / 2, sceneH / 2, eyeZ,
@@ -73,24 +74,34 @@ void Renderer::resizeGL(int width, int height)
 
 void Renderer::paintGL()
 {
+    makeCurrent();
+
     if (m_pCamera) // Qt might update the widget before camera is set
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (m_pScene && m_pScene->activeTrack())
+        if (m_pScene)
         {
-            m_pScene->activeTrack()->render(m_pCamera);
+             if (m_pScene->activeTrack())
+             {
+                m_pScene->activeTrack()->render(m_pCamera);
+             }
+
+             if (m_pScene->world())
+             {
+                 m_pScene->world()->render(m_pCamera);
+             }
         }
     }
 
-    QGLWidget::swapBuffers();
+    swapBuffers();
 }
 
 void Renderer::updateFrame(MCCamera * pCamera)
 {
     m_pCamera = pCamera;
 
-    updateGL();
+    paintGL();
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)

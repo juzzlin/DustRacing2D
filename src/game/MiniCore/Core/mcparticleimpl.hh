@@ -30,8 +30,8 @@ public:
 private:
   inline void stepTime();
   MCParticle * m_pPublic;
-  UINT m_lifeTime;
-  UINT m_initLifeTime;
+  MCUint m_lifeTime;
+  MCUint m_initLifeTime;
   MCParticle::AnimationStyle m_animationStyle;
   bool m_isActive;
   MCFloat m_scale;

@@ -62,13 +62,13 @@ public:
     virtual void print(ostream & os);
 
     //! Pad to given length with given char
-    virtual void padToLength(UINT length, char c);
+    virtual void padToLength(MCUint length, char c);
 
     //! Get width of the current text using given font
-    virtual UINT width(const MCFont * rFont) const;
+    virtual MCUint width(const MCFont * rFont) const;
 
     //! Get height of the current text using given font
-    virtual UINT height(const MCFont * rFont) const;
+    virtual MCUint height(const MCFont * rFont) const;
 
     //! Get text as a std QString
     virtual const QString & text() const;

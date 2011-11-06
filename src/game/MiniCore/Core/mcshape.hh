@@ -105,10 +105,10 @@ public:
   /*! Rotate
    * \param a The new rotation angle in degrees
    */
-  virtual void rotate(UINT a);
+  virtual void rotate(MCUint a);
 
   //! Return the current angle
-  UINT angle() const;
+  MCUint angle() const;
 
   //! Return non-rotated bounding box of the shape
   virtual MCBBox<MCFloat> bbox() const = 0;
@@ -136,10 +136,10 @@ public:
   /*! Register a new event type
    * \return The new unique type ID
    */
-  static UINT registerType();
+  static MCUint registerType();
 
   //! Return class-wide type id
-  virtual UINT instanceTypeID() const = 0;
+  virtual MCUint instanceTypeID() const = 0;
 
 private:
 

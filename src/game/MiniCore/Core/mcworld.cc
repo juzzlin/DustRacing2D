@@ -31,6 +31,7 @@ MCWorld * MCWorldImpl::m_pInstance = nullptr;
 MCWorldImpl::MCWorldImpl()
 : m_pForceRegistry(new MCForceRegistry)
 , m_pResolver(new MCContactResolver)
+, m_pQuadtree(nullptr)
 , minX(0)
 , maxX(0)
 , minY(0)
@@ -46,7 +47,7 @@ void MCWorldImpl::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     m_pForceRegistry->update();
-    for (UINT i = 0; i < m_objs.size(); i++) {
+    for (MCUint i = 0; i < m_objs.size(); i++) {
         MCObject * const p(m_objs[i]);
         if (p->physicsObject() && !p->stationary()) {
             p->integrate(step);
@@ -63,7 +64,7 @@ void MCWorldImpl::detectCollisions()
     static MCQuadtree::ObjectSet collisions;
     MCQuadtree::ObjectSet::iterator j;
     MCQuadtree::ObjectSet::iterator j2;
-    for (UINT i = 0; i < m_objs.size(); i++) {
+    for (MCUint i = 0; i < m_objs.size(); i++) {
         MCObject * const p(m_objs[i]);
         if (p->physicsObject()) {
             collisions.clear();
@@ -156,7 +157,7 @@ void MCWorldImpl::render(MCCamera * pCamera)
     LayerHash::iterator j;
     LayerHash::iterator end;
     MCObject * pObj = nullptr;
-    for (UINT i = 0; i < MCWorld::MAX_LAYERS; i++) {
+    for (MCUint i = 0; i < MCWorld::MAX_LAYERS; i++) {
         j   = m_layers[i].begin();
         end = m_layers[i].end();
         for (; j != end; j++) {
@@ -172,9 +173,9 @@ void MCWorldImpl::render(MCCamera * pCamera)
 
 void MCWorldImpl::renderShadows(MCCamera * pCamera)
 {
-    const UINT i2 = m_objs.size();
+    const MCUint i2 = m_objs.size();
     MCObject * pObj = nullptr;
-    for (UINT i = 0; i < i2; i++) {
+    for (MCUint i = 0; i < i2; i++) {
         pObj = m_objs[i];
         if (pObj->renderable() && pObj->hasShadow()) {
             if ((pCamera && pCamera->isVisible(pObj->bbox())) || !pCamera) {
@@ -212,6 +213,7 @@ void MCWorld::setDimensions(MCFloat minX_, MCFloat maxX_, MCFloat minY_, MCFloat
     const MCFloat MIN_LEAF_HEIGHT = 64;
 
     // Init quadtree
+    delete m_pImpl->m_pQuadtree;
     m_pImpl->m_pQuadtree = new MCQuadtree(minX_, minY_, maxX_, maxY_,
                                           MIN_LEAF_WIDTH, MIN_LEAF_HEIGHT);
     // Set dimensions
@@ -290,8 +292,10 @@ void MCWorld::removeObjectNow(MCObject * p)
 {
     p->setRemoving(true);
     for (MCObject * obj : m_pImpl->m_objs) {
-        if (obj->physicsObject()) {
-            obj->deleteContacts(p);
+        if (obj != p) {
+            if (obj->physicsObject()) {
+                obj->deleteContacts(p);
+            }
         }
     }
 
@@ -322,7 +326,7 @@ void MCWorldImpl::removeObject(MCObject * p)
     p->setRemoving(false);
 }
 
-void MCWorldImpl::removeObjects()
+void MCWorldImpl::processRemovedObjects()
 {
     for (MCObject * obj : m_removeObjs) {
         if (obj->removing()) {
@@ -334,13 +338,13 @@ void MCWorldImpl::removeObjects()
 
 void MCWorldImpl::addToLayerMap(MCObject * p)
 {
-    const UINT layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
+    const MCUint layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
     m_layers[layerIndex].insert(p);
 }
 
 void MCWorldImpl::removeFromLayerMap(MCObject * p)
 {
-    const UINT layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
+    const MCUint layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
     m_layers[layerIndex].erase(p);
 }
 
@@ -376,7 +380,7 @@ void MCWorld::stepTime(MCFloat step)
     m_pImpl->processContacts();
 
     // Remove objects that are marked to be removed
-    m_pImpl->removeObjects();
+    m_pImpl->processRemovedObjects();
 }
 
 void MCWorld::render(MCCamera * pCamera)

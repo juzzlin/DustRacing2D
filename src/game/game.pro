@@ -76,6 +76,7 @@ HEADERS += car.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
+    layers.h
 
 # Engine
 HEADERS += MiniCore/Core/mccamera.hh \

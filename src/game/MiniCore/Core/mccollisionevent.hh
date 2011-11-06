@@ -49,17 +49,17 @@ public:
   MCObject * collidingObject() const;
 
   //! Return the typeID
-  static UINT typeID();
+  static MCUint typeID();
 
   //! \reimp
-  virtual UINT instanceTypeID() const;
+  virtual MCUint instanceTypeID() const;
 
 private:
 
   DISABLE_COPY(MCCollisionEvent);
   DISABLE_ASSI(MCCollisionEvent);
 
-  static UINT m_typeID;
+  static MCUint m_typeID;
   MCCollisionEventImpl * const m_pImpl;
 };
 

@@ -17,7 +17,8 @@
 #define CAR_H
 
 #include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCSurface"
+
+class MCSurface;
 
 //! Base class for race cars.
 class Car : public MCObject
@@ -30,9 +31,9 @@ public:
     //! Destructor.
     virtual ~Car();
 
-protected:
-
 private:
+
+    MCSurface * m_pSurface;
 };
 
 #endif // CAR_H

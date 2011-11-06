@@ -22,7 +22,7 @@
 #include "mcshapeview.hh"
 #include "mcmathutil.hh"
 
-UINT MCRectShapeImpl::m_typeID = MCShape::registerType();
+MCUint MCRectShapeImpl::m_typeID = MCShape::registerType();
 
 MCRectShapeImpl::MCRectShapeImpl(MCObject * pParent, MCFloat width, MCFloat height) :
   MCShapeImpl(pParent),
@@ -95,7 +95,7 @@ void MCRectShape::translate(const MCVector3d<MCFloat> & p)
   m_pImpl->m_obbox.translate(p);
 }
 
-void MCRectShape::rotate(UINT a)
+void MCRectShape::rotate(MCUint a)
 {
   MCShape::rotate(a);
   m_pImpl->m_obbox.rotate(angle());
@@ -128,12 +128,12 @@ MCVector2d<MCFloat> MCRectShape::contactNormal(const MCVector2d<MCFloat> & p) co
   return m_pImpl->contactNormal(p);
 }
 
-UINT MCRectShape::typeID()
+MCUint MCRectShape::typeID()
 {
   return MCRectShapeImpl::m_typeID;
 }
 
-UINT MCRectShape::instanceTypeID() const
+MCUint MCRectShape::instanceTypeID() const
 {
   return MCRectShapeImpl::m_typeID;
 }
