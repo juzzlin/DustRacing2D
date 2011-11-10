@@ -30,6 +30,7 @@ Renderer::Renderer(QWidget * parent)
 , m_pScene(nullptr)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
+, m_viewAngle(135.0f)
 {
     setFocusPolicy(Qt::StrongFocus);
 }
@@ -45,37 +46,41 @@ void Renderer::initializeGL()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void Renderer::resizeGL(int width, int height)
+void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-    if (height == 0)
+    if (viewHeight == 0)
     {
-        height = 1;
+        viewHeight = 1;
     }
 
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, viewWidth, viewHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    const float viewAngle = 135.0f;
-    gluPerspective(viewAngle, static_cast<GLfloat>(width) / height, 0.1f, 1000.0f);
+    const float zNear = 0.0f;
+    const float zFar  = 1000.0f;
+
+    gluPerspective(m_viewAngle, static_cast<GLfloat>(viewWidth) /
+        viewHeight, zNear, zFar);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    setViewerPosition(viewWidth, viewHeight);
+}
+
+void Renderer::setViewerPosition(int viewWidth, int viewHeight) const
+{
     // Set eye position so that the scene looks like a pure 2D-scene
-    const int sceneH = width;
-    const int sceneW = height;
-    const float eyeZ = sceneH / 2 /
-            std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
-    gluLookAt(sceneW / 2, sceneH / 2, eyeZ,
-              sceneW / 2, sceneH / 2, 0,
+    const float eyeZ = viewHeight / 2 /
+        std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(m_viewAngle / 2)));
+    gluLookAt(viewWidth / 2, viewHeight / 2, eyeZ,
+              viewWidth / 2, viewHeight / 2, 0,
               0, 1, 0);
 }
 
 void Renderer::paintGL()
 {
-    makeCurrent();
-
     if (m_pCamera) // Qt might update the widget before camera is set
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

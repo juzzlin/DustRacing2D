@@ -52,7 +52,7 @@ protected:
     virtual void initializeGL();
 
     //! \reimp
-    virtual void resizeGL(int width, int height);
+    virtual void resizeGL(int viewWidth, int viewHeight);
 
     //! \reimp
     virtual void paintGL();
@@ -65,9 +65,14 @@ protected:
 
 private:
 
+    //! Set viewer position so that the scene looks like
+    //! a pure 2D-scene.
+    void setViewerPosition(int viewWidth, int viewHeight) const;
+
     Scene        * m_pScene;
     MCCamera     * m_pCamera;
     InputHandler * m_pInputHandler;
+    const float    m_viewAngle;
 };
 
 #endif // RENDERER_H
