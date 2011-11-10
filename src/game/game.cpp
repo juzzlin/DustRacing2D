@@ -35,13 +35,14 @@ Game::Game()
 , m_pInputHandler(new InputHandler)
 , m_updateTimer()
 , m_renderTimer()
-, m_targetUpdateFps(30)
-, m_targetRenderFps(30)
-, m_timeStep(1.0f / m_targetUpdateFps)
+, m_updateFps(30)
+, m_timeStep(1.0f / m_updateFps)
+, m_renderCount(0)
+, m_availableRenderTime(0)
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-
-    connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(renderFrame()));
+    connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
+    m_renderTimer.setInterval(1000);
 
     m_pTrackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
         QDir::separator() + "levels");
@@ -49,14 +50,8 @@ Game::Game()
 
 void Game::setTargetUpdateFps(unsigned int fps)
 {
-    m_targetUpdateFps = fps;
-    m_timeStep  = 1.0f / m_targetUpdateFps;
-}
-
-void Game::setTargetRenderFps(unsigned int fps)
-{
-    m_targetRenderFps = fps;
-    m_timeStep  = 1.0f / m_targetRenderFps;
+    m_updateFps = fps;
+    m_timeStep  = 1.0f / m_updateFps;
 }
 
 void Game::setRenderer(Renderer * newRenderer)
@@ -68,6 +63,12 @@ void Game::setRenderer(Renderer * newRenderer)
     m_pRenderer->makeCurrent();
 
     m_pRenderer->setInputHandler(m_pInputHandler);
+}
+
+void Game::finish()
+{
+    disconnect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    disconnect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
 }
 
 Renderer * Game::renderer() const
@@ -127,10 +128,9 @@ bool Game::init()
 
 void Game::start()
 {
-    m_updateTimer.setInterval(1000 / m_targetUpdateFps);
+    m_updateTimer.setInterval(1000 / m_updateFps);
     m_updateTimer.start();
 
-    m_renderTimer.setInterval(1000 / m_targetRenderFps);
     m_renderTimer.start();
 }
 
@@ -142,13 +142,34 @@ void Game::stop()
 
 void Game::updateFrame()
 {
+    static int renderTime = 0;
+    static QTime updateTimer;
+    updateTimer.start();
+
     static int x = 0;
     static int y = 0;
-    x+=1;
-    y+=1;
+    x ++;
+    y ++;
 
     m_pScene->updateFrame(m_timeStep);
     m_pCamera->setPos(x, y);
+
+    const int updateTime      = updateTimer.elapsed();
+    const int availableTimeMs = 1000 / m_updateFps;
+    if (m_availableRenderTime >= renderTime)
+    {
+        static QTime renderTimer;
+        renderTimer.start();
+        renderFrame();
+        renderTime = (renderTimer.elapsed() + renderTime) / 2;
+        m_renderCount++;
+
+        m_availableRenderTime -= renderTime;
+    }
+    else
+    {
+        m_availableRenderTime += availableTimeMs - updateTime;
+    }
 }
 
 void Game::renderFrame()
@@ -157,6 +178,12 @@ void Game::renderFrame()
     {
         m_pRenderer->updateFrame(m_pCamera);
     }
+}
+
+void Game::countRenderFps()
+{
+    std::cout << m_renderCount << std::endl;
+    m_renderCount = 0;
 }
 
 Game::~Game()

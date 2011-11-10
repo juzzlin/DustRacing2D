@@ -61,6 +61,7 @@ MainWindow * MainWindow::instance()
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
+    emit closed();
     event->accept();
 }
 

@@ -38,8 +38,7 @@ int main(int argc, char ** argv)
     MCLogger::logInfo("Creating game..");
     Game game;
     game.setRenderer(new Renderer);
-    game.setTargetUpdateFps(240);
-    game.setTargetRenderFps(60);
+    game.setTargetUpdateFps(100);
 
     // Initialize and start the game
     if (game.init())
@@ -57,6 +56,8 @@ int main(int argc, char ** argv)
     MainWindow mainWindow;
     mainWindow.setCentralWidget(game.renderer());
     mainWindow.show();
+
+    game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
 
     return app.exec();
 }

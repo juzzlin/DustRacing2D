@@ -63,10 +63,12 @@ public:
 private slots:
 
     void updateFrame();
-
-    void renderFrame();
+    void countRenderFps();
+    void finish();
 
 private:
+
+    void renderFrame();
 
     Renderer         * m_pRenderer;
     Scene            * m_pScene;
@@ -76,9 +78,11 @@ private:
     InputHandler     * m_pInputHandler;
     QTimer             m_updateTimer;
     QTimer             m_renderTimer;
-    unsigned int       m_targetUpdateFps;
-    unsigned int       m_targetRenderFps;
+    unsigned int       m_updateFps;
+    unsigned int       m_renderFps;
     float              m_timeStep;
+    unsigned int       m_renderCount;
+    int                m_availableRenderTime;
 };
 
 #endif // GAME_H

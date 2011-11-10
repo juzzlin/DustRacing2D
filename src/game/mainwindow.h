@@ -42,6 +42,10 @@ public:
     //! Run the game
     void runGame();
 
+signals:
+
+    void closed();
+
 protected:
 
     //! \reimp
