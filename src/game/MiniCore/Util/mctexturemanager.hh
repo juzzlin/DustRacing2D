@@ -47,22 +47,21 @@ class MCSurface;
  * Example mapping file:
  *
  * <?xml version="1.0"?>
- *
- * <textures version="1.0">
- *   <default_path value="./data/images/"/>
- *   <x_axis_mirror value=1/>
- *   <colorkey r=255 g=255 b=255/>
- *   <texture handle="BALL_GREEN" file="ball_green.png" w="16" h="16"/>
- *   <texture handle="BALL_BLUE"  file="ball_blue.bmp"/>
- *   <texture handle="BALL_BROWN" file="ball_brown.bmp"/>
- *   <texture handle="BAZOOKA"    file="bazooka.jpg" x="10" y="5"/>
- *   <colorkey r=255 g=0 b=0/>
- *   <x_axis_mirror value=0/>
+ * <textures basePath="./data/images/">
+ *   <texture handle="Car" file="car1.png" w="16" h="16"
+ *     xAxisMirror="1">
+ *     <colorKey r="255" g="255" b="255"/>
+ *   </texture>
+ *   <texture handle="Car" file="car1.png" w="16" h="16">
+ *     <alphaTest func="greater" threshold="0.5">
+ *   </texture>
+ *   <texture handle="Wall" file="wall.bmp"/>
+ *   <texture handle="Track" file="track.bmp"/>
+ *   <texture handle="Bazooka" file="bazooka.jpg" x="10" y="5">
+ *     <colorKey r="255" g="0" b="0"/>
+ *   </texture>
  *   <texture handle="WINDOW_ICON" file="logo_v2.bmp"/>
  * </textures>
- *
- * Note: there can be multiple default_path, colorkey and x_axis_mirror
- *       settings, if needed.
  *
  */
 class MCTextureManager

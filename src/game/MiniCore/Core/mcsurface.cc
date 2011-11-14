@@ -41,7 +41,7 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 {}
 
 MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight,
-                             const MCVector2d<MCFloat> & newCenter, bool useAlphaTest)
+    const MCVector2d<MCFloat> & newCenter, bool useAlphaTest)
 : m_handle(newHandle)
 , m_w(newWidth)
 , m_w2(newWidth / 2)
@@ -53,11 +53,11 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 {}
 
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, bool useAlphaTest) :
-        m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight, useAlphaTest))
+    m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight, useAlphaTest))
 {}
 
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, const MCVector2d<MCFloat> & newCenter,
-                     bool useAlphaTest) :
+    bool useAlphaTest) :
 m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight, newCenter, useAlphaTest))
 {}
 
@@ -126,11 +126,7 @@ void MCSurfaceImpl::render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, 
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
     }
 
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
-    }
+    doAlphaTest();
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_handle);
@@ -182,11 +178,7 @@ void MCSurfaceImpl::renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFlo
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
     }
 
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
-    }
+    doAlphaTest();
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_handle);
@@ -236,11 +228,7 @@ void MCSurfaceImpl::renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int a
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), 0);
     }
 
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
-    }
+    doAlphaTest();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
@@ -292,11 +280,7 @@ void MCSurfaceImpl::renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y,
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), 0);
     }
 
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
-    }
+    doAlphaTest();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
@@ -318,6 +302,15 @@ void MCSurfaceImpl::renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y,
 
     glPopMatrix();
     glPopAttrib();
+}
+
+void MCSurfaceImpl::doAlphaTest() const
+{
+    if (m_useAlphaTest)
+    {
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
+    }
 }
 
 GLuint MCSurface::handle() const

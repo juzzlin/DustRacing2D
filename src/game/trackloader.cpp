@@ -87,59 +87,63 @@ TrackData * TrackLoader::loadTrack(QString path)
 
     file.close();
 
-    QDomElement  root = doc.documentElement();
-    QString      name = root.attribute("name", "undefined");
-    unsigned int cols = root.attribute("cols", "0").toUInt();
-    unsigned int rows = root.attribute("rows", "0").toUInt();
-
     TrackData * newData = nullptr;
-    if (cols > 0 && rows > 0)
+
+    QDomElement root = doc.documentElement();
+    if (root.nodeName() == "track")
     {
-        newData = new TrackData(name, cols, rows);
-        newData->setFileName(path);
+        QString      name = root.attribute("name", "undefined");
+        unsigned int cols = root.attribute("cols", "0").toUInt();
+        unsigned int rows = root.attribute("rows", "0").toUInt();
 
-        QVector<TrackTile *> routeVector;
-
-        QDomNode node = root.firstChild();
-        while(!node.isNull())
+        if (cols > 0 && rows > 0)
         {
-            QDomElement tag = node.toElement();
-            if(!tag.isNull())
+            newData = new TrackData(name, cols, rows);
+            newData->setFileName(path);
+
+            QVector<TrackTile *> routeVector;
+
+            QDomNode node = root.firstChild();
+            while(!node.isNull())
             {
-                // Read a tile tag
-                if (tag.nodeName() == "tile")
+                QDomElement tag = node.toElement();
+                if(!tag.isNull())
                 {
-                    QString      id = tag.attribute("type", "clear");
-                    unsigned int i  = tag.attribute("i", "0").toUInt();
-                    unsigned int j  = tag.attribute("j", "0").toUInt();
-                    int          o  = tag.attribute("o", "0").toInt();
-                    int      index  = tag.attribute("index", "-1").toInt();
-
-                    // Reverse the y-coordinate and angle
-                    j = cols - j - 1;
-                    o = -o;
-
-                    if (TrackTile * tile = newData->map().getTile(i, j))
+                    // Read a tile tag
+                    if (tag.nodeName() == "tile")
                     {
-                        tile->setRotation(o);
-                        tile->setTileType(id);
-                        tile->setRouteIndex(index);
+                        QString      id = tag.attribute("type", "clear");
+                        unsigned int i  = tag.attribute("i", "0").toUInt();
+                        unsigned int j  = tag.attribute("j", "0").toUInt();
+                        int          o  = tag.attribute("o", "0").toInt();
+                        int      index  = tag.attribute("index", "-1").toInt();
 
-                        // Associate with a surface object corresponging
-                        // to the tile type.
-                        // surface() throws if fails. Handled of higher level.
-                        tile->setSurface(m_textureManager->surface(id));
+                        // Reverse the y-coordinate and angle
+                        j = cols - j - 1;
+                        o = -o;
 
-                        if (index >= 0)
-                            routeVector << tile;
+                        if (TrackTile * tile = newData->map().getTile(i, j))
+                        {
+                            tile->setRotation(o);
+                            tile->setTileType(id);
+                            tile->setRouteIndex(index);
+
+                            // Associate with a surface object corresponging
+                            // to the tile type.
+                            // surface() throws if fails. Handled of higher level.
+                            tile->setSurface(m_textureManager->surface(id));
+
+                            if (index >= 0)
+                                routeVector << tile;
+                        }
                     }
                 }
+
+                node = node.nextSibling();
             }
 
-            node = node.nextSibling();
+            newData->route().buildFromVector(routeVector);
         }
-
-        newData->route().buildFromVector(routeVector);
     }
 
     return newData;

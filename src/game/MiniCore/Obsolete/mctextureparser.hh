@@ -27,7 +27,6 @@
 #include <QtXml>
 #include <QList>
 
-
 //! Parser for the XML-formatted texture file.
 class MCTextureParser : public QXmlDefaultHandler
 {

@@ -57,8 +57,8 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcsurfaceview.cc \
     MiniCore/Core/mctrigonom.cc \
     MiniCore/Core/mcworld.cc \
+    MiniCore/Util/mctextureconfigloader.cc \
     MiniCore/Util/mctexturemanager.cc \
-    MiniCore/Util/mctextureparser.cc \
 
 HEADERS += car.h \
     game.h \
@@ -76,7 +76,7 @@ HEADERS += car.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
-    layers.h
+    layers.h \
 
 # Engine
 HEADERS += MiniCore/Core/mccamera.hh \
@@ -110,5 +110,5 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mctrigonom.hh \
     MiniCore/Core/mcworld.hh \
     MiniCore/Util/mctexturedata.hh \
+    MiniCore/Util/mctextureconfigloader.hh \
     MiniCore/Util/mctexturemanager.hh \
-    MiniCore/Util/mctextureparser.hh \

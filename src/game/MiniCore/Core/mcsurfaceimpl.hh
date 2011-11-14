@@ -39,6 +39,8 @@ public:
 
 private:
 
+    inline void doAlphaTest() const;
+
     GLuint m_handle;
     MCFloat m_w;
     MCFloat m_w2;

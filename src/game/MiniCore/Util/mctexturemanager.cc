@@ -19,8 +19,8 @@
 
 #include "../Core/mctypes.hh"
 #include "../Core/mcsurface.hh"
+#include "mctextureconfigloader.hh"
 #include "mctexturemanager.hh"
-#include "mctextureparser.hh"
 
 #include <QDir>
 #include <QGLWidget>
@@ -30,33 +30,23 @@ MCTextureManager::MCTextureManager()
 : m_mapTextures()
 {}
 
-void MCTextureManager::load(const QString & fileName, const QString & baseDataPath) throw (MCException)
+void MCTextureManager::load(
+    const QString & fileName, const QString & baseDataPath) throw (MCException)
 {
-    // Instantiate a parser
-    MCTextureParser handler;
-
-    // Instantiate a QFile for the texture file
-    QFile xmlFile(fileName);
-
-    // Set QXmlInputSource to the QFile
-    QXmlInputSource source(&xmlFile);
-
-    // Instantiate a simple (SAX2) reader
-    QXmlSimpleReader reader;
-
-    // Set it to use the MCTextureParser as the handler
-    reader.setContentHandler(&handler);
-    reader.setErrorHandler(&handler);
+    MCTextureConfigLoader loader;
+    loader.setConfigPath(fileName);
 
     // Parse the texture config file
-    if (reader.parse(source))
+    if (loader.loadTextures())
     {
-        // Get texture data / parameters
-        QList<MCTextureData> textureDataList = handler.textureData();
-        for (MCTextureData data : textureDataList)
+        int numTextures = loader.textures();
+        for (int i = 0; i < numTextures; i++)
         {
+            const MCTextureData & data = *loader.texture(i);
+
             // Load image file
-            QString path = baseDataPath + QDir::separator().toAscii() + data.imagePath;
+            const QString path =
+                baseDataPath + QDir::separator().toAscii() + data.imagePath;
 
             // Load the image
             QImage textureImage;
@@ -99,13 +89,14 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, const QImage & image)
+void MCTextureManager::createGLTextureFromImage(
+    const MCTextureData & data, const QImage & image)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image.height();
     int origW = data.widthSet  ? data.width  : image.width();
 
-    // Create a surface with dimensions of 2**n
+    // Create a surface with dimensions of 2^n
     QImage textureImage = createNearest2PowNImage(image);
 
     // Flip pA about X-axis if set active
@@ -124,15 +115,20 @@ void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, cons
         {
             for (int j = 0; j < textureImage.height(); j++)
             {
-                if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,        data.colorKey.b, 2) &&
-                    colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,  data.colorKey.g, 2) &&
-                    colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, data.colorKey.r, 2))
+                if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,
+                    data.colorKey.b, 2) &&
+                    colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,
+                    data.colorKey.g, 2) &&
+                    colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16,
+                    data.colorKey.r, 2))
                 {
-                    textureImage.setPixel(i, j, textureImage.pixel(i, j) & 0x00000000);
+                    textureImage.setPixel(i, j, textureImage.pixel(i, j) &
+                        0x00000000);
                 }
                 else
                 {
-                    textureImage.setPixel(i, j, textureImage.pixel(i, j) | 0xff000000);
+                    textureImage.setPixel(i, j, textureImage.pixel(i, j) |
+                        0xff000000);
                 }
             }
         }
@@ -153,14 +149,15 @@ void MCTextureManager::createGLTextureFromImage(const MCTextureData & data, cons
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Edit image data using the information textureImage gives us
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(), 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(),
+        0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 
     // Create a new MCSurface object
     MCSurface * pTexture = nullptr;
     if (data.centerSet)
     {
-        pTexture = new MCSurface(textureHandle, origW, origH, data.center, data.colorKeySet);
+        pTexture = new MCSurface(textureHandle, origW, origH, data.center,
+            data.colorKeySet);
     }
     else
     {
