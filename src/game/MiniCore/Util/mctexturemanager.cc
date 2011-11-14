@@ -116,11 +116,11 @@ void MCTextureManager::createGLTextureFromImage(
             for (int j = 0; j < textureImage.height(); j++)
             {
                 if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,
-                    data.colorKey.b, 2) &&
+                    data.colorKey.m_b, 2) &&
                     colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,
-                    data.colorKey.g, 2) &&
+                    data.colorKey.m_g, 2) &&
                     colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16,
-                    data.colorKey.r, 2))
+                    data.colorKey.m_r, 2))
                 {
                     textureImage.setPixel(i, j, textureImage.pixel(i, j) &
                         0x00000000);

@@ -41,8 +41,6 @@ void MCTextureConfigLoader::setConfigPath(QString path)
 bool MCTextureConfigLoader::loadTextures()
 {
     QDomDocument doc;
-    int numLoaded = 0;
-
     QFile file(m_filePath);
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -70,15 +68,11 @@ bool MCTextureConfigLoader::loadTextures()
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                bool         colorKeySet  = false;
-                bool         alphaTestSet = false;
-                bool         xAxisMirror  = tag.attribute("xAxisMirror", "0").toInt();
-                unsigned int width        = tag.attribute("w", "0").toUInt();
-                unsigned int height       = tag.attribute("h", "0").toUInt();
-                int          x            = tag.attribute("x", "0").toInt();
-                int          y            = tag.attribute("y", "0").toInt();
-                QString      file         = tag.attribute("file", "");
-                QString      handle       = tag.attribute("handle", "");
+                bool         xAxisMirror = tag.attribute("xAxisMirror", "0").toInt();
+                unsigned int width       = tag.attribute("w", "0").toUInt();
+                unsigned int height      = tag.attribute("h", "0").toUInt();
+                QString      file        = tag.attribute("file", "");
+                QString      handle      = tag.attribute("handle", "");
 
                 newData->imagePath   = basePath + QDir::separator() + file;
                 newData->handle      = handle;
@@ -96,30 +90,41 @@ bool MCTextureConfigLoader::loadTextures()
                     newData->heightSet = true;
                 }
 
-                if (x && y)
-                {
-                    newData->center    = MCVector2d<int>(x, y);
-                    newData->centerSet = true;
-                }
-
                 // Read child nodes of texture node.
                 QDomNode childNode = node.firstChild();
                 while(!childNode.isNull())
                 {
                     if (childNode.nodeName() == "colorKey")
                     {
-                        QDomElement tag = node.toElement();
+                        QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            colorKeySet = true;
+                            newData->colorKey.m_r = tag.attribute("r", "0").toUInt();
+                            newData->colorKey.m_g = tag.attribute("g", "0").toUInt();
+                            newData->colorKey.m_b = tag.attribute("b", "0").toUInt();
+                            newData->colorKeySet  = true;
                         }
                     }
                     else if (childNode.nodeName() == "alphaTest")
                     {
-                        QDomElement tag = node.toElement();
+                        QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            alphaTestSet = true;
+                            newData->alphaTest.m_threshold = tag.attribute("threshold", "0").toFloat();
+                            newData->alphaTest.m_function  = alphaFunctionStringToEnum(tag.attribute("function", ""));
+                            newData->alphaTestSet          = true;
+                        }
+                    }
+                    else if (childNode.nodeName() == "center")
+                    {
+                        QDomElement tag = childNode.toElement();
+                        if(!tag.isNull())
+                        {
+                            const int x = tag.attribute("x", "0").toInt();
+                            const int y = tag.attribute("y", "0").toInt();
+
+                            newData->center    = MCVector2d<int>(x, y);
+                            newData->centerSet = true;
                         }
                     }
 
@@ -134,6 +139,42 @@ bool MCTextureConfigLoader::loadTextures()
     }
 
     return true;
+}
+
+GLenum MCTextureConfigLoader::alphaFunctionStringToEnum(QString function) const
+{
+    if (function == "never")
+    {
+        return GL_NEVER;
+    }
+    else if (function == "less")
+    {
+        return GL_LESS;
+    }
+    else if (function == "equal")
+    {
+        return GL_EQUAL;
+    }
+    else if (function == "lequal")
+    {
+        return GL_LEQUAL;
+    }
+    else if (function == "greater")
+    {
+        return GL_GREATER;
+    }
+    else if (function == "notequal")
+    {
+        return GL_NOTEQUAL;
+    }
+    else if (function == "gequal")
+    {
+        return GL_GEQUAL;
+    }
+    else
+    {
+        return GL_ALWAYS;
+    }
 }
 
 unsigned int MCTextureConfigLoader::textures() const

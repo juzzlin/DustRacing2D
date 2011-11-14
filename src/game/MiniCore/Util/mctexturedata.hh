@@ -23,22 +23,20 @@
 #include "../Core/mctypes.hh"
 #include "../Core/mcvector2d.hh"
 
+#include <GL/gl.h> // For GLenum
 #include <QString>
-
-//! Possible colorkey setting
-struct ColorKey
-{
-    //! red, green, blue
-    MCUint r, g, b;
-};
 
 //! Texture data structure used by MCTextureParser.
 struct MCTextureData
 {
-    //! Constructor
-    MCTextureData() :
-        centerSet(false), heightSet(false),
-        widthSet(false), colorKeySet(false), xAxisMirror(false) {}
+    MCTextureData()
+    : centerSet(false)
+    , heightSet(false)
+    , widthSet(false)
+    , colorKeySet(false)
+    , alphaTestSet(false)
+    , xAxisMirror(false)
+    {}
 
     //! Handle of the texture
     QString handle;
@@ -64,11 +62,34 @@ struct MCTextureData
     //! Width
     int width;
 
-    //! True, if colorkey was set
-    bool colorKeySet;
+    //! Possible colorkey setting
+    struct ColorKey
+    {
+        //! red, green, blue
+        MCUint m_r, m_g, m_b;
+    };
 
     //! Colorkey, if set
     ColorKey colorKey;
+
+    //! True, if colorkey was set
+    bool colorKeySet;
+
+    //! Possible alphaTest setting
+    struct AlphaTest
+    {
+        //! Alpha test function
+        GLenum m_function;
+
+        //! Alpha test threshold
+        GLclampf m_threshold;
+    };
+
+    //! Alpha test, if set
+    AlphaTest alphaTest;
+
+    //! True, if alpha test was set
+    bool alphaTestSet;
 
     //! True if X-Axis mirroring is wanted
     bool xAxisMirror;

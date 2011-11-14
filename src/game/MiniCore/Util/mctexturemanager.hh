@@ -53,11 +53,12 @@ class MCSurface;
  *     <colorKey r="255" g="255" b="255"/>
  *   </texture>
  *   <texture handle="Car" file="car1.png" w="16" h="16">
- *     <alphaTest func="greater" threshold="0.5">
+ *     <alphaTest function="greater" threshold="0.5">
  *   </texture>
  *   <texture handle="Wall" file="wall.bmp"/>
  *   <texture handle="Track" file="track.bmp"/>
- *   <texture handle="Bazooka" file="bazooka.jpg" x="10" y="5">
+ *   <texture handle="Bazooka" file="bazooka.jpg">
+ *     <center x="10" y="5"/>
  *     <colorKey r="255" g="0" b="0"/>
  *   </texture>
  *   <texture handle="WINDOW_ICON" file="logo_v2.bmp"/>

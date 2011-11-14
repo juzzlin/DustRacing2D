@@ -23,6 +23,8 @@
 #include <QString>
 #include <QVector>
 
+#include <GL/gl.h> // For GLenum.
+
 class MCTextureData;
 
 //! Manages the texture config loading.
@@ -51,6 +53,8 @@ public:
 
 private:
 
+    //! Convert alpha test function string to enum.
+    GLenum alphaFunctionStringToEnum(QString function) const;
     QString m_filePath;
     QVector<MCTextureData *> m_textures;
 };
