@@ -102,13 +102,17 @@ private:
     //! Creates an OpenGL texture from a QImage + texture meta data
     void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
 
+    //! Apply given color key (set alpha values on / off).
+    void applyColorKey(QImage & textureImage,
+        MCUint r, MCUint g, MCUint b) const;
+
     //! Creates a scaled image with dimensions forced to the nearest power
     //! of two.
     QImage createNearest2PowNImage(const QImage & image);
 
     //! Map for resulting surface objects
-    typedef QHash<QString, MCSurface *> TextureHash;
-    TextureHash m_mapTextures;
+    typedef QHash<QString, MCSurface *> SurfaceHash;
+    SurfaceHash m_mapSurfaces;
 };
 
 #endif // MCTEXTUREMANAGER_HH

@@ -27,7 +27,7 @@
 #include <GL/gl.h>
 
 MCTextureManager::MCTextureManager()
-: m_mapTextures()
+: m_mapSurfaces()
 {}
 
 void MCTextureManager::load(
@@ -111,27 +111,8 @@ void MCTextureManager::createGLTextureFromImage(
     // Apply colorkey if it was set (set or clear alpha)
     if (data.colorKeySet)
     {
-        for (int i = 0; i < textureImage.width(); i++)
-        {
-            for (int j = 0; j < textureImage.height(); j++)
-            {
-                if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,
-                    data.colorKey.m_b, 2) &&
-                    colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,
-                    data.colorKey.m_g, 2) &&
-                    colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16,
-                    data.colorKey.m_r, 2))
-                {
-                    textureImage.setPixel(i, j, textureImage.pixel(i, j) &
-                        0x00000000);
-                }
-                else
-                {
-                    textureImage.setPixel(i, j, textureImage.pixel(i, j) |
-                        0xff000000);
-                }
-            }
-        }
+        applyColorKey(textureImage,
+            data.colorKey.m_r, data.colorKey.m_g, data.colorKey.m_b);
     }
 
     // Convert to GL_RGBA
@@ -144,7 +125,7 @@ void MCTextureManager::createGLTextureFromImage(
     // Bind the texture object
     glBindTexture(GL_TEXTURE_2D, textureHandle);
 
-    // Set the texture's stretching properties
+    // Disable smoothing filters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -153,25 +134,59 @@ void MCTextureManager::createGLTextureFromImage(
         0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 
     // Create a new MCSurface object
-    MCSurface * pTexture = nullptr;
+    MCSurface * pSurface = new MCSurface(textureHandle, origW, origH);
+
+    // Enable alpha test if it or color key was set
+    if (data.colorKeySet)
+    {
+        pSurface->setAlphaTest(true, GL_GREATER, 0.5f);
+    }
+    else if (data.alphaTestSet)
+    {
+        pSurface->setAlphaTest(true, data.alphaTest.m_function,
+            data.alphaTest.m_threshold);
+    }
+
+    // Set custom center if it was set
     if (data.centerSet)
     {
-        pTexture = new MCSurface(textureHandle, origW, origH, data.center,
-            data.colorKeySet);
-    }
-    else
-    {
-        pTexture = new MCSurface(textureHandle, origW, origH, data.colorKeySet);
+        pSurface->setCenter(data.center);
     }
 
     // Store MCSurface to map
-    m_mapTextures[data.handle] = pTexture;
+    m_mapSurfaces[data.handle] = pSurface;
+}
+
+void MCTextureManager::applyColorKey(QImage & textureImage,
+    MCUint r, MCUint g, MCUint b) const
+{
+    for (int i = 0; i < textureImage.width(); i++)
+    {
+        for (int j = 0; j < textureImage.height(); j++)
+        {
+            if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,
+                b, 2) &&
+                colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,
+                g, 2) &&
+                colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16,
+                r, 2))
+            {
+                textureImage.setPixel(i, j, textureImage.pixel(i, j) &
+                    0x00000000);
+            }
+            else
+            {
+                textureImage.setPixel(i, j, textureImage.pixel(i, j) |
+                    0xff000000);
+            }
+        }
+    }
 }
 
 MCSurface * MCTextureManager::surface(const QString & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (!m_mapTextures.contains(id))
+    if (!m_mapSurfaces.contains(id))
     {
         // No:
         throw MCException("Cannot find texture object for handle '" + id + "'");
@@ -180,15 +195,15 @@ MCSurface * MCTextureManager::surface(const QString & id) const throw (MCExcepti
     else
     {
         // Yes: return handle for the texture
-        return m_mapTextures.find(id).value();
+        return m_mapSurfaces.find(id).value();
     }
 }
 
 MCTextureManager::~MCTextureManager()
 {
     // Delete OpenGL textures and Textures
-    TextureHash::iterator iter(m_mapTextures.begin());
-    while (iter != m_mapTextures.end())
+    SurfaceHash::iterator iter(m_mapSurfaces.begin());
+    while (iter != m_mapSurfaces.end())
     {
         if (iter.value())
         {
@@ -199,5 +214,5 @@ MCTextureManager::~MCTextureManager()
         }
         iter++;
     }
-    m_mapTextures.clear();
+    m_mapSurfaces.clear();
 }

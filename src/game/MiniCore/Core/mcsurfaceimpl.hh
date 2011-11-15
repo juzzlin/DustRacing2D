@@ -25,9 +25,7 @@ class MCSurfaceImpl
 {
 public:
 
-    MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
-    MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height,
-                  const MCVector2d<MCFloat> & center, bool useAlphaTest);
+    MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height);
     virtual ~MCSurfaceImpl() {};
 
     MCBBox<MCFloat> inline rotatedBBox(MCFloat x, MCFloat y, int angle);
@@ -49,6 +47,8 @@ private:
     MCVector2d<MCFloat> m_center;
     bool m_centerSet;
     bool m_useAlphaTest;
+    GLenum m_alphaFunc;
+    GLclampf m_alphaThreshold;
     friend class MCSurface;
 };
 

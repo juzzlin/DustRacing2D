@@ -46,22 +46,23 @@ public:
     //! \param handle Handle of the corresponding OpenGL texture.
     //! \param width  Desired width of the surface when rendered 1:1.
     //! \param height Desired height of the surface when rendered 1:1.
-    //! \param useAlphaTest Alpha is tested for colorkeying if true. Pixels whose
-    //!        alpha is < 0.5f are not rendered.
-    MCSurface(GLuint handle, MCFloat width, MCFloat height, bool useAlphaTest);
-
-    //! Constructor.
-    //! \param handle Handle of the corresponding OpenGL texture.
-    //! \param width  Desired width of the surface when rendered 1:1.
-    //! \param height Desired height of the surface when rendered 1:1.
-    //! \param center Vector that defines a custom rotation point other than
-    //!        (width / 2, height / 2).
-    //! \param useAlphaTest Alpha is tested for colorkeying if true. Pixels whose
-    //!        alpha is < 0.5f are not rendered.
-    MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCVector2d<MCFloat> & center, bool useAlphaTest);
+    MCSurface(GLuint handle, MCFloat width, MCFloat height);
 
     //! Destructor.
     virtual ~MCSurface();
+
+    //! Set the point the surface is centered about.
+    //! \param center Vector that defines a custom rotation point other than
+    //!        (width / 2, height / 2) which is the default.
+    void setCenter(const MCVector2d<MCFloat> & center);
+
+    //! Enable / disable alpha test.
+    //! \param useAlphaTest Alpha is tested for colorkeying if true.
+    //! \param alphaFunc Alpha function used in alpha test. Has no effect
+    //!        if useAlphaTest equals false.
+    //! \param threshold Threshold used in the alpha test. Has no effect
+    //!        if useAlphaTest equals false.
+    void setAlphaTest(bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
 
    /*! Get bounding box for a rotated surface
     * \param x x-coordinate

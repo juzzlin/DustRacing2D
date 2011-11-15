@@ -24,12 +24,7 @@
 #include "mcbbox.hh"
 #include "mctrigonom.hh"
 
-namespace
-{
-    const float COLORKEY_ALPHA_THRESHOLD = 0.5f;
-}
-
-MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, bool useAlphaTest)
+MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 : m_handle(newHandle)
 , m_w(newWidth)
 , m_w2(newWidth / 2)
@@ -37,33 +32,31 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 , m_h2(newHeight / 2)
 , m_center(m_w2, m_h2)
 , m_centerSet(false)
-, m_useAlphaTest(useAlphaTest)
+, m_useAlphaTest(false)
+, m_alphaFunc(GL_ALWAYS)
+, m_alphaThreshold(0.0f)
 {}
 
-MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight,
-    const MCVector2d<MCFloat> & newCenter, bool useAlphaTest)
-: m_handle(newHandle)
-, m_w(newWidth)
-, m_w2(newWidth / 2)
-, m_h(newHeight)
-, m_h2(newHeight / 2)
-, m_center(newCenter)
-, m_centerSet(true)
-, m_useAlphaTest(useAlphaTest)
-{}
-
-MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, bool useAlphaTest) :
-    m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight, useAlphaTest))
-{}
-
-MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight, const MCVector2d<MCFloat> & newCenter,
-    bool useAlphaTest) :
-m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight, newCenter, useAlphaTest))
+MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight) :
+    m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight))
 {}
 
 MCSurface::~MCSurface()
 {
     delete m_pImpl;
+}
+
+void MCSurface::setCenter(const MCVector2d<MCFloat> & center)
+{
+    m_pImpl->m_centerSet = true;
+    m_pImpl->m_center    = center;
+}
+
+void MCSurface::setAlphaTest(bool useAlphaTest, GLenum alphaFunc, GLclampf threshold)
+{
+    m_pImpl->m_useAlphaTest   = useAlphaTest;
+    m_pImpl->m_alphaFunc      = alphaFunc;
+    m_pImpl->m_alphaThreshold = threshold;
 }
 
 MCBBox<MCFloat> MCSurface::rotatedBBox(MCFloat x, MCFloat y, int angle)
@@ -309,7 +302,7 @@ void MCSurfaceImpl::doAlphaTest() const
     if (m_useAlphaTest)
     {
         glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, COLORKEY_ALPHA_THRESHOLD);
+        glAlphaFunc(m_alphaFunc, m_alphaThreshold);
     }
 }
 
