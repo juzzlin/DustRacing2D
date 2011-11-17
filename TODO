@@ -1,0 +1,7 @@
+TODO
+====
+
+- Merge MCMathUtil & MCTrigonom
+- Global setting for shadow offsets
+- Constrained friction generator to control slides
+- XML car models + model loader
