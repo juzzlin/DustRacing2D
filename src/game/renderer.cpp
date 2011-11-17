@@ -94,6 +94,7 @@ void Renderer::paintGL()
 
              if (m_pScene->world())
              {
+                 m_pScene->world()->renderShadows(m_pCamera);
                  m_pScene->world()->render(m_pCamera);
              }
         }

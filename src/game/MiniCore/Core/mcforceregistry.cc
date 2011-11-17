@@ -23,7 +23,7 @@
 #include "mcforcegenerator.hh"
 
 MCForceRegistryImpl::MCForceRegistryImpl() :
-    m_registry(),
+    m_registryHash(),
     m_owned()
 {}
 
@@ -39,22 +39,39 @@ MCForceRegistryImpl::~MCForceRegistryImpl()
 
 void MCForceRegistryImpl::update()
 {
-    for (MCUint i = 0; i < m_registry.size(); i++) {
-        if (m_registry[i].second->index() != -1) {
-            m_registry[i].first->updateForce(m_registry[i].second);
+    auto iter = m_registryHash.begin();
+    while (iter != m_registryHash.end())
+    {
+        Registry & registry = iter->second;
+        for (MCUint i = 0; i < registry.size(); i++) {
+            if (iter->first->index() != -1) {
+                registry[i]->updateForce(iter->first);
+            }
         }
+
+        iter++;
     }
 }
 
 void MCForceRegistryImpl::remove(MCForceGenerator * generator,
     MCObject * object)
 {
-    for (MCUint i = 0; i < m_registry.size(); i++) {
-        if (m_registry[i].first == generator &&
-                m_registry[i].second == object) {
-            m_registry[i] = m_registry.back();
-            m_registry.pop_back();
-            return;
+    auto iter = m_registryHash.find(object);
+    if (iter != m_registryHash.end())
+    {
+        Registry & registry = iter->second;
+        for (MCUint i = 0; i < registry.size(); i++) {
+            if (registry[i] == generator &&
+                iter->first == object) {
+                    registry[i] = registry.back();
+                    registry.pop_back();
+                    break;
+            }
+        }
+
+        if (!registry.size())
+        {
+            m_registryHash.erase(iter);
         }
     }
 }
@@ -66,11 +83,17 @@ MCForceRegistry::MCForceRegistry() :
 void MCForceRegistry::addForceGenerator(MCForceGenerator * generator,
     MCObject * object, bool takeOwnership)
 {
-    m_pImpl->m_registry.push_back(
-        MCForceRegistryImpl::ForceObjectPair(generator, object));
+    MCForceRegistryImpl::Registry & registry =
+        m_pImpl->m_registryHash[object];
 
-    if (takeOwnership) {
-        m_pImpl->m_owned.insert(generator);
+    if (find(registry.begin(), registry.end(),
+        generator) == registry.end())
+    {
+        registry.push_back(generator);
+
+        if (takeOwnership) {
+            m_pImpl->m_owned.insert(generator);
+        }
     }
 }
 
@@ -87,6 +110,6 @@ void MCForceRegistry::update()
 
 void MCForceRegistry::clear()
 {
-    m_pImpl->m_registry.clear();
+    m_pImpl->m_registryHash.clear();
 }
 

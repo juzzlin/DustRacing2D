@@ -146,13 +146,7 @@ void Game::updateFrame()
     static QTime updateTimer;
     updateTimer.start();
 
-    static int x = 0;
-    static int y = 0;
-    x ++;
-    y ++;
-
-    m_pScene->updateFrame(m_timeStep);
-    m_pCamera->setPos(x, y);
+    m_pScene->updateFrame(m_pInputHandler, m_pCamera, m_timeStep);
 
     const int updateTime      = updateTimer.elapsed();
     const int availableTimeMs = 1000 / m_updateFps;

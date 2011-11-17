@@ -14,24 +14,50 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.h"
+#include "inputhandler.h"
 #include "layers.h"
 #include "scene.h"
 #include "track.h"
+#include <MiniCore/Core/MCCamera>
 #include <MiniCore/Core/MCSurface>
 #include <MiniCore/Core/MCTypes>
 #include <MiniCore/Core/MCWorld>
 
 Scene::Scene(MCSurface * pCarSurface)
 : m_pActiveTrack(nullptr)
-, m_pCar(new Car(pCarSurface))
 , m_pWorld(new MCWorld())
+, m_pCar(new Car(pCarSurface))
 {
     m_pCar->setLayer(Layers::Cars);
 }
 
-void Scene::updateFrame(float timeStep)
+void Scene::updateFrame(InputHandler * pHandler,
+    MCCamera * pCamera, float timeStep)
 {
+    // Process input
+    if (pHandler->getActionState(0, InputHandler::IA_LEFT))
+    {
+        m_pCar->turnLeft();
+    }
+    else if (pHandler->getActionState(0, InputHandler::IA_RIGHT))
+    {
+        m_pCar->turnRight();
+    }
+
+    if (pHandler->getActionState(0, InputHandler::IA_UP))
+    {
+        m_pCar->accelerate();
+    }
+    else if (pHandler->getActionState(0, InputHandler::IA_DOWN))
+    {
+        m_pCar->brake();
+    }
+
+    // Step time
     m_pWorld->stepTime(timeStep);
+
+    // Update camera location
+    pCamera->setPos(m_pCar->getX(), m_pCar->getY());
 }
 
 void Scene::setActiveTrack(Track * activeTrack)

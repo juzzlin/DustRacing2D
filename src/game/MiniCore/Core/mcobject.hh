@@ -54,21 +54,21 @@ public:
         ContactHash;
 
     //! Constructor.
-    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     explicit MCObject(const std::string & typeId);
 
     //! Constructor.
     //! Construct MCObject using the given shape.
     //! \param pShape Pointer to the surface to be used. MCObject will take
     //!               the ownership.
-    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     MCObject(MCShape * pShape, const std::string & typeId);
 
     //! Constructor.
     //! Construct MCObject implicitly using MCRectShape with
     //! MCSurfaceView for the given MCSurface.
-    //! \param pSurface Pointer to the (shared) surface to be used
-    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS"
+    //! \param pSurface Pointer to the (shared) surface to be used.
+    //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     MCObject(MCSurface * pSurface, const std::string & typeId);
 
     //! \brief Convenience method to set the surface of the view.
@@ -99,17 +99,17 @@ public:
     //! Returns 0 if type is not registered.
     static MCUint typeID(const std::string & typeName);
 
-    //! Send event to given object
-    //! \param pObject Destination object
-    //! \param pEvent Event to be sent
+    //! Send event to given object.
+    //! \param pObject Destination object.
+    //! \param pEvent Event to be sent.
     static void sendEvent(MCObject * pObject, MCEvent * pEvent);
 
-    //! Render the object
-    //! \param p Camera window to be used
+    //! Render the object.
+    //! \param p Camera window to be used.
     virtual void render(MCCamera * p = nullptr);
 
-    //! Render the object shadow
-    //! \param p Camera window to be used
+    //! Render the object shadow.
+    //! \param p Camera window to be used.
     virtual void renderShadow(MCCamera * p = nullptr);
 
     //! \brief Add object to the World.
@@ -127,44 +127,53 @@ public:
     //! Composite objects may re-implement this and remove all their sub-objects.
     virtual void removeFromWorldNow();
 
-    //! Set mass
-    //! \param newMass The new mass
+    //! Set mass.
+    //! \param newMass The new mass.
     //! \param stationary Sets inverse mass to zero if true.
     //!        This results in "infinite" mass for stationary objects.
     void setMass(MCFloat newMass, bool stationary = false);
 
-    //! Get inverse mass
+    //! Get inverse mass.
     MCFloat invMass() const;
 
-    //! Get mass
+    //! Get mass.
     MCFloat mass() const;
 
-    //! Return true if object is stationary
+    //! Return true if object is stationary.
     bool stationary() const;
 
     //! \brief Set maximum velocity.
-    //! \param maxVelocity The new max velocity
+    //! \param maxVelocity The new max velocity in length units / sec.
+    //!                    Usually pixels / sec.
     void setMaximumVelocity(MCFloat maxVelocity);
 
     //! \brief Add velocity component of an impulse vector.
-    //! \param impulse The velocity component
+    //! \param impulse The velocity component.
     void addImpulse(const MCVector3d<MCFloat> & impulse);
 
-    //! Set velocity
-    //! \param newVelocity The new velocity
+    //! Set current velocity to the given value.
+    //! \param newVelocity The new velocity.
     void setVelocity(const MCVector3d<MCFloat> & newVelocity);
 
-    //! Return velocity
+    //! Return current velocity.
     const MCVector3d<MCFloat> & velocity() const;
 
-    //! Set constant acceleration (e.g. gravity)
-    //! \param newAcceleration The new acceleration
+    //! Set constant acceleration (e.g. gravity). Use addForce()
+    //! to cause acceleration that varies from frame to frame.
+    //! \param newAcceleration The new acceleration.
     void setAcceleration(const MCVector3d<MCFloat> & newAcceleration);
 
-    //! Return constant acceleration
+    //! Return constant acceleration.
     const MCVector3d<MCFloat> & acceleration() const;
 
-    //! Resets all forces + velocities
+    //! Add a force vector to the object for a single frame.
+    //! \param force Force vector to be added.
+    void addForce(const MCVector3d<MCFloat> & force);
+
+    //! Clear accumulated forces.
+    void clearForces();
+
+    //! Resets all forces + velocities.
     void resetMotion();
 
     //! \brief Sets whether the physics of the object should be updated.
@@ -188,11 +197,11 @@ public:
     //! \brief Return whether the object should be automatically rendered.
     bool renderable() const;
 
-    //! \brief Enable/disable shadow
+    //! \brief Enable/disable shadow.
     //! True is the default.
     void setHasShadow(bool flag);
 
-    //! \brief Return true if the object draws shadow (renderShadow() is called)
+    //! \brief Return true if the object draws shadow (renderShadow() is called).
     bool hasShadow() const;
 
     //! Set location
@@ -210,40 +219,40 @@ public:
     //! Return location
     const MCVector3d<MCFloat> & location() const;
 
-    //! Convenience getter for location
+    //! Convenience getter for location.
     MCFloat getX() const;
 
-    //! Convenience getter for location
+    //! Convenience getter for location.
     MCFloat getY() const;
 
-    //! Convenience getter for location
+    //! Convenience getter for location.
     MCFloat getZ() const;
 
-    //! Set rotation ("yaw") angle about Z-axis
-    //! \param newAngle The new angle in degrees [0..360]
+    //! Set rotation ("yaw") angle about Z-axis.
+    //! \param newAngle The new angle in degrees [0..360].
     virtual void rotate(MCUint newAngle);
 
-    //! Get rotation angle
+    //! Get rotation angle.
     MCUint angle() const;
 
-    //! Get direction vector
+    //! Get direction vector.
     MCVector2d<MCFloat> direction() const;
 
-    //! \brief Set restitution
+    //! \brief Set restitution.
     //! \param newRestitution The new restitution [0.0..1.0]
-    //!        (0.0 means a totally "soft" object, 1.0 means hard)
+    //!        (0.0 means a totally "soft" object, 1.0 means hard).
     void setRestitution(MCFloat newRestitution);
 
-    //! Get restitution
+    //! Get restitution.
     MCFloat restitution() const;
 
-    //! Set shape. MCObject will take the ownership
+    //! Set shape. MCObject will take the ownership.
     virtual void setShape(MCShape * newShape);
 
-    //! Get shape
+    //! Get shape.
     MCShape * shape() const;
 
-    //! Set view. MCObject will take the ownership
+    //! Set view. MCObject will take the ownership.
     virtual void setView(MCShapeView * newView);
 
     //! \brief Step internal time.
@@ -251,27 +260,20 @@ public:
     //! implementation in the overidden version.
     virtual void stepTime();
 
-    //! Return internal time
+    //! Return internal time.
     MCUint time() const;
 
-    //! Reset internal time
+    //! Reset internal time.
     void resetTime();
 
     //! Get view
     MCShapeView * view() const;
 
-    //! Add a force vector to the object for a single frame.
-    //! \param force Force vector to be added
-    void addForce(const MCVector3d<MCFloat> & force);
-
-    //! Clear accumulated forces
-    void clearForces();
-
-    //! Integrate forces
-    //! \param step Time step to be integrated
+    //! Integrate forces. Usually called by MCWorld.
+    //! \param step Time step to be integrated.
     void integrate(MCFloat step);
 
-    //! Return current bounding box
+    //! Return current bounding box.
     virtual MCBBox<MCFloat> bbox() const;
 
     //! Set rendering layer (0 is considered the lowest and is rendered
@@ -279,19 +281,19 @@ public:
     //! 2d-surfaces only.
     virtual void setLayer(MCUint layer);
 
-    //! Return the render layer
+    //! Return the render layer.
     MCUint layer() const;
 
-    //! Add a collision contact
+    //! Add a collision contact.
     void addContact(MCContact * contact);
 
-    //! Get collision contact hash
+    //! Get collision contact hash.
     const ContactHash & contacts() const;
 
-    //! Delete current contacts
+    //! Delete current contacts.
     void deleteContacts();
 
-    //! Delete all contacts with the given object
+    //! Delete all contacts with the given object.
     void deleteContacts(MCObject * p);
 
     //! Return index in MCWorld's object vector. Returns -1 if not in the world.
@@ -299,17 +301,17 @@ public:
 
 protected:
 
-    //! Event handler
-    //! \param pEvent Event to be handled
-    //! \return true if event was handled
+    //! Event handler.
+    //! \param pEvent Event to be handled.
+    //! \return true if event was handled.
     virtual bool event(MCEvent * pEvent);
 
     //! Event handler for MCCollisionEvent.
-    //! \param pEvent Event to be handled
+    //! \param pEvent Event to be handled.
     virtual void collisionEvent(MCCollisionEvent * pEvent);
 
     //! Event handler for MCOutOfBoundariesEvent.
-    //! \param pEvent Event to be handled
+    //! \param pEvent Event to be handled.
     virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent * pEvent);
 
     //! \brief Register a new type and get a unique type id.
@@ -338,7 +340,7 @@ private:
     //! Used by MCWorld.
     bool removing() const;
 
-    //! Disable copy constructor and assignment
+    //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);
     DISABLE_ASSI(MCObject);
     MCObjectImpl * const m_pImpl;

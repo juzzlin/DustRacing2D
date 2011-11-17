@@ -31,7 +31,8 @@ class MCFrictionGeneratorImpl;
 
 /*!
  * \class MCFrictionGenerator
- * \brief Force generator for "global" friction.
+ * \brief Force generator for "global" friction between object
+ *        and a plane.
  *
  * Force generator for "global" friction. This generator works only
  * in the XY-plane, meaning that only i and j components of

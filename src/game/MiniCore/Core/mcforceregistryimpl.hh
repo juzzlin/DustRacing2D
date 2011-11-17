@@ -20,7 +20,7 @@
 #ifndef MCFORCEREGISTRYIMPL_HH
 #define MCFORCEREGISTRYIMPL_HH
 
-#include <map>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -38,9 +38,9 @@ public:
               MCObject * object);
 
 private:
-  typedef std::pair<MCForceGenerator *, MCObject *> ForceObjectPair;
-  typedef std::vector<ForceObjectPair> Registry;
-  Registry m_registry;
+  typedef std::vector<MCForceGenerator *> Registry;
+  typedef std::unordered_map<MCObject *, Registry> RegistryHash;
+  RegistryHash m_registryHash;
   std::unordered_set<MCForceGenerator *> m_owned;
   friend class MCForceRegistry;
 };

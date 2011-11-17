@@ -17,6 +17,8 @@
 #define SCENE_H
 
 class Car;
+class InputHandler;
+class MCCamera;
 class MCSurface;
 class MCWorld;
 class Track;
@@ -34,7 +36,8 @@ public:
 
     //! Update physics and objects by the given
     //! time step.
-    void updateFrame(float timeStep);
+    void updateFrame(InputHandler * pHandler,
+        MCCamera * pCamera, float timeStep);
 
     //! Set the active race track.
     void setActiveTrack(Track * activeTrack);
@@ -48,8 +51,8 @@ public:
 private:
 
     Track   * m_pActiveTrack;
-    Car     * m_pCar;
     MCWorld * m_pWorld;
+    Car     * m_pCar;
 };
 
 #endif // SCENE_H

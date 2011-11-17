@@ -19,6 +19,7 @@
 #include "MiniCore/Core/MCObject"
 
 class MCSurface;
+class MCFrictionGenerator;
 
 //! Base class for race cars.
 class Car : public MCObject
@@ -28,12 +29,26 @@ public:
     //! Constructor.
     Car(MCSurface * pSurface);
 
+    //! Turn left.
+    void turnLeft();
+
+    //! Turn right.
+    void turnRight();
+
+    //! Accelerate.
+    void accelerate();
+
+    //! Brake.
+    void brake();
+
     //! Destructor.
     virtual ~Car();
 
 private:
 
-    MCSurface * m_pSurface;
+    MCSurface           * m_pSurface;
+    MCFrictionGenerator * m_deccelerationFriction;
+    bool                  m_frictionGeneratorAdded;
 };
 
 #endif // CAR_H
