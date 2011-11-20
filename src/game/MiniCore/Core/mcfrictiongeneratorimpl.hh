@@ -24,7 +24,7 @@
 class MCFrictionGeneratorImpl
 {
 public:
-  MCFrictionGeneratorImpl(MCFloat coeff);
+  MCFrictionGeneratorImpl(MCFloat coeff, MCFloat acceleration);
   virtual ~MCFrictionGeneratorImpl();
 
 private:

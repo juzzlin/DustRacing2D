@@ -20,10 +20,6 @@
 #ifndef MCFRICTIONGENERATOR_HH
 #define MCFRICTIONGENERATOR_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcforcegenerator.hh"
 #include "mcmacros.hh"
 
@@ -43,21 +39,23 @@ class MCFrictionGenerator : public MCForceGenerator
 {
 public:
 
-  /*! Constructor
-   * \param coeff Dynamic friction coefficient.
-   */
-  MCFrictionGenerator(MCFloat coeff);
+    /*! Constructor.
+     * \param coeff   Dynamic friction coefficient.
+     * \param gravity Gravitational acceleration.
+     */
+    explicit MCFrictionGenerator(MCFloat coeff, MCFloat gravity = 9.81f);
 
-  //! Destructor
-  virtual ~MCFrictionGenerator();
+    //! Destructor.
+    virtual ~MCFrictionGenerator();
 
-  //! \reimp
-  virtual void updateForce(MCObject * p);
+    //! \reimp
+    virtual void updateForce(MCObject * p);
 
 private:
+
     DISABLE_COPY(MCFrictionGenerator);
     DISABLE_ASSI(MCFrictionGenerator);
-    shared_ptr<MCFrictionGeneratorImpl> const m_pImpl;
+    MCFrictionGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCFRICTIONGENERATOR_HH

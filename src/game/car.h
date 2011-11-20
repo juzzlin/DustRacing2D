@@ -41,6 +41,9 @@ public:
     //! Brake.
     void brake();
 
+    //! User isn't doing anything.
+    void noAction();
+
     //! Destructor.
     virtual ~Car();
 

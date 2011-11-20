@@ -306,8 +306,13 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
     m_pImpl->setFlag(STATIONARY_MASK, stationary_);
 
     if (!stationary_) {
-        m_pImpl->m_invMass = 1.0 / newMass;
-        m_pImpl->m_mass    = 0;
+        if (newMass > 0) {
+            m_pImpl->m_invMass = 1.0 / newMass;
+        }
+        else {
+            m_pImpl->m_invMass = std::numeric_limits<MCFloat>::max();
+        }
+        m_pImpl->m_mass = newMass;
     }
     else {
         m_pImpl->m_invMass = 0;

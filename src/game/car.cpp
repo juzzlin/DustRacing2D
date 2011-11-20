@@ -24,7 +24,7 @@
 
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")
-, m_deccelerationFriction(new MCFrictionGenerator(1.0f))
+, m_deccelerationFriction(new MCFrictionGenerator(0.25f))
 , m_frictionGeneratorAdded(false)
 {
     setLayer(Layers::Cars);
@@ -66,6 +66,17 @@ void Car::brake()
     MCWorld::instance()->addForceGenerator(
         m_deccelerationFriction, this, false);
     m_frictionGeneratorAdded = true;
+}
+
+void Car::noAction()
+{
+    // Remove friction generator if it was added
+    if (m_frictionGeneratorAdded)
+    {
+        MCWorld::instance()->removeForceGenerator(
+            m_deccelerationFriction, this);
+        m_frictionGeneratorAdded = false;
+    }
 }
 
 Car::~Car()

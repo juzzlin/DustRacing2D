@@ -176,7 +176,7 @@ void Game::renderFrame()
 
 void Game::countRenderFps()
 {
-    std::cout << m_renderCount << std::endl;
+    //std::cout << m_renderCount << std::endl;
     m_renderCount = 0;
 }
 

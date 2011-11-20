@@ -35,22 +35,32 @@ void Scene::updateFrame(InputHandler * pHandler,
     MCCamera * pCamera, float timeStep)
 {
     // Process input
+    bool actionTaken = false;
     if (pHandler->getActionState(0, InputHandler::IA_LEFT))
     {
         m_pCar->turnLeft();
+        actionTaken = true;
     }
     else if (pHandler->getActionState(0, InputHandler::IA_RIGHT))
     {
         m_pCar->turnRight();
+        actionTaken = true;
     }
 
     if (pHandler->getActionState(0, InputHandler::IA_UP))
     {
         m_pCar->accelerate();
+        actionTaken = true;
     }
     else if (pHandler->getActionState(0, InputHandler::IA_DOWN))
     {
         m_pCar->brake();
+        actionTaken = true;
+    }
+
+    if (!actionTaken)
+    {
+        m_pCar->noAction();
     }
 
     // Step time

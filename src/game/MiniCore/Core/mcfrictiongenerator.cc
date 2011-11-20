@@ -23,29 +23,33 @@
 
 namespace
 {
-  const MCFloat FRICTION_SPEED_TH = 0.01f;
+    const MCFloat FRICTION_SPEED_TH = 0.001f;
 }
 
-MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(MCFloat coeff) :
-    m_coeff(coeff)
+MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
+    MCFloat coeff, MCFloat acceleration)
+: m_coeff(coeff * acceleration)
 {}
 
 MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
 {}
 
-MCFrictionGenerator::MCFrictionGenerator(MCFloat coeff) :
-    m_pImpl(new MCFrictionGeneratorImpl(coeff))
+MCFrictionGenerator::MCFrictionGenerator(
+    MCFloat coeff, MCFloat acceleration)
+: m_pImpl(new MCFrictionGeneratorImpl(coeff, acceleration))
 {}
 
 void MCFrictionGenerator::updateForce(MCObject * p)
 {
-  MCVector2d<MCFloat> v(p->velocity());
-  MCFloat l = v.lengthFast();
-  if (l > FRICTION_SPEED_TH) {
-    p->addForce((-v / l) * m_pImpl->m_coeff / p->invMass());
-  }
+    MCVector2d<MCFloat> v(p->velocity());
+    MCFloat l = v.lengthFast();
+    if (l > FRICTION_SPEED_TH) {
+        p->addForce((-v / l) * m_pImpl->m_coeff * p->mass());
+    }
 }
 
 MCFrictionGenerator::~MCFrictionGenerator()
-{}
+{
+    delete m_pImpl;
+}
 
