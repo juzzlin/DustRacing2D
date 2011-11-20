@@ -131,10 +131,13 @@ public:
   template <typename U>
   MCVector3d<T> & operator -= (const MCVector3d<U> & r);
   
-  //! Get length
+  //! Get length.
   inline T length() const;
 
-  //! Get length squared
+  //! Get length using a fast approximation.
+  inline T lengthFast() const;
+
+  //! Get length squared.
   inline T lengthSquared() const;
 
   //! Normalize 
@@ -348,6 +351,15 @@ template <typename T>
 T MCVector3d<T>::length() const
 {
   return sqrt(m_i * m_i + m_j * m_j + m_k * m_k);
+}
+
+template <typename T>
+T MCVector3d<T>::lengthFast() const
+{
+    const MCVector2d<T> ij(m_i, m_j);
+    const T l = ij.lengthFast();
+    const MCVector2d<T> lk(l, m_k);
+    return lk.lengthFast();
 }
 
 template <typename T>

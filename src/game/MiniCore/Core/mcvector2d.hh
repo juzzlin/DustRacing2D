@@ -124,10 +124,10 @@ public:
   //! Get length
   inline T length() const;
 
-  //! Get length, inaccurate
+  //! Get length using a fast approximation.
   inline T lengthFast() const;
 
-  //! Get length squared
+  //! Get length squared.
   inline T lengthSquared() const;
 
   //! Normalize
