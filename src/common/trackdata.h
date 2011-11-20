@@ -25,19 +25,19 @@ class TrackData
 {
 public:
 
-  //! Constructor
+  //! Constructor.
   TrackData(QString name, unsigned int cols, unsigned rows);
 
-  //! Destructor
+  //! Destructor.
   virtual ~TrackData();
 
-  //! Get name
+  //! Get name.
   QString name() const;
 
-  //! Get file name
+  //! Get file name.
   QString fileName() const;
 
-  //! Set file name
+  //! Set file name.
   void setFileName(QString fileName);
 
   //! Get map object.

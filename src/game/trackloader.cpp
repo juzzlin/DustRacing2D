@@ -92,9 +92,9 @@ TrackData * TrackLoader::loadTrack(QString path)
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        QString      name = root.attribute("name", "undefined");
-        unsigned int cols = root.attribute("cols", "0").toUInt();
-        unsigned int rows = root.attribute("rows", "0").toUInt();
+        const QString      name = root.attribute("name", "undefined");
+        const unsigned int cols = root.attribute("cols", "0").toUInt();
+        const unsigned int rows = root.attribute("rows", "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
@@ -118,9 +118,9 @@ TrackData * TrackLoader::loadTrack(QString path)
                         int          o  = tag.attribute("o", "0").toInt();
                         int      index  = tag.attribute("index", "-1").toInt();
 
-                        // Reverse the y-coordinate and angle
-                        j = cols - j - 1;
+                        // Mirror the angle and y-index.
                         o = -o;
+                        j = rows - 1 - j;
 
                         if (TrackTile * tile = newData->map().getTile(i, j))
                         {

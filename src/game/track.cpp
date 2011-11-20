@@ -41,6 +41,11 @@ MCUint Track::height() const
     return m_height;
 }
 
+const TrackData & Track::trackData() const
+{
+    return *m_pTrackData;
+}
+
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
                                     MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
 

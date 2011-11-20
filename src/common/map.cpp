@@ -20,10 +20,10 @@
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows) :
-    m_trackData(trackData),
-    m_cols(cols),
-    m_rows(rows)
+Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
+: m_trackData(trackData)
+, m_cols(cols)
+, m_rows(rows)
 {
     // Create an empty map
     for (unsigned int j = 0; j < m_rows; j++)
@@ -37,14 +37,14 @@ Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows) :
         m_map << row;
     }
 
-    // Create tiles
+    // Create tiles and set coordinates.
     for (unsigned int i = 0; i < m_cols; i++)
         for (unsigned int j = 0; j < m_rows; j++)
         {
             TrackTile * newTile = new TrackTile(m_trackData,
-                                                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                                                        TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                                                QPoint(i, j));
+                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+                QPoint(i, j));
             setTile(i, j, newTile);
         }
 }

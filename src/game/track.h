@@ -30,7 +30,7 @@ public:
 
     //! Constructor.
     //! \param pTrackData The data that represents the track.
-    //!                  Track will take the ownership.
+    //!                   Track will take the ownership.
     explicit Track(TrackData * pTrackData);
 
     //! Destructor.
@@ -44,6 +44,9 @@ public:
 
     //! Return height in pixels.
     MCUint height() const;
+
+    //! Return the track data.
+    const TrackData & trackData() const;
 
 private:
 

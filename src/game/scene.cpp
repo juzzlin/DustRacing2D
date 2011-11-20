@@ -18,6 +18,8 @@
 #include "layers.h"
 #include "scene.h"
 #include "track.h"
+#include "tracktile.h"
+#include "../../common/trackdata.h"
 #include <MiniCore/Core/MCCamera>
 #include <MiniCore/Core/MCSurface>
 #include <MiniCore/Core/MCTypes>
@@ -90,6 +92,16 @@ void Scene::setActiveTrack(Track * activeTrack)
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
     m_pCar->addToWorld();
+
+    if (m_pActiveTrack->trackData().route().length() > 0)
+    {
+        const MCFloat x =
+            m_pActiveTrack->trackData().route().get(0)->location().x();
+        const MCFloat y =
+            m_pActiveTrack->trackData().route().get(0)->location().y();
+
+        m_pCar->translate(MCVector2d<MCFloat>(x, y));
+    }
 }
 
 Track * Scene::activeTrack() const
