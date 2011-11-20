@@ -56,7 +56,7 @@ const MCUint SHADOW_MASK = (1<<4);
 const MCUint REMOVING_MASK = (1<<5);
 
 // Physics damping factor
-const MCFloat DAMPING_FACTOR = 0.995;
+const MCFloat DAMPING_FACTOR = 0.999;
 }
 
 MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
@@ -126,30 +126,42 @@ void MCObjectImpl::doOutOfBoundariesEvent()
 {
     const MCWorld * pWorld = MCWorld::instance();
     if (m_location.i() < pWorld->minX()) {
+        m_velocity.setI(0);
+        m_forces.setI(0);
         m_pPublic->translate(MCVector3d<MCFloat>(pWorld->minX(), m_location.j(), m_location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         m_pPublic->outOfBoundariesEvent(&e);
     } else if (m_location.i() > pWorld->maxX()) {
+        m_velocity.setI(0);
+        m_forces.setI(0);
         m_pPublic->translate(MCVector3d<MCFloat>(pWorld->maxX(), m_location.j(), m_location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         m_pPublic->outOfBoundariesEvent(&e);
     }
 
     if (m_location.j() < pWorld->minY()) {
+        m_velocity.setJ(0);
+        m_forces.setJ(0);
         m_pPublic->translate(MCVector3d<MCFloat>(m_location.i(), pWorld->minY(), m_location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         m_pPublic->outOfBoundariesEvent(&e);
     } else if (m_location.j() > pWorld->maxY()) {
+        m_velocity.setJ(0);
+        m_forces.setJ(0);
         m_pPublic->translate(MCVector3d<MCFloat>(m_location.i(), pWorld->maxY(), m_location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         m_pPublic->outOfBoundariesEvent(&e);
     }
 
     if (m_location.k() < pWorld->minZ()) {
+        m_velocity.setK(0);
+        m_forces.setK(0);
         m_pPublic->translate(MCVector3d<MCFloat>(m_location.i(), m_location.j(), pWorld->minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
         m_pPublic->outOfBoundariesEvent(&e);
     } else if (m_location.k() > pWorld->maxZ()) {
+        m_velocity.setK(0);
+        m_forces.setK(0);
         m_pPublic->translate(MCVector3d<MCFloat>(m_location.i(), m_location.j(), pWorld->maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
         m_pPublic->outOfBoundariesEvent(&e);
