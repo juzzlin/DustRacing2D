@@ -27,16 +27,17 @@ namespace
 }
 
 MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
-    MCFloat coeff, MCFloat acceleration)
-: m_coeff(coeff * acceleration)
+    MCFloat coeff, MCFloat gravity)
+: m_coeff(coeff)
+, m_gravity(gravity)
 {}
 
 MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
 {}
 
 MCFrictionGenerator::MCFrictionGenerator(
-    MCFloat coeff, MCFloat acceleration)
-: m_pImpl(new MCFrictionGeneratorImpl(coeff, acceleration))
+    MCFloat coeff, MCFloat gravity)
+: m_pImpl(new MCFrictionGeneratorImpl(coeff, gravity))
 {}
 
 void MCFrictionGenerator::updateForce(MCObject * p)
@@ -44,8 +45,19 @@ void MCFrictionGenerator::updateForce(MCObject * p)
     MCVector2d<MCFloat> v(p->velocity());
     MCFloat l = v.lengthFast();
     if (l > FRICTION_SPEED_TH) {
-        p->addForce((-v / l) * m_pImpl->m_coeff * p->mass());
+        p->addForce((-v / l) *
+        m_pImpl->m_coeff * m_pImpl->m_gravity * p->mass());
     }
+}
+
+MCFloat MCFrictionGenerator::coeff() const
+{
+    return m_pImpl->m_coeff;
+}
+
+MCFloat MCFrictionGenerator::gravity() const
+{
+    return m_pImpl->m_gravity;
 }
 
 MCFrictionGenerator::~MCFrictionGenerator()

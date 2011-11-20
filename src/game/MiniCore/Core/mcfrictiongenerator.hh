@@ -51,6 +51,12 @@ public:
     //! \reimp
     virtual void updateForce(MCObject * p);
 
+    //! Return coeff.
+    MCFloat coeff() const;
+
+    //! Return gravity.
+    MCFloat gravity() const;
+
 private:
 
     DISABLE_COPY(MCFrictionGenerator);

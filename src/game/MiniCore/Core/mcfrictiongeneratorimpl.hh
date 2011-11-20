@@ -24,11 +24,11 @@
 class MCFrictionGeneratorImpl
 {
 public:
-  MCFrictionGeneratorImpl(MCFloat coeff, MCFloat acceleration);
+  MCFrictionGeneratorImpl(MCFloat coeff, MCFloat gravity);
   virtual ~MCFrictionGeneratorImpl();
 
 private:
-  MCFloat m_coeff;
+  MCFloat m_coeff, m_gravity;
   friend class MCFrictionGenerator;
 };
 

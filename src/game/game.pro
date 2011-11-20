@@ -17,6 +17,7 @@ SOURCES += main.cpp \
     race.cpp \
     renderer.cpp \
     scene.cpp \
+    slidefrictiongenerator.cpp \
     timing.cpp \
     track.cpp \
     trackloader.cpp \
@@ -63,10 +64,12 @@ SOURCES += MiniCore/Core/mccamera.cc \
 HEADERS += car.h \
     game.h \
     inputhandler.h \
+    layers.h \
     mainwindow.h \
     race.h \
     renderer.h \
     scene.h \
+    slidefrictiongenerator.h \
     timing.h \
     track.h \
     trackloader.h \
@@ -76,7 +79,6 @@ HEADERS += car.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
-    layers.h \
 
 # Engine
 HEADERS += MiniCore/Core/mccamera.hh \
