@@ -15,6 +15,7 @@
 
 #include "car.h"
 #include "layers.h"
+#include "slidefrictiongenerator.h"
 #include "MiniCore/Core/MCFrictionGenerator"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"
@@ -22,25 +23,49 @@
 #include "MiniCore/Core/MCVector2d"
 #include "MiniCore/Core/MCMathUtil"
 
+namespace
+{
+    const MCFloat MAX_VELOCITY = 6.0f;
+}
+
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")
-, m_deccelerationFriction(new MCFrictionGenerator(0.25f))
+, m_pDeccelerationFriction(new MCFrictionGenerator(0.25f))
+, m_pSlideFriction(new SlideFrictionGenerator(0.25f))
 , m_frictionGeneratorAdded(false)
+, m_accelerating(false)
 {
     setLayer(Layers::Cars);
     setMass(1000);
-    setMaximumVelocity(1000);
+    setMaximumVelocity(MAX_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
+
+    MCWorld::instance()->addForceGenerator(
+        m_pSlideFriction, this, true);
 }
 
 void Car::turnLeft()
 {
-    rotate(angle() + 1);
+    const MCUint newAngle = angle() + 1;
+    const MCFloat speed = velocity().length();
+    const MCFloat coeff = 0.99f;
+    const MCFloat newI = MCTrigonom::cos(newAngle);
+    const MCFloat newJ = MCTrigonom::sin(newAngle);
+    setVelocity(MCVector2d<MCFloat>(newI, newJ) * speed * (1.0f - coeff) +
+        MCVector2d<MCFloat>(velocity()) * coeff);
+    rotate(newAngle);
 }
 
 void Car::turnRight()
 {
-    rotate(360 + static_cast<int>(angle()) - 1);
+    const MCUint newAngle = 360 + static_cast<int>(angle()) - 1;
+    const MCFloat speed = velocity().length();
+    const MCFloat coeff = 0.99f;
+    const MCFloat newI = MCTrigonom::cos(newAngle);
+    const MCFloat newJ = MCTrigonom::sin(newAngle);
+    setVelocity(MCVector2d<MCFloat>(newI, newJ) * speed * (1.0f - coeff) +
+        MCVector2d<MCFloat>(velocity()) * coeff);
+    rotate(newAngle);
 }
 
 void Car::accelerate()
@@ -54,9 +79,11 @@ void Car::accelerate()
     if (m_frictionGeneratorAdded)
     {
         MCWorld::instance()->removeForceGenerator(
-            m_deccelerationFriction, this);
+            m_pDeccelerationFriction, this);
         m_frictionGeneratorAdded = false;
     }
+
+    m_accelerating = true;
 }
 
 void Car::brake()
@@ -64,8 +91,10 @@ void Car::brake()
     // Simulate braking by adding a friction
     // generator.
     MCWorld::instance()->addForceGenerator(
-        m_deccelerationFriction, this, false);
+        m_pDeccelerationFriction, this, true);
     m_frictionGeneratorAdded = true;
+
+    m_accelerating = false;
 }
 
 void Car::noAction()
@@ -74,12 +103,13 @@ void Car::noAction()
     if (m_frictionGeneratorAdded)
     {
         MCWorld::instance()->removeForceGenerator(
-            m_deccelerationFriction, this);
+            m_pDeccelerationFriction, this);
         m_frictionGeneratorAdded = false;
     }
+
+    m_accelerating = false;
 }
 
 Car::~Car()
 {
-    delete m_deccelerationFriction;
 }

@@ -20,6 +20,7 @@
 
 class MCSurface;
 class MCFrictionGenerator;
+class SlideFrictionGenerator;
 
 //! Base class for race cars.
 class Car : public MCObject
@@ -49,9 +50,11 @@ public:
 
 private:
 
-    MCSurface           * m_pSurface;
-    MCFrictionGenerator * m_deccelerationFriction;
-    bool                  m_frictionGeneratorAdded;
+    MCSurface              * m_pSurface;
+    MCFrictionGenerator    * m_pDeccelerationFriction;
+    SlideFrictionGenerator * m_pSlideFriction;
+    bool                     m_frictionGeneratorAdded;
+    bool                     m_accelerating;
 };
 
 #endif // CAR_H
