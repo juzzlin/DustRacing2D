@@ -47,25 +47,25 @@ Car::Car(MCSurface * pSurface)
 void Car::turnLeft()
 {
     const MCUint newAngle = angle() + 1;
-    const MCFloat speed = velocity().length();
-    const MCFloat coeff = 0.99f;
-    const MCFloat newI = MCTrigonom::cos(newAngle);
-    const MCFloat newJ = MCTrigonom::sin(newAngle);
-    setVelocity(MCVector2d<MCFloat>(newI, newJ) * speed * (1.0f - coeff) +
-        MCVector2d<MCFloat>(velocity()) * coeff);
+    oversteer(newAngle);
     rotate(newAngle);
 }
 
 void Car::turnRight()
 {
     const MCUint newAngle = 360 + static_cast<int>(angle()) - 1;
+    oversteer(newAngle);
+    rotate(newAngle);
+}
+
+void Car::oversteer(MCUint newBodyAngle)
+{
     const MCFloat speed = velocity().length();
     const MCFloat coeff = 0.99f;
-    const MCFloat newI = MCTrigonom::cos(newAngle);
-    const MCFloat newJ = MCTrigonom::sin(newAngle);
+    const MCFloat newI = MCTrigonom::cos(newBodyAngle);
+    const MCFloat newJ = MCTrigonom::sin(newBodyAngle);
     setVelocity(MCVector2d<MCFloat>(newI, newJ) * speed * (1.0f - coeff) +
         MCVector2d<MCFloat>(velocity()) * coeff);
-    rotate(newAngle);
 }
 
 void Car::accelerate()

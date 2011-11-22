@@ -50,6 +50,8 @@ public:
 
 private:
 
+    void oversteer(MCUint newBodyAngle);
+
     MCSurface              * m_pSurface;
     MCFrictionGenerator    * m_pDeccelerationFriction;
     SlideFrictionGenerator * m_pSlideFriction;
