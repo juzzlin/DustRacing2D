@@ -20,16 +20,18 @@
 #ifndef MCTRIGONOMIMPL_HH
 #define MCTRIGONOMIMPL_HH
 
+#include <vector>
+
 //! Implementation class for MCTrigonom
 class MCTrigonomImpl
 {
 public:
-  MCTrigonomImpl();
+    MCTrigonomImpl();
 
 private:
-  vector<MCFloat> m_sin;
-  vector<MCFloat> m_cos;
-  friend class MCTrigonom;
+    std::vector<MCFloat> m_sin;
+    std::vector<MCFloat> m_cos;
+    friend class MCTrigonom;
 };
 
 #endif // MCTRIGONOMIMPL_HH

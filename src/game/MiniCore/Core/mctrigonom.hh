@@ -20,16 +20,10 @@
 #ifndef MCTRIGONOM_HH
 #define MCTRIGONOM_HH
 
-#include <vector>
-
-using std::vector;
-
 #include "mctypes.hh"
 #include "mcmacros.hh"
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
+#include <memory>
 
 class MCTrigonomImpl;
 
@@ -45,29 +39,37 @@ class MCTrigonom
 {
 public:
 
-  //! Convert degree to radians
-  static MCFloat degToRad(MCFloat angle);
-  //! Convert radian to degrees
-  static MCFloat radToDeg(MCFloat angle);
+    //! Convert degree to radians
+    static MCFloat degToRad(MCFloat angle);
 
-  //! Get sine of given angle (0..360)
-  static MCFloat sin(int angle);
-  //! Get cosine of given angle (0..360)
-  static MCFloat cos(int angle);
+    //! Convert radian to degrees
+    static MCFloat radToDeg(MCFloat angle);
 
-  //! X-coordinate transformation for given location and given angle
-  static MCFloat transformedX(MCFloat x0, MCFloat y0, int angle);
-  //! Y-coordinate transformation for given location and given angle
-  static MCFloat transformedY(MCFloat x0, MCFloat y0, int angle);
+    //! Get sine of given angle (0..360)
+    static MCFloat sin(MCUint angle);
+
+    //! Get cosine of given angle (0..360)
+    static MCFloat cos(MCUint angle);
+
+    //! Return X-coordinate of the given point rotated by given angle.
+    static MCFloat rotatedX(MCFloat x0, MCFloat y0, MCUint angle);
+
+    //! Return Y-coordinate of the given point rotated by given angle.
+    static MCFloat rotatedY(MCFloat x0, MCFloat y0, MCUint angle);
+
+    //! Rotate given coordinates by given angle and store result
+    //! to x1 and y1.
+    static void rotated(
+        MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCUint angle);
 
 private:
 
-  //! Constructor
-  MCTrigonom();
+    //! Disabled constructor.
+    MCTrigonom();
 
-  DISABLE_COPY(MCTrigonom);
-  DISABLE_ASSI(MCTrigonom);
-  static shared_ptr<MCTrigonomImpl> const m_pImpl;
+    DISABLE_COPY(MCTrigonom);
+    DISABLE_ASSI(MCTrigonom);
+    static std::shared_ptr<MCTrigonomImpl> const m_pImpl;
 };
 
 #endif // MCTRIGONOM_HH

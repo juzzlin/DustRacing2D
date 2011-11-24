@@ -14,6 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "slidefrictiongenerator.h"
+#include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCTrigonom"
 
 SlideFrictionGenerator::SlideFrictionGenerator(
     MCFloat coeff, MCFloat gravity)
@@ -23,7 +25,10 @@ SlideFrictionGenerator::SlideFrictionGenerator(
 
 void SlideFrictionGenerator::updateForce(MCObject * p)
 {
-
+    const MCUint bodyAngle = p->angle();
+    const MCVector2d<MCFloat> a(
+        MCTrigonom::cos(bodyAngle), MCTrigonom::sin(bodyAngle));
+    const MCVector2d<MCFloat> v = p->velocity();
 }
 
 SlideFrictionGenerator::~SlideFrictionGenerator()

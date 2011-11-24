@@ -23,54 +23,68 @@
 
 #include <cmath>
 
-shared_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
+std::shared_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
 
 namespace
 {
-  const MCUint LUT_SIZE = 361;
-  const MCFloat PI = 3.1415926535897932384626;
+    const MCUint  LUT_SIZE = 361;
+    const MCFloat PI       = 3.1415926535897932384626;
 }
 
-MCTrigonomImpl::MCTrigonomImpl() :
-    m_sin(LUT_SIZE, 0),
-    m_cos(LUT_SIZE, 0)
+MCTrigonomImpl::MCTrigonomImpl()
+: m_sin(LUT_SIZE, 0)
+, m_cos(LUT_SIZE, 0)
 {
-  for (MCUint i = 0; i < LUT_SIZE; i++) {
-    MCTrigonomImpl::m_sin.at(i) = std::sin(TO_FLOAT(MCTrigonom::degToRad(i)));
-    MCTrigonomImpl::m_cos.at(i) = std::cos(TO_FLOAT(MCTrigonom::degToRad(i)));
-  }
+    for (MCUint i = 0; i < LUT_SIZE; i++) {
+        MCTrigonomImpl::m_sin.at(i) =
+            std::sin(TO_FLOAT(MCTrigonom::degToRad(i)));
+        MCTrigonomImpl::m_cos.at(i) =
+            std::cos(TO_FLOAT(MCTrigonom::degToRad(i)));
+    }
 }
 
 MCFloat MCTrigonom::degToRad(MCFloat angle)
 {
-  const MCFloat DEG_TO_RAD(PI / 180.0);
-  return angle * DEG_TO_RAD;
+    const MCFloat DEG_TO_RAD(PI / 180.0);
+    return angle * DEG_TO_RAD;
 }
 
 MCFloat MCTrigonom::radToDeg(MCFloat angle)
 {
-  const MCFloat RAD_TO_DEG(180.0 / PI);
-  return angle * RAD_TO_DEG;
+    const MCFloat RAD_TO_DEG(180.0 / PI);
+    return angle * RAD_TO_DEG;
 }
 
-MCFloat MCTrigonom::sin(int angle)
+MCFloat MCTrigonom::sin(MCUint angle)
 {
-  return MCTrigonom::m_pImpl->m_sin[angle % LUT_SIZE];
+    return MCTrigonom::m_pImpl->m_sin[angle % LUT_SIZE];
 }
 
-MCFloat MCTrigonom::cos(int angle)
+MCFloat MCTrigonom::cos(MCUint angle)
 {
-  return MCTrigonom::m_pImpl->m_cos[angle % LUT_SIZE];
+    return MCTrigonom::m_pImpl->m_cos[angle % LUT_SIZE];
 }
 
-MCFloat MCTrigonom::transformedX(MCFloat x0, MCFloat y0, int angle)
+MCFloat MCTrigonom::rotatedX(MCFloat x0, MCFloat y0, MCUint angle)
 {
-  angle %= LUT_SIZE;
-  return MCTrigonom::m_pImpl->m_cos[angle] * x0 - MCTrigonom::m_pImpl->m_sin[angle] * y0;
+    angle %= LUT_SIZE;
+    return MCTrigonom::m_pImpl->m_cos[angle] * x0 -
+        MCTrigonom::m_pImpl->m_sin[angle] * y0;
 }
 
-MCFloat MCTrigonom::transformedY(MCFloat x0, MCFloat y0, int angle)
+MCFloat MCTrigonom::rotatedY(MCFloat x0, MCFloat y0, MCUint angle)
 {
-  angle %= LUT_SIZE;
-  return MCTrigonom::m_pImpl->m_sin[angle] * x0 + MCTrigonom::m_pImpl->m_cos[angle] * y0;
+    angle %= LUT_SIZE;
+    return MCTrigonom::m_pImpl->m_sin[angle] * x0 +
+        MCTrigonom::m_pImpl->m_cos[angle] * y0;
+}
+
+void MCTrigonom::rotated(
+    MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCUint angle)
+{
+    angle %= LUT_SIZE;
+    y1 = MCTrigonom::m_pImpl->m_sin[angle] * x0 +
+        MCTrigonom::m_pImpl->m_cos[angle] * y0;
+    x1 = MCTrigonom::m_pImpl->m_cos[angle] * x0 -
+        MCTrigonom::m_pImpl->m_sin[angle] * y0;
 }

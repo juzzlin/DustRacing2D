@@ -161,14 +161,14 @@ void MCOBBox<T>::rotate(MCUint a)
     m_a = a;
 
     // Update vertex vectors
-    T newI = MCTrigonom::transformedX(m_v[0].i(), m_v[0].j(), m_a);
-    T newJ = MCTrigonom::transformedY(m_v[0].i(), m_v[0].j(), m_a);
+    T newI = MCTrigonom::rotatedX(m_v[0].i(), m_v[0].j(), m_a);
+    T newJ = MCTrigonom::rotatedY(m_v[0].i(), m_v[0].j(), m_a);
 
     m_v[0].setI(newI);
     m_v[0].setJ(newJ);
 
-    newI = MCTrigonom::transformedX(m_v[1].i(), m_v[1].j(), m_a);
-    newJ = MCTrigonom::transformedY(m_v[1].i(), m_v[1].j(), m_a);
+    newI = MCTrigonom::rotatedX(m_v[1].i(), m_v[1].j(), m_a);
+    newJ = MCTrigonom::rotatedY(m_v[1].i(), m_v[1].j(), m_a);
 
     m_v[1].setI(newI);
     m_v[1].setJ(newJ);
