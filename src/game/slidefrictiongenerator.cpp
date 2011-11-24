@@ -15,7 +15,13 @@
 
 #include "slidefrictiongenerator.h"
 #include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCMathUtil"
 #include "MiniCore/Core/MCTrigonom"
+
+namespace
+{
+    const MCFloat FRICTION_SPEED_TH = 0.001f;
+}
 
 SlideFrictionGenerator::SlideFrictionGenerator(
     MCFloat coeff, MCFloat gravity)
@@ -25,10 +31,17 @@ SlideFrictionGenerator::SlideFrictionGenerator(
 
 void SlideFrictionGenerator::updateForce(MCObject * p)
 {
-    const MCUint bodyAngle = p->angle();
-    const MCVector2d<MCFloat> a(
-        MCTrigonom::cos(bodyAngle), MCTrigonom::sin(bodyAngle));
-    const MCVector2d<MCFloat> v = p->velocity();
+    const MCUint bodyNormalAngle = p->angle() + 90;
+    const MCVector2d<MCFloat> n(
+        MCTrigonom::cos(bodyNormalAngle),
+        MCTrigonom::sin(bodyNormalAngle));
+    const MCVector2d<MCFloat> & v = p->velocity();
+    MCVector2d<MCFloat> s = MCMathUtil::projection(v, n);
+
+    if (s.lengthFast() > FRICTION_SPEED_TH)
+    {
+        p->addForce(-s * coeff() * gravity() * p->mass());
+    }
 }
 
 SlideFrictionGenerator::~SlideFrictionGenerator()

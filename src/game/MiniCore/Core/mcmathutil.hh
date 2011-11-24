@@ -35,71 +35,83 @@ using std::max;
 
 #include "mcvector2d.hh"
 
-//! Miscellaneous math utilities
+//! Miscellaneous math utilities.
 class MCMathUtil
 {
-  enum SIGN {NEG=0, POS, ZERO};
+    enum SIGN {NEG=0, POS, ZERO};
 
 public:
 
-  //! Return true if x == y. Can be used with MCFloats / MCFloats.
-  template <typename T>
-  inline static bool equals(T x, T y);
+    //! Returns true if x == y. Can be used with MCFloats / MCFloats.
+    template <typename T>
+    inline static bool equals(T x, T y);
 
-  /*! Return the minimum distance between a point and a vector
-   * \param p Point to be tested
-   * \param v Vector that defines the line
-   */
-  template <typename T>
-  inline static T distanceFromVector(const MCVector2d<T> & p, const MCVector2d<T> & v);
+    //! Returns the minimum distance between a point and a vector.
+    //! Uses a fast approximation.
+    //! \param p Point to be tested
+    //! \param v Vector that defines the line
+    template <typename T>
+    inline static T distanceFromVector(const MCVector2d<T> & p, const MCVector2d<T> & v);
 
-  //! Return sign of x
-  template <typename T>
-  inline static MCMathUtil::SIGN sign(T x);
+    //! Returns vector a projected on vector b.
+    template <typename T>
+    inline static MCVector2d<T> projection(
+        const MCVector2d<T> & a, const MCVector2d<T> & b);
+
+    //! Returns sign of x
+    template <typename T>
+    inline static MCMathUtil::SIGN sign(T x);
 };
 
 template <typename T>
 bool MCMathUtil::equals(T x, T y)
 {
-  if (numeric_limits<T>::is_exact)
-  {
-    return x == y;
-  }
-  else
-  {
-    const T m = max(abs(x), abs(y));
-    if (m > 0)
+    if (numeric_limits<T>::is_exact)
     {
-      return abs(x - y) / m <= numeric_limits<T>::epsilon();
+        return x == y;
     }
     else
     {
-      return true;
+        const T m = max(abs(x), abs(y));
+        if (m > 0)
+        {
+            return abs(x - y) / m <= numeric_limits<T>::epsilon();
+        }
+        else
+        {
+            return true;
+        }
     }
-  }
 }
 
 template <typename T>
 T MCMathUtil::distanceFromVector(const MCVector2d<T> & p, const MCVector2d<T> & v)
 {
-  return abs(p.dot(MCVector2d<MCFloat>(-v.j(), v.i()).normalizedFast()));
+    return abs(p.dot(MCVector2d<MCFloat>(-v.j(), v.i()).normalizedFast()));
+}
+
+template <typename T>
+MCVector2d<T> MCMathUtil::projection(
+    const MCVector2d<T> & a, const MCVector2d<T> & b)
+{
+    return b * a.dot(b) / b.lengthSquared();
 }
 
 template <typename T>
 MCMathUtil::SIGN MCMathUtil::sign(T x)
 {
-  if (x < 0)
-  {
-    return MCMathUtil::NEG;
-  }
-  else if (x > 0)
-  {
-    return MCMathUtil::POS;
-  }
-  else
-  {
-    return MCMathUtil::ZERO;
-  }
+    if (x < 0)
+    {
+        return MCMathUtil::NEG;
+    }
+    else if (x > 0)
+    {
+        return MCMathUtil::POS;
+    }
+    else
+    {
+        return MCMathUtil::ZERO;
+    }
 }
 
 #endif // MCMATHUTIL_HH

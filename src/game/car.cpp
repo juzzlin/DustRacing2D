@@ -25,13 +25,15 @@
 
 namespace
 {
-    const MCFloat MAX_VELOCITY = 6.0f;
+    const MCFloat MAX_VELOCITY   = 6.0f;
+    const MCFloat BRAKE_FRICTION = 0.25f;
+    const MCFloat SLIDE_FRICTION = 0.15f;
 }
 
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")
-, m_pDeccelerationFriction(new MCFrictionGenerator(0.25f))
-, m_pSlideFriction(new SlideFrictionGenerator(0.25f))
+, m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION))
+, m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
 , m_frictionGeneratorAdded(false)
 , m_accelerating(false)
 {

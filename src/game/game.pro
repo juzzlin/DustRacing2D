@@ -96,6 +96,7 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcglrectparticle.hh \
     MiniCore/Core/mcgravitygenerator.hh \
     MiniCore/Core/mclogger.hh \
+    MiniCore/Core/mcmathutil.hh \
     MiniCore/Core/mcobject.hh \
     MiniCore/Core/mcoutofboundariesevent.hh \
     MiniCore/Core/mcparticle.hh \
