@@ -56,393 +56,393 @@ class MCVector2d
 {
 public:
 
-  //! Constructor
-  MCVector2d();
-  
-  //! Constructor
-  explicit MCVector2d(T i, T j = 0);
-  
-  //! Copy constructor
-  template <typename U>
-  MCVector2d(const MCVector2d<U> & r);
-  
-  //! Destructor
-  inline ~MCVector2d() {}
-  
-  //! Assignment
-  template <typename U>
-  MCVector2d<T> & operator = (const MCVector2d<U> & r);
-  
-  //! Cross product. Returns the resulting component.
-  template <typename U>
-  T operator * (const MCVector2d<U> & r) const;
+    //! Constructor
+    MCVector2d();
 
-  //! Dot product
-  template <typename U>
-  T dot(const MCVector2d<U> & r) const;
+    //! Constructor
+    explicit MCVector2d(T i, T j = 0);
 
-  //! Component product
-  template <typename U>
-  MCVector2d<T> comp(const MCVector2d<U> & r) const;
+    //! Copy constructor
+    template <typename U>
+    MCVector2d(const MCVector2d<U> & r);
 
-  //! Component product + store
-  template <typename U>
-  MCVector2d<T> & compStore(const MCVector2d<U> & r);
+    //! Destructor
+    inline ~MCVector2d() {}
+
+    //! Assignment
+    template <typename U>
+    MCVector2d<T> & operator = (const MCVector2d<U> & r);
+
+    //! Cross product. Returns the resulting component.
+    template <typename U>
+    T operator * (const MCVector2d<U> & r) const;
+
+    //! Dot product
+    template <typename U>
+    T dot(const MCVector2d<U> & r) const;
+
+    //! Component product
+    template <typename U>
+    MCVector2d<T> comp(const MCVector2d<U> & r) const;
+
+    //! Component product + store
+    template <typename U>
+    MCVector2d<T> & compStore(const MCVector2d<U> & r);
     
-  //! Multiplication
-  template <typename S>
-  MCVector2d<T> operator * (S n) const;
-  
-  //! Division
-  template <typename S>
-  MCVector2d<T> operator / (S n) const;
-  
-  //! Vector sum 
-  template <typename U>
-  MCVector2d<T> operator + (const MCVector2d<U> & r) const;
-  
-  //! Vector subtraction
-  template <typename U>
-  MCVector2d<T> operator - (const MCVector2d<U> & r) const;
+    //! Multiplication
+    template <typename S>
+    MCVector2d<T> operator * (S n) const;
 
-  //! *=
-  template <typename S>
-  MCVector2d<T> & operator *= (S n);
-  
-  //! /=
-  template <typename S>
-  MCVector2d<T> & operator /= (S n);
+    //! Division
+    template <typename S>
+    MCVector2d<T> operator / (S n) const;
 
-  //! +=
-  template <typename U>
-  MCVector2d<T> & operator += (const MCVector2d<U> & r);
-  
-  //! -=
-  template <typename U>
-  MCVector2d<T> & operator -= (const MCVector2d<U> & r);
-  
-  //! Get length
-  inline T length() const;
+    //! Vector sum
+    template <typename U>
+    MCVector2d<T> operator + (const MCVector2d<U> & r) const;
 
-  //! Get length using a fast approximation.
-  inline T lengthFast() const;
+    //! Vector subtraction
+    template <typename U>
+    MCVector2d<T> operator - (const MCVector2d<U> & r) const;
 
-  //! Get length squared.
-  inline T lengthSquared() const;
+    //! *=
+    template <typename S>
+    MCVector2d<T> & operator *= (S n);
 
-  //! Normalize
-  void normalize();
+    //! /=
+    template <typename S>
+    MCVector2d<T> & operator /= (S n);
 
-  //! Normalize, inaccurate
-  void normalizeFast();
+    //! +=
+    template <typename U>
+    MCVector2d<T> & operator += (const MCVector2d<U> & r);
 
-  //! Return a normalized vector
-  inline MCVector2d<T> normalized() const;
+    //! -=
+    template <typename U>
+    MCVector2d<T> & operator -= (const MCVector2d<U> & r);
 
-  //! Return a normalized vector, inaccurate
-  inline MCVector2d<T> normalizedFast() const;
+    //! Get length
+    inline T length() const;
 
-  //! Invert
-  void invert();
+    //! Get length using a fast approximation.
+    inline T lengthFast() const;
 
-  //! Return an inverted vector
-  inline MCVector2d<T> inverted() const;
+    //! Get length squared.
+    inline T lengthSquared() const;
 
-  //! Set the vector to zero vector
-  void setZero();
+    //! Normalize
+    void normalize();
 
-  //! Return true if a zero vector
-  bool isZero() const;
+    //! Normalize, inaccurate
+    void normalizeFast();
 
-  //! Set components
-  void set(T newI, T newJ = 0);
+    //! Return a normalized vector
+    inline MCVector2d<T> normalized() const;
 
-  //! Set i-component
-  void setI(T newI);
+    //! Return a normalized vector, inaccurate
+    inline MCVector2d<T> normalizedFast() const;
 
-  //! Set j-component
-  void setJ(T newJ);
+    //! Invert
+    void invert();
 
-  //! Get i-component
-  inline T i() const;
+    //! Return an inverted vector
+    inline MCVector2d<T> inverted() const;
 
-  //! Get j-component
-  inline T j() const;
+    //! Set the vector to zero vector
+    void setZero();
 
-  //! Write to stream
-  friend ostream& operator<<(ostream & out, const MCVector2d<T> & v) 
-  {
-    out << "[ " << v.m_i << ", " << v.m_j << " ]";
-    return out;
-  }
+    //! Return true if a zero vector
+    bool isZero() const;
+
+    //! Set components
+    void set(T newI, T newJ = 0);
+
+    //! Set i-component
+    void setI(T newI);
+
+    //! Set j-component
+    void setJ(T newJ);
+
+    //! Get i-component
+    inline T i() const;
+
+    //! Get j-component
+    inline T j() const;
+
+    //! Write to stream
+    friend ostream& operator<<(ostream & out, const MCVector2d<T> & v)
+    {
+        out << "[ " << v.m_i << ", " << v.m_j << " ]";
+        return out;
+    }
 
 private:
 
-  //! Components
-  T m_i, m_j;
+    //! Components
+    T m_i, m_j;
 };
 
 template <typename T>
 MCVector2d<T>::MCVector2d() :
-  m_i(0),
-  m_j(0)
+    m_i(0),
+    m_j(0)
 {}
 
 template <typename T>
 MCVector2d<T>::MCVector2d(T newI, T newJ) :
-  m_i(newI),
-  m_j(newJ)
+    m_i(newI),
+    m_j(newJ)
 {}
 
 template <typename T>
 template <typename U>
 MCVector2d<T>::MCVector2d(const MCVector2d<U> & r) :
-  m_i(r.i()),
-  m_j(r.j())
+    m_i(r.i()),
+    m_j(r.j())
 {}
 
 template <typename T>
 template <typename U>
 MCVector2d<T> & MCVector2d<T>::operator = (const MCVector2d<U> & r)
 {
-  if (reinterpret_cast<const void *>(&r) != reinterpret_cast<void *>(this))
-  {
-    m_i = r.i();
-    m_j = r.j();
-  }
+    if (reinterpret_cast<const void *>(&r) != reinterpret_cast<void *>(this))
+    {
+        m_i = r.i();
+        m_j = r.j();
+    }
 
-  return *this;
+    return *this;
 }
 
 template <typename T>
 template <typename U>
 T MCVector2d<T>::operator * (const MCVector2d<U> & r) const
 {
-  return m_i * r.j() - m_j * r.i();
+    return m_i * r.j() - m_j * r.i();
 }
 
 template <typename T>
 template <typename U>
 T MCVector2d<T>::dot(const MCVector2d<U> & r) const
 {
-  return m_i * r.i() + m_j * r.j();
+    return m_i * r.i() + m_j * r.j();
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> MCVector2d<T>::comp(const MCVector2d<U> & r) const
 {
-  return MCVector2d<T>(m_i * r.i(), m_j * r.j());
+    return MCVector2d<T>(m_i * r.i(), m_j * r.j());
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> & MCVector2d<T>::compStore(const MCVector2d<U> & r)
 {
-  m_i = m_i * r.i();
-  m_j = m_j * r.j();
+    m_i = m_i * r.i();
+    m_j = m_j * r.j();
 
-  return *this;
+    return *this;
 }
 
 template <typename T>
 template <typename S>
 MCVector2d<T> MCVector2d<T>::operator * (S n) const
 {
-  return MCVector2d<T>(m_i * n, m_j * n);
+    return MCVector2d<T>(m_i * n, m_j * n);
 }
 
 template <typename T>
 template <typename S>
 MCVector2d<T> & MCVector2d<T>::operator *= (S n)
 {
-  m_i *= n;
-  m_j *= n;
-  return *this;
+    m_i *= n;
+    m_j *= n;
+    return *this;
 }
 
 template <typename T>
 template <typename S>
 MCVector2d<T> MCVector2d<T>::operator / (S n) const
 {
-  return MCVector2d<T>(m_i / n, m_j / n);
+    return MCVector2d<T>(m_i / n, m_j / n);
 }
 
 template <typename T>
 template <typename S>
 MCVector2d<T> & MCVector2d<T>::operator /= (S n)
 {
-  m_i /= n;
-  m_j /= n;
-  return *this;
+    m_i /= n;
+    m_j /= n;
+    return *this;
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> MCVector2d<T>::operator + (const MCVector2d<U> & r) const
 {
-  return MCVector2d<T>(m_i + r.i(), m_j + r.j());
+    return MCVector2d<T>(m_i + r.i(), m_j + r.j());
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> & MCVector2d<T>::operator += (const MCVector2d<U> & r)
 {
-  m_i += r.i();
-  m_j += r.j();
-  return *this;
+    m_i += r.i();
+    m_j += r.j();
+    return *this;
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> MCVector2d<T>::operator - (const MCVector2d<U> & r) const
 {
-  return MCVector2d<T>(m_i - r.i(), m_j - r.j());
+    return MCVector2d<T>(m_i - r.i(), m_j - r.j());
 }
 
 template <typename T>
 template <typename U>
 MCVector2d<T> & MCVector2d<T>::operator -= (const MCVector2d<U> & r)
 {
-  m_i -= r.i();
-  m_j -= r.j();
-  return *this;
+    m_i -= r.i();
+    m_j -= r.j();
+    return *this;
 }
 
 template <typename T>
 T MCVector2d<T>::length() const
 {
-  return sqrt(m_i * m_i + m_j * m_j);
+    return sqrt(m_i * m_i + m_j * m_j);
 }
 
 template <typename T>
 T MCVector2d<T>::lengthFast() const
 {
-  const T a = abs(m_i);
-  const T b = abs(m_j);
-  if (a > b) {
-    return a + b / 2;
-  } else {
-    return b + a / 2;
-  }
+    const T a = abs(m_i);
+    const T b = abs(m_j);
+    if (a > b) {
+        return a + b / 2;
+    } else {
+        return b + a / 2;
+    }
 }
 
 template <typename T>
 T MCVector2d<T>::lengthSquared() const
 {
-  return m_i * m_i + m_j * m_j;
+    return m_i * m_i + m_j * m_j;
 }
 
 template <typename T>
 void MCVector2d<T>::normalize()
 {
-  if (!isZero()) {
-    const T l(length());
-    m_i /= l;
-    m_j /= l;
-  }
+    if (!isZero()) {
+        const T l(length());
+        m_i /= l;
+        m_j /= l;
+    }
 }
 
 template <typename T>
 void MCVector2d<T>::normalizeFast()
 {
-  if (!isZero()) {
-    const T l(lengthFast());
-    m_i /= l;
-    m_j /= l;
-  }
+    if (!isZero()) {
+        const T l(lengthFast());
+        m_i /= l;
+        m_j /= l;
+    }
 }
 
 template <typename T>
 MCVector2d<T> MCVector2d<T>::normalized() const
 {
-  if (!isZero()) {
-    const T l(length());
-    return MCVector2d<T>(m_i / l, m_j / l);
-  }
-  return MCVector2d<T>();
+    if (!isZero()) {
+        const T l(length());
+        return MCVector2d<T>(m_i / l, m_j / l);
+    }
+    return MCVector2d<T>();
 }
 
 template <typename T>
 MCVector2d<T> MCVector2d<T>::normalizedFast() const
 {
-  if (!isZero()) {
-    const T l(lengthFast());
-    return MCVector2d<T>(m_i / l, m_j / l);
-  }
-  return MCVector2d<T>();
+    if (!isZero()) {
+        const T l(lengthFast());
+        return MCVector2d<T>(m_i / l, m_j / l);
+    }
+    return MCVector2d<T>();
 }
 
 template <typename T>
 void MCVector2d<T>::invert()
 {
-  m_i = -m_i;
-  m_j = -m_j;
+    m_i = -m_i;
+    m_j = -m_j;
 }
 
 template <typename T>
 MCVector2d<T> MCVector2d<T>::inverted() const
 {
-  return MCVector2d<T>(-m_i, -m_j);
+    return MCVector2d<T>(-m_i, -m_j);
 }
 
 template <typename T>
 void MCVector2d<T>::set(T newI, T newJ)
 {
-  m_i = newI;
-  m_j = newJ;
+    m_i = newI;
+    m_j = newJ;
 }
 
 template <typename T>
 void MCVector2d<T>::setI(T newI)
 {
-  m_i = newI;
+    m_i = newI;
 }
 
 template <typename T>
 void MCVector2d<T>::setJ(T newJ)
 {
-  m_j = newJ;
+    m_j = newJ;
 }
 
 template <typename T>
 T MCVector2d<T>::i() const
 {
-  return m_i;
+    return m_i;
 }
 
 template <typename T>
 T MCVector2d<T>::j() const
 {
-  return m_j;
+    return m_j;
 }
 
 template <typename T>
 void MCVector2d<T>::setZero()
 {
-  m_i = 0;
-  m_j = 0;
+    m_i = 0;
+    m_j = 0;
 }
 
 template <typename T>
 bool MCVector2d<T>::isZero() const
 {
-  if (numeric_limits<T>::is_exact)
-  {
-    return m_i == 0 && m_j == 0;
-  }
-  else
-  {
-    return abs(m_i) <= numeric_limits<T>::epsilon() && 
-        abs(m_j) <= numeric_limits<T>::epsilon();
-  }
+    if (numeric_limits<T>::is_exact)
+    {
+        return m_i == 0 && m_j == 0;
+    }
+    else
+    {
+        return abs(m_i) <= numeric_limits<T>::epsilon() &&
+            abs(m_j) <= numeric_limits<T>::epsilon();
+    }
 }
 
 // Unary negation
 template <typename T>
 MCVector2d<T> operator - (const MCVector2d<T> & r)
 {
-  return MCVector2d<T>(-r.i(), -r.j());
+    return MCVector2d<T>(-r.i(), -r.j());
 }
 
 #endif // MCVECTOR2D_HH
