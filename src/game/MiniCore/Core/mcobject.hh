@@ -117,6 +117,9 @@ public:
     //! Composite objects may override this and add all their sub-objects.
     virtual void addToWorld();
 
+    //! \brief Combined addToWorld() and translate.
+    virtual void addToWorld(MCFloat x, MCFloat y, MCFloat z = 0);
+
     //! \brief Remove object from the World.
     //! Convenience method to remove object from the MCWorld instance.
     //! Composite objects may re-implement this and remove all their sub-objects.

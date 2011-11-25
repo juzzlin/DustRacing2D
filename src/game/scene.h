@@ -19,6 +19,7 @@
 class Car;
 class InputHandler;
 class MCCamera;
+class MCObject;
 class MCSurface;
 class MCWorld;
 class Track;
@@ -50,9 +51,10 @@ public:
 
 private:
 
-    Track   * m_pActiveTrack;
-    MCWorld * m_pWorld;
-    Car     * m_pCar;
+    Track    * m_pActiveTrack;
+    MCWorld  * m_pWorld;
+    Car      * m_pCar;
+    MCObject * m_pCameraObj;
 };
 
 #endif // SCENE_H

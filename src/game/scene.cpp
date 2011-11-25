@@ -21,7 +21,10 @@
 #include "tracktile.h"
 #include "../../common/trackdata.h"
 #include <MiniCore/Core/MCCamera>
+#include <MiniCore/Core/MCFrictionGenerator>
+#include <MiniCore/Core/MCObject>
 #include <MiniCore/Core/MCSurface>
+#include <MiniCore/Core/MCSpringForceGenerator>
 #include <MiniCore/Core/MCTypes>
 #include <MiniCore/Core/MCWorld>
 
@@ -29,8 +32,14 @@ Scene::Scene(MCSurface * pCarSurface)
 : m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld())
 , m_pCar(new Car(pCarSurface))
+, m_pCameraObj(new MCObject("CameraObj"))
 {
     m_pCar->setLayer(Layers::Cars);
+    m_pCameraObj->setMass(1);
+    m_pWorld->addForceGenerator(new MCSpringForceGenerator(
+        m_pCar, 0.1, 0, 0, 10000), m_pCameraObj, true);
+    m_pWorld->addForceGenerator(new MCFrictionGenerator(1.0),
+        m_pCameraObj, true);
 }
 
 void Scene::updateFrame(InputHandler * pHandler,
@@ -69,7 +78,7 @@ void Scene::updateFrame(InputHandler * pHandler,
     m_pWorld->stepTime(timeStep);
 
     // Update camera location
-    pCamera->setPos(m_pCar->getX(), m_pCar->getY());
+    pCamera->setPos(m_pCameraObj->getX(), m_pCameraObj->getY());
 }
 
 void Scene::setActiveTrack(Track * activeTrack)
@@ -92,6 +101,7 @@ void Scene::setActiveTrack(Track * activeTrack)
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
     m_pCar->addToWorld();
+    m_pCameraObj->addToWorld(MAX_X / 2, MAX_Y / 2);
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {

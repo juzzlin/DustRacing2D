@@ -112,11 +112,12 @@ TrackData * TrackLoader::loadTrack(QString path)
                     // Read a tile tag
                     if (tag.nodeName() == "tile")
                     {
-                        QString      id = tag.attribute("type", "clear");
-                        unsigned int i  = tag.attribute("i", "0").toUInt();
-                        unsigned int j  = tag.attribute("j", "0").toUInt();
-                        int          o  = tag.attribute("o", "0").toInt();
-                        int      index  = tag.attribute("index", "-1").toInt();
+                        QString      id      = tag.attribute("type", "clear");
+                        unsigned int i       = tag.attribute("i", "0").toUInt();
+                        unsigned int j       = tag.attribute("j", "0").toUInt();
+                        int          o       = tag.attribute("o", "0").toInt();
+                        int          index   = tag.attribute("index", "-1").toInt();
+                        unsigned int profile = tag.attribute("profile", "0").toUInt();
 
                         // Mirror the angle and y-index.
                         o = -o;
@@ -127,6 +128,20 @@ TrackData * TrackLoader::loadTrack(QString path)
                             tile->setRotation(o);
                             tile->setTileType(id);
                             tile->setRouteIndex(index);
+
+                            switch (profile)
+                            {
+                            default:
+                            case 0:
+                                tile->setProfile(TrackTileBase::TP_FLAT);
+                                break;
+                            case 1:
+                                tile->setProfile(TrackTileBase::TP_HILL);
+                                break;
+                            case 2:
+                                tile->setProfile(TrackTileBase::TP_GORGE);
+                                break;
+                            }
 
                             // Associate with a surface object corresponging
                             // to the tile type.

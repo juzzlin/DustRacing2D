@@ -273,6 +273,14 @@ void MCObject::addToWorld()
     }
 }
 
+void MCObject::addToWorld(MCFloat x, MCFloat y, MCFloat z)
+{
+    if (MCWorld::instance()) {
+        MCWorld::instance()->addObject(this);
+        translate(MCVector3d<MCFloat>(x, y, z));
+    }
+}
+
 void MCObject::removeFromWorld()
 {
     if (MCWorld::instance()) {

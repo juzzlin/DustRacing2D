@@ -112,7 +112,8 @@ void Track::render(MCCamera * pCamera)
                     glNormal3f(0.0f, 0.0f, 1.0f);
                     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-                    glTranslated(X + w / 2, Y + h / 2, 0);
+                    const int Z = 0;
+                    glTranslated(X + w / 2, Y + h / 2, Z);
                     glRotated(pTile->rotation(), 0, 0, 1);
 
                     // Render the tile as a quad
