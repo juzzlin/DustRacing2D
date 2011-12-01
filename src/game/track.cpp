@@ -21,6 +21,7 @@
 #include "MiniCore/Core/MCSurface"
 #include <QImage>
 #include <QGLWidget>
+#include <cassert>
 
 Track::Track(TrackData * pTrackData)
 : m_pTrackData(pTrackData)
@@ -29,6 +30,7 @@ Track::Track(TrackData * pTrackData)
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
 {
+    assert(pTrackData);
 }
 
 MCUint Track::width() const
@@ -46,8 +48,21 @@ const TrackData & Track::trackData() const
     return *m_pTrackData;
 }
 
+TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
+{
+    // X index
+    MCUint i = x * m_cols / m_width;
+    i = i >= m_cols ? m_cols - 1 : i;
+
+    // Y index
+    MCUint j = y * m_rows / m_height;
+    j = j >= m_rows ? m_rows - 1 : j;
+
+    return m_pTrackData->map().getTile(i, j);
+}
+
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
-                                    MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
+    MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
 
 {
   // Calculate which tiles are visible in the Camera window:

@@ -20,6 +20,7 @@
 #include "MiniCore/Core/MCTypes"
 
 class TrackData;
+class TrackTile;
 class MCCamera;
 
 //! A renderable race track object constructed from
@@ -48,10 +49,13 @@ public:
     //! Return the track data.
     const TrackData & trackData() const;
 
+    //! Return pointer to the tile at the given location.
+    TrackTile * trackTileAtLocation(MCUint x, MCUint y) const;
+
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
-                                 MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
+        MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
     TrackData * m_pTrackData;
     MCUint m_rows, m_cols, m_width, m_height;
