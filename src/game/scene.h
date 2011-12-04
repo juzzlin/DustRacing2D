@@ -22,6 +22,7 @@ class MCCamera;
 class MCObject;
 class MCSurface;
 class MCWorld;
+class Race;
 class Track;
 
 //! The game scene.
@@ -55,6 +56,7 @@ private:
     MCWorld  * m_pWorld;
     Car      * m_pCar;
     MCObject * m_pCameraObj;
+    Race     * m_pRace;
 };
 
 #endif // SCENE_H

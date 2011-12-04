@@ -16,10 +16,52 @@
 #ifndef RACE_H
 #define RACE_H
 
+#include <unordered_map>
+#include <vector>
+
+class Car;
+class Track;
+class TrackTile;
+
+//! Class that controls the race event.
 class Race
 {
 public:
+
+    //! Constructor.
     Race();
+
+    //! Destructor.
+    virtual ~Race();
+
+    //! Init the race.
+    void init();
+
+    //! Update situation.
+    void update();
+
+    //! Set the current race track.
+    void setTrack(Track * pTrack);
+
+    //! Set the number of laps.
+    void setLapCount(unsigned int laps);
+
+    //! Add a car to the race.
+    void addCar(Car * pCar);
+
+private:
+
+    void checkRoute(Car * pCar);
+
+    typedef std::vector<Car *> CarVector;
+    CarVector m_cars;
+
+    typedef std::unordered_map<Car *, int> RouteHash;
+    RouteHash m_routeHash;
+
+    unsigned int m_lapCount;
+
+    Track * m_pTrack;
 };
 
 #endif // RACE_H

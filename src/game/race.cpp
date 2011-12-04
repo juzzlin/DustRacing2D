@@ -15,6 +15,78 @@
 
 #include "race.h"
 
+#include "car.h"
+#include "track.h"
+#include "tracktile.h"
+#include <algorithm>
+#include <cassert>
+
+#include "../common/trackdata.h"
+
 Race::Race()
+: m_lapCount(0)
+, m_pTrack(nullptr)
+{
+}
+
+void Race::init()
+{
+    for(Car * pCar : m_cars)
+    {
+        m_routeHash[pCar] = 0;
+    }
+}
+
+void Race::update()
+{
+    for(Car * pCar : m_cars)
+    {
+        checkRoute(pCar);
+    }
+}
+
+void Race::checkRoute(Car * pCar)
+{
+    assert(m_pTrack);
+
+    TrackTile * pCurrent = m_pTrack->trackTileAtLocation(
+        pCar->getX(), pCar->getY());
+
+    // Lap progressed?
+    if (pCurrent->routeIndex() == m_routeHash[pCar] + 1)
+    {
+        m_routeHash[pCar] = pCurrent->routeIndex();
+    }
+    // Lap finished?
+    else if (m_routeHash[pCar] ==
+        static_cast<int>(m_pTrack->trackData().route().length()) - 1)
+    {
+        if (pCurrent->routeIndex() == 1)
+        {
+            m_routeHash[pCar] = 1;
+            std::cout << "A New lap!" << std::endl;
+        }
+    }
+}
+
+void Race::setTrack(Track * pTrack)
+{
+    m_pTrack = pTrack;
+}
+
+void Race::setLapCount(unsigned int laps)
+{
+    m_lapCount = laps;
+}
+
+void Race::addCar(Car * pCar)
+{
+    if (find(m_cars.begin(), m_cars.end(), pCar) == m_cars.end())
+    {
+        m_cars.push_back(pCar);
+    }
+}
+
+Race::~Race()
 {
 }

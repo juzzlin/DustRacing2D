@@ -13,10 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#include "scene.h"
+
 #include "car.h"
 #include "inputhandler.h"
 #include "layers.h"
-#include "scene.h"
+#include "race.h"
 #include "track.h"
 #include "tracktile.h"
 #include "../../common/trackdata.h"
@@ -30,9 +32,10 @@
 
 Scene::Scene(MCSurface * pCarSurface)
 : m_pActiveTrack(nullptr)
-, m_pWorld(new MCWorld())
+, m_pWorld(new MCWorld)
 , m_pCar(new Car(pCarSurface))
 , m_pCameraObj(new MCObject("CameraObj"))
+, m_pRace(new Race)
 {
     m_pCar->setLayer(Layers::Cars);
     m_pCameraObj->setMass(1);
@@ -40,6 +43,7 @@ Scene::Scene(MCSurface * pCarSurface)
         m_pCar, 0.1, 0, 0, 10000), m_pCameraObj, true);
     m_pWorld->addForceGenerator(new MCFrictionGenerator(1.0),
         m_pCameraObj, true);
+    m_pRace->addCar(m_pCar);
 }
 
 void Scene::updateFrame(InputHandler * pHandler,
@@ -79,6 +83,9 @@ void Scene::updateFrame(InputHandler * pHandler,
 
     // Update camera location
     pCamera->setPos(m_pCameraObj->getX(), m_pCameraObj->getY());
+
+    // Update race situation
+    m_pRace->update();
 }
 
 void Scene::setActiveTrack(Track * activeTrack)
@@ -102,6 +109,8 @@ void Scene::setActiveTrack(Track * activeTrack)
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
     m_pCar->addToWorld();
     m_pCameraObj->addToWorld(MAX_X / 2, MAX_Y / 2);
+    m_pRace->setTrack(activeTrack);
+    m_pRace->init();
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
@@ -127,5 +136,6 @@ MCWorld * Scene::world() const
 Scene::~Scene()
 {
     delete m_pCar;
+    delete m_pRace;
     delete m_pWorld;
 }

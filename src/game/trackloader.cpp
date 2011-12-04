@@ -62,7 +62,7 @@ int TrackLoader::loadTracks()
             else
             {
                 MCLogger::logError("Couldn't load '%s'..",
-                                   trackPath.toStdString().c_str());
+                    trackPath.toStdString().c_str());
             }
         }
     }
