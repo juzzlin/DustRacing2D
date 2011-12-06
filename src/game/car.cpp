@@ -25,15 +25,15 @@
 
 namespace
 {
-    const MCFloat MAX_VELOCITY   = 6.0f;
-    const MCFloat BRAKE_FRICTION = 0.25f;
-    const MCFloat SLIDE_FRICTION = 0.15f;
+    const MCFloat MAX_VELOCITY     = 6.0f;
+    const MCFloat BRAKE_FRICTION   = 0.25f;
+    const MCFloat SLIDE_FRICTION   = 0.15f;
+    const MCFloat ROLLING_FRICTION = 0.01f;
 }
 
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")
 , m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION))
-, m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
 , m_frictionGeneratorAdded(false)
 , m_accelerating(false)
 {
@@ -43,7 +43,10 @@ Car::Car(MCSurface * pSurface)
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
 
     MCWorld::instance()->addForceGenerator(
-        m_pSlideFriction, this, true);
+        new SlideFrictionGenerator(SLIDE_FRICTION), this, true);
+
+    MCWorld::instance()->addForceGenerator(
+        new MCFrictionGenerator(ROLLING_FRICTION), this, true);
 }
 
 void Car::turnLeft()
