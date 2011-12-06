@@ -21,9 +21,6 @@
 #define MCCIRCLESHAPE_HH
 
 #include "mcshape.hh"
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
 
 class MCCircleShapeImpl;
 class MCShapeView;
@@ -33,45 +30,45 @@ class MCCircleShape : public MCShape
 {
 public:
 
-  /*! Constructor
-   * \param radius  Radius of the shape
-   * \param pParent Parent object
-   * \param pView   View for the shape. May be nullptr.
-   */
-  MCCircleShape(MCObject * pParent, MCShapeView * pView, MCFloat radius);
+    /*! Constructor
+     * \param radius  Radius of the shape
+     * \param pParent Parent object
+     * \param pView   View for the shape. May be nullptr.
+     */
+    MCCircleShape(MCObject * pParent, MCShapeView * pView, MCFloat radius);
 
-  //! Destructor
-  virtual ~MCCircleShape();
+    //! Destructor
+    virtual ~MCCircleShape();
 
-  //! \reimp
-  bool contains(const MCVector2d<MCFloat> & p) const;
+    //! \reimp
+    bool contains(const MCVector2d<MCFloat> & p) const;
 
-  //! \reimp
-  int interpenetrationDepth(const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
+    //! \reimp
+    int interpenetrationDepth(const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
 
-  //! \reimp
-  MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
+    //! \reimp
+    MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
 
-  //! Return type id
-  static MCUint typeID();
+    //! Return type id
+    static MCUint typeID();
 
-  //! \reimp
-  virtual MCUint instanceTypeID() const;
+    //! \reimp
+    virtual MCUint instanceTypeID() const;
 
-  //! \reimp
-  virtual MCBBox<MCFloat> bbox() const;
+    //! \reimp
+    virtual MCBBox<MCFloat> bbox() const;
 
-  //! Set the radius
-  void setRadius(MCFloat r);
+    //! Set the radius
+    void setRadius(MCFloat r);
 
-  //! Return the radius
-  MCFloat radius() const;
+    //! Return the radius
+    MCFloat radius() const;
 
 private:
 
-  DISABLE_COPY(MCCircleShape);
-  DISABLE_ASSI(MCCircleShape);
-  shared_ptr<MCCircleShapeImpl> const m_pImpl;
+    DISABLE_COPY(MCCircleShape);
+    DISABLE_ASSI(MCCircleShape);
+    MCCircleShapeImpl * const m_pImpl;
 };
 
 #endif // MCCIRCLESHAPE_HH

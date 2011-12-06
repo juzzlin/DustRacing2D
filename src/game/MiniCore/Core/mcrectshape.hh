@@ -24,10 +24,6 @@
 #include "mcobbox.hh"
 #include "mcedge.hh"
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 class MCRectShapeImpl;
 class MCShapeView;
 class MCObject;
@@ -41,53 +37,56 @@ class MCRectShape : public MCShape
 {
 public:
 
-  /*! Constructor
-   * \param pParent Parent object
-   * \param pView View for the shape. May be nullptr.
-   */
-  MCRectShape(MCObject * pParent, MCShapeView * pView, MCFloat width, MCFloat height);
+    /*! Constructor
+     * \param pParent Parent object
+     * \param pView View for the shape. May be nullptr.
+     */
+    MCRectShape(MCObject * pParent, MCShapeView * pView,
+        MCFloat width, MCFloat height);
 
-  //! Destructor
-  virtual ~MCRectShape();
+    //! Destructor
+    virtual ~MCRectShape();
 
-  //! \reimp
-  virtual void translate(const MCVector3d<MCFloat> & p);
+    //! \reimp
+    virtual void translate(const MCVector3d<MCFloat> & p);
 
-  //! \reimp
-  virtual void rotate(MCUint a);
+    //! \reimp
+    virtual void rotate(MCUint a);
 
-  //! \reimp
-  virtual MCBBox<MCFloat> bbox() const;
+    //! \reimp
+    virtual MCBBox<MCFloat> bbox() const;
 
-  //! \reimp
-  virtual bool contains(const MCVector2d<MCFloat> & p) const;
+    //! \reimp
+    virtual bool contains(const MCVector2d<MCFloat> & p) const;
 
-  //! \reimp
-  virtual int interpenetrationDepth(const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
+    //! \reimp
+    virtual int interpenetrationDepth(
+        const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
 
-  //! \reimp
-  virtual MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
+    //! \reimp
+    virtual MCVector2d<MCFloat> contactNormal(
+        const MCVector2d<MCFloat> & p) const;
 
-  //! \brief Resize
-  void resize(MCFloat width, MCFloat height);
+    //! \brief Resize
+    void resize(MCFloat width, MCFloat height);
 
-  //! Return the oriented bbox to access vertices etc.
-  const MCOBBox<MCFloat> & obbox() const;
+    //! Return the oriented bbox to access vertices etc.
+    const MCOBBox<MCFloat> & obbox() const;
 
-  //! Return "nearest" edge for a point
-  MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
+    //! Return "nearest" edge for a point
+    MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
 
-  //! Return the typeID
-  static MCUint typeID();
+    //! Return the typeID
+    static MCUint typeID();
 
-  //! \reimp
-  virtual MCUint instanceTypeID() const;
+    //! \reimp
+    virtual MCUint instanceTypeID() const;
 
 private:
 
-  DISABLE_COPY(MCRectShape);
-  DISABLE_ASSI(MCRectShape);
-  shared_ptr<MCRectShapeImpl> const m_pImpl;
+    DISABLE_COPY(MCRectShape);
+    DISABLE_ASSI(MCRectShape);
+    MCRectShapeImpl * const m_pImpl;
 };
 
 #endif // MCRECTSHAPE_HH
