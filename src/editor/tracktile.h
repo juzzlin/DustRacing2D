@@ -28,7 +28,8 @@ class TrackData;
 
 //! A race track is built of TrackTiles. The TrackTile class
 //! extends TrackTileBase with features needed to visualize
-//! track tiles in the editor.
+//! track tiles in the editor. Note that the track tile instances
+//! do not change. Only their types change when user sets a tile.
 class TrackTile : public QGraphicsItem, public TrackTileBase
 {
 public:
@@ -45,7 +46,7 @@ public:
     //! \param matrixLocation Location in the tile matrix.
     //! \param type Type of the tile. See setType().
     TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
-              const QString & type = "clear");
+        const QString & type = "clear");
 
     //! Destructor
     virtual ~TrackTile();
@@ -54,7 +55,8 @@ public:
     virtual QRectF boundingRect () const;
 
     //! \reimp
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    virtual void paint(QPainter * painter,
+        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);

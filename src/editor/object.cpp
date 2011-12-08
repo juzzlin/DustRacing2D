@@ -13,31 +13,30 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECTDATA_H
-#define OBJECTDATA_H
+#include "object.h"
+#include <QPainter>
 
-#include <QPixmap>
-#include <QString>
-
-//! Structure used by ObjectLoader.
-struct ObjectData
+Object::Object(QSizeF size, QPixmap pixmap)
+: m_size(size)
+, m_pixmap(pixmap)
 {
-    //! Path to the image representing this object.
-    QPixmap pixmap;
+}
 
-    //! Category of this object.
-    QString category;
+QRectF Object::boundingRect () const
+{
+    return QRectF(-m_size.width() / 2, -m_size.height() / 2,
+                   m_size.width(),      m_size.height());
+}
 
-    //! Role of this object.
-    QString role;
+void Object::paint(QPainter * painter,
+    const QStyleOptionGraphicsItem * option, QWidget * widget)
+{
+    Q_UNUSED(widget);
+    Q_UNUSED(option);
 
-    //! Width when added to the scene.
-    //! Applies only to certain kind (category) of objects.
-    unsigned int width;
-
-    //! Height when added to the scene.
-    //! Applies only to certain kind (category) of objects.
-    unsigned int height;
-};
-
-#endif // OBJECTDATA_H
+    painter->save();
+    painter->drawPixmap(boundingRect().x(), boundingRect().y(),
+        boundingRect().width(), boundingRect().height(),
+        m_pixmap);
+    painter->restore();
+}

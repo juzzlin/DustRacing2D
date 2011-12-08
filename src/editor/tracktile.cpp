@@ -29,7 +29,7 @@
 TrackTile * TrackTile::m_activeTile = nullptr;
 
 TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
-                     const QString & type)
+    const QString & type)
 : TrackTileBase(trackData, location, matrixLocation, type)
 , m_size(QSizeF(TILE_W, TILE_H))
 , m_active(false)
@@ -68,7 +68,7 @@ QRectF TrackTile::boundingRect () const
 }
 
 void TrackTile::paint(QPainter * painter,
-                      const QStyleOptionGraphicsItem * option, QWidget * widget)
+    const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -81,20 +81,19 @@ void TrackTile::paint(QPainter * painter,
     // Render the tile pixmap if tile is not cleared.
     if (tileType() != "clear")
     {
-        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
-                            m_size.width(), m_size.height(),
-                            m_pixmap);
+        painter->drawPixmap(boundingRect().x(), boundingRect().y(),
+            boundingRect().width(), boundingRect().height(),
+            m_pixmap);
     }
     else
     {
-        painter->drawPixmap(-m_size.width() / 2, -m_size.height() / 2,
-                            m_size.width(), m_size.height(),
-                            QPixmap(Config::Editor::CLEAR_PATH));
+        painter->drawPixmap(boundingRect().x(), boundingRect().y(),
+            boundingRect().width(), boundingRect().height(),
+            QPixmap(Config::Editor::CLEAR_PATH));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);
-        painter->drawRect(-m_size.width() / 2, -m_size.height() / 2,
-                           m_size.width(),      m_size.height());
+        painter->drawRect(boundingRect());
     }
 
     // Render highlight

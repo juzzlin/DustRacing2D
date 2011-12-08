@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
     QApplication app(argc, argv);
 
     // Track file can be given as command line argument.
-    QString trackFile = argc > 1 ? argv[1] : "";
+    const QString trackFile = argc > 1 ? argv[1] : "";
     MainWindow mainWindow(trackFile);
     mainWindow.show();
 

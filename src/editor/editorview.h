@@ -23,6 +23,7 @@ class QAction;
 class QMouseEvent;
 class QPaintEvent;
 class EditorData;
+class ObjectLoader;
 class TrackTile;
 
 class EditorView : public QGraphicsView
@@ -31,7 +32,7 @@ class EditorView : public QGraphicsView
 
 public:
 
-    explicit EditorView(EditorData * editor, QWidget * parent = 0);
+    explicit EditorView(QWidget * parent = 0);
 
 protected:
 
@@ -58,12 +59,12 @@ private:
     void handleLeftButtonClickOnTile(TrackTile * tile);
     void handleRightButtonClickOnTile(TrackTile * tile);
 
-    EditorData * m_editorData;
-    QMenu        m_menu;
-    QPoint       m_clickedPos;
-    QAction    * m_setAsFlat;
-    QAction    * m_setAsHill;
-    QAction    * m_setAsGorge;
+    QMenu          m_menu;
+    QPoint         m_clickedPos;
+    QPointF        m_clickedScenePos;
+    QAction      * m_setAsFlat;
+    QAction      * m_setAsHill;
+    QAction      * m_setAsGorge;
 };
 
 #endif // EDITORVIEW_H

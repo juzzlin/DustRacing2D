@@ -61,9 +61,10 @@ namespace
 }
 
 MainWindow::MainWindow(QString trackFile)
-: m_editorData(new EditorData(this))
-, m_editorView(new EditorView(m_editorData, this))
+: m_objectLoader(new ObjectLoader)
+, m_editorData(new EditorData(this))
 , m_editorScene(new EditorScene(this))
+, m_editorView(new EditorView(this))
 , m_console(new QTextEdit(this))
 , m_saveAction(nullptr)
 , m_saveAsAction(nullptr)
@@ -72,7 +73,6 @@ MainWindow::MainWindow(QString trackFile)
 , m_setRouteAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
-, m_objectLoader(new ObjectLoader)
 {
     if (!m_instance)
     {
@@ -207,18 +207,23 @@ void MainWindow::addObjectsToToolBar()
 {
     // Loop through all object models loaded
     // by the object loader.
-    ObjectLoader::ObjectDataVector objects =
-        m_objectLoader->getObjectsByCategory("tile");
-    for (const ObjectData model : objects)
+    QVector<QString> categories;
+    categories << "tile" << "free";
+    for (QString category : categories)
     {
-        // Create the action.
-        QAction * p = new QAction(QIcon(model.pixmap), model.role, this);
+        ObjectLoader::ObjectDataVector objects =
+            m_objectLoader->getObjectsByCategory(category);
+        for (const ObjectData model : objects)
+        {
+            // Create the action.
+            QAction * p = new QAction(QIcon(model.pixmap), model.role, this);
 
-        // Set model role as the data.
-        p->setData(QVariant(model.role));
+            // Set model role as the data.
+            p->setData(QVariant(model.role));
 
-        // Add it to the toolbar.
-        m_toolBar->addAction(p);
+            // Add it to the toolbar.
+            m_toolBar->addAction(p);
+        }
     }
 }
 
@@ -227,9 +232,19 @@ MainWindow * MainWindow::instance()
     return MainWindow::m_instance;
 }
 
+EditorView * MainWindow::editorView() const
+{
+    return m_editorView;
+}
+
 EditorScene * MainWindow::editorScene() const
 {
     return m_editorScene;
+}
+
+EditorData * MainWindow::editorData() const
+{
+    return m_editorData;
 }
 
 ObjectLoader * MainWindow::objectLoader() const
@@ -368,11 +383,30 @@ void MainWindow::handleToolBarActionClick(QAction * action)
             m_editorData->setMode(EditorData::EM_NONE);
         }
         // The user wants to set a tile type or clear it.
-        else
+        else if (m_objectLoader->getCategoryByRole(
+            action->data().toString()) == "tile")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EM_SETTILETYPE);
+            m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
+        }
+        // The user wants to add an object to the scene.
+        else if (m_objectLoader->getCategoryByRole(
+            action->data().toString()) == "free")
+        {
+            ObjectData objectData = m_objectLoader->getObjectByRole(
+                action->data().toString());
+
+            unsigned int w = objectData.width;
+            w = w > 0 ? w : objectData.pixmap.width();
+
+            unsigned int h = objectData.height;
+            h = h > 0 ? h : objectData.pixmap.height();
+
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(
+                objectData.pixmap.scaled(w, h));
+            m_editorData->setMode(EditorData::EM_ADD_OBJECT);
         }
     }
     else

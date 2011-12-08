@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TILELOADER_H
-#define TILELOADER_H
+#ifndef OBJECT_LOADER_H
+#define OBJECT_LOADER_H
 
 #include <QtCore>
 
@@ -39,8 +39,11 @@ public:
     //! Get all objects of the given category.
     ObjectDataVector getObjectsByCategory(QString category) const;
 
-    //! Get all objects of the given role.
-    ObjectDataVector getObjectsByRole(QString role) const;
+    //! Get object of the given role.
+    ObjectData getObjectByRole(QString role) const;
+
+    //! Get category by role.
+    QString getCategoryByRole(QString role) const;
 
     //! Get all objects.
     ObjectDataVector objects() const;
@@ -55,4 +58,4 @@ private:
     ObjectDataVector m_objects;
 };
 
-#endif // TILELOADER_H
+#endif // OBJECT_LOADER_H

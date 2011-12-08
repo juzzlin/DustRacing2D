@@ -13,31 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECTDATA_H
-#define OBJECTDATA_H
+#ifndef OBJECT_H
+#define OBJECT_H
 
+#include <QGraphicsItem>
 #include <QPixmap>
-#include <QString>
 
-//! Structure used by ObjectLoader.
-struct ObjectData
+class Object : public QGraphicsItem
 {
-    //! Path to the image representing this object.
-    QPixmap pixmap;
+public:
 
-    //! Category of this object.
-    QString category;
+    Object(QSizeF size, QPixmap pixmap);
 
-    //! Role of this object.
-    QString role;
+    //! \reimp
+    virtual QRectF boundingRect () const;
 
-    //! Width when added to the scene.
-    //! Applies only to certain kind (category) of objects.
-    unsigned int width;
+    //! \reimp
+    virtual void paint(QPainter * painter,
+        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
-    //! Height when added to the scene.
-    //! Applies only to certain kind (category) of objects.
-    unsigned int height;
+private:
+
+    //! Original size of the tile in pixels.
+    QSizeF m_size;
+
+    //! Image of the tile.
+    QPixmap m_pixmap;
 };
 
-#endif // OBJECTDATA_H
+#endif // OBJECT_H

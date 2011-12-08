@@ -57,8 +57,14 @@ public:
     //! Print text to the console.
     void console(QString text);
 
-    //! Get pointer to the current scene. Cannot be nullptr.
+    //! Get pointer to the view. Cannot be nullptr.
+    EditorView * editorView() const;
+
+    //! Get pointer to the scene. Cannot be nullptr.
     EditorScene * editorScene() const;
+
+    //! Get pointer to the data. Cannot be nullptr.
+    EditorData * editorData() const;
 
     //! Get pointer to the object loaded. Cannot be nullptr.
     ObjectLoader * objectLoader() const;
@@ -99,9 +105,10 @@ private:
     void populateToolBar();
     void removeTilesFromScene();
 
+    ObjectLoader * m_objectLoader;
     EditorData   * m_editorData;
-    EditorView   * m_editorView;
     EditorScene  * m_editorScene;
+    EditorView   * m_editorView;
     QTextEdit    * m_console;
     QAction      * m_saveAction;
     QAction      * m_saveAsAction;
@@ -111,7 +118,6 @@ private:
     QAction      * m_setRouteAction;
     QSlider      * m_scaleSlider;
     QToolBar     * m_toolBar;
-    ObjectLoader * m_objectLoader;
 
     static MainWindow * m_instance;
 };

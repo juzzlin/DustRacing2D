@@ -63,7 +63,8 @@ bool ObjectLoader::load(QString path)
 
                 newData.category  = tag.attribute("category",  "undefined");
                 newData.role      = tag.attribute("role",      "undefined");
-
+                newData.width     = tag.attribute("width",     "0").toUInt();
+                newData.height    = tag.attribute("height",    "0").toUInt();
                 QString imagePath = tag.attribute("imagePath", "undefined");
 
                 // The corresponding image is loaded
@@ -90,7 +91,8 @@ bool ObjectLoader::load(QString path)
     return true;
 }
 
-ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(QString category) const
+ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(
+    QString category) const
 {
     ObjectDataVector result;
 
@@ -105,19 +107,30 @@ ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(QString catego
     return result;
 }
 
-ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByRole(QString role) const
+ObjectData ObjectLoader::getObjectByRole(QString role) const
 {
-    ObjectDataVector result;
-
     for (int i = 0; i < m_objects.size(); i++)
     {
         if (m_objects[i].role == role)
         {
-            result << m_objects[i];
+            return m_objects[i];
         }
     }
 
-    return result;
+    return ObjectData();
+}
+
+QString ObjectLoader::getCategoryByRole(QString role) const
+{
+    for (int i = 0; i < m_objects.size(); i++)
+    {
+        if (m_objects[i].role == role)
+        {
+            return m_objects[i].category;
+        }
+    }
+
+    return QString();
 }
 
 ObjectLoader::ObjectDataVector ObjectLoader::objects() const

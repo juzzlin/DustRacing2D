@@ -13,6 +13,7 @@ SOURCES += main.cpp mainwindow.cpp \
     editordata.cpp \
     editorview.cpp \
     editorscene.cpp \
+    object.cpp \
     objectloader.cpp \
     tiletypedialog.cpp \
     tileanimator.cpp \
@@ -22,13 +23,15 @@ SOURCES += main.cpp mainwindow.cpp \
     ../common/map.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
-    ../common/tracktilebase.cpp
+    ../common/tracktilebase.cpp \
 
 HEADERS += mainwindow.h \
     newtrackdialog.h \
     editordata.h \
     editorview.h \
     editorscene.h \
+    object.h \
+    objectdata.h \
     objectloader.h \
     tiletypedialog.h \
     tileanimator.h \
@@ -39,7 +42,6 @@ HEADERS += mainwindow.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
-    objectdata.h
 
 RESOURCES += \
     ../../data/images/images.qrc

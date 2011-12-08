@@ -67,7 +67,7 @@ bool EditorData::canRouteBeSet() const
 
 void EditorData::beginSetRoute()
 {
-    setMode(EditorData::EM_SETROUTE);
+    setMode(EditorData::EM_SET_ROUTE);
 
     if (m_trackData)
     {

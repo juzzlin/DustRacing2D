@@ -31,7 +31,8 @@ class EditorData
 public:
 
     //! Editing modes.
-    enum EditorMode {EM_NONE = 0, EM_SETROUTE, EM_SETTILETYPE};
+    enum EditorMode {EM_NONE = 0,
+        EM_SET_ROUTE, EM_SET_TILE_TYPE, EM_ADD_OBJECT};
 
     //! Constructor.
     //! \param mainWindow Pointer to the main window.
