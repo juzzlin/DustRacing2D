@@ -54,6 +54,17 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 root.appendChild(tileTag);
             }
 
+    // Add information about objects
+    for (unsigned int i = 0; i < trackData->objects().count(); i++)
+    {
+        QDomElement objectTag = doc.createElement("object");
+        ObjectBase & object = trackData->objects().object(i);
+        objectTag.setAttribute("type", object.role());
+        objectTag.setAttribute("x", static_cast<int>(object.location().x()));
+        objectTag.setAttribute("y", static_cast<int>(object.location().y()));
+        root.appendChild(objectTag);
+    }
+
     // Save to file
     QFile file(path);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -86,7 +97,8 @@ TrackData * TrackIO::open(QString path)
     file.close();
 
     QDomElement  root    = doc.documentElement();
-    QString      version = root.attribute("version", Config::Editor::EDITOR_VERSION);
+    QString      version = root.attribute("version",
+        Config::Editor::EDITOR_VERSION);
     QString      name    = root.attribute("name", "undefined");
     unsigned int cols    = root.attribute("cols", "0").toUInt();
     unsigned int rows    = root.attribute("rows", "0").toUInt();
@@ -119,7 +131,9 @@ TrackData * TrackIO::open(QString path)
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);
-                        tile->setPixmap(MainWindow::instance()->objectLoader()->getPixmapByRole(id));
+                        tile->setPixmap(
+                            MainWindow::instance()->objectLoader()
+                                .getPixmapByRole(id));
                         tile->setRouteIndex(index);
 
                         switch (profileInt)

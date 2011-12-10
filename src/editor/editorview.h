@@ -59,12 +59,12 @@ private:
     void handleLeftButtonClickOnTile(TrackTile * tile);
     void handleRightButtonClickOnTile(TrackTile * tile);
 
-    QMenu          m_menu;
-    QPoint         m_clickedPos;
-    QPointF        m_clickedScenePos;
-    QAction      * m_setAsFlat;
-    QAction      * m_setAsHill;
-    QAction      * m_setAsGorge;
+    QMenu     m_menu;
+    QPoint    m_clickedPos;
+    QPointF   m_clickedScenePos;
+    QAction * m_setAsFlat;
+    QAction * m_setAsHill;
+    QAction * m_setAsGorge;
 };
 
 #endif // EDITORVIEW_H

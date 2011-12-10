@@ -13,38 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef OBJECTS_H
+#define OBJECTS_H
 
-#include <QGraphicsItem>
-#include <QPixmap>
-#include "../common/objectbase.h"
+#include "objectbase.h"
+#include <vector>
 
-//! Freely placeable object.
-class Object : public QGraphicsItem, public ObjectBase
+//! Container for all objects.
+class Objects
 {
 public:
 
+    typedef std::vector<ObjectBase *> ObjectVector;
+
     //! Constructor.
-    Object(QString category, QString role, QSizeF size, QPixmap pixmap);
+    Objects();
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+    //! Add an object.
+    void add(ObjectBase & object);
 
-    //! \reimp
-    virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    //! Remove an object.
+    void remove(ObjectBase & object);
 
-    //! \reimp
-    virtual void setLocation(QPointF newLocation);
+    //! Return object count.
+    unsigned int count() const;
+
+    //! Return given object.
+    ObjectBase & object(unsigned int index) const;
 
 private:
 
-    //! Original size of the tile in pixels.
-    QSizeF m_size;
-
-    //! Image of the tile.
-    QPixmap m_pixmap;
+    ObjectVector m_objects;
 };
 
-#endif // OBJECT_H
+#endif // OBJECTS_H

@@ -232,24 +232,24 @@ MainWindow * MainWindow::instance()
     return MainWindow::m_instance;
 }
 
-EditorView * MainWindow::editorView() const
+EditorView & MainWindow::editorView() const
 {
-    return m_editorView;
+    return *m_editorView;
 }
 
-EditorScene * MainWindow::editorScene() const
+EditorScene & MainWindow::editorScene() const
 {
-    return m_editorScene;
+    return *m_editorScene;
 }
 
-EditorData * MainWindow::editorData() const
+EditorData & MainWindow::editorData() const
 {
-    return m_editorData;
+    return *m_editorData;
 }
 
-ObjectLoader * MainWindow::objectLoader() const
+ObjectLoader & MainWindow::objectLoader() const
 {
-    return m_objectLoader;
+    return *m_objectLoader;
 }
 
 QAction * MainWindow::currentToolBarAction() const
@@ -445,8 +445,7 @@ bool MainWindow::doOpenTrack(QString fileName)
 
     removeTilesFromScene();
 
-    m_editorData->loadTrackData(fileName);
-    if (m_editorData->trackData())
+    if (m_editorData->loadTrackData(fileName))
     {
         console(QString(tr("Track '%1' opened.").arg(fileName)));
 
@@ -586,10 +585,10 @@ void MainWindow::addRouteLinesToScene(bool closeLoop)
 // TODO: Move to EditorData
 void MainWindow::removeTilesFromScene()
 {
+    TrackTile::setActiveTile(nullptr);
+
     if (m_editorData->trackData())
     {
-        TrackTile::setActiveTile(nullptr);
-
         const unsigned int cols = m_editorData->trackData()->map().cols();
         const unsigned int rows = m_editorData->trackData()->map().rows();
 
@@ -606,17 +605,20 @@ void MainWindow::removeTilesFromScene()
 // TODO: Move to EditorData
 void MainWindow::clear()
 {
-    const unsigned int cols = m_editorData->trackData()->map().cols();
-    const unsigned int rows = m_editorData->trackData()->map().rows();
+    if (m_editorData->trackData())
+    {
+        const unsigned int cols = m_editorData->trackData()->map().cols();
+        const unsigned int rows = m_editorData->trackData()->map().rows();
 
-    for (unsigned int i = 0; i < cols; i++)
-        for (unsigned int j = 0; j < rows; j++)
-            if (TrackTile * p = m_editorData->trackData()->map().getTile(i, j))
-                p->setTileType("clear");
+        for (unsigned int i = 0; i < cols; i++)
+            for (unsigned int j = 0; j < rows; j++)
+                if (TrackTile * p = m_editorData->trackData()->map().getTile(i, j))
+                    p->setTileType("clear");
 
-    m_console->append(QString(tr("Tiles cleared.")));
+        m_console->append(QString(tr("Tiles cleared.")));
 
-    clearRoute();
+        clearRoute();
+    }
 }
 
 // TODO: Move to EditorData

@@ -57,17 +57,17 @@ public:
     //! Print text to the console.
     void console(QString text);
 
-    //! Get pointer to the view. Cannot be nullptr.
-    EditorView * editorView() const;
+    //! Get reference to the view.
+    EditorView & editorView() const;
 
-    //! Get pointer to the scene. Cannot be nullptr.
-    EditorScene * editorScene() const;
+    //! Get reference to the scene.
+    EditorScene & editorScene() const;
 
-    //! Get pointer to the data. Cannot be nullptr.
-    EditorData * editorData() const;
+    //! Get reference to the data.
+    EditorData & editorData() const;
 
-    //! Get pointer to the object loaded. Cannot be nullptr.
-    ObjectLoader * objectLoader() const;
+    //! Get reference to the object loaded.
+    ObjectLoader & objectLoader() const;
 
 public slots:
 

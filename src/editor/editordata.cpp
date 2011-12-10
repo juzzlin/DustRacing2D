@@ -92,7 +92,8 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
         const unsigned int length = m_trackData->route().length();
         if (length > 1)
         {
-            QPen pen(QBrush(QColor(0, 0, 255, 64)), 15, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+            QPen pen(QBrush(QColor(0, 0, 255, 64)), 15, Qt::DashDotLine,
+                 Qt::RoundCap, Qt::RoundJoin);
 
             for (unsigned int i = 1; i < length; i++)
             {
@@ -101,8 +102,10 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
 
                 if (!tile1->routeLine())
                 {
-                    tile1->setRouteLine(m_mainWindow->editorScene()->addLine(tile0->x(), tile0->y(),
-                                                                             tile1->x(), tile1->y(), pen));
+                    tile1->setRouteLine(
+                        m_mainWindow->editorScene().addLine(
+                            tile0->x(), tile0->y(),
+                            tile1->x(), tile1->y(), pen));
                 }
             }
 
@@ -113,8 +116,10 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
 
                 if (!tile1->routeLine())
                 {
-                    tile1->setRouteLine(m_mainWindow->editorScene()->addLine(tile0->x(), tile0->y(),
-                                                                             tile1->x(), tile1->y(), pen));
+                    tile1->setRouteLine(
+                        m_mainWindow->editorScene().addLine(
+                            tile0->x(), tile0->y(),
+                            tile1->x(), tile1->y(), pen));
                 }
             }
         }
@@ -132,7 +137,7 @@ void EditorData::removeRouteLinesFromScene()
             if (tile->routeLine())
             {
                 QGraphicsLineItem * line = tile->routeLine();
-                m_mainWindow->editorScene()->removeItem(line);
+                m_mainWindow->editorScene().removeItem(line);
                 delete line;
                 tile->setRouteLine(nullptr);
                 tile->update();

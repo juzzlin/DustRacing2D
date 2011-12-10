@@ -16,8 +16,9 @@
 #include "object.h"
 #include <QPainter>
 
-Object::Object(QSizeF size, QPixmap pixmap)
-: m_size(size)
+Object::Object(QString category, QString role, QSizeF size, QPixmap pixmap)
+: ObjectBase(category, role)
+, m_size(size)
 , m_pixmap(pixmap)
 {
 }
@@ -39,4 +40,10 @@ void Object::paint(QPainter * painter,
         boundingRect().width(), boundingRect().height(),
         m_pixmap);
     painter->restore();
+}
+
+void Object::setLocation(QPointF newLocation)
+{
+    ObjectBase::setLocation(newLocation);
+    setPos(newLocation);
 }

@@ -13,38 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#include "objects.h"
+#include <algorithm>
 
-#include <QGraphicsItem>
-#include <QPixmap>
-#include "../common/objectbase.h"
-
-//! Freely placeable object.
-class Object : public QGraphicsItem, public ObjectBase
+Objects::Objects()
 {
-public:
+}
 
-    //! Constructor.
-    Object(QString category, QString role, QSizeF size, QPixmap pixmap);
+void Objects::add(ObjectBase & object)
+{
+    if (find(m_objects.begin(), m_objects.end(), &object) ==
+        m_objects.end())
+    {
+        m_objects.push_back(&object);
+    }
+}
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+void Objects::remove(ObjectBase & object)
+{
+    auto i = find(m_objects.begin(), m_objects.end(), &object);
+    if (i != m_objects.end())
+    {
+        m_objects.erase(i);
+    }
+}
 
-    //! \reimp
-    virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+unsigned int Objects::count() const
+{
+    return m_objects.size();
+}
 
-    //! \reimp
-    virtual void setLocation(QPointF newLocation);
-
-private:
-
-    //! Original size of the tile in pixels.
-    QSizeF m_size;
-
-    //! Image of the tile.
-    QPixmap m_pixmap;
-};
-
-#endif // OBJECT_H
+ObjectBase & Objects::object(unsigned int index) const
+{
+    return *m_objects.at(index);
+}

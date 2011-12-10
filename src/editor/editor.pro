@@ -21,6 +21,8 @@ SOURCES += main.cpp mainwindow.cpp \
     tracktile.cpp \
     ../common/config.cpp \
     ../common/map.cpp \
+    ../common/objectbase.cpp \
+    ../common/objects.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
     ../common/tracktilebase.cpp \
@@ -39,6 +41,8 @@ HEADERS += mainwindow.h \
     tracktile.h \
     ../common/config.h \
     ../common/map.h \
+    ../common/objectbase.h \
+    ../common/objects.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \

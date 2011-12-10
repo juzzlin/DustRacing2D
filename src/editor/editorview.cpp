@@ -49,8 +49,8 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
         }
 
         // Drag'n'drop active?
-        EditorData * editorData = MainWindow::instance()->editorData();
-        TrackTile  * sourceTile = editorData->dragAndDropSourceTile();
+        EditorData & editorData = MainWindow::instance()->editorData();
+        TrackTile  * sourceTile = editorData.dragAndDropSourceTile();
         if (sourceTile)
         {
             sourceTile->setPos(mappedPos);
@@ -132,32 +132,32 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
 void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
 {
-    EditorData   * editorData   = MainWindow::instance()->editorData();
-    ObjectLoader * objectLoader = MainWindow::instance()->objectLoader();
+    EditorData   & editorData   = MainWindow::instance()->editorData();
+    ObjectLoader & objectLoader = MainWindow::instance()->objectLoader();
 
     // User is defining the route
-    if (editorData->mode() == EditorData::EM_SET_ROUTE)
+    if (editorData.mode() == EditorData::EM_SET_ROUTE)
     {
         // Push tile to the route
-        tile->setRouteIndex(editorData->trackData()->route().push(tile));
+        tile->setRouteIndex(editorData.trackData()->route().push(tile));
 
         // Check if we might have a loop => end
-        if (!tile->routeIndex() && editorData->trackData()->route().length() > 1)
+        if (!tile->routeIndex() && editorData.trackData()->route().length() > 1)
         {
-            editorData->setMode(EditorData::EM_NONE);
+            editorData.setMode(EditorData::EM_NONE);
             MainWindow::instance()->endSetRoute();
 
             // Update route lines and close the loop
-            editorData->addRouteLinesToScene(true);
+            editorData.addRouteLinesToScene(true);
         }
         else
         {
             // Update route lines but don't close the loop
-            editorData->addRouteLinesToScene(false);
+            editorData.addRouteLinesToScene(false);
         }
     }
     // User is setting the tile type
-    else if (editorData->mode() == EditorData::EM_SET_TILE_TYPE)
+    else if (editorData.mode() == EditorData::EM_SET_TILE_TYPE)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
@@ -167,14 +167,14 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
         }
     }
     // User is adding an object
-    else if (editorData->mode() == EditorData::EM_ADD_OBJECT)
+    else if (editorData.mode() == EditorData::EM_ADD_OBJECT)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
             if (scene())
             {
                 ObjectData objectData(
-                    objectLoader->getObjectByRole(action->data().toString()));
+                    objectLoader.getObjectByRole(action->data().toString()));
 
                 unsigned int w = objectData.width;
                 w = w > 0 ? w : objectData.pixmap.width();
@@ -182,20 +182,26 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
                 unsigned int h = objectData.height;
                 h = h > 0 ? h : objectData.pixmap.height();
 
-                Object * newObject = new Object(QSizeF(w, h),
-                    objectData.pixmap);
-                scene()->addItem(newObject);
-                newObject->setPos(m_clickedScenePos);
+                // Create the object
+                Object * newObject = new Object(
+                    objectData.category, objectData.role,
+                    QSizeF(w, h), objectData.pixmap);
+                newObject->setLocation(m_clickedScenePos);
 
+                // Add to scene
+                scene()->addItem(newObject);
+
+                // Add to track data
+                editorData.trackData()->objects().add(*newObject);
             }
         }
     }
     // User is initiating a drag'n'drop
-    else if (editorData->mode() == EditorData::EM_NONE)
+    else if (editorData.mode() == EditorData::EM_NONE)
     {
         tile->setZValue(tile->zValue() + 1);
-        editorData->setDragAndDropSourceTile(tile);
-        editorData->setDragAndDropSourcePos(tile->pos());
+        editorData.setDragAndDropSourceTile(tile);
+        editorData.setDragAndDropSourcePos(tile->pos());
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
@@ -235,8 +241,8 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
     if (scene())
     {
         // Drag'n'drop active?
-        EditorData * editorData = MainWindow::instance()->editorData();
-        TrackTile  * sourceTile = editorData->dragAndDropSourceTile();
+        EditorData & editorData = MainWindow::instance()->editorData();
+        TrackTile  * sourceTile = editorData.dragAndDropSourceTile();
         if (sourceTile)
         {
             // Determine the dest tile
@@ -271,12 +277,12 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
             destTile->setRotation(sourceAngle);
 
             // Restore position
-            sourceTile->setPos(editorData->dragAndDropSourcePos());
+            sourceTile->setPos(editorData.dragAndDropSourcePos());
             sourceTile->setZValue(sourceTile->zValue() - 1);
 
             update();
 
-            editorData->setDragAndDropSourceTile(nullptr);
+            editorData.setDragAndDropSourceTile(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();

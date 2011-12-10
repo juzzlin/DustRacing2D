@@ -24,6 +24,7 @@ SOURCES += main.cpp \
     tracktile.cpp \
     ../common/config.cpp \
     ../common/map.cpp \
+    ../common/objects.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
     ../common/tracktilebase.cpp \
@@ -76,6 +77,7 @@ HEADERS += car.h \
     tracktile.h \
     ../common/config.h \
     ../common/map.h \
+    ../common/objects.h \
     ../common/route.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \

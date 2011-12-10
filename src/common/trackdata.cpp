@@ -57,6 +57,16 @@ const Map & TrackData::map() const
     return m_map;
 }
 
+Objects & TrackData::objects()
+{
+    return m_objects;
+}
+
+const Objects & TrackData::objects() const
+{
+    return m_objects;
+}
+
 TrackData::~TrackData()
 {
 }

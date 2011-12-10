@@ -18,6 +18,7 @@
 
 #include <QString>
 
+#include "objects.h"
 #include "route.h"
 #include "map.h"
 
@@ -25,39 +26,46 @@ class TrackData
 {
 public:
 
-  //! Constructor.
-  TrackData(QString name, unsigned int cols, unsigned rows);
+    //! Constructor.
+    TrackData(QString name, unsigned int cols, unsigned rows);
 
-  //! Destructor.
-  virtual ~TrackData();
+    //! Destructor.
+    virtual ~TrackData();
 
-  //! Get name.
-  QString name() const;
+    //! Get name.
+    QString name() const;
 
-  //! Get file name.
-  QString fileName() const;
+    //! Get file name.
+    QString fileName() const;
 
-  //! Set file name.
-  void setFileName(QString fileName);
+    //! Set file name.
+    void setFileName(QString fileName);
 
-  //! Get map object.
-  Map & map();
+    //! Get map object.
+    Map & map();
 
-  //! Get route object.
-  const Map & map() const;
+    //! Get route object.
+    const Map & map() const;
 
-  //! Get route object.
-  Route & route();
+    //! Get route object.
+    Route & route();
 
-  //! Get route object.
-  const Route & route() const;
+    //! Get route object.
+    const Route & route() const;
+
+    //! Get objects object.
+    Objects & objects();
+
+    //! Get objects object.
+    const Objects & objects() const;
 
 private:
 
-  QString m_name;
-  QString m_fileName;
-  Map     m_map;
-  Route   m_route;
+    QString m_name;
+    QString m_fileName;
+    Map     m_map;
+    Objects m_objects;
+    Route   m_route;
 };
 
 #endif // TRACKDATA_H

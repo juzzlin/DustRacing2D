@@ -70,7 +70,7 @@ public:
     //! Removes line objects from the scene.
     void removeRouteLinesFromScene();
 
-    //! Returns current track data object.
+    //! Returns current track data object. Returns NULL if not set.
     TrackData * trackData();
 
     //! Returns current editing mode.

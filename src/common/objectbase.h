@@ -13,38 +13,42 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef OBJECTBASE_H
+#define OBJECTBASE_H
 
-#include <QGraphicsItem>
-#include <QPixmap>
-#include "../common/objectbase.h"
+#include <QString>
+#include <QPointF>
 
-//! Freely placeable object.
-class Object : public QGraphicsItem, public ObjectBase
+//! Base class for freely placeable objects in the editor.
+class ObjectBase
 {
 public:
 
     //! Constructor.
-    Object(QString category, QString role, QSizeF size, QPixmap pixmap);
+    ObjectBase(QString category, QString role);
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+    //! Get location in world / scene.
+    virtual QPointF location() const;
 
-    //! \reimp
-    virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-
-    //! \reimp
+    //! Set coordinates in the world.
     virtual void setLocation(QPointF newLocation);
+
+    //! Get category.
+    QString category() const;
+
+    //! Get role.
+    QString role() const;
 
 private:
 
-    //! Original size of the tile in pixels.
-    QSizeF m_size;
+    //! Category of this object.
+    QString m_category;
 
-    //! Image of the tile.
-    QPixmap m_pixmap;
+    //! Role of this object.
+    QString m_role;
+
+    //! Coordinates in the world.
+    QPointF m_location;
 };
 
-#endif // OBJECT_H
+#endif // OBJECTBASE_H
