@@ -233,6 +233,24 @@ void TrackTile::setPixmap(const QPixmap & pixmap)
     update();
 }
 
+void TrackTile::swap(TrackTile & other)
+{
+    // Swap tile types
+    const QString sourceType = tileType();
+    setTileType(other.tileType());
+    other.setTileType(sourceType);
+
+    // Swap tile pixmaps
+    const QPixmap sourcePixmap = pixmap();
+    setPixmap(other.pixmap());
+    other.setPixmap(sourcePixmap);
+
+    // Swap tile rotations
+    const int sourceAngle = rotation();
+    setRotation(other.rotation());
+    other.setRotation(sourceAngle);
+}
+
 TrackTile::~TrackTile()
 {
     delete m_animator;

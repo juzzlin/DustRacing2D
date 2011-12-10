@@ -258,23 +258,8 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
                 }
             }
 
-            // Swap tile types
-            QString sourceType = sourceTile->tileType();
-            QString destType = destTile->tileType();
-            sourceTile->setTileType(destType);
-            destTile->setTileType(sourceType);
-
-            // Swap tile pixmaps
-            QPixmap sourcePixmap = sourceTile->pixmap();
-            QPixmap destPixmap = destTile->pixmap();
-            sourceTile->setPixmap(destPixmap);
-            destTile->setPixmap(sourcePixmap);
-
-            // Swap tile rotations
-            int sourceAngle = sourceTile->rotation();
-            int destAngle = destTile->rotation();
-            sourceTile->setRotation(destAngle);
-            destTile->setRotation(sourceAngle);
+            // Swap tiles
+            sourceTile->swap(*destTile);
 
             // Restore position
             sourceTile->setPos(editorData.dragAndDropSourcePos());

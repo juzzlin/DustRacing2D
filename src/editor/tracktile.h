@@ -96,6 +96,9 @@ public:
     //! Set the current pixmap
     void setPixmap(const QPixmap & pixmap);
 
+    //! Swap data with given tile. Used in drag'n'drop.
+    void swap(TrackTile & other);
+
 private:
 
     //! Create the menu that is shown when right-clicking on the tile.
