@@ -16,6 +16,7 @@
 #include "mainwindow.h"
 
 #include "../common/config.h"
+#include "object.h"
 #include "objectdata.h"
 #include "objectloader.h"
 #include "trackio.h"
@@ -444,6 +445,7 @@ bool MainWindow::doOpenTrack(QString fileName)
     }
 
     removeTilesFromScene();
+    removeObjectsFromScene();
 
     if (m_editorData->loadTrackData(fileName))
     {
@@ -476,6 +478,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         addTilesToScene();
+        addObjectsToScene();
         addRouteLinesToScene(true);
 
         return true;
@@ -532,6 +535,7 @@ void MainWindow::initializeNewTrack()
         const unsigned int rows = dialog.rows();
 
         removeTilesFromScene();
+        removeObjectsFromScene();
 
         m_editorData->setTrackData(new TrackData(dialog.name(), cols, rows));
 
@@ -548,6 +552,7 @@ void MainWindow::initializeNewTrack()
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         addTilesToScene();
+        addObjectsToScene();
 
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
@@ -564,16 +569,37 @@ void MainWindow::initializeNewTrack()
 // TODO: Move to EditorData
 void MainWindow::addTilesToScene()
 {
-    const unsigned int cols = m_editorData->trackData()->map().cols();
-    const unsigned int rows = m_editorData->trackData()->map().rows();
+    TrackData * data = m_editorData->trackData();
+    if (data)
+    {
+        const unsigned int cols = data->map().cols();
+        const unsigned int rows = data->map().rows();
 
-    for (unsigned int i = 0; i < cols; i++)
-        for (unsigned int j = 0; j < rows; j++)
-            if (TrackTile * tile = m_editorData->trackData()->map().getTile(i, j))
-                m_editorScene->addItem(tile);
+        for (unsigned int i = 0; i < cols; i++)
+            for (unsigned int j = 0; j < rows; j++)
+                if (TrackTile * tile = data->map().getTile(i, j))
+                    m_editorScene->addItem(tile);
 
-    if (m_editorData->trackData()->map().getTile(0, 0))
-        m_editorData->trackData()->map().getTile(0, 0)->setActive(true);
+        if (data->map().getTile(0, 0))
+            data->map().getTile(0, 0)->setActive(true);
+    }
+}
+
+// TODO: Move to EditorData
+void MainWindow::addObjectsToScene()
+{
+    TrackData * data = m_editorData->trackData();
+    if (data)
+    {
+        for (unsigned int i = 0; i < data->objects().count(); i++)
+        {
+            if (Object * object =
+                dynamic_cast<Object *>(&data->objects().object(i)))
+            {
+                m_editorScene->addItem(object);
+            }
+        }
+    }
 }
 
 void MainWindow::addRouteLinesToScene(bool closeLoop)
@@ -586,15 +612,15 @@ void MainWindow::addRouteLinesToScene(bool closeLoop)
 void MainWindow::removeTilesFromScene()
 {
     TrackTile::setActiveTile(nullptr);
-
-    if (m_editorData->trackData())
+    TrackData * data = m_editorData->trackData();
+    if (data)
     {
-        const unsigned int cols = m_editorData->trackData()->map().cols();
-        const unsigned int rows = m_editorData->trackData()->map().rows();
+        const unsigned int cols = data->map().cols();
+        const unsigned int rows = data->map().rows();
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * tile = m_editorData->trackData()->map().getTile(i, j))
+                if (TrackTile * tile = data->map().getTile(i, j))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
@@ -603,16 +629,35 @@ void MainWindow::removeTilesFromScene()
 }
 
 // TODO: Move to EditorData
+void MainWindow::removeObjectsFromScene()
+{
+    TrackData * data = m_editorData->trackData();
+    if (data)
+    {
+        for (unsigned int i = 0; i < data->objects().count(); i++)
+        {
+            if (Object * object =
+                dynamic_cast<Object *>(&data->objects().object(i)))
+            {
+                m_editorScene->removeItem(object);
+                delete object;
+            }
+        }
+    }
+}
+
+// TODO: Move to EditorData
 void MainWindow::clear()
 {
-    if (m_editorData->trackData())
+    TrackData * data = m_editorData->trackData();
+    if (data)
     {
-        const unsigned int cols = m_editorData->trackData()->map().cols();
-        const unsigned int rows = m_editorData->trackData()->map().rows();
+        const unsigned int cols = data->map().cols();
+        const unsigned int rows = data->map().rows();
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * p = m_editorData->trackData()->map().getTile(i, j))
+                if (TrackTile * p = data->map().getTile(i, j))
                     p->setTileType("clear");
 
         m_console->append(QString(tr("Tiles cleared.")));

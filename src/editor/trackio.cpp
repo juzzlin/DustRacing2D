@@ -19,10 +19,13 @@
 #include <QDomElement>
 
 #include "mainwindow.h"
+#include "object.h"
+#include "objectdata.h"
 #include "objectloader.h"
 #include "trackio.h"
 #include "tracktile.h"
 #include "../common/config.h"
+#include "../common/objectbase.h"
 #include "../common/trackdata.h"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
@@ -59,7 +62,8 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     {
         QDomElement objectTag = doc.createElement("object");
         ObjectBase & object = trackData->objects().object(i);
-        objectTag.setAttribute("type", object.role());
+        objectTag.setAttribute("category", object.category());
+        objectTag.setAttribute("role", object.role());
         objectTag.setAttribute("x", static_cast<int>(object.location().x()));
         objectTag.setAttribute("y", static_cast<int>(object.location().y()));
         root.appendChild(objectTag);
@@ -127,6 +131,8 @@ TrackData * TrackIO::open(QString path)
                     int      index  = tag.attribute("index", "-1").toInt();
                     int profileInt  = tag.attribute("profile", "0").toInt();
 
+                    // Init a new tile. QGraphicsScene will take
+                    // the ownership eventually.
                     if (TrackTile * tile = newData->map().getTile(i, j))
                     {
                         tile->setRotation(o);
@@ -153,6 +159,26 @@ TrackData * TrackIO::open(QString path)
                         if (index >= 0)
                             routeVector << tile;
                     }
+                }
+                // Read an object tag
+                else if (tag.nodeName() == "object")
+                {
+                    QString role     = tag.attribute("role", "clear");
+                    QString category = tag.attribute("category", "clear");
+                    int     x        = tag.attribute("x", "0").toInt();
+                    int     y        = tag.attribute("y", "0").toInt();
+
+                    ObjectData model =
+                        MainWindow::instance()->objectLoader().getObjectByRole(
+                            role);
+
+                    // Create a new object. QGraphicsScene will take
+                    // the ownership eventually.
+                    ObjectBase * object = new Object(category, role,
+                        QSizeF(model.height, model.width),
+                        model.pixmap);
+                    object->setLocation(QPointF(x, y));
+                    newData->objects().add(*object);
                 }
             }
 
