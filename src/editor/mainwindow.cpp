@@ -91,7 +91,7 @@ MainWindow::MainWindow(QString trackFile)
 
     // Load object models that can be used to build tracks.
     const QString objectFilePath = QString(Config::Common::DATA_PATH) +
-        QDir::separator() + "objects.conf";
+        QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
     loadObjectModels(objectFilePath);
 
     if (!trackFile.isEmpty())

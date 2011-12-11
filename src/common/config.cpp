@@ -25,6 +25,7 @@ const char * Config::Editor::QSETTINGS_COMPANY_NAME  = "DustRAC";
 const char * Config::Editor::QSETTINGS_SOFTWARE_NAME = "Editor";
 const char * Config::Editor::EDITOR_NAME             = "DustRAC Track Editor";
 const char * Config::Editor::EDITOR_VERSION          = "0.1";
+const char * Config::Editor::MODEL_CONFIG_FILE_NAME  = "editorModels.conf";
 
 // Game variables
 const char * Config::Game::QSETTINGS_COMPANY_NAME  = "DustRAC";

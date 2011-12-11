@@ -36,6 +36,7 @@ public:
         static const char * EDITOR_VERSION;
         static const char * QSETTINGS_COMPANY_NAME;
         static const char * QSETTINGS_SOFTWARE_NAME;
+        static const char * MODEL_CONFIG_FILE_NAME;
 
         //! Path to the "select" icon.
         static const char * SELECT_PATH;
