@@ -61,7 +61,6 @@ void Game::setRenderer(Renderer * newRenderer)
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.
     m_pRenderer->makeCurrent();
-
     m_pRenderer->setInputHandler(m_pInputHandler);
 }
 

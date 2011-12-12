@@ -55,7 +55,6 @@ private:
     Track    * m_pActiveTrack;
     MCWorld  * m_pWorld;
     Car      * m_pCar;
-    MCObject * m_pCameraObj;
     Race     * m_pRace;
 };
 

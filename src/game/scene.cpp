@@ -34,15 +34,9 @@ Scene::Scene(MCSurface * pCarSurface)
 : m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
 , m_pCar(new Car(pCarSurface))
-, m_pCameraObj(new MCObject("CameraObj"))
 , m_pRace(new Race)
 {
     m_pCar->setLayer(Layers::Cars);
-    m_pCameraObj->setMass(1);
-    m_pWorld->addForceGenerator(new MCSpringForceGenerator(
-        m_pCar, 0.1, 0, 0, 10000), m_pCameraObj, true);
-    m_pWorld->addForceGenerator(new MCFrictionGenerator(1.0),
-        m_pCameraObj, true);
     m_pRace->addCar(m_pCar);
 }
 
@@ -82,7 +76,10 @@ void Scene::updateFrame(InputHandler * pHandler,
     m_pWorld->stepTime(timeStep);
 
     // Update camera location
-    pCamera->setPos(m_pCameraObj->getX(), m_pCameraObj->getY());
+    MCVector2d<MCFloat> p(m_pCar->location());
+    const int offsetFactor = 20;
+    p += m_pCar->direction() * m_pCar->velocity().lengthFast() * offsetFactor;
+    pCamera->setPos(p.i(), p.j());
 
     // Update race situation
     m_pRace->update();
@@ -108,7 +105,6 @@ void Scene::setActiveTrack(Track * activeTrack)
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
     m_pCar->addToWorld();
-    m_pCameraObj->addToWorld(MAX_X / 2, MAX_Y / 2);
     m_pRace->setTrack(activeTrack);
     m_pRace->init();
 
