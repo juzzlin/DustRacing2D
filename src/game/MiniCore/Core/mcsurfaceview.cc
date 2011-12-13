@@ -35,45 +35,47 @@ MCSurfaceView::MCSurfaceView(MCSurface * pSurface) :
 
 MCSurfaceView::~MCSurfaceView()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }
 
 void MCSurfaceView::setSurface(MCSurface * p)
 {
-  m_pImpl->m_pSurface = p;
+    m_pImpl->m_pSurface = p;
 }
 
 MCSurface * MCSurfaceView::surface() const
 {
-  return m_pImpl->m_pSurface;
+    return m_pImpl->m_pSurface;
 }
 
-void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p)
+void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCUint angle,
+    MCCamera * p)
 {
-  if (m_pImpl->m_pSurface) {
-    m_pImpl->m_pSurface->render(p, l.i(), l.j(), l.k(), angle);
-  }
+    if (m_pImpl->m_pSurface) {
+        m_pImpl->m_pSurface->render(p, l.i(), l.j(), l.k(), angle);
+    }
 }
 
-void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p)
+void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle,
+    MCCamera * p)
 {
-  if (m_pImpl->m_pSurface) {
-    m_pImpl->m_pSurface->renderShadow(p, l.i(), l.j(), angle);
-  }
+    if (m_pImpl->m_pSurface) {
+        m_pImpl->m_pSurface->renderShadow(p, l.i(), l.j(), angle);
+    }
 }
 
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
-                                 MCFloat wr, MCFloat hr, MCCamera * p)
+    MCFloat wr, MCFloat hr, MCCamera * p)
 {
-  if (m_pImpl->m_pSurface) {
-    m_pImpl->m_pSurface->renderScaled(p, l.i(), l.j(), l.k(), wr, hr, angle);
-  }
+    if (m_pImpl->m_pSurface) {
+        m_pImpl->m_pSurface->renderScaled(p, l.i(), l.j(), l.k(), wr, hr, angle);
+    }
 }
 
-void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l, MCUint angle,
-                                       MCFloat wr, MCFloat hr, MCCamera * p)
+void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
+    MCUint angle, MCFloat wr, MCFloat hr, MCCamera * p)
 {
-  if (m_pImpl->m_pSurface) {
-    m_pImpl->m_pSurface->renderShadowScaled(p, l.i(), l.j(), wr, hr, angle);
-  }
+    if (m_pImpl->m_pSurface) {
+        m_pImpl->m_pSurface->renderShadowScaled(p, l.i(), l.j(), wr, hr, angle);
+    }
 }

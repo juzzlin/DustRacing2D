@@ -25,11 +25,11 @@
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
-MCGLRectParticleImpl::MCGLRectParticleImpl() :
-  m_r(1.0f),
-  m_g(1.0f),
-  m_b(1.0f),
-  m_a(1.0f)
+MCGLRectParticleImpl::MCGLRectParticleImpl()
+: m_r(1.0f)
+, m_g(1.0f)
+, m_b(1.0f)
+, m_a(1.0f)
 {}
 
 MCGLRectParticleImpl::~MCGLRectParticleImpl()
@@ -38,88 +38,88 @@ MCGLRectParticleImpl::~MCGLRectParticleImpl()
 MCGLRectParticle::MCGLRectParticle() :
     m_pImpl(new MCGLRectParticleImpl)
 {
-  // Disable shadow by default
-  setHasShadow(false);
+    // Disable shadow by default
+    setHasShadow(false);
 }
 
 void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 {
-  m_pImpl->m_r = r;
-  m_pImpl->m_g = g;
-  m_pImpl->m_b = b;
-  m_pImpl->m_a = a;
+    m_pImpl->m_r = r;
+    m_pImpl->m_g = g;
+    m_pImpl->m_b = b;
+    m_pImpl->m_a = a;
 }
 
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
-  MCFloat x = location().i();
-  MCFloat y = location().j();
-  MCFloat z = location().k();
+    MCFloat x = location().i();
+    MCFloat y = location().j();
+    MCFloat z = location().k();
 
-  if (pCamera) {
-    pCamera->mapToCamera(x, y);
-  }
+    if (pCamera) {
+        pCamera->mapToCamera(x, y);
+    }
 
-  // Disable texturing
-  glPushAttrib(GL_ENABLE_BIT);
-  glDisable(GL_TEXTURE_2D);
-  glPushMatrix();
-  glTranslated(x, y, z);
+    // Disable texturing
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_TEXTURE_2D);
+    glPushMatrix();
+    glTranslated(x, y, z);
 
-  // Rotate
-  if (angle()) {
-    glRotated(angle(), 0, 0, 1);
-  }
+    // Rotate
+    if (angle()) {
+        glRotated(angle(), 0, 0, 1);
+    }
 
-  // Enable blending
-  MCFloat alpha = m_pImpl->m_a;
-  if (alpha < 1.0f || animationStyle() == FadeOut) {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-  }
+    // Enable blending
+    MCFloat alpha = m_pImpl->m_a;
+    if (alpha < 1.0f || animationStyle() == FadeOut) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+    }
 
-  // Scale alpha if fading out
-  if (animationStyle() == FadeOut) {
-    alpha *= scale();
-  }
+    // Scale alpha if fading out
+    if (animationStyle() == FadeOut) {
+        alpha *= scale();
+    }
 
-  // Scale radius if fading out
-  MCFloat r = radius();
-  if (animationStyle() == Shrink) {
-    r *= scale();
-  }
+    // Scale radius if fading out
+    MCFloat r = radius();
+    if (animationStyle() == Shrink) {
+        r *= scale();
+    }
 
-  glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
-  glNormal3f(0, 0, 1.0);
-  glScaled(r, r, 1);
-  glBegin(GL_QUADS);
+    glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
+    glNormal3f(0, 0, 1.0);
+    glScaled(r, r, 1);
+    glBegin(GL_QUADS);
 
-  glVertex2f(-1, -1);
-  glVertex2f(-1, +1);
-  glVertex2f(+1, +1);
-  glVertex2f(+1, -1);
+    glVertex2f(-1, -1);
+    glVertex2f(-1, +1);
+    glVertex2f(+1, +1);
+    glVertex2f(+1, -1);
 
-  glEnd();
-  glPopMatrix();
-  glPopAttrib();
+    glEnd();
+    glPopMatrix();
+    glPopAttrib();
 }
 
 void MCGLRectParticle::renderShadow(MCCamera *)
 {
-  return;
+    return;
 }
 
 MCGLRectParticle * MCGLRectParticle::create()
 {
-  return MCGLRectParticle::m_recycler.newObject();
+    return MCGLRectParticle::m_recycler.newObject();
 }
 
 void MCGLRectParticle::recycle()
 {
-  MCGLRectParticle::m_recycler.freeObject(this);
+    MCGLRectParticle::m_recycler.freeObject(this);
 }
 
 MCGLRectParticle::~MCGLRectParticle()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }

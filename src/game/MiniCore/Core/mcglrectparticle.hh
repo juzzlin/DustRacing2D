@@ -32,36 +32,36 @@ class MCGLRectParticle : public MCParticle
 {
 public:
 
-  //! Create a new particle
-  static MCGLRectParticle * create();
+    //! Create a new particle
+    static MCGLRectParticle * create();
 
-  //! \reimp
-  void recycle();
+    //! \reimp
+    void recycle();
 
-  //! Set color
-  void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0f);
+    //! Set color
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0f);
 
-  //! \reimp
-  void render(MCCamera * pCamera = nullptr);
+    //! \reimp
+    void render(MCCamera * pCamera = nullptr);
 
-  //! \reimp
-  void renderShadow(MCCamera * pCamera = nullptr);
+    //! \reimp
+    void renderShadow(MCCamera * pCamera = nullptr);
 
 private:
 
-  //! Constructor
-  MCGLRectParticle();
+    //! Constructor
+    MCGLRectParticle();
 
-  //! Destructor
-  ~MCGLRectParticle();
+    //! Destructor
+    ~MCGLRectParticle();
 
-  //! Recycler object
-  static MCRecycler<MCGLRectParticle> m_recycler;
-  friend class MCRecycler<MCGLRectParticle>;
+    //! Recycler object
+    static MCRecycler<MCGLRectParticle> m_recycler;
+    friend class MCRecycler<MCGLRectParticle>;
 
-  DISABLE_COPY(MCGLRectParticle);
-  DISABLE_ASSI(MCGLRectParticle);
-  MCGLRectParticleImpl * const m_pImpl;
+    DISABLE_COPY(MCGLRectParticle);
+    DISABLE_ASSI(MCGLRectParticle);
+    MCGLRectParticleImpl * const m_pImpl;
 };
 
 #endif // MCGLRECTPARTICLE_HH

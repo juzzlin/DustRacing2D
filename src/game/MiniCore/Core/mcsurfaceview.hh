@@ -20,10 +20,6 @@
 #ifndef MCSURFACEVIEW_HH
 #define MCSURFACEVIEW_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcshapeview.hh"
 
 class MCSurface;
@@ -36,38 +32,42 @@ class MCCamera;
 class MCSurfaceView : public MCShapeView
 {
 public:
-  /*! Constructor.
-   * \param pSurface Surface to be used. Ownership of pSurface is not changed.
-   */
-  explicit MCSurfaceView(MCSurface * pSurface = nullptr);
 
-  //! Destructor
-  virtual ~MCSurfaceView();
+    /*! Constructor.
+     * \param pSurface Surface to be used. Ownership of pSurface is not changed.
+     */
+    explicit MCSurfaceView(MCSurface * pSurface = nullptr);
 
-  //! Set surface
-  void setSurface(MCSurface * p);
+    //! Destructor
+    virtual ~MCSurfaceView();
 
-  //! Get surface
-  MCSurface * surface() const;
+    //! Set surface
+    void setSurface(MCSurface * p);
 
-  //! \reimp
-  virtual void render(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr);
+    //! Get surface
+    MCSurface * surface() const;
 
-  //! \reimp
-  virtual void renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr);
+    //! \reimp
+    virtual void render(const MCVector3d<MCFloat> & l, MCUint angle,
+        MCCamera * p = nullptr);
 
-  //! \reimp
-  virtual void renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
-                            MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    //! \reimp
+    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCUint angle,
+        MCCamera * p = nullptr);
 
-  //! \reimp
-  virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, MCUint angle,
-                                  MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    //! \reimp
+    virtual void renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
+        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+
+    //! \reimp
+    virtual void renderShadowScaled(const MCVector3d<MCFloat> & l, MCUint angle,
+        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
 private:
-  DISABLE_COPY(MCSurfaceView);
-  DISABLE_ASSI(MCSurfaceView);
-  MCSurfaceViewImpl * const m_pImpl;
+
+    DISABLE_COPY(MCSurfaceView);
+    DISABLE_ASSI(MCSurfaceView);
+    MCSurfaceViewImpl * const m_pImpl;
 };
 
 #endif // MCSURFACEVIEW_HH

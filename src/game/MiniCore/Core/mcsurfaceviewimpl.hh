@@ -24,13 +24,13 @@
 class MCSurfaceViewImpl
 {
 public:
-  //! Constructor
-  MCSurfaceViewImpl(MCSurface * pSurface);
-  //! Destructor
-  ~MCSurfaceViewImpl();
+    //! Constructor
+    MCSurfaceViewImpl(MCSurface * pSurface);
+    //! Destructor
+    ~MCSurfaceViewImpl();
 private:
-  MCSurface * m_pSurface;
-  friend class MCSurfaceView;
+    MCSurface * m_pSurface;
+    friend class MCSurfaceView;
 };
 
 #endif // MCSURFACEVIEWIMPL_HH
