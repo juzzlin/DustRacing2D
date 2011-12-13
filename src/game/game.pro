@@ -42,10 +42,13 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcforceregistry.cc \
     MiniCore/Core/mcfrictiongenerator.cc \
     MiniCore/Core/mcglcircleparticle.cc \
+    MiniCore/Core/mcglobjectdata.cc \
     MiniCore/Core/mcglrectparticle.cc \
     MiniCore/Core/mcgravitygenerator.cc \
     MiniCore/Core/mclogger.cc \
     MiniCore/Core/mcobject.cc \
+    MiniCore/Core/mcobjectdata.cc \
+    MiniCore/Core/mcobjectfactory.cc \
     MiniCore/Core/mcoutofboundariesevent.cc \
     MiniCore/Core/mcparticle.cc \
     MiniCore/Core/mcquadtree.cc \
@@ -55,6 +58,7 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcspringforcegenerator2dfast.cc \
     MiniCore/Core/mcspringforcegenerator.cc \
     MiniCore/Core/mcsurface.cc \
+    MiniCore/Core/mcsurfaceobjectdata.cc \
     MiniCore/Core/mcsurfaceparticle.cc \
     MiniCore/Core/mcsurfaceview.cc \
     MiniCore/Core/mctrigonom.cc \
@@ -62,6 +66,7 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Util/mctextureconfigloader.cc \
     MiniCore/Util/mctexturemanager.cc \
 
+# Game headers
 HEADERS += car.h \
     game.h \
     inputhandler.h \
@@ -82,7 +87,7 @@ HEADERS += car.h \
     ../common/trackdata.h \
     ../common/tracktilebase.h \
 
-# Engine
+# Engine headers
 HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mccircleshape.hh \
     MiniCore/Core/mccollisionevent.hh \
@@ -95,11 +100,14 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcforceregistry.hh \
     MiniCore/Core/mcfrictiongenerator.hh \
     MiniCore/Core/mcglcircleparticle.hh \
+    MiniCore/Core/mcglobjectdata.hh \
     MiniCore/Core/mcglrectparticle.hh \
     MiniCore/Core/mcgravitygenerator.hh \
     MiniCore/Core/mclogger.hh \
     MiniCore/Core/mcmathutil.hh \
     MiniCore/Core/mcobject.hh \
+    MiniCore/Core/mcobjectfactory.hh \
+    MiniCore/Core/mcobjectdata.hh \
     MiniCore/Core/mcoutofboundariesevent.hh \
     MiniCore/Core/mcparticle.hh \
     MiniCore/Core/mcquadtree.hh \
@@ -110,6 +118,7 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcspringforcegenerator2dfast.hh \
     MiniCore/Core/mcspringforcegenerator.hh \
     MiniCore/Core/mcsurface.hh \
+    MiniCore/Core/mcsurfaceobjectdata.hh \
     MiniCore/Core/mcsurfaceparticle.hh \
     MiniCore/Core/mcsurfaceview.hh \
     MiniCore/Core/mctrigonom.hh \
