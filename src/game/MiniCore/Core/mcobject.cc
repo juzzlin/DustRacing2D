@@ -186,9 +186,9 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId) :
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(this,
-                                              new MCSurfaceView(pSurface),
-                                              pSurface ? pSurface->width() : 0,
-                                              pSurface ? pSurface->height() : 0);
+        new MCSurfaceView(pSurface),
+        pSurface ? pSurface->width() : 0,
+        pSurface ? pSurface->height() : 0);
     m_pImpl->m_pShape = rectShape;
 }
 

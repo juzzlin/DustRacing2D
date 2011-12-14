@@ -20,6 +20,8 @@
 #ifndef MCSHAPEIMPL_HH
 #define MCSHAPEIMPL_HH
 
+#include <memory>
+
 class MCShapeView;
 class MCObject;
 
@@ -27,17 +29,17 @@ class MCObject;
 class MCShapeImpl
 {
 public:
-  explicit MCShapeImpl(MCObject * pParent);
-  virtual ~MCShapeImpl();
-  static MCUint m_typeCount;
+    explicit MCShapeImpl(MCObject * pParent);
+    virtual ~MCShapeImpl();
+    static MCUint m_typeCount;
 
 private:
-  MCObject * m_pParent;
-  MCVector3d<MCFloat> m_location;
-  MCVector2d<MCFloat> m_shadowOffset;
-  MCUint m_angle;
-  shared_ptr<MCShapeView> m_pView;
-  friend class MCShape;
+    MCObject * m_pParent;
+    MCVector3d<MCFloat> m_location;
+    MCVector2d<MCFloat> m_shadowOffset;
+    MCUint m_angle;
+    std::shared_ptr<MCShapeView> m_pView;
+    friend class MCShape;
 };
 
 #endif // MCSHAPEIMPL_HH

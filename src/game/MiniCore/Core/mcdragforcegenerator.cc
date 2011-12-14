@@ -44,5 +44,7 @@ void MCDragForceGenerator::updateForce(MCObject * p)
 }
 
 MCDragForceGenerator::~MCDragForceGenerator()
-{}
+{
+    delete m_pImpl;
+}
 

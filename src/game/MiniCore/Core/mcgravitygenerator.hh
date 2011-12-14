@@ -20,10 +20,6 @@
 #ifndef MCGRAVITYGENERATOR_HH
 #define MCGRAVITYGENERATOR_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcforcegenerator.hh"
 #include "mcvector3d.hh"
 #include "mcmacros.hh"
@@ -35,21 +31,22 @@ class MCGravityGenerator : public MCForceGenerator
 {
 public:
 
-  /*! Constructor
-   * \param g Gravity vector (G = m * g)
-   */
-  MCGravityGenerator(const MCVector3d<MCFloat> & g);
+    /*! Constructor
+     * \param g Gravity vector (G = m * g)
+     */
+    MCGravityGenerator(const MCVector3d<MCFloat> & g);
 
-  //! Destructor
-  virtual ~MCGravityGenerator();
+    //! Destructor
+    virtual ~MCGravityGenerator();
 
-  //! \reimp
-  virtual void updateForce(MCObject * p);
+    //! \reimp
+    virtual void updateForce(MCObject * p);
 
 private:
+
     DISABLE_COPY(MCGravityGenerator);
     DISABLE_ASSI(MCGravityGenerator);
-    shared_ptr<MCGravityGeneratorImpl> const m_pImpl;
+    MCGravityGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCGRAVITYGENERATOR_HH

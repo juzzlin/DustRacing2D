@@ -25,9 +25,7 @@
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
+#include <memory>
 
 class MCRandomImpl;
 
@@ -36,27 +34,27 @@ class MCRandom
 {
 public:
 
-  //! Get next random value in the table
-  static MCFloat getValue();
+    //! Get next random value in the table
+    static MCFloat getValue();
 
-  //! Return a random 2d vector
-  static MCVector2d<MCFloat> randomVector2d();
+    //! Return a random 2d vector
+    static MCVector2d<MCFloat> randomVector2d();
 
-  //! Return a random 3d vector
-  static MCVector3d<MCFloat> randomVector3d();
+    //! Return a random 3d vector
+    static MCVector3d<MCFloat> randomVector3d();
 
 private:
 
-  //! Constructor disabled
-  MCRandom();
+    //! Constructor disabled
+    MCRandom();
 
-  //! Disable copy constructor
-  DISABLE_COPY(MCRandom);
+    //! Disable copy constructor
+    DISABLE_COPY(MCRandom);
 
-  //! Disable assignment
-  DISABLE_ASSI(MCRandom);
+    //! Disable assignment
+    DISABLE_ASSI(MCRandom);
 
-  static shared_ptr<MCRandomImpl> const m_pImpl;
+    static std::shared_ptr<MCRandomImpl> const m_pImpl;
 };
 
 #endif // MCRANDOM_HH

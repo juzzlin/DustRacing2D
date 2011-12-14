@@ -20,10 +20,6 @@
 #ifndef MCDRAGFORCEGENERATOR_HH
 #define MCDRAGFORCEGENERATOR_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcforcegenerator.hh"
 #include "mcmacros.hh"
 
@@ -34,22 +30,23 @@ class MCDragForceGenerator : public MCForceGenerator
 {
 public:
 
-  /*! Constructor
-   * \param coeff1 Linear coefficient
-   * \param coeff2 Quadratic coefficient
-   */
-  MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2);
+    /*! Constructor
+     * \param coeff1 Linear coefficient
+     * \param coeff2 Quadratic coefficient
+     */
+    MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2);
 
-  //! Destructor
-  virtual ~MCDragForceGenerator();
+    //! Destructor
+    virtual ~MCDragForceGenerator();
 
-  //! \reimp
-  virtual void updateForce(MCObject * p);
+    //! \reimp
+    virtual void updateForce(MCObject * p);
 
 private:
+
     DISABLE_COPY(MCDragForceGenerator);
     DISABLE_ASSI(MCDragForceGenerator);
-    shared_ptr<MCDragForceGeneratorImpl> const m_pImpl;
+    MCDragForceGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCDRAGFORCEGENERATOR_HH

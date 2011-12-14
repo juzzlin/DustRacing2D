@@ -25,100 +25,103 @@
 MCUint MCShapeImpl::m_typeCount = 0;
 
 MCShapeImpl::MCShapeImpl(MCObject * pParent) :
-  m_pParent(pParent),
-  m_angle(0)
+    m_pParent(pParent),
+    m_angle(0)
 {}
 
 MCShapeImpl::~MCShapeImpl()
 {}
 
 MCShape::MCShape(MCObject * pParent, MCShapeView * pView) :
-  m_pImpl(new MCShapeImpl(pParent))
+    m_pImpl(new MCShapeImpl(pParent))
 {
-  if (pView) setView(pView);
+    if (pView) setView(pView);
 }
 
 MCObject * MCShape::parent() const
 {
-  return m_pImpl->m_pParent;
+    return m_pImpl->m_pParent;
 }
 
 MCUint MCShape::registerType()
 {
-  return ++MCShapeImpl::m_typeCount;
+    return ++MCShapeImpl::m_typeCount;
 }
 
 MCShape::~MCShape()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }
 
 void MCShape::setView(MCShapeView * p)
 {
-  m_pImpl->m_pView.reset(p);
+    m_pImpl->m_pView.reset(p);
 }
 
-void MCShape::setView(shared_ptr<MCShapeView> p)
+void MCShape::setView(std::shared_ptr<MCShapeView> p)
 {
-  m_pImpl->m_pView = p;
+    m_pImpl->m_pView = p;
 }
 
 MCShapeView * MCShape::view() const
 {
-  return m_pImpl->m_pView.get();
+    return m_pImpl->m_pView.get();
 }
 
 void MCShape::render(MCCamera * p)
 {
-  if (m_pImpl->m_pView) {
-    m_pImpl->m_pView->render(m_pImpl->m_location, m_pImpl->m_angle, p);
-  }
+    if (m_pImpl->m_pView) {
+        m_pImpl->m_pView->render(m_pImpl->m_location, m_pImpl->m_angle, p);
+    }
 }
 
 void MCShape::renderShadow(MCCamera * p)
 {
-  if (m_pImpl->m_pView) {
-    m_pImpl->m_pView->renderShadow(m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
-                                   m_pImpl->m_angle, p);
-  }
+    if (m_pImpl->m_pView) {
+        m_pImpl->m_pView->renderShadow(
+            m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
+            m_pImpl->m_angle, p);
+    }
 }
 
 void MCShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * p)
 {
-  if (m_pImpl->m_pView) {
-    m_pImpl->m_pView->renderScaled(m_pImpl->m_location, m_pImpl->m_angle, wr, hr, p);
-  }
+    if (m_pImpl->m_pView) {
+        m_pImpl->m_pView->renderScaled(m_pImpl->m_location,
+            m_pImpl->m_angle, wr, hr, p);
+    }
 }
 
 void MCShape::renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p)
 {
-  if (m_pImpl->m_pView) {
-    m_pImpl->m_pView->renderShadowScaled(m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
-                                         m_pImpl->m_angle, wr, hr, p);
-  }
+    if (m_pImpl->m_pView) {
+        m_pImpl->m_pView->renderShadowScaled(
+            m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
+            m_pImpl->m_angle, wr, hr, p);
+    }
 }
 
 void MCShape::translate(const MCVector3d<MCFloat> & p)
 {
-  m_pImpl->m_location = p;
+    m_pImpl->m_location = p;
 }
 
 const MCVector3d<MCFloat> & MCShape::location() const
 {
-  return m_pImpl->m_location;
+    return m_pImpl->m_location;
 }
 
 void MCShape::setShadowOffset(const MCVector2d<MCFloat> & p)
 {
-  m_pImpl->m_shadowOffset = p;
+    m_pImpl->m_shadowOffset = p;
 }
 
 void MCShape::rotate(MCUint a)
 {
-  m_pImpl->m_angle = a%360;
+    m_pImpl->m_angle = a % 360;
 }
 
 MCUint MCShape::angle() const
 {
-  return m_pImpl->m_angle;
+    return m_pImpl->m_angle;
 }

@@ -20,10 +20,6 @@
 #ifndef MCSPRINGFORCEGENERATOR2DFAST_HH
 #define MCSPRINGFORCEGENERATOR2DFAST_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcforcegenerator.hh"
 #include "mcmacros.hh"
 
@@ -64,7 +60,7 @@ private:
 
     DISABLE_COPY(MCSpringForceGenerator2dFast);
     DISABLE_ASSI(MCSpringForceGenerator2dFast);
-    shared_ptr<MCSpringForceGenerator2dFastImpl> const m_pImpl;
+    MCSpringForceGenerator2dFastImpl * const m_pImpl;
 };
 
 #endif // MCSPRINGFORCEGENERATOR2DFAST_HH

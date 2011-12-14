@@ -59,8 +59,8 @@ public:
 
     //! Constructor.
     //! Construct MCObject using the given shape.
-    //! \param pShape Pointer to the surface to be used. MCObject will take
-    //!               the ownership.
+    //! \param pShape Pointer to the surface to be used.
+    //! MCObject will take the ownership.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     MCObject(MCShape * pShape, const std::string & typeId);
 
@@ -68,12 +68,16 @@ public:
     //! Construct MCObject implicitly using MCRectShape with
     //! MCSurfaceView for the given MCSurface.
     //! \param pSurface Pointer to the (shared) surface to be used.
+    //! MCObject won't take the ownership, because the same surface
+    //! can be used to draw multiple objects.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     MCObject(MCSurface * pSurface, const std::string & typeId);
 
     //! \brief Convenience method to set the surface of the view.
     //! This works only if MCSurfaceView is being used in the shape.
     //! \param pSurface Pointer to the new surface.
+    //! MCObject won't take the ownership, because the same surface
+    //! can be used to draw multiple objects.
     void setSurface(MCSurface * pSurface);
 
     //! \brief Convenience method to get the surface of the view.

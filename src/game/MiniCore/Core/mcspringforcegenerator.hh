@@ -20,10 +20,6 @@
 #ifndef MCSPRINGFORCEGENERATOR_HH
 #define MCSPRINGFORCEGENERATOR_HH
 
-#include <tr1/memory>
-
-using std::tr1::shared_ptr;
-
 #include "mcforcegenerator.hh"
 #include "mcmacros.hh"
 
@@ -39,28 +35,28 @@ class MCSpringForceGenerator : public MCForceGenerator
 {
 public:
 
-  /*! Constructor
-   * \param p2     The another end of the spring.
-   * \param coeff  Spring coefficient (F = -coeff * x)
-   * \param length Nominal length of the spring.
-   * \param min    Min length of the spring.
-   * \param max    Max length of the spring.
-   */
-  MCSpringForceGenerator(MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
+    /*! Constructor
+     * \param p2     The another end of the spring.
+     * \param coeff  Spring coefficient (F = -coeff * x)
+     * \param length Nominal length of the spring.
+     * \param min    Min length of the spring.
+     * \param max    Max length of the spring.
+     */
+    MCSpringForceGenerator(MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
 
-  //! Destructor
-  virtual ~MCSpringForceGenerator();
+    //! Destructor
+    virtual ~MCSpringForceGenerator();
 
-  /*! \brief Update the force with respect to p1.
-   * NOTE!: You must create generators for the both ends of the spring.
-   */
-  virtual void updateForce(MCObject * p1);
+    /*! \brief Update the force with respect to p1.
+     * NOTE!: You must create generators for the both ends of the spring.
+     */
+    virtual void updateForce(MCObject * p1);
 
 private:
 
     DISABLE_COPY(MCSpringForceGenerator);
     DISABLE_ASSI(MCSpringForceGenerator);
-    shared_ptr<MCSpringForceGeneratorImpl> const m_pImpl;
+    MCSpringForceGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCSPRINGFORCEGENERATOR_HH
