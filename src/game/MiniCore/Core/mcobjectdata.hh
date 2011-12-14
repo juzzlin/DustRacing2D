@@ -31,6 +31,12 @@ class MCObjectData
 {
 public:
 
+    /*! Possible shape types:
+     *  Rect   = MCRectShape.
+     *  Circle = MCCircleShape.
+     */
+    enum Shape {None, Rect, Circle};
+
     //! Constructor.
     explicit MCObjectData(const std::string & typeId);
 
@@ -41,10 +47,31 @@ public:
     std::string typeId() const;
 
     //! Set mass.
-    void setMass(MCFloat newMass);
+    void setMass(MCFloat mass);
 
     //! Get mass.
     MCFloat mass() const;
+
+    //! Set shape radius (implicitly selects circle shape).
+    void setShapeRadius(MCFloat radius);
+
+    //! Get shape radius.
+    MCFloat shapeRadius() const;
+
+    //! Set shape width (implicitly selects rect shape).
+    void setShapeWidth(MCFloat width);
+
+    //! Return shape width.
+    MCFloat shapeWidth() const;
+
+    //! Set shape height (implicitly selects rect shape).
+    void setShapeHeight(MCFloat height);
+
+    //! Return shape height.
+    MCFloat shapeHeight() const;
+
+    //! Return shape type.
+    Shape shape() const;
 
 private:
 

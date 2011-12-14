@@ -27,6 +27,10 @@ private:
     MCObjectDataImpl();
     std::string typeId;
     MCFloat mass;
+    MCObjectData::Shape shape;
+    MCFloat shapeRadius;
+    MCFloat shapeWidth;
+    MCFloat shapeHeight;
     friend class MCObjectData;
 };
 

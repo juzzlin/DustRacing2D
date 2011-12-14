@@ -29,6 +29,10 @@ MCObjectData::MCObjectData(const std::string & typeId)
 MCObjectDataImpl::MCObjectDataImpl()
 : typeId("")
 , mass(0.0f)
+, shape(MCObjectData::Circle)
+, shapeRadius(0.0f)
+, shapeWidth(0.0f)
+, shapeHeight(0.0f)
 {
 }
 
@@ -45,6 +49,44 @@ void MCObjectData::setMass(MCFloat newMass)
 MCFloat MCObjectData::mass() const
 {
     return m_pImpl->mass;
+}
+
+void MCObjectData::setShapeRadius(MCFloat radius)
+{
+    m_pImpl->shape       = MCObjectData::Circle;
+    m_pImpl->shapeRadius = radius;
+}
+
+MCFloat MCObjectData::shapeRadius() const
+{
+    return m_pImpl->shapeRadius;
+}
+
+void MCObjectData::setShapeWidth(MCFloat width)
+{
+    m_pImpl->shape       = MCObjectData::Rect;
+    m_pImpl->shapeHeight = width;
+}
+
+MCFloat MCObjectData::shapeWidth() const
+{
+    return m_pImpl->shapeWidth;
+}
+
+void MCObjectData::setShapeHeight(MCFloat height)
+{
+    m_pImpl->shape       = MCObjectData::Rect;
+    m_pImpl->shapeHeight = height;
+}
+
+MCFloat MCObjectData::shapeHeight() const
+{
+    return m_pImpl->shapeHeight;
+}
+
+MCObjectData::Shape MCObjectData::shape() const
+{
+    return m_pImpl->shape;
 }
 
 MCObjectData::~MCObjectData()
