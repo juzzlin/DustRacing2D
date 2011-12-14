@@ -27,7 +27,18 @@ MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
 }
 
 MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
+: surfaceId("")
 {
+}
+
+void MCSurfaceObjectData::setSurfaceId(std::string id)
+{
+    m_pImpl->surfaceId = id;
+}
+
+std::string MCSurfaceObjectData::surfaceId() const
+{
+    return m_pImpl->surfaceId;
 }
 
 MCSurfaceObjectData::~MCSurfaceObjectData()

@@ -25,6 +25,7 @@ class MCSurfaceObjectDataImpl
 {
 private:
     MCSurfaceObjectDataImpl();
+    std::string surfaceId;
     friend class MCSurfaceObjectData;
 };
 

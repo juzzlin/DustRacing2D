@@ -22,11 +22,14 @@
 
 #include <memory>
 #include <vector>
+#include "../Util/mctexturemanager.hh"
 
 class MCObjectFactoryImpl
 {
 private:
-    std::vector<std::shared_ptr<MCObject *> > m_objects;
+    MCObjectFactoryImpl(MCTextureManager & tm);
+    std::vector<std::shared_ptr<MCObject> > objects;
+    MCTextureManager & textureManager;
     friend class MCObjectFactory;
 };
 

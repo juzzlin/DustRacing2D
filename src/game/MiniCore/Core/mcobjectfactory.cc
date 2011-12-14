@@ -19,15 +19,62 @@
 
 #include "mcobjectfactory.hh"
 #include "mcobjectfactoryimpl.hh"
+#include "mccircleshape.hh"
+#include "mcrectshape.hh"
+#include "mcsurfaceview.hh"
 
-MCObjectFactory::MCObjectFactory()
-: m_pImpl(new MCObjectFactoryImpl)
+MCObjectFactory::MCObjectFactory(MCTextureManager & tm)
+: m_pImpl(new MCObjectFactoryImpl(tm))
+{
+}
+
+MCObjectFactoryImpl::MCObjectFactoryImpl(MCTextureManager & tm)
+: textureManager(tm)
 {
 }
 
 MCObject * MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
-    return nullptr;
+    MCShape     * pShape   = nullptr;
+    MCShapeView * pView    = nullptr;
+    MCObject    * pObject  = nullptr;
+    MCSurface   * pSurface = m_pImpl->textureManager.surface(
+        QString(data.surfaceId().c_str()));
+
+    switch (data.shape())
+    {
+    // Default shape, use surface dimensions
+    case MCObjectData::None:
+        pObject = new MCObject(pSurface, data.typeId());
+        break;
+    // Explicit circle shape
+    case MCObjectData::Circle:
+        pObject = new MCObject(data.typeId());
+        pView   = new MCSurfaceView(pSurface);
+        pShape  = new MCCircleShape(pObject, pView,
+            data.shapeRadius());
+        pObject->setShape(pShape);
+        break;
+    // Explicit rect shape
+    case MCObjectData::Rect:
+        pObject = new MCObject(data.typeId());
+        pView   = new MCSurfaceView(pSurface);
+        pShape  = new MCRectShape(pObject, pView,
+            data.shapeWidth(), data.shapeHeight());
+        pObject->setShape(pShape);
+        break;
+    }
+
+    // Set mass
+    pObject->setMass(data.mass());
+
+    // Store for deletion
+    if (pObject)
+    {
+        m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
+    }
+
+    return pObject;
 }
 
 MCObject * MCObjectFactory::build(const MCGLObjectData & data)

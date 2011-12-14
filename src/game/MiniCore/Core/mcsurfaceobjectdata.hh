@@ -35,6 +35,12 @@ public:
     //! Destructor.
     virtual ~MCSurfaceObjectData();
 
+    //! Set the surface id.
+    void setSurfaceId(std::string id);
+
+    //! Return the surface id.
+    std::string surfaceId() const;
+
 private:
 
     DISABLE_COPY(MCSurfaceObjectData);
