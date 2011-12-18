@@ -63,21 +63,24 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
             MCCollisionEvent ev1(p2->parent());
             MCObject::sendEvent(p1->parent(), &ev1);
 
-            vertex = obbox1.vertex(i);
-            depth = 0;
-            depthIsSet = false;
+            vertex             = obbox1.vertex(i);
+            depth              = 0;
+            depthIsSet         = false;
             contactNormalIsSet = false;
 
             if (ev1.accepted()) {
                 // TODO: contactPoint should be something else than vertex.
-                depth = p2->interpenetrationDepth(vertex, p1->location());
-                depthIsSet = true;
-                contactNormal = p2->contactNormal(p1->location());
+                depth =
+                    p2->interpenetrationDepth(vertex, p1->location());
+                depthIsSet         = true;
+                contactNormal      = p2->contactNormal(p1->location());
                 contactNormalIsSet = true;
 
                 MCContact * pContact = MCContact::create();
                 pContact->init(p2->parent(), vertex, contactNormal, depth);
                 p1->parent()->addContact(pContact);
+
+                collided = true;
             }
 
             // Send collision event to owner of p2
@@ -97,8 +100,6 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
                 pContact->init(p1->parent(), vertex, -contactNormal, depth);
                 p2->parent()->addContact(pContact);
             }
-
-            return true;
         }
     }
 
@@ -216,8 +217,11 @@ bool MCContactResolver::processPossibleCollision(MCObject * p1, MCObject * p2)
         if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID()) {
 
             // Static cast because we know the types now
-            return m_pImpl->processRectRect(static_cast<MCRectShape *>(p1->shape()),
-                                            static_cast<MCRectShape *>(p2->shape()));
+            const bool p1p2 = m_pImpl->processRectRect(static_cast<MCRectShape *>(p1->shape()),
+                static_cast<MCRectShape *>(p2->shape()));
+            const bool p2p1 = m_pImpl->processRectRect(static_cast<MCRectShape *>(p2->shape()),
+                static_cast<MCRectShape *>(p1->shape()));
+            return p1p2 || p2p1;
         }
 
         // Both circles ?
