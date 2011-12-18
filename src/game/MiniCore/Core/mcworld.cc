@@ -62,18 +62,16 @@ void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
     static MCQuadtree::ObjectSet collisions;
-    MCQuadtree::ObjectSet::iterator j;
-    MCQuadtree::ObjectSet::iterator j2;
     for (MCUint i = 0; i < m_objs.size(); i++) {
         MCObject * const p(m_objs[i]);
         if (p->physicsObject()) {
             collisions.clear();
             m_pQuadtree->getBBoxCollisions(p, collisions);
-            j  = collisions.begin();
-            j2 = collisions.end();
-            while (j != j2) {
-                m_pResolver->processPossibleCollision(p, *j);
-                j++;
+            auto j1 = collisions.begin();
+            auto j2 = collisions.end();
+            while (j1 != j2) {
+                m_pResolver->processPossibleCollision(p, *j1);
+                j1++;
             }
         }
     }
@@ -96,7 +94,7 @@ MCContact * MCWorldImpl::getDeepestInterpenetration(
 void MCWorldImpl::processContacts(MCObject * p)
 {
     MCContact * deepestContact = nullptr;
-    MCObject::ContactHash::const_iterator iter(p->contacts().begin());
+    auto iter(p->contacts().begin());
     iter = p->contacts().begin();
     for (; iter != p->contacts().end(); iter++) {
         deepestContact = getDeepestInterpenetration(iter->second);

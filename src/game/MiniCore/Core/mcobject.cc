@@ -65,7 +65,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , m_time(0)
 , m_invMass(std::numeric_limits<MCFloat>::max())
 , m_mass(0)
-, m_restitution(0.0)
+, m_restitution(0.5)
 , m_angle(0)
 , m_maximumVelocity(-1)
 , m_layer(0)
@@ -253,12 +253,12 @@ bool MCObject::event(MCEvent * pEvent)
 
 void MCObject::collisionEvent(MCCollisionEvent * e)
 {
-    e->ignore();
+    e->accept();
 }
 
 void MCObject::outOfBoundariesEvent(MCOutOfBoundariesEvent * e)
 {
-    e->ignore();
+    e->accept();
 }
 
 void MCObject::sendEvent(MCObject * pObject, MCEvent * pEvent)
@@ -645,6 +645,16 @@ void MCObject::deleteContacts(MCObject * p)
         }
         i->second.clear();
     }
+}
+
+void MCObject::setInitialLocation(const MCVector3d<MCFloat> & location)
+{
+    m_pImpl->m_initialLocation = location;
+}
+
+const MCVector3d<MCFloat> & MCObject::initialLocation() const
+{
+    return m_pImpl->m_initialLocation;
 }
 
 MCObject::~MCObject()

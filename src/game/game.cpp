@@ -22,6 +22,7 @@
 #include "trackloader.h"
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
+#include "MiniCore/Core/MCObjectFactory"
 #include "MiniCore/Util/MCTextureManager"
 #include <QDir>
 #include <QTime>
@@ -30,7 +31,8 @@ Game::Game()
 : m_pRenderer(nullptr)
 , m_pScene(nullptr)
 , m_pTextureManager(new MCTextureManager)
-, m_pTrackLoader(new TrackLoader(m_pTextureManager))
+, m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
+, m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
 , m_pCamera(nullptr)
 , m_pInputHandler(new InputHandler)
 , m_updateTimer()
@@ -101,10 +103,10 @@ bool Game::init()
         }
 
         // Create the scene
-        m_pScene = new Scene(m_pTextureManager->surface("car001"));
+        m_pScene = new Scene(*m_pTextureManager->surface("car001"));
 
         // Set the default track
-        m_pScene->setActiveTrack(m_pTrackLoader->track(0));
+        m_pScene->setActiveTrack(*m_pTrackLoader->track(0));
 
         // Set the current game scene. Renderer calls render()
         // for all objects in the scene.
@@ -113,8 +115,8 @@ bool Game::init()
         m_pCamera = new MCCamera(
             Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT,
             0, 0,
-            m_pScene->activeTrack()->width(),
-            m_pScene->activeTrack()->height());
+            m_pScene->activeTrack().width(),
+            m_pScene->activeTrack().height());
     }
     catch (MCException & e)
     {
@@ -145,7 +147,7 @@ void Game::updateFrame()
     static QTime updateTimer;
     updateTimer.start();
 
-    m_pScene->updateFrame(m_pInputHandler, m_pCamera, m_timeStep);
+    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
 
     const int updateTime      = updateTimer.elapsed();
     const int availableTimeMs = 1000 / m_updateFps;
@@ -184,6 +186,7 @@ Game::~Game()
     delete m_pScene;
     delete m_pTrackLoader;
     delete m_pTextureManager;
+    delete m_pObjectFactory;
     delete m_pCamera;
     delete m_pInputHandler;
 }

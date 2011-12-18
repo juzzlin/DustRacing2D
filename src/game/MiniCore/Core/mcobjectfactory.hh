@@ -40,11 +40,11 @@ public:
 
     //! Build an object with a surface view.
     //! MCObjectFactory keeps the ownership.
-    MCObject * build(const MCSurfaceObjectData & data);
+    MCObject & build(const MCSurfaceObjectData & data);
 
     //! Build an object with a GL view.
     //! MCObjectFactory keeps the ownership.
-    MCObject * build(const MCGLObjectData & data);
+    MCObject & build(const MCGLObjectData & data);
 
 private:
 

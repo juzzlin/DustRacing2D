@@ -20,6 +20,7 @@
 #include "layers.h"
 #include "race.h"
 #include "track.h"
+#include "trackobject.h"
 #include "tracktile.h"
 #include "../../common/trackdata.h"
 #include <MiniCore/Core/MCCamera>
@@ -30,69 +31,70 @@
 #include <MiniCore/Core/MCTypes>
 #include <MiniCore/Core/MCWorld>
 
-Scene::Scene(MCSurface * pCarSurface)
+#include <cassert>
+
+Scene::Scene(MCSurface & carSurface)
 : m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
-, m_pCar(new Car(pCarSurface))
-, m_pRace(new Race)
+, m_car(&carSurface)
 {
-    m_pCar->setLayer(Layers::Cars);
-    m_pRace->addCar(m_pCar);
+    m_car.setLayer(Layers::Cars);
+    m_race.addCar(&m_car);
 }
 
-void Scene::updateFrame(InputHandler * pHandler,
-    MCCamera * pCamera, float timeStep)
+void Scene::updateFrame(InputHandler & handler,
+    MCCamera & camera, float timeStep)
 {
     // Process input
     bool actionTaken = false;
-    if (pHandler->getActionState(0, InputHandler::IA_LEFT))
+    if (handler.getActionState(0, InputHandler::IA_LEFT))
     {
-        m_pCar->turnLeft();
+        m_car.turnLeft();
         actionTaken = true;
     }
-    else if (pHandler->getActionState(0, InputHandler::IA_RIGHT))
+    else if (handler.getActionState(0, InputHandler::IA_RIGHT))
     {
-        m_pCar->turnRight();
+        m_car.turnRight();
         actionTaken = true;
     }
 
-    if (pHandler->getActionState(0, InputHandler::IA_UP))
+    if (handler.getActionState(0, InputHandler::IA_UP))
     {
-        m_pCar->accelerate();
+        m_car.accelerate();
         actionTaken = true;
     }
-    else if (pHandler->getActionState(0, InputHandler::IA_DOWN))
+    else if (handler.getActionState(0, InputHandler::IA_DOWN))
     {
-        m_pCar->brake();
+        m_car.brake();
         actionTaken = true;
     }
 
     if (!actionTaken)
     {
-        m_pCar->noAction();
+        m_car.noAction();
     }
 
     // Step time
     m_pWorld->stepTime(timeStep);
 
     // Update camera location
-    MCVector2d<MCFloat> p(m_pCar->location());
-    const int offsetFactor = 20;
-    p += m_pCar->direction() * m_pCar->velocity().lengthFast() * offsetFactor;
-    pCamera->setPos(p.i(), p.j());
+    MCVector2d<MCFloat> p(m_car.location());
+//    const int offsetFactor = 20;
+//    p += m_car.direction() * m_car.velocity().lengthFast() * offsetFactor;
+    camera.setPos(p.i(), p.j());
 
     // Update race situation
-    m_pRace->update();
+    m_race.update();
 }
 
-void Scene::setActiveTrack(Track * activeTrack)
+void Scene::setActiveTrack(Track & activeTrack)
 {
-    m_pActiveTrack = activeTrack;
+    m_pActiveTrack = &activeTrack;
 
     // TODO: Remove objects
     // TODO: Removing not inserted objects results in a
     // crash because Quadtree can't handle it.
-    //m_pCar->removeFromWorldNow();
+    //m_car.removeFromWorldNow();
 
     // Update world dimensions according to the
     // active track.
@@ -104,9 +106,12 @@ void Scene::setActiveTrack(Track * activeTrack)
     const MCUint MAX_Z = 1000;
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
-    m_pCar->addToWorld();
-    m_pRace->setTrack(activeTrack);
-    m_pRace->init();
+    m_race.setTrack(&activeTrack);
+    m_race.init();
+
+    // Add objects to the world
+
+    m_car.addToWorld();
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
@@ -115,23 +120,34 @@ void Scene::setActiveTrack(Track * activeTrack)
         const MCFloat y =
             m_pActiveTrack->trackData().route().get(0)->location().y();
 
-        m_pCar->translate(MCVector2d<MCFloat>(x, y));
+        m_car.translate(MCVector2d<MCFloat>(x, y));
+    }
+
+    const unsigned int trackObjectCount =
+        m_pActiveTrack->trackData().objects().count();
+    for (unsigned int i = 0; i < trackObjectCount; i++)
+    {
+        TrackObject & trackObject = static_cast<TrackObject &>(
+            m_pActiveTrack->trackData().objects().object(i));
+        MCObject & mcObject = trackObject.object();
+        mcObject.setLayer(Layers::Cars);
+        mcObject.addToWorld();
+        mcObject.translate(mcObject.initialLocation());
     }
 }
 
-Track * Scene::activeTrack() const
+Track & Scene::activeTrack() const
 {
-    return m_pActiveTrack;
+    assert(m_pActiveTrack);
+    return *m_pActiveTrack;
 }
 
-MCWorld * Scene::world() const
+MCWorld & Scene::world() const
 {
-    return m_pWorld;
+    assert(m_pWorld);
+    return *m_pWorld;
 }
 
 Scene::~Scene()
 {
-    delete m_pCar;
-    delete m_pRace;
-    delete m_pWorld;
 }

@@ -24,6 +24,7 @@ class Scene;
 class Renderer;
 class TrackLoader;
 class MCCamera;
+class MCObjectFactory;
 class MCTextureManager;
 
 //! The main game class.
@@ -73,6 +74,7 @@ private:
     Renderer         * m_pRenderer;
     Scene            * m_pScene;
     MCTextureManager * m_pTextureManager;
+    MCObjectFactory  * m_pObjectFactory;
     TrackLoader      * m_pTrackLoader;
     MCCamera         * m_pCamera;
     InputHandler     * m_pInputHandler;

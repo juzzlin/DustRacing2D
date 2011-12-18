@@ -18,6 +18,7 @@
 
 #include "objectbase.h"
 #include <vector>
+#include <memory>
 
 //! Container for all objects.
 class Objects
@@ -30,7 +31,7 @@ public:
     Objects();
 
     //! Add an object.
-    void add(ObjectBase & object);
+    void add(ObjectBase & object, bool takeOwnership = false);
 
     //! Remove an object.
     void remove(ObjectBase & object);
@@ -44,6 +45,7 @@ public:
 private:
 
     ObjectVector m_objects;
+    std::vector<std::shared_ptr<ObjectBase> > m_owned;
 };
 
 #endif // OBJECTS_H

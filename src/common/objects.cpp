@@ -20,12 +20,17 @@ Objects::Objects()
 {
 }
 
-void Objects::add(ObjectBase & object)
+void Objects::add(ObjectBase & object, bool takeOwnership)
 {
     if (find(m_objects.begin(), m_objects.end(), &object) ==
         m_objects.end())
     {
         m_objects.push_back(&object);
+
+        if (takeOwnership)
+        {
+            m_owned.push_back(std::shared_ptr<ObjectBase>(&object));
+        }
     }
 }
 

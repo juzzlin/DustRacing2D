@@ -28,6 +28,7 @@ MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
 
 MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
 : surfaceId("")
+, defaultCircleShape(false)
 {
 }
 
@@ -39,6 +40,16 @@ void MCSurfaceObjectData::setSurfaceId(std::string id)
 std::string MCSurfaceObjectData::surfaceId() const
 {
     return m_pImpl->surfaceId;
+}
+
+void MCSurfaceObjectData::setDefaultCircleShape(bool state)
+{
+    m_pImpl->defaultCircleShape = state;
+}
+
+bool MCSurfaceObjectData::defaultCirleShape() const
+{
+    return m_pImpl->defaultCircleShape;
 }
 
 MCSurfaceObjectData::~MCSurfaceObjectData()

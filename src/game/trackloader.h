@@ -21,7 +21,10 @@
 
 class Track;
 class TrackData;
+class TrackTile;
 class MCTextureManager;
+class MCObjectFactory;
+class QDomElement;
 
 //! Manages the track loading procedure.
 //! TODO: This can be shared with the editor or inherit from
@@ -32,8 +35,11 @@ public:
 
     //! Constructor.
     //! \param textureManager Texture manager to be used when determining
-    //!                       tile textures.
-    TrackLoader(MCTextureManager * textureManager);
+    //! tile textures.
+    //! \param objectFactory  Object factory that creates objects other
+    //! than tiles.
+    TrackLoader(MCTextureManager & textureManager,
+                MCObjectFactory  & objectFactory);
 
     //! Destructor.
     ~TrackLoader();
@@ -57,7 +63,16 @@ private:
     //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);
 
-    MCTextureManager * m_textureManager;
+    //! Handle a tile element.
+    void handleTile(
+        QDomElement & tag, TrackData & newData,
+        QVector<TrackTile *> & routeVector);
+
+    //! Handle an object element.
+    void handleObject(QDomElement & tag, TrackData & newData);
+
+    MCTextureManager & m_textureManager;
+    MCObjectFactory  & m_objectFactory;
     QVector<QString>   m_paths;
     QVector<Track *>   m_tracks;
 };

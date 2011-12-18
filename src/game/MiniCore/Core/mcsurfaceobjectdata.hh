@@ -41,6 +41,13 @@ public:
     //! Return the surface id.
     std::string surfaceId() const;
 
+    //! Sets the shape to be a circle according to
+    //! the surface dimensions.
+    void setDefaultCircleShape(bool state);
+
+    //! Returns true if default circle shape is wanted.
+    bool defaultCirleShape() const;
+
 private:
 
     DISABLE_COPY(MCSurfaceObjectData);

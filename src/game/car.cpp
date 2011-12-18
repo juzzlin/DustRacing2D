@@ -16,6 +16,7 @@
 #include "car.h"
 #include "layers.h"
 #include "slidefrictiongenerator.h"
+#include "MiniCore/Core/MCCollisionEvent"
 #include "MiniCore/Core/MCFrictionGenerator"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"
@@ -113,6 +114,13 @@ void Car::noAction()
     }
 
     m_accelerating = false;
+}
+
+void Car::collisionEvent(MCCollisionEvent *pEvent)
+{
+    static int i = 0;
+    std::cout << "SAATANAN SAATANA: " << i++ << std::endl;
+    pEvent->accept();
 }
 
 Car::~Car()

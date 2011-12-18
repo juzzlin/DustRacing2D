@@ -26,6 +26,7 @@ class MCSurfaceObjectDataImpl
 private:
     MCSurfaceObjectDataImpl();
     std::string surfaceId;
+    bool defaultCircleShape;
     friend class MCSurfaceObjectData;
 };
 

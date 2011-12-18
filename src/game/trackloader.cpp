@@ -22,14 +22,21 @@
 
 #include "track.h"
 #include "trackloader.h"
+#include "trackobject.h"
 #include "tracktile.h"
 #include "../common/trackdata.h"
 
 #include "MiniCore/Core/MCLogger"
+#include "MiniCore/Core/MCObjectFactory"
 #include "MiniCore/Util/MCTextureManager"
 
-TrackLoader::TrackLoader(MCTextureManager * textureManager)
+#include <cassert>
+
+TrackLoader::TrackLoader(
+    MCTextureManager & textureManager,
+    MCObjectFactory  & objectFactory)
 : m_textureManager(textureManager)
+, m_objectFactory(objectFactory)
 , m_paths()
 , m_tracks()
 {
@@ -112,45 +119,12 @@ TrackData * TrackLoader::loadTrack(QString path)
                     // Read a tile tag
                     if (tag.nodeName() == "tile")
                     {
-                        QString      id      = tag.attribute("type", "clear");
-                        unsigned int i       = tag.attribute("i", "0").toUInt();
-                        unsigned int j       = tag.attribute("j", "0").toUInt();
-                        int          o       = tag.attribute("o", "0").toInt();
-                        int          index   = tag.attribute("index", "-1").toInt();
-                        unsigned int profile = tag.attribute("profile", "0").toUInt();
-
-                        // Mirror the angle and y-index.
-                        o = -o;
-                        j = rows - 1 - j;
-
-                        if (TrackTile * tile = newData->map().getTile(i, j))
-                        {
-                            tile->setRotation(o);
-                            tile->setTileType(id);
-                            tile->setRouteIndex(index);
-
-                            switch (profile)
-                            {
-                            default:
-                            case 0:
-                                tile->setProfile(TrackTileBase::TP_FLAT);
-                                break;
-                            case 1:
-                                tile->setProfile(TrackTileBase::TP_HILL);
-                                break;
-                            case 2:
-                                tile->setProfile(TrackTileBase::TP_GORGE);
-                                break;
-                            }
-
-                            // Associate with a surface object corresponging
-                            // to the tile type.
-                            // surface() throws if fails. Handled of higher level.
-                            tile->setSurface(m_textureManager->surface(id));
-
-                            if (index >= 0)
-                                routeVector << tile;
-                        }
+                        handleTile(tag, *newData, routeVector);
+                    }
+                    // Read an object tag
+                    else if (tag.nodeName() == "object")
+                    {
+                        handleObject(tag, *newData);
                     }
                 }
 
@@ -162,6 +136,75 @@ TrackData * TrackLoader::loadTrack(QString path)
     }
 
     return newData;
+}
+
+void TrackLoader::handleTile(
+    QDomElement & tag, TrackData & newData, QVector<TrackTile *> & routeVector)
+{
+    QString      id      = tag.attribute("type", "clear");
+    unsigned int i       = tag.attribute("i", "0").toUInt();
+    unsigned int j       = tag.attribute("j", "0").toUInt();
+    int          o       = tag.attribute("o", "0").toInt();
+    int          index   = tag.attribute("index", "-1").toInt();
+    unsigned int profile = tag.attribute("profile", "0").toUInt();
+
+    // Mirror the angle and y-index.
+    o = -o;
+    j = newData.map().rows() - 1 - j;
+
+    if (TrackTile * tile = newData.map().getTile(i, j))
+    {
+        assert(tile);
+
+        tile->setRotation(o);
+        tile->setTileType(id);
+        tile->setRouteIndex(index);
+
+        switch (profile)
+        {
+        default:
+        case 0:
+            tile->setProfile(TrackTileBase::TP_FLAT);
+            break;
+        case 1:
+            tile->setProfile(TrackTileBase::TP_HILL);
+            break;
+        case 2:
+            tile->setProfile(TrackTileBase::TP_GORGE);
+            break;
+        }
+
+        // Associate with a surface object corresponging
+        // to the tile type.
+        // surface() throws if fails. Handled of higher level.
+        tile->setSurface(m_textureManager.surface(id));
+
+        if (index >= 0)
+            routeVector << tile;
+    }
+}
+
+void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
+{
+    QString role     = tag.attribute("role", "");
+    QString category = tag.attribute("category", "");
+    int     x        = tag.attribute("x", "0").toInt();
+    int     y        = tag.attribute("y", "0").toInt();
+
+    // TODO: A separate config file for these
+    MCSurfaceObjectData tireData("tire");
+    tireData.setMass(50);
+    tireData.setSurfaceId("tire");
+    tireData.setDefaultCircleShape(true);
+
+    MCObject & tire = m_objectFactory.build(tireData);
+    tire.setInitialLocation(
+        MCVector2d<MCFloat>(x,
+            newData.map().rows() * TrackTile::TILE_H - y));
+
+    // Wrap the MCObject in a TrackObject and add to
+    // the TrackData
+    newData.objects().add(*new TrackObject(category, role, tire), true);
 }
 
 unsigned int TrackLoader::tracks() const

@@ -21,7 +21,10 @@
 #include "mcobjectfactoryimpl.hh"
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
+#include "mcsurface.hh"
 #include "mcsurfaceview.hh"
+
+#include <cassert>
 
 MCObjectFactory::MCObjectFactory(MCTextureManager & tm)
 : m_pImpl(new MCObjectFactoryImpl(tm))
@@ -33,7 +36,7 @@ MCObjectFactoryImpl::MCObjectFactoryImpl(MCTextureManager & tm)
 {
 }
 
-MCObject * MCObjectFactory::build(const MCSurfaceObjectData & data)
+MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
     MCShape     * pShape   = nullptr;
     MCShapeView * pView    = nullptr;
@@ -45,8 +48,22 @@ MCObject * MCObjectFactory::build(const MCSurfaceObjectData & data)
     {
     // Default shape, use surface dimensions
     case MCObjectData::None:
-        pObject = new MCObject(pSurface, data.typeId());
+        // Circle shape according to surface dimensions
+        if (!data.defaultCirleShape())
+        {
+            pObject = new MCObject(data.typeId());
+            pView   = new MCSurfaceView(pSurface);
+            pShape  = new MCCircleShape(pObject, pView,
+                std::max(pSurface->width(), pSurface->width()) / 2);
+            pObject->setShape(pShape);
+        }
+        // Rect shape according to surface dimensions (default)
+        else
+        {
+            pObject = new MCObject(pSurface, data.typeId());
+        }
         break;
+
     // Explicit circle shape
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
@@ -55,6 +72,7 @@ MCObject * MCObjectFactory::build(const MCSurfaceObjectData & data)
             data.shapeRadius());
         pObject->setShape(pShape);
         break;
+
     // Explicit rect shape
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
@@ -65,22 +83,21 @@ MCObject * MCObjectFactory::build(const MCSurfaceObjectData & data)
         break;
     }
 
+    assert(pObject);
+
     // Set mass
     pObject->setMass(data.mass());
 
     // Store for deletion
-    if (pObject)
-    {
-        m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
-    }
+    m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
 
-    return pObject;
+    return *pObject;
 }
 
-MCObject * MCObjectFactory::build(const MCGLObjectData & data)
-{
-    return nullptr;
-}
+//MCObject & MCObjectFactory::build(const MCGLObjectData & data)
+//{
+//    return nullptr;
+//}
 
 MCObjectFactory::~MCObjectFactory()
 {

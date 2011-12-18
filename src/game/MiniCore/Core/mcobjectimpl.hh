@@ -28,13 +28,9 @@
 //! Implementation class for MCObject.
 class MCObjectImpl
 {
-public:
-
+private:
     MCObjectImpl(MCObject * pPublic, const std::string & typeName);
     ~MCObjectImpl();
-
-private:
-
     static MCUint typeID(const std::string & typeName);
     static MCUint registerType(const std::string & typeName);
     inline void integrate(MCFloat step);
@@ -54,6 +50,7 @@ private:
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCVector3d<MCFloat> m_acceleration;
     MCVector3d<MCFloat> m_velocity;
+    MCVector3d<MCFloat> m_initialLocation;
     MCVector3d<MCFloat> m_location;
     MCVector3d<MCFloat> m_forces;
     MCShape * m_pShape;

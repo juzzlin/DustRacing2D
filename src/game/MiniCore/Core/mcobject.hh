@@ -247,7 +247,8 @@ public:
 
     //! \brief Set restitution.
     //! \param newRestitution The new restitution [0.0..1.0]
-    //!        (0.0 means a totally "soft" object, 1.0 means hard).
+    //! (0.0 means a totally "soft" object, 1.0 means hard).
+    //! Default is 0.5.
     void setRestitution(MCFloat newRestitution);
 
     //! Get restitution.
@@ -306,6 +307,12 @@ public:
     //! Return index in MCWorld's object vector. Returns -1 if not in the world.
     int index() const;
 
+    //! Set initial location. This won't result in any translations.
+    void setInitialLocation(const MCVector3d<MCFloat> & location);
+
+    //! Get initial location.
+    const MCVector3d<MCFloat> & initialLocation() const;
+
 protected:
 
     //! Event handler.
@@ -313,7 +320,9 @@ protected:
     //! \return true if event was handled.
     virtual bool event(MCEvent * pEvent);
 
-    //! Event handler for MCCollisionEvent.
+    //! Event handler for MCCollisionEvent. Override this to
+    //! filter out collisions with certain objects.
+    //! All collisions are accepted by default.
     //! \param pEvent Event to be handled.
     virtual void collisionEvent(MCCollisionEvent * pEvent);
 

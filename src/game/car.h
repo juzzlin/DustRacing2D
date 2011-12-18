@@ -47,6 +47,9 @@ public:
     //! Destructor.
     virtual ~Car();
 
+    void collisionEvent(MCCollisionEvent *pEvent);
+
+
 private:
 
     void oversteer(MCUint newBodyAngle);
