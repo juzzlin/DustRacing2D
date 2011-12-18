@@ -21,9 +21,11 @@ SOURCES += main.cpp \
     timing.cpp \
     track.cpp \
     trackloader.cpp \
+    trackobject.cpp \
     tracktile.cpp \
     ../common/config.cpp \
     ../common/map.cpp \
+    ../common/objectbase.cpp \
     ../common/objects.cpp \
     ../common/route.cpp \
     ../common/trackdata.cpp \
@@ -79,9 +81,11 @@ HEADERS += car.h \
     timing.h \
     track.h \
     trackloader.h \
+    trackobject.h \
     tracktile.h \
     ../common/config.h \
     ../common/map.h \
+    ../common/objectbase.h \
     ../common/objects.h \
     ../common/route.h \
     ../common/trackdata.h \
