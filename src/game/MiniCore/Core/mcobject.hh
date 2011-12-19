@@ -204,6 +204,15 @@ public:
     //! \brief Return whether the object should be automatically rendered.
     bool renderable() const;
 
+    //! \brief Sets whether view should render shape outline for debug
+    //! purposes.
+    //! False is the default.
+    void setRenderShapeOutline(bool flag);
+
+    //! \brief Returns whether view should render shape outline for debug
+    //! purposes.
+    bool renderShapeOutline() const;
+
     //! \brief Enable/disable shadow.
     //! True is the default.
     void setHasShadow(bool flag);

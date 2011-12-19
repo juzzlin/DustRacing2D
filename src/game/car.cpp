@@ -48,6 +48,8 @@ Car::Car(MCSurface * pSurface)
 
     MCWorld::instance()->addForceGenerator(
         new MCFrictionGenerator(ROLLING_FRICTION), this, true);
+
+    setRenderShapeOutline(true);
 }
 
 void Car::turnLeft()

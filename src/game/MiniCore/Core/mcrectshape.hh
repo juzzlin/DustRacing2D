@@ -82,6 +82,12 @@ public:
     //! \reimp
     virtual MCUint instanceTypeID() const;
 
+    //! \reimp
+    virtual void render(MCCamera * p);
+
+    //! \reimp
+    virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p);
+
 private:
 
     DISABLE_COPY(MCRectShape);

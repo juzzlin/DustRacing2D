@@ -37,26 +37,31 @@ MCObjectImpl::TypeHash MCObjectImpl::m_typeHash;
 
 namespace
 {
-// Object is stationary
-const MCUint STATIONARY_MASK = (1<<0);
+enum PropertyMask
+{
+    // Object is stationary
+    StationaryMask = (1<<0),
 
-// Object is renderable
-const MCUint RENDERABLE_MASK = (1<<1);
+    // Object is renderable
+    RenderableMask = (1<<1),
 
-// Object is considered in physics calculations
-const MCUint PHYSICS_MASK = (1<<2);
+    // Object is considered in physics calculations
+    PhysicsMask = (1<<2),
 
-// Object is considered in collision calculations
-const MCUint COLLISIONS_MASK = (1<<3);
+    // Object is considered in collision calculations
+    CollisionsMask = (1<<3),
 
-// Object has a shadow
-const MCUint SHADOW_MASK = (1<<4);
+    // Object has a shadow
+    ShadowMask = (1<<4),
 
-// Object is scheduled to be removed from the world
-const MCUint REMOVING_MASK = (1<<5);
+    // Object is scheduled to be removed from the world
+    RemovingMask = (1<<5),
 
+    // View renders outline for debug
+    OutlineMask = (1<<6)
+};
 // Physics damping factor
-const MCFloat DAMPING_FACTOR = 0.999;
+const MCFloat DampingFactor = 0.999;
 }
 
 MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
@@ -70,7 +75,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , m_maximumVelocity(-1)
 , m_layer(0)
 , m_index(-1)
-, m_flags(RENDERABLE_MASK | PHYSICS_MASK | COLLISIONS_MASK | SHADOW_MASK)
+, m_flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , m_pShape(nullptr)
 {}
@@ -106,7 +111,7 @@ void MCObjectImpl::integrate(MCFloat step)
         m_pPublic->translate(m_location + m_velocity * step);
         acceleration += m_forces * m_invMass;
         m_velocity   += acceleration * step;
-        m_velocity   *= DAMPING_FACTOR;
+        m_velocity   *= DampingFactor;
 
         // Note that this code doesn't take the z-component into consideration
         if (m_maximumVelocity > 0) {
@@ -311,7 +316,7 @@ void MCObject::renderShadow(MCCamera * p)
 
 void MCObject::setMass(MCFloat newMass, bool stationary_)
 {
-    m_pImpl->setFlag(STATIONARY_MASK, stationary_);
+    m_pImpl->setFlag(StationaryMask, stationary_);
 
     if (!stationary_) {
         if (newMass > 0) {
@@ -340,7 +345,7 @@ MCFloat MCObject::mass() const
 
 bool MCObject::stationary() const
 {
-    return m_pImpl->m_flags & STATIONARY_MASK;
+    return m_pImpl->m_flags & StationaryMask;
 }
 
 void MCObject::addImpulse(const MCVector3d<MCFloat> & impulse)
@@ -350,42 +355,52 @@ void MCObject::addImpulse(const MCVector3d<MCFloat> & impulse)
 
 void MCObject::setPhysicsObject(bool flag)
 {
-    m_pImpl->setFlag(PHYSICS_MASK, flag);
+    m_pImpl->setFlag(PhysicsMask, flag);
 }
 
 bool MCObject::physicsObject() const
 {
-    return m_pImpl->m_flags & PHYSICS_MASK;
+    return m_pImpl->m_flags & PhysicsMask;
 }
 
 void MCObject::setBypassCollisions(bool flag)
 {
-    m_pImpl->setFlag(COLLISIONS_MASK, !flag);
+    m_pImpl->setFlag(CollisionsMask, !flag);
 }
 
 bool MCObject::bypassCollisions() const
 {
-    return !(m_pImpl->m_flags & COLLISIONS_MASK);
+    return !(m_pImpl->m_flags & CollisionsMask);
 }
 
 void MCObject::setRenderable(bool flag)
 {
-    m_pImpl->setFlag(RENDERABLE_MASK, flag);
+    m_pImpl->setFlag(RenderableMask, flag);
 }
 
 bool MCObject::renderable() const
 {
-    return m_pImpl->m_flags & RENDERABLE_MASK;
+    return m_pImpl->m_flags & RenderableMask;
+}
+
+void MCObject::setRenderShapeOutline(bool flag)
+{
+    m_pImpl->setFlag(OutlineMask, flag);
+}
+
+bool MCObject::renderShapeOutline() const
+{
+    return m_pImpl->m_flags & OutlineMask;
 }
 
 void MCObject::setHasShadow(bool flag)
 {
-    m_pImpl->setFlag(SHADOW_MASK, flag);
+    m_pImpl->setFlag(ShadowMask, flag);
 }
 
 bool MCObject::hasShadow() const
 {
-    return m_pImpl->m_flags & SHADOW_MASK;
+    return m_pImpl->m_flags & ShadowMask;
 }
 
 void MCObject::setMaximumVelocity(MCFloat maxVelocity)
@@ -607,12 +622,12 @@ void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint *
 
 void MCObject::setRemoving(bool flag)
 {
-    m_pImpl->setFlag(REMOVING_MASK, flag);
+    m_pImpl->setFlag(RemovingMask, flag);
 }
 
 bool MCObject::removing() const
 {
-    return m_pImpl->m_flags & REMOVING_MASK;
+    return m_pImpl->m_flags & RemovingMask;
 }
 
 void MCObject::addContact(MCContact * contact)

@@ -20,11 +20,11 @@
 #include "mcsurface.hh"
 #include "mcsurfaceimpl.hh"
 #include "mccamera.hh"
-
 #include "mcbbox.hh"
 #include "mctrigonom.hh"
 
-MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
+MCSurfaceImpl::MCSurfaceImpl(
+    GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 : m_handle(newHandle)
 , m_w(newWidth)
 , m_w2(newWidth / 2)
@@ -37,8 +37,8 @@ MCSurfaceImpl::MCSurfaceImpl(GLuint newHandle, MCFloat newWidth, MCFloat newHeig
 , m_alphaThreshold(0.0f)
 {}
 
-MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight) :
-    m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight))
+MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
+: m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight))
 {}
 
 MCSurface::~MCSurface()
@@ -52,7 +52,8 @@ void MCSurface::setCenter(const MCVector2d<MCFloat> & center)
     m_pImpl->m_center    = center;
 }
 
-void MCSurface::setAlphaTest(bool useAlphaTest, GLenum alphaFunc, GLclampf threshold)
+void MCSurface::setAlphaTest(
+    bool useAlphaTest, GLenum alphaFunc, GLclampf threshold)
 {
     m_pImpl->m_useAlphaTest   = useAlphaTest;
     m_pImpl->m_alphaFunc      = alphaFunc;
@@ -76,12 +77,14 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCFloat x, MCFloat y, int angle)
     return MCBBox<MCFloat>(x - w1, y - h1, x + w1, y + h1);
 }
 
-MCBBox<MCFloat> MCSurface::rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
+MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
+    MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
 {
     return m_pImpl->rotatedScaledBBox(x, y, angle, w2, h2);
 }
 
-MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
+MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(
+    MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
 {
     using std::abs;
 
@@ -93,12 +96,14 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(MCFloat x, MCFloat y, int angle
     return MCBBox<MCFloat>(x - w1, y - h1, x + w1, y + h1);
 }
 
-void MCSurface::render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
+void MCSurface::render(
+    MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
 {
     m_pImpl->render(pCamera, x, y, z, angle);
 }
 
-void MCSurfaceImpl::render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
+void MCSurfaceImpl::render(
+    MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
 {
     if (pCamera)
     {
@@ -144,12 +149,16 @@ void MCSurfaceImpl::render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, 
     glPopAttrib();
 }
 
-void MCSurface::renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
+void MCSurface::renderScaled(
+    MCCamera * pCamera,
+    MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
 {
     m_pImpl->renderScaled(pCamera, x, y, z, wr, hr, angle);
 }
 
-void MCSurfaceImpl::renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
+void MCSurfaceImpl::renderScaled(
+    MCCamera * pCamera,
+    MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
 {
     if (pCamera)
     {
@@ -193,12 +202,14 @@ void MCSurfaceImpl::renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFlo
     glPopAttrib();
 }
 
-void MCSurface::renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
+void MCSurface::renderShadow(
+    MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
 {
     m_pImpl->renderShadow(pCamera, x, y, angle);
 }
 
-void MCSurfaceImpl::renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
+void MCSurfaceImpl::renderShadow(
+    MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
 {
     if (pCamera)
     {
@@ -245,12 +256,16 @@ void MCSurfaceImpl::renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int a
     glPopAttrib();
 }
 
-void MCSurface::renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
+void MCSurface::renderShadowScaled(
+    MCCamera * pCamera,
+    MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
 {
     m_pImpl->renderShadowScaled(pCamera, x, y, wr, hr, angle);
 }
 
-void MCSurfaceImpl::renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
+void MCSurfaceImpl::renderShadowScaled(
+    MCCamera * pCamera,
+    MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
 {
     if (pCamera)
     {

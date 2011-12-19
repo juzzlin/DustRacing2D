@@ -19,8 +19,12 @@
 
 #include "mcrectshape.hh"
 #include "mcrectshapeimpl.hh"
+#include "mccamera.hh"
+#include "mcobject.hh"
 #include "mcshapeview.hh"
 #include "mcmathutil.hh"
+
+#include <GL/gl.h>
 
 MCUint MCRectShapeImpl::m_typeID = MCShape::registerType();
 
@@ -129,6 +133,33 @@ MCVector2d<MCFloat> MCRectShapeImpl::contactNormal(
         (MCVector3d<MCFloat>(edgeForPoint(p).edge) * DOWN)).normalizedFast();
 }
 
+void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
+{
+    // This code is shitty and only for debug purposes.
+
+    glPushAttrib(GL_ENABLE_BIT);
+
+    for (int i = 0; i < 4; i++) {
+        int x = m_obbox.vertex(i).i();
+        int y = m_obbox.vertex(i).j();
+
+        if (pCamera) {
+            pCamera->mapToCamera(x, y);
+        }
+
+        glPointSize(4);
+        glPushMatrix();
+        glTranslated(x, y, 0.0f);
+        glColor4f(1.0, 0.0, 0.0, 1.0);
+        glBegin(GL_POINTS);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glEnd();
+        glPopMatrix();
+    }
+
+    glPopAttrib();
+}
+
 MCVector2d<MCFloat> MCRectShape::contactNormal(
     const MCVector2d<MCFloat> & p) const
 {
@@ -155,6 +186,26 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
     m_pImpl->m_obbox =
         MCOBBox<MCFloat>(width / 2, height / 2, location());
     m_pImpl->m_obbox.rotate(angle());
+}
+
+void MCRectShape::render(MCCamera * pCamera)
+{
+    MCShape::render(pCamera);
+
+    // Render outline for debug purposes
+    if (parent()->renderShapeOutline()) {
+        m_pImpl->renderShapeOutline(pCamera);
+    }
+}
+
+void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
+{
+    MCShape::renderScaled(wr, hr, pCamera);
+
+    // Render outline for debug purposes
+    if (parent()->renderShapeOutline()) {
+        m_pImpl->renderShapeOutline(pCamera);
+    }
 }
 
 MCRectShape::~MCRectShape()
