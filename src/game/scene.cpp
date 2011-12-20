@@ -37,6 +37,8 @@ Scene::Scene(MCSurface & carSurface)
 : m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
 , m_car(&carSurface)
+, m_testCar(&carSurface)
+, m_cameraBaseOffset(0)
 {
     m_car.setLayer(Layers::Cars);
     m_race.addCar(&m_car);
@@ -77,10 +79,15 @@ void Scene::updateFrame(InputHandler & handler,
     // Step time
     m_pWorld->stepTime(timeStep);
 
-    // Update camera location
+    // Update camera location with respect to the car speed.
+    // Make changes a bit smoother so that an abrupt decrease
+    // in the speed won't look bad.
     MCVector2d<MCFloat> p(m_car.location());
-//    const int offsetFactor = 20;
-//    p += m_car.direction() * m_car.velocity().lengthFast() * offsetFactor;
+    const int offsetAmplification = 20;
+    const int smooth = 5;
+    m_cameraBaseOffset +=
+        (m_car.velocity().lengthFast() - m_cameraBaseOffset) / smooth;
+    p += m_car.direction() * m_cameraBaseOffset * offsetAmplification;
     camera.setPos(p.i(), p.j());
 
     // Update race situation
@@ -112,6 +119,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     // Add objects to the world
 
     m_car.addToWorld();
+    m_testCar.addToWorld();
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
@@ -121,6 +129,7 @@ void Scene::setActiveTrack(Track & activeTrack)
             m_pActiveTrack->trackData().route().get(0)->location().y();
 
         m_car.translate(MCVector2d<MCFloat>(x, y));
+        m_testCar.translate(MCVector2d<MCFloat>(x, y + 50));
     }
 
     const unsigned int trackObjectCount =

@@ -56,7 +56,9 @@ private:
     Track   * m_pActiveTrack;
     MCWorld * m_pWorld;
     Car       m_car;
+    Car       m_testCar;
     Race      m_race;
+    MCFloat   m_cameraBaseOffset;
 };
 
 #endif // SCENE_H

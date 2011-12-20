@@ -49,6 +49,12 @@ public:
      */
     MCOBBox(T hx, T hy, const MCVector2d<T> & loc);
 
+    //! Copy-constructor.
+    MCOBBox<T>(const MCOBBox<T> & other);
+
+    //! Assignment operator.
+    MCOBBox<T> & operator=(const MCOBBox<T> & other);
+
     //! Return current angle
     inline MCUint angle() const
     {
@@ -138,6 +144,37 @@ MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
 }
 
 template <typename T>
+MCOBBox<T>::MCOBBox(const MCOBBox<T> & other)
+: m_hx(other.m_hx)
+, m_hy(other.m_hy)
+, m_p(other.m_p)
+, m_a(other.m_a)
+{
+    m_v[0] = other.m_v[0];
+    m_v[1] = other.m_v[1];
+    m_v[2] = other.m_v[2];
+    m_v[3] = other.m_v[3];
+}
+
+template <typename T>
+MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
+{
+    if (this != &other)
+    {
+        m_hx   = other.m_hx;
+        m_hy   = other.m_hy;
+        m_p    = other.m_p;
+        m_a    = other.m_a;
+        m_v[0] = other.m_v[0];
+        m_v[1] = other.m_v[1];
+        m_v[2] = other.m_v[2];
+        m_v[3] = other.m_v[3];
+    }
+
+    return *this;
+}
+
+template <typename T>
 bool MCOBBox<T>::contains(MCVector2d<T> p) const
 {
     // Translate the test point
@@ -169,23 +206,14 @@ void MCOBBox<T>::rotate(MCUint a)
         // Store the new angle
         m_a = a;
 
-        // Update vertex vectors
-        T newI = MCTrigonom::rotatedX(m_v[0].i(), m_v[0].j(), m_a);
-        T newJ = MCTrigonom::rotatedY(m_v[0].i(), m_v[0].j(), m_a);
-
-        m_v[0].setI(newI);
-        m_v[0].setJ(newJ);
-
-        newI = MCTrigonom::rotatedX(m_v[1].i(), m_v[1].j(), m_a);
-        newJ = MCTrigonom::rotatedY(m_v[1].i(), m_v[1].j(), m_a);
-
-        m_v[1].setI(newI);
-        m_v[1].setJ(newJ);
+        // Update vertex vectors. Note that the original
+        // vertex vectors must be used as the source.
+        MCTrigonom::rotated(MCVector2d<T>(-m_hx, -m_hy), m_v[0], m_a);
+        MCTrigonom::rotated(MCVector2d<T>(-m_hx,  m_hy), m_v[1], m_a);
 
         // Mirror the other two vertices
         m_v[2].setI(-m_v[0].i());
         m_v[2].setJ(-m_v[0].j());
-
         m_v[3].setI(-m_v[1].i());
         m_v[3].setJ(-m_v[1].j());
     }

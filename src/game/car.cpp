@@ -49,7 +49,7 @@ Car::Car(MCSurface * pSurface)
     MCWorld::instance()->addForceGenerator(
         new MCFrictionGenerator(ROLLING_FRICTION), this, true);
 
-    setRenderShapeOutline(true);
+    //setRenderShapeOutline(true);
 }
 
 void Car::turnLeft()
@@ -116,13 +116,6 @@ void Car::noAction()
     }
 
     m_accelerating = false;
-}
-
-void Car::collisionEvent(MCCollisionEvent *pEvent)
-{
-    static int i = 0;
-    std::cout << "SAATANAN SAATANA: " << i++ << std::endl;
-    pEvent->accept();
 }
 
 Car::~Car()

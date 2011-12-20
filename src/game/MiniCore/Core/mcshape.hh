@@ -40,16 +40,16 @@ class MCShape
 {
 public:
 
-    /*! Constructor
+    /*! Constructor.
      * \param pParent Parent / owner object of the shape.
      * \param pView View for the shape. MCShape takes the ownership.
      */
     explicit MCShape(MCObject * pParent, MCShapeView * pView = nullptr);
 
-    //! Destructor
+    //! Destructor.
     virtual ~MCShape();
 
-    //! Get the parent object
+    //! Get the parent object.
     MCObject * parent() const;
 
     //! Set view object. MCShape takes the ownership.
@@ -60,39 +60,39 @@ public:
      */
     void setView(std::shared_ptr<MCShapeView> p);
 
-    //! Get view class
+    //! Get view class.
     MCShapeView * view() const;
 
-    /*! Render
+    /*! Render.
      * \param p Camera window to be used
      */
     virtual void render(MCCamera * p = nullptr);
 
-    /*! Render shadow
+    /*! Render shadow.
      * \param p Camera window to be used
      */
     virtual void renderShadow(MCCamera * p = nullptr);
 
-    /*! Render scaled
+    /*! Render scaled.
      * \param p Camera window to be used
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
     virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
-    /*! Render shadow scaled
+    /*! Render shadow scaled.
      * \param p Camera window to be used
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
     virtual void renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
-    /*! Translate
+    /*! Translate.
      * \param p The new location
      */
     virtual void translate(const MCVector3d<MCFloat> & p);
 
-    //! Get the current location
+    //! Get the current location.
     const MCVector3d<MCFloat> & location() const;
 
     /*! Set offset for the fake shadow.
@@ -100,18 +100,18 @@ public:
      */
     void setShadowOffset(const MCVector2d<MCFloat> & p);
 
-    /*! Rotate
+    /*! Rotate.
      * \param a The new rotation angle in degrees
      */
     virtual void rotate(MCUint a);
 
-    //! Return the current angle
+    //! Return the current angle.
     MCUint angle() const;
 
-    //! Return non-rotated bounding box of the shape
+    //! Return non-rotated bounding box of the shape.
     virtual MCBBox<MCFloat> bbox() const = 0;
 
-    /*! Tests if shape contains the given point
+    /*! Tests if shape contains the given point.
      * \param p The point to be tested
      * \return True if point contained
      */

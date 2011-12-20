@@ -20,6 +20,9 @@
 #ifndef MCTYPES_HH
 #define MCTYPES_HH
 
+#include "mcvector2d.hh"
+#include "mcvector3d.hh"
+
 // Floating point data type used
 #ifdef MC_USE_DOUBLE
   typedef double MCFloat;

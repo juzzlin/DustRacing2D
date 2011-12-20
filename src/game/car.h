@@ -47,17 +47,14 @@ public:
     //! Destructor.
     virtual ~Car();
 
-    void collisionEvent(MCCollisionEvent *pEvent);
-
-
 private:
 
     void oversteer(MCUint newBodyAngle);
 
-    MCSurface              * m_pSurface;
-    MCFrictionGenerator    * m_pDeccelerationFriction;
-    bool                     m_frictionGeneratorAdded;
-    bool                     m_accelerating;
+    MCSurface           * m_pSurface;
+    MCFrictionGenerator * m_pDeccelerationFriction;
+    bool                  m_frictionGeneratorAdded;
+    bool                  m_accelerating;
 };
 
 #endif // CAR_H

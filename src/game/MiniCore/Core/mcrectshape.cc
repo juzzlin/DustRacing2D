@@ -105,7 +105,7 @@ void MCRectShape::translate(const MCVector3d<MCFloat> & p)
 void MCRectShape::rotate(MCUint a)
 {
     MCShape::rotate(a);
-    m_pImpl->m_obbox.rotate(angle());
+    m_pImpl->m_obbox.rotate(a);
 }
 
 MCBBox<MCFloat> MCRectShape::bbox() const

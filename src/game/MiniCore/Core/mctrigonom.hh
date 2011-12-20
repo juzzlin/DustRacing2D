@@ -62,6 +62,12 @@ public:
     static void rotated(
         MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCUint angle);
 
+    //! Rotate given vector v0 by given angle and store result
+    //! to v1.
+    static void rotated(
+        const MCVector2d<MCFloat> & v0, MCVector2d<MCFloat> & v1,
+        MCUint angle);
+
 private:
 
     //! Disabled constructor.
