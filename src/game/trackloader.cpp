@@ -141,12 +141,17 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::handleTile(
     QDomElement & tag, TrackData & newData, QVector<TrackTile *> & routeVector)
 {
-    QString      id      = tag.attribute("type", "clear");
-    unsigned int i       = tag.attribute("i", "0").toUInt();
-    unsigned int j       = tag.attribute("j", "0").toUInt();
-    int          o       = tag.attribute("o", "0").toInt();
-    int          index   = tag.attribute("index", "-1").toInt();
-    unsigned int profile = tag.attribute("profile", "0").toUInt();
+    const QString      id      = tag.attribute("type", "clear");
+    const unsigned int profile = tag.attribute("profile", "0").toUInt();
+
+    // Route index
+    const int index = tag.attribute("index", "-1").toInt();
+    // X-coordinate in the tile matrix
+    unsigned int i = tag.attribute("i", "0").toUInt();
+    // Y-coordinate in the tile matrix
+    unsigned int j = tag.attribute("j", "0").toUInt();
+    // Orientation angle in degrees.
+    int o = tag.attribute("o", "0").toInt();
 
     // Mirror the angle and y-index.
     o = -o;
@@ -186,10 +191,13 @@ void TrackLoader::handleTile(
 
 void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
 {
-    QString role     = tag.attribute("role", "");
-    QString category = tag.attribute("category", "");
-    int     x        = tag.attribute("x", "0").toInt();
-    int     y        = tag.attribute("y", "0").toInt();
+    const QString role     = tag.attribute("role", "");
+    const QString category = tag.attribute("category", "");
+
+    // X-coordinate in the world
+    const int x = tag.attribute("x", "0").toInt();
+    // Y-coordinate in the world
+    const int y = tag.attribute("y", "0").toInt();
 
     // TODO: A separate config file for these
     MCSurfaceObjectData tireData("tire");

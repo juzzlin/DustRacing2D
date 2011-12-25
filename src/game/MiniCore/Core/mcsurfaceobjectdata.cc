@@ -32,12 +32,12 @@ MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
 {
 }
 
-void MCSurfaceObjectData::setSurfaceId(std::string id)
+void MCSurfaceObjectData::setSurfaceId(const std::string & id)
 {
     m_pImpl->surfaceId = id;
 }
 
-std::string MCSurfaceObjectData::surfaceId() const
+const std::string & MCSurfaceObjectData::surfaceId() const
 {
     return m_pImpl->surfaceId;
 }

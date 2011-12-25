@@ -55,6 +55,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
             pView   = new MCSurfaceView(pSurface);
             pShape  = new MCCircleShape(pObject, pView,
                 std::max(pSurface->width(), pSurface->height()) / 2);
+            std::cout << std::max(pSurface->width(), pSurface->height()) << std::endl;
             pObject->setShape(pShape);
         }
         // Rect shape according to surface dimensions (default)

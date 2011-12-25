@@ -36,10 +36,10 @@ public:
     virtual ~MCSurfaceObjectData();
 
     //! Set the surface id.
-    void setSurfaceId(std::string id);
+    void setSurfaceId(const std::string & id);
 
     //! Return the surface id.
-    std::string surfaceId() const;
+    const std::string & surfaceId() const;
 
     //! Sets the shape to be a circle according to
     //! the surface dimensions.
