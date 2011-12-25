@@ -49,12 +49,12 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     // Default shape, use surface dimensions
     case MCObjectData::None:
         // Circle shape according to surface dimensions
-        if (!data.defaultCirleShape())
+        if (data.defaultCirleShape())
         {
             pObject = new MCObject(data.typeId());
             pView   = new MCSurfaceView(pSurface);
             pShape  = new MCCircleShape(pObject, pView,
-                std::max(pSurface->width(), pSurface->width()) / 2);
+                std::max(pSurface->width(), pSurface->height()) / 2);
             pObject->setShape(pShape);
         }
         // Rect shape according to surface dimensions (default)
