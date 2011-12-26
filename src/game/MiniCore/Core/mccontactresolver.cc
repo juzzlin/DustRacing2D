@@ -120,7 +120,7 @@ bool MCContactResolverImpl::processRectCircle(
 
     MCEdge<MCFloat> edge(shape1.edgeForPoint(shape2.location()));
     const MCVector2d<MCFloat> x(MCVector2d<MCFloat>(shape2.location()) - edge.origin);
-    const MCFloat dist = MCMathUtil::distanceFromVector(x, edge.edge);
+    MCFloat dist = MCMathUtil::distanceFromVector(x, edge.edge);
     bool collided = false;
 
     if (dist < shape2.radius()) {
@@ -179,7 +179,6 @@ bool MCContactResolverImpl::processCircleCircle(
     MCFloat depth = d.lengthFast() - shape1.radius() - shape2.radius();
 
     if (depth < 0) {
-
         depth = -depth;
 
         // Send collision event to owner of shape1 and generate a contact

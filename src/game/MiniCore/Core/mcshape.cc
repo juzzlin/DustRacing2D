@@ -32,10 +32,15 @@ MCShapeImpl::MCShapeImpl(MCObject & parent)
 MCShapeImpl::~MCShapeImpl()
 {}
 
-MCShape::MCShape(MCObject & parent, MCShapeView * pView) :
-    m_pImpl(new MCShapeImpl(parent))
+MCShape::MCShape(MCObject & parent, MCShapeView * pView)
+: m_pImpl(new MCShapeImpl(parent))
 {
-    if (pView) setView(pView);
+    if (pView) {
+        setView(pView);
+    }
+
+    // Set default shadow offset
+    setShadowOffset(MCVector2d<MCFloat>(2, -2));
 }
 
 MCObject & MCShape::parent() const
