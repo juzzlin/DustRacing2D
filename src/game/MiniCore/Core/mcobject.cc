@@ -131,49 +131,61 @@ void MCObjectImpl::integrate(MCFloat step)
 
 void MCObjectImpl::doOutOfBoundariesEvent()
 {
+    // By default use the center point as the test point.
+    MCFloat minX = location.i();
+    MCFloat maxX = location.i();
+    MCFloat minY = location.j();
+    MCFloat maxY = location.j();
+
+    // Use shape bbox if shape is defined.
+    if (pShape)
+    {
+        minX = pShape->bbox().x1();
+        maxX = pShape->bbox().x2();
+        minY = pShape->bbox().y1();
+        maxY = pShape->bbox().y2();
+    }
+
+    // Check X-boundaries
     const MCWorld * pWorld = &MCWorld::instance();
-    if (location.i() < pWorld->minX()) {
-        velocity.setI(0);
-        forces.setI(0);
-        pPublic->translate(
-            MCVector3d<MCFloat>(pWorld->minX(), location.j(), location.k()));
+    if (minX < pWorld->minX()) {
+        velocity.setI(0); forces.setI(0);
+        pPublic->translate(MCVector3d<MCFloat>(
+            location.i() + pWorld->minX() - minX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         pPublic->outOfBoundariesEvent(e);
-    } else if (location.i() > pWorld->maxX()) {
-        velocity.setI(0);
-        forces.setI(0);
-        pPublic->translate(
-            MCVector3d<MCFloat>(pWorld->maxX(), location.j(), location.k()));
+    } else if (maxX > pWorld->maxX()) {
+        velocity.setI(0); forces.setI(0);
+        pPublic->translate(MCVector3d<MCFloat>(
+            location.i() + pWorld->maxX() - maxX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         pPublic->outOfBoundariesEvent(e);
     }
 
-    if (location.j() < pWorld->minY()) {
-        velocity.setJ(0);
-        forces.setJ(0);
-        pPublic->translate(
-            MCVector3d<MCFloat>(location.i(), pWorld->minY(), location.k()));
+    // Check Y-boundaries
+    if (minY < pWorld->minY()) {
+        velocity.setJ(0); forces.setJ(0);
+        pPublic->translate(MCVector3d<MCFloat>(
+            location.i(), location.j() + pWorld->minY() - minY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         pPublic->outOfBoundariesEvent(e);
-    } else if (location.j() > pWorld->maxY()) {
-        velocity.setJ(0);
-        forces.setJ(0);
-        pPublic->translate(
-            MCVector3d<MCFloat>(location.i(), pWorld->maxY(), location.k()));
+    } else if (maxY > pWorld->maxY()) {
+        velocity.setJ(0); forces.setJ(0);
+        pPublic->translate(MCVector3d<MCFloat>(
+            location.i(), location.j() + pWorld->maxY() - maxY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         pPublic->outOfBoundariesEvent(e);
     }
 
+    // Check Z-boundaries
     if (location.k() < pWorld->minZ()) {
-        velocity.setK(0);
-        forces.setK(0);
+        velocity.setK(0); forces.setK(0);
         pPublic->translate(
             MCVector3d<MCFloat>(location.i(), location.j(), pWorld->minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
         pPublic->outOfBoundariesEvent(e);
     } else if (location.k() > pWorld->maxZ()) {
-        velocity.setK(0);
-        forces.setK(0);
+        velocity.setK(0); forces.setK(0);
         pPublic->translate(
             MCVector3d<MCFloat>(location.i(), location.j(), pWorld->maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
