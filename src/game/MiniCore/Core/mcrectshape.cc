@@ -32,6 +32,7 @@ MCRectShapeImpl::MCRectShapeImpl(
     MCObject & parent, MCFloat width, MCFloat height)
 : MCShapeImpl(parent)
 , m_obbox(width / 2, height / 2, MCVector2d<MCFloat>())
+, m_momentOfInertiaFactor((width * width + height * height) / 12)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
@@ -113,6 +114,11 @@ MCBBox<MCFloat> MCRectShape::bbox() const
     return m_pImpl->m_obbox.bbox();
 }
 
+MCFloat MCRectShape::momentOfInertia() const
+{
+    return m_pImpl->m_momentOfInertiaFactor * parent().mass();
+}
+
 bool MCRectShape::contains(const MCVector2d<MCFloat> & p) const
 {
     return m_pImpl->m_obbox.contains(p);
@@ -186,6 +192,7 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
     m_pImpl->m_obbox =
         MCOBBox<MCFloat>(width / 2, height / 2, location());
     m_pImpl->m_obbox.rotate(angle());
+    m_pImpl->m_momentOfInertiaFactor = (width * width + height * height) / 12;
 }
 
 void MCRectShape::render(MCCamera * pCamera)

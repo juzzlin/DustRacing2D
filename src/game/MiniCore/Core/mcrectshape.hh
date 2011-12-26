@@ -88,6 +88,9 @@ public:
     //! \reimp
     virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p);
 
+    //! \reimp
+    virtual MCFloat momentOfInertia() const;
+
 private:
 
     DISABLE_COPY(MCRectShape);

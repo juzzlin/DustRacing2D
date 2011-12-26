@@ -30,6 +30,7 @@ class MCCircleShapeImpl : public MCShapeImpl
     virtual ~MCCircleShapeImpl();
     static MCUint m_typeID;
     MCFloat m_radius;
+    MCFloat m_momentOfInertiaFactor;
     friend class MCCircleShape;
 };
 

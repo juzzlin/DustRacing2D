@@ -59,6 +59,9 @@ public:
     //! \reimp
     virtual MCBBox<MCFloat> bbox() const;
 
+    //! \reimp
+    virtual MCFloat momentOfInertia() const;
+
     //! Set the radius
     void setRadius(MCFloat r);
 

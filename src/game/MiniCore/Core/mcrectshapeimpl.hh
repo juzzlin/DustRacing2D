@@ -40,6 +40,7 @@ private:
   inline MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
   void renderShapeOutline(MCCamera * pCamera);
   MCOBBox<MCFloat> m_obbox;
+  MCFloat m_momentOfInertiaFactor;
   friend class MCRectShape;
 };
 

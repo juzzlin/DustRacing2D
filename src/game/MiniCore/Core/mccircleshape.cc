@@ -20,12 +20,14 @@
 #include "mccircleshape.hh"
 #include "mccircleshapeimpl.hh"
 #include "mcshapeview.hh"
+#include "mcobject.hh"
 
 MCUint MCCircleShapeImpl::m_typeID = MCShape::registerType();
 
 MCCircleShapeImpl::MCCircleShapeImpl(MCObject & parent, MCFloat radius)
 : MCShapeImpl(parent)
 , m_radius(radius)
+, m_momentOfInertiaFactor(radius * radius / 2)
 {}
 
 MCCircleShapeImpl::~MCCircleShapeImpl()
@@ -45,6 +47,12 @@ MCFloat MCCircleShape::radius() const
 void MCCircleShape::setRadius(MCFloat r)
 {
     m_pImpl->m_radius = r;
+    m_pImpl->m_momentOfInertiaFactor = r * r / 2;
+}
+
+MCFloat MCCircleShape::momentOfInertia() const
+{
+    return m_pImpl->m_momentOfInertiaFactor * parent().mass();
 }
 
 bool MCCircleShape::contains(const MCVector2d<MCFloat> & p) const

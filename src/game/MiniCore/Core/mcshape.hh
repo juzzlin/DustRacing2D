@@ -78,14 +78,16 @@ public:
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
-    virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    virtual void renderScaled(
+        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
     /*! Render shadow scaled.
      * \param p Camera window to be used
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
-    virtual void renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    virtual void renderShadowScaled(
+        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
 
     /*! Translate.
      * \param p The new location
@@ -123,13 +125,19 @@ public:
      * \param p2 Control point e.g. the center of the colliding object
      * \return Interpenetration depth.
      */
-    virtual int interpenetrationDepth(const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const = 0;
+    virtual int interpenetrationDepth(
+        const MCVector2d<MCFloat> & p1,
+        const MCVector2d<MCFloat> & p2) const = 0;
 
     /*! Returns contact normal for the given point
      * \param p The point to be tested. It can be outside or inside the shape.
      * \return Contact normal pointing outwards the shape
      */
-    virtual MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const = 0;
+    virtual MCVector2d<MCFloat> contactNormal(
+        const MCVector2d<MCFloat> & p) const = 0;
+
+    //! Get the moment of inertia (J).
+    virtual MCFloat momentOfInertia() const = 0;
 
     /*! Register a new event type
      * \return The new unique type ID
