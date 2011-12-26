@@ -29,18 +29,18 @@ SlideFrictionGenerator::SlideFrictionGenerator(
 {
 }
 
-void SlideFrictionGenerator::updateForce(MCObject * p)
+void SlideFrictionGenerator::updateForce(MCObject & object)
 {
-    const MCUint bodyNormalAngle = p->angle() + 90;
+    const MCUint bodyNormalAngle = object.angle() + 90;
     const MCVector2d<MCFloat> n(
         MCTrigonom::cos(bodyNormalAngle),
         MCTrigonom::sin(bodyNormalAngle));
-    const MCVector2d<MCFloat> & v = p->velocity();
+    const MCVector2d<MCFloat> & v = object.velocity();
     MCVector2d<MCFloat> s = MCMathUtil::projection(v, n);
 
     if (s.lengthFast() > FRICTION_SPEED_TH)
     {
-        p->addForce(-s * coeff() * gravity() * p->mass());
+        object.addForce(-s * coeff() * gravity() * object.mass());
     }
 }
 

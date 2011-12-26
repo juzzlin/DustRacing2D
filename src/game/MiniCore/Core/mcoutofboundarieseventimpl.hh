@@ -23,9 +23,7 @@
 //! Implementation class for MCOutOfBoundariesEvent
 class MCOutOfBoundariesEventImpl
 {
-public:
   explicit MCOutOfBoundariesEventImpl(MCOutOfBoundariesEvent::ViolatedEdge violatedEdge);
-private:
   MCOutOfBoundariesEvent::ViolatedEdge m_violatedEdge;
   friend class MCOutOfBoundariesEvent;
 };

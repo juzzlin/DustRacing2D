@@ -49,7 +49,7 @@ public:
     virtual ~MCFrictionGenerator();
 
     //! \reimp
-    virtual void updateForce(MCObject * p);
+    virtual void updateForce(MCObject & object);
 
     //! Return coeff.
     MCFloat coeff() const;

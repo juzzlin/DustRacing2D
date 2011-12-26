@@ -38,10 +38,10 @@ class MCRectShape : public MCShape
 public:
 
     /*! Constructor
-     * \param pParent Parent object
+     * \param parent Parent object.
      * \param pView View for the shape. May be nullptr.
      */
-    MCRectShape(MCObject * pParent, MCShapeView * pView,
+    MCRectShape(MCObject & parent, MCShapeView * pView,
         MCFloat width, MCFloat height);
 
     //! Destructor

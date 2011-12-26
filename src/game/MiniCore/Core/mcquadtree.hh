@@ -17,14 +17,13 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCQUADTREE_HH
-#define MCQUADTREE_HH
+#ifndef MCOBJECTTREE_HH
+#define MCOBJECTTREE_HH
 
 #include "mcbbox.hh"
 #include "mcmacros.hh"
 #include "mcobject.hh"
 
-#include <memory>
 #include <unordered_set>
 
 class MCQuadtreeImpl;
@@ -40,36 +39,43 @@ public:
     typedef std::unordered_set<MCObject *> ObjectSet;
 
     //! Constructor.
-    //! \param x1,y1,x2,y2 represent the size of the first-level bounding box
-    //! \param leafMaxW,leafMaxH are the maximum dimensions for leaves
-    MCQuadtree(MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2, MCUint leafMaxW, MCUint leafMaxH);
+    //! \param x1,y1,x2,y2 represent the size of the first-level bounding box.
+    //! \param leafMaxW,leafMaxH are the maximum dimensions for leaves.
+    MCQuadtree(
+        MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
+        MCUint leafMaxW, MCUint leafMaxH);
 
-    //! Insert an object into the tree (O(log(N))
-    //! \param p is the object to be inserted
-    void insert(MCObject * p);
+    //! Destructor.
+    ~MCQuadtree();
 
-    //! Remove an object from the tree (O(log(N))
-    //! \param p is the object to be removed. Does nothing if p is invalid.
+    //! Insert an object into the tree (O(log(N)).
+    //! \param object is the object to be inserted.
+    void insert(MCObject & object);
+
+    //! Remove an object from the tree (O(log(N)).
+    //! \param object is the object to be removed.
     //! \return true if was removed.
-    bool remove(MCObject * p);
+    bool remove(MCObject & object);
 
     //! Remove all objects.
     void removeAll();
 
-    //! Get objects within given distance and of given type
-    void getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs,
-                                  MCUint typeId = 0);
+    //! Get objects within given distance and of given type.
+    void getObjectsWithinDistance(
+        MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs,
+        MCUint typeId = 0);
 
-    //! Get all objects of given type overlapping given BBox
-    void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs,
-                              MCUint typeId = 0);
+    //! Get all objects of given type overlapping given BBox.
+    void getObjectsWithinBBox(
+        const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs,
+        MCUint typeId = 0);
 
     //! Get bbox collisions involving the given object
-    //! \param p Object to be tested
-    //! \param rVectPObjs Vector in which colliding object are stored
-    //! \param typeId Match MCObjects of given type only
-    void getBBoxCollisions(const MCObject * p, ObjectSet & resultObjs,
-                           MCUint typeId = 0);
+    //! \param object Object to be tested.
+    //! \param rVectPObjs Vector in which colliding object are stored.
+    //! \param typeId Match MCObjects of given type only.
+    void getBBoxCollisions(const MCObject & object, ObjectSet & resultObjs,
+        MCUint typeId = 0);
 
     //! Get bounding box
     const MCBBox<MCFloat> & bbox() const;
@@ -78,9 +84,9 @@ private:
 
     DISABLE_COPY(MCQuadtree);
     DISABLE_ASSI(MCQuadtree);
-    std::shared_ptr<MCQuadtreeImpl> const m_pImpl;
+    MCQuadtreeImpl * const m_pImpl;
     friend class MCQuadtreeImpl;
 };
 
-#endif // MCQUADTREE_HH
+#endif // MCOBJECTTREE_HH
 

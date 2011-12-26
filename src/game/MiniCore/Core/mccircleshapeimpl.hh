@@ -26,14 +26,11 @@ class MCObject;
 
 class MCCircleShapeImpl : public MCShapeImpl
 {
-public:
-  MCCircleShapeImpl(MCObject * pParent, MCFloat radius);
-  virtual ~MCCircleShapeImpl();
-  static MCUint m_typeID;
-
-private:
-  MCFloat m_radius;
-  friend class MCCircleShape;
+    MCCircleShapeImpl(MCObject & parent, MCFloat radius);
+    virtual ~MCCircleShapeImpl();
+    static MCUint m_typeID;
+    MCFloat m_radius;
+    friend class MCCircleShape;
 };
 
 #endif // MCCIRCLESHAPEIMPL_HH

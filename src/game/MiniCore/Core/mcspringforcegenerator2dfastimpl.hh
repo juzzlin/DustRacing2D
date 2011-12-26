@@ -23,18 +23,17 @@
 //! Implementation class for MCSpringForceGenerator2dFast
 class MCSpringForceGenerator2dFastImpl
 {
-public:
-  MCSpringForceGenerator2dFastImpl(MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
-  virtual ~MCSpringForceGenerator2dFastImpl();
-  inline void updateForce(MCObject * p1);
-
-private:
-  MCObject * m_p2;
-  MCFloat m_coeff;
-  MCFloat m_length;
-  MCFloat m_min;
-  MCFloat m_max;
-  friend class MCSpringForceGenerator2dFast;
+    MCSpringForceGenerator2dFastImpl(
+        MCObject & object2,
+        MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
+    virtual ~MCSpringForceGenerator2dFastImpl();
+    inline void updateForce(MCObject & object1);
+    MCObject * m_p2;
+    MCFloat m_coeff;
+    MCFloat m_length;
+    MCFloat m_min;
+    MCFloat m_max;
+    friend class MCSpringForceGenerator2dFast;
 };
 
 #endif // MCSPRINGFORCEGENERATOR2DFASTIMPL_HH

@@ -23,8 +23,8 @@
 #include "mcobject.hh"
 
 MCSpringForceGeneratorImpl::MCSpringForceGeneratorImpl(
-    MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
-: m_p2(p2)
+    MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
+: m_p2(&object2)
 , m_coeff(coeff)
 , m_length(length)
 , m_min(min)
@@ -34,10 +34,10 @@ MCSpringForceGeneratorImpl::MCSpringForceGeneratorImpl(
 MCSpringForceGeneratorImpl::~MCSpringForceGeneratorImpl()
 {}
 
-void MCSpringForceGeneratorImpl::updateForce(MCObject * p1)
+void MCSpringForceGeneratorImpl::updateForce(MCObject & object1)
 {
     // Take diff vector of the node locations
-    MCVector3d<MCFloat> diff = p1->location() - m_p2->location();
+    MCVector3d<MCFloat> diff = object1.location() - m_p2->location();
 
     // Get length of diff and normalize
     const MCFloat length = diff.length();
@@ -50,33 +50,35 @@ void MCSpringForceGeneratorImpl::updateForce(MCObject * p1)
     // interpenetration depth scaled with respect to the masses of
     // the nodes.
     if (length > m_max) {
-        const MCFloat m1 = p1->invMass();
+        const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
-        MCContact * contact1 = MCContact::create();
-        contact1->init(m_p2, p1->location(), -diff, (length - m_max) * m2 / (m1 + m2));
-        p1->addContact(contact1);
+        MCContact & contact1 = MCContact::create();
+        contact1.init(
+            *m_p2, object1.location(), -diff, (length - m_max) * m2 / (m1 + m2));
+        object1.addContact(contact1);
 
     } else if (length < m_min) {
-        const MCFloat m1 = p1->invMass();
+        const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
-        MCContact * contact1 = MCContact::create();
-        contact1->init(m_p2, p1->location(), diff, (m_min - length) * m2 / (m1 + m2));
-        p1->addContact(contact1);
+        MCContact & contact1 = MCContact::create();
+        contact1.init(
+            *m_p2, object1.location(), diff, (m_min - length) * m2 / (m1 + m2));
+        object1.addContact(contact1);
     }
 
     // Update force
     diff *= (m_length - length) * m_coeff;
-    p1->addForce(diff);
+    object1.addForce(diff);
 }
 
 MCSpringForceGenerator::MCSpringForceGenerator(
-    MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
-: m_pImpl(new MCSpringForceGeneratorImpl(p2, coeff, length, min, max))
+    MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
+: m_pImpl(new MCSpringForceGeneratorImpl(object2, coeff, length, min, max))
 {}
 
-void MCSpringForceGenerator::updateForce(MCObject * p1)
+void MCSpringForceGenerator::updateForce(MCObject & object1)
 {
-  m_pImpl->updateForce(p1);
+  m_pImpl->updateForce(object1);
 }
 
 MCSpringForceGenerator::~MCSpringForceGenerator()

@@ -41,7 +41,7 @@ public:
 
   //! Create a new particle or return recycled one.
   //! Inherited classes must re-define this.
-  static MCParticle * create();
+  static MCParticle & create();
 
   //! Called by die().
   //! Inherited classes must re-define this.
@@ -85,9 +85,6 @@ public:
 
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;
-
-  //! Follow given object
-  void setFollowObject(MCObject * pObject);
 
 protected:
 

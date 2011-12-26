@@ -23,11 +23,9 @@
 //! Implementation class for MCParticle
 class MCParticleImpl
 {
-public:
+protected:
   MCParticleImpl();
   virtual ~MCParticleImpl();
-
-private:
   inline void stepTime();
   MCParticle * m_pPublic;
   MCUint m_lifeTime;

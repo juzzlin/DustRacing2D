@@ -55,7 +55,7 @@ public:
     virtual ~MCWorld();
 
     //! Return the one-and-only MCWorld instance
-    static MCWorld * instance();
+    static MCWorld & instance();
 
     //! Set dimensions of the world box
     void setDimensions(MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY,
@@ -63,31 +63,32 @@ public:
 
     //! Add object to the world. Object's current location is used.
     //! \param p Object to be added.
-    void addObject(MCObject * p);
+    void addObject(MCObject & object);
 
     //! Schedules the object to be removed from the world. This method
     //! should be used when removing objects in the middle of a run.
     //! Object is not removed immediately so possibly on-going physics
     //! and collision calculations are not messed up. Do not delete the object.
     //! \param p Object to be removed.
-    void removeObject(MCObject * p);
+    void removeObject(MCObject & object);
 
     //! Removes object from the world immediately. This can be used if the object
     //! gets deleted. Slow.
     //! \param p Object to be removed.
-    void removeObjectNow(MCObject * p);
+    void removeObjectNow(MCObject & object);
 
     //! \brief Add force generator to an object.
     //! \param pGen Generator to be added.
     //! \param pObj Target object.
     //! \param takeOwnership If true, MCWorld takes the Ownership
     //!        and handles deletion of generator.
-    void addForceGenerator(MCForceGenerator * pGen, MCObject * pObj, bool takeOwnership = false);
+    void addForceGenerator(
+        MCForceGenerator & gen, MCObject & obj, bool takeOwnership = false);
 
     //! \brief Remove force generator assigned to an object.
     //! \param pGen Generator to be added.
     //! \param pObj Target object.
-    void removeForceGenerator(MCForceGenerator * pGen, MCObject * pObj);
+    void removeForceGenerator(MCForceGenerator & gen, MCObject & obj);
 
     //! \brief Step world time
     //! This causes the integration of physics and executes
@@ -105,9 +106,9 @@ public:
     //!        no any translations or clipping done.
     virtual void renderShadows(MCCamera * pCamera = nullptr);
 
-    //! \brief Return pointer to the object quadtree.
+    //! \brief Return reference to the object quadtree.
     //! \return Pointer to the quadtree.
-    MCQuadtree * tree() const;
+    MCQuadtree & tree() const;
 
     //! Get minimum X
     MCFloat minX() const;
@@ -128,10 +129,10 @@ public:
     MCFloat maxZ() const;
 
     //! Add p to the internal layer map. Can be used if a layer change is needed.
-    void addToLayerMap(MCObject * p);
+    void addToLayerMap(MCObject & object);
 
     //! Remove p from the internal layer map. Can be used if a layer change is needed.
-    void removeFromLayerMap(MCObject * p);
+    void removeFromLayerMap(MCObject & object);
 
     //! Max number of rendering layers
     static const MCUint MAX_LAYERS = 32;

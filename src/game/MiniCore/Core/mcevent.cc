@@ -22,28 +22,28 @@
 
 MCUint MCEvent::m_typeCount = 0;
 
-MCEvent::MCEvent() :
-  m_accepted(false)
+MCEvent::MCEvent()
+: m_accepted(false)
 {}
 
 MCUint MCEvent::registerType()
 {
-  return ++MCEvent::m_typeCount;
+    return ++MCEvent::m_typeCount;
 }
 
 void MCEvent::accept()
 {
-  m_accepted = true;
+    m_accepted = true;
 }
 
 void MCEvent::ignore()
 {
-  m_accepted = false;
+    m_accepted = false;
 }
 
 bool MCEvent::accepted() const
 {
-  return m_accepted;
+    return m_accepted;
 }
 
 MCEvent::~MCEvent()

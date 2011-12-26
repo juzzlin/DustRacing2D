@@ -104,9 +104,9 @@ public:
     static MCUint typeID(const std::string & typeName);
 
     //! Send event to given object.
-    //! \param pObject Destination object.
-    //! \param pEvent Event to be sent.
-    static void sendEvent(MCObject * pObject, MCEvent * pEvent);
+    //! \param object Destination object.
+    //! \param event Event to be sent.
+    static void sendEvent(MCObject & object, MCEvent & event);
 
     //! Render the object.
     //! \param p Camera window to be used.
@@ -263,6 +263,16 @@ public:
     //! Get restitution.
     MCFloat restitution() const;
 
+    //! Set global friction. A friction coeff > 0 results in a
+    //! implicit creation of a MCFrictionGenarator when the
+    //! object is being added to the world.
+    //! Use a custom friction generator if a more controlled
+    //! friction is wanted.
+    void setXYFriction(MCFloat friction);
+
+    //! Get global friction.
+    MCFloat xyFriction() const;
+
     //! Set shape. MCObject will take the ownership.
     virtual void setShape(MCShape * newShape);
 
@@ -302,7 +312,7 @@ public:
     MCUint layer() const;
 
     //! Add a collision contact.
-    void addContact(MCContact * contact);
+    void addContact(MCContact & contact);
 
     //! Get collision contact hash.
     const ContactHash & contacts() const;
@@ -311,7 +321,7 @@ public:
     void deleteContacts();
 
     //! Delete all contacts with the given object.
-    void deleteContacts(MCObject * p);
+    void deleteContacts(MCObject & object);
 
     //! Return index in MCWorld's object vector. Returns -1 if not in the world.
     int index() const;
@@ -327,17 +337,17 @@ protected:
     //! Event handler.
     //! \param pEvent Event to be handled.
     //! \return true if event was handled.
-    virtual bool event(MCEvent * pEvent);
+    virtual bool event(MCEvent & event);
 
     //! Event handler for MCCollisionEvent. Override this to
     //! filter out collisions with certain objects.
     //! All collisions are accepted by default.
-    //! \param pEvent Event to be handled.
-    virtual void collisionEvent(MCCollisionEvent * pEvent);
+    //! \param event Event to be handled.
+    virtual void collisionEvent(MCCollisionEvent & event);
 
     //! Event handler for MCOutOfBoundariesEvent.
-    //! \param pEvent Event to be handled.
-    virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent * pEvent);
+    //! \param event Event to be handled.
+    virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent & event);
 
     //! \brief Register a new type and get a unique type id.
     static MCUint registerType(const std::string & typeName);
@@ -370,10 +380,10 @@ private:
     DISABLE_ASSI(MCObject);
     MCObjectImpl * const m_pImpl;
     friend class MCObjectImpl;
-    friend void  MCWorld::removeObject(MCObject *);
-    friend void  MCWorld::removeObjectNow(MCObject *);
-    friend void  MCWorldImpl::addObject(MCObject *);
-    friend void  MCWorldImpl::removeObject(MCObject *);
+    friend void  MCWorld::removeObject(MCObject &);
+    friend void  MCWorld::removeObjectNow(MCObject &);
+    friend void  MCWorldImpl::addObject(MCObject &);
+    friend void  MCWorldImpl::removeObject(MCObject &);
     friend void  MCWorldImpl::processRemovedObjects();
     friend class MCQuadtree;
     friend class MCQuadtreeImpl;

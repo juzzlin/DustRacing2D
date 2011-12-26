@@ -45,7 +45,7 @@ void MCForceRegistryImpl::update()
         Registry & registry = iter->second;
         for (MCUint i = 0; i < registry.size(); i++) {
             if (iter->first->index() != -1) {
-                registry[i]->updateForce(iter->first);
+                registry[i]->updateForce(*iter->first);
             }
         }
 
@@ -53,16 +53,16 @@ void MCForceRegistryImpl::update()
     }
 }
 
-void MCForceRegistryImpl::remove(MCForceGenerator * generator,
-    MCObject * object)
+void MCForceRegistryImpl::remove(MCForceGenerator & generator,
+    MCObject & object)
 {
-    auto iter = m_registryHash.find(object);
+    auto iter = m_registryHash.find(&object);
     if (iter != m_registryHash.end())
     {
         Registry & registry = iter->second;
         for (MCUint i = 0; i < registry.size(); i++) {
-            if (registry[i] == generator &&
-                iter->first == object) {
+            if (registry[i] == &generator &&
+                iter->first == &object) {
                     registry[i] = registry.back();
                     registry.pop_back();
                     break;
@@ -80,25 +80,25 @@ MCForceRegistry::MCForceRegistry() :
     m_pImpl(new MCForceRegistryImpl)
 {}
 
-void MCForceRegistry::addForceGenerator(MCForceGenerator * generator,
-    MCObject * object, bool takeOwnership)
+void MCForceRegistry::addForceGenerator(MCForceGenerator & generator,
+    MCObject & object, bool takeOwnership)
 {
     MCForceRegistryImpl::Registry & registry =
-        m_pImpl->m_registryHash[object];
+        m_pImpl->m_registryHash[&object];
 
     if (find(registry.begin(), registry.end(),
-        generator) == registry.end())
+        &generator) == registry.end())
     {
-        registry.push_back(generator);
+        registry.push_back(&generator);
 
         if (takeOwnership) {
-            m_pImpl->m_owned.insert(generator);
+            m_pImpl->m_owned.insert(&generator);
         }
     }
 }
 
-void MCForceRegistry::removeForceGenerator(MCForceGenerator * generator,
-    MCObject * object)
+void MCForceRegistry::removeForceGenerator(MCForceGenerator & generator,
+    MCObject & object)
 {
     m_pImpl->remove(generator, object);
 }

@@ -23,11 +23,9 @@
 //! Implementation class for MCCollisionEvent
 class MCCollisionEventImpl
 {
-public:
-  explicit MCCollisionEventImpl(MCObject * pCollidingObject);
-private:
-  MCObject * m_pCollidingObject;
-  friend class MCCollisionEvent;
+    explicit MCCollisionEventImpl(MCObject & collidingObject);
+    MCObject & m_collidingObject;
+    friend class MCCollisionEvent;
 };
 
 #endif // MCCOLLISIONEVENTIMPL_HH

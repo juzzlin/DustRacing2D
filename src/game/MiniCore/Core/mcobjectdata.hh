@@ -26,7 +26,9 @@
 
 class MCObjectDataImpl;
 
-//! Base class for object data classes.
+//! Base class for object data classes. MCObjectData is used by the
+//! MCObjectFactory in order to create objects of the desired
+//! configurations.
 class MCObjectData
 {
 public:
@@ -72,6 +74,18 @@ public:
 
     //! Return shape type.
     Shape shape() const;
+
+    //! Set restitution.
+    void setRestitution(MCFloat restitution);
+
+    //! Get restitution.
+    MCFloat restitution() const;
+
+    //! Set global friction.
+    void setXYFriction(MCFloat friction);
+
+    //! Get global friction.
+    MCFloat xyFriction() const;
 
 private:
 

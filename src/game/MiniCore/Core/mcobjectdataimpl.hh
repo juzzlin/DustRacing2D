@@ -31,6 +31,8 @@ private:
     MCFloat shapeRadius;
     MCFloat shapeWidth;
     MCFloat shapeHeight;
+    MCFloat restitution;
+    MCFloat xyFriction;
     friend class MCObjectData;
 };
 

@@ -20,59 +20,62 @@
 #include "mccontact.hh"
 #include "mccontactimpl.hh"
 #include "mcobject.hh"
+#include <cassert>
 
-MCContactImpl::MCContactImpl() :
-    m_pObject(nullptr),
-    m_interpenetrationDepth(0.0f)
+MCContactImpl::MCContactImpl()
+: m_pObject(nullptr)
+, m_interpenetrationDepth(0.0f)
 {}
 
 MCRecycler<MCContact> MCContactImpl::m_recycler;
 
-MCContact::MCContact() :
-    m_pImpl(new MCContactImpl())
+MCContact::MCContact()
+: m_pImpl(new MCContactImpl())
 {}
 
-void MCContact::init(MCObject * pObject,
-                     const MCVector2d<MCFloat> & newContactPoint, const MCVector2d<MCFloat> & newContactNormal,
-                     MCFloat newInterpenetrationDepth)
+void MCContact::init(MCObject & object,
+    const MCVector2d<MCFloat> & newContactPoint,
+    const MCVector2d<MCFloat> & newContactNormal,
+    MCFloat newInterpenetrationDepth)
 {
-  m_pImpl->m_pObject               = pObject;
-  m_pImpl->m_contactPoint          = newContactPoint;
-  m_pImpl->m_contactNormal         = newContactNormal;
-  m_pImpl->m_interpenetrationDepth = newInterpenetrationDepth;
+    m_pImpl->m_pObject               = &object;
+    m_pImpl->m_contactPoint          = newContactPoint;
+    m_pImpl->m_contactNormal         = newContactNormal;
+    m_pImpl->m_interpenetrationDepth = newInterpenetrationDepth;
 }
 
-MCObject * MCContact::object() const
+MCObject & MCContact::object() const
 {
-  return m_pImpl->m_pObject;
+    assert(m_pImpl->m_pObject);
+    return *m_pImpl->m_pObject;
 }
 
 const MCVector2d<MCFloat> & MCContact::contactPoint() const
 {
-  return m_pImpl->m_contactPoint;
+    return m_pImpl->m_contactPoint;
 }
 
 const MCVector2d<MCFloat> & MCContact::contactNormal() const
 {
-  return m_pImpl->m_contactNormal;
+    return m_pImpl->m_contactNormal;
 }
 
 MCFloat MCContact::interpenetrationDepth() const
 {
-  return m_pImpl->m_interpenetrationDepth;
+    return m_pImpl->m_interpenetrationDepth;
 }
 
-MCContact * MCContact::create()
+MCContact & MCContact::create()
 {
-  return MCContactImpl::m_recycler.newObject();
+    return *MCContactImpl::m_recycler.newObject();
 }
 
 void MCContact::free()
 {
-  return MCContactImpl::m_recycler.freeObject(this);
+    return MCContactImpl::m_recycler.freeObject(this);
 }
 
 MCContact::~MCContact()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }

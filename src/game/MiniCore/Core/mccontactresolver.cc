@@ -37,15 +37,18 @@ MCContactResolver::MCContactResolver() :
 {}
 
 MCContactResolver::~MCContactResolver()
-{}
-
-bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
 {
-    if (p1->parent() && p2->parent() && (p1->parent() == p2->parent())) {
+    delete m_pImpl;
+}
+
+bool MCContactResolverImpl::processRectRect(
+    MCRectShape & shape1, MCRectShape & shape2)
+{
+    if (&shape1.parent() == &shape2.parent()) {
         return false;
     }
 
-    const MCOBBox<MCFloat> & obbox1(p1->obbox());
+    const MCOBBox<MCFloat> & obbox1(shape1.obbox());
     bool collided = false;
 
     MCVector2d<MCFloat> vertex;
@@ -57,11 +60,11 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
 
     // Loop thru all vertices and generate contacts
     for (MCUint i = 0; i < 4; i++) {
-        if (p2->contains(obbox1.vertex(i))) {
+        if (shape2.contains(obbox1.vertex(i))) {
 
             // Send collision event to owner of p1
-            MCCollisionEvent ev1(p2->parent());
-            MCObject::sendEvent(p1->parent(), &ev1);
+            MCCollisionEvent ev1(shape2.parent());
+            MCObject::sendEvent(shape1.parent(), ev1);
 
             vertex             = obbox1.vertex(i);
             depth              = 0;
@@ -71,34 +74,34 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
             if (ev1.accepted()) {
                 // TODO: contactPoint should be something else than vertex.
                 depth =
-                    p2->interpenetrationDepth(vertex, p1->location());
+                    shape2.interpenetrationDepth(vertex, shape1.location());
                 depthIsSet         = true;
-                contactNormal      = p2->contactNormal(p1->location());
+                contactNormal      = shape2.contactNormal(shape1.location());
                 contactNormalIsSet = true;
 
-                MCContact * pContact = MCContact::create();
-                pContact->init(p2->parent(), vertex, contactNormal, depth);
-                p1->parent()->addContact(pContact);
+                MCContact & contact = MCContact::create();
+                contact.init(shape2.parent(), vertex, contactNormal, depth);
+                shape1.parent().addContact(contact);
 
                 collided = true;
             }
 
             // Send collision event to owner of p2
-            MCCollisionEvent ev2(p1->parent());
-            MCObject::sendEvent(p2->parent(), &ev2);
+            MCCollisionEvent ev2(shape1.parent());
+            MCObject::sendEvent(shape2.parent(), ev2);
 
             if (ev2.accepted()) {
                 if (!depthIsSet) {
-                    depth = p2->interpenetrationDepth(vertex, p1->location());
+                    depth = shape2.interpenetrationDepth(vertex, shape1.location());
                 }
 
                 if (!contactNormalIsSet) {
-                    contactNormal = p2->contactNormal(p1->location());
+                    contactNormal = shape2.contactNormal(shape1.location());
                 }
 
-                MCContact * pContact = MCContact::create();
-                pContact->init(p1->parent(), vertex, -contactNormal, depth);
-                p2->parent()->addContact(pContact);
+                MCContact & contact = MCContact::create();
+                contact.init(shape1.parent(), vertex, -contactNormal, depth);
+                shape2.parent().addContact(contact);
             }
         }
     }
@@ -106,92 +109,95 @@ bool MCContactResolverImpl::processRectRect(MCRectShape * p1, MCRectShape * p2)
     return collided;
 }
 
-bool MCContactResolverImpl::processRectCircle(MCRectShape * p1, MCCircleShape * p2)
+bool MCContactResolverImpl::processRectCircle(
+    MCRectShape & shape1, MCCircleShape & shape2)
 {
-    if (p1->parent() && p2->parent() && (p1->parent() == p2->parent())) {
+    if (&shape1.parent() == &shape2.parent()) {
         return false;
     }
 
-    MCEdge<MCFloat> edge(p1->edgeForPoint(p2->location()));
-    const MCVector2d<MCFloat> x(MCVector2d<MCFloat>(p2->location()) - edge.origin);
+    MCEdge<MCFloat> edge(shape1.edgeForPoint(shape2.location()));
+    const MCVector2d<MCFloat> x(MCVector2d<MCFloat>(shape2.location()) - edge.origin);
     const MCFloat dist = MCMathUtil::distanceFromVector(x, edge.edge);
     bool collided = false;
 
-    if (dist < p2->radius()) {
+    if (dist < shape2.radius()) {
 
         collided = true;
 
         // Send collision event to owner of p1
-        MCCollisionEvent ev1(p2->parent());
-        MCObject::sendEvent(p1->parent(), &ev1);
+        MCCollisionEvent ev1(shape2.parent());
+        MCObject::sendEvent(shape1.parent(), ev1);
 
         // TODO: contactPoint should be something much more accurate than this..
-        const MCVector2d<MCFloat> contactPoint(p2->location());
-        const MCFloat depth = p2->radius() - dist;
+        const MCVector2d<MCFloat> contactPoint(shape2.location());
+        const MCFloat depth = shape2.radius() - dist;
         MCVector2d<MCFloat> contactNormal;
         bool contactNormalIsSet = false;
 
         if (ev1.accepted()) {
-            contactNormal = p1->contactNormal(p2->location());
+            contactNormal = shape1.contactNormal(shape2.location());
             contactNormalIsSet = true;
 
-            MCContact * pContact = MCContact::create();
-            pContact->init(p2->parent(), contactPoint, -contactNormal, depth);
-            p1->parent()->addContact(pContact);
+            MCContact & contact = MCContact::create();
+            contact.init(shape2.parent(), contactPoint, -contactNormal, depth);
+            shape1.parent().addContact(contact);
         }
 
         // Send collision event to owner of p2
-        MCCollisionEvent ev2(p1->parent());
-        MCObject::sendEvent(p2->parent(), &ev2);
+        MCCollisionEvent ev2(shape1.parent());
+        MCObject::sendEvent(shape2.parent(), ev2);
 
         if (ev2.accepted()) {
             if (!contactNormalIsSet) {
-                contactNormal = p1->contactNormal(p2->location());
+                contactNormal = shape1.contactNormal(shape2.location());
             }
 
-            MCContact * pContact = MCContact::create();
-            pContact->init(p1->parent(), contactPoint, contactNormal, depth);
-            p2->parent()->addContact(pContact);
+            MCContact & contact = MCContact::create();
+            contact.init(shape1.parent(), contactPoint, contactNormal, depth);
+            shape2.parent().addContact(contact);
         }
     }
 
     return collided;
 }
 
-bool MCContactResolverImpl::processCircleCircle(MCCircleShape * p1, MCCircleShape * p2)
+bool MCContactResolverImpl::processCircleCircle(
+    MCCircleShape & shape1, MCCircleShape & shape2)
 {
-    if (p1->parent() && p2->parent() && (p1->parent() == p2->parent())) {
+    if (&shape1.parent() == &shape2.parent()) {
         return false;
     }
 
-    MCVector2d<MCFloat> d(p2->location() - p1->location());
-    const MCVector2d<MCFloat> contactPoint(MCVector2d<MCFloat>(p1->location()) + d / 2);
-    MCFloat depth = d.lengthFast() - p1->radius() - p2->radius();
+    MCVector2d<MCFloat> d(shape2.location() - shape1.location());
+    const MCVector2d<MCFloat> contactPoint(
+        MCVector2d<MCFloat>(shape1.location()) + d / 2);
+    MCFloat depth = d.lengthFast() - shape1.radius() - shape2.radius();
 
     if (depth < 0) {
 
         depth = -depth;
 
         // Send collision event to owner of p1
-        MCCollisionEvent ev1(p2->parent());
-        MCObject::sendEvent(p1->parent(), &ev1);
+        MCCollisionEvent ev1(shape2.parent());
+        MCObject::sendEvent(shape1.parent(), ev1);
 
         if (ev1.accepted()) {
             const MCVector2d<MCFloat> contactNormal(-d.normalizedFast());
-            MCContact * pContact = MCContact::create();
-            pContact->init(p2->parent(), contactPoint, contactNormal, depth);
-            p1->parent()->addContact(pContact);
+            MCContact & contact = MCContact::create();
+            contact.init(shape2.parent(), contactPoint, contactNormal, depth);
+            shape1.parent().addContact(contact);
         }
 
         // Send collision event to owner of p2
-        MCCollisionEvent ev2(p1->parent());
-        MCObject::sendEvent(p2->parent(), &ev2);
+        MCCollisionEvent ev2(shape1.parent());
+        MCObject::sendEvent(shape2.parent(), ev2);
 
         if (ev2.accepted()) {
             const MCVector2d<MCFloat> contactNormal(d.normalizedFast());
-            MCContact * pContact = MCContact::create();
-            pContact->init(p2->parent(), contactPoint, contactNormal, depth);
-            p1->parent()->addContact(pContact);
+            MCContact & contact = MCContact::create();
+            contact.init(shape2.parent(), contactPoint, contactNormal, depth);
+            shape1.parent().addContact(contact);
         }
 
         return true;
@@ -200,43 +206,48 @@ bool MCContactResolverImpl::processCircleCircle(MCCircleShape * p1, MCCircleShap
     return false;
 }
 
-bool MCContactResolver::processPossibleCollision(MCObject * p1, MCObject * p2)
+bool MCContactResolver::processPossibleCollision(
+   MCObject & object1, MCObject & object2)
 {
-    if (p1 == p2) {
+    if (&object1 == &object2) {
         return false;
     }
 
     // Check that both objects contain a shape
-    if (p1->shape() && p2->shape()) {
+    if (object1.shape() && object2.shape()) {
 
         // Store id's
-        const MCUint id1 = p1->shape()->instanceTypeID();
-        const MCUint id2 = p2->shape()->instanceTypeID();
+        const MCUint id1 = object1.shape()->instanceTypeID();
+        const MCUint id2 = object2.shape()->instanceTypeID();
 
         // Both rects ?
         if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID()) {
 
             // Static cast because we know the types now
-            const bool p1p2 = m_pImpl->processRectRect(static_cast<MCRectShape *>(p1->shape()),
-                static_cast<MCRectShape *>(p2->shape()));
-            const bool p2p1 = m_pImpl->processRectRect(static_cast<MCRectShape *>(p2->shape()),
-                static_cast<MCRectShape *>(p1->shape()));
+            const bool p1p2 = m_pImpl->processRectRect(
+                *static_cast<MCRectShape *>(object1.shape()),
+                *static_cast<MCRectShape *>(object2.shape()));
+            const bool p2p1 = m_pImpl->processRectRect(
+                *static_cast<MCRectShape *>(object2.shape()),
+                *static_cast<MCRectShape *>(object1.shape()));
             return p1p2 || p2p1;
         }
 
         // Both circles ?
         if (id1 == MCCircleShape::typeID() && id2 == MCCircleShape::typeID()) {
             // Static cast because we know the types now
-            return m_pImpl->processCircleCircle(static_cast<MCCircleShape *>(p1->shape()),
-                                                static_cast<MCCircleShape *>(p2->shape()));
+            return m_pImpl->processCircleCircle(
+                *static_cast<MCCircleShape *>(object1.shape()),
+                *static_cast<MCCircleShape *>(object2.shape()));
         }
 
         // Test id1 first to match a corresponding method
         if (id1 == MCRectShape::typeID()) {
             if (id2 == MCCircleShape::typeID()) {
                 // Static cast because we know the types now
-                return m_pImpl->processRectCircle(static_cast<MCRectShape *>(p1->shape()),
-                                                  static_cast<MCCircleShape *>(p2->shape()));
+                return m_pImpl->processRectCircle(
+                    *static_cast<MCRectShape *>(object1.shape()),
+                    *static_cast<MCCircleShape *>(object2.shape()));
             }
         }
 
@@ -244,8 +255,9 @@ bool MCContactResolver::processPossibleCollision(MCObject * p1, MCObject * p2)
         if (id2 == MCRectShape::typeID()) {
             if (id1 == MCCircleShape::typeID()) {
                 // Static cast because we know the types now
-                return m_pImpl->processRectCircle(static_cast<MCRectShape *>(p2->shape()),
-                                                  static_cast<MCCircleShape *>(p1->shape()));
+                return m_pImpl->processRectCircle(
+                    *static_cast<MCRectShape *>(object2.shape()),
+                    *static_cast<MCCircleShape *>(object1.shape()));
             }
         }
     }

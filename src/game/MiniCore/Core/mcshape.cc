@@ -24,23 +24,23 @@
 
 MCUint MCShapeImpl::m_typeCount = 0;
 
-MCShapeImpl::MCShapeImpl(MCObject * pParent) :
-    m_pParent(pParent),
-    m_angle(0)
+MCShapeImpl::MCShapeImpl(MCObject & parent)
+: m_parent(parent)
+, m_angle(0)
 {}
 
 MCShapeImpl::~MCShapeImpl()
 {}
 
-MCShape::MCShape(MCObject * pParent, MCShapeView * pView) :
-    m_pImpl(new MCShapeImpl(pParent))
+MCShape::MCShape(MCObject & parent, MCShapeView * pView) :
+    m_pImpl(new MCShapeImpl(parent))
 {
     if (pView) setView(pView);
 }
 
-MCObject * MCShape::parent() const
+MCObject & MCShape::parent() const
 {
-    return m_pImpl->m_pParent;
+    return m_pImpl->m_parent;
 }
 
 MCUint MCShape::registerType()

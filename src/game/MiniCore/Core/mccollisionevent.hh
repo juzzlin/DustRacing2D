@@ -37,30 +37,31 @@ class MCCollisionEventImpl;
 class MCCollisionEvent : public MCEvent
 {
 public:
-  /*! Constructor
-   * \param p This event is sent to an object that has collided with p
-   */
-  explicit MCCollisionEvent(MCObject * p);
 
-  //! Destructor
-  ~MCCollisionEvent();
+    /*! Constructor.
+     * \param object This event is sent to an object that has collided with object.
+     */
+    explicit MCCollisionEvent(MCObject & object);
 
-  //! Get colling object
-  MCObject * collidingObject() const;
+    //! Destructor.
+    ~MCCollisionEvent();
 
-  //! Return the typeID
-  static MCUint typeID();
+    //! Get colling object.
+    MCObject & collidingObject() const;
 
-  //! \reimp
-  virtual MCUint instanceTypeID() const;
+    //! Return the typeID.
+    static MCUint typeID();
+
+    //! \reimp
+    virtual MCUint instanceTypeID() const;
 
 private:
 
-  DISABLE_COPY(MCCollisionEvent);
-  DISABLE_ASSI(MCCollisionEvent);
+    DISABLE_COPY(MCCollisionEvent);
+    DISABLE_ASSI(MCCollisionEvent);
 
-  static MCUint m_typeID;
-  MCCollisionEventImpl * const m_pImpl;
+    static MCUint m_typeID;
+    MCCollisionEventImpl * const m_pImpl;
 };
 
 #endif // MCCOLLISIONEVENT_HH

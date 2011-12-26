@@ -30,7 +30,7 @@ public:
     virtual ~SlideFrictionGenerator();
 
     //! \reimp
-    virtual void updateForce(MCObject * p);
+    virtual void updateForce(MCObject & object);
 };
 
 #endif // SLIDEFRICTIONGENERATOR_H

@@ -23,8 +23,8 @@
 
 MCUint MCCircleShapeImpl::m_typeID = MCShape::registerType();
 
-MCCircleShapeImpl::MCCircleShapeImpl(MCObject * pParent, MCFloat radius)
-: MCShapeImpl(pParent)
+MCCircleShapeImpl::MCCircleShapeImpl(MCObject & parent, MCFloat radius)
+: MCShapeImpl(parent)
 , m_radius(radius)
 {}
 
@@ -32,9 +32,9 @@ MCCircleShapeImpl::~MCCircleShapeImpl()
 {}
 
 MCCircleShape::MCCircleShape(
-    MCObject * pParent, MCShapeView * pView, MCFloat newRadius)
-: MCShape(pParent, pView)
-, m_pImpl(new MCCircleShapeImpl(pParent, newRadius))
+    MCObject & parent, MCShapeView * pView, MCFloat newRadius)
+: MCShape(parent, pView)
+, m_pImpl(new MCCircleShapeImpl(parent, newRadius))
 {}
 
 MCFloat MCCircleShape::radius() const

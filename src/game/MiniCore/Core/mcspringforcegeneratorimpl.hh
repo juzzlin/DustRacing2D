@@ -23,12 +23,10 @@
 //! Implementation class for MCSpringForceGenerator
 class MCSpringForceGeneratorImpl
 {
-public:
-  MCSpringForceGeneratorImpl(MCObject * p2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
+  MCSpringForceGeneratorImpl(
+      MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
   virtual ~MCSpringForceGeneratorImpl();
-  inline void updateForce(MCObject * p1);
-
-private:
+  inline void updateForce(MCObject & object1);
   MCObject * m_p2;
   MCFloat m_coeff;
   MCFloat m_length;

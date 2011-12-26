@@ -29,8 +29,8 @@
 MCUint MCRectShapeImpl::m_typeID = MCShape::registerType();
 
 MCRectShapeImpl::MCRectShapeImpl(
-    MCObject * pParent, MCFloat width, MCFloat height)
-: MCShapeImpl(pParent)
+    MCObject & parent, MCFloat width, MCFloat height)
+: MCShapeImpl(parent)
 , m_obbox(width / 2, height / 2, MCVector2d<MCFloat>())
 {}
 
@@ -86,9 +86,9 @@ int MCRectShapeImpl::interpenetrationDepth(
 }
 
 MCRectShape::MCRectShape(
-    MCObject * pParent, MCShapeView * pView, MCFloat width, MCFloat height) :
-    MCShape(pParent, pView),
-    m_pImpl(new MCRectShapeImpl(pParent, width, height))
+    MCObject & parent, MCShapeView * pView, MCFloat width, MCFloat height) :
+    MCShape(parent, pView),
+    m_pImpl(new MCRectShapeImpl(parent, width, height))
 {}
 
 MCEdge<MCFloat> MCRectShape::edgeForPoint(const MCVector2d<MCFloat> & p) const
@@ -193,7 +193,7 @@ void MCRectShape::render(MCCamera * pCamera)
     MCShape::render(pCamera);
 
     // Render outline for debug purposes
-    if (parent()->renderShapeOutline()) {
+    if (parent().renderShapeOutline()) {
         m_pImpl->renderShapeOutline(pCamera);
     }
 }
@@ -203,7 +203,7 @@ void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
     MCShape::renderScaled(wr, hr, pCamera);
 
     // Render outline for debug purposes
-    if (parent()->renderShapeOutline()) {
+    if (parent().renderShapeOutline()) {
         m_pImpl->renderShapeOutline(pCamera);
     }
 }

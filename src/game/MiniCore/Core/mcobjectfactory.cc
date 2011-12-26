@@ -53,9 +53,8 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
         {
             pObject = new MCObject(data.typeId());
             pView   = new MCSurfaceView(pSurface);
-            pShape  = new MCCircleShape(pObject, pView,
+            pShape  = new MCCircleShape(*pObject, pView,
                 std::max(pSurface->width(), pSurface->height()) / 2);
-            std::cout << std::max(pSurface->width(), pSurface->height()) << std::endl;
             pObject->setShape(pShape);
         }
         // Rect shape according to surface dimensions (default)
@@ -69,8 +68,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
         pView   = new MCSurfaceView(pSurface);
-        pShape  = new MCCircleShape(pObject, pView,
-            data.shapeRadius());
+        pShape  = new MCCircleShape(*pObject, pView, data.shapeRadius());
         pObject->setShape(pShape);
         break;
 
@@ -78,7 +76,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
         pView   = new MCSurfaceView(pSurface);
-        pShape  = new MCRectShape(pObject, pView,
+        pShape  = new MCRectShape(*pObject, pView,
             data.shapeWidth(), data.shapeHeight());
         pObject->setShape(pShape);
         break;
@@ -88,6 +86,12 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
 
     // Set mass
     pObject->setMass(data.mass());
+
+    // Set friction
+    pObject->setXYFriction(data.xyFriction());
+
+    // Set restitution
+    pObject->setRestitution(data.restitution());
 
     // Store for deletion
     m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));

@@ -22,8 +22,6 @@
 
 #include "mcmacros.hh"
 
-#include <memory>
-
 class MCContactResolverImpl;
 class MCObject;
 
@@ -37,18 +35,18 @@ public:
     //! Destructor
     virtual ~MCContactResolver();
 
-    /*! Process a suspected collision
-   * \param p1 Pointer to the 1st object
-   * \param p2 Pointer to the 2nd object
-   * \return true if objects really collided
-   */
-    bool processPossibleCollision(MCObject * p1, MCObject * p2);
+    /*! Process a suspected collision.
+     * \param object1 1st object.
+     * \param object2 2nd object.
+     * \return true if objects really collided.
+     */
+    bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
 private:
 
     DISABLE_COPY(MCContactResolver);
     DISABLE_ASSI(MCContactResolver);
-    std::shared_ptr<MCContactResolverImpl> const m_pImpl;
+    MCContactResolverImpl * const m_pImpl;
     friend class MCContactResolverImpl;
 };
 

@@ -40,13 +40,13 @@ MCFrictionGenerator::MCFrictionGenerator(
 : m_pImpl(new MCFrictionGeneratorImpl(coeff, gravity))
 {}
 
-void MCFrictionGenerator::updateForce(MCObject * p)
+void MCFrictionGenerator::updateForce(MCObject & object)
 {
-    const MCVector2d<MCFloat> v(p->velocity());
+    const MCVector2d<MCFloat> v(object.velocity());
     const MCFloat l = v.lengthFast();
     if (l > FRICTION_SPEED_TH) {
-        p->addForce((-v / l) *
-        m_pImpl->m_coeff * m_pImpl->m_gravity * p->mass());
+        object.addForce((-v / l) *
+        m_pImpl->m_coeff * m_pImpl->m_gravity * object.mass());
     }
 }
 

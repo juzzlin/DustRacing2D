@@ -38,46 +38,47 @@ class MCContact
 {
 public:
 
-  //! Return a new (empty) contact
-  static MCContact * create();
+    //! Return a new (empty) contact
+    static MCContact & create();
 
-  //! Move contact to the list of free contacts
-  void free();
+    //! Move contact to the list of free contacts
+    void free();
 
-  /*! \brief Init the contact.
-   *  \param pObject The contacting object
-   *  \param contactPoint The point of contact
-   *  \param contactNormal The contact normal pointing away from pObject
-   *  \param interpenetrationDepth The depth of interpenetration
-   */
-  void init(MCObject * pObject,
-            const MCVector2d<MCFloat> & contactPoint, const MCVector2d<MCFloat> & contactNormal,
-            MCFloat interpenetrationDepth);
+    /*! \brief Init the contact.
+     *  \param object The contacting object
+     *  \param contactPoint The point of contact
+     *  \param contactNormal The contact normal pointing away from pObject
+     *  \param interpenetrationDepth The depth of interpenetration
+     */
+    void init(MCObject & object,
+        const MCVector2d<MCFloat> & contactPoint,
+        const MCVector2d<MCFloat> & contactNormal,
+        MCFloat interpenetrationDepth);
 
-  //! Return the contacting object
-  MCObject * object() const;
+    //! Return the contacting object
+    MCObject & object() const;
 
-  //! Return the contact point
-  const MCVector2d<MCFloat> & contactPoint() const;
+    //! Return the contact point
+    const MCVector2d<MCFloat> & contactPoint() const;
 
-  //! Return the contact normal
-  const MCVector2d<MCFloat> & contactNormal() const;
+    //! Return the contact normal
+    const MCVector2d<MCFloat> & contactNormal() const;
 
-  //! Return the interpenetration
-  MCFloat interpenetrationDepth() const;
+    //! Return the interpenetration
+    MCFloat interpenetrationDepth() const;
 
 private:
 
-  //! Constructor disabled: use MCContact::create()
-  MCContact();
+    //! Constructor disabled: use MCContact::create()
+    MCContact();
 
-  //! Destructor disabled: use MCContact::free()
-  ~MCContact();
+    //! Destructor disabled: use MCContact::free()
+    ~MCContact();
 
-  DISABLE_COPY(MCContact);
-  DISABLE_ASSI(MCContact);
-  MCContactImpl * const m_pImpl;
-  friend class MCRecycler<MCContact>;
+    DISABLE_COPY(MCContact);
+    DISABLE_ASSI(MCContact);
+    MCContactImpl * const m_pImpl;
+    friend class MCRecycler<MCContact>;
 };
 
 #endif // MCCONTACT_HH

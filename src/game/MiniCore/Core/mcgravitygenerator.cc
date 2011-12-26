@@ -32,11 +32,11 @@ MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g) :
     m_pImpl(new MCGravityGeneratorImpl(g))
 {}
 
-void MCGravityGenerator::updateForce(MCObject * p)
+void MCGravityGenerator::updateForce(MCObject & object)
 {
     // G = m * g
-    if (p->invMass() > 0.0) {
-        p->addForce(m_pImpl->m_g * p->mass());
+    if (object.invMass() > 0.0) {
+        object.addForce(m_pImpl->m_g * object.mass());
     }
 }
 

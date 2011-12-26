@@ -26,14 +26,11 @@ class MCRectShape;
 
 class MCContactResolverImpl
 {
-public:
     MCContactResolverImpl();
     virtual ~MCContactResolverImpl();
-    bool processRectRect(MCRectShape * p1, MCRectShape * p2);
-    bool processRectCircle(MCRectShape * p1, MCCircleShape * p2);
-    bool processCircleCircle(MCCircleShape * p1, MCCircleShape * p2);
-
-private:
+    bool processRectRect(MCRectShape & object1, MCRectShape & object2);
+    bool processRectCircle(MCRectShape & object1, MCCircleShape & object2);
+    bool processCircleCircle(MCCircleShape & object1, MCCircleShape & object2);
     friend class MCContactResolver;
 };
 

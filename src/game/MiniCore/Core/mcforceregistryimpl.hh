@@ -34,8 +34,7 @@ public:
   MCForceRegistryImpl();
   virtual ~MCForceRegistryImpl();
   void update();
-  void remove(MCForceGenerator * generator,
-              MCObject * object);
+  void remove(MCForceGenerator & generator, MCObject & object);
 
 private:
   typedef std::vector<MCForceGenerator *> Registry;

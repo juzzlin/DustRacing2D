@@ -24,134 +24,134 @@
 
 MCRecycler<MCParticle> MCParticle::m_recycler;
 
-MCParticleImpl::MCParticleImpl() :
-    m_lifeTime(0),
-    m_initLifeTime(0),
-    m_animationStyle(MCParticle::None),
-    m_isActive(false),
-    m_scale(1.0)
+MCParticleImpl::MCParticleImpl()
+: m_lifeTime(0)
+, m_initLifeTime(0)
+, m_animationStyle(MCParticle::None)
+, m_isActive(false)
+, m_scale(1.0)
 {}
 
 MCParticleImpl::~MCParticleImpl()
 {}
 
-MCParticle::MCParticle() :
-    MCObject("PARTICLE"),
-    m_pImpl(new MCParticleImpl)
+MCParticle::MCParticle()
+: MCObject("PARTICLE")
+, m_pImpl(new MCParticleImpl)
 {
-  m_pImpl->m_pPublic = this;
+    m_pImpl->m_pPublic = this;
 
-  setShape(new MCCircleShape(this, nullptr, 0.0f));
-  setBypassCollisions(true);
+    setShape(new MCCircleShape(*this, nullptr, 0.0f));
+    setBypassCollisions(true);
 }
 
 MCParticle::~MCParticle()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }
 
 void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
 {
-  m_pImpl->m_lifeTime       = newLifeTime;
-  m_pImpl->m_initLifeTime   = newLifeTime;
-  m_pImpl->m_animationStyle = MCParticle::None;
-  m_pImpl->m_isActive       = true;
-  m_pImpl->m_scale          = 1.0;
+    m_pImpl->m_lifeTime       = newLifeTime;
+    m_pImpl->m_initLifeTime   = newLifeTime;
+    m_pImpl->m_animationStyle = MCParticle::None;
+    m_pImpl->m_isActive       = true;
+    m_pImpl->m_scale          = 1.0;
 
-  static_cast<MCCircleShape *>(shape())->setRadius(newRadius);
+    static_cast<MCCircleShape *>(shape())->setRadius(newRadius);
 
-  translate(newLocation);
+    translate(newLocation);
 }
 
 MCFloat MCParticle::radius() const
 {
-  return static_cast<MCCircleShape *>(shape())->radius();
+    return static_cast<MCCircleShape *>(shape())->radius();
 }
 
 MCUint MCParticle::lifeTime() const
 {
-  return m_pImpl->m_lifeTime;
+    return m_pImpl->m_lifeTime;
 }
 
 MCUint MCParticle::initLifeTime() const
 {
-  return m_pImpl->m_initLifeTime;
+    return m_pImpl->m_initLifeTime;
 }
 
 void MCParticle::setAnimationStyle(MCParticle::AnimationStyle style)
 {
-  m_pImpl->m_animationStyle = style;
+    m_pImpl->m_animationStyle = style;
 }
 
 MCParticle::AnimationStyle MCParticle::animationStyle() const
 {
-  return m_pImpl->m_animationStyle;
+    return m_pImpl->m_animationStyle;
 }
 
 void MCParticle::stepTime()
 {
-  m_pImpl->stepTime();
+    m_pImpl->stepTime();
 }
 
 void MCParticleImpl::stepTime()
 {
-  if (m_lifeTime) {
-    m_lifeTime--;
-    m_scale = static_cast<MCFloat>(m_lifeTime) / m_initLifeTime;
-  } else if (m_isActive) {
-    m_isActive = false;
-    m_pPublic->timeOut();
-  }
+    if (m_lifeTime) {
+        m_lifeTime--;
+        m_scale = static_cast<MCFloat>(m_lifeTime) / m_initLifeTime;
+    } else if (m_isActive) {
+        m_isActive = false;
+        m_pPublic->timeOut();
+    }
 }
 
 MCFloat MCParticle::scale() const
 {
-  return m_pImpl->m_scale;
+    return m_pImpl->m_scale;
 }
 
 void MCParticle::timeOut()
 {
-  die();
+    die();
 }
 
 void MCParticle::render(MCCamera * pCamera)
 {
-  if (animationStyle() == MCParticle::Shrink) {
-    const MCFloat s = scale() / 2.0;
-    shape()->renderScaled(s * bbox().width(), s * bbox().height(), pCamera);
-  } else {
-    MCObject::render(pCamera);
-  }
+    if (animationStyle() == MCParticle::Shrink) {
+        const MCFloat s = scale() / 2.0;
+        shape()->renderScaled(s * bbox().width(), s * bbox().height(), pCamera);
+    } else {
+        MCObject::render(pCamera);
+    }
 }
 
 void MCParticle::renderShadow(MCCamera * pCamera)
 {
-  if (animationStyle() == MCParticle::Shrink) {
-    const MCFloat s = scale() / 2.0;
-    shape()->renderShadowScaled(s * bbox().width(), s * bbox().height(), pCamera);
-  } else {
-    MCObject::renderShadow(pCamera);
-  }
+    if (animationStyle() == MCParticle::Shrink) {
+        const MCFloat s = scale() / 2.0;
+        shape()->renderShadowScaled(s * bbox().width(), s * bbox().height(), pCamera);
+    } else {
+        MCObject::renderShadow(pCamera);
+    }
 }
 
-MCParticle * MCParticle::create()
+MCParticle & MCParticle::create()
 {
-  return m_recycler.newObject();
+    return *m_recycler.newObject();
 }
 
 bool MCParticle::isActive() const
 {
-  return m_pImpl->m_isActive;
+    return m_pImpl->m_isActive;
 }
 
 void MCParticle::die()
 {
-  removeFromWorld();
-  m_pImpl->m_isActive = false;
-  recycle();
+    removeFromWorld();
+    m_pImpl->m_isActive = false;
+    recycle();
 }
 
 void MCParticle::recycle()
 {
-  m_recycler.freeObject(this);
+    m_recycler.freeObject(this);
 }

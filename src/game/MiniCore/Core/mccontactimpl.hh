@@ -25,10 +25,7 @@
 //! Implementation class for MCContact.
 class MCContactImpl
 {
-public:
   MCContactImpl();
-
-private:
   MCObject * m_pObject;
   MCVector2d<MCFloat> m_contactPoint;
   MCVector2d<MCFloat> m_contactNormal;

@@ -28,13 +28,12 @@ class MCObject;
 //! Implementation class for MCShape
 class MCShapeImpl
 {
-public:
-    explicit MCShapeImpl(MCObject * pParent);
+protected:
+    explicit MCShapeImpl(MCObject & parent);
     virtual ~MCShapeImpl();
-    static MCUint m_typeCount;
-
 private:
-    MCObject * m_pParent;
+    static MCUint m_typeCount;
+    MCObject & m_parent;
     MCVector3d<MCFloat> m_location;
     MCVector2d<MCFloat> m_shadowOffset;
     MCUint m_angle;

@@ -31,11 +31,11 @@ class MCCircleShape : public MCShape
 public:
 
     /*! Constructor
-     * \param radius  Radius of the shape
-     * \param pParent Parent object
-     * \param pView   View for the shape. May be nullptr.
+     * \param radius Radius of the shape
+     * \param parent Parent object
+     * \param pView  View for the shape. May be nullptr.
      */
-    MCCircleShape(MCObject * pParent, MCShapeView * pView, MCFloat radius);
+    MCCircleShape(MCObject & parent, MCShapeView * pView, MCFloat radius);
 
     //! Destructor
     virtual ~MCCircleShape();
@@ -44,7 +44,8 @@ public:
     bool contains(const MCVector2d<MCFloat> & p) const;
 
     //! \reimp
-    int interpenetrationDepth(const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
+    int interpenetrationDepth(
+        const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
 
     //! \reimp
     MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;

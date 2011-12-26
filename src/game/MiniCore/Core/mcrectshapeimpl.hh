@@ -31,7 +31,7 @@ class MCCamera;
 class MCRectShapeImpl : public MCShapeImpl
 {
 private:
-  MCRectShapeImpl(MCObject * pParent, MCFloat width, MCFloat height);
+  MCRectShapeImpl(MCObject & parent, MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
   static MCUint m_typeID;
   inline MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;

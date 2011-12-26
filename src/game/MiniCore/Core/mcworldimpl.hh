@@ -21,7 +21,8 @@
 #define MCWORLDIMPL_HH
 
 #include "mctypes.hh"
-
+#include "mccontactresolver.hh"
+#include "mcforceregistry.hh"
 #include <memory>
 #include <unordered_set>
 #include <vector>
@@ -29,8 +30,6 @@
 class MCObject;
 class MCWorld;
 class MCQuadtree;
-class MCForceRegistry;
-class MCContactResolver;
 class MCContact;
 
 class MCWorldImpl
@@ -38,28 +37,27 @@ class MCWorldImpl
 public:
   MCWorldImpl();
   virtual ~MCWorldImpl();
-  void addObject(MCObject * p);
+  void addObject(MCObject & object);
   void processRemovedObjects();
-  void removeObject(MCObject * p);
+  void removeObject(MCObject & object);
 
 private:
   void integrate(MCFloat step);
   void detectCollisions();
   void processContacts();
-  void processContacts(MCObject * p);
-  void processContact(MCObject * pObject, MCContact * pContact);
-  void addToLayerMap(MCObject *);
-  void removeFromLayerMap(MCObject *);
+  void processContacts(MCObject & object);
+  void processContact(MCObject & object, MCContact & contact);
+  void addToLayerMap(MCObject &);
+  void removeFromLayerMap(MCObject &);
   MCContact * getDeepestInterpenetration(
       const std::vector<MCContact *> & contacts);
   void render(MCCamera * p);
   void renderShadows(MCCamera * p);
   static MCWorld * m_pInstance;
-  MCForceRegistry * m_pForceRegistry;
-  MCContactResolver * m_pResolver;
-  MCQuadtree * m_pQuadtree;
+  MCForceRegistry m_forceRegistry;
+  MCContactResolver m_contactResolver;
+  MCQuadtree * m_pObjectTree;
   MCFloat minX, maxX, minY, maxY, minZ, maxZ;
-  MCVector3d<MCFloat> m_gravity;
   typedef std::unordered_set<MCObject *> LayerHash;
   LayerHash m_layers[MCWorld::MAX_LAYERS];
   MCWorld::ObjectVector m_objs;

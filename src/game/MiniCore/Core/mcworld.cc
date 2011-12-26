@@ -19,19 +19,18 @@
 
 #include "mcworld.hh"
 #include "mcworldimpl.hh"
-#include "mcforceregistry.hh"
 #include "mcforcegenerator.hh"
-#include "mccontactresolver.hh"
+#include "mcfrictiongenerator.hh"
 #include "mcobject.hh"
 #include "mcquadtree.hh"
 #include "mccamera.hh"
 
+#include <cassert>
+
 MCWorld * MCWorldImpl::m_pInstance = nullptr;
 
 MCWorldImpl::MCWorldImpl()
-: m_pForceRegistry(new MCForceRegistry)
-, m_pResolver(new MCContactResolver)
-, m_pQuadtree(nullptr)
+: m_pObjectTree(nullptr)
 , minX(0)
 , maxX(0)
 , minY(0)
@@ -46,14 +45,14 @@ MCWorldImpl::~MCWorldImpl()
 void MCWorldImpl::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
-    m_pForceRegistry->update();
+    m_forceRegistry.update();
     for (MCUint i = 0; i < m_objs.size(); i++) {
-        MCObject * const p(m_objs[i]);
-        if (p->physicsObject() && !p->stationary()) {
-            p->integrate(step);
-            p->stepTime();
+        MCObject * const object(m_objs[i]);
+        if (object->physicsObject() && !object->stationary()) {
+            object->integrate(step);
+            object->stepTime();
         } else {
-            p->stepTime();
+            object->stepTime();
         }
     }
 }
@@ -63,14 +62,14 @@ void MCWorldImpl::detectCollisions()
     // Check collisions for all registered objects
     static MCQuadtree::ObjectSet collisions;
     for (MCUint i = 0; i < m_objs.size(); i++) {
-        MCObject * const p(m_objs[i]);
-        if (p->physicsObject()) {
+        MCObject * const object(m_objs[i]);
+        if (object->physicsObject()) {
             collisions.clear();
-            m_pQuadtree->getBBoxCollisions(p, collisions);
+            m_pObjectTree->getBBoxCollisions(*object, collisions);
             auto j1 = collisions.begin();
             auto j2 = collisions.end();
             while (j1 != j2) {
-                m_pResolver->processPossibleCollision(p, *j1);
+                m_contactResolver.processPossibleCollision(*object, **j1);
                 j1++;
             }
         }
@@ -91,62 +90,65 @@ MCContact * MCWorldImpl::getDeepestInterpenetration(
     return bestContact;
 }
 
-void MCWorldImpl::processContacts(MCObject * p)
+void MCWorldImpl::processContacts(MCObject & object)
 {
     MCContact * deepestContact = nullptr;
-    auto iter(p->contacts().begin());
-    iter = p->contacts().begin();
-    for (; iter != p->contacts().end(); iter++) {
+    auto iter(object.contacts().begin());
+    iter = object.contacts().begin();
+    for (; iter != object.contacts().end(); iter++) {
         deepestContact = getDeepestInterpenetration(iter->second);
         if (deepestContact) {
-            processContact(p, deepestContact);
+            processContact(object, *deepestContact);
         }
     }
-    p->deleteContacts();
+    object.deleteContacts();
 }
 
 void MCWorldImpl::processContacts()
 {
-    for (MCObject * obj : m_objs) {
-        if (obj->physicsObject()) {
-            processContacts(obj);
+    for (MCObject * object : m_objs) {
+        if (object->physicsObject()) {
+            processContacts(*object);
         }
     }
 }
 
-void MCWorldImpl::processContact(MCObject * pObject, MCContact * pContact)
+void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
 {
-    MCObject * const pa(pObject);
-    MCObject * const pb(pContact->object());
+    MCObject & pa(object);
+    MCObject & pb(contact.object());
 
-    const MCFloat restitution(std::min(pObject->restitution(), pContact->object()->restitution()));
-    const MCVector2d<MCFloat> diff(pb->velocity() - pa->velocity());
-    const MCVector3d<MCFloat> impulse(pContact->contactNormal() * pContact->contactNormal().dot(diff));
-    const MCVector3d<MCFloat> displacement(pContact->contactNormal() * pContact->interpenetrationDepth());
+    const MCFloat restitution(
+        std::min(pa.restitution(), pb.restitution()));
+    const MCVector2d<MCFloat> diff(pb.velocity() - pa.velocity());
+    const MCVector3d<MCFloat> impulse(
+        contact.contactNormal() * contact.contactNormal().dot(diff));
+    const MCVector3d<MCFloat> displacement(
+        contact.contactNormal() * contact.interpenetrationDepth());
 
-    const MCFloat a = pa->invMass();
-    const MCFloat b = pb->invMass();
+    const MCFloat a = pa.invMass();
+    const MCFloat b = pb.invMass();
 
-    if (!pa->stationary()) {
+    if (!pa.stationary()) {
         // Move colliding object
         const MCFloat s = a / (a + b);
-        pa->displace(displacement * s);
+        pa.displace(displacement * s);
 
         // Apply impulse
-        pa->addImpulse((impulse + impulse * restitution) * s);
+        pa.addImpulse((impulse + impulse * restitution) * s);
     }
 
-    if (!pb->stationary()) {
+    if (!pb.stationary()) {
         // Move colliding object
         const MCFloat s = b / (a + b);
-        pb->displace(-displacement * s);
+        pb.displace(-displacement * s);
 
         // Apply impulse
-        pb->addImpulse((-impulse - impulse * restitution) * s);
+        pb.addImpulse((-impulse - impulse * restitution) * s);
     }
 
     // Remove contacts with pa from pb, because physically it was already handled here
-    pb->deleteContacts(pa);
+    pb.deleteContacts(pa);
 }
 
 void MCWorldImpl::render(MCCamera * pCamera)
@@ -184,7 +186,7 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
 }
 
 MCWorld::MCWorld() :
-    m_pImpl(new MCWorldImpl)    
+    m_pImpl(new MCWorldImpl)
 {
     if (!MCWorldImpl::m_pInstance) {
         MCWorldImpl::m_pInstance = this;
@@ -194,26 +196,28 @@ MCWorld::MCWorld() :
     }
 }
 
-MCWorld * MCWorld::instance()
+MCWorld & MCWorld::instance()
 {
     if (!MCWorldImpl::m_pInstance) {
         std::cerr << "ERROR!!: MCWorld instance not created!" << std::endl;
         exit(EXIT_FAILURE);
     }
-    return MCWorldImpl::m_pInstance;
+    return *MCWorldImpl::m_pInstance;
 }
 
-void MCWorld::setDimensions(MCFloat minX_, MCFloat maxX_, MCFloat minY_, MCFloat maxY_,
-                            MCFloat minZ_, MCFloat maxZ_)
+void MCWorld::setDimensions(
+    MCFloat minX_, MCFloat maxX_, MCFloat minY_, MCFloat maxY_,
+    MCFloat minZ_, MCFloat maxZ_)
 {
     // Set dimensions for minimum quadtree leaves
     const MCFloat MIN_LEAF_WIDTH  = 64;
     const MCFloat MIN_LEAF_HEIGHT = 64;
 
     // Init quadtree
-    delete m_pImpl->m_pQuadtree;
-    m_pImpl->m_pQuadtree = new MCQuadtree(minX_, minY_, maxX_, maxY_,
-                                          MIN_LEAF_WIDTH, MIN_LEAF_HEIGHT);
+    delete m_pImpl->m_pObjectTree;
+    m_pImpl->m_pObjectTree = new MCQuadtree(
+        minX_, minY_, maxX_, maxY_, MIN_LEAF_WIDTH, MIN_LEAF_HEIGHT);
+
     // Set dimensions
     m_pImpl->minX = minX_;
     m_pImpl->maxX = maxX_;
@@ -253,117 +257,127 @@ MCFloat MCWorld::maxZ() const
     return m_pImpl->maxZ;
 }
 
-void MCWorld::addObject(MCObject * p)
+void MCWorld::addObject(MCObject & object)
 {
-    m_pImpl->addObject(p);
+    m_pImpl->addObject(object);
 }
 
-void MCWorldImpl::addObject(MCObject * p)
+void MCWorldImpl::addObject(MCObject & object)
 {
-    if (!p->removing()) {
-        if (p->index() == -1) {
+    if (!object.removing()) {
+        if (object.index() == -1) {
 
             // Add to layer map
-            addToLayerMap(p);
+            addToLayerMap(object);
 
             // Add to object vector (O(1))
-            m_objs.push_back(p);
-            p->setIndex(m_objs.size() - 1);
+            m_objs.push_back(&object);
+            object.setIndex(m_objs.size() - 1);
 
             // Add to Quadtree
-            if (p->physicsObject() && !p->bypassCollisions()) {
-                m_pQuadtree->insert(p);
+            if (object.physicsObject() && !object.bypassCollisions()) {
+                m_pObjectTree->insert(object);
+            }
+
+            // Add xy friction
+            const MCFloat FrictionThreshold = 0.001f;
+            if (object.xyFriction() > FrictionThreshold) {
+                m_forceRegistry.addForceGenerator(
+                    *new MCFrictionGenerator(object.xyFriction()), object, true);
             }
         }
     } else {
-        p->setRemoving(false);
+        object.setRemoving(false);
     }
 }
 
-void MCWorld::removeObject(MCObject * p)
+void MCWorld::removeObject(MCObject & object)
 {
-    p->setRemoving(true);
-    m_pImpl->m_removeObjs.push_back(p);
+    object.setRemoving(true);
+    m_pImpl->m_removeObjs.push_back(&object);
 }
 
-void MCWorld::removeObjectNow(MCObject * p)
+void MCWorld::removeObjectNow(MCObject & object)
 {
-    p->setRemoving(true);
+    object.setRemoving(true);
     for (MCObject * obj : m_pImpl->m_objs) {
-        if (obj != p) {
+        if (obj != &object) {
             if (obj->physicsObject()) {
-                obj->deleteContacts(p);
+                obj->deleteContacts(object);
             }
         }
     }
 
-    m_pImpl->removeObject(p);
+    m_pImpl->removeObject(object);
 }
 
-void MCWorldImpl::removeObject(MCObject * p)
+void MCWorldImpl::removeObject(MCObject & object)
 {
     // Reset motion
-    p->resetMotion();
+    object.resetMotion();
 
     // Remove from the layer map
-    removeFromLayerMap(p);
+    removeFromLayerMap(object);
 
     // Remove from object vector (O(1))
-    if (p->index() > -1 && p->index() < static_cast<int>(m_objs.size())) {
-        m_objs[p->index()] = m_objs.back();
-        m_objs[p->index()]->setIndex(p->index());
+    if (object.index() > -1 && object.index() < static_cast<int>(m_objs.size())) {
+        m_objs[object.index()] = m_objs.back();
+        m_objs[object.index()]->setIndex(object.index());
         m_objs.pop_back();
-        p->setIndex(-1);
+        object.setIndex(-1);
     }
 
     // Remove from Quadtree
-    if (p->physicsObject() && !p->bypassCollisions()) {
-        m_pQuadtree->remove(p);
+    if (object.physicsObject() && !object.bypassCollisions()) {
+        m_pObjectTree->remove(object);
     }
 
-    p->setRemoving(false);
+    object.setRemoving(false);
 }
 
 void MCWorldImpl::processRemovedObjects()
 {
     for (MCObject * obj : m_removeObjs) {
         if (obj->removing()) {
-            removeObject(obj);
+            removeObject(*obj);
         }
     }
     m_removeObjs.clear();
 }
 
-void MCWorldImpl::addToLayerMap(MCObject * p)
+void MCWorldImpl::addToLayerMap(MCObject & object)
 {
-    const MCUint layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
-    m_layers[layerIndex].insert(p);
+    const MCUint layerIndex =
+        object.layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : object.layer();
+    m_layers[layerIndex].insert(&object);
 }
 
-void MCWorldImpl::removeFromLayerMap(MCObject * p)
+void MCWorldImpl::removeFromLayerMap(MCObject & object)
 {
-    const MCUint layerIndex = p->layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : p->layer();
-    m_layers[layerIndex].erase(p);
+    const MCUint layerIndex =
+        object.layer() >= MCWorld::MAX_LAYERS ? MCWorld::MAX_LAYERS - 1 : object.layer();
+    m_layers[layerIndex].erase(&object);
 }
 
-void MCWorld::addToLayerMap(MCObject * p)
+void MCWorld::addToLayerMap(MCObject & object)
 {
-    m_pImpl->addToLayerMap(p);
+    m_pImpl->addToLayerMap(object);
 }
 
-void MCWorld::removeFromLayerMap(MCObject * p)
+void MCWorld::removeFromLayerMap(MCObject & object)
 {
-    m_pImpl->removeFromLayerMap(p);
+    m_pImpl->removeFromLayerMap(object);
 }
 
-void MCWorld::addForceGenerator(MCForceGenerator * pGen, MCObject * pObj, bool takeOwnership)
+void MCWorld::addForceGenerator(
+    MCForceGenerator & gen, MCObject & obj, bool takeOwnership)
 {
-    m_pImpl->m_pForceRegistry->addForceGenerator(pGen, pObj, takeOwnership);
+    m_pImpl->m_forceRegistry.addForceGenerator(gen, obj, takeOwnership);
 }
 
-void MCWorld::removeForceGenerator(MCForceGenerator * pGen, MCObject * pObj)
+void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
 {
-    m_pImpl->m_pForceRegistry->removeForceGenerator(pGen, pObj);
+    m_pImpl->m_forceRegistry.removeForceGenerator(gen, obj);
 }
 
 void MCWorld::stepTime(MCFloat step)
@@ -396,14 +410,13 @@ MCWorld::ObjectVector MCWorld::objects() const
     return m_pImpl->m_objs;
 }
 
-MCQuadtree * MCWorld::tree() const
+MCQuadtree & MCWorld::tree() const
 {
-    return m_pImpl->m_pQuadtree;
+    assert(m_pImpl->m_pObjectTree);
+    return *m_pImpl->m_pObjectTree;
 }
 
 MCWorld::~MCWorld()
 {
-    delete m_pImpl->m_pForceRegistry;
-    delete m_pImpl->m_pResolver;
-    delete m_pImpl->m_pQuadtree;
+    delete m_pImpl->m_pObjectTree;
 }

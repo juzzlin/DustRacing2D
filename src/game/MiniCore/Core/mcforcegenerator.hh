@@ -36,7 +36,7 @@ public:
   virtual ~MCForceGenerator();
 
   //! Update force to the given object
-  virtual void updateForce(MCObject * p) = 0;
+  virtual void updateForce(MCObject & object) = 0;
 
 private:
   DISABLE_COPY(MCForceGenerator);

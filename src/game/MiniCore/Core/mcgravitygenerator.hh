@@ -40,7 +40,7 @@ public:
     virtual ~MCGravityGenerator();
 
     //! \reimp
-    virtual void updateForce(MCObject * p);
+    virtual void updateForce(MCObject & object);
 
 private:
 

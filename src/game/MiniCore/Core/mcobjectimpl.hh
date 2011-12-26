@@ -21,7 +21,6 @@
 #define MCOBJECTIMPL_HH
 
 #include "mcvector3d.hh"
-
 #include <unordered_map>
 #include <string>
 
@@ -42,6 +41,7 @@ private:
     MCFloat m_invMass;
     MCFloat m_mass;
     MCFloat m_restitution;
+    MCFloat m_xyFriction;
     MCUint m_angle;
     MCFloat m_maximumVelocity;
     MCUint m_layer;

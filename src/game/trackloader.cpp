@@ -201,14 +201,15 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
 
     // TODO: A separate config file for these
     MCSurfaceObjectData tireData("tire");
-    tireData.setMass(50);
+    tireData.setMass(25);
     tireData.setSurfaceId("tire");
     tireData.setDefaultCircleShape(true);
+    tireData.setRestitution(0.5f);
+    tireData.setXYFriction(0.25f);
 
     MCObject & tire = m_objectFactory.build(tireData);
     tire.setInitialLocation(
-        MCVector2d<MCFloat>(x,
-            newData.map().rows() * TrackTile::TILE_H - y));
+        MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
 
     // Wrap the MCObject in a TrackObject and add to
     // the TrackData

@@ -29,10 +29,12 @@ MCObjectData::MCObjectData(const std::string & typeId)
 MCObjectDataImpl::MCObjectDataImpl()
 : typeId("")
 , mass(0.0f)
-, shape(MCObjectData::Circle)
+, shape(MCObjectData::None)
 , shapeRadius(0.0f)
 , shapeWidth(0.0f)
 , shapeHeight(0.0f)
+, restitution(0.5f)
+, xyFriction(0.0f)
 {
 }
 
@@ -87,6 +89,26 @@ MCFloat MCObjectData::shapeHeight() const
 MCObjectData::Shape MCObjectData::shape() const
 {
     return m_pImpl->shape;
+}
+
+void MCObjectData::setRestitution(MCFloat restitution)
+{
+    m_pImpl->restitution = restitution;
+}
+
+MCFloat MCObjectData::restitution() const
+{
+    return m_pImpl->restitution;
+}
+
+void MCObjectData::setXYFriction(MCFloat friction)
+{
+    m_pImpl->xyFriction = friction;
+}
+
+MCFloat MCObjectData::xyFriction() const
+{
+    return m_pImpl->xyFriction;
 }
 
 MCObjectData::~MCObjectData()

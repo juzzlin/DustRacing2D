@@ -23,31 +23,31 @@
 
 MCUint MCCollisionEvent::m_typeID = MCEvent::registerType();
 
-MCCollisionEventImpl::MCCollisionEventImpl(MCObject * p) :
-    m_pCollidingObject(p)
+MCCollisionEventImpl::MCCollisionEventImpl(MCObject & object)
+: m_collidingObject(object)
 {}
 
-MCCollisionEvent::MCCollisionEvent(MCObject * p) :
-    m_pImpl(new MCCollisionEventImpl(p))
+MCCollisionEvent::MCCollisionEvent(MCObject & object)
+: m_pImpl(new MCCollisionEventImpl(object))
 {}
 
 MCUint MCCollisionEvent::typeID()
 {
-  return MCCollisionEvent::m_typeID;
+    return MCCollisionEvent::m_typeID;
 }
 
 MCUint MCCollisionEvent::instanceTypeID() const
 {
-  return MCCollisionEvent::m_typeID;
+    return MCCollisionEvent::m_typeID;
 }
 
-MCObject * MCCollisionEvent::collidingObject() const
+MCObject & MCCollisionEvent::collidingObject() const
 {
-  return m_pImpl->m_pCollidingObject;
+    return m_pImpl->m_collidingObject;
 }
 
 MCCollisionEvent::~MCCollisionEvent()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }
 

@@ -43,11 +43,11 @@ Car::Car(MCSurface * pSurface)
     setMaximumVelocity(MAX_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
 
-    MCWorld::instance()->addForceGenerator(
-        new SlideFrictionGenerator(SLIDE_FRICTION), this, true);
+    MCWorld::instance().addForceGenerator(
+        *new SlideFrictionGenerator(SLIDE_FRICTION), *this, true);
 
-    MCWorld::instance()->addForceGenerator(
-        new MCFrictionGenerator(ROLLING_FRICTION), this, true);
+    MCWorld::instance().addForceGenerator(
+        *new MCFrictionGenerator(ROLLING_FRICTION), *this, true);
 
     //setRenderShapeOutline(true);
 }
@@ -86,8 +86,8 @@ void Car::accelerate()
     // Remove friction generator if it was added
     if (m_frictionGeneratorAdded)
     {
-        MCWorld::instance()->removeForceGenerator(
-            m_pDeccelerationFriction, this);
+        MCWorld::instance().removeForceGenerator(
+           *m_pDeccelerationFriction, *this);
         m_frictionGeneratorAdded = false;
     }
 
@@ -98,8 +98,8 @@ void Car::brake()
 {
     // Simulate braking by adding a friction
     // generator.
-    MCWorld::instance()->addForceGenerator(
-        m_pDeccelerationFriction, this, true);
+    MCWorld::instance().addForceGenerator(
+        *m_pDeccelerationFriction, *this, true);
     m_frictionGeneratorAdded = true;
 
     m_accelerating = false;
@@ -110,8 +110,8 @@ void Car::noAction()
     // Remove friction generator if it was added
     if (m_frictionGeneratorAdded)
     {
-        MCWorld::instance()->removeForceGenerator(
-            m_pDeccelerationFriction, this);
+        MCWorld::instance().removeForceGenerator(
+            *m_pDeccelerationFriction, *this);
         m_frictionGeneratorAdded = false;
     }
 
