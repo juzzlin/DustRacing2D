@@ -29,7 +29,7 @@
 
 class MCObject;
 class MCWorld;
-class MCQuadtree;
+class MCObjectTree;
 class MCContact;
 
 class MCWorldImpl
@@ -56,7 +56,7 @@ private:
   static MCWorld * m_pInstance;
   MCForceRegistry m_forceRegistry;
   MCContactResolver m_contactResolver;
-  MCQuadtree * m_pObjectTree;
+  MCObjectTree * m_pObjectTree;
   MCFloat minX, maxX, minY, maxY, minZ, maxZ;
   typedef std::unordered_set<MCObject *> LayerHash;
   LayerHash m_layers[MCWorld::MAX_LAYERS];

@@ -26,7 +26,7 @@
 #include "mcbbox.hh"
 #include "mcworld.hh"
 #include "mcworldimpl.hh"
-#include "mcquadtree.hh"
+#include "mcobjecttree.hh"
 #include "mccontact.hh"
 
 #include <unordered_map>
@@ -358,12 +358,12 @@ private:
     //! Used by MCWorld.
     void setIndex(int index);
 
-    //! Cache range of quadtree cells the object is touching.
-    //! Used by MCQuadtree.
+    //! Cache range of objectTree cells the object is touching.
+    //! Used by MCObjectTree.
     void cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1);
 
     //! Get cached index range.
-    //! Used by MCQuadtree.
+    //! Used by MCObjectTree.
     void restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1);
 
     //! Set object to be removed. Objects cannot be removed immediately, because
@@ -385,8 +385,8 @@ private:
     friend void  MCWorldImpl::addObject(MCObject &);
     friend void  MCWorldImpl::removeObject(MCObject &);
     friend void  MCWorldImpl::processRemovedObjects();
-    friend class MCQuadtree;
-    friend class MCQuadtreeImpl;
+    friend class MCObjectTree;
+    friend class MCObjectTreeImpl;
     friend class MCContactResolver;
 };
 

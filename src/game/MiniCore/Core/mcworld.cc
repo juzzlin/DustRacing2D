@@ -22,7 +22,7 @@
 #include "mcforcegenerator.hh"
 #include "mcfrictiongenerator.hh"
 #include "mcobject.hh"
-#include "mcquadtree.hh"
+#include "mcobjecttree.hh"
 #include "mccamera.hh"
 
 #include <cassert>
@@ -60,7 +60,7 @@ void MCWorldImpl::integrate(MCFloat step)
 void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
-    static MCQuadtree::ObjectSet collisions;
+    static MCObjectTree::ObjectSet collisions;
     for (MCUint i = 0; i < m_objs.size(); i++) {
         MCObject * const object(m_objs[i]);
         if (object->physicsObject()) {
@@ -209,13 +209,13 @@ void MCWorld::setDimensions(
     MCFloat minX_, MCFloat maxX_, MCFloat minY_, MCFloat maxY_,
     MCFloat minZ_, MCFloat maxZ_)
 {
-    // Set dimensions for minimum quadtree leaves
+    // Set dimensions for minimum objectTree leaves
     const MCFloat MIN_LEAF_WIDTH  = 64;
     const MCFloat MIN_LEAF_HEIGHT = 64;
 
-    // Init quadtree
+    // Init objectTree
     delete m_pImpl->m_pObjectTree;
-    m_pImpl->m_pObjectTree = new MCQuadtree(
+    m_pImpl->m_pObjectTree = new MCObjectTree(
         minX_, minY_, maxX_, maxY_, MIN_LEAF_WIDTH, MIN_LEAF_HEIGHT);
 
     // Set dimensions
@@ -274,7 +274,7 @@ void MCWorldImpl::addObject(MCObject & object)
             m_objs.push_back(&object);
             object.setIndex(m_objs.size() - 1);
 
-            // Add to Quadtree
+            // Add to ObjectTree
             if (object.physicsObject() && !object.bypassCollisions()) {
                 m_pObjectTree->insert(object);
             }
@@ -327,7 +327,7 @@ void MCWorldImpl::removeObject(MCObject & object)
         object.setIndex(-1);
     }
 
-    // Remove from Quadtree
+    // Remove from ObjectTree
     if (object.physicsObject() && !object.bypassCollisions()) {
         m_pObjectTree->remove(object);
     }
@@ -410,7 +410,7 @@ MCWorld::ObjectVector MCWorld::objects() const
     return m_pImpl->m_objs;
 }
 
-MCQuadtree & MCWorld::tree() const
+MCObjectTree & MCWorld::objectTree() const
 {
     assert(m_pImpl->m_pObjectTree);
     return *m_pImpl->m_pObjectTree;

@@ -28,7 +28,7 @@
 #include "mctypes.hh"
 
 class MCWorldImpl;
-class MCQuadtree;
+class MCObjectTree;
 class MCForceGenerator;
 class MCCamera;
 class MCObject;
@@ -62,33 +62,35 @@ public:
                        MCFloat minZ, MCFloat maxZ);
 
     //! Add object to the world. Object's current location is used.
-    //! \param p Object to be added.
+    //! \param object Object to be added.
     void addObject(MCObject & object);
 
     //! Schedules the object to be removed from the world. This method
     //! should be used when removing objects in the middle of a run.
     //! Object is not removed immediately so possibly on-going physics
     //! and collision calculations are not messed up. Do not delete the object.
-    //! \param p Object to be removed.
+    //! \param object Object to be removed.
     void removeObject(MCObject & object);
 
     //! Removes object from the world immediately. This can be used if the object
     //! gets deleted. Slow.
-    //! \param p Object to be removed.
+    //! \param object Object to be removed.
     void removeObjectNow(MCObject & object);
 
     //! \brief Add force generator to an object.
-    //! \param pGen Generator to be added.
-    //! \param pObj Target object.
+    //! \param generator Generator to be added.
+    //! \param object Target object the force applies to.
     //! \param takeOwnership If true, MCWorld takes the Ownership
     //!        and handles deletion of generator.
     void addForceGenerator(
-        MCForceGenerator & gen, MCObject & obj, bool takeOwnership = false);
+        MCForceGenerator & generator,
+        MCObject & object, bool takeOwnership = false);
 
     //! \brief Remove force generator assigned to an object.
-    //! \param pGen Generator to be added.
-    //! \param pObj Target object.
-    void removeForceGenerator(MCForceGenerator & gen, MCObject & obj);
+    //! \param generator Generator to be added.
+    //! \param object Target object the force applies to.
+    void removeForceGenerator(
+        MCForceGenerator & generator, MCObject & object);
 
     //! \brief Step world time
     //! This causes the integration of physics and executes
@@ -106,9 +108,9 @@ public:
     //!        no any translations or clipping done.
     virtual void renderShadows(MCCamera * pCamera = nullptr);
 
-    //! \brief Return reference to the object quadtree.
-    //! \return Pointer to the quadtree.
-    MCQuadtree & tree() const;
+    //! \brief Return reference to the object objectTree.
+    //! \return Pointer to the objectTree.
+    MCObjectTree & objectTree() const;
 
     //! Get minimum X
     MCFloat minX() const;

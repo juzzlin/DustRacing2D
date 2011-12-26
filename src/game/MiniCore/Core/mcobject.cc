@@ -430,13 +430,13 @@ const MCVector3d<MCFloat> & MCObject::acceleration() const
 void MCObject::translate(const MCVector3d<MCFloat> & newLocation)
 {
     const bool wasInWorld = !removing() &&
-        MCWorld::instance().tree().remove(*this);
+        MCWorld::instance().objectTree().remove(*this);
     m_pImpl->m_location = newLocation;
     if (m_pImpl->m_pShape) {
         m_pImpl->m_pShape->translate(newLocation);
     }
     if (wasInWorld) {
-        MCWorld::instance().tree().insert(*this);
+        MCWorld::instance().objectTree().insert(*this);
     }
 }
 
@@ -484,10 +484,10 @@ void MCObject::rotate(MCUint newAngle)
             if (dynamic_cast<MCCircleShape *>(m_pImpl->m_pShape)) {
                 m_pImpl->m_pShape->rotate(m_pImpl->m_angle);
             } else {
-                const bool wasInWorld = MCWorld::instance().tree().remove(*this);
+                const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
                 m_pImpl->m_pShape->rotate(m_pImpl->m_angle);
                 if (wasInWorld) {
-                    MCWorld::instance().tree().insert(*this);
+                    MCWorld::instance().objectTree().insert(*this);
                 }
             }
         }

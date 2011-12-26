@@ -100,7 +100,7 @@ void Scene::setActiveTrack(Track & activeTrack)
 
     // TODO: Remove objects
     // TODO: Removing not inserted objects results in a
-    // crash because Quadtree can't handle it.
+    // crash because ObjectTree can't handle it.
     //m_car.removeFromWorldNow();
 
     // Update world dimensions according to the

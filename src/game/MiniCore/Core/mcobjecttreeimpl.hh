@@ -17,16 +17,16 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCQUADTREEIMPL_HH
-#define MCQUADTREEIMPL_HH
+#ifndef MCOBJECTTREEIMPL_HH
+#define MCOBJECTTREEIMPL_HH
 
-//! Implementation class for MCQuadtree
-class MCQuadtreeImpl
+//! Implementation class for MCObjectTree.
+class MCObjectTreeImpl
 {
-    MCQuadtreeImpl(
-        MCQuadtree * pPublic, MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
+    MCObjectTreeImpl(
+        MCObjectTree * pPublic, MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
         MCUint leafMaxW, MCUint leafMaxH);
-    ~MCQuadtreeImpl();
+    ~MCObjectTreeImpl();
 
     void removeAll();
     void build();
@@ -34,21 +34,21 @@ class MCQuadtreeImpl
     bool remove(MCObject & object);
     void getIndexRange(const MCBBox<MCFloat> & bbox);
     void getBBoxCollisions(
-        const MCObject & object, MCQuadtree::ObjectSet & resultObjs, MCUint typeId);
+        const MCObject & object, MCObjectTree::ObjectSet & resultObjs, MCUint typeId);
     void getObjectsWithinDistance(
-        MCFloat x, MCFloat y, MCFloat d, MCQuadtree::ObjectSet & resultObjs,
+        MCFloat x, MCFloat y, MCFloat d, MCObjectTree::ObjectSet & resultObjs,
         MCUint typeId);
     void getObjectsWithinBBox(
-        const MCBBox<MCFloat> & rBBox, MCQuadtree::ObjectSet & resultObjs,
+        const MCBBox<MCFloat> & rBBox, MCObjectTree::ObjectSet & resultObjs,
         MCUint typeId);
-    MCQuadtree * const m_pPublic;
+    MCObjectTree * const m_pPublic;
     MCBBox<MCFloat> m_bbox;
     MCUint m_leafMaxW, m_leafMaxH, m_horSize, m_verSize;
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCFloat m_helpHor;
     MCFloat m_helpVer;
-    MCQuadtree::ObjectSet * m_matrix;
-    friend class MCQuadtree;
+    MCObjectTree::ObjectSet * m_matrix;
+    friend class MCObjectTree;
 };
 
-#endif // MCQUADTREEIMPL_HH
+#endif // MCOBJECTTREEIMPL_HH

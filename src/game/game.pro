@@ -51,9 +51,9 @@ SOURCES += MiniCore/Core/mccamera.cc \
     MiniCore/Core/mcobject.cc \
     MiniCore/Core/mcobjectdata.cc \
     MiniCore/Core/mcobjectfactory.cc \
+    MiniCore/Core/mcobjecttree.cc \
     MiniCore/Core/mcoutofboundariesevent.cc \
     MiniCore/Core/mcparticle.cc \
-    MiniCore/Core/mcquadtree.cc \
     MiniCore/Core/mcrandom.cc \
     MiniCore/Core/mcrectshape.cc \
     MiniCore/Core/mcshape.cc \
@@ -112,9 +112,9 @@ HEADERS += MiniCore/Core/mccamera.hh \
     MiniCore/Core/mcobject.hh \
     MiniCore/Core/mcobjectfactory.hh \
     MiniCore/Core/mcobjectdata.hh \
+    MiniCore/Core/mcobjecttree.hh \
     MiniCore/Core/mcoutofboundariesevent.hh \
     MiniCore/Core/mcparticle.hh \
-    MiniCore/Core/mcquadtree.hh \
     MiniCore/Core/mcrandom.hh \
     MiniCore/Core/mcrectshape.hh \
     MiniCore/Core/mcrecycler.hh \

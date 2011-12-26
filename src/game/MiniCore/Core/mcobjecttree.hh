@@ -26,13 +26,13 @@
 
 #include <unordered_set>
 
-class MCQuadtreeImpl;
+class MCObjectTreeImpl;
 
-//! A geometrically structured MCQuadtree used for fast collision detection.
+//! A geometrically structured MCObjectTree used for fast collision detection.
 //! The tree stores objects inherited from MCObject -class.
 //! A (2d) collision test for a given object can be requested against all
 //! objects of a given typeid.
-class MCQuadtree
+class MCObjectTree
 {
 public:
 
@@ -41,12 +41,12 @@ public:
     //! Constructor.
     //! \param x1,y1,x2,y2 represent the size of the first-level bounding box.
     //! \param leafMaxW,leafMaxH are the maximum dimensions for leaves.
-    MCQuadtree(
+    MCObjectTree(
         MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
         MCUint leafMaxW, MCUint leafMaxH);
 
     //! Destructor.
-    ~MCQuadtree();
+    ~MCObjectTree();
 
     //! Insert an object into the tree (O(log(N)).
     //! \param object is the object to be inserted.
@@ -82,10 +82,10 @@ public:
 
 private:
 
-    DISABLE_COPY(MCQuadtree);
-    DISABLE_ASSI(MCQuadtree);
-    MCQuadtreeImpl * const m_pImpl;
-    friend class MCQuadtreeImpl;
+    DISABLE_COPY(MCObjectTree);
+    DISABLE_ASSI(MCObjectTree);
+    MCObjectTreeImpl * const m_pImpl;
+    friend class MCObjectTreeImpl;
 };
 
 #endif // MCOBJECTTREE_HH
