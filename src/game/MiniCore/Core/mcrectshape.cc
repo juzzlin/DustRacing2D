@@ -26,13 +26,13 @@
 
 #include <GL/gl.h>
 
-MCUint MCRectShapeImpl::m_typeID = MCShape::registerType();
+MCUint MCRectShapeImpl::typeID = MCShape::registerType();
 
 MCRectShapeImpl::MCRectShapeImpl(
     MCObject & parent, MCFloat width, MCFloat height)
 : MCShapeImpl(parent)
-, m_obbox(width / 2, height / 2, MCVector2d<MCFloat>())
-, m_momentOfInertiaFactor((width * width + height * height) / 12)
+, obbox(width / 2, height / 2, MCVector2d<MCFloat>())
+, momentOfInertiaFactor((width * width + height * height) / 12)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
@@ -41,14 +41,14 @@ MCRectShapeImpl::~MCRectShapeImpl()
 MCEdge<MCFloat> MCRectShapeImpl::edgeForPoint(const MCVector2d<MCFloat> & p) const
 {
     // Cache location
-    const MCVector2d<MCFloat> l(m_obbox.location());
+    const MCVector2d<MCFloat> l(obbox.location());
 
     // Translate test point to obbox's coordinates
     const MCVector2d<MCFloat> x(p - l);
 
     // Cache vertices
-    const MCVector2d<MCFloat> v0(m_obbox.vertex(0));
-    const MCVector2d<MCFloat> v1(m_obbox.vertex(1));
+    const MCVector2d<MCFloat> v0(obbox.vertex(0));
+    const MCVector2d<MCFloat> v1(obbox.vertex(1));
 
     // Translate vertices to obbox's coordinates
     MCVector2d<MCFloat> a(v0 - l);
@@ -60,7 +60,7 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForPoint(const MCVector2d<MCFloat> & p) con
         return MCEdge<MCFloat>(v1 - v0, v0);
     }
 
-    const MCVector2d<MCFloat> v2(m_obbox.vertex(2));
+    const MCVector2d<MCFloat> v2(obbox.vertex(2));
 
     a = b;
     b = v2 - l;
@@ -68,7 +68,7 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForPoint(const MCVector2d<MCFloat> & p) con
         return MCEdge<MCFloat>(v2 - v1, v1);
     }
 
-    const MCVector2d<MCFloat> v3(m_obbox.vertex(3));
+    const MCVector2d<MCFloat> v3(obbox.vertex(3));
 
     a = b;
     b = v3 - l;
@@ -100,28 +100,28 @@ MCEdge<MCFloat> MCRectShape::edgeForPoint(const MCVector2d<MCFloat> & p) const
 void MCRectShape::translate(const MCVector3d<MCFloat> & p)
 {
     MCShape::translate(p);
-    m_pImpl->m_obbox.translate(p);
+    m_pImpl->obbox.translate(p);
 }
 
 void MCRectShape::rotate(MCUint a)
 {
     MCShape::rotate(a);
-    m_pImpl->m_obbox.rotate(a);
+    m_pImpl->obbox.rotate(a);
 }
 
 MCBBox<MCFloat> MCRectShape::bbox() const
 {
-    return m_pImpl->m_obbox.bbox();
+    return m_pImpl->obbox.bbox();
 }
 
 MCFloat MCRectShape::momentOfInertia() const
 {
-    return m_pImpl->m_momentOfInertiaFactor * parent().mass();
+    return m_pImpl->momentOfInertiaFactor * parent().mass();
 }
 
 bool MCRectShape::contains(const MCVector2d<MCFloat> & p) const
 {
-    return m_pImpl->m_obbox.contains(p);
+    return m_pImpl->obbox.contains(p);
 }
 
 int MCRectShape::interpenetrationDepth(
@@ -146,8 +146,8 @@ void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
     glPushAttrib(GL_ENABLE_BIT);
 
     for (int i = 0; i < 4; i++) {
-        int x = m_obbox.vertex(i).i();
-        int y = m_obbox.vertex(i).j();
+        int x = obbox.vertex(i).i();
+        int y = obbox.vertex(i).j();
 
         if (pCamera) {
             pCamera->mapToCamera(x, y);
@@ -174,25 +174,25 @@ MCVector2d<MCFloat> MCRectShape::contactNormal(
 
 MCUint MCRectShape::typeID()
 {
-    return MCRectShapeImpl::m_typeID;
+    return MCRectShapeImpl::typeID;
 }
 
 MCUint MCRectShape::instanceTypeID() const
 {
-    return MCRectShapeImpl::m_typeID;
+    return MCRectShapeImpl::typeID;
 }
 
 const MCOBBox<MCFloat> & MCRectShape::obbox() const
 {
-    return m_pImpl->m_obbox;
+    return m_pImpl->obbox;
 }
 
 void MCRectShape::resize(MCFloat width, MCFloat height)
 {
-    m_pImpl->m_obbox =
+    m_pImpl->obbox =
         MCOBBox<MCFloat>(width / 2, height / 2, location());
-    m_pImpl->m_obbox.rotate(angle());
-    m_pImpl->m_momentOfInertiaFactor = (width * width + height * height) / 12;
+    m_pImpl->obbox.rotate(angle());
+    m_pImpl->momentOfInertiaFactor = (width * width + height * height) / 12;
 }
 
 void MCRectShape::render(MCCamera * pCamera)

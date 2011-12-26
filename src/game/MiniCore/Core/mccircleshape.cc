@@ -22,12 +22,12 @@
 #include "mcshapeview.hh"
 #include "mcobject.hh"
 
-MCUint MCCircleShapeImpl::m_typeID = MCShape::registerType();
+MCUint MCCircleShapeImpl::typeID = MCShape::registerType();
 
 MCCircleShapeImpl::MCCircleShapeImpl(MCObject & parent, MCFloat radius)
 : MCShapeImpl(parent)
-, m_radius(radius)
-, m_momentOfInertiaFactor(radius * radius / 2)
+, radius(radius)
+, momentOfInertiaFactor(radius * radius / 2)
 {}
 
 MCCircleShapeImpl::~MCCircleShapeImpl()
@@ -41,18 +41,18 @@ MCCircleShape::MCCircleShape(
 
 MCFloat MCCircleShape::radius() const
 {
-    return m_pImpl->m_radius;
+    return m_pImpl->radius;
 }
 
 void MCCircleShape::setRadius(MCFloat r)
 {
-    m_pImpl->m_radius = r;
-    m_pImpl->m_momentOfInertiaFactor = r * r / 2;
+    m_pImpl->radius = r;
+    m_pImpl->momentOfInertiaFactor = r * r / 2;
 }
 
 MCFloat MCCircleShape::momentOfInertia() const
 {
-    return m_pImpl->m_momentOfInertiaFactor * parent().mass();
+    return m_pImpl->momentOfInertiaFactor * parent().mass();
 }
 
 bool MCCircleShape::contains(const MCVector2d<MCFloat> & p) const
@@ -74,12 +74,12 @@ MCVector2d<MCFloat> MCCircleShape::contactNormal(
 
 MCUint MCCircleShape::typeID()
 {
-    return MCCircleShapeImpl::m_typeID;
+    return MCCircleShapeImpl::typeID;
 }
 
 MCUint MCCircleShape::instanceTypeID() const
 {
-    return MCCircleShapeImpl::m_typeID;
+    return MCCircleShapeImpl::typeID;
 }
 
 MCBBox<MCFloat> MCCircleShape::bbox() const

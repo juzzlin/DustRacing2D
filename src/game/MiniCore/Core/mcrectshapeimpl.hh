@@ -33,14 +33,14 @@ class MCRectShapeImpl : public MCShapeImpl
 private:
   MCRectShapeImpl(MCObject & parent, MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
-  static MCUint m_typeID;
+  static MCUint typeID;
   inline MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
   inline int interpenetrationDepth(
       const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
   inline MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
   void renderShapeOutline(MCCamera * pCamera);
-  MCOBBox<MCFloat> m_obbox;
-  MCFloat m_momentOfInertiaFactor;
+  MCOBBox<MCFloat> obbox;
+  MCFloat momentOfInertiaFactor;
   friend class MCRectShape;
 };
 

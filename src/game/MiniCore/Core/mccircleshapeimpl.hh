@@ -28,9 +28,9 @@ class MCCircleShapeImpl : public MCShapeImpl
 {
     MCCircleShapeImpl(MCObject & parent, MCFloat radius);
     virtual ~MCCircleShapeImpl();
-    static MCUint m_typeID;
-    MCFloat m_radius;
-    MCFloat m_momentOfInertiaFactor;
+    static MCUint typeID;
+    MCFloat radius;
+    MCFloat momentOfInertiaFactor;
     friend class MCCircleShape;
 };
 
