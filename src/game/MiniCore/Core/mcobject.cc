@@ -32,8 +32,8 @@
 #include "mccamera.hh"
 #include "mctrigonom.hh"
 
-MCUint MCObjectImpl::m_typeIDCount = 1;
-MCObjectImpl::TypeHash MCObjectImpl::m_typeHash;
+MCUint MCObjectImpl::typeIDCount = 1;
+MCObjectImpl::TypeHash MCObjectImpl::typeHash;
 
 namespace
 {
@@ -65,40 +65,40 @@ const MCFloat DampingFactor = 0.999;
 }
 
 MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
-: m_pPublic(pPublic)
-, m_typeID(registerType(typeId))
-, m_time(0)
-, m_invMass(std::numeric_limits<MCFloat>::max())
-, m_mass(0)
-, m_restitution(0.5)
-, m_xyFriction(0.0)
-, m_angle(0)
-, m_maximumVelocity(-1)
-, m_layer(0)
-, m_index(-1)
-, m_flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
-, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
-, m_pShape(nullptr)
+: pPublic(pPublic)
+, typeID(registerType(typeId))
+, time(0)
+, invMass(std::numeric_limits<MCFloat>::max())
+, mass(0)
+, restitution(0.5)
+, xyFriction(0.0)
+, angle(0)
+, maximumVelocity(-1)
+, layer(0)
+, index(-1)
+, flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
+, i0(0), i1(0), j0(0), j1(0)
+, pShape(nullptr)
 {}
 
 void MCObjectImpl::setFlag(MCUint flag, bool enable)
 {
-    m_flags = enable ? m_flags | flag : m_flags & ~flag;
+    flags = enable ? flags | flag : flags & ~flag;
 }
 
-MCUint MCObjectImpl::typeID(const std::string & typeName)
+MCUint MCObjectImpl::getTypeIDForName(const std::string & typeName)
 {
-    auto i(m_typeHash.find(typeName));
-    return i == m_typeHash.end() ? 0 : i->second;
+    auto i(typeHash.find(typeName));
+    return i == typeHash.end() ? 0 : i->second;
 }
 
 MCUint MCObjectImpl::registerType(const std::string & typeName)
 {
-    auto i(m_typeHash.find(typeName));
-    if (i == m_typeHash.end()) {
-        m_typeIDCount++;
-        m_typeHash[typeName] = m_typeIDCount;
-        return m_typeIDCount;
+    auto i(typeHash.find(typeName));
+    if (i == typeHash.end()) {
+        typeIDCount++;
+        typeHash[typeName] = typeIDCount;
+        return typeIDCount;
     } else {
         return i->second;
     }
@@ -108,22 +108,23 @@ void MCObjectImpl::integrate(MCFloat step)
 {
     if (step > 0.0) {
 
-        MCVector3d<MCFloat> acceleration(m_acceleration);
-        m_pPublic->translate(m_location + m_velocity * step);
-        acceleration += m_forces * m_invMass;
-        m_velocity   += acceleration * step;
-        m_velocity   *= DampingFactor;
+        MCVector3d<MCFloat> totAcceleration(acceleration);
+        pPublic->translate(location + velocity * step);
+
+        totAcceleration += forces * invMass;
+        velocity        += totAcceleration * step;
+        velocity        *= DampingFactor;
 
         // Note that this code doesn't take the z-component into consideration
-        if (m_maximumVelocity > 0) {
-            const MCFloat l = MCVector2d<MCFloat>(m_velocity).lengthFast();
-            if (l > m_maximumVelocity) {
-                m_velocity /= l;
-                m_velocity *= m_maximumVelocity;
+        if (maximumVelocity > 0) {
+            const MCFloat l = MCVector2d<MCFloat>(velocity).lengthFast();
+            if (l > maximumVelocity) {
+                velocity /= l;
+                velocity *= maximumVelocity;
             }
         }
 
-        m_forces.setZero();
+        forces.setZero();
         doOutOfBoundariesEvent();
     }
 }
@@ -131,89 +132,90 @@ void MCObjectImpl::integrate(MCFloat step)
 void MCObjectImpl::doOutOfBoundariesEvent()
 {
     const MCWorld * pWorld = &MCWorld::instance();
-    if (m_location.i() < pWorld->minX()) {
-        m_velocity.setI(0);
-        m_forces.setI(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(pWorld->minX(), m_location.j(), m_location.k()));
+    if (location.i() < pWorld->minX()) {
+        velocity.setI(0);
+        forces.setI(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(pWorld->minX(), location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
-        m_pPublic->outOfBoundariesEvent(e);
-    } else if (m_location.i() > pWorld->maxX()) {
-        m_velocity.setI(0);
-        m_forces.setI(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(pWorld->maxX(), m_location.j(), m_location.k()));
+        pPublic->outOfBoundariesEvent(e);
+    } else if (location.i() > pWorld->maxX()) {
+        velocity.setI(0);
+        forces.setI(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(pWorld->maxX(), location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
-        m_pPublic->outOfBoundariesEvent(e);
+        pPublic->outOfBoundariesEvent(e);
     }
 
-    if (m_location.j() < pWorld->minY()) {
-        m_velocity.setJ(0);
-        m_forces.setJ(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(m_location.i(), pWorld->minY(), m_location.k()));
+    if (location.j() < pWorld->minY()) {
+        velocity.setJ(0);
+        forces.setJ(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(location.i(), pWorld->minY(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
-        m_pPublic->outOfBoundariesEvent(e);
-    } else if (m_location.j() > pWorld->maxY()) {
-        m_velocity.setJ(0);
-        m_forces.setJ(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(m_location.i(), pWorld->maxY(), m_location.k()));
+        pPublic->outOfBoundariesEvent(e);
+    } else if (location.j() > pWorld->maxY()) {
+        velocity.setJ(0);
+        forces.setJ(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(location.i(), pWorld->maxY(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
-        m_pPublic->outOfBoundariesEvent(e);
+        pPublic->outOfBoundariesEvent(e);
     }
 
-    if (m_location.k() < pWorld->minZ()) {
-        m_velocity.setK(0);
-        m_forces.setK(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(m_location.i(), m_location.j(), pWorld->minZ()));
+    if (location.k() < pWorld->minZ()) {
+        velocity.setK(0);
+        forces.setK(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(location.i(), location.j(), pWorld->minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
-        m_pPublic->outOfBoundariesEvent(e);
-    } else if (m_location.k() > pWorld->maxZ()) {
-        m_velocity.setK(0);
-        m_forces.setK(0);
-        m_pPublic->translate(
-            MCVector3d<MCFloat>(m_location.i(), m_location.j(), pWorld->maxZ()));
+        pPublic->outOfBoundariesEvent(e);
+    } else if (location.k() > pWorld->maxZ()) {
+        velocity.setK(0);
+        forces.setK(0);
+        pPublic->translate(
+            MCVector3d<MCFloat>(location.i(), location.j(), pWorld->maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
-        m_pPublic->outOfBoundariesEvent(e);
+        pPublic->outOfBoundariesEvent(e);
     }
 }
 
 MCObjectImpl::~MCObjectImpl()
 {}
 
-MCObject::MCObject(const std::string & typeId) :
-    m_pImpl(new MCObjectImpl(this, typeId))
+MCObject::MCObject(const std::string & typeId)
+: m_pImpl(new MCObjectImpl(this, typeId))
 {}
 
-MCObject::MCObject(MCShape * pShape, const std::string & typeId) :
-    m_pImpl(new MCObjectImpl(this, typeId))
+MCObject::MCObject(MCShape * pShape, const std::string & typeId)
+: m_pImpl(new MCObjectImpl(this, typeId))
 {
-    m_pImpl->m_pShape = pShape;
+    m_pImpl->pShape = pShape;
 }
 
-MCObject::MCObject(MCSurface * pSurface, const std::string & typeId) :
-    m_pImpl(new MCObjectImpl(this, typeId))
+MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
+: m_pImpl(new MCObjectImpl(this, typeId))
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(*this,
         new MCSurfaceView(pSurface),
         pSurface ? pSurface->width() : 0,
         pSurface ? pSurface->height() : 0);
-    m_pImpl->m_pShape = rectShape;
+    m_pImpl->pShape = rectShape;
 }
 
 void MCObject::resetMotion()
 {
-    m_pImpl->m_velocity.setZero();
-    m_pImpl->m_forces.setZero();
+    m_pImpl->velocity.setZero();
+    m_pImpl->forces.setZero();
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
 {
-    if (m_pImpl->m_pShape && m_pImpl->m_pShape->view()) {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->m_pShape->view());
+    if (m_pImpl->pShape && m_pImpl->pShape->view()) {
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(
+            m_pImpl->pShape->view());
         if (pView) {
             if (pView->surface() != pSurface) {
                 pView->setSurface(pSurface);
@@ -224,8 +226,9 @@ void MCObject::setSurface(MCSurface * pSurface)
 
 MCSurface * MCObject::surface() const
 {
-    if (m_pImpl->m_pShape && m_pImpl->m_pShape->view()) {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->m_pShape->view());
+    if (m_pImpl->pShape && m_pImpl->pShape->view()) {
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(
+            m_pImpl->pShape->view());
         if (pView) {
             return pView->surface();
         }
@@ -235,12 +238,12 @@ MCSurface * MCObject::surface() const
 
 MCUint MCObject::typeID() const
 {
-    return m_pImpl->m_typeID;
+    return m_pImpl->typeID;
 }
 
 MCUint MCObject::typeID(const std::string & typeName)
 {
-    return MCObjectImpl::typeID(typeName);
+    return MCObjectImpl::getTypeIDForName(typeName);
 }
 
 MCUint MCObject::registerType(const std::string & typeName)
@@ -301,15 +304,15 @@ void MCObject::removeFromWorldNow()
 
 void MCObject::render(MCCamera * p)
 {
-    if (m_pImpl->m_pShape) {
-        m_pImpl->m_pShape->render(p);
+    if (m_pImpl->pShape) {
+        m_pImpl->pShape->render(p);
     }
 }
 
 void MCObject::renderShadow(MCCamera * p)
 {
-    if (m_pImpl->m_pShape) {
-        m_pImpl->m_pShape->renderShadow(p);
+    if (m_pImpl->pShape) {
+        m_pImpl->pShape->renderShadow(p);
     }
 }
 
@@ -319,37 +322,37 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
 
     if (!stationary_) {
         if (newMass > 0) {
-            m_pImpl->m_invMass = 1.0 / newMass;
+            m_pImpl->invMass = 1.0 / newMass;
         }
         else {
-            m_pImpl->m_invMass = std::numeric_limits<MCFloat>::max();
+            m_pImpl->invMass = std::numeric_limits<MCFloat>::max();
         }
-        m_pImpl->m_mass = newMass;
+        m_pImpl->mass = newMass;
     }
     else {
-        m_pImpl->m_invMass = 0;
-        m_pImpl->m_mass    = std::numeric_limits<MCFloat>::max();
+        m_pImpl->invMass = 0;
+        m_pImpl->mass    = std::numeric_limits<MCFloat>::max();
     }
 }
 
 MCFloat MCObject::invMass() const
 {
-    return m_pImpl->m_invMass;
+    return m_pImpl->invMass;
 }
 
 MCFloat MCObject::mass() const
 {
-    return m_pImpl->m_mass;
+    return m_pImpl->mass;
 }
 
 bool MCObject::stationary() const
 {
-    return m_pImpl->m_flags & StationaryMask;
+    return m_pImpl->flags & StationaryMask;
 }
 
 void MCObject::addImpulse(const MCVector3d<MCFloat> & impulse)
 {
-    m_pImpl->m_velocity += impulse;
+    m_pImpl->velocity += impulse;
 }
 
 void MCObject::setPhysicsObject(bool flag)
@@ -359,7 +362,7 @@ void MCObject::setPhysicsObject(bool flag)
 
 bool MCObject::physicsObject() const
 {
-    return m_pImpl->m_flags & PhysicsMask;
+    return m_pImpl->flags & PhysicsMask;
 }
 
 void MCObject::setBypassCollisions(bool flag)
@@ -369,7 +372,7 @@ void MCObject::setBypassCollisions(bool flag)
 
 bool MCObject::bypassCollisions() const
 {
-    return !(m_pImpl->m_flags & CollisionsMask);
+    return !(m_pImpl->flags & CollisionsMask);
 }
 
 void MCObject::setRenderable(bool flag)
@@ -379,7 +382,7 @@ void MCObject::setRenderable(bool flag)
 
 bool MCObject::renderable() const
 {
-    return m_pImpl->m_flags & RenderableMask;
+    return m_pImpl->flags & RenderableMask;
 }
 
 void MCObject::setRenderShapeOutline(bool flag)
@@ -389,7 +392,7 @@ void MCObject::setRenderShapeOutline(bool flag)
 
 bool MCObject::renderShapeOutline() const
 {
-    return m_pImpl->m_flags & OutlineMask;
+    return m_pImpl->flags & OutlineMask;
 }
 
 void MCObject::setHasShadow(bool flag)
@@ -399,41 +402,41 @@ void MCObject::setHasShadow(bool flag)
 
 bool MCObject::hasShadow() const
 {
-    return m_pImpl->m_flags & ShadowMask;
+    return m_pImpl->flags & ShadowMask;
 }
 
 void MCObject::setMaximumVelocity(MCFloat maxVelocity)
 {
-    m_pImpl->m_maximumVelocity = maxVelocity;
+    m_pImpl->maximumVelocity = maxVelocity;
 }
 
 void MCObject::setVelocity(const MCVector3d<MCFloat> & newVelocity)
 {
-    m_pImpl->m_velocity = newVelocity;
+    m_pImpl->velocity = newVelocity;
 }
 
 const MCVector3d<MCFloat> & MCObject::velocity() const
 {
-    return m_pImpl->m_velocity;
+    return m_pImpl->velocity;
 }
 
 void MCObject::setAcceleration(const MCVector3d<MCFloat> & newAcceleration)
 {
-    m_pImpl->m_acceleration = newAcceleration;
+    m_pImpl->acceleration = newAcceleration;
 }
 
 const MCVector3d<MCFloat> & MCObject::acceleration() const
 {
-    return m_pImpl->m_acceleration;
+    return m_pImpl->acceleration;
 }
 
 void MCObject::translate(const MCVector3d<MCFloat> & newLocation)
 {
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
-    m_pImpl->m_location = newLocation;
-    if (m_pImpl->m_pShape) {
-        m_pImpl->m_pShape->translate(newLocation);
+    m_pImpl->location = newLocation;
+    if (m_pImpl->pShape) {
+        m_pImpl->pShape->translate(newLocation);
     }
     if (wasInWorld) {
         MCWorld::instance().objectTree().insert(*this);
@@ -442,50 +445,50 @@ void MCObject::translate(const MCVector3d<MCFloat> & newLocation)
 
 void MCObject::displace(const MCVector3d<MCFloat> & displacement)
 {
-    translate(m_pImpl->m_location + displacement);
+    translate(m_pImpl->location + displacement);
 }
 
 const MCVector3d<MCFloat> & MCObject::location() const
 {
-    return m_pImpl->m_location;
+    return m_pImpl->location;
 }
 
 void MCObject::setShadowOffset(const MCVector2d<MCFloat> & p)
 {
-    if (m_pImpl->m_pShape) {
-        m_pImpl->m_pShape->setShadowOffset(p);
+    if (m_pImpl->pShape) {
+        m_pImpl->pShape->setShadowOffset(p);
     }
 }
 
 MCFloat MCObject::getX() const
 {
-    return m_pImpl->m_location.i();
+    return m_pImpl->location.i();
 }
 
 MCFloat MCObject::getY() const
 {
-    return m_pImpl->m_location.j();
+    return m_pImpl->location.j();
 }
 
 MCFloat MCObject::getZ() const
 {
-    return m_pImpl->m_location.k();
+    return m_pImpl->location.k();
 }
 
 void MCObject::rotate(MCUint newAngle)
 { 
-    if (newAngle != m_pImpl->m_angle) {
+    if (newAngle != m_pImpl->angle) {
 
         const MCUint MAX_ANGLE = 360;
         newAngle %= MAX_ANGLE;
-        m_pImpl->m_angle = newAngle;
+        m_pImpl->angle = newAngle;
 
-        if (m_pImpl->m_pShape) {
-            if (dynamic_cast<MCCircleShape *>(m_pImpl->m_pShape)) {
-                m_pImpl->m_pShape->rotate(m_pImpl->m_angle);
+        if (m_pImpl->pShape) {
+            if (dynamic_cast<MCCircleShape *>(m_pImpl->pShape)) {
+                m_pImpl->pShape->rotate(m_pImpl->angle);
             } else {
                 const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
-                m_pImpl->m_pShape->rotate(m_pImpl->m_angle);
+                m_pImpl->pShape->rotate(m_pImpl->angle);
                 if (wasInWorld) {
                     MCWorld::instance().objectTree().insert(*this);
                 }
@@ -496,7 +499,7 @@ void MCObject::rotate(MCUint newAngle)
 
 MCUint MCObject::angle() const
 {
-    return m_pImpl->m_angle;
+    return m_pImpl->angle;
 }
 
 MCVector2d<MCFloat> MCObject::direction() const
@@ -508,48 +511,48 @@ void MCObject::setRestitution(MCFloat newRestitution)
 {
     newRestitution = newRestitution < 0.0 ? 0.0 : newRestitution;
     newRestitution = newRestitution > 1.0 ? 1.0 : newRestitution;
-    m_pImpl->m_restitution = newRestitution;
+    m_pImpl->restitution = newRestitution;
 }
 
 MCFloat MCObject::restitution() const
 {
-    return m_pImpl->m_restitution;
+    return m_pImpl->restitution;
 }
 
 void MCObject::setShape(MCShape * newShape)
 {
-    if (m_pImpl->m_pShape) {
-        delete m_pImpl->m_pShape;
+    if (m_pImpl->pShape) {
+        delete m_pImpl->pShape;
     }
 
-    m_pImpl->m_pShape = newShape;
+    m_pImpl->pShape = newShape;
 }
 
 MCShape * MCObject::shape() const
 {
-    return m_pImpl->m_pShape;
+    return m_pImpl->pShape;
 }
 
 void MCObject::setView(MCShapeView * newView)
 {
-    if (m_pImpl->m_pShape) {
-        m_pImpl->m_pShape->setView(newView);
+    if (m_pImpl->pShape) {
+        m_pImpl->pShape->setView(newView);
     }
 }
 
 MCShapeView * MCObject::view() const
 {
-    return m_pImpl->m_pShape ? m_pImpl->m_pShape->view() : nullptr;
+    return m_pImpl->pShape ? m_pImpl->pShape->view() : nullptr;
 }
 
 void MCObject::addForce(const MCVector3d<MCFloat> & force)
 {
-    m_pImpl->m_forces += force;
+    m_pImpl->forces += force;
 }
 
 void MCObject::clearForces()
 {
-    m_pImpl->m_forces.setZero();
+    m_pImpl->forces.setZero();
 }
 
 void MCObject::integrate(MCFloat step)
@@ -560,8 +563,8 @@ void MCObject::integrate(MCFloat step)
 
 MCBBox<MCFloat> MCObject::bbox() const
 {
-    if (m_pImpl->m_pShape) {
-        return m_pImpl->m_pShape->bbox();
+    if (m_pImpl->pShape) {
+        return m_pImpl->pShape->bbox();
     } else {
         return MCBBox<MCFloat>(getX(), getY(), getX() + 1, getY() + 1);
     }
@@ -569,55 +572,55 @@ MCBBox<MCFloat> MCObject::bbox() const
 
 void MCObject::stepTime()
 {
-    m_pImpl->m_time++;
+    m_pImpl->time++;
 }
 
 MCUint MCObject::time() const
 {
-    return m_pImpl->m_time;
+    return m_pImpl->time;
 }
 
 void MCObject::resetTime()
 {
-    m_pImpl->m_time = 0;
+    m_pImpl->time = 0;
 }
 
 void MCObject::setLayer(MCUint newLayer)
 {
     MCWorld::instance().removeFromLayerMap(*this);
-    m_pImpl->m_layer = newLayer;
+    m_pImpl->layer = newLayer;
     MCWorld::instance().addToLayerMap(*this);
 }
 
 MCUint MCObject::layer() const
 {
-    return m_pImpl->m_layer;
+    return m_pImpl->layer;
 }
 
 void MCObject::setIndex(int newIndex)
 {
-    m_pImpl->m_index = newIndex;
+    m_pImpl->index = newIndex;
 }
 
 int MCObject::index() const
 {
-    return m_pImpl->m_index;
+    return m_pImpl->index;
 }
 
 void MCObject::cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1)
 {
-    m_pImpl->m_i0 = i0;
-    m_pImpl->m_i1 = i1;
-    m_pImpl->m_j0 = j0;
-    m_pImpl->m_j1 = j1;
+    m_pImpl->i0 = i0;
+    m_pImpl->i1 = i1;
+    m_pImpl->j0 = j0;
+    m_pImpl->j1 = j1;
 }
 
 void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1)
 {
-    *i0 = m_pImpl->m_i0;
-    *i1 = m_pImpl->m_i1;
-    *j0 = m_pImpl->m_j0;
-    *j1 = m_pImpl->m_j1;
+    *i0 = m_pImpl->i0;
+    *i1 = m_pImpl->i1;
+    *j0 = m_pImpl->j0;
+    *j1 = m_pImpl->j1;
 }
 
 void MCObject::setRemoving(bool flag)
@@ -627,34 +630,34 @@ void MCObject::setRemoving(bool flag)
 
 bool MCObject::removing() const
 {
-    return m_pImpl->m_flags & RemovingMask;
+    return m_pImpl->flags & RemovingMask;
 }
 
 void MCObject::addContact(MCContact & contact)
 {
-    m_pImpl->m_contacts[&contact.object()].push_back(&contact);
+    m_pImpl->contacts[&contact.object()].push_back(&contact);
 }
 
 const MCObject::ContactHash & MCObject::contacts() const
 {
-    return m_pImpl->m_contacts;
+    return m_pImpl->contacts;
 }
 
 void MCObject::deleteContacts()
 {
-    auto i(m_pImpl->m_contacts.begin());
-    for (; i != m_pImpl->m_contacts.end(); i++) {
+    auto i(m_pImpl->contacts.begin());
+    for (; i != m_pImpl->contacts.end(); i++) {
         for (MCUint j = 0; j < i->second.size(); j++) {
             i->second[j]->free();
         }
     }
-    m_pImpl->m_contacts.clear();
+    m_pImpl->contacts.clear();
 }
 
 void MCObject::deleteContacts(MCObject & object)
 {
-    auto i(m_pImpl->m_contacts.find(&object));
-    if (i != m_pImpl->m_contacts.end()) {
+    auto i(m_pImpl->contacts.find(&object));
+    if (i != m_pImpl->contacts.end()) {
         for (MCUint j = 0; j < i->second.size(); j++) {
             i->second[j]->free();
         }
@@ -664,28 +667,28 @@ void MCObject::deleteContacts(MCObject & object)
 
 void MCObject::setInitialLocation(const MCVector3d<MCFloat> & location)
 {
-    m_pImpl->m_initialLocation = location;
+    m_pImpl->initialLocation = location;
 }
 
 const MCVector3d<MCFloat> & MCObject::initialLocation() const
 {
-    return m_pImpl->m_initialLocation;
+    return m_pImpl->initialLocation;
 }
 
 void MCObject::setXYFriction(MCFloat friction)
 {
-    m_pImpl->m_xyFriction = friction;
+    m_pImpl->xyFriction = friction;
 }
 
 MCFloat MCObject::xyFriction() const
 {
-    return m_pImpl->m_xyFriction;
+    return m_pImpl->xyFriction;
 }
 
 MCObject::~MCObject()
 {
     deleteContacts();
 
-    delete m_pImpl->m_pShape;
+    delete m_pImpl->pShape;
     delete m_pImpl;
 }

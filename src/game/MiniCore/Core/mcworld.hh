@@ -20,7 +20,6 @@
 #ifndef MCWORLD_HH
 #define MCWORLD_HH
 
-#include <memory>
 #include <vector>
 
 #include "mcvector3d.hh"
@@ -137,7 +136,7 @@ public:
     void removeFromLayerMap(MCObject & object);
 
     //! Max number of rendering layers
-    static const MCUint MAX_LAYERS = 32;
+    static const MCUint MaxLayers = 32;
 
 protected:
 
@@ -148,7 +147,7 @@ private:
 
     DISABLE_COPY(MCWorld);
     DISABLE_ASSI(MCWorld);
-    std::shared_ptr<MCWorldImpl> const m_pImpl;
+    MCWorldImpl * const m_pImpl;
     friend class MCWorldImpl;
 };
 

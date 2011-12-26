@@ -32,37 +32,37 @@ class MCWorld;
 class MCObjectTree;
 class MCContact;
 
+//! Implementation class for MCWorld.
 class MCWorldImpl
 {
 public:
-  MCWorldImpl();
-  virtual ~MCWorldImpl();
-  void addObject(MCObject & object);
-  void processRemovedObjects();
-  void removeObject(MCObject & object);
-
+    MCWorldImpl();
+    virtual ~MCWorldImpl();
+    void addObject(MCObject & object);
+    void processRemovedObjects();
+    void removeObject(MCObject & object);
 private:
-  void integrate(MCFloat step);
-  void detectCollisions();
-  void processContacts();
-  void processContacts(MCObject & object);
-  void processContact(MCObject & object, MCContact & contact);
-  void addToLayerMap(MCObject &);
-  void removeFromLayerMap(MCObject &);
-  MCContact * getDeepestInterpenetration(
-      const std::vector<MCContact *> & contacts);
-  void render(MCCamera * p);
-  void renderShadows(MCCamera * p);
-  static MCWorld * m_pInstance;
-  MCForceRegistry m_forceRegistry;
-  MCContactResolver m_contactResolver;
-  MCObjectTree * m_pObjectTree;
-  MCFloat minX, maxX, minY, maxY, minZ, maxZ;
-  typedef std::unordered_set<MCObject *> LayerHash;
-  LayerHash m_layers[MCWorld::MAX_LAYERS];
-  MCWorld::ObjectVector m_objs;
-  MCWorld::ObjectVector m_removeObjs;
-  friend class MCWorld;
+    void integrate(MCFloat step);
+    void detectCollisions();
+    void processContacts();
+    void processContacts(MCObject & object);
+    void processContact(MCObject & object, MCContact & contact);
+    void addToLayerMap(MCObject &);
+    void removeFromLayerMap(MCObject &);
+    MCContact * getDeepestInterpenetration(
+        const std::vector<MCContact *> & contacts);
+    void render(MCCamera * p);
+    void renderShadows(MCCamera * p);
+    static MCWorld * pInstance;
+    MCForceRegistry forceRegistry;
+    MCContactResolver contactResolver;
+    MCObjectTree * pObjectTree;
+    MCFloat minX, maxX, minY, maxY, minZ, maxZ;
+    typedef std::unordered_set<MCObject *> LayerHash;
+    LayerHash layers[MCWorld::MaxLayers];
+    MCWorld::ObjectVector objs;
+    MCWorld::ObjectVector removeObjs;
+    friend class MCWorld;
 };
 
 #endif // MCWORLDIMPL_HH

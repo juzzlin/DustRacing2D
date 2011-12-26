@@ -49,20 +49,21 @@ bool MCContactResolverImpl::processRectRect(
     }
 
     const MCOBBox<MCFloat> & obbox1(shape1.obbox());
-    bool collided = false;
 
     MCVector2d<MCFloat> vertex;
     MCVector2d<MCFloat> contactNormal;
 
-    MCFloat depth;
-    bool depthIsSet;
-    bool contactNormalIsSet;
+    MCFloat depth           = 0;
+    bool depthIsSet         = false;
+    bool contactNormalIsSet = false;
+    bool collided           = false;
 
-    // Loop thru all vertices and generate contacts
+    // Loop thru all vertices of shape1 and generate contacts
     for (MCUint i = 0; i < 4; i++) {
         if (shape2.contains(obbox1.vertex(i))) {
 
-            // Send collision event to owner of p1
+            // Send collision event to owner of shape1 and generate a contact
+            // if accepted.
             MCCollisionEvent ev1(shape2.parent());
             MCObject::sendEvent(shape1.parent(), ev1);
 
@@ -86,7 +87,8 @@ bool MCContactResolverImpl::processRectRect(
                 collided = true;
             }
 
-            // Send collision event to owner of p2
+            // Send collision event to owner of shape2 and generate a contact
+            // if accepted.
             MCCollisionEvent ev2(shape1.parent());
             MCObject::sendEvent(shape2.parent(), ev2);
 
@@ -125,7 +127,8 @@ bool MCContactResolverImpl::processRectCircle(
 
         collided = true;
 
-        // Send collision event to owner of p1
+        // Send collision event to owner of shape1 and generate a contact
+        // if accepted.
         MCCollisionEvent ev1(shape2.parent());
         MCObject::sendEvent(shape1.parent(), ev1);
 
@@ -144,7 +147,8 @@ bool MCContactResolverImpl::processRectCircle(
             shape1.parent().addContact(contact);
         }
 
-        // Send collision event to owner of p2
+        // Send collision event to owner of shape2 and generate a contact
+        // if accepted.
         MCCollisionEvent ev2(shape1.parent());
         MCObject::sendEvent(shape2.parent(), ev2);
 
@@ -178,7 +182,8 @@ bool MCContactResolverImpl::processCircleCircle(
 
         depth = -depth;
 
-        // Send collision event to owner of p1
+        // Send collision event to owner of shape1 and generate a contact
+        // if accepted.
         MCCollisionEvent ev1(shape2.parent());
         MCObject::sendEvent(shape1.parent(), ev1);
 
@@ -189,7 +194,8 @@ bool MCContactResolverImpl::processCircleCircle(
             shape1.parent().addContact(contact);
         }
 
-        // Send collision event to owner of p2
+        // Send collision event to owner of shape2 and generate a contact
+        // if accepted.
         MCCollisionEvent ev2(shape1.parent());
         MCObject::sendEvent(shape2.parent(), ev2);
 
@@ -207,7 +213,7 @@ bool MCContactResolverImpl::processCircleCircle(
 }
 
 bool MCContactResolver::processPossibleCollision(
-   MCObject & object1, MCObject & object2)
+    MCObject & object1, MCObject & object2)
 {
     if (&object1 == &object2) {
         return false;
@@ -222,21 +228,24 @@ bool MCContactResolver::processPossibleCollision(
 
         // Both rects ?
         if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID()) {
-
-            // Static cast because we know the types now
-            const bool p1p2 = m_pImpl->processRectRect(
+            // We must test first object1 against object2 and then
+            // the other way around.
+            const bool shape1shape2 = m_pImpl->processRectRect(
+                // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object1.shape()),
                 *static_cast<MCRectShape *>(object2.shape()));
-            const bool p2p1 = m_pImpl->processRectRect(
+            const bool shape2shape1 = m_pImpl->processRectRect(
+                // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object2.shape()),
                 *static_cast<MCRectShape *>(object1.shape()));
-            return p1p2 || p2p1;
+            return shape1shape2 || shape2shape1;
         }
 
         // Both circles ?
         if (id1 == MCCircleShape::typeID() && id2 == MCCircleShape::typeID()) {
-            // Static cast because we know the types now
+            // This test needs to be run only once for both objects.
             return m_pImpl->processCircleCircle(
+                // Static cast because we know the types now
                 *static_cast<MCCircleShape *>(object1.shape()),
                 *static_cast<MCCircleShape *>(object2.shape()));
         }
@@ -244,8 +253,8 @@ bool MCContactResolver::processPossibleCollision(
         // Test id1 first to match a corresponding method
         if (id1 == MCRectShape::typeID()) {
             if (id2 == MCCircleShape::typeID()) {
-                // Static cast because we know the types now
                 return m_pImpl->processRectCircle(
+                    // Static cast because we know the types now
                     *static_cast<MCRectShape *>(object1.shape()),
                     *static_cast<MCCircleShape *>(object2.shape()));
             }
@@ -254,8 +263,8 @@ bool MCContactResolver::processPossibleCollision(
         // Test the other way around
         if (id2 == MCRectShape::typeID()) {
             if (id1 == MCCircleShape::typeID()) {
-                // Static cast because we know the types now
                 return m_pImpl->processRectCircle(
+                    // Static cast because we know the types now
                     *static_cast<MCRectShape *>(object2.shape()),
                     *static_cast<MCCircleShape *>(object1.shape()));
             }
