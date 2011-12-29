@@ -284,7 +284,8 @@ void MCWorldImpl::addObject(MCObject & object)
             const MCFloat FrictionThreshold = 0.001f;
             if (object.xyFriction() > FrictionThreshold) {
                 forceRegistry.addForceGenerator(
-                    *new MCFrictionGenerator(object.xyFriction()), object, true);
+                    *new MCFrictionGenerator(
+                        object.xyFriction(), object.xyFriction()), object, true);
             }
         }
     } else {

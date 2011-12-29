@@ -65,8 +65,8 @@ public:
     //! Set the radius
     void setRadius(MCFloat r);
 
-    //! Return the radius
-    MCFloat radius() const;
+    //! \reimp
+    virtual MCFloat radius() const;
 
 private:
 

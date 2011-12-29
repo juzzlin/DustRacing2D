@@ -139,13 +139,18 @@ public:
     //! Get the moment of inertia (J).
     virtual MCFloat momentOfInertia() const = 0;
 
-    /*! Register a new event type
-     * \return The new unique type ID
+    /*! Register a new shape type.
+     * \return The new unique type ID.
      */
     static MCUint registerType();
 
-    //! Return class-wide type id
+    //! Return class-wide static type id inited by calling
+    //! MCShape::registerType(). This is used to optimize collision detection
+    //! and to avoid dynamic_cast.
     virtual MCUint instanceTypeID() const = 0;
+
+    //! Return approximated radius.
+    virtual MCFloat radius() const = 0;
 
 private:
 

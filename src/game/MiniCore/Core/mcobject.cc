@@ -70,10 +70,14 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , time(0)
 , invMass(std::numeric_limits<MCFloat>::max())
 , mass(0)
-, restitution(0.5)
-, xyFriction(0.0)
+, restitution(0.5f)
+, xyFriction(0.0f)
 , angle(0)
+, angularAcceleration(0.0f)
+, angularVelocity(0.0f)
+, maximumAngularVelocity(-1)
 , maximumVelocity(-1)
+, moment(0.0f)
 , layer(0)
 , index(-1)
 , flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
@@ -124,7 +128,33 @@ void MCObjectImpl::integrate(MCFloat step)
             }
         }
 
+        if (pShape)
+        {
+            if (pShape->momentOfInertia() > 0.0f)
+            {
+                MCFloat totAngularAcceleration(angularAcceleration);
+                angle += MCTrigonom::radToDeg(angularVelocity * step);
+                doRotate(static_cast<MCUint>(angle));
+
+                totAngularAcceleration += moment / pShape->momentOfInertia();
+                angularVelocity        += totAngularAcceleration * step;
+                angularVelocity        *= DampingFactor;
+
+                if (maximumAngularVelocity > 0) {
+                    if (angularVelocity > 0) {
+                        if (angularVelocity > maximumAngularVelocity) {
+                            angularVelocity = maximumAngularVelocity;
+                        }
+                    }
+                    else if (-angularVelocity > maximumAngularVelocity) {
+                        angularVelocity = -maximumAngularVelocity;
+                    }
+                }
+            }
+        }
+
         forces.setZero();
+        moment = 0.0f;
         doOutOfBoundariesEvent();
     }
 }
@@ -221,6 +251,7 @@ void MCObject::resetMotion()
 {
     m_pImpl->velocity.setZero();
     m_pImpl->forces.setZero();
+    m_pImpl->moment = 0.0f;
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
@@ -432,6 +463,21 @@ const MCVector3d<MCFloat> & MCObject::velocity() const
     return m_pImpl->velocity;
 }
 
+void MCObject::setAngularVelocity(MCFloat newVelocity)
+{
+    m_pImpl->angularVelocity = newVelocity;
+}
+
+MCFloat MCObject::angularVelocity() const
+{
+    return m_pImpl->angularVelocity;
+}
+
+void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
+{
+    m_pImpl->maximumAngularVelocity = newVelocity;
+}
+
 void MCObject::setAcceleration(const MCVector3d<MCFloat> & newAcceleration)
 {
     m_pImpl->acceleration = newAcceleration;
@@ -489,21 +535,26 @@ MCFloat MCObject::getZ() const
 
 void MCObject::rotate(MCUint newAngle)
 { 
-    if (newAngle != m_pImpl->angle) {
+    m_pImpl->rotate(newAngle);
+}
 
-        const MCUint MAX_ANGLE = 360;
-        newAngle %= MAX_ANGLE;
-        m_pImpl->angle = newAngle;
+void MCObjectImpl::rotate(MCUint newAngle)
+{
+    const MCUint MAX_ANGLE = 360;
+    angle = static_cast<MCUint>(newAngle) % MAX_ANGLE;
+}
 
-        if (m_pImpl->pShape) {
-            if (dynamic_cast<MCCircleShape *>(m_pImpl->pShape)) {
-                m_pImpl->pShape->rotate(m_pImpl->angle);
-            } else {
-                const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
-                m_pImpl->pShape->rotate(m_pImpl->angle);
-                if (wasInWorld) {
-                    MCWorld::instance().objectTree().insert(*this);
-                }
+void MCObjectImpl::doRotate(MCUint newAngle)
+{
+    if (pShape) {
+        if (pShape->instanceTypeID() == MCCircleShape::typeID()) {
+            pShape->rotate(newAngle);
+        } else {
+            const bool wasInWorld =
+                MCWorld::instance().objectTree().remove(*pPublic);
+            pShape->rotate(newAngle);
+            if (wasInWorld) {
+                MCWorld::instance().objectTree().insert(*pPublic);
             }
         }
     }
@@ -562,9 +613,15 @@ void MCObject::addForce(const MCVector3d<MCFloat> & force)
     m_pImpl->forces += force;
 }
 
+void MCObject::addMoment(MCFloat moment)
+{
+    m_pImpl->moment += moment;
+}
+
 void MCObject::clearForces()
 {
     m_pImpl->forces.setZero();
+    m_pImpl->moment = 0.0f;
 }
 
 void MCObject::integrate(MCFloat step)

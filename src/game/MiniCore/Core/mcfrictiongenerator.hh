@@ -40,10 +40,12 @@ class MCFrictionGenerator : public MCForceGenerator
 public:
 
     /*! Constructor.
-     * \param coeff   Dynamic friction coefficient.
+     * \param coeffLin Linear friction coefficient.
+     * \param coeffRot Rotational friction coefficient.
      * \param gravity Gravitational acceleration.
      */
-    explicit MCFrictionGenerator(MCFloat coeff, MCFloat gravity = 9.81f);
+    explicit MCFrictionGenerator(
+        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = 9.81f);
 
     //! Destructor.
     virtual ~MCFrictionGenerator();
@@ -51,8 +53,11 @@ public:
     //! \reimp
     virtual void updateForce(MCObject & object);
 
-    //! Return coeff.
-    MCFloat coeff() const;
+    //! Return linear coeff.
+    MCFloat coeffLin() const;
+
+    //! Return rotational coeff.
+    MCFloat coeffRot() const;
 
     //! Return gravity.
     MCFloat gravity() const;

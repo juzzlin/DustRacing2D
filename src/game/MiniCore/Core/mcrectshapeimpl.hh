@@ -41,6 +41,7 @@ private:
   void renderShapeOutline(MCCamera * pCamera);
   MCOBBox<MCFloat> obbox;
   MCFloat momentOfInertiaFactor;
+  MCFloat radius;
   friend class MCRectShape;
 };
 

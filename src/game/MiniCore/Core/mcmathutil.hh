@@ -58,9 +58,13 @@ public:
     inline static MCVector2d<T> projection(
         const MCVector2d<T> & a, const MCVector2d<T> & b);
 
-    //! Returns sign of x
+    //! Returns the sign of x.
     template <typename T>
     inline static MCMathUtil::SIGN sign(T x);
+
+    //! Returns the absolute of x.
+    template <typename T>
+    inline static T abs(T x);
 };
 
 template <typename T>
@@ -112,6 +116,12 @@ MCMathUtil::SIGN MCMathUtil::sign(T x)
     {
         return MCMathUtil::ZERO;
     }
+}
+
+template <typename T>
+T MCMathUtil::abs(T x)
+{
+    return x < 0 ? -x : x;
 }
 
 #endif // MCMATHUTIL_HH

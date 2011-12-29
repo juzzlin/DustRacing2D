@@ -35,6 +35,8 @@ private:
     inline void integrate(MCFloat step);
     inline void doOutOfBoundariesEvent();
     void setFlag(MCUint flag, bool enable);
+    void rotate(MCUint newAngle); // Degrees
+    void doRotate(MCUint newAngle);
     MCObject * const pPublic;
     MCUint typeID;
     MCUint time;
@@ -42,8 +44,12 @@ private:
     MCFloat mass;
     MCFloat restitution;
     MCFloat xyFriction;
-    MCUint angle;
+    MCFloat angle; // Degrees
+    MCFloat angularAcceleration; // Radians / s^2
+    MCFloat angularVelocity; // Radians / s
+    MCFloat maximumAngularVelocity; // Radians / s
     MCFloat maximumVelocity;
+    MCFloat moment;
     MCUint layer;
     int index;
     MCUint flags;

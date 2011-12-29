@@ -33,6 +33,7 @@ MCRectShapeImpl::MCRectShapeImpl(
 : MCShapeImpl(parent)
 , obbox(width / 2, height / 2, MCVector2d<MCFloat>())
 , momentOfInertiaFactor((width * width + height * height) / 12)
+, radius(std::max(width, height) / 2)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
@@ -213,6 +214,11 @@ void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
     if (parent().renderShapeOutline()) {
         m_pImpl->renderShapeOutline(pCamera);
     }
+}
+
+MCFloat MCRectShape::radius() const
+{
+    return m_pImpl->radius;
 }
 
 MCRectShape::~MCRectShape()

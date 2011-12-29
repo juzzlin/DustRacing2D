@@ -19,7 +19,9 @@
 
 #include "mcfrictiongenerator.hh"
 #include "mcfrictiongeneratorimpl.hh"
+#include "mcmathutil.hh"
 #include "mcobject.hh"
+#include "mcshape.hh"
 
 namespace
 {
@@ -27,8 +29,9 @@ namespace
 }
 
 MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
-    MCFloat coeff, MCFloat gravity)
-: m_coeff(coeff)
+    MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)
+: m_coeffLin(coeffLin)
+, m_coeffRot(coeffRot)
 , m_gravity(gravity)
 {}
 
@@ -36,23 +39,38 @@ MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
 {}
 
 MCFrictionGenerator::MCFrictionGenerator(
-    MCFloat coeff, MCFloat gravity)
-: m_pImpl(new MCFrictionGeneratorImpl(coeff, gravity))
+    MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)
+: m_pImpl(new MCFrictionGeneratorImpl(coeffLin, coeffRot, gravity))
 {}
 
 void MCFrictionGenerator::updateForce(MCObject & object)
 {
+    // Linear motion.
     const MCVector2d<MCFloat> v(object.velocity());
-    const MCFloat l = v.lengthFast();
-    if (l > FRICTION_SPEED_TH) {
-        object.addForce((-v / l) *
-        m_pImpl->m_coeff * m_pImpl->m_gravity * object.mass());
+    MCFloat x = v.lengthFast();
+    if (x > FRICTION_SPEED_TH && m_pImpl->m_coeffLin > 0.0f) {
+        object.addForce(
+        (-v / x) * m_pImpl->m_coeffLin * m_pImpl->m_gravity * object.mass());
+    }
+
+    // Approximated moment caused by rotational friction.
+    if (object.shape()) {
+        x = object.angularVelocity() * object.shape()->radius();
+        if (MCMathUtil::abs(x) > FRICTION_SPEED_TH && m_pImpl->m_coeffRot > 0.0f) {
+            object.addMoment(
+                -x * m_pImpl->m_coeffRot * m_pImpl->m_gravity * object.mass());
+        }
     }
 }
 
-MCFloat MCFrictionGenerator::coeff() const
+MCFloat MCFrictionGenerator::coeffLin() const
 {
-    return m_pImpl->m_coeff;
+    return m_pImpl->m_coeffLin;
+}
+
+MCFloat MCFrictionGenerator::coeffRot() const
+{
+    return m_pImpl->m_coeffRot;
 }
 
 MCFloat MCFrictionGenerator::gravity() const

@@ -91,6 +91,9 @@ public:
     //! \reimp
     virtual MCFloat momentOfInertia() const;
 
+    //! Return approximated radius.
+    virtual MCFloat radius() const;
+
 private:
 
     DISABLE_COPY(MCRectShape);

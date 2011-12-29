@@ -165,6 +165,19 @@ public:
     //! Return current velocity.
     const MCVector3d<MCFloat> & velocity() const;
 
+    //! Set current angular velocity to the given value.
+    //! Unit: rad/s.
+    //! \param newVelocity The new velocity.
+    void setAngularVelocity(MCFloat newVelocity);
+
+    //! Return current angular velocity.
+    //! Unit: rad/s.
+    MCFloat angularVelocity() const;
+
+    //! \brief Set maximum angular velocity.
+    //! \param maxVelocity The new angular max velocity in rad/s.
+    void setMaximumAngularVelocity(MCFloat maxVelocity);
+
     //! Set constant acceleration (e.g. gravity). Use addForce()
     //! to cause acceleration that varies from frame to frame.
     //! \param newAcceleration The new acceleration.
@@ -173,9 +186,13 @@ public:
     //! Return constant acceleration.
     const MCVector3d<MCFloat> & acceleration() const;
 
-    //! Add a force vector to the object for a single frame.
+    //! Add a force (N) vector to the object for a single frame.
     //! \param force Force vector to be added.
     void addForce(const MCVector3d<MCFloat> & force);
+
+    //! Add a moment (Nm) to the object for a single frame.
+    //! \param moment Value to be added.
+    void addMoment(MCFloat moment);
 
     //! Clear accumulated forces.
     void clearForces();

@@ -23,12 +23,9 @@
 //! Implementation class for MCFrictionGenerator
 class MCFrictionGeneratorImpl
 {
-public:
-  MCFrictionGeneratorImpl(MCFloat coeff, MCFloat gravity);
+  MCFrictionGeneratorImpl(MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity);
   virtual ~MCFrictionGeneratorImpl();
-
-private:
-  MCFloat m_coeff, m_gravity;
+  MCFloat m_coeffLin, m_coeffRot, m_gravity;
   friend class MCFrictionGenerator;
 };
 

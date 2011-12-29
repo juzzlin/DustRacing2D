@@ -18,6 +18,7 @@
 #include "slidefrictiongenerator.h"
 #include "MiniCore/Core/MCCollisionEvent"
 #include "MiniCore/Core/MCFrictionGenerator"
+#include "MiniCore/Core/MCShape"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"
 #include "MiniCore/Core/MCTypes"
@@ -26,15 +27,16 @@
 
 namespace
 {
-    const MCFloat MAX_VELOCITY     = 6.0f;
-    const MCFloat BRAKE_FRICTION   = 0.25f;
-    const MCFloat SLIDE_FRICTION   = 0.15f;
-    const MCFloat ROLLING_FRICTION = 0.01f;
+    const MCFloat MAX_VELOCITY      = 6.0f;
+    const MCFloat BRAKE_FRICTION    = 0.25f;
+    const MCFloat SLIDE_FRICTION    = 0.15f;
+    const MCFloat ROLLING_FRICTION  = 0.01f;
+    const MCFloat ROTATION_FRICTION = 0.9f;
 }
 
 Car::Car(MCSurface * pSurface)
 : MCObject(pSurface, "Car")
-, m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION))
+, m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
 , m_frictionGeneratorAdded(false)
 , m_accelerating(false)
 {
@@ -47,7 +49,8 @@ Car::Car(MCSurface * pSurface)
         *new SlideFrictionGenerator(SLIDE_FRICTION), *this, true);
 
     MCWorld::instance().addForceGenerator(
-        *new MCFrictionGenerator(ROLLING_FRICTION), *this, true);
+        *new MCFrictionGenerator(
+            ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
 
     //setRenderShapeOutline(true);
 }

@@ -25,7 +25,7 @@ namespace
 
 SlideFrictionGenerator::SlideFrictionGenerator(
     MCFloat coeff, MCFloat gravity)
-: MCFrictionGenerator(coeff, gravity)
+: MCFrictionGenerator(coeff, coeff, gravity)
 {
 }
 
@@ -40,7 +40,7 @@ void SlideFrictionGenerator::updateForce(MCObject & object)
 
     if (s.lengthFast() > FRICTION_SPEED_TH)
     {
-        object.addForce(-s * coeff() * gravity() * object.mass());
+        object.addForce(-s * coeffLin() * gravity() * object.mass());
     }
 }
 
