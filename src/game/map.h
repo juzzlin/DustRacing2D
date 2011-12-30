@@ -13,40 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktile.h"
-#include "trackdata.h"
+#ifndef MAP_H
+#define MAP_H
 
-TrackTile::TrackTile(
-    TrackData * trackData,
-    QPointF location,
-    QPoint matrixLocation,
-    const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_rotation(0)
-, m_surface(nullptr)
-{
-}
+#include "../common/mapbase.h"
 
-void TrackTile::setRotation(int rotation)
-{
-    m_rotation = rotation;
-}
+class TrackData;
 
-int TrackTile::rotation() const
+//! Base class for the tile matrix used by TrackData.
+class Map : public MapBase
 {
-    return m_rotation;
-}
+public:
 
-void TrackTile::setSurface(MCSurface * surface)
-{
-    m_surface = surface;
-}
+    //! Constuctor.
+    Map(TrackData * trackData, unsigned int cols, unsigned int rows);
 
-MCSurface * TrackTile::surface() const
-{
-    return m_surface;
-}
+    //! Destructor.
+    virtual ~Map();
+};
 
-TrackTile::~TrackTile()
-{
-}
+#endif // MAP_H

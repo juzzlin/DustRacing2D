@@ -47,12 +47,12 @@ const Route & TrackData::route() const
     return m_route;
 }
 
-Map & TrackData::map()
+MapBase & TrackData::map()
 {
     return m_map;
 }
 
-const Map & TrackData::map() const
+const MapBase & TrackData::map() const
 {
     return m_map;
 }

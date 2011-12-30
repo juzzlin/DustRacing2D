@@ -16,9 +16,9 @@
 #include "editordata.h"
 #include "editorscene.h"
 #include "mainwindow.h"
+#include "trackdata.h"
 #include "tracktile.h"
 #include "trackio.h"
-#include "../common/trackdata.h"
 
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
@@ -97,8 +97,8 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
 
             for (unsigned int i = 1; i < length; i++)
             {
-                TrackTile * tile0 = m_trackData->route().get(i - 1);
-                TrackTile * tile1 = m_trackData->route().get(i);
+                TrackTile * tile0 = static_cast<TrackTile *>(m_trackData->route().get(i - 1));
+                TrackTile * tile1 = static_cast<TrackTile *>(m_trackData->route().get(i));
 
                 if (!tile1->routeLine())
                 {
@@ -111,8 +111,8 @@ void EditorData::addRouteLinesToScene(bool closeLoop)
 
             if (closeLoop)
             {
-                TrackTile * tile0 = m_trackData->route().get(length - 1);
-                TrackTile * tile1 = m_trackData->route().get(0);
+                TrackTile * tile0 = static_cast<TrackTile *>(m_trackData->route().get(length - 1));
+                TrackTile * tile1 = static_cast<TrackTile *>(m_trackData->route().get(0));
 
                 if (!tile1->routeLine())
                 {
@@ -133,7 +133,7 @@ void EditorData::removeRouteLinesFromScene()
         const unsigned int length = m_trackData->route().length();
         for (unsigned int i = 0; i < length; i++)
         {
-            TrackTile * tile = m_trackData->route().get(i);
+            TrackTile * tile = static_cast<TrackTile *>(m_trackData->route().get(i));
             if (tile->routeLine())
             {
                 QGraphicsLineItem * line = tile->routeLine();

@@ -20,9 +20,9 @@
 #include "layers.h"
 #include "race.h"
 #include "track.h"
+#include "trackdata.h"
 #include "trackobject.h"
 #include "tracktile.h"
-#include "../../common/trackdata.h"
 #include <MiniCore/Core/MCCamera>
 #include <MiniCore/Core/MCFrictionGenerator>
 #include <MiniCore/Core/MCObject>

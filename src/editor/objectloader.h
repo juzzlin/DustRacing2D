@@ -53,7 +53,7 @@ public:
 
 private:
 
-    Q_DISABLE_COPY(ObjectLoader);
+    Q_DISABLE_COPY(ObjectLoader)
 
     ObjectDataVector m_objects;
 };

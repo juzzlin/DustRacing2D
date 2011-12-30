@@ -21,7 +21,6 @@
 
 class Car;
 class Track;
-class TrackTile;
 
 //! Class that controls the race event.
 class Race

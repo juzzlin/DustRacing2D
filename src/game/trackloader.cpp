@@ -21,10 +21,10 @@
 #include <QDomElement>
 
 #include "track.h"
+#include "trackdata.h"
 #include "trackloader.h"
 #include "trackobject.h"
 #include "tracktile.h"
-#include "../common/trackdata.h"
 
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
@@ -108,7 +108,7 @@ TrackData * TrackLoader::loadTrack(QString path)
             newData = new TrackData(name, cols, rows);
             newData->setFileName(path);
 
-            QVector<TrackTile *> routeVector;
+            QVector<TrackTileBase *> routeVector;
 
             QDomNode node = root.firstChild();
             while(!node.isNull())
@@ -139,7 +139,7 @@ TrackData * TrackLoader::loadTrack(QString path)
 }
 
 void TrackLoader::handleTile(
-    QDomElement & tag, TrackData & newData, QVector<TrackTile *> & routeVector)
+    QDomElement & tag, TrackData & newData, QVector<TrackTileBase *> & routeVector)
 {
     const QString      id      = tag.attribute("type", "clear");
     const unsigned int profile = tag.attribute("profile", "0").toUInt();
@@ -157,36 +157,34 @@ void TrackLoader::handleTile(
     o = -o;
     j = newData.map().rows() - 1 - j;
 
-    if (TrackTile * tile = newData.map().getTile(i, j))
+    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j));
+    assert(tile);
+
+    tile->setRotation(o);
+    tile->setTileType(id);
+    tile->setRouteIndex(index);
+
+    switch (profile)
     {
-        assert(tile);
-
-        tile->setRotation(o);
-        tile->setTileType(id);
-        tile->setRouteIndex(index);
-
-        switch (profile)
-        {
-        default:
-        case 0:
-            tile->setProfile(TrackTileBase::TP_FLAT);
-            break;
-        case 1:
-            tile->setProfile(TrackTileBase::TP_HILL);
-            break;
-        case 2:
-            tile->setProfile(TrackTileBase::TP_GORGE);
-            break;
-        }
-
-        // Associate with a surface object corresponging
-        // to the tile type.
-        // surface() throws if fails. Handled of higher level.
-        tile->setSurface(m_textureManager.surface(id));
-
-        if (index >= 0)
-            routeVector << tile;
+    default:
+    case 0:
+        tile->setProfile(TrackTileBase::TP_FLAT);
+        break;
+    case 1:
+        tile->setProfile(TrackTileBase::TP_HILL);
+        break;
+    case 2:
+        tile->setProfile(TrackTileBase::TP_GORGE);
+        break;
     }
+
+    // Associate with a surface object corresponging
+    // to the tile type.
+    // surface() throws if fails. Handled of higher level.
+    tile->setSurface(m_textureManager.surface(id));
+
+    if (index >= 0)
+        routeVector << tile;
 }
 
 void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)

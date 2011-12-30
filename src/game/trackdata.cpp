@@ -13,40 +13,60 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktile.h"
 #include "trackdata.h"
+#include "tracktile.h"
 
-TrackTile::TrackTile(
-    TrackData * trackData,
-    QPointF location,
-    QPoint matrixLocation,
-    const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_rotation(0)
-, m_surface(nullptr)
+TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
+: m_name(name)
+, m_map(this, cols, rows)
+, m_route()
+{}
+
+QString TrackData::name() const
 {
+    return m_name;
 }
 
-void TrackTile::setRotation(int rotation)
+QString TrackData::fileName() const
 {
-    m_rotation = rotation;
+    return m_fileName;
 }
 
-int TrackTile::rotation() const
+void TrackData::setFileName(QString newFileName)
 {
-    return m_rotation;
+    m_fileName = newFileName;
 }
 
-void TrackTile::setSurface(MCSurface * surface)
+Route & TrackData::route()
 {
-    m_surface = surface;
+    return m_route;
 }
 
-MCSurface * TrackTile::surface() const
+const Route & TrackData::route() const
 {
-    return m_surface;
+    return m_route;
 }
 
-TrackTile::~TrackTile()
+MapBase & TrackData::map()
+{
+    return m_map;
+}
+
+const MapBase & TrackData::map() const
+{
+    return m_map;
+}
+
+Objects & TrackData::objects()
+{
+    return m_objects;
+}
+
+const Objects & TrackData::objects() const
+{
+    return m_objects;
+}
+
+TrackData::~TrackData()
 {
 }

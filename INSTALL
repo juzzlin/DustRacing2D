@@ -1,24 +1,29 @@
 Build & install instructions
 ============================
 
-Dustrac currently uses qmake as the build system,
-dustrac.pro being the main project file that
-can be loaded in the QtCreator IDE.
+Dustrac currently uses CMake as the build system.
+The main CMakeLists.txt can be loaded in the QtCreator IDE.
 
 Currently the build depends only on Qt 4.7 (>=)
-development files (libqt4-dev on Ubuntu) and no
+(libqt4-dev on Ubuntu) + OpenGL development files and no
 additional libraries are required.
 
 Dustrac exploits some features of the new C++11
 standard, so a compliant compiler is required (GCC 4.6,
 Microsoft Visual Studio 2010). 
   
-Building from the command line
-------------------------------
+Building from the command line on Linux
+---------------------------------------
+
+You need to have CMake installed on your system.
 
 Just run:
 
-$ qmake 
+$ ./configure
+
+This runs CMake that generates the makefiles.
+If everything went ok, run:
+
 $ make
 
 This will build the editor and the game binaries
@@ -36,4 +41,3 @@ all the runtime data.
 
 
 -- Jussi Lind <jussi.lind@iki.fi>
-

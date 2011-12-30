@@ -18,7 +18,7 @@
 
 #include <QVector>
 
-class TrackTile;
+class TrackTileBase;
 
 //! Route is used to define the race route as a sequence
 //! of TrackTiles.
@@ -30,22 +30,22 @@ public:
     void clear();
 
     //! Push new tile to the route and return its index.
-    int push(TrackTile * tile);
+    int push(TrackTileBase * tile);
 
     //! Build route from an (unordered) vector of tiles.
     //! Will be sorted with respect to route indices.
-    void buildFromVector(QVector<TrackTile *> routeVector);
+    void buildFromVector(QVector<TrackTileBase *> routeVector);
 
     //! Return length of the current route.
     unsigned int length() const;
 
     //! Return tile for the given index or nullptr if
     //! out of range.
-    TrackTile * get(unsigned int index) const;
+    TrackTileBase * get(unsigned int index) const;
 
 private:
 
-    QVector<TrackTile *> m_route;
+    QVector<TrackTileBase *> m_route;
 };
 
 #endif // ROUTE_H

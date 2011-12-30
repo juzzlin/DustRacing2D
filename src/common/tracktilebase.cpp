@@ -14,9 +14,9 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktilebase.h"
-#include "trackdata.h"
+#include "trackdatabase.h"
 
-TrackTileBase::TrackTileBase(TrackData * trackData,
+TrackTileBase::TrackTileBase(TrackDataBase * trackData,
                              QPointF location, QPoint matrixLocation,
                              const QString & type)
 : m_routeIndex(-1)
@@ -72,7 +72,7 @@ TrackTileBase::RouteDirection TrackTileBase::routeDirection() const
     return m_routeDirection;
 }
 
-TrackData * TrackTileBase::trackData() const
+TrackDataBase * TrackTileBase::trackData() const
 {
     return m_trackData;
 }

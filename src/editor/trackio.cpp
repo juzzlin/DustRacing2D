@@ -22,11 +22,11 @@
 #include "object.h"
 #include "objectdata.h"
 #include "objectloader.h"
+#include "trackdata.h"
 #include "trackio.h"
 #include "tracktile.h"
 #include "../common/config.h"
 #include "../common/objectbase.h"
-#include "../common/trackdata.h"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
@@ -42,7 +42,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     // Add information about tiles
     for (unsigned int i = 0; i < trackData->map().cols(); i++)
         for (unsigned int j = 0; j < trackData->map().rows(); j++)
-            if (TrackTile * tile = trackData->map().getTile(i, j))
+            if (TrackTile * tile = static_cast<TrackTile *>(trackData->map().getTile(i, j)))
             {
                 QDomElement tileTag = doc.createElement("tile");
                 tileTag.setAttribute("type", tile->tileType());
@@ -113,7 +113,7 @@ TrackData * TrackIO::open(QString path)
         newData = new TrackData(name, cols, rows);
         newData->setFileName(path);
 
-        QVector<TrackTile *> routeVector;
+        QVector<TrackTileBase *> routeVector;
 
         QDomNode node = root.firstChild();
         while(!node.isNull())
@@ -133,7 +133,7 @@ TrackData * TrackIO::open(QString path)
 
                     // Init a new tile. QGraphicsScene will take
                     // the ownership eventually.
-                    if (TrackTile * tile = newData->map().getTile(i, j))
+                    if (TrackTile * tile = static_cast<TrackTile *>(newData->map().getTile(i, j)))
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);

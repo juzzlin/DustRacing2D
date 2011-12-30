@@ -13,40 +13,28 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktile.h"
+#include "map.h"
 #include "trackdata.h"
+#include "tracktile.h"
 
-TrackTile::TrackTile(
-    TrackData * trackData,
-    QPointF location,
-    QPoint matrixLocation,
-    const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_rotation(0)
-, m_surface(nullptr)
+#include <QPoint>
+#include <QPointF>
+
+Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
+: MapBase(trackData, cols, rows)
 {
+    // Create tiles and set coordinates.
+    for (unsigned int i = 0; i < cols; i++)
+        for (unsigned int j = 0; j < rows; j++)
+        {
+            TrackTileBase * newTile = new TrackTile(trackData,
+                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+                QPoint(i, j));
+            setTile(i, j, newTile);
+        }
 }
 
-void TrackTile::setRotation(int rotation)
-{
-    m_rotation = rotation;
-}
-
-int TrackTile::rotation() const
-{
-    return m_rotation;
-}
-
-void TrackTile::setSurface(MCSurface * surface)
-{
-    m_surface = surface;
-}
-
-MCSurface * TrackTile::surface() const
-{
-    return m_surface;
-}
-
-TrackTile::~TrackTile()
+Map::~Map()
 {
 }

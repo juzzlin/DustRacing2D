@@ -14,11 +14,11 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.h"
+#include "trackdata.h"
 #include "tiletypedialog.h"
 #include "tileanimator.h"
 #include "mainwindow.h"
 #include "../common/config.h"
-#include "../common/trackdata.h"
 
 #include <QAction>
 #include <QGraphicsLineItem>

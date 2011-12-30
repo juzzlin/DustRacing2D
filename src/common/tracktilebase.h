@@ -20,7 +20,7 @@
 #include <QPointF>
 #include <QString>
 
-class TrackData;
+class TrackDataBase;
 
 //! Base class for track tiles used in the editor and in the game.
 class TrackTileBase
@@ -39,14 +39,14 @@ public:
     //! \param location Location (coordinates) in the track scene.
     //! \param matrixLocation Location in the tile matrix.
     //! \param type Type of the tile. See setType().
-    TrackTileBase(TrackData * trackData, QPointF location, QPoint matrixLocation,
+    TrackTileBase(TrackDataBase * trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
     //! Destructor.
     virtual ~TrackTileBase();
 
     //! Return pointer to the "parent" track data.
-    TrackData * trackData() const;
+    TrackDataBase * trackData() const;
 
     //! Get location in world / scene.
     virtual QPointF location() const;
@@ -93,7 +93,7 @@ private:
     QPoint m_matrixLocation;
 
     //! Pointer to the "parent" track data.
-    TrackData * m_trackData;
+    TrackDataBase * m_trackData;
 
     //! Direction towards the next tile in the route.
     RouteDirection m_routeDirection;

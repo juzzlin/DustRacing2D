@@ -21,7 +21,7 @@
 
 class Track;
 class TrackData;
-class TrackTile;
+class TrackTileBase;
 class MCTextureManager;
 class MCObjectFactory;
 class QDomElement;
@@ -66,7 +66,7 @@ private:
     //! Handle a tile element.
     void handleTile(
         QDomElement & tag, TrackData & newData,
-        QVector<TrackTile *> & routeVector);
+        QVector<TrackTileBase *> & routeVector);
 
     //! Handle an object element.
     void handleObject(QDomElement & tag, TrackData & newData);

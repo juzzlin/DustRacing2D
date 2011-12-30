@@ -26,7 +26,7 @@
 
 #include "mctextureconfigloader.hh"
 #include "mctexturedata.hh"
-#include "MiniCore/Core/MCLogger"
+#include "../Core/MCLogger"
 
 MCTextureConfigLoader::MCTextureConfigLoader()
 : m_filePath("")

@@ -18,16 +18,18 @@
 
 #include <QString>
 
-#include "objects.h"
-#include "route.h"
+#include "../common/trackdatabase.h"
+#include "../common/mapbase.h"
+#include "../common/route.h"
+#include "../common/objects.h"
 #include "map.h"
 
-class TrackData
+class TrackData : public TrackDataBase
 {
 public:
 
     //! Constructor.
-    TrackData(QString name, unsigned int cols, unsigned rows);
+    TrackData(QString name, unsigned int cols, unsigned int rows);
 
     //! Destructor.
     virtual ~TrackData();
@@ -42,10 +44,10 @@ public:
     void setFileName(QString fileName);
 
     //! Get map object.
-    Map & map();
+    MapBase & map();
 
-    //! Get route object.
-    const Map & map() const;
+    //! Get map object.
+    const MapBase & map() const;
 
     //! Get route object.
     Route & route();

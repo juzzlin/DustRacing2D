@@ -17,11 +17,10 @@
 
 #include "car.h"
 #include "track.h"
+#include "trackdata.h"
 #include "tracktile.h"
 #include <algorithm>
 #include <cassert>
-
-#include "../common/trackdata.h"
 
 Race::Race()
 : m_lapCount(0)

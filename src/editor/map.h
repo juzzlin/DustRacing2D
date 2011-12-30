@@ -16,38 +16,20 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <QVector>
+#include "../common/mapbase.h"
 
-class TrackTile;
 class TrackData;
 
-//! The tile matrix used by TrackData.
-class Map
+//! Base class for the tile matrix used by TrackData.
+class Map : public MapBase
 {
 public:
 
-    //! Constructor
+    //! Constuctor.
     Map(TrackData * trackData, unsigned int cols, unsigned int rows);
 
-    //! Get column count
-    unsigned int cols() const;
-
-    //! Get row count
-    unsigned int rows() const;
-
-    //! Set given tile to given coordinates.
-    //! Returns false if impossible coordinates.
-    bool setTile(unsigned int x, unsigned int y, TrackTile * pTile);
-
-    //! Get tile at given coordinates.
-    //! Returns nullptr if no tile set or impossible coordinates.
-    TrackTile * getTile(unsigned int x, unsigned int y) const;
-
-private:
-
-    TrackData * m_trackData;
-    unsigned int m_cols, m_rows;
-    QVector<QVector<TrackTile *> > m_map;
+    //! Destructor.
+    virtual ~Map();
 };
 
 #endif // MAP_H

@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktile.h"
+#include "tracktilebase.h"
 #include "route.h"
 
 #include <algorithm>
 
 void Route::clear()
 {
-    for (TrackTile * tile : m_route)
+    for (TrackTileBase * tile : m_route)
     {
         tile->setRouteIndex(-1);
     }
@@ -28,7 +28,7 @@ void Route::clear()
     m_route.clear();
 }
 
-int Route::push(TrackTile * tile)
+int Route::push(TrackTileBase * tile)
 {
     bool routeClosed = false;
     if (m_route.size() && tile->routeIndex() == 0)
@@ -42,7 +42,7 @@ int Route::push(TrackTile * tile)
 
         if (m_route.size())
         {
-            TrackTile * prev = m_route.back();
+            TrackTileBase * prev = m_route.back();
 
             int deltaX = tile->matrixLocation().x() - prev->matrixLocation().x();
             int deltaY = tile->matrixLocation().y() - prev->matrixLocation().y();
@@ -52,11 +52,11 @@ int Route::push(TrackTile * tile)
             {
                 if (deltaY > 0)
                 {
-                    prev->setRouteDirection(TrackTile::RD_DOWN);
+                    prev->setRouteDirection(TrackTileBase::RD_DOWN);
                 }
                 else
                 {
-                    prev->setRouteDirection(TrackTile::RD_UP);
+                    prev->setRouteDirection(TrackTileBase::RD_UP);
                 }
 
                 okToAdd = true;
@@ -66,11 +66,11 @@ int Route::push(TrackTile * tile)
             {
                 if (deltaX > 0)
                 {
-                    prev->setRouteDirection(TrackTile::RD_RIGHT);
+                    prev->setRouteDirection(TrackTileBase::RD_RIGHT);
                 }
                 else
                 {
-                    prev->setRouteDirection(TrackTile::RD_LEFT);
+                    prev->setRouteDirection(TrackTileBase::RD_LEFT);
                 }
 
                 okToAdd = true;
@@ -87,12 +87,12 @@ int Route::push(TrackTile * tile)
                         if (deltaY > 0)
                         {
                             // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTile::RD_DOWN_RIGHT);
+                            prev->setRouteDirection(TrackTileBase::RD_DOWN_RIGHT);
                         }
                         else
                         {
                             // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTile::RD_UP_RIGHT);
+                            prev->setRouteDirection(TrackTileBase::RD_UP_RIGHT);
                         }
 
                         okToAdd = true;
@@ -102,12 +102,12 @@ int Route::push(TrackTile * tile)
                         if (deltaY > 0)
                         {
                             // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTile::RD_DOWN_LEFT);
+                            prev->setRouteDirection(TrackTileBase::RD_DOWN_LEFT);
                         }
                         else
                         {
                             // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTile::RD_UP_LEFT);
+                            prev->setRouteDirection(TrackTileBase::RD_UP_LEFT);
                         }
 
                         okToAdd = true;
@@ -138,7 +138,7 @@ unsigned int Route::length() const
     return m_route.size();
 }
 
-TrackTile * Route::get(unsigned int index) const
+TrackTileBase * Route::get(unsigned int index) const
 {
     if (index < length())
         return m_route[index];
@@ -148,13 +148,13 @@ TrackTile * Route::get(unsigned int index) const
 
 struct mySortFunc
 {
-    bool operator () (TrackTile * lhs, TrackTile * rhs)
+    bool operator () (TrackTileBase * lhs, TrackTileBase * rhs)
     {
         return lhs->routeIndex() < rhs->routeIndex();
     }
 };
 
-void Route::buildFromVector(QVector<TrackTile *> routeVector)
+void Route::buildFromVector(QVector<TrackTileBase *> routeVector)
 {
     if (routeVector.size())
     {
@@ -162,7 +162,7 @@ void Route::buildFromVector(QVector<TrackTile *> routeVector)
 
         std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
 
-        for (TrackTile * tile : routeVector)
+        for (TrackTileBase * tile : routeVector)
         {
             if (tile->routeIndex() >= 0)
             {

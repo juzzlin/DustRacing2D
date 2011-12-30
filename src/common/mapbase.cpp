@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "map.h"
-#include "tracktile.h"
-#include "trackdata.h"
+#include "mapbase.h"
+#include "tracktilebase.h"
+#include "trackdatabase.h"
 
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
+MapBase::MapBase(TrackDataBase * trackData, unsigned int cols, unsigned int rows)
 : m_trackData(trackData)
 , m_cols(cols)
 , m_rows(rows)
@@ -28,7 +28,7 @@ Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
     // Create an empty map
     for (unsigned int j = 0; j < m_rows; j++)
     {
-        QVector<TrackTile *> row;
+        QVector<TrackTileBase *> row;
         for (unsigned int i = 0; i < m_cols; i++)
         {
             row << nullptr;
@@ -36,30 +36,19 @@ Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
 
         m_map << row;
     }
-
-    // Create tiles and set coordinates.
-    for (unsigned int i = 0; i < m_cols; i++)
-        for (unsigned int j = 0; j < m_rows; j++)
-        {
-            TrackTile * newTile = new TrackTile(m_trackData,
-                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                QPoint(i, j));
-            setTile(i, j, newTile);
-        }
 }
 
-unsigned int Map::cols() const
+unsigned int MapBase::cols() const
 {
     return m_cols;
 }
 
-unsigned int Map::rows() const
+unsigned int MapBase::rows() const
 {
     return m_rows;
 }
 
-bool Map::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
+bool MapBase::setTile(unsigned int x, unsigned int y, TrackTileBase * pTile)
 {
     if (x >= m_cols || y >= m_rows)
         return false;
@@ -69,10 +58,14 @@ bool Map::setTile(unsigned int x, unsigned int y, TrackTile * pTile)
     return true;
 }
 
-TrackTile * Map::getTile(unsigned int x, unsigned int y) const
+TrackTileBase * MapBase::getTile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
         return nullptr;
 
     return m_map[y][x];
+}
+
+MapBase::~MapBase()
+{
 }

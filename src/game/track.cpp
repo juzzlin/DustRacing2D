@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "../common/map.h"
-#include "../common/trackdata.h"
 #include "track.h"
+#include "trackdata.h"
 #include "tracktile.h"
+#include "map.h"
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
 #include <QImage>
@@ -58,7 +58,7 @@ TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
     MCUint j = y * m_rows / m_height;
     j = j >= m_rows ? m_rows - 1 : j;
 
-    return m_pTrackData->map().getTile(i, j);
+    return static_cast<TrackTile *>(m_pTrackData->map().getTile(i, j));
 }
 
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
@@ -87,7 +87,7 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
 
 void Track::render(MCCamera * pCamera)
 {
-    const Map & rMap = m_pTrackData->map();
+    const MapBase & rMap = m_pTrackData->map();
 
     // Get the Camera window
     MCBBox<MCFloat> cameraBox(pCamera->bbox());
@@ -111,7 +111,7 @@ void Track::render(MCCamera * pCamera)
         x = i0 * w;
         for (MCUint i = i0; i <= i2; i++)
         {
-            if (TrackTile * pTile = rMap.getTile(i, j))
+            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
             {
                 if (MCSurface * pSurface = pTile->surface())
                 {

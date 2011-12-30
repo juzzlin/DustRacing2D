@@ -19,6 +19,8 @@
 #include "../common/tracktilebase.h"
 #include "MiniCore/Core/MCSurface"
 
+class TrackData;
+
 //! The track tile used in the game.
 class TrackTile : public TrackTileBase
 {
@@ -33,7 +35,7 @@ public:
     //! Constructor.
     //! See TrackTileBase.
     TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
-              const QString & type = "clear");
+        const QString & type = "clear");
 
     //! Destructor
     virtual ~TrackTile();

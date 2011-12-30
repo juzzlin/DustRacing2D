@@ -20,13 +20,12 @@
 #include "objectdata.h"
 #include "objectloader.h"
 #include "trackio.h"
+#include "trackdata.h"
 #include "tracktile.h"
 #include "editordata.h"
 #include "editorview.h"
 #include "editorscene.h"
 #include "newtrackdialog.h"
-
-#include "../common/trackdata.h"
 
 #include <QAction>
 #include <QApplication>
@@ -577,11 +576,11 @@ void MainWindow::addTilesToScene()
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * tile = data->map().getTile(i, j))
+                if (TrackTile * tile = static_cast<TrackTile *>(data->map().getTile(i, j)))
                     m_editorScene->addItem(tile);
 
         if (data->map().getTile(0, 0))
-            data->map().getTile(0, 0)->setActive(true);
+            static_cast<TrackTile *>(data->map().getTile(0, 0))->setActive(true);
     }
 }
 
@@ -620,7 +619,7 @@ void MainWindow::removeTilesFromScene()
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * tile = data->map().getTile(i, j))
+                if (TrackTile * tile = static_cast<TrackTile *>(data->map().getTile(i, j)))
                 {
                     m_editorScene->removeItem(tile);
                     delete tile;
@@ -657,8 +656,8 @@ void MainWindow::clear()
 
         for (unsigned int i = 0; i < cols; i++)
             for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * p = data->map().getTile(i, j))
-                    p->setTileType("clear");
+                if (TrackTile * pTile = static_cast<TrackTile *>(data->map().getTile(i, j)))
+                    pTile->setTileType("clear");
 
         m_console->append(QString(tr("Tiles cleared.")));
 
