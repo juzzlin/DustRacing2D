@@ -27,7 +27,7 @@
 class MCObjectFactoryImpl;
 class MCTextureManager;
 
-//! Class that is used when loading objects from file.
+//! MCObjectFactory is a factory class that can be used when loading objects from file.
 class MCObjectFactory
 {
 public:
@@ -45,6 +45,10 @@ public:
     //! Build an object with a GL view.
     //! MCObjectFactory keeps the ownership.
     MCObject & build(const MCGLObjectData & data);
+
+    //! Build an object with a custom view.
+    //! MCObjectFactory keeps the ownership.
+    MCObject & build(const MCObjectData & data, MCShapeView & view);
 
 private:
 

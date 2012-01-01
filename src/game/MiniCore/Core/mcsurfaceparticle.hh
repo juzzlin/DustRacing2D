@@ -32,36 +32,36 @@ class MCSurfaceParticle : public MCParticle
 {
 public:
 
-  //! (Re-)init the particle.
-  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime,
-                    MCSurface * pSurface);
+    //! (Re-)init the particle.
+    virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime,
+        MCSurface * pSurface);
 
-  //! Create a new particle or return recycled one
-  static MCSurfaceParticle * create();
+    //! Create a new particle or return recycled one
+    static MCSurfaceParticle * create();
 
-  //! \reimp
-  virtual void recycle();
+    //! \reimp
+    virtual void recycle();
 
 protected:
 
-  //! Constructor
-  MCSurfaceParticle();
+    //! Constructor
+    MCSurfaceParticle();
 
-  //! Destructor
-  virtual ~MCSurfaceParticle();
+    //! Destructor
+    virtual ~MCSurfaceParticle();
 
 private:
 
-  //! \reimp
-  virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
+    //! \reimp
+    virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
 
-  //! Recycler object
-  static MCRecycler<MCSurfaceParticle> m_recycler;
-  friend class MCRecycler<MCSurfaceParticle>;
+    //! Recycler object
+    static MCRecycler<MCSurfaceParticle> m_recycler;
+    friend class MCRecycler<MCSurfaceParticle>;
 
-  DISABLE_COPY(MCSurfaceParticle);
-  DISABLE_ASSI(MCSurfaceParticle);
-  MCSurfaceParticleImpl * const m_pImpl;
+    DISABLE_COPY(MCSurfaceParticle);
+    DISABLE_ASSI(MCSurfaceParticle);
+    MCSurfaceParticleImpl * const m_pImpl;
 };
 
 #endif // MCSURFACEPARTICLE_HH

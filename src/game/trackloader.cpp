@@ -25,6 +25,7 @@
 #include "trackloader.h"
 #include "trackobject.h"
 #include "tracktile.h"
+#include "treeview.h"
 
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
@@ -198,20 +199,41 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     const int y = tag.attribute("y", "0").toInt();
 
     // TODO: A separate config file for these
-    MCSurfaceObjectData tireData("tire");
-    tireData.setMass(25);
-    tireData.setSurfaceId("tire");
-    tireData.setDefaultCircleShape(true);
-    tireData.setRestitution(0.5f);
-    tireData.setXYFriction(0.25f);
+    if (role == "tire")
+    {
+        MCSurfaceObjectData data("tire");
+        data.setMass(25);
+        data.setSurfaceId("tire");
+        data.setDefaultCircleShape(true);
+        data.setRestitution(0.5f);
+        data.setXYFriction(0.25f);
 
-    MCObject & tire = m_objectFactory.build(tireData);
-    tire.setInitialLocation(
-        MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(
+            MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
 
-    // Wrap the MCObject in a TrackObject and add to
-    // the TrackData
-    newData.objects().add(*new TrackObject(category, role, tire), true);
+        // Wrap the MCObject in a TrackObject and add to
+        // the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "tree")
+    {
+        MCFloat radius = 32;
+
+        MCSurfaceObjectData data("tree");
+        data.setStationary(true);
+        data.setRestitution(0.75f);
+        data.setShapeRadius(radius);
+
+        TreeView * view = new TreeView(*m_textureManager.surface("tree"), radius, 2, 20, 4);
+        MCObject & object = m_objectFactory.build(data, *view);
+        object.setInitialLocation(
+            MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
+
+        // Wrap the MCObject in a TrackObject and add to
+        // the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
 }
 
 unsigned int TrackLoader::tracks() const

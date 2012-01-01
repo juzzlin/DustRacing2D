@@ -87,6 +87,12 @@ public:
     //! Get global friction.
     MCFloat xyFriction() const;
 
+    //! Set stationary.
+    void setStationary(bool stationary);
+
+    //! Return true if stationary.
+    bool stationary() const;
+
 private:
 
     DISABLE_COPY(MCObjectData);

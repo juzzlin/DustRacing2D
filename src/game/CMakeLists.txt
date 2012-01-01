@@ -15,6 +15,7 @@ trackdata.cpp
 trackloader.cpp
 trackobject.cpp
 tracktile.cpp
+treeview.cpp
 ../common/config.cpp
 ../common/objectbase.cpp
 ../common/objects.cpp

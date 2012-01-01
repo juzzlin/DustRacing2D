@@ -33,6 +33,7 @@ private:
     MCFloat shapeHeight;
     MCFloat restitution;
     MCFloat xyFriction;
+    bool stationary;
     friend class MCObjectData;
 };
 

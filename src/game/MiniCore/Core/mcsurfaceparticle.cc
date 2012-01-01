@@ -29,35 +29,35 @@ MCSurfaceParticleImpl::MCSurfaceParticleImpl()
 MCSurfaceParticleImpl::~MCSurfaceParticleImpl()
 {}
 
-MCSurfaceParticle::MCSurfaceParticle() :
-    m_pImpl(new MCSurfaceParticleImpl)
+MCSurfaceParticle::MCSurfaceParticle()
+: m_pImpl(new MCSurfaceParticleImpl)
 {
-  setView(new MCSurfaceView);
+    setView(new MCSurfaceView);
 }
 
 void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime,
-                             MCSurface * pSurface)
+    MCSurface * pSurface)
 {
-  MCParticle::init(newLocation, newRadius, newLifeTime);
-  setSurface(pSurface);
+    MCParticle::init(newLocation, newRadius, newLifeTime);
+    setSurface(pSurface);
 }
 
 void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
 {
-  MCParticle::init(newLocation, newRadius, newLifeTime);
+    MCParticle::init(newLocation, newRadius, newLifeTime);
 }
 
 MCSurfaceParticle * MCSurfaceParticle::create()
 {
-  return m_recycler.newObject();
+    return m_recycler.newObject();
 }
 
 void MCSurfaceParticle::recycle()
 {
-  m_recycler.freeObject(this);
+    m_recycler.freeObject(this);
 }
 
 MCSurfaceParticle::~MCSurfaceParticle()
 {
-  delete m_pImpl;
+    delete m_pImpl;
 }

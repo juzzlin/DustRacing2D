@@ -35,6 +35,7 @@ MCObjectDataImpl::MCObjectDataImpl()
 , shapeHeight(0.0f)
 , restitution(0.5f)
 , xyFriction(0.0f)
+, stationary(false)
 {
 }
 
@@ -109,6 +110,16 @@ void MCObjectData::setXYFriction(MCFloat friction)
 MCFloat MCObjectData::xyFriction() const
 {
     return m_pImpl->xyFriction;
+}
+
+void MCObjectData::setStationary(bool stationary)
+{
+    m_pImpl->stationary = stationary;
+}
+
+bool MCObjectData::stationary() const
+{
+    return m_pImpl->stationary;
 }
 
 MCObjectData::~MCObjectData()
