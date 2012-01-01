@@ -68,7 +68,7 @@ MCFloat MCObjectData::shapeRadius() const
 void MCObjectData::setShapeWidth(MCFloat width)
 {
     m_pImpl->shape       = MCObjectData::Rect;
-    m_pImpl->shapeHeight = width;
+    m_pImpl->shapeWidth  = width;
 }
 
 MCFloat MCObjectData::shapeWidth() const
