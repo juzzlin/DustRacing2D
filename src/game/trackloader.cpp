@@ -223,7 +223,8 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         MCSurfaceObjectData data("tree");
         data.setStationary(true);
         data.setRestitution(0.25f);
-        data.setShapeRadius(radius);
+        data.setShapeWidth(radius * 2);
+        data.setShapeHeight(radius * 2);
 
         TreeView * view = new TreeView(*m_textureManager.surface("tree"), radius, 2, 20, 4);
         MCObject & object = m_objectFactory.build(data, *view);
