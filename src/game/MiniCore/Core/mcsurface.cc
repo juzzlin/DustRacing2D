@@ -312,6 +312,11 @@ void MCSurfaceImpl::renderShadowScaled(
     glPopAttrib();
 }
 
+void MCSurface::doAlphaTest() const
+{
+    m_pImpl->doAlphaTest();
+}
+
 void MCSurfaceImpl::doAlphaTest() const
 {
     if (m_useAlphaTest)

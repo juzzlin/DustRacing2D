@@ -23,8 +23,6 @@
 //! Implementation class for MCSurface
 class MCSurfaceImpl
 {
-public:
-
     MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height);
     virtual ~MCSurfaceImpl() {};
 
@@ -34,9 +32,6 @@ public:
     inline void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
     inline void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
     inline void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
-
-private:
-
     inline void doAlphaTest() const;
 
     GLuint m_handle;

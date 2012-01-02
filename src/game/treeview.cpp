@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "treeview.h"
+#include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"
 
@@ -35,7 +36,7 @@ TreeView::~TreeView()
 {
 }
 
-void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * p)
+void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
 {
     if (++m_topAngle >= 720)
     {
@@ -45,20 +46,51 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * p)
     m_top.setI(MCTrigonom::cos(m_topAngle / 2));
     m_top.setJ(MCTrigonom::sin(m_topAngle / 2));
 
-    MCFloat branchHeight  = m_branchHeight;
-    MCFloat r             = m_r0;
-    MCUint  angle         = 0;
+    MCFloat branchHeight = m_branchHeight;
+    MCFloat r            = m_r0;
+    MCUint  angle        = 0;
 
     glPushAttrib(GL_ENABLE_BIT);
     glDisable(GL_DEPTH_TEST);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, surface()->handle());
+
+    surface()->doAlphaTest();
 
     for (int i = 0; i < m_branches; i++)
     {
-        surface()->renderScaled(
-            p,
-            l.i() + m_top.i() * branchHeight / 2,
-            l.j() + m_top.j() * branchHeight / 2,
-            branchHeight, r, r, angle);
+        MCFloat x = l.i() + m_top.i() * branchHeight / 2;
+        MCFloat y = l.j() + m_top.j() * branchHeight / 2;
+
+        const MCFloat z = branchHeight;
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        glPushMatrix();
+        glTranslated(x, y, z);
+        glRotated(angle, 0, 0, 1);
+
+        glNormal3i(0, 0, 1);
+
+        glBegin(GL_QUADS);
+
+        glTexCoord2i(0, 0);
+        glVertex2f(-r, -r);
+        glTexCoord2i(0, 1);
+        glVertex2f(-r, r);
+        glTexCoord2i(1, 1);
+        glVertex2f(r, r);
+        glTexCoord2i(1, 0);
+        glVertex2f(r, -r);
+
+        glEnd();
+
+        glPopMatrix();
 
         branchHeight += m_dBranchHeight;
         r            += m_dr;

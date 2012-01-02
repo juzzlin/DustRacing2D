@@ -64,6 +64,12 @@ public:
     //!        if useAlphaTest equals false.
     void setAlphaTest(bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
 
+    //! Runs the corresponding GL-commands defined in setAlphaTest().
+    //! This is done automtically, but doAlphaTest() can be used if
+    //! someone else renders the surface by using the texture
+    //! handle and wants to run the configured alpha test.
+    void doAlphaTest() const;
+
    /*! Get bounding box for a rotated surface
     * \param x x-coordinate
     * \param y y-coordinate
