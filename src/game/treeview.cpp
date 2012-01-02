@@ -49,14 +49,23 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * p)
     MCFloat r             = m_r0;
     MCUint  angle         = 0;
 
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_DEPTH_TEST);
+
     for (int i = 0; i < m_branches; i++)
     {
         surface()->renderScaled(
-            p, l.i() + m_top.i() * branchHeight / 2, l.j() + m_top.j() * branchHeight / 2, branchHeight, r, r, angle);
+            p,
+            l.i() + m_top.i() * branchHeight / 2,
+            l.j() + m_top.j() * branchHeight / 2,
+            branchHeight, r, r, angle);
+
         branchHeight += m_dBranchHeight;
         r            += m_dr;
         angle        += m_dAngle;
     }
+
+    glPopAttrib();
 }
 
 void TreeView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p)
