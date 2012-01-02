@@ -10,6 +10,7 @@ race.cpp
 renderer.cpp
 scene.cpp
 slidefrictiongenerator.cpp
+timing.cpp
 track.cpp
 trackdata.cpp
 trackloader.cpp
@@ -29,6 +30,7 @@ set(MOC_HDRS
 game.h
 mainwindow.h
 renderer.h
+timing.h
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

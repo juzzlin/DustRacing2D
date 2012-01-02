@@ -41,7 +41,7 @@ Scene::Scene(MCSurface & carSurface)
 , m_cameraBaseOffset(0)
 {
     m_car.setLayer(Layers::Cars);
-    m_race.addCar(&m_car);
+    m_race.addCar(m_car);
 }
 
 void Scene::updateFrame(InputHandler & handler,
@@ -113,7 +113,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     const MCUint MAX_Z = 1000;
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
-    m_race.setTrack(&activeTrack);
+    m_race.setTrack(activeTrack);
     m_race.init();
 
     // Add objects to the world
@@ -143,6 +143,8 @@ void Scene::setActiveTrack(Track & activeTrack)
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
     }
+
+    m_race.start();
 }
 
 Track & Scene::activeTrack() const

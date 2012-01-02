@@ -17,19 +17,66 @@
 #define TIMING_H
 
 #include <QObject>
+#include <QHash>
+#include <QTime>
 
-class timing : public QObject
+class Car;
+
+class Timing : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit timing(QObject * parent = 0);
+    //! Constructor.
+    explicit Timing(QObject * parent = nullptr);
 
-signals:
+    //! Destructor.
+    ~Timing();
 
-public slots:
+    //! Completes the current lap for the given car.
+    void lapCompleted(Car & car);
 
+    //! Returns last lap time in 10th of secs for the given car or
+    //! -1 if invalid car or time not set.
+    int lastLapTime(Car & car);
+
+    //! Starts the timing.
+    void start();
+
+    //! Stops the timing.
+    void stop();
+
+    //! Adds the given car to the timing.
+    void addCar(Car & car);
+
+    //! Removes the given car from the timing.
+    void removeCar(Car & car);
+
+    //! Converts milliseconds to string "hh:mm:ss.zzz".
+    QString msecToString(int msec) const;
+
+private:
+
+    //! Timing structure.
+    class Times
+    {
+    public:
+        Times()
+        : lastLapTime(-1)
+        , recordLapTime(-1)
+        , totalTime(0)
+        , lap(0)
+        {}
+
+        int lastLapTime;
+        int recordLapTime;
+        int totalTime;
+        int lap;
+    };
+
+    QHash<Car *, Timing::Times> m_times;
+    QTime m_time;
 };
 
 #endif // TIMING_H

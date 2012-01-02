@@ -36,41 +36,49 @@ void Race::init()
     }
 }
 
+void Race::start()
+{
+    m_timing.start();
+}
+
 void Race::update()
 {
     for(Car * pCar : m_cars)
     {
-        checkRoute(pCar);
+        checkRoute(*pCar);
     }
 }
 
-void Race::checkRoute(Car * pCar)
+void Race::checkRoute(Car & car)
 {
     assert(m_pTrack);
 
     TrackTile * pCurrent = m_pTrack->trackTileAtLocation(
-        pCar->getX(), pCar->getY());
+        car.getX(), car.getY());
 
     // Lap progressed?
-    if (pCurrent->routeIndex() == m_routeHash[pCar] + 1)
+    if (pCurrent->routeIndex() == m_routeHash[&car] + 1)
     {
-        m_routeHash[pCar] = pCurrent->routeIndex();
+        m_routeHash[&car] = pCurrent->routeIndex();
     }
     // Lap finished?
-    else if (m_routeHash[pCar] ==
+    else if (m_routeHash[&car] ==
         static_cast<int>(m_pTrack->trackData().route().length()) - 1)
     {
         if (pCurrent->routeIndex() == 1)
         {
-            m_routeHash[pCar] = 1;
-            std::cout << "A New lap!" << std::endl;
+            m_routeHash[&car] = 1;
+            m_timing.lapCompleted(car);
+            std::cout << "Lap completed: "
+                << m_timing.msecToString(m_timing.lastLapTime(car)).toStdString()
+                << std::endl;
         }
     }
 }
 
-void Race::setTrack(Track * pTrack)
+void Race::setTrack(Track & track)
 {
-    m_pTrack = pTrack;
+    m_pTrack = &track;
 }
 
 void Race::setLapCount(unsigned int laps)
@@ -78,12 +86,14 @@ void Race::setLapCount(unsigned int laps)
     m_lapCount = laps;
 }
 
-void Race::addCar(Car * pCar)
+void Race::addCar(Car & car)
 {
-    if (find(m_cars.begin(), m_cars.end(), pCar) == m_cars.end())
+    if (find(m_cars.begin(), m_cars.end(), &car) == m_cars.end())
     {
-        m_cars.push_back(pCar);
+        m_cars.push_back(&car);
     }
+
+    m_timing.addCar(car);
 }
 
 Race::~Race()

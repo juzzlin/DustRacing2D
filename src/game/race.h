@@ -19,6 +19,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "timing.h"
+
 class Car;
 class Track;
 
@@ -36,21 +38,24 @@ public:
     //! Init the race.
     void init();
 
+    //! Start the race and timing.
+    void start();
+
     //! Update situation.
     void update();
 
     //! Set the current race track.
-    void setTrack(Track * pTrack);
+    void setTrack(Track & track);
 
     //! Set the number of laps.
     void setLapCount(unsigned int laps);
 
     //! Add a car to the race.
-    void addCar(Car * pCar);
+    void addCar(Car & car);
 
 private:
 
-    void checkRoute(Car * pCar);
+    void checkRoute(Car & car);
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
@@ -59,6 +64,8 @@ private:
     RouteHash m_routeHash;
 
     unsigned int m_lapCount;
+
+    Timing m_timing;
 
     Track * m_pTrack;
 };
