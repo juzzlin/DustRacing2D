@@ -36,6 +36,12 @@ Core/mcglobjectdata.cc
 Core/mcglrectparticle.cc
 Util/mctexturemanager.cc
 Util/mctextureconfigloader.cc
+Text/mctexturefont.cc
+Text/mctexturefontconfigloader.cc
+Text/mctexturefontdata.cc
+Text/mctexturefontmanager.cc
+Text/mctextureglyph.cc
+Text/mctexturetext.cc
 )
 
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${OPENGL_INCLUDE_DIR})

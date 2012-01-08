@@ -42,7 +42,7 @@ void MCTextureManager::load(
         int numTextures = loader.textures();
         for (int i = 0; i < numTextures; i++)
         {
-            const MCTextureData & data = *loader.texture(i);
+            const MCTextureData & data = loader.texture(i);
 
             // Load image file
             const QString path =

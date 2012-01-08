@@ -28,6 +28,8 @@
 #include "mctexturedata.hh"
 #include "../Core/MCLogger"
 
+#include <cassert>
+
 MCTextureConfigLoader::MCTextureConfigLoader()
 : m_filePath("")
 , m_textures()
@@ -182,14 +184,11 @@ unsigned int MCTextureConfigLoader::textures() const
     return m_textures.size();
 }
 
-MCTextureData * MCTextureConfigLoader::texture(unsigned int index) const
+MCTextureData & MCTextureConfigLoader::texture(unsigned int index) const
 {
-    if (index < static_cast<unsigned int>(m_textures.size()))
-    {
-        return m_textures.at(index);
-    }
-
-    return nullptr;
+    assert(index < static_cast<unsigned int>(m_textures.size()));
+    assert(m_textures.at(index));
+    return *m_textures.at(index);
 }
 
 MCTextureConfigLoader::~MCTextureConfigLoader()

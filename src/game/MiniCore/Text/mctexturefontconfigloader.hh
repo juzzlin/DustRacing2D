@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,46 +17,44 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCTEXTURECONFIGLOADER_HH
-#define MCTEXTURECONFIGLOADER_HH
+#ifndef MCTEXTUREFONTCONFIGLOADER_HH
+#define MCTEXTUREFONTCONFIGLOADER_HH
 
-#include <QString>
 #include <QVector>
+#include <QString>
 
-#include <GL/gl.h> // For GLenum.
+class MCTextureFontData;
 
-class MCTextureData;
-
-//! Manages the texture config loading.
-class MCTextureConfigLoader
+//! Loads the texture font config XML-file and creates
+//! MCTextureFontData's used by MCTextureFontManager.
+class MCTextureFontConfigLoader
 {
 public:
 
     //! Constructor.
-    MCTextureConfigLoader();
+    MCTextureFontConfigLoader();
 
     //! Destructor.
-    ~MCTextureConfigLoader();
+    ~MCTextureFontConfigLoader();
 
     //! Set file path.
     void setConfigPath(QString filePath);
 
-    //! Load all textures found in the current filePath.
+    //! Load all fonts found in the current filePath.
     //! \return true if succeeded.
-    bool loadTextures();
+    bool loadFonts();
 
-    //! Get texture count.
-    unsigned int textures() const;
+    //! Get font count.
+    unsigned int fonts() const;
 
-    //! Get a texture of given index.
-    MCTextureData & texture(unsigned int index) const;
+    //! Get font data of the given index.
+    MCTextureFontData & font(unsigned int index) const;
 
 private:
 
-    //! Convert alpha test function string to enum.
-    GLenum alphaFunctionStringToEnum(QString function) const;
+    typedef QVector<MCTextureFontData*> FontVector;
     QString m_filePath;
-    QVector<MCTextureData *> m_textures;
+    FontVector m_fonts;
 };
 
-#endif // MCTEXTURECONFIGLOADER_HH
+#endif // MCTEXTUREFONTCONFIGLOADER_HH
