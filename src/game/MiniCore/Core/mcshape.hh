@@ -25,6 +25,7 @@
 #include "mctypes.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
+#include "mcsegment.hh"
 
 #include <memory>
 
@@ -120,21 +121,18 @@ public:
     virtual bool contains(const MCVector2d<MCFloat> & p) const = 0;
 
     /*! \brief Returns the interpenetration depth for the given point.
-     * Note!!: It must be first tested, that p1 is inside the shape.
-     * \param p1 The interpenetrated point to be tested
-     * \param p2 Control point e.g. the center of the colliding object
+     * Note!!: It must be first tested, that p.vertex0 is inside the shape.
+     * \param p The crossing segment to be tested.
      * \return Interpenetration depth.
      */
-    virtual int interpenetrationDepth(
-        const MCVector2d<MCFloat> & p1,
-        const MCVector2d<MCFloat> & p2) const = 0;
+    virtual int interpenetrationDepth(const MCSegment<MCFloat> & p) const = 0;
 
-    /*! Returns contact normal for the given point
-     * \param p The point to be tested. It can be outside or inside the shape.
-     * \return Contact normal pointing outwards the shape
+    /*! \brief Returns contact normal for the given point
+     * Note!!: It must be first tested, that p.vertex0 is inside the shape.
+     * \param p The crossing segment to be tested.
+     * \return Contact normal pointing outwards the shape.
      */
-    virtual MCVector2d<MCFloat> contactNormal(
-        const MCVector2d<MCFloat> & p) const = 0;
+    virtual MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const = 0;
 
     //! Get the moment of inertia (J).
     virtual MCFloat momentOfInertia() const = 0;

@@ -34,6 +34,7 @@ using std::sqrt;
 using std::max;
 
 #include "mcvector2d.hh"
+#include "mcsegment.hh"
 
 //! Miscellaneous math utilities.
 class MCMathUtil
@@ -57,6 +58,10 @@ public:
     template <typename T>
     inline static MCVector2d<T> projection(
         const MCVector2d<T> & a, const MCVector2d<T> & b);
+
+    //! Returns true if the given segments cross.
+    template <typename T>
+    inline static bool crosses(const MCSegment<T> & a, const MCSegment<T> & b);
 
     //! Returns the sign of x.
     template <typename T>
@@ -99,6 +104,28 @@ MCVector2d<T> MCMathUtil::projection(
     const MCVector2d<T> & a, const MCVector2d<T> & b)
 {
     return b * a.dot(b) / b.lengthSquared();
+}
+
+template <typename T>
+bool MCMathUtil::crosses(const MCSegment<T> & a, const MCSegment<T> & b)
+{
+    const MCVector2d<T> a0a1(a.vertex1 - a.vertex0);
+    const MCVector2d<T> a0b0(b.vertex0 - a.vertex0);
+    const MCVector2d<T> a0b1(b.vertex1 - a.vertex0);
+
+    if (sign(a0a1 * a0b0) != sign(a0a1 * a0b1))
+    {
+        const MCVector2d<T> b0b1(b.vertex1 - b.vertex0);
+        const MCVector2d<T> b0a0(a.vertex0 - b.vertex0);
+        const MCVector2d<T> b0a1(a.vertex1 - b.vertex0);
+
+        if (sign(b0b1 * b0a0) != sign(b0b1 * b0a1))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 template <typename T>

@@ -44,11 +44,10 @@ public:
     bool contains(const MCVector2d<MCFloat> & p) const;
 
     //! \reimp
-    int interpenetrationDepth(
-        const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
+    int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
 
     //! \reimp
-    MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
+    MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
 
     //! Return type id
     static MCUint typeID();

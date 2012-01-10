@@ -186,7 +186,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
     const MCVector2d<T> e2 = m_v[3] - m_v[2];
     const MCVector2d<T> e3 = m_v[0] - m_v[3];
 
-    // Do the test
+    // Do the test by using cross products.
     const MCMathUtil::SIGN ref = MCMathUtil::sign(e0 * (m_v[1] - p));
     if (MCMathUtil::sign(e1 * (m_v[2] - p)) == ref &&
         MCMathUtil::sign(e2 * (m_v[3] - p)) == ref &&

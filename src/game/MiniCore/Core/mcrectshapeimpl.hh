@@ -22,6 +22,7 @@
 
 #include "mcshapeimpl.hh"
 #include "mcedge.hh"
+#include "mcsegment.hh"
 #include "mcobbox.hh"
 
 class MCObject;
@@ -34,10 +35,9 @@ private:
   MCRectShapeImpl(MCObject & parent, MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
   static MCUint typeID;
-  inline MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
-  inline int interpenetrationDepth(
-      const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
-  inline MCVector2d<MCFloat> contactNormal(const MCVector2d<MCFloat> & p) const;
+  inline MCEdge<MCFloat> edgeForSegment(const MCSegment<MCFloat> & p) const;
+  inline int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
+  inline MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
   void renderShapeOutline(MCCamera * pCamera);
   MCOBBox<MCFloat> obbox;
   MCFloat momentOfInertiaFactor;

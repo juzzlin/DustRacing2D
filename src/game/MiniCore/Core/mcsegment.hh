@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,27 +17,27 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCEDGE_HH
-#define MCEDGE_HH
+#ifndef MCSEGMENT_HH
+#define MCSEGMENT_HH
 
 #include "mcvector2d.hh"
 
-//! MCEdge is a structure for an edge vector and its origin.
+//! MCSegment is a structure for a geometrical segment.
 template <typename T>
-struct MCEdge
+struct MCSegment
 {
     //! Constructor.
-    MCEdge(const MCVector2d<T> & newEdge, const MCVector2d<T> & newOrigin)
-    : edge(newEdge)
-    , origin(newOrigin)
+    MCSegment(const MCVector2d<T> & v0, const MCVector2d<T> & v1)
+    : vertex0(v0)
+    , vertex1(v1)
     {}
 
     //! Constructor.
-    MCEdge()
+    MCSegment()
     {}
 
-    MCVector2d<T> edge;
-    MCVector2d<T> origin;
+    MCVector2d<T> vertex0;
+    MCVector2d<T> vertex1;
 };
 
-#endif // MCEDGE_HH
+#endif // MCSEGMENT_HH

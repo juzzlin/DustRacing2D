@@ -21,7 +21,6 @@
 #define MCCONTACTRESOLVERIMPL_HH
 
 class MCContactResolver;
-class MCCircleShape;
 class MCRectShape;
 
 class MCContactResolverImpl
@@ -29,8 +28,6 @@ class MCContactResolverImpl
     MCContactResolverImpl();
     virtual ~MCContactResolverImpl();
     bool processRectRect(MCRectShape & object1, MCRectShape & object2);
-    bool processRectCircle(MCRectShape & object1, MCCircleShape & object2);
-    bool processCircleCircle(MCCircleShape & object1, MCCircleShape & object2);
     friend class MCContactResolver;
 };
 

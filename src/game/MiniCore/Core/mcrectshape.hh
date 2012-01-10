@@ -23,6 +23,7 @@
 #include "mcshape.hh"
 #include "mcobbox.hh"
 #include "mcedge.hh"
+#include "mcsegment.hh"
 
 class MCRectShapeImpl;
 class MCShapeView;
@@ -60,12 +61,10 @@ public:
     virtual bool contains(const MCVector2d<MCFloat> & p) const;
 
     //! \reimp
-    virtual int interpenetrationDepth(
-        const MCVector2d<MCFloat> & p1, const MCVector2d<MCFloat> & p2) const;
+    virtual int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
 
     //! \reimp
-    virtual MCVector2d<MCFloat> contactNormal(
-        const MCVector2d<MCFloat> & p) const;
+    virtual MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
 
     //! \brief Resize
     void resize(MCFloat width, MCFloat height);
@@ -73,8 +72,8 @@ public:
     //! Return the oriented bbox to access vertices etc.
     const MCOBBox<MCFloat> & obbox() const;
 
-    //! Return "nearest" edge for a point
-    MCEdge<MCFloat> edgeForPoint(const MCVector2d<MCFloat> & p) const;
+    //! Get crossing edge for the given segment.
+    MCEdge<MCFloat> edgeForSegment(const MCSegment<MCFloat> & p) const;
 
     //! Return the typeID
     static MCUint typeID();
