@@ -221,7 +221,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     else if (role == "tree")
     {
         const MCFloat treeViewRadius = 32;
-        const MCFloat treeBodyRadius = 16;
+        const MCFloat treeBodyRadius = 8;
 
         MCSurfaceObjectData data("tree");
         data.setStationary(true);
