@@ -26,8 +26,10 @@
 #include <QGLWidget>
 #include <GL/gl.h>
 
+#include <cassert>
+
 MCTextureManager::MCTextureManager()
-: m_mapSurfaces()
+: m_surfaceMap()
 {}
 
 void MCTextureManager::load(
@@ -39,7 +41,7 @@ void MCTextureManager::load(
     // Parse the texture config file
     if (loader.loadTextures())
     {
-        int numTextures = loader.textures();
+        const int numTextures = loader.textures();
         for (int i = 0; i < numTextures; i++)
         {
             const MCTextureData & data = loader.texture(i);
@@ -154,7 +156,7 @@ void MCTextureManager::createGLTextureFromImage(
     }
 
     // Store MCSurface to map
-    m_mapSurfaces[data.handle] = pSurface;
+    m_surfaceMap[data.handle] = pSurface;
 }
 
 void MCTextureManager::applyColorKey(QImage & textureImage,
@@ -183,27 +185,25 @@ void MCTextureManager::applyColorKey(QImage & textureImage,
     }
 }
 
-MCSurface * MCTextureManager::surface(const QString & id) const throw (MCException)
+MCSurface & MCTextureManager::surface(const QString & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (!m_mapSurfaces.contains(id))
+    if (!m_surfaceMap.contains(id))
     {
-        // No:
         throw MCException("Cannot find texture object for handle '" + id + "'");
-        return nullptr;
     }
-    else
-    {
-        // Yes: return handle for the texture
-        return m_mapSurfaces.find(id).value();
-    }
+
+    // Yes: return handle for the texture
+    MCSurface * pSurface = m_surfaceMap.find(id).value();
+    assert(pSurface);
+    return *pSurface;
 }
 
 MCTextureManager::~MCTextureManager()
 {
     // Delete OpenGL textures and Textures
-    SurfaceHash::iterator iter(m_mapSurfaces.begin());
-    while (iter != m_mapSurfaces.end())
+    auto iter(m_surfaceMap.begin());
+    while (iter != m_surfaceMap.end())
     {
         if (iter.value())
         {
@@ -214,5 +214,4 @@ MCTextureManager::~MCTextureManager()
         }
         iter++;
     }
-    m_mapSurfaces.clear();
 }

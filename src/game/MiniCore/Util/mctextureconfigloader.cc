@@ -18,11 +18,9 @@
 //
 
 #include <QDir>
-#include <QFile>
-#include <QStringList>
-#include <QTextStream>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QFile>
 
 #include "mctextureconfigloader.hh"
 #include "mctexturedata.hh"

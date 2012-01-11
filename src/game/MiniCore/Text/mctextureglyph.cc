@@ -16,3 +16,22 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
+
+#include "mctextureglyph.hh"
+
+#include <cassert>
+
+MCTextureGlyph::MCTextureGlyph(int glyph, UV uv0, UV uv1, UV uv2, UV uv3)
+: m_glyph(glyph)
+{
+    m_uv[0] = uv0;
+    m_uv[1] = uv1;
+    m_uv[2] = uv2;
+    m_uv[3] = uv3;
+}
+
+const MCTextureGlyph::UV & MCTextureGlyph::uv(MCUint vertex) const
+{
+    assert(vertex < 4);
+    return m_uv[vertex];
+}

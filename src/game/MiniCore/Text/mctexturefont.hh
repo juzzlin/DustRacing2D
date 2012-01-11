@@ -20,10 +20,33 @@
 #ifndef MCTEXTUREFONT_HH
 #define MCTEXTUREFONT_HH
 
+#include "mctextureglyph.hh"
+#include <unordered_map>
+
 //! Textured monospace font.
 class MCTextureFont
 {
+public:
 
+    //! Constructor.
+    //! \param textureHandle Handle to the OpenGL texture containing
+    //! all the monospace glyphs.
+    MCTextureFont(MCUint textureHandle);
+
+    //! Add a mapping from given glyph id to given MCTextureGlyph.
+    //! MCTextureGlyph includes e.g. uv-coordinates.
+    void addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph);
+
+    //! Return an MCTextureGlyph for the given id. Default containing
+    //! the whole texture is returned if not found.
+    MCTextureGlyph & glyph(int glyphId);
+
+private:
+
+    typedef std::unordered_map<int, MCTextureGlyph> GlyphHash;
+    GlyphHash m_glyphs;
+    MCTextureGlyph m_default;
+    MCUint m_textureHandle;
 };
 
 #endif // MCTEXTUREFONT_HH

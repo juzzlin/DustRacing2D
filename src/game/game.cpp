@@ -24,6 +24,7 @@
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
 #include "MiniCore/Util/MCTextureManager"
+#include "MiniCore/Text/MCTextureFontManager"
 #include <QDir>
 #include <QTime>
 
@@ -31,6 +32,7 @@ Game::Game()
 : m_pRenderer(nullptr)
 , m_pScene(nullptr)
 , m_pTextureManager(new MCTextureManager)
+, m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
 , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
 , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
 , m_pCamera(nullptr)
@@ -82,7 +84,7 @@ bool Game::init()
     try
     {
         // Load texture data
-        QString textureConfigPath = QString(Config::Common::DATA_PATH) +
+        const QString textureConfigPath = QString(Config::Common::DATA_PATH) +
             QDir::separator() + "textures.conf";
 
         MCLogger::logInfo("Loading texture config from %s..",
@@ -90,6 +92,15 @@ bool Game::init()
 
         m_pTextureManager->load(textureConfigPath,
             Config::Common::DATA_PATH);
+
+        // Load texture font data
+        const QString fontConfigPath = QString(Config::Common::DATA_PATH) +
+            QDir::separator() + "fonts.conf";
+
+        MCLogger::logInfo("Loading font config from %s..",
+            fontConfigPath.toStdString().c_str());
+
+        m_pTextureFontManager->load(fontConfigPath);
 
         // Load track data
         if (int numLoaded = m_pTrackLoader->loadTracks())
@@ -103,7 +114,7 @@ bool Game::init()
         }
 
         // Create the scene
-        m_pScene = new Scene(*m_pTextureManager->surface("car001"));
+        m_pScene = new Scene(m_pTextureManager->surface("car001"));
 
         // Set the default track
         m_pScene->setActiveTrack(*m_pTrackLoader->track(0));

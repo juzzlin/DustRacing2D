@@ -87,9 +87,9 @@ public:
     //! by calling handle() of the resulting MCSurface.
     //! MCTextureManager will keep the ownership.
     //! \param handle Handle defined in the textures XML file.
-    //! \return Pointer to the corresponding MCSurface.
+    //! \return Reference to the corresponding MCSurface.
     //! \throws MCException on failure.
-    MCSurface * surface(const QString & handle) const throw (MCException);
+    MCSurface & surface(const QString & handle) const throw (MCException);
 
 private:
 
@@ -112,7 +112,7 @@ private:
 
     //! Map for resulting surface objects
     typedef QHash<QString, MCSurface *> SurfaceHash;
-    SurfaceHash m_mapSurfaces;
+    SurfaceHash m_surfaceMap;
 };
 
 #endif // MCTEXTUREMANAGER_HH

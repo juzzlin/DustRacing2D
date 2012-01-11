@@ -16,3 +16,113 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
+
+#include "mctexturefontconfigloader.hh"
+#include "mctexturefont.hh"
+#include "mctexturefontdata.hh"
+#include "mctexturefontmanager.hh"
+
+#include "../Core/mctypes.hh"
+#include "../Core/mcsurface.hh"
+#include "../Util/mctexturemanager.hh"
+
+#include <cassert>
+
+MCTextureFontManager::MCTextureFontManager(
+    const MCTextureManager & textureManager)
+  : m_fontHash()
+  , m_textureManager(textureManager)
+{}
+
+void MCTextureFontManager::load(
+    const QString & fileName) throw (MCException)
+{
+    MCTextureFontConfigLoader loader;
+    loader.setConfigPath(fileName);
+
+    // Parse the texture config file
+    if (loader.loadFonts())
+    {
+        const int numFonts = loader.fonts();
+        for (int i = 0; i < numFonts; i++)
+        {
+            const MCTextureFontData & data = loader.font(i);
+            createFontFromData(data);
+        }
+    }
+    else
+    {
+        // Throw an exception
+        throw MCException("Parsing '" + fileName + "' failed!");
+    }
+}
+
+void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
+{
+    // Fetch the corresponding surface.
+    MCSurface & surface = m_textureManager.surface(data.surface);
+
+    // Create the new font using the GL texture handle given by the
+    // corresponding surface.
+    MCTextureFont * newFont = new MCTextureFont(surface.handle());
+
+    // Generate glyph structures from the loaded data.
+    // Loop thru glyph rows.
+    for (int j = 0; j < data.rows.size(); j++)
+    {
+        // Loop through glyphs in the row.
+        const MCTextureFontData::Row row       = data.rows[j];
+        const QString                rowGlyphs = row.glyphs;
+        for (int i = 0; i < rowGlyphs.length(); i++)
+        {
+            const MCFloat fi = i;
+            const MCFloat fy = row.y;
+            const MCFloat fh = row.h;
+            const MCFloat fH = surface.height();
+
+            // Calculate the uv-coordinates for the glyph.
+            MCTextureGlyph newGlyph(
+                rowGlyphs.at(i).toAscii(),
+                MCTextureGlyph::UV(
+                    fi / data.maxGlyphsPerRow, fy / fH),
+                MCTextureGlyph::UV(
+                    (fi + 1) / data.maxGlyphsPerRow, fy / fH),
+                MCTextureGlyph::UV(
+                    (fi + 1) / data.maxGlyphsPerRow, (fy + fh) / fH),
+                MCTextureGlyph::UV(
+                    fi / data.maxGlyphsPerRow, (fy + fh) / fH));
+
+            // Add glyph mapping to the font.
+            newFont->addGlyphMapping(rowGlyphs.at(i).toAscii(), newGlyph);
+        }
+    }
+
+    // Store the font.
+    m_fontHash[data.name] = newFont;
+}
+
+MCTextureFont & MCTextureFontManager::font(
+    const QString & name) const throw (MCException)
+{
+    // Try to find existing texture for the surface
+    if (!m_fontHash.contains(name))
+    {
+        // No:
+        throw MCException("Cannot find font object called '" + name + "'");
+    }
+
+    MCTextureFont * font = m_fontHash.find(name).value();
+    assert(font);
+    return *font;
+}
+
+MCTextureFontManager::~MCTextureFontManager()
+{
+    // Delete fonts
+    auto iter(m_fontHash.begin());
+    while (iter != m_fontHash.end())
+    {
+        delete iter.value();
+        iter++;
+    }
+}

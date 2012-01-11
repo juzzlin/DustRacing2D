@@ -184,7 +184,7 @@ void TrackLoader::handleTile(
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
-    tile->setSurface(m_textureManager.surface(id));
+    tile->setSurface(&m_textureManager.surface(id));
 
     if (index >= 0)
         routeVector << tile;
@@ -231,7 +231,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         data.setLayer(Layers::Tree);
 
         TreeView * view = new TreeView(
-            *m_textureManager.surface("tree"), treeViewRadius, 2, 20, 4);
+            m_textureManager.surface("tree"), treeViewRadius, 2, 20, 4);
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));

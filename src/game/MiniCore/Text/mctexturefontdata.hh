@@ -20,10 +20,38 @@
 #ifndef MCTEXTUREFONTDATA_HH
 #define MCTEXTUREFONTDATA_HH
 
+#include <QString>
+#include <QVector>
+
 //! Data class used by MCTextureFontConfigLoader.
 class MCTextureFontData
 {
+public:
 
+    //! Glyph row.
+    struct Row
+    {
+        //! Y-coordinate of the row.
+        int y;
+
+        //! Height of the row.
+        int h;
+
+        //! Glyphs in the row.
+        QString glyphs;
+    };
+
+    //! Name of the font.
+    QString name;
+
+    //! MCSurface handle including the glyphs.
+    QString surface;
+
+    //! Max number of glyphs per row in the texture image.
+    int maxGlyphsPerRow;
+
+    //! Glyph rows.
+    QVector<Row> rows;
 };
 
 #endif // MCTEXTUREFONTDATA_HH

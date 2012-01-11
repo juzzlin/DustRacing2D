@@ -41,7 +41,8 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     MCShape     * pShape   = nullptr;
     MCShapeView * pView    = nullptr;
     MCObject    * pObject  = nullptr;
-    MCSurface   * pSurface = m_pImpl->textureManager.surface(
+
+    MCSurface   & surface  = m_pImpl->textureManager.surface(
         QString(data.surfaceId().c_str()));
 
     switch (data.shape())
@@ -52,22 +53,22 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
         if (data.defaultCirleShape())
         {
             pObject = new MCObject(data.typeId());
-            pView   = new MCSurfaceView(pSurface);
+            pView   = new MCSurfaceView(&surface);
             pShape  = new MCCircleShape(*pObject, pView,
-                std::max(pSurface->width(), pSurface->height()) / 2);
+                std::max(surface.width(), surface.height()) / 2);
             pObject->setShape(pShape);
         }
         // Rect shape according to surface dimensions (default)
         else
         {
-            pObject = new MCObject(pSurface, data.typeId());
+            pObject = new MCObject(&surface, data.typeId());
         }
         break;
 
     // Explicit circle shape
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
-        pView   = new MCSurfaceView(pSurface);
+        pView   = new MCSurfaceView(&surface);
         pShape  = new MCCircleShape(*pObject, pView, data.shapeRadius());
         pObject->setShape(pShape);
         break;
@@ -75,7 +76,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     // Explicit rect shape
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
-        pView   = new MCSurfaceView(pSurface);
+        pView   = new MCSurfaceView(&surface);
         pShape  = new MCRectShape(*pObject, pView,
             data.shapeWidth(), data.shapeHeight());
         pObject->setShape(pShape);

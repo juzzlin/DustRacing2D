@@ -16,3 +16,31 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
+
+#include "mctexturefont.hh"
+
+MCTextureFont::MCTextureFont(MCUint textureHandle)
+  : m_default(
+    0,
+    MCTextureGlyph::UV(0, 0),
+    MCTextureGlyph::UV(1, 0),
+    MCTextureGlyph::UV(1, 1),
+    MCTextureGlyph::UV(0, 1))
+  , m_textureHandle(textureHandle)
+{
+}
+
+void MCTextureFont::addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph)
+{
+    m_glyphs.insert(GlyphHash::value_type(glyphId, textureGlyph));
+}
+
+MCTextureGlyph & MCTextureFont::glyph(int glyphId)
+{
+    auto textureGlyph = m_glyphs.find(glyphId);
+    if (textureGlyph != m_glyphs.end())
+    {
+        return textureGlyph->second;
+    }
+    return m_default;
+}

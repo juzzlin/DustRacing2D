@@ -20,6 +20,12 @@
 #include "mctexturefontconfigloader.hh"
 #include "mctexturefontdata.hh"
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+
+#include "../Core/MCLogger"
+
 #include <cassert>
 
 MCTextureFontConfigLoader::MCTextureFontConfigLoader()
@@ -33,7 +39,68 @@ void MCTextureFontConfigLoader::setConfigPath(QString filePath)
 
 bool MCTextureFontConfigLoader::loadFonts()
 {
-    // TODO
+    QDomDocument doc;
+    QFile file(m_filePath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return false;
+    }
+
+    file.close();
+
+    QDomElement root = doc.documentElement();
+    if (root.nodeName() == "fonts")
+    {
+        MCTextureFontData * newData = nullptr;
+        QDomNode node = root.firstChild();
+        while(!node.isNull() && node.nodeName() == "font")
+        {
+            newData = new MCTextureFontData;
+            QDomElement tag = node.toElement();
+            if(!tag.isNull())
+            {
+                newData->name            = tag.attribute("name", "");
+                newData->surface         = tag.attribute("surface", "");
+                newData->maxGlyphsPerRow = tag.attribute(
+                    "maxGlyphsPerRow", "0").toInt();
+
+                MCLogger::logInfo("Loading font '%s'..",
+                    newData->name.toStdString().c_str());
+
+                // Read child nodes of font node.
+                QDomNode childNode = node.firstChild();
+                while(!childNode.isNull())
+                {
+                    if (childNode.nodeName() == "row")
+                    {
+                        QDomElement tag = childNode.toElement();
+                        if(!tag.isNull())
+                        {
+                            MCTextureFontData::Row row;
+                            row.y      = tag.attribute("y", "0").toInt();
+                            row.h      = tag.attribute("h", "0").toInt();
+                            row.glyphs = tag.attribute("glyphs", "");
+
+                            newData->rows.push_back(row);
+                        }
+                    }
+
+                    childNode = childNode.nextSibling();
+                }
+            }
+
+            m_fonts << newData;
+
+            node = node.nextSibling();
+        }
+    }
+
     return true;
 }
 
@@ -55,6 +122,4 @@ MCTextureFontConfigLoader::~MCTextureFontConfigLoader()
     {
         delete font;
     }
-
-    m_fonts.clear();
 }

@@ -26,6 +26,7 @@ class TrackLoader;
 class MCCamera;
 class MCObjectFactory;
 class MCTextureManager;
+class MCTextureFontManager;
 
 //! The main game class.
 class Game : public QObject
@@ -71,20 +72,21 @@ private:
 
     void renderFrame();
 
-    Renderer         * m_pRenderer;
-    Scene            * m_pScene;
-    MCTextureManager * m_pTextureManager;
-    MCObjectFactory  * m_pObjectFactory;
-    TrackLoader      * m_pTrackLoader;
-    MCCamera         * m_pCamera;
-    InputHandler     * m_pInputHandler;
-    QTimer             m_updateTimer;
-    QTimer             m_renderTimer;
-    unsigned int       m_updateFps;
-    unsigned int       m_renderFps;
-    float              m_timeStep;
-    unsigned int       m_renderCount;
-    int                m_availableRenderTime;
+    Renderer             * m_pRenderer;
+    Scene                * m_pScene;
+    MCTextureManager     * m_pTextureManager;
+    MCTextureFontManager * m_pTextureFontManager;
+    MCObjectFactory      * m_pObjectFactory;
+    TrackLoader          * m_pTrackLoader;
+    MCCamera             * m_pCamera;
+    InputHandler         * m_pInputHandler;
+    QTimer                 m_updateTimer;
+    QTimer                 m_renderTimer;
+    unsigned int           m_updateFps;
+    unsigned int           m_renderFps;
+    float                  m_timeStep;
+    unsigned int           m_renderCount;
+    int                    m_availableRenderTime;
 };
 
 #endif // GAME_H
