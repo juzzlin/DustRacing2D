@@ -83,18 +83,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     }
 
     assert(pObject);
-
-    // Set mass
-    pObject->setMass(data.mass(), data.stationary());
-
-    // Set friction
-    pObject->setXYFriction(data.xyFriction());
-
-    // Set restitution
-    pObject->setRestitution(data.restitution());
-
-    // Set rendering layer
-    pObject->setLayer(data.layer(), false);
+    m_pImpl->setCommonProperties(*pObject, data);
 
     // Store for deletion
     m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
@@ -137,23 +126,28 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
     }
 
     assert(pObject);
-
-    // Set mass
-    pObject->setMass(data.mass(), data.stationary());
-
-    // Set friction
-    pObject->setXYFriction(data.xyFriction());
-
-    // Set restitution
-    pObject->setRestitution(data.restitution());
-
-    // Set rendering layer
-    pObject->setLayer(data.layer(), false);
+    m_pImpl->setCommonProperties(*pObject, data);
 
     // Store for deletion
     m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
 
     return *pObject;
+}
+
+void MCObjectFactoryImpl::setCommonProperties(
+    MCObject & object, const MCObjectData & data) const
+{
+    // Set mass
+    object.setMass(data.mass(), data.stationary());
+
+    // Set friction
+    object.setXYFriction(data.xyFriction());
+
+    // Set restitution
+    object.setRestitution(data.restitution());
+
+    // Set rendering layer
+    object.setLayer(data.layer(), false);
 }
 
 MCObjectFactory::~MCObjectFactory()

@@ -24,10 +24,15 @@
 #include <vector>
 #include "../Util/mctexturemanager.hh"
 
+class MCObject;
+class MCObjectData;
+
 class MCObjectFactoryImpl
 {
 private:
     MCObjectFactoryImpl(MCTextureManager & tm);
+    void setCommonProperties(
+        MCObject & object, const MCObjectData & data) const;
     std::vector<std::shared_ptr<MCObject> > objects;
     MCTextureManager & textureManager;
     friend class MCObjectFactory;
