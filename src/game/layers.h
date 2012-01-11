@@ -22,7 +22,8 @@ enum Layers
 {
     Ground = 0,
     Cars   = 1,
-    Smoke  = 2
+    Smoke  = 2,
+    Tree   = 10
 };
 
 #endif // LAYERS_H

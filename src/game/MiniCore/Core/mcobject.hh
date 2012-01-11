@@ -323,7 +323,11 @@ public:
     //! Set rendering layer (0 is considered the lowest and is rendered
     //! first. This can be used when creating complex objects from
     //! 2d-surfaces only.
-    virtual void setLayer(MCUint layer);
+    //! \param layer The new layer.
+    //! \param updateWorld Updates MCWorld's layer
+    //! structure if true. Set to false if setting only the initial
+    //! value and MCWorld instance is not created yet.
+    virtual void setLayer(MCUint layer, bool updateWorldLayers = true);
 
     //! Return the render layer.
     MCUint layer() const;

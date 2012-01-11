@@ -20,6 +20,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "layers.h"
+
 #include "track.h"
 #include "trackdata.h"
 #include "trackloader.h"
@@ -218,15 +220,18 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     }
     else if (role == "tree")
     {
-        MCFloat radius = 32;
+        const MCFloat treeViewRadius = 32;
+        const MCFloat treeBodyRadius = 16;
 
         MCSurfaceObjectData data("tree");
         data.setStationary(true);
         data.setRestitution(0.25f);
-        data.setShapeWidth(radius * 2);
-        data.setShapeHeight(radius * 2);
+        data.setShapeWidth(treeBodyRadius);
+        data.setShapeHeight(treeBodyRadius);
+        data.setLayer(Layers::Tree);
 
-        TreeView * view = new TreeView(*m_textureManager.surface("tree"), radius, 2, 20, 4);
+        TreeView * view = new TreeView(
+            *m_textureManager.surface("tree"), treeViewRadius, 2, 20, 4);
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));

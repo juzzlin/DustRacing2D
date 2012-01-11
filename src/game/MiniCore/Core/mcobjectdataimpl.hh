@@ -34,6 +34,7 @@ private:
     MCFloat restitution;
     MCFloat xyFriction;
     bool stationary;
+    int layer;
     friend class MCObjectData;
 };
 

@@ -93,6 +93,9 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     // Set restitution
     pObject->setRestitution(data.restitution());
 
+    // Set rendering layer
+    pObject->setLayer(data.layer(), false);
+
     // Store for deletion
     m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
 
@@ -143,6 +146,9 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
 
     // Set restitution
     pObject->setRestitution(data.restitution());
+
+    // Set rendering layer
+    pObject->setLayer(data.layer(), false);
 
     // Store for deletion
     m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));

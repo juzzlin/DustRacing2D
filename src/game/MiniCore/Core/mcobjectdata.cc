@@ -36,6 +36,7 @@ MCObjectDataImpl::MCObjectDataImpl()
 , restitution(0.5f)
 , xyFriction(0.0f)
 , stationary(false)
+, layer(0)
 {
 }
 
@@ -120,6 +121,16 @@ void MCObjectData::setStationary(bool stationary)
 bool MCObjectData::stationary() const
 {
     return m_pImpl->stationary;
+}
+
+void MCObjectData::setLayer(int layer)
+{
+    m_pImpl->layer = layer;
+}
+
+int MCObjectData::layer() const
+{
+    return m_pImpl->layer;
 }
 
 MCObjectData::~MCObjectData()

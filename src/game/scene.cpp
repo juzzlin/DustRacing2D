@@ -139,7 +139,6 @@ void Scene::setActiveTrack(Track & activeTrack)
         TrackObject & trackObject = static_cast<TrackObject &>(
             m_pActiveTrack->trackData().objects().object(i));
         MCObject & mcObject = trackObject.object();
-        mcObject.setLayer(Layers::Cars);
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
     }

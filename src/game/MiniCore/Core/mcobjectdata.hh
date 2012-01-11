@@ -93,6 +93,12 @@ public:
     //! Return true if stationary.
     bool stationary() const;
 
+    //! Set the rendering layer.
+    void setLayer(int layer);
+
+    //! Get the rendering layer.
+    int layer() const;
+
 private:
 
     DISABLE_COPY(MCObjectData);

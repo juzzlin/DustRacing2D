@@ -654,11 +654,15 @@ void MCObject::resetTime()
     m_pImpl->time = 0;
 }
 
-void MCObject::setLayer(MCUint newLayer)
+void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
 {
-    MCWorld::instance().removeFromLayerMap(*this);
-    m_pImpl->layer = newLayer;
-    MCWorld::instance().addToLayerMap(*this);
+    if (updateWorldLayers) {
+        MCWorld::instance().removeFromLayerMap(*this);
+        m_pImpl->layer = newLayer;
+        MCWorld::instance().addToLayerMap(*this);
+    } else {
+        m_pImpl->layer = newLayer;
+    }
 }
 
 MCUint MCObject::layer() const
