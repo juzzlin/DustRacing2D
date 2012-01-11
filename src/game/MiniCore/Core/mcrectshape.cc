@@ -44,6 +44,8 @@ MCRectShapeImpl::~MCRectShapeImpl()
 
 MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) const
 {
+    // **** Try first a crossing lines method ****
+
     const MCSegment<MCFloat> s0s1(obbox.vertex(0), obbox.vertex(1));
     const MCSegment<MCFloat> s1s2(obbox.vertex(1), obbox.vertex(2));
     const MCSegment<MCFloat> s2s3(obbox.vertex(2), obbox.vertex(3));
@@ -61,10 +63,52 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) co
     {
         return MCEdge<MCFloat>(obbox.vertex(3) - obbox.vertex(2), obbox.vertex(2));
     }
-    else
+    else if (MCMathUtil::crosses(p, s3s0))
     {
         return MCEdge<MCFloat>(obbox.vertex(0) - obbox.vertex(3), obbox.vertex(3));
     }
+
+    // **** Sector method ****
+
+    const MCVector2d<MCFloat> l(obbox.location());
+
+    // Translate test point to obbox's coordinates
+    const MCVector2d<MCFloat> x(p.vertex0 - l);
+
+    // Cache vertices
+    const MCVector2d<MCFloat> v0(obbox.vertex(0));
+    const MCVector2d<MCFloat> v1(obbox.vertex(1));
+
+    // Translate vertices to obbox's coordinates
+    MCVector2d<MCFloat> a(v0 - l);
+    MCVector2d<MCFloat> b(v1 - l);
+
+    // **** Find the corresponding edge  ****
+
+    if (x * a > 0 && b * x > 0)
+    {
+        return MCEdge<MCFloat>(v1 - v0, v0);
+    }
+
+    const MCVector2d<MCFloat> v2(obbox.vertex(2));
+
+    a = b;
+    b = v2 - l;
+    if (x * a > 0 && b * x > 0)
+    {
+        return MCEdge<MCFloat>(v2 - v1, v1);
+    }
+
+    const MCVector2d<MCFloat> v3(obbox.vertex(3));
+
+    a = b;
+    b = v3 - l;
+    if (x * a > 0 && b * x > 0)
+    {
+        return MCEdge<MCFloat>(v3 - v2, v2);
+    }
+
+    return MCEdge<MCFloat>(v0 - v3, v3);
 }
 
 int MCRectShapeImpl::interpenetrationDepth(const MCSegment<MCFloat> & p) const
