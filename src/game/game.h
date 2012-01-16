@@ -70,6 +70,10 @@ private slots:
 
 private:
 
+    void loadSurfaces();
+    void loadFonts();
+    bool loadTracks();
+    void initScene();
     void renderFrame();
 
     Renderer             * m_pRenderer;

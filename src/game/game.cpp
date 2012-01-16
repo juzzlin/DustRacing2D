@@ -79,63 +79,97 @@ Renderer * Game::renderer() const
     return m_pRenderer;
 }
 
-bool Game::init()
+void Game::loadSurfaces()
 {
-    try
+    // Load texture data
+    const QString textureConfigPath = QString(Config::Common::DATA_PATH) +
+        QDir::separator() + "textures.conf";
+
+    MCLogger::logInfo("Loading texture config from %s..",
+        textureConfigPath.toStdString().c_str());
+
+    // Load textures / surfaces
+    m_pTextureManager->load(textureConfigPath,
+        Config::Common::DATA_PATH);
+}
+
+void Game::loadFonts()
+{
+    const QString fontConfigPath = QString(Config::Common::DATA_PATH) +
+        QDir::separator() + "fonts.conf";
+
+    MCLogger::logInfo("Loading font config from %s..",
+        fontConfigPath.toStdString().c_str());
+
+    // Load fonts
+    m_pTextureFontManager->load(fontConfigPath);
+}
+
+bool Game::loadTracks()
+{
+    // Load track data
+    if (int numLoaded = m_pTrackLoader->loadTracks())
     {
-        // Load texture data
-        const QString textureConfigPath = QString(Config::Common::DATA_PATH) +
-            QDir::separator() + "textures.conf";
-
-        MCLogger::logInfo("Loading texture config from %s..",
-            textureConfigPath.toStdString().c_str());
-
-        m_pTextureManager->load(textureConfigPath,
-            Config::Common::DATA_PATH);
-
-        // Load texture font data
-        const QString fontConfigPath = QString(Config::Common::DATA_PATH) +
-            QDir::separator() + "fonts.conf";
-
-        MCLogger::logInfo("Loading font config from %s..",
-            fontConfigPath.toStdString().c_str());
-
-        m_pTextureFontManager->load(fontConfigPath);
-
-        // Load track data
-        if (int numLoaded = m_pTrackLoader->loadTracks())
-        {
-            MCLogger::logInfo("%d track(s) loaded.", numLoaded);
-        }
-        else
-        {
-            MCLogger::logError("No valid tracks found.");
-            return false;
-        }
-
-        // Create the scene
-        m_pScene = new Scene(m_pTextureManager->surface("car001"));
-
-        // Set the default track
-        m_pScene->setActiveTrack(*m_pTrackLoader->track(0));
-
-        // Set the current game scene. Renderer calls render()
-        // for all objects in the scene.
-        m_pRenderer->setScene(m_pScene);
-
-        m_pCamera = new MCCamera(
-            Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT,
-            0, 0,
-            m_pScene->activeTrack().width(),
-            m_pScene->activeTrack().height());
+        MCLogger::logInfo("%d track(s) loaded.", numLoaded);
     }
-    catch (MCException & e)
+    else
     {
-        MCLogger::logFatal("%s.", e.what());
+        MCLogger::logError("No valid tracks found.");
         return false;
     }
 
     return true;
+}
+
+void Game::initScene()
+{
+    // Create the scene
+    m_pScene = new Scene(m_pTextureManager->surface("car001"));
+
+    // Set the default track
+    m_pScene->setActiveTrack(*m_pTrackLoader->track(0));
+
+    // Set the current game scene. Renderer calls render()
+    // for all objects in the scene.
+    m_pRenderer->setScene(m_pScene);
+
+    m_pCamera = new MCCamera(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT,
+        0, 0,
+        m_pScene->activeTrack().width(),
+        m_pScene->activeTrack().height());
+}
+
+bool Game::init()
+{
+    try
+    {
+        // Load surfaces / textures
+        loadSurfaces();
+
+        // Load textured fonts
+        loadFonts();
+
+        // Load race tracks
+        if (loadTracks())
+        {
+            // Init the game scene
+            initScene();
+
+            // Init succeeded
+            return true;
+        }
+    }
+    catch (MCException & e)
+    {
+        MCLogger::logFatal("%s.", e.what());
+
+        // Init failed
+        return false;
+    }
+
+    // Init failed
+    return false;
 }
 
 void Game::start()
