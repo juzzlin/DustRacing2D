@@ -59,14 +59,14 @@ void MCTextureManager::load(
             }
             else
             {
-                throw MCException("Cannot read file '" + path + "'");
+                throw MCException("Cannot read file '" + path.toStdString() + "'");
             }
         }
     }
     else
     {
         // Throw an exception
-        throw MCException("Parsing '" + fileName + "' failed!");
+        throw MCException("Parsing '" + fileName.toStdString() + "' failed!");
     }
 }
 
@@ -190,7 +190,7 @@ MCSurface & MCTextureManager::surface(const QString & id) const throw (MCExcepti
     // Try to find existing texture for the surface
     if (!m_surfaceMap.contains(id))
     {
-        throw MCException("Cannot find texture object for handle '" + id + "'");
+        throw MCException("Cannot find texture object for handle '" + id.toStdString() + "'");
     }
 
     // Yes: return handle for the texture

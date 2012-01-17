@@ -24,7 +24,7 @@
 
 using std::exception;
 
-#include <QString>
+#include <string>
 
 //! Simple exception wrapper class with a message.
 class MCException : public exception
@@ -32,7 +32,7 @@ class MCException : public exception
 public:
 
   //! Constructor
-  MCException(QString msg) : m_msg(msg) {}
+  MCException(const std::string & msg) : m_msg(msg) {}
 
   //! Destructor
   virtual ~MCException() throw() {}
@@ -43,7 +43,7 @@ public:
 private:
 
   //! Message QString
-  QString m_msg;
+  std::string m_msg;
 };
 
 #endif // MCEXCEPTION_HH

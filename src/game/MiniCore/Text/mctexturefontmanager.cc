@@ -35,7 +35,7 @@ MCTextureFontManager::MCTextureFontManager(
 {}
 
 void MCTextureFontManager::load(
-    const QString & fileName) throw (MCException)
+    const std::string & fileName) throw (MCException)
 {
     MCTextureFontConfigLoader loader;
     loader.setConfigPath(fileName);
@@ -60,7 +60,7 @@ void MCTextureFontManager::load(
 void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 {
     // Fetch the corresponding surface.
-    MCSurface & surface = m_textureManager.surface(data.surface);
+    MCSurface & surface = m_textureManager.surface(data.surface.c_str());
 
     // Create the new font using the GL texture handle given by the
     // corresponding surface.
@@ -68,12 +68,12 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
     // Generate glyph structures from the loaded data.
     // Loop thru glyph rows.
-    for (int j = 0; j < data.rows.size(); j++)
+    for (MCUint j = 0; j < data.rows.size(); j++)
     {
         // Loop through glyphs in the row.
         const MCTextureFontData::Row row       = data.rows[j];
-        const QString                rowGlyphs = row.glyphs;
-        for (int i = 0; i < rowGlyphs.length(); i++)
+        const std::string            rowGlyphs = row.glyphs;
+        for (MCUint i = 0; i < rowGlyphs.length(); i++)
         {
             const MCFloat fi = i;
             const MCFloat fy = row.y;
@@ -82,7 +82,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
             // Calculate the uv-coordinates for the glyph.
             MCTextureGlyph newGlyph(
-                rowGlyphs.at(i).toAscii(),
+                rowGlyphs.at(i),
                 MCTextureGlyph::UV(
                     fi / data.maxGlyphsPerRow, fy / fH),
                 MCTextureGlyph::UV(
@@ -93,7 +93,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
                     fi / data.maxGlyphsPerRow, (fy + fh) / fH));
 
             // Add glyph mapping to the font.
-            newFont->addGlyphMapping(rowGlyphs.at(i).toAscii(), newGlyph);
+            newFont->addGlyphMapping(rowGlyphs.at(i), newGlyph);
         }
     }
 
@@ -102,16 +102,16 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 }
 
 MCTextureFont & MCTextureFontManager::font(
-    const QString & name) const throw (MCException)
+    const std::string & name) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (!m_fontHash.contains(name))
+    if (m_fontHash.find(name) != m_fontHash.end())
     {
         // No:
         throw MCException("Cannot find font object called '" + name + "'");
     }
 
-    MCTextureFont * font = m_fontHash.find(name).value();
+    MCTextureFont * font = m_fontHash.find(name)->second;
     assert(font);
     return *font;
 }
@@ -122,7 +122,7 @@ MCTextureFontManager::~MCTextureFontManager()
     auto iter(m_fontHash.begin());
     while (iter != m_fontHash.end())
     {
-        delete iter.value();
+        delete iter->second;
         iter++;
     }
 }

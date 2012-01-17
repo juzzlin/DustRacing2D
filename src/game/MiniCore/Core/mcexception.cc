@@ -21,5 +21,5 @@
 
 const char * MCException::what() const throw()
 {
-  return m_msg.toStdString().c_str();
+  return m_msg.c_str();
 }

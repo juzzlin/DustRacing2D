@@ -32,7 +32,7 @@ MCTextureFontConfigLoader::MCTextureFontConfigLoader()
 {
 }
 
-void MCTextureFontConfigLoader::setConfigPath(QString filePath)
+void MCTextureFontConfigLoader::setConfigPath(const std::string & filePath)
 {
     m_filePath = filePath;
 }
@@ -40,7 +40,7 @@ void MCTextureFontConfigLoader::setConfigPath(QString filePath)
 bool MCTextureFontConfigLoader::loadFonts()
 {
     QDomDocument doc;
-    QFile file(m_filePath);
+    QFile file(m_filePath.c_str());
     if (!file.open(QIODevice::ReadOnly))
     {
         return false;
@@ -65,13 +65,13 @@ bool MCTextureFontConfigLoader::loadFonts()
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                newData->name            = tag.attribute("name", "");
-                newData->surface         = tag.attribute("surface", "");
+                newData->name            = tag.attribute("name", "").toStdString();
+                newData->surface         = tag.attribute("surface", "").toStdString();
                 newData->maxGlyphsPerRow = tag.attribute(
                     "maxGlyphsPerRow", "0").toInt();
 
                 MCLogger::logInfo("Loading font '%s'..",
-                    newData->name.toStdString().c_str());
+                    newData->name.c_str());
 
                 // Read child nodes of font node.
                 QDomNode childNode = node.firstChild();
@@ -85,7 +85,7 @@ bool MCTextureFontConfigLoader::loadFonts()
                             MCTextureFontData::Row row;
                             row.y      = tag.attribute("y", "0").toInt();
                             row.h      = tag.attribute("h", "0").toInt();
-                            row.glyphs = tag.attribute("glyphs", "");
+                            row.glyphs = tag.attribute("glyphs", "").toStdString();
 
                             newData->rows.push_back(row);
                         }
@@ -95,7 +95,7 @@ bool MCTextureFontConfigLoader::loadFonts()
                 }
             }
 
-            m_fonts << newData;
+            m_fonts.push_back(newData);
 
             node = node.nextSibling();
         }

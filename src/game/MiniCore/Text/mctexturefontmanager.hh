@@ -20,8 +20,8 @@
 #ifndef MCTEXTUREFONTMANAGER_HH
 #define MCTEXTUREFONTMANAGER_HH
 
-#include <QString>
-#include <QHash>
+#include <string>
+#include <unordered_map>
 
 #include "../Core/mcexception.hh"
 #include "../Core/mcmacros.hh"
@@ -62,14 +62,14 @@ public:
 
     //! Loads texture config from the given config file.
     //! \param filePath Path to the XML-based input file.
-    virtual void load(const QString & filePath) throw (MCException);
+    virtual void load(const std::string & filePath) throw (MCException);
 
     //! Returns a font object associated with given name.
     //! MCTextureFontManager will keep the ownership.
     //! \param name Name defined in the fonts XML file.
     //! \return Reference to the corresponding MCTextureFont.
     //! \throws MCException on failure.
-    MCTextureFont & font(const QString & name) const throw (MCException);
+    MCTextureFont & font(const std::string & name) const throw (MCException);
 
 private:
 
@@ -84,7 +84,7 @@ private:
     void createFontFromData(const MCTextureFontData & data);
 
     //! Map for resulting font objects.
-    typedef QHash<QString, MCTextureFont *> FontHash;
+    typedef std::unordered_map<std::string, MCTextureFont *> FontHash;
     FontHash m_fontHash;
 
     const MCTextureManager & m_textureManager;

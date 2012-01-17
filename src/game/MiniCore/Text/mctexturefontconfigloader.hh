@@ -20,8 +20,8 @@
 #ifndef MCTEXTUREFONTCONFIGLOADER_HH
 #define MCTEXTUREFONTCONFIGLOADER_HH
 
-#include <QVector>
-#include <QString>
+#include <vector>
+#include <string>
 
 class MCTextureFontData;
 
@@ -38,7 +38,7 @@ public:
     ~MCTextureFontConfigLoader();
 
     //! Set file path.
-    void setConfigPath(QString filePath);
+    void setConfigPath(const std::string & filePath);
 
     //! Load all fonts found in the current filePath.
     //! \return true if succeeded.
@@ -52,8 +52,8 @@ public:
 
 private:
 
-    typedef QVector<MCTextureFontData*> FontVector;
-    QString m_filePath;
+    typedef std::vector<MCTextureFontData*> FontVector;
+    std::string m_filePath;
     FontVector m_fonts;
 };
 

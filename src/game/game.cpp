@@ -95,11 +95,10 @@ void Game::loadSurfaces()
 
 void Game::loadFonts()
 {
-    const QString fontConfigPath = QString(Config::Common::DATA_PATH) +
-        QDir::separator() + "fonts.conf";
+    const std::string fontConfigPath = std::string(Config::Common::DATA_PATH) +
+        QDir::separator().toAscii() + "fonts.conf";
 
-    MCLogger::logInfo("Loading font config from %s..",
-        fontConfigPath.toStdString().c_str());
+    MCLogger::logInfo("Loading font config from %s..", fontConfigPath.c_str());
 
     // Load fonts
     m_pTextureFontManager->load(fontConfigPath);
