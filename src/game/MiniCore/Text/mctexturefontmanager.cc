@@ -24,7 +24,7 @@
 
 #include "../Core/mctypes.hh"
 #include "../Core/mcsurface.hh"
-#include "../Util/mctexturemanager.hh"
+#include "../Core/mctexturemanager.hh"
 
 #include <cassert>
 

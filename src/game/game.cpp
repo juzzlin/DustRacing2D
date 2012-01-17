@@ -23,7 +23,7 @@
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
-#include "MiniCore/Util/MCTextureManager"
+#include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Text/MCTextureFontManager"
 #include <QDir>
 #include <QTime>

@@ -15,6 +15,8 @@ Core/mccamera.cc
 Core/mcobjecttree.cc
 Core/mcoutofboundariesevent.cc
 Core/mcspringforcegenerator2dfast.cc
+Core/mctexturemanager.cc
+Core/mctextureconfigloader.cc
 Core/mcevent.cc
 Core/mcdragforcegenerator.cc
 Core/mclogger.cc
@@ -34,8 +36,6 @@ Core/mcglcircleparticle.cc
 Core/mcrectshape.cc
 Core/mcglobjectdata.cc
 Core/mcglrectparticle.cc
-Util/mctexturemanager.cc
-Util/mctextureconfigloader.cc
 Text/mctexturefont.cc
 Text/mctexturefontconfigloader.cc
 Text/mctexturefontdata.cc

@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <vector>
-#include "../Util/mctexturemanager.hh"
+#include "mctexturemanager.hh"
 
 class MCObject;
 class MCObjectData;

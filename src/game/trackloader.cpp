@@ -31,7 +31,7 @@
 
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
-#include "MiniCore/Util/MCTextureManager"
+#include "MiniCore/Core/MCTextureManager"
 
 #include <cassert>
 
