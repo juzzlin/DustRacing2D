@@ -24,7 +24,7 @@
 #include "../Core/mcvector2d.hh"
 
 #include <GL/gl.h> // For GLenum
-#include <QString>
+#include <string>
 
 //! Texture data structure used by MCTextureParser.
 struct MCTextureData
@@ -39,10 +39,10 @@ struct MCTextureData
     {}
 
     //! Handle of the texture
-    QString handle;
+    std::string handle;
 
     //! Image path
-    QString imagePath;
+    std::string imagePath;
 
     //! True if center was set
     bool centerSet;

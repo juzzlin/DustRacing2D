@@ -42,8 +42,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     MCShapeView * pView    = nullptr;
     MCObject    * pObject  = nullptr;
 
-    MCSurface   & surface  = m_pImpl->textureManager.surface(
-        QString(data.surfaceId().c_str()));
+    MCSurface   & surface  = m_pImpl->textureManager.surface(data.surfaceId());
 
     switch (data.shape())
     {

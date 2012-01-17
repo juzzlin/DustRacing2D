@@ -144,7 +144,7 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::handleTile(
     QDomElement & tag, TrackData & newData, QVector<TrackTileBase *> & routeVector)
 {
-    const QString      id      = tag.attribute("type", "clear");
+    const std::string  id      = tag.attribute("type", "clear").toStdString();
     const unsigned int profile = tag.attribute("profile", "0").toUInt();
 
     // Route index
@@ -164,7 +164,7 @@ void TrackLoader::handleTile(
     assert(tile);
 
     tile->setRotation(o);
-    tile->setTileType(id);
+    tile->setTileType(id.c_str());
     tile->setRouteIndex(index);
 
     switch (profile)

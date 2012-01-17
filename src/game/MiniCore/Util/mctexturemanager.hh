@@ -21,8 +21,8 @@
 #define MCTEXTUREMANAGER_HH
 
 #include <QImage>
-#include <QString>
-#include <QHash>
+#include <string>
+#include <unordered_map>
 
 #include "../Core/mcexception.hh"
 #include "../Core/mcmacros.hh"
@@ -80,7 +80,8 @@ public:
     //! \param baseDataPath The absolute search path for an image is
     //! baseDataPath + default_path + file. default_path and file are
     //! defined in the input file.
-    virtual void load(const QString & filePath, const QString & baseDataPath) throw (MCException);
+    virtual void load(
+        const std::string & filePath, const std::string & baseDataPath) throw (MCException);
 
     //! Returns a surface object associated with given strId.
     //! Corresponding OpenGL texture handle can be obtained
@@ -89,7 +90,8 @@ public:
     //! \param handle Handle defined in the textures XML file.
     //! \return Reference to the corresponding MCSurface.
     //! \throws MCException on failure.
-    MCSurface & surface(const QString & handle) const throw (MCException);
+    MCSurface & surface(
+        const std::string & handle) const throw (MCException);
 
 private:
 
@@ -111,7 +113,7 @@ private:
     QImage createNearest2PowNImage(const QImage & image);
 
     //! Map for resulting surface objects
-    typedef QHash<QString, MCSurface *> SurfaceHash;
+    typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
     SurfaceHash m_surfaceMap;
 };
 

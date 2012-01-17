@@ -82,15 +82,13 @@ Renderer * Game::renderer() const
 void Game::loadSurfaces()
 {
     // Load texture data
-    const QString textureConfigPath = QString(Config::Common::DATA_PATH) +
-        QDir::separator() + "textures.conf";
+    const std::string textureConfigPath = std::string(Config::Common::DATA_PATH) +
+        QDir::separator().toAscii() + "textures.conf";
 
-    MCLogger::logInfo("Loading texture config from %s..",
-        textureConfigPath.toStdString().c_str());
+    MCLogger::logInfo("Loading texture config from %s..", textureConfigPath.c_str());
 
     // Load textures / surfaces
-    m_pTextureManager->load(textureConfigPath,
-        Config::Common::DATA_PATH);
+    m_pTextureManager->load(textureConfigPath, Config::Common::DATA_PATH);
 }
 
 void Game::loadFonts()

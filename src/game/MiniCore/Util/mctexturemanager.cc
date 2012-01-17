@@ -33,7 +33,7 @@ MCTextureManager::MCTextureManager()
 {}
 
 void MCTextureManager::load(
-    const QString & fileName, const QString & baseDataPath) throw (MCException)
+    const std::string & fileName, const std::string & baseDataPath) throw (MCException)
 {
     MCTextureConfigLoader loader;
     loader.setConfigPath(fileName);
@@ -47,26 +47,26 @@ void MCTextureManager::load(
             const MCTextureData & data = loader.texture(i);
 
             // Load image file
-            const QString path =
+            const std::string path =
                 baseDataPath + QDir::separator().toAscii() + data.imagePath;
 
             // Load the image
             QImage textureImage;
-            if (textureImage.load(path))
+            if (textureImage.load(path.c_str()))
             {
                 // Create an OpenGL texture from the image
                 createGLTextureFromImage(data, textureImage);
             }
             else
             {
-                throw MCException("Cannot read file '" + path.toStdString() + "'");
+                throw MCException("Cannot read file '" + path + "'");
             }
         }
     }
     else
     {
         // Throw an exception
-        throw MCException("Parsing '" + fileName.toStdString() + "' failed!");
+        throw MCException("Parsing '" + fileName + "' failed!");
     }
 }
 
@@ -128,6 +128,7 @@ void MCTextureManager::createGLTextureFromImage(
     glBindTexture(GL_TEXTURE_2D, textureHandle);
 
     // Disable smoothing filters
+    // TODO: Make this configurable!
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -185,16 +186,16 @@ void MCTextureManager::applyColorKey(QImage & textureImage,
     }
 }
 
-MCSurface & MCTextureManager::surface(const QString & id) const throw (MCException)
+MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (!m_surfaceMap.contains(id))
+    if (m_surfaceMap.find(id) == m_surfaceMap.end())
     {
-        throw MCException("Cannot find texture object for handle '" + id.toStdString() + "'");
+        throw MCException("Cannot find texture object for handle '" + id + "'");
     }
 
     // Yes: return handle for the texture
-    MCSurface * pSurface = m_surfaceMap.find(id).value();
+    MCSurface * pSurface = m_surfaceMap.find(id)->second;
     assert(pSurface);
     return *pSurface;
 }
@@ -205,9 +206,9 @@ MCTextureManager::~MCTextureManager()
     auto iter(m_surfaceMap.begin());
     while (iter != m_surfaceMap.end())
     {
-        if (iter.value())
+        if (iter->second)
         {
-            MCSurface * p = iter.value();
+            MCSurface * p = iter->second;
             GLuint dummyHandle = p->handle();
             glDeleteTextures(1, &dummyHandle);
             delete p;

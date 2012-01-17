@@ -20,8 +20,8 @@
 #ifndef MCTEXTURECONFIGLOADER_HH
 #define MCTEXTURECONFIGLOADER_HH
 
-#include <QString>
-#include <QVector>
+#include <string>
+#include <vector>
 
 #include <GL/gl.h> // For GLenum.
 
@@ -39,7 +39,7 @@ public:
     ~MCTextureConfigLoader();
 
     //! Set file path.
-    void setConfigPath(QString filePath);
+    void setConfigPath(const std::string & filePath);
 
     //! Load all textures found in the current filePath.
     //! \return true if succeeded.
@@ -54,9 +54,9 @@ public:
 private:
 
     //! Convert alpha test function string to enum.
-    GLenum alphaFunctionStringToEnum(QString function) const;
-    QString m_filePath;
-    QVector<MCTextureData *> m_textures;
+    GLenum alphaFunctionStringToEnum(const std::string & function) const;
+    std::string m_filePath;
+    std::vector<MCTextureData *> m_textures;
 };
 
 #endif // MCTEXTURECONFIGLOADER_HH

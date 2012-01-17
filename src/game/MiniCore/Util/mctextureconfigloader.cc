@@ -33,7 +33,7 @@ MCTextureConfigLoader::MCTextureConfigLoader()
 , m_textures()
 {}
 
-void MCTextureConfigLoader::setConfigPath(QString path)
+void MCTextureConfigLoader::setConfigPath(const std::string & path)
 {
     m_filePath = path;
 }
@@ -41,7 +41,7 @@ void MCTextureConfigLoader::setConfigPath(QString path)
 bool MCTextureConfigLoader::loadTextures()
 {
     QDomDocument doc;
-    QFile file(m_filePath);
+    QFile file(m_filePath.c_str());
     if (!file.open(QIODevice::ReadOnly))
     {
         return false;
@@ -58,7 +58,7 @@ bool MCTextureConfigLoader::loadTextures()
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "textures")
     {
-        QString basePath = root.attribute("basePath", "./");
+        std::string basePath = root.attribute("basePath", "./").toStdString();
 
         MCTextureData * newData = nullptr;
         QDomNode node = root.firstChild();
@@ -71,10 +71,10 @@ bool MCTextureConfigLoader::loadTextures()
                 bool         xAxisMirror = tag.attribute("xAxisMirror", "0").toInt();
                 unsigned int width       = tag.attribute("w", "0").toUInt();
                 unsigned int height      = tag.attribute("h", "0").toUInt();
-                QString      file        = tag.attribute("file", "");
-                QString      handle      = tag.attribute("handle", "");
+                std::string  file        = tag.attribute("file", "").toStdString();
+                std::string  handle      = tag.attribute("handle", "").toStdString();
 
-                newData->imagePath   = basePath + QDir::separator() + file;
+                newData->imagePath   = basePath + QDir::separator().toAscii() + file;
                 newData->handle      = handle;
                 newData->xAxisMirror = xAxisMirror;
 
@@ -110,8 +110,10 @@ bool MCTextureConfigLoader::loadTextures()
                         QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            newData->alphaTest.m_threshold = tag.attribute("threshold", "0").toFloat();
-                            newData->alphaTest.m_function  = alphaFunctionStringToEnum(tag.attribute("function", ""));
+                            newData->alphaTest.m_threshold =
+                                tag.attribute("threshold", "0").toFloat();
+                            newData->alphaTest.m_function  =
+                                alphaFunctionStringToEnum(tag.attribute("function", "").toStdString());
                             newData->alphaTestSet          = true;
                         }
                     }
@@ -132,7 +134,7 @@ bool MCTextureConfigLoader::loadTextures()
                 }
             }
 
-            m_textures << newData;
+            m_textures.push_back(newData);
 
             node = node.nextSibling();
         }
@@ -141,7 +143,8 @@ bool MCTextureConfigLoader::loadTextures()
     return true;
 }
 
-GLenum MCTextureConfigLoader::alphaFunctionStringToEnum(QString function) const
+GLenum MCTextureConfigLoader::alphaFunctionStringToEnum(
+    const std::string & function) const
 {
     if (function == "never")
     {
