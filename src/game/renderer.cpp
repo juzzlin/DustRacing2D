@@ -21,9 +21,10 @@
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCTrigonom"
 #include "MiniCore/Core/MCWorld"
-#include <cmath>
 
+#include <cmath>
 #include <QKeyEvent>
+#include <GL/glu.h>
 
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
