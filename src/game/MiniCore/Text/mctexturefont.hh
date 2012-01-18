@@ -23,15 +23,17 @@
 #include "mctextureglyph.hh"
 #include <unordered_map>
 
+class MCSurface;
+
 //! Textured monospace font.
 class MCTextureFont
 {
 public:
 
     //! Constructor.
-    //! \param textureHandle Handle to the OpenGL texture containing
+    //! \param surface Reference to the surface object containing
     //! all the monospace glyphs.
-    MCTextureFont(MCUint textureHandle);
+    MCTextureFont(MCSurface & surface);
 
     //! Add a mapping from given glyph id to given MCTextureGlyph.
     //! MCTextureGlyph includes e.g. uv-coordinates.
@@ -41,12 +43,15 @@ public:
     //! the whole texture is returned if not found.
     MCTextureGlyph & glyph(int glyphId);
 
+    //! Return the associated surface.
+    const MCSurface & surface() const;
+
 private:
 
     typedef std::unordered_map<int, MCTextureGlyph> GlyphHash;
     GlyphHash m_glyphs;
     MCTextureGlyph m_default;
-    MCUint m_textureHandle;
+    const MCSurface & m_surface;
 };
 
 #endif // MCTEXTUREFONT_HH

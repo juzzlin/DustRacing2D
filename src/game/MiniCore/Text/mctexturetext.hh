@@ -24,6 +24,7 @@
 #include <string>
 
 class MCCamera;
+class MCTextureFont;
 
 //! MCTextureText is a renderable text object
 //! using a textured monospace font (MCTextureFont).
@@ -49,15 +50,17 @@ public:
     //! Get glyph height.
     MCFloat glyphHeight() const;
 
-    //! Render at (x,y) seen thru as seen thru the
-    //! given camera window (can be null) using the
+    //! Render at (x,y) as seen thru the
+    //! given camera window (can be nullptr) using the
     //! given font.
-    void render(MCFloat x, MCFloat y, MCCamera * pCamera);
+    void render(MCFloat x, MCFloat y, MCCamera * pCamera,
+        MCTextureFont & font);
 
-    //! Render shadow at (x,y) seen thru as seen thru the
-    //! given camera window (can be null) using the
+    //! Render shadow at (x,y) as seen thru the
+    //! given camera window (can be nullptr) using the
     //! given font.
-    void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera);
+    void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
+        MCTextureFont & font);
 
 private:
 

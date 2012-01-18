@@ -18,15 +18,16 @@
 //
 
 #include "mctexturefont.hh"
+#include "../Core/mcsurface.hh"
 
-MCTextureFont::MCTextureFont(MCUint textureHandle)
+MCTextureFont::MCTextureFont(MCSurface & surface)
   : m_default(
     0,
     MCTextureGlyph::UV(0, 0),
     MCTextureGlyph::UV(1, 0),
     MCTextureGlyph::UV(1, 1),
     MCTextureGlyph::UV(0, 1))
-  , m_textureHandle(textureHandle)
+  , m_surface(surface)
 {
 }
 
@@ -43,4 +44,9 @@ MCTextureGlyph & MCTextureFont::glyph(int glyphId)
         return textureGlyph->second;
     }
     return m_default;
+}
+
+const MCSurface & MCTextureFont::surface() const
+{
+    return m_surface;
 }

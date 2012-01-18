@@ -64,7 +64,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
     // Create the new font using the GL texture handle given by the
     // corresponding surface.
-    MCTextureFont * newFont = new MCTextureFont(surface.handle());
+    MCTextureFont * newFont = new MCTextureFont(surface);
 
     // Generate glyph structures from the loaded data.
     // Loop thru glyph rows.
@@ -105,7 +105,7 @@ MCTextureFont & MCTextureFontManager::font(
     const std::string & name) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (m_fontHash.find(name) != m_fontHash.end())
+    if (m_fontHash.find(name) == m_fontHash.end())
     {
         // No:
         throw MCException("Cannot find font object called '" + name + "'");

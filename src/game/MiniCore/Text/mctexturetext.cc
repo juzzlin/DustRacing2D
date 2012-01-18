@@ -18,7 +18,13 @@
 //
 
 #include "mctexturetext.hh"
+#include "mctexturefont.hh"
+#include "mctextureglyph.hh"
+
 #include "../Core/mccamera.hh"
+#include "../Core/mcsurface.hh"
+
+#include <GL/gl.h>
 
 MCTextureText::MCTextureText(const std::string & text)
 : m_text(text)
@@ -53,21 +59,65 @@ MCFloat MCTextureText::glyphHeight() const
     return m_glyphHeight;
 }
 
-void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera)
+void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
+    MCTextureFont & font)
 {
     if (pCamera)
     {
-        // TODO
+        pCamera->mapToCamera(x, y);
     }
 
-    // TODO
+    glPushAttrib(GL_ENABLE_BIT);
+
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glNormal3i(0, 0, 1);
+
+    font.surface().doAlphaTest();
+
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    glBindTexture(GL_TEXTURE_2D, font.surface().handle());
+
+    glPushMatrix();
+    glTranslated(x, y, 0);
+
+    const MCFloat w2 = m_glyphWidth / 2;
+    const MCFloat h2 = m_glyphHeight / 2;
+    MCFloat glyphXPos = 0;
+
+    glBegin(GL_QUADS);
+
+    const MCUint textSize = m_text.size();
+    for (MCUint i = 0; i < textSize; i++)
+    {
+        MCTextureGlyph & glyph = font.glyph(m_text.at(i));
+
+        glTexCoord2f(glyph.uv(0).m_u, glyph.uv(0).m_v);
+        glVertex3f(glyphXPos - w2, -h2, 0);
+        glTexCoord2f(glyph.uv(1).m_u, glyph.uv(1).m_v);
+        glVertex3f(glyphXPos + w2, -h2, 0);
+        glTexCoord2f(glyph.uv(2).m_u, glyph.uv(2).m_v);
+        glVertex3f(glyphXPos + w2, h2, 0);
+        glTexCoord2f(glyph.uv(3).m_u, glyph.uv(3).m_v);
+        glVertex3f(glyphXPos - w2, h2, 0);
+
+        glyphXPos += m_glyphWidth;
+    }
+
+    glEnd();
+
+    glPopMatrix();
+    glPopAttrib();
 }
 
-void MCTextureText::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera)
+void MCTextureText::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
+    MCTextureFont & font)
 {
     if (pCamera)
     {
-        // TODO
+        pCamera->mapToCamera(x, y);
     }
 
     // TODO
