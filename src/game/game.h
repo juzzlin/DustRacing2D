@@ -22,6 +22,7 @@
 class InputHandler;
 class Scene;
 class Renderer;
+class TimingOverlay;
 class TrackLoader;
 class MCCamera;
 class MCObjectFactory;
@@ -82,6 +83,7 @@ private:
     MCTextureFontManager * m_pTextureFontManager;
     MCObjectFactory      * m_pObjectFactory;
     TrackLoader          * m_pTrackLoader;
+    TimingOverlay        * m_pTimingOverlay;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_updateTimer;

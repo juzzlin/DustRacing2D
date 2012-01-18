@@ -14,17 +14,21 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "../common/config.h"
+
 #include "game.h"
 #include "inputhandler.h"
 #include "scene.h"
 #include "renderer.h"
+#include "timingoverlay.h"
 #include "track.h"
 #include "trackloader.h"
+
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
 #include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Text/MCTextureFontManager"
+
 #include <QDir>
 #include <QTime>
 
@@ -35,6 +39,7 @@ Game::Game()
 , m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
 , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
 , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
+, m_pTimingOverlay(new TimingOverlay(*m_pTextureFontManager))
 , m_pCamera(nullptr)
 , m_pInputHandler(new InputHandler)
 , m_updateTimer()
@@ -135,6 +140,8 @@ void Game::initScene()
         0, 0,
         m_pScene->activeTrack().width(),
         m_pScene->activeTrack().height());
+
+    m_pScene->setTimingOverlay(*m_pTimingOverlay);
 }
 
 bool Game::init()

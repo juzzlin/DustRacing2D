@@ -25,6 +25,7 @@ class MCObject;
 class MCSurface;
 class MCWorld;
 class Track;
+class TimingOverlay;
 
 //! The game scene.
 class Scene
@@ -51,14 +52,21 @@ public:
     //! Return the world.
     MCWorld & world() const;
 
+    //! Set timing overlay.
+    void setTimingOverlay(TimingOverlay & timingOverlay);
+
+    //! Get timing overlay.
+    TimingOverlay & timingOverlay() const;
+
 private:
 
-    Track   * m_pActiveTrack;
-    MCWorld * m_pWorld;
-    Car       m_car;
-    Car       m_testCar;
-    Race      m_race;
-    MCFloat   m_cameraBaseOffset;
+    Track         * m_pActiveTrack;
+    MCWorld       * m_pWorld;
+    TimingOverlay * m_pTimingOverlay;
+    Car             m_car;
+    Car             m_testCar;
+    Race            m_race;
+    MCFloat         m_cameraBaseOffset;
 };
 
 #endif // SCENE_H

@@ -158,6 +158,17 @@ MCWorld & Scene::world() const
     return *m_pWorld;
 }
 
+void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
+{
+    m_pTimingOverlay = &timingOverlay;
+}
+
+TimingOverlay & Scene::timingOverlay() const
+{
+    assert(m_pTimingOverlay);
+    return *m_pTimingOverlay;
+}
+
 Scene::~Scene()
 {
 }

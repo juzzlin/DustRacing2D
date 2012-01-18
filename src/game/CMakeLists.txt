@@ -6,11 +6,13 @@ inputhandler.cpp
 main.cpp
 mainwindow.cpp
 map.cpp
+overlaybase.cpp
 race.cpp
 renderer.cpp
 scene.cpp
 slidefrictiongenerator.cpp
 timing.cpp
+timingoverlay.cpp
 track.cpp
 trackdata.cpp
 trackloader.cpp
