@@ -27,22 +27,38 @@ MCTextureFont::MCTextureFont(MCSurface & surface)
     MCTextureGlyph::UV(1, 0),
     MCTextureGlyph::UV(1, 1),
     MCTextureGlyph::UV(0, 1))
+  , m_glyphLookUp(256, m_default)
   , m_surface(surface)
 {
 }
 
 void MCTextureFont::addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph)
 {
-    m_glyphs.insert(GlyphHash::value_type(glyphId, textureGlyph));
+    if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
+    {
+        m_glyphLookUp[glyphId] = textureGlyph;
+    }
+    else
+    {
+        m_glyphs.insert(GlyphHash::value_type(glyphId, textureGlyph));
+    }
 }
 
 MCTextureGlyph & MCTextureFont::glyph(int glyphId)
 {
-    auto textureGlyph = m_glyphs.find(glyphId);
-    if (textureGlyph != m_glyphs.end())
+    if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
     {
-        return textureGlyph->second;
+        return m_glyphLookUp[glyphId];
     }
+    else
+    {
+        auto textureGlyph = m_glyphs.find(glyphId);
+        if (textureGlyph != m_glyphs.end())
+        {
+            return textureGlyph->second;
+        }
+    }
+
     return m_default;
 }
 

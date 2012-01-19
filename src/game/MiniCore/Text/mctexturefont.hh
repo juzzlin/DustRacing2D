@@ -22,6 +22,7 @@
 
 #include "mctextureglyph.hh"
 #include <unordered_map>
+#include <vector>
 
 class MCSurface;
 
@@ -48,9 +49,11 @@ public:
 
 private:
 
+    MCTextureGlyph m_default;
     typedef std::unordered_map<int, MCTextureGlyph> GlyphHash;
     GlyphHash m_glyphs;
-    MCTextureGlyph m_default;
+    typedef std::vector<MCTextureGlyph> GlyphLookUp;
+    GlyphLookUp m_glyphLookUp;
     const MCSurface & m_surface;
 };
 
