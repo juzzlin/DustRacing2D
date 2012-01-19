@@ -27,7 +27,7 @@ TimingOverlay::TimingOverlay(MCTextureFontManager & fontManager)
 void TimingOverlay::render(MCCamera * pCamera)
 {
     MCTextureFont & defaultMonospace = m_fontManager.font("default");
-    MCTextureText test("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    MCTextureText test("1234567890\nabcdefghijklmnopqrstuvwxyz\nABCDEFGHIJKLMNOPQRSTUVWXYZ");
     test.render(300, 300, pCamera, defaultMonospace);
 }
 

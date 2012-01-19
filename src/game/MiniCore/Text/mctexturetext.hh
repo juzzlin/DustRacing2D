@@ -54,13 +54,13 @@ public:
     //! given camera window (can be nullptr) using the
     //! given font.
     void render(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font);
+        MCTextureFont & font, bool newLineIncreasesY = false);
 
     //! Render shadow at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
     //! given font.
     void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font);
+        MCTextureFont & font, bool newLineIncreasesY = false);
 
 private:
 
