@@ -84,13 +84,13 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
             MCTextureGlyph newGlyph(
                 rowGlyphs.at(i),
                 MCTextureGlyph::UV(
-                    fi / data.maxGlyphsPerRow, fy / fH),
+                    fi / data.maxGlyphsPerRow, fH - fy / fH),
                 MCTextureGlyph::UV(
-                    (fi + 1) / data.maxGlyphsPerRow, fy / fH),
+                    (fi + 1) / data.maxGlyphsPerRow, fH - fy / fH),
                 MCTextureGlyph::UV(
-                    (fi + 1) / data.maxGlyphsPerRow, (fy + fh) / fH),
+                    (fi + 1) / data.maxGlyphsPerRow, fH - (fy + fh) / fH),
                 MCTextureGlyph::UV(
-                    fi / data.maxGlyphsPerRow, (fy + fh) / fH));
+                    fi / data.maxGlyphsPerRow, fH - (fy + fh) / fH));
 
             // Add glyph mapping to the font.
             newFont->addGlyphMapping(rowGlyphs.at(i), newGlyph);

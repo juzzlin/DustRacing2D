@@ -116,13 +116,13 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
             MCTextureGlyph & glyph = font.glyph(m_text.at(i));
 
             glTexCoord2f(glyph.uv(0).m_u, glyph.uv(0).m_v);
-            glVertex3f(glyphXPos - w2, glyphYPos - h2, 0);
-            glTexCoord2f(glyph.uv(1).m_u, glyph.uv(1).m_v);
-            glVertex3f(glyphXPos + w2, glyphYPos - h2, 0);
-            glTexCoord2f(glyph.uv(2).m_u, glyph.uv(2).m_v);
-            glVertex3f(glyphXPos + w2, glyphYPos + h2, 0);
-            glTexCoord2f(glyph.uv(3).m_u, glyph.uv(3).m_v);
             glVertex3f(glyphXPos - w2, glyphYPos + h2, 0);
+            glTexCoord2f(glyph.uv(1).m_u, glyph.uv(1).m_v);
+            glVertex3f(glyphXPos + w2, glyphYPos + h2, 0);
+            glTexCoord2f(glyph.uv(2).m_u, glyph.uv(2).m_v);
+            glVertex3f(glyphXPos + w2, glyphYPos - h2, 0);
+            glTexCoord2f(glyph.uv(3).m_u, glyph.uv(3).m_v);
+            glVertex3f(glyphXPos - w2, glyphYPos - h2, 0);
 
             glyphXPos += m_glyphWidth;
         }
