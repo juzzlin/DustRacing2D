@@ -30,6 +30,15 @@ public:
     //! Constructor.
     OverlayBase();
 
+    //! Set overlay dimensions.
+    void setDimensions(MCUint width, MCUint height);
+
+    //! Get overlay width.
+    MCUint width() const;
+
+    //! Get overlay height.
+    MCUint height() const;
+
     //! Destructor.
     virtual ~OverlayBase();
 
@@ -37,6 +46,8 @@ public:
     virtual void render(MCCamera * pCamera) = 0;
 
 private:
+
+    MCUint m_width, m_height;
 };
 
 #endif // OVERLAYBASE_H

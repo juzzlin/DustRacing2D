@@ -141,6 +141,9 @@ void Game::initScene()
         m_pScene->activeTrack().width(),
         m_pScene->activeTrack().height());
 
+    m_pTimingOverlay->setDimensions(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+
     m_pScene->setTimingOverlay(*m_pTimingOverlay);
 }
 

@@ -16,7 +16,25 @@
 #include "overlaybase.h"
 
 OverlayBase::OverlayBase()
+  : m_width(0)
+  , m_height(0)
 {
+}
+
+void OverlayBase::setDimensions(MCUint width, MCUint height)
+{
+    m_width = width;
+    m_height = height;
+}
+
+MCUint OverlayBase::width() const
+{
+    return m_width;
+}
+
+MCUint OverlayBase::height() const
+{
+    return m_height;
 }
 
 OverlayBase::~OverlayBase()
