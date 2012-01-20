@@ -16,8 +16,6 @@
 #include "inputhandler.h"
 #include "renderer.h"
 #include "scene.h"
-#include "track.h"
-#include "timingoverlay.h"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCTrigonom"
@@ -89,11 +87,7 @@ void Renderer::paintGL()
 
         if (m_pScene)
         {
-            // TODO: Move these to Scene::render() !!!
-            m_pScene->activeTrack().render(m_pCamera);
-            m_pScene->world().renderShadows(m_pCamera);
-            m_pScene->world().render(m_pCamera);
-            m_pScene->timingOverlay().render(m_pCamera);
+            m_pScene->render(*m_pCamera);
         }
     }
 

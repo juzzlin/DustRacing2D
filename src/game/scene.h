@@ -58,6 +58,9 @@ public:
     //! Get timing overlay.
     TimingOverlay & timingOverlay() const;
 
+    //! Render all components.
+    void render(MCCamera & camera);
+
 private:
 
     Track         * m_pActiveTrack;

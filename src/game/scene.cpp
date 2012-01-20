@@ -19,6 +19,7 @@
 #include "inputhandler.h"
 #include "layers.h"
 #include "race.h"
+#include "timingoverlay.h"
 #include "track.h"
 #include "trackdata.h"
 #include "trackobject.h"
@@ -167,6 +168,14 @@ TimingOverlay & Scene::timingOverlay() const
 {
     assert(m_pTimingOverlay);
     return *m_pTimingOverlay;
+}
+
+void Scene::render(MCCamera & camera)
+{
+    m_pActiveTrack->render(&camera);
+    m_pWorld->renderShadows(&camera);
+    m_pWorld->render(&camera);
+    m_pTimingOverlay->render(&camera);
 }
 
 Scene::~Scene()
