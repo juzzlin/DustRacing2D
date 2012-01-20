@@ -72,15 +72,12 @@ void MCTextureManager::load(
 
 QImage MCTextureManager::createNearest2PowNImage(const QImage & image)
 {
-    int n = 0;
-    int w = image.width();
-    int h = image.height();
+    double w = image.width();
+    double h = image.height();
 
-    n = log(static_cast<double>(w)) / log(2);
-    w = pow(2, n);
+    w = pow(2, 1 + int(log(w - w / 2) / log(2) + .5));
     w = w < 2 ? 2 : w;
-    n = log(static_cast<double>(h)) / log(2);
-    h = pow(2, n);
+    h = pow(2, 1 + int(log(h - h / 2) / log(2) + .5));
     h = h < 2 ? 2 : h;
 
     return image.scaled(w, h);
