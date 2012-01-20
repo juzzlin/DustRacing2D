@@ -21,6 +21,7 @@
 #include "../Core/mcsurface.hh"
 #include "mctextureconfigloader.hh"
 #include "mctexturemanager.hh"
+#include "mctexturemanagerimpl.hh"
 
 #include <QDir>
 #include <QGLWidget>
@@ -29,7 +30,7 @@
 #include <cassert>
 
 MCTextureManager::MCTextureManager()
-: m_surfaceMap()
+: m_pImpl(new MCTextureManagerImpl)
 {}
 
 void MCTextureManager::load(
@@ -55,7 +56,7 @@ void MCTextureManager::load(
             if (textureImage.load(path.c_str()))
             {
                 // Create an OpenGL texture from the image
-                createGLTextureFromImage(data, textureImage);
+                m_pImpl->createGLTextureFromImage(data, textureImage);
             }
             else
             {
@@ -70,7 +71,30 @@ void MCTextureManager::load(
     }
 }
 
-QImage MCTextureManager::createNearest2PowNImage(const QImage & image)
+MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
+{
+    // Try to find existing texture for the surface
+    if (m_pImpl->surfaceMap.find(id) == m_pImpl->surfaceMap.end())
+    {
+        throw MCException("Cannot find texture object for handle '" + id + "'");
+    }
+
+    // Yes: return handle for the texture
+    MCSurface * pSurface = m_pImpl->surfaceMap.find(id)->second;
+    assert(pSurface);
+    return *pSurface;
+}
+
+MCTextureManager::~MCTextureManager()
+{
+    delete m_pImpl;
+}
+
+MCTextureManagerImpl::MCTextureManagerImpl()
+{
+}
+
+QImage MCTextureManagerImpl::createNearest2PowNImage(const QImage & image)
 {
     double w = image.width();
     double h = image.height();
@@ -88,7 +112,7 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCTextureManager::createGLTextureFromImage(
+void MCTextureManagerImpl::createGLTextureFromImage(
     const MCTextureData & data, const QImage & image)
 {
     // Store original width of the image
@@ -154,10 +178,10 @@ void MCTextureManager::createGLTextureFromImage(
     }
 
     // Store MCSurface to map
-    m_surfaceMap[data.handle] = pSurface;
+    surfaceMap[data.handle] = pSurface;
 }
 
-void MCTextureManager::applyColorKey(QImage & textureImage,
+void MCTextureManagerImpl::applyColorKey(QImage & textureImage,
     MCUint r, MCUint g, MCUint b) const
 {
     for (int i = 0; i < textureImage.width(); i++)
@@ -183,25 +207,11 @@ void MCTextureManager::applyColorKey(QImage & textureImage,
     }
 }
 
-MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
-{
-    // Try to find existing texture for the surface
-    if (m_surfaceMap.find(id) == m_surfaceMap.end())
-    {
-        throw MCException("Cannot find texture object for handle '" + id + "'");
-    }
-
-    // Yes: return handle for the texture
-    MCSurface * pSurface = m_surfaceMap.find(id)->second;
-    assert(pSurface);
-    return *pSurface;
-}
-
-MCTextureManager::~MCTextureManager()
+MCTextureManagerImpl::~MCTextureManagerImpl()
 {
     // Delete OpenGL textures and Textures
-    auto iter(m_surfaceMap.begin());
-    while (iter != m_surfaceMap.end())
+    auto iter(surfaceMap.begin());
+    while (iter != surfaceMap.end())
     {
         if (iter->second)
         {
