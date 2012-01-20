@@ -31,11 +31,27 @@ MCTextureText::MCTextureText(const std::string & text)
 , m_glyphWidth(32)
 , m_glyphHeight(32)
 {
+    updateTextDimensions();
+}
+
+void MCTextureText::updateTextDimensions()
+{
+    m_textWidth  = m_text.size() * m_glyphWidth;
+    m_textHeight = m_glyphHeight;
+    for (MCUint i = 0; i < m_text.size(); i++)
+    {
+        if (m_text.at(i) == '\n')
+        {
+            m_textHeight += m_glyphHeight;
+        }
+    }
 }
 
 void MCTextureText::setText(const std::string & text)
 {
     m_text = text;
+
+    updateTextDimensions();
 }
 
 const std::string & MCTextureText::text() const
@@ -43,24 +59,36 @@ const std::string & MCTextureText::text() const
     return m_text;
 }
 
-void MCTextureText::setGlyphSize(MCFloat width, MCFloat height)
+void MCTextureText::setGlyphSize(MCUint width, MCUint height)
 {
     m_glyphWidth  = width;
     m_glyphHeight = height;
+
+    updateTextDimensions();
 }
 
-MCFloat MCTextureText::glyphWidth() const
+MCUint MCTextureText::glyphWidth() const
 {
     return m_glyphWidth;
 }
 
-MCFloat MCTextureText::glyphHeight() const
+MCUint MCTextureText::glyphHeight() const
 {
     return m_glyphHeight;
 }
 
+MCUint MCTextureText::textWidth() const
+{
+    return m_textWidth;
+}
+
+MCUint MCTextureText::textHeight() const
+{
+    return m_textHeight;
+}
+
 void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
+    MCTextureFont & font, bool newLineIncreasesY) const
 {
     if (pCamera)
     {
@@ -135,7 +163,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
 }
 
 void MCTextureText::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
+    MCTextureFont & font, bool newLineIncreasesY) const
 {
     if (pCamera)
     {

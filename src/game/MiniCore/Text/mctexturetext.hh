@@ -42,30 +42,39 @@ public:
     const std::string & text() const;
 
     //! Set size of one glyph.
-    void setGlyphSize(MCFloat width, MCFloat height);
+    void setGlyphSize(MCUint width, MCUint height);
 
     //! Get glyph width.
-    MCFloat glyphWidth() const;
+    MCUint glyphWidth() const;
 
     //! Get glyph height.
-    MCFloat glyphHeight() const;
+    MCUint glyphHeight() const;
+
+    //! Get text width.
+    MCUint textWidth() const;
+
+    //! Get text height.
+    MCUint textHeight() const;
 
     //! Render at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
     //! given font.
     void render(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
+        MCTextureFont & font, bool newLineIncreasesY = false) const;
 
     //! Render shadow at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
     //! given font.
     void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
+        MCTextureFont & font, bool newLineIncreasesY = false) const;
 
 private:
 
+    void updateTextDimensions();
+
     std::string m_text;
-    MCFloat m_glyphWidth, m_glyphHeight;
+    MCUint m_glyphWidth, m_glyphHeight;
+    MCUint m_textWidth, m_textHeight;
 };
 
 #endif // MCTEXTUREGLYPH_HH
