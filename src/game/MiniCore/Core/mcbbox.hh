@@ -138,6 +138,16 @@ public:
         return r.i() >= m_x1 && r.i() <= m_x2 && r.j() >= m_y1 && r.j() <= m_y2;
     }
 
+    //! Translate.
+    template <typename U>
+    void translate(const MCVector2d<U> & r)
+    {
+        m_x1 += r.i();
+        m_y1 += r.j();
+        m_x2 += r.i();
+        m_y2 += r.j();
+    }
+
 private:
 
     //! Vertex coordinates

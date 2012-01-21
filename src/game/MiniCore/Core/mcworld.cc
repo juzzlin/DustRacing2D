@@ -19,10 +19,13 @@
 
 #include "mcworld.hh"
 #include "mcworldimpl.hh"
+#include "mcbbox.hh"
 #include "mcforcegenerator.hh"
 #include "mcfrictiongenerator.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
+#include "mcshape.hh"
+#include "mcshapeview.hh"
 #include "mccamera.hh"
 
 #include <cassert>
@@ -163,8 +166,18 @@ void MCWorldImpl::render(MCCamera * pCamera)
         for (; j != end; j++) {
             pObj = *j;
             if (pObj->renderable()) {
-                if ((pCamera && pCamera->isVisible(pObj->bbox())) || !pCamera) {
-                    pObj->render(pCamera);
+                // Check if view is set and is visible
+                if (pObj->shape() && pObj->shape()->view())
+                {
+                    MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
+                    bbox.translate(MCVector2d<MCFloat>(pObj->location()));
+                    if (!pCamera || pCamera->isVisible(bbox)) {
+                        pObj->render(pCamera); // pCamera can be a nullptr
+                    }
+                }
+                // Check if shape is visible
+                else if (!pCamera || pCamera->isVisible(pObj->bbox())) {
+                    pObj->render(pCamera); // pCamera can be a nullptr
                 }
             }
         }
@@ -178,8 +191,18 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
     for (MCUint i = 0; i < i2; i++) {
         pObj = objs[i];
         if (pObj->renderable() && pObj->hasShadow()) {
-            if ((pCamera && pCamera->isVisible(pObj->bbox())) || !pCamera) {
-                pObj->renderShadow(pCamera);
+            // Check if view is set and is visible
+            if (pObj->shape() && pObj->shape()->view())
+            {
+                MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
+                bbox.translate(MCVector2d<MCFloat>(pObj->location()));
+                if (!pCamera || pCamera->isVisible(bbox)) {
+                    pObj->renderShadow(pCamera); // pCamera can be a nullptr
+                }
+            }
+            // Check if shape is visible
+            else if (!pCamera || pCamera->isVisible(pObj->bbox())) {
+                pObj->renderShadow(pCamera); // pCamera can be a nullptr
             }
         }
     }

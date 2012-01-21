@@ -317,7 +317,8 @@ public:
     //! \param step Time step to be integrated.
     void integrate(MCFloat step);
 
-    //! Return current bounding box.
+    //! Return current bounding box. Default implementation returns
+    //! the bbox of the shape if set, and (0, 0, 1, 1) otherwise.
     virtual MCBBox<MCFloat> bbox() const;
 
     //! Set rendering layer (0 is considered the lowest and is rendered

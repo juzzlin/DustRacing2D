@@ -79,3 +79,11 @@ void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
         m_pImpl->m_pSurface->renderShadowScaled(p, l.i(), l.j(), wr, hr, angle);
     }
 }
+
+MCBBox<MCFloat> MCSurfaceView::bbox() const
+{
+    const MCFloat w = m_pImpl->m_pSurface->width() / 2;
+    const MCFloat h = m_pImpl->m_pSurface->height() / 2;
+
+    return MCBBox<MCFloat>(-w, -h, w, h);
+}

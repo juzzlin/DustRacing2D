@@ -23,6 +23,7 @@
 #include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcvector3d.hh"
+#include "mcbbox.hh"
 
 class MCCamera;
 
@@ -78,6 +79,10 @@ public:
     virtual void renderShadowScaled(
         const MCVector3d<MCFloat> & l, MCUint angle,
         MCFloat wr, MCFloat hr, MCCamera * p = nullptr) = 0;
+
+    //! Return non-rotated, non-translated bounding box of the view.
+    //! This is used to optimize rendering.
+    virtual MCBBox<MCFloat> bbox() const = 0;
 
 private:
 

@@ -111,7 +111,7 @@ public:
     //! Return the current angle.
     MCUint angle() const;
 
-    //! Return non-rotated bounding box of the shape.
+    //! Return non-rotated, translated bounding box of the shape.
     virtual MCBBox<MCFloat> bbox() const = 0;
 
     /*! Tests if shape contains the given point.
