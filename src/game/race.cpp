@@ -70,7 +70,7 @@ void Race::checkRoute(Car & car)
             m_routeHash[&car] = 1;
             m_timing.lapCompleted(car);
             std::cout << "Lap completed: "
-                << m_timing.msecToString(m_timing.lastLapTime(car)).toStdString()
+                << m_timing.msecsToString(m_timing.lastLapTime(car))
                 << std::endl;
         }
     }
@@ -94,6 +94,11 @@ void Race::addCar(Car & car)
     }
 
     m_timing.addCar(car);
+}
+
+Timing & Race::timing()
+{
+    return m_timing;
 }
 
 Race::~Race()

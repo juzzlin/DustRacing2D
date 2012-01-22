@@ -57,6 +57,13 @@ void MCTextureFontManager::load(
     }
 }
 
+MCFloat clamp(MCFloat val)
+{
+    val = val < 0.0 ? 0.0 : val;
+    val = val > 1.0 ? 1.0 : val;
+    return val;
+}
+
 void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 {
     // Fetch the corresponding surface.
@@ -84,13 +91,13 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
             MCTextureGlyph newGlyph(
                 rowGlyphs.at(i),
                 MCTextureGlyph::UV(
-                    fi / data.maxGlyphsPerRow, fH - fy / fH),
+                    clamp(fi / data.maxGlyphsPerRow),       clamp((fH - fy) / fH)),
                 MCTextureGlyph::UV(
-                    (fi + 1) / data.maxGlyphsPerRow, fH - fy / fH),
+                    clamp((fi + 1) / data.maxGlyphsPerRow), clamp((fH - fy) / fH)),
                 MCTextureGlyph::UV(
-                    (fi + 1) / data.maxGlyphsPerRow, fH - (fy + fh) / fH),
+                    clamp((fi + 1) / data.maxGlyphsPerRow), clamp((fH - (fy + fh)) / fH)),
                 MCTextureGlyph::UV(
-                    fi / data.maxGlyphsPerRow, fH - (fy + fh) / fH));
+                    clamp(fi / data.maxGlyphsPerRow),       clamp((fH - (fy + fh)) / fH)));
 
             // Add glyph mapping to the font.
             newFont->addGlyphMapping(rowGlyphs.at(i), newGlyph);

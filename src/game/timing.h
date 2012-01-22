@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QHash>
 #include <QTime>
+#include <string>
 
 class Car;
 
@@ -35,11 +36,25 @@ public:
     ~Timing();
 
     //! Completes the current lap for the given car.
-    void lapCompleted(Car & car);
+    void lapCompleted(const Car & car);
 
-    //! Returns last lap time in 10th of secs for the given car or
+    //! Returns last lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int lastLapTime(Car & car);
+    int lastLapTime(const Car & car);
+
+    //! Returns the current lap time in msecs for the given car or
+    //! -1 if invalid car or time not set.
+    int currentTime(const Car & car);
+
+    //! Returns the record lap time in msecs for the given car or
+    //! -1 if invalid car or time not set.
+    int recordTime(const Car & car);
+
+    //! Returns true, if new record just achieved.
+    bool newRecordActive(const Car & car) const;
+
+    //! Force the state of active new record.
+    void setNewRecordActive(const Car & car, bool state);
 
     //! Starts the timing.
     void start();
@@ -48,13 +63,13 @@ public:
     void stop();
 
     //! Adds the given car to the timing.
-    void addCar(Car & car);
+    void addCar(const Car & car);
 
     //! Removes the given car from the timing.
-    void removeCar(Car & car);
+    void removeCar(const Car & car);
 
-    //! Converts milliseconds to string "hh:mm:ss.zzz".
-    QString msecToString(int msec) const;
+    //! Converts msecs to string "hh:mm:ss.zzz".
+    std::string msecsToString(int msec) const;
 
 private:
 
@@ -67,15 +82,17 @@ private:
         , recordLapTime(-1)
         , totalTime(0)
         , lap(0)
+        , newRecordActive(false)
         {}
 
         int lastLapTime;
         int recordLapTime;
         int totalTime;
         int lap;
+        bool newRecordActive;
     };
 
-    QHash<Car *, Timing::Times> m_times;
+    QHash<const Car *, Timing::Times> m_times;
     QTime m_time;
 };
 

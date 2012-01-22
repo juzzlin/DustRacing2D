@@ -14,22 +14,116 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "timingoverlay.h"
+#include "timing.h"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Text/MCTextureFontManager"
 #include "MiniCore/Text/MCTextureText"
 
-TimingOverlay::TimingOverlay(MCTextureFontManager & fontManager)
+#include <sstream>
+
+TimingOverlay::TimingOverlay(
+    MCTextureFontManager & fontManager)
   : m_fontManager(fontManager)
+  , m_pCar(nullptr)
+  , m_pTiming(nullptr)
 {
+}
+
+void TimingOverlay::setCarToFollow(const Car & car)
+{
+    m_pCar = &car;
+}
+
+void TimingOverlay::setTiming(Timing & timing)
+{
+    m_pTiming = &timing;
 }
 
 void TimingOverlay::render(MCCamera * pCamera)
 {
-    MCTextureFont & defaultMonospace = m_fontManager.font("default");
-    MCTextureText test("00'00,00");
-    test.render(width() - test.textWidth(), height() - test.textHeight(),
-        nullptr, defaultMonospace);
+    if (m_pCar && m_pTiming)
+    {
+        // Get the font
+        MCTextureFont & defaultMonospace = m_fontManager.font("default");
+
+        // Render the current lap time
+        {
+            const int currentLapTime = m_pTiming->currentTime(*m_pCar);
+            std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
+            std::stringstream ss;
+            ss << "  " << currentLapTimeStr;
+            MCTextureText currentLapTimeText(ss.str());
+            currentLapTimeText.setGlyphSize(20, 20);
+            currentLapTimeText.render(
+                width() - currentLapTimeText.textWidth(),
+                height() - currentLapTimeText.textHeight(),
+                nullptr,
+                defaultMonospace);
+        }
+
+        // Render the last lap time
+        {
+            const int lastLapTime = m_pTiming->lastLapTime(*m_pCar);
+            std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
+            std::stringstream ss;
+            ss << "L:" << lastLapTimeStr;
+            MCTextureText lastLapTimeText(ss.str());
+            lastLapTimeText.setGlyphSize(20, 20);
+            lastLapTimeText.render(
+                width() - lastLapTimeText.textWidth(),
+                height() - lastLapTimeText.textHeight() * 2,
+                nullptr,
+                defaultMonospace);
+        }
+
+        // Render the record lap time
+        {
+            static int blink   = 0;
+            static int blinked = 0;
+            static bool show   = true;
+
+            // 60 Hz update rate is assumed here
+            if (m_pTiming->newRecordActive(*m_pCar))
+            {
+                if (blinked < 8)
+                {
+                    blink++;
+                    if (blink > 15)
+                    {
+                        show  = !show;
+                        blink = 0;
+                        blinked++;
+                    }
+                }
+                else
+                {
+                    m_pTiming->setNewRecordActive(*m_pCar, false);
+                    blinked = 0;
+                    show = true;
+                }
+            }
+            else
+            {
+                show = true;
+            }
+
+            if (show)
+            {
+                const int recordLapTime = m_pTiming->recordTime(*m_pCar);
+                std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
+                std::stringstream ss;
+                ss << "R:" << recordLapTimeStr;
+                MCTextureText recordLapTimeText(ss.str());
+                recordLapTimeText.setGlyphSize(20, 20);
+                recordLapTimeText.render(
+                    width() - recordLapTimeText.textWidth(),
+                    height() - recordLapTimeText.textHeight() * 3,
+                    nullptr,
+                    defaultMonospace);
+            }
+        }
+    }
 }
 
 TimingOverlay::~TimingOverlay()

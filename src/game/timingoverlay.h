@@ -18,7 +18,9 @@
 
 #include "overlaybase.h"
 
+class Car;
 class MCTextureFontManager;
+class Timing;
 
 //! Renders timeing information on top of the game scene.
 class TimingOverlay : public OverlayBase
@@ -34,9 +36,17 @@ public:
     //! Render as seen through the given camera window.
     virtual void render(MCCamera * pCamera);
 
+    //! Show timing for the given car.
+    void setCarToFollow(const Car & car);
+
+    //! Set the timing data.
+    void setTiming(Timing & timing);
+
 private:
 
     MCTextureFontManager & m_fontManager;
+    const Car * m_pCar;
+    Timing * m_pTiming;
 };
 
 #endif // TIMINGOVERLAY_H

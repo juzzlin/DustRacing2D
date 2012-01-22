@@ -162,6 +162,8 @@ MCWorld & Scene::world() const
 void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
 {
     m_pTimingOverlay = &timingOverlay;
+    m_pTimingOverlay->setTiming(m_race.timing());
+    m_pTimingOverlay->setCarToFollow(m_car);
 }
 
 TimingOverlay & Scene::timingOverlay() const

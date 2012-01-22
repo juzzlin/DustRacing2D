@@ -17,11 +17,11 @@
 #include "car.h"
 
 Timing::Timing(QObject *parent)
-: QObject(parent)
+  : QObject(parent)
 {
 }
 
-void Timing::lapCompleted(Car & car)
+void Timing::lapCompleted(const Car & car)
 {
     Timing::Times & times = m_times[&car];
     times.lap++;
@@ -30,13 +30,38 @@ void Timing::lapCompleted(Car & car)
     times.lastLapTime = elapsed - times.totalTime;
     times.totalTime   = elapsed;
 
-    if (times.lastLapTime < times.recordLapTime)
+    times.newRecordActive = false;
+    if (times.lastLapTime < times.recordLapTime ||
+        times.recordLapTime == -1)
     {
-        times.recordLapTime = times.lastLapTime;
+        times.recordLapTime   = times.lastLapTime;
+        times.newRecordActive = true;
     }
 }
 
-int Timing::lastLapTime(Car & car)
+int Timing::currentTime(const Car & car)
+{
+    if (m_times.contains(&car))
+    {
+        Timing::Times & times = m_times[&car];
+        return m_time.elapsed() - times.totalTime;
+    }
+
+    return -1;
+}
+
+int Timing::recordTime(const Car & car)
+{
+    if (m_times.contains(&car))
+    {
+        Timing::Times & times = m_times[&car];
+        return times.recordLapTime;
+    }
+
+    return -1;
+}
+
+int Timing::lastLapTime(const Car & car)
 {
     if (m_times.contains(&car))
     {
@@ -46,14 +71,32 @@ int Timing::lastLapTime(Car & car)
     return -1;
 }
 
-void Timing::addCar(Car & car)
+void Timing::addCar(const Car & car)
 {
     m_times[&car] = Timing::Times();
 }
 
-void Timing::removeCar(Car & car)
+void Timing::removeCar(const Car & car)
 {
     m_times.remove(&car);
+}
+
+bool Timing::newRecordActive(const Car & car) const
+{
+    if (m_times.contains(&car))
+    {
+        return m_times[&car].newRecordActive;
+    }
+
+    return false;
+}
+
+void Timing::setNewRecordActive(const Car & car, bool state)
+{
+    if (m_times.contains(&car))
+    {
+        m_times[&car].newRecordActive = state;
+    }
 }
 
 void Timing::start()
@@ -66,15 +109,22 @@ void Timing::stop()
 {
 }
 
-QString Timing::msecToString(int msec) const
+std::string Timing::msecsToString(int msec) const
 {
-    int hh = msec / 3600000;
-    int mm = (msec % 3600000) / 60000;
-    int ss = (msec % 3600000 % 60000) / 1000;
-    int ms = (msec % 3600000 % 60000 % 1000);
+    if (msec < 0)
+    {
+        return "--:--:--.---";
+    }
 
-    QTime time(hh, mm, ss, ms);
-    return time.toString("hh:mm:ss.zzz");
+    const int hh = msec / 3600000;
+    const int hr = msec % 3600000;
+    const int mm = hr   / 60000;
+    const int mr = hr   % 60000;
+    const int ss = mr   / 1000;
+    const int ms = mr   % 1000;
+
+    const QTime time(hh, mm, ss, ms);
+    return time.toString("hh:mm:ss.zzz").toStdString();
 }
 
 Timing::~Timing()

@@ -53,6 +53,9 @@ public:
     //! Add a car to the race.
     void addCar(Car & car);
 
+    //! Get the timing object.
+    Timing & timing();
+
 private:
 
     void checkRoute(Car & car);
