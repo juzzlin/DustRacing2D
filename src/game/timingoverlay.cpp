@@ -47,6 +47,20 @@ void TimingOverlay::render(MCCamera * pCamera)
         // Get the font
         MCTextureFont & defaultMonospace = m_fontManager.font("default");
 
+        // Render the current lap
+        {
+            const int lap = m_pTiming->lap(*m_pCar) + 1;
+            std::stringstream ss;
+            ss << " LAP:" << lap;
+            MCTextureText lapText(ss.str());
+            lapText.setGlyphSize(20, 20);
+            lapText.render(
+                0,
+                height() - lapText.textHeight(),
+                nullptr,
+                defaultMonospace);
+        }
+
         // Render the current lap time
         {
             const int currentLapTime = m_pTiming->currentTime(*m_pCar);

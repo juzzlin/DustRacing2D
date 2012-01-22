@@ -39,29 +39,40 @@ void Timing::lapCompleted(const Car & car)
     }
 }
 
-int Timing::currentTime(const Car & car)
+int Timing::lap(const Car & car) const
 {
     if (m_times.contains(&car))
     {
-        Timing::Times & times = m_times[&car];
+        const Timing::Times & times = m_times[&car];
+        return times.lap;
+    }
+
+    return -1;
+}
+
+int Timing::currentTime(const Car & car) const
+{
+    if (m_times.contains(&car))
+    {
+        const Timing::Times & times = m_times[&car];
         return m_time.elapsed() - times.totalTime;
     }
 
     return -1;
 }
 
-int Timing::recordTime(const Car & car)
+int Timing::recordTime(const Car & car) const
 {
     if (m_times.contains(&car))
     {
-        Timing::Times & times = m_times[&car];
+        const Timing::Times & times = m_times[&car];
         return times.recordLapTime;
     }
 
     return -1;
 }
 
-int Timing::lastLapTime(const Car & car)
+int Timing::lastLapTime(const Car & car) const
 {
     if (m_times.contains(&car))
     {

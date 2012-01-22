@@ -38,17 +38,20 @@ public:
     //! Completes the current lap for the given car.
     void lapCompleted(const Car & car);
 
+    //! Returns the current lap for the given car.
+    int lap(const Car & car) const;
+
     //! Returns last lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int lastLapTime(const Car & car);
+    int lastLapTime(const Car & car) const;
 
     //! Returns the current lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int currentTime(const Car & car);
+    int currentTime(const Car & car) const;
 
     //! Returns the record lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int recordTime(const Car & car);
+    int recordTime(const Car & car) const;
 
     //! Returns true, if new record just achieved.
     bool newRecordActive(const Car & car) const;
