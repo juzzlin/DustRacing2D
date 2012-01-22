@@ -34,11 +34,12 @@ namespace
     const MCFloat ROTATION_FRICTION = 0.9f;
 }
 
-Car::Car(MCSurface * pSurface)
-: MCObject(pSurface, "Car")
-, m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
-, m_frictionGeneratorAdded(false)
-, m_accelerating(false)
+Car::Car(MCSurface * pSurface, MCUint index)
+  : MCObject(pSurface, "Car")
+  , m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
+  , m_frictionGeneratorAdded(false)
+  , m_accelerating(false)
+  , m_index(index)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -53,6 +54,11 @@ Car::Car(MCSurface * pSurface)
             ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
 
     //setRenderShapeOutline(true);
+}
+
+MCUint Car::index() const
+{
+    return m_index;
 }
 
 void Car::turnLeft()

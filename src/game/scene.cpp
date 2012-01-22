@@ -37,8 +37,8 @@
 Scene::Scene(MCSurface & carSurface)
 : m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
-, m_car(&carSurface)
-, m_testCar(&carSurface)
+, m_car(&carSurface, 0)
+, m_testCar(&carSurface, 1)
 , m_cameraBaseOffset(0)
 {
     m_car.setLayer(Layers::Cars);

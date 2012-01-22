@@ -27,7 +27,10 @@ class Car : public MCObject
 public:
 
     //! Constructor.
-    Car(MCSurface * pSurface);
+    Car(MCSurface * pSurface, MCUint index);
+
+    //! Return the index.
+    MCUint index() const;
 
     //! Turn left.
     void turnLeft();
@@ -55,6 +58,7 @@ private:
     MCFrictionGenerator * m_pDeccelerationFriction;
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
+    MCUint                m_index;
 };
 
 #endif // CAR_H
