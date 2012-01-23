@@ -29,9 +29,20 @@
 
 #include <cassert>
 
+MCTextureManager * MCTextureManager::m_pInstance = nullptr;
+
 MCTextureManager::MCTextureManager()
 : m_pImpl(new MCTextureManagerImpl)
-{}
+{
+    assert(!MCTextureManager::m_pInstance);
+    MCTextureManager::m_pInstance = this;
+}
+
+MCTextureManager & MCTextureManager::instance()
+{
+    assert(MCTextureManager::m_pInstance);
+    return *MCTextureManager::m_pInstance;
+}
 
 void MCTextureManager::load(
     const std::string & fileName, const std::string & baseDataPath) throw (MCException)

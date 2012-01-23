@@ -60,6 +60,9 @@ public:
     //! Destructor.
     virtual ~MCTextureFontManager();
 
+    //! Return the singleton.
+    static MCTextureFontManager & instance();
+
     //! Loads texture config from the given config file.
     //! \param filePath Path to the XML-based input file.
     virtual void load(const std::string & filePath) throw (MCException);
@@ -88,6 +91,7 @@ private:
     FontHash m_fontHash;
 
     const MCTextureManager & m_textureManager;
+    static MCTextureFontManager * m_pInstance;
 };
 
 #endif // MCTEXTUREFONTMANAGER_HH

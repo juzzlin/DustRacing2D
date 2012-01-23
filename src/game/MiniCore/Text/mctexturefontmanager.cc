@@ -28,11 +28,22 @@
 
 #include <cassert>
 
+MCTextureFontManager * MCTextureFontManager::m_pInstance = nullptr;
+
 MCTextureFontManager::MCTextureFontManager(
     const MCTextureManager & textureManager)
   : m_fontHash()
   , m_textureManager(textureManager)
-{}
+{
+    assert(!MCTextureFontManager::m_pInstance);
+    MCTextureFontManager::m_pInstance = this;
+}
+
+MCTextureFontManager & MCTextureFontManager::instance()
+{
+    assert(MCTextureFontManager::m_pInstance);
+    return *MCTextureFontManager::m_pInstance;
+}
 
 void MCTextureFontManager::load(
     const std::string & fileName) throw (MCException)

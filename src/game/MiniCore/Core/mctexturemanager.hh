@@ -76,6 +76,9 @@ public:
     //! Destructor
     virtual ~MCTextureManager();
 
+    //! Return the singleton.
+    static MCTextureManager & instance();
+
     //! Loads texture config from strBasePath using the given mapping file strFile.
     //! \param filePath Path to the XML-based input file.
     //! \param baseDataPath The absolute search path for an image is
@@ -99,6 +102,7 @@ private:
     DISABLE_COPY(MCTextureManager);
     DISABLE_ASSI(MCTextureManager);
     MCTextureManagerImpl * const m_pImpl;
+    static MCTextureManager * m_pInstance;
 };
 
 #endif // MCTEXTUREMANAGER_HH
