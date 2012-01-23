@@ -11,6 +11,7 @@ race.cpp
 renderer.cpp
 scene.cpp
 slidefrictiongenerator.cpp
+speedometer.cpp
 timing.cpp
 timingoverlay.cpp
 track.cpp

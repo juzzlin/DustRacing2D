@@ -17,8 +17,9 @@
 
 #include "game.h"
 #include "inputhandler.h"
-#include "scene.h"
 #include "renderer.h"
+#include "scene.h"
+#include "speedometer.h"
 #include "timingoverlay.h"
 #include "track.h"
 #include "trackloader.h"
@@ -39,7 +40,7 @@ Game::Game()
 , m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
 , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
 , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
-, m_pTimingOverlay(new TimingOverlay(*m_pTextureFontManager))
+, m_pTimingOverlay(nullptr)
 , m_pCamera(nullptr)
 , m_pInputHandler(new InputHandler)
 , m_updateTimer()
@@ -141,10 +142,15 @@ void Game::initScene()
         m_pScene->activeTrack().width(),
         m_pScene->activeTrack().height());
 
+    m_pTimingOverlay = new TimingOverlay;
     m_pTimingOverlay->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
-
     m_pScene->setTimingOverlay(*m_pTimingOverlay);
+
+    m_pSpeedometer = new Speedometer;
+    m_pSpeedometer->setDimensions(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    m_pScene->setSpeedometer(*m_pSpeedometer);
 }
 
 bool Game::init()
@@ -241,4 +247,6 @@ Game::~Game()
     delete m_pObjectFactory;
     delete m_pCamera;
     delete m_pInputHandler;
+    delete m_pTimingOverlay;
+    delete m_pSpeedometer;
 }

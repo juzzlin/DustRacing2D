@@ -42,8 +42,8 @@ public:
     //! Destructor.
     virtual ~OverlayBase();
 
-    //! Render as seen through the given camera window.
-    virtual void render(MCCamera * pCamera) = 0;
+    //! Render.
+    virtual void render() = 0;
 
 private:
 

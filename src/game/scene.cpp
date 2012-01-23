@@ -19,6 +19,7 @@
 #include "inputhandler.h"
 #include "layers.h"
 #include "race.h"
+#include "speedometer.h"
 #include "timingoverlay.h"
 #include "track.h"
 #include "trackdata.h"
@@ -35,11 +36,13 @@
 #include <cassert>
 
 Scene::Scene(MCSurface & carSurface)
-: m_pActiveTrack(nullptr)
-, m_pWorld(new MCWorld)
-, m_car(&carSurface, 0)
-, m_testCar(&carSurface, 1)
-, m_cameraBaseOffset(0)
+  : m_pActiveTrack(nullptr)
+  , m_pWorld(new MCWorld)
+  , m_pTimingOverlay(nullptr)
+  , m_pSpeedometer(nullptr)
+  , m_car(&carSurface, 0)
+  , m_testCar(&carSurface, 1)
+  , m_cameraBaseOffset(0)
 {
     m_car.setLayer(Layers::Cars);
     m_race.addCar(m_car);
@@ -166,6 +169,12 @@ void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
     m_pTimingOverlay->setCarToFollow(m_car);
 }
 
+void Scene::setSpeedometer(Speedometer & speedometer)
+{
+    m_pSpeedometer = &speedometer;
+    m_pSpeedometer->setCarToFollow(m_car);
+}
+
 TimingOverlay & Scene::timingOverlay() const
 {
     assert(m_pTimingOverlay);
@@ -174,10 +183,15 @@ TimingOverlay & Scene::timingOverlay() const
 
 void Scene::render(MCCamera & camera)
 {
+    assert(m_pActiveTrack);
     m_pActiveTrack->render(&camera);
+    assert(m_pWorld);
     m_pWorld->renderShadows(&camera);
     m_pWorld->render(&camera);
-    m_pTimingOverlay->render(&camera);
+    assert(m_pTimingOverlay);
+    m_pTimingOverlay->render();
+    assert(m_pSpeedometer);
+    m_pSpeedometer->render();
 }
 
 Scene::~Scene()

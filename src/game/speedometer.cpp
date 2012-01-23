@@ -13,42 +13,36 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TIMINGOVERLAY_H
-#define TIMINGOVERLAY_H
+#include "speedometer.h"
 
-#include "overlaybase.h"
+#include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCSurface"
+#include "MiniCore/Core/MCTextureManager"
+#include "MiniCore/Text/MCTextureFontManager"
+#include "MiniCore/Text/MCTextureText"
 
-class Car;
-class MCTextureFontManager;
-class MCTextureFont;
-class Timing;
+#include <sstream>
 
-//! Renders timeing information on top of the game scene.
-class TimingOverlay : public OverlayBase
+Speedometer::Speedometer()
+  : m_pCar(nullptr)
+  , m_surface(MCTextureManager::instance().surface("speedometer"))
 {
-public:
+}
 
-    //! Constructor.
-    TimingOverlay();
+void Speedometer::setCarToFollow(const Car & car)
+{
+    m_pCar = &car;
+}
 
-    //! Destructor.
-    virtual ~TimingOverlay();
+void Speedometer::render()
+{
+    m_surface.render(nullptr,
+         16 + m_surface.width() / 2,
+         16 + m_surface.height() / 2,
+         0,
+         0);
+}
 
-    //! \reimp
-    virtual void render();
-
-    //! Show timing for the given car.
-    void setCarToFollow(const Car & car);
-
-    //! Set the timing data.
-    void setTiming(Timing & timing);
-
-private:
-
-    MCTextureFontManager & m_fontManager;
-    MCTextureFont & m_defaultMonospace;
-    const Car * m_pCar;
-    Timing * m_pTiming;
-};
-
-#endif // TIMINGOVERLAY_H
+Speedometer::~Speedometer()
+{
+}

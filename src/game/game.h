@@ -20,8 +20,9 @@
 #include <QTimer>
 
 class InputHandler;
-class Scene;
 class Renderer;
+class Scene;
+class Speedometer;
 class TimingOverlay;
 class TrackLoader;
 class MCCamera;
@@ -84,6 +85,7 @@ private:
     MCObjectFactory      * m_pObjectFactory;
     TrackLoader          * m_pTrackLoader;
     TimingOverlay        * m_pTimingOverlay;
+    Speedometer          * m_pSpeedometer;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_updateTimer;

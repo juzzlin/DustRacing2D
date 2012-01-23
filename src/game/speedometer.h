@@ -13,26 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TIMINGOVERLAY_H
-#define TIMINGOVERLAY_H
+#ifndef SPEEDOMETER_H
+#define SPEEDOMETER_H
 
 #include "overlaybase.h"
 
 class Car;
+class MCSurface;
 class MCTextureFontManager;
-class MCTextureFont;
-class Timing;
 
-//! Renders timeing information on top of the game scene.
-class TimingOverlay : public OverlayBase
+//! Renders speedometer on top of the game scene.
+class Speedometer : public OverlayBase
 {
 public:
 
     //! Constructor.
-    TimingOverlay();
+    Speedometer();
 
     //! Destructor.
-    virtual ~TimingOverlay();
+    virtual ~Speedometer();
 
     //! \reimp
     virtual void render();
@@ -40,15 +39,10 @@ public:
     //! Show timing for the given car.
     void setCarToFollow(const Car & car);
 
-    //! Set the timing data.
-    void setTiming(Timing & timing);
-
 private:
 
-    MCTextureFontManager & m_fontManager;
-    MCTextureFont & m_defaultMonospace;
     const Car * m_pCar;
-    Timing * m_pTiming;
+    MCSurface & m_surface;
 };
 
-#endif // TIMINGOVERLAY_H
+#endif // SPEEDOMETER_H

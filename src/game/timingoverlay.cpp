@@ -22,9 +22,9 @@
 
 #include <sstream>
 
-TimingOverlay::TimingOverlay(
-    MCTextureFontManager & fontManager)
-  : m_fontManager(fontManager)
+TimingOverlay::TimingOverlay()
+  : m_fontManager(MCTextureFontManager::instance())
+  , m_defaultMonospace(m_fontManager.font("default"))
   , m_pCar(nullptr)
   , m_pTiming(nullptr)
 {
@@ -40,12 +40,12 @@ void TimingOverlay::setTiming(Timing & timing)
     m_pTiming = &timing;
 }
 
-void TimingOverlay::render(MCCamera * pCamera)
+void TimingOverlay::render()
 {
     if (m_pCar && m_pTiming)
     {
-        // Get the font
-        MCTextureFont & defaultMonospace = m_fontManager.font("default");
+        const int shadowY = -2;
+        const int shadowX = 2;
 
         // Render the current lap
         {
@@ -54,11 +54,16 @@ void TimingOverlay::render(MCCamera * pCamera)
             ss << " LAP:" << lap;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
+            lapText.renderShadow(
+                shadowX + 0,
+                shadowY + height() - lapText.textHeight(),
+                nullptr,
+                m_defaultMonospace);
             lapText.render(
                 0,
                 height() - lapText.textHeight(),
                 nullptr,
-                defaultMonospace);
+                m_defaultMonospace);
         }
 
         // Render the current lap time
@@ -69,11 +74,16 @@ void TimingOverlay::render(MCCamera * pCamera)
             ss << "  " << currentLapTimeStr;
             MCTextureText currentLapTimeText(ss.str());
             currentLapTimeText.setGlyphSize(20, 20);
+            currentLapTimeText.renderShadow(
+                shadowX + width() - currentLapTimeText.textWidth(),
+                shadowY + height() - currentLapTimeText.textHeight(),
+                nullptr,
+                m_defaultMonospace);
             currentLapTimeText.render(
                 width() - currentLapTimeText.textWidth(),
                 height() - currentLapTimeText.textHeight(),
                 nullptr,
-                defaultMonospace);
+                m_defaultMonospace);
         }
 
         // Render the last lap time
@@ -84,11 +94,16 @@ void TimingOverlay::render(MCCamera * pCamera)
             ss << "L:" << lastLapTimeStr;
             MCTextureText lastLapTimeText(ss.str());
             lastLapTimeText.setGlyphSize(20, 20);
+            lastLapTimeText.renderShadow(
+                shadowX + width() - lastLapTimeText.textWidth(),
+                shadowY + height() - lastLapTimeText.textHeight() * 2,
+                nullptr,
+                m_defaultMonospace);
             lastLapTimeText.render(
                 width() - lastLapTimeText.textWidth(),
                 height() - lastLapTimeText.textHeight() * 2,
                 nullptr,
-                defaultMonospace);
+                m_defaultMonospace);
         }
 
         // Render the record lap time
@@ -130,11 +145,16 @@ void TimingOverlay::render(MCCamera * pCamera)
                 ss << "R:" << recordLapTimeStr;
                 MCTextureText recordLapTimeText(ss.str());
                 recordLapTimeText.setGlyphSize(20, 20);
+                recordLapTimeText.renderShadow(
+                    shadowX + width() - recordLapTimeText.textWidth(),
+                    shadowY + height() - recordLapTimeText.textHeight() * 3,
+                    nullptr,
+                    m_defaultMonospace);
                 recordLapTimeText.render(
                     width() - recordLapTimeText.textWidth(),
                     height() - recordLapTimeText.textHeight() * 3,
                     nullptr,
-                    defaultMonospace);
+                    m_defaultMonospace);
             }
         }
     }

@@ -26,6 +26,7 @@ class MCSurface;
 class MCWorld;
 class Track;
 class TimingOverlay;
+class Speedometer;
 
 //! The game scene.
 class Scene
@@ -55,6 +56,9 @@ public:
     //! Set timing overlay.
     void setTimingOverlay(TimingOverlay & timingOverlay);
 
+    //! Set speedometer.
+    void setSpeedometer(Speedometer & speedometer);
+
     //! Get timing overlay.
     TimingOverlay & timingOverlay() const;
 
@@ -66,6 +70,7 @@ private:
     Track         * m_pActiveTrack;
     MCWorld       * m_pWorld;
     TimingOverlay * m_pTimingOverlay;
+    Speedometer   * m_pSpeedometer;
     Car             m_car;
     Car             m_testCar;
     Race            m_race;
