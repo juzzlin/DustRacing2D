@@ -15,13 +15,8 @@
 
 #include "speedometer.h"
 
-#include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Text/MCTextureFontManager"
-#include "MiniCore/Text/MCTextureText"
-
-#include <sstream>
 
 Speedometer::Speedometer()
   : m_pCar(nullptr)
