@@ -37,7 +37,3 @@ void Speedometer::render()
          0,
          0);
 }
-
-Speedometer::~Speedometer()
-{
-}

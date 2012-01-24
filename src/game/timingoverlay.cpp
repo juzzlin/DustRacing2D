@@ -159,7 +159,3 @@ void TimingOverlay::render()
         }
     }
 }
-
-TimingOverlay::~TimingOverlay()
-{
-}

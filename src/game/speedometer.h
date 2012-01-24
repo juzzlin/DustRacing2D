@@ -30,9 +30,6 @@ public:
     //! Constructor.
     Speedometer();
 
-    //! Destructor.
-    virtual ~Speedometer();
-
     //! \reimp
     virtual void render();
 

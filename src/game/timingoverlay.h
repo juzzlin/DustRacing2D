@@ -31,9 +31,6 @@ public:
     //! Constructor.
     TimingOverlay();
 
-    //! Destructor.
-    virtual ~TimingOverlay();
-
     //! \reimp
     virtual void render();
 
