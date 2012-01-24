@@ -29,7 +29,7 @@
 #include "mcobjecttree.hh"
 #include "mccontact.hh"
 
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -50,8 +50,8 @@ class MCObject
 {
 public:
 
-    typedef std::unordered_map<MCObject *, std::vector<MCContact *> >
-        ContactHash;
+    //! Hash container for contacts. Prefer map here for iteration performance.
+    typedef std::map<MCObject *, std::vector<MCContact *> > ContactHash;
 
     //! Constructor.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".

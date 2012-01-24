@@ -20,8 +20,8 @@
 #ifndef MCFORCEREGISTRYIMPL_HH
 #define MCFORCEREGISTRYIMPL_HH
 
-#include <unordered_map>
-#include <unordered_set>
+#include <map>
+#include <set>
 #include <vector>
 
 class MCForceGenerator;
@@ -31,17 +31,18 @@ class MCObject;
 class MCForceRegistryImpl
 {
 public:
-  MCForceRegistryImpl();
-  virtual ~MCForceRegistryImpl();
-  void update();
-  void remove(MCForceGenerator & generator, MCObject & object);
+    MCForceRegistryImpl();
+    virtual ~MCForceRegistryImpl();
+    void update();
+    void remove(MCForceGenerator & generator, MCObject & object);
 
 private:
-  typedef std::vector<MCForceGenerator *> Registry;
-  typedef std::unordered_map<MCObject *, Registry> RegistryHash;
-  RegistryHash m_registryHash;
-  std::unordered_set<MCForceGenerator *> m_owned;
-  friend class MCForceRegistry;
+    // Prefer map and set here for iteration performance.
+    typedef std::vector<MCForceGenerator *> Registry;
+    typedef std::map<MCObject *, Registry> RegistryHash;
+    RegistryHash m_registryHash;
+    std::set<MCForceGenerator *> m_owned;
+    friend class MCForceRegistry;
 };
 
 #endif // MCFORCEREGISTRYIMPL_HH

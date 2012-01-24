@@ -36,6 +36,8 @@ class MCObjectTree
 {
 public:
 
+    //! Container for objects. There are a lot of inserts/removals so
+    //! unordered_set is taken.
     typedef std::unordered_set<MCObject *> ObjectSet;
 
     //! Constructor.
@@ -48,11 +50,11 @@ public:
     //! Destructor.
     ~MCObjectTree();
 
-    //! Insert an object into the tree (O(log(N)).
+    //! Insert an object into the tree (O(1)).
     //! \param object is the object to be inserted.
     void insert(MCObject & object);
 
-    //! Remove an object from the tree (O(log(N)).
+    //! Remove an object from the tree (O(1)).
     //! \param object is the object to be removed.
     //! \return true if was removed.
     bool remove(MCObject & object);
