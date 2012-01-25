@@ -16,14 +16,19 @@
 #include "timing.h"
 #include "car.h"
 
-Timing::Timing(QObject *parent)
+#include <cassert>
+
+Timing::Timing(MCUint cars, QObject *parent)
   : QObject(parent)
+  , m_times(cars, Timing::Times())
 {
 }
 
-void Timing::lapCompleted(const Car & car)
+void Timing::lapCompleted(MCUint index)
 {
-    Timing::Times & times = m_times[&car];
+    assert(index < m_times.size());
+
+    Timing::Times & times = m_times[index];
     times.lap++;
 
     const int elapsed = m_time.elapsed();
@@ -39,75 +44,41 @@ void Timing::lapCompleted(const Car & car)
     }
 }
 
-int Timing::lap(const Car & car) const
+int Timing::lap(MCUint index) const
 {
-    if (m_times.contains(&car))
-    {
-        const Timing::Times & times = m_times[&car];
-        return times.lap;
-    }
-
-    return -1;
+    assert(index < m_times.size());
+    return m_times[index].lap;
 }
 
-int Timing::currentTime(const Car & car) const
+int Timing::currentTime(MCUint index) const
 {
-    if (m_times.contains(&car))
-    {
-        const Timing::Times & times = m_times[&car];
-        return m_time.elapsed() - times.totalTime;
-    }
-
-    return -1;
+    assert(index < m_times.size());
+    const Timing::Times & times = m_times[index];
+    return m_time.elapsed() - times.totalTime;
 }
 
-int Timing::recordTime(const Car & car) const
+int Timing::recordTime(MCUint index) const
 {
-    if (m_times.contains(&car))
-    {
-        const Timing::Times & times = m_times[&car];
-        return times.recordLapTime;
-    }
-
-    return -1;
+    assert(index < m_times.size());
+    return m_times[index].recordLapTime;
 }
 
-int Timing::lastLapTime(const Car & car) const
+int Timing::lastLapTime(MCUint index) const
 {
-    if (m_times.contains(&car))
-    {
-        return m_times[&car].lastLapTime;
-    }
-
-    return -1;
+    assert(index < m_times.size());
+    return m_times[index].lastLapTime;
 }
 
-void Timing::addCar(const Car & car)
+bool Timing::newRecordActive(MCUint index) const
 {
-    m_times[&car] = Timing::Times();
+    assert(index < m_times.size());
+    return m_times[index].newRecordActive;
 }
 
-void Timing::removeCar(const Car & car)
+void Timing::setNewRecordActive(MCUint index, bool state)
 {
-    m_times.remove(&car);
-}
-
-bool Timing::newRecordActive(const Car & car) const
-{
-    if (m_times.contains(&car))
-    {
-        return m_times[&car].newRecordActive;
-    }
-
-    return false;
-}
-
-void Timing::setNewRecordActive(const Car & car, bool state)
-{
-    if (m_times.contains(&car))
-    {
-        m_times[&car].newRecordActive = state;
-    }
+    assert(index < m_times.size());
+    m_times[index].newRecordActive = state;
 }
 
 void Timing::start()
@@ -138,6 +109,3 @@ std::string Timing::msecsToString(int msec) const
     return time.toString("hh:mm:ss.zzz").toStdString();
 }
 
-Timing::~Timing()
-{
-}

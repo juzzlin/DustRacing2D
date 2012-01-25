@@ -22,9 +22,12 @@
 #include <algorithm>
 #include <cassert>
 
+static const unsigned int MAX_CARS = 24;
+
 Race::Race()
-: m_lapCount(0)
-, m_pTrack(nullptr)
+  : m_lapCount(0)
+  , m_timing(MAX_CARS)
+  , m_pTrack(nullptr)
 {
 }
 
@@ -68,9 +71,9 @@ void Race::checkRoute(Car & car)
         if (pCurrent->routeIndex() == 1)
         {
             m_routeHash[&car] = 1;
-            m_timing.lapCompleted(car);
+            m_timing.lapCompleted(car.index());
             std::cout << "Lap completed: "
-                << m_timing.msecsToString(m_timing.lastLapTime(car))
+                << m_timing.msecsToString(m_timing.lastLapTime(car.index()))
                 << std::endl;
         }
     }
@@ -92,8 +95,6 @@ void Race::addCar(Car & car)
     {
         m_cars.push_back(&car);
     }
-
-    m_timing.addCar(car);
 }
 
 Timing & Race::timing()

@@ -17,9 +17,12 @@
 #define TIMING_H
 
 #include <QObject>
-#include <QHash>
 #include <QTime>
+
 #include <string>
+#include <vector>
+
+#include "MiniCore/Core/MCTypes"
 
 class Car;
 
@@ -30,46 +33,37 @@ class Timing : public QObject
 public:
 
     //! Constructor.
-    explicit Timing(QObject * parent = nullptr);
-
-    //! Destructor.
-    ~Timing();
+    explicit Timing(MCUint cars, QObject * parent = nullptr);
 
     //! Completes the current lap for the given car.
-    void lapCompleted(const Car & car);
+    void lapCompleted(MCUint index);
 
     //! Returns the current lap for the given car.
-    int lap(const Car & car) const;
+    int lap(MCUint index) const;
 
     //! Returns last lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int lastLapTime(const Car & car) const;
+    int lastLapTime(MCUint index) const;
 
     //! Returns the current lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int currentTime(const Car & car) const;
+    int currentTime(MCUint index) const;
 
     //! Returns the record lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
-    int recordTime(const Car & car) const;
+    int recordTime(MCUint index) const;
 
     //! Returns true, if new record just achieved.
-    bool newRecordActive(const Car & car) const;
+    bool newRecordActive(MCUint index) const;
 
     //! Force the state of active new record.
-    void setNewRecordActive(const Car & car, bool state);
+    void setNewRecordActive(MCUint index, bool state);
 
     //! Starts the timing.
     void start();
 
     //! Stops the timing.
     void stop();
-
-    //! Adds the given car to the timing.
-    void addCar(const Car & car);
-
-    //! Removes the given car from the timing.
-    void removeCar(const Car & car);
 
     //! Converts msecs to string "hh:mm:ss.zzz".
     std::string msecsToString(int msec) const;
@@ -95,7 +89,7 @@ private:
         bool newRecordActive;
     };
 
-    QHash<const Car *, Timing::Times> m_times;
+    std::vector<Timing::Times> m_times;
     QTime m_time;
 };
 
