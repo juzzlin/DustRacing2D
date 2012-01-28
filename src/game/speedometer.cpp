@@ -46,11 +46,11 @@ void Speedometer::render()
     // Make the stored angle to follow the real angle.
     if (m_angle < newAngle - 1.0f)
     {
-        m_angle += 0.25f;
+        m_angle += 0.5f;
     }
     else if (m_angle > newAngle + 1.0f)
     {
-        m_angle -= 0.25f;
+        m_angle -= 0.5f;
     }
 
     // Render the components.
