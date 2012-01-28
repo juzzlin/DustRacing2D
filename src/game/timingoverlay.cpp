@@ -15,6 +15,7 @@
 
 #include "timingoverlay.h"
 #include "timing.h"
+#include "car.h"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Text/MCTextureFontManager"
@@ -49,7 +50,7 @@ void TimingOverlay::render()
 
         // Render the current lap
         {
-            const int lap = m_pTiming->lap(*m_pCar) + 1;
+            const int lap = m_pTiming->lap(m_pCar->index()) + 1;
             std::stringstream ss;
             ss << " LAP:" << lap;
             MCTextureText lapText(ss.str());
@@ -68,7 +69,7 @@ void TimingOverlay::render()
 
         // Render the current lap time
         {
-            const int currentLapTime = m_pTiming->currentTime(*m_pCar);
+            const int currentLapTime = m_pTiming->currentTime(m_pCar->index());
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
             std::stringstream ss;
             ss << "  " << currentLapTimeStr;
@@ -88,7 +89,7 @@ void TimingOverlay::render()
 
         // Render the last lap time
         {
-            const int lastLapTime = m_pTiming->lastLapTime(*m_pCar);
+            const int lastLapTime = m_pTiming->lastLapTime(m_pCar->index());
             std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
             std::stringstream ss;
             ss << "L:" << lastLapTimeStr;
@@ -113,7 +114,7 @@ void TimingOverlay::render()
             static bool show   = true;
 
             // 60 Hz update rate is assumed here
-            if (m_pTiming->newRecordActive(*m_pCar))
+            if (m_pTiming->newRecordActive(m_pCar->index()))
             {
                 if (blinked < 8)
                 {
@@ -127,7 +128,7 @@ void TimingOverlay::render()
                 }
                 else
                 {
-                    m_pTiming->setNewRecordActive(*m_pCar, false);
+                    m_pTiming->setNewRecordActive(m_pCar->index(), false);
                     blinked = 0;
                     show = true;
                 }
@@ -139,7 +140,7 @@ void TimingOverlay::render()
 
             if (show)
             {
-                const int recordLapTime = m_pTiming->recordTime(*m_pCar);
+                const int recordLapTime = m_pTiming->recordTime(m_pCar->index());
                 std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
                 std::stringstream ss;
                 ss << "R:" << recordLapTimeStr;
