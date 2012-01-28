@@ -14,13 +14,19 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "speedometer.h"
+#include "car.h"
 
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
 
 Speedometer::Speedometer()
   : m_pCar(nullptr)
-  , m_surface(MCTextureManager::instance().surface("speedometer"))
+  , m_body(MCTextureManager::instance().surface("speedometer-body"))
+  , m_hand(MCTextureManager::instance().surface("speedometer-hand"))
+  , m_center(MCTextureManager::instance().surface("speedometer-center"))
+  , m_angle(180.0)
+  , m_bodyX(16 + m_body.width() / 2)
+  , m_bodyY(16 + m_body.height() / 2)
 {
 }
 
@@ -31,9 +37,24 @@ void Speedometer::setCarToFollow(const Car & car)
 
 void Speedometer::render()
 {
-    m_surface.render(nullptr,
-         16 + m_surface.width() / 2,
-         16 + m_surface.height() / 2,
-         0,
-         0);
+    // The length of the velocity vector is typically in the range
+    // of 0..20. This formula scales it to degrees. There's no exact
+    // calulations behined this scaling, these values just feel quite
+    // realistic in practice.
+    MCFloat newAngle = 180 - m_pCar->velocity().lengthFast() * 270 / 12;
+
+    // Make the stored angle to follow the real angle.
+    if (m_angle < newAngle - 1.0f)
+    {
+        m_angle += 0.25f;
+    }
+    else if (m_angle > newAngle + 1.0f)
+    {
+        m_angle -= 0.25f;
+    }
+
+    // Render the components.
+    m_body.render(nullptr, m_bodyX, m_bodyY, 0, 0);
+    m_hand.render(nullptr, m_bodyX, m_bodyY, 0, m_angle);
+    m_center.render(nullptr, m_bodyX, m_bodyY, 0, m_angle);
 }

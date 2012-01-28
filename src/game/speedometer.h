@@ -39,7 +39,11 @@ public:
 private:
 
     const Car * m_pCar;
-    MCSurface & m_surface;
+    MCSurface & m_body;
+    MCSurface & m_hand;
+    MCSurface & m_center;
+    MCFloat m_angle;
+    MCUint m_bodyX, m_bodyY;
 };
 
 #endif // SPEEDOMETER_H
