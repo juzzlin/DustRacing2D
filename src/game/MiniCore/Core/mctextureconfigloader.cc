@@ -113,8 +113,24 @@ bool MCTextureConfigLoader::loadTextures()
                             newData->alphaTest.m_threshold =
                                 tag.attribute("threshold", "0").toFloat();
                             newData->alphaTest.m_function  =
-                                alphaFunctionStringToEnum(tag.attribute("function", "").toStdString());
-                            newData->alphaTestSet          = true;
+                                alphaTestStringToEnum(
+                                    tag.attribute("function", "").toStdString());
+                            newData->alphaTestSet = true;
+                        }
+                    }
+                    else if (childNode.nodeName() == "alphaBlend")
+                    {
+                        QDomElement tag = childNode.toElement();
+                        if(!tag.isNull())
+                        {
+                            newData->alphaBlend.m_src =
+                                alphaBlendStringToEnum(
+                                    tag.attribute("src", "srcAlpha").toStdString());
+                            newData->alphaBlend.m_dst =
+                                alphaBlendStringToEnum(
+                                    tag.attribute(
+                                        "dst", "srcAlphaMinusOne").toStdString());
+                            newData->alphaBlendSet = true;
                         }
                     }
                     else if (childNode.nodeName() == "center")
@@ -128,6 +144,11 @@ bool MCTextureConfigLoader::loadTextures()
                             newData->center    = MCVector2d<int>(x, y);
                             newData->centerSet = true;
                         }
+                    }
+                    else
+                    {
+                        MCLogger::logError("Unknown tag '%s'",
+                            childNode.nodeName().toStdString().c_str());
                     }
 
                     childNode = childNode.nextSibling();
@@ -143,7 +164,7 @@ bool MCTextureConfigLoader::loadTextures()
     return true;
 }
 
-GLenum MCTextureConfigLoader::alphaFunctionStringToEnum(
+GLenum MCTextureConfigLoader::alphaTestStringToEnum(
     const std::string & function) const
 {
     if (function == "never")
@@ -176,7 +197,50 @@ GLenum MCTextureConfigLoader::alphaFunctionStringToEnum(
     }
     else
     {
+        MCLogger::logError("Unknown alpha test function '%s'", function.c_str());
         return GL_ALWAYS;
+    }
+}
+
+GLenum MCTextureConfigLoader::alphaBlendStringToEnum(
+    const std::string & function) const
+{
+    if (function == "one")
+    {
+        return GL_ONE;
+    }
+    else if (function == "zero")
+    {
+        return GL_ZERO;
+    }
+    else if (function == "srcColor")
+    {
+        return GL_SRC_COLOR;
+    }
+    else if (function == "oneMinusSrcColor")
+    {
+        return GL_ONE_MINUS_SRC_COLOR;
+    }
+    else if (function == "srcAlpha")
+    {
+        return GL_SRC_ALPHA;
+    }
+    else if (function == "oneMinusSrcAlpha")
+    {
+        return GL_ONE_MINUS_SRC_ALPHA;
+    }
+    else if (function == "dstColor")
+    {
+        return GL_DST_COLOR;
+    }
+    else if (function == "oneMinusDstColor")
+    {
+        return GL_ONE_MINUS_DST_COLOR;
+    }
+    else
+    {
+        MCLogger::logError("Unknown alpha blend function '%s'", function.c_str());
+        return GL_SRC_ALPHA;
     }
 }
 

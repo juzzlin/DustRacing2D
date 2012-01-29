@@ -35,6 +35,9 @@ MCSurfaceImpl::MCSurfaceImpl(
 , m_useAlphaTest(false)
 , m_alphaFunc(GL_ALWAYS)
 , m_alphaThreshold(0.0f)
+, m_useAlphaBlend(false)
+, m_src(GL_SRC_ALPHA)
+, m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {}
 
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
@@ -60,6 +63,41 @@ void MCSurface::setAlphaTest(
     m_pImpl->m_alphaThreshold = threshold;
 }
 
+void MCSurface::setAlphaBlend(
+    bool useAlphaBlend, GLenum src, GLenum dst)
+{
+    m_pImpl->m_useAlphaBlend  = useAlphaBlend;
+    m_pImpl->m_src            = src;
+    m_pImpl->m_dst            = dst;
+}
+
+void MCSurface::doAlphaTest() const
+{
+    m_pImpl->doAlphaTest();
+}
+
+void MCSurfaceImpl::doAlphaTest() const
+{
+    if (m_useAlphaTest)
+    {
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(m_alphaFunc, m_alphaThreshold);
+    }
+}
+
+void MCSurface::doAlphaBlend() const
+{
+    m_pImpl->doAlphaBlend();
+}
+
+void MCSurfaceImpl::doAlphaBlend() const
+{
+    if (m_useAlphaBlend)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(m_src, m_dst);
+    }
+}
 MCBBox<MCFloat> MCSurface::rotatedBBox(MCFloat x, MCFloat y, int angle)
 {
     return m_pImpl->rotatedBBox(x, y, angle);
@@ -125,6 +163,7 @@ void MCSurfaceImpl::render(
     }
 
     doAlphaTest();
+    doAlphaBlend();
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_handle);
@@ -181,6 +220,7 @@ void MCSurfaceImpl::renderScaled(
     }
 
     doAlphaTest();
+    doAlphaBlend();
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_handle);
@@ -310,20 +350,6 @@ void MCSurfaceImpl::renderShadowScaled(
 
     glPopMatrix();
     glPopAttrib();
-}
-
-void MCSurface::doAlphaTest() const
-{
-    m_pImpl->doAlphaTest();
-}
-
-void MCSurfaceImpl::doAlphaTest() const
-{
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(m_alphaFunc, m_alphaThreshold);
-    }
 }
 
 GLuint MCSurface::handle() const

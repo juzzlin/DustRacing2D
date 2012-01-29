@@ -65,10 +65,25 @@ public:
     void setAlphaTest(bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
 
     //! Runs the corresponding GL-commands defined in setAlphaTest().
-    //! This is done automtically, but doAlphaTest() can be used if
+    //! This is done automatically, but doAlphaTest() can be used if
     //! someone else renders the surface by using the texture
     //! handle and wants to run the configured alpha test.
     void doAlphaTest() const;
+
+    //! Enable / disable alpha blend.
+    //! \param useAlphaBlend Alpha blending is enabled if true.
+    //! \param src Source alpha function used in the alpha blending. Has no effect
+    //!        if useAlphaBlend equals false.
+    //! \param dst Destination alpha function used in the alpha blending. Has no effect
+    //!        if useAlphaBlend equals false.
+    void setAlphaBlend(
+        bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
+
+    //! Runs the corresponding GL-commands defined in setAlphaBlend().
+    //! This is done automatically, but doAlphaBlend() can be used if
+    //! someone else renders the surface by using the texture
+    //! handle and wants to run the configured alpha blending.
+    void doAlphaBlend() const;
 
    /*! Get bounding box for a rotated surface
     * \param x x-coordinate

@@ -54,7 +54,11 @@ public:
 private:
 
     //! Convert alpha test function string to enum.
-    GLenum alphaFunctionStringToEnum(const std::string & function) const;
+    GLenum alphaTestStringToEnum(const std::string & function) const;
+
+    //! Convert alpha blend function string to enum.
+    GLenum alphaBlendStringToEnum(const std::string & function) const;
+
     std::string m_filePath;
     std::vector<MCTextureData *> m_textures;
 };

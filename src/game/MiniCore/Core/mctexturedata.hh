@@ -35,6 +35,7 @@ struct MCTextureData
     , widthSet(false)
     , colorKeySet(false)
     , alphaTestSet(false)
+    , alphaBlendSet(false)
     , xAxisMirror(false)
     {}
 
@@ -85,11 +86,27 @@ struct MCTextureData
         GLclampf m_threshold;
     };
 
-    //! Alpha test, if set
+    //! Alpha test settings, if set
     AlphaTest alphaTest;
 
     //! True, if alpha test was set
     bool alphaTestSet;
+
+    //! Possible alphaBlend setting
+    struct AlphaBlend
+    {
+        //! Src blend function
+        GLenum m_src;
+
+        //! Dest blend function
+        GLenum m_dst;
+    };
+
+    //! Alpha blend settings, if set
+    AlphaBlend alphaBlend;
+
+    //! True, if alpha blend was set
+    bool alphaBlendSet;
 
     //! True if X-Axis mirroring is wanted
     bool xAxisMirror;

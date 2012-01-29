@@ -33,6 +33,7 @@ class MCSurfaceImpl
     inline void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
     inline void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
     inline void doAlphaTest() const;
+    inline void doAlphaBlend() const;
 
     GLuint m_handle;
     MCFloat m_w;
@@ -44,6 +45,9 @@ class MCSurfaceImpl
     bool m_useAlphaTest;
     GLenum m_alphaFunc;
     GLclampf m_alphaThreshold;
+    bool m_useAlphaBlend;
+    GLenum m_src;
+    GLenum m_dst;
     friend class MCSurface;
 };
 

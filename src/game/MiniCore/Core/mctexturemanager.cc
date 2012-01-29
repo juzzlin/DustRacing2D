@@ -178,8 +178,15 @@ void MCTextureManagerImpl::createGLTextureFromImage(
     }
     else if (data.alphaTestSet)
     {
-        pSurface->setAlphaTest(true, data.alphaTest.m_function,
-            data.alphaTest.m_threshold);
+        pSurface->setAlphaTest(
+            true, data.alphaTest.m_function, data.alphaTest.m_threshold);
+    }
+
+    // Enable alpha blend, if set
+    if (data.alphaBlendSet)
+    {
+        pSurface->setAlphaBlend(
+            true, data.alphaBlend.m_src, data.alphaBlend.m_dst);
     }
 
     // Set custom center if it was set

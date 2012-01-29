@@ -49,12 +49,12 @@ class MCTextureManagerImpl;
  *
  * <?xml version="1.0"?>
  * <textures basePath="./data/images/">
- *   <texture handle="Car" file="car1.png" w="16" h="16"
- *     xAxisMirror="1">
+ *   <texture handle="Car1" file="car1.png" w="16" h="16" xAxisMirror="1">
  *     <colorKey r="255" g="255" b="255"/>
  *   </texture>
- *   <texture handle="Car" file="car1.png" w="16" h="16">
- *     <alphaTest function="greater" threshold="0.5">
+ *   <texture handle="Car2" file="car2.png" w="16" h="16">
+ *     <alphaTest function="greater" threshold="0.5"/>
+ *     <alphaBlend src="srcAlpha" dest="oneMinusSrcAlpha"/>
  *   </texture>
  *   <texture handle="Wall" file="wall.bmp"/>
  *   <texture handle="Track" file="track.bmp"/>
