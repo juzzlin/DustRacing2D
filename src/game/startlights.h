@@ -13,41 +13,31 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OVERLAYBASE_H
-#define OVERLAYBASE_H
+#ifndef STARTLIGHTS_H
+#define STARTLIGHTS_H
 
-#include "MiniCore/Core/MCBBox"
-#include "MiniCore/Core/MCTypes"
+#include "overlaybase.h"
 
-class MCCamera;
+class MCSurface;
+class MCTextureFontManager;
 
-//! Base class for overlays that are rendered on top of
-//! the game scene.
-class OverlayBase
+//! Renders startlights on top of the game scene.
+class Startlights : public OverlayBase
 {
 public:
 
     //! Constructor.
-    OverlayBase();
+    Startlights();
 
-    //! Set overlay dimensions.
-    virtual void setDimensions(MCUint width, MCUint height);
-
-    //! Get overlay width.
-    MCUint width() const;
-
-    //! Get overlay height.
-    MCUint height() const;
-
-    //! Destructor.
-    virtual ~OverlayBase();
-
-    //! Render.
-    virtual void render() = 0;
+    //! \reimp
+    virtual void render();
 
 private:
 
-    MCUint m_width, m_height;
+//    MCSurface & m_body;
+//    MCSurface & m_hand;
+//    MCSurface & m_center;
+    MCUint m_x, m_y;
 };
 
-#endif // OVERLAYBASE_H
+#endif // STARTLIGHTS_H

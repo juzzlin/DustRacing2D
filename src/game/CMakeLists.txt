@@ -1,6 +1,7 @@
 # Set sources
 set(SRC
 car.cpp
+checkerflag.cpp
 game.cpp
 inputhandler.cpp
 main.cpp
@@ -12,6 +13,7 @@ renderer.cpp
 scene.cpp
 slidefrictiongenerator.cpp
 speedometer.cpp
+startlights.cpp
 timing.cpp
 timingoverlay.cpp
 track.cpp

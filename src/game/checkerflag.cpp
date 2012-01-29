@@ -13,41 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OVERLAYBASE_H
-#define OVERLAYBASE_H
+#include "checkerflag.h"
 
-#include "MiniCore/Core/MCBBox"
-#include "MiniCore/Core/MCTypes"
+#include "MiniCore/Core/MCSurface"
+#include "MiniCore/Core/MCTextureManager"
 
-class MCCamera;
-
-//! Base class for overlays that are rendered on top of
-//! the game scene.
-class OverlayBase
+Checkerflag::Checkerflag()
 {
-public:
+}
 
-    //! Constructor.
-    OverlayBase();
-
-    //! Set overlay dimensions.
-    virtual void setDimensions(MCUint width, MCUint height);
-
-    //! Get overlay width.
-    MCUint width() const;
-
-    //! Get overlay height.
-    MCUint height() const;
-
-    //! Destructor.
-    virtual ~OverlayBase();
-
-    //! Render.
-    virtual void render() = 0;
-
-private:
-
-    MCUint m_width, m_height;
-};
-
-#endif // OVERLAYBASE_H
+void Checkerflag::render()
+{
+    // TODO
+}
