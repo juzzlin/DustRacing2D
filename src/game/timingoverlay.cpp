@@ -43,18 +43,26 @@ void TimingOverlay::setTiming(Timing & timing)
 
 void TimingOverlay::render()
 {
+    // TODO: Refactor and optimize.
+
     if (m_pCar && m_pTiming)
     {
-        const int shadowY = -2;
-        const int shadowX = 2;
+        const int shadowY        = -2;
+        const int shadowX        =  2;
+        const int index          = m_pCar->index();
+        const int lap            = m_pTiming->lap(index) + 1;
+        const int currentLapTime = m_pTiming->currentTime(index);
+        const int lastLapTime    = m_pTiming->lastLapTime(index);
+        const int recordLapTime  = m_pTiming->recordTime(index);
 
         // Render the current lap
         {
-            const int lap = m_pTiming->lap(m_pCar->index()) + 1;
             std::stringstream ss;
             ss << " LAP:" << lap;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
+            lapText.setColor(1.0f, 1.0f, 0.0f);
+
             lapText.renderShadow(
                 shadowX + 0,
                 shadowY + height() - lapText.textHeight(),
@@ -69,12 +77,25 @@ void TimingOverlay::render()
 
         // Render the current lap time
         {
-            const int currentLapTime = m_pTiming->currentTime(m_pCar->index());
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
             std::stringstream ss;
             ss << "  " << currentLapTimeStr;
             MCTextureText currentLapTimeText(ss.str());
             currentLapTimeText.setGlyphSize(20, 20);
+
+            if (lastLapTime == -1)
+            {
+                currentLapTimeText.setColor(1.0f, 1.0f, 1.0f);
+            }
+            else if (currentLapTime < lastLapTime)
+            {
+                currentLapTimeText.setColor(0.0f, 1.0f, 0.0f);
+            }
+            else
+            {
+                currentLapTimeText.setColor(1.0f, 0.0f, 0.0f);
+            }
+
             currentLapTimeText.renderShadow(
                 shadowX + width() - currentLapTimeText.textWidth(),
                 shadowY + height() - currentLapTimeText.textHeight(),
@@ -89,7 +110,6 @@ void TimingOverlay::render()
 
         // Render the last lap time
         {
-            const int lastLapTime = m_pTiming->lastLapTime(m_pCar->index());
             std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
             std::stringstream ss;
             ss << "L:" << lastLapTimeStr;
@@ -140,7 +160,6 @@ void TimingOverlay::render()
 
             if (show)
             {
-                const int recordLapTime = m_pTiming->recordTime(m_pCar->index());
                 std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
                 std::stringstream ss;
                 ss << "R:" << recordLapTimeStr;

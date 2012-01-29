@@ -45,7 +45,7 @@ public:
     void setGlyphSize(MCUint width, MCUint height);
 
     //! Set color.
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a);
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0f);
 
     //! Get color.
     void getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const;
