@@ -29,6 +29,9 @@ public:
     //! Constructor.
     Car(MCSurface * pSurface, MCUint index);
 
+    //! Destructor.
+    virtual ~Car();
+
     //! Return the index.
     MCUint index() const;
 
@@ -47,8 +50,8 @@ public:
     //! User isn't doing anything.
     void noAction();
 
-    //! Destructor.
-    virtual ~Car();
+    //! Get estimated speed in km/h. This is used by the speedometer.
+    MCUint speedInKmh() const;
 
 private:
 

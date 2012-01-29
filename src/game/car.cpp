@@ -127,6 +127,14 @@ void Car::noAction()
     m_accelerating = false;
 }
 
+MCUint Car::speedInKmh() const
+{
+    const MCFloat i = MCTrigonom::cos(angle());
+    const MCFloat j = MCTrigonom::sin(angle());
+
+    return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 200 / 10;
+}
+
 Car::~Car()
 {
 }

@@ -37,11 +37,8 @@ void Speedometer::setCarToFollow(const Car & car)
 
 void Speedometer::render()
 {
-    // The length of the velocity vector is typically in the range
-    // of 0..20. This formula scales it to degrees. There's no exact
-    // calulations behined this scaling, these values just feel quite
-    // realistic in practice.
-    MCFloat newAngle = 180 - m_pCar->velocity().lengthFast() * 270 / 12;
+    // 200 km/h is at 180 degrees.
+    MCFloat newAngle = 180 - m_pCar->speedInKmh() * 180 / 200;
 
     // Make the stored angle to follow the real angle.
     if (m_angle < newAngle - 1.0f)
