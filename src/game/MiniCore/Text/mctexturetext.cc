@@ -27,9 +27,13 @@
 #include <GL/gl.h>
 
 MCTextureText::MCTextureText(const std::string & text)
-: m_text(text)
-, m_glyphWidth(32)
-, m_glyphHeight(32)
+  : m_text(text)
+  , m_glyphWidth(32)
+  , m_glyphHeight(32)
+  , m_r(1.0f)
+  , m_g(1.0f)
+  , m_b(1.0f)
+  , m_a(1.0f)
 {
     updateTextDimensions();
 }
@@ -77,6 +81,22 @@ MCUint MCTextureText::glyphHeight() const
     return m_glyphHeight;
 }
 
+void MCTextureText::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+{
+    m_r = r;
+    m_g = g;
+    m_b = b;
+    m_a = a;
+}
+
+void MCTextureText::getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const
+{
+    r = m_r;
+    g = m_g;
+    b = m_b;
+    a = m_a;
+}
+
 MCUint MCTextureText::textWidth() const
 {
     return m_textWidth;
@@ -102,9 +122,10 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
     glNormal3i(0, 0, 1);
 
     font.surface().doAlphaTest();
+    font.surface().doAlphaBlend();
 
     glNormal3f(0.0f, 0.0f, 1.0f);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor4f(m_r, m_g, m_b, m_a);
 
     glBindTexture(GL_TEXTURE_2D, font.surface().handle());
 

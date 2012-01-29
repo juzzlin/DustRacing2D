@@ -44,6 +44,12 @@ public:
     //! Set size of one glyph.
     void setGlyphSize(MCUint width, MCUint height);
 
+    //! Set color.
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a);
+
+    //! Get color.
+    void getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const;
+
     //! Get glyph width.
     MCUint glyphWidth() const;
 
@@ -75,6 +81,7 @@ private:
     std::string m_text;
     MCUint m_glyphWidth, m_glyphHeight;
     MCUint m_textWidth, m_textHeight;
+    MCFloat m_r, m_g, m_b, m_a;
 };
 
 #endif // MCTEXTUREGLYPH_HH
