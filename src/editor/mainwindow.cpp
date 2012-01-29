@@ -13,19 +13,19 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
-#include "../common/config.h"
-#include "object.h"
-#include "objectdata.h"
-#include "objectloader.h"
-#include "trackio.h"
-#include "trackdata.h"
-#include "tracktile.h"
-#include "editordata.h"
-#include "editorview.h"
-#include "editorscene.h"
-#include "newtrackdialog.h"
+#include "../common/config.hpp"
+#include "object.hpp"
+#include "objectdata.hpp"
+#include "objectloader.hpp"
+#include "trackio.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
+#include "editordata.hpp"
+#include "editorview.hpp"
+#include "editorscene.hpp"
+#include "newtrackdialog.hpp"
 
 #include <QAction>
 #include <QApplication>

@@ -16,9 +16,9 @@
 #include <QApplication>
 #include <QDir>
 
-#include "game.h"
-#include "mainwindow.h"
-#include "renderer.h"
+#include "game.hpp"
+#include "mainwindow.hpp"
+#include "renderer.hpp"
 
 #include "MiniCore/Core/MCLogger"
 

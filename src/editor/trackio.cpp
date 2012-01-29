@@ -18,15 +18,16 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-#include "mainwindow.h"
-#include "object.h"
-#include "objectdata.h"
-#include "objectloader.h"
-#include "trackdata.h"
-#include "trackio.h"
-#include "tracktile.h"
-#include "../common/config.h"
-#include "../common/objectbase.h"
+#include "mainwindow.hpp"
+#include "object.hpp"
+#include "objectdata.hpp"
+#include "objectloader.hpp"
+#include "trackdata.hpp"
+#include "trackio.hpp"
+#include "tracktile.hpp"
+
+#include "../common/config.hpp"
+#include "../common/objectbase.hpp"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {

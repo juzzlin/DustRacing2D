@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "timingoverlay.h"
-#include "timing.h"
-#include "car.h"
+#include "timingoverlay.hpp"
+#include "timing.hpp"
+#include "car.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Text/MCTextureFontManager"

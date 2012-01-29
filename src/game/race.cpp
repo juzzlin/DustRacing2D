@@ -13,12 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "race.h"
+#include "race.hpp"
 
-#include "car.h"
-#include "track.h"
-#include "trackdata.h"
-#include "tracktile.h"
+#include "car.hpp"
+#include "track.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
+
 #include <algorithm>
 #include <cassert>
 

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "overlaybase.h"
+#include "overlaybase.hpp"
 
 OverlayBase::OverlayBase()
   : m_width(0)

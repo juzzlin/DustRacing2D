@@ -13,16 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "../common/config.h"
+#include "../common/config.hpp"
 
-#include "game.h"
-#include "inputhandler.h"
-#include "renderer.h"
-#include "scene.h"
-#include "speedometer.h"
-#include "timingoverlay.h"
-#include "track.h"
-#include "trackloader.h"
+#include "game.hpp"
+#include "inputhandler.hpp"
+#include "renderer.hpp"
+#include "scene.hpp"
+#include "speedometer.hpp"
+#include "timingoverlay.hpp"
+#include "track.hpp"
+#include "trackloader.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"

@@ -20,14 +20,14 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-#include "layers.h"
+#include "layers.hpp"
 
-#include "track.h"
-#include "trackdata.h"
-#include "trackloader.h"
-#include "trackobject.h"
-#include "tracktile.h"
-#include "treeview.h"
+#include "track.hpp"
+#include "trackdata.hpp"
+#include "trackloader.hpp"
+#include "trackobject.hpp"
+#include "tracktile.hpp"
+#include "treeview.hpp"
 
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"

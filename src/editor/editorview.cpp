@@ -19,13 +19,13 @@
 #include <QStatusBar>
 #include <QString>
 
-#include "editordata.h"
-#include "editorview.h"
-#include "mainwindow.h"
-#include "object.h"
-#include "objectloader.h"
-#include "trackdata.h"
-#include "tracktile.h"
+#include "editordata.hpp"
+#include "editorview.hpp"
+#include "mainwindow.hpp"
+#include "object.hpp"
+#include "objectloader.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
 
 EditorView::EditorView(QWidget * parent)
 : QGraphicsView(parent)

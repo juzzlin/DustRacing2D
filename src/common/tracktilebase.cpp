@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktilebase.h"
-#include "trackdatabase.h"
+#include "tracktilebase.hpp"
+#include "trackdatabase.hpp"
 
 TrackTileBase::TrackTileBase(TrackDataBase * trackData,
                              QPointF location, QPoint matrixLocation,

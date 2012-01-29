@@ -13,12 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktile.h"
-#include "trackdata.h"
-#include "tiletypedialog.h"
-#include "tileanimator.h"
-#include "mainwindow.h"
-#include "../common/config.h"
+#include "tracktile.hpp"
+#include "trackdata.hpp"
+#include "tiletypedialog.hpp"
+#include "tileanimator.hpp"
+#include "mainwindow.hpp"
+
+#include "../common/config.hpp"
 
 #include <QAction>
 #include <QGraphicsLineItem>

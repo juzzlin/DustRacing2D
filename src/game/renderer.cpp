@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "inputhandler.h"
-#include "renderer.h"
-#include "scene.h"
+#include "inputhandler.hpp"
+#include "renderer.hpp"
+#include "scene.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCTrigonom"

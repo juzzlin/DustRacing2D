@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "trackdata.h"
-#include "tracktile.h"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
 
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
 : m_name(name)

@@ -13,7 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "treeview.h"
+#include "treeview.hpp"
+
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"

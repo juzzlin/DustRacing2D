@@ -18,9 +18,9 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "../common/config.h"
-#include "mainwindow.h"
-#include "objectloader.h"
+#include "../common/config.hpp"
+#include "mainwindow.hpp"
+#include "objectloader.hpp"
 
 ObjectLoader::ObjectLoader()
 {

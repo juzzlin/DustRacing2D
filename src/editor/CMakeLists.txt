@@ -25,12 +25,12 @@ tracktile.cpp
 
 # Set moc headers
 set(MOC_HDRS 
-mainwindow.h
-newtrackdialog.h
-editorview.h
-editorscene.h
-tiletypedialog.h
-tileanimator.h
+mainwindow.hpp
+newtrackdialog.hpp
+editorview.hpp
+editorscene.hpp
+tiletypedialog.hpp
+tileanimator.hpp
 )
 
 # Some .ui files

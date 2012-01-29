@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "map.h"
-#include "trackdata.h"
-#include "tracktile.h"
+#include "map.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
 
 #include <QPoint>
 #include <QPointF>

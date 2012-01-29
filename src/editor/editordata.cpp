@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "editordata.h"
-#include "editorscene.h"
-#include "mainwindow.h"
-#include "trackdata.h"
-#include "tracktile.h"
-#include "trackio.h"
+#include "editordata.hpp"
+#include "editorscene.hpp"
+#include "mainwindow.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
+#include "trackio.hpp"
 
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)

@@ -13,9 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "mapbase.h"
-#include "tracktilebase.h"
-#include "trackdatabase.h"
+#include "mapbase.hpp"
+
+#include "tracktilebase.hpp"
+#include "trackdatabase.hpp"
 
 #include <QPoint>
 #include <QPointF>
@@ -24,18 +25,14 @@ MapBase::MapBase(TrackDataBase * trackData, unsigned int cols, unsigned int rows
 : m_trackData(trackData)
 , m_cols(cols)
 , m_rows(rows)
+, m_map(rows, TrackTileRow(m_cols, nullptr))
 {
-    // Create an empty map
-    for (unsigned int j = 0; j < m_rows; j++)
-    {
-        QVector<TrackTileBase *> row;
-        for (unsigned int i = 0; i < m_cols; i++)
-        {
-            row << nullptr;
-        }
-
-        m_map << row;
-    }
+//    // Create an empty map
+//    for (unsigned int j = 0; j < m_rows; j++)
+//    {
+//        TrackTileRow row(m_cols, nullptr);
+//        m_map.push_back(row);
+//    }
 }
 
 unsigned int MapBase::cols() const

@@ -32,10 +32,10 @@ treeview.cpp
 )
 
 set(MOC_HDRS
-game.h
-mainwindow.h
-renderer.h
-timing.h
+game.hpp
+mainwindow.hpp
+renderer.hpp
+timing.hpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

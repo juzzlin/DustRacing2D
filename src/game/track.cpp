@@ -13,10 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "track.h"
-#include "trackdata.h"
-#include "tracktile.h"
-#include "map.h"
+#include "track.hpp"
+#include "trackdata.hpp"
+#include "tracktile.hpp"
+#include "map.hpp"
+
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
 #include <QImage>

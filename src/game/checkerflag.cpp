@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "checkerflag.h"
+#include "checkerflag.hpp"
 
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
