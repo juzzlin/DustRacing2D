@@ -55,7 +55,7 @@ void TimingOverlay::render()
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->recordTime(index);
 
-        // Render the current lap
+        // Render the current lap number
         {
             std::stringstream ss;
             ss << " LAP:" << lap;
@@ -68,6 +68,7 @@ void TimingOverlay::render()
                 shadowY + height() - lapText.textHeight(),
                 nullptr,
                 m_defaultMonospace);
+
             lapText.render(
                 0,
                 height() - lapText.textHeight(),
@@ -83,14 +84,17 @@ void TimingOverlay::render()
             MCTextureText currentLapTimeText(ss.str());
             currentLapTimeText.setGlyphSize(20, 20);
 
+            // Set color to white, if lastLapTime is not set.
             if (lastLapTime == -1)
             {
                 currentLapTimeText.setColor(1.0f, 1.0f, 1.0f);
             }
+            // Set color to green, if current time is ahead of the last lap time.
             else if (currentLapTime < lastLapTime)
             {
                 currentLapTimeText.setColor(0.0f, 1.0f, 0.0f);
             }
+            // Set color to red (current time is slower than the last lap time).
             else
             {
                 currentLapTimeText.setColor(1.0f, 0.0f, 0.0f);
@@ -101,6 +105,7 @@ void TimingOverlay::render()
                 shadowY + height() - currentLapTimeText.textHeight(),
                 nullptr,
                 m_defaultMonospace);
+
             currentLapTimeText.render(
                 width() - currentLapTimeText.textWidth(),
                 height() - currentLapTimeText.textHeight(),
@@ -115,11 +120,13 @@ void TimingOverlay::render()
             ss << "L:" << lastLapTimeStr;
             MCTextureText lastLapTimeText(ss.str());
             lastLapTimeText.setGlyphSize(20, 20);
+
             lastLapTimeText.renderShadow(
                 shadowX + width() - lastLapTimeText.textWidth(),
                 shadowY + height() - lastLapTimeText.textHeight() * 2,
                 nullptr,
                 m_defaultMonospace);
+
             lastLapTimeText.render(
                 width() - lastLapTimeText.textWidth(),
                 height() - lastLapTimeText.textHeight() * 2,
@@ -133,7 +140,8 @@ void TimingOverlay::render()
             static int blinked = 0;
             static bool show   = true;
 
-            // 60 Hz update rate is assumed here
+            // Blink the record time a couple of times if a new record time set.
+            // 60 Hz update rate is assumed here.
             if (m_pTiming->newRecordActive(m_pCar->index()))
             {
                 if (blinked < 8)
@@ -165,11 +173,13 @@ void TimingOverlay::render()
                 ss << "R:" << recordLapTimeStr;
                 MCTextureText recordLapTimeText(ss.str());
                 recordLapTimeText.setGlyphSize(20, 20);
+
                 recordLapTimeText.renderShadow(
                     shadowX + width() - recordLapTimeText.textWidth(),
                     shadowY + height() - recordLapTimeText.textHeight() * 3,
                     nullptr,
                     m_defaultMonospace);
+
                 recordLapTimeText.render(
                     width() - recordLapTimeText.textWidth(),
                     height() - recordLapTimeText.textHeight() * 3,
