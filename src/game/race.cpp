@@ -73,9 +73,6 @@ void Race::checkRoute(Car & car)
         {
             m_routeHash[&car] = 1;
             m_timing.lapCompleted(car.index());
-            std::cout << "Lap completed: "
-                << m_timing.msecsToString(m_timing.lastLapTime(car.index()))
-                << std::endl;
         }
     }
 }

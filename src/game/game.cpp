@@ -209,6 +209,7 @@ void Game::updateFrame()
 
     const int updateTime      = updateTimer.elapsed();
     const int availableTimeMs = 1000 / m_updateFps;
+
     if (m_availableRenderTime >= renderTime)
     {
         static QTime renderTimer;
@@ -235,7 +236,6 @@ void Game::renderFrame()
 
 void Game::countRenderFps()
 {
-    //std::cout << m_renderCount << std::endl;
     m_renderCount = 0;
 }
 
