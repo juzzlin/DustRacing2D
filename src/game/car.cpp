@@ -34,8 +34,8 @@ namespace
     const MCFloat ROTATION_FRICTION = 0.9f;
 }
 
-Car::Car(MCSurface * pSurface, MCUint index)
-  : MCObject(pSurface, "Car")
+Car::Car(MCSurface & surface, MCUint index)
+  : MCObject(&surface, "Car")
   , m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
   , m_frictionGeneratorAdded(false)
   , m_accelerating(false)

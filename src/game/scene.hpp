@@ -19,6 +19,8 @@
 #include "car.hpp"
 #include "race.hpp"
 
+#include <vector>
+
 class InputHandler;
 class MCCamera;
 class MCObject;
@@ -34,7 +36,7 @@ class Scene
 public:
 
     //! Constructor.
-    explicit Scene(MCSurface & carSurface);
+    explicit Scene(MCSurface & carSurface, MCUint numCars = 8);
 
     //! Destructor.
     ~Scene();
@@ -67,14 +69,23 @@ public:
 
 private:
 
+    void updateWorld(float timeStep);
+
+    void updateRace();
+
+    void updateCameraLocation(MCCamera & camera);
+
+    void processUserInput(InputHandler & handler);
+
     Track         * m_pActiveTrack;
     MCWorld       * m_pWorld;
     TimingOverlay * m_pTimingOverlay;
     Speedometer   * m_pSpeedometer;
-    Car             m_car;
-    Car             m_testCar;
     Race            m_race;
     MCFloat         m_cameraBaseOffset;
+
+    typedef std::vector<Car *> CarVector;
+    CarVector m_cars;
 };
 
 #endif // SCENE_HPP

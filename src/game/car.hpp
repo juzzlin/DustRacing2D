@@ -27,7 +27,7 @@ class Car : public MCObject
 public:
 
     //! Constructor.
-    Car(MCSurface * pSurface, MCUint index);
+    Car(MCSurface & surface, MCUint index);
 
     //! Destructor.
     virtual ~Car();

@@ -36,67 +36,91 @@
 
 #include <cassert>
 
-Scene::Scene(MCSurface & carSurface)
+Scene::Scene(MCSurface & carSurface, MCUint numCars)
   : m_pActiveTrack(nullptr)
   , m_pWorld(new MCWorld)
   , m_pTimingOverlay(nullptr)
   , m_pSpeedometer(nullptr)
-  , m_car(&carSurface, 0)
-  , m_testCar(&carSurface, 1)
   , m_cameraBaseOffset(0)
 {
-    m_car.setLayer(Layers::Cars);
-    m_race.addCar(m_car);
+    // Create and add cars.
+    assert(numCars);
+    for (MCUint i = 0; i < numCars; i++)
+    {
+        Car * car = new Car(carSurface, i);
+        car->setLayer(Layers::Cars);
+        m_cars.push_back(car);
+        m_race.addCar(*car);
+    }
 }
 
 void Scene::updateFrame(InputHandler & handler,
     MCCamera & camera, float timeStep)
 {
-    // Process input
+    processUserInput(handler);
+
+    updateCameraLocation(camera);
+
+    updateWorld(timeStep);
+
+    updateRace();
+}
+
+void Scene::updateWorld(float timeStep)
+{
+    // Step time
+    m_pWorld->stepTime(timeStep);
+}
+
+void Scene::updateRace()
+{
+    // Update race situation
+    m_race.update();
+}
+
+void Scene::updateCameraLocation(MCCamera & camera)
+{
+    // Update camera location with respect to the car speed.
+    // Make changes a bit smoother so that an abrupt decrease
+    // in the speed won't look bad.
+    MCVector2d<MCFloat> p(m_cars.at(0)->location());
+    const int offsetAmplification = 20;
+    const int smooth = 5;
+    m_cameraBaseOffset +=
+        (m_cars.at(0)->velocity().lengthFast() - m_cameraBaseOffset) / smooth;
+    p += m_cars.at(0)->direction() * m_cameraBaseOffset * offsetAmplification;
+    camera.setPos(p.i(), p.j());
+}
+
+void Scene::processUserInput(InputHandler & handler)
+{
     bool actionTaken = false;
     if (handler.getActionState(0, InputHandler::IA_LEFT))
     {
-        m_car.turnLeft();
+        m_cars.at(0)->turnLeft();
         actionTaken = true;
     }
     else if (handler.getActionState(0, InputHandler::IA_RIGHT))
     {
-        m_car.turnRight();
+        m_cars.at(0)->turnRight();
         actionTaken = true;
     }
 
     if (handler.getActionState(0, InputHandler::IA_UP))
     {
-        m_car.accelerate();
+        m_cars.at(0)->accelerate();
         actionTaken = true;
     }
     else if (handler.getActionState(0, InputHandler::IA_DOWN))
     {
-        m_car.brake();
+        m_cars.at(0)->brake();
         actionTaken = true;
     }
 
     if (!actionTaken)
     {
-        m_car.noAction();
+        m_cars.at(0)->noAction();
     }
-
-    // Step time
-    m_pWorld->stepTime(timeStep);
-
-    // Update camera location with respect to the car speed.
-    // Make changes a bit smoother so that an abrupt decrease
-    // in the speed won't look bad.
-    MCVector2d<MCFloat> p(m_car.location());
-    const int offsetAmplification = 20;
-    const int smooth = 5;
-    m_cameraBaseOffset +=
-        (m_car.velocity().lengthFast() - m_cameraBaseOffset) / smooth;
-    p += m_car.direction() * m_cameraBaseOffset * offsetAmplification;
-    camera.setPos(p.i(), p.j());
-
-    // Update race situation
-    m_race.update();
 }
 
 void Scene::setActiveTrack(Track & activeTrack)
@@ -122,9 +146,10 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_race.init();
 
     // Add objects to the world
-
-    m_car.addToWorld();
-    m_testCar.addToWorld();
+    for (Car * car : m_cars)
+    {
+        car->addToWorld();
+    }
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
@@ -133,8 +158,10 @@ void Scene::setActiveTrack(Track & activeTrack)
         const MCFloat y =
             m_pActiveTrack->trackData().route().get(0)->location().y();
 
-        m_car.translate(MCVector2d<MCFloat>(x, y));
-        m_testCar.translate(MCVector2d<MCFloat>(x, y + 50));
+        for (Car * car : m_cars)
+        {
+            car->translate(MCVector2d<MCFloat>(x, y));
+        }
     }
 
     const unsigned int trackObjectCount =
@@ -167,13 +194,13 @@ void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
 {
     m_pTimingOverlay = &timingOverlay;
     m_pTimingOverlay->setTiming(m_race.timing());
-    m_pTimingOverlay->setCarToFollow(m_car);
+    m_pTimingOverlay->setCarToFollow(*m_cars.at(0));
 }
 
 void Scene::setSpeedometer(Speedometer & speedometer)
 {
     m_pSpeedometer = &speedometer;
-    m_pSpeedometer->setCarToFollow(m_car);
+    m_pSpeedometer->setCarToFollow(*m_cars.at(0));
 }
 
 TimingOverlay & Scene::timingOverlay() const
@@ -186,15 +213,22 @@ void Scene::render(MCCamera & camera)
 {
     assert(m_pActiveTrack);
     m_pActiveTrack->render(&camera);
+
     assert(m_pWorld);
     m_pWorld->renderShadows(&camera);
     m_pWorld->render(&camera);
+
     assert(m_pTimingOverlay);
     m_pTimingOverlay->render();
+
     assert(m_pSpeedometer);
     m_pSpeedometer->render();
 }
 
 Scene::~Scene()
 {
+    for (Car * car : m_cars)
+    {
+        delete car;
+    }
 }
