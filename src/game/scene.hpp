@@ -83,7 +83,7 @@ private:
 
     void addCarsToWorld();
 
-    void translateCars();
+    void translateCarsToStartPositions();
 
     void initRace();
 

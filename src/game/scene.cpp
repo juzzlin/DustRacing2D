@@ -136,7 +136,7 @@ void Scene::setActiveTrack(Track & activeTrack)
 
     addCarsToWorld();
 
-    translateCars();
+    translateCarsToStartPositions();
 
     addTrackObjectsToWorld();
 
@@ -169,20 +169,28 @@ void Scene::addCarsToWorld()
     }
 }
 
-void Scene::translateCars()
+void Scene::translateCarsToStartPositions()
 {
     assert(m_pActiveTrack);
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
-        const MCFloat x =
+        const MCFloat startTileX =
             m_pActiveTrack->trackData().route().get(0)->location().x();
-        const MCFloat y =
+        const MCFloat startTileY =
             m_pActiveTrack->trackData().route().get(0)->location().y();
+        const MCFloat tileWidth  = TrackTile::TILE_W;
+        const MCFloat tileHeight = TrackTile::TILE_H;
 
-        for (Car * car : m_cars)
+        for (MCUint i = 0; i < m_cars.size(); i++)
         {
-            car->translate(MCVector2d<MCFloat>(x, y));
+            MCFloat rowPos = (i / 2) * tileWidth;
+            MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+
+            m_cars.at(i)->translate(
+                MCVector2d<MCFloat>(
+                    startTileX - rowPos,
+                    startTileY + colPos));
         }
     }
 }
