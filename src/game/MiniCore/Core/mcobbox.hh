@@ -187,10 +187,37 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
     const MCVector2d<T> e3 = m_v[0] - m_v[3];
 
     // Do the test by using cross products.
-    const MCMathUtil::SIGN ref = MCMathUtil::sign(e0 * (m_v[1] - p));
-    if (MCMathUtil::sign(e1 * (m_v[2] - p)) == ref &&
-        MCMathUtil::sign(e2 * (m_v[3] - p)) == ref &&
-        MCMathUtil::sign(e3 * (m_v[0] - p)) == ref)
+    const MCMathUtil::SIGN ref  = MCMathUtil::sign(e0 * (m_v[1] - p));
+    const MCMathUtil::SIGN e1v2 = MCMathUtil::sign(e1 * (m_v[2] - p));
+    const MCMathUtil::SIGN e2v3 = MCMathUtil::sign(e2 * (m_v[3] - p));
+    const MCMathUtil::SIGN e3v0 = MCMathUtil::sign(e3 * (m_v[0] - p));
+
+    // Test if the test point is inside the obbox
+    if (e1v2 == ref && e2v3 == ref && e3v0 == ref)
+    {
+        return true;
+    }
+
+    // Test if the test point only touches
+    if (e1v2 == MCMathUtil::ZERO && e2v3 == ref && e3v0 == ref)
+    {
+        return true;
+    }
+
+    // Test if the test point only touches
+    if (e1v2 == ref && e2v3 == MCMathUtil::ZERO && e3v0 == ref)
+    {
+        return true;
+    }
+
+    // Test if the test point only touches
+    if (e1v2 == ref && e2v3 == ref && e3v0 == MCMathUtil::ZERO)
+    {
+        return true;
+    }
+
+    // Test if the test point only touches
+    if (ref == MCMathUtil::ZERO && e1v2 == e2v3 && e1v2 == e3v0)
     {
         return true;
     }
