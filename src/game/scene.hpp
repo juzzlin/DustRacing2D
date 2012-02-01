@@ -77,6 +77,16 @@ private:
 
     void processUserInput(InputHandler & handler);
 
+    void setWorldDimensions();
+
+    void addTrackObjectsToWorld();
+
+    void addCarsToWorld();
+
+    void translateCars();
+
+    void initRace();
+
     Track         * m_pActiveTrack;
     MCWorld       * m_pWorld;
     TimingOverlay * m_pTimingOverlay;

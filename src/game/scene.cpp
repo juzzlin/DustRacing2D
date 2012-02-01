@@ -132,6 +132,22 @@ void Scene::setActiveTrack(Track & activeTrack)
     // crash because ObjectTree can't handle it.
     //m_car.removeFromWorldNow();
 
+    setWorldDimensions();
+
+    addCarsToWorld();
+
+    translateCars();
+
+    addTrackObjectsToWorld();
+
+    initRace();
+}
+
+void Scene::setWorldDimensions()
+{
+    assert(m_pWorld);
+    assert(m_pActiveTrack);
+
     // Update world dimensions according to the
     // active track.
     const MCUint MIN_X = 0;
@@ -142,14 +158,20 @@ void Scene::setActiveTrack(Track & activeTrack)
     const MCUint MAX_Z = 1000;
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
-    m_race.setTrack(activeTrack);
-    m_race.init();
+}
 
+void Scene::addCarsToWorld()
+{
     // Add objects to the world
     for (Car * car : m_cars)
     {
         car->addToWorld();
     }
+}
+
+void Scene::translateCars()
+{
+    assert(m_pActiveTrack);
 
     if (m_pActiveTrack->trackData().route().length() > 0)
     {
@@ -163,9 +185,15 @@ void Scene::setActiveTrack(Track & activeTrack)
             car->translate(MCVector2d<MCFloat>(x, y));
         }
     }
+}
+
+void Scene::addTrackObjectsToWorld()
+{
+    assert(m_pActiveTrack);
 
     const unsigned int trackObjectCount =
         m_pActiveTrack->trackData().objects().count();
+
     for (unsigned int i = 0; i < trackObjectCount; i++)
     {
         TrackObject & trackObject = static_cast<TrackObject &>(
@@ -174,7 +202,14 @@ void Scene::setActiveTrack(Track & activeTrack)
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
     }
+}
 
+void Scene::initRace()
+{
+    assert(m_pActiveTrack);
+
+    m_race.setTrack(*m_pActiveTrack);
+    m_race.init();
     m_race.start();
 }
 
