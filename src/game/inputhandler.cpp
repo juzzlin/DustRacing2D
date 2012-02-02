@@ -15,19 +15,20 @@
 
 #include "inputhandler.hpp"
 #include <iostream>
+#include <cassert>
 
-InputHandler::InputHandler()
-: m_actionHash()
+InputHandler::InputHandler(MCUint maxPlayers)
+  : m_playerActions(maxPlayers, std::bitset<IA_END_OF_ENUM>())
 {}
 
-bool InputHandler::getActionState(int playerIndex,
-    InputAction action) const
+bool InputHandler::getActionState(MCUint playerIndex, InputAction action) const
 {
-    return m_actionHash[playerIndex][action];
+    assert(playerIndex < m_playerActions.size());
+    return m_playerActions[playerIndex][action];
 }
 
-void InputHandler::setActionState(int playerIndex,
-    InputAction action, bool state)
+void InputHandler::setActionState(MCUint playerIndex, InputAction action, bool state)
 {
-    m_actionHash[playerIndex][action] = state;
+    assert(playerIndex < m_playerActions.size());
+    m_playerActions[playerIndex][action] = state;
 }

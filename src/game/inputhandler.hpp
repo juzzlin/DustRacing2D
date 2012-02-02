@@ -16,8 +16,10 @@
 #ifndef INPUTHANDLER_HPP
 #define INPUTHANDLER_HPP
 
-#include <QHash>
+#include <vector>
 #include <bitset>
+
+#include "MiniCore/Core/MCTypes"
 
 //! Handler for players' interactions.
 class InputHandler
@@ -28,19 +30,19 @@ public:
     enum InputAction {IA_LEFT = 0, IA_RIGHT, IA_UP, IA_DOWN, IA_END_OF_ENUM};
 
     //! Constructor.
-    InputHandler();
+    InputHandler(MCUint maxPlayers);
 
     //! Set state of the given action of the given player.
-    void setActionState(int playerIndex, InputAction action, bool state);
+    void setActionState(MCUint playerIndex, InputAction action, bool state);
 
     //! Get state of the given action of the given player.
-    bool getActionState(int playerIndex,
+    bool getActionState(MCUint playerIndex,
         InputAction action) const;
 
 private:
 
-    typedef QHash<int, std::bitset<IA_END_OF_ENUM> > ActionHash;
-    ActionHash m_actionHash;
+    typedef std::vector<std::bitset<IA_END_OF_ENUM> > ActionVector;
+    ActionVector m_playerActions;
 };
 
 #endif // INPUTHANDLER_HPP
