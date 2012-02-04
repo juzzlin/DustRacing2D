@@ -34,6 +34,7 @@
 #include <MiniCore/Core/MCTypes>
 #include <MiniCore/Core/MCWorld>
 
+#include <algorithm>
 #include <cassert>
 
 Scene::Scene(MCSurface & carSurface, MCUint numCars)
@@ -171,6 +172,8 @@ void Scene::addCarsToWorld()
 
 void Scene::translateCarsToStartPositions()
 {
+    // TODO: Currently works only horizontally and to the right..
+
     assert(m_pActiveTrack);
 
     if (m_pActiveTrack->trackData().route().length() > 0)
@@ -182,12 +185,17 @@ void Scene::translateCarsToStartPositions()
         const MCFloat tileWidth  = TrackTile::TILE_W;
         const MCFloat tileHeight = TrackTile::TILE_H;
 
-        for (MCUint i = 0; i < m_cars.size(); i++)
+        // Randomize the order
+        std::vector<Car *> randomized = m_cars;
+        std::random_shuffle(randomized.begin(), randomized.end());
+
+        // Position the cars into two queues.
+        for (MCUint i = 0; i < randomized.size(); i++)
         {
             MCFloat rowPos = (i / 2) * tileWidth;
             MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
 
-            m_cars.at(i)->translate(
+            randomized.at(i)->translate(
                 MCVector2d<MCFloat>(
                     startTileX - rowPos,
                     startTileY + colPos));
