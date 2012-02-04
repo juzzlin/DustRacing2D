@@ -13,39 +13,34 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef STARTLIGHTS_HPP
-#define STARTLIGHTS_HPP
+#ifndef STARTLIGHTSOVERLAY_HPP
+#define STARTLIGHTSOVERLAY_HPP
 
-#include "MiniCore/Core/MCTypes"
+#include "overlaybase.hpp"
 
-//! Startlight model.
-class Startlights
+class MCSurface;
+class MCTextureFontManager;
+
+class Startlights;
+
+//! Renders startlights on top of the game scene.
+class StartlightsOverlay : public OverlayBase
 {
 public:
 
-    enum LightState
-    {
-        LightsOff,
-        LightsFirstRow,
-        LightsSecondRow,
-        LightsThirdRow,
-        LightsGo,
-        LightsEnd
-    };
-
     //! Constructor.
-    Startlights();
+    StartlightsOverlay(Startlights & model);
 
-    void run();
-
-    LightState state() const;
+    //! \reimp
+    virtual void render();
 
 private:
 
-    bool updateCounter(MCUint limit);
+    void renderLights(MCUint rows, MCUint litRows) const;
 
-    LightState m_state;
-    MCUint m_counter;
+    MCSurface & m_startLightOn;
+    MCSurface & m_startLightOff;
+    Startlights & m_model;
 };
 
-#endif // STARTLIGHTS_HPP
+#endif // STARTLIGHTSOVERLAY_HPP

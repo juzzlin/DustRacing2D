@@ -20,6 +20,8 @@
 #include "layers.hpp"
 #include "race.hpp"
 #include "speedometer.hpp"
+#include "startlights.hpp"
+#include "startlightsoverlay.hpp"
 #include "timingoverlay.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -42,6 +44,8 @@ Scene::Scene(MCSurface & carSurface, MCUint numCars)
   , m_pWorld(new MCWorld)
   , m_pTimingOverlay(nullptr)
   , m_pSpeedometer(nullptr)
+  , m_pStartlights(nullptr)
+  , m_pStartlightsOverlay(nullptr)
   , m_cameraBaseOffset(0)
 {
     // Create and add cars.
@@ -74,7 +78,9 @@ void Scene::updateWorld(float timeStep)
 }
 
 void Scene::updateRace()
-{
+{    
+    m_pStartlights->run();
+
     // Update race situation
     m_race.update();
 }
@@ -254,6 +260,16 @@ void Scene::setSpeedometer(Speedometer & speedometer)
     m_pSpeedometer->setCarToFollow(*m_cars.at(0));
 }
 
+void Scene::setStartlights(Startlights & startlights)
+{
+    m_pStartlights = &startlights;
+}
+
+void Scene::setStartlightsOverlay(StartlightsOverlay & startlightsOverlay)
+{
+    m_pStartlightsOverlay = &startlightsOverlay;
+}
+
 TimingOverlay & Scene::timingOverlay() const
 {
     assert(m_pTimingOverlay);
@@ -274,6 +290,9 @@ void Scene::render(MCCamera & camera)
 
     assert(m_pSpeedometer);
     m_pSpeedometer->render();
+
+    assert(m_pStartlightsOverlay);
+    m_pStartlightsOverlay->render();
 }
 
 Scene::~Scene()

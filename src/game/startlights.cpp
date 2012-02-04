@@ -15,17 +15,63 @@
 
 #include "startlights.hpp"
 
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-
 Startlights::Startlights()
-//  , m_body(MCTextureManager::instance().surface("speedometer-body"))
-//  , m_hand(MCTextureManager::instance().surface("speedometer-hand"))
-//  , m_center(MCTextureManager::instance().surface("speedometer-center"))
+  : m_state(LightsOff)
+  , m_counter(0)
 {
 }
 
-void Startlights::render()
+bool Startlights::updateCounter(MCUint limit)
 {
-    // TODO
+    if (++m_counter > limit)
+    {
+        m_counter = 0;
+        return true;
+    }
+    return false;
+}
+
+void Startlights::run()
+{
+    const MCUint second = 100;
+    switch (m_state)
+    {
+    case LightsOff:
+        if (updateCounter(second))
+        {
+            m_state = LightsFirstRow;
+        }
+        break;
+    case LightsFirstRow:
+        if (updateCounter(second))
+        {
+            m_state = LightsSecondRow;
+        }
+        break;
+    case LightsSecondRow:
+        if (updateCounter(second))
+        {
+            m_state = LightsThirdRow;
+        }
+        break;
+    case LightsThirdRow:
+        if (updateCounter(second))
+        {
+            m_state = LightsGo;
+        }
+        break;
+    case LightsGo:
+        if (updateCounter(second))
+        {
+            m_state = LightsEnd;
+        }
+        break;
+    case LightsEnd:
+        break;
+    }
+}
+
+Startlights::LightState Startlights::state() const
+{
+    return m_state;
 }

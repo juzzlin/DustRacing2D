@@ -23,6 +23,8 @@ class InputHandler;
 class Renderer;
 class Scene;
 class Speedometer;
+class Startlights;
+class StartlightsOverlay;
 class TimingOverlay;
 class TrackLoader;
 class MCCamera;
@@ -86,6 +88,8 @@ private:
     TrackLoader          * m_pTrackLoader;
     TimingOverlay        * m_pTimingOverlay;
     Speedometer          * m_pSpeedometer;
+    Startlights          * m_pStartlights;
+    StartlightsOverlay   * m_pStartlightsOverlay;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_updateTimer;

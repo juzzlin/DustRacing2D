@@ -14,6 +14,7 @@ scene.cpp
 slidefrictiongenerator.cpp
 speedometer.cpp
 startlights.cpp
+startlightsoverlay.cpp
 timing.cpp
 timingoverlay.cpp
 track.cpp

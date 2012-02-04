@@ -29,6 +29,8 @@ class MCWorld;
 class Track;
 class TimingOverlay;
 class Speedometer;
+class Startlights;
+class StartlightsOverlay;
 
 //! The game scene.
 class Scene
@@ -61,6 +63,12 @@ public:
     //! Set speedometer.
     void setSpeedometer(Speedometer & speedometer);
 
+    //! Set startlights.
+    void setStartlights(Startlights & startlights);
+
+    //! Set startlightsOverlay.
+    void setStartlightsOverlay(StartlightsOverlay & startlightsOverlay);
+
     //! Get timing overlay.
     TimingOverlay & timingOverlay() const;
 
@@ -87,12 +95,14 @@ private:
 
     void initRace();
 
-    Track         * m_pActiveTrack;
-    MCWorld       * m_pWorld;
-    TimingOverlay * m_pTimingOverlay;
-    Speedometer   * m_pSpeedometer;
-    Race            m_race;
-    MCFloat         m_cameraBaseOffset;
+    Track              * m_pActiveTrack;
+    MCWorld            * m_pWorld;
+    TimingOverlay      * m_pTimingOverlay;
+    Speedometer        * m_pSpeedometer;
+    Startlights        * m_pStartlights;
+    StartlightsOverlay * m_pStartlightsOverlay;
+    Race                 m_race;
+    MCFloat              m_cameraBaseOffset;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;

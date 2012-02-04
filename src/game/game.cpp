@@ -20,6 +20,8 @@
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "speedometer.hpp"
+#include "startlights.hpp"
+#include "startlightsoverlay.hpp"
 #include "timingoverlay.hpp"
 #include "track.hpp"
 #include "trackloader.hpp"
@@ -34,21 +36,24 @@
 #include <QTime>
 
 Game::Game()
-: m_pRenderer(nullptr)
-, m_pScene(nullptr)
-, m_pTextureManager(new MCTextureManager)
-, m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
-, m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
-, m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
-, m_pTimingOverlay(nullptr)
-, m_pCamera(nullptr)
-, m_pInputHandler(new InputHandler(2))
-, m_updateTimer()
-, m_renderTimer()
-, m_updateFps(30)
-, m_timeStep(1.0f / m_updateFps)
-, m_renderCount(0)
-, m_availableRenderTime(0)
+  : m_pRenderer(nullptr)
+  , m_pScene(nullptr)
+  , m_pTextureManager(new MCTextureManager)
+  , m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
+  , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
+  , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
+  , m_pTimingOverlay(nullptr)
+  , m_pSpeedometer(nullptr)
+  , m_pStartlights(nullptr)
+  , m_pStartlightsOverlay(nullptr)
+  , m_pCamera(nullptr)
+  , m_pInputHandler(new InputHandler(2))
+  , m_updateTimer()
+  , m_renderTimer()
+  , m_updateFps(30)
+  , m_timeStep(1.0f / m_updateFps)
+  , m_renderCount(0)
+  , m_availableRenderTime(0)
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
@@ -151,6 +156,13 @@ void Game::initScene()
     m_pSpeedometer->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
     m_pScene->setSpeedometer(*m_pSpeedometer);
+
+    m_pStartlights = new Startlights;
+    m_pStartlightsOverlay = new StartlightsOverlay(*m_pStartlights);
+    m_pStartlightsOverlay->setDimensions(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    m_pScene->setStartlights(*m_pStartlights);
+    m_pScene->setStartlightsOverlay(*m_pStartlightsOverlay);
 }
 
 bool Game::init()
@@ -249,4 +261,6 @@ Game::~Game()
     delete m_pInputHandler;
     delete m_pTimingOverlay;
     delete m_pSpeedometer;
+    delete m_pStartlights;
+    delete m_pStartlightsOverlay;
 }
