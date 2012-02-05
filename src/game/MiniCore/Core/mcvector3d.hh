@@ -189,7 +189,7 @@ public:
 private:
 
     //! Components
-    T m_i, m_j, m_k;
+    T m_i, m_j, m_k, padding;
 };
 
 template <typename T>
