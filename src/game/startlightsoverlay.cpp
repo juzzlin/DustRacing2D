@@ -22,6 +22,7 @@
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
   : m_startLightOn(MCTextureManager::instance().surface("startLightOn"))
   , m_startLightOff(MCTextureManager::instance().surface("startLightOff"))
+  , m_startLightGlow(MCTextureManager::instance().surface("startLightGlow"))
   , m_model(model)
 {
 }
@@ -34,6 +35,7 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
     const MCFloat y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
     const MCFloat h = rows * m_startLightOn.height();
 
+    // Body
     for (MCUint row = 0; row < rows; row++)
     {
         for (MCUint col = 0; col < cols; col++)
@@ -53,6 +55,23 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
                     nullptr,
                     x + col * m_startLightOff.width(),
                     y + h - row * m_startLightOff.height(),
+                    0,
+                    0);
+            }
+        }
+    }
+
+    // Glow
+    for (MCUint row = 0; row < rows; row++)
+    {
+        for (MCUint col = 0; col < cols; col++)
+        {
+            if (row < litRows)
+            {
+                m_startLightGlow.render(
+                    nullptr,
+                    x + col * m_startLightOn.width(),
+                    y + h - row * m_startLightOn.height(),
                     0,
                     0);
             }

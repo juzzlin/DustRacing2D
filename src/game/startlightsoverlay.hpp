@@ -44,6 +44,7 @@ private:
 
     MCSurface & m_startLightOn;
     MCSurface & m_startLightOff;
+    MCSurface & m_startLightGlow;
     Startlights & m_model;
 };
 
