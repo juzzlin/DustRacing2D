@@ -88,8 +88,6 @@ private:
     TrackLoader          * m_pTrackLoader;
     TimingOverlay        * m_pTimingOverlay;
     Speedometer          * m_pSpeedometer;
-    Startlights          * m_pStartlights;
-    StartlightsOverlay   * m_pStartlightsOverlay;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_updateTimer;

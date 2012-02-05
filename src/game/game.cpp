@@ -49,8 +49,6 @@ Game::Game()
   , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
   , m_pTimingOverlay(nullptr)
   , m_pSpeedometer(nullptr)
-  , m_pStartlights(nullptr)
-  , m_pStartlightsOverlay(nullptr)
   , m_pCamera(nullptr)
   , m_pInputHandler(new InputHandler(MAX_PLAYERS))
   , m_updateTimer()
@@ -161,13 +159,6 @@ void Game::initScene()
     m_pSpeedometer->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
     m_pScene->setSpeedometer(*m_pSpeedometer);
-
-    m_pStartlights = new Startlights(*m_pInputHandler);
-    m_pStartlightsOverlay = new StartlightsOverlay(*m_pStartlights);
-    m_pStartlightsOverlay->setDimensions(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
-    m_pScene->setStartlights(*m_pStartlights);
-    m_pScene->setStartlightsOverlay(*m_pStartlightsOverlay);
 }
 
 bool Game::init()
@@ -266,6 +257,4 @@ Game::~Game()
     delete m_pInputHandler;
     delete m_pTimingOverlay;
     delete m_pSpeedometer;
-    delete m_pStartlights;
-    delete m_pStartlightsOverlay;
 }

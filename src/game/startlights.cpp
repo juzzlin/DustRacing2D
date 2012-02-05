@@ -15,12 +15,13 @@
 
 #include "startlights.hpp"
 #include "inputhandler.hpp"
+#include "race.hpp"
 
-Startlights::Startlights(InputHandler & inputHandler)
+Startlights::Startlights(Race & race)
   : m_state(LightsInit)
   , m_counter(0)
   , m_stepsPerState(100)
-  , m_inputHandler(inputHandler)
+  , m_race(race)
 {
 }
 
@@ -47,7 +48,7 @@ void Startlights::update()
              MCVector3dF(m_pos.i(), m_height / 2, 0),
              second / 3);
         m_state = LightsAppear;
-        m_inputHandler.setEnabled(false);
+        InputHandler::setEnabled(false);
         break;
 
     case LightsAppear:
@@ -76,7 +77,8 @@ void Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsGo;
-            m_inputHandler.setEnabled(true);
+            InputHandler::setEnabled(true);
+            m_race.start();
         }
         break;
 

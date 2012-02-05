@@ -17,15 +17,16 @@
 #include <iostream>
 #include <cassert>
 
+bool InputHandler::m_enabled = true;
+
 InputHandler::InputHandler(MCUint maxPlayers)
   : m_playerActions(maxPlayers, std::bitset<IA_END_OF_ENUM>())
-  , m_enabled(true)
 {}
 
 bool InputHandler::getActionState(MCUint playerIndex, InputAction action) const
 {
     assert(playerIndex < m_playerActions.size());
-    return m_enabled && m_playerActions[playerIndex][action];
+    return InputHandler::m_enabled && m_playerActions[playerIndex][action];
 }
 
 void InputHandler::setActionState(MCUint playerIndex, InputAction action, bool state)
@@ -39,7 +40,7 @@ void InputHandler::setEnabled(bool state)
     m_enabled = state;
 }
 
-bool InputHandler::enabled() const
+bool InputHandler::enabled()
 {
     return m_enabled;
 }

@@ -28,6 +28,8 @@
 #include "trackobject.hpp"
 #include "tracktile.hpp"
 
+#include "../common/config.hpp"
+
 #include <MiniCore/Core/MCCamera>
 #include <MiniCore/Core/MCFrictionGenerator>
 #include <MiniCore/Core/MCObject>
@@ -40,12 +42,13 @@
 #include <cassert>
 
 Scene::Scene(MCSurface & carSurface, MCUint numCars)
-  : m_pActiveTrack(nullptr)
+  : m_race()
+  , m_pActiveTrack(nullptr)
   , m_pWorld(new MCWorld)
   , m_pTimingOverlay(nullptr)
   , m_pSpeedometer(nullptr)
-  , m_pStartlights(nullptr)
-  , m_pStartlightsOverlay(nullptr)
+  , m_pStartlights(new Startlights(m_race))
+  , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
   , m_cameraBaseOffset(0)
 {
     // Create and add cars.
@@ -57,6 +60,9 @@ Scene::Scene(MCSurface & carSurface, MCUint numCars)
         m_cars.push_back(car);
         m_race.addCar(*car);
     }
+
+    m_pStartlightsOverlay->setDimensions(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 }
 
 void Scene::updateFrame(InputHandler & handler,
@@ -232,7 +238,6 @@ void Scene::initRace()
 
     m_race.setTrack(*m_pActiveTrack);
     m_race.init();
-    m_race.start();
 }
 
 Track & Scene::activeTrack() const
@@ -301,4 +306,7 @@ Scene::~Scene()
     {
         delete car;
     }
+
+    delete m_pStartlights;
+    delete m_pStartlightsOverlay;
 }

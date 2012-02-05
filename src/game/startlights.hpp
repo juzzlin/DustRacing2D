@@ -19,7 +19,7 @@
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVectorAnimation"
 
-class InputHandler;
+class Race;
 
 //! Startlight model that controls the position and animation
 //! of the startlights.
@@ -41,7 +41,7 @@ public:
     };
 
     //! Constructor.
-    Startlights(InputHandler & inputHandler);
+    Startlights(Race & race);
 
     void update();
 
@@ -61,7 +61,7 @@ private:
     MCVector3dF m_pos;
     MCUint m_width, m_height;
     MCVectorAnimation m_animation;
-    InputHandler & m_inputHandler;
+    Race & m_race;
 };
 
 #endif // STARTLIGHTS_HPP

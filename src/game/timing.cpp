@@ -21,6 +21,7 @@
 Timing::Timing(MCUint cars, QObject *parent)
   : QObject(parent)
   , m_times(cars, Timing::Times())
+  , m_started(false)
 {
 }
 
@@ -52,6 +53,11 @@ int Timing::lap(MCUint index) const
 
 int Timing::currentTime(MCUint index) const
 {
+    if (!m_started)
+    {
+        return 0;
+    }
+
     assert(index < m_times.size());
     const Timing::Times & times = m_times[index];
     return m_time.elapsed() - times.totalTime;
@@ -59,12 +65,22 @@ int Timing::currentTime(MCUint index) const
 
 int Timing::recordTime(MCUint index) const
 {
+    if (!m_started)
+    {
+        return -1;
+    }
+
     assert(index < m_times.size());
     return m_times[index].recordLapTime;
 }
 
 int Timing::lastLapTime(MCUint index) const
 {
+    if (!m_started)
+    {
+        return -1;
+    }
+
     assert(index < m_times.size());
     return m_times[index].lastLapTime;
 }
@@ -85,10 +101,12 @@ void Timing::start()
 {
     m_time = QTime(0, 0, 0, 0);
     m_time.start();
+    m_started = true;
 }
 
 void Timing::stop()
 {
+    m_started = false;
 }
 
 std::string Timing::msecsToString(int msec) const

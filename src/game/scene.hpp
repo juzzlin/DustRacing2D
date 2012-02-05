@@ -95,13 +95,13 @@ private:
 
     void initRace();
 
+    Race                 m_race;
     Track              * m_pActiveTrack;
     MCWorld            * m_pWorld;
     TimingOverlay      * m_pTimingOverlay;
     Speedometer        * m_pSpeedometer;
     Startlights        * m_pStartlights;
     StartlightsOverlay * m_pStartlightsOverlay;
-    Race                 m_race;
     MCFloat              m_cameraBaseOffset;
 
     typedef std::vector<Car *> CarVector;

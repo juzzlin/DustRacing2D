@@ -91,6 +91,7 @@ private:
 
     std::vector<Timing::Times> m_times;
     QTime m_time;
+    bool m_started;
 };
 
 #endif // TIMING_HPP
