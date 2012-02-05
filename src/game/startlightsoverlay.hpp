@@ -17,6 +17,7 @@
 #define STARTLIGHTSOVERLAY_HPP
 
 #include "overlaybase.hpp"
+#include "MiniCore/Core/MCTypes"
 
 class MCSurface;
 class MCTextureFontManager;
@@ -33,6 +34,9 @@ public:
 
     //! \reimp
     virtual void render();
+
+    //! \reimp
+    virtual void setDimensions(MCUint width, MCUint height);
 
 private:
 

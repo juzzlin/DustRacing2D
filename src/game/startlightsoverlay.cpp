@@ -30,8 +30,8 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
 {
     const MCUint cols = 8;
 
-    const MCFloat x = width()  / 2 - (cols - 1) * m_startLightOn.width()  / 2;
-    const MCFloat y = height() / 2 - (rows - 1) * m_startLightOn.height() / 2;
+    const MCFloat x = m_model.pos().i() - (cols - 1) * m_startLightOn.width()  / 2;
+    const MCFloat y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
     const MCFloat h = rows * m_startLightOn.height();
 
     for (MCUint row = 0; row < rows; row++)
@@ -60,6 +60,12 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
     }
 }
 
+void StartlightsOverlay::setDimensions(MCUint width, MCUint height)
+{
+    OverlayBase::setDimensions(width, height);
+    m_model.setDimensions(width, height);
+}
+
 void StartlightsOverlay::render()
 {
     switch (m_model.state())
@@ -81,6 +87,7 @@ void StartlightsOverlay::render()
         renderLights(3, 0);
         break;
     case Startlights::LightsEnd:
+        renderLights(3, 0);
         break;
     }
 }

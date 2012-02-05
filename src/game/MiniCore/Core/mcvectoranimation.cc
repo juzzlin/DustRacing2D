@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2009 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,24 +17,39 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCTYPES_HH
-#define MCTYPES_HH
+#include "mcvectoranimation.hh"
+#include <cassert>
 
-#include "mcvector2d.hh"
-#include "mcvector3d.hh"
+MCVectorAnimation::MCVectorAnimation()
+  : m_pVect(nullptr)
+{
+}
 
-// Floating point data type used
-#ifdef MC_USE_DOUBLE
-  typedef double MCFloat;
-#else
-  typedef float MCFloat;
-#endif
+MCVectorAnimation::~MCVectorAnimation()
+{
+}
 
-// Some convenience typedef's
-typedef unsigned int  MCUint;
-typedef unsigned char MCUchar;
+void MCVectorAnimation::init(
+    MCVector3dF & vect,
+    const MCVector3dF & start,
+    const MCVector3dF & end,
+    MCUint steps)
+{
+    m_delta = (end - start) / steps;
+    m_pVect = &vect;
+    m_steps = steps;
+    m_step  = 0;
 
-typedef MCVector3d<MCFloat> MCVector3dF;
-typedef MCVector2d<MCFloat> MCVector2dF;
+    *m_pVect = start;
+}
 
-#endif // MCTYPES_HH
+bool MCVectorAnimation::update()
+{
+    assert(m_pVect);
+    if (++m_step < m_steps)
+    {
+        *m_pVect += m_delta;
+        return false;
+    }
+    return true;
+}

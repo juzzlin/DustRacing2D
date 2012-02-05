@@ -17,6 +17,7 @@
 #define STARTLIGHTS_HPP
 
 #include "MiniCore/Core/MCTypes"
+#include "MiniCore/Core/MCVectorAnimation"
 
 //! Startlight model.
 class Startlights
@@ -25,6 +26,7 @@ public:
 
     enum LightState
     {
+        LightsInit,
         LightsOff,
         LightsFirstRow,
         LightsSecondRow,
@@ -36,9 +38,13 @@ public:
     //! Constructor.
     Startlights();
 
-    void run();
+    void update();
 
     LightState state() const;
+
+    void setDimensions(MCUint width, MCUint height);
+
+    const MCVector3dF & pos() const;
 
 private:
 
@@ -46,6 +52,10 @@ private:
 
     LightState m_state;
     MCUint m_counter;
+    MCUint m_stepsPerState;
+    MCVector3dF m_pos;
+    MCUint m_width, m_height;
+    MCVectorAnimation m_animation;
 };
 
 #endif // STARTLIGHTS_HPP

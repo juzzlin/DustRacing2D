@@ -79,7 +79,7 @@ void Scene::updateWorld(float timeStep)
 
 void Scene::updateRace()
 {    
-    m_pStartlights->run();
+    m_pStartlights->update();
 
     // Update race situation
     m_race.update();

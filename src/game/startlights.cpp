@@ -16,8 +16,9 @@
 #include "startlights.hpp"
 
 Startlights::Startlights()
-  : m_state(LightsOff)
+  : m_state(LightsInit)
   , m_counter(0)
+  , m_stepsPerState(100)
 {
 }
 
@@ -31,12 +32,22 @@ bool Startlights::updateCounter(MCUint limit)
     return false;
 }
 
-void Startlights::run()
+void Startlights::update()
 {
-    const MCUint second = 100;
+    const MCUint second = m_stepsPerState;
     switch (m_state)
     {
+    case LightsInit:
+        m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
+        m_animation.init(
+             m_pos,
+             m_pos,
+             MCVector3dF(m_pos.i(), m_height / 2, 0),
+             second / 3);
+        m_state = LightsOff;
+        break;
     case LightsOff:
+        m_animation.update();
         if (updateCounter(second))
         {
             m_state = LightsFirstRow;
@@ -64,14 +75,30 @@ void Startlights::run()
         if (updateCounter(second))
         {
             m_state = LightsEnd;
+            m_animation.init(m_pos,
+                             m_pos,
+                             MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
+                             second / 3);
         }
         break;
     case LightsEnd:
+        m_animation.update();
         break;
     }
+}
+
+void Startlights::setDimensions(MCUint width, MCUint height)
+{
+    m_width  = width;
+    m_height = height;
 }
 
 Startlights::LightState Startlights::state() const
 {
     return m_state;
+}
+
+const MCVector3dF & Startlights::pos() const
+{
+    return m_pos;
 }

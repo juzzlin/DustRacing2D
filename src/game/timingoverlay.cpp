@@ -141,7 +141,7 @@ void TimingOverlay::render()
             static bool show   = true;
 
             // Blink the record time a couple of times if a new record time set.
-            // 60 Hz update rate is assumed here.
+            // 100 Hz update rate is assumed here.
             if (m_pTiming->newRecordActive(m_pCar->index()))
             {
                 if (blinked < 8)
