@@ -19,16 +19,27 @@
 
 InputHandler::InputHandler(MCUint maxPlayers)
   : m_playerActions(maxPlayers, std::bitset<IA_END_OF_ENUM>())
+  , m_enabled(true)
 {}
 
 bool InputHandler::getActionState(MCUint playerIndex, InputAction action) const
 {
     assert(playerIndex < m_playerActions.size());
-    return m_playerActions[playerIndex][action];
+    return m_enabled && m_playerActions[playerIndex][action];
 }
 
 void InputHandler::setActionState(MCUint playerIndex, InputAction action, bool state)
 {
     assert(playerIndex < m_playerActions.size());
     m_playerActions[playerIndex][action] = state;
+}
+
+void InputHandler::setEnabled(bool state)
+{
+    m_enabled = state;
+}
+
+bool InputHandler::enabled() const
+{
+    return m_enabled;
 }

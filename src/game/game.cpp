@@ -35,6 +35,11 @@
 #include <QDir>
 #include <QTime>
 
+namespace
+{
+const int MAX_PLAYERS = 2;
+}
+
 Game::Game()
   : m_pRenderer(nullptr)
   , m_pScene(nullptr)
@@ -47,7 +52,7 @@ Game::Game()
   , m_pStartlights(nullptr)
   , m_pStartlightsOverlay(nullptr)
   , m_pCamera(nullptr)
-  , m_pInputHandler(new InputHandler(2))
+  , m_pInputHandler(new InputHandler(MAX_PLAYERS))
   , m_updateTimer()
   , m_renderTimer()
   , m_updateFps(30)
@@ -157,7 +162,7 @@ void Game::initScene()
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
     m_pScene->setSpeedometer(*m_pSpeedometer);
 
-    m_pStartlights = new Startlights;
+    m_pStartlights = new Startlights(*m_pInputHandler);
     m_pStartlightsOverlay = new StartlightsOverlay(*m_pStartlights);
     m_pStartlightsOverlay->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);

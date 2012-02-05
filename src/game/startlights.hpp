@@ -19,6 +19,8 @@
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVectorAnimation"
 
+class InputHandler;
+
 //! Startlight model.
 class Startlights
 {
@@ -36,7 +38,7 @@ public:
     };
 
     //! Constructor.
-    Startlights();
+    Startlights(InputHandler & inputHandler);
 
     void update();
 
@@ -56,6 +58,7 @@ private:
     MCVector3dF m_pos;
     MCUint m_width, m_height;
     MCVectorAnimation m_animation;
+    InputHandler & m_inputHandler;
 };
 
 #endif // STARTLIGHTS_HPP

@@ -14,11 +14,13 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "startlights.hpp"
+#include "inputhandler.hpp"
 
-Startlights::Startlights()
+Startlights::Startlights(InputHandler & inputHandler)
   : m_state(LightsInit)
   , m_counter(0)
   , m_stepsPerState(100)
+  , m_inputHandler(inputHandler)
 {
 }
 
@@ -45,7 +47,9 @@ void Startlights::update()
              MCVector3dF(m_pos.i(), m_height / 2, 0),
              second / 3);
         m_state = LightsOff;
+        m_inputHandler.setEnabled(false);
         break;
+
     case LightsOff:
         m_animation.update();
         if (updateCounter(second))
@@ -53,24 +57,29 @@ void Startlights::update()
             m_state = LightsFirstRow;
         }
         break;
+
     case LightsFirstRow:
         if (updateCounter(second))
         {
             m_state = LightsSecondRow;
         }
         break;
+
     case LightsSecondRow:
         if (updateCounter(second))
         {
             m_state = LightsThirdRow;
         }
         break;
+
     case LightsThirdRow:
         if (updateCounter(second))
         {
             m_state = LightsGo;
+            m_inputHandler.setEnabled(true);
         }
         break;
+
     case LightsGo:
         if (updateCounter(second))
         {
@@ -81,6 +90,7 @@ void Startlights::update()
                              second / 3);
         }
         break;
+
     case LightsEnd:
         m_animation.update();
         break;
