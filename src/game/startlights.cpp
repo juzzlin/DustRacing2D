@@ -46,11 +46,11 @@ void Startlights::update()
              m_pos,
              MCVector3dF(m_pos.i(), m_height / 2, 0),
              second / 3);
-        m_state = LightsOff;
+        m_state = LightsAppear;
         m_inputHandler.setEnabled(false);
         break;
 
-    case LightsOff:
+    case LightsAppear:
         m_animation.update();
         if (updateCounter(second))
         {
@@ -83,7 +83,7 @@ void Startlights::update()
     case LightsGo:
         if (updateCounter(second))
         {
-            m_state = LightsEnd;
+            m_state = LightsDisappear;
             m_animation.init(m_pos,
                              m_pos,
                              MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
@@ -91,8 +91,11 @@ void Startlights::update()
         }
         break;
 
-    case LightsEnd:
+    case LightsDisappear:
         m_animation.update();
+        break;
+
+    case LightsEnd:
         break;
     }
 }

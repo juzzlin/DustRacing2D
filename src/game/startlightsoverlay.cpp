@@ -89,10 +89,6 @@ void StartlightsOverlay::render()
 {
     switch (m_model.state())
     {
-    default:
-    case Startlights::LightsOff:
-        renderLights(3, 0);
-        break;
     case Startlights::LightsFirstRow:
         renderLights(3, 1);
         break;
@@ -103,10 +99,13 @@ void StartlightsOverlay::render()
         renderLights(3, 3);
         break;
     case Startlights::LightsGo:
+    case Startlights::LightsAppear:
+    case Startlights::LightsDisappear:
         renderLights(3, 0);
         break;
     case Startlights::LightsEnd:
-        renderLights(3, 0);
+        break;
+    default:
         break;
     }
 }

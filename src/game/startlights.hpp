@@ -21,19 +21,22 @@
 
 class InputHandler;
 
-//! Startlight model.
+//! Startlight model that controls the position and animation
+//! of the startlights.
 class Startlights
 {
 public:
 
+    //! Startlights animation sequence states.
     enum LightState
     {
         LightsInit,
-        LightsOff,
+        LightsAppear,
         LightsFirstRow,
         LightsSecondRow,
         LightsThirdRow,
         LightsGo,
+        LightsDisappear,
         LightsEnd
     };
 
