@@ -37,6 +37,8 @@ struct MCTextureData
     , alphaTestSet(false)
     , alphaBlendSet(false)
     , xAxisMirror(false)
+    , minFilterSet(false)
+    , magFilterSet(false)
     {}
 
     //! Handle of the texture
@@ -110,6 +112,18 @@ struct MCTextureData
 
     //! True if X-Axis mirroring is wanted
     bool xAxisMirror;
+
+    //! Min filter value
+    GLint minFilter;
+
+    //! True, if min filter was set
+    bool minFilterSet;
+
+    //! Mag filter value
+    GLint magFilter;
+
+    //! True, if mag filter was set
+    bool magFilterSet;
 };
 
 #endif // MCTEXTUREDATA_HH

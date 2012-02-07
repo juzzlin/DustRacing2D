@@ -145,6 +145,37 @@ bool MCTextureConfigLoader::loadTextures()
                             newData->centerSet = true;
                         }
                     }
+                    else if (childNode.nodeName() == "filter")
+                    {
+                        QDomElement tag = childNode.toElement();
+                        if(!tag.isNull())
+                        {
+                            std::string min = tag.attribute("min", "").toStdString();
+                            std::string mag = tag.attribute("mag", "").toStdString();
+
+                            if (min == "linear")
+                            {
+                                newData->minFilterSet = true;
+                                newData->minFilter    = GL_LINEAR;
+                            }
+                            else
+                            {
+                                newData->minFilterSet = true;
+                                newData->minFilter    = GL_NEAREST;
+                            }
+
+                            if (mag == "linear")
+                            {
+                                newData->magFilterSet = true;
+                                newData->magFilter    = GL_LINEAR;
+                            }
+                            else
+                            {
+                                newData->magFilterSet = true;
+                                newData->magFilter    = GL_NEAREST;
+                            }
+                        }
+                    }
                     else
                     {
                         MCLogger::logError("Unknown tag '%s'",

@@ -159,10 +159,25 @@ void MCTextureManagerImpl::createGLTextureFromImage(
     // Bind the texture object
     glBindTexture(GL_TEXTURE_2D, textureHandle);
 
-    // Disable smoothing filters
-    // TODO: Make this configurable!
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // Set min filter.
+    if (data.minFilterSet)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, data.minFilter);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    }
+
+    // Set mag filter.
+    if (data.magFilterSet)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, data.magFilter);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
 
     // Edit image data using the information textureImage gives us
     glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage.width(), textureImage.height(),
