@@ -57,7 +57,6 @@ private:
 
     void oversteer(MCUint newBodyAngle);
 
-    MCSurface           * m_pSurface;
     MCFrictionGenerator * m_pDeccelerationFriction;
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
