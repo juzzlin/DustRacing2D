@@ -135,7 +135,7 @@ bool Game::loadTracks()
 void Game::initScene()
 {
     // Create the scene
-    m_pScene = new Scene(m_pTextureManager->surface("car001"));
+    m_pScene = new Scene;
 
     // Set the default track
     m_pScene->setActiveTrack(*m_pTrackLoader->track(0));

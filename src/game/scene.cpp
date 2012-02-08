@@ -35,13 +35,14 @@
 #include <MiniCore/Core/MCObject>
 #include <MiniCore/Core/MCSurface>
 #include <MiniCore/Core/MCSpringForceGenerator>
+#include <MiniCore/Core/MCTextureManager>
 #include <MiniCore/Core/MCTypes>
 #include <MiniCore/Core/MCWorld>
 
 #include <algorithm>
 #include <cassert>
 
-Scene::Scene(MCSurface & carSurface, MCUint numCars)
+Scene::Scene(MCUint numCars)
   : m_race()
   , m_pActiveTrack(nullptr)
   , m_pWorld(new MCWorld)
@@ -55,7 +56,16 @@ Scene::Scene(MCSurface & carSurface, MCUint numCars)
     assert(numCars);
     for (MCUint i = 0; i < numCars; i++)
     {
-        Car * car = new Car(carSurface, i);
+        Car * car = nullptr;
+        if (i == 0)
+        {
+            car = new Car(MCTextureManager::instance().surface("car001"), i);
+        }
+        else
+        {
+            car = new Car(MCTextureManager::instance().surface("car002"), i);
+        }
+
         car->setLayer(Layers::Cars);
         m_cars.push_back(car);
         m_race.addCar(*car);

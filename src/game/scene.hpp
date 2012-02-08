@@ -38,7 +38,7 @@ class Scene
 public:
 
     //! Constructor.
-    explicit Scene(MCSurface & carSurface, MCUint numCars = 8);
+    explicit Scene(MCUint numCars = 8);
 
     //! Destructor.
     ~Scene();
