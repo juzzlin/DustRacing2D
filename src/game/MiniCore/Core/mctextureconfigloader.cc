@@ -158,10 +158,14 @@ bool MCTextureConfigLoader::loadTextures()
                                 newData->minFilterSet = true;
                                 newData->minFilter    = GL_LINEAR;
                             }
-                            else
+                            else if (min == "nearest")
                             {
                                 newData->minFilterSet = true;
                                 newData->minFilter    = GL_NEAREST;
+                            }
+                            else
+                            {
+                                MCLogger::logError("Unknown min filter '%s'", min.c_str());
                             }
 
                             if (mag == "linear")
@@ -169,10 +173,14 @@ bool MCTextureConfigLoader::loadTextures()
                                 newData->magFilterSet = true;
                                 newData->magFilter    = GL_LINEAR;
                             }
-                            else
+                            else if (mag == "nearest")
                             {
                                 newData->magFilterSet = true;
                                 newData->magFilter    = GL_NEAREST;
+                            }
+                            else
+                            {
+                                MCLogger::logError("Unknown mag filter '%s'", mag.c_str());
                             }
                         }
                     }
