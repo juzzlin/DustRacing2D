@@ -29,7 +29,8 @@ TreeView::TreeView(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeig
 , m_dBranchHeight(m_branchHeight)
 , m_dr((m_r1 - m_r0) / m_branches)
 , m_dAngle(360 / (m_branches + 1))
-, m_topAngle(0)
+, m_topSinAngle(0)
+, m_topCosAngle(0)
 {
 }
 
@@ -39,20 +40,24 @@ TreeView::~TreeView()
 
 void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
 {
-    if (++m_topAngle >= 720)
+    if (++m_topCosAngle >= 360)
     {
-        m_topAngle = 0;
+        m_topCosAngle = 0;
     }
 
-    m_top.setI(MCTrigonom::cos(m_topAngle / 2));
-    m_top.setJ(MCTrigonom::sin(m_topAngle / 2));
+    if (++m_topSinAngle >= 720)
+    {
+        m_topSinAngle = 0;
+    }
+
+    m_top.setI(MCTrigonom::cos(m_topCosAngle));
+    m_top.setJ(MCTrigonom::sin(m_topSinAngle / 2));
 
     MCFloat branchHeight = m_branchHeight;
     MCFloat r            = m_r0;
     MCUint  angle        = 0;
 
     glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_DEPTH_TEST);
     glColor4f(1.0, 1.0, 1.0, 1.0);
 
     glEnable(GL_TEXTURE_2D);
@@ -60,12 +65,11 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
 
     surface()->doAlphaTest();
 
+    MCFloat z = branchHeight / 3;
     for (int i = 0; i < m_branches; i++)
     {
-        MCFloat x = l.i() + m_top.i() * branchHeight / 2;
-        MCFloat y = l.j() + m_top.j() * branchHeight / 2;
-
-        const MCFloat z = branchHeight;
+        MCFloat x = l.i() + m_top.i() * branchHeight / 4;
+        MCFloat y = l.j() + m_top.j() * branchHeight / 4;
 
         if (pCamera)
         {
@@ -94,6 +98,7 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
         glPopMatrix();
 
         branchHeight += m_dBranchHeight;
+        z            += m_dBranchHeight;
         r            += m_dr;
         angle        += m_dAngle;
     }

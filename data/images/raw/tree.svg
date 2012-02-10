@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="tree.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -30,8 +30,8 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1680"
-     inkscape:window-height="1026"
+     inkscape:window-width="1280"
+     inkscape:window-height="775"
      inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1">
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -59,19 +59,22 @@
        sodipodi:type="star"
        style="fill:#208020;fill-opacity:1;fill-rule:nonzero;stroke:#104010;stroke-width:5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path4119"
-       sodipodi:sides="7"
+       sodipodi:sides="5"
        sodipodi:cx="190"
        sodipodi:cy="152.36218"
        sodipodi:r1="31.112698"
        sodipodi:r2="155.56349"
        sodipodi:arg1="0.78539816"
-       sodipodi:arg2="1.2341971"
-       inkscape:flatsided="false"
-       inkscape:rounded="0.03"
-       inkscape:randomized="0.05"
-       d="m 206.69125,167.66412 c -2.74047,2.64526 45.5073,132.01564 42.0198,133.53223 -3.4875,1.51659 -63.79873,-114.22177 -67.61668,-114.57158 -3.81796,-0.3498 -72.72734,102.87944 -76.01881,100.76992 -3.29147,-2.10952 56.80701,-115.23495 54.56518,-118.39337 -2.24182,-3.15843 -117.361289,6.20289 -117.705899,2.45936 C 41.59023,167.71715 161.08395,147.00955 162.22811,143.26082 163.37227,139.5121 78.366353,40.612285 80.886208,37.762918 83.406064,34.913551 181.34219,121.27043 184.97147,119.91809 188.60075,118.56576 203.20284,-10.161363 206.94742,-9.7214795 210.692,-9.2815963 197.47234,130.81 200.56962,133.06357 c 3.09728,2.25357 121.48895,-73.512943 123.66118,-70.360255 2.17223,3.152687 -98.55054,89.740175 -97.83403,93.590695 0.71652,3.85051 104.18937,42.31417 102.69384,45.89016 -1.49552,3.57599 -119.65888,-37.16531 -122.39936,-34.52005 z"
+       sodipodi:arg2="1.4137167"
+       inkscape:flatsided="true"
+       inkscape:rounded="0.25"
+       inkscape:randomized="-0.043"
+       d="m 216.56552,180.12252 c -6.42132,6.61958 -35.9168,8.2641 -44.388,4.34226 -8.4712,-3.92183 -17.34628,-25.29271 -16.27978,-34.18845 1.0665,-8.89575 14.47598,-23.70314 23.55834,-24.99065 9.08236,-1.2875 35.82534,-1.26208 39.9264,6.83585 4.10106,8.09792 3.60436,41.3814 -2.81696,48.00099 z"
        inkscape:transform-center-x="3.3106695"
        inkscape:transform-center-y="11.445216"
-       transform="translate(-32.228108,29.101361)" />
+       transform="translate(-32.228108,29.101361)"
+       inkscape:export-filename="/home/jussil/sourceforge/dustrac/data/images/tree.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
   </g>
 </svg>

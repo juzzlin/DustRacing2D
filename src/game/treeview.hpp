@@ -46,7 +46,8 @@ private:
     MCFloat m_branchHeight, m_dBranchHeight;
     MCFloat m_dr;
     MCFloat m_dAngle;
-    MCUint m_topAngle;
+    MCUint m_topSinAngle;
+    MCUint m_topCosAngle;
     MCVector2d<MCFloat> m_top;
 };
 

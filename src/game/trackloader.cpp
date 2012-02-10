@@ -231,7 +231,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         data.setLayer(Layers::Tree);
 
         TreeView * view = new TreeView(
-            m_textureManager.surface("tree"), treeViewRadius, 2, 20, 4);
+            m_textureManager.surface("tree"), treeViewRadius, 2, 30, 5);
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
