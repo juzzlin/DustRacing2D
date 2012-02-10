@@ -47,6 +47,8 @@ public:
     //! Brake.
     void brake();
 
+    void setBrakeLightState(bool state);
+
     //! User isn't doing anything.
     void noAction();
 
@@ -66,10 +68,12 @@ private:
     MCFrictionGenerator * m_pDeccelerationFriction;
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
+    bool                  m_braking;
     MCUint                m_index;
     MCUint                m_leftTireAngle;
     MCUint                m_rightTireAngle;
     MCSurface           & m_frontTire;
+    MCSurface           & m_brakeGlow;
 };
 
 #endif // CAR_HPP

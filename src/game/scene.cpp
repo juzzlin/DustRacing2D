@@ -119,6 +119,8 @@ void Scene::processUserInput(InputHandler & handler)
 {
     bool actionTaken = false;
     bool steering    = false;
+
+    // Handle turning
     if (handler.getActionState(0, InputHandler::IA_LEFT))
     {
         m_cars.at(0)->turnLeft();
@@ -132,6 +134,8 @@ void Scene::processUserInput(InputHandler & handler)
         steering    = true;
     }
 
+    // Handle accelerating / braking
+    m_cars.at(0)->setBrakeLightState(false);
     if (handler.getActionState(0, InputHandler::IA_UP))
     {
         m_cars.at(0)->accelerate();
@@ -140,6 +144,7 @@ void Scene::processUserInput(InputHandler & handler)
     else if (handler.getActionState(0, InputHandler::IA_DOWN))
     {
         m_cars.at(0)->brake();
+        m_cars.at(0)->setBrakeLightState(true);
         actionTaken = true;
     }
 

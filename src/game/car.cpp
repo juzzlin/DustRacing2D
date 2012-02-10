@@ -29,7 +29,7 @@
 namespace
 {
     const MCFloat MAX_VELOCITY      = 6.0f;
-    const MCFloat BRAKE_FRICTION    = 0.25f;
+    const MCFloat BRAKE_FRICTION    = 0.50f;
     const MCFloat SLIDE_FRICTION    = 0.15f;
     const MCFloat ROLLING_FRICTION  = 0.01f;
     const MCFloat ROTATION_FRICTION = 0.9f;
@@ -40,10 +40,12 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
   , m_frictionGeneratorAdded(false)
   , m_accelerating(false)
+  , m_braking(false)
   , m_index(index)
   , m_leftTireAngle(180)
   , m_rightTireAngle(180)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
+  , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -122,6 +124,12 @@ void Car::brake()
     m_frictionGeneratorAdded = true;
 
     m_accelerating = false;
+    m_braking      = true;
+}
+
+void Car::setBrakeLightState(bool state)
+{
+    m_braking = state;
 }
 
 void Car::noAction()
@@ -168,17 +176,34 @@ MCUint Car::speedInKmh() const
 
 void Car::render(MCCamera *p)
 {
+    // Render left front tire
     MCVector2dF leftTire;
     MCTrigonom::rotated(MCVector2dF(25, 17), leftTire, angle());
     leftTire += MCVector2dF(location());
     m_frontTire.render(p, leftTire, m_leftTireAngle + angle());
 
+    // Render right front tire
     MCVector2dF rightTire;
     MCTrigonom::rotated(MCVector2dF(25, -17), rightTire, angle());
     rightTire += MCVector2dF(location());
     m_frontTire.render(p, rightTire, m_rightTireAngle + angle());
 
+    // Render body
     MCObject::render(p);
+
+    // Render brake lights
+    if (m_braking)
+    {
+        MCVector2dF leftBrakeGlow;
+        MCTrigonom::rotated(MCVector2dF(-45, 15), leftBrakeGlow, angle());
+        leftBrakeGlow += MCVector2dF(location());
+        m_brakeGlow.render(p, leftBrakeGlow, angle());
+
+        MCVector2dF rightBrakeGlow;
+        MCTrigonom::rotated(MCVector2dF(-45, -15), rightBrakeGlow, angle());
+        rightBrakeGlow += MCVector2dF(location());
+        m_brakeGlow.render(p, rightBrakeGlow, angle());
+    }
 }
 
 Car::~Car()
