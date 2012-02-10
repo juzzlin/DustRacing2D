@@ -50,8 +50,14 @@ public:
     //! User isn't doing anything.
     void noAction();
 
+    //! User isn't steering.
+    void noSteering();
+
     //! Get estimated speed in km/h. This is used by the speedometer.
     MCUint speedInKmh() const;
+
+    //! \reimp
+    virtual void render(MCCamera *p);
 
 private:
 
@@ -61,6 +67,9 @@ private:
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
     MCUint                m_index;
+    MCUint                m_leftTireAngle;
+    MCUint                m_rightTireAngle;
+    MCSurface           & m_frontTire;
 };
 
 #endif // CAR_HPP

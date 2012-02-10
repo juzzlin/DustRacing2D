@@ -44,18 +44,18 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
             {
                 m_startLightOn.render(
                     nullptr,
-                    x + col * m_startLightOn.width(),
-                    y + h - row * m_startLightOn.height(),
-                    0,
+                    MCVector3dF(
+                        x + col * m_startLightOn.width(),
+                        y + h - row * m_startLightOn.height()),
                     0);
             }
             else
             {
                 m_startLightOff.render(
                     nullptr,
-                    x + col * m_startLightOff.width(),
-                    y + h - row * m_startLightOff.height(),
-                    0,
+                    MCVector3dF(
+                        x + col * m_startLightOff.width(),
+                        y + h - row * m_startLightOff.height()),
                     0);
             }
         }
@@ -70,9 +70,9 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
             {
                 m_startLightGlow.render(
                     nullptr,
-                    x + col * m_startLightOn.width(),
-                    y + h - row * m_startLightOn.height(),
-                    0,
+                    MCVector3dF(
+                        x + col * m_startLightOn.width(),
+                        y + h - row * m_startLightOn.height()),
                     0);
             }
         }

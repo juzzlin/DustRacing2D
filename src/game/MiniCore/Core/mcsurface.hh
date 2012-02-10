@@ -54,7 +54,7 @@ public:
     //! Set the point the surface is centered about.
     //! \param center Vector that defines a custom rotation point other than
     //!        (width / 2, height / 2) which is the default.
-    void setCenter(const MCVector2d<MCFloat> & center);
+    void setCenter(MCVector2dFR center);
 
     //! Enable / disable alpha test.
     //! \param useAlphaTest Alpha is tested for colorkeying if true.
@@ -62,7 +62,8 @@ public:
     //!        if useAlphaTest equals false.
     //! \param threshold Threshold used in the alpha test. Has no effect
     //!        if useAlphaTest equals false.
-    void setAlphaTest(bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
+    void setAlphaTest(
+        bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
 
     //! Runs the corresponding GL-commands defined in setAlphaTest().
     //! This is done automatically, but doAlphaTest() can be used if
@@ -86,44 +87,40 @@ public:
     void doAlphaBlend() const;
 
    /*! Get bounding box for a rotated surface
-    * \param x x-coordinate
-    * \param y y-coordinate
+    * \param pos The position.
     * \param angle Rotation angle (0..360)
     */
-    MCBBox<MCFloat> rotatedBBox(MCFloat x, MCFloat y, int angle);
+    MCBBox<MCFloat> rotatedBBox(MCVector2dFR, int angle);
 
    /*! Get bounding box for a rotated and scaled surface
-    * \param x x-coordinate
-    * \param y y-coordinate
+    * \param pos The position.
     * \param angle Rotation angle (0..360)
     * \param w2 half of the scaled width
     * \param h2 half of the scaled height
     */
-    MCBBox<MCFloat> rotatedScaledBBox(MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2);
+    MCBBox<MCFloat> rotatedScaledBBox(MCVector2dFR pos, int angle, MCFloat w2, MCFloat h2);
 
     //! Render using default size + z
-    void render(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle);
+    void render(MCCamera * pCamera, MCVector3dFR pos, int angle);
 
    /*! Render scaled.
-    * \param x x-coordinate
-    * \param y y-coordinate
-    * \param z z-coordinate
+    * \param pos The position.
     * \param wr Half of the wanted width.
     * \param hr Half of the wanted height.
     */
-    void renderScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle);
+    void renderScaled(
+        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, int angle);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * pCamera, MCFloat x, MCFloat y, int angle);
+    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, int angle);
 
    /*! Render (fake) shadow scaled.
-    * \param x x-coordinate
-    * \param y y-coordinate
-    * \param z z-coordinate
+    * \param pos The position.
     * \param wr Half of the wanted width.
     * \param hr Half of the wanted height.
     */
-    void renderShadowScaled(MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle);
+    void renderShadowScaled(
+        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, int angle);
 
     //! Get OpenGL texture handle
     GLuint handle() const;

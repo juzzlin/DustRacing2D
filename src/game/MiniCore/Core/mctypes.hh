@@ -37,4 +37,7 @@ typedef unsigned char MCUchar;
 typedef MCVector3d<MCFloat> MCVector3dF;
 typedef MCVector2d<MCFloat> MCVector2dF;
 
+typedef const MCVector3dF & MCVector3dFR;
+typedef const MCVector2dF & MCVector2dFR;
+
 #endif // MCTYPES_HH

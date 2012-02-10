@@ -49,7 +49,7 @@ MCSurface::~MCSurface()
     delete m_pImpl;
 }
 
-void MCSurface::setCenter(const MCVector2d<MCFloat> & center)
+void MCSurface::setCenter(MCVector2dFR center)
 {
     m_pImpl->m_centerSet = true;
     m_pImpl->m_center    = center;
@@ -98,12 +98,12 @@ void MCSurfaceImpl::doAlphaBlend() const
         glBlendFunc(m_src, m_dst);
     }
 }
-MCBBox<MCFloat> MCSurface::rotatedBBox(MCFloat x, MCFloat y, int angle)
+MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, int angle)
 {
-    return m_pImpl->rotatedBBox(x, y, angle);
+    return m_pImpl->rotatedBBox(pos, angle);
 }
 
-MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCFloat x, MCFloat y, int angle)
+MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCVector2dFR pos, int angle)
 {
     using std::abs;
 
@@ -112,17 +112,17 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCFloat x, MCFloat y, int angle)
     const MCFloat  w1 = (abs(cos * m_w2) + abs(sin * m_h2)) / 2;
     const MCFloat  h1 = (abs(sin * m_w2) + abs(cos * m_h2)) / 2;
 
-    return MCBBox<MCFloat>(x - w1, y - h1, x + w1, y + h1);
+    return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
 MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
-    MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
+    MCVector2dFR pos, int angle, MCFloat w2, MCFloat h2)
 {
-    return m_pImpl->rotatedScaledBBox(x, y, angle, w2, h2);
+    return m_pImpl->rotatedScaledBBox(pos, angle, w2, h2);
 }
 
 MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(
-    MCFloat x, MCFloat y, int angle, MCFloat w2, MCFloat h2)
+    MCVector2dFR pos, int angle, MCFloat w2, MCFloat h2)
 {
     using std::abs;
 
@@ -131,18 +131,23 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(
     const MCFloat  w1 = (abs(cos * w2) + abs(sin * h2)) / 2;
     const MCFloat  h1 = (abs(sin * w2) + abs(cos * h2)) / 2;
 
-    return MCBBox<MCFloat>(x - w1, y - h1, x + w1, y + h1);
+    return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
 void MCSurface::render(
-    MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
+    MCCamera * pCamera, MCVector3dFR pos, int angle)
 {
-    m_pImpl->render(pCamera, x, y, z, angle);
+    m_pImpl->render(pCamera, pos, angle);
 }
 
 void MCSurfaceImpl::render(
-    MCCamera * pCamera, MCFloat x, MCFloat y, MCFloat z, int angle)
+    MCCamera * pCamera, MCVector3dFR pos, int angle)
 {
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+
+    const MCFloat z = pos.k();
+
     if (pCamera)
     {
         pCamera->mapToCamera(x, y);
@@ -189,16 +194,19 @@ void MCSurfaceImpl::render(
 }
 
 void MCSurface::renderScaled(
-    MCCamera * pCamera,
-    MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
+    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, int angle)
 {
-    m_pImpl->renderScaled(pCamera, x, y, z, wr, hr, angle);
+    m_pImpl->renderScaled(pCamera, pos, wr, hr, angle);
 }
 
 void MCSurfaceImpl::renderScaled(
-    MCCamera * pCamera,
-    MCFloat x, MCFloat y, MCFloat z, MCFloat wr, MCFloat hr, int angle)
+    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, int angle)
 {
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+
+    const MCFloat z = pos.k();
+
     if (pCamera)
     {
         pCamera->mapToCamera(x, y);
@@ -243,14 +251,17 @@ void MCSurfaceImpl::renderScaled(
 }
 
 void MCSurface::renderShadow(
-    MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
+    MCCamera * pCamera, MCVector2dFR pos, int angle)
 {
-    m_pImpl->renderShadow(pCamera, x, y, angle);
+    m_pImpl->renderShadow(pCamera, pos, angle);
 }
 
 void MCSurfaceImpl::renderShadow(
-    MCCamera * pCamera, MCFloat x, MCFloat y, int angle)
+    MCCamera * pCamera, MCVector2dFR pos, int angle)
 {
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+
     if (pCamera)
     {
         pCamera->mapToCamera(x, y);
@@ -297,16 +308,17 @@ void MCSurfaceImpl::renderShadow(
 }
 
 void MCSurface::renderShadowScaled(
-    MCCamera * pCamera,
-    MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
+    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, int angle)
 {
-    m_pImpl->renderShadowScaled(pCamera, x, y, wr, hr, angle);
+    m_pImpl->renderShadowScaled(pCamera, pos, wr, hr, angle);
 }
 
 void MCSurfaceImpl::renderShadowScaled(
-    MCCamera * pCamera,
-    MCFloat x, MCFloat y, MCFloat wr, MCFloat hr, int angle)
+    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, int angle)
 {
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+
     if (pCamera)
     {
         pCamera->mapToCamera(x, y);
@@ -367,7 +379,7 @@ MCFloat MCSurface::height() const
     return m_pImpl->m_h;
 }
 
-MCVector2d<MCFloat> MCSurface::center() const
+MCVector2dF MCSurface::center() const
 {
     return m_pImpl->m_center;
 }

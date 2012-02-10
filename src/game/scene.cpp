@@ -118,15 +118,18 @@ void Scene::updateCameraLocation(MCCamera & camera)
 void Scene::processUserInput(InputHandler & handler)
 {
     bool actionTaken = false;
+    bool steering    = false;
     if (handler.getActionState(0, InputHandler::IA_LEFT))
     {
         m_cars.at(0)->turnLeft();
         actionTaken = true;
+        steering    = true;
     }
     else if (handler.getActionState(0, InputHandler::IA_RIGHT))
     {
         m_cars.at(0)->turnRight();
         actionTaken = true;
+        steering    = true;
     }
 
     if (handler.getActionState(0, InputHandler::IA_UP))
@@ -143,6 +146,11 @@ void Scene::processUserInput(InputHandler & handler)
     if (!actionTaken)
     {
         m_cars.at(0)->noAction();
+    }
+
+    if (!steering)
+    {
+        m_cars.at(0)->noSteering();
     }
 }
 

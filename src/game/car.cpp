@@ -20,6 +20,7 @@
 #include "MiniCore/Core/MCFrictionGenerator"
 #include "MiniCore/Core/MCShape"
 #include "MiniCore/Core/MCSurface"
+#include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Core/MCTrigonom"
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVector2d"
@@ -40,6 +41,9 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_frictionGeneratorAdded(false)
   , m_accelerating(false)
   , m_index(index)
+  , m_leftTireAngle(180)
+  , m_rightTireAngle(180)
+  , m_frontTire(MCTextureManager::instance().surface("frontTire"))
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -66,6 +70,9 @@ void Car::turnLeft()
     const MCUint newAngle = angle() + 1;
     oversteer(newAngle);
     rotate(newAngle);
+
+    if (m_leftTireAngle < 210) m_leftTireAngle++;
+    if (m_rightTireAngle < 210) m_rightTireAngle++;
 }
 
 void Car::turnRight()
@@ -73,6 +80,9 @@ void Car::turnRight()
     const MCUint newAngle = 360 + static_cast<int>(angle()) - 1;
     oversteer(newAngle);
     rotate(newAngle);
+
+    if (m_leftTireAngle > 150) m_leftTireAngle--;
+    if (m_rightTireAngle > 150) m_rightTireAngle--;
 }
 
 void Car::oversteer(MCUint newBodyAngle)
@@ -127,12 +137,48 @@ void Car::noAction()
     m_accelerating = false;
 }
 
+void Car::noSteering()
+{
+    if (m_leftTireAngle < 180)
+    {
+        m_leftTireAngle++;
+    }
+    else if (m_leftTireAngle > 180)
+    {
+        m_leftTireAngle--;
+    }
+
+    if (m_rightTireAngle < 180)
+    {
+        m_rightTireAngle++;
+    }
+    else if (m_rightTireAngle > 180)
+    {
+        m_rightTireAngle--;
+    }
+}
+
 MCUint Car::speedInKmh() const
 {
     const MCFloat i = MCTrigonom::cos(angle());
     const MCFloat j = MCTrigonom::sin(angle());
 
     return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 200 / 10;
+}
+
+void Car::render(MCCamera *p)
+{
+    MCVector2dF leftTire;
+    MCTrigonom::rotated(MCVector2dF(25, 17), leftTire, angle());
+    leftTire += MCVector2dF(location());
+    m_frontTire.render(p, leftTire, m_leftTireAngle + angle());
+
+    MCVector2dF rightTire;
+    MCTrigonom::rotated(MCVector2dF(25, -17), rightTire, angle());
+    rightTire += MCVector2dF(location());
+    m_frontTire.render(p, rightTire, m_rightTireAngle + angle());
+
+    MCObject::render(p);
 }
 
 Car::~Car()

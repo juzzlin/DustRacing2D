@@ -43,7 +43,7 @@ private:
     MCSurface & m_hand;
     MCSurface & m_center;
     MCFloat m_angle;
-    MCUint m_bodyX, m_bodyY;
+    MCVector3dF m_bodyPos;
 };
 
 #endif // SPEEDOMETER_HPP

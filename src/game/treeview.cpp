@@ -103,5 +103,5 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
 
 void TreeView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p)
 {
-    surface()->renderShadowScaled(p, l.i(), l.j(), m_r0, m_r0, angle);
+    surface()->renderShadowScaled(p, l, m_r0, m_r0, angle);
 }

@@ -25,8 +25,7 @@ Speedometer::Speedometer()
   , m_hand(MCTextureManager::instance().surface("speedometer-hand"))
   , m_center(MCTextureManager::instance().surface("speedometer-center"))
   , m_angle(180.0)
-  , m_bodyX(16 + m_body.width() / 2)
-  , m_bodyY(16 + m_body.height() / 2)
+  , m_bodyPos(16 + m_body.width() / 2, 16 + m_body.height() / 2)
 {
 }
 
@@ -51,7 +50,7 @@ void Speedometer::render()
     }
 
     // Render the components.
-    m_body.render(nullptr, m_bodyX, m_bodyY, 0, 0);
-    m_hand.render(nullptr, m_bodyX, m_bodyY, 0, m_angle);
-    m_center.render(nullptr, m_bodyX, m_bodyY, 0, m_angle);
+    m_body.render(nullptr, m_bodyPos, 0);
+    m_hand.render(nullptr, m_bodyPos, m_angle);
+    m_center.render(nullptr, m_bodyPos, m_angle);
 }

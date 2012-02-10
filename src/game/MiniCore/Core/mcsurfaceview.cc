@@ -52,7 +52,7 @@ void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCUint angle,
     MCCamera * p)
 {
     if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->render(p, l.i(), l.j(), l.k(), angle);
+        m_pImpl->m_pSurface->render(p, l, angle);
     }
 }
 
@@ -60,7 +60,7 @@ void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle,
     MCCamera * p)
 {
     if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderShadow(p, l.i(), l.j(), angle);
+        m_pImpl->m_pSurface->renderShadow(p, l, angle);
     }
 }
 
@@ -68,7 +68,7 @@ void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCUint angle,
     MCFloat wr, MCFloat hr, MCCamera * p)
 {
     if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderScaled(p, l.i(), l.j(), l.k(), wr, hr, angle);
+        m_pImpl->m_pSurface->renderScaled(p, l, wr, hr, angle);
     }
 }
 
@@ -76,7 +76,7 @@ void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCUint angle, MCFloat wr, MCFloat hr, MCCamera * p)
 {
     if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderShadowScaled(p, l.i(), l.j(), wr, hr, angle);
+        m_pImpl->m_pSurface->renderShadowScaled(p, l, wr, hr, angle);
     }
 }
 
