@@ -29,6 +29,7 @@ Race::Race()
   : m_lapCount(0)
   , m_timing(MAX_CARS)
   , m_pTrack(nullptr)
+  , m_started(false)
 {
 }
 
@@ -43,6 +44,12 @@ void Race::init()
 void Race::start()
 {
     m_timing.start();
+    m_started = true;
+}
+
+bool Race::started()
+{
+    return m_started;
 }
 
 void Race::update()

@@ -41,6 +41,9 @@ public:
     //! Start the race and timing.
     void start();
 
+    //! Return true, if race has started.
+    bool started();
+
     //! Update situation.
     void update();
 
@@ -71,6 +74,8 @@ private:
     Timing m_timing;
 
     Track * m_pTrack;
+
+    bool m_started;
 };
 
 #endif // RACE_HPP

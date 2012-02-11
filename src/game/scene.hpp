@@ -21,6 +21,7 @@
 
 #include <vector>
 
+class AiLogic;
 class InputHandler;
 class MCCamera;
 class MCObject;
@@ -85,6 +86,8 @@ private:
 
     void processUserInput(InputHandler & handler);
 
+    void updateAiLogic();
+
     void setWorldDimensions();
 
     void addTrackObjectsToWorld();
@@ -106,6 +109,9 @@ private:
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
+
+    typedef std::vector<AiLogic *> AiVector;
+    AiVector m_aiLogic;
 };
 
 #endif // SCENE_HPP

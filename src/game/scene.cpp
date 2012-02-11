@@ -15,6 +15,7 @@
 
 #include "scene.hpp"
 
+#include "ailogic.hpp"
 #include "car.hpp"
 #include "inputhandler.hpp"
 #include "layers.hpp"
@@ -64,9 +65,11 @@ Scene::Scene(MCUint numCars)
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
+            m_aiLogic.push_back(new AiLogic(*car));
         }
 
         car->setLayer(Layers::Cars);
+
         m_cars.push_back(car);
         m_race.addCar(*car);
     }
@@ -78,7 +81,12 @@ Scene::Scene(MCUint numCars)
 void Scene::updateFrame(InputHandler & handler,
     MCCamera & camera, float timeStep)
 {
-    processUserInput(handler);
+    if (m_race.started())
+    {
+        processUserInput(handler);
+
+        updateAiLogic();
+    }
 
     updateCameraLocation(camera);
 
@@ -156,6 +164,14 @@ void Scene::processUserInput(InputHandler & handler)
     if (!steering)
     {
         m_cars.at(0)->noSteering();
+    }
+}
+
+void Scene::updateAiLogic()
+{
+    for (AiLogic * ai : m_aiLogic)
+    {
+        ai->update();
     }
 }
 
@@ -328,6 +344,11 @@ Scene::~Scene()
     for (Car * car : m_cars)
     {
         delete car;
+    }
+
+    for (AiLogic * ai : m_aiLogic)
+    {
+        delete ai;
     }
 
     delete m_pStartlights;

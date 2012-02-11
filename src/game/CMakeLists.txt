@@ -1,5 +1,6 @@
 # Set sources
 set(SRC
+ailogic.cpp
 car.cpp
 checkerflag.cpp
 game.cpp
