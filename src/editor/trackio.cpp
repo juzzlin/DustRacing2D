@@ -53,7 +53,14 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 tileTag.setAttribute("o", tile->rotation());
 
                 if (tile->routeIndex() != -1)
+                {
                     tileTag.setAttribute("index", tile->routeIndex());
+                }
+
+                if (tile->computerHint() != TrackTile::CH_NONE)
+                {
+                    tileTag.setAttribute("computerHint", tile->computerHint());
+                }
 
                 root.appendChild(tileTag);
             }
@@ -125,12 +132,13 @@ TrackData * TrackIO::open(QString path)
                 // Read a tile tag
                 if (tag.nodeName() == "tile")
                 {
-                    QString      id = tag.attribute("type", "clear");
-                    unsigned int i  = tag.attribute("i", "0").toUInt();
-                    unsigned int j  = tag.attribute("j", "0").toUInt();
-                    int          o  = tag.attribute("o", "0").toInt();
-                    int      index  = tag.attribute("index", "-1").toInt();
-                    int profileInt  = tag.attribute("profile", "0").toInt();
+                    QString      id     = tag.attribute("type", "clear");
+                    unsigned int i      = tag.attribute("i", "0").toUInt();
+                    unsigned int j      = tag.attribute("j", "0").toUInt();
+                    int          o      = tag.attribute("o", "0").toInt();
+                    int      index      = tag.attribute("index", "-1").toInt();
+                    int profileInt      = tag.attribute("profile", "0").toInt();
+                    int computerHintInt = tag.attribute("computerHint", "0").toInt();
 
                     // Init a new tile. QGraphicsScene will take
                     // the ownership eventually.
@@ -145,7 +153,6 @@ TrackData * TrackIO::open(QString path)
 
                         switch (profileInt)
                         {
-                        default:
                         case TrackTileBase::TP_FLAT:
                             tile->setProfile(TrackTileBase::TP_FLAT);
                             break;
@@ -154,6 +161,20 @@ TrackData * TrackIO::open(QString path)
                             break;
                         case TrackTileBase::TP_GORGE:
                             tile->setProfile(TrackTileBase::TP_GORGE);
+                            break;
+                        default:
+                            break;
+                        }
+
+                        switch (computerHintInt)
+                        {
+                        case TrackTileBase::CH_FIRST_BEFORE_CORNER:
+                            tile->setComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
+                            break;
+                        case TrackTileBase::CH_SECOND_BEFORE_CORNER:
+                            tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
+                            break;
+                        default:
                             break;
                         }
 

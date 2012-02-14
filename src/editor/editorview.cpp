@@ -97,9 +97,30 @@ void EditorView::createContextMenu()
     QObject::connect(m_setAsGorge, SIGNAL(triggered()), this,
                      SLOT(doSetAsGorge()));
 
+    m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_menu);
+    QObject::connect(m_clearComputerHint, SIGNAL(triggered()), this,
+                     SLOT(doClearComputerHint()));
+
+    m_setComputerHintFirstBeforeCorner = new QAction(
+        QWidget::tr("Set computer hint 'first before corner'.."), &m_menu);
+    QObject::connect(m_setComputerHintFirstBeforeCorner, SIGNAL(triggered()), this,
+                     SLOT(doSetComputerHintFirstBeforeCorner()));
+
+    m_setComputerHintSecondBeforeCorner = new QAction(
+        QWidget::tr("Set computer hint 'second before corner'.."), &m_menu);
+    QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
+                     SLOT(doSetComputerHintSecondBeforeCorner()));
+
+    // Populate the menu
     m_menu.addActions(QList<QAction *>()
-                      << rotate90CW << rotate90CCW
-                      << m_setAsFlat << m_setAsHill << m_setAsGorge);
+        << rotate90CW
+        << rotate90CCW
+        << m_setAsFlat
+        << m_setAsHill
+        << m_setAsGorge
+        << m_clearComputerHint
+        << m_setComputerHintFirstBeforeCorner
+        << m_setComputerHintSecondBeforeCorner);
 }
 
 void EditorView::mousePressEvent(QMouseEvent * event)
@@ -231,6 +252,26 @@ void EditorView::handleRightButtonClickOnTile(TrackTile * tile)
         break;
     }
 
+    // Enable all hints by default
+    m_clearComputerHint->setEnabled(true);
+    m_setComputerHintFirstBeforeCorner->setEnabled(true);
+    m_setComputerHintSecondBeforeCorner->setEnabled(true);
+
+    switch (tile->computerHint())
+    {
+    case TrackTileBase::CH_NONE:
+        m_clearComputerHint->setEnabled(false);
+        break;
+    case TrackTileBase::TP_HILL:
+        m_setComputerHintFirstBeforeCorner->setEnabled(false);
+        break;
+    case TrackTileBase::TP_GORGE:
+        m_setComputerHintSecondBeforeCorner->setEnabled(false);
+        break;
+    default:
+        break;
+    }
+
     // Show the context menu
     QPoint globalPos = mapToGlobal(m_clickedPos);
     m_menu.exec(globalPos);
@@ -319,3 +360,31 @@ void EditorView::doSetAsGorge()
         tile->setProfile(TrackTileBase::TP_GORGE);
     }
 }
+
+void EditorView::doClearComputerHint()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setComputerHint(TrackTileBase::CH_NONE);
+    }
+}
+
+void EditorView::doSetComputerHintFirstBeforeCorner()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
+    }
+}
+
+void EditorView::doSetComputerHintSecondBeforeCorner()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
+    }
+}
+

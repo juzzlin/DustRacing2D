@@ -52,6 +52,9 @@ private slots:
     void doSetAsFlat();
     void doSetAsHill();
     void doSetAsGorge();
+    void doClearComputerHint();
+    void doSetComputerHintFirstBeforeCorner();
+    void doSetComputerHintSecondBeforeCorner();
 
 private:
 
@@ -65,6 +68,9 @@ private:
     QAction * m_setAsFlat;
     QAction * m_setAsHill;
     QAction * m_setAsGorge;
+    QAction * m_clearComputerHint;
+    QAction * m_setComputerHintFirstBeforeCorner;
+    QAction * m_setComputerHintSecondBeforeCorner;
 };
 
 #endif // EDITORVIEW_HPP

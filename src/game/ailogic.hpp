@@ -17,6 +17,9 @@
 #define AILOGIC_HPP
 
 class Car;
+class Route;
+class Track;
+class TrackTile;
 
 //! Class that implements the logic for artificial intelligence.
 class AiLogic
@@ -32,9 +35,17 @@ public:
     //! Update.
     void update();
 
+    //! Set the current race track.
+    void setTrack(Track & track);
+
 private:
 
+    void steer(TrackTile & targetTile, TrackTile & currentTile) const;
+
     Car & m_car;
+    Track * m_track;
+    const Route * m_route;
+    unsigned int m_targetIndex;
 };
 
 #endif // AILOGIC_HPP

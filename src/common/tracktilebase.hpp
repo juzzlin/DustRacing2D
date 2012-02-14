@@ -34,6 +34,9 @@ public:
     //! Possible profiles of a tile.
     enum TileProfile {TP_FLAT = 0, TP_HILL, TP_GORGE};
 
+    //! Hints for computer players.
+    enum ComputerHint {CH_NONE = 0, CH_FIRST_BEFORE_CORNER, CH_SECOND_BEFORE_CORNER};
+
     //! Constructor.
     //! \param trackData Pointer to the "parent" TrackData.
     //! \param location Location (coordinates) in the track scene.
@@ -78,6 +81,12 @@ public:
     //! Get profile
     TileProfile profile() const;
 
+    //! Set computer hint
+    void setComputerHint(ComputerHint hint);
+
+    //! Get computer hint
+    ComputerHint computerHint() const;
+
 private:
 
     //! Index in the route vector.
@@ -100,6 +109,9 @@ private:
 
     //! Profile of the tile.
     TileProfile m_profile;
+
+    //! Computer hint
+    ComputerHint m_computerHint;
 };
 
 #endif // TRACKTILEBASE_HPP

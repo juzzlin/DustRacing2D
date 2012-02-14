@@ -26,6 +26,7 @@ TrackTileBase::TrackTileBase(TrackDataBase * trackData,
 , m_trackData(trackData)
 , m_routeDirection(TrackTileBase::RD_NONE)
 , m_profile(TrackTileBase::TP_FLAT)
+, m_computerHint(TrackTileBase::CH_NONE)
 {
 }
 
@@ -85,6 +86,16 @@ void TrackTileBase::setProfile(TrackTileBase::TileProfile profile)
 TrackTileBase::TileProfile TrackTileBase::profile() const
 {
     return m_profile;
+}
+
+void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)
+{
+    m_computerHint = hint;
+}
+
+TrackTileBase::ComputerHint TrackTileBase::computerHint() const
+{
+    return m_computerHint;
 }
 
 TrackTileBase::~TrackTileBase()

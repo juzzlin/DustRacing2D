@@ -146,13 +146,17 @@ void TrackLoader::handleTile(
 {
     const std::string  id      = tag.attribute("type", "clear").toStdString();
     const unsigned int profile = tag.attribute("profile", "0").toUInt();
+    const unsigned int hint    = tag.attribute("computerHint", "0").toUInt();
 
     // Route index
     const int index = tag.attribute("index", "-1").toInt();
+
     // X-coordinate in the tile matrix
     unsigned int i = tag.attribute("i", "0").toUInt();
+
     // Y-coordinate in the tile matrix
     unsigned int j = tag.attribute("j", "0").toUInt();
+
     // Orientation angle in degrees.
     int o = tag.attribute("o", "0").toInt();
 
@@ -178,6 +182,20 @@ void TrackLoader::handleTile(
         break;
     case 2:
         tile->setProfile(TrackTileBase::TP_GORGE);
+        break;
+    }
+
+    switch (hint)
+    {
+    default:
+    case 0:
+        tile->setComputerHint(TrackTileBase::CH_NONE);
+        break;
+    case 1:
+        tile->setComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
+        break;
+    case 2:
+        tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
         break;
     }
 
