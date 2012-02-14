@@ -37,6 +37,8 @@ MCRectShapeImpl::MCRectShapeImpl(
 , obbox(width / 2, height / 2, MCVector2d<MCFloat>())
 , momentOfInertiaFactor((width * width + height * height) / 12)
 , radius(std::max(width, height) / 2)
+, width(width)
+, height(height)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
@@ -134,7 +136,7 @@ void MCRectShape::translate(const MCVector3d<MCFloat> & p)
     m_pImpl->obbox.translate(p);
 }
 
-void MCRectShape::rotate(MCUint a)
+void MCRectShape::rotate(MCFloat a)
 {
     MCShape::rotate(a);
     m_pImpl->obbox.rotate(a);
@@ -224,6 +226,8 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
         MCOBBox<MCFloat>(width / 2, height / 2, location());
     m_pImpl->obbox.rotate(angle());
     m_pImpl->momentOfInertiaFactor = (width * width + height * height) / 12;
+    m_pImpl->width = width;
+    m_pImpl->height = height;
 }
 
 void MCRectShape::render(MCCamera * pCamera)
@@ -249,6 +253,16 @@ void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
 MCFloat MCRectShape::radius() const
 {
     return m_pImpl->radius;
+}
+
+MCFloat MCRectShape::width() const
+{
+    return m_pImpl->width;
+}
+
+MCFloat MCRectShape::height() const
+{
+    return m_pImpl->height;
 }
 
 MCRectShape::~MCRectShape()

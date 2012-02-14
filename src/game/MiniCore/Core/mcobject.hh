@@ -263,10 +263,10 @@ public:
 
     //! Set rotation ("yaw") angle about Z-axis.
     //! \param newAngle The new angle in degrees [0..360].
-    virtual void rotate(MCUint newAngle);
+    virtual void rotate(MCFloat newAngle);
 
     //! Get rotation angle.
-    MCUint angle() const;
+    MCFloat angle() const;
 
     //! Get direction vector.
     MCVector2d<MCFloat> direction() const;
@@ -300,9 +300,15 @@ public:
     virtual void setView(MCShapeView * newView);
 
     //! \brief Step internal time.
-    //! This is called on every integration step. Must call base-class'
+    //! This is called AFTER every integration step. Must call base-class'
     //! implementation in the overidden version.
     virtual void stepTime();
+
+    //! This is called BEFORE every integration step.
+    virtual void beforeIntegration();
+
+    //! This is called AFTER every integration step.
+    virtual void afterIntegration();
 
     //! Return internal time.
     MCUint time() const;

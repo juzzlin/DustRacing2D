@@ -36,7 +36,7 @@ private:
     MCObject & m_parent;
     MCVector3d<MCFloat> m_location;
     MCVector2d<MCFloat> m_shadowOffset;
-    MCUint m_angle;
+    MCFloat m_angle;
     std::shared_ptr<MCShapeView> m_pView;
     friend class MCShape;
 };

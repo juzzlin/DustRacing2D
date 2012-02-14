@@ -38,7 +38,7 @@ TreeView::~TreeView()
 {
 }
 
-void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
+void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera)
 {
     if (++m_topCosAngle >= 360)
     {
@@ -106,7 +106,7 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCUint, MCCamera * pCamera)
     glPopAttrib();
 }
 
-void TreeView::renderShadow(const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p)
+void TreeView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
     surface()->renderShadowScaled(p, l, m_r0, m_r0, angle);
 }

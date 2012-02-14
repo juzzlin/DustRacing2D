@@ -35,8 +35,8 @@ private:
     inline void integrate(MCFloat step);
     inline void doOutOfBoundariesEvent();
     void setFlag(MCUint flag, bool enable);
-    void rotate(MCUint newAngle); // Degrees
-    void doRotate(MCUint newAngle);
+    void rotate(MCFloat newAngle); // Degrees
+    void doRotate(MCFloat newAngle);
     MCObject * const pPublic;
     MCUint typeID;
     MCUint time;

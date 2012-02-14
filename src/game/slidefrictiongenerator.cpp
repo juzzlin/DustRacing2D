@@ -32,7 +32,7 @@ SlideFrictionGenerator::SlideFrictionGenerator(
 
 void SlideFrictionGenerator::updateForce(MCObject & object)
 {
-    const MCUint bodyNormalAngle = object.angle() + 90;
+    const MCFloat bodyNormalAngle = object.angle() + 90;
     const MCVector2d<MCFloat> n(
         MCTrigonom::cos(bodyNormalAngle),
         MCTrigonom::sin(bodyNormalAngle));

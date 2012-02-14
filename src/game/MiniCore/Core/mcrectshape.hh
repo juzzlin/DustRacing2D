@@ -52,7 +52,7 @@ public:
     virtual void translate(const MCVector3d<MCFloat> & p);
 
     //! \reimp
-    virtual void rotate(MCUint a);
+    virtual void rotate(MCFloat a);
 
     //! \reimp
     virtual MCBBox<MCFloat> bbox() const;
@@ -92,6 +92,12 @@ public:
 
     //! Return approximated radius.
     virtual MCFloat radius() const;
+
+    //! Return width.
+    MCFloat width() const;
+
+    //! Return height.
+    MCFloat height() const;
 
 private:
 

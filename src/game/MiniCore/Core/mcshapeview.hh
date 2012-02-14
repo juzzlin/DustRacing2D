@@ -48,7 +48,7 @@ public:
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void render(
-        const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr) = 0;
+        const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr) = 0;
 
     /*! Render shadow for the shape at the current location using given camera window.
      * \param l Location.
@@ -56,7 +56,7 @@ public:
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void renderShadow(
-        const MCVector3d<MCFloat> & l, MCUint angle, MCCamera * p = nullptr) = 0;
+        const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr) = 0;
 
     /*! Render the scaled shape at the current location using given camera window.
      * \param l Location.
@@ -66,7 +66,7 @@ public:
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void renderScaled(
-        const MCVector3d<MCFloat> & l, MCUint angle,
+        const MCVector3d<MCFloat> & l, MCFloat angle,
         MCFloat wr, MCFloat hr, MCCamera * p = nullptr) = 0;
 
     /*! Render scaled shadow for the shape at the current location using given camera window.
@@ -77,7 +77,7 @@ public:
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void renderShadowScaled(
-        const MCVector3d<MCFloat> & l, MCUint angle,
+        const MCVector3d<MCFloat> & l, MCFloat angle,
         MCFloat wr, MCFloat hr, MCCamera * p = nullptr) = 0;
 
     //! Return non-rotated, non-translated bounding box of the view.

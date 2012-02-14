@@ -90,7 +90,7 @@ public:
     * \param pos The position.
     * \param angle Rotation angle (0..360)
     */
-    MCBBox<MCFloat> rotatedBBox(MCVector2dFR, int angle);
+    MCBBox<MCFloat> rotatedBBox(MCVector2dFR, MCFloat angle);
 
    /*! Get bounding box for a rotated and scaled surface
     * \param pos The position.
@@ -98,10 +98,10 @@ public:
     * \param w2 half of the scaled width
     * \param h2 half of the scaled height
     */
-    MCBBox<MCFloat> rotatedScaledBBox(MCVector2dFR pos, int angle, MCFloat w2, MCFloat h2);
+    MCBBox<MCFloat> rotatedScaledBBox(MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2);
 
     //! Render using default size + z
-    void render(MCCamera * pCamera, MCVector3dFR pos, int angle);
+    void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle);
 
    /*! Render scaled.
     * \param pos The position.
@@ -109,10 +109,10 @@ public:
     * \param hr Half of the wanted height.
     */
     void renderScaled(
-        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, int angle);
+        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, int angle);
+    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle);
 
    /*! Render (fake) shadow scaled.
     * \param pos The position.
@@ -120,7 +120,7 @@ public:
     * \param hr Half of the wanted height.
     */
     void renderShadowScaled(
-        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, int angle);
+        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
 
     //! Get OpenGL texture handle
     GLuint handle() const;

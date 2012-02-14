@@ -35,6 +35,8 @@ public:
     //! Return the index.
     MCUint index() const;
 
+    void clearStatuses();
+
     //! Turn left.
     void turnLeft();
 
@@ -61,19 +63,29 @@ public:
     //! \reimp
     virtual void render(MCCamera *p);
 
-private:
+    //! \reimp
+    virtual void beforeIntegration();
 
-    void oversteer(MCUint newBodyAngle);
+    //! \reimp
+    virtual void afterIntegration();
+
+    void setPower(MCFloat power);
+
+private:
 
     MCFrictionGenerator * m_pDeccelerationFriction;
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
     bool                  m_braking;
     MCUint                m_index;
-    MCUint                m_leftTireAngle;
-    MCUint                m_rightTireAngle;
+    MCFloat               m_tireAngle;
+    MCFloat               m_effectiveTireAngle;
     MCSurface           & m_frontTire;
     MCSurface           & m_brakeGlow;
+    MCFloat               m_power;
+    MCVector2dF           m_front;
+    MCVector2dF           m_front2;
+    MCVector2dF           m_back;
 };
 
 #endif // CAR_HPP

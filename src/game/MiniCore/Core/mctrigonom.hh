@@ -46,27 +46,27 @@ public:
     static MCFloat radToDeg(MCFloat angle);
 
     //! Get sine of given angle (0..360)
-    static MCFloat sin(MCUint angle);
+    static MCFloat sin(MCFloat angle);
 
     //! Get cosine of given angle (0..360)
-    static MCFloat cos(MCUint angle);
+    static MCFloat cos(MCFloat angle);
 
     //! Return X-coordinate of the given point rotated by given angle.
-    static MCFloat rotatedX(MCFloat x0, MCFloat y0, MCUint angle);
+    static MCFloat rotatedX(MCFloat x0, MCFloat y0, MCFloat angle);
 
     //! Return Y-coordinate of the given point rotated by given angle.
-    static MCFloat rotatedY(MCFloat x0, MCFloat y0, MCUint angle);
+    static MCFloat rotatedY(MCFloat x0, MCFloat y0, MCFloat angle);
 
     //! Rotate given coordinates by given angle and store result
     //! to x1 and y1.
     static void rotated(
-        MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCUint angle);
+        MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCFloat angle);
 
     //! Rotate given vector v0 by given angle and store result
     //! to v1.
     static void rotated(
         const MCVector2d<MCFloat> & v0, MCVector2d<MCFloat> & v1,
-        MCUint angle);
+        MCFloat angle);
 
 private:
 

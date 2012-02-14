@@ -26,12 +26,12 @@ class MCSurfaceImpl
     MCSurfaceImpl(GLuint handle, MCFloat width, MCFloat height);
     virtual ~MCSurfaceImpl() {};
 
-    MCBBox<MCFloat> inline rotatedBBox(MCVector2dFR pos, int angle);
-    MCBBox<MCFloat> inline rotatedScaledBBox(MCVector2dFR pos, int angle, MCFloat w2, MCFloat h2);
-    inline void render(MCCamera * pCamera, MCVector3dFR pos, int angle);
-    inline void renderScaled(MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, int angle);
-    inline void renderShadow(MCCamera * pCamera, MCVector2dFR pos, int angle);
-    inline void renderShadowScaled(MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, int angle);
+    MCBBox<MCFloat> inline rotatedBBox(MCVector2dFR pos, MCFloat angle);
+    MCBBox<MCFloat> inline rotatedScaledBBox(MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2);
+    inline void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle);
+    inline void renderScaled(MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
+    inline void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle);
+    inline void renderShadowScaled(MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
     inline void doAlphaTest() const;
     inline void doAlphaBlend() const;
 

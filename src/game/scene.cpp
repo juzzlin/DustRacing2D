@@ -61,11 +61,13 @@ Scene::Scene(MCUint numCars)
         if (i == 0)
         {
             car = new Car(MCTextureManager::instance().surface("car001"), i);
+            car->setPower(3000);
         }
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
-            m_aiLogic.push_back(new AiLogic(*car));
+            car->setPower(3000);
+            //m_aiLogic.push_back(new AiLogic(*car));
         }
 
         car->setLayer(Layers::Cars);
@@ -128,6 +130,8 @@ void Scene::processUserInput(InputHandler & handler)
     bool actionTaken = false;
     bool steering    = false;
 
+    m_cars.at(0)->clearStatuses();
+
     // Handle turning
     if (handler.getActionState(0, InputHandler::IA_LEFT))
     {
@@ -143,7 +147,6 @@ void Scene::processUserInput(InputHandler & handler)
     }
 
     // Handle accelerating / braking
-    m_cars.at(0)->setBrakeLightState(false);
     if (handler.getActionState(0, InputHandler::IA_UP))
     {
         m_cars.at(0)->accelerate();
@@ -152,7 +155,6 @@ void Scene::processUserInput(InputHandler & handler)
     else if (handler.getActionState(0, InputHandler::IA_DOWN))
     {
         m_cars.at(0)->brake();
-        m_cars.at(0)->setBrakeLightState(true);
         actionTaken = true;
     }
 
@@ -193,6 +195,11 @@ void Scene::setActiveTrack(Track & activeTrack)
     addTrackObjectsToWorld();
 
     initRace();
+
+    for (AiLogic * ai : m_aiLogic)
+    {
+        ai->setTrack(activeTrack);
+    }
 }
 
 void Scene::setWorldDimensions()
@@ -237,16 +244,20 @@ void Scene::translateCarsToStartPositions()
         const MCFloat tileHeight = TrackTile::TILE_H;
 
         // Randomize the order
-        std::vector<Car *> randomized = m_cars;
-        std::random_shuffle(randomized.begin(), randomized.end());
+//        std::vector<Car *> randomized = m_cars;
+//        std::random_shuffle(randomized.begin(), randomized.end());
+
+        // Reverse order
+        std::vector<Car *> order = m_cars;
+        std::reverse(order.begin(), order.end());
 
         // Position the cars into two queues.
-        for (MCUint i = 0; i < randomized.size(); i++)
+        for (MCUint i = 0; i < order.size(); i++)
         {
             MCFloat rowPos = (i / 2) * tileWidth;
             MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
 
-            randomized.at(i)->translate(
+            order.at(i)->translate(
                 MCVector2d<MCFloat>(
                     startTileX - rowPos,
                     startTileY + colPos));

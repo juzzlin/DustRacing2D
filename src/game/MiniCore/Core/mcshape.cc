@@ -121,13 +121,12 @@ void MCShape::setShadowOffset(const MCVector2d<MCFloat> & p)
     m_pImpl->m_shadowOffset = p;
 }
 
-void MCShape::rotate(MCUint newAngle)
+void MCShape::rotate(MCFloat newAngle)
 {
-    const MCUint MAX_ANGLE = 360;
-    m_pImpl->m_angle = newAngle % MAX_ANGLE;
+    m_pImpl->m_angle = newAngle;
 }
 
-MCUint MCShape::angle() const
+MCFloat MCShape::angle() const
 {
     return m_pImpl->m_angle;
 }

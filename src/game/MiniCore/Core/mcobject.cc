@@ -134,7 +134,7 @@ void MCObjectImpl::integrate(MCFloat step)
             {
                 MCFloat totAngularAcceleration(angularAcceleration);
                 angle += MCTrigonom::radToDeg(angularVelocity * step);
-                doRotate(static_cast<MCUint>(angle));
+                doRotate(angle);
 
                 totAngularAcceleration += moment / pShape->momentOfInertia();
                 angularVelocity        += totAngularAcceleration * step;
@@ -533,18 +533,17 @@ MCFloat MCObject::getZ() const
     return m_pImpl->location.k();
 }
 
-void MCObject::rotate(MCUint newAngle)
+void MCObject::rotate(MCFloat newAngle)
 { 
     m_pImpl->rotate(newAngle);
 }
 
-void MCObjectImpl::rotate(MCUint newAngle)
+void MCObjectImpl::rotate(MCFloat newAngle)
 {
-    const MCUint MAX_ANGLE = 360;
-    angle = static_cast<MCUint>(newAngle) % MAX_ANGLE;
+    angle = newAngle;
 }
 
-void MCObjectImpl::doRotate(MCUint newAngle)
+void MCObjectImpl::doRotate(MCFloat newAngle)
 {
     if (pShape) {
         if (pShape->instanceTypeID() == MCCircleShape::typeID()) {
@@ -560,7 +559,7 @@ void MCObjectImpl::doRotate(MCUint newAngle)
     }
 }
 
-MCUint MCObject::angle() const
+MCFloat MCObject::angle() const
 {
     return m_pImpl->angle;
 }
@@ -642,6 +641,14 @@ MCBBox<MCFloat> MCObject::bbox() const
 void MCObject::stepTime()
 {
     m_pImpl->time++;
+}
+
+void MCObject::beforeIntegration()
+{
+}
+
+void MCObject::afterIntegration()
+{
 }
 
 MCUint MCObject::time() const

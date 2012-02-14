@@ -52,8 +52,10 @@ void MCWorldImpl::integrate(MCFloat step)
     for (MCUint i = 0; i < objs.size(); i++) {
         MCObject * const object(objs[i]);
         if (object->physicsObject() && !object->stationary()) {
+            object->beforeIntegration();
             object->integrate(step);
             object->stepTime();
+            object->afterIntegration();
         } else {
             object->stepTime();
         }

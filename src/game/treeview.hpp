@@ -32,11 +32,11 @@ public:
     virtual ~TreeView();
 
     //! \reimp
-    virtual void render(const MCVector3d<MCFloat> & l, MCUint angle,
+    virtual void render(const MCVector3d<MCFloat> & l, MCFloat angle,
         MCCamera * p = nullptr);
 
     //! \reimp
-    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCUint angle,
+    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
         MCCamera * p = nullptr);
 
 private:

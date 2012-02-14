@@ -106,10 +106,10 @@ public:
     /*! Rotate.
      * \param a The new rotation angle in degrees
      */
-    virtual void rotate(MCUint a);
+    virtual void rotate(MCFloat a);
 
     //! Return the current angle.
-    MCUint angle() const;
+    MCFloat angle() const;
 
     //! Return non-rotated, translated bounding box of the shape.
     virtual MCBBox<MCFloat> bbox() const = 0;

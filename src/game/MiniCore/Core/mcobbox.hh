@@ -56,7 +56,7 @@ public:
     MCOBBox<T> & operator=(const MCOBBox<T> & other);
 
     //! Return current angle
-    inline MCUint angle() const
+    inline MCFloat angle() const
     {
         return m_a;
     }
@@ -102,7 +102,7 @@ public:
     /*! Rotate
      * \param a Rotation angle in degrees (0..360)
      */
-    void rotate(MCUint a);
+    void rotate(MCFloat a);
 
     /*! Translate
      * \param p The new location
@@ -124,7 +124,7 @@ private:
     MCVector2d<T> m_p;
 
     //! Rotation angle
-    MCUint m_a;
+    MCFloat m_a;
 
     //! Vertex vectors
     MCVector2d<T> m_v[4];
@@ -226,7 +226,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
 }
 
 template <typename T>
-void MCOBBox<T>::rotate(MCUint a)
+void MCOBBox<T>::rotate(MCFloat a)
 {
     if (a != m_a)
     {

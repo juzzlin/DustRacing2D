@@ -42,6 +42,8 @@ private:
   MCOBBox<MCFloat> obbox;
   MCFloat momentOfInertiaFactor;
   MCFloat radius;
+  MCFloat width;
+  MCFloat height;
   friend class MCRectShape;
 };
 
