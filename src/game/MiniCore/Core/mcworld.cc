@@ -446,12 +446,18 @@ MCObjectTree & MCWorld::objectTree() const
 
 void MCWorld::setMetersPerPixel(MCFloat value)
 {
-    m_pImpl->metersPerPixel = value;
+    m_pImpl->metersPerPixel        = value;
+    m_pImpl->metersPerPixelSquared = value * value;
 }
 
 MCFloat MCWorld::metersPerPixel() const
 {
     return m_pImpl->metersPerPixel;
+}
+
+MCFloat MCWorld::metersPerPixelSquared() const
+{
+    return m_pImpl->metersPerPixelSquared;
 }
 
 MCWorld::~MCWorld()

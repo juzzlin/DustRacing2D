@@ -152,8 +152,7 @@ MCFloat MCRectShape::momentOfInertia() const
     return
         m_pImpl->momentOfInertiaFactor *
         parent().mass() *
-        MCWorld::instance().metersPerPixel() *
-        MCWorld::instance().metersPerPixel();
+        MCWorld::instance().metersPerPixelSquared();
 }
 
 bool MCRectShape::contains(const MCVector2d<MCFloat> & p) const

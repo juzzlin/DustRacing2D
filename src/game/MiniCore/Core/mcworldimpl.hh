@@ -59,6 +59,7 @@ private:
     MCObjectTree * pObjectTree;
     MCFloat minX, maxX, minY, maxY, minZ, maxZ;
     MCFloat metersPerPixel;
+    MCFloat metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;

@@ -66,6 +66,9 @@ public:
     //! Get how many meters equal one pixel.
     MCFloat metersPerPixel() const;
 
+    //! Get how many meters equal one pixel squared.
+    MCFloat metersPerPixelSquared() const;
+
     //! Add object to the world. Object's current location is used.
     //! \param object Object to be added.
     void addObject(MCObject & object);
