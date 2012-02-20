@@ -1,14 +1,14 @@
 <track version="0.1" cols="6" rows="6" name="Hourglass">
  <tile profile="0" i="0" j="0" o="0" type="corner90" index="7"/>
- <tile profile="0" i="0" j="1" o="180" type="corner45Left" index="8"/>
+ <tile profile="0" i="0" j="1" o="180" type="corner45Left" index="8" computerHint="4"/>
  <tile profile="0" i="0" j="2" o="90" type="straight45Female"/>
  <tile profile="0" i="0" j="3" o="180" type="straight45Female"/>
- <tile profile="0" i="0" j="4" o="0" type="corner45Right" index="11" computerHint="1"/>
+ <tile profile="0" i="0" j="4" o="0" type="corner45Right" index="11" computerHint="4"/>
  <tile profile="0" i="0" j="5" o="-90" type="corner90" index="12"/>
  <tile profile="0" i="1" j="0" o="90" type="straight" computerHint="1"/>
  <tile profile="0" i="1" j="1" o="-90" type="straight45Female"/>
- <tile profile="0" i="1" j="2" o="0" type="corner45Left" index="9"/>
- <tile profile="0" i="1" j="3" o="-180" type="corner45Right" index="10"/>
+ <tile profile="0" i="1" j="2" o="0" type="corner45Left" index="9" computerHint="3"/>
+ <tile profile="0" i="1" j="3" o="-180" type="corner45Right" index="10" computerHint="3"/>
  <tile profile="0" i="1" j="4" o="0" type="straight45Female"/>
  <tile profile="0" i="1" j="5" o="90" type="straight"/>
  <tile profile="0" i="2" j="0" o="90" type="straight" computerHint="2"/>
@@ -25,15 +25,15 @@
  <tile profile="0" i="3" j="5" o="90" type="straight" computerHint="2"/>
  <tile profile="0" i="4" j="0" o="90" type="straight"/>
  <tile profile="0" i="4" j="1" o="180" type="straight45Female"/>
- <tile profile="0" i="4" j="2" o="0" type="corner45Right" index="4"/>
- <tile profile="0" i="4" j="3" o="-180" type="corner45Left" index="3"/>
+ <tile profile="0" i="4" j="2" o="0" type="corner45Right" index="4" computerHint="4"/>
+ <tile profile="0" i="4" j="3" o="-180" type="corner45Left" index="3" computerHint="4"/>
  <tile profile="0" i="4" j="4" o="90" type="straight45Female"/>
  <tile profile="0" i="4" j="5" o="90" type="finish" index="0" computerHint="1"/>
  <tile profile="0" i="5" j="0" o="90" type="corner90" index="6"/>
- <tile profile="0" i="5" j="1" o="-180" type="corner45Right" index="5" computerHint="1"/>
+ <tile profile="0" i="5" j="1" o="-180" type="corner45Right" index="5" computerHint="3"/>
  <tile profile="0" i="5" j="2" o="0" type="straight45Female"/>
  <tile profile="0" i="5" j="3" o="-90" type="straight45Female"/>
- <tile profile="0" i="5" j="4" o="0" type="corner45Left" index="2"/>
+ <tile profile="0" i="5" j="4" o="0" type="corner45Left" index="2" computerHint="3"/>
  <tile profile="0" i="5" j="5" o="180" type="corner90" index="1"/>
  <object x="276" y="1256" category="free" role="tree"/>
  <object x="323" y="1175" category="free" role="tree"/>

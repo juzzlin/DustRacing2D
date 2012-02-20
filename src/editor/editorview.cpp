@@ -111,6 +111,16 @@ void EditorView::createContextMenu()
     QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
                      SLOT(doSetComputerHintSecondBeforeCorner()));
 
+    m_setComputerHintLeftLine = new QAction(
+        QWidget::tr("Set computer hint 'left line'.."), &m_menu);
+    QObject::connect(m_setComputerHintLeftLine, SIGNAL(triggered()), this,
+                     SLOT(doSetComputerHintLeftLine()));
+
+    m_setComputerHintRightLine = new QAction(
+        QWidget::tr("Set computer hint 'right line'.."), &m_menu);
+    QObject::connect(m_setComputerHintRightLine, SIGNAL(triggered()), this,
+                     SLOT(doSetComputerHintRightLine()));
+
     // Populate the menu
     m_menu.addActions(QList<QAction *>()
         << rotate90CW
@@ -120,7 +130,9 @@ void EditorView::createContextMenu()
         << m_setAsGorge
         << m_clearComputerHint
         << m_setComputerHintFirstBeforeCorner
-        << m_setComputerHintSecondBeforeCorner);
+        << m_setComputerHintSecondBeforeCorner
+        << m_setComputerHintLeftLine
+        << m_setComputerHintRightLine);
 }
 
 void EditorView::mousePressEvent(QMouseEvent * event)
@@ -256,17 +268,25 @@ void EditorView::handleRightButtonClickOnTile(TrackTile * tile)
     m_clearComputerHint->setEnabled(true);
     m_setComputerHintFirstBeforeCorner->setEnabled(true);
     m_setComputerHintSecondBeforeCorner->setEnabled(true);
+    m_setComputerHintLeftLine->setEnabled(true);
+    m_setComputerHintRightLine->setEnabled(true);
 
     switch (tile->computerHint())
     {
     case TrackTileBase::CH_NONE:
         m_clearComputerHint->setEnabled(false);
         break;
-    case TrackTileBase::TP_HILL:
+    case TrackTileBase::CH_FIRST_BEFORE_CORNER:
         m_setComputerHintFirstBeforeCorner->setEnabled(false);
         break;
-    case TrackTileBase::TP_GORGE:
+    case TrackTileBase::CH_SECOND_BEFORE_CORNER:
         m_setComputerHintSecondBeforeCorner->setEnabled(false);
+        break;
+    case TrackTileBase::CH_LEFT_LINE:
+        m_setComputerHintLeftLine->setEnabled(false);
+        break;
+    case TrackTileBase::CH_RIGHT_LINE:
+        m_setComputerHintRightLine->setEnabled(false);
         break;
     default:
         break;
@@ -385,6 +405,24 @@ void EditorView::doSetComputerHintSecondBeforeCorner()
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
+    }
+}
+
+void EditorView::doSetComputerHintLeftLine()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setComputerHint(TrackTileBase::CH_LEFT_LINE);
+    }
+}
+
+void EditorView::doSetComputerHintRightLine()
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setComputerHint(TrackTileBase::CH_RIGHT_LINE);
     }
 }
 

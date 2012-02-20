@@ -10,6 +10,7 @@ mainwindow.cpp
 map.cpp
 overlaybase.cpp
 race.cpp
+radius.cpp
 renderer.cpp
 scene.cpp
 slidefrictiongenerator.cpp

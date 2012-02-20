@@ -58,6 +58,7 @@ private:
     MCContactResolver contactResolver;
     MCObjectTree * pObjectTree;
     MCFloat minX, maxX, minY, maxY, minZ, maxZ;
+    MCFloat metersPerPixel;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;

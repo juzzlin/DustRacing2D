@@ -174,6 +174,12 @@ TrackData * TrackIO::open(QString path)
                         case TrackTileBase::CH_SECOND_BEFORE_CORNER:
                             tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
                             break;
+                        case TrackTileBase::CH_LEFT_LINE:
+                            tile->setComputerHint(TrackTileBase::CH_LEFT_LINE);
+                            break;
+                        case TrackTileBase::CH_RIGHT_LINE:
+                            tile->setComputerHint(TrackTileBase::CH_RIGHT_LINE);
+                            break;
                         default:
                             break;
                         }

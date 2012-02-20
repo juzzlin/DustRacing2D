@@ -13,43 +13,20 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef AILOGIC_HPP
-#define AILOGIC_HPP
+#ifndef RADIUS_HPP
+#define RADIUS_HPP
 
-#include "MiniCore/Core/MCTypes"
-
-class Car;
-class Route;
-class Track;
-class TrackTile;
-
-//! Class that implements the logic for artificial intelligence.
-class AiLogic
+//! Calculate the radius of a circle defined by the given three points.
+namespace Radius
 {
-public:
+    struct CirclePoints
+    {
+        float x1, y1;
+        float x2, y2;
+        float x3, y3;
+    };
 
-    //! Constructor.
-    AiLogic(Car & car);
+    float calculate(const CirclePoints & cp);
+}
 
-    //! Destructor.
-    virtual ~AiLogic();
-
-    //! Update.
-    void update();
-
-    //! Set the current race track.
-    void setTrack(Track & track);
-
-private:
-
-    void steer(TrackTile & targetTile, TrackTile & currentTile);
-
-    Car & m_car;
-    Track * m_track;
-    const Route * m_route;
-    unsigned int m_targetIndex;
-    MCFloat m_lastDiff;
-    MCFloat m_integrate;
-};
-
-#endif // AILOGIC_HPP
+#endif // RADIUS_HPP

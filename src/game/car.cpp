@@ -15,6 +15,7 @@
 
 #include "car.hpp"
 #include "layers.hpp"
+#include "radius.hpp"
 #include "slidefrictiongenerator.hpp"
 #include "MiniCore/Core/MCCollisionEvent"
 #include "MiniCore/Core/MCFrictionGenerator"
@@ -31,9 +32,9 @@ namespace
 {
     const MCFloat MAX_VELOCITY       = 10.0f;
     const MCFloat BRAKE_FRICTION     = 0.5f;
-    const MCFloat SLIDE_FRICTION     = 0.25f;
+    const MCFloat SLIDE_FRICTION     = 0.5f;
     const MCFloat ROLLING_FRICTION   = 0.1f;
-    const MCFloat ROTATION_FRICTION  = 1.0f;
+    const MCFloat ROTATION_FRICTION  = 0.1f;
 }
 
 Car::Car(MCSurface & surface, MCUint index)
@@ -42,25 +43,32 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_frictionGeneratorAdded(false)
   , m_accelerating(false)
   , m_braking(false)
+  , m_turnLeft(false)
+  , m_turnRight(false)
   , m_index(index)
   , m_tireAngle(0)
-  , m_effectiveTireAngle(0)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
   , m_power(3000.0f)
+  , m_turningMoment(1e5)
 {
     setLayer(Layers::Cars);
     setMass(1000);
     setMaximumVelocity(MAX_VELOCITY);
+    setMaximumAngularVelocity(10);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
     setRestitution(0.1f);
 
-//    MCWorld::instance().addForceGenerator(
-//        *new SlideFrictionGenerator(SLIDE_FRICTION), *this, true);
+    MCWorld::instance().addForceGenerator(
+        *new SlideFrictionGenerator(SLIDE_FRICTION), *this, true);
 
     MCWorld::instance().addForceGenerator(
         *new MCFrictionGenerator(
             ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
+
+    const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
+    const MCFloat height = static_cast<MCRectShape *>(shape())->height();
+    m_length = std::max(width, height);
 
     //setRenderShapeOutline(true);
 }
@@ -68,6 +76,16 @@ Car::Car(MCSurface & surface, MCUint index)
 void Car::setPower(MCFloat power)
 {
     m_power = power;
+}
+
+void Car::setTurningMoment(MCFloat value)
+{
+    m_turningMoment = value;
+}
+
+MCFloat Car::turningMoment() const
+{
+    return m_turningMoment;
 }
 
 void Car::clearStatuses()
@@ -85,33 +103,44 @@ void Car::turnLeft()
 {
     if (m_tireAngle < 45) m_tireAngle++;
 
-    m_effectiveTireAngle = 45;
+    m_turnLeft = true;
+
+    if (speedInKmh() > 5)
+    {
+        addMoment(m_turningMoment);
+    }
 }
 
 void Car::turnRight()
 {
     if (m_tireAngle > -45) m_tireAngle--;
 
-    m_effectiveTireAngle = -45;
+    m_turnRight = true;
+
+    if (speedInKmh() > 5)
+    {
+        addMoment(-m_turningMoment);
+    }
 }
 
 void Car::accelerate()
 {
-    const MCFloat realAngle = angle() + m_effectiveTireAngle;
+    // Remove friction generator if it was added
+    if (m_frictionGeneratorAdded)
+    {
+        MCWorld::instance().removeForceGenerator(
+            *m_pDeccelerationFriction, *this);
+        m_frictionGeneratorAdded = false;
+    }
+
+    const MCFloat realAngle = angle();/* + m_effectiveTireAngle*/;
     MCFloat dx = MCTrigonom::cos(realAngle);
     MCFloat dy = MCTrigonom::sin(realAngle);
     MCVector2d<MCFloat> force(dx, dy);
     addForce(force * m_power);
 
-    // Remove friction generator if it was added
-    if (m_frictionGeneratorAdded)
-    {
-        MCWorld::instance().removeForceGenerator(
-           *m_pDeccelerationFriction, *this);
-        m_frictionGeneratorAdded = false;
-    }
-
     m_accelerating = true;
+    m_braking      = false;
 }
 
 void Car::brake()
@@ -151,10 +180,11 @@ void Car::noSteering()
         m_tireAngle--;
     }
 
-    m_effectiveTireAngle = 0;
+    m_turnLeft = false;
+    m_turnRight = false;
 }
 
-MCUint Car::speedInKmh() const
+MCFloat Car::speedInKmh() const
 {
     const MCFloat i = MCTrigonom::cos(angle());
     const MCFloat j = MCTrigonom::sin(angle());
@@ -166,13 +196,13 @@ void Car::render(MCCamera *p)
 {
     // Render left front tire
     MCVector2dF leftTire;
-    MCTrigonom::rotated(MCVector2dF(25, 16), leftTire, angle());
+    MCTrigonom::rotated(MCVector2dF(20, 13), leftTire, angle());
     leftTire += MCVector2dF(location());
     m_frontTire.render(p, leftTire, m_tireAngle + angle());
 
     // Render right front tire
     MCVector2dF rightTire;
-    MCTrigonom::rotated(MCVector2dF(25, -16), rightTire, angle());
+    MCTrigonom::rotated(MCVector2dF(20, -13), rightTire, angle());
     rightTire += MCVector2dF(location());
     m_frontTire.render(p, rightTire, m_tireAngle + angle());
 
@@ -183,49 +213,15 @@ void Car::render(MCCamera *p)
     if (m_braking)
     {
         MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotated(MCVector2dF(-45, 15), leftBrakeGlow, angle());
+        MCTrigonom::rotated(MCVector2dF(-36, 12), leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotated(MCVector2dF(-45, -15), rightBrakeGlow, angle());
+        MCTrigonom::rotated(MCVector2dF(-36, -12), rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
-}
-
-void Car::beforeIntegration()
-{
-    const MCFloat width = static_cast<MCRectShape *>(shape())->width();
-    const MCVector2dF front(width / 2, 0);
-    MCTrigonom::rotated(front, m_front, angle());
-    m_front += MCVector2dF(location());
-
-    const MCVector2dF back(-width / 2, 0);
-    MCTrigonom::rotated(back, m_back, angle());
-    m_back = MCVector2dF(location());
-}
-
-void Car::afterIntegration()
-{
-    const MCFloat width = static_cast<MCRectShape *>(shape())->width();
-    const MCVector2dF front(width / 2, 0);
-    MCTrigonom::rotated(front, m_front2, angle());
-    m_front2 += MCVector2dF(location());
-
-    MCVector2dF bodyDirection(m_front2 - m_back);
-    MCFloat newBodyAngle = MCTrigonom::radToDeg(std::atan2(
-        bodyDirection.j(), bodyDirection.i()));
-
-    rotate(newBodyAngle);
-
-    const MCFloat speed = velocity().length();
-    const MCFloat coeff = 0.99f;
-    const MCFloat realAngle = angle() + 2 * m_tireAngle;
-    const MCFloat newI = MCTrigonom::cos(realAngle);
-    const MCFloat newJ = MCTrigonom::sin(realAngle);
-    setVelocity(MCVector2d<MCFloat>(newI, newJ) * speed * (1.0f - coeff) +
-        MCVector2d<MCFloat>(velocity()) * coeff);
 }
 
 Car::~Car()

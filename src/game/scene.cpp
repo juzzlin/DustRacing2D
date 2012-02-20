@@ -61,13 +61,13 @@ Scene::Scene(MCUint numCars)
         if (i == 0)
         {
             car = new Car(MCTextureManager::instance().surface("car001"), i);
-            car->setPower(3000);
+            car->setPower(3000.0f);
         }
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
-            car->setPower(3000);
-            //m_aiLogic.push_back(new AiLogic(*car));
+            m_aiLogic.push_back(new AiLogic(*car));
+            car->setPower(3000.0f + i * 100.0f);
         }
 
         car->setLayer(Layers::Cars);
@@ -217,6 +217,7 @@ void Scene::setWorldDimensions()
     const MCUint MAX_Z = 1000;
 
     m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
+    m_pWorld->setMetersPerPixel(0.1f);
 }
 
 void Scene::addCarsToWorld()

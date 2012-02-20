@@ -35,7 +35,8 @@ public:
     enum TileProfile {TP_FLAT = 0, TP_HILL, TP_GORGE};
 
     //! Hints for computer players.
-    enum ComputerHint {CH_NONE = 0, CH_FIRST_BEFORE_CORNER, CH_SECOND_BEFORE_CORNER};
+    enum ComputerHint {CH_NONE = 0, CH_FIRST_BEFORE_CORNER, CH_SECOND_BEFORE_CORNER,
+        CH_LEFT_LINE, CH_RIGHT_LINE};
 
     //! Constructor.
     //! \param trackData Pointer to the "parent" TrackData.

@@ -197,6 +197,12 @@ void TrackLoader::handleTile(
     case 2:
         tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
         break;
+    case 3:
+        tile->setComputerHint(TrackTileBase::CH_LEFT_LINE);
+        break;
+    case 4:
+        tile->setComputerHint(TrackTileBase::CH_RIGHT_LINE);
+        break;
     }
 
     // Associate with a surface object corresponging

@@ -149,7 +149,11 @@ MCBBox<MCFloat> MCRectShape::bbox() const
 
 MCFloat MCRectShape::momentOfInertia() const
 {
-    return m_pImpl->momentOfInertiaFactor * parent().mass();
+    return
+        m_pImpl->momentOfInertiaFactor *
+        parent().mass() *
+        MCWorld::instance().metersPerPixel() *
+        MCWorld::instance().metersPerPixel();
 }
 
 bool MCRectShape::contains(const MCVector2d<MCFloat> & p) const

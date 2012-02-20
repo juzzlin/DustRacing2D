@@ -40,6 +40,7 @@ MCWorldImpl::MCWorldImpl()
 , maxY(0)
 , minZ(0)
 , maxZ(0)
+, metersPerPixel(1.0)
 {}
 
 MCWorldImpl::~MCWorldImpl()
@@ -441,6 +442,16 @@ MCObjectTree & MCWorld::objectTree() const
 {
     assert(m_pImpl->pObjectTree);
     return *m_pImpl->pObjectTree;
+}
+
+void MCWorld::setMetersPerPixel(MCFloat value)
+{
+    m_pImpl->metersPerPixel = value;
+}
+
+MCFloat MCWorld::metersPerPixel() const
+{
+    return m_pImpl->metersPerPixel;
 }
 
 MCWorld::~MCWorld()

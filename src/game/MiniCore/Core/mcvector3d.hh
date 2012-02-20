@@ -146,6 +146,12 @@ public:
     //! Return normalized vector
     inline MCVector3d<T> normalized() const;
 
+    //! Normalize
+    void normalizeFast();
+
+    //! Return normalized vector
+    inline MCVector3d<T> normalizedFast() const;
+
     //! Invert vector
     void invert();
 
@@ -380,10 +386,31 @@ void MCVector3d<T>::normalize()
 }
 
 template <typename T>
+void MCVector3d<T>::normalizeFast()
+{
+    if (!isZero()) {
+        const T l(lengthFast());
+        m_i /= l;
+        m_j /= l;
+        m_k /= l;
+    }
+}
+
+template <typename T>
 MCVector3d<T> MCVector3d<T>::normalized() const
 {
     if (!isZero()) {
         const T l(length());
+        return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
+    }
+    return MCVector3d<T>();
+}
+
+template <typename T>
+MCVector3d<T> MCVector3d<T>::normalizedFast() const
+{
+    if (!isZero()) {
+        const T l(lengthFast());
         return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
     }
     return MCVector3d<T>();

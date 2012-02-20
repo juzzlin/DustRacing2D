@@ -28,6 +28,8 @@ AiLogic::AiLogic(Car & car)
   , m_track(nullptr)
   , m_route(nullptr)
   , m_targetIndex(0)
+  , m_lastDiff(0)
+  , m_integrate(0)
 {
 }
 
@@ -53,65 +55,99 @@ void AiLogic::update()
     }
 }
 
-void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile) const
+void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 {
-    MCVector2dF target(
-        targetTile.location().x(),
-        targetTile.location().y());
+    // Initial target coordinates
+    MCVector3dF target(targetTile.location().x(), targetTile.location().y());
 
-    if (targetTile.matrixLocation().x() == currentTile.matrixLocation().x())
+    // Take line hints into account
+    if (currentTile.computerHint() == TrackTile::CH_LEFT_LINE)
     {
-        target.setI(m_car.location().i());
+        target -= MCVector3dF(TrackTile::TILE_W / 2, 0);
+    }
+    else if (currentTile.computerHint() == TrackTile::CH_RIGHT_LINE)
+    {
+        target += MCVector3dF(TrackTile::TILE_W / 2, 0);
     }
 
-    if (targetTile.matrixLocation().y() == currentTile.matrixLocation().y())
-    {
-        target.setJ(m_car.location().j());
-    }
+    // A simple PID-controller
+    target -= MCVector3dF(m_car.location());
+    const MCFloat crossProd = (target.normalizedFast() * m_car.velocity().normalizedFast()).k();
+    MCFloat adjust = 1.0f * crossProd * 1e5 + 1.0f * (crossProd - m_lastDiff) * 1e6;
 
-    target -= MCVector2dF(m_car.location());
+    // Clamp the value
+    const MCFloat maxAdjust = 1e6;
+    if (adjust > maxAdjust) adjust  = maxAdjust;
+    if (adjust < -maxAdjust) adjust = -maxAdjust;
 
-    const MCFloat crossProd =
-        target.normalizedFast() *
-        MCVector2dF(
-            MCTrigonom::cos(m_car.angle()),
-            MCTrigonom::sin(m_car.angle()));
-
-    if (crossProd < 0.05f)
+    // Set turning moment and turn
+    m_car.setTurningMoment(std::fabs(adjust));
+    if (crossProd < -0.1f)
     {
         m_car.turnLeft();
     }
-    else if (crossProd > -0.05f)
+    else if (crossProd > 0.1f)
     {
         m_car.turnRight();
     }
 
+    // Store the last difference
+    m_lastDiff = crossProd;
+
+    // Braking / acceleration logic
+
     bool accelerate = true;
     bool brake      = false;
-    if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
+
+    if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
     {
-        if (m_car.speedInKmh() > 100)
+        if (m_car.speedInKmh() > 50)
         {
             brake = true;
+        }
+    }
+
+    if (currentTile.tileType() == "corner90")
+    {
+        if (m_car.speedInKmh() > 50)
+        {
             accelerate = false;
         }
     }
-    else if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
+
+    if (currentTile.tileType() == "corner45Left" || currentTile.tileType() == "corner45Right")
     {
-        accelerate = false;
+        if (m_car.speedInKmh() > 75)
+        {
+            accelerate = false;
+        }
     }
 
-    if (m_car.speedInKmh() < 50)
+    if (m_car.speedInKmh() < 25)
     {
         accelerate = true;
         brake = false;
+    }
+
+    if (std::abs(currentTile.matrixLocation().x() - targetTile.matrixLocation().x()) > 2 &&
+        currentTile.matrixLocation().y() == targetTile.matrixLocation().y())
+    {
+        brake = false;
+        accelerate = true;
+    }
+
+    if (std::abs(currentTile.matrixLocation().y() - targetTile.matrixLocation().y()) > 2 &&
+        currentTile.matrixLocation().x() == targetTile.matrixLocation().x())
+    {
+        brake = false;
+        accelerate = true;
     }
 
     if (brake)
     {
         m_car.brake();
     }
-    else if (accelerate && crossProd < 0.5f && crossProd > -0.5f)
+    else if (accelerate)
     {
         m_car.accelerate();
     }

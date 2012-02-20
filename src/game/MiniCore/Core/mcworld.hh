@@ -60,6 +60,12 @@ public:
     void setDimensions(MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY,
                        MCFloat minZ, MCFloat maxZ);
 
+    //! Set how many meters equal one pixel.
+    void setMetersPerPixel(MCFloat value);
+
+    //! Get how many meters equal one pixel.
+    MCFloat metersPerPixel() const;
+
     //! Add object to the world. Object's current location is used.
     //! \param object Object to be added.
     void addObject(MCObject & object);

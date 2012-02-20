@@ -18,6 +18,8 @@
 
 #include "MiniCore/Core/MCObject"
 
+#include <deque>
+
 class MCSurface;
 class MCFrictionGenerator;
 
@@ -58,18 +60,16 @@ public:
     void noSteering();
 
     //! Get estimated speed in km/h. This is used by the speedometer.
-    MCUint speedInKmh() const;
+    MCFloat speedInKmh() const;
 
     //! \reimp
     virtual void render(MCCamera *p);
 
-    //! \reimp
-    virtual void beforeIntegration();
-
-    //! \reimp
-    virtual void afterIntegration();
-
     void setPower(MCFloat power);
+
+    void setTurningMoment(MCFloat value);
+
+    MCFloat turningMoment() const;
 
 private:
 
@@ -77,15 +77,15 @@ private:
     bool                  m_frictionGeneratorAdded;
     bool                  m_accelerating;
     bool                  m_braking;
+    bool                  m_turnLeft;
+    bool                  m_turnRight;
     MCUint                m_index;
     MCFloat               m_tireAngle;
-    MCFloat               m_effectiveTireAngle;
     MCSurface           & m_frontTire;
     MCSurface           & m_brakeGlow;
     MCFloat               m_power;
-    MCVector2dF           m_front;
-    MCVector2dF           m_front2;
-    MCVector2dF           m_back;
+    MCFloat               m_turningMoment;
+    MCFloat               m_length;
 };
 
 #endif // CAR_HPP
