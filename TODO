@@ -1,6 +1,28 @@
 TODO
 ====
 
+Game:
+
+- Separate Computer Hints and Route Hints
+- Support for rotational impulses
+- Reverse gear
+- Additional friction of car is off the track
+- Move car to the nearest track tile if stuck for too long
+- Max lap count
+- Position detection
+- Skid marks
+- Grandstands
+- Checkerflag animation
 - Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
-- XML car models + model loader
+- Initial start menu
+
+Editor:
+
+- Separate Computer Hints and Route Hints
+- Must be possible to move objects around
+
+Graphics:
+
+- New image for tire object
+
