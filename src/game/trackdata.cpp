@@ -17,9 +17,9 @@
 #include "tracktile.hpp"
 
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
-: m_name(name)
-, m_map(this, cols, rows)
-, m_route()
+  : m_name(name)
+  , m_map(*this, cols, rows)
+  , m_route()
 {}
 
 QString TrackData::name() const

@@ -45,7 +45,7 @@ public:
     //! \param location Location (coordinates) in the track scene.
     //! \param matrixLocation Location in the tile matrix.
     //! \param type Type of the tile. See setType().
-    TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+    TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
     //! Destructor
@@ -99,13 +99,14 @@ public:
     //! Swap data with given tile. Used in drag'n'drop.
     void swap(TrackTile & other);
 
+    void setAdded(bool state);
+
+    bool added() const;
+
 private:
 
     //! Create the menu that is shown when right-clicking on the tile.
     void createContextMenu();
-
-    //! Pointer to the object containing the data of the track.
-    TrackData * m_trackData;
 
     //! Pointer to the active/selected tile.
     static TrackTile * m_activeTile;
@@ -125,6 +126,8 @@ private:
 
     //! Image of the tile.
     QPixmap m_pixmap;
+
+    bool m_added;
 };
 
 #endif // TRACKTILE_HPP

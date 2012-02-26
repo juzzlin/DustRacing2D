@@ -328,6 +328,12 @@ void MainWindow::populateMenuBar()
     connect(m_clearAllAction, SIGNAL(triggered()), this, SLOT(clear()));
     m_clearAllAction->setEnabled(false);
 
+    // Add "enlarge canvas"-action
+    m_enlargeCanvasAction = new QAction(tr("&Enlarge canvas"), this);
+    editMenu->addAction(m_enlargeCanvasAction);
+    connect(m_enlargeCanvasAction, SIGNAL(triggered()), this, SLOT(enlargeCanvas()));
+    m_enlargeCanvasAction->setEnabled(false);
+
     // Create "route"-menu
     QMenu * routeMenu = menuBar()->addMenu(tr("&Route"));
 
@@ -462,6 +468,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
         m_clearAllAction->setEnabled(true);
+        m_enlargeCanvasAction->setEnabled(true);
         m_setRouteAction->setEnabled(true);
 
         delete m_editorScene;
@@ -547,7 +554,6 @@ void MainWindow::initializeNewTrack()
 
         m_editorScene->setSceneRect(newSceneRect);
         m_editorView->setScene(m_editorScene);
-        m_editorView->setSceneRect(newSceneRect);
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         addTilesToScene();
@@ -556,6 +562,7 @@ void MainWindow::initializeNewTrack()
         m_saveAsAction->setEnabled(true);
         m_toolBar->setEnabled(true);
         m_clearAllAction->setEnabled(true);
+        m_enlargeCanvasAction->setEnabled(true);
         m_setRouteAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
@@ -568,16 +575,25 @@ void MainWindow::initializeNewTrack()
 // TODO: Move to EditorData
 void MainWindow::addTilesToScene()
 {
-    TrackData * data = m_editorData->trackData();
-    if (data)
+    if (TrackData * data = m_editorData->trackData())
     {
         const unsigned int cols = data->map().cols();
         const unsigned int rows = data->map().rows();
 
         for (unsigned int i = 0; i < cols; i++)
+        {
             for (unsigned int j = 0; j < rows; j++)
+            {
                 if (TrackTile * tile = static_cast<TrackTile *>(data->map().getTile(i, j)))
-                    m_editorScene->addItem(tile);
+                {
+                    if (!tile->added())
+                    {
+                        m_editorScene->addItem(tile);
+                        tile->setAdded(true);
+                    }
+                }
+            }
+        }
 
         if (data->map().getTile(0, 0))
             static_cast<TrackTile *>(data->map().getTile(0, 0))->setActive(true);
@@ -587,13 +603,11 @@ void MainWindow::addTilesToScene()
 // TODO: Move to EditorData
 void MainWindow::addObjectsToScene()
 {
-    TrackData * data = m_editorData->trackData();
-    if (data)
+    if (TrackData * data = m_editorData->trackData())
     {
         for (unsigned int i = 0; i < data->objects().count(); i++)
         {
-            if (Object * object =
-                dynamic_cast<Object *>(&data->objects().object(i)))
+            if (Object * object = dynamic_cast<Object *>(&data->objects().object(i)))
             {
                 m_editorScene->addItem(object);
             }
@@ -611,8 +625,7 @@ void MainWindow::addRouteLinesToScene(bool closeLoop)
 void MainWindow::removeTilesFromScene()
 {
     TrackTile::setActiveTile(nullptr);
-    TrackData * data = m_editorData->trackData();
-    if (data)
+    if (TrackData * data = m_editorData->trackData())
     {
         const unsigned int cols = data->map().cols();
         const unsigned int rows = data->map().rows();
@@ -630,8 +643,7 @@ void MainWindow::removeTilesFromScene()
 // TODO: Move to EditorData
 void MainWindow::removeObjectsFromScene()
 {
-    TrackData * data = m_editorData->trackData();
-    if (data)
+    if (TrackData * data = m_editorData->trackData())
     {
         for (unsigned int i = 0; i < data->objects().count(); i++)
         {
@@ -648,8 +660,7 @@ void MainWindow::removeObjectsFromScene()
 // TODO: Move to EditorData
 void MainWindow::clear()
 {
-    TrackData * data = m_editorData->trackData();
-    if (data)
+    if (TrackData * data = m_editorData->trackData())
     {
         const unsigned int cols = data->map().cols();
         const unsigned int rows = data->map().rows();
@@ -671,6 +682,21 @@ void MainWindow::clearRoute()
     m_editorData->removeRouteLinesFromScene();
     m_editorData->trackData()->route().clear();
     m_console->append(QString(tr("Route cleared.")));
+}
+
+void MainWindow::enlargeCanvas()
+{
+    if (TrackData * data = m_editorData->trackData())
+    {
+        data->enlargeCanvas();
+        addTilesToScene();
+
+        QRectF newSceneRect(-MARGIN, -MARGIN,
+            2 * MARGIN + data->map().cols() * TrackTile::TILE_W,
+            2 * MARGIN + data->map().rows() * TrackTile::TILE_H);
+
+        m_editorView->setSceneRect(newSceneRect);
+    }
 }
 
 void MainWindow::beginSetRoute()

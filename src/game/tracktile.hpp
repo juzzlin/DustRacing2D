@@ -35,7 +35,7 @@ public:
 
     //! Constructor.
     //! See TrackTileBase.
-    TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+    TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
     //! Destructor

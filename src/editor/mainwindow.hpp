@@ -87,6 +87,7 @@ private slots:
     void clear();
     void clearRoute();
     bool doOpenTrack(QString fileName);
+    void enlargeCanvas();
     void handleToolBarActionClick(QAction * action);
     void initializeNewTrack();
     void openTrack();
@@ -116,6 +117,7 @@ private:
     QAction      * m_saveAsAction;
     QAction      * m_currentToolBarAction;
     QAction      * m_clearAllAction;
+    QAction      * m_enlargeCanvasAction;
     QAction      * m_clearRouteAction;
     QAction      * m_setRouteAction;
     QSlider      * m_scaleSlider;

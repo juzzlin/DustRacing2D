@@ -39,18 +39,18 @@ public:
         CH_LEFT_LINE, CH_RIGHT_LINE};
 
     //! Constructor.
-    //! \param trackData Pointer to the "parent" TrackData.
+    //! \param trackData Reference to the "parent" TrackData.
     //! \param location Location (coordinates) in the track scene.
     //! \param matrixLocation Location in the tile matrix.
     //! \param type Type of the tile. See setType().
-    TrackTileBase(TrackDataBase * trackData, QPointF location, QPoint matrixLocation,
+    TrackTileBase(TrackDataBase & trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
     //! Destructor.
     virtual ~TrackTileBase();
 
-    //! Return pointer to the "parent" track data.
-    TrackDataBase * trackData() const;
+    //! Return reference to the "parent" track data.
+    TrackDataBase & trackData() const;
 
     //! Get location in world / scene.
     virtual QPointF location() const;
@@ -103,7 +103,7 @@ private:
     QPoint m_matrixLocation;
 
     //! Pointer to the "parent" track data.
-    TrackDataBase * m_trackData;
+    TrackDataBase & m_trackData;
 
     //! Direction towards the next tile in the route.
     RouteDirection m_routeDirection;

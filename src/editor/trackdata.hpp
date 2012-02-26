@@ -62,6 +62,9 @@ public:
     //! Get objects object.
     const Objects & objects() const;
 
+    //! Enlarge canvas.
+    void enlargeCanvas();
+
 private:
 
     QString m_name;

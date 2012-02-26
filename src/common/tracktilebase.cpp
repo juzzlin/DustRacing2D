@@ -16,17 +16,17 @@
 #include "tracktilebase.hpp"
 #include "trackdatabase.hpp"
 
-TrackTileBase::TrackTileBase(TrackDataBase * trackData,
-                             QPointF location, QPoint matrixLocation,
-                             const QString & type)
-: m_routeIndex(-1)
-, m_tileType(type)
-, m_location(location)
-, m_matrixLocation(matrixLocation)
-, m_trackData(trackData)
-, m_routeDirection(TrackTileBase::RD_NONE)
-, m_profile(TrackTileBase::TP_FLAT)
-, m_computerHint(TrackTileBase::CH_NONE)
+TrackTileBase::TrackTileBase(TrackDataBase & trackData,
+    QPointF location, QPoint matrixLocation,
+    const QString & type)
+  : m_routeIndex(-1)
+  , m_tileType(type)
+  , m_location(location)
+  , m_matrixLocation(matrixLocation)
+  , m_trackData(trackData)
+  , m_routeDirection(TrackTileBase::RD_NONE)
+  , m_profile(TrackTileBase::TP_FLAT)
+  , m_computerHint(TrackTileBase::CH_NONE)
 {
 }
 
@@ -73,7 +73,7 @@ TrackTileBase::RouteDirection TrackTileBase::routeDirection() const
     return m_routeDirection;
 }
 
-TrackDataBase * TrackTileBase::trackData() const
+TrackDataBase & TrackTileBase::trackData() const
 {
     return m_trackData;
 }

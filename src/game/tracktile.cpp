@@ -17,13 +17,10 @@
 #include "trackdata.hpp"
 
 TrackTile::TrackTile(
-    TrackData * trackData,
-    QPointF location,
-    QPoint matrixLocation,
-    const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_rotation(0)
-, m_surface(nullptr)
+    TrackData & trackData, QPointF location, QPoint matrixLocation, const QString & type)
+  : TrackTileBase(trackData, location, matrixLocation, type)
+  , m_rotation(0)
+  , m_surface(nullptr)
 {
 }
 

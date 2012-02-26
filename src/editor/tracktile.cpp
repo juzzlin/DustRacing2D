@@ -29,13 +29,14 @@
 
 TrackTile * TrackTile::m_activeTile = nullptr;
 
-TrackTile::TrackTile(TrackData * trackData, QPointF location, QPoint matrixLocation,
+TrackTile::TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
     const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_size(QSizeF(TILE_W, TILE_H))
-, m_active(false)
-, m_animator(new TileAnimator(this))
-, m_routeLine(nullptr)
+  : TrackTileBase(trackData, location, matrixLocation, type)
+  , m_size(QSizeF(TILE_W, TILE_H))
+  , m_active(false)
+  , m_animator(new TileAnimator(this))
+  , m_routeLine(nullptr)
+  , m_added(false)
 {
     setPos(location);
 }
@@ -250,6 +251,26 @@ void TrackTile::swap(TrackTile & other)
     const int sourceAngle = rotation();
     setRotation(other.rotation());
     other.setRotation(sourceAngle);
+
+    // Swap computer hints
+    const TrackTileBase::ComputerHint sourceHint = computerHint();
+    setComputerHint(other.computerHint());
+    other.setComputerHint(sourceHint);
+
+    // Swap profiles
+    const TrackTileBase::TileProfile sourceProfile = profile();
+    setProfile(other.profile());
+    other.setProfile(sourceProfile);
+}
+
+void TrackTile::setAdded(bool state)
+{
+    m_added = state;
+}
+
+bool TrackTile::added() const
+{
+    return m_added;
 }
 
 TrackTile::~TrackTile()

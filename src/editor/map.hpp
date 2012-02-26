@@ -26,7 +26,10 @@ class Map : public MapBase
 public:
 
     //! Constuctor.
-    Map(TrackData * trackData, unsigned int cols, unsigned int rows);
+    Map(TrackData & trackData, unsigned int cols, unsigned int rows);
+
+    //! Resize the map.
+    void resize(unsigned int newCols, unsigned int newRows);
 
     //! Destructor.
     virtual ~Map();

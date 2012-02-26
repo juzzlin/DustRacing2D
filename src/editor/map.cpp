@@ -20,19 +20,44 @@
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
-: MapBase(trackData, cols, rows)
+Map::Map(TrackData & trackData, unsigned int cols, unsigned int rows)
+  : MapBase(trackData, cols, rows)
 {
     // Create tiles and set coordinates.
     for (unsigned int i = 0; i < cols; i++)
+    {
         for (unsigned int j = 0; j < rows; j++)
         {
-            TrackTileBase * newTile = new TrackTile(trackData,
+            TrackTileBase * newTile = new TrackTile(
+                trackData,
                 QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                 TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
                 QPoint(i, j));
             setTile(i, j, newTile);
         }
+    }
+}
+
+void Map::resize(unsigned int newCols, unsigned int newRows)
+{
+    MapBase::resize(newCols, newRows);
+
+    // Create tiles and set coordinates.
+    for (unsigned int i = 0; i < cols(); i++)
+    {
+        for (unsigned int j = 0; j < rows(); j++)
+        {
+            if (!getTile(i, j))
+            {
+                TrackTileBase * newTile = new TrackTile(
+                    static_cast<TrackData &>(trackData()),
+                    QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                    TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+                    QPoint(i, j));
+                setTile(i, j, newTile);
+            }
+        }
+    }
 }
 
 Map::~Map()

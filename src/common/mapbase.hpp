@@ -27,16 +27,22 @@ class MapBase
 public:
 
     //! Constructor.
-    MapBase(TrackDataBase * trackData, unsigned int cols, unsigned int rows);
+    MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows);
 
     //! Destructor.
     virtual ~MapBase();
+
+    //! Get track data.
+    TrackDataBase & trackData();
 
     //! Get column count
     unsigned int cols() const;
 
     //! Get row count
     unsigned int rows() const;
+
+    //! Resize the map.
+    virtual void resize(unsigned int newCols, unsigned int newRows);
 
     //! Set given tile to given coordinates.
     //! Returns false if impossible coordinates.
@@ -48,7 +54,7 @@ public:
 
 private:
 
-    TrackDataBase * m_trackData;
+    TrackDataBase & m_trackData;
     unsigned int m_cols, m_rows;
     typedef std::vector<TrackTileBase *> TrackTileRow;
     typedef std::vector<TrackTileRow> TrackTileMap;

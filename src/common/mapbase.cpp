@@ -21,19 +21,14 @@
 #include <QPoint>
 #include <QPointF>
 
-MapBase::MapBase(TrackDataBase * trackData, unsigned int cols, unsigned int rows)
-: m_trackData(trackData)
-, m_cols(cols)
-, m_rows(rows)
-, m_map(rows, TrackTileRow(m_cols, nullptr))
-{
-//    // Create an empty map
-//    for (unsigned int j = 0; j < m_rows; j++)
-//    {
-//        TrackTileRow row(m_cols, nullptr);
-//        m_map.push_back(row);
-//    }
-}
+#include <cassert>
+
+MapBase::MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows)
+  : m_trackData(trackData)
+  , m_cols(cols)
+  , m_rows(rows)
+  , m_map(rows, TrackTileRow(m_cols, nullptr))
+{}
 
 unsigned int MapBase::cols() const
 {
@@ -43,6 +38,25 @@ unsigned int MapBase::cols() const
 unsigned int MapBase::rows() const
 {
     return m_rows;
+}
+
+void MapBase::resize(unsigned int newCols, unsigned int newRows)
+{
+    for (unsigned int row = 0; row < m_map.size(); row++)
+    {
+        if (newCols > m_map[row].size())
+        {
+            m_map[row].resize(newCols, nullptr);
+        }
+    }
+
+    if (newRows > m_rows)
+    {
+        m_map.resize(newRows, TrackTileRow(newCols, nullptr));
+    }
+
+    m_cols = newCols;
+    m_rows = newRows;
 }
 
 bool MapBase::setTile(unsigned int x, unsigned int y, TrackTileBase * pTile)
@@ -61,6 +75,11 @@ TrackTileBase * MapBase::getTile(unsigned int x, unsigned int y) const
         return nullptr;
 
     return m_map[y][x];
+}
+
+TrackDataBase & MapBase::trackData()
+{
+    return m_trackData;
 }
 
 MapBase::~MapBase()

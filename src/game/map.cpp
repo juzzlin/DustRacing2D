@@ -20,7 +20,7 @@
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(TrackData * trackData, unsigned int cols, unsigned int rows)
+Map::Map(TrackData & trackData, unsigned int cols, unsigned int rows)
 : MapBase(trackData, cols, rows)
 {
     // Create tiles and set coordinates.
