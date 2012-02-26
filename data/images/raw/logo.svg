@@ -7,19 +7,41 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448819"
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.2 r9819"
-   inkscape:export-filename="/home/jussil/dustrac-logo3.png"
+   inkscape:version="0.48.3 r9882"
+   inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac/data/images/about.png"
    inkscape:export-xdpi="36.040001"
    inkscape:export-ydpi="36.040001"
    sodipodi:docname="logo.svg">
   <defs
-     id="defs4" />
+     id="defs4">
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.75;fill:none;stroke:#06ffff;stroke-width:0.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:1;stroke-opacity:1;stroke-dasharray:none"
+       id="path3771-6"
+       sodipodi:cx="-252.14285"
+       sodipodi:cy="951.64789"
+       sodipodi:rx="197.85715"
+       sodipodi:ry="200.71428"
+       d="m -54.285706,951.64789 a 197.85715,200.71428 0 1 1 -395.714294,0 197.85715,200.71428 0 1 1 395.714294,0 z"
+       transform="matrix(1.33875,0,0,1.33875,131.69911,-709.22787)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.75;fill:none;stroke:#06ffff;stroke-width:0.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:1;stroke-opacity:1;stroke-dasharray:none"
+       id="path3771-6-8"
+       sodipodi:cx="-252.14285"
+       sodipodi:cy="951.64789"
+       sodipodi:rx="197.85715"
+       sodipodi:ry="200.71428"
+       d="m -54.285706,951.64789 a 197.85715,200.71428 0 1 1 -395.714294,0 197.85715,200.71428 0 1 1 395.714294,0 z"
+       transform="matrix(1.33875,0,0,1.33875,131.69911,-709.22787)" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -28,14 +50,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="205.9692"
-     inkscape:cy="692.23549"
+     inkscape:cx="-49.0308"
+     inkscape:cy="481.5288"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="776"
-     inkscape:window-x="0"
+     inkscape:window-width="1615"
+     inkscape:window-height="1026"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -172,5 +194,46 @@
        inkscape:export-filename="/home/jussil/dustrac-logo.png"
        inkscape:export-xdpi="9.0100002"
        inkscape:export-ydpi="9.0100002" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;font-family:Sans;stroke-opacity:1"
+       x="127.14286"
+       y="-83.352104"
+       id="text2992"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2994"
+         x="127.14286"
+         y="-83.352104">DUST RACING</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:Sans"
+       id="text3776"
+       sodipodi:linespacing="125%"
+       transform="translate(562,-218)"
+       x="445.36858"
+       y="351.01907"><tspan
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+   id="tspan3778">DUST RACING</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:Sans"
+       id="text3776-5"
+       sodipodi:linespacing="125%"
+       transform="matrix(-1,0,0,-1,184.1985,947.0663)"><textPath
+         xlink:href="#path3771-6"
+         id="textPath3780-5"><tspan
+   id="tspan3778-2"
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1">DUST RACING</tspan></textPath></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:Sans"
+       id="text3776-5-4"
+       sodipodi:linespacing="125%"
+       transform="translate(562.65865,-216.05623)"><textPath
+         xlink:href="#path3771-6-8"
+         id="textPath3780-5-9"><tspan
+   id="tspan3778-2-3"
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1">DUST RACING</tspan></textPath></text>
   </g>
 </svg>
