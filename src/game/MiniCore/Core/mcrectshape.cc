@@ -87,7 +87,7 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) co
 
     // **** Find the corresponding edge  ****
 
-    if (x * a > 0 && b * x > 0)
+    if (x % a > 0 && b % x > 0)
     {
         return MCEdge<MCFloat>(v1 - v0, v0);
     }
@@ -96,7 +96,7 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) co
 
     a = b;
     b = v2 - l;
-    if (x * a > 0 && b * x > 0)
+    if (x % a > 0 && b % x > 0)
     {
         return MCEdge<MCFloat>(v2 - v1, v1);
     }
@@ -105,7 +105,7 @@ MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) co
 
     a = b;
     b = v3 - l;
-    if (x * a > 0 && b * x > 0)
+    if (x % a > 0 && b % x > 0)
     {
         return MCEdge<MCFloat>(v3 - v2, v2);
     }
@@ -171,7 +171,7 @@ MCVector2d<MCFloat> MCRectShapeImpl::contactNormal(
     // Get the crossing edge for p and build a normal vector from it
     static const MCVector3d<MCFloat> DOWN(0, 0, -1);
     MCVector3d<MCFloat> normal(
-        MCVector3d<MCFloat>(edgeForSegment(p).edge) * DOWN);
+        MCVector3d<MCFloat>(edgeForSegment(p).edge) % DOWN);
     return MCVector2d<MCFloat>(normal).normalizedFast();
 }
 

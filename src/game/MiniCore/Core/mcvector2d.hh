@@ -44,7 +44,7 @@ using std::numeric_limits;
  *  MCVector2d<int> z = a + b;
  *
  *  // Cross product
- *  cout << a * b << endl;
+ *  cout << a % b << endl;
  *
  *  // Dot product
  *  cout << a.dot(b) << endl;
@@ -75,7 +75,7 @@ public:
 
     //! Cross product. Returns the resulting component.
     template <typename U>
-    T operator * (const MCVector2d<U> & r) const;
+    T operator % (const MCVector2d<U> & r) const;
 
     //! Dot product
     template <typename U>
@@ -216,7 +216,7 @@ MCVector2d<T> & MCVector2d<T>::operator = (const MCVector2d<U> & r)
 
 template <typename T>
 template <typename U>
-T MCVector2d<T>::operator * (const MCVector2d<U> & r) const
+T MCVector2d<T>::operator % (const MCVector2d<U> & r) const
 {
     return m_i * r.j() - m_j * r.i();
 }

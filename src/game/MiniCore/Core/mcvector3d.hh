@@ -46,7 +46,7 @@ using std::numeric_limits;
  *  MCVector3d<int> z = a + b;
  *
  *  // Cross product
- *  cout << a * b << endl;
+ *  cout << a % b << endl;
  *
  *  // Dot product
  *  cout << a.dot(b) << endl;
@@ -85,7 +85,7 @@ public:
 
     //! Cross product. Returns the resulting vector.
     template <typename U>
-    MCVector3d<T> operator * (const MCVector3d<U> & r) const;
+    MCVector3d<T> operator % (const MCVector3d<U> & r) const;
 
     //! Dot product
     template <typename U>
@@ -251,7 +251,7 @@ MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> & r)
 
 template <typename T>
 template <typename U>
-MCVector3d<T> MCVector3d<T>::operator * (const MCVector3d<U> & r) const
+MCVector3d<T> MCVector3d<T>::operator % (const MCVector3d<U> & r) const
 {
     T _i = m_j * r.k() - r.j() * m_k;
     T _j = m_i * r.k() - r.i() * m_k;

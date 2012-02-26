@@ -72,7 +72,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     // A simple PID-controller
     target -= MCVector3dF(m_car.location());
-    const MCFloat crossProd = (target.normalizedFast() * m_car.velocity().normalizedFast()).k();
+    const MCFloat crossProd = (target.normalizedFast() % m_car.velocity().normalizedFast()).k();
     MCFloat adjust = 1.0f * crossProd * 1e5 + 1.0f * (crossProd - m_lastDiff) * 1e6;
 
     // Clamp the value

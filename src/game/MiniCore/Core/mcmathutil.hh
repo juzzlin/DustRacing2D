@@ -113,13 +113,13 @@ bool MCMathUtil::crosses(const MCSegment<T> & a, const MCSegment<T> & b)
     const MCVector2d<T> a0b0(b.vertex0 - a.vertex0);
     const MCVector2d<T> a0b1(b.vertex1 - a.vertex0);
 
-    if (sign(a0a1 * a0b0) != sign(a0a1 * a0b1))
+    if (sign(a0a1 % a0b0) != sign(a0a1 % a0b1))
     {
         const MCVector2d<T> b0b1(b.vertex1 - b.vertex0);
         const MCVector2d<T> b0a0(a.vertex0 - b.vertex0);
         const MCVector2d<T> b0a1(a.vertex1 - b.vertex0);
 
-        if (sign(b0b1 * b0a0) != sign(b0b1 * b0a1))
+        if (sign(b0b1 % b0a0) != sign(b0b1 % b0a1))
         {
             return true;
         }

@@ -133,7 +133,7 @@ void Car::accelerate()
 {
     m_pBrakingFriction->enable(false);
 
-    const MCFloat realAngle = angle();/* + m_effectiveTireAngle*/;
+    const MCFloat realAngle = angle();
     MCFloat dx = MCTrigonom::cos(realAngle);
     MCFloat dy = MCTrigonom::sin(realAngle);
     MCVector2d<MCFloat> force(dx, dy);
