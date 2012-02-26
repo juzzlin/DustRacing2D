@@ -24,23 +24,34 @@
 #include "mctypes.hh"
 
 class MCObject;
+class MCForceGeneratorImpl;
 
 //! Abstract base class for different force generators
 class MCForceGenerator
 {
 public:
-  //! Constructor
-  MCForceGenerator();
 
-  //! Destructor
-  virtual ~MCForceGenerator();
+    //! Constructor
+    MCForceGenerator();
 
-  //! Update force to the given object
-  virtual void updateForce(MCObject & object) = 0;
+    //! Destructor
+    virtual ~MCForceGenerator();
+
+    //! Update force to the given object
+    virtual void updateForce(MCObject & object) = 0;
+
+    //! Enable / disable the force. Enabled by default.
+    void enable(bool status);
+
+    //! Return true if enabled.
+    bool enabled() const;
 
 private:
-  DISABLE_COPY(MCForceGenerator);
-  DISABLE_ASSI(MCForceGenerator);
+
+    DISABLE_COPY(MCForceGenerator);
+    DISABLE_ASSI(MCForceGenerator);
+
+    MCForceGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCFORCEGENERATOR_HH

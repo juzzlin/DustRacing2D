@@ -19,9 +19,34 @@
 
 #include "mcforcegenerator.hh"
 
-MCForceGenerator::MCForceGenerator()
+class MCForceGeneratorImpl
+{
+    MCForceGeneratorImpl();
+
+    bool enabled;
+    friend class MCForceGenerator;
+};
+
+MCForceGeneratorImpl::MCForceGeneratorImpl()
+  : enabled(true)
 {}
 
-MCForceGenerator::~MCForceGenerator()
+MCForceGenerator::MCForceGenerator()
+  : m_pImpl(new MCForceGeneratorImpl)
 {}
+
+void MCForceGenerator::enable(bool status)
+{
+    m_pImpl->enabled = status;
+}
+
+bool MCForceGenerator::enabled() const
+{
+    return m_pImpl->enabled;
+}
+
+MCForceGenerator::~MCForceGenerator()
+{
+    delete m_pImpl;
+}
 

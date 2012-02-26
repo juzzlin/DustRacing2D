@@ -45,7 +45,9 @@ void MCForceRegistryImpl::update()
         Registry & registry = iter->second;
         for (MCUint i = 0; i < registry.size(); i++) {
             if (iter->first->index() != -1) {
-                registry[i]->updateForce(*iter->first);
+                if (registry[i]->enabled()) {
+                    registry[i]->updateForce(*iter->first);
+                }
             }
         }
 
