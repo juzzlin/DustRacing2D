@@ -83,6 +83,8 @@ MainWindow::MainWindow(QString trackFile)
         qFatal("MainWindow already instantiated!");
     }
 
+    setWindowIcon(QIcon(":/logo.png"));
+
     // Init widgets
     init();
 

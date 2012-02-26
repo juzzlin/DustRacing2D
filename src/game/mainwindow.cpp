@@ -41,6 +41,8 @@ MainWindow::MainWindow()
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " +
         Config::Game::GAME_VERSION);
 
+    setWindowIcon(QIcon(":/logo.png"));
+
     // Set window size
     resize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 
