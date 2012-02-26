@@ -99,6 +99,14 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
     bool accelerate = true;
     bool brake      = false;
 
+    if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
+    {
+        if (m_car.speedInKmh() > 100)
+        {
+            brake = true;
+        }
+    }
+
     if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
     {
         if (m_car.speedInKmh() > 50)
