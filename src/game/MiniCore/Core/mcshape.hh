@@ -93,15 +93,15 @@ public:
     /*! Translate.
      * \param p The new location
      */
-    virtual void translate(const MCVector3d<MCFloat> & p);
+    virtual void translate(const MCVector3dF & p);
 
     //! Get the current location.
-    const MCVector3d<MCFloat> & location() const;
+    const MCVector3dF & location() const;
 
     /*! Set offset for the fake shadow.
      * \param p The new offset.
      */
-    void setShadowOffset(const MCVector2d<MCFloat> & p);
+    void setShadowOffset(const MCVector2dF & p);
 
     /*! Rotate.
      * \param a The new rotation angle in degrees
@@ -112,27 +112,28 @@ public:
     MCFloat angle() const;
 
     //! Return non-rotated, translated bounding box of the shape.
-    virtual MCBBox<MCFloat> bbox() const = 0;
+    virtual MCBBoxF bbox() const = 0;
 
     /*! Tests if shape contains the given point.
      * \param p The point to be tested
      * \return True if point contained
      */
-    virtual bool contains(const MCVector2d<MCFloat> & p) const = 0;
+    virtual bool contains(const MCVector2dF & p) const = 0;
 
     /*! \brief Returns the interpenetration depth for the given point.
      * Note!!: It must be first tested, that p.vertex0 is inside the shape.
      * \param p The crossing segment to be tested.
-     * \return Interpenetration depth.
+     * \return Interpenetration depth. Set contactNormal to the contactNormal.
      */
-    virtual int interpenetrationDepth(const MCSegment<MCFloat> & p) const = 0;
+    virtual int interpenetrationDepth(
+        const MCSegmentF & p, MCVector2dF & contactNormal) const = 0;
 
     /*! \brief Returns contact normal for the given point
      * Note!!: It must be first tested, that p.vertex0 is inside the shape.
      * \param p The crossing segment to be tested.
      * \return Contact normal pointing outwards the shape.
      */
-    virtual MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const = 0;
+    virtual MCVector2dF contactNormal(const MCSegmentF & p) const = 0;
 
     //! Get the moment of inertia (J).
     virtual MCFloat momentOfInertia() const = 0;

@@ -22,6 +22,7 @@
 
 #include "mctypes.hh"
 #include "mcmacros.hh"
+#include "mcvector3d.hh"
 
 /*!
  *  \class MCVectorAnimation
@@ -41,11 +42,7 @@ public:
     virtual ~MCVectorAnimation();
 
     //! Initialize the animation.
-    void init(
-        MCVector3dF & vect,
-        const MCVector3dF & start,
-        const MCVector3dF & end,
-        MCUint steps);
+    void init(MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, MCUint steps);
 
     //! Update the animation. Returns true when done.
     bool update();

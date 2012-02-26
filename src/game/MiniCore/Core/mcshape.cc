@@ -40,7 +40,7 @@ MCShape::MCShape(MCObject & parent, MCShapeView * pView)
     }
 
     // Set default shadow offset
-    setShadowOffset(MCVector2d<MCFloat>(2, -2));
+    setShadowOffset(MCVector2dF(2, -2));
 }
 
 MCObject & MCShape::parent() const
@@ -84,7 +84,7 @@ void MCShape::renderShadow(MCCamera * p)
 {
     if (m_pImpl->m_pView) {
         m_pImpl->m_pView->renderShadow(
-            m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
+            m_pImpl->m_location + MCVector3dF(m_pImpl->m_shadowOffset),
             m_pImpl->m_angle, p);
     }
 }
@@ -101,22 +101,22 @@ void MCShape::renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p)
 {
     if (m_pImpl->m_pView) {
         m_pImpl->m_pView->renderShadowScaled(
-            m_pImpl->m_location + MCVector3d<MCFloat>(m_pImpl->m_shadowOffset),
+            m_pImpl->m_location + MCVector3dF(m_pImpl->m_shadowOffset),
             m_pImpl->m_angle, wr, hr, p);
     }
 }
 
-void MCShape::translate(const MCVector3d<MCFloat> & p)
+void MCShape::translate(const MCVector3dF & p)
 {
     m_pImpl->m_location = p;
 }
 
-const MCVector3d<MCFloat> & MCShape::location() const
+const MCVector3dF & MCShape::location() const
 {
     return m_pImpl->m_location;
 }
 
-void MCShape::setShadowOffset(const MCVector2d<MCFloat> & p)
+void MCShape::setShadowOffset(const MCVector2dF & p)
 {
     m_pImpl->m_shadowOffset = p;
 }

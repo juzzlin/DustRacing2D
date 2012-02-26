@@ -130,6 +130,8 @@ private:
     MCVector2d<T> m_v[4];
 };
 
+typedef MCOBBox<MCFloat> MCOBBoxF;
+
 template <typename T>
 MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
 : m_hx(newHx)

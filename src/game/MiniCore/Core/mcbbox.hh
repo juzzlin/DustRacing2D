@@ -154,4 +154,6 @@ private:
     T m_x1, m_y1, m_x2, m_y2;
 };
 
+typedef MCBBox<MCFloat> MCBBoxF;
+
 #endif // MCBBOX_HH

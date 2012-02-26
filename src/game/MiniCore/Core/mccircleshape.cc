@@ -60,8 +60,10 @@ bool MCCircleShape::contains(const MCVector2d<MCFloat> & p) const
     return (MCVector2d<MCFloat>(location()) - p).lengthFast() <= radius();
 }
 
-int MCCircleShape::interpenetrationDepth(const MCSegment<MCFloat> & p) const
+int MCCircleShape::interpenetrationDepth(
+    const MCSegment<MCFloat> & p, MCVector2dF & contactNormal) const
 {
+    contactNormal = this->contactNormal(p);
     return radius() - (MCVector2d<MCFloat>(location()) - p.vertex0).lengthFast();
 }
 

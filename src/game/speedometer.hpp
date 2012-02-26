@@ -17,6 +17,7 @@
 #define SPEEDOMETER_HPP
 
 #include "overlaybase.hpp"
+#include "MiniCore/Core/MCVector3d"
 
 class Car;
 class MCSurface;

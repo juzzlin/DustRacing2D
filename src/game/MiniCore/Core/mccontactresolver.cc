@@ -52,13 +52,12 @@ bool MCContactResolverImpl::processRectRect(
 
     const MCOBBox<MCFloat> & obbox1(shape1.obbox());
 
-    MCVector2d<MCFloat> vertex;
-    MCVector2d<MCFloat> contactNormal;
+    MCVector2dF vertex;
+    MCVector2dF contactNormal;
 
-    MCFloat depth           = 0;
-    bool depthIsSet         = false;
-    bool contactNormalIsSet = false;
-    bool collided           = false;
+    MCFloat depth   = 0;
+    bool depthIsSet = false;
+    bool collided   = false;
 
     // Loop thru all vertices of shape1 and generate contacts
     for (MCUint i = 0; i < 4; i++) {
@@ -72,15 +71,11 @@ bool MCContactResolverImpl::processRectRect(
             vertex             = obbox1.vertex(i);
             depth              = 0;
             depthIsSet         = false;
-            contactNormalIsSet = false;
 
             if (ev1.accepted()) {
-                depth =
-                    shape2.interpenetrationDepth(MCSegment<MCFloat>(vertex, shape1.location()));
+                depth = shape2.interpenetrationDepth(
+                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 depthIsSet = true;
-                contactNormal =
-                    shape2.contactNormal(MCSegment<MCFloat>(vertex, shape1.location()));
-                contactNormalIsSet = true;
 
                 MCContact & contact = MCContact::create();
                 contact.init(shape2.parent(), vertex, contactNormal, depth);
@@ -97,12 +92,7 @@ bool MCContactResolverImpl::processRectRect(
             if (ev2.accepted()) {
                 if (!depthIsSet) {
                     depth = shape2.interpenetrationDepth(
-                        MCSegment<MCFloat>(vertex, shape1.location()));
-                }
-
-                if (!contactNormalIsSet) {
-                    contactNormal = shape2.contactNormal(
-                        MCSegment<MCFloat>(vertex, shape1.location()));
+                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 }
 
                 MCContact & contact = MCContact::create();

@@ -22,6 +22,7 @@
 
 #include "mctypes.hh"
 #include "mcmacros.hh"
+#include "mcvector2d.hh"
 
 #include <memory>
 

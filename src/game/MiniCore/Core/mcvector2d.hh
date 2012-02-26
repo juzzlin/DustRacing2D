@@ -20,6 +20,8 @@
 #ifndef MCVECTOR2D_HH
 #define MCVECTOR2D_HH
 
+#include "mctypes.hh"
+
 #include <cmath>
 
 using std::sqrt;
@@ -181,6 +183,9 @@ private:
     //! Components
     T m_i, m_j;
 };
+
+typedef MCVector2d<MCFloat> MCVector2dF;
+typedef const MCVector2dF & MCVector2dFR;
 
 template <typename T>
 MCVector2d<T>::MCVector2d() :

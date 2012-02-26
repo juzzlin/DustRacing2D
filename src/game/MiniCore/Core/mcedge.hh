@@ -40,4 +40,6 @@ struct MCEdge
     MCVector2d<T> origin;
 };
 
+typedef MCEdge<MCFloat> MCEdgeF;
+
 #endif // MCEDGE_HH

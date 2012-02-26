@@ -20,9 +20,6 @@
 #ifndef MCTYPES_HH
 #define MCTYPES_HH
 
-#include "mcvector2d.hh"
-#include "mcvector3d.hh"
-
 // Floating point data type used
 #ifdef MC_USE_DOUBLE
   typedef double MCFloat;
@@ -33,11 +30,5 @@
 // Some convenience typedef's
 typedef unsigned int  MCUint;
 typedef unsigned char MCUchar;
-
-typedef MCVector3d<MCFloat> MCVector3dF;
-typedef MCVector2d<MCFloat> MCVector2dF;
-
-typedef const MCVector3dF & MCVector3dFR;
-typedef const MCVector2dF & MCVector2dFR;
 
 #endif // MCTYPES_HH

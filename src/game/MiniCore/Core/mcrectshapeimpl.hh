@@ -31,13 +31,13 @@ class MCCamera;
 //! Implementation class of MCRectShape.
 class MCRectShapeImpl : public MCShapeImpl
 {
-private:
   MCRectShapeImpl(MCObject & parent, MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
   static MCUint typeID;
-  inline MCEdge<MCFloat> edgeForSegment(const MCSegment<MCFloat> & p) const;
-  inline int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
-  inline MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
+  inline MCEdge<MCFloat> edgeForSegment(const MCSegmentF & p) const;
+  inline int interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const;
+  inline MCVector2dF contactNormal(const MCSegmentF & p) const;
+  inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
   void renderShapeOutline(MCCamera * pCamera);
   MCOBBox<MCFloat> obbox;
   MCFloat momentOfInertiaFactor;

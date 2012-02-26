@@ -33,104 +33,98 @@ MCUint MCRectShapeImpl::typeID = MCShape::registerType();
 
 MCRectShapeImpl::MCRectShapeImpl(
     MCObject & parent, MCFloat width, MCFloat height)
-: MCShapeImpl(parent)
-, obbox(width / 2, height / 2, MCVector2d<MCFloat>())
-, momentOfInertiaFactor((width * width + height * height) / 12)
-, radius(std::max(width, height) / 2)
-, width(width)
-, height(height)
+  : MCShapeImpl(parent)
+  , obbox(width / 2, height / 2, MCVector2dF())
+  , momentOfInertiaFactor((width * width + height * height) / 12)
+  , radius(std::max(width, height) / 2)
+  , width(width)
+  , height(height)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
 {}
 
-MCEdge<MCFloat> MCRectShapeImpl::edgeForSegment(const MCSegment<MCFloat> & p) const
+MCEdgeF MCRectShapeImpl::edgeForSegment(const MCSegmentF & p) const
 {
     // **** Try first a crossing lines method ****
 
-    const MCSegment<MCFloat> s0s1(obbox.vertex(0), obbox.vertex(1));
-    const MCSegment<MCFloat> s1s2(obbox.vertex(1), obbox.vertex(2));
-    const MCSegment<MCFloat> s2s3(obbox.vertex(2), obbox.vertex(3));
-    const MCSegment<MCFloat> s3s0(obbox.vertex(3), obbox.vertex(0));
+    const MCSegmentF s0s1(obbox.vertex(0), obbox.vertex(1));
+    const MCSegmentF s1s2(obbox.vertex(1), obbox.vertex(2));
+    const MCSegmentF s2s3(obbox.vertex(2), obbox.vertex(3));
+    const MCSegmentF s3s0(obbox.vertex(3), obbox.vertex(0));
 
     if (MCMathUtil::crosses(p, s0s1))
     {
-        return MCEdge<MCFloat>(obbox.vertex(1) - obbox.vertex(0), obbox.vertex(0));
+        return MCEdgeF(obbox.vertex(1) - obbox.vertex(0), obbox.vertex(0));
     }
     else if (MCMathUtil::crosses(p, s1s2))
     {
-        return MCEdge<MCFloat>(obbox.vertex(2) - obbox.vertex(1), obbox.vertex(1));
+        return MCEdgeF(obbox.vertex(2) - obbox.vertex(1), obbox.vertex(1));
     }
     else if (MCMathUtil::crosses(p, s2s3))
     {
-        return MCEdge<MCFloat>(obbox.vertex(3) - obbox.vertex(2), obbox.vertex(2));
+        return MCEdgeF(obbox.vertex(3) - obbox.vertex(2), obbox.vertex(2));
     }
     else if (MCMathUtil::crosses(p, s3s0))
     {
-        return MCEdge<MCFloat>(obbox.vertex(0) - obbox.vertex(3), obbox.vertex(3));
+        return MCEdgeF(obbox.vertex(0) - obbox.vertex(3), obbox.vertex(3));
     }
 
     // **** Sector method ****
 
-    const MCVector2d<MCFloat> l(obbox.location());
+    const MCVector2dF l(obbox.location());
 
     // Translate test point to obbox's coordinates
-    const MCVector2d<MCFloat> x(p.vertex0 - l);
+    const MCVector2dF x(p.vertex0 - l);
 
     // Cache vertices
-    const MCVector2d<MCFloat> v0(obbox.vertex(0));
-    const MCVector2d<MCFloat> v1(obbox.vertex(1));
+    const MCVector2dF v0(obbox.vertex(0));
+    const MCVector2dF v1(obbox.vertex(1));
 
     // Translate vertices to obbox's coordinates
-    MCVector2d<MCFloat> a(v0 - l);
-    MCVector2d<MCFloat> b(v1 - l);
+    MCVector2dF a(v0 - l);
+    MCVector2dF b(v1 - l);
 
     // **** Find the corresponding edge  ****
 
     if (x % a > 0 && b % x > 0)
     {
-        return MCEdge<MCFloat>(v1 - v0, v0);
+        return MCEdgeF(v1 - v0, v0);
     }
 
-    const MCVector2d<MCFloat> v2(obbox.vertex(2));
+    const MCVector2dF v2(obbox.vertex(2));
 
     a = b;
     b = v2 - l;
     if (x % a > 0 && b % x > 0)
     {
-        return MCEdge<MCFloat>(v2 - v1, v1);
+        return MCEdgeF(v2 - v1, v1);
     }
 
-    const MCVector2d<MCFloat> v3(obbox.vertex(3));
+    const MCVector2dF v3(obbox.vertex(3));
 
     a = b;
     b = v3 - l;
     if (x % a > 0 && b % x > 0)
     {
-        return MCEdge<MCFloat>(v3 - v2, v2);
+        return MCEdgeF(v3 - v2, v2);
     }
 
-    return MCEdge<MCFloat>(v0 - v3, v3);
-}
-
-int MCRectShapeImpl::interpenetrationDepth(const MCSegment<MCFloat> & p) const
-{
-    MCEdge<MCFloat> edge(edgeForSegment(p));
-    return MCMathUtil::distanceFromVector(p.vertex0 - edge.origin, edge.edge);
+    return MCEdgeF(v0 - v3, v3);
 }
 
 MCRectShape::MCRectShape(
     MCObject & parent, MCShapeView * pView, MCFloat width, MCFloat height)
-: MCShape(parent, pView)
-, m_pImpl(new MCRectShapeImpl(parent, width, height))
+  : MCShape(parent, pView)
+  , m_pImpl(new MCRectShapeImpl(parent, width, height))
 {}
 
-MCEdge<MCFloat> MCRectShape::edgeForSegment(const MCSegment<MCFloat> & p) const
+MCEdgeF MCRectShape::edgeForSegment(const MCSegmentF & p) const
 {
     return m_pImpl->edgeForSegment(p);
 }
 
-void MCRectShape::translate(const MCVector3d<MCFloat> & p)
+void MCRectShape::translate(const MCVector3dF & p)
 {
     MCShape::translate(p);
     m_pImpl->obbox.translate(p);
@@ -155,24 +149,41 @@ MCFloat MCRectShape::momentOfInertia() const
         MCWorld::instance().metersPerPixelSquared();
 }
 
-bool MCRectShape::contains(const MCVector2d<MCFloat> & p) const
+bool MCRectShape::contains(const MCVector2dF & point) const
 {
-    return m_pImpl->obbox.contains(p);
+    return m_pImpl->obbox.contains(point);
 }
 
-int MCRectShape::interpenetrationDepth(const MCSegment<MCFloat> & p) const
+int MCRectShape::interpenetrationDepth(
+    const MCSegmentF & segment, MCVector2dF & contactNormal) const
 {
-    return m_pImpl->interpenetrationDepth(p);
+    return m_pImpl->interpenetrationDepth(segment, contactNormal);
 }
 
-MCVector2d<MCFloat> MCRectShapeImpl::contactNormal(
-    const MCSegment<MCFloat> & p) const
+int MCRectShapeImpl::interpenetrationDepth(
+    const MCSegmentF & segment, MCVector2dF & contactNormal) const
+{
+    MCEdgeF edge(edgeForSegment(segment));
+    contactNormal = this->contactNormal(segment, edge);
+    return MCMathUtil::distanceFromVector(segment.vertex0 - edge.origin, edge.edge);
+}
+
+MCVector2dF MCRectShapeImpl::contactNormal(
+    const MCSegmentF & segment) const
 {
     // Get the crossing edge for p and build a normal vector from it
-    static const MCVector3d<MCFloat> DOWN(0, 0, -1);
-    MCVector3d<MCFloat> normal(
-        MCVector3d<MCFloat>(edgeForSegment(p).edge) % DOWN);
-    return MCVector2d<MCFloat>(normal).normalizedFast();
+    static const MCVector3dF DOWN(0, 0, -1);
+    MCVector3dF normal(MCVector3dF(edgeForSegment(segment).edge) % DOWN);
+    return MCVector2dF(normal).normalizedFast();
+}
+
+MCVector2dF MCRectShapeImpl::contactNormal(
+    const MCSegmentF &, const MCEdgeF & edge) const
+{
+    // Get the crossing edge for p and build a normal vector from it
+    static const MCVector3dF DOWN(0, 0, -1);
+    MCVector3dF normal(MCVector3dF(edge.edge) % DOWN);
+    return MCVector2dF(normal).normalizedFast();
 }
 
 void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
@@ -202,8 +213,8 @@ void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
     glPopAttrib();
 }
 
-MCVector2d<MCFloat> MCRectShape::contactNormal(
-    const MCSegment<MCFloat> & p) const
+MCVector2dF MCRectShape::contactNormal(
+    const MCSegmentF & p) const
 {
     return m_pImpl->contactNormal(p);
 }
@@ -218,15 +229,14 @@ MCUint MCRectShape::instanceTypeID() const
     return MCRectShapeImpl::typeID;
 }
 
-const MCOBBox<MCFloat> & MCRectShape::obbox() const
+const MCOBBoxF & MCRectShape::obbox() const
 {
     return m_pImpl->obbox;
 }
 
 void MCRectShape::resize(MCFloat width, MCFloat height)
 {
-    m_pImpl->obbox =
-        MCOBBox<MCFloat>(width / 2, height / 2, location());
+    m_pImpl->obbox = MCOBBoxF(width / 2, height / 2, location());
     m_pImpl->obbox.rotate(angle());
     m_pImpl->momentOfInertiaFactor = (width * width + height * height) / 12;
     m_pImpl->width = width;

@@ -44,7 +44,7 @@ public:
     bool contains(const MCVector2d<MCFloat> & p) const;
 
     //! \reimp
-    int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
+    int interpenetrationDepth(const MCSegment<MCFloat> & p, MCVector2dF & contactNormal) const;
 
     //! \reimp
     MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;

@@ -20,10 +20,11 @@
 #ifndef MCSURFACE_HH
 #define MCSURFACE_HH
 
-#include "mcmacros.hh"
 #include "mctypes.hh"
+#include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcvector2d.hh"
+#include "mcvector3d.hh"
 
 #include <cmath>
 #include <string>

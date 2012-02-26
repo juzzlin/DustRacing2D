@@ -42,38 +42,37 @@ public:
      * \param parent Parent object.
      * \param pView View for the shape. May be nullptr.
      */
-    MCRectShape(MCObject & parent, MCShapeView * pView,
-        MCFloat width, MCFloat height);
+    MCRectShape(MCObject & parent, MCShapeView * pView, MCFloat width, MCFloat height);
 
     //! Destructor
     virtual ~MCRectShape();
 
     //! \reimp
-    virtual void translate(const MCVector3d<MCFloat> & p);
+    virtual void translate(const MCVector3dF & p);
 
     //! \reimp
     virtual void rotate(MCFloat a);
 
     //! \reimp
-    virtual MCBBox<MCFloat> bbox() const;
+    virtual MCBBoxF bbox() const;
 
     //! \reimp
-    virtual bool contains(const MCVector2d<MCFloat> & p) const;
+    virtual bool contains(const MCVector2dF & p) const;
 
     //! \reimp
-    virtual int interpenetrationDepth(const MCSegment<MCFloat> & p) const;
+    virtual int interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const;
 
     //! \reimp
-    virtual MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
+    virtual MCVector2dF contactNormal(const MCSegmentF & p) const;
 
     //! \brief Resize
     void resize(MCFloat width, MCFloat height);
 
     //! Return the oriented bbox to access vertices etc.
-    const MCOBBox<MCFloat> & obbox() const;
+    const MCOBBoxF & obbox() const;
 
     //! Get crossing edge for the given segment.
-    MCEdge<MCFloat> edgeForSegment(const MCSegment<MCFloat> & p) const;
+    MCEdgeF edgeForSegment(const MCSegmentF & p) const;
 
     //! Return the typeID
     static MCUint typeID();

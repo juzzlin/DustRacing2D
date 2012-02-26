@@ -40,4 +40,6 @@ struct MCSegment
     MCVector2d<T> vertex1;
 };
 
+typedef MCSegment<MCFloat> MCSegmentF;
+
 #endif // MCSEGMENT_HH
