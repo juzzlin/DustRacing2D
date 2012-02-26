@@ -15,6 +15,7 @@
 
 #include "../common/config.hpp"
 #include "mainwindow.hpp"
+#include "aboutdlg.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -26,6 +27,7 @@
 MainWindow * MainWindow::m_instance = nullptr;
 
 MainWindow::MainWindow()
+  : m_aboutDlg(new AboutDlg(this))
 {
     if (!m_instance)
     {
@@ -81,9 +83,5 @@ void MainWindow::populateMenuBar()
     // Add "about"-action
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
-    //  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
-}
-
-MainWindow::~MainWindow()
-{
+    connect(aboutAct, SIGNAL(triggered()), m_aboutDlg, SLOT(exec()));
 }

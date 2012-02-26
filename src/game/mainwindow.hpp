@@ -19,6 +19,7 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 
+class AboutDlg;
 class Renderer;
 
 /*! \class MainWindow
@@ -32,9 +33,6 @@ public:
 
     //! Constructor
     MainWindow();
-    
-    //! Destructor
-    ~MainWindow();
 
     //! Return the singleton MainWindow.
     static MainWindow * instance();
@@ -56,6 +54,8 @@ private:
     void populateMenuBar();
 
     static MainWindow * m_instance;
+
+    AboutDlg * m_aboutDlg;
 };
 
 #endif // MAINWINDOW_HPP
