@@ -39,8 +39,7 @@ namespace
 
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
-  , m_pDeccelerationFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
-  , m_frictionGeneratorAdded(false)
+  , m_pBrakingFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
   , m_accelerating(false)
   , m_braking(false)
   , m_turnLeft(false)
@@ -59,12 +58,19 @@ Car::Car(MCSurface & surface, MCUint index)
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
     setRestitution(0.1f);
 
+    // Add slide friction generator
     MCWorld::instance().addForceGenerator(
         *new SlideFrictionGenerator(SLIDE_FRICTION), *this, true);
 
+    // Add rolling friction generator
     MCWorld::instance().addForceGenerator(
         *new MCFrictionGenerator(
             ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
+
+    // Add braking friction generator
+    MCWorld::instance().addForceGenerator(
+        *m_pBrakingFriction, *this, true);
+    m_pBrakingFriction->enable(false);
 
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
@@ -125,13 +131,7 @@ void Car::turnRight()
 
 void Car::accelerate()
 {
-    // Remove friction generator if it was added
-    if (m_frictionGeneratorAdded)
-    {
-        MCWorld::instance().removeForceGenerator(
-            *m_pDeccelerationFriction, *this);
-        m_frictionGeneratorAdded = false;
-    }
+    m_pBrakingFriction->enable(false);
 
     const MCFloat realAngle = angle();/* + m_effectiveTireAngle*/;
     MCFloat dx = MCTrigonom::cos(realAngle);
@@ -145,11 +145,7 @@ void Car::accelerate()
 
 void Car::brake()
 {
-    // Simulate braking by adding a friction
-    // generator.
-    MCWorld::instance().addForceGenerator(
-        *m_pDeccelerationFriction, *this, true);
-    m_frictionGeneratorAdded = true;
+    m_pBrakingFriction->enable(true);
 
     m_accelerating = false;
     m_braking      = true;
@@ -157,13 +153,7 @@ void Car::brake()
 
 void Car::noAction()
 {
-    // Remove friction generator if it was added
-    if (m_frictionGeneratorAdded)
-    {
-        MCWorld::instance().removeForceGenerator(
-            *m_pDeccelerationFriction, *this);
-        m_frictionGeneratorAdded = false;
-    }
+    m_pBrakingFriction->enable(false);
 
     m_accelerating = false;
     m_braking      = false;

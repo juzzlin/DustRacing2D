@@ -73,8 +73,7 @@ public:
 
 private:
 
-    MCFrictionGenerator * m_pDeccelerationFriction;
-    bool                  m_frictionGeneratorAdded;
+    MCFrictionGenerator * m_pBrakingFriction;
     bool                  m_accelerating;
     bool                  m_braking;
     bool                  m_turnLeft;
