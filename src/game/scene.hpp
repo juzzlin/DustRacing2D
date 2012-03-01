@@ -27,11 +27,12 @@ class MCCamera;
 class MCObject;
 class MCSurface;
 class MCWorld;
-class Track;
-class TimingOverlay;
+class OffTrackDetector;
 class Speedometer;
 class Startlights;
 class StartlightsOverlay;
+class Track;
+class TimingOverlay;
 
 //! The game scene.
 class Scene
@@ -112,6 +113,9 @@ private:
 
     typedef std::vector<AiLogic *> AiVector;
     AiVector m_aiLogic;
+
+    typedef std::vector<OffTrackDetector *> OTDVector;
+    OTDVector m_offTrackDetectors;
 };
 
 #endif // SCENE_HPP
