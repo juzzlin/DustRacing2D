@@ -3,6 +3,7 @@ set(SRC
 aboutdlg.cpp
 ailogic.cpp
 car.cpp
+centrifugalforcegenerator.cpp
 checkerflag.cpp
 game.cpp
 inputhandler.cpp

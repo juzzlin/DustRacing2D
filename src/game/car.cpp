@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
+#include "centrifugalforcegenerator.hpp"
 #include "layers.hpp"
 #include "radius.hpp"
 #include "slidefrictiongenerator.hpp"
@@ -71,6 +72,10 @@ Car::Car(MCSurface & surface, MCUint index)
     MCWorld::instance().addForceGenerator(
         *m_pBrakingFriction, *this, true);
     m_pBrakingFriction->enable(false);
+
+    // Add centrifugal force generator
+    MCWorld::instance().addForceGenerator(
+        *new CentrifugalForceGenerator, *this, true);
 
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();

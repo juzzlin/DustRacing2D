@@ -6,7 +6,7 @@ Game:
 - Separate Computer Hints and Route Hints
 - Support for rotational impulses
 - Reverse gear
-- Additional friction of car is off the track
+- Additional friction of car is off the track (a new force generator?)
 - Move car to the nearest track tile if stuck for too long
 - Max lap count
 - Position detection
@@ -16,6 +16,7 @@ Game:
 - Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
 - Initial start menu
+- Make AI use angles instead of cross product?
 
 Editor:
 
@@ -25,4 +26,5 @@ Editor:
 Graphics:
 
 - New image for tire object
-
+- Finish line tile
+- New car images
