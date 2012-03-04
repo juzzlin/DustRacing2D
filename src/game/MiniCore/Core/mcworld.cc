@@ -32,6 +32,13 @@
 
 MCWorld * MCWorldImpl::pInstance = nullptr;
 
+namespace
+{
+// Set dimensions for minimum objectTree leaves
+const MCFloat MinLeafWidth  = 64;
+const MCFloat MinLeafHeight = 64;
+}
+
 MCWorldImpl::MCWorldImpl()
 : pObjectTree(nullptr)
 , minX(0)
@@ -41,7 +48,8 @@ MCWorldImpl::MCWorldImpl()
 , minZ(0)
 , maxZ(0)
 , metersPerPixel(1.0)
-{}
+{
+}
 
 MCWorldImpl::~MCWorldImpl()
 {}
@@ -220,6 +228,9 @@ MCWorld::MCWorld()
         std::cerr << "ERROR!!: Only one MCWorld can exist!" << std::endl;
         exit(EXIT_FAILURE);
     }
+
+    // Default dimensions. Creates also MCObjectTree.
+    setDimensions(0, MinLeafWidth, 0, MinLeafHeight, 0, 1);
 }
 
 MCWorld & MCWorld::instance()
@@ -236,10 +247,6 @@ void MCWorld::setDimensions(
     MCFloat minY, MCFloat maxY,
     MCFloat minZ, MCFloat maxZ)
 {
-    // Set dimensions for minimum objectTree leaves
-    const MCFloat MinLeafWidth  = 64;
-    const MCFloat MinLeafHeight = 64;
-
     // Init objectTree
     delete m_pImpl->pObjectTree;
     m_pImpl->pObjectTree = new MCObjectTree(
@@ -462,6 +469,8 @@ MCFloat MCWorld::metersPerPixelSquared() const
 
 MCWorld::~MCWorld()
 {
+    MCWorldImpl::pInstance = nullptr;
+
     delete m_pImpl->pObjectTree;
     delete m_pImpl;
 }

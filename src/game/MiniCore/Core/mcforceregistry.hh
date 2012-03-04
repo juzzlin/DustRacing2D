@@ -25,6 +25,7 @@
 
 class MCForceRegistryImpl;
 class MCForceGenerator;
+class MCObject;
 
 /*! \class MCForceRegistry
  *  \brief MCForceRegistry stores object-force -pairs
@@ -43,14 +44,14 @@ public:
    *        and handles deletion of generator.
    */
   void addForceGenerator(MCForceGenerator & generator,
-                         MCObject & object, bool takeOwnership = false);
+      MCObject & object, bool takeOwnership = false);
 
   /*! Remove given force generator to given object
    * \param generator Force generator to be matched.
    * \param object Object to be matched
    */
   void removeForceGenerator(MCForceGenerator & generator,
-                            MCObject & object);
+      MCObject & object);
 
   //! Update force generators
   void update();

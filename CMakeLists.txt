@@ -18,6 +18,8 @@ include(${QT_USE_FILE})
 # game binary)
 find_package(OpenGL REQUIRED)
 
+enable_testing()
+
 # Sub build: editor
 add_subdirectory(src/editor)
 # Sub build: MiniCore engine

@@ -45,8 +45,6 @@ Text/mctextureglyph.cc
 Text/mctexturetext.cc
 )
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${OPENGL_INCLUDE_DIR})
-
 link_libraries(
 #   ${SDL_LIBRARY}
 #   ${SDLMIXER_LIBRARY}
@@ -59,4 +57,5 @@ link_libraries(
 )
 
 add_library(MiniCore ${MiniCoreSRC})
+add_subdirectory(UnitTests)
 

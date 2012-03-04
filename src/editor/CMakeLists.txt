@@ -62,7 +62,7 @@ qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 include_directories(${CMAKE_BINARY_DIR})
 
 # Add the executable
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/editor)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/editor)
 add_executable(editor ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS})
 
 # Link libraries

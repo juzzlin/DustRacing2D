@@ -55,7 +55,7 @@ qt4_add_resources(RC_SRC ${RCS})
 
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 
-link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_glu_LIBRARY})
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/game)
+link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/game)
 add_executable(dustrac ${SRC} ${MOC_SRC} ${RC_SRC})
 
