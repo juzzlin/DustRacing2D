@@ -10,6 +10,7 @@ inputhandler.cpp
 main.cpp
 mainwindow.cpp
 map.cpp
+offtrackdetector.cpp
 overlaybase.cpp
 race.cpp
 radius.cpp

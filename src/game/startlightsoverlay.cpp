@@ -87,6 +87,9 @@ void StartlightsOverlay::setDimensions(MCUint width, MCUint height)
 
 void StartlightsOverlay::render()
 {
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_DEPTH_TEST);
+
     switch (m_model.state())
     {
     case Startlights::LightsFirstRow:
@@ -108,4 +111,6 @@ void StartlightsOverlay::render()
     default:
         break;
     }
+
+    glPopAttrib();
 }

@@ -36,6 +36,9 @@ void Speedometer::setCarToFollow(const Car & car)
 
 void Speedometer::render()
 {
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_DEPTH_TEST);
+
     // 200 km/h is at 180 degrees.
     MCFloat newAngle = 180 - m_pCar->speedInKmh() * 180 / 200;
 
@@ -53,4 +56,6 @@ void Speedometer::render()
     m_body.render(nullptr, m_bodyPos, 0);
     m_hand.render(nullptr, m_bodyPos, m_angle);
     m_center.render(nullptr, m_bodyPos, m_angle);
+
+    glPopAttrib();
 }

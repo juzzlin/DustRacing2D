@@ -19,6 +19,7 @@
 #include "car.hpp"
 #include "inputhandler.hpp"
 #include "layers.hpp"
+#include "offtrackdetector.hpp"
 #include "race.hpp"
 #include "speedometer.hpp"
 #include "startlights.hpp"
@@ -361,6 +362,11 @@ Scene::~Scene()
     for (AiLogic * ai : m_aiLogic)
     {
         delete ai;
+    }
+
+    for (OffTrackDetector * otd : m_offTrackDetectors)
+    {
+        delete otd;
     }
 
     delete m_pStartlights;
