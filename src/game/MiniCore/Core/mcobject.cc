@@ -112,7 +112,7 @@ void MCObjectImpl::integrate(MCFloat step)
 {
     if (step > 0.0) {
 
-        MCVector3d<MCFloat> totAcceleration(acceleration);
+        MCVector3dF totAcceleration(acceleration);
         pPublic->translate(location + velocity * step);
 
         totAcceleration += forces * invMass;
@@ -121,7 +121,7 @@ void MCObjectImpl::integrate(MCFloat step)
 
         // Note that this code doesn't take the z-component into consideration
         if (maximumVelocity > 0) {
-            const MCFloat l = MCVector2d<MCFloat>(velocity).lengthFast();
+            const MCFloat l = MCVector2dF(velocity).lengthFast();
             if (l > maximumVelocity) {
                 velocity /= l;
                 velocity *= maximumVelocity;
@@ -180,13 +180,13 @@ void MCObjectImpl::doOutOfBoundariesEvent()
     const MCWorld * pWorld = &MCWorld::instance();
     if (minX < pWorld->minX()) {
         velocity.setI(0); forces.setI(0);
-        pPublic->translate(MCVector3d<MCFloat>(
+        pPublic->translate(MCVector3dF(
             location.i() + pWorld->minX() - minX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         pPublic->outOfBoundariesEvent(e);
     } else if (maxX > pWorld->maxX()) {
         velocity.setI(0); forces.setI(0);
-        pPublic->translate(MCVector3d<MCFloat>(
+        pPublic->translate(MCVector3dF(
             location.i() + pWorld->maxX() - maxX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         pPublic->outOfBoundariesEvent(e);
@@ -195,13 +195,13 @@ void MCObjectImpl::doOutOfBoundariesEvent()
     // Check Y-boundaries
     if (minY < pWorld->minY()) {
         velocity.setJ(0); forces.setJ(0);
-        pPublic->translate(MCVector3d<MCFloat>(
+        pPublic->translate(MCVector3dF(
             location.i(), location.j() + pWorld->minY() - minY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         pPublic->outOfBoundariesEvent(e);
     } else if (maxY > pWorld->maxY()) {
         velocity.setJ(0); forces.setJ(0);
-        pPublic->translate(MCVector3d<MCFloat>(
+        pPublic->translate(MCVector3dF(
             location.i(), location.j() + pWorld->maxY() - maxY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         pPublic->outOfBoundariesEvent(e);
@@ -211,13 +211,13 @@ void MCObjectImpl::doOutOfBoundariesEvent()
     if (location.k() < pWorld->minZ()) {
         velocity.setK(0); forces.setK(0);
         pPublic->translate(
-            MCVector3d<MCFloat>(location.i(), location.j(), pWorld->minZ()));
+            MCVector3dF(location.i(), location.j(), pWorld->minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
         pPublic->outOfBoundariesEvent(e);
     } else if (location.k() > pWorld->maxZ()) {
         velocity.setK(0); forces.setK(0);
         pPublic->translate(
-            MCVector3d<MCFloat>(location.i(), location.j(), pWorld->maxZ()));
+            MCVector3dF(location.i(), location.j(), pWorld->maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
         pPublic->outOfBoundariesEvent(e);
     }
@@ -332,7 +332,7 @@ void MCObject::addToWorld()
 void MCObject::addToWorld(MCFloat x, MCFloat y, MCFloat z)
 {
     MCWorld::instance().addObject(*this);
-    translate(MCVector3d<MCFloat>(x, y, z));
+    translate(MCVector3dF(x, y, z));
 }
 
 void MCObject::removeFromWorld()
@@ -393,7 +393,7 @@ bool MCObject::stationary() const
     return m_pImpl->flags & StationaryMask;
 }
 
-void MCObject::addImpulse(const MCVector3d<MCFloat> & impulse)
+void MCObject::addImpulse(const MCVector3dF & impulse)
 {
     m_pImpl->velocity += impulse;
 }
@@ -453,12 +453,12 @@ void MCObject::setMaximumVelocity(MCFloat maxVelocity)
     m_pImpl->maximumVelocity = maxVelocity;
 }
 
-void MCObject::setVelocity(const MCVector3d<MCFloat> & newVelocity)
+void MCObject::setVelocity(const MCVector3dF & newVelocity)
 {
     m_pImpl->velocity = newVelocity;
 }
 
-const MCVector3d<MCFloat> & MCObject::velocity() const
+const MCVector3dF & MCObject::velocity() const
 {
     return m_pImpl->velocity;
 }
@@ -478,17 +478,17 @@ void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
     m_pImpl->maximumAngularVelocity = newVelocity;
 }
 
-void MCObject::setAcceleration(const MCVector3d<MCFloat> & newAcceleration)
+void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
 {
     m_pImpl->acceleration = newAcceleration;
 }
 
-const MCVector3d<MCFloat> & MCObject::acceleration() const
+const MCVector3dF & MCObject::acceleration() const
 {
     return m_pImpl->acceleration;
 }
 
-void MCObject::translate(const MCVector3d<MCFloat> & newLocation)
+void MCObject::translate(const MCVector3dF & newLocation)
 {
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
@@ -501,17 +501,17 @@ void MCObject::translate(const MCVector3d<MCFloat> & newLocation)
     }
 }
 
-void MCObject::displace(const MCVector3d<MCFloat> & displacement)
+void MCObject::displace(const MCVector3dF & displacement)
 {
     translate(m_pImpl->location + displacement);
 }
 
-const MCVector3d<MCFloat> & MCObject::location() const
+const MCVector3dF & MCObject::location() const
 {
     return m_pImpl->location;
 }
 
-void MCObject::setShadowOffset(const MCVector2d<MCFloat> & p)
+void MCObject::setShadowOffset(const MCVector2dF & p)
 {
     if (m_pImpl->pShape) {
         m_pImpl->pShape->setShadowOffset(p);
@@ -564,9 +564,9 @@ MCFloat MCObject::angle() const
     return m_pImpl->angle;
 }
 
-MCVector2d<MCFloat> MCObject::direction() const
+MCVector2dF MCObject::direction() const
 {
-    return MCVector2d<MCFloat>(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
+    return MCVector2dF(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
 }
 
 void MCObject::setRestitution(MCFloat newRestitution)
@@ -607,7 +607,7 @@ MCShapeView * MCObject::view() const
     return m_pImpl->pShape ? m_pImpl->pShape->view() : nullptr;
 }
 
-void MCObject::addForce(const MCVector3d<MCFloat> & force)
+void MCObject::addForce(const MCVector3dF & force)
 {
     m_pImpl->forces += force;
 }
@@ -745,12 +745,12 @@ void MCObject::deleteContacts(MCObject & object)
     }
 }
 
-void MCObject::setInitialLocation(const MCVector3d<MCFloat> & location)
+void MCObject::setInitialLocation(const MCVector3dF & location)
 {
     m_pImpl->initialLocation = location;
 }
 
-const MCVector3d<MCFloat> & MCObject::initialLocation() const
+const MCVector3dF & MCObject::initialLocation() const
 {
     return m_pImpl->initialLocation;
 }

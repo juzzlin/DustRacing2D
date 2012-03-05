@@ -156,14 +156,14 @@ public:
 
     //! \brief Add velocity component of an impulse vector.
     //! \param impulse The velocity component.
-    void addImpulse(const MCVector3d<MCFloat> & impulse);
+    void addImpulse(const MCVector3dF & impulse);
 
     //! Set current velocity to the given value.
     //! \param newVelocity The new velocity.
-    void setVelocity(const MCVector3d<MCFloat> & newVelocity);
+    void setVelocity(const MCVector3dF & newVelocity);
 
     //! Return current velocity.
-    const MCVector3d<MCFloat> & velocity() const;
+    const MCVector3dF & velocity() const;
 
     //! Set current angular velocity to the given value.
     //! Unit: rad/s.
@@ -181,14 +181,14 @@ public:
     //! Set constant acceleration (e.g. gravity). Use addForce()
     //! to cause acceleration that varies from frame to frame.
     //! \param newAcceleration The new acceleration.
-    void setAcceleration(const MCVector3d<MCFloat> & newAcceleration);
+    void setAcceleration(const MCVector3dF & newAcceleration);
 
     //! Return constant acceleration.
-    const MCVector3d<MCFloat> & acceleration() const;
+    const MCVector3dF & acceleration() const;
 
     //! Add a force (N) vector to the object for a single frame.
     //! \param force Force vector to be added.
-    void addForce(const MCVector3d<MCFloat> & force);
+    void addForce(const MCVector3dF & force);
 
     //! Add a moment (Nm) to the object for a single frame.
     //! \param moment Value to be added.
@@ -239,18 +239,18 @@ public:
 
     //! Set location
     //! \param newLocation The new location
-    virtual void translate(const MCVector3d<MCFloat> & newLocation);
+    virtual void translate(const MCVector3dF & newLocation);
 
     //! Displace object
     //! \param displacement Translates object to location() + displacement.
-    void displace(const MCVector3d<MCFloat> & displacement);
+    void displace(const MCVector3dF & displacement);
 
     //! Set offset for the fake shadow.
     //! \param p The new offset. Applies only if a shape has been set.
-    void setShadowOffset(const MCVector2d<MCFloat> & p);
+    void setShadowOffset(const MCVector2dF & p);
 
     //! Return location
-    const MCVector3d<MCFloat> & location() const;
+    const MCVector3dF & location() const;
 
     //! Convenience getter for location.
     MCFloat getX() const;
@@ -269,7 +269,7 @@ public:
     MCFloat angle() const;
 
     //! Get direction vector.
-    MCVector2d<MCFloat> direction() const;
+    MCVector2dF direction() const;
 
     //! \brief Set restitution.
     //! \param newRestitution The new restitution [0.0..1.0]
@@ -355,10 +355,10 @@ public:
     int index() const;
 
     //! Set initial location. This won't result in any translations.
-    void setInitialLocation(const MCVector3d<MCFloat> & location);
+    void setInitialLocation(const MCVector3dF & location);
 
     //! Get initial location.
-    const MCVector3d<MCFloat> & initialLocation() const;
+    const MCVector3dF & initialLocation() const;
 
 protected:
 
