@@ -23,6 +23,8 @@
 #include "../../Core/mcobject.hh"
 #include "../../Core/mcworld.hh"
 
+#include <memory>
+
 class TestForceGenerator : public MCForceGenerator
 {
 public:
@@ -31,6 +33,11 @@ public:
     : m_updated(false)
     {}
 
+    ~TestForceGenerator()
+    {
+        m_destructorCallCount++;
+    }
+
     //! \reimp
     void updateForce(MCObject &)
     {
@@ -38,7 +45,11 @@ public:
     }
 
     bool m_updated;
+
+    static MCUint m_destructorCallCount;
 };
+
+MCUint TestForceGenerator::m_destructorCallCount = 0;
 
 MCForceRegistryTest::MCForceRegistryTest()
 {
@@ -60,6 +71,46 @@ void MCForceRegistryTest::testAddUpdateRemove()
     dut.removeForceGenerator(force, object);
     dut.update();
     QVERIFY(force.m_updated == false);
+}
+
+void MCForceRegistryTest::testAddUpdateRemoveMulti()
+{
+    const MCUint NUM_OBJECTS = 100;
+    TestForceGenerator::m_destructorCallCount = 0;
+
+    {
+        std::vector<TestForceGenerator *> forces;
+
+        MCForceRegistry dut;
+        MCWorld world;
+
+        std::vector<std::shared_ptr<MCObject> > objects;
+        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        {
+            MCObject * object = new MCObject("TestObject");
+            objects.push_back(std::shared_ptr<MCObject>(object));
+            world.addObject(*object);
+            TestForceGenerator * force = new TestForceGenerator;
+            dut.addForceGenerator(*force, *object, true);
+            forces.push_back(force);
+        }
+
+        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        {
+            QVERIFY(forces[i]->m_updated == false);
+        }
+
+        dut.update();
+
+        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        {
+            QVERIFY(forces[i]->m_updated == true);
+        }
+    }
+
+    // MCForceRegistry should have deleted the forces, because
+    // true was given to addForceGenerator().
+    QVERIFY(TestForceGenerator::m_destructorCallCount == NUM_OBJECTS);
 }
 
 void MCForceRegistryTest::testUpdateWithEnable()
