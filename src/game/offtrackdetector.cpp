@@ -48,8 +48,8 @@ void OffTrackDetector::update()
         if (rTile.rotation() == 0 || rTile.rotation() == 180)
         {
             MCFloat y = m_car.location().j();
-            if (y > rTile.location().y() + m_tileWLimit ||
-                y < rTile.location().y() - m_tileWLimit)
+            if (y > rTile.location().y() + m_tileHLimit ||
+                y < rTile.location().y() - m_tileHLimit)
             {
                 m_car.setOffTrack(true);
             }
@@ -57,8 +57,8 @@ void OffTrackDetector::update()
         else if (rTile.rotation() == 90 || rTile.rotation() == 270)
         {
             MCFloat x = m_car.location().i();
-            if (x > rTile.location().x() + m_tileHLimit ||
-                x < rTile.location().x() - m_tileHLimit)
+            if (x > rTile.location().x() + m_tileWLimit ||
+                x < rTile.location().x() - m_tileWLimit)
             {
                 m_car.setOffTrack(true);
             }
