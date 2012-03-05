@@ -37,6 +37,8 @@ private:
 
     Car   & m_car;
     Track * m_pTrack;
+    float   m_tileWLimit;
+    float   m_tileHLimit;
 };
 
 #endif // OFFTRACKDETECTOR_HPP

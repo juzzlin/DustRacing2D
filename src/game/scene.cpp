@@ -75,6 +75,8 @@ Scene::Scene(MCUint numCars)
 
         m_cars.push_back(car);
         m_race.addCar(*car);
+
+        m_offTrackDetectors.push_back(new OffTrackDetector(*car));
     }
 
     m_pStartlightsOverlay->setDimensions(
@@ -96,6 +98,11 @@ void Scene::updateFrame(InputHandler & handler,
     updateWorld(timeStep);
 
     updateRace();
+
+    for (OffTrackDetector * otd : m_offTrackDetectors)
+    {
+        otd->update();
+    }
 }
 
 void Scene::updateWorld(float timeStep)
@@ -200,6 +207,11 @@ void Scene::setActiveTrack(Track & activeTrack)
     for (AiLogic * ai : m_aiLogic)
     {
         ai->setTrack(activeTrack);
+    }
+
+    for (OffTrackDetector * otd : m_offTrackDetectors)
+    {
+        otd->setTrack(activeTrack);
     }
 }
 

@@ -36,13 +36,17 @@ namespace
     const MCFloat SLIDE_FRICTION     = 0.5f;
     const MCFloat ROLLING_FRICTION   = 0.1f;
     const MCFloat ROTATION_FRICTION  = 0.1f;
+    const MCFloat OFF_TRACK_FRICTION = 0.15f;
 }
 
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(BRAKE_FRICTION, 0.0f))
+  , m_pOffTrackFriction(new MCFrictionGenerator(
+        OFF_TRACK_FRICTION, 0))
   , m_accelerating(false)
   , m_braking(false)
+  , m_reverse(false)
   , m_turnLeft(false)
   , m_turnRight(false)
   , m_index(index)
@@ -72,6 +76,11 @@ Car::Car(MCSurface & surface, MCUint index)
     MCWorld::instance().addForceGenerator(
         *m_pBrakingFriction, *this, true);
     m_pBrakingFriction->enable(false);
+
+    // Add off-track friction generator
+    MCWorld::instance().addForceGenerator(
+        *m_pOffTrackFriction, *this, true);
+    m_pOffTrackFriction->enable(false);
 
     // Add centrifugal force generator
     MCWorld::instance().addForceGenerator(
@@ -116,7 +125,7 @@ void Car::turnLeft()
 
     m_turnLeft = true;
 
-    if (speedInKmh() > 5)
+    if (std::fabs(speedInKmh()) > 5)
     {
         addMoment(m_turningMoment);
     }
@@ -128,7 +137,7 @@ void Car::turnRight()
 
     m_turnRight = true;
 
-    if (speedInKmh() > 5)
+    if (std::fabs(speedInKmh()) > 5)
     {
         addMoment(-m_turningMoment);
     }
@@ -146,14 +155,31 @@ void Car::accelerate()
 
     m_accelerating = true;
     m_braking      = false;
+    m_reverse      = false;
 }
 
 void Car::brake()
 {
-    m_pBrakingFriction->enable(true);
-
     m_accelerating = false;
-    m_braking      = true;
+
+    if (speedInKmh() < 1)
+    {
+        m_reverse = true;
+    }
+
+    if (m_reverse)
+    {
+        const MCFloat realAngle = angle();
+        MCFloat dx = MCTrigonom::cos(realAngle);
+        MCFloat dy = MCTrigonom::sin(realAngle);
+        MCVector2d<MCFloat> force(dx, dy);
+        addForce(-force * m_power / 2);
+    }
+    else
+    {
+        m_braking = true;
+        m_pBrakingFriction->enable(true);
+    }
 }
 
 void Car::noAction()
@@ -162,6 +188,7 @@ void Car::noAction()
 
     m_accelerating = false;
     m_braking      = false;
+    m_reverse      = false;
 }
 
 void Car::noSteering()
@@ -217,6 +244,11 @@ void Car::render(MCCamera *p)
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
+}
+
+void Car::setOffTrack(bool state)
+{
+    m_pOffTrackFriction->enable(state);
 }
 
 Car::~Car()

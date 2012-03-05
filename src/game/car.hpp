@@ -71,11 +71,15 @@ public:
 
     MCFloat turningMoment() const;
 
+    void setOffTrack(bool state);
+
 private:
 
     MCFrictionGenerator * m_pBrakingFriction;
+    MCFrictionGenerator * m_pOffTrackFriction;
     bool                  m_accelerating;
     bool                  m_braking;
+    bool                  m_reverse;
     bool                  m_turnLeft;
     bool                  m_turnRight;
     MCUint                m_index;
