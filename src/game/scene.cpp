@@ -301,6 +301,7 @@ void Scene::initRace()
     assert(m_pActiveTrack);
 
     m_race.setTrack(*m_pActiveTrack);
+    m_race.setLapCount(5);
     m_race.init();
 }
 
@@ -320,6 +321,7 @@ void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
 {
     m_pTimingOverlay = &timingOverlay;
     m_pTimingOverlay->setTiming(m_race.timing());
+    m_pTimingOverlay->setRace(m_race);
     m_pTimingOverlay->setCarToFollow(*m_cars.at(0));
 }
 

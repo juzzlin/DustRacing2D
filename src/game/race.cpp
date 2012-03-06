@@ -94,6 +94,11 @@ void Race::setLapCount(unsigned int laps)
     m_lapCount = laps;
 }
 
+unsigned int Race::lapCount() const
+{
+    return m_lapCount;
+}
+
 void Race::addCar(Car & car)
 {
     if (find(m_cars.begin(), m_cars.end(), &car) == m_cars.end())

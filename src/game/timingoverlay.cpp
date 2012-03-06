@@ -14,6 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "timingoverlay.hpp"
+
+#include "race.hpp"
 #include "timing.hpp"
 #include "car.hpp"
 
@@ -28,6 +30,7 @@ TimingOverlay::TimingOverlay()
   , m_defaultMonospace(m_fontManager.font("default"))
   , m_pCar(nullptr)
   , m_pTiming(nullptr)
+  , m_pRace(nullptr)
 {
 }
 
@@ -41,11 +44,16 @@ void TimingOverlay::setTiming(Timing & timing)
     m_pTiming = &timing;
 }
 
+void TimingOverlay::setRace(Race & race)
+{
+    m_pRace = &race;
+}
+
 void TimingOverlay::render()
 {
     // TODO: Refactor and optimize.
 
-    if (m_pCar && m_pTiming)
+    if (m_pCar && m_pTiming && m_pRace)
     {
         const int shadowY        = -2;
         const int shadowX        =  2;
@@ -55,10 +63,12 @@ void TimingOverlay::render()
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->recordTime(index);
 
+        const int unsigned laps  = m_pRace->lapCount();
+
         // Render the current lap number
         {
             std::stringstream ss;
-            ss << " LAP:" << lap;
+            ss << " LAP:" << lap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
             lapText.setColor(1.0f, 1.0f, 0.0f);

@@ -21,6 +21,7 @@
 class Car;
 class MCTextureFontManager;
 class MCTextureFont;
+class Race;
 class Timing;
 
 //! Renders timeing information on top of the game scene.
@@ -40,12 +41,16 @@ public:
     //! Set the timing data.
     void setTiming(Timing & timing);
 
+    //! Set current race.
+    void setRace(Race & race);
+
 private:
 
     MCTextureFontManager & m_fontManager;
-    MCTextureFont & m_defaultMonospace;
-    const Car * m_pCar;
-    Timing * m_pTiming;
+    MCTextureFont        & m_defaultMonospace;
+    const Car            * m_pCar;
+    Timing               * m_pTiming;
+    Race                 * m_pRace;
 };
 
 #endif // TIMINGOVERLAY_HPP
