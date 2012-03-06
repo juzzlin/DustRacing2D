@@ -18,6 +18,7 @@
 
 #include <QGraphicsView>
 #include <QMenu>
+#include "../common/tracktilebase.hpp"
 
 class QAction;
 class QMouseEvent;
@@ -49,32 +50,34 @@ private slots:
 
     void doRotate90CW();
     void doRotate90CCW();
-    void doSetAsFlat();
-    void doSetAsHill();
-    void doSetAsGorge();
     void doClearComputerHint();
     void doSetComputerHintFirstBeforeCorner();
     void doSetComputerHintSecondBeforeCorner();
-    void doSetComputerHintLeftLine();
-    void doSetComputerHintRightLine();
+    void doClearDrivingLineHint();
+    void doSetDrivingLineHintLeft();
+    void doSetDrivingLineHintRight();
+    void doSetDrivingLineHintTop();
+    void doSetDrivingLineHintBottom();
 
 private:
 
     void createContextMenu();
     void handleLeftButtonClickOnTile(TrackTile * tile);
     void handleRightButtonClickOnTile(TrackTile * tile);
+    void doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint);
+    void doSetComputerHint(TrackTileBase::ComputerHint hint);
 
     QMenu     m_menu;
     QPoint    m_clickedPos;
     QPointF   m_clickedScenePos;
-    QAction * m_setAsFlat;
-    QAction * m_setAsHill;
-    QAction * m_setAsGorge;
     QAction * m_clearComputerHint;
     QAction * m_setComputerHintFirstBeforeCorner;
     QAction * m_setComputerHintSecondBeforeCorner;
-    QAction * m_setComputerHintLeftLine;
-    QAction * m_setComputerHintRightLine;
+    QAction * m_clearDrivingLineHint;
+    QAction * m_setDrivingLineHintLeft;
+    QAction * m_setDrivingLineHintRight;
+    QAction * m_setDrivingLineHintTop;
+    QAction * m_setDrivingLineHintBottom;
 };
 
 #endif // EDITORVIEW_HPP

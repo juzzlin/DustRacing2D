@@ -25,8 +25,8 @@ TrackTileBase::TrackTileBase(TrackDataBase & trackData,
   , m_matrixLocation(matrixLocation)
   , m_trackData(trackData)
   , m_routeDirection(TrackTileBase::RD_NONE)
-  , m_profile(TrackTileBase::TP_FLAT)
   , m_computerHint(TrackTileBase::CH_NONE)
+  , m_drivingLineHint(TrackTileBase::DLH_NONE)
 {
 }
 
@@ -78,16 +78,6 @@ TrackDataBase & TrackTileBase::trackData() const
     return m_trackData;
 }
 
-void TrackTileBase::setProfile(TrackTileBase::TileProfile profile)
-{
-    m_profile = profile;
-}
-
-TrackTileBase::TileProfile TrackTileBase::profile() const
-{
-    return m_profile;
-}
-
 void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)
 {
     m_computerHint = hint;
@@ -96,6 +86,16 @@ void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)
 TrackTileBase::ComputerHint TrackTileBase::computerHint() const
 {
     return m_computerHint;
+}
+
+void TrackTileBase::setDrivingLineHint(TrackTileBase::DrivingLineHint hint)
+{
+    m_drivingLineHint = hint;
+}
+
+TrackTileBase::DrivingLineHint TrackTileBase::drivingLineHint() const
+{
+    return m_drivingLineHint;
 }
 
 TrackTileBase::~TrackTileBase()

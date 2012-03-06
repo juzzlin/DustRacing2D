@@ -28,15 +28,36 @@ class TrackTileBase
 public:
 
     //! Direction to the next tile in the route.
-    enum RouteDirection {RD_NONE = 0, RD_LEFT, RD_RIGHT, RD_UP, RD_DOWN,
-        RD_UP_LEFT, RD_UP_RIGHT, RD_DOWN_LEFT, RD_DOWN_RIGHT};
-
-    //! Possible profiles of a tile.
-    enum TileProfile {TP_FLAT = 0, TP_HILL, TP_GORGE};
+    enum RouteDirection
+    {
+        RD_NONE = 0,
+        RD_LEFT,
+        RD_RIGHT,
+        RD_UP,
+        RD_DOWN,
+        RD_UP_LEFT,
+        RD_UP_RIGHT,
+        RD_DOWN_LEFT,
+        RD_DOWN_RIGHT
+    };
 
     //! Hints for computer players.
-    enum ComputerHint {CH_NONE = 0, CH_FIRST_BEFORE_CORNER, CH_SECOND_BEFORE_CORNER,
-        CH_LEFT_LINE, CH_RIGHT_LINE};
+    enum ComputerHint
+    {
+        CH_NONE = 0,
+        CH_FIRST_BEFORE_CORNER,
+        CH_SECOND_BEFORE_CORNER
+    };
+
+    //! Driving line hints for computer players.
+    enum DrivingLineHint
+    {
+        DLH_NONE = 0,
+        DLH_LEFT,
+        DLH_RIGHT,
+        DLH_TOP,
+        DLH_BOTTOM
+    };
 
     //! Constructor.
     //! \param trackData Reference to the "parent" TrackData.
@@ -76,17 +97,17 @@ public:
     //! Get direction towards next tile in the route.
     TrackTileBase::RouteDirection routeDirection() const;
 
-    //! Set profile
-    void setProfile(TileProfile profile);
-
-    //! Get profile
-    TileProfile profile() const;
-
     //! Set computer hint
     void setComputerHint(ComputerHint hint);
 
     //! Get computer hint
     ComputerHint computerHint() const;
+
+    //! Set driving line hint
+    void setDrivingLineHint(DrivingLineHint hint);
+
+    //! Get driving line hint
+    DrivingLineHint drivingLineHint() const;
 
 private:
 
@@ -108,11 +129,11 @@ private:
     //! Direction towards the next tile in the route.
     RouteDirection m_routeDirection;
 
-    //! Profile of the tile.
-    TileProfile m_profile;
-
     //! Computer hint
     ComputerHint m_computerHint;
+
+    //! Driving line hint
+    DrivingLineHint m_drivingLineHint;
 };
 
 #endif // TRACKTILEBASE_HPP

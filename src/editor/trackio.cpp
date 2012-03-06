@@ -47,7 +47,6 @@ bool TrackIO::save(const TrackData * trackData, QString path)
             {
                 QDomElement tileTag = doc.createElement("tile");
                 tileTag.setAttribute("type", tile->tileType());
-                tileTag.setAttribute("profile", tile->profile());
                 tileTag.setAttribute("i", i);
                 tileTag.setAttribute("j", j);
                 tileTag.setAttribute("o", tile->rotation());
@@ -60,6 +59,11 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                 if (tile->computerHint() != TrackTile::CH_NONE)
                 {
                     tileTag.setAttribute("computerHint", tile->computerHint());
+                }
+
+                if (tile->drivingLineHint() != TrackTile::DLH_NONE)
+                {
+                    tileTag.setAttribute("drivingLineHint", tile->drivingLineHint());
                 }
 
                 root.appendChild(tileTag);
@@ -137,8 +141,8 @@ TrackData * TrackIO::open(QString path)
                     unsigned int j      = tag.attribute("j", "0").toUInt();
                     int          o      = tag.attribute("o", "0").toInt();
                     int      index      = tag.attribute("index", "-1").toInt();
-                    int profileInt      = tag.attribute("profile", "0").toInt();
-                    int computerHintInt = tag.attribute("computerHint", "0").toInt();
+                    int computerHint    = tag.attribute("computerHint", "0").toInt();
+                    int drivingLineHint = tag.attribute("drivingLineHint", "0").toInt();
 
                     // Init a new tile. QGraphicsScene will take
                     // the ownership eventually.
@@ -150,39 +154,10 @@ TrackData * TrackIO::open(QString path)
                             MainWindow::instance()->objectLoader()
                                 .getPixmapByRole(id));
                         tile->setRouteIndex(index);
-
-                        switch (profileInt)
-                        {
-                        case TrackTileBase::TP_FLAT:
-                            tile->setProfile(TrackTileBase::TP_FLAT);
-                            break;
-                        case TrackTileBase::TP_HILL:
-                            tile->setProfile(TrackTileBase::TP_HILL);
-                            break;
-                        case TrackTileBase::TP_GORGE:
-                            tile->setProfile(TrackTileBase::TP_GORGE);
-                            break;
-                        default:
-                            break;
-                        }
-
-                        switch (computerHintInt)
-                        {
-                        case TrackTileBase::CH_FIRST_BEFORE_CORNER:
-                            tile->setComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
-                            break;
-                        case TrackTileBase::CH_SECOND_BEFORE_CORNER:
-                            tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
-                            break;
-                        case TrackTileBase::CH_LEFT_LINE:
-                            tile->setComputerHint(TrackTileBase::CH_LEFT_LINE);
-                            break;
-                        case TrackTileBase::CH_RIGHT_LINE:
-                            tile->setComputerHint(TrackTileBase::CH_RIGHT_LINE);
-                            break;
-                        default:
-                            break;
-                        }
+                        tile->setComputerHint(
+                            static_cast<TrackTileBase::ComputerHint>(computerHint));
+                        tile->setDrivingLineHint(
+                            static_cast<TrackTileBase::DrivingLineHint>(drivingLineHint));
 
                         if (index >= 0)
                             routeVector << tile;

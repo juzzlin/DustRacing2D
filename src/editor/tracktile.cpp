@@ -104,33 +104,6 @@ void TrackTile::paint(QPainter * painter,
         painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
     }
 
-    // Render white (hill) or black (gorge) X
-    switch (profile())
-    {
-        case TrackTileBase::TP_HILL:
-        {
-            pen.setColor(QColor(255, 255, 255));
-            painter->setPen(pen);
-            const int w = m_size.width();
-            const int h = m_size.height();
-            painter->drawLine(-w / 2, -h / 2, w / 2,  h / 2);
-            painter->drawLine(-w / 2,  h / 2, w / 2, -h / 2);
-        }
-        break;
-        case TrackTileBase::TP_GORGE:
-        {
-            pen.setColor(QColor(0, 0, 0));
-            painter->setPen(pen);
-            const int w = m_size.width();
-            const int h = m_size.height();
-            painter->drawLine(-w / 2, -h / 2, w / 2,  h / 2);
-            painter->drawLine(-w / 2,  h / 2, w / 2, -h / 2);
-        }
-        break;
-    default:
-        break;
-    }
-
     // Render route arrow arrow
     if (routeIndex() == 0)
     {
@@ -252,15 +225,19 @@ void TrackTile::swap(TrackTile & other)
     setRotation(other.rotation());
     other.setRotation(sourceAngle);
 
-    // Swap computer hints
-    const TrackTileBase::ComputerHint sourceHint = computerHint();
-    setComputerHint(other.computerHint());
-    other.setComputerHint(sourceHint);
+    {
+        // Swap computer hints
+        const TrackTileBase::ComputerHint sourceHint = computerHint();
+        setComputerHint(other.computerHint());
+        other.setComputerHint(sourceHint);
+    }
 
-    // Swap profiles
-    const TrackTileBase::TileProfile sourceProfile = profile();
-    setProfile(other.profile());
-    other.setProfile(sourceProfile);
+    {
+        // Swap driving line hints
+        const TrackTileBase::DrivingLineHint sourceHint = drivingLineHint();
+        setDrivingLineHint(other.drivingLineHint());
+        other.setDrivingLineHint(sourceHint);
+    }
 }
 
 void TrackTile::setAdded(bool state)

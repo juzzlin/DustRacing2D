@@ -61,13 +61,21 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
     MCVector3dF target(targetTile.location().x(), targetTile.location().y());
 
     // Take line hints into account
-    if (currentTile.computerHint() == TrackTile::CH_LEFT_LINE)
+    if (currentTile.drivingLineHint() == TrackTile::DLH_LEFT)
     {
         target -= MCVector3dF(TrackTile::TILE_W / 2, 0);
     }
-    else if (currentTile.computerHint() == TrackTile::CH_RIGHT_LINE)
+    else if (currentTile.drivingLineHint() == TrackTile::DLH_RIGHT)
     {
         target += MCVector3dF(TrackTile::TILE_W / 2, 0);
+    }
+    else if (currentTile.drivingLineHint() == TrackTile::DLH_TOP)
+    {
+        target += MCVector3dF(0, TrackTile::TILE_H / 2);
+    }
+    else if (currentTile.drivingLineHint() == TrackTile::DLH_BOTTOM)
+    {
+        target -= MCVector3dF(0, TrackTile::TILE_H / 2);
     }
 
     // A simple PID-controller

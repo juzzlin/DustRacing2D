@@ -144,9 +144,9 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::handleTile(
     QDomElement & tag, TrackData & newData, QVector<TrackTileBase *> & routeVector)
 {
-    const std::string  id      = tag.attribute("type", "clear").toStdString();
-    const unsigned int profile = tag.attribute("profile", "0").toUInt();
-    const unsigned int hint    = tag.attribute("computerHint", "0").toUInt();
+    const std::string  id              = tag.attribute("type", "clear").toStdString();
+    const unsigned int computerHint    = tag.attribute("computerHint", "0").toUInt();
+    const unsigned int drivingLineHint = tag.attribute("drivingLineHint", "0").toUInt();
 
     // Route index
     const int index = tag.attribute("index", "-1").toInt();
@@ -170,40 +170,8 @@ void TrackLoader::handleTile(
     tile->setRotation(o);
     tile->setTileType(id.c_str());
     tile->setRouteIndex(index);
-
-    switch (profile)
-    {
-    default:
-    case 0:
-        tile->setProfile(TrackTileBase::TP_FLAT);
-        break;
-    case 1:
-        tile->setProfile(TrackTileBase::TP_HILL);
-        break;
-    case 2:
-        tile->setProfile(TrackTileBase::TP_GORGE);
-        break;
-    }
-
-    switch (hint)
-    {
-    default:
-    case 0:
-        tile->setComputerHint(TrackTileBase::CH_NONE);
-        break;
-    case 1:
-        tile->setComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
-        break;
-    case 2:
-        tile->setComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
-        break;
-    case 3:
-        tile->setComputerHint(TrackTileBase::CH_LEFT_LINE);
-        break;
-    case 4:
-        tile->setComputerHint(TrackTileBase::CH_RIGHT_LINE);
-        break;
-    }
+    tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
+    tile->setDrivingLineHint(static_cast<TrackTileBase::DrivingLineHint>(drivingLineHint));
 
     // Associate with a surface object corresponging
     // to the tile type.
