@@ -3,12 +3,10 @@ TODO
 
 Game:
 
-- Separate Computer Hints and Route Hints
 - Support for rotational impulses
 - Reverse gear
 - Additional friction of car is off the track (a new force generator?)
 - Move car to the nearest track tile if stuck for too long
-- Max lap count
 - Position detection
 - Skid marks
 - Grandstands
@@ -20,7 +18,6 @@ Game:
 
 Editor:
 
-- Separate Computer Hints and Route Hints
 - Must be possible to move objects around
 
 Graphics:
