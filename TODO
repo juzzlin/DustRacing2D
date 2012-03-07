@@ -4,8 +4,6 @@ TODO
 Game:
 
 - Support for rotational impulses
-- Reverse gear
-- Additional friction of car is off the track (a new force generator?)
 - Move car to the nearest track tile if stuck for too long
 - Position detection
 - Skid marks
@@ -14,7 +12,6 @@ Game:
 - Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
 - Initial start menu
-- Make AI use angles instead of cross product?
 
 Editor:
 
