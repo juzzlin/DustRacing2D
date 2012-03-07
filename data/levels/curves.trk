@@ -81,7 +81,7 @@
  <tile i="7" j="9" o="0" type="grass"/>
  <tile i="8" j="0" o="0" type="grass"/>
  <tile i="8" j="1" o="90" type="corner90" index="5" drivingLineHint="1"/>
- <tile i="8" j="2" o="0" type="straight" index="4" computerHint="1" drivingLineHint="2"/>
+ <tile i="8" j="2" o="0" type="straight" index="4" computerHint="1"/>
  <tile i="8" j="3" o="0" type="straight" computerHint="2"/>
  <tile i="8" j="4" o="0" type="straight"/>
  <tile i="8" j="5" o="0" type="straight"/>

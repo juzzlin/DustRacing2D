@@ -29,7 +29,6 @@ AiLogic::AiLogic(Car & car)
   , m_route(nullptr)
   , m_targetIndex(0)
   , m_lastDiff(0)
-  , m_integrate(0)
 {
 }
 
@@ -63,44 +62,57 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
     // Take line hints into account
     if (currentTile.drivingLineHint() == TrackTile::DLH_LEFT)
     {
-        target -= MCVector3dF(TrackTile::TILE_W / 2, 0);
+        target -= MCVector3dF(TrackTile::TILE_W / 3, 0);
     }
     else if (currentTile.drivingLineHint() == TrackTile::DLH_RIGHT)
     {
-        target += MCVector3dF(TrackTile::TILE_W / 2, 0);
+        target += MCVector3dF(TrackTile::TILE_W / 3, 0);
     }
     else if (currentTile.drivingLineHint() == TrackTile::DLH_TOP)
     {
-        target += MCVector3dF(0, TrackTile::TILE_H / 2);
+        target += MCVector3dF(0, TrackTile::TILE_H / 3);
     }
     else if (currentTile.drivingLineHint() == TrackTile::DLH_BOTTOM)
     {
-        target -= MCVector3dF(0, TrackTile::TILE_H / 2);
+        target -= MCVector3dF(0, TrackTile::TILE_H / 3);
     }
 
-    // A simple PID-controller
+    // A simple PID-controller using integer calculations
     target -= MCVector3dF(m_car.location());
-    const MCFloat crossProd = (target.normalizedFast() % m_car.velocity().normalizedFast()).k();
-    MCFloat adjust = 1.0f * crossProd * 1e5 + 1.0f * (crossProd - m_lastDiff) * 1e6;
+
+    int angle = static_cast<int>(MCTrigonom::radToDeg(std::atan2(target.j(), target.i())));
+    int cur   = static_cast<int>(m_car.angle()) % 360;
+    int diff  = angle - cur;
+
+    if (diff > 180)
+    {
+        diff = diff - 360;
+    }
+    else if (diff < -180)
+    {
+        diff = diff + 360;
+    }
+
+    int adjust =  2 * diff * 1000 + 2 * (diff - m_lastDiff) * 10000;
 
     // Clamp the value
-    const MCFloat maxAdjust = 1e6;
+    const int maxAdjust = 1e6;
     if (adjust > maxAdjust) adjust  = maxAdjust;
     if (adjust < -maxAdjust) adjust = -maxAdjust;
 
     // Set turning moment and turn
     m_car.setTurningMoment(std::fabs(adjust));
-    if (crossProd < -0.1f)
-    {
-        m_car.turnLeft();
-    }
-    else if (crossProd > 0.1f)
+    if (diff < -3)
     {
         m_car.turnRight();
     }
+    else if (diff > 3)
+    {
+        m_car.turnLeft();
+    }
 
     // Store the last difference
-    m_lastDiff = crossProd;
+    m_lastDiff = diff;
 
     // Braking / acceleration logic
 
@@ -117,7 +129,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
     {
-        if (m_car.speedInKmh() > 50)
+        if (m_car.speedInKmh() > 70)
         {
             brake = true;
         }

@@ -44,12 +44,11 @@ private:
 
     void steer(TrackTile & targetTile, TrackTile & currentTile);
 
-    Car & m_car;
-    Track * m_track;
+    Car         & m_car;
+    Track       * m_track;
     const Route * m_route;
-    unsigned int m_targetIndex;
-    MCFloat m_lastDiff;
-    MCFloat m_integrate;
+    unsigned int  m_targetIndex;
+    int           m_lastDiff;
 };
 
 #endif // AILOGIC_HPP

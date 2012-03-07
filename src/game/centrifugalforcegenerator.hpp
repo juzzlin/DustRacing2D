@@ -17,17 +17,21 @@
 #define CENTRIFUGALFORCEGENERATOR_HPP
 
 #include "MiniCore/Core/MCForceGenerator"
+#include "MiniCore/Core/MCVector3d"
+
+#include <deque>
 
 //! Adds centrifugal force to the cars.
 class CentrifugalForceGenerator : public MCForceGenerator
 {
 public:
 
-    //! Constructor.
-    CentrifugalForceGenerator();
-
     //! \reimp
     virtual void updateForce(MCObject & object);
+
+private:
+
+    std::deque<MCVector3dF> m_queue;
 };
 
 #endif // CENTRIFUGALFORCEGENERATOR_HPP

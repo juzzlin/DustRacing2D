@@ -14,11 +14,48 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "centrifugalforcegenerator.hpp"
-
-CentrifugalForceGenerator::CentrifugalForceGenerator()
-{
-}
+#include "radius.hpp"
+#include "MiniCore/Core/MCObject"
 
 void CentrifugalForceGenerator::updateForce(MCObject & object)
 {
+    m_queue.push_back(object.location());
+
+    if (m_queue.size() > 2)
+    {
+        Radius::CirclePoints cp;
+        cp.x1 = m_queue[0].i();
+        cp.y1 = m_queue[0].j();
+        cp.x2 = m_queue[1].i();
+        cp.y2 = m_queue[1].j();
+        cp.x3 = m_queue[2].i();
+        cp.y3 = m_queue[2].j();
+
+        const MCFloat radius = Radius::calculate(cp);
+
+        if (radius > 10 && radius < 1000) // Make things a bit more stable
+        {
+            const MCFloat amp = 10;
+            const MCFloat velocity2 = (object.velocity() * amp).lengthSquared();
+            const MCFloat force     = object.mass() * velocity2 / radius;
+
+            const MCVector2dF v1(cp.x2 - cp.x1, cp.y2 - cp.y1);
+            const MCVector2dF v2(cp.x3 - cp.x1, cp.y3 - cp.y1);
+
+            static const MCVector3dF up(0, 0, 1);
+            const MCVector3dF forceVect = object.velocity().normalizedFast() % up;
+
+            if (v1 % v2 < 0)
+            {
+                object.addForce(forceVect * -force);
+            }
+            else
+            {
+                object.addForce(forceVect * force);
+            }
+
+        }
+
+        m_queue.pop_front();
+    }
 }
