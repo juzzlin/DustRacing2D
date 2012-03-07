@@ -33,9 +33,9 @@ void CentrifugalForceGenerator::updateForce(MCObject & object)
 
         const MCFloat radius = Radius::calculate(cp);
 
-        if (radius > 10 && radius < 1000) // Make things a bit more stable
+        if (radius > 1 && radius < 1000) // Make things a bit more stable
         {
-            const MCFloat amp = 10;
+            const MCFloat amp = 5;
             const MCFloat velocity2 = (object.velocity() * amp).lengthSquared();
             const MCFloat force     = object.mass() * velocity2 / radius;
 
