@@ -196,9 +196,8 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     if (role == "tire")
     {
         MCSurfaceObjectData data("tire");
-        data.setMass(25);
+        data.setMass(250); // Exaggerate the mass on purpose
         data.setSurfaceId("tire");
-        data.setDefaultCircleShape(true);
         data.setRestitution(0.5f);
         data.setXYFriction(0.25f);
 
