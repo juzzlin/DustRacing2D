@@ -41,8 +41,7 @@ namespace
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(FRICTION, 0.0f))
-  , m_pOffTrackFriction(new MCFrictionGenerator(
-        OFF_TRACK_FRICTION, 0))
+  , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
   , m_accelerating(false)
   , m_braking(false)
   , m_reverse(false)
@@ -63,22 +62,18 @@ Car::Car(MCSurface & surface, MCUint index)
     setRestitution(0.1f);
 
     // Add slide friction generator
-    MCWorld::instance().addForceGenerator(
-        *new SlideFrictionGenerator(FRICTION), *this, true);
+    MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);
 
     // Add rolling friction generator
     MCWorld::instance().addForceGenerator(
-        *new MCFrictionGenerator(
-            ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
+        *new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
 
     // Add braking friction generator
-    MCWorld::instance().addForceGenerator(
-        *m_pBrakingFriction, *this, true);
+    MCWorld::instance().addForceGenerator(*m_pBrakingFriction, *this, true);
     m_pBrakingFriction->enable(false);
 
     // Add off-track friction generator
-    MCWorld::instance().addForceGenerator(
-        *m_pOffTrackFriction, *this, true);
+    MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
     m_pOffTrackFriction->enable(false);
 
     // Add centrifugal force generator
@@ -216,15 +211,18 @@ MCFloat Car::speedInKmh() const
 
 void Car::render(MCCamera *p)
 {
+    static const MCVector2dF leftFrontTirePos(20, 13);
+    static const MCVector2dF rightFrontTirePos(20, -13);
+
     // Render left front tire
     MCVector2dF leftTire;
-    MCTrigonom::rotated(MCVector2dF(20, 13), leftTire, angle());
+    MCTrigonom::rotated(leftFrontTirePos, leftTire, angle());
     leftTire += MCVector2dF(location());
     m_frontTire.render(p, leftTire, m_tireAngle + angle());
 
     // Render right front tire
     MCVector2dF rightTire;
-    MCTrigonom::rotated(MCVector2dF(20, -13), rightTire, angle());
+    MCTrigonom::rotated(rightFrontTirePos, rightTire, angle());
     rightTire += MCVector2dF(location());
     m_frontTire.render(p, rightTire, m_tireAngle + angle());
 
@@ -234,13 +232,16 @@ void Car::render(MCCamera *p)
     // Render brake lights
     if (m_braking)
     {
+        static const MCVector2dF leftBrakeGlowPos(-36, 12);
+        static const MCVector2dF rightBrakeGlowPos(-36, -12);
+
         MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotated(MCVector2dF(-36, 12), leftBrakeGlow, angle());
+        MCTrigonom::rotated(leftBrakeGlowPos, leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotated(MCVector2dF(-36, -12), rightBrakeGlow, angle());
+        MCTrigonom::rotated(rightBrakeGlowPos, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
