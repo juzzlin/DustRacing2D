@@ -1,7 +1,6 @@
-project(DustRacing)
+cmake_minimum_required(VERSION 2.8)
 
-cmake_minimum_required(VERSION 2.6)
-cmake_policy(VERSION 2.6)
+project(DustRacing)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic -ffast-math")
