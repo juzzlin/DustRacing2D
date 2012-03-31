@@ -108,12 +108,18 @@ MCUint MCObjectImpl::registerType(const std::string & typeName)
     }
 }
 
+void MCObject::integrate(MCFloat step)
+{
+    m_pImpl->integrate(step);
+
+    translate(location() + velocity());
+}
+
 void MCObjectImpl::integrate(MCFloat step)
 {
     if (step > 0.0) {
 
         MCVector3dF totAcceleration(acceleration);
-        pPublic->translate(location + velocity * step);
 
         totAcceleration += forces * invMass;
         velocity        += totAcceleration * step;
@@ -394,7 +400,7 @@ bool MCObject::stationary() const
     return m_pImpl->flags & StationaryMask;
 }
 
-void MCObject::addImpulse(const MCVector3dF & impulse)
+void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
     m_pImpl->velocity += impulse;
 }
@@ -644,12 +650,6 @@ void MCObject::clearForces()
 {
     m_pImpl->forces.setZero();
     m_pImpl->moment = 0.0f;
-}
-
-void MCObject::integrate(MCFloat step)
-{
-    m_pImpl->integrate(step);
-    translate(location() + velocity());
 }
 
 MCBBox<MCFloat> MCObject::bbox() const

@@ -149,7 +149,7 @@ void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
         pa.displace(displacement * s);
 
         // Apply impulse
-        pa.addImpulse((impulse + impulse * restitution) * s);
+        pa.addLinearImpulse((impulse + impulse * restitution) * s);
     }
 
     if (!pb.stationary()) {
@@ -158,7 +158,7 @@ void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
         pb.displace(-displacement * s);
 
         // Apply impulse
-        pb.addImpulse((-impulse - impulse * restitution) * s);
+        pb.addLinearImpulse((-impulse - impulse * restitution) * s);
     }
 
     // Remove contacts with pa from pb, because physically it was already handled here

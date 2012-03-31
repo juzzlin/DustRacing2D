@@ -156,7 +156,7 @@ public:
 
     //! \brief Add velocity component of an impulse vector.
     //! \param impulse The velocity component.
-    void addImpulse(const MCVector3dF & impulse);
+    void addLinearImpulse(const MCVector3dF & impulse);
 
     //! Set current velocity to the given value.
     //! \param newVelocity The new velocity.
