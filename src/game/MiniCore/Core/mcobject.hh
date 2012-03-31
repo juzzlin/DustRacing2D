@@ -265,6 +265,9 @@ public:
     //! \param newAngle The new angle in degrees [0..360].
     virtual void rotate(MCFloat newAngle);
 
+    //! Set center of rotation in world coordinates.
+    void setCenterOfRotation(MCVector2dF center);
+
     //! Get rotation angle.
     MCFloat angle() const;
 

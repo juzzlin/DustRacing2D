@@ -20,6 +20,7 @@
 #ifndef MCOBJECTIMPL_HH
 #define MCOBJECTIMPL_HH
 
+#include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include <unordered_map>
 #include <string>
@@ -54,11 +55,12 @@ private:
     int index;
     MCUint flags;
     MCUint i0, i1, j0, j1;
-    MCVector3d<MCFloat> acceleration;
-    MCVector3d<MCFloat> velocity;
-    MCVector3d<MCFloat> initialLocation;
-    MCVector3d<MCFloat> location;
-    MCVector3d<MCFloat> forces;
+    MCVector3dF acceleration;
+    MCVector3dF velocity;
+    MCVector3dF initialLocation;
+    MCVector3dF location;
+    MCVector3dF forces;
+    MCVector2dF centerOfRotation;
     MCShape * pShape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
     static TypeHash typeHash;

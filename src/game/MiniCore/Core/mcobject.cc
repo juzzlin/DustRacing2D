@@ -133,8 +133,9 @@ void MCObjectImpl::integrate(MCFloat step)
             if (pShape->momentOfInertia() > 0.0f)
             {
                 MCFloat totAngularAcceleration(angularAcceleration);
-                angle += MCTrigonom::radToDeg(angularVelocity * step);
-                doRotate(angle);
+                const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
+                doRotate(newAngle);
+                angle = newAngle;
 
                 totAngularAcceleration += moment / pShape->momentOfInertia();
                 angularVelocity        += totAngularAcceleration * step;
@@ -533,6 +534,11 @@ MCFloat MCObject::getZ() const
     return m_pImpl->location.k();
 }
 
+void MCObject::setCenterOfRotation(MCVector2dF center)
+{
+    m_pImpl->centerOfRotation = center - MCVector2dF(location());
+}
+
 void MCObject::rotate(MCFloat newAngle)
 { 
     m_pImpl->rotate(newAngle);
@@ -540,20 +546,37 @@ void MCObject::rotate(MCFloat newAngle)
 
 void MCObjectImpl::rotate(MCFloat newAngle)
 {
+    doRotate(newAngle);
     angle = newAngle;
 }
 
 void MCObjectImpl::doRotate(MCFloat newAngle)
 {
-    if (pShape) {
-        if (pShape->instanceTypeID() == MCCircleShape::typeID()) {
-            pShape->rotate(newAngle);
-        } else {
-            const bool wasInWorld =
-                MCWorld::instance().objectTree().remove(*pPublic);
-            pShape->rotate(newAngle);
-            if (wasInWorld) {
-                MCWorld::instance().objectTree().insert(*pPublic);
+    if (newAngle != angle)
+    {
+        if (!centerOfRotation.isZero())
+        {
+            MCVector2dF centerOfRotation1;
+            MCTrigonom::rotated(centerOfRotation, centerOfRotation1, newAngle - angle);
+            pPublic->displace(centerOfRotation - centerOfRotation1);
+        }
+
+        if (pShape)
+        {
+            if (pShape->instanceTypeID() == MCCircleShape::typeID())
+            {
+                pShape->rotate(newAngle);
+            }
+            else
+            {
+                const bool wasInWorld = MCWorld::instance().objectTree().remove(*pPublic);
+
+                pShape->rotate(newAngle);
+
+                if (wasInWorld)
+                {
+                    MCWorld::instance().objectTree().insert(*pPublic);
+                }
             }
         }
     }
