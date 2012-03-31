@@ -34,6 +34,8 @@ private:
     static MCUint getTypeIDForName(const std::string & typeName);
     static MCUint registerType(const std::string & typeName);
     inline void integrate(MCFloat step);
+    inline void integrateLinear(MCFloat step);
+    inline void integrateRotational(MCFloat step);
     inline void doOutOfBoundariesEvent();
     void setFlag(MCUint flag, bool enable);
     void rotate(MCFloat newAngle); // Degrees

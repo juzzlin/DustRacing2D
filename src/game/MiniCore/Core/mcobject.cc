@@ -117,52 +117,61 @@ void MCObject::integrate(MCFloat step)
 
 void MCObjectImpl::integrate(MCFloat step)
 {
-    if (step > 0.0) {
-
-        MCVector3dF totAcceleration(acceleration);
-
-        totAcceleration += forces * invMass;
-        velocity        += totAcceleration * step;
-        velocity        *= DampingFactor;
-
-        // Note that this code doesn't take the z-component into consideration
-        if (maximumVelocity > 0) {
-            const MCFloat l = MCVector2dF(velocity).lengthFast();
-            if (l > maximumVelocity) {
-                velocity /= l;
-                velocity *= maximumVelocity;
-            }
-        }
-
-        if (pShape)
-        {
-            if (pShape->momentOfInertia() > 0.0f)
-            {
-                MCFloat totAngularAcceleration(angularAcceleration);
-                const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
-                doRotate(newAngle);
-                angle = newAngle;
-
-                totAngularAcceleration += moment / pShape->momentOfInertia();
-                angularVelocity        += totAngularAcceleration * step;
-                angularVelocity        *= DampingFactor;
-
-                if (maximumAngularVelocity > 0) {
-                    if (angularVelocity > 0) {
-                        if (angularVelocity > maximumAngularVelocity) {
-                            angularVelocity = maximumAngularVelocity;
-                        }
-                    }
-                    else if (-angularVelocity > maximumAngularVelocity) {
-                        angularVelocity = -maximumAngularVelocity;
-                    }
-                }
-            }
-        }
+    if (step > 0.0)
+    {
+        integrateLinear(step);
+        integrateRotational(step);
 
         forces.setZero();
         moment = 0.0f;
         doOutOfBoundariesEvent();
+    }
+}
+
+void MCObjectImpl::integrateLinear(MCFloat step)
+{
+    MCVector3dF totAcceleration(acceleration);
+
+    totAcceleration += forces * invMass;
+    velocity        += totAcceleration * step;
+    velocity        *= DampingFactor;
+
+    // Note that this code doesn't take the z-component into consideration
+    if (maximumVelocity > 0) {
+        const MCFloat l = MCVector2dF(velocity).lengthFast();
+        if (l > maximumVelocity) {
+            velocity /= l;
+            velocity *= maximumVelocity;
+        }
+    }
+}
+
+void MCObjectImpl::integrateRotational(MCFloat step)
+{
+    if (pShape)
+    {
+        if (pShape->momentOfInertia() > 0.0f)
+        {
+            MCFloat totAngularAcceleration(angularAcceleration);
+            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
+            doRotate(newAngle);
+            angle = newAngle;
+
+            totAngularAcceleration += moment / pShape->momentOfInertia();
+            angularVelocity        += totAngularAcceleration * step;
+            angularVelocity        *= DampingFactor;
+
+            if (maximumAngularVelocity > 0) {
+                if (angularVelocity > 0) {
+                    if (angularVelocity > maximumAngularVelocity) {
+                        angularVelocity = maximumAngularVelocity;
+                    }
+                }
+                else if (-angularVelocity > maximumAngularVelocity) {
+                    angularVelocity = -maximumAngularVelocity;
+                }
+            }
+        }
     }
 }
 
