@@ -3,7 +3,6 @@ TODO
 
 Game:
 
-- Support for rotational impulses
 - Move car to the nearest track tile if stuck for too long
 - Position detection
 - Skid marks
@@ -12,6 +11,7 @@ Game:
 - Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
 - Initial start menu
+- Install target
 
 Editor:
 
@@ -19,6 +19,4 @@ Editor:
 
 Graphics:
 
-- New image for tire object
-- Finish line tile
 - New car images
