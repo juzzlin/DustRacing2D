@@ -156,7 +156,6 @@ void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
 
         const MCFloat magnitude = rotationalImpulse.k();
         pa.addRotationalImpulse(-magnitude * s / pa.shape()->radius());
-        pa.setCenterOfRotation(contactPoint);
     }
 
     if (!pb.stationary()) {
@@ -170,7 +169,6 @@ void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
 
         const MCFloat magnitude = rotationalImpulse.k();
         pb.addRotationalImpulse(magnitude * s / pb.shape()->radius());
-        pa.setCenterOfRotation(contactPoint);
     }
 
     // Remove contacts with pa from pb, because physically it was already handled here
