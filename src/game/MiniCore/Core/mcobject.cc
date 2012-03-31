@@ -75,7 +75,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , angle(0)
 , angularAcceleration(0.0f)
 , angularVelocity(0.0f)
-, maximumAngularVelocity(-1)
+, maximumAngularVelocity(1.0f)
 , maximumVelocity(-1)
 , moment(0.0f)
 , layer(0)
@@ -153,24 +153,23 @@ void MCObjectImpl::integrateRotational(MCFloat step)
         if (pShape->momentOfInertia() > 0.0f)
         {
             MCFloat totAngularAcceleration(angularAcceleration);
-            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
-            doRotate(newAngle);
-            angle = newAngle;
 
             totAngularAcceleration += moment / pShape->momentOfInertia();
             angularVelocity        += totAngularAcceleration * step;
             angularVelocity        *= DampingFactor;
 
-            if (maximumAngularVelocity > 0) {
-                if (angularVelocity > 0) {
-                    if (angularVelocity > maximumAngularVelocity) {
-                        angularVelocity = maximumAngularVelocity;
-                    }
-                }
-                else if (-angularVelocity > maximumAngularVelocity) {
-                    angularVelocity = -maximumAngularVelocity;
-                }
+            MCFloat angularVelocity1 = angularVelocity;
+            if (angularVelocity1 > maximumAngularVelocity) {
+                angularVelocity1 = maximumAngularVelocity;
             }
+
+            if (angularVelocity1 < -maximumAngularVelocity) {
+                angularVelocity1 = -maximumAngularVelocity;
+            }
+
+            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity1 * step);
+            doRotate(newAngle);
+            angle = newAngle;
         }
     }
 }
@@ -414,6 +413,11 @@ void MCObject::addLinearImpulse(const MCVector3dF & impulse)
     m_pImpl->velocity += impulse;
 }
 
+void MCObject::addRotationalImpulse(MCFloat impulse)
+{
+    m_pImpl->angularVelocity += impulse;
+}
+
 void MCObject::setPhysicsObject(bool flag)
 {
     m_pImpl->setFlag(PhysicsMask, flag);
@@ -574,6 +578,7 @@ void MCObjectImpl::doRotate(MCFloat newAngle)
             MCVector2dF centerOfRotation1;
             MCTrigonom::rotated(centerOfRotation, centerOfRotation1, newAngle - angle);
             pPublic->displace(centerOfRotation - centerOfRotation1);
+            centerOfRotation.setZero();
         }
 
         if (pShape)

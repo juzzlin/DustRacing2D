@@ -34,6 +34,7 @@ using std::sqrt;
 using std::max;
 
 #include "mcvector2d.hh"
+#include "mcvector3d.hh"
 #include "mcsegment.hh"
 
 //! Miscellaneous math utilities.
@@ -58,6 +59,11 @@ public:
     template <typename T>
     inline static MCVector2d<T> projection(
         const MCVector2d<T> & a, const MCVector2d<T> & b);
+
+    //! Returns vector a projected on vector b.
+    template <typename T>
+    inline static MCVector3d<T> projection(
+        const MCVector3d<T> & a, const MCVector3d<T> & b);
 
     //! Returns true if the given segments cross.
     template <typename T>
@@ -102,6 +108,13 @@ T MCMathUtil::distanceFromVector(const MCVector2d<T> & p, const MCVector2d<T> & 
 template <typename T>
 MCVector2d<T> MCMathUtil::projection(
     const MCVector2d<T> & a, const MCVector2d<T> & b)
+{
+    return b * a.dot(b) / b.lengthSquared();
+}
+
+template <typename T>
+MCVector3d<T> MCMathUtil::projection(
+    const MCVector3d<T> & a, const MCVector3d<T> & b)
 {
     return b * a.dot(b) / b.lengthSquared();
 }

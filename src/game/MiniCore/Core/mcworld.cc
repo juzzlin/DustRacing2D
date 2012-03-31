@@ -22,10 +22,12 @@
 #include "mcbbox.hh"
 #include "mcforcegenerator.hh"
 #include "mcfrictiongenerator.hh"
+#include "mcmathutil.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
+#include "mctrigonom.hh"
 #include "mccamera.hh"
 
 #include <cassert>
@@ -134,31 +136,41 @@ void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
 
     const MCFloat restitution(
         std::min(pa.restitution(), pb.restitution()));
-    const MCVector2d<MCFloat> diff(pb.velocity() - pa.velocity());
-    const MCVector3d<MCFloat> impulse(
+    const MCVector2dF diff(pb.velocity() - pa.velocity());
+    const MCVector3dF impulse(
         contact.contactNormal() * contact.contactNormal().dot(diff));
-    const MCVector3d<MCFloat> displacement(
+    const MCVector3dF displacement(
         contact.contactNormal() * contact.interpenetrationDepth());
 
     const MCFloat a = pa.invMass();
     const MCFloat b = pb.invMass();
 
     if (!pa.stationary()) {
-        // Move colliding object
         const MCFloat s = a / (a + b);
         pa.displace(displacement * s);
-
-        // Apply impulse
         pa.addLinearImpulse((impulse + impulse * restitution) * s);
+
+        const MCVector3dF contactPoint(contact.contactPoint());
+        const MCVector3dF arm = contactPoint - pa.location();
+        const MCVector3dF rotationalImpulse = MCVector3dF(diff) % arm;
+
+        const MCFloat magnitude = rotationalImpulse.k();
+        pa.addRotationalImpulse(-magnitude * s / pa.shape()->radius());
+        pa.setCenterOfRotation(contactPoint);
     }
 
     if (!pb.stationary()) {
-        // Move colliding object
         const MCFloat s = b / (a + b);
         pb.displace(-displacement * s);
-
-        // Apply impulse
         pb.addLinearImpulse((-impulse - impulse * restitution) * s);
+
+        const MCVector3dF contactPoint(contact.contactPoint());
+        const MCVector3dF arm = contactPoint - pb.location();
+        const MCVector3dF rotationalImpulse = MCVector3dF(diff) % arm;
+
+        const MCFloat magnitude = rotationalImpulse.k();
+        pb.addRotationalImpulse(magnitude * s / pb.shape()->radius());
+        pa.setCenterOfRotation(contactPoint);
     }
 
     // Remove contacts with pa from pb, because physically it was already handled here

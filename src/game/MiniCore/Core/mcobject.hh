@@ -158,6 +158,9 @@ public:
     //! \param impulse The velocity component.
     void addLinearImpulse(const MCVector3dF & impulse);
 
+    //! Add rotational impulse in rad/s.
+    void addRotationalImpulse(MCFloat impulse);
+
     //! Set current velocity to the given value.
     //! \param newVelocity The new velocity.
     void setVelocity(const MCVector3dF & newVelocity);
