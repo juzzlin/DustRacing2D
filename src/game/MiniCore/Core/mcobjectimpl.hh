@@ -53,6 +53,7 @@ private:
     MCFloat maximumAngularVelocity; // Radians / s
     MCFloat maximumVelocity;
     MCFloat moment;
+    MCFloat momentOfInertia;
     MCUint layer;
     int index;
     MCUint flags;
@@ -69,6 +70,7 @@ private:
     static MCUint typeIDCount;
     MCObject::ContactHash contacts;
     friend class MCObject;
+    bool sattuma;
 };
 
 #endif // MCOBJECTIMPL_HH

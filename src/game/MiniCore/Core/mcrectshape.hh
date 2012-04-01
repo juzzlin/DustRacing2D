@@ -86,9 +86,6 @@ public:
     //! \reimp
     virtual void renderScaled(MCFloat wr, MCFloat hr, MCCamera * p);
 
-    //! \reimp
-    virtual MCFloat momentOfInertia() const;
-
     //! Return approximated radius.
     virtual MCFloat radius() const;
 

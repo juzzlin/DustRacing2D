@@ -197,6 +197,10 @@ public:
     //! \param moment Value to be added.
     void addMoment(MCFloat moment);
 
+    void setMomentOfInertia(MCFloat momentOfInertia);
+
+    MCFloat momentOfInertia() const;
+
     //! Clear accumulated forces.
     void clearForces();
 

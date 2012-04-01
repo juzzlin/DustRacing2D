@@ -46,7 +46,7 @@ private:
     void detectCollisions();
     void processContacts();
     void processContacts(MCObject & object);
-    void processContact(MCObject & object, MCContact & contact);
+    void createImpulses(MCObject & object, MCContact & contact);
     void addToLayerMap(MCObject &);
     void removeFromLayerMap(MCObject &);
     MCContact * getDeepestInterpenetration(

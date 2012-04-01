@@ -35,7 +35,6 @@ MCRectShapeImpl::MCRectShapeImpl(
     MCObject & parent, MCFloat width, MCFloat height)
   : MCShapeImpl(parent)
   , obbox(width / 2, height / 2, MCVector2dF())
-  , momentOfInertiaFactor((width * width + height * height) / 12)
   , radius(std::max(width, height) / 2)
   , width(width)
   , height(height)
@@ -141,14 +140,6 @@ MCBBox<MCFloat> MCRectShape::bbox() const
     return m_pImpl->obbox.bbox();
 }
 
-MCFloat MCRectShape::momentOfInertia() const
-{
-    return
-        m_pImpl->momentOfInertiaFactor *
-        parent().mass() *
-        MCWorld::instance().metersPerPixelSquared();
-}
-
 bool MCRectShape::contains(const MCVector2dF & point) const
 {
     return m_pImpl->obbox.contains(point);
@@ -238,7 +229,6 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
 {
     m_pImpl->obbox = MCOBBoxF(width / 2, height / 2, location());
     m_pImpl->obbox.rotate(angle());
-    m_pImpl->momentOfInertiaFactor = (width * width + height * height) / 12;
     m_pImpl->width = width;
     m_pImpl->height = height;
 }

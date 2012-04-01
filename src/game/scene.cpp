@@ -62,13 +62,13 @@ Scene::Scene(MCUint numCars)
         if (i == 0)
         {
             car = new Car(MCTextureManager::instance().surface("car001"), i);
-            car->setPower(3000.0f);
+            car->setPower(4500.0f);
         }
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
             m_aiLogic.push_back(new AiLogic(*car));
-            car->setPower(3000.0f + i * 100.0f);
+            car->setPower(4500.0f + i * 100.0f);
         }
 
         car->setLayer(Layers::Cars);
@@ -229,7 +229,7 @@ void Scene::setWorldDimensions()
     const MCUint minZ = 0;
     const MCUint maxZ = 1000;
 
-    const MCFloat metersPerPixel = 0.1f;
+    const MCFloat metersPerPixel = 0.05f;
     m_pWorld->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
 }
 

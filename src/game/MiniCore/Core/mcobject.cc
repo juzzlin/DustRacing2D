@@ -75,7 +75,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , angle(0)
 , angularAcceleration(0.0f)
 , angularVelocity(0.0f)
-, maximumAngularVelocity(1.0f)
+, maximumAngularVelocity(2 * 3.1415f)
 , maximumVelocity(-1)
 , moment(0.0f)
 , layer(0)
@@ -120,12 +120,13 @@ void MCObjectImpl::integrate(MCFloat step)
     if (step > 0.0)
     {
         integrateLinear(step);
+
         integrateRotational(step);
 
-        forces.setZero();
-        moment = 0.0f;
         doOutOfBoundariesEvent();
     }
+
+    forces.setZero();
 }
 
 void MCObjectImpl::integrateLinear(MCFloat step)
@@ -150,28 +151,29 @@ void MCObjectImpl::integrateRotational(MCFloat step)
 {
     if (pShape)
     {
-        if (pShape->momentOfInertia() > 0.0f)
+        if (momentOfInertia > 0.0f)
         {
             MCFloat totAngularAcceleration(angularAcceleration);
 
-            totAngularAcceleration += moment / pShape->momentOfInertia();
+            totAngularAcceleration += moment / momentOfInertia;
             angularVelocity        += totAngularAcceleration * step;
             angularVelocity        *= DampingFactor;
 
-            MCFloat angularVelocity1 = angularVelocity;
-            if (angularVelocity1 > maximumAngularVelocity) {
-                angularVelocity1 = maximumAngularVelocity;
+            if (angularVelocity > maximumAngularVelocity) {
+                angularVelocity = maximumAngularVelocity;
             }
 
-            if (angularVelocity1 < -maximumAngularVelocity) {
-                angularVelocity1 = -maximumAngularVelocity;
+            if (angularVelocity < -maximumAngularVelocity) {
+                angularVelocity = -maximumAngularVelocity;
             }
 
-            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity1 * step);
+            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
             doRotate(newAngle);
             angle = newAngle;
         }
     }
+
+    moment = 0.0f;
 }
 
 void MCObjectImpl::doOutOfBoundariesEvent()
@@ -385,11 +387,13 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
         else {
             m_pImpl->invMass = std::numeric_limits<MCFloat>::max();
         }
-        m_pImpl->mass = newMass;
+        m_pImpl->mass            = newMass;
+        m_pImpl->momentOfInertia = newMass * 10.0f;
     }
     else {
-        m_pImpl->invMass = 0;
-        m_pImpl->mass    = std::numeric_limits<MCFloat>::max();
+        m_pImpl->invMass         = 0;
+        m_pImpl->mass            = std::numeric_limits<MCFloat>::max();
+        m_pImpl->momentOfInertia = std::numeric_limits<MCFloat>::max();
     }
 }
 
@@ -658,6 +662,16 @@ void MCObject::addForce(const MCVector3dF & force)
 void MCObject::addMoment(MCFloat moment)
 {
     m_pImpl->moment += moment;
+}
+
+void MCObject::setMomentOfInertia(MCFloat momentOfInertia)
+{
+    m_pImpl->momentOfInertia = momentOfInertia;
+}
+
+MCFloat MCObject::momentOfInertia() const
+{
+    return m_pImpl->momentOfInertia;
 }
 
 void MCObject::clearForces()

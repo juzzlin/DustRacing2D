@@ -48,17 +48,21 @@ void MCFrictionGenerator::updateForce(MCObject & object)
     // Linear motion.
     const MCVector2d<MCFloat> v(object.velocity());
     MCFloat x = v.lengthFast();
-    if (x > FRICTION_SPEED_TH && m_pImpl->m_coeffLin > 0.0f) {
+    if (x > FRICTION_SPEED_TH && m_pImpl->m_coeffLin > 0.0f)
+    {
         object.addForce(
-        (-v / x) * m_pImpl->m_coeffLin * m_pImpl->m_gravity * object.mass());
+            (-v / x) * m_pImpl->m_coeffLin * m_pImpl->m_gravity * object.mass());
     }
 
     // Approximated moment caused by rotational friction.
-    if (object.shape()) {
-        x = object.angularVelocity() * object.shape()->radius();
-        if (MCMathUtil::abs(x) > FRICTION_SPEED_TH && m_pImpl->m_coeffRot > 0.0f) {
+    if (object.shape())
+    {
+        if (std::fabs(object.angularVelocity()) > FRICTION_SPEED_TH &&
+            m_pImpl->m_coeffRot > 0.0f)
+        {
+            x = object.angularVelocity() * object.shape()->radius();
             object.addMoment(
-                -x * m_pImpl->m_coeffRot * m_pImpl->m_gravity * object.mass());
+                -x * m_pImpl->m_coeffRot * m_pImpl->m_gravity * object.mass() * 0.5f);
         }
     }
 }

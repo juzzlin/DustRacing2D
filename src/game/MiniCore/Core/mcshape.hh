@@ -135,9 +135,6 @@ public:
      */
     virtual MCVector2dF contactNormal(const MCSegmentF & p) const = 0;
 
-    //! Get the moment of inertia (J).
-    virtual MCFloat momentOfInertia() const = 0;
-
     /*! Register a new shape type.
      * \return The new unique type ID.
      */

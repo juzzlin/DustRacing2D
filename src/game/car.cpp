@@ -31,11 +31,12 @@
 
 namespace
 {
-    const MCFloat MAX_VELOCITY       = 15.0f;
-    const MCFloat FRICTION           = 0.5f;
-    const MCFloat ROLLING_FRICTION   = 0.1f;
-    const MCFloat ROTATION_FRICTION  = 0.1f;
-    const MCFloat OFF_TRACK_FRICTION = 0.2f;
+    const MCFloat MAX_LINEAR_VELOCITY  = 15.0f;
+    const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
+    const MCFloat FRICTION             = 0.4f;
+    const MCFloat ROLLING_FRICTION     = 0.1f;
+    const MCFloat ROTATION_FRICTION    = 0.75f;
+    const MCFloat OFF_TRACK_FRICTION   = 0.2f;
 }
 
 Car::Car(MCSurface & surface, MCUint index)
@@ -52,12 +53,13 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
   , m_power(3000.0f)
-  , m_turningMoment(1e5)
+  , m_turningMoment(.25f)
 {
     setLayer(Layers::Cars);
     setMass(1000);
-    setMaximumVelocity(MAX_VELOCITY);
-    setMaximumAngularVelocity(10);
+    setMomentOfInertia(1000 * 25);
+    setMaximumVelocity(MAX_LINEAR_VELOCITY);
+    setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
     setRestitution(0.1f);
 
@@ -77,7 +79,7 @@ Car::Car(MCSurface & surface, MCUint index)
     m_pOffTrackFriction->enable(false);
 
     // Add centrifugal force generator
-    const MCFloat amplification = 6.0f;
+    const MCFloat amplification = 5.0f;
     MCWorld::instance().addForceGenerator(
         *new CentrifugalForceGenerator(amplification), *this, true);
 
@@ -85,22 +87,12 @@ Car::Car(MCSurface & surface, MCUint index)
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
     m_length = std::max(width, height);
 
-    //setRenderShapeOutline(true);
+    //setRenderShapeOutline(true); // FOR DEBUG
 }
 
 void Car::setPower(MCFloat power)
 {
     m_power = power;
-}
-
-void Car::setTurningMoment(MCFloat value)
-{
-    m_turningMoment = value;
-}
-
-MCFloat Car::turningMoment() const
-{
-    return m_turningMoment;
 }
 
 void Car::clearStatuses()
@@ -120,9 +112,9 @@ void Car::turnLeft()
 
     m_turnLeft = true;
 
-    if (std::fabs(speedInKmh()) > 5)
+    if (std::fabs(speedInKmh()) > 1)
     {
-        addMoment(m_turningMoment);
+        addRotationalImpulse(m_turningMoment);
     }
 }
 
@@ -132,9 +124,9 @@ void Car::turnRight()
 
     m_turnRight = true;
 
-    if (std::fabs(speedInKmh()) > 5)
+    if (std::fabs(speedInKmh()) > 1)
     {
-        addMoment(-m_turningMoment);
+        addRotationalImpulse(-m_turningMoment);
     }
 }
 

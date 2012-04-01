@@ -67,10 +67,6 @@ public:
 
     void setPower(MCFloat power);
 
-    void setTurningMoment(MCFloat value);
-
-    MCFloat turningMoment() const;
-
     void setOffTrack(bool state);
 
 private:

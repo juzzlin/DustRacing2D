@@ -77,7 +77,6 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
         target -= MCVector3dF(0, TrackTile::TILE_H / 3);
     }
 
-    // A simple PID-controller using integer calculations
     target -= MCVector3dF(m_car.location());
 
     int angle = static_cast<int>(MCTrigonom::radToDeg(std::atan2(target.j(), target.i())));
@@ -93,15 +92,6 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
         diff = diff + 360;
     }
 
-    int adjust =  2 * diff * 1000 + 2 * (diff - m_lastDiff) * 10000;
-
-    // Clamp the value
-    const int maxAdjust = 1e6;
-    if (adjust > maxAdjust) adjust  = maxAdjust;
-    if (adjust < -maxAdjust) adjust = -maxAdjust;
-
-    // Set turning moment and turn
-    m_car.setTurningMoment(std::fabs(adjust));
     if (diff < -3)
     {
         m_car.turnRight();

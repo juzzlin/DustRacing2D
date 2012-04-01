@@ -114,7 +114,7 @@ void MCWorldImpl::processContacts(MCObject & object)
     for (; iter != object.contacts().end(); iter++) {
         deepestContact = getDeepestInterpenetration(iter->second);
         if (deepestContact) {
-            processContact(object, *deepestContact);
+            createImpulses(object, *deepestContact);
         }
     }
     object.deleteContacts();
@@ -129,46 +129,59 @@ void MCWorldImpl::processContacts()
     }
 }
 
-void MCWorldImpl::processContact(MCObject & object, MCContact & contact)
+void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
 {
     MCObject & pa(object);
     MCObject & pb(contact.object());
 
     const MCFloat restitution(
         std::min(pa.restitution(), pb.restitution()));
-    const MCVector2dF diff(pb.velocity() - pa.velocity());
-    const MCVector3dF impulse(
-        contact.contactNormal() * contact.contactNormal().dot(diff));
+
+    const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
+
+    const MCVector3dF linearImpulse(
+        contact.contactNormal() * contact.contactNormal().dot(velocityDelta));
+
     const MCVector3dF displacement(
         contact.contactNormal() * contact.interpenetrationDepth());
 
-    const MCFloat a = pa.invMass();
-    const MCFloat b = pb.invMass();
+    const MCFloat invMassA = pa.invMass();
+    const MCFloat invMassB = pb.invMass();
 
     if (!pa.stationary()) {
-        const MCFloat s = a / (a + b);
-        pa.displace(displacement * s);
-        pa.addLinearImpulse((impulse + impulse * restitution) * s);
 
+        // Linear component
+        const MCFloat massScaling = invMassA / (invMassA + invMassB);
+        pa.displace(displacement * massScaling);
+        pa.addLinearImpulse((linearImpulse + linearImpulse * restitution) * massScaling);
+
+        // Angular component
         const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = contactPoint - pa.location();
-        const MCVector3dF rotationalImpulse = MCVector3dF(diff) % arm;
+        const MCVector3dF arm = (contactPoint - pa.location());
+        const MCVector3dF rotationalImpulse =
+            MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
 
         const MCFloat magnitude = rotationalImpulse.k();
-        pa.addRotationalImpulse(-magnitude * s / pa.shape()->radius());
+        pa.addRotationalImpulse(-magnitude * massScaling);
+        pa.setCenterOfRotation(contactPoint);
     }
 
     if (!pb.stationary()) {
-        const MCFloat s = b / (a + b);
-        pb.displace(-displacement * s);
-        pb.addLinearImpulse((-impulse - impulse * restitution) * s);
 
+        // Linear component
+        const MCFloat massScaling = invMassB / (invMassA + invMassB);
+        pb.displace(-displacement * massScaling);
+        pb.addLinearImpulse((-linearImpulse - linearImpulse * restitution) * massScaling);
+
+        // Angular component
         const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = contactPoint - pb.location();
-        const MCVector3dF rotationalImpulse = MCVector3dF(diff) % arm;
+        const MCVector3dF arm = (contactPoint - pb.location());
+        const MCVector3dF rotationalImpulse =
+            MCVector3dF(linearImpulse * pb.mass()) % arm / pb.momentOfInertia();
 
         const MCFloat magnitude = rotationalImpulse.k();
-        pb.addRotationalImpulse(magnitude * s / pb.shape()->radius());
+        pb.addRotationalImpulse(magnitude * massScaling);
+        pb.setCenterOfRotation(pb.location());
     }
 
     // Remove contacts with pa from pb, because physically it was already handled here
