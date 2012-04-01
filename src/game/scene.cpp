@@ -222,15 +222,15 @@ void Scene::setWorldDimensions()
 
     // Update world dimensions according to the
     // active track.
-    const MCUint MIN_X = 0;
-    const MCUint MAX_X = m_pActiveTrack->width();
-    const MCUint MIN_Y = 0;
-    const MCUint MAX_Y = m_pActiveTrack->height();
-    const MCUint MIN_Z = 0;
-    const MCUint MAX_Z = 1000;
+    const MCUint minX = 0;
+    const MCUint maxX = m_pActiveTrack->width();
+    const MCUint minY = 0;
+    const MCUint maxY = m_pActiveTrack->height();
+    const MCUint minZ = 0;
+    const MCUint maxZ = 1000;
 
-    m_pWorld->setDimensions(MIN_X, MAX_X, MIN_Y, MAX_Y, MIN_Z, MAX_Z);
-    m_pWorld->setMetersPerPixel(0.1f);
+    const MCFloat metersPerPixel = 0.1f;
+    m_pWorld->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
 }
 
 void Scene::addCarsToWorld()

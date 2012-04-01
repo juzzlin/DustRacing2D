@@ -56,14 +56,15 @@ public:
     //! Return the one-and-only MCWorld instance
     static MCWorld & instance();
 
-    //! Set dimensions of the world box
-    void setDimensions(MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY,
-                       MCFloat minZ, MCFloat maxZ);
+    //! Set dimensions of the world box.
+    void setDimensions(
+        MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
+        MCFloat metersPerPixel);
 
-    //! Set how many meters equal one pixel.
+    //! Set how many meters equal one pixel / length unit.
     void setMetersPerPixel(MCFloat value);
 
-    //! Get how many meters equal one pixel.
+    //! Get how many meters equal one pixel / length unit.
     MCFloat metersPerPixel() const;
 
     //! Get how many meters equal one pixel squared.

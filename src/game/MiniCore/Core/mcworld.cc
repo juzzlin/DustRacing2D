@@ -240,7 +240,7 @@ MCWorld::MCWorld()
     }
 
     // Default dimensions. Creates also MCObjectTree.
-    setDimensions(0, MinLeafWidth, 0, MinLeafHeight, 0, 1);
+    setDimensions(0.0f, MinLeafWidth, 0.0f, MinLeafHeight, 0.0f, 1.0f, 1.0f);
 }
 
 MCWorld & MCWorld::instance()
@@ -253,9 +253,8 @@ MCWorld & MCWorld::instance()
 }
 
 void MCWorld::setDimensions(
-    MCFloat minX, MCFloat maxX,
-    MCFloat minY, MCFloat maxY,
-    MCFloat minZ, MCFloat maxZ)
+    MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
+    MCFloat metersPerPixel)
 {
     // Init objectTree
     delete m_pImpl->pObjectTree;
@@ -269,6 +268,8 @@ void MCWorld::setDimensions(
     m_pImpl->maxY = maxY;
     m_pImpl->minZ = minZ;
     m_pImpl->maxZ = maxZ;
+
+    setMetersPerPixel(metersPerPixel);
 }
 
 MCFloat MCWorld::minX() const
