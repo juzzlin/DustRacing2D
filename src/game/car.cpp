@@ -33,9 +33,9 @@ namespace
 {
     const MCFloat MAX_LINEAR_VELOCITY  = 15.0f;
     const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
-    const MCFloat FRICTION             = 0.4f;
+    const MCFloat FRICTION             = 0.5f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat ROTATION_FRICTION    = 0.75f;
+    const MCFloat ROTATION_FRICTION    = 0.5f;
     const MCFloat OFF_TRACK_FRICTION   = 0.2f;
 }
 
@@ -57,11 +57,11 @@ Car::Car(MCSurface & surface, MCUint index)
 {
     setLayer(Layers::Cars);
     setMass(1000);
-    setMomentOfInertia(1000 * 25);
+    setMomentOfInertia(1000 * 10);
     setMaximumVelocity(MAX_LINEAR_VELOCITY);
     setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(0.1f);
+    setRestitution(0.25f);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);

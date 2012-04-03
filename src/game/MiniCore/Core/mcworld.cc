@@ -162,7 +162,7 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
             MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
 
         const MCFloat magnitude = rotationalImpulse.k();
-        pa.addRotationalImpulse(-magnitude * massScaling);
+        pa.addRotationalImpulse((-magnitude - magnitude * restitution) * massScaling);
         pa.setCenterOfRotation(contactPoint);
     }
 
@@ -180,7 +180,7 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
             MCVector3dF(linearImpulse * pb.mass()) % arm / pb.momentOfInertia();
 
         const MCFloat magnitude = rotationalImpulse.k();
-        pb.addRotationalImpulse(magnitude * massScaling);
+        pb.addRotationalImpulse((magnitude + magnitude * restitution) * massScaling);
         pb.setCenterOfRotation(pb.location());
     }
 

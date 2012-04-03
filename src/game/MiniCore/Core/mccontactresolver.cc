@@ -52,6 +52,8 @@ bool MCContactResolverImpl::processRectRect(
 
     const MCOBBox<MCFloat> & obbox1(shape1.obbox());
 
+    const MCFloat relaxation = 0.9f;
+
     MCVector2dF vertex;
     MCVector2dF contactNormal;
 
@@ -74,7 +76,7 @@ bool MCContactResolverImpl::processRectRect(
 
             if (ev1.accepted()) {
                 depth = shape2.interpenetrationDepth(
-                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
+                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal) * relaxation;
                 depthIsSet = true;
 
                 MCContact & contact = MCContact::create();
@@ -92,7 +94,7 @@ bool MCContactResolverImpl::processRectRect(
             if (ev2.accepted()) {
                 if (!depthIsSet) {
                     depth = shape2.interpenetrationDepth(
-                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
+                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal) * relaxation;
                 }
 
                 MCContact & contact = MCContact::create();
