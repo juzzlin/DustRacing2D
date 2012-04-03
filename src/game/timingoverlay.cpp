@@ -71,7 +71,7 @@ void TimingOverlay::render()
             ss << " LAP:" << lap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
-            lapText.setColor(1.0f, 1.0f, 0.0f);
+            lapText.setColor(1.0f, 1.0f, 1.0f);
 
             lapText.renderShadow(
                 shadowX + 0,
@@ -82,6 +82,27 @@ void TimingOverlay::render()
             lapText.render(
                 0,
                 height() - lapText.textHeight(),
+                nullptr,
+                m_defaultMonospace);
+        }
+
+        // Render the position
+        {
+            std::stringstream ss;
+            ss << " POS:" << "---";
+            MCTextureText posText(ss.str());
+            posText.setGlyphSize(20, 20);
+            posText.setColor(1.0f, 1.0f, 0.0f);
+
+            posText.renderShadow(
+                shadowX + 0,
+                shadowY + height() - posText.textHeight() * 2,
+                nullptr,
+                m_defaultMonospace);
+
+            posText.render(
+                0,
+                height() - posText.textHeight() * 2,
                 nullptr,
                 m_defaultMonospace);
         }
