@@ -69,6 +69,8 @@ public:
 
     void setOffTrack(bool state);
 
+    void setTurningImpulse(MCFloat impulse);
+
 private:
 
     MCFrictionGenerator * m_pBrakingFriction;
@@ -83,7 +85,7 @@ private:
     MCSurface           & m_frontTire;
     MCSurface           & m_brakeGlow;
     MCFloat               m_power;
-    MCFloat               m_turningMoment;
+    MCFloat               m_turningImpulse;
     MCFloat               m_length;
 };
 

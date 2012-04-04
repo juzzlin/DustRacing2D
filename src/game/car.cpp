@@ -53,7 +53,7 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
   , m_power(3000.0f)
-  , m_turningMoment(.25f)
+  , m_turningImpulse(.25f)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -114,7 +114,7 @@ void Car::turnLeft()
 
     if (std::fabs(speedInKmh()) > 1)
     {
-        addRotationalImpulse(m_turningMoment);
+        addRotationalImpulse(m_turningImpulse);
     }
 }
 
@@ -126,7 +126,7 @@ void Car::turnRight()
 
     if (std::fabs(speedInKmh()) > 1)
     {
-        addRotationalImpulse(-m_turningMoment);
+        addRotationalImpulse(-m_turningImpulse);
     }
 }
 
@@ -242,6 +242,11 @@ void Car::render(MCCamera *p)
 void Car::setOffTrack(bool state)
 {
     m_pOffTrackFriction->enable(state);
+}
+
+void Car::setTurningImpulse(MCFloat impulse)
+{
+    m_turningImpulse = impulse;
 }
 
 Car::~Car()

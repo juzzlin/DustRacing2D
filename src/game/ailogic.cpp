@@ -79,24 +79,42 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     target -= MCVector3dF(m_car.location());
 
-    int angle = static_cast<int>(MCTrigonom::radToDeg(std::atan2(target.j(), target.i())));
-    int cur   = static_cast<int>(m_car.angle()) % 360;
-    int diff  = angle - cur;
+    MCFloat angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
+    MCFloat cur   = static_cast<int>(m_car.angle()) % 360;
+    MCFloat diff  = angle - cur;
 
-    if (diff > 180)
+    bool ok = false;
+    while (!ok)
     {
-        diff = diff - 360;
-    }
-    else if (diff < -180)
-    {
-        diff = diff + 360;
+        if (diff > 180)
+        {
+            diff = diff - 360;
+            ok = false;
+        }
+        else if (diff < -180)
+        {
+            diff = diff + 360;
+            ok = false;
+        }
+        else
+        {
+            ok = true;
+        }
     }
 
-    if (diff < -3)
+    // PID-controller. This makes the computer players to turn and react faster
+    // than the human player, but hey...they are stupid.
+    MCFloat control = diff * 0.01f + (diff - m_lastDiff) * 0.01f;
+    const MCFloat maxControl = 0.5f;
+    control = control < 0 ? -control : control;
+    control = control > maxControl ? maxControl : control;
+    m_car.setTurningImpulse(control);
+
+    if (diff < -3.0f)
     {
         m_car.turnRight();
     }
-    else if (diff > 3)
+    else if (diff > 3.0f)
     {
         m_car.turnLeft();
     }
@@ -111,7 +129,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
     {
-        if (m_car.speedInKmh() > 100)
+        if (m_car.speedInKmh() > 120)
         {
             brake = true;
         }
@@ -119,7 +137,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
     {
-        if (m_car.speedInKmh() > 70)
+        if (m_car.speedInKmh() > 90)
         {
             brake = true;
         }
@@ -127,7 +145,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     if (currentTile.tileType() == "corner90")
     {
-        if (m_car.speedInKmh() > 50)
+        if (m_car.speedInKmh() > 60)
         {
             accelerate = false;
         }
@@ -135,7 +153,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     if (currentTile.tileType() == "corner45Left" || currentTile.tileType() == "corner45Right")
     {
-        if (m_car.speedInKmh() > 75)
+        if (m_car.speedInKmh() > 100)
         {
             accelerate = false;
         }
