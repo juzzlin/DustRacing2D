@@ -17,6 +17,8 @@
 #define TIMINGOVERLAY_HPP
 
 #include "overlaybase.hpp"
+#include <vector>
+#include <string>
 
 class Car;
 class MCTextureFontManager;
@@ -46,11 +48,12 @@ public:
 
 private:
 
-    MCTextureFontManager & m_fontManager;
-    MCTextureFont        & m_defaultMonospace;
-    const Car            * m_pCar;
-    Timing               * m_pTiming;
-    Race                 * m_pRace;
+    MCTextureFontManager   & m_fontManager;
+    MCTextureFont          & m_defaultMonospace;
+    const Car              * m_pCar;
+    Timing                 * m_pTiming;
+    Race                   * m_pRace;
+    std::vector<std::string> m_posTexts;
 };
 
 #endif // TIMINGOVERLAY_HPP

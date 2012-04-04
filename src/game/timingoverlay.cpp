@@ -31,6 +31,7 @@ TimingOverlay::TimingOverlay()
   , m_pCar(nullptr)
   , m_pTiming(nullptr)
   , m_pRace(nullptr)
+  , m_posTexts({"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "---"})
 {
 }
 
@@ -89,7 +90,7 @@ void TimingOverlay::render()
         // Render the position
         {
             std::stringstream ss;
-            ss << " POS:" << "---";
+            ss << " POS:" << m_posTexts.back();
             MCTextureText posText(ss.str());
             posText.setGlyphSize(20, 20);
             posText.setColor(1.0f, 1.0f, 0.0f);
