@@ -69,7 +69,8 @@ private:
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
-    typedef std::unordered_map<Car *, int> RouteHash;
+    // Map from car index to tile index
+    typedef std::unordered_map<int, int> RouteHash;
     RouteHash m_routeHash;
 
     unsigned int m_lapCount;

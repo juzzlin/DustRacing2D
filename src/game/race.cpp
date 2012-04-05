@@ -37,7 +37,7 @@ void Race::init()
 {
     for(Car * pCar : m_cars)
     {
-        m_routeHash[pCar] = 0;
+        m_routeHash[pCar->index()] = 0;
     }
 }
 
@@ -64,21 +64,21 @@ void Race::checkRoute(Car & car)
 {
     assert(m_pTrack);
 
-    TrackTile * pCurrent = m_pTrack->trackTileAtLocation(
+    const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(
         car.getX(), car.getY());
 
     // Lap progressed?
-    if (pCurrent->routeIndex() == m_routeHash[&car] + 1)
+    if (pCurrent->routeIndex() == m_routeHash[car.index()] + 1)
     {
-        m_routeHash[&car] = pCurrent->routeIndex();
+        m_routeHash[car.index()] = pCurrent->routeIndex();
     }
     // Lap finished?
-    else if (m_routeHash[&car] ==
+    else if (m_routeHash[car.index()] ==
         static_cast<int>(m_pTrack->trackData().route().length()) - 1)
     {
         if (pCurrent->routeIndex() == 1)
         {
-            m_routeHash[&car] = 1;
+            m_routeHash[car.index()] = 1;
             m_timing.lapCompleted(car.index());
         }
     }
