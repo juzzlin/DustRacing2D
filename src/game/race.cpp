@@ -39,6 +39,8 @@ void Race::init()
     {
         m_routeHash[pCar->index()] = 0;
     }
+
+    m_positions.clear();
 }
 
 void Race::start()
@@ -71,6 +73,7 @@ void Race::checkRoute(Car & car)
     if (pCurrent->routeIndex() == m_routeHash[car.index()] + 1)
     {
         m_routeHash[car.index()] = pCurrent->routeIndex();
+        m_positions[pCurrent->routeIndex()][m_timing.lap(car.index())].push_back(car.index());
     }
     // Lap finished?
     else if (m_routeHash[car.index()] ==
@@ -79,9 +82,25 @@ void Race::checkRoute(Car & car)
         if (pCurrent->routeIndex() == 1)
         {
             m_routeHash[car.index()] = 1;
+            m_positions[pCurrent->routeIndex()][m_timing.lap(car.index())].push_back(car.index());
             m_timing.lapCompleted(car.index());
         }
     }
+}
+
+unsigned int Race::getPositionOfCar(int index) const
+{
+    const int currentTile = m_routeHash[index];
+    const std::vector<int> & order = m_positions[currentTile][m_timing.leadersLap()];
+    for (unsigned int i = 0; i < order.size(); i++)
+    {
+        if (order[i] == index)
+        {
+            return i + 1;
+        }
+    }
+
+    return 0; // Should return the last valid position?
 }
 
 void Race::setTrack(Track & track)

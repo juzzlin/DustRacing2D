@@ -31,7 +31,7 @@ TimingOverlay::TimingOverlay()
   , m_pCar(nullptr)
   , m_pTiming(nullptr)
   , m_pRace(nullptr)
-  , m_posTexts({"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "---"})
+  , m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"})
 {
 }
 
@@ -59,17 +59,19 @@ void TimingOverlay::render()
         const int shadowY        = -2;
         const int shadowX        =  2;
         const int index          = m_pCar->index();
-        const int lap            = m_pTiming->leadersLap() + 1;
+        const int leadersLap     = m_pTiming->leadersLap() + 1;
+        const int lap            = m_pTiming->lap(m_pCar->index()) + 1;
         const int currentLapTime = m_pTiming->currentTime(index);
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->recordTime(index);
 
-        const int unsigned laps  = m_pRace->lapCount();
+        const unsigned int pos   = m_pRace->getPositionOfCar(index);
+        const unsigned int laps  = m_pRace->lapCount();
 
         // Render the current lap number
         {
             std::stringstream ss;
-            ss << " LAP:" << lap << "/" << laps;
+            ss << " LAP:" << leadersLap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
             lapText.setColor(1.0f, 1.0f, 1.0f);
@@ -90,7 +92,14 @@ void TimingOverlay::render()
         // Render the position
         {
             std::stringstream ss;
-            ss << " POS:" << m_posTexts.back();
+            ss << " POS:" << m_posTexts.at(pos);
+
+            const int lapDiff = leadersLap - lap;
+            if (lapDiff > 0)
+            {
+                ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
+            }
+
             MCTextureText posText(ss.str());
             posText.setGlyphSize(20, 20);
             posText.setColor(1.0f, 1.0f, 0.0f);
