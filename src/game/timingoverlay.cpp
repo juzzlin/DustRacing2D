@@ -59,7 +59,7 @@ void TimingOverlay::render()
         const int shadowY        = -2;
         const int shadowX        =  2;
         const int index          = m_pCar->index();
-        const int lap            = m_pTiming->lap(index) + 1;
+        const int lap            = m_pTiming->leadersLap() + 1;
         const int currentLapTime = m_pTiming->currentTime(index);
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->recordTime(index);

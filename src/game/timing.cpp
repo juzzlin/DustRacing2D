@@ -51,6 +51,22 @@ int Timing::lap(MCUint index) const
     return m_times[index].lap;
 }
 
+int Timing::leadersLap() const
+{
+    int maxLap = 0;
+
+    for (unsigned int index = 0; index < m_times.size(); index++)
+    {
+        const int lap = m_times[index].lap;
+        if (lap > maxLap)
+        {
+            maxLap = lap;
+        }
+    }
+
+    return maxLap;
+}
+
 int Timing::currentTime(MCUint index) const
 {
     if (!m_started)

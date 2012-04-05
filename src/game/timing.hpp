@@ -41,6 +41,9 @@ public:
     //! Returns the current lap for the given car.
     int lap(MCUint index) const;
 
+    //! Returns the lap for the leading car.
+    int leadersLap() const;
+
     //! Returns last lap time in msecs for the given car or
     //! -1 if invalid car or time not set.
     int lastLapTime(MCUint index) const;
