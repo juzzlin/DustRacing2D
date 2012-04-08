@@ -33,7 +33,7 @@ class MCGLRectParticle : public MCParticle
 public:
 
     //! Create a new particle
-    static MCGLRectParticle * create();
+    static MCGLRectParticle & create();
 
     //! \reimp
     void recycle();

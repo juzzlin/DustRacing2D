@@ -50,7 +50,11 @@ public:
   //! Finish the particle. Automatically called on timeOut().
   void die();
 
-  //! (Re-)Init a particle
+  //! (Re-)Init a particle.
+  //! \param location Initial location.
+  //! \param radius   Initial radius.
+  //! \param lifeTime Life time / number of frames. The life time is decremented
+  //! each time stepTime() is called.
   void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
 
   //! Return radius

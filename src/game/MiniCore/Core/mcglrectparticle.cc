@@ -75,7 +75,7 @@ void MCGLRectParticle::render(MCCamera * pCamera)
     MCFloat alpha = m_pImpl->m_a;
     if (alpha < 1.0f || animationStyle() == FadeOut) {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+        glBlendFunc(GL_SRC_ALPHA, GL_DST_COLOR);
     }
 
     // Scale alpha if fading out
@@ -89,16 +89,11 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         r *= scale();
     }
 
-    glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
+    glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, 1.0f - alpha);
     glNormal3f(0, 0, 1.0);
-    glScaled(r, r, 1);
-    glBegin(GL_QUADS);
-
-    glVertex2f(-1, -1);
-    glVertex2f(-1, +1);
-    glVertex2f(+1, +1);
-    glVertex2f(+1, -1);
-
+    glPointSize(r * 2);
+    glBegin(GL_POINTS);
+    glVertex2f(0, 0);
     glEnd();
     glPopMatrix();
     glPopAttrib();
@@ -109,9 +104,9 @@ void MCGLRectParticle::renderShadow(MCCamera *)
     return;
 }
 
-MCGLRectParticle * MCGLRectParticle::create()
+MCGLRectParticle & MCGLRectParticle::create()
 {
-    return MCGLRectParticle::m_recycler.newObject();
+    return *MCGLRectParticle::m_recycler.newObject();
 }
 
 void MCGLRectParticle::recycle()
