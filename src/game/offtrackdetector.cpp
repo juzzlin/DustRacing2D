@@ -45,18 +45,18 @@ void OffTrackDetector::update()
     }
     else if (rTile.tileType() == "straight" || rTile.tileType() == "finish")
     {
-        if (rTile.rotation() == 0 || rTile.rotation() == 180)
+        if ((rTile.rotation() + 90) % 180 == 0)
         {
-            MCFloat y = m_car.location().j();
+            const MCFloat y = m_car.location().j();
             if (y > rTile.location().y() + m_tileHLimit ||
                 y < rTile.location().y() - m_tileHLimit)
             {
                 m_car.setOffTrack(true);
             }
         }
-        else if (rTile.rotation() == 90 || rTile.rotation() == 270)
+        else if (rTile.rotation() % 180 == 0)
         {
-            MCFloat x = m_car.location().i();
+            const MCFloat x = m_car.location().i();
             if (x > rTile.location().x() + m_tileWLimit ||
                 x < rTile.location().x() - m_tileWLimit)
             {
