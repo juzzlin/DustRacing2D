@@ -161,7 +161,7 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
 
         const MCFloat magnitude = rotationalImpulse.k();
         pa.addRotationalImpulse((-magnitude - magnitude * restitution) * massScaling);
-        pa.setCenterOfRotation(contactPoint);
+        pa.setCenterOfRotation(pa.location());
     }
 
     if (!pb.stationary()) {
