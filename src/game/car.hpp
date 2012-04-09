@@ -76,6 +76,14 @@ public:
 
 private:
 
+    void doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+
+    void doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+
+    void doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+
+    void doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
     bool                  m_offTrack;

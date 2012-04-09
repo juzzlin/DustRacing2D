@@ -240,35 +240,38 @@ void Car::render(MCCamera *p)
         MCTrigonom::rotated(rightBrakeGlowPos, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
+
+        doSkidMark(leftTire, 0.25f, 0.25f, 0.25f, 0.5f);
+        doSkidMark(rightTire, 0.25f, 0.25f, 0.25f, 0.5f);
+
+        doSmoke(leftTire, 0.95f, 0.95f, 0.95f, 0.5f);
+        doSmoke(rightTire, 0.95f, 0.95f, 0.95f, 0.5f);
     }
 
     if (m_offTrack && speedInKmh() > 10)
     {
-        MCGLRectParticle & grass1 = MCGLRectParticle::create();
-        grass1.init(leftTire, 5, 180);
-        grass1.setAnimationStyle(MCParticle::Shrink);
-        grass1.setColor(0.75f, 0.75f, 0.75f, 0.5f);
-        grass1.addToWorld();
-        grass1.setVelocity(MCRandom::randomVector2d() * 0.1f);
+        doSkidMark(leftTire, 0.3f, 0.2f, 0.0f, 0.5f);
+        doSkidMark(rightTire, 0.3f, 0.2f, 0.0f, 0.5f);
 
-        MCGLRectParticle & grass2 = MCGLRectParticle::create();
-        grass2.init(rightTire, 5, 180);
-        grass2.setAnimationStyle(MCParticle::Shrink);
-        grass2.setColor(0.75f, 0.75f, 0.75f, 0.5f);
-        grass2.addToWorld();
-        grass2.setVelocity(MCRandom::randomVector2d() * 0.1f);
+        doSmoke(leftTire, 0.75f, 0.75f, 0.75f, 0.5f);
+        doSmoke(rightTire, 0.75f, 0.75f, 0.75f, 0.5f);
 
-        MCGLRectParticle & grass3 = MCGLRectParticle::create();
-        grass3.init(leftTire, 4, 360);
-        grass3.setAnimationStyle(MCParticle::FadeOut);
-        grass3.setColor(0.3f, 0.2f, 0.0f, 0.5f);
-        grass3.addToWorld();
+        if (rand() % 5 == 0)
+        {
+            static const MCVector2dF leftRearTirePos(-20, 13);
+            static const MCVector2dF rightRearTirePos(-20, -13);
 
-        MCGLRectParticle & grass4 = MCGLRectParticle::create();
-        grass4.init(rightTire, 4, 360);
-        grass4.setAnimationStyle(MCParticle::FadeOut);
-        grass4.setColor(0.3f, 0.2f, 0.0f, 0.5f);
-        grass4.addToWorld();
+            MCVector2dF leftTire;
+            MCTrigonom::rotated(leftRearTirePos, leftTire, angle());
+            leftTire += MCVector2dF(location());
+
+            MCVector2dF rightTire;
+            MCTrigonom::rotated(rightRearTirePos, rightTire, angle());
+            rightTire += MCVector2dF(location());
+
+            doMud(leftTire, 0.3f, 0.2f, 0.0f, 0.9f);
+            doMud(rightTire, 0.3f, 0.2f, 0.0f, 0.9f);
+        }
     }
 }
 
@@ -278,12 +281,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
     {
         if (rand() % 10 == 0)
         {
-            MCGLRectParticle & sparkle = MCGLRectParticle::create();
-            sparkle.init(event.contactPoint(), 2, 60);
-            sparkle.setAnimationStyle(MCParticle::Shrink);
-            sparkle.setColor(1.0f, 0.8f, 0.0f, 0.9f);
-            sparkle.addToWorld();
-            sparkle.setVelocity(velocity() * 0.5f);
+            doSparkle(event.contactPoint(), 1.0f, 0.8f, 0.0f, 0.9f);
         }
     }
 
@@ -299,6 +297,48 @@ void Car::setOffTrack(bool state)
 void Car::setTurningImpulse(MCFloat impulse)
 {
     m_turningImpulse = impulse;
+}
+
+void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+{
+    MCGLRectParticle & smoke = MCGLRectParticle::create();
+    smoke.init(location, 5, 180);
+    smoke.setAnimationStyle(MCParticle::Shrink);
+    smoke.setColor(r, g, b, a);
+    smoke.setVelocity(MCRandom::randomVector2d() * 0.1f);
+    smoke.addToWorld();
+}
+
+void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+{
+    MCGLRectParticle & skidMark = MCGLRectParticle::create();
+    skidMark.init(location, 4, 720);
+    skidMark.setAnimationStyle(MCParticle::FadeOut);
+    skidMark.setColor(r, g, b, a);
+    skidMark.rotate(angle());
+    skidMark.setPhysicsObject(false);
+    skidMark.addToWorld();
+}
+
+void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+{
+    MCGLRectParticle & mud = MCGLRectParticle::create();
+    mud.init(location, 4, 120);
+    mud.setAnimationStyle(MCParticle::Shrink);
+    mud.setColor(r, g, b, a);
+    mud.addToWorld();
+    mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0f));
+    mud.setAcceleration(MCVector3dF(0, 0, -10.0f));
+}
+
+void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+{
+    MCGLRectParticle & sparkle = MCGLRectParticle::create();
+    sparkle.init(location, 2, 60);
+    sparkle.setAnimationStyle(MCParticle::Shrink);
+    sparkle.setColor(r, g, b, a);
+    sparkle.addToWorld();
+    sparkle.setVelocity(velocity() * 0.5f);
 }
 
 Car::~Car()

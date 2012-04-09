@@ -66,7 +66,7 @@ void MCGLRectParticle::render(MCCamera * pCamera)
     glTranslated(x, y, location().k());
 
     // Rotate
-    if (angle()) {
+    if (angle() > 0) {
         glRotated(angle(), 0, 0, 1);
     }
 
@@ -92,9 +92,11 @@ void MCGLRectParticle::render(MCCamera * pCamera)
     {
         glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
         glNormal3f(0, 0, 1.0f);
-        glPointSize(r + r);
-        glBegin(GL_POINTS);
-        glVertex2f(0, 0);
+        glBegin(GL_QUADS);
+        glVertex2f(-r,  r);
+        glVertex2f( r,  r);
+        glVertex2f( r, -r);
+        glVertex2f(-r, -r);
         glEnd();
     }
 

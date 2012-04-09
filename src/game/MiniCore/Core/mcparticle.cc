@@ -61,6 +61,8 @@ void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius
     m_pImpl->m_delta          = m_pImpl->m_scale / m_pImpl->m_initLifeTime;
     m_pImpl->m_radius         = newRadius;
 
+    setPhysicsObject(true);
+
     translate(newLocation);
 }
 
