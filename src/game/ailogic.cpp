@@ -104,8 +104,8 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
 
     // PID-controller. This makes the computer players to turn and react faster
     // than the human player, but hey...they are stupid.
-    MCFloat control = diff * 0.01f + (diff - m_lastDiff) * 0.01f;
-    const MCFloat maxControl = 0.5f;
+    MCFloat control = diff * 0.02f + (diff - m_lastDiff) * 0.02f;
+    const MCFloat maxControl = 1.0f;
     control = control < 0 ? -control : control;
     control = control > maxControl ? maxControl : control;
     m_car.setTurningImpulse(control);

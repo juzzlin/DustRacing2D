@@ -314,12 +314,6 @@ public:
     //! implementation in the overidden version.
     virtual void stepTime();
 
-    //! This is called BEFORE every integration step.
-    virtual void beforeIntegration();
-
-    //! This is called AFTER every integration step.
-    virtual void afterIntegration();
-
     //! Return internal time.
     MCUint time() const;
 

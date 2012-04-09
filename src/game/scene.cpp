@@ -62,13 +62,13 @@ Scene::Scene(MCUint numCars)
         if (i == 0)
         {
             car = new Car(MCTextureManager::instance().surface("car001"), i);
-            car->setPower(4500.0f);
+            car->setPower(7000.0f);
         }
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
             m_aiLogic.push_back(new AiLogic(*car));
-            car->setPower(4500.0f + i * 100.0f);
+            car->setPower(7000.0f + i * 100.0f);
         }
 
         car->setLayer(Layers::Cars);
@@ -125,7 +125,7 @@ void Scene::updateCameraLocation(MCCamera & camera)
     // Make changes a bit smoother so that an abrupt decrease
     // in the speed won't look bad.
     MCVector2d<MCFloat> p(m_cars.at(0)->location());
-    const int offsetAmplification = 20;
+    const int offsetAmplification = 10;
     const int smooth = 5;
     m_cameraBaseOffset +=
         (m_cars.at(0)->velocity().lengthFast() - m_cameraBaseOffset) / smooth;

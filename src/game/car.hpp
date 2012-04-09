@@ -65,6 +65,9 @@ public:
     //! \reimp
     virtual void render(MCCamera *p);
 
+    //! \reimp
+    virtual void collisionEvent(MCCollisionEvent & event);
+
     void setPower(MCFloat power);
 
     void setOffTrack(bool state);
@@ -75,6 +78,7 @@ private:
 
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
+    bool                  m_offTrack;
     bool                  m_accelerating;
     bool                  m_braking;
     bool                  m_reverse;

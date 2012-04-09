@@ -23,8 +23,9 @@
 //! Implementation class for MCCollisionEvent
 class MCCollisionEventImpl
 {
-    explicit MCCollisionEventImpl(MCObject & collidingObject);
+    explicit MCCollisionEventImpl(MCObject & collidingObject, MCVector3dF contactPoint);
     MCObject & m_collidingObject;
+    MCVector3dF m_contactPoint;
     friend class MCCollisionEvent;
 };
 

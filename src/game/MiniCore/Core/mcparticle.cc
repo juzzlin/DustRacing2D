@@ -29,7 +29,8 @@ MCParticleImpl::MCParticleImpl()
 , m_initLifeTime(0)
 , m_animationStyle(MCParticle::None)
 , m_isActive(false)
-, m_scale(1.0)
+, m_scale(1.0f)
+, m_delta(0.0f)
 {}
 
 MCParticleImpl::~MCParticleImpl()
@@ -56,16 +57,16 @@ void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius
     m_pImpl->m_initLifeTime   = newLifeTime;
     m_pImpl->m_animationStyle = MCParticle::None;
     m_pImpl->m_isActive       = true;
-    m_pImpl->m_scale          = 1.0;
-
-    static_cast<MCCircleShape *>(shape())->setRadius(newRadius);
+    m_pImpl->m_scale          = 1.0f;
+    m_pImpl->m_delta          = m_pImpl->m_scale / m_pImpl->m_initLifeTime;
+    m_pImpl->m_radius         = newRadius;
 
     translate(newLocation);
 }
 
 MCFloat MCParticle::radius() const
 {
-    return static_cast<MCCircleShape *>(shape())->radius();
+    return m_pImpl->m_radius;
 }
 
 MCUint MCParticle::lifeTime() const
@@ -95,9 +96,9 @@ void MCParticle::stepTime()
 
 void MCParticleImpl::stepTime()
 {
-    if (m_lifeTime) {
+    if (m_lifeTime > 0) {
         m_lifeTime--;
-        m_scale = static_cast<MCFloat>(m_lifeTime) / m_initLifeTime;
+        m_scale -= m_delta;
     } else if (m_isActive) {
         m_isActive = false;
         m_pPublic->timeOut();

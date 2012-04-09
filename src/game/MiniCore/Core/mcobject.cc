@@ -694,14 +694,6 @@ void MCObject::stepTime()
     m_pImpl->time++;
 }
 
-void MCObject::beforeIntegration()
-{
-}
-
-void MCObject::afterIntegration()
-{
-}
-
 MCUint MCObject::time() const
 {
     return m_pImpl->time;

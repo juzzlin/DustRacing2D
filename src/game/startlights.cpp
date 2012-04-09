@@ -20,7 +20,7 @@
 Startlights::Startlights(Race & race)
   : m_state(LightsInit)
   , m_counter(0)
-  , m_stepsPerState(100)
+  , m_stepsPerState(60)
   , m_race(race)
 {
 }

@@ -20,6 +20,8 @@
 #include "slidefrictiongenerator.hpp"
 #include "MiniCore/Core/MCCollisionEvent"
 #include "MiniCore/Core/MCFrictionGenerator"
+#include "MiniCore/Core/MCGLRectParticle"
+#include "MiniCore/Core/MCRandom"
 #include "MiniCore/Core/MCRectShape"
 #include "MiniCore/Core/MCShape"
 #include "MiniCore/Core/MCSurface"
@@ -34,15 +36,17 @@ namespace
     const MCFloat MAX_LINEAR_VELOCITY  = 15.0f;
     const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
     const MCFloat FRICTION             = 0.5f;
+    const MCFloat BRAKING_FRICTION     = 1.0f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
     const MCFloat ROTATION_FRICTION    = 0.5f;
-    const MCFloat OFF_TRACK_FRICTION   = 0.2f;
+    const MCFloat OFF_TRACK_FRICTION   = 0.5f;
 }
 
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
-  , m_pBrakingFriction(new MCFrictionGenerator(FRICTION, 0.0f))
+  , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
   , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
+  , m_offTrack(false)
   , m_accelerating(false)
   , m_braking(false)
   , m_reverse(false)
@@ -52,8 +56,8 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_tireAngle(0)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
-  , m_power(3000.0f)
-  , m_turningImpulse(.25f)
+  , m_power(5000.0f)
+  , m_turningImpulse(.40f)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -61,7 +65,7 @@ Car::Car(MCSurface & surface, MCUint index)
     setMaximumVelocity(MAX_LINEAR_VELOCITY);
     setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(0.25f);
+    setRestitution(0.1f);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);
@@ -198,7 +202,7 @@ MCFloat Car::speedInKmh() const
     const MCFloat i = MCTrigonom::cos(angle());
     const MCFloat j = MCTrigonom::sin(angle());
 
-    return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 200 / 10;
+    return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 120 / 10;
 }
 
 void Car::render(MCCamera *p)
@@ -237,11 +241,59 @@ void Car::render(MCCamera *p)
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
+
+    if (m_offTrack && speedInKmh() > 10)
+    {
+        MCGLRectParticle & grass1 = MCGLRectParticle::create();
+        grass1.init(leftTire, 5, 180);
+        grass1.setAnimationStyle(MCParticle::Shrink);
+        grass1.setColor(0.75f, 0.75f, 0.75f, 0.5f);
+        grass1.addToWorld();
+        grass1.setVelocity(MCRandom::randomVector2d() * 0.1f);
+
+        MCGLRectParticle & grass2 = MCGLRectParticle::create();
+        grass2.init(rightTire, 5, 180);
+        grass2.setAnimationStyle(MCParticle::Shrink);
+        grass2.setColor(0.75f, 0.75f, 0.75f, 0.5f);
+        grass2.addToWorld();
+        grass2.setVelocity(MCRandom::randomVector2d() * 0.1f);
+
+        MCGLRectParticle & grass3 = MCGLRectParticle::create();
+        grass3.init(leftTire, 4, 360);
+        grass3.setAnimationStyle(MCParticle::FadeOut);
+        grass3.setColor(0.3f, 0.2f, 0.0f, 0.5f);
+        grass3.addToWorld();
+
+        MCGLRectParticle & grass4 = MCGLRectParticle::create();
+        grass4.init(rightTire, 4, 360);
+        grass4.setAnimationStyle(MCParticle::FadeOut);
+        grass4.setColor(0.3f, 0.2f, 0.0f, 0.5f);
+        grass4.addToWorld();
+    }
+}
+
+void Car::collisionEvent(MCCollisionEvent & event)
+{
+    if (event.collidingObject().typeID() == typeID())
+    {
+        if (rand() % 10 == 0)
+        {
+            MCGLRectParticle & sparkle = MCGLRectParticle::create();
+            sparkle.init(event.contactPoint(), 2, 60);
+            sparkle.setAnimationStyle(MCParticle::Shrink);
+            sparkle.setColor(1.0f, 0.8f, 0.0f, 0.9f);
+            sparkle.addToWorld();
+            sparkle.setVelocity(velocity() * 0.5f);
+        }
+    }
+
+    event.accept();
 }
 
 void Car::setOffTrack(bool state)
 {
     m_pOffTrackFriction->enable(state);
+    m_offTrack = state;
 }
 
 void Car::setTurningImpulse(MCFloat impulse)

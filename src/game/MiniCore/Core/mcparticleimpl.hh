@@ -33,6 +33,8 @@ protected:
   MCParticle::AnimationStyle m_animationStyle;
   bool m_isActive;
   MCFloat m_scale;
+  MCFloat m_delta;
+  MCFloat m_radius;
   friend class MCParticle;
 };
 

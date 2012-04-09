@@ -41,13 +41,16 @@ public:
     /*! Constructor.
      * \param object This event is sent to an object that has collided with object.
      */
-    explicit MCCollisionEvent(MCObject & object);
+    explicit MCCollisionEvent(MCObject & object, MCVector3dF contactPoint);
 
     //! Destructor.
     ~MCCollisionEvent();
 
     //! Get colling object.
     MCObject & collidingObject() const;
+
+    //! Get the contact point.
+    const MCVector3dF & contactPoint() const;
 
     //! Return the typeID.
     static MCUint typeID();

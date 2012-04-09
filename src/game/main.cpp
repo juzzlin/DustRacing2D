@@ -38,7 +38,7 @@ int main(int argc, char ** argv)
     MCLogger::logInfo("Creating game..");
     Game game;
     game.setRenderer(new Renderer);
-    game.setTargetUpdateFps(100);
+    game.setTargetUpdateFps(60);
 
     // Initialize and start the game
     if (game.init())

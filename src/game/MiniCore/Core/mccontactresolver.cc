@@ -67,16 +67,16 @@ bool MCContactResolverImpl::processRectRect(
 
             // Send collision event to owner of shape1 and generate a contact
             // if accepted.
-            MCCollisionEvent ev1(shape2.parent());
+            MCCollisionEvent ev1(shape2.parent(), obbox1.vertex(i));
             MCObject::sendEvent(shape1.parent(), ev1);
 
-            vertex             = obbox1.vertex(i);
-            depth              = 0;
-            depthIsSet         = false;
+            vertex     = obbox1.vertex(i);
+            depth      = 0;
+            depthIsSet = false;
 
             if (ev1.accepted()) {
                 depth = shape2.interpenetrationDepth(
-                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal) * relaxation;
+                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 depthIsSet = true;
 
                 MCContact & contact = MCContact::create();
@@ -88,13 +88,13 @@ bool MCContactResolverImpl::processRectRect(
 
             // Send collision event to owner of shape2 and generate a contact
             // if accepted.
-            MCCollisionEvent ev2(shape1.parent());
+            MCCollisionEvent ev2(shape1.parent(), obbox1.vertex(i));
             MCObject::sendEvent(shape2.parent(), ev2);
 
             if (ev2.accepted()) {
                 if (!depthIsSet) {
                     depth = shape2.interpenetrationDepth(
-                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal) * relaxation;
+                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 }
 
                 MCContact & contact = MCContact::create();
