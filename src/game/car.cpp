@@ -40,13 +40,20 @@ namespace
     const MCFloat ROLLING_FRICTION     = 0.1f;
     const MCFloat ROTATION_FRICTION    = 0.5f;
     const MCFloat OFF_TRACK_FRICTION   = 0.5f;
+    const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
+
+    const MCVector2dF LEFT_FRONT_TIRE_POS(20, 13);
+    const MCVector2dF RIGHT_FRONT_TIRE_POS(20, -13);
+    const MCVector2dF LEFT_REAR_TIRE_POS(-20, 13);
+    const MCVector2dF RIGHT_REAR_TIRE_POS(-20, -13);
 }
 
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
   , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
-  , m_offTrack(false)
+  , m_leftSideOffTrack(false)
+  , m_rightSideOffTrack(false)
   , m_accelerating(false)
   , m_braking(false)
   , m_reverse(false)
@@ -205,22 +212,43 @@ MCFloat Car::speedInKmh() const
     return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 120 / 10;
 }
 
+MCVector3dF Car::leftFrontTireLocation() const
+{
+    MCVector2dF pos;
+    MCTrigonom::rotated(LEFT_FRONT_TIRE_POS, pos, angle());
+    return pos + MCVector2dF(location());
+}
+
+MCVector3dF Car::rightFrontTireLocation() const
+{
+    MCVector2dF pos;
+    MCTrigonom::rotated(RIGHT_FRONT_TIRE_POS, pos, angle());
+    return pos + MCVector2dF(location());
+}
+
+MCVector3dF Car::leftRearTireLocation() const
+{
+    MCVector2dF pos;
+    MCTrigonom::rotated(LEFT_REAR_TIRE_POS, pos, angle());
+    return pos + MCVector2dF(location());
+}
+
+MCVector3dF Car::rightRearTireLocation() const
+{
+    MCVector2dF pos;
+    MCTrigonom::rotated(RIGHT_REAR_TIRE_POS, pos, angle());
+    return pos + MCVector2dF(location());
+}
+
 void Car::render(MCCamera *p)
 {
-    static const MCVector2dF leftFrontTirePos(20, 13);
-    static const MCVector2dF rightFrontTirePos(20, -13);
-
     // Render left front tire
-    MCVector2dF leftTire;
-    MCTrigonom::rotated(leftFrontTirePos, leftTire, angle());
-    leftTire += MCVector2dF(location());
-    m_frontTire.render(p, leftTire, m_tireAngle + angle());
+    const MCVector3dF leftFrontTire(leftFrontTireLocation());
+    m_frontTire.render(p, leftFrontTire, m_tireAngle + angle());
 
     // Render right front tire
-    MCVector2dF rightTire;
-    MCTrigonom::rotated(rightFrontTirePos, rightTire, angle());
-    rightTire += MCVector2dF(location());
-    m_frontTire.render(p, rightTire, m_tireAngle + angle());
+    const MCVector3dF rightFrontTire(rightFrontTireLocation());
+    m_frontTire.render(p, rightFrontTire, m_tireAngle + angle());
 
     // Render body
     MCObject::render(p);
@@ -241,36 +269,35 @@ void Car::render(MCCamera *p)
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
 
-        doSkidMark(leftTire, 0.25f, 0.25f, 0.25f, 0.5f);
-        doSkidMark(rightTire, 0.25f, 0.25f, 0.25f, 0.5f);
+        doSkidMark(leftFrontTire, 0.25f, 0.25f, 0.25f, 0.5f);
+        doSkidMark(rightFrontTire, 0.25f, 0.25f, 0.25f, 0.5f);
 
-        doSmoke(leftTire, 0.95f, 0.95f, 0.95f, 0.5f);
-        doSmoke(rightTire, 0.95f, 0.95f, 0.95f, 0.5f);
+        doSmoke(leftFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
+        doSmoke(rightFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
     }
 
-    if (m_offTrack && speedInKmh() > 10)
+    if (speedInKmh() > 10)
     {
-        doSkidMark(leftTire, 0.3f, 0.2f, 0.0f, 0.5f);
-        doSkidMark(rightTire, 0.3f, 0.2f, 0.0f, 0.5f);
-
-        doSmoke(leftTire, 0.75f, 0.75f, 0.75f, 0.5f);
-        doSmoke(rightTire, 0.75f, 0.75f, 0.75f, 0.5f);
-
-        if (rand() % 5 == 0)
+        if (m_leftSideOffTrack)
         {
-            static const MCVector2dF leftRearTirePos(-20, 13);
-            static const MCVector2dF rightRearTirePos(-20, -13);
+            doSkidMark(leftFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
+            doSmoke(leftFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
 
-            MCVector2dF leftTire;
-            MCTrigonom::rotated(leftRearTirePos, leftTire, angle());
-            leftTire += MCVector2dF(location());
+            if (rand() % 5 == 0)
+            {
+                doMud(leftRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+            }
+        }
 
-            MCVector2dF rightTire;
-            MCTrigonom::rotated(rightRearTirePos, rightTire, angle());
-            rightTire += MCVector2dF(location());
+        if (m_rightSideOffTrack)
+        {
+            doSkidMark(rightFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
+            doSmoke(rightFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
 
-            doMud(leftTire, 0.3f, 0.2f, 0.0f, 0.9f);
-            doMud(rightTire, 0.3f, 0.2f, 0.0f, 0.9f);
+            if (rand() % 5 == 0)
+            {
+                doMud(rightRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+            }
         }
     }
 }
@@ -288,10 +315,29 @@ void Car::collisionEvent(MCCollisionEvent & event)
     event.accept();
 }
 
-void Car::setOffTrack(bool state)
+void Car::stepTime()
+{
+    if (m_leftSideOffTrack)
+    {
+        addMoment(OFF_TRACK_MOMENT);
+    }
+
+    if (m_rightSideOffTrack)
+    {
+        addMoment(-OFF_TRACK_MOMENT);
+    }
+}
+
+void Car::setLeftSideOffTrack(bool state)
 {
     m_pOffTrackFriction->enable(state);
-    m_offTrack = state;
+    m_leftSideOffTrack = state;
+}
+
+void Car::setRightSideOffTrack(bool state)
+{
+    m_pOffTrackFriction->enable(state);
+    m_rightSideOffTrack = state;
 }
 
 void Car::setTurningImpulse(MCFloat impulse)

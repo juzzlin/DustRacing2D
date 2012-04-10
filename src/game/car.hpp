@@ -68,11 +68,28 @@ public:
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event);
 
+    //! \reimp
+    virtual void stepTime();
+
     void setPower(MCFloat power);
 
-    void setOffTrack(bool state);
+    void setLeftSideOffTrack(bool state);
+
+    void setRightSideOffTrack(bool state);
 
     void setTurningImpulse(MCFloat impulse);
+
+    //! Get location of the left front tire.
+    MCVector3dF leftFrontTireLocation() const;
+
+    //! Get location of the right front tire.
+    MCVector3dF rightFrontTireLocation() const;
+
+    //! Get location of the left rear tire.
+    MCVector3dF leftRearTireLocation() const;
+
+    //! Get location of the right rear tire.
+    MCVector3dF rightRearTireLocation() const;
 
 private:
 
@@ -86,7 +103,8 @@ private:
 
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
-    bool                  m_offTrack;
+    bool                  m_leftSideOffTrack;
+    bool                  m_rightSideOffTrack;
     bool                  m_accelerating;
     bool                  m_braking;
     bool                  m_reverse;
