@@ -317,14 +317,17 @@ void Car::collisionEvent(MCCollisionEvent & event)
 
 void Car::stepTime()
 {
-    if (m_leftSideOffTrack)
+    if (speedInKmh() > 10)
     {
-        addMoment(OFF_TRACK_MOMENT);
-    }
+        if (m_leftSideOffTrack)
+        {
+            addMoment(OFF_TRACK_MOMENT);
+        }
 
-    if (m_rightSideOffTrack)
-    {
-        addMoment(-OFF_TRACK_MOMENT);
+        if (m_rightSideOffTrack)
+        {
+            addMoment(-OFF_TRACK_MOMENT);
+        }
     }
 }
 
