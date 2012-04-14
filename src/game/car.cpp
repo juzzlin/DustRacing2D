@@ -65,6 +65,7 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
   , m_power(5000.0f)
   , m_turningImpulse(.40f)
+  , m_speedInKmh(0)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -123,7 +124,7 @@ void Car::turnLeft()
 
     m_turnLeft = true;
 
-    if (std::fabs(speedInKmh()) > 1)
+    if (std::abs(m_speedInKmh) > 1)
     {
         addRotationalImpulse(m_turningImpulse);
     }
@@ -135,7 +136,7 @@ void Car::turnRight()
 
     m_turnRight = true;
 
-    if (std::fabs(speedInKmh()) > 1)
+    if (std::abs(m_speedInKmh) > 1)
     {
         addRotationalImpulse(-m_turningImpulse);
     }
@@ -160,7 +161,7 @@ void Car::brake()
 {
     m_accelerating = false;
 
-    if (speedInKmh() < 1)
+    if (m_speedInKmh < 1)
     {
         m_reverse = true;
     }
@@ -204,12 +205,9 @@ void Car::noSteering()
     m_turnRight = false;
 }
 
-MCFloat Car::speedInKmh() const
+int Car::speedInKmh() const
 {
-    const MCFloat i = MCTrigonom::cos(angle());
-    const MCFloat j = MCTrigonom::sin(angle());
-
-    return velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 120 / 10;
+    return m_speedInKmh;
 }
 
 MCVector3dF Car::leftFrontTireLocation() const
@@ -276,7 +274,7 @@ void Car::render(MCCamera *p)
         doSmoke(rightFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
     }
 
-    if (speedInKmh() > 10)
+    if (m_speedInKmh > 10)
     {
         if (m_leftSideOffTrack)
         {
@@ -317,7 +315,12 @@ void Car::collisionEvent(MCCollisionEvent & event)
 
 void Car::stepTime()
 {
-    if (speedInKmh() > 10)
+    const MCFloat i = MCTrigonom::cos(angle());
+    const MCFloat j = MCTrigonom::sin(angle());
+
+    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 120 / 10;
+
+    if (m_speedInKmh > 10)
     {
         if (m_leftSideOffTrack)
         {

@@ -60,7 +60,7 @@ public:
     void noSteering();
 
     //! Get estimated speed in km/h. This is used by the speedometer.
-    MCFloat speedInKmh() const;
+    int speedInKmh() const;
 
     //! \reimp
     virtual void render(MCCamera *p);
@@ -117,6 +117,7 @@ private:
     MCFloat               m_power;
     MCFloat               m_turningImpulse;
     MCFloat               m_length;
+    int                   m_speedInKmh;
 };
 
 #endif // CAR_HPP
