@@ -118,6 +118,7 @@ private:
     MCFloat               m_turningImpulse;
     MCFloat               m_length;
     int                   m_speedInKmh;
+    MCFloat               m_dx, m_dy;
 };
 
 #endif // CAR_HPP

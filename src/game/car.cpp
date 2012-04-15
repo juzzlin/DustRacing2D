@@ -66,6 +66,8 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_power(5000.0f)
   , m_turningImpulse(.40f)
   , m_speedInKmh(0)
+  , m_dx(0)
+  , m_dy(0)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -146,10 +148,7 @@ void Car::accelerate()
 {
     m_pBrakingFriction->enable(false);
 
-    const MCFloat realAngle = angle();
-    MCFloat dx = MCTrigonom::cos(realAngle);
-    MCFloat dy = MCTrigonom::sin(realAngle);
-    MCVector2d<MCFloat> force(dx, dy);
+    MCVector2d<MCFloat> force(m_dx, m_dy);
     addForce(force * m_power);
 
     m_accelerating = true;
@@ -168,10 +167,7 @@ void Car::brake()
 
     if (m_reverse)
     {
-        const MCFloat realAngle = angle();
-        MCFloat dx = MCTrigonom::cos(realAngle);
-        MCFloat dy = MCTrigonom::sin(realAngle);
-        MCVector2d<MCFloat> force(dx, dy);
+        MCVector2d<MCFloat> force(m_dx, m_dy);
         addForce(-force * m_power / 2);
     }
     else
@@ -315,10 +311,10 @@ void Car::collisionEvent(MCCollisionEvent & event)
 
 void Car::stepTime()
 {
-    const MCFloat i = MCTrigonom::cos(angle());
-    const MCFloat j = MCTrigonom::sin(angle());
+    m_dx = MCTrigonom::cos(angle());
+    m_dy = MCTrigonom::sin(angle());
 
-    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(i, j, 0)) * 120 / 10;
+    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 120 / 10;
 
     if (m_speedInKmh > 10)
     {
