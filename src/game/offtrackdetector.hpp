@@ -16,8 +16,11 @@
 #ifndef OFFTRACKDETECTOR_HPP
 #define OFFTRACKDETECTOR_HPP
 
+#include "MiniCore/Core/MCVector2d"
+
 class Car;
 class Track;
+class TrackTile;
 
 //! Detects if a car is off the track.
 class OffTrackDetector
@@ -34,6 +37,9 @@ public:
     void update();
 
 private:
+
+    //! Test if the given location is off the track on the given tile.
+    bool isOffTrack(MCVector2dF tire, const TrackTile & tile) const;
 
     Car   & m_car;
     Track * m_pTrack;

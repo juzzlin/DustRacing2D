@@ -34,73 +34,62 @@ void OffTrackDetector::setTrack(Track & track)
 
 void OffTrackDetector::update()
 {
-    m_car.setLeftSideOffTrack(false);
-    m_car.setRightSideOffTrack(false);
-
-    const MCVector3dF leftFrontTirePos(m_car.leftFrontTireLocation());
-    const MCVector3dF rightFrontTirePos(m_car.rightFrontTireLocation());
-
     assert(m_pTrack);
 
-    // TODO: Refactor this:
-
     {
-        TrackTile & rTile = *m_pTrack->trackTileAtLocation(
-                    leftFrontTirePos.i(), leftFrontTirePos.j());
-        if (rTile.tileType() == "grass")
+        const MCVector3dF leftFrontTirePos(m_car.leftFrontTireLocation());
+        TrackTile & tile = *m_pTrack->trackTileAtLocation(
+            leftFrontTirePos.i(), leftFrontTirePos.j());
+
+        m_car.setLeftSideOffTrack(false);
+
+        if (isOffTrack(leftFrontTirePos, tile))
         {
             m_car.setLeftSideOffTrack(true);
         }
-        else if (rTile.tileType() == "straight" || rTile.tileType() == "finish")
+    }
+
+    {
+        const MCVector3dF rightFrontTirePos(m_car.rightFrontTireLocation());
+        TrackTile & tile = *m_pTrack->trackTileAtLocation(
+            rightFrontTirePos.i(), rightFrontTirePos.j());
+
+        m_car.setRightSideOffTrack(false);
+
+        if (isOffTrack(rightFrontTirePos, tile))
         {
-            if ((rTile.rotation() + 90) % 180 == 0)
+            m_car.setRightSideOffTrack(true);
+        }
+    }
+}
+
+bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) const
+{
+    if (tile.tileType() == "grass")
+    {
+        return true;
+    }
+    else if (tile.tileType() == "straight" || tile.tileType() == "finish")
+    {
+        if ((tile.rotation() + 90) % 180 == 0)
+        {
+            const MCFloat y = tire.j();
+            if (y > tile.location().y() + m_tileHLimit ||
+                y < tile.location().y() - m_tileHLimit)
             {
-                const MCFloat y = leftFrontTirePos.j();
-                if (y > rTile.location().y() + m_tileHLimit ||
-                    y < rTile.location().y() - m_tileHLimit)
-                {
-                    m_car.setLeftSideOffTrack(true);
-                }
+                return true;
             }
-            else if (rTile.rotation() % 180 == 0)
+        }
+        else if (tile.rotation() % 180 == 0)
+        {
+            const MCFloat x = tire.i();
+            if (x > tile.location().x() + m_tileWLimit ||
+                x < tile.location().x() - m_tileWLimit)
             {
-                const MCFloat x = leftFrontTirePos.i();
-                if (x > rTile.location().x() + m_tileWLimit ||
-                    x < rTile.location().x() - m_tileWLimit)
-                {
-                    m_car.setLeftSideOffTrack(true);
-                }
+                return true;
             }
         }
     }
 
-    {
-        TrackTile & rTile = *m_pTrack->trackTileAtLocation(
-                    rightFrontTirePos.i(), rightFrontTirePos.j());
-        if (rTile.tileType() == "grass")
-        {
-            m_car.setRightSideOffTrack(true);
-        }
-        else if (rTile.tileType() == "straight" || rTile.tileType() == "finish")
-        {
-            if ((rTile.rotation() + 90) % 180 == 0)
-            {
-                const MCFloat y = rightFrontTirePos.j();
-                if (y > rTile.location().y() + m_tileHLimit ||
-                    y < rTile.location().y() - m_tileHLimit)
-                {
-                    m_car.setRightSideOffTrack(true);
-                }
-            }
-            else if (rTile.rotation() % 180 == 0)
-            {
-                const MCFloat x = rightFrontTirePos.i();
-                if (x > rTile.location().x() + m_tileWLimit ||
-                    x < rTile.location().x() - m_tileWLimit)
-                {
-                    m_car.setRightSideOffTrack(true);
-                }
-            }
-        }
-    }
+    return false;
 }
