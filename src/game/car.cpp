@@ -395,7 +395,3 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     sparkle.addToWorld();
     sparkle.setVelocity(velocity() * 0.5f);
 }
-
-Car::~Car()
-{
-}

@@ -31,9 +31,6 @@ public:
     //! Constructor.
     Car(MCSurface & surface, MCUint index);
 
-    //! Destructor.
-    virtual ~Car();
-
     //! Return the index.
     MCUint index() const;
 
