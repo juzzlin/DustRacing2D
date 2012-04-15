@@ -236,18 +236,18 @@ MCVector3dF Car::rightRearTireLocation() const
 
 void Car::render(MCCamera *p)
 {
-    // Render left front tire
+    // Render left front tire.
     const MCVector3dF leftFrontTire(leftFrontTireLocation());
     m_frontTire.render(p, leftFrontTire, m_tireAngle + angle());
 
-    // Render right front tire
+    // Render right front tire.
     const MCVector3dF rightFrontTire(rightFrontTireLocation());
     m_frontTire.render(p, rightFrontTire, m_tireAngle + angle());
 
-    // Render body
+    // Render body.
     MCObject::render(p);
 
-    // Render brake lights
+    // Render brake light glows if braking.
     if (m_braking)
     {
         static const MCVector2dF leftBrakeGlowPos(-36, 12);
@@ -270,6 +270,7 @@ void Car::render(MCCamera *p)
         doSmoke(rightFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
     }
 
+    // Particle animations due to the car being off the track.
     if (m_speedInKmh > 10)
     {
         if (m_leftSideOffTrack)
@@ -298,6 +299,7 @@ void Car::render(MCCamera *p)
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
+    // Spawn sparkles if colliding with another car.
     if (event.collidingObject().typeID() == typeID())
     {
         if (rand() % 10 == 0)
@@ -311,11 +313,14 @@ void Car::collisionEvent(MCCollisionEvent & event)
 
 void Car::stepTime()
 {
+    // Cache dx and dy.
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
+    // Cache speed in km/h.
     m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 120 / 10;
 
+    // Apply moment if car is off the track.
     if (m_speedInKmh > 10)
     {
         if (m_leftSideOffTrack)
@@ -332,12 +337,14 @@ void Car::stepTime()
 
 void Car::setLeftSideOffTrack(bool state)
 {
+    // Enable off-track friction if left side is off the track.
     m_pOffTrackFriction->enable(state);
     m_leftSideOffTrack = state;
 }
 
 void Car::setRightSideOffTrack(bool state)
 {
+    // Enable off-track friction if right side is off the track.
     m_pOffTrackFriction->enable(state);
     m_rightSideOffTrack = state;
 }
