@@ -12,7 +12,6 @@ Core/mcexception.cc
 Core/mcforcegenerator.cc
 Core/mcforceregistry.cc
 Core/mcfrictiongenerator.cc
-Core/mcglcircleparticle.cc
 Core/mcglobjectdata.cc
 Core/mcglrectparticle.cc
 Core/mcglrectparticlegroup.cc
