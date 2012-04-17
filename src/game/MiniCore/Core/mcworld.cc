@@ -191,18 +191,18 @@ void MCWorldImpl::render(MCCamera * pCamera)
     // Render in the order of the layers
     LayerHash::iterator j;
     LayerHash::iterator end;
-    MCObject * pObj = nullptr;
+
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++) {
         j   = layers[i].begin();
         end = layers[i].end();
         for (; j != end; j++) {
-            pObj = *j;
+            MCObject * const pObj = *j;
             if (pObj->renderable()) {
                 // Check if view is set and is visible
                 if (pObj->shape() && pObj->shape()->view())
                 {
                     MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
-                    bbox.translate(MCVector2d<MCFloat>(pObj->location()));
+                    bbox.translate(MCVector2dF(pObj->location()));
                     if (!pCamera || pCamera->isVisible(bbox)) {
                         pObj->render(pCamera); // pCamera can be a nullptr
                     }
@@ -212,6 +212,9 @@ void MCWorldImpl::render(MCCamera * pCamera)
                     pObj->render(pCamera); // pCamera can be a nullptr
                 }
             }
+            else if (pObj->virtualObject()) {
+                pObj->render(pCamera);
+            }
         }
     }
 }
@@ -219,15 +222,14 @@ void MCWorldImpl::render(MCCamera * pCamera)
 void MCWorldImpl::renderShadows(MCCamera * pCamera)
 {
     const MCUint i2 = objs.size();
-    MCObject * pObj = nullptr;
     for (MCUint i = 0; i < i2; i++) {
-        pObj = objs[i];
+        MCObject * const pObj = objs[i];
         if (pObj->renderable() && pObj->hasShadow()) {
             // Check if view is set and is visible
             if (pObj->shape() && pObj->shape()->view())
             {
                 MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
-                bbox.translate(MCVector2d<MCFloat>(pObj->location()));
+                bbox.translate(MCVector2dF(pObj->location()));
                 if (!pCamera || pCamera->isVisible(bbox)) {
                     pObj->renderShadow(pCamera); // pCamera can be a nullptr
                 }
@@ -236,6 +238,9 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
             else if (!pCamera || pCamera->isVisible(pObj->bbox())) {
                 pObj->renderShadow(pCamera); // pCamera can be a nullptr
             }
+        }
+        else if (pObj->virtualObject()) {
+            pObj->renderShadow(pCamera);
         }
     }
 }

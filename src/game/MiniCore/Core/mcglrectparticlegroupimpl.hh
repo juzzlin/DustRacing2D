@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,22 +17,23 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCGLRECTPARTICLEIMPL_HH
-#define MCGLRECTPARTICLEIMPL_HH
+#ifndef MCGLRECTPARTICLEGROUPIMPL_HH
+#define MCGLRECTPARTICLEGROUPIMPL_HH
 
-#include "mcrecycler.hh"
+#include <vector>
+#include <unordered_set>
 
-//! Implementation class for MCGLRectParticle
-class MCGLRectParticleImpl
+//! Implementation class for MCGLRectParticleGroup
+class MCGLRectParticleGroupImpl
 {
 public:
-    MCGLRectParticleImpl();
-    ~MCGLRectParticleImpl();
+    MCGLRectParticleGroupImpl();
+    ~MCGLRectParticleGroupImpl();
 
 private:
-    friend class MCGLRectParticle;
-    MCFloat r, g, b, a;
-    MCGLRectParticleGroup * group;
+    friend class MCGLRectParticleGroup;
+    std::vector<MCGLRectParticle *> particles;
+    std::unordered_set<MCGLRectParticle *> addedParticles;
 };
 
-#endif // MCGLRECTPARTICLEIMPL_HH
+#endif // MCGLRECTPARTICLEGROUPIMPL_HH

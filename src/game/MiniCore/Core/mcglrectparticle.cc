@@ -26,10 +26,11 @@
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
 MCGLRectParticleImpl::MCGLRectParticleImpl()
-: m_r(1.0f)
-, m_g(1.0f)
-, m_b(1.0f)
-, m_a(1.0f)
+: r(1.0f)
+, g(1.0f)
+, b(1.0f)
+, a(1.0f)
+, group(nullptr)
 {}
 
 MCGLRectParticleImpl::~MCGLRectParticleImpl()
@@ -44,10 +45,10 @@ MCGLRectParticle::MCGLRectParticle() :
 
 void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 {
-    m_pImpl->m_r = r;
-    m_pImpl->m_g = g;
-    m_pImpl->m_b = b;
-    m_pImpl->m_a = a;
+    m_pImpl->r = r;
+    m_pImpl->g = g;
+    m_pImpl->b = b;
+    m_pImpl->a = a;
 }
 
 void MCGLRectParticle::render(MCCamera * pCamera)
@@ -58,16 +59,15 @@ void MCGLRectParticle::render(MCCamera * pCamera)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glPushMatrix();
-
     renderInner(pCamera);
 
-    glPopMatrix();
     glPopAttrib();
 }
 
 void MCGLRectParticle::renderInner(MCCamera * pCamera)
 {
+    glPushMatrix();
+
     MCFloat x = location().i();
     MCFloat y = location().j();
 
@@ -85,7 +85,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     glBegin(GL_QUADS);
 
     // Scale alpha if fading out
-    MCFloat alpha = m_pImpl->m_a;
+    MCFloat alpha = m_pImpl->a;
     if (animationStyle() == FadeOut) {
         alpha *= scale();
     }
@@ -98,7 +98,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
 
     if (r > 0)
     {
-        glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
+        glColor4f(m_pImpl->r, m_pImpl->g, m_pImpl->b, alpha);
         glNormal3f(0, 0, 1.0f);
         glVertex2f(-r,  r);
         glVertex2f( r,  r);
@@ -107,6 +107,8 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     }
 
     glEnd();
+
+    glPopMatrix();
 }
 
 void MCGLRectParticle::renderShadow(MCCamera *)
@@ -122,6 +124,19 @@ MCGLRectParticle & MCGLRectParticle::create()
 void MCGLRectParticle::recycle()
 {
     MCGLRectParticle::m_recycler.freeObject(this);
+}
+
+MCGLRectParticleGroup * MCGLRectParticle::group() const
+{
+    return m_pImpl->group;
+}
+
+void MCGLRectParticle::setGroup(MCGLRectParticleGroup * group)
+{
+    // Prevents rendering by MCWorld.
+    setRenderable(group == nullptr);
+
+    m_pImpl->group = group;
 }
 
 MCGLRectParticle::~MCGLRectParticle()

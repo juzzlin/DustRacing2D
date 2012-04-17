@@ -17,6 +17,7 @@
 #define CAR_HPP
 
 #include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCGLRectParticleGroup"
 
 #include <deque>
 
@@ -116,6 +117,8 @@ private:
     MCFloat               m_length;
     int                   m_speedInKmh;
     MCFloat               m_dx, m_dy;
+
+    mutable MCGLRectParticleGroup m_particleGroup;
 };
 
 #endif // CAR_HPP

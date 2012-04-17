@@ -101,6 +101,8 @@ Car::Car(MCSurface & surface, MCUint index)
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
     m_length = std::max(width, height);
 
+    m_particleGroup.addToWorld();
+
     //setRenderShapeOutline(true); // FOR DEBUG
 }
 
@@ -372,6 +374,8 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
     smoke.setColor(r, g, b, a);
     smoke.setVelocity(MCRandom::randomVector2d() * 0.1f);
     smoke.addToWorld();
+
+    m_particleGroup.addParticle(smoke);
 }
 
 void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -383,6 +387,8 @@ void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCF
     skidMark.rotate(angle());
     skidMark.setPhysicsObject(false);
     skidMark.addToWorld();
+
+    m_particleGroup.addParticle(skidMark);
 }
 
 void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -394,6 +400,8 @@ void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat 
     mud.addToWorld();
     mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0f));
     mud.setAcceleration(MCVector3dF(0, 0, -10.0f));
+
+    m_particleGroup.addParticle(mud);
 }
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -404,4 +412,6 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     sparkle.setColor(r, g, b, a);
     sparkle.addToWorld();
     sparkle.setVelocity(velocity() * 0.5f);
+
+    m_particleGroup.addParticle(sparkle);
 }

@@ -21,6 +21,7 @@
 #define MCGLRECTPARTICLE_HH
 
 #include "mcparticle.hh"
+#include "mcglrectparticlegroup.hh"
 
 class MCGLRectParticleImpl;
 class MCCamera;
@@ -56,11 +57,21 @@ private:
     ~MCGLRectParticle();
 
     //! Inner calls of render.
+    //! Used by MCGLRectParticleGroup.
     void renderInner(MCCamera * pCamera);
+
+    //! Returns a pointer to the group or nullptr if not added to any group.
+    //! Used by MCGLRectParticleGroup.
+    MCGLRectParticleGroup * group() const;
+
+    //! Set pointer to the current group or nullptr if not added to any group.
+    //! Used by MCGLRectParticleGroup.
+    void setGroup(MCGLRectParticleGroup * group);
 
     //! Recycler object
     static MCRecycler<MCGLRectParticle> m_recycler;
     friend class MCRecycler<MCGLRectParticle>;
+    friend class MCGLRectParticleGroup;
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);

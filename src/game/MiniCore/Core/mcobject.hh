@@ -228,6 +228,12 @@ public:
     //! \brief Return whether the object should be automatically rendered.
     bool renderable() const;
 
+    //! Return true if the object is a virtual object.
+    bool virtualObject() const;
+
+    //! Return true if the object is a virtual object.
+    void setVirtualObject(bool flag);
+
     //! \brief Sets whether view should render shape outline for debug
     //! purposes.
     //! False is the default.

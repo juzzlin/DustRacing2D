@@ -58,7 +58,10 @@ enum PropertyMask
     RemovingMask = (1<<5),
 
     // View renders outline for debug
-    OutlineMask = (1<<6)
+    OutlineMask = (1<<6),
+
+    // Object is a virtual object (for example a group).
+    VirtualMask = (1<<7)
 };
 // Physics damping factor
 const MCFloat DampingFactor = 0.999;
@@ -450,6 +453,16 @@ void MCObject::setRenderable(bool flag)
 bool MCObject::renderable() const
 {
     return m_pImpl->flags & RenderableMask;
+}
+
+bool MCObject::virtualObject() const
+{
+    return m_pImpl->flags & VirtualMask;
+}
+
+void MCObject::setVirtualObject(bool flag)
+{
+    m_pImpl->setFlag(VirtualMask, flag);
 }
 
 void MCObject::setRenderShapeOutline(bool flag)
