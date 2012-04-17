@@ -262,12 +262,22 @@ void Car::render(MCCamera *p)
         MCTrigonom::rotated(rightBrakeGlowPos, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
+    }
 
-        doSkidMark(leftFrontTire, 0.25f, 0.25f, 0.25f, 0.5f);
-        doSkidMark(rightFrontTire, 0.25f, 0.25f, 0.25f, 0.5f);
+    if (m_accelerating)
+    {
+        if (m_speedInKmh < 50)
+        {
+            if (!m_leftSideOffTrack)
+            {
+                doSkidMark(leftRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25f);
+            }
 
-        doSmoke(leftFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
-        doSmoke(rightFrontTire, 0.95f, 0.95f, 0.95f, 0.5f);
+            if (!m_rightSideOffTrack)
+            {
+                doSkidMark(rightRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25f);
+            }
+        }
     }
 
     // Particle animations due to the car being off the track.
@@ -367,7 +377,7 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
 void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
     MCGLRectParticle & skidMark = MCGLRectParticle::create();
-    skidMark.init(location, 4, 720);
+    skidMark.init(location, 4, 15 * 60);
     skidMark.setAnimationStyle(MCParticle::FadeOut);
     skidMark.setColor(r, g, b, a);
     skidMark.rotate(angle());
