@@ -143,7 +143,7 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
         }
     }
 
-    if (currentTile.tileType() == "corner90")
+    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
     {
         if (m_car.speedInKmh() > 60)
         {
@@ -151,7 +151,8 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
         }
     }
 
-    if (currentTile.tileType() == "corner45Left" || currentTile.tileType() == "corner45Right")
+    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
+        currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
     {
         if (m_car.speedInKmh() > 100)
         {

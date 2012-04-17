@@ -79,6 +79,9 @@ public:
 
 private:
 
+    //! Disable the string-based type getter. Use tileTypeEnum() instead.
+    const QString & tileType() const;
+
     int m_rotation;
 
     MCSurface * m_surface;

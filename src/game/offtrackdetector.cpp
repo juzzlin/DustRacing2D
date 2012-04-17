@@ -65,11 +65,12 @@ void OffTrackDetector::update()
 
 bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) const
 {
-    if (tile.tileType() == "grass")
+    if (tile.tileTypeEnum() == TrackTile::TT_GRASS)
     {
         return true;
     }
-    else if (tile.tileType() == "straight" || tile.tileType() == "finish")
+    else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT ||
+        tile.tileTypeEnum() == TrackTile::TT_FINISH)
     {
         if ((tile.rotation() + 90) % 180 == 0)
         {
