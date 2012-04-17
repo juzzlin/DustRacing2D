@@ -52,6 +52,22 @@ void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
+    // Disable texturing
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glPushMatrix();
+
+    renderInner(pCamera);
+
+    glPopMatrix();
+    glPopAttrib();
+}
+
+void MCGLRectParticle::renderInner(MCCamera * pCamera)
+{
     MCFloat x = location().i();
     MCFloat y = location().j();
 
@@ -59,10 +75,6 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         pCamera->mapToCamera(x, y);
     }
 
-    // Disable texturing
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_TEXTURE_2D);
-    glPushMatrix();
     glTranslated(x, y, location().k());
 
     // Rotate
@@ -70,14 +82,10 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         glRotated(angle(), 0, 0, 1);
     }
 
-    // Enable blending
-    MCFloat alpha = m_pImpl->m_a;
-    if (alpha < 1.0f || animationStyle() == FadeOut) {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
+    glBegin(GL_QUADS);
 
     // Scale alpha if fading out
+    MCFloat alpha = m_pImpl->m_a;
     if (animationStyle() == FadeOut) {
         alpha *= scale();
     }
@@ -92,16 +100,13 @@ void MCGLRectParticle::render(MCCamera * pCamera)
     {
         glColor4f(m_pImpl->m_r, m_pImpl->m_g, m_pImpl->m_b, alpha);
         glNormal3f(0, 0, 1.0f);
-        glBegin(GL_QUADS);
         glVertex2f(-r,  r);
         glVertex2f( r,  r);
         glVertex2f( r, -r);
         glVertex2f(-r, -r);
-        glEnd();
     }
 
-    glPopMatrix();
-    glPopAttrib();
+    glEnd();
 }
 
 void MCGLRectParticle::renderShadow(MCCamera *)

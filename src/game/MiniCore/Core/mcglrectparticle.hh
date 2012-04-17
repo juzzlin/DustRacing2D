@@ -49,11 +49,14 @@ public:
 
 private:
 
-    //! Constructor
+    //! Constructor.
     MCGLRectParticle();
 
-    //! Destructor
+    //! Destructor.
     ~MCGLRectParticle();
+
+    //! Inner calls of render.
+    void renderInner(MCCamera * pCamera);
 
     //! Recycler object
     static MCRecycler<MCGLRectParticle> m_recycler;
