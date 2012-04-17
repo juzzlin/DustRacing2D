@@ -27,6 +27,20 @@ class TrackTile : public TrackTileBase
 {
 public:
 
+    //! All possible types.
+    enum TileType
+    {
+        TT_NONE = 0,
+        TT_CORNER_90,
+        TT_CORNER_45_LEFT,
+        TT_CORNER_45_RIGHT,
+        TT_STRAIGHT,
+        TT_STRAIGHT_45_MALE,
+        TT_STRAIGHT_45_FEMALE,
+        TT_GRASS,
+        TT_FINISH
+    };
+
     //! Tile width in pixels
     static const unsigned int TILE_W = 256;
 
@@ -36,7 +50,7 @@ public:
     //! Constructor.
     //! See TrackTileBase.
     TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
-        const QString & type = "clear");
+        const QString & type = "", TileType typeEnum = TT_NONE);
 
     //! Destructor
     virtual ~TrackTile();
@@ -57,10 +71,19 @@ public:
     //! Get the orientation in XY-plane in degrees.
     int rotation() const;
 
+    //! Get the type as an enum (performance optimization).
+    TileType tileTypeEnum() const;
+
+    //! Set the type as an enum (performance optimization).
+    void setTileTypeEnum(TileType type);
+
 private:
 
     int m_rotation;
+
     MCSurface * m_surface;
+
+    TileType m_typeEnum;
 };
 
 #endif // TRACKTILE_HPP

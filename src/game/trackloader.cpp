@@ -169,6 +169,7 @@ void TrackLoader::handleTile(
 
     tile->setRotation(o);
     tile->setTileType(id.c_str());
+    tile->setTileTypeEnum(tileTypeEnumFromString(id.c_str()));
     tile->setRouteIndex(index);
     tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
     tile->setDrivingLineHint(static_cast<TrackTileBase::DrivingLineHint>(drivingLineHint));
@@ -180,6 +181,48 @@ void TrackLoader::handleTile(
 
     if (index >= 0)
         routeVector << tile;
+}
+
+TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
+{
+    if (str == "corner90")
+    {
+        return TrackTile::TT_CORNER_90;
+    }
+    else if (str == "corner45Left")
+    {
+        return TrackTile::TT_CORNER_45_LEFT;
+    }
+    else if (str == "corner45Right")
+    {
+        return TrackTile::TT_CORNER_45_RIGHT;
+    }
+    else if (str == "straight")
+    {
+        return TrackTile::TT_STRAIGHT;
+    }
+    else if (str == "straight45Male")
+    {
+        return TrackTile::TT_STRAIGHT_45_MALE;
+    }
+    else if (str == "straight45Female")
+    {
+        return TrackTile::TT_STRAIGHT_45_FEMALE;
+    }
+    else if (str == "grass")
+    {
+        return TrackTile::TT_GRASS;
+    }
+    else if (str == "finish")
+    {
+        return TrackTile::TT_FINISH;
+    }
+    else
+    {
+        MCLogger::logError("No mapping for tile '%s'..", str.c_str());
+    }
+
+    return TrackTile::TT_NONE;
 }
 
 void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)

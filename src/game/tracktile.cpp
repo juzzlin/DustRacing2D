@@ -17,10 +17,15 @@
 #include "trackdata.hpp"
 
 TrackTile::TrackTile(
-    TrackData & trackData, QPointF location, QPoint matrixLocation, const QString & type)
+    TrackData & trackData,
+    QPointF location,
+    QPoint matrixLocation,
+    const QString & type,
+    TrackTile::TileType typeEnum)
   : TrackTileBase(trackData, location, matrixLocation, type)
   , m_rotation(0)
   , m_surface(nullptr)
+  , m_typeEnum(typeEnum)
 {
 }
 
@@ -42,6 +47,16 @@ void TrackTile::setSurface(MCSurface * surface)
 MCSurface * TrackTile::surface() const
 {
     return m_surface;
+}
+
+TrackTile::TileType TrackTile::tileTypeEnum() const
+{
+    return m_typeEnum;
+}
+
+void TrackTile::setTileTypeEnum(TrackTile::TileType type)
+{
+    m_typeEnum = type;
 }
 
 TrackTile::~TrackTile()

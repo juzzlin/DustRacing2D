@@ -19,6 +19,8 @@
 #include <QString>
 #include <QVector>
 
+#include "tracktile.hpp"
+
 class Track;
 class TrackData;
 class TrackTileBase;
@@ -70,6 +72,9 @@ private:
 
     //! Handle an object element.
     void handleObject(QDomElement & tag, TrackData & newData);
+
+    //! Convert tile type string to a type enum.
+    TrackTile::TileType tileTypeEnumFromString(std::string str);
 
     MCTextureManager & m_textureManager;
     MCObjectFactory  & m_objectFactory;
