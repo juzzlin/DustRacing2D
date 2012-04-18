@@ -4,14 +4,15 @@ TODO
 Game:
 
 - Move car to the nearest track tile if stuck for too long
-- Position detection
-- Skid marks
+- Position detection (almost done)
 - Grandstands
 - Checkerflag animation
 - Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
 - Initial start menu
 - Install target
+- GL point particle class
+- Eliminate stuttering on static collisions
 
 Editor:
 
