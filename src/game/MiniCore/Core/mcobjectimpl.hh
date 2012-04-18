@@ -53,6 +53,7 @@ private:
     MCFloat maximumAngularVelocity; // Radians / s
     MCFloat maximumVelocity;
     MCFloat moment;
+    MCFloat invMomentOfInertia;
     MCFloat momentOfInertia;
     MCUint layer;
     int index;

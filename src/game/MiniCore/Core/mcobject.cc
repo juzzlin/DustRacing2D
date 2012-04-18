@@ -81,6 +81,8 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , maximumAngularVelocity(2 * 3.1415f)
 , maximumVelocity(-1)
 , moment(0.0f)
+, invMomentOfInertia(std::numeric_limits<MCFloat>::max())
+, momentOfInertia(0)
 , layer(0)
 , index(-1)
 , flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
@@ -158,7 +160,7 @@ void MCObjectImpl::integrateRotational(MCFloat step)
         {
             MCFloat totAngularAcceleration(angularAcceleration);
 
-            totAngularAcceleration += moment / momentOfInertia;
+            totAngularAcceleration += moment * invMomentOfInertia;
             angularVelocity        += totAngularAcceleration * step;
             angularVelocity        *= DampingFactor;
 
@@ -383,20 +385,27 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
 {
     m_pImpl->setFlag(StationaryMask, stationary_);
 
-    if (!stationary_) {
-        if (newMass > 0) {
+    if (!stationary_)
+    {
+        if (newMass > 0)
+        {
             m_pImpl->invMass = 1.0 / newMass;
         }
-        else {
+        else
+        {
             m_pImpl->invMass = std::numeric_limits<MCFloat>::max();
         }
+
         m_pImpl->mass            = newMass;
-        m_pImpl->momentOfInertia = newMass * 10.0f;
+
+        setMomentOfInertia(newMass * 10.0f);
     }
-    else {
+    else
+    {
         m_pImpl->invMass         = 0;
         m_pImpl->mass            = std::numeric_limits<MCFloat>::max();
-        m_pImpl->momentOfInertia = std::numeric_limits<MCFloat>::max();
+
+        setMomentOfInertia(std::numeric_limits<MCFloat>::max());
     }
 }
 
@@ -408,6 +417,30 @@ MCFloat MCObject::invMass() const
 MCFloat MCObject::mass() const
 {
     return m_pImpl->mass;
+}
+
+void MCObject::setMomentOfInertia(MCFloat newMomentOfInertia)
+{
+    if (newMomentOfInertia > 0)
+    {
+        m_pImpl->invMomentOfInertia = 1.0 / newMomentOfInertia;
+    }
+    else
+    {
+        m_pImpl->invMomentOfInertia = std::numeric_limits<MCFloat>::max();
+    }
+
+    m_pImpl->momentOfInertia = newMomentOfInertia;
+}
+
+MCFloat MCObject::momentOfInertia() const
+{
+    return m_pImpl->momentOfInertia;
+}
+
+MCFloat MCObject::invMomentOfInertia() const
+{
+    return m_pImpl->invMomentOfInertia;
 }
 
 bool MCObject::stationary() const
@@ -675,16 +708,6 @@ void MCObject::addForce(const MCVector3dF & force)
 void MCObject::addMoment(MCFloat moment)
 {
     m_pImpl->moment += moment;
-}
-
-void MCObject::setMomentOfInertia(MCFloat momentOfInertia)
-{
-    m_pImpl->momentOfInertia = momentOfInertia;
-}
-
-MCFloat MCObject::momentOfInertia() const
-{
-    return m_pImpl->momentOfInertia;
 }
 
 void MCObject::clearForces()

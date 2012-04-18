@@ -145,6 +145,8 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
 
     const MCFloat invMassA = pa.invMass();
     const MCFloat invMassB = pb.invMass();
+    const MCFloat invInerA = pa.invMomentOfInertia();
+    const MCFloat invInerB = pb.invMomentOfInertia();
 
     if (!pa.stationary()) {
 
@@ -159,8 +161,9 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
         const MCVector3dF rotationalImpulse =
             MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
 
-        const MCFloat magnitude = rotationalImpulse.k();
-        pa.addRotationalImpulse((-magnitude - magnitude * restitution) * massScaling);
+        const MCFloat magnitude   = rotationalImpulse.k();
+        const MCFloat inerScaling = invInerA / (invInerA + invInerB);
+        pa.addRotationalImpulse((-magnitude - magnitude * restitution) * inerScaling);
         pa.setCenterOfRotation(pa.location());
     }
 
@@ -177,8 +180,9 @@ void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
         const MCVector3dF rotationalImpulse =
             MCVector3dF(linearImpulse * pb.mass()) % arm / pb.momentOfInertia();
 
-        const MCFloat magnitude = rotationalImpulse.k();
-        pb.addRotationalImpulse((magnitude + magnitude * restitution) * massScaling);
+        const MCFloat magnitude   = rotationalImpulse.k();
+        const MCFloat inerScaling = invInerB / (invInerA + invInerB);
+        pb.addRotationalImpulse((magnitude + magnitude * restitution) * inerScaling);
         pb.setCenterOfRotation(pb.location());
     }
 
