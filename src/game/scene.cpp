@@ -86,14 +86,14 @@ Scene::Scene(MCUint numCars)
 void Scene::updateFrame(InputHandler & handler,
     MCCamera & camera, float timeStep)
 {
+    updateCameraLocation(camera);
+
     if (m_race.started())
     {
         processUserInput(handler);
 
         updateAiLogic();
     }
-
-    updateCameraLocation(camera);
 
     updateWorld(timeStep);
 
