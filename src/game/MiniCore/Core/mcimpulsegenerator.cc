@@ -20,6 +20,7 @@
 #include "mcimpulsegenerator.hh"
 #include "mccontact.hh"
 #include "mcobject.hh"
+#include "mcshape.hh"
 
 void MCImpulseGenerator::generateImpulses(MCObject & object, MCContact & contact)
 {
@@ -42,16 +43,30 @@ void MCImpulseGenerator::generateImpulses(MCObject & object, MCContact & contact
     const MCFloat invInerA = pa.invMomentOfInertia();
     const MCFloat invInerB = pb.invMomentOfInertia();
 
-    if (!pa.stationary()) {
+    // TODO: Eliminate copy-paste code.
+
+    if (!pa.stationary())
+    {
+        const MCVector3dF & contactPoint(contact.contactPoint());
+        const MCVector3dF arm = (contactPoint - pa.location());
 
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
         pa.displace(displacement * massScaling);
-        pa.addLinearImpulse((linearImpulse + linearImpulse * restitution) * massScaling);
+
+        // This ad-hoc scaling affects the balance between linear and angular components.
+        MCFloat linearBalance = 1.0f;
+        if (pa.shape())
+        {
+            const MCFloat d = pa.shape()->radius() * 2;
+            MCFloat linearBalance = (d - arm.lengthFast()) / d;
+            linearBalance = linearBalance < 0 ? 0 : linearBalance;
+        }
+
+        pa.addLinearImpulse(
+            (linearImpulse + linearImpulse * restitution) * massScaling * linearBalance);
 
         // Angular component
-        const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = (contactPoint - pa.location());
         const MCVector3dF rotationalImpulse =
             MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
 
@@ -61,16 +76,28 @@ void MCImpulseGenerator::generateImpulses(MCObject & object, MCContact & contact
         pa.setCenterOfRotation(pa.location());
     }
 
-    if (!pb.stationary()) {
+    if (!pb.stationary())
+    {
+        const MCVector3dF & contactPoint(contact.contactPoint());
+        const MCVector3dF arm = (contactPoint - pb.location());
 
         // Linear component
         const MCFloat massScaling = invMassB / (invMassA + invMassB);
         pb.displace(-displacement * massScaling);
-        pb.addLinearImpulse((-linearImpulse - linearImpulse * restitution) * massScaling);
+
+        // This ad-hoc scaling affects the balance between linear and angular components.
+        MCFloat linearBalance = 1.0f;
+        if (pb.shape())
+        {
+            const MCFloat d = pb.shape()->radius() * 2;
+            MCFloat linearBalance = (d - arm.lengthFast()) / d;
+            linearBalance = linearBalance < 0 ? 0 : linearBalance;
+        }
+
+        pb.addLinearImpulse(
+            (-linearImpulse - linearImpulse * restitution) * massScaling * linearBalance);
 
         // Angular component
-        const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = (contactPoint - pb.location());
         const MCVector3dF rotationalImpulse =
             MCVector3dF(linearImpulse * pb.mass()) % arm / pb.momentOfInertia();
 

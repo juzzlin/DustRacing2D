@@ -13,7 +13,6 @@ Game:
 - Install target
 - GL point particle class
 - GLRectView?
-- Scale impulse between rotational and linear
 - Eliminate stuttering on static collisions
 
 Editor:
