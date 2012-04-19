@@ -22,6 +22,7 @@
 
 #include "mctypes.hh"
 #include "mccollisiondetector.hh"
+#include "mcimpulsegenerator.hh"
 #include "mcforceregistry.hh"
 #include <memory>
 #include <unordered_set>
@@ -46,7 +47,7 @@ private:
     void detectCollisions();
     void processContacts();
     void processContacts(MCObject & object);
-    void createImpulses(MCObject & object, MCContact & contact);
+    void generateImpulses(MCObject & object, MCContact & contact);
     void addToLayerMap(MCObject &);
     void removeFromLayerMap(MCObject &);
     MCContact * getDeepestInterpenetration(
@@ -56,6 +57,7 @@ private:
     static MCWorld * pInstance;
     MCForceRegistry forceRegistry;
     MCCollisionDetector collisionDetector;
+    MCImpulseGenerator impulseGenerator;
     MCObjectTree * pObjectTree;
     MCFloat minX, maxX, minY, maxY, minZ, maxZ;
     MCFloat metersPerPixel;

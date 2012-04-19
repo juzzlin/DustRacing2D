@@ -16,6 +16,7 @@ Core/mcglobjectdata.cc
 Core/mcglrectparticle.cc
 Core/mcglrectparticlegroup.cc
 Core/mcgravitygenerator.cc
+Core/mcimpulsegenerator.cc
 Core/mclogger.cc
 Core/mcobject.cc
 Core/mcobjectdata.cc

@@ -61,12 +61,12 @@ void MCWorldImpl::integrate(MCFloat step)
     // Integrate and update all registered objects
     forceRegistry.update();
     for (MCUint i = 0; i < objs.size(); i++) {
-        MCObject * const object(objs[i]);
-        if (object->physicsObject() && !object->stationary()) {
-            object->integrate(step);
-            object->stepTime();
+        MCObject & object(*objs[i]);
+        if (object.physicsObject() && !object.stationary()) {
+            object.integrate(step);
+            object.stepTime();
         } else {
-            object->stepTime();
+            object.stepTime();
         }
     }
 }
@@ -74,16 +74,16 @@ void MCWorldImpl::integrate(MCFloat step)
 void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
-    static MCObjectTree::ObjectSet collisions;
+    static MCObjectTree::ObjectSet possibleCollisions;
     for (MCUint i = 0; i < objs.size(); i++) {
-        MCObject * const object(objs[i]);
-        if (object->physicsObject()) {
-            collisions.clear();
-            pObjectTree->getBBoxCollisions(*object, collisions);
-            auto j1 = collisions.begin();
-            auto j2 = collisions.end();
+        MCObject & object(*objs[i]);
+        if (object.physicsObject()) {
+            possibleCollisions.clear();
+            pObjectTree->getBBoxCollisions(object, possibleCollisions);
+            auto j1 = possibleCollisions.begin();
+            auto j2 = possibleCollisions.end();
             while (j1 != j2) {
-                collisionDetector.processPossibleCollision(*object, **j1);
+                collisionDetector.processPossibleCollision(object, **j1);
                 j1++;
             }
         }
@@ -112,7 +112,7 @@ void MCWorldImpl::processContacts(MCObject & object)
     for (; iter != object.contacts().end(); iter++) {
         deepestContact = getDeepestInterpenetration(iter->second);
         if (deepestContact) {
-            createImpulses(object, *deepestContact);
+            impulseGenerator.generateImpulses(object, *deepestContact);
         }
     }
     object.deleteContacts();
@@ -127,69 +127,6 @@ void MCWorldImpl::processContacts()
     }
 }
 
-void MCWorldImpl::createImpulses(MCObject & object, MCContact & contact)
-{
-    MCObject & pa(object);
-    MCObject & pb(contact.object());
-
-    const MCFloat restitution(
-        std::min(pa.restitution(), pb.restitution()));
-
-    const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
-
-    const MCVector3dF linearImpulse(
-        contact.contactNormal() * contact.contactNormal().dot(velocityDelta));
-
-    const MCVector3dF displacement(
-        contact.contactNormal() * contact.interpenetrationDepth());
-
-    const MCFloat invMassA = pa.invMass();
-    const MCFloat invMassB = pb.invMass();
-    const MCFloat invInerA = pa.invMomentOfInertia();
-    const MCFloat invInerB = pb.invMomentOfInertia();
-
-    if (!pa.stationary()) {
-
-        // Linear component
-        const MCFloat massScaling = invMassA / (invMassA + invMassB);
-        pa.displace(displacement * massScaling);
-        pa.addLinearImpulse((linearImpulse + linearImpulse * restitution) * massScaling);
-
-        // Angular component
-        const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = (contactPoint - pa.location());
-        const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
-
-        const MCFloat magnitude   = rotationalImpulse.k();
-        const MCFloat inerScaling = invInerA / (invInerA + invInerB);
-        pa.addRotationalImpulse((-magnitude - magnitude * restitution) * inerScaling);
-        pa.setCenterOfRotation(pa.location());
-    }
-
-    if (!pb.stationary()) {
-
-        // Linear component
-        const MCFloat massScaling = invMassB / (invMassA + invMassB);
-        pb.displace(-displacement * massScaling);
-        pb.addLinearImpulse((-linearImpulse - linearImpulse * restitution) * massScaling);
-
-        // Angular component
-        const MCVector3dF contactPoint(contact.contactPoint());
-        const MCVector3dF arm = (contactPoint - pb.location());
-        const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse * pb.mass()) % arm / pb.momentOfInertia();
-
-        const MCFloat magnitude   = rotationalImpulse.k();
-        const MCFloat inerScaling = invInerB / (invInerA + invInerB);
-        pb.addRotationalImpulse((magnitude + magnitude * restitution) * inerScaling);
-        pb.setCenterOfRotation(pb.location());
-    }
-
-    // Remove contacts with pa from pb, because physically it was already handled here
-    pb.deleteContacts(pa);
-}
-
 void MCWorldImpl::render(MCCamera * pCamera)
 {
     // Render in the order of the layers
@@ -200,24 +137,24 @@ void MCWorldImpl::render(MCCamera * pCamera)
         j   = layers[i].begin();
         end = layers[i].end();
         for (; j != end; j++) {
-            MCObject * const pObj = *j;
-            if (pObj->renderable()) {
+            MCObject & object = **j;
+            if (object.renderable()) {
                 // Check if view is set and is visible
-                if (pObj->shape() && pObj->shape()->view())
+                if (object.shape() && object.shape()->view())
                 {
-                    MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
-                    bbox.translate(MCVector2dF(pObj->location()));
+                    MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                    bbox.translate(MCVector2dF(object.location()));
                     if (!pCamera || pCamera->isVisible(bbox)) {
-                        pObj->render(pCamera); // pCamera can be a nullptr
+                        object.render(pCamera); // pCamera can be a nullptr
                     }
                 }
                 // Check if shape is visible
-                else if (!pCamera || pCamera->isVisible(pObj->bbox())) {
-                    pObj->render(pCamera); // pCamera can be a nullptr
+                else if (!pCamera || pCamera->isVisible(object.bbox())) {
+                    object.render(pCamera); // pCamera can be a nullptr
                 }
             }
-            else if (pObj->virtualObject()) {
-                pObj->render(pCamera);
+            else if (object.virtualObject()) {
+                object.render(pCamera);
             }
         }
     }
@@ -227,24 +164,24 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
 {
     const MCUint i2 = objs.size();
     for (MCUint i = 0; i < i2; i++) {
-        MCObject * const pObj = objs[i];
-        if (pObj->renderable() && pObj->hasShadow()) {
+        MCObject & object = *objs[i];
+        if (object.renderable() && object.hasShadow()) {
             // Check if view is set and is visible
-            if (pObj->shape() && pObj->shape()->view())
+            if (object.shape() && object.shape()->view())
             {
-                MCBBox<MCFloat> bbox(pObj->shape()->view()->bbox());
-                bbox.translate(MCVector2dF(pObj->location()));
+                MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                bbox.translate(MCVector2dF(object.location()));
                 if (!pCamera || pCamera->isVisible(bbox)) {
-                    pObj->renderShadow(pCamera); // pCamera can be a nullptr
+                    object.renderShadow(pCamera); // pCamera can be a nullptr
                 }
             }
             // Check if shape is visible
-            else if (!pCamera || pCamera->isVisible(pObj->bbox())) {
-                pObj->renderShadow(pCamera); // pCamera can be a nullptr
+            else if (!pCamera || pCamera->isVisible(object.bbox())) {
+                object.renderShadow(pCamera); // pCamera can be a nullptr
             }
         }
-        else if (pObj->virtualObject()) {
-            pObj->renderShadow(pCamera);
+        else if (object.virtualObject()) {
+            object.renderShadow(pCamera);
         }
     }
 }
