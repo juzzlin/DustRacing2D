@@ -17,23 +17,23 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCCONTACTRESOLVER_HH
-#define MCCONTACTRESOLVER_HH
+#ifndef MCCOLLISIONDETECTOR_HH
+#define MCCOLLISIONDETECTOR_HH
 
 #include "mcmacros.hh"
 
-class MCContactResolverImpl;
+class MCCollisionDetectorImpl;
 class MCObject;
 
 //! Contact resolver / collision detector
-class MCContactResolver
+class MCCollisionDetector
 {
 public:
     //! Constructor
-    MCContactResolver();
+    MCCollisionDetector();
 
     //! Destructor
-    virtual ~MCContactResolver();
+    virtual ~MCCollisionDetector();
 
     /*! Process a suspected collision.
      * \param object1 1st object.
@@ -44,10 +44,10 @@ public:
 
 private:
 
-    DISABLE_COPY(MCContactResolver);
-    DISABLE_ASSI(MCContactResolver);
-    MCContactResolverImpl * const m_pImpl;
-    friend class MCContactResolverImpl;
+    DISABLE_COPY(MCCollisionDetector);
+    DISABLE_ASSI(MCCollisionDetector);
+    MCCollisionDetectorImpl * const m_pImpl;
+    friend class MCCollisionDetectorImpl;
 };
 
-#endif // MCCONTACTRESOLVER_HH
+#endif // MCCOLLISIONDETECTOR_HH

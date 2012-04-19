@@ -430,7 +430,7 @@ private:
     friend void  MCWorldImpl::processRemovedObjects();
     friend class MCObjectTree;
     friend class MCObjectTreeImpl;
-    friend class MCContactResolver;
+    friend class MCCollisionDetector;
 };
 
 #endif // MCOBJECT_HH

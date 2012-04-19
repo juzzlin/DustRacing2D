@@ -83,7 +83,7 @@ void MCWorldImpl::detectCollisions()
             auto j1 = collisions.begin();
             auto j2 = collisions.end();
             while (j1 != j2) {
-                contactResolver.processPossibleCollision(*object, **j1);
+                collisionDetector.processPossibleCollision(*object, **j1);
                 j1++;
             }
         }

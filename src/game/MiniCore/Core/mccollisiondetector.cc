@@ -17,8 +17,8 @@
 // MA  02110-1301, USA.
 //
 
-#include "mccontactresolver.hh"
-#include "mccontactresolverimpl.hh"
+#include "mccollisiondetector.hh"
+#include "mccollisiondetectorimpl.hh"
 #include "mccontact.hh"
 #include "mcobject.hh"
 #include "mcsegment.hh"
@@ -28,22 +28,22 @@
 
 #include <cassert>
 
-MCContactResolverImpl::MCContactResolverImpl()
+MCCollisionDetectorImpl::MCCollisionDetectorImpl()
 {}
 
-MCContactResolverImpl::~MCContactResolverImpl()
+MCCollisionDetectorImpl::~MCCollisionDetectorImpl()
 {}
 
-MCContactResolver::MCContactResolver() :
-    m_pImpl(new MCContactResolverImpl)
+MCCollisionDetector::MCCollisionDetector() :
+    m_pImpl(new MCCollisionDetectorImpl)
 {}
 
-MCContactResolver::~MCContactResolver()
+MCCollisionDetector::~MCCollisionDetector()
 {
     delete m_pImpl;
 }
 
-bool MCContactResolverImpl::processRectRect(
+bool MCCollisionDetectorImpl::processRectRect(
     MCRectShape & shape1, MCRectShape & shape2)
 {
     if (&shape1.parent() == &shape2.parent()) {
@@ -105,7 +105,7 @@ bool MCContactResolverImpl::processRectRect(
     return collided;
 }
 
-bool MCContactResolver::processPossibleCollision(
+bool MCCollisionDetector::processPossibleCollision(
     MCObject & object1, MCObject & object2)
 {
     if (&object1 == &object2) {

@@ -17,18 +17,18 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCCONTACTRESOLVERIMPL_HH
-#define MCCONTACTRESOLVERIMPL_HH
+#ifndef MCCOLLISIONDETECTORIMPL_HH
+#define MCCOLLISIONDETECTORIMPL_HH
 
-class MCContactResolver;
+class MCCollisionDetector;
 class MCRectShape;
 
-class MCContactResolverImpl
+class MCCollisionDetectorImpl
 {
-    MCContactResolverImpl();
-    virtual ~MCContactResolverImpl();
+    MCCollisionDetectorImpl();
+    virtual ~MCCollisionDetectorImpl();
     bool processRectRect(MCRectShape & object1, MCRectShape & object2);
-    friend class MCContactResolver;
+    friend class MCCollisionDetector;
 };
 
-#endif // MCCONTACTRESOLVERIMPL_HH
+#endif // MCCOLLISIONDETECTORIMPL_HH

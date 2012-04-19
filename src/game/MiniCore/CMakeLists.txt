@@ -4,7 +4,7 @@ set(MiniCoreSRC
 Core/mccamera.cc
 Core/mccircleshape.cc
 Core/mccollisionevent.cc
-Core/mccontactresolver.cc
+Core/mccollisiondetector.cc
 Core/mccontact.cc
 Core/mcdragforcegenerator.cc
 Core/mcevent.cc

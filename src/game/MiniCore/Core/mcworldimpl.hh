@@ -21,7 +21,7 @@
 #define MCWORLDIMPL_HH
 
 #include "mctypes.hh"
-#include "mccontactresolver.hh"
+#include "mccollisiondetector.hh"
 #include "mcforceregistry.hh"
 #include <memory>
 #include <unordered_set>
@@ -55,7 +55,7 @@ private:
     void renderShadows(MCCamera * p);
     static MCWorld * pInstance;
     MCForceRegistry forceRegistry;
-    MCContactResolver contactResolver;
+    MCCollisionDetector collisionDetector;
     MCObjectTree * pObjectTree;
     MCFloat minX, maxX, minY, maxY, minZ, maxZ;
     MCFloat metersPerPixel;
