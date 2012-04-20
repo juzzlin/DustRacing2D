@@ -22,13 +22,25 @@
 
 class MCObject;
 class MCContact;
+class MCImpulseGeneratorImpl;
 
 //! Generates impulses due to detected collisions.
 class MCImpulseGenerator
 {
 public:
+
+    //! Constructor.
+    MCImpulseGenerator();
+
+    //! Destructor.
+    ~MCImpulseGenerator();
+
     //! Generate impulses to object due to the given contact.
     void generateImpulses(MCObject & object, MCContact & contact);
+
+private:
+
+    MCImpulseGeneratorImpl * const m_pImpl;
 };
 
 #endif // MCIMPULSEGENERATOR_HH
