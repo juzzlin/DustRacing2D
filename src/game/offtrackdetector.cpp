@@ -18,6 +18,8 @@
 #include "track.hpp"
 #include "tracktile.hpp"
 
+#include "MiniCore/Core/MCTrigonom"
+
 #include <cassert>
 
 OffTrackDetector::OffTrackDetector(Car & car)
@@ -89,6 +91,28 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
             {
                 return true;
             }
+        }
+    }
+    else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_MALE)
+    {
+        const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
+        MCVector2dF rotatedDiff;
+        MCTrigonom::rotated(diff, rotatedDiff, tile.rotation() - 45);
+
+        if (rotatedDiff.j() > m_tileHLimit || rotatedDiff.j() < -m_tileHLimit)
+        {
+            return true;
+        }
+    }
+    else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_FEMALE)
+    {
+        const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
+        MCVector2dF rotatedDiff;
+        MCTrigonom::rotated(diff, rotatedDiff, tile.rotation() - 45);
+
+        if (rotatedDiff.j() < m_tileHLimit)
+        {
+            return true;
         }
     }
 
