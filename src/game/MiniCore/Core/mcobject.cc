@@ -626,7 +626,7 @@ void MCObjectImpl::doRotate(MCFloat newAngle)
         if (!centerOfRotation.isZero())
         {
             MCVector2dF centerOfRotation1;
-            MCTrigonom::rotated(centerOfRotation, centerOfRotation1, newAngle - angle);
+            MCTrigonom::rotatedVector(centerOfRotation, centerOfRotation1, newAngle - angle);
             pPublic->displace(centerOfRotation - centerOfRotation1);
             centerOfRotation.setZero();
         }

@@ -211,28 +211,28 @@ int Car::speedInKmh() const
 MCVector3dF Car::leftFrontTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotated(LEFT_FRONT_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(LEFT_FRONT_TIRE_POS, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightFrontTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotated(RIGHT_FRONT_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(RIGHT_FRONT_TIRE_POS, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::leftRearTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotated(LEFT_REAR_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(LEFT_REAR_TIRE_POS, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightRearTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotated(RIGHT_REAR_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(RIGHT_REAR_TIRE_POS, pos, angle());
     return pos + MCVector2dF(location());
 }
 
@@ -256,12 +256,12 @@ void Car::render(MCCamera *p)
         static const MCVector2dF rightBrakeGlowPos(-36, -12);
 
         MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotated(leftBrakeGlowPos, leftBrakeGlow, angle());
+        MCTrigonom::rotatedVector(leftBrakeGlowPos, leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotated(rightBrakeGlowPos, rightBrakeGlow, angle());
+        MCTrigonom::rotatedVector(rightBrakeGlowPos, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }

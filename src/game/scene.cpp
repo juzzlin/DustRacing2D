@@ -86,8 +86,6 @@ Scene::Scene(MCUint numCars)
 void Scene::updateFrame(InputHandler & handler,
     MCCamera & camera, float timeStep)
 {
-    updateCameraLocation(camera);
-
     if (m_race.started())
     {
         processUserInput(handler);
@@ -103,6 +101,8 @@ void Scene::updateFrame(InputHandler & handler,
     {
         otd->update();
     }
+
+    updateCameraLocation(camera);
 }
 
 void Scene::updateWorld(float timeStep)

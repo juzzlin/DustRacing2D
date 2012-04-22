@@ -60,12 +60,12 @@ public:
 
     //! Rotate given coordinates by given angle and store result
     //! to x1 and y1.
-    static void rotated(
+    static void rotatedCoordinates(
         MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCFloat angle);
 
     //! Rotate given vector v0 by given angle and store result
     //! to v1.
-    static void rotated(
+    static void rotatedVector(
         const MCVector2d<MCFloat> & v0, MCVector2d<MCFloat> & v1,
         MCFloat angle);
 

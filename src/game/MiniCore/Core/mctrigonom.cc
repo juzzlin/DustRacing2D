@@ -87,7 +87,7 @@ MCFloat MCTrigonom::rotatedY(MCFloat x0, MCFloat y0, MCFloat angle)
         MCTrigonom::cos(angle) * y0;
 }
 
-void MCTrigonom::rotated(
+void MCTrigonom::rotatedCoordinates(
     MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCFloat angle)
 {
     const MCFloat sin = MCTrigonom::sin(angle);
@@ -97,7 +97,7 @@ void MCTrigonom::rotated(
     x1 = cos * x0 - sin * y0;
 }
 
-void MCTrigonom::rotated(
+void MCTrigonom::rotatedVector(
     const MCVector2d<MCFloat> & v0, MCVector2d<MCFloat> & v1, MCFloat angle)
 {
     const MCFloat sin = MCTrigonom::sin(angle);

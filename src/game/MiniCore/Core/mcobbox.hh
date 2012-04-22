@@ -237,8 +237,8 @@ void MCOBBox<T>::rotate(MCFloat a)
 
         // Update vertex vectors. Note that the original
         // vertex vectors must be used as the source.
-        MCTrigonom::rotated(MCVector2d<T>(-m_hx, -m_hy), m_v[0], m_a);
-        MCTrigonom::rotated(MCVector2d<T>(-m_hx,  m_hy), m_v[1], m_a);
+        MCTrigonom::rotatedVector(MCVector2d<T>(-m_hx, -m_hy), m_v[0], m_a);
+        MCTrigonom::rotatedVector(MCVector2d<T>(-m_hx,  m_hy), m_v[1], m_a);
 
         // Mirror the other two vertices
         m_v[2].setI(-m_v[0].i());
