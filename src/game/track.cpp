@@ -102,8 +102,14 @@ void Track::render(MCCamera * pCamera)
 
     // Tile coordinates
     int x, y;
-    const int w = TrackTile::TILE_W;
-    const int h = TrackTile::TILE_H;
+
+    static const int w  = TrackTile::TILE_W;
+    static const int h  = TrackTile::TILE_H;
+    static const int w2 = TrackTile::TILE_W / 2;
+    static const int h2 = TrackTile::TILE_H / 2;
+
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Loop through the visible tile matrix and draw the tiles
     y = j0 * h;
@@ -118,31 +124,29 @@ void Track::render(MCCamera * pCamera)
                 {
                     // Calculate absolute coordinates to be
                     // used in the rendering
-                    int X = x - cameraBox.x1();
-                    int Y = y - cameraBox.y1();
+                    const int X = x - cameraBox.x1();
+                    const int Y = y - cameraBox.y1();
 
                     glPushMatrix();
 
                     // Bind the texture according to the tile
                     glBindTexture(GL_TEXTURE_2D, pSurface->handle());
-                    glNormal3f(0.0f, 0.0f, 1.0f);
-                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
                     const int Z = 0;
-                    glTranslated(X + w / 2, Y + h / 2, Z);
+                    glTranslated(X + w2, Y + h2, Z);
                     glRotated(pTile->rotation(), 0, 0, 1);
 
                     // Render the tile as a quad
                     glBegin(GL_QUADS);
 
                     glTexCoord2i(0, 0);
-                    glVertex2i  (-w / 2, -h / 2);
+                    glVertex2i(-w2, -h2);
                     glTexCoord2i(0, 1);
-                    glVertex2i  (-w / 2, h / 2);
+                    glVertex2i(-w2, h2);
                     glTexCoord2i(1, 1);
-                    glVertex2i  (w / 2, h / 2);
+                    glVertex2i(w2, h2);
                     glTexCoord2i(1, 0);
-                    glVertex2i  (w / 2, -h / 2);
+                    glVertex2i(w2, -h2);
 
                     glEnd();
                     glPopMatrix();
