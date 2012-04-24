@@ -20,6 +20,10 @@
 #include "checkeredflag.hpp"
 #include "inputhandler.hpp"
 #include "layers.hpp"
+#include "menu.hpp"
+#include "menuitem.hpp"
+#include "menuitemview.hpp"
+#include "menumanager.hpp"
 #include "offtrackdetector.hpp"
 #include "race.hpp"
 #include "startlights.hpp"
@@ -54,6 +58,8 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 , m_pTimingOverlay(nullptr)
 , m_pStartlights(new Startlights(m_race))
 , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
+, m_pMainMenu(nullptr)
+, m_pMenuManager(nullptr)
 , m_pStateMachine(new StateMachine(renderer, *m_pStartlights))
 , m_pCheckeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
@@ -94,6 +100,8 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
     m_pCheckeredFlag->setDimensions(width(), height());
 
     MCWorld::instance().enableDepthTestOnLayer(Layers::Tree, true);
+
+    createMenus();
 }
 
 unsigned int Scene::width()
@@ -104,6 +112,23 @@ unsigned int Scene::width()
 unsigned int Scene::height()
 {
     return 600;
+}
+
+void Scene::createMenus()
+{
+    m_pMenuManager = new MenuManager;
+    m_pMainMenu = new Menu(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+
+    MenuItem * play = new MenuItem("Play");
+    play->setView(new MenuItemView, true);
+
+    MenuItem * quit = new MenuItem("Quit");
+    quit->setView(new MenuItemView, true);
+
+    m_pMainMenu->addItem(*play, true);
+    m_pMainMenu->addItem(*quit, true);
+
+    m_pMenuManager->enterMenu(*m_pMainMenu);
 }
 
 void Scene::updateFrame(InputHandler & handler,
@@ -464,4 +489,6 @@ Scene::~Scene()
     delete m_pStartlights;
     delete m_pStartlightsOverlay;
     delete m_pStateMachine;
+    delete m_pMainMenu;
+    delete m_pMenuManager;
 }

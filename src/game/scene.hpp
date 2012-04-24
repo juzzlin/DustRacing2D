@@ -24,6 +24,8 @@
 class AiLogic;
 class CheckeredFlag;
 class InputHandler;
+class Menu;
+class MenuManager;
 class MCCamera;
 class MCObject;
 class MCSurface;
@@ -89,6 +91,8 @@ public:
 
 private:
 
+    void createMenus();
+
     void updateWorld(float timeStep);
 
     void updateRace();
@@ -117,6 +121,8 @@ private:
     StartlightsOverlay * m_pStartlightsOverlay;
     StateMachine       * m_pStateMachine;
     CheckeredFlag      * m_pCheckeredFlag;
+    Menu               * m_pMainMenu;
+    MenuManager        * m_pMenuManager;
     MCFloat              m_cameraBaseOffset;
 
     typedef std::vector<Car *> CarVector;

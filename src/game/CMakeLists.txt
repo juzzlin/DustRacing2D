@@ -10,6 +10,10 @@ set(SRC
     main.cpp
     mainwindow.cpp
     map.cpp
+    menu.cpp
+    menuitem.cpp
+    menuitemview.cpp
+    menumanager.cpp
     offtrackdetector.cpp
     overlaybase.cpp
     race.cpp
