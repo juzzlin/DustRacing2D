@@ -31,24 +31,30 @@ public:
 
     virtual ~MenuItem();
 
+    const std::string & text() const;
+
     void setView(MenuItemView * menuItemView, bool takeOwnership);
 
     MenuItemView * view();
 
-    void setMenuOnClick(Menu & menuOnClick);
-
-    virtual void clicked();
-
     virtual void render();
 
-    std::string text() const;
+    virtual void onLeft();
+
+    virtual void onRight();
+
+    virtual void onSelect();
+
+    void setFocused(bool focused);
+
+    bool focused() const;
 
 private:
 
     std::string m_text;
-    Menu * m_menuOnClick;
     MenuItemView * m_pView;
     std::shared_ptr<MenuItemView> m_pOwnedView;
+    bool m_focused;
 };
 
 #endif // MENUITEM_HPP

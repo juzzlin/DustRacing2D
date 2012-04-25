@@ -16,9 +16,12 @@
 #include "menu.hpp"
 #include "menuitem.hpp"
 
+#include <cassert>
+
 Menu::Menu(unsigned int width, unsigned int height)
   : m_width(width)
   , m_height(height)
+  , m_currentIndex(0)
 {
 }
 
@@ -30,6 +33,8 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
     {
         m_ownedMenuItems.push_back(std::shared_ptr<MenuItem>(&menuItem));
     }
+
+    updateFocus();
 }
 
 void Menu::render()
@@ -38,6 +43,66 @@ void Menu::render()
     {
         item->render();
     }
+}
+
+void Menu::up()
+{
+    assert(m_menuItems.size());
+    m_currentIndex++;
+    if (m_currentIndex >= m_menuItems.size())
+    {
+        m_currentIndex = 0;
+    }
+
+    updateFocus();
+}
+
+void Menu::down()
+{
+    assert(m_menuItems.size());
+    m_currentIndex--;
+    if (m_currentIndex >= m_menuItems.size()) // m_currentIndex is unsisgned.
+    {
+        m_currentIndex = m_menuItems.size() - 1;
+    }
+
+    updateFocus();
+}
+
+void Menu::left()
+{
+    assert(m_menuItems.size());
+    assert(m_currentIndex < m_menuItems.size());
+
+    m_menuItems.at(m_currentIndex)->onLeft();
+}
+
+void Menu::right()
+{
+    assert(m_menuItems.size());
+    assert(m_currentIndex < m_menuItems.size());
+
+    m_menuItems.at(m_currentIndex)->onRight();
+}
+
+void Menu::selectCurrentItem()
+{
+    assert(m_menuItems.size());
+
+    m_menuItems.at(m_currentIndex)->onSelect();
+}
+
+void Menu::updateFocus()
+{
+    assert(m_menuItems.size());
+    assert(m_currentIndex < m_menuItems.size());
+
+    for (MenuItem * item : m_menuItems)
+    {
+        item->setFocused(false);
+    }
+
+    m_menuItems.at(m_currentIndex)->setFocused(true);
 }
 
 Menu::~Menu()

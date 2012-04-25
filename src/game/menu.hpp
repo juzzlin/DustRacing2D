@@ -34,14 +34,32 @@ public:
     //! Render the menu.
     virtual void render();
 
+    //! Selection up.
+    void up();
+
+    //! Selection down.
+    void down();
+
+    //! Current item left.
+    void left();
+
+    //! Current item right.
+    void right();
+
+    //! Select the current item.
+    void selectCurrentItem();
+
     //! Add item to the menu.
     void addItem(MenuItem & menuItem, bool takeOwnership = false);
 
 private:
 
+    void updateFocus();
+
     std::vector<MenuItem *> m_menuItems;
     std::vector<std::shared_ptr<MenuItem> > m_ownedMenuItems;
     unsigned int m_width, m_height;
+    unsigned int m_currentIndex;
 };
 
 #endif // MENU_HPP

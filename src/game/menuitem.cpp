@@ -20,8 +20,8 @@
 
 MenuItem::MenuItem(std::string text)
   : m_text(text)
-  , m_menuOnClick(nullptr)
   , m_pView(nullptr)
+  , m_focused(false)
 {
 }
 
@@ -40,17 +40,26 @@ MenuItemView * MenuItem::view()
     return m_pView;
 }
 
-void MenuItem::setMenuOnClick(Menu & menuOnClick)
+void MenuItem::onLeft()
 {
-    m_menuOnClick = &menuOnClick;
 }
 
-void MenuItem::clicked()
+void MenuItem::onRight()
 {
-    if (m_menuOnClick)
-    {
-        MenuManager::instance().enterMenu(*m_menuOnClick);
-    }
+}
+
+void MenuItem::onSelect()
+{
+}
+
+void MenuItem::setFocused(bool focused)
+{
+    m_focused = focused;
+}
+
+bool MenuItem::focused() const
+{
+    return m_focused;
 }
 
 void MenuItem::render()
@@ -61,7 +70,7 @@ void MenuItem::render()
     }
 }
 
-std::string MenuItem::text() const
+const std::string & MenuItem::text() const
 {
     return m_text;
 }
