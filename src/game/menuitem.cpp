@@ -22,6 +22,10 @@ MenuItem::MenuItem(std::string text)
   : m_text(text)
   , m_pView(nullptr)
   , m_focused(false)
+  , m_lMargin(1)
+  , m_rMargin(1)
+  , m_tMargin(1)
+  , m_bMargin(1)
 {
 }
 
@@ -55,6 +59,22 @@ void MenuItem::onSelect()
 void MenuItem::setFocused(bool focused)
 {
     m_focused = focused;
+}
+
+void MenuItem::setContentsMargins(int left, int right, int top, int bottom)
+{
+    m_lMargin = left;
+    m_rMargin = right;
+    m_tMargin = top;
+    m_bMargin = bottom;
+}
+
+void MenuItem::getContentsMargins(int & left, int & right, int & top, int & bottom) const
+{
+    left   = m_lMargin;
+    right  = m_rMargin;
+    top    = m_tMargin;
+    bottom = m_bMargin;
 }
 
 bool MenuItem::focused() const

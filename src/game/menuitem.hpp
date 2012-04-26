@@ -47,6 +47,10 @@ public:
 
     void setFocused(bool focused);
 
+    void setContentsMargins(int left, int right, int top, int bottom);
+
+    void getContentsMargins(int & left, int & right, int & top, int & bottom) const;
+
     bool focused() const;
 
 private:
@@ -55,6 +59,7 @@ private:
     MenuItemView * m_pView;
     std::shared_ptr<MenuItemView> m_pOwnedView;
     bool m_focused;
+    int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
 };
 
 #endif // MENUITEM_HPP
