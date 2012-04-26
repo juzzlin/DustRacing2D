@@ -41,7 +41,7 @@ public:
 
     MenuItemView * view();
 
-    virtual void render();
+    virtual void render(int x1, int y1, int x2, int y2);
 
     virtual void onLeft();
 

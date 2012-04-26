@@ -39,9 +39,24 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 
 void Menu::render()
 {
+    // Calculate total height
+    int totalHeight = 0;
     for (MenuItem * item : m_menuItems)
     {
-        item->render();
+        totalHeight += item->height();
+    }
+
+    // Render centered items
+    int startY = m_height / 2 - totalHeight / 2;
+    for (MenuItem * item : m_menuItems)
+    {
+        const int x1 = m_width / 2 - item->width() / 2;
+        const int y1 = startY;
+        const int x2 = m_width / 2 + item->width() / 2;
+        const int y2 = startY + item->height();
+
+        item->render(x1, y1, x2, y2);
+        startY += item->height();
     }
 }
 

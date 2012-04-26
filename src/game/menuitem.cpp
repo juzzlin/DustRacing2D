@@ -33,12 +33,12 @@ MenuItem::MenuItem(int width, int height, std::string text)
 
 int MenuItem::width() const
 {
-    return m_width;
+    return m_width + m_lMargin + m_rMargin;
 }
 
 int MenuItem::height() const
 {
-    return m_height;
+    return m_height + m_tMargin + m_bMargin;
 }
 
 void MenuItem::setView(MenuItemView * menuItemView, bool takeOwnership)
@@ -94,11 +94,11 @@ bool MenuItem::focused() const
     return m_focused;
 }
 
-void MenuItem::render()
+void MenuItem::render(int x1, int y1, int x2, int y2)
 {
     if (m_pView)
     {
-        m_pView->render();
+        m_pView->render(x1, y1, x2, y2);
     }
 }
 
