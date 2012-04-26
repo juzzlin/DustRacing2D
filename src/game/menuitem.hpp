@@ -27,9 +27,13 @@ class MenuItem
 {
 public:
 
-    MenuItem(std::string text = "");
+    MenuItem(int width, int height, std::string text = "");
 
     virtual ~MenuItem();
+
+    int width() const;
+
+    int height() const;
 
     const std::string & text() const;
 
@@ -59,6 +63,7 @@ private:
     MenuItemView * m_pView;
     std::shared_ptr<MenuItemView> m_pOwnedView;
     bool m_focused;
+    int m_width, m_height;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
 };
 

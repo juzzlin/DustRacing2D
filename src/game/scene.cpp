@@ -116,13 +116,16 @@ unsigned int Scene::height()
 
 void Scene::createMenus()
 {
-    m_pMenuManager = new MenuManager;
-    m_pMainMenu = new Menu(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    const int width = Config::Game::WINDOW_WIDTH;
+    const int height = Config::Game::WINDOW_HEIGHT;
 
-    MenuItem * play = new MenuItem("Play");
+    m_pMenuManager = new MenuManager;
+    m_pMainMenu = new Menu(width, height);
+
+    MenuItem * play = new MenuItem(width, height / 2, "Play");
     play->setView(new MenuItemView, true);
 
-    MenuItem * quit = new MenuItem("Quit");
+    MenuItem * quit = new MenuItem(width, height / 2, "Quit");
     quit->setView(new MenuItemView, true);
 
     m_pMainMenu->addItem(*play, true);

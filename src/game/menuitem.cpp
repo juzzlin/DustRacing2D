@@ -18,15 +18,27 @@
 #include "menu.hpp"
 #include "menumanager.hpp"
 
-MenuItem::MenuItem(std::string text)
+MenuItem::MenuItem(int width, int height, std::string text)
   : m_text(text)
   , m_pView(nullptr)
   , m_focused(false)
+  , m_width(width)
+  , m_height(height)
   , m_lMargin(1)
   , m_rMargin(1)
   , m_tMargin(1)
   , m_bMargin(1)
 {
+}
+
+int MenuItem::width() const
+{
+    return m_width;
+}
+
+int MenuItem::height() const
+{
+    return m_height;
 }
 
 void MenuItem::setView(MenuItemView * menuItemView, bool takeOwnership)
