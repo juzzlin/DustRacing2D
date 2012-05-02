@@ -22,6 +22,7 @@
 #include <vector>
 
 class AiLogic;
+class CheckeredFlag;
 class InputHandler;
 class MCCamera;
 class MCObject;
@@ -106,6 +107,7 @@ private:
     Speedometer        * m_pSpeedometer;
     Startlights        * m_pStartlights;
     StartlightsOverlay * m_pStartlightsOverlay;
+    CheckeredFlag        * m_pCheckerflag;
     MCFloat              m_cameraBaseOffset;
 
     typedef std::vector<Car *> CarVector;

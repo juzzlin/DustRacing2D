@@ -13,16 +13,39 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "checkerflag.hpp"
+#ifndef CHECKEREDFLAG_HPP
+#define CHECKEREDFLAG_HPP
 
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
+#include "overlaybase.hpp"
 
-Checkerflag::Checkerflag()
+#include <vector>
+
+class MCSurface;
+class MCTextureFontManager;
+
+//! Renders checkerflag on top of the game scene.
+class CheckeredFlag : public OverlayBase
 {
-}
+public:
 
-void Checkerflag::render()
-{
-    // TODO
-}
+    //! Constructor.
+    CheckeredFlag();
+
+    //! \reimp
+    virtual void setDimensions(MCUint width, MCUint height);
+
+    //! \reimp
+    virtual void render();
+
+private:
+
+    struct Node
+    {
+        float x, y, z;
+        int angle;
+    };
+
+    std::vector<std::vector<Node> > m_matrix;
+};
+
+#endif // CHECKEREDFLAG_HPP

@@ -4,7 +4,7 @@ aboutdlg.cpp
 ailogic.cpp
 car.cpp
 centrifugalforcegenerator.cpp
-checkerflag.cpp
+checkeredflag.cpp
 game.cpp
 inputhandler.cpp
 main.cpp

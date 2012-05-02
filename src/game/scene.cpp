@@ -17,6 +17,7 @@
 
 #include "ailogic.hpp"
 #include "car.hpp"
+#include "checkeredflag.hpp"
 #include "inputhandler.hpp"
 #include "layers.hpp"
 #include "offtrackdetector.hpp"
@@ -52,6 +53,7 @@ Scene::Scene(MCUint numCars)
   , m_pSpeedometer(nullptr)
   , m_pStartlights(new Startlights(m_race))
   , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
+  , m_pCheckerflag(new CheckeredFlag)
   , m_cameraBaseOffset(0)
 {
     // Create and add cars.
@@ -80,6 +82,9 @@ Scene::Scene(MCUint numCars)
     }
 
     m_pStartlightsOverlay->setDimensions(
+        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+
+    m_pCheckerflag->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 }
 
@@ -364,6 +369,9 @@ void Scene::render(MCCamera & camera)
 
     assert(m_pStartlightsOverlay);
     m_pStartlightsOverlay->render();
+
+    assert(m_pCheckerflag);
+    m_pCheckerflag->render();
 }
 
 Scene::~Scene()
