@@ -53,7 +53,7 @@ Scene::Scene(MCUint numCars)
   , m_pSpeedometer(nullptr)
   , m_pStartlights(new Startlights(m_race))
   , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
-  , m_pCheckerflag(new CheckeredFlag)
+  , m_pCheckeredFlag(new CheckeredFlag)
   , m_cameraBaseOffset(0)
 {
     // Create and add cars.
@@ -84,7 +84,7 @@ Scene::Scene(MCUint numCars)
     m_pStartlightsOverlay->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 
-    m_pCheckerflag->setDimensions(
+    m_pCheckeredFlag->setDimensions(
         Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
 }
 
@@ -306,7 +306,7 @@ void Scene::initRace()
     assert(m_pActiveTrack);
 
     m_race.setTrack(*m_pActiveTrack);
-    m_race.setLapCount(5);
+    m_race.setLapCount(2);
     m_race.init();
 }
 
@@ -370,8 +370,11 @@ void Scene::render(MCCamera & camera)
     assert(m_pStartlightsOverlay);
     m_pStartlightsOverlay->render();
 
-    assert(m_pCheckerflag);
-    m_pCheckerflag->render();
+    if (m_race.checkeredFlagEnabled())
+    {
+        assert(m_pCheckeredFlag);
+        m_pCheckeredFlag->render();
+    }
 }
 
 Scene::~Scene()

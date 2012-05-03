@@ -107,7 +107,7 @@ private:
     Speedometer        * m_pSpeedometer;
     Startlights        * m_pStartlights;
     StartlightsOverlay * m_pStartlightsOverlay;
-    CheckeredFlag        * m_pCheckerflag;
+    CheckeredFlag      * m_pCheckeredFlag;
     MCFloat              m_cameraBaseOffset;
 
     typedef std::vector<Car *> CarVector;

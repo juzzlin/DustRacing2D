@@ -65,6 +65,10 @@ public:
     //! Get the timing object.
     Timing & timing();
 
+    bool checkeredFlagEnabled() const;
+
+    Car & getLeadingCar() const;
+
 private:
 
     void checkRoute(Car & car);
@@ -90,6 +94,8 @@ private:
     Track * m_pTrack;
 
     bool m_started;
+
+    bool m_checkeredFlagEnabled;
 };
 
 #endif // RACE_HPP

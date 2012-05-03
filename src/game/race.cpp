@@ -30,6 +30,7 @@ Race::Race()
   , m_timing(MAX_CARS)
   , m_pTrack(nullptr)
   , m_started(false)
+  , m_checkeredFlagEnabled(false)
 {
 }
 
@@ -60,14 +61,25 @@ void Race::update()
     {
         checkRoute(*pCar);
     }
+
+    // Enable the checkered flag if leader has done at least 95% of the last lap.
+    if (m_timing.leadersLap() + 1 == static_cast<int>(m_lapCount))
+    {
+        Car & leader = getLeadingCar();
+        const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(leader.getX(), leader.getY());
+        if (pCurrent->routeIndex() != -1 &&
+            pCurrent->routeIndex() > 9 * m_pTrack->trackData().route().length() / 10)
+        {
+            m_checkeredFlagEnabled = true;
+        }
+    }
 }
 
 void Race::checkRoute(Car & car)
 {
     assert(m_pTrack);
 
-    const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(
-        car.getX(), car.getY());
+    const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(car.getX(), car.getY());
 
     // Lap progressed?
     if (pCurrent->routeIndex() == m_routeHash[car.index()] + 1)
@@ -103,6 +115,24 @@ unsigned int Race::getPositionOfCar(int index) const
     return 0; // Should return the last valid position?
 }
 
+Car & Race::getLeadingCar() const
+{
+    unsigned int bestPos = m_cars.size();
+    Car        * bestCar = m_cars.back();
+
+    for (unsigned int i = 0; i < m_cars.size(); i++)
+    {
+        const unsigned int pos = getPositionOfCar(i);
+        if (pos > 0 && pos < bestPos)
+        {
+            bestCar = m_cars.at(i);
+            bestPos = pos;
+        }
+    }
+
+    return *bestCar;
+}
+
 void Race::setTrack(Track & track)
 {
     m_pTrack = &track;
@@ -129,6 +159,11 @@ void Race::addCar(Car & car)
 Timing & Race::timing()
 {
     return m_timing;
+}
+
+bool Race::checkeredFlagEnabled() const
+{
+    return m_checkeredFlagEnabled;
 }
 
 Race::~Race()

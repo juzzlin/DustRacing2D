@@ -65,9 +65,7 @@ void CheckeredFlag::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glNormal3i(0, 0, 1);
-
     glBegin(GL_QUADS);
-
     glNormal3f(0.0f, 0.0f, 1.0f);
 
     for (int j = 0; j < ROWS; j++)
