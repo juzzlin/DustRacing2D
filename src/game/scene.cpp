@@ -355,27 +355,18 @@ TimingOverlay & Scene::timingOverlay() const
 
 void Scene::render(MCCamera & camera)
 {
-    assert(m_pActiveTrack);
     m_pActiveTrack->render(&camera);
-
-    assert(m_pWorld);
     m_pWorld->renderShadows(&camera);
     m_pWorld->render(&camera);
 
-    assert(m_pTimingOverlay);
-    m_pTimingOverlay->render();
-
-    assert(m_pSpeedometer);
-    m_pSpeedometer->render();
-
-    assert(m_pStartlightsOverlay);
-    m_pStartlightsOverlay->render();
-
     if (m_race.checkeredFlagEnabled())
     {
-        assert(m_pCheckeredFlag);
         m_pCheckeredFlag->render();
     }
+
+    m_pTimingOverlay->render();
+    m_pSpeedometer->render();
+    m_pStartlightsOverlay->render();
 }
 
 Scene::~Scene()
