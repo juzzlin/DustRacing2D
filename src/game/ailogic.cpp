@@ -32,7 +32,12 @@ AiLogic::AiLogic(Car & car)
 {
 }
 
-void AiLogic::update()
+Car & AiLogic::car() const
+{
+    return m_car;
+}
+
+void AiLogic::update(bool isRaceCompleted)
 {
     if (m_track)
     {
@@ -50,11 +55,12 @@ void AiLogic::update()
             }
         }
 
-        steer(*targetTile, *currentTile);
+        steer(*targetTile, *currentTile, isRaceCompleted);
     }
 }
 
-void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
+void AiLogic::steer(
+    TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted)
 {
     // Initial target coordinates
     MCVector3dF target(targetTile.location().x(), targetTile.location().y());
@@ -127,57 +133,64 @@ void AiLogic::steer(TrackTile & targetTile, TrackTile & currentTile)
     bool accelerate = true;
     bool brake      = false;
 
-    if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
+    if (isRaceCompleted)
     {
-        if (m_car.speedInKmh() > 120)
+        accelerate = false;
+    }
+    else
+    {
+        if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
         {
-            brake = true;
+            if (m_car.speedInKmh() > 120)
+            {
+                brake = true;
+            }
         }
-    }
 
-    if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
-    {
-        if (m_car.speedInKmh() > 90)
+        if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
         {
-            brake = true;
+            if (m_car.speedInKmh() > 90)
+            {
+                brake = true;
+            }
         }
-    }
 
-    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
-    {
-        if (m_car.speedInKmh() > 60)
+        if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
         {
-            accelerate = false;
+            if (m_car.speedInKmh() > 60)
+            {
+                accelerate = false;
+            }
         }
-    }
 
-    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
-        currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
-    {
-        if (m_car.speedInKmh() > 100)
+        if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
+                currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
-            accelerate = false;
+            if (m_car.speedInKmh() > 100)
+            {
+                accelerate = false;
+            }
         }
-    }
 
-    if (m_car.speedInKmh() < 25)
-    {
-        accelerate = true;
-        brake = false;
-    }
+        if (m_car.speedInKmh() < 25)
+        {
+            accelerate = true;
+            brake = false;
+        }
 
-    if (std::abs(currentTile.matrixLocation().x() - targetTile.matrixLocation().x()) > 2 &&
-        currentTile.matrixLocation().y() == targetTile.matrixLocation().y())
-    {
-        brake = false;
-        accelerate = true;
-    }
+        if (std::abs(currentTile.matrixLocation().x() - targetTile.matrixLocation().x()) > 2 &&
+                currentTile.matrixLocation().y() == targetTile.matrixLocation().y())
+        {
+            brake = false;
+            accelerate = true;
+        }
 
-    if (std::abs(currentTile.matrixLocation().y() - targetTile.matrixLocation().y()) > 2 &&
-        currentTile.matrixLocation().x() == targetTile.matrixLocation().x())
-    {
-        brake = false;
-        accelerate = true;
+        if (std::abs(currentTile.matrixLocation().y() - targetTile.matrixLocation().y()) > 2 &&
+                currentTile.matrixLocation().x() == targetTile.matrixLocation().x())
+        {
+            brake = false;
+            accelerate = true;
+        }
     }
 
     if (brake)

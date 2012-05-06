@@ -31,6 +31,7 @@ Race::Race()
   , m_pTrack(nullptr)
   , m_started(false)
   , m_checkeredFlagEnabled(false)
+  , m_winnerFinished(false)
 {
 }
 
@@ -59,7 +60,7 @@ void Race::update()
 {
     for(Car * pCar : m_cars)
     {
-        checkRoute(*pCar);
+        updateRouteProgress(*pCar);
     }
 
     // Enable the checkered flag if leader has done at least 95% of the last lap.
@@ -68,14 +69,23 @@ void Race::update()
         Car & leader = getLeadingCar();
         const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(leader.getX(), leader.getY());
         if (pCurrent->routeIndex() != -1 &&
-            pCurrent->routeIndex() > 9 * m_pTrack->trackData().route().length() / 10)
+            pCurrent->routeIndex() >
+            static_cast<int>(9 * m_pTrack->trackData().route().length() / 10))
         {
             m_checkeredFlagEnabled = true;
         }
     }
+    // Check if winner has finished
+    else if (m_timing.leadersLap() == static_cast<int>(m_lapCount))
+    {
+        m_winnerFinished = true;
+
+        Car & leader = getLeadingCar();
+        m_timing.setRaceCompleted(leader.index(), true);
+    }
 }
 
-void Race::checkRoute(Car & car)
+void Race::updateRouteProgress(Car & car)
 {
     assert(m_pTrack);
 
@@ -96,6 +106,11 @@ void Race::checkRoute(Car & car)
             m_routeHash[car.index()] = 1;
             m_positions[pCurrent->routeIndex()][m_timing.lap(car.index())].push_back(car.index());
             m_timing.lapCompleted(car.index());
+
+            if (m_winnerFinished)
+            {
+                m_timing.setRaceCompleted(car.index(), true);
+            }
         }
     }
 }

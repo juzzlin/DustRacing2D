@@ -38,6 +38,12 @@ public:
     //! Completes the current lap for the given car.
     void lapCompleted(MCUint index);
 
+    //! Completes the race for the given car.
+    void setRaceCompleted(MCUint index, bool state);
+
+    //! Returns if the race is completed for the given car.
+    bool raceCompleted(MCUint index) const;
+
     //! Returns the current lap for the given car.
     int lap(MCUint index) const;
 
@@ -83,6 +89,7 @@ private:
         , totalTime(0)
         , lap(0)
         , newRecordActive(false)
+        , raceCompleted(false)
         {}
 
         int lastLapTime;
@@ -90,6 +97,7 @@ private:
         int totalTime;
         int lap;
         bool newRecordActive;
+        bool raceCompleted;
     };
 
     std::vector<Timing::Times> m_times;

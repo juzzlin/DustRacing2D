@@ -71,7 +71,7 @@ public:
 
 private:
 
-    void checkRoute(Car & car);
+    void updateRouteProgress(Car & car);
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
@@ -96,6 +96,8 @@ private:
     bool m_started;
 
     bool m_checkeredFlagEnabled;
+
+    bool m_winnerFinished;
 };
 
 #endif // RACE_HPP

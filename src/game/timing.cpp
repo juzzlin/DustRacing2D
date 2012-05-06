@@ -45,6 +45,20 @@ void Timing::lapCompleted(MCUint index)
     }
 }
 
+void Timing::setRaceCompleted(MCUint index, bool state)
+{
+    assert(index < m_times.size());
+    Timing::Times & times = m_times[index];
+    times.raceCompleted = state;
+}
+
+bool Timing::raceCompleted(MCUint index) const
+{
+    assert(index < m_times.size());
+    const Timing::Times & times = m_times[index];
+    return times.raceCompleted;
+}
+
 int Timing::lap(MCUint index) const
 {
     assert(index < m_times.size());

@@ -186,7 +186,8 @@ void Scene::updateAiLogic()
 {
     for (AiLogic * ai : m_aiLogic)
     {
-        ai->update();
+        const bool isRaceCompleted = m_race.timing().raceCompleted(ai->car().index());
+        ai->update(isRaceCompleted);
     }
 }
 

@@ -35,14 +35,18 @@ public:
     virtual ~AiLogic();
 
     //! Update.
-    void update();
+    void update(bool isRaceCompleted);
 
     //! Set the current race track.
     void setTrack(Track & track);
 
+    //! Get associated car.
+    Car & car() const;
+
 private:
 
-    void steer(TrackTile & targetTile, TrackTile & currentTile);
+    void steer(
+        TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted);
 
     Car         & m_car;
     Track       * m_track;
