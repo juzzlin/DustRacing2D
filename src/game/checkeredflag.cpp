@@ -39,7 +39,6 @@ void CheckeredFlag::setDimensions(MCUint width, MCUint height)
 
     // Init the matrix
     m_matrix.clear();
-    int angle = 0;
     for (int j = 0; j < ROWS; j++)
     {
         std::vector<CheckeredFlag::Node> row;
