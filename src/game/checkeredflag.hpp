@@ -17,7 +17,7 @@
 #define CHECKEREDFLAG_HPP
 
 #include "overlaybase.hpp"
-
+#include "MiniCore/Core/MCVector3d"
 #include <vector>
 
 class MCSurface;
@@ -41,7 +41,8 @@ private:
 
     struct Node
     {
-        float x, y, z;
+        MCVector3dF loc1;
+        MCVector3dF loc;
         int angle;
     };
 

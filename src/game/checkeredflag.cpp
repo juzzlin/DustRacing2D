@@ -21,8 +21,10 @@
 
 namespace
 {
-const int ROWS = 6;
-const int COLS = 8;
+const int   ROWS             = 6;
+const int   COLS             = 8;
+const float AMPLITUDE        = 10.0f;
+const float APPEARANCE_SPEED = 0.05f;
 }
 
 CheckeredFlag::CheckeredFlag()
@@ -44,11 +46,11 @@ void CheckeredFlag::setDimensions(MCUint width, MCUint height)
         for (int i = 0; i < COLS; i++)
         {
             CheckeredFlag::Node node;
-            node.x     = i * nodeWidth  + nodeWidth  / 2;
-            node.y     = j * nodeHeight + nodeHeight / 2;
-            node.z     = 0;
+            node.loc = MCVector3dF(this->width() / 2, this->height() * 2, 0);
+            node.loc1.setI(i * nodeWidth  + nodeWidth  / 2);
+            node.loc1.setJ(j * nodeHeight + nodeHeight / 2);
+            node.loc1.setK(0);
             node.angle = ((i + j) * 40) % 360;
-
             row.push_back(node);
         }
 
@@ -81,7 +83,8 @@ void CheckeredFlag::render()
                 node0.angle = 0;
             }
 
-            node0.z = MCTrigonom::sin(node0.angle) * 10.0f;
+            node0.loc += (node0.loc1 - node0.loc) * APPEARANCE_SPEED;
+            node0.loc.setK(MCTrigonom::sin(node0.angle) * AMPLITUDE);
 
             if ((j + i) & 0x1)
             {
@@ -98,10 +101,10 @@ void CheckeredFlag::render()
                 const CheckeredFlag::Node & node2 = m_matrix.at(j + 1).at(i + 1);
                 const CheckeredFlag::Node & node3 = m_matrix.at(j + 1).at(i);
 
-                glVertex3f(node0.x, node0.y, node0.z);
-                glVertex3f(node1.x, node1.y, node1.z);
-                glVertex3f(node2.x, node2.y, node2.z);
-                glVertex3f(node3.x, node3.y, node3.z);
+                glVertex3f(node0.loc.i(), node0.loc.j(), node0.loc.k());
+                glVertex3f(node1.loc.i(), node1.loc.j(), node1.loc.k());
+                glVertex3f(node2.loc.i(), node2.loc.j(), node2.loc.k());
+                glVertex3f(node3.loc.i(), node3.loc.j(), node3.loc.k());
             }
         }
     }
