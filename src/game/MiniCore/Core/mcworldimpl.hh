@@ -64,6 +64,7 @@ private:
     MCFloat metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
+    bool depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
     friend class MCWorld;

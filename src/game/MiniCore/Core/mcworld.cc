@@ -30,6 +30,8 @@
 #include "mctrigonom.hh"
 #include "mccamera.hh"
 
+#include <GL/gl.h>
+
 #include <cassert>
 
 MCWorld * MCWorldImpl::pInstance = nullptr;
@@ -51,6 +53,10 @@ MCWorldImpl::MCWorldImpl()
 , maxZ(0)
 , metersPerPixel(1.0)
 {
+    for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
+    {
+        depthTestEnabled[i] = false;
+    }
 }
 
 MCWorldImpl::~MCWorldImpl()
@@ -60,12 +66,16 @@ void MCWorldImpl::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     forceRegistry.update();
-    for (MCUint i = 0; i < objs.size(); i++) {
+    for (MCUint i = 0; i < objs.size(); i++)
+    {
         MCObject & object(*objs[i]);
-        if (object.physicsObject() && !object.stationary()) {
+        if (object.physicsObject() && !object.stationary())
+        {
             object.integrate(step);
             object.stepTime();
-        } else {
+        }
+        else
+        {
             object.stepTime();
         }
     }
@@ -75,14 +85,17 @@ void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
     static MCObjectTree::ObjectSet possibleCollisions;
-    for (MCUint i = 0; i < objs.size(); i++) {
+    for (MCUint i = 0; i < objs.size(); i++)
+    {
         MCObject & object(*objs[i]);
-        if (object.physicsObject()) {
+        if (object.physicsObject())
+        {
             possibleCollisions.clear();
             pObjectTree->getBBoxCollisions(object, possibleCollisions);
             auto j1 = possibleCollisions.begin();
             auto j2 = possibleCollisions.end();
-            while (j1 != j2) {
+            while (j1 != j2)
+            {
                 collisionDetector.processPossibleCollision(object, **j1);
                 j1++;
             }
@@ -95,8 +108,10 @@ MCContact * MCWorldImpl::getDeepestInterpenetration(
 {
     MCFloat maxDepth = 0;
     MCContact * bestContact = nullptr;
-    for (MCContact * contact : contacts) {
-        if (contact->interpenetrationDepth() > maxDepth) {
+    for (MCContact * contact : contacts)
+    {
+        if (contact->interpenetrationDepth() > maxDepth)
+        {
             maxDepth = contact->interpenetrationDepth();
             bestContact = contact;
         }
@@ -109,9 +124,11 @@ void MCWorldImpl::processContacts(MCObject & object)
     MCContact * deepestContact = nullptr;
     auto iter(object.contacts().begin());
     iter = object.contacts().begin();
-    for (; iter != object.contacts().end(); iter++) {
+    for (; iter != object.contacts().end(); iter++)
+    {
         deepestContact = getDeepestInterpenetration(iter->second);
-        if (deepestContact) {
+        if (deepestContact)
+        {
             impulseGenerator.generateImpulses(object, *deepestContact);
         }
     }
@@ -120,8 +137,10 @@ void MCWorldImpl::processContacts(MCObject & object)
 
 void MCWorldImpl::processContacts()
 {
-    for (MCObject * object : objs) {
-        if (object->physicsObject()) {
+    for (MCObject * object : objs)
+    {
+        if (object->physicsObject())
+        {
             processContacts(*object);
         }
     }
@@ -129,58 +148,84 @@ void MCWorldImpl::processContacts()
 
 void MCWorldImpl::render(MCCamera * pCamera)
 {
-    // Render in the order of the layers
-    LayerHash::iterator j;
-    LayerHash::iterator end;
+    // Render in the order of the layers. Depth test is
+    // layer-specific.
 
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++) {
+    static LayerHash::iterator j;
+    static LayerHash::iterator end;
+
+    glPushAttrib(GL_ENABLE_BIT);
+
+    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
+    {
+        if (depthTestEnabled[i])
+        {
+            glEnable(GL_DEPTH_TEST);
+        }
+        else
+        {
+            glDisable(GL_DEPTH_TEST);
+        }
+
         j   = layers[i].begin();
         end = layers[i].end();
-        for (; j != end; j++) {
+        for (; j != end; j++)
+        {
             MCObject & object = **j;
-            if (object.renderable()) {
+            if (object.renderable())
+            {
                 // Check if view is set and is visible
                 if (object.shape() && object.shape()->view())
                 {
                     MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
                     bbox.translate(MCVector2dF(object.location()));
-                    if (!pCamera || pCamera->isVisible(bbox)) {
+                    if (!pCamera || pCamera->isVisible(bbox))
+                    {
                         object.render(pCamera); // pCamera can be a nullptr
                     }
                 }
                 // Check if shape is visible
-                else if (!pCamera || pCamera->isVisible(object.bbox())) {
+                else if (!pCamera || pCamera->isVisible(object.bbox()))
+                {
                     object.render(pCamera); // pCamera can be a nullptr
                 }
             }
-            else if (object.virtualObject()) {
+            else if (object.virtualObject())
+            {
                 object.render(pCamera);
             }
         }
     }
+
+    glPopAttrib();
 }
 
 void MCWorldImpl::renderShadows(MCCamera * pCamera)
 {
     const MCUint i2 = objs.size();
-    for (MCUint i = 0; i < i2; i++) {
+    for (MCUint i = 0; i < i2; i++)
+    {
         MCObject & object = *objs[i];
-        if (object.renderable() && object.hasShadow()) {
+        if (object.renderable() && object.hasShadow())
+        {
             // Check if view is set and is visible
             if (object.shape() && object.shape()->view())
             {
                 MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
                 bbox.translate(MCVector2dF(object.location()));
-                if (!pCamera || pCamera->isVisible(bbox)) {
+                if (!pCamera || pCamera->isVisible(bbox))
+                {
                     object.renderShadow(pCamera); // pCamera can be a nullptr
                 }
             }
             // Check if shape is visible
-            else if (!pCamera || pCamera->isVisible(object.bbox())) {
+            else if (!pCamera || pCamera->isVisible(object.bbox()))
+            {
                 object.renderShadow(pCamera); // pCamera can be a nullptr
             }
         }
-        else if (object.virtualObject()) {
+        else if (object.virtualObject())
+        {
             object.renderShadow(pCamera);
         }
     }
@@ -189,9 +234,12 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
 MCWorld::MCWorld()
 : m_pImpl(new MCWorldImpl)
 {
-    if (!MCWorldImpl::pInstance) {
+    if (!MCWorldImpl::pInstance)
+    {
         MCWorldImpl::pInstance = this;
-    } else {
+    }
+    else
+    {
         std::cerr << "ERROR!!: Only one MCWorld can exist!" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -202,10 +250,12 @@ MCWorld::MCWorld()
 
 MCWorld & MCWorld::instance()
 {
-    if (!MCWorldImpl::pInstance) {
+    if (!MCWorldImpl::pInstance)
+    {
         std::cerr << "ERROR!!: MCWorld instance not created!" << std::endl;
         exit(EXIT_FAILURE);
     }
+
     return *MCWorldImpl::pInstance;
 }
 
@@ -266,9 +316,10 @@ void MCWorld::addObject(MCObject & object)
 
 void MCWorldImpl::addObject(MCObject & object)
 {
-    if (!object.removing()) {
-        if (object.index() == -1) {
-
+    if (!object.removing())
+    {
+        if (object.index() == -1)
+        {
             // Add to layer map
             addToLayerMap(object);
 
@@ -277,19 +328,23 @@ void MCWorldImpl::addObject(MCObject & object)
             object.setIndex(objs.size() - 1);
 
             // Add to ObjectTree
-            if (object.physicsObject() && !object.bypassCollisions()) {
+            if (object.physicsObject() && !object.bypassCollisions())
+            {
                 pObjectTree->insert(object);
             }
 
             // Add xy friction
             const MCFloat FrictionThreshold = 0.001f;
-            if (object.xyFriction() > FrictionThreshold) {
+            if (object.xyFriction() > FrictionThreshold)
+            {
                 forceRegistry.addForceGenerator(
                     *new MCFrictionGenerator(
                         object.xyFriction(), object.xyFriction()), object, true);
             }
         }
-    } else {
+    }
+    else
+    {
         object.setRemoving(false);
     }
 }
@@ -303,9 +358,12 @@ void MCWorld::removeObject(MCObject & object)
 void MCWorld::removeObjectNow(MCObject & object)
 {
     object.setRemoving(true);
-    for (MCObject * obj : m_pImpl->objs) {
-        if (obj != &object) {
-            if (obj->physicsObject()) {
+    for (MCObject * obj : m_pImpl->objs)
+    {
+        if (obj != &object)
+        {
+            if (obj->physicsObject())
+            {
                 obj->deleteContacts(object);
             }
         }
@@ -323,7 +381,8 @@ void MCWorldImpl::removeObject(MCObject & object)
     removeFromLayerMap(object);
 
     // Remove from object vector (O(1))
-    if (object.index() > -1 && object.index() < static_cast<int>(objs.size())) {
+    if (object.index() > -1 && object.index() < static_cast<int>(objs.size()))
+    {
         objs[object.index()] = objs.back();
         objs[object.index()]->setIndex(object.index());
         objs.pop_back();
@@ -331,7 +390,8 @@ void MCWorldImpl::removeObject(MCObject & object)
     }
 
     // Remove from ObjectTree
-    if (object.physicsObject() && !object.bypassCollisions()) {
+    if (object.physicsObject() && !object.bypassCollisions())
+    {
         pObjectTree->remove(object);
     }
 
@@ -340,11 +400,14 @@ void MCWorldImpl::removeObject(MCObject & object)
 
 void MCWorldImpl::processRemovedObjects()
 {
-    for (MCObject * obj : removeObjs) {
-        if (obj->removing()) {
+    for (MCObject * obj : removeObjs)
+    {
+        if (obj->removing())
+        {
             removeObject(*obj);
         }
     }
+
     removeObjs.clear();
 }
 
@@ -370,6 +433,14 @@ void MCWorld::addToLayerMap(MCObject & object)
 void MCWorld::removeFromLayerMap(MCObject & object)
 {
     m_pImpl->removeFromLayerMap(object);
+}
+
+void MCWorld::enableDepthTestOnLayer(MCUint layer, bool enable)
+{
+    if (layer < MCWorld::MaxLayers)
+    {
+        m_pImpl->depthTestEnabled[layer] = enable;
+    }
 }
 
 void MCWorld::addForceGenerator(

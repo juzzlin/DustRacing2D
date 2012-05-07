@@ -145,6 +145,9 @@ public:
     //! Remove p from the internal layer map. Can be used if a layer change is needed.
     void removeFromLayerMap(MCObject & object);
 
+    //! Enable/disable depth test on a layer.
+    void enableDepthTestOnLayer(MCUint layer, bool enable);
+
     //! Max number of rendering layers
     static const MCUint MaxLayers = 32;
 
