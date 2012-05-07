@@ -23,7 +23,7 @@ namespace
 {
 const int   ROWS             = 6;
 const int   COLS             = 8;
-const float AMPLITUDE        = 10.0f;
+const float AMPLITUDE        = 30.0f;
 const float APPEARANCE_SPEED = 0.05f;
 }
 

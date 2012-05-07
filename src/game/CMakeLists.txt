@@ -28,6 +28,7 @@ trackloader.cpp
 trackobject.cpp
 tracktile.cpp
 treeview.cpp
+wall.cpp
 ../common/config.cpp
 ../common/objectbase.cpp
 ../common/objects.cpp

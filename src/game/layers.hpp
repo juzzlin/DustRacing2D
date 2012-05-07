@@ -23,6 +23,7 @@ enum Layers
     Ground = 0,
     Cars   = 1,
     Smoke  = 2,
+    Walls  = 3,
     Tree   = 10
 };
 

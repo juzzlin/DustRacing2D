@@ -270,4 +270,12 @@
  <object x="1452" y="1045" category="free" role="tire"/>
  <object x="1338" y="1038" category="free" role="tire"/>
  <object x="1276" y="1038" category="free" role="tire"/>
+ <object x="511" y="1813" category="free" role="wall"/>
+ <object x="511" y="1792" category="free" role="wall"/>
+ <object x="510" y="1770" category="free" role="wall"/>
+ <object x="510" y="1745" category="free" role="wall"/>
+ <object x="511" y="1721" category="free" role="wall"/>
+ <object x="511" y="1694" category="free" role="wall"/>
+ <object x="512" y="1671" category="free" role="wall"/>
+ <object x="512" y="1646" category="free" role="wall"/>
 </track>

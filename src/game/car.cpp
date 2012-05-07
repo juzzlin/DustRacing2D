@@ -312,7 +312,8 @@ void Car::render(MCCamera *p)
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     // Spawn sparkles if colliding with another car.
-    if (event.collidingObject().typeID() == typeID())
+    if (event.collidingObject().typeID() == typeID() ||
+        event.collidingObject().typeID() == MCObject::typeID("WALL"))
     {
         if (rand() % 10 == 0)
         {

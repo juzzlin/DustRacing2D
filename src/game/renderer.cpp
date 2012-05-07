@@ -30,7 +30,7 @@ Renderer::Renderer(QWidget * parent)
 , m_pScene(nullptr)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
-, m_viewAngle(135.0f)
+, m_viewAngle(45.0f)
 {
     setFocusPolicy(Qt::StrongFocus);
 }

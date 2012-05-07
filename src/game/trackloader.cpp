@@ -28,6 +28,7 @@
 #include "trackobject.hpp"
 #include "tracktile.hpp"
 #include "treeview.hpp"
+#include "wall.hpp"
 
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObjectFactory"
@@ -232,8 +233,13 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
 
     // X-coordinate in the world
     const int x = tag.attribute("x", "0").toInt();
+
     // Y-coordinate in the world
     const int y = tag.attribute("y", "0").toInt();
+
+    // Height of the map. The y-coordinates needs to be mirrored, because
+    // the coordinate system is y-wise mirrored in the editor.
+    const int h = newData.map().rows() * TrackTile::TILE_H;
 
     // TODO: A separate config file for these
     if (role == "tire")
@@ -246,7 +252,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(
-            MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
+            MCVector2d<MCFloat>(x, h - y));
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -265,14 +271,26 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         data.setLayer(Layers::Tree);
 
         TreeView * view = new TreeView(
-            m_textureManager.surface("tree"), treeViewRadius, 2, 30, 5);
+            m_textureManager.surface("tree"), treeViewRadius, 2, 90, 5);
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
-            MCVector2d<MCFloat>(x, newData.map().rows() * TrackTile::TILE_H - y));
+            MCVector2d<MCFloat>(x, h - y));
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "wall")
+    {
+        const int wallSize = 16;
+        MCObject * object = new Wall(
+            m_textureManager.surface("wall"), x, h - y, wallSize, wallSize, wallSize);
+        object->setLayer(Layers::Walls, false);
+        object->setInitialLocation(MCVector3dF(x, h - y, 0));
+
+        // Wrap the MCObject in a TrackObject and add to
+        // the TrackData
+        newData.objects().add(*new TrackObject(category, role, *object), true);
     }
 }
 
