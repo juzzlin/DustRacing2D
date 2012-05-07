@@ -290,9 +290,11 @@ void Car::render(MCCamera *p)
             doSkidMark(leftFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
             doSmoke(leftFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
 
-            if (rand() % 5 == 0)
+            static int counter = 0;
+            if (++counter >= 5)
             {
                 doMud(leftRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+                counter = 0;
             }
         }
 
@@ -301,9 +303,11 @@ void Car::render(MCCamera *p)
             doSkidMark(rightFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
             doSmoke(rightFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
 
-            if (rand() % 5 == 0)
+            static int counter = 0;
+            if (++counter >= 5)
             {
                 doMud(rightRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+                counter = 0;
             }
         }
     }
@@ -315,9 +319,11 @@ void Car::collisionEvent(MCCollisionEvent & event)
     if (event.collidingObject().typeID() == typeID() ||
         event.collidingObject().typeID() == MCObject::typeID("WALL"))
     {
-        if (rand() % 10 == 0)
+        static int counter = 0;
+        if (++counter >= 10)
         {
             doSparkle(event.contactPoint(), 1.0f, 0.8f, 0.0f, 0.9f);
+            counter = 0;
         }
     }
 
