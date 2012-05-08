@@ -54,7 +54,7 @@ public:
     void setLapCount(unsigned int laps);
 
     //! Get the position of the given car (0 == N/A, 1 == first, 2 == second..).
-    unsigned int getPositionOfCar(int index) const;
+    unsigned int getPositionOfCar(const Car & car) const;
 
     //! Get the number of laps.
     unsigned int lapCount() const;
@@ -76,15 +76,9 @@ private:
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
-    // Map from car index to tile index.
-    // Tracks how cars are progressing on the route / lap.
-    typedef std::unordered_map<int, int> RouteHash;
-    mutable RouteHash m_routeHash;
-
-    // Map from tile index to lap index to car order vector.
+    // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
-    typedef std::unordered_map<int, std::vector<int> > LapHash;
-    typedef std::unordered_map<int, LapHash> PositionHash;
+    typedef std::unordered_map<int, std::vector<int> > PositionHash;
     mutable PositionHash m_positions;
 
     unsigned int m_lapCount;

@@ -77,6 +77,14 @@ public:
 
     void setTurningImpulse(MCFloat impulse);
 
+    void setCurrentRouteIndex(int index);
+
+    int currentRouteIndex() const;
+
+    void setRouteProgression(int value);
+
+    int routeProgression() const;
+
     //! Get location of the left front tire.
     MCVector3dF leftFrontTireLocation() const;
 
@@ -117,6 +125,8 @@ private:
     MCFloat               m_length;
     int                   m_speedInKmh;
     MCFloat               m_dx, m_dy;
+    int                   m_currentRouteIndex;
+    int                   m_routeProgression;
 
     mutable MCGLRectParticleGroup m_particleGroup;
 };

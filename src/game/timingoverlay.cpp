@@ -65,7 +65,7 @@ void TimingOverlay::render()
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->recordTime(index);
 
-        const unsigned int pos   = m_pRace->getPositionOfCar(index);
+        const unsigned int pos   = m_pRace->getPositionOfCar(*m_pCar);
         const unsigned int laps  = m_pRace->lapCount();
 
         // Render the current lap number

@@ -39,7 +39,8 @@ void Race::init()
 {
     for(Car * pCar : m_cars)
     {
-        m_routeHash[pCar->index()] = 0;
+        pCar->setCurrentRouteIndex(0);
+        pCar->setRouteProgression(0);
     }
 
     m_positions.clear();
@@ -87,24 +88,27 @@ void Race::update()
 
 void Race::updateRouteProgress(Car & car)
 {
-    assert(m_pTrack);
-
     const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(car.getX(), car.getY());
 
     // Lap progressed?
-    if (pCurrent->routeIndex() == m_routeHash[car.index()] + 1)
+    if (pCurrent->routeIndex() == car.currentRouteIndex() + 1)
     {
-        m_routeHash[car.index()] = pCurrent->routeIndex();
-        m_positions[pCurrent->routeIndex()][m_timing.lap(car.index())].push_back(car.index());
+        car.setCurrentRouteIndex(pCurrent->routeIndex());
+        car.setRouteProgression(car.routeProgression() + 1);
+
+        m_positions[car.routeProgression()].push_back(car.index());
     }
     // Lap finished?
-    else if (m_routeHash[car.index()] ==
+    else if (car.currentRouteIndex() ==
         static_cast<int>(m_pTrack->trackData().route().length()) - 1)
     {
         if (pCurrent->routeIndex() == 1)
         {
-            m_routeHash[car.index()] = 1;
-            m_positions[pCurrent->routeIndex()][m_timing.lap(car.index())].push_back(car.index());
+            car.setCurrentRouteIndex(1);
+            car.setRouteProgression(car.routeProgression() + 1);
+
+            m_positions[car.routeProgression()].push_back(car.index());
+
             m_timing.lapCompleted(car.index());
 
             if (m_winnerFinished)
@@ -115,13 +119,12 @@ void Race::updateRouteProgress(Car & car)
     }
 }
 
-unsigned int Race::getPositionOfCar(int index) const
+unsigned int Race::getPositionOfCar(const Car & car) const
 {
-    const int currentTile = m_routeHash[index];
-    const std::vector<int> & order = m_positions[currentTile][m_timing.leadersLap()];
+    const std::vector<int> & order = m_positions[car.routeProgression()];
     for (unsigned int i = 0; i < order.size(); i++)
     {
-        if (order[i] == index)
+        if (order[i] == static_cast<unsigned int>(car.index()))
         {
             return i + 1;
         }
@@ -137,10 +140,10 @@ Car & Race::getLeadingCar() const
 
     for (unsigned int i = 0; i < m_cars.size(); i++)
     {
-        const unsigned int pos = getPositionOfCar(i);
+        const unsigned int pos = getPositionOfCar(*m_cars[i]);
         if (pos > 0 && pos < bestPos)
         {
-            bestCar = m_cars.at(i);
+            bestCar = m_cars[i];
             bestPos = pos;
         }
     }

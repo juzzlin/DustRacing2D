@@ -68,6 +68,8 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_speedInKmh(0)
   , m_dx(0)
   , m_dy(0)
+  , m_currentRouteIndex(-1)
+  , m_routeProgression(0)
 {
     setLayer(Layers::Cars);
     setMass(1000);
@@ -421,4 +423,24 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     sparkle.setVelocity(velocity() * 0.5f);
 
     m_particleGroup.addParticle(sparkle);
+}
+
+void Car::setCurrentRouteIndex(int index)
+{
+    m_currentRouteIndex = index;
+}
+
+int Car::currentRouteIndex() const
+{
+    return m_currentRouteIndex;
+}
+
+void Car::setRouteProgression(int value)
+{
+    m_routeProgression = value;
+}
+
+int Car::routeProgression() const
+{
+    return m_routeProgression;
 }
