@@ -33,6 +33,8 @@ MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
 : m_coeffLin(coeffLin)
 , m_coeffRot(coeffRot)
 , m_gravity(gravity)
+, m_coeffLinTot(coeffLin * gravity)
+, m_coeffRotTot(coeffRot * gravity)
 {}
 
 MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
@@ -50,19 +52,18 @@ void MCFrictionGenerator::updateForce(MCObject & object)
     MCFloat x = v.lengthFast();
     if (x > FRICTION_SPEED_TH && m_pImpl->m_coeffLin > 0.0f)
     {
-        object.addForce(
-            (-v / x) * m_pImpl->m_coeffLin * m_pImpl->m_gravity * object.mass());
+        object.addForce(-v * m_pImpl->m_coeffLinTot * object.mass() / x);
     }
 
     // Approximated moment caused by rotational friction.
     if (object.shape())
     {
         if (std::fabs(object.angularVelocity()) > FRICTION_SPEED_TH &&
-            m_pImpl->m_coeffRot > 0.0f)
+            m_pImpl->m_coeffRotTot > 0.0f)
         {
             x = object.angularVelocity() * object.shape()->radius();
             object.addMoment(
-                -x * m_pImpl->m_coeffRot * m_pImpl->m_gravity * object.mass() * 0.5f);
+                -x * m_pImpl->m_coeffRotTot * object.mass() * 0.5f);
         }
     }
 }

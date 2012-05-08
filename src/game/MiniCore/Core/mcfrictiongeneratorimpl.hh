@@ -25,7 +25,7 @@ class MCFrictionGeneratorImpl
 {
   MCFrictionGeneratorImpl(MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity);
   virtual ~MCFrictionGeneratorImpl();
-  MCFloat m_coeffLin, m_coeffRot, m_gravity;
+  MCFloat m_coeffLin, m_coeffRot, m_gravity, m_coeffLinTot, m_coeffRotTot;
   friend class MCFrictionGenerator;
 };
 
