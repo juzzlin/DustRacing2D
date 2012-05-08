@@ -143,9 +143,11 @@ void MCObjectImpl::integrateLinear(MCFloat step)
     velocity        *= DampingFactor;
 
     // Note that this code doesn't take the z-component into consideration
-    if (maximumVelocity > 0) {
+    if (maximumVelocity > 0)
+    {
         const MCFloat l = MCVector2dF(velocity).lengthFast();
-        if (l > maximumVelocity) {
+        if (l > maximumVelocity)
+        {
             velocity /= l;
             velocity *= maximumVelocity;
         }
@@ -198,48 +200,69 @@ void MCObjectImpl::doOutOfBoundariesEvent()
         maxY = pShape->bbox().y2();
     }
 
-    // Check X-boundaries
-    const MCWorld * pWorld = &MCWorld::instance();
-    if (minX < pWorld->minX()) {
+    checkXBoundariesAndSendEvent(minX, maxX);
+    checkYBoundariesAndSendEvent(minY, maxY);
+    checkZBoundariesAndSendEvent();
+}
+
+void MCObjectImpl::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
+{
+    const MCWorld & world = MCWorld::instance();
+    if (minX < world.minX())
+    {
         velocity.setI(0); forces.setI(0);
         pPublic->translate(MCVector3dF(
-            location.i() + pWorld->minX() - minX, location.j(), location.k()));
+            location.i() + world.minX() - minX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         pPublic->outOfBoundariesEvent(e);
-    } else if (maxX > pWorld->maxX()) {
+    }
+    else if (maxX > world.maxX())
+    {
         velocity.setI(0); forces.setI(0);
         pPublic->translate(MCVector3dF(
-            location.i() + pWorld->maxX() - maxX, location.j(), location.k()));
+            location.i() + world.maxX() - maxX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         pPublic->outOfBoundariesEvent(e);
     }
+}
 
-    // Check Y-boundaries
-    if (minY < pWorld->minY()) {
+void MCObjectImpl::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
+{
+    const MCWorld & world = MCWorld::instance();
+    if (minY < world.minY())
+    {
         velocity.setJ(0); forces.setJ(0);
         pPublic->translate(MCVector3dF(
-            location.i(), location.j() + pWorld->minY() - minY, location.k()));
+            location.i(), location.j() + world.minY() - minY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         pPublic->outOfBoundariesEvent(e);
-    } else if (maxY > pWorld->maxY()) {
+    }
+    else if (maxY > world.maxY())
+    {
         velocity.setJ(0); forces.setJ(0);
         pPublic->translate(MCVector3dF(
-            location.i(), location.j() + pWorld->maxY() - maxY, location.k()));
+            location.i(), location.j() + world.maxY() - maxY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         pPublic->outOfBoundariesEvent(e);
     }
+}
 
-    // Check Z-boundaries
-    if (location.k() < pWorld->minZ()) {
+void MCObjectImpl::checkZBoundariesAndSendEvent()
+{
+    const MCWorld & world = MCWorld::instance();
+    if (location.k() < world.minZ())
+    {
         velocity.setK(0); forces.setK(0);
         pPublic->translate(
-            MCVector3dF(location.i(), location.j(), pWorld->minZ()));
+            MCVector3dF(location.i(), location.j(), world.minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
         pPublic->outOfBoundariesEvent(e);
-    } else if (location.k() > pWorld->maxZ()) {
+    }
+    else if (location.k() > world.maxZ())
+    {
         velocity.setK(0); forces.setK(0);
         pPublic->translate(
-            MCVector3dF(location.i(), location.j(), pWorld->maxZ()));
+            MCVector3dF(location.i(), location.j(), world.maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
         pPublic->outOfBoundariesEvent(e);
     }
@@ -278,11 +301,13 @@ void MCObject::resetMotion()
 
 void MCObject::setSurface(MCSurface * pSurface)
 {
-    if (m_pImpl->pShape && m_pImpl->pShape->view()) {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(
-            m_pImpl->pShape->view());
-        if (pView) {
-            if (pView->surface() != pSurface) {
+    if (m_pImpl->pShape && m_pImpl->pShape->view())
+    {
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->pShape->view());
+        if (pView)
+        {
+            if (pView->surface() != pSurface)
+            {
                 pView->setSurface(pSurface);
             }
         }
@@ -291,10 +316,11 @@ void MCObject::setSurface(MCSurface * pSurface)
 
 MCSurface * MCObject::surface() const
 {
-    if (m_pImpl->pShape && m_pImpl->pShape->view()) {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(
-            m_pImpl->pShape->view());
-        if (pView) {
+    if (m_pImpl->pShape && m_pImpl->pShape->view())
+    {
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->pShape->view());
+        if (pView)
+        {
             return pView->surface();
         }
     }
@@ -323,7 +349,8 @@ bool MCObject::event(MCEvent & event)
         collisionEvent(static_cast<MCCollisionEvent &>(event));
         return true;
     }
-    else if (event.instanceTypeID() == MCOutOfBoundariesEvent::typeID()) {
+    else if (event.instanceTypeID() == MCOutOfBoundariesEvent::typeID())
+    {
         outOfBoundariesEvent(static_cast<MCOutOfBoundariesEvent &>(event));
         return true;
     }
@@ -664,8 +691,8 @@ MCVector2dF MCObject::direction() const
 
 void MCObject::setRestitution(MCFloat newRestitution)
 {
-    newRestitution = newRestitution < 0.0 ? 0.0 : newRestitution;
-    newRestitution = newRestitution > 1.0 ? 1.0 : newRestitution;
+    newRestitution = newRestitution < 0.0f ? 0.0f : newRestitution;
+    newRestitution = newRestitution > 1.0f ? 1.0f : newRestitution;
     m_pImpl->restitution = newRestitution;
 }
 
@@ -742,11 +769,14 @@ void MCObject::resetTime()
 
 void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
 {
-    if (updateWorldLayers) {
+    if (updateWorldLayers)
+    {
         MCWorld::instance().removeFromLayerMap(*this);
         m_pImpl->layer = newLayer;
         MCWorld::instance().addToLayerMap(*this);
-    } else {
+    }
+    else
+    {
         m_pImpl->layer = newLayer;
     }
 }
@@ -805,8 +835,10 @@ const MCObject::ContactHash & MCObject::contacts() const
 void MCObject::deleteContacts()
 {
     auto i(m_pImpl->contacts.begin());
-    for (; i != m_pImpl->contacts.end(); i++) {
-        for (MCUint j = 0; j < i->second.size(); j++) {
+    for (; i != m_pImpl->contacts.end(); i++)
+    {
+        for (MCUint j = 0; j < i->second.size(); j++)
+        {
             i->second[j]->free();
         }
     }
@@ -816,8 +848,10 @@ void MCObject::deleteContacts()
 void MCObject::deleteContacts(MCObject & object)
 {
     auto i(m_pImpl->contacts.find(&object));
-    if (i != m_pImpl->contacts.end()) {
-        for (MCUint j = 0; j < i->second.size(); j++) {
+    if (i != m_pImpl->contacts.end())
+    {
+        for (MCUint j = 0; j < i->second.size(); j++)
+        {
             i->second[j]->free();
         }
         i->second.clear();

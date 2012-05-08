@@ -103,45 +103,13 @@ void MCWorldImpl::detectCollisions()
     }
 }
 
-MCContact * MCWorldImpl::getDeepestInterpenetration(
-    const std::vector<MCContact *> & contacts)
-{
-    MCFloat maxDepth = 0;
-    MCContact * bestContact = nullptr;
-    for (MCContact * contact : contacts)
-    {
-        if (contact->interpenetrationDepth() > maxDepth)
-        {
-            maxDepth = contact->interpenetrationDepth();
-            bestContact = contact;
-        }
-    }
-    return bestContact;
-}
-
-void MCWorldImpl::processContacts(MCObject & object)
-{
-    MCContact * deepestContact = nullptr;
-    auto iter(object.contacts().begin());
-    iter = object.contacts().begin();
-    for (; iter != object.contacts().end(); iter++)
-    {
-        deepestContact = getDeepestInterpenetration(iter->second);
-        if (deepestContact)
-        {
-            impulseGenerator.generateImpulses(object, *deepestContact);
-        }
-    }
-    object.deleteContacts();
-}
-
 void MCWorldImpl::processContacts()
 {
     for (MCObject * object : objs)
     {
         if (object->physicsObject())
         {
-            processContacts(*object);
+            impulseGenerator.generateImpulsesFromDeepestContacts(*object);
         }
     }
 }

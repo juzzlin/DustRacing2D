@@ -37,6 +37,9 @@ private:
     inline void integrateLinear(MCFloat step);
     inline void integrateRotational(MCFloat step);
     inline void doOutOfBoundariesEvent();
+    inline void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
+    inline void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
+    inline void checkZBoundariesAndSendEvent();
     void setFlag(MCUint flag, bool enable);
     void rotate(MCFloat newAngle); // Degrees
     void doRotate(MCFloat newAngle);

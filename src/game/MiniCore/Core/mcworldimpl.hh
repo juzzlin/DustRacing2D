@@ -46,7 +46,6 @@ private:
     void integrate(MCFloat step);
     void detectCollisions();
     void processContacts();
-    void processContacts(MCObject & object);
     void generateImpulses(MCObject & object, MCContact & contact);
     void addToLayerMap(MCObject &);
     void removeFromLayerMap(MCObject &);

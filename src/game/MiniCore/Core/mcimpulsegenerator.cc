@@ -29,8 +29,28 @@ class MCImpulseGeneratorImpl
         const MCVector3dF & displacement, const MCVector3dF & linearImpulse,
         MCFloat restitution);
 
+    MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
+
+    void generateImpulsesFromDeepestContacts(MCObject & object);
+
     friend class MCImpulseGenerator;
 };
+
+MCContact * MCImpulseGeneratorImpl::getDeepestInterpenetration(
+    const std::vector<MCContact *> & contacts)
+{
+    MCFloat maxDepth = 0;
+    MCContact * bestContact = nullptr;
+    for (MCContact * contact : contacts)
+    {
+        if (contact->interpenetrationDepth() > maxDepth)
+        {
+            maxDepth = contact->interpenetrationDepth();
+            bestContact = contact;
+        }
+    }
+    return bestContact;
+}
 
 void MCImpulseGeneratorImpl::processContact(
     MCObject & pa, MCObject & pb, const MCContact & contact,
@@ -61,7 +81,7 @@ void MCImpulseGeneratorImpl::processContact(
         }
 
         pa.addLinearImpulse(
-            (linearImpulse + linearImpulse * restitution) * massScaling * linearBalance);
+            (linearImpulse * restitution) * massScaling * linearBalance);
 
         // Angular component
         const MCVector3dF rotationalImpulse =
@@ -69,9 +89,42 @@ void MCImpulseGeneratorImpl::processContact(
 
         const MCFloat magnitude   = rotationalImpulse.k();
         const MCFloat inerScaling = invInerA / (invInerA + invInerB);
-        pa.addRotationalImpulse((-magnitude - magnitude * restitution) * inerScaling);
-        pa.setCenterOfRotation(pa.location());
+        pa.addRotationalImpulse(-magnitude * restitution * inerScaling);
     }
+}
+
+void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(MCObject & object)
+{
+    auto iter(object.contacts().begin());
+    for (; iter != object.contacts().end(); iter++)
+    {
+        MCContact * contact = getDeepestInterpenetration(iter->second);
+        if (contact)
+        {
+            MCObject & pa(object);
+            MCObject & pb(contact->object());
+
+            const MCFloat restitution(
+                std::min(pa.restitution(), pb.restitution()));
+
+            const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
+
+            const MCVector3dF linearImpulse(
+                contact->contactNormal() * contact->contactNormal().dot(velocityDelta));
+
+            const MCVector3dF displacement(
+                contact->contactNormal() * contact->interpenetrationDepth());
+
+            processContact(pa, pb, *contact, displacement, linearImpulse, restitution);
+
+            processContact(pb, pa, *contact, -displacement, -linearImpulse, restitution);
+
+            // Remove contact with pa from pb, because it was already handled here.
+            pb.deleteContacts(pa);
+        }
+    }
+
+    object.deleteContacts();
 }
 
 MCImpulseGenerator::MCImpulseGenerator()
@@ -83,26 +136,8 @@ MCImpulseGenerator::~MCImpulseGenerator()
     delete m_pImpl;
 }
 
-void MCImpulseGenerator::generateImpulses(MCObject & object, MCContact & contact)
+void MCImpulseGenerator::generateImpulsesFromDeepestContacts(MCObject & object)
 {
-    MCObject & pa(object);
-    MCObject & pb(contact.object());
-
-    const MCFloat restitution(
-        std::min(pa.restitution(), pb.restitution()));
-
-    const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
-
-    const MCVector3dF linearImpulse(
-        contact.contactNormal() * contact.contactNormal().dot(velocityDelta));
-
-    const MCVector3dF displacement(
-        contact.contactNormal() * contact.interpenetrationDepth());
-
-    m_pImpl->processContact(pa, pb, contact, displacement, linearImpulse, restitution);
-
-    m_pImpl->processContact(pb, pa, contact, -displacement, -linearImpulse, restitution);
-
-    // Remove contact with pa from pb, because it was already handled here.
-    pb.deleteContacts(pa);
+    m_pImpl->generateImpulsesFromDeepestContacts(object);
 }
+

@@ -35,8 +35,8 @@ public:
     //! Destructor.
     ~MCImpulseGenerator();
 
-    //! Generate impulses to object due to the given contact.
-    void generateImpulses(MCObject & object, MCContact & contact);
+    //! Generate impulses to the given object due to its current contacts.
+    void generateImpulsesFromDeepestContacts(MCObject & object);
 
 private:
 

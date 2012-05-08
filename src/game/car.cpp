@@ -75,7 +75,7 @@ Car::Car(MCSurface & surface, MCUint index)
     setMaximumVelocity(MAX_LINEAR_VELOCITY);
     setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(0.1f);
+    setRestitution(0.25f);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);
