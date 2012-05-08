@@ -63,8 +63,6 @@ enum PropertyMask
     // Object is a virtual object (for example a group).
     VirtualMask = (1<<7)
 };
-// Physics damping factor
-const MCFloat DampingFactor = 0.999;
 }
 
 MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
@@ -88,6 +86,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
 , i0(0), i1(0), j0(0), j1(0)
 , pShape(nullptr)
+, damping(0.999f)
 {}
 
 void MCObjectImpl::setFlag(MCUint flag, bool enable)
@@ -140,7 +139,7 @@ void MCObjectImpl::integrateLinear(MCFloat step)
 
     totAcceleration += forces * invMass;
     velocity        += totAcceleration * step;
-    velocity        *= DampingFactor;
+    velocity        *= damping;
 
     // Note that this code doesn't take the z-component into consideration
     if (maximumVelocity > 0)
@@ -164,7 +163,7 @@ void MCObjectImpl::integrateRotational(MCFloat step)
 
             totAngularAcceleration += moment * invMomentOfInertia;
             angularVelocity        += totAngularAcceleration * step;
-            angularVelocity        *= DampingFactor;
+            angularVelocity        *= damping;
 
             if (angularVelocity > maximumAngularVelocity) {
                 angularVelocity = maximumAngularVelocity;
@@ -876,6 +875,11 @@ void MCObject::setXYFriction(MCFloat friction)
 MCFloat MCObject::xyFriction() const
 {
     return m_pImpl->xyFriction;
+}
+
+void MCObject::setDamping(MCFloat value)
+{
+    m_pImpl->damping = value;
 }
 
 MCObject::~MCObject()

@@ -375,6 +375,10 @@ public:
     //! Get initial location.
     const MCVector3dF & initialLocation() const;
 
+    //! Set the damping factor used in physics calculations. The default is 0.999.
+    //! Use smaller value if the object is too unstable.
+    void setDamping(MCFloat value);
+
 protected:
 
     //! Event handler.

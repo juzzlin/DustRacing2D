@@ -73,8 +73,8 @@ private:
     static TypeHash typeHash;
     static MCUint typeIDCount;
     MCObject::ContactHash contacts;
+    MCFloat damping;
     friend class MCObject;
-    bool sattuma;
 };
 
 #endif // MCOBJECTIMPL_HH
