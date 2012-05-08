@@ -30,7 +30,7 @@ Wall::Wall(MCSurface & surface, int x, int y, int newWx, int newWy, int newH)
 , wy2(newWy / 2)
 , h(newH)
 {
-    setMass(0, true); // Set as a stationary object
+    //setMass(0, true); // Set as a stationary object
     setRestitution(1.0f);
 }
 
@@ -51,6 +51,7 @@ void Wall::render(MCCamera * pCamera)
     glCullFace(GL_BACK);
     glPushMatrix();
     glTranslated(x, y, 0);
+    glRotated(angle(), 0, 0, 1);
     glBindTexture(GL_TEXTURE_2D, surface()->handle());
     glBegin(GL_QUADS);
 
@@ -152,6 +153,7 @@ void Wall::renderShadow(MCCamera * pCamera)
     // Translate to screen coordinates
     glPushMatrix();
     glTranslated(x, y, 0);
+    glRotated(angle(), 0, 0, 1);
 
     x = wx2;
     y = wy2;

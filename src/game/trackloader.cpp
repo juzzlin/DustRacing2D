@@ -287,6 +287,9 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
             m_textureManager.surface("wall"), x, h - y, wallSize, wallSize, wallSize);
         object->setLayer(Layers::Walls, false);
         object->setInitialLocation(MCVector3dF(x, h - y, 0));
+        object->setMass(5000);
+        object->setXYFriction(0.5f);
+        object->setDamping(0.9f);
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
