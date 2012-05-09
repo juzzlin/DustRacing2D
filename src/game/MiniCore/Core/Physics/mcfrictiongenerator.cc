@@ -19,9 +19,9 @@
 
 #include "mcfrictiongenerator.hh"
 #include "mcfrictiongeneratorimpl.hh"
-#include "mcmathutil.hh"
-#include "mcobject.hh"
-#include "mcshape.hh"
+#include "../mcmathutil.hh"
+#include "../mcobject.hh"
+#include "../mcshape.hh"
 
 namespace
 {

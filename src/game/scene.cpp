@@ -33,14 +33,14 @@
 
 #include "../common/config.hpp"
 
-#include <MiniCore/Core/MCCamera>
-#include <MiniCore/Core/MCFrictionGenerator>
-#include <MiniCore/Core/MCObject>
-#include <MiniCore/Core/MCSurface>
-#include <MiniCore/Core/MCSpringForceGenerator>
-#include <MiniCore/Core/MCTextureManager>
-#include <MiniCore/Core/MCTypes>
-#include <MiniCore/Core/MCWorld>
+#include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCSurface"
+#include "MiniCore/Core/MCTextureManager"
+#include "MiniCore/Core/MCTypes"
+#include "MiniCore/Core/MCWorld"
+#include "MiniCore/Core/Physics/MCFrictionGenerator"
+#include "MiniCore/Core/Physics/MCSpringForceGenerator"
 
 #include <algorithm>
 #include <cassert>

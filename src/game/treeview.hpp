@@ -16,7 +16,7 @@
 #ifndef TREEVIEW_HPP
 #define TREEVIEW_HPP
 
-#include "MiniCore/Core/MCSurfaceView"
+#include "MiniCore/Core/Views/MCSurfaceView"
 
 //! Custom view used to render tree objects.
 class TreeView : public MCSurfaceView

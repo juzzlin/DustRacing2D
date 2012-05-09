@@ -27,7 +27,7 @@
 #include "mcworld.hh"
 #include "mcworldimpl.hh"
 #include "mcobjecttree.hh"
-#include "mccontact.hh"
+#include "Physics/mccontact.hh"
 
 #include <map>
 #include <vector>

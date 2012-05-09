@@ -21,9 +21,9 @@
 #define MCWORLDIMPL_HH
 
 #include "mctypes.hh"
-#include "mccollisiondetector.hh"
-#include "mcimpulsegenerator.hh"
-#include "mcforceregistry.hh"
+#include "Physics/mccollisiondetector.hh"
+#include "Physics/mcimpulsegenerator.hh"
+#include "Physics/mcforceregistry.hh"
 #include <memory>
 #include <unordered_set>
 #include <vector>

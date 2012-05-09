@@ -17,36 +17,31 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCDRAGFORCEGENERATOR_HH
-#define MCDRAGFORCEGENERATOR_HH
+#include "mcgravitygenerator.hh"
+#include "mcgravitygeneratorimpl.hh"
+#include "../mcobject.hh"
 
-#include "mcforcegenerator.hh"
-#include "mcmacros.hh"
+MCGravityGeneratorImpl::MCGravityGeneratorImpl(const MCVector3d<MCFloat> & g)
+: m_g(g)
+{}
 
-class MCDragForceGeneratorImpl;
+MCGravityGeneratorImpl::~MCGravityGeneratorImpl()
+{}
 
-//! Force generator for drag
-class MCDragForceGenerator : public MCForceGenerator
+MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g) :
+    m_pImpl(new MCGravityGeneratorImpl(g))
+{}
+
+void MCGravityGenerator::updateForce(MCObject & object)
 {
-public:
+    // G = m * g
+    if (object.invMass() > 0.0) {
+        object.addForce(m_pImpl->m_g * object.mass());
+    }
+}
 
-    /*! Constructor
-     * \param coeff1 Linear coefficient
-     * \param coeff2 Quadratic coefficient
-     */
-    MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2);
+MCGravityGenerator::~MCGravityGenerator()
+{
+    delete m_pImpl;
+}
 
-    //! Destructor
-    virtual ~MCDragForceGenerator();
-
-    //! \reimp
-    virtual void updateForce(MCObject * p);
-
-private:
-
-    DISABLE_COPY(MCDragForceGenerator);
-    DISABLE_ASSI(MCDragForceGenerator);
-    MCDragForceGeneratorImpl * const m_pImpl;
-};
-
-#endif // MCDRAGFORCEGENERATOR_HH

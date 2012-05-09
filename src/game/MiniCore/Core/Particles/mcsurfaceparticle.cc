@@ -19,7 +19,7 @@
 
 #include "mcsurfaceparticle.hh"
 #include "mcsurfaceparticleimpl.hh"
-#include "mcsurfaceview.hh"
+#include "../Views/mcsurfaceview.hh"
 
 MCRecycler<MCSurfaceParticle> MCSurfaceParticle::m_recycler;
 

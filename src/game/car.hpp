@@ -17,7 +17,7 @@
 #define CAR_HPP
 
 #include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCGLRectParticleGroup"
+#include "MiniCore/Core/Particles/MCGLRectParticleGroup"
 
 #include <deque>
 

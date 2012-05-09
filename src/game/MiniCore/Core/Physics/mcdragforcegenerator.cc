@@ -17,41 +17,34 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCFORCEGENERATOR_HH
-#define MCFORCEGENERATOR_HH
+#include "mcdragforcegenerator.hh"
+#include "mcdragforcegeneratorimpl.hh"
+#include "../mcobject.hh"
 
-#include "mcmacros.hh"
-#include "mctypes.hh"
+MCDragForceGeneratorImpl::MCDragForceGeneratorImpl(MCFloat coeff1, MCFloat coeff2) :
+    m_coeff1(coeff1),
+    m_coeff2(coeff2)
+{}
 
-class MCObject;
-class MCForceGeneratorImpl;
+MCDragForceGeneratorImpl::~MCDragForceGeneratorImpl()
+{}
 
-//! Abstract base class for different force generators
-class MCForceGenerator
+MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2) :
+    m_pImpl(new MCDragForceGeneratorImpl(coeff1, coeff2))
+{}
+
+void MCDragForceGenerator::updateForce(MCObject * p)
 {
-public:
+  MCVector3d<MCFloat> force(p->velocity());
+  MCFloat v = force.length();
+  v = m_pImpl->m_coeff1 * v + m_pImpl->m_coeff2 * v * v;
+  force.normalize();
+  force *= -v;
+  p->addForce(force);
+}
 
-    //! Constructor
-    MCForceGenerator();
+MCDragForceGenerator::~MCDragForceGenerator()
+{
+    delete m_pImpl;
+}
 
-    //! Destructor
-    virtual ~MCForceGenerator();
-
-    //! Update force to the given object
-    virtual void updateForce(MCObject & object) = 0;
-
-    //! Enable / disable the force. Enabled by default.
-    void enable(bool status);
-
-    //! Return true if enabled.
-    bool enabled() const;
-
-private:
-
-    DISABLE_COPY(MCForceGenerator);
-    DISABLE_ASSI(MCForceGenerator);
-
-    MCForceGeneratorImpl * const m_pImpl;
-};
-
-#endif // MCFORCEGENERATOR_HH

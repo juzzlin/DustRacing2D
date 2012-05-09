@@ -17,36 +17,22 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCGRAVITYGENERATOR_HH
-#define MCGRAVITYGENERATOR_HH
+#ifndef MCGLRECTPARTICLEIMPL_HH
+#define MCGLRECTPARTICLEIMPL_HH
 
-#include "mcforcegenerator.hh"
-#include "mcvector3d.hh"
-#include "mcmacros.hh"
+#include "../mcrecycler.hh"
 
-class MCGravityGeneratorImpl;
-
-//! Force generator for gravity
-class MCGravityGenerator : public MCForceGenerator
+//! Implementation class for MCGLRectParticle
+class MCGLRectParticleImpl
 {
 public:
-
-    /*! Constructor
-     * \param g Gravity vector (G = m * g)
-     */
-    MCGravityGenerator(const MCVector3d<MCFloat> & g);
-
-    //! Destructor
-    virtual ~MCGravityGenerator();
-
-    //! \reimp
-    virtual void updateForce(MCObject & object);
+    MCGLRectParticleImpl();
+    ~MCGLRectParticleImpl();
 
 private:
-
-    DISABLE_COPY(MCGravityGenerator);
-    DISABLE_ASSI(MCGravityGenerator);
-    MCGravityGeneratorImpl * const m_pImpl;
+    friend class MCGLRectParticle;
+    MCFloat r, g, b, a;
+    MCGLRectParticleGroup * group;
 };
 
-#endif // MCGRAVITYGENERATOR_HH
+#endif // MCGLRECTPARTICLEIMPL_HH

@@ -19,7 +19,7 @@
 #include "MiniCore/Core/MCMathUtil"
 #include "MiniCore/Core/MCRectShape"
 #include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCSurfaceView"
+#include "MiniCore/Core/Views/MCSurfaceView"
 #include <GL/gl.h>
 
 Wall::Wall(MCSurface & surface, int x, int y, int newWx, int newWy, int newH)

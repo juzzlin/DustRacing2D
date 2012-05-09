@@ -20,9 +20,9 @@
 #include "mcglrectparticle.hh"
 #include "mcglrectparticlegroup.hh"
 #include "mcglrectparticlegroupimpl.hh"
-#include "mccamera.hh"
-#include "mcshape.hh"
-#include "mcshapeview.hh"
+#include "../mccamera.hh"
+#include "../mcshape.hh"
+#include "../mcshapeview.hh"
 
 #include <GL/gl.h>
 

@@ -20,8 +20,8 @@
 #ifndef MCPARTICLE_HH
 #define MCPARTICLE_HH
 
-#include "mcobject.hh"
-#include "mcrecycler.hh"
+#include "../mcobject.hh"
+#include "../mcrecycler.hh"
 
 class MCParticleImpl;
 

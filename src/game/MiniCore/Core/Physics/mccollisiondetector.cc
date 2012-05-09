@@ -20,11 +20,11 @@
 #include "mccollisiondetector.hh"
 #include "mccollisiondetectorimpl.hh"
 #include "mccontact.hh"
-#include "mcobject.hh"
-#include "mcsegment.hh"
-#include "mcshape.hh"
-#include "mcrectshape.hh"
-#include "mccollisionevent.hh"
+#include "../mcobject.hh"
+#include "../mcsegment.hh"
+#include "../mcshape.hh"
+#include "../mcrectshape.hh"
+#include "../mccollisionevent.hh"
 
 #include <cassert>
 

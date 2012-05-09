@@ -20,8 +20,6 @@
 #include "mcworld.hh"
 #include "mcworldimpl.hh"
 #include "mcbbox.hh"
-#include "mcforcegenerator.hh"
-#include "mcfrictiongenerator.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
@@ -29,6 +27,8 @@
 #include "mcshapeview.hh"
 #include "mctrigonom.hh"
 #include "mccamera.hh"
+#include "Physics/mcforcegenerator.hh"
+#include "Physics/mcfrictiongenerator.hh"
 
 #include <GL/gl.h>
 

@@ -21,7 +21,7 @@
 #define MCSPRINGFORCEGENERATOR_HH
 
 #include "mcforcegenerator.hh"
-#include "mcmacros.hh"
+#include "../mcmacros.hh"
 
 class MCSpringForceGeneratorImpl;
 

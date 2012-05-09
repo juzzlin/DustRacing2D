@@ -21,7 +21,6 @@
 #include "mcrectshapeimpl.hh"
 #include "mccamera.hh"
 #include "mcobject.hh"
-#include "mcray.hh"
 #include "mcshapeview.hh"
 #include "mcmathutil.hh"
 

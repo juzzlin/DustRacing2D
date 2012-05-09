@@ -19,8 +19,8 @@
 #include "radius.hpp"
 #include "slidefrictiongenerator.hpp"
 #include "MiniCore/Core/MCCollisionEvent"
-#include "MiniCore/Core/MCFrictionGenerator"
-#include "MiniCore/Core/MCGLRectParticle"
+#include "MiniCore/Core/Physics/MCFrictionGenerator"
+#include "MiniCore/Core/Particles/MCGLRectParticle"
 #include "MiniCore/Core/MCRandom"
 #include "MiniCore/Core/MCRectShape"
 #include "MiniCore/Core/MCShape"
@@ -77,7 +77,7 @@ Car::Car(MCSurface & surface, MCUint index)
     setMaximumVelocity(MAX_LINEAR_VELOCITY);
     setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(0.25f);
+    setRestitution(0.1f);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);

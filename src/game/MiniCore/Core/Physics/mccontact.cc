@@ -19,7 +19,7 @@
 
 #include "mccontact.hh"
 #include "mccontactimpl.hh"
-#include "mcobject.hh"
+#include "../mcobject.hh"
 #include <cassert>
 
 MCContactImpl::MCContactImpl()

@@ -19,7 +19,7 @@
 
 #include "mcglrectparticle.hh"
 #include "mcglrectparticleimpl.hh"
-#include "mccamera.hh"
+#include "../mccamera.hh"
 
 #include <GL/gl.h>
 

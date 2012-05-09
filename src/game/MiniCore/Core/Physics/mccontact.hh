@@ -20,9 +20,9 @@
 #ifndef MCCONTACT_HH
 #define MCCONTACT_HH
 
-#include "mcvector2d.hh"
-#include "mcrecycler.hh"
-#include "mcmacros.hh"
+#include "../mcvector2d.hh"
+#include "../mcrecycler.hh"
+#include "../mcmacros.hh"
 
 class MCObject;
 class MCContactImpl;

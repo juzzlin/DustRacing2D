@@ -20,7 +20,7 @@
 #ifndef MCFORCEREGISTRY_HH
 #define MCFORCEREGISTRY_HH
 
-#include "mcmacros.hh"
+#include "../mcmacros.hh"
 #include <memory>
 
 class MCForceRegistryImpl;

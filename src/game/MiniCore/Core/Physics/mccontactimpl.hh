@@ -17,34 +17,21 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcdragforcegenerator.hh"
-#include "mcdragforcegeneratorimpl.hh"
-#include "mcobject.hh"
+#ifndef MCCONTACTIMPL_HH
+#define MCCONTACTIMPL_HH
 
-MCDragForceGeneratorImpl::MCDragForceGeneratorImpl(MCFloat coeff1, MCFloat coeff2) :
-    m_coeff1(coeff1),
-    m_coeff2(coeff2)
-{}
+#include "../mcrecycler.hh"
 
-MCDragForceGeneratorImpl::~MCDragForceGeneratorImpl()
-{}
-
-MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2) :
-    m_pImpl(new MCDragForceGeneratorImpl(coeff1, coeff2))
-{}
-
-void MCDragForceGenerator::updateForce(MCObject * p)
+//! Implementation class for MCContact.
+class MCContactImpl
 {
-  MCVector3d<MCFloat> force(p->velocity());
-  MCFloat v = force.length();
-  v = m_pImpl->m_coeff1 * v + m_pImpl->m_coeff2 * v * v;
-  force.normalize();
-  force *= -v;
-  p->addForce(force);
-}
+  MCContactImpl();
+  MCObject * m_pObject;
+  MCVector2d<MCFloat> m_contactPoint;
+  MCVector2d<MCFloat> m_contactNormal;
+  MCFloat m_interpenetrationDepth;
+  static MCRecycler<MCContact> m_recycler;
+  friend class MCContact;
+};
 
-MCDragForceGenerator::~MCDragForceGenerator()
-{
-    delete m_pImpl;
-}
-
+#endif // MCCONTACTIMPL_HH

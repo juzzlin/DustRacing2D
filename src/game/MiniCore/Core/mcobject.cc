@@ -23,7 +23,6 @@
 #include "mcshapeview.hh"
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
-#include "mcsurfaceview.hh"
 #include "mcsurface.hh"
 #include "mcworld.hh"
 #include "mcevent.hh"
@@ -31,6 +30,7 @@
 #include "mcoutofboundariesevent.hh"
 #include "mccamera.hh"
 #include "mctrigonom.hh"
+#include "Views/mcsurfaceview.hh"
 
 MCUint MCObjectImpl::typeIDCount = 1;
 MCObjectImpl::TypeHash MCObjectImpl::typeHash;

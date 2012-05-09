@@ -19,8 +19,7 @@
 
 #include "mcparticle.hh"
 #include "mcparticleimpl.hh"
-#include "mccircleshape.hh"
-#include "mccast.hh"
+#include "../mccircleshape.hh"
 
 MCRecycler<MCParticle> MCParticle::m_recycler;
 

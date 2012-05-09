@@ -20,7 +20,7 @@
 #ifndef MCSURFACEVIEW_HH
 #define MCSURFACEVIEW_HH
 
-#include "mcshapeview.hh"
+#include "../mcshapeview.hh"
 
 class MCSurface;
 class MCSurfaceViewImpl;

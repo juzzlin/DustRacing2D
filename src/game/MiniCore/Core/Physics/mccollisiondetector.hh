@@ -17,22 +17,37 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCGLRECTPARTICLEIMPL_HH
-#define MCGLRECTPARTICLEIMPL_HH
+#ifndef MCCOLLISIONDETECTOR_HH
+#define MCCOLLISIONDETECTOR_HH
 
-#include "mcrecycler.hh"
+#include "../mcmacros.hh"
 
-//! Implementation class for MCGLRectParticle
-class MCGLRectParticleImpl
+class MCCollisionDetectorImpl;
+class MCObject;
+
+//! Contact resolver / collision detector
+class MCCollisionDetector
 {
 public:
-    MCGLRectParticleImpl();
-    ~MCGLRectParticleImpl();
+    //! Constructor
+    MCCollisionDetector();
+
+    //! Destructor
+    virtual ~MCCollisionDetector();
+
+    /*! Process a suspected collision.
+     * \param object1 1st object.
+     * \param object2 2nd object.
+     * \return true if objects really collided.
+     */
+    bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
 private:
-    friend class MCGLRectParticle;
-    MCFloat r, g, b, a;
-    MCGLRectParticleGroup * group;
+
+    DISABLE_COPY(MCCollisionDetector);
+    DISABLE_ASSI(MCCollisionDetector);
+    MCCollisionDetectorImpl * const m_pImpl;
+    friend class MCCollisionDetectorImpl;
 };
 
-#endif // MCGLRECTPARTICLEIMPL_HH
+#endif // MCCOLLISIONDETECTOR_HH

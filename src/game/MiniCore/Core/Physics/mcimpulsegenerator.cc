@@ -19,8 +19,8 @@
 
 #include "mcimpulsegenerator.hh"
 #include "mccontact.hh"
-#include "mcobject.hh"
-#include "mcshape.hh"
+#include "../mcobject.hh"
+#include "../mcshape.hh"
 
 class MCImpulseGeneratorImpl
 {
@@ -80,8 +80,9 @@ void MCImpulseGeneratorImpl::processContact(
             linearBalance = linearBalance < 0 ? 0 : linearBalance;
         }
 
+        const MCFloat effRestitution = 1.0f + restitution;
         pa.addLinearImpulse(
-            (linearImpulse * restitution) * massScaling * linearBalance);
+            linearImpulse * effRestitution * massScaling * linearBalance);
 
         // Angular component
         const MCVector3dF rotationalImpulse =
@@ -89,7 +90,7 @@ void MCImpulseGeneratorImpl::processContact(
 
         const MCFloat magnitude   = rotationalImpulse.k();
         const MCFloat inerScaling = invInerA / (invInerA + invInerB);
-        pa.addRotationalImpulse(-magnitude * restitution * inerScaling);
+        pa.addRotationalImpulse(-magnitude * effRestitution * inerScaling);
     }
 }
 
@@ -98,7 +99,7 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(MCObject & obje
     auto iter(object.contacts().begin());
     for (; iter != object.contacts().end(); iter++)
     {
-        MCContact * contact = getDeepestInterpenetration(iter->second);
+        const MCContact * contact = getDeepestInterpenetration(iter->second);
         if (contact)
         {
             MCObject & pa(object);

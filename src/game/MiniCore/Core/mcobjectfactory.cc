@@ -22,7 +22,7 @@
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
-#include "mcsurfaceview.hh"
+#include "Views/mcsurfaceview.hh"
 
 #include <cassert>
 

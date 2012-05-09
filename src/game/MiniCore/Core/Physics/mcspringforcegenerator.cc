@@ -20,7 +20,7 @@
 #include "mcspringforcegenerator.hh"
 #include "mcspringforcegeneratorimpl.hh"
 #include "mccontact.hh"
-#include "mcobject.hh"
+#include "../mcobject.hh"
 
 MCSpringForceGeneratorImpl::MCSpringForceGeneratorImpl(
     MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)

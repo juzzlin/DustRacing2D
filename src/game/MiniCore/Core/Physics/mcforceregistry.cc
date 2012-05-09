@@ -17,7 +17,7 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobject.hh"
+#include "../mcobject.hh"
 #include "mcforceregistry.hh"
 #include "mcforceregistryimpl.hh"
 #include "mcforcegenerator.hh"

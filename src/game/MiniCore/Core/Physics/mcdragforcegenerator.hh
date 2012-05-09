@@ -17,21 +17,36 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCCONTACTIMPL_HH
-#define MCCONTACTIMPL_HH
+#ifndef MCDRAGFORCEGENERATOR_HH
+#define MCDRAGFORCEGENERATOR_HH
 
-#include "mcrecycler.hh"
+#include "mcforcegenerator.hh"
+#include "../mcmacros.hh"
 
-//! Implementation class for MCContact.
-class MCContactImpl
+class MCDragForceGeneratorImpl;
+
+//! Force generator for drag
+class MCDragForceGenerator : public MCForceGenerator
 {
-  MCContactImpl();
-  MCObject * m_pObject;
-  MCVector2d<MCFloat> m_contactPoint;
-  MCVector2d<MCFloat> m_contactNormal;
-  MCFloat m_interpenetrationDepth;
-  static MCRecycler<MCContact> m_recycler;
-  friend class MCContact;
+public:
+
+    /*! Constructor
+     * \param coeff1 Linear coefficient
+     * \param coeff2 Quadratic coefficient
+     */
+    MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2);
+
+    //! Destructor
+    virtual ~MCDragForceGenerator();
+
+    //! \reimp
+    virtual void updateForce(MCObject * p);
+
+private:
+
+    DISABLE_COPY(MCDragForceGenerator);
+    DISABLE_ASSI(MCDragForceGenerator);
+    MCDragForceGeneratorImpl * const m_pImpl;
 };
 
-#endif // MCCONTACTIMPL_HH
+#endif // MCDRAGFORCEGENERATOR_HH

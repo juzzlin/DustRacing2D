@@ -17,37 +17,41 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCCOLLISIONDETECTOR_HH
-#define MCCOLLISIONDETECTOR_HH
+#ifndef MCFORCEGENERATOR_HH
+#define MCFORCEGENERATOR_HH
 
-#include "mcmacros.hh"
+#include "../mcmacros.hh"
+#include "../mctypes.hh"
 
-class MCCollisionDetectorImpl;
 class MCObject;
+class MCForceGeneratorImpl;
 
-//! Contact resolver / collision detector
-class MCCollisionDetector
+//! Abstract base class for different force generators
+class MCForceGenerator
 {
 public:
+
     //! Constructor
-    MCCollisionDetector();
+    MCForceGenerator();
 
     //! Destructor
-    virtual ~MCCollisionDetector();
+    virtual ~MCForceGenerator();
 
-    /*! Process a suspected collision.
-     * \param object1 1st object.
-     * \param object2 2nd object.
-     * \return true if objects really collided.
-     */
-    bool processPossibleCollision(MCObject & object1, MCObject & object2);
+    //! Update force to the given object
+    virtual void updateForce(MCObject & object) = 0;
+
+    //! Enable / disable the force. Enabled by default.
+    void enable(bool status);
+
+    //! Return true if enabled.
+    bool enabled() const;
 
 private:
 
-    DISABLE_COPY(MCCollisionDetector);
-    DISABLE_ASSI(MCCollisionDetector);
-    MCCollisionDetectorImpl * const m_pImpl;
-    friend class MCCollisionDetectorImpl;
+    DISABLE_COPY(MCForceGenerator);
+    DISABLE_ASSI(MCForceGenerator);
+
+    MCForceGeneratorImpl * const m_pImpl;
 };
 
-#endif // MCCOLLISIONDETECTOR_HH
+#endif // MCFORCEGENERATOR_HH

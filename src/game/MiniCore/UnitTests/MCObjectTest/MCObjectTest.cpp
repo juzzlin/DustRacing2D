@@ -18,8 +18,8 @@
 //
 
 #include "MCObjectTest.hpp"
-#include "../../Core/mcforcegenerator.hh"
-#include "../../Core/mcforceregistry.hh"
+#include "../../Core/Physics/mcforcegenerator.hh"
+#include "../../Core/Physics/mcforceregistry.hh"
 #include "../../Core/mcobject.hh"
 #include "../../Core/mcworld.hh"
 

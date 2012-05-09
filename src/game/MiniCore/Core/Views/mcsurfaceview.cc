@@ -19,8 +19,8 @@
 
 #include "mcsurfaceview.hh"
 #include "mcsurfaceviewimpl.hh"
-#include "mcsurface.hh"
-#include "mccamera.hh"
+#include "../mccamera.hh"
+#include "../mcsurface.hh"
 
 MCSurfaceViewImpl::MCSurfaceViewImpl(MCSurface * pSurface) :
     m_pSurface(pSurface)

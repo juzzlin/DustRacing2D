@@ -16,7 +16,7 @@
 #ifndef CENTRIFUGALFORCEGENERATOR_HPP
 #define CENTRIFUGALFORCEGENERATOR_HPP
 
-#include "MiniCore/Core/MCForceGenerator"
+#include "MiniCore/Core/Physics/MCForceGenerator"
 #include "MiniCore/Core/MCVector3d"
 
 #include <deque>

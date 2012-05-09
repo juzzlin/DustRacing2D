@@ -17,31 +17,36 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcgravitygenerator.hh"
-#include "mcgravitygeneratorimpl.hh"
-#include "mcobject.hh"
+#ifndef MCGRAVITYGENERATOR_HH
+#define MCGRAVITYGENERATOR_HH
 
-MCGravityGeneratorImpl::MCGravityGeneratorImpl(const MCVector3d<MCFloat> & g)
-: m_g(g)
-{}
+#include "mcforcegenerator.hh"
+#include "../mcvector3d.hh"
+#include "../mcmacros.hh"
 
-MCGravityGeneratorImpl::~MCGravityGeneratorImpl()
-{}
+class MCGravityGeneratorImpl;
 
-MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g) :
-    m_pImpl(new MCGravityGeneratorImpl(g))
-{}
-
-void MCGravityGenerator::updateForce(MCObject & object)
+//! Force generator for gravity
+class MCGravityGenerator : public MCForceGenerator
 {
-    // G = m * g
-    if (object.invMass() > 0.0) {
-        object.addForce(m_pImpl->m_g * object.mass());
-    }
-}
+public:
 
-MCGravityGenerator::~MCGravityGenerator()
-{
-    delete m_pImpl;
-}
+    /*! Constructor
+     * \param g Gravity vector (G = m * g)
+     */
+    MCGravityGenerator(const MCVector3d<MCFloat> & g);
 
+    //! Destructor
+    virtual ~MCGravityGenerator();
+
+    //! \reimp
+    virtual void updateForce(MCObject & object);
+
+private:
+
+    DISABLE_COPY(MCGravityGenerator);
+    DISABLE_ASSI(MCGravityGenerator);
+    MCGravityGeneratorImpl * const m_pImpl;
+};
+
+#endif // MCGRAVITYGENERATOR_HH

@@ -21,7 +21,7 @@
 #define MCFRICTIONGENERATOR_HH
 
 #include "mcforcegenerator.hh"
-#include "mcmacros.hh"
+#include "../mcmacros.hh"
 
 class MCFrictionGeneratorImpl;
 
