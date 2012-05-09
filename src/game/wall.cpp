@@ -22,7 +22,7 @@
 #include "MiniCore/Core/Views/MCSurfaceView"
 #include <GL/gl.h>
 
-Wall::Wall(MCSurface & surface, int x, int y, int newWx, int newWy, int newH)
+Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)
 : MCObject(new MCRectShape(*this, new MCSurfaceView(&surface), newWx, newWy), "WALL")
 , wx(newWx)
 , wy(newWy)

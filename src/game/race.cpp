@@ -124,7 +124,7 @@ unsigned int Race::getPositionOfCar(const Car & car) const
     const std::vector<int> & order = m_positions[car.routeProgression()];
     for (unsigned int i = 0; i < order.size(); i++)
     {
-        if (order[i] == static_cast<unsigned int>(car.index()))
+        if (order[i] == static_cast<int>(car.index()))
         {
             return i + 1;
         }
