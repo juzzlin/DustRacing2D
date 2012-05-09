@@ -166,7 +166,7 @@ void AiLogic::steer(
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
                 currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
-            if (m_car.speedInKmh() > 100)
+            if (m_car.speedInKmh() > 120)
             {
                 accelerate = false;
             }

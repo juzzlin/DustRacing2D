@@ -42,16 +42,17 @@ namespace
     const MCFloat OFF_TRACK_FRICTION   = 0.5f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
 
-    const MCVector2dF LEFT_FRONT_TIRE_POS(20, 13);
-    const MCVector2dF RIGHT_FRONT_TIRE_POS(20, -13);
-    const MCVector2dF LEFT_REAR_TIRE_POS(-20, 13);
-    const MCVector2dF RIGHT_REAR_TIRE_POS(-20, -13);
+    const MCVector2dF LEFT_FRONT_TIRE_POS(15, 9);
+    const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -9);
+    const MCVector2dF LEFT_REAR_TIRE_POS(-15, 9);
+    const MCVector2dF RIGHT_REAR_TIRE_POS(-15, -9);
 }
 
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
   , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
+  , m_pSlideFriction(new SlideFrictionGenerator(FRICTION))
   , m_leftSideOffTrack(false)
   , m_rightSideOffTrack(false)
   , m_accelerating(false)
@@ -64,7 +65,7 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
   , m_power(5000.0f)
-  , m_turningImpulse(.40f)
+  , m_turningImpulse(.35f)
   , m_speedInKmh(0)
   , m_dx(0)
   , m_dy(0)
@@ -80,7 +81,7 @@ Car::Car(MCSurface & surface, MCUint index)
     setRestitution(0.1f);
 
     // Add slide friction generator
-    MCWorld::instance().addForceGenerator(*new SlideFrictionGenerator(FRICTION), *this, true);
+    MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
 
     // Add rolling friction generator
     MCWorld::instance().addForceGenerator(
@@ -126,6 +127,8 @@ MCUint Car::index() const
 
 void Car::turnLeft()
 {
+    m_pSlideFriction->enable(true);
+
     if (m_tireAngle < 45) m_tireAngle++;
 
     m_turnLeft = true;
@@ -138,6 +141,8 @@ void Car::turnLeft()
 
 void Car::turnRight()
 {
+    m_pSlideFriction->enable(true);
+
     if (m_tireAngle > -45) m_tireAngle--;
 
     m_turnRight = true;
@@ -151,6 +156,7 @@ void Car::turnRight()
 void Car::accelerate()
 {
     m_pBrakingFriction->enable(false);
+    m_pSlideFriction->enable(true);
 
     MCVector2d<MCFloat> force(m_dx, m_dy);
     addForce(force * m_power);
@@ -178,12 +184,14 @@ void Car::brake()
     {
         m_braking = true;
         m_pBrakingFriction->enable(true);
+        m_pSlideFriction->enable(false);
     }
 }
 
 void Car::noAction()
 {
     m_pBrakingFriction->enable(false);
+    m_pSlideFriction->enable(true);
 
     m_accelerating = false;
     m_braking      = false;
@@ -254,8 +262,8 @@ void Car::render(MCCamera *p)
     // Render brake light glows if braking.
     if (m_braking)
     {
-        static const MCVector2dF leftBrakeGlowPos(-36, 12);
-        static const MCVector2dF rightBrakeGlowPos(-36, -12);
+        static const MCVector2dF leftBrakeGlowPos(-27, 9);
+        static const MCVector2dF rightBrakeGlowPos(-27, -9);
 
         MCVector2dF leftBrakeGlow;
         MCTrigonom::rotatedVector(leftBrakeGlowPos, leftBrakeGlow, angle());
@@ -390,7 +398,7 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
 void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
     MCGLRectParticle & skidMark = MCGLRectParticle::create();
-    skidMark.init(location, 4, 15 * 60);
+    skidMark.init(location, 3, 15 * 60);
     skidMark.setAnimationStyle(MCParticle::FadeOut);
     skidMark.setColor(r, g, b, a);
     skidMark.rotate(angle());

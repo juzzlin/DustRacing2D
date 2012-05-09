@@ -109,6 +109,7 @@ private:
 
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
+    MCFrictionGenerator * m_pSlideFriction;
     bool                  m_leftSideOffTrack;
     bool                  m_rightSideOffTrack;
     bool                  m_accelerating;
