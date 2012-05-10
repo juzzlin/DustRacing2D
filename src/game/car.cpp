@@ -325,15 +325,18 @@ void Car::render(MCCamera *p)
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
-    // Spawn sparkles if colliding with another car.
-    if (event.collidingObject().typeID() == typeID() ||
-        event.collidingObject().typeID() == MCObject::typeID("WALL"))
+    // Spawn sparkles if colliding with another car or a wall.
+    if (m_speedInKmh > 50)
     {
-        static int counter = 0;
-        if (++counter >= 10)
+        if (event.collidingObject().typeID() == typeID() ||
+            event.collidingObject().typeID() == MCObject::typeID("WALL"))
         {
-            doSparkle(event.contactPoint(), 1.0f, 0.8f, 0.0f, 0.9f);
-            counter = 0;
+            static int counter = 0;
+            if (++counter >= 10)
+            {
+                doSparkle(event.contactPoint(), 1.0f, 0.8f, 0.0f, 0.9f);
+                counter = 0;
+            }
         }
     }
 
