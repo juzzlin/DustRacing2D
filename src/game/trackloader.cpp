@@ -214,6 +214,26 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     {
         return TrackTile::TT_GRASS;
     }
+    else if (str == "sand")
+    {
+        return TrackTile::TT_SAND;
+    }
+    else if (str == "sandGrassStraight")
+    {
+        return TrackTile::TT_SAND_GRASS_STRAIGHT;
+    }
+    else if (str == "sandGrassStraight45Female")
+    {
+        return TrackTile::TT_SAND_GRASS_STRAIGHT_45_FEMALE;
+    }
+    else if (str == "sandGrassCorner")
+    {
+        return TrackTile::TT_SAND_GRASS_CORNER;
+    }
+    else if (str == "sandGrassCorner2")
+    {
+        return TrackTile::TT_SAND_GRASS_CORNER_2;
+    }
     else if (str == "finish")
     {
         return TrackTile::TT_FINISH;

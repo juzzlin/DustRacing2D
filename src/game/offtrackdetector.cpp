@@ -67,11 +67,16 @@ void OffTrackDetector::update()
 
 bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) const
 {
-    if (tile.tileTypeEnum() == TrackTile::TT_GRASS)
+    if (tile.tileTypeEnum() == TrackTile::TT_GRASS               ||
+        tile.tileTypeEnum() == TrackTile::TT_SAND                ||
+        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_STRAIGHT ||
+        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_CORNER   ||
+        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_CORNER_2)
     {
         return true;
     }
-    else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT ||
+    else if (
+        tile.tileTypeEnum() == TrackTile::TT_STRAIGHT ||
         tile.tileTypeEnum() == TrackTile::TT_FINISH)
     {
         if ((tile.rotation() + 90) % 180 == 0)
@@ -104,7 +109,9 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
             return true;
         }
     }
-    else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_FEMALE)
+    else if (
+        tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_FEMALE ||
+        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_STRAIGHT_45_FEMALE)
     {
         const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
         MCVector2dF rotatedDiff;
