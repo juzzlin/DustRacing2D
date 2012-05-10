@@ -41,7 +41,7 @@ class Scene
 public:
 
     //! Constructor.
-    explicit Scene(MCUint numCars = 8);
+    explicit Scene(unsigned int numCars = 10);
 
     //! Destructor.
     ~Scene();

@@ -31,7 +31,7 @@ TimingOverlay::TimingOverlay()
   , m_pCar(nullptr)
   , m_pTiming(nullptr)
   , m_pRace(nullptr)
-  , m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"})
+  , m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"})
 {
 }
 

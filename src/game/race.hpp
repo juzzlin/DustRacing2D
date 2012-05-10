@@ -30,7 +30,7 @@ class Race
 public:
 
     //! Constructor.
-    Race();
+    Race(unsigned int numCars);
 
     //! Destructor.
     virtual ~Race();

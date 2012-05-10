@@ -45,8 +45,8 @@
 #include <algorithm>
 #include <cassert>
 
-Scene::Scene(MCUint numCars)
-  : m_race()
+Scene::Scene(unsigned int numCars)
+  : m_race(numCars)
   , m_pActiveTrack(nullptr)
   , m_pWorld(new MCWorld)
   , m_pTimingOverlay(nullptr)

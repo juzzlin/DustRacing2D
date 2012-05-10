@@ -23,11 +23,9 @@
 #include <algorithm>
 #include <cassert>
 
-static const unsigned int MAX_CARS = 24;
-
-Race::Race()
+Race::Race(unsigned int numCars)
   : m_lapCount(0)
-  , m_timing(MAX_CARS)
+  , m_timing(numCars)
   , m_pTrack(nullptr)
   , m_started(false)
   , m_checkeredFlagEnabled(false)

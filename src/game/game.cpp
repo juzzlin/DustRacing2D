@@ -37,7 +37,8 @@
 
 namespace
 {
-const int MAX_PLAYERS = 2;
+static const unsigned int MAX_PLAYERS = 2;
+static const unsigned int NUM_CARS    = 10;
 }
 
 Game::Game()
@@ -135,7 +136,7 @@ bool Game::loadTracks()
 void Game::initScene()
 {
     // Create the scene
-    m_pScene = new Scene;
+    m_pScene = new Scene(NUM_CARS);
 
     // Set the default track
     m_pScene->setActiveTrack(*m_pTrackLoader->track(0));
