@@ -17,6 +17,7 @@
 #define CAR_HPP
 
 #include "MiniCore/Core/MCObject"
+#include "MiniCore/Core/MCVector2d"
 #include "MiniCore/Core/Particles/MCGLRectParticleGroup"
 
 #include <deque>
@@ -28,6 +29,56 @@ class MCFrictionGenerator;
 class Car : public MCObject
 {
 public:
+
+    //! Defines the (default) car properties.
+    class Description
+    {
+    public:
+
+        //! Constructor.
+        Description()
+        : maxLinearVelocity(15.0f)
+        , maxAngularVelocity(10.0f)
+        , friction(0.5f)
+        , brakingFriction(1.0f)
+        , rollingFriction(0.1f)
+        , rotationFriction(0.5f)
+        , offTrackFriction(0.5f)
+        , offTrackMoment(50000.0f)
+        , turningImpulse(0.35f)
+        , power(5000.0f)
+        , mass(1000.0f)
+        , momentOfInertia(mass * 10.0f)
+        , restitution(0.1f)
+        , leftFrontTirePos(15, 9)
+        , rightFrontTirePos(15, -9)
+        , leftRearTirePos(-15, 9)
+        , rightRearTirePos(-15, -9)
+        , leftBrakeGlowPos(-27, 9)
+        , rightBrakeGlowPos(-27, -9)
+        {}
+
+        MCFloat maxLinearVelocity;
+        MCFloat maxAngularVelocity;
+        MCFloat friction;
+        MCFloat brakingFriction;
+        MCFloat rollingFriction;
+        MCFloat rotationFriction;
+        MCFloat offTrackFriction;
+        MCFloat offTrackMoment;
+        MCFloat turningImpulse;
+        MCFloat power;
+        MCFloat mass;
+        MCFloat momentOfInertia;
+        MCFloat restitution;
+
+        MCVector2dF leftFrontTirePos;
+        MCVector2dF rightFrontTirePos;
+        MCVector2dF leftRearTirePos;
+        MCVector2dF rightRearTirePos;
+        MCVector2dF leftBrakeGlowPos;
+        MCVector2dF rightBrakeGlowPos;
+    };
 
     //! Constructor.
     Car(MCSurface & surface, MCUint index);

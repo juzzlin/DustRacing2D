@@ -41,11 +41,18 @@ namespace
     const MCFloat ROTATION_FRICTION    = 0.5f;
     const MCFloat OFF_TRACK_FRICTION   = 0.5f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
+    const MCFloat TURNING_IMPULSE      = 0.35f;
+    const MCFloat POWER                = 5000.0f;
+    const MCFloat MASS                 = 1000.0f;
+    const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
+    const MCFloat RESTITUTION          = 0.1f;
 
     const MCVector2dF LEFT_FRONT_TIRE_POS(15, 9);
     const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -9);
     const MCVector2dF LEFT_REAR_TIRE_POS(-15, 9);
     const MCVector2dF RIGHT_REAR_TIRE_POS(-15, -9);
+    const MCVector2dF LEFT_BRAKE_GLOW_POS(-27, 9);
+    const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -9);
 }
 
 Car::Car(MCSurface & surface, MCUint index)
@@ -64,8 +71,8 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_tireAngle(0)
   , m_frontTire(MCTextureManager::instance().surface("frontTire"))
   , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
-  , m_power(5000.0f)
-  , m_turningImpulse(.35f)
+  , m_power(POWER)
+  , m_turningImpulse(TURNING_IMPULSE)
   , m_speedInKmh(0)
   , m_dx(0)
   , m_dy(0)
@@ -73,12 +80,12 @@ Car::Car(MCSurface & surface, MCUint index)
   , m_routeProgression(0)
 {
     setLayer(Layers::Cars);
-    setMass(1000);
-    setMomentOfInertia(1000 * 10);
+    setMass(MASS);
+    setMomentOfInertia(MOMENT_OF_INERTIA);
     setMaximumVelocity(MAX_LINEAR_VELOCITY);
     setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(0.1f);
+    setRestitution(RESTITUTION);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
@@ -262,16 +269,13 @@ void Car::render(MCCamera *p)
     // Render brake light glows if braking.
     if (m_braking)
     {
-        static const MCVector2dF leftBrakeGlowPos(-27, 9);
-        static const MCVector2dF rightBrakeGlowPos(-27, -9);
-
         MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotatedVector(leftBrakeGlowPos, leftBrakeGlow, angle());
+        MCTrigonom::rotatedVector(LEFT_BRAKE_GLOW_POS, leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotatedVector(rightBrakeGlowPos, rightBrakeGlow, angle());
+        MCTrigonom::rotatedVector(RIGHT_BRAKE_GLOW_POS, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
