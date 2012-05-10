@@ -86,6 +86,7 @@ public:
     //! Return the index.
     MCUint index() const;
 
+    //! Clear statuses before setting any states.
     void clearStatuses();
 
     //! Turn left.
@@ -101,9 +102,6 @@ public:
     void brake();
 
     void setBrakeLightState(bool state);
-
-    //! User isn't doing anything.
-    void noAction();
 
     //! User isn't steering.
     void noSteering();

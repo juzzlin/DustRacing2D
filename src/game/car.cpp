@@ -123,8 +123,12 @@ void Car::setPower(MCFloat power)
 
 void Car::clearStatuses()
 {
-    m_braking      = false;
+    m_pBrakingFriction->enable(false);
+    m_pSlideFriction->enable(true);
+
     m_accelerating = false;
+    m_braking      = false;
+    m_reverse      = false;
 }
 
 MCUint Car::index() const
@@ -142,7 +146,14 @@ void Car::turnLeft()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        addRotationalImpulse(m_turningImpulse);
+        if (m_braking)
+        {
+            addRotationalImpulse(m_turningImpulse / 2);
+        }
+        else
+        {
+            addRotationalImpulse(m_turningImpulse);
+        }
     }
 }
 
@@ -156,7 +167,14 @@ void Car::turnRight()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        addRotationalImpulse(-m_turningImpulse);
+        if (m_braking)
+        {
+            addRotationalImpulse(-m_turningImpulse / 2);
+        }
+        else
+        {
+            addRotationalImpulse(-m_turningImpulse);
+        }
     }
 }
 
@@ -193,16 +211,6 @@ void Car::brake()
         m_pBrakingFriction->enable(true);
         m_pSlideFriction->enable(false);
     }
-}
-
-void Car::noAction()
-{
-    m_pBrakingFriction->enable(false);
-    m_pSlideFriction->enable(true);
-
-    m_accelerating = false;
-    m_braking      = false;
-    m_reverse      = false;
 }
 
 void Car::noSteering()
