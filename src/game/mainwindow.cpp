@@ -53,9 +53,6 @@ MainWindow::MainWindow()
     // Try to center the window.
     QRect geometry(QApplication::desktop()->availableGeometry());
     move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
-
-    // Populate menu bar with actions
-    populateMenuBar();
 }
 
 MainWindow * MainWindow::instance()
@@ -67,23 +64,4 @@ void MainWindow::closeEvent(QCloseEvent * event)
 {
     emit closed();
     event->accept();
-}
-
-void MainWindow::populateMenuBar()
-{
-    // Create "file"-menu
-    QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
-
-    // Add "quit"-action
-    QAction * quitAct = new QAction(tr("&Quit"), this);
-    fileMenu->addAction(quitAct);
-    connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
-
-    // Create "help"-menu
-    QMenu * helpMenu = menuBar()->addMenu(tr("&Help"));
-
-    // Add "about"-action
-    QAction * aboutAct = new QAction(tr("&About"), this);
-    helpMenu->addAction(aboutAct);
-    connect(aboutAct, SIGNAL(triggered()), m_aboutDlg, SLOT(exec()));
 }

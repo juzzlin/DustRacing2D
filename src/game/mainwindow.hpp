@@ -16,7 +16,7 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include <QMainWindow>
+#include <QWidget>
 #include <QCloseEvent>
 
 class AboutDlg;
@@ -25,7 +25,7 @@ class Renderer;
 /*! \class MainWindow
  *  \brief The main window of the game.
  */
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
@@ -50,8 +50,6 @@ protected:
     void closeEvent(QCloseEvent * event);
 
 private:
-
-    void populateMenuBar();
 
     static MainWindow * m_instance;
 

@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QHBoxLayout>
 
 #include "game.hpp"
 #include "mainwindow.hpp"
@@ -34,11 +35,24 @@ int main(int argc, char ** argv)
     MCLogger::setEchoMode(true);
     MCLogger::setDateTime(true);
 
+    MCLogger::logInfo("Creating renderer..");
+    Renderer * renderer = new Renderer;
+
+    // Create the main window
+    MCLogger::logInfo("Creating the main window..");
+    MainWindow mainWindow;
+    QHBoxLayout * layout = new QHBoxLayout(&mainWindow);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(renderer);
+    mainWindow.setContentsMargins(0, 0, 0, 0);
+    mainWindow.show();
+
     // Create the game object and set the renderer
-    MCLogger::logInfo("Creating game..");
+    MCLogger::logInfo("Creating game object..");
     Game game;
-    game.setRenderer(new Renderer);
+    game.setRenderer(renderer);
     game.setTargetUpdateFps(60);
+    game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
 
     // Initialize and start the game
     if (game.init())
@@ -50,14 +64,6 @@ int main(int argc, char ** argv)
         MCLogger::logError("Initing the game failed.");
         return EXIT_FAILURE;
     }
-
-    // Create the main window
-    MCLogger::logInfo("Creating window..");
-    MainWindow mainWindow;
-    mainWindow.setCentralWidget(game.renderer());
-    mainWindow.show();
-
-    game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
 
     return app.exec();
 }
