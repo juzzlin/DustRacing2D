@@ -45,6 +45,7 @@ int main(int argc, char ** argv)
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(renderer);
     mainWindow.setContentsMargins(0, 0, 0, 0);
+    mainWindow.setCursor(QCursor(Qt::BlankCursor));
     mainWindow.show();
 
     // Create the game object and set the renderer
