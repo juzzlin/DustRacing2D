@@ -41,7 +41,7 @@ public:
     /*! Constructor.
      * \param object This event is sent to an object that has collided with object.
      */
-    explicit MCCollisionEvent(MCObject & object, MCVector3dF contactPoint);
+    MCCollisionEvent(MCObject & object, MCVector3dF contactPoint);
 
     //! Destructor.
     ~MCCollisionEvent();
