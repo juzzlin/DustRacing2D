@@ -20,6 +20,7 @@ Core/mcsurface.cc
 Core/mcsurfaceobjectdata.cc
 Core/mctextureconfigloader.cc
 Core/mctexturemanager.cc
+Core/mctimerevent.cc
 Core/mctrigonom.cc
 Core/mcvectoranimation.cc
 Core/mcworld.cc
