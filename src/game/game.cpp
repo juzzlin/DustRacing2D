@@ -52,16 +52,14 @@ Game::Game()
   , m_pSpeedometer(nullptr)
   , m_pCamera(nullptr)
   , m_pInputHandler(new InputHandler(MAX_PLAYERS))
-  , m_updateTimer()
-  , m_renderTimer()
-  , m_updateFps(30)
+  , m_updateFps(60)
   , m_timeStep(1.0f / m_updateFps)
   , m_renderCount(0)
   , m_availableRenderTime(0)
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
-    m_renderTimer.setInterval(1000);
+    connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
+    m_renderCountTimer.setInterval(1000);
 
     m_pTrackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
         QDir::separator() + "levels");
@@ -86,7 +84,7 @@ void Game::setRenderer(Renderer * newRenderer)
 void Game::finish()
 {
     disconnect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    disconnect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
+    disconnect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
 }
 
 Renderer * Game::renderer() const
@@ -199,48 +197,19 @@ void Game::start()
     m_updateTimer.setInterval(1000 / m_updateFps);
     m_updateTimer.start();
 
-    m_renderTimer.start();
+    m_renderCountTimer.start();
 }
 
 void Game::stop()
 {
     m_updateTimer.stop();
-    m_renderTimer.stop();
+    m_renderCountTimer.stop();
 }
 
 void Game::updateFrame()
 {
-    static int renderTime = 0;
-    static QTime updateTimer;
-    updateTimer.start();
-
     m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
-
-    const int updateTime      = updateTimer.elapsed();
-    const int availableTimeMs = 1000 / m_updateFps;
-
-    if (m_availableRenderTime >= renderTime)
-    {
-        static QTime renderTimer;
-        renderTimer.start();
-        renderFrame();
-        renderTime = (renderTimer.elapsed() + renderTime) / 2;
-        m_renderCount++;
-
-        m_availableRenderTime -= renderTime;
-    }
-    else
-    {
-        m_availableRenderTime += availableTimeMs - updateTime;
-    }
-}
-
-void Game::renderFrame()
-{
-    if (m_pRenderer)
-    {
-        m_pRenderer->updateFrame(m_pCamera);
-    }
+    m_pRenderer->updateFrame(m_pCamera);
 }
 
 void Game::countRenderFps()

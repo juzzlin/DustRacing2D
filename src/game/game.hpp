@@ -46,7 +46,7 @@ public:
     virtual ~Game();
 
     //! Set target value for frames per second.
-    //! Default is 30. This is independent of the
+    //! Default is 60. This is independent of the
     //! rendering FPS.
     void setTargetUpdateFps(unsigned int fps);
 
@@ -78,7 +78,6 @@ private:
     void loadFonts();
     bool loadTracks();
     void initScene();
-    void renderFrame();
 
     Renderer             * m_pRenderer;
     Scene                * m_pScene;
@@ -91,7 +90,7 @@ private:
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_updateTimer;
-    QTimer                 m_renderTimer;
+    QTimer                 m_renderCountTimer;
     unsigned int           m_updateFps;
     unsigned int           m_renderFps;
     float                  m_timeStep;
