@@ -25,7 +25,7 @@
 class MCTimerEventImpl;
 
 /*! Event that is send to all MCObject's that have subscribed to the event
- *  by calling MCWorld::subscribeToTimerEvent(MCObject &).
+    by calling MCWorld::subscribeTimerEvent(MCObject &).
  */
 class MCTimerEvent : public MCEvent
 {

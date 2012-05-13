@@ -21,7 +21,32 @@
 #include "../../Core/Physics/mcforcegenerator.hh"
 #include "../../Core/Physics/mcforceregistry.hh"
 #include "../../Core/mcobject.hh"
+#include "../../Core/mctimerevent.hh"
 #include "../../Core/mcworld.hh"
+
+class TestObject : public MCObject
+{
+public:
+
+    TestObject()
+    : MCObject("TEST_OBJECT")
+    , m_timerEventReceived(false)
+    {
+    }
+
+    virtual bool event(MCEvent & event)
+    {
+        if (event.instanceTypeID() == MCTimerEvent::typeID())
+        {
+            m_timerEventReceived = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool m_timerEventReceived;
+};
 
 MCObjectTest::MCObjectTest()
 {
@@ -39,6 +64,36 @@ void MCObjectTest::testMass()
     object.setMass(1, true);
     QVERIFY(object.stationary());
     QVERIFY(qFuzzyCompare(object.invMass(), 0.0f));
+}
+
+void MCObjectTest::testTimerEvent()
+{
+    TestObject testObject1, testObject2;
+    QVERIFY(!testObject1.m_timerEventReceived);
+    QVERIFY(!testObject2.m_timerEventReceived);
+
+    testObject1.m_timerEventReceived = false;
+    testObject2.m_timerEventReceived = false;
+    MCTimerEvent timerEvent(100);
+    MCObject::sendTimerEvent(timerEvent);
+    QVERIFY(!testObject1.m_timerEventReceived);
+    QVERIFY(!testObject2.m_timerEventReceived);
+
+    testObject1.m_timerEventReceived = false;
+    testObject2.m_timerEventReceived = false;
+    MCObject::subscribeTimerEvent(testObject1);
+    MCObject::subscribeTimerEvent(testObject2);
+    MCObject::sendTimerEvent(timerEvent);
+    QVERIFY(testObject1.m_timerEventReceived);
+    QVERIFY(testObject2.m_timerEventReceived);
+
+    testObject1.m_timerEventReceived = false;
+    testObject2.m_timerEventReceived = false;
+    MCObject::unsubscribeTimerEvent(testObject1);
+    MCObject::unsubscribeTimerEvent(testObject2);
+    MCObject::sendTimerEvent(timerEvent);
+    QVERIFY(!testObject1.m_timerEventReceived);
+    QVERIFY(!testObject2.m_timerEventReceived);
 }
 
 QTEST_MAIN(MCObjectTest)

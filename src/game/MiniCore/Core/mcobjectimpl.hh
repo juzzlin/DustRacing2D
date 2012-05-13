@@ -71,9 +71,12 @@ private:
     MCShape * pShape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
     static TypeHash typeHash;
+    typedef std::vector<MCObject * > TimerEventObjectsList;
+    static TimerEventObjectsList timerEventObjects;
     static MCUint typeIDCount;
     MCObject::ContactHash contacts;
     MCFloat damping;
+    int timerEventObjectsIndex;
     friend class MCObject;
 };
 

@@ -40,6 +40,7 @@ class MCSurface;
 class MCEvent;
 class MCCollisionEvent;
 class MCOutOfBoundariesEvent;
+class MCTimerEvent;
 class MCCamera;
 
 //! \class MCObject.
@@ -107,6 +108,16 @@ public:
     //! \param object Destination object.
     //! \param event Event to be sent.
     static void sendEvent(MCObject & object, MCEvent & event);
+
+    //! Subscribe the given object to timer events.
+    static void subscribeTimerEvent(MCObject & object);
+
+    //! Subscribe the given object from timer events.
+    static void unsubscribeTimerEvent(MCObject & object);
+
+    //! Send the given timer event to all objects that
+    //! have subscribed to timer events.
+    static void sendTimerEvent(MCTimerEvent & event);
 
     //! Render the object.
     //! \param p Camera window to be used.

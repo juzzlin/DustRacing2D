@@ -28,6 +28,7 @@ public:
 
 private slots:
     void testMass();
+    void testTimerEvent();
 
 private:
 

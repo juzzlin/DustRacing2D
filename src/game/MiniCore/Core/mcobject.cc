@@ -28,12 +28,14 @@
 #include "mcevent.hh"
 #include "mccollisionevent.hh"
 #include "mcoutofboundariesevent.hh"
+#include "mctimerevent.hh"
 #include "mccamera.hh"
 #include "mctrigonom.hh"
 #include "Views/mcsurfaceview.hh"
 
 MCUint MCObjectImpl::typeIDCount = 1;
 MCObjectImpl::TypeHash MCObjectImpl::typeHash;
+MCObjectImpl::TimerEventObjectsList MCObjectImpl::timerEventObjects;
 
 namespace
 {
@@ -87,6 +89,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , i0(0), i1(0), j0(0), j1(0)
 , pShape(nullptr)
 , damping(0.999f)
+, timerEventObjectsIndex(-1)
 {}
 
 void MCObjectImpl::setFlag(MCUint flag, bool enable)
@@ -103,11 +106,14 @@ MCUint MCObjectImpl::getTypeIDForName(const std::string & typeName)
 MCUint MCObjectImpl::registerType(const std::string & typeName)
 {
     auto i(typeHash.find(typeName));
-    if (i == typeHash.end()) {
+    if (i == typeHash.end())
+    {
         typeIDCount++;
         typeHash[typeName] = typeIDCount;
         return typeIDCount;
-    } else {
+    }
+    else
+    {
         return i->second;
     }
 }
@@ -370,6 +376,36 @@ void MCObject::outOfBoundariesEvent(MCOutOfBoundariesEvent & event)
 void MCObject::sendEvent(MCObject & object, MCEvent & event)
 {
     object.event(event);
+}
+
+void MCObject::subscribeTimerEvent(MCObject & object)
+{
+    if (object.m_pImpl->timerEventObjectsIndex == -1)
+    {
+        MCObjectImpl::timerEventObjects.push_back(&object);
+        object.m_pImpl->timerEventObjectsIndex = MCObjectImpl::timerEventObjects.size() - 1;
+    }
+}
+
+void MCObject::unsubscribeTimerEvent(MCObject & object)
+{
+    if (object.m_pImpl->timerEventObjectsIndex > -1)
+    {
+        MCObjectImpl::timerEventObjects.back()->m_pImpl->timerEventObjectsIndex =
+            object.m_pImpl->timerEventObjectsIndex;
+        MCObjectImpl::timerEventObjects.at(object.m_pImpl->timerEventObjectsIndex) =
+            MCObjectImpl::timerEventObjects.back();
+        MCObjectImpl::timerEventObjects.pop_back();
+        object.m_pImpl->timerEventObjectsIndex = -1;
+    }
+}
+
+void MCObject::sendTimerEvent(MCTimerEvent & event)
+{
+    for (MCObject * obj : MCObjectImpl::timerEventObjects)
+    {
+        MCObject::sendEvent(*obj, event);
+    }
 }
 
 void MCObject::addToWorld()
