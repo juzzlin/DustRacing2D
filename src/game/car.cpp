@@ -47,12 +47,12 @@ namespace
     const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
     const MCFloat RESTITUTION          = 0.1f;
 
-    const MCVector2dF LEFT_FRONT_TIRE_POS(15, 9);
-    const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -9);
-    const MCVector2dF LEFT_REAR_TIRE_POS(-15, 9);
-    const MCVector2dF RIGHT_REAR_TIRE_POS(-15, -9);
-    const MCVector2dF LEFT_BRAKE_GLOW_POS(-27, 9);
-    const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -9);
+    const MCVector2dF LEFT_FRONT_TIRE_POS(15, 11);
+    const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -11);
+    const MCVector2dF LEFT_REAR_TIRE_POS(-15, 11);
+    const MCVector2dF RIGHT_REAR_TIRE_POS(-15, -11);
+    const MCVector2dF LEFT_BRAKE_GLOW_POS(-27, 11);
+    const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -11);
 }
 
 Car::Car(MCSurface & surface, MCUint index)
