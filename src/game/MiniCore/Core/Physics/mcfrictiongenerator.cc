@@ -62,8 +62,7 @@ void MCFrictionGenerator::updateForce(MCObject & object)
             m_pImpl->m_coeffRotTot > 0.0f)
         {
             x = object.angularVelocity() * object.shape()->radius();
-            object.addMoment(
-                -x * m_pImpl->m_coeffRotTot * object.mass() * 0.5f);
+            object.addTorque(-x * m_pImpl->m_coeffRotTot * object.mass() * 0.5f);
         }
     }
 }

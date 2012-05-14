@@ -80,7 +80,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , angularVelocity(0.0f)
 , maximumAngularVelocity(2 * 3.1415f)
 , maximumVelocity(-1)
-, moment(0.0f)
+, torque(0.0f)
 , invMomentOfInertia(std::numeric_limits<MCFloat>::max())
 , momentOfInertia(0)
 , layer(0)
@@ -90,6 +90,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , pShape(nullptr)
 , damping(0.999f)
 , timerEventObjectsIndex(-1)
+, sleeping(false)
 {}
 
 void MCObjectImpl::setFlag(MCUint flag, bool enable)
@@ -129,11 +130,23 @@ void MCObjectImpl::integrate(MCFloat step)
 {
     if (step > 0.0)
     {
-        integrateLinear(step);
+        if (!sleeping)
+        {
+            integrateLinear(step);
 
-        integrateRotational(step);
+            integrateRotational(step);
 
-        doOutOfBoundariesEvent();
+            doOutOfBoundariesEvent();
+
+            const MCFloat linearSleepingLimit  = 0.1f;
+            const MCFloat angularSleepingLimit = 0.1f;
+
+            if (velocity.lengthFast() < linearSleepingLimit &&
+                angularVelocity       < angularSleepingLimit)
+            {
+                sleeping = true;
+            }
+        }
     }
 
     forces.setZero();
@@ -167,7 +180,7 @@ void MCObjectImpl::integrateRotational(MCFloat step)
         {
             MCFloat totAngularAcceleration(angularAcceleration);
 
-            totAngularAcceleration += moment * invMomentOfInertia;
+            totAngularAcceleration += torque * invMomentOfInertia;
             angularVelocity        += totAngularAcceleration * step;
             angularVelocity        *= damping;
 
@@ -185,7 +198,7 @@ void MCObjectImpl::integrateRotational(MCFloat step)
         }
     }
 
-    moment = 0.0f;
+    torque = 0.0f;
 }
 
 void MCObjectImpl::doOutOfBoundariesEvent()
@@ -301,7 +314,7 @@ void MCObject::resetMotion()
 {
     m_pImpl->velocity.setZero();
     m_pImpl->forces.setZero();
-    m_pImpl->moment = 0.0f;
+    m_pImpl->torque = 0.0f;
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
@@ -513,11 +526,13 @@ bool MCObject::stationary() const
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
     m_pImpl->velocity += impulse;
+    m_pImpl->sleeping  = false;
 }
 
 void MCObject::addRotationalImpulse(MCFloat impulse)
 {
     m_pImpl->angularVelocity += impulse;
+    m_pImpl->sleeping         = false;
 }
 
 void MCObject::setPhysicsObject(bool flag)
@@ -588,6 +603,7 @@ void MCObject::setMaximumVelocity(MCFloat maxVelocity)
 void MCObject::setVelocity(const MCVector3dF & newVelocity)
 {
     m_pImpl->velocity = newVelocity;
+    m_pImpl->sleeping = false;
 }
 
 const MCVector3dF & MCObject::velocity() const
@@ -598,6 +614,7 @@ const MCVector3dF & MCObject::velocity() const
 void MCObject::setAngularVelocity(MCFloat newVelocity)
 {
     m_pImpl->angularVelocity = newVelocity;
+    m_pImpl->sleeping        = false;
 }
 
 MCFloat MCObject::angularVelocity() const
@@ -613,6 +630,7 @@ void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
 void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
 {
     m_pImpl->acceleration = newAcceleration;
+    m_pImpl->sleeping     = false;
 }
 
 const MCVector3dF & MCObject::acceleration() const
@@ -738,7 +756,8 @@ MCFloat MCObject::restitution() const
 
 void MCObject::setShape(MCShape * newShape)
 {
-    if (m_pImpl->pShape) {
+    if (m_pImpl->pShape)
+    {
         delete m_pImpl->pShape;
     }
 
@@ -752,7 +771,8 @@ MCShape * MCObject::shape() const
 
 void MCObject::setView(MCShapeView * newView)
 {
-    if (m_pImpl->pShape) {
+    if (m_pImpl->pShape)
+    {
         m_pImpl->pShape->setView(newView);
     }
 }
@@ -764,25 +784,30 @@ MCShapeView * MCObject::view() const
 
 void MCObject::addForce(const MCVector3dF & force)
 {
-    m_pImpl->forces += force;
+    m_pImpl->forces  += force;
+    m_pImpl->sleeping = false;
 }
 
-void MCObject::addMoment(MCFloat moment)
+void MCObject::addTorque(MCFloat torque)
 {
-    m_pImpl->moment += moment;
+    m_pImpl->torque  += torque;
+    m_pImpl->sleeping = false;
 }
 
 void MCObject::clearForces()
 {
     m_pImpl->forces.setZero();
-    m_pImpl->moment = 0.0f;
+    m_pImpl->torque = 0.0f;
 }
 
 MCBBox<MCFloat> MCObject::bbox() const
 {
-    if (m_pImpl->pShape) {
+    if (m_pImpl->pShape)
+    {
         return m_pImpl->pShape->bbox();
-    } else {
+    }
+    else
+    {
         return MCBBox<MCFloat>(getX(), getY(), getX() + 1, getY() + 1);
     }
 }

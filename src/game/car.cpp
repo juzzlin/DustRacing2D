@@ -369,12 +369,12 @@ void Car::stepTime()
     {
         if (m_leftSideOffTrack)
         {
-            addMoment(OFF_TRACK_MOMENT);
+            addTorque(OFF_TRACK_MOMENT);
         }
 
         if (m_rightSideOffTrack)
         {
-            addMoment(-OFF_TRACK_MOMENT);
+            addTorque(-OFF_TRACK_MOMENT);
         }
     }
 }

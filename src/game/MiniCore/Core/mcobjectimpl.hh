@@ -55,7 +55,7 @@ private:
     MCFloat angularVelocity; // Radians / s
     MCFloat maximumAngularVelocity; // Radians / s
     MCFloat maximumVelocity;
-    MCFloat moment;
+    MCFloat torque;
     MCFloat invMomentOfInertia;
     MCFloat momentOfInertia;
     MCUint layer;
@@ -77,6 +77,7 @@ private:
     MCObject::ContactHash contacts;
     MCFloat damping;
     int timerEventObjectsIndex;
+    bool sleeping;
     friend class MCObject;
 };
 

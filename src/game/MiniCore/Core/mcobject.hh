@@ -206,7 +206,7 @@ public:
 
     //! Add a moment (Nm) to the object for a single frame.
     //! \param moment Value to be added.
-    void addMoment(MCFloat moment);
+    void addTorque(MCFloat moment);
 
     //! Set moment of inertia.
     void setMomentOfInertia(MCFloat momentOfInertia);
