@@ -42,6 +42,8 @@ public:
      */
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
+    void enableCollisionEvents(bool enable);
+
 private:
 
     DISABLE_COPY(MCCollisionDetector);

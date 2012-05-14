@@ -20,6 +20,8 @@
 #ifndef MCIMPULSEGENERATOR_HH
 #define MCIMPULSEGENERATOR_HH
 
+#include "../MCTypes"
+
 class MCObject;
 class MCContact;
 class MCImpulseGeneratorImpl;
@@ -36,7 +38,12 @@ public:
     ~MCImpulseGenerator();
 
     //! Generate impulses to the given object due to its current contacts.
+    //! Delete contacts.
     void generateImpulsesFromDeepestContacts(MCObject & object);
+
+    //! Resolve position of the given object due to its current contacts.
+    //! Delete contacts.
+    void resolvePosition(MCObject & object, MCFloat accuracy);
 
 private:
 

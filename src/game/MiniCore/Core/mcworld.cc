@@ -103,13 +103,24 @@ void MCWorldImpl::detectCollisions()
     }
 }
 
-void MCWorldImpl::processContacts()
+void MCWorldImpl::generateImpulses()
 {
     for (MCObject * object : objs)
     {
         if (object->physicsObject())
         {
             impulseGenerator.generateImpulsesFromDeepestContacts(*object);
+        }
+    }
+}
+
+void MCWorldImpl::resolvePositions(MCFloat accuracy)
+{
+    for (MCObject * object : objs)
+    {
+        if (object->physicsObject())
+        {
+            impulseGenerator.resolvePosition(*object, accuracy);
         }
     }
 }
@@ -427,11 +438,18 @@ void MCWorld::stepTime(MCFloat step)
     // Integrate physics
     m_pImpl->integrate(step);
 
-    // Detect all collisions and generate contacts
-    m_pImpl->detectCollisions();
+    m_pImpl->collisionDetector.enableCollisionEvents(false);
 
-    // Process contacts
-    m_pImpl->processContacts();
+    // Detect all collisions and generate contacts
+    MCFloat accuracy = 0.5f;
+    m_pImpl->detectCollisions();
+    m_pImpl->resolvePositions(accuracy);
+
+    m_pImpl->collisionDetector.enableCollisionEvents(true);
+
+    // Process contacts and generate impulses
+    m_pImpl->detectCollisions();
+    m_pImpl->generateImpulses();
 
     // Remove objects that are marked to be removed
     m_pImpl->processRemovedObjects();

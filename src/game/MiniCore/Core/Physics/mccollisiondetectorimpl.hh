@@ -28,6 +28,7 @@ class MCCollisionDetectorImpl
     MCCollisionDetectorImpl();
     virtual ~MCCollisionDetectorImpl();
     bool processRectRect(MCRectShape & object1, MCRectShape & object2);
+    bool enableCollisionEvents;
     friend class MCCollisionDetector;
 };
 

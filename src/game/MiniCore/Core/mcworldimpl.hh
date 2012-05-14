@@ -45,12 +45,11 @@ public:
 private:
     void integrate(MCFloat step);
     void detectCollisions();
-    void processContacts();
-    void generateImpulses(MCObject & object, MCContact & contact);
+    void generateImpulses();
+    void resolvePositions(MCFloat accuracy);
     void addToLayerMap(MCObject &);
     void removeFromLayerMap(MCObject &);
-    MCContact * getDeepestInterpenetration(
-        const std::vector<MCContact *> & contacts);
+    MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
     void render(MCCamera * p);
     void renderShadows(MCCamera * p);
     static MCWorld * pInstance;
