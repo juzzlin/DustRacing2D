@@ -46,7 +46,8 @@ MCCollisionDetector::~MCCollisionDetector()
 bool MCCollisionDetectorImpl::processRectRect(
     MCRectShape & shape1, MCRectShape & shape2)
 {
-    if (&shape1.parent() == &shape2.parent()) {
+    if (&shape1.parent() == &shape2.parent())
+    {
         return false;
     }
 
@@ -60,9 +61,10 @@ bool MCCollisionDetectorImpl::processRectRect(
     bool collided   = false;
 
     // Loop thru all vertices of shape1 and generate contacts
-    for (MCUint i = 0; i < 4; i++) {
-        if (shape2.contains(obbox1.vertex(i))) {
-
+    for (MCUint i = 0; i < 4; i++)
+    {
+        if (shape2.contains(obbox1.vertex(i)))
+        {
             // Send collision event to owner of shape1 and generate a contact
             // if accepted.
             MCCollisionEvent ev1(shape2.parent(), obbox1.vertex(i));
@@ -72,7 +74,8 @@ bool MCCollisionDetectorImpl::processRectRect(
             depth      = 0;
             depthIsSet = false;
 
-            if (ev1.accepted()) {
+            if (ev1.accepted())
+            {
                 depth = shape2.interpenetrationDepth(
                     MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 depthIsSet = true;
@@ -89,8 +92,10 @@ bool MCCollisionDetectorImpl::processRectRect(
             MCCollisionEvent ev2(shape1.parent(), obbox1.vertex(i));
             MCObject::sendEvent(shape2.parent(), ev2);
 
-            if (ev2.accepted()) {
-                if (!depthIsSet) {
+            if (ev2.accepted())
+            {
+                if (!depthIsSet)
+                {
                     depth = shape2.interpenetrationDepth(
                         MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
                 }
@@ -108,29 +113,33 @@ bool MCCollisionDetectorImpl::processRectRect(
 bool MCCollisionDetector::processPossibleCollision(
     MCObject & object1, MCObject & object2)
 {
-    if (&object1 == &object2) {
+    if (&object1 == &object2)
+    {
         return false;
     }
 
     // Check that both objects contain a shape
-    if (object1.shape() && object2.shape()) {
-
+    if (object1.shape() && object2.shape())
+    {
         // Store id's
         const MCUint id1 = object1.shape()->instanceTypeID();
         const MCUint id2 = object2.shape()->instanceTypeID();
 
         // Both rects ?
-        if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID()) {
+        if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID())
+        {
             // We must test first object1 against object2 and then
             // the other way around.
             const bool shape1shape2 = m_pImpl->processRectRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object1.shape()),
                 *static_cast<MCRectShape *>(object2.shape()));
+
             const bool shape2shape1 = m_pImpl->processRectRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object2.shape()),
                 *static_cast<MCRectShape *>(object1.shape()));
+
             return shape1shape2 || shape2shape1;
         }
     }

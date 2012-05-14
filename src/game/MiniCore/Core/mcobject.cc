@@ -642,11 +642,16 @@ void MCObject::translate(const MCVector3dF & newLocation)
 {
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
+
     m_pImpl->location = newLocation;
-    if (m_pImpl->pShape) {
+
+    if (m_pImpl->pShape)
+    {
         m_pImpl->pShape->translate(newLocation);
     }
-    if (wasInWorld) {
+
+    if (wasInWorld)
+    {
         MCWorld::instance().objectTree().insert(*this);
     }
 }
