@@ -64,13 +64,13 @@ Scene::Scene(unsigned int numCars)
         if (i == 0)
         {
             car = new Car(MCTextureManager::instance().surface("car001"), i);
-            car->setPower(7000.0f);
+            car->setPower(10000.0f);
         }
         else
         {
             car = new Car(MCTextureManager::instance().surface("car002"), i);
             m_aiLogic.push_back(new AiLogic(*car));
-            car->setPower(7000.0f + i * 100.0f);
+            car->setPower(10000.0f + i * 250.0f);
         }
 
         car->setLayer(Layers::Cars);

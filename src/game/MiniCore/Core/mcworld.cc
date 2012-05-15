@@ -441,7 +441,10 @@ void MCWorld::stepTime(MCFloat step)
     m_pImpl->collisionDetector.enableCollisionEvents(false);
 
     // Detect all collisions and generate contacts
-    MCFloat accuracy = 0.5f;
+    MCFloat accuracy = 0.25f;
+    m_pImpl->detectCollisions();
+    m_pImpl->resolvePositions(accuracy);
+
     m_pImpl->detectCollisions();
     m_pImpl->resolvePositions(accuracy);
 
