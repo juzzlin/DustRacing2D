@@ -78,6 +78,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , angle(0)
 , angularAcceleration(0.0f)
 , angularVelocity(0.0f)
+, angularImpulse(0.0f)
 , maximumAngularVelocity(2 * 3.1415f)
 , maximumVelocity(-1)
 , torque(0.0f)
@@ -150,6 +151,8 @@ void MCObjectImpl::integrate(MCFloat step)
     }
 
     forces.setZero();
+    linearImpulse.setZero();
+    angularImpulse = 0.0f;
 }
 
 void MCObjectImpl::integrateLinear(MCFloat step)
@@ -157,7 +160,7 @@ void MCObjectImpl::integrateLinear(MCFloat step)
     MCVector3dF totAcceleration(acceleration);
 
     totAcceleration += forces * invMass;
-    velocity        += totAcceleration * step;
+    velocity        += totAcceleration * step + linearImpulse;
     velocity        *= damping;
 
     // Note that this code doesn't take the z-component into consideration
@@ -181,7 +184,7 @@ void MCObjectImpl::integrateRotational(MCFloat step)
             MCFloat totAngularAcceleration(angularAcceleration);
 
             totAngularAcceleration += torque * invMomentOfInertia;
-            angularVelocity        += totAngularAcceleration * step;
+            angularVelocity        += totAngularAcceleration * step + angularImpulse;
             angularVelocity        *= damping;
 
             if (angularVelocity > maximumAngularVelocity) {
@@ -525,14 +528,14 @@ bool MCObject::stationary() const
 
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
-    m_pImpl->velocity += impulse;
-    m_pImpl->sleeping  = false;
+    m_pImpl->linearImpulse += impulse;
+    m_pImpl->sleeping       = false;
 }
 
 void MCObject::addRotationalImpulse(MCFloat impulse)
 {
-    m_pImpl->angularVelocity += impulse;
-    m_pImpl->sleeping         = false;
+    m_pImpl->angularImpulse += impulse;
+    m_pImpl->sleeping        = false;
 }
 
 void MCObject::setPhysicsObject(bool flag)

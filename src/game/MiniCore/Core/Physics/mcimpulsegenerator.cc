@@ -24,7 +24,7 @@
 
 class MCImpulseGeneratorImpl
 {
-    void processContact(
+    void generateImpulsesFromContact(
         MCObject & pa, MCObject & pb, const MCContact & contact,
         const MCVector3dF & linearImpulse,
         MCFloat restitution);
@@ -69,7 +69,7 @@ void MCImpulseGeneratorImpl::displace(
     }
 }
 
-void MCImpulseGeneratorImpl::processContact(
+void MCImpulseGeneratorImpl::generateImpulsesFromContact(
     MCObject & pa, MCObject & pb, const MCContact & contact,
     const MCVector3dF & linearImpulse,
     MCFloat restitution)
@@ -82,7 +82,8 @@ void MCImpulseGeneratorImpl::processContact(
     if (!pa.stationary())
     {
         const MCVector3dF & contactPoint(contact.contactPoint());
-        const MCVector3dF arm = contactPoint - pa.location();
+        const MCVector3dF armA = contactPoint - pa.location();
+        const MCVector3dF armB = contactPoint - pb.location();
 
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
@@ -92,7 +93,7 @@ void MCImpulseGeneratorImpl::processContact(
         if (pa.shape())
         {
             const MCFloat d = pa.shape()->radius() * 2;
-            MCFloat linearBalance = 1.0f - arm.lengthFast() / d;
+            MCFloat linearBalance = 1.0f - armA.lengthFast() / d;
             linearBalance = linearBalance < 0 ? 0 : linearBalance;
         }
 
@@ -102,7 +103,7 @@ void MCImpulseGeneratorImpl::processContact(
 
         // Angular component
         const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse * pa.mass()) % arm / pa.momentOfInertia();
+            MCVector3dF(linearImpulse * pa.mass()) % armA / pa.momentOfInertia();
 
         const MCFloat magnitude   = rotationalImpulse.k();
         const MCFloat inerScaling = invInerA / (invInerA + invInerB);
@@ -155,9 +156,9 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(MCObject & obje
             const MCVector3dF linearImpulse(
                 contact->contactNormal() * contact->contactNormal().dot(velocityDelta));
 
-            processContact(pa, pb, *contact, linearImpulse, restitution);
+            generateImpulsesFromContact(pa, pb, *contact, linearImpulse, restitution);
 
-            processContact(pb, pa, *contact, -linearImpulse, restitution);
+            generateImpulsesFromContact(pb, pa, *contact, -linearImpulse, restitution);
 
             // Remove contact with pa from pb, because it was already handled here.
             pb.deleteContacts(pa);

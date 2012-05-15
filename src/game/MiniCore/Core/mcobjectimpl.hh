@@ -53,6 +53,7 @@ private:
     MCFloat angle; // Degrees
     MCFloat angularAcceleration; // Radians / s^2
     MCFloat angularVelocity; // Radians / s
+    MCFloat angularImpulse;
     MCFloat maximumAngularVelocity; // Radians / s
     MCFloat maximumVelocity;
     MCFloat torque;
@@ -64,6 +65,7 @@ private:
     MCUint i0, i1, j0, j1;
     MCVector3dF acceleration;
     MCVector3dF velocity;
+    MCVector3dF linearImpulse;
     MCVector3dF initialLocation;
     MCVector3dF location;
     MCVector3dF forces;
