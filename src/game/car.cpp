@@ -200,10 +200,10 @@ void Car::brake()
         m_reverse = true;
     }
 
-    if (m_reverse)
+    if (m_reverse && m_speedInKmh > -25)
     {
         MCVector2d<MCFloat> force(m_dx, m_dy);
-        addForce(-force * m_power / 2);
+        addForce(-force * m_power);
     }
     else
     {
@@ -275,7 +275,7 @@ void Car::render(MCCamera *p)
     MCObject::render(p);
 
     // Render brake light glows if braking.
-    if (m_braking)
+    if (m_braking && m_speedInKmh > 0)
     {
         MCVector2dF leftBrakeGlow;
         MCTrigonom::rotatedVector(LEFT_BRAKE_GLOW_POS, leftBrakeGlow, angle());
@@ -305,7 +305,7 @@ void Car::render(MCCamera *p)
     }
 
     // Particle animations due to the car being off the track.
-    if (m_speedInKmh > 10)
+    if (std::abs(m_speedInKmh) > 10)
     {
         if (m_leftSideOffTrack)
         {
@@ -375,6 +375,18 @@ void Car::stepTime()
         if (m_rightSideOffTrack)
         {
             addTorque(-OFF_TRACK_MOMENT);
+        }
+    }
+    else if (m_speedInKmh < -10)
+    {
+        if (m_leftSideOffTrack)
+        {
+            addTorque(-OFF_TRACK_MOMENT);
+        }
+
+        if (m_rightSideOffTrack)
+        {
+            addTorque(OFF_TRACK_MOMENT);
         }
     }
 }
