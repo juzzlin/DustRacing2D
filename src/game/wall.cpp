@@ -61,69 +61,59 @@ void Wall::render(MCCamera * pCamera)
     glColor3f(0.75, 0.75, 0.75);
 
     // Cap
-    {
-        glNormal3f(0, 0, 1.0f);
-        glTexCoord2i(0, 0);
-        glVertex3i  (-x, +y, h);
-        glTexCoord2i(0, 1);
-        glVertex3i  (-x, -y, h);
-        glTexCoord2i(1, 1 );
-        glVertex3i  (+x, -y, h);
-        glTexCoord2i(1, 0 );
-        glVertex3i  (+x, +y, h);
-    }
+    glNormal3f(0, 0, 1.0f);
+    glTexCoord2i(0, 0);
+    glVertex3i(-x, +y, h);
+    glTexCoord2i(0, 1);
+    glVertex3i(-x, -y, h);
+    glTexCoord2i(1, 1 );
+    glVertex3i(+x, -y, h);
+    glTexCoord2i(1, 0 );
+    glVertex3i(+x, +y, h);
 
     // Back
-    {
-        glNormal3f(0, 1.0f, 0);
-        glTexCoord2i(0, 0);
-        glVertex3i  (-x, +y, 0);
-        glTexCoord2i(0, 1);
-        glVertex3i  (-x, +y, h);
-        glTexCoord2i(1, 1 );
-        glVertex3i  (+x, +y, h);
-        glTexCoord2i(1, 0 );
-        glVertex3i  (+x, +y, 0);
-    }
+    glNormal3f(0, 1.0f, 0);
+    glTexCoord2i(0, 0);
+    glVertex3i(-x, +y, 0);
+    glTexCoord2i(0, 1);
+    glVertex3i(-x, +y, h);
+    glTexCoord2i(1, 1 );
+    glVertex3i(+x, +y, h);
+    glTexCoord2i(1, 0 );
+    glVertex3i(+x, +y, 0);
 
     // Front
-    {
-        glNormal3f(0, -1.0f, 0);
-        glTexCoord2i(0, 0);
-        glVertex3i  (+x, -y, 0);
-        glTexCoord2i(0, 1);
-        glVertex3i  (+x, -y, h);
-        glTexCoord2i(1, 1 );
-        glVertex3i  (-x, -y, h);
-        glTexCoord2i(1, 0 );
-        glVertex3i  (-x, -y, 0);
-    }
+    glNormal3f(0, -1.0f, 0);
+    glTexCoord2i(0, 0);
+    glVertex3i(+x, -y, 0);
+    glTexCoord2i(0, 1);
+    glVertex3i(+x, -y, h);
+    glTexCoord2i(1, 1 );
+    glVertex3i(-x, -y, h);
+    glTexCoord2i(1, 0 );
+    glVertex3i(-x, -y, 0);
 
     // Left
-    {
-        glNormal3f(-1.0f, 0, 0);
-        glTexCoord2i(0, 0);
-        glVertex3i  (-x, -y, 0);
-        glTexCoord2i(0, 1);
-        glVertex3i  (-x, -y, h);
-        glTexCoord2i(1, 1 );
-        glVertex3i  (-x, +y, h);
-        glTexCoord2i(1, 0 );
-        glVertex3i  (-x, +y, 0);
-    }
+    glNormal3f(-1.0f, 0, 0);
+    glTexCoord2i(0, 0);
+    glVertex3i(-x, -y, 0);
+    glTexCoord2i(0, 1);
+    glVertex3i(-x, -y, h);
+    glTexCoord2i(1, 1 );
+    glVertex3i(-x, +y, h);
+    glTexCoord2i(1, 0 );
+    glVertex3i(-x, +y, 0);
 
     // Right
-    {
-        glNormal3f(1.0f, 0, 0);
-        glTexCoord2i(0, 0);
-        glVertex3i  (+x, +y, 0);
-        glTexCoord2i(0, 1);
-        glVertex3i  (+x, +y, h);
-        glTexCoord2i(1, 1 );
-        glVertex3i  (+x, -y, h);
-        glTexCoord2i(1, 0 );
-        glVertex3i  (+x, -y, 0);
-    }
+    glNormal3f(1.0f, 0, 0);
+    glTexCoord2i(0, 0);
+    glVertex3i(+x, +y, 0);
+    glTexCoord2i(0, 1);
+    glVertex3i(+x, +y, h);
+    glTexCoord2i(1, 1 );
+    glVertex3i(+x, -y, h);
+    glTexCoord2i(1, 0 );
+    glVertex3i(+x, -y, 0);
 
     glEnd();
     glPopMatrix();
@@ -141,8 +131,11 @@ void Wall::renderShadow(MCCamera * pCamera)
     // Get absolute (screen) coordinates
     if (pCamera)
     {
-        x = pCamera->mapXToCamera(x + wx2);
-        y = pCamera->mapYToCamera(y - wy2);
+        const int shadowOffsetX = wx2 / 2;
+        const int shadowOffsetY = wy2 / 2;
+
+        x = pCamera->mapXToCamera(x + shadowOffsetX);
+        y = pCamera->mapYToCamera(y - shadowOffsetY);
     }
 
     // Disable texturing, enable alpha
@@ -162,7 +155,7 @@ void Wall::renderShadow(MCCamera * pCamera)
     // Shadow color
     glColor4f(0.1f, 0.1f, 0.1f, 0.5f);
 
-    // No: draw a full shadow
+    // Draw a full shadow
     glBegin(GL_QUADS);
     glNormal3f(0, 0, 1.0f);
     glVertex3i(-x, +y, 0);
@@ -171,19 +164,6 @@ void Wall::renderShadow(MCCamera * pCamera)
     glVertex3i(+x, +y, 0);
     glEnd();
 
-    // Draw two additional triangle-shaped shadow parts
-    glBegin(GL_TRIANGLES);
-    glNormal3f(0, 0, 1.0f);
-
-    glVertex3i(0, 2 * y, 0);
-    glVertex3i(0, y,     0);
-    glVertex3i(x, y,     0);
-
-    glVertex3i(0 - wx,     2 * y   - wy, 0);
-    glVertex3i(0 - wx + x, y - wy + y,   0);
-    glVertex3i(x - wx,     y - wy,       0);
-
-    glEnd();
     glPopMatrix();
     glPopAttrib();
 }
