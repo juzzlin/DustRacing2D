@@ -127,6 +127,7 @@ void Wall::render(MCCamera * pCamera)
 
     glEnd();
     glPopMatrix();
+    glDisable(GL_CULL_FACE);
     glPopAttrib();
 }
 
