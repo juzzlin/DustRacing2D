@@ -208,8 +208,8 @@ void Game::stop()
 
 void Game::updateFrame()
 {
-    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
     m_pRenderer->updateFrame(m_pCamera);
+    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
 }
 
 void Game::countRenderFps()
