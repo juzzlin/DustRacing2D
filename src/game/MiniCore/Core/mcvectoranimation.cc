@@ -20,13 +20,59 @@
 #include "mcvectoranimation.hh"
 #include <cassert>
 
+class MCVectorAnimationImpl
+{
+    MCVectorAnimationImpl();
+    void init(
+        MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end,
+        MCUint steps);
+    bool update();
+
+    MCVector3dF * pVect;
+    MCVector3dF   delta;
+    MCUint        steps;
+    MCUint        step;
+
+    friend class MCVectorAnimation;
+};
+
+MCVectorAnimationImpl::MCVectorAnimationImpl()
+: pVect(nullptr)
+{
+}
+
+void MCVectorAnimationImpl::init(
+    MCVector3dF       & vect,
+    const MCVector3dF & start,
+    const MCVector3dF & end,
+    MCUint steps_)
+{
+    delta  = (end - start) / steps_;
+    pVect  = &vect;
+    steps  = steps_;
+    step   = 0;
+    *pVect = start;
+}
+
+bool MCVectorAnimationImpl::update()
+{
+    assert(pVect);
+    if (++step < steps)
+    {
+        *pVect += delta;
+        return false;
+    }
+    return true;
+}
+
 MCVectorAnimation::MCVectorAnimation()
-  : m_pVect(nullptr)
+: m_pImpl(new MCVectorAnimationImpl)
 {
 }
 
 MCVectorAnimation::~MCVectorAnimation()
 {
+    delete m_pImpl;
 }
 
 void MCVectorAnimation::init(
@@ -35,21 +81,10 @@ void MCVectorAnimation::init(
     const MCVector3dF & end,
     MCUint steps)
 {
-    m_delta = (end - start) / steps;
-    m_pVect = &vect;
-    m_steps = steps;
-    m_step  = 0;
-
-    *m_pVect = start;
+    m_pImpl->init(vect, start, end, steps);
 }
 
 bool MCVectorAnimation::update()
 {
-    assert(m_pVect);
-    if (++m_step < m_steps)
-    {
-        *m_pVect += m_delta;
-        return false;
-    }
-    return true;
+    return m_pImpl->update();
 }

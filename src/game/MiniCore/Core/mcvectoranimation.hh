@@ -24,6 +24,8 @@
 #include "mcmacros.hh"
 #include "mcvector3d.hh"
 
+class MCVectorAnimationImpl;
+
 /*!
  *  \class MCVectorAnimation
  *
@@ -52,10 +54,7 @@ private:
     DISABLE_COPY(MCVectorAnimation);
     DISABLE_ASSI(MCVectorAnimation);
 
-    MCVector3dF * m_pVect;
-    MCVector3dF   m_delta;
-    MCUint m_steps;
-    MCUint m_step;
+    MCVectorAnimationImpl * const m_pImpl;
 };
 
 #endif // MCVECTORANIMATION_HH
