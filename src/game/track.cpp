@@ -100,56 +100,28 @@ void Track::render(MCCamera * pCamera)
     // Set the default color
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // Tile coordinates
-    int x, y;
-
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
-    static const int w2 = TrackTile::TILE_W / 2;
-    static const int h2 = TrackTile::TILE_H / 2;
 
     glNormal3f(0.0f, 0.0f, 1.0f);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Loop through the visible tile matrix and draw the tiles
-    y = j0 * h;
+    int initX = i0 * w;
+    int x     = initX;
+    int y     = j0 * h;
     for (MCUint j = j0; j <= j2; j++)
     {
-        x = i0 * w;
+        x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
             if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
             {
                 if (MCSurface * pSurface = pTile->surface())
                 {
-                    // Calculate absolute coordinates to be
-                    // used in the rendering
-                    const int X = x - cameraBox.x1();
-                    const int Y = y - cameraBox.y1();
-
-                    glPushMatrix();
-
-                    // Bind the texture according to the tile
-                    glBindTexture(GL_TEXTURE_2D, pSurface->handle());
-
-                    const int Z = 0;
-                    glTranslated(X + w2, Y + h2, Z);
-                    glRotated(pTile->rotation(), 0, 0, 1);
-
-                    // Render the tile as a quad
-                    glBegin(GL_QUADS);
-
-                    glTexCoord2i(0, 0);
-                    glVertex2i(-w2, -h2);
-                    glTexCoord2i(0, 1);
-                    glVertex2i(-w2, h2);
-                    glTexCoord2i(1, 1);
-                    glVertex2i(w2, h2);
-                    glTexCoord2i(1, 0);
-                    glVertex2i(w2, -h2);
-
-                    glEnd();
-                    glPopMatrix();
+                    renderTile(
+                        x - cameraBox.x1(), y - cameraBox.y1(), 0,
+                        pTile->rotation(), *pSurface);
                 }
             }
 
@@ -158,6 +130,35 @@ void Track::render(MCCamera * pCamera)
 
         y += h;
     }
+}
+
+void Track::renderTile(int x, int y, int z, int angle, MCSurface & surface) const
+{
+    static const int w2 = TrackTile::TILE_W / 2;
+    static const int h2 = TrackTile::TILE_H / 2;
+
+    glPushMatrix();
+
+    // Bind the texture according to the tile
+    glBindTexture(GL_TEXTURE_2D, surface.handle());
+
+    glTranslated(x + w2, y + h2, z);
+    glRotated(angle, 0, 0, 1);
+
+    // Render the tile as a quad
+    glBegin(GL_QUADS);
+
+    glTexCoord2i(0, 0);
+    glVertex2i(-w2, -h2);
+    glTexCoord2i(0, 1);
+    glVertex2i(-w2, h2);
+    glTexCoord2i(1, 1);
+    glVertex2i(w2, h2);
+    glTexCoord2i(1, 0);
+    glVertex2i(w2, -h2);
+
+    glEnd();
+    glPopMatrix();
 }
 
 Track::~Track()

@@ -22,6 +22,7 @@
 class TrackData;
 class TrackTile;
 class MCCamera;
+class MCSurface;
 
 //! A renderable race track object constructed from
 //! the given track data.
@@ -56,6 +57,8 @@ private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
+
+    void renderTile(int x, int y, int z, int angle, MCSurface & surface) const;
 
     TrackData * m_pTrackData;
     MCUint m_rows, m_cols, m_width, m_height;
