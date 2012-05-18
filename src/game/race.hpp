@@ -50,9 +50,6 @@ public:
     //! Set the current race track.
     void setTrack(Track & track);
 
-    //! Set the number of laps.
-    void setLapCount(unsigned int laps);
-
     //! Get the position of the given car (0 == N/A, 1 == first, 2 == second..).
     unsigned int getPositionOfCar(const Car & car) const;
 

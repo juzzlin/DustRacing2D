@@ -151,12 +151,8 @@ Car & Race::getLeadingCar() const
 
 void Race::setTrack(Track & track)
 {
-    m_pTrack = &track;
-}
-
-void Race::setLapCount(unsigned int laps)
-{
-    m_lapCount = laps;
+    m_pTrack   = &track;
+    m_lapCount = m_pTrack->trackData().lapCount();
 }
 
 unsigned int Race::lapCount() const

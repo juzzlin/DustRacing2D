@@ -15,6 +15,21 @@
 
 #include "trackdatabase.hpp"
 
+TrackDataBase::TrackDataBase()
+: m_lapCount(1)
+{
+}
+
+unsigned int TrackDataBase::lapCount() const
+{
+    return m_lapCount;
+}
+
+void TrackDataBase::setLapCount(unsigned int laps)
+{
+    m_lapCount = laps;
+}
+
 TrackDataBase::~TrackDataBase()
 {
 }

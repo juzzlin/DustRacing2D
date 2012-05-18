@@ -295,9 +295,7 @@ void Scene::addTrackObjectsToWorld()
 void Scene::initRace()
 {
     assert(m_pActiveTrack);
-
     m_race.setTrack(*m_pActiveTrack);
-    m_race.setLapCount(2);
     m_race.init();
 }
 

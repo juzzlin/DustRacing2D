@@ -26,6 +26,9 @@ class TrackDataBase
 {
 public:
 
+    //! Constructor.
+    TrackDataBase();
+
     //! Destructor.
     virtual ~TrackDataBase();
 
@@ -37,6 +40,12 @@ public:
 
     //! Set file name.
     virtual void setFileName(QString fileName) = 0;
+
+    //! Get lap count.
+    virtual unsigned int lapCount() const;
+
+    //! Set lap count.
+    virtual void setLapCount(unsigned int laps);
 
     //! Get map object.
     virtual MapBase & map() = 0;
@@ -55,6 +64,10 @@ public:
 
     //! Get objects object.
     virtual const Objects & objects() const = 0;
+
+private:
+
+    unsigned int m_lapCount;
 };
 
 #endif // TRACKDATABASE_HPP

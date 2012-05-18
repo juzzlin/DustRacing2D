@@ -38,6 +38,7 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     root.setAttribute("name", trackData->name());
     root.setAttribute("cols", trackData->map().cols());
     root.setAttribute("rows", trackData->map().rows());
+    root.setAttribute("lapCount", trackData->lapCount());
     doc.appendChild(root);
 
     // Add information about tiles
@@ -112,18 +113,19 @@ TrackData * TrackIO::open(QString path)
 
     file.close();
 
-    QDomElement  root    = doc.documentElement();
-    QString      version = root.attribute("version",
-        Config::Editor::EDITOR_VERSION);
-    QString      name    = root.attribute("name", "undefined");
-    unsigned int cols    = root.attribute("cols", "0").toUInt();
-    unsigned int rows    = root.attribute("rows", "0").toUInt();
+    const QDomElement  root     = doc.documentElement();
+    const QString      version  = root.attribute("version", Config::Editor::EDITOR_VERSION);
+    const QString      name     = root.attribute("name", "undefined");
+    const unsigned int cols     = root.attribute("cols", "0").toUInt();
+    const unsigned int rows     = root.attribute("rows", "0").toUInt();
+    const unsigned int lapCount = root.attribute("lapCount", "0").toUInt();
 
     TrackData * newData = nullptr;
     if (cols > 0 && rows > 0)
     {
         newData = new TrackData(name, cols, rows);
         newData->setFileName(path);
+        newData->setLapCount(lapCount);
 
         QVector<TrackTileBase *> routeVector;
 
@@ -136,13 +138,13 @@ TrackData * TrackIO::open(QString path)
                 // Read a tile tag
                 if (tag.nodeName() == "tile")
                 {
-                    QString      id     = tag.attribute("type", "clear");
-                    unsigned int i      = tag.attribute("i", "0").toUInt();
-                    unsigned int j      = tag.attribute("j", "0").toUInt();
-                    int          o      = tag.attribute("o", "0").toInt();
-                    int      index      = tag.attribute("index", "-1").toInt();
-                    int computerHint    = tag.attribute("computerHint", "0").toInt();
-                    int drivingLineHint = tag.attribute("drivingLineHint", "0").toInt();
+                    const QString      id     = tag.attribute("type", "clear");
+                    const unsigned int i      = tag.attribute("i", "0").toUInt();
+                    const unsigned int j      = tag.attribute("j", "0").toUInt();
+                    const int          o      = tag.attribute("o", "0").toInt();
+                    const int      index      = tag.attribute("index", "-1").toInt();
+                    const int computerHint    = tag.attribute("computerHint", "0").toInt();
+                    const int drivingLineHint = tag.attribute("drivingLineHint", "0").toInt();
 
                     // Init a new tile. QGraphicsScene will take
                     // the ownership eventually.
@@ -150,9 +152,7 @@ TrackData * TrackIO::open(QString path)
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);
-                        tile->setPixmap(
-                            MainWindow::instance()->objectLoader()
-                                .getPixmapByRole(id));
+                        tile->setPixmap(MainWindow::instance()->objectLoader().getPixmapByRole(id));
                         tile->setRouteIndex(index);
                         tile->setComputerHint(
                             static_cast<TrackTileBase::ComputerHint>(computerHint));
@@ -166,10 +166,10 @@ TrackData * TrackIO::open(QString path)
                 // Read an object tag
                 else if (tag.nodeName() == "object")
                 {
-                    QString role     = tag.attribute("role", "clear");
-                    QString category = tag.attribute("category", "clear");
-                    int     x        = tag.attribute("x", "0").toInt();
-                    int     y        = tag.attribute("y", "0").toInt();
+                    const QString role     = tag.attribute("role", "clear");
+                    const QString category = tag.attribute("category", "clear");
+                    const int     x        = tag.attribute("x", "0").toInt();
+                    const int     y        = tag.attribute("y", "0").toInt();
 
                     ObjectData model =
                         MainWindow::instance()->objectLoader().getObjectByRole(

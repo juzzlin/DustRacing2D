@@ -67,11 +67,11 @@ public:
 
 private:
 
-    QString m_name;
-    QString m_fileName;
-    Map     m_map;
-    Objects m_objects;
-    Route   m_route;
+    QString      m_name;
+    QString      m_fileName;
+    Map          m_map;
+    Objects      m_objects;
+    Route        m_route;
 };
 
 #endif // TRACKDATA_HPP

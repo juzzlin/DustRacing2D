@@ -21,6 +21,7 @@
 #include "objectloader.hpp"
 #include "trackio.hpp"
 #include "trackdata.hpp"
+#include "trackpropertiesdialog.hpp"
 #include "tracktile.hpp"
 #include "editordata.hpp"
 #include "editorview.hpp"
@@ -48,6 +49,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include <cassert>
+
 MainWindow * MainWindow::m_instance = nullptr;
 
 namespace
@@ -71,6 +74,7 @@ MainWindow::MainWindow(QString trackFile)
 , m_currentToolBarAction(nullptr)
 , m_clearAllAction(nullptr)
 , m_setRouteAction(nullptr)
+, m_setTrackPropertiesAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
 {
@@ -336,6 +340,12 @@ void MainWindow::populateMenuBar()
     connect(m_enlargeCanvasAction, SIGNAL(triggered()), this, SLOT(enlargeCanvas()));
     m_enlargeCanvasAction->setEnabled(false);
 
+    // Add "Set track properties"-action
+    m_setTrackPropertiesAction = new QAction(tr("&Set track properties"), this);
+    editMenu->addAction(m_setTrackPropertiesAction);
+    connect(m_setTrackPropertiesAction, SIGNAL(triggered()), this, SLOT(setTrackProperties()));
+    m_setTrackPropertiesAction->setEnabled(false);
+
     // Create "route"-menu
     QMenu * routeMenu = menuBar()->addMenu(tr("&Route"));
 
@@ -382,6 +392,8 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 {
     if (action != m_currentToolBarAction)
     {
+        assert(m_editorData);
+
         m_currentToolBarAction = action;
 
         // Select-action
@@ -454,6 +466,7 @@ bool MainWindow::doOpenTrack(QString fileName)
     removeTilesFromScene();
     removeObjectsFromScene();
 
+    assert(m_editorData);
     if (m_editorData->loadTrackData(fileName))
     {
         console(QString(tr("Track '%1' opened.").arg(fileName)));
@@ -472,6 +485,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_clearAllAction->setEnabled(true);
         m_enlargeCanvasAction->setEnabled(true);
         m_setRouteAction->setEnabled(true);
+        m_setTrackPropertiesAction->setEnabled(true);
 
         delete m_editorScene;
         m_editorScene = new EditorScene;
@@ -502,6 +516,7 @@ bool MainWindow::doOpenTrack(QString fileName)
 
 void MainWindow::saveTrack()
 {
+    assert(m_editorData);
     if (m_editorData->saveTrackData())
     {
         console(QString(tr("Track '")) + m_editorData->trackData()->fileName() + tr("' saved."));
@@ -522,6 +537,7 @@ void MainWindow::saveAsTrack()
     if (!fileName.endsWith(".trk"))
         fileName += ".trk";
 
+    assert(m_editorData);
     if (m_editorData->saveTrackDataAs(fileName))
     {
         console(QString(tr("Track '")) + fileName + tr("' saved."));
@@ -545,6 +561,7 @@ void MainWindow::initializeNewTrack()
         removeTilesFromScene();
         removeObjectsFromScene();
 
+        assert(m_editorData);
         m_editorData->setTrackData(new TrackData(dialog.name(), cols, rows));
 
         delete m_editorScene;
@@ -566,6 +583,7 @@ void MainWindow::initializeNewTrack()
         m_clearAllAction->setEnabled(true);
         m_enlargeCanvasAction->setEnabled(true);
         m_setRouteAction->setEnabled(true);
+        m_setTrackPropertiesAction->setEnabled(true);
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
             .arg(m_editorData->trackData()->name())
@@ -574,9 +592,24 @@ void MainWindow::initializeNewTrack()
     }
 }
 
+void MainWindow::setTrackProperties()
+{
+    // Show a dialog to set some properties e.g. lap count.
+    assert(m_editorData);
+    TrackPropertiesDialog dialog(m_editorData->trackData()->lapCount(), this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_editorData->trackData()->setLapCount(dialog.lapCount());
+
+        console(QString(tr("Lap count set to '%1'."))
+            .arg(m_editorData->trackData()->lapCount()));
+    }
+}
+
 // TODO: Move to EditorData
 void MainWindow::addTilesToScene()
 {
+    assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
         const unsigned int cols = data->map().cols();
@@ -605,6 +638,7 @@ void MainWindow::addTilesToScene()
 // TODO: Move to EditorData
 void MainWindow::addObjectsToScene()
 {
+    assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
         for (unsigned int i = 0; i < data->objects().count(); i++)
@@ -620,12 +654,14 @@ void MainWindow::addObjectsToScene()
 void MainWindow::addRouteLinesToScene(bool closeLoop)
 {
     // Re-use this method
+    assert(m_editorData);
     m_editorData->addRouteLinesToScene(closeLoop);
 }
 
 // TODO: Move to EditorData
 void MainWindow::removeTilesFromScene()
 {
+    assert(m_editorData);
     TrackTile::setActiveTile(nullptr);
     if (TrackData * data = m_editorData->trackData())
     {
@@ -645,6 +681,7 @@ void MainWindow::removeTilesFromScene()
 // TODO: Move to EditorData
 void MainWindow::removeObjectsFromScene()
 {
+    assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
         for (unsigned int i = 0; i < data->objects().count(); i++)
@@ -662,6 +699,7 @@ void MainWindow::removeObjectsFromScene()
 // TODO: Move to EditorData
 void MainWindow::clear()
 {
+    assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
         const unsigned int cols = data->map().cols();
@@ -681,6 +719,7 @@ void MainWindow::clear()
 // TODO: Move to EditorData
 void MainWindow::clearRoute()
 {
+    assert(m_editorData);
     m_editorData->removeRouteLinesFromScene();
     m_editorData->trackData()->route().clear();
     m_console->append(QString(tr("Route cleared.")));
@@ -688,6 +727,7 @@ void MainWindow::clearRoute()
 
 void MainWindow::enlargeCanvas()
 {
+    assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
         data->enlargeCanvas();
@@ -703,6 +743,7 @@ void MainWindow::enlargeCanvas()
 
 void MainWindow::beginSetRoute()
 {
+    assert(m_editorData);
     if (m_editorData->canRouteBeSet())
     {
         console(tr("Set route: begin."));
@@ -720,6 +761,7 @@ void MainWindow::beginSetRoute()
 
 void MainWindow::endSetRoute()
 {
+    assert(m_editorData);
     m_editorData->endSetRoute();
     console(tr("Set route: route finished."));
 }

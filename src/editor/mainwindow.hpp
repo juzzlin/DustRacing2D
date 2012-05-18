@@ -90,6 +90,7 @@ private slots:
     void enlargeCanvas();
     void handleToolBarActionClick(QAction * action);
     void initializeNewTrack();
+    void setTrackProperties();
     void openTrack();
     void saveTrack();
     void saveAsTrack();
@@ -120,6 +121,7 @@ private:
     QAction      * m_enlargeCanvasAction;
     QAction      * m_clearRouteAction;
     QAction      * m_setRouteAction;
+    QAction      * m_setTrackPropertiesAction;
     QSlider      * m_scaleSlider;
     QToolBar     * m_toolBar;
 
