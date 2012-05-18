@@ -1,0 +1,40 @@
+0.1-alpha4
+----------
+
+    Adds CHANGELOG.
+    Lap count can be set in the editor for each track.
+    Updates README.
+    Implementation class for MCVectorAnimation.
+    Refactors Track.
+    Adds a CMake target for runtime files.
+    Updates TODO.
+    Update impulses only on integrate.
+    Parameter tuning.
+    Change the order of scene update and render.
+    More power for reverse. Bug fixes related to reverse.
+    Refactors wall.cpp.
+    Disable culling after rendering walls.
+    Four pixels bigger car.
+    Separates position resolving and impulse generation.
+    Support for "sleeping" objects.
+    Simpler frame update timing.
+    Mechanism to send MCTimerEvent's.
+    Adds MCTimerEvent.
+    Disables mouse cursor.
+    Updates INSTALL.
+    Adds missing sand.png.
+
+0.1-alpha3
+----------
+
+    Use QWidget instead of QMainWindow. Also fixes rendering on Windows.
+    Refactors Car controlling.
+    Adds Car::Description.
+    Support for ten cars.
+    Don't spawn sparkles at low speeds.
+    New graphics: sand.
+    Updates graphics: asphalt.
+    Updates archive.sh
+
+-- Jussi Lind <jussi.lind@iki.fi>
+
