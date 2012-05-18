@@ -61,7 +61,7 @@ Game::Game()
     connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
     m_renderCountTimer.setInterval(1000);
 
-    m_pTrackLoader->addTrackSearchPath(QString(Config::Common::DATA_PATH) +
+    m_pTrackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
 }
 
@@ -95,18 +95,18 @@ Renderer * Game::renderer() const
 void Game::loadSurfaces()
 {
     // Load texture data
-    const std::string textureConfigPath = std::string(Config::Common::DATA_PATH) +
+    const std::string textureConfigPath = std::string(Config::Common::dataPath) +
         QDir::separator().toAscii() + "textures.conf";
 
     MCLogger::logInfo("Loading texture config from %s..", textureConfigPath.c_str());
 
     // Load textures / surfaces
-    m_pTextureManager->load(textureConfigPath, Config::Common::DATA_PATH);
+    m_pTextureManager->load(textureConfigPath, Config::Common::dataPath);
 }
 
 void Game::loadFonts()
 {
-    const std::string fontConfigPath = std::string(Config::Common::DATA_PATH) +
+    const std::string fontConfigPath = std::string(Config::Common::dataPath) +
         QDir::separator().toAscii() + "fonts.conf";
 
     MCLogger::logInfo("Loading font config from %s..", fontConfigPath.c_str());

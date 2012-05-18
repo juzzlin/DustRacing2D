@@ -24,7 +24,7 @@ public:
     public:
 
         //! The base data path.
-        static const char * DATA_PATH;
+        static const char * dataPath;
     };
 
     //! Editor-specific config data.
