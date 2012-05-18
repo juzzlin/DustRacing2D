@@ -5,7 +5,14 @@ General
 -------
 
 Dust Racing is a tile-based 2D racing game written in Qt/OpenGL.
-Dust Racing is licensed under GNU GPLv3.
+
+License
+-------
+
+Dust Racing is licensed under GNU GPLv3. This applies to everything
+in the source tree, including graphics.
+
+See COPYING for the complete license text.
 
 Source code
 -----------
@@ -21,7 +28,7 @@ src/game/
 src/game/MiniCore/
 src/editor/
 
-See INSTALL for build / install instruction.
+See INSTALL for build and install instruction.
 
 
 -- Jussi Lind <jussi.lind@iki.fi>
