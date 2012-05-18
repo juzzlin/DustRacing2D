@@ -35,7 +35,7 @@ bool Startlights::updateCounter(MCUint limit)
     return false;
 }
 
-void Startlights::update()
+bool Startlights::update()
 {
     const MCUint second = m_stepsPerState;
     switch (m_state)
@@ -49,7 +49,7 @@ void Startlights::update()
              second / 3);
         m_state = LightsAppear;
         InputHandler::setEnabled(false);
-        break;
+        return true;
 
     case LightsAppear:
         m_animation.update();
@@ -57,21 +57,21 @@ void Startlights::update()
         {
             m_state = LightsFirstRow;
         }
-        break;
+        return true;
 
     case LightsFirstRow:
         if (updateCounter(second))
         {
             m_state = LightsSecondRow;
         }
-        break;
+        return true;
 
     case LightsSecondRow:
         if (updateCounter(second))
         {
             m_state = LightsThirdRow;
         }
-        break;
+        return true;
 
     case LightsThirdRow:
         if (updateCounter(second))
@@ -80,7 +80,7 @@ void Startlights::update()
             InputHandler::setEnabled(true);
             m_race.start();
         }
-        break;
+        return true;
 
     case LightsGo:
         if (updateCounter(second))
@@ -91,21 +91,28 @@ void Startlights::update()
                              MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
                              second / 3);
         }
-        break;
+        return true;
 
     case LightsDisappear:
         m_animation.update();
-        break;
+        return true;
 
     case LightsEnd:
-        break;
+        return false;
     }
+
+    return true;
 }
 
 void Startlights::setDimensions(MCUint width, MCUint height)
 {
     m_width  = width;
     m_height = height;
+}
+
+void Startlights::reset()
+{
+    m_state = LightsInit;
 }
 
 Startlights::LightState Startlights::state() const

@@ -32,6 +32,7 @@ class OffTrackDetector;
 class Speedometer;
 class Startlights;
 class StartlightsOverlay;
+class StateMachine;
 class Track;
 class TimingOverlay;
 
@@ -50,6 +51,9 @@ public:
     //! time step.
     void updateFrame(InputHandler & handler,
         MCCamera & camera, float timeStep);
+
+    //! Update animations.
+    void updateAnimations();
 
     //! Set the active race track.
     void setActiveTrack(Track & activeTrack);
@@ -107,6 +111,7 @@ private:
     Speedometer        * m_pSpeedometer;
     Startlights        * m_pStartlights;
     StartlightsOverlay * m_pStartlightsOverlay;
+    StateMachine       * m_pStateMachine;
     CheckeredFlag      * m_pCheckeredFlag;
     MCFloat              m_cameraBaseOffset;
 

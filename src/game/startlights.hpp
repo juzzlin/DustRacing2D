@@ -19,11 +19,13 @@
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVectorAnimation"
 
+#include "updateableif.hpp"
+
 class Race;
 
 //! Startlight model that controls the position and animation
 //! of the startlights.
-class Startlights
+class Startlights : public UpdateableIf
 {
 public:
 
@@ -43,7 +45,11 @@ public:
     //! Constructor.
     Startlights(Race & race);
 
-    void update();
+    //! \reimp
+    virtual bool update();
+
+    //! \reimp
+    virtual void reset();
 
     LightState state() const;
 
@@ -55,13 +61,14 @@ private:
 
     bool updateCounter(MCUint limit);
 
-    LightState m_state;
-    MCUint m_counter;
-    MCUint m_stepsPerState;
-    MCVector3dF m_pos;
-    MCUint m_width, m_height;
+    LightState        m_state;
+    MCUint            m_counter;
+    MCUint            m_stepsPerState;
+    MCVector3dF       m_pos;
+    MCUint            m_width;
+    MCUint            m_height;
     MCVectorAnimation m_animation;
-    Race & m_race;
+    Race            & m_race;
 };
 
 #endif // STARTLIGHTS_HPP

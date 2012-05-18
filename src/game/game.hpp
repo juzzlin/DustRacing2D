@@ -69,6 +69,7 @@ public:
 private slots:
 
     void updateFrame();
+    void updateAnimations();
     void countRenderFps();
     void finish();
 
@@ -89,7 +90,8 @@ private:
     Speedometer          * m_pSpeedometer;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
-    QTimer                 m_updateTimer;
+    QTimer                 m_frameUpdateTimer;
+    QTimer                 m_animationUpdateTimer;
     QTimer                 m_renderCountTimer;
     unsigned int           m_updateFps;
     unsigned int           m_renderFps;

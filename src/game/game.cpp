@@ -42,22 +42,23 @@ static const unsigned int NUM_CARS    = 10;
 }
 
 Game::Game()
-  : m_pRenderer(nullptr)
-  , m_pScene(nullptr)
-  , m_pTextureManager(new MCTextureManager)
-  , m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
-  , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
-  , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
-  , m_pTimingOverlay(nullptr)
-  , m_pSpeedometer(nullptr)
-  , m_pCamera(nullptr)
-  , m_pInputHandler(new InputHandler(MAX_PLAYERS))
-  , m_updateFps(60)
-  , m_timeStep(1.0f / m_updateFps)
-  , m_renderCount(0)
-  , m_availableRenderTime(0)
+: m_pRenderer(nullptr)
+, m_pScene(nullptr)
+, m_pTextureManager(new MCTextureManager)
+, m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
+, m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
+, m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
+, m_pTimingOverlay(nullptr)
+, m_pSpeedometer(nullptr)
+, m_pCamera(nullptr)
+, m_pInputHandler(new InputHandler(MAX_PLAYERS))
+, m_updateFps(60)
+, m_timeStep(1.0f / m_updateFps)
+, m_renderCount(0)
+, m_availableRenderTime(0)
 {
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    connect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
     connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
     m_renderCountTimer.setInterval(1000);
 
@@ -83,7 +84,7 @@ void Game::setRenderer(Renderer * newRenderer)
 
 void Game::finish()
 {
-    disconnect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    disconnect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     disconnect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
 }
 
@@ -194,15 +195,19 @@ bool Game::init()
 
 void Game::start()
 {
-    m_updateTimer.setInterval(1000 / m_updateFps);
-    m_updateTimer.start();
+    m_frameUpdateTimer.setInterval(1000 / m_updateFps);
+    m_frameUpdateTimer.start();
+
+    m_animationUpdateTimer.setInterval(1000 / 60); // Always 60 Hz
+    m_animationUpdateTimer.start();
 
     m_renderCountTimer.start();
 }
 
 void Game::stop()
 {
-    m_updateTimer.stop();
+    m_frameUpdateTimer.stop();
+    m_animationUpdateTimer.stop();
     m_renderCountTimer.stop();
 }
 
@@ -210,6 +215,11 @@ void Game::updateFrame()
 {
     m_pRenderer->updateFrame(m_pCamera);
     m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
+}
+
+void Game::updateAnimations()
+{
+    m_pScene->updateAnimations();
 }
 
 void Game::countRenderFps()

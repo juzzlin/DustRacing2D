@@ -30,6 +30,7 @@ Track::Track(TrackData * pTrackData)
 , m_cols(m_pTrackData->map().cols())
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
+, m_scale(0.0f)
 {
     assert(pTrackData);
 }
@@ -144,6 +145,7 @@ void Track::renderTile(int x, int y, int z, int angle, MCSurface & surface) cons
 
     glTranslated(x + w2, y + h2, z);
     glRotated(angle, 0, 0, 1);
+    glScaled(m_scale, m_scale, 0.0f);
 
     // Render the tile as a quad
     glBegin(GL_QUADS);
@@ -159,6 +161,25 @@ void Track::renderTile(int x, int y, int z, int angle, MCSurface & surface) cons
 
     glEnd();
     glPopMatrix();
+}
+
+bool Track::update()
+{
+    if (m_scale < 1.0f)
+    {
+        m_scale += 0.05f;
+        return true;
+    }
+    else
+    {
+        m_scale = 1.0f;
+        return false;
+    }
+}
+
+void Track::reset()
+{
+    m_scale = 0.0f;
 }
 
 Track::~Track()

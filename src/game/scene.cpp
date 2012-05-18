@@ -25,6 +25,7 @@
 #include "speedometer.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
+#include "statemachine.hpp"
 #include "timingoverlay.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -46,15 +47,16 @@
 #include <cassert>
 
 Scene::Scene(unsigned int numCars)
-  : m_race(numCars)
-  , m_pActiveTrack(nullptr)
-  , m_pWorld(new MCWorld)
-  , m_pTimingOverlay(nullptr)
-  , m_pSpeedometer(nullptr)
-  , m_pStartlights(new Startlights(m_race))
-  , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
-  , m_pCheckeredFlag(new CheckeredFlag)
-  , m_cameraBaseOffset(0)
+: m_race(numCars)
+, m_pActiveTrack(nullptr)
+, m_pWorld(new MCWorld)
+, m_pTimingOverlay(nullptr)
+, m_pSpeedometer(nullptr)
+, m_pStartlights(new Startlights(m_race))
+, m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
+, m_pStateMachine(new StateMachine(*m_pStartlights))
+, m_pCheckeredFlag(new CheckeredFlag)
+, m_cameraBaseOffset(0)
 {
     // Create and add cars.
     assert(numCars);
@@ -110,6 +112,11 @@ void Scene::updateFrame(InputHandler & handler,
     updateCameraLocation(camera);
 }
 
+void Scene::updateAnimations()
+{
+    m_pStateMachine->update();
+}
+
 void Scene::updateWorld(float timeStep)
 {
     // Step time
@@ -118,8 +125,6 @@ void Scene::updateWorld(float timeStep)
 
 void Scene::updateRace()
 {    
-    m_pStartlights->update();
-
     // Update race situation
     m_race.update();
 }
@@ -184,6 +189,7 @@ void Scene::updateAiLogic()
 void Scene::setActiveTrack(Track & activeTrack)
 {
     m_pActiveTrack = &activeTrack;
+    m_pStateMachine->setTrack(*m_pActiveTrack);
 
     // TODO: Remove objects
     // TODO: Removing not inserted objects results in a
@@ -376,4 +382,5 @@ Scene::~Scene()
 
     delete m_pStartlights;
     delete m_pStartlightsOverlay;
+    delete m_pStateMachine;
 }

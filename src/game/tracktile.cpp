@@ -22,10 +22,10 @@ TrackTile::TrackTile(
     QPoint matrixLocation,
     const QString & type,
     TrackTile::TileType typeEnum)
-  : TrackTileBase(trackData, location, matrixLocation, type)
-  , m_rotation(0)
-  , m_surface(nullptr)
-  , m_typeEnum(typeEnum)
+: TrackTileBase(trackData, location, matrixLocation, type)
+, m_rotation(0)
+, m_surface(nullptr)
+, m_typeEnum(typeEnum)
 {
 }
 

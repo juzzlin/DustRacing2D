@@ -20,6 +20,7 @@ set(SRC
     speedometer.cpp
     startlights.cpp
     startlightsoverlay.cpp
+    statemachine.cpp
     timing.cpp
     timingoverlay.cpp
     track.cpp
@@ -61,4 +62,3 @@ add_custom_target(runtime ALL
 link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/game)
 add_executable(dustrac ${SRC} ${MOC_SRC} ${RC_SRC})
-

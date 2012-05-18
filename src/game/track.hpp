@@ -16,6 +16,8 @@
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
+#include "updateableif.hpp"
+
 #include "MiniCore/Core/MCBBox"
 #include "MiniCore/Core/MCTypes"
 
@@ -26,7 +28,7 @@ class MCSurface;
 
 //! A renderable race track object constructed from
 //! the given track data.
-class Track
+class Track : public UpdateableIf
 {
 public:
 
@@ -53,6 +55,12 @@ public:
     //! Return pointer to the tile at the given location.
     TrackTile * trackTileAtLocation(MCUint x, MCUint y) const;
 
+    //! \reimp
+    virtual bool update();
+
+    //! \reimp
+    virtual void reset();
+
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
@@ -62,6 +70,7 @@ private:
 
     TrackData * m_pTrackData;
     MCUint m_rows, m_cols, m_width, m_height;
+    MCFloat m_scale;
 };
 
 #endif // TRACK_HPP
