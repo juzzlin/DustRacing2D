@@ -14,14 +14,20 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "statemachine.hpp"
+
+#include "renderer.hpp"
 #include "startlights.hpp"
 #include "track.hpp"
 
-StateMachine::StateMachine(Startlights & startlights)
+StateMachine::StateMachine(
+    Renderer & renderer, Startlights & startlights)
 : m_state(Init)
 , m_startlights(startlights)
+, m_renderer(renderer)
 , m_pTrack(nullptr)
+, m_fadeValue(0.0f)
 {
+    m_renderer.setEnabled(false);
 }
 
 void StateMachine::setTrack(Track & track)
@@ -34,7 +40,30 @@ bool StateMachine::update()
     switch (m_state)
     {
     case Init:
-        m_state = GameTransitionIn;
+        m_state = Intro;
+        break;
+
+    case Intro:
+
+        if (m_fadeValue < 2.0f)
+        {
+            m_fadeValue += 0.01f;
+            m_renderer.setFadeShaderEnabled(true);
+            m_renderer.setFadeValue(std::min(m_fadeValue, 1.0f));
+
+            // Avoid a non-black screen immediately after the game starts.
+            if (m_fadeValue > 0.02f)
+            {
+                m_renderer.setEnabled(true);
+            }
+        }
+        else
+        {
+            m_fadeValue = 1.0f;
+            m_state = GameTransitionIn;
+            m_renderer.setFadeShaderEnabled(false);
+        }
+
         break;
 
     case GameTransitionIn:

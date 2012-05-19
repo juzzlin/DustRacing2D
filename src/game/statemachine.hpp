@@ -18,6 +18,7 @@
 
 #include "updateableif.hpp"
 
+class Renderer;
 class Startlights;
 class Track;
 
@@ -37,7 +38,7 @@ public:
     };
 
     //! Constructor.
-    StateMachine(Startlights & startLights);
+    StateMachine(Renderer & renderer, Startlights & startLights);
 
     void setTrack(Track & track);
 
@@ -53,7 +54,9 @@ private:
 
     State         m_state;
     Startlights & m_startlights;
+    Renderer    & m_renderer;
     Track       * m_pTrack;
+    float         m_fadeValue;
 };
 
 #endif // STATEMACHINE_HPP

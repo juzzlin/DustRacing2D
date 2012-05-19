@@ -46,7 +46,7 @@
 #include <algorithm>
 #include <cassert>
 
-Scene::Scene(unsigned int numCars)
+Scene::Scene(Renderer & renderer, unsigned int numCars)
 : m_race(numCars)
 , m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
@@ -54,7 +54,7 @@ Scene::Scene(unsigned int numCars)
 , m_pSpeedometer(nullptr)
 , m_pStartlights(new Startlights(m_race))
 , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
-, m_pStateMachine(new StateMachine(*m_pStartlights))
+, m_pStateMachine(new StateMachine(renderer, *m_pStartlights))
 , m_pCheckeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
 {
@@ -349,18 +349,31 @@ TimingOverlay & Scene::timingOverlay() const
 
 void Scene::render(MCCamera & camera)
 {
-    m_pActiveTrack->render(&camera);
-    m_pWorld->renderShadows(&camera);
-    m_pWorld->render(&camera);
-
-    if (m_race.checkeredFlagEnabled())
+    if (m_pStateMachine->state() == StateMachine::Intro)
     {
-        m_pCheckeredFlag->render();
+        const int w2 = Config::Game::WINDOW_WIDTH  / 2;
+        const int h2 = Config::Game::WINDOW_HEIGHT / 2;
+        static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
+        surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }
+    else if (
+        m_pStateMachine->state() == StateMachine::GameTransitionIn ||
+        m_pStateMachine->state() == StateMachine::DoStartlights ||
+        m_pStateMachine->state() == StateMachine::Play)
+    {
+        m_pActiveTrack->render(&camera);
+        m_pWorld->renderShadows(&camera);
+        m_pWorld->render(&camera);
 
-    m_pTimingOverlay->render();
-    m_pSpeedometer->render();
-    m_pStartlightsOverlay->render();
+        if (m_race.checkeredFlagEnabled())
+        {
+            m_pCheckeredFlag->render();
+        }
+
+        m_pTimingOverlay->render();
+        m_pSpeedometer->render();
+        m_pStartlightsOverlay->render();
+    }
 }
 
 Scene::~Scene()

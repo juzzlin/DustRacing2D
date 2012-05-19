@@ -9,8 +9,8 @@ Game:
 - Global setting for shadow offsets
 - Initial start menu
 - Install target for CMake
-- Runtime target for CMake
 - Collisions: angular impulse from rotation
+- Different resolutions + fullscreen.
 
 Editor:
 

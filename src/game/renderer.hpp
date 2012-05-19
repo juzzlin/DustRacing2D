@@ -21,6 +21,8 @@
 
 class InputHandler;
 class MCCamera;
+class QGLShaderProgram;
+class QGLShader;
 class QKeyEvent;
 class QPaintEvent;
 class Scene;
@@ -46,6 +48,14 @@ public:
     //! Set input handler to be used.
     void setInputHandler(InputHandler * pInputHandler);
 
+    void setEnabled(bool enable);
+
+    void setFadeShaderEnabled(bool enable);
+
+    void setFadeValue(float value);
+
+    float fadeValue() const;
+
 protected:
 
     //! \reimp
@@ -69,10 +79,18 @@ private:
     //! a pure 2D-scene.
     void setViewerPosition(int viewWidth, int viewHeight) const;
 
-    Scene        * m_pScene;
-    MCCamera     * m_pCamera;
-    InputHandler * m_pInputHandler;
-    const float    m_viewAngle;
+    //! Load vertex and fragment shaders.
+    void loadShaders();
+
+    Scene            * m_pScene;
+    MCCamera         * m_pCamera;
+    InputHandler     * m_pInputHandler;
+    const float        m_viewAngle;
+    QGLShaderProgram * m_pFadeProgram;
+    QGLShader        * m_pFadeFragmentShader;
+    bool               m_fadeShaderEnabled;
+    float              m_fadeValue;
+    bool               m_enabled;
 };
 
 #endif // RENDERER_HPP

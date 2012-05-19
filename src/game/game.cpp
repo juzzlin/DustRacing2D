@@ -35,6 +35,8 @@
 #include <QDir>
 #include <QTime>
 
+#include <cassert>
+
 namespace
 {
 static const unsigned int MAX_PLAYERS = 2;
@@ -134,8 +136,10 @@ bool Game::loadTracks()
 
 void Game::initScene()
 {
+    assert(m_pRenderer);
+
     // Create the scene
-    m_pScene = new Scene(NUM_CARS);
+    m_pScene = new Scene(*m_pRenderer, NUM_CARS);
 
     // Set the default track
     m_pScene->setActiveTrack(*m_pTrackLoader->track(0));

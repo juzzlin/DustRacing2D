@@ -16,13 +16,19 @@
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "../common/config.hpp"
 
 #include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCSurface"
+#include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Core/MCTrigonom"
 #include "MiniCore/Core/MCWorld"
 
 #include <cmath>
+
 #include <QKeyEvent>
+#include <QGLShader>
+#include <QGLShaderProgram>
 #include <GL/glu.h>
 
 Renderer::Renderer(QWidget * parent)
@@ -31,6 +37,11 @@ Renderer::Renderer(QWidget * parent)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
 , m_viewAngle(45.0f)
+, m_pFadeProgram(nullptr)
+, m_pFadeFragmentShader(nullptr)
+, m_fadeShaderEnabled(false)
+, m_fadeValue(1.0f)
+, m_enabled(true)
 {
     setFocusPolicy(Qt::StrongFocus);
 }
@@ -44,6 +55,11 @@ void Renderer::initializeGL()
     glEnable(GL_TEXTURE_2D);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+    if (QGLShader::hasOpenGLShaders(QGLShader::Fragment, context()))
+    {
+        loadShaders();
+    }
 }
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
@@ -74,21 +90,68 @@ void Renderer::setViewerPosition(int viewWidth, int viewHeight) const
     // Set eye position so that the scene looks like a pure 2D-scene
     const float eyeZ = viewHeight / 2 /
         std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(m_viewAngle / 2)));
-    gluLookAt(viewWidth / 2, viewHeight / 2, eyeZ,
-              viewWidth / 2, viewHeight / 2, 0,
-              0, 1, 0);
+    gluLookAt(
+        viewWidth / 2, viewHeight / 2, eyeZ,
+        viewWidth / 2, viewHeight / 2, 0,
+        0, 1, 0);
+}
+
+void Renderer::loadShaders()
+{
+    m_pFadeProgram        = new QGLShaderProgram(context(), this);
+    m_pFadeFragmentShader = new QGLShader(QGLShader::Fragment, context(), this);
+
+    // TODO: Error handling
+    m_pFadeFragmentShader->compileSourceFile(
+        QString(Config::Common::dataPath) + "/shaders/fade.fsh");
+    m_pFadeProgram->addShader(m_pFadeFragmentShader);
+    m_pFadeProgram->link();
+}
+
+void Renderer::setEnabled(bool enable)
+{
+    m_enabled = enable;
+}
+
+void Renderer::setFadeShaderEnabled(bool enable)
+{
+    m_fadeShaderEnabled = enable;
+}
+
+void Renderer::setFadeValue(float value)
+{
+    m_fadeValue = value;
+}
+
+float Renderer::fadeValue() const
+{
+    return m_fadeValue;
 }
 
 void Renderer::paintGL()
 {
-    if (m_pCamera) // Qt might update the widget before camera is set
+    if (m_fadeShaderEnabled && m_pFadeProgram)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        m_pFadeProgram->bind();
+        m_pFadeProgram->setUniformValue("value", m_fadeValue);
+    }
 
-        if (m_pScene)
+    if (m_enabled)
+    {
+        if (m_pCamera) // Qt might update the widget before camera is set
         {
-            m_pScene->render(*m_pCamera);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            if (m_pScene)
+            {
+                m_pScene->render(*m_pCamera);
+            }
         }
+    }
+
+    if (m_fadeShaderEnabled && m_pFadeProgram)
+    {
+        m_pFadeProgram->release();
     }
 
     swapBuffers();

@@ -29,6 +29,7 @@ class MCObject;
 class MCSurface;
 class MCWorld;
 class OffTrackDetector;
+class Renderer;
 class Speedometer;
 class Startlights;
 class StartlightsOverlay;
@@ -42,7 +43,7 @@ class Scene
 public:
 
     //! Constructor.
-    explicit Scene(unsigned int numCars = 10);
+    explicit Scene(Renderer & renderer, unsigned int numCars = 10);
 
     //! Destructor.
     ~Scene();
