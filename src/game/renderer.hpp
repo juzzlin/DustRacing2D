@@ -21,6 +21,7 @@
 
 class InputHandler;
 class MCCamera;
+class MCGLScene;
 class QGLShaderProgram;
 class QGLShader;
 class QKeyEvent;
@@ -75,14 +76,11 @@ protected:
 
 private:
 
-    //! Set viewer position so that the scene looks like
-    //! a pure 2D-scene.
-    void setViewerPosition(int viewWidth, int viewHeight) const;
-
     //! Load vertex and fragment shaders.
     void loadShaders();
 
     Scene            * m_pScene;
+    MCGLScene        * m_pGLScene;
     MCCamera         * m_pCamera;
     InputHandler     * m_pInputHandler;
     const float        m_viewAngle;

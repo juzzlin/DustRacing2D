@@ -19,6 +19,7 @@
 #include "../common/config.hpp"
 
 #include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCGLScene"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Core/MCTrigonom"
@@ -34,6 +35,7 @@
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
 , m_pScene(nullptr)
+, m_pGLScene(new MCGLScene)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
 , m_viewAngle(45.0f)
@@ -48,13 +50,7 @@ Renderer::Renderer(QWidget * parent)
 
 void Renderer::initializeGL()
 {
-    glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
-    glDepthFunc(GL_LEQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    m_pGLScene->initialize();
 
     if (QGLShader::hasOpenGLShaders(QGLShader::Fragment, context()))
     {
@@ -64,36 +60,7 @@ void Renderer::initializeGL()
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-    if (viewHeight == 0)
-    {
-        viewHeight = 1;
-    }
-
-    glViewport(0, 0, viewWidth, viewHeight);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    const float zNear = 0.0f;
-    const float zFar  = 1000.0f;
-
-    gluPerspective(m_viewAngle, static_cast<GLfloat>(viewWidth) /
-        viewHeight, zNear, zFar);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    setViewerPosition(viewWidth, viewHeight);
-}
-
-void Renderer::setViewerPosition(int viewWidth, int viewHeight) const
-{
-    // Set eye position so that the scene looks like a pure 2D-scene
-    const float eyeZ = viewHeight / 2 /
-        std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(m_viewAngle / 2)));
-    gluLookAt(
-        viewWidth / 2, viewHeight / 2, eyeZ,
-        viewWidth / 2, viewHeight / 2, 0,
-        0, 1, 0);
+    m_pGLScene->resize(viewWidth, viewHeight, m_viewAngle);
 }
 
 void Renderer::loadShaders()
@@ -226,4 +193,5 @@ void Renderer::setInputHandler(InputHandler * pInputHandler)
 
 Renderer::~Renderer()
 {
+    delete m_pGLScene;
 }

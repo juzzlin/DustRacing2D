@@ -7,6 +7,7 @@ Core/mccollisionevent.cc
 Core/mcevent.cc
 Core/mcexception.cc
 Core/mcglobjectdata.cc
+Core/mcglscene.cc
 Core/mclogger.cc
 Core/mcobject.cc
 Core/mcobjectdata.cc
