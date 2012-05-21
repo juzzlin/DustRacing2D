@@ -142,11 +142,14 @@ void Scene::updateCameraLocation(MCCamera & camera)
     // Make changes a bit smoother so that an abrupt decrease
     // in the speed won't look bad.
     MCVector2d<MCFloat> p(m_cars.at(0)->location());
-    const int offsetAmplification = 10;
-    const int smooth = 5;
+
+    const float offsetAmplification = 10;
+    const float smooth              = 0.2;
+
     m_cameraBaseOffset +=
-        (m_cars.at(0)->velocity().lengthFast() - m_cameraBaseOffset) / smooth;
+        (m_cars.at(0)->velocity().lengthFast() - m_cameraBaseOffset) * smooth;
     p += m_cars.at(0)->direction() * m_cameraBaseOffset * offsetAmplification;
+
     camera.setPos(p.i(), p.j());
 }
 

@@ -66,7 +66,7 @@ private:
     void calculateVisibleIndices(const MCBBox<int> & r,
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
-    void renderTile(int x, int y, int z, int angle, MCSurface & surface) const;
+    void renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & surface) const;
 
     TrackData * m_pTrackData;
     MCUint m_rows, m_cols, m_width, m_height;

@@ -37,97 +37,84 @@
 class MCCamera
 {
 public:
-  
-  /*! \brief Constructor.
-   *  \param w Width of the window.
-   *  \param h Height of the window.
-   *  \param x Center x of the window.
-   *  \param y Center y of the window.
-   *  \param maxX Maximum allowed x for the window.
-   *  \param maxY Maximum allowed y for the window.
-   */
-  MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
 
-  /*! \brief Set Camera location in the scene.
-   *  \param x Center x of the window.
-   *  \param y Center y of the window.
-   */
-  void setPos(MCFloat x, MCFloat y);
+    /*! \brief Constructor.
+     *  \param w Width of the window.
+     *  \param h Height of the window.
+     *  \param x Center x of the window.
+     *  \param y Center y of the window.
+     *  \param maxX Maximum allowed x for the window.
+     *  \param maxY Maximum allowed y for the window.
+     */
+    MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
 
-  //! Get bounding box
-  MCBBox<MCFloat> bbox() const;
+    /*! \brief Set Camera location in the scene.
+     *  \param x Center x of the window.
+     *  \param y Center y of the window.
+     */
+    void setPos(MCFloat x, MCFloat y);
 
-  //! Get width
-  MCFloat width() const;
+    //! Get bounding box
+    MCBBox<MCFloat> bbox() const;
 
-  //! Get height
-  MCFloat height() const;
+    //! Get width
+    MCFloat width() const;
 
-  //! Translate given scene x-coordinate into Camera coordinate
-  inline MCFloat mapXToCamera(MCFloat x) const
-  {
-    return x - m_x + m_halfW;
-  }
+    //! Get height
+    MCFloat height() const;
 
-  //! Translate given scene y-coordinate into Camera coordinate
-  inline MCFloat mapYToCamera(MCFloat y) const
-  {
-    return y - m_y + m_halfH;
-  }
+    //! Translate given scene x-coordinate into Camera coordinate
+    inline MCFloat mapXToCamera(MCFloat x) const
+    {
+        return x - m_x + m_halfW;
+    }
 
-  //! Translate given scene coordinates in-place into Camera coordinates
-  inline void mapToCamera(MCFloat & x, MCFloat & y)
-  {
-    x = x - m_x + m_halfW;
-    y = y - m_y + m_halfH;
-  }
+    //! Translate given scene y-coordinate into Camera coordinate
+    inline MCFloat mapYToCamera(MCFloat y) const
+    {
+        return y - m_y + m_halfH;
+    }
 
-  //! Translate given scene coordinates in-place into Camera coordinates
-  inline void mapToCamera(int & x, int & y)
-  {
-    x = x - m_x + m_halfW;
-    y = y - m_y + m_halfH;
-  }
+    //! Translate given scene coordinates in-place into Camera coordinates
+    inline void mapToCamera(MCFloat & x, MCFloat & y)
+    {
+        x = x - m_x + m_halfW;
+        y = y - m_y + m_halfH;
+    }
 
-  //! Translate given Camera x-coordinate into scene coordinate
-  inline MCFloat mapXToScene(MCFloat x) const
-  {
-    return x + m_x - m_halfW;
-  }
+    //! Translate given Camera x-coordinate into scene coordinate
+    inline MCFloat mapXToScene(MCFloat x) const
+    {
+        return x + m_x - m_halfW;
+    }
 
-  //! Translate given Camera y-coordinate into scene coordinate
-  inline MCFloat mapYToScene(MCFloat y) const
-  {
-    return y + m_y - m_halfH;
-  }
+    //! Translate given Camera y-coordinate into scene coordinate
+    inline MCFloat mapYToScene(MCFloat y) const
+    {
+        return y + m_y - m_halfH;
+    }
 
-  //! Translate given Camera coordinates in-place into scene coordinates
-  inline void mapToScene(MCFloat * x, MCFloat * y)
-  {
-    *x = *x + m_x - m_halfW;
-    *y = *y + m_y - m_halfH;
-  }
+    //! Translate given Camera coordinates in-place into scene coordinates
+    inline void mapToScene(MCFloat & x, MCFloat & y)
+    {
+        x = x + m_x - m_halfW;
+        y = y + m_y - m_halfH;
+    }
 
-  //! Translate given Camera coordinates in-place into scene coordinates
-  inline void mapToScene(int * x, int * y)
-  {
-    *x = *x + m_x - m_halfW;
-    *y = *y + m_y - m_halfH;
-  }
+    //! Test if given BBox is visible through the current
+    //! camera window
+    inline bool isVisible(const MCBBox<MCFloat> & r) const
+    {
+        const MCFloat w2 = r.width()  / 2;
+        const MCFloat h2 = r.height() / 2;
 
-  //! Test if given BBox is visible through the current
-  //! camera window
-  inline bool isVisible(const MCBBox<MCFloat> & r) const
-  {
-    const MCFloat w2 = r.width() / 2;
-    const MCFloat h2 = r.height() / 2;
-
-    // Give some space to possible shadows, that's why we're adding w2 and h2.
-    return MCBBox<MCFloat>(m_x - m_halfW - w2,
-                           m_y - m_halfH - h2,
-                           m_x + m_halfW + w2,
-                           m_y + m_halfH + h2).intersects(r);
-  }
+        // Give some space to possible shadows, that's why we're adding w2 and h2.
+        return MCBBox<MCFloat>(
+            m_x - m_halfW - w2,
+            m_y - m_halfH - h2,
+            m_x + m_halfW + w2,
+            m_y + m_halfH + h2).intersects(r);
+    }
 
 private:
 

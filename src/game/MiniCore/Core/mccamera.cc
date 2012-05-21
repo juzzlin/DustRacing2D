@@ -19,55 +19,56 @@
 
 #include "mccamera.hh"
 
-MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY) :
-  m_w(w),
-  m_h(h),
-  m_halfW(w / 2),
-  m_halfH(h / 2),
-  m_x(x),
-  m_y(y),
-  m_maxX(maxX),
-  m_maxY(maxY)
+MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
+: m_w(w)
+, m_h(h)
+, m_halfW(w / 2)
+, m_halfH(h / 2)
+, m_x(x)
+, m_y(y)
+, m_maxX(maxX)
+, m_maxY(maxY)
 {
     setPos(x, y);
 }
 
 void MCCamera::setPos(MCFloat x, MCFloat y)
 {
-  if (x < m_halfW)
-  {
-    x = m_halfW;
-  }
-  else if (x > m_maxX - m_halfW)
-  {
-    x = m_maxX - m_halfW;
-  }
+    if (x < m_halfW)
+    {
+        x = m_halfW;
+    }
+    else if (x > m_maxX - m_halfW)
+    {
+        x = m_maxX - m_halfW;
+    }
 
-  m_x = x;
+    m_x = x;
 
-  if (y < m_halfH)
-  {
-    y = m_halfH;
-  }
-  else if (y > m_maxY - m_halfH)
-  {
-    y = m_maxY - m_halfH;
-  }
+    if (y < m_halfH)
+    {
+        y = m_halfH;
+    }
+    else if (y > m_maxY - m_halfH)
+    {
+        y = m_maxY - m_halfH;
+    }
 
-  m_y = y;
+    m_y = y;
 }
 
 MCFloat MCCamera::width() const
 {
-  return m_w;
+    return m_w;
 }
 
 MCFloat MCCamera::height() const
 {
-  return m_h;
+    return m_h;
 }
 
 MCBBox<MCFloat> MCCamera::bbox() const
 {
-  return MCBBox<MCFloat>(m_x - m_halfW, m_y - m_halfH, m_x + m_halfW, m_y + m_halfH);
+    return MCBBox<MCFloat>(
+        m_x - m_halfW, m_y - m_halfH, m_x + m_halfW, m_y + m_halfH);
 }

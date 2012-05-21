@@ -121,7 +121,7 @@ void Track::render(MCCamera * pCamera)
                 if (MCSurface * pSurface = pTile->surface())
                 {
                     renderTile(
-                        x - cameraBox.x1(), y - cameraBox.y1(), 0,
+                        MCFloat(x) - cameraBox.x1(), MCFloat(y) - cameraBox.y1(), 0,
                         pTile->rotation(), *pSurface);
                 }
             }
@@ -133,7 +133,7 @@ void Track::render(MCCamera * pCamera)
     }
 }
 
-void Track::renderTile(int x, int y, int z, int angle, MCSurface & surface) const
+void Track::renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & surface) const
 {
     static const int w2 = TrackTile::TILE_W / 2;
     static const int h2 = TrackTile::TILE_H / 2;
@@ -172,7 +172,8 @@ bool Track::update()
     }
     else
     {
-        m_scale = 1.0f;
+        // This helps to remove some glitches in tile boundaries.
+        m_scale = 1.001f;
         return false;
     }
 }

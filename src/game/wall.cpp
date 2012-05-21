@@ -36,8 +36,8 @@ Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)
 
 void Wall::render(MCCamera * pCamera)
 {
-    int x = getX();
-    int y = getY();
+    MCFloat x = getX();
+    MCFloat y = getY();
 
     if (pCamera)
     {

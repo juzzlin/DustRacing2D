@@ -182,11 +182,13 @@ void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
 
     glPushAttrib(GL_ENABLE_BIT);
 
-    for (int i = 0; i < 4; i++) {
-        int x = obbox.vertex(i).i();
-        int y = obbox.vertex(i).j();
+    for (int i = 0; i < 4; i++)
+    {
+        MCFloat x = obbox.vertex(i).i();
+        MCFloat y = obbox.vertex(i).j();
 
-        if (pCamera) {
+        if (pCamera)
+        {
             pCamera->mapToCamera(x, y);
         }
 
@@ -203,8 +205,7 @@ void MCRectShapeImpl::renderShapeOutline(MCCamera * pCamera)
     glPopAttrib();
 }
 
-MCVector2dF MCRectShape::contactNormal(
-    const MCSegmentF & p) const
+MCVector2dF MCRectShape::contactNormal(const MCSegmentF & p) const
 {
     return m_pImpl->contactNormal(p);
 }
