@@ -25,15 +25,16 @@ void CentrifugalForceGenerator::updateForce(MCObject & object)
 {
     m_queue.push_back(object.location());
 
-    if (m_queue.size() > 2)
+    const unsigned int numSamples = 10;
+    if (m_queue.size() > numSamples)
     {
         static Radius::CirclePoints cp;
         cp.x1 = m_queue[0].i();
         cp.y1 = m_queue[0].j();
-        cp.x2 = m_queue[1].i();
-        cp.y2 = m_queue[1].j();
-        cp.x3 = m_queue[2].i();
-        cp.y3 = m_queue[2].j();
+        cp.x2 = m_queue[numSamples / 2].i();
+        cp.y2 = m_queue[numSamples / 2].j();
+        cp.x3 = m_queue[numSamples].i();
+        cp.y3 = m_queue[numSamples].j();
 
         const MCFloat radius = Radius::calculate(cp);
 
