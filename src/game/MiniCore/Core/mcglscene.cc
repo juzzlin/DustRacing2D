@@ -38,7 +38,9 @@ void MCGLScene::initialize()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void MCGLScene::resize(MCUint viewWidth, MCUint viewHeight, MCFloat viewAngle)
+void MCGLScene::resize(
+    MCUint viewWidth, MCUint viewHeight,
+    MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
 {
     if (viewHeight == 0)
     {
@@ -52,20 +54,20 @@ void MCGLScene::resize(MCUint viewWidth, MCUint viewHeight, MCFloat viewAngle)
     const float zNear = 0.0f;
     const float zFar  = 1000.0f;
 
-    gluPerspective(viewAngle, static_cast<GLfloat>(viewWidth) /
-        viewHeight, zNear, zFar);
+    gluPerspective(viewAngle, static_cast<GLfloat>(sceneWidth) /
+        sceneHeight, zNear, zFar);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    setViewerPosition(viewWidth, viewHeight, viewAngle);
+    setViewerPosition(sceneWidth, sceneHeight, viewAngle);
 }
 
-void MCGLScene::setViewerPosition(MCUint viewWidth, MCUint viewHeight, MCFloat viewAngle)
+void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
 {
     // Set eye position so that the scene looks like a pure 2D-scene
-    const MCUint  vH2  = viewHeight / 2;
-    const MCUint  vW2  = viewWidth  / 2;
+    const MCUint  vH2  = sceneHeight / 2;
+    const MCUint  vW2  = sceneWidth  / 2;
     const MCFloat eyeZ = vH2 /
         std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
     gluLookAt(vW2, vH2, eyeZ, vW2, vH2, 0, 0, 1, 0);

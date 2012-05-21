@@ -38,10 +38,11 @@ public:
     virtual void initialize();
 
     //! Resize / set projection matrices. Re-implement if desired.
-    virtual void resize(MCUint viewWidth, MCUint viewHeight, MCFloat viewAngle);
+    virtual void resize(MCUint viewWidth, MCUint viewHeight,
+        MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
 
     //! Set viewer's position. Automatically called by resize().
-    virtual void setViewerPosition(MCUint viewWidth, MCUint viewHeight, MCFloat viewAngle);
+    virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
 };
 
 #endif // MCGLSCENE_HH

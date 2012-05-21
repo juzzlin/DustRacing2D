@@ -149,19 +149,19 @@ void Game::initScene()
     m_pRenderer->setScene(m_pScene);
 
     m_pCamera = new MCCamera(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT,
+        Scene::width(), Scene::height(),
         0, 0,
         m_pScene->activeTrack().width(),
         m_pScene->activeTrack().height());
 
     m_pTimingOverlay = new TimingOverlay;
     m_pTimingOverlay->setDimensions(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+        Scene::width(), Scene::height());
     m_pScene->setTimingOverlay(*m_pTimingOverlay);
 
     m_pSpeedometer = new Speedometer;
     m_pSpeedometer->setDimensions(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+        Scene::width(), Scene::height());
     m_pScene->setSpeedometer(*m_pSpeedometer);
 }
 

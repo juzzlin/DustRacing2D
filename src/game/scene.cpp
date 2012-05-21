@@ -83,11 +83,18 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
         m_offTrackDetectors.push_back(new OffTrackDetector(*car));
     }
 
-    m_pStartlightsOverlay->setDimensions(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    m_pStartlightsOverlay->setDimensions(width(), height());
+    m_pCheckeredFlag->setDimensions(width(), height());
+}
 
-    m_pCheckeredFlag->setDimensions(
-        Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+unsigned int Scene::width()
+{
+    return 800;
+}
+
+unsigned int Scene::height()
+{
+    return 600;
 }
 
 void Scene::updateFrame(InputHandler & handler,
@@ -351,8 +358,8 @@ void Scene::render(MCCamera & camera)
 {
     if (m_pStateMachine->state() == StateMachine::Intro)
     {
-        const int w2 = Config::Game::WINDOW_WIDTH  / 2;
-        const int h2 = Config::Game::WINDOW_HEIGHT / 2;
+        const int w2 = width() / 2;
+        const int h2 = height() / 2;
         static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
         surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }

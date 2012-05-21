@@ -56,9 +56,9 @@ public:
         static const char * QSETTINGS_SOFTWARE_NAME;
 
         //! Window width.
-        static const unsigned int WINDOW_WIDTH = 800;
+        static const unsigned int WINDOW_WIDTH;
 
         //! Window height.
-        static const unsigned int WINDOW_HEIGHT = 600;
+        static const unsigned int WINDOW_HEIGHT;
     };
 };

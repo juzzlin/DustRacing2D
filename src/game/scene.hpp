@@ -48,6 +48,14 @@ public:
     //! Destructor.
     ~Scene();
 
+    //! Width of the scene. This is always constant and doesn't
+    //! depend on resolution.
+    static unsigned int width();
+
+    //! Height of the scene. This is always constant and doesn't
+    //! depend on resolution.
+    static unsigned int height();
+
     //! Update physics and objects by the given
     //! time step.
     void updateFrame(InputHandler & handler,
