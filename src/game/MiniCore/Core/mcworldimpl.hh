@@ -58,8 +58,8 @@ private:
     MCImpulseGenerator impulseGenerator;
     MCObjectTree * pObjectTree;
     MCFloat minX, maxX, minY, maxY, minZ, maxZ;
-    MCFloat metersPerPixel;
-    MCFloat metersPerPixelSquared;
+    static MCFloat metersPerPixel;
+    static MCFloat metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
     bool depthTestEnabled[MCWorld::MaxLayers];

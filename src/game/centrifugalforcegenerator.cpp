@@ -17,15 +17,14 @@
 #include "radius.hpp"
 #include "MiniCore/Core/MCObject"
 
-CentrifugalForceGenerator::CentrifugalForceGenerator(MCFloat amp)
-: m_amp(amp)
+CentrifugalForceGenerator::CentrifugalForceGenerator()
 {}
 
 void CentrifugalForceGenerator::updateForce(MCObject & object)
 {
     m_queue.push_back(object.location());
 
-    const unsigned int numSamples = 10;
+    const unsigned int numSamples = 60;
     if (m_queue.size() > numSamples)
     {
         static Radius::CirclePoints cp;
@@ -36,18 +35,19 @@ void CentrifugalForceGenerator::updateForce(MCObject & object)
         cp.x3 = m_queue[numSamples].i();
         cp.y3 = m_queue[numSamples].j();
 
-        const MCFloat radius = Radius::calculate(cp);
+        MCFloat radius = Radius::calculate(cp);
+        MCWorld::toMeters(radius);
 
-        if (radius > 1 && radius < 1000) // Make things a bit more stable
+        if (radius > 1 && radius < 100) // Make things a bit more stable
         {
-            const MCFloat velocity2 = (object.velocity() * m_amp).lengthSquared();
+            const MCFloat velocity2 = object.velocity().lengthSquared();
             const MCFloat force     = object.mass() * velocity2 / radius;
 
             const MCVector2dF v1(cp.x2 - cp.x1, cp.y2 - cp.y1);
             const MCVector2dF v2(cp.x3 - cp.x1, cp.y3 - cp.y1);
 
             static const MCVector3dF up(0, 0, 1);
-            const MCVector3dF forceVect = object.velocity().normalizedFast() % up;
+            const MCVector3dF forceVect = (object.velocity().normalizedFast() % up);
 
             // Check if the force should be applied to the left or to the right
             if (v1 % v2 < 0)

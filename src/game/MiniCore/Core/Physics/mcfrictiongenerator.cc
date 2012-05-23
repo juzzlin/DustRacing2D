@@ -26,6 +26,7 @@
 namespace
 {
     const MCFloat FRICTION_SPEED_TH = 0.001f;
+    const MCFloat ROTATION_DECAY    = 0.01f;
 }
 
 MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
@@ -34,7 +35,7 @@ MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
 , m_coeffRot(coeffRot)
 , m_gravity(gravity)
 , m_coeffLinTot(coeffLin * gravity)
-, m_coeffRotTot(coeffRot * gravity)
+, m_coeffRotTot(coeffRot * gravity * ROTATION_DECAY)
 {}
 
 MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
@@ -55,15 +56,11 @@ void MCFrictionGenerator::updateForce(MCObject & object)
         object.addForce(-v * m_pImpl->m_coeffLinTot * object.mass() / x);
     }
 
-    // Approximated moment caused by rotational friction.
+    // Simulated friction caused by angular torque.
     if (object.shape())
     {
-        if (std::fabs(object.angularVelocity()) > FRICTION_SPEED_TH &&
-            m_pImpl->m_coeffRotTot > 0.0f)
-        {
-            x = object.angularVelocity() * object.shape()->radius();
-            object.addTorque(-x * m_pImpl->m_coeffRotTot * object.mass() * 0.5f);
-        }
+        const MCFloat x = object.angularVelocity();
+        object.addRotationalImpulse(-x * m_pImpl->m_coeffRotTot);
     }
 }
 

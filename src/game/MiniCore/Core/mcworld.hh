@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include "mcmacros.hh"
 #include "mctypes.hh"
@@ -61,14 +62,17 @@ public:
         MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
         MCFloat metersPerPixel);
 
-    //! Set how many meters equal one pixel / length unit.
-    void setMetersPerPixel(MCFloat value);
+    //! Set how many meters equal one pixel.
+    static void setMetersPerPixel(MCFloat value);
 
-    //! Get how many meters equal one pixel / length unit.
-    MCFloat metersPerPixel() const;
+    //! Convert pixels to meters.
+    static void toMeters(MCFloat & pixels);
 
-    //! Get how many meters equal one pixel squared.
-    MCFloat metersPerPixelSquared() const;
+    //! Convert pixels to meters.
+    static void toMeters(MCVector2dF & pixels);
+
+    //! Convert pixels to meters.
+    static void toMeters(MCVector3dF & pixels);
 
     //! Add object to the world. Object's current location is used.
     //! \param object Object to be added.

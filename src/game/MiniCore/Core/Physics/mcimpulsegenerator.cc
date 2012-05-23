@@ -76,14 +76,14 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
 {
     const MCFloat invMassA = pa.invMass();
     const MCFloat invMassB = pb.invMass();
-    const MCFloat invInerA = pa.invMomentOfInertia();
-    const MCFloat invInerB = pb.invMomentOfInertia();
 
     if (!pa.stationary())
     {
         const MCVector3dF & contactPoint(contact.contactPoint());
-        const MCVector3dF armA = contactPoint - pa.location();
-        const MCVector3dF armB = contactPoint - pb.location();
+        MCVector3dF armA = contactPoint - pa.location();
+        MCWorld::toMeters(armA);
+        MCVector3dF armB = contactPoint - pb.location();
+        MCWorld::toMeters(armB);
 
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
@@ -92,7 +92,8 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
         MCFloat linearBalance = 1.0f;
         if (pa.shape())
         {
-            const MCFloat d = pa.shape()->radius() * 2;
+            MCFloat d = pa.shape()->radius();
+            MCWorld::toMeters(d);
             MCFloat linearBalance = 1.0f - armA.lengthFast() / d;
             linearBalance = linearBalance < 0 ? 0 : linearBalance;
         }
@@ -103,11 +104,9 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
 
         // Angular component
         const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse * pa.mass()) % armA / pa.momentOfInertia();
-
-        const MCFloat magnitude   = rotationalImpulse.k();
-        const MCFloat inerScaling = invInerA / (invInerA + invInerB);
-        pa.addRotationalImpulse(-magnitude * effRestitution * inerScaling);
+            MCVector3dF(linearImpulse * pa.mass()) % armA;
+        const MCFloat magnitude = rotationalImpulse.k() / pa.momentOfInertia();
+        pa.addRotationalImpulse(2.0f * 3.1415f * -magnitude * effRestitution * massScaling);
     }
 }
 
@@ -137,7 +136,8 @@ void MCImpulseGeneratorImpl::resolvePosition(MCObject & object, MCFloat accuracy
     object.deleteContacts();
 }
 
-void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(MCObject & object)
+void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
+    MCObject & object)
 {
     auto iter(object.contacts().begin());
     for (; iter != object.contacts().end(); iter++)
@@ -154,10 +154,10 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(MCObject & obje
             const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
 
             const MCVector3dF linearImpulse(
-                contact->contactNormal() * contact->contactNormal().dot(velocityDelta));
+                contact->contactNormal() *
+                contact->contactNormal().dot(velocityDelta));
 
             generateImpulsesFromContact(pa, pb, *contact, linearImpulse, restitution);
-
             generateImpulsesFromContact(pb, pa, *contact, -linearImpulse, restitution);
 
             // Remove contact with pa from pb, because it was already handled here.
@@ -182,7 +182,8 @@ void MCImpulseGenerator::resolvePosition(MCObject & object, MCFloat accuracy)
     m_pImpl->resolvePosition(object, accuracy);
 }
 
-void MCImpulseGenerator::generateImpulsesFromDeepestContacts(MCObject & object)
+void MCImpulseGenerator::generateImpulsesFromDeepestContacts(
+    MCObject & object)
 {
     m_pImpl->generateImpulsesFromDeepestContacts(object);
 }

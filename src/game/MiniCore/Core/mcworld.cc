@@ -34,7 +34,9 @@
 
 #include <cassert>
 
-MCWorld * MCWorldImpl::pInstance = nullptr;
+MCWorld * MCWorldImpl::pInstance             = nullptr;
+MCFloat   MCWorldImpl::metersPerPixel        = 1.0;
+MCFloat   MCWorldImpl::metersPerPixelSquared = 1.0;
 
 namespace
 {
@@ -51,7 +53,6 @@ MCWorldImpl::MCWorldImpl()
 , maxY(0)
 , minZ(0)
 , maxZ(0)
-, metersPerPixel(1.0)
 {
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -255,7 +256,7 @@ void MCWorld::setDimensions(
     m_pImpl->minZ = minZ;
     m_pImpl->maxZ = maxZ;
 
-    setMetersPerPixel(metersPerPixel);
+    MCWorld::setMetersPerPixel(metersPerPixel);
 }
 
 MCFloat MCWorld::minX() const
@@ -438,19 +439,15 @@ void MCWorld::stepTime(MCFloat step)
     // Integrate physics
     m_pImpl->integrate(step);
 
+    // Process contacts and generate impulses
     m_pImpl->collisionDetector.enableCollisionEvents(false);
-
-    // Detect all collisions and generate contacts
-    MCFloat accuracy = 0.25f;
-    m_pImpl->detectCollisions();
-    m_pImpl->resolvePositions(accuracy);
-
-    m_pImpl->detectCollisions();
-    m_pImpl->resolvePositions(accuracy);
-
+    for (MCUint i = 0; i < 4; i++)
+    {
+        m_pImpl->detectCollisions();
+        m_pImpl->resolvePositions(0.2f);
+    }
     m_pImpl->collisionDetector.enableCollisionEvents(true);
 
-    // Process contacts and generate impulses
     m_pImpl->detectCollisions();
     m_pImpl->generateImpulses();
 
@@ -481,18 +478,23 @@ MCObjectTree & MCWorld::objectTree() const
 
 void MCWorld::setMetersPerPixel(MCFloat value)
 {
-    m_pImpl->metersPerPixel        = value;
-    m_pImpl->metersPerPixelSquared = value * value;
+    MCWorldImpl::metersPerPixel        = value;
+    MCWorldImpl::metersPerPixelSquared = value * value;
 }
 
-MCFloat MCWorld::metersPerPixel() const
+void MCWorld::toMeters(MCFloat & pixels)
 {
-    return m_pImpl->metersPerPixel;
+    pixels *= MCWorldImpl::metersPerPixel;
 }
 
-MCFloat MCWorld::metersPerPixelSquared() const
+void MCWorld::toMeters(MCVector2dF & pixels)
 {
-    return m_pImpl->metersPerPixelSquared;
+    pixels *= MCWorldImpl::metersPerPixel;
+}
+
+void MCWorld::toMeters(MCVector3dF & pixels)
+{
+    pixels *= MCWorldImpl::metersPerPixel;
 }
 
 MCWorld::~MCWorld()

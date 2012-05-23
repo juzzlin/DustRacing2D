@@ -35,13 +35,14 @@ namespace
 {
     const MCFloat MAX_LINEAR_VELOCITY  = 15.0f;
     const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
-    const MCFloat FRICTION             = 0.5f;
+    const MCFloat FRICTION             = 1.0f;
     const MCFloat BRAKING_FRICTION     = 1.0f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat ROTATION_FRICTION    = 0.5f;
+    const MCFloat SLIDE_FRICTION       = 1.0f;
+    const MCFloat ROTATION_FRICTION    = 1.0f;
     const MCFloat OFF_TRACK_FRICTION   = 0.5f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
-    const MCFloat TURNING_IMPULSE      = 0.35f;
+    const MCFloat TURNING_IMPULSE      = 0.25f;
     const MCFloat POWER                = 5000.0f;
     const MCFloat MASS                 = 1000.0f;
     const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
@@ -59,7 +60,7 @@ Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
   , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
-  , m_pSlideFriction(new SlideFrictionGenerator(FRICTION))
+  , m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
   , m_leftSideOffTrack(false)
   , m_rightSideOffTrack(false)
   , m_accelerating(false)
@@ -101,11 +102,6 @@ Car::Car(MCSurface & surface, MCUint index)
     // Add off-track friction generator
     MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
     m_pOffTrackFriction->enable(false);
-
-    // Add centrifugal force generator
-    const MCFloat amplification = 5.0f;
-    MCWorld::instance().addForceGenerator(
-        *new CentrifugalForceGenerator(amplification), *this, true);
 
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();

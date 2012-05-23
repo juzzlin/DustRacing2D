@@ -27,8 +27,7 @@ class CentrifugalForceGenerator : public MCForceGenerator
 public:
 
     //! Constructor.
-    //! \param amp Amplification factor to exaggerate the effect.
-    CentrifugalForceGenerator(MCFloat amp = 1.0f);
+    CentrifugalForceGenerator();
 
     //! \reimp
     virtual void updateForce(MCObject & object);
@@ -36,7 +35,6 @@ public:
 private:
 
     std::deque<MCVector3dF> m_queue;
-    MCFloat m_amp;
 };
 
 #endif // CENTRIFUGALFORCEGENERATOR_HPP
