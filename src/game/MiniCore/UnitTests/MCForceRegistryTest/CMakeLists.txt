@@ -9,6 +9,7 @@ set(MOC_HDRS MCForceRegistryTest.hpp)
 
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/unittests)
 add_executable(MCForceRegistryTest ${SRC} ${MOC_SRC})
-add_test(MCForceRegistryTest ${CMAKE_BINARY_DIR}/bin/tests/MCForceRegistryTest)
+add_test(MCForceRegistryTest ${CMAKE_SOURCE_DIR}/unittests/MCForceRegistryTest)
+

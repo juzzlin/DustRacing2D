@@ -9,6 +9,7 @@ set(MOC_HDRS MCObjectTest.hpp)
 
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/tests)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/unittests)
 add_executable(MCObjectTest ${SRC} ${MOC_SRC})
-add_test(MCObjectTest ${CMAKE_BINARY_DIR}/bin/tests/MCObjectTest)
+add_test(MCObjectTest ${CMAKE_SOURCE_DIR}/bin/unittests/MCObjectTest)
+
