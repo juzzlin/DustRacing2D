@@ -22,20 +22,23 @@
 #include "mcshapeview.hh"
 #include "mccamera.hh"
 
+#include <cassert>
+
 MCUint MCShapeImpl::m_typeCount = 0;
 
-MCShapeImpl::MCShapeImpl(MCObject & parent)
-: m_parent(parent)
+MCShapeImpl::MCShapeImpl()
+: m_pParent(nullptr)
 , m_angle(0)
 {}
 
 MCShapeImpl::~MCShapeImpl()
 {}
 
-MCShape::MCShape(MCObject & parent, MCShapeView * pView)
-: m_pImpl(new MCShapeImpl(parent))
+MCShape::MCShape(MCShapeView * pView)
+: m_pImpl(new MCShapeImpl)
 {
-    if (pView) {
+    if (pView)
+    {
         setView(pView);
     }
 
@@ -43,9 +46,15 @@ MCShape::MCShape(MCObject & parent, MCShapeView * pView)
     setShadowOffset(MCVector2dF(2, -2));
 }
 
+void MCShape::setParent(MCObject & parent)
+{
+    m_pImpl->m_pParent = &parent;
+}
+
 MCObject & MCShape::parent() const
 {
-    return m_pImpl->m_parent;
+    assert(m_pImpl->m_pParent);
+    return *m_pImpl->m_pParent;
 }
 
 MCUint MCShape::registerType()

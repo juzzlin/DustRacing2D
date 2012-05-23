@@ -231,17 +231,11 @@ void MCObjectImpl::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
     const MCWorld & world = MCWorld::instance();
     if (minX < world.minX())
     {
-        velocity.setI(0); forces.setI(0);
-        pPublic->translate(MCVector3dF(
-            location.i() + world.minX() - minX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         pPublic->outOfBoundariesEvent(e);
     }
     else if (maxX > world.maxX())
     {
-        velocity.setI(0); forces.setI(0);
-        pPublic->translate(MCVector3dF(
-            location.i() + world.maxX() - maxX, location.j(), location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         pPublic->outOfBoundariesEvent(e);
     }
@@ -252,17 +246,11 @@ void MCObjectImpl::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
     const MCWorld & world = MCWorld::instance();
     if (minY < world.minY())
     {
-        velocity.setJ(0); forces.setJ(0);
-        pPublic->translate(MCVector3dF(
-            location.i(), location.j() + world.minY() - minY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         pPublic->outOfBoundariesEvent(e);
     }
     else if (maxY > world.maxY())
     {
-        velocity.setJ(0); forces.setJ(0);
-        pPublic->translate(MCVector3dF(
-            location.i(), location.j() + world.maxY() - maxY, location.k()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         pPublic->outOfBoundariesEvent(e);
     }
@@ -299,18 +287,18 @@ MCObject::MCObject(const std::string & typeId)
 MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 : m_pImpl(new MCObjectImpl(this, typeId))
 {
-    m_pImpl->pShape = pShape;
+    setShape(pShape);
 }
 
 MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
  : m_pImpl(new MCObjectImpl(this, typeId))
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
-    MCRectShape * rectShape = new MCRectShape(*this,
+    MCRectShape * rectShape = new MCRectShape(
         new MCSurfaceView(pSurface),
         pSurface ? pSurface->width() : 0,
         pSurface ? pSurface->height() : 0);
-    m_pImpl->pShape = rectShape;
+    setShape(rectShape);
 }
 
 void MCObject::resetMotion()
@@ -764,12 +752,13 @@ MCFloat MCObject::restitution() const
 
 void MCObject::setShape(MCShape * newShape)
 {
+    delete m_pImpl->pShape;
+    m_pImpl->pShape = newShape;
+
     if (m_pImpl->pShape)
     {
-        delete m_pImpl->pShape;
+        m_pImpl->pShape->setParent(*this);
     }
-
-    m_pImpl->pShape = newShape;
 }
 
 MCShape * MCObject::shape() const

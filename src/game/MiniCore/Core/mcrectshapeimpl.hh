@@ -31,7 +31,7 @@ class MCCamera;
 //! Implementation class of MCRectShape.
 class MCRectShapeImpl : public MCShapeImpl
 {
-  MCRectShapeImpl(MCObject & parent, MCFloat width, MCFloat height);
+  MCRectShapeImpl(MCFloat width, MCFloat height);
   virtual ~MCRectShapeImpl();
   static MCUint typeID;
   inline MCEdge<MCFloat> edgeForSegment(const MCSegmentF & p) const;

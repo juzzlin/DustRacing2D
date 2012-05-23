@@ -149,7 +149,7 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
             MCObject & pb(contact->object());
 
             const MCFloat restitution(
-                std::min(pa.restitution(), pb.restitution()));
+                std::max(pa.restitution(), pb.restitution()));
 
             const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
 

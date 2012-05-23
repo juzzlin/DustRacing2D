@@ -65,6 +65,10 @@ private:
     bool depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
+    MCObject * m_pLeft;
+    MCObject * m_pRight;
+    MCObject * m_pTop;
+    MCObject * m_pBottom;
     friend class MCWorld;
 };
 

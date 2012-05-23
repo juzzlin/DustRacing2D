@@ -26,7 +26,7 @@ class MCObject;
 
 class MCCircleShapeImpl : public MCShapeImpl
 {
-    MCCircleShapeImpl(MCObject & parent, MCFloat radius);
+    MCCircleShapeImpl(MCFloat radius);
     virtual ~MCCircleShapeImpl();
     static MCUint typeID;
     MCFloat radius;

@@ -53,7 +53,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
         {
             pObject = new MCObject(data.typeId());
             pView   = new MCSurfaceView(&surface);
-            pShape  = new MCCircleShape(*pObject, pView,
+            pShape  = new MCCircleShape(pView,
                 std::max(surface.width(), surface.height()) / 2);
             pObject->setShape(pShape);
         }
@@ -68,7 +68,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
         pView   = new MCSurfaceView(&surface);
-        pShape  = new MCCircleShape(*pObject, pView, data.shapeRadius());
+        pShape  = new MCCircleShape(pView, data.shapeRadius());
         pObject->setShape(pShape);
         break;
 
@@ -76,8 +76,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
         pView   = new MCSurfaceView(&surface);
-        pShape  = new MCRectShape(*pObject, pView,
-            data.shapeWidth(), data.shapeHeight());
+        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
         pObject->setShape(pShape);
         break;
     }
@@ -112,14 +111,14 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
     // Explicit circle shape
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
-        pShape  = new MCCircleShape(*pObject, pView, data.shapeRadius());
+        pShape  = new MCCircleShape(pView, data.shapeRadius());
         pObject->setShape(pShape);
         break;
 
     // Explicit rect shape
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
-        pShape  = new MCRectShape(*pObject, pView,
+        pShape  = new MCRectShape(pView,
             data.shapeWidth(), data.shapeHeight());
         pObject->setShape(pShape);
         break;

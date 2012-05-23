@@ -29,11 +29,11 @@ class MCObject;
 class MCShapeImpl
 {
 protected:
-    explicit MCShapeImpl(MCObject & parent);
+    MCShapeImpl();
     virtual ~MCShapeImpl();
 private:
     static MCUint m_typeCount;
-    MCObject & m_parent;
+    MCObject * m_pParent;
     MCVector3d<MCFloat> m_location;
     MCVector2d<MCFloat> m_shadowOffset;
     MCFloat m_angle;

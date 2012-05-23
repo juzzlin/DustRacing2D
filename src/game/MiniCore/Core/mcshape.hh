@@ -42,13 +42,16 @@ class MCShape
 public:
 
     /*! Constructor.
-     * \param parent Parent / owner object of the shape.
      * \param pView View for the shape. MCShape takes the ownership.
      */
-    explicit MCShape(MCObject & parent, MCShapeView * pView = nullptr);
+    explicit MCShape(MCShapeView * pView = nullptr);
 
     //! Destructor.
     virtual ~MCShape();
+
+    //! Set the parent object. MCObject will call this automatically
+    //! when a shape is set.
+    void setParent(MCObject & parent);
 
     //! Get the parent object.
     MCObject & parent() const;

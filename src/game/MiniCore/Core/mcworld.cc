@@ -25,6 +25,7 @@
 #include "mcobjecttree.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
+#include "mcrectshape.hh"
 #include "mctrigonom.hh"
 #include "mccamera.hh"
 #include "Physics/mcforcegenerator.hh"
@@ -53,6 +54,10 @@ MCWorldImpl::MCWorldImpl()
 , maxY(0)
 , minZ(0)
 , maxZ(0)
+, m_pLeft(nullptr)
+, m_pRight(nullptr)
+, m_pTop(nullptr)
+, m_pBottom(nullptr)
 {
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -61,7 +66,12 @@ MCWorldImpl::MCWorldImpl()
 }
 
 MCWorldImpl::~MCWorldImpl()
-{}
+{
+    delete m_pLeft;
+    delete m_pRight;
+    delete m_pTop;
+    delete m_pBottom;
+}
 
 void MCWorldImpl::integrate(MCFloat step)
 {
@@ -257,6 +267,62 @@ void MCWorld::setDimensions(
     m_pImpl->maxZ = maxZ;
 
     MCWorld::setMetersPerPixel(metersPerPixel);
+
+    // Create "wall" objects
+    const MCFloat w = maxX - minX;
+    const MCFloat h = maxY - minY;
+
+    if (m_pImpl->m_pLeft)
+    {
+        removeObjectNow(*m_pImpl->m_pLeft);
+        delete m_pImpl->m_pLeft;
+    }
+
+    m_pImpl->m_pLeft = new MCObject("LEFT_WALL");
+    m_pImpl->m_pLeft->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->m_pLeft->setMass(0, true);
+    m_pImpl->m_pLeft->setRestitution(0.25f);
+    m_pImpl->m_pLeft->addToWorld();
+    m_pImpl->m_pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
+
+    if (m_pImpl->m_pRight)
+    {
+        removeObjectNow(*m_pImpl->m_pRight);
+        delete m_pImpl->m_pRight;
+    }
+
+    m_pImpl->m_pRight = new MCObject("RIGHT_WALL");
+    m_pImpl->m_pRight->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->m_pRight->setMass(0, true);
+    m_pImpl->m_pRight->setRestitution(0.25f);
+    m_pImpl->m_pRight->addToWorld();
+    m_pImpl->m_pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
+
+    if (m_pImpl->m_pTop)
+    {
+        removeObjectNow(*m_pImpl->m_pTop);
+        delete m_pImpl->m_pTop;
+    }
+
+    m_pImpl->m_pTop = new MCObject("TOP_WALL");
+    m_pImpl->m_pTop->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->m_pTop->setMass(0, true);
+    m_pImpl->m_pTop->setRestitution(0.25f);
+    m_pImpl->m_pTop->addToWorld();
+    m_pImpl->m_pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
+
+    if (m_pImpl->m_pBottom)
+    {
+        removeObjectNow(*m_pImpl->m_pBottom);
+        delete m_pImpl->m_pBottom;
+    }
+
+    m_pImpl->m_pBottom = new MCObject("BOTTOM_WALL");
+    m_pImpl->m_pBottom->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->m_pBottom->setMass(0, true);
+    m_pImpl->m_pBottom->setRestitution(0.25f);
+    m_pImpl->m_pBottom->addToWorld();
+    m_pImpl->m_pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
 
 MCFloat MCWorld::minX() const

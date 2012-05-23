@@ -30,13 +30,11 @@
 
 MCUint MCRectShapeImpl::typeID = MCShape::registerType();
 
-MCRectShapeImpl::MCRectShapeImpl(
-    MCObject & parent, MCFloat width, MCFloat height)
-  : MCShapeImpl(parent)
-  , obbox(width / 2, height / 2, MCVector2dF())
-  , radius(std::max(width, height) / 2)
-  , width(width)
-  , height(height)
+MCRectShapeImpl::MCRectShapeImpl(MCFloat width, MCFloat height)
+: obbox(width / 2, height / 2, MCVector2dF())
+, radius(std::max(width, height) / 2)
+, width(width)
+, height(height)
 {}
 
 MCRectShapeImpl::~MCRectShapeImpl()
@@ -112,9 +110,9 @@ MCEdgeF MCRectShapeImpl::edgeForSegment(const MCSegmentF & p) const
 }
 
 MCRectShape::MCRectShape(
-    MCObject & parent, MCShapeView * pView, MCFloat width, MCFloat height)
-  : MCShape(parent, pView)
-  , m_pImpl(new MCRectShapeImpl(parent, width, height))
+  MCShapeView * pView, MCFloat width, MCFloat height)
+: MCShape(pView)
+, m_pImpl(new MCRectShapeImpl(width, height))
 {}
 
 MCEdgeF MCRectShape::edgeForSegment(const MCSegmentF & p) const

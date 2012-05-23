@@ -41,7 +41,7 @@ MCParticle::MCParticle()
 {
     m_pImpl->m_pPublic = this;
 
-    setShape(new MCCircleShape(*this, nullptr, 0.0f));
+    setShape(new MCCircleShape(nullptr, 0.0f));
     setBypassCollisions(true);
 }
 
