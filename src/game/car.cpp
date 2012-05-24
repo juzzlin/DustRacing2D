@@ -144,11 +144,11 @@ void Car::turnLeft()
     {
         if (m_braking)
         {
-            addRotationalImpulse(m_turningImpulse / 2);
+            addAngularImpulse(m_turningImpulse / 2);
         }
         else
         {
-            addRotationalImpulse(m_turningImpulse);
+            addAngularImpulse(m_turningImpulse);
         }
     }
 }
@@ -165,11 +165,11 @@ void Car::turnRight()
     {
         if (m_braking)
         {
-            addRotationalImpulse(-m_turningImpulse / 2);
+            addAngularImpulse(-m_turningImpulse / 2);
         }
         else
         {
-            addRotationalImpulse(-m_turningImpulse);
+            addAngularImpulse(-m_turningImpulse);
         }
     }
 }

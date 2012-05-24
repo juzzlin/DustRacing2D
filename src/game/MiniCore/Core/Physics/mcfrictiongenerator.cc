@@ -60,7 +60,7 @@ void MCFrictionGenerator::updateForce(MCObject & object)
     if (object.shape())
     {
         const MCFloat x = object.angularVelocity();
-        object.addRotationalImpulse(-x * m_pImpl->m_coeffRotTot);
+        object.addAngularImpulse(-x * m_pImpl->m_coeffRotTot);
     }
 }
 

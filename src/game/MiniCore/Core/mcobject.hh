@@ -170,7 +170,7 @@ public:
     void addLinearImpulse(const MCVector3dF & impulse);
 
     //! Add rotational impulse in rad/s.
-    void addRotationalImpulse(MCFloat impulse);
+    void addAngularImpulse(MCFloat impulse);
 
     //! Set current velocity to the given value.
     //! \param newVelocity The new velocity.

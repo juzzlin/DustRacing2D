@@ -520,7 +520,7 @@ void MCObject::addLinearImpulse(const MCVector3dF & impulse)
     m_pImpl->sleeping       = false;
 }
 
-void MCObject::addRotationalImpulse(MCFloat impulse)
+void MCObject::addAngularImpulse(MCFloat impulse)
 {
     m_pImpl->angularImpulse += impulse;
     m_pImpl->sleeping        = false;
