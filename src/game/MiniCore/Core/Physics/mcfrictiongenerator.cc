@@ -50,17 +50,17 @@ void MCFrictionGenerator::updateForce(MCObject & object)
 {
     // Linear motion.
     const MCVector2d<MCFloat> v(object.velocity());
-    MCFloat x = v.lengthFast();
-    if (x > FRICTION_SPEED_TH && m_pImpl->m_coeffLin > 0.0f)
+    const MCFloat l = v.lengthFast();
+    if (l > FRICTION_SPEED_TH)
     {
-        object.addForce(-v * m_pImpl->m_coeffLinTot * object.mass() / x);
+        object.addForce(-v * m_pImpl->m_coeffLinTot * object.mass() / l);
     }
 
     // Simulated friction caused by angular torque.
     if (object.shape())
     {
-        const MCFloat x = object.angularVelocity();
-        object.addAngularImpulse(-x * m_pImpl->m_coeffRotTot);
+        const MCFloat a = object.angularVelocity();
+        object.addAngularImpulse(-a * m_pImpl->m_coeffRotTot);
     }
 }
 
