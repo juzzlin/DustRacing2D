@@ -27,13 +27,15 @@
 #include <GL/gl.h>
 
 MCTextureText::MCTextureText(const std::string & text)
-  : m_text(text)
-  , m_glyphWidth(32)
-  , m_glyphHeight(32)
-  , m_r(1.0f)
-  , m_g(1.0f)
-  , m_b(1.0f)
-  , m_a(1.0f)
+: m_text(text)
+, m_glyphWidth(32)
+, m_glyphHeight(32)
+, m_r(1.0f)
+, m_g(1.0f)
+, m_b(1.0f)
+, m_a(1.0f)
+, m_xOffset(2.0f)
+, m_yOffset(2.0f)
 {
     updateTextDimensions();
 }
@@ -97,6 +99,12 @@ void MCTextureText::getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a)
     a = m_a;
 }
 
+void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
+{
+    m_xOffset = xOffset;
+    m_yOffset = yOffset;
+}
+
 MCUint MCTextureText::textWidth() const
 {
     return m_textWidth;
@@ -105,6 +113,13 @@ MCUint MCTextureText::textWidth() const
 MCUint MCTextureText::textHeight() const
 {
     return m_textHeight;
+}
+
+void MCTextureText::renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
+    MCTextureFont & font, bool newLineIncreasesY) const
+{
+    renderShadow(x + m_xOffset, y + m_yOffset, pCamera, font, newLineIncreasesY);
+    render(x, y, pCamera, font, newLineIncreasesY);
 }
 
 void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,

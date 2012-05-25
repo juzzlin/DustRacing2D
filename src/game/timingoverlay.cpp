@@ -53,6 +53,7 @@ void TimingOverlay::setRace(Race & race)
 void TimingOverlay::render()
 {
     // TODO: Refactor and optimize.
+    std::stringstream ss;
 
     if (m_pCar && m_pTiming && m_pRace)
     {
@@ -70,28 +71,19 @@ void TimingOverlay::render()
 
         // Render the current lap number
         {
-            std::stringstream ss;
+            ss.seekp(0);
             ss << " LAP:" << leadersLap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
             lapText.setColor(1.0f, 1.0f, 1.0f);
-
-            lapText.renderShadow(
-                shadowX + 0,
-                shadowY + height() - lapText.textHeight(),
-                nullptr,
-                m_defaultMonospace);
-
-            lapText.render(
-                0,
-                height() - lapText.textHeight(),
-                nullptr,
-                m_defaultMonospace);
+            lapText.setShadowOffset(shadowX, shadowY);
+            lapText.renderWithShadow(0, height() - lapText.textHeight(),
+                nullptr, m_defaultMonospace);
         }
 
         // Render the position
         {
-            std::stringstream ss;
+            ss.seekp(0);
             ss << " POS:" << m_posTexts.at(pos);
 
             const int lapDiff = leadersLap - lap;
@@ -103,24 +95,15 @@ void TimingOverlay::render()
             MCTextureText posText(ss.str());
             posText.setGlyphSize(20, 20);
             posText.setColor(1.0f, 1.0f, 0.0f);
-
-            posText.renderShadow(
-                shadowX + 0,
-                shadowY + height() - posText.textHeight() * 2,
-                nullptr,
-                m_defaultMonospace);
-
-            posText.render(
-                0,
-                height() - posText.textHeight() * 2,
-                nullptr,
-                m_defaultMonospace);
+            posText.setShadowOffset(shadowX, shadowY);
+            posText.renderWithShadow(0, height() - posText.textHeight() * 2,
+                nullptr, m_defaultMonospace);
         }
 
         // Render the current lap time
         {
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
-            std::stringstream ss;
+            ss.seekp(0);
             ss << "  " << currentLapTimeStr;
             MCTextureText currentLapTimeText(ss.str());
             currentLapTimeText.setGlyphSize(20, 20);
@@ -141,13 +124,8 @@ void TimingOverlay::render()
                 currentLapTimeText.setColor(1.0f, 0.0f, 0.0f);
             }
 
-            currentLapTimeText.renderShadow(
-                shadowX + width() - currentLapTimeText.textWidth(),
-                shadowY + height() - currentLapTimeText.textHeight(),
-                nullptr,
-                m_defaultMonospace);
-
-            currentLapTimeText.render(
+            currentLapTimeText.setShadowOffset(shadowX, shadowY);
+            currentLapTimeText.renderWithShadow(
                 width() - currentLapTimeText.textWidth(),
                 height() - currentLapTimeText.textHeight(),
                 nullptr,
@@ -157,18 +135,12 @@ void TimingOverlay::render()
         // Render the last lap time
         {
             std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
-            std::stringstream ss;
+            ss.seekp(0);
             ss << "L:" << lastLapTimeStr;
             MCTextureText lastLapTimeText(ss.str());
             lastLapTimeText.setGlyphSize(20, 20);
-
-            lastLapTimeText.renderShadow(
-                shadowX + width() - lastLapTimeText.textWidth(),
-                shadowY + height() - lastLapTimeText.textHeight() * 2,
-                nullptr,
-                m_defaultMonospace);
-
-            lastLapTimeText.render(
+            lastLapTimeText.setShadowOffset(shadowX, shadowY);
+            lastLapTimeText.renderWithShadow(
                 width() - lastLapTimeText.textWidth(),
                 height() - lastLapTimeText.textHeight() * 2,
                 nullptr,
@@ -210,18 +182,12 @@ void TimingOverlay::render()
             if (show)
             {
                 std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
-                std::stringstream ss;
+                ss.seekp(0);
                 ss << "R:" << recordLapTimeStr;
                 MCTextureText recordLapTimeText(ss.str());
                 recordLapTimeText.setGlyphSize(20, 20);
-
-                recordLapTimeText.renderShadow(
-                    shadowX + width() - recordLapTimeText.textWidth(),
-                    shadowY + height() - recordLapTimeText.textHeight() * 3,
-                    nullptr,
-                    m_defaultMonospace);
-
-                recordLapTimeText.render(
+                recordLapTimeText.setShadowOffset(shadowX, shadowY);
+                recordLapTimeText.renderWithShadow(
                     width() - recordLapTimeText.textWidth(),
                     height() - recordLapTimeText.textHeight() * 3,
                     nullptr,

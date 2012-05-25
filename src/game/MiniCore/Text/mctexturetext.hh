@@ -50,6 +50,9 @@ public:
     //! Get color.
     void getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const;
 
+    //! Set shadow offset. Effective if renderWithShadow() is called.
+    void setShadowOffset(MCFloat xOffset, MCFloat yOffset);
+
     //! Get glyph width.
     MCUint glyphWidth() const;
 
@@ -74,6 +77,12 @@ public:
     void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
         MCTextureFont & font, bool newLineIncreasesY = false) const;
 
+    //! Render text and shadow at (x,y) as seen thru the
+    //! given camera window (can be nullptr) using the
+    //! given font. Shadow offset as set by setShadowOffset().
+    void renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
+        MCTextureFont & font, bool newLineIncreasesY = false) const;
+
 private:
 
     void updateTextDimensions();
@@ -82,6 +91,7 @@ private:
     MCUint m_glyphWidth, m_glyphHeight;
     MCUint m_textWidth, m_textHeight;
     MCFloat m_r, m_g, m_b, m_a;
+    MCFloat m_xOffset, m_yOffset;
 };
 
 #endif // MCTEXTUREGLYPH_HH
