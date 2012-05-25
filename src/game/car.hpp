@@ -157,6 +157,7 @@ private:
     void doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
     MCFrictionGenerator * m_pBrakingFriction;
+    MCFrictionGenerator * m_pOnTrackFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
     MCFrictionGenerator * m_pSlideFriction;
     bool                  m_leftSideOffTrack;

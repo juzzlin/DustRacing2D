@@ -40,7 +40,7 @@ namespace
     const MCFloat ROLLING_FRICTION     = 0.1f;
     const MCFloat SLIDE_FRICTION       = 1.0f;
     const MCFloat ROTATION_FRICTION    = 1.0f;
-    const MCFloat OFF_TRACK_FRICTION   = 0.5f;
+    const MCFloat OFF_TRACK_FRICTION   = 1.0f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
     const MCFloat TURNING_IMPULSE      = 0.25f;
     const MCFloat POWER                = 5000.0f;
@@ -59,7 +59,8 @@ namespace
 Car::Car(MCSurface & surface, MCUint index)
   : MCObject(&surface, "Car")
   , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
-  , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, 0))
+  , m_pOnTrackFriction(new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION))
+  , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, ROTATION_FRICTION))
   , m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
   , m_leftSideOffTrack(false)
   , m_rightSideOffTrack(false)
@@ -91,13 +92,13 @@ Car::Car(MCSurface & surface, MCUint index)
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
 
-    // Add rolling friction generator
-    MCWorld::instance().addForceGenerator(
-        *new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION), *this, true);
-
     // Add braking friction generator
     MCWorld::instance().addForceGenerator(*m_pBrakingFriction, *this, true);
     m_pBrakingFriction->enable(false);
+
+    // Add rolling friction generator
+    MCWorld::instance().addForceGenerator(*m_pOnTrackFriction, *this, true);
+    m_pOnTrackFriction->enable(true);
 
     // Add off-track friction generator
     MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
@@ -134,8 +135,6 @@ MCUint Car::index() const
 
 void Car::turnLeft()
 {
-    m_pSlideFriction->enable(true);
-
     if (m_tireAngle < 45) m_tireAngle++;
 
     m_turnLeft = true;
@@ -155,8 +154,6 @@ void Car::turnLeft()
 
 void Car::turnRight()
 {
-    m_pSlideFriction->enable(true);
-
     if (m_tireAngle > -45) m_tireAngle--;
 
     m_turnRight = true;
@@ -177,7 +174,6 @@ void Car::turnRight()
 void Car::accelerate()
 {
     m_pBrakingFriction->enable(false);
-    m_pSlideFriction->enable(true);
 
     MCVector2d<MCFloat> force(m_dx, m_dy);
     addForce(force * m_power);
@@ -205,7 +201,6 @@ void Car::brake()
     {
         m_braking = true;
         m_pBrakingFriction->enable(true);
-        m_pSlideFriction->enable(false);
     }
 }
 
@@ -385,19 +380,28 @@ void Car::stepTime()
             addTorque(OFF_TRACK_MOMENT);
         }
     }
+
+    if (m_leftSideOffTrack || m_rightSideOffTrack)
+    {
+        m_pOffTrackFriction->enable(true);
+        m_pOnTrackFriction->enable(false);
+    }
+    else
+    {
+        m_pOffTrackFriction->enable(false);
+        m_pOnTrackFriction->enable(true);
+    }
 }
 
 void Car::setLeftSideOffTrack(bool state)
 {
     // Enable off-track friction if left side is off the track.
-    m_pOffTrackFriction->enable(state);
     m_leftSideOffTrack = state;
 }
 
 void Car::setRightSideOffTrack(bool state)
 {
     // Enable off-track friction if right side is off the track.
-    m_pOffTrackFriction->enable(state);
     m_rightSideOffTrack = state;
 }
 
