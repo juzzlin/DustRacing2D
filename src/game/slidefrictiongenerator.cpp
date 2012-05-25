@@ -35,16 +35,13 @@ void SlideFrictionGenerator::updateForce(MCObject & object)
 {
     const MCFloat bodyNormalAngle = object.angle() + 90;
     const MCVector2d<MCFloat> n(
-        MCTrigonom::cos(bodyNormalAngle),
-        MCTrigonom::sin(bodyNormalAngle));
+        MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
     const MCVector2d<MCFloat> & v = object.velocity();
     const MCVector2d<MCFloat>   s = MCMathUtil::projection(v, n);
-    const MCFloat l = s.lengthFast();
 
     // This is only a simulation and doesn't base on "real" physics.
-    if (l > FRICTION_SPEED_TH)
+    if (s.lengthFast() > FRICTION_SPEED_TH)
     {
-//        object.addForce(-s * coeffLin() * gravity() * object.mass() / l);
         object.addLinearImpulse(-s * coeffLin() * SLIDE_DECAY);
     }
 }

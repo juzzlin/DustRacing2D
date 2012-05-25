@@ -77,18 +77,16 @@ void MCWorldImpl::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     forceRegistry.update();
-    for (MCUint i = 0; i < objs.size(); i++)
+    const MCUint i2 = objs.size();
+    for (MCUint i = 0; i < i2; i++)
     {
         MCObject & object(*objs[i]);
         if (object.physicsObject() && !object.stationary())
         {
             object.integrate(step);
-            object.stepTime();
         }
-        else
-        {
-            object.stepTime();
-        }
+
+        object.stepTime();
     }
 }
 

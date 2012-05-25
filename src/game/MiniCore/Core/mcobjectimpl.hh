@@ -35,7 +35,7 @@ private:
     static MCUint registerType(const std::string & typeName);
     inline void integrate(MCFloat step);
     inline void integrateLinear(MCFloat step);
-    inline void integrateRotational(MCFloat step);
+    inline void integrateAngular(MCFloat step);
     inline void doOutOfBoundariesEvent();
     inline void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
     inline void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
@@ -80,6 +80,8 @@ private:
     MCFloat damping;
     int timerEventObjectsIndex;
     bool sleeping;
+    bool physicsObject;
+    bool stationary;
     friend class MCObject;
 };
 

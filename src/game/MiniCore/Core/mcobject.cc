@@ -41,14 +41,8 @@ namespace
 {
 enum PropertyMask
 {
-    // Object is stationary
-    StationaryMask = (1<<0),
-
     // Object is renderable
     RenderableMask = (1<<1),
-
-    // Object is considered in physics calculations
-    PhysicsMask = (1<<2),
 
     // Object is considered in collision calculations
     CollisionsMask = (1<<3),
@@ -86,12 +80,14 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , momentOfInertia(0)
 , layer(0)
 , index(-1)
-, flags(RenderableMask | PhysicsMask | CollisionsMask | ShadowMask)
+, flags(RenderableMask | CollisionsMask | ShadowMask)
 , i0(0), i1(0), j0(0), j1(0)
 , pShape(nullptr)
 , damping(0.999f)
 , timerEventObjectsIndex(-1)
 , sleeping(false)
+, physicsObject(true)
+, stationary(false)
 {}
 
 void MCObjectImpl::setFlag(MCUint flag, bool enable)
@@ -129,24 +125,19 @@ void MCObject::integrate(MCFloat step)
 
 void MCObjectImpl::integrate(MCFloat step)
 {
-    if (step > 0.0)
+    if (!sleeping)
     {
-        if (!sleeping)
+        integrateLinear(step);
+        integrateAngular(step);
+        doOutOfBoundariesEvent();
+
+        const MCFloat linearSleepingLimit  = 0.1f;
+        const MCFloat angularSleepingLimit = 0.1f;
+
+        if (velocity.lengthFast() < linearSleepingLimit &&
+            angularVelocity       < angularSleepingLimit)
         {
-            integrateLinear(step);
-
-            integrateRotational(step);
-
-            doOutOfBoundariesEvent();
-
-            const MCFloat linearSleepingLimit  = 0.1f;
-            const MCFloat angularSleepingLimit = 0.1f;
-
-            if (velocity.lengthFast() < linearSleepingLimit &&
-                angularVelocity       < angularSleepingLimit)
-            {
-                sleeping = true;
-            }
+            sleeping = true;
         }
     }
 
@@ -158,7 +149,6 @@ void MCObjectImpl::integrate(MCFloat step)
 void MCObjectImpl::integrateLinear(MCFloat step)
 {
     MCVector3dF totAcceleration(acceleration);
-
     totAcceleration += forces * invMass;
     velocity        += totAcceleration * step + linearImpulse;
     velocity        *= damping;
@@ -175,14 +165,13 @@ void MCObjectImpl::integrateLinear(MCFloat step)
     }
 }
 
-void MCObjectImpl::integrateRotational(MCFloat step)
+void MCObjectImpl::integrateAngular(MCFloat step)
 {
     if (pShape)
     {
         if (momentOfInertia > 0.0f)
         {
             MCFloat totAngularAcceleration(angularAcceleration);
-
             totAngularAcceleration += torque * invMomentOfInertia;
             angularVelocity        += totAngularAcceleration * step + angularImpulse;
             angularVelocity        *= damping;
@@ -206,23 +195,19 @@ void MCObjectImpl::integrateRotational(MCFloat step)
 
 void MCObjectImpl::doOutOfBoundariesEvent()
 {
-    // By default use the center point as the test point.
-    MCFloat minX = location.i();
-    MCFloat maxX = location.i();
-    MCFloat minY = location.j();
-    MCFloat maxY = location.j();
-
     // Use shape bbox if shape is defined.
     if (pShape)
     {
-        minX = pShape->bbox().x1();
-        maxX = pShape->bbox().x2();
-        minY = pShape->bbox().y1();
-        maxY = pShape->bbox().y2();
+        checkXBoundariesAndSendEvent(pShape->bbox().x1(), pShape->bbox().x2());
+        checkYBoundariesAndSendEvent(pShape->bbox().y1(), pShape->bbox().y2());
+    }
+    else
+    {
+        // By default use the center point as the test point.
+        checkXBoundariesAndSendEvent(location.i(), location.i());
+        checkYBoundariesAndSendEvent(location.j(), location.j());
     }
 
-    checkXBoundariesAndSendEvent(minX, maxX);
-    checkYBoundariesAndSendEvent(minY, maxY);
     checkZBoundariesAndSendEvent();
 }
 
@@ -449,7 +434,7 @@ void MCObject::renderShadow(MCCamera * p)
 
 void MCObject::setMass(MCFloat newMass, bool stationary_)
 {
-    m_pImpl->setFlag(StationaryMask, stationary_);
+    m_pImpl->stationary = stationary_;
 
     if (!stationary_)
     {
@@ -511,7 +496,7 @@ MCFloat MCObject::invMomentOfInertia() const
 
 bool MCObject::stationary() const
 {
-    return m_pImpl->flags & StationaryMask;
+    return m_pImpl->stationary;
 }
 
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
@@ -528,12 +513,12 @@ void MCObject::addAngularImpulse(MCFloat impulse)
 
 void MCObject::setPhysicsObject(bool flag)
 {
-    m_pImpl->setFlag(PhysicsMask, flag);
+    m_pImpl->physicsObject = flag;
 }
 
 bool MCObject::physicsObject() const
 {
-    return m_pImpl->flags & PhysicsMask;
+    return m_pImpl->physicsObject;
 }
 
 void MCObject::setBypassCollisions(bool flag)
