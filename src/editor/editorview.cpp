@@ -157,12 +157,28 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             // Handle right button click
             if (event->button() == Qt::RightButton)
             {
-                handleRightButtonClickOnTile(tile);
+                handleRightButtonClickOnTile(*tile);
             }
             // Handle left button click
             else if (event->button() == Qt::LeftButton)
             {
-                handleLeftButtonClickOnTile(tile);
+                handleLeftButtonClickOnTile(*tile);
+            }
+
+            QWidget::mousePressEvent(event);
+        }
+        else if (Object * object =
+            dynamic_cast<Object *>(scene()->itemAt(m_clickedScenePos)))
+        {
+            // Handle right button click
+            if (event->button() == Qt::RightButton)
+            {
+                // Nothing to do currently
+            }
+            // Handle left button click
+            else if (event->button() == Qt::LeftButton)
+            {
+                handleLeftButtonClickOnObject(*object);
             }
 
             QWidget::mousePressEvent(event);
@@ -170,7 +186,26 @@ void EditorView::mousePressEvent(QMouseEvent * event)
     }
 }
 
-void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
+void EditorView::handleLeftButtonClickOnObject(Object & object)
+{
+    EditorData   & editorData   = MainWindow::instance()->editorData();
+    ObjectLoader & objectLoader = MainWindow::instance()->objectLoader();
+
+    // User is erasing an object
+    if (editorData.mode() == EditorData::EM_ERASE_OBJECT)
+    {
+        if (scene())
+        {
+            // Remove from track data.
+            editorData.trackData()->objects().remove(object);
+
+            // Remove from scene.
+            scene()->removeItem(&object);
+        }
+    }
+}
+
+void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 {
     EditorData   & editorData   = MainWindow::instance()->editorData();
     ObjectLoader & objectLoader = MainWindow::instance()->objectLoader();
@@ -179,10 +214,10 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
     if (editorData.mode() == EditorData::EM_SET_ROUTE)
     {
         // Push tile to the route
-        tile->setRouteIndex(editorData.trackData()->route().push(tile));
+        tile.setRouteIndex(editorData.trackData()->route().push(&tile));
 
         // Check if we might have a loop => end
-        if (!tile->routeIndex() && editorData.trackData()->route().length() > 1)
+        if (!tile.routeIndex() && editorData.trackData()->route().length() > 1)
         {
             editorData.setMode(EditorData::EM_NONE);
             MainWindow::instance()->endSetRoute();
@@ -201,8 +236,8 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
-            tile->setTileType(action->data().toString());
-            tile->setPixmap(action->icon().pixmap(
+            tile.setTileType(action->data().toString());
+            tile.setPixmap(action->icon().pixmap(
                 TrackTile::TILE_W, TrackTile::TILE_H));
         }
     }
@@ -239,23 +274,23 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile * tile)
     // User is initiating a drag'n'drop
     else if (editorData.mode() == EditorData::EM_NONE)
     {
-        tile->setZValue(tile->zValue() + 1);
-        editorData.setDragAndDropSourceTile(tile);
-        editorData.setDragAndDropSourcePos(tile->pos());
+        tile.setZValue(tile.zValue() + 1);
+        editorData.setDragAndDropSourceTile(&tile);
+        editorData.setDragAndDropSourcePos(tile.pos());
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
     }
 }
 
-void EditorView::handleRightButtonClickOnTile(TrackTile * tile)
+void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
 {
     // Enable all hints by default
     m_clearComputerHint->setEnabled(true);
     m_setComputerHintFirstBeforeCorner->setEnabled(true);
     m_setComputerHintSecondBeforeCorner->setEnabled(true);
 
-    switch (tile->computerHint())
+    switch (tile.computerHint())
     {
     case TrackTileBase::CH_NONE:
         m_clearComputerHint->setEnabled(false);
@@ -277,7 +312,7 @@ void EditorView::handleRightButtonClickOnTile(TrackTile * tile)
     m_setDrivingLineHintTop->setEnabled(true);
     m_setDrivingLineHintBottom->setEnabled(true);
 
-    switch (tile->drivingLineHint())
+    switch (tile.drivingLineHint())
     {
     case TrackTileBase::DLH_NONE:
         m_clearDrivingLineHint->setEnabled(false);

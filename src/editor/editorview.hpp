@@ -24,6 +24,7 @@ class QAction;
 class QMouseEvent;
 class QPaintEvent;
 class EditorData;
+class Object;
 class ObjectLoader;
 class TrackTile;
 
@@ -62,8 +63,9 @@ private slots:
 private:
 
     void createContextMenu();
-    void handleLeftButtonClickOnTile(TrackTile * tile);
-    void handleRightButtonClickOnTile(TrackTile * tile);
+    void handleLeftButtonClickOnTile(TrackTile & tile);
+    void handleRightButtonClickOnTile(TrackTile & tile);
+    void handleLeftButtonClickOnObject(Object & tile);
     void doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 

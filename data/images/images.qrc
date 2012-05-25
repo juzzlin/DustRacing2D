@@ -4,5 +4,6 @@
         <file>clear.png</file>
         <file>about.png</file>
         <file>logo.png</file>
+        <file>cross.png</file>
     </qresource>
 </RCC>

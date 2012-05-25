@@ -372,18 +372,23 @@ void MainWindow::populateMenuBar()
 void MainWindow::populateToolBar()
 {
     // Add "select"-action
-    QAction * p = new QAction(QIcon(QPixmap(Config::Editor::SELECT_PATH)),
-                              tr("Select"), this);
+    QAction * p = new QAction(QIcon(QPixmap(Config::Editor::SELECT_PATH)), tr("Select"), this);
     p->setData(QVariant(QString("select")));
     m_toolBar->addAction(p);
 
+    // Add "erase"-action
+    p = new QAction(
+        QIcon(QPixmap(Config::Editor::ERASE_PATH)), tr("Erase object"), this);
+    p->setData(QVariant(QString("erase")));
+    m_toolBar->addAction(p);
+
     // Add "clear"-action
-    p = new QAction(QIcon(QPixmap(Config::Editor::CLEAR_PATH)),
-                    tr("Clear"), this);
+    p = new QAction(QIcon(QPixmap(Config::Editor::CLEAR_PATH)), tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
     m_toolBar->addAction(p);
 
-    connect(m_toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(handleToolBarActionClick(QAction*)));
+    connect(m_toolBar, SIGNAL(actionTriggered(QAction*)),
+        this, SLOT(handleToolBarActionClick(QAction*)));
 
     m_toolBar->setEnabled(false);
 }
@@ -401,6 +406,13 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             m_editorData->setMode(EditorData::EM_NONE);
+        }
+        // The user wants to erase an object.
+        else if (action->data() == "erase")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
+            m_editorData->setMode(EditorData::EM_ERASE_OBJECT);
         }
         // The user wants to set a tile type or clear it.
         else if (m_objectLoader->getCategoryByRole(

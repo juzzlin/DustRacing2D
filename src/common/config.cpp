@@ -23,6 +23,7 @@ const char * Config::Common::dataPath = DATA_PATH;
 
 // **** Editor variables ****
 const char * Config::Editor::SELECT_PATH             = ":/cursor.png";
+const char * Config::Editor::ERASE_PATH              = ":/cross.png";
 const char * Config::Editor::CLEAR_PATH              = ":/clear.png";
 const char * Config::Editor::QSETTINGS_COMPANY_NAME  = "Dust Racing";
 const char * Config::Editor::QSETTINGS_SOFTWARE_NAME = "Editor";

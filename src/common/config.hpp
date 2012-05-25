@@ -41,6 +41,9 @@ public:
         //! Path to the "select" icon.
         static const char * SELECT_PATH;
 
+        //! Path to the "erase" icon.
+        static const char * ERASE_PATH;
+
         //! Path to the "clear" tile.
         static const char * CLEAR_PATH;
     };
