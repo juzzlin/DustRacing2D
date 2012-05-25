@@ -21,10 +21,12 @@
 #define MCTEXTURETEXT_HH
 
 #include "../Core/mctypes.hh"
+#include "../Core/mcmacros.hh"
 #include <string>
 
 class MCCamera;
 class MCTextureFont;
+class MCTextureTextImpl;
 
 //! MCTextureText is a renderable text object
 //! using a textured monospace font (MCTextureFont).
@@ -33,7 +35,10 @@ class MCTextureText
 public:
 
     //! Constructor.
-    MCTextureText(const std::string & text);
+    explicit MCTextureText(const std::string & text);
+
+    //! Destructor.
+    ~MCTextureText();
 
     //! Set the text.
     void setText(const std::string & text);
@@ -85,13 +90,9 @@ public:
 
 private:
 
-    void updateTextDimensions();
-
-    std::string m_text;
-    MCUint m_glyphWidth, m_glyphHeight;
-    MCUint m_textWidth, m_textHeight;
-    MCFloat m_r, m_g, m_b, m_a;
-    MCFloat m_xOffset, m_yOffset;
+    DISABLE_ASSI(MCTextureText);
+    DISABLE_COPY(MCTextureText);
+    MCTextureTextImpl * const m_pImpl;
 };
 
 #endif // MCTEXTUREGLYPH_HH
