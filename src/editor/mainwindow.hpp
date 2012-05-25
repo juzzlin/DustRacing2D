@@ -20,6 +20,7 @@
 #include <QCloseEvent>
 #include <QString>
 
+class AboutDlg;
 class EditorData;
 class EditorView;
 class EditorScene;
@@ -94,6 +95,7 @@ private slots:
     void openTrack();
     void saveTrack();
     void saveAsTrack();
+    void showAboutDlg();
     void updateScale(int value);
 
 private:
@@ -110,6 +112,7 @@ private:
     void removeTilesFromScene();
 
     ObjectLoader * m_objectLoader;
+    AboutDlg     * m_aboutDlg;
     EditorData   * m_editorData;
     EditorScene  * m_editorScene;
     EditorView   * m_editorView;

@@ -16,6 +16,7 @@
 #include "mainwindow.hpp"
 
 #include "../common/config.hpp"
+#include "aboutdlg.hpp"
 #include "object.hpp"
 #include "objectdata.hpp"
 #include "objectloader.hpp"
@@ -65,6 +66,7 @@ namespace
 
 MainWindow::MainWindow(QString trackFile)
 : m_objectLoader(new ObjectLoader)
+, m_aboutDlg(new AboutDlg(this))
 , m_editorData(new EditorData(this))
 , m_editorScene(new EditorScene(this))
 , m_editorView(new EditorView(this))
@@ -366,7 +368,7 @@ void MainWindow::populateMenuBar()
     // Add "about"-action
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
-    //  connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAbout()));
+    connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
 }
 
 void MainWindow::populateToolBar()
@@ -465,6 +467,11 @@ void MainWindow::openTrack()
                                                     path,
                                                     tr("Track Files (*.trk)"));
     doOpenTrack(fileName);
+}
+
+void MainWindow::showAboutDlg()
+{
+    m_aboutDlg->exec();
 }
 
 bool MainWindow::doOpenTrack(QString fileName)

@@ -1,12 +1,13 @@
 # Set sources
 set(SRC
+    aboutdlg.cpp
+    editordata.cpp
+    editorview.cpp
+    editorscene.cpp
     main.cpp
     mainwindow.cpp
     map.cpp
     newtrackdialog.cpp
-    editordata.cpp
-    editorview.cpp
-    editorscene.cpp
     object.cpp
     objectloader.cpp
     tiletypedialog.cpp
@@ -25,10 +26,11 @@ set(SRC
 
 # Set moc headers
 set(MOC_HDRS
-    mainwindow.hpp
-    newtrackdialog.hpp
+    aboutdlg.hpp
     editorview.hpp
     editorscene.hpp
+    mainwindow.hpp
+    newtrackdialog.hpp
     tiletypedialog.hpp
     tileanimator.hpp
     trackpropertiesdialog.hpp)
