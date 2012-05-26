@@ -22,8 +22,7 @@ If everything went ok, run:
 
 $ make
 
-This will build the editor and the game binaries
-in bin/editor/ and in bin/game/ respectively.
+This will build the editor and the game binaries.
 
 Building by using QtCreator on Windows (tested on Windows 7)
 ------------------------------------------------------------
