@@ -66,6 +66,8 @@ private:
     void handleLeftButtonClickOnTile(TrackTile & tile);
     void handleRightButtonClickOnTile(TrackTile & tile);
     void handleLeftButtonClickOnObject(Object & tile);
+    void handleTileDragRelease(QMouseEvent * event);
+    void handleObjectDragRelease(QMouseEvent * event);
     void doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 

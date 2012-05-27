@@ -16,6 +16,7 @@
 #include "editordata.hpp"
 #include "editorscene.hpp"
 #include "mainwindow.hpp"
+#include "object.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "trackio.hpp"
@@ -23,6 +24,7 @@
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
 , m_dragAndDropSourceTile(nullptr)
+, m_dragAndDropObject(nullptr)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
 {}
@@ -169,6 +171,16 @@ void EditorData::setDragAndDropSourceTile(TrackTile * tile)
 TrackTile * EditorData::dragAndDropSourceTile() const
 {
     return m_dragAndDropSourceTile;
+}
+
+void EditorData::setDragAndDropObject(Object * object)
+{
+    m_dragAndDropObject = object;
+}
+
+Object * EditorData::dragAndDropObject() const
+{
+    return m_dragAndDropObject;
 }
 
 void EditorData::setDragAndDropSourcePos(QPointF pos)

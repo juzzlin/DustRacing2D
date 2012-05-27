@@ -53,12 +53,17 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
             tile->setActive(true);
         }
 
-        // Drag'n'drop active?
         EditorData & editorData = MainWindow::instance()->editorData();
-        TrackTile  * sourceTile = editorData.dragAndDropSourceTile();
-        if (sourceTile)
+
+        // Tile drag'n'drop active?
+        if (TrackTile * sourceTile = editorData.dragAndDropSourceTile())
         {
             sourceTile->setPos(mappedPos);
+        }
+        // Object drag'n'drop active?
+        else if (Object * object = editorData.dragAndDropObject())
+        {
+            object->setPos(mappedPos);
         }
 
         // Show coordinates in status bar
@@ -149,7 +154,23 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         m_clickedPos      = event->pos();
         m_clickedScenePos = mapToScene(m_clickedPos);
 
-        if (TrackTile * tile =
+        if (Object * object =
+            dynamic_cast<Object *>(scene()->itemAt(m_clickedScenePos)))
+        {
+            // Handle right button click
+            if (event->button() == Qt::RightButton)
+            {
+                // Nothing to do currently
+            }
+            // Handle left button click
+            else if (event->button() == Qt::LeftButton)
+            {
+                handleLeftButtonClickOnObject(*object);
+            }
+
+            QWidget::mousePressEvent(event);
+        }
+        else if (TrackTile * tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(m_clickedScenePos)))
         {
             tile->setActive(true);
@@ -167,29 +188,12 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
             QWidget::mousePressEvent(event);
         }
-        else if (Object * object =
-            dynamic_cast<Object *>(scene()->itemAt(m_clickedScenePos)))
-        {
-            // Handle right button click
-            if (event->button() == Qt::RightButton)
-            {
-                // Nothing to do currently
-            }
-            // Handle left button click
-            else if (event->button() == Qt::LeftButton)
-            {
-                handleLeftButtonClickOnObject(*object);
-            }
-
-            QWidget::mousePressEvent(event);
-        }
     }
 }
 
 void EditorView::handleLeftButtonClickOnObject(Object & object)
 {
-    EditorData   & editorData   = MainWindow::instance()->editorData();
-    ObjectLoader & objectLoader = MainWindow::instance()->objectLoader();
+    EditorData & editorData = MainWindow::instance()->editorData();
 
     // User is erasing an object
     if (editorData.mode() == EditorData::EM_ERASE_OBJECT)
@@ -202,6 +206,15 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
             // Remove from scene.
             scene()->removeItem(&object);
         }
+    }
+    // User is initiating a drag'n'drop
+    else if (editorData.mode() == EditorData::EM_NONE)
+    {
+        object.setZValue(object.zValue() + 1);
+        editorData.setDragAndDropObject(&object);
+
+        // Change cursor to the closed hand cursor.
+        QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
     }
 }
 
@@ -340,12 +353,18 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
 
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
 {
+    handleTileDragRelease(event);
+    handleObjectDragRelease(event);
+}
+
+void EditorView::handleTileDragRelease(QMouseEvent * event)
+{
     if (scene())
     {
-        // Drag'n'drop active?
         EditorData & editorData = MainWindow::instance()->editorData();
-        TrackTile  * sourceTile = editorData.dragAndDropSourceTile();
-        if (sourceTile)
+
+        // Tile drag'n'drop active?
+        if (TrackTile * sourceTile = editorData.dragAndDropSourceTile())
         {
             // Determine the dest tile
             TrackTile * destTile = sourceTile;
@@ -370,6 +389,29 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
             update();
 
             editorData.setDragAndDropSourceTile(nullptr);
+
+            // Restore the cursor.
+            QApplication::restoreOverrideCursor();
+        }
+    }
+}
+
+void EditorView::handleObjectDragRelease(QMouseEvent * event)
+{
+    if (scene())
+    {
+        EditorData & editorData = MainWindow::instance()->editorData();
+
+        // Tile drag'n'drop active?
+        if (Object * object = editorData.dragAndDropObject())
+        {
+            // Restore position
+            object->setPos(mapToScene(event->pos()));
+            object->setZValue(object->zValue() - 1);
+
+            update();
+
+            editorData.setDragAndDropObject(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();
@@ -452,4 +494,3 @@ void EditorView::doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint)
         tile->setDrivingLineHint(hint);
     }
 }
-

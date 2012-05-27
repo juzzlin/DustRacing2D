@@ -22,6 +22,7 @@
 #include <QPointF>
 
 class MainWindow;
+class Object;
 class TrackData;
 class TrackTile;
 
@@ -86,12 +87,17 @@ public:
     //! Sets the current editing mode.
     void setMode(EditorMode newMode);
 
-    //! Returns the tile being drag'n'dropped
-    //! or nullptr.
-    TrackTile * dragAndDropSourceTile() const;
-
     //! Set tile that is being drag'n'dropped.
     void setDragAndDropSourceTile(TrackTile * tile);
+
+    //! Returns the tile being drag'n'dropped or nullptr.
+    TrackTile * dragAndDropSourceTile() const;
+
+    //! Set object that is being drag'n'dropped.
+    void setDragAndDropObject(Object * object);
+
+    //! Returns the object being drag'n'dropped or nullptr.
+    Object * dragAndDropObject() const;
 
     //! Get source pos of the drag'n'drop.
     QPointF dragAndDropSourcePos() const;
@@ -107,6 +113,7 @@ private:
     std::shared_ptr<TrackData> m_trackData;
     EditorMode m_mode;
     TrackTile * m_dragAndDropSourceTile;
+    Object * m_dragAndDropObject;
     QPointF m_dragAndDropSourcePos;
     MainWindow * m_mainWindow;
 };
