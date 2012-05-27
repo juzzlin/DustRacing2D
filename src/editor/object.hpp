@@ -37,6 +37,7 @@ public:
         const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
     //! \reimp
+    //! Sets the Object and QGraphicsItem locations.
     virtual void setLocation(QPointF newLocation);
 
 private:

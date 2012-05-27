@@ -405,8 +405,8 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
         // Tile drag'n'drop active?
         if (Object * object = editorData.dragAndDropObject())
         {
-            // Restore position
-            object->setPos(mapToScene(event->pos()));
+            // Set the new position position
+            object->setLocation(mapToScene(event->pos()));
             object->setZValue(object->zValue() - 1);
 
             update();
