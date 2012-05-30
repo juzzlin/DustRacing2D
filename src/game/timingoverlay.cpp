@@ -53,8 +53,6 @@ void TimingOverlay::setRace(Race & race)
 void TimingOverlay::render()
 {
     // TODO: Refactor and optimize.
-    std::stringstream ss;
-
     if (m_pCar && m_pTiming && m_pRace)
     {
         const int shadowY        = -2;
@@ -71,7 +69,7 @@ void TimingOverlay::render()
 
         // Render the current lap number
         {
-            ss.seekp(0);
+            std::stringstream ss;
             ss << " LAP:" << leadersLap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
@@ -83,7 +81,7 @@ void TimingOverlay::render()
 
         // Render the position
         {
-            ss.seekp(0);
+            std::stringstream ss;
             ss << " POS:" << m_posTexts.at(pos);
 
             const int lapDiff = leadersLap - lap;
@@ -103,7 +101,7 @@ void TimingOverlay::render()
         // Render the current lap time
         {
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
-            ss.seekp(0);
+            std::stringstream ss;
             ss << "  " << currentLapTimeStr;
             MCTextureText currentLapTimeText(ss.str());
             currentLapTimeText.setGlyphSize(20, 20);
@@ -135,7 +133,7 @@ void TimingOverlay::render()
         // Render the last lap time
         {
             std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
-            ss.seekp(0);
+            std::stringstream ss;
             ss << "L:" << lastLapTimeStr;
             MCTextureText lastLapTimeText(ss.str());
             lastLapTimeText.setGlyphSize(20, 20);
@@ -182,7 +180,7 @@ void TimingOverlay::render()
             if (show)
             {
                 std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
-                ss.seekp(0);
+                std::stringstream ss;
                 ss << "R:" << recordLapTimeStr;
                 MCTextureText recordLapTimeText(ss.str());
                 recordLapTimeText.setGlyphSize(20, 20);
