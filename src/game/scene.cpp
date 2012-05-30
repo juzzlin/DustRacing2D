@@ -256,8 +256,6 @@ void Scene::addCarsToWorld()
 
 void Scene::translateCarsToStartPositions()
 {
-    // TODO: Currently works only horizontally and to the right..
-
     assert(m_pActiveTrack);
 
     if (m_pActiveTrack->trackData().route().length() > 0)
@@ -266,27 +264,78 @@ void Scene::translateCarsToStartPositions()
             m_pActiveTrack->trackData().route().get(0)->location().x();
         const MCFloat startTileY =
             m_pActiveTrack->trackData().route().get(0)->location().y();
+        const TrackTile::RouteDirection routeDirection =
+            m_pActiveTrack->trackData().route().get(0)->routeDirection();
         const MCFloat tileWidth  = TrackTile::TILE_W;
         const MCFloat tileHeight = TrackTile::TILE_H;
-
-        // Randomize the order
-//        std::vector<Car *> randomized = m_cars;
-//        std::random_shuffle(randomized.begin(), randomized.end());
 
         // Reverse order
         std::vector<Car *> order = m_cars;
         std::reverse(order.begin(), order.end());
 
         // Position the cars into two queues.
-        for (MCUint i = 0; i < order.size(); i++)
+        switch (routeDirection)
         {
-            MCFloat rowPos = (i / 2) * tileWidth;
-            MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+        case TrackTile::RD_LEFT:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i / 2) * tileWidth;
+                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
 
-            order.at(i)->translate(
-                MCVector2d<MCFloat>(
-                    startTileX - rowPos,
-                    startTileY + colPos));
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(180);
+            }
+            break;
+
+        default:
+        case TrackTile::RD_RIGHT:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i / 2) * tileWidth;
+                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX - rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(0);
+            }
+            break;
+
+        case TrackTile::RD_DOWN:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
+                const MCFloat colPos = (i / 2) * tileHeight;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY - colPos));
+
+                order.at(i)->rotate(90);
+            }
+            break;
+
+        case TrackTile::RD_UP:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
+                const MCFloat colPos = (i / 2) * tileHeight;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(270);
+            }
+            break;
         }
     }
 }
