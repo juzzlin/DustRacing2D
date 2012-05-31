@@ -54,10 +54,13 @@ MCWorldImpl::MCWorldImpl()
 , maxY(0)
 , minZ(0)
 , maxZ(0)
-, m_pLeft(nullptr)
-, m_pRight(nullptr)
-, m_pTop(nullptr)
-, m_pBottom(nullptr)
+, pLeft(nullptr)
+, pRight(nullptr)
+, pTop(nullptr)
+, pBottom(nullptr)
+, numCollisions(0)
+, numResolverLoops(5)
+, resolverStep(1.0f / numResolverLoops)
 {
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -67,10 +70,10 @@ MCWorldImpl::MCWorldImpl()
 
 MCWorldImpl::~MCWorldImpl()
 {
-    delete m_pLeft;
-    delete m_pRight;
-    delete m_pTop;
-    delete m_pBottom;
+    delete pLeft;
+    delete pRight;
+    delete pTop;
+    delete pBottom;
 }
 
 void MCWorldImpl::integrate(MCFloat step)
@@ -93,6 +96,7 @@ void MCWorldImpl::integrate(MCFloat step)
 void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
+    numCollisions = 0;
     static MCObjectTree::ObjectSet possibleCollisions;
     for (MCUint i = 0; i < objs.size(); i++)
     {
@@ -100,12 +104,16 @@ void MCWorldImpl::detectCollisions()
         if (object.physicsObject())
         {
             possibleCollisions.clear();
+            object.deleteContacts();
             pObjectTree->getBBoxCollisions(object, possibleCollisions);
             auto j1 = possibleCollisions.begin();
             auto j2 = possibleCollisions.end();
             while (j1 != j2)
             {
-                collisionDetector.processPossibleCollision(object, **j1);
+                if (collisionDetector.processPossibleCollision(object, **j1))
+                {
+                    numCollisions++;
+                }
                 j1++;
             }
         }
@@ -270,57 +278,57 @@ void MCWorld::setDimensions(
     const MCFloat w = maxX - minX;
     const MCFloat h = maxY - minY;
 
-    if (m_pImpl->m_pLeft)
+    if (m_pImpl->pLeft)
     {
-        removeObjectNow(*m_pImpl->m_pLeft);
-        delete m_pImpl->m_pLeft;
+        removeObjectNow(*m_pImpl->pLeft);
+        delete m_pImpl->pLeft;
     }
 
-    m_pImpl->m_pLeft = new MCObject("LEFT_WALL");
-    m_pImpl->m_pLeft->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->m_pLeft->setMass(0, true);
-    m_pImpl->m_pLeft->setRestitution(0.25f);
-    m_pImpl->m_pLeft->addToWorld();
-    m_pImpl->m_pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
+    m_pImpl->pLeft = new MCObject("LEFT_WALL");
+    m_pImpl->pLeft->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->pLeft->setMass(0, true);
+    m_pImpl->pLeft->setRestitution(0.25f);
+    m_pImpl->pLeft->addToWorld();
+    m_pImpl->pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
 
-    if (m_pImpl->m_pRight)
+    if (m_pImpl->pRight)
     {
-        removeObjectNow(*m_pImpl->m_pRight);
-        delete m_pImpl->m_pRight;
+        removeObjectNow(*m_pImpl->pRight);
+        delete m_pImpl->pRight;
     }
 
-    m_pImpl->m_pRight = new MCObject("RIGHT_WALL");
-    m_pImpl->m_pRight->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->m_pRight->setMass(0, true);
-    m_pImpl->m_pRight->setRestitution(0.25f);
-    m_pImpl->m_pRight->addToWorld();
-    m_pImpl->m_pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
+    m_pImpl->pRight = new MCObject("RIGHT_WALL");
+    m_pImpl->pRight->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->pRight->setMass(0, true);
+    m_pImpl->pRight->setRestitution(0.25f);
+    m_pImpl->pRight->addToWorld();
+    m_pImpl->pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
 
-    if (m_pImpl->m_pTop)
+    if (m_pImpl->pTop)
     {
-        removeObjectNow(*m_pImpl->m_pTop);
-        delete m_pImpl->m_pTop;
+        removeObjectNow(*m_pImpl->pTop);
+        delete m_pImpl->pTop;
     }
 
-    m_pImpl->m_pTop = new MCObject("TOP_WALL");
-    m_pImpl->m_pTop->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->m_pTop->setMass(0, true);
-    m_pImpl->m_pTop->setRestitution(0.25f);
-    m_pImpl->m_pTop->addToWorld();
-    m_pImpl->m_pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
+    m_pImpl->pTop = new MCObject("TOP_WALL");
+    m_pImpl->pTop->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->pTop->setMass(0, true);
+    m_pImpl->pTop->setRestitution(0.25f);
+    m_pImpl->pTop->addToWorld();
+    m_pImpl->pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
 
-    if (m_pImpl->m_pBottom)
+    if (m_pImpl->pBottom)
     {
-        removeObjectNow(*m_pImpl->m_pBottom);
-        delete m_pImpl->m_pBottom;
+        removeObjectNow(*m_pImpl->pBottom);
+        delete m_pImpl->pBottom;
     }
 
-    m_pImpl->m_pBottom = new MCObject("BOTTOM_WALL");
-    m_pImpl->m_pBottom->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->m_pBottom->setMass(0, true);
-    m_pImpl->m_pBottom->setRestitution(0.25f);
-    m_pImpl->m_pBottom->addToWorld();
-    m_pImpl->m_pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
+    m_pImpl->pBottom = new MCObject("BOTTOM_WALL");
+    m_pImpl->pBottom->setShape(new MCRectShape(nullptr, w, h));
+    m_pImpl->pBottom->setMass(0, true);
+    m_pImpl->pBottom->setRestitution(0.25f);
+    m_pImpl->pBottom->addToWorld();
+    m_pImpl->pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
 
 MCFloat MCWorld::minX() const
@@ -500,23 +508,31 @@ void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
 
 void MCWorld::stepTime(MCFloat step)
 {
+    m_pImpl->stepTime(step);
+}
+
+void MCWorldImpl::stepTime(MCFloat step)
+{
     // Integrate physics
-    m_pImpl->integrate(step);
+    integrate(step);
+    detectCollisions();
 
-    // Process contacts and generate impulses
-    m_pImpl->collisionDetector.enableCollisionEvents(false);
-    for (MCUint i = 0; i < 4; i++)
+    if (numCollisions)
     {
-        m_pImpl->detectCollisions();
-        m_pImpl->resolvePositions(0.2f);
-    }
-    m_pImpl->collisionDetector.enableCollisionEvents(true);
+        generateImpulses();
 
-    m_pImpl->detectCollisions();
-    m_pImpl->generateImpulses();
+        // Process contacts and generate impulses
+        collisionDetector.enableCollisionEvents(false);
+        for (MCUint i = 0; i < numResolverLoops; i++)
+        {
+            detectCollisions();
+            resolvePositions(resolverStep);
+        }
+        collisionDetector.enableCollisionEvents(true);
+    }
 
     // Remove objects that are marked to be removed
-    m_pImpl->processRemovedObjects();
+    processRemovedObjects();
 }
 
 void MCWorld::render(MCCamera * pCamera)

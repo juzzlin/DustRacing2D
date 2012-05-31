@@ -43,6 +43,7 @@ public:
     void processRemovedObjects();
     void removeObject(MCObject & object);
 private:
+    void stepTime(MCFloat step);
     void integrate(MCFloat step);
     void detectCollisions();
     void generateImpulses();
@@ -65,10 +66,14 @@ private:
     bool depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
-    MCObject * m_pLeft;
-    MCObject * m_pRight;
-    MCObject * m_pTop;
-    MCObject * m_pBottom;
+    MCWorld::ObjectVector collidingObjs;
+    MCObject * pLeft;
+    MCObject * pRight;
+    MCObject * pTop;
+    MCObject * pBottom;
+    MCUint numCollisions;
+    MCUint numResolverLoops;
+    MCFloat resolverStep;
     friend class MCWorld;
 };
 

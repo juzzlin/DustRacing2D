@@ -390,6 +390,9 @@ public:
     //! Use smaller value if the object is too unstable.
     void setDamping(MCFloat value);
 
+    //! Return true, if the obejct is sleeping.
+    bool sleeping() const;
+
 protected:
 
     //! Event handler.

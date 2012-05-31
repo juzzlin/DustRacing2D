@@ -46,7 +46,7 @@ namespace
     const MCFloat POWER                = 5000.0f;
     const MCFloat MASS                 = 1000.0f;
     const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
-    const MCFloat RESTITUTION          = 0.0f;
+    const MCFloat RESTITUTION          = 0.25f;
 
     const MCVector2dF LEFT_FRONT_TIRE_POS(15, 11);
     const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -11);

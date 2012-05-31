@@ -73,7 +73,7 @@ MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
 , angularAcceleration(0.0f)
 , angularVelocity(0.0f)
 , angularImpulse(0.0f)
-, maximumAngularVelocity(2 * 3.1415f)
+, maximumAngularVelocity(4 * 3.1415f)
 , maximumVelocity(-1)
 , torque(0.0f)
 , invMomentOfInertia(std::numeric_limits<MCFloat>::max())
@@ -923,6 +923,11 @@ MCFloat MCObject::xyFriction() const
 void MCObject::setDamping(MCFloat value)
 {
     m_pImpl->damping = value;
+}
+
+bool MCObject::sleeping() const
+{
+    return m_pImpl->sleeping;
 }
 
 MCObject::~MCObject()
