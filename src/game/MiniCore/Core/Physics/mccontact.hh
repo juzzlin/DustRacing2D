@@ -25,7 +25,6 @@
 #include "../mcmacros.hh"
 
 class MCObject;
-class MCContactImpl;
 
 /*! \class MCContact
  *  \brief MCContact is a class representing a collision contact.

@@ -29,7 +29,6 @@
 
 #include <memory>
 
-class MCShapeImpl;
 class MCShapeView;
 class MCObject;
 class MCCamera;

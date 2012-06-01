@@ -22,7 +22,6 @@
 
 #include "mcshape.hh"
 
-class MCCircleShapeImpl;
 class MCShapeView;
 
 //! Circular shape model

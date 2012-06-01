@@ -25,7 +25,6 @@
 #include "mcedge.hh"
 #include "mcsegment.hh"
 
-class MCRectShapeImpl;
 class MCShapeView;
 class MCObject;
 

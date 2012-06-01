@@ -26,8 +26,6 @@
 
 #include <unordered_set>
 
-class MCObjectTreeImpl;
-
 //! A geometrically structured MCObjectTree used for fast collision detection.
 //! The tree stores objects inherited from MCObject -class.
 //! A (2d) collision test for a given object can be requested against all
@@ -86,8 +84,15 @@ private:
 
     DISABLE_COPY(MCObjectTree);
     DISABLE_ASSI(MCObjectTree);
-    MCObjectTreeImpl * const m_pImpl;
-    friend class MCObjectTreeImpl;
+
+    void getIndexRange(const MCBBox<MCFloat> & bbox);
+    void build();
+    MCBBox<MCFloat> m_bbox;
+    MCUint m_leafMaxW, m_leafMaxH, m_horSize, m_verSize;
+    MCUint m_i0, m_i1, m_j0, m_j1;
+    MCFloat m_helpHor;
+    MCFloat m_helpVer;
+    MCObjectTree::ObjectSet * m_matrix;
 };
 
 #endif // MCOBJECTTREE_HH

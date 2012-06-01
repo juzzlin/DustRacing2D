@@ -34,7 +34,6 @@
 #include <vector>
 #include <string>
 
-class MCObjectImpl;
 class MCShape;
 class MCShapeView;
 class MCSurface;
