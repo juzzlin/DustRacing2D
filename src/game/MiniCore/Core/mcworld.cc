@@ -18,7 +18,6 @@
 //
 
 #include "mcworld.hh"
-#include "mcworldimpl.hh"
 #include "mcbbox.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
@@ -35,9 +34,9 @@
 
 #include <cassert>
 
-MCWorld * MCWorldImpl::pInstance             = nullptr;
-MCFloat   MCWorldImpl::metersPerPixel        = 1.0;
-MCFloat   MCWorldImpl::metersPerPixelSquared = 1.0;
+MCWorld * MCWorld::pInstance             = nullptr;
+MCFloat   MCWorld::metersPerPixel        = 1.0;
+MCFloat   MCWorld::metersPerPixelSquared = 1.0;
 
 namespace
 {
@@ -46,14 +45,14 @@ const MCFloat MinLeafWidth  = 64;
 const MCFloat MinLeafHeight = 64;
 }
 
-MCWorldImpl::MCWorldImpl()
+MCWorld::MCWorld()
 : pObjectTree(nullptr)
-, minX(0)
-, maxX(0)
-, minY(0)
-, maxY(0)
-, minZ(0)
-, maxZ(0)
+, m_minX(0)
+, m_maxX(0)
+, m_minY(0)
+, m_maxY(0)
+, m_minZ(0)
+, m_maxZ(0)
 , pLeft(nullptr)
 , pRight(nullptr)
 , pTop(nullptr)
@@ -62,21 +61,37 @@ MCWorldImpl::MCWorldImpl()
 , numResolverLoops(5)
 , resolverStep(1.0f / numResolverLoops)
 {
+    if (!MCWorld::pInstance)
+    {
+        MCWorld::pInstance = this;
+    }
+    else
+    {
+        std::cerr << "ERROR!!: Only one MCWorld can exist!" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Default dimensions. Creates also MCObjectTree.
+    setDimensions(0.0f, MinLeafWidth, 0.0f, MinLeafHeight, 0.0f, 1.0f, 1.0f);
+
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
         depthTestEnabled[i] = false;
     }
 }
 
-MCWorldImpl::~MCWorldImpl()
+MCWorld::~MCWorld()
 {
+    delete pObjectTree;
     delete pLeft;
     delete pRight;
     delete pTop;
     delete pBottom;
+
+    MCWorld::pInstance = nullptr;
 }
 
-void MCWorldImpl::integrate(MCFloat step)
+void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     forceRegistry.update();
@@ -93,23 +108,23 @@ void MCWorldImpl::integrate(MCFloat step)
     }
 }
 
-void MCWorldImpl::detectCollisions()
+void MCWorld::detectCollisions()
 {
     // Check collisions for all registered objects
     numCollisions = collisionDetector.detectCollisions(objs, *pObjectTree);
 }
 
-void MCWorldImpl::generateImpulses()
+void MCWorld::generateImpulses()
 {
     impulseGenerator.generateImpulsesFromDeepestContacts(objs);
 }
 
-void MCWorldImpl::resolvePositions(MCFloat accuracy)
+void MCWorld::resolvePositions(MCFloat accuracy)
 {
     impulseGenerator.resolvePositions(objs, accuracy);
 }
 
-void MCWorldImpl::render(MCCamera * pCamera)
+void MCWorld::render(MCCamera * pCamera)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
@@ -163,7 +178,7 @@ void MCWorldImpl::render(MCCamera * pCamera)
     glPopAttrib();
 }
 
-void MCWorldImpl::renderShadows(MCCamera * pCamera)
+void MCWorld::renderShadows(MCCamera * pCamera)
 {
     const MCUint i2 = objs.size();
     for (MCUint i = 0; i < i2; i++)
@@ -194,32 +209,15 @@ void MCWorldImpl::renderShadows(MCCamera * pCamera)
     }
 }
 
-MCWorld::MCWorld()
-: m_pImpl(new MCWorldImpl)
-{
-    if (!MCWorldImpl::pInstance)
-    {
-        MCWorldImpl::pInstance = this;
-    }
-    else
-    {
-        std::cerr << "ERROR!!: Only one MCWorld can exist!" << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    // Default dimensions. Creates also MCObjectTree.
-    setDimensions(0.0f, MinLeafWidth, 0.0f, MinLeafHeight, 0.0f, 1.0f, 1.0f);
-}
-
 MCWorld & MCWorld::instance()
 {
-    if (!MCWorldImpl::pInstance)
+    if (!MCWorld::pInstance)
     {
         std::cerr << "ERROR!!: MCWorld instance not created!" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    return *MCWorldImpl::pInstance;
+    return *MCWorld::pInstance;
 }
 
 void MCWorld::setDimensions(
@@ -227,17 +225,17 @@ void MCWorld::setDimensions(
     MCFloat metersPerPixel)
 {
     // Init objectTree
-    delete m_pImpl->pObjectTree;
-    m_pImpl->pObjectTree = new MCObjectTree(
+    delete pObjectTree;
+    pObjectTree = new MCObjectTree(
         minX, minY, maxX, maxY, MinLeafWidth, MinLeafHeight);
 
     // Set dimensions
-    m_pImpl->minX = minX;
-    m_pImpl->maxX = maxX;
-    m_pImpl->minY = minY;
-    m_pImpl->maxY = maxY;
-    m_pImpl->minZ = minZ;
-    m_pImpl->maxZ = maxZ;
+    minX = minX;
+    maxX = maxX;
+    minY = minY;
+    maxY = maxY;
+    minZ = minZ;
+    maxZ = maxZ;
 
     MCWorld::setMetersPerPixel(metersPerPixel);
 
@@ -245,95 +243,90 @@ void MCWorld::setDimensions(
     const MCFloat w = maxX - minX;
     const MCFloat h = maxY - minY;
 
-    if (m_pImpl->pLeft)
+    if (pLeft)
     {
-        removeObjectNow(*m_pImpl->pLeft);
-        delete m_pImpl->pLeft;
+        removeObjectNow(*pLeft);
+        delete pLeft;
     }
 
-    m_pImpl->pLeft = new MCObject("LEFT_WALL");
-    m_pImpl->pLeft->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->pLeft->setMass(0, true);
-    m_pImpl->pLeft->setRestitution(0.25f);
-    m_pImpl->pLeft->addToWorld();
-    m_pImpl->pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
+    pLeft = new MCObject("LEFT_WALL");
+    pLeft->setShape(new MCRectShape(nullptr, w, h));
+    pLeft->setMass(0, true);
+    pLeft->setRestitution(0.25f);
+    pLeft->addToWorld();
+    pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
 
-    if (m_pImpl->pRight)
+    if (pRight)
     {
-        removeObjectNow(*m_pImpl->pRight);
-        delete m_pImpl->pRight;
+        removeObjectNow(*pRight);
+        delete pRight;
     }
 
-    m_pImpl->pRight = new MCObject("RIGHT_WALL");
-    m_pImpl->pRight->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->pRight->setMass(0, true);
-    m_pImpl->pRight->setRestitution(0.25f);
-    m_pImpl->pRight->addToWorld();
-    m_pImpl->pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
+    pRight = new MCObject("RIGHT_WALL");
+    pRight->setShape(new MCRectShape(nullptr, w, h));
+    pRight->setMass(0, true);
+    pRight->setRestitution(0.25f);
+    pRight->addToWorld();
+    pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
 
-    if (m_pImpl->pTop)
+    if (pTop)
     {
-        removeObjectNow(*m_pImpl->pTop);
-        delete m_pImpl->pTop;
+        removeObjectNow(*pTop);
+        delete pTop;
     }
 
-    m_pImpl->pTop = new MCObject("TOP_WALL");
-    m_pImpl->pTop->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->pTop->setMass(0, true);
-    m_pImpl->pTop->setRestitution(0.25f);
-    m_pImpl->pTop->addToWorld();
-    m_pImpl->pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
+    pTop = new MCObject("TOP_WALL");
+    pTop->setShape(new MCRectShape(nullptr, w, h));
+    pTop->setMass(0, true);
+    pTop->setRestitution(0.25f);
+    pTop->addToWorld();
+    pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
 
-    if (m_pImpl->pBottom)
+    if (pBottom)
     {
-        removeObjectNow(*m_pImpl->pBottom);
-        delete m_pImpl->pBottom;
+        removeObjectNow(*pBottom);
+        delete pBottom;
     }
 
-    m_pImpl->pBottom = new MCObject("BOTTOM_WALL");
-    m_pImpl->pBottom->setShape(new MCRectShape(nullptr, w, h));
-    m_pImpl->pBottom->setMass(0, true);
-    m_pImpl->pBottom->setRestitution(0.25f);
-    m_pImpl->pBottom->addToWorld();
-    m_pImpl->pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
+    pBottom = new MCObject("BOTTOM_WALL");
+    pBottom->setShape(new MCRectShape(nullptr, w, h));
+    pBottom->setMass(0, true);
+    pBottom->setRestitution(0.25f);
+    pBottom->addToWorld();
+    pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
 
 MCFloat MCWorld::minX() const
 {
-    return m_pImpl->minX;
+    return m_minX;
 }
 
 MCFloat MCWorld::maxX() const
 {
-    return m_pImpl->maxX;
+    return m_maxX;
 }
 
 MCFloat MCWorld::minY() const
 {
-    return m_pImpl->minY;
+    return m_minY;
 }
 
 MCFloat MCWorld::maxY() const
 {
-    return m_pImpl->maxY;
+    return m_maxY;
 }
 
 MCFloat MCWorld::minZ() const
 {
-    return m_pImpl->minZ;
+    return m_minZ;
 }
 
 MCFloat MCWorld::maxZ() const
 {
-    return m_pImpl->maxZ;
+    return m_maxZ;
 }
 
 void MCWorld::addObject(MCObject & object)
-{
-    m_pImpl->addObject(object);
-}
-
-void MCWorldImpl::addObject(MCObject & object)
 {
     if (!object.removing())
     {
@@ -371,13 +364,13 @@ void MCWorldImpl::addObject(MCObject & object)
 void MCWorld::removeObject(MCObject & object)
 {
     object.setRemoving(true);
-    m_pImpl->removeObjs.push_back(&object);
+    removeObjs.push_back(&object);
 }
 
 void MCWorld::removeObjectNow(MCObject & object)
 {
     object.setRemoving(true);
-    for (MCObject * obj : m_pImpl->objs)
+    for (MCObject * obj : objs)
     {
         if (obj != &object)
         {
@@ -388,10 +381,10 @@ void MCWorld::removeObjectNow(MCObject & object)
         }
     }
 
-    m_pImpl->removeObject(object);
+    doRemoveObject(object);
 }
 
-void MCWorldImpl::removeObject(MCObject & object)
+void MCWorld::doRemoveObject(MCObject & object)
 {
     // Reset motion
     object.resetMotion();
@@ -417,68 +410,53 @@ void MCWorldImpl::removeObject(MCObject & object)
     object.setRemoving(false);
 }
 
-void MCWorldImpl::processRemovedObjects()
+void MCWorld::processRemovedObjects()
 {
     for (MCObject * obj : removeObjs)
     {
         if (obj->removing())
         {
-            removeObject(*obj);
+            doRemoveObject(*obj);
         }
     }
 
     removeObjs.clear();
 }
 
-void MCWorldImpl::addToLayerMap(MCObject & object)
+void MCWorld::addToLayerMap(MCObject & object)
 {
     const MCUint layerIndex =
         object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
     layers[layerIndex].insert(&object);
 }
 
-void MCWorldImpl::removeFromLayerMap(MCObject & object)
+void MCWorld::removeFromLayerMap(MCObject & object)
 {
     const MCUint layerIndex =
         object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
     layers[layerIndex].erase(&object);
 }
 
-void MCWorld::addToLayerMap(MCObject & object)
-{
-    m_pImpl->addToLayerMap(object);
-}
-
-void MCWorld::removeFromLayerMap(MCObject & object)
-{
-    m_pImpl->removeFromLayerMap(object);
-}
-
 void MCWorld::enableDepthTestOnLayer(MCUint layer, bool enable)
 {
     if (layer < MCWorld::MaxLayers)
     {
-        m_pImpl->depthTestEnabled[layer] = enable;
+        depthTestEnabled[layer] = enable;
     }
 }
 
 void MCWorld::addForceGenerator(
     MCForceGenerator & gen, MCObject & obj, bool takeOwnership)
 {
-    m_pImpl->forceRegistry.addForceGenerator(gen, obj, takeOwnership);
+    forceRegistry.addForceGenerator(gen, obj, takeOwnership);
 }
 
 void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
 {
-    m_pImpl->forceRegistry.removeForceGenerator(gen, obj);
+    forceRegistry.removeForceGenerator(gen, obj);
 }
 
 void MCWorld::stepTime(MCFloat step)
-{
-    m_pImpl->stepTime(step);
-}
-
-void MCWorldImpl::stepTime(MCFloat step)
 {
     // Integrate physics
     integrate(step);
@@ -502,52 +480,34 @@ void MCWorldImpl::stepTime(MCFloat step)
     processRemovedObjects();
 }
 
-void MCWorld::render(MCCamera * pCamera)
-{
-    m_pImpl->render(pCamera);
-}
-
-void MCWorld::renderShadows(MCCamera * pCamera)
-{
-    m_pImpl->renderShadows(pCamera);
-}
-
 MCWorld::ObjectVector MCWorld::objects() const
 {
-    return m_pImpl->objs;
+    return objs;
 }
 
 MCObjectTree & MCWorld::objectTree() const
 {
-    assert(m_pImpl->pObjectTree);
-    return *m_pImpl->pObjectTree;
+    assert(pObjectTree);
+    return *pObjectTree;
 }
 
 void MCWorld::setMetersPerPixel(MCFloat value)
 {
-    MCWorldImpl::metersPerPixel        = value;
-    MCWorldImpl::metersPerPixelSquared = value * value;
+    MCWorld::metersPerPixel        = value;
+    MCWorld::metersPerPixelSquared = value * value;
 }
 
 void MCWorld::toMeters(MCFloat & pixels)
 {
-    pixels *= MCWorldImpl::metersPerPixel;
+    pixels *= MCWorld::metersPerPixel;
 }
 
 void MCWorld::toMeters(MCVector2dF & pixels)
 {
-    pixels *= MCWorldImpl::metersPerPixel;
+    pixels *= MCWorld::metersPerPixel;
 }
 
 void MCWorld::toMeters(MCVector3dF & pixels)
 {
-    pixels *= MCWorldImpl::metersPerPixel;
-}
-
-MCWorld::~MCWorld()
-{
-    MCWorldImpl::pInstance = nullptr;
-
-    delete m_pImpl->pObjectTree;
-    delete m_pImpl;
+    pixels *= MCWorld::metersPerPixel;
 }

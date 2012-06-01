@@ -25,7 +25,6 @@
 #include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcworld.hh"
-#include "mcworldimpl.hh"
 #include "mcobjecttree.hh"
 #include "Physics/mccontact.hh"
 
@@ -490,13 +489,9 @@ private:
     DISABLE_COPY(MCObject);
     DISABLE_ASSI(MCObject);
 
-    friend void  MCWorld::removeObject(MCObject &);
-    friend void  MCWorld::removeObjectNow(MCObject &);
-    friend void  MCWorldImpl::addObject(MCObject &);
-    friend void  MCWorldImpl::removeObject(MCObject &);
-    friend void  MCWorldImpl::processRemovedObjects();
     friend class MCObjectTree;
     friend class MCObjectTreeImpl;
+    friend class MCWorld;
     friend class MCCollisionDetector;
 };
 

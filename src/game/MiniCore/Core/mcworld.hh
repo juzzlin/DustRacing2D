@@ -21,16 +21,20 @@
 #define MCWORLD_HH
 
 #include <vector>
+#include <unordered_set>
 
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include "mcmacros.hh"
 #include "mctypes.hh"
+#include "Physics/mcforceregistry.hh"
+#include "Physics/mccollisiondetector.hh"
+#include "Physics/mcimpulsegenerator.hh"
 
-class MCWorldImpl;
 class MCObjectTree;
 class MCForceGenerator;
 class MCCamera;
+class MCContact;
 class MCObject;
 
 //! \class World base class
@@ -164,8 +168,35 @@ private:
 
     DISABLE_COPY(MCWorld);
     DISABLE_ASSI(MCWorld);
-    MCWorldImpl * const m_pImpl;
-    friend class MCWorldImpl;
+
+    void integrate(MCFloat step);
+    void processRemovedObjects();
+    void doRemoveObject(MCObject & object);
+    void detectCollisions();
+    void generateImpulses();
+    void resolvePositions(MCFloat accuracy);
+    MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
+    static MCWorld * pInstance;
+    MCForceRegistry forceRegistry;
+    MCCollisionDetector collisionDetector;
+    MCImpulseGenerator impulseGenerator;
+    MCObjectTree * pObjectTree;
+    MCFloat m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
+    static MCFloat metersPerPixel;
+    static MCFloat metersPerPixelSquared;
+    typedef std::unordered_set<MCObject *> LayerHash;
+    LayerHash layers[MCWorld::MaxLayers];
+    bool depthTestEnabled[MCWorld::MaxLayers];
+    MCWorld::ObjectVector objs;
+    MCWorld::ObjectVector removeObjs;
+    MCWorld::ObjectVector collidingObjs;
+    MCObject * pLeft;
+    MCObject * pRight;
+    MCObject * pTop;
+    MCObject * pBottom;
+    MCUint numCollisions;
+    MCUint numResolverLoops;
+    MCFloat resolverStep;
 };
 
 #endif // MCWORLD_HH
