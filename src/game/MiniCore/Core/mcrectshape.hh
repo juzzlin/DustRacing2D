@@ -98,7 +98,15 @@ private:
 
     DISABLE_COPY(MCRectShape);
     DISABLE_ASSI(MCRectShape);
-    MCRectShapeImpl * const m_pImpl;
+
+    static MCUint m_typeID;
+    inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
+    void renderShapeOutline(MCCamera * pCamera);
+    MCOBBox<MCFloat> m_obbox;
+    MCFloat m_momentOfInertiaFactor;
+    MCFloat m_radius;
+    MCFloat m_width;
+    MCFloat m_height;
 };
 
 #endif // MCRECTSHAPE_HH

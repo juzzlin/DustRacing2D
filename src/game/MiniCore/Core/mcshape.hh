@@ -156,7 +156,13 @@ private:
     //! Disable copy constructor and assignment
     DISABLE_COPY(MCShape);
     DISABLE_ASSI(MCShape);
-    MCShapeImpl * const m_pImpl;
+
+    static MCUint m_typeCount;
+    MCObject * m_pParent;
+    MCVector3d<MCFloat> m_location;
+    MCVector2d<MCFloat> m_shadowOffset;
+    MCFloat m_angle;
+    std::shared_ptr<MCShapeView> m_pView;
 };
 
 #endif // MCSHAPE_HH

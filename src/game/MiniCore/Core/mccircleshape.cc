@@ -18,32 +18,24 @@
 //
 
 #include "mccircleshape.hh"
-#include "mccircleshapeimpl.hh"
 #include "mcshapeview.hh"
 #include "mcobject.hh"
 
-MCUint MCCircleShapeImpl::typeID = MCShape::registerType();
+MCUint MCCircleShape::m_typeID = MCShape::registerType();
 
-MCCircleShapeImpl::MCCircleShapeImpl(MCFloat radius)
-: radius(radius)
-{}
-
-MCCircleShapeImpl::~MCCircleShapeImpl()
-{}
-
-MCCircleShape::MCCircleShape(MCShapeView * pView, MCFloat newRadius)
+MCCircleShape::MCCircleShape(MCShapeView * pView, MCFloat radius)
 : MCShape(pView)
-, m_pImpl(new MCCircleShapeImpl(newRadius))
+, m_radius(radius)
 {}
 
 MCFloat MCCircleShape::radius() const
 {
-    return m_pImpl->radius;
+    return m_radius;
 }
 
 void MCCircleShape::setRadius(MCFloat r)
 {
-    m_pImpl->radius = r;
+    m_radius = r;
 }
 
 bool MCCircleShape::contains(const MCVector2d<MCFloat> & p) const
@@ -65,12 +57,12 @@ MCVector2d<MCFloat> MCCircleShape::contactNormal(const MCSegment<MCFloat> & p) c
 
 MCUint MCCircleShape::typeID()
 {
-    return MCCircleShapeImpl::typeID;
+    return m_typeID;
 }
 
 MCUint MCCircleShape::instanceTypeID() const
 {
-    return MCCircleShapeImpl::typeID;
+    return m_typeID;
 }
 
 MCBBox<MCFloat> MCCircleShape::bbox() const

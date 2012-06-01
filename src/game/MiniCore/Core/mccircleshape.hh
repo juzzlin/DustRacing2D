@@ -67,7 +67,10 @@ private:
 
     DISABLE_COPY(MCCircleShape);
     DISABLE_ASSI(MCCircleShape);
-    MCCircleShapeImpl * const m_pImpl;
+
+    static MCUint m_typeID;
+    MCFloat m_radius;
+    MCFloat m_momentOfInertiaFactor;
 };
 
 #endif // MCCIRCLESHAPE_HH
