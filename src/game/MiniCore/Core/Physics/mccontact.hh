@@ -77,7 +77,12 @@ private:
 
     DISABLE_COPY(MCContact);
     DISABLE_ASSI(MCContact);
-    MCContactImpl * const m_pImpl;
+
+    MCObject * m_pObject;
+    MCVector2d<MCFloat> m_contactPoint;
+    MCVector2d<MCFloat> m_contactNormal;
+    MCFloat m_interpenetrationDepth;
+    static MCRecycler<MCContact> m_recycler;
     friend class MCRecycler<MCContact>;
 };
 

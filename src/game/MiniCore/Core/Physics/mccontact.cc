@@ -18,19 +18,14 @@
 //
 
 #include "mccontact.hh"
-#include "mccontactimpl.hh"
 #include "../mcobject.hh"
 #include <cassert>
 
-MCContactImpl::MCContactImpl()
-: m_pObject(nullptr)
-, m_interpenetrationDepth(0.0f)
-{}
-
-MCRecycler<MCContact> MCContactImpl::m_recycler;
+MCRecycler<MCContact> MCContact::m_recycler;
 
 MCContact::MCContact()
-: m_pImpl(new MCContactImpl())
+: m_pObject(nullptr)
+, m_interpenetrationDepth(0.0f)
 {}
 
 void MCContact::init(MCObject & object,
@@ -38,44 +33,43 @@ void MCContact::init(MCObject & object,
     const MCVector2d<MCFloat> & newContactNormal,
     MCFloat newInterpenetrationDepth)
 {
-    m_pImpl->m_pObject               = &object;
-    m_pImpl->m_contactPoint          = newContactPoint;
-    m_pImpl->m_contactNormal         = newContactNormal;
-    m_pImpl->m_interpenetrationDepth = newInterpenetrationDepth;
+    m_pObject               = &object;
+    m_contactPoint          = newContactPoint;
+    m_contactNormal         = newContactNormal;
+    m_interpenetrationDepth = newInterpenetrationDepth;
 }
 
 MCObject & MCContact::object() const
 {
-    assert(m_pImpl->m_pObject);
-    return *m_pImpl->m_pObject;
+    assert(m_pObject);
+    return *m_pObject;
 }
 
 const MCVector2d<MCFloat> & MCContact::contactPoint() const
 {
-    return m_pImpl->m_contactPoint;
+    return m_contactPoint;
 }
 
 const MCVector2d<MCFloat> & MCContact::contactNormal() const
 {
-    return m_pImpl->m_contactNormal;
+    return m_contactNormal;
 }
 
 MCFloat MCContact::interpenetrationDepth() const
 {
-    return m_pImpl->m_interpenetrationDepth;
+    return m_interpenetrationDepth;
 }
 
 MCContact & MCContact::create()
 {
-    return *MCContactImpl::m_recycler.newObject();
+    return *MCContact::m_recycler.newObject();
 }
 
 void MCContact::free()
 {
-    return MCContactImpl::m_recycler.freeObject(this);
+    return MCContact::m_recycler.freeObject(this);
 }
 
 MCContact::~MCContact()
 {
-    delete m_pImpl;
 }
