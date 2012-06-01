@@ -18,13 +18,11 @@
 //
 
 #include "mcsurface.hh"
-#include "mcsurfaceimpl.hh"
 #include "mccamera.hh"
 #include "mcbbox.hh"
 #include "mctrigonom.hh"
 
-MCSurfaceImpl::MCSurfaceImpl(
-    GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
+MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 : m_handle(newHandle)
 , m_w(newWidth)
 , m_w2(newWidth / 2)
@@ -40,43 +38,33 @@ MCSurfaceImpl::MCSurfaceImpl(
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {}
 
-MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
-: m_pImpl(new MCSurfaceImpl(newHandle, newWidth, newHeight))
-{}
-
 MCSurface::~MCSurface()
 {
-    delete m_pImpl;
 }
 
 void MCSurface::setCenter(MCVector2dFR center)
 {
-    m_pImpl->m_centerSet = true;
-    m_pImpl->m_center    = center;
+    m_centerSet = true;
+    m_center    = center;
 }
 
 void MCSurface::setAlphaTest(
     bool useAlphaTest, GLenum alphaFunc, GLclampf threshold)
 {
-    m_pImpl->m_useAlphaTest   = useAlphaTest;
-    m_pImpl->m_alphaFunc      = alphaFunc;
-    m_pImpl->m_alphaThreshold = threshold;
+    m_useAlphaTest   = useAlphaTest;
+    m_alphaFunc      = alphaFunc;
+    m_alphaThreshold = threshold;
 }
 
 void MCSurface::setAlphaBlend(
     bool useAlphaBlend, GLenum src, GLenum dst)
 {
-    m_pImpl->m_useAlphaBlend  = useAlphaBlend;
-    m_pImpl->m_src            = src;
-    m_pImpl->m_dst            = dst;
+    m_useAlphaBlend  = useAlphaBlend;
+    m_src            = src;
+    m_dst            = dst;
 }
 
 void MCSurface::doAlphaTest() const
-{
-    m_pImpl->doAlphaTest();
-}
-
-void MCSurfaceImpl::doAlphaTest() const
 {
     if (m_useAlphaTest)
     {
@@ -87,23 +75,14 @@ void MCSurfaceImpl::doAlphaTest() const
 
 void MCSurface::doAlphaBlend() const
 {
-    m_pImpl->doAlphaBlend();
-}
-
-void MCSurfaceImpl::doAlphaBlend() const
-{
     if (m_useAlphaBlend)
     {
         glEnable(GL_BLEND);
         glBlendFunc(m_src, m_dst);
     }
 }
-MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
-{
-    return m_pImpl->rotatedBBox(pos, angle);
-}
 
-MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCVector2dFR pos, MCFloat angle)
+MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
 {
     using std::abs;
 
@@ -118,12 +97,6 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedBBox(MCVector2dFR pos, MCFloat angle)
 MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
     MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2)
 {
-    return m_pImpl->rotatedScaledBBox(pos, angle, w2, h2);
-}
-
-MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(
-    MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2)
-{
     using std::abs;
 
     const MCFloat cos = MCTrigonom::cos(angle);
@@ -134,14 +107,7 @@ MCBBox<MCFloat> MCSurfaceImpl::rotatedScaledBBox(
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
-void MCSurface::render(
-    MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
-{
-    m_pImpl->render(pCamera, pos, angle);
-}
-
-void MCSurfaceImpl::render(
-    MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
+void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -156,11 +122,7 @@ void MCSurfaceImpl::render(
     glPushAttrib(GL_ENABLE_BIT);
     glPushMatrix();
     glTranslated(x, y, z);
-
-    if (angle)
-    {
-        glRotated(angle, 0, 0, 1);
-    }
+    glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
     {
@@ -196,12 +158,6 @@ void MCSurfaceImpl::render(
 void MCSurface::renderScaled(
     MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
 {
-    m_pImpl->renderScaled(pCamera, pos, wr, hr, angle);
-}
-
-void MCSurfaceImpl::renderScaled(
-    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
-{
     MCFloat x = pos.i();
     MCFloat y = pos.j();
 
@@ -216,11 +172,7 @@ void MCSurfaceImpl::renderScaled(
     glColor4f(1.0, 1.0, 1.0, 1.0);
     glPushMatrix();
     glTranslated(x, y, z);
-
-    if (angle)
-    {
-        glRotated(angle, 0, 0, 1);
-    }
+    glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
     {
@@ -250,14 +202,7 @@ void MCSurfaceImpl::renderScaled(
     glPopAttrib();
 }
 
-void MCSurface::renderShadow(
-    MCCamera * pCamera, MCVector2dFR pos, MCFloat angle)
-{
-    m_pImpl->renderShadow(pCamera, pos, angle);
-}
-
-void MCSurfaceImpl::renderShadow(
-    MCCamera * pCamera, MCVector2dFR pos, MCFloat angle)
+void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -270,13 +215,8 @@ void MCSurfaceImpl::renderShadow(
     glPushAttrib(GL_ENABLE_BIT);
     glPushMatrix();
     glTranslated(x, y, 0);
-
     glColor4f(1.0, 1.0, 1.0, 1.0);
-
-    if (angle)
-    {
-        glRotated(angle, 0, 0, 1);
-    }
+    glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
     {
@@ -310,12 +250,6 @@ void MCSurfaceImpl::renderShadow(
 void MCSurface::renderShadowScaled(
     MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
 {
-    m_pImpl->renderShadowScaled(pCamera, pos, wr, hr, angle);
-}
-
-void MCSurfaceImpl::renderShadowScaled(
-    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
-{
     MCFloat x = pos.i();
     MCFloat y = pos.j();
 
@@ -327,13 +261,8 @@ void MCSurfaceImpl::renderShadowScaled(
     glPushAttrib(GL_ENABLE_BIT);
     glPushMatrix();
     glTranslated(x, y, 0);
-
     glColor4f(1.0, 1.0, 1.0, 1.0);
-
-    if (angle)
-    {
-        glRotated(angle, 0, 0, 1);
-    }
+    glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
     {
@@ -366,20 +295,20 @@ void MCSurfaceImpl::renderShadowScaled(
 
 GLuint MCSurface::handle() const
 {
-    return m_pImpl->m_handle;
+    return m_handle;
 }
 
 MCFloat MCSurface::width() const
 {
-    return m_pImpl->m_w;
+    return m_w;
 }
 
 MCFloat MCSurface::height() const
 {
-    return m_pImpl->m_h;
+    return m_h;
 }
 
 MCVector2dF MCSurface::center() const
 {
-    return m_pImpl->m_center;
+    return m_center;
 }

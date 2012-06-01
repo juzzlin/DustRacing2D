@@ -139,7 +139,20 @@ private:
 
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
-    MCSurfaceImpl * const m_pImpl;
+
+    GLuint m_handle;
+    MCFloat m_w;
+    MCFloat m_w2;
+    MCFloat m_h;
+    MCFloat m_h2;
+    MCVector2dF m_center;
+    bool m_centerSet;
+    bool m_useAlphaTest;
+    GLenum m_alphaFunc;
+    GLclampf m_alphaThreshold;
+    bool m_useAlphaBlend;
+    GLenum m_src;
+    GLenum m_dst;
 };
 
 #endif // MCSURFACE_HH
