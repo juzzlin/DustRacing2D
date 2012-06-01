@@ -30,6 +30,7 @@
 #include "Physics/mccontact.hh"
 
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 
@@ -413,6 +414,8 @@ protected:
     //! \brief Register a new type and get a unique type id.
     static MCUint registerType(const std::string & typeName);
 
+    static MCUint getTypeIDForName(const std::string & typeName);
+
 private:
 
     //! Set index in worlds' object vector.
@@ -436,11 +439,58 @@ private:
     //! Used by MCWorld.
     bool removing() const;
 
+    void integrateLinear(MCFloat step);
+    void integrateAngular(MCFloat step);
+    void doOutOfBoundariesEvent();
+    void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
+    void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
+    void checkZBoundariesAndSendEvent();
+    void setFlag(MCUint flag, bool enable);
+    void doRotate(MCFloat newAngle);
+
+    MCUint m_typeID;
+    MCUint m_time;
+    MCFloat m_invMass;
+    MCFloat m_mass;
+    MCFloat m_restitution;
+    MCFloat m_xyFriction;
+    MCFloat m_angle; // Degrees
+    MCFloat m_angularAcceleration; // Radians / s^2
+    MCFloat m_angularVelocity; // Radians / s
+    MCFloat m_angularImpulse;
+    MCFloat m_maximumAngularVelocity; // Radians / s
+    MCFloat m_maximumVelocity;
+    MCFloat m_torque;
+    MCFloat m_invMomentOfInertia;
+    MCFloat m_momentOfInertia;
+    MCUint m_layer;
+    int m_index;
+    MCUint flags;
+    MCUint m_i0, m_i1, m_j0, m_j1;
+    MCVector3dF m_acceleration;
+    MCVector3dF m_velocity;
+    MCVector3dF linearImpulse;
+    MCVector3dF m_initialLocation;
+    MCVector3dF m_location;
+    MCVector3dF m_forces;
+    MCVector2dF centerOfRotation;
+    MCShape * pShape;
+    typedef std::unordered_map<std::string, MCUint> TypeHash;
+    static TypeHash typeHash;
+    typedef std::vector<MCObject * > TimerEventObjectsList;
+    static TimerEventObjectsList timerEventObjects;
+    static MCUint typeIDCount;
+    MCObject::ContactHash m_contacts;
+    MCFloat damping;
+    int timerEventObjectsIndex;
+    bool m_sleeping;
+    bool m_physicsObject;
+    bool m_stationary;
+
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);
     DISABLE_ASSI(MCObject);
-    MCObjectImpl * const m_pImpl;
-    friend class MCObjectImpl;
+
     friend void  MCWorld::removeObject(MCObject &);
     friend void  MCWorld::removeObjectNow(MCObject &);
     friend void  MCWorldImpl::addObject(MCObject &);

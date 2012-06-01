@@ -18,7 +18,6 @@
 //
 
 #include "mcobject.hh"
-#include "mcobjectimpl.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
 #include "mccircleshape.hh"
@@ -33,9 +32,9 @@
 #include "mctrigonom.hh"
 #include "Views/mcsurfaceview.hh"
 
-MCUint MCObjectImpl::typeIDCount = 1;
-MCObjectImpl::TypeHash MCObjectImpl::typeHash;
-MCObjectImpl::TimerEventObjectsList MCObjectImpl::timerEventObjects;
+MCUint MCObject::typeIDCount = 1;
+MCObject::TypeHash MCObject::typeHash;
+MCObject::TimerEventObjectsList MCObject::timerEventObjects;
 
 namespace
 {
@@ -61,47 +60,113 @@ enum PropertyMask
 };
 }
 
-MCObjectImpl::MCObjectImpl(MCObject * pPublic, const std::string & typeId)
-: pPublic(pPublic)
-, typeID(registerType(typeId))
-, time(0)
-, invMass(std::numeric_limits<MCFloat>::max())
-, mass(0)
-, restitution(0.5f)
-, xyFriction(0.0f)
-, angle(0)
-, angularAcceleration(0.0f)
-, angularVelocity(0.0f)
-, angularImpulse(0.0f)
-, maximumAngularVelocity(4 * 3.1415f)
-, maximumVelocity(-1)
-, torque(0.0f)
-, invMomentOfInertia(std::numeric_limits<MCFloat>::max())
-, momentOfInertia(0)
-, layer(0)
-, index(-1)
+MCObject::MCObject(const std::string & typeId)
+: m_typeID(registerType(typeId))
+, m_time(0)
+, m_invMass(std::numeric_limits<MCFloat>::max())
+, m_mass(0)
+, m_restitution(0.5f)
+, m_xyFriction(0.0f)
+, m_angle(0)
+, m_angularAcceleration(0.0f)
+, m_angularVelocity(0.0f)
+, m_angularImpulse(0.0f)
+, m_maximumAngularVelocity(4 * 3.1415f)
+, m_maximumVelocity(-1)
+, m_torque(0.0f)
+, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
+, m_momentOfInertia(0)
+, m_layer(0)
+, m_index(-1)
 , flags(RenderableMask | CollisionsMask | ShadowMask)
-, i0(0), i1(0), j0(0), j1(0)
+, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
 , damping(0.999f)
 , timerEventObjectsIndex(-1)
-, sleeping(false)
-, physicsObject(true)
-, stationary(false)
+, m_sleeping(false)
+, m_physicsObject(true)
+, m_stationary(false)
 {}
 
-void MCObjectImpl::setFlag(MCUint flag, bool enable)
+// TODO: Use constructor chaining when GCC supports it
+MCObject::MCObject(MCShape * pShape, const std::string & typeId)
+: m_typeID(registerType(typeId))
+, m_time(0)
+, m_invMass(std::numeric_limits<MCFloat>::max())
+, m_mass(0)
+, m_restitution(0.5f)
+, m_xyFriction(0.0f)
+, m_angle(0)
+, m_angularAcceleration(0.0f)
+, m_angularVelocity(0.0f)
+, m_angularImpulse(0.0f)
+, m_maximumAngularVelocity(4 * 3.1415f)
+, m_maximumVelocity(-1)
+, m_torque(0.0f)
+, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
+, m_momentOfInertia(0)
+, m_layer(0)
+, m_index(-1)
+, flags(RenderableMask | CollisionsMask | ShadowMask)
+, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
+, pShape(nullptr)
+, damping(0.999f)
+, timerEventObjectsIndex(-1)
+, m_sleeping(false)
+, m_physicsObject(true)
+, m_stationary(false)
+{
+    setShape(pShape);
+}
+
+// TODO: Use constructor chaining when GCC supports it
+MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
+: m_typeID(registerType(typeId))
+, m_time(0)
+, m_invMass(std::numeric_limits<MCFloat>::max())
+, m_mass(0)
+, m_restitution(0.5f)
+, m_xyFriction(0.0f)
+, m_angle(0)
+, m_angularAcceleration(0.0f)
+, m_angularVelocity(0.0f)
+, m_angularImpulse(0.0f)
+, m_maximumAngularVelocity(4 * 3.1415f)
+, m_maximumVelocity(-1)
+, m_torque(0.0f)
+, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
+, m_momentOfInertia(0)
+, m_layer(0)
+, m_index(-1)
+, flags(RenderableMask | CollisionsMask | ShadowMask)
+, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
+, pShape(nullptr)
+, damping(0.999f)
+, timerEventObjectsIndex(-1)
+, m_sleeping(false)
+, m_physicsObject(true)
+, m_stationary(false)
+{
+    // Create an MCRectShape using pSurface with an MCSurfaceView
+    MCRectShape * rectShape = new MCRectShape(
+        new MCSurfaceView(pSurface),
+        pSurface ? pSurface->width() : 0,
+        pSurface ? pSurface->height() : 0);
+    setShape(rectShape);
+}
+
+void MCObject::setFlag(MCUint flag, bool enable)
 {
     flags = enable ? flags | flag : flags & ~flag;
 }
 
-MCUint MCObjectImpl::getTypeIDForName(const std::string & typeName)
+MCUint MCObject::getTypeIDForName(const std::string & typeName)
 {
     auto i(typeHash.find(typeName));
     return i == typeHash.end() ? 0 : i->second;
 }
 
-MCUint MCObjectImpl::registerType(const std::string & typeName)
+MCUint MCObject::registerType(const std::string & typeName)
 {
     auto i(typeHash.find(typeName));
     if (i == typeHash.end())
@@ -118,14 +183,7 @@ MCUint MCObjectImpl::registerType(const std::string & typeName)
 
 void MCObject::integrate(MCFloat step)
 {
-    m_pImpl->integrate(step);
-
-    translate(location() + velocity());
-}
-
-void MCObjectImpl::integrate(MCFloat step)
-{
-    if (!sleeping)
+    if (!m_sleeping)
     {
         integrateLinear(step);
         integrateAngular(step);
@@ -134,66 +192,68 @@ void MCObjectImpl::integrate(MCFloat step)
         const MCFloat linearSleepingLimit  = 0.1f;
         const MCFloat angularSleepingLimit = 0.1f;
 
-        if (velocity.lengthFast() < linearSleepingLimit &&
-            angularVelocity       < angularSleepingLimit)
+        if (m_velocity.lengthFast() < linearSleepingLimit &&
+            m_angularVelocity       < angularSleepingLimit)
         {
-            sleeping = true;
+            m_sleeping = true;
         }
     }
 
-    forces.setZero();
+    m_forces.setZero();
     linearImpulse.setZero();
-    angularImpulse = 0.0f;
+    m_angularImpulse = 0.0f;
+
+    translate(location() + velocity());
 }
 
-void MCObjectImpl::integrateLinear(MCFloat step)
+void MCObject::integrateLinear(MCFloat step)
 {
-    MCVector3dF totAcceleration(acceleration);
-    totAcceleration += forces * invMass;
-    velocity        += totAcceleration * step + linearImpulse;
-    velocity        *= damping;
+    MCVector3dF totAcceleration(m_acceleration);
+    totAcceleration += m_forces * m_invMass;
+    m_velocity      += totAcceleration * step + linearImpulse;
+    m_velocity      *= damping;
 
     // Note that this code doesn't take the z-component into consideration
-    if (maximumVelocity > 0)
+    if (m_maximumVelocity > 0)
     {
-        const MCFloat l = MCVector2dF(velocity).lengthFast();
-        if (l > maximumVelocity)
+        const MCFloat l = MCVector2dF(m_velocity).lengthFast();
+        if (l > m_maximumVelocity)
         {
-            velocity /= l;
-            velocity *= maximumVelocity;
+            m_velocity /= l;
+            m_velocity *= m_maximumVelocity;
         }
     }
 }
 
-void MCObjectImpl::integrateAngular(MCFloat step)
+void MCObject::integrateAngular(MCFloat step)
 {
     if (pShape)
     {
-        if (momentOfInertia > 0.0f)
+        if (m_momentOfInertia > 0.0f)
         {
-            MCFloat totAngularAcceleration(angularAcceleration);
-            totAngularAcceleration += torque * invMomentOfInertia;
-            angularVelocity        += totAngularAcceleration * step + angularImpulse;
-            angularVelocity        *= damping;
+            MCFloat totAngularAcceleration(m_angularAcceleration);
+            totAngularAcceleration += m_torque * m_invMomentOfInertia;
+            m_angularVelocity        += totAngularAcceleration * step + m_angularImpulse;
+            m_angularVelocity        *= damping;
 
-            if (angularVelocity > maximumAngularVelocity) {
-                angularVelocity = maximumAngularVelocity;
+            if (m_angularVelocity > m_maximumAngularVelocity) {
+                m_angularVelocity = m_maximumAngularVelocity;
             }
 
-            if (angularVelocity < -maximumAngularVelocity) {
-                angularVelocity = -maximumAngularVelocity;
+            if (m_angularVelocity < -m_maximumAngularVelocity) {
+                m_angularVelocity = -m_maximumAngularVelocity;
             }
 
-            const MCFloat newAngle = angle + MCTrigonom::radToDeg(angularVelocity * step);
+            const MCFloat newAngle = m_angle + MCTrigonom::radToDeg(m_angularVelocity * step);
             doRotate(newAngle);
-            angle = newAngle;
+            m_angle = newAngle;
         }
     }
 
-    torque = 0.0f;
+    m_torque = 0.0f;
 }
 
-void MCObjectImpl::doOutOfBoundariesEvent()
+void MCObject::doOutOfBoundariesEvent()
 {
     // Use shape bbox if shape is defined.
     if (pShape)
@@ -204,100 +264,76 @@ void MCObjectImpl::doOutOfBoundariesEvent()
     else
     {
         // By default use the center point as the test point.
-        checkXBoundariesAndSendEvent(location.i(), location.i());
-        checkYBoundariesAndSendEvent(location.j(), location.j());
+        checkXBoundariesAndSendEvent(m_location.i(), m_location.i());
+        checkYBoundariesAndSendEvent(m_location.j(), m_location.j());
     }
 
     checkZBoundariesAndSendEvent();
 }
 
-void MCObjectImpl::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
+void MCObject::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
 {
     const MCWorld & world = MCWorld::instance();
     if (minX < world.minX())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
     else if (maxX > world.maxX())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
 }
 
-void MCObjectImpl::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
+void MCObject::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
 {
     const MCWorld & world = MCWorld::instance();
     if (minY < world.minY())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
     else if (maxY > world.maxY())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
 }
 
-void MCObjectImpl::checkZBoundariesAndSendEvent()
+void MCObject::checkZBoundariesAndSendEvent()
 {
     const MCWorld & world = MCWorld::instance();
-    if (location.k() < world.minZ())
+    if (m_location.k() < world.minZ())
     {
-        velocity.setK(0); forces.setK(0);
-        pPublic->translate(
-            MCVector3dF(location.i(), location.j(), world.minZ()));
+        m_velocity.setK(0); m_forces.setK(0);
+        translate(
+            MCVector3dF(m_location.i(), m_location.j(), world.minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
-    else if (location.k() > world.maxZ())
+    else if (m_location.k() > world.maxZ())
     {
-        velocity.setK(0); forces.setK(0);
-        pPublic->translate(
-            MCVector3dF(location.i(), location.j(), world.maxZ()));
+        m_velocity.setK(0); m_forces.setK(0);
+        translate(
+            MCVector3dF(m_location.i(), m_location.j(), world.maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
-        pPublic->outOfBoundariesEvent(e);
+        outOfBoundariesEvent(e);
     }
-}
-
-MCObjectImpl::~MCObjectImpl()
-{}
-
-MCObject::MCObject(const std::string & typeId)
-: m_pImpl(new MCObjectImpl(this, typeId))
-{}
-
-MCObject::MCObject(MCShape * pShape, const std::string & typeId)
-: m_pImpl(new MCObjectImpl(this, typeId))
-{
-    setShape(pShape);
-}
-
-MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
- : m_pImpl(new MCObjectImpl(this, typeId))
-{
-    // Create an MCRectShape using pSurface with an MCSurfaceView
-    MCRectShape * rectShape = new MCRectShape(
-        new MCSurfaceView(pSurface),
-        pSurface ? pSurface->width() : 0,
-        pSurface ? pSurface->height() : 0);
-    setShape(rectShape);
 }
 
 void MCObject::resetMotion()
 {
-    m_pImpl->velocity.setZero();
-    m_pImpl->forces.setZero();
-    m_pImpl->torque = 0.0f;
+    m_velocity.setZero();
+    m_forces.setZero();
+    m_torque = 0.0f;
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
 {
-    if (m_pImpl->pShape && m_pImpl->pShape->view())
+    if (pShape && pShape->view())
     {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->pShape->view());
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
         if (pView)
         {
             if (pView->surface() != pSurface)
@@ -310,9 +346,9 @@ void MCObject::setSurface(MCSurface * pSurface)
 
 MCSurface * MCObject::surface() const
 {
-    if (m_pImpl->pShape && m_pImpl->pShape->view())
+    if (pShape && pShape->view())
     {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(m_pImpl->pShape->view());
+        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
         if (pView)
         {
             return pView->surface();
@@ -323,17 +359,12 @@ MCSurface * MCObject::surface() const
 
 MCUint MCObject::typeID() const
 {
-    return m_pImpl->typeID;
+    return m_typeID;
 }
 
 MCUint MCObject::typeID(const std::string & typeName)
 {
-    return MCObjectImpl::getTypeIDForName(typeName);
-}
-
-MCUint MCObject::registerType(const std::string & typeName)
-{
-    return MCObjectImpl::registerType(typeName);
+    return MCObject::getTypeIDForName(typeName);
 }
 
 bool MCObject::event(MCEvent & event)
@@ -369,29 +400,29 @@ void MCObject::sendEvent(MCObject & object, MCEvent & event)
 
 void MCObject::subscribeTimerEvent(MCObject & object)
 {
-    if (object.m_pImpl->timerEventObjectsIndex == -1)
+    if (object.timerEventObjectsIndex == -1)
     {
-        MCObjectImpl::timerEventObjects.push_back(&object);
-        object.m_pImpl->timerEventObjectsIndex = MCObjectImpl::timerEventObjects.size() - 1;
+        timerEventObjects.push_back(&object);
+        object.timerEventObjectsIndex = timerEventObjects.size() - 1;
     }
 }
 
 void MCObject::unsubscribeTimerEvent(MCObject & object)
 {
-    if (object.m_pImpl->timerEventObjectsIndex > -1)
+    if (object.timerEventObjectsIndex > -1)
     {
-        MCObjectImpl::timerEventObjects.back()->m_pImpl->timerEventObjectsIndex =
-            object.m_pImpl->timerEventObjectsIndex;
-        MCObjectImpl::timerEventObjects.at(object.m_pImpl->timerEventObjectsIndex) =
-            MCObjectImpl::timerEventObjects.back();
-        MCObjectImpl::timerEventObjects.pop_back();
-        object.m_pImpl->timerEventObjectsIndex = -1;
+        timerEventObjects.back()->timerEventObjectsIndex =
+            object.timerEventObjectsIndex;
+        timerEventObjects.at(object.timerEventObjectsIndex) =
+            timerEventObjects.back();
+        timerEventObjects.pop_back();
+        object.timerEventObjectsIndex = -1;
     }
 }
 
 void MCObject::sendTimerEvent(MCTimerEvent & event)
 {
-    for (MCObject * obj : MCObjectImpl::timerEventObjects)
+    for (MCObject * obj : timerEventObjects)
     {
         MCObject::sendEvent(*obj, event);
     }
@@ -420,41 +451,41 @@ void MCObject::removeFromWorldNow()
 
 void MCObject::render(MCCamera * p)
 {
-    if (m_pImpl->pShape) {
-        m_pImpl->pShape->render(p);
+    if (pShape) {
+        pShape->render(p);
     }
 }
 
 void MCObject::renderShadow(MCCamera * p)
 {
-    if (m_pImpl->pShape) {
-        m_pImpl->pShape->renderShadow(p);
+    if (pShape) {
+        pShape->renderShadow(p);
     }
 }
 
 void MCObject::setMass(MCFloat newMass, bool stationary_)
 {
-    m_pImpl->stationary = stationary_;
+    m_stationary = stationary_;
 
     if (!stationary_)
     {
         if (newMass > 0)
         {
-            m_pImpl->invMass = 1.0 / newMass;
+            m_invMass = 1.0 / newMass;
         }
         else
         {
-            m_pImpl->invMass = std::numeric_limits<MCFloat>::max();
+            m_invMass = std::numeric_limits<MCFloat>::max();
         }
 
-        m_pImpl->mass            = newMass;
+        m_mass            = newMass;
 
         setMomentOfInertia(newMass * 10.0f);
     }
     else
     {
-        m_pImpl->invMass         = 0;
-        m_pImpl->mass            = std::numeric_limits<MCFloat>::max();
+        m_invMass         = 0;
+        m_mass            = std::numeric_limits<MCFloat>::max();
 
         setMomentOfInertia(std::numeric_limits<MCFloat>::max());
     }
@@ -462,156 +493,156 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
 
 MCFloat MCObject::invMass() const
 {
-    return m_pImpl->invMass;
+    return m_invMass;
 }
 
 MCFloat MCObject::mass() const
 {
-    return m_pImpl->mass;
+    return m_mass;
 }
 
 void MCObject::setMomentOfInertia(MCFloat newMomentOfInertia)
 {
     if (newMomentOfInertia > 0)
     {
-        m_pImpl->invMomentOfInertia = 1.0 / newMomentOfInertia;
+        m_invMomentOfInertia = 1.0 / newMomentOfInertia;
     }
     else
     {
-        m_pImpl->invMomentOfInertia = std::numeric_limits<MCFloat>::max();
+        m_invMomentOfInertia = std::numeric_limits<MCFloat>::max();
     }
 
-    m_pImpl->momentOfInertia = newMomentOfInertia;
+    m_momentOfInertia = newMomentOfInertia;
 }
 
 MCFloat MCObject::momentOfInertia() const
 {
-    return m_pImpl->momentOfInertia;
+    return m_momentOfInertia;
 }
 
 MCFloat MCObject::invMomentOfInertia() const
 {
-    return m_pImpl->invMomentOfInertia;
+    return m_invMomentOfInertia;
 }
 
 bool MCObject::stationary() const
 {
-    return m_pImpl->stationary;
+    return m_stationary;
 }
 
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
-    m_pImpl->linearImpulse += impulse;
-    m_pImpl->sleeping       = false;
+    linearImpulse += impulse;
+    m_sleeping       = false;
 }
 
 void MCObject::addAngularImpulse(MCFloat impulse)
 {
-    m_pImpl->angularImpulse += impulse;
-    m_pImpl->sleeping        = false;
+    m_angularImpulse += impulse;
+    m_sleeping        = false;
 }
 
 void MCObject::setPhysicsObject(bool flag)
 {
-    m_pImpl->physicsObject = flag;
+    m_physicsObject = flag;
 }
 
 bool MCObject::physicsObject() const
 {
-    return m_pImpl->physicsObject;
+    return m_physicsObject;
 }
 
 void MCObject::setBypassCollisions(bool flag)
 {
-    m_pImpl->setFlag(CollisionsMask, !flag);
+    setFlag(CollisionsMask, !flag);
 }
 
 bool MCObject::bypassCollisions() const
 {
-    return !(m_pImpl->flags & CollisionsMask);
+    return !(flags & CollisionsMask);
 }
 
 void MCObject::setRenderable(bool flag)
 {
-    m_pImpl->setFlag(RenderableMask, flag);
+    setFlag(RenderableMask, flag);
 }
 
 bool MCObject::renderable() const
 {
-    return m_pImpl->flags & RenderableMask;
+    return flags & RenderableMask;
 }
 
 bool MCObject::virtualObject() const
 {
-    return m_pImpl->flags & VirtualMask;
+    return flags & VirtualMask;
 }
 
 void MCObject::setVirtualObject(bool flag)
 {
-    m_pImpl->setFlag(VirtualMask, flag);
+    setFlag(VirtualMask, flag);
 }
 
 void MCObject::setRenderShapeOutline(bool flag)
 {
-    m_pImpl->setFlag(OutlineMask, flag);
+    setFlag(OutlineMask, flag);
 }
 
 bool MCObject::renderShapeOutline() const
 {
-    return m_pImpl->flags & OutlineMask;
+    return flags & OutlineMask;
 }
 
 void MCObject::setHasShadow(bool flag)
 {
-    m_pImpl->setFlag(ShadowMask, flag);
+    setFlag(ShadowMask, flag);
 }
 
 bool MCObject::hasShadow() const
 {
-    return m_pImpl->flags & ShadowMask;
+    return flags & ShadowMask;
 }
 
 void MCObject::setMaximumVelocity(MCFloat maxVelocity)
 {
-    m_pImpl->maximumVelocity = maxVelocity;
+    m_maximumVelocity = maxVelocity;
 }
 
 void MCObject::setVelocity(const MCVector3dF & newVelocity)
 {
-    m_pImpl->velocity = newVelocity;
-    m_pImpl->sleeping = false;
+    m_velocity = newVelocity;
+    m_sleeping = false;
 }
 
 const MCVector3dF & MCObject::velocity() const
 {
-    return m_pImpl->velocity;
+    return m_velocity;
 }
 
 void MCObject::setAngularVelocity(MCFloat newVelocity)
 {
-    m_pImpl->angularVelocity = newVelocity;
-    m_pImpl->sleeping        = false;
+    m_angularVelocity = newVelocity;
+    m_sleeping        = false;
 }
 
 MCFloat MCObject::angularVelocity() const
 {
-    return m_pImpl->angularVelocity;
+    return m_angularVelocity;
 }
 
 void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
 {
-    m_pImpl->maximumAngularVelocity = newVelocity;
+    m_maximumAngularVelocity = newVelocity;
 }
 
 void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
 {
-    m_pImpl->acceleration = newAcceleration;
-    m_pImpl->sleeping     = false;
+    m_acceleration = newAcceleration;
+    m_sleeping     = false;
 }
 
 const MCVector3dF & MCObject::acceleration() const
 {
-    return m_pImpl->acceleration;
+    return m_acceleration;
 }
 
 void MCObject::translate(const MCVector3dF & newLocation)
@@ -619,11 +650,11 @@ void MCObject::translate(const MCVector3dF & newLocation)
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
 
-    m_pImpl->location = newLocation;
+    m_location = newLocation;
 
-    if (m_pImpl->pShape)
+    if (pShape)
     {
-        m_pImpl->pShape->translate(newLocation);
+        pShape->translate(newLocation);
     }
 
     if (wasInWorld)
@@ -634,61 +665,56 @@ void MCObject::translate(const MCVector3dF & newLocation)
 
 void MCObject::displace(const MCVector3dF & displacement)
 {
-    translate(m_pImpl->location + displacement);
+    translate(m_location + displacement);
 }
 
 const MCVector3dF & MCObject::location() const
 {
-    return m_pImpl->location;
+    return m_location;
 }
 
 void MCObject::setShadowOffset(const MCVector2dF & p)
 {
-    if (m_pImpl->pShape) {
-        m_pImpl->pShape->setShadowOffset(p);
+    if (pShape) {
+        pShape->setShadowOffset(p);
     }
 }
 
 MCFloat MCObject::getX() const
 {
-    return m_pImpl->location.i();
+    return m_location.i();
 }
 
 MCFloat MCObject::getY() const
 {
-    return m_pImpl->location.j();
+    return m_location.j();
 }
 
 MCFloat MCObject::getZ() const
 {
-    return m_pImpl->location.k();
+    return m_location.k();
 }
 
 void MCObject::setCenterOfRotation(MCVector2dF center)
 {
-    m_pImpl->centerOfRotation = center - MCVector2dF(location());
+    centerOfRotation = center - MCVector2dF(location());
 }
 
 void MCObject::rotate(MCFloat newAngle)
-{ 
-    m_pImpl->rotate(newAngle);
-}
-
-void MCObjectImpl::rotate(MCFloat newAngle)
 {
     doRotate(newAngle);
-    angle = newAngle;
+    m_angle = newAngle;
 }
 
-void MCObjectImpl::doRotate(MCFloat newAngle)
+void MCObject::doRotate(MCFloat newAngle)
 {
-    if (newAngle != angle)
+    if (newAngle != m_angle)
     {
         if (!centerOfRotation.isZero())
         {
             MCVector2dF centerOfRotation1;
-            MCTrigonom::rotatedVector(centerOfRotation, centerOfRotation1, newAngle - angle);
-            pPublic->displace(centerOfRotation - centerOfRotation1);
+            MCTrigonom::rotatedVector(centerOfRotation, centerOfRotation1, newAngle - m_angle);
+            displace(centerOfRotation - centerOfRotation1);
             centerOfRotation.setZero();
         }
 
@@ -700,13 +726,13 @@ void MCObjectImpl::doRotate(MCFloat newAngle)
             }
             else
             {
-                const bool wasInWorld = MCWorld::instance().objectTree().remove(*pPublic);
+                const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
 
                 pShape->rotate(newAngle);
 
                 if (wasInWorld)
                 {
-                    MCWorld::instance().objectTree().insert(*pPublic);
+                    MCWorld::instance().objectTree().insert(*this);
                 }
             }
         }
@@ -715,7 +741,7 @@ void MCObjectImpl::doRotate(MCFloat newAngle)
 
 MCFloat MCObject::angle() const
 {
-    return m_pImpl->angle;
+    return m_angle;
 }
 
 MCVector2dF MCObject::direction() const
@@ -727,66 +753,66 @@ void MCObject::setRestitution(MCFloat newRestitution)
 {
     newRestitution = newRestitution < 0.0f ? 0.0f : newRestitution;
     newRestitution = newRestitution > 1.0f ? 1.0f : newRestitution;
-    m_pImpl->restitution = newRestitution;
+    m_restitution = newRestitution;
 }
 
 MCFloat MCObject::restitution() const
 {
-    return m_pImpl->restitution;
+    return m_restitution;
 }
 
 void MCObject::setShape(MCShape * newShape)
 {
-    delete m_pImpl->pShape;
-    m_pImpl->pShape = newShape;
+    delete pShape;
+    pShape = newShape;
 
-    if (m_pImpl->pShape)
+    if (pShape)
     {
-        m_pImpl->pShape->setParent(*this);
+        pShape->setParent(*this);
     }
 }
 
 MCShape * MCObject::shape() const
 {
-    return m_pImpl->pShape;
+    return pShape;
 }
 
 void MCObject::setView(MCShapeView * newView)
 {
-    if (m_pImpl->pShape)
+    if (pShape)
     {
-        m_pImpl->pShape->setView(newView);
+        pShape->setView(newView);
     }
 }
 
 MCShapeView * MCObject::view() const
 {
-    return m_pImpl->pShape ? m_pImpl->pShape->view() : nullptr;
+    return pShape ? pShape->view() : nullptr;
 }
 
 void MCObject::addForce(const MCVector3dF & force)
 {
-    m_pImpl->forces  += force;
-    m_pImpl->sleeping = false;
+    m_forces  += force;
+    m_sleeping = false;
 }
 
 void MCObject::addTorque(MCFloat torque)
 {
-    m_pImpl->torque  += torque;
-    m_pImpl->sleeping = false;
+    torque  += torque;
+    m_sleeping = false;
 }
 
 void MCObject::clearForces()
 {
-    m_pImpl->forces.setZero();
-    m_pImpl->torque = 0.0f;
+    m_forces.setZero();
+    m_torque = 0.0f;
 }
 
 MCBBox<MCFloat> MCObject::bbox() const
 {
-    if (m_pImpl->pShape)
+    if (pShape)
     {
-        return m_pImpl->pShape->bbox();
+        return pShape->bbox();
     }
     else
     {
@@ -796,17 +822,17 @@ MCBBox<MCFloat> MCObject::bbox() const
 
 void MCObject::stepTime()
 {
-    m_pImpl->time++;
+    m_time++;
 }
 
 MCUint MCObject::time() const
 {
-    return m_pImpl->time;
+    return m_time;
 }
 
 void MCObject::resetTime()
 {
-    m_pImpl->time = 0;
+    m_time = 0;
 }
 
 void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
@@ -814,83 +840,83 @@ void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
     if (updateWorldLayers)
     {
         MCWorld::instance().removeFromLayerMap(*this);
-        m_pImpl->layer = newLayer;
+        m_layer = newLayer;
         MCWorld::instance().addToLayerMap(*this);
     }
     else
     {
-        m_pImpl->layer = newLayer;
+        m_layer = newLayer;
     }
 }
 
 MCUint MCObject::layer() const
 {
-    return m_pImpl->layer;
+    return m_layer;
 }
 
 void MCObject::setIndex(int newIndex)
 {
-    m_pImpl->index = newIndex;
+    m_index = newIndex;
 }
 
 int MCObject::index() const
 {
-    return m_pImpl->index;
+    return m_index;
 }
 
 void MCObject::cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1)
 {
-    m_pImpl->i0 = i0;
-    m_pImpl->i1 = i1;
-    m_pImpl->j0 = j0;
-    m_pImpl->j1 = j1;
+    m_i0 = i0;
+    m_i1 = i1;
+    m_j0 = j0;
+    m_j1 = j1;
 }
 
 void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1)
 {
-    *i0 = m_pImpl->i0;
-    *i1 = m_pImpl->i1;
-    *j0 = m_pImpl->j0;
-    *j1 = m_pImpl->j1;
+    *i0 = m_i0;
+    *i1 = m_i1;
+    *j0 = m_j0;
+    *j1 = m_j1;
 }
 
 void MCObject::setRemoving(bool flag)
 {
-    m_pImpl->setFlag(RemovingMask, flag);
+    setFlag(RemovingMask, flag);
 }
 
 bool MCObject::removing() const
 {
-    return m_pImpl->flags & RemovingMask;
+    return flags & RemovingMask;
 }
 
 void MCObject::addContact(MCContact & contact)
 {
-    m_pImpl->contacts[&contact.object()].push_back(&contact);
+    m_contacts[&contact.object()].push_back(&contact);
 }
 
 const MCObject::ContactHash & MCObject::contacts() const
 {
-    return m_pImpl->contacts;
+    return m_contacts;
 }
 
 void MCObject::deleteContacts()
 {
-    auto i(m_pImpl->contacts.begin());
-    for (; i != m_pImpl->contacts.end(); i++)
+    auto i(m_contacts.begin());
+    for (; i != m_contacts.end(); i++)
     {
         for (MCUint j = 0; j < i->second.size(); j++)
         {
             i->second[j]->free();
         }
     }
-    m_pImpl->contacts.clear();
+    m_contacts.clear();
 }
 
 void MCObject::deleteContacts(MCObject & object)
 {
-    auto i(m_pImpl->contacts.find(&object));
-    if (i != m_pImpl->contacts.end())
+    auto i(m_contacts.find(&object));
+    if (i != m_contacts.end())
     {
         for (MCUint j = 0; j < i->second.size(); j++)
         {
@@ -902,38 +928,37 @@ void MCObject::deleteContacts(MCObject & object)
 
 void MCObject::setInitialLocation(const MCVector3dF & location)
 {
-    m_pImpl->initialLocation = location;
+    m_initialLocation = location;
 }
 
 const MCVector3dF & MCObject::initialLocation() const
 {
-    return m_pImpl->initialLocation;
+    return m_initialLocation;
 }
 
 void MCObject::setXYFriction(MCFloat friction)
 {
-    m_pImpl->xyFriction = friction;
+    m_xyFriction = friction;
 }
 
 MCFloat MCObject::xyFriction() const
 {
-    return m_pImpl->xyFriction;
+    return m_xyFriction;
 }
 
 void MCObject::setDamping(MCFloat value)
 {
-    m_pImpl->damping = value;
+    damping = value;
 }
 
 bool MCObject::sleeping() const
 {
-    return m_pImpl->sleeping;
+    return m_sleeping;
 }
 
 MCObject::~MCObject()
 {
     deleteContacts();
 
-    delete m_pImpl->pShape;
-    delete m_pImpl;
+    delete pShape;
 }
