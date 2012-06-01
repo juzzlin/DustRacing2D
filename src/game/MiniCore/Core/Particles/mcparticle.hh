@@ -23,8 +23,6 @@
 #include "../mcobject.hh"
 #include "../mcrecycler.hh"
 
-class MCParticleImpl;
-
 /*! \class MCParticle
  *  \brief Base particle class for particle animations.
  *
@@ -111,8 +109,14 @@ private:
 
   DISABLE_COPY(MCParticle);
   DISABLE_ASSI(MCParticle);
-  MCParticleImpl * const m_pImpl;
-  friend class MCParticleImpl;
+
+  MCUint m_lifeTime;
+  MCUint m_initLifeTime;
+  MCParticle::AnimationStyle m_animationStyle;
+  bool m_isActive;
+  MCFloat m_scale;
+  MCFloat m_delta;
+  MCFloat m_radius;
 };
 
 #endif // MCPARTICLE_HH
