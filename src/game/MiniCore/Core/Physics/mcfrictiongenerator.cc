@@ -18,7 +18,6 @@
 //
 
 #include "mcfrictiongenerator.hh"
-#include "mcfrictiongeneratorimpl.hh"
 #include "../mcmathutil.hh"
 #include "../mcobject.hh"
 #include "../mcshape.hh"
@@ -29,21 +28,13 @@ namespace
     const MCFloat ROTATION_DECAY    = 0.01f;
 }
 
-MCFrictionGeneratorImpl::MCFrictionGeneratorImpl(
+MCFrictionGenerator::MCFrictionGenerator(
     MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)
 : m_coeffLin(coeffLin)
 , m_coeffRot(coeffRot)
 , m_gravity(gravity)
 , m_coeffLinTot(coeffLin * gravity)
 , m_coeffRotTot(coeffRot * gravity * ROTATION_DECAY)
-{}
-
-MCFrictionGeneratorImpl::~MCFrictionGeneratorImpl()
-{}
-
-MCFrictionGenerator::MCFrictionGenerator(
-    MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)
-: m_pImpl(new MCFrictionGeneratorImpl(coeffLin, coeffRot, gravity))
 {}
 
 void MCFrictionGenerator::updateForce(MCObject & object)
@@ -53,34 +44,33 @@ void MCFrictionGenerator::updateForce(MCObject & object)
     const MCFloat l = v.lengthFast();
     if (l > FRICTION_SPEED_TH)
     {
-        object.addForce(-v * m_pImpl->m_coeffLinTot * object.mass() / l);
+        object.addForce(-v * m_coeffLinTot * object.mass() / l);
     }
 
     // Simulated friction caused by angular torque.
     if (object.shape())
     {
         const MCFloat a = object.angularVelocity();
-        object.addAngularImpulse(-a * m_pImpl->m_coeffRotTot);
+        object.addAngularImpulse(-a * m_coeffRotTot);
     }
 }
 
 MCFloat MCFrictionGenerator::coeffLin() const
 {
-    return m_pImpl->m_coeffLin;
+    return m_coeffLin;
 }
 
 MCFloat MCFrictionGenerator::coeffRot() const
 {
-    return m_pImpl->m_coeffRot;
+    return m_coeffRot;
 }
 
 MCFloat MCFrictionGenerator::gravity() const
 {
-    return m_pImpl->m_gravity;
+    return m_gravity;
 }
 
 MCFrictionGenerator::~MCFrictionGenerator()
 {
-    delete m_pImpl;
 }
 

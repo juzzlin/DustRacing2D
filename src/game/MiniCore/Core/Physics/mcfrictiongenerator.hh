@@ -23,8 +23,6 @@
 #include "mcforcegenerator.hh"
 #include "../mcmacros.hh"
 
-class MCFrictionGeneratorImpl;
-
 /*!
  * \class MCFrictionGenerator
  * \brief Force generator for "global" friction between object
@@ -66,7 +64,8 @@ private:
 
     DISABLE_COPY(MCFrictionGenerator);
     DISABLE_ASSI(MCFrictionGenerator);
-    MCFrictionGeneratorImpl * const m_pImpl;
+
+    MCFloat m_coeffLin, m_coeffRot, m_gravity, m_coeffLinTot, m_coeffRotTot;
 };
 
 #endif // MCFRICTIONGENERATOR_HH

@@ -21,9 +21,10 @@
 #define MCFORCEREGISTRY_HH
 
 #include "../mcmacros.hh"
-#include <memory>
+#include <map>
+#include <set>
+#include <vector>
 
-class MCForceRegistryImpl;
 class MCForceGenerator;
 class MCObject;
 
@@ -36,6 +37,9 @@ public:
 
   //! Constructor
   MCForceRegistry();
+
+  //! Destructor
+  ~MCForceRegistry();
 
   /*! Add given force generator to given object
    * \param generator Force generator to be attached.
@@ -63,7 +67,12 @@ private:
 
   DISABLE_COPY(MCForceRegistry);
   DISABLE_ASSI(MCForceRegistry);
-  std::shared_ptr<MCForceRegistryImpl> m_pImpl;
+
+  // Prefer map and set here for iteration performance.
+  typedef std::vector<MCForceGenerator *> Registry;
+  typedef std::map<MCObject *, Registry> RegistryHash;
+  RegistryHash m_registryHash;
+  std::set<MCForceGenerator *> m_owned;
 };
 
 #endif // MCFORCEREGISTRY_HH
