@@ -24,7 +24,6 @@
 #include "mcvector3d.hh"
 
 class MCObject;
-class MCCollisionEventImpl;
 
 /*! \class MCCollisionEvent
  *  \brief Event sent when two objects collides.
@@ -63,8 +62,9 @@ private:
     DISABLE_COPY(MCCollisionEvent);
     DISABLE_ASSI(MCCollisionEvent);
 
+    MCObject & m_collidingObject;
+    MCVector3dF m_contactPoint;
     static MCUint m_typeID;
-    MCCollisionEventImpl * const m_pImpl;
 };
 
 #endif // MCCOLLISIONEVENT_HH

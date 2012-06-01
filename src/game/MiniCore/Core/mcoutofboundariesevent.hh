@@ -23,7 +23,6 @@
 #include "mcevent.hh"
 
 class MCObject;
-class MCOutOfBoundariesEventImpl;
 
 /*! \class MCOutOfBoundariesEvent
  *  \brief Event sent when an objects goes out of world boundaries.
@@ -56,11 +55,8 @@ private:
 
   DISABLE_COPY(MCOutOfBoundariesEvent);
   DISABLE_ASSI(MCOutOfBoundariesEvent);
-
-  //! Type ID
+  MCOutOfBoundariesEvent::ViolatedEdge m_violatedEdge;
   static MCUint m_typeID;
-
-  MCOutOfBoundariesEventImpl * const m_pImpl;
 };
 
 #endif // MCOUTOFBOUNDARIESEVENT_HH

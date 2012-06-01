@@ -19,16 +19,12 @@
 
 #include "mcobject.hh"
 #include "mcoutofboundariesevent.hh"
-#include "mcoutofboundarieseventimpl.hh"
 
 MCUint MCOutOfBoundariesEvent::m_typeID = MCEvent::registerType();
 
-MCOutOfBoundariesEventImpl::MCOutOfBoundariesEventImpl(MCOutOfBoundariesEvent::ViolatedEdge edge) :
-    m_violatedEdge(edge)
-{}
-
-MCOutOfBoundariesEvent::MCOutOfBoundariesEvent(MCOutOfBoundariesEvent::ViolatedEdge edge) :
-    m_pImpl(new MCOutOfBoundariesEventImpl(edge))
+MCOutOfBoundariesEvent::MCOutOfBoundariesEvent(
+    MCOutOfBoundariesEvent::ViolatedEdge edge)
+: m_violatedEdge(edge)
 {}
 
 MCUint MCOutOfBoundariesEvent::typeID()
@@ -43,11 +39,10 @@ MCUint MCOutOfBoundariesEvent::instanceTypeID() const
 
 MCOutOfBoundariesEvent::ViolatedEdge MCOutOfBoundariesEvent::violatedEdge() const
 {
-  return m_pImpl->m_violatedEdge;
+  return m_violatedEdge;
 }
 
 MCOutOfBoundariesEvent::~MCOutOfBoundariesEvent()
 {
-  delete m_pImpl;
 }
 
