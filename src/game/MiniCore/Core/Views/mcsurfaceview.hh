@@ -23,7 +23,6 @@
 #include "../mcshapeview.hh"
 
 class MCSurface;
-class MCSurfaceViewImpl;
 class MCCamera;
 
 /*! \class MCSurfaceView.
@@ -70,7 +69,8 @@ private:
 
     DISABLE_COPY(MCSurfaceView);
     DISABLE_ASSI(MCSurfaceView);
-    MCSurfaceViewImpl * const m_pImpl;
+
+    MCSurface * m_pSurface;
 };
 
 #endif // MCSURFACEVIEW_HH

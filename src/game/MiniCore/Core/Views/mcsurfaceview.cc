@@ -18,72 +18,66 @@
 //
 
 #include "mcsurfaceview.hh"
-#include "mcsurfaceviewimpl.hh"
 #include "../mccamera.hh"
 #include "../mcsurface.hh"
 
-MCSurfaceViewImpl::MCSurfaceViewImpl(MCSurface * pSurface) :
+MCSurfaceView::MCSurfaceView(MCSurface * pSurface) :
     m_pSurface(pSurface)
 {}
 
-MCSurfaceViewImpl::~MCSurfaceViewImpl()
-{}
-
-MCSurfaceView::MCSurfaceView(MCSurface * pSurface) :
-    m_pImpl(new MCSurfaceViewImpl(pSurface))
-{}
-
 MCSurfaceView::~MCSurfaceView()
-{
-    delete m_pImpl;
-}
+{}
 
 void MCSurfaceView::setSurface(MCSurface * p)
 {
-    m_pImpl->m_pSurface = p;
+    m_pSurface = p;
 }
 
 MCSurface * MCSurfaceView::surface() const
 {
-    return m_pImpl->m_pSurface;
+    return m_pSurface;
 }
 
 void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->render(p, l, angle);
+    if (m_pSurface)
+    {
+        m_pSurface->render(p, l, angle);
     }
 }
 
 void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderShadow(p, l, angle);
+    if (m_pSurface)
+    {
+        m_pSurface->renderShadow(p, l, angle);
     }
 }
 
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCFloat wr, MCFloat hr, MCCamera * p)
 {
-    if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderScaled(p, l, wr, hr, angle);
+    if (m_pSurface)
+    {
+        m_pSurface->renderScaled(p, l, wr, hr, angle);
     }
 }
 
 void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCFloat angle, MCFloat wr, MCFloat hr, MCCamera * p)
 {
-    if (m_pImpl->m_pSurface) {
-        m_pImpl->m_pSurface->renderShadowScaled(p, l, wr, hr, angle);
+    if (m_pSurface)
+    {
+        m_pSurface->renderShadowScaled(p, l, wr, hr, angle);
     }
 }
 
 MCBBox<MCFloat> MCSurfaceView::bbox() const
 {
-    const MCFloat w = m_pImpl->m_pSurface->width() / 2;
-    const MCFloat h = m_pImpl->m_pSurface->height() / 2;
+    const MCFloat w = m_pSurface->width() / 2;
+    const MCFloat h = m_pSurface->height() / 2;
 
     return MCBBox<MCFloat>(-w, -h, w, h);
 }
