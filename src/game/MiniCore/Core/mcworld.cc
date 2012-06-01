@@ -101,7 +101,7 @@ void MCWorldImpl::detectCollisions()
     for (MCUint i = 0; i < objs.size(); i++)
     {
         MCObject & object(*objs[i]);
-        if (object.physicsObject())
+        if (object.physicsObject() && !object.bypassCollisions())
         {
             possibleCollisions.clear();
             object.deleteContacts();
