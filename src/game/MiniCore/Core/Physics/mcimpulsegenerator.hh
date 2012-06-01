@@ -21,6 +21,7 @@
 #define MCIMPULSEGENERATOR_HH
 
 #include "../MCTypes"
+#include <vector>
 
 class MCObject;
 class MCContact;
@@ -37,13 +38,13 @@ public:
     //! Destructor.
     ~MCImpulseGenerator();
 
-    //! Generate impulses to the given object due to its current contacts.
+    //! Generate impulses to the given objects according to current contacts.
     //! Delete contacts.
-    void generateImpulsesFromDeepestContacts(MCObject & object);
+    void generateImpulsesFromDeepestContacts(std::vector<MCObject *> & objs);
 
-    //! Resolve position of the given object due to its current contacts.
+    //! Resolve positions of the given objects according to current contacts.
     //! Delete contacts.
-    void resolvePosition(MCObject & object, MCFloat accuracy);
+    void resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy);
 
 private:
 

@@ -159,3 +159,33 @@ bool MCCollisionDetector::processPossibleCollision(
 
     return false;
 }
+
+MCUint MCCollisionDetector::detectCollisions(
+    std::vector<MCObject *> & objs, MCObjectTree & objectTree)
+{
+    // Check collisions for all registered objects
+    MCUint numCollisions = 0;
+    MCObjectTree::ObjectSet possibleCollisions;
+    for (MCUint i = 0; i < objs.size(); i++)
+    {
+        MCObject & object(*objs[i]);
+        if (object.physicsObject() && !object.bypassCollisions())
+        {
+            possibleCollisions.clear();
+            object.deleteContacts();
+            objectTree.getBBoxCollisions(object, possibleCollisions);
+            auto j1 = possibleCollisions.begin();
+            auto j2 = possibleCollisions.end();
+            while (j1 != j2)
+            {
+                if (processPossibleCollision(object, **j1))
+                {
+                    numCollisions++;
+                }
+                j1++;
+            }
+        }
+    }
+    return numCollisions;
+}
+

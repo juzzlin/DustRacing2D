@@ -21,9 +21,13 @@
 #define MCCOLLISIONDETECTOR_HH
 
 #include "../mcmacros.hh"
+#include "../mctypes.hh"
+
+#include <vector>
 
 class MCCollisionDetectorImpl;
 class MCObject;
+class MCObjectTree;
 
 //! Contact resolver / collision detector
 class MCCollisionDetector
@@ -35,16 +39,22 @@ public:
     //! Destructor
     virtual ~MCCollisionDetector();
 
+    //! Detect collisions and generate contacts. Contacts are stored
+    //! to MCObject.
+    MCUint detectCollisions(
+        std::vector<MCObject *> & objs, MCObjectTree & objectTree);
+
+    //! Turn collision events on/off.
+    void enableCollisionEvents(bool enable);
+
+private:
+
     /*! Process a suspected collision.
      * \param object1 1st object.
      * \param object2 2nd object.
      * \return true if objects really collided.
      */
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
-
-    void enableCollisionEvents(bool enable);
-
-private:
 
     DISABLE_COPY(MCCollisionDetector);
     DISABLE_ASSI(MCCollisionDetector);

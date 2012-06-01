@@ -96,50 +96,17 @@ void MCWorldImpl::integrate(MCFloat step)
 void MCWorldImpl::detectCollisions()
 {
     // Check collisions for all registered objects
-    numCollisions = 0;
-    static MCObjectTree::ObjectSet possibleCollisions;
-    for (MCUint i = 0; i < objs.size(); i++)
-    {
-        MCObject & object(*objs[i]);
-        if (object.physicsObject() && !object.bypassCollisions())
-        {
-            possibleCollisions.clear();
-            object.deleteContacts();
-            pObjectTree->getBBoxCollisions(object, possibleCollisions);
-            auto j1 = possibleCollisions.begin();
-            auto j2 = possibleCollisions.end();
-            while (j1 != j2)
-            {
-                if (collisionDetector.processPossibleCollision(object, **j1))
-                {
-                    numCollisions++;
-                }
-                j1++;
-            }
-        }
-    }
+    numCollisions = collisionDetector.detectCollisions(objs, *pObjectTree);
 }
 
 void MCWorldImpl::generateImpulses()
 {
-    for (MCObject * object : objs)
-    {
-        if (object->physicsObject())
-        {
-            impulseGenerator.generateImpulsesFromDeepestContacts(*object);
-        }
-    }
+    impulseGenerator.generateImpulsesFromDeepestContacts(objs);
 }
 
 void MCWorldImpl::resolvePositions(MCFloat accuracy)
 {
-    for (MCObject * object : objs)
-    {
-        if (object->physicsObject())
-        {
-            impulseGenerator.resolvePosition(*object, accuracy);
-        }
-    }
+    impulseGenerator.resolvePositions(objs, accuracy);
 }
 
 void MCWorldImpl::render(MCCamera * pCamera)
