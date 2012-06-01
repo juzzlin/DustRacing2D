@@ -1,1 +1,1 @@
-git archive --format=tar --prefix=dustrac-0.1-alpha4/ HEAD | gzip > dustrac-0.1-alpha4.tar.gz
+git archive --format=tar --prefix=dustrac-0.2.0/ HEAD | gzip > dustrac-0.2.0.tar.gz

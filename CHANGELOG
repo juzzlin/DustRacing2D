@@ -1,3 +1,28 @@
+0.2.0
+-----
+
+    Refactors MCWorld.
+    Collision improvements.
+    Vertical initial positions.
+    Object drag'n'drop.
+    Updates README.
+    Private class for MCTextureText.
+    Refactors TimingOverlay.
+    About dialog for editor.
+    Erase action.
+    Parameter tuning.
+    Improves friction policy when off-track.
+    Build binaries to the root of the source tree.
+    Use rectangular objects as the world "walls".
+    Physics improvements: friction, position resolving, KMS.
+    Updates CentrifugalForceGenerator.
+    Makes rendering of track smoother.
+    Separates scene and screen resolutions.
+    Adds MCGLScene.
+    Fade in animation using a fragment shader.
+    Adds the main state machine.
+    Set the data path in the main CMakeLists.txt.
+
 0.1-alpha4
 ----------
 
