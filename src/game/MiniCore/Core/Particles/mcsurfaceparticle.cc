@@ -18,19 +18,11 @@
 //
 
 #include "mcsurfaceparticle.hh"
-#include "mcsurfaceparticleimpl.hh"
 #include "../Views/mcsurfaceview.hh"
 
 MCRecycler<MCSurfaceParticle> MCSurfaceParticle::m_recycler;
 
-MCSurfaceParticleImpl::MCSurfaceParticleImpl()
-{}
-
-MCSurfaceParticleImpl::~MCSurfaceParticleImpl()
-{}
-
 MCSurfaceParticle::MCSurfaceParticle()
-: m_pImpl(new MCSurfaceParticleImpl)
 {
     setView(new MCSurfaceView);
 }
@@ -59,5 +51,4 @@ void MCSurfaceParticle::recycle()
 
 MCSurfaceParticle::~MCSurfaceParticle()
 {
-    delete m_pImpl;
 }

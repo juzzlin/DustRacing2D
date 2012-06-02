@@ -22,7 +22,9 @@
 
 #include "mcparticle.hh"
 
-class MCGLRectParticleGroupImpl;
+#include <vector>
+#include <unordered_set>
+
 class MCGLRectParticle;
 class MCCamera;
 
@@ -62,7 +64,8 @@ private:
 
     DISABLE_COPY(MCGLRectParticleGroup);
     DISABLE_ASSI(MCGLRectParticleGroup);
-    MCGLRectParticleGroupImpl * const m_pImpl;
+    std::vector<MCGLRectParticle *> m_particles;
+    std::unordered_set<MCGLRectParticle *> m_addedParticles;
 };
 
 #endif // MCGLRECTPARTICLEGROUP_HH

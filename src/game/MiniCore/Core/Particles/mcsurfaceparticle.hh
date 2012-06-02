@@ -23,7 +23,6 @@
 #include "mcparticle.hh"
 
 class MCSurface;
-class MCSurfaceParticleImpl;
 
 /*! \class MCSurfaceParticle
  *  \brief A particle that renders as a MCSurface. Can be inherited.
@@ -61,7 +60,6 @@ private:
 
     DISABLE_COPY(MCSurfaceParticle);
     DISABLE_ASSI(MCSurfaceParticle);
-    MCSurfaceParticleImpl * const m_pImpl;
 };
 
 #endif // MCSURFACEPARTICLE_HH

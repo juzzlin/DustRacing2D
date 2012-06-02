@@ -19,22 +19,14 @@
 
 #include "mcglrectparticle.hh"
 #include "mcglrectparticlegroup.hh"
-#include "mcglrectparticlegroupimpl.hh"
 #include "../mccamera.hh"
 #include "../mcshape.hh"
 #include "../mcshapeview.hh"
 
 #include <GL/gl.h>
 
-MCGLRectParticleGroupImpl::MCGLRectParticleGroupImpl()
-{}
-
-MCGLRectParticleGroupImpl::~MCGLRectParticleGroupImpl()
-{}
-
-MCGLRectParticleGroup::MCGLRectParticleGroup() :
-    MCObject("MCGLRECTPARTICLEGROUP"),
-    m_pImpl(new MCGLRectParticleGroupImpl)
+MCGLRectParticleGroup::MCGLRectParticleGroup()
+: MCObject("MCGLRECTPARTICLEGROUP")
 {
     setHasShadow(false);
     setRenderable(false);
@@ -50,11 +42,11 @@ void MCGLRectParticleGroup::render(MCCamera * pCamera)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    unsigned int i2 = m_pImpl->particles.size();
+    unsigned int i2 = m_particles.size();
     for (unsigned int i = 0; i < i2; i++)
     {
         // Render the particle if it belongs to this group.
-        MCGLRectParticle * const p = m_pImpl->particles[i];
+        MCGLRectParticle * const p = m_particles[i];
         if (p->group() == this)
         {
             // This is normally checked in MCWorld::render().
@@ -66,8 +58,8 @@ void MCGLRectParticleGroup::render(MCCamera * pCamera)
         else
         {
             // Didn't belong to this group, remove from the vector.
-            m_pImpl->particles[i] = m_pImpl->particles.back();
-            m_pImpl->particles.pop_back();
+            m_particles[i] = m_particles.back();
+            m_particles.pop_back();
             i2--;
         }
     }
@@ -85,13 +77,13 @@ void MCGLRectParticleGroup::addParticle(MCGLRectParticle & particle)
     if (particle.group() != this)
     {
         particle.setGroup(this);
-        m_pImpl->particles.push_back(&particle);
+        m_particles.push_back(&particle);
     }
 }
 
 void MCGLRectParticleGroup::clear()
 {
-    for (MCGLRectParticle * p : m_pImpl->particles)
+    for (MCGLRectParticle * p : m_particles)
     {
         if (p->group() == this)
         {
@@ -99,10 +91,10 @@ void MCGLRectParticleGroup::clear()
         }
     }
 
-    m_pImpl->particles.clear();
+    m_particles.clear();
 }
 
 MCGLRectParticleGroup::~MCGLRectParticleGroup()
 {
-    delete m_pImpl;
+    clear();
 }

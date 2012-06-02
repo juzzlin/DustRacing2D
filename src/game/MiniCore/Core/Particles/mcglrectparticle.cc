@@ -18,37 +18,33 @@
 //
 
 #include "mcglrectparticle.hh"
-#include "mcglrectparticleimpl.hh"
 #include "../mccamera.hh"
 
 #include <GL/gl.h>
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
-MCGLRectParticleImpl::MCGLRectParticleImpl()
-: r(1.0f)
-, g(1.0f)
-, b(1.0f)
-, a(1.0f)
-, group(nullptr)
-{}
-
-MCGLRectParticleImpl::~MCGLRectParticleImpl()
-{}
-
-MCGLRectParticle::MCGLRectParticle() :
-    m_pImpl(new MCGLRectParticleImpl)
+MCGLRectParticle::MCGLRectParticle()
+: m_r(1.0f)
+, m_g(1.0f)
+, m_b(1.0f)
+, m_a(1.0f)
+, m_group(nullptr)
 {
     // Disable shadow by default
     setHasShadow(false);
 }
 
+MCGLRectParticle::~MCGLRectParticle()
+{
+}
+
 void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 {
-    m_pImpl->r = r;
-    m_pImpl->g = g;
-    m_pImpl->b = b;
-    m_pImpl->a = a;
+    m_r = r;
+    m_g = g;
+    m_b = b;
+    m_a = a;
 }
 
 void MCGLRectParticle::render(MCCamera * pCamera)
@@ -85,7 +81,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     glBegin(GL_QUADS);
 
     // Scale alpha if fading out
-    MCFloat alpha = m_pImpl->a;
+    MCFloat alpha = m_a;
     if (animationStyle() == FadeOut) {
         alpha *= scale();
     }
@@ -98,7 +94,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
 
     if (r > 0)
     {
-        glColor4f(m_pImpl->r, m_pImpl->g, m_pImpl->b, alpha);
+        glColor4f(m_r, m_g, m_b, alpha);
         glNormal3f(0, 0, 1.0f);
         glVertex2f(-r,  r);
         glVertex2f( r,  r);
@@ -128,18 +124,14 @@ void MCGLRectParticle::recycle()
 
 MCGLRectParticleGroup * MCGLRectParticle::group() const
 {
-    return m_pImpl->group;
+    return m_group;
 }
 
 void MCGLRectParticle::setGroup(MCGLRectParticleGroup * group)
 {
-    // Prevents rendering by MCWorld.
+    // Prevents rendering by MCWorld if group is set.
+    // In this case the group takes care of the rendering calls.
     setRenderable(group == nullptr);
 
-    m_pImpl->group = group;
-}
-
-MCGLRectParticle::~MCGLRectParticle()
-{
-    delete m_pImpl;
+    m_group = group;
 }

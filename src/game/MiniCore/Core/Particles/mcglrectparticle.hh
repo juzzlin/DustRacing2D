@@ -23,7 +23,6 @@
 #include "mcparticle.hh"
 #include "mcglrectparticlegroup.hh"
 
-class MCGLRectParticleImpl;
 class MCCamera;
 
 /*! \class MCGLRectParticle
@@ -75,7 +74,8 @@ private:
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
-    MCGLRectParticleImpl * const m_pImpl;
+    MCFloat m_r, m_g, m_b, m_a;
+    MCGLRectParticleGroup * m_group;
 };
 
 #endif // MCGLRECTPARTICLE_HH
