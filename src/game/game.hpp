@@ -69,7 +69,6 @@ public:
 private slots:
 
     void updateFrame();
-    void renderFrame();
     void updateAnimations();
     void countRenderFps();
     void finish();
@@ -92,7 +91,6 @@ private:
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_frameUpdateTimer;
-    QTimer                 m_frameRenderTimer;
     QTimer                 m_animationUpdateTimer;
     QTimer                 m_renderCountTimer;
     unsigned int           m_updateFps;

@@ -60,7 +60,6 @@ Game::Game()
 , m_availableRenderTime(0)
 {
     connect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    connect(&m_frameRenderTimer, SIGNAL(timeout()), this, SLOT(renderFrame()));
     connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
     connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
     m_renderCountTimer.setInterval(1000);
@@ -203,9 +202,6 @@ void Game::start()
     m_frameUpdateTimer.setInterval(1000 / m_updateFps);
     m_frameUpdateTimer.start();
 
-    m_frameRenderTimer.setInterval(1000 / m_updateFps);
-    m_frameRenderTimer.start();
-
     m_animationUpdateTimer.setInterval(1000 / 60); // Always 60 Hz
     m_animationUpdateTimer.start();
 
@@ -215,19 +211,14 @@ void Game::start()
 void Game::stop()
 {
     m_frameUpdateTimer.stop();
-    m_frameRenderTimer.stop();
     m_animationUpdateTimer.stop();
     m_renderCountTimer.stop();
 }
 
 void Game::updateFrame()
 {
-    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
-}
-
-void Game::renderFrame()
-{
     m_pRenderer->updateFrame(m_pCamera);
+    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
 }
 
 void Game::updateAnimations()
