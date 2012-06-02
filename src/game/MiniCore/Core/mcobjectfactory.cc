@@ -18,13 +18,30 @@
 //
 
 #include "mcobjectfactory.hh"
-#include "mcobjectfactoryimpl.hh"
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
+#include "mctexturemanager.hh"
 #include "Views/mcsurfaceview.hh"
 
 #include <cassert>
+#include <memory>
+#include <vector>
+
+class MCObject;
+class MCObjectData;
+
+//! Implementation class for MCObjectFactory.
+class MCObjectFactoryImpl
+{
+private:
+    MCObjectFactoryImpl(MCTextureManager & tm);
+    void setCommonProperties(
+        MCObject & object, const MCObjectData & data) const;
+    std::vector<std::shared_ptr<MCObject> > objects;
+    MCTextureManager & textureManager;
+    friend class MCObjectFactory;
+};
 
 MCObjectFactory::MCObjectFactory(MCTextureManager & tm)
 : m_pImpl(new MCObjectFactoryImpl(tm))

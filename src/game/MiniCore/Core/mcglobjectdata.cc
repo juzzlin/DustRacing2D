@@ -18,15 +18,22 @@
 //
 
 #include "mcglobjectdata.hh"
-#include "mcglobjectdataimpl.hh"
+
+//! Private class of MCGLObjectData.
+class MCGLObjectDataImpl
+{
+private:
+    MCGLObjectDataImpl();
+    friend class MCGLObjectData;
+};
+
+MCGLObjectDataImpl::MCGLObjectDataImpl()
+{
+}
 
 MCGLObjectData::MCGLObjectData(const std::string & typeId)
 : MCObjectData(typeId)
 , m_pImpl(new MCGLObjectDataImpl)
-{
-}
-
-MCGLObjectDataImpl::MCGLObjectDataImpl()
 {
 }
 

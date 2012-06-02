@@ -18,13 +18,24 @@
 //
 
 #include "mcobjectdata.hh"
-#include "mcobjectdataimpl.hh"
 
-MCObjectData::MCObjectData(const std::string & typeId)
-: m_pImpl(new MCObjectDataImpl)
+//! Private class of MCObjectData.
+class MCObjectDataImpl
 {
-    m_pImpl->typeId = typeId;
-}
+private:
+    MCObjectDataImpl();
+    std::string typeId;
+    MCFloat mass;
+    MCObjectData::Shape shape;
+    MCFloat shapeRadius;
+    MCFloat shapeWidth;
+    MCFloat shapeHeight;
+    MCFloat restitution;
+    MCFloat xyFriction;
+    bool stationary;
+    int layer;
+    friend class MCObjectData;
+};
 
 MCObjectDataImpl::MCObjectDataImpl()
 : typeId("")
@@ -38,6 +49,12 @@ MCObjectDataImpl::MCObjectDataImpl()
 , stationary(false)
 , layer(0)
 {
+}
+
+MCObjectData::MCObjectData(const std::string & typeId)
+: m_pImpl(new MCObjectDataImpl)
+{
+    m_pImpl->typeId = typeId;
 }
 
 std::string MCObjectData::typeId() const

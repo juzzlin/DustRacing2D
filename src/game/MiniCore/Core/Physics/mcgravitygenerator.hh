@@ -24,8 +24,6 @@
 #include "../mcvector3d.hh"
 #include "../mcmacros.hh"
 
-class MCGravityGeneratorImpl;
-
 //! Force generator for gravity
 class MCGravityGenerator : public MCForceGenerator
 {
@@ -46,7 +44,7 @@ private:
 
     DISABLE_COPY(MCGravityGenerator);
     DISABLE_ASSI(MCGravityGenerator);
-    MCGravityGeneratorImpl * const m_pImpl;
+    MCVector3d<MCFloat> m_g;
 };
 
 #endif // MCGRAVITYGENERATOR_HH

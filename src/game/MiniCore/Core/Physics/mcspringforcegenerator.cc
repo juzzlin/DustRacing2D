@@ -18,11 +18,10 @@
 //
 
 #include "mcspringforcegenerator.hh"
-#include "mcspringforcegeneratorimpl.hh"
 #include "mccontact.hh"
 #include "../mcobject.hh"
 
-MCSpringForceGeneratorImpl::MCSpringForceGeneratorImpl(
+MCSpringForceGenerator::MCSpringForceGenerator(
     MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
 : m_p2(&object2)
 , m_coeff(coeff)
@@ -31,10 +30,7 @@ MCSpringForceGeneratorImpl::MCSpringForceGeneratorImpl(
 , m_max(max)
 {}
 
-MCSpringForceGeneratorImpl::~MCSpringForceGeneratorImpl()
-{}
-
-void MCSpringForceGeneratorImpl::updateForce(MCObject & object1)
+void MCSpringForceGenerator::updateForce(MCObject & object1)
 {
     // Take diff vector of the node locations
     MCVector3d<MCFloat> diff = object1.location() - m_p2->location();
@@ -49,7 +45,8 @@ void MCSpringForceGeneratorImpl::updateForce(MCObject & object1)
     // This is handled by generating extra contacts for the node with
     // interpenetration depth scaled with respect to the masses of
     // the nodes.
-    if (length > m_max) {
+    if (length > m_max)
+    {
         const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
         MCContact & contact1 = MCContact::create();
@@ -57,7 +54,9 @@ void MCSpringForceGeneratorImpl::updateForce(MCObject & object1)
             *m_p2, object1.location(), -diff, (length - m_max) * m2 / (m1 + m2));
         object1.addContact(contact1);
 
-    } else if (length < m_min) {
+    }
+    else if (length < m_min)
+    {
         const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
         MCContact & contact1 = MCContact::create();
@@ -71,19 +70,6 @@ void MCSpringForceGeneratorImpl::updateForce(MCObject & object1)
     object1.addForce(diff);
 }
 
-MCSpringForceGenerator::MCSpringForceGenerator(
-    MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
-: m_pImpl(new MCSpringForceGeneratorImpl(object2, coeff, length, min, max))
-{}
-
-void MCSpringForceGenerator::updateForce(MCObject & object1)
-{
-  m_pImpl->updateForce(object1);
-}
-
 MCSpringForceGenerator::~MCSpringForceGenerator()
 {
-    delete m_pImpl;
 }
-
-

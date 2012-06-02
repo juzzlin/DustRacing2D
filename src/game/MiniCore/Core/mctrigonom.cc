@@ -18,18 +18,30 @@
 //
 
 #include "mctrigonom.hh"
-#include "mctrigonomimpl.hh"
 #include "mccast.hh"
 
 #include <cmath>
-
-std::shared_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
+#include <vector>
 
 namespace
 {
     const MCUint  LutSize = 7200;
     const MCFloat PI      = 3.1415926535897932384626;
 }
+
+//! Implementation class for MCTrigonom
+class MCTrigonomImpl
+{
+public:
+    MCTrigonomImpl();
+
+private:
+    std::vector<MCFloat> m_sin;
+    std::vector<MCFloat> m_cos;
+    friend class MCTrigonom;
+};
+
+std::shared_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
 
 MCTrigonomImpl::MCTrigonomImpl()
 : m_sin(LutSize, 0)

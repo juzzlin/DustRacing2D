@@ -23,8 +23,6 @@
 #include "mcforcegenerator.hh"
 #include "../mcmacros.hh"
 
-class MCSpringForceGenerator2dFastImpl;
-
 /*! \class MCSpringForceGenerator2dFast
  *  \brief Fast force generator for (constrained) springs in 2d.
  *
@@ -62,7 +60,11 @@ private:
 
     DISABLE_COPY(MCSpringForceGenerator2dFast);
     DISABLE_ASSI(MCSpringForceGenerator2dFast);
-    MCSpringForceGenerator2dFastImpl * const m_pImpl;
+    MCObject * m_p2;
+    MCFloat m_coeff;
+    MCFloat m_length;
+    MCFloat m_min;
+    MCFloat m_max;
 };
 
 #endif // MCSPRINGFORCEGENERATOR2DFAST_HH

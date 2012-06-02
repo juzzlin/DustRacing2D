@@ -18,26 +18,18 @@
 //
 
 #include "mcdragforcegenerator.hh"
-#include "mcdragforcegeneratorimpl.hh"
 #include "../mcobject.hh"
 
-MCDragForceGeneratorImpl::MCDragForceGeneratorImpl(MCFloat coeff1, MCFloat coeff2) :
-    m_coeff1(coeff1),
-    m_coeff2(coeff2)
-{}
-
-MCDragForceGeneratorImpl::~MCDragForceGeneratorImpl()
-{}
-
-MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2) :
-    m_pImpl(new MCDragForceGeneratorImpl(coeff1, coeff2))
+MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2)
+: m_coeff1(coeff1)
+, m_coeff2(coeff2)
 {}
 
 void MCDragForceGenerator::updateForce(MCObject * p)
 {
   MCVector3d<MCFloat> force(p->velocity());
   MCFloat v = force.length();
-  v = m_pImpl->m_coeff1 * v + m_pImpl->m_coeff2 * v * v;
+  v = m_coeff1 * v + m_coeff2 * v * v;
   force.normalize();
   force *= -v;
   p->addForce(force);
@@ -45,6 +37,4 @@ void MCDragForceGenerator::updateForce(MCObject * p)
 
 MCDragForceGenerator::~MCDragForceGenerator()
 {
-    delete m_pImpl;
 }
-

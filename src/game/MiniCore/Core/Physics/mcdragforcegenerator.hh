@@ -23,8 +23,6 @@
 #include "mcforcegenerator.hh"
 #include "../mcmacros.hh"
 
-class MCDragForceGeneratorImpl;
-
 //! Force generator for drag
 class MCDragForceGenerator : public MCForceGenerator
 {
@@ -46,7 +44,7 @@ private:
 
     DISABLE_COPY(MCDragForceGenerator);
     DISABLE_ASSI(MCDragForceGenerator);
-    MCDragForceGeneratorImpl * const m_pImpl;
+    MCFloat m_coeff1, m_coeff2;
 };
 
 #endif // MCDRAGFORCEGENERATOR_HH

@@ -23,8 +23,6 @@
 #include "mcforcegenerator.hh"
 #include "../mcmacros.hh"
 
-class MCSpringForceGeneratorImpl;
-
 /*! \class MCSpringForceGenerator
  *  \brief Force generator for (constrained) springs.
  *
@@ -57,7 +55,11 @@ private:
 
     DISABLE_COPY(MCSpringForceGenerator);
     DISABLE_ASSI(MCSpringForceGenerator);
-    MCSpringForceGeneratorImpl * const m_pImpl;
+    MCObject * m_p2;
+    MCFloat m_coeff;
+    MCFloat m_length;
+    MCFloat m_min;
+    MCFloat m_max;
 };
 
 #endif // MCSPRINGFORCEGENERATOR_HH

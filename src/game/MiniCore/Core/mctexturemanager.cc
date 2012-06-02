@@ -21,7 +21,6 @@
 #include "../Core/mcsurface.hh"
 #include "mctextureconfigloader.hh"
 #include "mctexturemanager.hh"
-#include "mctexturemanagerimpl.hh"
 
 #include <QDir>
 #include <QGLWidget>
@@ -31,75 +30,32 @@
 
 MCTextureManager * MCTextureManager::m_pInstance = nullptr;
 
-MCTextureManager::MCTextureManager()
-: m_pImpl(new MCTextureManagerImpl)
+//! Implementation class for MCTextureManager
+class MCTextureManagerImpl
 {
-    assert(!MCTextureManager::m_pInstance);
-    MCTextureManager::m_pInstance = this;
-}
+    //! Constructor.
+    MCTextureManagerImpl();
 
-MCTextureManager & MCTextureManager::instance()
-{
-    assert(MCTextureManager::m_pInstance);
-    return *MCTextureManager::m_pInstance;
-}
+    //! Destructor.
+    ~MCTextureManagerImpl();
 
-void MCTextureManager::load(
-    const std::string & fileName, const std::string & baseDataPath) throw (MCException)
-{
-    MCTextureConfigLoader loader;
-    loader.setConfigPath(fileName);
+    //! Creates an OpenGL texture from a QImage + texture meta data
+    void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
 
-    // Parse the texture config file
-    if (loader.loadTextures())
-    {
-        const int numTextures = loader.textures();
-        for (int i = 0; i < numTextures; i++)
-        {
-            const MCTextureData & data = loader.texture(i);
+    //! Apply given color key (set alpha values on / off).
+    void applyColorKey(QImage & textureImage,
+        MCUint r, MCUint g, MCUint b) const;
 
-            // Load image file
-            const std::string path =
-                baseDataPath + QDir::separator().toAscii() + data.imagePath;
+    //! Creates a scaled image with dimensions forced to the nearest power
+    //! of two.
+    QImage createNearest2PowNImage(const QImage & image);
 
-            // Load the image
-            QImage textureImage;
-            if (textureImage.load(path.c_str()))
-            {
-                // Create an OpenGL texture from the image
-                m_pImpl->createGLTextureFromImage(data, textureImage);
-            }
-            else
-            {
-                throw MCException("Cannot read file '" + path + "'");
-            }
-        }
-    }
-    else
-    {
-        // Throw an exception
-        throw MCException("Parsing '" + fileName + "' failed!");
-    }
-}
+    //! Map for resulting surface objects
+    typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
+    SurfaceHash surfaceMap;
 
-MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
-{
-    // Try to find existing texture for the surface
-    if (m_pImpl->surfaceMap.find(id) == m_pImpl->surfaceMap.end())
-    {
-        throw MCException("Cannot find texture object for handle '" + id + "'");
-    }
-
-    // Yes: return handle for the texture
-    MCSurface * pSurface = m_pImpl->surfaceMap.find(id)->second;
-    assert(pSurface);
-    return *pSurface;
-}
-
-MCTextureManager::~MCTextureManager()
-{
-    delete m_pImpl;
-}
+    friend class MCTextureManager;
+};
 
 MCTextureManagerImpl::MCTextureManagerImpl()
 {
@@ -256,4 +212,74 @@ MCTextureManagerImpl::~MCTextureManagerImpl()
         }
         iter++;
     }
+}
+
+MCTextureManager::MCTextureManager()
+: m_pImpl(new MCTextureManagerImpl)
+{
+    assert(!MCTextureManager::m_pInstance);
+    MCTextureManager::m_pInstance = this;
+}
+
+MCTextureManager & MCTextureManager::instance()
+{
+    assert(MCTextureManager::m_pInstance);
+    return *MCTextureManager::m_pInstance;
+}
+
+void MCTextureManager::load(
+    const std::string & fileName, const std::string & baseDataPath) throw (MCException)
+{
+    MCTextureConfigLoader loader;
+    loader.setConfigPath(fileName);
+
+    // Parse the texture config file
+    if (loader.loadTextures())
+    {
+        const int numTextures = loader.textures();
+        for (int i = 0; i < numTextures; i++)
+        {
+            const MCTextureData & data = loader.texture(i);
+
+            // Load image file
+            const std::string path =
+                baseDataPath + QDir::separator().toAscii() + data.imagePath;
+
+            // Load the image
+            QImage textureImage;
+            if (textureImage.load(path.c_str()))
+            {
+                // Create an OpenGL texture from the image
+                m_pImpl->createGLTextureFromImage(data, textureImage);
+            }
+            else
+            {
+                throw MCException("Cannot read file '" + path + "'");
+            }
+        }
+    }
+    else
+    {
+        // Throw an exception
+        throw MCException("Parsing '" + fileName + "' failed!");
+    }
+}
+
+MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
+{
+    // Try to find existing texture for the surface
+    if (m_pImpl->surfaceMap.find(id) == m_pImpl->surfaceMap.end())
+    {
+        throw MCException("Cannot find texture object for handle '" + id + "'");
+    }
+
+    // Yes: return handle for the texture
+    MCSurface * pSurface = m_pImpl->surfaceMap.find(id)->second;
+    assert(pSurface);
+    return *pSurface;
+}
+
+MCTextureManager::~MCTextureManager()
+{
+    delete m_pImpl;
 }

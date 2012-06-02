@@ -18,17 +18,26 @@
 //
 
 #include "mcsurfaceobjectdata.hh"
-#include "mcsurfaceobjectdataimpl.hh"
 
-MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
-: MCObjectData(typeId)
-, m_pImpl(new MCSurfaceObjectDataImpl)
+//! Private class of MCSurfaceObjectData.
+class MCSurfaceObjectDataImpl
 {
-}
+private:
+    MCSurfaceObjectDataImpl();
+    std::string surfaceId;
+    bool defaultCircleShape;
+    friend class MCSurfaceObjectData;
+};
 
 MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
 : surfaceId("")
 , defaultCircleShape(false)
+{
+}
+
+MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
+: MCObjectData(typeId)
+, m_pImpl(new MCSurfaceObjectDataImpl)
 {
 }
 

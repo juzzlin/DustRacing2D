@@ -18,11 +18,10 @@
 //
 
 #include "mcspringforcegenerator2dfast.hh"
-#include "mcspringforcegenerator2dfastimpl.hh"
 #include "mccontact.hh"
 #include "../mcobject.hh"
 
-MCSpringForceGenerator2dFastImpl::MCSpringForceGenerator2dFastImpl(
+MCSpringForceGenerator2dFast::MCSpringForceGenerator2dFast(
     MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
 : m_p2(&object2)
 , m_coeff(coeff)
@@ -31,17 +30,15 @@ MCSpringForceGenerator2dFastImpl::MCSpringForceGenerator2dFastImpl(
 , m_max(max)
 {}
 
-MCSpringForceGenerator2dFastImpl::~MCSpringForceGenerator2dFastImpl()
-{}
-
-void MCSpringForceGenerator2dFastImpl::updateForce(MCObject & object1)
+void MCSpringForceGenerator2dFast::updateForce(MCObject & object1)
 {
     // Take diff vector of the node locations
     MCVector2d<MCFloat> diff(object1.location() - m_p2->location());
 
     // Get length of diff and normalize
     const MCFloat length = diff.lengthFast();
-    if (length > 0) {
+    if (length > 0)
+    {
         diff /= length;
     }
 
@@ -49,7 +46,8 @@ void MCSpringForceGenerator2dFastImpl::updateForce(MCObject & object1)
     // This is handled by generating extra contacts for the node with
     // interpenetration depth scaled with respect to the masses of
     // the nodes.
-    if (length > m_max) {
+    if (length > m_max)
+    {
         const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
         MCContact & contact1 = MCContact::create();
@@ -57,7 +55,9 @@ void MCSpringForceGenerator2dFastImpl::updateForce(MCObject & object1)
             -diff, (length - m_max) * m2 / (m1 + m2));
         object1.addContact(contact1);
 
-    } else if (length < m_min) {
+    }
+    else if (length < m_min)
+    {
         const MCFloat m1 = object1.invMass();
         const MCFloat m2 = m_p2->invMass();
         MCContact & contact1 = MCContact::create();
@@ -71,19 +71,6 @@ void MCSpringForceGenerator2dFastImpl::updateForce(MCObject & object1)
     object1.addForce(diff);
 }
 
-MCSpringForceGenerator2dFast::MCSpringForceGenerator2dFast(
-    MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
-: m_pImpl(new MCSpringForceGenerator2dFastImpl(
-    object2, coeff, length, min, max))
-{}
-
-void MCSpringForceGenerator2dFast::updateForce(MCObject & object1)
-{
-    m_pImpl->updateForce(object1);
-}
-
 MCSpringForceGenerator2dFast::~MCSpringForceGenerator2dFast()
 {
-    delete m_pImpl;
 }
-

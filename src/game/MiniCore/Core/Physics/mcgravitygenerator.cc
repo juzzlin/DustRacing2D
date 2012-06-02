@@ -18,30 +18,17 @@
 //
 
 #include "mcgravitygenerator.hh"
-#include "mcgravitygeneratorimpl.hh"
 #include "../mcobject.hh"
 
-MCGravityGeneratorImpl::MCGravityGeneratorImpl(const MCVector3d<MCFloat> & g)
+MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g)
 : m_g(g)
-{}
-
-MCGravityGeneratorImpl::~MCGravityGeneratorImpl()
-{}
-
-MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g) :
-    m_pImpl(new MCGravityGeneratorImpl(g))
 {}
 
 void MCGravityGenerator::updateForce(MCObject & object)
 {
     // G = m * g
-    if (object.invMass() > 0.0) {
-        object.addForce(m_pImpl->m_g * object.mass());
+    if (!object.stationary())
+    {
+        object.addForce(m_g * object.mass());
     }
 }
-
-MCGravityGenerator::~MCGravityGenerator()
-{
-    delete m_pImpl;
-}
-

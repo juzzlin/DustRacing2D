@@ -18,8 +18,6 @@
 //
 
 #include "mcrandom.hh"
-#include "mcrandomimpl.hh"
-
 #include "mccast.hh"
 #include <cstdlib>
 #include <QDateTime>
@@ -29,6 +27,21 @@ namespace
 const MCUint LUT_SIZE = 0x1000;
 const MCUint MOD_MASK = 0x0fff;
 }
+
+//! Implementation class for MCRandom
+class MCRandomImpl
+{
+public:
+  MCRandomImpl();
+  inline MCFloat getValue() const;
+
+private:
+  void buildLUT();
+
+  mutable MCUint m_valPtr;
+  std::vector<MCFloat> m_data;
+  friend class MCRandom;
+};
 
 std::shared_ptr<MCRandomImpl> const MCRandom::m_pImpl(new MCRandomImpl);
 

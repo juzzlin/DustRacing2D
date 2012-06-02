@@ -18,7 +18,6 @@
 //
 
 #include "mccollisiondetector.hh"
-#include "mccollisiondetectorimpl.hh"
 #include "mccontact.hh"
 #include "../mcobject.hh"
 #include "../mcsegment.hh"
@@ -27,6 +26,15 @@
 #include "../mccollisionevent.hh"
 
 #include <cassert>
+
+class MCCollisionDetectorImpl
+{
+    MCCollisionDetectorImpl();
+    virtual ~MCCollisionDetectorImpl();
+    bool processRectRect(MCRectShape & object1, MCRectShape & object2);
+    bool enableCollisionEvents;
+    friend class MCCollisionDetector;
+};
 
 MCCollisionDetectorImpl::MCCollisionDetectorImpl()
 : enableCollisionEvents(false)
