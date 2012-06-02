@@ -1,16 +1,19 @@
 README
 ======
 
-General
--------
+Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written in Qt (C++) and OpenGL. Dust Racing comes with a Qt-based level editor for easy level creation. A separate engine, MiniCore, is used for physics modeling.
 
-Dust Racing is a tile-based 2D racing game written in Qt/OpenGL.
+Please note, that Dust Racing is still under heavy development and a lot of stuff is incomplete or missing. There are no menus yet, for example. Only source code downloads are currently available.
+
+Dust Racing is currently being developed on Ubuntu 12.04 LTS.
+
+All kinds of contributions are welcome!
 
 License
 -------
 
 Dust Racing is licensed under GNU GPLv3. This applies to everything
-in the source tree, including graphics.
+in the source tree unless stated otherwise, including graphics.
 
 See COPYING for the complete license text.
 
@@ -19,16 +22,22 @@ Source code
 
 The source tree includes source code for the track editor and
 the game itself. The game uses an 2D engine called MiniCore
-written by Jussi Lind. The code is documented by using
+written by Jussi Lind. The code is "documented" by using
 Doxygen tags.
 
-Source tree layout:
+The source tree layout:
 
-src/game/
-src/game/MiniCore/
-src/editor/
+src/game/          : Source files for the game.
+src/game/MiniCore/ : Source files for the graphics/physics engine.
+src/editor/        : Source files for the track editor.
+src/common/        : Shared files between the editor and the game.
+data/              : Data mapping and configuration files.
+data/images/       : Image files and textures.
+data/images/raw/   : Some SVG-images used as the source for final images.
+data/levels/       : Level data.
+data/shaders/      : GLSL shaders.
 
-See INSTALL for build and install instruction.
-
+See INSTALL for build and install instructions.
 
 -- Jussi Lind <jussi.lind@iki.fi>
+
