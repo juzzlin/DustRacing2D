@@ -89,8 +89,8 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
     for (MCUint j = 0; j < data.rows.size(); j++)
     {
         // Loop through glyphs in the row.
-        const MCTextureFontData::Row row       = data.rows[j];
-        const std::string            rowGlyphs = row.glyphs;
+        const MCTextureFontData::Row & row       = data.rows.at(j);
+        const std::string            & rowGlyphs = row.glyphs;
         for (MCUint i = 0; i < rowGlyphs.length(); i++)
         {
             const MCFloat fi = i;

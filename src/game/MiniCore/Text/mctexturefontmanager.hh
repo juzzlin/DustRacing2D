@@ -30,7 +30,7 @@ class MCTextureFont;
 class MCTextureFontData;
 class MCTextureManager;
 
-/*! Manager for textured monospace font.
+/*! A singleton manager for textured monospace fonts.
  *
  *  Example config file for a MCTextureFont containing glyphs
  *  of a monospace font. Surface "monospace" refers to a
