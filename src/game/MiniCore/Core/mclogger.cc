@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,28 +18,32 @@
 //
 
 #include "mclogger.hh"
-#include <QDateTime>
+#include <ctime>
 #include <cstdio>
 
 bool   MCLogger::m_echoMode = false;
 bool   MCLogger::m_dateTime = true;
-FILE * MCLogger::m_stream   = nullptr;
+FILE * MCLogger::m_file     = nullptr;
+
+MCLogger::MCLogger()
+{
+}
 
 bool MCLogger::init(const char * fileName, bool append)
 {
-    MCLogger::m_stream = nullptr;
+    MCLogger::m_file = nullptr;
     if (fileName)
     {
         if (append)
         {
-            MCLogger::m_stream = fopen(fileName, "a+");
+            MCLogger::m_file = fopen(fileName, "a+");
         }
         else
         {
-            MCLogger::m_stream = fopen(fileName, "w+");
+            MCLogger::m_file = fopen(fileName, "w+");
         }
 
-        if (!m_stream)
+        if (!m_file)
         {
             fprintf(stderr, "ERROR!!: Couldn't open '%s' for write.\n", fileName);
             return false;
@@ -63,61 +67,55 @@ void MCLogger::prefixDateTime()
 {
     if (MCLogger::m_dateTime)
     {
-        const char * date = QDateTime::currentDateTime().toString().toStdString().c_str();
-        fprintf(MCLogger::m_stream, "[%s] ", date);
-        fprintf(stdout, "[%s] ", date);
+        time_t rawTime;
+        time(&rawTime);
+        std::string timeStr(ctime(&rawTime));
+        timeStr.erase(timeStr.length() - 1);
+        m_oss << "[" << timeStr << "] ";
     }
 }
 
-void MCLogger::doLog(const char * type, const char * format, va_list ap)
+std::ostringstream & MCLogger::info()
 {
     MCLogger::prefixDateTime();
+    m_oss << "I: ";
+    return m_oss;
+}
 
-    if (MCLogger::m_stream)
+std::ostringstream & MCLogger::warning()
+{
+    MCLogger::prefixDateTime();
+    m_oss << "W: ";
+    return m_oss;
+}
+
+std::ostringstream & MCLogger::error()
+{
+    MCLogger::prefixDateTime();
+    m_oss << "E: ";
+    return m_oss;
+}
+
+std::ostringstream & MCLogger::fatal()
+{
+    MCLogger::prefixDateTime();
+    m_oss << "F: ";
+    return m_oss;
+}
+
+MCLogger::~MCLogger()
+{
+    if (MCLogger::m_file)
     {
-        fprintf(MCLogger::m_stream, "%s", type);
-        vfprintf(MCLogger::m_stream, format, ap);
-        fprintf(MCLogger::m_stream, "\n");
-        fflush(MCLogger::m_stream);
+        fprintf(MCLogger::m_file, "%s", m_oss.str().c_str());
+        fprintf(MCLogger::m_file, "\n");
+        fflush(MCLogger::m_file);
     }
 
     if (MCLogger::m_echoMode)
     {
-        fprintf(stdout, "%s", type);
-        vfprintf(stdout, format, ap);
+        fprintf(stdout, "%s", m_oss.str().c_str());
         fprintf(stdout, "\n");
+        fflush(stdout);
     }
 }
-
-void MCLogger::logInfo(const char * format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    MCLogger::doLog("I: ", format, ap);
-    va_end(ap);
-}
-
-void MCLogger::logWarning(const char * format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    MCLogger::doLog("W: ", format, ap);
-    va_end(ap);
-}
-
-void MCLogger::logError(const char * format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    MCLogger::doLog("E: ", format, ap);
-    va_end(ap);
-}
-
-void MCLogger::logFatal(const char * format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    MCLogger::doLog("F: ", format, ap);
-    va_end(ap);
-}
-

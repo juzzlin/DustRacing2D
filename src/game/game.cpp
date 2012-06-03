@@ -101,7 +101,7 @@ void Game::loadSurfaces()
     const std::string textureConfigPath = std::string(Config::Common::dataPath) +
         QDir::separator().toAscii() + "textures.conf";
 
-    MCLogger::logInfo("Loading texture config from %s..", textureConfigPath.c_str());
+    MCLogger().info() << "Loading texture config from '" << textureConfigPath << "'..";
 
     // Load textures / surfaces
     m_pTextureManager->load(textureConfigPath, Config::Common::dataPath);
@@ -112,7 +112,7 @@ void Game::loadFonts()
     const std::string fontConfigPath = std::string(Config::Common::dataPath) +
         QDir::separator().toAscii() + "fonts.conf";
 
-    MCLogger::logInfo("Loading font config from %s..", fontConfigPath.c_str());
+    MCLogger().info() << "Loading font config from '" << fontConfigPath << "'..";
 
     // Load fonts
     m_pTextureFontManager->load(fontConfigPath);
@@ -123,11 +123,11 @@ bool Game::loadTracks()
     // Load track data
     if (int numLoaded = m_pTrackLoader->loadTracks())
     {
-        MCLogger::logInfo("%d track(s) loaded.", numLoaded);
+        MCLogger().info() << numLoaded << " track(s) loaded.";
     }
     else
     {
-        MCLogger::logError("No valid tracks found.");
+        MCLogger().error() << "No valid tracks found.";
         return false;
     }
 
@@ -187,7 +187,7 @@ bool Game::init()
     }
     catch (MCException & e)
     {
-        MCLogger::logFatal("%s.", e.what());
+        MCLogger().fatal() << e.what();
 
         // Init failed
         return false;

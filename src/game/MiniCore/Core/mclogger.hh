@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -20,13 +20,28 @@
 #ifndef MCLOGGER_HH
 #define MCLOGGER_HH
 
-#include <cstdio>
-#include <cstdarg>
+#include "mcmacros.hh"
 
-//! A logging interface.
+#include <cstdio>
+#include <sstream>
+
+/*! A logging class. MCLogger flushes on destruction.
+ *
+ * Example:
+ *
+ * MCLogger::init("myLog.txt");
+ * MCLogger::setEchoMode(true);
+ * MCLogger().info() << "Initialization finished.";
+ */
 class MCLogger
 {
 public:
+
+    //! Constructor.
+    MCLogger();
+
+    //! Destructor.
+    ~MCLogger();
 
     //! Initialize the logger.
     //! \param fileName Log to fileName. Can be nullptr.
@@ -42,37 +57,30 @@ public:
     //! \param enable Prefix with date and time if true. Default is true.
     static void setDateTime(bool enable);
 
-    //! Log an info message. Logs only to stdout if
-    //! init failed and echoMode is enabled.
-    //! \param format The printf-styled message.
-    static void logInfo(const char * format, ...);
+    //! Get stream to the info log message.
+    std::ostringstream & info();
 
-    //! Log a warning message. Logs only to stderr if
-    //! init failed and echoMode is enabled.
-    //! \param format The printf-styled message.
-    static void logWarning(const char * format, ...);
+    //! Get stream to the warning log message.
+    std::ostringstream & warning();
 
-    //! Log an error message. Logs only to stderr if
-    //! init failed and echoMode is enabled.
-    //! \param format The printf-styled message.
-    static void logError(const char * format, ...);
+    //! Get stream to the error log message.
+    std::ostringstream & error();
 
-    //! Log a fatal message. Logs only to stderr if
-    //! init failed and echoMode is enabled.
-    //! \param format The printf-styled message.
-    static void logFatal(const char * format, ...);
+    //! Get stream to the fatal log message.
+    std::ostringstream & fatal();
 
 private:
 
-    //! Disdabled constructor.
-    MCLogger();
+    DISABLE_COPY(MCLogger);
+    DISABLE_ASSI(MCLogger);
 
-    static void prefixDateTime();
-    static void doLog(const char * type, const char * format, va_list ap);
+    void prefixDateTime();
 
-    static bool   m_echoMode;
-    static bool   m_dateTime;
-    static FILE * m_stream;
+    static bool        m_echoMode;
+    static bool        m_dateTime;
+    static FILE      * m_file;
+
+    std::ostringstream m_oss;
 };
 
 #endif // MCLOGGER_HH

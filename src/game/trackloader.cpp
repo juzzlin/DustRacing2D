@@ -59,11 +59,11 @@ int TrackLoader::loadTracks()
     int numLoaded = 0;
     for (QString path : m_paths)
     {
-        MCLogger::logInfo("Loading tracks from '%s'..", path.toStdString().c_str());
+        MCLogger().info() << "Loading tracks from '" << path.toStdString() << "'..";
         QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
         for (QString trackPath : trackPaths)
         {
-            MCLogger::logInfo("Found '%s'..", trackPath.toStdString().c_str());
+            MCLogger().info() << "Found '" << trackPath.toStdString() << "'..";
             trackPath = path + QDir::separator() + trackPath;
             if (TrackData * trackData = loadTrack(trackPath))
             {
@@ -72,8 +72,8 @@ int TrackLoader::loadTracks()
             }
             else
             {
-                MCLogger::logError("Couldn't load '%s'..",
-                    trackPath.toStdString().c_str());
+                MCLogger().error() << "Couldn't load '" <<
+                    trackPath.toStdString() << "'..";
             }
         }
     }
@@ -242,7 +242,7 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     }
     else
     {
-        MCLogger::logError("No mapping for tile '%s'..", str.c_str());
+        MCLogger().error() << "No mapping for tile '" << str << "'..";
     }
 
     return TrackTile::TT_NONE;

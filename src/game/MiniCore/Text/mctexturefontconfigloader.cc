@@ -70,8 +70,7 @@ bool MCTextureFontConfigLoader::loadFonts()
                 newData->maxGlyphsPerRow = tag.attribute(
                     "maxGlyphsPerRow", "0").toInt();
 
-                MCLogger::logInfo("Loading font '%s'..",
-                    newData->name.c_str());
+                MCLogger().info() << "Loading font '" << newData->name.c_str() << "'..";
 
                 // Read child nodes of font node.
                 QDomNode childNode = node.firstChild();

@@ -165,7 +165,7 @@ bool MCTextureConfigLoader::loadTextures()
                             }
                             else
                             {
-                                MCLogger::logError("Unknown min filter '%s'", min.c_str());
+                                MCLogger().error() << "Unknown min filter '" << min.c_str() << "'";
                             }
 
                             if (mag == "linear")
@@ -180,14 +180,14 @@ bool MCTextureConfigLoader::loadTextures()
                             }
                             else
                             {
-                                MCLogger::logError("Unknown mag filter '%s'", mag.c_str());
+                                MCLogger().error() << "Unknown mag filter '" << mag.c_str() << "'";
                             }
                         }
                     }
                     else
                     {
-                        MCLogger::logError("Unknown tag '%s'",
-                            childNode.nodeName().toStdString().c_str());
+                        MCLogger().error() <<
+                            "Unknown tag '" << childNode.nodeName().toStdString() << "'";
                     }
 
                     childNode = childNode.nextSibling();
@@ -236,7 +236,7 @@ GLenum MCTextureConfigLoader::alphaTestStringToEnum(
     }
     else
     {
-        MCLogger::logError("Unknown alpha test function '%s'", function.c_str());
+        MCLogger().error() << "Unknown alpha test function '" << function << "'";
         return GL_ALWAYS;
     }
 }
@@ -278,7 +278,7 @@ GLenum MCTextureConfigLoader::alphaBlendStringToEnum(
     }
     else
     {
-        MCLogger::logError("Unknown alpha blend function '%s'", function.c_str());
+        MCLogger().error() << "Unknown alpha blend function '" << function << "'";
         return GL_SRC_ALPHA;
     }
 }

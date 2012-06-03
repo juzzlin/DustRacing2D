@@ -35,11 +35,11 @@ int main(int argc, char ** argv)
     MCLogger::setEchoMode(true);
     MCLogger::setDateTime(true);
 
-    MCLogger::logInfo("Creating renderer..");
+    MCLogger().info() << "Creating renderer..";
     Renderer * renderer = new Renderer;
 
     // Create the main window
-    MCLogger::logInfo("Creating the main window..");
+    MCLogger().info() << "Creating the main window..";
     MainWindow mainWindow;
     QHBoxLayout * layout = new QHBoxLayout(&mainWindow);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
     mainWindow.show();
 
     // Create the game object and set the renderer
-    MCLogger::logInfo("Creating game object..");
+    MCLogger().info() << "Creating game object..";
     Game game;
     game.setRenderer(renderer);
     game.setTargetUpdateFps(60);
@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
     }
     else
     {
-        MCLogger::logError("Initing the game failed.");
+        MCLogger().error() << "Initing the game failed.";
         return EXIT_FAILURE;
     }
 
