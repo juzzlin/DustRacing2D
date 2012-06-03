@@ -1,65 +1,75 @@
+0.2.1
+-----
+
+* Changes MCLogger into a stream-based logger.
+  - Fixes crashes on some platforms due to portability
+* issues with va_list.
+* Only one update timer.
+* Updates README.
+* Performance improvements by removing pimpl from the engine.
+
 0.2.0
 -----
 
-    Refactors MCWorld.
-    Collision improvements.
-    Vertical initial positions.
-    Object drag'n'drop.
-    Updates README.
-    Private class for MCTextureText.
-    Refactors TimingOverlay.
-    About dialog for editor.
-    Erase action.
-    Parameter tuning.
-    Improves friction policy when off-track.
-    Build binaries to the root of the source tree.
-    Use rectangular objects as the world "walls".
-    Physics improvements: friction, position resolving, KMS.
-    Updates CentrifugalForceGenerator.
-    Makes rendering of track smoother.
-    Separates scene and screen resolutions.
-    Adds MCGLScene.
-    Fade in animation using a fragment shader.
-    Adds the main state machine.
-    Set the data path in the main CMakeLists.txt.
+* Refactors MCWorld.
+* Collision improvements.
+* Vertical initial positions.
+* Object drag'n'drop.
+* Updates README.
+* Private class for MCTextureText.
+* Refactors TimingOverlay.
+* About dialog for editor.
+* Erase action.
+* Parameter tuning.
+* Improves friction policy when off-track.
+* Build binaries to the root of the source tree.
+* Use rectangular objects as the world "walls".
+* Physics improvements: friction, position resolving, KMS.
+* Updates CentrifugalForceGenerator.
+* Makes rendering of track smoother.
+* Separates scene and screen resolutions.
+* Adds MCGLScene.
+* Fade in animation using a fragment shader.
+* Adds the main state machine.
+* Set the data path in the main CMakeLists.txt.
 
 0.1-alpha4
 ----------
 
-    Adds CHANGELOG.
-    Lap count can be set in the editor for each track.
-    Updates README.
-    Implementation class for MCVectorAnimation.
-    Refactors Track.
-    Adds a CMake target for runtime files.
-    Updates TODO.
-    Update impulses only on integrate.
-    Parameter tuning.
-    Change the order of scene update and render.
-    More power for reverse. Bug fixes related to reverse.
-    Refactors wall.cpp.
-    Disable culling after rendering walls.
-    Four pixels bigger car.
-    Separates position resolving and impulse generation.
-    Support for "sleeping" objects.
-    Simpler frame update timing.
-    Mechanism to send MCTimerEvent's.
-    Adds MCTimerEvent.
-    Disables mouse cursor.
-    Updates INSTALL.
-    Adds missing sand.png.
+* Adds CHANGELOG.
+* Lap count can be set in the editor for each track.
+* Updates README.
+* Implementation class for MCVectorAnimation.
+* Refactors Track.
+* Adds a CMake target for runtime files.
+* Updates TODO.
+* Update impulses only on integrate.
+* Parameter tuning.
+* Change the order of scene update and render.
+* More power for reverse. Bug fixes related to reverse.
+* Refactors wall.cpp.
+* Disable culling after rendering walls.
+* Four pixels bigger car.
+* Separates position resolving and impulse generation.
+* Support for "sleeping" objects.
+* Simpler frame update timing.
+* Mechanism to send MCTimerEvent's.
+* Adds MCTimerEvent.
+* Disables mouse cursor.
+* Updates INSTALL.
+* Adds missing sand.png.
 
 0.1-alpha3
 ----------
 
-    Use QWidget instead of QMainWindow. Also fixes rendering on Windows.
-    Refactors Car controlling.
-    Adds Car::Description.
-    Support for ten cars.
-    Don't spawn sparkles at low speeds.
-    New graphics: sand.
-    Updates graphics: asphalt.
-    Updates archive.sh
+* Use QWidget instead of QMainWindow. Also fixes rendering on Windows.
+* Refactors Car controlling.
+* Adds Car::Description.
+* Support for ten cars.
+* Don't spawn sparkles at low speeds.
+* New graphics: sand.
+* Updates graphics: asphalt.
+* Updates archive.sh
 
 -- Jussi Lind <jussi.lind@iki.fi>
 
