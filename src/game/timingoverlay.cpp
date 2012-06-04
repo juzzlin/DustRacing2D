@@ -98,6 +98,40 @@ void TimingOverlay::render()
                 nullptr, m_defaultMonospace);
         }
 
+        // Render speed
+        {
+            int speed = m_pCar->speedInKmh();
+            speed = speed < 0 ? 0 : speed;
+
+            MCTextureText speedText("");
+            std::stringstream ss;
+            ss << " " << speed;
+            if (speed < 100)
+            {
+                speedText.setColor(1.0f, 1.0f, 1.0f);
+            }
+            else if (speed < 200)
+            {
+                speedText.setColor(1.0f, 1.0f, 0.0f);
+            }
+            else
+            {
+                speedText.setColor(1.0f, 0.0f, 0.0f);
+            }
+
+            speedText.setText(ss.str());
+            speedText.setGlyphSize(40, 40);
+            speedText.setShadowOffset(shadowX, shadowY);
+            const int h = speedText.textHeight();
+            speedText.renderWithShadow(0, h, nullptr, m_defaultMonospace);
+
+            speedText.setText(" KM/H");
+            speedText.setGlyphSize(20, 20);
+            speedText.setColor(1.0f, 1.0f, 1.0f);
+            speedText.renderWithShadow(0, 2 * speedText.textHeight() + h,
+                nullptr, m_defaultMonospace);
+        }
+
         // Render the current lap time
         {
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);

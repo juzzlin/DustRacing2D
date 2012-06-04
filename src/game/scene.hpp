@@ -30,7 +30,6 @@ class MCSurface;
 class MCWorld;
 class OffTrackDetector;
 class Renderer;
-class Speedometer;
 class Startlights;
 class StartlightsOverlay;
 class StateMachine;
@@ -76,9 +75,6 @@ public:
     //! Set timing overlay.
     void setTimingOverlay(TimingOverlay & timingOverlay);
 
-    //! Set speedometer.
-    void setSpeedometer(Speedometer & speedometer);
-
     //! Set startlights.
     void setStartlights(Startlights & startlights);
 
@@ -117,7 +113,6 @@ private:
     Track              * m_pActiveTrack;
     MCWorld            * m_pWorld;
     TimingOverlay      * m_pTimingOverlay;
-    Speedometer        * m_pSpeedometer;
     Startlights        * m_pStartlights;
     StartlightsOverlay * m_pStartlightsOverlay;
     StateMachine       * m_pStateMachine;

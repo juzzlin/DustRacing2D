@@ -22,7 +22,6 @@
 #include "layers.hpp"
 #include "offtrackdetector.hpp"
 #include "race.hpp"
-#include "speedometer.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "statemachine.hpp"
@@ -51,7 +50,6 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 , m_pActiveTrack(nullptr)
 , m_pWorld(new MCWorld)
 , m_pTimingOverlay(nullptr)
-, m_pSpeedometer(nullptr)
 , m_pStartlights(new Startlights(m_race))
 , m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
 , m_pStateMachine(new StateMachine(renderer, *m_pStartlights))
@@ -384,12 +382,6 @@ void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
     m_pTimingOverlay->setCarToFollow(*m_cars.at(0));
 }
 
-void Scene::setSpeedometer(Speedometer & speedometer)
-{
-    m_pSpeedometer = &speedometer;
-    m_pSpeedometer->setCarToFollow(*m_cars.at(0));
-}
-
 void Scene::setStartlights(Startlights & startlights)
 {
     m_pStartlights = &startlights;
@@ -430,7 +422,6 @@ void Scene::render(MCCamera & camera)
         }
 
         m_pTimingOverlay->render();
-        m_pSpeedometer->render();
         m_pStartlightsOverlay->render();
     }
 }

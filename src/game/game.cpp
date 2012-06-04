@@ -19,7 +19,6 @@
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
-#include "speedometer.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "timingoverlay.hpp"
@@ -51,7 +50,6 @@ Game::Game()
 , m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
 , m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
 , m_pTimingOverlay(nullptr)
-, m_pSpeedometer(nullptr)
 , m_pCamera(nullptr)
 , m_pInputHandler(new InputHandler(MAX_PLAYERS))
 , m_updateFps(60)
@@ -158,11 +156,6 @@ void Game::initScene()
     m_pTimingOverlay->setDimensions(
         Scene::width(), Scene::height());
     m_pScene->setTimingOverlay(*m_pTimingOverlay);
-
-    m_pSpeedometer = new Speedometer;
-    m_pSpeedometer->setDimensions(
-        Scene::width(), Scene::height());
-    m_pScene->setSpeedometer(*m_pSpeedometer);
 }
 
 bool Game::init()
@@ -240,5 +233,4 @@ Game::~Game()
     delete m_pCamera;
     delete m_pInputHandler;
     delete m_pTimingOverlay;
-    delete m_pSpeedometer;
 }
