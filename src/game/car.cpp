@@ -33,12 +33,12 @@
 
 namespace
 {
-    const MCFloat MAX_LINEAR_VELOCITY  = 15.0f;
+    const MCFloat MAX_LINEAR_VELOCITY  = 50.0f;
     const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
     const MCFloat FRICTION             = 1.0f;
     const MCFloat BRAKING_FRICTION     = 1.0f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat SLIDE_FRICTION       = 0.75f;
+    const MCFloat SLIDE_FRICTION       = 1.00f;
     const MCFloat ROTATION_FRICTION    = 1.0f;
     const MCFloat OFF_TRACK_FRICTION   = 0.75f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
