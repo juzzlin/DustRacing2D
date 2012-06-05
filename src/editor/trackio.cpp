@@ -62,9 +62,14 @@ bool TrackIO::save(const TrackData * trackData, QString path)
                     tileTag.setAttribute("computerHint", tile->computerHint());
                 }
 
-                if (tile->drivingLineHint() != TrackTile::DLH_NONE)
+                if (tile->drivingLineHintH() != TrackTile::DLHH_NONE)
                 {
-                    tileTag.setAttribute("drivingLineHint", tile->drivingLineHint());
+                    tileTag.setAttribute("drivingLineHintH", tile->drivingLineHintH());
+                }
+
+                if (tile->drivingLineHintV() != TrackTile::DLHV_NONE)
+                {
+                    tileTag.setAttribute("drivingLineHintV", tile->drivingLineHintV());
                 }
 
                 root.appendChild(tileTag);
@@ -138,13 +143,14 @@ TrackData * TrackIO::open(QString path)
                 // Read a tile tag
                 if (tag.nodeName() == "tile")
                 {
-                    const QString      id     = tag.attribute("type", "clear");
-                    const unsigned int i      = tag.attribute("i", "0").toUInt();
-                    const unsigned int j      = tag.attribute("j", "0").toUInt();
-                    const int          o      = tag.attribute("o", "0").toInt();
-                    const int      index      = tag.attribute("index", "-1").toInt();
-                    const int computerHint    = tag.attribute("computerHint", "0").toInt();
-                    const int drivingLineHint = tag.attribute("drivingLineHint", "0").toInt();
+                    const QString      id      = tag.attribute("type", "clear");
+                    const unsigned int i       = tag.attribute("i", "0").toUInt();
+                    const unsigned int j       = tag.attribute("j", "0").toUInt();
+                    const int          o       = tag.attribute("o", "0").toInt();
+                    const int      index       = tag.attribute("index", "-1").toInt();
+                    const int computerHint     = tag.attribute("computerHint", "0").toInt();
+                    const int drivingLineHintH = tag.attribute("drivingLineHintH", "0").toInt();
+                    const int drivingLineHintV = tag.attribute("drivingLineHintV", "0").toInt();
 
                     // Init a new tile. QGraphicsScene will take
                     // the ownership eventually.
@@ -156,8 +162,10 @@ TrackData * TrackIO::open(QString path)
                         tile->setRouteIndex(index);
                         tile->setComputerHint(
                             static_cast<TrackTileBase::ComputerHint>(computerHint));
-                        tile->setDrivingLineHint(
-                            static_cast<TrackTileBase::DrivingLineHint>(drivingLineHint));
+                        tile->setDrivingLineHintH(
+                            static_cast<TrackTileBase::DrivingLineHintH>(drivingLineHintH));
+                        tile->setDrivingLineHintV(
+                            static_cast<TrackTileBase::DrivingLineHintV>(drivingLineHintV));
 
                         if (index >= 0)
                             routeVector << tile;

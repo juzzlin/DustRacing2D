@@ -147,9 +147,10 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::handleTile(
     QDomElement & tag, TrackData & newData, QVector<TrackTileBase *> & routeVector)
 {
-    const std::string  id              = tag.attribute("type", "clear").toStdString();
-    const unsigned int computerHint    = tag.attribute("computerHint", "0").toUInt();
-    const unsigned int drivingLineHint = tag.attribute("drivingLineHint", "0").toUInt();
+    const std::string  id               = tag.attribute("type", "clear").toStdString();
+    const unsigned int computerHint     = tag.attribute("computerHint", "0").toUInt();
+    const unsigned int drivingLineHintH = tag.attribute("drivingLineHintH", "0").toUInt();
+    const unsigned int drivingLineHintV = tag.attribute("drivingLineHintV", "0").toUInt();
 
     // Route index
     const int index = tag.attribute("index", "-1").toInt();
@@ -175,7 +176,8 @@ void TrackLoader::handleTile(
     tile->setTileTypeEnum(tileTypeEnumFromString(id.c_str()));
     tile->setRouteIndex(index);
     tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
-    tile->setDrivingLineHint(static_cast<TrackTileBase::DrivingLineHint>(drivingLineHint));
+    tile->setDrivingLineHintH(static_cast<TrackTileBase::DrivingLineHintH>(drivingLineHintH));
+    tile->setDrivingLineHintV(static_cast<TrackTileBase::DrivingLineHintV>(drivingLineHintV));
 
     // Associate with a surface object corresponging
     // to the tile type.
@@ -239,6 +241,10 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     else if (str == "finish")
     {
         return TrackTile::TT_FINISH;
+    }
+    else if (str == "clear")
+    {
+        return TrackTile::TT_NONE;
     }
     else
     {

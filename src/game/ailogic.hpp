@@ -45,7 +45,12 @@ public:
 
 private:
 
-    void steer(
+    //! Steering logic.
+    void steerControl(
+        TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted);
+
+    //! Brake/accelerate logic.
+    void speedControl(
         TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted);
 
     Car         & m_car;

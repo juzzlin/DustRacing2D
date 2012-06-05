@@ -25,14 +25,14 @@ MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2)
 , m_coeff2(coeff2)
 {}
 
-void MCDragForceGenerator::updateForce(MCObject * p)
+void MCDragForceGenerator::updateForce(MCObject & object)
 {
-  MCVector3d<MCFloat> force(p->velocity());
+  MCVector3d<MCFloat> force(object.velocity());
   MCFloat v = force.length();
   v = m_coeff1 * v + m_coeff2 * v * v;
   force.normalize();
   force *= -v;
-  p->addForce(force);
+  object.addForce(force);
 }
 
 MCDragForceGenerator::~MCDragForceGenerator()

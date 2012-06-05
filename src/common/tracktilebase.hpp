@@ -49,14 +49,20 @@ public:
         CH_SECOND_BEFORE_CORNER
     };
 
-    //! Driving line hints for computer players.
-    enum DrivingLineHint
+    //! Horizontal driving line hints for computer players.
+    enum DrivingLineHintH
     {
-        DLH_NONE = 0,
-        DLH_LEFT,
-        DLH_RIGHT,
-        DLH_TOP,
-        DLH_BOTTOM
+        DLHH_NONE = 0,
+        DLHH_LEFT,
+        DLHH_RIGHT
+    };
+
+    //! Vertical driving line hints for computer players.
+    enum DrivingLineHintV
+    {
+        DLHV_NONE = 0,
+        DLHV_TOP,
+        DLHV_BOTTOM
     };
 
     //! Constructor.
@@ -104,10 +110,16 @@ public:
     ComputerHint computerHint() const;
 
     //! Set driving line hint
-    void setDrivingLineHint(DrivingLineHint hint);
+    void setDrivingLineHintH(DrivingLineHintH hint);
 
-    //! Get driving line hint
-    DrivingLineHint drivingLineHint() const;
+    //! Set driving line hint
+    void setDrivingLineHintV(DrivingLineHintV hint);
+
+    //! Get horizontal driving line hint
+    DrivingLineHintH drivingLineHintH() const;
+
+    //! Get vertical driving line hint
+    DrivingLineHintV drivingLineHintV() const;
 
 private:
 
@@ -133,7 +145,10 @@ private:
     ComputerHint m_computerHint;
 
     //! Driving line hint
-    DrivingLineHint m_drivingLineHint;
+    DrivingLineHintH m_drivingLineHintH;
+
+    //! Driving line hint
+    DrivingLineHintV m_drivingLineHintV;
 };
 
 #endif // TRACKTILEBASE_HPP

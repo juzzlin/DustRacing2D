@@ -234,9 +234,13 @@ void TrackTile::swap(TrackTile & other)
 
     {
         // Swap driving line hints
-        const TrackTileBase::DrivingLineHint sourceHint = drivingLineHint();
-        setDrivingLineHint(other.drivingLineHint());
-        other.setDrivingLineHint(sourceHint);
+        const TrackTileBase::DrivingLineHintH sourceHintH = drivingLineHintH();
+        setDrivingLineHintH(other.drivingLineHintH());
+        other.setDrivingLineHintH(sourceHintH);
+
+        const TrackTileBase::DrivingLineHintV sourceHintV = drivingLineHintV();
+        setDrivingLineHintV(other.drivingLineHintV());
+        other.setDrivingLineHintV(sourceHintV);
     }
 }
 

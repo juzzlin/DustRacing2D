@@ -55,30 +55,32 @@ void AiLogic::update(bool isRaceCompleted)
             }
         }
 
-        steer(*targetTile, *currentTile, isRaceCompleted);
+        steerControl(*targetTile, *currentTile, isRaceCompleted);
+        speedControl(*targetTile, *currentTile, isRaceCompleted);
     }
 }
 
-void AiLogic::steer(
-    TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted)
+void AiLogic::steerControl(
+    TrackTile & targetTile, TrackTile & currentTile, bool)
 {
     // Initial target coordinates
     MCVector3dF target(targetTile.location().x(), targetTile.location().y());
 
     // Take line hints into account
-    if (currentTile.drivingLineHint() == TrackTile::DLH_LEFT)
+    if (currentTile.drivingLineHintH() == TrackTile::DLHH_LEFT)
     {
         target -= MCVector3dF(TrackTile::TILE_W / 3, 0);
     }
-    else if (currentTile.drivingLineHint() == TrackTile::DLH_RIGHT)
+    else if (currentTile.drivingLineHintH() == TrackTile::DLHH_RIGHT)
     {
         target += MCVector3dF(TrackTile::TILE_W / 3, 0);
     }
-    else if (currentTile.drivingLineHint() == TrackTile::DLH_TOP)
+
+    if (currentTile.drivingLineHintV() == TrackTile::DLHV_TOP)
     {
         target += MCVector3dF(0, TrackTile::TILE_H / 3);
     }
-    else if (currentTile.drivingLineHint() == TrackTile::DLH_BOTTOM)
+    else if (currentTile.drivingLineHintV() == TrackTile::DLHV_BOTTOM)
     {
         target -= MCVector3dF(0, TrackTile::TILE_H / 3);
     }
@@ -127,9 +129,12 @@ void AiLogic::steer(
 
     // Store the last difference
     m_lastDiff = diff;
+}
 
+void AiLogic::speedControl(
+    TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted)
+{
     // Braking / acceleration logic
-
     bool accelerate = true;
     bool brake      = false;
 
@@ -141,7 +146,7 @@ void AiLogic::steer(
     {
         if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
         {
-            if (m_car.speedInKmh() > 120)
+            if (m_car.speedInKmh() > 100)
             {
                 brake = true;
             }
@@ -149,7 +154,7 @@ void AiLogic::steer(
 
         if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
         {
-            if (m_car.speedInKmh() > 90)
+            if (m_car.speedInKmh() > 50)
             {
                 brake = true;
             }
@@ -157,7 +162,7 @@ void AiLogic::steer(
 
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
         {
-            if (m_car.speedInKmh() > 60)
+            if (m_car.speedInKmh() > 30)
             {
                 accelerate = false;
             }
@@ -166,7 +171,7 @@ void AiLogic::steer(
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
                 currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
-            if (m_car.speedInKmh() > 120)
+            if (m_car.speedInKmh() > 60)
             {
                 accelerate = false;
             }

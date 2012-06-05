@@ -54,7 +54,8 @@ private slots:
     void doClearComputerHint();
     void doSetComputerHintFirstBeforeCorner();
     void doSetComputerHintSecondBeforeCorner();
-    void doClearDrivingLineHint();
+    void doClearDrivingLineHintH();
+    void doClearDrivingLineHintV();
     void doSetDrivingLineHintLeft();
     void doSetDrivingLineHintRight();
     void doSetDrivingLineHintTop();
@@ -68,7 +69,8 @@ private:
     void handleLeftButtonClickOnObject(Object & tile);
     void handleTileDragRelease(QMouseEvent * event);
     void handleObjectDragRelease(QMouseEvent * event);
-    void doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint);
+    void doSetDrivingLineHintH(TrackTileBase::DrivingLineHintH hint);
+    void doSetDrivingLineHintV(TrackTileBase::DrivingLineHintV hint);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 
     QMenu     m_menu;
@@ -77,7 +79,8 @@ private:
     QAction * m_clearComputerHint;
     QAction * m_setComputerHintFirstBeforeCorner;
     QAction * m_setComputerHintSecondBeforeCorner;
-    QAction * m_clearDrivingLineHint;
+    QAction * m_clearDrivingLineHintH;
+    QAction * m_clearDrivingLineHintV;
     QAction * m_setDrivingLineHintLeft;
     QAction * m_setDrivingLineHintRight;
     QAction * m_setDrivingLineHintTop;

@@ -32,7 +32,8 @@ EditorView::EditorView(QWidget * parent)
 , m_clearComputerHint(nullptr)
 , m_setComputerHintFirstBeforeCorner(nullptr)
 , m_setComputerHintSecondBeforeCorner(nullptr)
-, m_clearDrivingLineHint(nullptr)
+, m_clearDrivingLineHintH(nullptr)
+, m_clearDrivingLineHintV(nullptr)
 , m_setDrivingLineHintLeft(nullptr)
 , m_setDrivingLineHintRight(nullptr)
 , m_setDrivingLineHintTop(nullptr)
@@ -109,9 +110,13 @@ void EditorView::createContextMenu()
     QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
                      SLOT(doSetComputerHintSecondBeforeCorner()));
 
-    m_clearDrivingLineHint = new QAction(QWidget::tr("Clear driving line hint"), &m_menu);
-    QObject::connect(m_clearDrivingLineHint, SIGNAL(triggered()), this,
-                     SLOT(doClearDrivingLineHint()));
+    m_clearDrivingLineHintH = new QAction(QWidget::tr("Clear hor driving line hint"), &m_menu);
+    QObject::connect(m_clearDrivingLineHintH, SIGNAL(triggered()), this,
+                     SLOT(doClearDrivingLineHintH()));
+
+    m_clearDrivingLineHintV = new QAction(QWidget::tr("Clear ver driving line hint"), &m_menu);
+    QObject::connect(m_clearDrivingLineHintV, SIGNAL(triggered()), this,
+                     SLOT(doClearDrivingLineHintV()));
 
     m_setDrivingLineHintLeft = new QAction(
         QWidget::tr("Set driving line hint 'left'.."), &m_menu);
@@ -134,17 +139,20 @@ void EditorView::createContextMenu()
                      SLOT(doSetDrivingLineHintBottom()));
 
     // Populate the menu
-    m_menu.addActions(QList<QAction *>()
-        << rotate90CW
-        << rotate90CCW
-        << m_clearComputerHint
-        << m_setComputerHintFirstBeforeCorner
-        << m_setComputerHintSecondBeforeCorner
-        << m_clearDrivingLineHint
-        << m_setDrivingLineHintLeft
-        << m_setDrivingLineHintRight
-        << m_setDrivingLineHintTop
-        << m_setDrivingLineHintBottom);
+    m_menu.addAction(rotate90CW);
+    m_menu.addAction(rotate90CCW);
+    m_menu.addSeparator();
+    m_menu.addAction(m_clearComputerHint);
+    m_menu.addAction(m_setComputerHintFirstBeforeCorner);
+    m_menu.addAction(m_setComputerHintSecondBeforeCorner);
+    m_menu.addSeparator();
+    m_menu.addAction(m_clearDrivingLineHintH);
+    m_menu.addAction(m_setDrivingLineHintLeft);
+    m_menu.addAction(m_setDrivingLineHintRight);
+    m_menu.addSeparator();
+    m_menu.addAction(m_clearDrivingLineHintV);
+    m_menu.addAction(m_setDrivingLineHintTop);
+    m_menu.addAction(m_setDrivingLineHintBottom);
 }
 
 void EditorView::mousePressEvent(QMouseEvent * event)
@@ -319,27 +327,37 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
     }
 
     // Enable all driving line hints by default
-    m_clearDrivingLineHint->setEnabled(true);
+    m_clearDrivingLineHintH->setEnabled(true);
+    m_clearDrivingLineHintV->setEnabled(true);
     m_setDrivingLineHintLeft->setEnabled(true);
     m_setDrivingLineHintRight->setEnabled(true);
     m_setDrivingLineHintTop->setEnabled(true);
     m_setDrivingLineHintBottom->setEnabled(true);
 
-    switch (tile.drivingLineHint())
+    switch (tile.drivingLineHintH())
     {
-    case TrackTileBase::DLH_NONE:
-        m_clearDrivingLineHint->setEnabled(false);
+    case TrackTileBase::DLHH_NONE:
+        m_clearDrivingLineHintH->setEnabled(false);
         break;
-    case TrackTileBase::DLH_LEFT:
+    case TrackTileBase::DLHH_LEFT:
         m_setDrivingLineHintLeft->setEnabled(false);
         break;
-    case TrackTileBase::DLH_RIGHT:
+    case TrackTileBase::DLHH_RIGHT:
         m_setDrivingLineHintRight->setEnabled(false);
         break;
-    case TrackTileBase::DLH_TOP:
+    default:
+        break;
+    }
+
+    switch (tile.drivingLineHintV())
+    {
+    case TrackTileBase::DLHV_NONE:
+        m_clearDrivingLineHintV->setEnabled(false);
+        break;
+    case TrackTileBase::DLHV_TOP:
         m_setDrivingLineHintTop->setEnabled(false);
         break;
-    case TrackTileBase::DLH_BOTTOM:
+    case TrackTileBase::DLHV_BOTTOM:
         m_setDrivingLineHintBottom->setEnabled(false);
         break;
     default:
@@ -461,36 +479,50 @@ void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
     }
 }
 
-void EditorView::doClearDrivingLineHint()
+void EditorView::doClearDrivingLineHintH()
 {
-    doSetDrivingLineHint(TrackTileBase::DLH_NONE);
+    doSetDrivingLineHintH(TrackTileBase::DLHH_NONE);
+}
+
+void EditorView::doClearDrivingLineHintV()
+{
+    doSetDrivingLineHintV(TrackTileBase::DLHV_NONE);
 }
 
 void EditorView::doSetDrivingLineHintLeft()
 {
-    doSetDrivingLineHint(TrackTileBase::DLH_LEFT);
+    doSetDrivingLineHintH(TrackTileBase::DLHH_LEFT);
 }
 
 void EditorView::doSetDrivingLineHintRight()
 {
-    doSetDrivingLineHint(TrackTileBase::DLH_RIGHT);
+    doSetDrivingLineHintH(TrackTileBase::DLHH_RIGHT);
 }
 
 void EditorView::doSetDrivingLineHintTop()
 {
-    doSetDrivingLineHint(TrackTileBase::DLH_TOP);
+    doSetDrivingLineHintV(TrackTileBase::DLHV_TOP);
 }
 
 void EditorView::doSetDrivingLineHintBottom()
 {
-    doSetDrivingLineHint(TrackTileBase::DLH_BOTTOM);
+    doSetDrivingLineHintV(TrackTileBase::DLHV_BOTTOM);
 }
 
-void EditorView::doSetDrivingLineHint(TrackTileBase::DrivingLineHint hint)
+void EditorView::doSetDrivingLineHintH(TrackTileBase::DrivingLineHintH hint)
 {
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
-        tile->setDrivingLineHint(hint);
+        tile->setDrivingLineHintH(hint);
+    }
+}
+
+void EditorView::doSetDrivingLineHintV(TrackTileBase::DrivingLineHintV hint)
+{
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
+    {
+        tile->setDrivingLineHintV(hint);
     }
 }

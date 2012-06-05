@@ -20,6 +20,7 @@
 #include "slidefrictiongenerator.hpp"
 #include "MiniCore/Core/MCCollisionEvent"
 #include "MiniCore/Core/Physics/MCFrictionGenerator"
+#include "MiniCore/Core/Physics/MCDragForceGenerator"
 #include "MiniCore/Core/Particles/MCGLRectParticle"
 #include "MiniCore/Core/MCRandom"
 #include "MiniCore/Core/MCRectShape"
@@ -47,6 +48,8 @@ namespace
     const MCFloat MASS                 = 1000.0f;
     const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
     const MCFloat RESTITUTION          = 0.25f;
+    const MCFloat DRAG_LINEAR          = 1.0f;
+    const MCFloat DRAG_QUADRATIC       = 5.0f;
 
     const MCVector2dF LEFT_FRONT_TIRE_POS(15, 11);
     const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -11);
@@ -103,6 +106,9 @@ Car::Car(MCSurface & surface, MCUint index)
     // Add off-track friction generator
     MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
     m_pOffTrackFriction->enable(false);
+
+    MCForceGenerator * drag = new MCDragForceGenerator(DRAG_LINEAR, DRAG_QUADRATIC);
+    MCWorld::instance().addForceGenerator(*drag, *this, true);
 
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
@@ -281,7 +287,7 @@ void Car::render(MCCamera *p)
 
     if (m_accelerating)
     {
-        if (m_speedInKmh < 50)
+        if (m_speedInKmh < 25)
         {
             if (!m_leftSideOffTrack)
             {
@@ -329,7 +335,7 @@ void Car::render(MCCamera *p)
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     // Spawn sparkles if colliding with another car or a wall.
-    if (m_speedInKmh > 50)
+    if (m_speedInKmh > 25)
     {
         if (event.collidingObject().typeID() == typeID() ||
             event.collidingObject().typeID() == MCObject::typeID("WALL"))
@@ -352,11 +358,11 @@ void Car::stepTime()
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
-    // Cache speed in km/h.
-    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 120 / 10;
+    // Cache speed in km/h. Use value of twice as big as the "real" value.
+    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 3.6f * 2;
 
     // Apply moment if car is off the track.
-    if (m_speedInKmh > 10)
+    if (m_speedInKmh > 5)
     {
         if (m_leftSideOffTrack)
         {
@@ -368,7 +374,7 @@ void Car::stepTime()
             addTorque(-OFF_TRACK_MOMENT);
         }
     }
-    else if (m_speedInKmh < -10)
+    else if (m_speedInKmh < -5)
     {
         if (m_leftSideOffTrack)
         {

@@ -26,7 +26,8 @@ TrackTileBase::TrackTileBase(TrackDataBase & trackData,
   , m_trackData(trackData)
   , m_routeDirection(TrackTileBase::RD_NONE)
   , m_computerHint(TrackTileBase::CH_NONE)
-  , m_drivingLineHint(TrackTileBase::DLH_NONE)
+  , m_drivingLineHintH(TrackTileBase::DLHH_NONE)
+  , m_drivingLineHintV(TrackTileBase::DLHV_NONE)
 {
 }
 
@@ -88,14 +89,24 @@ TrackTileBase::ComputerHint TrackTileBase::computerHint() const
     return m_computerHint;
 }
 
-void TrackTileBase::setDrivingLineHint(TrackTileBase::DrivingLineHint hint)
+void TrackTileBase::setDrivingLineHintH(TrackTileBase::DrivingLineHintH hint)
 {
-    m_drivingLineHint = hint;
+    m_drivingLineHintH = hint;
 }
 
-TrackTileBase::DrivingLineHint TrackTileBase::drivingLineHint() const
+TrackTileBase::DrivingLineHintH TrackTileBase::drivingLineHintH() const
 {
-    return m_drivingLineHint;
+    return m_drivingLineHintH;
+}
+
+void TrackTileBase::setDrivingLineHintV(TrackTileBase::DrivingLineHintV hint)
+{
+    m_drivingLineHintV = hint;
+}
+
+TrackTileBase::DrivingLineHintV TrackTileBase::drivingLineHintV() const
+{
+    return m_drivingLineHintV;
 }
 
 TrackTileBase::~TrackTileBase()
