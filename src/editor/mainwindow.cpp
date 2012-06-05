@@ -351,7 +351,7 @@ void MainWindow::populateMenuBar()
     m_enlargeVerSize->setEnabled(false);
 
     // Add "Set track properties"-action
-    m_setTrackPropertiesAction = new QAction(tr("&Set track properties"), this);
+    m_setTrackPropertiesAction = new QAction(tr("&Set lap count.."), this);
     editMenu->addAction(m_setTrackPropertiesAction);
     connect(m_setTrackPropertiesAction, SIGNAL(triggered()), this, SLOT(setTrackProperties()));
     m_setTrackPropertiesAction->setEnabled(false);
