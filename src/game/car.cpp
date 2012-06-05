@@ -39,11 +39,11 @@ namespace
     const MCFloat FRICTION             = 1.0f;
     const MCFloat BRAKING_FRICTION     = 1.0f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat SLIDE_FRICTION       = 1.00f;
+    const MCFloat SLIDE_FRICTION       = 0.75f;
     const MCFloat ROTATION_FRICTION    = 1.0f;
     const MCFloat OFF_TRACK_FRICTION   = 0.75f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
-    const MCFloat TURNING_IMPULSE      = 0.25f;
+    const MCFloat TURNING_IMPULSE      = 0.30f;
     const MCFloat POWER                = 5000.0f;
     const MCFloat MASS                 = 1000.0f;
     const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
@@ -147,13 +147,15 @@ void Car::turnLeft()
 
     if (std::abs(m_speedInKmh) > 1)
     {
+        MCFloat velScaling = 1.0f - m_speedInKmh / 600.0f;
+        velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
             addAngularImpulse(m_turningImpulse / 2);
         }
         else
         {
-            addAngularImpulse(m_turningImpulse);
+            addAngularImpulse(m_turningImpulse * velScaling);
         }
     }
 }
@@ -166,13 +168,15 @@ void Car::turnRight()
 
     if (std::abs(m_speedInKmh) > 1)
     {
+        MCFloat velScaling = 1.0f - m_speedInKmh / 600.0f;
+        velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
             addAngularImpulse(-m_turningImpulse / 2);
         }
         else
         {
-            addAngularImpulse(-m_turningImpulse);
+            addAngularImpulse(-m_turningImpulse * velScaling);
         }
     }
 }
@@ -285,7 +289,7 @@ void Car::render(MCCamera *p)
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
 
-    if (m_accelerating)
+    if (m_accelerating || m_braking)
     {
         if (m_speedInKmh < 25)
         {

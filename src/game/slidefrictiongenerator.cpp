@@ -22,7 +22,7 @@
 namespace
 {
     const MCFloat FRICTION_SPEED_TH = 0.001f;
-    const MCFloat SLIDE_DECAY       = 0.05f;
+    const MCFloat SLIDE_DECAY       = 0.1f;
 }
 
 SlideFrictionGenerator::SlideFrictionGenerator(
