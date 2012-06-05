@@ -67,9 +67,14 @@ const Objects & TrackData::objects() const
     return m_objects;
 }
 
-void TrackData::enlargeCanvas()
+void TrackData::enlargeHorSize()
 {
-    m_map.resize(m_map.cols() + 1, m_map.rows() + 1);
+    m_map.resize(m_map.cols() + 1, m_map.rows());
+}
+
+void TrackData::enlargeVerSize()
+{
+    m_map.resize(m_map.cols(), m_map.rows() + 1);
 }
 
 TrackData::~TrackData()

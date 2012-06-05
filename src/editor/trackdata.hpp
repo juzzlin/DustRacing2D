@@ -62,8 +62,11 @@ public:
     //! Get objects object.
     const Objects & objects() const;
 
-    //! Enlarge canvas.
-    void enlargeCanvas();
+    //! Enlarge horizontal size.
+    void enlargeHorSize();
+
+    //! Enlarge vertical size.
+    void enlargeVerSize();
 
 private:
 

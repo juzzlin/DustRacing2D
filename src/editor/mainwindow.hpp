@@ -88,7 +88,8 @@ private slots:
     void clear();
     void clearRoute();
     bool doOpenTrack(QString fileName);
-    void enlargeCanvas();
+    void enlargeHorSize();
+    void enlargeVerSize();
     void handleToolBarActionClick(QAction * action);
     void initializeNewTrack();
     void setTrackProperties();
@@ -110,6 +111,7 @@ private:
     void populateToolBar();
     void removeObjectsFromScene();
     void removeTilesFromScene();
+    void setActionStatesOnNewTrack();
 
     ObjectLoader * m_objectLoader;
     AboutDlg     * m_aboutDlg;
@@ -121,7 +123,8 @@ private:
     QAction      * m_saveAsAction;
     QAction      * m_currentToolBarAction;
     QAction      * m_clearAllAction;
-    QAction      * m_enlargeCanvasAction;
+    QAction      * m_enlargeHorSize;
+    QAction      * m_enlargeVerSize;
     QAction      * m_clearRouteAction;
     QAction      * m_setRouteAction;
     QAction      * m_setTrackPropertiesAction;

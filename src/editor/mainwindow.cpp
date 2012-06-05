@@ -75,6 +75,8 @@ MainWindow::MainWindow(QString trackFile)
 , m_saveAsAction(nullptr)
 , m_currentToolBarAction(nullptr)
 , m_clearAllAction(nullptr)
+, m_enlargeHorSize(nullptr)
+, m_enlargeVerSize(nullptr)
 , m_setRouteAction(nullptr)
 , m_setTrackPropertiesAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
@@ -336,11 +338,17 @@ void MainWindow::populateMenuBar()
     connect(m_clearAllAction, SIGNAL(triggered()), this, SLOT(clear()));
     m_clearAllAction->setEnabled(false);
 
-    // Add "enlarge canvas"-action
-    m_enlargeCanvasAction = new QAction(tr("&Enlarge canvas"), this);
-    editMenu->addAction(m_enlargeCanvasAction);
-    connect(m_enlargeCanvasAction, SIGNAL(triggered()), this, SLOT(enlargeCanvas()));
-    m_enlargeCanvasAction->setEnabled(false);
+    // Add "enlarge hor size"-action
+    m_enlargeHorSize = new QAction(tr("Enlarge hor size"), this);
+    editMenu->addAction(m_enlargeHorSize);
+    connect(m_enlargeHorSize, SIGNAL(triggered()), this, SLOT(enlargeHorSize()));
+    m_enlargeHorSize->setEnabled(false);
+
+    // Add "enlarge ver size"-action
+    m_enlargeVerSize = new QAction(tr("Enlarge ver size"), this);
+    editMenu->addAction(m_enlargeVerSize);
+    connect(m_enlargeVerSize, SIGNAL(triggered()), this, SLOT(enlargeVerSize()));
+    m_enlargeVerSize->setEnabled(false);
 
     // Add "Set track properties"-action
     m_setTrackPropertiesAction = new QAction(tr("&Set track properties"), this);
@@ -499,12 +507,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         settings.endGroup();
 
         m_saveAction->setEnabled(true);
-        m_saveAsAction->setEnabled(true);
-        m_toolBar->setEnabled(true);
-        m_clearAllAction->setEnabled(true);
-        m_enlargeCanvasAction->setEnabled(true);
-        m_setRouteAction->setEnabled(true);
-        m_setTrackPropertiesAction->setEnabled(true);
+
+        setActionStatesOnNewTrack();
 
         delete m_editorScene;
         m_editorScene = new EditorScene;
@@ -596,19 +600,24 @@ void MainWindow::initializeNewTrack()
 
         addTilesToScene();
         addObjectsToScene();
-
-        m_saveAsAction->setEnabled(true);
-        m_toolBar->setEnabled(true);
-        m_clearAllAction->setEnabled(true);
-        m_enlargeCanvasAction->setEnabled(true);
-        m_setRouteAction->setEnabled(true);
-        m_setTrackPropertiesAction->setEnabled(true);
+        setActionStatesOnNewTrack();
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
             .arg(m_editorData->trackData()->name())
             .arg(m_editorData->trackData()->map().cols())
             .arg(m_editorData->trackData()->map().rows()));
     }
+}
+
+void MainWindow::setActionStatesOnNewTrack()
+{
+    m_saveAsAction->setEnabled(true);
+    m_toolBar->setEnabled(true);
+    m_clearAllAction->setEnabled(true);
+    m_enlargeHorSize->setEnabled(true);
+    m_enlargeVerSize->setEnabled(true);
+    m_setRouteAction->setEnabled(true);
+    m_setTrackPropertiesAction->setEnabled(true);
 }
 
 void MainWindow::setTrackProperties()
@@ -744,12 +753,28 @@ void MainWindow::clearRoute()
     m_console->append(QString(tr("Route cleared.")));
 }
 
-void MainWindow::enlargeCanvas()
+void MainWindow::enlargeHorSize()
 {
     assert(m_editorData);
     if (TrackData * data = m_editorData->trackData())
     {
-        data->enlargeCanvas();
+        data->enlargeHorSize();
+        addTilesToScene();
+
+        QRectF newSceneRect(-MARGIN, -MARGIN,
+            2 * MARGIN + data->map().cols() * TrackTile::TILE_W,
+            2 * MARGIN + data->map().rows() * TrackTile::TILE_H);
+
+        m_editorView->setSceneRect(newSceneRect);
+    }
+}
+
+void MainWindow::enlargeVerSize()
+{
+    assert(m_editorData);
+    if (TrackData * data = m_editorData->trackData())
+    {
+        data->enlargeVerSize();
         addTilesToScene();
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
