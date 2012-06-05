@@ -403,6 +403,7 @@ void EditorView::handleTileDragRelease(QMouseEvent * event)
             // Restore position
             sourceTile->setPos(editorData.dragAndDropSourcePos());
             sourceTile->setZValue(sourceTile->zValue() - 1);
+            destTile->setZValue(sourceTile->zValue());
 
             update();
 

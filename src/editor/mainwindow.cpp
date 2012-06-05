@@ -674,6 +674,7 @@ void MainWindow::addObjectsToScene()
             if (Object * object = dynamic_cast<Object *>(&data->objects().object(i)))
             {
                 m_editorScene->addItem(object);
+                object->setZValue(10);
             }
         }
     }
