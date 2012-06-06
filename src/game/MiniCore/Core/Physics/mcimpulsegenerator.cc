@@ -166,6 +166,8 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
 
                 // Remove contact with pa from pb, because it was already handled here.
                 pb.deleteContacts(pa);
+
+                break;
             }
         }
 
