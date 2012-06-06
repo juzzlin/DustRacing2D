@@ -51,7 +51,7 @@ void MCGLScene::resize(
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    const float zNear = 0.0f;
+    const float zNear = 1.0f;
     const float zFar  = 1000.0f;
 
     gluPerspective(viewAngle, static_cast<GLfloat>(sceneWidth) /
