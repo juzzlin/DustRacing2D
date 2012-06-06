@@ -34,9 +34,9 @@
 
 #include <cassert>
 
-MCWorld * MCWorld::pInstance             = nullptr;
-MCFloat   MCWorld::metersPerPixel        = 1.0;
-MCFloat   MCWorld::metersPerPixelSquared = 1.0;
+MCWorld * MCWorld::pInstance               = nullptr;
+MCFloat   MCWorld::m_metersPerPixel        = 1.0;
+MCFloat   MCWorld::m_metersPerPixelSquared = 1.0;
 
 namespace
 {
@@ -224,24 +224,26 @@ void MCWorld::setDimensions(
     MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
     MCFloat metersPerPixel)
 {
+    MCWorld::setMetersPerPixel(metersPerPixel);
+
+    // Set dimensions
+    m_minX = minX;
+    m_maxX = maxX;
+    m_minY = minY;
+    m_maxY = maxY;
+    m_minZ = minZ;
+    m_maxZ = maxZ;
+
     // Init objectTree
     delete pObjectTree;
     pObjectTree = new MCObjectTree(
-        minX, minY, maxX, maxY, MinLeafWidth, MinLeafHeight);
-
-    // Set dimensions
-    minX = minX;
-    maxX = maxX;
-    minY = minY;
-    maxY = maxY;
-    minZ = minZ;
-    maxZ = maxZ;
-
-    MCWorld::setMetersPerPixel(metersPerPixel);
+        m_minX, m_minY,
+        m_maxX, m_maxY,
+        MinLeafWidth, MinLeafHeight);
 
     // Create "wall" objects
-    const MCFloat w = maxX - minX;
-    const MCFloat h = maxY - minY;
+    const MCFloat w = m_maxX - m_minX;
+    const MCFloat h = m_maxY - m_minY;
 
     if (pLeft)
     {
@@ -493,21 +495,27 @@ MCObjectTree & MCWorld::objectTree() const
 
 void MCWorld::setMetersPerPixel(MCFloat value)
 {
-    MCWorld::metersPerPixel        = value;
-    MCWorld::metersPerPixelSquared = value * value;
+    MCWorld::m_metersPerPixel        = value;
+    MCWorld::m_metersPerPixelSquared = value * value;
+}
+
+MCFloat MCWorld::metersPerPixel()
+{
+    assert(MCWorld::pInstance);
+    return MCWorld::m_metersPerPixel;
 }
 
 void MCWorld::toMeters(MCFloat & pixels)
 {
-    pixels *= MCWorld::metersPerPixel;
+    pixels *= MCWorld::m_metersPerPixel;
 }
 
 void MCWorld::toMeters(MCVector2dF & pixels)
 {
-    pixels *= MCWorld::metersPerPixel;
+    pixels *= MCWorld::m_metersPerPixel;
 }
 
 void MCWorld::toMeters(MCVector3dF & pixels)
 {
-    pixels *= MCWorld::metersPerPixel;
+    pixels *= MCWorld::m_metersPerPixel;
 }

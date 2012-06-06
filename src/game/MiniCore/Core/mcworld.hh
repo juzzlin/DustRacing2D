@@ -69,6 +69,9 @@ public:
     //! Set how many meters equal one pixel.
     static void setMetersPerPixel(MCFloat value);
 
+    //! Get how many meters equal one pixel.
+    static MCFloat metersPerPixel();
+
     //! Convert pixels to meters.
     static void toMeters(MCFloat & pixels);
 
@@ -182,8 +185,8 @@ private:
     MCImpulseGenerator impulseGenerator;
     MCObjectTree * pObjectTree;
     MCFloat m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
-    static MCFloat metersPerPixel;
-    static MCFloat metersPerPixelSquared;
+    static MCFloat m_metersPerPixel;
+    static MCFloat m_metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
     bool depthTestEnabled[MCWorld::MaxLayers];
