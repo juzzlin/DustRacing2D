@@ -39,7 +39,7 @@ namespace
     const MCFloat FRICTION             = 1.0f;
     const MCFloat BRAKING_FRICTION     = 1.0f;
     const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat SLIDE_FRICTION       = 0.75f;
+    const MCFloat SLIDE_FRICTION       = 0.5f;
     const MCFloat ROTATION_FRICTION    = 1.0f;
     const MCFloat OFF_TRACK_FRICTION   = 0.75f;
     const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
