@@ -244,10 +244,10 @@ public:
     bool renderable() const;
 
     //! Return true if the object is a virtual object.
-    bool virtualObject() const;
+    bool isParticleGroup() const;
 
     //! Return true if the object is a virtual object.
-    void setVirtualObject(bool flag);
+    void setIsParticleGroup(bool flag);
 
     //! \brief Sets whether view should render shape outline for debug
     //! purposes.
@@ -484,6 +484,12 @@ private:
     bool m_sleeping;
     bool m_physicsObject;
     bool m_stationary;
+    bool m_renderable;
+    bool m_bypassCollisions;
+    bool m_hasShadow;
+    bool m_removing;
+    bool m_renderOutline;
+    bool m_isParticleGroup;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);

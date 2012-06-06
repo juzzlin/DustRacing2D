@@ -179,7 +179,7 @@ private:
     int                   m_currentRouteIndex;
     int                   m_routeProgression;
 
-    mutable MCGLRectParticleGroup m_particleGroup;
+    mutable MCGLRectParticleGroup m_isParticleGroup;
 };
 
 #endif // CAR_HPP

@@ -31,7 +31,7 @@ MCGLRectParticleGroup::MCGLRectParticleGroup()
     setHasShadow(false);
     setRenderable(false);
     setPhysicsObject(false);
-    setVirtualObject(true);
+    setIsParticleGroup(true);
 }
 
 void MCGLRectParticleGroup::render(MCCamera * pCamera)

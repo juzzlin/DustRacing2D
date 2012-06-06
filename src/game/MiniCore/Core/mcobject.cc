@@ -36,30 +36,7 @@ MCUint MCObject::typeIDCount = 1;
 MCObject::TypeHash MCObject::typeHash;
 MCObject::TimerEventObjectsList MCObject::timerEventObjects;
 
-namespace
-{
-enum PropertyMask
-{
-    // Object is renderable
-    RenderableMask = (1<<1),
-
-    // Object is considered in collision calculations
-    CollisionsMask = (1<<3),
-
-    // Object has a shadow
-    ShadowMask = (1<<4),
-
-    // Object is scheduled to be removed from the world
-    RemovingMask = (1<<5),
-
-    // View renders outline for debug
-    OutlineMask = (1<<6),
-
-    // Object is a virtual object (for example a group).
-    VirtualMask = (1<<7)
-};
-}
-
+// TODO: Use constructor chaining when GCC supports it
 MCObject::MCObject(const std::string & typeId)
 : m_typeID(registerType(typeId))
 , m_time(0)
@@ -78,7 +55,6 @@ MCObject::MCObject(const std::string & typeId)
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
-, flags(RenderableMask | CollisionsMask | ShadowMask)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
 , damping(0.999f)
@@ -86,6 +62,12 @@ MCObject::MCObject(const std::string & typeId)
 , m_sleeping(false)
 , m_physicsObject(true)
 , m_stationary(false)
+, m_renderable(true)
+, m_bypassCollisions(false)
+, m_hasShadow(true)
+, m_removing(false)
+, m_renderOutline(false)
+, m_isParticleGroup(false)
 {}
 
 // TODO: Use constructor chaining when GCC supports it
@@ -107,7 +89,6 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
-, flags(RenderableMask | CollisionsMask | ShadowMask)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
 , damping(0.999f)
@@ -115,6 +96,12 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_sleeping(false)
 , m_physicsObject(true)
 , m_stationary(false)
+, m_renderable(true)
+, m_bypassCollisions(false)
+, m_hasShadow(true)
+, m_removing(false)
+, m_renderOutline(false)
+, m_isParticleGroup(false)
 {
     setShape(pShape);
 }
@@ -138,7 +125,6 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
-, flags(RenderableMask | CollisionsMask | ShadowMask)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
 , damping(0.999f)
@@ -146,6 +132,12 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_sleeping(false)
 , m_physicsObject(true)
 , m_stationary(false)
+, m_renderable(true)
+, m_bypassCollisions(false)
+, m_hasShadow(true)
+, m_removing(false)
+, m_renderOutline(false)
+, m_isParticleGroup(false)
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(
@@ -554,52 +546,52 @@ bool MCObject::physicsObject() const
 
 void MCObject::setBypassCollisions(bool flag)
 {
-    setFlag(CollisionsMask, !flag);
+    m_bypassCollisions = flag;
 }
 
 bool MCObject::bypassCollisions() const
 {
-    return !(flags & CollisionsMask);
+    return m_bypassCollisions;
 }
 
 void MCObject::setRenderable(bool flag)
 {
-    setFlag(RenderableMask, flag);
+    m_renderable = flag;
 }
 
 bool MCObject::renderable() const
 {
-    return flags & RenderableMask;
+    return m_renderable;
 }
 
-bool MCObject::virtualObject() const
+bool MCObject::isParticleGroup() const
 {
-    return flags & VirtualMask;
+    return m_isParticleGroup;
 }
 
-void MCObject::setVirtualObject(bool flag)
+void MCObject::setIsParticleGroup(bool flag)
 {
-    setFlag(VirtualMask, flag);
+    m_isParticleGroup = flag;
 }
 
 void MCObject::setRenderShapeOutline(bool flag)
 {
-    setFlag(OutlineMask, flag);
+    m_renderOutline = flag;
 }
 
 bool MCObject::renderShapeOutline() const
 {
-    return flags & OutlineMask;
+    return m_renderOutline;
 }
 
 void MCObject::setHasShadow(bool flag)
 {
-    setFlag(ShadowMask, flag);
+    m_hasShadow = flag;
 }
 
 bool MCObject::hasShadow() const
 {
-    return flags & ShadowMask;
+    return m_hasShadow;
 }
 
 void MCObject::setMaximumVelocity(MCFloat maxVelocity)
@@ -882,12 +874,12 @@ void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint *
 
 void MCObject::setRemoving(bool flag)
 {
-    setFlag(RemovingMask, flag);
+    m_removing = flag;
 }
 
 bool MCObject::removing() const
 {
-    return flags & RemovingMask;
+    return m_removing;
 }
 
 void MCObject::addContact(MCContact & contact)

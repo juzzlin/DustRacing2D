@@ -168,7 +168,7 @@ void MCWorld::render(MCCamera * pCamera)
                     object.render(pCamera); // pCamera can be a nullptr
                 }
             }
-            else if (object.virtualObject())
+            else if (object.isParticleGroup())
             {
                 object.render(pCamera);
             }
@@ -202,7 +202,7 @@ void MCWorld::renderShadows(MCCamera * pCamera)
                 object.renderShadow(pCamera); // pCamera can be a nullptr
             }
         }
-        else if (object.virtualObject())
+        else if (object.isParticleGroup())
         {
             object.renderShadow(pCamera);
         }
