@@ -20,6 +20,7 @@
 #include "mcrandom.hh"
 #include "mccast.hh"
 #include <cstdlib>
+#include <vector>
 #include <QDateTime>
 
 namespace
