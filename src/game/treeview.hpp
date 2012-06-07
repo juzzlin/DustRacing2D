@@ -18,6 +18,8 @@
 
 #include "MiniCore/Core/Views/MCSurfaceView"
 
+#include <GL/gl.h>
+
 //! Custom view used to render tree objects.
 class TreeView : public MCSurfaceView
 {
@@ -49,6 +51,7 @@ private:
     MCUint m_topSinAngle;
     MCUint m_topCosAngle;
     MCVector2d<MCFloat> m_top;
+    static GLuint m_listIndex;
 };
 
 #endif // TREEVIEW_HPP

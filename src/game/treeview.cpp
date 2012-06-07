@@ -19,6 +19,10 @@
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTrigonom"
 
+#include <cassert>
+
+GLuint TreeView::m_listIndex = 0;
+
 TreeView::TreeView(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeight, int branches)
 : MCSurfaceView(&surface)
 , m_r0(r0)
@@ -36,6 +40,11 @@ TreeView::TreeView(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeig
 
 TreeView::~TreeView()
 {
+    if (TreeView::m_listIndex)
+    {
+        glDeleteLists(TreeView::m_listIndex, 1);
+        TreeView::m_listIndex = 0;
+    }
 }
 
 void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera)
@@ -58,8 +67,7 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
     MCUint  angle        = 0;
 
     glPushAttrib(GL_ENABLE_BIT);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, surface()->handle());
 
@@ -79,21 +87,30 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
         glPushMatrix();
         glTranslated(x, y, z);
         glRotated(angle, 0, 0, 1);
+        glScaled(r, r, 1);
 
-        glNormal3i(0, 0, 1);
-
-        glBegin(GL_QUADS);
-
-        glTexCoord2i(0, 0);
-        glVertex2f(-r, -r);
-        glTexCoord2i(0, 1);
-        glVertex2f(-r, r);
-        glTexCoord2i(1, 1);
-        glVertex2f(r, r);
-        glTexCoord2i(1, 0);
-        glVertex2f(r, -r);
-
-        glEnd();
+        if (!m_listIndex)
+        {
+            m_listIndex = glGenLists(1);
+            assert(m_listIndex != 0);
+            glNewList(m_listIndex, GL_COMPILE);
+            glNormal3i(0, 0, 1);
+            glBegin(GL_QUADS);
+            glTexCoord2i(0, 0);
+            glVertex2f(-1, -1);
+            glTexCoord2i(0, 1);
+            glVertex2f(-1, 1);
+            glTexCoord2i(1, 1);
+            glVertex2f(1, 1);
+            glTexCoord2i(1, 0);
+            glVertex2f(1, -1);
+            glEnd();
+            glEndList();
+        }
+        else
+        {
+            glCallList(m_listIndex);
+        }
 
         glPopMatrix();
 
