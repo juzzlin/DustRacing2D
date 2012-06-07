@@ -20,6 +20,7 @@
 #include "mcimpulsegenerator.hh"
 #include "mccontact.hh"
 #include "../mcobject.hh"
+#include "../mcmathutil.hh"
 #include "../mcshape.hh"
 
 class MCImpulseGeneratorImpl
@@ -84,7 +85,6 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
         MCWorld::toMeters(armA);
         MCVector3dF armB = contactPoint - pb.location();
         MCWorld::toMeters(armB);
-
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
 
@@ -94,7 +94,8 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
         {
             MCFloat d = pa.shape()->radius();
             MCWorld::toMeters(d);
-            MCFloat linearBalance = 1.0f - armA.lengthFast() / d;
+            MCFloat linearBalance = 1.0f - MCMathUtil::distanceFromVector(
+                MCVector2dF(contactPoint - pa.location()), MCVector2dF(linearImpulse)) / d;
             linearBalance = linearBalance < 0 ? 0 : linearBalance;
         }
 
@@ -104,9 +105,9 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
 
         // Angular component
         const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse * pa.mass()) % armA;
-        const MCFloat magnitude = rotationalImpulse.k() / pa.momentOfInertia();
-        pa.addAngularImpulse(2.0f * 3.1415f * -magnitude * effRestitution * massScaling);
+            MCVector3dF(linearImpulse) % armA;
+        const MCFloat magnitude = rotationalImpulse.k();
+        pa.addAngularImpulse(-magnitude * effRestitution * massScaling);
     }
 }
 
