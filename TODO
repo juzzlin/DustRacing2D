@@ -5,17 +5,16 @@ Game:
 
 - Move car to the nearest track tile if stuck for too long
 - Grandstands
-- Merge MCMathUtil & MCTrigonom
 - Global setting for shadow offsets
 - Initial start menu
 - Install target for CMake
-- Collisions: angular impulse from rotation
-- Different resolutions + fullscreen.
+- Full screen mode
+- One big wall object
 
 Editor:
 
-- Must be possible to move objects around
+- Possibility to rotate objects
 
-Graphics:
+Content:
 
-- New car images
+- More tracks
