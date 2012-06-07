@@ -22,6 +22,10 @@
 #include "mcbbox.hh"
 #include "mctrigonom.hh"
 
+#include <cassert>
+
+MCSurface::HandleToList MCSurface::m_handleToList;
+
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 : m_handle(newHandle)
 , m_w(newWidth)
@@ -36,10 +40,17 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 , m_useAlphaBlend(false)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
-{}
+, m_listIndex(0)
+{
+}
 
 MCSurface::~MCSurface()
 {
+    if (m_listIndex)
+    {
+        glDeleteLists(m_listIndex, 1);
+        m_handleToList.erase(m_handle);
+    }
 }
 
 void MCSurface::setCenter(MCVector2dFR center)
@@ -107,6 +118,40 @@ MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
+void MCSurface::callList()
+{
+    if (!m_listIndex)
+    {
+        if (m_handleToList.find(m_handle) == m_handleToList.end())
+        {
+            m_listIndex = glGenLists(1);
+            assert(m_listIndex != 0);
+            m_handleToList[m_handle] = m_listIndex;
+
+            glNewList(m_listIndex, GL_COMPILE);
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, m_handle);
+            glBegin(GL_QUADS);
+            glNormal3i(0, 0, 1);
+            glColor3f(1.0f, 1.0f, 1.0f);
+            glTexCoord2i(0, 0);
+            glVertex3f(-m_w2, -m_h2, 0);
+            glTexCoord2i(0, 1);
+            glVertex3f(-m_w2, m_h2, 0);
+            glTexCoord2i(1, 1);
+            glVertex3f(m_w2, m_h2, 0);
+            glTexCoord2i(1, 0);
+            glVertex3f(m_w2, -m_h2, 0);
+            glEnd();
+            glEndList();
+        }
+    }
+    else
+    {
+        glCallList(m_listIndex);
+    }
+}
+
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
 {
     MCFloat x = pos.i();
@@ -132,24 +177,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
     doAlphaTest();
     doAlphaBlend();
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_handle);
-    glNormal3i(0, 0, 1);
-
-    glBegin(GL_QUADS);
-
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    glColor3f(1.0f, 1.0f, 1.0f);
-
-    glTexCoord2i(0, 0);
-    glVertex3f(-m_w2, -m_h2, 0);
-    glTexCoord2i(0, 1);
-    glVertex3f(-m_w2, m_h2, 0);
-    glTexCoord2i(1, 1);
-    glVertex3f(m_w2, m_h2, 0);
-    glTexCoord2i(1, 0);
-    glVertex3f(m_w2, -m_h2, 0);
-    glEnd();
+    callList();
 
     glPopMatrix();
     glPopAttrib();
@@ -179,24 +207,12 @@ void MCSurface::renderScaled(
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
     }
 
+    glScaled(wr / m_w2, hr / m_h2, 1.0f);
+
     doAlphaTest();
     doAlphaBlend();
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_handle);
-    glNormal3i(0, 0, 1);
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2i(0, 0);
-    glVertex2f(-wr, -hr);
-    glTexCoord2i(0, 1);
-    glVertex2f(-wr, hr);
-    glTexCoord2i(1, 1);
-    glVertex2f(wr, hr);
-    glTexCoord2i(1, 0);
-    glVertex2f(wr, -hr);
-    glEnd();
+    callList();
 
     glPopMatrix();
     glPopAttrib();
@@ -227,21 +243,8 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_handle);
-    glNormal3i(0, 0, 1);
 
-    glBegin(GL_QUADS);
-
-    glTexCoord2i(0, 0);
-    glVertex2f(-m_w2, -m_h2);
-    glTexCoord2i(0, 1);
-    glVertex2f(-m_w2, m_h2);
-    glTexCoord2i(1, 1);
-    glVertex2f(m_w2, m_h2);
-    glTexCoord2i(1, 0);
-    glVertex2f(m_w2, -m_h2);
-    glEnd();
+    callList();
 
     glPopMatrix();
     glPopAttrib();
@@ -273,21 +276,10 @@ void MCSurface::renderShadowScaled(
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_handle);
-    glNormal3i(0, 0, 1);
 
-    glBegin(GL_QUADS);
+    glScaled(wr / m_w2, hr / m_h2, 1.0f);
 
-    glTexCoord2i(0, 0);
-    glVertex2f(-wr, -hr);
-    glTexCoord2i(0, 1);
-    glVertex2f(-wr, hr);
-    glTexCoord2i(1, 1);
-    glVertex2f(wr, hr);
-    glTexCoord2i(1, 0);
-    glVertex2f(wr, -hr);
-    glEnd();
+    callList();
 
     glPopMatrix();
     glPopAttrib();

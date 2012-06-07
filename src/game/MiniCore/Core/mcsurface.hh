@@ -28,6 +28,8 @@
 
 #include <cmath>
 #include <string>
+#include <unordered_map>
+
 #include <GL/gl.h>
 
 using std::string;
@@ -140,6 +142,8 @@ private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 
+    void callList();
+
     GLuint m_handle;
     MCFloat m_w;
     MCFloat m_w2;
@@ -153,6 +157,9 @@ private:
     bool m_useAlphaBlend;
     GLenum m_src;
     GLenum m_dst;
+    GLuint m_listIndex;
+    typedef std::unordered_map<GLuint, GLuint> HandleToList;
+    static HandleToList m_handleToList;
 };
 
 #endif // MCSURFACE_HH
