@@ -106,6 +106,7 @@ void Track::render(MCCamera * pCamera)
 
     glNormal3f(0.0f, 0.0f, 1.0f);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_TEXTURE_2D);
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -139,27 +140,35 @@ void Track::renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & s
     static const int h2 = TrackTile::TILE_H / 2;
 
     glPushMatrix();
-
-    // Bind the texture according to the tile
-    glBindTexture(GL_TEXTURE_2D, surface.handle());
-
     glTranslated(x + w2, y + h2, z);
     glRotated(angle, 0, 0, 1);
     glScaled(m_scale, m_scale, 0.0f);
 
-    // Render the tile as a quad
-    glBegin(GL_QUADS);
+    GLuint listFound = m_handleToList[surface.handle()];
+    if (listFound == 0)
+    {
+        GLuint listIndex = glGenLists(1);
+        assert(listIndex != 0);
+        m_handleToList[surface.handle()] = listIndex;
+        glNewList(listIndex, GL_COMPILE);
+        glBindTexture(GL_TEXTURE_2D, surface.handle());
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);
+        glVertex2i(-w2, -h2);
+        glTexCoord2i(0, 1);
+        glVertex2i(-w2, h2);
+        glTexCoord2i(1, 1);
+        glVertex2i(w2, h2);
+        glTexCoord2i(1, 0);
+        glVertex2i(w2, -h2);
+        glEnd();
+        glEndList();
+    }
+    else
+    {
+        glCallList(listFound);
+    }
 
-    glTexCoord2i(0, 0);
-    glVertex2i(-w2, -h2);
-    glTexCoord2i(0, 1);
-    glVertex2i(-w2, h2);
-    glTexCoord2i(1, 1);
-    glVertex2i(w2, h2);
-    glTexCoord2i(1, 0);
-    glVertex2i(w2, -h2);
-
-    glEnd();
     glPopMatrix();
 }
 
@@ -185,5 +194,12 @@ void Track::reset()
 
 Track::~Track()
 {
+    auto i = m_handleToList.begin();
+    while (i != m_handleToList.end())
+    {
+        glDeleteLists(i->second, 1);
+        i++;
+    }
+
     delete m_pTrackData;
 }
