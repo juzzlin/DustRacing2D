@@ -225,8 +225,8 @@ void MCObject::integrateAngular(MCFloat step)
         {
             MCFloat totAngularAcceleration(m_angularAcceleration);
             totAngularAcceleration += m_torque * m_invMomentOfInertia;
-            m_angularVelocity        += totAngularAcceleration * step + m_angularImpulse;
-            m_angularVelocity        *= damping;
+            m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
+            m_angularVelocity      *= damping;
 
             if (m_angularVelocity > m_maximumAngularVelocity) {
                 m_angularVelocity = m_maximumAngularVelocity;
