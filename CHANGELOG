@@ -1,3 +1,27 @@
+0.2.2
+-----
+
+* Updates TODO.
+* Bigger start light glow.
+* OpenGL call lists for multiple objects.
+* Impulsegenerator improvements.
+* Handle only one deepest contact at a time.
+* Refactors MCObject properties.
+* Fixes Z-buffering.
+* Refactors MCWorld::setDimensions().
+* Adds missing include to mcrandom.cc
+* Less powerful cars.
+* Tunes steering so that it depends of speed.
+* Editor bug fixes.
+* Makes curves.trk longer.
+* Misleading "set track properties" => "set lap count".
+* Hor and ver size of the track can be enlarged separately.
+* Hor/Ver driving line hints.
+* Adds drag force to cars.
+* New km/h speed scaling.
+* Set higher possible max speed for Car.
+* Digital speedometer.
+
 0.2.1
 -----
 
