@@ -23,6 +23,8 @@
 #include "mcparticle.hh"
 #include "mcglrectparticlegroup.hh"
 
+#include <GL/gl.h>
+
 class MCCamera;
 
 /*! \class MCGLRectParticle
@@ -76,6 +78,8 @@ private:
     DISABLE_ASSI(MCGLRectParticle);
     MCFloat m_r, m_g, m_b, m_a;
     MCGLRectParticleGroup * m_group;
+    static GLuint m_listIndex;
+    static GLuint m_listIndex2;
 };
 
 #endif // MCGLRECTPARTICLE_HH

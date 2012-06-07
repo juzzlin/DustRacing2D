@@ -21,8 +21,11 @@
 #include "../mccamera.hh"
 
 #include <GL/gl.h>
+#include <cassert>
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
+GLuint MCGLRectParticle::m_listIndex  = 0;
+GLuint MCGLRectParticle::m_listIndex2 = 0;
 
 MCGLRectParticle::MCGLRectParticle()
 : m_r(1.0f)
@@ -37,6 +40,11 @@ MCGLRectParticle::MCGLRectParticle()
 
 MCGLRectParticle::~MCGLRectParticle()
 {
+    if (MCGLRectParticle::m_listIndex)
+    {
+        glDeleteLists(MCGLRectParticle::m_listIndex, 1);
+        MCGLRectParticle::m_listIndex = 0;
+    }
 }
 
 void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
@@ -50,10 +58,21 @@ void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
     // Disable texturing
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    if (!m_listIndex2)
+    {
+        m_listIndex2 = glGenLists(1);
+        assert(m_listIndex2 != 0);
+        glNewList(m_listIndex2, GL_COMPILE);
+        glPushAttrib(GL_ENABLE_BIT);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEndList();
+    }
+    else
+    {
+        glCallList(m_listIndex2);
+    }
 
     renderInner(pCamera);
 
@@ -74,35 +93,49 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     glTranslated(x, y, location().k());
 
     // Rotate
-    if (angle() > 0) {
+    if (angle() > 0)
+    {
         glRotated(angle(), 0, 0, 1);
     }
 
-    glBegin(GL_QUADS);
-
     // Scale alpha if fading out
     MCFloat alpha = m_a;
-    if (animationStyle() == FadeOut) {
+    if (animationStyle() == FadeOut)
+    {
         alpha *= scale();
     }
 
     // Scale radius if fading out
     MCFloat r = radius();
-    if (animationStyle() == Shrink) {
+    if (animationStyle() == Shrink)
+    {
         r *= scale();
     }
 
     if (r > 0)
     {
         glColor4f(m_r, m_g, m_b, alpha);
-        glNormal3f(0, 0, 1.0f);
-        glVertex2f(-r,  r);
-        glVertex2f( r,  r);
-        glVertex2f( r, -r);
-        glVertex2f(-r, -r);
-    }
+        glScaled(r, r, 1.0f);
 
-    glEnd();
+        if (!m_listIndex)
+        {
+            m_listIndex = glGenLists(1);
+            assert(m_listIndex != 0);
+            glNewList(m_listIndex, GL_COMPILE);
+            glNormal3i(0, 0, 1);
+            glBegin(GL_QUADS);
+            glVertex2f(-1,  1);
+            glVertex2f( 1,  1);
+            glVertex2f( 1, -1);
+            glVertex2f(-1, -1);
+            glEnd();
+            glEndList();
+        }
+        else
+        {
+            glCallList(m_listIndex);
+        }
+    }
 
     glPopMatrix();
 }
