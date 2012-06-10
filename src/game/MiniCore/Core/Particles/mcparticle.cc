@@ -28,10 +28,10 @@ MCParticle::MCParticle()
 , m_initLifeTime(0)
 , m_animationStyle(MCParticle::None)
 , m_isActive(false)
-, m_scale(1.0f)
-, m_delta(0.0f)
+, m_scale(1.0)
+, m_delta(0.0)
 {
-    setShape(new MCCircleShape(nullptr, 0.0f));
+    setShape(new MCCircleShape(nullptr, 0.0));
     setBypassCollisions(true);
 }
 
@@ -45,7 +45,7 @@ void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius
     m_initLifeTime   = newLifeTime;
     m_animationStyle = MCParticle::None;
     m_isActive       = true;
-    m_scale          = 1.0f;
+    m_scale          = 1.0;
     m_delta          = m_scale / m_initLifeTime;
     m_radius         = newRadius;
 

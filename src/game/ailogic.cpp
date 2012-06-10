@@ -112,17 +112,17 @@ void AiLogic::steerControl(
 
     // PID-controller. This makes the computer players to turn and react faster
     // than the human player, but hey...they are stupid.
-    MCFloat control = diff * 0.01f + (diff - m_lastDiff) * 0.01f;
-    const MCFloat maxControl = 1.0f;
+    MCFloat control = diff * 0.01 + (diff - m_lastDiff) * 0.01;
+    const MCFloat maxControl = 1.0;
     control = control < 0 ? -control : control;
     control = control > maxControl ? maxControl : control;
     m_car.setTurningImpulse(control);
 
-    if (diff < -3.0f)
+    if (diff < -3.0)
     {
         m_car.turnRight();
     }
-    else if (diff > 3.0f)
+    else if (diff > 3.0)
     {
         m_car.turnLeft();
     }

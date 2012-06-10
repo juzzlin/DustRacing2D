@@ -49,9 +49,9 @@ MCTrigonomImpl::MCTrigonomImpl()
 {
     for (MCUint i = 0; i < LutSize; i++) {
         MCTrigonomImpl::m_sin.at(i) =
-            std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
+            std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0 - 3600));
         MCTrigonomImpl::m_cos.at(i) =
-            std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
+            std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0 - 3600));
     }
 }
 
@@ -69,7 +69,7 @@ MCFloat MCTrigonom::radToDeg(MCFloat angle)
 
 MCFloat MCTrigonom::sin(MCFloat angle)
 {
-    const int index = static_cast<int>(angle * 10.0f) + 3600;
+    const int index = static_cast<int>(angle * 10.0) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))
     {
         return m_pImpl->m_sin[index];
@@ -79,7 +79,7 @@ MCFloat MCTrigonom::sin(MCFloat angle)
 
 MCFloat MCTrigonom::cos(MCFloat angle)
 {
-    const int index = static_cast<int>(angle * 10.0f) + 3600;
+    const int index = static_cast<int>(angle * 10.0) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))
     {
         return m_pImpl->m_cos[index];

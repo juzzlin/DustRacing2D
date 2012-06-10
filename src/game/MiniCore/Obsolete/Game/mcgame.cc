@@ -208,7 +208,7 @@ void MCGame::GFXInit2dScene(int hRes, int vRes, int sceneW, int sceneH, MCFloat 
   glLoadIdentity();
 
   // Note: Y-coordinates are reversed
-  //  glOrtho(0, HRES, VRES, 0, -1.0f, 1.0f);
+  //  glOrtho(0, HRES, VRES, 0, -1.0, 1.0);
 
   // Set perspective
   gluPerspective(viewAngle, static_cast<MCFloat>(m_pImpl->m_sceneW) / m_pImpl->m_sceneH, 0.1, 1000.0);

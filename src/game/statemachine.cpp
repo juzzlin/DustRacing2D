@@ -25,7 +25,7 @@ StateMachine::StateMachine(
 , m_startlights(startlights)
 , m_renderer(renderer)
 , m_pTrack(nullptr)
-, m_fadeValue(0.0f)
+, m_fadeValue(0.0)
 {
     m_renderer.setEnabled(false);
 }
@@ -45,21 +45,21 @@ bool StateMachine::update()
 
     case Intro:
 
-        if (m_fadeValue < 2.0f)
+        if (m_fadeValue < 2.0)
         {
-            m_fadeValue += 0.01f;
+            m_fadeValue += 0.01;
             m_renderer.setFadeShaderEnabled(true);
-            m_renderer.setFadeValue(std::min(m_fadeValue, 1.0f));
+            m_renderer.setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
 
             // Avoid a non-black screen immediately after the game starts.
-            if (m_fadeValue > 0.02f)
+            if (m_fadeValue > 0.02)
             {
                 m_renderer.setEnabled(true);
             }
         }
         else
         {
-            m_fadeValue = 1.0f;
+            m_fadeValue = 1.0;
             m_state = GameTransitionIn;
             m_renderer.setFadeShaderEnabled(false);
         }

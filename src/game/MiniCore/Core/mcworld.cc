@@ -59,7 +59,7 @@ MCWorld::MCWorld()
 , pBottom(nullptr)
 , numCollisions(0)
 , numResolverLoops(5)
-, resolverStep(1.0f / numResolverLoops)
+, resolverStep(1.0 / numResolverLoops)
 {
     if (!MCWorld::pInstance)
     {
@@ -72,7 +72,7 @@ MCWorld::MCWorld()
     }
 
     // Default dimensions. Creates also MCObjectTree.
-    setDimensions(0.0f, MinLeafWidth, 0.0f, MinLeafHeight, 0.0f, 1.0f, 1.0f);
+    setDimensions(0.0, MinLeafWidth, 0.0, MinLeafHeight, 0.0, 1.0, 1.0);
 
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -254,7 +254,7 @@ void MCWorld::setDimensions(
     pLeft = new MCObject("LEFT_WALL");
     pLeft->setShape(new MCRectShape(nullptr, w, h));
     pLeft->setMass(0, true);
-    pLeft->setRestitution(0.25f);
+    pLeft->setRestitution(0.25);
     pLeft->addToWorld();
     pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
 
@@ -267,7 +267,7 @@ void MCWorld::setDimensions(
     pRight = new MCObject("RIGHT_WALL");
     pRight->setShape(new MCRectShape(nullptr, w, h));
     pRight->setMass(0, true);
-    pRight->setRestitution(0.25f);
+    pRight->setRestitution(0.25);
     pRight->addToWorld();
     pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
 
@@ -280,7 +280,7 @@ void MCWorld::setDimensions(
     pTop = new MCObject("TOP_WALL");
     pTop->setShape(new MCRectShape(nullptr, w, h));
     pTop->setMass(0, true);
-    pTop->setRestitution(0.25f);
+    pTop->setRestitution(0.25);
     pTop->addToWorld();
     pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
 
@@ -293,7 +293,7 @@ void MCWorld::setDimensions(
     pBottom = new MCObject("BOTTOM_WALL");
     pBottom->setShape(new MCRectShape(nullptr, w, h));
     pBottom->setMass(0, true);
-    pBottom->setRestitution(0.25f);
+    pBottom->setRestitution(0.25);
     pBottom->addToWorld();
     pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
 }

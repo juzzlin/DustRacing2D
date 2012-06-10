@@ -25,7 +25,7 @@ MCRecycler<MCContact> MCContact::m_recycler;
 
 MCContact::MCContact()
 : m_pObject(nullptr)
-, m_interpenetrationDepth(0.0f)
+, m_interpenetrationDepth(0.0)
 {}
 
 void MCContact::init(MCObject & object,

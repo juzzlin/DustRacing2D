@@ -21,10 +21,10 @@
 #define MCTYPES_HH
 
 // Floating point data type used
-#ifdef MC_USE_DOUBLE
-  typedef double MCFloat;
-#else
+#ifdef MC_USE_FLOAT
   typedef float MCFloat;
+#else
+  typedef double MCFloat;
 #endif
 
 // Some convenience typedef's

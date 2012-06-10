@@ -67,7 +67,7 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
     MCUint  angle        = 0;
 
     glPushAttrib(GL_ENABLE_BIT);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, surface()->handle());
 

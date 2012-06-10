@@ -54,12 +54,12 @@ MCTextureTextImpl::MCTextureTextImpl(const std::string & text_)
 : text(text_)
 , glyphWidth(32)
 , glyphHeight(32)
-, r(1.0f)
-, g(1.0f)
-, b(1.0f)
-, a(1.0f)
-, xOffset(2.0f)
-, yOffset(2.0f)
+, r(1.0)
+, g(1.0)
+, b(1.0)
+, a(1.0)
+, xOffset(2.0)
+, yOffset(2.0)
 {
     updateTextDimensions();
 }
@@ -183,7 +183,7 @@ void MCTextureTextImpl::render(MCFloat x, MCFloat y, MCCamera * pCamera,
     font.surface().doAlphaTest();
     font.surface().doAlphaBlend();
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
+    glNormal3f(0.0, 0.0, 1.0);
     glColor4f(r, g, b, a);
 
     glBindTexture(GL_TEXTURE_2D, font.surface().handle());
@@ -268,8 +268,8 @@ void MCTextureTextImpl::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glNormal3f(0.0, 0.0, 1.0);
+    glColor3f(1.0, 1.0, 1.0);
 
     glBindTexture(GL_TEXTURE_2D, font.surface().handle());
 

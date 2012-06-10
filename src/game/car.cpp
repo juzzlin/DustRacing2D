@@ -34,22 +34,22 @@
 
 namespace
 {
-    const MCFloat MAX_LINEAR_VELOCITY  = 50.0f;
-    const MCFloat MAX_ANGULAR_VELOCITY = 10.0f;
-    const MCFloat FRICTION             = 1.0f;
-    const MCFloat BRAKING_FRICTION     = 1.0f;
+    const MCFloat MAX_LINEAR_VELOCITY  = 50.0;
+    const MCFloat MAX_ANGULAR_VELOCITY = 10.0;
+    const MCFloat FRICTION             = 1.0;
+    const MCFloat BRAKING_FRICTION     = 1.0;
     const MCFloat ROLLING_FRICTION     = 0.1f;
     const MCFloat SLIDE_FRICTION       = 0.5f;
-    const MCFloat ROTATION_FRICTION    = 1.0f;
+    const MCFloat ROTATION_FRICTION    = 1.0;
     const MCFloat OFF_TRACK_FRICTION   = 0.75f;
-    const MCFloat OFF_TRACK_MOMENT     = 50000.0f;
+    const MCFloat OFF_TRACK_MOMENT     = 50000.0;
     const MCFloat TURNING_IMPULSE      = 0.30f;
-    const MCFloat POWER                = 5000.0f;
-    const MCFloat MASS                 = 1000.0f;
-    const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0f;
+    const MCFloat POWER                = 5000.0;
+    const MCFloat MASS                 = 1000.0;
+    const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0;
     const MCFloat RESTITUTION          = 0.25f;
-    const MCFloat DRAG_LINEAR          = 1.0f;
-    const MCFloat DRAG_QUADRATIC       = 5.0f;
+    const MCFloat DRAG_LINEAR          = 1.0;
+    const MCFloat DRAG_QUADRATIC       = 5.0;
 
     const MCVector2dF LEFT_FRONT_TIRE_POS(15, 11);
     const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -11);
@@ -61,7 +61,7 @@ namespace
 
 Car::Car(MCSurface & surface, MCUint index)
 : MCObject(&surface, "Car")
-, m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0f))
+, m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION))
 , m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, ROTATION_FRICTION))
 , m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
@@ -147,7 +147,7 @@ void Car::turnLeft()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        MCFloat velScaling = 1.0f - m_speedInKmh / 600.0f;
+        MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
@@ -168,7 +168,7 @@ void Car::turnRight()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        MCFloat velScaling = 1.0f - m_speedInKmh / 600.0f;
+        MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
@@ -295,12 +295,12 @@ void Car::render(MCCamera *p)
         {
             if (!m_leftSideOffTrack)
             {
-                doSkidMark(leftRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25f);
+                doSkidMark(leftRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25);
             }
 
             if (!m_rightSideOffTrack)
             {
-                doSkidMark(rightRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25f);
+                doSkidMark(rightRearTireLocation(), 0.25f, 0.25f, 0.25f, 0.25);
             }
         }
     }
@@ -310,26 +310,26 @@ void Car::render(MCCamera *p)
     {
         if (m_leftSideOffTrack)
         {
-            doSkidMark(leftFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
-            doSmoke(leftFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
+            doSkidMark(leftFrontTire, 0.3f, 0.2f, 0.0, 0.5);
+            doSmoke(leftFrontTire, 0.75f, 0.75f, 0.75f, 0.5);
 
             static int counter = 0;
             if (++counter >= 5)
             {
-                doMud(leftRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+                doMud(leftRearTireLocation(), 0.3f, 0.2f, 0.0, 0.9);
                 counter = 0;
             }
         }
 
         if (m_rightSideOffTrack)
         {
-            doSkidMark(rightFrontTire, 0.3f, 0.2f, 0.0f, 0.5f);
-            doSmoke(rightFrontTire, 0.75f, 0.75f, 0.75f, 0.5f);
+            doSkidMark(rightFrontTire, 0.3f, 0.2f, 0.0, 0.5);
+            doSmoke(rightFrontTire, 0.75f, 0.75f, 0.75f, 0.5);
 
             static int counter = 0;
             if (++counter >= 5)
             {
-                doMud(rightRearTireLocation(), 0.3f, 0.2f, 0.0f, 0.9f);
+                doMud(rightRearTireLocation(), 0.3f, 0.2f, 0.0, 0.9);
                 counter = 0;
             }
         }
@@ -347,7 +347,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
             static int counter = 0;
             if (++counter >= 10)
             {
-                doSparkle(event.contactPoint(), 1.0f, 0.8f, 0.0f, 0.9f);
+                doSparkle(event.contactPoint(), 1.0, 0.8f, 0.0, 0.9);
                 counter = 0;
             }
         }
@@ -426,7 +426,7 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
     smoke.init(location, 5, 180);
     smoke.setAnimationStyle(MCParticle::Shrink);
     smoke.setColor(r, g, b, a);
-    smoke.setVelocity(MCRandom::randomVector2d() * 0.1f);
+    smoke.setVelocity(MCRandom::randomVector2d() * 0.1);
     smoke.addToWorld();
 
     m_isParticleGroup.addParticle(smoke);
@@ -452,8 +452,8 @@ void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat 
     mud.setAnimationStyle(MCParticle::Shrink);
     mud.setColor(r, g, b, a);
     mud.addToWorld();
-    mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0f));
-    mud.setAcceleration(MCVector3dF(0, 0, -10.0f));
+    mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0));
+    mud.setAcceleration(MCVector3dF(0, 0, -10.0));
 
     m_isParticleGroup.addParticle(mud);
 }
@@ -465,7 +465,7 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     sparkle.setAnimationStyle(MCParticle::Shrink);
     sparkle.setColor(r, g, b, a);
     sparkle.addToWorld();
-    sparkle.setVelocity(velocity() * 0.5f);
+    sparkle.setVelocity(velocity() * 0.5);
 
     m_isParticleGroup.addParticle(sparkle);
 }

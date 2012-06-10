@@ -31,7 +31,7 @@ Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)
 , h(newH)
 {
     //setMass(0, true); // Set as a stationary object
-    setRestitution(1.0f);
+    setRestitution(1.0);
 }
 
 void Wall::render(MCCamera * pCamera)
@@ -61,7 +61,7 @@ void Wall::render(MCCamera * pCamera)
     glColor3f(0.75, 0.75, 0.75);
 
     // Cap
-    glNormal3f(0, 0, 1.0f);
+    glNormal3f(0, 0, 1.0);
     glTexCoord2i(0, 0);
     glVertex3i(-x, +y, h);
     glTexCoord2i(0, 1);
@@ -72,7 +72,7 @@ void Wall::render(MCCamera * pCamera)
     glVertex3i(+x, +y, h);
 
     // Back
-    glNormal3f(0, 1.0f, 0);
+    glNormal3f(0, 1.0, 0);
     glTexCoord2i(0, 0);
     glVertex3i(-x, +y, 0);
     glTexCoord2i(0, 1);
@@ -83,7 +83,7 @@ void Wall::render(MCCamera * pCamera)
     glVertex3i(+x, +y, 0);
 
     // Front
-    glNormal3f(0, -1.0f, 0);
+    glNormal3f(0, -1.0, 0);
     glTexCoord2i(0, 0);
     glVertex3i(+x, -y, 0);
     glTexCoord2i(0, 1);
@@ -94,7 +94,7 @@ void Wall::render(MCCamera * pCamera)
     glVertex3i(-x, -y, 0);
 
     // Left
-    glNormal3f(-1.0f, 0, 0);
+    glNormal3f(-1.0, 0, 0);
     glTexCoord2i(0, 0);
     glVertex3i(-x, -y, 0);
     glTexCoord2i(0, 1);
@@ -105,7 +105,7 @@ void Wall::render(MCCamera * pCamera)
     glVertex3i(-x, +y, 0);
 
     // Right
-    glNormal3f(1.0f, 0, 0);
+    glNormal3f(1.0, 0, 0);
     glTexCoord2i(0, 0);
     glVertex3i(+x, +y, 0);
     glTexCoord2i(0, 1);
@@ -153,11 +153,11 @@ void Wall::renderShadow(MCCamera * pCamera)
     y = wy2;
 
     // Shadow color
-    glColor4f(0.1f, 0.1f, 0.1f, 0.5f);
+    glColor4f(0.1f, 0.1f, 0.1f, 0.5);
 
     // Draw a full shadow
     glBegin(GL_QUADS);
-    glNormal3f(0, 0, 1.0f);
+    glNormal3f(0, 0, 1.0);
     glVertex3i(-x, +y, 0);
     glVertex3i(-x, -y, 0);
     glVertex3i(+x, -y, 0);

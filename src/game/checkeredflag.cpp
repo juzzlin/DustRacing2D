@@ -23,7 +23,7 @@ namespace
 {
 const int   ROWS             = 6;
 const int   COLS             = 8;
-const float AMPLITUDE        = 30.0f;
+const float AMPLITUDE        = 30.0;
 const float APPEARANCE_SPEED = 0.05f;
 }
 
@@ -67,7 +67,7 @@ void CheckeredFlag::render()
 
     glNormal3i(0, 0, 1);
     glBegin(GL_QUADS);
-    glNormal3f(0.0f, 0.0f, 1.0f);
+    glNormal3f(0.0, 0.0, 1.0);
 
     for (int j = 0; j < ROWS; j++)
     {
@@ -87,11 +87,11 @@ void CheckeredFlag::render()
 
             if ((j + i) & 0x1)
             {
-                glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+                glColor4f(1.0, 1.0, 1.0, 0.25);
             }
             else
             {
-                glColor4f(0.0f, 0.0f, 0.0f, 0.25f);
+                glColor4f(0.0, 0.0, 0.0, 0.25);
             }
 
             if (i < COLS - 1 && j < ROWS - 1)

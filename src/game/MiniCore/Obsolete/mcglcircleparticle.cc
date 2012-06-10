@@ -36,10 +36,10 @@ namespace
 }
 
 MCGLCircleParticleImpl::MCGLCircleParticleImpl() :
-  m_r(1.0f),
-  m_g(1.0f),
-  m_b(1.0f),
-  m_a(1.0f)
+  m_r(1.0),
+  m_g(1.0),
+  m_b(1.0),
+  m_a(1.0)
 {
   // Pre-calculate values
   if (!MCGLCircleParticleImpl::circleX.size())
@@ -93,7 +93,7 @@ void MCGLCircleParticle::render(MCCamera * pCamera)
 
   // Enable blending
   MCFloat alpha = m_pImpl->m_a;
-  if (alpha < 1.0f || animationStyle() == FadeOut) {
+  if (alpha < 1.0 || animationStyle() == FadeOut) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
   }

@@ -66,7 +66,7 @@ public:
     //! \param threshold Threshold used in the alpha test. Has no effect
     //!        if useAlphaTest equals false.
     void setAlphaTest(
-        bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5f);
+        bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5);
 
     //! Runs the corresponding GL-commands defined in setAlphaTest().
     //! This is done automatically, but doAlphaTest() can be used if

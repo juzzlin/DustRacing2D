@@ -275,8 +275,8 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         MCSurfaceObjectData data("tire");
         data.setMass(250); // Exaggerate the mass on purpose
         data.setSurfaceId("tire");
-        data.setRestitution(0.5f);
-        data.setXYFriction(0.25f);
+        data.setRestitution(0.5);
+        data.setXYFriction(0.25);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(
@@ -293,7 +293,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
 
         MCSurfaceObjectData data("tree");
         data.setStationary(true);
-        data.setRestitution(0.25f);
+        data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
         data.setShapeHeight(treeBodyRadius);
         data.setLayer(Layers::Tree);
@@ -316,8 +316,8 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         object->setLayer(Layers::Walls, false);
         object->setInitialLocation(MCVector3dF(x, h - y, 0));
         object->setMass(5000);
-        object->setXYFriction(0.5f);
-        object->setDamping(0.9f);
+        object->setXYFriction(0.5);
+        object->setDamping(0.9);
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData

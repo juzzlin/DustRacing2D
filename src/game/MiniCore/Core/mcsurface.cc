@@ -36,7 +36,7 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 , m_centerSet(false)
 , m_useAlphaTest(false)
 , m_alphaFunc(GL_ALWAYS)
-, m_alphaThreshold(0.0f)
+, m_alphaThreshold(0.0)
 , m_useAlphaBlend(false)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
@@ -133,7 +133,7 @@ void MCSurface::callList()
             glBindTexture(GL_TEXTURE_2D, m_handle);
             glBegin(GL_QUADS);
             glNormal3i(0, 0, 1);
-            glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3f(1.0, 1.0, 1.0);
             glTexCoord2i(0, 0);
             glVertex3f(-m_w2, -m_h2, 0);
             glTexCoord2i(0, 1);
@@ -207,7 +207,7 @@ void MCSurface::renderScaled(
         glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
     }
 
-    glScaled(wr / m_w2, hr / m_h2, 1.0f);
+    glScaled(wr / m_w2, hr / m_h2, 1.0);
 
     doAlphaTest();
     doAlphaBlend();
@@ -277,7 +277,7 @@ void MCSurface::renderShadowScaled(
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
 
-    glScaled(wr / m_w2, hr / m_h2, 1.0f);
+    glScaled(wr / m_w2, hr / m_h2, 1.0);
 
     callList();
 

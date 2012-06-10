@@ -38,7 +38,7 @@ float Radius::calculate(const Radius::CirclePoints & cp)
         return 0;
     }
 
-    dt = 1.0f / dt;
+    dt = 1.0 / dt;
 
     const float centerX = (bc * (cy - dy) - cd * (by - cy)) * dt;
     const float centerY = (cd * (bx - cx) - bc * (cx - dx)) * dt;

@@ -41,7 +41,7 @@ public:
     void recycle();
 
     //! Set color
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0f);
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
 
     //! \reimp
     void render(MCCamera * pCamera = nullptr);

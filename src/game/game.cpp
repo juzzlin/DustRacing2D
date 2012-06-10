@@ -53,7 +53,7 @@ Game::Game()
 , m_pCamera(nullptr)
 , m_pInputHandler(new InputHandler(MAX_PLAYERS))
 , m_updateFps(60)
-, m_timeStep(1.0f / m_updateFps)
+, m_timeStep(1.0 / m_updateFps)
 , m_renderCount(0)
 , m_availableRenderTime(0)
 {
@@ -69,7 +69,7 @@ Game::Game()
 void Game::setTargetUpdateFps(unsigned int fps)
 {
     m_updateFps = fps;
-    m_timeStep  = 1.0f / m_updateFps;
+    m_timeStep  = 1.0 / m_updateFps;
 }
 
 void Game::setRenderer(Renderer * newRenderer)

@@ -30,7 +30,7 @@ Track::Track(TrackData * pTrackData)
 , m_cols(m_pTrackData->map().cols())
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
-, m_scale(0.0f)
+, m_scale(0.0)
 {
     assert(pTrackData);
 }
@@ -99,13 +99,13 @@ void Track::render(MCCamera * pCamera)
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
     // Set the default color
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
 
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
 
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glNormal3f(0.0, 0.0, 1.0);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     glEnable(GL_TEXTURE_2D);
 
     // Loop through the visible tile matrix and draw the tiles
@@ -142,7 +142,7 @@ void Track::renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & s
     glPushMatrix();
     glTranslated(x + w2, y + h2, z);
     glRotated(angle, 0, 0, 1);
-    glScaled(m_scale, m_scale, 0.0f);
+    glScaled(m_scale, m_scale, 0.0);
 
     GLuint listFound = m_handleToList[surface.handle()];
     if (listFound == 0)
@@ -174,7 +174,7 @@ void Track::renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & s
 
 bool Track::update()
 {
-    if (m_scale < 1.0f)
+    if (m_scale < 1.0)
     {
         m_scale += 0.05f;
         return true;
@@ -189,7 +189,7 @@ bool Track::update()
 
 void Track::reset()
 {
-    m_scale = 0.0f;
+    m_scale = 0.0;
 }
 
 Track::~Track()

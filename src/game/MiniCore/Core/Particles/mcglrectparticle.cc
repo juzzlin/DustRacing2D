@@ -28,10 +28,10 @@ GLuint MCGLRectParticle::m_listIndex  = 0;
 GLuint MCGLRectParticle::m_listIndex2 = 0;
 
 MCGLRectParticle::MCGLRectParticle()
-: m_r(1.0f)
-, m_g(1.0f)
-, m_b(1.0f)
-, m_a(1.0f)
+: m_r(1.0)
+, m_g(1.0)
+, m_b(1.0)
+, m_a(1.0)
 , m_group(nullptr)
 {
     // Disable shadow by default
@@ -115,7 +115,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     if (r > 0)
     {
         glColor4f(m_r, m_g, m_b, alpha);
-        glScaled(r, r, 1.0f);
+        glScaled(r, r, 1.0);
 
         if (!m_listIndex)
         {

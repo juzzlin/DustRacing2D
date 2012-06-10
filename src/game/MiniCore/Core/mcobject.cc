@@ -42,22 +42,22 @@ MCObject::MCObject(const std::string & typeId)
 , m_time(0)
 , m_invMass(std::numeric_limits<MCFloat>::max())
 , m_mass(0)
-, m_restitution(0.5f)
-, m_xyFriction(0.0f)
+, m_restitution(0.5)
+, m_xyFriction(0.0)
 , m_angle(0)
-, m_angularAcceleration(0.0f)
-, m_angularVelocity(0.0f)
-, m_angularImpulse(0.0f)
-, m_maximumAngularVelocity(4 * 3.1415f)
+, m_angularAcceleration(0.0)
+, m_angularVelocity(0.0)
+, m_angularImpulse(0.0)
+, m_maximumAngularVelocity(4 * 3.1415)
 , m_maximumVelocity(-1)
-, m_torque(0.0f)
+, m_torque(0.0)
 , m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
-, damping(0.999f)
+, damping(0.999)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)
@@ -76,22 +76,22 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_time(0)
 , m_invMass(std::numeric_limits<MCFloat>::max())
 , m_mass(0)
-, m_restitution(0.5f)
-, m_xyFriction(0.0f)
+, m_restitution(0.5)
+, m_xyFriction(0.0)
 , m_angle(0)
-, m_angularAcceleration(0.0f)
-, m_angularVelocity(0.0f)
-, m_angularImpulse(0.0f)
-, m_maximumAngularVelocity(4 * 3.1415f)
+, m_angularAcceleration(0.0)
+, m_angularVelocity(0.0)
+, m_angularImpulse(0.0)
+, m_maximumAngularVelocity(4 * 3.1415)
 , m_maximumVelocity(-1)
-, m_torque(0.0f)
+, m_torque(0.0)
 , m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
-, damping(0.999f)
+, damping(0.999)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)
@@ -112,22 +112,22 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_time(0)
 , m_invMass(std::numeric_limits<MCFloat>::max())
 , m_mass(0)
-, m_restitution(0.5f)
-, m_xyFriction(0.0f)
+, m_restitution(0.5)
+, m_xyFriction(0.0)
 , m_angle(0)
-, m_angularAcceleration(0.0f)
-, m_angularVelocity(0.0f)
-, m_angularImpulse(0.0f)
-, m_maximumAngularVelocity(4 * 3.1415f)
+, m_angularAcceleration(0.0)
+, m_angularVelocity(0.0)
+, m_angularImpulse(0.0)
+, m_maximumAngularVelocity(4 * 3.1415)
 , m_maximumVelocity(-1)
-, m_torque(0.0f)
+, m_torque(0.0)
 , m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
 , m_momentOfInertia(0)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , pShape(nullptr)
-, damping(0.999f)
+, damping(0.999)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)
@@ -193,7 +193,7 @@ void MCObject::integrate(MCFloat step)
 
     m_forces.setZero();
     linearImpulse.setZero();
-    m_angularImpulse = 0.0f;
+    m_angularImpulse = 0.0;
 
     translate(location() + velocity());
 }
@@ -221,7 +221,7 @@ void MCObject::integrateAngular(MCFloat step)
 {
     if (pShape)
     {
-        if (m_momentOfInertia > 0.0f)
+        if (m_momentOfInertia > 0.0)
         {
             MCFloat totAngularAcceleration(m_angularAcceleration);
             totAngularAcceleration += m_torque * m_invMomentOfInertia;
@@ -242,7 +242,7 @@ void MCObject::integrateAngular(MCFloat step)
         }
     }
 
-    m_torque = 0.0f;
+    m_torque = 0.0;
 }
 
 void MCObject::doOutOfBoundariesEvent()
@@ -318,7 +318,7 @@ void MCObject::resetMotion()
 {
     m_velocity.setZero();
     m_forces.setZero();
-    m_torque = 0.0f;
+    m_torque = 0.0;
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
@@ -472,7 +472,7 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
 
         m_mass            = newMass;
 
-        setMomentOfInertia(newMass * 10.0f);
+        setMomentOfInertia(newMass * 10.0);
     }
     else
     {
@@ -743,8 +743,8 @@ MCVector2dF MCObject::direction() const
 
 void MCObject::setRestitution(MCFloat newRestitution)
 {
-    newRestitution = newRestitution < 0.0f ? 0.0f : newRestitution;
-    newRestitution = newRestitution > 1.0f ? 1.0f : newRestitution;
+    newRestitution = newRestitution < 0.0 ? 0.0 : newRestitution;
+    newRestitution = newRestitution > 1.0 ? 1.0 : newRestitution;
     m_restitution = newRestitution;
 }
 
@@ -797,7 +797,7 @@ void MCObject::addTorque(MCFloat torque)
 void MCObject::clearForces()
 {
     m_forces.setZero();
-    m_torque = 0.0f;
+    m_torque = 0.0;
 }
 
 MCBBox<MCFloat> MCObject::bbox() const

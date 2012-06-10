@@ -25,7 +25,7 @@
 namespace
 {
     const MCFloat FRICTION_SPEED_TH = 0.001f;
-    const MCFloat ROTATION_DECAY    = 0.01f;
+    const MCFloat ROTATION_DECAY    = 0.01;
 }
 
 MCFrictionGenerator::MCFrictionGenerator(

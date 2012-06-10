@@ -73,7 +73,7 @@ void TimingOverlay::render()
             ss << " LAP:" << leadersLap << "/" << laps;
             MCTextureText lapText(ss.str());
             lapText.setGlyphSize(20, 20);
-            lapText.setColor(1.0f, 1.0f, 1.0f);
+            lapText.setColor(1.0, 1.0, 1.0);
             lapText.setShadowOffset(shadowX, shadowY);
             lapText.renderWithShadow(0, height() - lapText.textHeight(),
                 nullptr, m_defaultMonospace);
@@ -92,7 +92,7 @@ void TimingOverlay::render()
 
             MCTextureText posText(ss.str());
             posText.setGlyphSize(20, 20);
-            posText.setColor(1.0f, 1.0f, 0.0f);
+            posText.setColor(1.0, 1.0, 0.0);
             posText.setShadowOffset(shadowX, shadowY);
             posText.renderWithShadow(0, height() - posText.textHeight() * 2,
                 nullptr, m_defaultMonospace);
@@ -108,15 +108,15 @@ void TimingOverlay::render()
             ss << " " << speed;
             if (speed < 100)
             {
-                speedText.setColor(1.0f, 1.0f, 1.0f);
+                speedText.setColor(1.0, 1.0, 1.0);
             }
             else if (speed < 200)
             {
-                speedText.setColor(1.0f, 1.0f, 0.0f);
+                speedText.setColor(1.0, 1.0, 0.0);
             }
             else
             {
-                speedText.setColor(1.0f, 0.0f, 0.0f);
+                speedText.setColor(1.0, 0.0, 0.0);
             }
 
             speedText.setText(ss.str());
@@ -127,7 +127,7 @@ void TimingOverlay::render()
 
             speedText.setText(" KM/H");
             speedText.setGlyphSize(20, 20);
-            speedText.setColor(1.0f, 1.0f, 1.0f);
+            speedText.setColor(1.0, 1.0, 1.0);
             speedText.renderWithShadow(0, 2 * speedText.textHeight() + h,
                 nullptr, m_defaultMonospace);
         }
@@ -143,17 +143,17 @@ void TimingOverlay::render()
             // Set color to white, if lastLapTime is not set.
             if (lastLapTime == -1)
             {
-                currentLapTimeText.setColor(1.0f, 1.0f, 1.0f);
+                currentLapTimeText.setColor(1.0, 1.0, 1.0);
             }
             // Set color to green, if current time is ahead of the last lap time.
             else if (currentLapTime < lastLapTime)
             {
-                currentLapTimeText.setColor(0.0f, 1.0f, 0.0f);
+                currentLapTimeText.setColor(0.0, 1.0, 0.0);
             }
             // Set color to red (current time is slower than the last lap time).
             else
             {
-                currentLapTimeText.setColor(1.0f, 0.0f, 0.0f);
+                currentLapTimeText.setColor(1.0, 0.0, 0.0);
             }
 
             currentLapTimeText.setShadowOffset(shadowX, shadowY);

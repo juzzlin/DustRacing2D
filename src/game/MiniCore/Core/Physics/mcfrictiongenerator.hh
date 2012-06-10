@@ -43,7 +43,7 @@ public:
      * \param gravity Gravitational acceleration.
      */
     explicit MCFrictionGenerator(
-        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = 9.81f);
+        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = 9.81);
 
     //! Destructor.
     virtual ~MCFrictionGenerator();

@@ -79,10 +79,10 @@ MCFloat MCRandom::getValue()
 
 MCVector2d<MCFloat> MCRandom::randomVector2d()
 {
-    return MCVector2d<MCFloat>(getValue() - .5f, getValue() - .5f).normalized();
+    return MCVector2d<MCFloat>(getValue() - .5f, getValue() - .5).normalized();
 }
 
 MCVector3d<MCFloat> MCRandom::randomVector3d()
 {
-    return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, getValue() - .5f).normalized();
+    return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, getValue() - .5).normalized();
 }

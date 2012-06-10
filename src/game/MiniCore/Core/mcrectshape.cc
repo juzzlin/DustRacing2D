@@ -170,10 +170,10 @@ void MCRectShape::renderShapeOutline(MCCamera * pCamera)
 
         glPointSize(4);
         glPushMatrix();
-        glTranslated(x, y, 0.0f);
+        glTranslated(x, y, 0.0);
         glColor4f(1.0, 0.0, 0.0, 1.0);
         glBegin(GL_POINTS);
-        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0, 0.0, 0.0);
         glEnd();
         glPopMatrix();
     }

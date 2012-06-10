@@ -42,7 +42,7 @@ class MCTextureManagerImpl
     //! Creates an OpenGL texture from a QImage + texture meta data
     void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
 
-    //! Apply given color key (set alpha values on / off).
+    //! Apply given color key (set alpha values on / of).
     void applyColorKey(QImage & textureImage,
         MCUint r, MCUint g, MCUint b) const;
 
@@ -146,7 +146,7 @@ void MCTextureManagerImpl::createGLTextureFromImage(
     // Enable alpha test if it or color key was set
     if (data.colorKeySet)
     {
-        pSurface->setAlphaTest(true, GL_GREATER, 0.5f);
+        pSurface->setAlphaTest(true, GL_GREATER, 0.5);
     }
     else if (data.alphaTestSet)
     {

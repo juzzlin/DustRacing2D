@@ -30,8 +30,8 @@ MCGLScene::MCGLScene()
 void MCGLScene::initialize()
 {
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0f);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearDepth(1.0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthFunc(GL_LEQUAL);
@@ -51,8 +51,8 @@ void MCGLScene::resize(
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    const float zNear = 1.0f;
-    const float zFar  = 1000.0f;
+    const float zNear = 1.0;
+    const float zFar  = 1000.0;
 
     gluPerspective(viewAngle, static_cast<GLfloat>(sceneWidth) /
         sceneHeight, zNear, zFar);

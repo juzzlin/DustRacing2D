@@ -17,6 +17,7 @@
 #define STATEMACHINE_HPP
 
 #include "updateableif.hpp"
+#include "MiniCore/Core/MCTypes"
 
 class Renderer;
 class Startlights;
@@ -56,7 +57,7 @@ private:
     Startlights & m_startlights;
     Renderer    & m_renderer;
     Track       * m_pTrack;
-    float         m_fadeValue;
+    MCFloat       m_fadeValue;
 };
 
 #endif // STATEMACHINE_HPP

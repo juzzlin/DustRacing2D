@@ -39,11 +39,11 @@ Renderer::Renderer(QWidget * parent)
 , m_pGLScene(new MCGLScene)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
-, m_viewAngle(45.0f)
+, m_viewAngle(45.0)
 , m_pFadeProgram(nullptr)
 , m_pFadeFragmentShader(nullptr)
 , m_fadeShaderEnabled(false)
-, m_fadeValue(1.0f)
+, m_fadeValue(1.0)
 , m_enabled(true)
 {
     setFocusPolicy(Qt::StrongFocus);

@@ -55,15 +55,15 @@ MCObjectTest::MCObjectTest()
 void MCObjectTest::testMass()
 {
     MCObject object("TestObject");
-    QVERIFY(qFuzzyCompare(object.mass(), 0.0f));
+    QVERIFY(qFuzzyCompare(object.mass(), MCFloat(0.0)));
 
-    object.setMass(1000.0f);
-    QVERIFY(qFuzzyCompare(object.mass(), 1000.0f));
-    QVERIFY(qFuzzyCompare(object.invMass(), 1.0f / 1000.0f));
+    object.setMass(MCFloat(1000.0));
+    QVERIFY(qFuzzyCompare(object.mass(), MCFloat(1000.0)));
+    QVERIFY(qFuzzyCompare(object.invMass(), MCFloat(1.0 / 1000.0)));
 
     object.setMass(1, true);
     QVERIFY(object.stationary());
-    QVERIFY(qFuzzyCompare(object.invMass(), 0.0f));
+    QVERIFY(qFuzzyCompare(object.invMass(), MCFloat(0.0)));
 }
 
 void MCObjectTest::testTimerEvent()
