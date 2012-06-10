@@ -17,7 +17,6 @@ set(SRC
     renderer.cpp
     scene.cpp
     slidefrictiongenerator.cpp
-    speedometer.cpp
     startlights.cpp
     startlightsoverlay.cpp
     statemachine.cpp
