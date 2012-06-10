@@ -67,24 +67,24 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
     MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
 
 {
-  // Calculate which tiles are visible in the Camera window:
-  // columns from i0 to i2 and rows from j0 to j2.
+    // Calculate which tiles are visible in the Camera window:
+    // columns from i0 to i2 and rows from j0 to j2.
 
-  // X low index
-  i0 = r.x1() * m_cols / m_width;
-  i0 = i0 >= m_cols ? 0 : i0;
+    // X low index
+    i0 = r.x1() * m_cols / m_width;
+    i0 = i0 >= m_cols ? 0 : i0;
 
-  // X high index
-  i2 = r.x2() * m_cols / m_width;
-  i2 = i2  >= m_cols ? m_cols - 1 : i2;
+    // X high index
+    i2 = r.x2() * m_cols / m_width;
+    i2 = i2  >= m_cols ? m_cols - 1 : i2;
 
-  // Y low index
-  j0 = r.y1() * m_rows / m_height;
-  j0 = j0 >= m_rows ? 0 : j0;
+    // Y low index
+    j0 = r.y1() * m_rows / m_height;
+    j0 = j0 >= m_rows ? 0 : j0;
 
-  // Y high index
-  j2 = r.y2() * m_rows / m_height;
-  j2 = j2  >= m_rows ? m_rows - 1 : j2;
+    // Y high index
+    j2 = r.y2() * m_rows / m_height;
+    j2 = j2  >= m_rows ? m_rows - 1 : j2;
 }
 
 void Track::render(MCCamera * pCamera)
