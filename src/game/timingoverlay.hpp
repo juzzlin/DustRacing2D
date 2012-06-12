@@ -37,6 +37,9 @@ public:
     //! \reimp
     virtual void render();
 
+    //! \reimp
+    virtual bool update();
+
     //! Show timing for the given car.
     void setCarToFollow(const Car & car);
 
@@ -54,6 +57,7 @@ private:
     Timing                 * m_pTiming;
     Race                   * m_pRace;
     std::vector<std::string> m_posTexts;
+    bool                     m_showRecordTime;
 };
 
 #endif // TIMINGOVERLAY_HPP

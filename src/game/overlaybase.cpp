@@ -37,6 +37,15 @@ MCUint OverlayBase::height() const
     return m_height;
 }
 
+bool OverlayBase::update()
+{
+    return false;
+}
+
+void OverlayBase::reset()
+{
+}
+
 OverlayBase::~OverlayBase()
 {
 }

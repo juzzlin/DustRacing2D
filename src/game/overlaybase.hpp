@@ -19,11 +19,13 @@
 #include "MiniCore/Core/MCBBox"
 #include "MiniCore/Core/MCTypes"
 
+#include "updateableif.hpp"
+
 class MCCamera;
 
 //! Base class for overlays that are rendered on top of
 //! the game scene.
-class OverlayBase
+class OverlayBase : public UpdateableIf
 {
 public:
 
@@ -44,6 +46,12 @@ public:
 
     //! Render.
     virtual void render() = 0;
+
+    //! \reimp
+    virtual bool update();
+
+    //! \reimp
+    virtual void reset();
 
 private:
 

@@ -36,12 +36,12 @@ void Timing::lapCompleted(MCUint index)
     times.lastLapTime = elapsed - times.totalTime;
     times.totalTime   = elapsed;
 
-    times.newRecordActive = false;
+    times.newRecordAchieved = false;
     if (times.lastLapTime < times.recordLapTime ||
         times.recordLapTime == -1)
     {
-        times.recordLapTime   = times.lastLapTime;
-        times.newRecordActive = true;
+        times.recordLapTime     = times.lastLapTime;
+        times.newRecordAchieved = true;
     }
 }
 
@@ -115,16 +115,16 @@ int Timing::lastLapTime(MCUint index) const
     return m_times[index].lastLapTime;
 }
 
-bool Timing::newRecordActive(MCUint index) const
+bool Timing::newRecordAchieved(MCUint index) const
 {
     assert(index < m_times.size());
-    return m_times[index].newRecordActive;
+    return m_times[index].newRecordAchieved;
 }
 
-void Timing::setNewRecordActive(MCUint index, bool state)
+void Timing::setNewRecordAchieved(MCUint index, bool state)
 {
     assert(index < m_times.size());
-    m_times[index].newRecordActive = state;
+    m_times[index].newRecordAchieved = state;
 }
 
 void Timing::start()

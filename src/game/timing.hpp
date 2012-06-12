@@ -63,10 +63,10 @@ public:
     int recordTime(MCUint index) const;
 
     //! Returns true, if new record just achieved.
-    bool newRecordActive(MCUint index) const;
+    bool newRecordAchieved(MCUint index) const;
 
     //! Force the state of active new record.
-    void setNewRecordActive(MCUint index, bool state);
+    void setNewRecordAchieved(MCUint index, bool state);
 
     //! Starts the timing.
     void start();
@@ -88,7 +88,7 @@ private:
         , recordLapTime(-1)
         , totalTime(0)
         , lap(0)
-        , newRecordActive(false)
+        , newRecordAchieved(false)
         , raceCompleted(false)
         {}
 
@@ -96,7 +96,7 @@ private:
         int recordLapTime;
         int totalTime;
         int lap;
-        bool newRecordActive;
+        bool newRecordAchieved;
         bool raceCompleted;
     };
 

@@ -120,6 +120,7 @@ void Scene::updateFrame(InputHandler & handler,
 void Scene::updateAnimations()
 {
     m_pStateMachine->update();
+    m_pTimingOverlay->update();
 }
 
 void Scene::updateWorld(float timeStep)

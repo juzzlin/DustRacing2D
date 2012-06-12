@@ -26,12 +26,13 @@
 #include <sstream>
 
 TimingOverlay::TimingOverlay()
-  : m_fontManager(MCTextureFontManager::instance())
-  , m_defaultMonospace(m_fontManager.font("default"))
-  , m_pCar(nullptr)
-  , m_pTiming(nullptr)
-  , m_pRace(nullptr)
-  , m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"})
+: m_fontManager(MCTextureFontManager::instance())
+, m_defaultMonospace(m_fontManager.font("default"))
+, m_pCar(nullptr)
+, m_pTiming(nullptr)
+, m_pRace(nullptr)
+, m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"})
+, m_showRecordTime(true)
 {
 }
 
@@ -181,37 +182,7 @@ void TimingOverlay::render()
 
         // Render the record lap time
         {
-            static int blink   = 0;
-            static int blinked = 0;
-            static bool show   = true;
-
-            // Blink the record time a couple of times if a new record time set.
-            // 100 Hz update rate is assumed here.
-            if (m_pTiming->newRecordActive(m_pCar->index()))
-            {
-                if (blinked < 8)
-                {
-                    blink++;
-                    if (blink > 15)
-                    {
-                        show  = !show;
-                        blink = 0;
-                        blinked++;
-                    }
-                }
-                else
-                {
-                    m_pTiming->setNewRecordActive(m_pCar->index(), false);
-                    blinked = 0;
-                    show = true;
-                }
-            }
-            else
-            {
-                show = true;
-            }
-
-            if (show)
+            if (m_showRecordTime)
             {
                 std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
                 std::stringstream ss;
@@ -227,4 +198,39 @@ void TimingOverlay::render()
             }
         }
     }
+}
+
+bool TimingOverlay::update()
+{
+    // Blink the record time a couple of times if a new record time set.
+    // 60 Hz update rate is assumed here.
+
+    static int blink   = 0;
+    static int blinked = 0;
+
+    if (m_pTiming->newRecordAchieved(m_pCar->index()))
+    {
+        if (blinked < 8)
+        {
+            blink++;
+            if (blink > 15)
+            {
+                m_showRecordTime = !m_showRecordTime;
+                blink = 0;
+                blinked++;
+            }
+        }
+        else
+        {
+            m_pTiming->setNewRecordAchieved(m_pCar->index(), false);
+            blinked = 0;
+            m_showRecordTime = true;
+        }
+    }
+    else
+    {
+        m_showRecordTime = true;
+    }
+
+    return true;
 }
