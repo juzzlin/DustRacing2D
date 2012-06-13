@@ -10,6 +10,8 @@ Game:
 - Install target for CMake
 - Full screen mode
 - One big wall object
+- Too easy to accidentally miss checkpoints
+- Update the code to use VBO's.
 
 Editor:
 
