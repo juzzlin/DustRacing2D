@@ -81,7 +81,7 @@ public:
     };
 
     //! Constructor.
-    Car(MCSurface & surface, MCUint index);
+    Car(MCSurface & surface, MCUint index, bool isHuman);
 
     //! Return the index.
     MCUint index() const;
@@ -146,6 +146,8 @@ public:
     //! Get location of the right rear tire.
     MCVector3dF rightRearTireLocation() const;
 
+    bool isHuman() const;
+
 private:
 
     void doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
@@ -178,6 +180,7 @@ private:
     MCFloat               m_dx, m_dy;
     int                   m_currentRouteIndex;
     int                   m_routeProgression;
+    bool                  m_isHuman;
 
     mutable MCGLRectParticleGroup m_isParticleGroup;
 };

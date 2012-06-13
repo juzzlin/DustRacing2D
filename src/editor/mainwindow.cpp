@@ -121,7 +121,7 @@ void MainWindow::init()
     setWindowTitle(QString(Config::Editor::EDITOR_NAME) + " " +
         Config::Editor::EDITOR_VERSION);
 
-    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     // Read dialog size data
@@ -281,7 +281,7 @@ void MainWindow::updateScale(int value)
 void MainWindow::closeEvent(QCloseEvent * event)
 {
     // Open settings file
-    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     // Save window size
@@ -462,7 +462,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 void MainWindow::openTrack()
 {
     // Load recent path
-    QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP);
@@ -499,7 +499,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         console(QString(tr("Track '%1' opened.").arg(fileName)));
 
         // Save recent path
-        QSettings settings(Config::Editor::QSETTINGS_COMPANY_NAME,
+        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
             Config::Editor::QSETTINGS_SOFTWARE_NAME);
 
         settings.beginGroup(SETTINGS_GROUP);

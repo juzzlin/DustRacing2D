@@ -59,7 +59,7 @@ namespace
     const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -11);
 }
 
-Car::Car(MCSurface & surface, MCUint index)
+Car::Car(MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
 , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION))
@@ -83,6 +83,7 @@ Car::Car(MCSurface & surface, MCUint index)
 , m_dy(0)
 , m_currentRouteIndex(-1)
 , m_routeProgression(0)
+, m_isHuman(isHuman)
 {
     setLayer(Layers::Cars);
     setMass(MASS);
@@ -488,4 +489,9 @@ void Car::setRouteProgression(int value)
 int Car::routeProgression() const
 {
     return m_routeProgression;
+}
+
+bool Car::isHuman() const
+{
+    return m_isHuman;
 }

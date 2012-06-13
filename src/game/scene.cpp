@@ -63,12 +63,12 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
         Car * car = nullptr;
         if (i == 0)
         {
-            car = new Car(MCTextureManager::instance().surface("car001"), i);
+            car = new Car(MCTextureManager::instance().surface("car001"), i, true);
             car->setPower(7500.0);
         }
         else
         {
-            car = new Car(MCTextureManager::instance().surface("car002"), i);
+            car = new Car(MCTextureManager::instance().surface("car002"), i, false);
             m_aiLogic.push_back(new AiLogic(*car));
             car->setPower(7500.0 + i * 250.0);
         }

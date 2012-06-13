@@ -20,8 +20,16 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
+#include "../common/config.hpp"
+
 #include <algorithm>
 #include <cassert>
+#include <QSettings>
+
+namespace
+{
+    const char * SETTINGS_GROUP = "LapRecords";
+}
 
 Race::Race(unsigned int numCars)
   : m_lapCount(0)
@@ -46,6 +54,7 @@ void Race::init()
 
 void Race::start()
 {
+    m_timing.reset();
     m_timing.start();
     m_started = true;
 }
@@ -107,7 +116,12 @@ void Race::updateRouteProgress(Car & car)
 
             m_positions[car.routeProgression()].push_back(car.index());
 
-            m_timing.lapCompleted(car.index());
+            m_timing.lapCompleted(car.index(), car.isHuman());
+
+            if (m_timing.newLapRecordAchieved())
+            {
+                saveLapRecord(m_timing.lapRecord());
+            }
 
             if (m_winnerFinished)
             {
@@ -115,6 +129,31 @@ void Race::updateRouteProgress(Car & car)
             }
         }
     }
+}
+
+void Race::saveLapRecord(int msecs)
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP);
+    settings.setValue(m_pTrack->trackData().name(), msecs);
+    settings.endGroup();
+}
+
+int Race::loadLapRecord() const
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    // Read record time, -1 if not found
+    settings.beginGroup(SETTINGS_GROUP);
+    const int time = settings.value(m_pTrack->trackData().name(), -1).toInt();
+    settings.endGroup();
+
+    return time;
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
@@ -153,6 +192,8 @@ void Race::setTrack(Track & track)
 {
     m_pTrack   = &track;
     m_lapCount = m_pTrack->trackData().lapCount();
+
+    m_timing.setLapRecord(loadLapRecord());
 }
 
 unsigned int Race::lapCount() const

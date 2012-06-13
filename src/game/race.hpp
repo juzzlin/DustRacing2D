@@ -69,6 +69,8 @@ public:
 private:
 
     void updateRouteProgress(Car & car);
+    void saveLapRecord(int msecs);
+    int loadLapRecord() const;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;

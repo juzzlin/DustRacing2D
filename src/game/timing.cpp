@@ -19,13 +19,15 @@
 #include <cassert>
 
 Timing::Timing(MCUint cars, QObject *parent)
-  : QObject(parent)
-  , m_times(cars, Timing::Times())
-  , m_started(false)
+: QObject(parent)
+, m_times(cars, Timing::Times())
+, m_started(false)
+, m_lapRecord(-1)
+, m_newLapRecordAchieved(false)
 {
 }
 
-void Timing::lapCompleted(MCUint index)
+void Timing::lapCompleted(MCUint index, bool isHuman)
 {
     assert(index < m_times.size());
 
@@ -36,12 +38,23 @@ void Timing::lapCompleted(MCUint index)
     times.lastLapTime = elapsed - times.totalTime;
     times.totalTime   = elapsed;
 
-    times.newRecordAchieved = false;
+    // Check if a new personal record achieved.
     if (times.lastLapTime < times.recordLapTime ||
         times.recordLapTime == -1)
     {
-        times.recordLapTime     = times.lastLapTime;
-        times.newRecordAchieved = true;
+        times.recordLapTime = times.lastLapTime;
+    }
+
+    // Check if a new lap record achieved.
+    // Accept new lap records only by human players.
+    m_newLapRecordAchieved = false;
+    if (isHuman)
+    {
+        if (times.lastLapTime < m_lapRecord || m_lapRecord == -1)
+        {
+            m_lapRecord = times.lastLapTime;
+            m_newLapRecordAchieved = true;
+        }
     }
 }
 
@@ -104,6 +117,26 @@ int Timing::recordTime(MCUint index) const
     return m_times[index].recordLapTime;
 }
 
+int Timing::lapRecord() const
+{
+    return m_lapRecord;
+}
+
+void Timing::setLapRecord(int msecs)
+{
+    m_lapRecord = msecs;
+}
+
+bool Timing::newLapRecordAchieved() const
+{
+    return m_newLapRecordAchieved;
+}
+
+void Timing::setNewLapRecordAchieved(bool state)
+{
+    m_newLapRecordAchieved = state;
+}
+
 int Timing::lastLapTime(MCUint index) const
 {
     if (!m_started)
@@ -113,18 +146,6 @@ int Timing::lastLapTime(MCUint index) const
 
     assert(index < m_times.size());
     return m_times[index].lastLapTime;
-}
-
-bool Timing::newRecordAchieved(MCUint index) const
-{
-    assert(index < m_times.size());
-    return m_times[index].newRecordAchieved;
-}
-
-void Timing::setNewRecordAchieved(MCUint index, bool state)
-{
-    assert(index < m_times.size());
-    m_times[index].newRecordAchieved = state;
 }
 
 void Timing::start()
@@ -137,6 +158,18 @@ void Timing::start()
 void Timing::stop()
 {
     m_started = false;
+}
+
+void Timing::reset()
+{
+    m_time                 = QTime(0, 0, 0, 0);
+    m_started              = false;
+    m_newLapRecordAchieved = false;
+
+    for (Timing::Times & time : m_times)
+    {
+        time = Timing::Times();
+    }
 }
 
 std::string Timing::msecsToString(int msec) const

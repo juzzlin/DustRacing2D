@@ -36,7 +36,7 @@ public:
     explicit Timing(MCUint cars, QObject * parent = nullptr);
 
     //! Completes the current lap for the given car.
-    void lapCompleted(MCUint index);
+    void lapCompleted(MCUint index, bool isHuman);
 
     //! Completes the race for the given car.
     void setRaceCompleted(MCUint index, bool state);
@@ -62,17 +62,26 @@ public:
     //! -1 if invalid car or time not set.
     int recordTime(MCUint index) const;
 
-    //! Returns true, if new record just achieved.
-    bool newRecordAchieved(MCUint index) const;
+    //! Return the current lap record or -1 if not set.
+    int lapRecord() const;
 
-    //! Force the state of active new record.
-    void setNewRecordAchieved(MCUint index, bool state);
+    //! Set the current lap record.
+    void setLapRecord(int msecs);
+
+    //! Returns true, if new lap record just achieved.
+    bool newLapRecordAchieved() const;
+
+    //! Force the state of active new lap record.
+    void setNewLapRecordAchieved(bool state);
 
     //! Starts the timing.
     void start();
 
     //! Stops the timing.
     void stop();
+
+    //! Resets the timing.
+    void reset();
 
     //! Converts msecs to string "hh:mm:ss.zzz".
     std::string msecsToString(int msec) const;
@@ -88,21 +97,21 @@ private:
         , recordLapTime(-1)
         , totalTime(0)
         , lap(0)
-        , newRecordAchieved(false)
         , raceCompleted(false)
         {}
 
         int lastLapTime;
-        int recordLapTime;
+        int recordLapTime; // Personal best
         int totalTime;
         int lap;
-        bool newRecordAchieved;
         bool raceCompleted;
     };
 
     std::vector<Timing::Times> m_times;
     QTime m_time;
     bool m_started;
+    int m_lapRecord;
+    bool m_newLapRecordAchieved;
 };
 
 #endif // TIMING_HPP

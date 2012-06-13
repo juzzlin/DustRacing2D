@@ -63,7 +63,7 @@ void TimingOverlay::render()
         const int lap            = m_pTiming->lap(m_pCar->index()) + 1;
         const int currentLapTime = m_pTiming->currentTime(index);
         const int lastLapTime    = m_pTiming->lastLapTime(index);
-        const int recordLapTime  = m_pTiming->recordTime(index);
+        const int recordLapTime  = m_pTiming->lapRecord();
 
         const unsigned int pos   = m_pRace->getPositionOfCar(*m_pCar);
         const unsigned int laps  = m_pRace->lapCount();
@@ -208,7 +208,7 @@ bool TimingOverlay::update()
     static int blink   = 0;
     static int blinked = 0;
 
-    if (m_pTiming->newRecordAchieved(m_pCar->index()))
+    if (m_pTiming->newLapRecordAchieved())
     {
         if (blinked < 8)
         {
@@ -222,7 +222,7 @@ bool TimingOverlay::update()
         }
         else
         {
-            m_pTiming->setNewRecordAchieved(m_pCar->index(), false);
+            m_pTiming->setNewLapRecordAchieved(false);
             blinked = 0;
             m_showRecordTime = true;
         }

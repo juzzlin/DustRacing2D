@@ -25,6 +25,9 @@ public:
 
         //! The base data path.
         static const char * dataPath;
+
+        //! "Company" name used in QSettings.
+        static const char * QSETTINGS_COMPANY_NAME;
     };
 
     //! Editor-specific config data.
@@ -34,9 +37,8 @@ public:
 
         static const char * EDITOR_NAME;
         static const char * EDITOR_VERSION;
-        static const char * QSETTINGS_COMPANY_NAME;
-        static const char * QSETTINGS_SOFTWARE_NAME;
         static const char * MODEL_CONFIG_FILE_NAME;
+        static const char * QSETTINGS_SOFTWARE_NAME;
 
         //! Path to the "select" icon.
         static const char * SELECT_PATH;
@@ -55,7 +57,6 @@ public:
 
         static const char * GAME_NAME;
         static const char * GAME_VERSION;
-        static const char * QSETTINGS_COMPANY_NAME;
         static const char * QSETTINGS_SOFTWARE_NAME;
 
         //! Window width.

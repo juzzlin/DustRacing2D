@@ -21,20 +21,20 @@
 // from the build system.
 const char * Config::Common::dataPath = DATA_PATH;
 
+const char * Config::Common::QSETTINGS_COMPANY_NAME  = "DustRacing";
+
 // **** Editor variables ****
 const char * Config::Editor::SELECT_PATH             = ":/cursor.png";
 const char * Config::Editor::ERASE_PATH              = ":/cross.png";
 const char * Config::Editor::CLEAR_PATH              = ":/clear.png";
-const char * Config::Editor::QSETTINGS_COMPANY_NAME  = "Dust Racing";
-const char * Config::Editor::QSETTINGS_SOFTWARE_NAME = "Editor";
 const char * Config::Editor::EDITOR_NAME             = "Dust Racing Track Editor";
 const char * Config::Editor::EDITOR_VERSION          = "0.2.2";
 const char * Config::Editor::MODEL_CONFIG_FILE_NAME  = "editorModels.conf";
+const char * Config::Editor::QSETTINGS_SOFTWARE_NAME = "Editor";
 
 // **** Game variables ****
-const char       * Config::Game::QSETTINGS_COMPANY_NAME  = "Dust Racing";
-const char       * Config::Game::QSETTINGS_SOFTWARE_NAME = "Game";
 const char       * Config::Game::GAME_NAME               = "Dust Racing";
 const char       * Config::Game::GAME_VERSION            = "0.2.2";
 const unsigned int Config::Game::WINDOW_WIDTH            = 1024;
 const unsigned int Config::Game::WINDOW_HEIGHT           = 768;
+const char       * Config::Game::QSETTINGS_SOFTWARE_NAME = "Game";
