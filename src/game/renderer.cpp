@@ -20,6 +20,7 @@
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCGLScene"
+#include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Core/MCTrigonom"
@@ -51,6 +52,8 @@ Renderer::Renderer(QWidget * parent)
 
 void Renderer::initializeGL()
 {
+    MCLogger().info() << "OpenGL Version: " << glGetString(GL_VERSION);
+
     m_pGLScene->initialize();
 
     if (QGLShader::hasOpenGLShaders(QGLShader::Fragment, context()))
