@@ -64,9 +64,9 @@ void Renderer::initializeGL()
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-        m_pGLScene->resize(
-            viewWidth, viewHeight, Scene::width(), Scene::height(),
-            m_viewAngle);
+    m_pGLScene->resize(
+        viewWidth, viewHeight, Scene::width(), Scene::height(),
+        m_viewAngle);
 }
 
 void Renderer::loadShaders()
