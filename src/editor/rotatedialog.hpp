@@ -13,24 +13,33 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ABOUTDLG_HPP
-#define ABOUTDLG_HPP
+#ifndef ROTATEDIALOG_HPP
+#define ROTATEDIALOG_HPP
 
 #include <QDialog>
 
-//! The about dialog.
-class AboutDlg : public QDialog
+class QGridLayout;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+
+class RotateDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    //! Constructor.
-    explicit AboutDlg(QWidget * parent = 0);
+    explicit RotateDialog(QWidget * parent = 0);
+
+    int angle() const;
 
 private:
 
-    void initWidgets();
+    QGridLayout * m_layout;
+    QPushButton * m_okButton;
+    QPushButton * m_cancelButton;
+    QLineEdit   * m_angleEdit;
+    QLabel      * m_angleLabel;
 };
 
-#endif // ABOUTDLG_HPP
+#endif // ROTATEDIALOG_HPP

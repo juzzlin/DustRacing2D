@@ -56,6 +56,7 @@ MCObject::MCObject(const std::string & typeId)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
+, m_initialAngle(0)
 , pShape(nullptr)
 , damping(0.999)
 , timerEventObjectsIndex(-1)
@@ -90,6 +91,7 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
+, m_initialAngle(0)
 , pShape(nullptr)
 , damping(0.999)
 , timerEventObjectsIndex(-1)
@@ -126,6 +128,7 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_layer(0)
 , m_index(-1)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
+, m_initialAngle(0)
 , pShape(nullptr)
 , damping(0.999)
 , timerEventObjectsIndex(-1)
@@ -926,6 +929,16 @@ void MCObject::setInitialLocation(const MCVector3dF & location)
 const MCVector3dF & MCObject::initialLocation() const
 {
     return m_initialLocation;
+}
+
+void MCObject::setInitialAngle(int angle)
+{
+    m_initialAngle = angle;
+}
+
+int MCObject::initialAngle() const
+{
+    return m_initialAngle;
 }
 
 void MCObject::setXYFriction(MCFloat friction)

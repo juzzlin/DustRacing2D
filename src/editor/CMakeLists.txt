@@ -10,6 +10,7 @@ set(SRC
     newtrackdialog.cpp
     object.cpp
     objectloader.cpp
+    rotatedialog.cpp
     tiletypedialog.cpp
     tileanimator.cpp
     trackdata.cpp
@@ -31,6 +32,7 @@ set(MOC_HDRS
     editorscene.hpp
     mainwindow.hpp
     newtrackdialog.hpp
+    rotatedialog.hpp
     tiletypedialog.hpp
     tileanimator.hpp
     trackpropertiesdialog.hpp)

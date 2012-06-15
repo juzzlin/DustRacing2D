@@ -79,11 +79,12 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     for (unsigned int i = 0; i < trackData->objects().count(); i++)
     {
         QDomElement objectTag = doc.createElement("object");
-        ObjectBase & object = trackData->objects().object(i);
+        Object & object = static_cast<Object &>(trackData->objects().object(i));
         objectTag.setAttribute("category", object.category());
         objectTag.setAttribute("role", object.role());
         objectTag.setAttribute("x", static_cast<int>(object.location().x()));
         objectTag.setAttribute("y", static_cast<int>(object.location().y()));
+        objectTag.setAttribute("o", static_cast<int>(object.rotation()));
         root.appendChild(objectTag);
     }
 
@@ -178,6 +179,7 @@ TrackData * TrackIO::open(QString path)
                     const QString category = tag.attribute("category", "clear");
                     const int     x        = tag.attribute("x", "0").toInt();
                     const int     y        = tag.attribute("y", "0").toInt();
+                    const int      o       = tag.attribute("o", "0").toInt();
 
                     ObjectData model =
                         MainWindow::instance()->objectLoader().getObjectByRole(
@@ -185,10 +187,11 @@ TrackData * TrackIO::open(QString path)
 
                     // Create a new object. QGraphicsScene will take
                     // the ownership eventually.
-                    ObjectBase * object = new Object(category, role,
+                    Object * object = new Object(category, role,
                         QSizeF(model.height, model.width),
                         model.pixmap);
                     object->setLocation(QPointF(x, y));
+                    object->setRotation(o);
                     newData->objects().add(*object);
                 }
             }

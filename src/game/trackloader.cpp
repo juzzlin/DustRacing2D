@@ -164,7 +164,8 @@ void TrackLoader::handleTile(
     // Orientation angle in degrees.
     int o = tag.attribute("o", "0").toInt();
 
-    // Mirror the angle and y-index.
+    // Mirror the angle and y-index, because game has the
+    // y-axis pointing up.
     o = -o;
     j = newData.map().rows() - 1 - j;
 
@@ -265,6 +266,12 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     // Y-coordinate in the world
     const int y = tag.attribute("y", "0").toInt();
 
+    // Angle in degrees
+    int o = tag.attribute("o", "0").toInt();
+
+    // Mirror the angle, because game has y-axis pointing up.
+    o = -o;
+
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
     const int h = newData.map().rows() * TrackTile::TILE_H;
@@ -281,6 +288,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
+        object.setInitialAngle(o);
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -303,6 +311,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
+        object.setInitialAngle(o);
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -315,6 +324,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
             m_textureManager.surface("wall"), x, h - y, wallSize, wallSize, wallSize);
         object->setLayer(Layers::Walls, false);
         object->setInitialLocation(MCVector3dF(x, h - y, 0));
+        object->setInitialAngle(o);
         object->setMass(5000);
         object->setXYFriction(0.5);
         object->setDamping(0.9);

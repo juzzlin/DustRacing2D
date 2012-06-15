@@ -24,6 +24,7 @@
 #include "mainwindow.hpp"
 #include "object.hpp"
 #include "objectloader.hpp"
+#include "rotatedialog.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
@@ -39,7 +40,8 @@ EditorView::EditorView(QWidget * parent)
 , m_setDrivingLineHintTop(nullptr)
 , m_setDrivingLineHintBottom(nullptr)
 {
-    createContextMenu();
+    createTileContextMenu();
+    createObjectContextMenu();
 }
 
 void EditorView::mouseMoveEvent(QMouseEvent * event)
@@ -78,81 +80,87 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
     }
 }
 
-void EditorView::createContextMenu()
+void EditorView::createTileContextMenu()
 {
-    QChar degreeSign(176);
+    const QChar degreeSign(176);
+    const QString dummy1(QString(QWidget::tr("Rotate 90")) +
+        degreeSign + QWidget::tr(" CW.."));
 
-    QString dummy1(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CW.."));
+    QAction * rotate90CW = new QAction(dummy1, &m_tileContextMenu);
+    QObject::connect(rotate90CW, SIGNAL(triggered()), this, SLOT(doRotateTile90CW()));
 
-    QAction * rotate90CW = new QAction(dummy1, &m_menu);
-    QObject::connect(rotate90CW, SIGNAL(triggered()), this,
-                     SLOT(doRotate90CW()));
+    const QString dummy2(QString(QWidget::tr("Rotate 90")) +
+        degreeSign + QWidget::tr(" CCW.."));
 
-    QString dummy2(QString(QWidget::tr("Rotate 90")) +
-                   degreeSign + QWidget::tr(" CCW.."));
+    QAction * rotate90CCW = new QAction(dummy2, &m_tileContextMenu);
+    QObject::connect(rotate90CCW, SIGNAL(triggered()), this, SLOT(doRotateTile90CCW()));
 
-    QAction * rotate90CCW = new QAction(dummy2, &m_menu);
-    QObject::connect(rotate90CCW, SIGNAL(triggered()), this,
-                     SLOT(doRotate90CCW()));
-
-    m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_menu);
-    QObject::connect(m_clearComputerHint, SIGNAL(triggered()), this,
-                     SLOT(doClearComputerHint()));
+    m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_tileContextMenu);
+    QObject::connect(m_clearComputerHint, SIGNAL(triggered()), this, SLOT(doClearComputerHint()));
 
     m_setComputerHintFirstBeforeCorner = new QAction(
-        QWidget::tr("Set computer hint 'first before corner'.."), &m_menu);
+        QWidget::tr("Set computer hint 'first before corner'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintFirstBeforeCorner, SIGNAL(triggered()), this,
-                     SLOT(doSetComputerHintFirstBeforeCorner()));
+        SLOT(doSetComputerHintFirstBeforeCorner()));
 
     m_setComputerHintSecondBeforeCorner = new QAction(
-        QWidget::tr("Set computer hint 'second before corner'.."), &m_menu);
+        QWidget::tr("Set computer hint 'second before corner'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
-                     SLOT(doSetComputerHintSecondBeforeCorner()));
+        SLOT(doSetComputerHintSecondBeforeCorner()));
 
-    m_clearDrivingLineHintH = new QAction(QWidget::tr("Clear hor driving line hint"), &m_menu);
+    m_clearDrivingLineHintH = new QAction(QWidget::tr("Clear hor driving line hint"), &m_tileContextMenu);
     QObject::connect(m_clearDrivingLineHintH, SIGNAL(triggered()), this,
-                     SLOT(doClearDrivingLineHintH()));
+        SLOT(doClearDrivingLineHintH()));
 
-    m_clearDrivingLineHintV = new QAction(QWidget::tr("Clear ver driving line hint"), &m_menu);
+    m_clearDrivingLineHintV = new QAction(QWidget::tr("Clear ver driving line hint"), &m_tileContextMenu);
     QObject::connect(m_clearDrivingLineHintV, SIGNAL(triggered()), this,
-                     SLOT(doClearDrivingLineHintV()));
+        SLOT(doClearDrivingLineHintV()));
 
     m_setDrivingLineHintLeft = new QAction(
-        QWidget::tr("Set driving line hint 'left'.."), &m_menu);
+        QWidget::tr("Set driving line hint 'left'.."), &m_tileContextMenu);
     QObject::connect(m_setDrivingLineHintLeft, SIGNAL(triggered()), this,
-                     SLOT(doSetDrivingLineHintLeft()));
+        SLOT(doSetDrivingLineHintLeft()));
 
     m_setDrivingLineHintRight = new QAction(
-        QWidget::tr("Set driving line hint 'right'.."), &m_menu);
+        QWidget::tr("Set driving line hint 'right'.."), &m_tileContextMenu);
     QObject::connect(m_setDrivingLineHintRight, SIGNAL(triggered()), this,
-                     SLOT(doSetDrivingLineHintRight()));
+        SLOT(doSetDrivingLineHintRight()));
 
     m_setDrivingLineHintTop = new QAction(
-        QWidget::tr("Set driving line hint 'top'.."), &m_menu);
+        QWidget::tr("Set driving line hint 'top'.."), &m_tileContextMenu);
     QObject::connect(m_setDrivingLineHintTop, SIGNAL(triggered()), this,
-                     SLOT(doSetDrivingLineHintTop()));
+        SLOT(doSetDrivingLineHintTop()));
 
     m_setDrivingLineHintBottom = new QAction(
-        QWidget::tr("Set driving line hint 'bottom'.."), &m_menu);
+        QWidget::tr("Set driving line hint 'bottom'.."), &m_tileContextMenu);
     QObject::connect(m_setDrivingLineHintBottom, SIGNAL(triggered()), this,
-                     SLOT(doSetDrivingLineHintBottom()));
+        SLOT(doSetDrivingLineHintBottom()));
 
     // Populate the menu
-    m_menu.addAction(rotate90CW);
-    m_menu.addAction(rotate90CCW);
-    m_menu.addSeparator();
-    m_menu.addAction(m_clearComputerHint);
-    m_menu.addAction(m_setComputerHintFirstBeforeCorner);
-    m_menu.addAction(m_setComputerHintSecondBeforeCorner);
-    m_menu.addSeparator();
-    m_menu.addAction(m_clearDrivingLineHintH);
-    m_menu.addAction(m_setDrivingLineHintLeft);
-    m_menu.addAction(m_setDrivingLineHintRight);
-    m_menu.addSeparator();
-    m_menu.addAction(m_clearDrivingLineHintV);
-    m_menu.addAction(m_setDrivingLineHintTop);
-    m_menu.addAction(m_setDrivingLineHintBottom);
+    m_tileContextMenu.addAction(rotate90CW);
+    m_tileContextMenu.addAction(rotate90CCW);
+    m_tileContextMenu.addSeparator();
+    m_tileContextMenu.addAction(m_clearComputerHint);
+    m_tileContextMenu.addAction(m_setComputerHintFirstBeforeCorner);
+    m_tileContextMenu.addAction(m_setComputerHintSecondBeforeCorner);
+    m_tileContextMenu.addSeparator();
+    m_tileContextMenu.addAction(m_clearDrivingLineHintH);
+    m_tileContextMenu.addAction(m_setDrivingLineHintLeft);
+    m_tileContextMenu.addAction(m_setDrivingLineHintRight);
+    m_tileContextMenu.addSeparator();
+    m_tileContextMenu.addAction(m_clearDrivingLineHintV);
+    m_tileContextMenu.addAction(m_setDrivingLineHintTop);
+    m_tileContextMenu.addAction(m_setDrivingLineHintBottom);
+}
+
+void EditorView::createObjectContextMenu()
+{
+    const QString dummy1(QString(QWidget::tr("Rotate..")));
+    QAction * rotate = new QAction(dummy1, &m_tileContextMenu);
+    QObject::connect(rotate, SIGNAL(triggered()), this, SLOT(doRotateObject()));
+
+    // Populate the menu
+    m_objectContextMenu.addAction(rotate);
 }
 
 void EditorView::mousePressEvent(QMouseEvent * event)
@@ -168,7 +176,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             // Handle right button click
             if (event->button() == Qt::RightButton)
             {
-                // Nothing to do currently
+                handleRightButtonClickOnObject(*object);
             }
             // Handle left button click
             else if (event->button() == Qt::LeftButton)
@@ -366,7 +374,14 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
 
     // Show the context menu
     QPoint globalPos = mapToGlobal(m_clickedPos);
-    m_menu.exec(globalPos);
+    m_tileContextMenu.exec(globalPos);
+}
+
+void EditorView::handleRightButtonClickOnObject(Object &)
+{
+    // Show the context menu
+    QPoint globalPos = mapToGlobal(m_clickedPos);
+    m_objectContextMenu.exec(globalPos);
 }
 
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
@@ -438,7 +453,7 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
     }
 }
 
-void EditorView::doRotate90CW()
+void EditorView::doRotateTile90CW()
 {
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
@@ -447,12 +462,25 @@ void EditorView::doRotate90CW()
     }
 }
 
-void EditorView::doRotate90CCW()
+void EditorView::doRotateTile90CCW()
 {
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->rotate90CCW();
+    }
+}
+
+void EditorView::doRotateObject()
+{
+    RotateDialog dialog;
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        if (Object * object =
+            dynamic_cast<Object *>(scene()->itemAt(mapToScene(m_clickedPos))))
+        {
+            object->setRotation(dialog.angle());
+        }
     }
 }
 

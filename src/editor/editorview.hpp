@@ -49,8 +49,9 @@ protected:
 
 private slots:
 
-    void doRotate90CW();
-    void doRotate90CCW();
+    void doRotateTile90CW();
+    void doRotateTile90CCW();
+    void doRotateObject();
     void doClearComputerHint();
     void doSetComputerHintFirstBeforeCorner();
     void doSetComputerHintSecondBeforeCorner();
@@ -63,17 +64,20 @@ private slots:
 
 private:
 
-    void createContextMenu();
+    void createTileContextMenu();
+    void createObjectContextMenu();
     void handleLeftButtonClickOnTile(TrackTile & tile);
     void handleRightButtonClickOnTile(TrackTile & tile);
-    void handleLeftButtonClickOnObject(Object & tile);
+    void handleLeftButtonClickOnObject(Object & object);
+    void handleRightButtonClickOnObject(Object & object);
     void handleTileDragRelease(QMouseEvent * event);
     void handleObjectDragRelease(QMouseEvent * event);
     void doSetDrivingLineHintH(TrackTileBase::DrivingLineHintH hint);
     void doSetDrivingLineHintV(TrackTileBase::DrivingLineHintV hint);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 
-    QMenu     m_menu;
+    QMenu     m_tileContextMenu;
+    QMenu     m_objectContextMenu;
     QPoint    m_clickedPos;
     QPointF   m_clickedScenePos;
     QAction * m_clearComputerHint;

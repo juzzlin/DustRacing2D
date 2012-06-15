@@ -385,6 +385,12 @@ public:
     //! Get initial location.
     const MCVector3dF & initialLocation() const;
 
+    //! Set initial angle. This won't result in any transformations.
+    void setInitialAngle(int angle);
+
+    //! Get initial angle.
+    int initialAngle() const;
+
     //! Set the damping factor used in physics calculations. The default is 0.999.
     //! Use smaller value if the object is too unstable.
     void setDamping(MCFloat value);
@@ -469,6 +475,7 @@ private:
     MCVector3dF m_velocity;
     MCVector3dF linearImpulse;
     MCVector3dF m_initialLocation;
+    int m_initialAngle;
     MCVector3dF m_location;
     MCVector3dF m_forces;
     MCVector2dF centerOfRotation;

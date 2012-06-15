@@ -353,6 +353,7 @@ void Scene::addTrackObjectsToWorld()
         MCObject & mcObject = trackObject.object();
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
+        mcObject.rotate(mcObject.initialAngle());
     }
 }
 
