@@ -13,10 +13,6 @@ Game:
 - Too easy to accidentally miss checkpoints
 - Update the code to use VBO's.
 
-Editor:
-
-- Possibility to rotate objects
-
 Content:
 
 - More tracks
