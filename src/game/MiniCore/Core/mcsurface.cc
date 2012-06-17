@@ -24,7 +24,13 @@
 
 #include <cassert>
 
-MCSurface::HandleToList MCSurface::m_handleToList;
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+namespace
+{
+static const int gNumVertices = 4;
+}
 
 MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 : m_handle(newHandle)
@@ -40,17 +46,58 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
 , m_useAlphaBlend(false)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
-, m_listIndex(0)
 {
+    // Init vertice data for a quad
+    const MCGLVertex vertices[gNumVertices] =
+    {
+        {-m_w2, -m_h2, 0},
+        {-m_w2,  m_h2, 0},
+        { m_w2,  m_h2, 0},
+        { m_w2, -m_h2, 0}
+    };
+
+    const MCGLVertex normals[] =
+    {
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1}
+    };
+
+    const GLfloat texCoords[] =
+    {
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0
+    };
+
+    const GLfloat colors[] =
+    {
+        1, 1, 1,
+        1, 1, 1,
+        1, 1, 1,
+        1, 1, 1
+    };
+
+    glGenBuffers(VBOTypes, m_vbos);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(MCGLVertex) * gNumVertices, vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GLfloat) * gNumVertices * 2, texCoords, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GLfloat) * gNumVertices * 3, colors, GL_STATIC_DRAW);
 }
 
 MCSurface::~MCSurface()
 {
-    if (m_listIndex)
-    {
-        glDeleteLists(m_listIndex, 1);
-        m_handleToList.erase(m_handle);
-    }
+    glDeleteBuffers(VBOTypes, m_vbos);
 }
 
 void MCSurface::setCenter(MCVector2dFR center)
@@ -118,38 +165,28 @@ MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
-void MCSurface::callList()
+void MCSurface::renderVBOs()
 {
-    if (!m_listIndex)
-    {
-        if (m_handleToList.find(m_handle) == m_handleToList.end())
-        {
-            m_listIndex = glGenLists(1);
-            assert(m_listIndex != 0);
-            m_handleToList[m_handle] = m_listIndex;
-
-            glNewList(m_listIndex, GL_COMPILE);
-            glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, m_handle);
-            glBegin(GL_QUADS);
-            glNormal3i(0, 0, 1);
-            glColor3f(1.0, 1.0, 1.0);
-            glTexCoord2i(0, 0);
-            glVertex3f(-m_w2, -m_h2, 0);
-            glTexCoord2i(0, 1);
-            glVertex3f(-m_w2, m_h2, 0);
-            glTexCoord2i(1, 1);
-            glVertex3f(m_w2, m_h2, 0);
-            glTexCoord2i(1, 0);
-            glVertex3f(m_w2, -m_h2, 0);
-            glEnd();
-            glEndList();
-        }
-    }
-    else
-    {
-        glCallList(m_listIndex);
-    }
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
+    glNormalPointer(GL_FLOAT, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    glColorPointer(3, GL_FLOAT, 0, 0);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_handle);
+    glDrawArrays(GL_QUADS, 0, gNumVertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
@@ -177,7 +214,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
     doAlphaTest();
     doAlphaBlend();
 
-    callList();
+    renderVBOs();
 
     glPopMatrix();
     glPopAttrib();
@@ -212,7 +249,7 @@ void MCSurface::renderScaled(
     doAlphaTest();
     doAlphaBlend();
 
-    callList();
+    renderVBOs();
 
     glPopMatrix();
     glPopAttrib();
@@ -244,7 +281,7 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
 
-    callList();
+    renderVBOs();
 
     glPopMatrix();
     glPopAttrib();
@@ -279,7 +316,7 @@ void MCSurface::renderShadowScaled(
 
     glScaled(wr / m_w2, hr / m_h2, 1.0);
 
-    callList();
+    renderVBOs();
 
     glPopMatrix();
     glPopAttrib();

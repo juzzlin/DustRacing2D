@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions 
 
 # This is the main data path given to the game and editor binaries.
 add_definitions(-DDATA_PATH="./data")
+add_definitions(-DGL_GLEXT_PROTOTYPES)
 
 # Find Qt4
 find_package(Qt4 4.7.0 REQUIRED)

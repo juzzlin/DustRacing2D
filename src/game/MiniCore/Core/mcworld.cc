@@ -133,6 +133,10 @@ void MCWorld::render(MCCamera * pCamera)
     static LayerHash::iterator end;
 
     glPushAttrib(GL_ENABLE_BIT);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -175,11 +179,21 @@ void MCWorld::render(MCCamera * pCamera)
         }
     }
 
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
     glPopAttrib();
 }
 
 void MCWorld::renderShadows(MCCamera * pCamera)
 {
+    glPushAttrib(GL_ENABLE_BIT);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
     const MCUint i2 = objs.size();
     for (MCUint i = 0; i < i2; i++)
     {
@@ -207,6 +221,12 @@ void MCWorld::renderShadows(MCCamera * pCamera)
             object.renderShadow(pCamera);
         }
     }
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glPopAttrib();
 }
 
 MCWorld & MCWorld::instance()

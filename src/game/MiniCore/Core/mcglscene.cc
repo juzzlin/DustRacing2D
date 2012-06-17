@@ -30,12 +30,12 @@ MCGLScene::MCGLScene()
 void MCGLScene::initialize()
 {
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glClearDepth(1.0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearDepth(1.0);
 }
 
 void MCGLScene::resize(

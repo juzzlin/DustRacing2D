@@ -23,12 +23,12 @@
 #include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcbbox.hh"
+#include "mcglvertex.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
 #include <cmath>
 #include <string>
-#include <unordered_map>
 
 #include <GL/gl.h>
 
@@ -143,6 +143,16 @@ private:
     DISABLE_ASSI(MCSurface);
 
     void callList();
+    void renderVBOs();
+
+    enum VBOType
+    {
+        VBOVertex,
+        VBONormal,
+        VBOTexture,
+        VBOColor,
+        VBOTypes
+    };
 
     GLuint m_handle;
     MCFloat m_w;
@@ -157,9 +167,7 @@ private:
     bool m_useAlphaBlend;
     GLenum m_src;
     GLenum m_dst;
-    GLuint m_listIndex;
-    typedef std::unordered_map<GLuint, GLuint> HandleToList;
-    static HandleToList m_handleToList;
+    GLuint m_vbos[VBOTypes];
 };
 
 #endif // MCSURFACE_HH
