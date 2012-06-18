@@ -23,7 +23,6 @@
 #include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcbbox.hh"
-#include "mcglvertex.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 

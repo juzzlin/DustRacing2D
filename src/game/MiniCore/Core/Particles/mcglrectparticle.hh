@@ -51,6 +51,14 @@ public:
 
 private:
 
+    enum VBOType
+    {
+        VBOVertex,
+        VBONormal,
+        VBOColor,
+        VBOTypes
+    };
+
     //! Constructor.
     MCGLRectParticle();
 
@@ -69,6 +77,10 @@ private:
     //! Used by MCGLRectParticleGroup.
     void setGroup(MCGLRectParticleGroup * group);
 
+    //! Set current alpha, doesn't affect the initial alpha
+    //! set by setColor().
+    void setAlpha(MCFloat a);
+
     //! Recycler object
     static MCRecycler<MCGLRectParticle> m_recycler;
     friend class MCRecycler<MCGLRectParticle>;
@@ -77,9 +89,8 @@ private:
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
     MCFloat m_r, m_g, m_b, m_a;
+    GLuint m_vbos[VBOTypes];
     MCGLRectParticleGroup * m_group;
-    static GLuint m_listIndex;
-    static GLuint m_listIndex2;
 };
 
 #endif // MCGLRECTPARTICLE_HH

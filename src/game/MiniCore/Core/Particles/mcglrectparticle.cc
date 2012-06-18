@@ -18,14 +18,20 @@
 //
 
 #include "mcglrectparticle.hh"
+#include "../mcglvertex.hh"
 #include "../mccamera.hh"
 
 #include <GL/gl.h>
+#include <GL/glext.h>
+
 #include <cassert>
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
-GLuint MCGLRectParticle::m_listIndex  = 0;
-GLuint MCGLRectParticle::m_listIndex2 = 0;
+
+namespace
+{
+static const int gNumVertices = 4;
+}
 
 MCGLRectParticle::MCGLRectParticle()
 : m_r(1.0)
@@ -36,15 +42,47 @@ MCGLRectParticle::MCGLRectParticle()
 {
     // Disable shadow by default
     setHasShadow(false);
+
+    // Init vertice data for a quad
+    const MCGLVertex vertices[gNumVertices] =
+    {
+        {-1, -1, 0},
+        {-1,  1, 0},
+        { 1,  1, 0},
+        { 1, -1, 0}
+    };
+
+    const MCGLVertex normals[gNumVertices] =
+    {
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1}
+    };
+
+    const GLfloat colors[] =
+    {
+        m_r, m_g, m_b, m_a,
+        m_r, m_g, m_b, m_a,
+        m_r, m_g, m_b, m_a,
+        m_r, m_g, m_b, m_a
+    };
+
+    glGenBuffers(VBOTypes, m_vbos);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(MCGLVertex) * gNumVertices, vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GLfloat) * gNumVertices * 4, colors, GL_DYNAMIC_DRAW);
 }
 
 MCGLRectParticle::~MCGLRectParticle()
 {
-    if (MCGLRectParticle::m_listIndex)
-    {
-        glDeleteLists(MCGLRectParticle::m_listIndex, 1);
-        MCGLRectParticle::m_listIndex = 0;
-    }
+    glDeleteBuffers(VBOTypes, m_vbos);
 }
 
 void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
@@ -53,28 +91,55 @@ void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
     m_g = g;
     m_b = b;
     m_a = a;
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    if (pColorData)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            const int offset = (i << 2);
+            pColorData[offset + 0] = r;
+            pColorData[offset + 1] = g;
+            pColorData[offset + 2] = b;
+            pColorData[offset + 3] = a;
+        }
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+}
+
+void MCGLRectParticle::setAlpha(MCFloat a)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    if (pColorData)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            pColorData[(i << 2) + 3] = a;
+        }
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
 }
 
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
     // Disable texturing
-    if (!m_listIndex2)
-    {
-        m_listIndex2 = glGenLists(1);
-        assert(m_listIndex2 != 0);
-        glNewList(m_listIndex2, GL_COMPILE);
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEndList();
-    }
-    else
-    {
-        glCallList(m_listIndex2);
-    }
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
     renderInner(pCamera);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
 
     glPopAttrib();
 }
@@ -86,23 +151,18 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     MCFloat x = location().i();
     MCFloat y = location().j();
 
-    if (pCamera) {
+    if (pCamera)
+    {
         pCamera->mapToCamera(x, y);
     }
 
     glTranslated(x, y, location().k());
-
-    // Rotate
-    if (angle() > 0)
-    {
-        glRotated(angle(), 0, 0, 1);
-    }
+    glRotated(angle(), 0, 0, 1);
 
     // Scale alpha if fading out
-    MCFloat alpha = m_a;
     if (animationStyle() == FadeOut)
     {
-        alpha *= scale();
+        setAlpha(m_a * scale());
     }
 
     // Scale radius if fading out
@@ -114,27 +174,15 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
 
     if (r > 0)
     {
-        glColor4f(m_r, m_g, m_b, alpha);
         glScaled(r, r, 1.0);
-
-        if (!m_listIndex)
-        {
-            m_listIndex = glGenLists(1);
-            assert(m_listIndex != 0);
-            glNewList(m_listIndex, GL_COMPILE);
-            glNormal3i(0, 0, 1);
-            glBegin(GL_QUADS);
-            glVertex2f(-1,  1);
-            glVertex2f( 1,  1);
-            glVertex2f( 1, -1);
-            glVertex2f(-1, -1);
-            glEnd();
-            glEndList();
-        }
-        else
-        {
-            glCallList(m_listIndex);
-        }
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+        glVertexPointer(3, GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
+        glNormalPointer(GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+        glColorPointer(4, GL_FLOAT, 0, 0);
+        glDrawArrays(GL_QUADS, 0, gNumVertices);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     glPopMatrix();

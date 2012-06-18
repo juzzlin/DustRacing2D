@@ -20,6 +20,7 @@
 #include "mcsurface.hh"
 #include "mccamera.hh"
 #include "mcbbox.hh"
+#include "mcglvertex.hh"
 #include "mctrigonom.hh"
 
 #include <cassert>
