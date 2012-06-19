@@ -25,8 +25,6 @@
 
 #include <cassert>
 
-#include <GL/gl.h>
-
 MCUint MCRectShape::m_typeID = MCShape::registerType();
 
 MCRectShape::MCRectShape(MCShapeView * pView, MCFloat width, MCFloat height)
@@ -152,35 +150,6 @@ MCVector2dF MCRectShape::contactNormal(const MCSegmentF &, const MCEdgeF & edge)
     return MCVector2dF(normal).normalizedFast();
 }
 
-void MCRectShape::renderShapeOutline(MCCamera * pCamera)
-{
-    // This code is shitty and only for debug purposes.
-
-    glPushAttrib(GL_ENABLE_BIT);
-
-    for (int i = 0; i < 4; i++)
-    {
-        MCFloat x = m_obbox.vertex(i).i();
-        MCFloat y = m_obbox.vertex(i).j();
-
-        if (pCamera)
-        {
-            pCamera->mapToCamera(x, y);
-        }
-
-        glPointSize(4);
-        glPushMatrix();
-        glTranslated(x, y, 0.0);
-        glColor4f(1.0, 0.0, 0.0, 1.0);
-        glBegin(GL_POINTS);
-        glVertex3f(0.0, 0.0, 0.0);
-        glEnd();
-        glPopMatrix();
-    }
-
-    glPopAttrib();
-}
-
 MCUint MCRectShape::typeID()
 {
     return m_typeID;
@@ -207,23 +176,11 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
 void MCRectShape::render(MCCamera * pCamera)
 {
     MCShape::render(pCamera);
-
-    // Render outline for debug purposes
-    if (parent().renderShapeOutline())
-    {
-        renderShapeOutline(pCamera);
-    }
 }
 
 void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
 {
     MCShape::renderScaled(wr, hr, pCamera);
-
-    // Render outline for debug purposes
-    if (parent().renderShapeOutline())
-    {
-        renderShapeOutline(pCamera);
-    }
 }
 
 MCFloat MCRectShape::radius() const

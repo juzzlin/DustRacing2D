@@ -100,7 +100,6 @@ private:
 
     static MCUint m_typeID;
     inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
-    void renderShapeOutline(MCCamera * pCamera);
     MCOBBox<MCFloat> m_obbox;
     MCFloat m_momentOfInertiaFactor;
     MCFloat m_radius;
