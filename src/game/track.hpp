@@ -21,10 +21,6 @@
 #include "MiniCore/Core/MCBBox"
 #include "MiniCore/Core/MCTypes"
 
-#include <unordered_map>
-
-#include <GL/gl.h>
-
 class TrackData;
 class TrackTile;
 class MCCamera;
@@ -70,13 +66,9 @@ private:
     void calculateVisibleIndices(const MCBBox<int> & r,
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
-    void renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & surface) const;
-
     TrackData * m_pTrackData;
     MCUint m_rows, m_cols, m_width, m_height;
     MCFloat m_scale;
-    typedef std::unordered_map<GLuint, GLuint> HandleToList;
-    mutable HandleToList m_handleToList;
 };
 
 #endif // TRACK_HPP

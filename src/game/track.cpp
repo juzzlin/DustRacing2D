@@ -20,8 +20,7 @@
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
-#include <QImage>
-#include <QGLWidget>
+
 #include <cassert>
 
 Track::Track(TrackData * pTrackData)
@@ -98,15 +97,10 @@ void Track::render(MCCamera * pCamera)
     MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
-    // Set the default color
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
 
-    glNormal3f(0.0, 0.0, 1.0);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glEnable(GL_TEXTURE_2D);
+    MCSurface::enableClientState(true);
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -121,9 +115,11 @@ void Track::render(MCCamera * pCamera)
             {
                 if (MCSurface * pSurface = pTile->surface())
                 {
-                    renderTile(
-                        MCFloat(x) - cameraBox.x1(), MCFloat(y) - cameraBox.y1(), 0,
-                        pTile->rotation(), *pSurface);
+                    pSurface->renderScaled(
+                        pCamera,
+                        MCVector3dF(x + w / 2, y + h / 2, 0), m_scale * w / 2, m_scale * h / 2,
+                        pTile->rotation(),
+                        false); // Manually enable/disable client states.
                 }
             }
 
@@ -132,44 +128,8 @@ void Track::render(MCCamera * pCamera)
 
         y += h;
     }
-}
 
-void Track::renderTile(MCFloat x, MCFloat y, MCFloat z, int angle, MCSurface & surface) const
-{
-    static const int w2 = TrackTile::TILE_W / 2;
-    static const int h2 = TrackTile::TILE_H / 2;
-
-    glPushMatrix();
-    glTranslated(x + w2, y + h2, z);
-    glRotated(angle, 0, 0, 1);
-    glScaled(m_scale, m_scale, 0.0);
-
-    GLuint listFound = m_handleToList[surface.handle()];
-    if (listFound == 0)
-    {
-        GLuint listIndex = glGenLists(1);
-        assert(listIndex != 0);
-        m_handleToList[surface.handle()] = listIndex;
-        glNewList(listIndex, GL_COMPILE);
-        glBindTexture(GL_TEXTURE_2D, surface.handle());
-        glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);
-        glVertex2i(-w2, -h2);
-        glTexCoord2i(0, 1);
-        glVertex2i(-w2, h2);
-        glTexCoord2i(1, 1);
-        glVertex2i(w2, h2);
-        glTexCoord2i(1, 0);
-        glVertex2i(w2, -h2);
-        glEnd();
-        glEndList();
-    }
-    else
-    {
-        glCallList(listFound);
-    }
-
-    glPopMatrix();
+    MCSurface::enableClientState(false);
 }
 
 bool Track::update()
@@ -194,12 +154,5 @@ void Track::reset()
 
 Track::~Track()
 {
-    auto i = m_handleToList.begin();
-    while (i != m_handleToList.end())
-    {
-        glDeleteLists(i->second, 1);
-        i++;
-    }
-
     delete m_pTrackData;
 }

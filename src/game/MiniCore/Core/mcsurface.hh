@@ -137,7 +137,7 @@ public:
      *  This can be used to save some function calls when rendering multiple surfaces.
      *  \see render()
      */
-    void enableClientState(bool enable);
+    static void enableClientState(bool enable);
 
     //! Get OpenGL texture handle
     GLuint handle() const;
