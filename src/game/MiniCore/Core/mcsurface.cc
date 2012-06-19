@@ -21,6 +21,7 @@
 #include "mccamera.hh"
 #include "mcbbox.hh"
 #include "mcglvertex.hh"
+#include "mcgltexcoord.hh"
 #include "mctrigonom.hh"
 
 #include <cassert>
@@ -28,17 +29,17 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
-namespace
-{
-static const int gNumVertices = 4;
-}
+static const int gNumVertices           = 4;
+static const int gNumVertexComponents   = 3;
+static const int gNumColorComponents    = 3;
+static const int gNumTexCoordComponents = 2;
 
-MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
-: m_handle(newHandle)
-, m_w(newWidth)
-, m_w2(newWidth / 2)
-, m_h(newHeight)
-, m_h2(newHeight / 2)
+MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
+: m_handle(handle)
+, m_w(width)
+, m_w2(width / 2)
+, m_h(height)
+, m_h2(height / 2)
 , m_center(m_w2, m_h2)
 , m_centerSet(false)
 , m_useAlphaTest(false)
@@ -57,7 +58,7 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
         { m_w2, -m_h2, 0}
     };
 
-    const MCGLVertex normals[] =
+    const MCGLVertex normals[gNumVertices] =
     {
         {0, 0, 1},
         {0, 0, 1},
@@ -65,15 +66,15 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
         {0, 0, 1}
     };
 
-    const GLfloat texCoords[] =
+    const MCGLTexCoord texCoords[gNumVertices] =
     {
-        0, 0,
-        0, 1,
-        1, 1,
-        1, 0
+        {0, 0},
+        {0, 1},
+        {1, 1},
+        {1, 0}
     };
 
-    const GLfloat colors[] =
+    const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
         1, 1, 1,
         1, 1, 1,
@@ -81,6 +82,58 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
         1, 1, 1
     };
 
+    initVBOs(vertices, normals, texCoords, colors);
+}
+
+MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
+: m_handle(handle)
+, m_w(width)
+, m_w2(width / 2)
+, m_h(height)
+, m_h2(height / 2)
+, m_center(m_w2, m_h2)
+, m_centerSet(false)
+, m_useAlphaTest(false)
+, m_alphaFunc(GL_ALWAYS)
+, m_alphaThreshold(0.0)
+, m_useAlphaBlend(false)
+, m_src(GL_SRC_ALPHA)
+, m_dst(GL_ONE_MINUS_SRC_ALPHA)
+{
+    // Init vertice data for a quad
+    const MCGLVertex vertices[gNumVertices] =
+    {
+        {-m_w2, -m_h2, 0},
+        {-m_w2,  m_h2, 0},
+        { m_w2,  m_h2, 0},
+        { m_w2, -m_h2, 0}
+    };
+
+    const MCGLVertex normals[gNumVertices] =
+    {
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1}
+    };
+
+    const GLfloat colors[gNumVertices * gNumColorComponents] =
+    {
+        1, 1, 1,
+        1, 1, 1,
+        1, 1, 1,
+        1, 1, 1
+    };
+
+    initVBOs(vertices, normals, texCoords, colors);
+}
+
+void MCSurface::initVBOs(
+    const MCGLVertex   * vertices,
+    const MCGLVertex   * normals,
+    const MCGLTexCoord * texCoords,
+    const GLfloat      * colors)
+{
     glGenBuffers(VBOTypes, m_vbos);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
     glBufferData(GL_ARRAY_BUFFER,
@@ -90,10 +143,11 @@ MCSurface::MCSurface(GLuint newHandle, MCFloat newWidth, MCFloat newHeight)
         sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * 2, texCoords, GL_STATIC_DRAW);
+        sizeof(MCGLTexCoord) * gNumVertices, texCoords, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * 3, colors, GL_STATIC_DRAW);
+        sizeof(GLfloat) * gNumVertices * gNumColorComponents,
+        colors, GL_STATIC_DRAW);
 }
 
 MCSurface::~MCSurface()
@@ -174,13 +228,13 @@ void MCSurface::renderVBOs(bool autoClientState)
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
     glNormalPointer(GL_FLOAT, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    glColorPointer(3, GL_FLOAT, 0, 0);
+    glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_handle);
     glDrawArrays(GL_QUADS, 0, gNumVertices);

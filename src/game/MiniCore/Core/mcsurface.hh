@@ -34,6 +34,8 @@
 using std::string;
 
 class MCCamera;
+class MCGLTexCoord;
+class MCGLVertex;
 class MCSurfaceImpl;
 
 /*! MCSurface is a renderable object bound to an OpenGL texture handle.
@@ -49,6 +51,13 @@ public:
     //! \param width  Desired width of the surface when rendered 1:1.
     //! \param height Desired height of the surface when rendered 1:1.
     MCSurface(GLuint handle, MCFloat width, MCFloat height);
+
+    //! Constructor.
+    //! \param handle Handle of the corresponding OpenGL texture.
+    //! \param width  Desired width of the surface when rendered 1:1.
+    //! \param height Desired height of the surface when rendered 1:1.
+    //! \param texCoords Array including texture coordinates of the four vertices.
+    MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
     virtual ~MCSurface();
@@ -157,6 +166,13 @@ private:
     DISABLE_ASSI(MCSurface);
 
     void callList();
+
+    void initVBOs(
+        const MCGLVertex   * vertices,
+        const MCGLVertex   * normals,
+        const MCGLTexCoord * texCoords,
+        const GLfloat      * colors);
+
     void renderVBOs(bool autoClientState = true);
 
     enum VBOType
