@@ -102,19 +102,27 @@ public:
     */
     MCBBox<MCFloat> rotatedScaledBBox(MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2);
 
-    //! Render using default size + z
-    void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle);
+    /*! Render by using the default size.
+     * \param pos The position.
+     * \param wr Half of the wanted width.
+     * \param hr Half of the wanted height.
+     */
+    void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
+        bool autoClientState = true);
 
    /*! Render scaled.
     * \param pos The position.
     * \param wr Half of the wanted width.
     * \param hr Half of the wanted height.
+    * \param autoClientState Automatically enable/disable OpenGL client states.
     */
     void renderScaled(
-        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
+        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
+        bool autoClientState = true);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle);
+    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
+        bool autoClientState = true);
 
    /*! Render (fake) shadow scaled.
     * \param pos The position.
@@ -122,7 +130,14 @@ public:
     * \param hr Half of the wanted height.
     */
     void renderShadowScaled(
-        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle);
+        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
+        bool autoClientState = true);
+
+    /*! Manually enable/disable OpenGL client states.
+     *  This can be used to save some function calls when rendering multiple surfaces.
+     *  \see render()
+     */
+    void enableClientState(bool enable);
 
     //! Get OpenGL texture handle
     GLuint handle() const;
@@ -142,7 +157,7 @@ private:
     DISABLE_ASSI(MCSurface);
 
     void callList();
-    void renderVBOs();
+    void renderVBOs(bool autoClientState = true);
 
     enum VBOType
     {

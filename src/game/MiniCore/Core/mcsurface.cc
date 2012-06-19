@@ -166,12 +166,13 @@ MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
-void MCSurface::renderVBOs()
+void MCSurface::renderVBOs(bool autoClientState)
 {
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
+    if (autoClientState)
+    {
+        enableClientState(true);
+    }
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
     glVertexPointer(3, GL_FLOAT, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
@@ -184,13 +185,15 @@ void MCSurface::renderVBOs()
     glBindTexture(GL_TEXTURE_2D, m_handle);
     glDrawArrays(GL_QUADS, 0, gNumVertices);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
+
+    if (autoClientState)
+    {
+        enableClientState(false);
+    }
 }
 
-void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
+void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
+    bool autoClientState)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -215,14 +218,15 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle)
     doAlphaTest();
     doAlphaBlend();
 
-    renderVBOs();
+    renderVBOs(autoClientState);
 
     glPopMatrix();
     glPopAttrib();
 }
 
 void MCSurface::renderScaled(
-    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
+    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
+    bool autoClientState)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -250,13 +254,14 @@ void MCSurface::renderScaled(
     doAlphaTest();
     doAlphaBlend();
 
-    renderVBOs();
+    renderVBOs(autoClientState);
 
     glPopMatrix();
     glPopAttrib();
 }
 
-void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle)
+void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
+    bool autoClientState)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -282,14 +287,15 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ZERO);
 
-    renderVBOs();
+    renderVBOs(autoClientState);
 
     glPopMatrix();
     glPopAttrib();
 }
 
 void MCSurface::renderShadowScaled(
-    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle)
+    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
+    bool autoClientState)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -317,10 +323,28 @@ void MCSurface::renderShadowScaled(
 
     glScaled(wr / m_w2, hr / m_h2, 1.0);
 
-    renderVBOs();
+    renderVBOs(autoClientState);
 
     glPopMatrix();
     glPopAttrib();
+}
+
+void MCSurface::enableClientState(bool enable)
+{
+    if (enable)
+    {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+    }
+    else
+    {
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+    }
 }
 
 GLuint MCSurface::handle() const
