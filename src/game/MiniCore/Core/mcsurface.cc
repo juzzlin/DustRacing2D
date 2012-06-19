@@ -239,7 +239,6 @@ void MCSurface::renderScaled(
     }
 
     glPushAttrib(GL_ENABLE_BIT);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
     glPushMatrix();
     glTranslated(x, y, z);
     glRotated(angle, 0, 0, 1);
@@ -274,7 +273,6 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
     glPushAttrib(GL_ENABLE_BIT);
     glPushMatrix();
     glTranslated(x, y, 0);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
     glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
@@ -308,7 +306,6 @@ void MCSurface::renderShadowScaled(
     glPushAttrib(GL_ENABLE_BIT);
     glPushMatrix();
     glTranslated(x, y, 0);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
     glRotated(angle, 0, 0, 1);
 
     if (m_centerSet)
