@@ -12,6 +12,8 @@ Game:
 - One big wall object
 - Too easy to accidentally miss checkpoints
 - Update the code to use VBO's.
+- Collision filter for objects
+  (e.g. trees doesn't need to check against other trees).
 
 Content:
 
