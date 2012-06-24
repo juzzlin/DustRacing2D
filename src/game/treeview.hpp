@@ -43,11 +43,11 @@ public:
 
 private:
 
-    MCFloat m_r0, m_r1, m_treeHeight;
+    int m_r0, m_r1, m_treeHeight;
     int m_branches;
-    MCFloat m_branchHeight, m_dBranchHeight;
-    MCFloat m_dr;
-    MCFloat m_dAngle;
+    int m_branchHeight, m_dBranchHeight;
+    int m_dr;
+    int m_dAngle;
     MCUint m_topSinAngle;
     MCUint m_topCosAngle;
     MCVector2d<MCFloat> m_top;

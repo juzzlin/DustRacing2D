@@ -53,13 +53,13 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
     m_top.setI(MCTrigonom::cos(m_topCosAngle));
     m_top.setJ(MCTrigonom::sin(m_topSinAngle / 2));
 
-    MCFloat branchHeight = m_branchHeight;
-    MCFloat r            = m_r0;
-    MCUint  angle        = 0;
+    int branchHeight = m_branchHeight;
+    int r            = m_r0;
+    int angle        = 0;
 
     surface()->enableClientState(true);
 
-    MCFloat z = branchHeight / 3;
+    int z = branchHeight / 3;
     for (int i = 0; i < m_branches; i++)
     {
         MCFloat x = l.i() + m_top.i() * branchHeight / 4;
