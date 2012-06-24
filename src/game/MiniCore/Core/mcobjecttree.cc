@@ -67,8 +67,11 @@ void MCObjectTree::insert(MCObject & object)
 {
     getIndexRange(object.bbox());
     object.cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
-    for (MCUint j = m_j0; j <= m_j1; j++) {
-        for (MCUint i = m_i0; i <= m_i1; i++) {
+
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
             m_matrix[j * m_horSize + i].insert(&object);
         }
     }
@@ -78,11 +81,15 @@ bool MCObjectTree::remove(MCObject & object)
 {
     bool removed = false;
     object.restoreIndexRange(&m_i0, &m_i1, &m_j0, &m_j1);
-    for (MCUint j = m_j0; j <= m_j1; j++) {
-        for (MCUint i = m_i0; i <= m_i1; i++) {
+
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
             const int index = j * m_horSize + i;
-            MCObjectTree::ObjectSet::iterator iter(m_matrix[index].find(&object));
-            if (iter != m_matrix[index].end()) {
+            auto iter(m_matrix[index].find(&object));
+            if (iter != m_matrix[index].end())
+            {
                 m_matrix[index].erase(iter);
                 removed = true;
             }
@@ -93,8 +100,10 @@ bool MCObjectTree::remove(MCObject & object)
 
 void MCObjectTree::removeAll()
 {
-    for (MCUint j = 0; j < m_verSize; j++) {
-        for (MCUint i = 0; i < m_horSize; i++) {
+    for (MCUint j = 0; j < m_verSize; j++)
+    {
+        for (MCUint i = 0; i < m_horSize; i++)
+        {
             m_matrix[j * m_horSize + i].clear();
         }
     }
@@ -120,14 +129,19 @@ void MCObjectTree::getBBoxCollisions(
     MCObject * p2 = nullptr;
     MCObjectTree::ObjectSet::iterator iter;
 
-    for (MCUint j = m_j0; j <= m_j1; j++) {
-        for (MCUint i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end()) {
+            while (iter != m_matrix[index].end())
+            {
                 p2 = *iter;
-                if ((&object != p2) && (!typeId || p2->typeID() == typeId)) {
-                    if (b.intersects(p2->bbox())) {
+                if ((&object != p2) && (!typeId || p2->typeID() == typeId))
+                {
+                    if (b.intersects(p2->bbox()))
+                    {
                         resultObjs.insert(p2);
                     }
                 }
@@ -151,18 +165,22 @@ void MCObjectTree::getObjectsWithinDistance(
     MCObjectTree::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
-    for (MCUint j = m_j0; j <= m_j1; j++) {
-        for (MCUint i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end()) {
+            while (iter != m_matrix[index].end())
+            {
                 p = *iter;
-                if (!typeId || p->typeID() == typeId) {
-
+                if (!typeId || p->typeID() == typeId)
+                {
                     const MCFloat x2 = x - p->getX();
                     const MCFloat y2 = y - p->getY();
 
-                    if (x2 * x2 + y2 * y2 < d) {
+                    if (x2 * x2 + y2 * y2 < d)
+                    {
                         resultObjs.insert(p);
                     }
                 }
@@ -184,14 +202,19 @@ void MCObjectTree::getObjectsWithinBBox(
     MCObjectTree::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
-    for (MCUint j = m_j0; j <= m_j1; j++) {
-        for (MCUint i = m_i0; i <= m_i1; i++) {
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
             const int index = j * m_horSize + i;
             iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end()) {
+            while (iter != m_matrix[index].end())
+            {
                 p = *iter;
-                if (!typeId || p->typeID() == typeId) {
-                    if (rBBox.intersects(p->bbox())) {
+                if (!typeId || p->typeID() == typeId)
+                {
+                    if (rBBox.intersects(p->bbox()))
+                    {
                         resultObjs.insert(p);
                     }
                 }
