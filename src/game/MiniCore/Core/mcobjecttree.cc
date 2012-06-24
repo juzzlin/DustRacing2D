@@ -138,11 +138,14 @@ void MCObjectTree::getBBoxCollisions(
             while (iter != m_matrix[index].end())
             {
                 p2 = *iter;
-                if ((&object != p2) && (!typeId || p2->typeID() == typeId))
+                if (!object.stationary() || !p2->stationary())
                 {
-                    if (b.intersects(p2->bbox()))
+                    if ((&object != p2) && (!typeId || p2->typeID() == typeId))
                     {
-                        resultObjs.insert(p2);
+                        if (b.intersects(p2->bbox()))
+                        {
+                            resultObjs.insert(p2);
+                        }
                     }
                 }
                 iter++;
