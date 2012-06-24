@@ -140,6 +140,8 @@ void MCWorld::render(MCCamera * pCamera)
 
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
+        // The depth test is enabled/disabled separately on
+        // each object layer.
         if (depthTestEnabled[i])
         {
             glEnable(GL_DEPTH_TEST);

@@ -83,6 +83,8 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 
     m_pStartlightsOverlay->setDimensions(width(), height());
     m_pCheckeredFlag->setDimensions(width(), height());
+
+    MCWorld::instance().enableDepthTestOnLayer(Layers::Tree, true);
 }
 
 unsigned int Scene::width()
