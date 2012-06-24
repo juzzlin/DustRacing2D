@@ -31,7 +31,7 @@
 
 static const int gNumVertices           = 4;
 static const int gNumVertexComponents   = 3;
-static const int gNumColorComponents    = 3;
+static const int gNumColorComponents    = 4;
 static const int gNumTexCoordComponents = 2;
 
 MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
@@ -76,10 +76,10 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
 
     const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1
     };
 
     initVBOs(vertices, normals, texCoords, colors);
@@ -140,14 +140,14 @@ void MCSurface::initVBOs(
         sizeof(MCGLVertex) * gNumVertices, vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
+        sizeof(MCGLVertex) * gNumVertices, normals, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLTexCoord) * gNumVertices, texCoords, GL_STATIC_DRAW);
+        sizeof(MCGLTexCoord) * gNumVertices, texCoords, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
     glBufferData(GL_ARRAY_BUFFER,
         sizeof(GLfloat) * gNumVertices * gNumColorComponents,
-        colors, GL_STATIC_DRAW);
+        colors, GL_DYNAMIC_DRAW);
 }
 
 MCSurface::~MCSurface()
@@ -198,13 +198,32 @@ void MCSurface::doAlphaBlend() const
 void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-    MCGLTexCoord * pTexData = (MCGLTexCoord *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    MCGLTexCoord * pTexData = (MCGLTexCoord *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pTexData)
     {
         pTexData[0] = texCoords[0];
         pTexData[1] = texCoords[1];
         pTexData[2] = texCoords[2];
         pTexData[3] = texCoords[3];
+
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+}
+
+void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    if (pColorData)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            const int offset = (i << 2);
+            pColorData[offset + 0] = r;
+            pColorData[offset + 1] = g;
+            pColorData[offset + 2] = b;
+            pColorData[offset + 3] = a;
+        }
 
         glUnmapBuffer(GL_ARRAY_BUFFER);
     }
@@ -384,7 +403,7 @@ void MCSurface::renderShadowScaled(
     glPopAttrib();
 }
 
-void MCSurface::enableClientState(bool enable)
+void MCSurface::enableClientState(bool enable) const
 {
     if (enable)
     {

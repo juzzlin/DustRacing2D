@@ -100,6 +100,9 @@ public:
     //! Set texture coordinates.
     void setTexCoords(const MCGLTexCoord texCoords[4]);
 
+    //! Set color.
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a);
+
    /*! Get bounding box for a rotated surface
     * \param pos The position.
     * \param angle Rotation angle (0..360)
@@ -150,7 +153,7 @@ public:
      *  surface multiple times.
      *  \see render()
      */
-    void enableClientState(bool enable);
+    void enableClientState(bool enable) const;
 
     //! Get OpenGL texture handle
     GLuint handle() const;
@@ -164,20 +167,19 @@ public:
     //! Get center
     MCVector2d<MCFloat> center() const;
 
+    //! Manually render VBO's.
+    void renderVBOs(bool autoClientState = true);
+
 private:
 
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
-
-    void callList();
 
     void initVBOs(
         const MCGLVertex   * vertices,
         const MCGLVertex   * normals,
         const MCGLTexCoord * texCoords,
         const GLfloat      * colors);
-
-    void renderVBOs(bool autoClientState = true);
 
     enum VBOType
     {

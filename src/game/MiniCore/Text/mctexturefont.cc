@@ -62,7 +62,7 @@ MCTextureGlyph & MCTextureFont::glyph(int glyphId)
     return m_default;
 }
 
-const MCSurface & MCTextureFont::surface() const
+MCSurface & MCTextureFont::surface() const
 {
     return m_surface;
 }

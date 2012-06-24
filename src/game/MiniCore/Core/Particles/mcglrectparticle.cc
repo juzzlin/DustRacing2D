@@ -93,7 +93,7 @@ void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
     m_a = a;
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
         for (int i = 0; i < 4; i++)
@@ -111,7 +111,7 @@ void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 void MCGLRectParticle::setAlpha(MCFloat a)
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
         for (int i = 0; i < 4; i++)

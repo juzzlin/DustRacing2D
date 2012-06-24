@@ -45,7 +45,7 @@ public:
     MCTextureGlyph & glyph(int glyphId);
 
     //! Return the associated surface.
-    const MCSurface & surface() const;
+    MCSurface & surface() const;
 
 private:
 
@@ -54,7 +54,7 @@ private:
     GlyphHash m_glyphs;
     typedef std::vector<MCTextureGlyph> GlyphLookUp;
     GlyphLookUp m_glyphLookUp;
-    const MCSurface & m_surface;
+    MCSurface & m_surface;
 };
 
 #endif // MCTEXTUREFONT_HH
