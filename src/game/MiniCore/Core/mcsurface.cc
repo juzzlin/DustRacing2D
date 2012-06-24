@@ -195,6 +195,21 @@ void MCSurface::doAlphaBlend() const
     }
 }
 
+void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
+{
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+    MCGLTexCoord * pTexData = (MCGLTexCoord *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    if (pTexData)
+    {
+        pTexData[0] = texCoords[0];
+        pTexData[1] = texCoords[1];
+        pTexData[2] = texCoords[2];
+        pTexData[3] = texCoords[3];
+
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+}
+
 MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
 {
     using std::abs;

@@ -97,6 +97,9 @@ public:
     //! handle and wants to run the configured alpha blending.
     void doAlphaBlend() const;
 
+    //! Set texture coordinates.
+    void setTexCoords(const MCGLTexCoord texCoords[4]);
+
    /*! Get bounding box for a rotated surface
     * \param pos The position.
     * \param angle Rotation angle (0..360)
