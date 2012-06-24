@@ -68,15 +68,17 @@ void TimingOverlay::render()
         const unsigned int pos   = m_pRace->getPositionOfCar(*m_pCar);
         const unsigned int laps  = m_pRace->lapCount();
 
+        MCTextureText text("");
+
         // Render the current lap number
         {
             std::stringstream ss;
             ss << " LAP:" << leadersLap << "/" << laps;
-            MCTextureText lapText(ss.str());
-            lapText.setGlyphSize(20, 20);
-            lapText.setColor(1.0, 1.0, 1.0);
-            lapText.setShadowOffset(shadowX, shadowY);
-            lapText.renderWithShadow(0, height() - lapText.textHeight(),
+            text.setText(ss.str());
+            text.setGlyphSize(20, 20);
+            text.setColor(1.0, 1.0, 1.0);
+            text.setShadowOffset(shadowX, shadowY);
+            text.renderWithShadow(0, height() - text.textHeight(),
                 nullptr, m_defaultMonospace);
         }
 
@@ -91,11 +93,11 @@ void TimingOverlay::render()
                 ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
             }
 
-            MCTextureText posText(ss.str());
-            posText.setGlyphSize(20, 20);
-            posText.setColor(1.0, 1.0, 0.0);
-            posText.setShadowOffset(shadowX, shadowY);
-            posText.renderWithShadow(0, height() - posText.textHeight() * 2,
+            text.setText(ss.str());
+            text.setGlyphSize(20, 20);
+            text.setColor(1.0, 1.0, 0.0);
+            text.setShadowOffset(shadowX, shadowY);
+            text.renderWithShadow(0, height() - text.textHeight() * 2,
                 nullptr, m_defaultMonospace);
         }
 
@@ -104,32 +106,31 @@ void TimingOverlay::render()
             int speed = m_pCar->speedInKmh();
             speed = speed < 0 ? 0 : speed;
 
-            MCTextureText speedText("");
             std::stringstream ss;
             ss << " " << speed;
             if (speed < 100)
             {
-                speedText.setColor(1.0, 1.0, 1.0);
+                text.setColor(1.0, 1.0, 1.0);
             }
             else if (speed < 200)
             {
-                speedText.setColor(1.0, 1.0, 0.0);
+                text.setColor(1.0, 1.0, 0.0);
             }
             else
             {
-                speedText.setColor(1.0, 0.0, 0.0);
+                text.setColor(1.0, 0.0, 0.0);
             }
 
-            speedText.setText(ss.str());
-            speedText.setGlyphSize(40, 40);
-            speedText.setShadowOffset(shadowX, shadowY);
-            const int h = speedText.textHeight();
-            speedText.renderWithShadow(0, h, nullptr, m_defaultMonospace);
+            text.setText(ss.str());
+            text.setGlyphSize(40, 40);
+            text.setShadowOffset(shadowX, shadowY);
+            const int h = text.textHeight();
+            text.renderWithShadow(0, h, nullptr, m_defaultMonospace);
 
-            speedText.setText(" KM/H");
-            speedText.setGlyphSize(20, 20);
-            speedText.setColor(1.0, 1.0, 1.0);
-            speedText.renderWithShadow(0, 2 * speedText.textHeight() + h,
+            text.setText(" KM/H");
+            text.setGlyphSize(20, 20);
+            text.setColor(1.0, 1.0, 1.0);
+            text.renderWithShadow(0, 2 * text.textHeight() + h,
                 nullptr, m_defaultMonospace);
         }
 
@@ -138,29 +139,29 @@ void TimingOverlay::render()
             std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
             std::stringstream ss;
             ss << "  " << currentLapTimeStr;
-            MCTextureText currentLapTimeText(ss.str());
-            currentLapTimeText.setGlyphSize(20, 20);
+            text.setText(ss.str());
+            text.setGlyphSize(20, 20);
 
             // Set color to white, if lastLapTime is not set.
             if (lastLapTime == -1)
             {
-                currentLapTimeText.setColor(1.0, 1.0, 1.0);
+                text.setColor(1.0, 1.0, 1.0);
             }
             // Set color to green, if current time is ahead of the last lap time.
             else if (currentLapTime < lastLapTime)
             {
-                currentLapTimeText.setColor(0.0, 1.0, 0.0);
+                text.setColor(0.0, 1.0, 0.0);
             }
             // Set color to red (current time is slower than the last lap time).
             else
             {
-                currentLapTimeText.setColor(1.0, 0.0, 0.0);
+                text.setColor(1.0, 0.0, 0.0);
             }
 
-            currentLapTimeText.setShadowOffset(shadowX, shadowY);
-            currentLapTimeText.renderWithShadow(
-                width() - currentLapTimeText.textWidth(),
-                height() - currentLapTimeText.textHeight(),
+            text.setShadowOffset(shadowX, shadowY);
+            text.renderWithShadow(
+                width() - text.textWidth(),
+                height() - text.textHeight(),
                 nullptr,
                 m_defaultMonospace);
         }
@@ -170,12 +171,12 @@ void TimingOverlay::render()
             std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
             std::stringstream ss;
             ss << "L:" << lastLapTimeStr;
-            MCTextureText lastLapTimeText(ss.str());
-            lastLapTimeText.setGlyphSize(20, 20);
-            lastLapTimeText.setShadowOffset(shadowX, shadowY);
-            lastLapTimeText.renderWithShadow(
-                width() - lastLapTimeText.textWidth(),
-                height() - lastLapTimeText.textHeight() * 2,
+            text.setText(ss.str());
+            text.setGlyphSize(20, 20);
+            text.setShadowOffset(shadowX, shadowY);
+            text.renderWithShadow(
+                width() - text.textWidth(),
+                height() - text.textHeight() * 2,
                 nullptr,
                 m_defaultMonospace);
         }
