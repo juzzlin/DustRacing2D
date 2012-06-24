@@ -93,10 +93,10 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
         const std::string            & rowGlyphs = row.glyphs;
         for (MCUint i = 0; i < rowGlyphs.length(); i++)
         {
-            const MCFloat fi = i;
-            const MCFloat fy = row.y;
-            const MCFloat fh = row.h;
-            const MCFloat fH = surface.height();
+            const GLfloat fi = i;
+            const GLfloat fy = row.y;
+            const GLfloat fh = row.h;
+            const GLfloat fH = surface.height();
 
             // Calculate the uv-coordinates for the glyph.
             MCTextureGlyph newGlyph(

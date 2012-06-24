@@ -52,10 +52,10 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
     // Init vertice data for a quad
     const MCGLVertex vertices[gNumVertices] =
     {
-        {-m_w2, -m_h2, 0},
-        {-m_w2,  m_h2, 0},
-        { m_w2,  m_h2, 0},
-        { m_w2, -m_h2, 0}
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
+        {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
     };
 
     const MCGLVertex normals[gNumVertices] =
@@ -103,10 +103,10 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
     // Init vertice data for a quad
     const MCGLVertex vertices[gNumVertices] =
     {
-        {-m_w2, -m_h2, 0},
-        {-m_w2,  m_h2, 0},
-        { m_w2,  m_h2, 0},
-        { m_w2, -m_h2, 0}
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
+        {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
     };
 
     const MCGLVertex normals[gNumVertices] =

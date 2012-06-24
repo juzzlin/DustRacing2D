@@ -22,6 +22,8 @@
 
 #include "../Core/mctypes.hh"
 
+#include <GL/gl.h>
+
 //! Textured glyph used by MCTextureFont.
 class MCTextureGlyph
 {
@@ -31,8 +33,8 @@ public:
     struct UV
     {
         UV() : m_u(0), m_v(0) {}
-        UV(MCFloat u, MCFloat v) : m_u(u), m_v(v) {}
-        MCFloat m_u, m_v;
+        UV(GLfloat u, GLfloat v) : m_u(u), m_v(v) {}
+        GLfloat m_u, m_v;
     };
 
     //! Constructor.

@@ -85,7 +85,7 @@ MCGLRectParticle::~MCGLRectParticle()
     glDeleteBuffers(VBOTypes, m_vbos);
 }
 
-void MCGLRectParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
     m_r = r;
     m_g = g;

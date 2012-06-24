@@ -41,7 +41,7 @@ public:
     void recycle();
 
     //! Set color
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
+    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
 
     //! \reimp
     void render(MCCamera * pCamera = nullptr);
@@ -88,7 +88,7 @@ private:
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
-    MCFloat m_r, m_g, m_b, m_a;
+    GLfloat m_r, m_g, m_b, m_a;
     GLuint m_vbos[VBOTypes];
     MCGLRectParticleGroup * m_group;
 };
