@@ -23,6 +23,7 @@
 #include "startlightsoverlay.hpp"
 #include "timingoverlay.hpp"
 #include "track.hpp"
+#include "trackdata.hpp"
 #include "trackloader.hpp"
 
 #include "MiniCore/Core/MCCamera"
@@ -33,6 +34,7 @@
 
 #include <QDir>
 #include <QTime>
+#include <QCoreApplication>
 
 #include <cassert>
 
@@ -134,13 +136,23 @@ bool Game::loadTracks()
 
 void Game::initScene()
 {
+    int defaultTrackIndex = 0;
     assert(m_pRenderer);
 
     // Create the scene
     m_pScene = new Scene(*m_pRenderer, NUM_CARS);
 
-    // Set the default track
-    m_pScene->setActiveTrack(*m_pTrackLoader->track(0));
+    // Set the default track. If track's name appears on the command line, choose it.
+    for (unsigned int i = 0; i < m_pTrackLoader->tracks(); i++)
+    {
+        if (QCoreApplication::arguments().contains(
+                m_pTrackLoader->track(i)->trackData().name()))
+        {
+            defaultTrackIndex = i;
+            break;
+        }
+    }
+    m_pScene->setActiveTrack(*m_pTrackLoader->track(defaultTrackIndex));
 
     // Set the current game scene. Renderer calls render()
     // for all objects in the scene.
