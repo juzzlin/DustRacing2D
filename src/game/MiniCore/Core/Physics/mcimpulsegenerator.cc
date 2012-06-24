@@ -150,7 +150,7 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
                 MCObject & pb(contact->object());
 
                 const MCFloat restitution(
-                    std::max(pa.restitution(), pb.restitution()));
+                    std::min(pa.restitution(), pb.restitution()));
 
                 const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
                 const MCFloat projection = contact->contactNormal().dot(velocityDelta);
@@ -167,8 +167,6 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
 
                 // Remove contact with pa from pb, because it was already handled here.
                 pb.deleteContacts(pa);
-
-                break;
             }
         }
 
