@@ -227,18 +227,7 @@ void MCSurface::renderVBOs(bool autoClientState)
         enableClientState(true);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
-    glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
-    glNormalPointer(GL_FLOAT, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-    glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_handle);
     glDrawArrays(GL_QUADS, 0, gNumVertices);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     if (autoClientState)
     {
@@ -388,9 +377,20 @@ void MCSurface::enableClientState(bool enable)
         glEnableClientState(GL_NORMAL_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+        glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
+        glNormalPointer(GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+        glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+        glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, m_handle);
     }
     else
     {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);

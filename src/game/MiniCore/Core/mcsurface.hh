@@ -142,11 +142,12 @@ public:
         MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
         bool autoClientState = true);
 
-    /*! Manually enable/disable OpenGL client states.
-     *  This can be used to save some function calls when rendering multiple surfaces.
+    /*! Manually enable/disable OpenGL client states and texturing environment.
+     *  This can be used to save some function calls when rendering the same
+     *  surface multiple times.
      *  \see render()
      */
-    static void enableClientState(bool enable);
+    void enableClientState(bool enable);
 
     //! Get OpenGL texture handle
     GLuint handle() const;

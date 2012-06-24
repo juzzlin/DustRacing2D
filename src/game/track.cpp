@@ -100,8 +100,6 @@ void Track::render(MCCamera * pCamera)
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
 
-    MCSurface::enableClientState(true);
-
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
     int x     = initX;
@@ -118,8 +116,7 @@ void Track::render(MCCamera * pCamera)
                     pSurface->renderScaled(
                         pCamera,
                         MCVector3dF(x + w / 2, y + h / 2, 0), m_scale * w / 2, m_scale * h / 2,
-                        pTile->rotation(),
-                        false); // Manually enable/disable client states.
+                        pTile->rotation());
                 }
             }
 
@@ -128,8 +125,6 @@ void Track::render(MCCamera * pCamera)
 
         y += h;
     }
-
-    MCSurface::enableClientState(false);
 }
 
 bool Track::update()
