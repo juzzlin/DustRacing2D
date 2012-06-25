@@ -176,7 +176,7 @@ std::string Timing::msecsToString(int msec) const
 {
     if (msec < 0)
     {
-        return "--:--:--.---";
+        return "--:--:--.-";
     }
 
     const int hh = msec / 3600000;
@@ -187,6 +187,8 @@ std::string Timing::msecsToString(int msec) const
     const int ms = mr   % 1000;
 
     const QTime time(hh, mm, ss, ms);
-    return time.toString("hh:mm:ss.zzz").toStdString();
+    std::string strTime(time.toString("hh:mm:ss.zzz").toStdString());
+    strTime.erase(strTime.length() - 2, 2); // Reduce .zzz to .z
+    return strTime;
 }
 
