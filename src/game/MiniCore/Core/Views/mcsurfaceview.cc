@@ -21,8 +21,9 @@
 #include "../mccamera.hh"
 #include "../mcsurface.hh"
 
-MCSurfaceView::MCSurfaceView(MCSurface * pSurface) :
-    m_pSurface(pSurface)
+MCSurfaceView::MCSurfaceView(const std::string & viewId, MCSurface * pSurface)
+: MCShapeView(viewId)
+, m_pSurface(pSurface)
 {}
 
 MCSurfaceView::~MCSurfaceView()

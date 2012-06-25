@@ -144,7 +144,7 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(
-        new MCSurfaceView(pSurface),
+        new MCSurfaceView(typeId, pSurface),
         pSurface ? pSurface->width() : 0,
         pSurface ? pSurface->height() : 0);
     setShape(rectShape);
@@ -446,14 +446,16 @@ void MCObject::removeFromWorldNow()
 
 void MCObject::render(MCCamera * p)
 {
-    if (pShape) {
+    if (pShape)
+    {
         pShape->render(p);
     }
 }
 
 void MCObject::renderShadow(MCCamera * p)
 {
-    if (pShape) {
+    if (pShape)
+    {
         pShape->renderShadow(p);
     }
 }

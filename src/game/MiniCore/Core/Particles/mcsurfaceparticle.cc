@@ -24,10 +24,13 @@ MCRecycler<MCSurfaceParticle> MCSurfaceParticle::m_recycler;
 
 MCSurfaceParticle::MCSurfaceParticle()
 {
-    setView(new MCSurfaceView);
+    setView(new MCSurfaceView("MCSurfaceParticle"));
 }
 
-void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime,
+void MCSurfaceParticle::init(
+    const MCVector3d<MCFloat> & newLocation,
+    MCFloat newRadius,
+    MCUint newLifeTime,
     MCSurface * pSurface)
 {
     MCParticle::init(newLocation, newRadius, newLifeTime);

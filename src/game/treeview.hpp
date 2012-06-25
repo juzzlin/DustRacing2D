@@ -41,6 +41,12 @@ public:
     virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
         MCCamera * p = nullptr);
 
+    //! \reimp
+    virtual void beginBatch();
+
+    //! \reimp
+    virtual void endBatch();
+
 private:
 
     int m_r0, m_r1, m_treeHeight;

@@ -21,6 +21,7 @@
 #define MCWORLD_HH
 
 #include <vector>
+#include <map>
 #include <unordered_set>
 
 #include "mcvector2d.hh"

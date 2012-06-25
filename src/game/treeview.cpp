@@ -20,7 +20,7 @@
 #include "MiniCore/Core/MCTrigonom"
 
 TreeView::TreeView(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeight, int branches)
-: MCSurfaceView(&surface)
+: MCSurfaceView("TreeView", &surface)
 , m_r0(r0)
 , m_r1(r1)
 , m_treeHeight(treeHeight)
@@ -57,8 +57,6 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
     int r            = m_r0;
     int angle        = 0;
 
-    surface()->enableClientState(true);
-
     int z = branchHeight;
     for (int i = 0; i < m_branches; i++)
     {
@@ -72,11 +70,19 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
         r            += m_dr;
         angle        += m_dAngle;
     }
-
-    surface()->enableClientState(false);
 }
 
 void TreeView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
-    surface()->renderShadowScaled(p, l, m_r0, m_r0, angle);
+    surface()->renderShadowScaled(p, l, m_r0, m_r0, angle, false);
+}
+
+void TreeView::beginBatch()
+{
+    surface()->enableClientState(true);
+}
+
+void TreeView::endBatch()
+{
+    surface()->enableClientState(false);
 }

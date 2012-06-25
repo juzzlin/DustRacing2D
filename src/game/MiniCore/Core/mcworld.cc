@@ -31,7 +31,6 @@
 #include "Physics/mcfrictiongenerator.hh"
 
 #include <GL/gl.h>
-
 #include <cassert>
 
 MCWorld * MCWorld::pInstance               = nullptr;
@@ -133,13 +132,13 @@ void MCWorld::render(MCCamera * pCamera)
     static LayerHash::iterator end;
 
     glPushAttrib(GL_ENABLE_BIT);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
 
+    // Build and render batches layer by layer
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
+        static std::map<std::string, std::vector<MCObject *> > batches;
+        batches.clear();
+
         // The depth test is enabled/disabled separately on
         // each object layer.
         if (depthTestEnabled[i])
@@ -165,13 +164,8 @@ void MCWorld::render(MCCamera * pCamera)
                     bbox.translate(MCVector2dF(object.location()));
                     if (!pCamera || pCamera->isVisible(bbox))
                     {
-                        object.render(pCamera); // pCamera can be a nullptr
+                        batches[object.shape()->view()->viewId()].push_back(&object);
                     }
-                }
-                // Check if shape is visible
-                else if (!pCamera || pCamera->isVisible(object.bbox()))
-                {
-                    object.render(pCamera); // pCamera can be a nullptr
                 }
             }
             else if (object.isParticleGroup())
@@ -179,55 +173,115 @@ void MCWorld::render(MCCamera * pCamera)
                 object.render(pCamera);
             }
         }
+
+        // Render batches
+        auto iter = batches.begin();
+        while (iter != batches.end())
+        {
+            const int i2 = iter->second.size();
+            for (int i = 0; i < i2; i++)
+            {
+                MCObject    * object = iter->second[i];
+                MCShapeView * view   = object->shape()->view();
+
+                if (i == 0)
+                {
+                    view->beginBatch();
+                }
+
+                object->render(pCamera);
+
+                if (i == i2 - 1)
+                {
+                    view->endBatch();
+                }
+            }
+
+            iter++;
+        }
     }
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
     glPopAttrib();
 }
 
 void MCWorld::renderShadows(MCCamera * pCamera)
 {
-    glPushAttrib(GL_ENABLE_BIT);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
+    // Render in the order of the layers. Depth test is
+    // layer-specific.
 
-    const MCUint i2 = objs.size();
-    for (MCUint i = 0; i < i2; i++)
+    static LayerHash::iterator j;
+    static LayerHash::iterator end;
+
+    glPushAttrib(GL_ENABLE_BIT);
+
+    // Build and render batches layer by layer
+    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        MCObject & object = *objs[i];
-        if (object.renderable() && object.hasShadow())
+        static std::map<std::string, std::vector<MCObject *> > batches;
+        batches.clear();
+
+        // The depth test is enabled/disabled separately on
+        // each object layer.
+        if (depthTestEnabled[i])
         {
-            // Check if view is set and is visible
-            if (object.shape() && object.shape()->view())
+            glEnable(GL_DEPTH_TEST);
+        }
+        else
+        {
+            glDisable(GL_DEPTH_TEST);
+        }
+
+        j   = layers[i].begin();
+        end = layers[i].end();
+        for (; j != end; j++)
+        {
+            MCObject & object = **j;
+            if (object.renderable())
             {
-                MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
-                bbox.translate(MCVector2dF(object.location()));
-                if (!pCamera || pCamera->isVisible(bbox))
+                // Check if view is set and is visible
+                if (object.shape() && object.shape()->view())
                 {
-                    object.renderShadow(pCamera); // pCamera can be a nullptr
+                    MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                    bbox.translate(MCVector2dF(object.location()));
+                    if (!pCamera || pCamera->isVisible(bbox))
+                    {
+                        batches[object.shape()->view()->viewId()].push_back(&object);
+                    }
                 }
             }
-            // Check if shape is visible
-            else if (!pCamera || pCamera->isVisible(object.bbox()))
+            else if (object.isParticleGroup())
             {
-                object.renderShadow(pCamera); // pCamera can be a nullptr
+                object.renderShadow(pCamera);
             }
         }
-        else if (object.isParticleGroup())
+
+        // Render batches
+        auto iter = batches.begin();
+        while (iter != batches.end())
         {
-            object.renderShadow(pCamera);
+            const int i2 = iter->second.size();
+            for (int i = 0; i < i2; i++)
+            {
+                MCObject    * object = iter->second[i];
+                MCShapeView * view   = object->shape()->view();
+
+                if (i == 0)
+                {
+                    view->beginBatch();
+                }
+
+                object->renderShadow(pCamera);
+
+                if (i == i2 - 1)
+                {
+                    view->endBatch();
+                }
+            }
+
+            iter++;
         }
     }
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
     glPopAttrib();
 }
 

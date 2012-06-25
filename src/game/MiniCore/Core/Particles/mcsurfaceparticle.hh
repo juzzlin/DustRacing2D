@@ -22,6 +22,8 @@
 
 #include "mcparticle.hh"
 
+#include <string>
+
 class MCSurface;
 
 /*! \class MCSurfaceParticle
@@ -32,7 +34,10 @@ class MCSurfaceParticle : public MCParticle
 public:
 
     //! (Re-)init the particle.
-    virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime,
+    virtual void init(
+        const MCVector3d<MCFloat> & location,
+        MCFloat radius,
+        MCUint lifeTime,
         MCSurface * pSurface);
 
     //! Create a new particle or return recycled one
