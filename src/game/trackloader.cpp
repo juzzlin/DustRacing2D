@@ -284,6 +284,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         data.setSurfaceId("tire");
         data.setRestitution(0.5);
         data.setXYFriction(0.25);
+        data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(
@@ -306,6 +307,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         data.setShapeHeight(treeBodyRadius);
         data.setLayer(Layers::Tree);
 
+        // Create a custom view.
         TreeView * view = new TreeView(
             m_textureManager.surface("tree"), treeViewRadius, 2, 90, 5);
         MCObject & object = m_objectFactory.build(data, *view);

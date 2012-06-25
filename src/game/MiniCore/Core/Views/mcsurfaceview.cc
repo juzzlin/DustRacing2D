@@ -21,9 +21,13 @@
 #include "../mccamera.hh"
 #include "../mcsurface.hh"
 
-MCSurfaceView::MCSurfaceView(const std::string & viewId, MCSurface * pSurface)
+MCSurfaceView::MCSurfaceView(
+    const std::string & viewId,
+    MCSurface * pSurface,
+    bool batchMode)
 : MCShapeView(viewId)
 , m_pSurface(pSurface)
+, m_batchMode(batchMode)
 {}
 
 MCSurfaceView::~MCSurfaceView()
@@ -44,7 +48,7 @@ void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,
 {
     if (m_pSurface)
     {
-        m_pSurface->render(p, l, angle);
+        m_pSurface->render(p, l, angle, !m_batchMode);
     }
 }
 
@@ -53,7 +57,7 @@ void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
 {
     if (m_pSurface)
     {
-        m_pSurface->renderShadow(p, l, angle);
+        m_pSurface->renderShadow(p, l, angle, !m_batchMode);
     }
 }
 
@@ -62,7 +66,7 @@ void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
 {
     if (m_pSurface)
     {
-        m_pSurface->renderScaled(p, l, wr, hr, angle);
+        m_pSurface->renderScaled(p, l, wr, hr, angle, !m_batchMode);
     }
 }
 
@@ -71,7 +75,23 @@ void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
 {
     if (m_pSurface)
     {
-        m_pSurface->renderShadowScaled(p, l, wr, hr, angle);
+        m_pSurface->renderShadowScaled(p, l, wr, hr, angle, !m_batchMode);
+    }
+}
+
+void MCSurfaceView::beginBatch()
+{
+    if (m_batchMode && m_pSurface)
+    {
+        m_pSurface->enableClientState(true);
+    }
+}
+
+void MCSurfaceView::endBatch()
+{
+    if (m_batchMode && m_pSurface)
+    {
+        m_pSurface->enableClientState(false);
     }
 }
 
@@ -82,3 +102,4 @@ MCBBox<MCFloat> MCSurfaceView::bbox() const
 
     return MCBBox<MCFloat>(-w, -h, w, h);
 }
+

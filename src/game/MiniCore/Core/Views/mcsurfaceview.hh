@@ -35,7 +35,10 @@ public:
     /*! Constructor.
      * \param typeId See MCShapeView::MCShapeView().
      * \param pSurface Surface to be used. Ownership of pSurface is not changed. */
-    explicit MCSurfaceView(const std::string & viewID, MCSurface * pSurface = nullptr);
+    explicit MCSurfaceView(
+        const std::string & viewID,
+        MCSurface * pSurface = nullptr,
+        bool batchMode = false);
 
     //! Destructor
     virtual ~MCSurfaceView();
@@ -74,12 +77,19 @@ public:
     //! \reimp
     virtual MCBBox<MCFloat> bbox() const;
 
+    //! \reimp
+    virtual void beginBatch();
+
+    //! \reimp
+    virtual void endBatch();
+
 private:
 
     DISABLE_COPY(MCSurfaceView);
     DISABLE_ASSI(MCSurfaceView);
 
     MCSurface * m_pSurface;
+    bool m_batchMode;
 };
 
 #endif // MCSURFACEVIEW_HH

@@ -26,12 +26,14 @@ private:
     MCSurfaceObjectDataImpl();
     std::string surfaceId;
     bool defaultCircleShape;
+    bool batchMode;
     friend class MCSurfaceObjectData;
 };
 
 MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
 : surfaceId("")
 , defaultCircleShape(false)
+, batchMode(false)
 {
 }
 
@@ -59,6 +61,16 @@ void MCSurfaceObjectData::setDefaultCircleShape(bool state)
 bool MCSurfaceObjectData::defaultCirleShape() const
 {
     return m_pImpl->defaultCircleShape;
+}
+
+void MCSurfaceObjectData::setBatchMode(bool state)
+{
+    m_pImpl->batchMode = state;
+}
+
+bool MCSurfaceObjectData::batchMode() const
+{
+    return m_pImpl->batchMode;
 }
 
 MCSurfaceObjectData::~MCSurfaceObjectData()

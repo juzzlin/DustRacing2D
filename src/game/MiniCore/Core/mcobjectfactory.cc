@@ -69,7 +69,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
         if (data.defaultCirleShape())
         {
             pObject = new MCObject(data.typeId());
-            pView   = new MCSurfaceView(data.typeId(), &surface);
+            pView   = new MCSurfaceView(data.typeId(), &surface, data.batchMode());
             pShape  = new MCCircleShape(pView,
                 std::max(surface.width(), surface.height()) / 2);
             pObject->setShape(pShape);
@@ -84,7 +84,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     // Explicit circle shape
     case MCObjectData::Circle:
         pObject = new MCObject(data.typeId());
-        pView   = new MCSurfaceView(data.typeId(), &surface);
+        pView   = new MCSurfaceView(data.typeId(), &surface, data.batchMode());
         pShape  = new MCCircleShape(pView, data.shapeRadius());
         pObject->setShape(pShape);
         break;
