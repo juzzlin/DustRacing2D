@@ -78,7 +78,7 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 1.0);
             text.setShadowOffset(shadowX, shadowY);
-            text.renderWithShadow(0, height() - text.textHeight(),
+            text.render(0, height() - text.textHeight(),
                 nullptr, m_defaultMonospace);
         }
 
@@ -97,7 +97,7 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 0.0);
             text.setShadowOffset(shadowX, shadowY);
-            text.renderWithShadow(0, height() - text.textHeight() * 2,
+            text.render(0, height() - text.textHeight() * 2,
                 nullptr, m_defaultMonospace);
         }
 
@@ -125,12 +125,12 @@ void TimingOverlay::render()
             text.setGlyphSize(40, 40);
             text.setShadowOffset(shadowX, shadowY);
             const int h = text.textHeight();
-            text.renderWithShadow(0, h, nullptr, m_defaultMonospace);
+            text.render(0, h, nullptr, m_defaultMonospace);
 
             text.setText(" KM/H");
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 1.0);
-            text.renderWithShadow(0, 2 * text.textHeight() + h,
+            text.render(0, 2 * text.textHeight() + h,
                 nullptr, m_defaultMonospace);
         }
 
@@ -159,7 +159,7 @@ void TimingOverlay::render()
             }
 
             text.setShadowOffset(shadowX, shadowY);
-            text.renderWithShadow(
+            text.render(
                 width() - text.textWidth(),
                 height() - text.textHeight(),
                 nullptr,
@@ -174,7 +174,7 @@ void TimingOverlay::render()
             text.setText(ss.str());
             text.setGlyphSize(20, 20);
             text.setShadowOffset(shadowX, shadowY);
-            text.renderWithShadow(
+            text.render(
                 width() - text.textWidth(),
                 height() - text.textHeight() * 2,
                 nullptr,
@@ -191,7 +191,7 @@ void TimingOverlay::render()
                 MCTextureText recordLapTimeText(ss.str());
                 recordLapTimeText.setGlyphSize(20, 20);
                 recordLapTimeText.setShadowOffset(shadowX, shadowY);
-                recordLapTimeText.renderWithShadow(
+                recordLapTimeText.render(
                     width() - recordLapTimeText.textWidth(),
                     height() - recordLapTimeText.textHeight() * 3,
                     nullptr,

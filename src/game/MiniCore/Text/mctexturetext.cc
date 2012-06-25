@@ -27,6 +27,9 @@
 
 #include <GL/gl.h>
 
+#include <map>
+#include <vector>
+
 class MCTextureTextImpl
 {
     explicit MCTextureTextImpl(const std::string & text);
@@ -34,13 +37,7 @@ class MCTextureTextImpl
     void updateTextDimensions();
 
     void render(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
-
-    void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
-
-    void renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
+        MCTextureFont & font, bool shadow = true);
 
     std::string text;
     MCUint glyphWidth, glyphHeight;
@@ -148,156 +145,77 @@ MCUint MCTextureText::textHeight() const
     return m_pImpl->textHeight;
 }
 
-void MCTextureText::renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
-{
-    m_pImpl->renderWithShadow(x, y, pCamera, font, newLineIncreasesY);
-}
-
-void MCTextureTextImpl::renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
-{
-    renderShadow(x + xOffset, y + yOffset, pCamera, font, newLineIncreasesY);
-    render(x, y, pCamera, font, newLineIncreasesY);
-}
-
 void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
+    MCTextureFont & font, bool shadow)
 {
-    m_pImpl->render(x, y, pCamera, font, newLineIncreasesY);
+    m_pImpl->render(x, y, pCamera, font, shadow);
 }
 
 void MCTextureTextImpl::render(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
+    MCTextureFont & font, bool shadow)
 {
-    const MCFloat w2 = glyphWidth / 2;
-    const MCFloat h2 = glyphHeight / 2;
-
-    MCFloat glyphXPos = 0;
-    MCFloat glyphYPos = 0;
+    const MCUint w2 = glyphWidth / 2;
+    const MCUint h2 = glyphHeight / 2;
 
     font.surface().enableClientState(true);
     font.surface().setColor(r, g, b, a);
 
     glDisable(GL_DEPTH_TEST);
 
-    int prevGlyph = 0;
-    int glyph     = 0;
-    const MCUint textSize = text.size();
-    for (MCUint i = 0; i < textSize; i++)
+    // Generate a sorted batch in order to
+    // improve VBO performance. The idea is
+    // to render glyphs out-of-order so that
+    // the same glyphs are grouped together.
+    static std::map<int, std::vector<int> > batch;
+    batch.clear();
+    for (MCUint i = 0; i < text.size(); i++)
     {
-        prevGlyph = glyph;
-        glyph     = text.at(i);
-        if (glyph == '\n')
+        const int glyph = text[i];
+        if (glyph != '\n' && glyph != ' ')
         {
-            if (newLineIncreasesY)
-            {
-                glyphYPos += glyphHeight;
-            }
-            else
-            {
-                glyphYPos -= glyphHeight;
-            }
-
-            glyphXPos  = 0;
-        }
-        else if (glyph == ' ')
-        {
-            glyphXPos += glyphWidth;
-        }
-        else
-        {
-            if (glyph != prevGlyph)
-            {
-                MCTextureGlyph & glyph = font.glyph(text.at(i));
-                const MCGLTexCoord uv[4] =
-                {
-                    {glyph.uv(3).m_u, glyph.uv(3).m_v},
-                    {glyph.uv(0).m_u, glyph.uv(0).m_v},
-                    {glyph.uv(1).m_u, glyph.uv(1).m_v},
-                    {glyph.uv(2).m_u, glyph.uv(2).m_v}
-                };
-
-                font.surface().setTexCoords(uv);
-            }
-
-            font.surface().renderScaled(
-                pCamera,
-                MCVector3dF(x + glyphXPos, y + glyphYPos, 0),
-                w2, h2, 0, false);
-
-            glyphXPos += glyphWidth;
+            batch[glyph].push_back(i);
         }
     }
 
-    font.surface().enableClientState(false);
-}
-
-void MCTextureText::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
-{
-    m_pImpl->renderShadow(x, y, pCamera, font, newLineIncreasesY);
-}
-
-void MCTextureTextImpl::renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-    MCTextureFont & font, bool newLineIncreasesY)
-{
-    const MCFloat w2 = glyphWidth / 2;
-    const MCFloat h2 = glyphHeight / 2;
-
-    MCFloat glyphXPos = 0;
-    MCFloat glyphYPos = 0;
-
-    font.surface().enableClientState(true);
-    glDisable(GL_DEPTH_TEST);
-
     int prevGlyph = 0;
     int glyph     = 0;
-    const MCUint textSize = text.size();
-    for (MCUint i = 0; i < textSize; i++)
+
+    auto iter = batch.begin();
+    while (iter != batch.end())
     {
         prevGlyph = glyph;
-        glyph     = text.at(i);
-        if (glyph == '\n')
-        {
-            if (newLineIncreasesY)
-            {
-                glyphYPos += glyphHeight;
-            }
-            else
-            {
-                glyphYPos -= glyphHeight;
-            }
-
-            glyphXPos  = 0;
-        }
-        else if (glyph == ' ')
-        {
-            glyphXPos += glyphWidth;
-        }
-        else
+        glyph     = iter->first;
+        for (MCUint i = 0; i < iter->second.size(); i++)
         {
             if (glyph != prevGlyph)
             {
-                MCTextureGlyph & glyph = font.glyph(text.at(i));
+                MCTextureGlyph & texGlyph = font.glyph(glyph);
                 const MCGLTexCoord uv[4] =
                 {
-                    {glyph.uv(3).m_u, glyph.uv(3).m_v},
-                    {glyph.uv(0).m_u, glyph.uv(0).m_v},
-                    {glyph.uv(1).m_u, glyph.uv(1).m_v},
-                    {glyph.uv(2).m_u, glyph.uv(2).m_v}
+                    {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
+                    {texGlyph.uv(0).m_u, texGlyph.uv(0).m_v},
+                    {texGlyph.uv(1).m_u, texGlyph.uv(1).m_v},
+                    {texGlyph.uv(2).m_u, texGlyph.uv(2).m_v}
                 };
 
                 font.surface().setTexCoords(uv);
             }
 
-            font.surface().renderShadowScaled(
-                pCamera,
-                MCVector3dF(x + glyphXPos, y + glyphYPos, 0),
-                w2, h2, 0, false);
+            MCUint glyphXPos = glyphWidth * iter->second[i];
 
-            glyphXPos += glyphWidth;
+            if (shadow)
+            {
+                font.surface().renderShadowScaled(pCamera,
+                    MCVector3dF(x + glyphXPos + xOffset, y + yOffset, 0),
+                    w2, h2, 0, false);
+            }
+
+            font.surface().renderScaled(pCamera,
+                MCVector3dF(x + glyphXPos, y, 0),
+                w2, h2, 0, false);
         }
+
+        iter++;
     }
 
     font.surface().enableClientState(false);

@@ -74,19 +74,7 @@ public:
     //! given camera window (can be nullptr) using the
     //! given font.
     void render(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
-
-    //! Render shadow at (x,y) as seen thru the
-    //! given camera window (can be nullptr) using the
-    //! given font.
-    void renderShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
-
-    //! Render text and shadow at (x,y) as seen thru the
-    //! given camera window (can be nullptr) using the
-    //! given font. Shadow offset as set by setShadowOffset().
-    void renderWithShadow(MCFloat x, MCFloat y, MCCamera * pCamera,
-        MCTextureFont & font, bool newLineIncreasesY = false);
+        MCTextureFont & font, bool shadow = true);
 
 private:
 
