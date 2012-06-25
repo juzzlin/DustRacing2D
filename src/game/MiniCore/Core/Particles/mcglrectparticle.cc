@@ -28,10 +28,8 @@
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
-namespace
-{
-static const int gNumVertices = 4;
-}
+static const int gNumVertices        = 4;
+static const int gNumColorComponents = 4;
 
 MCGLRectParticle::MCGLRectParticle()
 : m_r(1.0)
@@ -60,7 +58,7 @@ MCGLRectParticle::MCGLRectParticle()
         {0, 0, 1}
     };
 
-    const GLfloat colors[] =
+    const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
         m_r, m_g, m_b, m_a,
         m_r, m_g, m_b, m_a,
@@ -77,7 +75,7 @@ MCGLRectParticle::MCGLRectParticle()
         sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * 4, colors, GL_DYNAMIC_DRAW);
+        sizeof(GLfloat) * gNumVertices * gNumColorComponents, colors, GL_DYNAMIC_DRAW);
 }
 
 MCGLRectParticle::~MCGLRectParticle()
@@ -93,6 +91,11 @@ void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     m_a = a;
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+
+    // This should make things a bit faster especially on NVIDIA.
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
+
     GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
@@ -110,15 +113,23 @@ void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 
 void MCGLRectParticle::setAlpha(MCFloat a)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-    if (pColorData)
+    if (m_a != a)
     {
-        for (int i = 0; i < 4; i++)
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+
+        // This should make things a bit faster especially on NVIDIA.
+        glBufferData(GL_ARRAY_BUFFER,
+            sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
+
+        GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        if (pColorData)
         {
-            pColorData[(i << 2) + 3] = a;
+            for (int i = 0; i < 4; i++)
+            {
+                pColorData[(i << 2) + 3] = a;
+            }
+            glUnmapBuffer(GL_ARRAY_BUFFER);
         }
-        glUnmapBuffer(GL_ARRAY_BUFFER);
     }
 }
 

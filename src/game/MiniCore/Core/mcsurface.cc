@@ -198,6 +198,11 @@ void MCSurface::doAlphaBlend() const
 void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+
+    // This should make things a bit faster especially on NVIDIA.
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(MCGLTexCoord) * gNumVertices, nullptr, GL_DYNAMIC_DRAW);
+
     MCGLTexCoord * pTexData = (MCGLTexCoord *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pTexData)
     {
@@ -213,6 +218,11 @@ void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
 void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
+
+    // This should make things a bit faster especially on NVIDIA.
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
+
     GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
