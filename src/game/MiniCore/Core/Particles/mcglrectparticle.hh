@@ -90,6 +90,7 @@ private:
     DISABLE_ASSI(MCGLRectParticle);
     GLfloat m_r, m_g, m_b, m_a;
     GLuint m_vbos[VBOTypes];
+    int m_frameCount;
     MCGLRectParticleGroup * m_group;
 };
 

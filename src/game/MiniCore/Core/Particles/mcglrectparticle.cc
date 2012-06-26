@@ -30,12 +30,14 @@ MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
 static const int gNumVertices        = 4;
 static const int gNumColorComponents = 4;
+static const int gAlphaFrames        = 10;
 
 MCGLRectParticle::MCGLRectParticle()
 : m_r(1.0)
 , m_g(1.0)
 , m_b(1.0)
 , m_a(1.0)
+, m_frameCount(gAlphaFrames)
 , m_group(nullptr)
 {
     // Disable shadow by default
@@ -170,10 +172,15 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
     glTranslated(x, y, location().k());
     glRotated(angle(), 0, 0, 1);
 
-    // Scale alpha if fading out
+    // Scale alpha if fading out. Don't do this on
+    // every frame, because it's expensive.
     if (animationStyle() == FadeOut)
     {
-        setAlpha(m_a * scale());
+        if (!--m_frameCount)
+        {
+            setAlpha(m_a * scale());
+            m_frameCount = gAlphaFrames;
+        }
     }
 
     // Scale radius if fading out

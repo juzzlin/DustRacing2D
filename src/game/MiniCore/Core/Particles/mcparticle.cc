@@ -81,10 +81,13 @@ MCParticle::AnimationStyle MCParticle::animationStyle() const
 
 void MCParticle::stepTime()
 {
-    if (m_lifeTime > 0) {
+    if (m_lifeTime > 0)
+    {
         m_lifeTime--;
         m_scale -= m_delta;
-    } else if (m_isActive) {
+    }
+    else if (m_isActive)
+    {
         m_isActive = false;
         timeOut();
     }
