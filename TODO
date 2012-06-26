@@ -9,11 +9,20 @@ Game:
 - Initial start menu
 - Install target for CMake
 - Full screen mode
-- One big wall object
+- One big (long) wall object
+- Restore support for circle-shaped objects
+- Optimize particle performance
+
+Editor:
+
+- Flood fill tool
+
+Bugs:
+
+- Misplaced finish line in the game
+- Something wrong with off-track detection with 45 degrees straight
+  e.g. monza.trk
 - Too easy to accidentally miss checkpoints
-- Update the code to use VBO's.
-- Collision filter for objects
-  (e.g. trees doesn't need to check against other trees).
 
 Content:
 
