@@ -224,7 +224,7 @@
  <tile i="11" j="13" o="0" type="grass"/>
  <tile i="11" j="14" o="0" type="grass"/>
  <tile i="11" j="15" o="180" type="straight45Female"/>
- <tile i="11" j="16" o="-270" type="corner45Left" index="3"/>
+ <tile drivingLineHintV="1" i="11" j="16" drivingLineHintH="1" o="-270" type="corner45Left" index="3"/>
  <tile i="11" j="17" o="0" type="sandGrassStraight"/>
  <tile i="11" j="18" o="0" type="sand"/>
  <tile i="12" j="0" o="180" type="sandGrassStraight"/>
@@ -242,7 +242,7 @@
  <tile i="12" j="12" o="0" type="grass"/>
  <tile i="12" j="13" o="0" type="grass"/>
  <tile i="12" j="14" o="0" type="grass"/>
- <tile i="12" j="15" o="-90" type="corner45Left" index="2"/>
+ <tile drivingLineHintV="2" i="12" j="15" o="-90" type="corner45Left" index="2"/>
  <tile i="12" j="16" o="0" type="straight45Female"/>
  <tile i="12" j="17" o="0" type="sandGrassStraight"/>
  <tile i="12" j="18" o="0" type="sand"/>
@@ -261,7 +261,7 @@
  <tile i="13" j="12" o="0" type="grass"/>
  <tile i="13" j="13" o="0" type="grass"/>
  <tile i="13" j="14" o="0" type="grass"/>
- <tile i="13" j="15" o="90" type="straight" index="1" computerHint="1"/>
+ <tile drivingLineHintV="2" i="13" j="15" o="90" type="straight" index="1" computerHint="1"/>
  <tile i="13" j="16" o="0" type="grass"/>
  <tile i="13" j="17" o="0" type="sandGrassStraight"/>
  <tile i="13" j="18" o="0" type="sand"/>
@@ -783,4 +783,10 @@
  <object x="934" y="3725" category="free" role="tire" o="0"/>
  <object x="886" y="3724" category="free" role="tire" o="0"/>
  <object x="830" y="3779" category="free" role="tire" o="0"/>
+ <object x="3541" y="2211" category="free" role="brake" o="45"/>
+ <object x="3229" y="2496" category="free" role="brake" o="45"/>
+ <object x="7732" y="2774" category="free" role="brake" o="0"/>
+ <object x="7732" y="3106" category="free" role="brake" o="0"/>
+ <object x="3646" y="3806" category="free" role="brake" o="0"/>
+ <object x="3645" y="4123" category="free" role="brake" o="0"/>
 </track>

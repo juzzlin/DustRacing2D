@@ -523,4 +523,6 @@
  <object x="4876" y="2338" category="free" role="tire" o="0"/>
  <object x="4812" y="2351" category="free" role="tire" o="0"/>
  <object x="4925" y="2380" category="free" role="tire" o="0"/>
+ <object x="4228" y="2020" category="free" role="brake" o="0"/>
+ <object x="4230" y="2333" category="free" role="brake" o="0"/>
 </track>

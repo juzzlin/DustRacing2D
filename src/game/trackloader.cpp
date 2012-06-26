@@ -277,7 +277,25 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     const int h = newData.map().rows() * TrackTile::TILE_H;
 
     // TODO: A separate config file for these
-    if (role == "tire")
+    if (role == "brake")
+    {
+        MCSurfaceObjectData data("brake");
+        data.setMass(1000);
+        data.setSurfaceId("brake");
+        data.setRestitution(0.5);
+        data.setXYFriction(1.0);
+        data.setBatchMode(true);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(
+            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialAngle(o);
+
+        // Wrap the MCObject in a TrackObject and add to
+        // the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "tire")
     {
         MCSurfaceObjectData data("tire");
         data.setMass(250); // Exaggerate the mass on purpose
