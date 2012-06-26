@@ -88,6 +88,9 @@ public:
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;
 
+  //! Get number of active particles.
+  static int numActiveParticles();
+
 protected:
 
   //! Constructor
@@ -106,6 +109,8 @@ private:
   //! Recycler object
   static MCRecycler<MCParticle> m_recycler;
   friend class MCRecycler<MCParticle>;
+
+  static int m_numActiveParticles;
 
   DISABLE_COPY(MCParticle);
   DISABLE_ASSI(MCParticle);

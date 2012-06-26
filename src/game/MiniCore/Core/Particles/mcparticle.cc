@@ -21,6 +21,7 @@
 #include "../mccircleshape.hh"
 
 MCRecycler<MCParticle> MCParticle::m_recycler;
+int MCParticle::m_numActiveParticles = 0;
 
 MCParticle::MCParticle()
 : MCObject("PARTICLE")
@@ -52,6 +53,8 @@ void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius
     setPhysicsObject(true);
 
     translate(newLocation);
+
+    MCParticle::m_numActiveParticles++;
 }
 
 MCFloat MCParticle::radius() const
@@ -100,6 +103,8 @@ MCFloat MCParticle::scale() const
 
 void MCParticle::timeOut()
 {
+    MCParticle::m_numActiveParticles--;
+
     die();
 }
 
@@ -150,3 +155,9 @@ void MCParticle::recycle()
 {
     m_recycler.freeObject(this);
 }
+
+int MCParticle::numActiveParticles()
+{
+    return MCParticle::m_numActiveParticles;
+}
+

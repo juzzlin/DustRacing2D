@@ -59,6 +59,8 @@ namespace
     const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -11);
 }
 
+static const int gMaxNumParticles = 500;
+
 Car::Car(MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
 , m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0))
@@ -423,6 +425,11 @@ void Car::setTurningImpulse(MCFloat impulse)
 
 void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
+    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    {
+        return;
+    }
+
     MCGLRectParticle & smoke = MCGLRectParticle::create();
     smoke.init(location, 5, 180);
     smoke.setAnimationStyle(MCParticle::Shrink);
@@ -435,6 +442,11 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
 
 void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
+    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    {
+        return;
+    }
+
     MCGLRectParticle & skidMark = MCGLRectParticle::create();
     skidMark.init(location, 3, 15 * 60);
     skidMark.setAnimationStyle(MCParticle::FadeOut);
@@ -448,6 +460,11 @@ void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCF
 
 void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
+    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    {
+        return;
+    }
+
     MCGLRectParticle & mud = MCGLRectParticle::create();
     mud.init(location, 4, 120);
     mud.setAnimationStyle(MCParticle::Shrink);
@@ -461,6 +478,11 @@ void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat 
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
+    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    {
+        return;
+    }
+
     MCGLRectParticle & sparkle = MCGLRectParticle::create();
     sparkle.init(location, 2, 60);
     sparkle.setAnimationStyle(MCParticle::Shrink);
