@@ -179,16 +179,16 @@ TrackData * TrackIO::open(QString path)
                     const QString category = tag.attribute("category", "clear");
                     const int     x        = tag.attribute("x", "0").toInt();
                     const int     y        = tag.attribute("y", "0").toInt();
-                    const int      o       = tag.attribute("o", "0").toInt();
+                    const int     o        = tag.attribute("o", "0").toInt();
 
                     ObjectData model =
-                        MainWindow::instance()->objectLoader().getObjectByRole(
+                        MainWindow::instance()->objectLoader().getObjectDataByRole(
                             role);
 
                     // Create a new object. QGraphicsScene will take
                     // the ownership eventually.
                     Object * object = new Object(category, role,
-                        QSizeF(model.height, model.width),
+                        QSizeF(model.width, model.height),
                         model.pixmap);
                     object->setLocation(QPointF(x, y));
                     object->setRotation(o);

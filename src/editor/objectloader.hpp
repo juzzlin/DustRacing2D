@@ -37,10 +37,10 @@ public:
     bool load(QString path);
 
     //! Get all objects of the given category.
-    ObjectDataVector getObjectsByCategory(QString category) const;
+    ObjectDataVector getObjectDataByCategory(QString category) const;
 
     //! Get object of the given role.
-    ObjectData getObjectByRole(QString role) const;
+    ObjectData getObjectDataByRole(QString role) const;
 
     //! Get category by role.
     QString getCategoryByRole(QString role) const;

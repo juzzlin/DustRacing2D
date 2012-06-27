@@ -91,7 +91,7 @@ bool ObjectLoader::load(QString path)
     return true;
 }
 
-ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(
+ObjectLoader::ObjectDataVector ObjectLoader::getObjectDataByCategory(
     QString category) const
 {
     ObjectDataVector result;
@@ -107,7 +107,7 @@ ObjectLoader::ObjectDataVector ObjectLoader::getObjectsByCategory(
     return result;
 }
 
-ObjectData ObjectLoader::getObjectByRole(QString role) const
+ObjectData ObjectLoader::getObjectDataByRole(QString role) const
 {
     for (int i = 0; i < m_objects.size(); i++)
     {

@@ -278,7 +278,7 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
             if (scene())
             {
                 ObjectData objectData(
-                    objectLoader.getObjectByRole(action->data().toString()));
+                    objectLoader.getObjectDataByRole(action->data().toString()));
 
                 unsigned int w = objectData.width;
                 w = w > 0 ? w : objectData.pixmap.width();

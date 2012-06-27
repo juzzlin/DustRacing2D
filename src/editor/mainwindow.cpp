@@ -222,7 +222,7 @@ void MainWindow::addObjectsToToolBar()
     for (QString category : categories)
     {
         ObjectLoader::ObjectDataVector objects =
-            m_objectLoader->getObjectsByCategory(category);
+            m_objectLoader->getObjectDataByCategory(category);
         for (const ObjectData model : objects)
         {
             // Create the action.
@@ -436,7 +436,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         else if (m_objectLoader->getCategoryByRole(
             action->data().toString()) == "free")
         {
-            ObjectData objectData = m_objectLoader->getObjectByRole(
+            ObjectData objectData = m_objectLoader->getObjectDataByRole(
                 action->data().toString());
 
             unsigned int w = objectData.width;
