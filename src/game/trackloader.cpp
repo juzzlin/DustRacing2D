@@ -298,7 +298,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
     else if (role == "tire")
     {
         MCSurfaceObjectData data("tire");
-        data.setMass(250); // Exaggerate the mass on purpose
+        data.setMass(1000); // Exaggerate the mass on purpose
         data.setSurfaceId("tire");
         data.setRestitution(0.5);
         data.setXYFriction(0.25);
@@ -345,7 +345,7 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         object->setLayer(Layers::Walls, false);
         object->setInitialLocation(MCVector3dF(x, h - y, 0));
         object->setInitialAngle(o);
-        object->setMass(5000);
+        object->setMass(0, true); // stationary
         object->setXYFriction(0.5);
         object->setDamping(0.9);
 
