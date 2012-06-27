@@ -20,6 +20,7 @@
 
 #include "mainwindow.hpp"
 #include "object.hpp"
+#include "objectfactory.hpp"
 #include "objectmodel.hpp"
 #include "objectmodelloader.hpp"
 #include "trackdata.hpp"
@@ -181,18 +182,12 @@ TrackData * TrackIO::open(QString path)
                     const int     y        = tag.attribute("y", "0").toInt();
                     const int     o        = tag.attribute("o", "0").toInt();
 
-                    ObjectModel model =
-                        MainWindow::instance()->objectModelLoader().getObjectModelByRole(
-                            role);
-
                     // Create a new object. QGraphicsScene will take
                     // the ownership eventually.
-                    Object * object = new Object(category, role,
-                        QSizeF(model.width, model.height),
-                        model.pixmap);
-                    object->setLocation(QPointF(x, y));
-                    object->setRotation(o);
-                    newData->objects().add(*object);
+                    Object & object = ObjectFactory::createObject(role);
+                    object.setLocation(QPointF(x, y));
+                    object.setRotation(o);
+                    newData->objects().add(object);
                 }
             }
 
