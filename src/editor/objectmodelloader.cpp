@@ -20,13 +20,13 @@
 
 #include "../common/config.hpp"
 #include "mainwindow.hpp"
-#include "objectloader.hpp"
+#include "objectmodelloader.hpp"
 
-ObjectLoader::ObjectLoader()
+ObjectModelLoader::ObjectModelLoader()
 {
 }
 
-bool ObjectLoader::load(QString path)
+bool ObjectModelLoader::load(QString path)
 {
     QDomDocument doc;
 
@@ -59,7 +59,7 @@ bool ObjectLoader::load(QString path)
             // Parse an object tag
             if (tag.nodeName() == "object")
             {
-                ObjectData newData;
+                ObjectModel newData;
 
                 newData.category  = tag.attribute("category",  "undefined");
                 newData.role      = tag.attribute("role",      "undefined");
@@ -91,7 +91,7 @@ bool ObjectLoader::load(QString path)
     return true;
 }
 
-ObjectLoader::ObjectDataVector ObjectLoader::getObjectDataByCategory(
+ObjectModelLoader::ObjectDataVector ObjectModelLoader::getObjectModelsByCategory(
     QString category) const
 {
     ObjectDataVector result;
@@ -107,7 +107,7 @@ ObjectLoader::ObjectDataVector ObjectLoader::getObjectDataByCategory(
     return result;
 }
 
-ObjectData ObjectLoader::getObjectDataByRole(QString role) const
+ObjectModel ObjectModelLoader::getObjectModelByRole(QString role) const
 {
     for (int i = 0; i < m_objects.size(); i++)
     {
@@ -117,10 +117,10 @@ ObjectData ObjectLoader::getObjectDataByRole(QString role) const
         }
     }
 
-    return ObjectData();
+    return ObjectModel();
 }
 
-QString ObjectLoader::getCategoryByRole(QString role) const
+QString ObjectModelLoader::getCategoryByRole(QString role) const
 {
     for (int i = 0; i < m_objects.size(); i++)
     {
@@ -133,12 +133,12 @@ QString ObjectLoader::getCategoryByRole(QString role) const
     return QString();
 }
 
-ObjectLoader::ObjectDataVector ObjectLoader::objects() const
+ObjectModelLoader::ObjectDataVector ObjectModelLoader::objects() const
 {
     return m_objects;
 }
 
-QPixmap ObjectLoader::getPixmapByRole(QString role) const
+QPixmap ObjectModelLoader::getPixmapByRole(QString role) const
 {
     for (int i = 0; i < m_objects.size(); i++)
     {

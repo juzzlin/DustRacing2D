@@ -9,7 +9,7 @@ set(SRC
     map.cpp
     newtrackdialog.cpp
     object.cpp
-    objectloader.cpp
+    objectmodelloader.cpp
     rotatedialog.cpp
     tiletypedialog.cpp
     tileanimator.cpp

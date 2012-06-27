@@ -23,7 +23,7 @@
 #include "editorview.hpp"
 #include "mainwindow.hpp"
 #include "object.hpp"
-#include "objectloader.hpp"
+#include "objectmodelloader.hpp"
 #include "rotatedialog.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
@@ -236,8 +236,8 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
 
 void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 {
-    EditorData   & editorData   = MainWindow::instance()->editorData();
-    ObjectLoader & objectLoader = MainWindow::instance()->objectLoader();
+    EditorData        & editorData   = MainWindow::instance()->editorData();
+    ObjectModelLoader & objectLoader = MainWindow::instance()->objectModelLoader();
 
     // User is defining the route
     if (editorData.mode() == EditorData::EM_SET_ROUTE)
@@ -277,8 +277,8 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
         {
             if (scene())
             {
-                ObjectData objectData(
-                    objectLoader.getObjectDataByRole(action->data().toString()));
+                ObjectModel objectData(
+                    objectLoader.getObjectModelByRole(action->data().toString()));
 
                 unsigned int w = objectData.width;
                 w = w > 0 ? w : objectData.pixmap.width();

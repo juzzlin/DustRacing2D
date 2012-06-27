@@ -18,8 +18,8 @@
 #include "../common/config.hpp"
 #include "aboutdlg.hpp"
 #include "object.hpp"
-#include "objectdata.hpp"
-#include "objectloader.hpp"
+#include "objectmodel.hpp"
+#include "objectmodelloader.hpp"
 #include "trackio.hpp"
 #include "trackdata.hpp"
 #include "trackpropertiesdialog.hpp"
@@ -65,7 +65,7 @@ namespace
 }
 
 MainWindow::MainWindow(QString trackFile)
-: m_objectLoader(new ObjectLoader)
+: m_objectModelLoader(new ObjectModelLoader)
 , m_aboutDlg(new AboutDlg(this))
 , m_editorData(new EditorData(this))
 , m_editorScene(new EditorScene(this))
@@ -199,7 +199,7 @@ void MainWindow::init()
 
 bool MainWindow::loadObjectModels(QString objectFilePath)
 {
-    if (m_objectLoader->load(objectFilePath))
+    if (m_objectModelLoader->load(objectFilePath))
     {
         addObjectsToToolBar();
         return true;
@@ -221,9 +221,9 @@ void MainWindow::addObjectsToToolBar()
     categories << "tile" << "free";
     for (QString category : categories)
     {
-        ObjectLoader::ObjectDataVector objects =
-            m_objectLoader->getObjectDataByCategory(category);
-        for (const ObjectData model : objects)
+        ObjectModelLoader::ObjectDataVector objects =
+            m_objectModelLoader->getObjectModelsByCategory(category);
+        for (const ObjectModel model : objects)
         {
             // Create the action.
             QAction * p = new QAction(QIcon(model.pixmap), model.role, this);
@@ -257,9 +257,9 @@ EditorData & MainWindow::editorData() const
     return *m_editorData;
 }
 
-ObjectLoader & MainWindow::objectLoader() const
+ObjectModelLoader & MainWindow::objectModelLoader() const
 {
-    return *m_objectLoader;
+    return *m_objectModelLoader;
 }
 
 QAction * MainWindow::currentToolBarAction() const
@@ -425,7 +425,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
             m_editorData->setMode(EditorData::EM_ERASE_OBJECT);
         }
         // The user wants to set a tile type or clear it.
-        else if (m_objectLoader->getCategoryByRole(
+        else if (m_objectModelLoader->getCategoryByRole(
             action->data().toString()) == "tile")
         {
             QApplication::restoreOverrideCursor();
@@ -433,10 +433,10 @@ void MainWindow::handleToolBarActionClick(QAction * action)
             m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
         }
         // The user wants to add an object to the scene.
-        else if (m_objectLoader->getCategoryByRole(
+        else if (m_objectModelLoader->getCategoryByRole(
             action->data().toString()) == "free")
         {
-            ObjectData objectData = m_objectLoader->getObjectDataByRole(
+            ObjectModel objectData = m_objectModelLoader->getObjectModelByRole(
                 action->data().toString());
 
             unsigned int w = objectData.width;
@@ -820,5 +820,5 @@ void MainWindow::console(QString text)
 MainWindow::~MainWindow()
 {
     delete m_editorData;
-    delete m_objectLoader;
+    delete m_objectModelLoader;
 }

@@ -20,8 +20,8 @@
 
 #include "mainwindow.hpp"
 #include "object.hpp"
-#include "objectdata.hpp"
-#include "objectloader.hpp"
+#include "objectmodel.hpp"
+#include "objectmodelloader.hpp"
 #include "trackdata.hpp"
 #include "trackio.hpp"
 #include "tracktile.hpp"
@@ -159,7 +159,7 @@ TrackData * TrackIO::open(QString path)
                     {
                         tile->setRotation(o);
                         tile->setTileType(id);
-                        tile->setPixmap(MainWindow::instance()->objectLoader().getPixmapByRole(id));
+                        tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(id));
                         tile->setRouteIndex(index);
                         tile->setComputerHint(
                             static_cast<TrackTileBase::ComputerHint>(computerHint));
@@ -181,8 +181,8 @@ TrackData * TrackIO::open(QString path)
                     const int     y        = tag.attribute("y", "0").toInt();
                     const int     o        = tag.attribute("o", "0").toInt();
 
-                    ObjectData model =
-                        MainWindow::instance()->objectLoader().getObjectDataByRole(
+                    ObjectModel model =
+                        MainWindow::instance()->objectModelLoader().getObjectModelByRole(
                             role);
 
                     // Create a new object. QGraphicsScene will take

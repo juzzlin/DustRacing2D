@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECTDATA_HPP
-#define OBJECTDATA_HPP
+#ifndef OBJECTMODEL_HPP
+#define OBJECTMODEL_HPP
 
 #include <QPixmap>
 #include <QString>
 
 //! Structure used by ObjectLoader.
-struct ObjectData
+struct ObjectModel
 {
     //! Path to the image representing this object.
     QPixmap pixmap;
@@ -40,4 +40,4 @@ struct ObjectData
     unsigned int height;
 };
 
-#endif // OBJECTDATA_HPP
+#endif // OBJECTMODEL_HPP

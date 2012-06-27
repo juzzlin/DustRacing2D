@@ -13,34 +13,34 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECT_LOADER_HPP
-#define OBJECT_LOADER_HPP
+#ifndef OBJECT_MODEL_LOADER_HPP
+#define OBJECT_MODEL_LOADER_HPP
 
 #include <QtCore>
 
-#include "objectdata.hpp"
+#include "objectmodel.hpp"
 
 //! Class that loads and manages object models used to
 //! build race tracks.
-class ObjectLoader
+class ObjectModelLoader
 {
 public:
 
-    typedef QVector<ObjectData> ObjectDataVector;
+    typedef QVector<ObjectModel> ObjectDataVector;
 
     //! Constructor.
-    ObjectLoader();
+    ObjectModelLoader();
 
     //! Load data from the given file.
     //! \param filePath The config file to be used.
     //! \return true If failed succeeded.
     bool load(QString path);
 
-    //! Get all objects of the given category.
-    ObjectDataVector getObjectDataByCategory(QString category) const;
+    //! Get all object models of the given category.
+    ObjectDataVector getObjectModelsByCategory(QString category) const;
 
-    //! Get object of the given role.
-    ObjectData getObjectDataByRole(QString role) const;
+    //! Get object model of the given role.
+    ObjectModel getObjectModelByRole(QString role) const;
 
     //! Get category by role.
     QString getCategoryByRole(QString role) const;
@@ -53,9 +53,9 @@ public:
 
 private:
 
-    Q_DISABLE_COPY(ObjectLoader)
+    Q_DISABLE_COPY(ObjectModelLoader)
 
     ObjectDataVector m_objects;
 };
 
-#endif // OBJECT_LOADER_HPP
+#endif // OBJECT_MODEL_LOADER_HPP

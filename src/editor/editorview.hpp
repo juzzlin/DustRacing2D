@@ -25,7 +25,7 @@ class QMouseEvent;
 class QPaintEvent;
 class EditorData;
 class Object;
-class ObjectLoader;
+class ObjectModelLoaderoader;
 class TrackTile;
 
 class EditorView : public QGraphicsView

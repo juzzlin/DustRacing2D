@@ -24,7 +24,7 @@ class AboutDlg;
 class EditorData;
 class EditorView;
 class EditorScene;
-class ObjectLoader;
+class ObjectModelLoader;
 class QAction;
 class QSlider;
 class QTextEdit;
@@ -68,7 +68,7 @@ public:
     EditorData & editorData() const;
 
     //! Get reference to the object loaded.
-    ObjectLoader & objectLoader() const;
+    ObjectModelLoader & objectModelLoader() const;
 
 public slots:
 
@@ -113,23 +113,23 @@ private:
     void removeTilesFromScene();
     void setActionStatesOnNewTrack();
 
-    ObjectLoader * m_objectLoader;
-    AboutDlg     * m_aboutDlg;
-    EditorData   * m_editorData;
-    EditorScene  * m_editorScene;
-    EditorView   * m_editorView;
-    QTextEdit    * m_console;
-    QAction      * m_saveAction;
-    QAction      * m_saveAsAction;
-    QAction      * m_currentToolBarAction;
-    QAction      * m_clearAllAction;
-    QAction      * m_enlargeHorSize;
-    QAction      * m_enlargeVerSize;
-    QAction      * m_clearRouteAction;
-    QAction      * m_setRouteAction;
-    QAction      * m_setTrackPropertiesAction;
-    QSlider      * m_scaleSlider;
-    QToolBar     * m_toolBar;
+    ObjectModelLoader * m_objectModelLoader;
+    AboutDlg          * m_aboutDlg;
+    EditorData        * m_editorData;
+    EditorScene       * m_editorScene;
+    EditorView        * m_editorView;
+    QTextEdit         * m_console;
+    QAction           * m_saveAction;
+    QAction           * m_saveAsAction;
+    QAction           * m_currentToolBarAction;
+    QAction           * m_clearAllAction;
+    QAction           * m_enlargeHorSize;
+    QAction           * m_enlargeVerSize;
+    QAction           * m_clearRouteAction;
+    QAction           * m_setRouteAction;
+    QAction           * m_setTrackPropertiesAction;
+    QSlider           * m_scaleSlider;
+    QToolBar          * m_toolBar;
 
     static MainWindow * m_instance;
 };
