@@ -15,45 +15,48 @@
 
 #include "editordata.hpp"
 #include "editorscene.hpp"
+#include "editorview.hpp"
 #include "mainwindow.hpp"
 #include "object.hpp"
+#include "targetnode.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "trackio.hpp"
+
+#include <cassert>
 
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
 , m_dragAndDropSourceTile(nullptr)
 , m_dragAndDropObject(nullptr)
+, m_dragAndDropTargetNode(nullptr)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
 {}
 
 bool EditorData::loadTrackData(QString fileName)
 {
+    removeTilesFromScene();
+    removeObjectsFromScene();
+
     m_trackData.reset(TrackIO::open(fileName));
     return static_cast<bool>(m_trackData.get());
 }
 
 bool EditorData::saveTrackData()
 {
-    if (m_trackData)
-        return TrackIO::save(m_trackData.get(), m_trackData->fileName());
-
-    return false;
+    assert(m_trackData);
+    return TrackIO::save(m_trackData.get(), m_trackData->fileName());
 }
 
 bool EditorData::saveTrackDataAs(QString fileName)
 {
-    if (m_trackData)
+    assert(m_trackData);
+    if (TrackIO::save(m_trackData.get(), fileName))
     {
-        if (TrackIO::save(m_trackData.get(), fileName))
-        {
-            m_trackData->setFileName(fileName);
-            return true;
-        }
+        m_trackData->setFileName(fileName);
+        return true;
     }
-
     return false;
 }
 
@@ -69,13 +72,10 @@ bool EditorData::canRouteBeSet() const
 
 void EditorData::beginSetRoute()
 {
+    assert(m_trackData);
     setMode(EditorData::EM_SET_ROUTE);
-
-    if (m_trackData)
-    {
-        removeRouteLinesFromScene();
-        m_trackData->route().clear();
-    }
+    removeRouteFromScene();
+    m_trackData->route().clear();
 }
 
 void EditorData::endSetRoute()
@@ -84,68 +84,76 @@ void EditorData::endSetRoute()
     setMode(EditorData::EM_NONE);
 }
 
-void EditorData::addRouteLinesToScene(bool closeLoop)
+void EditorData::addExistingRouteToScene()
 {
-    // Add route lines to the scene.
-    // Each tile contains a pointer to the corresponding line object so that
-    // it can be removed later.
-    if (m_trackData)
+    // Re-push existing (loaded) target nodes so that route lines
+    // and links will be correctly created. A bit stupid,
+    // but is enough for now, because the vectors are not long.
+    std::vector<TargetNodeBase *> temp;
+    m_trackData->route().getAll(temp);
+    m_trackData->route().clear();
+    for (TargetNodeBase * tnode : temp)
     {
-        const unsigned int length = m_trackData->route().length();
-        if (length > 1)
-        {
-            QPen pen(QBrush(QColor(0, 0, 255, 64)), 15, Qt::DashDotLine,
-                 Qt::RoundCap, Qt::RoundJoin);
-
-            for (unsigned int i = 1; i < length; i++)
-            {
-                TrackTile * tile0 = static_cast<TrackTile *>(m_trackData->route().get(i - 1));
-                TrackTile * tile1 = static_cast<TrackTile *>(m_trackData->route().get(i));
-
-                if (!tile1->routeLine())
-                {
-                    tile1->setRouteLine(
-                        m_mainWindow->editorScene().addLine(
-                            tile0->x(), tile0->y(),
-                            tile1->x(), tile1->y(), pen));
-                }
-            }
-
-            if (closeLoop)
-            {
-                TrackTile * tile0 = static_cast<TrackTile *>(m_trackData->route().get(length - 1));
-                TrackTile * tile1 = static_cast<TrackTile *>(m_trackData->route().get(0));
-
-                if (!tile1->routeLine())
-                {
-                    tile1->setRouteLine(
-                        m_mainWindow->editorScene().addLine(
-                            tile0->x(), tile0->y(),
-                            tile1->x(), tile1->y(), pen));
-                }
-            }
-        }
+        pushTargetNodeToRoute(*tnode);
     }
 }
 
-void EditorData::removeRouteLinesFromScene()
+void EditorData::pushNewTargetNodeToRoute(QPointF pos)
 {
-    if (m_trackData)
+    // Push location to the route
+    TargetNodeBase * tnode = new TargetNode;
+    tnode->setLocation(pos);
+    pushTargetNodeToRoute(*tnode);
+}
+
+void EditorData::pushTargetNodeToRoute(TargetNodeBase & tnode)
+{
+    Route & route = trackData()->route();
+
+    if (route.length())
     {
-        const unsigned int length = m_trackData->route().length();
-        for (unsigned int i = 0; i < length; i++)
-        {
-            TrackTile * tile = static_cast<TrackTile *>(m_trackData->route().get(i));
-            if (tile->routeLine())
-            {
-                QGraphicsLineItem * line = tile->routeLine();
-                m_mainWindow->editorScene().removeItem(line);
-                delete line;
-                tile->setRouteLine(nullptr);
-                tile->update();
-            }
-        }
+        TargetNode & prev = static_cast<TargetNode &>(route.get(route.length() - 1));
+        prev.setNext(&tnode);
+        tnode.setPrev(&prev);
+        prev.updateRouteLine();
     }
+
+    const bool loopClosed = route.push(tnode);
+
+    QGraphicsLineItem * routeLine = new QGraphicsLineItem;
+    static_cast<TargetNode &>(tnode).setRouteLine(routeLine);
+
+    m_mainWindow->editorScene().addItem(&static_cast<TargetNode &>(tnode));
+    m_mainWindow->editorScene().addItem(routeLine);
+    static_cast<TargetNode &>(tnode).setZValue(10);
+    routeLine->setZValue(10);
+
+    // Check if we might have a loop => end
+    if (loopClosed)
+    {
+        setMode(EditorData::EM_NONE);
+        m_mainWindow->endSetRoute();
+
+        static_cast<TargetNode &>(route.get(route.length() - 1)).setLocation(
+            static_cast<TargetNode &>(route.get(0)).location());
+
+        tnode.setNext(&route.get(0));
+        route.get(0).setPrev(&tnode);
+    }
+}
+
+void EditorData::removeRouteFromScene()
+{
+    for (unsigned int i = 0; i < m_trackData->route().length(); i++)
+    {
+        TargetNodeBase * tnode = &m_trackData->route().get(i);
+        m_mainWindow->editorScene().removeItem(static_cast<TargetNode *>(tnode));
+        m_mainWindow->editorScene().removeItem(static_cast<TargetNode *>(tnode)->routeLine());
+        delete static_cast<TargetNode *>(tnode)->routeLine();
+        delete tnode;
+    }
+
+    m_mainWindow->editorView().update();
 }
 
 TrackData * EditorData::trackData()
@@ -183,6 +191,16 @@ Object * EditorData::dragAndDropObject() const
     return m_dragAndDropObject;
 }
 
+void EditorData::setDragAndDropTargetNode(TargetNode * tnode)
+{
+    m_dragAndDropTargetNode = tnode;
+}
+
+TargetNode * EditorData::dragAndDropTargetNode() const
+{
+    return m_dragAndDropTargetNode;
+}
+
 void EditorData::setDragAndDropSourcePos(QPointF pos)
 {
     m_dragAndDropSourcePos = pos;
@@ -191,4 +209,116 @@ void EditorData::setDragAndDropSourcePos(QPointF pos)
 QPointF EditorData::dragAndDropSourcePos() const
 {
     return m_dragAndDropSourcePos;
+}
+
+void EditorData::addTilesToScene()
+{
+    assert(m_trackData);
+
+    const unsigned int cols = m_trackData->map().cols();
+    const unsigned int rows = m_trackData->map().rows();
+
+    for (unsigned int i = 0; i < cols; i++)
+    {
+        for (unsigned int j = 0; j < rows; j++)
+        {
+            if (TrackTile * tile = static_cast<TrackTile *>(m_trackData->map().getTile(i, j)))
+            {
+                if (!tile->added())
+                {
+                    m_mainWindow->editorScene().addItem(tile);
+                    tile->setAdded(true);
+                }
+            }
+        }
+    }
+
+    if (m_trackData->map().getTile(0, 0))
+        static_cast<TrackTile *>(m_trackData->map().getTile(0, 0))->setActive(true);
+}
+
+void EditorData::addObjectsToScene()
+{
+    assert(m_trackData);
+
+    for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
+    {
+        if (Object * object = dynamic_cast<Object *>(&m_trackData->objects().object(i)))
+        {
+            m_mainWindow->editorScene().addItem(object);
+            object->setZValue(10);
+        }
+    }
+}
+
+void EditorData::removeTilesFromScene()
+{
+    if (m_trackData)
+    {
+        TrackTile::setActiveTile(nullptr);
+
+        const unsigned int cols = m_trackData->map().cols();
+        const unsigned int rows = m_trackData->map().rows();
+
+        for (unsigned int i = 0; i < cols; i++)
+        {
+            for (unsigned int j = 0; j < rows; j++)
+            {
+                if (TrackTile * tile = static_cast<TrackTile *>(m_trackData->map().getTile(i, j)))
+                {
+                    m_mainWindow->editorScene().removeItem(tile);
+                    delete tile;
+                }
+            }
+        }
+    }
+}
+
+void EditorData::removeObjectsFromScene()
+{
+    if (m_trackData)
+    {
+        for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
+        {
+            if (Object * object =
+                    dynamic_cast<Object *>(&m_trackData->objects().object(i)))
+            {
+                m_mainWindow->editorScene().removeItem(object);
+                delete object;
+            }
+        }
+    }
+}
+
+void EditorData::clear()
+{
+    assert(m_trackData);
+
+    const unsigned int cols = m_trackData->map().cols();
+    const unsigned int rows = m_trackData->map().rows();
+
+    for (unsigned int i = 0; i < cols; i++)
+    {
+        for (unsigned int j = 0; j < rows; j++)
+        {
+            if (TrackTile * pTile = static_cast<TrackTile *>(m_trackData->map().getTile(i, j)))
+            {
+                pTile->setTileType("clear");
+            }
+        }
+    }
+
+    m_mainWindow->console(QString(QObject::tr("Tiles cleared.")));
+
+    clearRoute();
+}
+
+void EditorData::clearRoute()
+{
+    assert(m_trackData);
+
+    removeRouteFromScene();
+    m_trackData->route().clear();
+
+    m_mainWindow->console(QString(QObject::tr("Route cleared.")));
 }

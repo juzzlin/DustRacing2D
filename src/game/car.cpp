@@ -83,7 +83,8 @@ Car::Car(MCSurface & surface, MCUint index, bool isHuman)
 , m_speedInKmh(0)
 , m_dx(0)
 , m_dy(0)
-, m_currentRouteIndex(-1)
+, m_currentTargetNodeIndex(-1)
+, m_prevTargetNodeIndex(-1)
 , m_routeProgression(0)
 , m_isHuman(isHuman)
 {
@@ -493,14 +494,24 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     m_isParticleGroup.addParticle(sparkle);
 }
 
-void Car::setCurrentRouteIndex(int index)
+void Car::setCurrentTargetNodeIndex(int index)
 {
-    m_currentRouteIndex = index;
+    m_currentTargetNodeIndex = index;
 }
 
-int Car::currentRouteIndex() const
+int Car::currentTargetNodeIndex() const
 {
-    return m_currentRouteIndex;
+    return m_currentTargetNodeIndex;
+}
+
+void Car::setPrevTargetNodeIndex(int index)
+{
+    m_prevTargetNodeIndex = index;
+}
+
+int Car::prevTargetNodeIndex() const
+{
+    return m_prevTargetNodeIndex;
 }
 
 void Car::setRouteProgression(int value)

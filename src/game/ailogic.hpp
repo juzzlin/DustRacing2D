@@ -20,6 +20,7 @@
 
 class Car;
 class Route;
+class TargetNodeBase;
 class Track;
 class TrackTile;
 
@@ -47,11 +48,11 @@ private:
 
     //! Steering logic.
     void steerControl(
-        TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted);
+        TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted);
 
     //! Brake/accelerate logic.
     void speedControl(
-        TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted);
+        TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted);
 
     Car         & m_car;
     Track       * m_track;

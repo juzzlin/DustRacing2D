@@ -22,6 +22,8 @@
 
 #include "layers.hpp"
 
+#include "../common/targetnodebase.hpp"
+
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackloader.hpp"
@@ -36,9 +38,7 @@
 
 #include <cassert>
 
-TrackLoader::TrackLoader(
-    MCTextureManager & textureManager,
-    MCObjectFactory  & objectFactory)
+TrackLoader::TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory)
 : m_textureManager(textureManager)
 , m_objectFactory(objectFactory)
 , m_paths()
@@ -72,8 +72,7 @@ int TrackLoader::loadTracks()
             }
             else
             {
-                MCLogger().error() << "Couldn't load '" <<
-                    trackPath.toStdString() << "'..";
+                MCLogger().error() << "Couldn't load '" << trackPath.toStdString() << "'..";
             }
         }
     }
@@ -114,55 +113,56 @@ TrackData * TrackLoader::loadTrack(QString path)
             newData->setFileName(path);
             newData->setLapCount(lapCount);
 
-            QVector<TrackTileBase *> routeVector;
+            // A temporary route vector.
+            std::vector<TargetNodeBase *> route;
 
             QDomNode node = root.firstChild();
             while(!node.isNull())
             {
-                QDomElement tag = node.toElement();
-                if(!tag.isNull())
+                QDomElement element = node.toElement();
+                if(!element.isNull())
                 {
-                    // Read a tile tag
-                    if (tag.nodeName() == "tile")
+                    // Read a tile element
+                    if (element.nodeName() == "tile")
                     {
-                        handleTile(tag, *newData, routeVector);
+                        readTile(element, *newData);
                     }
-                    // Read an object tag
-                    else if (tag.nodeName() == "object")
+                    // Read an object element
+                    else if (element.nodeName() == "object")
                     {
-                        handleObject(tag, *newData);
+                        readObject(element, *newData);
+                    }
+                    // Read a target node element
+                    else if (element.nodeName() == "tnode")
+                    {
+                        readTargetNode(element, *newData, route);
                     }
                 }
 
                 node = node.nextSibling();
             }
 
-            newData->route().buildFromVector(routeVector);
+            newData->route().buildFromVector(route);
         }
     }
 
     return newData;
 }
 
-void TrackLoader::handleTile(
-    QDomElement & tag, TrackData & newData, QVector<TrackTileBase *> & routeVector)
+void TrackLoader::readTile(
+    QDomElement & element, TrackData & newData)
 {
-    const std::string  id               = tag.attribute("type", "clear").toStdString();
-    const unsigned int computerHint     = tag.attribute("computerHint", "0").toUInt();
-    const unsigned int drivingLineHintH = tag.attribute("drivingLineHintH", "0").toUInt();
-    const unsigned int drivingLineHintV = tag.attribute("drivingLineHintV", "0").toUInt();
-
-    // Route index
-    const int index = tag.attribute("index", "-1").toInt();
+    const std::string  id           = element.attribute("type", "clear").toStdString();
+    const unsigned int computerHint = element.attribute("computerHint", "0").toUInt();
 
     // X-coordinate in the tile matrix
-    unsigned int i = tag.attribute("i", "0").toUInt();
+    unsigned int i = element.attribute("i", "0").toUInt();
 
     // Y-coordinate in the tile matrix
-    unsigned int j = tag.attribute("j", "0").toUInt();
+    unsigned int j = element.attribute("j", "0").toUInt();
 
     // Orientation angle in degrees.
-    int o = tag.attribute("o", "0").toInt();
+    int o = element.attribute("o", "0").toInt();
 
     // Mirror the angle and y-index, because game has the
     // y-axis pointing up.
@@ -175,18 +175,12 @@ void TrackLoader::handleTile(
     tile->setRotation(o);
     tile->setTileType(id.c_str());
     tile->setTileTypeEnum(tileTypeEnumFromString(id.c_str()));
-    tile->setRouteIndex(index);
     tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
-    tile->setDrivingLineHintH(static_cast<TrackTileBase::DrivingLineHintH>(drivingLineHintH));
-    tile->setDrivingLineHintV(static_cast<TrackTileBase::DrivingLineHintV>(drivingLineHintV));
 
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
     tile->setSurface(&m_textureManager.surface(id));
-
-    if (index >= 0)
-        routeVector << tile;
 }
 
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
@@ -255,19 +249,19 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     return TrackTile::TT_NONE;
 }
 
-void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
+void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 {
-    const QString role     = tag.attribute("role", "");
-    const QString category = tag.attribute("category", "");
+    const QString role     = element.attribute("role", "");
+    const QString category = element.attribute("category", "");
 
     // X-coordinate in the world
-    const int x = tag.attribute("x", "0").toInt();
+    const int x = element.attribute("x", "0").toInt();
 
     // Y-coordinate in the world
-    const int y = tag.attribute("y", "0").toInt();
+    const int y = element.attribute("y", "0").toInt();
 
     // Angle in degrees
-    int o = tag.attribute("o", "0").toInt();
+    int o = element.attribute("o", "0").toInt();
 
     // Mirror the angle, because game has y-axis pointing up.
     o = -o;
@@ -353,6 +347,23 @@ void TrackLoader::handleObject(QDomElement & tag, TrackData & newData)
         // the TrackData
         newData.objects().add(*new TrackObject(category, role, *object), true);
     }
+}
+
+void TrackLoader::readTargetNode(
+    QDomElement & element, TrackData & newData, std::vector<TargetNodeBase *> & route)
+{
+    const int x = element.attribute("x", "0").toInt();
+    const int y = element.attribute("y", "0").toInt();
+    const int i = element.attribute("i", "0").toInt();
+
+    // Height of the map. The y-coordinates needs to be mirrored, because
+    // the coordinate system is y-wise mirrored in the editor.
+    const int h = newData.map().rows() * TrackTile::TILE_H;
+
+    TargetNodeBase * tnode = new TargetNodeBase;
+    tnode->setIndex(i);
+    tnode->setLocation(QPointF(x, h - y));
+    route.push_back(tnode);
 }
 
 unsigned int TrackLoader::tracks() const

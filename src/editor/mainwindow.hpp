@@ -101,16 +101,11 @@ private slots:
 
 private:
 
-    void addObjectsToScene();
-    void addTilesToScene();
-    void addRouteLinesToScene(bool closeLoop);
     void addObjectsToToolBar();
     void init();
     bool loadObjectModels(QString objectFilePath);
     void populateMenuBar();
     void populateToolBar();
-    void removeObjectsFromScene();
-    void removeTilesFromScene();
     void setActionStatesOnNewTrack();
 
     ObjectModelLoader * m_objectModelLoader;

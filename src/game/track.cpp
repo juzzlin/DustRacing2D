@@ -62,6 +62,26 @@ TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
     return static_cast<TrackTile *>(m_pTrackData->map().getTile(i, j));
 }
 
+TrackTile * Track::finishLine() const
+{
+    const MapBase & rMap = m_pTrackData->map();
+    for (MCUint j = 0; j < rMap.rows(); j++)
+    {
+        for (MCUint i = 0; i < rMap.cols(); i++)
+        {
+            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            {
+                if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
+                {
+                    return pTile;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
     MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
 

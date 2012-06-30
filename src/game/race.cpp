@@ -21,6 +21,7 @@
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
+#include "../common/targetnodebase.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -45,7 +46,8 @@ void Race::init()
 {
     for(Car * pCar : m_cars)
     {
-        pCar->setCurrentRouteIndex(0);
+        pCar->setCurrentTargetNodeIndex(0);
+        pCar->setPrevTargetNodeIndex(0);
         pCar->setRouteProgression(0);
     }
 
@@ -74,11 +76,12 @@ void Race::update()
     // Enable the checkered flag if leader has done at least 95% of the last lap.
     if (m_timing.leadersLap() + 1 == static_cast<int>(m_lapCount))
     {
-        Car & leader = getLeadingCar();
-        const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(leader.getX(), leader.getY());
-        if (pCurrent->routeIndex() != -1 &&
-            pCurrent->routeIndex() >
-            static_cast<int>(9 * m_pTrack->trackData().route().length() / 10))
+        Car                  & leader = getLeadingCar();
+        const Route          & route  = m_pTrack->trackData().route();
+        const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
+
+        if (tnode.index() >=
+            static_cast<int>(9 * route.length() / 10))
         {
             m_checkeredFlagEnabled = true;
         }
@@ -93,31 +96,42 @@ void Race::update()
     }
 }
 
+bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
+{
+    if (car.location().i() < tnode.location().x() - TrackTile::TILE_W / 2 - tolerance)
+    {
+        return false;
+    }
+    else if (car.location().i() > tnode.location().x() + TrackTile::TILE_W / 2 + tolerance)
+    {
+        return false;
+    }
+    else if (car.location().j() < tnode.location().y() - TrackTile::TILE_H / 2 - tolerance)
+    {
+        return false;
+    }
+    else if (car.location().j() > tnode.location().y() + TrackTile::TILE_H / 2 + tolerance)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void Race::updateRouteProgress(Car & car)
 {
-    const TrackTile * pCurrent = m_pTrack->trackTileAtLocation(car.getX(), car.getY());
+    const Route    & route = m_pTrack->trackData().route();
+    unsigned int     index = car.currentTargetNodeIndex();
+    TargetNodeBase & tnode = route.get(index);
 
-    // Lap progressed?
-    if (pCurrent->routeIndex() == car.currentRouteIndex() + 1)
+    // Give a bit more tolerance for other than the finishing check point.
+    const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 2;
+    if (isInsideCheckPoint(car, tnode, tolerance))
     {
-        car.setCurrentRouteIndex(pCurrent->routeIndex());
-        car.setRouteProgression(car.routeProgression() + 1);
-
-        m_positions[car.routeProgression()].push_back(car.index());
-    }
-    // Lap finished?
-    else if (car.currentRouteIndex() ==
-        static_cast<int>(m_pTrack->trackData().route().length()) - 1)
-    {
-        if (pCurrent->routeIndex() == 1)
+        // Lap finished?
+        if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.length()))
         {
-            car.setCurrentRouteIndex(1);
-            car.setRouteProgression(car.routeProgression() + 1);
-
-            m_positions[car.routeProgression()].push_back(car.index());
-
             m_timing.lapCompleted(car.index(), car.isHuman());
-
             if (m_timing.newLapRecordAchieved())
             {
                 saveLapRecord(m_timing.lapRecord());
@@ -128,7 +142,20 @@ void Race::updateRouteProgress(Car & car)
                 m_timing.setRaceCompleted(car.index(), true);
             }
         }
+
+        // Increase progress and update the positions hash
+        car.setRouteProgression(car.routeProgression() + 1);
+        m_positions[car.routeProgression()].push_back(car.index());
+
+        // Switch to next check point
+        car.setPrevTargetNodeIndex(index);
+        if (++index >= route.length())
+        {
+            index = 0;
+        }
     }
+
+    car.setCurrentTargetNodeIndex(index);
 }
 
 void Race::saveLapRecord(int msecs)

@@ -32,8 +32,10 @@
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
+#include "../common/targetnodebase.hpp"
 
 #include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObject"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
@@ -132,7 +134,7 @@ void Scene::updateWorld(float timeStep)
 }
 
 void Scene::updateRace()
-{    
+{
     // Update race situation
     m_race.update();
 }
@@ -259,14 +261,10 @@ void Scene::translateCarsToStartPositions()
 {
     assert(m_pActiveTrack);
 
-    if (m_pActiveTrack->trackData().route().length() > 0)
+    if (TrackTile * finishLine = m_pActiveTrack->finishLine())
     {
-        const MCFloat startTileX =
-            m_pActiveTrack->trackData().route().get(0)->location().x();
-        const MCFloat startTileY =
-            m_pActiveTrack->trackData().route().get(0)->location().y();
-        const TrackTile::RouteDirection routeDirection =
-            m_pActiveTrack->trackData().route().get(0)->routeDirection();
+        const MCFloat startTileX = finishLine->location().x();
+        const MCFloat startTileY = finishLine->location().y();
         const MCFloat tileWidth  = TrackTile::TILE_W;
         const MCFloat tileHeight = TrackTile::TILE_H;
 
@@ -275,9 +273,11 @@ void Scene::translateCarsToStartPositions()
         std::reverse(order.begin(), order.end());
 
         // Position the cars into two queues.
+        const int routeDirection = finishLine->rotation() % 360;
         switch (routeDirection)
         {
-        case TrackTile::RD_LEFT:
+        case 90:
+        case -270:
             for (MCUint i = 0; i < order.size(); i++)
             {
                 const MCFloat rowPos = (i / 2) * tileWidth;
@@ -293,7 +293,8 @@ void Scene::translateCarsToStartPositions()
             break;
 
         default:
-        case TrackTile::RD_RIGHT:
+        case 270:
+        case -90:
             for (MCUint i = 0; i < order.size(); i++)
             {
                 const MCFloat rowPos = (i / 2) * tileWidth;
@@ -308,7 +309,7 @@ void Scene::translateCarsToStartPositions()
             }
             break;
 
-        case TrackTile::RD_DOWN:
+        case 0:
             for (MCUint i = 0; i < order.size(); i++)
             {
                 const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
@@ -323,7 +324,8 @@ void Scene::translateCarsToStartPositions()
             }
             break;
 
-        case TrackTile::RD_UP:
+        case 180:
+        case -180:
             for (MCUint i = 0; i < order.size(); i++)
             {
                 const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
@@ -338,6 +340,11 @@ void Scene::translateCarsToStartPositions()
             }
             break;
         }
+    }
+    else
+    {
+        MCLogger().error() << "Finish line tile not found in track '" <<
+            m_pActiveTrack->trackData().name().toStdString() << "'";
     }
 }
 

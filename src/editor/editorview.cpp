@@ -26,6 +26,7 @@
 #include "objectfactory.hpp"
 #include "objectmodelloader.hpp"
 #include "rotatedialog.hpp"
+#include "targetnode.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
@@ -34,12 +35,6 @@ EditorView::EditorView(QWidget * parent)
 , m_clearComputerHint(nullptr)
 , m_setComputerHintFirstBeforeCorner(nullptr)
 , m_setComputerHintSecondBeforeCorner(nullptr)
-, m_clearDrivingLineHintH(nullptr)
-, m_clearDrivingLineHintV(nullptr)
-, m_setDrivingLineHintLeft(nullptr)
-, m_setDrivingLineHintRight(nullptr)
-, m_setDrivingLineHintTop(nullptr)
-, m_setDrivingLineHintBottom(nullptr)
 {
     createTileContextMenu();
     createObjectContextMenu();
@@ -67,7 +62,12 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
         // Object drag'n'drop active?
         else if (Object * object = editorData.dragAndDropObject())
         {
-            object->setPos(mappedPos);
+            object->setLocation(mappedPos);
+        }
+        // Target node drag'n'drop active?
+        else if (TargetNode * tnode = editorData.dragAndDropTargetNode())
+        {
+            tnode->setLocation(mappedPos);
         }
 
         // Show coordinates in status bar
@@ -109,34 +109,6 @@ void EditorView::createTileContextMenu()
     QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
         SLOT(doSetComputerHintSecondBeforeCorner()));
 
-    m_clearDrivingLineHintH = new QAction(QWidget::tr("Clear hor driving line hint"), &m_tileContextMenu);
-    QObject::connect(m_clearDrivingLineHintH, SIGNAL(triggered()), this,
-        SLOT(doClearDrivingLineHintH()));
-
-    m_clearDrivingLineHintV = new QAction(QWidget::tr("Clear ver driving line hint"), &m_tileContextMenu);
-    QObject::connect(m_clearDrivingLineHintV, SIGNAL(triggered()), this,
-        SLOT(doClearDrivingLineHintV()));
-
-    m_setDrivingLineHintLeft = new QAction(
-        QWidget::tr("Set driving line hint 'left'.."), &m_tileContextMenu);
-    QObject::connect(m_setDrivingLineHintLeft, SIGNAL(triggered()), this,
-        SLOT(doSetDrivingLineHintLeft()));
-
-    m_setDrivingLineHintRight = new QAction(
-        QWidget::tr("Set driving line hint 'right'.."), &m_tileContextMenu);
-    QObject::connect(m_setDrivingLineHintRight, SIGNAL(triggered()), this,
-        SLOT(doSetDrivingLineHintRight()));
-
-    m_setDrivingLineHintTop = new QAction(
-        QWidget::tr("Set driving line hint 'top'.."), &m_tileContextMenu);
-    QObject::connect(m_setDrivingLineHintTop, SIGNAL(triggered()), this,
-        SLOT(doSetDrivingLineHintTop()));
-
-    m_setDrivingLineHintBottom = new QAction(
-        QWidget::tr("Set driving line hint 'bottom'.."), &m_tileContextMenu);
-    QObject::connect(m_setDrivingLineHintBottom, SIGNAL(triggered()), this,
-        SLOT(doSetDrivingLineHintBottom()));
-
     // Populate the menu
     m_tileContextMenu.addAction(rotate90CW);
     m_tileContextMenu.addAction(rotate90CCW);
@@ -144,14 +116,6 @@ void EditorView::createTileContextMenu()
     m_tileContextMenu.addAction(m_clearComputerHint);
     m_tileContextMenu.addAction(m_setComputerHintFirstBeforeCorner);
     m_tileContextMenu.addAction(m_setComputerHintSecondBeforeCorner);
-    m_tileContextMenu.addSeparator();
-    m_tileContextMenu.addAction(m_clearDrivingLineHintH);
-    m_tileContextMenu.addAction(m_setDrivingLineHintLeft);
-    m_tileContextMenu.addAction(m_setDrivingLineHintRight);
-    m_tileContextMenu.addSeparator();
-    m_tileContextMenu.addAction(m_clearDrivingLineHintV);
-    m_tileContextMenu.addAction(m_setDrivingLineHintTop);
-    m_tileContextMenu.addAction(m_setDrivingLineHintBottom);
 }
 
 void EditorView::createObjectContextMenu()
@@ -183,6 +147,22 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             else if (event->button() == Qt::LeftButton)
             {
                 handleLeftButtonClickOnObject(*object);
+            }
+
+            QWidget::mousePressEvent(event);
+        }
+        else if (TargetNode * tnode =
+            dynamic_cast<TargetNode *>(scene()->itemAt(m_clickedScenePos)))
+        {
+            // Handle right button click
+            if (event->button() == Qt::RightButton)
+            {
+                handleRightButtonClickOnTargetNode(*tnode);
+            }
+            // Handle left button click
+            else if (event->button() == Qt::LeftButton)
+            {
+                handleLeftButtonClickOnTargetNode(*tnode);
             }
 
             QWidget::mousePressEvent(event);
@@ -235,6 +215,26 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
     }
 }
 
+void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
+{
+    EditorData & editorData = MainWindow::instance()->editorData();
+
+    // User is initiating a drag'n'drop
+    if (editorData.mode() == EditorData::EM_NONE)
+    {
+        tnode.setZValue(tnode.zValue() + 1);
+        editorData.setDragAndDropTargetNode(&tnode);
+
+        // Change cursor to the closed hand cursor.
+        QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
+    }
+    // It's not possible to make nodes overlap if not handled also here.
+    else if (editorData.mode() == EditorData::EM_SET_ROUTE)
+    {
+        editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
+    }
+}
+
 void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 {
     EditorData & editorData = MainWindow::instance()->editorData();
@@ -242,23 +242,7 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
     // User is defining the route
     if (editorData.mode() == EditorData::EM_SET_ROUTE)
     {
-        // Push tile to the route
-        tile.setRouteIndex(editorData.trackData()->route().push(&tile));
-
-        // Check if we might have a loop => end
-        if (!tile.routeIndex() && editorData.trackData()->route().length() > 1)
-        {
-            editorData.setMode(EditorData::EM_NONE);
-            MainWindow::instance()->endSetRoute();
-
-            // Update route lines and close the loop
-            editorData.addRouteLinesToScene(true);
-        }
-        else
-        {
-            // Update route lines but don't close the loop
-            editorData.addRouteLinesToScene(false);
-        }
+        editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
     // User is setting the tile type
     else if (editorData.mode() == EditorData::EM_SET_TILE_TYPE)
@@ -323,44 +307,6 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
         break;
     }
 
-    // Enable all driving line hints by default
-    m_clearDrivingLineHintH->setEnabled(true);
-    m_clearDrivingLineHintV->setEnabled(true);
-    m_setDrivingLineHintLeft->setEnabled(true);
-    m_setDrivingLineHintRight->setEnabled(true);
-    m_setDrivingLineHintTop->setEnabled(true);
-    m_setDrivingLineHintBottom->setEnabled(true);
-
-    switch (tile.drivingLineHintH())
-    {
-    case TrackTileBase::DLHH_NONE:
-        m_clearDrivingLineHintH->setEnabled(false);
-        break;
-    case TrackTileBase::DLHH_LEFT:
-        m_setDrivingLineHintLeft->setEnabled(false);
-        break;
-    case TrackTileBase::DLHH_RIGHT:
-        m_setDrivingLineHintRight->setEnabled(false);
-        break;
-    default:
-        break;
-    }
-
-    switch (tile.drivingLineHintV())
-    {
-    case TrackTileBase::DLHV_NONE:
-        m_clearDrivingLineHintV->setEnabled(false);
-        break;
-    case TrackTileBase::DLHV_TOP:
-        m_setDrivingLineHintTop->setEnabled(false);
-        break;
-    case TrackTileBase::DLHV_BOTTOM:
-        m_setDrivingLineHintBottom->setEnabled(false);
-        break;
-    default:
-        break;
-    }
-
     // Show the context menu
     QPoint globalPos = mapToGlobal(m_clickedPos);
     m_tileContextMenu.exec(globalPos);
@@ -373,10 +319,16 @@ void EditorView::handleRightButtonClickOnObject(Object &)
     m_objectContextMenu.exec(globalPos);
 }
 
+void EditorView::handleRightButtonClickOnTargetNode(TargetNode &)
+{
+    // Do nothing currently
+}
+
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
 {
     handleTileDragRelease(event);
     handleObjectDragRelease(event);
+    handleTargetNodeDragRelease(event);
 }
 
 void EditorView::handleTileDragRelease(QMouseEvent * event)
@@ -425,7 +377,7 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
     {
         EditorData & editorData = MainWindow::instance()->editorData();
 
-        // Tile drag'n'drop active?
+        // Object drag'n'drop active?
         if (Object * object = editorData.dragAndDropObject())
         {
             // Set the new position position
@@ -435,6 +387,29 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
             update();
 
             editorData.setDragAndDropObject(nullptr);
+
+            // Restore the cursor.
+            QApplication::restoreOverrideCursor();
+        }
+    }
+}
+
+void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
+{
+    if (scene())
+    {
+        EditorData & editorData = MainWindow::instance()->editorData();
+
+        // Target node drag'n'drop active?
+        if (TargetNode * tnode = editorData.dragAndDropTargetNode())
+        {
+            // Set the new position position
+            tnode->setLocation(mapToScene(event->pos()));
+            tnode->setZValue(tnode->zValue() - 1);
+
+            update();
+
+            editorData.setDragAndDropTargetNode(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();
@@ -494,53 +469,5 @@ void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->setComputerHint(hint);
-    }
-}
-
-void EditorView::doClearDrivingLineHintH()
-{
-    doSetDrivingLineHintH(TrackTileBase::DLHH_NONE);
-}
-
-void EditorView::doClearDrivingLineHintV()
-{
-    doSetDrivingLineHintV(TrackTileBase::DLHV_NONE);
-}
-
-void EditorView::doSetDrivingLineHintLeft()
-{
-    doSetDrivingLineHintH(TrackTileBase::DLHH_LEFT);
-}
-
-void EditorView::doSetDrivingLineHintRight()
-{
-    doSetDrivingLineHintH(TrackTileBase::DLHH_RIGHT);
-}
-
-void EditorView::doSetDrivingLineHintTop()
-{
-    doSetDrivingLineHintV(TrackTileBase::DLHV_TOP);
-}
-
-void EditorView::doSetDrivingLineHintBottom()
-{
-    doSetDrivingLineHintV(TrackTileBase::DLHV_BOTTOM);
-}
-
-void EditorView::doSetDrivingLineHintH(TrackTileBase::DrivingLineHintH hint)
-{
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-    {
-        tile->setDrivingLineHintH(hint);
-    }
-}
-
-void EditorView::doSetDrivingLineHintV(TrackTileBase::DrivingLineHintV hint)
-{
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-    {
-        tile->setDrivingLineHintV(hint);
     }
 }

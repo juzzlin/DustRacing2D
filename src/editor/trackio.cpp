@@ -23,12 +23,14 @@
 #include "objectfactory.hpp"
 #include "objectmodel.hpp"
 #include "objectmodelloader.hpp"
+#include "targetnode.hpp"
 #include "trackdata.hpp"
 #include "trackio.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
 #include "../common/objectbase.hpp"
+#include "../common/targetnodebase.hpp"
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
@@ -42,52 +44,9 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     root.setAttribute("lapCount", trackData->lapCount());
     doc.appendChild(root);
 
-    // Add information about tiles
-    for (unsigned int i = 0; i < trackData->map().cols(); i++)
-        for (unsigned int j = 0; j < trackData->map().rows(); j++)
-            if (TrackTile * tile = static_cast<TrackTile *>(trackData->map().getTile(i, j)))
-            {
-                QDomElement tileTag = doc.createElement("tile");
-                tileTag.setAttribute("type", tile->tileType());
-                tileTag.setAttribute("i", i);
-                tileTag.setAttribute("j", j);
-                tileTag.setAttribute("o", tile->rotation());
-
-                if (tile->routeIndex() != -1)
-                {
-                    tileTag.setAttribute("index", tile->routeIndex());
-                }
-
-                if (tile->computerHint() != TrackTile::CH_NONE)
-                {
-                    tileTag.setAttribute("computerHint", tile->computerHint());
-                }
-
-                if (tile->drivingLineHintH() != TrackTile::DLHH_NONE)
-                {
-                    tileTag.setAttribute("drivingLineHintH", tile->drivingLineHintH());
-                }
-
-                if (tile->drivingLineHintV() != TrackTile::DLHV_NONE)
-                {
-                    tileTag.setAttribute("drivingLineHintV", tile->drivingLineHintV());
-                }
-
-                root.appendChild(tileTag);
-            }
-
-    // Add information about objects
-    for (unsigned int i = 0; i < trackData->objects().count(); i++)
-    {
-        QDomElement objectTag = doc.createElement("object");
-        Object & object = static_cast<Object &>(trackData->objects().object(i));
-        objectTag.setAttribute("category", object.category());
-        objectTag.setAttribute("role", object.role());
-        objectTag.setAttribute("x", static_cast<int>(object.location().x()));
-        objectTag.setAttribute("y", static_cast<int>(object.location().y()));
-        objectTag.setAttribute("o", static_cast<int>(object.rotation()));
-        root.appendChild(objectTag);
-    }
+    writeTiles(*trackData, root, doc);
+    writeObjects(*trackData, root, doc);
+    writeTargetNodes(*trackData, root, doc);
 
     // Save to file
     QFile file(path);
@@ -128,74 +87,155 @@ TrackData * TrackIO::open(QString path)
     const unsigned int lapCount = root.attribute("lapCount", "0").toUInt();
 
     TrackData * newData = nullptr;
-    if (cols > 0 && rows > 0)
+    if (cols && rows)
     {
         newData = new TrackData(name, cols, rows);
         newData->setFileName(path);
         newData->setLapCount(lapCount);
 
-        QVector<TrackTileBase *> routeVector;
+        // Temporary route vector.
+        std::vector<TargetNodeBase *> route;
 
         QDomNode node = root.firstChild();
         while(!node.isNull())
         {
-            QDomElement tag = node.toElement();
-            if(!tag.isNull())
+            QDomElement element = node.toElement();
+            if(!element.isNull())
             {
-                // Read a tile tag
-                if (tag.nodeName() == "tile")
+                // Read a tile element
+                if (element.nodeName() == "tile")
                 {
-                    const QString      id      = tag.attribute("type", "clear");
-                    const unsigned int i       = tag.attribute("i", "0").toUInt();
-                    const unsigned int j       = tag.attribute("j", "0").toUInt();
-                    const int          o       = tag.attribute("o", "0").toInt();
-                    const int      index       = tag.attribute("index", "-1").toInt();
-                    const int computerHint     = tag.attribute("computerHint", "0").toInt();
-                    const int drivingLineHintH = tag.attribute("drivingLineHintH", "0").toInt();
-                    const int drivingLineHintV = tag.attribute("drivingLineHintV", "0").toInt();
-
-                    // Init a new tile. QGraphicsScene will take
-                    // the ownership eventually.
-                    if (TrackTile * tile = static_cast<TrackTile *>(newData->map().getTile(i, j)))
-                    {
-                        tile->setRotation(o);
-                        tile->setTileType(id);
-                        tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(id));
-                        tile->setRouteIndex(index);
-                        tile->setComputerHint(
-                            static_cast<TrackTileBase::ComputerHint>(computerHint));
-                        tile->setDrivingLineHintH(
-                            static_cast<TrackTileBase::DrivingLineHintH>(drivingLineHintH));
-                        tile->setDrivingLineHintV(
-                            static_cast<TrackTileBase::DrivingLineHintV>(drivingLineHintV));
-
-                        if (index >= 0)
-                            routeVector << tile;
-                    }
+                    readTile(*newData, element);
                 }
-                // Read an object tag
-                else if (tag.nodeName() == "object")
+                // Read an object element
+                else if (element.nodeName() == "object")
                 {
-                    const QString role     = tag.attribute("role", "clear");
-                    const QString category = tag.attribute("category", "clear");
-                    const int     x        = tag.attribute("x", "0").toInt();
-                    const int     y        = tag.attribute("y", "0").toInt();
-                    const int     o        = tag.attribute("o", "0").toInt();
-
-                    // Create a new object. QGraphicsScene will take
-                    // the ownership eventually.
-                    Object & object = ObjectFactory::createObject(role);
-                    object.setLocation(QPointF(x, y));
-                    object.setRotation(o);
-                    newData->objects().add(object);
+                    readObject(*newData, element);
+                }
+                // Read a target node element
+                else if (element.nodeName() == "tnode")
+                {
+                    readTargetNode(route, element);
                 }
             }
 
             node = node.nextSibling();
         }
 
-        newData->route().buildFromVector(routeVector);
+        // Sort and build route from the temporary vector.
+        newData->route().buildFromVector(route);
     }
 
     return newData;
+}
+
+void TrackIO::readTile(TrackData & newData, const QDomElement & element)
+{
+    const QString       id = element.attribute("type", "clear");
+    const unsigned int   i = element.attribute("i", "0").toUInt();
+    const unsigned int   j = element.attribute("j", "0").toUInt();
+    const int            o = element.attribute("o", "0").toInt();
+    const int computerHint = element.attribute("computerHint", "0").toInt();
+
+    // Init a new tile. QGraphicsScene will take
+    // the ownership eventually.
+    if (TrackTile * tile = static_cast<TrackTile *>(newData.map().getTile(i, j)))
+    {
+        tile->setRotation(o);
+        tile->setTileType(id);
+        tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(id));
+        tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
+    }
+}
+
+void TrackIO::readObject(TrackData & newData, const QDomElement & element)
+{
+    const QString role     = element.attribute("role", "clear");
+    const QString category = element.attribute("category", "clear");
+    const int     x        = element.attribute("x", "0").toInt();
+    const int     y        = element.attribute("y", "0").toInt();
+    const int     o        = element.attribute("o", "0").toInt();
+
+    ObjectModel model = MainWindow::instance()->objectModelLoader().getObjectModelByRole(role);
+
+    // Create a new object. QGraphicsScene will take
+    // the ownership eventually.
+    Object & object = ObjectFactory::createObject(role);
+    object.setLocation(QPointF(x, y));
+    object.setRotation(o);
+    newData.objects().add(object);
+}
+
+void TrackIO::readTargetNode(
+   std::vector<TargetNodeBase *> & route, const QDomElement & element)
+{
+    const int x = element.attribute("x", "0").toInt();
+    const int y = element.attribute("y", "0").toInt();
+    const int i = element.attribute("i", "0").toInt();
+
+    // Create a new object. QGraphicsScene will take
+    // the ownership eventually.
+    TargetNode * tnode = new TargetNode;
+    tnode->setIndex(i);
+    tnode->setLocation(QPointF(x, y));
+    route.push_back(tnode);
+}
+
+void TrackIO::writeTiles(
+    const TrackData & trackData, QDomElement & root, QDomDocument & doc)
+{
+    for (unsigned int i = 0; i < trackData.map().cols(); i++)
+    {
+        for (unsigned int j = 0; j < trackData.map().rows(); j++)
+        {
+            if (TrackTile * tile = static_cast<TrackTile *>(trackData.map().getTile(i, j)))
+            {
+                QDomElement tileElement = doc.createElement("tile");
+                tileElement.setAttribute("type", tile->tileType());
+                tileElement.setAttribute("i", i);
+                tileElement.setAttribute("j", j);
+                tileElement.setAttribute("o", tile->rotation());
+
+                if (tile->computerHint() != TrackTile::CH_NONE)
+                {
+                    tileElement.setAttribute("computerHint", tile->computerHint());
+                }
+
+                root.appendChild(tileElement);
+            }
+        }
+    }
+}
+
+void TrackIO::writeObjects(
+    const TrackData & trackData, QDomElement & root, QDomDocument & doc)
+{
+    for (unsigned int i = 0; i < trackData.objects().count(); i++)
+    {
+        QDomElement objectElement = doc.createElement("object");
+        Object    & object        = static_cast<Object &>(trackData.objects().object(i));
+
+        objectElement.setAttribute("category", object.category());
+        objectElement.setAttribute("role", object.role());
+        objectElement.setAttribute("x", static_cast<int>(object.location().x()));
+        objectElement.setAttribute("y", static_cast<int>(object.location().y()));
+        objectElement.setAttribute("o", static_cast<int>(object.rotation()));
+        root.appendChild(objectElement);
+    }
+}
+
+void TrackIO::writeTargetNodes(
+    const TrackData & trackData, QDomElement & root, QDomDocument & doc)
+{
+    const Route & route = trackData.route();
+    for (unsigned int i = 0; i < route.length(); i++)
+    {
+        QDomElement      tnodeElement = doc.createElement("tnode");
+        TargetNodeBase & tnode        = route.get(i);
+
+        tnodeElement.setAttribute("i", tnode.index());
+        tnodeElement.setAttribute("x", static_cast<int>(tnode.location().x()));
+        tnodeElement.setAttribute("y", static_cast<int>(tnode.location().y()));
+        root.appendChild(tnodeElement);
+    }
 }

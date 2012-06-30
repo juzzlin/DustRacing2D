@@ -33,6 +33,7 @@ set(SRC
     ../common/objectbase.cpp
     ../common/objects.cpp
     ../common/route.cpp
+    ../common/targetnodebase.cpp
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp
     ../common/mapbase.cpp)

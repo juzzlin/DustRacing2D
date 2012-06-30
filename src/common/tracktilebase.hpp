@@ -27,42 +27,12 @@ class TrackTileBase
 {
 public:
 
-    //! Direction to the next tile in the route.
-    enum RouteDirection
-    {
-        RD_NONE = 0,
-        RD_LEFT,
-        RD_RIGHT,
-        RD_UP,
-        RD_DOWN,
-        RD_UP_LEFT,
-        RD_UP_RIGHT,
-        RD_DOWN_LEFT,
-        RD_DOWN_RIGHT
-    };
-
     //! Hints for computer players.
     enum ComputerHint
     {
         CH_NONE = 0,
         CH_FIRST_BEFORE_CORNER,
         CH_SECOND_BEFORE_CORNER
-    };
-
-    //! Horizontal driving line hints for computer players.
-    enum DrivingLineHintH
-    {
-        DLHH_NONE = 0,
-        DLHH_LEFT,
-        DLHH_RIGHT
-    };
-
-    //! Vertical driving line hints for computer players.
-    enum DrivingLineHintV
-    {
-        DLHV_NONE = 0,
-        DLHV_TOP,
-        DLHV_BOTTOM
     };
 
     //! Constructor.
@@ -85,23 +55,11 @@ public:
     //! Get location in the tile matrix.
     virtual QPoint matrixLocation() const;
 
-    //! Set index in the route vector.
-    virtual void setRouteIndex(int index);
-
-    //! Get route index, return -1 if not set.
-    int routeIndex() const;
-
     //! Set type: "corner", "straight", "grass", "finish", "clear"..
     void setTileType(const QString & type);
 
     //! Get type
     const QString & tileType() const;
-
-    //! Set direction towards next tile in the route.
-    void setRouteDirection(TrackTileBase::RouteDirection direction);
-
-    //! Get direction towards next tile in the route.
-    TrackTileBase::RouteDirection routeDirection() const;
 
     //! Set computer hint
     void setComputerHint(ComputerHint hint);
@@ -109,22 +67,7 @@ public:
     //! Get computer hint
     ComputerHint computerHint() const;
 
-    //! Set driving line hint
-    void setDrivingLineHintH(DrivingLineHintH hint);
-
-    //! Set driving line hint
-    void setDrivingLineHintV(DrivingLineHintV hint);
-
-    //! Get horizontal driving line hint
-    DrivingLineHintH drivingLineHintH() const;
-
-    //! Get vertical driving line hint
-    DrivingLineHintV drivingLineHintV() const;
-
 private:
-
-    //! Index in the route vector.
-    int m_routeIndex;
 
     //! Type string.
     QString m_tileType;
@@ -138,17 +81,8 @@ private:
     //! Pointer to the "parent" track data.
     TrackDataBase & m_trackData;
 
-    //! Direction towards the next tile in the route.
-    RouteDirection m_routeDirection;
-
     //! Computer hint
     ComputerHint m_computerHint;
-
-    //! Driving line hint
-    DrivingLineHintH m_drivingLineHintH;
-
-    //! Driving line hint
-    DrivingLineHintV m_drivingLineHintV;
 };
 
 #endif // TRACKTILEBASE_HPP

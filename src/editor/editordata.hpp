@@ -23,8 +23,11 @@
 
 class MainWindow;
 class Object;
+class TargetNode;
+class TargetNodeBase;
 class TrackData;
 class TrackTile;
+class QGraphicsLineItem;
 
 //! Editor data includes data and functionality related to the current
 //! race track and editing session.
@@ -69,14 +72,14 @@ public:
     //! setting the route.
     void endSetRoute();
 
-    //! Adds line objects to the scenes visualizing
-    //! the current route.
-    //! \param closeLoop The route will be considered a
-    //! closed loop if true.
-    void addRouteLinesToScene(bool closeLoop);
+    //! Adds current target node objects to the scene.
+    void addExistingRouteToScene();
 
-    //! Removes line objects from the scene.
-    void removeRouteLinesFromScene();
+    //! Push a new target node.
+    void pushNewTargetNodeToRoute(QPointF pos);
+
+    //! Removes target node and line objects from the scene.
+    void removeRouteFromScene();
 
     //! Returns current track data object. Returns NULL if not set.
     TrackData * trackData();
@@ -99,23 +102,51 @@ public:
     //! Returns the object being drag'n'dropped or nullptr.
     Object * dragAndDropObject() const;
 
+    //! Set target node that is being drag'n'dropped.
+    void setDragAndDropTargetNode(TargetNode * tnode);
+
+    //! Returns the target node being drag'n'dropped or nullptr.
+    TargetNode * dragAndDropTargetNode() const;
+
     //! Get source pos of the drag'n'drop.
     QPointF dragAndDropSourcePos() const;
 
     //! Set source pos of the drag'n'drop.
     void setDragAndDropSourcePos(QPointF pos);
 
+    //! Add tiles in current track data object to the scene.
+    void addTilesToScene();
+
+    //! Add objects in current track data object to the scene.
+    void addObjectsToScene();
+
+    //! Remove all tiles from the scene.
+    void removeTilesFromScene();
+
+    //! Remove all objects from the scene.
+    void removeObjectsFromScene();
+
+    //! Clear all.
+    void clear();
+
+    //! Clear the current route only.
+    void clearRoute();
+
 private:
 
     EditorData(const EditorData & e);
     EditorData & operator= (const EditorData & e);
 
-    std::shared_ptr<TrackData> m_trackData;
-    EditorMode m_mode;
-    TrackTile * m_dragAndDropSourceTile;
-    Object * m_dragAndDropObject;
-    QPointF m_dragAndDropSourcePos;
-    MainWindow * m_mainWindow;
+    void pushTargetNodeToRoute(TargetNodeBase & tnode);
+
+    std::shared_ptr<TrackData>       m_trackData;
+    EditorMode                       m_mode;
+    TrackTile                      * m_dragAndDropSourceTile;
+    Object                         * m_dragAndDropObject;
+    TargetNode                     * m_dragAndDropTargetNode;
+    QPointF                          m_dragAndDropSourcePos;
+    MainWindow                     * m_mainWindow;
+    std::vector<QGraphicsLineItem *> m_targetNodes;
 };
 
 #endif // EDITORDATA_HPP

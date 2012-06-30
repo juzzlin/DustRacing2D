@@ -62,20 +62,7 @@ public:
     void setActive(bool active);
 
     //! \reimp
-    virtual void setRouteIndex(int index);
-
-    //! \reimp
     virtual void setTileType(const QString & type);
-
-    //! \reimp
-    virtual void setRouteDirection(TrackTileBase::RouteDirection direction);
-
-    //! Set a line item that is drawn from a tile to the previous tile.
-    void setRouteLine(QGraphicsLineItem * routeLine);
-
-    //! Get the route line.
-    //! \returns Valid pointer or nullptr if not set.
-    QGraphicsLineItem * routeLine() const;
 
     //! Get current active tile.
     //! \returns Valid pointer or nullptr if not set.
@@ -119,10 +106,6 @@ private:
 
     //! Animator used when rotating the tile.
     TileAnimator * m_animator;
-
-    //! Line that is drawn from a tile to the previous tile
-    //! according to the route vector.
-    QGraphicsLineItem * m_routeLine;
 
     //! Image of the tile.
     QPixmap m_pixmap;

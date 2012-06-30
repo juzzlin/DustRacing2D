@@ -12,6 +12,7 @@ set(SRC
     objectfactory.cpp
     objectmodelloader.cpp
     rotatedialog.cpp
+    targetnode.cpp
     tiletypedialog.cpp
     tileanimator.cpp
     trackdata.cpp
@@ -23,6 +24,7 @@ set(SRC
     ../common/objectbase.cpp
     ../common/objects.cpp
     ../common/route.cpp
+    ../common/targetnodebase.cpp
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp)
 

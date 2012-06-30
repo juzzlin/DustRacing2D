@@ -55,6 +55,9 @@ public:
     //! Return pointer to the tile at the given location.
     TrackTile * trackTileAtLocation(MCUint x, MCUint y) const;
 
+    //! Return pointer to the finish line tile.
+    TrackTile * finishLine() const;
+
     //! \reimp
     virtual bool update();
 

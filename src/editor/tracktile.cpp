@@ -29,38 +29,15 @@
 
 TrackTile * TrackTile::m_activeTile = nullptr;
 
-TrackTile::TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
-    const QString & type)
-  : TrackTileBase(trackData, location, matrixLocation, type)
-  , m_size(QSizeF(TILE_W, TILE_H))
-  , m_active(false)
-  , m_animator(new TileAnimator(this))
-  , m_routeLine(nullptr)
-  , m_added(false)
+TrackTile::TrackTile(
+    TrackData & trackData, QPointF location, QPoint matrixLocation, const QString & type)
+: TrackTileBase(trackData, location, matrixLocation, type)
+, m_size(QSizeF(TILE_W, TILE_H))
+, m_active(false)
+, m_animator(new TileAnimator(this))
+, m_added(false)
 {
     setPos(location);
-}
-
-void TrackTile::setRouteIndex(int index)
-{
-    TrackTileBase::setRouteIndex(index);
-    update();
-}
-
-void TrackTile::setRouteLine(QGraphicsLineItem * routeLine)
-{
-    m_routeLine = routeLine;
-}
-
-QGraphicsLineItem * TrackTile::routeLine() const
-{
-    return m_routeLine;
-}
-
-void TrackTile::setRouteDirection(TrackTileBase::RouteDirection direction)
-{
-    TrackTileBase::setRouteDirection(direction);
-    update();
 }
 
 QRectF TrackTile::boundingRect () const
@@ -102,45 +79,6 @@ void TrackTile::paint(QPainter * painter,
     if (m_active)
     {
         painter->fillRect(boundingRect(), QBrush(QColor(0, 0, 0, 64)));
-    }
-
-    // Render route arrow arrow
-    if (routeIndex() == 0)
-    {
-        // Cancel possible rotation so that the text is not
-        // rotated and rotate for the arrow head.
-        QTransform transform;
-        switch (routeDirection())
-        {
-        case RD_LEFT:
-            transform.rotate(180 - rotation());
-            break;
-        case RD_RIGHT:
-            transform.rotate(0 - rotation());
-            break;
-        case RD_UP:
-            transform.rotate(270 - rotation());
-            break;
-        case RD_DOWN:
-            transform.rotate(90 - rotation());
-            break;
-        default:
-        case RD_NONE:
-            break;
-        }
-        painter->setTransform(transform, true);
-
-        // Draw an arrow head
-        QPainterPath path;
-        QPolygon triangle;
-        triangle << QPoint( m_size.width() / 3,  0)
-                 << QPoint(                  0, -m_size.height() / 4)
-                 << QPoint(                  0,  m_size.height() / 4)
-                 << QPoint( m_size.width() / 3,  0);
-        path.addPolygon(triangle);
-        painter->strokePath(path,
-                            QPen(QBrush(QColor(0, 0, 255, 64)), 15,
-                                 Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
     }
 
     painter->restore();
@@ -225,23 +163,10 @@ void TrackTile::swap(TrackTile & other)
     setRotation(other.rotation());
     other.setRotation(sourceAngle);
 
-    {
-        // Swap computer hints
-        const TrackTileBase::ComputerHint sourceHint = computerHint();
-        setComputerHint(other.computerHint());
-        other.setComputerHint(sourceHint);
-    }
-
-    {
-        // Swap driving line hints
-        const TrackTileBase::DrivingLineHintH sourceHintH = drivingLineHintH();
-        setDrivingLineHintH(other.drivingLineHintH());
-        other.setDrivingLineHintH(sourceHintH);
-
-        const TrackTileBase::DrivingLineHintV sourceHintV = drivingLineHintV();
-        setDrivingLineHintV(other.drivingLineHintV());
-        other.setDrivingLineHintV(sourceHintV);
-    }
+    // Swap computer hints
+    const TrackTileBase::ComputerHint sourceHint = computerHint();
+    setComputerHint(other.computerHint());
+    other.setComputerHint(sourceHint);
 }
 
 void TrackTile::setAdded(bool state)

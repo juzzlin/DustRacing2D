@@ -17,17 +17,34 @@
 #define TRACKIO_HPP
 
 #include <QString>
+#include <vector>
 
+class TargetNodeBase;
 class TrackData;
+class QDomDocument;
+class QDomElement;
 
-namespace TrackIO
+class TrackIO
 {
+public:
     //! Save given track data. Returns false if failed.
-    bool save(const TrackData * trackData, QString path);
+    static bool save(const TrackData * trackData, QString path);
 
     //! Load given track data. Returns the new TrackData object,
     //! or nullptr if failed.
-    TrackData * open(QString path);
-}
+    static TrackData * open(QString path);
+
+private:
+
+    static void readTile(TrackData & newData, const QDomElement & element);
+    static void readObject(TrackData & newData, const QDomElement & element);
+    static void readTargetNode(std::vector<TargetNodeBase *> & route, const QDomElement & element);
+    static void writeTiles(
+        const TrackData & newData, QDomElement & element, QDomDocument & doc);
+    static void writeObjects(
+        const TrackData & newData, QDomElement & element, QDomDocument & doc);
+    static void writeTargetNodes(
+        const TrackData & newData, QDomElement & element, QDomDocument & doc);
+};
 
 #endif // TRACKIO_HPP

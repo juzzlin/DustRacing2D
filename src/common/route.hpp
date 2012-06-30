@@ -16,9 +16,10 @@
 #ifndef ROUTE_HPP
 #define ROUTE_HPP
 
-#include <QVector>
+#include <vector>
 
 class TrackTileBase;
+class TargetNodeBase;
 
 //! Route is used to define the race route as a sequence
 //! of TrackTiles.
@@ -29,23 +30,28 @@ public:
     //! Clear the current route.
     void clear();
 
-    //! Push new tile to the route and return its index.
-    int push(TrackTileBase * tile);
+    //! Push new target to the route and return true
+    //! if the route got closed.
+    bool push(TargetNodeBase & target);
 
-    //! Build route from an (unordered) vector of tiles.
-    //! Will be sorted with respect to route indices.
-    void buildFromVector(QVector<TrackTileBase *> routeVector);
+    //! Build route from an (unordered) vector of Targets.
+    //! Will be sorted with respect to their indices.
+    void buildFromVector(std::vector<TargetNodeBase *> & routeVector);
 
     //! Return length of the current route.
     unsigned int length() const;
 
-    //! Return tile for the given index or nullptr if
-    //! out of range.
-    TrackTileBase * get(unsigned int index) const;
+    //! Return Target for the given index.
+    TargetNodeBase & get(unsigned int index) const;
+
+    //! Get all nodes.
+    void getAll(std::vector<TargetNodeBase *> & routeVector) const;
 
 private:
 
-    QVector<TrackTileBase *> m_route;
+    bool isClosed() const;
+
+    std::vector<TargetNodeBase *> m_route;
 };
 
 #endif // ROUTE_HPP

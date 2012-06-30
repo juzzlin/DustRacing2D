@@ -172,6 +172,7 @@ void TimingOverlay::render()
             std::stringstream ss;
             ss << "L:" << lastLapTimeStr;
             text.setText(ss.str());
+            text.setColor(1.0, 1.0, 1.0);
             text.setGlyphSize(20, 20);
             text.setShadowOffset(shadowX, shadowY);
             text.render(
@@ -182,21 +183,19 @@ void TimingOverlay::render()
         }
 
         // Render the record lap time
+        if (m_showRecordTime)
         {
-            if (m_showRecordTime)
-            {
-                std::string recordLapTimeStr = m_pTiming->msecsToString(recordLapTime);
-                std::stringstream ss;
-                ss << "R:" << recordLapTimeStr;
-                MCTextureText recordLapTimeText(ss.str());
-                recordLapTimeText.setGlyphSize(20, 20);
-                recordLapTimeText.setShadowOffset(shadowX, shadowY);
-                recordLapTimeText.render(
-                    width() - recordLapTimeText.textWidth(),
-                    height() - recordLapTimeText.textHeight() * 3,
-                    nullptr,
-                    m_defaultMonospace);
-            }
+            std::stringstream ss;
+            ss << "R:" << m_pTiming->msecsToString(recordLapTime);
+            text.setText(ss.str());
+            text.setColor(1.0, 1.0, 1.0);
+            text.setGlyphSize(20, 20);
+            text.setShadowOffset(shadowX, shadowY);
+            text.render(
+                width()  - text.textWidth(),
+                height() - text.textHeight() * 3,
+                nullptr,
+                m_defaultMonospace);
         }
     }
 }

@@ -65,13 +65,15 @@ private:
     //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);
 
-    //! Handle a tile element.
-    void handleTile(
-        QDomElement & tag, TrackData & newData,
-        QVector<TrackTileBase *> & routeVector);
+    //! Read a tile element.
+    void readTile(QDomElement & element, TrackData & newData);
 
-    //! Handle an object element.
-    void handleObject(QDomElement & tag, TrackData & newData);
+    //! Read an object element.
+    void readObject(QDomElement & element, TrackData & newData);
+
+    //! Read a target node element and push to the given vector.
+    void readTargetNode(
+        QDomElement & element, TrackData & newData, std::vector<TargetNodeBase *> & route);
 
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);

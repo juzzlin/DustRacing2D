@@ -13,124 +13,40 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "tracktilebase.hpp"
 #include "route.hpp"
+#include "targetnodebase.hpp"
 
 #include <algorithm>
+#include <cassert>
+
+static const int CLOSING_TH = 32;
 
 void Route::clear()
 {
-    for (TrackTileBase * tile : m_route)
-    {
-        tile->setRouteIndex(-1);
-    }
-
     m_route.clear();
 }
 
-int Route::push(TrackTileBase * tile)
+bool Route::push(TargetNodeBase & tnode)
 {
-    bool routeClosed = false;
-    if (m_route.size() && tile->routeIndex() == 0)
+    tnode.setIndex(m_route.size());
+    m_route.push_back(&tnode);
+    return isClosed();
+}
+
+bool Route::isClosed() const
+{
+    if (m_route.size() > 1)
     {
-        routeClosed = true;
-    }
+        const int dx = std::abs(m_route[0]->location().x() - m_route.back()->location().x());
+        const int dy = std::abs(m_route[0]->location().y() - m_route.back()->location().y());
 
-    if (!m_route.contains(tile) || routeClosed)
-    {
-        bool okToAdd = false;
-
-        if (m_route.size())
+        if (dx < CLOSING_TH && dy < CLOSING_TH)
         {
-            TrackTileBase * prev = m_route.back();
-
-            int deltaX = tile->matrixLocation().x() - prev->matrixLocation().x();
-            int deltaY = tile->matrixLocation().y() - prev->matrixLocation().y();
-
-            // Equal X-coordinates?
-            if (deltaX == 0)
-            {
-                if (deltaY > 0)
-                {
-                    prev->setRouteDirection(TrackTileBase::RD_DOWN);
-                }
-                else
-                {
-                    prev->setRouteDirection(TrackTileBase::RD_UP);
-                }
-
-                okToAdd = true;
-            }
-            // Equal Y-coordinates?
-            else if (deltaY == 0)
-            {
-                if (deltaX > 0)
-                {
-                    prev->setRouteDirection(TrackTileBase::RD_RIGHT);
-                }
-                else
-                {
-                    prev->setRouteDirection(TrackTileBase::RD_LEFT);
-                }
-
-                okToAdd = true;
-            }
-            // Segment at a 45 degree angle?
-            // Possible only if not the starting segment which
-            // can be only at a straight angle.
-            else if (m_route.size() > 1)
-            {
-                if (std::abs(deltaX) == std::abs(deltaY))
-                {
-                    if (deltaX > 0)
-                    {
-                        if (deltaY > 0)
-                        {
-                            // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTileBase::RD_DOWN_RIGHT);
-                        }
-                        else
-                        {
-                            // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTileBase::RD_UP_RIGHT);
-                        }
-
-                        okToAdd = true;
-                    }
-                    else
-                    {
-                        if (deltaY > 0)
-                        {
-                            // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTileBase::RD_DOWN_LEFT);
-                        }
-                        else
-                        {
-                            // TODO: Is this needed?
-                            prev->setRouteDirection(TrackTileBase::RD_UP_LEFT);
-                        }
-
-                        okToAdd = true;
-                    }
-                }
-            }
-        }
-        else
-        {
-            okToAdd = true;
-        }
-
-        if (okToAdd)
-        {
-            if (!routeClosed)
-            {
-                tile->setRouteIndex(m_route.size());
-                m_route.append(tile);
-            }
+            return true;
         }
     }
 
-    return tile->routeIndex();
+    return false;
 }
 
 unsigned int Route::length() const
@@ -138,38 +54,36 @@ unsigned int Route::length() const
     return m_route.size();
 }
 
-TrackTileBase * Route::get(unsigned int index) const
+TargetNodeBase & Route::get(unsigned int index) const
 {
-    if (index < length())
-        return m_route[index];
-
-    return nullptr;
+    assert (index < length());
+    return *m_route[index];
 }
 
-struct mySortFunc
+void Route::getAll(std::vector<TargetNodeBase *> & routeVector) const
 {
-    bool operator () (TrackTileBase * lhs, TrackTileBase * rhs)
-    {
-        return lhs->routeIndex() < rhs->routeIndex();
-    }
-};
+    routeVector = m_route;
+}
 
-void Route::buildFromVector(QVector<TrackTileBase *> routeVector)
+void Route::buildFromVector(std::vector<TargetNodeBase *> & routeVector)
 {
-    if (routeVector.size())
+    struct mySortFunc
     {
-        clear();
-
-        std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
-
-        for (TrackTileBase * tile : routeVector)
+        bool operator () (const TargetNodeBase * lhs, const TargetNodeBase * rhs)
         {
-            if (tile->routeIndex() >= 0)
-            {
-                push(tile);
-            }
+            return lhs->index() < rhs->index();
         }
+    };
 
-        push(routeVector.at(0));
+    clear();
+
+    std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
+
+    for (TargetNodeBase * tnode : routeVector)
+    {
+        if (tnode && tnode->index() >= 0)
+        {
+            push(*tnode);
+        }
     }
 }

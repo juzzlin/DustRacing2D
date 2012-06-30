@@ -1,5 +1,5 @@
 // This file is part of Dust Racing (DustRAC).
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // DustRAC is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,21 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OBJECT_HPP
-#define OBJECT_HPP
+#ifndef TARGETNODE_HPP
+#define TARGETNODE_HPP
 
 #include <QGraphicsItem>
-#include <QPixmap>
+#include "../common/targetnodebase.hpp"
 
-#include "../common/objectbase.hpp"
+class QGraphicsLineItem;
 
-//! Freely placeable object.
-class Object : public QGraphicsItem, public ObjectBase
+//! Freely placeable target node.
+class TargetNode : public QGraphicsItem, public TargetNodeBase
 {
 public:
 
     //! Constructor.
-    Object(QString category, QString role, QSizeF size, QPixmap pixmap);
+    TargetNode();
 
     //! \reimp
     virtual QRectF boundingRect () const;
@@ -37,16 +37,26 @@ public:
         const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
     //! \reimp
-    //! Sets the Object and QGraphicsItem locations.
+    //! Sets the TargetNode and QGraphicsItem locations.
     virtual void setLocation(QPointF newLocation);
+
+    //! Set a line item that is drawn from a node to the next node.
+    void setRouteLine(QGraphicsLineItem * routeLine);
+
+    //! Get the route line.
+    //! \returns Valid pointer or nullptr if not set.
+    QGraphicsLineItem * routeLine() const;
+
+    void updateRouteLine();
 
 private:
 
     //! Original size in pixels.
     QSizeF m_size;
 
-    //! Image of the object.
-    QPixmap m_pixmap;
+    //! Line that is drawn from a node to the next node
+    //! according to the route vector.
+    QGraphicsLineItem * m_routeLine;
 };
 
-#endif // OBJECT_HPP
+#endif // TARGETNODE_HPP

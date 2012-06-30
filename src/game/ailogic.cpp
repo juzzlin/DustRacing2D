@@ -19,6 +19,7 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "../common/route.hpp"
+#include "../common/targetnodebase.hpp"
 #include "../common/tracktilebase.hpp"
 
 #include "MiniCore/Core/MCTrigonom"
@@ -43,48 +44,21 @@ void AiLogic::update(bool isRaceCompleted)
     {
         m_car.clearStatuses();
 
-        TrackTile * currentTile = m_track->trackTileAtLocation(
+        const Route    & route       = m_track->trackData().route();
+        TargetNodeBase & tnode       = route.get(m_car.currentTargetNodeIndex());
+        TrackTile      * currentTile = m_track->trackTileAtLocation(
             m_car.location().i(), m_car.location().j());
-        TrackTile * targetTile  = dynamic_cast<TrackTile *>(m_route->get(m_targetIndex));
 
-        if (currentTile->routeIndex() == targetTile->routeIndex())
-        {
-            if (++m_targetIndex >= m_route->length())
-            {
-                m_targetIndex = 0;
-            }
-        }
-
-        steerControl(*targetTile, *currentTile, isRaceCompleted);
-        speedControl(*targetTile, *currentTile, isRaceCompleted);
+        steerControl(tnode, *currentTile, isRaceCompleted);
+        speedControl(tnode, *currentTile, isRaceCompleted);
     }
 }
 
 void AiLogic::steerControl(
-    TrackTile & targetTile, TrackTile & currentTile, bool)
+    TargetNodeBase & tnode, TrackTile & currentTile, bool)
 {
     // Initial target coordinates
-    MCVector3dF target(targetTile.location().x(), targetTile.location().y());
-
-    // Take line hints into account
-    if (currentTile.drivingLineHintH() == TrackTile::DLHH_LEFT)
-    {
-        target -= MCVector3dF(TrackTile::TILE_W / 3, 0);
-    }
-    else if (currentTile.drivingLineHintH() == TrackTile::DLHH_RIGHT)
-    {
-        target += MCVector3dF(TrackTile::TILE_W / 3, 0);
-    }
-
-    if (currentTile.drivingLineHintV() == TrackTile::DLHV_TOP)
-    {
-        target += MCVector3dF(0, TrackTile::TILE_H / 3);
-    }
-    else if (currentTile.drivingLineHintV() == TrackTile::DLHV_BOTTOM)
-    {
-        target -= MCVector3dF(0, TrackTile::TILE_H / 3);
-    }
-
+    MCVector3dF target(tnode.location().x(), tnode.location().y());
     target -= MCVector3dF(m_car.location());
 
     MCFloat angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
@@ -132,7 +106,7 @@ void AiLogic::steerControl(
 }
 
 void AiLogic::speedControl(
-    TrackTile & targetTile, TrackTile & currentTile, bool isRaceCompleted)
+    TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted)
 {
     // Braking / acceleration logic
     bool accelerate = true;
@@ -169,7 +143,7 @@ void AiLogic::speedControl(
         }
 
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
-                currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
+            currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
             if (m_car.speedInKmh() > 60)
             {
@@ -181,20 +155,6 @@ void AiLogic::speedControl(
         {
             accelerate = true;
             brake = false;
-        }
-
-        if (std::abs(currentTile.matrixLocation().x() - targetTile.matrixLocation().x()) > 2 &&
-                currentTile.matrixLocation().y() == targetTile.matrixLocation().y())
-        {
-            brake = false;
-            accelerate = true;
-        }
-
-        if (std::abs(currentTile.matrixLocation().y() - targetTile.matrixLocation().y()) > 2 &&
-                currentTile.matrixLocation().x() == targetTile.matrixLocation().x())
-        {
-            brake = false;
-            accelerate = true;
         }
     }
 

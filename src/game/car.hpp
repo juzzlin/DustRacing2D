@@ -24,6 +24,7 @@
 
 class MCSurface;
 class MCFrictionGenerator;
+class Route;
 
 //! Base class for race cars.
 class Car : public MCObject
@@ -126,9 +127,13 @@ public:
 
     void setTurningImpulse(MCFloat impulse);
 
-    void setCurrentRouteIndex(int index);
+    void setCurrentTargetNodeIndex(int index);
 
-    int currentRouteIndex() const;
+    int currentTargetNodeIndex() const;
+
+    void setPrevTargetNodeIndex(int index);
+
+    int prevTargetNodeIndex() const;
 
     void setRouteProgression(int value);
 
@@ -178,7 +183,8 @@ private:
     MCFloat               m_length;
     int                   m_speedInKmh;
     MCFloat               m_dx, m_dy;
-    int                   m_currentRouteIndex;
+    int                   m_currentTargetNodeIndex;
+    int                   m_prevTargetNodeIndex;
     int                   m_routeProgression;
     bool                  m_isHuman;
 

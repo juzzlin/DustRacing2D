@@ -26,6 +26,7 @@ class QPaintEvent;
 class EditorData;
 class Object;
 class ObjectModelLoaderoader;
+class TargetNode;
 class TrackTile;
 
 class EditorView : public QGraphicsView
@@ -55,12 +56,6 @@ private slots:
     void doClearComputerHint();
     void doSetComputerHintFirstBeforeCorner();
     void doSetComputerHintSecondBeforeCorner();
-    void doClearDrivingLineHintH();
-    void doClearDrivingLineHintV();
-    void doSetDrivingLineHintLeft();
-    void doSetDrivingLineHintRight();
-    void doSetDrivingLineHintTop();
-    void doSetDrivingLineHintBottom();
 
 private:
 
@@ -70,10 +65,11 @@ private:
     void handleRightButtonClickOnTile(TrackTile & tile);
     void handleLeftButtonClickOnObject(Object & object);
     void handleRightButtonClickOnObject(Object & object);
+    void handleLeftButtonClickOnTargetNode(TargetNode & tnode);
+    void handleRightButtonClickOnTargetNode(TargetNode & tnode);
     void handleTileDragRelease(QMouseEvent * event);
     void handleObjectDragRelease(QMouseEvent * event);
-    void doSetDrivingLineHintH(TrackTileBase::DrivingLineHintH hint);
-    void doSetDrivingLineHintV(TrackTileBase::DrivingLineHintV hint);
+    void handleTargetNodeDragRelease(QMouseEvent * event);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 
     QMenu     m_tileContextMenu;
@@ -83,12 +79,6 @@ private:
     QAction * m_clearComputerHint;
     QAction * m_setComputerHintFirstBeforeCorner;
     QAction * m_setComputerHintSecondBeforeCorner;
-    QAction * m_clearDrivingLineHintH;
-    QAction * m_clearDrivingLineHintV;
-    QAction * m_setDrivingLineHintLeft;
-    QAction * m_setDrivingLineHintRight;
-    QAction * m_setDrivingLineHintTop;
-    QAction * m_setDrivingLineHintBottom;
 };
 
 #endif // EDITORVIEW_HPP

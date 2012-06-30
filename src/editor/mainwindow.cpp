@@ -482,6 +482,18 @@ void MainWindow::showAboutDlg()
     m_aboutDlg->exec();
 }
 
+void MainWindow::clear()
+{
+    assert(m_editorData);
+    m_editorData->clear();
+}
+
+void MainWindow::clearRoute()
+{
+    assert(m_editorData);
+    m_editorData->clearRoute();
+}
+
 bool MainWindow::doOpenTrack(QString fileName)
 {
     if (!QFile::exists(fileName))
@@ -490,10 +502,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         return false;
     }
 
-    removeTilesFromScene();
-    removeObjectsFromScene();
-
     assert(m_editorData);
+
     if (m_editorData->loadTrackData(fileName))
     {
         console(QString(tr("Track '%1' opened.").arg(fileName)));
@@ -518,13 +528,14 @@ bool MainWindow::doOpenTrack(QString fileName)
             2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
 
         m_editorScene->setSceneRect(newSceneRect);
+
         m_editorView->setScene(m_editorScene);
         m_editorView->setSceneRect(newSceneRect);
         m_editorView->ensureVisible(0, 0, 0, 0);
 
-        addTilesToScene();
-        addObjectsToScene();
-        addRouteLinesToScene(true);
+        m_editorData->addTilesToScene();
+        m_editorData->addObjectsToScene();
+        m_editorData->addExistingRouteToScene();
 
         return true;
     }
@@ -581,10 +592,10 @@ void MainWindow::initializeNewTrack()
         const unsigned int cols = dialog.cols();
         const unsigned int rows = dialog.rows();
 
-        removeTilesFromScene();
-        removeObjectsFromScene();
-
         assert(m_editorData);
+
+        m_editorData->removeTilesFromScene();
+        m_editorData->removeObjectsFromScene();
         m_editorData->setTrackData(new TrackData(dialog.name(), cols, rows));
 
         delete m_editorScene;
@@ -598,8 +609,9 @@ void MainWindow::initializeNewTrack()
         m_editorView->setScene(m_editorScene);
         m_editorView->ensureVisible(0, 0, 0, 0);
 
-        addTilesToScene();
-        addObjectsToScene();
+        m_editorData->addTilesToScene();
+        m_editorData->addObjectsToScene();
+
         setActionStatesOnNewTrack();
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
@@ -634,137 +646,17 @@ void MainWindow::setTrackProperties()
     }
 }
 
-// TODO: Move to EditorData
-void MainWindow::addTilesToScene()
-{
-    assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
-    {
-        const unsigned int cols = data->map().cols();
-        const unsigned int rows = data->map().rows();
-
-        for (unsigned int i = 0; i < cols; i++)
-        {
-            for (unsigned int j = 0; j < rows; j++)
-            {
-                if (TrackTile * tile = static_cast<TrackTile *>(data->map().getTile(i, j)))
-                {
-                    if (!tile->added())
-                    {
-                        m_editorScene->addItem(tile);
-                        tile->setAdded(true);
-                    }
-                }
-            }
-        }
-
-        if (data->map().getTile(0, 0))
-            static_cast<TrackTile *>(data->map().getTile(0, 0))->setActive(true);
-    }
-}
-
-// TODO: Move to EditorData
-void MainWindow::addObjectsToScene()
-{
-    assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
-    {
-        for (unsigned int i = 0; i < data->objects().count(); i++)
-        {
-            if (Object * object = dynamic_cast<Object *>(&data->objects().object(i)))
-            {
-                m_editorScene->addItem(object);
-                object->setZValue(10);
-            }
-        }
-    }
-}
-
-void MainWindow::addRouteLinesToScene(bool closeLoop)
-{
-    // Re-use this method
-    assert(m_editorData);
-    m_editorData->addRouteLinesToScene(closeLoop);
-}
-
-// TODO: Move to EditorData
-void MainWindow::removeTilesFromScene()
-{
-    assert(m_editorData);
-    TrackTile::setActiveTile(nullptr);
-    if (TrackData * data = m_editorData->trackData())
-    {
-        const unsigned int cols = data->map().cols();
-        const unsigned int rows = data->map().rows();
-
-        for (unsigned int i = 0; i < cols; i++)
-            for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * tile = static_cast<TrackTile *>(data->map().getTile(i, j)))
-                {
-                    m_editorScene->removeItem(tile);
-                    delete tile;
-                }
-    }
-}
-
-// TODO: Move to EditorData
-void MainWindow::removeObjectsFromScene()
-{
-    assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
-    {
-        for (unsigned int i = 0; i < data->objects().count(); i++)
-        {
-            if (Object * object =
-                dynamic_cast<Object *>(&data->objects().object(i)))
-            {
-                m_editorScene->removeItem(object);
-                delete object;
-            }
-        }
-    }
-}
-
-// TODO: Move to EditorData
-void MainWindow::clear()
-{
-    assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
-    {
-        const unsigned int cols = data->map().cols();
-        const unsigned int rows = data->map().rows();
-
-        for (unsigned int i = 0; i < cols; i++)
-            for (unsigned int j = 0; j < rows; j++)
-                if (TrackTile * pTile = static_cast<TrackTile *>(data->map().getTile(i, j)))
-                    pTile->setTileType("clear");
-
-        m_console->append(QString(tr("Tiles cleared.")));
-
-        clearRoute();
-    }
-}
-
-// TODO: Move to EditorData
-void MainWindow::clearRoute()
-{
-    assert(m_editorData);
-    m_editorData->removeRouteLinesFromScene();
-    m_editorData->trackData()->route().clear();
-    m_console->append(QString(tr("Route cleared.")));
-}
-
 void MainWindow::enlargeHorSize()
 {
     assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
+    if (TrackData * trackData = m_editorData->trackData())
     {
-        data->enlargeHorSize();
-        addTilesToScene();
+        trackData->enlargeHorSize();
+        m_editorData->addTilesToScene();
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + data->map().cols() * TrackTile::TILE_W,
-            2 * MARGIN + data->map().rows() * TrackTile::TILE_H);
+            2 * MARGIN + trackData->map().cols() * TrackTile::TILE_W,
+            2 * MARGIN + trackData->map().rows() * TrackTile::TILE_H);
 
         m_editorView->setSceneRect(newSceneRect);
     }
@@ -773,14 +665,14 @@ void MainWindow::enlargeHorSize()
 void MainWindow::enlargeVerSize()
 {
     assert(m_editorData);
-    if (TrackData * data = m_editorData->trackData())
+    if (TrackData * trackData = m_editorData->trackData())
     {
-        data->enlargeVerSize();
-        addTilesToScene();
+        trackData->enlargeVerSize();
+        m_editorData->addTilesToScene();
 
         QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + data->map().cols() * TrackTile::TILE_W,
-            2 * MARGIN + data->map().rows() * TrackTile::TILE_H);
+            2 * MARGIN + trackData->map().cols() * TrackTile::TILE_W,
+            2 * MARGIN + trackData->map().rows() * TrackTile::TILE_H);
 
         m_editorView->setSceneRect(newSceneRect);
     }
@@ -788,13 +680,23 @@ void MainWindow::enlargeVerSize()
 
 void MainWindow::beginSetRoute()
 {
+    QApplication::restoreOverrideCursor();
+
     assert(m_editorData);
     if (m_editorData->canRouteBeSet())
     {
         console(tr("Set route: begin."));
-        QMessageBox::information(this, tr("Set route"), tr("Click on the tiles one by one and make a closed loop.\n"
-                                                           "Start from the finish line tile.\n"
-                                                           "Click on the finish line tile again to finish."));
+        QMessageBox::information(
+            this,
+            tr("Set route, checkpoints and driving lines."),
+            tr("Setting the route defines checkpoints for the cars so\n"
+               "that no shortcuts can be taken. It also defines\n"
+               "driving lines for the computer players.\n\n"
+               "Click on the tiles one by one and make a closed loop\n"
+               "with the target nodes. You can adjust the nodes afterwads.\n"
+               "Start from the first tile after the finish line tile\n"
+               "to make the lap detection and timing work correctly.\n"
+               "Click on the first node again to finish."));
         m_editorData->beginSetRoute();
     }
     else

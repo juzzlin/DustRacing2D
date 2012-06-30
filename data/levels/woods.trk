@@ -1,27 +1,27 @@
-<track lapCount="3" version="0.2.2" cols="5" rows="5" name="woods">
- <tile i="0" j="0" o="0" type="corner90" index="1"/>
- <tile i="0" j="1" o="180" type="finish" index="0" computerHint="1"/>
- <tile i="0" j="2" o="0" type="straight" index="15" computerHint="2"/>
- <tile i="0" j="3" drivingLineHintH="1" o="540" type="straight" index="14"/>
- <tile drivingLineHintV="1" i="0" j="4" o="630" type="corner90" index="13" computerHint="2"/>
- <tile i="1" j="0" o="90" type="corner90" index="2"/>
- <tile drivingLineHintV="1" i="1" j="1" o="-90" type="corner90" index="3"/>
- <tile i="1" j="2" o="0" type="corner90" index="10"/>
- <tile i="1" j="3" drivingLineHintH="2" o="0" type="straight" index="11" computerHint="1"/>
- <tile drivingLineHintV="1" i="1" j="4" o="180" type="corner90" index="12"/>
- <tile drivingLineHintV="2" i="2" j="0" o="180" type="straight45Female"/>
- <tile drivingLineHintV="1" i="2" j="1" o="90" type="corner45Left" index="4"/>
- <tile i="2" j="2" o="90" type="straight" index="9" computerHint="1"/>
+<track lapCount="3" version="0.2.2" cols="5" rows="5" name="Woods">
+ <tile i="0" j="0" o="0" type="corner90"/>
+ <tile i="0" j="1" o="360" type="finish" computerHint="1"/>
+ <tile i="0" j="2" o="0" type="straight" computerHint="2"/>
+ <tile i="0" j="3" o="540" type="straight"/>
+ <tile i="0" j="4" o="630" type="corner90" computerHint="2"/>
+ <tile i="1" j="0" o="90" type="corner90"/>
+ <tile i="1" j="1" o="-90" type="corner90"/>
+ <tile i="1" j="2" o="0" type="corner90"/>
+ <tile i="1" j="3" o="0" type="straight" computerHint="1"/>
+ <tile i="1" j="4" o="180" type="corner90"/>
+ <tile i="2" j="0" o="180" type="straight45Female"/>
+ <tile i="2" j="1" o="90" type="corner45Left"/>
+ <tile i="2" j="2" o="90" type="straight" computerHint="1"/>
  <tile i="2" j="3" o="0" type="sandGrassCorner"/>
  <tile i="2" j="4" o="270" type="sandGrassCorner"/>
- <tile drivingLineHintV="2" i="3" j="0" o="-90" type="straight45Female"/>
- <tile drivingLineHintV="1" i="3" j="1" o="630" type="corner45Right" index="5" computerHint="1"/>
- <tile i="3" j="2" o="90" type="straight" index="8" computerHint="2"/>
+ <tile i="3" j="0" o="-90" type="straight45Female"/>
+ <tile i="3" j="1" o="630" type="corner45Right" computerHint="1"/>
+ <tile i="3" j="2" o="90" type="straight" computerHint="2"/>
  <tile i="3" j="3" o="90" type="sandGrassCorner"/>
  <tile i="3" j="4" o="180" type="sandGrassCorner"/>
  <tile i="4" j="0" o="-90" type="grass"/>
- <tile drivingLineHintV="2" i="4" j="1" o="90" type="corner90" index="6"/>
- <tile i="4" j="2" o="180" type="corner90" index="7"/>
+ <tile i="4" j="1" o="90" type="corner90"/>
+ <tile i="4" j="2" o="180" type="corner90"/>
  <tile i="4" j="3" o="0" type="grass"/>
  <tile i="4" j="4" o="0" type="grass"/>
  <object x="1155" y="417" category="free" role="tire" o="0"/>
@@ -107,4 +107,18 @@
  <object x="1250" y="1161" category="free" role="tree" o="0"/>
  <object x="1196" y="1230" category="free" role="tree" o="0"/>
  <object x="20" y="23" category="free" role="tree" o="0"/>
+ <tnode x="141" y="139" i="0"/>
+ <tnode x="339" y="226" i="1"/>
+ <tnode x="557" y="335" i="2"/>
+ <tnode x="687" y="303" i="3"/>
+ <tnode x="764" y="238" i="4"/>
+ <tnode x="929" y="320" i="5"/>
+ <tnode x="1139" y="465" i="6"/>
+ <tnode x="1112" y="605" i="7"/>
+ <tnode x="452" y="694" i="8"/>
+ <tnode x="358" y="1066" i="9"/>
+ <tnode x="230" y="1153" i="10"/>
+ <tnode x="121" y="1051" i="11"/>
+ <tnode x="124" y="357" i="12"/>
+ <tnode x="141" y="139" i="13"/>
 </track>
