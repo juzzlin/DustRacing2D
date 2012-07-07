@@ -19,10 +19,8 @@ Editor:
 
 Bugs:
 
-- Misplaced finish line in the game
 - Something wrong with off-track detection with 45 degrees straight
   e.g. monza.trk
-- Too easy to accidentally miss checkpoints
 
 Content:
 
