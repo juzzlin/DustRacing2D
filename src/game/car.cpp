@@ -32,41 +32,15 @@
 #include "MiniCore/Core/MCVector2d"
 #include "MiniCore/Core/MCMathUtil"
 
-namespace
-{
-    const MCFloat MAX_LINEAR_VELOCITY  = 50.0;
-    const MCFloat MAX_ANGULAR_VELOCITY = 10.0;
-    const MCFloat FRICTION             = 1.0;
-    const MCFloat BRAKING_FRICTION     = 1.0;
-    const MCFloat ROLLING_FRICTION     = 0.1f;
-    const MCFloat SLIDE_FRICTION       = 0.75f;
-    const MCFloat ROTATION_FRICTION    = 1.0;
-    const MCFloat OFF_TRACK_FRICTION   = 0.75f;
-    const MCFloat OFF_TRACK_MOMENT     = 50000.0;
-    const MCFloat TURNING_IMPULSE      = 0.30f;
-    const MCFloat POWER                = 5000.0;
-    const MCFloat MASS                 = 1000.0;
-    const MCFloat MOMENT_OF_INERTIA    = MASS * 10.0;
-    const MCFloat RESTITUTION          = 0.25f;
-    const MCFloat DRAG_LINEAR          = 1.0;
-    const MCFloat DRAG_QUADRATIC       = 5.0;
-
-    const MCVector2dF LEFT_FRONT_TIRE_POS(15, 11);
-    const MCVector2dF RIGHT_FRONT_TIRE_POS(15, -11);
-    const MCVector2dF LEFT_REAR_TIRE_POS(-15, 11);
-    const MCVector2dF RIGHT_REAR_TIRE_POS(-15, -11);
-    const MCVector2dF LEFT_BRAKE_GLOW_POS(-27, 11);
-    const MCVector2dF RIGHT_BRAKE_GLOW_POS(-27, -11);
-}
-
 static const int gMaxNumParticles = 500;
 
-Car::Car(MCSurface & surface, MCUint index, bool isHuman)
+Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
-, m_pBrakingFriction(new MCFrictionGenerator(BRAKING_FRICTION, 0.0))
-, m_pOnTrackFriction(new MCFrictionGenerator(ROLLING_FRICTION, ROTATION_FRICTION))
-, m_pOffTrackFriction(new MCFrictionGenerator(OFF_TRACK_FRICTION, ROTATION_FRICTION))
-, m_pSlideFriction(new SlideFrictionGenerator(SLIDE_FRICTION))
+, m_desc(desc)
+, m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
+, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFriction, desc.rotationFriction))
+, m_pOffTrackFriction(new MCFrictionGenerator(desc.offTrackFriction, desc.rotationFriction))
+, m_pSlideFriction(new SlideFrictionGenerator(desc.slideFriction))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -78,8 +52,6 @@ Car::Car(MCSurface & surface, MCUint index, bool isHuman)
 , m_tireAngle(0)
 , m_frontTire(MCTextureManager::instance().surface("frontTire"))
 , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
-, m_power(POWER)
-, m_turningImpulse(TURNING_IMPULSE)
 , m_speedInKmh(0)
 , m_dx(0)
 , m_dy(0)
@@ -89,12 +61,12 @@ Car::Car(MCSurface & surface, MCUint index, bool isHuman)
 , m_isHuman(isHuman)
 {
     setLayer(Layers::Cars);
-    setMass(MASS);
-    setMomentOfInertia(MOMENT_OF_INERTIA);
-    setMaximumVelocity(MAX_LINEAR_VELOCITY);
-    setMaximumAngularVelocity(MAX_ANGULAR_VELOCITY);
+    setMass(desc.mass);
+    setMomentOfInertia(desc.momentOfInertia);
+    setMaximumVelocity(desc.maxLinearVelocity);
+    setMaximumAngularVelocity(desc.maxAngularVelocity);
     setShadowOffset(MCVector2d<MCFloat>(5, -5));
-    setRestitution(RESTITUTION);
+    setRestitution(desc.restitution);
 
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
@@ -111,7 +83,7 @@ Car::Car(MCSurface & surface, MCUint index, bool isHuman)
     MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
     m_pOffTrackFriction->enable(false);
 
-    MCForceGenerator * drag = new MCDragForceGenerator(DRAG_LINEAR, DRAG_QUADRATIC);
+    MCForceGenerator * drag = new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic);
     MCWorld::instance().addForceGenerator(*drag, *this, true);
 
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
@@ -119,13 +91,6 @@ Car::Car(MCSurface & surface, MCUint index, bool isHuman)
     m_length = std::max(width, height);
 
     m_isParticleGroup.addToWorld();
-
-    //setRenderShapeOutline(true); // FOR DEBUG
-}
-
-void Car::setPower(MCFloat power)
-{
-    m_power = power;
 }
 
 void Car::clearStatuses()
@@ -155,11 +120,11 @@ void Car::turnLeft()
         velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
-            addAngularImpulse(m_turningImpulse / 2);
+            addAngularImpulse(m_desc.turningImpulse / 2);
         }
         else
         {
-            addAngularImpulse(m_turningImpulse * velScaling);
+            addAngularImpulse(m_desc.turningImpulse * velScaling);
         }
     }
 }
@@ -176,11 +141,11 @@ void Car::turnRight()
         velScaling = velScaling < 0.25f ? 0.25f : velScaling;
         if (m_braking)
         {
-            addAngularImpulse(-m_turningImpulse / 2);
+            addAngularImpulse(-m_desc.turningImpulse / 2);
         }
         else
         {
-            addAngularImpulse(-m_turningImpulse * velScaling);
+            addAngularImpulse(-m_desc.turningImpulse * velScaling);
         }
     }
 }
@@ -190,7 +155,7 @@ void Car::accelerate()
     m_pBrakingFriction->enable(false);
 
     MCVector2d<MCFloat> force(m_dx, m_dy);
-    addForce(force * m_power);
+    addForce(force * m_desc.power);
 
     m_accelerating = true;
     m_braking      = false;
@@ -209,7 +174,7 @@ void Car::brake()
     if (m_reverse && m_speedInKmh > -25)
     {
         MCVector2d<MCFloat> force(m_dx, m_dy);
-        addForce(-force * m_power);
+        addForce(-force * m_desc.power);
     }
     else
     {
@@ -241,28 +206,28 @@ int Car::speedInKmh() const
 MCVector3dF Car::leftFrontTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotatedVector(LEFT_FRONT_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(m_desc.leftFrontTirePos, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightFrontTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotatedVector(RIGHT_FRONT_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(m_desc.rightFrontTirePos, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::leftRearTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotatedVector(LEFT_REAR_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(m_desc.leftRearTirePos, pos, angle());
     return pos + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightRearTireLocation() const
 {
     MCVector2dF pos;
-    MCTrigonom::rotatedVector(RIGHT_REAR_TIRE_POS, pos, angle());
+    MCTrigonom::rotatedVector(m_desc.rightRearTirePos, pos, angle());
     return pos + MCVector2dF(location());
 }
 
@@ -283,12 +248,12 @@ void Car::render(MCCamera *p)
     if (m_braking && m_speedInKmh > 0)
     {
         MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotatedVector(LEFT_BRAKE_GLOW_POS, leftBrakeGlow, angle());
+        MCTrigonom::rotatedVector(m_desc.leftBrakeGlowPos, leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotatedVector(RIGHT_BRAKE_GLOW_POS, rightBrakeGlow, angle());
+        MCTrigonom::rotatedVector(m_desc.rightBrakeGlowPos, rightBrakeGlow, angle());
         rightBrakeGlow += MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
@@ -374,24 +339,24 @@ void Car::stepTime()
     {
         if (m_leftSideOffTrack)
         {
-            addTorque(OFF_TRACK_MOMENT);
+            addTorque(m_desc.offTrackMoment);
         }
 
         if (m_rightSideOffTrack)
         {
-            addTorque(-OFF_TRACK_MOMENT);
+            addTorque(-m_desc.offTrackMoment);
         }
     }
     else if (m_speedInKmh < -5)
     {
         if (m_leftSideOffTrack)
         {
-            addTorque(-OFF_TRACK_MOMENT);
+            addTorque(-m_desc.offTrackMoment);
         }
 
         if (m_rightSideOffTrack)
         {
-            addTorque(OFF_TRACK_MOMENT);
+            addTorque(m_desc.offTrackMoment);
         }
     }
 
@@ -421,7 +386,7 @@ void Car::setRightSideOffTrack(bool state)
 
 void Car::setTurningImpulse(MCFloat impulse)
 {
-    m_turningImpulse = impulse;
+    m_desc.turningImpulse = impulse;
 }
 
 void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const

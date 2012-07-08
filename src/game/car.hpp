@@ -38,33 +38,35 @@ public:
 
         //! Constructor.
         Description()
-        : maxLinearVelocity(15.0)
+        : maxLinearVelocity(50.0)
         , maxAngularVelocity(10.0)
-        , friction(0.5)
         , brakingFriction(1.0)
         , rollingFriction(0.1)
-        , rotationFriction(0.5)
-        , offTrackFriction(0.5)
+        , rotationFriction(1.0)
+        , slideFriction(0.75)
+        , offTrackFriction(0.75)
         , offTrackMoment(50000.0)
-        , turningImpulse(0.35)
+        , turningImpulse(0.30)
         , power(5000.0)
         , mass(1000.0)
         , momentOfInertia(mass * 10.0)
         , restitution(0.1)
-        , leftFrontTirePos(15, 9)
-        , rightFrontTirePos(15, -9)
-        , leftRearTirePos(-15, 9)
-        , rightRearTirePos(-15, -9)
-        , leftBrakeGlowPos(-27, 9)
-        , rightBrakeGlowPos(-27, -9)
+        , dragLinear(1.0)
+        , dragQuadratic(5.0)
+        , leftFrontTirePos(15, 11)
+        , rightFrontTirePos(15, -11)
+        , leftRearTirePos(-15, 11)
+        , rightRearTirePos(-15, -11)
+        , leftBrakeGlowPos(-27, 11)
+        , rightBrakeGlowPos(-27, -11)
         {}
 
         MCFloat maxLinearVelocity;
         MCFloat maxAngularVelocity;
-        MCFloat friction;
         MCFloat brakingFriction;
         MCFloat rollingFriction;
         MCFloat rotationFriction;
+        MCFloat slideFriction;
         MCFloat offTrackFriction;
         MCFloat offTrackMoment;
         MCFloat turningImpulse;
@@ -72,6 +74,8 @@ public:
         MCFloat mass;
         MCFloat momentOfInertia;
         MCFloat restitution;
+        MCFloat dragLinear;
+        MCFloat dragQuadratic;
 
         MCVector2dF leftFrontTirePos;
         MCVector2dF rightFrontTirePos;
@@ -82,7 +86,7 @@ public:
     };
 
     //! Constructor.
-    Car(MCSurface & surface, MCUint index, bool isHuman);
+    Car(Description desc, MCSurface & surface, MCUint index, bool isHuman);
 
     //! Return the index.
     MCUint index() const;
@@ -118,8 +122,6 @@ public:
 
     //! \reimp
     virtual void stepTime();
-
-    void setPower(MCFloat power);
 
     void setLeftSideOffTrack(bool state);
 
@@ -163,6 +165,8 @@ private:
 
     void doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
+    Description           m_desc;
+
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOnTrackFriction;
     MCFrictionGenerator * m_pOffTrackFriction;
@@ -178,8 +182,6 @@ private:
     MCFloat               m_tireAngle;
     MCSurface           & m_frontTire;
     MCSurface           & m_brakeGlow;
-    MCFloat               m_power;
-    MCFloat               m_turningImpulse;
     MCFloat               m_length;
     int                   m_speedInKmh;
     MCFloat               m_dx, m_dy;

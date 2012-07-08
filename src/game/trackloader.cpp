@@ -294,7 +294,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCSurfaceObjectData data("tire");
         data.setMass(1000); // Exaggerate the mass on purpose
         data.setSurfaceId("tire");
-        data.setRestitution(0.5);
+        data.setRestitution(0.25);
         data.setXYFriction(0.25);
         data.setBatchMode(true);
 

@@ -125,7 +125,7 @@ void Race::updateRouteProgress(Car & car)
     TargetNodeBase & tnode = route.get(index);
 
     // Give a bit more tolerance for other than the finishing check point.
-    const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 2;
+    const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
     if (isInsideCheckPoint(car, tnode, tolerance))
     {
         // Lap finished?
