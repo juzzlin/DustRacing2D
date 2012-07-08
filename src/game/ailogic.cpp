@@ -49,13 +49,12 @@ void AiLogic::update(bool isRaceCompleted)
         TrackTile      * currentTile = m_track->trackTileAtLocation(
             m_car.location().i(), m_car.location().j());
 
-        steerControl(tnode, *currentTile, isRaceCompleted);
-        speedControl(tnode, *currentTile, isRaceCompleted);
+        steerControl(tnode);
+        speedControl(*currentTile, isRaceCompleted);
     }
 }
 
-void AiLogic::steerControl(
-    TargetNodeBase & tnode, TrackTile & currentTile, bool)
+void AiLogic::steerControl(TargetNodeBase & tnode)
 {
     // Initial target coordinates
     MCVector3dF target(tnode.location().x(), tnode.location().y());
@@ -105,9 +104,12 @@ void AiLogic::steerControl(
     m_lastDiff = diff;
 }
 
-void AiLogic::speedControl(
-    TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted)
+void AiLogic::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 {
+    // TODO: Maybe it'd be possible to adjust speed according to
+    // the difference between current and target angles so that
+    // computer hints wouldn't be needed anymore..?
+
     // Braking / acceleration logic
     bool accelerate = true;
     bool brake      = false;

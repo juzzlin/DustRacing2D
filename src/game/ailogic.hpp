@@ -47,12 +47,10 @@ public:
 private:
 
     //! Steering logic.
-    void steerControl(
-        TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted);
+    void steerControl(TargetNodeBase & tnode);
 
     //! Brake/accelerate logic.
-    void speedControl(
-        TargetNodeBase & tnode, TrackTile & currentTile, bool isRaceCompleted);
+    void speedControl(TrackTile & currentTile, bool isRaceCompleted);
 
     Car         & m_car;
     Track       * m_track;
