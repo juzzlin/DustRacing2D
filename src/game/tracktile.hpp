@@ -73,6 +73,15 @@ public:
     //! Get the corresponding surface.
     MCSurface * surface() const;
 
+    //! Set the renderable surface object corresponding
+    //! to the preview of track tile. TrackTile won't take the
+    //! ownership, because many TrackTile's might use
+    //! the same surface object.
+    void setPreviewSurface(MCSurface * surface);
+
+    //! Get the corresponding preview surface.
+    MCSurface * previewSurface() const;
+
     //! Get the orientation in XY-plane in degrees.
     int rotation() const;
 
@@ -90,6 +99,8 @@ private:
     int m_rotation;
 
     MCSurface * m_surface;
+
+    MCSurface * m_previewSurface;
 
     TileType m_typeEnum;
 };

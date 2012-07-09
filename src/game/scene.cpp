@@ -33,6 +33,7 @@
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackobject.hpp"
+#include "trackpreviewoverlay.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
@@ -53,16 +54,17 @@
 
 Scene::Scene(Renderer & renderer, unsigned int numCars)
 : m_race(numCars)
-, m_pActiveTrack(nullptr)
-, m_pWorld(new MCWorld)
-, m_pTimingOverlay(nullptr)
-, m_pStartlights(new Startlights(m_race))
-, m_pStartlightsOverlay(new StartlightsOverlay(*m_pStartlights))
-, m_pStateMachine(new StateMachine(renderer, *m_pStartlights))
+, m_activeTrack(nullptr)
+, m_world(new MCWorld)
+, m_timingOverlay(new TimingOverlay)
+, m_startlights(new Startlights(m_race))
+, m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
+, m_stateMachine(new StateMachine(renderer, *m_startlights))
 , m_pMainMenu(nullptr)
 , m_pMenuManager(nullptr)
-, m_pCheckeredFlag(new CheckeredFlag)
+, m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
+, m_trackPreviewOverlay(new TrackPreviewOverlay)
 {
     const int humanPower = 7500;
 
@@ -96,8 +98,15 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
         m_offTrackDetectors.push_back(new OffTrackDetector(*car));
     }
 
-    m_pStartlightsOverlay->setDimensions(width(), height());
-    m_pCheckeredFlag->setDimensions(width(), height());
+    m_startlightsOverlay->setDimensions(width(), height());
+    m_checkeredFlag->setDimensions(width(), height());
+
+    m_timingOverlay->setDimensions(width(), height());
+    m_timingOverlay->setTiming(m_race.timing());
+    m_timingOverlay->setRace(m_race);
+    m_timingOverlay->setCarToFollow(*m_cars.at(0));
+
+    m_trackPreviewOverlay->setDimensions(width(), height());
 
     MCWorld::instance().enableDepthTestOnLayer(Layers::Tree, true);
 
@@ -158,14 +167,14 @@ void Scene::updateFrame(InputHandler & handler,
 
 void Scene::updateAnimations()
 {
-    m_pStateMachine->update();
-    m_pTimingOverlay->update();
+    m_stateMachine->update();
+    m_timingOverlay->update();
 }
 
 void Scene::updateWorld(float timeStep)
 {
     // Step time
-    m_pWorld->stepTime(timeStep);
+    m_world->stepTime(timeStep);
 }
 
 void Scene::updateRace()
@@ -236,8 +245,8 @@ void Scene::updateAiLogic()
 
 void Scene::setActiveTrack(Track & activeTrack)
 {
-    m_pActiveTrack = &activeTrack;
-    m_pStateMachine->setTrack(*m_pActiveTrack);
+    m_activeTrack = &activeTrack;
+    m_stateMachine->setTrack(*m_activeTrack);
 
     // TODO: Remove objects
     // TODO: Removing not inserted objects results in a
@@ -263,24 +272,26 @@ void Scene::setActiveTrack(Track & activeTrack)
     {
         otd->setTrack(activeTrack);
     }
+
+    m_trackPreviewOverlay->setTrack(&activeTrack);
 }
 
 void Scene::setWorldDimensions()
 {
-    assert(m_pWorld);
-    assert(m_pActiveTrack);
+    assert(m_world);
+    assert(m_activeTrack);
 
     // Update world dimensions according to the
     // active track.
     const MCUint minX = 0;
-    const MCUint maxX = m_pActiveTrack->width();
+    const MCUint maxX = m_activeTrack->width();
     const MCUint minY = 0;
-    const MCUint maxY = m_pActiveTrack->height();
+    const MCUint maxY = m_activeTrack->height();
     const MCUint minZ = 0;
     const MCUint maxZ = 1000;
 
     const MCFloat metersPerPixel = 0.05f;
-    m_pWorld->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
+    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
 }
 
 void Scene::addCarsToWorld()
@@ -294,9 +305,9 @@ void Scene::addCarsToWorld()
 
 void Scene::translateCarsToStartPositions()
 {
-    assert(m_pActiveTrack);
+    assert(m_activeTrack);
 
-    if (TrackTile * finishLine = m_pActiveTrack->finishLine())
+    if (TrackTile * finishLine = m_activeTrack->finishLine())
     {
         const MCFloat startTileX = finishLine->location().x();
         const MCFloat startTileY = finishLine->location().y();
@@ -379,21 +390,21 @@ void Scene::translateCarsToStartPositions()
     else
     {
         MCLogger().error() << "Finish line tile not found in track '" <<
-            m_pActiveTrack->trackData().name().toStdString() << "'";
+            m_activeTrack->trackData().name().toStdString() << "'";
     }
 }
 
 void Scene::addTrackObjectsToWorld()
 {
-    assert(m_pActiveTrack);
+    assert(m_activeTrack);
 
     const unsigned int trackObjectCount =
-        m_pActiveTrack->trackData().objects().count();
+        m_activeTrack->trackData().objects().count();
 
     for (unsigned int i = 0; i < trackObjectCount; i++)
     {
         TrackObject & trackObject = static_cast<TrackObject &>(
-            m_pActiveTrack->trackData().objects().object(i));
+            m_activeTrack->trackData().objects().object(i));
         MCObject & mcObject = trackObject.object();
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
@@ -403,50 +414,26 @@ void Scene::addTrackObjectsToWorld()
 
 void Scene::initRace()
 {
-    assert(m_pActiveTrack);
-    m_race.setTrack(*m_pActiveTrack);
+    assert(m_activeTrack);
+    m_race.setTrack(*m_activeTrack);
     m_race.init();
 }
 
 Track & Scene::activeTrack() const
 {
-    assert(m_pActiveTrack);
-    return *m_pActiveTrack;
+    assert(m_activeTrack);
+    return *m_activeTrack;
 }
 
 MCWorld & Scene::world() const
 {
-    assert(m_pWorld);
-    return *m_pWorld;
-}
-
-void Scene::setTimingOverlay(TimingOverlay & timingOverlay)
-{
-    m_pTimingOverlay = &timingOverlay;
-    m_pTimingOverlay->setTiming(m_race.timing());
-    m_pTimingOverlay->setRace(m_race);
-    m_pTimingOverlay->setCarToFollow(*m_cars.at(0));
-}
-
-void Scene::setStartlights(Startlights & startlights)
-{
-    m_pStartlights = &startlights;
-}
-
-void Scene::setStartlightsOverlay(StartlightsOverlay & startlightsOverlay)
-{
-    m_pStartlightsOverlay = &startlightsOverlay;
-}
-
-TimingOverlay & Scene::timingOverlay() const
-{
-    assert(m_pTimingOverlay);
-    return *m_pTimingOverlay;
+    assert(m_world);
+    return *m_world;
 }
 
 void Scene::render(MCCamera & camera)
 {
-    if (m_pStateMachine->state() == StateMachine::Intro)
+    if (m_stateMachine->state() == StateMachine::Intro)
     {
         const int w2 = width() / 2;
         const int h2 = height() / 2;
@@ -454,22 +441,24 @@ void Scene::render(MCCamera & camera)
         surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }
     else if (
-        m_pStateMachine->state() == StateMachine::GameTransitionIn ||
-        m_pStateMachine->state() == StateMachine::DoStartlights ||
-        m_pStateMachine->state() == StateMachine::Play)
+        m_stateMachine->state() == StateMachine::GameTransitionIn ||
+        m_stateMachine->state() == StateMachine::DoStartlights ||
+        m_stateMachine->state() == StateMachine::Play)
     {
-        m_pActiveTrack->render(&camera);
-        m_pWorld->renderShadows(&camera);
-        m_pWorld->render(&camera);
+        m_activeTrack->render(&camera);
+        m_world->renderShadows(&camera);
+        m_world->render(&camera);
 
         if (m_race.checkeredFlagEnabled())
         {
-            m_pCheckeredFlag->render();
+            m_checkeredFlag->render();
         }
 
-        m_pTimingOverlay->render();
-        m_pStartlightsOverlay->render();
+        m_timingOverlay->render();
+        m_startlightsOverlay->render();
     }
+
+    m_trackPreviewOverlay->render();
 }
 
 Scene::~Scene()
@@ -489,9 +478,10 @@ Scene::~Scene()
         delete otd;
     }
 
-    delete m_pStartlights;
-    delete m_pStartlightsOverlay;
-    delete m_pStateMachine;
+    delete m_startlights;
+    delete m_startlightsOverlay;
+    delete m_stateMachine;
+    delete m_timingOverlay;
     delete m_pMainMenu;
     delete m_pMenuManager;
 }

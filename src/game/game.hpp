@@ -45,12 +45,8 @@ public:
     //! Destructor
     virtual ~Game();
 
-    //! Set target value for frames per second.
-    //! Default is 60. This is independent of the
-    //! rendering FPS.
+    //! Set target value for frames per second. Default is 60.
     void setTargetUpdateFps(unsigned int fps);
-
-    void setTargetRenderFps(unsigned int fps);
 
     void setRenderer(Renderer * renderer);
 
@@ -86,7 +82,6 @@ private:
     MCTextureFontManager * m_pTextureFontManager;
     MCObjectFactory      * m_pObjectFactory;
     TrackLoader          * m_pTrackLoader;
-    TimingOverlay        * m_pTimingOverlay;
     MCCamera             * m_pCamera;
     InputHandler         * m_pInputHandler;
     QTimer                 m_frameUpdateTimer;

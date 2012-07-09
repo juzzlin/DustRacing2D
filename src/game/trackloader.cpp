@@ -181,6 +181,16 @@ void TrackLoader::readTile(
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
     tile->setSurface(&m_textureManager.surface(id));
+
+    // Set preview surface, if found.
+    try
+    {
+        tile->setPreviewSurface(&m_textureManager.surface(id + "Preview"));
+    }
+    catch (...)
+    {
+        // Don't care
+    }
 }
 
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)

@@ -151,13 +151,13 @@ bool Track::update()
 {
     if (m_scale < 1.0)
     {
-        m_scale += 0.05f;
+        m_scale += 0.05;
         return true;
     }
     else
     {
         // This helps to remove some glitches in tile boundaries.
-        m_scale = 1.001f;
+        m_scale = 1.001;
         return false;
     }
 }

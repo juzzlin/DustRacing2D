@@ -25,6 +25,7 @@ TrackTile::TrackTile(
 : TrackTileBase(trackData, location, matrixLocation, type)
 , m_rotation(0)
 , m_surface(nullptr)
+, m_previewSurface(nullptr)
 , m_typeEnum(typeEnum)
 {
 }
@@ -47,6 +48,16 @@ void TrackTile::setSurface(MCSurface * surface)
 MCSurface * TrackTile::surface() const
 {
     return m_surface;
+}
+
+void TrackTile::setPreviewSurface(MCSurface * surface)
+{
+    m_previewSurface = surface;
+}
+
+MCSurface * TrackTile::previewSurface() const
+{
+    return m_previewSurface;
 }
 
 TrackTile::TileType TrackTile::tileTypeEnum() const

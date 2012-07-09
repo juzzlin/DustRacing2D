@@ -36,6 +36,7 @@ class Startlights;
 class StartlightsOverlay;
 class StateMachine;
 class Track;
+class TrackPreviewOverlay;
 class TimingOverlay;
 
 //! The game scene.
@@ -57,10 +58,8 @@ public:
     //! depend on resolution.
     static unsigned int height();
 
-    //! Update physics and objects by the given
-    //! time step.
-    void updateFrame(InputHandler & handler,
-        MCCamera & camera, float timeStep);
+    //! Update physics and objects by the given time step.
+    void updateFrame(InputHandler & handler, MCCamera & camera, float timeStep);
 
     //! Update animations.
     void updateAnimations();
@@ -73,18 +72,6 @@ public:
 
     //! Return the world.
     MCWorld & world() const;
-
-    //! Set timing overlay.
-    void setTimingOverlay(TimingOverlay & timingOverlay);
-
-    //! Set startlights.
-    void setStartlights(Startlights & startlights);
-
-    //! Set startlightsOverlay.
-    void setStartlightsOverlay(StartlightsOverlay & startlightsOverlay);
-
-    //! Get timing overlay.
-    TimingOverlay & timingOverlay() const;
 
     //! Render all components.
     void render(MCCamera & camera);
@@ -113,17 +100,18 @@ private:
 
     void initRace();
 
-    Race                 m_race;
-    Track              * m_pActiveTrack;
-    MCWorld            * m_pWorld;
-    TimingOverlay      * m_pTimingOverlay;
-    Startlights        * m_pStartlights;
-    StartlightsOverlay * m_pStartlightsOverlay;
-    StateMachine       * m_pStateMachine;
-    CheckeredFlag      * m_pCheckeredFlag;
+    Race                  m_race;
+    Track               * m_activeTrack;
+    MCWorld             * m_world;
+    TimingOverlay       * m_timingOverlay;
+    Startlights         * m_startlights;
+    StartlightsOverlay  * m_startlightsOverlay;
+    StateMachine        * m_stateMachine;
+    CheckeredFlag       * m_checkeredFlag;
     Menu               * m_pMainMenu;
     MenuManager        * m_pMenuManager;
-    MCFloat              m_cameraBaseOffset;
+    MCFloat               m_cameraBaseOffset;
+    TrackPreviewOverlay * m_trackPreviewOverlay;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;

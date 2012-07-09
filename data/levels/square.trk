@@ -10,7 +10,7 @@
  <tile i="0" j="8" o="0" type="grass"/>
  <tile i="1" j="0" o="0" type="grass"/>
  <tile i="1" j="1" o="0" type="corner90"/>
- <tile i="1" j="2" o="0" type="straight"/>
+ <tile i="1" j="2" o="0" type="straight" computerHint="1"/>
  <tile i="1" j="3" o="0" type="straight"/>
  <tile i="1" j="4" o="0" type="straight"/>
  <tile i="1" j="5" o="0" type="straight"/>
@@ -24,7 +24,7 @@
  <tile i="2" j="4" o="-90" type="sandGrassStraight"/>
  <tile i="2" j="5" o="-90" type="sandGrassStraight"/>
  <tile i="2" j="6" o="-90" type="sandGrassCorner"/>
- <tile i="2" j="7" o="90" type="straight"/>
+ <tile i="2" j="7" o="90" type="straight" computerHint="1"/>
  <tile i="2" j="8" o="0" type="grass"/>
  <tile i="3" j="0" o="0" type="grass"/>
  <tile i="3" j="1" o="90" type="straight"/>
@@ -54,7 +54,7 @@
  <tile i="5" j="7" o="90" type="straight"/>
  <tile i="5" j="8" o="0" type="grass"/>
  <tile i="6" j="0" o="0" type="grass"/>
- <tile i="6" j="1" o="90" type="straight"/>
+ <tile i="6" j="1" o="90" type="straight" computerHint="1"/>
  <tile i="6" j="2" o="90" type="sandGrassCorner"/>
  <tile i="6" j="3" o="90" type="sandGrassStraight"/>
  <tile i="6" j="4" o="90" type="sandGrassStraight"/>
@@ -68,7 +68,7 @@
  <tile i="7" j="3" o="0" type="straight"/>
  <tile i="7" j="4" o="0" type="straight"/>
  <tile i="7" j="5" o="0" type="straight"/>
- <tile i="7" j="6" o="0" type="straight"/>
+ <tile i="7" j="6" o="0" type="straight" computerHint="1"/>
  <tile i="7" j="7" o="180" type="corner90"/>
  <tile i="7" j="8" o="0" type="grass"/>
  <tile i="8" j="0" o="0" type="grass"/>
@@ -111,5 +111,5 @@
  <tnode x="1846" y="1848" i="12"/>
  <tnode x="1658" y="1923" i="13"/>
  <tnode x="885" y="1932" i="14"/>
- <tnode x="639" y="1908" i="15"/>
+ <tnode x="633" y="1917" i="15"/>
 </track>
