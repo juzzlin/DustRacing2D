@@ -44,8 +44,6 @@ public:
         , rollingFriction(0.1)
         , rotationFriction(1.0)
         , slideFriction(0.75)
-        , offTrackFriction(0.75)
-        , offTrackMoment(50000.0)
         , turningImpulse(0.30)
         , power(5000.0)
         , mass(1000.0)
@@ -67,8 +65,6 @@ public:
         MCFloat rollingFriction;
         MCFloat rotationFriction;
         MCFloat slideFriction;
-        MCFloat offTrackFriction;
-        MCFloat offTrackMoment;
         MCFloat turningImpulse;
         MCFloat power;
         MCFloat mass;
@@ -169,7 +165,6 @@ private:
 
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOnTrackFriction;
-    MCFrictionGenerator * m_pOffTrackFriction;
     MCFrictionGenerator * m_pSlideFriction;
     bool                  m_leftSideOffTrack;
     bool                  m_rightSideOffTrack;

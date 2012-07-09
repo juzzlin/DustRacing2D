@@ -58,23 +58,26 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 , m_pCheckeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
 {
+    const int humanPower = 7500;
+
     // Create and add cars.
     assert(numCars);
     for (MCUint i = 0; i < numCars; i++)
     {
+        Car::Description desc;
+
         Car * car = nullptr;
         if (i == 0)
         {
-            Car::Description desc;
-            desc.power = 7500.0;
-
+            desc.power = humanPower;
             car = new Car(desc, MCTextureManager::instance().surface("car001"), i, true);
         }
         else
         {
-            Car::Description desc;
-            desc.power = 7500.0 + i * 250.0;
-
+            // Introduce some variance to the power of computer players so that the
+            // slowest cars have less power than the human player and the fastest
+            // cars have more power than the human player.
+            desc.power = humanPower - humanPower / 2 + i * humanPower / numCars;
             car = new Car(desc, MCTextureManager::instance().surface("car002"), i, false);
             m_aiLogic.push_back(new AiLogic(*car));
         }
