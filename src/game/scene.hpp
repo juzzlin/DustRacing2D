@@ -108,10 +108,10 @@ private:
     StartlightsOverlay  * m_startlightsOverlay;
     StateMachine        * m_stateMachine;
     CheckeredFlag       * m_checkeredFlag;
-    Menu               * m_pMainMenu;
-    MenuManager        * m_pMenuManager;
     MCFloat               m_cameraBaseOffset;
     TrackPreviewOverlay * m_trackPreviewOverlay;
+    Menu                * m_pMainMenu;
+    MenuManager         * m_pMenuManager;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;

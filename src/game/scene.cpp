@@ -60,11 +60,11 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 , m_startlights(new Startlights(m_race))
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_stateMachine(new StateMachine(renderer, *m_startlights))
-, m_pMainMenu(nullptr)
-, m_pMenuManager(nullptr)
 , m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
 , m_trackPreviewOverlay(new TrackPreviewOverlay)
+, m_pMainMenu(nullptr)
+, m_pMenuManager(nullptr)
 {
     const int humanPower = 7500;
 
