@@ -63,8 +63,8 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
 , m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
 , m_trackPreviewOverlay(new TrackPreviewOverlay)
-, m_pMainMenu(nullptr)
-, m_pMenuManager(nullptr)
+, m_mainMenu(nullptr)
+, m_menuManager(nullptr)
 {
     const int humanPower = 7500;
 
@@ -128,8 +128,8 @@ void Scene::createMenus()
     const int width = Config::Game::WINDOW_WIDTH;
     const int height = Config::Game::WINDOW_HEIGHT;
 
-    m_pMenuManager = new MenuManager;
-    m_pMainMenu = new Menu(width, height);
+    m_menuManager = new MenuManager;
+    m_mainMenu = new Menu(width, height);
 
     MenuItem * play = new MenuItem(width, height / 2, "Play");
     play->setView(new MenuItemView, true);
@@ -137,10 +137,10 @@ void Scene::createMenus()
     MenuItem * quit = new MenuItem(width, height / 2, "Quit");
     quit->setView(new MenuItemView, true);
 
-    m_pMainMenu->addItem(*play, true);
-    m_pMainMenu->addItem(*quit, true);
+    m_mainMenu->addItem(*play, true);
+    m_mainMenu->addItem(*quit, true);
 
-    m_pMenuManager->enterMenu(*m_pMainMenu);
+    m_menuManager->enterMenu(*m_mainMenu);
 }
 
 void Scene::updateFrame(InputHandler & handler,
@@ -482,6 +482,6 @@ Scene::~Scene()
     delete m_startlightsOverlay;
     delete m_stateMachine;
     delete m_timingOverlay;
-    delete m_pMainMenu;
-    delete m_pMenuManager;
+    delete m_mainMenu;
+    delete m_menuManager;
 }
