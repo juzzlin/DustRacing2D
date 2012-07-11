@@ -28,18 +28,46 @@ public:
     //! Constructor.
     MenuManager();
 
-    Menu & activeMenu() const;
+    //! Returns the active menu or nullptr.
+    Menu * activeMenu() const;
 
+    //! Enter the given menu.
     void enterMenu(Menu & newMenu);
 
-    void exitMenu();
+    //! Force exit on current menu.
+    void exitCurrentMenu();
+
+    //! Force exit on all menus.
+    void exit();
+
+    //! Render the menu.
+    void render();
+
+    //! Selection up.
+    void up();
+
+    //! Selection down.
+    void down();
+
+    //! Current item left.
+    void left();
+
+    //! Current item right.
+    void right();
+
+    //! Select the current item.
+    void selectCurrentItem();
+
+    //! \returns true when done.
+    bool done() const;
 
     static MenuManager & instance();
 
 private:
 
-    std::vector<Menu *> m_menus;
+    std::vector<Menu *> m_menuStack;
     static MenuManager * m_pInstance;
+    bool m_done;
 };
 
 #endif // MENUMANAGER_HPP

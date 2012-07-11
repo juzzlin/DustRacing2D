@@ -19,9 +19,11 @@
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "statemachine.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackloader.hpp"
+#include "trackselectionmenu.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCLogger"
@@ -42,14 +44,14 @@ static const unsigned int NUM_CARS    = 10;
 }
 
 Game::Game()
-: m_pRenderer(nullptr)
-, m_pScene(nullptr)
-, m_pTextureManager(new MCTextureManager)
-, m_pTextureFontManager(new MCTextureFontManager(*m_pTextureManager))
-, m_pObjectFactory(new MCObjectFactory(*m_pTextureManager))
-, m_pTrackLoader(new TrackLoader(*m_pTextureManager, *m_pObjectFactory))
-, m_pCamera(nullptr)
-, m_pInputHandler(new InputHandler(MAX_PLAYERS))
+: m_stateMachine(new StateMachine)
+, m_renderer(nullptr)
+, m_scene(nullptr)
+, m_textureManager(new MCTextureManager)
+, m_textureFontManager(new MCTextureFontManager(*m_textureManager))
+, m_objectFactory(new MCObjectFactory(*m_textureManager))
+, m_trackLoader(new TrackLoader(*m_textureManager, *m_objectFactory))
+, m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_updateFps(60)
 , m_timeStep(1.0 / m_updateFps)
 , m_renderCount(0)
@@ -60,7 +62,7 @@ Game::Game()
     connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
     m_renderCountTimer.setInterval(1000);
 
-    m_pTrackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
+    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
 }
 
@@ -72,12 +74,12 @@ void Game::setTargetUpdateFps(unsigned int fps)
 
 void Game::setRenderer(Renderer * newRenderer)
 {
-    m_pRenderer = newRenderer;
+    m_renderer = newRenderer;
 
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.
-    m_pRenderer->makeCurrent();
-    m_pRenderer->setInputHandler(m_pInputHandler);
+    m_renderer->makeCurrent();
+    m_renderer->setInputHandler(m_inputHandler);
 }
 
 void Game::finish()
@@ -88,7 +90,7 @@ void Game::finish()
 
 Renderer * Game::renderer() const
 {
-    return m_pRenderer;
+    return m_renderer;
 }
 
 void Game::loadSurfaces()
@@ -100,7 +102,7 @@ void Game::loadSurfaces()
     MCLogger().info() << "Loading texture config from '" << textureConfigPath << "'..";
 
     // Load textures / surfaces
-    m_pTextureManager->load(textureConfigPath, Config::Common::dataPath);
+    m_textureManager->load(textureConfigPath, Config::Common::dataPath);
 }
 
 void Game::loadFonts()
@@ -111,13 +113,13 @@ void Game::loadFonts()
     MCLogger().info() << "Loading font config from '" << fontConfigPath << "'..";
 
     // Load fonts
-    m_pTextureFontManager->load(fontConfigPath);
+    m_textureFontManager->load(fontConfigPath);
 }
 
 bool Game::loadTracks()
 {
     // Load track data
-    if (int numLoaded = m_pTrackLoader->loadTracks())
+    if (int numLoaded = m_trackLoader->loadTracks())
     {
         MCLogger().info() << numLoaded << " track(s) loaded.";
     }
@@ -132,34 +134,21 @@ bool Game::loadTracks()
 
 void Game::initScene()
 {
-    int defaultTrackIndex = 0;
-    assert(m_pRenderer);
+    assert(m_stateMachine);
+    assert(m_renderer);
 
     // Create the scene
-    m_pScene = new Scene(*m_pRenderer, NUM_CARS);
+    m_scene = new Scene(*m_stateMachine, *m_renderer, NUM_CARS);
 
-    // Set the default track. If track's name appears on the command line, choose it.
-    for (unsigned int i = 0; i < m_pTrackLoader->tracks(); i++)
+    // Add tracks to the menu.
+    for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
     {
-        if (QCoreApplication::arguments().contains(
-                m_pTrackLoader->track(i)->trackData().name()))
-        {
-            defaultTrackIndex = i;
-            break;
-        }
+        m_scene->trackSelectionMenu().addTrack(*m_trackLoader->track(i));
     }
-
-    m_pScene->setActiveTrack(*m_pTrackLoader->track(defaultTrackIndex));
 
     // Set the current game scene. Renderer calls render()
     // for all objects in the scene.
-    m_pRenderer->setScene(m_pScene);
-
-    m_pCamera = new MCCamera(
-        Scene::width(), Scene::height(),
-        0, 0,
-        m_pScene->activeTrack().width(),
-        m_pScene->activeTrack().height());
+    m_renderer->setScene(m_scene);
 }
 
 bool Game::init()
@@ -214,13 +203,13 @@ void Game::stop()
 
 void Game::updateFrame()
 {
-    m_pRenderer->updateFrame(m_pCamera);
-    m_pScene->updateFrame(*m_pInputHandler, *m_pCamera, m_timeStep);
+    m_renderer->updateFrame(m_scene->camera());
+    m_scene->updateFrame(*m_inputHandler, m_timeStep);
 }
 
 void Game::updateAnimations()
 {
-    m_pScene->updateAnimations();
+    m_scene->updateAnimations();
 }
 
 void Game::countRenderFps()
@@ -230,10 +219,10 @@ void Game::countRenderFps()
 
 Game::~Game()
 {
-    delete m_pScene;
-    delete m_pTrackLoader;
-    delete m_pTextureManager;
-    delete m_pObjectFactory;
-    delete m_pCamera;
-    delete m_pInputHandler;
+    delete m_stateMachine;
+    delete m_scene;
+    delete m_trackLoader;
+    delete m_textureManager;
+    delete m_objectFactory;
+    delete m_inputHandler;
 }

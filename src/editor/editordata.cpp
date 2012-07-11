@@ -110,9 +110,9 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBase & tnode)
 {
     Route & route = trackData()->route();
 
-    if (route.length())
+    if (route.numNodes())
     {
-        TargetNode & prev = static_cast<TargetNode &>(route.get(route.length() - 1));
+        TargetNode & prev = static_cast<TargetNode &>(route.get(route.numNodes() - 1));
         prev.setNext(&tnode);
         tnode.setPrev(&prev);
         prev.updateRouteLine();
@@ -134,7 +134,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBase & tnode)
         setMode(EditorData::EM_NONE);
         m_mainWindow->endSetRoute();
 
-        static_cast<TargetNode &>(route.get(route.length() - 1)).setLocation(
+        static_cast<TargetNode &>(route.get(route.numNodes() - 1)).setLocation(
             static_cast<TargetNode &>(route.get(0)).location());
 
         tnode.setNext(&route.get(0));
@@ -144,7 +144,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBase & tnode)
 
 void EditorData::removeRouteFromScene()
 {
-    for (unsigned int i = 0; i < m_trackData->route().length(); i++)
+    for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
     {
         TargetNodeBase * tnode = &m_trackData->route().get(i);
         m_mainWindow->editorScene().removeItem(static_cast<TargetNode *>(tnode));

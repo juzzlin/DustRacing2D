@@ -19,7 +19,7 @@ MenuItemView::MenuItemView()
 {
 }
 
-void MenuItemView::render(int x1, int y1, int x2, int y2)
+void MenuItemView::render(int x, int y)
 {
 
 }

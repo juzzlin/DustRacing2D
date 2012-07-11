@@ -38,14 +38,17 @@ public:
     //! Will be sorted with respect to their indices.
     void buildFromVector(std::vector<TargetNodeBase *> & routeVector);
 
-    //! Return length of the current route.
-    unsigned int length() const;
+    //! Return number of target nodes.
+    unsigned int numNodes() const;
 
     //! Return Target for the given index.
     TargetNodeBase & get(unsigned int index) const;
 
     //! Get all nodes.
     void getAll(std::vector<TargetNodeBase *> & routeVector) const;
+
+    //! Return length based on target node locations.
+    unsigned int geometricLength() const;
 
 private:
 

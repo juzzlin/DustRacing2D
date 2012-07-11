@@ -33,7 +33,7 @@
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackobject.hpp"
-#include "trackpreviewoverlay.hpp"
+#include "trackselectionmenu.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
@@ -52,20 +52,23 @@
 #include <algorithm>
 #include <cassert>
 
-Scene::Scene(Renderer & renderer, unsigned int numCars)
-: m_race(numCars)
+Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
+: m_stateMachine(stateMachine)
+, m_race(numCars)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
 , m_timingOverlay(new TimingOverlay)
 , m_startlights(new Startlights(m_race))
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
-, m_stateMachine(new StateMachine(renderer, *m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
-, m_trackPreviewOverlay(new TrackPreviewOverlay)
+, m_trackSelectionMenu(nullptr)
 , m_mainMenu(nullptr)
 , m_menuManager(nullptr)
 {
+    m_stateMachine.setRenderer(renderer);
+    m_stateMachine.setStartlights(*m_startlights);
+
     const int humanPower = 7500;
 
     // Create and add cars.
@@ -106,8 +109,6 @@ Scene::Scene(Renderer & renderer, unsigned int numCars)
     m_timingOverlay->setRace(m_race);
     m_timingOverlay->setCarToFollow(*m_cars.at(0));
 
-    m_trackPreviewOverlay->setDimensions(width(), height());
-
     MCWorld::instance().enableDepthTestOnLayer(Layers::Tree, true);
 
     createMenus();
@@ -125,49 +126,52 @@ unsigned int Scene::height()
 
 void Scene::createMenus()
 {
-    const int width = Config::Game::WINDOW_WIDTH;
-    const int height = Config::Game::WINDOW_HEIGHT;
-
     m_menuManager = new MenuManager;
-    m_mainMenu = new Menu(width, height);
+    m_mainMenu = new Menu(width(), height());
 
-    MenuItem * play = new MenuItem(width, height / 2, "Play");
+    MenuItem * play = new MenuItem(width(), height() / 2, "Play");
     play->setView(new MenuItemView, true);
 
-    MenuItem * quit = new MenuItem(width, height / 2, "Quit");
+    MenuItem * quit = new MenuItem(width(), height() / 2, "Quit");
     quit->setView(new MenuItemView, true);
 
     m_mainMenu->addItem(*play, true);
     m_mainMenu->addItem(*quit, true);
 
-    m_menuManager->enterMenu(*m_mainMenu);
+    m_trackSelectionMenu = new TrackSelectionMenu(
+        width(), height(), *this, m_stateMachine);
+
+    //m_menuManager->enterMenu(*m_mainMenu);
+    m_menuManager->enterMenu(*m_trackSelectionMenu);
 }
 
-void Scene::updateFrame(InputHandler & handler,
-    MCCamera & camera, float timeStep)
+void Scene::updateFrame(InputHandler & handler, float timeStep)
 {
-    if (m_race.started())
+    if (m_activeTrack)
     {
-        processUserInput(handler);
+        if (m_race.started())
+        {
+            processUserInput(handler);
 
-        updateAiLogic();
+            updateAiLogic();
+        }
+
+        updateWorld(timeStep);
+
+        updateRace();
+
+        for (OffTrackDetector * otd : m_offTrackDetectors)
+        {
+            otd->update();
+        }
+
+        updateCameraLocation(m_camera);
     }
-
-    updateWorld(timeStep);
-
-    updateRace();
-
-    for (OffTrackDetector * otd : m_offTrackDetectors)
-    {
-        otd->update();
-    }
-
-    updateCameraLocation(camera);
 }
 
 void Scene::updateAnimations()
 {
-    m_stateMachine->update();
+    m_stateMachine.update();
     m_timingOverlay->update();
 }
 
@@ -246,7 +250,13 @@ void Scene::updateAiLogic()
 void Scene::setActiveTrack(Track & activeTrack)
 {
     m_activeTrack = &activeTrack;
-    m_stateMachine->setTrack(*m_activeTrack);
+    m_stateMachine.setTrack(*m_activeTrack);
+
+    m_camera.init(
+        Scene::width(), Scene::height(),
+        0, 0,
+        activeTrack.width(),
+        activeTrack.height());
 
     // TODO: Remove objects
     // TODO: Removing not inserted objects results in a
@@ -272,8 +282,6 @@ void Scene::setActiveTrack(Track & activeTrack)
     {
         otd->setTrack(activeTrack);
     }
-
-    m_trackPreviewOverlay->setTrack(&activeTrack);
 }
 
 void Scene::setWorldDimensions()
@@ -431,19 +439,29 @@ MCWorld & Scene::world() const
     return *m_world;
 }
 
+TrackSelectionMenu & Scene::trackSelectionMenu() const
+{
+    assert(m_trackSelectionMenu);
+    return *m_trackSelectionMenu;
+}
+
 void Scene::render(MCCamera & camera)
 {
-    if (m_stateMachine->state() == StateMachine::Intro)
+    if (m_stateMachine.state() == StateMachine::Intro)
     {
         const int w2 = width() / 2;
         const int h2 = height() / 2;
         static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
         surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }
+    else if (m_stateMachine.state() == StateMachine::Menu)
+    {
+        m_menuManager->render();
+    }
     else if (
-        m_stateMachine->state() == StateMachine::GameTransitionIn ||
-        m_stateMachine->state() == StateMachine::DoStartlights ||
-        m_stateMachine->state() == StateMachine::Play)
+        m_stateMachine.state() == StateMachine::GameTransitionIn ||
+        m_stateMachine.state() == StateMachine::DoStartlights ||
+        m_stateMachine.state() == StateMachine::Play)
     {
         m_activeTrack->render(&camera);
         m_world->renderShadows(&camera);
@@ -457,8 +475,6 @@ void Scene::render(MCCamera & camera)
         m_timingOverlay->render();
         m_startlightsOverlay->render();
     }
-
-    m_trackPreviewOverlay->render();
 }
 
 Scene::~Scene()
@@ -480,7 +496,6 @@ Scene::~Scene()
 
     delete m_startlights;
     delete m_startlightsOverlay;
-    delete m_stateMachine;
     delete m_timingOverlay;
     delete m_mainMenu;
     delete m_menuManager;

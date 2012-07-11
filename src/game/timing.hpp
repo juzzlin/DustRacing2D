@@ -84,7 +84,7 @@ public:
     void reset();
 
     //! Converts msecs to string "hh:mm:ss.zzz".
-    std::string msecsToString(int msec) const;
+    static std::string msecsToString(int msec);
 
 private:
 

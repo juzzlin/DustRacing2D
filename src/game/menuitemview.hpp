@@ -27,7 +27,7 @@ public:
     //! Destructor.
     virtual ~MenuItemView();
 
-    virtual void render(int x1, int y1, int x2, int y2);
+    virtual void render(int x, int y);
 };
 
 #endif // MENUITEMVIEW_HPP

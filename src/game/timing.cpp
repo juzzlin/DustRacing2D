@@ -172,7 +172,7 @@ void Timing::reset()
     }
 }
 
-std::string Timing::msecsToString(int msec) const
+std::string Timing::msecsToString(int msec)
 {
     if (msec < 0)
     {

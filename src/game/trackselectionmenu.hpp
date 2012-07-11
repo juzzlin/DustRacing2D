@@ -13,30 +13,48 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TRACKPREVIEWOVERLAY_HPP
-#define TRACKPREVIEWOVERLAY_HPP
+#ifndef TRACKSELECTIONMENU_HPP
+#define TRACKSELECTIONMENU_HPP
 
-#include "overlaybase.hpp"
+#include "menu.hpp"
 
 class Track;
+class TrackItem;
+class Scene;
+class StateMachine;
 
-//! Renders a preview of the given track.
-class TrackPreviewOverlay : public OverlayBase
+//! Allows the user to select a track to play.
+class TrackSelectionMenu : public Menu
 {
 public:
 
     //! Constructor.
-    TrackPreviewOverlay();
+    TrackSelectionMenu(
+        int width, int height, Scene & scene, StateMachine & sm);
 
-    //! Set the track to be rendered or nullptr.
-    void setTrack(Track * track);
+    //! Add a track to the list of selectable tracks.
+    void addTrack(Track & track);
+
+    //! Returns the selected track or nullptr.
+    Track * selectedTrack() const;
 
     //! \reimp
     virtual void render();
 
+    //! \reimp
+    virtual void left();
+
+    //! \reimp
+    virtual void right();
+
+    //! \reimp
+    virtual void selectCurrentItem();
+
 private:
 
-    Track * m_track;
+    Track        * m_selectedTrack;
+    Scene        & m_scene;
+    StateMachine & m_sm;
 };
 
-#endif // TRACKPREVIEWOVERLAY_HPP
+#endif // TRACKSELECTIONMENU_HPP

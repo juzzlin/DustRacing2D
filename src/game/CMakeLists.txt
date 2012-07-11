@@ -30,7 +30,7 @@ set(SRC
     trackdata.cpp
     trackloader.cpp
     trackobject.cpp
-    trackpreviewoverlay.cpp
+    trackselectionmenu.cpp
     tracktile.cpp
     treeview.cpp
     wall.cpp

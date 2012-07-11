@@ -19,16 +19,27 @@
 
 #include "mccamera.hh"
 
-MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
-: m_w(w)
-, m_h(h)
-, m_halfW(w / 2)
-, m_halfH(h / 2)
-, m_x(x)
-, m_y(y)
-, m_maxX(maxX)
-, m_maxY(maxY)
+MCCamera::MCCamera()
 {
+    init(0, 0, 0, 0, 0, 0);
+}
+
+MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
+{
+    init(w, h, x, y, maxX, maxY);
+}
+
+void MCCamera::init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
+{
+    m_w     = w;
+    m_h     = h;
+    m_halfW = w / 2;
+    m_halfH = h / 2;
+    m_x     = x;
+    m_y     = y;
+    m_maxX  = maxX;
+    m_maxY  = maxY;
+
     setPos(x, y);
 }
 

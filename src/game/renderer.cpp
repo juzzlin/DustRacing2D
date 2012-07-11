@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "inputhandler.hpp"
+#include "menumanager.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "../common/config.hpp"
@@ -130,9 +131,9 @@ void Renderer::paintGL()
     swapBuffers();
 }
 
-void Renderer::updateFrame(MCCamera * pCamera)
+void Renderer::updateFrame(MCCamera & camera)
 {
-    m_pCamera = pCamera;
+    m_pCamera = &camera;
 
     paintGL();
 }
@@ -170,15 +171,21 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
         {
         case Qt::Key_Left:
             m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, false);
+            MenuManager::instance().left();
             break;
         case Qt::Key_Right:
             m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, false);
+            MenuManager::instance().right();
             break;
         case Qt::Key_Up:
             m_pInputHandler->setActionState(0, InputHandler::IA_UP, false);
             break;
         case Qt::Key_Down:
             m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, false);
+            break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            MenuManager::instance().selectCurrentItem();
             break;
         default:
             QGLWidget::keyReleaseEvent(event);

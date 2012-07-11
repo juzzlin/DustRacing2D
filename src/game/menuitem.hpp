@@ -41,13 +41,21 @@ public:
 
     MenuItemView * view();
 
-    virtual void render(int x1, int y1, int x2, int y2);
+    virtual void render(int x, int y);
 
     virtual void onLeft();
 
     virtual void onRight();
 
+    virtual void onUp();
+
+    virtual void onDown();
+
     virtual void onSelect();
+
+    virtual void enter();
+
+    virtual void exit();
 
     void setFocused(bool focused);
 

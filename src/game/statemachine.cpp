@@ -15,24 +15,20 @@
 
 #include "statemachine.hpp"
 
+#include "menumanager.hpp"
 #include "renderer.hpp"
 #include "startlights.hpp"
 #include "track.hpp"
 
-StateMachine::StateMachine(
-    Renderer & renderer, Startlights & startlights)
+#include <cassert>
+
+StateMachine::StateMachine()
 : m_state(Init)
-, m_startlights(startlights)
-, m_renderer(renderer)
-, m_pTrack(nullptr)
+, m_startlights(nullptr)
+, m_renderer(nullptr)
+, m_track(nullptr)
 , m_fadeValue(0.0)
 {
-    m_renderer.setEnabled(false);
-}
-
-void StateMachine::setTrack(Track & track)
-{
-    m_pTrack = &track;
 }
 
 bool StateMachine::update()
@@ -45,42 +41,58 @@ bool StateMachine::update()
 
     case Intro:
 
+        assert(m_renderer);
+
         if (m_fadeValue < 2.0)
         {
             m_fadeValue += 0.01;
-            m_renderer.setFadeShaderEnabled(true);
-            m_renderer.setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
+            m_renderer->setFadeShaderEnabled(true);
+            m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
 
             // Avoid a non-black screen immediately after the game starts.
             if (m_fadeValue > 0.02)
             {
-                m_renderer.setEnabled(true);
+                m_renderer->setEnabled(true);
             }
         }
         else
         {
             m_fadeValue = 1.0;
+            m_state = Menu;
+            m_renderer->setFadeShaderEnabled(false);
+        }
+
+        break;
+
+    case Menu:
+
+        if (MenuManager::instance().done())
+        {
             m_state = GameTransitionIn;
-            m_renderer.setFadeShaderEnabled(false);
         }
 
         break;
 
     case GameTransitionIn:
-        if (m_pTrack)
+
+        assert(m_track);
+
+        if (!m_track->update())
         {
-            if (!m_pTrack->update())
-            {
-                m_state = DoStartlights;
-            }
+            m_state = DoStartlights;
         }
+
         break;
 
     case DoStartlights:
-        if (!m_startlights.update())
+
+        assert(m_startlights);
+
+        if (!m_startlights->update())
         {
             m_state = Play;
         }
+
         break;
 
     case Play:

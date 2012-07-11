@@ -17,6 +17,7 @@
 #define STATEMACHINE_HPP
 
 #include "updateableif.hpp"
+#include "renderer.hpp"
 #include "MiniCore/Core/MCTypes"
 
 class Renderer;
@@ -39,9 +40,23 @@ public:
     };
 
     //! Constructor.
-    StateMachine(Renderer & renderer, Startlights & startLights);
+    StateMachine();
 
-    void setTrack(Track & track);
+    void setTrack(Track & track)
+    {
+        m_track = &track;
+    }
+
+    void setRenderer(Renderer & renderer)
+    {
+        m_renderer = &renderer;
+        m_renderer->setEnabled(false);
+    }
+
+    void setStartlights(Startlights & startlights)
+    {
+        m_startlights = &startlights;
+    }
 
     StateMachine::State state() const;
 
@@ -54,9 +69,9 @@ public:
 private:
 
     State         m_state;
-    Startlights & m_startlights;
-    Renderer    & m_renderer;
-    Track       * m_pTrack;
+    Startlights * m_startlights;
+    Renderer    * m_renderer;
+    Track       * m_track;
     MCFloat       m_fadeValue;
 };
 

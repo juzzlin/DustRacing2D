@@ -64,8 +64,26 @@ void MenuItem::onRight()
 {
 }
 
+void MenuItem::onUp()
+{
+}
+
+void MenuItem::onDown()
+{
+}
+
 void MenuItem::onSelect()
 {
+}
+
+void MenuItem::enter()
+{
+
+}
+
+void MenuItem::exit()
+{
+
 }
 
 void MenuItem::setFocused(bool focused)
@@ -94,11 +112,11 @@ bool MenuItem::focused() const
     return m_focused;
 }
 
-void MenuItem::render(int x1, int y1, int x2, int y2)
+void MenuItem::render(int x, int y)
 {
     if (m_pView)
     {
-        m_pView->render(x1, y1, x2, y2);
+        m_pView->render(x, y);
     }
 }
 

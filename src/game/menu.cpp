@@ -18,10 +18,12 @@
 
 #include <cassert>
 
-Menu::Menu(unsigned int width, unsigned int height)
-  : m_width(width)
-  , m_height(height)
-  , m_currentIndex(0)
+Menu::Menu(int width, int height, MenuStyle style)
+: m_width(width)
+, m_height(height)
+, m_currentIndex(0)
+, m_style(style)
+, m_done(false)
 {
 }
 
@@ -37,36 +39,64 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
     updateFocus();
 }
 
-void Menu::render()
+MenuItem * Menu::currentItem() const
 {
-    // Calculate total height
-    int totalHeight = 0;
-    for (MenuItem * item : m_menuItems)
+    if (m_menuItems.size())
     {
-        totalHeight += item->height();
+        return m_menuItems.at(m_currentIndex);
     }
 
-    // Render centered items
-    int startY = m_height / 2 - totalHeight / 2;
-    for (MenuItem * item : m_menuItems)
-    {
-        const int x1 = m_width / 2 - item->width() / 2;
-        const int y1 = startY;
-        const int x2 = m_width / 2 + item->width() / 2;
-        const int y2 = startY + item->height();
+    return nullptr;
+}
 
-        item->render(x1, y1, x2, y2);
-        startY += item->height();
+void Menu::render()
+{
+    if (m_style == Menu::MS_LIST)
+    {
+        // Calculate total height
+        int totalHeight = 0;
+        for (MenuItem * item : m_menuItems)
+        {
+            totalHeight += item->height();
+        }
+
+        // Render centered items
+        int startY = m_height / 2 - totalHeight / 2;
+        for (MenuItem * item : m_menuItems)
+        {
+            const int x = m_width / 2;
+            const int y = startY;
+
+            item->render(x, y);
+            startY += item->height();
+        }
+    }
+    else if (m_style == Menu::MS_SHOW_ONE)
+    {
+        if (m_menuItems.size())
+        {
+            MenuItem & item = *m_menuItems.at(m_currentIndex);
+            item.render(m_width / 2, m_height / 2);
+        }
     }
 }
 
 void Menu::up()
 {
-    assert(m_menuItems.size());
+    if (m_menuItems.size())
+    {
+        m_menuItems[m_currentIndex]->exit();
+    }
+
     m_currentIndex++;
     if (m_currentIndex >= m_menuItems.size())
     {
         m_currentIndex = 0;
+    }
+
+    if (m_menuItems.size())
+    {
+        m_menuItems[m_currentIndex]->enter();
     }
 
     updateFocus();
@@ -74,11 +104,20 @@ void Menu::up()
 
 void Menu::down()
 {
-    assert(m_menuItems.size());
+    if (m_menuItems.size())
+    {
+        m_menuItems[m_currentIndex]->exit();
+    }
+
     m_currentIndex--;
-    if (m_currentIndex >= m_menuItems.size()) // m_currentIndex is unsisgned.
+    if (m_currentIndex >= m_menuItems.size()) // m_currentIndex is unsigned
     {
         m_currentIndex = m_menuItems.size() - 1;
+    }
+
+    if (m_menuItems.size())
+    {
+        m_menuItems[m_currentIndex]->enter();
     }
 
     updateFocus();
@@ -86,38 +125,53 @@ void Menu::down()
 
 void Menu::left()
 {
-    assert(m_menuItems.size());
-    assert(m_currentIndex < m_menuItems.size());
-
-    m_menuItems.at(m_currentIndex)->onLeft();
+    up();
 }
 
 void Menu::right()
 {
-    assert(m_menuItems.size());
-    assert(m_currentIndex < m_menuItems.size());
-
-    m_menuItems.at(m_currentIndex)->onRight();
+    down();
 }
 
 void Menu::selectCurrentItem()
 {
-    assert(m_menuItems.size());
-
-    m_menuItems.at(m_currentIndex)->onSelect();
+    if (m_menuItems.size())
+    {
+        m_menuItems.at(m_currentIndex)->onSelect();
+    }
 }
 
 void Menu::updateFocus()
 {
-    assert(m_menuItems.size());
-    assert(m_currentIndex < m_menuItems.size());
-
-    for (MenuItem * item : m_menuItems)
+    if (m_menuItems.size())
     {
-        item->setFocused(false);
-    }
+        for (MenuItem * item : m_menuItems)
+        {
+            item->setFocused(false);
+        }
 
-    m_menuItems.at(m_currentIndex)->setFocused(true);
+        m_menuItems.at(m_currentIndex)->setFocused(true);
+    }
+}
+
+int Menu::width() const
+{
+    return m_width;
+}
+
+int Menu::height() const
+{
+    return m_height;
+}
+
+bool Menu::done() const
+{
+    return m_done;
+}
+
+void Menu::enter()
+{
+    m_done = false;
 }
 
 Menu::~Menu()

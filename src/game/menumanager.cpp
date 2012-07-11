@@ -21,32 +21,98 @@
 MenuManager * MenuManager::m_pInstance = nullptr;
 
 MenuManager::MenuManager()
+: m_done(false)
 {
     assert(!m_pInstance);
     m_pInstance = this;
 }
 
-Menu & MenuManager::activeMenu() const
+Menu * MenuManager::activeMenu() const
 {
-    assert(m_menus.size());
-    assert(m_menus.back());
-    return *m_menus.back();
+    if (m_menuStack.size())
+    {
+        return m_menuStack.back();
+    }
+
+    return nullptr;
 }
 
 void MenuManager::enterMenu(Menu & newMenu)
 {
-    m_menus.push_back(&newMenu);
+    m_menuStack.push_back(&newMenu);
+    newMenu.enter();
     newMenu.render();
 }
 
-void MenuManager::exitMenu()
+void MenuManager::exitCurrentMenu()
 {
-    assert(m_menus.size() > 1);
-    m_menus.pop_back();
+    if (m_menuStack.size())
+    {
+        m_menuStack.pop_back();
+    }
+}
+
+void MenuManager::exit()
+{
+    m_menuStack.clear();
+    m_done = true;
 }
 
 MenuManager & MenuManager::instance()
 {
     assert(m_pInstance);
     return *m_pInstance;
+}
+
+void MenuManager::render()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->render();
+    }
+}
+
+void MenuManager::up()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->up();
+    }
+}
+
+void MenuManager::down()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->down();
+    }
+}
+
+void MenuManager::left()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->left();
+    }
+}
+
+void MenuManager::right()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->right();
+    }
+}
+
+void MenuManager::selectCurrentItem()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->selectCurrentItem();
+    }
+}
+
+bool MenuManager::done() const
+{
+    return m_done;
 }

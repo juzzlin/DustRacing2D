@@ -19,6 +19,8 @@
 #include "car.hpp"
 #include "race.hpp"
 
+#include "MiniCore/Core/MCCamera"
+
 #include <vector>
 
 class AiLogic;
@@ -36,7 +38,7 @@ class Startlights;
 class StartlightsOverlay;
 class StateMachine;
 class Track;
-class TrackPreviewOverlay;
+class TrackSelectionMenu;
 class TimingOverlay;
 
 //! The game scene.
@@ -45,7 +47,7 @@ class Scene
 public:
 
     //! Constructor.
-    explicit Scene(Renderer & renderer, unsigned int numCars = 10);
+    Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars = 10);
 
     //! Destructor.
     ~Scene();
@@ -59,7 +61,7 @@ public:
     static unsigned int height();
 
     //! Update physics and objects by the given time step.
-    void updateFrame(InputHandler & handler, MCCamera & camera, float timeStep);
+    void updateFrame(InputHandler & handler, float timeStep);
 
     //! Update animations.
     void updateAnimations();
@@ -72,6 +74,15 @@ public:
 
     //! Return the world.
     MCWorld & world() const;
+
+    //! Return track selection menu.
+    TrackSelectionMenu & trackSelectionMenu() const;
+
+    //! Return camera.
+    MCCamera & camera()
+    {
+        return m_camera;
+    }
 
     //! Render all components.
     void render(MCCamera & camera);
@@ -100,16 +111,17 @@ private:
 
     void initRace();
 
+    StateMachine        & m_stateMachine;
     Race                  m_race;
     Track               * m_activeTrack;
     MCWorld             * m_world;
+    MCCamera              m_camera;
     TimingOverlay       * m_timingOverlay;
     Startlights         * m_startlights;
     StartlightsOverlay  * m_startlightsOverlay;
-    StateMachine        * m_stateMachine;
     CheckeredFlag       * m_checkeredFlag;
     MCFloat               m_cameraBaseOffset;
-    TrackPreviewOverlay * m_trackPreviewOverlay;
+    TrackSelectionMenu  * m_trackSelectionMenu;
     Menu                * m_mainMenu;
     MenuManager         * m_menuManager;
 

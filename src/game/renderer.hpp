@@ -41,7 +41,7 @@ public:
     //! Destructor.
     virtual ~Renderer();
 
-    void updateFrame(MCCamera * pCamera);
+    void updateFrame(MCCamera & camera);
 
     //! Set game scene to be rendered.
     void setScene(Scene * pScene);

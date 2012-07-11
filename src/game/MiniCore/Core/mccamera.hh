@@ -38,6 +38,9 @@ class MCCamera
 {
 public:
 
+    //! Default constructor.
+    MCCamera();
+
     /*! \brief Constructor.
      *  \param w Width of the window.
      *  \param h Height of the window.
@@ -47,6 +50,16 @@ public:
      *  \param maxY Maximum allowed y for the window.
      */
     MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
+
+    /*! \brief Re-init.
+     *  \param w Width of the window.
+     *  \param h Height of the window.
+     *  \param x Center x of the window.
+     *  \param y Center y of the window.
+     *  \param maxX Maximum allowed x for the window.
+     *  \param maxY Maximum allowed y for the window.
+     */
+    void init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
 
     /*! \brief Set Camera location in the scene.
      *  \param x Center x of the window.

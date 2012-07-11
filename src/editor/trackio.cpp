@@ -228,7 +228,7 @@ void TrackIO::writeTargetNodes(
     const TrackData & trackData, QDomElement & root, QDomDocument & doc)
 {
     const Route & route = trackData.route();
-    for (unsigned int i = 0; i < route.length(); i++)
+    for (unsigned int i = 0; i < route.numNodes(); i++)
     {
         QDomElement      tnodeElement = doc.createElement("tnode");
         TargetNodeBase & tnode        = route.get(i);

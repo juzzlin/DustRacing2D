@@ -49,14 +49,14 @@ bool Route::isClosed() const
     return false;
 }
 
-unsigned int Route::length() const
+unsigned int Route::numNodes() const
 {
     return m_route.size();
 }
 
 TargetNodeBase & Route::get(unsigned int index) const
 {
-    assert (index < length());
+    assert (index < numNodes());
     return *m_route[index];
 }
 
@@ -86,4 +86,25 @@ void Route::buildFromVector(std::vector<TargetNodeBase *> & routeVector)
             push(*tnode);
         }
     }
+}
+
+unsigned int Route::geometricLength() const
+{
+    unsigned int result = 0;
+
+    if (m_route.size() > 1)
+    {
+        for (unsigned int i = 0; i < m_route.size() - 1; i++)
+        {
+            int dx = m_route[i]->location().x() - m_route[i + 1]->location().x();
+            int dy = m_route[i]->location().y() - m_route[i + 1]->location().y();
+            result += sqrt(dx * dx + dy * dy);
+        }
+
+        int dx = m_route[m_route.size() - 1]->location().x() - m_route[0]->location().x();
+        int dy = m_route[m_route.size() - 1]->location().y() - m_route[0]->location().y();
+        result += sqrt(dx * dx + dy * dy);
+    }
+
+    return result;
 }

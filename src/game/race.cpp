@@ -81,7 +81,7 @@ void Race::update()
         const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
 
         if (tnode.index() >=
-            static_cast<int>(9 * route.length() / 10))
+            static_cast<int>(9 * route.numNodes() / 10))
         {
             m_checkeredFlagEnabled = true;
         }
@@ -129,7 +129,7 @@ void Race::updateRouteProgress(Car & car)
     if (isInsideCheckPoint(car, tnode, tolerance))
     {
         // Lap finished?
-        if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.length()))
+        if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
         {
             m_timing.lapCompleted(car.index(), car.isHuman());
             if (m_timing.newLapRecordAchieved())
@@ -149,7 +149,7 @@ void Race::updateRouteProgress(Car & car)
 
         // Switch to next check point
         car.setPrevTargetNodeIndex(index);
-        if (++index >= route.length())
+        if (++index >= route.numNodes())
         {
             index = 0;
         }
