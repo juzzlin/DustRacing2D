@@ -56,7 +56,16 @@ void TargetNode::paint(QPainter * painter,
     Q_UNUSED(option);
 
     painter->save();
-    painter->setPen(QPen(QBrush(QColor(0, 0, 255, 64)), LW));
+
+    if (index() == 0)
+    {
+        painter->setPen(QPen(QBrush(QColor(255, 255, 255, 64)), LW));
+    }
+    else
+    {
+        painter->setPen(QPen(QBrush(QColor(0, 0, 255, 64)), LW));
+    }
+
     painter->drawRect(
         boundingRect().x()     + LW,     boundingRect().y()      + LW,
         boundingRect().width() - LW * 2, boundingRect().height() - LW * 2);
