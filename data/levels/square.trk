@@ -1,4 +1,4 @@
-<track lapCount="10" version="0.2.2" cols="9" rows="9" name="Square">
+<track lapCount="10" version="0.3.0" cols="9" rows="9" name="Square">
  <tile i="0" j="0" o="0" type="grass"/>
  <tile i="0" j="1" o="0" type="grass"/>
  <tile i="0" j="2" o="0" type="grass"/>
@@ -96,6 +96,64 @@
  <object x="571" y="857" category="free" role="tree" o="0"/>
  <object x="573" y="1146" category="free" role="tree" o="0"/>
  <object x="560" y="1428" category="free" role="tree" o="0"/>
+ <object x="418" y="188" category="free" role="rock" o="0"/>
+ <object x="374" y="201" category="free" role="rock" o="0"/>
+ <object x="350" y="176" category="free" role="rock" o="0"/>
+ <object x="377" y="170" category="free" role="rock" o="0"/>
+ <object x="332" y="212" category="free" role="rock" o="0"/>
+ <object x="297" y="222" category="free" role="rock" o="0"/>
+ <object x="295" y="248" category="free" role="rock" o="0"/>
+ <object x="274" y="281" category="free" role="rock" o="0"/>
+ <object x="237" y="327" category="free" role="rock" o="0"/>
+ <object x="226" y="374" category="free" role="rock" o="0"/>
+ <object x="226" y="414" category="free" role="rock" o="0"/>
+ <object x="186" y="419" category="free" role="rock" o="0"/>
+ <object x="145" y="306" category="free" role="rock" o="0"/>
+ <object x="201" y="238" category="free" role="rock" o="0"/>
+ <object x="239" y="185" category="free" role="rock" o="0"/>
+ <object x="239" y="262" category="free" role="rock" o="0"/>
+ <object x="468" y="221" category="free" role="rock" o="0"/>
+ <object x="389" y="237" category="free" role="rock" o="0"/>
+ <object x="534" y="166" category="free" role="rock" o="0"/>
+ <object x="466" y="132" category="free" role="rock" o="0"/>
+ <object x="374" y="84" category="free" role="rock" o="0"/>
+ <object x="414" y="129" category="free" role="rock" o="0"/>
+ <object x="315" y="132" category="free" role="rock" o="0"/>
+ <object x="531" y="209" category="free" role="rock" o="0"/>
+ <object x="474" y="172" category="free" role="rock" o="0"/>
+ <object x="2015" y="2034" category="free" role="rock" o="0"/>
+ <object x="2076" y="1989" category="free" role="rock" o="0"/>
+ <object x="2040" y="2005" category="free" role="rock" o="0"/>
+ <object x="2046" y="2076" category="free" role="rock" o="0"/>
+ <object x="1918" y="2105" category="free" role="rock" o="0"/>
+ <object x="1798" y="2118" category="free" role="rock" o="0"/>
+ <object x="1844" y="2070" category="free" role="rock" o="0"/>
+ <object x="1867" y="2113" category="free" role="rock" o="0"/>
+ <object x="1952" y="2070" category="free" role="rock" o="0"/>
+ <object x="1992" y="2088" category="free" role="rock" o="0"/>
+ <object x="1971" y="2133" category="free" role="rock" o="0"/>
+ <object x="1915" y="2180" category="free" role="rock" o="0"/>
+ <object x="1828" y="2167" category="free" role="rock" o="0"/>
+ <object x="1753" y="2186" category="free" role="rock" o="0"/>
+ <object x="1663" y="2105" category="free" role="rock" o="0"/>
+ <object x="1579" y="2130" category="free" role="rock" o="0"/>
+ <object x="1660" y="2144" category="free" role="rock" o="0"/>
+ <object x="1725" y="2159" category="free" role="rock" o="0"/>
+ <object x="1727" y="2093" category="free" role="rock" o="0"/>
+ <object x="2027" y="2195" category="free" role="rock" o="0"/>
+ <object x="2090" y="2162" category="free" role="rock" o="0"/>
+ <object x="2034" y="2147" category="free" role="rock" o="0"/>
+ <object x="2117" y="2082" category="free" role="rock" o="0"/>
+ <object x="2077" y="2040" category="free" role="rock" o="0"/>
+ <object x="2122" y="1953" category="free" role="rock" o="0"/>
+ <object x="2077" y="1931" category="free" role="rock" o="0"/>
+ <object x="2149" y="2017" category="free" role="rock" o="0"/>
+ <object x="2210" y="2105" category="free" role="rock" o="0"/>
+ <object x="2161" y="2127" category="free" role="rock" o="0"/>
+ <object x="2152" y="2197" category="free" role="rock" o="0"/>
+ <object x="2093" y="2135" category="free" role="rock" o="0"/>
+ <object x="2111" y="2218" category="free" role="rock" o="0"/>
+ <object x="1961" y="2192" category="free" role="rock" o="0"/>
  <tnode x="639" y="1908" i="0"/>
  <tnode x="444" y="1830" i="1"/>
  <tnode x="342" y="1632" i="2"/>
@@ -111,5 +169,5 @@
  <tnode x="1846" y="1848" i="12"/>
  <tnode x="1658" y="1923" i="13"/>
  <tnode x="885" y="1932" i="14"/>
- <tnode x="633" y="1917" i="15"/>
+ <tnode x="639" y="1908" i="15"/>
 </track>
