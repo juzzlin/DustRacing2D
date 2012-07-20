@@ -36,6 +36,8 @@ MCUint MCObject::typeIDCount = 1;
 MCObject::TypeHash MCObject::typeHash;
 MCObject::TimerEventObjectsList MCObject::timerEventObjects;
 
+static const MCFloat DAMPING = 0.999;
+
 // TODO: Use constructor chaining when GCC supports it
 MCObject::MCObject(const std::string & typeId)
 : m_typeID(registerType(typeId))
@@ -58,7 +60,7 @@ MCObject::MCObject(const std::string & typeId)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , m_initialAngle(0)
 , pShape(nullptr)
-, damping(0.999)
+, damping(DAMPING)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)
@@ -93,7 +95,7 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , m_initialAngle(0)
 , pShape(nullptr)
-, damping(0.999)
+, damping(DAMPING)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)
@@ -130,7 +132,7 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_i0(0), m_i1(0), m_j0(0), m_j1(0)
 , m_initialAngle(0)
 , pShape(nullptr)
-, damping(0.999)
+, damping(DAMPING)
 , timerEventObjectsIndex(-1)
 , m_sleeping(false)
 , m_physicsObject(true)

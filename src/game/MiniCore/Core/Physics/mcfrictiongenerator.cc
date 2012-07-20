@@ -24,7 +24,8 @@
 
 namespace
 {
-    const MCFloat FRICTION_SPEED_TH = 0.001f;
+    const MCFloat FRICTION_SPEED_TH = 0.01;
+    const MCFloat LINEAR_DECAY      = 0.005;
     const MCFloat ROTATION_DECAY    = 0.01;
 }
 
@@ -33,19 +34,15 @@ MCFrictionGenerator::MCFrictionGenerator(
 : m_coeffLin(coeffLin)
 , m_coeffRot(coeffRot)
 , m_gravity(gravity)
-, m_coeffLinTot(coeffLin * gravity)
+, m_coeffLinTot(coeffLin * gravity * LINEAR_DECAY)
 , m_coeffRotTot(coeffRot * gravity * ROTATION_DECAY)
 {}
 
 void MCFrictionGenerator::updateForce(MCObject & object)
 {
-    // Linear motion.
+    // Simulated friction caused by linear motion.
     const MCVector2d<MCFloat> v(object.velocity());
-    const MCFloat l = v.lengthFast();
-    if (l > FRICTION_SPEED_TH)
-    {
-        object.addForce(-v * m_coeffLinTot * object.mass() / l);
-    }
+    object.addLinearImpulse(-v * m_coeffLinTot);
 
     // Simulated friction caused by angular torque.
     if (object.shape())
