@@ -6,7 +6,6 @@ Game:
 - Move car to the nearest track tile if stuck for too long
 - Grandstands
 - Global setting for shadow offsets
-- Initial start menu
 - Install target for CMake
 - Full screen mode
 - One big (long) wall object

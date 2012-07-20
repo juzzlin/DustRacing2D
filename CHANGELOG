@@ -1,3 +1,53 @@
+0.3.0
+-----
+
+* Updates TODO.
+* Draw the first checkpoint in white.
+* Adds TrackSelectionMenu.
+* Fixes some compilation warnings.
+* Introduces more variance to the computer players.
+* Use Car::Description instead of constants in anonymous namespace.
+* Free-hand routes.
+* Editor: Refactors Object creation to ObjectFactory.
+* Renames ObjectData => ObjectModel, ObjectLoader => ObjectModelLoader.
+* Fixes incorrect object dimensions when loading a track into the editor.
+* Makes wall stationary, heavier tire objects.
+* Braking spot hints.
+* Adds monza.trk
+* Increases slide friction.
+* Track number of active particles.
+* Don't update particle alpha on every frame.
+* Batch support for MCSurfaceView.
+* Simple batching of views.
+* Reduce the displayed precision of timing.
+* Refactors and optimizes MCTextureText.
+* NVIDIA-specific optimizations for VBO's.
+* Fixes compilation with -DMC_USE_DOUBLE.
+* Refactors TimingOverlay.
+* MCTextureText renders VBO's.
+* Adds MCSurface::setTexCoords().
+* A bit taller trees.
+* Physics improvements.
+* Optimizations when rendering the same surface multiple times.
+* Integer calculations in tree views.
+* Don't test stationary objects against stationary objects.
+* Enable depth tests for trees.
+* Refactors MCSurface.
+* Removes obsolete glColor4f()-calls.
+* Removes debug code from MCRectShape.
+* Track renders by using MCSurface instead of custom render.
+* TreeView to use MCSurface instead of custom render.
+* MCGLRectParticle uses VBO's.
+* MCSurface uses VBO's.
+* Updates AUTHORS.
+* New track woods.trk.
+* Rotation support for all objects in editor and in the game.
+* Removes obsolete test.trk
+* Log OpenGL version.
+* Lap records are saved and loaded.
+* Refactors TimingOverlay.
+* Removes the obsolete analog speedometer.
+
 0.2.2
 -----
 
