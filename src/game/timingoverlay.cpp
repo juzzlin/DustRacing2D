@@ -64,16 +64,24 @@ void TimingOverlay::render()
         const int currentLapTime = m_pTiming->currentTime(index);
         const int lastLapTime    = m_pTiming->lastLapTime(index);
         const int recordLapTime  = m_pTiming->lapRecord();
-
-        const unsigned int pos   = m_pRace->getPositionOfCar(*m_pCar);
-        const unsigned int laps  = m_pRace->lapCount();
+        const int pos            = m_pRace->getPositionOfCar(*m_pCar);
+        const int laps           = m_pRace->lapCount();
 
         MCTextureText text("");
 
         // Render the current lap number
         {
             std::stringstream ss;
-            ss << " LAP:" << leadersLap << "/" << laps;
+
+            if (leadersLap <= laps)
+            {
+                ss << " LAP:" << leadersLap << "/" << laps;
+            }
+            else
+            {
+                ss << " WINNER FINISHED";
+            }
+
             text.setText(ss.str());
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 1.0);
