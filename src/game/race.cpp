@@ -124,38 +124,44 @@ void Race::updateRouteProgress(Car & car)
     unsigned int     index = car.currentTargetNodeIndex();
     TargetNodeBase & tnode = route.get(index);
 
-    // Give a bit more tolerance for other than the finishing check point.
-    const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
-    if (isInsideCheckPoint(car, tnode, tolerance))
+    if (!m_timing.raceCompleted(car.index()))
     {
-        // Lap finished?
-        if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
+        // Give a bit more tolerance for other than the finishing check point.
+        const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
+        if (isInsideCheckPoint(car, tnode, tolerance))
         {
-            m_timing.lapCompleted(car.index(), car.isHuman());
-            if (m_timing.newLapRecordAchieved())
+            // Lap finished?
+            if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
             {
-                saveLapRecord(m_timing.lapRecord());
+                m_timing.lapCompleted(car.index(), car.isHuman());
+
+                // Check if we have a new lap record
+                if (m_timing.newLapRecordAchieved())
+                {
+                    saveLapRecord(m_timing.lapRecord());
+                }
+
+                // Finish the race if winner has already finished.
+                if (m_winnerFinished)
+                {
+                    m_timing.setRaceCompleted(car.index(), true);
+                }
             }
 
-            if (m_winnerFinished)
+            // Increase progress and update the positions hash
+            car.setRouteProgression(car.routeProgression() + 1);
+            m_positions[car.routeProgression()].push_back(car.index());
+
+            // Switch to next check point
+            car.setPrevTargetNodeIndex(index);
+            if (++index >= route.numNodes())
             {
-                m_timing.setRaceCompleted(car.index(), true);
+                index = 0;
             }
         }
 
-        // Increase progress and update the positions hash
-        car.setRouteProgression(car.routeProgression() + 1);
-        m_positions[car.routeProgression()].push_back(car.index());
-
-        // Switch to next check point
-        car.setPrevTargetNodeIndex(index);
-        if (++index >= route.numNodes())
-        {
-            index = 0;
-        }
+        car.setCurrentTargetNodeIndex(index);
     }
-
-    car.setCurrentTargetNodeIndex(index);
 }
 
 void Race::saveLapRecord(int msecs)

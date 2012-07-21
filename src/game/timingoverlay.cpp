@@ -144,27 +144,37 @@ void TimingOverlay::render()
 
         // Render the current lap time
         {
-            std::string currentLapTimeStr = m_pTiming->msecsToString(currentLapTime);
             std::stringstream ss;
-            ss << "  " << currentLapTimeStr;
-            text.setText(ss.str());
-            text.setGlyphSize(20, 20);
 
-            // Set color to white, if lastLapTime is not set.
-            if (lastLapTime == -1)
+            if (m_pTiming->raceCompleted(index))
             {
+                ss << "  " << m_pTiming->msecsToString(lastLapTime);
+
                 text.setColor(1.0, 1.0, 1.0);
             }
-            // Set color to green, if current time is ahead of the last lap time.
-            else if (currentLapTime < lastLapTime)
-            {
-                text.setColor(0.0, 1.0, 0.0);
-            }
-            // Set color to red (current time is slower than the last lap time).
             else
             {
-                text.setColor(1.0, 0.0, 0.0);
+                ss << "  " << m_pTiming->msecsToString(currentLapTime);
+
+                // Set color to white, if lastLapTime is not set.
+                if (lastLapTime == -1 || currentLapTime == lastLapTime)
+                {
+                    text.setColor(1.0, 1.0, 1.0);
+                }
+                // Set color to green, if current time is ahead of the last lap time.
+                else if (currentLapTime < lastLapTime)
+                {
+                    text.setColor(0.0, 1.0, 0.0);
+                }
+                // Set color to red (current time is slower than the last lap time).
+                else
+                {
+                    text.setColor(1.0, 0.0, 0.0);
+                }
             }
+
+            text.setText(ss.str());
+            text.setGlyphSize(20, 20);
 
             text.setShadowOffset(shadowX, shadowY);
             text.render(
@@ -176,9 +186,8 @@ void TimingOverlay::render()
 
         // Render the last lap time
         {
-            std::string lastLapTimeStr = m_pTiming->msecsToString(lastLapTime);
             std::stringstream ss;
-            ss << "L:" << lastLapTimeStr;
+            ss << "L:" << m_pTiming->msecsToString(lastLapTime);
             text.setText(ss.str());
             text.setColor(1.0, 1.0, 1.0);
             text.setGlyphSize(20, 20);
