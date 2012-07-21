@@ -56,8 +56,8 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
     int branchHeight = m_branchHeight;
     int r            = m_r0;
     int angle        = 0;
+    int z            = branchHeight;
 
-    int z = branchHeight;
     for (int i = 0; i < m_branches; i++)
     {
         MCFloat x = l.i() + m_top.i() * branchHeight / 4;

@@ -39,8 +39,7 @@ class MCGLVertex;
 class MCSurfaceImpl;
 
 /*! MCSurface is a renderable object bound to an OpenGL texture handle.
- *  MCSurface can be rendered straightly as a standalone object
- *  without creating any vertices, like a surface. This is useful in 2D-engines.
+ *  MCSurface can be rendered straightly as a standalone object.
  */
 class MCSurface
 {
