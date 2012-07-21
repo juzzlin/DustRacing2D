@@ -1,5 +1,5 @@
-TODO
-====
+TODO / IDEAS
+============
 
 Game:
 
@@ -11,16 +11,10 @@ Game:
 - One big (long) wall object
 - Restore support for circle-shaped objects
 - Optimize particle performance
+- Show total time 
+- Race record times separately for different lap counts
 
 Editor:
 
 - Flood fill tool
-
-Bugs:
-
-- Something wrong with off-track detection with 45 degrees straight
-  e.g. monza.trk
-
-Content:
-
-- More tracks
+- The size of the object cursor should vary with respect to zoom level
