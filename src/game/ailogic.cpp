@@ -46,11 +46,11 @@ void AiLogic::update(bool isRaceCompleted)
 
         const Route    & route       = m_track->trackData().route();
         TargetNodeBase & tnode       = route.get(m_car.currentTargetNodeIndex());
-        TrackTile      * currentTile = m_track->trackTileAtLocation(
+        TrackTile      & currentTile = *m_track->trackTileAtLocation(
             m_car.location().i(), m_car.location().j());
 
         steerControl(tnode);
-        speedControl(*currentTile, isRaceCompleted);
+        speedControl(currentTile, isRaceCompleted);
     }
 }
 
