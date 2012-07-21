@@ -29,7 +29,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
-static const int gNumVertices           = 4;
+static const int gNumVertices           = 6;
 static const int gNumVertexComponents   = 3;
 static const int gNumColorComponents    = 4;
 static const int gNumTexCoordComponents = 2;
@@ -49,17 +49,21 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {
-    // Init vertice data for a quad
+    // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
         { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
         { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
     };
 
     const MCGLVertex normals[gNumVertices] =
     {
+        {0, 0, 1},
+        {0, 0, 1},
         {0, 0, 1},
         {0, 0, 1},
         {0, 0, 1},
@@ -71,11 +75,15 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
         {0, 0},
         {0, 1},
         {1, 1},
+        {0, 0},
+        {1, 1},
         {1, 0}
     };
 
     const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
+        1, 1, 1, 1,
+        1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -100,11 +108,13 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {
-    // Init vertice data for a quad
+    // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
         { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
         { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
     };
@@ -114,15 +124,19 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
         {0, 0, 1},
         {0, 0, 1},
         {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1},
         {0, 0, 1}
     };
 
     const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1,
-        1, 1, 1
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1
     };
 
     initVBOs(vertices, normals, texCoords, colors);
@@ -209,7 +223,9 @@ void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
         pTexData[0] = texCoords[0];
         pTexData[1] = texCoords[1];
         pTexData[2] = texCoords[2];
-        pTexData[3] = texCoords[3];
+        pTexData[3] = texCoords[0];
+        pTexData[4] = texCoords[2];
+        pTexData[5] = texCoords[3];
 
         glUnmapBuffer(GL_ARRAY_BUFFER);
     }
@@ -226,7 +242,7 @@ void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
     GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < gNumVertices; i++)
         {
             const int offset = (i << 2);
             pColorData[offset + 0] = r;
@@ -271,7 +287,7 @@ void MCSurface::renderVBOs(bool autoClientState)
         enableClientState(true);
     }
 
-    glDrawArrays(GL_QUADS, 0, gNumVertices);
+    glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
 
     if (autoClientState)
     {
