@@ -151,7 +151,11 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
     {
         if (m_race.started())
         {
-            processUserInput(handler);
+            const bool isRaceCompleted = m_race.timing().raceCompleted(0);
+            if (!isRaceCompleted)
+            {
+                processUserInput(handler);
+            }
 
             updateAiLogic();
         }
