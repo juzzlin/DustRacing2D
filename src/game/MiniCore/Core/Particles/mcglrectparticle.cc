@@ -28,7 +28,7 @@
 
 MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
-static const int gNumVertices        = 4;
+static const int gNumVertices        = 6;
 static const int gNumColorComponents = 4;
 static const int gAlphaFrames        = 10;
 
@@ -49,6 +49,8 @@ MCGLRectParticle::MCGLRectParticle()
         {-1, -1, 0},
         {-1,  1, 0},
         { 1,  1, 0},
+        {-1, -1, 0},
+        { 1,  1, 0},
         { 1, -1, 0}
     };
 
@@ -57,11 +59,15 @@ MCGLRectParticle::MCGLRectParticle()
         {0, 0, 1},
         {0, 0, 1},
         {0, 0, 1},
+        {0, 0, 1},
+        {0, 0, 1},
         {0, 0, 1}
     };
 
     const GLfloat colors[gNumVertices * gNumColorComponents] =
     {
+        m_r, m_g, m_b, m_a,
+        m_r, m_g, m_b, m_a,
         m_r, m_g, m_b, m_a,
         m_r, m_g, m_b, m_a,
         m_r, m_g, m_b, m_a,
@@ -101,7 +107,7 @@ void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
     if (pColorData)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < gNumVertices; i++)
         {
             const int offset = (i << 2);
             pColorData[offset + 0] = r;
@@ -126,7 +132,7 @@ void MCGLRectParticle::setAlpha(MCFloat a)
         GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         if (pColorData)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < gNumVertices; i++)
             {
                 pColorData[(i << 2) + 3] = a;
             }
@@ -199,7 +205,7 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
         glNormalPointer(GL_FLOAT, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
         glColorPointer(4, GL_FLOAT, 0, 0);
-        glDrawArrays(GL_QUADS, 0, gNumVertices);
+        glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
