@@ -323,6 +323,8 @@ void Scene::translateCarsToStartPositions()
         const MCFloat startTileY = finishLine->location().y();
         const MCFloat tileWidth  = TrackTile::TILE_W;
         const MCFloat tileHeight = TrackTile::TILE_H;
+        const MCFloat spacing    = 0.75 * TrackTile::TILE_W;
+        const MCFloat oddOffset  = TrackTile::TILE_W / 8;
 
         // Reverse order
         std::vector<Car *> order = m_cars;
@@ -336,7 +338,7 @@ void Scene::translateCarsToStartPositions()
         case -270:
             for (MCUint i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i / 2) * tileWidth;
+                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
 
                 order.at(i)->translate(
@@ -353,7 +355,7 @@ void Scene::translateCarsToStartPositions()
         case -90:
             for (MCUint i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i / 2) * tileWidth;
+                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
 
                 order.at(i)->translate(
@@ -369,7 +371,7 @@ void Scene::translateCarsToStartPositions()
             for (MCUint i = 0; i < order.size(); i++)
             {
                 const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
-                const MCFloat colPos = (i / 2) * tileHeight;
+                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
 
                 order.at(i)->translate(
                     MCVector2d<MCFloat>(
@@ -384,8 +386,8 @@ void Scene::translateCarsToStartPositions()
         case -180:
             for (MCUint i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
-                const MCFloat colPos = (i / 2) * tileHeight;
+                const MCFloat rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
+                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
 
                 order.at(i)->translate(
                     MCVector2d<MCFloat>(
