@@ -19,13 +19,13 @@
 #include "MiniCore/Core/MCTextureManager"
 #include "MiniCore/Core/MCTrigonom"
 
-namespace
-{
-const int   ROWS             = 6;
-const int   COLS             = 8;
-const float AMPLITUDE        = 30.0;
-const float APPEARANCE_SPEED = 0.05f;
-}
+static const int   ROWS             = 6;
+static const int   COLS             = 8;
+static const int   FLAG_W           = 100;
+static const int   FLAG_H           = 50;
+static const int   V_SPACING        = 10;
+static const float AMPLITUDE        = 30.0;
+static const float APPEARANCE_SPEED = 0.05f;
 
 CheckeredFlag::CheckeredFlag()
 {}
@@ -34,8 +34,8 @@ void CheckeredFlag::setDimensions(MCUint width, MCUint height)
 {
     OverlayBase::setDimensions(width, height);
 
-    const int nodeWidth  = this->width()  / COLS;
-    const int nodeHeight = this->height() / ROWS;
+    const int nodeWidth  = FLAG_W / COLS;
+    const int nodeHeight = FLAG_H / ROWS;
 
     // Init the matrix
     m_matrix.clear();
@@ -45,11 +45,17 @@ void CheckeredFlag::setDimensions(MCUint width, MCUint height)
         for (int i = 0; i < COLS; i++)
         {
             CheckeredFlag::Node node;
+
+            // Node's initial location
             node.loc = MCVector3dF(this->width() / 2, this->height() * 2, 0);
-            node.loc1.setI(i * nodeWidth  + nodeWidth  / 2);
-            node.loc1.setJ(j * nodeHeight + nodeHeight / 2);
+
+            // Node's target location
+            node.loc1.setI(this->width()  / 2 - FLAG_W / 2 + i * nodeWidth);
+            node.loc1.setJ(this->height()     - FLAG_H - V_SPACING + j * nodeHeight);
             node.loc1.setK(0);
+
             node.angle = ((i + j) * 40) % 360;
+
             row.push_back(node);
         }
 
@@ -87,11 +93,11 @@ void CheckeredFlag::render()
 
             if ((j + i) & 0x1)
             {
-                glColor4f(1.0, 1.0, 1.0, 0.25);
+                glColor4f(1.0, 1.0, 1.0, 0.5);
             }
             else
             {
-                glColor4f(0.0, 0.0, 0.0, 0.25);
+                glColor4f(0.0, 0.0, 0.0, 0.5);
             }
 
             if (i < COLS - 1 && j < ROWS - 1)
