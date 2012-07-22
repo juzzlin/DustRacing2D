@@ -1,3 +1,20 @@
+0.3.1
+-----
+
+* Updates monza.trk.
+* The game returns back to the main menu after a race.
+* Makes the checkered flag smaller.
+* Adds a plant object.
+* Freeze laps time when player has finished.
+* Disables car controls when race has finished.
+* Displays 'winner finished' text when the race is over.
+* Render MCGLRectParticle by using triangles instead of a quad.
+* Render MCSurface by using triangles instead of a quad.
+* Scales down the front tire texture.
+* Friction adjustments.
+* Use a simpler friction approach for stability (and more fun).
+* Adds a rock object.
+
 0.3.0
 -----
 
