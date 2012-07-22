@@ -299,6 +299,24 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         // the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
+    else if (role == "plant")
+    {
+        MCSurfaceObjectData data("plant");
+        data.setMass(10);
+        data.setSurfaceId("plant");
+        data.setRestitution(0.1);
+        data.setXYFriction(1.0);
+        data.setBatchMode(true);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(
+            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialAngle(o);
+
+        // Wrap the MCObject in a TrackObject and add to
+        // the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
     else if (role == "rock")
     {
         MCSurfaceObjectData data("rock");
