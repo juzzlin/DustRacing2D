@@ -27,18 +27,16 @@
 #include <cassert>
 #include <QSettings>
 
-namespace
-{
-    const char * SETTINGS_GROUP = "LapRecords";
-}
+static const char * SETTINGS_GROUP     = "LapRecords";
+static const int    HUMAN_PLAYER_INDEX = 0;
 
 Race::Race(unsigned int numCars)
-  : m_lapCount(0)
-  , m_timing(numCars)
-  , m_pTrack(nullptr)
-  , m_started(false)
-  , m_checkeredFlagEnabled(false)
-  , m_winnerFinished(false)
+: m_lapCount(0)
+, m_timing(numCars)
+, m_pTrack(nullptr)
+, m_started(false)
+, m_checkeredFlagEnabled(false)
+, m_winnerFinished(false)
 {
 }
 
@@ -51,14 +49,18 @@ void Race::init()
         pCar->setRouteProgression(0);
     }
 
+    m_timing.reset();
     m_positions.clear();
+
+    m_checkeredFlagEnabled = false;
+    m_winnerFinished       = false;
+    m_started              = false;
 }
 
 void Race::start()
 {
-    m_timing.reset();
     m_timing.start();
-    m_started = true;
+    m_started  = true;
 }
 
 bool Race::started()
@@ -250,6 +252,11 @@ Timing & Race::timing()
 bool Race::checkeredFlagEnabled() const
 {
     return m_checkeredFlagEnabled;
+}
+
+bool Race::finished() const
+{
+    return m_timing.raceCompleted(HUMAN_PLAYER_INDEX);
 }
 
 Race::~Race()

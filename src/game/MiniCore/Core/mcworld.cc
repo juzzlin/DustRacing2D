@@ -296,6 +296,28 @@ MCWorld & MCWorld::instance()
     return *MCWorld::pInstance;
 }
 
+void MCWorld::clear()
+{
+    // This does the same as removeObject(), but the removal
+    // process here is simpler as all data structures will be
+    // cleared and all objects will be removed at once.
+    for (MCObject * object : objs)
+    {
+        object->deleteContacts();
+        object->resetMotion();
+        object->setIndex(-1);
+    }
+
+    pObjectTree->removeAll();
+    objs.clear();
+    removeObjs.clear();
+
+    for (unsigned int i = 0; i < MCWorld::MaxLayers; i++)
+    {
+        layers[i].clear();
+    }
+}
+
 void MCWorld::setDimensions(
     MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
     MCFloat metersPerPixel)
@@ -441,25 +463,31 @@ void MCWorld::addObject(MCObject & object)
 
 void MCWorld::removeObject(MCObject & object)
 {
-    object.setRemoving(true);
-    removeObjs.push_back(&object);
+    if (object.index() >= 0)
+    {
+        object.setRemoving(true);
+        removeObjs.push_back(&object);
+    }
 }
 
 void MCWorld::removeObjectNow(MCObject & object)
 {
-    object.setRemoving(true);
-    for (MCObject * obj : objs)
+    if (object.index() >= 0)
     {
-        if (obj != &object)
+        object.setRemoving(true);
+        for (MCObject * obj : objs)
         {
-            if (obj->physicsObject())
+            if (obj != &object)
             {
-                obj->deleteContacts(object);
+                if (obj->physicsObject())
+                {
+                    obj->deleteContacts(object);
+                }
             }
         }
-    }
 
-    doRemoveObject(object);
+        doRemoveObject(object);
+    }
 }
 
 void MCWorld::doRemoveObject(MCObject & object)

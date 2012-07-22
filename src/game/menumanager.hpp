@@ -16,6 +16,8 @@
 #ifndef MENUMANAGER_HPP
 #define MENUMANAGER_HPP
 
+#include <map>
+#include <string>
 #include <vector>
 
 class Menu;
@@ -31,8 +33,14 @@ public:
     //! Returns the active menu or nullptr.
     Menu * activeMenu() const;
 
+    //! Add the given menu.
+    void addMenu(Menu & newMenu);
+
     //! Enter the given menu.
     void enterMenu(Menu & newMenu);
+
+    //! Enter the given menu.
+    void enterMenu(std::string menuId);
 
     //! Force exit on current menu.
     void exitCurrentMenu();
@@ -65,6 +73,7 @@ public:
 
 private:
 
+    std::map<std::string, Menu *> m_idToMenuMap;
     std::vector<Menu *> m_menuStack;
     static MenuManager * m_pInstance;
     bool m_done;

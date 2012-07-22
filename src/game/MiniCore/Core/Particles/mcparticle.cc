@@ -103,8 +103,6 @@ MCFloat MCParticle::scale() const
 
 void MCParticle::timeOut()
 {
-    MCParticle::m_numActiveParticles--;
-
     die();
 }
 
@@ -146,6 +144,11 @@ bool MCParticle::isActive() const
 
 void MCParticle::die()
 {
+    if (MCParticle::m_numActiveParticles > 0)
+    {
+        MCParticle::m_numActiveParticles--;
+    }
+
     removeFromWorld();
     m_isActive = false;
     recycle();

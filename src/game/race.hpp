@@ -64,6 +64,9 @@ public:
 
     bool checkeredFlagEnabled() const;
 
+    //! Return true if the race has finished
+    bool finished() const;
+
     Car & getLeadingCar() const;
 
 private:
@@ -87,9 +90,7 @@ private:
     Track * m_pTrack;
 
     bool m_started;
-
     bool m_checkeredFlagEnabled;
-
     bool m_winnerFinished;
 };
 

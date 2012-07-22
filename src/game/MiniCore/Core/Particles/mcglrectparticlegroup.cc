@@ -93,6 +93,8 @@ void MCGLRectParticleGroup::clear()
     {
         if (p->group() == this)
         {
+            p->die();
+            p->resetMotion();
             p->setGroup(nullptr);
         }
     }

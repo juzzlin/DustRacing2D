@@ -203,6 +203,7 @@ void Game::stop()
 
 void Game::updateFrame()
 {
+    m_stateMachine->update();
     m_renderer->updateFrame(m_scene->camera());
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
 }

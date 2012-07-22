@@ -84,8 +84,13 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
     m_length = std::max(width, height);
+}
 
-    m_isParticleGroup.addToWorld();
+void Car::addToWorld()
+{
+    MCObject::addToWorld();
+    m_particleGroup.clear();
+    m_particleGroup.addToWorld();
 }
 
 void Car::clearStatuses()
@@ -369,7 +374,7 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
     smoke.setVelocity(MCRandom::randomVector2d() * 0.1);
     smoke.addToWorld();
 
-    m_isParticleGroup.addParticle(smoke);
+    m_particleGroup.addParticle(smoke);
 }
 
 void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -387,7 +392,7 @@ void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCF
     skidMark.setPhysicsObject(false);
     skidMark.addToWorld();
 
-    m_isParticleGroup.addParticle(skidMark);
+    m_particleGroup.addParticle(skidMark);
 }
 
 void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -405,7 +410,7 @@ void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat 
     mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0));
     mud.setAcceleration(MCVector3dF(0, 0, -10.0));
 
-    m_isParticleGroup.addParticle(mud);
+    m_particleGroup.addParticle(mud);
 }
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
@@ -422,7 +427,7 @@ void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFl
     sparkle.addToWorld();
     sparkle.setVelocity(velocity() * 0.5);
 
-    m_isParticleGroup.addParticle(sparkle);
+    m_particleGroup.addParticle(sparkle);
 }
 
 void Car::setCurrentTargetNodeIndex(int index)

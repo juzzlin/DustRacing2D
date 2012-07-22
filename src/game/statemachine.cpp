@@ -16,6 +16,7 @@
 #include "statemachine.hpp"
 
 #include "menumanager.hpp"
+#include "race.hpp"
 #include "renderer.hpp"
 #include "startlights.hpp"
 #include "track.hpp"
@@ -25,6 +26,7 @@
 StateMachine::StateMachine()
 : m_state(Init)
 , m_startlights(nullptr)
+, m_race(nullptr)
 , m_renderer(nullptr)
 , m_track(nullptr)
 , m_fadeValue(0.0)
@@ -36,7 +38,10 @@ bool StateMachine::update()
     switch (m_state)
     {
     case Init:
-        m_state = Intro;
+
+        m_state     = Intro;
+        m_fadeValue = 0.0;
+
         break;
 
     case Intro:
@@ -58,7 +63,8 @@ bool StateMachine::update()
         else
         {
             m_fadeValue = 1.0;
-            m_state = Menu;
+            m_state     = Menu;
+
             m_renderer->setFadeShaderEnabled(false);
         }
 
@@ -79,6 +85,7 @@ bool StateMachine::update()
 
         if (!m_track->update())
         {
+            m_startlights->reset();
             m_state = DoStartlights;
         }
 
@@ -96,6 +103,37 @@ bool StateMachine::update()
         break;
 
     case Play:
+
+        assert(m_race);
+
+        if (m_race->finished())
+        {
+            m_fadeValue = 2.0;
+            m_state     = GameTransitionOut;
+        }
+
+        break;
+
+    case GameTransitionOut:
+
+        assert(m_renderer);
+
+        if (m_fadeValue >= 0.01)
+        {
+            m_fadeValue -= 0.01;
+            m_renderer->setFadeShaderEnabled(true);
+            m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
+        }
+        else
+        {
+            m_fadeValue = 1.0;
+            m_state     = Menu;
+
+            m_renderer->setFadeShaderEnabled(false);
+
+            MenuManager::instance().enterMenu("trackSelection");
+        }
+
         break;
 
     default:

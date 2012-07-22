@@ -67,6 +67,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_menuManager(nullptr)
 {
     m_stateMachine.setRenderer(renderer);
+    m_stateMachine.setRace(m_race);
     m_stateMachine.setStartlights(*m_startlights);
 
     const int humanPower = 7500;
@@ -127,7 +128,8 @@ unsigned int Scene::height()
 void Scene::createMenus()
 {
     m_menuManager = new MenuManager;
-    m_mainMenu = new Menu(width(), height());
+    m_mainMenu = new Menu("main", width(), height());
+    m_menuManager->addMenu(*m_mainMenu);
 
     MenuItem * play = new MenuItem(width(), height() / 2, "Play");
     play->setView(new MenuItemView, true);
@@ -138,8 +140,9 @@ void Scene::createMenus()
     m_mainMenu->addItem(*play, true);
     m_mainMenu->addItem(*quit, true);
 
-    m_trackSelectionMenu = new TrackSelectionMenu(
+    m_trackSelectionMenu = new TrackSelectionMenu("trackSelection",
         width(), height(), *this, m_stateMachine);
+    m_menuManager->addMenu(*m_trackSelectionMenu);
 
     //m_menuManager->enterMenu(*m_mainMenu);
     m_menuManager->enterMenu(*m_trackSelectionMenu);
@@ -175,7 +178,6 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 
 void Scene::updateAnimations()
 {
-    m_stateMachine.update();
     m_timingOverlay->update();
 }
 
@@ -262,16 +264,12 @@ void Scene::setActiveTrack(Track & activeTrack)
         activeTrack.width(),
         activeTrack.height());
 
-    // TODO: Remove objects
-    // TODO: Removing not inserted objects results in a
-    // crash because ObjectTree can't handle it.
-    //m_car.removeFromWorldNow();
+    // Remove previous objects;
+    m_world->clear();
 
     setWorldDimensions();
 
     addCarsToWorld();
-
-    translateCarsToStartPositions();
 
     addTrackObjectsToWorld();
 
@@ -426,6 +424,8 @@ void Scene::addTrackObjectsToWorld()
 
 void Scene::initRace()
 {
+    translateCarsToStartPositions();
+
     assert(m_activeTrack);
     m_race.setTrack(*m_activeTrack);
     m_race.init();
@@ -464,6 +464,7 @@ void Scene::render(MCCamera & camera)
     }
     else if (
         m_stateMachine.state() == StateMachine::GameTransitionIn ||
+        m_stateMachine.state() == StateMachine::GameTransitionOut ||
         m_stateMachine.state() == StateMachine::DoStartlights ||
         m_stateMachine.state() == StateMachine::Play)
     {

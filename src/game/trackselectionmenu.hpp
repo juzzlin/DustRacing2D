@@ -29,7 +29,7 @@ class TrackSelectionMenu : public Menu
 public:
 
     //! Constructor.
-    TrackSelectionMenu(
+    TrackSelectionMenu(std::string id,
         int width, int height, Scene & scene, StateMachine & sm);
 
     //! Add a track to the list of selectable tracks.

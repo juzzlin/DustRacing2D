@@ -20,6 +20,7 @@
 #include "renderer.hpp"
 #include "MiniCore/Core/MCTypes"
 
+class Race;
 class Renderer;
 class Startlights;
 class Track;
@@ -34,9 +35,10 @@ public:
         Init,
         Intro,
         Menu,
-        GameTransitionIn,
+        GameTransitionIn, // Active when a race starts
         DoStartlights,
-        Play
+        Play,
+        GameTransitionOut // Active when a race is over
     };
 
     //! Constructor.
@@ -51,6 +53,11 @@ public:
     {
         m_renderer = &renderer;
         m_renderer->setEnabled(false);
+    }
+
+    void setRace(Race & race)
+    {
+        m_race = &race;
     }
 
     void setStartlights(Startlights & startlights)
@@ -70,6 +77,7 @@ private:
 
     State         m_state;
     Startlights * m_startlights;
+    Race        * m_race;
     Renderer    * m_renderer;
     Track       * m_track;
     MCFloat       m_fadeValue;

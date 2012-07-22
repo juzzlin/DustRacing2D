@@ -37,11 +37,23 @@ Menu * MenuManager::activeMenu() const
     return nullptr;
 }
 
+void MenuManager::addMenu(Menu & newMenu)
+{
+    m_idToMenuMap[newMenu.id()] = &newMenu;
+}
+
 void MenuManager::enterMenu(Menu & newMenu)
 {
+    m_done = false;
     m_menuStack.push_back(&newMenu);
     newMenu.enter();
     newMenu.render();
+}
+
+void MenuManager::enterMenu(std::string menuId)
+{
+    assert(m_idToMenuMap[menuId]);
+    enterMenu(*m_idToMenuMap[menuId]);
 }
 
 void MenuManager::exitCurrentMenu()

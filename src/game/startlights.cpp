@@ -86,15 +86,19 @@ bool Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsDisappear;
-            m_animation.init(m_pos,
-                             m_pos,
-                             MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
-                             second / 3);
+            m_animation.init(
+                m_pos,
+                m_pos,
+                MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
+                second / 3);
         }
         return true;
 
     case LightsDisappear:
-        m_animation.update();
+        if (m_animation.update())
+        {
+            m_state = LightsEnd;
+        }
         return true;
 
     case LightsEnd:

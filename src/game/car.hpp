@@ -119,6 +119,9 @@ public:
     //! \reimp
     virtual void stepTime();
 
+    //! \reimp
+    virtual void addToWorld();
+
     void setLeftSideOffTrack(bool state);
 
     void setRightSideOffTrack(bool state);
@@ -185,7 +188,7 @@ private:
     int                   m_routeProgression;
     bool                  m_isHuman;
 
-    mutable MCGLRectParticleGroup m_isParticleGroup;
+    mutable MCGLRectParticleGroup m_particleGroup;
 };
 
 #endif // CAR_HPP

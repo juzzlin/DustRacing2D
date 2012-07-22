@@ -59,8 +59,11 @@ public:
     //! Destructor.
     virtual ~MCWorld();
 
-    //! Return the one-and-only MCWorld instance
+    //! Return the one-and-only MCWorld instance.
     static MCWorld & instance();
+
+    //! Remove all objects.
+    void clear();
 
     //! Set dimensions of the world box.
     void setDimensions(
@@ -193,7 +196,6 @@ private:
     bool depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
-    MCWorld::ObjectVector collidingObjs;
     MCObject * pLeft;
     MCObject * pRight;
     MCObject * pTop;

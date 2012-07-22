@@ -18,13 +18,19 @@
 
 #include <cassert>
 
-Menu::Menu(int width, int height, MenuStyle style)
-: m_width(width)
+Menu::Menu(std::string id, int width, int height, MenuStyle style)
+: m_id(id)
+, m_width(width)
 , m_height(height)
 , m_currentIndex(0)
 , m_style(style)
 , m_done(false)
 {
+}
+
+std::string Menu::id() const
+{
+    return m_id;
 }
 
 void Menu::addItem(MenuItem & menuItem, bool takeOwnership)

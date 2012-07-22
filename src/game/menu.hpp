@@ -16,6 +16,7 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
+#include <string>
 #include <vector>
 #include <memory>
 
@@ -33,10 +34,12 @@ public:
     };
 
     //! Constructor.
-    Menu(int width, int height, MenuStyle style = MS_LIST);
+    Menu(std::string id, int width, int height, MenuStyle style = MS_LIST);
 
     //! Destructor.
     virtual ~Menu();
+
+    std::string id() const;
 
     //! Render the menu.
     virtual void render();
@@ -78,6 +81,7 @@ private:
 
     std::vector<MenuItem *> m_menuItems;
     std::vector<std::shared_ptr<MenuItem> > m_ownedMenuItems;
+    std::string m_id;
     int m_width, m_height;
     unsigned int m_currentIndex;
     MenuStyle m_style;

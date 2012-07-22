@@ -200,9 +200,9 @@ void TrackItem::render(int x, int y)
     }
 }
 
-TrackSelectionMenu::TrackSelectionMenu(
+TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene, StateMachine & sm)
-: Menu(width, height, Menu::MS_SHOW_ONE)
+: Menu(id, width, height, Menu::MS_SHOW_ONE)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 , m_sm(sm)
