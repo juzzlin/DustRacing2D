@@ -90,7 +90,20 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
             desc.power = humanPower - humanPower / 2 + i * humanPower / numCars;
-            car = new Car(desc, MCTextureManager::instance().surface("car002"), i, false);
+
+            if (i == numCars - 1)
+            {
+                car = new Car(desc, MCTextureManager::instance().surface("car003"), i, false);
+            }
+            else if (i == numCars - 2)
+            {
+                car = new Car(desc, MCTextureManager::instance().surface("car004"), i, false);
+            }
+            else
+            {
+                car = new Car(desc, MCTextureManager::instance().surface("car002"), i, false);
+            }
+
             m_aiLogic.push_back(new AiLogic(*car));
         }
 
