@@ -29,9 +29,9 @@ src/game/          : Source files for the game.
 src/game/MiniCore/ : Source files for the graphics/physics engine.
 src/editor/        : Source files for the track editor.
 src/common/        : Shared files between the editor and the game.
+src/images/        : Some SVG-images used as the source for final images.
 data/              : Data mapping and configuration files.
-data/images/       : Image files and textures.
-data/images/raw/   : Some SVG-images used as the source for final images.
+data/images/       : Image files and textures loaded by the game.
 data/levels/       : Level data.
 data/shaders/      : GLSL shaders.
 
