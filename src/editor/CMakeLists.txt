@@ -65,7 +65,7 @@ include_directories(${CMAKE_BINARY_DIR})
 
 # Add the executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
-add_executable(editor ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS})
+add_executable(${EDITOR_BINARY_NAME} ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS})
 
 # Link libraries
-target_link_libraries(editor ${QT_LIBRARIES})
+target_link_libraries(${EDITOR_BINARY_NAME} ${QT_LIBRARIES})

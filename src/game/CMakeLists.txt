@@ -64,6 +64,7 @@ add_custom_target(runtime ALL
     COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
 
 # The main game executable
-link_libraries(MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
-add_executable(dustrac ${SRC} ${MOC_SRC} ${RC_SRC})
+add_executable(${GAME_BINARY_NAME} ${SRC} ${MOC_SRC} ${RC_SRC})
+target_link_libraries(${GAME_BINARY_NAME}
+    MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})

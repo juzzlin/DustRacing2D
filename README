@@ -1,13 +1,11 @@
 README
 ======
 
-Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written in Qt (C++) and OpenGL. Dust Racing comes with a Qt-based level editor for easy level creation. A separate engine, MiniCore, is used for physics modeling.
+Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written
+in Qt (C++) and OpenGL.
 
-Please note, that Dust Racing is still under heavy development and a lot of stuff is incomplete or missing. There are no menus yet, for example. Only source code downloads are currently available.
-
-Dust Racing is currently being developed on Ubuntu 12.04 LTS.
-
-All kinds of contributions are welcome!
+Dust Racing comes with a Qt-based level editor for easy level creation.
+A separate engine, MiniCore, is used for physics modeling.
 
 License
 -------

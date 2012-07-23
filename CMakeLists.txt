@@ -6,6 +6,9 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
 
+set(GAME_BINARY_NAME "dustrac-game")
+set(EDITOR_BINARY_NAME "dustrac-editor")
+
 # This is the main data path given to the game and editor binaries.
 add_definitions(-DDATA_PATH="./data")
 add_definitions(-DGL_GLEXT_PROTOTYPES)
