@@ -168,10 +168,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
         if (m_race.started())
         {
             const bool isRaceCompleted = m_race.timing().raceCompleted(0);
-            if (!isRaceCompleted)
-            {
-                processUserInput(handler);
-            }
+            processUserInput(handler, isRaceCompleted);
 
             updateAiLogic();
         }
@@ -223,7 +220,7 @@ void Scene::updateCameraLocation(MCCamera & camera)
     camera.setPos(p.i(), p.j());
 }
 
-void Scene::processUserInput(InputHandler & handler)
+void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
 {
     bool steering = false;
 
@@ -232,7 +229,10 @@ void Scene::processUserInput(InputHandler & handler)
     // Handle accelerating / braking
     if (handler.getActionState(0, InputHandler::IA_UP))
     {
-        m_cars.at(0)->accelerate();
+        if (!isRaceCompleted)
+        {
+            m_cars.at(0)->accelerate();
+        }
     }
     else if (handler.getActionState(0, InputHandler::IA_DOWN))
     {

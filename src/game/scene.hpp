@@ -97,7 +97,7 @@ private:
 
     void updateCameraLocation(MCCamera & camera);
 
-    void processUserInput(InputHandler & handler);
+    void processUserInput(InputHandler & handler, bool isRaceCompleted);
 
     void updateAiLogic();
 
