@@ -108,7 +108,7 @@ bool StateMachine::update()
 
         if (m_race->finished())
         {
-            m_fadeValue = 2.0;
+            m_fadeValue = 3.0;
             m_state     = GameTransitionOut;
         }
 
