@@ -64,6 +64,9 @@ Game::Game()
 
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
+
+    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
+        "DustRacingTracks");
 }
 
 void Game::setTargetUpdateFps(unsigned int fps)
