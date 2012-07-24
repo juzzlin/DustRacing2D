@@ -52,6 +52,8 @@
 #include <algorithm>
 #include <cassert>
 
+static const MCFloat METERS_PER_PIXEL = 0.05f;
+
 Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
 : m_stateMachine(stateMachine)
 , m_race(numCars)
@@ -123,7 +125,8 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     m_timingOverlay->setRace(m_race);
     m_timingOverlay->setCarToFollow(*m_cars.at(0));
 
-    MCWorld::instance().enableDepthTestOnLayer(Layers::Tree, true);
+    m_world->enableDepthTestOnLayer(Layers::Tree, true);
+    m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     createMenus();
 }
@@ -313,8 +316,7 @@ void Scene::setWorldDimensions()
     const MCUint minZ = 0;
     const MCUint maxZ = 1000;
 
-    const MCFloat metersPerPixel = 0.05f;
-    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
+    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_PIXEL);
 }
 
 void Scene::addCarsToWorld()
