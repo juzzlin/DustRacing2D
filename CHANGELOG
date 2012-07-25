@@ -1,3 +1,15 @@
+0.3.2
+-----
+
+* Sets MCWorld::metersPerPixel earlier.
+* Search tracks also in ~/DustRacingTracks
+* Longer delay before fade out.
+* Disable only acceleration when the race is over.
+* Adds black and orange cars.
+* Moves data/images/raw to src/images.
+* Renames dustrac to dustrac-game and editor to dustrac-editor.
+* Makes the starting grid shorter.
+
 0.3.1
 -----
 
