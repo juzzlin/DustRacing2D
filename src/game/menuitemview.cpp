@@ -19,9 +19,8 @@ MenuItemView::MenuItemView()
 {
 }
 
-void MenuItemView::render(int x, int y)
+void MenuItemView::render(int, int)
 {
-
 }
 
 MenuItemView::~MenuItemView()
