@@ -26,7 +26,6 @@
 
 class MCCamera;
 class MCTextureFont;
-class MCTextureTextImpl;
 
 //! MCTextureText is a renderable text object
 //! using a textured monospace font (MCTextureFont).
@@ -80,7 +79,14 @@ private:
 
     DISABLE_ASSI(MCTextureText);
     DISABLE_COPY(MCTextureText);
-    MCTextureTextImpl * const m_pImpl;
+
+    void updateTextDimensions();
+
+    std::string m_text;
+    MCUint m_glyphWidth, m_glyphHeight;
+    MCUint m_textWidth, m_textHeight;
+    MCFloat m_r, m_g, m_b, m_a;
+    MCFloat m_xOffset, m_yOffset;
 };
 
 #endif // MCTEXTUREGLYPH_HH
