@@ -129,17 +129,17 @@ void MCObjectTree::getBBoxCollisions(
     MCObject * p2 = nullptr;
     MCObjectTree::ObjectSet::iterator iter;
 
-    for (MCUint j = m_j0; j <= m_j1; j++)
+    if (!object.stationary())
     {
-        for (MCUint i = m_i0; i <= m_i1; i++)
+        for (MCUint j = m_j0; j <= m_j1; j++)
         {
-            const int index = j * m_horSize + i;
-            iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end())
+            for (MCUint i = m_i0; i <= m_i1; i++)
             {
-                p2 = *iter;
-                if (!object.stationary() || !p2->stationary())
+                const int index = j * m_horSize + i;
+                iter = m_matrix[index].begin();
+                while (iter != m_matrix[index].end())
                 {
+                    p2 = *iter;
                     if ((&object != p2) && (!typeId || p2->typeID() == typeId))
                     {
                         if (b.intersects(p2->bbox()))
@@ -147,8 +147,34 @@ void MCObjectTree::getBBoxCollisions(
                             resultObjs.insert(p2);
                         }
                     }
+                    iter++;
                 }
-                iter++;
+            }
+        }
+    }
+    else
+    {
+        for (MCUint j = m_j0; j <= m_j1; j++)
+        {
+            for (MCUint i = m_i0; i <= m_i1; i++)
+            {
+                const int index = j * m_horSize + i;
+                iter = m_matrix[index].begin();
+                while (iter != m_matrix[index].end())
+                {
+                    p2 = *iter;
+                    if (!p2->stationary())
+                    {
+                        if ((&object != p2) && (!typeId || p2->typeID() == typeId))
+                        {
+                            if (b.intersects(p2->bbox()))
+                            {
+                                resultObjs.insert(p2);
+                            }
+                        }
+                    }
+                    iter++;
+                }
             }
         }
     }
