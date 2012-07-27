@@ -192,9 +192,7 @@ void TrackItem::render(int x, int y)
     }
 
     {
-        std::stringstream ss;
-        ss << "Use arrows to browse and enter to select..";
-        text.setText(ss.str());
+        text.setText("Use arrows to browse and enter to select..");
         text.setGlyphSize(10, 10);
         text.render(10, text.textHeight(), nullptr, defaultMonospace);
     }
