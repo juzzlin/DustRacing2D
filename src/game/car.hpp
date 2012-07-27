@@ -43,7 +43,7 @@ public:
         , brakingFriction(0.75)
         , rollingFriction(0.05)
         , rotationFriction(1.0)
-        , slideFriction(0.75)
+        , slideFriction(0.5)
         , turningImpulse(0.30)
         , power(5000.0)
         , mass(1000.0)
