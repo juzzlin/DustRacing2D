@@ -158,7 +158,6 @@ void TrackItem::render(int x, int y)
         ss << m_track.trackData().name().toStdString();
         text.setText(ss.str());
         text.setGlyphSize(20, 20);
-        text.setColor(1.0, 1.0, 1.0);
         text.setShadowOffset(shadowX, shadowY);
         text.render(
             x - text.textWidth() / 2, y + height() / 2 + text.textHeight(),
@@ -170,7 +169,6 @@ void TrackItem::render(int x, int y)
         ss << "  Laps: " << m_track.trackData().lapCount();
         text.setText(ss.str());
         text.setGlyphSize(20, 20);
-        text.setColor(1.0, 1.0, 1.0);
         text.render(textX, y - height() / 2 - text.textHeight(), nullptr, defaultMonospace);
     }
 
