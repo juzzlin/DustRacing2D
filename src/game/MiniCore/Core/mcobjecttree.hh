@@ -60,22 +60,17 @@ public:
     //! Remove all objects.
     void removeAll();
 
-    //! Get objects within given distance and of given type.
-    void getObjectsWithinDistance(
-        MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs,
-        MCUint typeId = 0);
+    //! Get objects within given distance.
+    void getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs);
 
     //! Get all objects of given type overlapping given BBox.
-    void getObjectsWithinBBox(
-        const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs,
-        MCUint typeId = 0);
+    void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs);
 
     //! Get bbox collisions involving the given object
     //! \param object Object to be tested.
     //! \param rVectPObjs Vector in which colliding object are stored.
     //! \param typeId Match MCObjects of given type only.
-    void getBBoxCollisions(const MCObject & object, ObjectSet & resultObjs,
-        MCUint typeId = 0);
+    void getBBoxCollisions(const MCObject & object, ObjectSet & resultObjs);
 
     //! Get bounding box
     const MCBBox<MCFloat> & bbox() const;

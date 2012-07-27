@@ -120,7 +120,7 @@ void MCObjectTree::build()
 }
 
 void MCObjectTree::getBBoxCollisions(
-    const MCObject & object, MCObjectTree::ObjectSet & resultObjs, MCUint typeId)
+    const MCObject & object, MCObjectTree::ObjectSet & resultObjs)
 {
     resultObjs.clear();
 
@@ -140,12 +140,9 @@ void MCObjectTree::getBBoxCollisions(
                 while (iter != m_matrix[index].end())
                 {
                     p2 = *iter;
-                    if ((&object != p2) && (!typeId || p2->typeID() == typeId))
+                    if (&object != p2 && b.intersects(p2->bbox()))
                     {
-                        if (b.intersects(p2->bbox()))
-                        {
-                            resultObjs.insert(p2);
-                        }
+                        resultObjs.insert(p2);
                     }
                     iter++;
                 }
@@ -165,12 +162,9 @@ void MCObjectTree::getBBoxCollisions(
                     p2 = *iter;
                     if (!p2->stationary())
                     {
-                        if ((&object != p2) && (!typeId || p2->typeID() == typeId))
+                        if (&object != p2 && b.intersects(p2->bbox()))
                         {
-                            if (b.intersects(p2->bbox()))
-                            {
-                                resultObjs.insert(p2);
-                            }
+                            resultObjs.insert(p2);
                         }
                     }
                     iter++;
@@ -182,8 +176,7 @@ void MCObjectTree::getBBoxCollisions(
 
 void MCObjectTree::getObjectsWithinDistance(
     MCFloat x, MCFloat y, MCFloat d,
-    MCObjectTree::ObjectSet & resultObjs,
-    MCUint typeId)
+    MCObjectTree::ObjectSet & resultObjs)
 {
     getIndexRange(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
 
@@ -203,15 +196,12 @@ void MCObjectTree::getObjectsWithinDistance(
             while (iter != m_matrix[index].end())
             {
                 p = *iter;
-                if (!typeId || p->typeID() == typeId)
-                {
-                    const MCFloat x2 = x - p->getX();
-                    const MCFloat y2 = y - p->getY();
+                const MCFloat x2 = x - p->getX();
+                const MCFloat y2 = y - p->getY();
 
-                    if (x2 * x2 + y2 * y2 < d)
-                    {
-                        resultObjs.insert(p);
-                    }
+                if (x2 * x2 + y2 * y2 < d)
+                {
+                    resultObjs.insert(p);
                 }
 
                 iter++;
@@ -222,8 +212,7 @@ void MCObjectTree::getObjectsWithinDistance(
 
 void MCObjectTree::getObjectsWithinBBox(
     const MCBBox<MCFloat> & rBBox,
-    MCObjectTree::ObjectSet & resultObjs,
-    MCUint typeId)
+    MCObjectTree::ObjectSet & resultObjs)
 {
     getIndexRange(rBBox);
 
@@ -240,12 +229,9 @@ void MCObjectTree::getObjectsWithinBBox(
             while (iter != m_matrix[index].end())
             {
                 p = *iter;
-                if (!typeId || p->typeID() == typeId)
+                if (rBBox.intersects(p->bbox()))
                 {
-                    if (rBBox.intersects(p->bbox()))
-                    {
-                        resultObjs.insert(p);
-                    }
+                    resultObjs.insert(p);
                 }
 
                 iter++;
