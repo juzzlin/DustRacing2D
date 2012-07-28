@@ -14,12 +14,17 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "track.hpp"
+
+#include "renderer.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "map.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCSurface"
+
+#include <QGLShaderProgram>
+#include <QMatrix4x4>
 
 #include <cassert>
 
@@ -120,6 +125,15 @@ void Track::render(MCCamera * pCamera)
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
 
+    QGLShaderProgram & prog = Renderer::instance().tileProgram();
+    assert(prog.isLinked());
+    prog.bind();
+
+    MCFloat x1, y1; // Coordinates mapped to camera
+
+    // Set common client state for all tiles using the same surface.
+    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(true, false);
+
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
     int x     = initX;
@@ -133,10 +147,13 @@ void Track::render(MCCamera * pCamera)
             {
                 if (MCSurface * pSurface = pTile->surface())
                 {
-                    pSurface->renderScaled(
-                        pCamera,
-                        MCVector3dF(x + w / 2, y + h / 2, 0), m_scale * w / 2, m_scale * h / 2,
-                        pTile->rotation());
+                    x1 = x;
+                    y1 = y;
+                    pCamera->mapToCamera(x1, y1);
+                    prog.setAttributeValue(1, QVector4D(x1 + w / 2, y1 + h / 2, 0, 0));
+                    prog.setAttributeValue(5, pTile->rotation());
+                    pSurface->bindTexture();
+                    pSurface->renderVBOs(false);
                 }
             }
 
@@ -145,6 +162,10 @@ void Track::render(MCCamera * pCamera)
 
         y += h;
     }
+
+    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(false, false);
+
+    prog.release();
 }
 
 bool Track::update()

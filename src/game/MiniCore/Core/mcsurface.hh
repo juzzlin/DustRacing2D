@@ -152,7 +152,7 @@ public:
      *  surface multiple times.
      *  \see render()
      */
-    void enableClientState(bool enable) const;
+    void enableClientState(bool enable, bool bindTexture = true) const;
 
     //! Get OpenGL texture handle
     GLuint handle() const;
@@ -166,8 +166,10 @@ public:
     //! Get center
     MCVector2d<MCFloat> center() const;
 
-    //! Manually render VBO's.
+    //! Manually render VBO's. Use GLSL shaders.
     void renderVBOs(bool autoClientState = true);
+
+    void bindTexture() const;
 
 private:
 

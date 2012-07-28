@@ -28,7 +28,7 @@ class QKeyEvent;
 class QPaintEvent;
 class Scene;
 
-//! The game renderer widget.
+//! The singleton renderer widget.
 class Renderer : public QGLWidget
 {
     Q_OBJECT
@@ -40,6 +40,8 @@ public:
 
     //! Destructor.
     virtual ~Renderer();
+
+    static Renderer & instance();
 
     void updateFrame(MCCamera & camera);
 
@@ -54,6 +56,8 @@ public:
     void setFadeShaderEnabled(bool enable);
 
     void setFadeValue(float value);
+
+    QGLShaderProgram & tileProgram();
 
     float fadeValue() const;
 
@@ -88,7 +92,12 @@ private:
     QGLShader        * m_pFadeFragmentShader;
     bool               m_fadeShaderEnabled;
     float              m_fadeValue;
+    QGLShaderProgram * m_pTileProgram;
+    QGLShader        * m_pTileFragmentShader;
+    QGLShader        * m_pTileVertexShader;
     bool               m_enabled;
+
+    static Renderer * m_instance;
 };
 
 #endif // RENDERER_HPP

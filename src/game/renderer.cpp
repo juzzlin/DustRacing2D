@@ -35,6 +35,8 @@
 #include <QGLShaderProgram>
 #include <GL/glu.h>
 
+Renderer * Renderer::m_instance = nullptr;
+
 Renderer::Renderer(QWidget * parent)
 : QGLWidget(parent)
 , m_pScene(nullptr)
@@ -46,9 +48,20 @@ Renderer::Renderer(QWidget * parent)
 , m_pFadeFragmentShader(nullptr)
 , m_fadeShaderEnabled(false)
 , m_fadeValue(1.0)
+, m_pTileProgram(nullptr)
+, m_pTileFragmentShader(nullptr)
+, m_pTileVertexShader(nullptr)
 , m_enabled(true)
 {
+    assert(!Renderer::m_instance);
+    Renderer::m_instance = this;
     setFocusPolicy(Qt::StrongFocus);
+}
+
+Renderer & Renderer::instance()
+{
+    assert(Renderer::m_instance);
+    return *Renderer::m_instance;
 }
 
 void Renderer::initializeGL()
@@ -80,6 +93,21 @@ void Renderer::loadShaders()
         QString(Config::Common::dataPath) + "/shaders/fade.fsh");
     m_pFadeProgram->addShader(m_pFadeFragmentShader);
     m_pFadeProgram->link();
+
+    m_pTileProgram          = new QGLShaderProgram(context(), this);
+    m_pTileFragmentShader   = new QGLShader(QGLShader::Fragment, context(), this);
+    m_pTileVertexShader     = new QGLShader(QGLShader::Vertex, context(), this);
+
+    // TODO: Error handling
+    m_pTileFragmentShader->compileSourceFile(
+        QString(Config::Common::dataPath) + "/shaders/tile.fsh");
+    m_pTileProgram->addShader(m_pTileFragmentShader);
+    m_pTileVertexShader->compileSourceFile(
+        QString(Config::Common::dataPath) + "/shaders/tile.vsh");
+    m_pTileProgram->addShader(m_pTileVertexShader);
+    m_pTileProgram->bindAttributeLocation("position", 1);
+    m_pTileProgram->bindAttributeLocation("angle",    5);
+    m_pTileProgram->link();
 }
 
 void Renderer::setEnabled(bool enable)
@@ -90,6 +118,12 @@ void Renderer::setEnabled(bool enable)
 void Renderer::setFadeShaderEnabled(bool enable)
 {
     m_fadeShaderEnabled = enable;
+}
+
+QGLShaderProgram & Renderer::tileProgram()
+{
+    assert(m_pTileProgram);
+    return *m_pTileProgram;
 }
 
 void Renderer::setFadeValue(float value)

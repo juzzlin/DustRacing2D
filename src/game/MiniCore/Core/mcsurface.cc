@@ -295,6 +295,11 @@ void MCSurface::renderVBOs(bool autoClientState)
     }
 }
 
+void MCSurface::bindTexture() const
+{
+    glBindTexture(GL_TEXTURE_2D, m_handle);
+}
+
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
     bool autoClientState)
 {
@@ -429,7 +434,7 @@ void MCSurface::renderShadowScaled(
     glPopAttrib();
 }
 
-void MCSurface::enableClientState(bool enable) const
+void MCSurface::enableClientState(bool enable, bool bindTexture) const
 {
     if (enable)
     {
@@ -445,8 +450,11 @@ void MCSurface::enableClientState(bool enable) const
         glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
         glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, m_handle);
+
+        if (bindTexture)
+        {
+            this->bindTexture();
+        }
     }
     else
     {
