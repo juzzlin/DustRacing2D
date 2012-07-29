@@ -50,6 +50,7 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 , m_program(nullptr)
+, m_shadowProgram(nullptr)
 {
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -110,6 +111,7 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 , m_program(nullptr)
+, m_shadowProgram(nullptr)
 {
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -308,6 +310,11 @@ void MCSurface::setShaderProgram(MCGLShaderProgram & program)
     m_program = &program;
 }
 
+void MCSurface::setShadowShaderProgram(MCGLShaderProgram & program)
+{
+    m_shadowProgram = &program;
+}
+
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
     bool autoClientState)
 {
@@ -323,6 +330,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
         }
 
         m_program->bind();
+        m_program->setScale(1.0, 1.0, 1.0);
 
         if (m_centerSet)
         {
@@ -335,9 +343,6 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
         m_program->rotate(angle);
 
-//    doAlphaTest();
-//    doAlphaBlend();
-
         renderVBOs(autoClientState);
 
         m_program->release();
@@ -348,102 +353,104 @@ void MCSurface::renderScaled(
     MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
     bool autoClientState)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-
-    const MCFloat z = pos.k();
-
-    if (pCamera)
+    if (m_program)
     {
-        pCamera->mapToCamera(x, y);
+        MCFloat x = pos.i();
+        MCFloat y = pos.j();
+        MCFloat z = pos.k();
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        m_program->bind();
+        m_program->setScale(wr / m_w2, hr / m_h2, 1.0);
+
+        if (m_centerSet)
+        {
+            m_program->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+        }
+        else
+        {
+            m_program->translate(MCVector3dF(x, y, z));
+        }
+
+        m_program->rotate(angle);
+
+        renderVBOs(autoClientState);
+
+        m_program->release();
     }
-
-    glPushAttrib(GL_ENABLE_BIT);
-    glPushMatrix();
-    glTranslated(x, y, z);
-    glRotated(angle, 0, 0, 1);
-
-    if (m_centerSet)
-    {
-        glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
-    }
-
-    glScaled(wr / m_w2, hr / m_h2, 1.0);
-
-    doAlphaTest();
-    doAlphaBlend();
-
-    renderVBOs(autoClientState);
-
-    glPopMatrix();
-    glPopAttrib();
 }
 
 void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
     bool autoClientState)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-
-    if (pCamera)
+    if (m_shadowProgram)
     {
-        pCamera->mapToCamera(x, y);
+        MCFloat x = pos.i();
+        MCFloat y = pos.j();
+        MCFloat z = 0;
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        m_shadowProgram->bind();
+        m_shadowProgram->setScale(1.0, 1.0, 1.0);
+
+        if (m_centerSet)
+        {
+            m_shadowProgram->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+        }
+        else
+        {
+            m_shadowProgram->translate(MCVector3dF(x, y, z));
+        }
+
+        m_shadowProgram->rotate(angle);
+
+        renderVBOs(autoClientState);
+
+        m_shadowProgram->release();
     }
-
-    glPushAttrib(GL_ENABLE_BIT);
-    glPushMatrix();
-    glTranslated(x, y, 0);
-    glRotated(angle, 0, 0, 1);
-
-    if (m_centerSet)
-    {
-        glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), 0);
-    }
-
-    doAlphaTest();
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ZERO, GL_ZERO);
-
-    renderVBOs(autoClientState);
-
-    glPopMatrix();
-    glPopAttrib();
 }
 
 void MCSurface::renderShadowScaled(
     MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
     bool autoClientState)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-
-    if (pCamera)
+    if (m_shadowProgram)
     {
-        pCamera->mapToCamera(x, y);
+        MCFloat x = pos.i();
+        MCFloat y = pos.j();
+        MCFloat z = 0;
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        m_shadowProgram->bind();
+        m_shadowProgram->setScale(wr / m_w2, hr / m_h2, 1.0);
+
+        if (m_centerSet)
+        {
+            m_shadowProgram->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+        }
+        else
+        {
+            m_shadowProgram->translate(MCVector3dF(x, y, z));
+        }
+
+        m_shadowProgram->rotate(angle);
+
+        renderVBOs(autoClientState);
+
+        m_shadowProgram->release();
     }
-
-    glPushAttrib(GL_ENABLE_BIT);
-    glPushMatrix();
-    glTranslated(x, y, 0);
-    glRotated(angle, 0, 0, 1);
-
-    if (m_centerSet)
-    {
-        glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), 0);
-    }
-
-    doAlphaTest();
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ZERO, GL_ZERO);
-
-    glScaled(wr / m_w2, hr / m_h2, 1.0);
-
-    renderVBOs(autoClientState);
-
-    glPopMatrix();
-    glPopAttrib();
 }
 
 void MCSurface::enableClientState(bool enable, bool bindTexture) const

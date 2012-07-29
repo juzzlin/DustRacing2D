@@ -53,6 +53,8 @@ public:
 
     virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 
+    virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
+
 private:
 };
 

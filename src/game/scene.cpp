@@ -112,6 +112,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 
         car->setLayer(Layers::Cars);
         car->surface()->setShaderProgram(Renderer::instance().masterProgram());
+        car->surface()->setShadowShaderProgram(Renderer::instance().masterShadowProgram());
 
         m_cars.push_back(car);
         m_race.addCar(*car);

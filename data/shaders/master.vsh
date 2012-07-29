@@ -14,6 +14,7 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 attribute vec4 position;
+attribute vec3 scale;
 attribute float angle;
 
 void main()
@@ -26,7 +27,12 @@ void main()
         0.0,     0.0,    0.0, 1.0);
 
     // Normal MVP transform
-    gl_Position = gl_ModelViewProjectionMatrix * (m * gl_Vertex + position);
+    vec4 scaled = gl_Vertex;
+    scaled.x    = gl_Vertex.x * scale.x;
+    scaled.y    = gl_Vertex.y * scale.y;
+    scaled.z    = gl_Vertex.z * scale.z;
+    scaled.w    = 1.0;
+    gl_Position = gl_ModelViewProjectionMatrix * (m * scaled + position);
     
     // Copy the promary color
     gl_FrontColor = gl_Color;

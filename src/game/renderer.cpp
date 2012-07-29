@@ -52,6 +52,7 @@ Renderer::Renderer(QWidget * parent)
 , m_fadeValue(1.0)
 , m_tileProgram(nullptr)
 , m_masterProgram(nullptr)
+, m_masterShadowProgram(nullptr)
 , m_enabled(true)
 {
     assert(!Renderer::m_instance);
@@ -110,6 +111,14 @@ void Renderer::loadShaders()
     m_masterProgram->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");
     m_masterProgram->link();
+
+    // TODO: Error handling
+    m_masterShadowProgram = new ShaderProgram(context());
+    m_masterShadowProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/master2dShadow.fsh");
+    m_masterShadowProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/master.vsh");
+    m_masterShadowProgram->link();
 }
 
 void Renderer::setEnabled(bool enable)
@@ -130,6 +139,11 @@ MCGLShaderProgram & Renderer::tileProgram()
 MCGLShaderProgram & Renderer::masterProgram()
 {
     return *m_masterProgram;
+}
+
+MCGLShaderProgram & Renderer::masterShadowProgram()
+{
+    return *m_masterShadowProgram;
 }
 
 void Renderer::setFadeValue(float value)

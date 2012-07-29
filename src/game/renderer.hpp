@@ -62,6 +62,8 @@ public:
 
     MCGLShaderProgram & masterProgram();
 
+    MCGLShaderProgram & masterShadowProgram();
+
     QGLShaderProgram & particleProgram();
 
     float fadeValue() const;
@@ -99,6 +101,7 @@ private:
     float               m_fadeValue;
     MCGLShaderProgram * m_tileProgram;
     MCGLShaderProgram * m_masterProgram;
+    MCGLShaderProgram * m_masterShadowProgram;
     bool                m_enabled;
 
     static Renderer * m_instance;

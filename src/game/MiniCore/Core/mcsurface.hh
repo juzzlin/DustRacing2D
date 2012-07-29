@@ -164,6 +164,9 @@ public:
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram & program);
 
+    //! Set the shader program to be used for 2d shadows.
+    void setShadowShaderProgram(MCGLShaderProgram & program);
+
     //! Get OpenGL texture handle
     GLuint handle() const;
 
@@ -211,6 +214,7 @@ private:
     GLenum m_dst;
     GLuint m_vbos[VBOTypes];
     MCGLShaderProgram * m_program;
+    MCGLShaderProgram * m_shadowProgram;
 };
 
 #endif // MCSURFACE_HH

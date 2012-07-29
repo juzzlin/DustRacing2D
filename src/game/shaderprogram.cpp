@@ -17,8 +17,9 @@
 
 #include <cassert>
 
-static const int POSITION = 1;
-static const int ANGLE    = 5;
+static const int POSITION   = 1;
+static const int ANGLE      = 5;
+static const int SCALE      = 6;
 
 ShaderProgram::ShaderProgram(const QGLContext * context)
 : m_program(context)
@@ -51,8 +52,9 @@ bool ShaderProgram::isLinked()
 bool ShaderProgram::addVertexShader(const std::string & fileName)
 {
     m_vertexShader.compileSourceFile(fileName.c_str());
-    m_program.bindAttributeLocation("position", POSITION);
-    m_program.bindAttributeLocation("angle",    ANGLE);
+    m_program.bindAttributeLocation("position",  POSITION);
+    m_program.bindAttributeLocation("angle",     ANGLE);
+    m_program.bindAttributeLocation("scale",     SCALE);
     return m_program.addShader(&m_vertexShader);
 }
 
@@ -74,6 +76,11 @@ void ShaderProgram::translate(const MCVector3dF & p)
 
 void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 {
+}
+
+void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
+{
+    m_program.setAttributeValue(SCALE, x, y, z);
 }
 
 ShaderProgram::~ShaderProgram()
