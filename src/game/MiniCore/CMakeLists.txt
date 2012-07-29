@@ -8,6 +8,7 @@ Core/mcevent.cc
 Core/mcexception.cc
 Core/mcglobjectdata.cc
 Core/mcglscene.cc
+Core/mcglshaderprogram.cc
 Core/mclogger.cc
 Core/mcobject.cc
 Core/mcobjectdata.cc

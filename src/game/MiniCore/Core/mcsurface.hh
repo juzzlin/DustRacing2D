@@ -34,6 +34,7 @@
 using std::string;
 
 class MCCamera;
+class MCGLShaderProgram;
 class MCGLTexCoord;
 class MCGLVertex;
 class MCSurfaceImpl;
@@ -154,6 +155,15 @@ public:
      */
     void enableClientState(bool enable, bool bindTexture = true) const;
 
+    //! Manually render VBO's.
+    void renderVBOs(bool autoClientState = true);
+
+    //! Bind the current texture.
+    void bindTexture() const;
+
+    //! Set the shader program to be used.
+    void setShaderProgram(MCGLShaderProgram & program);
+
     //! Get OpenGL texture handle
     GLuint handle() const;
 
@@ -165,11 +175,6 @@ public:
 
     //! Get center
     MCVector2d<MCFloat> center() const;
-
-    //! Manually render VBO's. Use GLSL shaders.
-    void renderVBOs(bool autoClientState = true);
-
-    void bindTexture() const;
 
 private:
 
@@ -205,6 +210,7 @@ private:
     GLenum m_src;
     GLenum m_dst;
     GLuint m_vbos[VBOTypes];
+    MCGLShaderProgram * m_program;
 };
 
 #endif // MCSURFACE_HH

@@ -40,6 +40,7 @@
 #include "../common/targetnodebase.hpp"
 
 #include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCGLShaderProgram"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCObject"
 #include "MiniCore/Core/MCSurface"
@@ -110,6 +111,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
         }
 
         car->setLayer(Layers::Cars);
+        car->surface()->setShaderProgram(Renderer::instance().masterProgram());
 
         m_cars.push_back(car);
         m_race.addCar(*car);

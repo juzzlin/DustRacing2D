@@ -20,6 +20,7 @@ set(SRC
     radius.cpp
     renderer.cpp
     scene.cpp
+    shaderprogram.cpp
     slidefrictiongenerator.cpp
     startlights.cpp
     startlightsoverlay.cpp

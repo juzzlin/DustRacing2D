@@ -20,6 +20,7 @@
 #include "mcsurface.hh"
 #include "mccamera.hh"
 #include "mcbbox.hh"
+#include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
 #include "mcgltexcoord.hh"
 #include "mctrigonom.hh"
@@ -48,6 +49,7 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
 , m_useAlphaBlend(false)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
+, m_program(nullptr)
 {
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -107,6 +109,7 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
 , m_useAlphaBlend(false)
 , m_src(GL_SRC_ALPHA)
 , m_dst(GL_ONE_MINUS_SRC_ALPHA)
+, m_program(nullptr)
 {
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -300,36 +303,45 @@ void MCSurface::bindTexture() const
     glBindTexture(GL_TEXTURE_2D, m_handle);
 }
 
+void MCSurface::setShaderProgram(MCGLShaderProgram & program)
+{
+    m_program = &program;
+}
+
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
     bool autoClientState)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-
-    const MCFloat z = pos.k();
-
-    if (pCamera)
+    if (m_program)
     {
-        pCamera->mapToCamera(x, y);
+        MCFloat x = pos.i();
+        MCFloat y = pos.j();
+        MCFloat z = pos.k();
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        m_program->bind();
+
+        if (m_centerSet)
+        {
+            m_program->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+        }
+        else
+        {
+            m_program->translate(MCVector3dF(x, y, z));
+        }
+
+        m_program->rotate(angle);
+
+//    doAlphaTest();
+//    doAlphaBlend();
+
+        renderVBOs(autoClientState);
+
+        m_program->release();
     }
-
-    glPushAttrib(GL_ENABLE_BIT);
-    glPushMatrix();
-    glTranslated(x, y, z);
-    glRotated(angle, 0, 0, 1);
-
-    if (m_centerSet)
-    {
-        glTranslated(m_w2 - m_center.i(), m_h2 - m_center.j(), z);
-    }
-
-    doAlphaTest();
-    doAlphaBlend();
-
-    renderVBOs(autoClientState);
-
-    glPopMatrix();
-    glPopAttrib();
 }
 
 void MCSurface::renderScaled(

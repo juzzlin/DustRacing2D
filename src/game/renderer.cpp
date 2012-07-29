@@ -17,10 +17,12 @@
 #include "menumanager.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "shaderprogram.hpp"
 #include "../common/config.hpp"
 
 #include "MiniCore/Core/MCCamera"
 #include "MiniCore/Core/MCGLScene"
+#include "MiniCore/Core/MCGLShaderProgram"
 #include "MiniCore/Core/MCLogger"
 #include "MiniCore/Core/MCSurface"
 #include "MiniCore/Core/MCTextureManager"
@@ -48,9 +50,8 @@ Renderer::Renderer(QWidget * parent)
 , m_pFadeFragmentShader(nullptr)
 , m_fadeShaderEnabled(false)
 , m_fadeValue(1.0)
-, m_pTileProgram(nullptr)
-, m_pTileFragmentShader(nullptr)
-, m_pTileVertexShader(nullptr)
+, m_tileProgram(nullptr)
+, m_masterProgram(nullptr)
 , m_enabled(true)
 {
     assert(!Renderer::m_instance);
@@ -94,20 +95,21 @@ void Renderer::loadShaders()
     m_pFadeProgram->addShader(m_pFadeFragmentShader);
     m_pFadeProgram->link();
 
-    m_pTileProgram          = new QGLShaderProgram(context(), this);
-    m_pTileFragmentShader   = new QGLShader(QGLShader::Fragment, context(), this);
-    m_pTileVertexShader     = new QGLShader(QGLShader::Vertex, context(), this);
+    // TODO: Error handling
+    m_tileProgram = new ShaderProgram(context());
+    m_tileProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/tile.fsh");
+    m_tileProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
+    m_tileProgram->link();
 
     // TODO: Error handling
-    m_pTileFragmentShader->compileSourceFile(
-        QString(Config::Common::dataPath) + "/shaders/tile.fsh");
-    m_pTileProgram->addShader(m_pTileFragmentShader);
-    m_pTileVertexShader->compileSourceFile(
-        QString(Config::Common::dataPath) + "/shaders/tile.vsh");
-    m_pTileProgram->addShader(m_pTileVertexShader);
-    m_pTileProgram->bindAttributeLocation("position", 1);
-    m_pTileProgram->bindAttributeLocation("angle",    5);
-    m_pTileProgram->link();
+    m_masterProgram = new ShaderProgram(context());
+    m_masterProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/master.fsh");
+    m_masterProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/master.vsh");
+    m_masterProgram->link();
 }
 
 void Renderer::setEnabled(bool enable)
@@ -120,10 +122,14 @@ void Renderer::setFadeShaderEnabled(bool enable)
     m_fadeShaderEnabled = enable;
 }
 
-QGLShaderProgram & Renderer::tileProgram()
+MCGLShaderProgram & Renderer::tileProgram()
 {
-    assert(m_pTileProgram);
-    return *m_pTileProgram;
+    return *m_tileProgram;
+}
+
+MCGLShaderProgram & Renderer::masterProgram()
+{
+    return *m_masterProgram;
 }
 
 void Renderer::setFadeValue(float value)
@@ -240,5 +246,7 @@ void Renderer::setInputHandler(InputHandler * pInputHandler)
 
 Renderer::~Renderer()
 {
+    delete m_tileProgram;
+    delete m_masterProgram;
     delete m_pGLScene;
 }

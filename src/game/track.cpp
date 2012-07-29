@@ -21,10 +21,8 @@
 #include "map.hpp"
 
 #include "MiniCore/Core/MCCamera"
+#include "MiniCore/Core/MCGLShaderProgram"
 #include "MiniCore/Core/MCSurface"
-
-#include <QGLShaderProgram>
-#include <QMatrix4x4>
 
 #include <cassert>
 
@@ -125,8 +123,7 @@ void Track::render(MCCamera * pCamera)
     static const int w  = TrackTile::TILE_W;
     static const int h  = TrackTile::TILE_H;
 
-    QGLShaderProgram & prog = Renderer::instance().tileProgram();
-    assert(prog.isLinked());
+    MCGLShaderProgram & prog = Renderer::instance().tileProgram();
     prog.bind();
 
     MCFloat x1, y1; // Coordinates mapped to camera
@@ -150,8 +147,8 @@ void Track::render(MCCamera * pCamera)
                     x1 = x;
                     y1 = y;
                     pCamera->mapToCamera(x1, y1);
-                    prog.setAttributeValue(1, QVector4D(x1 + w / 2, y1 + h / 2, 0, 0));
-                    prog.setAttributeValue(5, pTile->rotation());
+                    prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+                    prog.rotate(pTile->rotation());
                     pSurface->bindTexture();
                     pSurface->renderVBOs(false);
                 }

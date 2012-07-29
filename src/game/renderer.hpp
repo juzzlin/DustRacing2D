@@ -22,6 +22,7 @@
 class InputHandler;
 class MCCamera;
 class MCGLScene;
+class MCGLShaderProgram;
 class QGLShaderProgram;
 class QGLShader;
 class QKeyEvent;
@@ -57,7 +58,11 @@ public:
 
     void setFadeValue(float value);
 
-    QGLShaderProgram & tileProgram();
+    MCGLShaderProgram & tileProgram();
+
+    MCGLShaderProgram & masterProgram();
+
+    QGLShaderProgram & particleProgram();
 
     float fadeValue() const;
 
@@ -83,19 +88,18 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
-    Scene            * m_pScene;
-    MCGLScene        * m_pGLScene;
-    MCCamera         * m_pCamera;
-    InputHandler     * m_pInputHandler;
-    const float        m_viewAngle;
-    QGLShaderProgram * m_pFadeProgram;
-    QGLShader        * m_pFadeFragmentShader;
-    bool               m_fadeShaderEnabled;
-    float              m_fadeValue;
-    QGLShaderProgram * m_pTileProgram;
-    QGLShader        * m_pTileFragmentShader;
-    QGLShader        * m_pTileVertexShader;
-    bool               m_enabled;
+    Scene             * m_pScene;
+    MCGLScene         * m_pGLScene;
+    MCCamera          * m_pCamera;
+    InputHandler      * m_pInputHandler;
+    const float         m_viewAngle;
+    QGLShaderProgram  * m_pFadeProgram;
+    QGLShader         * m_pFadeFragmentShader;
+    bool                m_fadeShaderEnabled;
+    float               m_fadeValue;
+    MCGLShaderProgram * m_tileProgram;
+    MCGLShaderProgram * m_masterProgram;
+    bool                m_enabled;
 
     static Renderer * m_instance;
 };
