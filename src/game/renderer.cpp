@@ -53,6 +53,8 @@ Renderer::Renderer(QWidget * parent)
 , m_tileProgram(nullptr)
 , m_masterProgram(nullptr)
 , m_masterShadowProgram(nullptr)
+, m_textProgram(nullptr)
+, m_textShadowProgram(nullptr)
 , m_enabled(true)
 {
     assert(!Renderer::m_instance);
@@ -119,6 +121,22 @@ void Renderer::loadShaders()
     m_masterShadowProgram->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");
     m_masterShadowProgram->link();
+
+    // TODO: Error handling
+    m_textProgram = new ShaderProgram(context());
+    m_textProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/text.fsh");
+    m_textProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/text.vsh");
+    m_textProgram->link();
+
+    // TODO: Error handling
+    m_textShadowProgram = new ShaderProgram(context());
+    m_textShadowProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/text2dShadow.fsh");
+    m_textShadowProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/text.vsh");
+    m_textShadowProgram->link();
 }
 
 void Renderer::setEnabled(bool enable)
@@ -144,6 +162,16 @@ MCGLShaderProgram & Renderer::masterProgram()
 MCGLShaderProgram & Renderer::masterShadowProgram()
 {
     return *m_masterShadowProgram;
+}
+
+MCGLShaderProgram & Renderer::textProgram()
+{
+    return *m_textProgram;
+}
+
+MCGLShaderProgram & Renderer::textShadowProgram()
+{
+    return *m_textShadowProgram;
 }
 
 void Renderer::setFadeValue(float value)
@@ -262,5 +290,8 @@ Renderer::~Renderer()
 {
     delete m_tileProgram;
     delete m_masterProgram;
+    delete m_masterShadowProgram;
+    delete m_textProgram;
+    delete m_textShadowProgram;
     delete m_pGLScene;
 }

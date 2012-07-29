@@ -15,6 +15,7 @@
 
 #include "trackselectionmenu.hpp"
 
+#include "renderer.hpp"
 #include "scene.hpp"
 #include "statemachine.hpp"
 #include "timing.hpp"
@@ -132,6 +133,7 @@ void TrackItem::render(int x, int y)
             {
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
+                    pSurface->setShaderProgram(Renderer::instance().masterProgram());
                     pSurface->renderScaled(
                         nullptr,
                         MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
@@ -213,6 +215,7 @@ void TrackSelectionMenu::addTrack(Track & track)
 void TrackSelectionMenu::render()
 {
     MCSurface & back = MCTextureManager::instance().surface("menu");
+    back.setShaderProgram(Renderer::instance().masterProgram());
     back.renderScaled(nullptr, MCVector3dF(0, 0, 0), width(), height(), 0);
     Menu::render();
 }

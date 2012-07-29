@@ -26,6 +26,7 @@
 #include "menumanager.hpp"
 #include "offtrackdetector.hpp"
 #include "race.hpp"
+#include "renderer.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "statemachine.hpp"
@@ -49,6 +50,8 @@
 #include "MiniCore/Core/MCWorld"
 #include "MiniCore/Core/Physics/MCFrictionGenerator"
 #include "MiniCore/Core/Physics/MCSpringForceGenerator"
+#include "MiniCore/Text/MCTextureFont"
+#include "MiniCore/Text/MCTextureFontManager"
 
 #include <algorithm>
 #include <cassert>
@@ -131,6 +134,11 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     m_world->enableDepthTestOnLayer(Layers::Tree, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
+    MCTextureFontManager::instance().font("default").surface().setShaderProgram(
+        Renderer::instance().textProgram());
+    MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
+        Renderer::instance().textShadowProgram());
+
     createMenus();
 }
 
@@ -169,26 +177,31 @@ void Scene::createMenus()
 
 void Scene::updateFrame(InputHandler & handler, float timeStep)
 {
-    if (m_activeTrack)
+    if (m_stateMachine.state() == StateMachine::GameTransitionIn ||
+        m_stateMachine.state() == StateMachine::GameTransitionOut ||
+        m_stateMachine.state() == StateMachine::DoStartlights ||
+        m_stateMachine.state() == StateMachine::Play)
     {
-        if (m_race.started())
+        if (m_activeTrack)
         {
-            const bool isRaceCompleted = m_race.timing().raceCompleted(0);
-            processUserInput(handler, isRaceCompleted);
+            if (m_race.started())
+            {
+                const bool isRaceCompleted = m_race.timing().raceCompleted(0);
+                processUserInput(handler, isRaceCompleted);
 
-            updateAiLogic();
+                updateAiLogic();
+            }
+
+            updateWorld(timeStep);
+            updateRace();
+
+            for (OffTrackDetector * otd : m_offTrackDetectors)
+            {
+                otd->update();
+            }
+
+            updateCameraLocation(m_camera);
         }
-
-        updateWorld(timeStep);
-
-        updateRace();
-
-        for (OffTrackDetector * otd : m_offTrackDetectors)
-        {
-            otd->update();
-        }
-
-        updateCameraLocation(m_camera);
     }
 }
 
@@ -287,11 +300,8 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_world->clear();
 
     setWorldDimensions();
-
     addCarsToWorld();
-
     addTrackObjectsToWorld();
-
     initRace();
 
     for (AiLogic * ai : m_aiLogic)
