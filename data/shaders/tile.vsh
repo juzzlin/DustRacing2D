@@ -20,18 +20,18 @@ void main()
 {
     float r = angle * 3.1415 / 180.0;
     mat4  m = mat4(
-        cos(r),  sin(r), 0.0, 0.0,
-        -sin(r), cos(r), 0.0, 0.0,
-        0.0,     0.0,    1.0, 0.0,
-        0.0,     0.0,    0.0, 1.0);
+        cos(r),  sin(r),        0.0,        0.0,
+        -sin(r), cos(r),        0.0,        0.0,
+        0.0,     0.0,           1.0,        0.0,
+        position.x, position.y, position.z, 1.0);
 
     // Normal MVP transform
-    gl_Position = gl_ModelViewProjectionMatrix * (m * gl_Vertex + position);
+    gl_Position = gl_ModelViewProjectionMatrix * m * gl_Vertex;
     
-    // Copy the promary color
+    // Copy the primary color
     gl_FrontColor = gl_Color;
 
-    // Copy texture coorinates    
+    // Copy texture coorinates
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }
 

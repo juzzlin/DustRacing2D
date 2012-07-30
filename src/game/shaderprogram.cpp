@@ -80,7 +80,7 @@ void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
-    m_program.setAttributeValue(SCALE, x, y, z);
+    m_program.setAttributeValue(SCALE, x, y, z, 1);
 }
 
 ShaderProgram::~ShaderProgram()
