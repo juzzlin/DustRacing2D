@@ -58,7 +58,7 @@ bool MCTextureConfigLoader::loadTextures()
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "textures")
     {
-        std::string basePath = root.attribute("basePath", "./").toStdString();
+        const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
 
         MCTextureData * newData = nullptr;
         QDomNode node = root.firstChild();
@@ -74,7 +74,7 @@ bool MCTextureConfigLoader::loadTextures()
                 std::string  file        = tag.attribute("file", "").toStdString();
                 std::string  handle      = tag.attribute("handle", "").toStdString();
 
-                newData->imagePath   = basePath + QDir::separator().toAscii() + file;
+                newData->imagePath   = baseImagePath + QDir::separator().toAscii() + file;
                 newData->handle      = handle;
                 newData->xAxisMirror = xAxisMirror;
 

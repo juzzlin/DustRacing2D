@@ -48,7 +48,7 @@ class MCTextureManagerImpl;
  * Example mapping file:
  *
  * <?xml version="1.0"?>
- * <textures basePath="./data/images/">
+ * <textures baseImagePath="./data/images/">
  *   <texture handle="Car1" file="car1.png" w="16" h="16" xAxisMirror="1">
  *     <colorKey r="255" g="255" b="255"/>
  *   </texture>
@@ -82,7 +82,7 @@ public:
     //! Loads texture config from strBasePath using the given mapping file strFile.
     //! \param filePath Path to the XML-based input file.
     //! \param baseDataPath The absolute search path for an image is
-    //! baseDataPath + default_path + file. default_path and file are
+    //! baseDataPath + baseImagePath + file. baseImagePath and the file are
     //! defined in the input file.
     virtual void load(
         const std::string & filePath, const std::string & baseDataPath) throw (MCException);
