@@ -20,10 +20,11 @@
 #ifndef MCSHAPEVIEW_HH
 #define MCSHAPEVIEW_HH
 
-#include "mctypes.hh"
-#include "mcmacros.hh"
-#include "mcvector3d.hh"
 #include "mcbbox.hh"
+#include "mcglshaderprogram.hh"
+#include "mcmacros.hh"
+#include "mctypes.hh"
+#include "mcvector3d.hh"
 
 class MCCamera;
 
@@ -42,10 +43,37 @@ public:
     //! beginBatch() and endBatch() are called based on this.
     MCShapeView(const std::string & viewId)
     : m_viewId(viewId)
+    , m_shaderProgram(nullptr)
+    , m_shadowShaderProgram(nullptr)
     {}
 
     //! Destructor.
     virtual ~MCShapeView() {};
+
+    //! Set the default shader program that is used when rendering.
+    virtual void setShaderProgram(MCGLShaderProgram * shaderProgram)
+    {
+        m_shaderProgram = shaderProgram;
+    }
+
+    //! Set the default shader program that is used when rendering
+    //! the (fake) 2d shadow.
+    virtual void setShadowShaderProgram(MCGLShaderProgram * shaderProgram)
+    {
+        m_shadowShaderProgram = shaderProgram;
+    }
+
+    //! Return the default shader program or nullptr if not set.
+    MCGLShaderProgram * shaderProgram() const
+    {
+        return m_shaderProgram;
+    }
+
+    //! Return the default shadow shader program or nullptr if not set.
+    MCGLShaderProgram * shadowShaderProgram() const
+    {
+        return m_shadowShaderProgram;
+    }
 
     /*! Render the shape at the current location using given camera window.
      * \param l Location.
@@ -55,7 +83,13 @@ public:
     virtual void render(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCCamera * p = nullptr) = 0;
+        MCCamera * p = nullptr)
+    {
+        // Suppress warnings for unused variables
+        (void)l;
+        (void)angle;
+        (void)p;
+    }
 
     /*! Render shadow for the shape at the current location using given camera window.
      * \param l Location.
@@ -65,7 +99,13 @@ public:
     virtual void renderShadow(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCCamera * p = nullptr) = 0;
+        MCCamera * p = nullptr)
+    {
+        // Suppress warnings for unused variables
+        (void)l;
+        (void)angle;
+        (void)p;
+    }
 
     /*! Render the scaled shape at the current location using given camera window.
      * \param l Location.
@@ -79,7 +119,15 @@ public:
         MCFloat angle,
         MCFloat wr,
         MCFloat hr,
-        MCCamera * p = nullptr) = 0;
+        MCCamera * p = nullptr)
+    {
+        // Suppress warnings for unused variables
+        (void)l;
+        (void)wr;
+        (void)hr;
+        (void)angle;
+        (void)p;
+    }
 
     /*! Render scaled shadow for the shape at the current location using given camera window.
      * \param l Location.
@@ -93,7 +141,15 @@ public:
         MCFloat angle,
         MCFloat wr,
         MCFloat hr,
-        MCCamera * p = nullptr) = 0;
+        MCCamera * p = nullptr)
+    {
+        // Suppress warnings for unused variables
+        (void)l;
+        (void)wr;
+        (void)hr;
+        (void)angle;
+        (void)p;
+    }
 
     //! Called for the first object in a batch of same kind
     //! of views when the render begins. E.g. VBO's can be
@@ -123,6 +179,8 @@ private:
     DISABLE_COPY(MCShapeView);
 
     std::string m_viewId;
+    MCGLShaderProgram * m_shaderProgram;
+    MCGLShaderProgram * m_shadowShaderProgram;
 };
 
 #endif // MCSHAPEVIEW_HH
