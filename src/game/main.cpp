@@ -21,7 +21,7 @@
 #include "mainwindow.hpp"
 #include "renderer.hpp"
 
-#include "MiniCore/Core/MCLogger"
+#include <MCLogger>
 
 int main(int argc, char ** argv)
 {

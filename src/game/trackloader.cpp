@@ -32,9 +32,9 @@
 #include "treeview.hpp"
 #include "wall.hpp"
 
-#include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCObjectFactory"
-#include "MiniCore/Core/MCTextureManager"
+#include <MCLogger>
+#include <MCObjectFactory>
+#include <MCTextureManager>
 
 #include <cassert>
 

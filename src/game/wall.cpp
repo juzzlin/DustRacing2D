@@ -15,11 +15,13 @@
 
 #include "wall.hpp"
 #include "layers.hpp"
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCMathUtil"
-#include "MiniCore/Core/MCRectShape"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/Views/MCSurfaceView"
+
+#include <MCCamera>
+#include <MCMathUtil>
+#include <MCRectShape>
+#include <MCSurface>
+#include <MCSurfaceView>
+
 #include <GL/gl.h>
 
 Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)

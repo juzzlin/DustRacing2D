@@ -18,7 +18,7 @@
 
 #include "updateableif.hpp"
 #include "renderer.hpp"
-#include "MiniCore/Core/MCTypes"
+#include <MCTypes>
 
 class Race;
 class Renderer;

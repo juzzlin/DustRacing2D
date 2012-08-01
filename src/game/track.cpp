@@ -20,10 +20,9 @@
 #include "tracktile.hpp"
 #include "map.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCGLShaderProgram"
-#include "MiniCore/Core/MCSurface"
-
+#include <MCCamera>
+#include <MCGLShaderProgram>
+#include <MCSurface>
 #include <cassert>
 
 Track::Track(TrackData * pTrackData)

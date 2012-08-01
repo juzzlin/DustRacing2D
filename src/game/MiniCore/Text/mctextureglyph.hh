@@ -20,7 +20,7 @@
 #ifndef MCTEXTUREGLYPH_HH
 #define MCTEXTUREGLYPH_HH
 
-#include "../Core/mctypes.hh"
+#include "mctypes.hh"
 
 #include <GL/gl.h>
 

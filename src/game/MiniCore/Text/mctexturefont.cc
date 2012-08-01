@@ -18,7 +18,7 @@
 //
 
 #include "mctexturefont.hh"
-#include "../Core/mcsurface.hh"
+#include "mcsurface.hh"
 
 MCTextureFont::MCTextureFont(MCSurface & surface)
   : m_default(

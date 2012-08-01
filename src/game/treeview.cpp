@@ -15,9 +15,9 @@
 
 #include "treeview.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTrigonom"
+#include <MCCamera>
+#include <MCSurface>
+#include <MCTrigonom>
 
 TreeView::TreeView(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeight, int branches)
 : MCSurfaceView("TreeView", &surface)

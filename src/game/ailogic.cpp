@@ -22,7 +22,7 @@
 #include "../common/targetnodebase.hpp"
 #include "../common/tracktilebase.hpp"
 
-#include "MiniCore/Core/MCTrigonom"
+#include <MCTrigonom>
 
 AiLogic::AiLogic(Car & car)
   : m_car(car)

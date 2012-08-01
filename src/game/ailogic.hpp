@@ -16,7 +16,7 @@
 #ifndef AILOGIC_HPP
 #define AILOGIC_HPP
 
-#include "MiniCore/Core/MCTypes"
+#include <MCTypes>
 
 class Car;
 class Route;

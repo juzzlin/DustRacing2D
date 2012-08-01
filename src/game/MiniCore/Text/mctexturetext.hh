@@ -20,8 +20,8 @@
 #ifndef MCTEXTURETEXT_HH
 #define MCTEXTURETEXT_HH
 
-#include "../Core/mctypes.hh"
-#include "../Core/mcmacros.hh"
+#include "mctypes.hh"
+#include "mcmacros.hh"
 #include <string>
 
 class MCCamera;

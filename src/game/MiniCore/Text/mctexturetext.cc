@@ -20,10 +20,9 @@
 #include "mctexturetext.hh"
 #include "mctexturefont.hh"
 #include "mctextureglyph.hh"
-
-#include "../Core/mccamera.hh"
-#include "../Core/mcsurface.hh"
-#include "../Core/mcgltexcoord.hh"
+#include "mccamera.hh"
+#include "mcsurface.hh"
+#include "mcgltexcoord.hh"
 
 #include <GL/gl.h>
 

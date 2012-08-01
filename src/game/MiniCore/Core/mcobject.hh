@@ -20,13 +20,13 @@
 #ifndef MCOBJECT_HH
 #define MCOBJECT_HH
 
-#include "mcvector3d.hh"
-#include "mctypes.hh"
-#include "mcmacros.hh"
 #include "mcbbox.hh"
-#include "mcworld.hh"
+#include "mccontact.hh"
+#include "mcmacros.hh"
 #include "mcobjecttree.hh"
-#include "Physics/mccontact.hh"
+#include "mctypes.hh"
+#include "mcvector3d.hh"
+#include "mcworld.hh"
 
 #include <map>
 #include <unordered_map>

@@ -18,8 +18,7 @@
 #include "track.hpp"
 #include "tracktile.hpp"
 
-#include "MiniCore/Core/MCTrigonom"
-
+#include <MCTrigonom>
 #include <cassert>
 
 OffTrackDetector::OffTrackDetector(Car & car)

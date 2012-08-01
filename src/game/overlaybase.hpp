@@ -16,8 +16,8 @@
 #ifndef OVERLAYBASE_HPP
 #define OVERLAYBASE_HPP
 
-#include "MiniCore/Core/MCBBox"
-#include "MiniCore/Core/MCTypes"
+#include <MCBBox>
+#include <MCTypes>
 
 #include "updateableif.hpp"
 

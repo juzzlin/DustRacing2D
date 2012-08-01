@@ -16,8 +16,8 @@
 #include "startlightsoverlay.hpp"
 #include "startlights.hpp"
 
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
+#include <MCSurface>
+#include <MCTextureManager>
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
   : m_startLightOn(MCTextureManager::instance().surface("startLightOn"))

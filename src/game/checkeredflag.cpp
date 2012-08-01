@@ -15,9 +15,9 @@
 
 #include "checkeredflag.hpp"
 
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Core/MCTrigonom"
+#include <MCSurface>
+#include <MCTextureManager>
+#include <MCTrigonom>
 
 static const int   ROWS             = 6;
 static const int   COLS             = 8;

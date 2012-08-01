@@ -30,7 +30,7 @@
 #include "mctimerevent.hh"
 #include "mccamera.hh"
 #include "mctrigonom.hh"
-#include "Views/mcsurfaceview.hh"
+#include "mcsurfaceview.hh"
 
 MCUint MCObject::typeIDCount = 1;
 MCObject::TypeHash MCObject::typeHash;

@@ -15,7 +15,7 @@
 
 #include "centrifugalforcegenerator.hpp"
 #include "radius.hpp"
-#include "MiniCore/Core/MCObject"
+#include <MCObject>
 
 CentrifugalForceGenerator::CentrifugalForceGenerator()
 {}

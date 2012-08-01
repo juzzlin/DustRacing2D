@@ -16,8 +16,8 @@
 #ifndef WALL_HPP
 #define WALL_HPP
 
-#include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCMacros"
+#include <MCObject>
+#include <MCMacros>
 
 class MCCamera;
 

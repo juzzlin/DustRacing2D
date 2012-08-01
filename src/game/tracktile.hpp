@@ -17,8 +17,7 @@
 #define TRACKTILE_HPP
 
 #include "../common/tracktilebase.hpp"
-
-#include "MiniCore/Core/MCSurface"
+#include <MCSurface>
 
 class TrackData;
 

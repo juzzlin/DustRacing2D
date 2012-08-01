@@ -15,9 +15,9 @@
 
 #include "slidefrictiongenerator.hpp"
 
-#include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCMathUtil"
-#include "MiniCore/Core/MCTrigonom"
+#include <MCObject>
+#include <MCMathUtil>
+#include <MCTrigonom>
 
 namespace
 {

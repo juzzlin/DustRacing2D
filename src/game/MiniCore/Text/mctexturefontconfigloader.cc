@@ -19,13 +19,11 @@
 
 #include "mctexturefontconfigloader.hh"
 #include "mctexturefontdata.hh"
+#include "mclogger.hh"
 
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
-
-#include "../Core/MCLogger"
-
 #include <cassert>
 
 MCTextureFontConfigLoader::MCTextureFontConfigLoader()

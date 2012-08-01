@@ -16,7 +16,7 @@
 #ifndef SHADERPROGRAM_HPP
 #define SHADERPROGRAM_HPP
 
-#include "MiniCore/Core/MCGLShaderProgram"
+#include <MCGLShaderProgram>
 #include <QGLShaderProgram>
 #include <QGLShader>
 #include <QGLContext>

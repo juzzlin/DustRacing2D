@@ -1,3 +1,10 @@
+# Engine include paths
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Graphics")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Particles")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Physics")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
+
 # Set sources
 set(SRC
     aboutdlg.cpp

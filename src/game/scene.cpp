@@ -40,18 +40,17 @@
 #include "../common/config.hpp"
 #include "../common/targetnodebase.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCGLShaderProgram"
-#include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Core/MCTypes"
-#include "MiniCore/Core/MCWorld"
-#include "MiniCore/Core/Physics/MCFrictionGenerator"
-#include "MiniCore/Core/Physics/MCSpringForceGenerator"
-#include "MiniCore/Text/MCTextureFont"
-#include "MiniCore/Text/MCTextureFontManager"
+#include <MCCamera>
+#include <MCFrictionGenerator>
+#include <MCGLShaderProgram>
+#include <MCLogger>
+#include <MCObject>
+#include <MCSurface>
+#include <MCTextureFont>
+#include <MCTextureFontManager>
+#include <MCTextureManager>
+#include <MCTypes>
+#include <MCWorld>
 
 #include <algorithm>
 #include <cassert>

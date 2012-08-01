@@ -18,8 +18,8 @@
 
 #include "updateableif.hpp"
 
-#include "MiniCore/Core/MCBBox"
-#include "MiniCore/Core/MCTypes"
+#include <MCBBox>
+#include <MCTypes>
 
 class TrackData;
 class TrackTile;

@@ -16,9 +16,9 @@
 #ifndef CAR_HPP
 #define CAR_HPP
 
-#include "MiniCore/Core/MCObject"
-#include "MiniCore/Core/MCVector2d"
-#include "MiniCore/Core/Particles/MCGLRectParticleGroup"
+#include <MCObject>
+#include <MCVector2d>
+#include <MCGLRectParticleGroup>
 
 #include <deque>
 

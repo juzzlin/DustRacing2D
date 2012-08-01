@@ -21,10 +21,9 @@
 #include "mctexturefont.hh"
 #include "mctexturefontdata.hh"
 #include "mctexturefontmanager.hh"
-
-#include "../Core/mctypes.hh"
-#include "../Core/mcsurface.hh"
-#include "../Core/mctexturemanager.hh"
+#include "mctypes.hh"
+#include "mcsurface.hh"
+#include "mctexturemanager.hh"
 
 #include <cassert>
 

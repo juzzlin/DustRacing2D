@@ -18,19 +18,20 @@
 #include "layers.hpp"
 #include "radius.hpp"
 #include "slidefrictiongenerator.hpp"
-#include "MiniCore/Core/MCCollisionEvent"
-#include "MiniCore/Core/Physics/MCFrictionGenerator"
-#include "MiniCore/Core/Physics/MCDragForceGenerator"
-#include "MiniCore/Core/Particles/MCGLRectParticle"
-#include "MiniCore/Core/MCRandom"
-#include "MiniCore/Core/MCRectShape"
-#include "MiniCore/Core/MCShape"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Core/MCTrigonom"
-#include "MiniCore/Core/MCTypes"
-#include "MiniCore/Core/MCVector2d"
-#include "MiniCore/Core/MCMathUtil"
+
+#include <MCCollisionEvent>
+#include <MCDragForceGenerator>
+#include <MCFrictionGenerator>
+#include <MCGLRectParticle>
+#include <MCMathUtil>
+#include <MCRandom>
+#include <MCRectShape>
+#include <MCShape>
+#include <MCSurface>
+#include <MCTextureManager>
+#include <MCTrigonom>
+#include <MCTypes>
+#include <MCVector2d>
 
 static const int gMaxNumParticles = 500;
 

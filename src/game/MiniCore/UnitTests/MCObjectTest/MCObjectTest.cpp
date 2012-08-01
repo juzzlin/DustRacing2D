@@ -18,11 +18,11 @@
 //
 
 #include "MCObjectTest.hpp"
-#include "../../Core/Physics/mcforcegenerator.hh"
-#include "../../Core/Physics/mcforceregistry.hh"
+#include "../../Physics/mcforcegenerator.hh"
+#include "../../Physics/mcforceregistry.hh"
+#include "../../Physics/mcworld.hh"
 #include "../../Core/mcobject.hh"
 #include "../../Core/mctimerevent.hh"
-#include "../../Core/mcworld.hh"
 
 class TestObject : public MCObject
 {

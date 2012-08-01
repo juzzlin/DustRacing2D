@@ -16,7 +16,7 @@
 #ifndef SLIDEFRICTIONGENERATOR_HPP
 #define SLIDEFRICTIONGENERATOR_HPP
 
-#include "MiniCore/Core/Physics/MCFrictionGenerator"
+#include <MCFrictionGenerator>
 
 //! Friction generator used when the car is in slide.
 class SlideFrictionGenerator : public MCFrictionGenerator

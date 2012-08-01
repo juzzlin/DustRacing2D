@@ -18,11 +18,9 @@
 
 #include <QObject>
 #include <QTime>
-
 #include <string>
 #include <vector>
-
-#include "MiniCore/Core/MCTypes"
+#include <MCTypes>
 
 class Car;
 

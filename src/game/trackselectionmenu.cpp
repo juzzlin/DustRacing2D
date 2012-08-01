@@ -25,12 +25,12 @@
 #include "menuitem.hpp"
 #include "menumanager.hpp"
 
-#include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Text/MCTextureFont"
-#include "MiniCore/Text/MCTextureFontManager"
-#include "MiniCore/Text/MCTextureText"
+#include <MCLogger>
+#include <MCSurface>
+#include <MCTextureManager>
+#include <MCTextureFont>
+#include <MCTextureFontManager>
+#include <MCTextureText>
 
 #include "../common/config.hpp"
 #include "../common/mapbase.hpp"

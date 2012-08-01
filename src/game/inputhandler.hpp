@@ -19,7 +19,7 @@
 #include <vector>
 #include <bitset>
 
-#include "MiniCore/Core/MCTypes"
+#include <MCTypes>
 
 //! Handler for players' interactions.
 class InputHandler

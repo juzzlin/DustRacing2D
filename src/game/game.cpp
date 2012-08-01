@@ -25,11 +25,11 @@
 #include "trackloader.hpp"
 #include "trackselectionmenu.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCObjectFactory"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Text/MCTextureFontManager"
+#include <MCCamera>
+#include <MCLogger>
+#include <MCObjectFactory>
+#include <MCTextureManager>
+#include <MCTextureFontManager>
 
 #include <QDir>
 #include <QTime>

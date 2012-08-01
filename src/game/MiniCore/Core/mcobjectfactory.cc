@@ -22,7 +22,7 @@
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
 #include "mctexturemanager.hh"
-#include "Views/mcsurfaceview.hh"
+#include "mcsurfaceview.hh"
 
 #include <cassert>
 #include <memory>

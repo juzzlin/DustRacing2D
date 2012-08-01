@@ -17,7 +17,7 @@
 #define CHECKEREDFLAG_HPP
 
 #include "overlaybase.hpp"
-#include "MiniCore/Core/MCVector3d"
+#include <MCVector3d>
 #include <vector>
 
 class MCSurface;

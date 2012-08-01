@@ -23,8 +23,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "../Core/mcexception.hh"
-#include "../Core/mcmacros.hh"
+#include "mcexception.hh"
+#include "mcmacros.hh"
 
 class MCTextureFont;
 class MCTextureFontData;

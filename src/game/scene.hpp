@@ -18,9 +18,7 @@
 
 #include "car.hpp"
 #include "race.hpp"
-
-#include "MiniCore/Core/MCCamera"
-
+#include <MCCamera>
 #include <vector>
 
 class AiLogic;

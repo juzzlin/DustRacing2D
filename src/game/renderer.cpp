@@ -20,14 +20,14 @@
 #include "shaderprogram.hpp"
 #include "../common/config.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Core/MCGLScene"
-#include "MiniCore/Core/MCGLShaderProgram"
-#include "MiniCore/Core/MCLogger"
-#include "MiniCore/Core/MCSurface"
-#include "MiniCore/Core/MCTextureManager"
-#include "MiniCore/Core/MCTrigonom"
-#include "MiniCore/Core/MCWorld"
+#include <MCCamera>
+#include <MCGLScene>
+#include <MCGLShaderProgram>
+#include <MCLogger>
+#include <MCSurface>
+#include <MCTextureManager>
+#include <MCTrigonom>
+#include <MCWorld>
 
 #include <cmath>
 #include <cassert>

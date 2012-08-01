@@ -19,9 +19,9 @@
 #include "timing.hpp"
 #include "car.hpp"
 
-#include "MiniCore/Core/MCCamera"
-#include "MiniCore/Text/MCTextureFontManager"
-#include "MiniCore/Text/MCTextureText"
+#include <MCCamera>
+#include <MCTextureFontManager>
+#include <MCTextureText>
 
 #include <sstream>
 
