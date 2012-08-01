@@ -105,19 +105,6 @@ bool MCTextureConfigLoader::loadTextures()
                             newData->colorKeySet  = true;
                         }
                     }
-                    else if (childNode.nodeName() == "alphaTest")
-                    {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
-                        {
-                            newData->alphaTest.m_threshold =
-                                tag.attribute("threshold", "0").toFloat();
-                            newData->alphaTest.m_function  =
-                                alphaTestStringToEnum(
-                                    tag.attribute("function", "").toStdString());
-                            newData->alphaTestSet = true;
-                        }
-                    }
                     else if (childNode.nodeName() == "alphaBlend")
                     {
                         QDomElement tag = childNode.toElement();
@@ -201,44 +188,6 @@ bool MCTextureConfigLoader::loadTextures()
     }
 
     return true;
-}
-
-GLenum MCTextureConfigLoader::alphaTestStringToEnum(
-    const std::string & function) const
-{
-    if (function == "never")
-    {
-        return GL_NEVER;
-    }
-    else if (function == "less")
-    {
-        return GL_LESS;
-    }
-    else if (function == "equal")
-    {
-        return GL_EQUAL;
-    }
-    else if (function == "lequal")
-    {
-        return GL_LEQUAL;
-    }
-    else if (function == "greater")
-    {
-        return GL_GREATER;
-    }
-    else if (function == "notequal")
-    {
-        return GL_NOTEQUAL;
-    }
-    else if (function == "gequal")
-    {
-        return GL_GEQUAL;
-    }
-    else
-    {
-        MCLogger().error() << "Unknown alpha test function '" << function << "'";
-        return GL_ALWAYS;
-    }
 }
 
 GLenum MCTextureConfigLoader::alphaBlendStringToEnum(

@@ -18,6 +18,7 @@
 //
 
 #include "mcglrectparticle.hh"
+#include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
 #include "mccamera.hh"
 
@@ -25,8 +26,6 @@
 #include <GL/glext.h>
 
 #include <cassert>
-
-MCRecycler<MCGLRectParticle> MCGLRectParticle::m_recycler;
 
 static const int gNumVertices        = 6;
 static const int gNumColorComponents = 4;
@@ -38,7 +37,7 @@ MCGLRectParticle::MCGLRectParticle()
 , m_b(1.0)
 , m_a(1.0)
 , m_frameCount(gAlphaFrames)
-, m_group(nullptr)
+, m_program(nullptr)
 {
     // Disable shadow by default
     setHasShadow(false);
@@ -89,6 +88,11 @@ MCGLRectParticle::MCGLRectParticle()
 MCGLRectParticle::~MCGLRectParticle()
 {
     glDeleteBuffers(VBOTypes, m_vbos);
+}
+
+void MCGLRectParticle::setShaderProgram(MCGLShaderProgram * program)
+{
+    m_program = program;
 }
 
 void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -143,52 +147,6 @@ void MCGLRectParticle::setAlpha(MCFloat a)
 
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
-    // Disable texturing
-    glPushAttrib(GL_ENABLE_BIT);
-    glDisable(GL_TEXTURE_2D);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-
-    renderInner(pCamera);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-
-    glPopAttrib();
-}
-
-void MCGLRectParticle::renderInner(MCCamera * pCamera)
-{
-    glPushMatrix();
-
-    MCFloat x = location().i();
-    MCFloat y = location().j();
-
-    if (pCamera)
-    {
-        pCamera->mapToCamera(x, y);
-    }
-
-    glTranslated(x, y, location().k());
-    glRotated(angle(), 0, 0, 1);
-
-    // Scale alpha if fading out. Don't do this on
-    // every frame, because it's expensive.
-    if (animationStyle() == FadeOut)
-    {
-        if (!--m_frameCount)
-        {
-            setAlpha(m_a * scale());
-            m_frameCount = gAlphaFrames;
-        }
-    }
-
     // Scale radius if fading out
     MCFloat r = radius();
     if (animationStyle() == Shrink)
@@ -196,9 +154,43 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
         r *= scale();
     }
 
-    if (r > 0)
+    if (r > 0 && m_program)
     {
-        glScaled(r, r, 1.0);
+        // Disable texturing
+        glPushAttrib(GL_ENABLE_BIT);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+
+        MCFloat x = location().i();
+        MCFloat y = location().j();
+
+        if (pCamera)
+        {
+            pCamera->mapToCamera(x, y);
+        }
+
+        m_program->bind();
+        m_program->translate(MCVector3dF(x, y, location().k()));
+        m_program->rotate(angle());
+
+        // Scale alpha if fading out. Don't do this on
+        // every frame, because it's expensive.
+        if (animationStyle() == FadeOut)
+        {
+            if (!--m_frameCount)
+            {
+                setAlpha(m_a * scale());
+                m_frameCount = gAlphaFrames;
+            }
+        }
+
+        m_program->setScale(r, r, 1.0);
+
         glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
         glVertexPointer(3, GL_FLOAT, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
@@ -207,36 +199,18 @@ void MCGLRectParticle::renderInner(MCCamera * pCamera)
         glColorPointer(4, GL_FLOAT, 0, 0);
         glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
 
-    glPopMatrix();
+        m_program->release();
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+
+        glPopAttrib();
+    }
 }
 
 void MCGLRectParticle::renderShadow(MCCamera *)
 {
     return;
-}
-
-MCGLRectParticle & MCGLRectParticle::create()
-{
-    return *MCGLRectParticle::m_recycler.newObject();
-}
-
-void MCGLRectParticle::recycle()
-{
-    MCGLRectParticle::m_recycler.freeObject(this);
-}
-
-MCGLRectParticleGroup * MCGLRectParticle::group() const
-{
-    return m_group;
-}
-
-void MCGLRectParticle::setGroup(MCGLRectParticleGroup * group)
-{
-    // Prevents rendering by MCWorld if group is set.
-    // In this case the group takes care of the rendering calls.
-    setRenderable(group == nullptr);
-
-    m_group = group;
 }

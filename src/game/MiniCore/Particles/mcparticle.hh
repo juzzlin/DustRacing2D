@@ -23,6 +23,8 @@
 #include "mcobject.hh"
 #include "mcrecycler.hh"
 
+#include <vector>
+
 /*! \class MCParticle
  *  \brief Base particle class for particle animations.
  *
@@ -34,16 +36,16 @@ class MCParticle : public MCObject
 {
 public:
 
+  typedef std::vector<MCParticle *> ParticleFreeList;
+
   //! Style of the disappear animation
   enum AnimationStyle {None = 0, Shrink, FadeOut};
 
-  //! Create a new particle or return recycled one.
-  //! Inherited classes must re-define this.
-  static MCParticle & create();
+  //! Constructor.
+  MCParticle();
 
-  //! Called by die().
-  //! Inherited classes must re-define this.
-  virtual void recycle();
+  //! Destructor
+  virtual ~MCParticle();
 
   //! Finish the particle. Automatically called on timeOut().
   void die();
@@ -54,6 +56,9 @@ public:
   //! \param lifeTime Life time / number of frames. The life time is decremented
   //! each time stepTime() is called.
   void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
+
+  //! Particle will be added to the given vector when it dies.
+  void setFreeList(ParticleFreeList & freeList);
 
   //! Return radius
   MCFloat radius() const;
@@ -93,22 +98,12 @@ public:
 
 protected:
 
-  //! Constructor
-  MCParticle();
-
-  //! Destructor
-  virtual ~MCParticle();
-
   /*! This is called when lifeTime reaches zero. Default implementation
    *  removes from the world. Re-imp if desired.
    */
   virtual void timeOut();
 
 private:
-
-  //! Recycler object
-  static MCRecycler<MCParticle> m_recycler;
-  friend class MCRecycler<MCParticle>;
 
   static int m_numActiveParticles;
 
@@ -122,6 +117,7 @@ private:
   MCFloat m_scale;
   MCFloat m_delta;
   MCFloat m_radius;
+  MCParticle::ParticleFreeList * m_freeList;
 };
 
 #endif // MCPARTICLE_HH

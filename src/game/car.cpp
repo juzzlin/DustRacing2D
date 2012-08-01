@@ -17,6 +17,7 @@
 #include "centrifugalforcegenerator.hpp"
 #include "layers.hpp"
 #include "radius.hpp"
+#include "renderer.hpp"
 #include "slidefrictiongenerator.hpp"
 
 #include <MCCollisionEvent>
@@ -32,8 +33,6 @@
 #include <MCTrigonom>
 #include <MCTypes>
 #include <MCVector2d>
-
-static const int gMaxNumParticles = 500;
 
 Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
@@ -85,13 +84,20 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
     const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
     const MCFloat height = static_cast<MCRectShape *>(shape())->height();
     m_length = std::max(width, height);
-}
 
-void Car::addToWorld()
-{
-    MCObject::addToWorld();
-    m_particleGroup.clear();
-    m_particleGroup.addToWorld();
+    for (int i = 0; i < 100; i++)
+    {
+        MCParticle * particle = new MCGLRectParticle;
+
+        // Initially push to list of free particles
+        m_freeList.push_back(particle);
+
+        // Store for deletion
+        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+    }
+
+    m_brakeGlow.setShaderProgram(&Renderer::instance().masterProgram());
+    m_frontTire.setShaderProgram(&Renderer::instance().masterProgram());
 }
 
 void Car::clearStatuses()
@@ -363,72 +369,48 @@ void Car::setTurningImpulse(MCFloat impulse)
 
 void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    MCGLRectParticle * smoke = nullptr;
+    if (m_freeList.size())
     {
-        return;
+        smoke = static_cast<MCGLRectParticle *>(m_freeList.back());
+        m_freeList.pop_back();
+
+        smoke->init(location, 5, 180);
+        smoke->setAnimationStyle(MCParticle::Shrink);
+        smoke->setColor(r, g, b, a);
+        smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
+        smoke->setShaderProgram(&Renderer::instance().particleProgram());
+        smoke->setFreeList(m_freeList);
+        smoke->addToWorld();
     }
-
-    MCGLRectParticle & smoke = MCGLRectParticle::create();
-    smoke.init(location, 5, 180);
-    smoke.setAnimationStyle(MCParticle::Shrink);
-    smoke.setColor(r, g, b, a);
-    smoke.setVelocity(MCRandom::randomVector2d() * 0.1);
-    smoke.addToWorld();
-
-    m_particleGroup.addParticle(smoke);
 }
 
-void Car::doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+void Car::doSkidMark(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
 {
-    if (MCParticle::numActiveParticles() > gMaxNumParticles)
-    {
-        return;
-    }
-
-    MCGLRectParticle & skidMark = MCGLRectParticle::create();
-    skidMark.init(location, 3, 15 * 60);
-    skidMark.setAnimationStyle(MCParticle::FadeOut);
-    skidMark.setColor(r, g, b, a);
-    skidMark.rotate(angle());
-    skidMark.setPhysicsObject(false);
-    skidMark.addToWorld();
-
-    m_particleGroup.addParticle(skidMark);
+    // Must be drawn to an offscreen buffer
 }
 
-void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+void Car::doMud(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
 {
-    if (MCParticle::numActiveParticles() > gMaxNumParticles)
-    {
-        return;
-    }
-
-    MCGLRectParticle & mud = MCGLRectParticle::create();
-    mud.init(location, 4, 120);
-    mud.setAnimationStyle(MCParticle::Shrink);
-    mud.setColor(r, g, b, a);
-    mud.addToWorld();
-    mud.setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0));
-    mud.setAcceleration(MCVector3dF(0, 0, -10.0));
-
-    m_particleGroup.addParticle(mud);
+    // Must be drawn to an offscreen buffer
 }
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    if (MCParticle::numActiveParticles() > gMaxNumParticles)
+    MCGLRectParticle * sparkle = nullptr;
+    if (m_freeList.size())
     {
-        return;
+        sparkle = static_cast<MCGLRectParticle *>(m_freeList.back());
+        m_freeList.pop_back();
+
+        sparkle->init(location, 2, 60);
+        sparkle->setAnimationStyle(MCParticle::Shrink);
+        sparkle->setColor(r, g, b, a);
+        sparkle->setVelocity(velocity() * 0.5);
+        sparkle->setShaderProgram(&Renderer::instance().particleProgram());
+        sparkle->setFreeList(m_freeList);
+        sparkle->addToWorld();
     }
-
-    MCGLRectParticle & sparkle = MCGLRectParticle::create();
-    sparkle.init(location, 2, 60);
-    sparkle.setAnimationStyle(MCParticle::Shrink);
-    sparkle.setColor(r, g, b, a);
-    sparkle.addToWorld();
-    sparkle.setVelocity(velocity() * 0.5);
-
-    m_particleGroup.addParticle(sparkle);
 }
 
 void Car::setCurrentTargetNodeIndex(int index)

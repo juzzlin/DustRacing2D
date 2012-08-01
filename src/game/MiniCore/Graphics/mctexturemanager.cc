@@ -143,17 +143,6 @@ void MCTextureManagerImpl::createGLTextureFromImage(
     // Create a new MCSurface object
     MCSurface * pSurface = new MCSurface(textureHandle, origW, origH);
 
-    // Enable alpha test if it or color key was set
-    if (data.colorKeySet)
-    {
-        pSurface->setAlphaTest(true, GL_GREATER, 0.5);
-    }
-    else if (data.alphaTestSet)
-    {
-        pSurface->setAlphaTest(
-            true, data.alphaTest.m_function, data.alphaTest.m_threshold);
-    }
-
     // Enable alpha blend, if set
     if (data.alphaBlendSet)
     {

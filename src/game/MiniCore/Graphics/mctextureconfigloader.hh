@@ -53,9 +53,6 @@ public:
 
 private:
 
-    //! Convert alpha test function string to enum.
-    GLenum alphaTestStringToEnum(const std::string & function) const;
-
     //! Convert alpha blend function string to enum.
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 

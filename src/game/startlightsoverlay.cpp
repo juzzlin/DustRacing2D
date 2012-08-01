@@ -15,16 +15,20 @@
 
 #include "startlightsoverlay.hpp"
 #include "startlights.hpp"
+#include "renderer.hpp"
 
 #include <MCSurface>
 #include <MCTextureManager>
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
-  : m_startLightOn(MCTextureManager::instance().surface("startLightOn"))
-  , m_startLightOff(MCTextureManager::instance().surface("startLightOff"))
-  , m_startLightGlow(MCTextureManager::instance().surface("startLightGlow"))
-  , m_model(model)
+: m_startLightOn(MCTextureManager::instance().surface("startLightOn"))
+, m_startLightOff(MCTextureManager::instance().surface("startLightOff"))
+, m_startLightGlow(MCTextureManager::instance().surface("startLightGlow"))
+, m_model(model)
 {
+    m_startLightOn.setShaderProgram(&Renderer::instance().masterProgram());
+    m_startLightOff.setShaderProgram(&Renderer::instance().masterProgram());
+    m_startLightGlow.setShaderProgram(&Renderer::instance().masterProgram());
 }
 
 void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
@@ -89,6 +93,8 @@ void StartlightsOverlay::render()
 {
     glPushAttrib(GL_ENABLE_BIT);
     glDisable(GL_DEPTH_TEST);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     switch (m_model.state())
     {

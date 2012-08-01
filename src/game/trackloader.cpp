@@ -24,6 +24,7 @@
 
 #include "../common/targetnodebase.hpp"
 
+#include "renderer.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackloader.hpp"
@@ -34,6 +35,7 @@
 
 #include <MCLogger>
 #include <MCObjectFactory>
+#include <MCShapeView>
 #include <MCTextureManager>
 
 #include <cassert>
@@ -294,6 +296,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
         object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -312,6 +316,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
         object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -330,6 +336,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
         object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -348,6 +356,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));
         object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
@@ -366,8 +376,10 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setLayer(Layers::Tree);
 
         // Create a custom view.
-        TreeView * view = new TreeView(
+        MCShapeView * view = new TreeView(
             m_textureManager.surface("tree"), treeViewRadius, 2, 90, 5);
+        view->setShaderProgram(&(Renderer::instance().masterProgram()));
+        view->setShadowShaderProgram(&(Renderer::instance().masterShadowProgram()));
         MCObject & object = m_objectFactory.build(data, *view);
         object.setInitialLocation(
             MCVector2d<MCFloat>(x, h - y));

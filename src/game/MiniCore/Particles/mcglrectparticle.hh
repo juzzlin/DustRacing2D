@@ -21,11 +21,11 @@
 #define MCGLRECTPARTICLE_HH
 
 #include "mcparticle.hh"
-#include "mcglrectparticlegroup.hh"
 
 #include <GL/gl.h>
 
 class MCCamera;
+class MCGLShaderProgram;
 
 /*! \class MCGLRectParticle
  *  \brief A particle that renders as a simple OpenGL rectangle. Final class.
@@ -34,14 +34,16 @@ class MCGLRectParticle : public MCParticle
 {
 public:
 
-    //! Create a new particle
-    static MCGLRectParticle & create();
+    //! Constructor.
+    MCGLRectParticle();
 
-    //! \reimp
-    void recycle();
+    //! Destructor.
+    virtual ~MCGLRectParticle();
 
     //! Set color
     void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
+
+    void setShaderProgram(MCGLShaderProgram * program);
 
     //! \reimp
     void render(MCCamera * pCamera = nullptr);
@@ -59,39 +61,16 @@ private:
         VBOTypes
     };
 
-    //! Constructor.
-    MCGLRectParticle();
-
-    //! Destructor.
-    ~MCGLRectParticle();
-
-    //! Inner calls of render.
-    //! Used by MCGLRectParticleGroup.
-    void renderInner(MCCamera * pCamera);
-
-    //! Returns a pointer to the group or nullptr if not added to any group.
-    //! Used by MCGLRectParticleGroup.
-    MCGLRectParticleGroup * group() const;
-
-    //! Set pointer to the current group or nullptr if not added to any group.
-    //! Used by MCGLRectParticleGroup.
-    void setGroup(MCGLRectParticleGroup * group);
-
     //! Set current alpha, doesn't affect the initial alpha
     //! set by setColor().
     void setAlpha(MCFloat a);
-
-    //! Recycler object
-    static MCRecycler<MCGLRectParticle> m_recycler;
-    friend class MCRecycler<MCGLRectParticle>;
-    friend class MCGLRectParticleGroup;
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
     GLfloat m_r, m_g, m_b, m_a;
     GLuint m_vbos[VBOTypes];
     int m_frameCount;
-    MCGLRectParticleGroup * m_group;
+    MCGLShaderProgram * m_program;
 };
 
 #endif // MCGLRECTPARTICLE_HH

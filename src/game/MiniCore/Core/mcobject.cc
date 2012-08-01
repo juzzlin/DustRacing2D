@@ -70,7 +70,7 @@ MCObject::MCObject(const std::string & typeId)
 , m_hasShadow(true)
 , m_removing(false)
 , m_renderOutline(false)
-, m_isParticleGroup(false)
+, m_isParticle(false)
 {}
 
 // TODO: Use constructor chaining when GCC supports it
@@ -105,7 +105,7 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
 , m_hasShadow(true)
 , m_removing(false)
 , m_renderOutline(false)
-, m_isParticleGroup(false)
+, m_isParticle(false)
 {
     setShape(pShape);
 }
@@ -142,7 +142,7 @@ MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
 , m_hasShadow(true)
 , m_removing(false)
 , m_renderOutline(false)
-, m_isParticleGroup(false)
+, m_isParticle(false)
 {
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(
@@ -571,14 +571,14 @@ bool MCObject::renderable() const
     return m_renderable;
 }
 
-bool MCObject::isParticleGroup() const
+bool MCObject::isParticle() const
 {
-    return m_isParticleGroup;
+    return m_isParticle;
 }
 
-void MCObject::setIsParticleGroup(bool flag)
+void MCObject::setIsParticle(bool flag)
 {
-    m_isParticleGroup = flag;
+    m_isParticle = flag;
 }
 
 void MCObject::setRenderShapeOutline(bool flag)
@@ -967,6 +967,7 @@ bool MCObject::sleeping() const
 
 MCObject::~MCObject()
 {
+    removeFromWorldNow();
     deleteContacts();
 
     delete pShape;

@@ -20,27 +20,30 @@
 #include "mcparticle.hh"
 #include "mccircleshape.hh"
 
-MCRecycler<MCParticle> MCParticle::m_recycler;
 int MCParticle::m_numActiveParticles = 0;
 
 MCParticle::MCParticle()
-: MCObject("PARTICLE")
+: MCObject("__P")
 , m_lifeTime(0)
 , m_initLifeTime(0)
 , m_animationStyle(MCParticle::None)
 , m_isActive(false)
 , m_scale(1.0)
 , m_delta(0.0)
+, m_freeList(nullptr)
 {
     setShape(new MCCircleShape(nullptr, 0.0));
     setBypassCollisions(true);
+    setPhysicsObject(true);
+    setIsParticle(true);
 }
 
 MCParticle::~MCParticle()
 {
 }
 
-void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
+void MCParticle::init(
+    const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
 {
     m_lifeTime       = newLifeTime;
     m_initLifeTime   = newLifeTime;
@@ -55,6 +58,11 @@ void MCParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius
     translate(newLocation);
 
     MCParticle::m_numActiveParticles++;
+}
+
+void MCParticle::setFreeList(ParticleFreeList & freeList)
+{
+    m_freeList = &freeList;
 }
 
 MCFloat MCParticle::radius() const
@@ -132,11 +140,6 @@ void MCParticle::renderShadow(MCCamera * pCamera)
     }
 }
 
-MCParticle & MCParticle::create()
-{
-    return *m_recycler.newObject();
-}
-
 bool MCParticle::isActive() const
 {
     return m_isActive;
@@ -144,23 +147,18 @@ bool MCParticle::isActive() const
 
 void MCParticle::die()
 {
-    if (MCParticle::m_numActiveParticles > 0)
-    {
-        MCParticle::m_numActiveParticles--;
-    }
+    MCParticle::m_numActiveParticles--;
 
     removeFromWorld();
     m_isActive = false;
-    recycle();
-}
 
-void MCParticle::recycle()
-{
-    m_recycler.freeObject(this);
+    if (m_freeList)
+    {
+        m_freeList->push_back(this);
+    }
 }
 
 int MCParticle::numActiveParticles()
 {
     return MCParticle::m_numActiveParticles;
 }
-

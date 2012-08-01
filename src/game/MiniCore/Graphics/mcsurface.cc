@@ -180,29 +180,12 @@ void MCSurface::setCenter(MCVector2dFR center)
     m_center    = center;
 }
 
-void MCSurface::setAlphaTest(
-    bool useAlphaTest, GLenum alphaFunc, GLclampf threshold)
-{
-    m_useAlphaTest   = useAlphaTest;
-    m_alphaFunc      = alphaFunc;
-    m_alphaThreshold = threshold;
-}
-
 void MCSurface::setAlphaBlend(
     bool useAlphaBlend, GLenum src, GLenum dst)
 {
     m_useAlphaBlend  = useAlphaBlend;
     m_src            = src;
     m_dst            = dst;
-}
-
-void MCSurface::doAlphaTest() const
-{
-    if (m_useAlphaTest)
-    {
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(m_alphaFunc, m_alphaThreshold);
-    }
 }
 
 void MCSurface::doAlphaBlend() const
@@ -305,14 +288,14 @@ void MCSurface::bindTexture() const
     glBindTexture(GL_TEXTURE_2D, m_handle);
 }
 
-void MCSurface::setShaderProgram(MCGLShaderProgram & program)
+void MCSurface::setShaderProgram(MCGLShaderProgram * program)
 {
-    m_program = &program;
+    m_program = program;
 }
 
-void MCSurface::setShadowShaderProgram(MCGLShaderProgram & program)
+void MCSurface::setShadowShaderProgram(MCGLShaderProgram * program)
 {
-    m_shadowProgram = &program;
+    m_shadowProgram = program;
 }
 
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
@@ -328,6 +311,9 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
         {
             pCamera->mapToCamera(x, y);
         }
+
+        glPushAttrib(GL_ENABLE_BIT);
+        doAlphaBlend();
 
         m_program->bind();
         m_program->setScale(1.0, 1.0, 1.0);
@@ -346,6 +332,8 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
         renderVBOs(autoClientState);
 
         m_program->release();
+
+        glPopAttrib();
     }
 }
 
@@ -364,6 +352,9 @@ void MCSurface::renderScaled(
             pCamera->mapToCamera(x, y);
         }
 
+        glPushAttrib(GL_ENABLE_BIT);
+        doAlphaBlend();
+
         m_program->bind();
         m_program->setScale(wr / m_w2, hr / m_h2, 1.0);
 
@@ -381,6 +372,8 @@ void MCSurface::renderScaled(
         renderVBOs(autoClientState);
 
         m_program->release();
+
+        glPopAttrib();
     }
 }
 

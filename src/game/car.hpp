@@ -18,9 +18,9 @@
 
 #include <MCObject>
 #include <MCVector2d>
-#include <MCGLRectParticleGroup>
-
+#include <MCParticle>
 #include <deque>
+#include <memory>
 
 class MCSurface;
 class MCFrictionGenerator;
@@ -119,9 +119,6 @@ public:
     //! \reimp
     virtual void stepTime();
 
-    //! \reimp
-    virtual void addToWorld();
-
     void setLeftSideOffTrack(bool state);
 
     void setRightSideOffTrack(bool state);
@@ -188,7 +185,8 @@ private:
     int                   m_routeProgression;
     bool                  m_isHuman;
 
-    mutable MCGLRectParticleGroup m_particleGroup;
+    mutable MCParticle::ParticleFreeList m_freeList;
+    std::vector<std::shared_ptr<MCParticle> > m_delete;
 };
 
 #endif // CAR_HPP

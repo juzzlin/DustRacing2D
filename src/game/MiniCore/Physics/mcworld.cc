@@ -22,6 +22,7 @@
 #include "mcmathutil.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
+#include "mcparticle.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
 #include "mcrectshape.hh"
@@ -158,19 +159,30 @@ void MCWorld::render(MCCamera * pCamera)
             if (object.renderable())
             {
                 // Check if view is set and is visible
-                if (object.shape() && object.shape()->view())
+                if (object.shape())
                 {
-                    MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
-                    bbox.translate(MCVector2dF(object.location()));
-                    if (!pCamera || pCamera->isVisible(bbox))
+                    if (object.isParticle())
                     {
-                        batches[object.shape()->view()->viewId()].push_back(&object);
+                        MCBBox<MCFloat> bbox(object.bbox()); // already translated
+                        if (pCamera->isVisible(bbox))
+                        {
+                            object.render(pCamera);
+                        }
+                        else
+                        {
+                            static_cast<MCParticle &>(object).die();
+                        }
+                    }
+                    else if (object.shape()->view())
+                    {
+                        MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                        bbox.translate(MCVector2dF(object.location()));
+                        if (!pCamera || pCamera->isVisible(bbox))
+                        {
+                            batches[object.shape()->view()->viewId()].push_back(&object);
+                        }
                     }
                 }
-            }
-            else if (object.isParticleGroup())
-            {
-                object.render(pCamera);
             }
         }
 
@@ -248,10 +260,6 @@ void MCWorld::renderShadows(MCCamera * pCamera)
                         batches[object.shape()->view()->viewId()].push_back(&object);
                     }
                 }
-            }
-            else if (object.isParticleGroup())
-            {
-                object.renderShadow(pCamera);
             }
         }
 

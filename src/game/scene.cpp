@@ -113,8 +113,8 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
         }
 
         car->setLayer(Layers::Cars);
-        car->surface()->setShaderProgram(Renderer::instance().masterProgram());
-        car->surface()->setShadowShaderProgram(Renderer::instance().masterShadowProgram());
+        car->surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        car->surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         m_cars.push_back(car);
         m_race.addCar(*car);
@@ -134,9 +134,9 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     MCTextureFontManager::instance().font("default").surface().setShaderProgram(
-        Renderer::instance().textProgram());
+        &Renderer::instance().textProgram());
     MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
-        Renderer::instance().textShadowProgram());
+        &Renderer::instance().textShadowProgram());
 
     createMenus();
 }

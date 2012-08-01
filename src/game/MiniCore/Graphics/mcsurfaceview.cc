@@ -17,6 +17,7 @@
 // MA  02110-1301, USA.
 //
 
+#include "mcglshaderprogram.hh"
 #include "mcsurfaceview.hh"
 #include "mccamera.hh"
 #include "mcsurface.hh"
@@ -41,6 +42,22 @@ void MCSurfaceView::setSurface(MCSurface * p)
 MCSurface * MCSurfaceView::surface() const
 {
     return m_pSurface;
+}
+
+void MCSurfaceView::setShaderProgram(MCGLShaderProgram * program)
+{
+    if (m_pSurface)
+    {
+        m_pSurface->setShaderProgram(program);
+    }
+}
+
+void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgram * program)
+{
+    if (m_pSurface)
+    {
+        m_pSurface->setShadowShaderProgram(program);
+    }
 }
 
 void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,

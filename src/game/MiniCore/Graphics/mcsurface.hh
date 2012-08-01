@@ -67,21 +67,6 @@ public:
     //!        (width / 2, height / 2) which is the default.
     void setCenter(MCVector2dFR center);
 
-    //! Enable / disable alpha test.
-    //! \param useAlphaTest Alpha is tested for colorkeying if true.
-    //! \param alphaFunc Alpha function used in alpha test. Has no effect
-    //!        if useAlphaTest equals false.
-    //! \param threshold Threshold used in the alpha test. Has no effect
-    //!        if useAlphaTest equals false.
-    void setAlphaTest(
-        bool useAlphaTest, GLenum alphaFunc = GL_GREATER, GLclampf threshold = 0.5);
-
-    //! Runs the corresponding GL-commands defined in setAlphaTest().
-    //! This is done automatically, but doAlphaTest() can be used if
-    //! someone else renders the surface by using the texture
-    //! handle and wants to run the configured alpha test.
-    void doAlphaTest() const;
-
     //! Enable / disable alpha blend.
     //! \param useAlphaBlend Alpha blending is enabled if true.
     //! \param src Source alpha function used in the alpha blending. Has no effect
@@ -162,10 +147,10 @@ public:
     void bindTexture() const;
 
     //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram & program);
+    void setShaderProgram(MCGLShaderProgram * program);
 
     //! Set the shader program to be used for 2d shadows.
-    void setShadowShaderProgram(MCGLShaderProgram & program);
+    void setShadowShaderProgram(MCGLShaderProgram * program);
 
     //! Get OpenGL texture handle
     GLuint handle() const;

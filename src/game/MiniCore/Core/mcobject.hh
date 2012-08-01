@@ -243,11 +243,11 @@ public:
     //! \brief Return whether the object should be automatically rendered.
     bool renderable() const;
 
-    //! Return true if the object is a virtual object.
-    bool isParticleGroup() const;
+    //! Return true if the object is a particle.
+    bool isParticle() const;
 
-    //! Return true if the object is a virtual object.
-    void setIsParticleGroup(bool flag);
+    //! Set the object as a particle.
+    void setIsParticle(bool flag);
 
     //! \brief Sets whether view should render shape outline for debug
     //! purposes.
@@ -496,7 +496,7 @@ private:
     bool m_hasShadow;
     bool m_removing;
     bool m_renderOutline;
-    bool m_isParticleGroup;
+    bool m_isParticle;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);

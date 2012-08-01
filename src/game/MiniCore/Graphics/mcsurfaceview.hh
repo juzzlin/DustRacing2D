@@ -24,6 +24,7 @@
 
 class MCSurface;
 class MCCamera;
+class MCGLShaderProgram;
 
 /*! \class MCSurfaceView.
  *  \brief View class for MCShape. Renders the given MCSurface.
@@ -48,6 +49,12 @@ public:
 
     //! Get surface
     MCSurface * surface() const;
+
+    //! \reimp
+    void setShaderProgram(MCGLShaderProgram * program);
+
+    //! \reimp
+    void setShadowShaderProgram(MCGLShaderProgram * program);
 
     //! \reimp
     virtual void render(
