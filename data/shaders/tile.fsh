@@ -14,9 +14,10 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 uniform sampler2D texture;
+uniform float     fade;
 
 void main(void)
 {
     vec4 color   = texture2D(texture, gl_TexCoord[0].st);
-    gl_FragColor = color;
+    gl_FragColor = color * fade;
 }

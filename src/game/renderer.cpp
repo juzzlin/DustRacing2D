@@ -46,9 +46,6 @@ Renderer::Renderer(QWidget * parent)
 , m_pCamera(nullptr)
 , m_pInputHandler(nullptr)
 , m_viewAngle(45.0)
-, m_pFadeProgram(nullptr)
-, m_pFadeFragmentShader(nullptr)
-, m_fadeShaderEnabled(false)
 , m_fadeValue(1.0)
 , m_tileProgram(nullptr)
 , m_masterProgram(nullptr)
@@ -90,15 +87,6 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
 
 void Renderer::loadShaders()
 {
-    m_pFadeProgram        = new QGLShaderProgram(context(), this);
-    m_pFadeFragmentShader = new QGLShader(QGLShader::Fragment, context(), this);
-
-    // TODO: Error handling
-    m_pFadeFragmentShader->compileSourceFile(
-        QString(Config::Common::dataPath) + "/shaders/fade.fsh");
-    m_pFadeProgram->addShader(m_pFadeFragmentShader);
-    m_pFadeProgram->link();
-
     // TODO: Error handling
     m_tileProgram = new ShaderProgram(context());
     m_tileProgram->addFragmentShader(
@@ -153,11 +141,6 @@ void Renderer::setEnabled(bool enable)
     m_enabled = enable;
 }
 
-void Renderer::setFadeShaderEnabled(bool enable)
-{
-    m_fadeShaderEnabled = enable;
-}
-
 MCGLShaderProgram & Renderer::tileProgram()
 {
     return *m_tileProgram;
@@ -200,12 +183,6 @@ float Renderer::fadeValue() const
 
 void Renderer::paintGL()
 {
-    if (m_fadeShaderEnabled && m_pFadeProgram)
-    {
-        m_pFadeProgram->bind();
-        m_pFadeProgram->setUniformValue("value", m_fadeValue);
-    }
-
     if (m_enabled)
     {
         if (m_pCamera) // Qt might update the widget before camera is set
@@ -217,11 +194,6 @@ void Renderer::paintGL()
                 m_pScene->render(*m_pCamera);
             }
         }
-    }
-
-    if (m_fadeShaderEnabled && m_pFadeProgram)
-    {
-        m_pFadeProgram->release();
     }
 
     swapBuffers();

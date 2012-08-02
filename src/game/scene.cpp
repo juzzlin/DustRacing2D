@@ -480,15 +480,33 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
 
 void Scene::render(MCCamera & camera)
 {
+    const MCFloat fadeValue = Renderer::instance().fadeValue();
+
+    // Don't update fade value needlessly on every frame.
+    static int fadeUpdate = 0;
+    if (++fadeUpdate == 4)
+    {
+        fadeUpdate = 0;
+    }
+
     if (m_stateMachine.state() == StateMachine::Intro)
     {
         const int w2 = width() / 2;
         const int h2 = height() / 2;
         static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
+        surface.setShaderProgram(&Renderer::instance().masterProgram());
+        surface.shaderProgram()->setFadeValue(fadeValue);
         surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }
     else if (m_stateMachine.state() == StateMachine::Menu)
     {
+        if (!fadeUpdate)
+        {
+            Renderer::instance().masterProgram().setFadeValue(fadeValue);
+            Renderer::instance().tileProgram().setFadeValue(fadeValue);
+            Renderer::instance().textProgram().setFadeValue(fadeValue);
+        }
+
         m_menuManager->render();
     }
     else if (
@@ -497,6 +515,13 @@ void Scene::render(MCCamera & camera)
         m_stateMachine.state() == StateMachine::DoStartlights ||
         m_stateMachine.state() == StateMachine::Play)
     {
+        if (!fadeUpdate)
+        {
+            Renderer::instance().masterProgram().setFadeValue(fadeValue);
+            Renderer::instance().tileProgram().setFadeValue(fadeValue);
+            Renderer::instance().textProgram().setFadeValue(fadeValue);
+        }
+
         m_activeTrack->render(&camera);
         m_world->renderShadows(&camera);
         m_world->render(&camera);

@@ -298,6 +298,16 @@ void MCSurface::setShadowShaderProgram(MCGLShaderProgram * program)
     m_shadowProgram = program;
 }
 
+MCGLShaderProgram * MCSurface::shaderProgram() const
+{
+    return m_program;
+}
+
+MCGLShaderProgram * MCSurface::shadowShaderProgram() const
+{
+    return m_shadowProgram;
+}
+
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
     bool autoClientState)
 {

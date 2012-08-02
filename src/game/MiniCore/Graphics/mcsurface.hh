@@ -152,6 +152,12 @@ public:
     //! Set the shader program to be used for 2d shadows.
     void setShadowShaderProgram(MCGLShaderProgram * program);
 
+    //! Get the shader program to be used.
+    MCGLShaderProgram * shaderProgram() const;
+
+    //! Get the shader program to be used for 2d shadows.
+    MCGLShaderProgram * shadowShaderProgram() const;
+
     //! Get OpenGL texture handle
     GLuint handle() const;
 

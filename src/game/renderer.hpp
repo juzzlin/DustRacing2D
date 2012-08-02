@@ -99,9 +99,6 @@ private:
     MCCamera          * m_pCamera;
     InputHandler      * m_pInputHandler;
     const float         m_viewAngle;
-    QGLShaderProgram  * m_pFadeProgram;
-    QGLShader         * m_pFadeFragmentShader;
-    bool                m_fadeShaderEnabled;
     float               m_fadeValue;
     MCGLShaderProgram * m_tileProgram;
     MCGLShaderProgram * m_masterProgram;

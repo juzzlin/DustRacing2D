@@ -35,7 +35,7 @@ public:
 
     virtual void link();
 
-    virtual bool isLinked();
+    virtual bool isLinked() const;
 
     virtual bool addVertexShader(const std::string & path);
 
@@ -49,7 +49,10 @@ public:
 
     virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
 
+    virtual void setFadeValue(GLfloat f);
+
 private:
+
     QGLShaderProgram m_program;
     QGLShader        m_fragmentShader;
     QGLShader        m_vertexShader;

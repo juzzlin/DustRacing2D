@@ -30,11 +30,13 @@ ShaderProgram::ShaderProgram(const QGLContext * context)
 
 void ShaderProgram::bind()
 {
+    MCGLShaderProgram::bind();
     m_program.bind();
 }
 
 void ShaderProgram::release()
 {
+    MCGLShaderProgram::release();
     m_program.release();
 }
 
@@ -44,7 +46,7 @@ void ShaderProgram::link()
     assert(m_program.isLinked());
 }
 
-bool ShaderProgram::isLinked()
+bool ShaderProgram::isLinked() const
 {
     return m_program.isLinked();
 }
@@ -81,6 +83,20 @@ void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
     m_program.setAttributeValue(SCALE, x, y, z, 1);
+}
+
+void ShaderProgram::setFadeValue(GLfloat f)
+{
+    if (!isBound())
+    {
+        bind();
+        m_program.setUniformValue("fade", f);
+        release();
+    }
+    else
+    {
+        m_program.setUniformValue("fade", f);
+    }
 }
 
 ShaderProgram::~ShaderProgram()

@@ -51,7 +51,6 @@ bool StateMachine::update()
         if (m_fadeValue < 2.0)
         {
             m_fadeValue += 0.01;
-            m_renderer->setFadeShaderEnabled(true);
             m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
 
             // Avoid a non-black screen immediately after the game starts.
@@ -64,13 +63,13 @@ bool StateMachine::update()
         {
             m_fadeValue = 1.0;
             m_state     = Menu;
-
-            m_renderer->setFadeShaderEnabled(false);
         }
 
         break;
 
     case Menu:
+
+        m_renderer->setFadeValue(1.0);
 
         if (MenuManager::instance().done())
         {
@@ -121,15 +120,12 @@ bool StateMachine::update()
         if (m_fadeValue >= 0.01)
         {
             m_fadeValue -= 0.01;
-            m_renderer->setFadeShaderEnabled(true);
             m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
         }
         else
         {
             m_fadeValue = 1.0;
             m_state     = Menu;
-
-            m_renderer->setFadeShaderEnabled(false);
 
             MenuManager::instance().enterMenu("trackSelection");
         }

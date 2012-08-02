@@ -20,6 +20,7 @@
 #include "mcglshaderprogram.hh"
 
 MCGLShaderProgram::MCGLShaderProgram()
+: m_isBound(false)
 {
 }
 
@@ -29,17 +30,24 @@ MCGLShaderProgram::~MCGLShaderProgram()
 
 void MCGLShaderProgram::bind()
 {
+    m_isBound = true;
 }
 
 void MCGLShaderProgram::release()
 {
+    m_isBound = false;
+}
+
+bool MCGLShaderProgram::isBound() const
+{
+    return m_isBound;
 }
 
 void MCGLShaderProgram::link()
 {
 }
 
-bool MCGLShaderProgram::isLinked()
+bool MCGLShaderProgram::isLinked() const
 {
     return false;
 }
@@ -67,5 +75,9 @@ void MCGLShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 }
 
 void MCGLShaderProgram::setScale(GLfloat, GLfloat, GLfloat)
+{
+}
+
+void MCGLShaderProgram::setFadeValue(GLfloat)
 {
 }

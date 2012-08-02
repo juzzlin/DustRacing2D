@@ -25,6 +25,7 @@
 #include <GL/gl.h>
 #include <string>
 
+//! Base class for GLSL shader programs compatible with MiniCore.
 class MCGLShaderProgram
 {
 public:
@@ -35,13 +36,18 @@ public:
     //! Destructor.
     virtual ~MCGLShaderProgram();
 
+    //! Binds the program. Re-imp and call parent implementation.
     virtual void bind();
 
+    //! Releases the program. Re-imp and call parent implementation.
     virtual void release();
+
+    //! \return true if bound.
+    bool isBound() const;
 
     virtual void link();
 
-    virtual bool isLinked();
+    virtual bool isLinked() const;
 
     virtual bool addVertexShader(const std::string & path);
 
@@ -55,7 +61,11 @@ public:
 
     virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
 
+    virtual void setFadeValue(GLfloat f);
+
 private:
+
+    bool m_isBound;
 };
 
 #endif // MCGLSHADERPROGRAM_HH
