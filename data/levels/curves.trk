@@ -1,4 +1,4 @@
-<track lapCount="3" version="0.2.2" cols="21" rows="10" name="Curves">
+<track lapCount="5" version="0.2.2" cols="21" rows="10" name="Curves">
  <tile i="0" j="0" o="180" type="sandGrassCorner2"/>
  <tile i="0" j="1" o="90" type="sandGrassStraight"/>
  <tile i="0" j="2" o="90" type="sandGrassStraight"/>

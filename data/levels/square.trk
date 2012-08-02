@@ -1,4 +1,4 @@
-<track lapCount="10" version="0.3.0" cols="9" rows="9" name="Square">
+<track lapCount="5" version="0.3.0" cols="9" rows="9" name="Square">
  <tile i="0" j="0" o="0" type="grass"/>
  <tile i="0" j="1" o="0" type="grass"/>
  <tile i="0" j="2" o="0" type="grass"/>

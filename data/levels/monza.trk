@@ -1,4 +1,4 @@
-<track lapCount="3" version="0.3.0" cols="35" rows="19" name="Monza">
+<track lapCount="5" version="0.3.0" cols="35" rows="19" name="Monza">
  <tile i="0" j="0" o="180" type="sand"/>
  <tile i="0" j="1" o="0" type="sand"/>
  <tile i="0" j="2" o="0" type="sand"/>

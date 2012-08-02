@@ -1,4 +1,4 @@
-<track lapCount="10" version="0.2.2" cols="5" rows="5" name="Woods">
+<track lapCount="5" version="0.2.2" cols="5" rows="5" name="Woods">
  <tile i="0" j="0" o="0" type="corner90"/>
  <tile i="0" j="1" o="360" type="finish" computerHint="1"/>
  <tile i="0" j="2" o="0" type="straight" computerHint="2"/>
