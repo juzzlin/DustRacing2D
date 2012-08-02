@@ -1,3 +1,24 @@
+0.4.0
+-----
+
+* Default lap count 5 for all tracks.
+* Render all objects by using GLSL shaders.
+* Renames basePath to baseImagePath in texture config.
+* Adds shader support to MCShapeView.
+* Improves the engine directory layout.
+* Render text using shaders.
+* MCSurface renders with shaders only.
+* Adds MCGLShaderProgram and ShaderProgram.
+* Render the track by using GLSL shaders.
+* Removes animation from tiles.
+* Slide more.
+* Don't take typeId into account in MCObjectTree.
+* Optimize collision detection of stationary objects.
+* Don't set text color if not needed.
+* Removes private class from MCTextureText.
+* Fixes some compilation warnings.
+* Adds infinity.trk
+
 0.3.2
 -----
 
