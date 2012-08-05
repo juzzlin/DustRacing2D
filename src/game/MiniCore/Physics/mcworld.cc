@@ -82,6 +82,8 @@ MCWorld::MCWorld()
 
 MCWorld::~MCWorld()
 {
+    clear();
+
     delete pObjectTree;
     delete pLeft;
     delete pRight;

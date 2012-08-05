@@ -85,7 +85,8 @@ public:
     //! \param pSurface Pointer to the surface (or nullptr if not any).
     MCSurface * surface() const;
 
-    //! Destructor.
+    //! Destructor. It's the callers responsibility to first remove
+    //! the object from MCWorld before deleting the object.
     virtual ~MCObject();
 
     //! Return unique class-wide id that can be used to

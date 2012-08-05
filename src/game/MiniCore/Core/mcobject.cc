@@ -967,8 +967,6 @@ bool MCObject::sleeping() const
 
 MCObject::~MCObject()
 {
-    removeFromWorldNow();
     deleteContacts();
-
     delete pShape;
 }
