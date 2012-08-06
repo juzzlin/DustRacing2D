@@ -38,7 +38,8 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
-, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFriction, desc.rotationFriction))
+, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
+, m_pOffTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOffTrack, desc.rotationFriction))
 , m_pSlideFriction(new SlideFrictionGenerator(desc.slideFriction))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
@@ -74,9 +75,13 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
     MCWorld::instance().addForceGenerator(*m_pBrakingFriction, *this, true);
     m_pBrakingFriction->enable(false);
 
-    // Add rolling friction generator
+    // Add rolling friction generator (on-track)
     MCWorld::instance().addForceGenerator(*m_pOnTrackFriction, *this, true);
     m_pOnTrackFriction->enable(true);
+
+    // Add rolling friction generator (off-track)
+    MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
+    m_pOffTrackFriction->enable(false);
 
     MCForceGenerator * drag = new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic);
     MCWorld::instance().addForceGenerator(*drag, *this, true);
@@ -162,15 +167,7 @@ void Car::accelerate()
     m_pBrakingFriction->enable(false);
 
     MCVector2d<MCFloat> force(m_dx, m_dy);
-
-    if (m_leftSideOffTrack || m_rightSideOffTrack)
-    {
-        addForce(force * m_desc.power * 0.25);
-    }
-    else
-    {
-        addForce(force * m_desc.power);
-    }
+    addForce(force * m_desc.power);
 
     m_accelerating = true;
     m_braking      = false;
@@ -348,6 +345,17 @@ void Car::stepTime()
 
     // Cache speed in km/h. Use value of twice as big as the "real" value.
     m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 3.6f * 2;
+
+    if (m_leftSideOffTrack || m_rightSideOffTrack)
+    {
+        m_pOffTrackFriction->enable(true);
+        m_pOnTrackFriction->enable(false);
+    }
+    else
+    {
+        m_pOffTrackFriction->enable(false);
+        m_pOnTrackFriction->enable(true);
+    }
 }
 
 void Car::setLeftSideOffTrack(bool state)

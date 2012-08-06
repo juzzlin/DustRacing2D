@@ -41,7 +41,8 @@ public:
         : maxLinearVelocity(50.0)
         , maxAngularVelocity(10.0)
         , brakingFriction(0.75)
-        , rollingFriction(0.05)
+        , rollingFrictionOnTrack(0.05)
+        , rollingFrictionOffTrack(0.5)
         , rotationFriction(1.0)
         , slideFriction(0.5)
         , turningImpulse(0.30)
@@ -62,7 +63,8 @@ public:
         MCFloat maxLinearVelocity;
         MCFloat maxAngularVelocity;
         MCFloat brakingFriction;
-        MCFloat rollingFriction;
+        MCFloat rollingFrictionOnTrack;
+        MCFloat rollingFrictionOffTrack;
         MCFloat rotationFriction;
         MCFloat slideFriction;
         MCFloat turningImpulse;
@@ -165,6 +167,7 @@ private:
 
     MCFrictionGenerator * m_pBrakingFriction;
     MCFrictionGenerator * m_pOnTrackFriction;
+    MCFrictionGenerator * m_pOffTrackFriction;
     MCFrictionGenerator * m_pSlideFriction;
     bool                  m_leftSideOffTrack;
     bool                  m_rightSideOffTrack;
