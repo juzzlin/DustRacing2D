@@ -22,7 +22,7 @@ Menu::Menu(std::string id, int width, int height, MenuStyle style)
 : m_id(id)
 , m_width(width)
 , m_height(height)
-, m_currentIndex(0)
+, m_currentIndex(-1)
 , m_style(style)
 , m_done(false)
 {
@@ -35,7 +35,8 @@ std::string Menu::id() const
 
 void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 {
-    m_menuItems.push_back(&menuItem);
+    m_items.push_back(&menuItem);
+    m_currentIndex = m_items.size() - 1;
 
     if (takeOwnership)
     {
@@ -47,9 +48,9 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 
 MenuItem * Menu::currentItem() const
 {
-    if (m_menuItems.size())
+    if (m_items.size())
     {
-        return m_menuItems.at(m_currentIndex);
+        return m_items.at(m_currentIndex);
     }
 
     return nullptr;
@@ -57,31 +58,33 @@ MenuItem * Menu::currentItem() const
 
 void Menu::render()
 {
-    if (m_style == Menu::MS_LIST)
+    if (m_style == Menu::MS_VERTICAL_LIST)
     {
         // Calculate total height
         int totalHeight = 0;
-        for (MenuItem * item : m_menuItems)
+        for (MenuItem * item : m_items)
         {
             totalHeight += item->height();
         }
 
         // Render centered items
-        int startY = m_height / 2 - totalHeight / 2;
-        for (MenuItem * item : m_menuItems)
+        int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
+        for (MenuItem * item : m_items)
         {
-            const int x = m_width / 2;
-            const int y = startY;
-
-            item->render(x, y);
+            item->render(m_width / 2, startY);
             startY += item->height();
         }
     }
+    else if (m_style == Menu::MS_HORIZONTAL_LIST)
+    {
+        // Not implemented
+        assert(false);
+    }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
-        if (m_menuItems.size())
+        if (m_items.size())
         {
-            MenuItem & item = *m_menuItems.at(m_currentIndex);
+            MenuItem & item = *m_items.at(m_currentIndex);
             item.render(m_width / 2, m_height / 2);
         }
     }
@@ -89,43 +92,13 @@ void Menu::render()
 
 void Menu::up()
 {
-    if (m_menuItems.size())
-    {
-        m_menuItems[m_currentIndex]->exit();
-    }
-
-    m_currentIndex++;
-    if (m_currentIndex >= m_menuItems.size())
-    {
-        m_currentIndex = 0;
-    }
-
-    if (m_menuItems.size())
-    {
-        m_menuItems[m_currentIndex]->enter();
-    }
-
+    setCurrentIndexWrapAround(m_currentIndex + 1);
     updateFocus();
 }
 
 void Menu::down()
 {
-    if (m_menuItems.size())
-    {
-        m_menuItems[m_currentIndex]->exit();
-    }
-
-    m_currentIndex--;
-    if (m_currentIndex >= m_menuItems.size()) // m_currentIndex is unsigned
-    {
-        m_currentIndex = m_menuItems.size() - 1;
-    }
-
-    if (m_menuItems.size())
-    {
-        m_menuItems[m_currentIndex]->enter();
-    }
-
+    setCurrentIndexWrapAround(m_currentIndex - 1);
     updateFocus();
 }
 
@@ -141,22 +114,22 @@ void Menu::right()
 
 void Menu::selectCurrentItem()
 {
-    if (m_menuItems.size())
+    if (m_items.size())
     {
-        m_menuItems.at(m_currentIndex)->onSelect();
+        m_items.at(m_currentIndex)->onSelect();
     }
 }
 
 void Menu::updateFocus()
 {
-    if (m_menuItems.size())
+    if (m_items.size())
     {
-        for (MenuItem * item : m_menuItems)
+        for (MenuItem * item : m_items)
         {
             item->setFocused(false);
         }
 
-        m_menuItems.at(m_currentIndex)->setFocused(true);
+        m_items.at(m_currentIndex)->setFocused(true);
     }
 }
 
@@ -170,9 +143,51 @@ int Menu::height() const
     return m_height;
 }
 
+int Menu::currentIndex() const
+{
+    return m_currentIndex;
+}
+
+void Menu::setCurrentIndex(int index)
+{
+    const int numItems = m_items.size();
+
+    if (!numItems)
+    {
+        m_currentIndex = -1;
+    }
+    else
+    {
+        m_currentIndex = index;
+        m_currentIndex = m_currentIndex < 0         ? 0            : m_currentIndex;
+        m_currentIndex = m_currentIndex >= numItems ? numItems - 1 : m_currentIndex;
+    }
+}
+
+void Menu::setCurrentIndexWrapAround(int index)
+{
+    const int numItems = m_items.size();
+
+    if (!numItems)
+    {
+        m_currentIndex = -1;
+    }
+    else
+    {
+        m_currentIndex = index;
+        m_currentIndex = m_currentIndex < 0         ? numItems - 1 : m_currentIndex;
+        m_currentIndex = m_currentIndex >= numItems ? 0            : m_currentIndex;
+    }
+}
+
 bool Menu::done() const
 {
     return m_done;
+}
+
+void Menu::setDone(bool done)
+{
+    m_done = done;
 }
 
 void Menu::enter()

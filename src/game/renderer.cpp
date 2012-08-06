@@ -209,25 +209,28 @@ void Renderer::updateFrame(MCCamera & camera)
 
 void Renderer::keyPressEvent(QKeyEvent * event)
 {
-    if (m_pInputHandler && !event->isAutoRepeat())
+    if (StateMachine::instance().state() != StateMachine::Menu)
     {
-        switch (event->key())
+        if (m_pInputHandler && !event->isAutoRepeat())
         {
-        case Qt::Key_Left:
-            m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, true);
-            break;
-        case Qt::Key_Right:
-            m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, true);
-            break;
-        case Qt::Key_Up:
-            m_pInputHandler->setActionState(0, InputHandler::IA_UP, true);
-            break;
-        case Qt::Key_Down:
-            m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, true);
-            break;
-        default:
-            QGLWidget::keyPressEvent(event);
-            break;
+            switch (event->key())
+            {
+            case Qt::Key_Left:
+                m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, true);
+                break;
+            case Qt::Key_Right:
+                m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, true);
+                break;
+            case Qt::Key_Up:
+                m_pInputHandler->setActionState(0, InputHandler::IA_UP, true);
+                break;
+            case Qt::Key_Down:
+                m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, true);
+                break;
+            default:
+                QGLWidget::keyPressEvent(event);
+                break;
+            }
         }
     }
 }
@@ -236,32 +239,64 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
 {
     if (m_pInputHandler && !event->isAutoRepeat())
     {
-        switch (event->key())
+        const bool menu = StateMachine::instance().state() == StateMachine::Menu;
+        if (menu)
         {
-        case Qt::Key_Left:
-            m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, false);
-            MenuManager::instance().left();
-            break;
-        case Qt::Key_Right:
-            m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, false);
-            MenuManager::instance().right();
-            break;
-        case Qt::Key_Up:
-            m_pInputHandler->setActionState(0, InputHandler::IA_UP, false);
-            break;
-        case Qt::Key_Down:
-            m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, false);
-            break;
-        case Qt::Key_Return:
-        case Qt::Key_Enter:
-            MenuManager::instance().selectCurrentItem();
-            break;
-        case Qt::Key_Escape:
-            StateMachine::instance().returnToMenu();
-            break;
-        default:
-            QGLWidget::keyReleaseEvent(event);
-            break;
+            switch (event->key())
+            {
+            case Qt::Key_Left:
+                MenuManager::instance().left();
+                break;
+            case Qt::Key_Right:
+                MenuManager::instance().right();
+                break;
+            case Qt::Key_Up:
+                MenuManager::instance().up();
+                break;
+            case Qt::Key_Down:
+                MenuManager::instance().down();
+                break;
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                MenuManager::instance().selectCurrentItem();
+                break;
+            case Qt::Key_Escape:
+            case Qt::Key_Q:
+                MenuManager::instance().exitCurrentMenu();
+                if (MenuManager::instance().done())
+                {
+                    QApplication::instance()->quit();
+                }
+                break;
+            default:
+                QGLWidget::keyReleaseEvent(event);
+                break;
+            }
+        }
+        else
+        {
+            switch (event->key())
+            {
+            case Qt::Key_Left:
+                m_pInputHandler->setActionState(0, InputHandler::IA_LEFT, false);
+                break;
+            case Qt::Key_Right:
+                m_pInputHandler->setActionState(0, InputHandler::IA_RIGHT, false);
+                break;
+            case Qt::Key_Up:
+                m_pInputHandler->setActionState(0, InputHandler::IA_UP, false);
+                break;
+            case Qt::Key_Down:
+                m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, false);
+                break;
+            case Qt::Key_Escape:
+            case Qt::Key_Q:
+                StateMachine::instance().quit();
+                break;
+            default:
+                QGLWidget::keyReleaseEvent(event);
+                break;
+            }
         }
     }
 }

@@ -15,10 +15,12 @@ set(SRC
     game.cpp
     inputhandler.cpp
     main.cpp
+    mainmenu.cpp
     mainwindow.cpp
     map.cpp
     menu.cpp
     menuitem.cpp
+    menuitemaction.cpp
     menuitemview.cpp
     menumanager.cpp
     offtrackdetector.cpp

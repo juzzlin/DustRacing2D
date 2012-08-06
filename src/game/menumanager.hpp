@@ -36,11 +36,20 @@ public:
     //! Add the given menu.
     void addMenu(Menu & newMenu);
 
-    //! Enter the given menu.
+    //! Enter the given menu & clear the menu stack.
     void enterMenu(Menu & newMenu);
 
-    //! Enter the given menu.
+    //! Enter the given menu & clear the menu stack.
     void enterMenu(std::string menuId);
+
+    //! Enter the given menu & push to stack.
+    void pushMenu(Menu & newMenu);
+
+    //! Enter the given menu & push to stack.
+    void pushMenu(std::string menuId);
+
+    //! Force enter on current menu.
+    void enterCurrentMenu();
 
     //! Force exit on current menu.
     void exitCurrentMenu();
@@ -76,7 +85,6 @@ private:
     std::map<std::string, Menu *> m_idToMenuMap;
     std::vector<Menu *> m_menuStack;
     static MenuManager * m_pInstance;
-    bool m_done;
 };
 
 #endif // MENUMANAGER_HPP

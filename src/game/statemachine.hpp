@@ -19,6 +19,7 @@
 #include "updateableif.hpp"
 #include "renderer.hpp"
 #include <MCTypes>
+#include <QApplication>
 
 class Race;
 class Renderer;
@@ -71,9 +72,16 @@ public:
         m_startlights = &startlights;
     }
 
-    void returnToMenu()
+    void quit()
     {
-        m_returnToMenu = true;
+        if (m_state == StateMachine::Play)
+        {
+            m_returnToMenu = true;
+        }
+        else if (m_state == StateMachine::Menu)
+        {
+            QApplication::quit();
+        }
     }
 
     StateMachine::State state() const;

@@ -13,28 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MENUITEMACTION_HPP
-#define MENUITEMACTION_HPP
+#ifndef MAINMENU_HPP
+#define MAINMENU_HPP
 
-//! Base class for menu item actions triggered when
-//! the item gets selected.
-class MenuItemAction
+#include "menu.hpp"
+
+//! The main menu of the game.
+class MainMenu : public Menu
 {
 public:
 
     //! Constructor.
-    MenuItemAction();
+    MainMenu(std::string id, int width, int height);
 
-    //! Called on select.
-    virtual void fire()
-    {
-        // Do nothing by default.
-    }
-
-    //! Destructor.
-    virtual ~MenuItemAction();
+    //! \reimp
+    virtual void render();
 
 private:
 };
 
-#endif // MENUITEMACTION_HPP
+#endif // MAINMENU_HPP

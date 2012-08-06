@@ -14,20 +14,22 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "menuitem.hpp"
+#include "menuitemaction.hpp"
 #include "menuitemview.hpp"
 #include "menu.hpp"
 #include "menumanager.hpp"
 
 MenuItem::MenuItem(int width, int height, std::string text)
-  : m_text(text)
-  , m_pView(nullptr)
-  , m_focused(false)
-  , m_width(width)
-  , m_height(height)
-  , m_lMargin(1)
-  , m_rMargin(1)
-  , m_tMargin(1)
-  , m_bMargin(1)
+: m_text(text)
+, m_action(nullptr)
+, m_view(nullptr)
+, m_focused(false)
+, m_width(width)
+, m_height(height)
+, m_lMargin(1)
+, m_rMargin(1)
+, m_tMargin(1)
+, m_bMargin(1)
 {
 }
 
@@ -41,19 +43,34 @@ int MenuItem::height() const
     return m_height + m_tMargin + m_bMargin;
 }
 
-void MenuItem::setView(MenuItemView * menuItemView, bool takeOwnership)
+void MenuItem::setView(MenuItemView * view, bool takeOwnership)
 {
-    m_pView = menuItemView;
+    m_view = view;
 
     if (takeOwnership)
     {
-        m_pOwnedView = std::shared_ptr<MenuItemView>(menuItemView);
+        m_ownedView = std::shared_ptr<MenuItemView>(view);
     }
 }
 
 MenuItemView * MenuItem::view()
 {
-    return m_pView;
+    return m_view;
+}
+
+void MenuItem::setAction(MenuItemAction * action, bool takeOwnership)
+{
+    m_action = action;
+
+    if (takeOwnership)
+    {
+        m_ownedAction = std::shared_ptr<MenuItemAction>(action);
+    }
+}
+
+MenuItemAction * MenuItem::action() const
+{
+    return m_action;
 }
 
 void MenuItem::onLeft()
@@ -74,16 +91,10 @@ void MenuItem::onDown()
 
 void MenuItem::onSelect()
 {
-}
-
-void MenuItem::enter()
-{
-
-}
-
-void MenuItem::exit()
-{
-
+    if (m_action)
+    {
+        m_action->fire();
+    }
 }
 
 void MenuItem::setFocused(bool focused)
@@ -114,9 +125,9 @@ bool MenuItem::focused() const
 
 void MenuItem::render(int x, int y)
 {
-    if (m_pView)
+    if (m_view)
     {
-        m_pView->render(x, y);
+        m_view->render(x, y);
     }
 }
 

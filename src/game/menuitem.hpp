@@ -20,6 +20,7 @@
 #include <memory>
 
 class Menu;
+class MenuItemAction;
 class MenuItemView;
 
 //! Base class for items used in menus.
@@ -37,9 +38,13 @@ public:
 
     const std::string & text() const;
 
-    void setView(MenuItemView * menuItemView, bool takeOwnership);
+    void setView(MenuItemView * view, bool takeOwnership);
 
     MenuItemView * view();
+
+    void setAction(MenuItemAction * action, bool takeOwnership);
+
+    MenuItemAction * action() const;
 
     virtual void render(int x, int y);
 
@@ -51,11 +56,8 @@ public:
 
     virtual void onDown();
 
+    //! Call action, if set.
     virtual void onSelect();
-
-    virtual void enter();
-
-    virtual void exit();
 
     void setFocused(bool focused);
 
@@ -68,8 +70,10 @@ public:
 private:
 
     std::string m_text;
-    MenuItemView * m_pView;
-    std::shared_ptr<MenuItemView> m_pOwnedView;
+    MenuItemAction * m_action;
+    MenuItemView * m_view;
+    std::shared_ptr<MenuItemAction> m_ownedAction;
+    std::shared_ptr<MenuItemView> m_ownedView;
     bool m_focused;
     int m_width, m_height;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;

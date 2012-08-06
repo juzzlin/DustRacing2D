@@ -27,6 +27,6 @@ void main(void)
     }
     else
     {
-        gl_FragColor = color * fade;
+        gl_FragColor = gl_Color * color * fade;
     }
 }

@@ -18,3 +18,7 @@
 MenuItemAction::MenuItemAction()
 {
 }
+
+MenuItemAction::~MenuItemAction()
+{
+}

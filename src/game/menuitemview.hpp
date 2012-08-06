@@ -16,18 +16,24 @@
 #ifndef MENUITEMVIEW_HPP
 #define MENUITEMVIEW_HPP
 
+class MenuItem;
+
 //! Base class for menu item views.
 class MenuItemView
 {
 public:
 
     //! Constructor.
-    MenuItemView();
+    MenuItemView(MenuItem & owner);
 
     //! Destructor.
     virtual ~MenuItemView();
 
     virtual void render(int x, int y);
+
+private:
+
+    MenuItem & m_owner;
 };
 
 #endif // MENUITEMVIEW_HPP

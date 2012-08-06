@@ -13,28 +13,33 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MENUITEMACTION_HPP
-#define MENUITEMACTION_HPP
+#include "mainmenu.hpp"
 
-//! Base class for menu item actions triggered when
-//! the item gets selected.
-class MenuItemAction
+#include "renderer.hpp"
+#include "scene.hpp"
+#include "statemachine.hpp"
+#include "menuitem.hpp"
+#include "menumanager.hpp"
+
+#include <MCLogger>
+#include <MCSurface>
+#include <MCTextureManager>
+#include <MCTextureFont>
+#include <MCTextureFontManager>
+#include <MCTextureText>
+
+#include <cassert>
+#include <sstream>
+
+MainMenu::MainMenu(std::string id, int width, int height)
+: Menu(id, width, height, Menu::MS_VERTICAL_LIST)
 {
-public:
+}
 
-    //! Constructor.
-    MenuItemAction();
-
-    //! Called on select.
-    virtual void fire()
-    {
-        // Do nothing by default.
-    }
-
-    //! Destructor.
-    virtual ~MenuItemAction();
-
-private:
-};
-
-#endif // MENUITEMACTION_HPP
+void MainMenu::render()
+{
+    MCSurface & back = MCTextureManager::instance().surface("menu");
+    back.setShaderProgram(&Renderer::instance().masterProgram());
+    back.renderScaled(nullptr, MCVector3dF(0, 0, 0), width(), height(), 0);
+    Menu::render();
+}

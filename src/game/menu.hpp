@@ -29,12 +29,13 @@ public:
     //! Default styles
     enum MenuStyle
     {
-        MS_LIST,
+        MS_VERTICAL_LIST,
+        MS_HORIZONTAL_LIST,
         MS_SHOW_ONE // Show only one item at a time
     };
 
     //! Constructor.
-    Menu(std::string id, int width, int height, MenuStyle style = MS_LIST);
+    Menu(std::string id, int width, int height, MenuStyle style = MS_VERTICAL_LIST);
 
     //! Destructor.
     virtual ~Menu();
@@ -68,6 +69,8 @@ public:
     //! \returns true if done.
     bool done() const;
 
+    void setDone(bool done);
+
     //! Called when the menu is entered. Call parent implementation if overridden.
     virtual void enter();
 
@@ -75,15 +78,21 @@ public:
 
     int height() const;
 
+    int currentIndex() const;
+
+    void setCurrentIndex(int index);
+
+    void setCurrentIndexWrapAround(int index);
+
 private:
 
     void updateFocus();
 
-    std::vector<MenuItem *> m_menuItems;
+    std::vector<MenuItem *> m_items;
     std::vector<std::shared_ptr<MenuItem> > m_ownedMenuItems;
     std::string m_id;
     int m_width, m_height;
-    unsigned int m_currentIndex;
+    int m_currentIndex;
     MenuStyle m_style;
     bool m_done;
 };

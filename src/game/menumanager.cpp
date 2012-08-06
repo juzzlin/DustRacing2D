@@ -21,7 +21,6 @@
 MenuManager * MenuManager::m_pInstance = nullptr;
 
 MenuManager::MenuManager()
-: m_done(false)
 {
     assert(!m_pInstance);
     m_pInstance = this;
@@ -44,7 +43,7 @@ void MenuManager::addMenu(Menu & newMenu)
 
 void MenuManager::enterMenu(Menu & newMenu)
 {
-    m_done = false;
+    m_menuStack.clear();
     m_menuStack.push_back(&newMenu);
     newMenu.enter();
     newMenu.render();
@@ -54,6 +53,27 @@ void MenuManager::enterMenu(std::string menuId)
 {
     assert(m_idToMenuMap[menuId]);
     enterMenu(*m_idToMenuMap[menuId]);
+}
+
+void MenuManager::pushMenu(Menu & newMenu)
+{
+    m_menuStack.push_back(&newMenu);
+    newMenu.enter();
+    newMenu.render();
+}
+
+void MenuManager::pushMenu(std::string menuId)
+{
+    assert(m_idToMenuMap[menuId]);
+    pushMenu(*m_idToMenuMap[menuId]);
+}
+
+void MenuManager::enterCurrentMenu()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.back()->enter();
+    }
 }
 
 void MenuManager::exitCurrentMenu()
@@ -67,7 +87,6 @@ void MenuManager::exitCurrentMenu()
 void MenuManager::exit()
 {
     m_menuStack.clear();
-    m_done = true;
 }
 
 MenuManager & MenuManager::instance()
@@ -126,5 +145,12 @@ void MenuManager::selectCurrentItem()
 
 bool MenuManager::done() const
 {
-    return m_done;
+    if (!m_menuStack.size())
+    {
+        return false;
+    }
+    else
+    {
+        return m_menuStack.back()->done();
+    }
 }

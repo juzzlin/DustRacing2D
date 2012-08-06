@@ -23,7 +23,6 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "menuitem.hpp"
-#include "menumanager.hpp"
 
 #include <MCLogger>
 #include <MCSurface>
@@ -238,9 +237,9 @@ void TrackSelectionMenu::selectCurrentItem()
     m_selectedTrack = &static_cast<TrackItem *>(currentItem())->track();
     m_sm.setTrack(*m_selectedTrack);
     m_scene.setActiveTrack(*m_selectedTrack);
-    MenuManager::instance().exit();
     MCLogger().info() <<
         "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";
+    setDone(true);
 }
 
 Track * TrackSelectionMenu::selectedTrack() const

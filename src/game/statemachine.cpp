@@ -149,7 +149,8 @@ bool StateMachine::update()
             m_fadeValue = 1.0;
             m_state     = Menu;
 
-            MenuManager::instance().enterMenu("trackSelection");
+            // Re-init the track selection menu
+            MenuManager::instance().enterCurrentMenu();
         }
 
         break;

@@ -20,8 +20,10 @@
 #include "checkeredflag.hpp"
 #include "inputhandler.hpp"
 #include "layers.hpp"
+#include "mainmenu.hpp"
 #include "menu.hpp"
 #include "menuitem.hpp"
+#include "menuitemaction.hpp"
 #include "menuitemview.hpp"
 #include "menumanager.hpp"
 #include "offtrackdetector.hpp"
@@ -54,6 +56,28 @@
 
 #include <algorithm>
 #include <cassert>
+
+#include <QApplication>
+
+class QuitAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Quit selected from menu.";
+        QApplication::instance()->quit();
+    }
+};
+
+class PlayAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Play selected from menu.";
+        MenuManager::instance().pushMenu("trackSelection");
+    }
+};
 
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 
@@ -154,24 +178,35 @@ unsigned int Scene::height()
 void Scene::createMenus()
 {
     m_menuManager = new MenuManager;
-    m_mainMenu = new Menu("main", width(), height());
+    m_mainMenu    = new MainMenu("main", width(), height());
+
     m_menuManager->addMenu(*m_mainMenu);
 
-    MenuItem * play = new MenuItem(width(), height() / 2, "Play");
-    play->setView(new MenuItemView, true);
+    MenuItem * play = new MenuItem(width(), height()    / 5, "Play");
+    play->setView(new MenuItemView(*play), true);
 
-    MenuItem * quit = new MenuItem(width(), height() / 2, "Quit");
-    quit->setView(new MenuItemView, true);
+    MenuItem * help = new MenuItem(width(), height()    / 5, "Help");
+    help->setView(new MenuItemView(*help), true);
 
-    m_mainMenu->addItem(*play, true);
-    m_mainMenu->addItem(*quit, true);
+    MenuItem * credits = new MenuItem(width(), height() / 5, "Credits");
+    credits->setView(new MenuItemView(*credits), true);
+
+    MenuItem * quit = new MenuItem(width(), height()    / 5, "Quit");
+    quit->setView(new MenuItemView(*quit), true);
+
+    m_mainMenu->addItem(*quit,    true);
+    m_mainMenu->addItem(*credits, true);
+    m_mainMenu->addItem(*help,    true);
+    m_mainMenu->addItem(*play,    true);
+
+    quit->setAction(new QuitAction, true);
+    play->setAction(new PlayAction, true);
 
     m_trackSelectionMenu = new TrackSelectionMenu("trackSelection",
         width(), height(), *this, m_stateMachine);
     m_menuManager->addMenu(*m_trackSelectionMenu);
 
-    //m_menuManager->enterMenu(*m_mainMenu);
-    m_menuManager->enterMenu(*m_trackSelectionMenu);
+    m_menuManager->enterMenu(*m_mainMenu);
 }
 
 void Scene::updateFrame(InputHandler & handler, float timeStep)
