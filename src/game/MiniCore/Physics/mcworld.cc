@@ -448,6 +448,7 @@ void MCWorld::addObject(MCObject & object)
             // Add to object vector (O(1))
             objs.push_back(&object);
             object.setIndex(objs.size() - 1);
+            object.resetMotion();
 
             // Add to ObjectTree
             if (object.physicsObject() && !object.bypassCollisions())

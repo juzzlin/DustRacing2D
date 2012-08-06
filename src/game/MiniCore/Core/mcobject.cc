@@ -321,9 +321,16 @@ void MCObject::checkZBoundariesAndSendEvent()
 
 void MCObject::resetMotion()
 {
-    m_velocity.setZero();
+    // Reset linear motion
     m_forces.setZero();
-    m_torque = 0.0;
+    m_velocity.setZero();
+    m_acceleration.setZero();
+
+    // Reset angular motion
+    m_torque              = 0.0;
+    m_angularAcceleration = 0.0;
+    m_angularVelocity     = 0.0;
+    m_angularImpulse      = 0.0;
 }
 
 void MCObject::setSurface(MCSurface * pSurface)
