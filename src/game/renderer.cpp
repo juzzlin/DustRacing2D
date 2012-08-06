@@ -18,6 +18,7 @@
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "shaderprogram.hpp"
+#include "statemachine.hpp"
 #include "../common/config.hpp"
 
 #include <MCCamera>
@@ -254,6 +255,9 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
         case Qt::Key_Return:
         case Qt::Key_Enter:
             MenuManager::instance().selectCurrentItem();
+            break;
+        case Qt::Key_Escape:
+            StateMachine::instance().returnToMenu();
             break;
         default:
             QGLWidget::keyReleaseEvent(event);

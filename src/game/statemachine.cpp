@@ -23,6 +23,8 @@
 
 #include <cassert>
 
+StateMachine * StateMachine::m_instance = nullptr;
+
 StateMachine::StateMachine()
 : m_state(Init)
 , m_startlights(nullptr)
@@ -30,7 +32,21 @@ StateMachine::StateMachine()
 , m_renderer(nullptr)
 , m_track(nullptr)
 , m_fadeValue(0.0)
+, m_returnToMenu(false)
 {
+    assert(!StateMachine::m_instance);
+    StateMachine::m_instance = this;
+}
+
+StateMachine::~StateMachine()
+{
+    StateMachine::m_instance = nullptr;
+}
+
+StateMachine & StateMachine::instance()
+{
+    assert(StateMachine::m_instance);
+    return *StateMachine::m_instance;
 }
 
 bool StateMachine::update()
@@ -69,6 +85,7 @@ bool StateMachine::update()
 
     case Menu:
 
+        m_returnToMenu = false;
         m_renderer->setFadeValue(1.0);
 
         if (MenuManager::instance().done())
@@ -108,6 +125,11 @@ bool StateMachine::update()
         if (m_race->finished())
         {
             m_fadeValue = 3.0;
+            m_state     = GameTransitionOut;
+        }
+        else if (m_returnToMenu)
+        {
+            m_fadeValue = 1.0;
             m_state     = GameTransitionOut;
         }
 

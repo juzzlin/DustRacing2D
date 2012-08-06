@@ -44,6 +44,12 @@ public:
     //! Constructor.
     StateMachine();
 
+    //! Destructor.
+    ~StateMachine();
+
+    //! Return the singleton instance.
+    static StateMachine & instance();
+
     void setTrack(Track & track)
     {
         m_track = &track;
@@ -65,6 +71,11 @@ public:
         m_startlights = &startlights;
     }
 
+    void returnToMenu()
+    {
+        m_returnToMenu = true;
+    }
+
     StateMachine::State state() const;
 
     //! \reimp
@@ -75,12 +86,15 @@ public:
 
 private:
 
+    static StateMachine * m_instance;
+
     State         m_state;
     Startlights * m_startlights;
     Race        * m_race;
     Renderer    * m_renderer;
     Track       * m_track;
     MCFloat       m_fadeValue;
+    bool          m_returnToMenu;
 };
 
 #endif // STATEMACHINE_HPP
