@@ -176,9 +176,9 @@ void Scene::createMenus()
 
 void Scene::updateFrame(InputHandler & handler, float timeStep)
 {
-    if (m_stateMachine.state() == StateMachine::GameTransitionIn ||
+    if (m_stateMachine.state() == StateMachine::GameTransitionIn  ||
         m_stateMachine.state() == StateMachine::GameTransitionOut ||
-        m_stateMachine.state() == StateMachine::DoStartlights ||
+        m_stateMachine.state() == StateMachine::DoStartlights     ||
         m_stateMachine.state() == StateMachine::Play)
     {
         if (m_activeTrack)
@@ -187,7 +187,6 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
             {
                 const bool isRaceCompleted = m_race.timing().raceCompleted(0);
                 processUserInput(handler, isRaceCompleted);
-
                 updateAiLogic();
             }
 
