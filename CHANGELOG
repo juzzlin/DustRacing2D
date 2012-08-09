@@ -1,3 +1,13 @@
+0.5.0
+-----
+
+* Adds the main menu.
+* Don't reset motion when adding object to the world.
+* Dedicated friction generator for off-track conditions.
+* Fixes SF#3547742: Some of the cars have a wrong orientation on the start grid.
+* Fixes SF#3547321: Pressing ESC while playing should take the game back to the main menu.
+* Fixes unit tests.
+
 0.4.0
 -----
 
