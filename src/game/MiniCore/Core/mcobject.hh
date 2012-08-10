@@ -268,7 +268,7 @@ public:
 
     //! Set location
     //! \param newLocation The new location
-    virtual void translate(const MCVector3dF & newLocation);
+    void translate(const MCVector3dF & newLocation);
 
     //! Displace object
     //! \param displacement Translates object to location() + displacement.
@@ -292,7 +292,7 @@ public:
 
     //! Set rotation ("yaw") angle about Z-axis.
     //! \param newAngle The new angle in degrees [0..360].
-    virtual void rotate(MCFloat newAngle);
+    void rotate(MCFloat newAngle);
 
     //! Set center of rotation in world coordinates.
     void setCenterOfRotation(MCVector2dF center);
@@ -323,13 +323,13 @@ public:
     MCFloat xyFriction() const;
 
     //! Set shape. MCObject will take the ownership.
-    virtual void setShape(MCShape * newShape);
+    void setShape(MCShape * newShape);
 
     //! Get shape.
     MCShape * shape() const;
 
     //! Set view. MCObject will take the ownership.
-    virtual void setView(MCShapeView * newView);
+    void setView(MCShapeView * newView);
 
     //! \brief Step internal time.
     //! This is called AFTER every integration step. Must call base-class'
@@ -351,7 +351,7 @@ public:
 
     //! Return current bounding box. Default implementation returns
     //! the bbox of the shape if set, and (0, 0, 1, 1) otherwise.
-    virtual MCBBox<MCFloat> bbox() const;
+    MCBBox<MCFloat> bbox() const;
 
     //! Set rendering layer (0 is considered the lowest and is rendered
     //! first. This can be used when creating complex objects from
@@ -360,7 +360,7 @@ public:
     //! \param updateWorld Updates MCWorld's layer
     //! structure if true. Set to false if setting only the initial
     //! value and MCWorld instance is not created yet.
-    virtual void setLayer(MCUint layer, bool updateWorldLayers = true);
+    void setLayer(MCUint layer, bool updateWorldLayers = true);
 
     //! Return the render layer.
     MCUint layer() const;
