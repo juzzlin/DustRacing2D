@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Dust Racing Track Editor
+Comment=2D racing game track editor
+Exec=/opt/DustRacing/dustrac-editor
+Icon=DustRacing
+Type=Application
+Categories=Games;
+StartupNotify=true

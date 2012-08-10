@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Dust Racing
+Comment=2D racing game
+Exec=/opt/DustRacing/dustrac-game
+Icon=DustRacing
+Type=Application
+Categories=Games;
+StartupNotify=true

@@ -6,11 +6,9 @@ Game:
 - Move car to the nearest track tile if stuck for too long
 - Grandstands
 - Global setting for shadow offsets
-- Install target for CMake
 - Full screen mode
 - One big (long) wall object
 - Restore support for circle-shaped objects
-- Optimize particle performance
 - Show total time 
 - Race record times separately for different lap counts
 

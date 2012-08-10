@@ -11,6 +11,8 @@ standard, so a C++11 compliant compiler is required (GCC >= 4.6).
 Building in the command line on Linux (tested on Ubuntu 12.04)
 --------------------------------------------------------------
 
+Development build (the game can be run without installing anything):
+
 1) Install Qt development files (libqt4-dev on Ubuntu).
 2) Install CMake from the Software Center.
 3) Go to the source directory and run:
@@ -18,11 +20,48 @@ Building in the command line on Linux (tested on Ubuntu 12.04)
 $ ./configure
 
 This runs CMake that generates the makefiles.
+You can also run cmake directly. The configure script
+is only for convenience.
+
+If everything went ok, run:
+  
+$ make
+
+This will build the editor and the game binaries.
+
+Run the game:
+
+$ ./dustrac-game
+
+Run the editor:
+
+$ ./dustrac-editor
+
+Release build (game installs to /opt/DustRacing):
+
+$ ./configure -DReleaseBuild=1
+
+This runs CMake that generates the makefiles.
 If everything went ok, run:
 
 $ make
 
 This will build the editor and the game binaries.
+
+Install the binaries and data files:
+
+$ sudo make install
+
+This install also the desktop files so Dust Racing
+should appear in your application menu.
+
+Run the game:
+
+$ /opt/DustRacing/dustrac-game
+
+Run the editor:
+
+$ /opt/DustRacing/dustrac-editor
 
 Building by using QtCreator on Windows (tested on Windows 7)
 ------------------------------------------------------------
@@ -48,15 +87,13 @@ Building by using QtCreator on Linux (tested on Ubuntu 12.04)
    Dust Racing source directory.
 3) Run CMake and build.
 
-Installing
-----------
+For packagers
+-------------
 
-Any install steps are not currently required.
-The binaries work when started from the directory
-that contains the binary.
+The binaries only need to find the data dir that includes
+all the runtime data. This can be set in the main CMakeLists.txt
+and is given to the game via -DDATA_PATH.
 
-The binaries only need to find the data-dir that includes
-all the runtime data.
-
+The release build should be used when packaging.
 
 -- Jussi Lind <jussi.lind@iki.fi>
