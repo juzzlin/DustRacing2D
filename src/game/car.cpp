@@ -323,7 +323,8 @@ void Car::collisionEvent(MCCollisionEvent & event)
     if (m_speedInKmh > 25)
     {
         if (event.collidingObject().typeID() == typeID() ||
-            event.collidingObject().typeID() == MCObject::typeID("WALL"))
+            event.collidingObject().typeID() == MCObject::typeID("WALL") ||
+            event.collidingObject().typeID() == MCObject::typeID("ROCK"))
         {
             static int counter = 0;
             if (++counter >= 10)

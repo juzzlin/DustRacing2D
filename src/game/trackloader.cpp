@@ -285,7 +285,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // TODO: A separate config file for these
     if (role == "brake")
     {
-        MCSurfaceObjectData data("brake");
+        MCSurfaceObjectData data("BRAKE");
         data.setMass(1000);
         data.setSurfaceId("brake");
         data.setRestitution(0.5);
@@ -305,7 +305,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "plant")
     {
-        MCSurfaceObjectData data("plant");
+        MCSurfaceObjectData data("PLANT");
         data.setMass(10);
         data.setSurfaceId("plant");
         data.setRestitution(0.1);
@@ -325,7 +325,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "rock")
     {
-        MCSurfaceObjectData data("rock");
+        MCSurfaceObjectData data("ROCK");
         data.setMass(5000);
         data.setSurfaceId("rock");
         data.setRestitution(0.9);
@@ -345,7 +345,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "tire")
     {
-        MCSurfaceObjectData data("tire");
+        MCSurfaceObjectData data("TIRE");
         data.setMass(1000); // Exaggerate the mass on purpose
         data.setSurfaceId("tire");
         data.setRestitution(0.25);
@@ -368,7 +368,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         const MCFloat treeViewRadius = 32;
         const MCFloat treeBodyRadius = 8;
 
-        MCSurfaceObjectData data("tree");
+        MCSurfaceObjectData data("TREE");
         data.setStationary(true);
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
@@ -391,19 +391,23 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "wall")
     {
-        const int wallSize = 16;
-        MCObject * object = new Wall(
-            m_textureManager.surface("wall"), x, h - y, wallSize, wallSize, wallSize);
-        object->setLayer(Layers::Walls, false);
-        object->setInitialLocation(MCVector3dF(x, h - y, 0));
-        object->setInitialAngle(o);
-        object->setMass(0, true); // stationary
-        object->setXYFriction(0.5);
-        object->setDamping(0.9);
+        MCSurfaceObjectData data("WALL");
+        data.setStationary(true);
+        data.setSurfaceId("wall");
+        data.setRestitution(0.9);
+        data.setXYFriction(1.0);
+        data.setBatchMode(true);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(
+            MCVector3dF(x, h - y, 8));
+        object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
         // Wrap the MCObject in a TrackObject and add to
         // the TrackData
-        newData.objects().add(*new TrackObject(category, role, *object), true);
+        newData.objects().add(*new TrackObject(category, role, object), true);
     }
 }
 

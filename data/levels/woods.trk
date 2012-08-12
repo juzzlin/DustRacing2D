@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.2.2" cols="5" rows="5" name="Woods">
+<track lapCount="5" version="0.5.0" cols="5" rows="5" name="Woods">
  <tile i="0" j="0" o="0" type="corner90"/>
  <tile i="0" j="1" o="360" type="finish" computerHint="1"/>
  <tile i="0" j="2" o="0" type="straight" computerHint="2"/>
@@ -26,19 +26,11 @@
  <tile i="4" j="4" o="0" type="grass"/>
  <object x="1155" y="417" category="free" role="tire" o="0"/>
  <object x="734" y="424" category="free" role="tire" o="0"/>
- <object x="748" y="403" category="free" role="tire" o="0"/>
- <object x="758" y="382" category="free" role="tire" o="0"/>
- <object x="762" y="351" category="free" role="tire" o="0"/>
  <object x="765" y="334" category="free" role="tire" o="0"/>
  <object x="768" y="310" category="free" role="tire" o="0"/>
  <object x="768" y="289" category="free" role="tire" o="0"/>
- <object x="751" y="372" category="free" role="tire" o="0"/>
- <object x="751" y="344" category="free" role="tire" o="0"/>
  <object x="751" y="331" category="free" role="tire" o="0"/>
  <object x="751" y="313" category="free" role="tire" o="0"/>
- <object x="773" y="378" category="free" role="wall" o="0"/>
- <object x="773" y="369" category="free" role="wall" o="0"/>
- <object x="773" y="358" category="free" role="wall" o="0"/>
  <object x="1147" y="830" category="free" role="tree" o="0"/>
  <object x="1232" y="772" category="free" role="tree" o="0"/>
  <object x="1012" y="512" category="free" role="tree" o="0"/>
@@ -82,7 +74,6 @@
  <object x="685" y="532" category="free" role="tree" o="0"/>
  <object x="750" y="536" category="free" role="tree" o="0"/>
  <object x="816" y="534" category="free" role="tree" o="0"/>
- <object x="775" y="403" category="free" role="tree" o="0"/>
  <object x="813" y="440" category="free" role="tree" o="0"/>
  <object x="720" y="445" category="free" role="tree" o="0"/>
  <object x="513" y="103" category="free" role="tree" o="0"/>
@@ -107,15 +98,21 @@
  <object x="1250" y="1161" category="free" role="tree" o="0"/>
  <object x="1196" y="1230" category="free" role="tree" o="0"/>
  <object x="20" y="23" category="free" role="tree" o="0"/>
+ <object x="767" y="367" category="free" role="wall" o="90"/>
+ <object x="769" y="408" category="free" role="tree" o="0"/>
+ <object x="546" y="749" category="free" role="wall" o="0"/>
+ <object x="612" y="748" category="free" role="wall" o="0"/>
+ <object x="494" y="801" category="free" role="wall" o="90"/>
+ <object x="494" y="866" category="free" role="wall" o="90"/>
  <tnode x="141" y="139" i="0"/>
  <tnode x="339" y="226" i="1"/>
  <tnode x="557" y="335" i="2"/>
- <tnode x="687" y="303" i="3"/>
- <tnode x="764" y="238" i="4"/>
- <tnode x="929" y="320" i="5"/>
+ <tnode x="652" y="303" i="3"/>
+ <tnode x="766" y="234" i="4"/>
+ <tnode x="922" y="364" i="5"/>
  <tnode x="1139" y="465" i="6"/>
  <tnode x="1112" y="605" i="7"/>
- <tnode x="452" y="694" i="8"/>
+ <tnode x="435" y="696" i="8"/>
  <tnode x="358" y="1066" i="9"/>
  <tnode x="230" y="1153" i="10"/>
  <tnode x="121" y="1051" i="11"/>

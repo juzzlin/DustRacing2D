@@ -209,6 +209,7 @@ TrackSelectionMenu::TrackSelectionMenu(std::string id,
 void TrackSelectionMenu::addTrack(Track & track)
 {
     addItem(*new TrackItem(width() / 2, height() / 2, track), true);
+    setCurrentIndex(0);
 }
 
 void TrackSelectionMenu::render()

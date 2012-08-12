@@ -92,7 +92,7 @@ public:
     * \param pos The position.
     * \param angle Rotation angle (0..360)
     */
-    MCBBox<MCFloat> rotatedBBox(MCVector2dFR, MCFloat angle);
+    MCBBox<MCFloat> rotatedBBox(MCVector2dFR pos, MCFloat angle);
 
    /*! Get bounding box for a rotated and scaled surface
     * \param pos The position.

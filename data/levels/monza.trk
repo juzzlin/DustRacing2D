@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.3.0" cols="35" rows="19" name="Monza">
+<track lapCount="5" version="0.5.0" cols="35" rows="19" name="Monza">
  <tile i="0" j="0" o="180" type="sand"/>
  <tile i="0" j="1" o="0" type="sand"/>
  <tile i="0" j="2" o="0" type="sand"/>
@@ -754,31 +754,18 @@
  <object x="1638" y="4149" category="free" role="brake" o="0"/>
  <object x="1344" y="1871" category="free" role="brake" o="0"/>
  <object x="982" y="1868" category="free" role="brake" o="0"/>
- <object x="2910" y="4056" category="free" role="wall" o="45"/>
- <object x="2930" y="4036" category="free" role="wall" o="45"/>
- <object x="2946" y="4017" category="free" role="wall" o="45"/>
- <object x="2963" y="3997" category="free" role="wall" o="45"/>
- <object x="2983" y="3980" category="free" role="wall" o="45"/>
- <object x="3003" y="3962" category="free" role="wall" o="45"/>
- <object x="3023" y="3942" category="free" role="wall" o="45"/>
- <object x="3043" y="3923" category="free" role="wall" o="45"/>
- <object x="3064" y="3903" category="free" role="wall" o="45"/>
- <object x="3084" y="3882" category="free" role="wall" o="45"/>
- <object x="3105" y="3864" category="free" role="wall" o="45"/>
- <object x="3126" y="3848" category="free" role="wall" o="45"/>
- <object x="5030" y="2573" category="free" role="wall" o="45"/>
- <object x="5053" y="2591" category="free" role="wall" o="45"/>
+ <object x="2920" y="4068" category="free" role="wall" o="135"/>
+ <object x="2967" y="4021" category="free" role="wall" o="135"/>
+ <object x="3013" y="3974" category="free" role="wall" o="135"/>
+ <object x="3060" y="3927" category="free" role="wall" o="135"/>
+ <object x="3108" y="3881" category="free" role="wall" o="135"/>
+ <object x="3155" y="3835" category="free" role="wall" o="135"/>
+ <object x="5029" y="2562" category="free" role="wall" o="45"/>
  <object x="5076" y="2608" category="free" role="wall" o="45"/>
- <object x="5102" y="2628" category="free" role="wall" o="45"/>
- <object x="5122" y="2647" category="free" role="wall" o="45"/>
- <object x="5144" y="2668" category="free" role="wall" o="45"/>
- <object x="5168" y="2690" category="free" role="wall" o="45"/>
- <object x="5192" y="2712" category="free" role="wall" o="45"/>
- <object x="5212" y="2732" category="free" role="wall" o="45"/>
- <object x="5236" y="2752" category="free" role="wall" o="45"/>
- <object x="5257" y="2777" category="free" role="wall" o="45"/>
- <object x="5277" y="2798" category="free" role="wall" o="45"/>
- <object x="5302" y="2821" category="free" role="wall" o="45"/>
+ <object x="5124" y="2654" category="free" role="wall" o="45"/>
+ <object x="5170" y="2701" category="free" role="wall" o="45"/>
+ <object x="5263" y="2796" category="free" role="wall" o="45"/>
+ <object x="5217" y="2748" category="free" role="wall" o="45"/>
  <object x="5488" y="2691" category="free" role="tree" o="0"/>
  <object x="5722" y="2690" category="free" role="tree" o="0"/>
  <object x="6035" y="2697" category="free" role="tree" o="0"/>
@@ -1382,8 +1369,8 @@
  <object x="1477" y="3305" category="free" role="plant" o="0"/>
  <tnode x="5248" y="3972" i="0"/>
  <tnode x="3712" y="3972" i="1"/>
- <tnode x="3332" y="4008" i="2"/>
- <tnode x="3076" y="4112" i="3"/>
+ <tnode x="3222" y="4027" i="2"/>
+ <tnode x="2961" y="4153" i="3"/>
  <tnode x="2748" y="4224" i="4"/>
  <tnode x="2488" y="4216" i="5"/>
  <tnode x="2216" y="4036" i="6"/>
@@ -1400,8 +1387,8 @@
  <tnode x="3404" y="2392" i="17"/>
  <tnode x="3624" y="2564" i="18"/>
  <tnode x="4296" y="2672" i="19"/>
- <tnode x="4968" y="2772" i="20"/>
- <tnode x="5300" y="2924" i="21"/>
+ <tnode x="4976" y="2761" i="20"/>
+ <tnode x="5394" y="2947" i="21"/>
  <tnode x="7956" y="2976" i="22"/>
  <tnode x="8212" y="3116" i="23"/>
  <tnode x="8340" y="3572" i="24"/>

@@ -114,9 +114,13 @@ void MCSurfaceView::endBatch()
 
 MCBBox<MCFloat> MCSurfaceView::bbox() const
 {
+    // TODO: Fix this! The view should know the angle of the
+    // shape somehow. Now we just return a naive bbox.
+
     const MCFloat w = m_pSurface->width() / 2;
     const MCFloat h = m_pSurface->height() / 2;
+    const MCFloat r = std::max(w, h);
 
-    return MCBBox<MCFloat>(-w, -h, w, h);
+    return MCBBox<MCFloat>(-r, -r, r, r);
 }
 
