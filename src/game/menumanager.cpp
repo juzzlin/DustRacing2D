@@ -147,7 +147,7 @@ bool MenuManager::done() const
 {
     if (!m_menuStack.size())
     {
-        return false;
+        return true;
     }
     else
     {
