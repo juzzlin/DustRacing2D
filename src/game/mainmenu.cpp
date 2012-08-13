@@ -14,22 +14,10 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainmenu.hpp"
-
 #include "renderer.hpp"
-#include "scene.hpp"
-#include "statemachine.hpp"
-#include "menuitem.hpp"
-#include "menumanager.hpp"
 
-#include <MCLogger>
 #include <MCSurface>
 #include <MCTextureManager>
-#include <MCTextureFont>
-#include <MCTextureFontManager>
-#include <MCTextureText>
-
-#include <cassert>
-#include <sstream>
 
 MainMenu::MainMenu(std::string id, int width, int height)
 : Menu(id, width, height, Menu::MS_VERTICAL_LIST)
