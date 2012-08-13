@@ -122,6 +122,7 @@ private:
     TrackSelectionMenu  * m_trackSelectionMenu;
     Menu                * m_mainMenu;
     Menu                * m_help;
+    Menu                * m_credits;
     MenuManager         * m_menuManager;
 
     typedef std::vector<Car *> CarVector;

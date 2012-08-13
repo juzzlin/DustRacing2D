@@ -18,6 +18,7 @@
 #include "ailogic.hpp"
 #include "car.hpp"
 #include "checkeredflag.hpp"
+#include "credits.hpp"
 #include "inputhandler.hpp"
 #include "help.hpp"
 #include "layers.hpp"
@@ -90,6 +91,16 @@ class HelpAction : public MenuItemAction
     }
 };
 
+class CreditsAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Credits selected from the main menu.";
+        MenuManager::instance().pushMenu("credits");
+    }
+};
+
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 
 Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
@@ -105,6 +116,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_trackSelectionMenu(nullptr)
 , m_mainMenu(nullptr)
 , m_help(nullptr)
+, m_credits(nullptr)
 , m_menuManager(nullptr)
 {
     m_stateMachine.setRenderer(renderer);
@@ -192,9 +204,11 @@ void Scene::createMenus()
     m_menuManager = new MenuManager;
     m_mainMenu    = new MainMenu("main", width(), height());
     m_help        = new Help("help", width(), height());
+    m_credits     = new Credits("credits", width(), height());
 
     m_menuManager->addMenu(*m_mainMenu);
     m_menuManager->addMenu(*m_help);
+    m_menuManager->addMenu(*m_credits);
 
     MenuItem * play = new MenuItem(width(), height()    / 5, "Play");
     play->setView(new MenuItemView(*play), true);
@@ -206,6 +220,7 @@ void Scene::createMenus()
 
     MenuItem * credits = new MenuItem(width(), height() / 5, "Credits");
     credits->setView(new MenuItemView(*credits), true);
+    credits->setAction(new CreditsAction, true);
 
     MenuItem * quit = new MenuItem(width(), height()    / 5, "Quit");
     quit->setView(new MenuItemView(*quit), true);
@@ -607,5 +622,6 @@ Scene::~Scene()
     delete m_mainMenu;
     delete m_trackSelectionMenu;
     delete m_help;
+    delete m_credits;
     delete m_menuManager;
 }
