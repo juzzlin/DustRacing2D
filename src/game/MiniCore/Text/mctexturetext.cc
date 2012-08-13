@@ -131,30 +131,26 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
 
     glDisable(GL_DEPTH_TEST);
 
-    // Generate a sorted batch in order to
-    // improve VBO performance. The idea is
-    // to render glyphs out-of-order so that
-    // the same glyphs are grouped together.
-    static std::map<int, std::vector<int> > batch;
-    batch.clear();
-    for (MCUint i = 0; i < m_text.size(); i++)
-    {
-        const int glyph = m_text[i];
-        if (glyph != '\n' && glyph != ' ')
-        {
-            batch[glyph].push_back(i);
-        }
-    }
-
     int prevGlyph = 0;
     int glyph     = 0;
+    int glyphXPos = x;
+    int glyphYPos = y;
 
-    auto iter = batch.begin();
-    while (iter != batch.end())
+    for (MCUint i = 0; i < m_text.size(); i++)
     {
         prevGlyph = glyph;
-        glyph     = iter->first;
-        for (MCUint i = 0; i < iter->second.size(); i++)
+        glyph     = m_text[i];
+
+        if (glyph == '\n')
+        {
+            glyphXPos  = x;
+            glyphYPos -= m_glyphHeight;
+        }
+        else if (glyph == ' ')
+        {
+            glyphXPos += m_glyphWidth;
+        }
+        else
         {
             if (glyph != prevGlyph)
             {
@@ -170,21 +166,18 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
                 font.surface().setTexCoords(uv);
             }
 
-            MCUint glyphXPos = m_glyphWidth * iter->second[i];
-
             if (shadow)
             {
                 font.surface().renderShadowScaled(pCamera,
-                    MCVector3dF(x + glyphXPos + m_xOffset, y + m_yOffset, 0),
+                    MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0),
                     w2, h2, 0, false);
             }
 
             font.surface().renderScaled(pCamera,
-                MCVector3dF(x + glyphXPos, y, 0),
-                w2, h2, 0, false);
-        }
+                MCVector3dF(glyphXPos, glyphYPos, 0), w2, h2, 0, false);
 
-        iter++;
+            glyphXPos += m_glyphWidth;
+        }
     }
 
     font.surface().enableClientState(false);
