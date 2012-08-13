@@ -121,6 +121,7 @@ private:
     MCFloat               m_cameraBaseOffset;
     TrackSelectionMenu  * m_trackSelectionMenu;
     Menu                * m_mainMenu;
+    Menu                * m_help;
     MenuManager         * m_menuManager;
 
     typedef std::vector<Car *> CarVector;

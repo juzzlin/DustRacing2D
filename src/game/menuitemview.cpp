@@ -45,7 +45,7 @@ void MenuItemView::render(int x, int y)
     }
 
     text.setShadowOffset(shadowX, shadowY);
-    text.render(x - text.textWidth() / 2 + 20, y, nullptr, defaultMonospace);
+    text.render(x - text.width() / 2 + 20, y, nullptr, defaultMonospace);
 }
 
 MenuItemView::~MenuItemView()

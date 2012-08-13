@@ -13,6 +13,7 @@ set(SRC
     centrifugalforcegenerator.cpp
     checkeredflag.cpp
     game.cpp
+    help.cpp
     inputhandler.cpp
     main.cpp
     mainmenu.cpp

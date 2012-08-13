@@ -38,7 +38,7 @@ MCTextureText::MCTextureText(const std::string & text)
 , m_b(1.0)
 , m_a(1.0)
 , m_xOffset(2.0)
-, m_yOffset(2.0)
+, m_yOffset(-2.0)
 {
     updateTextDimensions();
 }
@@ -49,15 +49,27 @@ MCTextureText::~MCTextureText()
 
 void MCTextureText::updateTextDimensions()
 {
-    m_textWidth  = m_text.size() * m_glyphWidth;
-    m_textHeight = m_glyphHeight;
+    int maxLength = 0;
+    int length    = 0;
+    m_textHeight  = m_glyphHeight;
     for (MCUint i = 0; i < m_text.size(); i++)
     {
         if (m_text.at(i) == '\n')
         {
             m_textHeight += m_glyphHeight;
+            length        = 0;
+        }
+        else
+        {
+            length++;
+            if (length > maxLength)
+            {
+                maxLength = length;
+            }
         }
     }
+
+    m_textWidth = maxLength * m_glyphWidth;
 }
 
 void MCTextureText::setText(const std::string & text)
@@ -110,12 +122,12 @@ void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
     m_yOffset = yOffset;
 }
 
-MCUint MCTextureText::textWidth() const
+MCUint MCTextureText::width() const
 {
     return m_textWidth;
 }
 
-MCUint MCTextureText::textHeight() const
+MCUint MCTextureText::height() const
 {
     return m_textHeight;
 }

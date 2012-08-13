@@ -161,7 +161,7 @@ void TrackItem::render(int x, int y)
         text.setGlyphSize(20, 20);
         text.setShadowOffset(shadowX, shadowY);
         text.render(
-            x - text.textWidth() / 2, y + height() / 2 + text.textHeight(),
+            x - text.width() / 2, y + height() / 2 + text.height(),
             nullptr, defaultMonospace);
     }
 
@@ -170,7 +170,7 @@ void TrackItem::render(int x, int y)
         ss << "  Laps: " << m_track.trackData().lapCount();
         text.setText(ss.str());
         text.setGlyphSize(20, 20);
-        text.render(textX, y - height() / 2 - text.textHeight(), nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height(), nullptr, defaultMonospace);
     }
 
     {
@@ -179,7 +179,7 @@ void TrackItem::render(int x, int y)
            << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
            << " m";
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.textHeight() * 2, nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, defaultMonospace);
     }
 
     {
@@ -187,13 +187,13 @@ void TrackItem::render(int x, int y)
         ss << "Record: "
            << Timing::msecsToString(loadLapRecord(m_track.trackData().name().toStdString()));
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.textHeight() * 3, nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, defaultMonospace);
     }
 
     {
         text.setText("Use arrows to browse and enter to select..");
         text.setGlyphSize(10, 10);
-        text.render(10, text.textHeight(), nullptr, defaultMonospace);
+        text.render(10, text.height(), nullptr, defaultMonospace);
     }
 }
 

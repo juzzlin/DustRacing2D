@@ -86,7 +86,7 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 1.0);
             text.setShadowOffset(shadowX, shadowY);
-            text.render(0, height() - text.textHeight(),
+            text.render(0, height() - text.height(),
                 nullptr, m_defaultMonospace);
         }
 
@@ -105,7 +105,7 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 0.0);
             text.setShadowOffset(shadowX, shadowY);
-            text.render(0, height() - text.textHeight() * 2,
+            text.render(0, height() - text.height() * 2,
                 nullptr, m_defaultMonospace);
         }
 
@@ -132,13 +132,13 @@ void TimingOverlay::render()
             text.setText(ss.str());
             text.setGlyphSize(40, 40);
             text.setShadowOffset(shadowX, shadowY);
-            const int h = text.textHeight();
+            const int h = text.height();
             text.render(0, h, nullptr, m_defaultMonospace);
 
             text.setText(" KM/H");
             text.setGlyphSize(20, 20);
             text.setColor(1.0, 1.0, 1.0);
-            text.render(0, 2 * text.textHeight() + h,
+            text.render(0, 2 * text.height() + h,
                 nullptr, m_defaultMonospace);
         }
 
@@ -178,8 +178,8 @@ void TimingOverlay::render()
 
             text.setShadowOffset(shadowX, shadowY);
             text.render(
-                width() - text.textWidth(),
-                height() - text.textHeight(),
+                width() - text.width(),
+                height() - text.height(),
                 nullptr,
                 m_defaultMonospace);
         }
@@ -193,8 +193,8 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setShadowOffset(shadowX, shadowY);
             text.render(
-                width() - text.textWidth(),
-                height() - text.textHeight() * 2,
+                width() - text.width(),
+                height() - text.height() * 2,
                 nullptr,
                 m_defaultMonospace);
         }
@@ -209,8 +209,8 @@ void TimingOverlay::render()
             text.setGlyphSize(20, 20);
             text.setShadowOffset(shadowX, shadowY);
             text.render(
-                width()  - text.textWidth(),
-                height() - text.textHeight() * 3,
+                width()  - text.width(),
+                height() - text.height() * 3,
                 nullptr,
                 m_defaultMonospace);
         }

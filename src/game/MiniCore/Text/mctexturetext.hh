@@ -64,10 +64,10 @@ public:
     MCUint glyphHeight() const;
 
     //! Get text width.
-    MCUint textWidth() const;
+    MCUint width() const;
 
     //! Get text height.
-    MCUint textHeight() const;
+    MCUint height() const;
 
     //! Render at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
