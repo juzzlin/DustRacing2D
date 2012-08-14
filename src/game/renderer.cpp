@@ -233,47 +233,46 @@ void Renderer::keyPressEvent(QKeyEvent * event)
             }
         }
     }
+    else
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            MenuManager::instance().left();
+            break;
+        case Qt::Key_Right:
+            MenuManager::instance().right();
+            break;
+        case Qt::Key_Up:
+            MenuManager::instance().up();
+            break;
+        case Qt::Key_Down:
+            MenuManager::instance().down();
+            break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            MenuManager::instance().selectCurrentItem();
+            break;
+        case Qt::Key_Escape:
+        case Qt::Key_Q:
+            MenuManager::instance().exitCurrentMenu();
+            if (MenuManager::instance().done())
+            {
+                QApplication::instance()->quit();
+            }
+            break;
+        default:
+            QGLWidget::keyReleaseEvent(event);
+            break;
+        }
+    }
 }
 
 void Renderer::keyReleaseEvent(QKeyEvent * event)
 {
-    if (m_pInputHandler && !event->isAutoRepeat())
+    if (StateMachine::instance().state() != StateMachine::Menu)
     {
-        const bool menu = StateMachine::instance().state() == StateMachine::Menu;
-        if (menu)
-        {
-            switch (event->key())
-            {
-            case Qt::Key_Left:
-                MenuManager::instance().left();
-                break;
-            case Qt::Key_Right:
-                MenuManager::instance().right();
-                break;
-            case Qt::Key_Up:
-                MenuManager::instance().up();
-                break;
-            case Qt::Key_Down:
-                MenuManager::instance().down();
-                break;
-            case Qt::Key_Return:
-            case Qt::Key_Enter:
-                MenuManager::instance().selectCurrentItem();
-                break;
-            case Qt::Key_Escape:
-            case Qt::Key_Q:
-                MenuManager::instance().exitCurrentMenu();
-                if (MenuManager::instance().done())
-                {
-                    QApplication::instance()->quit();
-                }
-                break;
-            default:
-                QGLWidget::keyReleaseEvent(event);
-                break;
-            }
-        }
-        else
+        if (m_pInputHandler && !event->isAutoRepeat())
         {
             switch (event->key())
             {
