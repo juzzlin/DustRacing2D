@@ -114,7 +114,7 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
     {
         const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
         MCVector2dF rotatedDiff;
-        MCTrigonom::rotatedVector(diff, rotatedDiff, tile.rotation() - 45);
+        MCTrigonom::rotatedVector(diff, rotatedDiff, 360 - tile.rotation() - 45);
 
         if (rotatedDiff.j() < m_tileHLimit)
         {
