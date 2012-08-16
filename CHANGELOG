@@ -1,3 +1,21 @@
+0.6.0
+-----
+
+* Fixes SF#3546834: OffTrackDetector doesn't work correctly on some tiles.
+* Menu reacts on key press events, not key release events.
+* Menu::done() returns true, if stack is empty.
+* Adds Credits menu.
+* Adds Help menu.
+* Removes needless headers from mainmenu.cpp
+* Take linefeed into account in MCTextureText.
+* Updates README.
+* Show timing as 'hh:mm:ss.zz'
+* New track straight.trk
+* Moves woods.trk to obsolete/
+* Makes the wall wall object longer.
+* Adds CMake install targets.
+* Makes some MCObject's methods non-virtual.
+
 0.5.0
 -----
 
