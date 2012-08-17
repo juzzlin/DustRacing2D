@@ -31,7 +31,6 @@
 #include "trackobject.hpp"
 #include "tracktile.hpp"
 #include "treeview.hpp"
-#include "wall.hpp"
 
 #include <MCLogger>
 #include <MCObjectFactory>
