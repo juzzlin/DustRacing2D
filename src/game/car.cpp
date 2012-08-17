@@ -62,6 +62,7 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_isHuman(isHuman)
 , m_smokeCounter(0)
 , m_sparkleCounter(0)
+, m_mudCounter(0)
 {
     setLayer(Layers::Cars);
     setMass(desc.mass);
@@ -318,11 +319,10 @@ void Car::render(MCCamera *p)
             doSkidMark(leftFrontTire, 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
-            static int counter = 0;
-            if (++counter >= 5)
+            if (++m_mudCounter >= 5)
             {
                 doMud(leftRearTireLocation(), 0.3, 0.2, 0.0, 0.9);
-                counter = 0;
+                m_mudCounter = 0;
             }
         }
 
@@ -331,11 +331,10 @@ void Car::render(MCCamera *p)
             doSkidMark(rightFrontTire, 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
-            static int counter = 0;
-            if (++counter >= 5)
+            if (++m_mudCounter >= 5)
             {
                 doMud(rightRearTireLocation(), 0.3, 0.2, 0.0, 0.9);
-                counter = 0;
+                m_mudCounter = 0;
             }
         }
 
@@ -435,9 +434,21 @@ void Car::doSkidMark(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
     // Must be drawn to an offscreen buffer
 }
 
-void Car::doMud(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
+void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    // Must be drawn to an offscreen buffer
+    MCGLRectParticle * mud = nullptr;
+    if (m_freeList.size())
+    {
+        mud = static_cast<MCGLRectParticle *>(m_freeList.back());
+        m_freeList.pop_back();
+
+        mud->init(location, 4, 120);
+        mud->setAnimationStyle(MCParticle::Shrink);
+        mud->setColor(r, g, b, a);
+        mud->setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0f));
+        mud->setAcceleration(MCVector3dF(0, 0, -10.0f));
+        mud->addToWorld();
+    }
 }
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const

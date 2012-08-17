@@ -189,6 +189,7 @@ private:
     bool                  m_isHuman;
     mutable int           m_smokeCounter;
     mutable int           m_sparkleCounter;
+    mutable int           m_mudCounter;
 
     mutable MCParticle::ParticleFreeList m_freeList;
     mutable MCParticle::ParticleFreeList m_freeList2;
