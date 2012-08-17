@@ -118,12 +118,12 @@ void MCParticle::render(MCCamera * pCamera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
-        const MCFloat s = scale() * 0.5f;
-        shape()->renderScaled(s * bbox().width(), s * bbox().height(), pCamera);
+        const MCFloat r = m_scale * m_radius;
+        shape()->renderScaled(r, r, pCamera);
     }
     else
     {
-        MCObject::render(pCamera);
+        shape()->render(pCamera);
     }
 }
 
@@ -131,12 +131,12 @@ void MCParticle::renderShadow(MCCamera * pCamera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
-        const MCFloat s = scale() * 0.5f;
-        shape()->renderShadowScaled(s * bbox().width(), s * bbox().height(), pCamera);
+        const MCFloat r = m_scale * m_radius;
+        shape()->renderShadowScaled(r, r, pCamera);
     }
     else
     {
-        MCObject::renderShadow(pCamera);
+        shape()->renderShadow(pCamera);
     }
 }
 

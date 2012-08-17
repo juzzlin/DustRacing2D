@@ -32,6 +32,8 @@
 #include "mctrigonom.hh"
 #include "mcsurfaceview.hh"
 
+#include <cassert>
+
 MCUint MCObject::typeIDCount = 1;
 MCObject::TypeHash MCObject::typeHash;
 MCObject::TimerEventObjectsList MCObject::timerEventObjects;
@@ -335,16 +337,14 @@ void MCObject::resetMotion()
 
 void MCObject::setSurface(MCSurface * pSurface)
 {
-    if (pShape && pShape->view())
+    assert(pShape && pShape->view());
+
+    MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
+    assert(pView);
+
+    if (pView->surface() != pSurface)
     {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
-        if (pView)
-        {
-            if (pView->surface() != pSurface)
-            {
-                pView->setSurface(pSurface);
-            }
-        }
+        pView->setSurface(pSurface);
     }
 }
 
@@ -681,9 +681,8 @@ const MCVector3dF & MCObject::location() const
 
 void MCObject::setShadowOffset(const MCVector2dF & p)
 {
-    if (pShape) {
-        pShape->setShadowOffset(p);
-    }
+    assert(pShape);
+    pShape->setShadowOffset(p);
 }
 
 MCFloat MCObject::getX() const
@@ -785,10 +784,8 @@ MCShape * MCObject::shape() const
 
 void MCObject::setView(MCShapeView * newView)
 {
-    if (pShape)
-    {
-        pShape->setView(newView);
-    }
+    assert(pShape);
+    pShape->setView(newView);
 }
 
 MCShapeView * MCObject::view() const

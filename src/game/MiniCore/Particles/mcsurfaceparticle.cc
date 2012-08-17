@@ -20,36 +20,9 @@
 #include "mcsurfaceparticle.hh"
 #include "mcsurfaceview.hh"
 
-MCRecycler<MCSurfaceParticle> MCSurfaceParticle::m_recycler;
-
 MCSurfaceParticle::MCSurfaceParticle()
 {
-    setView(new MCSurfaceView("MCSurfaceParticle"));
-}
-
-void MCSurfaceParticle::init(
-    const MCVector3d<MCFloat> & newLocation,
-    MCFloat newRadius,
-    MCUint newLifeTime,
-    MCSurface * pSurface)
-{
-    MCParticle::init(newLocation, newRadius, newLifeTime);
-    setSurface(pSurface);
-}
-
-void MCSurfaceParticle::init(const MCVector3d<MCFloat> & newLocation, MCFloat newRadius, MCUint newLifeTime)
-{
-    MCParticle::init(newLocation, newRadius, newLifeTime);
-}
-
-MCSurfaceParticle * MCSurfaceParticle::create()
-{
-    return m_recycler.newObject();
-}
-
-void MCSurfaceParticle::recycle()
-{
-    m_recycler.freeObject(this);
+    setView(new MCSurfaceView("__MCSP"));
 }
 
 MCSurfaceParticle::~MCSurfaceParticle()

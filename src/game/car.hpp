@@ -187,8 +187,11 @@ private:
     int                   m_prevTargetNodeIndex;
     int                   m_routeProgression;
     bool                  m_isHuman;
+    mutable int           m_smokeCounter;
+    mutable int           m_sparkleCounter;
 
     mutable MCParticle::ParticleFreeList m_freeList;
+    mutable MCParticle::ParticleFreeList m_freeList2;
     std::vector<std::shared_ptr<MCParticle> > m_delete;
 };
 

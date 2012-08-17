@@ -21,47 +21,34 @@
 #define MCSURFACEPARTICLE_HH
 
 #include "mcparticle.hh"
-
-#include <string>
+#include "mccamera.hh"
+#include "mcsurface.hh"
+#include <iostream>
 
 class MCSurface;
 
 /*! \class MCSurfaceParticle
- *  \brief A particle that renders as a MCSurface. Can be inherited.
+ *  \brief A particle that renders as an MCSurface. Can be inherited.
+ *
+ *  Use MCObject::setSurface() to set the surface.
  */
 class MCSurfaceParticle : public MCParticle
 {
 public:
 
-    //! (Re-)init the particle.
-    virtual void init(
-        const MCVector3d<MCFloat> & location,
-        MCFloat radius,
-        MCUint lifeTime,
-        MCSurface * pSurface);
-
-    //! Create a new particle or return recycled one
-    static MCSurfaceParticle * create();
-
-    //! \reimp
-    virtual void recycle();
-
-protected:
-
     //! Constructor
     MCSurfaceParticle();
+
+    //! \reimp
+    virtual void renderShadow(MCCamera *)
+    {
+        // Do nothing
+    }
 
     //! Destructor
     virtual ~MCSurfaceParticle();
 
 private:
-
-    //! \reimp
-    virtual void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
-
-    //! Recycler object
-    static MCRecycler<MCSurfaceParticle> m_recycler;
-    friend class MCRecycler<MCSurfaceParticle>;
 
     DISABLE_COPY(MCSurfaceParticle);
     DISABLE_ASSI(MCSurfaceParticle);
