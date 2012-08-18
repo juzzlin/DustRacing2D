@@ -54,6 +54,7 @@ Renderer::Renderer(QWidget * parent)
 , m_textProgram(nullptr)
 , m_textShadowProgram(nullptr)
 , m_particleProgram(nullptr)
+, m_pointParticleProgram(nullptr)
 , m_enabled(true)
 {
     assert(!Renderer::m_instance);
@@ -135,6 +136,14 @@ void Renderer::loadShaders()
     m_particleProgram->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.vsh");
     m_particleProgram->link();
+
+    // TODO: Error handling
+    m_pointParticleProgram = new ShaderProgram(context());
+    m_pointParticleProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
+    m_pointParticleProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/pointParticle.vsh");
+    m_pointParticleProgram->link();
 }
 
 void Renderer::setEnabled(bool enable)
@@ -170,6 +179,11 @@ MCGLShaderProgram & Renderer::textShadowProgram()
 MCGLShaderProgram & Renderer::particleProgram()
 {
     return *m_particleProgram;
+}
+
+MCGLShaderProgram & Renderer::pointParticleProgram()
+{
+    return *m_pointParticleProgram;
 }
 
 void Renderer::setFadeValue(float value)
@@ -318,5 +332,6 @@ Renderer::~Renderer()
     delete m_textProgram;
     delete m_textShadowProgram;
     delete m_particleProgram;
+    delete m_pointParticleProgram;
     delete m_pGLScene;
 }

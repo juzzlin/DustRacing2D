@@ -27,6 +27,7 @@ Graphics/mcsurfaceview.cc
 Graphics/mctextureconfigloader.cc
 Graphics/mctexturemanager.cc
 Particles/mcparticle.cc
+Particles/mcglpointparticle.cc
 Particles/mcglrectparticle.cc
 Particles/mcsurfaceparticle.cc
 Physics/mccircleshape.cc

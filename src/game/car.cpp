@@ -23,6 +23,7 @@
 #include <MCCollisionEvent>
 #include <MCDragForceGenerator>
 #include <MCFrictionGenerator>
+#include <MCGLPointParticle>
 #include <MCGLRectParticle>
 #include <MCMathUtil>
 #include <MCRandom>
@@ -35,7 +36,7 @@
 #include <MCTypes>
 #include <MCVector2d>
 
-Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
+Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
@@ -64,14 +65,35 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_sparkleCounter(0)
 , m_mudCounter(0)
 {
+    setProperties(desc);
+
+    initForceGenerators(desc);
+
+    preCreateParticles();
+
+    m_brakeGlow.setShaderProgram(&Renderer::instance().masterProgram());
+    m_frontTire.setShaderProgram(&Renderer::instance().masterProgram());
+}
+
+void Car::setProperties(Description & desc)
+{
     setLayer(Layers::Cars);
+
     setMass(desc.mass);
     setMomentOfInertia(desc.momentOfInertia);
     setMaximumVelocity(desc.maxLinearVelocity);
     setMaximumAngularVelocity(desc.maxAngularVelocity);
-    setShadowOffset(MCVector2d<MCFloat>(5, -5));
     setRestitution(desc.restitution);
 
+    setShadowOffset(MCVector2d<MCFloat>(5, -5));
+
+    const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
+    const MCFloat height = static_cast<MCRectShape *>(shape())->height();
+    m_length = std::max(width, height);
+}
+
+void Car::initForceGenerators(Description & desc)
+{
     // Add slide friction generator
     MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
 
@@ -89,11 +111,10 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
 
     MCForceGenerator * drag = new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic);
     MCWorld::instance().addForceGenerator(*drag, *this, true);
+}
 
-    const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
-    const MCFloat height = static_cast<MCRectShape *>(shape())->height();
-    m_length = std::max(width, height);
-
+void Car::preCreateParticles()
+{
     // Pre-create some MCGLRectParticles
     for (int i = 0; i < 100; i++)
     {
@@ -125,8 +146,20 @@ Car::Car(Description desc, MCSurface & surface, MCUint index, bool isHuman)
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
     }
 
-    m_brakeGlow.setShaderProgram(&Renderer::instance().masterProgram());
-    m_frontTire.setShaderProgram(&Renderer::instance().masterProgram());
+    // Pre-create some MCGLPointParticles
+    for (int i = 0; i < 100; i++)
+    {
+        MCParticle * particle = new MCGLPointParticle;
+        static_cast<MCGLPointParticle *>(particle)->setShaderProgram(
+            &Renderer::instance().pointParticleProgram());
+        particle->setFreeList(m_freeList3);
+
+        // Initially push to list of free particles
+        m_freeList3.push_back(particle);
+
+        // Store for deletion
+        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+    }
 }
 
 void Car::clearStatuses()
@@ -453,11 +486,11 @@ void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat 
 
 void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    MCGLRectParticle * sparkle = nullptr;
-    if (m_freeList.size())
+    MCGLPointParticle * sparkle = nullptr;
+    if (m_freeList3.size())
     {
-        sparkle = static_cast<MCGLRectParticle *>(m_freeList.back());
-        m_freeList.pop_back();
+        sparkle = static_cast<MCGLPointParticle *>(m_freeList3.back());
+        m_freeList3.pop_back();
 
         sparkle->init(location, 2, 60);
         sparkle->setAnimationStyle(MCParticle::Shrink);

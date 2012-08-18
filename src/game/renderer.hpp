@@ -70,6 +70,8 @@ public:
 
     MCGLShaderProgram & particleProgram();
 
+    MCGLShaderProgram & pointParticleProgram();
+
     float fadeValue() const;
 
 protected:
@@ -106,6 +108,7 @@ private:
     MCGLShaderProgram * m_textProgram;
     MCGLShaderProgram * m_textShadowProgram;
     MCGLShaderProgram * m_particleProgram;
+    MCGLShaderProgram * m_pointParticleProgram;
     bool                m_enabled;
 
     static Renderer * m_instance;
