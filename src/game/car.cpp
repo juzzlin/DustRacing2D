@@ -186,7 +186,7 @@ void Car::turnLeft()
     if (std::abs(m_speedInKmh) > 1)
     {
         MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
-        velScaling = velScaling < 0.25f ? 0.25f : velScaling;
+        velScaling = velScaling < 0.25 ? 0.25 : velScaling;
         if (m_braking)
         {
             addAngularImpulse(m_desc.turningImpulse / 2);
@@ -207,7 +207,7 @@ void Car::turnRight()
     if (std::abs(m_speedInKmh) > 1)
     {
         MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
-        velScaling = velScaling < 0.25f ? 0.25f : velScaling;
+        velScaling = velScaling < 0.25 ? 0.25 : velScaling;
         if (m_braking)
         {
             addAngularImpulse(-m_desc.turningImpulse / 2);
@@ -390,7 +390,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
         {
             if (++m_sparkleCounter >= 10)
             {
-                doSparkle(event.contactPoint(), 1.0, 0.8f, 0.0, 0.9);
+                doSparkle(event.contactPoint(), 1.0, 0.8, 0.0, 0.9);
                 doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
                 m_sparkleCounter = 0;
             }
@@ -407,7 +407,7 @@ void Car::stepTime()
     m_dy = MCTrigonom::sin(angle());
 
     // Cache speed in km/h. Use value of twice as big as the "real" value.
-    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 3.6f * 2;
+    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 3.6 * 2;
 
     if (m_leftSideOffTrack || m_rightSideOffTrack)
     {

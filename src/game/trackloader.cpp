@@ -60,7 +60,7 @@ int TrackLoader::loadTracks()
     int numLoaded = 0;
     for (QString path : m_paths)
     {
-        MCLogger().info() << "Loading tracks from '" << path.toStdString() << "'..";
+        MCLogger().info() << "Loading race tracks from '" << path.toStdString() << "'..";
         QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
         for (QString trackPath : trackPaths)
         {

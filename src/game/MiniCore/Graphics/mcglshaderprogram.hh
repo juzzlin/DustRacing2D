@@ -45,23 +45,35 @@ public:
     //! \return true if bound.
     bool isBound() const;
 
+    //! Link the program.
     virtual void link();
 
+    //! \return true if linked.
     virtual bool isLinked() const;
 
+    /*! Add a vertex shader.
+     *  \return true if succeeded. */
     virtual bool addVertexShader(const std::string & path);
 
+    /*! Add a fragment shader.
+     *  \return true if succeeded. */
     virtual bool addFragmentShader(const std::string & path);
 
+    //! Set rotation.
     virtual void rotate(GLfloat angle);
 
+    //! Set translation.
     virtual void translate(const MCVector3dF & pos);
 
-    virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    //! Set color.
+    virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
 
-    virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
+    //! Set scale.
+    virtual void setScale(GLfloat x = 1.0, GLfloat y = 1.0, GLfloat z = 1.0);
 
-    virtual void setFadeValue(GLfloat f);
+    /*! Set fade factor. The final color should be multiplied with this
+     *  factor. */
+    virtual void setFadeValue(GLfloat f = 1.0);
 
 private:
 

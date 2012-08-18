@@ -124,11 +124,11 @@ bool Game::loadTracks()
     // Load track data
     if (int numLoaded = m_trackLoader->loadTracks())
     {
-        MCLogger().info() << numLoaded << " track(s) loaded.";
+        MCLogger().info() << "A total of " << numLoaded << " race track(s) loaded.";
     }
     else
     {
-        MCLogger().error() << "No valid tracks found.";
+        MCLogger().error() << "No valid race tracks found.";
         return false;
     }
 
