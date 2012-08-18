@@ -1,3 +1,12 @@
+0.6.1
+-----
+
+* Adds documentation to shaderprogram.hpp
+* Render sparkles as points.
+* Adds mud particle.
+* New smoke.
+* Moves wall.hpp and wall.cpp to obsolete/
+
 0.6.0
 -----
 
