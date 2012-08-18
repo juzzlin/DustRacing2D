@@ -22,33 +22,49 @@
 #include <QGLContext>
 #include <QObject>
 
+/*! Implements the MCGLShaderProgram interface by wrapping
+ *  a QGLShaderProgram. */
 class ShaderProgram : public MCGLShaderProgram
 {
 public:
+
+    //! Constructor.
     ShaderProgram(const QGLContext * context);
 
+    //! Destructor.
     virtual ~ShaderProgram();
 
+    //! \reimp
     virtual void bind();
 
+    //! \reimp
     virtual void release();
 
+    //! \reimp
     virtual void link();
 
+    //! \reimp
     virtual bool isLinked() const;
 
+    //! \reimp
     virtual bool addVertexShader(const std::string & path);
 
+    //! \reimp
     virtual bool addFragmentShader(const std::string & path);
 
+    //! \reimp
     virtual void rotate(GLfloat angle);
 
+    //! \reimp
     virtual void translate(const MCVector3dF & pos);
 
+    //! \reimp
     virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 
+    //! \reimp
     virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
 
+    //! \reimp
     virtual void setFadeValue(GLfloat f);
 
 private:

@@ -78,6 +78,7 @@ void ShaderProgram::translate(const MCVector3dF & p)
 
 void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 {
+    // Not supported. Vertex colors are currently set in VBO's.
 }
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
