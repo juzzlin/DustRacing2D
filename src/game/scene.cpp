@@ -554,7 +554,7 @@ void Scene::render(MCCamera & camera)
 
     if (m_stateMachine.state() == StateMachine::Intro)
     {
-        const int w2 = width() / 2;
+        const int w2 = width()  / 2;
         const int h2 = height() / 2;
         static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
         surface.setShaderProgram(&Renderer::instance().masterProgram());

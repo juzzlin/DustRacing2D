@@ -10,10 +10,11 @@ A separate engine, MiniCore, is used for physics modeling.
 License
 -------
 
-Dust Racing is licensed under GNU GPLv3. This applies to everything
-in the source tree unless stated otherwise, including graphics.
-
+Dust Racing source code is licensed under GNU GPLv3. 
 See COPYING for the complete license text.
+
+All image files, except where otherwise noted, are licensed under
+http://creativecommons.org/licenses/by/3.0/
 
 Playing
 -------

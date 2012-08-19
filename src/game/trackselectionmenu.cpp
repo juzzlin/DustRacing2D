@@ -214,9 +214,12 @@ void TrackSelectionMenu::addTrack(Track & track)
 
 void TrackSelectionMenu::render()
 {
-    MCSurface & back = MCTextureManager::instance().surface("menu");
+    const int w2 = width()  / 2;
+    const int h2 = height() / 2;
+    MCSurface & back = MCTextureManager::instance().surface("trackSelectionBack");
     back.setShaderProgram(&Renderer::instance().masterProgram());
-    back.renderScaled(nullptr, MCVector3dF(0, 0, 0), width(), height(), 0);
+    back.setColor(0.5, 0.5, 0.5, 1.0);
+    back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     Menu::render();
 }
 
