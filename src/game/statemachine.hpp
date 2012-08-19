@@ -36,10 +36,12 @@ public:
         Init,
         Intro,
         Menu,
+        MenuTransitionIn,
+        MenuTransitionOut,
         GameTransitionIn, // Active when a race starts
+        GameTransitionOut, // Active when a race is over
         DoStartlights,
-        Play,
-        GameTransitionOut // Active when a race is over
+        Play
     };
 
     //! Constructor.

@@ -561,7 +561,10 @@ void Scene::render(MCCamera & camera)
         surface.shaderProgram()->setFadeValue(fadeValue);
         surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     }
-    else if (m_stateMachine.state() == StateMachine::Menu)
+    else if (
+        m_stateMachine.state() == StateMachine::Menu ||
+        m_stateMachine.state() == StateMachine::MenuTransitionOut ||
+        m_stateMachine.state() == StateMachine::MenuTransitionIn)
     {
         if (!fadeUpdate)
         {

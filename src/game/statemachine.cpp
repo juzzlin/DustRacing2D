@@ -25,6 +25,9 @@
 
 StateMachine * StateMachine::m_instance = nullptr;
 
+static const float FADE_SPEED_INTRO = 0.01;
+static const float FADE_SPEED_MENU  = 0.02;
+
 StateMachine::StateMachine()
 : m_state(Init)
 , m_startlights(nullptr)
@@ -66,7 +69,7 @@ bool StateMachine::update()
 
         if (m_fadeValue < 2.0)
         {
-            m_fadeValue += 0.01;
+            m_fadeValue += FADE_SPEED_INTRO;
             m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
 
             // Avoid a non-black screen immediately after the game starts.
@@ -90,8 +93,24 @@ bool StateMachine::update()
 
         if (MenuManager::instance().done())
         {
-            m_state = GameTransitionIn;
+            m_state = MenuTransitionOut;
         }
+
+        break;
+
+    case MenuTransitionOut:
+
+        if (m_fadeValue <= 0.0)
+        {
+            m_state     = GameTransitionIn;
+            m_fadeValue = 0.0;
+        }
+        else
+        {
+            m_fadeValue -= FADE_SPEED_MENU;
+        }
+
+        m_renderer->setFadeValue(m_fadeValue);
 
         break;
 
@@ -99,11 +118,19 @@ bool StateMachine::update()
 
         assert(m_track);
 
-        if (!m_track->update())
+        if (m_fadeValue >= 1.0)
         {
+            m_fadeValue = 1.0;
+            m_state     = DoStartlights;
+
             m_startlights->reset();
-            m_state = DoStartlights;
         }
+        else
+        {
+            m_fadeValue += FADE_SPEED_MENU;
+        }
+
+        m_renderer->setFadeValue(m_fadeValue);
 
         break;
 
@@ -124,7 +151,7 @@ bool StateMachine::update()
 
         if (m_race->finished())
         {
-            m_fadeValue = 3.0;
+            m_fadeValue = 3.0; // Add some delay with a value greater than 1.0
             m_state     = GameTransitionOut;
         }
         else if (m_returnToMenu)
@@ -139,12 +166,25 @@ bool StateMachine::update()
 
         assert(m_renderer);
 
-        if (m_fadeValue >= 0.01)
+        if (m_fadeValue >= FADE_SPEED_MENU)
         {
-            m_fadeValue -= 0.01;
-            m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
+            m_fadeValue -= FADE_SPEED_MENU;
         }
         else
+        {
+            m_fadeValue = 0.0;
+            m_state     = MenuTransitionIn;
+        }
+
+        m_renderer->setFadeValue(std::fmin(m_fadeValue, 1.0));
+
+        break;
+
+    case MenuTransitionIn:
+
+        assert(m_renderer);
+
+        if (m_fadeValue >= 1.0)
         {
             m_fadeValue = 1.0;
             m_state     = Menu;
@@ -152,6 +192,12 @@ bool StateMachine::update()
             // Re-init the track selection menu
             MenuManager::instance().enterCurrentMenu();
         }
+        else
+        {
+            m_fadeValue += FADE_SPEED_MENU;
+        }
+
+        m_renderer->setFadeValue(m_fadeValue);
 
         break;
 
