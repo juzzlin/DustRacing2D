@@ -52,7 +52,7 @@ void MCTextureText::updateTextDimensions()
     int maxLength = 0;
     int length    = 0;
     m_textHeight  = m_glyphHeight;
-    for (MCUint i = 0; i < m_text.size(); i++)
+    for (int i = 0; i < static_cast<int>(m_text.size()); i++)
     {
         if (m_text.at(i) == '\n')
         {
@@ -83,19 +83,19 @@ const std::string & MCTextureText::text() const
     return m_text;
 }
 
-void MCTextureText::setGlyphSize(MCUint width, MCUint height)
+void MCTextureText::setGlyphSize(int width, int height)
 {
     m_glyphWidth  = width;
     m_glyphHeight = height;
     updateTextDimensions();
 }
 
-MCUint MCTextureText::glyphWidth() const
+int MCTextureText::glyphWidth() const
 {
     return m_glyphWidth;
 }
 
-MCUint MCTextureText::glyphHeight() const
+int MCTextureText::glyphHeight() const
 {
     return m_glyphHeight;
 }
@@ -122,12 +122,12 @@ void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
     m_yOffset = yOffset;
 }
 
-MCUint MCTextureText::width() const
+int MCTextureText::width() const
 {
     return m_textWidth;
 }
 
-MCUint MCTextureText::height() const
+int MCTextureText::height() const
 {
     return m_textHeight;
 }
@@ -135,8 +135,8 @@ MCUint MCTextureText::height() const
 void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
     MCTextureFont & font, bool shadow)
 {
-    const MCUint w2 = m_glyphWidth  / 2;
-    const MCUint h2 = m_glyphHeight / 2;
+    const int w2 = m_glyphWidth  / 2;
+    const int h2 = m_glyphHeight / 2;
 
     font.surface().enableClientState(true);
     font.surface().setColor(m_r, m_g, m_b, m_a);
@@ -148,7 +148,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
     int glyphXPos = x;
     int glyphYPos = y;
 
-    for (MCUint i = 0; i < m_text.size(); i++)
+    for (int i = 0; i < static_cast<int>(m_text.size()); i++)
     {
         prevGlyph = glyph;
         glyph     = m_text[i];

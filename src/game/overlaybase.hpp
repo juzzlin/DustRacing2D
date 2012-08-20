@@ -33,13 +33,13 @@ public:
     OverlayBase();
 
     //! Set overlay dimensions.
-    virtual void setDimensions(MCUint width, MCUint height);
+    virtual void setDimensions(int width, int height);
 
     //! Get overlay width.
-    MCUint width() const;
+    int width() const;
 
     //! Get overlay height.
-    MCUint height() const;
+    int height() const;
 
     //! Destructor.
     virtual ~OverlayBase();
@@ -55,7 +55,7 @@ public:
 
 private:
 
-    MCUint m_width, m_height;
+    int m_width, m_height;
 };
 
 #endif // OVERLAYBASE_HPP

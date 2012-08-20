@@ -20,6 +20,7 @@
 #include "checkeredflag.hpp"
 #include "credits.hpp"
 #include "inputhandler.hpp"
+#include "intro.hpp"
 #include "help.hpp"
 #include "layers.hpp"
 #include "mainmenu.hpp"
@@ -118,10 +119,12 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_help(nullptr)
 , m_credits(nullptr)
 , m_menuManager(nullptr)
+, m_intro(new Intro)
 {
     m_stateMachine.setRenderer(renderer);
     m_stateMachine.setRace(m_race);
     m_stateMachine.setStartlights(*m_startlights);
+    m_stateMachine.setIntro(*m_intro);
 
     const int humanPower = 7500;
 
@@ -170,8 +173,9 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
         m_offTrackDetectors.push_back(new OffTrackDetector(*car));
     }
 
-    m_startlightsOverlay->setDimensions(width(), height());
     m_checkeredFlag->setDimensions(width(), height());
+    m_intro->setDimensions(width(), height());
+    m_startlightsOverlay->setDimensions(width(), height());
 
     m_timingOverlay->setDimensions(width(), height());
     m_timingOverlay->setTiming(m_race.timing());
@@ -552,14 +556,10 @@ void Scene::render(MCCamera & camera)
         fadeUpdate = 0;
     }
 
-    if (m_stateMachine.state() == StateMachine::Intro)
+    if (m_stateMachine.state() == StateMachine::DoIntro)
     {
-        const int w2 = width()  / 2;
-        const int h2 = height() / 2;
-        static MCSurface & surface = MCTextureManager::instance().surface("dustRacing");
-        surface.setShaderProgram(&Renderer::instance().masterProgram());
-        surface.shaderProgram()->setFadeValue(fadeValue);
-        surface.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
+        m_intro->setFadeValue(fadeValue);
+        m_intro->render();
     }
     else if (
         m_stateMachine.state() == StateMachine::Menu ||
@@ -619,12 +619,13 @@ Scene::~Scene()
         delete otd;
     }
 
+    delete m_credits;
+    delete m_help;
+    delete m_intro;
+    delete m_mainMenu;
+    delete m_menuManager;
     delete m_startlights;
     delete m_startlightsOverlay;
     delete m_timingOverlay;
-    delete m_mainMenu;
     delete m_trackSelectionMenu;
-    delete m_help;
-    delete m_credits;
-    delete m_menuManager;
 }

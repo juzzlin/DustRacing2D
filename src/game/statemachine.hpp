@@ -21,6 +21,7 @@
 #include <MCTypes>
 #include <QApplication>
 
+class Intro;
 class Race;
 class Renderer;
 class Startlights;
@@ -34,7 +35,7 @@ public:
     enum State
     {
         Init,
-        Intro,
+        DoIntro,
         Menu,
         MenuTransitionIn,
         MenuTransitionOut,
@@ -52,6 +53,11 @@ public:
 
     //! Return the singleton instance.
     static StateMachine & instance();
+
+    void setIntro(Intro & intro)
+    {
+        m_intro = &intro;
+    }
 
     void setTrack(Track & track)
     {
@@ -99,6 +105,8 @@ private:
     static StateMachine * m_instance;
 
     State         m_state;
+
+    Intro       * m_intro;
     Startlights * m_startlights;
     Race        * m_race;
     Renderer    * m_renderer;

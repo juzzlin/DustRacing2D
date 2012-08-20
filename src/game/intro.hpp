@@ -13,39 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef STARTLIGHTSOVERLAY_HPP
-#define STARTLIGHTSOVERLAY_HPP
+#ifndef INTRO_HPP
+#define INTRO_HPP
 
 #include "overlaybase.hpp"
-#include <MCTypes>
 
 class MCSurface;
-class MCTextureFontManager;
+class MCTextureFont;
 
-class Startlights;
-
-//! Renders startlights on top of the game scene.
-class StartlightsOverlay : public OverlayBase
+//! The intro animation.
+class Intro : public OverlayBase
 {
 public:
 
     //! Constructor.
-    StartlightsOverlay(Startlights & model);
+    Intro();
 
     //! \reimp
-    virtual void render();
+    void render();
+
+    void setFadeValue(float value);
 
     //! \reimp
-    virtual void setDimensions(int width, int height);
+    void setDimensions(int width, int height);
+
+    //! \reimp
+    bool update();
 
 private:
 
-    void renderLights(int rows, int litRows) const;
-
-    MCSurface & m_startLightOn;
-    MCSurface & m_startLightOff;
-    MCSurface & m_startLightGlow;
-    Startlights & m_model;
+    MCSurface     & m_back;
+    MCTextureFont & m_monospace;
 };
 
-#endif // STARTLIGHTSOVERLAY_HPP
+#endif // INTRO_HPP

@@ -15,6 +15,7 @@
 
 #include "statemachine.hpp"
 
+#include "intro.hpp"
 #include "menumanager.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
@@ -25,11 +26,12 @@
 
 StateMachine * StateMachine::m_instance = nullptr;
 
-static const float FADE_SPEED_INTRO = 0.01;
-static const float FADE_SPEED_MENU  = 0.02;
+static const float FADE_SPEED_MENU = 0.02;
+static const float FADE_SPEED_GAME = 0.01;
 
 StateMachine::StateMachine()
 : m_state(Init)
+, m_intro(nullptr)
 , m_startlights(nullptr)
 , m_race(nullptr)
 , m_renderer(nullptr)
@@ -58,30 +60,19 @@ bool StateMachine::update()
     {
     case Init:
 
-        m_state     = Intro;
+        m_state     = DoIntro;
         m_fadeValue = 0.0;
 
         break;
 
-    case Intro:
+    case DoIntro:
 
         assert(m_renderer);
 
-        if (m_fadeValue < 2.0)
+        if (m_intro->update()) // Intro return true when done.
         {
-            m_fadeValue += FADE_SPEED_INTRO;
-            m_renderer->setFadeValue(std::min(m_fadeValue, MCFloat(1.0)));
-
-            // Avoid a non-black screen immediately after the game starts.
-            if (m_fadeValue > 0.02)
-            {
-                m_renderer->setEnabled(true);
-            }
-        }
-        else
-        {
-            m_fadeValue = 1.0;
-            m_state     = Menu;
+            m_renderer->setFadeValue(1.0);
+            m_state = Menu;
         }
 
         break;
@@ -89,7 +80,8 @@ bool StateMachine::update()
     case Menu:
 
         m_returnToMenu = false;
-        m_renderer->setFadeValue(1.0);
+        m_fadeValue = 1.0;
+        m_renderer->setFadeValue(m_fadeValue);
 
         if (MenuManager::instance().done())
         {
@@ -166,9 +158,9 @@ bool StateMachine::update()
 
         assert(m_renderer);
 
-        if (m_fadeValue >= FADE_SPEED_MENU)
+        if (m_fadeValue >= FADE_SPEED_GAME)
         {
-            m_fadeValue -= FADE_SPEED_MENU;
+            m_fadeValue -= FADE_SPEED_GAME;
         }
         else
         {

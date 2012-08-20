@@ -16,6 +16,7 @@ set(SRC
     game.cpp
     help.cpp
     inputhandler.cpp
+    intro.cpp
     main.cpp
     mainmenu.cpp
     mainwindow.cpp

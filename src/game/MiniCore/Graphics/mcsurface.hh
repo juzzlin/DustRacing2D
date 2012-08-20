@@ -86,7 +86,7 @@ public:
     void setTexCoords(const MCGLTexCoord texCoords[4]);
 
     //! Set color.
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a);
+    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
 
    /*! Get bounding box for a rotated surface
     * \param pos The position.

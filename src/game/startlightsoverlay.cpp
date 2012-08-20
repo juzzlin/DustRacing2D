@@ -31,18 +31,18 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
     m_startLightGlow.setShaderProgram(&Renderer::instance().masterProgram());
 }
 
-void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
+void StartlightsOverlay::renderLights(int rows, int litRows) const
 {
-    const MCUint cols = 8;
+    const int cols = 8;
 
     const MCFloat x = m_model.pos().i() - (cols - 1) * m_startLightOn.width()  / 2;
     const MCFloat y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
     const MCFloat h = rows * m_startLightOn.height();
 
     // Body
-    for (MCUint row = 0; row < rows; row++)
+    for (int row = 0; row < rows; row++)
     {
-        for (MCUint col = 0; col < cols; col++)
+        for (int col = 0; col < cols; col++)
         {
             if (row < litRows)
             {
@@ -66,9 +66,9 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
     }
 
     // Glow
-    for (MCUint row = 0; row < rows; row++)
+    for (int row = 0; row < rows; row++)
     {
-        for (MCUint col = 0; col < cols; col++)
+        for (int col = 0; col < cols; col++)
         {
             if (row < litRows)
             {
@@ -83,7 +83,7 @@ void StartlightsOverlay::renderLights(MCUint rows, MCUint litRows) const
     }
 }
 
-void StartlightsOverlay::setDimensions(MCUint width, MCUint height)
+void StartlightsOverlay::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
     m_model.setDimensions(width, height);

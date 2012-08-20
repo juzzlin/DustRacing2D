@@ -44,7 +44,9 @@ public:
     virtual ~MCVectorAnimation();
 
     //! Initialize the animation.
-    void init(MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, MCUint steps);
+    void init(
+        MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, MCUint steps,
+        MCUint preDelay = 0, MCUint postDelay = 0);
 
     //! Update the animation. Returns true when done.
     bool update();
@@ -54,7 +56,14 @@ private:
     DISABLE_COPY(MCVectorAnimation);
     DISABLE_ASSI(MCVectorAnimation);
 
-    MCVectorAnimationImpl * const m_pImpl;
+    MCVector3dF * m_vect;
+    MCVector3dF   m_start;
+    MCVector3dF   m_end;
+    MCVector3dF   m_delta;
+    MCUint        m_steps;
+    MCUint        m_step;
+    MCUint        m_preDelay;
+    MCUint        m_postDelay;
 };
 
 #endif // MCVECTORANIMATION_HH

@@ -20,71 +20,53 @@
 #include "mcvectoranimation.hh"
 #include <cassert>
 
-class MCVectorAnimationImpl
-{
-    MCVectorAnimationImpl();
-    void init(
-        MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end,
-        MCUint steps);
-    bool update();
-
-    MCVector3dF * pVect;
-    MCVector3dF   delta;
-    MCUint        steps;
-    MCUint        step;
-
-    friend class MCVectorAnimation;
-};
-
-MCVectorAnimationImpl::MCVectorAnimationImpl()
-: pVect(nullptr)
-{
-}
-
-void MCVectorAnimationImpl::init(
-    MCVector3dF       & vect,
-    const MCVector3dF & start,
-    const MCVector3dF & end,
-    MCUint steps_)
-{
-    delta  = (end - start) / steps_;
-    pVect  = &vect;
-    steps  = steps_;
-    step   = 0;
-    *pVect = start;
-}
-
-bool MCVectorAnimationImpl::update()
-{
-    assert(pVect);
-    if (++step < steps)
-    {
-        *pVect += delta;
-        return false;
-    }
-    return true;
-}
-
 MCVectorAnimation::MCVectorAnimation()
-: m_pImpl(new MCVectorAnimationImpl)
+: m_vect(nullptr)
+, m_preDelay(0)
+, m_postDelay(0)
 {
-}
-
-MCVectorAnimation::~MCVectorAnimation()
-{
-    delete m_pImpl;
 }
 
 void MCVectorAnimation::init(
-    MCVector3dF & vect,
+    MCVector3dF       & vect,
     const MCVector3dF & start,
     const MCVector3dF & end,
-    MCUint steps)
+    MCUint steps,
+    MCUint preDelay,
+    MCUint postDelay)
 {
-    m_pImpl->init(vect, start, end, steps);
+    m_delta     = (end - start) / steps;
+    m_vect      = &vect;
+    m_steps     = steps;
+    m_step      = 0;
+    *m_vect     = start;
+    m_preDelay  = preDelay;
+    m_postDelay = postDelay;
 }
 
 bool MCVectorAnimation::update()
 {
-    return m_pImpl->update();
+    assert(m_vect);
+
+    if (m_preDelay)
+    {
+        m_preDelay--;
+        return false;
+    }
+    else if (++m_step < m_steps)
+    {
+        *m_vect += m_delta;
+        return false;
+    }
+    else if (m_postDelay)
+    {
+        m_postDelay--;
+        return false;
+    }
+
+    return true;
+}
+
+MCVectorAnimation::~MCVectorAnimation()
+{
 }

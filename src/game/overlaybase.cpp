@@ -21,18 +21,18 @@ OverlayBase::OverlayBase()
 {
 }
 
-void OverlayBase::setDimensions(MCUint width, MCUint height)
+void OverlayBase::setDimensions(int width, int height)
 {
     m_width = width;
     m_height = height;
 }
 
-MCUint OverlayBase::width() const
+int OverlayBase::width() const
 {
     return m_width;
 }
 
-MCUint OverlayBase::height() const
+int OverlayBase::height() const
 {
     return m_height;
 }

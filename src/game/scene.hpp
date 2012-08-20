@@ -24,6 +24,7 @@
 class AiLogic;
 class CheckeredFlag;
 class InputHandler;
+class Intro;
 class Menu;
 class MenuManager;
 class MCCamera;
@@ -124,6 +125,7 @@ private:
     Menu                * m_help;
     Menu                * m_credits;
     MenuManager         * m_menuManager;
+    Intro               * m_intro;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;

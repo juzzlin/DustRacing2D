@@ -46,7 +46,7 @@ public:
     const std::string & text() const;
 
     //! Set size of one glyph.
-    void setGlyphSize(MCUint width, MCUint height);
+    void setGlyphSize(int width, int height);
 
     //! Set color.
     void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
@@ -58,16 +58,16 @@ public:
     void setShadowOffset(MCFloat xOffset, MCFloat yOffset);
 
     //! Get glyph width.
-    MCUint glyphWidth() const;
+    int glyphWidth() const;
 
     //! Get glyph height.
-    MCUint glyphHeight() const;
+    int glyphHeight() const;
 
     //! Get text width.
-    MCUint width() const;
+    int width() const;
 
     //! Get text height.
-    MCUint height() const;
+    int height() const;
 
     //! Render at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
@@ -83,8 +83,8 @@ private:
     void updateTextDimensions();
 
     std::string m_text;
-    MCUint m_glyphWidth, m_glyphHeight;
-    MCUint m_textWidth, m_textHeight;
+    int m_glyphWidth, m_glyphHeight;
+    int m_textWidth, m_textHeight;
     MCFloat m_r, m_g, m_b, m_a;
     MCFloat m_xOffset, m_yOffset;
 };
