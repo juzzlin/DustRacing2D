@@ -18,6 +18,9 @@
 
 #include "menu.hpp"
 
+class MCSurface;
+class MCTextureFont;
+
 //! The credits "menu".
 class Credits : public Menu
 {
@@ -30,6 +33,9 @@ public:
     virtual void render();
 
 private:
+
+    MCSurface     & m_back;
+    MCTextureFont & m_monospace;
 };
 
 #endif // CREDITS_HPP

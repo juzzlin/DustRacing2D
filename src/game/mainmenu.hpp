@@ -18,6 +18,8 @@
 
 #include "menu.hpp"
 
+class MCSurface;
+
 //! The main menu of the game.
 class MainMenu : public Menu
 {
@@ -30,6 +32,8 @@ public:
     virtual void render();
 
 private:
+
+    MCSurface & m_back;
 };
 
 #endif // MAINMENU_HPP

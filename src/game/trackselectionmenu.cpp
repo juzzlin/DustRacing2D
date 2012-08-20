@@ -52,6 +52,7 @@ public:
     : MenuItem(width, height)
     , m_track(track)
     , m_xDisplacement(-1000)
+    , m_monospace(MCTextureFontManager::instance().font("default"))
     {}
 
     Track & track() const
@@ -76,6 +77,7 @@ private:
 
     Track & m_track;
     int m_xDisplacement;
+    MCTextureFont & m_monospace;
 };
 
 int loadLapRecord(std::string trackName)
@@ -148,7 +150,6 @@ void TrackItem::render(int x, int y)
     }
 
     MCTextureText text("");
-    MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
 
     const int textX   = x - width() / 2;
     const int shadowY = -2;
@@ -161,8 +162,7 @@ void TrackItem::render(int x, int y)
         text.setGlyphSize(20, 20);
         text.setShadowOffset(shadowX, shadowY);
         text.render(
-            x - text.width() / 2, y + height() / 2 + text.height(),
-            nullptr, defaultMonospace);
+            x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
     }
 
     {
@@ -170,7 +170,7 @@ void TrackItem::render(int x, int y)
         ss << "  Laps: " << m_track.trackData().lapCount();
         text.setText(ss.str());
         text.setGlyphSize(20, 20);
-        text.render(textX, y - height() / 2 - text.height(), nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height(), nullptr, m_monospace);
     }
 
     {
@@ -179,7 +179,7 @@ void TrackItem::render(int x, int y)
            << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
            << " m";
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
     }
 
     {
@@ -187,23 +187,26 @@ void TrackItem::render(int x, int y)
         ss << "Record: "
            << Timing::msecsToString(loadLapRecord(m_track.trackData().name().toStdString()));
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, defaultMonospace);
+        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
     }
 
     {
         text.setText("Use arrows to browse and enter to select..");
         text.setGlyphSize(10, 10);
-        text.render(10, text.height(), nullptr, defaultMonospace);
+        text.render(10, text.height(), nullptr, m_monospace);
     }
 }
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene, StateMachine & sm)
 : Menu(id, width, height, Menu::MS_SHOW_ONE)
+, m_back(MCTextureManager::instance().surface("trackSelectionBack"))
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 , m_sm(sm)
 {
+    m_back.setShaderProgram(&Renderer::instance().masterProgram());
+    m_back.setColor(0.5, 0.5, 0.5, 1.0);
 }
 
 void TrackSelectionMenu::addTrack(Track & track)
@@ -216,10 +219,7 @@ void TrackSelectionMenu::render()
 {
     const int w2 = width()  / 2;
     const int h2 = height() / 2;
-    MCSurface & back = MCTextureManager::instance().surface("trackSelectionBack");
-    back.setShaderProgram(&Renderer::instance().masterProgram());
-    back.setColor(0.5, 0.5, 0.5, 1.0);
-    back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
+    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
     Menu::render();
 }
 

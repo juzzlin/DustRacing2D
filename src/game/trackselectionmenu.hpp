@@ -22,6 +22,7 @@ class Track;
 class TrackItem;
 class Scene;
 class StateMachine;
+class MCSurface;
 
 //! Allows the user to select a track to play.
 class TrackSelectionMenu : public Menu
@@ -52,6 +53,7 @@ public:
 
 private:
 
+    MCSurface    & m_back;
     Track        * m_selectedTrack;
     Scene        & m_scene;
     StateMachine & m_sm;
