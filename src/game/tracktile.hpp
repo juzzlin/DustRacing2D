@@ -90,18 +90,19 @@ public:
     //! Set the type as an enum (performance optimization).
     void setTileTypeEnum(TileType type);
 
+    //! Returns true if the tile needs a separate asphalt background.
+    bool hasAsphalt() const;
+
 private:
 
     //! Disable the string-based type getter. Use tileTypeEnum() instead.
     const QString & tileType() const;
 
-    int m_rotation;
-
+    int         m_rotation;
     MCSurface * m_surface;
-
     MCSurface * m_previewSurface;
-
-    TileType m_typeEnum;
+    TileType    m_typeEnum;
+    bool        m_hasAsphalt;
 };
 
 #endif // TRACKTILE_HPP

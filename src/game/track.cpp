@@ -23,6 +23,7 @@
 #include <MCCamera>
 #include <MCGLShaderProgram>
 #include <MCSurface>
+#include <MCTextureManager>
 #include <cassert>
 
 Track::Track(TrackData * pTrackData)
@@ -125,6 +126,8 @@ void Track::render(MCCamera * pCamera)
     MCGLShaderProgram & prog = Renderer::instance().tileProgram();
     prog.bind();
 
+    MCSurface & asphalt = MCTextureManager::instance().surface("asphalt");
+
     MCFloat x1, y1; // Coordinates mapped to camera
 
     // Set common client state for all tiles using the same surface.
@@ -147,6 +150,14 @@ void Track::render(MCCamera * pCamera)
                     y1 = y;
                     pCamera->mapToCamera(x1, y1);
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+
+                    if (pTile->hasAsphalt())
+                    {
+                        prog.rotate(0);
+                        asphalt.bindTexture();
+                        asphalt.renderVBOs(false);
+                    }
+
                     prog.rotate(pTile->rotation());
                     pSurface->bindTexture();
                     pSurface->renderVBOs(false);

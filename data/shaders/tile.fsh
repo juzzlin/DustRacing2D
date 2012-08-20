@@ -18,6 +18,15 @@ uniform float     fade;
 
 void main(void)
 {
-    vec4 color   = texture2D(texture, gl_TexCoord[0].st);
-    gl_FragColor = color * fade;
+    vec4 color = texture2D(texture, gl_TexCoord[0].st);
+    
+    // Alpha test
+    if (color.a < 0.1)
+    {
+        discard;
+    }
+    else
+    {
+        gl_FragColor = color * fade;
+    }
 }

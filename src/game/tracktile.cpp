@@ -27,6 +27,7 @@ TrackTile::TrackTile(
 , m_surface(nullptr)
 , m_previewSurface(nullptr)
 , m_typeEnum(typeEnum)
+, m_hasAsphalt(false)
 {
 }
 
@@ -68,6 +69,29 @@ TrackTile::TileType TrackTile::tileTypeEnum() const
 void TrackTile::setTileTypeEnum(TrackTile::TileType type)
 {
     m_typeEnum = type;
+
+    switch (type)
+    {
+    case TT_CORNER_90:
+    case TT_CORNER_45_LEFT:
+    case TT_CORNER_45_RIGHT:
+    case TT_STRAIGHT:
+    case TT_STRAIGHT_45_MALE:
+    case TT_STRAIGHT_45_FEMALE:
+    case TT_SAND_GRASS_STRAIGHT:
+    case TT_SAND_GRASS_STRAIGHT_45_FEMALE:
+    case TT_FINISH:
+        m_hasAsphalt = true;
+        break;
+    default:
+        m_hasAsphalt = false;
+        break;
+    }
+}
+
+bool TrackTile::hasAsphalt() const
+{
+    return m_hasAsphalt;
 }
 
 TrackTile::~TrackTile()
