@@ -25,10 +25,7 @@
 
 #include <MCVectorAnimation>
 
-static MCVector3dF       dustVec;
-static MCVector3dF       color;
 static MCVector3dF       fade;
-static MCVectorAnimation dustAnim;
 static MCVectorAnimation fadeAnim;
 
 static MCTextureText text1("DUST RACING 2D");
@@ -57,24 +54,16 @@ void Intro::setDimensions(int width, int height)
     text1.setColor(1.0, 1.0, 1.0, 1.0);
     text1.setShadowOffset(shadowX, shadowY);
 
-    static MCVector3dF dustVec0(width / 2 - text1.width() / 2 + 20, height + 40, 0);
-    static MCVector3dF dustVec1(width / 2 - text1.width() / 2 + 20, height / 2, 0);
-
     static MCVector3dF fade0(0.0, 0.0, 0.0);
     static MCVector3dF fade1(1.0, 1.0, 1.0);
 
-    fadeAnim.init(fade,    fade0,    fade1,    120);
-    dustAnim.init(dustVec, dustVec0, dustVec1, 10, 180, 120);
+    fadeAnim.init(fade, fade0, fade1, 120, 0, 120);
 }
 
 bool Intro::update()
 {
     Renderer::instance().setEnabled(true);
-
-    const bool dustDone  = dustAnim.update();
-    const bool fadeDone  = fadeAnim.update();
-
-    return dustDone && fadeDone;
+    return fadeAnim.update();
 }
 
 void Intro::render()
@@ -87,6 +76,6 @@ void Intro::render()
 
     m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
 
-    text1.render(dustVec.i(), dustVec.j(), nullptr, m_monospace);
+    text1.render(width() / 2 - text1.width() / 2 + 20, height() / 2 + 40, nullptr, m_monospace);
 }
 
