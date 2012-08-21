@@ -1,3 +1,13 @@
+0.7.0
+-----
+
+* Refactors track rendering.
+* New asphalt engine.
+* Refactors the menu classes.
+* Adds Intro.
+* Adds transition animations between the menu and the game.
+* Adds new background images for the menu.
+
 0.6.1
 -----
 
