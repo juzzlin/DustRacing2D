@@ -33,6 +33,7 @@ Track::Track(TrackData * pTrackData)
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_scale(0.0)
+, m_asphalt(MCTextureManager::instance().surface("asphalt"))
 {
     assert(pTrackData);
 }
@@ -111,8 +112,6 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
 
 void Track::render(MCCamera * pCamera)
 {
-    const MapBase & rMap = m_pTrackData->map();
-
     // Get the Camera window
     MCBBox<MCFloat> cameraBox(pCamera->bbox());
 
@@ -120,13 +119,66 @@ void Track::render(MCCamera * pCamera)
     MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
-    static const int w  = TrackTile::TILE_W;
-    static const int h  = TrackTile::TILE_H;
-
     MCGLShaderProgram & prog = Renderer::instance().tileProgram();
     prog.bind();
 
-    MCSurface & asphalt = MCTextureManager::instance().surface("asphalt");
+    renderAsphalt(pCamera, prog, i0, i2, j0, j2);
+    renderTiles(pCamera, prog, i0, i2, j0, j2);
+
+    prog.release();
+}
+
+void Track::renderAsphalt(
+    MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+{
+    const MapBase & rMap = m_pTrackData->map();
+
+    static const int w = TrackTile::TILE_W;
+    static const int h = TrackTile::TILE_H;
+
+    MCFloat x1, y1; // Coordinates mapped to camera
+
+    // Set common client state for all tiles using the same surface.
+    m_asphalt.enableClientState(true, true);
+
+    // Loop through the visible tile matrix and draw the tiles
+    int initX = i0 * w;
+    int x     = initX;
+    int y     = j0 * h;
+    for (MCUint j = j0; j <= j2; j++)
+    {
+        x = initX;
+        for (MCUint i = i0; i <= i2; i++)
+        {
+            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            {
+                if (pTile->hasAsphalt())
+                {
+                    x1 = x;
+                    y1 = y;
+                    pCamera->mapToCamera(x1, y1);
+                    prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+                    prog.rotate(0);
+                    m_asphalt.renderVBOs(false);
+                }
+            }
+
+            x += w;
+        }
+
+        y += h;
+    }
+
+    m_asphalt.enableClientState(false, false);
+}
+
+void Track::renderTiles(
+    MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+{
+    const MapBase & rMap = m_pTrackData->map();
+
+    static const int w = TrackTile::TILE_W;
+    static const int h = TrackTile::TILE_H;
 
     MCFloat x1, y1; // Coordinates mapped to camera
 
@@ -150,14 +202,6 @@ void Track::render(MCCamera * pCamera)
                     y1 = y;
                     pCamera->mapToCamera(x1, y1);
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
-
-                    if (pTile->hasAsphalt())
-                    {
-                        prog.rotate(0);
-                        asphalt.bindTexture();
-                        asphalt.renderVBOs(false);
-                    }
-
                     prog.rotate(pTile->rotation());
                     pSurface->bindTexture();
                     pSurface->renderVBOs(false);
@@ -171,8 +215,6 @@ void Track::render(MCCamera * pCamera)
     }
 
     static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(false, false);
-
-    prog.release();
 }
 
 bool Track::update()

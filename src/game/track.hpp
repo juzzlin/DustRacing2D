@@ -24,6 +24,7 @@
 class TrackData;
 class TrackTile;
 class MCCamera;
+class MCGLShaderProgram;
 class MCSurface;
 
 //! A renderable race track object constructed from
@@ -69,9 +70,16 @@ private:
     void calculateVisibleIndices(const MCBBox<int> & r,
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
+    void renderAsphalt(
+        MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+
+    void renderTiles(
+        MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+
     TrackData * m_pTrackData;
-    MCUint m_rows, m_cols, m_width, m_height;
-    MCFloat m_scale;
+    MCUint      m_rows, m_cols, m_width, m_height;
+    MCFloat     m_scale;
+    MCSurface & m_asphalt;
 };
 
 #endif // TRACK_HPP
