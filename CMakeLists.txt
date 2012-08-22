@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.7)
 
 project(DustRacing)
 
@@ -28,13 +28,10 @@ endif()
 add_definitions(-DDATA_PATH="${DATA_PATH}")
 add_definitions(-DGL_GLEXT_PROTOTYPES)
 
-# Find Qt4
-find_package(Qt4 4.7.0 REQUIRED)
-
-# By default only QtCore and QtGui modules are enabled
-set(QT_USE_QTXML TRUE)
-set(QT_USE_QTOPENGL TRUE)
+# Find Qt4 and needed additional components.
+find_package(Qt4 4.7.0 REQUIRED COMPONENTS QtXml QtOpenGL)
 include(${QT_USE_FILE})
+include_directories(${QT_INCLUDES})
 
 # Find OpenGL (this is for some glu functions used by the
 # game binary)
