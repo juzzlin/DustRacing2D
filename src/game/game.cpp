@@ -56,6 +56,7 @@ Game::Game()
 , m_timeStep(1.0 / m_updateFps)
 , m_renderCount(0)
 , m_availableRenderTime(0)
+, m_paused(false)
 {
     connect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
@@ -202,6 +203,26 @@ void Game::stop()
     m_frameUpdateTimer.stop();
     m_animationUpdateTimer.stop();
     m_renderCountTimer.stop();
+}
+
+void Game::togglePause()
+{
+    if (m_paused)
+    {
+        start();
+
+        m_paused = false;
+
+        MCLogger().info() << "Game continued.";
+    }
+    else
+    {
+        stop();
+
+        m_paused = true;
+
+        MCLogger().info() << "Game paused.";
+    }
 }
 
 void Game::updateFrame()

@@ -241,6 +241,9 @@ void Renderer::keyPressEvent(QKeyEvent * event)
             case Qt::Key_Down:
                 m_pInputHandler->setActionState(0, InputHandler::IA_DOWN, true);
                 break;
+            case Qt::Key_P:
+                emit pauseToggled();
+                break;
             default:
                 QGLWidget::keyPressEvent(event);
                 break;

@@ -74,6 +74,10 @@ public:
 
     float fadeValue() const;
 
+signals:
+
+    void pauseToggled();
+
 protected:
 
     //! \reimp

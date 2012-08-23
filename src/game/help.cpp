@@ -28,7 +28,8 @@ static MCTextureText HELP_TEXT(
     "Right : Turn right\n"
     "Up    : Accelerate\n"
     "Down  : Brake\n"
-    "ESC/Q : Quit"
+    "ESC/Q : Quit\n"
+    "P     : Pause"
 );
 
 Help::Help(std::string id, int width, int height)

@@ -62,6 +62,10 @@ public:
     //! Stop scene.
     void stop();
 
+public slots:
+
+    void togglePause();
+
 private slots:
 
     void updateFrame();
@@ -92,6 +96,7 @@ private:
     float                  m_timeStep;
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
+    bool                   m_paused;
 };
 
 #endif // GAME_HPP
