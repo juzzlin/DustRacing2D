@@ -100,6 +100,12 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
+    void handleMenuKeyPressEvent(QKeyEvent * event);
+
+    void handleGameKeyPressEvent(QKeyEvent * event);
+
+    void handleGameKeyReleaseEvent(QKeyEvent * event);
+
     Scene             * m_pScene;
     MCGLScene         * m_pGLScene;
     MCCamera          * m_pCamera;
