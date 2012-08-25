@@ -17,6 +17,7 @@
 #define EDITORDATA_HPP
 
 #include <memory>
+#include <vector>
 
 #include <QString>
 #include <QPointF>
