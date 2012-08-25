@@ -17,7 +17,7 @@
 #define TRACKLOADER_HPP
 
 #include <QString>
-#include <QVector>
+#include <vector>
 
 #include "tracktile.hpp"
 
@@ -40,8 +40,7 @@ public:
     //! tile textures.
     //! \param objectFactory  Object factory that creates objects other
     //! than tiles.
-    TrackLoader(MCTextureManager & textureManager,
-                MCObjectFactory  & objectFactory);
+    TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory);
 
     //! Destructor.
     ~TrackLoader();
@@ -78,10 +77,10 @@ private:
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);
 
-    MCTextureManager & m_textureManager;
-    MCObjectFactory  & m_objectFactory;
-    QVector<QString>   m_paths;
-    QVector<Track *>   m_tracks;
+    MCTextureManager   & m_textureManager;
+    MCObjectFactory    & m_objectFactory;
+    std::vector<QString> m_paths;
+    std::vector<Track *> m_tracks;
 };
 
 #endif // TRACKLOADER_HPP

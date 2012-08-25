@@ -49,10 +49,7 @@ TrackLoader::TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & o
 
 void TrackLoader::addTrackSearchPath(QString path)
 {
-    if (!m_paths.contains(path))
-    {
-        m_paths << path;
-    }
+    m_paths.push_back(path);
 }
 
 int TrackLoader::loadTracks()
@@ -68,7 +65,7 @@ int TrackLoader::loadTracks()
             trackPath = path + QDir::separator() + trackPath;
             if (TrackData * trackData = loadTrack(trackPath))
             {
-                m_tracks << new Track(trackData);
+                m_tracks.push_back(new Track(trackData));
                 numLoaded++;
             }
             else
@@ -292,8 +289,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(
-            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
@@ -312,8 +308,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(
-            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
@@ -332,8 +327,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(
-            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
@@ -352,8 +346,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(
-            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
@@ -380,8 +373,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         view->setShaderProgram(&(Renderer::instance().masterProgram()));
         view->setShadowShaderProgram(&(Renderer::instance().masterShadowProgram()));
         MCObject & object = m_objectFactory.build(data, *view);
-        object.setInitialLocation(
-            MCVector2d<MCFloat>(x, h - y));
+        object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
 
         // Wrap the MCObject in a TrackObject and add to
@@ -398,8 +390,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(
-            MCVector3dF(x, h - y, 8));
+        object.setInitialLocation(MCVector3dF(x, h - y, 8));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
