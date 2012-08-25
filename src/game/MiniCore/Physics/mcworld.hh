@@ -125,12 +125,8 @@ public:
     //! \brief Render all registered objects.
     //! \param pCamera The camera window to be used. If nullptr, then
     //!        no any translations or clipping done.
-    virtual void render(MCCamera * pCamera = nullptr);
-
-    //! \brief Render fake shadows of all registered objects.
-    //! \param pCamera The camera window to be used. If nullptr, then
-    //!        no any translations or clipping done.
-    virtual void renderShadows(MCCamera * pCamera = nullptr);
+    //! \param enableShadows Render shadows, if true.
+    void render(MCCamera * pCamera = nullptr, bool enableShadows = true);
 
     //! \brief Return reference to the object objectTree.
     //! \return Pointer to the objectTree.
@@ -176,6 +172,10 @@ private:
     DISABLE_COPY(MCWorld);
     DISABLE_ASSI(MCWorld);
 
+    void buildBatches(MCCamera * pCamera = nullptr);
+    void renderObjects(MCCamera * pCamera = nullptr);
+    void renderShadows(MCCamera * pCamera = nullptr);
+
     void integrate(MCFloat step);
     void processRemovedObjects();
     void doRemoveObject(MCObject & object);
@@ -187,12 +187,14 @@ private:
     MCForceRegistry forceRegistry;
     MCCollisionDetector collisionDetector;
     MCImpulseGenerator impulseGenerator;
-    MCObjectTree * pObjectTree;
+    MCObjectTree * m_objectTree;
     MCFloat m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
     static MCFloat m_metersPerPixel;
     static MCFloat m_metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
+    typedef std::map<std::string, std::vector<MCObject *> > BatchHash;
+    BatchHash batches[MCWorld::MaxLayers];
     bool depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;

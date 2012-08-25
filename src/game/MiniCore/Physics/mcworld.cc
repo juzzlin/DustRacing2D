@@ -46,7 +46,7 @@ const MCFloat MinLeafHeight = 64;
 }
 
 MCWorld::MCWorld()
-: pObjectTree(nullptr)
+: m_objectTree(nullptr)
 , m_minX(0)
 , m_maxX(0)
 , m_minY(0)
@@ -84,7 +84,7 @@ MCWorld::~MCWorld()
 {
     clear();
 
-    delete pObjectTree;
+    delete m_objectTree;
     delete pLeft;
     delete pRight;
     delete pTop;
@@ -113,7 +113,7 @@ void MCWorld::integrate(MCFloat step)
 void MCWorld::detectCollisions()
 {
     // Check collisions for all registered objects
-    numCollisions = collisionDetector.detectCollisions(objs, *pObjectTree);
+    numCollisions = collisionDetector.detectCollisions(objs, *m_objectTree);
 }
 
 void MCWorld::generateImpulses()
@@ -126,22 +126,65 @@ void MCWorld::resolvePositions(MCFloat accuracy)
     impulseGenerator.resolvePositions(objs, accuracy);
 }
 
-void MCWorld::render(MCCamera * pCamera)
+void MCWorld::render(MCCamera * pCamera, bool enableShadows)
+{
+    buildBatches(pCamera);
+
+    if (enableShadows)
+    {
+        renderShadows(pCamera);
+    }
+
+    renderObjects(pCamera);
+}
+
+void MCWorld::buildBatches(MCCamera * pCamera)
+{
+    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
+    {
+        batches[i].clear();
+
+        LayerHash::iterator j   = layers[i].begin();
+        LayerHash::iterator end = layers[i].end();
+
+        for (; j != end; j++)
+        {
+            MCObject & object = **j;
+            if (object.renderable())
+            {
+                // Check if view is set and is visible
+                if (object.shape())
+                {
+                    if (object.isParticle())
+                    {
+                        if (!pCamera || pCamera->isVisible(object.bbox()))
+                        {
+                            object.render(pCamera);
+                        }
+                    }
+                    else if (object.shape()->view())
+                    {
+                        MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                        bbox.translate(MCVector2dF(object.location()));
+                        if (!pCamera || pCamera->isVisible(bbox))
+                        {
+                            batches[i][object.shape()->view()->viewId()].push_back(&object);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MCWorld::renderObjects(MCCamera * pCamera)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
-
-    static LayerHash::iterator j;
-    static LayerHash::iterator end;
-
     glPushAttrib(GL_ENABLE_BIT);
 
-    // Build and render batches layer by layer
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        static std::map<std::string, std::vector<MCObject *> > batches;
-        batches.clear();
-
         // The depth test is enabled/disabled separately on
         // each object layer.
         if (depthTestEnabled[i])
@@ -153,43 +196,10 @@ void MCWorld::render(MCCamera * pCamera)
             glDisable(GL_DEPTH_TEST);
         }
 
-        j   = layers[i].begin();
-        end = layers[i].end();
-        for (; j != end; j++)
-        {
-            MCObject & object = **j;
-            if (object.renderable())
-            {
-                // Check if view is set and is visible
-                if (object.shape())
-                {
-                    if (object.isParticle())
-                    {
-                        if (pCamera->isVisible(object.bbox())) // already translated
-                        {
-                            object.render(pCamera);
-                        }
-                        else
-                        {
-                            static_cast<MCParticle &>(object).die();
-                        }
-                    }
-                    else if (object.shape()->view())
-                    {
-                        MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
-                        bbox.translate(MCVector2dF(object.location()));
-                        if (!pCamera || pCamera->isVisible(bbox))
-                        {
-                            batches[object.shape()->view()->viewId()].push_back(&object);
-                        }
-                    }
-                }
-            }
-        }
-
         // Render batches
-        auto iter = batches.begin();
-        while (iter != batches.end())
+        auto iter = batches[i].begin();
+        auto end  = batches[i].end();
+        while (iter != end)
         {
             const int i2 = iter->second.size();
             for (int i = 0; i < i2; i++)
@@ -219,54 +229,16 @@ void MCWorld::render(MCCamera * pCamera)
 
 void MCWorld::renderShadows(MCCamera * pCamera)
 {
-    // Render in the order of the layers. Depth test is
-    // layer-specific.
-
-    static LayerHash::iterator j;
-    static LayerHash::iterator end;
-
     glPushAttrib(GL_ENABLE_BIT);
 
-    // Build and render batches layer by layer
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        static std::map<std::string, std::vector<MCObject *> > batches;
-        batches.clear();
-
-        // The depth test is enabled/disabled separately on
-        // each object layer.
-        if (depthTestEnabled[i])
-        {
-            glEnable(GL_DEPTH_TEST);
-        }
-        else
-        {
-            glDisable(GL_DEPTH_TEST);
-        }
-
-        j   = layers[i].begin();
-        end = layers[i].end();
-        for (; j != end; j++)
-        {
-            MCObject & object = **j;
-            if (object.renderable())
-            {
-                // Check if view is set and is visible
-                if (object.shape() && object.shape()->view())
-                {
-                    MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
-                    bbox.translate(MCVector2dF(object.location()));
-                    if (!pCamera || pCamera->isVisible(bbox))
-                    {
-                        batches[object.shape()->view()->viewId()].push_back(&object);
-                    }
-                }
-            }
-        }
+        glDisable(GL_DEPTH_TEST);
 
         // Render batches
-        auto iter = batches.begin();
-        while (iter != batches.end())
+        auto iter = batches[i].begin();
+        auto end  = batches[i].end();
+        while (iter != end)
         {
             const int i2 = iter->second.size();
             for (int i = 0; i < i2; i++)
@@ -317,7 +289,7 @@ void MCWorld::clear()
         object->setIndex(-1);
     }
 
-    pObjectTree->removeAll();
+    m_objectTree->removeAll();
     objs.clear();
     removeObjs.clear();
 
@@ -342,8 +314,8 @@ void MCWorld::setDimensions(
     m_maxZ = maxZ;
 
     // Init objectTree
-    delete pObjectTree;
-    pObjectTree = new MCObjectTree(
+    delete m_objectTree;
+    m_objectTree = new MCObjectTree(
         m_minX, m_minY,
         m_maxX, m_maxY,
         MinLeafWidth, MinLeafHeight);
@@ -451,11 +423,11 @@ void MCWorld::addObject(MCObject & object)
             // Add to ObjectTree
             if (object.physicsObject() && !object.bypassCollisions())
             {
-                pObjectTree->insert(object);
+                m_objectTree->insert(object);
             }
 
             // Add xy friction
-            const MCFloat FrictionThreshold = 0.001f;
+            const MCFloat FrictionThreshold = 0.001;
             if (object.xyFriction() > FrictionThreshold)
             {
                 forceRegistry.addForceGenerator(
@@ -519,7 +491,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     // Remove from ObjectTree
     if (object.physicsObject() && !object.bypassCollisions())
     {
-        pObjectTree->remove(object);
+        m_objectTree->remove(object);
     }
 
     object.setRemoving(false);
@@ -602,8 +574,8 @@ MCWorld::ObjectVector MCWorld::objects() const
 
 MCObjectTree & MCWorld::objectTree() const
 {
-    assert(pObjectTree);
-    return *pObjectTree;
+    assert(m_objectTree);
+    return *m_objectTree;
 }
 
 void MCWorld::setMetersPerPixel(MCFloat value)

@@ -589,7 +589,6 @@ void Scene::render(MCCamera & camera)
         }
 
         m_activeTrack->render(&camera);
-        m_world->renderShadows(&camera);
         m_world->render(&camera);
 
         if (m_race.checkeredFlagEnabled())
