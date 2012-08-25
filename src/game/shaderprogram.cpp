@@ -30,14 +30,20 @@ ShaderProgram::ShaderProgram(const QGLContext * context)
 
 void ShaderProgram::bind()
 {
-    MCGLShaderProgram::bind();
-    m_program.bind();
+    if (!isBound())
+    {
+        MCGLShaderProgram::bind();
+        m_program.bind();
+    }
 }
 
 void ShaderProgram::release()
 {
-    MCGLShaderProgram::release();
-    m_program.release();
+    if (isBound())
+    {
+        MCGLShaderProgram::release();
+        m_program.release();
+    }
 }
 
 void ShaderProgram::link()
