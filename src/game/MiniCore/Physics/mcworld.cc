@@ -165,8 +165,7 @@ void MCWorld::render(MCCamera * pCamera)
                 {
                     if (object.isParticle())
                     {
-                        MCBBox<MCFloat> bbox(object.bbox()); // already translated
-                        if (pCamera->isVisible(bbox))
+                        if (pCamera->isVisible(object.bbox())) // already translated
                         {
                             object.render(pCamera);
                         }

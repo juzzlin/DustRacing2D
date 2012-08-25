@@ -188,21 +188,21 @@ void MCObject::integrate(MCFloat step)
         integrateAngular(step);
         doOutOfBoundariesEvent();
 
-        const MCFloat linearSleepingLimit  = 0.1f;
-        const MCFloat angularSleepingLimit = 0.1f;
+        static const MCFloat linearSleepingLimit  = 0.1;
+        static const MCFloat angularSleepingLimit = 0.1;
 
         if (m_velocity.lengthFast() < linearSleepingLimit &&
             m_angularVelocity       < angularSleepingLimit)
         {
             m_sleeping = true;
         }
+
+        m_forces.setZero();
+        linearImpulse.setZero();
+        m_angularImpulse = 0.0;
+
+        translate(location() + velocity());
     }
-
-    m_forces.setZero();
-    linearImpulse.setZero();
-    m_angularImpulse = 0.0;
-
-    translate(location() + velocity());
 }
 
 void MCObject::integrateLinear(MCFloat step)
@@ -235,11 +235,12 @@ void MCObject::integrateAngular(MCFloat step)
             m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
             m_angularVelocity      *= damping;
 
-            if (m_angularVelocity > m_maximumAngularVelocity) {
+            if (m_angularVelocity > m_maximumAngularVelocity)
+            {
                 m_angularVelocity = m_maximumAngularVelocity;
             }
-
-            if (m_angularVelocity < -m_maximumAngularVelocity) {
+            else if (m_angularVelocity < -m_maximumAngularVelocity)
+            {
                 m_angularVelocity = -m_maximumAngularVelocity;
             }
 
