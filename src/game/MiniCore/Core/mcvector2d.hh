@@ -23,18 +23,8 @@
 #include "mctypes.hh"
 
 #include <cmath>
-
-using std::sqrt;
-using std::abs;
-
 #include <iostream>
-
-using std::ostream;
-
 #include <limits>
-
-using std::numeric_limits;
-
 
 /*! 2-dimensional vector template. Template parameter represents
  *  the data type of the components. 
@@ -172,7 +162,7 @@ public:
     inline T j() const;
 
     //! Write to stream
-    friend ostream& operator<<(ostream & out, const MCVector2d<T> & v)
+    friend std::ostream & operator << (std::ostream & out, const MCVector2d<T> & v)
     {
         out << "[ " << v.m_i << ", " << v.m_j << " ]";
         return out;
@@ -317,17 +307,21 @@ MCVector2d<T> & MCVector2d<T>::operator -= (const MCVector2d<U> & r)
 template <typename T>
 T MCVector2d<T>::length() const
 {
-    return sqrt(m_i * m_i + m_j * m_j);
+    return std::sqrt(m_i * m_i + m_j * m_j);
 }
 
 template <typename T>
 T MCVector2d<T>::lengthFast() const
 {
-    const T a = abs(m_i);
-    const T b = abs(m_j);
-    if (a > b) {
+    const T a = std::abs(m_i);
+    const T b = std::abs(m_j);
+
+    if (a > b)
+    {
         return a + b / 2;
-    } else {
+    }
+    else
+    {
         return b + a / 2;
     }
 }
@@ -341,7 +335,8 @@ T MCVector2d<T>::lengthSquared() const
 template <typename T>
 void MCVector2d<T>::normalize()
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(length());
         m_i /= l;
         m_j /= l;
@@ -351,7 +346,8 @@ void MCVector2d<T>::normalize()
 template <typename T>
 void MCVector2d<T>::normalizeFast()
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(lengthFast());
         m_i /= l;
         m_j /= l;
@@ -361,20 +357,24 @@ void MCVector2d<T>::normalizeFast()
 template <typename T>
 MCVector2d<T> MCVector2d<T>::normalized() const
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(length());
         return MCVector2d<T>(m_i / l, m_j / l);
     }
+
     return MCVector2d<T>();
 }
 
 template <typename T>
 MCVector2d<T> MCVector2d<T>::normalizedFast() const
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(lengthFast());
         return MCVector2d<T>(m_i / l, m_j / l);
     }
+
     return MCVector2d<T>();
 }
 
@@ -432,14 +432,15 @@ void MCVector2d<T>::setZero()
 template <typename T>
 bool MCVector2d<T>::isZero() const
 {
-    if (numeric_limits<T>::is_exact)
+    if (std::numeric_limits<T>::is_exact)
     {
         return m_i == 0 && m_j == 0;
     }
     else
     {
-        return abs(m_i) <= numeric_limits<T>::epsilon() &&
-            abs(m_j) <= numeric_limits<T>::epsilon();
+        return
+            std::abs(m_i) <= std::numeric_limits<T>::epsilon() &&
+            std::abs(m_j) <= std::numeric_limits<T>::epsilon();
     }
 }
 

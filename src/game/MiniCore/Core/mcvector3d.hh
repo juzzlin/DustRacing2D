@@ -23,18 +23,8 @@
 #include "mcvector2d.hh"
 
 #include <cmath>
-
-using std::sqrt;
-using std::pow;
-using std::abs;
-
 #include <iostream>
-
-using std::ostream;
-
 #include <limits>
-
-using std::numeric_limits;
 
 /*! 3-dimensional vector template. Template parameter represents
  *  the data type of the components. 
@@ -186,7 +176,7 @@ public:
     inline T k() const;
 
     //! Write to stream
-    friend ostream& operator<<(ostream & out, const MCVector3d<T> & v)
+    friend std::ostream & operator << (std::ostream & out, const MCVector3d<T> & v)
     {
         out << "[ " << v.i() << ", " << v.j() << ", " << v.k() << " ]";
         return out;
@@ -359,7 +349,7 @@ MCVector3d<T> & MCVector3d<T>::operator -= (const MCVector3d<U> & r)
 template <typename T>
 T MCVector3d<T>::length() const
 {
-    return sqrt(m_i * m_i + m_j * m_j + m_k * m_k);
+    return std::sqrt(m_i * m_i + m_j * m_j + m_k * m_k);
 }
 
 template <typename T>
@@ -380,7 +370,8 @@ T MCVector3d<T>::lengthSquared() const
 template <typename T>
 void MCVector3d<T>::normalize()
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(length());
         m_i /= l;
         m_j /= l;
@@ -391,7 +382,8 @@ void MCVector3d<T>::normalize()
 template <typename T>
 void MCVector3d<T>::normalizeFast()
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(lengthFast());
         m_i /= l;
         m_j /= l;
@@ -402,20 +394,24 @@ void MCVector3d<T>::normalizeFast()
 template <typename T>
 MCVector3d<T> MCVector3d<T>::normalized() const
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(length());
         return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
     }
+
     return MCVector3d<T>();
 }
 
 template <typename T>
 MCVector3d<T> MCVector3d<T>::normalizedFast() const
 {
-    if (!isZero()) {
+    if (!isZero())
+    {
         const T l(lengthFast());
         return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
     }
+
     return MCVector3d<T>();
 }
 
@@ -488,15 +484,16 @@ void MCVector3d<T>::setZero()
 template <typename T>
 bool MCVector3d<T>::isZero() const
 {
-    if (numeric_limits<T>::is_exact)
+    if (std::numeric_limits<T>::is_exact)
     {
         return m_i == 0 && m_j == 0 && m_k == 0;
     }
     else
     {
-        return abs(m_i) <= numeric_limits<T>::epsilon() &&
-            abs(m_j) <= numeric_limits<T>::epsilon() &&
-            abs(m_k) <= numeric_limits<T>::epsilon();
+        return
+            std::abs(m_i) <= std::numeric_limits<T>::epsilon() &&
+            std::abs(m_j) <= std::numeric_limits<T>::epsilon() &&
+            std::abs(m_k) <= std::numeric_limits<T>::epsilon();
     }
 }
 
