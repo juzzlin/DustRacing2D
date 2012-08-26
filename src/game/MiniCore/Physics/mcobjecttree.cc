@@ -140,9 +140,12 @@ void MCObjectTree::getBBoxCollisions(
                 while (iter != m_matrix[index].end())
                 {
                     p2 = *iter;
-                    if (&object != p2 && b.intersects(p2->bbox()))
+                    if (!p2->sleeping() || !object.sleeping())
                     {
-                        resultObjs.insert(p2);
+                        if (&object != p2 && b.intersects(p2->bbox()))
+                        {
+                            resultObjs.insert(p2);
+                        }
                     }
                     iter++;
                 }
@@ -162,9 +165,12 @@ void MCObjectTree::getBBoxCollisions(
                     p2 = *iter;
                     if (!p2->stationary())
                     {
-                        if (&object != p2 && b.intersects(p2->bbox()))
+                        if (!p2->sleeping() || !object.sleeping())
                         {
-                            resultObjs.insert(p2);
+                            if (&object != p2 && b.intersects(p2->bbox()))
+                            {
+                                resultObjs.insert(p2);
+                            }
                         }
                     }
                     iter++;
@@ -236,6 +242,23 @@ void MCObjectTree::getObjectsWithinBBox(
 
                 iter++;
             }
+        }
+    }
+}
+
+void MCObjectTree::getObjectsWithinBBoxNaive(
+    const MCBBox<MCFloat> & rBBox,
+    MCObjectTree::ObjectVec & resultObjs)
+{
+    getIndexRange(rBBox);
+    resultObjs.clear();
+
+    for (MCUint j = m_j0; j <= m_j1; j++)
+    {
+        for (MCUint i = m_i0; i <= m_i1; i++)
+        {
+            const int index = j * m_horSize + i;
+            std::copy(m_matrix[index].begin(), m_matrix[index].end(), std::back_inserter(resultObjs));
         }
     }
 }

@@ -25,6 +25,7 @@
 #include "mcobject.hh"
 
 #include <unordered_set>
+#include <vector>
 
 //! A geometrically structured MCObjectTree used for fast collision detection.
 //! The tree stores objects inherited from MCObject -class.
@@ -65,6 +66,10 @@ public:
 
     //! Get all objects of given type overlapping given BBox.
     void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs);
+
+    //! Get all objects of given type overlapping given BBox.
+    typedef std::vector<MCObject *> ObjectVec;
+    void getObjectsWithinBBoxNaive(const MCBBox<MCFloat> & rBBox, ObjectVec & resultObjs);
 
     //! Get bbox collisions involving the given object
     //! \param object Object to be tested.
