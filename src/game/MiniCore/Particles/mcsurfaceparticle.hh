@@ -23,7 +23,8 @@
 #include "mcparticle.hh"
 #include "mccamera.hh"
 #include "mcsurface.hh"
-#include <iostream>
+
+#include <string>
 
 class MCSurface;
 
@@ -37,7 +38,7 @@ class MCSurfaceParticle : public MCParticle
 public:
 
     //! Constructor
-    MCSurfaceParticle();
+    MCSurfaceParticle(const std::string & viewId);
 
     //! \reimp
     virtual void renderShadow(MCCamera *)

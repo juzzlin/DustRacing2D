@@ -133,7 +133,7 @@ void Car::preCreateParticles()
     // Pre-create some MCSurfaceParticles
     for (int i = 0; i < 100; i++)
     {
-        MCParticle * particle = new MCSurfaceParticle;
+        MCParticle * particle = new MCSurfaceParticle("SMOKE");
 
         particle->setSurface(&MCTextureManager::instance().surface("smoke"));
         particle->surface()->setShaderProgram(&Renderer::instance().masterProgram());

@@ -167,20 +167,20 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                 // Check if view is set and is visible
                 if (object.shape())
                 {
-                    if (object.isParticle())
-                    {
-                        if (!pCamera || pCamera->isVisible(object.bbox()))
-                        {
-                            object.render(pCamera);
-                        }
-                    }
-                    else if (object.shape()->view())
+                    if (object.shape()->view())
                     {
                         MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
                         bbox.translate(MCVector2dF(object.location()));
                         if (!pCamera || pCamera->isVisible(bbox))
                         {
                             batches[i][object.shape()->view()->viewId()].push_back(&object);
+                        }
+                    }
+                    else if (object.isParticle())
+                    {
+                        if (!pCamera || pCamera->isVisible(object.bbox()))
+                        {
+                            object.render(pCamera);
                         }
                     }
                 }

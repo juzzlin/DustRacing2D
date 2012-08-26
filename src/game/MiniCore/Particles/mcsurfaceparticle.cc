@@ -20,9 +20,9 @@
 #include "mcsurfaceparticle.hh"
 #include "mcsurfaceview.hh"
 
-MCSurfaceParticle::MCSurfaceParticle()
+MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
 {
-    setView(new MCSurfaceView("__MCSP"));
+    setView(new MCSurfaceView(viewId, nullptr, true));
 }
 
 MCSurfaceParticle::~MCSurfaceParticle()
