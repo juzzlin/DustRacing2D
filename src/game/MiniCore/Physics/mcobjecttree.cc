@@ -129,7 +129,10 @@ void MCObjectTree::getBBoxCollisions(
     MCObject * p2 = nullptr;
     MCObjectTree::ObjectSet::iterator iter;
 
-    if (!object.stationary())
+    // Optimization: ignore collisions between sleeping objects.
+    // Note that stationary objects are also sleeping objects.
+
+    if (!object.sleeping())
     {
         for (MCUint j = m_j0; j <= m_j1; j++)
         {
@@ -140,12 +143,9 @@ void MCObjectTree::getBBoxCollisions(
                 while (iter != m_matrix[index].end())
                 {
                     p2 = *iter;
-                    if (!p2->sleeping() || !object.sleeping())
+                    if (&object != p2 && b.intersects(p2->bbox()))
                     {
-                        if (&object != p2 && b.intersects(p2->bbox()))
-                        {
-                            resultObjs.insert(p2);
-                        }
+                        resultObjs.insert(p2);
                     }
                     iter++;
                 }
@@ -163,14 +163,11 @@ void MCObjectTree::getBBoxCollisions(
                 while (iter != m_matrix[index].end())
                 {
                     p2 = *iter;
-                    if (!p2->stationary())
+                    if (!p2->sleeping())
                     {
-                        if (!p2->sleeping() || !object.sleeping())
+                        if (&object != p2 && b.intersects(p2->bbox()))
                         {
-                            if (&object != p2 && b.intersects(p2->bbox()))
-                            {
-                                resultObjs.insert(p2);
-                            }
+                            resultObjs.insert(p2);
                         }
                     }
                     iter++;

@@ -485,14 +485,15 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
             m_invMass = std::numeric_limits<MCFloat>::max();
         }
 
-        m_mass            = newMass;
+        m_mass = newMass;
 
         setMomentOfInertia(newMass * 10.0);
     }
     else
     {
-        m_invMass         = 0;
-        m_mass            = std::numeric_limits<MCFloat>::max();
+        m_invMass  = 0;
+        m_mass     = std::numeric_limits<MCFloat>::max();
+        m_sleeping = true;
 
         setMomentOfInertia(std::numeric_limits<MCFloat>::max());
     }

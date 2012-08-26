@@ -71,10 +71,12 @@ public:
     typedef std::vector<MCObject *> ObjectVec;
     void getObjectsWithinBBoxNaive(const MCBBox<MCFloat> & rBBox, ObjectVec & resultObjs);
 
-    //! Get bbox collisions involving the given object
-    //! \param object Object to be tested.
-    //! \param rVectPObjs Vector in which colliding object are stored.
-    //! \param typeId Match MCObjects of given type only.
+    /*! Get bbox collisions involving the given object. Collisions between
+     *  sleeping objects are ignored, because that gives a huge performance
+     *  boost.
+     *  \param object Object to be tested.
+     *  \param rVectPObjs Vector in which colliding object are stored.
+     *  \param typeId Match MCObjects of given type only. */
     void getBBoxCollisions(const MCObject & object, ObjectSet & resultObjs);
 
     //! Get bounding box

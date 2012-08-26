@@ -63,6 +63,7 @@ void MCObjectTest::testMass()
 
     object.setMass(1, true);
     QVERIFY(object.stationary());
+    QVERIFY(object.sleeping());
     QVERIFY(qFuzzyCompare(object.invMass(), MCFloat(0.0)));
 }
 
