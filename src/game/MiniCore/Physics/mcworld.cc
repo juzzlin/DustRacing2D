@@ -140,6 +140,18 @@ void MCWorld::render(MCCamera * pCamera, bool enableShadows)
 
 void MCWorld::buildBatches(MCCamera * pCamera)
 {
+    // In the case of Dust Racing 2D, it was faster to just loop through
+    // all objects on all layers and perform visibility tests instead of
+    // just fetching all "visible" objects from MCObjectTree.
+
+    // This code tests the visibility and sorts the objects with respect
+    // to their view id's into "batches". MCWorld::render()
+    // (and MCWorld::renderShadows()) then goes through these batches
+    // and perform the actual rendering.
+
+    // Grouping the objects like this reduces texture switches etc and increases
+    // overall performance.
+
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
         batches[i].clear();
