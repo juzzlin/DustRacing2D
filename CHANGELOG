@@ -1,3 +1,23 @@
+0.7.1
+-----
+
+* Moves curves.trk to obsolete/
+* Adds documentation to MCWorld::buildBatches().
+* Removes obsolete test.trk
+* Set the object also sleeping if it's stationary.
+* Ignore collisions between sleeping objects.
+* Refactors TrackLoader.
+* Adds triangle.trk
+* Refactors rendering functions in MCWorld.
+* Adds a missing vector include in editordata.hpp.
+* Don't bind program if already bound.
+* Cosmetic changes to MCVector2d and MCVector3d.
+* Adds irritating.trk
+* Refactors event handling in Renderer.
+* Pressing P pauses the game.
+* CMake: find_package() checks for Qt modules. Set CMake version to >= 2.8.7.
+* CC license changed from by to by-nc.
+
 0.7.0
 -----
 
