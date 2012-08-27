@@ -1,3 +1,9 @@
+0.7.2
+-----
+
+* Don't set CMAKE_INSTALL_PREFIX in CMakeLists.txt
+* Batch support for MCSurfaceParticle.
+
 0.7.1
 -----
 
