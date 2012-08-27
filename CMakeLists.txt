@@ -9,10 +9,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions 
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
 
+# Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
 option(ReleaseBuild "ReleaseBuild" OFF)
 
 # Set install paths
-set(CMAKE_INSTALL_PREFIX /usr)
 set(DEST_PATH /opt/DustRacing)
 set(BIN_PATH ${DEST_PATH})
 
@@ -20,7 +20,7 @@ if(ReleaseBuild)
     message(STATUS "Release build.")
     set(DATA_PATH ${DEST_PATH}/data)
 else()
-    message(STATUS "Development build.")
+    message(STATUS "NOTE!!: This is development build without install targets!")
     set(DATA_PATH ./data)
 endif()
 
@@ -48,18 +48,20 @@ add_subdirectory(src/game/MiniCore)
 add_subdirectory(src/game)
 
 # Install binaries & data
-install(PROGRAMS dustrac-game DESTINATION ${BIN_PATH})
-install(PROGRAMS dustrac-editor DESTINATION ${BIN_PATH})
-install(FILES data/editorModels.conf data/textures.conf data/fonts.conf DESTINATION ${DATA_PATH})
-install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.jpg")
-install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
-install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
-install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
-install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
+if(ReleaseBuild)
+    install(PROGRAMS dustrac-game DESTINATION ${BIN_PATH})
+    install(PROGRAMS dustrac-editor DESTINATION ${BIN_PATH})
+    install(FILES data/editorModels.conf data/textures.conf data/fonts.conf DESTINATION ${DATA_PATH})
+    install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.jpg")
+    install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
+    install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
+    install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
+    install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
 
-# Install icons and the .desktop file
-install(FILES dustrac-game.desktop DESTINATION share/applications)
-install(FILES dustrac-editor.desktop DESTINATION share/applications)
-install(FILES data/icons/DustRacing.png DESTINATION share/pixmaps)
-install(FILES data/icons/DustRacing.png DESTINATION share/icons/hicolor/64x64/apps)
+    # Install icons and the .desktop file
+    install(FILES dustrac-game.desktop DESTINATION share/applications)
+    install(FILES dustrac-editor.desktop DESTINATION share/applications)
+    install(FILES data/icons/DustRacing.png DESTINATION share/pixmaps)
+    install(FILES data/icons/DustRacing.png DESTINATION share/icons/hicolor/64x64/apps)
+endif()
 

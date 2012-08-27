@@ -94,6 +94,14 @@ The binaries only need to find the data dir that includes
 all the runtime data. This can be set in the main CMakeLists.txt
 and is given to the game via -DDATA_PATH.
 
-The release build should be used when packaging.
+The release build should be used when packaging (give
+-DReleaseBuild=1 to cmake).
+
+Currently everything installs to /opt/DustRacing, except
+icons and desktop files go to CMAKE_INSTALL_PREFIX/share/.
+
+CMAKE_INSTALL_PREFIX usually defaults to /usr/local/ and
+can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
+to cmake.
 
 -- Jussi Lind <jussi.lind@iki.fi>
