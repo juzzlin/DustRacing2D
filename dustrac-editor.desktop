@@ -4,5 +4,5 @@ Comment=2D racing game track editor
 Exec=dustrac-editor
 Icon=DustRacing
 Type=Application
-Categories=games
+Categories=Game
 StartupNotify=true
