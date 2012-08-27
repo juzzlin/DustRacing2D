@@ -4,5 +4,5 @@ Comment=2D racing game
 Exec=/opt/DustRacing/dustrac-game
 Icon=DustRacing
 Type=Application
-Categories=Games;
+Categories=games
 StartupNotify=true
