@@ -13,6 +13,7 @@ set(SRC
     centrifugalforcegenerator.cpp
     checkeredflag.cpp
     credits.cpp
+    eventhandler.cpp
     game.cpp
     help.cpp
     inputhandler.cpp
@@ -57,6 +58,7 @@ set(SRC
 
 set(MOC_HDRS
     aboutdlg.hpp
+    eventhandler.hpp
     game.hpp
     mainwindow.hpp
     renderer.hpp
@@ -66,7 +68,7 @@ set(MOC_HDRS
 set(RCS ${CMAKE_SOURCE_DIR}/data/images/images.qrc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-  
+
 # This command will generate rules that will run rcc
 qt4_add_resources(RC_SRC ${RCS})
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})

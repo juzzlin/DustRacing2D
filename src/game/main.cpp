@@ -54,7 +54,6 @@ int main(int argc, char ** argv)
     game.setRenderer(renderer);
     game.setTargetUpdateFps(60);
     game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
-    game.connect(renderer, SIGNAL(pauseToggled()), &game, SLOT(togglePause()));
 
     // Initialize and start the game
     if (game.init())

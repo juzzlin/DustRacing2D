@@ -16,6 +16,8 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include "eventhandler.hpp"
+
 #include <QGLWidget>
 #include <QTimer>
 
@@ -47,10 +49,10 @@ public:
     void updateFrame(MCCamera & camera);
 
     //! Set game scene to be rendered.
-    void setScene(Scene * pScene);
+    void setScene(Scene & scene);
 
-    //! Set input handler to be used.
-    void setInputHandler(InputHandler * pInputHandler);
+    //! Set event handler to be used.
+    void setEventHandler(EventHandler & eventHandler);
 
     void setEnabled(bool enable);
 
@@ -74,10 +76,6 @@ public:
 
     float fadeValue() const;
 
-signals:
-
-    void pauseToggled();
-
 protected:
 
     //! \reimp
@@ -100,16 +98,10 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
-    void handleMenuKeyPressEvent(QKeyEvent * event);
-
-    void handleGameKeyPressEvent(QKeyEvent * event);
-
-    void handleGameKeyReleaseEvent(QKeyEvent * event);
-
     Scene             * m_pScene;
     MCGLScene         * m_pGLScene;
     MCCamera          * m_pCamera;
-    InputHandler      * m_pInputHandler;
+    EventHandler      * m_eventHandler;
     const float         m_viewAngle;
     float               m_fadeValue;
     MCGLShaderProgram * m_tileProgram;

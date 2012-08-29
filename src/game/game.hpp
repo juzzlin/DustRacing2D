@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QTimer>
 
+class EventHandler;
 class InputHandler;
 class Renderer;
 class Scene;
@@ -88,6 +89,7 @@ private:
     MCObjectFactory      * m_objectFactory;
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;
+    EventHandler         * m_eventHandler;
     QTimer                 m_frameUpdateTimer;
     QTimer                 m_animationUpdateTimer;
     QTimer                 m_renderCountTimer;

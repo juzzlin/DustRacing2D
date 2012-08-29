@@ -16,6 +16,7 @@
 #include "../common/config.hpp"
 
 #include "game.hpp"
+#include "eventhandler.hpp"
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
@@ -52,6 +53,7 @@ Game::Game()
 , m_objectFactory(new MCObjectFactory(*m_textureManager))
 , m_trackLoader(new TrackLoader(*m_textureManager, *m_objectFactory))
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
+, m_eventHandler(new EventHandler(*m_inputHandler))
 , m_updateFps(60)
 , m_timeStep(1.0 / m_updateFps)
 , m_renderCount(0)
@@ -61,6 +63,9 @@ Game::Game()
     connect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
     connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
+
+    connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
+
     m_renderCountTimer.setInterval(1000);
 
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
@@ -83,7 +88,7 @@ void Game::setRenderer(Renderer * newRenderer)
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.
     m_renderer->makeCurrent();
-    m_renderer->setInputHandler(m_inputHandler);
+    m_renderer->setEventHandler(*m_eventHandler);
 }
 
 void Game::finish()
@@ -152,7 +157,7 @@ void Game::initScene()
 
     // Set the current game scene. Renderer calls render()
     // for all objects in the scene.
-    m_renderer->setScene(m_scene);
+    m_renderer->setScene(*m_scene);
 }
 
 bool Game::init()
@@ -249,5 +254,6 @@ Game::~Game()
     delete m_trackLoader;
     delete m_textureManager;
     delete m_objectFactory;
+    delete m_eventHandler;
     delete m_inputHandler;
 }
