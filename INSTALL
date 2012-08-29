@@ -37,9 +37,9 @@ Run the editor:
 
 $ ./dustrac-editor
 
-Release build (game installs to /opt/DustRacing):
+Release build (in this example game installs under /usr):
 
-$ ./configure -DReleaseBuild=1
+$ ./configure -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
 
 This runs CMake that generates the makefiles.
 If everything went ok, run:
@@ -57,11 +57,11 @@ should appear in your application menu.
 
 Run the game:
 
-$ /opt/DustRacing/dustrac-game
+$ dustrac-game
 
 Run the editor:
 
-$ /opt/DustRacing/dustrac-editor
+$ dustrac-editor
 
 Building by using QtCreator on Windows (tested on Windows 7)
 ------------------------------------------------------------
@@ -97,11 +97,11 @@ and is given to the game via -DDATA_PATH.
 The release build should be used when packaging (give
 -DReleaseBuild=1 to cmake).
 
-Currently everything installs to /opt/DustRacing, except
-icons and desktop files go to CMAKE_INSTALL_PREFIX/share/.
+Currently the data files install to CMAKE_INSTALL_PREFIX/share/DustRacing
+and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 
-CMAKE_INSTALL_PREFIX usually defaults to /usr/local/ and
+CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
-to cmake.
+to cmake (or to the configure script).
 
 -- Jussi Lind <jussi.lind@iki.fi>

@@ -13,12 +13,11 @@ set(EDITOR_BINARY_NAME "dustrac-editor")
 option(ReleaseBuild "ReleaseBuild" OFF)
 
 # Set install paths
-set(DEST_PATH /opt/DustRacing)
-set(BIN_PATH ${DEST_PATH})
+set(BIN_PATH bin)
 
 if(ReleaseBuild)
     message(STATUS "Release build.")
-    set(DATA_PATH ${DEST_PATH}/data)
+    set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/DustRacing/data)
 else()
     message(STATUS "NOTE!!: This is development build without install targets!")
     set(DATA_PATH ./data)
