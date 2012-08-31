@@ -121,17 +121,17 @@ TrackData * TrackLoader::loadTrack(QString path)
                 if(!element.isNull())
                 {
                     // Read a tile element
-                    if (element.nodeName() == "tile")
+                    if (element.nodeName() == "t")
                     {
                         readTile(element, *newData);
                     }
                     // Read an object element
-                    else if (element.nodeName() == "object")
+                    else if (element.nodeName() == "o")
                     {
                         readObject(element, *newData);
                     }
                     // Read a target node element
-                    else if (element.nodeName() == "tnode")
+                    else if (element.nodeName() == "n")
                     {
                         readTargetNode(element, *newData, route);
                     }
@@ -150,8 +150,8 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::readTile(
     QDomElement & element, TrackData & newData)
 {
-    const std::string  id           = element.attribute("type", "clear").toStdString();
-    const unsigned int computerHint = element.attribute("computerHint", "0").toUInt();
+    const std::string  id           = element.attribute("t", "clear").toStdString();
+    const unsigned int computerHint = element.attribute("c", "0").toUInt();
 
     // X-coordinate in the tile matrix
     unsigned int i = element.attribute("i", "0").toUInt();
@@ -259,8 +259,8 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 
 void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 {
-    const QString role     = element.attribute("role", "");
-    const QString category = element.attribute("category", "");
+    const QString role     = element.attribute("r", "");
+    const QString category = element.attribute("c", "");
 
     // X-coordinate in the world
     const int x = element.attribute("x", "0").toInt();

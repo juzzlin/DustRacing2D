@@ -103,17 +103,17 @@ TrackData * TrackIO::open(QString path)
             if(!element.isNull())
             {
                 // Read a tile element
-                if (element.nodeName() == "tile")
+                if (element.nodeName() == "t")
                 {
                     readTile(*newData, element);
                 }
                 // Read an object element
-                else if (element.nodeName() == "object")
+                else if (element.nodeName() == "o")
                 {
                     readObject(*newData, element);
                 }
                 // Read a target node element
-                else if (element.nodeName() == "tnode")
+                else if (element.nodeName() == "n")
                 {
                     readTargetNode(route, element);
                 }
@@ -131,11 +131,11 @@ TrackData * TrackIO::open(QString path)
 
 void TrackIO::readTile(TrackData & newData, const QDomElement & element)
 {
-    const QString       id = element.attribute("type", "clear");
+    const QString       id = element.attribute("t", "clear");
     const unsigned int   i = element.attribute("i", "0").toUInt();
     const unsigned int   j = element.attribute("j", "0").toUInt();
     const int            o = element.attribute("o", "0").toInt();
-    const int computerHint = element.attribute("computerHint", "0").toInt();
+    const int computerHint = element.attribute("c", "0").toInt();
 
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
@@ -150,8 +150,8 @@ void TrackIO::readTile(TrackData & newData, const QDomElement & element)
 
 void TrackIO::readObject(TrackData & newData, const QDomElement & element)
 {
-    const QString role     = element.attribute("role", "clear");
-    const QString category = element.attribute("category", "clear");
+    const QString role     = element.attribute("r", "clear");
+    const QString category = element.attribute("c", "clear");
     const int     x        = element.attribute("x", "0").toInt();
     const int     y        = element.attribute("y", "0").toInt();
     const int     o        = element.attribute("o", "0").toInt();
@@ -190,15 +190,15 @@ void TrackIO::writeTiles(
         {
             if (TrackTile * tile = static_cast<TrackTile *>(trackData.map().getTile(i, j)))
             {
-                QDomElement tileElement = doc.createElement("tile");
-                tileElement.setAttribute("type", tile->tileType());
+                QDomElement tileElement = doc.createElement("t");
+                tileElement.setAttribute("t", tile->tileType());
                 tileElement.setAttribute("i", i);
                 tileElement.setAttribute("j", j);
                 tileElement.setAttribute("o", tile->rotation());
 
                 if (tile->computerHint() != TrackTile::CH_NONE)
                 {
-                    tileElement.setAttribute("computerHint", tile->computerHint());
+                    tileElement.setAttribute("c", tile->computerHint());
                 }
 
                 root.appendChild(tileElement);
@@ -212,11 +212,11 @@ void TrackIO::writeObjects(
 {
     for (unsigned int i = 0; i < trackData.objects().count(); i++)
     {
-        QDomElement objectElement = doc.createElement("object");
+        QDomElement objectElement = doc.createElement("o");
         Object    & object        = static_cast<Object &>(trackData.objects().object(i));
 
-        objectElement.setAttribute("category", object.category());
-        objectElement.setAttribute("role", object.role());
+        objectElement.setAttribute("c", object.category());
+        objectElement.setAttribute("r", object.role());
         objectElement.setAttribute("x", static_cast<int>(object.location().x()));
         objectElement.setAttribute("y", static_cast<int>(object.location().y()));
         objectElement.setAttribute("o", static_cast<int>(object.rotation()));
@@ -230,7 +230,7 @@ void TrackIO::writeTargetNodes(
     const Route & route = trackData.route();
     for (unsigned int i = 0; i < route.numNodes(); i++)
     {
-        QDomElement      tnodeElement = doc.createElement("tnode");
+        QDomElement      tnodeElement = doc.createElement("n");
         TargetNodeBase & tnode        = route.get(i);
 
         tnodeElement.setAttribute("i", tnode.index());

@@ -1,354 +1,354 @@
 <track lapCount="5" version="0.3.0" cols="10" rows="10" name="H">
- <tile i="0" j="0" o="180" type="sandGrassCorner2"/>
- <tile i="0" j="1" o="90" type="sandGrassStraight"/>
- <tile i="0" j="2" o="90" type="sandGrassStraight"/>
- <tile i="0" j="3" o="90" type="sandGrassStraight"/>
- <tile i="0" j="4" o="90" type="sandGrassStraight"/>
- <tile i="0" j="5" o="90" type="sandGrassStraight"/>
- <tile i="0" j="6" o="90" type="sandGrassStraight"/>
- <tile i="0" j="7" o="90" type="sandGrassStraight"/>
- <tile i="0" j="8" o="90" type="sandGrassStraight"/>
- <tile i="0" j="9" o="90" type="sandGrassCorner2"/>
- <tile i="1" j="0" o="180" type="sandGrassStraight"/>
- <tile i="1" j="1" o="0" type="corner90"/>
- <tile i="1" j="2" o="0" type="straight" computerHint="1"/>
- <tile i="1" j="3" o="0" type="straight"/>
- <tile i="1" j="4" o="0" type="straight"/>
- <tile i="1" j="5" o="0" type="straight"/>
- <tile i="1" j="6" o="0" type="straight"/>
- <tile i="1" j="7" o="0" type="straight"/>
- <tile i="1" j="8" o="-90" type="corner90"/>
- <tile i="1" j="9" o="0" type="sandGrassStraight"/>
- <tile i="2" j="0" o="180" type="sandGrassStraight"/>
- <tile i="2" j="1" o="90" type="corner90"/>
- <tile i="2" j="2" o="0" type="straight"/>
- <tile i="2" j="3" o="0" type="straight" computerHint="1"/>
- <tile i="2" j="4" o="-90" type="corner90"/>
- <tile i="2" j="5" o="0" type="corner90"/>
- <tile i="2" j="6" o="0" type="straight"/>
- <tile i="2" j="7" o="0" type="straight" computerHint="1"/>
- <tile i="2" j="8" o="-180" type="corner90"/>
- <tile i="2" j="9" o="0" type="sandGrassStraight"/>
- <tile i="3" j="0" o="-90" type="sandGrassCorner2"/>
- <tile i="3" j="1" o="-90" type="sandGrassStraight"/>
- <tile i="3" j="2" o="-90" type="sandGrassStraight"/>
- <tile i="3" j="3" o="-90" type="sandGrassCorner"/>
- <tile i="3" j="4" o="-90" type="straight"/>
- <tile i="3" j="5" o="90" type="straight" computerHint="1"/>
- <tile i="3" j="6" o="0" type="sandGrassCorner"/>
- <tile i="3" j="7" o="-90" type="sandGrassStraight"/>
- <tile i="3" j="8" o="-90" type="sandGrassStraight"/>
- <tile i="3" j="9" o="0" type="sandGrassCorner2"/>
- <tile i="4" j="0" o="0" type="sand"/>
- <tile i="4" j="1" o="0" type="sand"/>
- <tile i="4" j="2" o="0" type="sand"/>
- <tile i="4" j="3" o="180" type="sandGrassStraight"/>
- <tile i="4" j="4" o="90" type="straight"/>
- <tile i="4" j="5" o="-90" type="finish"/>
- <tile i="4" j="6" o="0" type="sandGrassStraight"/>
- <tile i="4" j="7" o="0" type="sand"/>
- <tile i="4" j="8" o="0" type="sand"/>
- <tile i="4" j="9" o="0" type="sand"/>
- <tile i="5" j="0" o="0" type="sand"/>
- <tile i="5" j="1" o="0" type="sand"/>
- <tile i="5" j="2" o="0" type="sand"/>
- <tile i="5" j="3" o="180" type="sandGrassStraight"/>
- <tile i="5" j="4" o="90" type="straight"/>
- <tile i="5" j="5" o="90" type="straight"/>
- <tile i="5" j="6" o="0" type="sandGrassStraight"/>
- <tile i="5" j="7" o="0" type="sand"/>
- <tile i="5" j="8" o="0" type="sand"/>
- <tile i="5" j="9" o="0" type="sand"/>
- <tile i="6" j="0" o="180" type="sandGrassCorner2"/>
- <tile i="6" j="1" o="90" type="sandGrassStraight"/>
- <tile i="6" j="2" o="90" type="sandGrassStraight"/>
- <tile i="6" j="3" o="180" type="sandGrassCorner"/>
- <tile i="6" j="4" o="90" type="straight" computerHint="1"/>
- <tile i="6" j="5" o="90" type="straight"/>
- <tile i="6" j="6" o="90" type="sandGrassCorner"/>
- <tile i="6" j="7" o="90" type="sandGrassStraight"/>
- <tile i="6" j="8" o="90" type="sandGrassStraight"/>
- <tile i="6" j="9" o="90" type="sandGrassCorner2"/>
- <tile i="7" j="0" o="180" type="sandGrassStraight"/>
- <tile i="7" j="1" o="0" type="corner90"/>
- <tile i="7" j="2" o="0" type="straight" computerHint="1"/>
- <tile i="7" j="3" o="0" type="straight"/>
- <tile i="7" j="4" o="-180" type="corner90"/>
- <tile i="7" j="5" o="90" type="corner90"/>
- <tile i="7" j="6" o="180" type="straight" computerHint="1"/>
- <tile i="7" j="7" o="0" type="straight"/>
- <tile i="7" j="8" o="270" type="corner90"/>
- <tile i="7" j="9" o="0" type="sandGrassStraight"/>
- <tile i="8" j="0" o="180" type="sandGrassStraight"/>
- <tile i="8" j="1" o="90" type="corner90"/>
- <tile i="8" j="2" o="0" type="straight"/>
- <tile i="8" j="3" o="0" type="straight"/>
- <tile i="8" j="4" o="0" type="straight"/>
- <tile i="8" j="5" o="0" type="straight"/>
- <tile i="8" j="6" o="0" type="straight"/>
- <tile i="8" j="7" o="0" type="straight" computerHint="1"/>
- <tile i="8" j="8" o="-180" type="corner90"/>
- <tile i="8" j="9" o="0" type="sandGrassStraight"/>
- <tile i="9" j="0" o="-90" type="sandGrassCorner2"/>
- <tile i="9" j="1" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="2" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="3" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="4" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="5" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="6" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="7" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="8" o="-90" type="sandGrassStraight"/>
- <tile i="9" j="9" o="0" type="sandGrassCorner2"/>
- <object x="510" y="2040" category="free" role="tire" o="0"/>
- <object x="510" y="2014" category="free" role="tire" o="0"/>
- <object x="511" y="1988" category="free" role="tire" o="0"/>
- <object x="503" y="1954" category="free" role="tire" o="0"/>
- <object x="516" y="1919" category="free" role="tire" o="0"/>
- <object x="519" y="1877" category="free" role="tire" o="0"/>
- <object x="503" y="1853" category="free" role="tire" o="0"/>
- <object x="509" y="1816" category="free" role="tire" o="0"/>
- <object x="507" y="1775" category="free" role="tire" o="0"/>
- <object x="514" y="1736" category="free" role="tire" o="0"/>
- <object x="501" y="1711" category="free" role="tire" o="0"/>
- <object x="511" y="1683" category="free" role="tire" o="0"/>
- <object x="503" y="1654" category="free" role="tire" o="0"/>
- <object x="515" y="1620" category="free" role="tire" o="0"/>
- <object x="505" y="1579" category="free" role="tire" o="0"/>
- <object x="516" y="1541" category="free" role="tire" o="0"/>
- <object x="505" y="518" category="free" role="tire" o="0"/>
- <object x="509" y="536" category="free" role="tire" o="0"/>
- <object x="509" y="577" category="free" role="tire" o="0"/>
- <object x="507" y="603" category="free" role="tire" o="0"/>
- <object x="509" y="632" category="free" role="tire" o="0"/>
- <object x="500" y="663" category="free" role="tire" o="0"/>
- <object x="506" y="698" category="free" role="tire" o="0"/>
- <object x="511" y="728" category="free" role="tire" o="0"/>
- <object x="512" y="762" category="free" role="tire" o="0"/>
- <object x="520" y="793" category="free" role="tire" o="0"/>
- <object x="511" y="824" category="free" role="tire" o="0"/>
- <object x="516" y="844" category="free" role="tire" o="0"/>
- <object x="507" y="874" category="free" role="tire" o="0"/>
- <object x="519" y="903" category="free" role="tire" o="0"/>
- <object x="507" y="941" category="free" role="tire" o="0"/>
- <object x="519" y="968" category="free" role="tire" o="0"/>
- <object x="511" y="990" category="free" role="tire" o="0"/>
- <object x="520" y="1024" category="free" role="tire" o="0"/>
- <object x="548" y="1280" category="free" role="tree" o="0"/>
- <object x="768" y="1276" category="free" role="tree" o="0"/>
- <object x="1029" y="1272" category="free" role="tree" o="0"/>
- <object x="1277" y="1276" category="free" role="tree" o="0"/>
- <object x="1528" y="1277" category="free" role="tree" o="0"/>
- <object x="2009" y="1280" category="free" role="tree" o="0"/>
- <object x="1775" y="1276" category="free" role="tree" o="0"/>
- <object x="2048" y="2051" category="free" role="tire" o="0"/>
- <object x="2042" y="2012" category="free" role="tire" o="0"/>
- <object x="2050" y="1972" category="free" role="tire" o="0"/>
- <object x="2048" y="1928" category="free" role="tire" o="0"/>
- <object x="2041" y="1862" category="free" role="tire" o="0"/>
- <object x="2058" y="1822" category="free" role="tire" o="0"/>
- <object x="2038" y="1775" category="free" role="tire" o="0"/>
- <object x="2048" y="1741" category="free" role="tire" o="0"/>
- <object x="2042" y="1690" category="free" role="tire" o="0"/>
- <object x="2042" y="1640" category="free" role="tire" o="0"/>
- <object x="2049" y="1590" category="free" role="tire" o="0"/>
- <object x="2037" y="1555" category="free" role="tire" o="0"/>
- <object x="2046" y="1519" category="free" role="tire" o="0"/>
- <object x="2045" y="514" category="free" role="tire" o="0"/>
- <object x="2049" y="535" category="free" role="tire" o="0"/>
- <object x="2041" y="571" category="free" role="tire" o="0"/>
- <object x="2050" y="606" category="free" role="tire" o="0"/>
- <object x="2044" y="650" category="free" role="tire" o="0"/>
- <object x="2049" y="671" category="free" role="tire" o="0"/>
- <object x="2045" y="710" category="free" role="tire" o="0"/>
- <object x="2049" y="741" category="free" role="tire" o="0"/>
- <object x="2049" y="789" category="free" role="tire" o="0"/>
- <object x="2042" y="832" category="free" role="tire" o="0"/>
- <object x="2045" y="857" category="free" role="tire" o="0"/>
- <object x="2050" y="894" category="free" role="tire" o="0"/>
- <object x="2042" y="925" category="free" role="tire" o="0"/>
- <object x="2045" y="955" category="free" role="tire" o="0"/>
- <object x="2046" y="1000" category="free" role="tire" o="0"/>
- <object x="2044" y="1029" category="free" role="tire" o="0"/>
- <object x="531" y="1231" category="free" role="plant" o="0"/>
- <object x="509" y="1215" category="free" role="plant" o="0"/>
- <object x="515" y="1196" category="free" role="plant" o="0"/>
- <object x="493" y="1142" category="free" role="plant" o="0"/>
- <object x="494" y="1088" category="free" role="plant" o="0"/>
- <object x="498" y="1163" category="free" role="plant" o="0"/>
- <object x="616" y="1277" category="free" role="plant" o="0"/>
- <object x="599" y="1292" category="free" role="plant" o="0"/>
- <object x="593" y="1265" category="free" role="plant" o="0"/>
- <object x="662" y="1286" category="free" role="plant" o="0"/>
- <object x="708" y="1281" category="free" role="plant" o="0"/>
- <object x="638" y="1280" category="free" role="plant" o="0"/>
- <object x="627" y="1306" category="free" role="plant" o="0"/>
- <object x="584" y="1312" category="free" role="plant" o="0"/>
- <object x="537" y="1348" category="free" role="plant" o="0"/>
- <object x="514" y="1377" category="free" role="plant" o="0"/>
- <object x="516" y="1427" category="free" role="plant" o="0"/>
- <object x="518" y="1470" category="free" role="plant" o="0"/>
- <object x="527" y="1326" category="free" role="plant" o="0"/>
- <object x="502" y="1331" category="free" role="plant" o="0"/>
- <object x="507" y="1284" category="free" role="plant" o="0"/>
- <object x="506" y="1238" category="free" role="plant" o="0"/>
- <object x="538" y="1211" category="free" role="plant" o="0"/>
- <object x="564" y="1241" category="free" role="plant" o="0"/>
- <object x="551" y="1329" category="free" role="plant" o="0"/>
- <object x="502" y="1356" category="free" role="plant" o="0"/>
- <object x="497" y="1456" category="free" role="plant" o="0"/>
- <object x="502" y="1412" category="free" role="plant" o="0"/>
- <object x="518" y="1399" category="free" role="plant" o="0"/>
- <object x="1844" y="1283" category="free" role="plant" o="0"/>
- <object x="1885" y="1289" category="free" role="plant" o="0"/>
- <object x="1907" y="1280" category="free" role="plant" o="0"/>
- <object x="1966" y="1291" category="free" role="plant" o="0"/>
- <object x="1941" y="1285" category="free" role="plant" o="0"/>
- <object x="1951" y="1256" category="free" role="plant" o="0"/>
- <object x="1994" y="1225" category="free" role="plant" o="0"/>
- <object x="2024" y="1212" category="free" role="plant" o="0"/>
- <object x="2020" y="1175" category="free" role="plant" o="0"/>
- <object x="2034" y="1147" category="free" role="plant" o="0"/>
- <object x="2053" y="1113" category="free" role="plant" o="0"/>
- <object x="2054" y="1076" category="free" role="plant" o="0"/>
- <object x="2060" y="1159" category="free" role="plant" o="0"/>
- <object x="2046" y="1178" category="free" role="plant" o="0"/>
- <object x="2043" y="1193" category="free" role="plant" o="0"/>
- <object x="2043" y="1215" category="free" role="plant" o="0"/>
- <object x="2037" y="1226" category="free" role="plant" o="0"/>
- <object x="2014" y="1233" category="free" role="plant" o="0"/>
- <object x="2054" y="1255" category="free" role="plant" o="0"/>
- <object x="2048" y="1297" category="free" role="plant" o="0"/>
- <object x="2051" y="1325" category="free" role="plant" o="0"/>
- <object x="2011" y="1329" category="free" role="plant" o="0"/>
- <object x="1989" y="1322" category="free" role="plant" o="0"/>
- <object x="2029" y="1343" category="free" role="plant" o="0"/>
- <object x="2043" y="1370" category="free" role="plant" o="0"/>
- <object x="2060" y="1384" category="free" role="plant" o="0"/>
- <object x="2057" y="1394" category="free" role="plant" o="0"/>
- <object x="2061" y="1434" category="free" role="plant" o="0"/>
- <object x="2053" y="1461" category="free" role="plant" o="0"/>
- <object x="2067" y="1493" category="free" role="plant" o="0"/>
- <object x="2032" y="1423" category="free" role="plant" o="0"/>
- <object x="2048" y="1418" category="free" role="plant" o="0"/>
- <object x="2055" y="1342" category="free" role="plant" o="0"/>
- <object x="2059" y="1275" category="free" role="plant" o="0"/>
- <object x="2058" y="1207" category="free" role="plant" o="0"/>
- <object x="2063" y="1227" category="free" role="plant" o="0"/>
- <object x="1973" y="1261" category="free" role="plant" o="0"/>
- <object x="1983" y="1239" category="free" role="plant" o="0"/>
- <object x="1866" y="1278" category="free" role="plant" o="0"/>
- <object x="1932" y="1269" category="free" role="plant" o="0"/>
- <object x="2034" y="2291" category="free" role="plant" o="0"/>
- <object x="2060" y="2295" category="free" role="plant" o="0"/>
- <object x="2238" y="2285" category="free" role="plant" o="0"/>
- <object x="2272" y="2297" category="free" role="plant" o="0"/>
- <object x="2273" y="2263" category="free" role="plant" o="0"/>
- <object x="2293" y="2229" category="free" role="plant" o="0"/>
- <object x="2298" y="2274" category="free" role="plant" o="0"/>
- <object x="1816" y="2299" category="free" role="plant" o="0"/>
- <object x="1854" y="2282" category="free" role="plant" o="0"/>
- <object x="1817" y="2278" category="free" role="plant" o="0"/>
- <object x="1817" y="2239" category="free" role="plant" o="0"/>
- <object x="1799" y="2236" category="free" role="plant" o="0"/>
- <object x="1799" y="2261" category="free" role="plant" o="0"/>
- <object x="2027" y="270" category="free" role="plant" o="0"/>
- <object x="2051" y="255" category="free" role="plant" o="0"/>
- <object x="2071" y="271" category="free" role="plant" o="0"/>
- <object x="2229" y="280" category="free" role="plant" o="0"/>
- <object x="2274" y="299" category="free" role="plant" o="0"/>
- <object x="2271" y="280" category="free" role="plant" o="0"/>
- <object x="2252" y="256" category="free" role="plant" o="0"/>
- <object x="2306" y="262" category="free" role="plant" o="0"/>
- <object x="2300" y="338" category="free" role="plant" o="0"/>
- <object x="1829" y="279" category="free" role="plant" o="0"/>
- <object x="1877" y="264" category="free" role="plant" o="0"/>
- <object x="1897" y="253" category="free" role="plant" o="0"/>
- <object x="1845" y="258" category="free" role="plant" o="0"/>
- <object x="1846" y="292" category="free" role="plant" o="0"/>
- <object x="1817" y="322" category="free" role="plant" o="0"/>
- <object x="1795" y="289" category="free" role="plant" o="0"/>
- <object x="1821" y="244" category="free" role="plant" o="0"/>
- <object x="1793" y="335" category="free" role="plant" o="0"/>
- <object x="1784" y="372" category="free" role="plant" o="0"/>
- <object x="494" y="2293" category="free" role="plant" o="0"/>
- <object x="506" y="2301" category="free" role="plant" o="0"/>
- <object x="531" y="2288" category="free" role="plant" o="0"/>
- <object x="728" y="2291" category="free" role="plant" o="0"/>
- <object x="684" y="2302" category="free" role="plant" o="0"/>
- <object x="725" y="2260" category="free" role="plant" o="0"/>
- <object x="768" y="2238" category="free" role="plant" o="0"/>
- <object x="784" y="2190" category="free" role="plant" o="0"/>
- <object x="755" y="2257" category="free" role="plant" o="0"/>
- <object x="756" y="2294" category="free" role="plant" o="0"/>
- <object x="335" y="2298" category="free" role="plant" o="0"/>
- <object x="283" y="2290" category="free" role="plant" o="0"/>
- <object x="283" y="2267" category="free" role="plant" o="0"/>
- <object x="303" y="2276" category="free" role="plant" o="0"/>
- <object x="242" y="2197" category="free" role="plant" o="0"/>
- <object x="249" y="2269" category="free" role="plant" o="0"/>
- <object x="244" y="2239" category="free" role="plant" o="0"/>
- <object x="353" y="2305" category="free" role="plant" o="0"/>
- <object x="306" y="2320" category="free" role="plant" o="0"/>
- <object x="337" y="2327" category="free" role="plant" o="0"/>
- <object x="491" y="266" category="free" role="plant" o="0"/>
- <object x="521" y="248" category="free" role="plant" o="0"/>
- <object x="484" y="223" category="free" role="plant" o="0"/>
- <object x="725" y="267" category="free" role="plant" o="0"/>
- <object x="674" y="263" category="free" role="plant" o="0"/>
- <object x="669" y="228" category="free" role="plant" o="0"/>
- <object x="713" y="280" category="free" role="plant" o="0"/>
- <object x="745" y="302" category="free" role="plant" o="0"/>
- <object x="755" y="334" category="free" role="plant" o="0"/>
- <object x="780" y="360" category="free" role="plant" o="0"/>
- <object x="757" y="305" category="free" role="plant" o="0"/>
- <object x="758" y="275" category="free" role="plant" o="0"/>
- <object x="744" y="269" category="free" role="plant" o="0"/>
- <object x="723" y="240" category="free" role="plant" o="0"/>
- <object x="790" y="304" category="free" role="plant" o="0"/>
- <object x="306" y="273" category="free" role="plant" o="0"/>
- <object x="345" y="264" category="free" role="plant" o="0"/>
- <object x="311" y="261" category="free" role="plant" o="0"/>
- <object x="274" y="260" category="free" role="plant" o="0"/>
- <object x="282" y="286" category="free" role="plant" o="0"/>
- <object x="271" y="331" category="free" role="plant" o="0"/>
- <object x="241" y="347" category="free" role="plant" o="0"/>
- <object x="241" y="384" category="free" role="plant" o="0"/>
- <object x="260" y="371" category="free" role="plant" o="0"/>
- <object x="240" y="414" category="free" role="plant" o="0"/>
- <object x="244" y="442" category="free" role="plant" o="0"/>
- <object x="250" y="299" category="free" role="plant" o="0"/>
- <object x="284" y="311" category="free" role="plant" o="0"/>
- <object x="387" y="253" category="free" role="plant" o="0"/>
- <tnode x="911" y="1412" i="0"/>
- <tnode x="724" y="1475" i="1"/>
- <tnode x="637" y="1742" i="2"/>
- <tnode x="609" y="2053" i="3"/>
- <tnode x="503" y="2145" i="4"/>
- <tnode x="392" y="2128" i="5"/>
- <tnode x="311" y="1981" i="6"/>
- <tnode x="362" y="609" i="7"/>
- <tnode x="412" y="502" i="8"/>
- <tnode x="506" y="428" i="9"/>
- <tnode x="606" y="432" i="10"/>
- <tnode x="688" y="563" i="11"/>
- <tnode x="600" y="797" i="12"/>
- <tnode x="574" y="938" i="13"/>
- <tnode x="748" y="1120" i="14"/>
- <tnode x="1429" y="1201" i="15"/>
- <tnode x="1749" y="1145" i="16"/>
- <tnode x="1920" y="984" i="17"/>
- <tnode x="1980" y="506" i="18"/>
- <tnode x="2035" y="432" i="19"/>
- <tnode x="2144" y="437" i="20"/>
- <tnode x="2216" y="536" i="21"/>
- <tnode x="2249" y="667" i="22"/>
- <tnode x="2198" y="1888" i="23"/>
- <tnode x="2115" y="2049" i="24"/>
- <tnode x="2012" y="2101" i="25"/>
- <tnode x="1944" y="1989" i="26"/>
- <tnode x="1844" y="1490" i="27"/>
- <tnode x="1689" y="1425" i="28"/>
- <tnode x="1464" y="1358" i="29"/>
- <tnode x="1150" y="1349" i="30"/>
- <tnode x="954" y="1400" i="31"/>
+ <t i="0" j="0" o="180" t="sandGrassCorner2"/>
+ <t i="0" j="1" o="90" t="sandGrassStraight"/>
+ <t i="0" j="2" o="90" t="sandGrassStraight"/>
+ <t i="0" j="3" o="90" t="sandGrassStraight"/>
+ <t i="0" j="4" o="90" t="sandGrassStraight"/>
+ <t i="0" j="5" o="90" t="sandGrassStraight"/>
+ <t i="0" j="6" o="90" t="sandGrassStraight"/>
+ <t i="0" j="7" o="90" t="sandGrassStraight"/>
+ <t i="0" j="8" o="90" t="sandGrassStraight"/>
+ <t i="0" j="9" o="90" t="sandGrassCorner2"/>
+ <t i="1" j="0" o="180" t="sandGrassStraight"/>
+ <t i="1" j="1" o="0" t="corner90"/>
+ <t i="1" j="2" o="0" t="straight" c="1"/>
+ <t i="1" j="3" o="0" t="straight"/>
+ <t i="1" j="4" o="0" t="straight"/>
+ <t i="1" j="5" o="0" t="straight"/>
+ <t i="1" j="6" o="0" t="straight"/>
+ <t i="1" j="7" o="0" t="straight"/>
+ <t i="1" j="8" o="-90" t="corner90"/>
+ <t i="1" j="9" o="0" t="sandGrassStraight"/>
+ <t i="2" j="0" o="180" t="sandGrassStraight"/>
+ <t i="2" j="1" o="90" t="corner90"/>
+ <t i="2" j="2" o="0" t="straight"/>
+ <t i="2" j="3" o="0" t="straight" c="1"/>
+ <t i="2" j="4" o="-90" t="corner90"/>
+ <t i="2" j="5" o="0" t="corner90"/>
+ <t i="2" j="6" o="0" t="straight"/>
+ <t i="2" j="7" o="0" t="straight" c="1"/>
+ <t i="2" j="8" o="-180" t="corner90"/>
+ <t i="2" j="9" o="0" t="sandGrassStraight"/>
+ <t i="3" j="0" o="-90" t="sandGrassCorner2"/>
+ <t i="3" j="1" o="-90" t="sandGrassStraight"/>
+ <t i="3" j="2" o="-90" t="sandGrassStraight"/>
+ <t i="3" j="3" o="-90" t="sandGrassCorner"/>
+ <t i="3" j="4" o="-90" t="straight"/>
+ <t i="3" j="5" o="90" t="straight" c="1"/>
+ <t i="3" j="6" o="0" t="sandGrassCorner"/>
+ <t i="3" j="7" o="-90" t="sandGrassStraight"/>
+ <t i="3" j="8" o="-90" t="sandGrassStraight"/>
+ <t i="3" j="9" o="0" t="sandGrassCorner2"/>
+ <t i="4" j="0" o="0" t="sand"/>
+ <t i="4" j="1" o="0" t="sand"/>
+ <t i="4" j="2" o="0" t="sand"/>
+ <t i="4" j="3" o="180" t="sandGrassStraight"/>
+ <t i="4" j="4" o="90" t="straight"/>
+ <t i="4" j="5" o="-90" t="finish"/>
+ <t i="4" j="6" o="0" t="sandGrassStraight"/>
+ <t i="4" j="7" o="0" t="sand"/>
+ <t i="4" j="8" o="0" t="sand"/>
+ <t i="4" j="9" o="0" t="sand"/>
+ <t i="5" j="0" o="0" t="sand"/>
+ <t i="5" j="1" o="0" t="sand"/>
+ <t i="5" j="2" o="0" t="sand"/>
+ <t i="5" j="3" o="180" t="sandGrassStraight"/>
+ <t i="5" j="4" o="90" t="straight"/>
+ <t i="5" j="5" o="90" t="straight"/>
+ <t i="5" j="6" o="0" t="sandGrassStraight"/>
+ <t i="5" j="7" o="0" t="sand"/>
+ <t i="5" j="8" o="0" t="sand"/>
+ <t i="5" j="9" o="0" t="sand"/>
+ <t i="6" j="0" o="180" t="sandGrassCorner2"/>
+ <t i="6" j="1" o="90" t="sandGrassStraight"/>
+ <t i="6" j="2" o="90" t="sandGrassStraight"/>
+ <t i="6" j="3" o="180" t="sandGrassCorner"/>
+ <t i="6" j="4" o="90" t="straight" c="1"/>
+ <t i="6" j="5" o="90" t="straight"/>
+ <t i="6" j="6" o="90" t="sandGrassCorner"/>
+ <t i="6" j="7" o="90" t="sandGrassStraight"/>
+ <t i="6" j="8" o="90" t="sandGrassStraight"/>
+ <t i="6" j="9" o="90" t="sandGrassCorner2"/>
+ <t i="7" j="0" o="180" t="sandGrassStraight"/>
+ <t i="7" j="1" o="0" t="corner90"/>
+ <t i="7" j="2" o="0" t="straight" c="1"/>
+ <t i="7" j="3" o="0" t="straight"/>
+ <t i="7" j="4" o="-180" t="corner90"/>
+ <t i="7" j="5" o="90" t="corner90"/>
+ <t i="7" j="6" o="180" t="straight" c="1"/>
+ <t i="7" j="7" o="0" t="straight"/>
+ <t i="7" j="8" o="270" t="corner90"/>
+ <t i="7" j="9" o="0" t="sandGrassStraight"/>
+ <t i="8" j="0" o="180" t="sandGrassStraight"/>
+ <t i="8" j="1" o="90" t="corner90"/>
+ <t i="8" j="2" o="0" t="straight"/>
+ <t i="8" j="3" o="0" t="straight"/>
+ <t i="8" j="4" o="0" t="straight"/>
+ <t i="8" j="5" o="0" t="straight"/>
+ <t i="8" j="6" o="0" t="straight"/>
+ <t i="8" j="7" o="0" t="straight" c="1"/>
+ <t i="8" j="8" o="-180" t="corner90"/>
+ <t i="8" j="9" o="0" t="sandGrassStraight"/>
+ <t i="9" j="0" o="-90" t="sandGrassCorner2"/>
+ <t i="9" j="1" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="2" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="3" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="4" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="5" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="6" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="7" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="8" o="-90" t="sandGrassStraight"/>
+ <t i="9" j="9" o="0" t="sandGrassCorner2"/>
+ <o x="510" y="2040" c="free" r="tire" o="0"/>
+ <o x="510" y="2014" c="free" r="tire" o="0"/>
+ <o x="511" y="1988" c="free" r="tire" o="0"/>
+ <o x="503" y="1954" c="free" r="tire" o="0"/>
+ <o x="516" y="1919" c="free" r="tire" o="0"/>
+ <o x="519" y="1877" c="free" r="tire" o="0"/>
+ <o x="503" y="1853" c="free" r="tire" o="0"/>
+ <o x="509" y="1816" c="free" r="tire" o="0"/>
+ <o x="507" y="1775" c="free" r="tire" o="0"/>
+ <o x="514" y="1736" c="free" r="tire" o="0"/>
+ <o x="501" y="1711" c="free" r="tire" o="0"/>
+ <o x="511" y="1683" c="free" r="tire" o="0"/>
+ <o x="503" y="1654" c="free" r="tire" o="0"/>
+ <o x="515" y="1620" c="free" r="tire" o="0"/>
+ <o x="505" y="1579" c="free" r="tire" o="0"/>
+ <o x="516" y="1541" c="free" r="tire" o="0"/>
+ <o x="505" y="518" c="free" r="tire" o="0"/>
+ <o x="509" y="536" c="free" r="tire" o="0"/>
+ <o x="509" y="577" c="free" r="tire" o="0"/>
+ <o x="507" y="603" c="free" r="tire" o="0"/>
+ <o x="509" y="632" c="free" r="tire" o="0"/>
+ <o x="500" y="663" c="free" r="tire" o="0"/>
+ <o x="506" y="698" c="free" r="tire" o="0"/>
+ <o x="511" y="728" c="free" r="tire" o="0"/>
+ <o x="512" y="762" c="free" r="tire" o="0"/>
+ <o x="520" y="793" c="free" r="tire" o="0"/>
+ <o x="511" y="824" c="free" r="tire" o="0"/>
+ <o x="516" y="844" c="free" r="tire" o="0"/>
+ <o x="507" y="874" c="free" r="tire" o="0"/>
+ <o x="519" y="903" c="free" r="tire" o="0"/>
+ <o x="507" y="941" c="free" r="tire" o="0"/>
+ <o x="519" y="968" c="free" r="tire" o="0"/>
+ <o x="511" y="990" c="free" r="tire" o="0"/>
+ <o x="520" y="1024" c="free" r="tire" o="0"/>
+ <o x="548" y="1280" c="free" r="tree" o="0"/>
+ <o x="768" y="1276" c="free" r="tree" o="0"/>
+ <o x="1029" y="1272" c="free" r="tree" o="0"/>
+ <o x="1277" y="1276" c="free" r="tree" o="0"/>
+ <o x="1528" y="1277" c="free" r="tree" o="0"/>
+ <o x="2009" y="1280" c="free" r="tree" o="0"/>
+ <o x="1775" y="1276" c="free" r="tree" o="0"/>
+ <o x="2048" y="2051" c="free" r="tire" o="0"/>
+ <o x="2042" y="2012" c="free" r="tire" o="0"/>
+ <o x="2050" y="1972" c="free" r="tire" o="0"/>
+ <o x="2048" y="1928" c="free" r="tire" o="0"/>
+ <o x="2041" y="1862" c="free" r="tire" o="0"/>
+ <o x="2058" y="1822" c="free" r="tire" o="0"/>
+ <o x="2038" y="1775" c="free" r="tire" o="0"/>
+ <o x="2048" y="1741" c="free" r="tire" o="0"/>
+ <o x="2042" y="1690" c="free" r="tire" o="0"/>
+ <o x="2042" y="1640" c="free" r="tire" o="0"/>
+ <o x="2049" y="1590" c="free" r="tire" o="0"/>
+ <o x="2037" y="1555" c="free" r="tire" o="0"/>
+ <o x="2046" y="1519" c="free" r="tire" o="0"/>
+ <o x="2045" y="514" c="free" r="tire" o="0"/>
+ <o x="2049" y="535" c="free" r="tire" o="0"/>
+ <o x="2041" y="571" c="free" r="tire" o="0"/>
+ <o x="2050" y="606" c="free" r="tire" o="0"/>
+ <o x="2044" y="650" c="free" r="tire" o="0"/>
+ <o x="2049" y="671" c="free" r="tire" o="0"/>
+ <o x="2045" y="710" c="free" r="tire" o="0"/>
+ <o x="2049" y="741" c="free" r="tire" o="0"/>
+ <o x="2049" y="789" c="free" r="tire" o="0"/>
+ <o x="2042" y="832" c="free" r="tire" o="0"/>
+ <o x="2045" y="857" c="free" r="tire" o="0"/>
+ <o x="2050" y="894" c="free" r="tire" o="0"/>
+ <o x="2042" y="925" c="free" r="tire" o="0"/>
+ <o x="2045" y="955" c="free" r="tire" o="0"/>
+ <o x="2046" y="1000" c="free" r="tire" o="0"/>
+ <o x="2044" y="1029" c="free" r="tire" o="0"/>
+ <o x="531" y="1231" c="free" r="plant" o="0"/>
+ <o x="509" y="1215" c="free" r="plant" o="0"/>
+ <o x="515" y="1196" c="free" r="plant" o="0"/>
+ <o x="493" y="1142" c="free" r="plant" o="0"/>
+ <o x="494" y="1088" c="free" r="plant" o="0"/>
+ <o x="498" y="1163" c="free" r="plant" o="0"/>
+ <o x="616" y="1277" c="free" r="plant" o="0"/>
+ <o x="599" y="1292" c="free" r="plant" o="0"/>
+ <o x="593" y="1265" c="free" r="plant" o="0"/>
+ <o x="662" y="1286" c="free" r="plant" o="0"/>
+ <o x="708" y="1281" c="free" r="plant" o="0"/>
+ <o x="638" y="1280" c="free" r="plant" o="0"/>
+ <o x="627" y="1306" c="free" r="plant" o="0"/>
+ <o x="584" y="1312" c="free" r="plant" o="0"/>
+ <o x="537" y="1348" c="free" r="plant" o="0"/>
+ <o x="514" y="1377" c="free" r="plant" o="0"/>
+ <o x="516" y="1427" c="free" r="plant" o="0"/>
+ <o x="518" y="1470" c="free" r="plant" o="0"/>
+ <o x="527" y="1326" c="free" r="plant" o="0"/>
+ <o x="502" y="1331" c="free" r="plant" o="0"/>
+ <o x="507" y="1284" c="free" r="plant" o="0"/>
+ <o x="506" y="1238" c="free" r="plant" o="0"/>
+ <o x="538" y="1211" c="free" r="plant" o="0"/>
+ <o x="564" y="1241" c="free" r="plant" o="0"/>
+ <o x="551" y="1329" c="free" r="plant" o="0"/>
+ <o x="502" y="1356" c="free" r="plant" o="0"/>
+ <o x="497" y="1456" c="free" r="plant" o="0"/>
+ <o x="502" y="1412" c="free" r="plant" o="0"/>
+ <o x="518" y="1399" c="free" r="plant" o="0"/>
+ <o x="1844" y="1283" c="free" r="plant" o="0"/>
+ <o x="1885" y="1289" c="free" r="plant" o="0"/>
+ <o x="1907" y="1280" c="free" r="plant" o="0"/>
+ <o x="1966" y="1291" c="free" r="plant" o="0"/>
+ <o x="1941" y="1285" c="free" r="plant" o="0"/>
+ <o x="1951" y="1256" c="free" r="plant" o="0"/>
+ <o x="1994" y="1225" c="free" r="plant" o="0"/>
+ <o x="2024" y="1212" c="free" r="plant" o="0"/>
+ <o x="2020" y="1175" c="free" r="plant" o="0"/>
+ <o x="2034" y="1147" c="free" r="plant" o="0"/>
+ <o x="2053" y="1113" c="free" r="plant" o="0"/>
+ <o x="2054" y="1076" c="free" r="plant" o="0"/>
+ <o x="2060" y="1159" c="free" r="plant" o="0"/>
+ <o x="2046" y="1178" c="free" r="plant" o="0"/>
+ <o x="2043" y="1193" c="free" r="plant" o="0"/>
+ <o x="2043" y="1215" c="free" r="plant" o="0"/>
+ <o x="2037" y="1226" c="free" r="plant" o="0"/>
+ <o x="2014" y="1233" c="free" r="plant" o="0"/>
+ <o x="2054" y="1255" c="free" r="plant" o="0"/>
+ <o x="2048" y="1297" c="free" r="plant" o="0"/>
+ <o x="2051" y="1325" c="free" r="plant" o="0"/>
+ <o x="2011" y="1329" c="free" r="plant" o="0"/>
+ <o x="1989" y="1322" c="free" r="plant" o="0"/>
+ <o x="2029" y="1343" c="free" r="plant" o="0"/>
+ <o x="2043" y="1370" c="free" r="plant" o="0"/>
+ <o x="2060" y="1384" c="free" r="plant" o="0"/>
+ <o x="2057" y="1394" c="free" r="plant" o="0"/>
+ <o x="2061" y="1434" c="free" r="plant" o="0"/>
+ <o x="2053" y="1461" c="free" r="plant" o="0"/>
+ <o x="2067" y="1493" c="free" r="plant" o="0"/>
+ <o x="2032" y="1423" c="free" r="plant" o="0"/>
+ <o x="2048" y="1418" c="free" r="plant" o="0"/>
+ <o x="2055" y="1342" c="free" r="plant" o="0"/>
+ <o x="2059" y="1275" c="free" r="plant" o="0"/>
+ <o x="2058" y="1207" c="free" r="plant" o="0"/>
+ <o x="2063" y="1227" c="free" r="plant" o="0"/>
+ <o x="1973" y="1261" c="free" r="plant" o="0"/>
+ <o x="1983" y="1239" c="free" r="plant" o="0"/>
+ <o x="1866" y="1278" c="free" r="plant" o="0"/>
+ <o x="1932" y="1269" c="free" r="plant" o="0"/>
+ <o x="2034" y="2291" c="free" r="plant" o="0"/>
+ <o x="2060" y="2295" c="free" r="plant" o="0"/>
+ <o x="2238" y="2285" c="free" r="plant" o="0"/>
+ <o x="2272" y="2297" c="free" r="plant" o="0"/>
+ <o x="2273" y="2263" c="free" r="plant" o="0"/>
+ <o x="2293" y="2229" c="free" r="plant" o="0"/>
+ <o x="2298" y="2274" c="free" r="plant" o="0"/>
+ <o x="1816" y="2299" c="free" r="plant" o="0"/>
+ <o x="1854" y="2282" c="free" r="plant" o="0"/>
+ <o x="1817" y="2278" c="free" r="plant" o="0"/>
+ <o x="1817" y="2239" c="free" r="plant" o="0"/>
+ <o x="1799" y="2236" c="free" r="plant" o="0"/>
+ <o x="1799" y="2261" c="free" r="plant" o="0"/>
+ <o x="2027" y="270" c="free" r="plant" o="0"/>
+ <o x="2051" y="255" c="free" r="plant" o="0"/>
+ <o x="2071" y="271" c="free" r="plant" o="0"/>
+ <o x="2229" y="280" c="free" r="plant" o="0"/>
+ <o x="2274" y="299" c="free" r="plant" o="0"/>
+ <o x="2271" y="280" c="free" r="plant" o="0"/>
+ <o x="2252" y="256" c="free" r="plant" o="0"/>
+ <o x="2306" y="262" c="free" r="plant" o="0"/>
+ <o x="2300" y="338" c="free" r="plant" o="0"/>
+ <o x="1829" y="279" c="free" r="plant" o="0"/>
+ <o x="1877" y="264" c="free" r="plant" o="0"/>
+ <o x="1897" y="253" c="free" r="plant" o="0"/>
+ <o x="1845" y="258" c="free" r="plant" o="0"/>
+ <o x="1846" y="292" c="free" r="plant" o="0"/>
+ <o x="1817" y="322" c="free" r="plant" o="0"/>
+ <o x="1795" y="289" c="free" r="plant" o="0"/>
+ <o x="1821" y="244" c="free" r="plant" o="0"/>
+ <o x="1793" y="335" c="free" r="plant" o="0"/>
+ <o x="1784" y="372" c="free" r="plant" o="0"/>
+ <o x="494" y="2293" c="free" r="plant" o="0"/>
+ <o x="506" y="2301" c="free" r="plant" o="0"/>
+ <o x="531" y="2288" c="free" r="plant" o="0"/>
+ <o x="728" y="2291" c="free" r="plant" o="0"/>
+ <o x="684" y="2302" c="free" r="plant" o="0"/>
+ <o x="725" y="2260" c="free" r="plant" o="0"/>
+ <o x="768" y="2238" c="free" r="plant" o="0"/>
+ <o x="784" y="2190" c="free" r="plant" o="0"/>
+ <o x="755" y="2257" c="free" r="plant" o="0"/>
+ <o x="756" y="2294" c="free" r="plant" o="0"/>
+ <o x="335" y="2298" c="free" r="plant" o="0"/>
+ <o x="283" y="2290" c="free" r="plant" o="0"/>
+ <o x="283" y="2267" c="free" r="plant" o="0"/>
+ <o x="303" y="2276" c="free" r="plant" o="0"/>
+ <o x="242" y="2197" c="free" r="plant" o="0"/>
+ <o x="249" y="2269" c="free" r="plant" o="0"/>
+ <o x="244" y="2239" c="free" r="plant" o="0"/>
+ <o x="353" y="2305" c="free" r="plant" o="0"/>
+ <o x="306" y="2320" c="free" r="plant" o="0"/>
+ <o x="337" y="2327" c="free" r="plant" o="0"/>
+ <o x="491" y="266" c="free" r="plant" o="0"/>
+ <o x="521" y="248" c="free" r="plant" o="0"/>
+ <o x="484" y="223" c="free" r="plant" o="0"/>
+ <o x="725" y="267" c="free" r="plant" o="0"/>
+ <o x="674" y="263" c="free" r="plant" o="0"/>
+ <o x="669" y="228" c="free" r="plant" o="0"/>
+ <o x="713" y="280" c="free" r="plant" o="0"/>
+ <o x="745" y="302" c="free" r="plant" o="0"/>
+ <o x="755" y="334" c="free" r="plant" o="0"/>
+ <o x="780" y="360" c="free" r="plant" o="0"/>
+ <o x="757" y="305" c="free" r="plant" o="0"/>
+ <o x="758" y="275" c="free" r="plant" o="0"/>
+ <o x="744" y="269" c="free" r="plant" o="0"/>
+ <o x="723" y="240" c="free" r="plant" o="0"/>
+ <o x="790" y="304" c="free" r="plant" o="0"/>
+ <o x="306" y="273" c="free" r="plant" o="0"/>
+ <o x="345" y="264" c="free" r="plant" o="0"/>
+ <o x="311" y="261" c="free" r="plant" o="0"/>
+ <o x="274" y="260" c="free" r="plant" o="0"/>
+ <o x="282" y="286" c="free" r="plant" o="0"/>
+ <o x="271" y="331" c="free" r="plant" o="0"/>
+ <o x="241" y="347" c="free" r="plant" o="0"/>
+ <o x="241" y="384" c="free" r="plant" o="0"/>
+ <o x="260" y="371" c="free" r="plant" o="0"/>
+ <o x="240" y="414" c="free" r="plant" o="0"/>
+ <o x="244" y="442" c="free" r="plant" o="0"/>
+ <o x="250" y="299" c="free" r="plant" o="0"/>
+ <o x="284" y="311" c="free" r="plant" o="0"/>
+ <o x="387" y="253" c="free" r="plant" o="0"/>
+ <n x="911" y="1412" i="0"/>
+ <n x="724" y="1475" i="1"/>
+ <n x="637" y="1742" i="2"/>
+ <n x="609" y="2053" i="3"/>
+ <n x="503" y="2145" i="4"/>
+ <n x="392" y="2128" i="5"/>
+ <n x="311" y="1981" i="6"/>
+ <n x="362" y="609" i="7"/>
+ <n x="412" y="502" i="8"/>
+ <n x="506" y="428" i="9"/>
+ <n x="606" y="432" i="10"/>
+ <n x="688" y="563" i="11"/>
+ <n x="600" y="797" i="12"/>
+ <n x="574" y="938" i="13"/>
+ <n x="748" y="1120" i="14"/>
+ <n x="1429" y="1201" i="15"/>
+ <n x="1749" y="1145" i="16"/>
+ <n x="1920" y="984" i="17"/>
+ <n x="1980" y="506" i="18"/>
+ <n x="2035" y="432" i="19"/>
+ <n x="2144" y="437" i="20"/>
+ <n x="2216" y="536" i="21"/>
+ <n x="2249" y="667" i="22"/>
+ <n x="2198" y="1888" i="23"/>
+ <n x="2115" y="2049" i="24"/>
+ <n x="2012" y="2101" i="25"/>
+ <n x="1944" y="1989" i="26"/>
+ <n x="1844" y="1490" i="27"/>
+ <n x="1689" y="1425" i="28"/>
+ <n x="1464" y="1358" i="29"/>
+ <n x="1150" y="1349" i="30"/>
+ <n x="954" y="1400" i="31"/>
 </track>
