@@ -88,7 +88,8 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
 
 void Renderer::loadShaders()
 {
-    // TODO: Error handling
+    // Note: ShaderProgram throws on error.
+
     m_tileProgram = new ShaderProgram(context());
     m_tileProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/tile.fsh");
@@ -96,7 +97,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
     m_tileProgram->link();
 
-    // TODO: Error handling
     m_masterProgram = new ShaderProgram(context());
     m_masterProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master.fsh");
@@ -104,7 +104,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");
     m_masterProgram->link();
 
-    // TODO: Error handling
     m_masterShadowProgram = new ShaderProgram(context());
     m_masterShadowProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master2dShadow.fsh");
@@ -112,7 +111,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");
     m_masterShadowProgram->link();
 
-    // TODO: Error handling
     m_textProgram = new ShaderProgram(context());
     m_textProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/text.fsh");
@@ -120,7 +118,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/text.vsh");
     m_textProgram->link();
 
-    // TODO: Error handling
     m_textShadowProgram = new ShaderProgram(context());
     m_textShadowProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/text2dShadow.fsh");
@@ -128,7 +125,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/text.vsh");
     m_textShadowProgram->link();
 
-    // TODO: Error handling
     m_particleProgram = new ShaderProgram(context());
     m_particleProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
@@ -136,7 +132,6 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/particle.vsh");
     m_particleProgram->link();
 
-    // TODO: Error handling
     m_pointParticleProgram = new ShaderProgram(context());
     m_pointParticleProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.fsh");

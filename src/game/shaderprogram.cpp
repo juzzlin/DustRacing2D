@@ -14,7 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "shaderprogram.hpp"
-
+#include <MCException>
+#include <MCLogger>
 #include <cassert>
 
 static const int POSITION = 1;
@@ -59,7 +60,12 @@ bool ShaderProgram::isLinked() const
 
 bool ShaderProgram::addVertexShader(const std::string & fileName)
 {
-    m_vertexShader.compileSourceFile(fileName.c_str());
+    if (!m_vertexShader.compileSourceFile(fileName.c_str()))
+    {
+        MCLogger().error() << "Cannot compile '" << fileName << "'";
+        throw MCException("Compiling a vertex shader failed.");
+    }
+
     m_program.bindAttributeLocation("position", POSITION);
     m_program.bindAttributeLocation("angle",    ANGLE);
     m_program.bindAttributeLocation("scale",    SCALE);
@@ -68,7 +74,12 @@ bool ShaderProgram::addVertexShader(const std::string & fileName)
 
 bool ShaderProgram::addFragmentShader(const std::string & fileName)
 {
-    m_fragmentShader.compileSourceFile(fileName.c_str());
+    if (!m_fragmentShader.compileSourceFile(fileName.c_str()))
+    {
+        MCLogger().error() << "Cannot compile '" << fileName << "'";
+        throw MCException("Compilinga fragment shader failed.");
+    }
+
     return m_program.addShader(&m_fragmentShader);
 }
 

@@ -21,50 +21,61 @@
 #include "mainwindow.hpp"
 #include "renderer.hpp"
 
+#include <MCException>
 #include <MCLogger>
 
 int main(int argc, char ** argv)
 {
-    // Create the QApplication
-    QApplication::setGraphicsSystem("opengl");
-    QApplication app(argc, argv);
-
-    // Initialize the logger
-    QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
-    MCLogger::init(logPath.toStdString().c_str());
-    MCLogger::setEchoMode(true);
-    MCLogger::setDateTime(true);
-
-    MCLogger().info() << "Creating renderer..";
-    Renderer * renderer = new Renderer;
-
-    // Create the main window
-    MCLogger().info() << "Creating the main window..";
-    MainWindow mainWindow;
-    QHBoxLayout * layout = new QHBoxLayout(&mainWindow);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(renderer);
-    mainWindow.setContentsMargins(0, 0, 0, 0);
-    mainWindow.setCursor(QCursor(Qt::BlankCursor));
-    mainWindow.show();
-
-    // Create the game object and set the renderer
-    MCLogger().info() << "Creating game object..";
-    Game game;
-    game.setRenderer(renderer);
-    game.setTargetUpdateFps(60);
-    game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
-
-    // Initialize and start the game
-    if (game.init())
+    try
     {
-        game.start();
+        // Create the QApplication
+        QApplication::setGraphicsSystem("opengl");
+        QApplication app(argc, argv);
+
+        // Initialize the logger
+        QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
+        MCLogger::init(logPath.toStdString().c_str());
+        MCLogger::setEchoMode(true);
+        MCLogger::setDateTime(true);
+
+        MCLogger().info() << "Creating renderer..";
+        Renderer * renderer = new Renderer;
+
+        // Create the main window
+        MCLogger().info() << "Creating the main window..";
+        MainWindow mainWindow;
+        QHBoxLayout * layout = new QHBoxLayout(&mainWindow);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->addWidget(renderer);
+        mainWindow.setContentsMargins(0, 0, 0, 0);
+        mainWindow.setCursor(QCursor(Qt::BlankCursor));
+        mainWindow.show();
+
+        // Create the game object and set the renderer
+        MCLogger().info() << "Creating game object..";
+        Game game;
+        game.setRenderer(renderer);
+        game.setTargetUpdateFps(60);
+        game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
+
+        // Initialize and start the game
+        if (game.init())
+        {
+            game.start();
+        }
+        else
+        {
+            MCLogger().fatal() << "Initing the game failed.";
+            return EXIT_FAILURE;
+        }
+
+        return app.exec();
     }
-    else
+    // Catch some errors during game initialization e.g.
+    // a vertex shader not found.
+    catch (MCException & e)
     {
-        MCLogger().error() << "Initing the game failed.";
+        MCLogger().fatal() << e.what();
         return EXIT_FAILURE;
     }
-
-    return app.exec();
 }
