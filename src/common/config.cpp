@@ -27,13 +27,13 @@ const char * Config::Editor::SELECT_PATH                 = ":/cursor.png";
 const char * Config::Editor::ERASE_PATH                  = ":/cross.png";
 const char * Config::Editor::CLEAR_PATH                  = ":/clear.png";
 const char * Config::Editor::EDITOR_NAME                 = "Dust Racing 2D Track Editor";
-const char * Config::Editor::EDITOR_VERSION              = "0.7.2";
+const char * Config::Editor::EDITOR_VERSION              = "0.7.3";
 const char * Config::Editor::MODEL_CONFIG_FILE_NAME      = "editorModels.conf";
 const char * Config::Editor::QSETTINGS_SOFTWARE_NAME     = "Editor";
 
 // **** Game variables ****
 const char       * Config::Game::GAME_NAME               = "Dust Racing 2D";
-const char       * Config::Game::GAME_VERSION            = "0.7.2";
+const char       * Config::Game::GAME_VERSION            = "0.7.3";
 const unsigned int Config::Game::WINDOW_WIDTH            = 1024;
 const unsigned int Config::Game::WINDOW_HEIGHT           = 768;
 const char       * Config::Game::QSETTINGS_SOFTWARE_NAME = "Game";

@@ -1,3 +1,12 @@
+0.7.3
+-----
+
+* Use the same image file for credits and help menus.
+* Makes the race track data format a bit more compact.
+* Refactors event handling to EventHandler.
+* Fixes invalid categories in the desktop files.
+* Don't install under /opt by default.
+
 0.7.2
 -----
 
