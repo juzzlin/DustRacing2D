@@ -67,17 +67,13 @@ void Route::getAll(std::vector<TargetNodeBase *> & routeVector) const
 
 void Route::buildFromVector(std::vector<TargetNodeBase *> & routeVector)
 {
-    struct mySortFunc
-    {
-        bool operator () (const TargetNodeBase * lhs, const TargetNodeBase * rhs)
-        {
-            return lhs->index() < rhs->index();
-        }
-    };
-
     clear();
 
-    std::sort(routeVector.begin(), routeVector.end(), mySortFunc());
+    std::sort(routeVector.begin(), routeVector.end(),
+        [] (const TargetNodeBase * lhs, const TargetNodeBase * rhs)
+        {
+            return lhs->index() < rhs->index();
+        });
 
     for (TargetNodeBase * tnode : routeVector)
     {

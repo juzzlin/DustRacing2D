@@ -16,7 +16,8 @@
 #include "trackdatabase.hpp"
 
 TrackDataBase::TrackDataBase()
-: m_lapCount(1)
+: m_lapCount(5)
+, m_index(999)
 {
 }
 
@@ -28,6 +29,16 @@ unsigned int TrackDataBase::lapCount() const
 void TrackDataBase::setLapCount(unsigned int laps)
 {
     m_lapCount = laps;
+}
+
+unsigned int TrackDataBase::index() const
+{
+    return m_index;
+}
+
+void TrackDataBase::setIndex(unsigned int index)
+{
+    m_index = index;
 }
 
 TrackDataBase::~TrackDataBase()

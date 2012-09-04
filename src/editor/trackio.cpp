@@ -37,11 +37,12 @@ bool TrackIO::save(const TrackData * trackData, QString path)
     // Create content
     QDomDocument doc;
     QDomElement root = doc.createElement("track");
-    root.setAttribute("version", Config::Editor::EDITOR_VERSION);
-    root.setAttribute("name", trackData->name());
-    root.setAttribute("cols", trackData->map().cols());
-    root.setAttribute("rows", trackData->map().rows());
+    root.setAttribute("version",  Config::Editor::EDITOR_VERSION);
+    root.setAttribute("name",     trackData->name());
+    root.setAttribute("cols",     trackData->map().cols());
+    root.setAttribute("rows",     trackData->map().rows());
     root.setAttribute("lapCount", trackData->lapCount());
+    root.setAttribute("index",    trackData->index());
     doc.appendChild(root);
 
     writeTiles(*trackData, root, doc);
@@ -85,6 +86,7 @@ TrackData * TrackIO::open(QString path)
     const unsigned int cols     = root.attribute("cols", "0").toUInt();
     const unsigned int rows     = root.attribute("rows", "0").toUInt();
     const unsigned int lapCount = root.attribute("lapCount", "0").toUInt();
+    const unsigned int index    = root.attribute("index", "0").toUInt();
 
     TrackData * newData = nullptr;
     if (cols && rows)
@@ -92,6 +94,7 @@ TrackData * TrackIO::open(QString path)
         newData = new TrackData(name, cols, rows);
         newData->setFileName(path);
         newData->setLapCount(lapCount);
+        newData->setIndex(index);
 
         // Temporary route vector.
         std::vector<TargetNodeBase *> route;

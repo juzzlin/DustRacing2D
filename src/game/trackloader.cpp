@@ -37,6 +37,7 @@
 #include <MCShapeView>
 #include <MCTextureManager>
 
+#include <algorithm>
 #include <cassert>
 
 TrackLoader::TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory)
@@ -74,6 +75,14 @@ int TrackLoader::loadTracks()
             }
         }
     }
+
+    // Sort tracks with respect to their indices
+    std::sort(m_tracks.begin(), m_tracks.end(),
+        [](Track * lhs, Track * rhs)
+        {
+             return lhs->trackData().index() < rhs->trackData().index();
+        });
+
     return numLoaded;
 }
 
@@ -100,16 +109,18 @@ TrackData * TrackLoader::loadTrack(QString path)
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        const QString      name     = root.attribute("name", "undefined");
-        const unsigned int cols     = root.attribute("cols", "0").toUInt();
-        const unsigned int rows     = root.attribute("rows", "0").toUInt();
+        const QString      name     = root.attribute("name",     "undefined");
+        const unsigned int cols     = root.attribute("cols",     "0").toUInt();
+        const unsigned int rows     = root.attribute("rows",     "0").toUInt();
         const unsigned int lapCount = root.attribute("lapCount", "1").toUInt();
+        const unsigned int index    = root.attribute("index",    "999").toUInt();
 
         if (cols > 0 && rows > 0)
         {
             newData = new TrackData(name, cols, rows);
             newData->setFileName(path);
             newData->setLapCount(lapCount);
+            newData->setIndex(index);
 
             // A temporary route vector.
             std::vector<TargetNodeBase *> route;

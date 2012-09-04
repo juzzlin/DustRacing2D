@@ -47,6 +47,12 @@ public:
     //! Set lap count.
     virtual void setLapCount(unsigned int laps);
 
+    //! Get lap index.
+    virtual unsigned int index() const;
+
+    //! Set track index.
+    virtual void setIndex(unsigned int index);
+
     //! Get map object.
     virtual MapBase & map() = 0;
 
@@ -68,6 +74,7 @@ public:
 private:
 
     unsigned int m_lapCount;
+    unsigned int m_index;
 };
 
 #endif // TRACKDATABASE_HPP
