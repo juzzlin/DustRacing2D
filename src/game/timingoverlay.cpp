@@ -14,26 +14,24 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "timingoverlay.hpp"
-
 #include "race.hpp"
 #include "timing.hpp"
 #include "car.hpp"
-
 #include <MCCamera>
 #include <MCTextureFontManager>
-#include <MCTextureText>
-
 #include <sstream>
 
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCTextureFontManager::instance())
 , m_defaultMonospace(m_fontManager.font("default"))
+, m_text("")
 , m_pCar(nullptr)
 , m_pTiming(nullptr)
 , m_pRace(nullptr)
 , m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"})
 , m_showRecordTime(true)
 {
+    m_text.setShadowOffset(2, -2);
 }
 
 void TimingOverlay::setCarToFollow(const Car & car)
@@ -56,8 +54,6 @@ void TimingOverlay::render()
     // TODO: Refactor and optimize.
     if (m_pCar && m_pTiming && m_pRace)
     {
-        const int shadowY        = -2;
-        const int shadowX        =  2;
         const int index          = m_pCar->index();
         const int leadersLap     = m_pTiming->leadersLap() + 1;
         const int lap            = m_pTiming->lap(m_pCar->index()) + 1;
@@ -67,7 +63,7 @@ void TimingOverlay::render()
         const int pos            = m_pRace->getPositionOfCar(*m_pCar);
         const int laps           = m_pRace->lapCount();
 
-        MCTextureText text("");
+        m_text.setGlyphSize(20, 20);
 
         // Render the current lap number
         {
@@ -82,11 +78,9 @@ void TimingOverlay::render()
                 ss << " WINNER FINISHED";
             }
 
-            text.setText(ss.str());
-            text.setGlyphSize(20, 20);
-            text.setColor(1.0, 1.0, 1.0);
-            text.setShadowOffset(shadowX, shadowY);
-            text.render(0, height() - text.height(),
+            m_text.setText(ss.str());
+            m_text.setColor(1.0, 1.0, 1.0);
+            m_text.render(0, height() - m_text.height(),
                 nullptr, m_defaultMonospace);
         }
 
@@ -101,11 +95,9 @@ void TimingOverlay::render()
                 ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
             }
 
-            text.setText(ss.str());
-            text.setGlyphSize(20, 20);
-            text.setColor(1.0, 1.0, 0.0);
-            text.setShadowOffset(shadowX, shadowY);
-            text.render(0, height() - text.height() * 2,
+            m_text.setText(ss.str());
+            m_text.setColor(1.0, 1.0, 0.0);
+            m_text.render(0, height() - m_text.height() * 2,
                 nullptr, m_defaultMonospace);
         }
 
@@ -118,27 +110,26 @@ void TimingOverlay::render()
             ss << " " << speed;
             if (speed < 100)
             {
-                text.setColor(1.0, 1.0, 1.0);
+                m_text.setColor(1.0, 1.0, 1.0);
             }
             else if (speed < 200)
             {
-                text.setColor(1.0, 1.0, 0.0);
+                m_text.setColor(1.0, 1.0, 0.0);
             }
             else
             {
-                text.setColor(1.0, 0.0, 0.0);
+                m_text.setColor(1.0, 0.0, 0.0);
             }
 
-            text.setText(ss.str());
-            text.setGlyphSize(40, 40);
-            text.setShadowOffset(shadowX, shadowY);
-            const int h = text.height();
-            text.render(0, h, nullptr, m_defaultMonospace);
+            m_text.setText(ss.str());
+            m_text.setGlyphSize(40, 40);
+            const int h = m_text.height();
+            m_text.render(0, h, nullptr, m_defaultMonospace);
 
-            text.setText(" KM/H");
-            text.setGlyphSize(20, 20);
-            text.setColor(1.0, 1.0, 1.0);
-            text.render(0, 2 * text.height() + h,
+            m_text.setText(" KM/H");
+            m_text.setGlyphSize(20, 20);
+            m_text.setColor(1.0, 1.0, 1.0);
+            m_text.render(0, 2 * m_text.height() + h,
                 nullptr, m_defaultMonospace);
         }
 
@@ -150,7 +141,7 @@ void TimingOverlay::render()
             {
                 ss << "  " << m_pTiming->msecsToString(lastLapTime);
 
-                text.setColor(1.0, 1.0, 1.0);
+                m_text.setColor(1.0, 1.0, 1.0);
             }
             else
             {
@@ -159,42 +150,41 @@ void TimingOverlay::render()
                 // Set color to white, if lastLapTime is not set.
                 if (lastLapTime == -1 || currentLapTime == lastLapTime)
                 {
-                    text.setColor(1.0, 1.0, 1.0);
+                    m_text.setColor(1.0, 1.0, 1.0);
                 }
                 // Set color to green, if current time is ahead of the last lap time.
                 else if (currentLapTime < lastLapTime)
                 {
-                    text.setColor(0.0, 1.0, 0.0);
+                    m_text.setColor(0.0, 1.0, 0.0);
                 }
                 // Set color to red (current time is slower than the last lap time).
                 else
                 {
-                    text.setColor(1.0, 0.0, 0.0);
+                    m_text.setColor(1.0, 0.0, 0.0);
                 }
             }
 
-            text.setText(ss.str());
-            text.setGlyphSize(20, 20);
+            m_text.setText(ss.str());
+            m_text.setGlyphSize(20, 20);
 
-            text.setShadowOffset(shadowX, shadowY);
-            text.render(
-                width() - text.width(),
-                height() - text.height(),
+            m_text.render(
+                width() - m_text.width(),
+                height() - m_text.height(),
                 nullptr,
                 m_defaultMonospace);
         }
+
+        m_text.setGlyphSize(20, 20);
+        m_text.setColor(1.0, 1.0, 1.0);
 
         // Render the last lap time
         {
             std::stringstream ss;
             ss << "L:" << m_pTiming->msecsToString(lastLapTime);
-            text.setText(ss.str());
-            text.setColor(1.0, 1.0, 1.0);
-            text.setGlyphSize(20, 20);
-            text.setShadowOffset(shadowX, shadowY);
-            text.render(
-                width() - text.width(),
-                height() - text.height() * 2,
+            m_text.setText(ss.str());
+            m_text.render(
+                width() - m_text.width(),
+                height() - m_text.height() * 2,
                 nullptr,
                 m_defaultMonospace);
         }
@@ -204,13 +194,10 @@ void TimingOverlay::render()
         {
             std::stringstream ss;
             ss << "R:" << m_pTiming->msecsToString(recordLapTime);
-            text.setText(ss.str());
-            text.setColor(1.0, 1.0, 1.0);
-            text.setGlyphSize(20, 20);
-            text.setShadowOffset(shadowX, shadowY);
-            text.render(
-                width()  - text.width(),
-                height() - text.height() * 3,
+            m_text.setText(ss.str());
+            m_text.render(
+                width()  - m_text.width(),
+                height() - m_text.height() * 3,
                 nullptr,
                 m_defaultMonospace);
         }

@@ -20,6 +20,8 @@
 #include <vector>
 #include <string>
 
+#include <MCTextureText>
+
 class Car;
 class MCTextureFontManager;
 class MCTextureFont;
@@ -53,6 +55,7 @@ private:
 
     MCTextureFontManager   & m_fontManager;
     MCTextureFont          & m_defaultMonospace;
+    MCTextureText            m_text;
     const Car              * m_pCar;
     Timing                 * m_pTiming;
     Race                   * m_pRace;
