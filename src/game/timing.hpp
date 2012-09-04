@@ -81,7 +81,7 @@ public:
     //! Resets the timing.
     void reset();
 
-    //! Converts msecs to string "hh:mm:ss.zzz".
+    //! Converts msecs to string "mm:ss.zz".
     static std::string msecsToString(int msec);
 
 private:
