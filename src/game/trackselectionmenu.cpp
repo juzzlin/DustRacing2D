@@ -35,13 +35,42 @@
 #include "../common/mapbase.hpp"
 
 #include <QSettings>
-
 #include <cassert>
 #include <sstream>
 
 namespace
 {
-    const char * SETTINGS_GROUP = "LapRecords";
+    // TODO: Move this to Track (the other similar functions as well)
+    const char * SETTINGS_GROUP_LAP = "LapRecords";
+    int loadLapRecord(std::string trackName)
+    {
+        // Open settings file
+        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+            Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+        // Read record time, -1 if not found
+        settings.beginGroup(SETTINGS_GROUP_LAP);
+        const int time = settings.value(trackName.c_str(), -1).toInt();
+        settings.endGroup();
+
+        return time;
+    }
+
+    // TODO: Move this to Track (the other similar functions as well)
+    const char * SETTINGS_GROUP_POS = "BestPositions";
+    int loadBestPos(std::string trackName)
+    {
+        // Open settings file
+        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+            Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+        // Read best pos, -1 if not found
+        settings.beginGroup(SETTINGS_GROUP_POS);
+        const int pos = settings.value(trackName.c_str(), -1).toInt();
+        settings.endGroup();
+
+        return pos;
+    }
 }
 
 class TrackItem : public MenuItem
@@ -51,9 +80,16 @@ public:
     TrackItem(int width, int height, Track & track)
     : MenuItem(width, height)
     , m_track(track)
-    , m_xDisplacement(-1000)
     , m_monospace(MCTextureFontManager::instance().font("default"))
-    {}
+    , m_star(MCTextureManager::instance().surface("star"))
+    , m_glow(MCTextureManager::instance().surface("starGlow"))
+    , m_xDisplacement(-1000)
+    , m_lapRecord(loadLapRecord(m_track.trackData().name().toStdString()))
+    , m_bestPos(loadBestPos(m_track.trackData().name().toStdString()))
+    {
+        m_star.setShaderProgram(&Renderer::instance().masterProgram());
+        m_glow.setShaderProgram(&Renderer::instance().masterProgram());
+    }
 
     Track & track() const
     {
@@ -70,30 +106,29 @@ public:
         m_xDisplacement = 1000;
     }
 
+    virtual void setFocused(bool focused)
+    {
+        MenuItem::setFocused(focused);
+
+        m_lapRecord = loadLapRecord(m_track.trackData().name().toStdString());
+        m_bestPos   = loadBestPos(m_track.trackData().name().toStdString());
+    }
+
     //! \reimp
     virtual void render(int x, int y);
 
 private:
 
-    Track & m_track;
-    int m_xDisplacement;
+    Track         & m_track;
     MCTextureFont & m_monospace;
+    MCSurface     & m_star;
+    MCSurface     & m_glow;
+    int             m_xDisplacement;
+    int             m_lapRecord;
+    int             m_bestPos;
 };
 
-int loadLapRecord(std::string trackName)
-{
-    // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-    // Read record time, -1 if not found
-    settings.beginGroup(SETTINGS_GROUP);
-    const int time = settings.value(trackName.c_str(), -1).toInt();
-    settings.endGroup();
-
-    return time;
-}
-
+// TODO: Split this fugly monster function into subs.
 void TrackItem::render(int x, int y)
 {
     const MapBase & rMap = m_track.trackData().map();
@@ -117,8 +152,17 @@ void TrackItem::render(int x, int y)
     }
 
     // Center the preview
-    const int initX = x - rMap.cols() * tileW / 2 + m_xDisplacement;
-    const int initY = y - rMap.rows() * tileH / 2;
+    int initX, initY;
+    if (rMap.cols() % 2 == 0)
+    {
+        initX = x - rMap.cols() * tileW / 2 + tileW / 4 + m_xDisplacement;
+    }
+    else
+    {
+        initX = x - rMap.cols() * tileW / 2 + m_xDisplacement;
+    }
+
+    initY = y - rMap.rows() * tileH / 2;
 
     // Loop through the visible tile matrix and draw the tiles
     MCFloat tileX, tileY;
@@ -155,6 +199,8 @@ void TrackItem::render(int x, int y)
     const int shadowY = -2;
     const int shadowX =  2;
 
+    // Render title
+
     {
         std::stringstream ss;
         ss << m_track.trackData().name().toStdString();
@@ -165,12 +211,36 @@ void TrackItem::render(int x, int y)
             x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
     }
 
+    // Render stars
+    const int starW  = m_star.width();
+    const int starH  = m_star.height();
+    const int startX = x - 5 * starW + starW / 2 + m_xDisplacement;
+    for (int i = 0; i < 10; i++)
+    {
+        if (m_bestPos != -1 && 10 - i >= m_bestPos)
+        {
+            m_star.setColor(1.0, 1.0, 0.0);
+            m_glow.render(
+                nullptr,
+                MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+        }
+        else
+        {
+            m_star.setColor(0.75, 0.75, 0.75);
+        }
+
+        m_star.render(
+            nullptr,
+            MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+    }
+
+    // Render track properties
     {
         std::stringstream ss;
         ss << "  Laps: " << m_track.trackData().lapCount();
         text.setText(ss.str());
         text.setGlyphSize(20, 20);
-        text.render(textX, y - height() / 2 - text.height(), nullptr, m_monospace);
+        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
     }
 
     {
@@ -179,15 +249,14 @@ void TrackItem::render(int x, int y)
            << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
            << " m";
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
+        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
     }
 
     {
         std::stringstream ss;
-        ss << "Record: "
-           << Timing::msecsToString(loadLapRecord(m_track.trackData().name().toStdString()));
+        ss << "Record: " << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
+        text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
     }
 
     {
@@ -233,6 +302,18 @@ void TrackSelectionMenu::right()
 {
     Menu::right();
     currentItem()->onRight();
+}
+
+void TrackSelectionMenu::up()
+{
+    Menu::up();
+    currentItem()->onRight();
+}
+
+void TrackSelectionMenu::down()
+{
+    Menu::down();
+    currentItem()->onLeft();
 }
 
 void TrackSelectionMenu::selectCurrentItem()

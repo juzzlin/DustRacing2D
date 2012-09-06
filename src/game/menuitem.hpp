@@ -59,7 +59,7 @@ public:
     //! Call action, if set.
     virtual void onSelect();
 
-    void setFocused(bool focused);
+    virtual void setFocused(bool focused);
 
     void setContentsMargins(int left, int right, int top, int bottom);
 

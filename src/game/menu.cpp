@@ -161,6 +161,8 @@ void Menu::setCurrentIndex(int index)
         m_currentIndex = index;
         m_currentIndex = m_currentIndex < 0         ? 0            : m_currentIndex;
         m_currentIndex = m_currentIndex >= numItems ? numItems - 1 : m_currentIndex;
+
+        updateFocus();
     }
 }
 
@@ -177,6 +179,8 @@ void Menu::setCurrentIndexWrapAround(int index)
         m_currentIndex = index;
         m_currentIndex = m_currentIndex < 0         ? numItems - 1 : m_currentIndex;
         m_currentIndex = m_currentIndex >= numItems ? 0            : m_currentIndex;
+
+        updateFocus();
     }
 }
 
@@ -193,6 +197,8 @@ void Menu::setDone(bool done)
 void Menu::enter()
 {
     m_done = false;
+
+    updateFocus();
 }
 
 Menu::~Menu()

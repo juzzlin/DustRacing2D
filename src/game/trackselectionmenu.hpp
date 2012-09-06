@@ -49,6 +49,12 @@ public:
     virtual void right();
 
     //! \reimp
+    virtual void up();
+
+    //! \reimp
+    virtual void down();
+
+    //! \reimp
     virtual void selectCurrentItem();
 
 private:
