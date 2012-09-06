@@ -27,7 +27,8 @@
 #include <cassert>
 #include <QSettings>
 
-static const char * SETTINGS_GROUP     = "LapRecords";
+static const char * SETTINGS_GROUP_LAP = "LapRecords";
+static const char * SETTINGS_GROUP_POS = "BestPositions";
 static const int    HUMAN_PLAYER_INDEX = 0;
 
 Race::Race(unsigned int numCars)
@@ -37,6 +38,7 @@ Race::Race(unsigned int numCars)
 , m_started(false)
 , m_checkeredFlagEnabled(false)
 , m_winnerFinished(false)
+, m_bestPos(-1)
 {
 }
 
@@ -164,6 +166,19 @@ void Race::updateRouteProgress(Car & car)
 
         car.setCurrentTargetNodeIndex(index);
     }
+    else
+    {
+        // Check if the race is completed fo a human player and if so,
+        // check if new best pos achieved and save it.
+        if (car.isHuman())
+        {
+            const int pos = getPositionOfCar(car);
+            if (pos < m_bestPos || m_bestPos == -1)
+            {
+                saveBestPos(pos);
+            }
+        }
+    }
 }
 
 void Race::saveLapRecord(int msecs)
@@ -172,7 +187,7 @@ void Race::saveLapRecord(int msecs)
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
-    settings.beginGroup(SETTINGS_GROUP);
+    settings.beginGroup(SETTINGS_GROUP_LAP);
     settings.setValue(m_pTrack->trackData().name(), msecs);
     settings.endGroup();
 }
@@ -184,11 +199,36 @@ int Race::loadLapRecord() const
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     // Read record time, -1 if not found
-    settings.beginGroup(SETTINGS_GROUP);
+    settings.beginGroup(SETTINGS_GROUP_LAP);
     const int time = settings.value(m_pTrack->trackData().name(), -1).toInt();
     settings.endGroup();
 
     return time;
+}
+
+void Race::saveBestPos(int pos)
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_POS);
+    settings.setValue(m_pTrack->trackData().name(), pos);
+    settings.endGroup();
+}
+
+int Race::loadBestPos() const
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    // Read the best position, -1 if not found
+    settings.beginGroup(SETTINGS_GROUP_POS);
+    const int pos = settings.value(m_pTrack->trackData().name(), -1).toInt();
+    settings.endGroup();
+
+    return pos;
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
@@ -227,6 +267,7 @@ void Race::setTrack(Track & track)
 {
     m_pTrack   = &track;
     m_lapCount = m_pTrack->trackData().lapCount();
+    m_bestPos  = loadBestPos();
 
     m_timing.setLapRecord(loadLapRecord());
 }

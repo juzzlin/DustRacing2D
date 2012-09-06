@@ -24,7 +24,7 @@
 class Car;
 class Track;
 
-//! Class that controls the race event.
+//! Class that controls the race event, checkpoints and timing.
 class Race
 {
 public:
@@ -72,8 +72,14 @@ public:
 private:
 
     void updateRouteProgress(Car & car);
+
     void saveLapRecord(int msecs);
-    int loadLapRecord() const;
+
+    int  loadLapRecord() const;
+
+    void saveBestPos(int pos);
+
+    int  loadBestPos() const;
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
@@ -92,6 +98,8 @@ private:
     bool m_started;
     bool m_checkeredFlagEnabled;
     bool m_winnerFinished;
+
+    int m_bestPos;
 };
 
 #endif // RACE_HPP
