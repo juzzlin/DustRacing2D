@@ -19,7 +19,7 @@ if(ReleaseBuild)
     message(STATUS "Release build.")
     set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
 else()
-    message(STATUS "NOTE!!: This is development build without install targets!")
+    message(STATUS "NOTE!!: This is a development build without install targets!")
     set(DATA_PATH ./data)
 endif()
 

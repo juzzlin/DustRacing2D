@@ -60,17 +60,19 @@ Game::Game()
 , m_availableRenderTime(0)
 , m_paused(false)
 {
-    connect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
-    connect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
-
-    connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
-
     m_renderCountTimer.setInterval(1000);
 
+    // Connect update timers
+    connect(&m_frameUpdateTimer,     SIGNAL(timeout()), this, SLOT(updateFrame()));
+    connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
+    connect(&m_renderCountTimer,     SIGNAL(timeout()), this, SLOT(countRenderFps()));
+
+    // Connect pause toggling
+    connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
+
+    // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
-
     m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
         "DustRacingTracks");
 }
@@ -93,6 +95,7 @@ void Game::setRenderer(Renderer * newRenderer)
 
 void Game::finish()
 {
+    // Disconnect update timers
     disconnect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     disconnect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
 }
