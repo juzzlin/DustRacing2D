@@ -81,6 +81,7 @@ MainWindow::MainWindow(QString trackFile)
 , m_setTrackPropertiesAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
+, m_saved(false)
 {
     if (!m_instance)
     {
@@ -537,6 +538,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         m_editorData->addObjectsToScene();
         m_editorData->addExistingRouteToScene();
 
+        m_saved = true;
+
         return true;
     }
     else
@@ -550,14 +553,24 @@ bool MainWindow::doOpenTrack(QString fileName)
 
 void MainWindow::saveTrack()
 {
-    assert(m_editorData);
-    if (m_editorData->saveTrackData())
+    if (!m_saved)
     {
-        console(QString(tr("Track '")) + m_editorData->trackData()->fileName() + tr("' saved."));
+        saveAsTrack();
     }
     else
     {
-        console(QString(tr("Failed to save track '")) + m_editorData->trackData()->fileName() + "'.");
+        assert(m_editorData);
+        if (m_editorData->saveTrackData())
+        {
+            console(QString(
+                tr("Track '")) + m_editorData->trackData()->fileName() + tr("' saved."));
+            m_saved = true;
+        }
+        else
+        {
+            console(QString(
+                tr("Failed to save track '")) + m_editorData->trackData()->fileName() + "'.");
+        }
     }
 }
 
@@ -575,7 +588,7 @@ void MainWindow::saveAsTrack()
     if (m_editorData->saveTrackDataAs(fileName))
     {
         console(QString(tr("Track '")) + fileName + tr("' saved."));
-        m_saveAction->setEnabled(true);
+        m_saved = true;
     }
     else
     {
@@ -618,11 +631,14 @@ void MainWindow::initializeNewTrack()
             .arg(m_editorData->trackData()->name())
             .arg(m_editorData->trackData()->map().cols())
             .arg(m_editorData->trackData()->map().rows()));
+
+        m_saved = false;
     }
 }
 
 void MainWindow::setActionStatesOnNewTrack()
 {
+    m_saveAction->setEnabled(true);
     m_saveAsAction->setEnabled(true);
     m_toolBar->setEnabled(true);
     m_clearAllAction->setEnabled(true);

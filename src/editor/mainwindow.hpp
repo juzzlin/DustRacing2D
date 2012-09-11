@@ -126,6 +126,8 @@ private:
     QSlider           * m_scaleSlider;
     QToolBar          * m_toolBar;
 
+    bool                m_saved;
+
     static MainWindow * m_instance;
 };
 
