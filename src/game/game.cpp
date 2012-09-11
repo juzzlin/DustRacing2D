@@ -20,6 +20,7 @@
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "settings.hpp"
 #include "statemachine.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -59,6 +60,7 @@ Game::Game()
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
+, m_settings(new Settings)
 {
     m_renderCountTimer.setInterval(1000);
 
@@ -259,4 +261,5 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
+    delete m_settings;
 }

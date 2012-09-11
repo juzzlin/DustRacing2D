@@ -23,6 +23,7 @@ class EventHandler;
 class InputHandler;
 class Renderer;
 class Scene;
+class Settings;
 class Speedometer;
 class Startlights;
 class StartlightsOverlay;
@@ -99,6 +100,7 @@ private:
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
     bool                   m_paused;
+    Settings             * m_settings;
 };
 
 #endif // GAME_HPP

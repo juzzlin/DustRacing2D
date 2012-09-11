@@ -73,14 +73,6 @@ private:
 
     void updateRouteProgress(Car & car);
 
-    void saveLapRecord(int msecs);
-
-    int  loadLapRecord() const;
-
-    void saveBestPos(int pos);
-
-    int  loadBestPos() const;
-
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
@@ -93,7 +85,7 @@ private:
 
     Timing m_timing;
 
-    Track * m_pTrack;
+    Track * m_track;
 
     bool m_started;
     bool m_checkeredFlagEnabled;

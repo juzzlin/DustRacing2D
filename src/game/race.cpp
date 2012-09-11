@@ -16,6 +16,7 @@
 #include "race.hpp"
 
 #include "car.hpp"
+#include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
@@ -25,16 +26,13 @@
 
 #include <algorithm>
 #include <cassert>
-#include <QSettings>
 
-static const char * SETTINGS_GROUP_LAP = "LapRecords";
-static const char * SETTINGS_GROUP_POS = "BestPositions";
-static const int    HUMAN_PLAYER_INDEX = 0;
+static const int HUMAN_PLAYER_INDEX = 0;
 
 Race::Race(unsigned int numCars)
 : m_lapCount(0)
 , m_timing(numCars)
-, m_pTrack(nullptr)
+, m_track(nullptr)
 , m_started(false)
 , m_checkeredFlagEnabled(false)
 , m_winnerFinished(false)
@@ -81,7 +79,7 @@ void Race::update()
     if (m_timing.leadersLap() + 1 == static_cast<int>(m_lapCount))
     {
         Car                  & leader = getLeadingCar();
-        const Route          & route  = m_pTrack->trackData().route();
+        const Route          & route  = m_track->trackData().route();
         const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
 
         if (tnode.index() >=
@@ -124,7 +122,7 @@ bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
 
 void Race::updateRouteProgress(Car & car)
 {
-    const Route    & route = m_pTrack->trackData().route();
+    const Route    & route = m_track->trackData().route();
     unsigned int     index = car.currentTargetNodeIndex();
     TargetNodeBase & tnode = route.get(index);
 
@@ -142,7 +140,7 @@ void Race::updateRouteProgress(Car & car)
                 // Check if we have a new lap record
                 if (m_timing.newLapRecordAchieved())
                 {
-                    saveLapRecord(m_timing.lapRecord());
+                    Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
                 }
 
                 // Finish the race if winner has already finished.
@@ -175,60 +173,10 @@ void Race::updateRouteProgress(Car & car)
             const int pos = getPositionOfCar(car);
             if (pos < m_bestPos || m_bestPos == -1)
             {
-                saveBestPos(pos);
+                Settings::instance().saveBestPos(*m_track, pos);
             }
         }
     }
-}
-
-void Race::saveLapRecord(int msecs)
-{
-    // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-    settings.beginGroup(SETTINGS_GROUP_LAP);
-    settings.setValue(m_pTrack->trackData().name(), msecs);
-    settings.endGroup();
-}
-
-int Race::loadLapRecord() const
-{
-    // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-    // Read record time, -1 if not found
-    settings.beginGroup(SETTINGS_GROUP_LAP);
-    const int time = settings.value(m_pTrack->trackData().name(), -1).toInt();
-    settings.endGroup();
-
-    return time;
-}
-
-void Race::saveBestPos(int pos)
-{
-    // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-    settings.beginGroup(SETTINGS_GROUP_POS);
-    settings.setValue(m_pTrack->trackData().name(), pos);
-    settings.endGroup();
-}
-
-int Race::loadBestPos() const
-{
-    // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-    // Read the best position, -1 if not found
-    settings.beginGroup(SETTINGS_GROUP_POS);
-    const int pos = settings.value(m_pTrack->trackData().name(), -1).toInt();
-    settings.endGroup();
-
-    return pos;
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
@@ -265,11 +213,11 @@ Car & Race::getLeadingCar() const
 
 void Race::setTrack(Track & track)
 {
-    m_pTrack   = &track;
-    m_lapCount = m_pTrack->trackData().lapCount();
-    m_bestPos  = loadBestPos();
+    m_track   = &track;
+    m_lapCount = m_track->trackData().lapCount();
+    m_bestPos  = Settings::instance().loadBestPos(*m_track);
 
-    m_timing.setLapRecord(loadLapRecord());
+    m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
 }
 
 unsigned int Race::lapCount() const

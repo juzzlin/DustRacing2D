@@ -17,6 +17,7 @@
 
 #include "renderer.hpp"
 #include "scene.hpp"
+#include "settings.hpp"
 #include "statemachine.hpp"
 #include "timing.hpp"
 #include "track.hpp"
@@ -34,44 +35,8 @@
 #include "../common/config.hpp"
 #include "../common/mapbase.hpp"
 
-#include <QSettings>
 #include <cassert>
 #include <sstream>
-
-namespace
-{
-    // TODO: Move this to Track (the other similar functions as well)
-    const char * SETTINGS_GROUP_LAP = "LapRecords";
-    int loadLapRecord(std::string trackName)
-    {
-        // Open settings file
-        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-            Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-        // Read record time, -1 if not found
-        settings.beginGroup(SETTINGS_GROUP_LAP);
-        const int time = settings.value(trackName.c_str(), -1).toInt();
-        settings.endGroup();
-
-        return time;
-    }
-
-    // TODO: Move this to Track (the other similar functions as well)
-    const char * SETTINGS_GROUP_POS = "BestPositions";
-    int loadBestPos(std::string trackName)
-    {
-        // Open settings file
-        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-            Config::Game::QSETTINGS_SOFTWARE_NAME);
-
-        // Read best pos, -1 if not found
-        settings.beginGroup(SETTINGS_GROUP_POS);
-        const int pos = settings.value(trackName.c_str(), -1).toInt();
-        settings.endGroup();
-
-        return pos;
-    }
-}
 
 class TrackItem : public MenuItem
 {
@@ -84,8 +49,8 @@ public:
     , m_star(MCTextureManager::instance().surface("star"))
     , m_glow(MCTextureManager::instance().surface("starGlow"))
     , m_xDisplacement(-1000)
-    , m_lapRecord(loadLapRecord(m_track.trackData().name().toStdString()))
-    , m_bestPos(loadBestPos(m_track.trackData().name().toStdString()))
+    , m_lapRecord(Settings::instance().loadLapRecord(m_track))
+    , m_bestPos(Settings::instance().loadBestPos(m_track))
     {
         m_star.setShaderProgram(&Renderer::instance().masterProgram());
         m_glow.setShaderProgram(&Renderer::instance().masterProgram());
@@ -110,8 +75,8 @@ public:
     {
         MenuItem::setFocused(focused);
 
-        m_lapRecord = loadLapRecord(m_track.trackData().name().toStdString());
-        m_bestPos   = loadBestPos(m_track.trackData().name().toStdString());
+        m_lapRecord = Settings::instance().loadLapRecord(m_track);
+        m_bestPos   = Settings::instance().loadBestPos(m_track);
     }
 
     //! \reimp
