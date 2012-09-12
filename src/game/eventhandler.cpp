@@ -100,6 +100,7 @@ bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
             m_inputHandler.setActionState(0, InputHandler::IA_UP, true);
             break;
         case Qt::Key_Down:
+        case Qt::Key_B:
             m_inputHandler.setActionState(0, InputHandler::IA_DOWN, true);
             break;
         case Qt::Key_P:
@@ -131,6 +132,7 @@ bool EventHandler::handleGameKeyReleaseEvent(QKeyEvent * event)
             m_inputHandler.setActionState(0, InputHandler::IA_UP, false);
             break;
         case Qt::Key_Down:
+        case Qt::Key_B:
             m_inputHandler.setActionState(0, InputHandler::IA_DOWN, false);
             break;
         case Qt::Key_Escape:

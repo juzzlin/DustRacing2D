@@ -312,16 +312,16 @@ void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
     m_cars.at(0)->clearStatuses();
 
     // Handle accelerating / braking
-    if (handler.getActionState(0, InputHandler::IA_UP))
+    if (handler.getActionState(0, InputHandler::IA_DOWN))
+    {
+        m_cars.at(0)->brake();
+    }
+    else if (handler.getActionState(0, InputHandler::IA_UP))
     {
         if (!isRaceCompleted)
         {
             m_cars.at(0)->accelerate();
         }
-    }
-    else if (handler.getActionState(0, InputHandler::IA_DOWN))
-    {
-        m_cars.at(0)->brake();
     }
 
     // Handle turning

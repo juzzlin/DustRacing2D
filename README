@@ -21,10 +21,10 @@ Playing
 
 The player controls the pink race car by arrow keys:
 
-Up    : Accelerate
-Down  : Brake
-Left  : Turn left
-Right : Turn right
+Accelerate : Up
+Brake      : Down/B
+Turn left  : Left
+Turn right : Right
 
 ESC or Q exits the race and also the current menu.
 
