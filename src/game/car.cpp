@@ -187,13 +187,21 @@ void Car::turnLeft()
     {
         MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25 ? 0.25 : velScaling;
-        if (m_braking)
+
+        if (!m_reverse)
         {
-            addAngularImpulse(m_desc.turningImpulse / 2);
+            if (m_braking)
+            {
+                addAngularImpulse(m_desc.turningImpulse / 2);
+            }
+            else
+            {
+                addAngularImpulse(m_desc.turningImpulse * velScaling);
+            }
         }
         else
         {
-            addAngularImpulse(m_desc.turningImpulse * velScaling);
+            addAngularImpulse(-m_desc.turningImpulse * velScaling);
         }
     }
 }
@@ -208,13 +216,21 @@ void Car::turnRight()
     {
         MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25 ? 0.25 : velScaling;
-        if (m_braking)
+
+        if (!m_reverse)
         {
-            addAngularImpulse(-m_desc.turningImpulse / 2);
+            if (m_braking)
+            {
+                addAngularImpulse(-m_desc.turningImpulse / 2);
+            }
+            else
+            {
+                addAngularImpulse(-m_desc.turningImpulse * velScaling);
+            }
         }
         else
         {
-            addAngularImpulse(-m_desc.turningImpulse * velScaling);
+            addAngularImpulse(m_desc.turningImpulse * velScaling);
         }
     }
 }
