@@ -29,12 +29,11 @@ static MCTextureText CREDITS_TEXT(
     "* Jussi Lind\n"
     "* Ville Makiranta\n\n"
     "RACE TRACKS\n\n"
-    "* Jussi Lind\n"
-    "* Antti Kervinen\n\n"
+    "* Jussi Lind\n\n"
     "FONT\n\n"
     "* Ubuntu Monospace\n\n"
     "SPECIAL THANKS\n\n"
-    "Ubuntu, Gimp\nInkScape, CMake\nGCC, Qt, Git"
+    "* Tommi Martela"
 );
 
 Credits::Credits(std::string id, int width, int height)
