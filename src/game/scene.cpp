@@ -62,6 +62,9 @@
 
 #include <QApplication>
 
+static const int SCENE_WIDTH  = 800;
+static const int SCENE_HEIGHT = 600;
+
 class QuitAction : public MenuItemAction
 {
     //! \reimp
@@ -195,12 +198,12 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 
 unsigned int Scene::width()
 {
-    return 800;
+    return SCENE_WIDTH;
 }
 
 unsigned int Scene::height()
 {
-    return 600;
+    return SCENE_HEIGHT;
 }
 
 void Scene::createMenus()
