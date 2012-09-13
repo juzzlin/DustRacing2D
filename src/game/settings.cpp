@@ -22,8 +22,9 @@
 
 Settings * Settings::m_instance = nullptr;
 
-static const char * SETTINGS_GROUP_LAP = "LapRecords";
-static const char * SETTINGS_GROUP_POS = "BestPositions";
+static const char * SETTINGS_GROUP_LAP    = "LapRecords";
+static const char * SETTINGS_GROUP_POS    = "BestPositions";
+static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracks";
 
 Settings::Settings()
 {
@@ -37,7 +38,7 @@ Settings & Settings::instance()
     return *Settings::m_instance;
 }
 
-void Settings::saveLapRecord(Track & track, int msecs)
+void Settings::saveLapRecord(const Track & track, int msecs)
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
@@ -48,13 +49,12 @@ void Settings::saveLapRecord(Track & track, int msecs)
     settings.endGroup();
 }
 
-int Settings::loadLapRecord(Track & track) const
+int Settings::loadLapRecord(const Track & track) const
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
-    // Read record time, -1 if not found
     settings.beginGroup(SETTINGS_GROUP_LAP);
     const int time = settings.value(track.trackData().name(), -1).toInt();
     settings.endGroup();
@@ -62,7 +62,7 @@ int Settings::loadLapRecord(Track & track) const
     return time;
 }
 
-void Settings::saveBestPos(Track & track, int pos)
+void Settings::saveBestPos(const Track & track, int pos)
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
@@ -73,16 +73,40 @@ void Settings::saveBestPos(Track & track, int pos)
     settings.endGroup();
 }
 
-int Settings::loadBestPos(Track & track) const
+int Settings::loadBestPos(const Track & track) const
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
-    // Read the best position, -1 if not found
     settings.beginGroup(SETTINGS_GROUP_POS);
     const int pos = settings.value(track.trackData().name(), -1).toInt();
     settings.endGroup();
 
     return pos;
+}
+
+void Settings::saveTrackLockStatus(const Track & track, bool status)
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
+    settings.setValue(track.trackData().name().toLatin1().toBase64(), status);
+    settings.endGroup();
+}
+
+bool Settings::loadTrackLockStatus(const Track & track) const
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
+    const bool status = settings.value(
+        track.trackData().name().toLatin1().toBase64(), 0).toBool();
+    settings.endGroup();
+
+    return status;
 }
