@@ -16,6 +16,7 @@
 #include "race.hpp"
 
 #include "car.hpp"
+#include "messageoverlay.hpp"
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -29,7 +30,7 @@
 
 static const int HUMAN_PLAYER_INDEX = 0;
 
-Race::Race(unsigned int numCars)
+Race::Race(unsigned int numCars, MessageOverlay & messageOverlay)
 : m_lapCount(0)
 , m_timing(numCars)
 , m_track(nullptr)
@@ -37,6 +38,7 @@ Race::Race(unsigned int numCars)
 , m_checkeredFlagEnabled(false)
 , m_winnerFinished(false)
 , m_bestPos(-1)
+, m_messageOverlay(messageOverlay)
 {
 }
 
@@ -59,8 +61,12 @@ void Race::init()
 
 void Race::start()
 {
-    m_timing.start();
-    m_started  = true;
+    if (!m_started)
+    {
+        m_timing.start();
+        m_messageOverlay.addMessage("GO!!!");
+        m_started  = true;
+    }
 }
 
 bool Race::started()
@@ -141,6 +147,7 @@ void Race::updateRouteProgress(Car & car)
                 if (m_timing.newLapRecordAchieved())
                 {
                     Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
+                    m_messageOverlay.addMessage("New lap record!");
                 }
 
                 // Finish the race if winner has already finished.
@@ -174,6 +181,7 @@ void Race::updateRouteProgress(Car & car)
             if (pos < m_bestPos || m_bestPos == -1)
             {
                 Settings::instance().saveBestPos(*m_track, pos);
+                m_messageOverlay.addMessage("New best pos!");
             }
         }
     }

@@ -54,7 +54,7 @@ public:
 private:
 
     MCTextureFontManager   & m_fontManager;
-    MCTextureFont          & m_defaultMonospace;
+    MCTextureFont          & m_font;
     MCTextureText            m_text;
     const Car              * m_pCar;
     Timing                 * m_pTiming;

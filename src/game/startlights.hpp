@@ -16,6 +16,8 @@
 #ifndef STARTLIGHTS_HPP
 #define STARTLIGHTS_HPP
 
+#include <QObject>
+
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVectorAnimation"
 
@@ -25,8 +27,10 @@ class Race;
 
 //! Startlight model that controls the position and animation
 //! of the startlights.
-class Startlights : public UpdateableIf
+class Startlights : public QObject, public UpdateableIf
 {
+    Q_OBJECT
+
 public:
 
     //! Startlights animation sequence states.
@@ -43,7 +47,7 @@ public:
     };
 
     //! Constructor.
-    Startlights(Race & race);
+    Startlights();
 
     //! \reimp
     virtual bool update();
@@ -57,6 +61,10 @@ public:
 
     const MCVector3dF & pos() const;
 
+signals:
+
+    void raceStarted();
+
 private:
 
     bool updateCounter(MCUint limit);
@@ -68,7 +76,6 @@ private:
     MCUint            m_width;
     MCUint            m_height;
     MCVectorAnimation m_animation;
-    Race            & m_race;
 };
 
 #endif // STARTLIGHTS_HPP

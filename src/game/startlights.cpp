@@ -15,13 +15,11 @@
 
 #include "startlights.hpp"
 #include "inputhandler.hpp"
-#include "race.hpp"
 
-Startlights::Startlights(Race & race)
-  : m_state(LightsInit)
-  , m_counter(0)
-  , m_stepsPerState(60)
-  , m_race(race)
+Startlights::Startlights()
+: m_state(LightsInit)
+, m_counter(0)
+, m_stepsPerState(60)
 {
 }
 
@@ -78,7 +76,7 @@ bool Startlights::update()
         {
             m_state = LightsGo;
             InputHandler::setEnabled(true);
-            m_race.start();
+            emit raceStarted();
         }
         return true;
 

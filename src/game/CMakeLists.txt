@@ -27,6 +27,7 @@ set(SRC
     menuitemaction.cpp
     menuitemview.cpp
     menumanager.cpp
+    messageoverlay.cpp
     offtrackdetector.cpp
     overlaybase.cpp
     race.cpp
@@ -62,7 +63,9 @@ set(MOC_HDRS
     eventhandler.hpp
     game.hpp
     mainwindow.hpp
+    race.hpp
     renderer.hpp
+    startlights.hpp
     timing.hpp)
 
 # Add the resource file

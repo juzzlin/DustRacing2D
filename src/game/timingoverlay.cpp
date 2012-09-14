@@ -23,7 +23,7 @@
 
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCTextureFontManager::instance())
-, m_defaultMonospace(m_fontManager.font("default"))
+, m_font(m_fontManager.font("default"))
 , m_text("")
 , m_pCar(nullptr)
 , m_pTiming(nullptr)
@@ -80,8 +80,7 @@ void TimingOverlay::render()
 
             m_text.setText(ss.str());
             m_text.setColor(1.0, 1.0, 1.0);
-            m_text.render(0, height() - m_text.height(),
-                nullptr, m_defaultMonospace);
+            m_text.render(0, height() - m_text.height(), nullptr, m_font);
         }
 
         // Render the position
@@ -97,8 +96,7 @@ void TimingOverlay::render()
 
             m_text.setText(ss.str());
             m_text.setColor(1.0, 1.0, 0.0);
-            m_text.render(0, height() - m_text.height() * 2,
-                nullptr, m_defaultMonospace);
+            m_text.render(0, height() - m_text.height() * 2, nullptr, m_font);
         }
 
         // Render speed
@@ -124,13 +122,12 @@ void TimingOverlay::render()
             m_text.setText(ss.str());
             m_text.setGlyphSize(40, 40);
             const int h = m_text.height();
-            m_text.render(0, h, nullptr, m_defaultMonospace);
+            m_text.render(0, h, nullptr, m_font);
 
             m_text.setText(" KM/H");
             m_text.setGlyphSize(20, 20);
             m_text.setColor(1.0, 1.0, 1.0);
-            m_text.render(0, 2 * m_text.height() + h,
-                nullptr, m_defaultMonospace);
+            m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
         }
 
         // Render the current lap time
@@ -166,12 +163,11 @@ void TimingOverlay::render()
 
             m_text.setText(ss.str());
             m_text.setGlyphSize(20, 20);
-
             m_text.render(
                 width() - m_text.width(),
                 height() - m_text.height(),
                 nullptr,
-                m_defaultMonospace);
+                m_font);
         }
 
         m_text.setGlyphSize(20, 20);
@@ -186,7 +182,7 @@ void TimingOverlay::render()
                 width() - m_text.width(),
                 height() - m_text.height() * 2,
                 nullptr,
-                m_defaultMonospace);
+                m_font);
         }
 
         // Render the record lap time
@@ -199,7 +195,7 @@ void TimingOverlay::render()
                 width()  - m_text.width(),
                 height() - m_text.height() * 3,
                 nullptr,
-                m_defaultMonospace);
+                m_font);
         }
     }
 }

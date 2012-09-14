@@ -31,6 +31,7 @@ class MCCamera;
 class MCObject;
 class MCSurface;
 class MCWorld;
+class MessageOverlay;
 class OffTrackDetector;
 class Renderer;
 class Startlights;
@@ -111,6 +112,7 @@ private:
     void initRace();
 
     StateMachine        & m_stateMachine;
+    MessageOverlay      * m_messageOverlay;
     Race                  m_race;
     Track               * m_activeTrack;
     MCWorld             * m_world;

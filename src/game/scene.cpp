@@ -29,6 +29,7 @@
 #include "menuitemaction.hpp"
 #include "menuitemview.hpp"
 #include "menumanager.hpp"
+#include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
@@ -56,6 +57,8 @@
 #include <MCTextureManager>
 #include <MCTypes>
 #include <MCWorld>
+
+#include <QObject>
 
 #include <algorithm>
 #include <cassert>
@@ -109,11 +112,12 @@ static const MCFloat METERS_PER_PIXEL = 0.05f;
 
 Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
 : m_stateMachine(stateMachine)
-, m_race(numCars)
+, m_messageOverlay(new MessageOverlay)
+, m_race(numCars, *m_messageOverlay)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
 , m_timingOverlay(new TimingOverlay)
-, m_startlights(new Startlights(m_race))
+, m_startlights(new Startlights)
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)
@@ -124,6 +128,8 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 {
+    QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
+
     m_stateMachine.setRenderer(renderer);
     m_stateMachine.setRace(m_race);
     m_stateMachine.setStartlights(*m_startlights);
@@ -179,6 +185,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     m_checkeredFlag->setDimensions(width(), height());
     m_intro->setDimensions(width(), height());
     m_startlightsOverlay->setDimensions(width(), height());
+    m_messageOverlay->setDimensions(width(), height());
 
     m_timingOverlay->setDimensions(width(), height());
     m_timingOverlay->setTiming(m_race.timing());
@@ -277,6 +284,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 void Scene::updateAnimations()
 {
     m_timingOverlay->update();
+    m_messageOverlay->update();
 }
 
 void Scene::updateWorld(float timeStep)
@@ -601,6 +609,7 @@ void Scene::render(MCCamera & camera)
 
         m_timingOverlay->render();
         m_startlightsOverlay->render();
+        m_messageOverlay->render();
     }
 }
 
@@ -630,4 +639,5 @@ Scene::~Scene()
     delete m_startlightsOverlay;
     delete m_timingOverlay;
     delete m_trackSelectionMenu;
+    delete m_messageOverlay;
 }

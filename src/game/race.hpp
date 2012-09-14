@@ -16,21 +16,26 @@
 #ifndef RACE_HPP
 #define RACE_HPP
 
+#include <QObject>
+
 #include <unordered_map>
 #include <vector>
 
 #include "timing.hpp"
 
 class Car;
+class MessageOverlay;
 class Track;
 
 //! Class that controls the race event, checkpoints and timing.
-class Race
+class Race : public QObject
 {
+    Q_OBJECT
+
 public:
 
     //! Constructor.
-    Race(unsigned int numCars);
+    Race(unsigned int numCars, MessageOverlay & messageOverlay);
 
     //! Destructor.
     virtual ~Race();
@@ -38,14 +43,8 @@ public:
     //! Init the race.
     void init();
 
-    //! Start the race and timing.
-    void start();
-
     //! Return true, if race has started.
     bool started();
-
-    //! Update situation.
-    void update();
 
     //! Set the current race track.
     void setTrack(Track & track);
@@ -68,6 +67,14 @@ public:
     bool finished() const;
 
     Car & getLeadingCar() const;
+
+public slots:
+
+    //! Start the race and timing.
+    void start();
+
+    //! Update situation.
+    void update();
 
 private:
 
@@ -92,6 +99,8 @@ private:
     bool m_winnerFinished;
 
     int m_bestPos;
+
+    MessageOverlay & m_messageOverlay;
 };
 
 #endif // RACE_HPP

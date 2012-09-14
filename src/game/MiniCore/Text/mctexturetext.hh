@@ -27,8 +27,8 @@
 class MCCamera;
 class MCTextureFont;
 
-//! MCTextureText is a renderable text object
-//! using a textured monospace font (MCTextureFont).
+/*! MCTextureText is a renderable texture text object.
+ *  A monospace font is assumed (MCTextureFont). */
 class MCTextureText
 {
 public:
