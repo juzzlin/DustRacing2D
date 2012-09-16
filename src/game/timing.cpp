@@ -29,9 +29,7 @@ Timing::Timing(MCUint cars, QObject *parent)
 
 void Timing::lapCompleted(MCUint index, bool isHuman)
 {
-    assert(index < m_times.size());
-
-    Timing::Times & times = m_times[index];
+    Timing::Times & times = m_times.at(index);
     times.lap++;
 
     const int elapsed = m_time.elapsed();
@@ -60,22 +58,31 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
 
 void Timing::setRaceCompleted(MCUint index, bool state)
 {
-    assert(index < m_times.size());
-    Timing::Times & times = m_times[index];
+    Timing::Times & times = m_times.at(index);
     times.raceCompleted = state;
 }
 
 bool Timing::raceCompleted(MCUint index) const
 {
-    assert(index < m_times.size());
-    const Timing::Times & times = m_times[index];
+    const Timing::Times & times = m_times.at(index);
     return times.raceCompleted;
+}
+
+void Timing::setIsActive(MCUint index, bool state)
+{
+    Timing::Times & times = m_times.at(index);
+    times.isActive = state;
+}
+
+bool Timing::isActive(MCUint index) const
+{
+    const Timing::Times & times = m_times.at(index);
+    return times.isActive;
 }
 
 int Timing::lap(MCUint index) const
 {
-    assert(index < m_times.size());
-    return m_times[index].lap;
+    return m_times.at(index).lap;
 }
 
 int Timing::leadersLap() const
@@ -84,7 +91,7 @@ int Timing::leadersLap() const
 
     for (unsigned int index = 0; index < m_times.size(); index++)
     {
-        const int lap = m_times[index].lap;
+        const int lap = m_times.at(index).lap;
         if (lap > maxLap)
         {
             maxLap = lap;
@@ -101,8 +108,7 @@ int Timing::currentTime(MCUint index) const
         return 0;
     }
 
-    assert(index < m_times.size());
-    const Timing::Times & times = m_times[index];
+    const Timing::Times & times = m_times.at(index);
     return m_time.elapsed() - times.totalTime;
 }
 
@@ -113,8 +119,7 @@ int Timing::recordTime(MCUint index) const
         return -1;
     }
 
-    assert(index < m_times.size());
-    return m_times[index].recordLapTime;
+    return m_times.at(index).recordLapTime;
 }
 
 int Timing::lapRecord() const
@@ -144,8 +149,7 @@ int Timing::lastLapTime(MCUint index) const
         return -1;
     }
 
-    assert(index < m_times.size());
-    return m_times[index].lastLapTime;
+    return m_times.at(index).lastLapTime;
 }
 
 void Timing::start()

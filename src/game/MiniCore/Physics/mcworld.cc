@@ -178,9 +178,20 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                     }
                     else if (object.isParticle())
                     {
-                        if (!pCamera || pCamera->isVisible(object.bbox()))
+                        if (pCamera)
                         {
-                            object.render(pCamera);
+                            if (pCamera->isVisible(object.bbox()))
+                            {
+                                object.render(pCamera);
+                            }
+                            else
+                            {
+                                static_cast<MCParticle &>(object).die();
+                            }
+                        }
+                        else
+                        {
+                            object.render(nullptr);
                         }
                     }
                 }

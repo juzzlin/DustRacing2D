@@ -131,7 +131,7 @@ void Car::preCreateParticles()
     }
 
     // Pre-create some MCSurfaceParticles
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 50; i++)
     {
         MCParticle * particle = new MCSurfaceParticle("SMOKE");
 
@@ -457,7 +457,7 @@ void Car::setTurningImpulse(MCFloat impulse)
 void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
     m_smokeCounter++;
-    if (m_smokeCounter > 1)
+    if (m_smokeCounter > 2)
     {
         MCSurfaceParticle * smoke = nullptr;
         if (m_freeList2.size())

@@ -34,7 +34,7 @@ public:
 
     //! Constructor.
     MessageOverlay(
-        MessageOverlay::MESSAGE_ALIGN align = MA_BOTTOM, int messageMaxTime = 80);
+        MessageOverlay::MESSAGE_ALIGN align = MA_BOTTOM, int messageMaxTime = 180);
 
     //! \reimp
     virtual void render();

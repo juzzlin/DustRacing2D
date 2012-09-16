@@ -132,57 +132,62 @@ void Race::updateRouteProgress(Car & car)
     unsigned int     index = car.currentTargetNodeIndex();
     TargetNodeBase & tnode = route.get(index);
 
-    if (!m_timing.raceCompleted(car.index()))
+    if (m_timing.isActive(car.index()))
     {
-        // Give a bit more tolerance for other than the finishing check point.
-        const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
-        if (isInsideCheckPoint(car, tnode, tolerance))
+        if (!m_timing.raceCompleted(car.index()))
         {
-            // Lap finished?
-            if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
+            // Give a bit more tolerance for other than the finishing check point.
+            const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
+            if (isInsideCheckPoint(car, tnode, tolerance))
             {
-                m_timing.lapCompleted(car.index(), car.isHuman());
-
-                // Check if we have a new lap record
-                if (m_timing.newLapRecordAchieved())
+                // Lap finished?
+                if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
                 {
-                    Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
-                    m_messageOverlay.addMessage("New lap record!");
+                    m_timing.lapCompleted(car.index(), car.isHuman());
+
+                    // Check if we have a new lap record
+                    if (m_timing.newLapRecordAchieved())
+                    {
+                        Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
+                        m_messageOverlay.addMessage("New lap record!");
+                    }
+
+                    // Finish the race if winner has already finished.
+                    if (m_winnerFinished)
+                    {
+                        m_timing.setRaceCompleted(car.index(), true);
+                    }
                 }
 
-                // Finish the race if winner has already finished.
-                if (m_winnerFinished)
+                // Increase progress and update the positions hash
+                car.setRouteProgression(car.routeProgression() + 1);
+                m_positions[car.routeProgression()].push_back(car.index());
+
+                // Switch to next check point
+                car.setPrevTargetNodeIndex(index);
+                if (++index >= route.numNodes())
                 {
-                    m_timing.setRaceCompleted(car.index(), true);
+                    index = 0;
                 }
             }
 
-            // Increase progress and update the positions hash
-            car.setRouteProgression(car.routeProgression() + 1);
-            m_positions[car.routeProgression()].push_back(car.index());
-
-            // Switch to next check point
-            car.setPrevTargetNodeIndex(index);
-            if (++index >= route.numNodes())
-            {
-                index = 0;
-            }
+            car.setCurrentTargetNodeIndex(index);
         }
-
-        car.setCurrentTargetNodeIndex(index);
-    }
-    else
-    {
-        // Check if the race is completed fo a human player and if so,
-        // check if new best pos achieved and save it.
-        if (car.isHuman())
+        else
         {
-            const int pos = getPositionOfCar(car);
-            if (pos < m_bestPos || m_bestPos == -1)
+            // Check if the race is completed fo a human player and if so,
+            // check if new best pos achieved and save it.
+            if (car.isHuman())
             {
-                Settings::instance().saveBestPos(*m_track, pos);
-                m_messageOverlay.addMessage("New best pos!");
+                const int pos = getPositionOfCar(car);
+                if (pos < m_bestPos || m_bestPos == -1)
+                {
+                    Settings::instance().saveBestPos(*m_track, pos);
+                    m_messageOverlay.addMessage("New best pos!");
+                }
             }
+
+            m_timing.setIsActive(car.index(), false);
         }
     }
 }
