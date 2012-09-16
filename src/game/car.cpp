@@ -468,6 +468,7 @@ void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloa
             smoke->init(location, 10, 120);
             smoke->setAnimationStyle(MCParticle::Shrink);
             smoke->translate(location);
+            smoke->rotate(MCRandom::getValue() * 360);
             smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
             smoke->surface()->setColor(r, g, b, a);
             smoke->surface()->setAlphaBlend(true);
