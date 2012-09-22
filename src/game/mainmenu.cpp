@@ -14,15 +14,98 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainmenu.hpp"
+#include "menuitem.hpp"
+#include "menuitemview.hpp"
+#include "menuitemaction.hpp"
+#include "menumanager.hpp"
 #include "renderer.hpp"
 
+#include <MCLogger>
 #include <MCSurface>
 #include <MCTextureManager>
+
+#include <QApplication>
+
+class QuitAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Quit selected from the main menu.";
+        QApplication::instance()->quit();
+    }
+};
+
+class PlayAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Play selected from the main menu.";
+        MenuManager::instance().pushMenu("trackSelection");
+    }
+};
+
+class HelpAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Help selected from the main menu.";
+        MenuManager::instance().pushMenu("help");
+    }
+};
+
+class CreditsAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Credits selected from the main menu.";
+        MenuManager::instance().pushMenu("credits");
+    }
+};
+
+class SettingsAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Settings selected from the main menu.";
+        MenuManager::instance().pushMenu("settings");
+    }
+};
 
 MainMenu::MainMenu(std::string id, int width, int height)
 : Menu(id, width, height, Menu::MS_VERTICAL_LIST)
 , m_back(MCTextureManager::instance().surface("mainMenuBack"))
 {
+    MenuItem * play = new MenuItem(width, height / 5, "Play");
+    play->setView(new MenuItemView(*play), true);
+    play->setAction(new PlayAction, true);
+
+    MenuItem * help = new MenuItem(width, height / 5, "Help");
+    help->setView(new MenuItemView(*help), true);
+    help->setAction(new HelpAction, true);
+
+    MenuItem * credits = new MenuItem(width, height / 5, "Credits");
+    credits->setView(new MenuItemView(*credits), true);
+    credits->setAction(new CreditsAction, true);
+
+    MenuItem * quit = new MenuItem(width, height / 5, "Quit");
+    quit->setView(new MenuItemView(*quit), true);
+    quit->setAction(new QuitAction, true);
+
+    MenuItem * settings = new MenuItem(width, height / 5, "Settings");
+    settings->setView(new MenuItemView(*settings), true);
+    settings->setAction(new SettingsAction, true);
+
+    addItem(*quit,     true);
+    addItem(*credits,  true);
+    addItem(*settings, true);
+    addItem(*help,     true);
+    addItem(*play,     true);
+
     m_back.setShaderProgram(&Renderer::instance().masterProgram());
     m_back.setColor(0.5, 0.5, 0.5, 1.0);
 }
