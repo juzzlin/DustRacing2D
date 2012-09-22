@@ -18,21 +18,14 @@
 #include "shaderprogram.hpp"
 
 #include <MCSurface>
-#include <MCTextureFont>
-#include <MCTextureFontManager>
 #include <MCTextureManager>
-#include <MCTextureText>
-
 #include <MCVectorAnimation>
 
 static MCVector3dF       fade;
 static MCVectorAnimation fadeAnim;
 
-static MCTextureText text1("DUST RACING 2D");
-
 Intro::Intro()
-: m_back(MCTextureManager::instance().surface("dustRacing"))
-, m_monospace(MCTextureFontManager::instance().font("default"))
+: m_back(MCTextureManager::instance().surface("intro"))
 {
     m_back.setShaderProgram(&Renderer::instance().masterProgram());
     m_back.setColor(.9, .9, .9, 1.0);
@@ -46,13 +39,6 @@ void Intro::setFadeValue(float value)
 void Intro::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
-
-    const int shadowY = -2;
-    const int shadowX =  2;
-
-    text1.setGlyphSize(40, 40);
-    text1.setColor(1.0, 1.0, 1.0, 1.0);
-    text1.setShadowOffset(shadowX, shadowY);
 
     static MCVector3dF fade0(0.0, 0.0, 0.0);
     static MCVector3dF fade1(1.0, 1.0, 1.0);
@@ -72,10 +58,7 @@ void Intro::render()
     const int h2 = height() / 2;
 
     Renderer::instance().masterProgram().setFadeValue(fade.i());
-    Renderer::instance().textProgram().setFadeValue(fade.i());
 
     m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
-
-    text1.render(width() / 2 - text1.width() / 2 + 20, height() / 2 + 40, nullptr, m_monospace);
 }
 

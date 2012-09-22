@@ -42,8 +42,7 @@ public:
 
 private:
 
-    MCSurface     & m_back;
-    MCTextureFont & m_monospace;
+    MCSurface & m_back;
 };
 
 #endif // INTRO_HPP
