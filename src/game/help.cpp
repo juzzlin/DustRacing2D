@@ -23,6 +23,9 @@
 #include <MCTextureText>
 
 static MCTextureText HELP_TEXT(
+    "GAME GOAL\n\n"
+    "You are racing against nine\ncomputer players.\n\n"
+    "Finish in TOP-5 to unlock\na new race track!\n\n"
     "CONTROLS\n\n"
     "Turn left  : Left\n"
     "Turn right : Right\n"
