@@ -33,6 +33,7 @@
 #include "offtrackdetector.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
+#include "settingsmenu.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "statemachine.hpp"
@@ -108,6 +109,16 @@ class CreditsAction : public MenuItemAction
     }
 };
 
+class SettingsAction : public MenuItemAction
+{
+    //! \reimp
+    void fire()
+    {
+        MCLogger().info() << "Settings selected from the main menu.";
+        MenuManager::instance().pushMenu("settings");
+    }
+};
+
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 
 Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
@@ -125,6 +136,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_mainMenu(nullptr)
 , m_help(nullptr)
 , m_credits(nullptr)
+, m_settings(nullptr)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 {
@@ -219,16 +231,18 @@ void Scene::createMenus()
     m_mainMenu    = new MainMenu("main", width(), height());
     m_help        = new Help("help", width(), height());
     m_credits     = new Credits("credits", width(), height());
+    m_settings    = new SettingsMenu("settings", width(), height());
 
     m_menuManager->addMenu(*m_mainMenu);
     m_menuManager->addMenu(*m_help);
     m_menuManager->addMenu(*m_credits);
+    m_menuManager->addMenu(*m_settings);
 
-    MenuItem * play = new MenuItem(width(), height()    / 5, "Play");
+    MenuItem * play = new MenuItem(width(), height() / 5, "Play");
     play->setView(new MenuItemView(*play), true);
     play->setAction(new PlayAction, true);
 
-    MenuItem * help = new MenuItem(width(), height()    / 5, "Help");
+    MenuItem * help = new MenuItem(width(), height() / 5, "Help");
     help->setView(new MenuItemView(*help), true);
     help->setAction(new HelpAction, true);
 
@@ -236,14 +250,19 @@ void Scene::createMenus()
     credits->setView(new MenuItemView(*credits), true);
     credits->setAction(new CreditsAction, true);
 
-    MenuItem * quit = new MenuItem(width(), height()    / 5, "Quit");
+    MenuItem * quit = new MenuItem(width(), height() / 5, "Quit");
     quit->setView(new MenuItemView(*quit), true);
     quit->setAction(new QuitAction, true);
 
-    m_mainMenu->addItem(*quit,    true);
-    m_mainMenu->addItem(*credits, true);
-    m_mainMenu->addItem(*help,    true);
-    m_mainMenu->addItem(*play,    true);
+    MenuItem * settings = new MenuItem(width(), height() / 5, "Settings");
+    settings->setView(new MenuItemView(*settings), true);
+    settings->setAction(new SettingsAction, true);
+
+    m_mainMenu->addItem(*quit,     true);
+    m_mainMenu->addItem(*credits,  true);
+    m_mainMenu->addItem(*settings, true);
+    m_mainMenu->addItem(*help,     true);
+    m_mainMenu->addItem(*play,     true);
 
     m_trackSelectionMenu = new TrackSelectionMenu("trackSelection",
         width(), height(), *this, m_stateMachine);
@@ -630,6 +649,7 @@ Scene::~Scene()
         delete otd;
     }
 
+    delete m_settings;
     delete m_credits;
     delete m_help;
     delete m_intro;

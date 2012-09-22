@@ -126,6 +126,7 @@ private:
     Menu                * m_mainMenu;
     Menu                * m_help;
     Menu                * m_credits;
+    Menu                * m_settings;
     MenuManager         * m_menuManager;
     Intro               * m_intro;
 

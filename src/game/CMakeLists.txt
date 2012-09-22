@@ -37,6 +37,7 @@ set(SRC
     shaderprogram.cpp
     slidefrictiongenerator.cpp
     settings.cpp
+    settingsmenu.cpp
     startlights.cpp
     startlightsoverlay.cpp
     statemachine.cpp
