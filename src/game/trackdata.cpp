@@ -17,9 +17,10 @@
 #include "tracktile.hpp"
 
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
-  : m_name(name)
-  , m_map(*this, cols, rows)
-  , m_route()
+: m_name(name)
+, m_map(*this, cols, rows)
+, m_route()
+, m_isLocked(false)
 {}
 
 QString TrackData::name() const
@@ -65,6 +66,16 @@ Objects & TrackData::objects()
 const Objects & TrackData::objects() const
 {
     return m_objects;
+}
+
+bool TrackData::isLocked() const
+{
+    return m_isLocked;
+}
+
+void TrackData::setIsLocked(bool locked)
+{
+    m_isLocked = locked;
 }
 
 TrackData::~TrackData()

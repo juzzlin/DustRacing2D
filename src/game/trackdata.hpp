@@ -62,6 +62,12 @@ public:
     //! Get objects object.
     const Objects & objects() const;
 
+    //! Return true if the track is locked.
+    bool isLocked() const;
+
+    //! Set the locked state.
+    void setIsLocked(bool locked);
+
 private:
 
     QString m_name;
@@ -69,6 +75,7 @@ private:
     Map     m_map;
     Objects m_objects;
     Route   m_route;
+    bool    m_isLocked;
 };
 
 #endif // TRACKDATA_HPP

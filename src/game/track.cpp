@@ -48,7 +48,7 @@ MCUint Track::height() const
     return m_height;
 }
 
-const TrackData & Track::trackData() const
+TrackData & Track::trackData() const
 {
     return *m_pTrackData;
 }

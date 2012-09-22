@@ -51,7 +51,7 @@ public:
     MCUint height() const;
 
     //! Return the track data.
-    const TrackData & trackData() const;
+    TrackData & trackData() const;
 
     //! Return pointer to the tile at the given location.
     TrackTile * trackTileAtLocation(MCUint x, MCUint y) const;

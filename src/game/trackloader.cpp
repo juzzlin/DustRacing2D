@@ -25,6 +25,7 @@
 #include "../common/targetnodebase.hpp"
 
 #include "renderer.hpp"
+#include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackloader.hpp"
@@ -73,6 +74,22 @@ int TrackLoader::loadTracks()
             {
                 MCLogger().error() << "Couldn't load '" << trackPath.toStdString() << "'..";
             }
+        }
+    }
+
+    // Check if the tracks are locked/unlocked.
+    for (Track * track : m_tracks)
+    {
+        if (!Settings::instance().loadTrackUnlockStatus(*track) &&
+           track->trackData().index() > 0) // The first track is never locked
+        {
+            MCLogger().info() << "'" << track->trackData().name().toStdString() << "' is locked.";
+            track->trackData().setIsLocked(true);
+        }
+        else
+        {
+            MCLogger().info() << "'" << track->trackData().name().toStdString() << "' is unlocked.";
+            track->trackData().setIsLocked(false);
         }
     }
 

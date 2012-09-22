@@ -86,7 +86,7 @@ int Settings::loadBestPos(const Track & track) const
     return pos;
 }
 
-void Settings::saveTrackLockStatus(const Track & track, bool status)
+void Settings::saveTrackUnlockStatus(const Track & track, bool status)
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
@@ -97,7 +97,7 @@ void Settings::saveTrackLockStatus(const Track & track, bool status)
     settings.endGroup();
 }
 
-bool Settings::loadTrackLockStatus(const Track & track) const
+bool Settings::loadTrackUnlockStatus(const Track & track) const
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
