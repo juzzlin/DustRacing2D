@@ -165,16 +165,12 @@ void TrackItem::render(int x, int y)
     const int shadowX =  2;
 
     // Render title
-
-    {
-        std::stringstream ss;
-        ss << m_track.trackData().name().toStdString();
-        text.setText(ss.str());
-        text.setGlyphSize(20, 20);
-        text.setShadowOffset(shadowX, shadowY);
-        text.render(
-            x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
-    }
+    std::stringstream ss;
+    ss << m_track.trackData().name().toStdString();
+    text.setText(ss.str());
+    text.setGlyphSize(20, 20);
+    text.setShadowOffset(shadowX, shadowY);
+    text.render(x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
 
     // Render stars
     const int starW  = m_star.width();
@@ -200,35 +196,27 @@ void TrackItem::render(int x, int y)
     }
 
     // Render track properties
-    {
-        std::stringstream ss;
-        ss << "  Laps: " << m_track.trackData().lapCount();
-        text.setText(ss.str());
-        text.setGlyphSize(20, 20);
-        text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
-    }
+    ss.str("");
+    ss << "  Laps: " << m_track.trackData().lapCount();
+    text.setText(ss.str());
+    text.setGlyphSize(20, 20);
+    text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
 
-    {
-        std::stringstream ss;
-        ss << "Length: "
-           << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
-           << " m";
-        text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
-    }
+    ss.str("");
+    ss << "Length: "
+       << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
+       << " m";
+    text.setText(ss.str());
+    text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
 
-    {
-        std::stringstream ss;
-        ss << "Record: " << Timing::msecsToString(m_lapRecord);
-        text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
-    }
+    ss.str("");
+    ss << "Record: " << Timing::msecsToString(m_lapRecord);
+    text.setText(ss.str());
+    text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
 
-    {
-        text.setText("Use arrows to browse and enter to select..");
-        text.setGlyphSize(10, 10);
-        text.render(10, text.height(), nullptr, m_monospace);
-    }
+    text.setText("Use arrows to browse and enter to select..");
+    text.setGlyphSize(10, 10);
+    text.render(10, text.height(), nullptr, m_monospace);
 }
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,

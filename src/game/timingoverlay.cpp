@@ -66,129 +66,115 @@ void TimingOverlay::render()
         m_text.setGlyphSize(20, 20);
 
         // Render the current lap number
+        std::stringstream ss;
+        if (leadersLap <= laps)
         {
-            std::stringstream ss;
-
-            if (leadersLap <= laps)
-            {
-                ss << " LAP:" << leadersLap << "/" << laps;
-            }
-            else
-            {
-                ss << " WINNER FINISHED";
-            }
-
-            m_text.setText(ss.str());
-            m_text.setColor(1.0, 1.0, 1.0);
-            m_text.render(0, height() - m_text.height(), nullptr, m_font);
+            ss << " LAP:" << leadersLap << "/" << laps;
         }
+        else
+        {
+            ss << " WINNER FINISHED";
+        }
+
+        m_text.setText(ss.str());
+        m_text.setColor(1.0, 1.0, 1.0);
+        m_text.render(0, height() - m_text.height(), nullptr, m_font);
 
         // Render the position
+        ss.str("");
+        ss << " POS:" << m_posTexts.at(pos);
+        const int lapDiff = leadersLap - lap;
+        if (lapDiff > 0)
         {
-            std::stringstream ss;
-            ss << " POS:" << m_posTexts.at(pos);
-
-            const int lapDiff = leadersLap - lap;
-            if (lapDiff > 0)
-            {
-                ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
-            }
-
-            m_text.setText(ss.str());
-            m_text.setColor(1.0, 1.0, 0.0);
-            m_text.render(0, height() - m_text.height() * 2, nullptr, m_font);
+            ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
         }
 
-        // Render speed
-        {
-            int speed = m_pCar->speedInKmh();
-            speed = speed < 0 ? 0 : speed;
+        m_text.setText(ss.str());
+        m_text.setColor(1.0, 1.0, 0.0);
+        m_text.render(0, height() - m_text.height() * 2, nullptr, m_font);
 
-            std::stringstream ss;
-            ss << " " << speed;
-            if (speed < 100)
+        // Render speed
+        int speed = m_pCar->speedInKmh();
+        speed = speed < 0 ? 0 : speed;
+        ss.str("");
+        ss << " " << speed;
+        if (speed < 100)
+        {
+            m_text.setColor(1.0, 1.0, 1.0);
+        }
+        else if (speed < 200)
+        {
+            m_text.setColor(1.0, 1.0, 0.0);
+        }
+        else
+        {
+            m_text.setColor(1.0, 0.0, 0.0);
+        }
+
+        m_text.setText(ss.str());
+        m_text.setGlyphSize(40, 40);
+        const int h = m_text.height();
+        m_text.render(0, h, nullptr, m_font);
+
+        m_text.setText(" KM/H");
+        m_text.setGlyphSize(20, 20);
+        m_text.setColor(1.0, 1.0, 1.0);
+        m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
+
+        // Render the current lap time
+        ss.str("");
+        if (m_pTiming->raceCompleted(index))
+        {
+            ss << "  " << m_pTiming->msecsToString(lastLapTime);
+
+            m_text.setColor(1.0, 1.0, 1.0);
+        }
+        else
+        {
+            ss << "  " << m_pTiming->msecsToString(currentLapTime);
+
+            // Set color to white, if lastLapTime is not set.
+            if (lastLapTime == -1 || currentLapTime == lastLapTime)
             {
                 m_text.setColor(1.0, 1.0, 1.0);
             }
-            else if (speed < 200)
+            // Set color to green, if current time is ahead of the last lap time.
+            else if (currentLapTime < lastLapTime)
             {
-                m_text.setColor(1.0, 1.0, 0.0);
+                m_text.setColor(0.0, 1.0, 0.0);
             }
+            // Set color to red (current time is slower than the last lap time).
             else
             {
                 m_text.setColor(1.0, 0.0, 0.0);
             }
-
-            m_text.setText(ss.str());
-            m_text.setGlyphSize(40, 40);
-            const int h = m_text.height();
-            m_text.render(0, h, nullptr, m_font);
-
-            m_text.setText(" KM/H");
-            m_text.setGlyphSize(20, 20);
-            m_text.setColor(1.0, 1.0, 1.0);
-            m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
         }
 
-        // Render the current lap time
-        {
-            std::stringstream ss;
-
-            if (m_pTiming->raceCompleted(index))
-            {
-                ss << "  " << m_pTiming->msecsToString(lastLapTime);
-
-                m_text.setColor(1.0, 1.0, 1.0);
-            }
-            else
-            {
-                ss << "  " << m_pTiming->msecsToString(currentLapTime);
-
-                // Set color to white, if lastLapTime is not set.
-                if (lastLapTime == -1 || currentLapTime == lastLapTime)
-                {
-                    m_text.setColor(1.0, 1.0, 1.0);
-                }
-                // Set color to green, if current time is ahead of the last lap time.
-                else if (currentLapTime < lastLapTime)
-                {
-                    m_text.setColor(0.0, 1.0, 0.0);
-                }
-                // Set color to red (current time is slower than the last lap time).
-                else
-                {
-                    m_text.setColor(1.0, 0.0, 0.0);
-                }
-            }
-
-            m_text.setText(ss.str());
-            m_text.setGlyphSize(20, 20);
-            m_text.render(
-                width() - m_text.width(),
-                height() - m_text.height(),
-                nullptr,
-                m_font);
-        }
+        m_text.setText(ss.str());
+        m_text.setGlyphSize(20, 20);
+        m_text.render(
+            width() - m_text.width(),
+            height() - m_text.height(),
+            nullptr,
+            m_font);
 
         m_text.setGlyphSize(20, 20);
         m_text.setColor(1.0, 1.0, 1.0);
 
         // Render the last lap time
-        {
-            std::stringstream ss;
-            ss << "L:" << m_pTiming->msecsToString(lastLapTime);
-            m_text.setText(ss.str());
-            m_text.render(
-                width() - m_text.width(),
-                height() - m_text.height() * 2,
-                nullptr,
-                m_font);
-        }
+        ss.str("");
+        ss << "L:" << m_pTiming->msecsToString(lastLapTime);
+        m_text.setText(ss.str());
+        m_text.render(
+            width() - m_text.width(),
+            height() - m_text.height() * 2,
+            nullptr,
+            m_font);
 
         // Render the record lap time
         if (m_showRecordTime)
         {
-            std::stringstream ss;
+            ss.str("");
             ss << "R:" << m_pTiming->msecsToString(recordLapTime);
             m_text.setText(ss.str());
             m_text.render(
