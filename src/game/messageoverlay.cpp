@@ -55,6 +55,12 @@ bool MessageOverlay::update()
         }
 
         // Time to vanish?
+        if (m.timeShown >= m.maxTime / 2)
+        {
+            m.targetY    = -20;
+            m.isRemoving = true;
+        }
+
         if (m.timeShown >= m.maxTime)
         {
             // Yes: remove from the list
@@ -75,14 +81,15 @@ void MessageOverlay::addMessage(const std::string & msg)
     MessageOverlay::Message myMsg;
 
     myMsg.timeShown      = 0;
-    myMsg.maxTime        = m_messageMaxTime;
+    myMsg.maxTime        = m_messageMaxTime * 2; // Half of the time is used when removing
     myMsg.text           = msg;
     myMsg.y              = -1;
     myMsg.targetY        = -1;
     myMsg.isYInitialized = false;
+    myMsg.isRemoving     = false;
 
     // Add to the list of active messages
-    m_listMessages.push_back(myMsg);
+    m_listMessages.push_front(myMsg);
 }
 
 void MessageOverlay::renderMessages()
@@ -109,7 +116,7 @@ void MessageOverlay::renderMessages()
     // Center X-coordinate
     x = width() / 2;
 
-    // Loop trough active messages and init their targetY
+    // Loop through active messages and init their targetY
     auto i(m_listMessages.begin());
     while (i != m_listMessages.end())
     {
@@ -123,7 +130,10 @@ void MessageOverlay::renderMessages()
         }
         else
         {
-            m.targetY = y;
+            if (!m.isRemoving)
+            {
+                m.targetY = y;
+            }
         }
 
         // Increment / decrement y-coordinate

@@ -72,7 +72,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
 , m_timingOverlay(new TimingOverlay)
-, m_startlights(new Startlights)
+, m_startlights(new Startlights(*m_messageOverlay))
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
 , m_cameraBaseOffset(0)

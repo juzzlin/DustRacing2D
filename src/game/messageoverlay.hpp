@@ -70,6 +70,8 @@ private:
 
         //! True, if y is initialized
         bool isYInitialized;
+
+        bool isRemoving;
     };
 
     MCTextureFontManager & m_fontManager;

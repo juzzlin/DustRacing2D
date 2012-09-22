@@ -23,6 +23,7 @@
 
 #include "updateableif.hpp"
 
+class MessageOverlay;
 class Race;
 
 //! Startlight model that controls the position and animation
@@ -47,7 +48,7 @@ public:
     };
 
     //! Constructor.
-    Startlights();
+    Startlights(MessageOverlay & messageOverlay);
 
     //! \reimp
     virtual bool update();
@@ -76,6 +77,7 @@ private:
     MCUint            m_width;
     MCUint            m_height;
     MCVectorAnimation m_animation;
+    MessageOverlay  & m_messageOverlay;
 };
 
 #endif // STARTLIGHTS_HPP

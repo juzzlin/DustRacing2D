@@ -64,7 +64,6 @@ void Race::start()
     if (!m_started)
     {
         m_timing.start();
-        m_messageOverlay.addMessage("GO!!!");
         m_started  = true;
     }
 }

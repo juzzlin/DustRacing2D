@@ -15,11 +15,13 @@
 
 #include "startlights.hpp"
 #include "inputhandler.hpp"
+#include "messageoverlay.hpp"
 
-Startlights::Startlights()
+Startlights::Startlights(MessageOverlay & messageOverlay)
 : m_state(LightsInit)
 , m_counter(0)
 , m_stepsPerState(60)
+, m_messageOverlay(messageOverlay)
 {
 }
 
@@ -54,6 +56,7 @@ bool Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsFirstRow;
+            m_messageOverlay.addMessage("3");
         }
         return true;
 
@@ -61,6 +64,7 @@ bool Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsSecondRow;
+            m_messageOverlay.addMessage("2");
         }
         return true;
 
@@ -68,6 +72,7 @@ bool Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsThirdRow;
+            m_messageOverlay.addMessage("1");
         }
         return true;
 
@@ -75,6 +80,7 @@ bool Startlights::update()
         if (updateCounter(second))
         {
             m_state = LightsGo;
+            m_messageOverlay.addMessage("GO!!!");
             InputHandler::setEnabled(true);
             emit raceStarted();
         }
