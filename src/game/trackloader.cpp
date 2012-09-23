@@ -63,12 +63,14 @@ int TrackLoader::loadTracks()
         QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
         for (QString trackPath : trackPaths)
         {
-            MCLogger().info() << "Found '" << trackPath.toStdString() << "'..";
             trackPath = path + QDir::separator() + trackPath;
             if (TrackData * trackData = loadTrack(trackPath))
             {
                 m_tracks.push_back(new Track(trackData));
                 numLoaded++;
+
+                MCLogger().info() << "Found '" << trackPath.toStdString() << "', index="
+                    << trackData->index();
             }
             else
             {
@@ -94,7 +96,7 @@ int TrackLoader::loadTracks()
     }
 
     // Sort tracks with respect to their indices
-    std::sort(m_tracks.begin(), m_tracks.end(),
+    std::stable_sort(m_tracks.begin(), m_tracks.end(),
         [](Track * lhs, Track * rhs)
         {
              return lhs->trackData().index() < rhs->trackData().index();
