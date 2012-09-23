@@ -48,12 +48,14 @@ public:
     , m_monospace(MCTextureFontManager::instance().font("default"))
     , m_star(MCTextureManager::instance().surface("star"))
     , m_glow(MCTextureManager::instance().surface("starGlow"))
+    , m_lock(MCTextureManager::instance().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
     , m_bestPos(Settings::instance().loadBestPos(m_track))
     {
         m_star.setShaderProgram(&Renderer::instance().masterProgram());
         m_glow.setShaderProgram(&Renderer::instance().masterProgram());
+        m_lock.setShaderProgram(&Renderer::instance().masterProgram());
     }
 
     Track & track() const
@@ -88,6 +90,7 @@ private:
     MCTextureFont & m_monospace;
     MCSurface     & m_star;
     MCSurface     & m_glow;
+    MCSurface     & m_lock;
     int             m_xDisplacement;
     int             m_lapRecord;
     int             m_bestPos;
@@ -144,6 +147,16 @@ void TrackItem::render(int x, int y)
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
                     pSurface->setShaderProgram(&Renderer::instance().masterProgram());
+
+                    if (m_track.trackData().isLocked())
+                    {
+                        pSurface->setColor(0.5, 0.5, 0.5);
+                    }
+                    else
+                    {
+                        pSurface->setColor(1.0, 1.0, 1.0);
+                    }
+
                     pSurface->renderScaled(
                         nullptr,
                         MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
@@ -173,26 +186,37 @@ void TrackItem::render(int x, int y)
     text.render(x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
 
     // Render stars
-    const int starW  = m_star.width();
-    const int starH  = m_star.height();
-    const int startX = x - 5 * starW + starW / 2 + m_xDisplacement;
-    for (int i = 0; i < 10; i++)
+    if (!m_track.trackData().isLocked())
     {
-        if (m_bestPos != -1 && 10 - i >= m_bestPos)
+        const int starW  = m_star.width();
+        const int starH  = m_star.height();
+        const int startX = x - 5 * starW + starW / 2 + m_xDisplacement;
+        for (int i = 0; i < 10; i++)
         {
-            m_star.setColor(1.0, 1.0, 0.0);
-            m_glow.render(
+            if (m_bestPos != -1 && 10 - i >= m_bestPos)
+            {
+                m_star.setColor(1.0, 1.0, 0.0);
+                m_glow.render(
+                    nullptr,
+                    MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+            }
+            else
+            {
+                m_star.setColor(0.75, 0.75, 0.75);
+            }
+
+            m_star.render(
                 nullptr,
                 MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
         }
-        else
-        {
-            m_star.setColor(0.75, 0.75, 0.75);
-        }
+    }
 
-        m_star.render(
+    // Render the lock
+    if (m_track.trackData().isLocked())
+    {
+        m_lock.render(
             nullptr,
-            MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+            MCVector3dF(x + m_xDisplacement, y, 0), 0);
     }
 
     // Render track properties
@@ -209,10 +233,13 @@ void TrackItem::render(int x, int y)
     text.setText(ss.str());
     text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
 
-    ss.str("");
-    ss << "Record: " << Timing::msecsToString(m_lapRecord);
-    text.setText(ss.str());
-    text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
+    if (!m_track.trackData().isLocked())
+    {
+        ss.str("");
+        ss << "Record: " << Timing::msecsToString(m_lapRecord);
+        text.setText(ss.str());
+        text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
+    }
 
     text.setText("Use arrows to browse and enter to select..");
     text.setGlyphSize(10, 10);
@@ -272,12 +299,16 @@ void TrackSelectionMenu::down()
 void TrackSelectionMenu::selectCurrentItem()
 {
     Menu::selectCurrentItem();
-    m_selectedTrack = &static_cast<TrackItem *>(currentItem())->track();
-    m_sm.setTrack(*m_selectedTrack);
-    m_scene.setActiveTrack(*m_selectedTrack);
-    MCLogger().info() <<
-        "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";
-    setDone(true);
+    Track & selection = static_cast<TrackItem *>(currentItem())->track();
+    if (!selection.trackData().isLocked())
+    {
+        m_selectedTrack = &selection;
+        m_sm.setTrack(*m_selectedTrack);
+        m_scene.setActiveTrack(*m_selectedTrack);
+        MCLogger().info() <<
+            "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";
+        setDone(true);
+    }
 }
 
 Track * TrackSelectionMenu::selectedTrack() const
