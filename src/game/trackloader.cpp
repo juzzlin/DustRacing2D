@@ -102,6 +102,11 @@ int TrackLoader::loadTracks()
              return lhs->trackData().index() < rhs->trackData().index();
         });
 
+    for (unsigned int i = 0; i + 1 < m_tracks.size(); i++)
+    {
+        m_tracks[i]->setNext(*m_tracks[i + 1]);
+    }
+
     return numLoaded;
 }
 

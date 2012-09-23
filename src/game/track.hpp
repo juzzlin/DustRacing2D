@@ -65,6 +65,12 @@ public:
     //! \reimp
     virtual void reset();
 
+    //! Set the next track.
+    void setNext(Track & next);
+
+    //! Return the next track or nullptr.
+    Track * next() const;
+
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
@@ -80,6 +86,7 @@ private:
     MCUint      m_rows, m_cols, m_width, m_height;
     MCFloat     m_scale;
     MCSurface & m_asphalt;
+    Track     * m_next;
 };
 
 #endif // TRACK_HPP

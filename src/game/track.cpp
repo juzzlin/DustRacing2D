@@ -34,6 +34,7 @@ Track::Track(TrackData * pTrackData)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_scale(0.0)
 , m_asphalt(MCTextureManager::instance().surface("asphalt"))
+, m_next(nullptr)
 {
     assert(pTrackData);
 }
@@ -227,6 +228,16 @@ bool Track::update()
 void Track::reset()
 {
     m_scale = 0.0;
+}
+
+void Track::setNext(Track & next)
+{
+    m_next = &next;
+}
+
+Track * Track::next() const
+{
+    return m_next;
 }
 
 Track::~Track()

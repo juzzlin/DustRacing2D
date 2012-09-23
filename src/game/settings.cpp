@@ -86,14 +86,15 @@ int Settings::loadBestPos(const Track & track) const
     return pos;
 }
 
-void Settings::saveTrackUnlockStatus(const Track & track, bool status)
+void Settings::saveTrackUnlockStatus(const Track & track)
 {
     // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_UNLOCK);
-    settings.setValue(track.trackData().name().toLatin1().toBase64(), status);
+    settings.setValue(track.trackData().name().toLatin1().toBase64(),
+        !track.trackData().isLocked());
     settings.endGroup();
 }
 

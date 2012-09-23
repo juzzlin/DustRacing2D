@@ -36,7 +36,7 @@ public:
 
     int loadBestPos(const Track & track) const;
 
-    void saveTrackUnlockStatus(const Track & track, bool status);
+    void saveTrackUnlockStatus(const Track & track);
 
     bool loadTrackUnlockStatus(const Track & track) const;
 

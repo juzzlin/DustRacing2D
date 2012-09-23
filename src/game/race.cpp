@@ -29,6 +29,7 @@
 #include <cassert>
 
 static const int HUMAN_PLAYER_INDEX = 0;
+static const int UNLOCK_LIMIT       = 5;
 
 Race::Race(unsigned int numCars, MessageOverlay & messageOverlay)
 : m_lapCount(0)
@@ -183,6 +184,17 @@ void Race::updateRouteProgress(Car & car)
                 {
                     Settings::instance().saveBestPos(*m_track, pos);
                     m_messageOverlay.addMessage("New best pos!");
+                }
+
+                if (pos <= UNLOCK_LIMIT)
+                {
+                    Track * next = m_track->next();
+                    if (next && next->trackData().isLocked())
+                    {
+                        next->trackData().setIsLocked(false);
+                        Settings::instance().saveTrackUnlockStatus(*next);
+                        m_messageOverlay.addMessage("A new track unlocked!");
+                    }
                 }
             }
 
