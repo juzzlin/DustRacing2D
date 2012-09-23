@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.5.0" cols="42" rows="4" name="Straight">
+<track lapCount="5" version="0.5.0" cols="42" rows="4" name="Straight" index="7">
  <t i="0" j="0" o="0" t="grass"/>
  <t i="0" j="1" o="0" t="grass"/>
  <t i="0" j="2" o="0" t="grass"/>

@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.7.0" cols="14" rows="14" name="Triangle">
+<track lapCount="5" version="0.7.0" cols="14" rows="14" name="Triangle" index="5">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
