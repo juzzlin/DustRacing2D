@@ -25,6 +25,7 @@ Menu::Menu(std::string id, int width, int height, MenuStyle style)
 , m_currentIndex(-1)
 , m_style(style)
 , m_done(false)
+, m_wrapAround(true)
 {
 }
 
@@ -92,24 +93,40 @@ void Menu::render()
 
 void Menu::up()
 {
-    setCurrentIndexWrapAround(m_currentIndex + 1);
+    if (m_wrapAround)
+    {
+        setCurrentIndexWrapAround(m_currentIndex + 1);
+    }
+    else
+    {
+        setCurrentIndex(m_currentIndex + 1);
+    }
+
     updateFocus();
 }
 
 void Menu::down()
 {
-    setCurrentIndexWrapAround(m_currentIndex - 1);
+    if (m_wrapAround)
+    {
+        setCurrentIndexWrapAround(m_currentIndex - 1);
+    }
+    else
+    {
+        setCurrentIndex(m_currentIndex - 1);
+    }
+
     updateFocus();
 }
 
 void Menu::left()
 {
-    up();
+    down();
 }
 
 void Menu::right()
 {
-    down();
+    up();
 }
 
 void Menu::selectCurrentItem()
@@ -199,6 +216,11 @@ void Menu::enter()
     m_done = false;
 
     updateFocus();
+}
+
+void Menu::setWrapAround(bool wrapAround)
+{
+    m_wrapAround = wrapAround;
 }
 
 Menu::~Menu()

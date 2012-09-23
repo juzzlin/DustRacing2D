@@ -256,6 +256,8 @@ TrackSelectionMenu::TrackSelectionMenu(std::string id,
 {
     m_back.setShaderProgram(&Renderer::instance().masterProgram());
     m_back.setColor(0.5, 0.5, 0.5, 1.0);
+
+    setWrapAround(false);
 }
 
 void TrackSelectionMenu::addTrack(Track & track)

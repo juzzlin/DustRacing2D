@@ -78,10 +78,16 @@ public:
 
     int height() const;
 
+    //! Return the current index.
     int currentIndex() const;
 
+    //! Set default wrap behavior.
+    void setWrapAround(bool wrapAround);
+
+    //! Set current index. Clamp if out-of-range.
     void setCurrentIndex(int index);
 
+    //! Set current index. Wrap around if out-of-range.
     void setCurrentIndexWrapAround(int index);
 
 private:
@@ -95,6 +101,7 @@ private:
     int m_currentIndex;
     MenuStyle m_style;
     bool m_done;
+    bool m_wrapAround;
 };
 
 #endif // MENU_HPP
