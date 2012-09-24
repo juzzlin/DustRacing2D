@@ -12,6 +12,7 @@ set(SRC
     car.cpp
     centrifugalforcegenerator.cpp
     checkeredflag.cpp
+    confirmationmenu.cpp
     credits.cpp
     eventhandler.cpp
     game.cpp

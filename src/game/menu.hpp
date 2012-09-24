@@ -66,16 +66,21 @@ public:
     //! Add item to the menu.
     virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
 
+    //! Use this if the current menu stack needs to be
+    //! completely quit, for example when the execution
+    //! should move from the menu to the actual game.
+    void setDone(bool done);
+
     //! \returns true if done.
     bool done() const;
-
-    void setDone(bool done);
 
     //! Called when the menu is entered. Call parent implementation if overridden.
     virtual void enter();
 
+    //! Returns the width of the menu.
     int width() const;
 
+    //! Returns the height of the menu.
     int height() const;
 
     //! Return the current index.
@@ -89,6 +94,10 @@ public:
 
     //! Set current index. Wrap around if out-of-range.
     void setCurrentIndexWrapAround(int index);
+
+    //! Exits and pops the menu stack. The menu can call this
+    //! also by itself.
+    void exit();
 
 private:
 

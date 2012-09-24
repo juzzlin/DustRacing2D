@@ -15,6 +15,7 @@
 
 #include "menu.hpp"
 #include "menuitem.hpp"
+#include "menumanager.hpp"
 
 #include <cassert>
 
@@ -78,8 +79,20 @@ void Menu::render()
     }
     else if (m_style == Menu::MS_HORIZONTAL_LIST)
     {
-        // Not implemented
-        assert(false);
+        // Calculate total height
+        int totalWidth = 0;
+        for (MenuItem * item : m_items)
+        {
+            totalWidth += item->width();
+        }
+
+        // Render centered items
+        int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
+        for (MenuItem * item : m_items)
+        {
+            item->render(startX, m_height / 2);
+            startX += item->width();
+        }
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
@@ -223,7 +236,11 @@ void Menu::setWrapAround(bool wrapAround)
     m_wrapAround = wrapAround;
 }
 
+void Menu::exit()
+{
+    MenuManager::instance().exitCurrentMenu();
+}
+
 Menu::~Menu()
 {
 }
-

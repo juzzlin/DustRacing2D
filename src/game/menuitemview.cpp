@@ -22,7 +22,13 @@
 
 MenuItemView::MenuItemView(MenuItem & owner)
 : m_owner(owner)
+, m_textSize(40)
 {
+}
+
+void MenuItemView::setTextSize(int size)
+{
+    m_textSize = size;
 }
 
 void MenuItemView::render(int x, int y)
@@ -33,7 +39,7 @@ void MenuItemView::render(int x, int y)
     const int shadowY = -2;
     const int shadowX =  2;
 
-    text.setGlyphSize(40, 40);
+    text.setGlyphSize(m_textSize, m_textSize);
 
     if (m_owner.focused())
     {

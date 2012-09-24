@@ -13,30 +13,30 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SETTINGSMENU_HPP
-#define SETTINGSMENU_HPP
+#ifndef CONFIRMATIONMENU_HPP
+#define CONFIRMATIONMENU_HPP
 
 #include "menu.hpp"
-#include "confirmationmenu.hpp"
 
 class MCSurface;
-class MCTextureFont;
 
-//! The settings menu.
-class SettingsMenu : public Menu
+//! Yes/No menu.
+class ConfirmationMenu : public Menu
 {
 public:
 
     //! Constructor.
-    SettingsMenu(std::string id, int width, int height);
+    ConfirmationMenu(std::string id, int width, int height);
 
     //! \reimp
     virtual void render();
 
+    //! \reimp
+    virtual void selectCurrentItem();
+
 private:
 
-    MCSurface        & m_back;
-    ConfirmationMenu   m_confirmationMenu;
+    MCSurface & m_back;
 };
 
-#endif // SETTINGSMENU_HPP
+#endif // CONFIRMATIONMENU_HPP

@@ -31,9 +31,12 @@ public:
 
     virtual void render(int x, int y);
 
+    virtual void setTextSize(int size);
+
 private:
 
     MenuItem & m_owner;
+    int m_textSize;
 };
 
 #endif // MENUITEMVIEW_HPP
