@@ -1,3 +1,37 @@
+0.8.0
+-----
+
+* Adds functionality to the Settings menu.
+* Editor: Makes object rotation incremental.
+* Adds SurfaceMenu base class for game menus.
+* Removes TODO as it's obsolete.
+* Finishing in TOP-5 unlocks the next race track.
+* Use std::stable_sort in TrackLoader.
+* Disable wrapping around in TrackSelectionMenu.
+* Sets indices to the default race tracks.
+* Adds an arrow to the finish line preview tile.
+* Updates the Help menu.
+* Loads the unlock statuses of race tracks.
+* Adds a new track circle.trk
+* Refactors menu creation.
+* Refines the intro.
+* Improves the smoke effect.
+* Particle performance improvements.
+* Adds MessageOverlay.
+* Updates the credits menu.
+* Fixes turning on reverse.
+* Also 'B' brakes.
+* Moves all scattered QSettings related stuff to Settings.
+* Editor: Open the "save as" dialog when saving (CTRL+S) the first time.
+* Fixes the scaling of startLightGlow.
+* Adds stars to track selection menu.
+* Adds star.svg and star.png
+* Save and load best positions.
+* Adds index-based track ordering.
+* Show time as mm:ss.zz
+* Refactors TimingOverlay.
+* Adds error handling for shader loading.
+
 0.7.3
 -----
 
