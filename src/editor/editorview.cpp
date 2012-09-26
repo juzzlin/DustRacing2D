@@ -443,7 +443,7 @@ void EditorView::doRotateObject()
         if (Object * object =
             dynamic_cast<Object *>(scene()->itemAt(mapToScene(m_clickedPos))))
         {
-            object->setRotation(dialog.angle());
+            object->setRotation(static_cast<int>(dialog.angle() + object->rotation()) % 360);
         }
     }
 }

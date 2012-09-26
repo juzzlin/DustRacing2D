@@ -33,9 +33,9 @@ RotateDialog::RotateDialog(QWidget * parent)
     setWindowTitle(tr("Rotate Object"));
 
     QIntValidator * validator = new QIntValidator(this);
-    validator->setRange(0, 360);
+    validator->setRange(-360, 360);
     m_angleEdit->setValidator(validator);
-    m_angleEdit->setText("0");
+    m_angleEdit->setText("90");
 
     m_layout->addWidget(m_angleLabel,   0, 0);
     m_layout->addWidget(m_angleEdit,    0, 1);
