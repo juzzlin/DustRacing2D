@@ -16,27 +16,22 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
-#include "menu.hpp"
+#include "surfacemenu.hpp"
 #include "confirmationmenu.hpp"
 
-class MCSurface;
 class MCTextureFont;
 
 //! The settings menu.
-class SettingsMenu : public Menu
+class SettingsMenu : public SurfaceMenu
 {
 public:
 
     //! Constructor.
     SettingsMenu(std::string id, int width, int height);
 
-    //! \reimp
-    virtual void render();
-
 private:
 
-    MCSurface        & m_back;
-    ConfirmationMenu   m_confirmationMenu;
+    ConfirmationMenu m_confirmationMenu;
 };
 
 #endif // SETTINGSMENU_HPP

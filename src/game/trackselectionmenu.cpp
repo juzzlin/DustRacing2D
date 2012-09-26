@@ -248,15 +248,11 @@ void TrackItem::render(int x, int y)
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene, StateMachine & sm)
-: Menu(id, width, height, Menu::MS_SHOW_ONE)
-, m_back(MCTextureManager::instance().surface("trackSelectionBack"))
+: SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 , m_sm(sm)
 {
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
-    m_back.setColor(0.5, 0.5, 0.5, 1.0);
-
     setWrapAround(false);
 }
 
@@ -264,14 +260,6 @@ void TrackSelectionMenu::addTrack(Track & track)
 {
     addItem(*new TrackItem(width() / 2, height() / 2, track), true);
     setCurrentIndex(0);
-}
-
-void TrackSelectionMenu::render()
-{
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
-    Menu::render();
 }
 
 void TrackSelectionMenu::left()

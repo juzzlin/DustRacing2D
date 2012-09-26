@@ -22,8 +22,6 @@
 #include "renderer.hpp"
 
 #include <MCLogger>
-#include <MCSurface>
-#include <MCTextureManager>
 
 class ResetAction : public MenuItemAction
 {
@@ -64,8 +62,7 @@ private:
 };
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
-: Menu(id, width, height, Menu::MS_VERTICAL_LIST)
-, m_back(MCTextureManager::instance().surface("helpBack"))
+: SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu("confirmationMenu", width, height)
 {
     MenuItem * resetRecordTimes = new MenuItem(width, height / 5, "Reset record times");
@@ -87,18 +84,5 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     addItem(*resetBestPositions,  true);
     addItem(*resetUnlockedTracks, true);
 
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
-    m_back.setColor(0.5, 0.5, 0.5, 1.0);
-
     MenuManager::instance().addMenu(m_confirmationMenu);
-}
-
-void SettingsMenu::render()
-{
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
-
-    Menu::render();
 }

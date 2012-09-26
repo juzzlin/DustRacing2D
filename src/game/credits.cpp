@@ -16,10 +16,6 @@
 #include "credits.hpp"
 #include "renderer.hpp"
 
-#include <MCSurface>
-#include <MCTextureFont>
-#include <MCTextureFontManager>
-#include <MCTextureManager>
 #include <MCTextureText>
 
 static MCTextureText CREDITS_TEXT(
@@ -38,24 +34,16 @@ static MCTextureText CREDITS_TEXT(
 );
 
 Credits::Credits(std::string id, int width, int height)
-: Menu(id, width, height, Menu::MS_VERTICAL_LIST)
-, m_back(MCTextureManager::instance().surface("creditsBack"))
-, m_monospace(MCTextureFontManager::instance().font("default"))
+: SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST)
 {
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
-    m_back.setColor(0.5, 0.5, 0.5, 1.0);
 }
 
 void Credits::render()
 {
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
+    SurfaceMenu::render();
 
     CREDITS_TEXT.setGlyphSize(20, 20);
     CREDITS_TEXT.render(
         width()  / 2 - CREDITS_TEXT.width()  / 2,
-        height() / 2 + CREDITS_TEXT.height() / 2, nullptr, m_monospace);
-
-    Menu::render();
+        height() / 2 + CREDITS_TEXT.height() / 2, nullptr, font());
 }

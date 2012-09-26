@@ -16,13 +16,12 @@
 #ifndef CREDITS_HPP
 #define CREDITS_HPP
 
-#include "menu.hpp"
+#include "surfacemenu.hpp"
 
-class MCSurface;
 class MCTextureFont;
 
 //! The credits "menu".
-class Credits : public Menu
+class Credits : public SurfaceMenu
 {
 public:
 
@@ -31,11 +30,6 @@ public:
 
     //! \reimp
     virtual void render();
-
-private:
-
-    MCSurface     & m_back;
-    MCTextureFont & m_monospace;
 };
 
 #endif // CREDITS_HPP

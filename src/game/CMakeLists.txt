@@ -42,6 +42,7 @@ set(SRC
     startlights.cpp
     startlightsoverlay.cpp
     statemachine.cpp
+    surfacemenu.cpp
     timing.cpp
     timingoverlay.cpp
     track.cpp

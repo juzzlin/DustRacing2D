@@ -16,13 +16,12 @@
 #ifndef HELP_HPP
 #define HELP_HPP
 
-#include "menu.hpp"
+#include "surfacemenu.hpp"
 
-class MCSurface;
 class MCTextureFont;
 
 //! The help "menu".
-class Help : public Menu
+class Help : public SurfaceMenu
 {
 public:
 
@@ -31,11 +30,6 @@ public:
 
     //! \reimp
     virtual void render();
-
-private:
-
-    MCSurface     & m_back;
-    MCTextureFont & m_monospace;
 };
 
 #endif // HELP_HPP

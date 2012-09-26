@@ -18,12 +18,8 @@
 #include "menuitemview.hpp"
 #include "menumanager.hpp"
 
-#include <MCTextureManager>
-#include <MCSurface>
-
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
-: Menu(id, width, height, Menu::MS_HORIZONTAL_LIST)
-, m_back(MCTextureManager::instance().surface("helpBack"))
+: SurfaceMenu("helpBack", id, width, height, Menu::MS_HORIZONTAL_LIST)
 {
     MenuItem * yes = new MenuItem(width / 4, height, "Yes");
     yes->setView(new MenuItemView(*yes), true);
@@ -33,16 +29,6 @@ ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
 
     addItem(*yes, true);
     addItem(*no,  true);
-}
-
-void ConfirmationMenu::render()
-{
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
-
-    Menu::render();
 }
 
 void ConfirmationMenu::selectCurrentItem()

@@ -13,21 +13,38 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CONFIRMATIONMENU_HPP
-#define CONFIRMATIONMENU_HPP
+#ifndef SURFACEMENU_HPP
+#define SURFACEMENU_HPP
 
-#include "surfacemenu.hpp"
+#include "menu.hpp"
 
-//! Yes/No menu.
-class ConfirmationMenu : public SurfaceMenu
+class MCSurface;
+class MCTextureFont;
+
+//! Base class for menus with a MCSurface background.
+class SurfaceMenu : public Menu
 {
 public:
 
     //! Constructor.
-    ConfirmationMenu(std::string id, int width, int height);
+    SurfaceMenu(
+        std::string surfaceId, std::string id, int width, int height,
+        MenuStyle style = Menu::MS_VERTICAL_LIST);
+
+    //! Destructor.
+    virtual ~SurfaceMenu() {}
 
     //! \reimp
-    virtual void selectCurrentItem();
+    virtual void render();
+
+protected:
+
+    MCTextureFont & font() const;
+
+private:
+
+    MCSurface     & m_back;
+    MCTextureFont & m_font;
 };
 
-#endif // CONFIRMATIONMENU_HPP
+#endif // SURFACEMENU_HPP
