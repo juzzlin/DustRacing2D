@@ -20,6 +20,10 @@
 #include "menuitemview.hpp"
 #include "menumanager.hpp"
 #include "renderer.hpp"
+#include "settings.hpp"
+#include "track.hpp"
+#include "trackdata.hpp"
+#include "trackloader.hpp"
 
 #include <MCLogger>
 
@@ -29,36 +33,90 @@ public:
 
     enum ResetType {RT_TIMES, RT_POSITIONS, RT_TRACKS};
 
-    ResetAction(ResetType type)
+    ResetAction(ResetType type, ConfirmationMenu & menu)
     : m_type(type)
+    , m_menu(menu)
     {
     }
 
 private:
+
+    class ResetPositions : public MenuItemAction
+    {
+        //! \reimp
+        void fire()
+        {
+            MCLogger().info() << "Reset positions selected.";
+            TrackLoader & tl = TrackLoader::instance();
+            for (unsigned int i = 0; i < tl.tracks(); i++)
+            {
+                Track & track = *tl.track(i);
+                Settings::instance().saveBestPos(track, -1);
+            }
+        }
+    };
+
+    class ResetTimes : public MenuItemAction
+    {
+        //! \reimp
+        void fire()
+        {
+            MCLogger().info() << "Reset times selected.";
+            TrackLoader & tl = TrackLoader::instance();
+            for (unsigned int i = 0; i < tl.tracks(); i++)
+            {
+                Track & track = *tl.track(i);
+                Settings::instance().saveLapRecord(track, -1);
+            }
+        }
+    };
+
+    class ResetTracks : public MenuItemAction
+    {
+        //! \reimp
+        void fire()
+        {
+            MCLogger().info() << "Reset tracks selected.";
+            TrackLoader & tl = TrackLoader::instance();
+            for (unsigned int i = 0; i < tl.tracks(); i++)
+            {
+                Track & track = *tl.track(i);
+                if (track.trackData().index() > 0)
+                {
+                    track.trackData().setIsLocked(true);
+                    Settings::instance().saveTrackUnlockStatus(track);
+                }
+            }
+        }
+    };
 
     //! \reimp
     void fire()
     {
         switch (m_type)
         {
-        case RT_TIMES:
-            MCLogger().info() << "Reset times selected.";
-            MenuManager::instance().pushMenu("confirmationMenu");
-            break;
         case RT_POSITIONS:
-            MCLogger().info() << "Reset positions selected.";
             MenuManager::instance().pushMenu("confirmationMenu");
+            m_menu.setAcceptAction(m_resetPositions);
+            break;
+        case RT_TIMES:
+            MenuManager::instance().pushMenu("confirmationMenu");
+            m_menu.setAcceptAction(m_resetTimes);
             break;
         case RT_TRACKS:
-            MCLogger().info() << "Reset tracks selected.";
             MenuManager::instance().pushMenu("confirmationMenu");
+            m_menu.setAcceptAction(m_resetTracks);
             break;
         default:
             break;
         }
     }
 
-    ResetType m_type;
+    ResetType          m_type;
+    ConfirmationMenu & m_menu;
+    ResetPositions     m_resetPositions;
+    ResetTimes         m_resetTimes;
+    ResetTracks        m_resetTracks;
 };
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
@@ -68,17 +126,20 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuItem * resetRecordTimes = new MenuItem(width, height / 5, "Reset record times");
     resetRecordTimes->setView(new MenuItemView(*resetRecordTimes), true);
     resetRecordTimes->view()->setTextSize(20);
-    resetRecordTimes->setAction(new ResetAction(ResetAction::RT_TIMES), true);
+    resetRecordTimes->setAction(
+        new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu), true);
 
     MenuItem * resetBestPositions = new MenuItem(width, height / 5, "Reset best positions");
     resetBestPositions->setView(new MenuItemView(*resetBestPositions), true);
     resetBestPositions->view()->setTextSize(20);
-    resetBestPositions->setAction(new ResetAction(ResetAction::RT_POSITIONS), true);
+    resetBestPositions->setAction(
+        new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu), true);
 
     MenuItem * resetUnlockedTracks = new MenuItem(width, height / 5, "Reset unlocked tracks");
     resetUnlockedTracks->setView(new MenuItemView(*resetUnlockedTracks), true);
     resetUnlockedTracks->view()->setTextSize(20);
-    resetUnlockedTracks->setAction(new ResetAction(ResetAction::RT_TRACKS), true);
+    resetUnlockedTracks->setAction(
+        new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);

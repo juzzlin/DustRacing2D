@@ -18,6 +18,9 @@
 
 #include "surfacemenu.hpp"
 
+class MenuItem;
+class MenuItemAction;
+
 //! Yes/No menu.
 class ConfirmationMenu : public SurfaceMenu
 {
@@ -26,8 +29,17 @@ public:
     //! Constructor.
     ConfirmationMenu(std::string id, int width, int height);
 
+    void setAcceptAction(MenuItemAction & action);
+
+    void setCancelAction(MenuItemAction & action);
+
     //! \reimp
     virtual void selectCurrentItem();
+
+private:
+
+    MenuItem * m_acceptItem;
+    MenuItem * m_cancelItem;
 };
 
 #endif // CONFIRMATIONMENU_HPP

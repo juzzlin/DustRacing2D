@@ -41,12 +41,22 @@
 #include <algorithm>
 #include <cassert>
 
+TrackLoader * TrackLoader::m_instance = nullptr;
+
 TrackLoader::TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory)
 : m_textureManager(textureManager)
 , m_objectFactory(objectFactory)
 , m_paths()
 , m_tracks()
 {
+    assert(!TrackLoader::m_instance);
+    TrackLoader::m_instance = this;
+}
+
+TrackLoader & TrackLoader::instance()
+{
+    assert(TrackLoader::m_instance);
+    return *m_instance;
 }
 
 void TrackLoader::addTrackSearchPath(QString path)

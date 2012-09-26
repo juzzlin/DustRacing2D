@@ -21,6 +21,7 @@
 
 #include "tracktile.hpp"
 
+class TargetNodeBase;
 class Track;
 class TrackData;
 class TrackTileBase;
@@ -28,7 +29,7 @@ class MCTextureManager;
 class MCObjectFactory;
 class QDomElement;
 
-//! Manages the track loading procedure.
+//! A singleton class that handles track loading.
 //! TODO: This can be shared with the editor or inherit from
 //! a shared loader.
 class TrackLoader
@@ -58,6 +59,8 @@ public:
     //! Get a track of given index.
     Track * track(unsigned int index) const;
 
+    static TrackLoader & instance();
+
 private:
 
     //! Load the given track.
@@ -81,6 +84,8 @@ private:
     MCObjectFactory    & m_objectFactory;
     std::vector<QString> m_paths;
     std::vector<Track *> m_tracks;
+
+    static TrackLoader * m_instance;
 };
 
 #endif // TRACKLOADER_HPP

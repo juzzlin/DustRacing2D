@@ -38,11 +38,11 @@ public:
 
     const std::string & text() const;
 
-    void setView(MenuItemView * view, bool takeOwnership);
+    void setView(MenuItemView * view, bool takeOwnership = false);
 
     MenuItemView * view();
 
-    void setAction(MenuItemAction * action, bool takeOwnership);
+    void setAction(MenuItemAction * action, bool takeOwnership = false);
 
     MenuItemAction * action() const;
 

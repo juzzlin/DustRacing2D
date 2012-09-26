@@ -15,20 +15,30 @@
 
 #include "confirmationmenu.hpp"
 #include "menuitem.hpp"
+#include "menuitemaction.hpp"
 #include "menuitemview.hpp"
 #include "menumanager.hpp"
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_HORIZONTAL_LIST)
+, m_acceptItem(new MenuItem(width / 4, height, "Yes"))
+, m_cancelItem(new MenuItem(width / 4, height, "No"))
 {
-    MenuItem * yes = new MenuItem(width / 4, height, "Yes");
-    yes->setView(new MenuItemView(*yes), true);
+    m_acceptItem->setView(new MenuItemView(*m_acceptItem), true);
+    m_cancelItem->setView(new MenuItemView(*m_cancelItem), true);
 
-    MenuItem * no = new MenuItem(width / 4, height, "No");
-    no->setView(new MenuItemView(*no), true);
+    addItem(*m_acceptItem, true);
+    addItem(*m_cancelItem, true);
+}
 
-    addItem(*yes, true);
-    addItem(*no,  true);
+void ConfirmationMenu::setAcceptAction(MenuItemAction & action)
+{
+    m_acceptItem->setAction(&action);
+}
+
+void ConfirmationMenu::setCancelAction(MenuItemAction & action)
+{
+    m_cancelItem->setAction(&action);
 }
 
 void ConfirmationMenu::selectCurrentItem()
