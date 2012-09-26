@@ -47,12 +47,7 @@ private:
         void fire()
         {
             MCLogger().info() << "Reset positions selected.";
-            TrackLoader & tl = TrackLoader::instance();
-            for (unsigned int i = 0; i < tl.tracks(); i++)
-            {
-                Track & track = *tl.track(i);
-                Settings::instance().saveBestPos(track, -1);
-            }
+            Settings::instance().resetBestPos();
         }
     };
 
@@ -62,12 +57,7 @@ private:
         void fire()
         {
             MCLogger().info() << "Reset times selected.";
-            TrackLoader & tl = TrackLoader::instance();
-            for (unsigned int i = 0; i < tl.tracks(); i++)
-            {
-                Track & track = *tl.track(i);
-                Settings::instance().saveLapRecord(track, -1);
-            }
+            Settings::instance().resetLapRecords();
         }
     };
 
@@ -84,9 +74,9 @@ private:
                 if (track.trackData().index() > 0)
                 {
                     track.trackData().setIsLocked(true);
-                    Settings::instance().saveTrackUnlockStatus(track);
                 }
             }
+            Settings::instance().resetTrackUnlockStatuses();
         }
     };
 
@@ -98,14 +88,17 @@ private:
         case RT_POSITIONS:
             MenuManager::instance().pushMenu("confirmationMenu");
             m_menu.setAcceptAction(m_resetPositions);
+            m_menu.setCurrentIndex(1);
             break;
         case RT_TIMES:
             MenuManager::instance().pushMenu("confirmationMenu");
             m_menu.setAcceptAction(m_resetTimes);
+            m_menu.setCurrentIndex(1);
             break;
         case RT_TRACKS:
             MenuManager::instance().pushMenu("confirmationMenu");
             m_menu.setAcceptAction(m_resetTracks);
+            m_menu.setCurrentIndex(1);
             break;
         default:
             break;

@@ -62,6 +62,17 @@ int Settings::loadLapRecord(const Track & track) const
     return time;
 }
 
+void Settings::resetLapRecords()
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_LAP);
+    settings.remove("");
+    settings.endGroup();
+}
+
 void Settings::saveBestPos(const Track & track, int pos)
 {
     // Open settings file
@@ -84,6 +95,17 @@ int Settings::loadBestPos(const Track & track) const
     settings.endGroup();
 
     return pos;
+}
+
+void Settings::resetBestPos()
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_POS);
+    settings.remove("");
+    settings.endGroup();
 }
 
 void Settings::saveTrackUnlockStatus(const Track & track)
@@ -110,4 +132,15 @@ bool Settings::loadTrackUnlockStatus(const Track & track) const
     settings.endGroup();
 
     return status;
+}
+
+void Settings::resetTrackUnlockStatuses()
+{
+    // Open settings file
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
+    settings.remove("");
+    settings.endGroup();
 }

@@ -29,16 +29,16 @@ public:
     static Settings & instance();
 
     void saveLapRecord(const Track & track, int msecs);
-
     int loadLapRecord(const Track & track) const;
+    void resetLapRecords();
 
     void saveBestPos(const Track & track, int pos);
-
     int loadBestPos(const Track & track) const;
+    void resetBestPos();
 
     void saveTrackUnlockStatus(const Track & track);
-
     bool loadTrackUnlockStatus(const Track & track) const;
+    void resetTrackUnlockStatuses();
 
 private:
 
