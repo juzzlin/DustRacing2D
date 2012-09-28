@@ -52,6 +52,7 @@ public:
         , restitution(0.1)
         , dragLinear(0.5)
         , dragQuadratic(2.5)
+        , numberPos(-7, 0)
         , leftFrontTirePos(15, 11)
         , rightFrontTirePos(15, -11)
         , leftRearTirePos(-15, 11)
@@ -75,6 +76,7 @@ public:
         MCFloat dragLinear;
         MCFloat dragQuadratic;
 
+        MCVector2dF numberPos;
         MCVector2dF leftFrontTirePos;
         MCVector2dF rightFrontTirePos;
         MCVector2dF leftRearTirePos;
@@ -151,6 +153,8 @@ public:
     //! Get location of the right rear tire.
     MCVector3dF rightRearTireLocation() const;
 
+    MCVector3dF numberLocation() const;
+
     bool isHuman() const;
 
 private:
@@ -184,6 +188,7 @@ private:
     bool                  m_turnRight;
     MCUint                m_index;
     MCFloat               m_tireAngle;
+    MCSurface           & m_number;
     MCSurface           & m_frontTire;
     MCSurface           & m_brakeGlow;
     MCFloat               m_length;

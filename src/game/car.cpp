@@ -36,6 +36,10 @@
 #include <MCTypes>
 #include <MCVector2d>
 
+#include <string>
+
+static std::string NUMBER_SURFACE_HANDLE[10] = {"1", "9", "8", "7", "6", "5", "4", "3", "2", "x"};
+
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
 , m_desc(desc)
@@ -52,6 +56,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_turnRight(false)
 , m_index(index)
 , m_tireAngle(0)
+, m_number(MCTextureManager::instance().surface(NUMBER_SURFACE_HANDLE[index]))
 , m_frontTire(MCTextureManager::instance().surface("frontTire"))
 , m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
 , m_speedInKmh(0)
@@ -71,6 +76,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     preCreateParticles();
 
+    m_number.setShaderProgram(&Renderer::instance().masterProgram());
     m_brakeGlow.setShaderProgram(&Renderer::instance().masterProgram());
     m_frontTire.setShaderProgram(&Renderer::instance().masterProgram());
 }
@@ -302,6 +308,13 @@ MCVector3dF Car::rightFrontTireLocation() const
     return pos + MCVector2dF(location());
 }
 
+MCVector3dF Car::numberLocation() const
+{
+    MCVector2dF pos;
+    MCTrigonom::rotatedVector(m_desc.numberPos, pos, angle());
+    return pos + MCVector2dF(location());
+}
+
 MCVector3dF Car::leftRearTireLocation() const
 {
     MCVector2dF pos;
@@ -393,6 +406,8 @@ void Car::render(MCCamera *p)
             doSmoke(smokeLocation, 0.75, 0.75, 0.75, 0.5);
         }
     }
+
+    m_number.render(p, numberLocation(), angle() + 90);
 }
 
 void Car::collisionEvent(MCCollisionEvent & event)
