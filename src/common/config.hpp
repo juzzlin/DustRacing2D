@@ -28,6 +28,10 @@ public:
 
         //! "Company" name used in QSettings.
         static const char * QSETTINGS_COMPANY_NAME;
+
+        //! Path used to search "3rd party" race tracks under the home dir:
+        //! ~/TRACK_SEARCH_PATH/
+        static const char * TRACK_SEARCH_PATH;
     };
 
     //! Editor-specific config data.

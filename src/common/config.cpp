@@ -21,6 +21,7 @@
 // from the build system.
 const char * Config::Common::dataPath                    = DATA_PATH;
 const char * Config::Common::QSETTINGS_COMPANY_NAME      = "DustRacing";
+const char * Config::Common::TRACK_SEARCH_PATH           = "DustRacingTracks";
 
 // **** Editor variables ****
 const char * Config::Editor::SELECT_PATH                 = ":/cursor.png";

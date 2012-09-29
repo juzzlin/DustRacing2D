@@ -78,6 +78,9 @@ public slots:
     //! End marking the route.
     void endSetRoute();
 
+    //! \reimp
+    void setVisible(bool visible);
+
 protected:
 
     //! \reimp
@@ -97,6 +100,7 @@ private slots:
     void saveTrack();
     void saveAsTrack();
     void showAboutDlg();
+    void showTip();
     void updateScale(int value);
 
 private:

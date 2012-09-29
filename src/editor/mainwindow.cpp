@@ -113,8 +113,27 @@ MainWindow::MainWindow(QString trackFile)
     else
     {
         // Print a welcome message
-        console(tr("Choose 'File -> New' or 'File -> Open' to start.."));
+        console(tr("Choose 'File -> New' or 'File -> Open' to start."));
     }
+}
+
+void MainWindow::setVisible(bool visible)
+{
+    QWidget::setVisible(visible);
+
+    if (visible)
+    {
+        showTip();
+    }
+}
+
+void MainWindow::showTip()
+{
+    QMessageBox::information(
+        this,
+        tr("Save your work to correct location."),
+        QString(tr("To make the game find your circuits, save them to %1%2%3%2"))
+            .arg(QDir::homePath()).arg(QDir::separator()).arg(Config::Common::TRACK_SEARCH_PATH));
 }
 
 void MainWindow::init()
