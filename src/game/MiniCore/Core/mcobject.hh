@@ -423,6 +423,9 @@ protected:
 
 private:
 
+    //! TODO: Replace this with constructor chaining when GCC supports.
+    void init(const std::string & typeId);
+
     //! Set index in worlds' object vector.
     //! Used by MCWorld.
     void setIndex(int index);

@@ -40,118 +40,66 @@ MCObject::TimerEventObjectsList MCObject::timerEventObjects;
 
 static const MCFloat DAMPING = 0.999;
 
-// TODO: Use constructor chaining when GCC supports it
 MCObject::MCObject(const std::string & typeId)
-: m_typeID(registerType(typeId))
-, m_time(0)
-, m_invMass(std::numeric_limits<MCFloat>::max())
-, m_mass(0)
-, m_restitution(0.5)
-, m_xyFriction(0.0)
-, m_angle(0)
-, m_angularAcceleration(0.0)
-, m_angularVelocity(0.0)
-, m_angularImpulse(0.0)
-, m_maximumAngularVelocity(4 * 3.1415)
-, m_maximumVelocity(-1)
-, m_torque(0.0)
-, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
-, m_momentOfInertia(0)
-, m_layer(0)
-, m_index(-1)
-, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
-, m_initialAngle(0)
-, pShape(nullptr)
-, damping(DAMPING)
-, timerEventObjectsIndex(-1)
-, m_sleeping(false)
-, m_physicsObject(true)
-, m_stationary(false)
-, m_renderable(true)
-, m_bypassCollisions(false)
-, m_hasShadow(true)
-, m_removing(false)
-, m_renderOutline(false)
-, m_isParticle(false)
-{}
-
-// TODO: Use constructor chaining when GCC supports it
-MCObject::MCObject(MCShape * pShape, const std::string & typeId)
-: m_typeID(registerType(typeId))
-, m_time(0)
-, m_invMass(std::numeric_limits<MCFloat>::max())
-, m_mass(0)
-, m_restitution(0.5)
-, m_xyFriction(0.0)
-, m_angle(0)
-, m_angularAcceleration(0.0)
-, m_angularVelocity(0.0)
-, m_angularImpulse(0.0)
-, m_maximumAngularVelocity(4 * 3.1415)
-, m_maximumVelocity(-1)
-, m_torque(0.0)
-, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
-, m_momentOfInertia(0)
-, m_layer(0)
-, m_index(-1)
-, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
-, m_initialAngle(0)
-, pShape(nullptr)
-, damping(DAMPING)
-, timerEventObjectsIndex(-1)
-, m_sleeping(false)
-, m_physicsObject(true)
-, m_stationary(false)
-, m_renderable(true)
-, m_bypassCollisions(false)
-, m_hasShadow(true)
-, m_removing(false)
-, m_renderOutline(false)
-, m_isParticle(false)
 {
+    init(typeId);
+}
+
+MCObject::MCObject(MCShape * pShape, const std::string & typeId)
+{
+    init(typeId);
+
     setShape(pShape);
 }
 
-// TODO: Use constructor chaining when GCC supports it
 MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
-: m_typeID(registerType(typeId))
-, m_time(0)
-, m_invMass(std::numeric_limits<MCFloat>::max())
-, m_mass(0)
-, m_restitution(0.5)
-, m_xyFriction(0.0)
-, m_angle(0)
-, m_angularAcceleration(0.0)
-, m_angularVelocity(0.0)
-, m_angularImpulse(0.0)
-, m_maximumAngularVelocity(4 * 3.1415)
-, m_maximumVelocity(-1)
-, m_torque(0.0)
-, m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
-, m_momentOfInertia(0)
-, m_layer(0)
-, m_index(-1)
-, m_i0(0), m_i1(0), m_j0(0), m_j1(0)
-, m_initialAngle(0)
-, pShape(nullptr)
-, damping(DAMPING)
-, timerEventObjectsIndex(-1)
-, m_sleeping(false)
-, m_physicsObject(true)
-, m_stationary(false)
-, m_renderable(true)
-, m_bypassCollisions(false)
-, m_hasShadow(true)
-, m_removing(false)
-, m_renderOutline(false)
-, m_isParticle(false)
 {
+    init(typeId);
+
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(
         new MCSurfaceView(typeId, pSurface),
         pSurface ? pSurface->width() : 0,
         pSurface ? pSurface->height() : 0);
     setShape(rectShape);
+}
+
+void MCObject::init(const std::string & typeId)
+{
+    m_typeID                 = registerType(typeId);
+    m_time                   = 0;
+    m_invMass                = std::numeric_limits<MCFloat>::max();
+    m_mass                   = 0;
+    m_restitution            = 0.5;
+    m_xyFriction             = 0.0;
+    m_angle                  = 0;
+    m_angularAcceleration    = 0.0;
+    m_angularVelocity        = 0.0;
+    m_angularImpulse         = 0.0;
+    m_maximumAngularVelocity = 4 * 3.1415;
+    m_maximumVelocity        = -1;
+    m_torque                 = 0.0;
+    m_invMomentOfInertia     = std::numeric_limits<MCFloat>::max();
+    m_momentOfInertia        = 0;
+    m_layer                  = 0;
+    m_index                  = -1;
+    m_i0                     = 0;
+    m_i1                     = 0;
+    m_j0                     = 0;
+    m_j1                     = 0;
+    m_initialAngle           = 0;
+    pShape                   = nullptr;
+    damping                  = DAMPING;
+    timerEventObjectsIndex   = -1;
+    m_sleeping               = false;
+    m_physicsObject          = true;
+    m_stationary             = false;
+    m_renderable             = true;
+    m_bypassCollisions       = false;
+    m_hasShadow              = true;
+    m_removing               = false;
+    m_renderOutline          = false;
+    m_isParticle             = false;
 }
 
 void MCObject::setFlag(MCUint flag, bool enable)
