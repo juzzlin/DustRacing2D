@@ -110,7 +110,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
             // Introduce some variance to the power of computer players so that the
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
-            desc.power = 3 * humanPower / 5 + i * humanPower / numCars;
+            desc.power = humanPower / 2 + (i + 1) * humanPower / numCars;
 
             if (i == numCars - 1)
             {
