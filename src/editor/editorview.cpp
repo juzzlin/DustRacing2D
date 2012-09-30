@@ -209,6 +209,7 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
     {
         object.setZValue(object.zValue() + 1);
         editorData.setDragAndDropObject(&object);
+        editorData.setSelectedObject(&object);
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
@@ -329,6 +330,34 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
     handleTileDragRelease(event);
     handleObjectDragRelease(event);
     handleTargetNodeDragRelease(event);
+}
+
+void EditorView::keyPressEvent(QKeyEvent * event)
+{
+    const EditorData & editorData = MainWindow::instance()->editorData();
+    if (Object * object = editorData.selectedObject())
+    {
+        if (!event->isAutoRepeat())
+        {
+            switch (event->key())
+            {
+            case Qt::Key_Left:
+                object->setPos(object->pos().x() - 1, object->pos().y());
+                break;
+            case Qt::Key_Right:
+                object->setPos(object->pos().x() + 1, object->pos().y());
+                break;
+            case Qt::Key_Up:
+                object->setPos(object->pos().x(), object->pos().y() - 1);
+                break;
+            case Qt::Key_Down:
+                object->setPos(object->pos().x(), object->pos().y() + 1);
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 void EditorView::handleTileDragRelease(QMouseEvent * event)

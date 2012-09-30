@@ -48,6 +48,9 @@ protected:
     //! \reimp
     void mouseReleaseEvent(QMouseEvent * event);
 
+    //! \reimp
+    void keyPressEvent(QKeyEvent * event);
+
 private slots:
 
     void doRotateTile90CW();

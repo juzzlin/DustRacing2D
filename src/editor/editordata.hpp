@@ -103,6 +103,12 @@ public:
     //! Returns the object being drag'n'dropped or nullptr.
     Object * dragAndDropObject() const;
 
+    //! Set selected object.
+    void setSelectedObject(Object * object);
+
+    //! Returns the selected object or nullptr.
+    Object * selectedObject() const;
+
     //! Set target node that is being drag'n'dropped.
     void setDragAndDropTargetNode(TargetNode * tnode);
 
@@ -144,6 +150,7 @@ private:
     EditorMode                       m_mode;
     TrackTile                      * m_dragAndDropSourceTile;
     Object                         * m_dragAndDropObject;
+    Object                         * m_selectedObject;
     TargetNode                     * m_dragAndDropTargetNode;
     QPointF                          m_dragAndDropSourcePos;
     MainWindow                     * m_mainWindow;

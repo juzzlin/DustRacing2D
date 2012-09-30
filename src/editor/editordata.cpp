@@ -29,6 +29,7 @@ EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
 , m_dragAndDropSourceTile(nullptr)
 , m_dragAndDropObject(nullptr)
+, m_selectedObject(nullptr)
 , m_dragAndDropTargetNode(nullptr)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
@@ -191,6 +192,16 @@ Object * EditorData::dragAndDropObject() const
     return m_dragAndDropObject;
 }
 
+void EditorData::setSelectedObject(Object * object)
+{
+    m_selectedObject = object;
+}
+
+Object * EditorData::selectedObject() const
+{
+    return m_selectedObject;
+}
+
 void EditorData::setDragAndDropTargetNode(TargetNode * tnode)
 {
     m_dragAndDropTargetNode = tnode;
@@ -288,6 +299,9 @@ void EditorData::removeObjectsFromScene()
             }
         }
     }
+
+    m_selectedObject    = nullptr;
+    m_dragAndDropObject = nullptr;
 }
 
 void EditorData::clear()
@@ -311,6 +325,9 @@ void EditorData::clear()
     m_mainWindow->console(QString(QObject::tr("Tiles cleared.")));
 
     clearRoute();
+
+    m_selectedObject    = nullptr;
+    m_dragAndDropObject = nullptr;
 }
 
 void EditorData::clearRoute()
