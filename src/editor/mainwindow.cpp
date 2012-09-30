@@ -466,8 +466,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
             h = h > 0 ? h : objectData.pixmap.height();
 
             QApplication::restoreOverrideCursor();
-            QApplication::setOverrideCursor(
-                objectData.pixmap.scaled(w, h));
+            QApplication::setOverrideCursor(QCursor(QPixmap(":/cursor2.png")));
             m_editorData->setMode(EditorData::EM_ADD_OBJECT);
         }
     }

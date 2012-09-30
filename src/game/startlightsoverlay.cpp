@@ -18,12 +18,12 @@
 #include "renderer.hpp"
 
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
-: m_startLightOn(MCTextureManager::instance().surface("startLightOn"))
-, m_startLightOff(MCTextureManager::instance().surface("startLightOff"))
-, m_startLightGlow(MCTextureManager::instance().surface("startLightGlow"))
+: m_startLightOn(MCSurfaceManager::instance().surface("startLightOn"))
+, m_startLightOff(MCSurfaceManager::instance().surface("startLightOff"))
+, m_startLightGlow(MCSurfaceManager::instance().surface("startLightGlow"))
 , m_model(model)
 {
     m_startLightOn.setShaderProgram(&Renderer::instance().masterProgram());

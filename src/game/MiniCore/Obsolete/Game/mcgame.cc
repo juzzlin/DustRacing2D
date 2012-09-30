@@ -23,7 +23,7 @@
 #include "mcworld.hh"
 #include "mccast.hh"
 #include "mcsoundmanager.hh"
-#include "mctexturemanager.hh"
+#include "mcsurfacemanager.hh"
 #include "mctrigonom.hh"
 
 #include <iostream>

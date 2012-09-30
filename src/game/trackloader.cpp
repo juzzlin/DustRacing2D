@@ -36,14 +36,14 @@
 #include <MCLogger>
 #include <MCObjectFactory>
 #include <MCShapeView>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 
 #include <algorithm>
 #include <cassert>
 
 TrackLoader * TrackLoader::m_instance = nullptr;
 
-TrackLoader::TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory)
+TrackLoader::TrackLoader(MCSurfaceManager & textureManager, MCObjectFactory  & objectFactory)
 : m_textureManager(textureManager)
 , m_objectFactory(objectFactory)
 , m_paths()
@@ -323,7 +323,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // the coordinate system is y-wise mirrored in the editor.
     const int h = newData.map().rows() * TrackTile::TILE_H;
 
-    // TODO: A separate config file for these
+    // TODO: Eliminate copy-paste initializations.
     if (role == "brake")
     {
         MCSurfaceObjectData data("BRAKE");
@@ -339,8 +339,25 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "grandstand")
+    {
+        MCSurfaceObjectData data("GS");
+        data.setStationary(true);
+        data.setSurfaceId("grandstand");
+        data.setRestitution(0.5);
+        data.setXYFriction(1.0);
+        data.setBatchMode(true);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(MCVector2dF(x, h - y));
+        object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
+
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
     else if (role == "plant")
@@ -358,8 +375,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
     else if (role == "rock")
@@ -377,8 +393,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
     else if (role == "tire")
@@ -396,8 +411,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
     else if (role == "tree")
@@ -421,8 +435,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
     else if (role == "wall")
@@ -440,8 +453,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
 
-        // Wrap the MCObject in a TrackObject and add to
-        // the TrackData
+        // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
 }

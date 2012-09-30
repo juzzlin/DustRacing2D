@@ -21,7 +21,7 @@
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
-#include "mctexturemanager.hh"
+#include "mcsurfacemanager.hh"
 #include "mcsurfaceview.hh"
 
 #include <cassert>
@@ -35,20 +35,20 @@ class MCObjectData;
 class MCObjectFactoryImpl
 {
 private:
-    MCObjectFactoryImpl(MCTextureManager & tm);
+    MCObjectFactoryImpl(MCSurfaceManager & tm);
     void setCommonProperties(
         MCObject & object, const MCObjectData & data) const;
     std::vector<std::shared_ptr<MCObject> > objects;
-    MCTextureManager & textureManager;
+    MCSurfaceManager & textureManager;
     friend class MCObjectFactory;
 };
 
-MCObjectFactory::MCObjectFactory(MCTextureManager & tm)
+MCObjectFactory::MCObjectFactory(MCSurfaceManager & tm)
 : m_pImpl(new MCObjectFactoryImpl(tm))
 {
 }
 
-MCObjectFactoryImpl::MCObjectFactoryImpl(MCTextureManager & tm)
+MCObjectFactoryImpl::MCObjectFactoryImpl(MCSurfaceManager & tm)
 : textureManager(tm)
 {
 }

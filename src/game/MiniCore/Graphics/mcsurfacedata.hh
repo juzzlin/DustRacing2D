@@ -17,8 +17,8 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCTEXTUREDATA_HH
-#define MCTEXTUREDATA_HH
+#ifndef MCSURFACEDATA_HH
+#define MCSURFACEDATA_HH
 
 #include "mctypes.hh"
 #include "mcvector2d.hh"
@@ -26,10 +26,10 @@
 #include <GL/gl.h> // For GLenum
 #include <string>
 
-//! Texture data structure used by MCTextureParser.
-struct MCTextureData
+//! Surface data structure used by MCTextureParser.
+struct MCSurfaceData
 {
-    MCTextureData()
+    MCSurfaceData()
     : centerSet(false)
     , heightSet(false)
     , widthSet(false)
@@ -39,6 +39,10 @@ struct MCTextureData
     , xAxisMirror(false)
     , minFilterSet(false)
     , magFilterSet(false)
+    , z0(0)
+    , z1(0)
+    , z2(0)
+    , z3(0)
     {}
 
     //! Handle of the texture
@@ -124,6 +128,18 @@ struct MCTextureData
 
     //! True, if mag filter was set
     bool magFilterSet;
+
+    //! Z-coordinate of vertex[0].
+    int z0;
+
+    //! Z-coordinate of vertex[1].
+    int z1;
+
+    //! Z-coordinate of vertex[2].
+    int z2;
+
+    //! Z-coordinate of vertex[3].
+    int z3;
 };
 
-#endif // MCTEXTUREDATA_HH
+#endif // MCSURFACEDATA_HH

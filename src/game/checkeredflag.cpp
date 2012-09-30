@@ -16,7 +16,7 @@
 #include "checkeredflag.hpp"
 
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTrigonom>
 
 static const int   ROWS             = 6;

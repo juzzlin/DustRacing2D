@@ -25,7 +25,7 @@ class TargetNodeBase;
 class Track;
 class TrackData;
 class TrackTileBase;
-class MCTextureManager;
+class MCSurfaceManager;
 class MCObjectFactory;
 class QDomElement;
 
@@ -41,7 +41,7 @@ public:
     //! tile textures.
     //! \param objectFactory  Object factory that creates objects other
     //! than tiles.
-    TrackLoader(MCTextureManager & textureManager, MCObjectFactory  & objectFactory);
+    TrackLoader(MCSurfaceManager & textureManager, MCObjectFactory  & objectFactory);
 
     //! Destructor.
     ~TrackLoader();
@@ -80,7 +80,7 @@ private:
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);
 
-    MCTextureManager   & m_textureManager;
+    MCSurfaceManager   & m_textureManager;
     MCObjectFactory    & m_objectFactory;
     std::vector<QString> m_paths;
     std::vector<Track *> m_tracks;

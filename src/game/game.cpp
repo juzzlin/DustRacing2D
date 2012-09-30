@@ -30,7 +30,7 @@
 #include <MCCamera>
 #include <MCLogger>
 #include <MCObjectFactory>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTextureFontManager>
 
 #include <QDir>
@@ -49,7 +49,7 @@ Game::Game()
 : m_stateMachine(new StateMachine)
 , m_renderer(nullptr)
 , m_scene(nullptr)
-, m_textureManager(new MCTextureManager)
+, m_textureManager(new MCSurfaceManager)
 , m_textureFontManager(new MCTextureFontManager(*m_textureManager))
 , m_objectFactory(new MCObjectFactory(*m_textureManager))
 , m_trackLoader(new TrackLoader(*m_textureManager, *m_objectFactory))

@@ -25,7 +25,7 @@
 #include "mcobject.hh"
 
 class MCObjectFactoryImpl;
-class MCTextureManager;
+class MCSurfaceManager;
 
 //! MCObjectFactory is a factory class that can be used when loading objects from file.
 class MCObjectFactory
@@ -33,7 +33,7 @@ class MCObjectFactory
 public:
 
     //! Constructor.
-    MCObjectFactory(MCTextureManager & tm);
+    MCObjectFactory(MCSurfaceManager & tm);
 
     //! Destructor
     virtual ~MCObjectFactory();

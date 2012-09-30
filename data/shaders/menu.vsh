@@ -13,18 +13,27 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MAINMENU_HPP
-#define MAINMENU_HPP
+attribute vec4 position;
+attribute vec4 scale;
+attribute float angle;
 
-#include "surfacemenu.hpp"
-
-//! The main menu of the game.
-class MainMenu : public SurfaceMenu
+void main()
 {
-public:
+    float r = angle * 3.1415 / 180.0;
+    mat4  m = mat4(
+        cos(r),     sin(r),     0.0,        0.0,
+        -sin(r),    cos(r),     0.0,        0.0,
+        0.0,        0.0,        1.0,        0.0,
+        position.x, position.y, position.z, 1.0);
 
-    //! Constructor.
-    MainMenu(std::string id, int width, int height);
-};
+    // Normal MVP transform
+    vec4 scaled = gl_Vertex * scale;
+    gl_Position = gl_ModelViewProjectionMatrix * m * scaled;
+    
+    // Copy the primary color
+    gl_FrontColor = gl_Color;
 
-#endif // MAINMENU_HPP
+    // Copy texture coorinates
+    gl_TexCoord[0] = gl_MultiTexCoord0;
+}
+

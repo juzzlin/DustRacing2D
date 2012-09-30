@@ -25,7 +25,7 @@
 #include <MCGLShaderProgram>
 #include <MCLogger>
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTrigonom>
 #include <MCWorld>
 
@@ -50,6 +50,7 @@ Renderer::Renderer(QWidget * parent)
 , m_tileProgram(nullptr)
 , m_masterProgram(nullptr)
 , m_masterShadowProgram(nullptr)
+, m_menuProgram(nullptr)
 , m_textProgram(nullptr)
 , m_textShadowProgram(nullptr)
 , m_particleProgram(nullptr)
@@ -97,6 +98,13 @@ void Renderer::loadShaders()
         std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
     m_tileProgram->link();
 
+    m_menuProgram = new ShaderProgram(context());
+    m_menuProgram->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/menu.fsh");
+    m_menuProgram->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/menu.vsh");
+    m_menuProgram->link();
+
     m_masterProgram = new ShaderProgram(context());
     m_masterProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master.fsh");
@@ -108,7 +116,7 @@ void Renderer::loadShaders()
     m_masterShadowProgram->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master2dShadow.fsh");
     m_masterShadowProgram->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/master.vsh");
+        std::string(Config::Common::dataPath) + "/shaders/master2dShadow.vsh");
     m_masterShadowProgram->link();
 
     m_textProgram = new ShaderProgram(context());
@@ -158,6 +166,11 @@ MCGLShaderProgram & Renderer::masterProgram()
 MCGLShaderProgram & Renderer::masterShadowProgram()
 {
     return *m_masterShadowProgram;
+}
+
+MCGLShaderProgram & Renderer::menuProgram()
+{
+    return *m_menuProgram;
 }
 
 MCGLShaderProgram & Renderer::textProgram()
@@ -248,6 +261,7 @@ Renderer::~Renderer()
     delete m_tileProgram;
     delete m_masterProgram;
     delete m_masterShadowProgram;
+    delete m_menuProgram;
     delete m_textProgram;
     delete m_textShadowProgram;
     delete m_particleProgram;

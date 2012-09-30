@@ -18,16 +18,16 @@
 #include "shaderprogram.hpp"
 
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCVectorAnimation>
 
 static MCVector3dF       fade;
 static MCVectorAnimation fadeAnim;
 
 Intro::Intro()
-: m_back(MCTextureManager::instance().surface("intro"))
+: m_back(MCSurfaceManager::instance().surface("intro"))
 {
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
+    m_back.setShaderProgram(&Renderer::instance().textProgram());
     m_back.setColor(.9, .9, .9, 1.0);
 }
 
@@ -57,8 +57,7 @@ void Intro::render()
     const int w2 = width()  / 2;
     const int h2 = height() / 2;
 
-    Renderer::instance().masterProgram().setFadeValue(fade.i());
-
+    m_back.shaderProgram()->setFadeValue(fade.i());
     m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
 }
 

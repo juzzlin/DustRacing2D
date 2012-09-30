@@ -66,6 +66,8 @@ public:
 
     MCGLShaderProgram & masterShadowProgram();
 
+    MCGLShaderProgram & menuProgram();
+
     MCGLShaderProgram & textProgram();
 
     MCGLShaderProgram & textShadowProgram();
@@ -107,6 +109,7 @@ private:
     MCGLShaderProgram * m_tileProgram;
     MCGLShaderProgram * m_masterProgram;
     MCGLShaderProgram * m_masterShadowProgram;
+    MCGLShaderProgram * m_menuProgram;
     MCGLShaderProgram * m_textProgram;
     MCGLShaderProgram * m_textShadowProgram;
     MCGLShaderProgram * m_particleProgram;

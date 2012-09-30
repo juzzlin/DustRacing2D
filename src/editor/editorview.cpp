@@ -342,16 +342,16 @@ void EditorView::keyPressEvent(QKeyEvent * event)
             switch (event->key())
             {
             case Qt::Key_Left:
-                object->setPos(object->pos().x() - 1, object->pos().y());
+                object->setLocation(QPointF(object->location().x() - 1, object->location().y()));
                 break;
             case Qt::Key_Right:
-                object->setPos(object->pos().x() + 1, object->pos().y());
+                object->setLocation(QPointF(object->location().x() + 1, object->location().y()));
                 break;
             case Qt::Key_Up:
-                object->setPos(object->pos().x(), object->pos().y() - 1);
+                object->setLocation(QPointF(object->location().x(), object->location().y() - 1));
                 break;
             case Qt::Key_Down:
-                object->setPos(object->pos().x(), object->pos().y() + 1);
+                object->setLocation(QPointF(object->location().x(), object->location().y() + 1));
                 break;
             default:
                 break;

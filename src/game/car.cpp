@@ -31,7 +31,7 @@
 #include <MCShape>
 #include <MCSurface>
 #include <MCSurfaceParticle>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTrigonom>
 #include <MCTypes>
 #include <MCVector2d>
@@ -56,9 +56,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_turnRight(false)
 , m_index(index)
 , m_tireAngle(0)
-, m_number(MCTextureManager::instance().surface(NUMBER_SURFACE_HANDLE[index]))
-, m_frontTire(MCTextureManager::instance().surface("frontTire"))
-, m_brakeGlow(MCTextureManager::instance().surface("brakeGlow"))
+, m_number(MCSurfaceManager::instance().surface(NUMBER_SURFACE_HANDLE[index]))
+, m_frontTire(MCSurfaceManager::instance().surface("frontTire"))
+, m_brakeGlow(MCSurfaceManager::instance().surface("brakeGlow"))
 , m_speedInKmh(0)
 , m_dx(0)
 , m_dy(0)
@@ -141,7 +141,7 @@ void Car::preCreateParticles()
     {
         MCParticle * particle = new MCSurfaceParticle("SMOKE");
 
-        particle->setSurface(&MCTextureManager::instance().surface("smoke"));
+        particle->setSurface(&MCSurfaceManager::instance().surface("smoke"));
         particle->surface()->setShaderProgram(&Renderer::instance().masterProgram());
         particle->setFreeList(m_freeList2);
 
@@ -416,6 +416,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
     if (m_speedInKmh > 25)
     {
         if (event.collidingObject().typeID() == typeID() ||
+            event.collidingObject().typeID() == MCObject::typeID("GS") ||
             event.collidingObject().typeID() == MCObject::typeID("WALL") ||
             event.collidingObject().typeID() == MCObject::typeID("ROCK"))
         {

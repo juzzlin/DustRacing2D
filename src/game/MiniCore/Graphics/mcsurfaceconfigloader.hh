@@ -17,39 +17,39 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCTEXTURECONFIGLOADER_HH
-#define MCTEXTURECONFIGLOADER_HH
+#ifndef MCSURFACECONFIGLOADER_HH
+#define MCSURFACECONFIGLOADER_HH
 
 #include <string>
 #include <vector>
 
 #include <GL/gl.h> // For GLenum.
 
-class MCTextureData;
+class MCSurfaceData;
 
-//! Manages the texture config loading.
-class MCTextureConfigLoader
+//! Manages loading of the surface config.
+class MCSurfaceConfigLoader
 {
 public:
 
     //! Constructor.
-    MCTextureConfigLoader();
+    MCSurfaceConfigLoader();
 
     //! Destructor.
-    ~MCTextureConfigLoader();
+    ~MCSurfaceConfigLoader();
 
     //! Set file path.
     void setConfigPath(const std::string & filePath);
 
-    //! Load all textures found in the current filePath.
+    //! Load all surfaces found in the current filePath.
     //! \return true if succeeded.
-    bool loadTextures();
+    bool load();
 
-    //! Get texture count.
-    unsigned int textures() const;
+    //! Get surface count.
+    unsigned int surfaceCount() const;
 
-    //! Get a texture of given index.
-    MCTextureData & texture(unsigned int index) const;
+    //! Get surface data of given index.
+    MCSurfaceData & surface(unsigned int index) const;
 
 private:
 
@@ -57,7 +57,7 @@ private:
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 
     std::string m_filePath;
-    std::vector<MCTextureData *> m_textures;
+    std::vector<MCSurfaceData *> m_surfaces;
 };
 
-#endif // MCTEXTURECONFIGLOADER_HH
+#endif // MCSURFACECONFIGLOADER_HH

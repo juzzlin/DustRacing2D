@@ -28,13 +28,13 @@
 
 class MCTextureFont;
 class MCTextureFontData;
-class MCTextureManager;
+class MCSurfaceManager;
 
 /*! A singleton manager for textured monospace fonts.
  *
  *  Example config file for a MCTextureFont containing glyphs
  *  of a monospace font. Surface "monospace" refers to a
- *  MCSurface handle loaded by MCTextureManager:
+ *  MCSurface handle loaded by MCSurfaceManager:
  *
  *  <?xml version="1.0"?>
  *  <!-- Config file for texture mapped fonts. -->
@@ -55,7 +55,7 @@ class MCTextureFontManager
 public:
 
     //! Constructor.
-    MCTextureFontManager(const MCTextureManager & textureManager);
+    MCTextureFontManager(const MCSurfaceManager & surfaceManager);
 
     //! Destructor.
     virtual ~MCTextureFontManager();
@@ -90,7 +90,7 @@ private:
     typedef std::unordered_map<std::string, MCTextureFont *> FontHash;
     FontHash m_fontHash;
 
-    const MCTextureManager & m_textureManager;
+    const MCSurfaceManager & m_surfaceManager;
     static MCTextureFontManager * m_pInstance;
 };
 

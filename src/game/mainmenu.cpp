@@ -22,7 +22,7 @@
 
 #include <MCLogger>
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 
 #include <QApplication>
 
@@ -77,8 +77,7 @@ class SettingsAction : public MenuItemAction
 };
 
 MainMenu::MainMenu(std::string id, int width, int height)
-: Menu(id, width, height, Menu::MS_VERTICAL_LIST)
-, m_back(MCTextureManager::instance().surface("mainMenuBack"))
+: SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
 {
     MenuItem * play = new MenuItem(width, height / 5, "Play");
     play->setView(new MenuItemView(*play), true);
@@ -105,15 +104,4 @@ MainMenu::MainMenu(std::string id, int width, int height)
     addItem(*settings, true);
     addItem(*help,     true);
     addItem(*play,     true);
-
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
-    m_back.setColor(0.5, 0.5, 0.5, 1.0);
-}
-
-void MainMenu::render()
-{
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
-    Menu::render();
 }

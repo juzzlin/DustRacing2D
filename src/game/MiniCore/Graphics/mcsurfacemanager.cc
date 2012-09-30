@@ -19,8 +19,8 @@
 
 #include "mctypes.hh"
 #include "mcsurface.hh"
-#include "mctextureconfigloader.hh"
-#include "mctexturemanager.hh"
+#include "mcsurfaceconfigloader.hh"
+#include "mcsurfacemanager.hh"
 
 #include <QDir>
 #include <QGLWidget>
@@ -28,19 +28,19 @@
 
 #include <cassert>
 
-MCTextureManager * MCTextureManager::m_pInstance = nullptr;
+MCSurfaceManager * MCSurfaceManager::m_pInstance = nullptr;
 
-//! Implementation class for MCTextureManager
-class MCTextureManagerImpl
+//! Implementation class for MCSurfaceManager
+class MCSurfaceManagerImpl
 {
     //! Constructor.
-    MCTextureManagerImpl();
+    MCSurfaceManagerImpl();
 
     //! Destructor.
-    ~MCTextureManagerImpl();
+    ~MCSurfaceManagerImpl();
 
     //! Creates an OpenGL texture from a QImage + texture meta data
-    void createGLTextureFromImage(const MCTextureData & data, const QImage & image);
+    void createGLTextureFromImage(const MCSurfaceData & data, const QImage & image);
 
     //! Apply given color key (set alpha values on / of).
     void applyColorKey(QImage & textureImage,
@@ -54,14 +54,14 @@ class MCTextureManagerImpl
     typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
     SurfaceHash surfaceMap;
 
-    friend class MCTextureManager;
+    friend class MCSurfaceManager;
 };
 
-MCTextureManagerImpl::MCTextureManagerImpl()
+MCSurfaceManagerImpl::MCSurfaceManagerImpl()
 {
 }
 
-QImage MCTextureManagerImpl::createNearest2PowNImage(const QImage & image)
+QImage MCSurfaceManagerImpl::createNearest2PowNImage(const QImage & image)
 {
     double w = image.width();
     double h = image.height();
@@ -79,8 +79,8 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCTextureManagerImpl::createGLTextureFromImage(
-    const MCTextureData & data, const QImage & image)
+void MCSurfaceManagerImpl::createGLTextureFromImage(
+    const MCSurfaceData & data, const QImage & image)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image.height();
@@ -141,14 +141,12 @@ void MCTextureManagerImpl::createGLTextureFromImage(
         0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 
     // Create a new MCSurface object
-    MCSurface * pSurface = new MCSurface(textureHandle, origW, origH);
+    MCSurface * pSurface =
+        new MCSurface(textureHandle, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Enable alpha blend, if set
-    if (data.alphaBlendSet)
-    {
-        pSurface->setAlphaBlend(
-            true, data.alphaBlend.m_src, data.alphaBlend.m_dst);
-    }
+    pSurface->setAlphaBlend(
+        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
 
     // Set custom center if it was set
     if (data.centerSet)
@@ -160,33 +158,28 @@ void MCTextureManagerImpl::createGLTextureFromImage(
     surfaceMap[data.handle] = pSurface;
 }
 
-void MCTextureManagerImpl::applyColorKey(QImage & textureImage,
+void MCSurfaceManagerImpl::applyColorKey(QImage & textureImage,
     MCUint r, MCUint g, MCUint b) const
 {
     for (int i = 0; i < textureImage.width(); i++)
     {
         for (int j = 0; j < textureImage.height(); j++)
         {
-            if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,
-                b, 2) &&
-                colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,
-                g, 2) &&
-                colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16,
-                r, 2))
+            if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,        b, 2) &&
+                colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,  g, 2) &&
+                colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, r, 2))
             {
-                textureImage.setPixel(i, j, textureImage.pixel(i, j) &
-                    0x00000000);
+                textureImage.setPixel(i, j, textureImage.pixel(i, j) & 0x00000000);
             }
             else
             {
-                textureImage.setPixel(i, j, textureImage.pixel(i, j) |
-                    0xff000000);
+                textureImage.setPixel(i, j, textureImage.pixel(i, j) | 0xff000000);
             }
         }
     }
 }
 
-MCTextureManagerImpl::~MCTextureManagerImpl()
+MCSurfaceManagerImpl::~MCSurfaceManagerImpl()
 {
     // Delete OpenGL textures and Textures
     auto iter(surfaceMap.begin());
@@ -203,32 +196,31 @@ MCTextureManagerImpl::~MCTextureManagerImpl()
     }
 }
 
-MCTextureManager::MCTextureManager()
-: m_pImpl(new MCTextureManagerImpl)
+MCSurfaceManager::MCSurfaceManager()
+: m_pImpl(new MCSurfaceManagerImpl)
 {
-    assert(!MCTextureManager::m_pInstance);
-    MCTextureManager::m_pInstance = this;
+    assert(!MCSurfaceManager::m_pInstance);
+    MCSurfaceManager::m_pInstance = this;
 }
 
-MCTextureManager & MCTextureManager::instance()
+MCSurfaceManager & MCSurfaceManager::instance()
 {
-    assert(MCTextureManager::m_pInstance);
-    return *MCTextureManager::m_pInstance;
+    assert(MCSurfaceManager::m_pInstance);
+    return *MCSurfaceManager::m_pInstance;
 }
 
-void MCTextureManager::load(
+void MCSurfaceManager::load(
     const std::string & fileName, const std::string & baseDataPath) throw (MCException)
 {
-    MCTextureConfigLoader loader;
+    MCSurfaceConfigLoader loader;
     loader.setConfigPath(fileName);
 
     // Parse the texture config file
-    if (loader.loadTextures())
+    if (loader.load())
     {
-        const int numTextures = loader.textures();
-        for (int i = 0; i < numTextures; i++)
+        for (unsigned int i = 0; i < loader.surfaceCount(); i++)
         {
-            const MCTextureData & data = loader.texture(i);
+            const MCSurfaceData & data = loader.surface(i);
 
             // Load image file
             const std::string path =
@@ -254,7 +246,7 @@ void MCTextureManager::load(
     }
 }
 
-MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCException)
+MCSurface & MCSurfaceManager::surface(const std::string & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
     if (m_pImpl->surfaceMap.find(id) == m_pImpl->surfaceMap.end())
@@ -268,7 +260,7 @@ MCSurface & MCTextureManager::surface(const std::string & id) const throw (MCExc
     return *pSurface;
 }
 
-MCTextureManager::~MCTextureManager()
+MCSurfaceManager::~MCSurfaceManager()
 {
     delete m_pImpl;
 }

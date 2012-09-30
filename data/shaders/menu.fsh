@@ -13,18 +13,20 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MAINMENU_HPP
-#define MAINMENU_HPP
+uniform sampler2D texture;
+uniform float     fade;
 
-#include "surfacemenu.hpp"
-
-//! The main menu of the game.
-class MainMenu : public SurfaceMenu
+void main(void)
 {
-public:
-
-    //! Constructor.
-    MainMenu(std::string id, int width, int height);
-};
-
-#endif // MAINMENU_HPP
+    vec4 color = texture2D(texture, gl_TexCoord[0].st);
+    
+    // Alpha test
+    if (color.a < 0.1)
+    {
+        discard;
+    }
+    else
+    {
+        gl_FragColor = gl_Color * color * fade;
+    }
+}

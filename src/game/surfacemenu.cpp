@@ -19,16 +19,16 @@
 #include <MCSurface>
 #include <MCTextureFont>
 #include <MCTextureFontManager>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 
 SurfaceMenu::SurfaceMenu(
     std::string surfaceId, std::string id, int width, int height,
     Menu::MenuStyle style)
 : Menu(id, width, height, style)
-, m_back(MCTextureManager::instance().surface(surfaceId))
+, m_back(MCSurfaceManager::instance().surface(surfaceId))
 , m_font(MCTextureFontManager::instance().font("default"))
 {
-    m_back.setShaderProgram(&Renderer::instance().masterProgram());
+    m_back.setShaderProgram(&Renderer::instance().menuProgram());
     m_back.setColor(0.5, 0.5, 0.5, 1.0);
 }
 

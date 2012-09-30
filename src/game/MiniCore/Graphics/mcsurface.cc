@@ -35,19 +35,21 @@ static const int gNumVertexComponents   = 3;
 static const int gNumColorComponents    = 4;
 static const int gNumTexCoordComponents = 2;
 
-MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
+MCSurface::MCSurface(
+    GLuint handle, MCFloat width, MCFloat height,
+    MCFloat z0, MCFloat z1, MCFloat z2, MCFloat z3)
 {
     init(handle, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
     {
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
+        {-(GLfloat)m_w2,  (GLfloat)m_h2, z1},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
+        {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
+        { (GLfloat)m_w2, -(GLfloat)m_h2, z3}
     };
 
     const MCGLVertex normals[gNumVertices] =

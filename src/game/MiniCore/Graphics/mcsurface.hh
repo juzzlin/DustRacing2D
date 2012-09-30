@@ -50,7 +50,13 @@ public:
     //! \param handle Handle of the corresponding OpenGL texture.
     //! \param width  Desired width of the surface when rendered 1:1.
     //! \param height Desired height of the surface when rendered 1:1.
-    MCSurface(GLuint handle, MCFloat width, MCFloat height);
+    //! \param z0     Z-coordinate for vertex[0]. Enables tilted surfaces.
+    //! \param z1     Z-coordinate for vertex[1]. Enables tilted surfaces.
+    //! \param z2     Z-coordinate for vertex[2]. Enables tilted surfaces.
+    //! \param z3     Z-coordinate for vertex[3]. Enables tilted surfaces.
+    MCSurface(
+        GLuint handle, MCFloat width, MCFloat height,
+        MCFloat z0 = 0, MCFloat z1 = 0, MCFloat z2 = 0, MCFloat z3 = 0);
 
     //! Constructor.
     //! \param handle Handle of the corresponding OpenGL texture.

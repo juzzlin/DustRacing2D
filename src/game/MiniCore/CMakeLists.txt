@@ -24,8 +24,8 @@ Graphics/mcglshaderprogram.cc
 Graphics/mcsurface.cc
 Graphics/mcsurfaceobjectdata.cc
 Graphics/mcsurfaceview.cc
-Graphics/mctextureconfigloader.cc
-Graphics/mctexturemanager.cc
+Graphics/mcsurfaceconfigloader.cc
+Graphics/mcsurfacemanager.cc
 Particles/mcparticle.cc
 Particles/mcglpointparticle.cc
 Particles/mcglrectparticle.cc

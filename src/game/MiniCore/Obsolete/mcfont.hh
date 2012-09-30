@@ -21,7 +21,7 @@
 #define MCFONT_HH
 
 #include "mctypes.hh"
-#include "mctexturemanager.hh"
+#include "mcsurfacemanager.hh"
 
 /*!
  * Routines to load and manage a bitmap-based "font".

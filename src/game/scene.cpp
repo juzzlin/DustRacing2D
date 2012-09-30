@@ -51,7 +51,7 @@
 #include <MCSurface>
 #include <MCTextureFont>
 #include <MCTextureFontManager>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTypes>
 #include <MCWorld>
 
@@ -103,7 +103,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
         if (i == 0)
         {
             desc.power = humanPower;
-            car = new Car(desc, MCTextureManager::instance().surface("car001"), i, true);
+            car = new Car(desc, MCSurfaceManager::instance().surface("car001"), i, true);
         }
         else
         {
@@ -114,15 +114,15 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
 
             if (i == numCars - 1)
             {
-                car = new Car(desc, MCTextureManager::instance().surface("car003"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("car003"), i, false);
             }
             else if (i == numCars - 2)
             {
-                car = new Car(desc, MCTextureManager::instance().surface("car004"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("car004"), i, false);
             }
             else
             {
-                car = new Car(desc, MCTextureManager::instance().surface("car002"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("car002"), i, false);
             }
 
             m_aiLogic.push_back(new AiLogic(*car));
@@ -519,7 +519,7 @@ void Scene::render(MCCamera & camera)
     {
         if (!fadeUpdate)
         {
-            Renderer::instance().masterProgram().setFadeValue(fadeValue);
+            Renderer::instance().menuProgram().setFadeValue(fadeValue);
             Renderer::instance().tileProgram().setFadeValue(fadeValue);
             Renderer::instance().textProgram().setFadeValue(fadeValue);
         }

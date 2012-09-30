@@ -17,8 +17,8 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCTEXTUREMANAGER_HH
-#define MCTEXTUREMANAGER_HH
+#ifndef MCSURFACEMANAGER_HH
+#define MCSURFACEMANAGER_HH
 
 #include <QImage>
 #include <string>
@@ -26,14 +26,13 @@
 
 #include "mcexception.hh"
 #include "mcmacros.hh"
-#include "mctexturedata.hh"
+#include "mcsurfacedata.hh"
 
 class MCSurface;
-class MCTextureManagerImpl;
+class MCSurfaceManagerImpl;
 
-/*! Texture manager base class.
+/*! Surface (texture) manager base class.
  *
- * This is an OpenGL texture manager class.
  * It loads texture images (all formats supported by QImage) listed in a special mapping
  * file and stores the OpenGL textures with original image dimensions using an
  * internal texture wrapper class (MCSurface) designed for 2D-games.
@@ -48,36 +47,36 @@ class MCTextureManagerImpl;
  * Example mapping file:
  *
  * <?xml version="1.0"?>
- * <textures baseImagePath="./data/images/">
- *   <texture handle="Car1" file="car1.png" w="16" h="16" xAxisMirror="1">
+ * <surfaces baseImagePath="./data/images/">
+ *   <surface handle="Car1" file="car1.png" w="16" h="16" xAxisMirror="1">
  *     <colorKey r="255" g="255" b="255"/>
- *   </texture>
- *   <texture handle="Car2" file="car2.png" w="16" h="16">
+ *   </surface>
+ *   <surface handle="Car2" file="car2.png" w="16" h="16">
  *     <alphaTest function="greater" threshold="0.5"/>
  *     <alphaBlend src="srcAlpha" dest="oneMinusSrcAlpha"/>
- *   </texture>
- *   <texture handle="Wall" file="wall.bmp"/>
- *   <texture handle="Track" file="track.bmp"/>
- *   <texture handle="Bazooka" file="bazooka.jpg">
+ *   </surface>
+ *   <surface handle="Wall" file="wall.bmp"/>
+ *   <surface handle="Track" file="track.bmp"/>
+ *   <surface handle="Bazooka" file="bazooka.jpg">
  *     <center x="10" y="5"/>
  *     <colorKey r="255" g="0" b="0"/>
- *   </texture>
- *   <texture handle="WINDOW_ICON" file="logo_v2.bmp"/>
- * </textures>
+ *   </surface>
+ *   <surface handle="WINDOW_ICON" file="logo_v2.bmp"/>
+ * </surfaces>
  *
  */
-class MCTextureManager
+class MCSurfaceManager
 {
 public:
 
     //! Constructor
-    MCTextureManager();
+    MCSurfaceManager();
 
     //! Destructor
-    virtual ~MCTextureManager();
+    virtual ~MCSurfaceManager();
 
     //! Return the singleton.
-    static MCTextureManager & instance();
+    static MCSurfaceManager & instance();
 
     //! Loads texture config from strBasePath using the given mapping file strFile.
     //! \param filePath Path to the XML-based input file.
@@ -90,7 +89,7 @@ public:
     //! Returns a surface object associated with given strId.
     //! Corresponding OpenGL texture handle can be obtained
     //! by calling handle() of the resulting MCSurface.
-    //! MCTextureManager will keep the ownership.
+    //! MCSurfaceManager will keep the ownership.
     //! \param handle Handle defined in the textures XML file.
     //! \return Reference to the corresponding MCSurface.
     //! \throws MCException on failure.
@@ -99,10 +98,10 @@ public:
 
 private:
 
-    DISABLE_COPY(MCTextureManager);
-    DISABLE_ASSI(MCTextureManager);
-    MCTextureManagerImpl * const m_pImpl;
-    static MCTextureManager * m_pInstance;
+    DISABLE_COPY(MCSurfaceManager);
+    DISABLE_ASSI(MCSurfaceManager);
+    MCSurfaceManagerImpl * const m_pImpl;
+    static MCSurfaceManager * m_pInstance;
 };
 
-#endif // MCTEXTUREMANAGER_HH
+#endif // MCSURFACEMANAGER_HH

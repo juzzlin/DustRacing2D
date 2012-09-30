@@ -22,23 +22,23 @@
 #include <QDomElement>
 #include <QFile>
 
-#include "mctextureconfigloader.hh"
-#include "mctexturedata.hh"
+#include "mcsurfaceconfigloader.hh"
+#include "mcsurfacedata.hh"
 #include "mclogger.hh"
 
 #include <cassert>
 
-MCTextureConfigLoader::MCTextureConfigLoader()
+MCSurfaceConfigLoader::MCSurfaceConfigLoader()
 : m_filePath("")
-, m_textures()
+, m_surfaces()
 {}
 
-void MCTextureConfigLoader::setConfigPath(const std::string & path)
+void MCSurfaceConfigLoader::setConfigPath(const std::string & path)
 {
     m_filePath = path;
 }
 
-bool MCTextureConfigLoader::loadTextures()
+bool MCSurfaceConfigLoader::load()
 {
     QDomDocument doc;
     QFile file(m_filePath.c_str());
@@ -56,27 +56,28 @@ bool MCTextureConfigLoader::loadTextures()
     file.close();
 
     QDomElement root = doc.documentElement();
-    if (root.nodeName() == "textures")
+    if (root.nodeName() == "surfaces")
     {
         const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
 
-        MCTextureData * newData = nullptr;
+        MCSurfaceData * newData = nullptr;
         QDomNode node = root.firstChild();
-        while(!node.isNull() && node.nodeName() == "texture")
+        while(!node.isNull() && node.nodeName() == "surface")
         {
-            newData = new MCTextureData;
+            newData = new MCSurfaceData;
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                bool         xAxisMirror = tag.attribute("xAxisMirror", "0").toInt();
-                unsigned int width       = tag.attribute("w", "0").toUInt();
-                unsigned int height      = tag.attribute("h", "0").toUInt();
-                std::string  file        = tag.attribute("file", "").toStdString();
-                std::string  handle      = tag.attribute("handle", "").toStdString();
-
-                newData->imagePath   = baseImagePath + QDir::separator().toAscii() + file;
-                newData->handle      = handle;
-                newData->xAxisMirror = xAxisMirror;
+                const unsigned int width  = tag.attribute("w", "0").toUInt();
+                const unsigned int height = tag.attribute("h", "0").toUInt();
+                const std::string  file   = tag.attribute("file", "").toStdString();
+                newData->imagePath        = baseImagePath + QDir::separator().toAscii() + file;
+                newData->handle           = tag.attribute("handle", "").toStdString();
+                newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
+                newData->z0               = tag.attribute("z0", "0").toInt();
+                newData->z1               = tag.attribute("z1", "0").toInt();
+                newData->z2               = tag.attribute("z2", "0").toInt();
+                newData->z3               = tag.attribute("z3", "0").toInt();
 
                 if (width)
                 {
@@ -90,7 +91,7 @@ bool MCTextureConfigLoader::loadTextures()
                     newData->heightSet = true;
                 }
 
-                // Read child nodes of texture node.
+                // Read child nodes of surface node.
                 QDomNode childNode = node.firstChild();
                 while(!childNode.isNull())
                 {
@@ -181,7 +182,7 @@ bool MCTextureConfigLoader::loadTextures()
                 }
             }
 
-            m_textures.push_back(newData);
+            m_surfaces.push_back(newData);
 
             node = node.nextSibling();
         }
@@ -190,7 +191,7 @@ bool MCTextureConfigLoader::loadTextures()
     return true;
 }
 
-GLenum MCTextureConfigLoader::alphaBlendStringToEnum(
+GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
     const std::string & function) const
 {
     if (function == "one")
@@ -232,24 +233,24 @@ GLenum MCTextureConfigLoader::alphaBlendStringToEnum(
     }
 }
 
-unsigned int MCTextureConfigLoader::textures() const
+unsigned int MCSurfaceConfigLoader::surfaceCount() const
 {
-    return m_textures.size();
+    return m_surfaces.size();
 }
 
-MCTextureData & MCTextureConfigLoader::texture(unsigned int index) const
+MCSurfaceData & MCSurfaceConfigLoader::surface(unsigned int index) const
 {
-    assert(index < static_cast<unsigned int>(m_textures.size()));
-    assert(m_textures.at(index));
-    return *m_textures.at(index);
+    assert(index < static_cast<unsigned int>(m_surfaces.size()));
+    assert(m_surfaces.at(index));
+    return *m_surfaces.at(index);
 }
 
-MCTextureConfigLoader::~MCTextureConfigLoader()
+MCSurfaceConfigLoader::~MCSurfaceConfigLoader()
 {
-    for (MCTextureData * texture : m_textures)
+    for (MCSurfaceData * surface : m_surfaces)
     {
-        delete texture;
+        delete surface;
     }
 
-    m_textures.clear();
+    m_surfaces.clear();
 }

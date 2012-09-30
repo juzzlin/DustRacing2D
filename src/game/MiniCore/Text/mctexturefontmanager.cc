@@ -23,16 +23,16 @@
 #include "mctexturefontmanager.hh"
 #include "mctypes.hh"
 #include "mcsurface.hh"
-#include "mctexturemanager.hh"
+#include "mcsurfacemanager.hh"
 
 #include <cassert>
 
 MCTextureFontManager * MCTextureFontManager::m_pInstance = nullptr;
 
 MCTextureFontManager::MCTextureFontManager(
-    const MCTextureManager & textureManager)
+    const MCSurfaceManager & surfaceManager)
   : m_fontHash()
-  , m_textureManager(textureManager)
+  , m_surfaceManager(surfaceManager)
 {
     assert(!MCTextureFontManager::m_pInstance);
     MCTextureFontManager::m_pInstance = this;
@@ -77,7 +77,7 @@ MCFloat clamp(MCFloat val)
 void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 {
     // Fetch the corresponding surface.
-    MCSurface & surface = m_textureManager.surface(data.surface.c_str());
+    MCSurface & surface = m_surfaceManager.surface(data.surface.c_str());
 
     // Create the new font using the GL texture handle given by the
     // corresponding surface.

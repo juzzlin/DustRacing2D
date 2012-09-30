@@ -27,7 +27,7 @@
 
 #include <MCLogger>
 #include <MCSurface>
-#include <MCTextureManager>
+#include <MCSurfaceManager>
 #include <MCTextureFont>
 #include <MCTextureFontManager>
 #include <MCTextureText>
@@ -46,16 +46,16 @@ public:
     : MenuItem(width, height)
     , m_track(track)
     , m_monospace(MCTextureFontManager::instance().font("default"))
-    , m_star(MCTextureManager::instance().surface("star"))
-    , m_glow(MCTextureManager::instance().surface("starGlow"))
-    , m_lock(MCTextureManager::instance().surface("lock"))
+    , m_star(MCSurfaceManager::instance().surface("star"))
+    , m_glow(MCSurfaceManager::instance().surface("starGlow"))
+    , m_lock(MCSurfaceManager::instance().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
     , m_bestPos(Settings::instance().loadBestPos(m_track))
     {
-        m_star.setShaderProgram(&Renderer::instance().masterProgram());
-        m_glow.setShaderProgram(&Renderer::instance().masterProgram());
-        m_lock.setShaderProgram(&Renderer::instance().masterProgram());
+        m_star.setShaderProgram(&Renderer::instance().menuProgram());
+        m_glow.setShaderProgram(&Renderer::instance().menuProgram());
+        m_lock.setShaderProgram(&Renderer::instance().menuProgram());
     }
 
     Track & track() const
@@ -146,7 +146,7 @@ void TrackItem::render(int x, int y)
             {
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
-                    pSurface->setShaderProgram(&Renderer::instance().masterProgram());
+                    pSurface->setShaderProgram(&Renderer::instance().menuProgram());
 
                     if (m_track.trackData().isLocked())
                     {

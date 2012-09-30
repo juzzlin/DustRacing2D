@@ -31,7 +31,7 @@ class StateMachine;
 class TimingOverlay;
 class TrackLoader;
 class MCObjectFactory;
-class MCTextureManager;
+class MCSurfaceManager;
 class MCTextureFontManager;
 
 //! The main game class.
@@ -85,7 +85,7 @@ private:
     StateMachine         * m_stateMachine;
     Renderer             * m_renderer;
     Scene                * m_scene;
-    MCTextureManager     * m_textureManager;
+    MCSurfaceManager     * m_textureManager;
     MCTextureFontManager * m_textureFontManager;
     MCObjectFactory      * m_objectFactory;
     TrackLoader          * m_trackLoader;
