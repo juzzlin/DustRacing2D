@@ -36,22 +36,9 @@ static const int gNumColorComponents    = 4;
 static const int gNumTexCoordComponents = 2;
 
 MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
-: m_handle(handle)
-, m_w(width)
-, m_w2(width / 2)
-, m_h(height)
-, m_h2(height / 2)
-, m_center(m_w2, m_h2)
-, m_centerSet(false)
-, m_useAlphaTest(false)
-, m_alphaFunc(GL_ALWAYS)
-, m_alphaThreshold(0.0)
-, m_useAlphaBlend(false)
-, m_src(GL_SRC_ALPHA)
-, m_dst(GL_ONE_MINUS_SRC_ALPHA)
-, m_program(nullptr)
-, m_shadowProgram(nullptr)
 {
+    init(handle, width, height);
+
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
     {
@@ -97,22 +84,9 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height)
 }
 
 MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
-: m_handle(handle)
-, m_w(width)
-, m_w2(width / 2)
-, m_h(height)
-, m_h2(height / 2)
-, m_center(m_w2, m_h2)
-, m_centerSet(false)
-, m_useAlphaTest(false)
-, m_alphaFunc(GL_ALWAYS)
-, m_alphaThreshold(0.0)
-, m_useAlphaBlend(false)
-, m_src(GL_SRC_ALPHA)
-, m_dst(GL_ONE_MINUS_SRC_ALPHA)
-, m_program(nullptr)
-, m_shadowProgram(nullptr)
 {
+    init(handle, width, height);
+
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
     {
@@ -145,6 +119,25 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
     };
 
     initVBOs(vertices, normals, texCoords, colors);
+}
+
+void MCSurface::init(GLuint handle, MCFloat width, MCFloat height)
+{
+    m_handle         = handle;
+    m_w              = width;
+    m_w2             = width / 2;
+    m_h              = height;
+    m_h2             = height / 2;
+    m_center         = MCVector2dF(m_w2, m_h2);
+    m_centerSet      = false;
+    m_useAlphaTest   = false;
+    m_alphaFunc      = GL_ALWAYS;
+    m_alphaThreshold = 0.0;
+    m_useAlphaBlend  = false;
+    m_src            = GL_SRC_ALPHA;
+    m_dst            = GL_ONE_MINUS_SRC_ALPHA;
+    m_program        = nullptr;
+    m_shadowProgram  = nullptr;
 }
 
 void MCSurface::initVBOs(

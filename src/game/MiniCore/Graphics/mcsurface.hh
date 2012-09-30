@@ -175,6 +175,8 @@ private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 
+    void init(GLuint handle, MCFloat width, MCFloat height);
+
     void initVBOs(
         const MCGLVertex   * vertices,
         const MCGLVertex   * normals,
