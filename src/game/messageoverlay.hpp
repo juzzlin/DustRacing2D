@@ -18,8 +18,9 @@
 
 #include "overlaybase.hpp"
 
-#include <list>
 #include <MCTextureText>
+#include <QString>
+#include <list>
 
 class MCTextureFontManager;
 class MCTextureFont;
@@ -44,6 +45,12 @@ public:
 
     //! Add a message to the MessageOverlay.
     void addMessage(const std::string & msg);
+
+    //! Add a message to the MessageOverlay.
+    void addMessage(QString msg);
+
+    //! Add a message to the MessageOverlay.
+    void addMessage(const char * msg);
 
 private:
 

@@ -67,14 +67,7 @@ void TimingOverlay::render()
 
         // Render the current lap number
         std::stringstream ss;
-        if (leadersLap <= laps)
-        {
-            ss << " LAP:" << leadersLap << "/" << laps;
-        }
-        else
-        {
-            ss << " WINNER FINISHED";
-        }
+        ss << " LAP:" << (leadersLap <= laps ? leadersLap : laps) << "/" << laps;
 
         m_text.setText(ss.str());
         m_text.setColor(1.0, 1.0, 1.0);

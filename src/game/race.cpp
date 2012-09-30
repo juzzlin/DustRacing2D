@@ -97,10 +97,15 @@ void Race::update()
     // Check if winner has finished
     else if (m_timing.leadersLap() == static_cast<int>(m_lapCount))
     {
-        m_winnerFinished = true;
+        if (!m_winnerFinished)
+        {
+            m_winnerFinished = true;
 
-        Car & leader = getLeadingCar();
-        m_timing.setRaceCompleted(leader.index(), true);
+            Car & leader = getLeadingCar();
+            m_timing.setRaceCompleted(leader.index(), true);
+
+            m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+        }
     }
 }
 
@@ -149,7 +154,7 @@ void Race::updateRouteProgress(Car & car)
                     if (m_timing.newLapRecordAchieved())
                     {
                         Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
-                        m_messageOverlay.addMessage("New lap record!");
+                        m_messageOverlay.addMessage(QObject::tr("New lap record!"));
                     }
 
                     // Finish the race if winner has already finished.
@@ -183,17 +188,21 @@ void Race::updateRouteProgress(Car & car)
                 if (pos < m_bestPos || m_bestPos == -1)
                 {
                     Settings::instance().saveBestPos(*m_track, pos);
-                    m_messageOverlay.addMessage("New best pos!");
+                    m_messageOverlay.addMessage(QObject::tr("New best pos!"));
                 }
 
-                if (pos <= UNLOCK_LIMIT)
+                Track * next = m_track->next();
+                if (next && next->trackData().isLocked())
                 {
-                    Track * next = m_track->next();
-                    if (next && next->trackData().isLocked())
+                    if (pos <= UNLOCK_LIMIT)
                     {
                         next->trackData().setIsLocked(false);
                         Settings::instance().saveTrackUnlockStatus(*next);
-                        m_messageOverlay.addMessage("A new track unlocked!");
+                        m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
+                    }
+                    else
+                    {
+                        m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
                     }
                 }
             }

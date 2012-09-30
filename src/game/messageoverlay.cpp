@@ -92,6 +92,16 @@ void MessageOverlay::addMessage(const std::string & msg)
     m_listMessages.push_front(myMsg);
 }
 
+void MessageOverlay::addMessage(QString msg)
+{
+    addMessage(msg.toStdString());
+}
+
+void MessageOverlay::addMessage(const char * msg)
+{
+    addMessage(std::string(msg));
+}
+
 void MessageOverlay::renderMessages()
 {
     // Text coordinates
