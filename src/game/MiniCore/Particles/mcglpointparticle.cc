@@ -117,6 +117,23 @@ void MCGLPointParticle::setAlpha(MCFloat a)
     }
 }
 
+void MCGLPointParticle::beginBatch()
+{
+    glPushAttrib(GL_ENABLE_BIT);
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+}
+
+void MCGLPointParticle::endBatch()
+{
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glPopAttrib();
+}
+
 void MCGLPointParticle::render(MCCamera * pCamera)
 {
     // Scale radius if fading out
@@ -128,15 +145,7 @@ void MCGLPointParticle::render(MCCamera * pCamera)
 
     if (r > 0 && m_program)
     {
-        // Disable texturing
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPointSize(2 * r);
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
 
         MCFloat x = location().i();
         MCFloat y = location().j();
@@ -171,11 +180,6 @@ void MCGLPointParticle::render(MCCamera * pCamera)
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         m_program->release();
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-
-        glPopAttrib();
     }
 }
 

@@ -140,6 +140,16 @@ void MCParticle::renderShadow(MCCamera * pCamera)
     }
 }
 
+void MCParticle::beginBatch()
+{
+    // Do nothing by default.
+}
+
+void MCParticle::endBatch()
+{
+    // Do nothing by default.
+}
+
 bool MCParticle::isActive() const
 {
     return m_isActive;

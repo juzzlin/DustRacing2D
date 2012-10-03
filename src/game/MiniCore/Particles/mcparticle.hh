@@ -90,6 +90,10 @@ public:
   //! \reimp
   virtual void renderShadow(MCCamera * pCamera = nullptr);
 
+  virtual void beginBatch();
+
+  virtual void endBatch();
+
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;
 

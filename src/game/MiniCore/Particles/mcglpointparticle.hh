@@ -50,6 +50,12 @@ public:
     //! \reimp
     void renderShadow(MCCamera * pCamera = nullptr);
 
+    //! \reimp
+    void beginBatch();
+
+    //! \reimp
+    void endBatch();
+
 private:
 
     enum VBOType

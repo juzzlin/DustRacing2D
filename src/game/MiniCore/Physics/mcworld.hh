@@ -173,8 +173,10 @@ private:
     DISABLE_ASSI(MCWorld);
 
     void buildBatches(MCCamera * pCamera = nullptr);
-    void renderObjects(MCCamera * pCamera = nullptr);
+    void renderBatches(MCCamera * pCamera = nullptr);
     void renderShadows(MCCamera * pCamera = nullptr);
+    void renderObjectBatches(MCCamera * pCamera, int layer);
+    void renderParticleBatches(MCCamera * pCamera, int layer);
 
     void integrate(MCFloat step);
     void processRemovedObjects();
@@ -194,8 +196,10 @@ private:
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
     typedef std::map<std::string, std::vector<MCObject *> > BatchHash;
-    BatchHash batches[MCWorld::MaxLayers];
-    bool depthTestEnabled[MCWorld::MaxLayers];
+    BatchHash m_batches[MCWorld::MaxLayers];
+    typedef std::map<MCUint, std::vector<MCObject *> > ParticleBatchHash;
+    ParticleBatchHash m_particleBatches[MCWorld::MaxLayers];
+    bool m_depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
     MCObject * pLeft;

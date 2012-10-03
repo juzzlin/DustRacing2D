@@ -317,7 +317,6 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
             pCamera->mapToCamera(x, y);
         }
 
-        glPushAttrib(GL_ENABLE_BIT);
         doAlphaBlend();
 
         m_program->bind();
@@ -338,7 +337,10 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
         m_program->release();
 
-        glPopAttrib();
+        if (m_useAlphaBlend)
+        {
+            glDisable(GL_BLEND);
+        }
     }
 }
 
@@ -357,7 +359,6 @@ void MCSurface::renderScaled(
             pCamera->mapToCamera(x, y);
         }
 
-        glPushAttrib(GL_ENABLE_BIT);
         doAlphaBlend();
 
         m_program->bind();
@@ -378,7 +379,10 @@ void MCSurface::renderScaled(
 
         m_program->release();
 
-        glPopAttrib();
+        if (m_useAlphaBlend)
+        {
+            glDisable(GL_BLEND);
+        }
     }
 }
 

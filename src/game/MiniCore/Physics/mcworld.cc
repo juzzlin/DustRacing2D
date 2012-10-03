@@ -76,7 +76,7 @@ MCWorld::MCWorld()
 
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
-        depthTestEnabled[i] = false;
+        m_depthTestEnabled[i] = false;
     }
 }
 
@@ -135,7 +135,7 @@ void MCWorld::render(MCCamera * pCamera, bool enableShadows)
         renderShadows(pCamera);
     }
 
-    renderObjects(pCamera);
+    renderBatches(pCamera);
 }
 
 void MCWorld::buildBatches(MCCamera * pCamera)
@@ -154,7 +154,8 @@ void MCWorld::buildBatches(MCCamera * pCamera)
 
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        batches[i].clear();
+        m_batches[i].clear();
+        m_particleBatches[i].clear();
 
         LayerHash::iterator j   = layers[i].begin();
         LayerHash::iterator end = layers[i].end();
@@ -167,31 +168,46 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                 // Check if view is set and is visible
                 if (object.shape())
                 {
+                    // Note: also particles with view will be handled here.
                     if (object.shape()->view())
                     {
                         MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
                         bbox.translate(MCVector2dF(object.location()));
-                        if (!pCamera || pCamera->isVisible(bbox))
+                        if (pCamera)
                         {
-                            batches[i][object.shape()->view()->viewId()].push_back(&object);
+                            if (pCamera->isVisible(bbox))
+                            {
+                                m_batches[i][object.shape()->view()->viewId()].push_back(&object);
+                            }
+                            else if (object.isParticle())
+                            {
+                                // Optimization
+                                static_cast<MCParticle &>(object).die();
+                            }
+                        }
+                        else
+                        {
+                            m_batches[i][object.shape()->view()->viewId()].push_back(&object);
                         }
                     }
+                    // Particles without a view will be handled here.
                     else if (object.isParticle())
                     {
                         if (pCamera)
                         {
                             if (pCamera->isVisible(object.bbox()))
                             {
-                                object.render(pCamera);
+                                m_particleBatches[i][object.typeID()].push_back(&object);
                             }
                             else
                             {
+                                // Optimization
                                 static_cast<MCParticle &>(object).die();
                             }
                         }
                         else
                         {
-                            object.render(nullptr);
+                            m_particleBatches[i][object.typeID()].push_back(&object);
                         }
                     }
                 }
@@ -200,17 +216,17 @@ void MCWorld::buildBatches(MCCamera * pCamera)
     }
 }
 
-void MCWorld::renderObjects(MCCamera * pCamera)
+void MCWorld::renderBatches(MCCamera * pCamera)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
     glPushAttrib(GL_ENABLE_BIT);
 
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
+    for (MCUint layer = 0; layer < MCWorld::MaxLayers; layer++)
     {
         // The depth test is enabled/disabled separately on
         // each object layer.
-        if (depthTestEnabled[i])
+        if (m_depthTestEnabled[layer])
         {
             glEnable(GL_DEPTH_TEST);
         }
@@ -219,35 +235,70 @@ void MCWorld::renderObjects(MCCamera * pCamera)
             glDisable(GL_DEPTH_TEST);
         }
 
-        // Render batches
-        auto iter = batches[i].begin();
-        auto end  = batches[i].end();
-        while (iter != end)
-        {
-            const int i2 = iter->second.size();
-            for (int i = 0; i < i2; i++)
-            {
-                MCObject    * object = iter->second[i];
-                MCShapeView * view   = object->shape()->view();
+        renderObjectBatches(pCamera, layer);
 
-                if (i == 0)
-                {
-                    view->beginBatch();
-                }
-
-                object->render(pCamera);
-
-                if (i == i2 - 1)
-                {
-                    view->endBatch();
-                }
-            }
-
-            iter++;
-        }
+        renderParticleBatches(pCamera, layer);
     }
 
     glPopAttrib();
+}
+
+void MCWorld::renderObjectBatches(MCCamera * pCamera, int layer)
+{
+    auto iter = m_batches[layer].begin();
+    auto end  = m_batches[layer].end();
+    while (iter != end)
+    {
+        const int i2 = iter->second.size();
+        for (int i = 0; i < i2; i++)
+        {
+            MCObject    * object = iter->second[i];
+            MCShapeView * view   = object->shape()->view();
+
+            if (i == 0)
+            {
+                view->beginBatch();
+            }
+
+            object->render(pCamera);
+
+            if (i == i2 - 1)
+            {
+                view->endBatch();
+            }
+        }
+
+        iter++;
+    }
+}
+
+void MCWorld::renderParticleBatches(MCCamera * pCamera, int layer)
+{
+    // Render particle batches
+    auto iter = m_particleBatches[layer].begin();
+    auto end  = m_particleBatches[layer].end();
+    while (iter != end)
+    {
+        const int i2 = iter->second.size();
+        for (int i = 0; i < i2; i++)
+        {
+            MCParticle * particle = static_cast<MCParticle *>(iter->second[i]);
+
+            if (i == 0)
+            {
+                particle->beginBatch();
+            }
+
+            particle->render(pCamera);
+
+            if (i == i2 - 1)
+            {
+                particle->endBatch();
+            }
+        }
+
+        iter++;
+    }
 }
 
 void MCWorld::renderShadows(MCCamera * pCamera)
@@ -259,8 +310,8 @@ void MCWorld::renderShadows(MCCamera * pCamera)
         glDisable(GL_DEPTH_TEST);
 
         // Render batches
-        auto iter = batches[i].begin();
-        auto end  = batches[i].end();
+        auto iter = m_batches[i].begin();
+        auto end  = m_batches[i].end();
         while (iter != end)
         {
             const int i2 = iter->second.size();
@@ -551,7 +602,7 @@ void MCWorld::enableDepthTestOnLayer(MCUint layer, bool enable)
 {
     if (layer < MCWorld::MaxLayers)
     {
-        depthTestEnabled[layer] = enable;
+        m_depthTestEnabled[layer] = enable;
     }
 }
 
