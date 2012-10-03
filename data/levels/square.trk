@@ -215,11 +215,9 @@
  <o x="708" y="1734" o="0" r="grandstand" c="free"/>
  <o x="836" y="1734" o="0" r="grandstand" c="free"/>
  <o x="964" y="1734" o="0" r="grandstand" c="free"/>
- <o x="713" y="2108" o="180" r="grandstand" c="free"/>
- <o x="841" y="2108" o="180" r="grandstand" c="free"/>
- <o x="969" y="2108" o="180" r="grandstand" c="free"/>
- <o x="1097" y="2108" o="180" r="grandstand" c="free"/>
  <o x="1092" y="1734" o="0" r="grandstand" c="free"/>
+ <o x="2058" y="248" o="45" r="grandstand" c="free"/>
+ <o x="244" y="247" o="-45" r="grandstand" c="free"/>
  <n x="639" y="1908" i="0"/>
  <n x="444" y="1830" i="1"/>
  <n x="342" y="1632" i="2"/>
