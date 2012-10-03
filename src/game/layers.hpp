@@ -18,14 +18,19 @@
 
 //! Layers define the rendering order (stacking)
 //! of different objects.
-enum Layers
+class Layers
 {
-    Ground      = 0,
-    Cars        = 1,
-    Smoke       = 2,
-    Walls       = 3,
-    GrandStands = 5,
-    Tree        = 10
+public:
+
+    enum Order
+    {
+        Ground      = 0,
+        Cars        = 1,
+        Smoke       = 2,
+        Walls       = 3,
+        GrandStands = 5,
+        Tree        = 10
+    };
 };
 
 #endif // LAYERS_HPP
