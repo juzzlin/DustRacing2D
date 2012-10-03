@@ -399,6 +399,10 @@ public:
     //! Return true, if the obejct is sleeping.
     bool sleeping() const;
 
+    //! Object goes to sleep if linear and angular velocities drops below
+    //! these values. The defaults are 0.01.
+    void setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit);
+
 protected:
 
     //! Event handler.
@@ -493,6 +497,8 @@ private:
     MCFloat damping;
     int timerEventObjectsIndex;
     bool m_sleeping;
+    MCFloat m_linearSleepLimit;
+    MCFloat m_angularSleepLimit;
     bool m_physicsObject;
     bool m_stationary;
     bool m_renderable;

@@ -92,6 +92,8 @@ void MCObject::init(const std::string & typeId)
     damping                  = DAMPING;
     timerEventObjectsIndex   = -1;
     m_sleeping               = false;
+    m_linearSleepLimit       = 0.01;
+    m_angularSleepLimit      = 0.01;
     m_physicsObject          = true;
     m_stationary             = false;
     m_renderable             = true;
@@ -136,13 +138,12 @@ void MCObject::integrate(MCFloat step)
         integrateAngular(step);
         doOutOfBoundariesEvent();
 
-        static const MCFloat linearSleepingLimit  = 0.1;
-        static const MCFloat angularSleepingLimit = 0.1;
-
-        if (m_velocity.lengthFast() < linearSleepingLimit &&
-            m_angularVelocity       < angularSleepingLimit)
+        if (m_velocity.lengthFast() < m_linearSleepLimit &&
+            m_angularVelocity       < m_angularSleepLimit)
         {
             m_sleeping = true;
+            m_velocity.setZero();
+            m_angularVelocity = 0;
         }
 
         m_forces.setZero();
@@ -489,7 +490,7 @@ bool MCObject::stationary() const
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
     linearImpulse += impulse;
-    m_sleeping       = false;
+    m_sleeping     = false;
 }
 
 void MCObject::addAngularImpulse(MCFloat impulse)
@@ -751,7 +752,7 @@ void MCObject::addForce(const MCVector3dF & force)
 
 void MCObject::addTorque(MCFloat torque)
 {
-    torque  += torque;
+    torque    += torque;
     m_sleeping = false;
 }
 
@@ -917,6 +918,12 @@ void MCObject::setDamping(MCFloat value)
 bool MCObject::sleeping() const
 {
     return m_sleeping;
+}
+
+void MCObject::setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit)
+{
+    m_linearSleepLimit  = linearSleepLimit;
+    m_angularSleepLimit = angularSleepLimit;
 }
 
 MCObject::~MCObject()
