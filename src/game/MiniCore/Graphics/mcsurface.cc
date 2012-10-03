@@ -27,9 +27,6 @@
 
 #include <cassert>
 
-#include <GL/gl.h>
-#include <GL/glext.h>
-
 static const int gNumVertices           = 6;
 static const int gNumVertexComponents   = 3;
 static const int gNumColorComponents    = 4;

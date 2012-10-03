@@ -22,7 +22,7 @@
 
 #include "mcrecycler.hh"
 #include <vector>
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 using std::vector;
 

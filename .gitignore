@@ -4,7 +4,6 @@
 *.a
 *moc_*
 *qrc_*
-*.cmake
 *.tar.gz
 *__*
 *CMake*
@@ -25,4 +24,18 @@ dustrac-editor
 dustrac-game
 test/
 unittests/
-
+CTestTestfile.cmake
+cmake_install.cmake
+src/editor/CTestTestfile.cmake
+src/editor/cmake_install.cmake
+src/game/CTestTestfile.cmake
+src/game/MiniCore/CTestTestfile.cmake
+src/game/MiniCore/UnitTests/CTestTestfile.cmake
+src/game/MiniCore/UnitTests/MCForceRegistryTest/CTestTestfile.cmake
+src/game/MiniCore/UnitTests/MCForceRegistryTest/cmake_install.cmake
+src/game/MiniCore/UnitTests/MCObjectTest/CTestTestfile.cmake
+src/game/MiniCore/UnitTests/MCObjectTest/cmake_install.cmake
+src/game/MiniCore/UnitTests/cmake_install.cmake
+src/game/MiniCore/cmake_install.cmake
+src/game/cmake_install.cmake
+src/game/renderer.cpp.autosave

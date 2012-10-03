@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-#include <GL/gl.h> // For GLenum.
+#include <MCGLEW> // For GLenum.
 
 class MCSurfaceData;
 

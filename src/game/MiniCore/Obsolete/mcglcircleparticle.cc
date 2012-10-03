@@ -22,7 +22,7 @@
 #include "mccamera.hh"
 #include "mctrigonom.hh"
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 MCRecycler<MCGLCircleParticle> MCGLCircleParticle::m_recycler;
 

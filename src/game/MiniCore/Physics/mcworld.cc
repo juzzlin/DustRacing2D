@@ -31,7 +31,7 @@
 #include "mcforcegenerator.hh"
 #include "mcfrictiongenerator.hh"
 
-#include <GL/gl.h>
+#include <MCGLEW>
 #include <cassert>
 
 MCWorld * MCWorld::pInstance               = nullptr;

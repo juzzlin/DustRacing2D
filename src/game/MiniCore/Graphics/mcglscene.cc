@@ -17,10 +17,12 @@
 // MA  02110-1301, USA.
 //
 
+#include <MCGLEW>
+#include <GL/glu.h>
+
 #include "mcglscene.hh"
 #include "mctrigonom.hh"
 
-#include <GL/glu.h>
 #include <cmath>
 
 MCGLScene::MCGLScene()
@@ -29,6 +31,7 @@ MCGLScene::MCGLScene()
 
 void MCGLScene::initialize()
 {
+    glewInit();
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);

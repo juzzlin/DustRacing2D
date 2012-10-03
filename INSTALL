@@ -1,20 +1,25 @@
 Build & install instructions
 ============================
 
+These are build & install instructions for Dust Racing 2D.
+
+Build dependencies
+------------------
+
 Dustrac currently uses CMake as the build system.
 
 Currently the build depends only on Qt (>= 4.7).
-No additional libraries are required.
+
 Dustrac also exploits some features of the new C++11
-standard, so a C++11 compliant compiler is required (GCC >= 4.6).
+standard, so a compliant compiler is required (GCC >= 4.6).
 
 Building in the command line on Linux (tested on Ubuntu 12.04)
 --------------------------------------------------------------
 
 Development build (the game can be run without installing anything):
 
-1) Install Qt development files (libqt4-dev on Ubuntu).
-2) Install CMake from the Software Center.
+1) Install Qt development files (libqt4-dev on Ubuntu 12.04).
+2) Install CMake.
 3) Go to the source directory and run:
 
 $ ./configure
@@ -82,7 +87,7 @@ Building by using QtCreator on Windows (tested on Windows 7)
 Building by using QtCreator on Linux (tested on Ubuntu 12.04) 
 -------------------------------------------------------------
 
-1) Install QtCreator and CMake from the Software Center.
+1) Install QtCreator and CMake from the package repository.
 2) Start QtCreator and open the top-level CMakeLists.txt from the
    Dust Racing source directory.
 3) Run CMake and build.

@@ -25,7 +25,10 @@ endif()
 
 # This is the main data path given to the game and editor binaries.
 add_definitions(-DDATA_PATH="${DATA_PATH}")
-add_definitions(-DGL_GLEXT_PROTOTYPES)
+
+# This is not needed with GLEW (built-in with MiniCore)
+#add_definitions(-DGL_GLEXT_PROTOTYPES) 
+add_definitions(-DGLEW_STATIC)
 
 # Find Qt4 and needed additional components.
 find_package(Qt4 4.7.0 REQUIRED COMPONENTS QtXml QtOpenGL)

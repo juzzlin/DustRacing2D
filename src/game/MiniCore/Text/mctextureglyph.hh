@@ -22,7 +22,7 @@
 
 #include "mctypes.hh"
 
-#include <GL/gl.h>
+#include <MCGLEW>
 
 //! Textured glyph used by MCTextureFont.
 class MCTextureGlyph

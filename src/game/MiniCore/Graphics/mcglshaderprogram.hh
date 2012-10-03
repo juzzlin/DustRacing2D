@@ -20,9 +20,11 @@
 #ifndef MCGLSHADERPROGRAM_HH
 #define MCGLSHADERPROGRAM_HH
 
+#include <MCGLEW>
+
 #include "mctypes.hh"
 #include "mcvector3d.hh"
-#include <GL/gl.h>
+
 #include <string>
 
 //! Base class for GLSL shader programs compatible with MiniCore.

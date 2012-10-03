@@ -22,7 +22,7 @@
 #include <MCSurface>
 #include <MCSurfaceView>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)
 : MCObject(new MCRectShape(new MCSurfaceView("Wall", &surface), newWx, newWy), "WALL")

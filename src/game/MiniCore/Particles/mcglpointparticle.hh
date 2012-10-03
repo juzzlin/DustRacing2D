@@ -20,9 +20,8 @@
 #ifndef MCGLPOINTPARTICLE_HH
 #define MCGLPOINTPARTICLE_HH
 
+#include <MCGLEW>
 #include "mcparticle.hh"
-
-#include <GL/gl.h>
 
 class MCCamera;
 class MCGLShaderProgram;

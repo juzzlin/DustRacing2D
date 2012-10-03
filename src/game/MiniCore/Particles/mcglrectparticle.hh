@@ -22,7 +22,7 @@
 
 #include "mcparticle.hh"
 
-#include <GL/gl.h>
+#include <MCGLEW>
 
 class MCCamera;
 class MCGLShaderProgram;

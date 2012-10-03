@@ -24,7 +24,7 @@
 #include "mcsurface.hh"
 #include "mcgltexcoord.hh"
 
-#include <GL/gl.h>
+#include <MCGLEW>
 
 #include <map>
 #include <vector>

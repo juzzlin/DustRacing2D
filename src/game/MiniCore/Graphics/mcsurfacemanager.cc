@@ -24,7 +24,7 @@
 
 #include <QDir>
 #include <QGLWidget>
-#include <GL/gl.h>
+#include <MCGLEW>
 
 #include <cassert>
 

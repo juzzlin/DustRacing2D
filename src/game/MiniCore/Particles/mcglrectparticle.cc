@@ -22,8 +22,7 @@
 #include "mcglvertex.hh"
 #include "mccamera.hh"
 
-#include <GL/gl.h>
-#include <GL/glext.h>
+#include <MCGLEW>
 
 #include <cassert>
 

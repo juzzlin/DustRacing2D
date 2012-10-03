@@ -23,7 +23,7 @@
 #include "mctypes.hh"
 #include "mcvector2d.hh"
 
-#include <GL/gl.h> // For GLenum
+#include <MCGLEW> // For GLenum
 #include <string>
 
 //! Surface data structure used by MCTextureParser.

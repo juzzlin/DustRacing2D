@@ -20,7 +20,7 @@
 #ifndef MCGLTEXCOORD_HH
 #define MCGLTEXCOORD_HH
 
-#include <GL/gl.h>
+#include <MCGLEW>
 
 struct MCGLTexCoord
 {

@@ -20,7 +20,7 @@
 #ifndef MCGLVERTEX_HPP
 #define MCGLVERTEX_HPP
 
-#include <GL/gl.h>
+#include <MCGLEW>
 
 struct MCGLVertex
 {

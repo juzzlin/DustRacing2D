@@ -16,6 +16,8 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <MCGLEW>
+
 #include "eventhandler.hpp"
 
 #include <QGLWidget>
