@@ -20,11 +20,12 @@
 //! of different objects.
 enum Layers
 {
-    Ground = 0,
-    Cars   = 1,
-    Smoke  = 2,
-    Walls  = 3,
-    Tree   = 10
+    Ground      = 0,
+    Cars        = 1,
+    Smoke       = 2,
+    Walls       = 3,
+    GrandStands = 5,
+    Tree        = 10
 };
 
 #endif // LAYERS_HPP

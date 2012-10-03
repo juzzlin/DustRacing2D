@@ -350,6 +350,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.5);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
+        data.setLayer(GrandStands);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
