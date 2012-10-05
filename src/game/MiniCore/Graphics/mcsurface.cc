@@ -459,6 +459,7 @@ void MCSurface::enableClientState(bool enable, bool bindTexture) const
 {
     if (enable)
     {
+        glEnable(GL_TEXTURE_2D);
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);

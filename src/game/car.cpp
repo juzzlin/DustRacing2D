@@ -124,7 +124,7 @@ void Car::preCreateParticles()
     // Pre-create some MCGLRectParticles
     for (int i = 0; i < 100; i++)
     {
-        MCParticle * particle = new MCGLRectParticle;
+        MCParticle * particle = new MCGLRectParticle("MUD");
         static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
             &Renderer::instance().particleProgram());
         particle->setFreeList(m_freeList);
@@ -155,7 +155,7 @@ void Car::preCreateParticles()
     // Pre-create some MCGLPointParticles
     for (int i = 0; i < 100; i++)
     {
-        MCParticle * particle = new MCGLPointParticle;
+        MCParticle * particle = new MCGLPointParticle("SPARKLE");
         static_cast<MCGLPointParticle *>(particle)->setShaderProgram(
             &Renderer::instance().pointParticleProgram());
         particle->setFreeList(m_freeList3);

@@ -35,7 +35,7 @@ class MCGLRectParticle : public MCParticle
 public:
 
     //! Constructor.
-    MCGLRectParticle();
+    MCGLRectParticle(const std::string & typeID);
 
     //! Destructor.
     virtual ~MCGLRectParticle();
@@ -50,6 +50,12 @@ public:
 
     //! \reimp
     void renderShadow(MCCamera * pCamera = nullptr);
+
+    //! \reimp
+    void beginBatch();
+
+    //! \reimp
+    void endBatch();
 
 private:
 

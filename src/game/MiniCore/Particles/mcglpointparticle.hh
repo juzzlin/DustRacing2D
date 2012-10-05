@@ -34,7 +34,8 @@ class MCGLPointParticle : public MCParticle
 {
 public:
 
-    MCGLPointParticle();
+    //! Constructor.
+    MCGLPointParticle(const std::string & typeID);
 
     //! Destructor.
     virtual ~MCGLPointParticle();
@@ -49,6 +50,12 @@ public:
 
     //! \reimp
     void renderShadow(MCCamera * pCamera = nullptr);
+
+    //! \reimp
+    void beginBatch();
+
+    //! \reimp
+    void endBatch();
 
 private:
 

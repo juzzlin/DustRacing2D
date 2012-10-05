@@ -42,7 +42,7 @@ public:
   enum AnimationStyle {None = 0, Shrink, FadeOut};
 
   //! Constructor.
-  MCParticle();
+  MCParticle(const std::string & typeID);
 
   //! Destructor
   virtual ~MCParticle();

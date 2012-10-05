@@ -37,7 +37,7 @@ class MCSurfaceParticle : public MCParticle
 {
 public:
 
-    //! Constructor
+    //! Constructor.
     MCSurfaceParticle(const std::string & viewId);
 
     //! \reimp
@@ -46,7 +46,7 @@ public:
         // Do nothing
     }
 
-    //! Destructor
+    //! Destructor.
     virtual ~MCSurfaceParticle();
 
 private:

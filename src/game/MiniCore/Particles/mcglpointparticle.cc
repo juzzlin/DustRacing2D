@@ -31,8 +31,9 @@ static const int gNumVertices        = 1;
 static const int gNumColorComponents = 4;
 static const int gAlphaFrames        = 10;
 
-MCGLPointParticle::MCGLPointParticle()
-: m_r(1.0)
+MCGLPointParticle::MCGLPointParticle(const std::string & typeID)
+: MCParticle(typeID)
+, m_r(1.0)
 , m_g(1.0)
 , m_b(1.0)
 , m_a(1.0)
@@ -117,6 +118,21 @@ void MCGLPointParticle::setAlpha(MCFloat a)
     }
 }
 
+void MCGLPointParticle::beginBatch()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+}
+
+void MCGLPointParticle::endBatch()
+{
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisable(GL_BLEND);
+}
+
 void MCGLPointParticle::render(MCCamera * pCamera)
 {
     // Scale radius if fading out
@@ -128,13 +144,6 @@ void MCGLPointParticle::render(MCCamera * pCamera)
 
     if (r > 0 && m_program)
     {
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-
         glPointSize(2 * r);
 
         MCFloat x = location().i();
@@ -168,10 +177,6 @@ void MCGLPointParticle::render(MCCamera * pCamera)
         glColorPointer(4, GL_FLOAT, 0, 0);
         glDrawArrays(GL_POINTS, 0, gNumVertices);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glPopAttrib();
 
         m_program->release();
     }

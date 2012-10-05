@@ -31,8 +31,9 @@ static const int gNumVertices        = 6;
 static const int gNumColorComponents = 4;
 static const int gAlphaFrames        = 10;
 
-MCGLRectParticle::MCGLRectParticle()
-: m_r(1.0)
+MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
+: MCParticle(typeID)
+, m_r(1.0)
 , m_g(1.0)
 , m_b(1.0)
 , m_a(1.0)
@@ -145,6 +146,26 @@ void MCGLRectParticle::setAlpha(MCFloat a)
     }
 }
 
+void MCGLRectParticle::beginBatch()
+{
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+}
+
+void MCGLRectParticle::endBatch()
+{
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    glDisable(GL_BLEND);
+}
+
 void MCGLRectParticle::render(MCCamera * pCamera)
 {
     // Scale radius if fading out
@@ -156,16 +177,6 @@ void MCGLRectParticle::render(MCCamera * pCamera)
 
     if (r > 0 && m_program)
     {
-        // Disable texturing
-        glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-
         MCFloat x = location().i();
         MCFloat y = location().j();
 
@@ -201,12 +212,6 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         m_program->release();
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-
-        glPopAttrib();
     }
 }
 
