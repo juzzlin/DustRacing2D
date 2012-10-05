@@ -1,3 +1,24 @@
+0.9.0
+-----
+
+* Removes obsolete glEnable(GL_TEXTURE_2D) calls.
+* Adds type identifiers for particles.
+* Improves rendering performance.
+* Removes irritating rocks from irritating.trk.
+* Lowers the linear and angular sleep limits to 0.01.
+* New rock texture.
+* Adds grandstand objects.
+* Eliminate copy-paste initializations in MCObject.
+* Eliminate copy-paste initializations in MCSurface.
+* Editor: Arrow keys can be used to move objects.
+* Adds screenshots of 0.8.1
+* Fixes a bug in the computer power scaling.
+* Improves messages.
+* Editor: Adds a tip about saving to ~/DustRacingTracks.
+* Makes the game a bit faster and harder.
+* Adds simple ambient lighting.
+* Adds car number plates.
+
 0.8.1
 -----
 
