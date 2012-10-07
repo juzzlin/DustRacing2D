@@ -154,11 +154,11 @@ void MCWorld::buildBatches(MCCamera * pCamera)
 
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        m_batches[i].clear();
+        m_objectBatches[i].clear();
         m_particleBatches[i].clear();
 
-        LayerHash::iterator j   = layers[i].begin();
-        LayerHash::iterator end = layers[i].end();
+        LayerHash::iterator j = layers[i].begin();
+        const LayerHash::iterator end = layers[i].end();
 
         for (; j != end; j++)
         {
@@ -176,7 +176,7 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                             bbox.translate(MCVector2dF(object.location()));
                             if (!pCamera || pCamera->isVisible(bbox))
                             {
-                                m_batches[i][object.shape()->view()->viewId()].push_back(&object);
+                                m_objectBatches[i][object.typeID()].push_back(&object);
                             }
                         }
                     }
@@ -234,15 +234,15 @@ void MCWorld::renderBatches(MCCamera * pCamera)
 
 void MCWorld::renderObjectBatches(MCCamera * pCamera, int layer)
 {
-    auto iter = m_batches[layer].begin();
-    auto end  = m_batches[layer].end();
+    auto iter = m_objectBatches[layer].begin();
+    const auto end = m_objectBatches[layer].end();
     while (iter != end)
     {
         const int i2 = iter->second.size();
         for (int i = 0; i < i2; i++)
         {
             MCObject    * object = iter->second[i];
-            MCShapeView * view   = object->shape()->view();
+            MCShapeView * view = object->shape()->view();
 
             if (i == 0)
             {
@@ -265,7 +265,7 @@ void MCWorld::renderParticleBatches(MCCamera * pCamera, int layer)
 {
     // Render particle batches
     auto iter = m_particleBatches[layer].begin();
-    auto end  = m_particleBatches[layer].end();
+    const auto end = m_particleBatches[layer].end();
     while (iter != end)
     {
         const int i2 = iter->second.size();
@@ -299,8 +299,8 @@ void MCWorld::renderShadows(MCCamera * pCamera)
         glDisable(GL_DEPTH_TEST);
 
         // Render batches
-        auto iter = m_batches[i].begin();
-        auto end  = m_batches[i].end();
+        auto iter = m_objectBatches[i].begin();
+        const auto end = m_objectBatches[i].end();
         while (iter != end)
         {
             const int i2 = iter->second.size();

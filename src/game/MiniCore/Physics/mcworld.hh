@@ -195,10 +195,9 @@ private:
     static MCFloat m_metersPerPixelSquared;
     typedef std::unordered_set<MCObject *> LayerHash;
     LayerHash layers[MCWorld::MaxLayers];
-    typedef std::map<std::string, std::vector<MCObject *> > BatchHash;
-    BatchHash m_batches[MCWorld::MaxLayers];
-    typedef std::map<MCUint, std::vector<MCObject *> > ParticleBatchHash;
-    ParticleBatchHash m_particleBatches[MCWorld::MaxLayers];
+    typedef std::map<MCUint, std::vector<MCObject *> > BatchHash;
+    BatchHash m_objectBatches[MCWorld::MaxLayers];
+    BatchHash m_particleBatches[MCWorld::MaxLayers];
     bool m_depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
