@@ -481,7 +481,7 @@ private:
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCVector3dF m_acceleration;
     MCVector3dF m_velocity;
-    MCVector3dF linearImpulse;
+    MCVector3dF m_linearImpulse;
     MCVector3dF m_initialLocation;
     int m_initialAngle;
     MCVector3dF m_location;

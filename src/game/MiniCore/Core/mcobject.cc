@@ -142,12 +142,12 @@ void MCObject::integrate(MCFloat step)
             m_angularVelocity       < m_angularSleepLimit)
         {
             m_sleeping = true;
-            m_velocity.setZero();
-            m_angularVelocity = 0;
+
+            resetMotion();
         }
 
         m_forces.setZero();
-        linearImpulse.setZero();
+        m_linearImpulse.setZero();
         m_angularImpulse = 0.0;
 
         translate(location() + velocity());
@@ -158,7 +158,7 @@ void MCObject::integrateLinear(MCFloat step)
 {
     MCVector3dF totAcceleration(m_acceleration);
     totAcceleration += m_forces * m_invMass;
-    m_velocity      += totAcceleration * step + linearImpulse;
+    m_velocity      += totAcceleration * step + m_linearImpulse;
     m_velocity      *= damping;
 
     // Note that this code doesn't take the z-component into consideration
@@ -277,6 +277,7 @@ void MCObject::resetMotion()
     m_forces.setZero();
     m_velocity.setZero();
     m_acceleration.setZero();
+    m_linearImpulse.setZero();
 
     // Reset angular motion
     m_torque              = 0.0;
@@ -489,7 +490,7 @@ bool MCObject::stationary() const
 
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
-    linearImpulse += impulse;
+    m_linearImpulse += impulse;
     m_sleeping     = false;
 }
 
