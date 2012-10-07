@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.8.1" cols="42" rows="4" index="7" name="Straight">
+<track lapCount="5" version="0.9.0" cols="42" rows="4" index="7" name="Straight">
  <t i="0" j="0" o="0" t="grass"/>
  <t i="0" j="1" o="0" t="grass"/>
  <t i="0" j="2" o="0" t="grass"/>
@@ -313,14 +313,29 @@
  <o x="9095" y="518" o="0" r="wall" c="free"/>
  <o x="9345" y="513" o="0" r="wall" c="free"/>
  <o x="9595" y="513" o="0" r="wall" c="free"/>
- <o x="1462" y="198" o="0" r="grandstand" c="free"/>
- <o x="1590" y="198" o="0" r="grandstand" c="free"/>
- <o x="1718" y="198" o="0" r="grandstand" c="free"/>
- <o x="1334" y="198" o="0" r="grandstand" c="free"/>
+ <o x="1462" y="215" o="0" r="grandstand" c="free"/>
+ <o x="1589" y="215" o="0" r="grandstand" c="free"/>
+ <o x="1716" y="215" o="0" r="grandstand" c="free"/>
+ <o x="1334" y="215" o="0" r="grandstand" c="free"/>
  <o x="10623" y="449" o="90" r="grandstand" c="free"/>
  <o x="10623" y="577" o="90" r="grandstand" c="free"/>
  <o x="10538" y="210" o="45" r="grandstand" c="free"/>
  <o x="10538" y="813" o="135" r="grandstand" c="free"/>
+ <o x="1136" y="263" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="875" y="263" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="613" y="263" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="5491" y="264" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="2933" y="263" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="2940" y="762" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="4209" y="762" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="4212" y="263" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="5486" y="760" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="6775" y="262" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="6775" y="760" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="8052" y="262" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="8056" y="762" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="9331" y="262" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="9326" y="762" o="180" r="dustRacing2DBanner" c="free"/>
  <n x="1652" y="380" i="0"/>
  <n x="2940" y="383" i="1"/>
  <n x="4218" y="380" i="2"/>
@@ -344,5 +359,5 @@
  <n x="377" y="456" i="20"/>
  <n x="629" y="359" i="21"/>
  <n x="1405" y="375" i="22"/>
- <n x="1653" y="376" i="23"/>
+ <n x="1652" y="380" i="23"/>
 </track>

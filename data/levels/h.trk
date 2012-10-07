@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.8.1" cols="10" rows="10" index="4" name="H">
+<track lapCount="5" version="0.9.0" cols="10" rows="10" index="4" name="H">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
@@ -318,6 +318,11 @@
  <o x="2111" y="190" o="0" r="grandstand" c="free"/>
  <o x="824" y="963" o="90" r="grandstand" c="free"/>
  <o x="824" y="835" o="90" r="grandstand" c="free"/>
+ <o x="1023" y="1012" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1289" y="1012" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1554" y="1012" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1414" y="1534" o="180" r="dustRacing2DBanner" c="free"/>
+ <o x="1677" y="1534" o="180" r="dustRacing2DBanner" c="free"/>
  <n x="911" y="1412" i="0"/>
  <n x="724" y="1475" i="1"/>
  <n x="637" y="1742" i="2"/>

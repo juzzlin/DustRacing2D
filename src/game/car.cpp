@@ -412,13 +412,15 @@ void Car::render(MCCamera *p)
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
+    static MCUint dustRacing2DBanner = MCObject::typeID("dustRacing2DBanner");
+    static MCUint grandstand         = MCObject::typeID("grandstand");
+    static MCUint wall               = MCObject::typeID("wall");
+    static MCUint rock               = MCObject::typeID("rock");
+
     // Spawn sparkles if colliding with another car or a wall.
     if (m_speedInKmh > 25)
     {
-        if (event.collidingObject().typeID() == typeID() ||
-            event.collidingObject().typeID() == MCObject::typeID("GS") ||
-            event.collidingObject().typeID() == MCObject::typeID("WALL") ||
-            event.collidingObject().typeID() == MCObject::typeID("ROCK"))
+        if (event.collidingObject().typeID() == typeID())
         {
             if (++m_sparkleCounter >= 10)
             {
@@ -426,6 +428,15 @@ void Car::collisionEvent(MCCollisionEvent & event)
                 doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
                 m_sparkleCounter = 0;
             }
+        }
+        else if (
+            event.collidingObject().typeID() == dustRacing2DBanner ||
+            event.collidingObject().typeID() == grandstand ||
+            event.collidingObject().typeID() == wall ||
+            event.collidingObject().typeID() == rock)
+        {
+            doSparkle(event.contactPoint(), 1.0, 0.8, 0.0, 0.9);
+            doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
         }
     }
 

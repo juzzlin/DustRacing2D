@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.8.1" cols="14" rows="14" index="5" name="Triangle">
+<track lapCount="5" version="0.9.0" cols="14" rows="14" index="5" name="Triangle">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
@@ -400,6 +400,8 @@
  <o x="2765" y="1729" o="-90" r="grandstand" c="free"/>
  <o x="2765" y="1985" o="-90" r="grandstand" c="free"/>
  <o x="2765" y="1601" o="-90" r="grandstand" c="free"/>
+ <o x="623" y="2542" o="-45" r="dustRacing2DBanner" c="free"/>
+ <o x="808" y="2356" o="-45" r="dustRacing2DBanner" c="free"/>
  <n x="2947" y="1920" i="0"/>
  <n x="2939" y="2692" i="1"/>
  <n x="2841" y="2919" i="2"/>

@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.8.1" cols="20" rows="6" index="1" name="Infinity">
+<track lapCount="5" version="0.9.0" cols="20" rows="6" index="1" name="Infinity">
  <t i="0" j="0" o="0" t="grass"/>
  <t i="0" j="1" o="0" t="grass"/>
  <t i="0" j="2" o="0" t="grass"/>
@@ -247,6 +247,8 @@
  <o x="3519" y="980" o="0" r="grandstand" c="free"/>
  <o x="2417" y="377" o="45" r="grandstand" c="free"/>
  <o x="2708" y="1172" o="225" r="grandstand" c="free"/>
+ <o x="759" y="261" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1800" y="261" o="0" r="dustRacing2DBanner" c="free"/>
  <n x="1415" y="383" i="0"/>
  <n x="1979" y="395" i="1"/>
  <n x="2163" y="461" i="2"/>

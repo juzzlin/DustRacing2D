@@ -326,9 +326,27 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // TODO: Eliminate copy-paste initializations.
     if (role == "brake")
     {
-        MCSurfaceObjectData data("BRAKE");
+        MCSurfaceObjectData data(role.toStdString());
         data.setMass(1000);
-        data.setSurfaceId("brake");
+        data.setSurfaceId(role.toStdString());
+        data.setRestitution(0.5);
+        data.setXYFriction(1.0);
+        data.setBatchMode(true);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(MCVector2dF(x, h - y));
+        object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
+
+        // Wrap the MCObject in a TrackObject and add to the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "dustRacing2DBanner")
+    {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setMass(50000);
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.5);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
@@ -344,9 +362,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "grandstand")
     {
-        MCSurfaceObjectData data("GS");
+        MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
-        data.setSurfaceId("grandstand");
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.5);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
@@ -363,9 +381,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "plant")
     {
-        MCSurfaceObjectData data("PLANT");
+        MCSurfaceObjectData data(role.toStdString());
         data.setMass(10);
-        data.setSurfaceId("plant");
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.1);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
@@ -381,9 +399,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "rock")
     {
-        MCSurfaceObjectData data("ROCK");
+        MCSurfaceObjectData data(role.toStdString());
         data.setMass(5000);
-        data.setSurfaceId("rock");
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
@@ -399,9 +417,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "tire")
     {
-        MCSurfaceObjectData data("TIRE");
+        MCSurfaceObjectData data(role.toStdString());
         data.setMass(1000); // Exaggerate the mass on purpose
-        data.setSurfaceId("tire");
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
         data.setXYFriction(0.25);
         data.setBatchMode(true);
@@ -420,7 +438,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         const MCFloat treeViewRadius = 32;
         const MCFloat treeBodyRadius = 8;
 
-        MCSurfaceObjectData data("TREE");
+        MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
@@ -441,9 +459,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "wall")
     {
-        MCSurfaceObjectData data("WALL");
+        MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
-        data.setSurfaceId("wall");
+        data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
