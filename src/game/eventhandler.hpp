@@ -39,6 +39,8 @@ signals:
 
     void pauseToggled();
 
+    void gameExited();
+
 private:
 
     bool handleMenuKeyPressEvent(QKeyEvent * event);

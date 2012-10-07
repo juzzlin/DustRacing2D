@@ -35,15 +35,19 @@
 
 #include <QDir>
 #include <QTime>
-#include <QCoreApplication>
+#include <QApplication>
 
 #include <cassert>
+#include <chrono>
+#include <thread>
 
 namespace
 {
 static const unsigned int MAX_PLAYERS = 2;
 static const unsigned int NUM_CARS    = 10;
 }
+
+Game * Game::m_instance = nullptr;
 
 Game::Game()
 : m_stateMachine(new StateMachine)
@@ -56,21 +60,22 @@ Game::Game()
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
 , m_updateFps(60)
+, m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
+, m_exit(false)
 , m_settings(new Settings)
 {
-    m_renderCountTimer.setInterval(1000);
-
-    // Connect update timers
-    connect(&m_frameUpdateTimer,     SIGNAL(timeout()), this, SLOT(updateFrame()));
-    connect(&m_animationUpdateTimer, SIGNAL(timeout()), this, SLOT(updateAnimations()));
-    connect(&m_renderCountTimer,     SIGNAL(timeout()), this, SLOT(countRenderFps()));
+    assert(!Game::m_instance);
+    Game::m_instance = this;
 
     // Connect pause toggling
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
+
+    // Connect signal that exits the whole game
+    connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
 
     // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
@@ -79,10 +84,17 @@ Game::Game()
         Config::Common::TRACK_SEARCH_PATH);
 }
 
+Game & Game::instance()
+{
+    assert(Game::m_instance);
+    return *Game::m_instance;
+}
+
 void Game::setTargetUpdateFps(unsigned int fps)
 {
-    m_updateFps = fps;
-    m_timeStep  = 1.0 / m_updateFps;
+    m_updateFps   = fps;
+    m_timeStep    = 1.0 / m_updateFps;
+    m_updateDelay = 1000 / m_updateFps;
 }
 
 void Game::setRenderer(Renderer * newRenderer)
@@ -97,9 +109,6 @@ void Game::setRenderer(Renderer * newRenderer)
 
 void Game::finish()
 {
-    // Disconnect update timers
-    disconnect(&m_frameUpdateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    disconnect(&m_renderCountTimer, SIGNAL(timeout()), this, SLOT(countRenderFps()));
 }
 
 Renderer * Game::renderer() const
@@ -199,20 +208,14 @@ bool Game::init()
 
 void Game::start()
 {
-    m_frameUpdateTimer.setInterval(1000 / m_updateFps);
-    m_frameUpdateTimer.start();
+    m_paused = false;
 
-    m_animationUpdateTimer.setInterval(1000 / 60); // Always 60 Hz
-    m_animationUpdateTimer.start();
-
-    m_renderCountTimer.start();
+    mainLoop();
 }
 
 void Game::stop()
 {
-    m_frameUpdateTimer.stop();
-    m_animationUpdateTimer.stop();
-    m_renderCountTimer.stop();
+    m_paused = true;
 }
 
 void Game::togglePause()
@@ -220,19 +223,19 @@ void Game::togglePause()
     if (m_paused)
     {
         start();
-
-        m_paused = false;
-
         MCLogger().info() << "Game continued.";
     }
     else
     {
         stop();
-
-        m_paused = true;
-
         MCLogger().info() << "Game paused.";
+        QApplication::instance()->quit();
     }
+}
+
+void Game::exitGame()
+{
+    m_exit = true;
 }
 
 void Game::updateFrame()
@@ -240,6 +243,31 @@ void Game::updateFrame()
     m_stateMachine->update();
     m_renderer->updateFrame(m_scene->camera());
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
+}
+
+void Game::mainLoop()
+{
+    while (!m_paused && !m_exit)
+    {
+        QTime updateTime;
+        updateTime.start();
+
+        QApplication::processEvents();
+        updateAnimations();
+        updateFrame();
+
+        int delay = m_updateDelay - updateTime.elapsed();
+        delay = delay < 0 ? 0 : delay;
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+
+    if (m_exit)
+    {
+        // For some weird reason calling QApplication::instance()->exit()
+        // didn't exit the application. It might have something to do
+        // with QApplication::processEvents() above.
+        ::exit(EXIT_SUCCESS);
+    }
 }
 
 void Game::updateAnimations()

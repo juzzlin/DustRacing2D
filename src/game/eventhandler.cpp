@@ -18,8 +18,6 @@
 #include "menumanager.hpp"
 #include "statemachine.hpp"
 
-#include <QApplication>
-
 EventHandler::EventHandler(InputHandler & inputHandler)
 : m_inputHandler(inputHandler)
 {
@@ -74,7 +72,7 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
         MenuManager::instance().exitCurrentMenu();
         if (MenuManager::instance().done())
         {
-            QApplication::instance()->quit();
+            emit gameExited();
         }
         break;
     default:

@@ -65,11 +65,11 @@ public:
     void getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d, ObjectSet & resultObjs);
 
     //! Get all objects of given type overlapping given BBox.
-    void getObjectsWithinBBox(const MCBBox<MCFloat> & rBBox, ObjectSet & resultObjs);
+    void getObjectsWithinBBox(const MCBBox<MCFloat> & bbox, ObjectSet & resultObjs);
 
     //! Get all objects of given type overlapping given BBox.
     typedef std::vector<MCObject *> ObjectVec;
-    void getObjectsWithinBBoxNaive(const MCBBox<MCFloat> & rBBox, ObjectVec & resultObjs);
+    void getObjectsWithinBBoxNaive(const MCBBox<MCFloat> & bbox, ObjectVec & resultObjs);
 
     /*! Get bbox collisions involving the given object. Collisions between
      *  sleeping objects are ignored, because that gives a huge performance
@@ -82,13 +82,21 @@ public:
     //! Get bounding box
     const MCBBox<MCFloat> & bbox() const;
 
+    //! Get object container index range corresponding to the given camera window.
+    void getIndexRange(
+        const MCBBox<MCFloat> & bbox, MCUint & i0, MCUint & i1, MCUint & j0, MCUint & j1);
+
+    //! Directly access the ObjectSet matrix.
+    const ObjectSet & getObjectSetAt(MCUint i, MCUint j);
+
 private:
 
     DISABLE_COPY(MCObjectTree);
     DISABLE_ASSI(MCObjectTree);
 
-    void getIndexRange(const MCBBox<MCFloat> & bbox);
+    void setIndexRange(const MCBBox<MCFloat> & bbox);
     void build();
+
     MCBBox<MCFloat> m_bbox;
     MCUint m_leafMaxW, m_leafMaxH, m_horSize, m_verSize;
     MCUint m_i0, m_i1, m_j0, m_j1;
@@ -98,4 +106,3 @@ private:
 };
 
 #endif // MCOBJECTTREE_HH
-

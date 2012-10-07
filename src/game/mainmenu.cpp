@@ -14,6 +14,8 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainmenu.hpp"
+
+#include "game.hpp"
 #include "menuitem.hpp"
 #include "menuitemview.hpp"
 #include "menuitemaction.hpp"
@@ -32,7 +34,7 @@ class QuitAction : public MenuItemAction
     void fire()
     {
         MCLogger().info() << "Quit selected from the main menu.";
-        QApplication::instance()->quit();
+        Game::instance().exitGame();
     }
 };
 

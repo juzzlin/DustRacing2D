@@ -47,6 +47,9 @@ public:
     //! Destructor
     virtual ~Game();
 
+    //! Return the game instance.
+    static Game & instance();
+
     //! Set target value for frames per second. Default is 60.
     void setTargetUpdateFps(unsigned int fps);
 
@@ -67,6 +70,7 @@ public:
 public slots:
 
     void togglePause();
+    void exitGame();
 
 private slots:
 
@@ -77,6 +81,7 @@ private slots:
 
 private:
 
+    void mainLoop();
     void loadSurfaces();
     void loadFonts();
     bool loadTracks();
@@ -91,16 +96,16 @@ private:
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;
     EventHandler         * m_eventHandler;
-    QTimer                 m_frameUpdateTimer;
-    QTimer                 m_animationUpdateTimer;
-    QTimer                 m_renderCountTimer;
     unsigned int           m_updateFps;
-    unsigned int           m_renderFps;
+    unsigned int           m_updateDelay;
     float                  m_timeStep;
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
     bool                   m_paused;
+    bool                   m_exit;
     Settings             * m_settings;
+
+    static Game * m_instance;
 };
 
 #endif // GAME_HPP

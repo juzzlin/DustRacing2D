@@ -40,32 +40,56 @@ MCObjectTree::~MCObjectTree()
     delete [] m_matrix;
 }
 
-void MCObjectTree::getIndexRange(const MCBBox<MCFloat> & rBBox)
+void MCObjectTree::setIndexRange(const MCBBox<MCFloat> & bbox)
 {
-    int temp = static_cast<int>(rBBox.x1() * m_helpHor);
+    int temp = static_cast<int>(bbox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
     m_i0 = static_cast<MCUint>(temp);
 
-    temp = static_cast<int>(rBBox.x2() * m_helpHor);
+    temp = static_cast<int>(bbox.x2() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
     m_i1 = static_cast<MCUint>(temp);
 
-    temp = static_cast<int>(rBBox.y1() * m_helpVer);
+    temp = static_cast<int>(bbox.y1() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
     m_j0 = static_cast<MCUint>(temp);
 
-    temp = static_cast<int>(rBBox.y2() * m_helpVer);
+    temp = static_cast<int>(bbox.y2() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
     m_j1 = static_cast<MCUint>(temp);
 }
 
+void MCObjectTree::getIndexRange(
+    const MCBBox<MCFloat> & bbox, MCUint & i0, MCUint & i1, MCUint & j0, MCUint & j1)
+{
+    int temp = static_cast<int>(bbox.x1() * m_helpHor);
+    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
+    else if (temp < 0) temp = 0;
+    i0 = static_cast<MCUint>(temp);
+
+    temp = static_cast<int>(bbox.x2() * m_helpHor);
+    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
+    else if (temp < 0) temp = 0;
+    i1 = static_cast<MCUint>(temp);
+
+    temp = static_cast<int>(bbox.y1() * m_helpVer);
+    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
+    else if (temp < 0) temp = 0;
+    j0 = static_cast<MCUint>(temp);
+
+    temp = static_cast<int>(bbox.y2() * m_helpVer);
+    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
+    else if (temp < 0) temp = 0;
+    j1 = static_cast<MCUint>(temp);
+}
+
 void MCObjectTree::insert(MCObject & object)
 {
-    getIndexRange(object.bbox());
+    setIndexRange(object.bbox());
     object.cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
 
     for (MCUint j = m_j0; j <= m_j1; j++)
@@ -125,7 +149,7 @@ void MCObjectTree::getBBoxCollisions(
     resultObjs.clear();
 
     const MCBBox<MCFloat> b(object.bbox());
-    getIndexRange(b);
+    setIndexRange(b);
     MCObject * p2 = nullptr;
     MCObjectTree::ObjectSet::iterator iter;
 
@@ -139,8 +163,9 @@ void MCObjectTree::getBBoxCollisions(
             for (MCUint i = m_i0; i <= m_i1; i++)
             {
                 const int index = j * m_horSize + i;
+                const auto end  = m_matrix[index].end();
                 iter = m_matrix[index].begin();
-                while (iter != m_matrix[index].end())
+                while (iter != end)
                 {
                     p2 = *iter;
                     if (&object != p2 && b.intersects(p2->bbox()))
@@ -159,8 +184,9 @@ void MCObjectTree::getBBoxCollisions(
             for (MCUint i = m_i0; i <= m_i1; i++)
             {
                 const int index = j * m_horSize + i;
+                const auto end  = m_matrix[index].end();
                 iter = m_matrix[index].begin();
-                while (iter != m_matrix[index].end())
+                while (iter != end)
                 {
                     p2 = *iter;
                     if (!p2->sleeping())
@@ -181,7 +207,7 @@ void MCObjectTree::getObjectsWithinDistance(
     MCFloat x, MCFloat y, MCFloat d,
     MCObjectTree::ObjectSet & resultObjs)
 {
-    getIndexRange(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
+    setIndexRange(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
 
     // Pre-square the distance
     d *= d;
@@ -194,9 +220,10 @@ void MCObjectTree::getObjectsWithinDistance(
     {
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
-            const int index = j * m_horSize + i;
+            const int  index = j * m_horSize + i;
+            const auto end   = m_matrix[index].end();
             iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end())
+            while (iter != end)
             {
                 p = *iter;
                 const MCFloat x2 = x - p->getX();
@@ -214,10 +241,10 @@ void MCObjectTree::getObjectsWithinDistance(
 }
 
 void MCObjectTree::getObjectsWithinBBox(
-    const MCBBox<MCFloat> & rBBox,
+    const MCBBox<MCFloat> & bbox,
     MCObjectTree::ObjectSet & resultObjs)
 {
-    getIndexRange(rBBox);
+    setIndexRange(bbox);
 
     resultObjs.clear();
     MCObjectTree::ObjectSet::iterator iter;
@@ -232,7 +259,7 @@ void MCObjectTree::getObjectsWithinBBox(
             while (iter != m_matrix[index].end())
             {
                 p = *iter;
-                if (rBBox.intersects(p->bbox()))
+                if (bbox.intersects(p->bbox()))
                 {
                     resultObjs.insert(p);
                 }
@@ -244,10 +271,10 @@ void MCObjectTree::getObjectsWithinBBox(
 }
 
 void MCObjectTree::getObjectsWithinBBoxNaive(
-    const MCBBox<MCFloat> & rBBox,
+    const MCBBox<MCFloat> & bbox,
     MCObjectTree::ObjectVec & resultObjs)
 {
-    getIndexRange(rBBox);
+    setIndexRange(bbox);
     resultObjs.clear();
 
     for (MCUint j = m_j0; j <= m_j1; j++)
@@ -263,4 +290,10 @@ void MCObjectTree::getObjectsWithinBBoxNaive(
 const MCBBox<MCFloat> & MCObjectTree::bbox() const
 {
     return m_bbox;
+}
+
+const MCObjectTree::ObjectSet & MCObjectTree::getObjectSetAt(MCUint i, MCUint j)
+{
+    const int index = j * m_horSize + i;
+    return m_matrix[index];
 }

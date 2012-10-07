@@ -16,6 +16,7 @@
 #include "../common/config.hpp"
 #include "mainwindow.hpp"
 #include "aboutdlg.hpp"
+#include "game.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -62,6 +63,7 @@ MainWindow * MainWindow::instance()
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-    emit closed();
     event->accept();
+    emit closed();
+    Game::instance().exitGame();
 }
