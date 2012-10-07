@@ -49,6 +49,12 @@ public:
     //! Destructor.
     virtual ~MCSurfaceParticle();
 
+    //! \reimp
+    void beginBatch();
+
+    //! \reimp
+    void endBatch();
+
 private:
 
     DISABLE_COPY(MCSurfaceParticle);

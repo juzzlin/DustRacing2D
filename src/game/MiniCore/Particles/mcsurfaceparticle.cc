@@ -26,6 +26,16 @@ MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
     setView(new MCSurfaceView(viewId, nullptr, true));
 }
 
+void MCSurfaceParticle::beginBatch()
+{
+    view()->beginBatch();
+}
+
+void MCSurfaceParticle::endBatch()
+{
+    view()->endBatch();
+}
+
 MCSurfaceParticle::~MCSurfaceParticle()
 {
 }
