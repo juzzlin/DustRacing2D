@@ -382,13 +382,14 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     else if (role == "plant")
     {
         MCSurfaceObjectData data(role.toStdString());
-        data.setMass(10);
+        data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.1);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
 
         MCObject & object = m_objectFactory.build(data);
+        object.setBypassCollisions(true);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
