@@ -307,18 +307,22 @@ void MCWorld::renderShadows(MCCamera * pCamera)
             for (int i = 0; i < i2; i++)
             {
                 MCObject    * object = iter->second[i];
-                MCShapeView * view   = object->shape()->view();
 
-                if (i == 0)
+                if (object->hasShadow())
                 {
-                    view->beginBatch();
-                }
+                    MCShapeView * view   = object->shape()->view();
 
-                object->renderShadow(pCamera);
+                    if (i == 0)
+                    {
+                        view->beginBatch();
+                    }
 
-                if (i == i2 - 1)
-                {
-                    view->endBatch();
+                    object->renderShadow(pCamera);
+
+                    if (i == i2 - 1)
+                    {
+                        view->endBatch();
+                    }
                 }
             }
 

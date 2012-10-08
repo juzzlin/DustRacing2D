@@ -34,11 +34,11 @@ public:
     virtual ~TreeView();
 
     //! \reimp
-    virtual void render(const MCVector3d<MCFloat> & l, MCFloat angle,
+    virtual void render(const MCVector3dF & l, MCFloat angle,
         MCCamera * p = nullptr);
 
     //! \reimp
-    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
+    virtual void renderShadow(const MCVector3dF & l, MCFloat angle,
         MCCamera * p = nullptr);
 
     //! \reimp
@@ -56,7 +56,7 @@ private:
     int m_dAngle;
     MCUint m_topSinAngle;
     MCUint m_topCosAngle;
-    MCVector2d<MCFloat> m_top;
+    MCVector2dF m_top;
 };
 
 #endif // TREEVIEW_HPP

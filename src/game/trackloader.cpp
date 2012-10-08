@@ -332,6 +332,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.5);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
+        data.setLayer(Layers::GrandStands);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
@@ -350,6 +351,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.5);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
+        data.setLayer(Layers::GrandStands);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
@@ -384,9 +386,26 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.1);
-        data.setXYFriction(1.0);
+        data.setRestitution(0.25);
         data.setBatchMode(true);
+        data.setLayer(Layers::Ground);
+
+        MCObject & object = m_objectFactory.build(data);
+        object.setInitialLocation(MCVector2dF(x, h - y));
+        object.setInitialAngle(o);
+        object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
+
+        // Wrap the MCObject in a TrackObject and add to the TrackData
+        newData.objects().add(*new TrackObject(category, role, object), true);
+    }
+    else if (role == "sandBrush")
+    {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setStationary(true);
+        data.setSurfaceId(role.toStdString());
+        data.setBatchMode(true);
+        data.setLayer(Layers::Ground);
 
         MCObject & object = m_objectFactory.build(data);
         object.setBypassCollisions(true);
@@ -394,6 +413,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setInitialAngle(o);
         object.surface()->setShaderProgram(&Renderer::instance().masterProgram());
         object.surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
+        object.setHasShadow(false);
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -406,6 +426,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.9);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
+        data.setLayer(Layers::Walls);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
@@ -424,6 +445,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.25);
         data.setXYFriction(0.25);
         data.setBatchMode(true);
+        data.setLayer(Layers::Walls);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
@@ -436,7 +458,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "tree")
     {
-        const MCFloat treeViewRadius = 32;
+        const MCFloat treeViewRadius = 48;
         const MCFloat treeBodyRadius = 8;
 
         MCSurfaceObjectData data(role.toStdString());
@@ -448,7 +470,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 
         // Create a custom view.
         MCShapeView * view = new TreeView(
-            m_textureManager.surface("tree"), treeViewRadius, 2, 90, 5);
+            m_textureManager.surface("tree"), treeViewRadius, 2, 120, 5);
         view->setShaderProgram(&(Renderer::instance().masterProgram()));
         view->setShadowShaderProgram(&(Renderer::instance().masterShadowProgram()));
         MCObject & object = m_objectFactory.build(data, *view);
@@ -466,6 +488,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         data.setRestitution(0.9);
         data.setXYFriction(1.0);
         data.setBatchMode(true);
+        data.setLayer(Layers::Walls);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector3dF(x, h - y, 8));
