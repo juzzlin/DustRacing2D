@@ -132,58 +132,86 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 {
     if (scene())
     {
+        EditorData & editorData = MainWindow::instance()->editorData();
+
         m_clickedPos      = event->pos();
         m_clickedScenePos = mapToScene(m_clickedPos);
 
-        if (Object * object =
-            dynamic_cast<Object *>(scene()->itemAt(m_clickedScenePos)))
-        {
-            // Handle right button click
-            if (event->button() == Qt::RightButton)
-            {
-                handleRightButtonClickOnObject(*object);
-            }
-            // Handle left button click
-            else if (event->button() == Qt::LeftButton)
-            {
-                handleLeftButtonClickOnObject(*object);
-            }
+        // Fetch all items at the location
+        QList<QGraphicsItem *> items = scene()->items(
+            m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
 
-            QWidget::mousePressEvent(event);
+        // User is erasing an object
+        if (editorData.mode() == EditorData::EM_ERASE_OBJECT)
+        {
+            // We need to find the first object to be erased, because
+            // there might be also overlapping TargetNodes.
+            for (QGraphicsItem * item : items)
+            {
+                if (Object * object = dynamic_cast<Object *>(item))
+                {
+                    // Remove from track data.
+                    editorData.trackData()->objects().remove(*object);
+
+                    // Remove from scene.
+                    scene()->removeItem(object);
+
+                    break;
+                }
+            }
         }
-        else if (TargetNode * tnode =
-            dynamic_cast<TargetNode *>(scene()->itemAt(m_clickedScenePos)))
+        // Default actions
+        else
         {
-            // Handle right button click
-            if (event->button() == Qt::RightButton)
-            {
-                handleRightButtonClickOnTargetNode(*tnode);
-            }
-            // Handle left button click
-            else if (event->button() == Qt::LeftButton)
-            {
-                handleLeftButtonClickOnTargetNode(*tnode);
-            }
+            QGraphicsItem * item = *items.begin();
 
-            QWidget::mousePressEvent(event);
-        }
-        else if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(m_clickedScenePos)))
-        {
-            tile->setActive(true);
-
-            // Handle right button click
-            if (event->button() == Qt::RightButton)
+            if (Object * object = dynamic_cast<Object *>(item))
             {
-                handleRightButtonClickOnTile(*tile);
-            }
-            // Handle left button click
-            else if (event->button() == Qt::LeftButton)
-            {
-                handleLeftButtonClickOnTile(*tile);
-            }
+                // Handle right button click
+                if (event->button() == Qt::RightButton)
+                {
+                    handleRightButtonClickOnObject(*object);
+                }
+                // Handle left button click
+                else if (event->button() == Qt::LeftButton)
+                {
+                    handleLeftButtonClickOnObject(*object);
+                }
 
-            QWidget::mousePressEvent(event);
+                QWidget::mousePressEvent(event);
+            }
+            else if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
+            {
+                // Handle right button click
+                if (event->button() == Qt::RightButton)
+                {
+                    handleRightButtonClickOnTargetNode(*tnode);
+                }
+                // Handle left button click
+                else if (event->button() == Qt::LeftButton)
+                {
+                    handleLeftButtonClickOnTargetNode(*tnode);
+                }
+
+                QWidget::mousePressEvent(event);
+            }
+            else if (TrackTile * tile = dynamic_cast<TrackTile *>(item))
+            {
+                tile->setActive(true);
+
+                // Handle right button click
+                if (event->button() == Qt::RightButton)
+                {
+                    handleRightButtonClickOnTile(*tile);
+                }
+                // Handle left button click
+                else if (event->button() == Qt::LeftButton)
+                {
+                    handleLeftButtonClickOnTile(*tile);
+                }
+
+                QWidget::mousePressEvent(event);
+            }
         }
     }
 }
@@ -192,20 +220,8 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
 {
     EditorData & editorData = MainWindow::instance()->editorData();
 
-    // User is erasing an object
-    if (editorData.mode() == EditorData::EM_ERASE_OBJECT)
-    {
-        if (scene())
-        {
-            // Remove from track data.
-            editorData.trackData()->objects().remove(object);
-
-            // Remove from scene.
-            scene()->removeItem(&object);
-        }
-    }
     // User is initiating a drag'n'drop
-    else if (editorData.mode() == EditorData::EM_NONE)
+    if (editorData.mode() == EditorData::EM_NONE)
     {
         object.setZValue(object.zValue() + 1);
         editorData.setDragAndDropObject(&object);
