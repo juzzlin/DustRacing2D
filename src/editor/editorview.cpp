@@ -329,11 +329,14 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
     m_tileContextMenu.exec(globalPos);
 }
 
-void EditorView::handleRightButtonClickOnObject(Object &)
+void EditorView::handleRightButtonClickOnObject(Object & object)
 {
+    EditorData & editorData = MainWindow::instance()->editorData();
+
     // Show the context menu
     QPoint globalPos = mapToGlobal(m_clickedPos);
     m_objectContextMenu.exec(globalPos);
+    editorData.setSelectedObject(&object);
 }
 
 void EditorView::handleRightButtonClickOnTargetNode(TargetNode &)
