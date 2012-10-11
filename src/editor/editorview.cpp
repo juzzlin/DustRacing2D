@@ -160,6 +160,25 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                 }
             }
         }
+        // User is adding an object
+        else if (editorData.mode() == EditorData::EM_ADD_OBJECT)
+        {
+            if (QAction * action = MainWindow::instance()->currentToolBarAction())
+            {
+                if (scene())
+                {
+                    // Create the object
+                    Object & object = ObjectFactory::createObject(action->data().toString());
+                    object.setLocation(m_clickedScenePos);
+
+                    // Add to scene
+                    scene()->addItem(&object);
+
+                    // Add to track data
+                    editorData.trackData()->objects().add(object);
+                }
+            }
+        }
         // Default actions
         else
         {
@@ -269,25 +288,6 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
             tile.setTileType(action->data().toString());
             tile.setPixmap(action->icon().pixmap(
                 TrackTile::TILE_W, TrackTile::TILE_H));
-        }
-    }
-    // User is adding an object
-    else if (editorData.mode() == EditorData::EM_ADD_OBJECT)
-    {
-        if (QAction * action = MainWindow::instance()->currentToolBarAction())
-        {
-            if (scene())
-            {
-                // Create the object
-                Object & object = ObjectFactory::createObject(action->data().toString());
-                object.setLocation(m_clickedScenePos);
-
-                // Add to scene
-                scene()->addItem(&object);
-
-                // Add to track data
-                editorData.trackData()->objects().add(object);
-            }
         }
     }
     // User is initiating a drag'n'drop
