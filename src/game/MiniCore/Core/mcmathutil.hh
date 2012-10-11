@@ -40,9 +40,9 @@ using std::max;
 //! Miscellaneous math utilities.
 class MCMathUtil
 {
-    enum SIGN {NEG=0, POS, ZERO};
-
 public:
+
+    enum SIGN {NEG=0, POS, ZERO};
 
     //! Returns true if x == y. Can be used with MCFloats / MCFloats.
     template <typename T>
