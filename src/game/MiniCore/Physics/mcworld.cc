@@ -577,6 +577,25 @@ void MCWorld::processRemovedObjects()
     removeObjs.clear();
 }
 
+void MCWorld::processCollisions()
+{
+    detectCollisions();
+
+    if (numCollisions)
+    {
+        generateImpulses();
+
+        // Process contacts and generate impulses
+        collisionDetector.enableCollisionEvents(false);
+        for (MCUint i = 0; i < numResolverLoops; i++)
+        {
+            detectCollisions();
+            resolvePositions(resolverStep);
+        }
+        collisionDetector.enableCollisionEvents(true);
+    }
+}
+
 void MCWorld::addToLayerMap(MCObject & object)
 {
     const MCUint layerIndex =
@@ -614,21 +633,9 @@ void MCWorld::stepTime(MCFloat step)
 {
     // Integrate physics
     integrate(step);
-    detectCollisions();
 
-    if (numCollisions)
-    {
-        generateImpulses();
-
-        // Process contacts and generate impulses
-        collisionDetector.enableCollisionEvents(false);
-        for (MCUint i = 0; i < numResolverLoops; i++)
-        {
-            detectCollisions();
-            resolvePositions(resolverStep);
-        }
-        collisionDetector.enableCollisionEvents(true);
-    }
+    // Process collisions and generate impulses
+    processCollisions();
 
     // Remove objects that are marked to be removed
     processRemovedObjects();

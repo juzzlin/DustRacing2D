@@ -177,14 +177,15 @@ private:
     void renderShadows(MCCamera * pCamera = nullptr);
     void renderObjectBatches(MCCamera * pCamera, int layer);
     void renderParticleBatches(MCCamera * pCamera, int layer);
-
     void integrate(MCFloat step);
     void processRemovedObjects();
+    void processCollisions();
     void doRemoveObject(MCObject & object);
     void detectCollisions();
     void generateImpulses();
     void resolvePositions(MCFloat accuracy);
     MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
+
     static MCWorld * pInstance;
     MCForceRegistry forceRegistry;
     MCCollisionDetector collisionDetector;
