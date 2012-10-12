@@ -113,7 +113,7 @@ void MCWorld::integrate(MCFloat step)
 void MCWorld::detectCollisions()
 {
     // Check collisions for all registered objects
-    numCollisions = collisionDetector.detectCollisions(objs, *m_objectTree);
+    numCollisions = collisionDetector.detectCollisions(*m_objectTree);
 }
 
 void MCWorld::generateImpulses()

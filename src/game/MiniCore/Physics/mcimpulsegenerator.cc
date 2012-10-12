@@ -128,6 +128,9 @@ void MCImpulseGeneratorImpl::resolvePositions(std::vector<MCObject *> & objs, MC
 
                 displace(pa, pb, displacement);
                 displace(pb, pa, -displacement);
+
+                pb.deleteContacts(pa);
+                pa.deleteContacts(pb);
             }
         }
 

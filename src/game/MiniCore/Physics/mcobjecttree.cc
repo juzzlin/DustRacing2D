@@ -63,30 +63,6 @@ void MCObjectTree::setIndexRange(const MCBBox<MCFloat> & bbox)
     m_j1 = static_cast<MCUint>(temp);
 }
 
-void MCObjectTree::getIndexRange(
-    const MCBBox<MCFloat> & bbox, MCUint & i0, MCUint & i1, MCUint & j0, MCUint & j1)
-{
-    int temp = static_cast<int>(bbox.x1() * m_helpHor);
-    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
-    else if (temp < 0) temp = 0;
-    i0 = static_cast<MCUint>(temp);
-
-    temp = static_cast<int>(bbox.x2() * m_helpHor);
-    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
-    else if (temp < 0) temp = 0;
-    i1 = static_cast<MCUint>(temp);
-
-    temp = static_cast<int>(bbox.y1() * m_helpVer);
-    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
-    else if (temp < 0) temp = 0;
-    j0 = static_cast<MCUint>(temp);
-
-    temp = static_cast<int>(bbox.y2() * m_helpVer);
-    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
-    else if (temp < 0) temp = 0;
-    j1 = static_cast<MCUint>(temp);
-}
-
 void MCObjectTree::insert(MCObject & object)
 {
     setIndexRange(object.bbox());
@@ -96,7 +72,9 @@ void MCObjectTree::insert(MCObject & object)
     {
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
-            m_matrix[j * m_horSize + i].insert(&object);
+            const int index = j * m_horSize + i;
+            m_matrix[index].m_objects.insert(&object);
+            m_matrix[index].m_dirty = true;
         }
     }
 }
@@ -111,10 +89,12 @@ bool MCObjectTree::remove(MCObject & object)
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
-            auto iter(m_matrix[index].find(&object));
-            if (iter != m_matrix[index].end())
+            const auto iter(m_matrix[index].m_objects.find(&object));
+            const auto end(m_matrix[index].m_objects.end());
+            if (iter != end)
             {
-                m_matrix[index].erase(iter);
+                m_matrix[index].m_objects.erase(iter);
+                m_matrix[index].m_dirty = true;
                 removed = true;
             }
         }
@@ -128,76 +108,70 @@ void MCObjectTree::removeAll()
     {
         for (MCUint i = 0; i < m_horSize; i++)
         {
-            m_matrix[j * m_horSize + i].clear();
+            const int index = j * m_horSize + i;
+            m_matrix[index].m_objects.clear();
+            m_matrix[index].m_dirty = true;
         }
     }
 }
 
 void MCObjectTree::build()
 {
-    m_matrix = new MCObjectTree::ObjectSet[m_horSize * m_verSize];
-    for (MCUint j = 0; j < m_verSize; j++) {
-        for (MCUint i = 0; i < m_horSize; i++) {
-            m_matrix[j * m_horSize + i] = MCObjectTree::ObjectSet();
+    m_matrix = new MCObjectTree::GridCell[m_horSize * m_verSize];
+    for (MCUint j = 0; j < m_verSize; j++)
+    {
+        for (MCUint i = 0; i < m_horSize; i++)
+        {
+            m_matrix[j * m_horSize + i].m_objects = MCObjectTree::ObjectSet();
         }
     }
 }
 
-void MCObjectTree::getBBoxCollisions(
-    const MCObject & object, MCObjectTree::ObjectSet & resultObjs)
+void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
 {
-    resultObjs.clear();
-
-    const MCBBox<MCFloat> b(object.bbox());
-    setIndexRange(b);
-    MCObject * p2 = nullptr;
-    MCObjectTree::ObjectSet::iterator iter;
+    result.clear();
 
     // Optimization: ignore collisions between sleeping objects.
     // Note that stationary objects are also sleeping objects.
 
-    if (!object.sleeping())
+    const MCUint matrixSize = m_verSize * m_horSize;
+    for (MCUint i = 0; i < matrixSize; i++)
     {
-        for (MCUint j = m_j0; j <= m_j1; j++)
+        if (m_matrix[i].m_dirty)
         {
-            for (MCUint i = m_i0; i <= m_i1; i++)
+            bool hadCollisions = false;
+            const MCObjectTree::ObjectSet & objects = m_matrix[i].m_objects;
+
+            auto outer(objects.begin());
+            const auto end(objects.end());
+            while (outer != end)
             {
-                const int index = j * m_horSize + i;
-                const auto end  = m_matrix[index].end();
-                iter = m_matrix[index].begin();
-                while (iter != end)
+                MCObject * obj1 = *outer;
+                auto inner = objects.begin();
+                while (inner != end)
                 {
-                    p2 = *iter;
-                    if (&object != p2 && b.intersects(p2->bbox()))
+                    MCObject * obj2 = *inner;
+                    if (obj1 != obj2)
                     {
-                        resultObjs.insert(p2);
-                    }
-                    iter++;
-                }
-            }
-        }
-    }
-    else
-    {
-        for (MCUint j = m_j0; j <= m_j1; j++)
-        {
-            for (MCUint i = m_i0; i <= m_i1; i++)
-            {
-                const int index = j * m_horSize + i;
-                const auto end  = m_matrix[index].end();
-                iter = m_matrix[index].begin();
-                while (iter != end)
-                {
-                    p2 = *iter;
-                    if (!p2->sleeping())
-                    {
-                        if (&object != p2 && b.intersects(p2->bbox()))
+                        if (!obj1->sleeping() || !obj2->sleeping())
                         {
-                            resultObjs.insert(p2);
+                            if (obj1->bbox().intersects(obj2->bbox()))
+                            {
+                                result[obj1].insert(obj2);
+                                hadCollisions = true;
+                            }
                         }
                     }
-                    iter++;
+
+                    inner++;
                 }
+
+                outer++;
+            }
+
+            if (!hadCollisions)
+            {
+                m_matrix[i].m_dirty = false;
             }
         }
     }
@@ -220,9 +194,9 @@ void MCObjectTree::getObjectsWithinDistance(
     {
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
-            const int  index = j * m_horSize + i;
-            const auto end   = m_matrix[index].end();
-            iter = m_matrix[index].begin();
+            const int index = j * m_horSize + i;
+            const auto end(m_matrix[index].m_objects.end());
+            iter = m_matrix[index].m_objects.begin();
             while (iter != end)
             {
                 p = *iter;
@@ -255,8 +229,8 @@ void MCObjectTree::getObjectsWithinBBox(
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
-            iter = m_matrix[index].begin();
-            while (iter != m_matrix[index].end())
+            iter = m_matrix[index].m_objects.begin();
+            while (iter != m_matrix[index].m_objects.end())
             {
                 p = *iter;
                 if (bbox.intersects(p->bbox()))
@@ -270,30 +244,7 @@ void MCObjectTree::getObjectsWithinBBox(
     }
 }
 
-void MCObjectTree::getObjectsWithinBBoxNaive(
-    const MCBBox<MCFloat> & bbox,
-    MCObjectTree::ObjectVec & resultObjs)
-{
-    setIndexRange(bbox);
-    resultObjs.clear();
-
-    for (MCUint j = m_j0; j <= m_j1; j++)
-    {
-        for (MCUint i = m_i0; i <= m_i1; i++)
-        {
-            const int index = j * m_horSize + i;
-            std::copy(m_matrix[index].begin(), m_matrix[index].end(), std::back_inserter(resultObjs));
-        }
-    }
-}
-
 const MCBBox<MCFloat> & MCObjectTree::bbox() const
 {
     return m_bbox;
-}
-
-const MCObjectTree::ObjectSet & MCObjectTree::getObjectSetAt(MCUint i, MCUint j)
-{
-    const int index = j * m_horSize + i;
-    return m_matrix[index];
 }

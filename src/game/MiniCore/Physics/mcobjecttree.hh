@@ -25,6 +25,8 @@
 #include "mcobject.hh"
 
 #include <unordered_set>
+#include <map>
+#include <set>
 #include <vector>
 
 //! A geometrically structured MCObjectTree used for fast collision detection.
@@ -35,9 +37,21 @@ class MCObjectTree
 {
 public:
 
-    //! Container for objects. There are a lot of inserts/removals so
-    //! unordered_set is taken.
     typedef std::unordered_set<MCObject *> ObjectSet;
+    typedef std::map<MCObject *, std::set<MCObject *> > CollisionVector;
+
+    //! Container for objects.
+    struct GridCell
+    {
+        GridCell()
+        : m_dirty(true)
+        , m_hadCollisions(false)
+        {}
+
+        ObjectSet m_objects;
+        bool      m_dirty;
+        bool      m_hadCollisions;
+    };
 
     //! Constructor.
     //! \param x1,y1,x2,y2 represent the size of the first-level bounding box.
@@ -67,27 +81,13 @@ public:
     //! Get all objects of given type overlapping given BBox.
     void getObjectsWithinBBox(const MCBBox<MCFloat> & bbox, ObjectSet & resultObjs);
 
-    //! Get all objects of given type overlapping given BBox.
-    typedef std::vector<MCObject *> ObjectVec;
-    void getObjectsWithinBBoxNaive(const MCBBox<MCFloat> & bbox, ObjectVec & resultObjs);
-
-    /*! Get bbox collisions involving the given object. Collisions between
-     *  sleeping objects are ignored, because that gives a huge performance
-     *  boost.
-     *  \param object Object to be tested.
-     *  \param rVectPObjs Vector in which colliding object are stored.
-     *  \param typeId Match MCObjects of given type only. */
-    void getBBoxCollisions(const MCObject & object, ObjectSet & resultObjs);
+    /*! Get bbox collisions. Collisions between sleeping objects are ignored,
+     *  because that gives a huge performance  boost.
+     *  \param result Store the possible collisions here. */
+    void getBBoxCollisions(CollisionVector & result);
 
     //! Get bounding box
     const MCBBox<MCFloat> & bbox() const;
-
-    //! Get object container index range corresponding to the given camera window.
-    void getIndexRange(
-        const MCBBox<MCFloat> & bbox, MCUint & i0, MCUint & i1, MCUint & j0, MCUint & j1);
-
-    //! Directly access the ObjectSet matrix.
-    const ObjectSet & getObjectSetAt(MCUint i, MCUint j);
 
 private:
 
@@ -102,7 +102,7 @@ private:
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCFloat m_helpHor;
     MCFloat m_helpVer;
-    MCObjectTree::ObjectSet * m_matrix;
+    MCObjectTree::GridCell * m_matrix;
 };
 
 #endif // MCOBJECTTREE_HH

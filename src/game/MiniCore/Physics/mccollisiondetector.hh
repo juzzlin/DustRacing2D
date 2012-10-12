@@ -39,10 +39,8 @@ public:
     //! Destructor
     virtual ~MCCollisionDetector();
 
-    //! Detect collisions and generate contacts. Contacts are stored
-    //! to MCObject.
-    MCUint detectCollisions(
-        std::vector<MCObject *> & objs, MCObjectTree & objectTree);
+    //! Detect collisions and generate contacts. Contacts are stored to MCObject.
+    MCUint detectCollisions(MCObjectTree & objectTree);
 
     //! Turn collision events on/off.
     void enableCollisionEvents(bool enable);

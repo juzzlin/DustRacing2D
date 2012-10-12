@@ -168,32 +168,35 @@ bool MCCollisionDetector::processPossibleCollision(
     return false;
 }
 
-MCUint MCCollisionDetector::detectCollisions(
-    std::vector<MCObject *> & objs, MCObjectTree & objectTree)
+MCUint MCCollisionDetector::detectCollisions(MCObjectTree & objectTree)
 {
+    static MCObjectTree::CollisionVector possibleCollisions;
+    objectTree.getBBoxCollisions(possibleCollisions);
+
     // Check collisions for all registered objects
     MCUint numCollisions = 0;
-    MCObjectTree::ObjectSet possibleCollisions;
-    for (MCUint i = 0; i < objs.size(); i++)
+    auto iter = possibleCollisions.begin();
+    const auto end = possibleCollisions.end();
+    for (;iter != end; iter++)
     {
-        MCObject & object(*objs[i]);
-        if (object.physicsObject() && !object.bypassCollisions())
+        MCObject * obj1(iter->first);
+        auto iter2 = iter->second.begin();
+        const auto end2 = iter->second.end();
+        for (;iter2 != end2; iter2++)
         {
-            possibleCollisions.clear();
-            object.deleteContacts();
-            objectTree.getBBoxCollisions(object, possibleCollisions);
-            auto j1 = possibleCollisions.begin();
-            auto j2 = possibleCollisions.end();
-            while (j1 != j2)
+            MCObject * obj2(*iter2);
+
+            if (obj1->physicsObject() && !obj1->bypassCollisions() &&
+                obj2->physicsObject() && !obj2->bypassCollisions())
             {
-                if (processPossibleCollision(object, **j1))
+                if (processPossibleCollision(*obj1, *obj2))
                 {
                     numCollisions++;
                 }
-                j1++;
             }
         }
     }
+
     return numCollisions;
 }
 
