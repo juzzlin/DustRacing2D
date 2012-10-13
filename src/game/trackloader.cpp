@@ -442,7 +442,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCSurfaceObjectData data(role.toStdString());
         data.setMass(1000); // Exaggerate the mass on purpose
         data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.25);
+        data.setRestitution(0.5);
         data.setXYFriction(0.25);
         data.setBatchMode(true);
         data.setLayer(Layers::Walls);
