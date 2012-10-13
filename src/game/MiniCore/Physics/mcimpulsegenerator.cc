@@ -104,10 +104,8 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
             linearImpulse * effRestitution * massScaling * linearBalance);
 
         // Angular component
-        const MCVector3dF rotationalImpulse =
-            MCVector3dF(linearImpulse) % armA;
-        const MCFloat magnitude = rotationalImpulse.k();
-        pa.addAngularImpulse(-magnitude * effRestitution * massScaling);
+        const MCVector3dF rotationalImpulse = MCVector3dF(linearImpulse) % armA;
+        pa.addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling);
     }
 }
 
