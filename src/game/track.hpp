@@ -39,7 +39,7 @@ public:
     explicit Track(TrackData * pTrackData);
 
     //! Destructor.
-    ~Track();
+    virtual ~Track();
 
     //! Render as seen through the given camera window.
     void render(MCCamera * pCamera);

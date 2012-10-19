@@ -49,7 +49,7 @@ public:
     StateMachine();
 
     //! Destructor.
-    ~StateMachine();
+    virtual ~StateMachine();
 
     //! Return the singleton instance.
     static StateMachine & instance();
