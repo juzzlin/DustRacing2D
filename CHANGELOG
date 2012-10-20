@@ -1,3 +1,30 @@
+0.10.0
+------
+
+* New static checkered flag.
+* Adds checkeredFlag.png
+* Fixes compilation warnings on GCC 4.7.
+* Increase restitution of the tire object.
+* Refactors MCWorld.
+* New broad phase algorithm.
+* Editor: Also a right-click on object makes it selected.
+* Editor: Objects can be properly added on top of other objects.
+* Moves MathUtil::SIGN to public scope.
+* Removes some plants from square.trk.
+* Updades circle.trk.
+* Removes some plants from monza.trk.
+* Removes some plants from irritating.trk.
+* Removes some plants from h.trk.
+* Removes some plants from triangle.trk.
+* Editor: Objects can be deleted under target nodes.
+* New trees and plants.
+* Makes plants stationary.
+* Updates monza.trk.
+* New smoother event loop.
+* Adds Dust Racing 2D banner.
+* Build object batches based on typeID.
+* Batch support for MCSurfaceParticle.
+
 0.9.0
 -----
 
