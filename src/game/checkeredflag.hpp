@@ -17,11 +17,8 @@
 #define CHECKEREDFLAG_HPP
 
 #include "overlaybase.hpp"
-#include <MCVector3d>
-#include <vector>
 
 class MCSurface;
-class MCTextureFontManager;
 
 //! Renders checkerflag on top of the game scene.
 class CheckeredFlag : public OverlayBase
@@ -39,14 +36,7 @@ public:
 
 private:
 
-    struct Node
-    {
-        MCVector3dF loc1;
-        MCVector3dF loc;
-        int angle;
-    };
-
-    std::vector<std::vector<Node> > m_matrix;
+    MCSurface & m_surface;
 };
 
 #endif // CHECKEREDFLAG_HPP
