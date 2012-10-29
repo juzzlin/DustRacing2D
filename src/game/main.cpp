@@ -20,6 +20,7 @@
 #include "game.hpp"
 #include "mainwindow.hpp"
 #include "renderer.hpp"
+#include "settings.hpp"
 
 #include <MCException>
 #include <MCLogger>
@@ -28,6 +29,8 @@ int main(int argc, char ** argv)
 {
     try
     {
+        Settings settings;
+
         // Create the QApplication
         QApplication::setGraphicsSystem("opengl");
         QApplication app(argc, argv);
@@ -41,15 +44,27 @@ int main(int argc, char ** argv)
         MCLogger().info() << "Creating renderer..";
         Renderer * renderer = new Renderer;
 
+        int hRes, vRes;
+        bool fullScreen;
+        Settings::instance().loadResolution(hRes, vRes, fullScreen);
+        MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
+
         // Create the main window
         MCLogger().info() << "Creating the main window..";
-        MainWindow mainWindow;
-        QHBoxLayout * layout = new QHBoxLayout(&mainWindow);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->addWidget(renderer);
-        mainWindow.setContentsMargins(0, 0, 0, 0);
-        mainWindow.setCursor(QCursor(Qt::BlankCursor));
-        mainWindow.show();
+        MainWindow mainWindow(hRes, vRes, fullScreen);
+        mainWindow.setCentralWidget(renderer);
+
+        if (fullScreen)
+        {
+            mainWindow.showFullScreen();
+        }
+        else
+        {
+            mainWindow.show();
+        }
+
+        mainWindow.activateWindow();
+        mainWindow.setFocus();
 
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";

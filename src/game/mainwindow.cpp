@@ -25,9 +25,11 @@
 #include <QMenu>
 #include <QMenuBar>
 
+#include <MCLogger>
+
 MainWindow * MainWindow::m_instance = nullptr;
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(int hRes, int vRes, bool fullScreen)
   : m_aboutDlg(new AboutDlg(this))
 {
     if (!m_instance)
@@ -39,21 +41,20 @@ MainWindow::MainWindow()
         qFatal("MainWindow already instantiated!");
     }
 
-    setWindowTitle(QString(Config::Game::GAME_NAME) + " " +
-        Config::Game::GAME_VERSION);
-
+    setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/logo.png"));
 
-    // Set window size
-    resize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
+    if (!fullScreen)
+    {
+        // Set window size & disable resize
+        resize(hRes, vRes);
+        setMinimumSize(hRes, vRes);
+        setMaximumSize(hRes, vRes);
 
-    // Disable resize
-    setMinimumSize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
-    setMaximumSize(Config::Game::WINDOW_WIDTH, Config::Game::WINDOW_HEIGHT);
-
-    // Try to center the window.
-    QRect geometry(QApplication::desktop()->availableGeometry());
-    move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+        // Try to center the window.
+        QRect geometry(QApplication::desktop()->availableGeometry());
+        move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+    }
 }
 
 MainWindow * MainWindow::instance()

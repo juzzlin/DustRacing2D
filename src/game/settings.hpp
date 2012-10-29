@@ -40,6 +40,9 @@ public:
     bool loadTrackUnlockStatus(const Track & track) const;
     void resetTrackUnlockStatuses();
 
+    void saveResolution(int hRes, int vRes, bool fullScreen = false);
+    void loadResolution(int & hRes, int & vRes, bool & fullScreen);
+
 private:
 
     static Settings * m_instance;

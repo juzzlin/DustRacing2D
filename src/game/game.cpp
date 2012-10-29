@@ -20,7 +20,6 @@
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
-#include "settings.hpp"
 #include "statemachine.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -38,8 +37,6 @@
 #include <QApplication>
 
 #include <cassert>
-#include <chrono>
-#include <thread>
 
 namespace
 {
@@ -65,8 +62,6 @@ Game::Game()
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
-, m_exit(false)
-, m_settings(new Settings)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -76,6 +71,9 @@ Game::Game()
 
     // Connect signal that exits the whole game
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
+
+    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    m_updateTimer.setInterval(m_updateDelay);
 
     // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
@@ -95,6 +93,8 @@ void Game::setTargetUpdateFps(unsigned int fps)
     m_updateFps   = fps;
     m_timeStep    = 1.0 / m_updateFps;
     m_updateDelay = 1000 / m_updateFps;
+
+    m_updateTimer.setInterval(m_updateDelay);
 }
 
 void Game::setRenderer(Renderer * newRenderer)
@@ -209,13 +209,13 @@ bool Game::init()
 void Game::start()
 {
     m_paused = false;
-
-    mainLoop();
+    m_updateTimer.start();
 }
 
 void Game::stop()
 {
     m_paused = true;
+    m_updateTimer.stop();
 }
 
 void Game::togglePause()
@@ -235,39 +235,15 @@ void Game::togglePause()
 
 void Game::exitGame()
 {
-    m_exit = true;
+    QApplication::instance()->exit();
 }
 
 void Game::updateFrame()
 {
+    updateAnimations();
     m_stateMachine->update();
     m_renderer->updateFrame(m_scene->camera());
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
-}
-
-void Game::mainLoop()
-{
-    while (!m_paused && !m_exit)
-    {
-        QTime updateTime;
-        updateTime.start();
-
-        QApplication::processEvents();
-        updateAnimations();
-        updateFrame();
-
-        int delay = m_updateDelay - updateTime.elapsed();
-        delay = delay < 0 ? 0 : delay;
-        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-    }
-
-    if (m_exit)
-    {
-        // For some weird reason calling QApplication::instance()->exit()
-        // didn't exit the application. It might have something to do
-        // with QApplication::processEvents() above.
-        ::exit(EXIT_SUCCESS);
-    }
 }
 
 void Game::updateAnimations()
@@ -289,5 +265,4 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
-    delete m_settings;
 }

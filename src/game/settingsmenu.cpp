@@ -35,7 +35,7 @@ public:
 
     ResetAction(ResetType type, ConfirmationMenu & menu)
     : m_type(type)
-    , m_menu(menu)
+    , m_confirmationMenu(menu)
     {
     }
 
@@ -86,19 +86,19 @@ private:
         switch (m_type)
         {
         case RT_POSITIONS:
-            MenuManager::instance().pushMenu("confirmationMenu");
-            m_menu.setAcceptAction(m_resetPositions);
-            m_menu.setCurrentIndex(1);
+            MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setAcceptAction(m_resetPositions);
+            m_confirmationMenu.setCurrentIndex(1);
             break;
         case RT_TIMES:
-            MenuManager::instance().pushMenu("confirmationMenu");
-            m_menu.setAcceptAction(m_resetTimes);
-            m_menu.setCurrentIndex(1);
+            MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setAcceptAction(m_resetTimes);
+            m_confirmationMenu.setCurrentIndex(1);
             break;
         case RT_TRACKS:
-            MenuManager::instance().pushMenu("confirmationMenu");
-            m_menu.setAcceptAction(m_resetTracks);
-            m_menu.setCurrentIndex(1);
+            MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setAcceptAction(m_resetTracks);
+            m_confirmationMenu.setCurrentIndex(1);
             break;
         default:
             break;
@@ -106,37 +106,61 @@ private:
     }
 
     ResetType          m_type;
-    ConfirmationMenu & m_menu;
+    ConfirmationMenu & m_confirmationMenu;
     ResetPositions     m_resetPositions;
     ResetTimes         m_resetTimes;
     ResetTracks        m_resetTracks;
 };
 
+static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
+static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
+
+class ResolutionAction : public MenuItemAction
+{
+public:
+
+    //! \reimp
+    void fire()
+    {
+        MenuManager::instance().pushMenu(RESOLUTION_MENU_ID);
+    }
+};
+
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
-, m_confirmationMenu("confirmationMenu", width, height)
+, m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
+, m_resolutionMenu(m_confirmationMenu, RESOLUTION_MENU_ID, width, height)
 {
-    MenuItem * resetRecordTimes = new MenuItem(width, height / 5, "Reset record times");
+    const int itemHeight = height / 8;
+
+    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, "Reset record times");
     resetRecordTimes->setView(new MenuItemView(*resetRecordTimes), true);
     resetRecordTimes->view()->setTextSize(20);
     resetRecordTimes->setAction(
         new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu), true);
 
-    MenuItem * resetBestPositions = new MenuItem(width, height / 5, "Reset best positions");
+    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, "Reset best positions");
     resetBestPositions->setView(new MenuItemView(*resetBestPositions), true);
     resetBestPositions->view()->setTextSize(20);
     resetBestPositions->setAction(
         new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu), true);
 
-    MenuItem * resetUnlockedTracks = new MenuItem(width, height / 5, "Reset unlocked tracks");
+    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, "Reset unlocked tracks");
     resetUnlockedTracks->setView(new MenuItemView(*resetUnlockedTracks), true);
     resetUnlockedTracks->view()->setTextSize(20);
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
+    MenuItem * selectResolution = new MenuItem(width, itemHeight, "Select resolution >");
+    selectResolution->setView(new MenuItemView(*selectResolution), true);
+    selectResolution->view()->setTextSize(20);
+    selectResolution->setAction(new ResolutionAction, true);
+
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);
     addItem(*resetUnlockedTracks, true);
+    addItem(*selectResolution,    true);
 
     MenuManager::instance().addMenu(m_confirmationMenu);
+    MenuManager::instance().addMenu(m_resolutionMenu);
 }

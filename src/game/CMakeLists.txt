@@ -34,6 +34,7 @@ set(SRC
     race.cpp
     radius.cpp
     renderer.cpp
+    resolutionmenu.cpp
     scene.cpp
     shaderprogram.cpp
     slidefrictiongenerator.cpp

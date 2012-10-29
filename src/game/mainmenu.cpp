@@ -81,23 +81,25 @@ class SettingsAction : public MenuItemAction
 MainMenu::MainMenu(std::string id, int width, int height)
 : SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
 {
-    MenuItem * play = new MenuItem(width, height / 5, "Play");
+    const int itemHeight = height / 8;
+
+    MenuItem * play = new MenuItem(width, itemHeight, "Play");
     play->setView(new MenuItemView(*play), true);
     play->setAction(new PlayAction, true);
 
-    MenuItem * help = new MenuItem(width, height / 5, "Help");
+    MenuItem * help = new MenuItem(width, itemHeight, "Help");
     help->setView(new MenuItemView(*help), true);
     help->setAction(new HelpAction, true);
 
-    MenuItem * credits = new MenuItem(width, height / 5, "Credits");
+    MenuItem * credits = new MenuItem(width, itemHeight, "Credits");
     credits->setView(new MenuItemView(*credits), true);
     credits->setAction(new CreditsAction, true);
 
-    MenuItem * quit = new MenuItem(width, height / 5, "Quit");
+    MenuItem * quit = new MenuItem(width, itemHeight, "Quit");
     quit->setView(new MenuItemView(*quit), true);
     quit->setAction(new QuitAction, true);
 
-    MenuItem * settings = new MenuItem(width, height / 5, "Settings");
+    MenuItem * settings = new MenuItem(width, itemHeight, "Settings");
     settings->setView(new MenuItemView(*settings), true);
     settings->setAction(new SettingsAction, true);
 

@@ -60,6 +60,11 @@ MenuItem * Menu::currentItem() const
 
 void Menu::render()
 {
+    if (!m_items.size())
+    {
+        return;
+    }
+
     if (m_style == Menu::MS_VERTICAL_LIST)
     {
         // Calculate total height
@@ -96,11 +101,8 @@ void Menu::render()
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
-        if (m_items.size())
-        {
-            MenuItem & item = *m_items.at(m_currentIndex);
-            item.render(m_width / 2, m_height / 2);
-        }
+        MenuItem & item = *m_items.at(m_currentIndex);
+        item.render(m_width / 2, m_height / 2);
     }
 }
 

@@ -16,10 +16,9 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
-#include "surfacemenu.hpp"
 #include "confirmationmenu.hpp"
-
-class MCTextureFont;
+#include "resolutionmenu.hpp"
+#include "surfacemenu.hpp"
 
 //! The settings menu.
 class SettingsMenu : public SurfaceMenu
@@ -32,6 +31,7 @@ public:
 private:
 
     ConfirmationMenu m_confirmationMenu;
+    ResolutionMenu   m_resolutionMenu;
 };
 
 #endif // SETTINGSMENU_HPP

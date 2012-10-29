@@ -22,6 +22,7 @@
 
 Settings * Settings::m_instance = nullptr;
 
+static const char * SETTINGS_GROUP_CONFIG = "Config";
 static const char * SETTINGS_GROUP_LAP    = "LapRecords";
 static const char * SETTINGS_GROUP_POS    = "BestPositions";
 static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracks";
@@ -40,7 +41,6 @@ Settings & Settings::instance()
 
 void Settings::saveLapRecord(const Track & track, int msecs)
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -51,7 +51,6 @@ void Settings::saveLapRecord(const Track & track, int msecs)
 
 int Settings::loadLapRecord(const Track & track) const
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -64,7 +63,6 @@ int Settings::loadLapRecord(const Track & track) const
 
 void Settings::resetLapRecords()
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -75,7 +73,6 @@ void Settings::resetLapRecords()
 
 void Settings::saveBestPos(const Track & track, int pos)
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -86,7 +83,6 @@ void Settings::saveBestPos(const Track & track, int pos)
 
 int Settings::loadBestPos(const Track & track) const
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -99,7 +95,6 @@ int Settings::loadBestPos(const Track & track) const
 
 void Settings::resetBestPos()
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -110,7 +105,6 @@ void Settings::resetBestPos()
 
 void Settings::saveTrackUnlockStatus(const Track & track)
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -122,7 +116,6 @@ void Settings::saveTrackUnlockStatus(const Track & track)
 
 bool Settings::loadTrackUnlockStatus(const Track & track) const
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
@@ -136,11 +129,34 @@ bool Settings::loadTrackUnlockStatus(const Track & track) const
 
 void Settings::resetTrackUnlockStatuses()
 {
-    // Open settings file
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_UNLOCK);
     settings.remove("");
+    settings.endGroup();
+}
+
+void Settings::saveResolution(int hRes, int vRes, bool fullScreen)
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    settings.setValue("hRes", hRes);
+    settings.setValue("vRes", vRes);
+    settings.setValue("fullScreen", fullScreen);
+    settings.endGroup();
+}
+
+void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    fullScreen = settings.value("fullScreen", false).toBool();
+    hRes       = settings.value("hRes", Config::Game::WINDOW_WIDTH).toInt();
+    vRes       = settings.value("vRes", Config::Game::WINDOW_HEIGHT).toInt();
     settings.endGroup();
 }

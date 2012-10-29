@@ -1,5 +1,5 @@
 // This file is part of Dust Racing (DustRAC).
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // DustRAC is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,49 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#ifndef RESOLUTIONMENU_HPP
+#define RESOLUTIONMENU_HPP
 
-#include <QWidget>
-#include <QMainWindow>
-#include <QCloseEvent>
+#include "surfacemenu.hpp"
 
-class AboutDlg;
-class Renderer;
+class ConfirmationMenu;
 
-/*! \class MainWindow
- *  \brief The main window of the game.
- */
-class MainWindow : public QMainWindow
+class ResolutionMenu : public SurfaceMenu
 {
-    Q_OBJECT
-
 public:
 
-    //! Constructor
-    MainWindow(int hRes, int vRes, bool fullScreen);
-
-    //! Return the singleton MainWindow.
-    static MainWindow * instance();
-
-    //! Run the game
-    void runGame();
-
-signals:
-
-    void closed();
-
-protected:
-
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
+    //! Constructor.
+    ResolutionMenu(ConfirmationMenu & confirmationMenu, std::string id, int width, int height);
 
 private:
 
-    static MainWindow * m_instance;
-
-    AboutDlg * m_aboutDlg;
+    ConfirmationMenu & m_confirmationMenu;
 };
 
-#endif // MAINWINDOW_HPP
-
+#endif // RESOLUTIONMENU_HPP

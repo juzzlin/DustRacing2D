@@ -23,7 +23,6 @@ class EventHandler;
 class InputHandler;
 class Renderer;
 class Scene;
-class Settings;
 class Speedometer;
 class Startlights;
 class StartlightsOverlay;
@@ -81,7 +80,6 @@ private slots:
 
 private:
 
-    void mainLoop();
     void loadSurfaces();
     void loadFonts();
     bool loadTracks();
@@ -102,8 +100,7 @@ private:
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
     bool                   m_paused;
-    bool                   m_exit;
-    Settings             * m_settings;
+    QTimer                 m_updateTimer;
 
     static Game * m_instance;
 };
