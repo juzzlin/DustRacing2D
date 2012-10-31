@@ -61,8 +61,10 @@
 #include <algorithm>
 #include <cassert>
 
-static const int     SCENE_WIDTH      = 800;
-static const int     SCENE_HEIGHT     = 600;
+// Default scene size.
+int Scene::m_width  = 800;
+int Scene::m_height = 600;
+
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 
 Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
@@ -159,14 +161,20 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     createMenus();
 }
 
-unsigned int Scene::width()
+int Scene::width()
 {
-    return SCENE_WIDTH;
+    return Scene::m_width;
 }
 
-unsigned int Scene::height()
+int Scene::height()
 {
-    return SCENE_HEIGHT;
+    return Scene::m_height;
+}
+
+void Scene::setSize(int width, int height)
+{
+    Scene::m_width  = width;
+    Scene::m_height = height;
 }
 
 void Scene::createMenus()

@@ -54,11 +54,14 @@ public:
 
     //! Width of the scene. This is always constant and doesn't
     //! depend on resolution.
-    static unsigned int width();
+    static int width();
 
     //! Height of the scene. This is always constant and doesn't
     //! depend on resolution.
-    static unsigned int height();
+    static int height();
+
+    //! Set scene size.
+    static void setSize(int width, int height);
 
     //! Update physics and objects by the given time step.
     void updateFrame(InputHandler & handler, float timeStep);
@@ -111,6 +114,8 @@ private:
 
     void initRace();
 
+    static int            m_width;
+    static int            m_height;
     StateMachine        & m_stateMachine;
     MessageOverlay      * m_messageOverlay;
     Race                  m_race;

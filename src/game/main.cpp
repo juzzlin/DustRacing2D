@@ -14,12 +14,14 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QHBoxLayout>
 
 #include "game.hpp"
 #include "mainwindow.hpp"
 #include "renderer.hpp"
+#include "scene.hpp"
 #include "settings.hpp"
 
 #include <MCException>
@@ -56,15 +58,25 @@ int main(int argc, char ** argv)
 
         if (fullScreen)
         {
+            // Adjust scene height so that window aspect ratio is taken into account.
+            const int newSceneHeight =
+                Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
+            Scene::setSize(Scene::width(), newSceneHeight);
+
             mainWindow.showFullScreen();
         }
         else
         {
+            // Adjust scene height so that window aspect ratio is taken into account.
+            const int newSceneHeight = Scene::width() * vRes / hRes;
+            Scene::setSize(Scene::width(), newSceneHeight);
+
             mainWindow.show();
         }
 
         mainWindow.activateWindow();
         mainWindow.setFocus();
+        mainWindow.setCursor(Qt::BlankCursor);
 
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";

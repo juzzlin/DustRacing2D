@@ -63,10 +63,10 @@ public:
         static const char * GAME_VERSION;
         static const char * QSETTINGS_SOFTWARE_NAME;
 
-        //! Window width.
+        //! Default window width.
         static const unsigned int WINDOW_WIDTH;
 
-        //! Window height.
+        //! Default window height.
         static const unsigned int WINDOW_HEIGHT;
     };
 };
