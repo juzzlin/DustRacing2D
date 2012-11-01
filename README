@@ -14,6 +14,8 @@ Dust Racing source code is licensed under GNU GPLv3.
 See COPYING for the complete license text.
 
 All image files, except where otherwise noted, are licensed under
+CC BY-NC 3.0.
+
 http://creativecommons.org/licenses/by-nc/3.0/
 
 Playing
@@ -50,6 +52,7 @@ data/              : Data mapping and configuration files.
 data/images/       : Image files and textures loaded by the game.
 data/levels/       : Level data.
 data/shaders/      : GLSL shaders.
+packaging/         : Example packaging for Ubuntu/Debian.
 
 See INSTALL for build and install instructions.
 
