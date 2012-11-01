@@ -18,6 +18,8 @@
 
 #include <cassert>
 
+namespace MTFH {
+
 MenuManager * MenuManager::m_pInstance = nullptr;
 
 MenuManager::MenuManager()
@@ -154,3 +156,5 @@ bool MenuManager::done() const
         return m_menuStack.back()->done();
     }
 }
+
+} // namespace MTFH

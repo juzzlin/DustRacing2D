@@ -13,30 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MENUITEMVIEW_HPP
-#define MENUITEMVIEW_HPP
+#include "menuitemview.hpp"
+#include "menuitem.hpp"
 
-class MenuItem;
+namespace MTFH {
 
-//! Base class for menu item views.
-class MenuItemView
+MenuItemView::MenuItemView(MenuItem & owner)
+: m_owner(owner)
 {
-public:
+}
 
-    //! Constructor.
-    MenuItemView(MenuItem & owner);
+MenuItem & MenuItemView::owner() const
+{
+    return m_owner;
+}
 
-    //! Destructor.
-    virtual ~MenuItemView();
+MenuItemView::~MenuItemView()
+{
+}
 
-    virtual void render(int x, int y);
-
-    virtual void setTextSize(int size);
-
-private:
-
-    MenuItem & m_owner;
-    int m_textSize;
-};
-
-#endif // MENUITEMVIEW_HPP
+} // namespace MTFH

@@ -23,7 +23,8 @@
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
-#include "menuitem.hpp"
+
+#include <MenuItem>
 
 #include <MCLogger>
 #include <MCSurface>
@@ -38,7 +39,7 @@
 #include <cassert>
 #include <sstream>
 
-class TrackItem : public MenuItem
+class TrackItem : public MTFH::MenuItem
 {
 public:
 

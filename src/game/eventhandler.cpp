@@ -15,8 +15,9 @@
 
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
-#include "menumanager.hpp"
 #include "statemachine.hpp"
+
+#include <MenuManager>
 
 EventHandler::EventHandler(InputHandler & inputHandler)
 : m_inputHandler(inputHandler)
@@ -52,25 +53,25 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        MenuManager::instance().left();
+        MTFH::MenuManager::instance().left();
         break;
     case Qt::Key_Right:
-        MenuManager::instance().right();
+        MTFH::MenuManager::instance().right();
         break;
     case Qt::Key_Up:
-        MenuManager::instance().up();
+        MTFH::MenuManager::instance().up();
         break;
     case Qt::Key_Down:
-        MenuManager::instance().down();
+        MTFH::MenuManager::instance().down();
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
-        MenuManager::instance().selectCurrentItem();
+        MTFH::MenuManager::instance().selectCurrentItem();
         break;
     case Qt::Key_Escape:
     case Qt::Key_Q:
-        MenuManager::instance().exitCurrentMenu();
-        if (MenuManager::instance().done())
+        MTFH::MenuManager::instance().exitCurrentMenu();
+        if (MTFH::MenuManager::instance().done())
         {
             emit gameExited();
         }

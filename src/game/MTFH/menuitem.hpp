@@ -19,6 +19,8 @@
 #include <string>
 #include <memory>
 
+namespace MTFH {
+
 class Menu;
 class MenuItemAction;
 class MenuItemView;
@@ -78,5 +80,7 @@ private:
     int m_width, m_height;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
 };
+
+} // namespace MTFH
 
 #endif // MENUITEM_HPP

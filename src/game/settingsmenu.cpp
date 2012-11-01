@@ -14,20 +14,21 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "settingsmenu.hpp"
-
-#include "menuitem.hpp"
-#include "menuitemaction.hpp"
-#include "menuitemview.hpp"
-#include "menumanager.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
+#include "textmenuitemview.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackloader.hpp"
 
+#include <MenuItem>
+#include <MenuItemAction>
+#include <MenuItemView>
+#include <MenuManager>
+
 #include <MCLogger>
 
-class ResetAction : public MenuItemAction
+class ResetAction : public MTFH::MenuItemAction
 {
 public:
 
@@ -41,7 +42,7 @@ public:
 
 private:
 
-    class ResetPositions : public MenuItemAction
+    class ResetPositions : public MTFH::MenuItemAction
     {
         //! \reimp
         void fire()
@@ -51,7 +52,7 @@ private:
         }
     };
 
-    class ResetTimes : public MenuItemAction
+    class ResetTimes : public MTFH::MenuItemAction
     {
         //! \reimp
         void fire()
@@ -61,7 +62,7 @@ private:
         }
     };
 
-    class ResetTracks : public MenuItemAction
+    class ResetTracks : public MTFH::MenuItemAction
     {
         //! \reimp
         void fire()
@@ -83,6 +84,8 @@ private:
     //! \reimp
     void fire()
     {
+        using MTFH::MenuManager;
+
         switch (m_type)
         {
         case RT_POSITIONS:
@@ -115,14 +118,14 @@ private:
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
 
-class ResolutionAction : public MenuItemAction
+class ResolutionAction : public MTFH::MenuItemAction
 {
 public:
 
     //! \reimp
     void fire()
     {
-        MenuManager::instance().pushMenu(RESOLUTION_MENU_ID);
+        MTFH::MenuManager::instance().pushMenu(RESOLUTION_MENU_ID);
     }
 };
 
@@ -133,27 +136,26 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 {
     const int itemHeight = height / 8;
 
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+
     MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, "Reset record times");
-    resetRecordTimes->setView(new MenuItemView(*resetRecordTimes), true);
-    resetRecordTimes->view()->setTextSize(20);
+    resetRecordTimes->setView(new TextMenuItemView(20, *resetRecordTimes), true);
     resetRecordTimes->setAction(
         new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu), true);
 
     MenuItem * resetBestPositions = new MenuItem(width, itemHeight, "Reset best positions");
-    resetBestPositions->setView(new MenuItemView(*resetBestPositions), true);
-    resetBestPositions->view()->setTextSize(20);
+    resetBestPositions->setView(new TextMenuItemView(20, *resetBestPositions), true);
     resetBestPositions->setAction(
         new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu), true);
 
     MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, "Reset unlocked tracks");
-    resetUnlockedTracks->setView(new MenuItemView(*resetUnlockedTracks), true);
-    resetUnlockedTracks->view()->setTextSize(20);
+    resetUnlockedTracks->setView(new TextMenuItemView(20, *resetUnlockedTracks), true);
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
     MenuItem * selectResolution = new MenuItem(width, itemHeight, "Select resolution >");
-    selectResolution->setView(new MenuItemView(*selectResolution), true);
-    selectResolution->view()->setTextSize(20);
+    selectResolution->setView(new TextMenuItemView(20, *selectResolution), true);
     selectResolution->setAction(new ResolutionAction, true);
 
     addItem(*resetRecordTimes,    true);

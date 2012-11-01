@@ -25,8 +25,6 @@ class AiLogic;
 class CheckeredFlag;
 class InputHandler;
 class Intro;
-class Menu;
-class MenuManager;
 class MCCamera;
 class MCObject;
 class MCSurface;
@@ -40,6 +38,11 @@ class StateMachine;
 class Track;
 class TrackSelectionMenu;
 class TimingOverlay;
+
+namespace MTFH {
+class Menu;
+class MenuManager;
+}
 
 //! The game scene.
 class Scene
@@ -128,11 +131,11 @@ private:
     CheckeredFlag       * m_checkeredFlag;
     MCFloat               m_cameraBaseOffset;
     TrackSelectionMenu  * m_trackSelectionMenu;
-    Menu                * m_mainMenu;
-    Menu                * m_help;
-    Menu                * m_credits;
-    Menu                * m_settings;
-    MenuManager         * m_menuManager;
+    MTFH::Menu          * m_mainMenu;
+    MTFH::Menu          * m_help;
+    MTFH::Menu          * m_credits;
+    MTFH::Menu          * m_settings;
+    MTFH::MenuManager   * m_menuManager;
     Intro               * m_intro;
 
     typedef std::vector<Car *> CarVector;

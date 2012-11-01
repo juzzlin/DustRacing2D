@@ -41,8 +41,6 @@ enable_testing()
 
 # Sub build: editor
 add_subdirectory(src/editor)
-# Sub build: MiniCore engine
-add_subdirectory(src/game/MiniCore)
 # Sub build: game binary
 add_subdirectory(src/game)
 

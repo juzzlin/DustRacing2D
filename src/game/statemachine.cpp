@@ -16,11 +16,12 @@
 #include "statemachine.hpp"
 
 #include "intro.hpp"
-#include "menumanager.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
 #include "startlights.hpp"
 #include "track.hpp"
+
+#include <MenuManager>
 
 #include <cassert>
 
@@ -83,7 +84,7 @@ bool StateMachine::update()
         m_fadeValue = 1.0;
         m_renderer->setFadeValue(m_fadeValue);
 
-        if (MenuManager::instance().done())
+        if (MTFH::MenuManager::instance().done())
         {
             m_state = MenuTransitionOut;
         }
@@ -182,7 +183,7 @@ bool StateMachine::update()
             m_state     = Menu;
 
             // Re-init the track selection menu
-            MenuManager::instance().enterCurrentMenu();
+            MTFH::MenuManager::instance().enterCurrentMenu();
         }
         else
         {

@@ -16,6 +16,8 @@
 #ifndef MENUITEMACTION_HPP
 #define MENUITEMACTION_HPP
 
+namespace MTFH {
+
 //! Base class for menu item actions triggered when
 //! the item gets selected.
 class MenuItemAction
@@ -36,5 +38,7 @@ public:
 
 private:
 };
+
+} // namespace MTFH
 
 #endif // MENUITEMACTION_HPP

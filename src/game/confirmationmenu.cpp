@@ -14,29 +14,31 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "confirmationmenu.hpp"
-#include "menuitem.hpp"
-#include "menuitemaction.hpp"
-#include "menuitemview.hpp"
-#include "menumanager.hpp"
+#include "textmenuitemview.hpp"
+
+#include <MenuItem>
+#include <MenuItemAction>
+#include <MenuItemView>
+#include <MenuManager>
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, Menu::MS_HORIZONTAL_LIST)
-, m_acceptItem(new MenuItem(width / 4, height, "Yes"))
-, m_cancelItem(new MenuItem(width / 4, height, "No"))
+: SurfaceMenu("helpBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
+, m_acceptItem(new MTFH::MenuItem(width / 4, height, "Yes"))
+, m_cancelItem(new MTFH::MenuItem(width / 4, height, "No"))
 {
-    m_acceptItem->setView(new MenuItemView(*m_acceptItem), true);
-    m_cancelItem->setView(new MenuItemView(*m_cancelItem), true);
+    m_acceptItem->setView(new TextMenuItemView(40, *m_acceptItem), true);
+    m_cancelItem->setView(new TextMenuItemView(40, *m_cancelItem), true);
 
     addItem(*m_acceptItem, true);
     addItem(*m_cancelItem, true);
 }
 
-void ConfirmationMenu::setAcceptAction(MenuItemAction & action)
+void ConfirmationMenu::setAcceptAction(MTFH::MenuItemAction & action)
 {
     m_acceptItem->setAction(&action);
 }
 
-void ConfirmationMenu::setCancelAction(MenuItemAction & action)
+void ConfirmationMenu::setCancelAction(MTFH::MenuItemAction & action)
 {
     m_cancelItem->setAction(&action);
 }

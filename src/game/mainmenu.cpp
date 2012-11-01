@@ -14,13 +14,14 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainmenu.hpp"
-
 #include "game.hpp"
-#include "menuitem.hpp"
-#include "menuitemview.hpp"
-#include "menuitemaction.hpp"
-#include "menumanager.hpp"
 #include "renderer.hpp"
+#include "textmenuitemview.hpp"
+
+#include <MenuItem>
+#include <MenuItemAction>
+#include <MenuItemView>
+#include <MenuManager>
 
 #include <MCLogger>
 #include <MCSurface>
@@ -28,7 +29,7 @@
 
 #include <QApplication>
 
-class QuitAction : public MenuItemAction
+class QuitAction : public MTFH::MenuItemAction
 {
     //! \reimp
     void fire()
@@ -38,69 +39,71 @@ class QuitAction : public MenuItemAction
     }
 };
 
-class PlayAction : public MenuItemAction
+class PlayAction : public MTFH::MenuItemAction
 {
     //! \reimp
     void fire()
     {
         MCLogger().info() << "Play selected from the main menu.";
-        MenuManager::instance().pushMenu("trackSelection");
+        MTFH::MenuManager::instance().pushMenu("trackSelection");
     }
 };
 
-class HelpAction : public MenuItemAction
+class HelpAction : public MTFH::MenuItemAction
 {
     //! \reimp
     void fire()
     {
         MCLogger().info() << "Help selected from the main menu.";
-        MenuManager::instance().pushMenu("help");
+        MTFH::MenuManager::instance().pushMenu("help");
     }
 };
 
-class CreditsAction : public MenuItemAction
+class CreditsAction : public MTFH::MenuItemAction
 {
     //! \reimp
     void fire()
     {
         MCLogger().info() << "Credits selected from the main menu.";
-        MenuManager::instance().pushMenu("credits");
+        MTFH::MenuManager::instance().pushMenu("credits");
     }
 };
 
-class SettingsAction : public MenuItemAction
+class SettingsAction : public MTFH::MenuItemAction
 {
     //! \reimp
     void fire()
     {
         MCLogger().info() << "Settings selected from the main menu.";
-        MenuManager::instance().pushMenu("settings");
+        MTFH::MenuManager::instance().pushMenu("settings");
     }
 };
 
 MainMenu::MainMenu(std::string id, int width, int height)
 : SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
 {
+    using MTFH::MenuItem;
+
     const int itemHeight = height / 8;
 
     MenuItem * play = new MenuItem(width, itemHeight, "Play");
-    play->setView(new MenuItemView(*play), true);
+    play->setView(new TextMenuItemView(40, *play), true);
     play->setAction(new PlayAction, true);
 
     MenuItem * help = new MenuItem(width, itemHeight, "Help");
-    help->setView(new MenuItemView(*help), true);
+    help->setView(new TextMenuItemView(40, *help), true);
     help->setAction(new HelpAction, true);
 
     MenuItem * credits = new MenuItem(width, itemHeight, "Credits");
-    credits->setView(new MenuItemView(*credits), true);
+    credits->setView(new TextMenuItemView(40, *credits), true);
     credits->setAction(new CreditsAction, true);
 
     MenuItem * quit = new MenuItem(width, itemHeight, "Quit");
-    quit->setView(new MenuItemView(*quit), true);
+    quit->setView(new TextMenuItemView(40, *quit), true);
     quit->setAction(new QuitAction, true);
 
     MenuItem * settings = new MenuItem(width, itemHeight, "Settings");
-    settings->setView(new MenuItemView(*settings), true);
+    settings->setView(new TextMenuItemView(40, *settings), true);
     settings->setAction(new SettingsAction, true);
 
     addItem(*quit,     true);

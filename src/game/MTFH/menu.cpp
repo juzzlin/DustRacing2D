@@ -19,6 +19,8 @@
 
 #include <cassert>
 
+namespace MTFH {
+
 Menu::Menu(std::string id, int width, int height, MenuStyle style)
 : m_id(id)
 , m_width(width)
@@ -246,3 +248,5 @@ void Menu::exit()
 Menu::~Menu()
 {
 }
+
+} // namespace MTFH

@@ -13,38 +13,35 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SURFACEMENU_HPP
-#define SURFACEMENU_HPP
+#ifndef TEXTMENUITEMVIEW_HPP
+#define TEXTMENUITEMVIEW_HPP
 
-#include <Menu>
+#include <MenuItemView>
 
-class MCSurface;
-class MCTextureFont;
+namespace MTFH {
+class MenuItem;
+}
 
-//! Base class for menus with a MCSurface background.
-class SurfaceMenu : public MTFH::Menu
+//! Base class for menu item views.
+class TextMenuItemView : public MTFH::MenuItemView
 {
 public:
 
     //! Constructor.
-    SurfaceMenu(
-        std::string surfaceId, std::string id, int width, int height,
-        MenuStyle style = Menu::MS_VERTICAL_LIST);
+    TextMenuItemView(int textSize, MTFH::MenuItem & owner);
 
     //! Destructor.
-    virtual ~SurfaceMenu() {}
+    virtual ~TextMenuItemView();
 
     //! \reimp
-    virtual void render();
+    virtual void render(int x, int y);
 
-protected:
-
-    MCTextureFont & font() const;
+    //! Set the text size.
+    virtual void setTextSize(int size);
 
 private:
 
-    MCSurface     & m_back;
-    MCTextureFont & m_font;
+    int m_textSize;
 };
 
-#endif // SURFACEMENU_HPP
+#endif // TEXTMENUITEMVIEW_HPP

@@ -24,7 +24,6 @@
 #include "help.hpp"
 #include "layers.hpp"
 #include "mainmenu.hpp"
-#include "menumanager.hpp"
 #include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
 #include "race.hpp"
@@ -42,6 +41,8 @@
 
 #include "../common/config.hpp"
 #include "../common/targetnodebase.hpp"
+
+#include <MenuManager>
 
 #include <MCCamera>
 #include <MCFrictionGenerator>
@@ -179,7 +180,7 @@ void Scene::setSize(int width, int height)
 
 void Scene::createMenus()
 {
-    m_menuManager = new MenuManager;
+    m_menuManager = new MTFH::MenuManager;
 
     m_mainMenu = new MainMenu("main", width(), height());
     m_menuManager->addMenu(*m_mainMenu);

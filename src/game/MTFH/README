@@ -1,0 +1,9 @@
+README
+======
+
+MTFH (Menu Toolkit From Hell) is a graphics agnostic toolkit
+designed for simple game menus.
+
+It's plain C++ and doesn't depend on anything.
+
+-- Jussi Lind <jussi.lind@iki.fi>

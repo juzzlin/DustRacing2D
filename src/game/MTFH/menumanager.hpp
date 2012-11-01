@@ -20,6 +20,8 @@
 #include <string>
 #include <vector>
 
+namespace MTFH {
+
 class Menu;
 
 //! The singleton MenuManager manages menus.
@@ -86,5 +88,7 @@ private:
     std::vector<Menu *> m_menuStack;
     static MenuManager * m_pInstance;
 };
+
+} // namespace MTFH
 
 #endif // MENUMANAGER_HPP

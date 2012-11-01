@@ -19,6 +19,8 @@
 #include "menu.hpp"
 #include "menumanager.hpp"
 
+namespace MTFH {
+
 MenuItem::MenuItem(int width, int height, std::string text)
 : m_text(text)
 , m_action(nullptr)
@@ -139,3 +141,6 @@ const std::string & MenuItem::text() const
 MenuItem::~MenuItem()
 {
 }
+
+} // namespace MTFH
+

@@ -16,19 +16,21 @@
 #include "resolutionmenu.hpp"
 #include "confirmationmenu.hpp"
 #include "game.hpp"
-#include "menuitem.hpp"
-#include "menuitemaction.hpp"
-#include "menuitemview.hpp"
-#include "menumanager.hpp"
 #include "settings.hpp"
+#include "textmenuitemview.hpp"
+
+#include <MenuItem>
+#include <MenuItemAction>
+#include <MenuItemView>
+#include <MenuManager>
 
 #include <MCLogger>
 
-class ResolutionItem : public MenuItem
+class ResolutionItem : public MTFH::MenuItem
 {
 public:
 
-    class SaveResolutionAction : public MenuItemAction
+    class SaveResolutionAction : public MTFH::MenuItemAction
     {
     public:
 
@@ -73,7 +75,7 @@ public:
     //! \reimp
     virtual void onSelect()
     {
-        MenuManager::instance().pushMenu(m_confirmationMenu.id());
+        MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
         m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
         m_confirmationMenu.setCurrentIndex(1);
     }
@@ -103,39 +105,33 @@ ResolutionMenu::ResolutionMenu(
 {
     const int itemHeight = height / 8;
 
-    MenuItem * resolution =
+    MTFH::MenuItem * resolution =
         new ResolutionItem(m_confirmationMenu, 320, 200, width, itemHeight, "320x200");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 
     resolution =
         new ResolutionItem(m_confirmationMenu, 640, 480, width, itemHeight, "640x480");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 
     resolution =
         new ResolutionItem(m_confirmationMenu, 800, 600, width, itemHeight, "800x600");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 
     resolution =
         new ResolutionItem(m_confirmationMenu, 1024, 768, width, itemHeight, "1024x768");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 
     resolution =
         new ResolutionItem(m_confirmationMenu, 1280, 960, width, itemHeight, "1280x960");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 
     resolution =
         new ResolutionItem(m_confirmationMenu, 0, 0, width, itemHeight, "Full screen");
-    resolution->setView(new MenuItemView(*resolution), true);
-    resolution->view()->setTextSize(20);
+    resolution->setView(new TextMenuItemView(20, *resolution), true);
     addItem(*resolution, true);
 }

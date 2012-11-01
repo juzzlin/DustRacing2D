@@ -20,6 +20,8 @@
 #include <vector>
 #include <memory>
 
+namespace MTFH {
+
 class MenuItem;
 
 class Menu
@@ -42,7 +44,7 @@ public:
 
     std::string id() const;
 
-    //! Render the menu.
+    //! Renders the menu items. See also MenuItemView.
     virtual void render();
 
     //! Selection up.
@@ -112,5 +114,7 @@ private:
     bool m_done;
     bool m_wrapAround;
 };
+
+} // namespace MTFH
 
 #endif // MENU_HPP

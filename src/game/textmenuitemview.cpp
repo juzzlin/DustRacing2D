@@ -13,27 +13,27 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "menuitemview.hpp"
-#include "menuitem.hpp"
+#include "textmenuitemview.hpp"
+#include <MenuItem>
 
 #include <MCTextureFont>
 #include <MCTextureFontManager>
 #include <MCTextureText>
 
-MenuItemView::MenuItemView(MenuItem & owner)
-: m_owner(owner)
-, m_textSize(40)
+TextMenuItemView::TextMenuItemView(int textSize, MTFH::MenuItem & owner)
+: MenuItemView(owner)
+, m_textSize(textSize)
 {
 }
 
-void MenuItemView::setTextSize(int size)
+void TextMenuItemView::setTextSize(int size)
 {
     m_textSize = size;
 }
 
-void MenuItemView::render(int x, int y)
+void TextMenuItemView::render(int x, int y)
 {
-    MCTextureText text(m_owner.text());
+    MCTextureText text(owner().text());
     MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
 
     const int shadowY = -2;
@@ -41,7 +41,7 @@ void MenuItemView::render(int x, int y)
 
     text.setGlyphSize(m_textSize, m_textSize);
 
-    if (m_owner.focused())
+    if (owner().focused())
     {
         text.setColor(1.0, 1.0, 0.0, 1.0);
     }
@@ -54,6 +54,6 @@ void MenuItemView::render(int x, int y)
     text.render(x - text.width() / 2 + 20, y, nullptr, defaultMonospace);
 }
 
-MenuItemView::~MenuItemView()
+TextMenuItemView::~TextMenuItemView()
 {
 }

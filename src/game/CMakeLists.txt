@@ -1,9 +1,18 @@
+# Sub build: MiniCore engine
+add_subdirectory(MiniCore)
+
+# Sub build: Menu Toolkit From Hell
+add_subdirectory(MTFH)
+
 # Engine include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Graphics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Particles")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Physics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
+
+# Menu toolkit include paths
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 
 # Set sources
 set(SRC
@@ -23,11 +32,6 @@ set(SRC
     mainmenu.cpp
     mainwindow.cpp
     map.cpp
-    menu.cpp
-    menuitem.cpp
-    menuitemaction.cpp
-    menuitemview.cpp
-    menumanager.cpp
     messageoverlay.cpp
     offtrackdetector.cpp
     overlaybase.cpp
@@ -44,6 +48,7 @@ set(SRC
     startlightsoverlay.cpp
     statemachine.cpp
     surfacemenu.cpp
+    textmenuitemview.cpp
     timing.cpp
     timingoverlay.cpp
     track.cpp
@@ -88,5 +93,12 @@ add_custom_target(runtime ALL
 # The main game executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 add_executable(${GAME_BINARY_NAME} ${SRC} ${MOC_SRC} ${RC_SRC})
-target_link_libraries(${GAME_BINARY_NAME}
-    MiniCore ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+
+target_link_libraries(
+    ${GAME_BINARY_NAME}
+    MiniCore
+    MTFH
+    ${QT_LIBRARIES}
+    ${OPENGL_gl_LIBRARY}
+    ${OPENGL_glu_LIBRARY})
+
