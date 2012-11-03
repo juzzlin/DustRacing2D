@@ -30,7 +30,6 @@ set(SRC
     intro.cpp
     main.cpp
     mainmenu.cpp
-    mainwindow.cpp
     map.cpp
     messageoverlay.cpp
     offtrackdetector.cpp
@@ -71,7 +70,6 @@ set(MOC_HDRS
     aboutdlg.hpp
     eventhandler.hpp
     game.hpp
-    mainwindow.hpp
     race.hpp
     renderer.hpp
     startlights.hpp

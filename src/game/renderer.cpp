@@ -32,14 +32,18 @@
 #include <cmath>
 #include <cassert>
 
-#include <QKeyEvent>
+#include <QApplication>
+#include <QIcon>
+#include <QDesktopWidget>
 #include <QGLShader>
 #include <QGLShaderProgram>
+#include <QKeyEvent>
+
 #include <GL/glu.h>
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(QWidget * parent)
+Renderer::Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent)
 : QGLWidget(parent)
 , m_pScene(nullptr)
 , m_pGLScene(new MCGLScene)
@@ -60,6 +64,21 @@ Renderer::Renderer(QWidget * parent)
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
     setFocusPolicy(Qt::StrongFocus);
+
+    setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
+    setWindowIcon(QIcon(":/logo.png"));
+
+    if (!fullScreen)
+    {
+        // Set window size & disable resize
+        resize(hRes, vRes);
+        setMinimumSize(hRes, vRes);
+        setMaximumSize(hRes, vRes);
+
+        // Try to center the window.
+        QRect geometry(QApplication::desktop()->availableGeometry());
+        move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
+    }
 }
 
 Renderer & Renderer::instance()
@@ -244,6 +263,12 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
     {
         QGLWidget::keyReleaseEvent(event);
     }
+}
+
+void Renderer::closeEvent(QCloseEvent * event)
+{
+    event->accept();
+    emit closed();
 }
 
 void Renderer::setScene(Scene & scene)

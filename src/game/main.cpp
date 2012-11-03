@@ -19,7 +19,6 @@
 #include <QHBoxLayout>
 
 #include "game.hpp"
-#include "mainwindow.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
@@ -43,18 +42,15 @@ int main(int argc, char ** argv)
         MCLogger::setEchoMode(true);
         MCLogger::setDateTime(true);
 
-        MCLogger().info() << "Creating renderer..";
-        Renderer * renderer = new Renderer;
-
         int hRes, vRes;
         bool fullScreen;
         Settings::instance().loadResolution(hRes, vRes, fullScreen);
         MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
 
-        // Create the main window
-        MCLogger().info() << "Creating the main window..";
-        MainWindow mainWindow(hRes, vRes, fullScreen);
-        mainWindow.setCentralWidget(renderer);
+        // Create the main window / renderer
+        MCLogger().info() << "Creating the renderer..";
+        Renderer renderer(hRes, vRes, fullScreen);
+        renderer.activateWindow();
 
         if (fullScreen)
         {
@@ -63,7 +59,7 @@ int main(int argc, char ** argv)
                 Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
             Scene::setSize(Scene::width(), newSceneHeight);
 
-            mainWindow.showFullScreen();
+            renderer.showFullScreen();
         }
         else
         {
@@ -71,19 +67,18 @@ int main(int argc, char ** argv)
             const int newSceneHeight = Scene::width() * vRes / hRes;
             Scene::setSize(Scene::width(), newSceneHeight);
 
-            mainWindow.show();
+            renderer.show();
         }
 
-        mainWindow.activateWindow();
-        mainWindow.setFocus();
-        mainWindow.setCursor(Qt::BlankCursor);
+        renderer.setFocus();
+        renderer.setCursor(Qt::BlankCursor);
 
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";
         Game game;
-        game.setRenderer(renderer);
+        game.setRenderer(&renderer);
         game.setTargetUpdateFps(60);
-        game.connect(&mainWindow, SIGNAL(closed()), &game, SLOT(finish()));
+        game.connect(&renderer, SIGNAL(closed()), &game, SLOT(finish()));
 
         // Initialize and start the game
         if (game.init())

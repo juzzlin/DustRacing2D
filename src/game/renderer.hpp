@@ -31,7 +31,7 @@ class QKeyEvent;
 class QPaintEvent;
 class Scene;
 
-//! The singleton renderer widget.
+//! The singleton renderer widget and the main "window".
 class Renderer : public QGLWidget
 {
     Q_OBJECT
@@ -39,7 +39,7 @@ class Renderer : public QGLWidget
 public:
 
     //! Constructor.
-    Renderer(QWidget * parent = nullptr);
+    Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent = nullptr);
 
     //! Destructor.
     virtual ~Renderer();
@@ -94,6 +94,13 @@ protected:
 
     //! \reimp
     virtual void keyReleaseEvent(QKeyEvent * event);
+
+    //! \reimp
+    void closeEvent(QCloseEvent * event);
+
+signals:
+
+    void closed();
 
 private:
 
