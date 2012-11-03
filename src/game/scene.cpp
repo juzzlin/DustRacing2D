@@ -128,17 +128,17 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
                 car = new Car(desc, MCSurfaceManager::instance().surface("car002"), i, false);
             }
 
-            m_ai.push_back(new AI(*car));
+            m_ai.push_back(AIPtr(new AI(*car)));
         }
 
         car->setLayer(Layers::Cars);
         car->surface()->setShaderProgram(&Renderer::instance().program("master"));
         car->surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
-        m_cars.push_back(car);
+        m_cars.push_back(CarPtr(car));
         m_race.addCar(*car);
 
-        m_offTrackDetectors.push_back(new OffTrackDetector(*car));
+        m_offTrackDetectors.push_back(OffTrackDetectorPtr(new OffTrackDetector(*car)));
     }
 
     m_checkeredFlag->setDimensions(width(), height());
@@ -220,7 +220,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
             updateWorld(timeStep);
             updateRace();
 
-            for (OffTrackDetector * otd : m_offTrackDetectors)
+            for (OffTrackDetectorPtr otd : m_offTrackDetectors)
             {
                 otd->update();
             }
@@ -304,7 +304,7 @@ void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
 
 void Scene::updateAI()
 {
-    for (AI * ai : m_ai)
+    for (AIPtr ai : m_ai)
     {
         const bool isRaceCompleted = m_race.timing().raceCompleted(ai->car().index());
         ai->update(isRaceCompleted);
@@ -330,12 +330,12 @@ void Scene::setActiveTrack(Track & activeTrack)
     addTrackObjectsToWorld();
     initRace();
 
-    for (AI * ai : m_ai)
+    for (AIPtr ai : m_ai)
     {
         ai->setTrack(activeTrack);
     }
 
-    for (OffTrackDetector * otd : m_offTrackDetectors)
+    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
     {
         otd->setTrack(activeTrack);
     }
@@ -361,7 +361,7 @@ void Scene::setWorldDimensions()
 void Scene::addCarsToWorld()
 {
     // Add objects to the world
-    for (Car * car : m_cars)
+    for (CarPtr car : m_cars)
     {
         car->addToWorld();
     }
@@ -381,7 +381,7 @@ void Scene::translateCarsToStartPositions()
         const MCFloat oddOffset  = TrackTile::TILE_W / 8;
 
         // Reverse order
-        std::vector<Car *> order = m_cars;
+        std::vector<CarPtr> order = m_cars;
         std::reverse(order.begin(), order.end());
 
         // Position the cars into two queues.
@@ -564,21 +564,6 @@ void Scene::render(MCCamera & camera)
 
 Scene::~Scene()
 {
-    for (Car * car : m_cars)
-    {
-        delete car;
-    }
-
-    for (AI * ai : m_ai)
-    {
-        delete ai;
-    }
-
-    for (OffTrackDetector * otd : m_offTrackDetectors)
-    {
-        delete otd;
-    }
-
     delete m_settings;
     delete m_credits;
     delete m_help;

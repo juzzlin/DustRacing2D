@@ -19,6 +19,8 @@
 #include "car.hpp"
 #include "race.hpp"
 #include <MCCamera>
+
+#include <memory>
 #include <vector>
 
 class AI;
@@ -138,13 +140,16 @@ private:
     MTFH::MenuManager   * m_menuManager;
     Intro               * m_intro;
 
-    typedef std::vector<Car *> CarVector;
+    typedef std::shared_ptr<Car> CarPtr;
+    typedef std::vector<CarPtr> CarVector;
     CarVector m_cars;
 
-    typedef std::vector<AI *> AIVector;
+    typedef std::shared_ptr<AI> AIPtr;
+    typedef std::vector<AIPtr> AIVector;
     AIVector m_ai;
 
-    typedef std::vector<OffTrackDetector *> OTDVector;
+    typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
+    typedef std::vector<OffTrackDetectorPtr> OTDVector;
     OTDVector m_offTrackDetectors;
 };
 
