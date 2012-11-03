@@ -15,7 +15,7 @@
 
 #include "scene.hpp"
 
-#include "ailogic.hpp"
+#include "ai.hpp"
 #include "car.hpp"
 #include "checkeredflag.hpp"
 #include "credits.hpp"
@@ -128,7 +128,7 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
                 car = new Car(desc, MCSurfaceManager::instance().surface("car002"), i, false);
             }
 
-            m_aiLogic.push_back(new AiLogic(*car));
+            m_ai.push_back(new AI(*car));
         }
 
         car->setLayer(Layers::Cars);
@@ -214,7 +214,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
             {
                 const bool isRaceCompleted = m_race.timing().raceCompleted(0);
                 processUserInput(handler, isRaceCompleted);
-                updateAiLogic();
+                updateAI();
             }
 
             updateWorld(timeStep);
@@ -302,9 +302,9 @@ void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
     }
 }
 
-void Scene::updateAiLogic()
+void Scene::updateAI()
 {
-    for (AiLogic * ai : m_aiLogic)
+    for (AI * ai : m_ai)
     {
         const bool isRaceCompleted = m_race.timing().raceCompleted(ai->car().index());
         ai->update(isRaceCompleted);
@@ -330,7 +330,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     addTrackObjectsToWorld();
     initRace();
 
-    for (AiLogic * ai : m_aiLogic)
+    for (AI * ai : m_ai)
     {
         ai->setTrack(activeTrack);
     }
@@ -569,7 +569,7 @@ Scene::~Scene()
         delete car;
     }
 
-    for (AiLogic * ai : m_aiLogic)
+    for (AI * ai : m_ai)
     {
         delete ai;
     }

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#include "ailogic.hpp"
+#include "ai.hpp"
 #include "car.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -23,22 +23,23 @@
 #include "../common/tracktilebase.hpp"
 
 #include <MCTrigonom>
+#include <MCTypes>
 
-AiLogic::AiLogic(Car & car)
-  : m_car(car)
-  , m_track(nullptr)
-  , m_route(nullptr)
-  , m_targetIndex(0)
-  , m_lastDiff(0)
+AI::AI(Car & car)
+: m_car(car)
+, m_track(nullptr)
+, m_route(nullptr)
+, m_targetIndex(0)
+, m_lastDiff(0)
 {
 }
 
-Car & AiLogic::car() const
+Car & AI::car() const
 {
     return m_car;
 }
 
-void AiLogic::update(bool isRaceCompleted)
+void AI::update(bool isRaceCompleted)
 {
     if (m_track)
     {
@@ -54,7 +55,7 @@ void AiLogic::update(bool isRaceCompleted)
     }
 }
 
-void AiLogic::steerControl(TargetNodeBase & tnode)
+void AI::steerControl(TargetNodeBase & tnode)
 {
     // Initial target coordinates
     MCVector3dF target(tnode.location().x(), tnode.location().y());
@@ -104,7 +105,7 @@ void AiLogic::steerControl(TargetNodeBase & tnode)
     m_lastDiff = diff;
 }
 
-void AiLogic::speedControl(TrackTile & currentTile, bool isRaceCompleted)
+void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 {
     // TODO: Maybe it'd be possible to adjust speed according to
     // the difference between current and target angles so that
@@ -170,12 +171,12 @@ void AiLogic::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     }
 }
 
-void AiLogic::setTrack(Track & track)
+void AI::setTrack(Track & track)
 {
     m_track = &track;
     m_route = &track.trackData().route();
 }
 
-AiLogic::~AiLogic()
+AI::~AI()
 {
 }

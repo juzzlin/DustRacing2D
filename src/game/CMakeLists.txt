@@ -17,7 +17,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 # Set sources
 set(SRC
     aboutdlg.cpp
-    ailogic.cpp
+    ai.cpp
     car.cpp
     centrifugalforcegenerator.cpp
     checkeredflag.cpp

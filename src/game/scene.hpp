@@ -21,7 +21,7 @@
 #include <MCCamera>
 #include <vector>
 
-class AiLogic;
+class AI;
 class CheckeredFlag;
 class InputHandler;
 class Intro;
@@ -105,7 +105,7 @@ private:
 
     void processUserInput(InputHandler & handler, bool isRaceCompleted);
 
-    void updateAiLogic();
+    void updateAI();
 
     void setWorldDimensions();
 
@@ -141,8 +141,8 @@ private:
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
-    typedef std::vector<AiLogic *> AiVector;
-    AiVector m_aiLogic;
+    typedef std::vector<AI *> AIVector;
+    AIVector m_ai;
 
     typedef std::vector<OffTrackDetector *> OTDVector;
     OTDVector m_offTrackDetectors;

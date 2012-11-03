@@ -13,10 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef AILOGIC_HPP
-#define AILOGIC_HPP
-
-#include <MCTypes>
+#ifndef AI_HPP
+#define AI_HPP
 
 class Car;
 class Route;
@@ -24,16 +22,16 @@ class TargetNodeBase;
 class Track;
 class TrackTile;
 
-//! Class that implements the logic for artificial intelligence.
-class AiLogic
+//! Class that implements the artificial intelligence of the computer players.
+class AI
 {
 public:
 
     //! Constructor.
-    AiLogic(Car & car);
+    AI(Car & car);
 
     //! Destructor.
-    virtual ~AiLogic();
+    virtual ~AI();
 
     //! Update.
     void update(bool isRaceCompleted);
@@ -59,4 +57,4 @@ private:
     int           m_lastDiff;
 };
 
-#endif // AILOGIC_HPP
+#endif // AI_HPP
