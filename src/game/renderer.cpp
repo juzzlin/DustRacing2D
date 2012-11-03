@@ -51,14 +51,6 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent)
 , m_eventHandler(nullptr)
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
-, m_tileProgram(nullptr)
-, m_masterProgram(nullptr)
-, m_masterShadowProgram(nullptr)
-, m_menuProgram(nullptr)
-, m_textProgram(nullptr)
-, m_textShadowProgram(nullptr)
-, m_particleProgram(nullptr)
-, m_pointParticleProgram(nullptr)
 , m_enabled(true)
 {
     assert(!Renderer::m_instance);
@@ -110,61 +102,70 @@ void Renderer::loadShaders()
 {
     // Note: ShaderProgram throws on error.
 
-    m_tileProgram = new ShaderProgram(context());
-    m_tileProgram->addFragmentShader(
+    MCGLShaderProgram * program = nullptr;
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/tile.fsh");
-    m_tileProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
-    m_tileProgram->link();
+    program->link();
+    m_shaderHash["tile"].reset(program);
 
-    m_menuProgram = new ShaderProgram(context());
-    m_menuProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/menu.fsh");
-    m_menuProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/menu.vsh");
-    m_menuProgram->link();
+    program->link();
+    m_shaderHash["menu"].reset(program);
 
-    m_masterProgram = new ShaderProgram(context());
-    m_masterProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master.fsh");
-    m_masterProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");
-    m_masterProgram->link();
+    program->link();
+    m_shaderHash["master"].reset(program);
 
-    m_masterShadowProgram = new ShaderProgram(context());
-    m_masterShadowProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master2dShadow.fsh");
-    m_masterShadowProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/master2dShadow.vsh");
-    m_masterShadowProgram->link();
+    program->link();
+    m_shaderHash["masterShadow"].reset(program);
 
-    m_textProgram = new ShaderProgram(context());
-    m_textProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/text.fsh");
-    m_textProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/text.vsh");
-    m_textProgram->link();
+    program->link();
+    m_shaderHash["text"].reset(program);
 
-    m_textShadowProgram = new ShaderProgram(context());
-    m_textShadowProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/text2dShadow.fsh");
-    m_textShadowProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/text.vsh");
-    m_textShadowProgram->link();
+    program->link();
+    m_shaderHash["textShadow"].reset(program);
 
-    m_particleProgram = new ShaderProgram(context());
-    m_particleProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
-    m_particleProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.vsh");
-    m_particleProgram->link();
+    program->link();
+    m_shaderHash["particle"].reset(program);
 
-    m_pointParticleProgram = new ShaderProgram(context());
-    m_pointParticleProgram->addFragmentShader(
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
-    m_pointParticleProgram->addVertexShader(
+    program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/pointParticle.vsh");
-    m_pointParticleProgram->link();
+    program->link();
+    m_shaderHash["pointParticle"].reset(program);
 }
 
 void Renderer::setEnabled(bool enable)
@@ -172,44 +173,9 @@ void Renderer::setEnabled(bool enable)
     m_enabled = enable;
 }
 
-MCGLShaderProgram & Renderer::tileProgram()
+MCGLShaderProgram & Renderer::program(const std::string & id)
 {
-    return *m_tileProgram;
-}
-
-MCGLShaderProgram & Renderer::masterProgram()
-{
-    return *m_masterProgram;
-}
-
-MCGLShaderProgram & Renderer::masterShadowProgram()
-{
-    return *m_masterShadowProgram;
-}
-
-MCGLShaderProgram & Renderer::menuProgram()
-{
-    return *m_menuProgram;
-}
-
-MCGLShaderProgram & Renderer::textProgram()
-{
-    return *m_textProgram;
-}
-
-MCGLShaderProgram & Renderer::textShadowProgram()
-{
-    return *m_textShadowProgram;
-}
-
-MCGLShaderProgram & Renderer::particleProgram()
-{
-    return *m_particleProgram;
-}
-
-MCGLShaderProgram & Renderer::pointParticleProgram()
-{
-    return *m_pointParticleProgram;
+    return *m_shaderHash[id];
 }
 
 void Renderer::setFadeValue(float value)
@@ -283,13 +249,5 @@ void Renderer::setEventHandler(EventHandler & eventHandler)
 
 Renderer::~Renderer()
 {
-    delete m_tileProgram;
-    delete m_masterProgram;
-    delete m_masterShadowProgram;
-    delete m_menuProgram;
-    delete m_textProgram;
-    delete m_textShadowProgram;
-    delete m_particleProgram;
-    delete m_pointParticleProgram;
     delete m_pGLScene;
 }

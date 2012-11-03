@@ -21,6 +21,10 @@
 #include <QGLWidget>
 #include <QTimer>
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+
 class InputHandler;
 class MCCamera;
 class MCGLScene;
@@ -60,21 +64,7 @@ public:
 
     void setFadeValue(float value);
 
-    MCGLShaderProgram & tileProgram();
-
-    MCGLShaderProgram & masterProgram();
-
-    MCGLShaderProgram & masterShadowProgram();
-
-    MCGLShaderProgram & menuProgram();
-
-    MCGLShaderProgram & textProgram();
-
-    MCGLShaderProgram & textShadowProgram();
-
-    MCGLShaderProgram & particleProgram();
-
-    MCGLShaderProgram & pointParticleProgram();
+    MCGLShaderProgram & program(const std::string & id);
 
     float fadeValue() const;
 
@@ -107,20 +97,15 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
+    typedef std::unordered_map<std::string, std::shared_ptr<MCGLShaderProgram> > ShaderHash;
+
     Scene             * m_pScene;
     MCGLScene         * m_pGLScene;
     MCCamera          * m_pCamera;
     EventHandler      * m_eventHandler;
     const float         m_viewAngle;
     float               m_fadeValue;
-    MCGLShaderProgram * m_tileProgram;
-    MCGLShaderProgram * m_masterProgram;
-    MCGLShaderProgram * m_masterShadowProgram;
-    MCGLShaderProgram * m_menuProgram;
-    MCGLShaderProgram * m_textProgram;
-    MCGLShaderProgram * m_textShadowProgram;
-    MCGLShaderProgram * m_particleProgram;
-    MCGLShaderProgram * m_pointParticleProgram;
+    ShaderHash          m_shaderHash;
     bool                m_enabled;
 
     static Renderer * m_instance;

@@ -27,7 +27,7 @@ static MCVectorAnimation fadeAnim;
 Intro::Intro()
 : m_back(MCSurfaceManager::instance().surface("intro"))
 {
-    m_back.setShaderProgram(&Renderer::instance().textProgram());
+    m_back.setShaderProgram(&Renderer::instance().program("text"));
     m_back.setColor(.9, .9, .9, 1.0);
 }
 

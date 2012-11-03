@@ -28,7 +28,7 @@ static const float APPEARANCE_SPEED = 0.05f;
 CheckeredFlag::CheckeredFlag()
 : m_surface(MCSurfaceManager::instance().surface("checkeredFlag"))
 {
-    m_surface.setShaderProgram(&Renderer::instance().masterProgram());
+    m_surface.setShaderProgram(&Renderer::instance().program("master"));
 }
 
 void CheckeredFlag::setDimensions(MCUint width, MCUint height)

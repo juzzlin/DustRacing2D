@@ -26,9 +26,9 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 , m_startLightGlow(MCSurfaceManager::instance().surface("startLightGlow"))
 , m_model(model)
 {
-    m_startLightOn.setShaderProgram(&Renderer::instance().masterProgram());
-    m_startLightOff.setShaderProgram(&Renderer::instance().masterProgram());
-    m_startLightGlow.setShaderProgram(&Renderer::instance().masterProgram());
+    m_startLightOn.setShaderProgram(&Renderer::instance().program("master"));
+    m_startLightOff.setShaderProgram(&Renderer::instance().program("master"));
+    m_startLightGlow.setShaderProgram(&Renderer::instance().program("master"));
 }
 
 void StartlightsOverlay::renderLights(int rows, int litRows) const

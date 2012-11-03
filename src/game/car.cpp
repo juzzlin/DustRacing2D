@@ -76,9 +76,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     preCreateParticles();
 
-    m_number.setShaderProgram(&Renderer::instance().masterProgram());
-    m_brakeGlow.setShaderProgram(&Renderer::instance().masterProgram());
-    m_frontTire.setShaderProgram(&Renderer::instance().masterProgram());
+    m_number.setShaderProgram(&Renderer::instance().program("master"));
+    m_brakeGlow.setShaderProgram(&Renderer::instance().program("master"));
+    m_frontTire.setShaderProgram(&Renderer::instance().program("master"));
 }
 
 void Car::setProperties(Description & desc)
@@ -126,7 +126,7 @@ void Car::preCreateParticles()
     {
         MCParticle * particle = new MCGLRectParticle("MUD");
         static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
-            &Renderer::instance().particleProgram());
+            &Renderer::instance().program("particle"));
         particle->setFreeList(m_freeList);
 
         // Initially push to list of free particles
@@ -142,7 +142,7 @@ void Car::preCreateParticles()
         MCParticle * particle = new MCSurfaceParticle("SMOKE");
 
         particle->setSurface(&MCSurfaceManager::instance().surface("smoke"));
-        particle->surface()->setShaderProgram(&Renderer::instance().masterProgram());
+        particle->surface()->setShaderProgram(&Renderer::instance().program("master"));
         particle->setFreeList(m_freeList2);
 
         // Initially push to list of free particles
@@ -157,7 +157,7 @@ void Car::preCreateParticles()
     {
         MCParticle * particle = new MCGLPointParticle("SPARKLE");
         static_cast<MCGLPointParticle *>(particle)->setShaderProgram(
-            &Renderer::instance().pointParticleProgram());
+            &Renderer::instance().program("pointParticle"));
         particle->setFreeList(m_freeList3);
 
         // Initially push to list of free particles

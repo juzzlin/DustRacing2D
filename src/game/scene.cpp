@@ -132,8 +132,8 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
         }
 
         car->setLayer(Layers::Cars);
-        car->surface()->setShaderProgram(&Renderer::instance().masterProgram());
-        car->surface()->setShadowShaderProgram(&Renderer::instance().masterShadowProgram());
+        car->surface()->setShaderProgram(&Renderer::instance().program("master"));
+        car->surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         m_cars.push_back(car);
         m_race.addCar(*car);
@@ -155,9 +155,9 @@ Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numC
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     MCTextureFontManager::instance().font("default").surface().setShaderProgram(
-        &Renderer::instance().textProgram());
+        &Renderer::instance().program("text"));
     MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
-        &Renderer::instance().textShadowProgram());
+        &Renderer::instance().program("textShadow"));
 
     createMenus();
 }
@@ -528,9 +528,9 @@ void Scene::render(MCCamera & camera)
     {
         if (!fadeUpdate)
         {
-            Renderer::instance().menuProgram().setFadeValue(fadeValue);
-            Renderer::instance().tileProgram().setFadeValue(fadeValue);
-            Renderer::instance().textProgram().setFadeValue(fadeValue);
+            Renderer::instance().program("menu").setFadeValue(fadeValue);
+            Renderer::instance().program("tile").setFadeValue(fadeValue);
+            Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 
         m_menuManager->render();
@@ -543,9 +543,9 @@ void Scene::render(MCCamera & camera)
     {
         if (!fadeUpdate)
         {
-            Renderer::instance().masterProgram().setFadeValue(fadeValue);
-            Renderer::instance().tileProgram().setFadeValue(fadeValue);
-            Renderer::instance().textProgram().setFadeValue(fadeValue);
+            Renderer::instance().program("master").setFadeValue(fadeValue);
+            Renderer::instance().program("tile").setFadeValue(fadeValue);
+            Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 
         m_activeTrack->render(&camera);

@@ -120,7 +120,7 @@ void Track::render(MCCamera * pCamera)
     MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
-    MCGLShaderProgram & prog = Renderer::instance().tileProgram();
+    MCGLShaderProgram & prog = Renderer::instance().program("tile");
     prog.bind();
 
     renderAsphalt(pCamera, prog, i0, i2, j0, j2);

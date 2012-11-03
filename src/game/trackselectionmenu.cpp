@@ -54,9 +54,9 @@ public:
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
     , m_bestPos(Settings::instance().loadBestPos(m_track))
     {
-        m_star.setShaderProgram(&Renderer::instance().menuProgram());
-        m_glow.setShaderProgram(&Renderer::instance().menuProgram());
-        m_lock.setShaderProgram(&Renderer::instance().menuProgram());
+        m_star.setShaderProgram(&Renderer::instance().program("menu"));
+        m_glow.setShaderProgram(&Renderer::instance().program("menu"));
+        m_lock.setShaderProgram(&Renderer::instance().program("menu"));
     }
 
     Track & track() const
@@ -147,7 +147,7 @@ void TrackItem::render(int x, int y)
             {
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
-                    pSurface->setShaderProgram(&Renderer::instance().menuProgram());
+                    pSurface->setShaderProgram(&Renderer::instance().program("menu"));
 
                     if (m_track.trackData().isLocked())
                     {

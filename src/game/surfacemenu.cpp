@@ -30,7 +30,7 @@ SurfaceMenu::SurfaceMenu(
 , m_back(MCSurfaceManager::instance().surface(surfaceId))
 , m_font(MCTextureFontManager::instance().font("default"))
 {
-    m_back.setShaderProgram(&Renderer::instance().menuProgram());
+    m_back.setShaderProgram(&Renderer::instance().program("menu"));
     m_back.setColor(0.5, 0.5, 0.5, 1.0);
 }
 
