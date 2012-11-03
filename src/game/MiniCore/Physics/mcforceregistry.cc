@@ -26,17 +26,6 @@ MCForceRegistry::MCForceRegistry()
 , m_owned()
 {}
 
-MCForceRegistry::~MCForceRegistry()
-{
-    auto iter(m_owned.begin());
-    while (iter != m_owned.end())
-    {
-        delete *iter;
-        iter++;
-    }
-    m_owned.clear();
-}
-
 void MCForceRegistry::update()
 {
     auto iter = m_registryHash.begin();
@@ -69,7 +58,7 @@ void MCForceRegistry::addForceGenerator(
 
         if (takeOwnership)
         {
-            m_owned.insert(&generator);
+            m_owned.insert(MCForceGeneratorPtr(&generator));
         }
     }
 }
@@ -85,9 +74,9 @@ void MCForceRegistry::removeForceGenerator(
         {
             if (registry[i] == &generator && iter->first == &object)
             {
-                    registry[i] = registry.back();
-                    registry.pop_back();
-                    break;
+                registry[i] = registry.back();
+                registry.pop_back();
+                break;
             }
         }
 
