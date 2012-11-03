@@ -106,7 +106,9 @@ private:
     void updateFocus();
 
     std::vector<MenuItem *> m_items;
-    std::vector<std::shared_ptr<MenuItem> > m_ownedMenuItems;
+    typedef std::shared_ptr<MenuItem> MenuItemPtr;
+    typedef std::vector<MenuItemPtr> MenuItemVector;
+    MenuItemVector m_ownedMenuItems;
     std::string m_id;
     int m_width, m_height;
     int m_currentIndex;

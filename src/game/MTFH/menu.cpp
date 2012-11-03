@@ -44,7 +44,7 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 
     if (takeOwnership)
     {
-        m_ownedMenuItems.push_back(std::shared_ptr<MenuItem>(&menuItem));
+        m_ownedMenuItems.push_back(MenuItemPtr(&menuItem));
     }
 
     updateFocus();
