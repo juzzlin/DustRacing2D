@@ -19,7 +19,6 @@
 #include "eventhandler.hpp"
 
 #include <QGLWidget>
-#include <QTimer>
 
 #include <memory>
 #include <string>
