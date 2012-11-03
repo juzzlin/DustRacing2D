@@ -74,8 +74,10 @@ private:
     std::string m_text;
     MenuItemAction * m_action;
     MenuItemView * m_view;
-    std::shared_ptr<MenuItemAction> m_ownedAction;
-    std::shared_ptr<MenuItemView> m_ownedView;
+    typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
+    MenuItemActionPtr m_ownedAction;
+    typedef std::shared_ptr<MenuItemView> MenuItemViewPtr;
+    MenuItemViewPtr m_ownedView;
     bool m_focused;
     int m_width, m_height;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;

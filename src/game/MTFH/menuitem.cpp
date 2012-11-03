@@ -51,7 +51,7 @@ void MenuItem::setView(MenuItemView * view, bool takeOwnership)
 
     if (takeOwnership)
     {
-        m_ownedView = std::shared_ptr<MenuItemView>(view);
+        m_ownedView = MenuItemViewPtr(view);
     }
 }
 
@@ -66,7 +66,7 @@ void MenuItem::setAction(MenuItemAction * action, bool takeOwnership)
 
     if (takeOwnership)
     {
-        m_ownedAction = std::shared_ptr<MenuItemAction>(action);
+        m_ownedAction = MenuItemActionPtr(action);
     }
 }
 
