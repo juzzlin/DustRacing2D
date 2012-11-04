@@ -46,6 +46,8 @@ public:
 
     void setAction(MenuItemAction * action, bool takeOwnership = false);
 
+    void setMenuOpenAction(const std::string & menuId);
+
     MenuItemAction * action() const;
 
     virtual void render(int x, int y);
@@ -72,6 +74,7 @@ public:
 private:
 
     std::string m_text;
+    std::string m_menuOpenActionMenuId;
     MenuItemAction * m_action;
     MenuItemView * m_view;
     typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;

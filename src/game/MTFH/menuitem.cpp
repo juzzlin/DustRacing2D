@@ -23,6 +23,7 @@ namespace MTFH {
 
 MenuItem::MenuItem(int width, int height, std::string text)
 : m_text(text)
+, m_menuOpenActionMenuId("")
 , m_action(nullptr)
 , m_view(nullptr)
 , m_focused(false)
@@ -70,6 +71,11 @@ void MenuItem::setAction(MenuItemAction * action, bool takeOwnership)
     }
 }
 
+void MenuItem::setMenuOpenAction(const std::string & menuId)
+{
+    m_menuOpenActionMenuId = menuId;
+}
+
 MenuItemAction * MenuItem::action() const
 {
     return m_action;
@@ -96,6 +102,11 @@ void MenuItem::onSelect()
     if (m_action)
     {
         m_action->fire();
+    }
+
+    if (!m_menuOpenActionMenuId.empty())
+    {
+        MenuManager::instance().pushMenu(m_menuOpenActionMenuId);
     }
 }
 

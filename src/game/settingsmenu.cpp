@@ -121,17 +121,6 @@ private:
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
 
-class ResolutionAction : public MTFH::MenuItemAction
-{
-public:
-
-    //! \reimp
-    void fire()
-    {
-        MTFH::MenuManager::instance().pushMenu(RESOLUTION_MENU_ID);
-    }
-};
-
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
@@ -159,12 +148,17 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 
     MenuItem * selectResolution = new MenuItem(width, itemHeight, "Select resolution >");
     selectResolution->setView(new TextMenuItemView(20, *selectResolution), true);
-    selectResolution->setAction(new ResolutionAction, true);
+    selectResolution->setMenuOpenAction(RESOLUTION_MENU_ID);
+
+    MenuItem * gameMode = new MenuItem(width, itemHeight, "Game mode >");
+    gameMode->setView(new TextMenuItemView(20, *gameMode), true);
+    gameMode->setMenuOpenAction(RESOLUTION_MENU_ID);
 
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);
     addItem(*resetUnlockedTracks, true);
     addItem(*selectResolution,    true);
+    addItem(*gameMode,            true);
 
     MenuManager::instance().addMenu(m_confirmationMenu);
     MenuManager::instance().addMenu(m_resolutionMenu);

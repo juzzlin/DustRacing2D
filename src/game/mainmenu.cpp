@@ -39,46 +39,6 @@ class QuitAction : public MTFH::MenuItemAction
     }
 };
 
-class PlayAction : public MTFH::MenuItemAction
-{
-    //! \reimp
-    void fire()
-    {
-        MCLogger().info() << "Play selected from the main menu.";
-        MTFH::MenuManager::instance().pushMenu("trackSelection");
-    }
-};
-
-class HelpAction : public MTFH::MenuItemAction
-{
-    //! \reimp
-    void fire()
-    {
-        MCLogger().info() << "Help selected from the main menu.";
-        MTFH::MenuManager::instance().pushMenu("help");
-    }
-};
-
-class CreditsAction : public MTFH::MenuItemAction
-{
-    //! \reimp
-    void fire()
-    {
-        MCLogger().info() << "Credits selected from the main menu.";
-        MTFH::MenuManager::instance().pushMenu("credits");
-    }
-};
-
-class SettingsAction : public MTFH::MenuItemAction
-{
-    //! \reimp
-    void fire()
-    {
-        MCLogger().info() << "Settings selected from the main menu.";
-        MTFH::MenuManager::instance().pushMenu("settings");
-    }
-};
-
 MainMenu::MainMenu(std::string id, int width, int height)
 : SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
 {
@@ -88,15 +48,15 @@ MainMenu::MainMenu(std::string id, int width, int height)
 
     MenuItem * play = new MenuItem(width, itemHeight, "Play");
     play->setView(new TextMenuItemView(40, *play), true);
-    play->setAction(new PlayAction, true);
+    play->setMenuOpenAction("trackSelection");
 
     MenuItem * help = new MenuItem(width, itemHeight, "Help");
     help->setView(new TextMenuItemView(40, *help), true);
-    help->setAction(new HelpAction, true);
+    help->setMenuOpenAction("help");
 
     MenuItem * credits = new MenuItem(width, itemHeight, "Credits");
     credits->setView(new TextMenuItemView(40, *credits), true);
-    credits->setAction(new CreditsAction, true);
+    credits->setMenuOpenAction("credits");
 
     MenuItem * quit = new MenuItem(width, itemHeight, "Quit");
     quit->setView(new TextMenuItemView(40, *quit), true);
@@ -104,7 +64,7 @@ MainMenu::MainMenu(std::string id, int width, int height)
 
     MenuItem * settings = new MenuItem(width, itemHeight, "Settings");
     settings->setView(new TextMenuItemView(40, *settings), true);
-    settings->setAction(new SettingsAction, true);
+    settings->setMenuOpenAction("settings");
 
     addItem(*quit,     true);
     addItem(*credits,  true);
