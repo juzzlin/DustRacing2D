@@ -30,9 +30,6 @@ public:
     //! Constructor.
     AI(Car & car);
 
-    //! Destructor.
-    virtual ~AI();
-
     //! Update.
     void update(bool isRaceCompleted);
 

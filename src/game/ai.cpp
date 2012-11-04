@@ -176,7 +176,3 @@ void AI::setTrack(Track & track)
     m_track = &track;
     m_route = &track.trackData().route();
 }
-
-AI::~AI()
-{
-}
