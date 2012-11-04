@@ -28,6 +28,14 @@ class MCGLScene
 {
 public:
 
+    //! Viewport split type for two-player setup.
+    enum SplitType
+    {
+        Single = 0,
+        Left,
+        Right
+    };
+
     //! Constructor.
     MCGLScene();
 
@@ -37,12 +45,26 @@ public:
     //! Initialize. Re-implement if desired.
     virtual void initialize();
 
-    //! Resize / set projection matrices. Re-implement if desired.
+    //! Resize / set projection matrices and viewport. Re-implement if desired.
     virtual void resize(MCUint viewWidth, MCUint viewHeight,
         MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
 
     //! Set viewer's position. Automatically called by resize().
     virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
+
+    //! Set viewport split type.
+    void setSplitType(SplitType splitType = Single);
+
+private:
+
+    void setViewport();
+
+    SplitType m_splitType;
+    MCUint    m_viewWidth;
+    MCUint    m_viewHeight;
+    MCUint    m_sceneWidth;
+    MCUint    m_sceneHeight;
+    MCFloat   m_viewAngle;
 };
 
 #endif // MCGLSCENE_HH

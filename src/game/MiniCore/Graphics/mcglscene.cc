@@ -27,6 +27,12 @@
 #include <cmath>
 
 MCGLScene::MCGLScene()
+: m_splitType(Single)
+, m_viewWidth(0)
+, m_viewHeight(0)
+, m_sceneWidth(0)
+, m_sceneHeight(0)
+, m_viewAngle(0)
 {
 }
 
@@ -49,28 +55,15 @@ void MCGLScene::initialize()
 }
 
 void MCGLScene::resize(
-    MCUint viewWidth, MCUint viewHeight,
-    MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
+    MCUint viewWidth, MCUint viewHeight, MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
 {
-    if (viewHeight == 0)
-    {
-        viewHeight = 1;
-    }
+    m_viewWidth   = viewWidth;
+    m_viewHeight  = viewHeight;
+    m_sceneWidth  = sceneWidth;
+    m_sceneHeight = sceneHeight;
+    m_viewAngle   = viewAngle;
 
-    glViewport(0, 0, viewWidth, viewHeight);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    const float zNear = 1.0;
-    const float zFar  = 1000.0;
-
-    gluPerspective(viewAngle, static_cast<GLfloat>(sceneWidth) /
-        sceneHeight, zNear, zFar);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    setViewerPosition(sceneWidth, sceneHeight, viewAngle);
+    setViewport();
 }
 
 void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
@@ -81,6 +74,28 @@ void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat
     const MCFloat eyeZ = vH2 /
         std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
     gluLookAt(vW2, vH2, eyeZ, vW2, vH2, 0, 0, 1, 0);
+}
+
+void MCGLScene::setSplitType(SplitType splitType)
+{
+    m_splitType = splitType;
+}
+
+void MCGLScene::setViewport()
+{
+    glViewport(0, 0, m_viewWidth, m_viewHeight);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    static const float zNear = 1.0;
+    static const float zFar  = 1000.0;
+
+    gluPerspective(m_viewAngle, static_cast<GLfloat>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
 }
 
 MCGLScene::~MCGLScene()
