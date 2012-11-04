@@ -79,23 +79,61 @@ void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat
 void MCGLScene::setSplitType(SplitType splitType)
 {
     m_splitType = splitType;
+    setViewport();
 }
 
 void MCGLScene::setViewport()
 {
-    glViewport(0, 0, m_viewWidth, m_viewHeight);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    if (m_splitType == Single)
+    {
+        glViewport(0, 0, m_viewWidth, m_viewHeight);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
 
-    static const float zNear = 1.0;
-    static const float zFar  = 1000.0;
+        static const float zNear = 1.0;
+        static const float zFar  = 1000.0;
 
-    gluPerspective(m_viewAngle, static_cast<GLfloat>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
+        gluPerspective(m_viewAngle, static_cast<GLfloat>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-    setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
+        setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
+    }
+    else if (m_splitType == Left)
+    {
+        glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+
+        static const float zNear = 1.0;
+        static const float zFar  = 1000.0;
+
+        gluPerspective(
+            m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
+    }
+    else if (m_splitType == Right)
+    {
+        glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+
+        static const float zNear = 1.0;
+        static const float zFar  = 1000.0;
+
+        gluPerspective(
+            m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
+    }
 }
 
 MCGLScene::~MCGLScene()

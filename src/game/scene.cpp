@@ -522,7 +522,7 @@ void Scene::render(MCCamera & camera)
         m_intro->render();
     }
     else if (
-        m_stateMachine.state() == StateMachine::Menu ||
+        m_stateMachine.state() == StateMachine::Menu              ||
         m_stateMachine.state() == StateMachine::MenuTransitionOut ||
         m_stateMachine.state() == StateMachine::MenuTransitionIn)
     {
@@ -537,9 +537,9 @@ void Scene::render(MCCamera & camera)
         m_menuManager->render();
     }
     else if (
-        m_stateMachine.state() == StateMachine::GameTransitionIn ||
+        m_stateMachine.state() == StateMachine::GameTransitionIn  ||
         m_stateMachine.state() == StateMachine::GameTransitionOut ||
-        m_stateMachine.state() == StateMachine::DoStartlights ||
+        m_stateMachine.state() == StateMachine::DoStartlights     ||
         m_stateMachine.state() == StateMachine::Play)
     {
         if (!fadeUpdate)

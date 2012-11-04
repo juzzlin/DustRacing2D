@@ -101,9 +101,9 @@ private:
     typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
-    Scene             * m_pScene;
-    MCGLScene         * m_pGLScene;
-    MCCamera          * m_pCamera;
+    Scene             * m_scene;
+    MCGLScene         * m_glScene;
+    MCCamera          * m_camera;
     EventHandler      * m_eventHandler;
     const float         m_viewAngle;
     float               m_fadeValue;

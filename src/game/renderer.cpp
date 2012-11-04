@@ -46,9 +46,9 @@ Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent)
 : QGLWidget(parent)
-, m_pScene(nullptr)
-, m_pGLScene(new MCGLScene)
-, m_pCamera(nullptr)
+, m_scene(nullptr)
+, m_glScene(new MCGLScene)
+, m_camera(nullptr)
 , m_eventHandler(nullptr)
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
@@ -84,7 +84,7 @@ void Renderer::initializeGL()
 {
     MCLogger().info() << "OpenGL Version: " << glGetString(GL_VERSION);
 
-    m_pGLScene->initialize();
+    m_glScene->initialize();
 
     if (QGLShader::hasOpenGLShaders(QGLShader::Fragment, context()))
     {
@@ -94,7 +94,7 @@ void Renderer::initializeGL()
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-    m_pGLScene->resize(
+    m_glScene->resize(
         viewWidth, viewHeight, Scene::width(), Scene::height(),
         m_viewAngle);
 }
@@ -206,13 +206,16 @@ void Renderer::paintGL()
 {
     if (m_enabled)
     {
-        if (m_pCamera) // Qt might update the widget before camera is set
+        if (m_camera) // Qt might update the widget before camera is set
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            if (m_pScene)
+            if (m_scene)
             {
-                m_pScene->render(*m_pCamera);
+                m_glScene->setSplitType(MCGLScene::Left);
+                m_scene->render(*m_camera);
+                m_glScene->setSplitType(MCGLScene::Right);
+                m_scene->render(*m_camera);
             }
         }
     }
@@ -222,7 +225,7 @@ void Renderer::paintGL()
 
 void Renderer::updateFrame(MCCamera & camera)
 {
-    m_pCamera = &camera;
+    m_camera = &camera;
 
     paintGL();
 }
@@ -253,7 +256,7 @@ void Renderer::closeEvent(QCloseEvent * event)
 
 void Renderer::setScene(Scene & scene)
 {
-    m_pScene = &scene;
+    m_scene = &scene;
 }
 
 void Renderer::setEventHandler(EventHandler & eventHandler)
@@ -263,5 +266,5 @@ void Renderer::setEventHandler(EventHandler & eventHandler)
 
 Renderer::~Renderer()
 {
-    delete m_pGLScene;
+    delete m_glScene;
 }
