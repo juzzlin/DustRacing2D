@@ -229,7 +229,6 @@ void Game::togglePause()
     {
         stop();
         MCLogger().info() << "Game paused.";
-        QApplication::instance()->quit();
     }
 }
 
