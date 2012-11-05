@@ -43,9 +43,19 @@ void ConfirmationMenu::setAcceptAction(MTFH::MenuItemAction & action)
     m_acceptItem->setAction(&action);
 }
 
+void ConfirmationMenu::setAcceptAction(std::function<void()> actionFunction)
+{
+    m_acceptItem->setAction(actionFunction);
+}
+
 void ConfirmationMenu::setCancelAction(MTFH::MenuItemAction & action)
 {
     m_cancelItem->setAction(&action);
+}
+
+void ConfirmationMenu::setCancelAction(std::function<void()> actionFunction)
+{
+    m_cancelItem->setAction(actionFunction);
 }
 
 void ConfirmationMenu::setText(std::string text)

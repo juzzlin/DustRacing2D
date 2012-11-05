@@ -16,6 +16,8 @@
 #ifndef CONFIRMATIONMENU_HPP
 #define CONFIRMATIONMENU_HPP
 
+#include <functional>
+
 #include "surfacemenu.hpp"
 
 namespace MTFH {
@@ -33,7 +35,11 @@ public:
 
     void setAcceptAction(MTFH::MenuItemAction & action);
 
+    void setAcceptAction(std::function<void()> actionFunction);
+
     void setCancelAction(MTFH::MenuItemAction & action);
+
+    void setCancelAction(std::function<void()> actionFunction);
 
     void setText(std::string text);
 

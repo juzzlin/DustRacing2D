@@ -44,45 +44,6 @@ public:
 
 private:
 
-    class ResetPositions : public MTFH::MenuItemAction
-    {
-        //! \reimp
-        void fire()
-        {
-            MCLogger().info() << "Reset positions selected.";
-            Settings::instance().resetBestPos();
-        }
-    };
-
-    class ResetTimes : public MTFH::MenuItemAction
-    {
-        //! \reimp
-        void fire()
-        {
-            MCLogger().info() << "Reset times selected.";
-            Settings::instance().resetLapRecords();
-        }
-    };
-
-    class ResetTracks : public MTFH::MenuItemAction
-    {
-        //! \reimp
-        void fire()
-        {
-            MCLogger().info() << "Reset tracks selected.";
-            TrackLoader & tl = TrackLoader::instance();
-            for (unsigned int i = 0; i < tl.tracks(); i++)
-            {
-                Track & track = *tl.track(i);
-                if (track.trackData().index() > 0)
-                {
-                    track.trackData().setIsLocked(true);
-                }
-            }
-            Settings::instance().resetTrackUnlockStatuses();
-        }
-    };
-
     //! \reimp
     void fire()
     {
@@ -93,21 +54,47 @@ private:
         case RT_POSITIONS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText("Reset best positions?");
-            m_confirmationMenu.setAcceptAction(m_resetPositions);
+            m_confirmationMenu.setAcceptAction(
+                []()
+                {
+                    MCLogger().info() << "Reset positions selected.";
+                    Settings::instance().resetBestPos();
+                });
             m_confirmationMenu.setCurrentIndex(1);
             break;
+
         case RT_TIMES:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText("Reset record times?");
-            m_confirmationMenu.setAcceptAction(m_resetTimes);
+            m_confirmationMenu.setAcceptAction(
+                []()
+                {
+                    MCLogger().info() << "Reset times selected.";
+                    Settings::instance().resetLapRecords();
+                });
             m_confirmationMenu.setCurrentIndex(1);
             break;
+
         case RT_TRACKS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText("Reset unlocked tracks?");
-            m_confirmationMenu.setAcceptAction(m_resetTracks);
+            m_confirmationMenu.setAcceptAction(
+                []()
+                {
+                    MCLogger().info() << "Reset tracks selected.";
+                    TrackLoader & tl = TrackLoader::instance();
+                    for (unsigned int i = 0; i < tl.tracks(); i++)
+                    {
+                        Track & track = *tl.track(i);
+                        if (track.trackData().index() > 0)
+                        {
+                            track.trackData().setIsLocked(true);
+                        }
+                }
+                Settings::instance().resetTrackUnlockStatuses();});
             m_confirmationMenu.setCurrentIndex(1);
             break;
+
         default:
             break;
         }
@@ -115,9 +102,6 @@ private:
 
     ResetType          m_type;
     ConfirmationMenu & m_confirmationMenu;
-    ResetPositions     m_resetPositions;
-    ResetTimes         m_resetTimes;
-    ResetTracks        m_resetTracks;
 };
 
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
@@ -166,18 +150,24 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 
     MenuItem * twoPlayers = new MenuItem(width, itemHeight, "Two player race");
     twoPlayers->setView(new TextMenuItemView(20, *twoPlayers), true);
-    twoPlayers->setAction([]() {
-        MCLogger().info() << "Two player game selected.";
-        Game::instance().setMode(Game::TwoPlayerRace);
-        MenuManager::instance().popMenu();});
+    twoPlayers->setAction(
+        []()
+        {
+            MCLogger().info() << "Two player game selected.";
+            Game::instance().setMode(Game::TwoPlayerRace);
+            MenuManager::instance().popMenu();
+        });
     m_gameModeMenu.addItem(*twoPlayers, true);
 
     MenuItem * onePlayer = new MenuItem(width, itemHeight, "One player race");
     onePlayer->setView(new TextMenuItemView(20, *onePlayer), true);
-    onePlayer->setAction([]() {
-        MCLogger().info() << "One player game selected.";
-        Game::instance().setMode(Game::OnePlayerRace);
-        MenuManager::instance().popMenu();});
+    onePlayer->setAction(
+        []()
+        {
+            MCLogger().info() << "One player game selected.";
+            Game::instance().setMode(Game::OnePlayerRace);
+            MenuManager::instance().popMenu();
+        });
     m_gameModeMenu.addItem(*onePlayer, true);
 
     MenuManager::instance().addMenu(m_confirmationMenu);
