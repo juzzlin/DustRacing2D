@@ -14,6 +14,8 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "settingsmenu.hpp"
+
+#include "game.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
 #include "textmenuitemview.hpp"
@@ -120,11 +122,13 @@ private:
 
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
+static const char * GAME_MODE_MENU_ID    = "gameModeMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_resolutionMenu(m_confirmationMenu, RESOLUTION_MENU_ID, width, height)
+, m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 {
     const int itemHeight = height / 8;
 
@@ -152,7 +156,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 
     MenuItem * gameMode = new MenuItem(width, itemHeight, "Game mode >");
     gameMode->setView(new TextMenuItemView(20, *gameMode), true);
-    gameMode->setMenuOpenAction(RESOLUTION_MENU_ID);
+    gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);
@@ -160,6 +164,23 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     addItem(*selectResolution,    true);
     addItem(*gameMode,            true);
 
+    MenuItem * twoPlayers = new MenuItem(width, itemHeight, "Two player race");
+    twoPlayers->setView(new TextMenuItemView(20, *twoPlayers), true);
+    twoPlayers->setAction([]() {
+        MCLogger().info() << "Two player game selected.";
+        Game::instance().setMode(Game::TwoPlayerRace);
+        MenuManager::instance().popMenu();});
+    m_gameModeMenu.addItem(*twoPlayers, true);
+
+    MenuItem * onePlayer = new MenuItem(width, itemHeight, "One player race");
+    onePlayer->setView(new TextMenuItemView(20, *onePlayer), true);
+    onePlayer->setAction([]() {
+        MCLogger().info() << "One player game selected.";
+        Game::instance().setMode(Game::OnePlayerRace);
+        MenuManager::instance().popMenu();});
+    m_gameModeMenu.addItem(*onePlayer, true);
+
     MenuManager::instance().addMenu(m_confirmationMenu);
     MenuManager::instance().addMenu(m_resolutionMenu);
+    MenuManager::instance().addMenu(m_gameModeMenu);
 }

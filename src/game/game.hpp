@@ -40,6 +40,12 @@ class Game : public QObject
 
 public:
 
+    enum GameMode
+    {
+        OnePlayerRace = 0,
+        TwoPlayerRace
+    };
+
     //! Constructor
     Game();
 
@@ -65,6 +71,12 @@ public:
 
     //! Stop scene.
     void stop();
+
+    //! Set the game mode.
+    void setMode(GameMode gameMode);
+
+    //! Get the game mode.
+    GameMode mode() const;
 
 public slots:
 
@@ -101,6 +113,7 @@ private:
     int                    m_availableRenderTime;
     bool                   m_paused;
     QTimer                 m_updateTimer;
+    GameMode               m_gameMode;
 
     static Game * m_instance;
 };

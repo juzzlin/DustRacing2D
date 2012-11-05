@@ -62,6 +62,7 @@ Game::Game()
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
+, m_gameMode(OnePlayerRace)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -105,6 +106,16 @@ void Game::setRenderer(Renderer * newRenderer)
     // to load textures to correct OpenGL context.
     m_renderer->makeCurrent();
     m_renderer->setEventHandler(*m_eventHandler);
+}
+
+void Game::setMode(GameMode gameMode)
+{
+    m_gameMode = gameMode;
+}
+
+Game::GameMode Game::mode() const
+{
+    return m_gameMode;
 }
 
 void Game::finish()
@@ -161,7 +172,7 @@ void Game::initScene()
     assert(m_renderer);
 
     // Create the scene
-    m_scene = new Scene(*m_stateMachine, *m_renderer, NUM_CARS);
+    m_scene = new Scene(*this, *m_stateMachine, *m_renderer, NUM_CARS);
 
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)

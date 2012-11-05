@@ -25,6 +25,7 @@ MenuItem::MenuItem(int width, int height, std::string text)
 : m_text(text)
 , m_menuOpenActionMenuId("")
 , m_action(nullptr)
+, m_actionFunction(nullptr)
 , m_view(nullptr)
 , m_focused(false)
 , m_width(width)
@@ -71,6 +72,11 @@ void MenuItem::setAction(MenuItemAction * action, bool takeOwnership)
     }
 }
 
+void MenuItem::setAction(std::function<void()> actionFunction)
+{
+    m_actionFunction = actionFunction;
+}
+
 void MenuItem::setMenuOpenAction(const std::string & menuId)
 {
     m_menuOpenActionMenuId = menuId;
@@ -102,6 +108,11 @@ void MenuItem::onSelect()
     if (m_action)
     {
         m_action->fire();
+    }
+
+    if (m_actionFunction)
+    {
+        m_actionFunction();
     }
 
     if (!m_menuOpenActionMenuId.empty())

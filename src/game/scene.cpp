@@ -19,6 +19,7 @@
 #include "car.hpp"
 #include "checkeredflag.hpp"
 #include "credits.hpp"
+#include "game.hpp"
 #include "inputhandler.hpp"
 #include "intro.hpp"
 #include "help.hpp"
@@ -46,6 +47,7 @@
 
 #include <MCCamera>
 #include <MCFrictionGenerator>
+#include <MCGLScene>
 #include <MCGLShaderProgram>
 #include <MCLogger>
 #include <MCObject>
@@ -68,8 +70,10 @@ int Scene::m_height = 600;
 
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 
-Scene::Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
-: m_stateMachine(stateMachine)
+Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
+: m_game(game)
+, m_stateMachine(stateMachine)
+, m_renderer(renderer)
 , m_messageOverlay(new MessageOverlay)
 , m_race(numCars, *m_messageOverlay)
 , m_activeTrack(nullptr)
@@ -518,6 +522,8 @@ void Scene::render(MCCamera & camera)
 
     if (m_stateMachine.state() == StateMachine::DoIntro)
     {
+        m_renderer.glScene().setSplitType(MCGLScene::Single);
+
         m_intro->setFadeValue(fadeValue);
         m_intro->render();
     }
@@ -533,6 +539,8 @@ void Scene::render(MCCamera & camera)
             Renderer::instance().program("tile3d").setFadeValue(fadeValue);
             Renderer::instance().program("text").setFadeValue(fadeValue);
         }
+
+        m_renderer.glScene().setSplitType(MCGLScene::Single);
 
         m_menuManager->render();
     }
@@ -550,18 +558,41 @@ void Scene::render(MCCamera & camera)
             Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 
-        m_activeTrack->render(&camera);
-        m_world->render(&camera);
-
-        if (m_race.checkeredFlagEnabled())
+        if (m_game.mode() == Game::TwoPlayerRace)
         {
-            m_checkeredFlag->render();
+            m_renderer.glScene().setSplitType(MCGLScene::Left);
+            renderPlayerScene(camera);
+
+            m_renderer.glScene().setSplitType(MCGLScene::Right);
+            renderPlayerScene(camera);
+        }
+        else
+        {
+            m_renderer.glScene().setSplitType(MCGLScene::Single);
+            renderPlayerScene(camera);
         }
 
-        m_timingOverlay->render();
-        m_startlightsOverlay->render();
-        m_messageOverlay->render();
+        m_renderer.glScene().setSplitType(MCGLScene::Single);
+        renderCommonScene(camera);
     }
+}
+
+void Scene::renderPlayerScene(MCCamera & camera)
+{
+    m_activeTrack->render(&camera);
+    m_world->render(&camera);
+    m_timingOverlay->render();
+}
+
+void Scene::renderCommonScene(MCCamera &)
+{
+    if (m_race.checkeredFlagEnabled())
+    {
+        m_checkeredFlag->render();
+    }
+
+    m_startlightsOverlay->render();
+    m_messageOverlay->render();
 }
 
 Scene::~Scene()

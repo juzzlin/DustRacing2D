@@ -16,6 +16,7 @@
 #ifndef MENUITEM_HPP
 #define MENUITEM_HPP
 
+#include <functional>
 #include <string>
 #include <memory>
 
@@ -45,6 +46,8 @@ public:
     MenuItemView * view();
 
     void setAction(MenuItemAction * action, bool takeOwnership = false);
+
+    void setAction(std::function<void()> actionFunction);
 
     void setMenuOpenAction(const std::string & menuId);
 
@@ -76,6 +79,7 @@ private:
     std::string m_text;
     std::string m_menuOpenActionMenuId;
     MenuItemAction * m_action;
+    std::function<void()> m_actionFunction;
     MenuItemView * m_view;
     typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
     MenuItemActionPtr m_ownedAction;

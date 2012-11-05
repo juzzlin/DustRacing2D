@@ -70,7 +70,7 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
         break;
     case Qt::Key_Escape:
     case Qt::Key_Q:
-        MTFH::MenuManager::instance().exitCurrentMenu();
+        MTFH::MenuManager::instance().popMenu();
         if (MTFH::MenuManager::instance().done())
         {
             emit gameExited();

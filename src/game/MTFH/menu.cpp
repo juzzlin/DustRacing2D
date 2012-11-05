@@ -242,7 +242,7 @@ void Menu::setWrapAround(bool wrapAround)
 
 void Menu::exit()
 {
-    MenuManager::instance().exitCurrentMenu();
+    MenuManager::instance().popMenu();
 }
 
 Menu::~Menu()

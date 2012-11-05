@@ -67,6 +67,8 @@ public:
 
     MCGLShaderProgram & program(const std::string & id);
 
+    MCGLScene & glScene();
+
     float fadeValue() const;
 
 protected:

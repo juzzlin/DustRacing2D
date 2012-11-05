@@ -192,6 +192,11 @@ MCGLShaderProgram & Renderer::program(const std::string & id)
     return *program;
 }
 
+MCGLScene & Renderer::glScene()
+{
+    return *m_glScene;
+}
+
 void Renderer::setFadeValue(float value)
 {
     m_fadeValue = value;
@@ -212,9 +217,6 @@ void Renderer::paintGL()
 
             if (m_scene)
             {
-                m_glScene->setSplitType(MCGLScene::Left);
-                m_scene->render(*m_camera);
-                m_glScene->setSplitType(MCGLScene::Right);
                 m_scene->render(*m_camera);
             }
         }

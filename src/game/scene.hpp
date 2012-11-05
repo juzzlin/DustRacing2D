@@ -25,6 +25,7 @@
 
 class AI;
 class CheckeredFlag;
+class Game;
 class InputHandler;
 class Intro;
 class MCCamera;
@@ -52,7 +53,8 @@ class Scene
 public:
 
     //! Constructor.
-    Scene(StateMachine & stateMachine, Renderer & renderer, unsigned int numCars = 10);
+    Scene(
+        Game & game, StateMachine & stateMachine, Renderer & renderer, unsigned int numCars = 10);
 
     //! Destructor.
     ~Scene();
@@ -97,31 +99,25 @@ public:
 
 private:
 
-    void createMenus();
-
-    void updateWorld(float timeStep);
-
-    void updateRace();
-
-    void updateCameraLocation(MCCamera & camera);
-
-    void processUserInput(InputHandler & handler, bool isRaceCompleted);
-
-    void updateAI();
-
-    void setWorldDimensions();
-
-    void addTrackObjectsToWorld();
-
     void addCarsToWorld();
-
-    void translateCarsToStartPositions();
-
+    void addTrackObjectsToWorld();
+    void createMenus();
     void initRace();
+    void processUserInput(InputHandler & handler, bool isRaceCompleted);
+    void renderCommonScene(MCCamera & camera);
+    void renderPlayerScene(MCCamera & camera);
+    void setWorldDimensions();
+    void translateCarsToStartPositions();
+    void updateAI();
+    void updateCameraLocation(MCCamera & camera);
+    void updateRace();
+    void updateWorld(float timeStep);
 
     static int            m_width;
     static int            m_height;
+    Game                & m_game;
     StateMachine        & m_stateMachine;
+    Renderer            & m_renderer;
     MessageOverlay      * m_messageOverlay;
     Race                  m_race;
     Track               * m_activeTrack;

@@ -70,19 +70,21 @@ void MenuManager::pushMenu(std::string menuId)
     pushMenu(*m_idToMenuMap[menuId]);
 }
 
+void MenuManager::popMenu()
+{
+    if (m_menuStack.size())
+    {
+        m_menuStack.pop_back();
+    }
+
+    enterCurrentMenu();
+}
+
 void MenuManager::enterCurrentMenu()
 {
     if (m_menuStack.size())
     {
         m_menuStack.back()->enter();
-    }
-}
-
-void MenuManager::exitCurrentMenu()
-{
-    if (m_menuStack.size())
-    {
-        m_menuStack.pop_back();
     }
 }
 

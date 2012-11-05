@@ -50,11 +50,11 @@ public:
     //! Enter the given menu & push to stack.
     void pushMenu(std::string menuId);
 
+    //! Force exit on current menu and enter the previous menu.
+    void popMenu();
+
     //! Force enter on current menu.
     void enterCurrentMenu();
-
-    //! Force exit on current menu.
-    void exitCurrentMenu();
 
     //! Force exit on all menus.
     void exit();
