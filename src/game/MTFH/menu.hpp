@@ -62,8 +62,12 @@ public:
     //! Select the current item.
     virtual void selectCurrentItem();
 
-    //! Return current item of nullptr.
+    //! Return current item or nullptr if no items added.
     MenuItem * currentItem() const;
+
+    //! Return selected item or nullptr if no item added.
+    //! Pressing enter on an item selects it.
+    MenuItem * selectedItem() const;
 
     //! Add item to the menu.
     virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
@@ -112,6 +116,7 @@ private:
     std::string m_id;
     int m_width, m_height;
     int m_currentIndex;
+    int m_selectedIndex;
     MenuStyle m_style;
     bool m_done;
     bool m_wrapAround;

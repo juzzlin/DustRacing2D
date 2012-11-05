@@ -26,6 +26,7 @@ Menu::Menu(std::string id, int width, int height, MenuStyle style)
 , m_width(width)
 , m_height(height)
 , m_currentIndex(-1)
+, m_selectedIndex(-1)
 , m_style(style)
 , m_done(false)
 , m_wrapAround(true)
@@ -40,7 +41,8 @@ std::string Menu::id() const
 void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 {
     m_items.push_back(&menuItem);
-    m_currentIndex = m_items.size() - 1;
+    m_currentIndex  = m_items.size() - 1;
+    m_selectedIndex = m_currentIndex;
 
     if (takeOwnership)
     {
@@ -55,6 +57,16 @@ MenuItem * Menu::currentItem() const
     if (m_items.size())
     {
         return m_items.at(m_currentIndex);
+    }
+
+    return nullptr;
+}
+
+MenuItem * Menu::selectedItem() const
+{
+    if (m_items.size())
+    {
+        return m_items.at(m_selectedIndex);
     }
 
     return nullptr;
@@ -150,7 +162,13 @@ void Menu::selectCurrentItem()
 {
     if (m_items.size())
     {
-        m_items.at(m_currentIndex)->onSelect();
+        for (MenuItem * item : m_items)
+        {
+            item->setSelected(false);
+        }
+
+        m_items.at(m_currentIndex)->setSelected(true);
+        m_selectedIndex = m_currentIndex;
     }
 }
 

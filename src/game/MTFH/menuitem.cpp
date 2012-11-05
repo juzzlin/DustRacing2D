@@ -21,13 +21,15 @@
 
 namespace MTFH {
 
-MenuItem::MenuItem(int width, int height, std::string text)
+MenuItem::MenuItem(int width, int height, std::string text, bool selectable)
 : m_text(text)
 , m_menuOpenActionMenuId("")
 , m_action(nullptr)
 , m_actionFunction(nullptr)
 , m_view(nullptr)
 , m_focused(false)
+, m_selected(false)
+, m_selectable(selectable)
 , m_width(width)
 , m_height(height)
 , m_lMargin(1)
@@ -103,22 +105,27 @@ void MenuItem::onDown()
 {
 }
 
-void MenuItem::onSelect()
+void MenuItem::setSelected(bool flag)
 {
-    if (m_action)
+    if (flag)
     {
-        m_action->fire();
+        if (m_action)
+        {
+            m_action->fire();
+        }
+
+        if (m_actionFunction)
+        {
+            m_actionFunction();
+        }
+
+        if (!m_menuOpenActionMenuId.empty())
+        {
+            MenuManager::instance().pushMenu(m_menuOpenActionMenuId);
+        }
     }
 
-    if (m_actionFunction)
-    {
-        m_actionFunction();
-    }
-
-    if (!m_menuOpenActionMenuId.empty())
-    {
-        MenuManager::instance().pushMenu(m_menuOpenActionMenuId);
-    }
+    m_selected = flag;
 }
 
 void MenuItem::setFocused(bool focused)
@@ -145,6 +152,16 @@ void MenuItem::getContentsMargins(int & left, int & right, int & top, int & bott
 bool MenuItem::focused() const
 {
     return m_focused;
+}
+
+bool MenuItem::selected() const
+{
+    return m_selected && m_selectable;
+}
+
+bool MenuItem::selectable() const
+{
+    return m_selectable;
 }
 
 void MenuItem::render(int x, int y)

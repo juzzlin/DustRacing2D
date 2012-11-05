@@ -31,7 +31,7 @@ class MenuItem
 {
 public:
 
-    MenuItem(int width, int height, std::string text = "");
+    MenuItem(int width, int height, std::string text = "", bool selectable = false);
 
     virtual ~MenuItem();
 
@@ -63,14 +63,17 @@ public:
 
     virtual void onDown();
 
-    //! Call action, if set.
-    virtual void onSelect();
+    virtual void setSelected(bool flag);
 
     virtual void setFocused(bool focused);
 
     void setContentsMargins(int left, int right, int top, int bottom);
 
     void getContentsMargins(int & left, int & right, int & top, int & bottom) const;
+
+    bool selected() const;
+
+    bool selectable() const;
 
     bool focused() const;
 
@@ -86,6 +89,8 @@ private:
     typedef std::shared_ptr<MenuItemView> MenuItemViewPtr;
     MenuItemViewPtr m_ownedView;
     bool m_focused;
+    bool m_selected;
+    bool m_selectable;
     int m_width, m_height;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
 };

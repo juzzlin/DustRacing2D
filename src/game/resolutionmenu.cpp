@@ -72,8 +72,9 @@ public:
     virtual ~ResolutionItem() {}
 
     //! \reimp
-    virtual void onSelect()
+    virtual void setSelected(bool flag)
     {
+        MenuItem::setSelected(flag);
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
         m_confirmationMenu.setText("Restart to change the resolution.");
         m_confirmationMenu.setAcceptAction(m_saveResolutionAction);

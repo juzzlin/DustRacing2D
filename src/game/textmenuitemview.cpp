@@ -45,6 +45,10 @@ void TextMenuItemView::render(int x, int y)
     {
         text.setColor(1.0, 1.0, 0.0, 1.0);
     }
+    else if (owner().selected())
+    {
+        text.setColor(1.0, 0.0, 0.0, 1.0);
+    }
     else
     {
         text.setColor(1.0, 1.0, 1.0, 1.0);
