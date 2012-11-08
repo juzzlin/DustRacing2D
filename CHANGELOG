@@ -1,3 +1,22 @@
+0.11.1
+------
+
+* Adds zip output to the archive script.
+* Use GLEW to improve portability.
+* Use shared_ptr in MCForceRegistry.
+* Cosmetic changes in Menu.
+* Updates license texts with Dust Racing 2D.
+* Cosmetic changes in MenuItem.
+* Use shared_ptr in Scene.
+* Renames AiLogic to AI.
+* Removes a useless QTimer include.
+* Replaces the explicit shader getters with a single getter and hash.
+* Merges Renderer and MainWindow.
+* Separates the menu toolkit from the game sources.
+* Adds example packaging for Ubuntu/Debian.
+* Adds screenshots of 0.11.0
+* Fixes game pause.
+
 0.11.0
 ------
 
