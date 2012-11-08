@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.9.0" cols="12" rows="12" index="2" name="Circle">
+<track lapCount="5" version="0.11.0" cols="12" rows="12" index="2" name="Circle">
  <t i="0" j="0" o="0" t="grass"/>
  <t i="0" j="1" o="0" t="grass"/>
  <t i="0" j="2" o="0" t="grass"/>
@@ -231,17 +231,8 @@
  <o x="1132" y="2128" o="0" r="tree" c="free"/>
  <o x="1067" y="1822" o="0" r="tree" c="free"/>
  <o x="1189" y="2025" o="0" r="tree" c="free"/>
- <o x="2176" y="707" o="45" r="dustRacing2DBanner" c="free"/>
- <o x="2362" y="892" o="45" r="dustRacing2DBanner" c="free"/>
- <o x="2190" y="2359" o="-225" r="dustRacing2DBanner" c="free"/>
- <o x="2376" y="2173" o="135" r="dustRacing2DBanner" c="free"/>
  <o x="513" y="2190" o="-90" r="dustRacing2DBanner" c="free"/>
  <o x="513" y="1930" o="-90" r="dustRacing2DBanner" c="free"/>
- <o x="724" y="879" o="-45" r="dustRacing2DBanner" c="free"/>
- <o x="909" y="694" o="-45" r="dustRacing2DBanner" c="free"/>
- <o x="917" y="2388" o="-135" r="dustRacing2DBanner" c="free"/>
- <o x="1403" y="494" o="0" r="dustRacing2DBanner" c="free"/>
- <o x="1664" y="494" o="0" r="dustRacing2DBanner" c="free"/>
  <n x="721" y="1160" i="0"/>
  <n x="1085" y="737" i="1"/>
  <n x="1535" y="638" i="2"/>
