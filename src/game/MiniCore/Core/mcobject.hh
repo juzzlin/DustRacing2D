@@ -451,6 +451,7 @@ private:
     //! Used by MCWorld.
     bool removing() const;
 
+    void toggleSleep(bool state);
     void integrateLinear(MCFloat step);
     void integrateAngular(MCFloat step);
     void doOutOfBoundariesEvent();

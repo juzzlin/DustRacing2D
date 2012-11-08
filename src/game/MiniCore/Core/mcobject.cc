@@ -141,8 +141,7 @@ void MCObject::integrate(MCFloat step)
         if (m_velocity.lengthFast() < m_linearSleepLimit &&
             m_angularVelocity       < m_angularSleepLimit)
         {
-            m_sleeping = true;
-
+            toggleSleep(true);
             resetMotion();
         }
 
@@ -443,6 +442,7 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
     {
         m_invMass  = 0;
         m_mass     = std::numeric_limits<MCFloat>::max();
+
         m_sleeping = true;
 
         setMomentOfInertia(std::numeric_limits<MCFloat>::max());
@@ -491,13 +491,15 @@ bool MCObject::stationary() const
 void MCObject::addLinearImpulse(const MCVector3dF & impulse)
 {
     m_linearImpulse += impulse;
-    m_sleeping     = false;
+
+    toggleSleep(false);
 }
 
 void MCObject::addAngularImpulse(MCFloat impulse)
 {
     m_angularImpulse += impulse;
-    m_sleeping        = false;
+
+    toggleSleep(false);
 }
 
 void MCObject::setPhysicsObject(bool flag)
@@ -568,7 +570,8 @@ void MCObject::setMaximumVelocity(MCFloat maxVelocity)
 void MCObject::setVelocity(const MCVector3dF & newVelocity)
 {
     m_velocity = newVelocity;
-    m_sleeping = false;
+
+    toggleSleep(false);
 }
 
 const MCVector3dF & MCObject::velocity() const
@@ -579,7 +582,8 @@ const MCVector3dF & MCObject::velocity() const
 void MCObject::setAngularVelocity(MCFloat newVelocity)
 {
     m_angularVelocity = newVelocity;
-    m_sleeping        = false;
+
+    toggleSleep(false);
 }
 
 MCFloat MCObject::angularVelocity() const
@@ -595,7 +599,8 @@ void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
 void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
 {
     m_acceleration = newAcceleration;
-    m_sleeping     = false;
+
+    toggleSleep(false);
 }
 
 const MCVector3dF & MCObject::acceleration() const
@@ -748,13 +753,15 @@ MCShapeView * MCObject::view() const
 void MCObject::addForce(const MCVector3dF & force)
 {
     m_forces  += force;
-    m_sleeping = false;
+
+    toggleSleep(false);
 }
 
 void MCObject::addTorque(MCFloat torque)
 {
     torque    += torque;
-    m_sleeping = false;
+
+    toggleSleep(false);
 }
 
 void MCObject::clearForces()
@@ -925,6 +932,24 @@ void MCObject::setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimi
 {
     m_linearSleepLimit  = linearSleepLimit;
     m_angularSleepLimit = angularSleepLimit;
+}
+
+void MCObject::toggleSleep(bool state)
+{
+    m_sleeping = state;
+
+    // Optimization: dynamically remove from the integration vector
+    if (!isParticle())
+    {
+        if (state)
+        {
+            MCWorld::instance().removeObjectFromIntegration(*this);
+        }
+        else
+        {
+            MCWorld::instance().restoreObjectToIntegration(*this);
+        }
+    }
 }
 
 MCObject::~MCObject()

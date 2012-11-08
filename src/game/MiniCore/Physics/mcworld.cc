@@ -563,6 +563,28 @@ void MCWorld::doRemoveObject(MCObject & object)
     object.setRemoving(false);
 }
 
+void MCWorld::removeObjectFromIntegration(MCObject & object)
+{
+    // Remove from object vector (O(1))
+    if (object.index() > -1 && object.index() < static_cast<int>(objs.size()))
+    {
+        objs[object.index()] = objs.back();
+        objs[object.index()]->setIndex(object.index());
+        objs.pop_back();
+        object.setIndex(-1);
+    }
+}
+
+void MCWorld::restoreObjectToIntegration(MCObject & object)
+{
+    if (object.index() == -1)
+    {
+        // Add to object vector (O(1))
+        objs.push_back(&object);
+        object.setIndex(objs.size() - 1);
+    }
+}
+
 void MCWorld::processRemovedObjects()
 {
     for (MCObject * obj : removeObjs)

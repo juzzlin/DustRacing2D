@@ -101,6 +101,10 @@ public:
     //! \param object Object to be removed.
     void removeObjectNow(MCObject & object);
 
+    void removeObjectFromIntegration(MCObject & object);
+
+    void restoreObjectToIntegration(MCObject & object);
+
     //! \brief Add force generator to an object.
     //! \param generator Generator to be added.
     //! \param object Target object the force applies to.
