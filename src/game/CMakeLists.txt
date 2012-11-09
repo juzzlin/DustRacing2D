@@ -84,13 +84,24 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 qt4_add_resources(RC_SRC ${RCS})
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 
-# Add target to copy runtime files to the binary dir
+# Add target to copy runtime files to the binary dir.
 add_custom_target(runtime ALL
     COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
 
+# Resource compilation for MinGW
+if(MINGW)
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o
+        COMMAND
+            windres.exe
+            -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/Windows.rc
+            -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
+    set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
+endif(MINGW)
+
 # The main game executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
-add_executable(${GAME_BINARY_NAME} ${SRC} ${MOC_SRC} ${RC_SRC})
+add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
 
 target_link_libraries(
     ${GAME_BINARY_NAME}
