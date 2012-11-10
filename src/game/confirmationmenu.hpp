@@ -35,13 +35,20 @@ public:
 
     void setCancelAction(MTFH::MenuItemAction & action);
 
+    void setText(std::string text);
+
     //! \reimp
     virtual void selectCurrentItem();
+
+    //! \reimp
+    virtual void render();
 
 private:
 
     MTFH::MenuItem * m_acceptItem;
     MTFH::MenuItem * m_cancelItem;
+
+    std::string m_text;
 };
 
 #endif // CONFIRMATIONMENU_HPP

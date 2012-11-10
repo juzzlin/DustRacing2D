@@ -90,16 +90,19 @@ private:
         {
         case RT_POSITIONS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setText("Reset best positions?");
             m_confirmationMenu.setAcceptAction(m_resetPositions);
             m_confirmationMenu.setCurrentIndex(1);
             break;
         case RT_TIMES:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setText("Reset record times?");
             m_confirmationMenu.setAcceptAction(m_resetTimes);
             m_confirmationMenu.setCurrentIndex(1);
             break;
         case RT_TRACKS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setText("Reset unlocked tracks?");
             m_confirmationMenu.setAcceptAction(m_resetTracks);
             m_confirmationMenu.setCurrentIndex(1);
             break;

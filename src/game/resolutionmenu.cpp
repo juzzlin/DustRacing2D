@@ -48,7 +48,6 @@ public:
             const bool fullScreen = !hRes && !vRes;
             Settings::instance().saveResolution(hRes, vRes, fullScreen);
             MCLogger().info() << "Resolution set: " << hRes << " " << vRes << " " << fullScreen;
-            MCLogger().info() << "Restart needed.";
             Game::instance().exitGame();
         }
 
@@ -76,6 +75,7 @@ public:
     virtual void onSelect()
     {
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
+        m_confirmationMenu.setText("Restart to change the resolution.");
         m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
         m_confirmationMenu.setCurrentIndex(1);
     }

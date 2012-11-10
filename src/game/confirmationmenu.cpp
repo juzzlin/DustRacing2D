@@ -21,13 +21,18 @@
 #include <MenuItemView>
 #include <MenuManager>
 
+#include <MCTextureFont>
+#include <MCTextureFontManager>
+#include <MCTextureText>
+
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
-, m_acceptItem(new MTFH::MenuItem(width / 4, height, "Yes"))
-, m_cancelItem(new MTFH::MenuItem(width / 4, height, "No"))
+, m_acceptItem(new MTFH::MenuItem(width / 4, height, "Ok"))
+, m_cancelItem(new MTFH::MenuItem(width / 4, height, "Cancel"))
+, m_text("")
 {
-    m_acceptItem->setView(new TextMenuItemView(40, *m_acceptItem), true);
-    m_cancelItem->setView(new TextMenuItemView(40, *m_cancelItem), true);
+    m_acceptItem->setView(new TextMenuItemView(20, *m_acceptItem), true);
+    m_cancelItem->setView(new TextMenuItemView(20, *m_cancelItem), true);
 
     addItem(*m_acceptItem, true);
     addItem(*m_cancelItem, true);
@@ -43,8 +48,30 @@ void ConfirmationMenu::setCancelAction(MTFH::MenuItemAction & action)
     m_cancelItem->setAction(&action);
 }
 
+void ConfirmationMenu::setText(std::string text)
+{
+    m_text = text;
+}
+
 void ConfirmationMenu::selectCurrentItem()
 {
     Menu::selectCurrentItem();
     exit();
+}
+
+void ConfirmationMenu::render()
+{
+    SurfaceMenu::render();
+
+    MCTextureText text(m_text);
+    MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
+
+    const int shadowY = -2;
+    const int shadowX =  2;
+
+    text.setColor(0.25, 0.75, 1.0, 1.0);
+    text.setGlyphSize(20, 20);
+    text.setShadowOffset(shadowX, shadowY);
+
+    text.render(width() / 2 - text.width() / 2 + 20, height() / 2 + 60, nullptr, defaultMonospace);
 }
