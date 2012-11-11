@@ -30,38 +30,7 @@
 
 MCSurfaceManager * MCSurfaceManager::m_pInstance = nullptr;
 
-//! Implementation class for MCSurfaceManager
-class MCSurfaceManagerImpl
-{
-    //! Constructor.
-    MCSurfaceManagerImpl();
-
-    //! Destructor.
-    ~MCSurfaceManagerImpl();
-
-    //! Creates an OpenGL texture from a QImage + texture meta data
-    void createGLTextureFromImage(const MCSurfaceData & data, const QImage & image);
-
-    //! Apply given color key (set alpha values on / of).
-    void applyColorKey(QImage & textureImage,
-        MCUint r, MCUint g, MCUint b) const;
-
-    //! Creates a scaled image with dimensions forced to the nearest power
-    //! of two.
-    QImage createNearest2PowNImage(const QImage & image);
-
-    //! Map for resulting surface objects
-    typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
-    SurfaceHash surfaceMap;
-
-    friend class MCSurfaceManager;
-};
-
-MCSurfaceManagerImpl::MCSurfaceManagerImpl()
-{
-}
-
-QImage MCSurfaceManagerImpl::createNearest2PowNImage(const QImage & image)
+QImage MCSurfaceManager::createNearest2PowNImage(const QImage & image)
 {
     double w = image.width();
     double h = image.height();
@@ -79,7 +48,7 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCSurfaceManagerImpl::createGLTextureFromImage(
+void MCSurfaceManager::createGLTextureFromImage(
     const MCSurfaceData & data, const QImage & image)
 {
     // Store original width of the image
@@ -158,8 +127,7 @@ void MCSurfaceManagerImpl::createGLTextureFromImage(
     surfaceMap[data.handle] = pSurface;
 }
 
-void MCSurfaceManagerImpl::applyColorKey(QImage & textureImage,
-    MCUint r, MCUint g, MCUint b) const
+void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, MCUint b) const
 {
     for (int i = 0; i < textureImage.width(); i++)
     {
@@ -179,7 +147,7 @@ void MCSurfaceManagerImpl::applyColorKey(QImage & textureImage,
     }
 }
 
-MCSurfaceManagerImpl::~MCSurfaceManagerImpl()
+MCSurfaceManager::~MCSurfaceManager()
 {
     // Delete OpenGL textures and Textures
     auto iter(surfaceMap.begin());
@@ -197,7 +165,6 @@ MCSurfaceManagerImpl::~MCSurfaceManagerImpl()
 }
 
 MCSurfaceManager::MCSurfaceManager()
-: m_pImpl(new MCSurfaceManagerImpl)
 {
     assert(!MCSurfaceManager::m_pInstance);
     MCSurfaceManager::m_pInstance = this;
@@ -231,7 +198,7 @@ void MCSurfaceManager::load(
             if (textureImage.load(path.c_str()))
             {
                 // Create an OpenGL texture from the image
-                m_pImpl->createGLTextureFromImage(data, textureImage);
+                createGLTextureFromImage(data, textureImage);
             }
             else
             {
@@ -249,18 +216,13 @@ void MCSurfaceManager::load(
 MCSurface & MCSurfaceManager::surface(const std::string & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (m_pImpl->surfaceMap.find(id) == m_pImpl->surfaceMap.end())
+    if (surfaceMap.find(id) == surfaceMap.end())
     {
         throw MCException("Cannot find texture object for handle '" + id + "'");
     }
 
     // Yes: return handle for the texture
-    MCSurface * pSurface = m_pImpl->surfaceMap.find(id)->second;
+    MCSurface * pSurface = surfaceMap.find(id)->second;
     assert(pSurface);
     return *pSurface;
-}
-
-MCSurfaceManager::~MCSurfaceManager()
-{
-    delete m_pImpl;
 }

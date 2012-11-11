@@ -21,6 +21,7 @@
 #define MCSURFACEMANAGER_HH
 
 #include <QImage>
+
 #include <string>
 #include <unordered_map>
 
@@ -29,7 +30,6 @@
 #include "mcsurfacedata.hh"
 
 class MCSurface;
-class MCSurfaceManagerImpl;
 
 /*! Surface (texture) manager base class.
  *
@@ -98,9 +98,23 @@ public:
 
 private:
 
+    //! Creates an OpenGL texture from a QImage + texture meta data
+    void createGLTextureFromImage(const MCSurfaceData & data, const QImage & image);
+
+    //! Apply given color key (set alpha values on / of).
+    void applyColorKey(QImage & textureImage,
+        MCUint r, MCUint g, MCUint b) const;
+
+    //! Creates a scaled image with dimensions forced to the nearest power
+    //! of two.
+    QImage createNearest2PowNImage(const QImage & image);
+
+    //! Map for resulting surface objects
+    typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
+    SurfaceHash surfaceMap;
+
     DISABLE_COPY(MCSurfaceManager);
     DISABLE_ASSI(MCSurfaceManager);
-    MCSurfaceManagerImpl * const m_pImpl;
     static MCSurfaceManager * m_pInstance;
 };
 
