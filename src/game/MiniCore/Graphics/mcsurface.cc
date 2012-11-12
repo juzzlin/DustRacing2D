@@ -33,10 +33,10 @@ static const int gNumColorComponents    = 4;
 static const int gNumTexCoordComponents = 2;
 
 MCSurface::MCSurface(
-    GLuint handle, MCFloat width, MCFloat height,
+    GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
     MCFloat z0, MCFloat z1, MCFloat z2, MCFloat z3)
 {
-    init(handle, width, height);
+    init(handle1, handle2, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -82,9 +82,10 @@ MCSurface::MCSurface(
     initVBOs(vertices, normals, texCoords, colors);
 }
 
-MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
+MCSurface::MCSurface(
+    GLuint handle1, GLuint handle2, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
 {
-    init(handle, width, height);
+    init(handle1, handle2, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[gNumVertices] =
@@ -120,9 +121,10 @@ MCSurface::MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTex
     initVBOs(vertices, normals, texCoords, colors);
 }
 
-void MCSurface::init(GLuint handle, MCFloat width, MCFloat height)
+void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height)
 {
-    m_handle         = handle;
+    m_handle1        = handle1;
+    m_handle2        = handle2;
     m_w              = width;
     m_w2             = width / 2;
     m_h              = height;
@@ -265,6 +267,7 @@ void MCSurface::renderVBOs(bool autoClientState)
     if (autoClientState)
     {
         enableClientState(true);
+        bindTexture();
     }
 
     glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
@@ -277,12 +280,22 @@ void MCSurface::renderVBOs(bool autoClientState)
 
 void MCSurface::bindTexture() const
 {
-    glBindTexture(GL_TEXTURE_2D, m_handle);
-}
+    assert(m_program);
 
-void MCSurface::bindTexture(GLuint handle) const
-{
-    glBindTexture(GL_TEXTURE_2D, handle);
+    if (m_handle2)
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_handle1);
+        m_program->bindTextureUnit0(0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_handle2);
+        m_program->bindTextureUnit1(1);
+        glActiveTexture(GL_TEXTURE0);
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, m_handle1);
+    }
 }
 
 void MCSurface::setShaderProgram(MCGLShaderProgram * program)
@@ -368,7 +381,8 @@ void MCSurface::renderScaled(
 
         if (m_centerSet)
         {
-            m_program->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+            m_program->translate(
+                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
@@ -407,7 +421,8 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
 
         if (m_centerSet)
         {
-            m_shadowProgram->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+            m_shadowProgram->translate(
+                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
@@ -442,7 +457,8 @@ void MCSurface::renderShadowScaled(
 
         if (m_centerSet)
         {
-            m_shadowProgram->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+            m_shadowProgram->translate(
+                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
@@ -457,7 +473,7 @@ void MCSurface::renderShadowScaled(
     }
 }
 
-void MCSurface::enableClientState(bool enable, bool bindTexture) const
+void MCSurface::enableClientState(bool enable) const
 {
     if (enable)
     {
@@ -474,10 +490,7 @@ void MCSurface::enableClientState(bool enable, bool bindTexture) const
         glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
         glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
 
-        if (bindTexture)
-        {
-            this->bindTexture();
-        }
+        bindTexture();
     }
     else
     {
@@ -486,12 +499,27 @@ void MCSurface::enableClientState(bool enable, bool bindTexture) const
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        m_program->bindTextureUnit0(0);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        m_program->bindTextureUnit1(0);
+
+        glActiveTexture(GL_TEXTURE0);
     }
 }
 
-GLuint MCSurface::handle() const
+GLuint MCSurface::handle1() const
 {
-    return m_handle;
+    return m_handle1;
+}
+
+GLuint MCSurface::handle2() const
+{
+    return m_handle2;
 }
 
 MCFloat MCSurface::width() const

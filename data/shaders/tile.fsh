@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-uniform sampler2D texture;
+uniform sampler3D texture;
 uniform float     fade;
 
 void main(void)
 {
-    vec4 color = texture2D(texture, gl_TexCoord[0].st);
+    vec4 color = texture3D(texture, vec3(gl_TexCoord[0].st, 1.0));
     
     // Alpha test
     if (color.a < 0.1)

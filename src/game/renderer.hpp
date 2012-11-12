@@ -98,7 +98,8 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
-    typedef std::unordered_map<std::string, std::shared_ptr<MCGLShaderProgram> > ShaderHash;
+    typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
+    typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
     Scene             * m_pScene;
     MCGLScene         * m_pGLScene;

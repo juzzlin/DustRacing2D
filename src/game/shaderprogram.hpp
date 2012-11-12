@@ -67,6 +67,12 @@ public:
     //! \reimp
     virtual void setFadeValue(GLfloat f);
 
+    //! \reimp
+    virtual void bindTextureUnit0(GLuint index);
+
+    //! \reimp
+    virtual void bindTextureUnit1(GLuint index);
+
 private:
 
     QGLShaderProgram m_program;

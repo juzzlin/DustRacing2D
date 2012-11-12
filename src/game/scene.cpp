@@ -529,7 +529,8 @@ void Scene::render(MCCamera & camera)
         if (!fadeUpdate)
         {
             Renderer::instance().program("menu").setFadeValue(fadeValue);
-            Renderer::instance().program("tile").setFadeValue(fadeValue);
+            Renderer::instance().program("tile2d").setFadeValue(fadeValue);
+            Renderer::instance().program("tile3d").setFadeValue(fadeValue);
             Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 
@@ -544,7 +545,8 @@ void Scene::render(MCCamera & camera)
         if (!fadeUpdate)
         {
             Renderer::instance().program("master").setFadeValue(fadeValue);
-            Renderer::instance().program("tile").setFadeValue(fadeValue);
+            Renderer::instance().program("tile2d").setFadeValue(fadeValue);
+            Renderer::instance().program("tile3d").setFadeValue(fadeValue);
             Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 

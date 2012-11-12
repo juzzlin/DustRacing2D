@@ -23,6 +23,7 @@
 #include <MCCamera>
 #include <MCGLScene>
 #include <MCGLShaderProgram>
+#include <MCException>
 #include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceManager>
@@ -105,11 +106,19 @@ void Renderer::loadShaders()
     MCGLShaderProgram * program = nullptr;
     program = new ShaderProgram(context());
     program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/tile.fsh");
+        std::string(Config::Common::dataPath) + "/shaders/tile2d.fsh");
     program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
     program->link();
-    m_shaderHash["tile"].reset(program);
+    m_shaderHash["tile2d"].reset(program);
+
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/tile3d.fsh");
+    program->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
+    program->link();
+    m_shaderHash["tile3d"].reset(program);
 
     program = new ShaderProgram(context());
     program->addFragmentShader(
@@ -175,7 +184,12 @@ void Renderer::setEnabled(bool enable)
 
 MCGLShaderProgram & Renderer::program(const std::string & id)
 {
-    return *m_shaderHash[id];
+    MCGLShaderProgramPtr program = m_shaderHash[id];
+    if (!program.get())
+    {
+        throw MCException("Cannot find shader program '" + id +"'");
+    }
+    return *program;
 }
 
 void Renderer::setFadeValue(float value)

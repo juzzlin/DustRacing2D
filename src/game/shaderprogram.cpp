@@ -149,6 +149,34 @@ void ShaderProgram::setFadeValue(GLfloat f)
     }
 }
 
+void ShaderProgram::bindTextureUnit0(GLuint index)
+{
+    if (!isBound())
+    {
+        bind();
+        m_program.setUniformValue("texture0", index);
+        release();
+    }
+    else
+    {
+        m_program.setUniformValue("texture0", index);
+    }
+}
+
+void ShaderProgram::bindTextureUnit1(GLuint index)
+{
+    if (!isBound())
+    {
+        bind();
+        m_program.setUniformValue("texture1", index);
+        release();
+    }
+    else
+    {
+        m_program.setUniformValue("texture1", index);
+    }
+}
+
 ShaderProgram::~ShaderProgram()
 {
 }

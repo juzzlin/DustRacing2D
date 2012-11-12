@@ -225,7 +225,6 @@ void MCWorld::renderBatches(MCCamera * pCamera)
         }
 
         renderObjectBatches(pCamera, layer);
-
         renderParticleBatches(pCamera, layer);
     }
 
@@ -306,11 +305,11 @@ void MCWorld::renderShadows(MCCamera * pCamera)
             const int i2 = iter->second.size();
             for (int i = 0; i < i2; i++)
             {
-                MCObject    * object = iter->second[i];
+                MCObject * object = iter->second[i];
 
                 if (object->hasShadow())
                 {
-                    MCShapeView * view   = object->shape()->view();
+                    MCShapeView * view = object->shape()->view();
 
                     if (i == 0)
                     {

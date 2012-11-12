@@ -48,20 +48,20 @@ class MCSurface;
  *
  * <?xml version="1.0"?>
  * <surfaces baseImagePath="./data/images/">
- *   <surface handle="Car1" file="car1.png" w="16" h="16" xAxisMirror="1">
+ *   <surface handle="Car1" image1="car1.png" w="16" h="16" xAxisMirror="1">
  *     <colorKey r="255" g="255" b="255"/>
  *   </surface>
- *   <surface handle="Car2" file="car2.png" w="16" h="16">
+ *   <surface handle="Car2" image1="car2.png" w="16" h="16">
  *     <alphaTest function="greater" threshold="0.5"/>
  *     <alphaBlend src="srcAlpha" dest="oneMinusSrcAlpha"/>
  *   </surface>
- *   <surface handle="Wall" file="wall.bmp"/>
- *   <surface handle="Track" file="track.bmp"/>
- *   <surface handle="Bazooka" file="bazooka.jpg">
+ *   <surface handle="WallMultiTexture" image1="wall.bmp" image2="wall2.bmp"/>
+ *   <surface handle="Track" image1="track.bmp"/>
+ *   <surface handle="Bazooka" image1="bazooka.jpg">
  *     <center x="10" y="5"/>
  *     <colorKey r="255" g="0" b="0"/>
  *   </surface>
- *   <surface handle="WINDOW_ICON" file="logo_v2.bmp"/>
+ *   <surface handle="WINDOW_ICON" image1="logo_v2.bmp"/>
  * </surfaces>
  *
  */
@@ -98,8 +98,12 @@ public:
 
 private:
 
-    //! Creates an OpenGL texture from a QImage + texture meta data
-    void createGLTextureFromImage(const MCSurfaceData & data, const QImage & image);
+    //! Creates a 2D OpenGL texture from a QImage + texture meta data
+    void create2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
+
+    //! Creates a 2D OpenGL textures from two QImages + texture meta data
+    void createMultiTextureFromImage(
+        const MCSurfaceData & data, const QImage & image1, const QImage & image2);
 
     //! Apply given color key (set alpha values on / of).
     void applyColorKey(QImage & textureImage,
@@ -108,6 +112,9 @@ private:
     //! Creates a scaled image with dimensions forced to the nearest power
     //! of two.
     QImage createNearest2PowNImage(const QImage & image);
+
+    //! Helper to create the texture.
+    GLuint doCreate2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
 
     //! Map for resulting surface objects
     typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;

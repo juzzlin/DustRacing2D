@@ -13,26 +13,27 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-attribute vec4 position;
-attribute float sin1;
-attribute float cos1;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform float     fade;
 
-void main()
+void main(void)
 {
-    mat4 m = mat4(
-        cos1,       sin1,       0.0,        0.0,
-        -sin1,      cos1,       0.0,        0.0,
-        0.0,        0.0,        1.0,        0.0,
-        position.x, position.y, position.z, 1.0);
-
-    // Normal MVP transform
-    gl_Position = gl_ModelViewProjectionMatrix * m * gl_Vertex;
+    vec4 color0 = texture2D(texture0, gl_TexCoord[0].st);
+    vec4 color1 = texture2D(texture1, gl_TexCoord[0].st);
     
-    // Copy the primary color
-    gl_FrontColor = gl_Color;
+    // Alpha test
+    if (color0.a < 0.1)
+    {
+        discard;
+    }
+    else
+    {
+        if (color0.r < 0.1 && color0.g > 0.9 && color0.r < 0.1)
+        {
+            color0 = color1;
+        }   
 
-    // Copy texture coorinates
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_TexCoord[1] = gl_MultiTexCoord0;
+        gl_FragColor = color0 * fade * vec4(1.0, 0.95, 0.9, 1.0);
+    }
 }
-

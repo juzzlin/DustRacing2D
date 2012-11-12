@@ -86,7 +86,6 @@ private:
     MCUint      m_rows, m_cols, m_width, m_height;
     MCFloat     m_scale;
     MCSurface & m_asphalt;
-    MCSurface & m_grass;
     Track     * m_next;
 };
 

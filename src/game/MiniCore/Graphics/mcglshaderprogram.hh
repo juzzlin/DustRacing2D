@@ -77,6 +77,12 @@ public:
      *  factor. */
     virtual void setFadeValue(GLfloat f = 1.0);
 
+    //! Bind given texture unit to the sampler 0.
+    virtual void bindTextureUnit0(GLuint index);
+
+    //! Bind given texture unit to the sampler 1 for multitexturing.
+    virtual void bindTextureUnit1(GLuint index);
+
 private:
 
     bool m_isBound;

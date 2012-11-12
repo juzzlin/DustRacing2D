@@ -36,7 +36,6 @@ Track::Track(TrackData * pTrackData)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_scale(0.0)
 , m_asphalt(MCSurfaceManager::instance().surface("asphalt"))
-, m_grass(MCSurfaceManager::instance().surface("grass"))
 , m_next(nullptr)
 {
     assert(pTrackData);
@@ -123,13 +122,15 @@ void Track::render(MCCamera * pCamera)
     MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
-    MCGLShaderProgram & prog = Renderer::instance().program("tile");
-    prog.bind();
+    MCGLShaderProgram & prog2d = Renderer::instance().program("tile2d");
+    prog2d.bind();
+    renderAsphalt(pCamera, prog2d, i0, i2, j0, j2);
+    prog2d.release();
 
-    renderAsphalt(pCamera, prog, i0, i2, j0, j2);
-    renderTiles(pCamera, prog, i0, i2, j0, j2);
-
-    prog.release();
+    MCGLShaderProgram & prog3d = Renderer::instance().program("tile3d");
+    prog3d.bind();
+    renderTiles(pCamera, prog3d, i0, i2, j0, j2);
+    prog3d.release();
 }
 
 void Track::renderAsphalt(
@@ -143,7 +144,8 @@ void Track::renderAsphalt(
     MCFloat x1, y1; // Coordinates mapped to camera
 
     // Set common client state for all tiles using the same surface.
-    m_asphalt.enableClientState(true, true);
+    m_asphalt.setShaderProgram(&prog);
+    m_asphalt.enableClientState(true);
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -173,7 +175,7 @@ void Track::renderAsphalt(
         y += h;
     }
 
-    m_asphalt.enableClientState(false, false);
+    m_asphalt.enableClientState(false);
 }
 
 void Track::renderTiles(
@@ -186,8 +188,10 @@ void Track::renderTiles(
 
     MCFloat x1, y1; // Coordinates mapped to camera
 
-    // Set common client state for all tiles using the same surface.
-    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(true, false);
+    // Set common client state for all tiles.
+    TrackTile * firstTile = static_cast<TrackTile *>(rMap.getTile(0, 0));
+    firstTile->surface()->setShaderProgram(&prog);
+    firstTile->surface()->enableClientState(true);
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -207,6 +211,7 @@ void Track::renderTiles(
                     pCamera->mapToCamera(x1, y1);
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     prog.rotate(pTile->rotation());
+                    pSurface->setShaderProgram(&prog);
                     pSurface->bindTexture();
                     pSurface->renderVBOs(false);
                 }
@@ -218,7 +223,7 @@ void Track::renderTiles(
         y += h;
     }
 
-    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(false, false);
+    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(false);
 }
 
 bool Track::update()

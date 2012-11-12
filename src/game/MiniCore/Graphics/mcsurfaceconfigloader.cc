@@ -70,14 +70,20 @@ bool MCSurfaceConfigLoader::load()
             {
                 const unsigned int width  = tag.attribute("w", "0").toUInt();
                 const unsigned int height = tag.attribute("h", "0").toUInt();
-                const std::string  file   = tag.attribute("file", "").toStdString();
-                newData->imagePath        = baseImagePath + QDir::separator().toAscii() + file;
+                const std::string  image1 = tag.attribute("image1", "").toStdString();
+                const std::string  image2 = tag.attribute("image2", "").toStdString();
+                newData->imagePath1       = baseImagePath + QDir::separator().toAscii() + image1;
                 newData->handle           = tag.attribute("handle", "").toStdString();
                 newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
                 newData->z0               = tag.attribute("z0", "0").toInt();
                 newData->z1               = tag.attribute("z1", "0").toInt();
                 newData->z2               = tag.attribute("z2", "0").toInt();
                 newData->z3               = tag.attribute("z3", "0").toInt();
+
+                if (!image2.empty())
+                {
+                    newData->imagePath2 = baseImagePath + QDir::separator().toAscii() + image2;
+                }
 
                 if (width)
                 {

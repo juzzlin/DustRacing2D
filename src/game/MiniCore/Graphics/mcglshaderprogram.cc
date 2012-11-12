@@ -81,3 +81,11 @@ void MCGLShaderProgram::setScale(GLfloat, GLfloat, GLfloat)
 void MCGLShaderProgram::setFadeValue(GLfloat)
 {
 }
+
+void MCGLShaderProgram::bindTextureUnit0(GLuint)
+{
+}
+
+void MCGLShaderProgram::bindTextureUnit1(GLuint)
+{
+}

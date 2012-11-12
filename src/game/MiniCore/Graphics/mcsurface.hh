@@ -47,7 +47,8 @@ class MCSurface
 public:
 
     //! Constructor.
-    //! \param handle Handle of the corresponding OpenGL texture.
+    //! \param handle Handle of the corresponding OpenGL texture 1.
+    //! \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
     //! \param width  Desired width of the surface when rendered 1:1.
     //! \param height Desired height of the surface when rendered 1:1.
     //! \param z0     Z-coordinate for vertex[0]. Enables tilted surfaces.
@@ -55,15 +56,17 @@ public:
     //! \param z2     Z-coordinate for vertex[2]. Enables tilted surfaces.
     //! \param z3     Z-coordinate for vertex[3]. Enables tilted surfaces.
     MCSurface(
-        GLuint handle, MCFloat width, MCFloat height,
+        GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
         MCFloat z0 = 0, MCFloat z1 = 0, MCFloat z2 = 0, MCFloat z3 = 0);
 
     //! Constructor.
-    //! \param handle Handle of the corresponding OpenGL texture.
+    //! \param handle Handle of the corresponding OpenGL texture 1.
+    //! \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
     //! \param width  Desired width of the surface when rendered 1:1.
     //! \param height Desired height of the surface when rendered 1:1.
     //! \param texCoords Array including texture coordinates of the four vertices.
-    MCSurface(GLuint handle, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4]);
+    MCSurface(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
+        const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
     virtual ~MCSurface();
@@ -144,16 +147,13 @@ public:
      *  surface multiple times.
      *  \see render()
      */
-    void enableClientState(bool enable, bool bindTexture = true) const;
+    void enableClientState(bool enable) const;
 
     //! Manually render VBO's.
     void renderVBOs(bool autoClientState = true);
 
     //! Bind the current texture.
     void bindTexture() const;
-
-    //! Bind the given texture.
-    void bindTexture(GLuint handle) const;
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);
@@ -168,7 +168,10 @@ public:
     MCGLShaderProgram * shadowShaderProgram() const;
 
     //! Get OpenGL texture handle
-    GLuint handle() const;
+    GLuint handle1() const;
+
+    //! Get OpenGL texture handle
+    GLuint handle2() const;
 
     //! Get width
     MCFloat width() const;
@@ -184,7 +187,7 @@ private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 
-    void init(GLuint handle, MCFloat width, MCFloat height);
+    void init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height);
 
     void initVBOs(
         const MCGLVertex   * vertices,
@@ -201,7 +204,8 @@ private:
         VBOTypes
     };
 
-    GLuint m_handle;
+    GLuint m_handle1;
+    GLuint m_handle2;
     MCFloat m_w;
     MCFloat m_w2;
     MCFloat m_h;

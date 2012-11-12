@@ -48,13 +48,65 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCSurfaceManager::createGLTextureFromImage(
+void MCSurfaceManager::create2DTextureFromImage(
     const MCSurfaceData & data, const QImage & image)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image.height();
     int origW = data.widthSet  ? data.width  : image.width();
 
+    GLuint textureHandle = doCreate2DTextureFromImage(data, image);
+
+    // Create a new MCSurface object
+    MCSurface * pSurface =
+        new MCSurface(textureHandle, 0, origW, origH, data.z0, data.z1, data.z2, data.z3);
+
+    // Enable alpha blend, if set
+    pSurface->setAlphaBlend(
+        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
+
+    // Set custom center if it was set
+    if (data.centerSet)
+    {
+        pSurface->setCenter(data.center);
+    }
+
+    // Store MCSurface to map
+    surfaceMap[data.handle] = pSurface;
+}
+
+void MCSurfaceManager::createMultiTextureFromImage(
+    const MCSurfaceData & data, const QImage & image1, const QImage & image2)
+{
+    // Store original width of the image
+    int origH = data.heightSet ? data.height : image1.height();
+    int origW = data.widthSet  ? data.width  : image1.width();
+
+    GLuint textureHandle1 = doCreate2DTextureFromImage(data, image1);
+    GLuint textureHandle2 = doCreate2DTextureFromImage(data, image2);
+
+    // Create a new MCSurface object
+    MCSurface * pSurface =
+        new MCSurface(
+            textureHandle1, textureHandle2, origW, origH, data.z0, data.z1, data.z2, data.z3);
+
+    // Enable alpha blend, if set
+    pSurface->setAlphaBlend(
+        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
+
+    // Set custom center if it was set
+    if (data.centerSet)
+    {
+        pSurface->setCenter(data.center);
+    }
+
+    // Store MCSurface to map
+    surfaceMap[data.handle] = pSurface;
+}
+
+GLuint MCSurfaceManager::doCreate2DTextureFromImage(
+    const MCSurfaceData & data, const QImage & image)
+{
     // Create a surface with dimensions of 2^n
     QImage textureImage = createNearest2PowNImage(image);
 
@@ -109,22 +161,7 @@ void MCSurfaceManager::createGLTextureFromImage(
         textureImage.width(), textureImage.height(),
         0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage.bits());
 
-    // Create a new MCSurface object
-    MCSurface * pSurface =
-        new MCSurface(textureHandle, origW, origH, data.z0, data.z1, data.z2, data.z3);
-
-    // Enable alpha blend, if set
-    pSurface->setAlphaBlend(
-        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
-
-    // Set custom center if it was set
-    if (data.centerSet)
-    {
-        pSurface->setCenter(data.center);
-    }
-
-    // Store MCSurface to map
-    surfaceMap[data.handle] = pSurface;
+    return textureHandle;
 }
 
 void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, MCUint b) const
@@ -156,8 +193,16 @@ MCSurfaceManager::~MCSurfaceManager()
         if (iter->second)
         {
             MCSurface * p = iter->second;
-            GLuint dummyHandle = p->handle();
-            glDeleteTextures(1, &dummyHandle);
+
+            GLuint dummyHandle1 = p->handle1();
+            glDeleteTextures(1, &dummyHandle1);
+
+            GLuint dummyHandle2 = p->handle2();
+            if (dummyHandle2)
+            {
+                glDeleteTextures(1, &dummyHandle2);
+            }
+
             delete p;
         }
         iter++;
@@ -189,20 +234,58 @@ void MCSurfaceManager::load(
         {
             const MCSurfaceData & data = loader.surface(i);
 
-            // Load image file
             const std::string path =
-                baseDataPath + QDir::separator().toAscii() + data.imagePath;
+                baseDataPath + QDir::separator().toAscii() + data.imagePath1;
 
-            // Load the image
-            QImage textureImage;
-            if (textureImage.load(path.c_str()))
+            // Create a 3D texture if data.imagePath2 is set.
+            if (!data.imagePath2.empty())
             {
-                // Create an OpenGL texture from the image
-                createGLTextureFromImage(data, textureImage);
+                const std::string path2 =
+                    baseDataPath + QDir::separator().toAscii() + data.imagePath2;
+
+                // Load the images and create a 3D texture.
+                QImage textureImage1;
+                if (textureImage1.load(path.c_str()))
+                {
+                    QImage textureImage2;
+                    if (textureImage2.load(path2.c_str()))
+                    {
+                        if ((textureImage1.width()  != textureImage2.width()) ||
+                            (textureImage1.height() != textureImage2.height()))
+                        {
+                            throw MCException(
+                                "Cannot create 3D texture: '" + path + "' and '" + path2 +
+                                "' don't have equal dimensions");
+                        }
+                        else
+                        {
+                            // Create an OpenGL texture from the image
+                            createMultiTextureFromImage(data, textureImage1, textureImage2);
+                        }
+                    }
+                    else
+                    {
+                        throw MCException("Cannot read file '" + path2 + "'");
+                    }
+                }
+                else
+                {
+                    throw MCException("Cannot read file '" + path + "'");
+                }
             }
             else
             {
-                throw MCException("Cannot read file '" + path + "'");
+                // Load the image and create a 2D texture.
+                QImage textureImage;
+                if (textureImage.load(path.c_str()))
+                {
+                    // Create an OpenGL texture from the image
+                    create2DTextureFromImage(data, textureImage);
+                }
+                else
+                {
+                    throw MCException("Cannot read file '" + path + "'");
+                }
             }
         }
     }

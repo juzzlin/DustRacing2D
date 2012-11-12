@@ -148,6 +148,7 @@ void TrackItem::render(int x, int y)
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
                     pSurface->setShaderProgram(&Renderer::instance().program("menu"));
+                    pSurface->bindTexture();
 
                     if (m_track.trackData().isLocked())
                     {
@@ -197,6 +198,7 @@ void TrackItem::render(int x, int y)
             if (m_bestPos != -1 && 10 - i >= m_bestPos)
             {
                 m_star.setColor(1.0, 1.0, 0.0);
+                m_glow.bindTexture();
                 m_glow.render(
                     nullptr,
                     MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
@@ -206,6 +208,7 @@ void TrackItem::render(int x, int y)
                 m_star.setColor(0.75, 0.75, 0.75);
             }
 
+            m_star.bindTexture();
             m_star.render(
                 nullptr,
                 MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
@@ -215,6 +218,7 @@ void TrackItem::render(int x, int y)
     // Render the lock
     if (m_track.trackData().isLocked())
     {
+        m_lock.bindTexture();
         m_lock.render(
             nullptr,
             MCVector3dF(x + m_xDisplacement, y, 0), 0);

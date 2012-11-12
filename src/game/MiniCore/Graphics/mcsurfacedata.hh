@@ -49,7 +49,10 @@ struct MCSurfaceData
     std::string handle;
 
     //! Image path
-    std::string imagePath;
+    std::string imagePath1;
+
+    //! Image path for the second texture if multitexturing is wanted.
+    std::string imagePath2;
 
     //! True if center was set
     bool centerSet;
