@@ -152,6 +152,9 @@ public:
     //! Bind the current texture.
     void bindTexture() const;
 
+    //! Bind the given texture.
+    void bindTexture(GLuint handle) const;
+
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);
 

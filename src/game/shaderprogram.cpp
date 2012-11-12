@@ -16,11 +16,13 @@
 #include "shaderprogram.hpp"
 #include <MCException>
 #include <MCLogger>
+#include <MCTrigonom>
 #include <cassert>
 
 static const int POSITION = 1;
-static const int ANGLE    = 5;
-static const int SCALE    = 6;
+static const int SIN      = 5;
+static const int COS      = 6;
+static const int SCALE    = 7;
 
 ShaderProgram::ShaderProgram(const QGLContext * context)
 : m_program(context)
@@ -67,7 +69,8 @@ bool ShaderProgram::addVertexShader(const std::string & fileName)
     }
 
     m_program.bindAttributeLocation("position", POSITION);
-    m_program.bindAttributeLocation("angle",    ANGLE);
+    m_program.bindAttributeLocation("sin1",     SIN);
+    m_program.bindAttributeLocation("cos1",     COS);
     m_program.bindAttributeLocation("scale",    SCALE);
     return m_program.addShader(&m_vertexShader);
 }
@@ -77,7 +80,7 @@ bool ShaderProgram::addFragmentShader(const std::string & fileName)
     if (!m_fragmentShader.compileSourceFile(fileName.c_str()))
     {
         MCLogger().error() << "Cannot compile '" << fileName << "'";
-        throw MCException("Compilinga fragment shader failed.");
+        throw MCException("Compiling a fragment shader failed.");
     }
 
     return m_program.addShader(&m_fragmentShader);
@@ -85,12 +88,32 @@ bool ShaderProgram::addFragmentShader(const std::string & fileName)
 
 void ShaderProgram::rotate(GLfloat angle)
 {
-    m_program.setAttributeValue(ANGLE, angle);
+    if (!isBound())
+    {
+        bind();
+        m_program.setAttributeValue(SIN, MCTrigonom::sin(angle));
+        m_program.setAttributeValue(COS, MCTrigonom::cos(angle));
+        release();
+    }
+    else
+    {
+        m_program.setAttributeValue(SIN, MCTrigonom::sin(angle));
+        m_program.setAttributeValue(COS, MCTrigonom::cos(angle));
+    }
 }
 
 void ShaderProgram::translate(const MCVector3dF & p)
 {
-    m_program.setAttributeValue(POSITION, p.i(), p.j(), p.k(), 0);
+    if (!isBound())
+    {
+        bind();
+        m_program.setAttributeValue(POSITION, p.i(), p.j(), p.k(), 0);
+        release();
+    }
+    else
+    {
+        m_program.setAttributeValue(POSITION, p.i(), p.j(), p.k(), 0);
+    }
 }
 
 void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
@@ -100,7 +123,16 @@ void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
-    m_program.setAttributeValue(SCALE, x, y, z, 1);
+    if (!isBound())
+    {
+        bind();
+        m_program.setAttributeValue(SCALE, x, y, z, 1);
+        release();
+    }
+    else
+    {
+        m_program.setAttributeValue(SCALE, x, y, z, 1);
+    }
 }
 
 void ShaderProgram::setFadeValue(GLfloat f)

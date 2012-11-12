@@ -280,6 +280,11 @@ void MCSurface::bindTexture() const
     glBindTexture(GL_TEXTURE_2D, m_handle);
 }
 
+void MCSurface::bindTexture(GLuint handle) const
+{
+    glBindTexture(GL_TEXTURE_2D, handle);
+}
+
 void MCSurface::setShaderProgram(MCGLShaderProgram * program)
 {
     m_program = program;

@@ -14,15 +14,15 @@
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
 attribute vec4 position;
-attribute float angle;
+attribute float sin1;
+attribute float cos1;
 
 void main()
 {
-    float r = angle * 3.1415 / 180.0;
-    mat4  m = mat4(
-        cos(r),  sin(r),        0.0,        0.0,
-        -sin(r), cos(r),        0.0,        0.0,
-        0.0,     0.0,           1.0,        0.0,
+    mat4 m = mat4(
+        cos1,       sin1,       0.0,        0.0,
+        -sin1,      cos1,       0.0,        0.0,
+        0.0,        0.0,        1.0,        0.0,
         position.x, position.y, position.z, 1.0);
 
     // Normal MVP transform

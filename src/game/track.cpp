@@ -16,6 +16,7 @@
 #include "track.hpp"
 
 #include "renderer.hpp"
+#include "scene.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "map.hpp"
@@ -24,6 +25,7 @@
 #include <MCGLShaderProgram>
 #include <MCSurface>
 #include <MCSurfaceManager>
+
 #include <cassert>
 
 Track::Track(TrackData * pTrackData)
@@ -34,6 +36,7 @@ Track::Track(TrackData * pTrackData)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_scale(0.0)
 , m_asphalt(MCSurfaceManager::instance().surface("asphalt"))
+, m_grass(MCSurfaceManager::instance().surface("grass"))
 , m_next(nullptr)
 {
     assert(pTrackData);

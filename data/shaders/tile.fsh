@@ -25,6 +25,10 @@ void main(void)
     {
         discard;
     }
+    else if (color.r < 0.1 && color.g > 0.9 && color.r < 0.1)
+    {
+        discard;
+    }
     else
     {
         gl_FragColor = color * fade * vec4(1.0, 0.95, 0.9, 1.0);
