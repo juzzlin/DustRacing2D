@@ -18,6 +18,7 @@
 //
 
 #include <MCGLEW>
+#include <MCLogger>
 #include <GL/glu.h>
 
 #include "mcglscene.hh"
@@ -31,7 +32,14 @@ MCGLScene::MCGLScene()
 
 void MCGLScene::initialize()
 {
-    glewInit();
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        MCLogger().fatal() << "Initing GLEW failed: " << glewGetErrorString(err);
+    }
+
+    MCLogger().info() << "Using GLEW " << glewGetString(GLEW_VERSION);
+
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
