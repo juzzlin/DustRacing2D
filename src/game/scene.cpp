@@ -27,6 +27,7 @@
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
+#include "particlemanager.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
 #include "settingsmenu.hpp"
@@ -90,6 +91,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
 , m_settings(nullptr)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
+, m_particleManager(new ParticleManager)
 {
     QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
 
@@ -608,4 +610,5 @@ Scene::~Scene()
     delete m_timingOverlay;
     delete m_trackSelectionMenu;
     delete m_messageOverlay;
+    delete m_particleManager;
 }

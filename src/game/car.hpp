@@ -18,9 +18,6 @@
 
 #include <MCObject>
 #include <MCVector2d>
-#include <MCParticle>
-#include <deque>
-#include <memory>
 
 class MCSurface;
 class MCFrictionGenerator;
@@ -160,18 +157,7 @@ public:
 private:
 
     void setProperties(Description & desc);
-
     void initForceGenerators(Description & desc);
-
-    void preCreateParticles();
-
-    void doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
-
-    void doSkidMark(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
-
-    void doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
-
-    void doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
     Description           m_desc;
 
@@ -201,13 +187,6 @@ private:
     mutable int           m_smokeCounter;
     mutable int           m_sparkleCounter;
     mutable int           m_mudCounter;
-
-    // Free lists for different types of particles.
-    mutable MCParticle::ParticleFreeList m_freeList;
-    mutable MCParticle::ParticleFreeList m_freeList2;
-    mutable MCParticle::ParticleFreeList m_freeList3;
-
-    std::vector<std::shared_ptr<MCParticle> > m_delete;
 };
 
 #endif // CAR_HPP

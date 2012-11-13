@@ -32,6 +32,7 @@ set(SRC
     mainmenu.cpp
     map.cpp
     messageoverlay.cpp
+    particlemanager.cpp
     offtrackdetector.cpp
     overlaybase.cpp
     race.cpp

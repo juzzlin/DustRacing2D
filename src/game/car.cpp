@@ -16,6 +16,7 @@
 #include "car.hpp"
 #include "centrifugalforcegenerator.hpp"
 #include "layers.hpp"
+#include "particlemanager.hpp"
 #include "radius.hpp"
 #include "renderer.hpp"
 #include "slidefrictiongenerator.hpp"
@@ -23,14 +24,10 @@
 #include <MCCollisionEvent>
 #include <MCDragForceGenerator>
 #include <MCFrictionGenerator>
-#include <MCGLPointParticle>
-#include <MCGLRectParticle>
 #include <MCMathUtil>
-#include <MCRandom>
 #include <MCRectShape>
 #include <MCShape>
 #include <MCSurface>
-#include <MCSurfaceParticle>
 #include <MCSurfaceManager>
 #include <MCTrigonom>
 #include <MCTypes>
@@ -74,8 +71,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     initForceGenerators(desc);
 
-    preCreateParticles();
-
     m_number.setShaderProgram(&Renderer::instance().program("master"));
     m_brakeGlow.setShaderProgram(&Renderer::instance().program("master"));
     m_frontTire.setShaderProgram(&Renderer::instance().program("master"));
@@ -117,55 +112,6 @@ void Car::initForceGenerators(Description & desc)
 
     MCForceGenerator * drag = new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic);
     MCWorld::instance().addForceGenerator(*drag, *this, true);
-}
-
-void Car::preCreateParticles()
-{
-    // Pre-create some MCGLRectParticles
-    for (int i = 0; i < 100; i++)
-    {
-        MCParticle * particle = new MCGLRectParticle("MUD");
-        static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
-            &Renderer::instance().program("particle"));
-        particle->setFreeList(m_freeList);
-
-        // Initially push to list of free particles
-        m_freeList.push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
-    }
-
-    // Pre-create some MCSurfaceParticles
-    for (int i = 0; i < 50; i++)
-    {
-        MCParticle * particle = new MCSurfaceParticle("SMOKE");
-
-        particle->setSurface(&MCSurfaceManager::instance().surface("smoke"));
-        particle->surface()->setShaderProgram(&Renderer::instance().program("master"));
-        particle->setFreeList(m_freeList2);
-
-        // Initially push to list of free particles
-        m_freeList2.push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
-    }
-
-    // Pre-create some MCGLPointParticles
-    for (int i = 0; i < 100; i++)
-    {
-        MCParticle * particle = new MCGLPointParticle("SPARKLE");
-        static_cast<MCGLPointParticle *>(particle)->setShaderProgram(
-            &Renderer::instance().program("pointParticle"));
-        particle->setFreeList(m_freeList3);
-
-        // Initially push to list of free particles
-        m_freeList3.push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
-    }
 }
 
 void Car::clearStatuses()
@@ -364,12 +310,14 @@ void Car::render(MCCamera *p)
         {
             if (!m_leftSideOffTrack)
             {
-                doSkidMark(leftRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
+                ParticleManager::instance().doSkidMark(
+                    leftRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
             }
 
             if (!m_rightSideOffTrack)
             {
-                doSkidMark(rightRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
+                ParticleManager::instance().doSkidMark(
+                    rightRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
             }
         }
     }
@@ -380,32 +328,37 @@ void Car::render(MCCamera *p)
         bool smoke = false;
         if (m_leftSideOffTrack)
         {
-            doSkidMark(leftFrontTire, 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(leftFrontTire, 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                doMud(leftRearTireLocation(), 0.3, 0.2, 0.0, 0.9);
+                ParticleManager::instance().doMud(
+                    leftRearTireLocation(), velocity() * 0.5, 0.3, 0.2, 0.0, 0.9);
                 m_mudCounter = 0;
             }
         }
 
         if (m_rightSideOffTrack)
         {
-            doSkidMark(rightFrontTire, 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(rightFrontTire, 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                doMud(rightRearTireLocation(), 0.3, 0.2, 0.0, 0.9);
+                ParticleManager::instance().doMud(
+                    rightRearTireLocation(), velocity() * 0.5, 0.3, 0.2, 0.0, 0.9);
                 m_mudCounter = 0;
             }
         }
 
         if (smoke)
         {
-            MCVector3dF smokeLocation = (leftRearTireLocation() + rightRearTireLocation()) * 0.5;
-            doSmoke(smokeLocation, 0.75, 0.75, 0.75, 0.5);
+            if (++m_smokeCounter >= 2)
+            {
+                MCVector3dF smokeLocation = (leftRearTireLocation() + rightRearTireLocation()) * 0.5;
+                ParticleManager::instance().doSmoke(smokeLocation, 0.75, 0.75, 0.75, 0.5);
+            }
         }
     }
 
@@ -427,8 +380,9 @@ void Car::collisionEvent(MCCollisionEvent & event)
         {
             if (++m_sparkleCounter >= 10)
             {
-                doSparkle(event.contactPoint(), 1.0, 0.8, 0.0, 0.9);
-                doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+                ParticleManager::instance().doSparkle(
+                    event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.9);
+                ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
                 m_sparkleCounter = 0;
             }
         }
@@ -438,8 +392,9 @@ void Car::collisionEvent(MCCollisionEvent & event)
             event.collidingObject().typeID() == wall ||
             event.collidingObject().typeID() == rock)
         {
-            doSparkle(event.contactPoint(), 1.0, 0.8, 0.0, 0.9);
-            doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+            ParticleManager::instance().doSparkle(
+                event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.9);
+            ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
         }
     }
 
@@ -482,69 +437,6 @@ void Car::setRightSideOffTrack(bool state)
 void Car::setTurningImpulse(MCFloat impulse)
 {
     m_desc.turningImpulse = impulse;
-}
-
-void Car::doSmoke(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
-{
-    m_smokeCounter++;
-    if (m_smokeCounter > 2)
-    {
-        MCSurfaceParticle * smoke = nullptr;
-        if (m_freeList2.size())
-        {
-            smoke = static_cast<MCSurfaceParticle *>(m_freeList2.back());
-            m_freeList2.pop_back();
-
-            smoke->init(location, 10, 120);
-            smoke->setAnimationStyle(MCParticle::Shrink);
-            smoke->translate(location);
-            smoke->rotate(MCRandom::getValue() * 360);
-            smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
-            smoke->surface()->setColor(r, g, b, a);
-            smoke->surface()->setAlphaBlend(true);
-            smoke->addToWorld();
-        }
-
-        m_smokeCounter = 0;
-    }
-}
-
-void Car::doSkidMark(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
-{
-    // Must be drawn to an offscreen buffer
-}
-
-void Car::doMud(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
-{
-    MCGLRectParticle * mud = nullptr;
-    if (m_freeList.size())
-    {
-        mud = static_cast<MCGLRectParticle *>(m_freeList.back());
-        m_freeList.pop_back();
-
-        mud->init(location, 4, 120);
-        mud->setAnimationStyle(MCParticle::Shrink);
-        mud->setColor(r, g, b, a);
-        mud->setVelocity(velocity() * 0.5f + MCVector3dF(0, 0, 2.0f));
-        mud->setAcceleration(MCVector3dF(0, 0, -10.0f));
-        mud->addToWorld();
-    }
-}
-
-void Car::doSparkle(MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
-{
-    MCGLPointParticle * sparkle = nullptr;
-    if (m_freeList3.size())
-    {
-        sparkle = static_cast<MCGLPointParticle *>(m_freeList3.back());
-        m_freeList3.pop_back();
-
-        sparkle->init(location, 2, 60);
-        sparkle->setAnimationStyle(MCParticle::Shrink);
-        sparkle->setColor(r, g, b, a);
-        sparkle->setVelocity(velocity() * 0.5);
-        sparkle->addToWorld();
-    }
 }
 
 void Car::setCurrentTargetNodeIndex(int index)
