@@ -279,7 +279,6 @@ void Car::render(MCCamera *p)
 {
     // Render left front tire.
     const MCVector3dF leftFrontTire(leftFrontTireLocation());
-    m_frontTire.bindTexture();
     m_frontTire.render(p, leftFrontTire, m_tireAngle + angle());
 
     // Render right front tire.
@@ -295,7 +294,6 @@ void Car::render(MCCamera *p)
         MCVector2dF leftBrakeGlow;
         MCTrigonom::rotatedVector(m_desc.leftBrakeGlowPos, leftBrakeGlow, angle());
         leftBrakeGlow += MCVector2dF(location());
-        m_brakeGlow.bindTexture();
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         MCVector2dF rightBrakeGlow;
@@ -362,7 +360,6 @@ void Car::render(MCCamera *p)
         }
     }
 
-    m_number.bindTexture();
     m_number.render(p, numberLocation(), angle() + 90);
 }
 

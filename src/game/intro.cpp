@@ -58,7 +58,6 @@ void Intro::render()
     const int h2 = height() / 2;
 
     m_back.shaderProgram()->setFadeValue(fade.i());
-    m_back.bindTexture();
     m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
 }
 
