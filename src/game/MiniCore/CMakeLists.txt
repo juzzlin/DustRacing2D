@@ -17,6 +17,7 @@ Core/mcrandom.cc
 Core/mctimerevent.cc
 Core/mctrigonom.cc
 Core/mcvectoranimation.cc
+Core/mcworld.cc
 Graphics/glew.c
 Graphics/mccamera.cc
 Graphics/mcglobjectdata.cc
@@ -47,7 +48,6 @@ Physics/mcrectshape.cc
 Physics/mcshape.cc
 Physics/mcspringforcegenerator.cc
 Physics/mcspringforcegenerator2dfast.cc
-Physics/mcworld.cc
 Text/mctexturefont.cc
 Text/mctexturefontconfigloader.cc
 Text/mctexturefontdata.cc

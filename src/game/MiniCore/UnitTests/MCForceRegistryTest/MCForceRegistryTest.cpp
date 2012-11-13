@@ -20,7 +20,7 @@
 #include "MCForceRegistryTest.hpp"
 #include "../../Physics/mcforcegenerator.hh"
 #include "../../Physics/mcforceregistry.hh"
-#include "../../Physics/mcworld.hh"
+#include "../../Core/mcworld.hh"
 #include "../../Core/mcobject.hh"
 
 #include <memory>
