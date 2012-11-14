@@ -397,6 +397,11 @@ void MainWindow::populateMenuBar()
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
+
+    // Add "about Qt"-action
+    QAction * aboutQtAct = new QAction(tr("About &Qt"), this);
+    helpMenu->addAction(aboutQtAct);
+    connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(showAboutQtDlg()));
 }
 
 void MainWindow::populateToolBar()
@@ -499,6 +504,11 @@ void MainWindow::openTrack()
 void MainWindow::showAboutDlg()
 {
     m_aboutDlg->exec();
+}
+
+void MainWindow::showAboutQtDlg()
+{
+    QMessageBox::aboutQt(this, tr("About Qt"));
 }
 
 void MainWindow::clear()

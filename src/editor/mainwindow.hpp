@@ -100,6 +100,7 @@ private slots:
     void saveTrack();
     void saveAsTrack();
     void showAboutDlg();
+    void showAboutQtDlg();
     void showTip();
     void updateScale(int value);
 
