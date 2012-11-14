@@ -369,6 +369,8 @@ void Car::collisionEvent(MCCollisionEvent & event)
     static MCUint grandstand         = MCObject::typeID("grandstand");
     static MCUint wall               = MCObject::typeID("wall");
     static MCUint rock               = MCObject::typeID("rock");
+    static MCUint tree               = MCObject::typeID("tree");
+    static MCUint plant              = MCObject::typeID("plant");
 
     // Spawn sparkles if colliding with another car or a wall.
     if (m_speedInKmh > 25)
@@ -392,6 +394,13 @@ void Car::collisionEvent(MCCollisionEvent & event)
             ParticleManager::instance().doSparkle(
                 event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
             ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+        }
+        else if (
+            event.collidingObject().typeID() == tree ||
+            event.collidingObject().typeID() == plant)
+        {
+            ParticleManager::instance().doLeaf(
+                event.contactPoint(), velocity() * 0.1, 0.0, 0.75, 0.0, 0.75);
         }
     }
 

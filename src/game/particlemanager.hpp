@@ -46,6 +46,10 @@ public:
         MCVector3dFR location, MCVector3dFR velocity,
         MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
+    void doLeaf(
+        MCVector3dFR location, MCVector3dFR velocity,
+        MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+
     void doMud(
         MCVector3dFR location, MCVector3dFR velocity,
         MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
@@ -54,10 +58,11 @@ private:
 
     void preCreateParticles();
 
-    // Free lists for different types of particles.
-    mutable MCParticle::ParticleFreeList m_freeList;
+    // Free lists (recycling) for different types of particles.
+    mutable MCParticle::ParticleFreeList m_freeList1;
     mutable MCParticle::ParticleFreeList m_freeList2;
     mutable MCParticle::ParticleFreeList m_freeList3;
+    mutable MCParticle::ParticleFreeList m_freeList4;
 
     // Particles to delete.
     std::vector<std::shared_ptr<MCParticle> > m_delete;

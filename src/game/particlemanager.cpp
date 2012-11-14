@@ -48,10 +48,10 @@ void ParticleManager::preCreateParticles()
         MCParticle * particle = new MCGLRectParticle("MUD");
         static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
             &Renderer::instance().program("particle"));
-        particle->setFreeList(m_freeList);
+        particle->setFreeList(m_freeList1);
 
         // Initially push to list of free particles
-        m_freeList.push_back(particle);
+        m_freeList1.push_back(particle);
 
         // Store for deletion
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
@@ -86,6 +86,21 @@ void ParticleManager::preCreateParticles()
         // Store for deletion
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
     }
+
+    // Pre-create some leaf particles
+    for (int i = 0; i < 100; i++)
+    {
+        MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
+        particle->setSurface(MCSurfaceManager::instance().surface("leaf"));
+        particle->setShaderProgram(&Renderer::instance().program("master"));
+        particle->setFreeList(m_freeList4);
+
+        // Initially push to list of free particles
+        m_freeList4.push_back(particle);
+
+        // Store for deletion
+        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+    }
 }
 
 void ParticleManager::doSmoke(
@@ -116,10 +131,10 @@ void ParticleManager::doMud(
     MCVector3dFR location, MCVector3dFR velocity, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
     MCGLRectParticle * mud = nullptr;
-    if (m_freeList.size())
+    if (m_freeList1.size())
     {
-        mud = static_cast<MCGLRectParticle *>(m_freeList.back());
-        m_freeList.pop_back();
+        mud = static_cast<MCGLRectParticle *>(m_freeList1.back());
+        m_freeList1.pop_back();
 
         mud->init(location, 4, 120);
         mud->setAnimationStyle(MCParticle::Shrink);
@@ -145,6 +160,26 @@ void ParticleManager::doSparkle(
         sparkle->setColor(r, g, b, a);
         sparkle->setVelocity(velocity);
         sparkle->addToWorld();
+    }
+}
+
+void ParticleManager::doLeaf(
+    MCVector3dFR location, MCVector3dFR velocity, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
+{
+    MCSurfaceParticle * leaf = nullptr;
+    if (m_freeList4.size())
+    {
+        leaf = static_cast<MCSurfaceParticle *>(m_freeList4.back());
+        m_freeList4.pop_back();
+
+        leaf->init(location, 10, 120);
+        leaf->setAnimationStyle(MCParticle::Shrink);
+        leaf->translate(location);
+        leaf->rotate(MCRandom::getValue() * 360);
+        leaf->setColor(r, g, b, a);
+        leaf->setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());
+        leaf->setAcceleration(MCVector3dF(0, 0, -5.0f));
+        leaf->addToWorld();
     }
 }
 
