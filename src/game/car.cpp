@@ -365,6 +365,7 @@ void Car::render(MCCamera *p)
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
+    // Cache type id integers.
     static MCUint dustRacing2DBanner = MCObject::typeID("dustRacing2DBanner");
     static MCUint grandstand         = MCObject::typeID("grandstand");
     static MCUint wall               = MCObject::typeID("wall");
@@ -372,9 +373,9 @@ void Car::collisionEvent(MCCollisionEvent & event)
     static MCUint tree               = MCObject::typeID("tree");
     static MCUint plant              = MCObject::typeID("plant");
 
-    // Spawn sparkles if colliding with another car or a wall.
     if (m_speedInKmh > 25)
     {
+        // Check if the car is colliding with another car.
         if (event.collidingObject().typeID() == typeID())
         {
             if (++m_sparkleCounter >= 10)
@@ -385,6 +386,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
                 m_sparkleCounter = 0;
             }
         }
+        // Check if the car is colliding with hard stationary objects.
         else if (
             event.collidingObject().typeID() == dustRacing2DBanner ||
             event.collidingObject().typeID() == grandstand ||
@@ -395,6 +397,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
                 event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
             ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
         }
+        // Check if the car is colliding with trees or plants.
         else if (
             event.collidingObject().typeID() == tree ||
             event.collidingObject().typeID() == plant)
