@@ -378,7 +378,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
             if (++m_sparkleCounter >= 10)
             {
                 ParticleManager::instance().doSparkle(
-                    event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.9);
+                    event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
                 ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
                 m_sparkleCounter = 0;
             }
@@ -390,7 +390,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
             event.collidingObject().typeID() == rock)
         {
             ParticleManager::instance().doSparkle(
-                event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.9);
+                event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
             ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
         }
     }

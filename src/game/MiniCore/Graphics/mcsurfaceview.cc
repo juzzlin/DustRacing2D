@@ -24,91 +24,91 @@
 
 MCSurfaceView::MCSurfaceView(
     const std::string & viewId,
-    MCSurface * pSurface,
+    MCSurface * surface,
     bool batchMode)
 : MCShapeView(viewId)
-, m_pSurface(pSurface)
+, m_surface(surface)
 , m_batchMode(batchMode)
 {}
 
 MCSurfaceView::~MCSurfaceView()
 {}
 
-void MCSurfaceView::setSurface(MCSurface * p)
+void MCSurfaceView::setSurface(MCSurface & surface)
 {
-    m_pSurface = p;
+    m_surface = &surface;
 }
 
 MCSurface * MCSurfaceView::surface() const
 {
-    return m_pSurface;
+    return m_surface;
 }
 
 void MCSurfaceView::setShaderProgram(MCGLShaderProgram * program)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->setShaderProgram(program);
+        m_surface->setShaderProgram(program);
     }
 }
 
 void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgram * program)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->setShadowShaderProgram(program);
+        m_surface->setShadowShaderProgram(program);
     }
 }
 
 void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->render(p, l, angle, !m_batchMode);
+        m_surface->render(p, l, angle, !m_batchMode);
     }
 }
 
 void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->renderShadow(p, l, angle, !m_batchMode);
+        m_surface->renderShadow(p, l, angle, !m_batchMode);
     }
 }
 
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCFloat wr, MCFloat hr, MCCamera * p)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->renderScaled(p, l, wr, hr, angle, !m_batchMode);
+        m_surface->renderScaled(p, l, wr, hr, angle, !m_batchMode);
     }
 }
 
 void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCFloat angle, MCFloat wr, MCFloat hr, MCCamera * p)
 {
-    if (m_pSurface)
+    if (m_surface)
     {
-        m_pSurface->renderShadowScaled(p, l, wr, hr, angle, !m_batchMode);
+        m_surface->renderShadowScaled(p, l, wr, hr, angle, !m_batchMode);
     }
 }
 
 void MCSurfaceView::beginBatch()
 {
-    if (m_batchMode && m_pSurface)
+    if (m_batchMode && m_surface)
     {
-        m_pSurface->enableClientState(true);
+        m_surface->enableClientState(true);
     }
 }
 
 void MCSurfaceView::endBatch()
 {
-    if (m_batchMode && m_pSurface)
+    if (m_batchMode && m_surface)
     {
-        m_pSurface->enableClientState(false);
+        m_surface->enableClientState(false);
     }
 }
 
@@ -117,8 +117,8 @@ MCBBox<MCFloat> MCSurfaceView::bbox() const
     // TODO: Fix this! The view should know the angle of the
     // shape somehow. Now we just return a naive bbox.
 
-    const MCFloat w = m_pSurface->width() / 2;
-    const MCFloat h = m_pSurface->height() / 2;
+    const MCFloat w = m_surface->width() / 2;
+    const MCFloat h = m_surface->height() / 2;
     const MCFloat r = std::max(w, h);
 
     return MCBBox<MCFloat>(-r, -r, r, r);

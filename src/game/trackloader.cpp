@@ -337,8 +337,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -356,8 +356,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -375,8 +375,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -393,8 +393,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -411,8 +411,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         object.setBypassCollisions(true);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
         object.setHasShadow(false);
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
@@ -431,8 +431,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -450,8 +450,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
@@ -493,8 +493,8 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector3dF(x, h - y, 8));
         object.setInitialAngle(o);
-        object.surface()->setShaderProgram(&Renderer::instance().program("master"));
-        object.surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object.view()->setShaderProgram(&Renderer::instance().program("master"));
+        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);

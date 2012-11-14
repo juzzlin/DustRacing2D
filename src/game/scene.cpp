@@ -53,6 +53,7 @@
 #include <MCLogger>
 #include <MCObject>
 #include <MCSurface>
+#include <MCSurfaceView>
 #include <MCTextureFont>
 #include <MCTextureFontManager>
 #include <MCSurfaceManager>
@@ -138,8 +139,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
         }
 
         car->setLayer(Layers::Cars);
-        car->surface()->setShaderProgram(&Renderer::instance().program("master"));
-        car->surface()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        car->view()->setShaderProgram(&Renderer::instance().program("master"));
+        car->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         m_cars.push_back(CarPtr(car));
         m_race.addCar(*car);

@@ -27,6 +27,7 @@
 #include <string>
 
 class MCSurface;
+class MCGLShaderProgram;
 
 /*! \class MCSurfaceParticle
  *  \brief A particle that renders as an MCSurface. Can be inherited.
@@ -45,6 +46,15 @@ public:
     {
         // Do nothing
     }
+
+    //! Set color.
+    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
+
+    //! Set the surface.
+    void setSurface(MCSurface & surface);
+
+    //! Set the shader program to be used.
+    void setShaderProgram(MCGLShaderProgram * program);
 
     //! Destructor.
     virtual ~MCSurfaceParticle();

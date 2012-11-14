@@ -18,6 +18,7 @@
 //
 
 #include "mcsurfaceparticle.hh"
+#include "mcsurface.hh"
 #include "mcsurfaceview.hh"
 
 MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
@@ -34,6 +35,21 @@ void MCSurfaceParticle::beginBatch()
 void MCSurfaceParticle::endBatch()
 {
     view()->endBatch();
+}
+
+void MCSurfaceParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+    static_cast<MCSurfaceView *>(view())->surface()->setColor(r, g, b, a);
+}
+
+void MCSurfaceParticle::setSurface(MCSurface & surface)
+{
+    static_cast<MCSurfaceView *>(view())->setSurface(surface);
+}
+
+void MCSurfaceParticle::setShaderProgram(MCGLShaderProgram * program)
+{
+    static_cast<MCSurfaceView *>(view())->surface()->setShaderProgram(program);
 }
 
 MCSurfaceParticle::~MCSurfaceParticle()

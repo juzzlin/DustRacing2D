@@ -285,32 +285,6 @@ void MCObject::resetMotion()
     m_angularImpulse      = 0.0;
 }
 
-void MCObject::setSurface(MCSurface * pSurface)
-{
-    assert(pShape && pShape->view());
-
-    MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
-    assert(pView);
-
-    if (pView->surface() != pSurface)
-    {
-        pView->setSurface(pSurface);
-    }
-}
-
-MCSurface * MCObject::surface() const
-{
-    if (pShape && pShape->view())
-    {
-        MCSurfaceView * pView = dynamic_cast<MCSurfaceView *>(pShape->view());
-        if (pView)
-        {
-            return pView->surface();
-        }
-    }
-    return nullptr;
-}
-
 MCUint MCObject::typeID() const
 {
     return m_typeID;

@@ -42,7 +42,7 @@ ParticleManager & ParticleManager::instance()
 
 void ParticleManager::preCreateParticles()
 {
-    // Pre-create some MCGLRectParticles
+    // Pre-create some mud particles
     for (int i = 0; i < 1000; i++)
     {
         MCParticle * particle = new MCGLRectParticle("MUD");
@@ -57,13 +57,12 @@ void ParticleManager::preCreateParticles()
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
     }
 
-    // Pre-create some MCSurfaceParticles
+    // Pre-create some smoke particles
     for (int i = 0; i < 500; i++)
     {
-        MCParticle * particle = new MCSurfaceParticle("SMOKE");
-
-        particle->setSurface(&MCSurfaceManager::instance().surface("smoke"));
-        particle->surface()->setShaderProgram(&Renderer::instance().program("master"));
+        MCSurfaceParticle * particle = new MCSurfaceParticle("SMOKE");
+        particle->setSurface(MCSurfaceManager::instance().surface("smoke"));
+        particle->setShaderProgram(&Renderer::instance().program("master"));
         particle->setFreeList(m_freeList2);
 
         // Initially push to list of free particles
@@ -73,12 +72,12 @@ void ParticleManager::preCreateParticles()
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
     }
 
-    // Pre-create some MCGLPointParticles
+    // Pre-create some sparkles
     for (int i = 0; i < 1000; i++)
     {
-        MCParticle * particle = new MCGLPointParticle("SPARKLE");
-        static_cast<MCGLPointParticle *>(particle)->setShaderProgram(
-            &Renderer::instance().program("pointParticle"));
+        MCSurfaceParticle * particle = new MCSurfaceParticle("SPARKLE");
+        particle->setSurface(MCSurfaceManager::instance().surface("sparkle"));
+        particle->setShaderProgram(&Renderer::instance().program("master"));
         particle->setFreeList(m_freeList3);
 
         // Initially push to list of free particles
@@ -103,8 +102,7 @@ void ParticleManager::doSmoke(
         smoke->translate(location);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
-        smoke->surface()->setColor(r, g, b, a);
-        smoke->surface()->setAlphaBlend(true);
+        smoke->setColor(r, g, b, a);
         smoke->addToWorld();
     }
 }
@@ -135,14 +133,15 @@ void ParticleManager::doMud(
 void ParticleManager::doSparkle(
     MCVector3dFR location, MCVector3dFR velocity, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    MCGLPointParticle * sparkle = nullptr;
+    MCSurfaceParticle * sparkle = nullptr;
     if (m_freeList3.size())
     {
-        sparkle = static_cast<MCGLPointParticle *>(m_freeList3.back());
+        sparkle = static_cast<MCSurfaceParticle *>(m_freeList3.back());
         m_freeList3.pop_back();
 
-        sparkle->init(location, 2, 60);
+        sparkle->init(location, 6, 60);
         sparkle->setAnimationStyle(MCParticle::Shrink);
+        sparkle->translate(location);
         sparkle->setColor(r, g, b, a);
         sparkle->setVelocity(velocity);
         sparkle->addToWorld();

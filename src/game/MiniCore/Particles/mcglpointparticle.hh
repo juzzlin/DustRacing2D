@@ -42,6 +42,7 @@ public:
     //! Set color
     void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
 
+    //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);
 
     //! \reimp

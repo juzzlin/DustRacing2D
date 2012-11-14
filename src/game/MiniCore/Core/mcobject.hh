@@ -73,18 +73,6 @@ public:
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     MCObject(MCSurface * pSurface, const std::string & typeId);
 
-    //! \brief Convenience method to set the surface of the view.
-    //! This works only if MCSurfaceView is being used in the shape.
-    //! \param pSurface Pointer to the new surface.
-    //! MCObject won't take the ownership, because the same surface
-    //! can be used to draw multiple objects.
-    void setSurface(MCSurface * pSurface);
-
-    //! \brief Convenience method to get the surface of the view.
-    //! This works only if MCSurfaceView is being used in the shape.
-    //! \param pSurface Pointer to the surface (or nullptr if not any).
-    MCSurface * surface() const;
-
     //! Destructor. It's the callers responsibility to first remove
     //! the object from MCWorld before deleting the object.
     virtual ~MCObject();
