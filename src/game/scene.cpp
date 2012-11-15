@@ -140,7 +140,7 @@ void Scene::createCars(MCUint numCars)
         if (i == 0)
         {
             desc.power = humanPower;
-            car = new Car(desc, MCSurfaceManager::instance().surface("car001"), i, true);
+            car = new Car(desc, MCSurfaceManager::instance().surface("carPink"), i, true);
         }
         else
         {
@@ -151,15 +151,15 @@ void Scene::createCars(MCUint numCars)
 
             if (i == numCars - 1)
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("car003"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("carBlack"), i, false);
             }
             else if (i == numCars - 2)
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("car004"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("carOrange"), i, false);
             }
             else
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("car002"), i, false);
+                car = new Car(desc, MCSurfaceManager::instance().surface("carYellow"), i, false);
             }
 
             m_ai.push_back(AIPtr(new AI(*car)));
