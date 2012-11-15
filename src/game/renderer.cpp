@@ -20,7 +20,6 @@
 #include "shaderprogram.hpp"
 #include "../common/config.hpp"
 
-#include <MCCamera>
 #include <MCGLScene>
 #include <MCGLShaderProgram>
 #include <MCException>
@@ -48,7 +47,6 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent)
 : QGLWidget(parent)
 , m_scene(nullptr)
 , m_glScene(new MCGLScene)
-, m_camera(nullptr)
 , m_eventHandler(nullptr)
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
@@ -211,24 +209,19 @@ void Renderer::paintGL()
 {
     if (m_enabled)
     {
-        if (m_camera) // Qt might update the widget before camera is set
-        {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            if (m_scene)
-            {
-                m_scene->render(*m_camera);
-            }
+        if (m_scene)
+        {
+            m_scene->render();
         }
     }
 
     swapBuffers();
 }
 
-void Renderer::updateFrame(MCCamera & camera)
+void Renderer::updateFrame()
 {
-    m_camera = &camera;
-
     paintGL();
 }
 

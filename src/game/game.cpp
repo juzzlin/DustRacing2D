@@ -252,7 +252,7 @@ void Game::updateFrame()
 {
     updateAnimations();
     m_stateMachine->update();
-    m_renderer->updateFrame(m_scene->camera());
+    m_renderer->updateFrame();
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
 }
 

@@ -84,17 +84,15 @@ void MCGLScene::setSplitType(SplitType splitType)
 
 void MCGLScene::setViewport()
 {
+    static const float zNear = 1.0;
+    static const float zFar  = 1000.0;
+
     if (m_splitType == Single)
     {
         glViewport(0, 0, m_viewWidth, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-
-        static const float zNear = 1.0;
-        static const float zFar  = 1000.0;
-
         gluPerspective(m_viewAngle, static_cast<GLfloat>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
-
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
@@ -105,13 +103,8 @@ void MCGLScene::setViewport()
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-
-        static const float zNear = 1.0;
-        static const float zFar  = 1000.0;
-
         gluPerspective(
             m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
-
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
@@ -122,13 +115,8 @@ void MCGLScene::setViewport()
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-
-        static const float zNear = 1.0;
-        static const float zFar  = 1000.0;
-
         gluPerspective(
             m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
-
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 

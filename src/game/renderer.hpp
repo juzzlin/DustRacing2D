@@ -27,7 +27,6 @@
 #include <unordered_map>
 
 class InputHandler;
-class MCCamera;
 class MCGLScene;
 class MCGLShaderProgram;
 class QGLShaderProgram;
@@ -51,7 +50,7 @@ public:
 
     static Renderer & instance();
 
-    void updateFrame(MCCamera & camera);
+    void updateFrame();
 
     //! Set game scene to be rendered.
     void setScene(Scene & scene);
@@ -105,7 +104,6 @@ private:
 
     Scene             * m_scene;
     MCGLScene         * m_glScene;
-    MCCamera          * m_camera;
     EventHandler      * m_eventHandler;
     const float         m_viewAngle;
     float               m_fadeValue;

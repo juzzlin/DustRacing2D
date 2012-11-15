@@ -89,14 +89,8 @@ public:
     //! Return track selection menu.
     TrackSelectionMenu & trackSelectionMenu() const;
 
-    //! Return camera.
-    MCCamera & camera()
-    {
-        return m_camera;
-    }
-
     //! Render all components.
-    void render(MCCamera & camera);
+    void render();
 
 private:
 
@@ -105,12 +99,12 @@ private:
     void createMenus();
     void initRace();
     void processUserInput(InputHandler & handler, bool isRaceCompleted);
-    void renderCommonScene(MCCamera & camera);
+    void renderCommonScene();
     void renderPlayerScene(MCCamera & camera);
     void setWorldDimensions();
     void translateCarsToStartPositions();
     void updateAI();
-    void updateCameraLocation(MCCamera & camera);
+    void updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object);
     void updateRace();
     void updateWorld(float timeStep);
 
@@ -123,12 +117,12 @@ private:
     Race                  m_race;
     Track               * m_activeTrack;
     MCWorld             * m_world;
-    MCCamera              m_camera;
     TimingOverlay       * m_timingOverlay;
     Startlights         * m_startlights;
     StartlightsOverlay  * m_startlightsOverlay;
     CheckeredFlag       * m_checkeredFlag;
-    MCFloat               m_cameraBaseOffset;
+    MCCamera              m_camera[2];
+    MCFloat               m_cameraOffset[2];
     TrackSelectionMenu  * m_trackSelectionMenu;
     MTFH::Menu          * m_mainMenu;
     MTFH::Menu          * m_help;

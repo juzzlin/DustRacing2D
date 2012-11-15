@@ -84,7 +84,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
 , m_startlights(new Startlights(*m_messageOverlay))
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
-, m_cameraBaseOffset(0)
 , m_trackSelectionMenu(nullptr)
 , m_mainMenu(nullptr)
 , m_help(nullptr)
@@ -100,6 +99,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
     m_stateMachine.setRace(m_race);
     m_stateMachine.setStartlights(*m_startlights);
     m_stateMachine.setIntro(*m_intro);
+
+    m_cameraOffset[0] = 0.0;
+    m_cameraOffset[1] = 0.0;
 
     const int humanPower = 8000;
 
@@ -232,7 +234,15 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
                 otd->update();
             }
 
-            updateCameraLocation(m_camera);
+            if (m_game.mode() == Game::TwoPlayerRace)
+            {
+                updateCameraLocation(m_camera[0], m_cameraOffset[0], *m_cars.at(0));
+                updateCameraLocation(m_camera[1], m_cameraOffset[1], *m_cars.at(1));
+            }
+            else
+            {
+                updateCameraLocation(m_camera[0], m_cameraOffset[0], *m_cars.at(0));
+            }
         }
     }
 }
@@ -260,21 +270,21 @@ void Scene::updateRace()
     m_race.update();
 }
 
-void Scene::updateCameraLocation(MCCamera & camera)
+void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object)
 {
     // Update camera location with respect to the car speed.
     // Make changes a bit smoother so that an abrupt decrease
     // in the speed won't look bad.
-    MCVector2d<MCFloat> p(m_cars.at(0)->location());
+    MCVector2d<MCFloat> loc(object.location());
 
-    const float offsetAmplification = 10;
+    // Smaller view requires less amplification to keep the car always visible.
+    const float offsetAmplification = m_game.mode() == Game::TwoPlayerRace ? 7.5 : 10.0;
     const float smooth              = 0.2;
 
-    m_cameraBaseOffset +=
-        (m_cars.at(0)->velocity().lengthFast() - m_cameraBaseOffset) * smooth;
-    p += m_cars.at(0)->direction() * m_cameraBaseOffset * offsetAmplification;
+    offset += (object.velocity().lengthFast() - offset) * smooth;
+    loc    += object.direction() * offset * offsetAmplification;
 
-    camera.setPos(p.i(), p.j());
+    camera.setPos(loc.i(), loc.j());
 }
 
 void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
@@ -328,11 +338,19 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_activeTrack = &activeTrack;
     m_stateMachine.setTrack(*m_activeTrack);
 
-    m_camera.init(
-        Scene::width(), Scene::height(),
-        0, 0,
-        activeTrack.width(),
-        activeTrack.height());
+    if (m_game.mode() == Game::TwoPlayerRace)
+    {
+        m_camera[0].init(
+            Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+
+        m_camera[1].init(
+            Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+    }
+    else
+    {
+        m_camera[0].init(
+            Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+    }
 
     // Remove previous objects;
     m_world->clear();
@@ -517,7 +535,7 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
     return *m_trackSelectionMenu;
 }
 
-void Scene::render(MCCamera & camera)
+void Scene::render()
 {
     const MCFloat fadeValue = Renderer::instance().fadeValue();
 
@@ -569,19 +587,19 @@ void Scene::render(MCCamera & camera)
         if (m_game.mode() == Game::TwoPlayerRace)
         {
             m_renderer.glScene().setSplitType(MCGLScene::Left);
-            renderPlayerScene(camera);
+            renderPlayerScene(m_camera[1]);
 
             m_renderer.glScene().setSplitType(MCGLScene::Right);
-            renderPlayerScene(camera);
+            renderPlayerScene(m_camera[0]);
         }
         else
         {
             m_renderer.glScene().setSplitType(MCGLScene::Single);
-            renderPlayerScene(camera);
+            renderPlayerScene(m_camera[0]);
         }
 
         m_renderer.glScene().setSplitType(MCGLScene::Single);
-        renderCommonScene(camera);
+        renderCommonScene();
     }
 }
 
@@ -592,7 +610,7 @@ void Scene::renderPlayerScene(MCCamera & camera)
     m_timingOverlay->render();
 }
 
-void Scene::renderCommonScene(MCCamera &)
+void Scene::renderCommonScene()
 {
     if (m_race.checkeredFlagEnabled())
     {
