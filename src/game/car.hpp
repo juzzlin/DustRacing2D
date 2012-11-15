@@ -19,12 +19,14 @@
 #include <MCObject>
 #include <MCVector2d>
 
+#include "updateableif.hpp"
+
 class MCSurface;
 class MCFrictionGenerator;
 class Route;
 
 //! Base class for race cars.
-class Car : public MCObject
+class Car : public MCObject, public UpdateableIf
 {
 public:
 
@@ -119,6 +121,12 @@ public:
 
     //! \reimp
     virtual void stepTime();
+
+    //! \reimp
+    virtual bool update();
+
+    //! \reimp
+    virtual void reset();
 
     void setLeftSideOffTrack(bool state);
 

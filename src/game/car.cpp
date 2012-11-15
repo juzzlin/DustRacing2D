@@ -278,12 +278,10 @@ MCVector3dF Car::rightRearTireLocation() const
 void Car::render(MCCamera *p)
 {
     // Render left front tire.
-    const MCVector3dF leftFrontTire(leftFrontTireLocation());
-    m_frontTire.render(p, leftFrontTire, m_tireAngle + angle());
+    m_frontTire.render(p, leftFrontTireLocation(), m_tireAngle + angle());
 
     // Render right front tire.
-    const MCVector3dF rightFrontTire(rightFrontTireLocation());
-    m_frontTire.render(p, rightFrontTire, m_tireAngle + angle());
+    m_frontTire.render(p, rightFrontTireLocation(), m_tireAngle + angle());
 
     // Render body.
     MCObject::render(p);
@@ -302,6 +300,11 @@ void Car::render(MCCamera *p)
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
 
+    m_number.render(p, numberLocation(), angle() + 90);
+}
+
+bool Car::update()
+{
     if (m_accelerating || m_braking)
     {
         if (m_speedInKmh < 25)
@@ -326,7 +329,7 @@ void Car::render(MCCamera *p)
         bool smoke = false;
         if (m_leftSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(leftFrontTire, 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(leftFrontTireLocation(), 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)
@@ -339,7 +342,7 @@ void Car::render(MCCamera *p)
 
         if (m_rightSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(rightFrontTire, 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(rightFrontTireLocation(), 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)
@@ -360,7 +363,11 @@ void Car::render(MCCamera *p)
         }
     }
 
-    m_number.render(p, numberLocation(), angle() + 90);
+    return true;
+}
+
+void Car::reset()
+{
 }
 
 void Car::collisionEvent(MCCollisionEvent & event)

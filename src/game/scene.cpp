@@ -241,6 +241,11 @@ void Scene::updateAnimations()
 {
     m_timingOverlay->update();
     m_messageOverlay->update();
+
+    for (CarPtr car : m_cars)
+    {
+        car->update();
+    }
 }
 
 void Scene::updateWorld(float timeStep)
