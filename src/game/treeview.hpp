@@ -17,11 +17,12 @@
 #define TREEVIEW_HPP
 
 #include <MCSurfaceView>
+#include "updateableif.hpp"
 
 /*! Custom view used to render tree objects by using a
  *  couple of MCSurfaces.
  */
-class TreeView : public MCSurfaceView
+class TreeView : public MCSurfaceView, public UpdateableIf
 {
 public:
 
@@ -46,6 +47,12 @@ public:
 
     //! \reimp
     virtual void endBatch();
+
+    //! \reimp
+    virtual bool update();
+
+    //! \reimp
+    virtual void reset();
 
 private:
 

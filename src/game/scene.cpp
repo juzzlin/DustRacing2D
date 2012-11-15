@@ -39,6 +39,7 @@
 #include "trackobject.hpp"
 #include "trackselectionmenu.hpp"
 #include "tracktile.hpp"
+#include "treeview.hpp"
 
 #include "../common/config.hpp"
 #include "../common/targetnodebase.hpp"
@@ -258,6 +259,11 @@ void Scene::updateAnimations()
     {
         car->update();
     }
+
+    for (TreeView * view : m_treeViews)
+    {
+        view->update();
+    }
 }
 
 void Scene::updateWorld(float timeStep)
@@ -360,9 +366,13 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_world->clear();
 
     setWorldDimensions();
+
     createCars();
+
     addCarsToWorld();
+
     addTrackObjectsToWorld();
+
     initRace();
 
     for (AIPtr ai : m_ai)
@@ -497,6 +507,8 @@ void Scene::addTrackObjectsToWorld()
     const unsigned int trackObjectCount =
         m_activeTrack->trackData().objects().count();
 
+    m_treeViews.clear();
+
     for (unsigned int i = 0; i < trackObjectCount; i++)
     {
         TrackObject & trackObject = static_cast<TrackObject &>(
@@ -505,6 +517,11 @@ void Scene::addTrackObjectsToWorld()
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
         mcObject.rotate(mcObject.initialAngle());
+
+        if (TreeView * treeView = dynamic_cast<TreeView *>(mcObject.view()))
+        {
+            m_treeViews.push_back(treeView);
+        }
     }
 }
 

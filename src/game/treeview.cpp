@@ -40,16 +40,6 @@ TreeView::~TreeView()
 
 void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera)
 {
-    if (++m_topCosAngle >= 360)
-    {
-        m_topCosAngle = 0;
-    }
-
-    if (++m_topSinAngle >= 720)
-    {
-        m_topSinAngle = 0;
-    }
-
     m_top.setI(MCTrigonom::cos(m_topCosAngle));
     m_top.setJ(MCTrigonom::sin(m_topSinAngle / 2));
 
@@ -85,4 +75,23 @@ void TreeView::beginBatch()
 void TreeView::endBatch()
 {
     surface()->enableClientState(false);
+}
+
+bool TreeView::update()
+{
+    if (++m_topCosAngle >= 360)
+    {
+        m_topCosAngle = 0;
+    }
+
+    if (++m_topSinAngle >= 720)
+    {
+        m_topSinAngle = 0;
+    }
+
+    return true;
+}
+
+void TreeView::reset()
+{
 }

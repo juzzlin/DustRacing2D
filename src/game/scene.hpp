@@ -40,6 +40,7 @@ class StartlightsOverlay;
 class StateMachine;
 class Track;
 class TrackSelectionMenu;
+class TreeView;
 class TimingOverlay;
 
 namespace MTFH {
@@ -138,6 +139,9 @@ private:
     typedef std::shared_ptr<AI> AIPtr;
     typedef std::vector<AIPtr> AIVector;
     AIVector m_ai;
+
+    // TreeViews need to be separately updated.
+    std::vector<TreeView *> m_treeViews;
 };
 
 #endif // SCENE_HPP
