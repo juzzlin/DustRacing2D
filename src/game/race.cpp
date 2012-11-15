@@ -17,6 +17,7 @@
 
 #include "car.hpp"
 #include "messageoverlay.hpp"
+#include "offtrackdetector.hpp"
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -106,6 +107,11 @@ void Race::update()
 
             m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
         }
+    }
+
+    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+    {
+        otd->update();
     }
 }
 
@@ -251,6 +257,11 @@ void Race::setTrack(Track & track)
     m_bestPos  = Settings::instance().loadBestPos(*m_track);
 
     m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
+
+    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+    {
+        otd->setTrack(track);
+    }
 }
 
 unsigned int Race::lapCount() const
@@ -263,6 +274,7 @@ void Race::addCar(Car & car)
     if (find(m_cars.begin(), m_cars.end(), &car) == m_cars.end())
     {
         m_cars.push_back(&car);
+        m_offTrackDetectors.push_back(OffTrackDetectorPtr(new OffTrackDetector(car)));
     }
 }
 

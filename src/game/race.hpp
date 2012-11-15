@@ -18,6 +18,7 @@
 
 #include <QObject>
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -25,6 +26,7 @@
 
 class Car;
 class MessageOverlay;
+class OffTrackDetector;
 class Track;
 
 //! Class that controls the race event, checkpoints and timing.
@@ -88,18 +90,17 @@ private:
     typedef std::unordered_map<int, std::vector<int> > PositionHash;
     mutable PositionHash m_positions;
 
-    unsigned int m_lapCount;
+    typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
+    typedef std::vector<OffTrackDetectorPtr> OTDVector;
+    OTDVector m_offTrackDetectors;
 
-    Timing m_timing;
-
-    Track * m_track;
-
-    bool m_started;
-    bool m_checkeredFlagEnabled;
-    bool m_winnerFinished;
-
-    int m_bestPos;
-
+    unsigned int     m_lapCount;
+    Timing           m_timing;
+    Track          * m_track;
+    bool             m_started;
+    bool             m_checkeredFlagEnabled;
+    bool             m_winnerFinished;
+    int              m_bestPos;
     MessageOverlay & m_messageOverlay;
 };
 

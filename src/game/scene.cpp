@@ -26,7 +26,6 @@
 #include "layers.hpp"
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
-#include "offtrackdetector.hpp"
 #include "particlemanager.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
@@ -137,10 +136,12 @@ void Scene::createCars(MCUint numCars)
         Car::Description desc;
 
         Car * car = nullptr;
-        if (i == 0)
+        if (i == 0 || (i == 1 && m_game.mode() == Game::TwoPlayerRace))
         {
             desc.power = humanPower;
-            car = new Car(desc, MCSurfaceManager::instance().surface("carPink"), i, true);
+
+            const std::string image = i ? "carBlue" : "carPink";
+            car = new Car(desc, MCSurfaceManager::instance().surface(image), i, true);
         }
         else
         {
@@ -171,8 +172,6 @@ void Scene::createCars(MCUint numCars)
 
         m_cars.push_back(CarPtr(car));
         m_race.addCar(*car);
-
-        m_offTrackDetectors.push_back(OffTrackDetectorPtr(new OffTrackDetector(*car)));
     }
 }
 
@@ -233,11 +232,6 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 
             updateWorld(timeStep);
             updateRace();
-
-            for (OffTrackDetectorPtr otd : m_offTrackDetectors)
-            {
-                otd->update();
-            }
 
             if (m_game.mode() == Game::TwoPlayerRace)
             {
@@ -368,11 +362,6 @@ void Scene::setActiveTrack(Track & activeTrack)
     for (AIPtr ai : m_ai)
     {
         ai->setTrack(activeTrack);
-    }
-
-    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
-    {
-        otd->setTrack(activeTrack);
     }
 }
 

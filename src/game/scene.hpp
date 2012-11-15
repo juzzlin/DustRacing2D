@@ -33,7 +33,6 @@ class MCObject;
 class MCSurface;
 class MCWorld;
 class MessageOverlay;
-class OffTrackDetector;
 class ParticleManager;
 class Renderer;
 class Startlights;
@@ -140,10 +139,6 @@ private:
     typedef std::shared_ptr<AI> AIPtr;
     typedef std::vector<AIPtr> AIVector;
     AIVector m_ai;
-
-    typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
-    typedef std::vector<OffTrackDetectorPtr> OTDVector;
-    OTDVector m_offTrackDetectors;
 };
 
 #endif // SCENE_HPP
