@@ -103,6 +103,31 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
 
+    createCars(numCars);
+
+    m_checkeredFlag->setDimensions(width(), height());
+    m_intro->setDimensions(width(), height());
+    m_startlightsOverlay->setDimensions(width(), height());
+    m_messageOverlay->setDimensions(width(), height());
+
+    m_timingOverlay->setDimensions(width(), height());
+    m_timingOverlay->setTiming(m_race.timing());
+    m_timingOverlay->setRace(m_race);
+    m_timingOverlay->setCarToFollow(*m_cars.at(0));
+
+    m_world->enableDepthTestOnLayer(Layers::Tree, true);
+    m_world->setMetersPerPixel(METERS_PER_PIXEL);
+
+    MCTextureFontManager::instance().font("default").surface().setShaderProgram(
+        &Renderer::instance().program("text"));
+    MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
+        &Renderer::instance().program("textShadow"));
+
+    createMenus();
+}
+
+void Scene::createCars(MCUint numCars)
+{
     const int humanPower = 8000;
 
     // Create and add cars.
@@ -149,26 +174,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
 
         m_offTrackDetectors.push_back(OffTrackDetectorPtr(new OffTrackDetector(*car)));
     }
-
-    m_checkeredFlag->setDimensions(width(), height());
-    m_intro->setDimensions(width(), height());
-    m_startlightsOverlay->setDimensions(width(), height());
-    m_messageOverlay->setDimensions(width(), height());
-
-    m_timingOverlay->setDimensions(width(), height());
-    m_timingOverlay->setTiming(m_race.timing());
-    m_timingOverlay->setRace(m_race);
-    m_timingOverlay->setCarToFollow(*m_cars.at(0));
-
-    m_world->enableDepthTestOnLayer(Layers::Tree, true);
-    m_world->setMetersPerPixel(METERS_PER_PIXEL);
-
-    MCTextureFontManager::instance().font("default").surface().setShaderProgram(
-        &Renderer::instance().program("text"));
-    MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
-        &Renderer::instance().program("textShadow"));
-
-    createMenus();
 }
 
 int Scene::width()

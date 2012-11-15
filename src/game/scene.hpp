@@ -96,6 +96,7 @@ private:
 
     void addCarsToWorld();
     void addTrackObjectsToWorld();
+    void createCars(MCUint numCars);
     void createMenus();
     void initRace();
     void processUserInput(InputHandler & handler, bool isRaceCompleted);
