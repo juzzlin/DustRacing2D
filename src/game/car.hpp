@@ -87,6 +87,9 @@ public:
     //! Constructor.
     Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman);
 
+    //! Destructor.
+    virtual ~Car();
+
     //! Return the index.
     MCUint index() const;
 

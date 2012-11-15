@@ -489,3 +489,8 @@ bool Car::isHuman() const
 {
     return m_isHuman;
 }
+
+Car::~Car()
+{
+    MCWorld::instance().removeForceGenerators(*this);
+}

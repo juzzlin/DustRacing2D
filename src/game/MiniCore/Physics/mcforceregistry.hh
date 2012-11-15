@@ -44,17 +44,18 @@ public:
    * \param generator Force generator to be attached.
    * \param object Target object.
    * \param takeOwnership If true, MCWorld takes the Ownership
-   *        and handles deletion of generator.
-   */
+   *        and handles deletion of generator. */
   void addForceGenerator(MCForceGenerator & generator,
       MCObject & object, bool takeOwnership = false);
 
   /*! Remove given force generator to given object
    * \param generator Force generator to be matched.
-   * \param object Object to be matched
-   */
-  void removeForceGenerator(MCForceGenerator & generator,
-      MCObject & object);
+   * \param object Object to be matched */
+  void removeForceGenerator(MCForceGenerator & generator, MCObject & object);
+
+  /*! Remove all force generators bound to given object.
+   * \param object Object to be matched */
+  void removeForceGenerators(MCObject & object);
 
   //! Update force generators
   void update();

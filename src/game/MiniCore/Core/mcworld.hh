@@ -120,6 +120,9 @@ public:
     void removeForceGenerator(
         MCForceGenerator & generator, MCObject & object);
 
+    //! \brief Remove all force generators assigned to an object.
+    void removeForceGenerators(MCObject & object);
+
     //! \brief Step world time
     //! This causes the integration of physics and executes
     //! collision detections.

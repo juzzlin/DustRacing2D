@@ -60,6 +60,9 @@ public:
     //! Add a car to the race.
     void addCar(Car & car);
 
+    //! Removes cars from the race.
+    void removeCars();
+
     //! Get the timing object.
     Timing & timing();
 

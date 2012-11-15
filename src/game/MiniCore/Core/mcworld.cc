@@ -645,6 +645,11 @@ void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
     forceRegistry.removeForceGenerator(gen, obj);
 }
 
+void MCWorld::removeForceGenerators(MCObject & obj)
+{
+    forceRegistry.removeForceGenerators(obj);
+}
+
 void MCWorld::stepTime(MCFloat step)
 {
     // Integrate physics

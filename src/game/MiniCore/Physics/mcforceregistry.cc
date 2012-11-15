@@ -87,6 +87,15 @@ void MCForceRegistry::removeForceGenerator(
     }
 }
 
+void MCForceRegistry::removeForceGenerators(MCObject & object)
+{
+    auto iter = m_registryHash.find(&object);
+    if (iter != m_registryHash.end())
+    {
+        m_registryHash.erase(iter);
+    }
+}
+
 void MCForceRegistry::clear()
 {
     m_registryHash.clear();

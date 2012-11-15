@@ -53,8 +53,7 @@ class Scene
 public:
 
     //! Constructor.
-    Scene(
-        Game & game, StateMachine & stateMachine, Renderer & renderer, unsigned int numCars = 10);
+    Scene(Game & game, StateMachine & stateMachine, Renderer & renderer);
 
     //! Destructor.
     ~Scene();
@@ -95,7 +94,7 @@ private:
 
     void addCarsToWorld();
     void addTrackObjectsToWorld();
-    void createCars(MCUint numCars);
+    void createCars();
     void createMenus();
     void initRace();
     void processUserInput(InputHandler & handler, bool isRaceCompleted);

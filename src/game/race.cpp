@@ -278,6 +278,12 @@ void Race::addCar(Car & car)
     }
 }
 
+void Race::removeCars()
+{
+    m_cars.clear();
+    m_offTrackDetectors.clear();
+}
+
 Timing & Race::timing()
 {
     return m_timing;

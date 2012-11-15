@@ -70,13 +70,14 @@ int Scene::m_width  = 800;
 int Scene::m_height = 600;
 
 static const MCFloat METERS_PER_PIXEL = 0.05f;
+static const int     NUM_CARS         = 10;
 
-Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsigned int numCars)
+Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 : m_game(game)
 , m_stateMachine(stateMachine)
 , m_renderer(renderer)
 , m_messageOverlay(new MessageOverlay)
-, m_race(numCars, *m_messageOverlay)
+, m_race(NUM_CARS, *m_messageOverlay)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
 , m_timingOverlay(new TimingOverlay)
@@ -102,8 +103,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
 
-    createCars(numCars);
-
     m_checkeredFlag->setDimensions(width(), height());
     m_intro->setDimensions(width(), height());
     m_startlightsOverlay->setDimensions(width(), height());
@@ -112,7 +111,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
     m_timingOverlay->setDimensions(width(), height());
     m_timingOverlay->setTiming(m_race.timing());
     m_timingOverlay->setRace(m_race);
-    m_timingOverlay->setCarToFollow(*m_cars.at(0));
 
     m_world->enableDepthTestOnLayer(Layers::Tree, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
@@ -125,13 +123,16 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, unsi
     createMenus();
 }
 
-void Scene::createCars(MCUint numCars)
+void Scene::createCars()
 {
     const int humanPower = 8000;
 
+    m_race.removeCars();
+    m_cars.clear();
+    m_ai.clear();
+
     // Create and add cars.
-    assert(numCars);
-    for (MCUint i = 0; i < numCars; i++)
+    for (int i = 0; i < NUM_CARS; i++)
     {
         Car::Description desc;
 
@@ -148,13 +149,13 @@ void Scene::createCars(MCUint numCars)
             // Introduce some variance to the power of computer players so that the
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
-            desc.power = humanPower / 2 + (i + 1) * humanPower / numCars;
+            desc.power = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
 
-            if (i == numCars - 1)
+            if (i == NUM_CARS - 1)
             {
                 car = new Car(desc, MCSurfaceManager::instance().surface("carBlack"), i, false);
             }
-            else if (i == numCars - 2)
+            else if (i == NUM_CARS - 2)
             {
                 car = new Car(desc, MCSurfaceManager::instance().surface("carOrange"), i, false);
             }
@@ -173,6 +174,8 @@ void Scene::createCars(MCUint numCars)
         m_cars.push_back(CarPtr(car));
         m_race.addCar(*car);
     }
+
+    m_timingOverlay->setCarToFollow(*m_cars.at(0));
 }
 
 int Scene::width()
@@ -288,6 +291,8 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
 
 void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
 {
+    assert(m_cars.size() > 1);
+
     bool steering = false;
 
     m_cars.at(0)->clearStatuses();
@@ -355,6 +360,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_world->clear();
 
     setWorldDimensions();
+    createCars();
     addCarsToWorld();
     addTrackObjectsToWorld();
     initRace();

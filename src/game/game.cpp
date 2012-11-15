@@ -38,11 +38,7 @@
 
 #include <cassert>
 
-namespace
-{
 static const unsigned int MAX_PLAYERS = 2;
-static const unsigned int NUM_CARS    = 10;
-}
 
 Game * Game::m_instance = nullptr;
 
@@ -172,7 +168,7 @@ void Game::initScene()
     assert(m_renderer);
 
     // Create the scene
-    m_scene = new Scene(*this, *m_stateMachine, *m_renderer, NUM_CARS);
+    m_scene = new Scene(*this, *m_stateMachine, *m_renderer);
 
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
