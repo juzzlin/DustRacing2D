@@ -188,11 +188,6 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                             {
                                 m_particleBatches[i][object.typeID()].push_back(&object);
                             }
-                            else
-                            {
-                                // Optimization
-                                static_cast<MCParticle &>(object).die();
-                            }
                         }
                         else
                         {
