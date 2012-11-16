@@ -112,7 +112,7 @@ void ParticleManager::doSmoke(
         smoke = static_cast<MCSurfaceParticle *>(m_freeList2.back());
         m_freeList2.pop_back();
 
-        smoke->init(location, 10, 120);
+        smoke->init(location, 10, 60);
         smoke->setAnimationStyle(MCParticle::Shrink);
         smoke->translate(location);
         smoke->rotate(MCRandom::getValue() * 360);
