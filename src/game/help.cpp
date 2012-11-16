@@ -26,7 +26,7 @@ static MCTextureText HELP_TEXT(
     "Turn left  : Left\n"
     "Turn right : Right\n"
     "Accelerate : Up\n"
-    "Brake      : Down/B\n\n"
+    "Brake      : Down\n\n"
     "CONTROLS FOR PLAYER 2\n\n"
     "Turn left  : A\n"
     "Turn right : D\n"

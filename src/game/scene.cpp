@@ -311,36 +311,39 @@ void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
 
     bool steering = false;
 
-    m_cars.at(0)->clearStatuses();
+    for (int i = 0; i < (m_game.mode() == Game::TwoPlayerRace ? 2 : 1); i++)
+    {
+        m_cars.at(i)->clearStatuses();
 
-    // Handle accelerating / braking
-    if (handler.getActionState(0, InputHandler::IA_DOWN))
-    {
-        m_cars.at(0)->brake();
-    }
-    else if (handler.getActionState(0, InputHandler::IA_UP))
-    {
-        if (!isRaceCompleted)
+        // Handle accelerating / braking
+        if (handler.getActionState(i, InputHandler::IA_DOWN))
         {
-            m_cars.at(0)->accelerate();
+            m_cars.at(i)->brake();
         }
-    }
+        else if (handler.getActionState(i, InputHandler::IA_UP))
+        {
+            if (!isRaceCompleted)
+            {
+                m_cars.at(i)->accelerate();
+            }
+        }
 
-    // Handle turning
-    if (handler.getActionState(0, InputHandler::IA_LEFT))
-    {
-        m_cars.at(0)->turnLeft();
-        steering = true;
-    }
-    else if (handler.getActionState(0, InputHandler::IA_RIGHT))
-    {
-        m_cars.at(0)->turnRight();
-        steering = true;
-    }
+        // Handle turning
+        if (handler.getActionState(i, InputHandler::IA_LEFT))
+        {
+            m_cars.at(i)->turnLeft();
+            steering = true;
+        }
+        else if (handler.getActionState(i, InputHandler::IA_RIGHT))
+        {
+            m_cars.at(i)->turnRight();
+            steering = true;
+        }
 
-    if (!steering)
-    {
-        m_cars.at(0)->noSteering();
+        if (!steering)
+        {
+            m_cars.at(i)->noSteering();
+        }
     }
 }
 

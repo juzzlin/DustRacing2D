@@ -21,14 +21,24 @@ http://creativecommons.org/licenses/by-nc/3.0/
 Playing
 -------
 
-The player controls the pink race car by arrow keys:
+The player one controls the pink race car:
 
 Accelerate : Up
-Brake      : Down/B
+Brake      : Down
 Turn left  : Left
 Turn right : Right
 
+The player two controls the blue race car (game mode
+can be selected in the Settings menu):
+
+Accelerate : W
+Brake      : S
+Turn left  : A
+Turn right : D
+
 ESC or Q exits the race and also the current menu.
+
+P pauses the game.
 
 Dust Racing searches for race tracks also in ~/DustRacingTracks/
 where you can place your own race tracks.

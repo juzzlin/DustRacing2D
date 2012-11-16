@@ -89,6 +89,7 @@ bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
     {
         switch (event->key())
         {
+        // Player 1
         case Qt::Key_Left:
             m_inputHandler.setActionState(0, InputHandler::IA_LEFT, true);
             break;
@@ -99,12 +100,26 @@ bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
             m_inputHandler.setActionState(0, InputHandler::IA_UP, true);
             break;
         case Qt::Key_Down:
-        case Qt::Key_B:
             m_inputHandler.setActionState(0, InputHandler::IA_DOWN, true);
             break;
         case Qt::Key_P:
             emit pauseToggled();
             break;
+
+        // Player 2
+        case Qt::Key_A:
+            m_inputHandler.setActionState(1, InputHandler::IA_LEFT, true);
+            break;
+        case Qt::Key_D:
+            m_inputHandler.setActionState(1, InputHandler::IA_RIGHT, true);
+            break;
+        case Qt::Key_W:
+            m_inputHandler.setActionState(1, InputHandler::IA_UP, true);
+            break;
+        case Qt::Key_S:
+            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, true);
+            break;
+
         default:
             return false;
         }
@@ -131,9 +146,22 @@ bool EventHandler::handleGameKeyReleaseEvent(QKeyEvent * event)
             m_inputHandler.setActionState(0, InputHandler::IA_UP, false);
             break;
         case Qt::Key_Down:
-        case Qt::Key_B:
             m_inputHandler.setActionState(0, InputHandler::IA_DOWN, false);
             break;
+
+        case Qt::Key_A:
+            m_inputHandler.setActionState(1, InputHandler::IA_LEFT, false);
+            break;
+        case Qt::Key_D:
+            m_inputHandler.setActionState(1, InputHandler::IA_RIGHT, false);
+            break;
+        case Qt::Key_W:
+            m_inputHandler.setActionState(1, InputHandler::IA_UP, false);
+            break;
+        case Qt::Key_S:
+            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, false);
+            break;
+
         case Qt::Key_Escape:
         case Qt::Key_Q:
             StateMachine::instance().quit();
