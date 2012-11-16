@@ -1,3 +1,51 @@
+0.12.0
+------
+
+* Use full screen mode as the default.
+* Kill particles that are not visible.
+* Don't render checkered flag on two player race.
+* Makes smoke faster.
+* Change the color of blue car to grey.
+* Input handling for player two.
+* TimingOverlay for both players.
+* Correctly update TreeView.
+* Recreate cars again for each race.
+* Moves OffTrackDetectors from Scene to Race.
+* Renames car images.
+* Refactors Scene::Scene().
+* Don't kill particles that are outside the view.
+* Correctly setup and render cameras.
+* Refactors Car::render().
+* Improves the documentation of Car::collisionEvent().
+* Adds leaf particles.
+* New sparkle particle.
+* Adds 'About Qt' menu action.
+* Moves MCWorld from Physics/ to Core/
+* Removes some useless MCSurface::bindTexture()'s
+* Refactors particle stuff to ParticleManager.
+* Remove some banners from circle.trk
+* Dynamically remove and restore sleeping objects from integration.
+* Change the project name to DustRacing2D in CMakeLists.txt.
+* Updates Help with controls for player 2.
+* Adds support for permanently selected items.
+* Use C++11 lambdas in SettingsMenu.
+* Adds game mode menu.
+* Adds MenuItem::setMenuOpenAction().
+* Split-screen support.
+* Refactors MCGLScene.
+* Removes unused destructor.
+* Log info about GLEW and check failure on initialization error.
+* Render grass by using multitexturing.
+* Pass sin and cos to shaders.
+* Adds tile.png
+* Removes private implementation from MCSurfaceManager.
+* Removes unused images.
+* New grass and sand textures.
+* Adds a message text to ConfirmationMenu.
+* Makes trees darker.
+* Makes asphalt darker.
+* Windows-specific tweaks to CMakeList.txt's
+
 0.11.1
 ------
 
