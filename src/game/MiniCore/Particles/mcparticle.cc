@@ -97,9 +97,8 @@ void MCParticle::stepTime()
         m_lifeTime--;
         m_scale -= m_delta;
     }
-    else if (m_isActive)
+    else
     {
-        m_isActive = false;
         timeOut();
     }
 }
