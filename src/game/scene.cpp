@@ -659,7 +659,7 @@ void Scene::renderPlayerScene(MCCamera & camera)
 
 void Scene::renderCommonScene()
 {
-    if (m_race.checkeredFlagEnabled())
+    if (m_race.checkeredFlagEnabled() && m_game.mode() != Game::TwoPlayerRace)
     {
         m_checkeredFlag->render();
     }
