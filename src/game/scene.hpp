@@ -18,6 +18,8 @@
 
 #include "car.hpp"
 #include "race.hpp"
+#include "timingoverlay.hpp"
+
 #include <MCCamera>
 
 #include <memory>
@@ -41,7 +43,6 @@ class StateMachine;
 class Track;
 class TrackSelectionMenu;
 class TreeView;
-class TimingOverlay;
 
 namespace MTFH {
 class Menu;
@@ -101,6 +102,7 @@ private:
     void processUserInput(InputHandler & handler, bool isRaceCompleted);
     void renderCommonScene();
     void renderPlayerScene(MCCamera & camera);
+    void resizeOverlays();
     void setWorldDimensions();
     void translateCarsToStartPositions();
     void updateAI();
@@ -117,7 +119,7 @@ private:
     Race                  m_race;
     Track               * m_activeTrack;
     MCWorld             * m_world;
-    TimingOverlay       * m_timingOverlay;
+    TimingOverlay         m_timingOverlay[2];
     Startlights         * m_startlights;
     StartlightsOverlay  * m_startlightsOverlay;
     CheckeredFlag       * m_checkeredFlag;

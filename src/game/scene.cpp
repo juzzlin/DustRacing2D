@@ -67,8 +67,8 @@
 #include <cassert>
 
 // Default scene size.
-int Scene::m_width  = 800;
-int Scene::m_height = 600;
+int Scene::m_width  = 1024;
+int Scene::m_height = 768;
 
 static const MCFloat METERS_PER_PIXEL = 0.05f;
 static const int     NUM_CARS         = 10;
@@ -81,7 +81,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_race(NUM_CARS, *m_messageOverlay)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
-, m_timingOverlay(new TimingOverlay)
 , m_startlights(new Startlights(*m_messageOverlay))
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
@@ -109,9 +108,10 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_startlightsOverlay->setDimensions(width(), height());
     m_messageOverlay->setDimensions(width(), height());
 
-    m_timingOverlay->setDimensions(width(), height());
-    m_timingOverlay->setTiming(m_race.timing());
-    m_timingOverlay->setRace(m_race);
+    m_timingOverlay[0].setTiming(m_race.timing());
+    m_timingOverlay[0].setRace(m_race);
+    m_timingOverlay[1].setTiming(m_race.timing());
+    m_timingOverlay[1].setRace(m_race);
 
     m_world->enableDepthTestOnLayer(Layers::Tree, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
@@ -176,7 +176,12 @@ void Scene::createCars()
         m_race.addCar(*car);
     }
 
-    m_timingOverlay->setCarToFollow(*m_cars.at(0));
+    if (m_game.mode() == Game::TwoPlayerRace)
+    {
+        m_timingOverlay[1].setCarToFollow(*m_cars.at(1));
+    }
+
+    m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
 }
 
 int Scene::width()
@@ -252,7 +257,13 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 
 void Scene::updateAnimations()
 {
-    m_timingOverlay->update();
+    if (m_game.mode() == Game::TwoPlayerRace)
+    {
+        m_timingOverlay[1].update();
+    }
+
+    m_timingOverlay[0].update();
+
     m_messageOverlay->update();
 
     for (CarPtr car : m_cars)
@@ -283,10 +294,9 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
     // Update camera location with respect to the car speed.
     // Make changes a bit smoother so that an abrupt decrease
     // in the speed won't look bad.
-    MCVector2d<MCFloat> loc(object.location());
+    MCVector2dF loc(object.location());
 
-    // Smaller view requires less amplification to keep the car always visible.
-    const float offsetAmplification = m_game.mode() == Game::TwoPlayerRace ? 7.5 : 10.0;
+    const float offsetAmplification = m_game.mode() == Game::TwoPlayerRace ? 9.6 : 13.8;
     const float smooth              = 0.2;
 
     offset += (object.velocity().lengthFast() - offset) * smooth;
@@ -368,6 +378,8 @@ void Scene::setActiveTrack(Track & activeTrack)
     setWorldDimensions();
 
     createCars();
+
+    resizeOverlays();
 
     addCarsToWorld();
 
@@ -525,6 +537,19 @@ void Scene::addTrackObjectsToWorld()
     }
 }
 
+void Scene::resizeOverlays()
+{
+    if (m_game.mode() == Game::TwoPlayerRace)
+    {
+        m_timingOverlay[0].setDimensions(width() / 2, height());
+        m_timingOverlay[1].setDimensions(width() / 2, height());
+    }
+    else
+    {
+        m_timingOverlay[0].setDimensions(width(), height());
+    }
+}
+
 void Scene::initRace()
 {
     translateCarsToStartPositions();
@@ -605,14 +630,17 @@ void Scene::render()
         {
             m_renderer.glScene().setSplitType(MCGLScene::Left);
             renderPlayerScene(m_camera[1]);
+            m_timingOverlay[1].render();
 
             m_renderer.glScene().setSplitType(MCGLScene::Right);
             renderPlayerScene(m_camera[0]);
+            m_timingOverlay[0].render();
         }
         else
         {
             m_renderer.glScene().setSplitType(MCGLScene::Single);
             renderPlayerScene(m_camera[0]);
+            m_timingOverlay[0].render();
         }
 
         m_renderer.glScene().setSplitType(MCGLScene::Single);
@@ -624,7 +652,6 @@ void Scene::renderPlayerScene(MCCamera & camera)
 {
     m_activeTrack->render(&camera);
     m_world->render(&camera);
-    m_timingOverlay->render();
 }
 
 void Scene::renderCommonScene()
@@ -648,7 +675,6 @@ Scene::~Scene()
     delete m_menuManager;
     delete m_startlights;
     delete m_startlightsOverlay;
-    delete m_timingOverlay;
     delete m_trackSelectionMenu;
     delete m_messageOverlay;
     delete m_particleManager;
