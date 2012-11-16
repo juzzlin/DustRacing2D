@@ -15,7 +15,7 @@
    height="1052.3622"
    id="svg3786"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="car003.svg">
+   sodipodi:docname="carBlue.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -527,7 +527,7 @@
        d="m 336,-72 c 22.16,0 48,17 40,39 -8,22 0,44 0,88 0,44 -17.84,33 -40,33 -22.16,0 -40,11 -40,-33 0,-44 8,-66 0,-88 -8,-22 17.84,-39 40,-39 z"
        transform="matrix(0.82719392,0,0,1,-332.70512,261.2919)"
        id="path4073-9-0-0"
-       style="fill:#bcecfc;fill-opacity:1;stroke:#bcecfc;stroke-width:17.58900069999999971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
+       style="fill:#e6e6e6;fill-opacity:1;stroke:#e6e6e6;stroke-width:17.58900069999999971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
        inkscape:connector-curvature="0"
        inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
        inkscape:export-xdpi="85.57"

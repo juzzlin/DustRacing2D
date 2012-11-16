@@ -142,7 +142,7 @@ void Scene::createCars()
         {
             desc.power = humanPower;
 
-            const std::string image = i ? "carBlue" : "carPink";
+            const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCSurfaceManager::instance().surface(image), i, true);
         }
         else
