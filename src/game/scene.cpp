@@ -361,18 +361,22 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_activeTrack = &activeTrack;
     m_stateMachine.setTrack(*m_activeTrack);
 
+    m_world->removeParticleVisibilityCameras();
     if (m_game.mode() == Game::TwoPlayerRace)
     {
         m_camera[0].init(
             Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+        m_world->addParticleVisibilityCamera(m_camera[0]);
 
         m_camera[1].init(
             Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+        m_world->addParticleVisibilityCamera(m_camera[1]);
     }
     else
     {
         m_camera[0].init(
             Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+        m_world->addParticleVisibilityCamera(m_camera[0]);
     }
 
     // Remove previous objects;

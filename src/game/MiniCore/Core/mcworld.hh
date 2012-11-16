@@ -166,6 +166,14 @@ public:
     //! Enable/disable depth test on a layer.
     void enableDepthTestOnLayer(MCUint layer, bool enable);
 
+    //! If a particle gets off all visibility cameras, it'll be killed.
+    //! This is just an optimization. We cannot use just the camera given
+    //! to render(), because there might be multiple cameras and viewports.
+    void addParticleVisibilityCamera(MCCamera & camera);
+
+    //! Remove all visibility cameras.
+    void removeParticleVisibilityCameras();
+
     //! Max number of rendering layers
     static const MCUint MaxLayers = 32;
 
@@ -216,6 +224,7 @@ private:
     MCUint numCollisions;
     MCUint numResolverLoops;
     MCFloat resolverStep;
+    std::vector<MCCamera *> m_visibilityCameras;
 };
 
 #endif // MCWORLD_HH

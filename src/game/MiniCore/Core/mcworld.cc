@@ -188,6 +188,24 @@ void MCWorld::buildBatches(MCCamera * pCamera)
                             {
                                 m_particleBatches[i][object.typeID()].push_back(&object);
                             }
+                            else
+                            {
+                                // Optimization that kills non-visible particles.
+                                bool isVisibleInAnyCamera = false;
+                                for (MCCamera * camera : m_visibilityCameras)
+                                {
+                                    if (camera != pCamera && camera->isVisible(object.bbox()))
+                                    {
+                                        isVisibleInAnyCamera = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!isVisibleInAnyCamera)
+                                {
+                                    static_cast<MCParticle &>(object).die();
+                                }
+                            }
                         }
                         else
                         {
@@ -632,6 +650,16 @@ void MCWorld::enableDepthTestOnLayer(MCUint layer, bool enable)
     {
         m_depthTestEnabled[layer] = enable;
     }
+}
+
+void MCWorld::addParticleVisibilityCamera(MCCamera & camera)
+{
+    m_visibilityCameras.push_back(&camera);
+}
+
+void MCWorld::removeParticleVisibilityCameras()
+{
+    m_visibilityCameras.clear();
 }
 
 void MCWorld::addForceGenerator(

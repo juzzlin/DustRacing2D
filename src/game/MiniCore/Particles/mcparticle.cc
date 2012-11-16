@@ -157,14 +157,18 @@ bool MCParticle::isActive() const
 
 void MCParticle::die()
 {
-    MCParticle::m_numActiveParticles--;
-
-    removeFromWorld();
-    m_isActive = false;
-
-    if (m_freeList)
+    if (m_isActive)
     {
-        m_freeList->push_back(this);
+        m_isActive = false;
+
+        MCParticle::m_numActiveParticles--;
+
+        removeFromWorld();
+
+        if (m_freeList)
+        {
+            m_freeList->push_back(this);
+        }
     }
 }
 
