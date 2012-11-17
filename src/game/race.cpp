@@ -108,7 +108,14 @@ void Race::update()
             Car & leader = getLeadingCar();
             m_timing.setRaceCompleted(leader.index(), true);
 
-            m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+            if (m_game.mode() == Game::TimeTrial)
+            {
+                m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
+            }
+            else
+            {
+                m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+            }
         }
     }
 
@@ -191,27 +198,30 @@ void Race::updateRouteProgress(Car & car)
         {
             // Check if the race is completed fo a human player and if so,
             // check if new best pos achieved and save it.
-            if (car.isHuman())
+            if (m_game.mode() == Game::OnePlayerRace || m_game.mode() == Game::TwoPlayerRace)
             {
-                const int pos = getPositionOfCar(car);
-                if (pos < m_bestPos || m_bestPos == -1)
+                if (car.isHuman())
                 {
-                    Settings::instance().saveBestPos(*m_track, pos);
-                    m_messageOverlay.addMessage(QObject::tr("New best pos!"));
-                }
-
-                Track * next = m_track->next();
-                if (next && next->trackData().isLocked())
-                {
-                    if (pos <= UNLOCK_LIMIT)
+                    const int pos = getPositionOfCar(car);
+                    if (pos < m_bestPos || m_bestPos == -1)
                     {
-                        next->trackData().setIsLocked(false);
-                        Settings::instance().saveTrackUnlockStatus(*next);
-                        m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
+                        Settings::instance().saveBestPos(*m_track, pos);
+                        m_messageOverlay.addMessage(QObject::tr("New best pos!"));
                     }
-                    else
+
+                    Track * next = m_track->next();
+                    if (next && next->trackData().isLocked())
                     {
-                        m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
+                        if (pos <= UNLOCK_LIMIT)
+                        {
+                            next->trackData().setIsLocked(false);
+                            Settings::instance().saveTrackUnlockStatus(*next);
+                            m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
+                        }
+                        else
+                        {
+                            m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
+                        }
                     }
                 }
             }
@@ -299,9 +309,14 @@ bool Race::checkeredFlagEnabled() const
 
 bool Race::finished() const
 {
-    if (m_game)
+    if (m_game.hasTwoHumanPlayers())
+    {
+        return
+            m_timing.raceCompleted(HUMAN_PLAYER_INDEX1) &&
+            m_timing.raceCompleted(HUMAN_PLAYER_INDEX2);
+    }
 
-    return m_timing.raceCompleted(HUMAN_PLAYER_INDEX);
+    return m_timing.raceCompleted(HUMAN_PLAYER_INDEX1);
 }
 
 Race::~Race()

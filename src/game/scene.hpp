@@ -99,7 +99,7 @@ private:
     void createCars();
     void createMenus();
     void initRace();
-    void processUserInput(InputHandler & handler, bool isRaceCompleted);
+    void processUserInput(InputHandler & handler);
     void renderCommonScene();
     void renderPlayerScene(MCCamera & camera);
     void resizeOverlays();
