@@ -153,22 +153,45 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     twoPlayers->setAction(
         []()
         {
-            MCLogger().info() << "Two player game selected.";
+            MCLogger().info() << "Two player race selected.";
             Game::instance().setMode(Game::TwoPlayerRace);
             MenuManager::instance().popMenu();
         });
-    m_gameModeMenu.addItem(*twoPlayers, true);
 
     MenuItem * onePlayer = new MenuItem(width, itemHeight, "One player race");
     onePlayer->setView(new TextMenuItemView(20, *onePlayer), true);
     onePlayer->setAction(
         []()
         {
-            MCLogger().info() << "One player game selected.";
+            MCLogger().info() << "One player race selected.";
             Game::instance().setMode(Game::OnePlayerRace);
             MenuManager::instance().popMenu();
         });
-    m_gameModeMenu.addItem(*onePlayer, true);
+
+    MenuItem * timeTrial = new MenuItem(width, itemHeight, "Time Trial");
+    timeTrial->setView(new TextMenuItemView(20, *timeTrial), true);
+    timeTrial->setAction(
+        []()
+        {
+            MCLogger().info() << "Time Trial selected.";
+            Game::instance().setMode(Game::TimeTrial);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * duel = new MenuItem(width, itemHeight, "Duel");
+    duel->setView(new TextMenuItemView(20, *duel), true);
+    duel->setAction(
+        []()
+        {
+            MCLogger().info() << "Duel selected.";
+            Game::instance().setMode(Game::Duel);
+            MenuManager::instance().popMenu();
+        });
+
+    m_gameModeMenu.addItem(*duel,       true);
+    m_gameModeMenu.addItem(*timeTrial,  true);
+    m_gameModeMenu.addItem(*twoPlayers, true);
+    m_gameModeMenu.addItem(*onePlayer,  true);
 
     MenuManager::instance().addMenu(m_confirmationMenu);
     MenuManager::instance().addMenu(m_resolutionMenu);

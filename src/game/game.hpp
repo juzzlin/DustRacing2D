@@ -43,7 +43,9 @@ public:
     enum GameMode
     {
         OnePlayerRace = 0,
-        TwoPlayerRace
+        TwoPlayerRace,
+        TimeTrial,
+        Duel
     };
 
     //! Constructor
@@ -77,6 +79,12 @@ public:
 
     //! Get the game mode.
     GameMode mode() const;
+
+    //! \return True if the current mode has two human players.
+    bool hasTwoHumanPlayers() const;
+
+    //! \return True if the current mode has computer players.
+    bool hasComputerPlayers() const;
 
 public slots:
 
@@ -113,7 +121,7 @@ private:
     int                    m_availableRenderTime;
     bool                   m_paused;
     QTimer                 m_updateTimer;
-    GameMode               m_gameMode;
+    GameMode               m_mode;
 
     static Game * m_instance;
 };

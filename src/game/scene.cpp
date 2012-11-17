@@ -78,7 +78,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_stateMachine(stateMachine)
 , m_renderer(renderer)
 , m_messageOverlay(new MessageOverlay)
-, m_race(NUM_CARS, *m_messageOverlay)
+, m_race(game, NUM_CARS, *m_messageOverlay)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
 , m_startlights(new Startlights(*m_messageOverlay))
@@ -138,14 +138,14 @@ void Scene::createCars()
         Car::Description desc;
 
         Car * car = nullptr;
-        if (i == 0 || (i == 1 && m_game.mode() == Game::TwoPlayerRace))
+        if (i == 0 || (i == 1 && m_game.hasTwoHumanPlayers()))
         {
             desc.power = humanPower;
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCSurfaceManager::instance().surface(image), i, true);
         }
-        else
+        else if (m_game.hasComputerPlayers())
         {
             // Introduce some variance to the power of computer players so that the
             // slowest cars have less power than the human player and the fastest
@@ -168,15 +168,18 @@ void Scene::createCars()
             m_ai.push_back(AIPtr(new AI(*car)));
         }
 
-        car->setLayer(Layers::Cars);
-        car->view()->setShaderProgram(&Renderer::instance().program("master"));
-        car->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        if (car)
+        {
+            car->setLayer(Layers::Cars);
+            car->view()->setShaderProgram(&Renderer::instance().program("master"));
+            car->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
-        m_cars.push_back(CarPtr(car));
-        m_race.addCar(*car);
+            m_cars.push_back(CarPtr(car));
+            m_race.addCar(*car);
+        }
     }
 
-    if (m_game.mode() == Game::TwoPlayerRace)
+    if (m_game.hasTwoHumanPlayers())
     {
         m_timingOverlay[1].setCarToFollow(*m_cars.at(1));
     }
@@ -242,7 +245,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
             updateWorld(timeStep);
             updateRace();
 
-            if (m_game.mode() == Game::TwoPlayerRace)
+            if (m_game.hasTwoHumanPlayers())
             {
                 updateCameraLocation(m_camera[0], m_cameraOffset[0], *m_cars.at(0));
                 updateCameraLocation(m_camera[1], m_cameraOffset[1], *m_cars.at(1));
@@ -257,7 +260,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 
 void Scene::updateAnimations()
 {
-    if (m_game.mode() == Game::TwoPlayerRace)
+    if (m_game.hasTwoHumanPlayers())
     {
         m_timingOverlay[1].update();
     }
@@ -296,7 +299,7 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
     // in the speed won't look bad.
     MCVector2dF loc(object.location());
 
-    const float offsetAmplification = m_game.mode() == Game::TwoPlayerRace ? 9.6 : 13.8;
+    const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6 : 13.8;
     const float smooth              = 0.2;
 
     offset += (object.velocity().lengthFast() - offset) * smooth;
@@ -307,11 +310,9 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
 
 void Scene::processUserInput(InputHandler & handler, bool isRaceCompleted)
 {
-    assert(m_cars.size() > 1);
-
     bool steering = false;
 
-    for (int i = 0; i < (m_game.mode() == Game::TwoPlayerRace ? 2 : 1); i++)
+    for (int i = 0; i < (m_game.hasTwoHumanPlayers() ? 2 : 1); i++)
     {
         m_cars.at(i)->clearStatuses();
 
@@ -362,7 +363,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_stateMachine.setTrack(*m_activeTrack);
 
     m_world->removeParticleVisibilityCameras();
-    if (m_game.mode() == Game::TwoPlayerRace)
+    if (m_game.hasTwoHumanPlayers())
     {
         m_camera[0].init(
             Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
@@ -546,7 +547,7 @@ void Scene::addTrackObjectsToWorld()
 
 void Scene::resizeOverlays()
 {
-    if (m_game.mode() == Game::TwoPlayerRace)
+    if (m_game.hasTwoHumanPlayers())
     {
         m_timingOverlay[0].setDimensions(width() / 2, height());
         m_timingOverlay[1].setDimensions(width() / 2, height());
@@ -633,7 +634,7 @@ void Scene::render()
             Renderer::instance().program("text").setFadeValue(fadeValue);
         }
 
-        if (m_game.mode() == Game::TwoPlayerRace)
+        if (m_game.hasTwoHumanPlayers())
         {
             m_renderer.glScene().setSplitType(MCGLScene::Left);
             renderPlayerScene(m_camera[1]);
@@ -663,7 +664,7 @@ void Scene::renderPlayerScene(MCCamera & camera)
 
 void Scene::renderCommonScene()
 {
-    if (m_race.checkeredFlagEnabled() && m_game.mode() != Game::TwoPlayerRace)
+    if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
     {
         m_checkeredFlag->render();
     }

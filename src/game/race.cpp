@@ -16,6 +16,7 @@
 #include "race.hpp"
 
 #include "car.hpp"
+#include "game.hpp"
 #include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
 #include "settings.hpp"
@@ -29,10 +30,11 @@
 #include <algorithm>
 #include <cassert>
 
-static const int HUMAN_PLAYER_INDEX = 0;
-static const int UNLOCK_LIMIT       = 5;
+static const int HUMAN_PLAYER_INDEX1 = 0;
+static const int HUMAN_PLAYER_INDEX2 = 1;
+static const int UNLOCK_LIMIT        = 5;
 
-Race::Race(unsigned int numCars, MessageOverlay & messageOverlay)
+Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay)
 : m_lapCount(0)
 , m_timing(numCars)
 , m_track(nullptr)
@@ -41,6 +43,7 @@ Race::Race(unsigned int numCars, MessageOverlay & messageOverlay)
 , m_winnerFinished(false)
 , m_bestPos(-1)
 , m_messageOverlay(messageOverlay)
+, m_game(game)
 {
 }
 
@@ -296,6 +299,8 @@ bool Race::checkeredFlagEnabled() const
 
 bool Race::finished() const
 {
+    if (m_game)
+
     return m_timing.raceCompleted(HUMAN_PLAYER_INDEX);
 }
 

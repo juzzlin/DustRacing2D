@@ -25,6 +25,7 @@
 #include "timing.hpp"
 
 class Car;
+class Game;
 class MessageOverlay;
 class OffTrackDetector;
 class Track;
@@ -37,7 +38,7 @@ class Race : public QObject
 public:
 
     //! Constructor.
-    Race(unsigned int numCars, MessageOverlay & messageOverlay);
+    Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay);
 
     //! Destructor.
     virtual ~Race();
@@ -105,6 +106,7 @@ private:
     bool             m_winnerFinished;
     int              m_bestPos;
     MessageOverlay & m_messageOverlay;
+    const Game     & m_game;
 };
 
 #endif // RACE_HPP

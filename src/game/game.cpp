@@ -58,7 +58,7 @@ Game::Game()
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
-, m_gameMode(OnePlayerRace)
+, m_mode(OnePlayerRace)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -106,12 +106,22 @@ void Game::setRenderer(Renderer * newRenderer)
 
 void Game::setMode(GameMode gameMode)
 {
-    m_gameMode = gameMode;
+    m_mode = gameMode;
 }
 
 Game::GameMode Game::mode() const
 {
-    return m_gameMode;
+    return m_mode;
+}
+
+bool Game::hasTwoHumanPlayers() const
+{
+    return m_mode == TwoPlayerRace || m_mode == Duel;
+}
+
+bool Game::hasComputerPlayers() const
+{
+    return m_mode == TwoPlayerRace || m_mode == OnePlayerRace;
 }
 
 void Game::finish()
