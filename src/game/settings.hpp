@@ -43,6 +43,9 @@ public:
     void saveResolution(int hRes, int vRes, bool fullScreen = false);
     void loadResolution(int & hRes, int & vRes, bool & fullScreen);
 
+    void saveFps(int fps);
+    int loadFps();
+
 private:
 
     static Settings * m_instance;

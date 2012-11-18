@@ -77,7 +77,7 @@ int main(int argc, char ** argv)
         MCLogger().info() << "Creating game object..";
         Game game;
         game.setRenderer(&renderer);
-        game.setTargetUpdateFps(60);
+        game.setFps(Settings::instance().loadFps());
         game.connect(&renderer, SIGNAL(closed()), &game, SLOT(finish()));
 
         // Initialize and start the game

@@ -107,12 +107,14 @@ private:
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
 static const char * GAME_MODE_MENU_ID    = "gameModeMenu";
+static const char * FPS_MENU_ID          = "fpsMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_resolutionMenu(m_confirmationMenu, RESOLUTION_MENU_ID, width, height)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 {
     const int itemHeight = height / 8;
 
@@ -142,9 +144,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     gameMode->setView(new TextMenuItemView(20, *gameMode), true);
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
+    MenuItem * selectFps = new MenuItem(width, itemHeight, "Select FPS >");
+    selectFps->setView(new TextMenuItemView(20, *selectFps), true);
+    selectFps->setMenuOpenAction(FPS_MENU_ID);
+
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);
     addItem(*resetUnlockedTracks, true);
+    addItem(*selectFps,           true);
     addItem(*selectResolution,    true);
     addItem(*gameMode,            true);
 
@@ -193,7 +200,57 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     m_gameModeMenu.addItem(*twoPlayers, true);
     m_gameModeMenu.addItem(*onePlayer,  true);
 
+    MenuItem * fps15 = new MenuItem(width, itemHeight, "15 fps");
+    fps15->setView(new TextMenuItemView(20, *fps15), true);
+    fps15->setAction(
+        []()
+        {
+            MCLogger().info() << "15 fps selected.";
+            Game::instance().setFps(15);
+            Settings::instance().saveFps(15);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * fps30 = new MenuItem(width, itemHeight, "30 fps");
+    fps30->setView(new TextMenuItemView(20, *fps30), true);
+    fps30->setAction(
+        []()
+        {
+            MCLogger().info() << "30 fps selected.";
+            Game::instance().setFps(30);
+            Settings::instance().saveFps(30);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * fps45 = new MenuItem(width, itemHeight, "45 fps");
+    fps45->setView(new TextMenuItemView(20, *fps45), true);
+    fps45->setAction(
+        []()
+        {
+            MCLogger().info() << "45 fps selected.";
+            Game::instance().setFps(45);
+            Settings::instance().saveFps(45);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * fps60 = new MenuItem(width, itemHeight, "60 fps");
+    fps60->setView(new TextMenuItemView(20, *fps60), true);
+    fps60->setAction(
+        []()
+        {
+            MCLogger().info() << "60 fps selected.";
+            Game::instance().setFps(60);
+            Settings::instance().saveFps(60);
+            MenuManager::instance().popMenu();
+        });
+
+    m_fpsMenu.addItem(*fps15, true);
+    m_fpsMenu.addItem(*fps30, true);
+    m_fpsMenu.addItem(*fps45, true);
+    m_fpsMenu.addItem(*fps60, true);
+
     MenuManager::instance().addMenu(m_confirmationMenu);
     MenuManager::instance().addMenu(m_resolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
+    MenuManager::instance().addMenu(m_fpsMenu);
 }

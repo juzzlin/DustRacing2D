@@ -58,7 +58,7 @@ public:
     static Game & instance();
 
     //! Set target value for frames per second. Default is 60.
-    void setTargetUpdateFps(unsigned int fps);
+    void setFps(unsigned int fps);
 
     void setRenderer(Renderer * renderer);
 
@@ -95,6 +95,7 @@ private slots:
 
     void updateFrame();
     void updateAnimations();
+    void renderFrame();
     void countRenderFps();
     void finish();
 
@@ -117,10 +118,13 @@ private:
     unsigned int           m_updateFps;
     unsigned int           m_updateDelay;
     float                  m_timeStep;
+    unsigned int           m_renderFps;
+    unsigned int           m_renderDelay;
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
     bool                   m_paused;
     QTimer                 m_updateTimer;
+    QTimer                 m_renderTimer;
     GameMode               m_mode;
 
     static Game * m_instance;

@@ -55,6 +55,8 @@ Game::Game()
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
+, m_renderFps(60)
+, m_renderDelay(1000 / m_renderFps)
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_paused(false)
@@ -72,6 +74,9 @@ Game::Game()
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
 
+    connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(renderFrame()));
+    m_renderTimer.setInterval(m_renderDelay);
+
     // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
@@ -85,13 +90,12 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
-void Game::setTargetUpdateFps(unsigned int fps)
+void Game::setFps(unsigned int fps)
 {
-    m_updateFps   = fps;
-    m_timeStep    = 1.0 / m_updateFps;
-    m_updateDelay = 1000 / m_updateFps;
+    m_renderFps   = fps;
+    m_renderDelay = 1000 / m_renderFps;
 
-    m_updateTimer.setInterval(m_updateDelay);
+    m_renderTimer.setInterval(m_renderDelay);
 }
 
 void Game::setRenderer(Renderer * newRenderer)
@@ -227,12 +231,14 @@ void Game::start()
 {
     m_paused = false;
     m_updateTimer.start();
+    m_renderTimer.start();
 }
 
 void Game::stop()
 {
     m_paused = true;
     m_updateTimer.stop();
+    m_renderTimer.stop();
 }
 
 void Game::togglePause()
@@ -258,13 +264,17 @@ void Game::updateFrame()
 {
     updateAnimations();
     m_stateMachine->update();
-    m_renderer->updateFrame();
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
 }
 
 void Game::updateAnimations()
 {
     m_scene->updateAnimations();
+}
+
+void Game::renderFrame()
+{
+    m_renderer->updateFrame();
 }
 
 void Game::countRenderFps()

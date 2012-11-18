@@ -33,6 +33,7 @@ private:
     ConfirmationMenu m_confirmationMenu;
     ResolutionMenu   m_resolutionMenu;
     SurfaceMenu      m_gameModeMenu;
+    SurfaceMenu      m_fpsMenu;
 };
 
 #endif // SETTINGSMENU_HPP

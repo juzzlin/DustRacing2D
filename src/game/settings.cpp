@@ -160,3 +160,26 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
     vRes       = settings.value("vRes", Config::Game::WINDOW_HEIGHT).toInt();
     settings.endGroup();
 }
+
+void Settings::saveFps(int fps)
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    settings.setValue("fps", fps);
+    settings.endGroup();
+}
+
+int Settings::loadFps()
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    int fps = 0;
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    fps = settings.value("fps", 60).toInt();
+    settings.endGroup();
+
+    return fps;
+}
