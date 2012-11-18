@@ -591,13 +591,6 @@ void Scene::render()
 {
     const MCFloat fadeValue = Renderer::instance().fadeValue();
 
-    // Don't update fade value needlessly on every frame.
-    static int fadeUpdate = 0;
-    if (++fadeUpdate == 4)
-    {
-        fadeUpdate = 0;
-    }
-
     if (m_stateMachine.state() == StateMachine::DoIntro)
     {
         m_renderer.glScene().setSplitType(MCGLScene::Single);
@@ -610,7 +603,7 @@ void Scene::render()
         m_stateMachine.state() == StateMachine::MenuTransitionOut ||
         m_stateMachine.state() == StateMachine::MenuTransitionIn)
     {
-        if (!fadeUpdate)
+        if (m_stateMachine.isFading())
         {
             Renderer::instance().program("menu").setFadeValue(fadeValue);
             Renderer::instance().program("tile2d").setFadeValue(fadeValue);
@@ -628,7 +621,7 @@ void Scene::render()
         m_stateMachine.state() == StateMachine::DoStartlights     ||
         m_stateMachine.state() == StateMachine::Play)
     {
-        if (!fadeUpdate)
+        if (m_stateMachine.isFading())
         {
             Renderer::instance().program("master").setFadeValue(fadeValue);
             Renderer::instance().program("tile2d").setFadeValue(fadeValue);

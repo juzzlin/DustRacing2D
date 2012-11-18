@@ -32,6 +32,7 @@ static const float FADE_SPEED_GAME = 0.01;
 
 StateMachine::StateMachine()
 : m_state(Init)
+, m_isFading(false)
 , m_intro(nullptr)
 , m_startlights(nullptr)
 , m_race(nullptr)
@@ -81,7 +82,8 @@ bool StateMachine::update()
     case Menu:
 
         m_returnToMenu = false;
-        m_fadeValue = 1.0;
+        m_fadeValue    = 1.0;
+        m_isFading     = true; // Must be set to apply the initial fade value is set in Scene.
         m_renderer->setFadeValue(m_fadeValue);
 
         if (MTFH::MenuManager::instance().done())
@@ -97,10 +99,12 @@ bool StateMachine::update()
         {
             m_state     = GameTransitionIn;
             m_fadeValue = 0.0;
+            m_isFading  = false;
         }
         else
         {
             m_fadeValue -= FADE_SPEED_MENU;
+            m_isFading   = true;
         }
 
         m_renderer->setFadeValue(m_fadeValue);
@@ -114,6 +118,7 @@ bool StateMachine::update()
         if (m_fadeValue >= 1.0)
         {
             m_fadeValue = 1.0;
+            m_isFading  = false;
             m_state     = DoStartlights;
 
             m_startlights->reset();
@@ -121,6 +126,7 @@ bool StateMachine::update()
         else
         {
             m_fadeValue += FADE_SPEED_MENU;
+            m_isFading   = true;
         }
 
         m_renderer->setFadeValue(m_fadeValue);
@@ -162,10 +168,12 @@ bool StateMachine::update()
         if (m_fadeValue >= FADE_SPEED_GAME)
         {
             m_fadeValue -= FADE_SPEED_GAME;
+            m_isFading   = true;
         }
         else
         {
             m_fadeValue = 0.0;
+            m_isFading  = false;
             m_state     = MenuTransitionIn;
         }
 
@@ -180,6 +188,7 @@ bool StateMachine::update()
         if (m_fadeValue >= 1.0)
         {
             m_fadeValue = 1.0;
+            m_isFading  = false;
             m_state     = Menu;
 
             // Re-init the track selection menu
@@ -188,6 +197,7 @@ bool StateMachine::update()
         else
         {
             m_fadeValue += FADE_SPEED_MENU;
+            m_isFading   = true;
         }
 
         m_renderer->setFadeValue(m_fadeValue);
@@ -204,6 +214,11 @@ bool StateMachine::update()
 StateMachine::State StateMachine::state() const
 {
     return m_state;
+}
+
+bool StateMachine::isFading() const
+{
+    return m_isFading;
 }
 
 void StateMachine::reset()

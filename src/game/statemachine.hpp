@@ -94,6 +94,8 @@ public:
 
     StateMachine::State state() const;
 
+    bool isFading() const;
+
     //! \reimp
     virtual bool update();
 
@@ -105,7 +107,7 @@ private:
     static StateMachine * m_instance;
 
     State         m_state;
-
+    bool          m_isFading;
     Intro       * m_intro;
     Startlights * m_startlights;
     Race        * m_race;
