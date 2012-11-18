@@ -449,11 +449,17 @@ void MainWindow::handleToolBarActionClick(QAction * action)
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
             m_editorData->setMode(EditorData::EM_ERASE_OBJECT);
         }
+        // The user wants to clear a tile.
+        else if (action->data() == "clear")
+        {
+            QApplication::restoreOverrideCursor();
+            QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
+            m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
+        }
         // The user wants to set a tile type or clear it.
         else if (m_objectModelLoader->getCategoryByRole(
             action->data().toString()) == "tile")
         {
-            qDebug() << "FOO";
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
             m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
