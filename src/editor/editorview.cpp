@@ -182,54 +182,56 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         // Default actions
         else
         {
-            QGraphicsItem * item = *items.begin();
-
-            if (Object * object = dynamic_cast<Object *>(item))
+            if (items.size())
             {
-                // Handle right button click
-                if (event->button() == Qt::RightButton)
+                QGraphicsItem * item = *items.begin();
+                if (Object * object = dynamic_cast<Object *>(item))
                 {
-                    handleRightButtonClickOnObject(*object);
-                }
-                // Handle left button click
-                else if (event->button() == Qt::LeftButton)
-                {
-                    handleLeftButtonClickOnObject(*object);
-                }
+                    // Handle right button click
+                    if (event->button() == Qt::RightButton)
+                    {
+                        handleRightButtonClickOnObject(*object);
+                    }
+                    // Handle left button click
+                    else if (event->button() == Qt::LeftButton)
+                    {
+                        handleLeftButtonClickOnObject(*object);
+                    }
 
-                QWidget::mousePressEvent(event);
-            }
-            else if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
-            {
-                // Handle right button click
-                if (event->button() == Qt::RightButton)
-                {
-                    handleRightButtonClickOnTargetNode(*tnode);
+                    QWidget::mousePressEvent(event);
                 }
-                // Handle left button click
-                else if (event->button() == Qt::LeftButton)
+                else if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
                 {
-                    handleLeftButtonClickOnTargetNode(*tnode);
-                }
+                    // Handle right button click
+                    if (event->button() == Qt::RightButton)
+                    {
+                        handleRightButtonClickOnTargetNode(*tnode);
+                    }
+                    // Handle left button click
+                    else if (event->button() == Qt::LeftButton)
+                    {
+                        handleLeftButtonClickOnTargetNode(*tnode);
+                    }
 
-                QWidget::mousePressEvent(event);
-            }
-            else if (TrackTile * tile = dynamic_cast<TrackTile *>(item))
-            {
-                tile->setActive(true);
-
-                // Handle right button click
-                if (event->button() == Qt::RightButton)
-                {
-                    handleRightButtonClickOnTile(*tile);
+                    QWidget::mousePressEvent(event);
                 }
-                // Handle left button click
-                else if (event->button() == Qt::LeftButton)
+                else if (TrackTile * tile = dynamic_cast<TrackTile *>(item))
                 {
-                    handleLeftButtonClickOnTile(*tile);
-                }
+                    tile->setActive(true);
 
-                QWidget::mousePressEvent(event);
+                    // Handle right button click
+                    if (event->button() == Qt::RightButton)
+                    {
+                        handleRightButtonClickOnTile(*tile);
+                    }
+                    // Handle left button click
+                    else if (event->button() == Qt::LeftButton)
+                    {
+                        handleLeftButtonClickOnTile(*tile);
+                    }
+
+                    QWidget::mousePressEvent(event);
+                }
             }
         }
     }

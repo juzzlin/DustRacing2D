@@ -453,6 +453,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         else if (m_objectModelLoader->getCategoryByRole(
             action->data().toString()) == "tile")
         {
+            qDebug() << "FOO";
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
             m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
