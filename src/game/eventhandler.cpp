@@ -15,6 +15,7 @@
 
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
+#include "keycodes.hpp"
 #include "statemachine.hpp"
 
 #include <MenuManager>
@@ -87,6 +88,24 @@ bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
 {
     if (!event->isAutoRepeat())
     {
+        switch (event->nativeScanCode())
+        {
+        case KeyCodes::LSHIFT:
+            m_inputHandler.setActionState(1, InputHandler::IA_UP, true);
+            break;
+        case KeyCodes::RSHIFT:
+            m_inputHandler.setActionState(0, InputHandler::IA_UP, true);
+            break;
+        case KeyCodes::LCTRL:
+            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, true);
+            break;
+        case KeyCodes::RCTRL:
+            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, true);
+            break;
+        default:
+            break;
+        }
+
         switch (event->key())
         {
         // Player 1
@@ -134,6 +153,24 @@ bool EventHandler::handleGameKeyReleaseEvent(QKeyEvent * event)
 {
     if (!event->isAutoRepeat())
     {
+        switch (event->nativeScanCode())
+        {
+        case KeyCodes::LSHIFT:
+            m_inputHandler.setActionState(1, InputHandler::IA_UP, false);
+            break;
+        case KeyCodes::RSHIFT:
+            m_inputHandler.setActionState(0, InputHandler::IA_UP, false);
+            break;
+        case KeyCodes::LCTRL:
+            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, false);
+            break;
+        case KeyCodes::RCTRL:
+            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, false);
+            break;
+        default:
+            break;
+        }
+
         switch (event->key())
         {
         case Qt::Key_Left:

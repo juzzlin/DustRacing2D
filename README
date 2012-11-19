@@ -23,16 +23,16 @@ Playing
 
 The player one controls the pink race car:
 
-Accelerate : Up
-Brake      : Down
+Accelerate : Up / RIGHT SHIFT
+Brake      : Down / RIGHT CTRL
 Turn left  : Left
 Turn right : Right
 
 The player two controls the grey race car (game mode
 can be selected in the Settings menu):
 
-Accelerate : W
-Brake      : S
+Accelerate : W / LEFT SHIFT
+Brake      : S / LEFT CTRL
 Turn left  : A
 Turn right : D
 
