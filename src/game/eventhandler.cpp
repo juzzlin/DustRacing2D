@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "eventhandler.hpp"
-#include "inputhandler.hpp"
 #include "keycodes.hpp"
 #include "statemachine.hpp"
 
@@ -23,6 +22,18 @@
 EventHandler::EventHandler(InputHandler & inputHandler)
 : m_inputHandler(inputHandler)
 {
+    m_keyToActionMap[KeyCodes::LSHIFT] = {1, InputHandler::IA_UP};
+    m_keyToActionMap[KeyCodes::RSHIFT] = {0, InputHandler::IA_UP};
+    m_keyToActionMap[KeyCodes::LCTRL]  = {1, InputHandler::IA_DOWN};
+    m_keyToActionMap[KeyCodes::RCTRL]  = {0, InputHandler::IA_DOWN};
+    m_keyToActionMap[Qt::Key_Left]     = {0, InputHandler::IA_LEFT};
+    m_keyToActionMap[Qt::Key_Right]    = {0, InputHandler::IA_RIGHT};
+    m_keyToActionMap[Qt::Key_A]        = {1, InputHandler::IA_LEFT};
+    m_keyToActionMap[Qt::Key_D]        = {1, InputHandler::IA_RIGHT};
+    m_keyToActionMap[Qt::Key_Up]       = {0, InputHandler::IA_UP};
+    m_keyToActionMap[Qt::Key_Down]     = {0, InputHandler::IA_DOWN};
+    m_keyToActionMap[Qt::Key_W]        = {1, InputHandler::IA_UP};
+    m_keyToActionMap[Qt::Key_S]        = {1, InputHandler::IA_DOWN};
 }
 
 bool EventHandler::handleKeyPressEvent(QKeyEvent * event)
@@ -86,129 +97,53 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
 
 bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
 {
-    if (!event->isAutoRepeat())
-    {
-        switch (event->nativeScanCode())
-        {
-        case KeyCodes::LSHIFT:
-            m_inputHandler.setActionState(1, InputHandler::IA_UP, true);
-            break;
-        case KeyCodes::RSHIFT:
-            m_inputHandler.setActionState(0, InputHandler::IA_UP, true);
-            break;
-        case KeyCodes::LCTRL:
-            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, true);
-            break;
-        case KeyCodes::RCTRL:
-            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, true);
-            break;
-        default:
-            break;
-        }
-
-        switch (event->key())
-        {
-        // Player 1
-        case Qt::Key_Left:
-            m_inputHandler.setActionState(0, InputHandler::IA_LEFT, true);
-            break;
-        case Qt::Key_Right:
-            m_inputHandler.setActionState(0, InputHandler::IA_RIGHT, true);
-            break;
-        case Qt::Key_Up:
-            m_inputHandler.setActionState(0, InputHandler::IA_UP, true);
-            break;
-        case Qt::Key_Down:
-            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, true);
-            break;
-        case Qt::Key_P:
-            emit pauseToggled();
-            break;
-
-        // Player 2
-        case Qt::Key_A:
-            m_inputHandler.setActionState(1, InputHandler::IA_LEFT, true);
-            break;
-        case Qt::Key_D:
-            m_inputHandler.setActionState(1, InputHandler::IA_RIGHT, true);
-            break;
-        case Qt::Key_W:
-            m_inputHandler.setActionState(1, InputHandler::IA_UP, true);
-            break;
-        case Qt::Key_S:
-            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, true);
-            break;
-
-        default:
-            return false;
-        }
-
-        return true;
-    }
-
-    return false;
+    return findMatch(event, true);
 }
 
 bool EventHandler::handleGameKeyReleaseEvent(QKeyEvent * event)
 {
+    return findMatch(event, false);
+}
+
+bool EventHandler::findMatch(QKeyEvent * event, bool press)
+{
     if (!event->isAutoRepeat())
     {
-        switch (event->nativeScanCode())
+        if (m_keyToActionMap.find(event->nativeScanCode()) != m_keyToActionMap.end())
         {
-        case KeyCodes::LSHIFT:
-            m_inputHandler.setActionState(1, InputHandler::IA_UP, false);
-            break;
-        case KeyCodes::RSHIFT:
-            m_inputHandler.setActionState(0, InputHandler::IA_UP, false);
-            break;
-        case KeyCodes::LCTRL:
-            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, false);
-            break;
-        case KeyCodes::RCTRL:
-            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, false);
-            break;
-        default:
-            break;
+            const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player;
+            const InputHandler::InputAction action =
+                m_keyToActionMap[event->nativeScanCode()].action;
+            m_inputHandler.setActionState(player, action, press);
+            return true;
         }
 
-        switch (event->key())
+        if (m_keyToActionMap.find(event->key()) != m_keyToActionMap.end())
         {
-        case Qt::Key_Left:
-            m_inputHandler.setActionState(0, InputHandler::IA_LEFT, false);
-            break;
-        case Qt::Key_Right:
-            m_inputHandler.setActionState(0, InputHandler::IA_RIGHT, false);
-            break;
-        case Qt::Key_Up:
-            m_inputHandler.setActionState(0, InputHandler::IA_UP, false);
-            break;
-        case Qt::Key_Down:
-            m_inputHandler.setActionState(0, InputHandler::IA_DOWN, false);
-            break;
-
-        case Qt::Key_A:
-            m_inputHandler.setActionState(1, InputHandler::IA_LEFT, false);
-            break;
-        case Qt::Key_D:
-            m_inputHandler.setActionState(1, InputHandler::IA_RIGHT, false);
-            break;
-        case Qt::Key_W:
-            m_inputHandler.setActionState(1, InputHandler::IA_UP, false);
-            break;
-        case Qt::Key_S:
-            m_inputHandler.setActionState(1, InputHandler::IA_DOWN, false);
-            break;
-
-        case Qt::Key_Escape:
-        case Qt::Key_Q:
-            StateMachine::instance().quit();
-            break;
-        default:
-            return false;
+            const unsigned int player = m_keyToActionMap[event->key()].player;
+            const InputHandler::InputAction action =
+                m_keyToActionMap[event->key()].action;
+            m_inputHandler.setActionState(player, action, press);
+            return true;
         }
 
-        return true;
+        if (press)
+        {
+            switch (event->key())
+            {
+            case Qt::Key_Escape:
+            case Qt::Key_Q:
+                StateMachine::instance().quit();
+                return true;
+            case Qt::Key_P:
+                emit pauseToggled();
+                return true;
+            default:
+                break;
+            }
+        }
     }
 
     return false;
 }
+

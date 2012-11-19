@@ -16,10 +16,10 @@
 #ifndef EVENTHANDLER_HPP
 #define EVENTHANDLER_HPP
 
+#include "inputhandler.hpp"
+
 #include <QKeyEvent>
 #include <QObject>
-
-class InputHandler;
 
 //! Handles key and mouse events.
 class EventHandler : public QObject
@@ -43,11 +43,22 @@ signals:
 
 private:
 
+    struct ActionMapping
+    {
+        unsigned int player;
+        InputHandler::InputAction action;
+    };
+
     bool handleMenuKeyPressEvent(QKeyEvent * event);
 
     bool handleGameKeyPressEvent(QKeyEvent * event);
 
     bool handleGameKeyReleaseEvent(QKeyEvent * event);
+
+    bool findMatch(QKeyEvent * event, bool press);
+
+    typedef std::map<unsigned int, ActionMapping> KeyToActionMap;
+    KeyToActionMap m_keyToActionMap;
 
     InputHandler & m_inputHandler;
 };
