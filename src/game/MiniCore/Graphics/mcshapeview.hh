@@ -158,9 +158,20 @@ public:
     virtual void beginBatch() {}
 
     //! Called for the last object in a batch of same kind
-    //! of views when the render begins.
+    //! of views when the render ends.
     //! The default implementation does nothing.
     virtual void endBatch() {}
+
+    //! Called for the first object in a batch of same kind
+    //! of views when the render of "shadows" begins. E.g. VBO's can be
+    //! set here to be shared between multiple views.
+    //! The default implementation does nothing.
+    virtual void beginShadowBatch() {}
+
+    //! Called for the last object in a batch of same kind
+    //! of views when the render of "shadows" ends.
+    //! The default implementation does nothing.
+    virtual void endShadowBatch() {}
 
     //! Return non-rotated, non-translated bounding box of the view.
     //! This is used to optimize rendering.

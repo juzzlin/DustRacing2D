@@ -149,11 +149,21 @@ public:
      */
     void enableClientState(bool enable) const;
 
+    /*! Manually enable/disable OpenGL client states and texturing environment.
+     *  This can be used to save some function calls when rendering the same
+     *  surface multiple times.
+     *  \see renderShadow()
+     */
+    void enableShadowClientState(bool enable) const;
+
     //! Manually render VBO's.
     void renderVBOs(bool autoClientState = true);
 
+    //! Manually render VBO's when rendering the 2d "shadow".
+    void renderShadowVBOs(bool autoClientState = true);
+
     //! Bind the current texture.
-    void bindTexture() const;
+    void bindTexture(bool bindOnlyFirstTexture = false) const;
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);

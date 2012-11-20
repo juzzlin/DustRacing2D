@@ -77,6 +77,16 @@ void TreeView::endBatch()
     surface()->enableClientState(false);
 }
 
+void TreeView::beginShadowBatch()
+{
+    surface()->enableShadowClientState(true);
+}
+
+void TreeView::endShadowBatch()
+{
+    surface()->enableShadowClientState(false);
+}
+
 bool TreeView::update()
 {
     if (++m_topCosAngle >= 360)

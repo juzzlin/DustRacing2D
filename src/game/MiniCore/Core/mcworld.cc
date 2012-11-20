@@ -326,14 +326,14 @@ void MCWorld::renderShadows(MCCamera * pCamera)
 
                     if (i == 0)
                     {
-                        view->beginBatch();
+                        view->beginShadowBatch();
                     }
 
                     object->renderShadow(pCamera);
 
                     if (i == i2 - 1)
                     {
-                        view->endBatch();
+                        view->endShadowBatch();
                     }
                 }
             }

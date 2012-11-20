@@ -278,11 +278,27 @@ void MCSurface::renderVBOs(bool autoClientState)
     }
 }
 
-void MCSurface::bindTexture() const
+void MCSurface::renderShadowVBOs(bool autoClientState)
+{
+    if (autoClientState)
+    {
+        enableShadowClientState(true);
+        bindTexture(true);
+    }
+
+    glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
+
+    if (autoClientState)
+    {
+        enableShadowClientState(false);
+    }
+}
+
+void MCSurface::bindTexture(bool bindOnlyFirstTexture) const
 {
     assert(m_program);
 
-    if (m_handle2)
+    if (m_handle2 && !bindOnlyFirstTexture)
     {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_handle1);
@@ -431,7 +447,7 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
 
         m_shadowProgram->rotate(angle);
 
-        renderVBOs(autoClientState);
+        renderShadowVBOs(autoClientState);
 
         m_shadowProgram->release();
     }
@@ -467,7 +483,7 @@ void MCSurface::renderShadowScaled(
 
         m_shadowProgram->rotate(angle);
 
-        renderVBOs(autoClientState);
+        renderShadowVBOs(autoClientState);
 
         m_shadowProgram->release();
     }
@@ -509,6 +525,27 @@ void MCSurface::enableClientState(bool enable) const
         m_program->bindTextureUnit1(0);
 
         glActiveTexture(GL_TEXTURE0);
+    }
+}
+
+void MCSurface::enableShadowClientState(bool enable) const
+{
+    if (enable)
+    {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+        glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+        glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
+
+        bindTexture(true);
+    }
+    else
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
 }
 

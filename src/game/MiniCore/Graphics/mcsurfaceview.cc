@@ -112,6 +112,22 @@ void MCSurfaceView::endBatch()
     }
 }
 
+void MCSurfaceView::beginBatchShadow()
+{
+    if (m_batchMode && m_surface)
+    {
+        m_surface->enableShadowClientState(true);
+    }
+}
+
+void MCSurfaceView::endBatchShadow()
+{
+    if (m_batchMode && m_surface)
+    {
+        m_surface->enableShadowClientState(false);
+    }
+}
+
 MCBBox<MCFloat> MCSurfaceView::bbox() const
 {
     // TODO: Fix this! The view should know the angle of the

@@ -128,6 +128,14 @@ void Renderer::loadShaders()
 
     program = new ShaderProgram(context());
     program->addFragmentShader(
+        std::string(Config::Common::dataPath) + "/shaders/car.fsh");
+    program->addVertexShader(
+        std::string(Config::Common::dataPath) + "/shaders/car.vsh");
+    program->link();
+    m_shaderHash["car"].reset(program);
+
+    program = new ShaderProgram(context());
+    program->addFragmentShader(
         std::string(Config::Common::dataPath) + "/shaders/master.fsh");
     program->addVertexShader(
         std::string(Config::Common::dataPath) + "/shaders/master.vsh");

@@ -27,7 +27,8 @@ void main(void)
     }
     else
     {
-        gl_FragColor = gl_Color * color * fade * vec4(1.0, 0.95, 0.9, 1.0);
+        vec4 ambient = fade * vec4(1.0, 0.95, 0.9, 1.0);
+        gl_FragColor = gl_Color * color * ambient;
     }
 }
 

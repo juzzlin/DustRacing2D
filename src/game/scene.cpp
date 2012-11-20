@@ -171,7 +171,7 @@ void Scene::createCars()
         if (car)
         {
             car->setLayer(Layers::Cars);
-            car->view()->setShaderProgram(&Renderer::instance().program("master"));
+            car->view()->setShaderProgram(&Renderer::instance().program("car"));
             car->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
             m_cars.push_back(CarPtr(car));
@@ -624,6 +624,7 @@ void Scene::render()
         if (m_stateMachine.isFading())
         {
             Renderer::instance().program("master").setFadeValue(fadeValue);
+            Renderer::instance().program("car").setFadeValue(fadeValue);
             Renderer::instance().program("tile2d").setFadeValue(fadeValue);
             Renderer::instance().program("tile3d").setFadeValue(fadeValue);
             Renderer::instance().program("text").setFadeValue(fadeValue);

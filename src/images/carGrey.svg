@@ -15,7 +15,7 @@
    height="1052.3622"
    id="svg3786"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="carBlue.svg">
+   sodipodi:docname="carGrey.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -30,7 +30,7 @@
      id="namedview4580"
      showgrid="false"
      inkscape:zoom="1.2685914"
-     inkscape:cx="102.56232"
+     inkscape:cx="-36.174235"
      inkscape:cy="888.02816"
      inkscape:window-x="65"
      inkscape:window-y="24"
@@ -183,7 +183,7 @@
        id="linearGradient3842-8-3-3-8">
       <stop
          id="stop3844-8-3-8-3"
-         style="stop-color:#000000;stop-opacity:1"
+         style="stop-color:#00ff00;stop-opacity:1;"
          offset="0" />
       <stop
          id="stop3846-1-0-2-7"
@@ -468,7 +468,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -484,7 +484,7 @@
        transform="matrix(1,0,0,-1,-465.76605,-151.03058)"
        id="rect4065-1-3-1"
        style="fill:url(#radialGradient3784);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-2-7-9)"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <rect
@@ -496,7 +496,7 @@
        transform="matrix(1,0,0,-1,-393.29143,-149.96967)"
        id="rect4067-5-7-9"
        style="fill:url(#radialGradient4107-8-0-8);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-8-7-2-5)"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <rect
@@ -508,7 +508,7 @@
        transform="matrix(1,0,0,-1,-393.11108,-55.809929)"
        id="rect4069-7-5-4"
        style="fill:url(#radialGradient4109-1-8-1);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-5-9-4-7)"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <rect
@@ -520,7 +520,7 @@
        transform="matrix(1,0,0,-1,-466.34714,-55.304859)"
        id="rect4071-7-3-4"
        style="fill:url(#radialGradient4111-6-3-5);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-9-8-5-3)"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -529,25 +529,25 @@
        id="path4073-9-0-0"
        style="fill:#e6e6e6;fill-opacity:1;stroke:#e6e6e6;stroke-width:17.58900069999999971;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
        d="m 296.3784,-8 c 6.35625,0 12.71251,16 12.71251,24 0,8 0,16 0,24 -5.87633,0.413439 -12.71251,-8 -12.71251,-16 1.21585,-13.826201 -2.81451,-31.9366265 0,-32 z"
        transform="matrix(0.82719392,0,0,1.1666667,-332.70512,262.62523)"
        id="path4075-4-3-8"
-       style="fill:url(#linearGradient4113-5-6-0);fill-opacity:1;stroke:none;filter:url(#filter5187-7-6-1)"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5187-7-6-1)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
        d="M 376.71251,-8 C 370.35626,-8 364,8 364,16 c 0,8 0,16 0,24 5.87633,0.413439 12.71251,-8 12.71251,-16 -1.21585,-13.826201 2.81451,-31.9366265 0,-32 z"
        transform="matrix(0.82719392,0,0,1.1666667,-332.70512,262.62523)"
        id="path4077-1-9-7"
-       style="fill:url(#linearGradient4115-4-1-5);fill-opacity:1;stroke:none;filter:url(#filter5183-9-9-4)"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5183-9-9-4)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -555,7 +555,7 @@
        id="path4079-7-7-2"
        style="fill:url(#radialGradient4117-2-7-7);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -564,16 +564,16 @@
        id="path4556-5-6"
        style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
        d="m 336,66.8 c 18.282,0 26.92238,-1.362757 33,-4.5825 6.07762,-3.219743 0,-5.17 0,-10.34 C 369,46.7075 354.282,48 336,48 c -18.282,0 -33,-1.2925 -33,3.8775 0,5.17 -6.50129,7.120257 0,10.34 6.50129,3.219743 14.718,4.5825 33,4.5825 z"
        transform="matrix(0.82719392,0,0,1.2765957,-331.02798,256.0153)"
        id="path4087-8-5-1"
-       style="fill:url(#linearGradient4119-4-4-5);fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -582,16 +582,16 @@
        id="path4089-8-5-7"
        style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
        d="m 336,-26.8 c 18.836,0 36,-1.835 34,8.4825 -2,10.3175 -6,9.57 -6,19.14 C 364,10.3925 354.836,8 336,8 317.164,8 308,10.3925 308,0.8225 308,-8.7475 304,-8 302,-18.3175 300,-28.635 317.164,-26.8 336,-26.8 z"
        transform="matrix(0.82719392,0,0,1,-332.70512,261.2919)"
        id="path4091-4-8-7"
-       style="fill:url(#linearGradient4121-2-9-9);fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -599,7 +599,7 @@
        id="path4093-2-5-3"
        style="fill:url(#radialGradient4123-3-4-8);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -607,7 +607,7 @@
        id="path4095-3-5-4"
        style="opacity:0.4424779;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -615,7 +615,7 @@
        id="path4097-8-1-5"
        style="opacity:0.43999999;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -633,7 +633,7 @@
        id="path4101-1-0-1"
        style="fill:#e6e6e6;fill-opacity:1;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5261-9-2-7)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -642,7 +642,7 @@
        id="path4103-3-6-0"
        style="fill:#e6e6e6;fill-opacity:1;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5261-9-2-7)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carBlue.png"
+       inkscape:export-filename="/home/jussil/dustrac-code/data/images/carGrey.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
   </g>

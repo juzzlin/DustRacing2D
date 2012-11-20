@@ -101,7 +101,7 @@ private:
     //! Creates a 2D OpenGL texture from a QImage + texture meta data
     void create2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
 
-    //! Creates a 2D OpenGL textures from two QImages + texture meta data
+    //! Creates two 2D OpenGL textures from two QImages + texture meta data
     void createMultiTextureFromImage(
         const MCSurfaceData & data, const QImage & image1, const QImage & image2);
 
@@ -109,8 +109,7 @@ private:
     void applyColorKey(QImage & textureImage,
         MCUint r, MCUint g, MCUint b) const;
 
-    //! Creates a scaled image with dimensions forced to the nearest power
-    //! of two.
+    //! Creates a scaled image with dimensions forced to the nearest power of two.
     QImage createNearest2PowNImage(const QImage & image);
 
     //! Helper to create the texture.

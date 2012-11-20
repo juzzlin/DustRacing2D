@@ -243,25 +243,15 @@ void MCSurfaceManager::load(
                 const std::string path2 =
                     baseDataPath + QDir::separator().toAscii() + data.imagePath2;
 
-                // Load the images and create a 3D texture.
+                // Load the images and create a multitexture.
                 QImage textureImage1;
                 if (textureImage1.load(path.c_str()))
                 {
                     QImage textureImage2;
                     if (textureImage2.load(path2.c_str()))
                     {
-                        if ((textureImage1.width()  != textureImage2.width()) ||
-                            (textureImage1.height() != textureImage2.height()))
-                        {
-                            throw MCException(
-                                "Cannot create 3D texture: '" + path + "' and '" + path2 +
-                                "' don't have equal dimensions");
-                        }
-                        else
-                        {
-                            // Create an OpenGL texture from the image
-                            createMultiTextureFromImage(data, textureImage1, textureImage2);
-                        }
+                        // Create an OpenGL texture from the image
+                        createMultiTextureFromImage(data, textureImage1, textureImage2);
                     }
                     else
                     {

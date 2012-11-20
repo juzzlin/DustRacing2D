@@ -90,6 +90,12 @@ public:
     //! \reimp
     virtual void endBatch();
 
+    //! \reimp
+    virtual void beginBatchShadow();
+
+    //! \reimp
+    virtual void endBatchShadow();
+
 private:
 
     DISABLE_COPY(MCSurfaceView);

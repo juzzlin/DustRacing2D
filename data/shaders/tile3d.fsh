@@ -34,6 +34,7 @@ void main(void)
             color0 = color1;
         }   
 
-        gl_FragColor = color0 * fade * vec4(1.0, 0.95, 0.9, 1.0);
+        vec4 ambient = fade * vec4(1.0, 0.95, 0.9, 1.0);
+        gl_FragColor = color0 * ambient;
     }
 }

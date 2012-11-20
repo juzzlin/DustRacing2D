@@ -49,6 +49,12 @@ public:
     virtual void endBatch();
 
     //! \reimp
+    virtual void beginShadowBatch();
+
+    //! \reimp
+    virtual void endShadowBatch();
+
+    //! \reimp
     virtual bool update();
 
     //! \reimp
