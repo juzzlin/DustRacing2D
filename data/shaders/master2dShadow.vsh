@@ -21,10 +21,10 @@ attribute float cos1;
 void main()
 {
     mat4 m = mat4(
-        cos1,       sin1,       0.0,        0.0,
-        -sin1,      cos1,       0.0,        0.0,
-        0.0,        0.0,        1.0,        0.0,
-        position.x, position.y, position.z, 1.0);
+        cos1,       sin1,       0.0, 0.0,
+        -sin1,      cos1,       0.0, 0.0,
+        0.0,        0.0,        0.0, 0.0,
+        position.x, position.y, 0.0, 1.0);
 
     // Normal MVP transform
     vec4 scaled = gl_Vertex * scale;
