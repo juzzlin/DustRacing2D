@@ -20,10 +20,14 @@
 #ifndef MCGLSCENE_HH
 #define MCGLSCENE_HH
 
+#include <MCGLM>
 #include "mctypes.hh"
+#include <vector>
 
-//! Basic initializations of a OpenGL scene suitable for
-//! 2D/2.5D games.
+class MCGLShaderProgram;
+
+/*! Basic initializations of an OpenGL scene suitable for
+ *  2D/2.5D games. Internally MCGLScene uses glm and glew libraries. */
 class MCGLScene
 {
 public:
@@ -42,7 +46,15 @@ public:
     //! Destructor.
     virtual ~MCGLScene();
 
-    //! Initialize. Re-implement if desired.
+    /*! Adds a shader program. Added programs are updated when e.g.
+     *  the projection changes. */
+    void addShaderProgram(MCGLShaderProgram & shader);
+
+    /*! Updates the model view projection matrix and sends it
+     *  to the added shaders. */
+    void updateModelViewProjectionMatrixAndShaders();
+
+    //! Initializes OpenGL and GLEW. Re-implement if desired.
     virtual void initialize();
 
     //! Resize / set projection matrices and viewport. Re-implement if desired.
@@ -52,12 +64,18 @@ public:
     //! Set viewer's position. Automatically called by resize().
     virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
 
+    //! Set projection. Automatically called by resize().
+    virtual void setProjection(float aspectRatio, float zNear, float zFar);
+
     //! Set viewport split type.
     void setSplitType(SplitType splitType = Single);
 
+    //! Get the resulting MVP matrix to be used in shaders.
+    const glm::mat4 & modelViewProjectionMatrix() const;
+
 private:
 
-    void setViewport();
+    void updateViewport();
 
     SplitType m_splitType;
     MCUint    m_viewWidth;
@@ -65,6 +83,14 @@ private:
     MCUint    m_sceneWidth;
     MCUint    m_sceneHeight;
     MCFloat   m_viewAngle;
+
+    glm::mat4 m_modelViewMatrix;
+    glm::mat4 m_projectionMatrix;
+
+    mutable glm::mat4 m_modelViewProjectionMatrix;
+    mutable bool      m_updateModelViewProjection;
+
+    std::vector<MCGLShaderProgram *> m_shaders;
 };
 
 #endif // MCGLSCENE_HH

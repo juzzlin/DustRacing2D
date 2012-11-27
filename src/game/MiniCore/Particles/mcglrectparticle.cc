@@ -26,9 +26,12 @@
 
 #include <cassert>
 
-static const int gNumVertices        = 6;
-static const int gNumColorComponents = 4;
-static const int gAlphaFrames        = 10;
+static const int NUM_VERTICES         = 6;
+static const int NUM_COLOR_COMPONENTS = 4;
+static const int ALPHA_FRAMES         = 10;
+static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
+static const int COLOR_DATA_SIZE      = sizeof(GLfloat)    * NUM_VERTICES * NUM_COLOR_COMPONENTS;
+static const int TOTAL_DATA_SIZE      = VERTEX_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 : MCParticle(typeID)
@@ -36,14 +39,14 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 , m_g(1.0)
 , m_b(1.0)
 , m_a(1.0)
-, m_frameCount(gAlphaFrames)
+, m_frameCount(ALPHA_FRAMES)
 , m_program(nullptr)
 {
     // Disable shadow by default
     setHasShadow(false);
 
     // Init vertice data for a quad
-    const MCGLVertex vertices[gNumVertices] =
+    const MCGLVertex vertices[NUM_VERTICES] =
     {
         {-1, -1, 0},
         {-1,  1, 0},
@@ -53,17 +56,7 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
         { 1, -1, 0}
     };
 
-    const MCGLVertex normals[gNumVertices] =
-    {
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1}
-    };
-
-    const GLfloat colors[gNumVertices * gNumColorComponents] =
+    const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
     {
         m_r, m_g, m_b, m_a,
         m_r, m_g, m_b, m_a,
@@ -73,21 +66,35 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
         m_r, m_g, m_b, m_a
     };
 
-    glGenBuffers(VBOTypes, m_vbos);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+    int offset = 0;
+
+    glGenVertexArrays(1, &m_vba);
+    glGenBuffers(1, &m_vbo);
+    glBindVertexArray(m_vba);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLVertex) * gNumVertices, vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLVertex) * gNumVertices, normals, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * gNumColorComponents, colors, GL_DYNAMIC_DRAW);
+        TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
+
+    // Vertex data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
+    offset += VERTEX_DATA_SIZE;
+
+    // Vertex color data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, colors);
+
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Color,  4, GL_FLOAT, GL_FALSE, 0,
+        (GLvoid *)(VERTEX_DATA_SIZE));
+
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
 }
 
 MCGLRectParticle::~MCGLRectParticle()
 {
-    glDeleteBuffers(VBOTypes, m_vbos);
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteVertexArrays(1, &m_vba);
 }
 
 void MCGLRectParticle::setShaderProgram(MCGLShaderProgram * program)
@@ -101,48 +108,11 @@ void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     m_g = g;
     m_b = b;
     m_a = a;
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-
-    // This should make things a bit faster especially on NVIDIA.
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
-
-    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-    if (pColorData)
-    {
-        for (int i = 0; i < gNumVertices; i++)
-        {
-            const int offset = (i << 2);
-            pColorData[offset + 0] = r;
-            pColorData[offset + 1] = g;
-            pColorData[offset + 2] = b;
-            pColorData[offset + 3] = a;
-        }
-        glUnmapBuffer(GL_ARRAY_BUFFER);
-    }
 }
 
 void MCGLRectParticle::setAlpha(MCFloat a)
 {
-    if (m_a != a)
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-
-        // This should make things a bit faster especially on NVIDIA.
-        glBufferData(GL_ARRAY_BUFFER,
-            sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
-
-        GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-        if (pColorData)
-        {
-            for (int i = 0; i < gNumVertices; i++)
-            {
-                pColorData[(i << 2) + 3] = a;
-            }
-            glUnmapBuffer(GL_ARRAY_BUFFER);
-        }
-    }
+    m_a = a;
 }
 
 void MCGLRectParticle::beginBatch()
@@ -150,18 +120,11 @@ void MCGLRectParticle::beginBatch()
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
 }
 
 void MCGLRectParticle::endBatch()
 {
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-
+    glBindVertexArray(0);
     glDisable(GL_BLEND);
 }
 
@@ -187,6 +150,7 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         m_program->bind();
         m_program->translate(MCVector3dF(x, y, location().k()));
         m_program->rotate(angle());
+        m_program->setColor(m_r, m_g, m_b, m_a);
 
         // Scale alpha if fading out. Don't do this on
         // every frame, because it's expensive.
@@ -195,20 +159,14 @@ void MCGLRectParticle::render(MCCamera * pCamera)
             if (!--m_frameCount)
             {
                 setAlpha(m_a * scale());
-                m_frameCount = gAlphaFrames;
+                m_frameCount = ALPHA_FRAMES;
             }
         }
 
         m_program->setScale(r, r, 1.0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
-        glVertexPointer(3, GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
-        glNormalPointer(GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-        glColorPointer(4, GL_FLOAT, 0, 0);
-        glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(m_vba);
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
 
         m_program->release();
     }

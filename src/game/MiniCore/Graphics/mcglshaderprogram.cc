@@ -18,10 +18,13 @@
 //
 
 #include "mcglshaderprogram.hh"
+#include "mcglscene.hh"
 
-MCGLShaderProgram::MCGLShaderProgram()
-: m_isBound(false)
+MCGLShaderProgram::MCGLShaderProgram(MCGLScene & scene)
+: m_scene(scene)
+, m_isBound(false)
 {
+    m_scene.addShaderProgram(*this);
 }
 
 MCGLShaderProgram::~MCGLShaderProgram()
@@ -60,6 +63,10 @@ bool MCGLShaderProgram::addVertexShader(const std::string &)
 bool MCGLShaderProgram::addFragmentShader(const std::string &)
 {
     return true;
+}
+
+void MCGLShaderProgram::setModelViewProjectionMatrix(const glm::mat4x4 &)
+{
 }
 
 void MCGLShaderProgram::rotate(GLfloat)

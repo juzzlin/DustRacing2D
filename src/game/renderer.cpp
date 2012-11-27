@@ -97,90 +97,35 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
         m_viewAngle);
 }
 
-void Renderer::loadShaders()
+void Renderer::createProgram(
+    const std::string & handle, const std::string & fshPath, const std::string & vshPath)
 {
     // Note: ShaderProgram throws on error.
 
-    MCGLShaderProgram * program = nullptr;
-    program = new ShaderProgram(context());
+    MCGLShaderProgram * program = new ShaderProgram(context(), *m_glScene);
     program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/tile2d.fsh");
+        std::string(Config::Common::dataPath) + "/shaders/" + fshPath);
     program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
+        std::string(Config::Common::dataPath) + "/shaders/" + vshPath);
     program->link();
-    m_shaderHash["tile2d"].reset(program);
+    m_shaderHash[handle].reset(program);
+}
 
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/tile3d.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/tile.vsh");
-    program->link();
-    m_shaderHash["tile3d"].reset(program);
+void Renderer::loadShaders()
+{
+    createProgram("tile2d",        "tile2d.fsh",         "tile.vsh");
+    createProgram("tile3d",        "tile3d.fsh",         "tile.vsh");
+    createProgram("menu",          "menu.fsh",           "master.vsh");
+    createProgram("car",           "car.fsh",            "car.vsh");
+    createProgram("master",        "master.fsh",         "master.vsh");
+    createProgram("masterShadow",  "master2dShadow.fsh", "master2dShadow.vsh");
+    createProgram("text",          "text.fsh",           "text.vsh");
+    createProgram("textShadow",    "text2dShadow.fsh",   "text.vsh");
+    createProgram("particle",      "particle.fsh",       "master.vsh");
+    createProgram("pointParticle", "particle.fsh",       "pointParticle.vsh");
 
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/menu.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/menu.vsh");
-    program->link();
-    m_shaderHash["menu"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/car.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/car.vsh");
-    program->link();
-    m_shaderHash["car"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/master.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/master.vsh");
-    program->link();
-    m_shaderHash["master"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/master2dShadow.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/master2dShadow.vsh");
-    program->link();
-    m_shaderHash["masterShadow"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/text.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/text.vsh");
-    program->link();
-    m_shaderHash["text"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/text2dShadow.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/text.vsh");
-    program->link();
-    m_shaderHash["textShadow"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/particle.vsh");
-    program->link();
-    m_shaderHash["particle"].reset(program);
-
-    program = new ShaderProgram(context());
-    program->addFragmentShader(
-        std::string(Config::Common::dataPath) + "/shaders/particle.fsh");
-    program->addVertexShader(
-        std::string(Config::Common::dataPath) + "/shaders/pointParticle.vsh");
-    program->link();
-    m_shaderHash["pointParticle"].reset(program);
+    // Make sure that shaders have the current model view projection matrix.
+    m_glScene->updateModelViewProjectionMatrixAndShaders();
 }
 
 void Renderer::setEnabled(bool enable)

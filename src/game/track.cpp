@@ -34,7 +34,6 @@ Track::Track(TrackData * pTrackData)
 , m_cols(m_pTrackData->map().cols())
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
-, m_scale(0.0)
 , m_asphalt(MCSurfaceManager::instance().surface("asphalt"))
 , m_next(nullptr)
 {
@@ -224,18 +223,6 @@ void Track::renderTiles(
     }
 
     static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->enableClientState(false);
-}
-
-bool Track::update()
-{
-    // This helps to remove some glitches in tile boundaries.
-    m_scale = 1.001;
-    return false;
-}
-
-void Track::reset()
-{
-    m_scale = 0.0;
 }
 
 void Track::setNext(Track & next)

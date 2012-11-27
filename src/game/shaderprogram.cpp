@@ -19,13 +19,11 @@
 #include <MCTrigonom>
 #include <cassert>
 
-static const int POSITION = 1;
-static const int SIN      = 5;
-static const int COS      = 6;
-static const int SCALE    = 7;
+// Pre-defined vertex shader attribute locations
 
-ShaderProgram::ShaderProgram(const QGLContext * context)
-: m_program(context)
+ShaderProgram::ShaderProgram(const QGLContext * context, MCGLScene & scene)
+: MCGLShaderProgram(scene)
+, m_program(context)
 , m_fragmentShader(QGLShader::Fragment, context)
 , m_vertexShader(QGLShader::Vertex, context)
 {
@@ -68,10 +66,11 @@ bool ShaderProgram::addVertexShader(const std::string & fileName)
         throw MCException("Compiling a vertex shader failed.");
     }
 
-    m_program.bindAttributeLocation("position", POSITION);
-    m_program.bindAttributeLocation("sin1",     SIN);
-    m_program.bindAttributeLocation("cos1",     COS);
-    m_program.bindAttributeLocation("scale",    SCALE);
+    m_program.bindAttributeLocation("inVertex",   MCGLShaderProgram::VAL_Vertex);
+    m_program.bindAttributeLocation("inNormal",   MCGLShaderProgram::VAL_Normal);
+    m_program.bindAttributeLocation("inTexCoord", MCGLShaderProgram::VAL_TexCoords);
+    m_program.bindAttributeLocation("inColor",    MCGLShaderProgram::VAL_Color);
+
     return m_program.addShader(&m_vertexShader);
 }
 
@@ -86,19 +85,34 @@ bool ShaderProgram::addFragmentShader(const std::string & fileName)
     return m_program.addShader(&m_fragmentShader);
 }
 
+void ShaderProgram::setModelViewProjectionMatrix(
+    const glm::mat4x4 & modelViewProjectionMatrix)
+{
+    if (!isBound())
+    {
+        bind();
+        glUniformMatrix4fv(
+            m_program.uniformLocation("mvp"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+        release();
+    }
+    else
+    {
+        glUniformMatrix4fv(
+            m_program.uniformLocation("mvp"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+    }
+}
+
 void ShaderProgram::rotate(GLfloat angle)
 {
     if (!isBound())
     {
         bind();
-        m_program.setAttributeValue(SIN, MCTrigonom::sin(angle));
-        m_program.setAttributeValue(COS, MCTrigonom::cos(angle));
+        m_program.setUniformValue("angle", MCTrigonom::sin(angle), MCTrigonom::cos(angle));
         release();
     }
     else
     {
-        m_program.setAttributeValue(SIN, MCTrigonom::sin(angle));
-        m_program.setAttributeValue(COS, MCTrigonom::cos(angle));
+        m_program.setUniformValue("angle", MCTrigonom::sin(angle), MCTrigonom::cos(angle));
     }
 }
 
@@ -107,18 +121,27 @@ void ShaderProgram::translate(const MCVector3dF & p)
     if (!isBound())
     {
         bind();
-        m_program.setAttributeValue(POSITION, p.i(), p.j(), p.k(), 0);
+        m_program.setUniformValue("pos", p.i(), p.j(), p.k(), 0);
         release();
     }
     else
     {
-        m_program.setAttributeValue(POSITION, p.i(), p.j(), p.k(), 0);
+        m_program.setUniformValue("pos", p.i(), p.j(), p.k(), 0);
     }
 }
 
-void ShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
+void ShaderProgram::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
-    // Not supported. Vertex colors are currently set in VBO's.
+    if (!isBound())
+    {
+        bind();
+        m_program.setUniformValue("color", r, g, b, a);
+        release();
+    }
+    else
+    {
+        m_program.setUniformValue("color", r, g, b, a);
+    }
 }
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
@@ -126,12 +149,12 @@ void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
     if (!isBound())
     {
         bind();
-        m_program.setAttributeValue(SCALE, x, y, z, 1);
+        m_program.setUniformValue("scale", x, y, z, 1);
         release();
     }
     else
     {
-        m_program.setAttributeValue(SCALE, x, y, z, 1);
+        m_program.setUniformValue("scale", x, y, z, 1);
     }
 }
 
@@ -154,12 +177,12 @@ void ShaderProgram::bindTextureUnit0(GLuint index)
     if (!isBound())
     {
         bind();
-        m_program.setUniformValue("texture0", index);
+        m_program.setUniformValue("tex0", index);
         release();
     }
     else
     {
-        m_program.setUniformValue("texture0", index);
+        m_program.setUniformValue("tex0", index);
     }
 }
 
@@ -168,12 +191,12 @@ void ShaderProgram::bindTextureUnit1(GLuint index)
     if (!isBound())
     {
         bind();
-        m_program.setUniformValue("texture1", index);
+        m_program.setUniformValue("tex1", index);
         release();
     }
     else
     {
-        m_program.setUniformValue("texture1", index);
+        m_program.setUniformValue("tex1", index);
     }
 }
 

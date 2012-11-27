@@ -29,7 +29,7 @@ class MCSurface;
 
 //! A renderable race track object constructed from
 //! the given track data.
-class Track : public UpdateableIf
+class Track
 {
 public:
 
@@ -59,12 +59,6 @@ public:
     //! Return pointer to the finish line tile.
     TrackTile * finishLine() const;
 
-    //! \reimp
-    virtual bool update();
-
-    //! \reimp
-    virtual void reset();
-
     //! Set the next track.
     void setNext(Track & next);
 
@@ -84,7 +78,6 @@ private:
 
     TrackData * m_pTrackData;
     MCUint      m_rows, m_cols, m_width, m_height;
-    MCFloat     m_scale;
     MCSurface & m_asphalt;
     Track     * m_next;
 };

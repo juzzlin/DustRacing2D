@@ -18,7 +18,7 @@ Core/mctimerevent.cc
 Core/mctrigonom.cc
 Core/mcvectoranimation.cc
 Core/mcworld.cc
-Graphics/glew.c
+Graphics/glew/glew.c
 Graphics/mccamera.cc
 Graphics/mcglobjectdata.cc
 Graphics/mcglscene.cc

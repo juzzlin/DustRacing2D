@@ -13,34 +13,49 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-attribute vec4 position;
-attribute vec4 scale;
-attribute float sin1;
-attribute float cos1;
+#version 130
+
+in vec3 inVertex;
+in vec3 inNormal;
+in vec2 inTexCoord;
+in vec4 inColor;
+
+uniform vec4 pos;
+uniform vec4 scale;
+uniform vec2 angle;
+uniform vec4 color;
+uniform mat4 mvp;
+
+out vec2 texCoord0;
+out vec2 texCoord1;
+out vec4 vColor;
 
 void main()
 {
-    mat4 m = mat4(
-        cos1,       sin1,       0.0,        0.0,
-        -sin1,      cos1,       0.0,        0.0,
-        0.0,        0.0,        1.0,        0.0,
-        position.x, position.y, position.z, 1.0);
+    float sin1 = angle.x;
+    float cos1 = angle.y;
+
+    mat4 transformation = mat4(
+        cos1,  sin1,  0.0,   0.0,
+        -sin1, cos1,  0.0,   0.0,
+        0.0,   0.0,   1.0,   0.0,
+        pos.x, pos.y, pos.z, 1.0);
 
     // Normal MVP transform
-    vec4 scaled = gl_Vertex * scale;
-    gl_Position = gl_ModelViewProjectionMatrix * m * scaled;
+    gl_Position = mvp * transformation * (vec4(inVertex, 1) * scale);
     
     // Copy the primary color
-    gl_FrontColor = gl_Color;
+    vColor = inColor * color;
 
-    mat4 o = mat4(
+    // Copy texture coorinates
+
+    mat4 skyReflectionOrientation = mat4(
         cos1, -sin1, 0.0, 0.0,
         sin1,  cos1, 0.0, 0.0,
         0.0,    0.0, 1.0, 0.0,
         0.0,    0.0, 0.0, 1.0);
 
-    // Copy texture coorinates
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_TexCoord[1] = gl_MultiTexCoord0 * o;
+    texCoord0 = inTexCoord;
+    texCoord1 = (vec4(inTexCoord, 0.0, 0.0) * skyReflectionOrientation).xy;
 }
 

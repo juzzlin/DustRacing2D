@@ -99,6 +99,9 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
+    void createProgram(
+        const std::string & handle, const std::string & fshPath, const std::string & vshPath);
+
     typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 

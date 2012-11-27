@@ -13,7 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#version 130
+
+in vec4 vColor;
+
+out vec4 fragColor;
+
 void main(void)
 {
-    gl_FragColor = gl_Color;
+    fragColor = vColor;
 }

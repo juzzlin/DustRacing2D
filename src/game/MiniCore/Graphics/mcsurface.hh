@@ -205,15 +205,6 @@ private:
         const MCGLTexCoord * texCoords,
         const GLfloat      * colors);
 
-    enum VBOType
-    {
-        VBOVertex,
-        VBONormal,
-        VBOTexture,
-        VBOColor,
-        VBOTypes
-    };
-
     GLuint m_handle1;
     GLuint m_handle2;
     MCFloat m_w;
@@ -228,7 +219,9 @@ private:
     bool m_useAlphaBlend;
     GLenum m_src;
     GLenum m_dst;
-    GLuint m_vbos[VBOTypes];
+    GLuint m_vbo;
+    GLuint m_vba;
+    GLfloat m_r, m_g, m_b, m_a;
     MCGLShaderProgram * m_program;
     MCGLShaderProgram * m_shadowProgram;
 };

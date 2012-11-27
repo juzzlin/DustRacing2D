@@ -13,17 +13,23 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
+#version 130
+
 uniform sampler2D texture;
+
+in vec2 texCoord0;
+
+out vec4 fragColor;
 
 void main(void)
 {
-    vec4 color = texture2D(texture, gl_TexCoord[0].st);
+    vec4 color = texture2D(texture, texCoord0);
     if (color.a < 0.1)
     {
         discard;
     }
     else
     {
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
 }

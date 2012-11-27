@@ -1,2 +1,2 @@
 // This is just wrapper header for glew
-#include "glew.h"
+#include "glew/glew.h"

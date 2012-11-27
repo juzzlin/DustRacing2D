@@ -22,8 +22,10 @@
 #include <GL/glu.h>
 
 #include "mcglscene.hh"
+#include "mcglshaderprogram.hh"
 #include "mctrigonom.hh"
 
+#include <algorithm>
 #include <cmath>
 
 MCGLScene::MCGLScene()
@@ -33,7 +35,16 @@ MCGLScene::MCGLScene()
 , m_sceneWidth(0)
 , m_sceneHeight(0)
 , m_viewAngle(0)
+, m_updateModelViewProjection(false)
 {
+}
+
+void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
+{
+    if (std::find(m_shaders.begin(), m_shaders.end(), &shader) == m_shaders.end())
+    {
+        m_shaders.push_back(&shader);
+    }
 }
 
 void MCGLScene::initialize()
@@ -63,7 +74,7 @@ void MCGLScene::resize(
     m_sceneHeight = sceneHeight;
     m_viewAngle   = viewAngle;
 
-    setViewport();
+    updateViewport();
 }
 
 void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
@@ -74,21 +85,40 @@ void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat
     const MCFloat eyeZ = vH2 /
         std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
     gluLookAt(vW2, vH2, eyeZ, vW2, vH2, 0, 0, 1, 0);
+
+    m_modelViewMatrix  = glm::mat4(1.0);
+    m_modelViewMatrix *= glm::lookAt(
+        glm::vec3(vW2, vH2, eyeZ),
+        glm::vec3(vW2, vH2, 0),
+        glm::vec3(0,   1,   0));
+
+    m_updateModelViewProjection = true;
 }
 
 void MCGLScene::setSplitType(SplitType splitType)
 {
     m_splitType = splitType;
-    setViewport();
+
+    updateViewport();
 }
 
-void MCGLScene::setViewport()
+void MCGLScene::setProjection(float aspectRatio, float zNear, float zFar)
+{
+    m_projectionMatrix  = glm::mat4(1.0);
+    m_projectionMatrix *= glm::perspective(m_viewAngle, aspectRatio, zNear, zFar);
+
+    m_updateModelViewProjection = true;
+}
+
+void MCGLScene::updateViewport()
 {
     static const float zNear = 1.0;
     static const float zFar  = 1000.0;
 
     if (m_splitType == Single)
     {
+        setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
+
         glViewport(0, 0, m_viewWidth, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -100,6 +130,8 @@ void MCGLScene::setViewport()
     }
     else if (m_splitType == Left)
     {
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -112,6 +144,8 @@ void MCGLScene::setViewport()
     }
     else if (m_splitType == Right)
     {
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -121,6 +155,27 @@ void MCGLScene::setViewport()
         glLoadIdentity();
 
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
+    }
+
+    updateModelViewProjectionMatrixAndShaders();
+}
+
+const glm::mat4 & MCGLScene::modelViewProjectionMatrix() const
+{
+    if (m_updateModelViewProjection)
+    {
+        m_modelViewProjectionMatrix = m_projectionMatrix * m_modelViewMatrix;
+        m_updateModelViewProjection = false;
+    }
+
+    return m_modelViewProjectionMatrix;
+}
+
+void MCGLScene::updateModelViewProjectionMatrixAndShaders()
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setModelViewProjectionMatrix(modelViewProjectionMatrix());
     }
 }
 

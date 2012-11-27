@@ -17,6 +17,7 @@
 #define SHADERPROGRAM_HPP
 
 #include <MCGLShaderProgram>
+#include <MCGLScene>
 #include <QGLShaderProgram>
 #include <QGLShader>
 #include <QGLContext>
@@ -29,7 +30,7 @@ class ShaderProgram : public MCGLShaderProgram
 public:
 
     //! Constructor.
-    ShaderProgram(const QGLContext * context);
+    ShaderProgram(const QGLContext * context, MCGLScene & scene);
 
     //! Destructor.
     virtual ~ShaderProgram();
@@ -51,6 +52,10 @@ public:
 
     //! \reimp
     virtual bool addFragmentShader(const std::string & path);
+
+    //! \reimp
+    virtual void setModelViewProjectionMatrix(
+        const glm::mat4x4 & modelViewProjectionMatrix);
 
     //! \reimp
     virtual void rotate(GLfloat angle);

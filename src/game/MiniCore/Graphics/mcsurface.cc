@@ -27,10 +27,17 @@
 
 #include <cassert>
 
-static const int gNumVertices           = 6;
-static const int gNumVertexComponents   = 3;
-static const int gNumColorComponents    = 4;
-static const int gNumTexCoordComponents = 2;
+static const int NUM_VERTICES             = 6;
+static const int NUM_VERTEX_COMPONENTS    = 3;
+static const int NUM_COLOR_COMPONENTS     = 4;
+static const int NUM_TEX_COORD_COMPONENTS = 2;
+
+static const int VERTEX_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;
+static const int NORMAL_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;
+static const int TEXCOORD_DATA_SIZE       = sizeof(MCGLTexCoord) * NUM_VERTICES;
+static const int COLOR_DATA_SIZE          = sizeof(GLfloat)      * NUM_VERTICES * NUM_COLOR_COMPONENTS;
+static const int TOTAL_DATA_SIZE          =
+    VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCSurface::MCSurface(
     GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
@@ -39,7 +46,7 @@ MCSurface::MCSurface(
     init(handle1, handle2, width, height);
 
     // Init vertice data for two triangles.
-    const MCGLVertex vertices[gNumVertices] =
+    const MCGLVertex vertices[NUM_VERTICES] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, z1},
@@ -49,7 +56,7 @@ MCSurface::MCSurface(
         { (GLfloat)m_w2, -(GLfloat)m_h2, z3}
     };
 
-    const MCGLVertex normals[gNumVertices] =
+    const MCGLVertex normals[NUM_VERTICES] =
     {
         {0, 0, 1},
         {0, 0, 1},
@@ -59,7 +66,7 @@ MCSurface::MCSurface(
         {0, 0, 1}
     };
 
-    const MCGLTexCoord texCoords[gNumVertices] =
+    const MCGLTexCoord texCoords[NUM_VERTICES] =
     {
         {0, 0},
         {0, 1},
@@ -69,7 +76,7 @@ MCSurface::MCSurface(
         {1, 0}
     };
 
-    const GLfloat colors[gNumVertices * gNumColorComponents] =
+    const GLfloat colors[COLOR_DATA_SIZE] =
     {
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -88,7 +95,7 @@ MCSurface::MCSurface(
     init(handle1, handle2, width, height);
 
     // Init vertice data for two triangles.
-    const MCGLVertex vertices[gNumVertices] =
+    const MCGLVertex vertices[NUM_VERTICES] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
@@ -98,7 +105,7 @@ MCSurface::MCSurface(
         { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
     };
 
-    const MCGLVertex normals[gNumVertices] =
+    const MCGLVertex normals[NUM_VERTICES] =
     {
         {0, 0, 1},
         {0, 0, 1},
@@ -108,7 +115,7 @@ MCSurface::MCSurface(
         {0, 0, 1}
     };
 
-    const GLfloat colors[gNumVertices * gNumColorComponents] =
+    const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
     {
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -139,6 +146,10 @@ void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat heig
     m_dst            = GL_ONE_MINUS_SRC_ALPHA;
     m_program        = nullptr;
     m_shadowProgram  = nullptr;
+    m_r              = 1.0;
+    m_g              = 1.0;
+    m_b              = 1.0;
+    m_a              = 1.0;
 }
 
 void MCSurface::initVBOs(
@@ -147,25 +158,49 @@ void MCSurface::initVBOs(
     const MCGLTexCoord * texCoords,
     const GLfloat      * colors)
 {
-    glGenBuffers(VBOTypes, m_vbos);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
+    int offset = 0;
+
+    glGenVertexArrays(1, &m_vba);
+    glGenBuffers(1, &m_vbo);
+    glBindVertexArray(m_vba);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLVertex) * gNumVertices, vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLVertex) * gNumVertices, normals, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLTexCoord) * gNumVertices, texCoords, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * gNumColorComponents,
-        colors, GL_DYNAMIC_DRAW);
+        TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
+
+    // Vertex data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
+    offset += VERTEX_DATA_SIZE;
+
+    // Normal data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, normals);
+    offset += NORMAL_DATA_SIZE;
+
+    // Texture coordinate data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, TEXCOORD_DATA_SIZE, texCoords);
+    offset += TEXCOORD_DATA_SIZE;
+
+    // Vertex color data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, colors);
+
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex,    3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal,    3, GL_FLOAT, GL_FALSE, 0,
+        (GLvoid *)VERTEX_DATA_SIZE);
+    glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
+        (GLvoid *)(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Color,     4, GL_FLOAT, GL_FALSE, 0,
+        (GLvoid *)(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE));
+
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
 }
 
 MCSurface::~MCSurface()
 {
-    glDeleteBuffers(VBOTypes, m_vbos);
+    glDeleteBuffers(1, &m_vbo);
+    glDeleteVertexArrays(1, &m_vba);
 }
 
 void MCSurface::setCenter(MCVector2dFR center)
@@ -193,48 +228,28 @@ void MCSurface::doAlphaBlend() const
 
 void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-    // This should make things a bit faster especially on NVIDIA.
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(MCGLTexCoord) * gNumVertices, nullptr, GL_DYNAMIC_DRAW);
-
-    MCGLTexCoord * pTexData = (MCGLTexCoord *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-    if (pTexData)
+    const MCGLTexCoord texCoordsAll[NUM_VERTICES] =
     {
-        pTexData[0] = texCoords[0];
-        pTexData[1] = texCoords[1];
-        pTexData[2] = texCoords[2];
-        pTexData[3] = texCoords[0];
-        pTexData[4] = texCoords[2];
-        pTexData[5] = texCoords[3];
+        texCoords[0],
+        texCoords[1],
+        texCoords[2],
+        texCoords[0],
+        texCoords[2],
+        texCoords[3]
+    };
 
-        glUnmapBuffer(GL_ARRAY_BUFFER);
-    }
+    glBufferSubData(
+        GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
 }
 
 void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-
-    // This should make things a bit faster especially on NVIDIA.
-    glBufferData(GL_ARRAY_BUFFER,
-        sizeof(GLfloat) * gNumVertices * gNumColorComponents, nullptr, GL_DYNAMIC_DRAW);
-
-    GLfloat * pColorData = (GLfloat *)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-    if (pColorData)
-    {
-        for (int i = 0; i < gNumVertices; i++)
-        {
-            const int offset = (i << 2);
-            pColorData[offset + 0] = r;
-            pColorData[offset + 1] = g;
-            pColorData[offset + 2] = b;
-            pColorData[offset + 3] = a;
-        }
-
-        glUnmapBuffer(GL_ARRAY_BUFFER);
-    }
+    m_r = r;
+    m_g = g;
+    m_b = b;
+    m_a = a;
 }
 
 MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
@@ -268,13 +283,12 @@ void MCSurface::renderVBOs(bool autoClientState)
     {
         enableClientState(true);
         bindTexture();
-    }
-
-    glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
-
-    if (autoClientState)
-    {
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
         enableClientState(false);
+    }
+    else
+    {
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
     }
 }
 
@@ -284,13 +298,12 @@ void MCSurface::renderShadowVBOs(bool autoClientState)
     {
         enableShadowClientState(true);
         bindTexture(true);
-    }
-
-    glDrawArrays(GL_TRIANGLES, 0, gNumVertices);
-
-    if (autoClientState)
-    {
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
         enableShadowClientState(false);
+    }
+    else
+    {
+        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
     }
 }
 
@@ -352,6 +365,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
         m_program->bind();
         m_program->setScale(1.0, 1.0, 1.0);
+        m_program->setColor(m_r, m_g, m_b, m_a);
 
         if (m_centerSet)
         {
@@ -394,6 +408,7 @@ void MCSurface::renderScaled(
 
         m_program->bind();
         m_program->setScale(wr / m_w2, hr / m_h2, 1.0);
+        m_program->setColor(m_r, m_g, m_b, m_a);
 
         if (m_centerSet)
         {
@@ -493,28 +508,13 @@ void MCSurface::enableClientState(bool enable) const
 {
     if (enable)
     {
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
-        glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBONormal]);
-        glNormalPointer(GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-        glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOColor]);
-        glColorPointer(gNumColorComponents, GL_FLOAT, 0, 0);
+        glBindVertexArray(m_vba);
 
         bindTexture();
     }
     else
     {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
+        glBindVertexArray(0);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -532,20 +532,13 @@ void MCSurface::enableShadowClientState(bool enable) const
 {
     if (enable)
     {
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOVertex]);
-        glVertexPointer(gNumVertexComponents, GL_FLOAT, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbos[VBOTexture]);
-        glTexCoordPointer(gNumTexCoordComponents, GL_FLOAT, 0, 0);
+        glBindVertexArray(m_vba);
 
         bindTexture(true);
     }
     else
     {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glBindVertexArray(0);
     }
 }
 

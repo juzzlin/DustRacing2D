@@ -21,19 +21,34 @@
 #define MCGLSHADERPROGRAM_HH
 
 #include <MCGLEW>
+#include <MCGLM>
 
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 
 #include <string>
 
-//! Base class for GLSL shader programs compatible with MiniCore.
+class MCGLScene;
+
+/*! Base class for GLSL shader programs compatible with MiniCore.
+ *  The user needs to inherit from this class and re-implement the
+ *  desired features so that they are forwarded to the actual
+ *  shaders as uniforms. The default implementation does nothing. */
 class MCGLShaderProgram
 {
 public:
 
+    //! Assumed vertex attribute locations.
+    enum VertexAttribLocations
+    {
+        VAL_Vertex    = 0,
+        VAL_Normal    = 1,
+        VAL_TexCoords = 2,
+        VAL_Color     = 3
+    };
+
     //! Constructor.
-    MCGLShaderProgram();
+    MCGLShaderProgram(MCGLScene & scene);
 
     //! Destructor.
     virtual ~MCGLShaderProgram();
@@ -61,7 +76,11 @@ public:
      *  \return true if succeeded. */
     virtual bool addFragmentShader(const std::string & path);
 
-    //! Set rotation.
+    //! Set model view projection matrix.
+    virtual void setModelViewProjectionMatrix(
+        const glm::mat4x4 & modelViewProjectionMatrix);
+
+    //! Set rotation (about Z-axis).
     virtual void rotate(GLfloat angle);
 
     //! Set translation.
@@ -85,7 +104,8 @@ public:
 
 private:
 
-    bool m_isBound;
+    MCGLScene & m_scene;
+    bool        m_isBound;
 };
 
 #endif // MCGLSHADERPROGRAM_HH

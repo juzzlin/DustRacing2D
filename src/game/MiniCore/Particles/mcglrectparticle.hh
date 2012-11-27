@@ -60,14 +60,6 @@ public:
 
 private:
 
-    enum VBOType
-    {
-        VBOVertex,
-        VBONormal,
-        VBOColor,
-        VBOTypes
-    };
-
     //! Set current alpha, doesn't affect the initial alpha
     //! set by setColor().
     void setAlpha(MCFloat a);
@@ -75,7 +67,8 @@ private:
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
     GLfloat m_r, m_g, m_b, m_a;
-    GLuint m_vbos[VBOTypes];
+    GLuint m_vbo;
+    GLuint m_vba;
     int m_frameCount;
     MCGLShaderProgram * m_program;
 };

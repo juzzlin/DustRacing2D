@@ -13,14 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with DustRAC. If not, see <http://www.gnu.org/licenses/>.
 
-attribute vec4 position;
+#version 130
+
+in vec3 inVertex;
+in vec3 inNormal;
+in vec2 inTexCoord;
+in vec4 inColor;
+
+uniform vec4 pos;
+uniform vec4 color;
+uniform mat4 mvp;
+
+out vec4 vColor;
 
 void main()
 {
     // Simple transform
-    gl_Position = gl_ModelViewProjectionMatrix * (gl_Vertex + position);
+    gl_Position = mvp * (vec4(inVertex, 1) + pos);
     
     // Copy the primary color
-    gl_FrontColor = gl_Color;
+    vColor = inColor * color;
 }
 
