@@ -1,3 +1,37 @@
+dustrac (0.14.0-1) precise; urgency=low
+
+  * Adds sky reflection.
+  * Updates square.trk
+  * Fixes grandstand shadows.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Thu, 29 Nov 2012 22:20:50 +0200
+
+dustrac (0.13.0-1) precise; urgency=low
+
+  * Refactors EventHandler to use an action map.
+  * Adds (L/R)SHIFT and (L/R)CTRL as alternative keys.
+  * Editor: Fixes clear tile action.
+  * Editor: Fixes a crash when clicking on empty track.
+  * Adds StateMachine::isFading().
+  * Configurable fps.
+  * Revert "Use full screen mode as the default."
+  * Fixes game logic on different game modes.
+  * Adds Time Trial and Duel menu items.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Mon, 19 Nov 2012 22:01:23 +0200
+
+dustrac (0.12.0-1) precise; urgency=low
+
+  * New release.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Fri, 16 Nov 2012 18:37:23 +0200
+
+dustrac (0.11.1-1) precise; urgency=low
+
+  * New release.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 10 Nov 2012 23:46:53 +0200
+
 dustrac (0.11.0-1) precise; urgency=low
 
   * New release.
