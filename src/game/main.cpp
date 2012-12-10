@@ -42,14 +42,26 @@ int main(int argc, char ** argv)
         MCLogger::setEchoMode(true);
         MCLogger::setDateTime(true);
 
+        // Create the main window / renderer
+
+        if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
+        {
+            MCLogger().fatal() << "At least OpenGL 3.0 is required!";
+            return EXIT_FAILURE;
+        }
+
         int hRes, vRes;
         bool fullScreen;
         Settings::instance().loadResolution(hRes, vRes, fullScreen);
         MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
 
-        // Create the main window / renderer
+        QGLFormat qglFormat;
+        qglFormat.setVersion(3, 0);
+        qglFormat.setProfile(QGLFormat::CoreProfile);
+        qglFormat.setSampleBuffers(false);
+
         MCLogger().info() << "Creating the renderer..";
-        Renderer renderer(hRes, vRes, fullScreen);
+        Renderer renderer(qglFormat, hRes, vRes, fullScreen);
         renderer.activateWindow();
 
         if (fullScreen)

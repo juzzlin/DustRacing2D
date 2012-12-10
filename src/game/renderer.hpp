@@ -43,7 +43,8 @@ class Renderer : public QGLWidget
 public:
 
     //! Constructor.
-    Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent = nullptr);
+    Renderer(
+        const QGLFormat & qglFormat, int hRes, int vRes, bool fullScreen, QWidget * parent = nullptr);
 
     //! Destructor.
     virtual ~Renderer();

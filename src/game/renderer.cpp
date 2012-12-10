@@ -43,8 +43,9 @@
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(int hRes, int vRes, bool fullScreen, QWidget * parent)
-: QGLWidget(parent)
+Renderer::Renderer(
+    const QGLFormat & qglFormat, int hRes, int vRes, bool fullScreen, QWidget * parent)
+: QGLWidget(qglFormat, parent)
 , m_scene(nullptr)
 , m_glScene(new MCGLScene)
 , m_eventHandler(nullptr)
