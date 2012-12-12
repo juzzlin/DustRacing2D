@@ -117,21 +117,21 @@ public:
      * \param hr Half of the wanted height.
      */
     void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
-        bool autoClientState = true);
+        bool autoBind = true);
 
    /*! Render scaled.
     * \param pos The position.
     * \param wr Half of the wanted width.
     * \param hr Half of the wanted height.
-    * \param autoClientState Automatically enable/disable OpenGL client states.
+    * \param autoBind Automatically enable/disable OpenGL client states.
     */
     void renderScaled(
         MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-        bool autoClientState = true);
+        bool autoBind = true);
 
     //! Render (fake) shadow
     void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
-        bool autoClientState = true);
+        bool autoBind = true);
 
    /*! Render (fake) shadow scaled.
     * \param pos The position.
@@ -140,27 +140,23 @@ public:
     */
     void renderShadowScaled(
         MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-        bool autoClientState = true);
+        bool autoBind = true);
+
+    //! Render the vertex buffer only. bind() must be called separately.
+    void render();
 
     /*! Manually enable/disable OpenGL client states and texturing environment.
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
-     *  \see render()
-     */
-    void enableClientState(bool enable) const;
+     *  \see render() */
+    void bind(bool enable) const;
 
     /*! Manually enable/disable OpenGL client states and texturing environment.
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
      *  \see renderShadow()
      */
-    void enableShadowClientState(bool enable) const;
-
-    //! Manually render VBO's.
-    void renderVBOs(bool autoClientState = true);
-
-    //! Manually render VBO's when rendering the 2d "shadow".
-    void renderShadowVBOs(bool autoClientState = true);
+    void bindShadow(bool enable) const;
 
     //! Bind the current texture.
     void bindTexture(bool bindOnlyFirstTexture = false) const;
@@ -204,6 +200,10 @@ private:
         const MCGLVertex   * normals,
         const MCGLTexCoord * texCoords,
         const GLfloat      * colors);
+
+    void doRender(bool autoBind);
+
+    void doRenderShadow(bool autoBind);
 
     GLuint m_handle1;
     GLuint m_handle2;

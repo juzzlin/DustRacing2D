@@ -100,7 +100,7 @@ void MCSurfaceView::beginBatch()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->enableClientState(true);
+        m_surface->bind(true);
     }
 }
 
@@ -108,7 +108,7 @@ void MCSurfaceView::endBatch()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->enableClientState(false);
+        m_surface->bind(false);
     }
 }
 
@@ -116,7 +116,7 @@ void MCSurfaceView::beginBatchShadow()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->enableShadowClientState(true);
+        m_surface->bindShadow(true);
     }
 }
 
@@ -124,7 +124,7 @@ void MCSurfaceView::endBatchShadow()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->enableShadowClientState(false);
+        m_surface->bindShadow(false);
     }
 }
 

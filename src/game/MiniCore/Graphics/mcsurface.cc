@@ -277,14 +277,18 @@ MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
-void MCSurface::renderVBOs(bool autoClientState)
+void MCSurface::render()
 {
-    if (autoClientState)
+    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
+}
+
+void MCSurface::doRender(bool autoBind)
+{
+    if (autoBind)
     {
-        enableClientState(true);
-        bindTexture();
+        bind(true);
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-        enableClientState(false);
+        bind(false);
     }
     else
     {
@@ -292,38 +296,17 @@ void MCSurface::renderVBOs(bool autoClientState)
     }
 }
 
-void MCSurface::renderShadowVBOs(bool autoClientState)
+void MCSurface::doRenderShadow(bool autoBind)
 {
-    if (autoClientState)
+    if (autoBind)
     {
-        enableShadowClientState(true);
-        bindTexture(true);
+        bindShadow(true);
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-        enableShadowClientState(false);
+        bindShadow(false);
     }
     else
     {
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-    }
-}
-
-void MCSurface::bindTexture(bool bindOnlyFirstTexture) const
-{
-    assert(m_program);
-
-    if (m_handle2 && !bindOnlyFirstTexture)
-    {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_handle1);
-        m_program->bindTextureUnit0(0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_handle2);
-        m_program->bindTextureUnit1(1);
-        glActiveTexture(GL_TEXTURE0);
-    }
-    else
-    {
-        glBindTexture(GL_TEXTURE_2D, m_handle1);
     }
 }
 
@@ -348,7 +331,7 @@ MCGLShaderProgram * MCSurface::shadowShaderProgram() const
 }
 
 void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
-    bool autoClientState)
+    bool autoBind)
 {
     if (m_program)
     {
@@ -378,7 +361,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
         m_program->rotate(angle);
 
-        renderVBOs(autoClientState);
+        doRender(autoBind);
 
         m_program->release();
 
@@ -391,7 +374,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
 void MCSurface::renderScaled(
     MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-    bool autoClientState)
+    bool autoBind)
 {
     if (m_program)
     {
@@ -422,7 +405,7 @@ void MCSurface::renderScaled(
 
         m_program->rotate(angle);
 
-        renderVBOs(autoClientState);
+        doRender(autoBind);
 
         m_program->release();
 
@@ -434,7 +417,7 @@ void MCSurface::renderScaled(
 }
 
 void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
-    bool autoClientState)
+    bool autoBind)
 {
     if (m_shadowProgram)
     {
@@ -462,7 +445,7 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
 
         m_shadowProgram->rotate(angle);
 
-        renderShadowVBOs(autoClientState);
+        doRenderShadow(autoBind);
 
         m_shadowProgram->release();
     }
@@ -470,7 +453,7 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
 
 void MCSurface::renderShadowScaled(
     MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-    bool autoClientState)
+    bool autoBind)
 {
     if (m_shadowProgram)
     {
@@ -498,18 +481,17 @@ void MCSurface::renderShadowScaled(
 
         m_shadowProgram->rotate(angle);
 
-        renderShadowVBOs(autoClientState);
+        doRenderShadow(autoBind);
 
         m_shadowProgram->release();
     }
 }
 
-void MCSurface::enableClientState(bool enable) const
+void MCSurface::bind(bool enable) const
 {
     if (enable)
     {
         glBindVertexArray(m_vba);
-
         bindTexture();
     }
     else
@@ -528,17 +510,36 @@ void MCSurface::enableClientState(bool enable) const
     }
 }
 
-void MCSurface::enableShadowClientState(bool enable) const
+void MCSurface::bindShadow(bool enable) const
 {
     if (enable)
     {
         glBindVertexArray(m_vba);
-
         bindTexture(true);
     }
     else
     {
         glBindVertexArray(0);
+    }
+}
+
+void MCSurface::bindTexture(bool bindOnlyFirstTexture) const
+{
+    assert(m_program);
+
+    if (m_handle2 && !bindOnlyFirstTexture)
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_handle1);
+        m_program->bindTextureUnit0(0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_handle2);
+        m_program->bindTextureUnit1(1);
+        glActiveTexture(GL_TEXTURE0);
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, m_handle1);
     }
 }
 

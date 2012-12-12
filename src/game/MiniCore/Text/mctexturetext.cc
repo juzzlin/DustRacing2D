@@ -138,7 +138,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
     const int w2 = m_glyphWidth  / 2;
     const int h2 = m_glyphHeight / 2;
 
-    font.surface().enableClientState(true);
+    font.surface().bind(true);
     font.surface().setColor(m_r, m_g, m_b, m_a);
 
     glDisable(GL_DEPTH_TEST);
@@ -192,5 +192,5 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
         }
     }
 
-    font.surface().enableClientState(false);
+    font.surface().bind(false);
 }
