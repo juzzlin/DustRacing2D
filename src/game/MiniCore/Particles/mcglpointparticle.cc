@@ -26,7 +26,6 @@
 
 static const int NUM_VERTICES         = 1;
 static const int NUM_COLOR_COMPONENTS = 4;
-static const int ALPHA_FRAMES         = 10;
 static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
 static const int COLOR_DATA_SIZE      = sizeof(GLfloat)    * NUM_VERTICES * NUM_COLOR_COMPONENTS;
 static const int TOTAL_DATA_SIZE      = VERTEX_DATA_SIZE + COLOR_DATA_SIZE;
@@ -37,7 +36,6 @@ MCGLPointParticle::MCGLPointParticle(const std::string & typeID)
 , m_g(1.0)
 , m_b(1.0)
 , m_a(1.0)
-, m_frameCount(ALPHA_FRAMES)
 , m_program(nullptr)
 {
     // Disable shadow by default
@@ -99,11 +97,6 @@ void MCGLPointParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     m_a = a;
 }
 
-void MCGLPointParticle::setAlpha(MCFloat a)
-{
-    m_a = a;
-}
-
 void MCGLPointParticle::beginBatch()
 {
     glEnable(GL_BLEND);
@@ -136,22 +129,16 @@ void MCGLPointParticle::render(MCCamera * pCamera)
             pCamera->mapToCamera(x, y);
         }
 
+        // Scale alpha if fading out.
+        if (animationStyle() == FadeOut)
+        {
+            m_a *= scale();
+        }
+
         m_program->bind();
         m_program->translate(MCVector3dF(x, y, location().k()));
         m_program->rotate(angle());
         m_program->setColor(m_r, m_g, m_b, m_a);
-
-        // Scale alpha if fading out. Don't do this on
-        // every frame, because it's expensive.
-        if (animationStyle() == FadeOut)
-        {
-            if (!--m_frameCount)
-            {
-                setAlpha(m_a * scale());
-                m_frameCount = ALPHA_FRAMES;
-            }
-        }
-
         m_program->setScale(r, r, 1.0);
 
         glBindVertexArray(m_vba);
