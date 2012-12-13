@@ -113,6 +113,9 @@ void MCGLRectParticle::beginBatch()
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    m_program->bind();
+    glBindVertexArray(m_vba);
 }
 
 void MCGLRectParticle::endBatch()
@@ -147,13 +150,11 @@ void MCGLRectParticle::render(MCCamera * pCamera)
             alpha *= scale();
         }
 
-        m_program->bind();
         m_program->translate(MCVector3dF(x, y, location().k()));
         m_program->rotate(angle());
         m_program->setColor(m_r, m_g, m_b, alpha);
         m_program->setScale(r, r, 1.0);
 
-        glBindVertexArray(m_vba);
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
     }
 }
