@@ -43,7 +43,7 @@ ParticleManager & ParticleManager::instance()
 void ParticleManager::preCreateParticles()
 {
     // Pre-create some mud particles
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         MCParticle * particle = new MCGLRectParticle("MUD");
         static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
@@ -58,7 +58,7 @@ void ParticleManager::preCreateParticles()
     }
 
     // Pre-create some smoke particles
-    for (int i = 0; i < 500; i++)
+    for (int i = 0; i < 100; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("SMOKE");
         particle->setSurface(MCSurfaceManager::instance().surface("smoke"));
@@ -73,7 +73,7 @@ void ParticleManager::preCreateParticles()
     }
 
     // Pre-create some sparkles
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("SPARKLE");
         particle->setSurface(MCSurfaceManager::instance().surface("sparkle"));
