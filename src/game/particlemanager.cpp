@@ -43,7 +43,7 @@ ParticleManager & ParticleManager::instance()
 void ParticleManager::preCreateParticles()
 {
     // Pre-create some mud particles
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 250; i++)
     {
         MCParticle * particle = new MCGLRectParticle("MUD");
         static_cast<MCGLRectParticle *>(particle)->setShaderProgram(
@@ -114,7 +114,6 @@ void ParticleManager::doSmoke(
 
         smoke->init(location, 10, 60);
         smoke->setAnimationStyle(MCParticle::Shrink);
-        smoke->translate(location);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
         smoke->setColor(r, g, b, a);
@@ -122,9 +121,23 @@ void ParticleManager::doSmoke(
     }
 }
 
-void ParticleManager::doSkidMark(MCVector3dFR, MCFloat, MCFloat, MCFloat, MCFloat) const
+void ParticleManager::doSkidMark(
+    MCVector3dFR location, MCFloat angle, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const
 {
-    // Must be drawn to an offscreen buffer. Not implemented.
+    MCGLRectParticle * skidMark = nullptr;
+    if (m_freeList1.size())
+    {
+        skidMark = static_cast<MCGLRectParticle *>(m_freeList1.back());
+        m_freeList1.pop_back();
+
+        skidMark->init(location, 4, 3000);
+        skidMark->setAnimationStyle(MCParticle::FadeOut);
+        skidMark->rotate(angle);
+        skidMark->setColor(r, g, b, a);
+        skidMark->setVelocity(MCVector3dF(0, 0, 0));
+        skidMark->setAcceleration(MCVector3dF(0, 0, 0));
+        skidMark->addToWorld();
+    }
 }
 
 void ParticleManager::doMud(
@@ -156,7 +169,6 @@ void ParticleManager::doSparkle(
 
         sparkle->init(location, 6, 60);
         sparkle->setAnimationStyle(MCParticle::Shrink);
-        sparkle->translate(location);
         sparkle->setColor(r, g, b, a);
         sparkle->setVelocity(velocity);
         sparkle->addToWorld();
@@ -174,7 +186,6 @@ void ParticleManager::doLeaf(
 
         leaf->init(location, 10, 120);
         leaf->setAnimationStyle(MCParticle::Shrink);
-        leaf->translate(location);
         leaf->rotate(MCRandom::getValue() * 360);
         leaf->setColor(r, g, b, a);
         leaf->setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());

@@ -141,9 +141,10 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         }
 
         // Scale alpha if fading out.
+        GLfloat alpha = m_a;
         if (animationStyle() == FadeOut)
         {
-            m_a *= scale();
+            alpha *= scale();
         }
 
         m_program->bind();

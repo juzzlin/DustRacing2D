@@ -305,21 +305,18 @@ void Car::render(MCCamera *p)
 
 bool Car::update()
 {
-    if (m_accelerating || m_braking)
+    if (m_braking && m_speedInKmh > 5 && m_speedInKmh < 25)
     {
-        if (m_speedInKmh < 25)
+        if (!m_leftSideOffTrack)
         {
-            if (!m_leftSideOffTrack)
-            {
-                ParticleManager::instance().doSkidMark(
-                    leftRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
-            }
+            ParticleManager::instance().doSkidMark(
+                leftRearTireLocation(), angle(), 0, 0, 0, 0.25);
+        }
 
-            if (!m_rightSideOffTrack)
-            {
-                ParticleManager::instance().doSkidMark(
-                    rightRearTireLocation(), 0.25, 0.25, 0.25, 0.25);
-            }
+        if (!m_rightSideOffTrack)
+        {
+            ParticleManager::instance().doSkidMark(
+                rightRearTireLocation(), angle(), 0, 0, 0, 0.25);
         }
     }
 
@@ -329,7 +326,8 @@ bool Car::update()
         bool smoke = false;
         if (m_leftSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(leftFrontTireLocation(), 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(
+                leftFrontTireLocation(), angle(), 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)
@@ -342,7 +340,8 @@ bool Car::update()
 
         if (m_rightSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(rightFrontTireLocation(), 0.3, 0.2, 0.0, 0.5);
+            ParticleManager::instance().doSkidMark(
+                rightFrontTireLocation(), angle(), 0.3, 0.2, 0.0, 0.5);
             smoke = true;
 
             if (++m_mudCounter >= 5)

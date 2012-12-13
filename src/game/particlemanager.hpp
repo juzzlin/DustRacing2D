@@ -40,7 +40,7 @@ public:
         MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
     void doSkidMark(
-        MCVector3dFR location, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
+        MCVector3dFR location, MCFloat angle, MCFloat r, MCFloat g, MCFloat b, MCFloat a) const;
 
     void doSparkle(
         MCVector3dFR location, MCVector3dFR velocity,

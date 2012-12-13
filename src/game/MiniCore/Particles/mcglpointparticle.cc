@@ -130,15 +130,16 @@ void MCGLPointParticle::render(MCCamera * pCamera)
         }
 
         // Scale alpha if fading out.
+        GLfloat alpha = m_a;
         if (animationStyle() == FadeOut)
         {
-            m_a *= scale();
+            alpha *= scale();
         }
 
         m_program->bind();
         m_program->translate(MCVector3dF(x, y, location().k()));
         m_program->rotate(angle());
-        m_program->setColor(m_r, m_g, m_b, m_a);
+        m_program->setColor(m_r, m_g, m_b, alpha);
         m_program->setScale(r, r, 1.0);
 
         glBindVertexArray(m_vba);
