@@ -154,8 +154,6 @@ void MCGLRectParticle::render(MCCamera * pCamera)
 
         glBindVertexArray(m_vba);
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-
-        m_program->release();
     }
 }
 

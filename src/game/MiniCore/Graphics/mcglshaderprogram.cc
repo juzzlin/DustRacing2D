@@ -20,6 +20,8 @@
 #include "mcglshaderprogram.hh"
 #include "mcglscene.hh"
 
+MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
+
 MCGLShaderProgram::MCGLShaderProgram(MCGLScene & scene)
 : m_scene(scene)
 , m_isBound(false)
@@ -34,11 +36,23 @@ MCGLShaderProgram::~MCGLShaderProgram()
 void MCGLShaderProgram::bind()
 {
     m_isBound = true;
+
+    if (MCGLShaderProgram::m_activeProgram && MCGLShaderProgram::m_activeProgram != this)
+    {
+        MCGLShaderProgram::m_activeProgram->release();
+    }
+
+    MCGLShaderProgram::m_activeProgram = this;
 }
 
 void MCGLShaderProgram::release()
 {
     m_isBound = false;
+
+    if (MCGLShaderProgram::m_activeProgram == this)
+    {
+        MCGLShaderProgram::m_activeProgram = nullptr;
+    }
 }
 
 bool MCGLShaderProgram::isBound() const

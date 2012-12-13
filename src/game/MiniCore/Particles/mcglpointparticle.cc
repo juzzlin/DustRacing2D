@@ -143,8 +143,6 @@ void MCGLPointParticle::render(MCCamera * pCamera)
 
         glBindVertexArray(m_vba);
         glDrawArrays(GL_POINTS, 0, NUM_VERTICES);
-
-        m_program->release();
     }
 }
 

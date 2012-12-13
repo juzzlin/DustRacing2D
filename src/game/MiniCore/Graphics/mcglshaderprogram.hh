@@ -53,7 +53,9 @@ public:
     //! Destructor.
     virtual ~MCGLShaderProgram();
 
-    //! Binds the program. Re-imp and call parent implementation.
+    /*! Binds the program. Re-imp and call parent implementation.
+     *  The previous active shader program will be lazily released,
+     *  so usually it won't be necessary to call release(). */
     virtual void bind();
 
     //! Releases the program. Re-imp and call parent implementation.
@@ -103,6 +105,8 @@ public:
     virtual void bindTextureUnit1(GLuint index);
 
 private:
+
+    static MCGLShaderProgram * m_activeProgram;
 
     MCGLScene & m_scene;
     bool        m_isBound;

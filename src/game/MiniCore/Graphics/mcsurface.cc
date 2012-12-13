@@ -363,8 +363,6 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
 
         doRender(autoBind);
 
-        m_program->release();
-
         if (m_useAlphaBlend)
         {
             glDisable(GL_BLEND);
@@ -407,8 +405,6 @@ void MCSurface::renderScaled(
 
         doRender(autoBind);
 
-        m_program->release();
-
         if (m_useAlphaBlend)
         {
             glDisable(GL_BLEND);
@@ -446,8 +442,6 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
         m_shadowProgram->rotate(angle);
 
         doRenderShadow(autoBind);
-
-        m_shadowProgram->release();
     }
 }
 
@@ -482,8 +476,6 @@ void MCSurface::renderShadowScaled(
         m_shadowProgram->rotate(angle);
 
         doRenderShadow(autoBind);
-
-        m_shadowProgram->release();
     }
 }
 
