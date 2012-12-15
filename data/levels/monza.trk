@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.9.0" cols="35" rows="19" index="3" name="Monza">
+<track lapCount="5" version="0.14.0" cols="35" rows="19" index="3" name="Monza">
  <t i="0" j="0" o="180" t="sand"/>
  <t i="0" j="1" o="0" t="sand"/>
  <t i="0" j="2" o="0" t="sand"/>
@@ -235,7 +235,7 @@
  <t i="12" j="5" o="0" t="grass"/>
  <t i="12" j="6" o="0" t="grass"/>
  <t i="12" j="7" o="-90" t="straight45Female"/>
- <t i="12" j="8" o="90" t="straight45Male"/>
+ <t i="12" j="8" o="90" t="straight45Male" c="2"/>
  <t i="12" j="9" o="90" t="straight45Female"/>
  <t i="12" j="10" o="0" t="grass"/>
  <t i="12" j="11" o="0" t="grass"/>
@@ -261,7 +261,7 @@
  <t i="13" j="12" o="0" t="grass"/>
  <t i="13" j="13" o="0" t="grass"/>
  <t i="13" j="14" o="0" t="grass"/>
- <t i="13" j="15" o="90" t="straight"/>
+ <t i="13" j="15" o="90" t="straight" c="1"/>
  <t i="13" j="16" o="0" t="grass"/>
  <t i="13" j="17" o="0" t="sandGrassStraight"/>
  <t i="13" j="18" o="0" t="sand"/>
@@ -280,7 +280,7 @@
  <t i="14" j="12" o="0" t="grass"/>
  <t i="14" j="13" o="0" t="grass"/>
  <t i="14" j="14" o="0" t="grass"/>
- <t i="14" j="15" o="90" t="straight"/>
+ <t i="14" j="15" o="90" t="straight" c="2"/>
  <t i="14" j="16" o="0" t="grass"/>
  <t i="14" j="17" o="0" t="sandGrassStraight"/>
  <t i="14" j="18" o="0" t="sand"/>
@@ -561,7 +561,7 @@
  <t i="29" j="8" o="0" t="grass"/>
  <t i="29" j="9" o="0" t="grass"/>
  <t i="29" j="10" o="0" t="grass"/>
- <t i="29" j="11" o="90" t="straight"/>
+ <t i="29" j="11" o="90" t="straight" c="2"/>
  <t i="29" j="12" o="0" t="grass"/>
  <t i="29" j="13" o="0" t="grass"/>
  <t i="29" j="14" o="0" t="grass"/>
@@ -738,10 +738,10 @@
  <o x="2041" y="3730" o="0" r="tree" c="free"/>
  <o x="600" y="1517" o="0" r="tree" c="free"/>
  <o x="789" y="1692" o="0" r="tree" c="free"/>
- <o x="3541" y="2211" o="45" r="brake" c="free"/>
- <o x="3229" y="2496" o="45" r="brake" c="free"/>
- <o x="7732" y="2774" o="0" r="brake" c="free"/>
- <o x="7732" y="3106" o="0" r="brake" c="free"/>
+ <o x="3541" y="2211" o="135" r="brake" c="free"/>
+ <o x="3229" y="2496" o="135" r="brake" c="free"/>
+ <o x="7732" y="2774" o="90" r="brake" c="free"/>
+ <o x="7732" y="3106" o="90" r="brake" c="free"/>
  <o x="3646" y="3806" o="270" r="brake" c="free"/>
  <o x="3645" y="4123" o="-90" r="brake" c="free"/>
  <o x="1628" y="3800" o="-90" r="brake" c="free"/>
@@ -880,8 +880,8 @@
  <o x="2420" y="3960" o="45" r="grandstand" c="free"/>
  <o x="1283" y="566" o="180" r="grandstand" c="free"/>
  <o x="5019" y="2960" o="225" r="grandstand" c="free"/>
- <o x="8507" y="3389" o="90" r="grandstand" c="free"/>
- <o x="8507" y="3517" o="90" r="grandstand" c="free"/>
+ <o x="8631" y="3389" o="90" r="grandstand" c="free"/>
+ <o x="8631" y="3517" o="90" r="grandstand" c="free"/>
  <o x="1278" y="240" o="0" r="dustRacing2DBanner" c="free"/>
  <o x="1573" y="357" o="45" r="dustRacing2DBanner" c="free"/>
  <o x="980" y="357" o="-45" r="dustRacing2DBanner" c="free"/>
@@ -957,13 +957,17 @@
  <o x="2816" y="4466" o="180" r="grandstand" c="free"/>
  <o x="2688" y="4466" o="180" r="grandstand" c="free"/>
  <o x="2559" y="4465" o="180" r="grandstand" c="free"/>
+ <o x="8631" y="3262" o="90" r="grandstand" c="free"/>
+ <o x="8631" y="3645" o="90" r="grandstand" c="free"/>
+ <o x="8485" y="3096" o="45" r="dustRacing2DBanner" c="free"/>
+ <o x="8488" y="3811" o="135" r="dustRacing2DBanner" c="free"/>
  <n x="5248" y="3972" i="0"/>
  <n x="3791" y="3999" i="1"/>
  <n x="3363" y="4044" i="2"/>
- <n x="2904" y="4178" i="3"/>
- <n x="2748" y="4224" i="4"/>
- <n x="2488" y="4216" i="5"/>
- <n x="2216" y="4036" i="6"/>
+ <n x="3017" y="4139" i="3"/>
+ <n x="2699" y="4235" i="4"/>
+ <n x="2394" y="4125" i="5"/>
+ <n x="2177" y="4060" i="6"/>
  <n x="1660" y="3972" i="7"/>
  <n x="1268" y="3836" i="8"/>
  <n x="1104" y="3404" i="9"/>
