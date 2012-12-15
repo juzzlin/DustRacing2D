@@ -126,7 +126,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
 void Scene::createCars()
 {
-    const int humanPower = 8000;
+    const int humanPower = 7500;
 
     m_race.removeCars();
     m_cars.clear();
@@ -151,6 +151,10 @@ void Scene::createCars()
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
             desc.power = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
+
+            desc.turningImpulse  = 0.5;
+            desc.slideFriction   = 1.0;
+            desc.brakingFriction = 2.0;
 
             if (i == NUM_CARS - 1)
             {

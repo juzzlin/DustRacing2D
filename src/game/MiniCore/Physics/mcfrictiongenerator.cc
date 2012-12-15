@@ -22,27 +22,30 @@
 #include "mcobject.hh"
 #include "mcshape.hh"
 
-namespace
-{
-    const MCFloat FRICTION_SPEED_TH = 0.01;
-    const MCFloat LINEAR_DECAY      = 0.005;
-    const MCFloat ROTATION_DECAY    = 0.01;
-}
+static const MCFloat ROTATION_DECAY = 0.01;
 
 MCFrictionGenerator::MCFrictionGenerator(
     MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)
 : m_coeffLin(coeffLin)
 , m_coeffRot(coeffRot)
 , m_gravity(gravity)
-, m_coeffLinTot(coeffLin * gravity * LINEAR_DECAY)
+, m_coeffLinTot(coeffLin * gravity)
 , m_coeffRotTot(coeffRot * gravity * ROTATION_DECAY)
 {}
 
 void MCFrictionGenerator::updateForce(MCObject & object)
 {
     // Simulated friction caused by linear motion.
-    const MCVector2d<MCFloat> v(object.velocity());
-    object.addLinearImpulse(-v * m_coeffLinTot);
+    const MCFloat length = object.velocity().lengthFast();
+    const MCVector2d<MCFloat> v(object.velocity().normalizedFast());
+    if (length >= 1.0)
+    {
+        object.addForce(-v * m_coeffLinTot * object.mass());
+    }
+    else
+    {
+        object.addForce(-v * length * m_coeffLinTot * object.mass());
+    }
 
     // Simulated friction caused by angular torque.
     if (object.shape())
