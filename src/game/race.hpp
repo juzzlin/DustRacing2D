@@ -29,6 +29,7 @@ class Game;
 class MessageOverlay;
 class OffTrackDetector;
 class Track;
+class TrackTile;
 
 //! Class that controls the race event, checkpoints and timing.
 class Race : public QObject
@@ -86,6 +87,10 @@ private:
 
     void updateRouteProgress(Car & car);
 
+    void checkIfCarIsStuck(Car & car);
+
+    void moveCarOntoPreviousCheckPoint(Car & car);
+
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
@@ -97,6 +102,12 @@ private:
     typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
     typedef std::vector<OffTrackDetectorPtr> OTDVector;
     OTDVector m_offTrackDetectors;
+
+    // Data structure to determine if a car is stuck.
+    // In that case we move the car onto the previous check point.
+    typedef std::pair<TrackTile *, int> StuckTileCounter; // Tile pointer and counter.
+    typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
+    StuckHash m_stuckHash;
 
     unsigned int     m_lapCount;
     Timing           m_timing;

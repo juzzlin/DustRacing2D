@@ -49,11 +49,13 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 
 void Race::init()
 {
-    for(Car * pCar : m_cars)
+    for(Car * car : m_cars)
     {
-        pCar->setCurrentTargetNodeIndex(0);
-        pCar->setPrevTargetNodeIndex(0);
-        pCar->setRouteProgression(0);
+        car->setCurrentTargetNodeIndex(0);
+        car->setPrevTargetNodeIndex(0);
+        car->setRouteProgression(0);
+
+        m_stuckHash[car->index()] = StuckTileCounter(nullptr, 0);
     }
 
     m_timing.reset();
@@ -157,6 +159,12 @@ void Race::updateRouteProgress(Car & car)
     {
         if (!m_timing.raceCompleted(car.index()))
         {
+            // Check is car is stuck and if so, move onto nearest asphalt tile.
+            if (!car.isHuman())
+            {
+                checkIfCarIsStuck(car);
+            }
+
             // Give a bit more tolerance for other than the finishing check point.
             const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
             if (isInsideCheckPoint(car, tnode, tolerance))
@@ -229,6 +237,35 @@ void Race::updateRouteProgress(Car & car)
             m_timing.setIsActive(car.index(), false);
         }
     }
+}
+
+void Race::checkIfCarIsStuck(Car & car)
+{
+    static const int STUCK_LIMIT = 60 * 5; // 5 secs.
+
+    TrackTile * currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
+
+    StuckTileCounter & counter = m_stuckHash[car.index()];
+    if (counter.first == nullptr || counter.first != currentTile)
+    {
+        counter.first  = currentTile;
+        counter.second = 0;
+    }
+    else if (counter.first == currentTile && !currentTile->hasAsphalt())
+    {
+        if (++counter.second >= STUCK_LIMIT)
+        {
+            moveCarOntoPreviousCheckPoint(car);
+        }
+    }
+}
+
+void Race::moveCarOntoPreviousCheckPoint(Car & car)
+{
+    const Route    & route = m_track->trackData().route();
+    TargetNodeBase & tnode = route.get(car.prevTargetNodeIndex());
+
+    car.translate(MCVector3dF(tnode.location().x(), tnode.location().y()));
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
