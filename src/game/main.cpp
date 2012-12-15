@@ -17,6 +17,7 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 #include "game.hpp"
 #include "renderer.hpp"
@@ -25,6 +26,24 @@
 
 #include <MCException>
 #include <MCLogger>
+
+static void initLogger()
+{
+    QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
+    MCLogger::init(logPath.toStdString().c_str());
+    MCLogger::setEchoMode(true);
+    MCLogger::setDateTime(true);
+}
+
+static void checkOpenGLVersion()
+{
+    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
+    {
+        QString versionError = QObject::tr("At least OpenGL 3.0 is required!");
+        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
+        throw MCException(versionError.toStdString());
+    }
+}
 
 int main(int argc, char ** argv)
 {
@@ -36,20 +55,11 @@ int main(int argc, char ** argv)
         QApplication::setGraphicsSystem("opengl");
         QApplication app(argc, argv);
 
-        // Initialize the logger
-        QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
-        MCLogger::init(logPath.toStdString().c_str());
-        MCLogger::setEchoMode(true);
-        MCLogger::setDateTime(true);
+        initLogger();
+
+        checkOpenGLVersion();
 
         // Create the main window / renderer
-
-        if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
-        {
-            MCLogger().fatal() << "At least OpenGL 3.0 is required!";
-            return EXIT_FAILURE;
-        }
-
         int hRes, vRes;
         bool fullScreen;
         Settings::instance().loadResolution(hRes, vRes, fullScreen);
