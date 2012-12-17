@@ -28,6 +28,7 @@ class Car;
 class Game;
 class MessageOverlay;
 class OffTrackDetector;
+class Route;
 class Track;
 class TrackTile;
 
@@ -86,9 +87,10 @@ public slots:
 private:
 
     void updateRouteProgress(Car & car);
-
+    void checkForNewLapRecord();
+    void checkForNewBestPosition(const Car & car);
     void checkIfCarIsStuck(Car & car);
-
+    bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
     void moveCarOntoPreviousCheckPoint(Car & car);
 
     typedef std::vector<Car *> CarVector;

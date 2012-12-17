@@ -152,8 +152,8 @@ bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
 void Race::updateRouteProgress(Car & car)
 {
     const Route    & route = m_track->trackData().route();
-    unsigned int     index = car.currentTargetNodeIndex();
-    TargetNodeBase & tnode = route.get(index);
+    unsigned int     currentTargetNodeIndex = car.currentTargetNodeIndex();
+    TargetNodeBase & tnode = route.get(currentTargetNodeIndex);
 
     if (m_timing.isActive(car.index()))
     {
@@ -166,26 +166,12 @@ void Race::updateRouteProgress(Car & car)
             }
 
             // Give a bit more tolerance for other than the finishing check point.
-            const int tolerance = index == 0 ? 0 : TrackTile::TILE_H / 20;
+            const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
-                // Lap finished?
-                if (index == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
+                if (isLapCompleted(car, route, currentTargetNodeIndex))
                 {
-                    m_timing.lapCompleted(car.index(), car.isHuman());
-
-                    // Check if we have a new lap record
-                    if (m_timing.newLapRecordAchieved())
-                    {
-                        Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
-                        m_messageOverlay.addMessage(QObject::tr("New lap record!"));
-                    }
-
-                    // Finish the race if winner has already finished.
-                    if (m_winnerFinished)
-                    {
-                        m_timing.setRaceCompleted(car.index(), true);
-                    }
+                    checkForNewLapRecord();
                 }
 
                 // Increase progress and update the positions hash
@@ -193,48 +179,82 @@ void Race::updateRouteProgress(Car & car)
                 m_positions[car.routeProgression()].push_back(car.index());
 
                 // Switch to next check point
-                car.setPrevTargetNodeIndex(index);
-                if (++index >= route.numNodes())
+                car.setPrevTargetNodeIndex(currentTargetNodeIndex);
+                if (++currentTargetNodeIndex >= route.numNodes())
                 {
-                    index = 0;
+                    currentTargetNodeIndex = 0;
                 }
             }
 
-            car.setCurrentTargetNodeIndex(index);
+            car.setCurrentTargetNodeIndex(currentTargetNodeIndex);
         }
         else
         {
-            // Check if the race is completed fo a human player and if so,
-            // check if new best pos achieved and save it.
-            if (m_game.mode() == Game::OnePlayerRace || m_game.mode() == Game::TwoPlayerRace)
-            {
-                if (car.isHuman())
-                {
-                    const int pos = getPositionOfCar(car);
-                    if (pos < m_bestPos || m_bestPos == -1)
-                    {
-                        Settings::instance().saveBestPos(*m_track, pos);
-                        m_messageOverlay.addMessage(QObject::tr("New best pos!"));
-                    }
-
-                    Track * next = m_track->next();
-                    if (next && next->trackData().isLocked())
-                    {
-                        if (pos <= UNLOCK_LIMIT)
-                        {
-                            next->trackData().setIsLocked(false);
-                            Settings::instance().saveTrackUnlockStatus(*next);
-                            m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
-                        }
-                        else
-                        {
-                            m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
-                        }
-                    }
-                }
-            }
+            checkForNewBestPosition(car);
 
             m_timing.setIsActive(car.index(), false);
+        }
+    }
+}
+
+bool Race::isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex)
+{
+    if (currentTargetNodeIndex == 0 &&
+        car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
+    {
+        m_timing.lapCompleted(car.index(), car.isHuman());
+
+        // Finish the race if winner has already finished.
+        if (m_winnerFinished)
+        {
+            m_timing.setRaceCompleted(car.index(), true);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+void Race::checkForNewLapRecord()
+{
+    // Check if we have a new lap record
+    if (m_timing.newLapRecordAchieved())
+    {
+        Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
+        m_messageOverlay.addMessage(QObject::tr("New lap record!"));
+    }
+}
+
+void Race::checkForNewBestPosition(const Car & car)
+{
+    // Check if the race is completed for a human player and if so,
+    // check if new best pos achieved and save it.
+    if (m_game.mode() == Game::OnePlayerRace || m_game.mode() == Game::TwoPlayerRace)
+    {
+        if (car.isHuman())
+        {
+            const int pos = getPositionOfCar(car);
+            if (pos < m_bestPos || m_bestPos == -1)
+            {
+                Settings::instance().saveBestPos(*m_track, pos);
+                m_messageOverlay.addMessage(QObject::tr("New best pos!"));
+            }
+
+            Track * next = m_track->next();
+            if (next && next->trackData().isLocked())
+            {
+                if (pos <= UNLOCK_LIMIT)
+                {
+                    next->trackData().setIsLocked(false);
+                    Settings::instance().saveTrackUnlockStatus(*next);
+                    m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
+                }
+                else
+                {
+                    m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
+                }
+            }
         }
     }
 }
