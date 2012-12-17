@@ -1,4 +1,4 @@
-<track lapCount="5" version="0.9.0" cols="14" rows="14" index="5" name="Triangle">
+<track lapCount="5" version="0.14.0" cols="14" rows="14" index="5" name="Triangle">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
@@ -53,7 +53,7 @@
  <t i="3" j="9" o="0" t="straight45Male"/>
  <t i="3" j="10" o="0" t="straight45Female"/>
  <t i="3" j="11" o="90" t="straight"/>
- <t i="3" j="12" o="90" t="straight"/>
+ <t i="3" j="12" o="90" t="straight" c="2"/>
  <t i="3" j="13" o="0" t="sandGrassStraight"/>
  <t i="4" j="0" o="180" t="sandGrassStraight"/>
  <t i="4" j="1" o="90" t="straight"/>
@@ -296,7 +296,6 @@
  <o x="2022" y="749" o="0" r="plant" c="free"/>
  <o x="1960" y="623" o="0" r="plant" c="free"/>
  <o x="2317" y="534" o="0" r="plant" c="free"/>
- <o x="3069" y="783" o="0" r="plant" c="free"/>
  <o x="3065" y="921" o="0" r="plant" c="free"/>
  <o x="3289" y="288" o="0" r="plant" c="free"/>
  <o x="3369" y="562" o="0" r="plant" c="free"/>
@@ -382,8 +381,8 @@
  <o x="3062" y="2862" o="0" r="tire" c="free"/>
  <o x="2796" y="2529" o="0" r="brake" c="free"/>
  <o x="3079" y="2526" o="0" r="brake" c="free"/>
- <o x="703" y="3071" o="0" r="brake" c="free"/>
- <o x="712" y="3320" o="0" r="brake" c="free"/>
+ <o x="703" y="3071" o="-90" r="brake" c="free"/>
+ <o x="712" y="3320" o="-90" r="brake" c="free"/>
  <o x="2444" y="658" o="45" r="brake" c="free"/>
  <o x="2673" y="885" o="45" r="brake" c="free"/>
  <o x="323" y="2744" o="-45" r="grandstand" c="free"/>
@@ -400,7 +399,7 @@
  <n x="2841" y="2919" i="2"/>
  <n x="2255" y="3183" i="3"/>
  <n x="1908" y="3198" i="4"/>
- <n x="619" y="3217" i="5"/>
+ <n x="591" y="3202" i="5"/>
  <n x="483" y="3089" i="6"/>
  <n x="468" y="2939" i="7"/>
  <n x="676" y="2679" i="8"/>
