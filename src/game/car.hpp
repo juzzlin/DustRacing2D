@@ -39,7 +39,7 @@ public:
         Description()
         : maxLinearVelocity(50.0)
         , maxAngularVelocity(10.0)
-        , brakingFriction(2.0)
+        , brakingFriction(1.5)
         , rollingFrictionOnTrack(0.1)
         , rollingFrictionOffTrack(0.5)
         , rotationFriction(1.0)
