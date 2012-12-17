@@ -29,6 +29,7 @@
 #include "particlemanager.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
+#include "settings.hpp"
 #include "settingsmenu.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
@@ -449,6 +450,21 @@ void Scene::translateCarsToStartPositions()
         // Reverse order
         std::vector<CarPtr> order = m_cars;
         std::reverse(order.begin(), order.end());
+
+        // Move the human player to a starting place that equals the best position
+        // of the previous racing track.
+        if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
+        {
+            if (m_activeTrack->prev())
+            {
+                const int prevBestPos = Settings::instance().loadBestPos(*m_activeTrack->prev());
+                if (prevBestPos > 0)
+                {
+                    order.insert(order.begin() + prevBestPos - 1, *m_cars.begin());
+                    order.pop_back();
+                }
+            }
+        }
 
         // Position the cars into two queues.
         const int routeDirection = finishLine->rotation() % 360;

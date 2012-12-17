@@ -36,6 +36,7 @@ Track::Track(TrackData * pTrackData)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_asphalt(MCSurfaceManager::instance().surface("asphalt"))
 , m_next(nullptr)
+, m_prev(nullptr)
 {
     assert(pTrackData);
 }
@@ -233,6 +234,16 @@ void Track::setNext(Track & next)
 Track * Track::next() const
 {
     return m_next;
+}
+
+void Track::setPrev(Track & prev)
+{
+    m_prev = &prev;
+}
+
+Track * Track::prev() const
+{
+    return m_prev;
 }
 
 Track::~Track()

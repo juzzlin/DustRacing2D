@@ -65,6 +65,12 @@ public:
     //! Return the next track or nullptr.
     Track * next() const;
 
+    //! Set the prev track.
+    void setPrev(Track & prev);
+
+    //! Return the prev track or nullptr.
+    Track * prev() const;
+
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
@@ -80,6 +86,7 @@ private:
     MCUint      m_rows, m_cols, m_width, m_height;
     MCSurface & m_asphalt;
     Track     * m_next;
+    Track     * m_prev;
 };
 
 #endif // TRACK_HPP
