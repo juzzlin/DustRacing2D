@@ -366,6 +366,11 @@ void MCWorld::clear()
         object->deleteContacts();
         object->resetMotion();
         object->setIndex(-1);
+
+        if (object->isParticle())
+        {
+            static_cast<MCParticle *>(object)->die();
+        }
     }
 
     m_objectTree->removeAll();
