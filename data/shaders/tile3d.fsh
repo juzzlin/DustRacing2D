@@ -17,7 +17,6 @@
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-uniform float     fade;
 
 in vec2 texCoord0;
 in vec4 vColor;
@@ -41,7 +40,6 @@ void main(void)
             color0 = color1;
         }   
 
-        vec4 ambient = fade * vec4(1.0, 0.95, 0.9, 1.0);
-        fragColor = color0 * ambient;
+        fragColor = color0 * vColor;
     }
 }

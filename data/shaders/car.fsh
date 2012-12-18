@@ -17,7 +17,6 @@
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-uniform float     fade;
 
 in vec2 texCoord0;
 in vec2 texCoord1;
@@ -38,14 +37,13 @@ void main(void)
     else
     {
         // Sky reflection
-        vec4 ambient = fade * vec4(1.0, 0.95, 0.9, 1.0);
         if (texColor.r < 0.75 && texColor.g > 0.75 && texColor.b < 0.75)
         {
-            fragColor = sky * 0.75 * texColor.g * ambient;
+            fragColor = sky * 0.75 * texColor.g * vColor;
         }
         else
         {
-            fragColor = texColor * ambient;
+            fragColor = texColor * vColor;
         }
     }
 }

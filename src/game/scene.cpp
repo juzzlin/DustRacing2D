@@ -645,6 +645,7 @@ void Scene::render()
         {
             Renderer::instance().program("master").setFadeValue(fadeValue);
             Renderer::instance().program("car").setFadeValue(fadeValue);
+            Renderer::instance().program("particle").setFadeValue(fadeValue);
             Renderer::instance().program("tile2d").setFadeValue(fadeValue);
             Renderer::instance().program("tile3d").setFadeValue(fadeValue);
             Renderer::instance().program("text").setFadeValue(fadeValue);

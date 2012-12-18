@@ -25,6 +25,8 @@ uniform vec4 scale;
 uniform vec4 color;
 uniform mat4 mvp;
 
+uniform float fade;
+
 out vec2 texCoord0;
 out vec4 vColor;
 
@@ -34,7 +36,7 @@ void main()
     gl_Position = mvp * (vec4(inVertex, 1) * scale + pos);
     
     // Copy the primary color
-    vColor = inColor * color;
+    vColor = inColor * color * fade;
 
     // Copy texture coorinates
     texCoord0 = inTexCoord;
