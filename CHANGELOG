@@ -1,3 +1,37 @@
+0.15.0
+------
+
+* Improves the startlight animation.
+* Resizeable target nodes.
+* Editor: Make TargetNodes darker.
+* Editor: Adds grassEditor.png
+* Editor: Rename computer hints.
+* Remove 15 and 45 fps from the FPS menu.
+* Correct layer for leaf particles.
+* Adds menu.vsh
+* Removes MCSurface::renderScaled().
+* Calculate color in the vertex shader.
+* Kill particles when the world is cleared.
+* The next starting pos will be the previous best pos.
+* Refactors Race.
+* Updates triagle.trk
+* Reduce braking friction.
+* Moves stuck cars onto the previous check point.
+* Show a message box error if OpenGL to old.
+* Updates monza.trk
+* More realistic friction.
+* New rock texture.
+* Small particle optimizations.
+* Adds skid marks.
+* Decrease the max number of particles.
+* Lazy release the active shader program.
+* Simplify particle alpha.
+* Refactors MCSurface.
+* Force OpenGL core profile 3.0
+* Upgrades shaders to version 1.30.
+* Fixes asphalt boundaries.
+* Updates the example debian packaging.
+
 0.14.0
 ------
 
