@@ -116,7 +116,7 @@ void Renderer::loadShaders()
 {
     createProgram("tile2d",        "tile2d.fsh",         "tile.vsh");
     createProgram("tile3d",        "tile3d.fsh",         "tile.vsh");
-    createProgram("menu",          "menu.fsh",           "master.vsh");
+    createProgram("menu",          "menu.fsh",           "menu.vsh");
     createProgram("car",           "car.fsh",            "car.vsh");
     createProgram("master",        "master.fsh",         "master.vsh");
     createProgram("masterShadow",  "master2dShadow.fsh", "master2dShadow.vsh");
