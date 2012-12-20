@@ -80,10 +80,7 @@ public:
      * \param angle Angle in degrees about the Z-axis.
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
-    virtual void render(
-        const MCVector3d<MCFloat> & l,
-        MCFloat angle,
-        MCCamera * p = nullptr)
+    virtual void render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr)
     {
         // Suppress warnings for unused variables
         (void)l;
@@ -96,10 +93,7 @@ public:
      * \param angle Angle in degrees about the Z-axis.
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
-    virtual void renderShadow(
-        const MCVector3d<MCFloat> & l,
-        MCFloat angle,
-        MCCamera * p = nullptr)
+    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr)
     {
         // Suppress warnings for unused variables
         (void)l;
@@ -110,21 +104,21 @@ public:
     /*! Render the scaled shape at the current location using given camera window.
      * \param l Location.
      * \param angle Angle in degrees about the Z-axis.
-     * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height.
+     * \param w Width.
+     * \param h Height.
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void renderScaled(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCFloat wr,
-        MCFloat hr,
+        MCFloat w,
+        MCFloat h,
         MCCamera * p = nullptr)
     {
         // Suppress warnings for unused variables
         (void)l;
-        (void)wr;
-        (void)hr;
+        (void)w;
+        (void)h;
         (void)angle;
         (void)p;
     }
@@ -132,21 +126,21 @@ public:
     /*! Render scaled shadow for the shape at the current location using given camera window.
      * \param l Location.
      * \param angle Angle in degrees about the Z-axis.
-     * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height.
+     * \param w Width.
+     * \param h Height.
      * \param p Camera window. If nullptr, then no translation or clipping done.
      */
     virtual void renderShadowScaled(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCFloat wr,
-        MCFloat hr,
+        MCFloat w,
+        MCFloat h,
         MCCamera * p = nullptr)
     {
         // Suppress warnings for unused variables
         (void)l;
-        (void)wr;
-        (void)hr;
+        (void)w;
+        (void)h;
         (void)angle;
         (void)p;
     }

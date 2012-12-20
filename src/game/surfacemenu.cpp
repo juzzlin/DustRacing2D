@@ -40,7 +40,8 @@ void SurfaceMenu::render()
     const int h2 = height() / 2;
     assert(w2 > 0 && h2 > 0);
     m_back.bindTexture();
-    m_back.renderScaled(nullptr, MCVector3dF(w2, h2, 0), w2, h2, 0);
+    m_back.setScale(width(), height());
+    m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
     Menu::render();
 }
 
@@ -48,4 +49,3 @@ MCTextureFont & SurfaceMenu::font() const
 {
     return m_font;
 }
-

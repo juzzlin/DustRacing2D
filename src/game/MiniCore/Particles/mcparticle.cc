@@ -117,8 +117,8 @@ void MCParticle::render(MCCamera * pCamera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
-        const MCFloat r = m_scale * m_radius;
-        shape()->renderScaled(r, r, pCamera);
+        const MCFloat d = m_scale * m_radius * 2;
+        shape()->renderScaled(d, d, pCamera);
     }
     else
     {
@@ -130,8 +130,8 @@ void MCParticle::renderShadow(MCCamera * pCamera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
-        const MCFloat r = m_scale * m_radius;
-        shape()->renderShadowScaled(r, r, pCamera);
+        const MCFloat d = m_scale * m_radius * 2;
+        shape()->renderShadowScaled(d, d, pCamera);
     }
     else
     {

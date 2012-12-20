@@ -72,14 +72,14 @@ public:
     virtual void renderScaled(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCFloat wr,
-        MCFloat hr,
+        MCFloat w,
+        MCFloat h,
         MCCamera * p = nullptr);
 
     //! \reimp
     virtual void renderShadowScaled(
         const MCVector3d<MCFloat> & l, MCFloat angle,
-        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+        MCFloat w, MCFloat h, MCCamera * p = nullptr);
 
     //! \reimp
     virtual MCBBox<MCFloat> bbox() const;

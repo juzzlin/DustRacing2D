@@ -39,5 +39,6 @@ void CheckeredFlag::setDimensions(MCUint width, MCUint height)
 void CheckeredFlag::render()
 {
     MCVector3dF pos(width() / 2, height() - FLAG_H / 2 - V_SPACING);
-    m_surface.renderScaled(nullptr, pos, FLAG_W / 2, FLAG_H / 2, 0);
+    m_surface.setScale(FLAG_W, FLAG_H);
+    m_surface.render(nullptr, pos, 0);
 }

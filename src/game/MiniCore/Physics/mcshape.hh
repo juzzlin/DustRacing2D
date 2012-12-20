@@ -78,19 +78,17 @@ public:
 
     /*! Render scaled.
      * \param p Camera window to be used
-     * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height.
+     * \param w Width.
+     * \param h Height.
      */
-    virtual void renderScaled(
-        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    virtual void renderScaled(MCFloat w, MCFloat h, MCCamera * p = nullptr);
 
     /*! Render shadow scaled.
      * \param p Camera window to be used
-     * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height.
+     * \param w Width.
+     * \param h Height.
      */
-    virtual void renderShadowScaled(
-        MCFloat wr, MCFloat hr, MCCamera * p = nullptr);
+    virtual void renderShadowScaled(MCFloat w, MCFloat h, MCCamera * p = nullptr);
 
     /*! Translate.
      * \param p The new location

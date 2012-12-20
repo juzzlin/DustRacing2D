@@ -97,6 +97,12 @@ public:
     //! Set color.
     void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
 
+    //! Set scaling factors.
+    void setScale(MCFloat x, MCFloat y, MCFloat z);
+
+    //! Set scaling by dimensions.
+    void setScale(MCFloat w, MCFloat h);
+
    /*! Get bounding box for a rotated surface
     * \param pos The position.
     * \param angle Rotation angle (0..360)
@@ -119,27 +125,8 @@ public:
     void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
         bool autoBind = true);
 
-   /*! Render scaled.
-    * \param pos The position.
-    * \param wr Half of the wanted width.
-    * \param hr Half of the wanted height.
-    * \param autoBind Automatically enable/disable OpenGL client states.
-    */
-    void renderScaled(
-        MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-        bool autoBind = true);
-
     //! Render (fake) shadow
     void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
-        bool autoBind = true);
-
-   /*! Render (fake) shadow scaled.
-    * \param pos The position.
-    * \param wr Half of the wanted width.
-    * \param hr Half of the wanted height.
-    */
-    void renderShadowScaled(
-        MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
         bool autoBind = true);
 
     //! Render the vertex buffer only. bind() must be called separately.
@@ -222,6 +209,7 @@ private:
     GLuint m_vbo;
     GLuint m_vba;
     GLfloat m_r, m_g, m_b, m_a;
+    MCFloat m_sx, m_sy, m_sz;
     MCGLShaderProgram * m_program;
     MCGLShaderProgram * m_shadowProgram;
 };

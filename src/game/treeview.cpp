@@ -53,7 +53,8 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
         MCFloat x = l.i() + m_top.i() * branchHeight / 4;
         MCFloat y = l.j() + m_top.j() * branchHeight / 4;
 
-        surface()->renderScaled(pCamera, MCVector3dF(x, y, z), r, r, angle, false);
+        surface()->setScale(r * 2, r * 2);
+        surface()->render(pCamera, MCVector3dF(x, y, z), angle, false);
 
         branchHeight += m_dBranchHeight;
         z            += m_dBranchHeight;
@@ -64,7 +65,8 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
 
 void TreeView::renderShadow(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 {
-    surface()->renderShadowScaled(p, l + MCVector3dF(5, -5, 0), m_r0, m_r0, angle, false);
+    surface()->setScale(m_r0 * 2, m_r0 * 2);
+    surface()->renderShadow(p, l + MCVector3dF(5, -5, 0), angle, false);
 }
 
 void TreeView::beginBatch()

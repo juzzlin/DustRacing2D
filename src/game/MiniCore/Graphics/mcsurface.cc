@@ -150,6 +150,9 @@ void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat heig
     m_g              = 1.0;
     m_b              = 1.0;
     m_a              = 1.0;
+    m_sx             = 1.0;
+    m_sy             = 1.0;
+    m_sz             = 1.0;
 }
 
 void MCSurface::initVBOs(
@@ -252,27 +255,27 @@ void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
     m_a = a;
 }
 
+void MCSurface::setScale(MCFloat x, MCFloat y, MCFloat z)
+{
+    m_sx = x;
+    m_sy = y;
+    m_sz = z;
+}
+
+void MCSurface::setScale(MCFloat w, MCFloat h)
+{
+    m_sx = w / m_w;
+    m_sy = h / m_h;
+}
+
 MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
 {
     using std::abs;
 
     const MCFloat cos = MCTrigonom::cos(angle);
     const MCFloat sin = MCTrigonom::sin(angle);
-    const MCFloat  w1 = (abs(cos * m_w2) + abs(sin * m_h2)) / 2;
-    const MCFloat  h1 = (abs(sin * m_w2) + abs(cos * m_h2)) / 2;
-
-    return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
-}
-
-MCBBox<MCFloat> MCSurface::rotatedScaledBBox(
-    MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2)
-{
-    using std::abs;
-
-    const MCFloat cos = MCTrigonom::cos(angle);
-    const MCFloat sin = MCTrigonom::sin(angle);
-    const MCFloat  w1 = (abs(cos * w2) + abs(sin * h2)) / 2;
-    const MCFloat  h1 = (abs(sin * w2) + abs(cos * h2)) / 2;
+    const MCFloat  w1 = (abs(cos * m_w2 * m_sx) + abs(sin * m_h2 * m_sy)) / 2;
+    const MCFloat  h1 = (abs(sin * m_w2 * m_sx) + abs(cos * m_h2 * m_sy)) / 2;
 
     return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
@@ -347,54 +350,12 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
         doAlphaBlend();
 
         m_program->bind();
-        m_program->setScale(1.0, 1.0, 1.0);
+        m_program->setScale(m_sx, m_sy, m_sz);
         m_program->setColor(m_r, m_g, m_b, m_a);
 
         if (m_centerSet)
         {
             m_program->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
-        }
-        else
-        {
-            m_program->translate(MCVector3dF(x, y, z));
-        }
-
-        m_program->rotate(angle);
-
-        doRender(autoBind);
-
-        if (m_useAlphaBlend)
-        {
-            glDisable(GL_BLEND);
-        }
-    }
-}
-
-void MCSurface::renderScaled(
-    MCCamera * pCamera, MCVector3dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-    bool autoBind)
-{
-    if (m_program)
-    {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = pos.k();
-
-        if (pCamera)
-        {
-            pCamera->mapToCamera(x, y);
-        }
-
-        doAlphaBlend();
-
-        m_program->bind();
-        m_program->setScale(wr / m_w2, hr / m_h2, 1.0);
-        m_program->setColor(m_r, m_g, m_b, m_a);
-
-        if (m_centerSet)
-        {
-            m_program->translate(
-                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
@@ -427,41 +388,7 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
         }
 
         m_shadowProgram->bind();
-        m_shadowProgram->setScale(1.0, 1.0, 1.0);
-
-        if (m_centerSet)
-        {
-            m_shadowProgram->translate(
-                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
-        }
-        else
-        {
-            m_shadowProgram->translate(MCVector3dF(x, y, z));
-        }
-
-        m_shadowProgram->rotate(angle);
-
-        doRenderShadow(autoBind);
-    }
-}
-
-void MCSurface::renderShadowScaled(
-    MCCamera * pCamera, MCVector2dFR pos, MCFloat wr, MCFloat hr, MCFloat angle,
-    bool autoBind)
-{
-    if (m_shadowProgram)
-    {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = 0;
-
-        if (pCamera)
-        {
-            pCamera->mapToCamera(x, y);
-        }
-
-        m_shadowProgram->bind();
-        m_shadowProgram->setScale(wr / m_w2, hr / m_h2, 1.0);
+        m_shadowProgram->setScale(m_sx, m_sy, m_sz);
 
         if (m_centerSet)
         {

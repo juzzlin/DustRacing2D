@@ -90,20 +90,20 @@ void MCShape::renderShadow(MCCamera * p)
     }
 }
 
-void MCShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * p)
+void MCShape::renderScaled(MCFloat w, MCFloat h, MCCamera * p)
 {
     if (m_pView)
     {
-        m_pView->renderScaled(m_location, m_angle, wr, hr, p);
+        m_pView->renderScaled(m_location, m_angle, w, h, p);
     }
 }
 
-void MCShape::renderShadowScaled(MCFloat wr, MCFloat hr, MCCamera * p)
+void MCShape::renderShadowScaled(MCFloat w, MCFloat h, MCCamera * p)
 {
     if (m_pView)
     {
         m_pView->renderShadowScaled(
-            m_location + MCVector3dF(m_shadowOffset), m_angle, wr, hr, p);
+            m_location + MCVector3dF(m_shadowOffset), m_angle, w, h, p);
     }
 }
 
