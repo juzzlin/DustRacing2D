@@ -16,6 +16,7 @@
 #include "particlemanager.hpp"
 
 #include "renderer.hpp"
+#include "layers.hpp"
 
 #include <MCGLPointParticle>
 #include <MCGLRectParticle>
@@ -93,6 +94,7 @@ void ParticleManager::preCreateParticles()
         MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
         particle->setSurface(MCSurfaceManager::instance().surface("leaf"));
         particle->setShaderProgram(&Renderer::instance().program("master"));
+        particle->setLayer(Layers::Tree);
         particle->setFreeList(m_freeList4);
 
         // Initially push to list of free particles
