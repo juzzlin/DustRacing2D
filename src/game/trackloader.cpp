@@ -96,7 +96,7 @@ int TrackLoader::loadTracks()
            track->trackData().index() > 0) // The first track is never locked
         {
             MCLogger().info() << "'" << track->trackData().name().toStdString() << "' is locked.";
-            track->trackData().setIsLocked(true);
+            track->trackData().setIsLocked(false);
         }
         else
         {

@@ -31,8 +31,8 @@ public:
     enum ComputerHint
     {
         CH_NONE = 0,
-        CH_FIRST_BEFORE_CORNER,
-        CH_SECOND_BEFORE_CORNER
+        CH_BRAKE_HARD,
+        CH_BRAKE
     };
 
     //! Constructor.

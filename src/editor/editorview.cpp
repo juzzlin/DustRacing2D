@@ -33,8 +33,8 @@
 EditorView::EditorView(QWidget * parent)
 : QGraphicsView(parent)
 , m_clearComputerHint(nullptr)
-, m_setComputerHintFirstBeforeCorner(nullptr)
-, m_setComputerHintSecondBeforeCorner(nullptr)
+, m_setComputerHintBrakeHard(nullptr)
+, m_setComputerHintBrake(nullptr)
 {
     createTileContextMenu();
     createObjectContextMenu();
@@ -99,23 +99,23 @@ void EditorView::createTileContextMenu()
     m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_tileContextMenu);
     QObject::connect(m_clearComputerHint, SIGNAL(triggered()), this, SLOT(doClearComputerHint()));
 
-    m_setComputerHintFirstBeforeCorner = new QAction(
-        QWidget::tr("Set computer hint 'first before corner'.."), &m_tileContextMenu);
-    QObject::connect(m_setComputerHintFirstBeforeCorner, SIGNAL(triggered()), this,
-        SLOT(doSetComputerHintFirstBeforeCorner()));
+    m_setComputerHintBrakeHard = new QAction(
+        QWidget::tr("Set computer hint 'brake hard'.."), &m_tileContextMenu);
+    QObject::connect(m_setComputerHintBrakeHard, SIGNAL(triggered()), this,
+        SLOT(doSetComputerHintBrakeHard()));
 
-    m_setComputerHintSecondBeforeCorner = new QAction(
-        QWidget::tr("Set computer hint 'second before corner'.."), &m_tileContextMenu);
-    QObject::connect(m_setComputerHintSecondBeforeCorner, SIGNAL(triggered()), this,
-        SLOT(doSetComputerHintSecondBeforeCorner()));
+    m_setComputerHintBrake = new QAction(
+        QWidget::tr("Set computer hint 'brake'.."), &m_tileContextMenu);
+    QObject::connect(m_setComputerHintBrake, SIGNAL(triggered()), this,
+        SLOT(doSetComputerHintBrake()));
 
     // Populate the menu
     m_tileContextMenu.addAction(rotate90CW);
     m_tileContextMenu.addAction(rotate90CCW);
     m_tileContextMenu.addSeparator();
     m_tileContextMenu.addAction(m_clearComputerHint);
-    m_tileContextMenu.addAction(m_setComputerHintFirstBeforeCorner);
-    m_tileContextMenu.addAction(m_setComputerHintSecondBeforeCorner);
+    m_tileContextMenu.addAction(m_setComputerHintBrakeHard);
+    m_tileContextMenu.addAction(m_setComputerHintBrake);
 }
 
 void EditorView::createObjectContextMenu()
@@ -308,19 +308,19 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
 {
     // Enable all hints by default
     m_clearComputerHint->setEnabled(true);
-    m_setComputerHintFirstBeforeCorner->setEnabled(true);
-    m_setComputerHintSecondBeforeCorner->setEnabled(true);
+    m_setComputerHintBrakeHard->setEnabled(true);
+    m_setComputerHintBrake->setEnabled(true);
 
     switch (tile.computerHint())
     {
     case TrackTileBase::CH_NONE:
         m_clearComputerHint->setEnabled(false);
         break;
-    case TrackTileBase::CH_FIRST_BEFORE_CORNER:
-        m_setComputerHintFirstBeforeCorner->setEnabled(false);
+    case TrackTileBase::CH_BRAKE_HARD:
+        m_setComputerHintBrakeHard->setEnabled(false);
         break;
-    case TrackTileBase::CH_SECOND_BEFORE_CORNER:
-        m_setComputerHintSecondBeforeCorner->setEnabled(false);
+    case TrackTileBase::CH_BRAKE:
+        m_setComputerHintBrake->setEnabled(false);
         break;
     default:
         break;
@@ -503,14 +503,14 @@ void EditorView::doClearComputerHint()
     doSetComputerHint(TrackTileBase::CH_NONE);
 }
 
-void EditorView::doSetComputerHintFirstBeforeCorner()
+void EditorView::doSetComputerHintBrakeHard()
 {
-    doSetComputerHint(TrackTileBase::CH_FIRST_BEFORE_CORNER);
+    doSetComputerHint(TrackTileBase::CH_BRAKE_HARD);
 }
 
-void EditorView::doSetComputerHintSecondBeforeCorner()
+void EditorView::doSetComputerHintBrake()
 {
-    doSetComputerHint(TrackTileBase::CH_SECOND_BEFORE_CORNER);
+    doSetComputerHint(TrackTileBase::CH_BRAKE);
 }
 
 void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)

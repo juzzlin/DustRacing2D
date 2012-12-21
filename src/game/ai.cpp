@@ -121,7 +121,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     }
     else
     {
-        if (currentTile.computerHint() == TrackTile::CH_SECOND_BEFORE_CORNER)
+        if (currentTile.computerHint() == TrackTile::CH_BRAKE)
         {
             if (m_car.speedInKmh() > 100)
             {
@@ -129,7 +129,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
             }
         }
 
-        if (currentTile.computerHint() == TrackTile::CH_FIRST_BEFORE_CORNER)
+        if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
         {
             if (m_car.speedInKmh() > 50)
             {

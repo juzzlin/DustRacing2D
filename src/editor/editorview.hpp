@@ -57,8 +57,8 @@ private slots:
     void doRotateTile90CCW();
     void doRotateObject();
     void doClearComputerHint();
-    void doSetComputerHintFirstBeforeCorner();
-    void doSetComputerHintSecondBeforeCorner();
+    void doSetComputerHintBrakeHard();
+    void doSetComputerHintBrake();
 
 private:
 
@@ -80,8 +80,8 @@ private:
     QPoint    m_clickedPos;
     QPointF   m_clickedScenePos;
     QAction * m_clearComputerHint;
-    QAction * m_setComputerHintFirstBeforeCorner;
-    QAction * m_setComputerHintSecondBeforeCorner;
+    QAction * m_setComputerHintBrakeHard;
+    QAction * m_setComputerHintBrake;
 };
 
 #endif // EDITORVIEW_HPP
