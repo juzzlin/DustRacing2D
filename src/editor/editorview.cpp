@@ -27,17 +27,20 @@
 #include "objectmodelloader.hpp"
 #include "rotatedialog.hpp"
 #include "targetnode.hpp"
+#include "targetnodesizedlg.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
-EditorView::EditorView(QWidget * parent)
+EditorView::EditorView(EditorData & editorData, QWidget * parent)
 : QGraphicsView(parent)
 , m_clearComputerHint(nullptr)
 , m_setComputerHintBrakeHard(nullptr)
 , m_setComputerHintBrake(nullptr)
+, m_editorData(editorData)
 {
     createTileContextMenu();
     createObjectContextMenu();
+    createTargetNodeContextMenu();
 }
 
 void EditorView::mouseMoveEvent(QMouseEvent * event)
@@ -52,20 +55,18 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
             tile->setActive(true);
         }
 
-        EditorData & editorData = MainWindow::instance()->editorData();
-
         // Tile drag'n'drop active?
-        if (TrackTile * sourceTile = editorData.dragAndDropSourceTile())
+        if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
         {
             sourceTile->setPos(mappedPos);
         }
         // Object drag'n'drop active?
-        else if (Object * object = editorData.dragAndDropObject())
+        else if (Object * object = m_editorData.dragAndDropObject())
         {
             object->setLocation(mappedPos);
         }
         // Target node drag'n'drop active?
-        else if (TargetNode * tnode = editorData.dragAndDropTargetNode())
+        else if (TargetNode * tnode = m_editorData.dragAndDropTargetNode())
         {
             tnode->setLocation(mappedPos);
         }
@@ -128,12 +129,20 @@ void EditorView::createObjectContextMenu()
     m_objectContextMenu.addAction(rotate);
 }
 
+void EditorView::createTargetNodeContextMenu()
+{
+    const QString dummy1(QString(QWidget::tr("Set size..")));
+    QAction * setSize = new QAction(dummy1, &m_targetNodeContextMenu);
+    QObject::connect(setSize, SIGNAL(triggered()), this, SLOT(doSetTargetNodeSize()));
+
+    // Populate the menu
+    m_targetNodeContextMenu.addAction(setSize);
+}
+
 void EditorView::mousePressEvent(QMouseEvent * event)
 {
     if (scene())
     {
-        EditorData & editorData = MainWindow::instance()->editorData();
-
         m_clickedPos      = event->pos();
         m_clickedScenePos = mapToScene(m_clickedPos);
 
@@ -142,7 +151,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
 
         // User is erasing an object
-        if (editorData.mode() == EditorData::EM_ERASE_OBJECT)
+        if (m_editorData.mode() == EditorData::EM_ERASE_OBJECT)
         {
             // We need to find the first object to be erased, because
             // there might be also overlapping TargetNodes.
@@ -151,7 +160,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                 if (Object * object = dynamic_cast<Object *>(item))
                 {
                     // Remove from track data.
-                    editorData.trackData()->objects().remove(*object);
+                    m_editorData.trackData()->objects().remove(*object);
 
                     // Remove from scene.
                     scene()->removeItem(object);
@@ -161,7 +170,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
             }
         }
         // User is adding an object
-        else if (editorData.mode() == EditorData::EM_ADD_OBJECT)
+        else if (m_editorData.mode() == EditorData::EM_ADD_OBJECT)
         {
             if (QAction * action = MainWindow::instance()->currentToolBarAction())
             {
@@ -175,7 +184,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                     scene()->addItem(&object);
 
                     // Add to track data
-                    editorData.trackData()->objects().add(object);
+                    m_editorData.trackData()->objects().add(object);
                 }
             }
         }
@@ -239,14 +248,12 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
 void EditorView::handleLeftButtonClickOnObject(Object & object)
 {
-    EditorData & editorData = MainWindow::instance()->editorData();
-
     // User is initiating a drag'n'drop
-    if (editorData.mode() == EditorData::EM_NONE)
+    if (m_editorData.mode() == EditorData::EM_NONE)
     {
         object.setZValue(object.zValue() + 1);
-        editorData.setDragAndDropObject(&object);
-        editorData.setSelectedObject(&object);
+        m_editorData.setDragAndDropObject(&object);
+        m_editorData.setSelectedObject(&object);
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
@@ -255,35 +262,31 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
 
 void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
 {
-    EditorData & editorData = MainWindow::instance()->editorData();
-
     // User is initiating a drag'n'drop
-    if (editorData.mode() == EditorData::EM_NONE)
+    if (m_editorData.mode() == EditorData::EM_NONE)
     {
         tnode.setZValue(tnode.zValue() + 1);
-        editorData.setDragAndDropTargetNode(&tnode);
+        m_editorData.setDragAndDropTargetNode(&tnode);
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
     }
     // It's not possible to make nodes overlap if not handled also here.
-    else if (editorData.mode() == EditorData::EM_SET_ROUTE)
+    else if (m_editorData.mode() == EditorData::EM_SET_ROUTE)
     {
-        editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
+        m_editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
 }
 
 void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 {
-    EditorData & editorData = MainWindow::instance()->editorData();
-
     // User is defining the route
-    if (editorData.mode() == EditorData::EM_SET_ROUTE)
+    if (m_editorData.mode() == EditorData::EM_SET_ROUTE)
     {
-        editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
+        m_editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
     // User is setting the tile type
-    else if (editorData.mode() == EditorData::EM_SET_TILE_TYPE)
+    else if (m_editorData.mode() == EditorData::EM_SET_TILE_TYPE)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
@@ -293,11 +296,11 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
         }
     }
     // User is initiating a drag'n'drop
-    else if (editorData.mode() == EditorData::EM_NONE)
+    else if (m_editorData.mode() == EditorData::EM_NONE)
     {
         tile.setZValue(tile.zValue() + 1);
-        editorData.setDragAndDropSourceTile(&tile);
-        editorData.setDragAndDropSourcePos(tile.pos());
+        m_editorData.setDragAndDropSourceTile(&tile);
+        m_editorData.setDragAndDropSourcePos(tile.pos());
 
         // Change cursor to the closed hand cursor.
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
@@ -333,17 +336,20 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
 
 void EditorView::handleRightButtonClickOnObject(Object & object)
 {
-    EditorData & editorData = MainWindow::instance()->editorData();
+    m_editorData.setSelectedObject(&object);
 
     // Show the context menu
     QPoint globalPos = mapToGlobal(m_clickedPos);
     m_objectContextMenu.exec(globalPos);
-    editorData.setSelectedObject(&object);
 }
 
-void EditorView::handleRightButtonClickOnTargetNode(TargetNode &)
+void EditorView::handleRightButtonClickOnTargetNode(TargetNode & tnode)
 {
-    // Do nothing currently
+    m_editorData.setSelectedTargetNode(&tnode);
+
+    // Show the context menu
+    QPoint globalPos = mapToGlobal(m_clickedPos);
+    m_targetNodeContextMenu.exec(globalPos);
 }
 
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
@@ -355,8 +361,7 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
 
 void EditorView::keyPressEvent(QKeyEvent * event)
 {
-    const EditorData & editorData = MainWindow::instance()->editorData();
-    if (Object * object = editorData.selectedObject())
+    if (Object * object = m_editorData.selectedObject())
     {
         if (!event->isAutoRepeat())
         {
@@ -385,10 +390,8 @@ void EditorView::handleTileDragRelease(QMouseEvent * event)
 {
     if (scene())
     {
-        EditorData & editorData = MainWindow::instance()->editorData();
-
         // Tile drag'n'drop active?
-        if (TrackTile * sourceTile = editorData.dragAndDropSourceTile())
+        if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
         {
             // Determine the dest tile
             TrackTile * destTile = sourceTile;
@@ -407,13 +410,13 @@ void EditorView::handleTileDragRelease(QMouseEvent * event)
             sourceTile->swap(*destTile);
 
             // Restore position
-            sourceTile->setPos(editorData.dragAndDropSourcePos());
+            sourceTile->setPos(m_editorData.dragAndDropSourcePos());
             sourceTile->setZValue(sourceTile->zValue() - 1);
             destTile->setZValue(sourceTile->zValue());
 
             update();
 
-            editorData.setDragAndDropSourceTile(nullptr);
+            m_editorData.setDragAndDropSourceTile(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();
@@ -425,10 +428,8 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
 {
     if (scene())
     {
-        EditorData & editorData = MainWindow::instance()->editorData();
-
         // Object drag'n'drop active?
-        if (Object * object = editorData.dragAndDropObject())
+        if (Object * object = m_editorData.dragAndDropObject())
         {
             // Set the new position position
             object->setLocation(mapToScene(event->pos()));
@@ -436,7 +437,7 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
 
             update();
 
-            editorData.setDragAndDropObject(nullptr);
+            m_editorData.setDragAndDropObject(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();
@@ -448,10 +449,8 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
 {
     if (scene())
     {
-        EditorData & editorData = MainWindow::instance()->editorData();
-
         // Target node drag'n'drop active?
-        if (TargetNode * tnode = editorData.dragAndDropTargetNode())
+        if (TargetNode * tnode = m_editorData.dragAndDropTargetNode())
         {
             // Set the new position position
             tnode->setLocation(mapToScene(event->pos()));
@@ -459,7 +458,7 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
 
             update();
 
-            editorData.setDragAndDropTargetNode(nullptr);
+            m_editorData.setDragAndDropTargetNode(nullptr);
 
             // Restore the cursor.
             QApplication::restoreOverrideCursor();
@@ -490,10 +489,21 @@ void EditorView::doRotateObject()
     RotateDialog dialog;
     if (dialog.exec() == QDialog::Accepted)
     {
-        if (Object * object =
-            dynamic_cast<Object *>(scene()->itemAt(mapToScene(m_clickedPos))))
+        if (Object * object = m_editorData.selectedObject())
         {
             object->setRotation(static_cast<int>(dialog.angle() + object->rotation()) % 360);
+        }
+    }
+}
+
+void EditorView::doSetTargetNodeSize()
+{
+    if (TargetNode * tnode = m_editorData.selectedTargetNode())
+    {
+        TargetNodeSizeDlg dialog(tnode->size());
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            tnode->setSize(dialog.targetNodeSize());
         }
     }
 }

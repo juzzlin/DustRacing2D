@@ -14,9 +14,11 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "targetnodebase.hpp"
+#include "tracktilebase.hpp"
 
 TargetNodeBase::TargetNodeBase()
-: m_index(-1)
+: m_size(QSize(TrackTileBase::TILE_H, TrackTileBase::TILE_W))
+, m_index(-1)
 , m_next(nullptr)
 , m_prev(nullptr)
 {
@@ -60,4 +62,14 @@ int TargetNodeBase::index() const
 void TargetNodeBase::setIndex(int index)
 {
     m_index = index;
+}
+
+void TargetNodeBase::setSize(QSizeF size)
+{
+    m_size = size;
+}
+
+QSizeF TargetNodeBase::size() const
+{
+    return m_size;
 }

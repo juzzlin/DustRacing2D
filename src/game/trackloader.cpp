@@ -508,15 +508,23 @@ void TrackLoader::readTargetNode(
 {
     const int x = element.attribute("x", "0").toInt();
     const int y = element.attribute("y", "0").toInt();
+    const int w = element.attribute("w", "0").toInt();
+    const int h = element.attribute("h", "0").toInt();
     const int i = element.attribute("i", "0").toInt();
 
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
-    const int h = newData.map().rows() * TrackTile::TILE_H;
+    const int mapHeight = newData.map().rows() * TrackTile::TILE_H;
 
     TargetNodeBase * tnode = new TargetNodeBase;
     tnode->setIndex(i);
-    tnode->setLocation(QPointF(x, h - y));
+    tnode->setLocation(QPointF(x, mapHeight - y));
+
+    if (w > 0 && h > 0)
+    {
+        tnode->setSize(QSizeF(w, h));
+    }
+
     route.push_back(tnode);
 }
 

@@ -28,8 +28,7 @@ static const QColor FIRST_NODE_COLOR(255, 255, 255, 128);
 static const QColor NODE_COLOR(ROUTE_LINE_COLOR);
 
 TargetNode::TargetNode()
-: m_size(QSize(TrackTile::TILE_H, TrackTile::TILE_W))
-, m_routeLine(nullptr)
+: m_routeLine(nullptr)
 {
 }
 
@@ -48,8 +47,8 @@ QGraphicsLineItem * TargetNode::routeLine() const
 QRectF TargetNode::boundingRect () const
 {
     return QRectF(
-        -m_size.width() / 2 - LINE_WIDTH, -m_size.height() / 2 - LINE_WIDTH,
-         m_size.width()     + LINE_WIDTH,  m_size.height()     + LINE_WIDTH);
+        -size().width() / 2 - LINE_WIDTH, -size().height() / 2 - LINE_WIDTH,
+         size().width()     + LINE_WIDTH,  size().height()     + LINE_WIDTH);
 }
 
 void TargetNode::paint(QPainter * painter,

@@ -16,6 +16,7 @@
 #ifndef TARGETNODEBASE_HPP
 #define TARGETNODEBASE_HPP
 
+#include <QSizeF>
 #include <QString>
 #include <QPointF>
 
@@ -48,10 +49,17 @@ public:
 
     virtual TargetNodeBase * prev() const;
 
+    virtual void setSize(QSizeF size);
+
+    virtual QSizeF size() const;
+
 private:
 
     //! Coordinates in the world.
     QPointF m_location;
+
+    //! Original size in pixels.
+    QSizeF m_size;
 
     //! Index in the route.
     int m_index;

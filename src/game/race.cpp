@@ -129,19 +129,22 @@ void Race::update()
 
 bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
 {
-    if (car.location().i() < tnode.location().x() - TrackTile::TILE_W / 2 - tolerance)
+    const int width2  = tnode.size().width()  / 2;
+    const int height2 = tnode.size().height() / 2;
+
+    if (car.location().i() < tnode.location().x() - width2 - tolerance)
     {
         return false;
     }
-    else if (car.location().i() > tnode.location().x() + TrackTile::TILE_W / 2 + tolerance)
+    else if (car.location().i() > tnode.location().x() + width2 + tolerance)
     {
         return false;
     }
-    else if (car.location().j() < tnode.location().y() - TrackTile::TILE_H / 2 - tolerance)
+    else if (car.location().j() < tnode.location().y() - height2 - tolerance)
     {
         return false;
     }
-    else if (car.location().j() > tnode.location().y() + TrackTile::TILE_H / 2 + tolerance)
+    else if (car.location().j() > tnode.location().y() + height2 + tolerance)
     {
         return false;
     }

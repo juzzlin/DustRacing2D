@@ -13,6 +13,7 @@ set(SRC
     objectmodelloader.cpp
     rotatedialog.cpp
     targetnode.cpp
+    targetnodesizedlg.cpp
     tiletypedialog.cpp
     tileanimator.cpp
     trackdata.cpp
@@ -36,6 +37,7 @@ set(MOC_HDRS
     mainwindow.hpp
     newtrackdialog.hpp
     rotatedialog.hpp
+    targetnodesizedlg.hpp
     tiletypedialog.hpp
     tileanimator.hpp
     trackpropertiesdialog.hpp)

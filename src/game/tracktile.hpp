@@ -45,12 +45,6 @@ public:
         TT_FINISH
     };
 
-    //! Tile width in pixels
-    static const unsigned int TILE_W = 256;
-
-    //! Tile height in pixels
-    static const unsigned int TILE_H = 256;
-
     //! Constructor.
     //! See TrackTileBase.
     TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,

@@ -27,6 +27,12 @@ class TrackTileBase
 {
 public:
 
+    //! Tile width in pixels
+    static const unsigned int TILE_W = 256;
+
+    //! Tile height in pixels
+    static const unsigned int TILE_H = 256;
+
     //! Hints for computer players.
     enum ComputerHint
     {

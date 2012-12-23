@@ -51,9 +51,6 @@ public:
 
 private:
 
-    //! Original size in pixels.
-    QSizeF m_size;
-
     //! Line that is drawn from a node to the next node
     //! according to the route vector.
     QGraphicsLineItem * m_routeLine;

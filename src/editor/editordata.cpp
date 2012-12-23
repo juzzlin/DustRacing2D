@@ -30,6 +30,7 @@ EditorData::EditorData(MainWindow * mainWindow)
 , m_dragAndDropSourceTile(nullptr)
 , m_dragAndDropObject(nullptr)
 , m_selectedObject(nullptr)
+, m_selectedTargetNode(nullptr)
 , m_dragAndDropTargetNode(nullptr)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
@@ -200,6 +201,16 @@ void EditorData::setSelectedObject(Object * object)
 Object * EditorData::selectedObject() const
 {
     return m_selectedObject;
+}
+
+void EditorData::setSelectedTargetNode(TargetNode * tnode)
+{
+    m_selectedTargetNode = tnode;
+}
+
+TargetNode * EditorData::selectedTargetNode() const
+{
+    return m_selectedTargetNode;
 }
 
 void EditorData::setDragAndDropTargetNode(TargetNode * tnode)

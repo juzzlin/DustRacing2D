@@ -35,7 +35,7 @@ class EditorView : public QGraphicsView
 
 public:
 
-    explicit EditorView(QWidget * parent = 0);
+    explicit EditorView(EditorData & editorData, QWidget * parent = 0);
 
 protected:
 
@@ -59,11 +59,13 @@ private slots:
     void doClearComputerHint();
     void doSetComputerHintBrakeHard();
     void doSetComputerHintBrake();
+    void doSetTargetNodeSize();
 
 private:
 
     void createTileContextMenu();
     void createObjectContextMenu();
+    void createTargetNodeContextMenu();
     void handleLeftButtonClickOnTile(TrackTile & tile);
     void handleRightButtonClickOnTile(TrackTile & tile);
     void handleLeftButtonClickOnObject(Object & object);
@@ -75,13 +77,15 @@ private:
     void handleTargetNodeDragRelease(QMouseEvent * event);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
 
-    QMenu     m_tileContextMenu;
-    QMenu     m_objectContextMenu;
-    QPoint    m_clickedPos;
-    QPointF   m_clickedScenePos;
-    QAction * m_clearComputerHint;
-    QAction * m_setComputerHintBrakeHard;
-    QAction * m_setComputerHintBrake;
+    QMenu        m_tileContextMenu;
+    QMenu        m_objectContextMenu;
+    QMenu        m_targetNodeContextMenu;
+    QPoint       m_clickedPos;
+    QPointF      m_clickedScenePos;
+    QAction    * m_clearComputerHint;
+    QAction    * m_setComputerHintBrakeHard;
+    QAction    * m_setComputerHintBrake;
+    EditorData & m_editorData;
 };
 
 #endif // EDITORVIEW_HPP

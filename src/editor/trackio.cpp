@@ -174,6 +174,8 @@ void TrackIO::readTargetNode(
 {
     const int x = element.attribute("x", "0").toInt();
     const int y = element.attribute("y", "0").toInt();
+    const int w = element.attribute("w", "0").toInt();
+    const int h = element.attribute("h", "0").toInt();
     const int i = element.attribute("i", "0").toInt();
 
     // Create a new object. QGraphicsScene will take
@@ -181,6 +183,12 @@ void TrackIO::readTargetNode(
     TargetNode * tnode = new TargetNode;
     tnode->setIndex(i);
     tnode->setLocation(QPointF(x, y));
+
+    if (w > 0 && h > 0)
+    {
+        tnode->setSize(QSizeF(w, h));
+    }
+
     route.push_back(tnode);
 }
 
@@ -239,6 +247,8 @@ void TrackIO::writeTargetNodes(
         tnodeElement.setAttribute("i", tnode.index());
         tnodeElement.setAttribute("x", static_cast<int>(tnode.location().x()));
         tnodeElement.setAttribute("y", static_cast<int>(tnode.location().y()));
+        tnodeElement.setAttribute("w", static_cast<int>(tnode.size().width()));
+        tnodeElement.setAttribute("h", static_cast<int>(tnode.size().height()));
         root.appendChild(tnodeElement);
     }
 }
