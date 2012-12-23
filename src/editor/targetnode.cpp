@@ -22,11 +22,13 @@
 
 #include <cassert>
 
-static const int LW = 15;
-static const int R  = TrackTile::TILE_W;
+static const int LINE_WIDTH = 15;
+static const QColor ROUTE_LINE_COLOR(0, 0, 255, 128);
+static const QColor FIRST_NODE_COLOR(255, 255, 255, 128);
+static const QColor NODE_COLOR(ROUTE_LINE_COLOR);
 
 TargetNode::TargetNode()
-: m_size(QSize(R, R))
+: m_size(QSize(TrackTile::TILE_H, TrackTile::TILE_W))
 , m_routeLine(nullptr)
 {
 }
@@ -34,7 +36,8 @@ TargetNode::TargetNode()
 void TargetNode::setRouteLine(QGraphicsLineItem * routeLine)
 {
     m_routeLine = routeLine;
-    m_routeLine->setPen(QPen(QBrush(QColor(0, 0, 255, 64)), LW, Qt::DashDotDotLine, Qt::RoundCap));
+    m_routeLine->setPen(
+        QPen(QBrush(ROUTE_LINE_COLOR), LINE_WIDTH, Qt::DashDotDotLine, Qt::RoundCap));
 }
 
 QGraphicsLineItem * TargetNode::routeLine() const
@@ -45,8 +48,8 @@ QGraphicsLineItem * TargetNode::routeLine() const
 QRectF TargetNode::boundingRect () const
 {
     return QRectF(
-        -m_size.width() / 2 - LW, -m_size.height() / 2 - LW,
-         m_size.width()     + LW,  m_size.height()     + LW);
+        -m_size.width() / 2 - LINE_WIDTH, -m_size.height() / 2 - LINE_WIDTH,
+         m_size.width()     + LINE_WIDTH,  m_size.height()     + LINE_WIDTH);
 }
 
 void TargetNode::paint(QPainter * painter,
@@ -59,19 +62,26 @@ void TargetNode::paint(QPainter * painter,
 
     if (index() == 0)
     {
-        painter->setPen(QPen(QBrush(QColor(255, 255, 255, 64)), LW));
+        painter->setPen(QPen(QBrush(FIRST_NODE_COLOR), LINE_WIDTH));
     }
     else
     {
-        painter->setPen(QPen(QBrush(QColor(0, 0, 255, 64)), LW));
+        painter->setPen(QPen(QBrush(NODE_COLOR), LINE_WIDTH));
     }
 
+    // Outline
     painter->drawRect(
-        boundingRect().x()     + LW,     boundingRect().y()      + LW,
-        boundingRect().width() - LW * 2, boundingRect().height() - LW * 2);
+        boundingRect().x()     + LINE_WIDTH,     boundingRect().y()      + LINE_WIDTH,
+        boundingRect().width() - LINE_WIDTH * 2, boundingRect().height() - LINE_WIDTH * 2);
+
+    // Circle in the middle
     painter->drawEllipse(
-        QPointF(boundingRect().x() + R / 2 + LW, boundingRect().y() + R / 2 + LW),
-        LW, LW);
+        QPointF(
+            boundingRect().x() + boundingRect().width() / 2 + LINE_WIDTH / 2,
+            boundingRect().y() + boundingRect().height() / 2 + LINE_WIDTH / 2),
+        LINE_WIDTH,
+        LINE_WIDTH);
+
     painter->restore();
 }
 
@@ -99,5 +109,3 @@ void TargetNode::updateRouteLine()
             next()->location().y());
     }
 }
-
-
