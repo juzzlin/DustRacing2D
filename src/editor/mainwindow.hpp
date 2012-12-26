@@ -70,6 +70,9 @@ public:
     //! Get reference to the object loaded.
     ObjectModelLoader & objectModelLoader() const;
 
+    //! Set Windows title + the given file name.
+    void setTitle(QString openFileName);
+
 public slots:
 
     //! Begin marking the route.

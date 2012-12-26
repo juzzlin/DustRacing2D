@@ -138,8 +138,7 @@ void MainWindow::showTip()
 
 void MainWindow::init()
 {
-    setWindowTitle(QString(Config::Editor::EDITOR_NAME) + " " +
-        Config::Editor::EDITOR_VERSION);
+    setTitle("New file");
 
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Editor::QSETTINGS_SOFTWARE_NAME);
@@ -215,6 +214,13 @@ void MainWindow::init()
     QList<int> sizes;
     sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
     splitter->setSizes(sizes);
+}
+
+void MainWindow::setTitle(QString openFileName)
+{
+    setWindowTitle(
+        QString(Config::Editor::EDITOR_NAME) + " " + Config::Editor::EDITOR_VERSION + " - " +
+        openFileName);
 }
 
 bool MainWindow::loadObjectModels(QString objectFilePath)
@@ -544,6 +550,8 @@ bool MainWindow::doOpenTrack(QString fileName)
     {
         console(QString(tr("Track '%1' opened.").arg(fileName)));
 
+        setTitle(fileName);
+
         // Save recent path
         QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
             Config::Editor::QSETTINGS_SOFTWARE_NAME);
@@ -599,6 +607,7 @@ void MainWindow::saveTrack()
         {
             console(QString(
                 tr("Track '")) + m_editorData->trackData()->fileName() + tr("' saved."));
+            setTitle(m_editorData->trackData()->fileName());
             m_saved = true;
         }
         else
@@ -623,6 +632,7 @@ void MainWindow::saveAsTrack()
     if (m_editorData->saveTrackDataAs(fileName))
     {
         console(QString(tr("Track '")) + fileName + tr("' saved."));
+        setTitle(fileName);
         m_saved = true;
     }
     else
@@ -666,6 +676,8 @@ void MainWindow::initializeNewTrack()
             .arg(m_editorData->trackData()->name())
             .arg(m_editorData->trackData()->map().cols())
             .arg(m_editorData->trackData()->map().rows()));
+
+        setTitle("New file");
 
         m_saved = false;
     }
