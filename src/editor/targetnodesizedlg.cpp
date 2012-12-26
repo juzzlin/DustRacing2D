@@ -36,12 +36,12 @@ TargetNodeSizeDlg::TargetNodeSizeDlg(QSizeF defaultSize, QWidget * parent)
     setWindowTitle(tr("Set target node size"));
 
     QIntValidator * widthValidator = new QIntValidator(this);
-    widthValidator->setRange(TrackTile::TILE_W / 2, TrackTile::TILE_W * 2);
+    widthValidator->setRange(TrackTile::TILE_W / 2, TrackTile::TILE_W * 4);
     m_widthEdit->setValidator(widthValidator);
     m_widthEdit->setText(QString("%1").arg(defaultSize.width()));
 
     QIntValidator * heightValidator = new QIntValidator(this);
-    heightValidator->setRange(TrackTile::TILE_H / 2, TrackTile::TILE_H * 2);
+    heightValidator->setRange(TrackTile::TILE_H / 2, TrackTile::TILE_H * 4);
     m_heightEdit->setValidator(widthValidator);
     m_heightEdit->setText(QString("%1").arg(defaultSize.height()));
 
