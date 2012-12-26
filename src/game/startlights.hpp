@@ -62,13 +62,15 @@ public:
 
     const MCVector3dF & pos() const;
 
+    MCFloat glowScale() const;
+
 signals:
 
     void raceStarted();
 
 private:
 
-    bool updateCounter(MCUint limit);
+    bool timeElapsed(MCUint limit);
 
     LightState        m_state;
     MCUint            m_counter;
@@ -76,6 +78,7 @@ private:
     MCVector3dF       m_pos;
     MCUint            m_width;
     MCUint            m_height;
+    MCFloat           m_glowScale;
     MCVectorAnimation m_animation;
     MessageOverlay  & m_messageOverlay;
 };

@@ -40,7 +40,7 @@ public:
 
 private:
 
-    void renderLights(int rows, int litRows) const;
+    void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;
 
     MCSurface & m_startLightOn;
     MCSurface & m_startLightOff;

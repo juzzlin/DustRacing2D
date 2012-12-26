@@ -25,7 +25,7 @@ Startlights::Startlights(MessageOverlay & messageOverlay)
 {
 }
 
-bool Startlights::updateCounter(MCUint limit)
+bool Startlights::timeElapsed(MCUint limit)
 {
     if (++m_counter > limit)
     {
@@ -48,12 +48,13 @@ bool Startlights::update()
              MCVector3dF(m_pos.i(), m_height / 2, 0),
              second / 3);
         m_state = LightsAppear;
+        m_glowScale = 1.0;
         InputHandler::setEnabled(false);
         return true;
 
     case LightsAppear:
         m_animation.update();
-        if (updateCounter(second))
+        if (timeElapsed(second))
         {
             m_state = LightsFirstRow;
             m_messageOverlay.addMessage("3");
@@ -61,7 +62,7 @@ bool Startlights::update()
         return true;
 
     case LightsFirstRow:
-        if (updateCounter(second))
+        if (timeElapsed(second))
         {
             m_state = LightsSecondRow;
             m_messageOverlay.addMessage("2");
@@ -69,7 +70,7 @@ bool Startlights::update()
         return true;
 
     case LightsSecondRow:
-        if (updateCounter(second))
+        if (timeElapsed(second))
         {
             m_state = LightsThirdRow;
             m_messageOverlay.addMessage("1");
@@ -77,7 +78,7 @@ bool Startlights::update()
         return true;
 
     case LightsThirdRow:
-        if (updateCounter(second))
+        if (timeElapsed(second))
         {
             m_state = LightsGo;
             m_messageOverlay.addMessage("GO!!!");
@@ -87,7 +88,7 @@ bool Startlights::update()
         return true;
 
     case LightsGo:
-        if (updateCounter(second))
+        if (timeElapsed(second))
         {
             m_state = LightsDisappear;
             m_animation.init(
@@ -96,6 +97,9 @@ bool Startlights::update()
                 MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
                 second / 3);
         }
+
+        m_glowScale *= 0.75;
+
         return true;
 
     case LightsDisappear:
@@ -131,4 +135,9 @@ Startlights::LightState Startlights::state() const
 const MCVector3dF & Startlights::pos() const
 {
     return m_pos;
+}
+
+MCFloat Startlights::glowScale() const
+{
+    return m_glowScale;
 }

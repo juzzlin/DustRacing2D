@@ -31,7 +31,7 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
     m_startLightGlow.setShaderProgram(&Renderer::instance().program("master"));
 }
 
-void StartlightsOverlay::renderLights(int rows, int litRows) const
+void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bool glowAlways) const
 {
     const int cols = 8;
 
@@ -70,8 +70,9 @@ void StartlightsOverlay::renderLights(int rows, int litRows) const
     {
         for (int col = 0; col < cols; col++)
         {
-            if (row < litRows)
+            if (row < litRows || glowAlways)
             {
+                m_startLightGlow.setScale(glowScale, glowScale, 1.0);
                 m_startLightGlow.render(
                     nullptr,
                     MCVector3dF(
@@ -97,21 +98,29 @@ void StartlightsOverlay::render()
     switch (m_model.state())
     {
     case Startlights::LightsFirstRow:
-        renderLights(3, 1);
+        renderLights(3, 1, m_model.glowScale());
         break;
+
     case Startlights::LightsSecondRow:
-        renderLights(3, 2);
+        renderLights(3, 2, m_model.glowScale());
         break;
+
     case Startlights::LightsThirdRow:
-        renderLights(3, 3);
+        renderLights(3, 3, m_model.glowScale());
         break;
+
     case Startlights::LightsGo:
+        renderLights(3, 0, m_model.glowScale(), true);
+        break;
+
     case Startlights::LightsAppear:
     case Startlights::LightsDisappear:
-        renderLights(3, 0);
+        renderLights(3, 0, m_model.glowScale());
         break;
+
     case Startlights::LightsEnd:
         break;
+
     default:
         break;
     }
