@@ -482,7 +482,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
     }
-    else if (role == "wall")
+    else if (role == "wall" || role == "wallLong")
     {
         MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
