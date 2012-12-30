@@ -33,9 +33,13 @@
 #include <MCTypes>
 #include <MCVector2d>
 
-#include <string>
+// These are needed to generate the number plate surface on top of the car.
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
 
-static std::string NUMBER_SURFACE_HANDLE[10] = {"1", "9", "8", "7", "6", "5", "4", "3", "2", "x"};
+#include <string>
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
@@ -53,7 +57,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_turnRight(false)
 , m_index(index)
 , m_tireAngle(0)
-, m_number(MCSurfaceManager::instance().surface(NUMBER_SURFACE_HANDLE[index]))
+, m_number(generateNumberSurface(index))
 , m_frontTire(MCSurfaceManager::instance().surface("frontTire"))
 , m_brakeGlow(MCSurfaceManager::instance().surface("brakeGlow"))
 , m_speedInKmh(0)
@@ -71,9 +75,38 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     initForceGenerators(desc);
 
-    m_number.setShaderProgram(&Renderer::instance().program("master"));
     m_brakeGlow.setShaderProgram(&Renderer::instance().program("master"));
     m_frontTire.setShaderProgram(&Renderer::instance().program("master"));
+    m_number.setShaderProgram(&Renderer::instance().program("master"));
+}
+
+MCSurface & Car::generateNumberSurface(MCUint index)
+{
+    const int w = 32;
+    const int h = 32;
+
+    QPixmap numberPixmap(w, h);
+    numberPixmap.fill(Qt::white);
+
+    QPainter painter;
+    painter.begin(&numberPixmap);
+    QFont font;
+    font.setPixelSize(32);
+    font.setBold(true);
+    painter.setFont(font);
+    painter.setPen(QColor(0, 0, 0));
+    QFontMetrics fm = painter.fontMetrics();
+    QString text = QString("%1").arg(index + 1);
+    painter.drawText(w / 2 - fm.width(text) / 2, h / 2 + fm.height() / 2 - fm.descent(), text);
+    painter.end();
+
+    MCSurfaceData surfaceData;
+    surfaceData.height        = 11;
+    surfaceData.heightSet     = true;
+    surfaceData.width         = 11;
+    surfaceData.widthSet      = true;
+
+    return MCSurfaceManager::instance().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
 
 void Car::setProperties(Description & desc)

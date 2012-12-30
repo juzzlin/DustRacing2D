@@ -167,6 +167,8 @@ public:
 
 private:
 
+    MCSurface & generateNumberSurface(MCUint index);
+
     void setProperties(Description & desc);
     void initForceGenerators(Description & desc);
 
