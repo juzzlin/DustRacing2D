@@ -26,7 +26,7 @@ $ ./configure
 
 This runs CMake that generates the makefiles.
 You can also run cmake directly. The configure script
-is only for convenience.
+is only for convenience and is just a wrapper for cmake. 
 
 If everything went ok, run:
   
