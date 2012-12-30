@@ -54,6 +54,8 @@ class Scene
 {
 public:
 
+    static const int NUM_CARS = 12;
+
     //! Constructor.
     Scene(Game & game, StateMachine & stateMachine, Renderer & renderer);
 

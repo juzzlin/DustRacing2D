@@ -72,7 +72,6 @@ int Scene::m_width  = 1024;
 int Scene::m_height = 768;
 
 static const MCFloat METERS_PER_PIXEL = 0.05f;
-static const int     NUM_CARS         = 10;
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 : m_game(game)

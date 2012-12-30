@@ -19,6 +19,7 @@
 #include "particlemanager.hpp"
 #include "radius.hpp"
 #include "renderer.hpp"
+#include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
 
 #include <MCCollisionEvent>
@@ -39,7 +40,10 @@
 #include <QPainter>
 #include <QPixmap>
 
+#include <cassert>
 #include <string>
+
+static std::vector<std::string> NUMBER_PLATES({"1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x"});
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
@@ -71,6 +75,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_sparkleCounter(0)
 , m_mudCounter(0)
 {
+    assert(static_cast<int>(NUMBER_PLATES.size()) == Scene::NUM_CARS);
+
     setProperties(desc);
 
     initForceGenerators(desc);
@@ -96,7 +102,7 @@ MCSurface & Car::generateNumberSurface(MCUint index)
     painter.setFont(font);
     painter.setPen(QColor(0, 0, 0));
     QFontMetrics fm = painter.fontMetrics();
-    QString text = QString("%1").arg(index + 1);
+    QString text = NUMBER_PLATES.at(index).c_str();
     painter.drawText(w / 2 - fm.width(text) / 2, h / 2 + fm.height() / 2 - fm.descent(), text);
     painter.end();
 

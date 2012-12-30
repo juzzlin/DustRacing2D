@@ -190,12 +190,14 @@ void TrackItem::render(int x, int y)
     // Render stars
     if (!m_track.trackData().isLocked())
     {
-        const int starW  = m_star.width();
-        const int starH  = m_star.height();
-        const int startX = x - 5 * starW + starW / 2 + m_xDisplacement;
-        for (int i = 0; i < 10; i++)
+        const int starW    = m_star.width();
+        const int starH    = m_star.height();
+        const int startX   = x - 5 * starW + starW / 2 + m_xDisplacement;
+        const int numStars = 10;
+
+        for (int i = 0; i < numStars; i++)
         {
-            if (m_bestPos != -1 && 10 - i >= m_bestPos)
+            if (m_bestPos != -1 && Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos)
             {
                 m_star.setColor(1.0, 1.0, 0.0);
                 m_glow.render(
