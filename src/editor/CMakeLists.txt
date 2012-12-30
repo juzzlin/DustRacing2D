@@ -45,8 +45,8 @@ set(MOC_HDRS
 # Some .ui files
 #set(UIS ui/about.ui ui/settings.ui)
 
-# Add the resource file
-set(RCS ${CMAKE_SOURCE_DIR}/data/images/images.qrc)
+# Add the resource files
+set(RCS ${CMAKE_SOURCE_DIR}/data/images/editor.qrc ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
 # Add include dir for the common sources
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common)
@@ -71,7 +71,7 @@ if(MINGW)
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o
         COMMAND
             windres.exe
-            -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/Windows.rc
+            -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/WindowsEditor.rc
             -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
     set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
 endif(MINGW)

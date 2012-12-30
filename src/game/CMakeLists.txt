@@ -77,7 +77,7 @@ set(MOC_HDRS
     timing.hpp)
 
 # Add the resource file
-set(RCS ${CMAKE_SOURCE_DIR}/data/images/images.qrc)
+set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -95,7 +95,7 @@ if(MINGW)
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o
         COMMAND
             windres.exe
-            -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/Windows.rc
+            -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/WindowsGame.rc
             -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
     set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
 endif(MINGW)

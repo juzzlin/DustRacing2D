@@ -58,7 +58,7 @@ Renderer::Renderer(
     setFocusPolicy(Qt::StrongFocus);
 
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
-    setWindowIcon(QIcon(":/logo.png"));
+    setWindowIcon(QIcon(":/DustRacing.png"));
 
     if (!fullScreen)
     {

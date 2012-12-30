@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DustRacing.png</file>
+        <file>DustRacingEditor.png</file>
+    </qresource>
+</RCC>

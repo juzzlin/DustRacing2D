@@ -2,7 +2,7 @@
 Name=Dust Racing Track Editor
 Comment=2D racing game track editor
 Exec=dustrac-editor
-Icon=DustRacing
+Icon=DustRacingEditor
 Type=Application
 Categories=Game
 StartupNotify=true

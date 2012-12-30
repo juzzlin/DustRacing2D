@@ -63,5 +63,7 @@ if(ReleaseBuild)
     install(FILES dustrac-editor.desktop DESTINATION share/applications)
     install(FILES data/icons/DustRacing.png DESTINATION share/pixmaps)
     install(FILES data/icons/DustRacing.png DESTINATION share/icons/hicolor/64x64/apps)
+    install(FILES data/icons/DustRacingEditor.png DESTINATION share/pixmaps)
+    install(FILES data/icons/DustRacingEditor.png DESTINATION share/icons/hicolor/64x64/apps)
 endif()
 
