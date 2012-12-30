@@ -96,14 +96,17 @@ public:
     MCSurface & surface(
         const std::string & handle) const throw (MCException);
 
+    //! Creates an MCSurface containing a 2D OpenGL texture from a QImage + texture meta data.
+    //! MCSurfaceManager keeps the ownership.
+    MCSurface & createSurfaceFromImage(
+        const MCSurfaceData & data, const QImage & image) throw (MCException);
+
+    //! Creates an MCSurface containing two 2D OpenGL textures from two QImages + texture meta data.
+    //! MCSurfaceManager keeps the ownership.
+    MCSurface & createSurfaceFromImages(
+        const MCSurfaceData & data, const QImage & image1, const QImage & image2) throw (MCException);
+
 private:
-
-    //! Creates a 2D OpenGL texture from a QImage + texture meta data
-    void create2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
-
-    //! Creates two 2D OpenGL textures from two QImages + texture meta data
-    void createMultiTextureFromImage(
-        const MCSurfaceData & data, const QImage & image1, const QImage & image2);
 
     //! Apply given color key (set alpha values on / of).
     void applyColorKey(QImage & textureImage,
@@ -112,12 +115,12 @@ private:
     //! Creates a scaled image with dimensions forced to the nearest power of two.
     QImage createNearest2PowNImage(const QImage & image);
 
-    //! Helper to create the texture.
-    GLuint doCreate2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
+    //! Helper to create the actual OpenGL texture.
+    GLuint create2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
 
     //! Map for resulting surface objects
     typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
-    SurfaceHash surfaceMap;
+    SurfaceHash m_surfaceMap;
 
     DISABLE_COPY(MCSurfaceManager);
     DISABLE_ASSI(MCSurfaceManager);

@@ -48,14 +48,14 @@ inline bool colorMatch(int val1, int val2, int threshold)
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
 }
 
-void MCSurfaceManager::create2DTextureFromImage(
-    const MCSurfaceData & data, const QImage & image)
+MCSurface & MCSurfaceManager::createSurfaceFromImage(
+    const MCSurfaceData & data, const QImage & image) throw (MCException)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image.height();
     int origW = data.widthSet  ? data.width  : image.width();
 
-    GLuint textureHandle = doCreate2DTextureFromImage(data, image);
+    GLuint textureHandle = create2DTextureFromImage(data, image);
 
     // Create a new MCSurface object
     MCSurface * pSurface =
@@ -72,18 +72,21 @@ void MCSurfaceManager::create2DTextureFromImage(
     }
 
     // Store MCSurface to map
-    surfaceMap[data.handle] = pSurface;
+    m_surfaceMap[data.handle] = pSurface;
+
+    assert(pSurface);
+    return *pSurface;
 }
 
-void MCSurfaceManager::createMultiTextureFromImage(
-    const MCSurfaceData & data, const QImage & image1, const QImage & image2)
+MCSurface & MCSurfaceManager::createSurfaceFromImages(
+    const MCSurfaceData & data, const QImage & image1, const QImage & image2) throw (MCException)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image1.height();
     int origW = data.widthSet  ? data.width  : image1.width();
 
-    GLuint textureHandle1 = doCreate2DTextureFromImage(data, image1);
-    GLuint textureHandle2 = doCreate2DTextureFromImage(data, image2);
+    GLuint textureHandle1 = create2DTextureFromImage(data, image1);
+    GLuint textureHandle2 = create2DTextureFromImage(data, image2);
 
     // Create a new MCSurface object
     MCSurface * pSurface =
@@ -101,10 +104,13 @@ void MCSurfaceManager::createMultiTextureFromImage(
     }
 
     // Store MCSurface to map
-    surfaceMap[data.handle] = pSurface;
+    m_surfaceMap[data.handle] = pSurface;
+
+    assert(pSurface);
+    return *pSurface;
 }
 
-GLuint MCSurfaceManager::doCreate2DTextureFromImage(
+GLuint MCSurfaceManager::create2DTextureFromImage(
     const MCSurfaceData & data, const QImage & image)
 {
     // Create a surface with dimensions of 2^n
@@ -187,8 +193,8 @@ void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, 
 MCSurfaceManager::~MCSurfaceManager()
 {
     // Delete OpenGL textures and Textures
-    auto iter(surfaceMap.begin());
-    while (iter != surfaceMap.end())
+    auto iter(m_surfaceMap.begin());
+    while (iter != m_surfaceMap.end())
     {
         if (iter->second)
         {
@@ -250,8 +256,7 @@ void MCSurfaceManager::load(
                     QImage textureImage2;
                     if (textureImage2.load(path2.c_str()))
                     {
-                        // Create an OpenGL texture from the image
-                        createMultiTextureFromImage(data, textureImage1, textureImage2);
+                        createSurfaceFromImages(data, textureImage1, textureImage2);
                     }
                     else
                     {
@@ -269,8 +274,7 @@ void MCSurfaceManager::load(
                 QImage textureImage;
                 if (textureImage.load(path.c_str()))
                 {
-                    // Create an OpenGL texture from the image
-                    create2DTextureFromImage(data, textureImage);
+                    createSurfaceFromImage(data, textureImage);
                 }
                 else
                 {
@@ -289,13 +293,13 @@ void MCSurfaceManager::load(
 MCSurface & MCSurfaceManager::surface(const std::string & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (surfaceMap.find(id) == surfaceMap.end())
+    if (m_surfaceMap.find(id) == m_surfaceMap.end())
     {
         throw MCException("Cannot find texture object for handle '" + id + "'");
     }
 
     // Yes: return handle for the texture
-    MCSurface * pSurface = surfaceMap.find(id)->second;
+    MCSurface * pSurface = m_surfaceMap.find(id)->second;
     assert(pSurface);
     return *pSurface;
 }
