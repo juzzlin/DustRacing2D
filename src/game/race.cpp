@@ -32,7 +32,7 @@
 
 static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
-static const int UNLOCK_LIMIT        = 5;
+static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
 
 Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay)
 : m_lapCount(0)
