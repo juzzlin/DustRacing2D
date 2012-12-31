@@ -451,17 +451,14 @@ void Scene::translateCarsToStartPositions()
         std::reverse(order.begin(), order.end());
 
         // Move the human player to a starting place that equals the best position
-        // of the previous racing track.
+        // of the current race track.
         if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
         {
-            if (m_activeTrack->prev())
+            const int bestPos = Settings::instance().loadBestPos(*m_activeTrack);
+            if (bestPos > 0)
             {
-                const int prevBestPos = Settings::instance().loadBestPos(*m_activeTrack->prev());
-                if (prevBestPos > 0)
-                {
-                    order.insert(order.begin() + prevBestPos - 1, *m_cars.begin());
-                    order.pop_back();
-                }
+                order.insert(order.begin() + bestPos - 1, *m_cars.begin());
+                order.pop_back();
             }
         }
 
