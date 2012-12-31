@@ -385,37 +385,22 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
     else if (role == "plant")
     {
+        const MCFloat plantBodyRadius = 4;
+
         MCSurfaceObjectData data(role.toStdString());
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
+        data.setShapeWidth(plantBodyRadius);
+        data.setShapeHeight(plantBodyRadius);
         data.setBatchMode(true);
-        data.setLayer(Layers::Ground);
+        data.setLayer(Layers::Tree);
 
         MCObject & object = m_objectFactory.build(data);
         object.setInitialLocation(MCVector2dF(x, h - y));
         object.setInitialAngle(o);
         object.view()->setShaderProgram(&Renderer::instance().program("master"));
         object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "sandBrush")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setStationary(true);
-        data.setSurfaceId(role.toStdString());
-        data.setBatchMode(true);
-        data.setLayer(Layers::Ground);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setBypassCollisions(true);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-        object.setHasShadow(false);
 
         // Wrap the MCObject in a TrackObject and add to the TrackData
         newData.objects().add(*new TrackObject(category, role, object), true);
