@@ -55,6 +55,7 @@ set(SRC
     trackdata.cpp
     trackloader.cpp
     trackobject.cpp
+    trackobjectfactory.cpp
     trackselectionmenu.cpp
     tracktile.cpp
     treeview.cpp

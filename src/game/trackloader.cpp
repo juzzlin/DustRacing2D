@@ -31,7 +31,6 @@
 #include "trackloader.hpp"
 #include "trackobject.hpp"
 #include "tracktile.hpp"
-#include "treeview.hpp"
 
 #include <MCLogger>
 #include <MCObjectFactory>
@@ -43,9 +42,9 @@
 
 TrackLoader * TrackLoader::m_instance = nullptr;
 
-TrackLoader::TrackLoader(MCSurfaceManager & textureManager, MCObjectFactory  & objectFactory)
-: m_textureManager(textureManager)
-, m_objectFactory(objectFactory)
+TrackLoader::TrackLoader(MCSurfaceManager & surfaceManager, MCObjectFactory & objectFactory)
+: m_surfaceManager(surfaceManager)
+, m_trackObjectFactory(objectFactory, surfaceManager)
 , m_paths()
 , m_tracks()
 {
@@ -225,12 +224,12 @@ void TrackLoader::readTile(
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
-    tile->setSurface(&m_textureManager.surface(id));
+    tile->setSurface(&m_surfaceManager.surface(id));
 
     // Set preview surface, if found.
     try
     {
-        tile->setPreviewSurface(&m_textureManager.surface(id + "Preview"));
+        tile->setPreviewSurface(&m_surfaceManager.surface(id + "Preview"));
     }
     catch (...)
     {
@@ -316,176 +315,20 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     const int y = element.attribute("y", "0").toInt();
 
     // Angle in degrees
-    int o = element.attribute("o", "0").toInt();
+    int angle = element.attribute("o", "0").toInt();
 
-    // Mirror the angle, because game has y-axis pointing up.
-    o = -o;
+    // Mirror the angle, because the y-axis is pointing
+    // down in the editor's coordinate system.
+    angle = -angle;
 
-    // Height of the map. The y-coordinates needs to be mirrored, because
-    // the coordinate system is y-wise mirrored in the editor.
+    // Height of the map.
     const int h = newData.map().rows() * TrackTile::TILE_H;
 
-    // TODO: Eliminate copy-paste initializations.
-    if (role == "brake")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setMass(1000);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.5);
-        data.setXYFriction(1.0);
-        data.setBatchMode(true);
-        data.setLayer(Layers::GrandStands);
+    // The y-coordinates needs to be mirrored, because the y-axis is pointing
+    // down in the editor's coordinate system.
+    MCVector2dF location(x, h - y);
 
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "dustRacing2DBanner")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setMass(50000);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.5);
-        data.setXYFriction(1.0);
-        data.setBatchMode(true);
-        data.setLayer(Layers::GrandStands);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "grandstand")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setStationary(true);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.5);
-        data.setXYFriction(1.0);
-        data.setBatchMode(true);
-        data.setLayer(Layers::GrandStands);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "plant")
-    {
-        const MCFloat plantBodyRadius = 4;
-
-        MCSurfaceObjectData data(role.toStdString());
-        data.setStationary(true);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.25);
-        data.setShapeWidth(plantBodyRadius);
-        data.setShapeHeight(plantBodyRadius);
-        data.setBatchMode(true);
-        data.setLayer(Layers::Tree);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "rock")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setMass(5000);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.9);
-        data.setXYFriction(1.0);
-        data.setBatchMode(true);
-        data.setLayer(Layers::Walls);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "tire")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setMass(1000); // Exaggerate the mass on purpose
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.5);
-        data.setXYFriction(0.25);
-        data.setBatchMode(true);
-        data.setLayer(Layers::Walls);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "tree")
-    {
-        const MCFloat treeViewRadius = 48;
-        const MCFloat treeBodyRadius = 8;
-
-        MCSurfaceObjectData data(role.toStdString());
-        data.setStationary(true);
-        data.setRestitution(0.25);
-        data.setShapeWidth(treeBodyRadius);
-        data.setShapeHeight(treeBodyRadius);
-        data.setLayer(Layers::Tree);
-
-        // Create a custom view.
-        MCShapeView * view = new TreeView(
-            m_textureManager.surface("tree"), treeViewRadius, 2, 120, 5);
-        view->setShaderProgram(&(Renderer::instance().program("master")));
-        view->setShadowShaderProgram(&(Renderer::instance().program("masterShadow")));
-        MCObject & object = m_objectFactory.build(data, *view);
-        object.setInitialLocation(MCVector2dF(x, h - y));
-        object.setInitialAngle(o);
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
-    else if (role == "wall" || role == "wallLong")
-    {
-        MCSurfaceObjectData data(role.toStdString());
-        data.setStationary(true);
-        data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.9);
-        data.setXYFriction(1.0);
-        data.setBatchMode(true);
-        data.setLayer(Layers::Walls);
-
-        MCObject & object = m_objectFactory.build(data);
-        object.setInitialLocation(MCVector3dF(x, h - y, 8));
-        object.setInitialAngle(o);
-        object.view()->setShaderProgram(&Renderer::instance().program("master"));
-        object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-        // Wrap the MCObject in a TrackObject and add to the TrackData
-        newData.objects().add(*new TrackObject(category, role, object), true);
-    }
+    newData.objects().add(m_trackObjectFactory.build(category, role, location, angle), true);
 }
 
 void TrackLoader::readTargetNode(

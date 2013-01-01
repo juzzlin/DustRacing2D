@@ -153,17 +153,12 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
 void MCObjectFactoryImpl::setCommonProperties(
     MCObject & object, const MCObjectData & data) const
 {
-    // Set mass
     object.setMass(data.mass(), data.stationary());
-
-    // Set friction
     object.setXYFriction(data.xyFriction());
-
-    // Set restitution
     object.setRestitution(data.restitution());
-
-    // Set rendering layer
     object.setLayer(data.layer(), false);
+    object.setInitialLocation(data.initialLocation());
+    object.setInitialAngle(data.initialAngle());
 }
 
 MCObjectFactory::~MCObjectFactory()

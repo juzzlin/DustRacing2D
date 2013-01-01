@@ -21,6 +21,7 @@
 #define MCSURFACEOBJECTDATA_HH
 
 #include "mcobjectdata.hh"
+#include <MCVector3d>
 
 class MCSurfaceObjectDataImpl;
 
@@ -33,7 +34,7 @@ public:
     explicit MCSurfaceObjectData(const std::string & typeId);
 
     //! Destructor.
-    virtual ~MCSurfaceObjectData();
+    virtual ~MCSurfaceObjectData() {};
 
     //! Set the surface id.
     void setSurfaceId(const std::string & id);
@@ -58,8 +59,10 @@ private:
 
     DISABLE_COPY(MCSurfaceObjectData);
     DISABLE_ASSI(MCSurfaceObjectData);
-    MCSurfaceObjectDataImpl * const m_pImpl;
-    friend class MCSurfaceObjectDataImpl;
+
+    std::string m_surfaceId;
+    bool        m_defaultCircleShape;
+    bool        m_batchMode;
 };
 
 #endif // MCSURFACEOBJECTDATA_HH

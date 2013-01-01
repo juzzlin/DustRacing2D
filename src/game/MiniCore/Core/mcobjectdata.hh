@@ -24,10 +24,12 @@
 #include "mctypes.hh"
 #include <string>
 
+#include <MCVector3d>
+
 class MCObjectDataImpl;
 
 //! Base class for object data classes. MCObjectData is used by the
-//! MCObjectFactory in order to create objects of the desired
+//! MCObjectFactory in order to create objects using desired
 //! configurations.
 class MCObjectData
 {
@@ -35,15 +37,14 @@ public:
 
     /*! Possible shape types:
      *  Rect   = MCRectShape.
-     *  Circle = MCCircleShape.
-     */
+     *  Circle = MCCircleShape. */
     enum Shape {None, Rect, Circle};
 
     //! Constructor.
     explicit MCObjectData(const std::string & typeId);
 
     //! Destructor.
-    virtual ~MCObjectData();
+    virtual ~MCObjectData() {};
 
     //! Get type id.
     std::string typeId() const;
@@ -99,12 +100,35 @@ public:
     //! Get the rendering layer.
     int layer() const;
 
+    //! Set the initial location.
+    void setInitialLocation(MCVector3dF location);
+
+    //! Get the initial location.
+    MCVector3dF initialLocation() const;
+
+    //! Set the initial angle.
+    void setInitialAngle(int angle);
+
+    //! Get the initial angle.
+    int initialAngle() const;
+
 private:
 
     DISABLE_COPY(MCObjectData);
     DISABLE_ASSI(MCObjectData);
-    MCObjectDataImpl * const m_pImpl;
-    friend class MCObjectDataImpl;
+
+    std::string         m_typeId;
+    MCFloat             m_mass;
+    MCObjectData::Shape m_shape;
+    MCFloat             m_shapeRadius;
+    MCFloat             m_shapeWidth;
+    MCFloat             m_shapeHeight;
+    MCFloat             m_restitution;
+    MCFloat             m_xyFriction;
+    bool                m_stationary;
+    int                 m_layer;
+    MCVector3dF         m_location;
+    int                 m_angle;
 };
 
 #endif // MCOBJECTDATA_HH

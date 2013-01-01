@@ -19,61 +19,40 @@
 
 #include "mcsurfaceobjectdata.hh"
 
-//! Private class of MCSurfaceObjectData.
-class MCSurfaceObjectDataImpl
-{
-private:
-    MCSurfaceObjectDataImpl();
-    std::string surfaceId;
-    bool defaultCircleShape;
-    bool batchMode;
-    friend class MCSurfaceObjectData;
-};
-
-MCSurfaceObjectDataImpl::MCSurfaceObjectDataImpl()
-: surfaceId("")
-, defaultCircleShape(false)
-, batchMode(false)
-{
-}
-
 MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
 : MCObjectData(typeId)
-, m_pImpl(new MCSurfaceObjectDataImpl)
+, m_surfaceId("")
+, m_defaultCircleShape(false)
+, m_batchMode(false)
 {
 }
 
 void MCSurfaceObjectData::setSurfaceId(const std::string & id)
 {
-    m_pImpl->surfaceId = id;
+    m_surfaceId = id;
 }
 
 const std::string & MCSurfaceObjectData::surfaceId() const
 {
-    return m_pImpl->surfaceId;
+    return m_surfaceId;
 }
 
 void MCSurfaceObjectData::setDefaultCircleShape(bool state)
 {
-    m_pImpl->defaultCircleShape = state;
+    m_defaultCircleShape = state;
 }
 
 bool MCSurfaceObjectData::defaultCirleShape() const
 {
-    return m_pImpl->defaultCircleShape;
+    return m_defaultCircleShape;
 }
 
 void MCSurfaceObjectData::setBatchMode(bool state)
 {
-    m_pImpl->batchMode = state;
+    m_batchMode = state;
 }
 
 bool MCSurfaceObjectData::batchMode() const
 {
-    return m_pImpl->batchMode;
-}
-
-MCSurfaceObjectData::~MCSurfaceObjectData()
-{
-    delete m_pImpl;
+    return m_batchMode;
 }
