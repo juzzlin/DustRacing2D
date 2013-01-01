@@ -314,12 +314,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // Y-coordinate in the world
     const int y = element.attribute("y", "0").toInt();
 
-    // Angle in degrees
-    int angle = element.attribute("o", "0").toInt();
-
     // Mirror the angle, because the y-axis is pointing
     // down in the editor's coordinate system.
-    angle = -angle;
+    const int angle = -element.attribute("o", "0").toInt();
 
     // Height of the map.
     const int h = newData.map().rows() * TrackTile::TILE_H;
