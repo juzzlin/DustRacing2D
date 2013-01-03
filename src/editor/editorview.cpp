@@ -185,6 +185,7 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
                     // Add to track data
                     m_editorData.trackData()->objects().add(object);
+                    m_editorData.setSelectedObject(&object);
                 }
             }
         }
