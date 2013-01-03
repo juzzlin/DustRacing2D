@@ -1,3 +1,29 @@
+0.16.0
+------
+
+* Fixes typo in textures.conf
+* New grandstand texture.
+* Refactors object creation in TrackLoader.
+* Updates the help text.
+* Correct shape radius for the plant object.
+* Removes h.trk.
+* Fixes loading of locked tracks.
+* Replaces square.trk with demo.trk.
+* Finish in TOP-6 to unlock a new race track.
+* Start pos will be the best pos of the current race track.
+* Increase car count to 12.
+* Generate number plates on-the-fly.
+* Refactors MCSurface.
+* Updates INSTALL.
+* New application icons.
+* Adds curvastone.trk.
+* Adds new resolutions to the Resolutions menu.
+* Editor: Automatically select the most recently added object.
+* Editor: Re-order toolbar icons.
+* Editor: Allow even larger target nodes.
+* Editor: Show open file name in the window title.
+* Updates index.html
+
 0.15.0
 ------
 
