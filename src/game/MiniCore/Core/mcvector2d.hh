@@ -131,7 +131,7 @@ public:
     //! Return a normalized vector
     inline MCVector2d<T> normalized() const;
 
-    //! Return a normalized vector, inaccurate
+    //! Return a normalized vector. Inaccurate.
     inline MCVector2d<T> normalizedFast() const;
 
     //! Invert
@@ -140,11 +140,17 @@ public:
     //! Return an inverted vector
     inline MCVector2d<T> inverted() const;
 
-    //! Set the vector to zero vector
+    //! Set the vector to zero vector.
     void setZero();
 
-    //! Return true if a zero vector
+    //! Return true if a zero vector.
     bool isZero() const;
+
+    //! Clamp to given length.
+    void clamp(T maxLength);
+
+    //! Clamp to given length. Inaccurate.
+    void clampFast(T maxLength);
 
     //! Set components
     void set(T newI, T newJ = 0);
@@ -441,6 +447,32 @@ bool MCVector2d<T>::isZero() const
         return
             std::abs(m_i) <= std::numeric_limits<T>::epsilon() &&
             std::abs(m_j) <= std::numeric_limits<T>::epsilon();
+    }
+}
+
+template <typename T>
+void MCVector2d<T>::clamp(T maxLength)
+{
+    const T l = length();
+    if (l > maxLength)
+    {
+        m_i *= maxLength;
+        m_i /= l;
+        m_j *= maxLength;
+        m_j /= l;
+    }
+}
+
+template <typename T>
+void MCVector2d<T>::clampFast(T maxLength)
+{
+    const T l = lengthFast();
+    if (l > maxLength)
+    {
+        m_i *= maxLength;
+        m_i /= l;
+        m_j *= maxLength;
+        m_j /= l;
     }
 }
 

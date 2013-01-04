@@ -154,6 +154,12 @@ public:
     //! Return true if a zero vector
     bool isZero() const;
 
+    //! Clamp to given length.
+    void clamp(T maxLength);
+
+    //! Clamp to given length. Inaccurate.
+    void clampFast(T maxLength);
+
     //! Set components
     void set(T i, T j = 0, T k = 0);
 
@@ -497,6 +503,36 @@ bool MCVector3d<T>::isZero() const
     }
 }
 
+template <typename T>
+void MCVector3d<T>::clamp(T maxLength)
+{
+    const T l = length();
+    if (l > maxLength)
+    {
+        m_i *= maxLength;
+        m_i /= l;
+        m_j *= maxLength;
+        m_j /= l;
+        m_k *= maxLength;
+        m_k /= l;
+    }
+}
+
+template <typename T>
+void MCVector3d<T>::clampFast(T maxLength)
+{
+    const T l = lengthFast();
+    if (l > maxLength)
+    {
+        m_i *= maxLength;
+        m_i /= l;
+        m_j *= maxLength;
+        m_j /= l;
+        m_k *= maxLength;
+        m_k /= l;
+    }
+}
+
 // Unary negation
 template <typename T>
 MCVector3d<T> operator - (const MCVector3d<T> & r)
@@ -505,4 +541,3 @@ MCVector3d<T> operator - (const MCVector3d<T> & r)
 }
 
 #endif // MCVECTOR3D_HH
-
