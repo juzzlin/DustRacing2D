@@ -27,7 +27,7 @@ public:
     explicit SlideFrictionGenerator(MCFloat coeff, MCFloat gravity = 9.81);
 
     //! Destructor.
-    virtual ~SlideFrictionGenerator();
+    virtual ~SlideFrictionGenerator() {};
 
     //! \reimp
     virtual void updateForce(MCObject & object);
