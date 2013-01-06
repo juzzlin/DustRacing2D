@@ -226,12 +226,27 @@ void Car::turnRight()
     }
 }
 
-void Car::accelerate()
+void Car::accelerate(bool deccelerate)
 {
     m_pBrakingFriction->enable(false);
 
-    MCVector2d<MCFloat> force(m_dx, m_dy);
-    addForce(force * m_desc.power);
+    const MCFloat gravity = 9.81;
+    MCFloat effForce = mass() * m_desc.accelerationFriction * gravity;
+    if (!velocity().isZero())
+    {
+        effForce = std::min(m_desc.power / velocity().lengthFast(), effForce);
+    }
+
+    const MCVector2d<MCFloat> direction(m_dx, m_dy);
+
+    if (deccelerate)
+    {
+        addForce(-direction * effForce);
+    }
+    else
+    {
+        addForce(direction * effForce);
+    }
 
     m_accelerating = true;
     m_braking      = false;
@@ -249,8 +264,7 @@ void Car::brake()
 
     if (m_reverse && m_speedInKmh > -25)
     {
-        MCVector2d<MCFloat> force(m_dx, m_dy);
-        addForce(-force * m_desc.power);
+        accelerate(true);
     }
     else
     {

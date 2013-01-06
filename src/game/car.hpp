@@ -39,6 +39,7 @@ public:
         Description()
         : maxLinearVelocity(50.0)
         , maxAngularVelocity(10.0)
+        , accelerationFriction(1.0)
         , brakingFriction(1.5)
         , rollingFrictionOnTrack(0.1)
         , rollingFrictionOffTrack(0.5)
@@ -62,6 +63,7 @@ public:
 
         MCFloat maxLinearVelocity;
         MCFloat maxAngularVelocity;
+        MCFloat accelerationFriction;
         MCFloat brakingFriction;
         MCFloat rollingFrictionOnTrack;
         MCFloat rollingFrictionOffTrack;
@@ -103,7 +105,7 @@ public:
     void turnRight();
 
     //! Accelerate.
-    void accelerate();
+    void accelerate(bool deccelerate = false);
 
     //! Brake.
     void brake();

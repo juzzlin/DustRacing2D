@@ -23,7 +23,7 @@ namespace
 {
     const MCFloat FRICTION_MIN_SPEED = 0.001f;
     const MCFloat SLIDE_FACTOR       = 0.1f;
-    const MCFloat FRICTION_LIMIT     = 4.0f;
+    const MCFloat FRICTION_LIMIT     = 4.5f;
 }
 
 SlideFrictionGenerator::SlideFrictionGenerator(
