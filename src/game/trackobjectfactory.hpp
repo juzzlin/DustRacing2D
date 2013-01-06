@@ -21,6 +21,7 @@
 
 class TrackObject;
 
+//! Convenience class used to create various objects when loading a race track.
 class TrackObjectFactory
 {
 public:
