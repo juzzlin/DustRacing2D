@@ -22,6 +22,7 @@
 #include "../common/targetnodebase.hpp"
 #include "../common/tracktilebase.hpp"
 
+#include <MCRandom>
 #include <MCTrigonom>
 #include <MCTypes>
 
@@ -43,6 +44,11 @@ void AI::update(bool isRaceCompleted)
 {
     if (m_track)
     {
+        if (m_lastTargetNodeIndex != m_car.currentTargetNodeIndex())
+        {
+            setRandomTolerance();
+        }
+
         m_car.clearStatuses();
 
         const Route    & route       = m_track->trackData().route();
@@ -52,14 +58,21 @@ void AI::update(bool isRaceCompleted)
 
         steerControl(tnode);
         speedControl(currentTile, isRaceCompleted);
+
+        m_lastTargetNodeIndex = m_car.currentTargetNodeIndex();
     }
+}
+
+void AI::setRandomTolerance()
+{
+    m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::TILE_W / 8;
 }
 
 void AI::steerControl(TargetNodeBase & tnode)
 {
     // Initial target coordinates
     MCVector3dF target(tnode.location().x(), tnode.location().y());
-    target -= MCVector3dF(m_car.location());
+    target -= MCVector3dF(m_car.location() + MCVector3dF(m_randomTolerance));
 
     MCFloat angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
     MCFloat cur   = static_cast<int>(m_car.angle()) % 360;
@@ -131,7 +144,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
         {
-            if (m_car.speedInKmh() > 50)
+            if (m_car.speedInKmh() > 75)
             {
                 brake = true;
             }
@@ -139,7 +152,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
         {
-            if (m_car.speedInKmh() > 30)
+            if (m_car.speedInKmh() > 50)
             {
                 accelerate = false;
             }

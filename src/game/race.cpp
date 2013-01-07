@@ -264,21 +264,24 @@ void Race::checkForNewBestPosition(const Car & car)
 
 void Race::checkIfCarIsStuck(Car & car)
 {
-    static const int STUCK_LIMIT = 60 * 5; // 5 secs.
-
-    TrackTile * currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
-
-    StuckTileCounter & counter = m_stuckHash[car.index()];
-    if (counter.first == nullptr || counter.first != currentTile)
+    if (started())
     {
-        counter.first  = currentTile;
-        counter.second = 0;
-    }
-    else if (counter.first == currentTile && !currentTile->hasAsphalt())
-    {
-        if (++counter.second >= STUCK_LIMIT)
+        static const int STUCK_LIMIT = 60 * 5; // 5 secs.
+
+        TrackTile * currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
+
+        StuckTileCounter & counter = m_stuckHash[car.index()];
+        if (counter.first == nullptr || counter.first != currentTile)
         {
-            moveCarOntoPreviousCheckPoint(car);
+            counter.first  = currentTile;
+            counter.second = 0;
+        }
+        else if (counter.first == currentTile && !currentTile->hasAsphalt())
+        {
+            if (++counter.second >= STUCK_LIMIT)
+            {
+                moveCarOntoPreviousCheckPoint(car);
+            }
         }
     }
 }

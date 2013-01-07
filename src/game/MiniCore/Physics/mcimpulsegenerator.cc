@@ -23,25 +23,10 @@
 #include "mcmathutil.hh"
 #include "mcshape.hh"
 
-class MCImpulseGeneratorImpl
-{
-    void generateImpulsesFromContact(
-        MCObject & pa, MCObject & pb, const MCContact & contact,
-        const MCVector3dF & linearImpulse,
-        MCFloat restitution);
+MCImpulseGenerator::MCImpulseGenerator()
+{}
 
-    void generateImpulsesFromDeepestContacts(std::vector<MCObject *> & objs);
-
-    void resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy);
-
-    void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);
-
-    MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
-
-    friend class MCImpulseGenerator;
-};
-
-MCContact * MCImpulseGeneratorImpl::getDeepestInterpenetration(
+MCContact * MCImpulseGenerator::getDeepestInterpenetration(
     const std::vector<MCContact *> & contacts)
 {
     MCFloat maxDepth = 0;
@@ -57,7 +42,7 @@ MCContact * MCImpulseGeneratorImpl::getDeepestInterpenetration(
     return bestContact;
 }
 
-void MCImpulseGeneratorImpl::displace(
+void MCImpulseGenerator::displace(
      MCObject & pa, MCObject & pb, const MCVector3dF & displacement)
 {
     if (!pa.stationary())
@@ -70,7 +55,7 @@ void MCImpulseGeneratorImpl::displace(
     }
 }
 
-void MCImpulseGeneratorImpl::generateImpulsesFromContact(
+void MCImpulseGenerator::generateImpulsesFromContact(
     MCObject & pa, MCObject & pb, const MCContact & contact,
     const MCVector3dF & linearImpulse,
     MCFloat restitution)
@@ -109,7 +94,7 @@ void MCImpulseGeneratorImpl::generateImpulsesFromContact(
     }
 }
 
-void MCImpulseGeneratorImpl::resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy)
+void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy)
 {
     for (MCObject * object : objs)
     {
@@ -122,7 +107,8 @@ void MCImpulseGeneratorImpl::resolvePositions(std::vector<MCObject *> & objs, MC
                 MCObject & pa(*object);
                 MCObject & pb(contact->object());
 
-                const MCVector3dF displacement(contact->contactNormal() * contact->interpenetrationDepth() * accuracy);
+                const MCVector3dF displacement(
+                    contact->contactNormal() * contact->interpenetrationDepth() * accuracy);
 
                 displace(pa, pb, displacement);
                 displace(pb, pa, -displacement);
@@ -136,7 +122,7 @@ void MCImpulseGeneratorImpl::resolvePositions(std::vector<MCObject *> & objs, MC
     }
 }
 
-void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
+void MCImpulseGenerator::generateImpulsesFromDeepestContacts(
     std::vector<MCObject *> & objs)
 {
     for (MCObject * object : objs)
@@ -174,24 +160,3 @@ void MCImpulseGeneratorImpl::generateImpulsesFromDeepestContacts(
         object->deleteContacts();
     }
 }
-
-MCImpulseGenerator::MCImpulseGenerator()
-: m_pImpl(new MCImpulseGeneratorImpl)
-{}
-
-MCImpulseGenerator::~MCImpulseGenerator()
-{
-    delete m_pImpl;
-}
-
-void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy)
-{
-    m_pImpl->resolvePositions(objs, accuracy);
-}
-
-void MCImpulseGenerator::generateImpulsesFromDeepestContacts(
-    std::vector<MCObject *> & objs)
-{
-    m_pImpl->generateImpulsesFromDeepestContacts(objs);
-}
-

@@ -16,6 +16,8 @@
 #ifndef AI_HPP
 #define AI_HPP
 
+#include <MCVector2d>
+
 class Car;
 class Route;
 class TargetNodeBase;
@@ -47,11 +49,15 @@ private:
     //! Brake/accelerate logic.
     void speedControl(TrackTile & currentTile, bool isRaceCompleted);
 
+    void setRandomTolerance();
+
     Car         & m_car;
     Track       * m_track;
     const Route * m_route;
     unsigned int  m_targetIndex;
     int           m_lastDiff;
+    int           m_lastTargetNodeIndex;
+    MCVector2dF   m_randomTolerance;
 };
 
 #endif // AI_HPP

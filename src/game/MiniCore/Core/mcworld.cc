@@ -45,7 +45,7 @@ const MCFloat MinLeafWidth  = 64;
 const MCFloat MinLeafHeight = 64;
 }
 
-MCWorld::MCWorld()
+MCWorld::MCWorld(MCVector3dF gravity)
 : m_objectTree(nullptr)
 , m_minX(0)
 , m_maxX(0)
@@ -60,6 +60,7 @@ MCWorld::MCWorld()
 , numCollisions(0)
 , numResolverLoops(5)
 , resolverStep(1.0 / numResolverLoops)
+, m_world(b2Vec2(gravity.i(), gravity.j()))
 {
     if (!MCWorld::pInstance)
     {
@@ -622,7 +623,10 @@ void MCWorld::processCollisions()
 
     if (numCollisions)
     {
-        generateImpulses();
+        for (MCUint i = 0; i < numResolverLoops; i++)
+        {
+            generateImpulses();
+        }
 
         // Process contacts and generate impulses
         collisionDetector.enableCollisionEvents(false);

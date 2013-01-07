@@ -24,6 +24,8 @@
 #include <map>
 #include <unordered_set>
 
+#include <b2World.h>
+
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include "mcmacros.hh"
@@ -54,7 +56,7 @@ public:
     typedef std::vector<MCObject *> ObjectVector;
 
     //! Constructor.
-    MCWorld();
+    MCWorld(MCVector3dF gravity = MCVector3dF(0, 0, -1));
 
     //! Destructor.
     virtual ~MCWorld();
@@ -65,7 +67,7 @@ public:
     //! Remove all objects.
     void clear();
 
-    //! Set dimensions of the world box.
+    //! Set dimensions of the world box in pixels.
     void setDimensions(
         MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
         MCFloat metersPerPixel);
@@ -225,6 +227,7 @@ private:
     MCUint numResolverLoops;
     MCFloat resolverStep;
     std::vector<MCCamera *> m_visibilityCameras;
+    b2World m_world;
 };
 
 #endif // MCWORLD_HH

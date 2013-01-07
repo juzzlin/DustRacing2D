@@ -21,11 +21,11 @@
 #define MCIMPULSEGENERATOR_HH
 
 #include "mctypes.hh"
+#include "mcvector3d.hh"
 #include <vector>
 
 class MCObject;
 class MCContact;
-class MCImpulseGeneratorImpl;
 
 //! Generates impulses due to detected collisions.
 class MCImpulseGenerator
@@ -36,7 +36,7 @@ public:
     MCImpulseGenerator();
 
     //! Destructor.
-    ~MCImpulseGenerator();
+    ~MCImpulseGenerator() {};
 
     //! Generate impulses to the given objects according to current contacts.
     //! Delete contacts.
@@ -48,7 +48,14 @@ public:
 
 private:
 
-    MCImpulseGeneratorImpl * const m_pImpl;
+    void generateImpulsesFromContact(
+        MCObject & pa, MCObject & pb, const MCContact & contact,
+        const MCVector3dF & linearImpulse,
+        MCFloat restitution);
+
+    void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);
+
+    MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
 };
 
 #endif // MCIMPULSEGENERATOR_HH

@@ -126,7 +126,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
 void Scene::createCars()
 {
-    const int humanPower = 300000; // This in Watts
+    const int   humanPower = 300000; // This in Watts
+    const float humanDrag  = 5.0;
 
     m_race.removeCars();
     m_cars.clear();
@@ -140,7 +141,8 @@ void Scene::createCars()
         Car * car = nullptr;
         if (i == 0 || (i == 1 && m_game.hasTwoHumanPlayers()))
         {
-            desc.power = humanPower;
+            desc.power         = humanPower;
+            desc.dragQuadratic = humanDrag;
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCSurfaceManager::instance().surface(image), i, true);
@@ -150,9 +152,9 @@ void Scene::createCars()
             // Introduce some variance to the power of computer players so that the
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
-            desc.power = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
-
-            desc.turningImpulse  = 0.5;
+            desc.power           = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
+            desc.dragQuadratic   = 0.5 * (humanDrag + humanDrag - (i + 1) * humanDrag  / NUM_CARS);
+            desc.turningImpulse  = 0.3;
             desc.slideFriction   = 1.0;
             desc.brakingFriction = 2.0;
 
