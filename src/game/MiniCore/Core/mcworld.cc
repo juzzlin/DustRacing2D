@@ -45,7 +45,7 @@ const MCFloat MinLeafWidth  = 64;
 const MCFloat MinLeafHeight = 64;
 }
 
-MCWorld::MCWorld(MCVector3dF gravity)
+MCWorld::MCWorld()
 : m_objectTree(nullptr)
 , m_minX(0)
 , m_maxX(0)
@@ -60,7 +60,6 @@ MCWorld::MCWorld(MCVector3dF gravity)
 , numCollisions(0)
 , numResolverLoops(5)
 , resolverStep(1.0 / numResolverLoops)
-, m_world(b2Vec2(gravity.i(), gravity.j()))
 {
     if (!MCWorld::pInstance)
     {
