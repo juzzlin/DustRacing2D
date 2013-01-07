@@ -197,7 +197,8 @@ void TrackItem::render(int x, int y)
 
         for (int i = 0; i < numStars; i++)
         {
-            if (m_bestPos != -1 && Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos)
+            // The range of m_bestPos is 1..NUM_CARS
+            if (m_bestPos != -1 && Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos - 1)
             {
                 m_star.setColor(1.0, 1.0, 0.0);
                 m_glow.render(
