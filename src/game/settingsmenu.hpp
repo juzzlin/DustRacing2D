@@ -30,6 +30,10 @@ public:
 
 private:
 
+    void populate(int width, int height);
+    void populateGameModeMenu(int width, int height);
+    void populateFpsMenu(int width, int height);
+
     ConfirmationMenu m_confirmationMenu;
     ResolutionMenu   m_resolutionMenu;
     SurfaceMenu      m_gameModeMenu;

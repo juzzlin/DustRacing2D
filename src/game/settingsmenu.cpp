@@ -116,6 +116,21 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 {
+    populate(width, height);
+    populateGameModeMenu(width, height);
+    populateFpsMenu(width, height);
+
+    using MTFH::MenuManager;
+
+    MenuManager::instance().addMenu(m_confirmationMenu);
+    MenuManager::instance().addMenu(m_resolutionMenu);
+    MenuManager::instance().addMenu(m_gameModeMenu);
+    MenuManager::instance().addMenu(m_fpsMenu);
+    MenuManager::instance().addMenu(m_keyConfigMenu);
+}
+
+void SettingsMenu::populate(int width, int height)
+{
     const int itemHeight = height / 8;
 
     using MTFH::MenuItem;
@@ -154,6 +169,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     addItem(*selectFps,           true);
     addItem(*selectResolution,    true);
     addItem(*gameMode,            true);
+}
+
+void SettingsMenu::populateGameModeMenu(int width, int height)
+{
+    const int itemHeight = height / 8;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
 
     MenuItem * twoPlayers = new MenuItem(width, itemHeight, "Two player race");
     twoPlayers->setView(new TextMenuItemView(20, *twoPlayers), true);
@@ -199,6 +222,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     m_gameModeMenu.addItem(*timeTrial,  true);
     m_gameModeMenu.addItem(*twoPlayers, true);
     m_gameModeMenu.addItem(*onePlayer,  true);
+}
+
+void SettingsMenu::populateFpsMenu(int width, int height)
+{
+    const int itemHeight = height / 8;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
 
     MenuItem * fps30 = new MenuItem(width, itemHeight, "30 fps");
     fps30->setView(new TextMenuItemView(20, *fps30), true);
