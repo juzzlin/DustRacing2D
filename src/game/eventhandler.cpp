@@ -15,13 +15,18 @@
 
 #include "eventhandler.hpp"
 #include "keycodes.hpp"
+#include "settings.hpp"
 #include "statemachine.hpp"
 
 #include <MenuManager>
 
+#include <cassert>
+
 EventHandler::EventHandler(InputHandler & inputHandler)
 : m_inputHandler(inputHandler)
+, m_captureMode(false)
 {
+    // Default key bindings
     m_keyToActionMap[KeyCodes::LSHIFT] = {1, InputHandler::IA_UP};
     m_keyToActionMap[KeyCodes::RSHIFT] = {0, InputHandler::IA_UP};
     m_keyToActionMap[KeyCodes::LCTRL]  = {1, InputHandler::IA_DOWN};
@@ -34,6 +39,45 @@ EventHandler::EventHandler(InputHandler & inputHandler)
     m_keyToActionMap[Qt::Key_Down]     = {0, InputHandler::IA_DOWN};
     m_keyToActionMap[Qt::Key_W]        = {1, InputHandler::IA_UP};
     m_keyToActionMap[Qt::Key_S]        = {1, InputHandler::IA_DOWN};
+
+    loadKeyMappings();
+}
+
+void EventHandler::loadKeyMappings()
+{
+    std::vector<InputHandler::InputAction> actions =
+    {
+        InputHandler::IA_UP,
+        InputHandler::IA_DOWN,
+        InputHandler::IA_LEFT,
+        InputHandler::IA_RIGHT
+    };
+
+    const int numPlayers = 2;
+    for (int player = 0; player < numPlayers; player++)
+    {
+        for (InputHandler::InputAction action : actions)
+        {
+            mapKeyToAction(
+                player,
+                action,
+                Settings::instance().loadKeyMapping(player, action));
+        }
+    }
+}
+
+void EventHandler::enableCaptureMode(InputHandler::InputAction action, int player)
+{
+    assert(player == 0 || player == 1);
+
+    m_captureMode   = true;
+    m_captureAction = action;
+    m_capturePlayer = player;
+}
+
+void EventHandler::disableCaptureMode()
+{
+    m_captureMode = false;
 }
 
 bool EventHandler::handleKeyPressEvent(QKeyEvent * event)
@@ -62,34 +106,45 @@ bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
 
 bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
 {
-    switch (event->key())
+    if (m_captureMode)
     {
-    case Qt::Key_Left:
-        MTFH::MenuManager::instance().left();
-        break;
-    case Qt::Key_Right:
-        MTFH::MenuManager::instance().right();
-        break;
-    case Qt::Key_Up:
-        MTFH::MenuManager::instance().up();
-        break;
-    case Qt::Key_Down:
-        MTFH::MenuManager::instance().down();
-        break;
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        MTFH::MenuManager::instance().selectCurrentItem();
-        break;
-    case Qt::Key_Escape:
-    case Qt::Key_Q:
-        MTFH::MenuManager::instance().popMenu();
-        if (MTFH::MenuManager::instance().done())
+        if (mapKeyToAction(m_capturePlayer, m_captureAction, event->nativeScanCode()))
         {
-            emit gameExited();
+            disableCaptureMode();
+            MTFH::MenuManager::instance().popMenu();
         }
-        break;
-    default:
-        return false;
+    }
+    else
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Left:
+            MTFH::MenuManager::instance().left();
+            break;
+        case Qt::Key_Right:
+            MTFH::MenuManager::instance().right();
+            break;
+        case Qt::Key_Up:
+            MTFH::MenuManager::instance().up();
+            break;
+        case Qt::Key_Down:
+            MTFH::MenuManager::instance().down();
+            break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            MTFH::MenuManager::instance().selectCurrentItem();
+            break;
+        case Qt::Key_Escape:
+        case Qt::Key_Q:
+            MTFH::MenuManager::instance().popMenu();
+            if (MTFH::MenuManager::instance().done())
+            {
+                emit gameExited();
+            }
+            break;
+        default:
+            return false;
+        }
     }
 
     return true;
@@ -97,15 +152,15 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
 
 bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
 {
-    return findMatch(event, true);
+    return applyMatchingAction(event, true);
 }
 
 bool EventHandler::handleGameKeyReleaseEvent(QKeyEvent * event)
 {
-    return findMatch(event, false);
+    return applyMatchingAction(event, false);
 }
 
-bool EventHandler::findMatch(QKeyEvent * event, bool press)
+bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
 {
     if (!event->isAutoRepeat())
     {
@@ -147,3 +202,32 @@ bool EventHandler::findMatch(QKeyEvent * event, bool press)
     return false;
 }
 
+bool EventHandler::mapKeyToAction(int player, InputHandler::InputAction action, int key)
+{
+    if (key &&
+        key != Qt::Key_Escape &&
+        key != Qt::Key_Q &&
+        key != Qt::Key_P)
+    {
+        // Find the matching action and change the key
+        auto iter = m_keyToActionMap.begin();
+        while (iter != m_keyToActionMap.end())
+        {
+            if (iter->second.action == action &&
+                iter->second.player == player)
+            {
+                iter = m_keyToActionMap.erase(iter);
+            }
+
+            iter++;
+        }
+
+        m_keyToActionMap[key] = {player, action};
+
+        Settings::instance().saveKeyMapping(player, action, key);
+
+        return true;
+    }
+
+    return false;
+}

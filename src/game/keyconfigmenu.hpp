@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,33 +13,30 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SETTINGSMENU_HPP
-#define SETTINGSMENU_HPP
+#ifndef KEYCONFIGMENU_HPP
+#define KEYCONFIGMENU_HPP
 
-#include "confirmationmenu.hpp"
-#include "keyconfigmenu.hpp"
-#include "resolutionmenu.hpp"
 #include "surfacemenu.hpp"
 
-//! The settings menu.
-class SettingsMenu : public SurfaceMenu
+class PressKeyMenu;
+
+//! Menu where user can configure the keys used to control the car.
+class KeyConfigMenu : public SurfaceMenu
 {
 public:
 
     //! Constructor.
-    SettingsMenu(std::string id, int width, int height);
+    KeyConfigMenu(std::string id, int width, int height);
+
+    //! Destructor.
+    virtual ~KeyConfigMenu();
 
 private:
 
-    void populate(int width, int height);
-    void populateGameModeMenu(int width, int height);
-    void populateFpsMenu(int width, int height);
+    void addPlayerOneConfig(int width, int height);
+    void addPlayerTwoConfig(int width, int height);
 
-    ConfirmationMenu m_confirmationMenu;
-    ResolutionMenu   m_resolutionMenu;
-    SurfaceMenu      m_gameModeMenu;
-    SurfaceMenu      m_fpsMenu;
-    KeyConfigMenu    m_keyConfigMenu;
+    PressKeyMenu * m_pressKeyMenu;
 };
 
-#endif // SETTINGSMENU_HPP
+#endif // KEYCONFIGMENU_HPP

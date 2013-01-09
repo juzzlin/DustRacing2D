@@ -86,6 +86,8 @@ public:
     //! \return True if the current mode has computer players.
     bool hasComputerPlayers() const;
 
+    EventHandler & eventHandler() const;
+
 public slots:
 
     void togglePause();

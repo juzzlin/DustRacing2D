@@ -16,6 +16,11 @@
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
+#include "inputhandler.hpp"
+
+#include <map>
+#include <QString>
+
 class Track;
 
 //! Singleton settings class that wraps the use of QSettings.
@@ -46,9 +51,15 @@ public:
     void saveFps(int fps);
     int loadFps();
 
+    void saveKeyMapping(int player, InputHandler::InputAction action, int key);
+    int loadKeyMapping(int player, InputHandler::InputAction action);
+
 private:
 
+    QString combineActionAndPlayer(int player, InputHandler::InputAction action);
+
     static Settings * m_instance;
+    std::map<InputHandler::InputAction, QString> m_actionToStringMap;
 };
 
 #endif // SETTINGS_HPP

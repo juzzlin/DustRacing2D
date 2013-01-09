@@ -128,6 +128,12 @@ bool Game::hasComputerPlayers() const
     return m_mode == TwoPlayerRace || m_mode == OnePlayerRace;
 }
 
+EventHandler & Game::eventHandler() const
+{
+    assert(m_eventHandler);
+    return *m_eventHandler;
+}
+
 void Game::finish()
 {
 }

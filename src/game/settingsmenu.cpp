@@ -108,6 +108,7 @@ static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
 static const char * GAME_MODE_MENU_ID    = "gameModeMenu";
 static const char * FPS_MENU_ID          = "fpsMenu";
+static const char * KEY_CONFIG_MENU_ID   = "keyConfigMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
@@ -115,6 +116,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_resolutionMenu(m_confirmationMenu, RESOLUTION_MENU_ID, width, height)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
     populateGameModeMenu(width, height);
@@ -163,9 +165,14 @@ void SettingsMenu::populate(int width, int height)
     selectFps->setView(new TextMenuItemView(20, *selectFps), true);
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
+    MenuItem * configureKeys = new MenuItem(width, itemHeight, "Configure keys >");
+    configureKeys->setView(new TextMenuItemView(20, *configureKeys), true);
+    configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
+
     addItem(*resetRecordTimes,    true);
     addItem(*resetBestPositions,  true);
     addItem(*resetUnlockedTracks, true);
+    addItem(*configureKeys,       true);
     addItem(*selectFps,           true);
     addItem(*selectResolution,    true);
     addItem(*gameMode,            true);
@@ -260,4 +267,5 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     MenuManager::instance().addMenu(m_resolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
+    MenuManager::instance().addMenu(m_keyConfigMenu);
 }

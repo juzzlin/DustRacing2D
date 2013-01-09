@@ -28,6 +28,7 @@ set(SRC
     help.cpp
     inputhandler.cpp
     intro.cpp
+    keyconfigmenu.cpp
     main.cpp
     mainmenu.cpp
     map.cpp

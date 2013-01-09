@@ -35,6 +35,8 @@ public:
 
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
+    void enableCaptureMode(InputHandler::InputAction action, int player);
+
 signals:
 
     void pauseToggled();
@@ -45,7 +47,7 @@ private:
 
     struct ActionMapping
     {
-        unsigned int player;
+        int player;
         InputHandler::InputAction action;
     };
 
@@ -55,12 +57,24 @@ private:
 
     bool handleGameKeyReleaseEvent(QKeyEvent * event);
 
-    bool findMatch(QKeyEvent * event, bool press);
+    bool applyMatchingAction(QKeyEvent * event, bool press);
 
-    typedef std::map<unsigned int, ActionMapping> KeyToActionMap;
+    bool mapKeyToAction(int player, InputHandler::InputAction action, int key);
+
+    void disableCaptureMode();
+
+    void loadKeyMappings();
+
+    typedef std::map<int, ActionMapping> KeyToActionMap;
     KeyToActionMap m_keyToActionMap;
 
     InputHandler & m_inputHandler;
+
+    bool m_captureMode;
+
+    InputHandler::InputAction m_captureAction;
+
+    int m_capturePlayer;
 };
 
 #endif // EVENTHANDLER_HPP

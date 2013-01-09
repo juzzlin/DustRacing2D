@@ -31,6 +31,11 @@ Settings::Settings()
 {
     assert(!Settings::m_instance);
     Settings::m_instance = this;
+
+    m_actionToStringMap[InputHandler::IA_UP]    = "IA_UP";
+    m_actionToStringMap[InputHandler::IA_DOWN]  = "IA_DOWN";
+    m_actionToStringMap[InputHandler::IA_LEFT]  = "IA_LEFT";
+    m_actionToStringMap[InputHandler::IA_RIGHT] = "IA_RIGHT";
 }
 
 Settings & Settings::instance()
@@ -182,4 +187,32 @@ int Settings::loadFps()
     settings.endGroup();
 
     return fps;
+}
+
+QString Settings::combineActionAndPlayer(int player, InputHandler::InputAction action)
+{
+    return QString("%2_%1").arg(player).arg(m_actionToStringMap[action]);
+}
+
+void Settings::saveKeyMapping(int player, InputHandler::InputAction action, int key)
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    settings.setValue(combineActionAndPlayer(player, action), key);
+    settings.endGroup();
+}
+
+int Settings::loadKeyMapping(int player, InputHandler::InputAction action)
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    int key = 0;
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    key = settings.value(combineActionAndPlayer(player, action), 0).toInt();
+    settings.endGroup();
+
+    return key;
 }
