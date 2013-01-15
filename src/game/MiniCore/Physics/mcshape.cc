@@ -85,8 +85,7 @@ void MCShape::renderShadow(MCCamera * p)
 {
     if (m_pView)
     {
-        m_pView->renderShadow(
-            m_location + MCVector3dF(m_shadowOffset), m_angle, p);
+        m_pView->renderShadow(m_location + MCVector3dF(m_shadowOffset), m_angle, p);
     }
 }
 

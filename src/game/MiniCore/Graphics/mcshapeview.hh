@@ -45,6 +45,7 @@ public:
     : m_viewId(viewId)
     , m_shaderProgram(nullptr)
     , m_shadowShaderProgram(nullptr)
+    , m_hasShadow(true)
     {}
 
     //! Destructor.
@@ -73,6 +74,19 @@ public:
     MCGLShaderProgram * shadowShaderProgram() const
     {
         return m_shadowShaderProgram;
+    }
+
+    //! \brief Enable/disable shadow.
+    //! True is the default.
+    void setHasShadow(bool flag)
+    {
+        m_hasShadow = flag;
+    }
+
+    //! \brief Return true if the view should draw a shadow (renderShadow() is called).
+    bool hasShadow() const
+    {
+        return m_hasShadow;
     }
 
     /*! Render the shape at the current location using given camera window.
@@ -186,6 +200,7 @@ private:
     std::string m_viewId;
     MCGLShaderProgram * m_shaderProgram;
     MCGLShaderProgram * m_shadowShaderProgram;
+    bool m_hasShadow;
 };
 
 #endif // MCSHAPEVIEW_HH

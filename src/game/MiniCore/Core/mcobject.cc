@@ -98,7 +98,6 @@ void MCObject::init(const std::string & typeId)
     m_stationary             = false;
     m_renderable             = true;
     m_bypassCollisions       = false;
-    m_hasShadow              = true;
     m_removing               = false;
     m_renderOutline          = false;
     m_isParticle             = false;
@@ -514,26 +513,6 @@ bool MCObject::isParticle() const
 void MCObject::setIsParticle(bool flag)
 {
     m_isParticle = flag;
-}
-
-void MCObject::setRenderShapeOutline(bool flag)
-{
-    m_renderOutline = flag;
-}
-
-bool MCObject::renderShapeOutline() const
-{
-    return m_renderOutline;
-}
-
-void MCObject::setHasShadow(bool flag)
-{
-    m_hasShadow = flag;
-}
-
-bool MCObject::hasShadow() const
-{
-    return m_hasShadow;
 }
 
 void MCObject::setMaximumVelocity(MCFloat maxVelocity)

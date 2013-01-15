@@ -38,9 +38,6 @@ MCGLPointParticle::MCGLPointParticle(const std::string & typeID)
 , m_a(1.0)
 , m_program(nullptr)
 {
-    // Disable shadow by default
-    setHasShadow(false);
-
     // Init vertice data for a quad
     const MCGLVertex vertices[NUM_VERTICES] =
     {

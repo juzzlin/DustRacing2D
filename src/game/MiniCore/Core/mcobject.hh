@@ -238,22 +238,6 @@ public:
     //! Set the object as a particle.
     void setIsParticle(bool flag);
 
-    //! \brief Sets whether view should render shape outline for debug
-    //! purposes.
-    //! False is the default.
-    void setRenderShapeOutline(bool flag);
-
-    //! \brief Returns whether view should render shape outline for debug
-    //! purposes.
-    bool renderShapeOutline() const;
-
-    //! \brief Enable/disable shadow.
-    //! True is the default.
-    void setHasShadow(bool flag);
-
-    //! \brief Return true if the object draws shadow (renderShadow() is called).
-    bool hasShadow() const;
-
     //! Set location
     //! \param newLocation The new location
     void translate(const MCVector3dF & newLocation);

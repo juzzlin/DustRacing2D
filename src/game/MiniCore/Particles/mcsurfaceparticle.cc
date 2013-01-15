@@ -25,6 +25,7 @@ MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
 : MCParticle(viewId)
 {
     setView(new MCSurfaceView(viewId, nullptr, true));
+    view()->setHasShadow(false);
 }
 
 void MCSurfaceParticle::beginBatch()
