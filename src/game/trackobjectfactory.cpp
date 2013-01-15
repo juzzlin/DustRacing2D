@@ -49,6 +49,14 @@ TrackObject & TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
     }
+    else if (role == "crate")
+    {
+        data.setMass(1000);
+        data.setSurfaceId(role.toStdString());
+        data.setRestitution(0.9);
+        data.setLayer(Layers::Walls);
+        data.setInitialLocation(MCVector3dF(location.i(), location.j(), 12));
+    }
     else if (role == "dustRacing2DBanner")
     {
         data.setMass(50000);
