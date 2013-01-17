@@ -21,8 +21,8 @@
 #include <MenuItemView>
 #include <MenuManager>
 
+#include <MCAssetManager>
 #include <MCTextureFont>
-#include <MCTextureFontManager>
 #include <MCTextureText>
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
@@ -74,7 +74,7 @@ void ConfirmationMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-    MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
 
     const int shadowY = -2;
     const int shadowX =  2;

@@ -37,7 +37,6 @@ class MCCamera;
 class MCGLShaderProgram;
 class MCGLTexCoord;
 class MCGLVertex;
-class MCSurfaceImpl;
 
 /*! MCSurface is a renderable object bound to an OpenGL texture handle.
  *  MCSurface can be rendered straightly as a standalone object.
@@ -102,20 +101,6 @@ public:
 
     //! Set scaling by dimensions.
     void setScale(MCFloat w, MCFloat h);
-
-   /*! Get bounding box for a rotated surface
-    * \param pos The position.
-    * \param angle Rotation angle (0..360)
-    */
-    MCBBox<MCFloat> rotatedBBox(MCVector2dFR pos, MCFloat angle);
-
-   /*! Get bounding box for a rotated and scaled surface
-    * \param pos The position.
-    * \param angle Rotation angle (0..360)
-    * \param w2 half of the scaled width
-    * \param h2 half of the scaled height
-    */
-    MCBBox<MCFloat> rotatedScaledBBox(MCVector2dFR pos, MCFloat angle, MCFloat w2, MCFloat h2);
 
     /*! Render by using the default size.
      * \param pos The position.

@@ -28,6 +28,9 @@ uniform mat4 mvp;
 
 uniform float fade;
 
+uniform vec4 diffuseLightDir;
+uniform vec4 diffuseLightColor;
+
 out vec2 texCoord0;
 out vec4 vColor;
 
@@ -44,10 +47,12 @@ void main()
 
     // Normal MVP transform
     gl_Position = mvp * translation * (vec4(inVertex, 1) * scale);
+
+    float diffuseLightIntensity = dot(normalize(diffuseLightDir), vec4(-inNormal, 1));
     
     // Copy the primary color
-    vec4 ambient = vec4(1.0, 0.95, 0.9, 1.0);
-    vColor = inColor * color * ambient * fade;
+    vec4 ambientLight = vec4(1.0, 0.95, 0.9, 1.0);
+    vColor = mix(inColor * color, ambientLight * diffuseLightColor * diffuseLightIntensity, 0.5) * fade;
 
     // Copy texture coorinates
     texCoord0 = inTexCoord;

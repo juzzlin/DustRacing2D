@@ -22,6 +22,7 @@
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
 
+#include <MCAssetManager>
 #include <MCCollisionEvent>
 #include <MCDragForceGenerator>
 #include <MCFrictionGenerator>
@@ -29,7 +30,6 @@
 #include <MCRectShape>
 #include <MCShape>
 #include <MCSurface>
-#include <MCSurfaceManager>
 #include <MCTrigonom>
 #include <MCTypes>
 #include <MCVector2d>
@@ -62,8 +62,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_index(index)
 , m_tireAngle(0)
 , m_number(generateNumberSurface(index))
-, m_frontTire(MCSurfaceManager::instance().surface("frontTire"))
-, m_brakeGlow(MCSurfaceManager::instance().surface("brakeGlow"))
+, m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
+, m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
 , m_speedInKmh(0)
 , m_dx(0)
 , m_dy(0)
@@ -112,7 +112,8 @@ MCSurface & Car::generateNumberSurface(MCUint index)
     surfaceData.width         = 11;
     surfaceData.widthSet      = true;
 
-    return MCSurfaceManager::instance().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
+    return
+        MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
 
 void Car::setProperties(Description & desc)
@@ -425,6 +426,7 @@ void Car::reset()
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
+    static MCUint crate              = MCObject::typeID("crate");
     static MCUint dustRacing2DBanner = MCObject::typeID("dustRacing2DBanner");
     static MCUint grandstand         = MCObject::typeID("grandstand");
     static MCUint wall               = MCObject::typeID("wall");
@@ -448,6 +450,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
         }
         // Check if the car is colliding with hard stationary objects.
         else if (
+            event.collidingObject().typeID() == crate ||
             event.collidingObject().typeID() == dustRacing2DBanner ||
             event.collidingObject().typeID() == grandstand ||
             event.collidingObject().typeID() == wall ||

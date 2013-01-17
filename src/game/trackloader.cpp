@@ -32,19 +32,18 @@
 #include "trackobject.hpp"
 #include "tracktile.hpp"
 
+#include <MCAssetManager>
 #include <MCLogger>
 #include <MCObjectFactory>
 #include <MCShapeView>
-#include <MCSurfaceManager>
 
 #include <algorithm>
 #include <cassert>
 
 TrackLoader * TrackLoader::m_instance = nullptr;
 
-TrackLoader::TrackLoader(MCSurfaceManager & surfaceManager, MCObjectFactory & objectFactory)
-: m_surfaceManager(surfaceManager)
-, m_trackObjectFactory(objectFactory, surfaceManager)
+TrackLoader::TrackLoader(MCObjectFactory & objectFactory)
+: m_trackObjectFactory(objectFactory)
 , m_paths()
 , m_tracks()
 {
@@ -78,7 +77,7 @@ int TrackLoader::loadTracks()
                 m_tracks.push_back(new Track(trackData));
                 numLoaded++;
 
-                MCLogger().info() << "Found '" << trackPath.toStdString() << "', index="
+                MCLogger().info() << "  Found '" << trackPath.toStdString() << "', index="
                     << trackData->index();
             }
             else
@@ -86,24 +85,42 @@ int TrackLoader::loadTracks()
                 MCLogger().error() << "Couldn't load '" << trackPath.toStdString() << "'..";
             }
         }
+
+        if (!trackPaths.size())
+        {
+            MCLogger().info() << "  No race tracks found.";
+        }
     }
 
+    if (numLoaded)
+    {
+        setLockedTracks();
+
+        sortTracks();
+    }
+
+    return numLoaded;
+}
+
+void TrackLoader::setLockedTracks()
+{
     // Check if the tracks are locked/unlocked.
     for (Track * track : m_tracks)
     {
         if (!Settings::instance().loadTrackUnlockStatus(*track) &&
             track->trackData().index() > 0) // The first track is never locked
         {
-            MCLogger().info() << "'" << track->trackData().name().toStdString() << "' is locked.";
             track->trackData().setIsLocked(true);
         }
         else
         {
-            MCLogger().info() << "'" << track->trackData().name().toStdString() << "' is unlocked.";
             track->trackData().setIsLocked(false);
         }
     }
+}
 
+void TrackLoader::sortTracks()
+{
     // Sort tracks with respect to their indices
     std::stable_sort(m_tracks.begin(), m_tracks.end(),
         [](Track * lhs, Track * rhs)
@@ -117,8 +134,6 @@ int TrackLoader::loadTracks()
         m_tracks[i]->setNext(*m_tracks[i + 1]);
         m_tracks[i + 1]->setPrev(*m_tracks[i]);
     }
-
-    return numLoaded;
 }
 
 TrackData * TrackLoader::loadTrack(QString path)
@@ -224,12 +239,12 @@ void TrackLoader::readTile(
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
-    tile->setSurface(&m_surfaceManager.surface(id));
+    tile->setSurface(&MCAssetManager::surfaceManager().surface(id));
 
     // Set preview surface, if found.
     try
     {
-        tile->setPreviewSurface(&m_surfaceManager.surface(id + "Preview"));
+        tile->setPreviewSurface(&MCAssetManager::surfaceManager().surface(id + "Preview"));
     }
     catch (...)
     {

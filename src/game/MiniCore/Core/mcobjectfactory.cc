@@ -18,7 +18,10 @@
 //
 
 #include "mcobjectfactory.hh"
+
+#include "mcassetmanager.hh"
 #include "mccircleshape.hh"
+#include "mcmeshview.hh"
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
 #include "mcsurfacemanager.hh"
@@ -31,25 +34,8 @@
 class MCObject;
 class MCObjectData;
 
-//! Implementation class for MCObjectFactory.
-class MCObjectFactoryImpl
-{
-private:
-    MCObjectFactoryImpl(MCSurfaceManager & tm);
-    void setCommonProperties(
-        MCObject & object, const MCObjectData & data) const;
-    std::vector<std::shared_ptr<MCObject> > objects;
-    MCSurfaceManager & textureManager;
-    friend class MCObjectFactory;
-};
-
-MCObjectFactory::MCObjectFactory(MCSurfaceManager & tm)
-: m_pImpl(new MCObjectFactoryImpl(tm))
-{
-}
-
-MCObjectFactoryImpl::MCObjectFactoryImpl(MCSurfaceManager & tm)
-: textureManager(tm)
+MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
+: m_assetManager(assetManager)
 {
 }
 
@@ -59,7 +45,7 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     MCShapeView * pView    = nullptr;
     MCObject    * pObject  = nullptr;
 
-    MCSurface   & surface  = m_pImpl->textureManager.surface(data.surfaceId());
+    MCSurface   & surface  = m_assetManager.surfaceManager().surface(data.surfaceId());
 
     switch (data.shape())
     {
@@ -99,18 +85,69 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     }
 
     assert(pObject);
-    m_pImpl->setCommonProperties(*pObject, data);
+    setCommonProperties(*pObject, data);
 
     // Store for deletion
-    m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
+    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
 
     return *pObject;
 }
 
-//MCObject & MCObjectFactory::build(const MCGLObjectData & data)
-//{
-//    return nullptr;
-//}
+MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
+{
+    MCShape     * pShape   = nullptr;
+    MCShapeView * pView    = nullptr;
+    MCObject    * pObject  = nullptr;
+
+    MCMesh      & mesh     = m_assetManager.meshManager().mesh(data.meshId());
+
+    switch (data.shape())
+    {
+    // Default shape, use surface dimensions
+    case MCObjectData::None:
+        // Circle shape according to surface dimensions
+        if (data.defaultCirleShape())
+        {
+            pObject = new MCObject(data.typeId());
+            pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
+            pShape  = new MCCircleShape(pView, std::max(mesh.width(), mesh.height()) / 2);
+            pObject->setShape(pShape);
+        }
+        // Rect shape according to mesh dimensions (default)
+        else
+        {
+            pObject = new MCObject(data.typeId());
+            pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
+            pShape  = new MCRectShape(pView, mesh.width(), mesh.height());
+            pObject->setShape(pShape);
+        }
+        break;
+
+    // Explicit circle shape
+    case MCObjectData::Circle:
+        pObject = new MCObject(data.typeId());
+        pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
+        pShape  = new MCCircleShape(pView, data.shapeRadius());
+        pObject->setShape(pShape);
+        break;
+
+    // Explicit rect shape
+    case MCObjectData::Rect:
+        pObject = new MCObject(data.typeId());
+        pView   = new MCMeshView(data.typeId(), &mesh);
+        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
+        pObject->setShape(pShape);
+        break;
+    }
+
+    assert(pObject);
+    setCommonProperties(*pObject, data);
+
+    // Store for deletion
+    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
+
+    return *pObject;
+}
 
 MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
 {
@@ -135,22 +172,21 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
     // Explicit rect shape
     case MCObjectData::Rect:
         pObject = new MCObject(data.typeId());
-        pShape  = new MCRectShape(pView,
-            data.shapeWidth(), data.shapeHeight());
+        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
         pObject->setShape(pShape);
         break;
     }
 
     assert(pObject);
-    m_pImpl->setCommonProperties(*pObject, data);
+    setCommonProperties(*pObject, data);
 
     // Store for deletion
-    m_pImpl->objects.push_back(std::shared_ptr<MCObject>(pObject));
+    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
 
     return *pObject;
 }
 
-void MCObjectFactoryImpl::setCommonProperties(
+void MCObjectFactory::setCommonProperties(
     MCObject & object, const MCObjectData & data) const
 {
     object.setMass(data.mass(), data.stationary());
@@ -163,5 +199,4 @@ void MCObjectFactoryImpl::setCommonProperties(
 
 MCObjectFactory::~MCObjectFactory()
 {
-    delete m_pImpl;
 }

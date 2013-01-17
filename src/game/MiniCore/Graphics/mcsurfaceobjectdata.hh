@@ -25,7 +25,7 @@
 
 class MCSurfaceObjectDataImpl;
 
-//! Data object used by MCObjectFactory.
+//! Surface object description that can be given to MCObjectFactory.
 class MCSurfaceObjectData : public MCObjectData
 {
 public:

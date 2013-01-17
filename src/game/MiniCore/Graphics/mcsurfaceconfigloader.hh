@@ -22,21 +22,19 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <MCGLEW> // For GLenum.
 
 class MCSurfaceData;
 
-//! Manages loading of the surface config.
+//! Loads the surface config.
 class MCSurfaceConfigLoader
 {
 public:
 
     //! Constructor.
     MCSurfaceConfigLoader();
-
-    //! Destructor.
-    ~MCSurfaceConfigLoader();
 
     //! Load all surfaces found in filePath.
     //! \return true if succeeded.
@@ -53,7 +51,8 @@ private:
     //! Convert alpha blend function string to enum.
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 
-    std::vector<MCSurfaceData *> m_surfaces;
+    typedef std::shared_ptr<MCSurfaceData> SurfaceDataPtr;
+    std::vector<SurfaceDataPtr> m_surfaces;
 };
 
 #endif // MCSURFACECONFIGLOADER_HH

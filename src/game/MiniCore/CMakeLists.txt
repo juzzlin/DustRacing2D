@@ -1,5 +1,6 @@
 project(MiniCore)
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Asset")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Core")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Graphics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Particles")
@@ -7,6 +8,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Physics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Text")
 
 set(MiniCoreSRC
+Asset/mcassetmanager.cc
 Core/mcevent.cc
 Core/mcexception.cc
 Core/mclogger.cc
@@ -20,9 +22,14 @@ Core/mcvectoranimation.cc
 Core/mcworld.cc
 Graphics/glew/glew.c
 Graphics/mccamera.cc
-Graphics/mcglobjectdata.cc
 Graphics/mcglscene.cc
 Graphics/mcglshaderprogram.cc
+Graphics/mcmesh.cc
+Graphics/mcmeshconfigloader.cc
+Graphics/mcmeshloader.cc
+Graphics/mcmeshmanager.cc
+Graphics/mcmeshobjectdata.cc
+Graphics/mcmeshview.cc
 Graphics/mcsurface.cc
 Graphics/mcsurfaceobjectdata.cc
 Graphics/mcsurfaceview.cc

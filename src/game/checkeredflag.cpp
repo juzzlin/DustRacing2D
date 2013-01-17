@@ -16,8 +16,8 @@
 #include "checkeredflag.hpp"
 #include "renderer.hpp"
 
+#include <MCAssetManager>
 #include <MCSurface>
-#include <MCSurfaceManager>
 #include <MCVector3d>
 
 static const int   FLAG_W           = 32;
@@ -26,7 +26,7 @@ static const int   V_SPACING        = 20;
 static const float APPEARANCE_SPEED = 0.05f;
 
 CheckeredFlag::CheckeredFlag()
-: m_surface(MCSurfaceManager::instance().surface("checkeredFlag"))
+: m_surface(MCAssetManager::surfaceManager().surface("checkeredFlag"))
 {
     m_surface.setShaderProgram(&Renderer::instance().program("master"));
 }

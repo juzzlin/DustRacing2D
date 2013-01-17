@@ -24,6 +24,7 @@
 #include "mcglvertex.hh"
 #include "mcgltexcoord.hh"
 #include "mctrigonom.hh"
+#include "mcvector3d.hh"
 
 #include <cassert>
 
@@ -49,31 +50,47 @@ MCSurface::MCSurface(
     const MCGLVertex vertices[NUM_VERTICES] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, z1},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
         {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
-        { (GLfloat)m_w2, -(GLfloat)m_h2, z3}
+        { (GLfloat)m_w2, -(GLfloat)m_h2, z3},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, z2}
     };
+
+    // Calculate normals
+
+    const MCVector3dF v0(vertices[0].x, vertices[0].y, vertices[0].z);
+    const MCVector3dF v1(vertices[1].x, vertices[1].y, vertices[1].z);
+    const MCVector3dF v2(vertices[2].x, vertices[2].y, vertices[2].z);
+    const MCVector3dF v3(vertices[3].x, vertices[3].y, vertices[3].z);
+    const MCVector3dF v4(vertices[4].x, vertices[4].y, vertices[4].z);
+    const MCVector3dF v5(vertices[5].x, vertices[5].y, vertices[5].z);
+
+    const MCVector3dF n0(((v1 - v0) % (v2 - v0)).normalized());
+    const MCVector3dF n1(n0);
+    const MCVector3dF n2(n0);
+    const MCVector3dF n3(((v4 - v3) % (v5 - v3)).normalized());
+    const MCVector3dF n4(n3);
+    const MCVector3dF n5(n3);
 
     const MCGLVertex normals[NUM_VERTICES] =
     {
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1},
-        {0, 0, 1}
+        {n0.i(), n0.j(), n0.k()},
+        {n1.i(), n1.j(), n1.k()},
+        {n2.i(), n2.j(), n2.k()},
+        {n3.i(), n3.j(), n3.k()},
+        {n4.i(), n4.j(), n4.k()},
+        {n5.i(), n5.j(), n5.k()}
     };
 
     const MCGLTexCoord texCoords[NUM_VERTICES] =
     {
         {0, 0},
+        {1, 1},
         {0, 1},
-        {1, 1},
         {0, 0},
-        {1, 1},
-        {1, 0}
+        {1, 0},
+        {1, 1}
     };
 
     const GLfloat colors[COLOR_DATA_SIZE] =
@@ -98,11 +115,11 @@ MCSurface::MCSurface(
     const MCGLVertex vertices[NUM_VERTICES] =
     {
         {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
         {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
         {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        { (GLfloat)m_w2, -(GLfloat)m_h2, 0}
+        { (GLfloat)m_w2, -(GLfloat)m_h2, 0},
+        { (GLfloat)m_w2,  (GLfloat)m_h2, 0}
     };
 
     const MCGLVertex normals[NUM_VERTICES] =
@@ -115,6 +132,16 @@ MCSurface::MCSurface(
         {0, 0, 1}
     };
 
+    const MCGLTexCoord texCoordsAll[NUM_VERTICES] =
+    {
+        texCoords[0],
+        texCoords[2],
+        texCoords[1],
+        texCoords[0],
+        texCoords[3],
+        texCoords[2]
+    };
+
     const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
     {
         1, 1, 1, 1,
@@ -125,7 +152,7 @@ MCSurface::MCSurface(
         1, 1, 1, 1
     };
 
-    initVBOs(vertices, normals, texCoords, colors);
+    initVBOs(vertices, normals, texCoordsAll, colors);
 }
 
 void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height)
@@ -188,11 +215,11 @@ void MCSurface::initVBOs(
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex,    3, GL_FLOAT, GL_FALSE, 0, 0);
     glVertexAttribPointer(MCGLShaderProgram::VAL_Normal,    3, GL_FLOAT, GL_FALSE, 0,
-        (GLvoid *)VERTEX_DATA_SIZE);
+        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
     glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
-        (GLvoid *)(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
+        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
     glVertexAttribPointer(MCGLShaderProgram::VAL_Color,     4, GL_FLOAT, GL_FALSE, 0,
-        (GLvoid *)(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE));
+        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE));
 
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
@@ -236,11 +263,11 @@ void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
     const MCGLTexCoord texCoordsAll[NUM_VERTICES] =
     {
         texCoords[0],
+        texCoords[2],
         texCoords[1],
-        texCoords[2],
         texCoords[0],
-        texCoords[2],
-        texCoords[3]
+        texCoords[3],
+        texCoords[2]
     };
 
     glBufferSubData(
@@ -266,18 +293,6 @@ void MCSurface::setScale(MCFloat w, MCFloat h)
 {
     m_sx = w / m_w;
     m_sy = h / m_h;
-}
-
-MCBBox<MCFloat> MCSurface::rotatedBBox(MCVector2dFR pos, MCFloat angle)
-{
-    using std::abs;
-
-    const MCFloat cos = MCTrigonom::cos(angle);
-    const MCFloat sin = MCTrigonom::sin(angle);
-    const MCFloat  w1 = (abs(cos * m_w2 * m_sx) + abs(sin * m_h2 * m_sy)) / 2;
-    const MCFloat  h1 = (abs(sin * m_w2 * m_sx) + abs(cos * m_h2 * m_sy)) / 2;
-
-    return MCBBox<MCFloat>(pos.i() - w1, pos.j() - h1, pos.i() + w1, pos.j() + h1);
 }
 
 void MCSurface::render()

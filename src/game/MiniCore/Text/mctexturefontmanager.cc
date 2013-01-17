@@ -27,21 +27,11 @@
 
 #include <cassert>
 
-MCTextureFontManager * MCTextureFontManager::m_pInstance = nullptr;
-
 MCTextureFontManager::MCTextureFontManager(
     const MCSurfaceManager & surfaceManager)
   : m_fontHash()
   , m_surfaceManager(surfaceManager)
 {
-    assert(!MCTextureFontManager::m_pInstance);
-    MCTextureFontManager::m_pInstance = this;
-}
-
-MCTextureFontManager & MCTextureFontManager::instance()
-{
-    assert(MCTextureFontManager::m_pInstance);
-    return *MCTextureFontManager::m_pInstance;
 }
 
 void MCTextureFontManager::load(

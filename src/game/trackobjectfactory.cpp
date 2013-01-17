@@ -19,86 +19,139 @@
 #include "renderer.hpp"
 #include "layers.hpp"
 
+#include <MCAssetManager>
 #include <MCObject>
 #include <MCObjectFactory>
 #include <MCShapeView>
-#include <MCSurfaceManager>
 
-TrackObjectFactory::TrackObjectFactory(
-    MCObjectFactory & objectFactory, MCSurfaceManager & surfaceManager)
+TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 : m_objectFactory(objectFactory)
-, m_surfaceManager(surfaceManager)
 {
 }
 
 TrackObject & TrackObjectFactory::build(
     QString category, QString role, MCVector2dF location, int angle)
 {
-    MCSurfaceObjectData data(role.toStdString());
-
-    // Defaults. Might get overridden below.
-    data.setInitialLocation(location);
-    data.setInitialAngle(angle);
-    data.setBatchMode(true);
-    data.setXYFriction(1.0);
-    data.setRestitution(0.5);
+    MCObject * object = nullptr;
 
     if (role == "brake")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setMass(1000);
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "crate")
     {
+        MCMeshObjectData data(role.toStdString());
+        data.setInitialLocation(MCVector3dF(location.i(), location.j(), 12));
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setMass(1000);
+        data.setMeshId(role.toStdString());
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
-        data.setLayer(Layers::Walls);
-        data.setInitialLocation(MCVector3dF(location.i(), location.j(), 12));
+        data.setLayer(Layers::Meshes);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "dustRacing2DBanner")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setMass(50000);
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "grandstand")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "plant")
     {
         const MCFloat plantBodyRadius = 4;
 
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
         data.setShapeWidth(plantBodyRadius);
         data.setShapeHeight(plantBodyRadius);
         data.setLayer(Layers::Tree);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "rock")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setMass(5000);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setLayer(Layers::Walls);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "tire")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setMass(1000); // Exaggerate the mass on purpose
         data.setSurfaceId(role.toStdString());
         data.setXYFriction(0.25);
         data.setLayer(Layers::Walls);
+
+        object = &m_objectFactory.build(data);
     }
     else if (role == "tree")
     {
         const MCFloat treeViewRadius = 48;
         const MCFloat treeBodyRadius = 8;
 
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setStationary(true);
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
@@ -107,7 +160,7 @@ TrackObject & TrackObjectFactory::build(
 
         // Create a custom view.
         MCShapeView * view = new TreeView(
-            m_surfaceManager.surface("tree"), treeViewRadius, 2, 120, 5);
+            MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5);
         view->setShaderProgram(&(Renderer::instance().program("master")));
         view->setShadowShaderProgram(&(Renderer::instance().program("masterShadow")));
         MCObject & object = m_objectFactory.build(data, *view);
@@ -117,17 +170,26 @@ TrackObject & TrackObjectFactory::build(
     }
     else if (role == "wall" || role == "wallLong")
     {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setLayer(Layers::Walls);
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
+
+        object = &m_objectFactory.build(data);
     }
 
-    MCObject & object = m_objectFactory.build(data);
-    object.view()->setShaderProgram(&Renderer::instance().program("master"));
-    object.view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+    assert(object);
+
+    object->view()->setShaderProgram(&Renderer::instance().program("master"));
+    object->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
     // Wrap the MCObject in a TrackObject
-    return *new TrackObject(category, role, object);
+    return *new TrackObject(category, role, *object);
 }

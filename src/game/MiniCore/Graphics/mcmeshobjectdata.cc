@@ -17,27 +17,23 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcglobjectdata.hh"
+#include "mcmeshobjectdata.hh"
 
-//! Private class of MCGLObjectData.
-class MCGLObjectDataImpl
-{
-private:
-    MCGLObjectDataImpl();
-    friend class MCGLObjectData;
-};
-
-MCGLObjectDataImpl::MCGLObjectDataImpl()
+MCMeshObjectData::MCMeshObjectData(const std::string & typeId)
+: MCSurfaceObjectData(typeId)
 {
 }
 
-MCGLObjectData::MCGLObjectData(const std::string & typeId)
-: MCObjectData(typeId)
-, m_pImpl(new MCGLObjectDataImpl)
+void MCMeshObjectData::setMeshId(const std::string & id)
 {
+    m_meshId = id;
 }
 
-MCGLObjectData::~MCGLObjectData()
+const std::string & MCMeshObjectData::meshId() const
 {
-    delete m_pImpl;
+    return m_meshId;
+}
+
+MCMeshObjectData::~MCMeshObjectData()
+{
 }

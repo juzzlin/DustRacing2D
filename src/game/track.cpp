@@ -21,10 +21,10 @@
 #include "tracktile.hpp"
 #include "map.hpp"
 
+#include <MCAssetManager>
 #include <MCCamera>
 #include <MCGLShaderProgram>
 #include <MCSurface>
-#include <MCSurfaceManager>
 
 #include <cassert>
 
@@ -34,7 +34,7 @@ Track::Track(TrackData * pTrackData)
 , m_cols(m_pTrackData->map().cols())
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
-, m_asphalt(MCSurfaceManager::instance().surface("asphalt"))
+, m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
 , m_next(nullptr)
 , m_prev(nullptr)
 {

@@ -18,14 +18,14 @@
 #include "shaderprogram.hpp"
 
 #include <MCSurface>
-#include <MCSurfaceManager>
+#include <MCAssetManager>
 #include <MCVectorAnimation>
 
 static MCVector3dF       fade;
 static MCVectorAnimation fadeAnim;
 
 Intro::Intro()
-: m_back(MCSurfaceManager::instance().surface("intro"))
+: m_back(MCAssetManager::surfaceManager().surface("intro"))
 {
     m_back.setShaderProgram(&Renderer::instance().program("text"));
     m_back.setColor(.9, .9, .9, 1.0);

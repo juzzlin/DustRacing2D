@@ -21,11 +21,10 @@
 #define MCOBJECTFACTORY_HH
 
 #include "mcsurfaceobjectdata.hh"
-#include "mcglobjectdata.hh"
+#include "mcmeshobjectdata.hh"
 #include "mcobject.hh"
 
-class MCObjectFactoryImpl;
-class MCSurfaceManager;
+class MCAssetManager;
 
 //! MCObjectFactory is a factory class that can be used when loading objects from file.
 class MCObjectFactory
@@ -33,29 +32,32 @@ class MCObjectFactory
 public:
 
     //! Constructor.
-    MCObjectFactory(MCSurfaceManager & tm);
+    MCObjectFactory(MCAssetManager & assetManager);
 
     //! Destructor
     virtual ~MCObjectFactory();
 
-    //! Build an object with a surface view.
-    //! MCObjectFactory keeps the ownership.
+    /*! Build an object with a surface view.
+     *  MCObjectFactory keeps the ownership. */
     MCObject & build(const MCSurfaceObjectData & data);
 
-    //! Build an object with a GL view.
-    //! MCObjectFactory keeps the ownership.
-    MCObject & build(const MCGLObjectData & data);
+    /*! Build an object with a mesh view.
+     *  MCObjectFactory keeps the ownership.*/
+    MCObject & build(const MCMeshObjectData & data);
 
-    //! Build an object with a custom view.
-    //! MCObjectFactory keeps the ownership.
+    /*! Build an object with a custom view.
+     *  MCObjectFactory keeps the ownership. */
     MCObject & build(const MCObjectData & data, MCShapeView & view);
 
 private:
 
     DISABLE_COPY(MCObjectFactory);
     DISABLE_ASSI(MCObjectFactory);
-    MCObjectFactoryImpl * const m_pImpl;
-    friend class MCObjectFactoryImpl;
+
+    void setCommonProperties(MCObject & object, const MCObjectData & data) const;
+
+    std::vector<std::shared_ptr<MCObject> > m_objects;
+    MCAssetManager & m_assetManager;
 };
 
 #endif // MCOBJECTFACTORY_HH

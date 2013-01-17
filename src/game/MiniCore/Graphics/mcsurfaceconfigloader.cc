@@ -54,11 +54,11 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
     {
         const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
 
-        MCSurfaceData * newData = nullptr;
+        SurfaceDataPtr newData;
         QDomNode node = root.firstChild();
         while(!node.isNull() && node.nodeName() == "surface")
         {
-            newData = new MCSurfaceData;
+            newData.reset(new MCSurfaceData);
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
@@ -243,14 +243,4 @@ MCSurfaceData & MCSurfaceConfigLoader::surface(unsigned int index) const
     assert(index < static_cast<unsigned int>(m_surfaces.size()));
     assert(m_surfaces.at(index));
     return *m_surfaces.at(index);
-}
-
-MCSurfaceConfigLoader::~MCSurfaceConfigLoader()
-{
-    for (MCSurfaceData * surface : m_surfaces)
-    {
-        delete surface;
-    }
-
-    m_surfaces.clear();
 }

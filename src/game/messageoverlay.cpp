@@ -15,13 +15,13 @@
 
 #include "messageoverlay.hpp"
 #include <MCCamera>
-#include <MCTextureFontManager>
+#include <MCAssetManager>
 
 static const int GLYPH_WIDTH  = 20;
 static const int GLYPH_HEIGHT = 20;
 
 MessageOverlay::MessageOverlay(MESSAGE_ALIGN align, int messageMaxTime)
-: m_fontManager(MCTextureFontManager::instance())
+: m_fontManager(MCAssetManager::textureFontManager())
 , m_font(m_fontManager.font("default"))
 , m_text("")
 , m_messageMaxTime(messageMaxTime)

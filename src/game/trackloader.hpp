@@ -26,7 +26,6 @@ class TargetNodeBase;
 class Track;
 class TrackData;
 class TrackTileBase;
-class MCSurfaceManager;
 class QDomElement;
 
 //! A singleton class that handles track loading.
@@ -36,12 +35,9 @@ class TrackLoader
 {
 public:
 
-    //! Constructor.
-    //! \param surfaceManager Texture manager to be used when determining
-    //! tile textures.
-    //! \param objectFactory  Object factory that creates objects other
-    //! than tiles.
-    TrackLoader(MCSurfaceManager & surfaceManager, MCObjectFactory  & objectFactory);
+    /*! Constructor.
+     *  \param objectFactory  Object factory that creates objects other than tiles. */
+    TrackLoader(MCObjectFactory  & objectFactory);
 
     //! Destructor.
     ~TrackLoader();
@@ -67,6 +63,10 @@ private:
     //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);
 
+    void setLockedTracks();
+
+    void sortTracks();
+
     //! Read a tile element.
     void readTile(QDomElement & element, TrackData & newData);
 
@@ -80,7 +80,6 @@ private:
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);
 
-    MCSurfaceManager   & m_surfaceManager;
     TrackObjectFactory   m_trackObjectFactory;
     std::vector<QString> m_paths;
     std::vector<Track *> m_tracks;

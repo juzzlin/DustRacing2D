@@ -5,6 +5,7 @@ add_subdirectory(MiniCore)
 add_subdirectory(MTFH)
 
 # Engine include paths
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Asset")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Graphics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Particles")

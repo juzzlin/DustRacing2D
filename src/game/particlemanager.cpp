@@ -18,10 +18,10 @@
 #include "renderer.hpp"
 #include "layers.hpp"
 
+#include <MCAssetManager>
 #include <MCGLPointParticle>
 #include <MCGLRectParticle>
 #include <MCRandom>
-#include <MCSurfaceManager>
 #include <MCSurfaceParticle>
 
 #include <cassert>
@@ -62,7 +62,7 @@ void ParticleManager::preCreateParticles()
     for (int i = 0; i < 100; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("SMOKE");
-        particle->setSurface(MCSurfaceManager::instance().surface("smoke"));
+        particle->setSurface(MCAssetManager::surfaceManager().surface("smoke"));
         particle->setShaderProgram(&Renderer::instance().program("master"));
         particle->setFreeList(m_freeList2);
 
@@ -77,7 +77,7 @@ void ParticleManager::preCreateParticles()
     for (int i = 0; i < 100; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("SPARKLE");
-        particle->setSurface(MCSurfaceManager::instance().surface("sparkle"));
+        particle->setSurface(MCAssetManager::surfaceManager().surface("sparkle"));
         particle->setShaderProgram(&Renderer::instance().program("master"));
         particle->setFreeList(m_freeList3);
 
@@ -92,7 +92,7 @@ void ParticleManager::preCreateParticles()
     for (int i = 0; i < 100; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
-        particle->setSurface(MCSurfaceManager::instance().surface("leaf"));
+        particle->setSurface(MCAssetManager::surfaceManager().surface("leaf"));
         particle->setShaderProgram(&Renderer::instance().program("master"));
         particle->setLayer(Layers::Tree);
         particle->setFreeList(m_freeList4);

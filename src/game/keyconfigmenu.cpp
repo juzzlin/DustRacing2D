@@ -24,10 +24,10 @@
 #include <MenuItemView>
 #include <MenuManager>
 
+#include <MCAssetManager>
 #include <MCLogger>
 #include <MCTextureText>
 #include <MCTextureFont>
-#include <MCTextureFontManager>
 
 //! "Menu" to select a key.
 class PressKeyMenu : public SurfaceMenu
@@ -56,7 +56,7 @@ void PressKeyMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-    MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
 
     const int shadowY = -2;
     const int shadowX =  2;

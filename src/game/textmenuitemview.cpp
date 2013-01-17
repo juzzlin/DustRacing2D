@@ -16,8 +16,8 @@
 #include "textmenuitemview.hpp"
 #include <MenuItem>
 
+#include <MCAssetManager>
 #include <MCTextureFont>
-#include <MCTextureFontManager>
 #include <MCTextureText>
 
 TextMenuItemView::TextMenuItemView(int textSize, MTFH::MenuItem & owner)
@@ -34,7 +34,7 @@ void TextMenuItemView::setTextSize(int size)
 void TextMenuItemView::render(int x, int y)
 {
     MCTextureText text(owner().text());
-    MCTextureFont defaultMonospace = MCTextureFontManager::instance().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
 
     const int shadowY = -2;
     const int shadowX =  2;

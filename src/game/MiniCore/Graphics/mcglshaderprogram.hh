@@ -94,8 +94,7 @@ public:
     //! Set scale.
     virtual void setScale(GLfloat x = 1.0, GLfloat y = 1.0, GLfloat z = 1.0);
 
-    /*! Set fade factor. The final color should be multiplied with this
-     *  factor. */
+    /*! Set fade factor. The final color should be multiplied with this factor. */
     virtual void setFadeValue(GLfloat f = 1.0);
 
     //! Bind given texture unit to the sampler 0.
@@ -103,6 +102,11 @@ public:
 
     //! Bind given texture unit to the sampler 1 for multitexturing.
     virtual void bindTextureUnit1(GLuint index);
+
+    //! Set a diffuse light.
+    virtual void setDiffuseLight(
+        GLfloat i, GLfloat j, GLfloat k,
+        GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 
 private:
 

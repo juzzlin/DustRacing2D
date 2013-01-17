@@ -27,7 +27,7 @@ class TrackObjectFactory
 public:
 
     //! Constructor.
-    TrackObjectFactory(MCObjectFactory & objectFactory, MCSurfaceManager & surfaceManager);
+    TrackObjectFactory(MCObjectFactory & objectFactory);
 
     //! Build and return an MCObject wrapped in TrackObject.
     TrackObject & build(QString category, QString role, MCVector2dF location, int angle);
@@ -35,7 +35,6 @@ public:
 private:
 
     MCObjectFactory  & m_objectFactory;
-    MCSurfaceManager & m_surfaceManager;
 };
 
 #endif // TRACKOBJECTFACTORY_HPP

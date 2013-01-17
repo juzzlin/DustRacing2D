@@ -28,7 +28,9 @@
 
 #include <cassert>
 
-MCSurfaceManager * MCSurfaceManager::m_pInstance = nullptr;
+MCSurfaceManager::MCSurfaceManager()
+{
+}
 
 QImage MCSurfaceManager::createNearest2PowNImage(const QImage & image)
 {
@@ -213,18 +215,6 @@ MCSurfaceManager::~MCSurfaceManager()
         }
         iter++;
     }
-}
-
-MCSurfaceManager::MCSurfaceManager()
-{
-    assert(!MCSurfaceManager::m_pInstance);
-    MCSurfaceManager::m_pInstance = this;
-}
-
-MCSurfaceManager & MCSurfaceManager::instance()
-{
-    assert(MCSurfaceManager::m_pInstance);
-    return *MCSurfaceManager::m_pInstance;
 }
 
 void MCSurfaceManager::load(

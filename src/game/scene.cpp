@@ -47,6 +47,7 @@
 
 #include <MenuManager>
 
+#include <MCAssetManager>
 #include <MCCamera>
 #include <MCFrictionGenerator>
 #include <MCGLScene>
@@ -56,8 +57,6 @@
 #include <MCSurface>
 #include <MCSurfaceView>
 #include <MCTextureFont>
-#include <MCTextureFontManager>
-#include <MCSurfaceManager>
 #include <MCTypes>
 #include <MCWorld>
 
@@ -114,12 +113,15 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_timingOverlay[1].setRace(m_race);
 
     m_world->enableDepthTestOnLayer(Layers::Tree, true);
+    m_world->enableDepthTestOnLayer(Layers::Meshes, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
-    MCTextureFontManager::instance().font("default").surface().setShaderProgram(
+    MCAssetManager::textureFontManager().font("default").surface().setShaderProgram(
         &Renderer::instance().program("text"));
-    MCTextureFontManager::instance().font("default").surface().setShadowShaderProgram(
+    MCAssetManager::textureFontManager().font("default").surface().setShadowShaderProgram(
         &Renderer::instance().program("textShadow"));
+
+    Renderer::instance().program("master").setDiffuseLight(1.0, -1.0, -0.25, 1.0, 1.0, 0.75, 1.0);
 
     createMenus();
 }
@@ -145,7 +147,7 @@ void Scene::createCars()
             desc.dragQuadratic = humanDrag;
 
             const std::string image = i ? "carGrey" : "carPink";
-            car = new Car(desc, MCSurfaceManager::instance().surface(image), i, true);
+            car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
         }
         else if (m_game.hasComputerPlayers())
         {
@@ -160,15 +162,15 @@ void Scene::createCars()
 
             if (i == NUM_CARS - 1)
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("carBlack"), i, false);
+                car = new Car(desc, MCAssetManager::surfaceManager().surface("carBlack"), i, false);
             }
             else if (i == NUM_CARS - 2)
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("carOrange"), i, false);
+                car = new Car(desc, MCAssetManager::surfaceManager().surface("carOrange"), i, false);
             }
             else
             {
-                car = new Car(desc, MCSurfaceManager::instance().surface("carYellow"), i, false);
+                car = new Car(desc, MCAssetManager::surfaceManager().surface("carYellow"), i, false);
             }
 
             m_ai.push_back(AIPtr(new AI(*car)));

@@ -19,7 +19,46 @@
 #include <MCTrigonom>
 #include <cassert>
 
-// Pre-defined vertex shader attribute locations
+// Uniform names
+static const char * DIFFUSE_LIGHT_DIR   = "diffuseLightDir";
+static const char * DIFFUSE_LIGHT_COLOR = "diffuseLightColor";
+static const char * FADE                = "fade";
+static const char * TEX0                = "tex0";
+static const char * TEX1                = "tex1";
+static const char * MVP                 = "mvp";
+static const char * ANGLE               = "angle";
+static const char * POS                 = "pos";
+static const char * COLOR               = "color";
+static const char * SCALE               = "scale";
+
+namespace
+{
+class AutoBindRelease
+{
+public:
+
+    AutoBindRelease(ShaderProgram & shaderProgram)
+    : m_program(shaderProgram)
+    , m_wasBound(shaderProgram.isBound())
+    {
+        m_wasBound = shaderProgram.isBound();
+        shaderProgram.bind();
+    }
+
+    ~AutoBindRelease()
+    {
+        if (!m_wasBound)
+        {
+            m_program.release();
+        }
+    }
+
+private:
+
+    ShaderProgram & m_program;
+    bool m_wasBound;
+};
+}
 
 ShaderProgram::ShaderProgram(const QGLContext * context, MCGLScene & scene)
 : MCGLShaderProgram(scene)
@@ -92,112 +131,65 @@ void ShaderProgram::setModelViewProjectionMatrix(
     {
         bind();
         glUniformMatrix4fv(
-            m_program.uniformLocation("mvp"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+            m_program.uniformLocation(MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
         release();
     }
     else
     {
         glUniformMatrix4fv(
-            m_program.uniformLocation("mvp"), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+            m_program.uniformLocation(MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
     }
 }
 
 void ShaderProgram::rotate(GLfloat angle)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("angle", MCTrigonom::sin(angle), MCTrigonom::cos(angle));
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("angle", MCTrigonom::sin(angle), MCTrigonom::cos(angle));
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(ANGLE, MCTrigonom::sin(angle), MCTrigonom::cos(angle));
 }
 
 void ShaderProgram::translate(const MCVector3dF & p)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("pos", p.i(), p.j(), p.k(), 0);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("pos", p.i(), p.j(), p.k(), 0);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(POS, p.i(), p.j(), p.k(), 0);
 }
 
 void ShaderProgram::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("color", r, g, b, a);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("color", r, g, b, a);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(COLOR, r, g, b, a);
 }
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("scale", x, y, z, 1);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("scale", x, y, z, 1);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(SCALE, x, y, z, 1);
+}
+
+void ShaderProgram::setDiffuseLight(
+    GLfloat i, GLfloat j, GLfloat k,
+    GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(DIFFUSE_LIGHT_DIR,   i, j, k, 1);
+    m_program.setUniformValue(DIFFUSE_LIGHT_COLOR, r, g, b, a);
 }
 
 void ShaderProgram::setFadeValue(GLfloat f)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("fade", f);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("fade", f);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(FADE, f);
 }
 
 void ShaderProgram::bindTextureUnit0(GLuint index)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("tex0", index);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("tex0", index);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(TEX0, index);
 }
 
 void ShaderProgram::bindTextureUnit1(GLuint index)
 {
-    if (!isBound())
-    {
-        bind();
-        m_program.setUniformValue("tex1", index);
-        release();
-    }
-    else
-    {
-        m_program.setUniformValue("tex1", index);
-    }
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(TEX1, index);
 }
 
 ShaderProgram::~ShaderProgram()

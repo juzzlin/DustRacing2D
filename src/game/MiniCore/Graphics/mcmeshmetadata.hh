@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,30 +17,28 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCGLOBJECTDATA_HH
-#define MCGLOBJECTDATA_HH
+#ifndef MCMESHMETADATA_HH
+#define MCMESHMETADATA_HH
 
-#include "mcobjectdata.hh"
+#include <string>
 
-class MCGLObjectDataImpl;
-
-//! GL-specific object data.
-class MCGLObjectData : public MCObjectData
+//! Mesh metadata structure used by MCMeshConfigLoader.
+struct MCMeshMetaData
 {
-public:
+    MCMeshMetaData()
+    {}
 
-    //! Constructor.
-    explicit MCGLObjectData(const std::string & typeId);
+    //! Handle of the mesh.
+    std::string handle;
 
-    //! Destructor.
-    virtual ~MCGLObjectData();
+    //! .obj-file path.
+    std::string modelPath;
 
-private:
+    //! Texture/surface handle (see MCSurfaceManager).
+    std::string texture1;
 
-    DISABLE_COPY(MCGLObjectData);
-    DISABLE_ASSI(MCGLObjectData);
-    MCGLObjectDataImpl * const m_pImpl;
-    friend class MCGLObjectDataImpl;
+    //! Texture/surface handle (see MCSurfaceManager).
+    std::string texture2;
 };
 
-#endif // MCGLOBJECTDATA_HH
+#endif // MCMESHMETADATA_HH

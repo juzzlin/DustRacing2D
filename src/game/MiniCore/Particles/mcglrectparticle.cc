@@ -29,8 +29,9 @@
 static const int NUM_VERTICES         = 6;
 static const int NUM_COLOR_COMPONENTS = 4;
 static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
+static const int NORMAL_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
 static const int COLOR_DATA_SIZE      = sizeof(GLfloat)    * NUM_VERTICES * NUM_COLOR_COMPONENTS;
-static const int TOTAL_DATA_SIZE      = VERTEX_DATA_SIZE + COLOR_DATA_SIZE;
+static const int TOTAL_DATA_SIZE      = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 : MCParticle(typeID)
@@ -49,6 +50,16 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
         {-1, -1, 0},
         { 1,  1, 0},
         { 1, -1, 0}
+    };
+
+    const MCGLVertex normals[NUM_VERTICES] =
+    {
+        { 0, 0, 1},
+        { 0, 0, 1},
+        { 0, 0, 1},
+        { 0, 0, 1},
+        { 0, 0, 1},
+        { 0, 0, 1}
     };
 
     const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
@@ -75,14 +86,21 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
     glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
     offset += VERTEX_DATA_SIZE;
 
+    // Normal data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, normals);
+    offset += NORMAL_DATA_SIZE;
+
     // Vertex color data
     glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, colors);
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
+        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
     glVertexAttribPointer(MCGLShaderProgram::VAL_Color,  4, GL_FLOAT, GL_FALSE, 0,
-        (GLvoid *)(VERTEX_DATA_SIZE));
+        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
 
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
 }
 

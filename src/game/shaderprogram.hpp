@@ -70,6 +70,11 @@ public:
     virtual void setScale(GLfloat x, GLfloat y, GLfloat z);
 
     //! \reimp
+    virtual void setDiffuseLight(
+        GLfloat i, GLfloat j, GLfloat k,
+        GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+
+    //! \reimp
     virtual void setFadeValue(GLfloat f);
 
     //! \reimp

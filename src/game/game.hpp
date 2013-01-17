@@ -30,8 +30,7 @@ class StateMachine;
 class TimingOverlay;
 class TrackLoader;
 class MCObjectFactory;
-class MCSurfaceManager;
-class MCTextureFontManager;
+class MCAssetManager;
 
 //! The main game class.
 class Game : public QObject
@@ -103,16 +102,13 @@ private slots:
 
 private:
 
-    void loadSurfaces();
-    void loadFonts();
     bool loadTracks();
     void initScene();
 
     StateMachine         * m_stateMachine;
     Renderer             * m_renderer;
     Scene                * m_scene;
-    MCSurfaceManager     * m_textureManager;
-    MCTextureFontManager * m_textureFontManager;
+    MCAssetManager       * m_assetManager;
     MCObjectFactory      * m_objectFactory;
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;

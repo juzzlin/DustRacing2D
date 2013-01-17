@@ -26,11 +26,10 @@
 
 #include <MenuItem>
 
+#include <MCAssetManager>
 #include <MCLogger>
 #include <MCSurface>
-#include <MCSurfaceManager>
 #include <MCTextureFont>
-#include <MCTextureFontManager>
 #include <MCTextureText>
 
 #include "../common/config.hpp"
@@ -46,10 +45,10 @@ public:
     TrackItem(int width, int height, Track & track)
     : MenuItem(width, height)
     , m_track(track)
-    , m_monospace(MCTextureFontManager::instance().font("default"))
-    , m_star(MCSurfaceManager::instance().surface("star"))
-    , m_glow(MCSurfaceManager::instance().surface("starGlow"))
-    , m_lock(MCSurfaceManager::instance().surface("lock"))
+    , m_monospace(MCAssetManager::textureFontManager().font("default"))
+    , m_star(MCAssetManager::surfaceManager().surface("star"))
+    , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
+    , m_lock(MCAssetManager::surfaceManager().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
     , m_bestPos(Settings::instance().loadBestPos(m_track))

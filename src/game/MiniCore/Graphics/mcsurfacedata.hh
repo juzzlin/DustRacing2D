@@ -26,7 +26,7 @@
 #include <MCGLEW> // For GLenum
 #include <string>
 
-//! Surface data structure used by MCTextureParser.
+//! Surface metadata structure used by MCSurfaceConfigLoader.
 struct MCSurfaceData
 {
     MCSurfaceData()
@@ -45,7 +45,7 @@ struct MCSurfaceData
     , z3(0)
     {}
 
-    //! Handle of the texture
+    //! Handle of the surface
     std::string handle;
 
     //! Image path

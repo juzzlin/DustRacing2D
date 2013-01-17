@@ -26,11 +26,11 @@
 #include "trackloader.hpp"
 #include "trackselectionmenu.hpp"
 
+#include <MCAssetManager>
 #include <MCCamera>
+#include <MCException>
 #include <MCLogger>
 #include <MCObjectFactory>
-#include <MCSurfaceManager>
-#include <MCTextureFontManager>
 
 #include <QDir>
 #include <QTime>
@@ -46,10 +46,13 @@ Game::Game()
 : m_stateMachine(new StateMachine)
 , m_renderer(nullptr)
 , m_scene(nullptr)
-, m_textureManager(new MCSurfaceManager)
-, m_textureFontManager(new MCTextureFontManager(*m_textureManager))
-, m_objectFactory(new MCObjectFactory(*m_textureManager))
-, m_trackLoader(new TrackLoader(*m_textureManager, *m_objectFactory))
+, m_assetManager(new MCAssetManager(
+    Config::Common::dataPath,
+    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "textures.conf",
+    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "fonts.conf",
+    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "meshes.conf"))
+, m_objectFactory(new MCObjectFactory(*m_assetManager))
+, m_trackLoader(new TrackLoader(*m_objectFactory))
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
 , m_updateFps(60)
@@ -143,29 +146,6 @@ Renderer * Game::renderer() const
     return m_renderer;
 }
 
-void Game::loadSurfaces()
-{
-    // Load texture data
-    const std::string textureConfigPath = std::string(Config::Common::dataPath) +
-        QDir::separator().toAscii() + "textures.conf";
-
-    MCLogger().info() << "Loading texture config from '" << textureConfigPath << "'..";
-
-    // Load textures / surfaces
-    m_textureManager->load(textureConfigPath, Config::Common::dataPath);
-}
-
-void Game::loadFonts()
-{
-    const std::string fontConfigPath = std::string(Config::Common::dataPath) +
-        QDir::separator().toAscii() + "fonts.conf";
-
-    MCLogger().info() << "Loading font config from '" << fontConfigPath << "'..";
-
-    // Load fonts
-    m_textureFontManager->load(fontConfigPath);
-}
-
 bool Game::loadTracks()
 {
     // Load track data
@@ -205,19 +185,12 @@ bool Game::init()
 {
     try
     {
-        // Load surfaces / textures
-        loadSurfaces();
+        m_assetManager->load();
 
-        // Load textured fonts
-        loadFonts();
-
-        // Load race tracks
         if (loadTracks())
         {
-            // Init the game scene
             initScene();
 
-            // Init succeeded
             return true;
         }
     }
@@ -225,11 +198,9 @@ bool Game::init()
     {
         MCLogger().fatal() << e.what();
 
-        // Init failed
         return false;
     }
 
-    // Init failed
     return false;
 }
 
@@ -292,8 +263,8 @@ Game::~Game()
 {
     delete m_stateMachine;
     delete m_scene;
+    delete m_assetManager;
     delete m_trackLoader;
-    delete m_textureManager;
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
