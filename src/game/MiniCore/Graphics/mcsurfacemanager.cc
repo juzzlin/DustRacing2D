@@ -231,10 +231,9 @@ void MCSurfaceManager::load(
     const std::string & fileName, const std::string & baseDataPath) throw (MCException)
 {
     MCSurfaceConfigLoader loader;
-    loader.setConfigPath(fileName);
 
     // Parse the texture config file
-    if (loader.load())
+    if (loader.load(fileName))
     {
         for (unsigned int i = 0; i < loader.surfaceCount(); i++)
         {

@@ -38,12 +38,9 @@ public:
     //! Destructor.
     ~MCSurfaceConfigLoader();
 
-    //! Set file path.
-    void setConfigPath(const std::string & filePath);
-
-    //! Load all surfaces found in the current filePath.
+    //! Load all surfaces found in filePath.
     //! \return true if succeeded.
-    bool load();
+    bool load(const std::string & filePath);
 
     //! Get surface count.
     unsigned int surfaceCount() const;
@@ -56,7 +53,6 @@ private:
     //! Convert alpha blend function string to enum.
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 
-    std::string m_filePath;
     std::vector<MCSurfaceData *> m_surfaces;
 };
 

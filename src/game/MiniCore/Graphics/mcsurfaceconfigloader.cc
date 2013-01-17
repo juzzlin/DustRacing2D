@@ -29,19 +29,13 @@
 #include <cassert>
 
 MCSurfaceConfigLoader::MCSurfaceConfigLoader()
-: m_filePath("")
-, m_surfaces()
+: m_surfaces()
 {}
 
-void MCSurfaceConfigLoader::setConfigPath(const std::string & path)
-{
-    m_filePath = path;
-}
-
-bool MCSurfaceConfigLoader::load()
+bool MCSurfaceConfigLoader::load(const std::string & path)
 {
     QDomDocument doc;
-    QFile file(m_filePath.c_str());
+    QFile file(path.c_str());
     if (!file.open(QIODevice::ReadOnly))
     {
         return false;
