@@ -20,6 +20,7 @@
 #include <cassert>
 
 // Uniform names
+static const char * AMBIENT_LIGHT_COLOR = "ambientLightColor";
 static const char * DIFFUSE_LIGHT_DIR   = "diffuseLightDir";
 static const char * DIFFUSE_LIGHT_COLOR = "diffuseLightColor";
 static const char * FADE                = "fade";
@@ -165,13 +166,21 @@ void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
     m_program.setUniformValue(SCALE, x, y, z, 1);
 }
 
-void ShaderProgram::setDiffuseLight(
-    GLfloat i, GLfloat j, GLfloat k,
-    GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void ShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
 {
     AutoBindRelease ab(*this);
-    m_program.setUniformValue(DIFFUSE_LIGHT_DIR,   i, j, k, 1);
-    m_program.setUniformValue(DIFFUSE_LIGHT_COLOR, r, g, b, a);
+
+    m_program.setUniformValue(
+        DIFFUSE_LIGHT_DIR, light.direction().i(), light.direction().j(), light.direction().k(), 1);
+
+    m_program.setUniformValue(
+        DIFFUSE_LIGHT_COLOR, light.r(), light.g(), light.b(), light.i());
+}
+
+void ShaderProgram::setAmbientLight(const MCGLAmbientLight & light)
+{
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(AMBIENT_LIGHT_COLOR, light.r(), light.g(), light.b(), light.i());
 }
 
 void ShaderProgram::setFadeValue(GLfloat f)

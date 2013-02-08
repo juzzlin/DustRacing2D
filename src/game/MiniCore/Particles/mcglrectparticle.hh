@@ -63,8 +63,8 @@ private:
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
     GLfloat m_r, m_g, m_b, m_a;
-    GLuint m_vbo;
-    GLuint m_vba;
+    static GLuint m_vbo;
+    static GLuint m_vba;
     MCGLShaderProgram * m_program;
 };
 

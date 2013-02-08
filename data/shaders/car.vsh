@@ -28,6 +28,10 @@ uniform mat4 mvp;
 
 uniform float fade;
 
+uniform vec4 diffuseLightDir;
+uniform vec4 diffuseLightColor;
+uniform vec4 ambientLightColor;
+
 out vec2 texCoord0;
 out vec2 texCoord1;
 out vec4 vColor;
@@ -47,11 +51,12 @@ void main()
     gl_Position = mvp * transformation * (vec4(inVertex, 1) * scale);
     
     // Copy the primary color
-    vec4 ambient = fade * vec4(1.0, 0.95, 0.9, 1.0);
-    vColor = inColor * color * ambient;
+    float diffuseLightIntensity = dot(normalize(diffuseLightDir), vec4(-inNormal, 1)) * diffuseLightColor.a;
+    vColor = inColor * color * (
+        vec4(ambientLightColor.rgb, 1.0) * ambientLightColor.a +
+        vec4(diffuseLightColor.rgb, 1.0) * diffuseLightIntensity) * fade;
 
     // Copy texture coorinates
-
     mat4 skyReflectionOrientation = mat4(
         cos1, -sin1, 0.0, 0.0,
         sin1,  cos1, 0.0, 0.0,

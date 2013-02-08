@@ -111,8 +111,11 @@ void MCGLShaderProgram::bindTextureUnit1(GLuint)
 {
 }
 
-void MCGLShaderProgram::setDiffuseLight(
-    GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat)
+void MCGLShaderProgram::setAmbientLight(const MCGLAmbientLight &)
+{
+}
+
+void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight &)
 {
 }
 

@@ -23,6 +23,8 @@
 #include <MCGLEW>
 #include <MCGLM>
 
+#include "mcglambientlight.hh"
+#include "mcgldiffuselight.hh"
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 
@@ -103,10 +105,11 @@ public:
     //! Bind given texture unit to the sampler 1 for multitexturing.
     virtual void bindTextureUnit1(GLuint index);
 
-    //! Set a diffuse light.
-    virtual void setDiffuseLight(
-        GLfloat i, GLfloat j, GLfloat k,
-        GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    //! Set ambient light.
+    virtual void setAmbientLight(const MCGLAmbientLight & light);
+
+    //! Set diffuse light.
+    virtual void setDiffuseLight(const MCGLDiffuseLight & light);
 
 private:
 

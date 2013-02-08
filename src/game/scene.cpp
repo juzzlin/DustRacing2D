@@ -50,6 +50,8 @@
 #include <MCAssetManager>
 #include <MCCamera>
 #include <MCFrictionGenerator>
+#include <MCGLAmbientLight>
+#include <MCGLDiffuseLight>
 #include <MCGLScene>
 #include <MCGLShaderProgram>
 #include <MCLogger>
@@ -121,7 +123,19 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     MCAssetManager::textureFontManager().font("default").surface().setShadowShaderProgram(
         &Renderer::instance().program("textShadow"));
 
-    Renderer::instance().program("master").setDiffuseLight(1.0, -1.0, -0.25, 1.0, 1.0, 0.75, 1.0);
+    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.5);
+    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -0.25), 1.0, 0.9, 0.85, 0.75);
+
+    Renderer::instance().program("car").setDiffuseLight(diffuseLight);
+    Renderer::instance().program("car").setAmbientLight(ambientLight);
+    Renderer::instance().program("master").setDiffuseLight(diffuseLight);
+    Renderer::instance().program("master").setAmbientLight(ambientLight);
+    Renderer::instance().program("particle").setDiffuseLight(diffuseLight);
+    Renderer::instance().program("particle").setAmbientLight(ambientLight);
+    Renderer::instance().program("tile2d").setDiffuseLight(diffuseLight);
+    Renderer::instance().program("tile2d").setAmbientLight(ambientLight);
+    Renderer::instance().program("tile3d").setDiffuseLight(diffuseLight);
+    Renderer::instance().program("tile3d").setAmbientLight(ambientLight);
 
     createMenus();
 }
