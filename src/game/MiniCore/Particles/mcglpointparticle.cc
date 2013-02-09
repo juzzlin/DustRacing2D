@@ -66,8 +66,7 @@ MCGLPointParticle::MCGLPointParticle(const std::string & typeID)
         glBindVertexArray(m_vba);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBufferData(GL_ARRAY_BUFFER,
-                     TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
 
         // Vertex data
         glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
@@ -82,9 +81,9 @@ MCGLPointParticle::MCGLPointParticle(const std::string & typeID)
 
         glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
-                              reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
+            reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
         glVertexAttribPointer(MCGLShaderProgram::VAL_Color,  4, GL_FLOAT, GL_FALSE, 0,
-                              reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
+            reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
 
         glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
         glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);

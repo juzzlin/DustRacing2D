@@ -241,7 +241,7 @@ void Race::checkForNewBestPosition(const Car & car)
             if (pos < m_bestPos || m_bestPos == -1)
             {
                 Settings::instance().saveBestPos(*m_track, pos);
-                m_messageOverlay.addMessage(QObject::tr("New best pos!"));
+                m_messageOverlay.addMessage(QObject::tr("A new best pos!"));
             }
 
             Track * next = m_track->next();
