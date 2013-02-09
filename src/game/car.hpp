@@ -42,7 +42,7 @@ public:
         , accelerationFriction(0.75)
         , brakingFriction(1.5)
         , rollingFrictionOnTrack(0.1)
-        , rollingFrictionOffTrack(0.5)
+        , rollingFrictionOffTrack(0.65)
         , rotationFriction(1.0)
         , slideFriction(0.9)
         , turningImpulse(0.3)
