@@ -1,3 +1,29 @@
+1.0.0
+-----
+
+* Updates curvastone.trk.
+* Updates infinity.trk.
+* Updates triangle.trk.
+* Removes irritating.trk (it was too irritating).
+* Improves the lighting model.
+* Improves the game dynamics.
+* Support for mesh objects.
+* Removes MCSurfaceConfigLoader::setConfigPath().
+* Adds cube.obj
+* Moves MCObject::hasShadow() to MCShapeView.
+* Configurable keys.
+* Refactors SettingsMenu::SettingsMenu()
+* Show all stars when best pos is 1.
+* Removes demo.trk and circle.trk as they are crap.
+* Less acceleration friction.
+* Friction limits acceleration.
+* Updates the car svg's.
+* Adds documentation to TrackObjectFactory.
+* Transparent background for the new application icons.
+* Rename Track Editor to Level Editor in dustrac-editor.desktop
+* Sets fixed limit to lateral friction.
+* Adds clamp() and clampFast() to MCVector2d and MCVector3d.
+
 0.16.0
 ------
 
