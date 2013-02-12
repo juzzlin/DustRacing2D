@@ -142,7 +142,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
 void Scene::createCars()
 {
-    const int   humanPower = 300000; // This in Watts
+    const int   humanPower = 200000; // This in Watts
     const float humanDrag  = 5.0;
 
     m_race.removeCars();
