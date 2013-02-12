@@ -104,7 +104,7 @@ if(MINGW)
 endif(MINGW)
 
 # The main game executable
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
 
 target_link_libraries(
