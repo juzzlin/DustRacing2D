@@ -92,6 +92,14 @@ qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 add_custom_target(runtime ALL
     COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
 
+# Copy desktop file
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    add_custom_target(desktop-file-game ALL
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.in
+            ${CMAKE_BINARY_DIR}/dustrac-game.desktop
+        DEPENDS ${GAME_BINARY_NAME})
+endif()
+
 # Resource compilation for MinGW
 if(MINGW)
     add_custom_command(
@@ -101,7 +109,7 @@ if(MINGW)
             -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/WindowsGame.rc
             -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
     set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
-endif(MINGW)
+endif()
 
 # The main game executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})

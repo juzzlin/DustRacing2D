@@ -74,7 +74,15 @@ if(MINGW)
             -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/WindowsEditor.rc
             -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
     set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
-endif(MINGW)
+endif()
+
+# Copy desktop file
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    add_custom_target(desktop-file-editor ALL
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/src/dustrac-editor.desktop.in
+            ${CMAKE_BINARY_DIR}/dustrac-editor.desktop
+        DEPENDS ${EDITOR_BINARY_NAME})
+endif()
 
 # Add the executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
