@@ -1,7 +1,8 @@
 README
 ======
 
-This directory contains example packaging for Ubuntu/Debian.
+debian      : Example packaging for Ubuntu/Debian.
+dustrac.nsi : Packaging script for NSIS.
 
 -- Jussi Lind <jussi.lind@iki.fi>
 

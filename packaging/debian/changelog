@@ -1,3 +1,101 @@
+dustrac (1.0.1-1) precise; urgency=low
+
+  * Unlock the first race track.
+  * Generate desktop files only on Linux.
+  * CMake: Output binaries to CMAKE_BINARY_DIR instead of CMAKE_SOURCE_DIR.
+  * Limit the power to 200 kW.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 16 Feb 2013 16:18:13 +0200
+
+dustrac (1.0.0-1) precise; urgency=low
+
+  * Updates curvastone.trk.
+  * Updates infinity.trk.
+  * Updates triangle.trk.
+  * Removes irritating.trk (it was too irritating).
+  * Improves the lighting model.
+  * Improves the game dynamics.
+  * Support for mesh objects.
+  * Removes MCSurfaceConfigLoader::setConfigPath().
+  * Adds cube.obj
+  * Moves MCObject::hasShadow() to MCShapeView.
+  * Configurable keys.
+  * Refactors SettingsMenu::SettingsMenu()
+  * Show all stars when best pos is 1.
+  * Removes demo.trk and circle.trk as they are crap.
+  * Less acceleration friction.
+  * Friction limits acceleration.
+  * Updates the car svg's.
+  * Adds documentation to TrackObjectFactory.
+  * Transparent background for the new application icons.
+  * Rename Track Editor to Level Editor in dustrac-editor.desktop
+  * Sets fixed limit to lateral friction.
+  * Adds clamp() and clampFast() to MCVector2d and MCVector3d.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 10 Feb 2013 13:12:45 +0200
+
+dustrac (0.16.0-1) precise; urgency=low
+
+  * Fixes typo in textures.conf
+  * New grandstand texture.
+  * Refactors object creation in TrackLoader.
+  * Updates the help text.
+  * Correct shape radius for the plant object.
+  * Removes h.trk.
+  * Fixes loading of locked tracks.
+  * Replaces square.trk with demo.trk.
+  * Finish in TOP-6 to unlock a new race track.
+  * Start pos will be the best pos of the current race track.
+  * Increase car count to 12.
+  * Generate number plates on-the-fly.
+  * Refactors MCSurface.
+  * Updates INSTALL.
+  * New application icons.
+  * Adds curvastone.trk.
+  * Adds new resolutions to the Resolutions menu.
+  * Editor: Automatically select the most recently added object.
+  * Editor: Re-order toolbar icons.
+  * Editor: Allow even larger target nodes.
+  * Editor: Show open file name in the window title.
+  * Updates index.html
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Fri, 04 Jan 2013 00:00:54 +0200
+
+dustrac (0.15.0-1) precise; urgency=low
+
+  * Improves the startlight animation.
+  * Resizeable target nodes.
+  * Editor: Make TargetNodes darker.
+  * Editor: Adds grassEditor.png
+  * Editor: Rename computer hints.
+  * Remove 15 and 45 fps from the FPS menu.
+  * Correct layer for leaf particles.
+  * Adds menu.vsh
+  * Removes MCSurface::renderScaled().
+  * Calculate color in the vertex shader.
+  * Kill particles when the world is cleared.
+  * The next starting pos will be the previous best pos.
+  * Refactors Race.
+  * Updates triagle.trk
+  * Reduce braking friction.
+  * Moves stuck cars onto the previous check point.
+  * Show a message box error if OpenGL to old.
+  * Updates monza.trk
+  * More realistic friction.
+  * New rock texture.
+  * Small particle optimizations.
+  * Adds skid marks.
+  * Decrease the max number of particles.
+  * Lazy release the active shader program.
+  * Simplify particle alpha.
+  * Refactors MCSurface.
+  * Force OpenGL core profile 3.0
+  * Upgrades shaders to version 1.30.
+  * Fixes asphalt boundaries.
+  * Updates the example debian packaging.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Wed, 26 Dec 2012 20:05:29 +0200
+
 dustrac (0.14.0-1) precise; urgency=low
 
   * Adds sky reflection.
