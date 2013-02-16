@@ -1,3 +1,11 @@
+1.0.1
+-----
+
+* Unlock the first race track.
+* Generate desktop files only on Linux.
+* CMake: Output binaries to CMAKE_BINARY_DIR instead of CMAKE_SOURCE_DIR.
+* Limit the power to 200 kW.
+
 1.0.0
 -----
 
