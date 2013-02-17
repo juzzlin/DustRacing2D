@@ -95,8 +95,6 @@ int TrackLoader::loadTracks()
     if (numLoaded)
     {
         setLockedTracks();
-
-        sortTracks();
     }
 
     return numLoaded;
@@ -104,11 +102,12 @@ int TrackLoader::loadTracks()
 
 void TrackLoader::setLockedTracks()
 {
+    sortTracks();
+
     // Check if the tracks are locked/unlocked.
     for (Track * track : m_tracks)
     {
-        if (!Settings::instance().loadTrackUnlockStatus(*track) &&
-            track->trackData().index() > 0) // The first track is never locked
+        if (!Settings::instance().loadTrackUnlockStatus(*track))
         {
             track->trackData().setIsLocked(true);
         }
@@ -117,6 +116,9 @@ void TrackLoader::setLockedTracks()
             track->trackData().setIsLocked(false);
         }
     }
+
+    // The first track is never locked
+    m_tracks.at(0)->trackData().setIsLocked(false);
 }
 
 void TrackLoader::sortTracks()
