@@ -12,6 +12,9 @@ set(EDITOR_BINARY_NAME "dustrac-editor")
 # Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
 option(ReleaseBuild "ReleaseBuild" OFF)
 
+# Enable debug build.
+option(DebugBuild "DebugBuild" OFF)
+
 # Enable install layout required by USC.
 option(Ubuntu "Ubuntu" OFF)
 
@@ -31,6 +34,10 @@ if(ReleaseBuild)
 else()
     message(STATUS "NOTE!!: This is a development build without install targets!")
     set(DATA_PATH ./data)
+    
+    if (DebugBuild)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+    endif()
 endif()
 
 # This is the main data path given to the game and editor binaries.
@@ -48,6 +55,15 @@ include_directories(${QT_INCLUDES})
 # Find OpenGL (this is for some glu functions used by the
 # game binary)
 find_package(OpenGL REQUIRED)
+
+# REQUIRED does not work in CMake <=2.4.6 for SDL
+find_package(SDL REQUIRED)
+find_package(SDL_mixer REQUIRED)
+
+# Workaround for the non-working REQUIRED flag
+if (NOT SDL_FOUND)
+   message (FATAL_ERROR "SDL libraries not found!")
+endif (NOT SDL_FOUND)
 
 # Enable CMake's unit test framework
 enable_testing()

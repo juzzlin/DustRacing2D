@@ -51,7 +51,7 @@ inline bool colorMatch(int val1, int val2, int threshold)
 }
 
 MCSurface & MCSurfaceManager::createSurfaceFromImage(
-    const MCSurfaceData & data, const QImage & image) throw (MCException)
+    const MCSurfaceMetaData & data, const QImage & image) throw (MCException)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image.height();
@@ -81,7 +81,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
 }
 
 MCSurface & MCSurfaceManager::createSurfaceFromImages(
-    const MCSurfaceData & data, const QImage & image1, const QImage & image2) throw (MCException)
+    const MCSurfaceMetaData & data, const QImage & image1, const QImage & image2) throw (MCException)
 {
     // Store original width of the image
     int origH = data.heightSet ? data.height : image1.height();
@@ -113,7 +113,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImages(
 }
 
 GLuint MCSurfaceManager::create2DTextureFromImage(
-    const MCSurfaceData & data, const QImage & image)
+    const MCSurfaceMetaData & data, const QImage & image)
 {
     // Create a surface with dimensions of 2^n
     QImage textureImage = createNearest2PowNImage(image);
@@ -218,16 +218,16 @@ MCSurfaceManager::~MCSurfaceManager()
 }
 
 void MCSurfaceManager::load(
-    const std::string & fileName, const std::string & baseDataPath) throw (MCException)
+    const std::string & configFilePath, const std::string & baseDataPath) throw (MCException)
 {
     MCSurfaceConfigLoader loader;
 
     // Parse the texture config file
-    if (loader.load(fileName))
+    if (loader.load(configFilePath))
     {
         for (unsigned int i = 0; i < loader.surfaceCount(); i++)
         {
-            const MCSurfaceData & data = loader.surface(i);
+            const MCSurfaceMetaData & data = loader.surface(i);
 
             const std::string path =
                 baseDataPath + QDir::separator().toAscii() + data.imagePath1;
@@ -275,7 +275,7 @@ void MCSurfaceManager::load(
     else
     {
         // Throw an exception
-        throw MCException("Parsing '" + fileName + "' failed!");
+        throw MCException("Parsing '" + configFilePath + "' failed!");
     }
 }
 

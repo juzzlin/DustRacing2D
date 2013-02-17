@@ -17,8 +17,8 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCSURFACEDATA_HH
-#define MCSURFACEDATA_HH
+#ifndef MCSURFACEMETADATA_HH
+#define MCSURFACEMETADATA_HH
 
 #include "mctypes.hh"
 #include "mcvector2d.hh"
@@ -27,9 +27,9 @@
 #include <string>
 
 //! Surface metadata structure used by MCSurfaceConfigLoader.
-struct MCSurfaceData
+struct MCSurfaceMetaData
 {
-    MCSurfaceData()
+    MCSurfaceMetaData()
     : centerSet(false)
     , heightSet(false)
     , widthSet(false)
@@ -145,4 +145,4 @@ struct MCSurfaceData
     int z3;
 };
 
-#endif // MCSURFACEDATA_HH
+#endif // MCSURFACEMETADATA_HH

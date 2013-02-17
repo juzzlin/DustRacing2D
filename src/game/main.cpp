@@ -27,6 +27,8 @@
 #include <MCException>
 #include <MCLogger>
 
+static const char * INIT_ERROR = "Initing the game failed!";
+
 static void initLogger()
 {
     QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
@@ -100,7 +102,6 @@ int main(int argc, char ** argv)
         Game game;
         game.setRenderer(&renderer);
         game.setFps(Settings::instance().loadFps());
-        game.connect(&renderer, SIGNAL(closed()), &game, SLOT(finish()));
 
         // Initialize and start the game
         if (game.init())
@@ -109,7 +110,7 @@ int main(int argc, char ** argv)
         }
         else
         {
-            MCLogger().fatal() << "Initing the game failed.";
+            MCLogger().fatal() << INIT_ERROR;
             return EXIT_FAILURE;
         }
 
@@ -120,6 +121,7 @@ int main(int argc, char ** argv)
     catch (MCException & e)
     {
         MCLogger().fatal() << e.what();
+        MCLogger().fatal() << INIT_ERROR;
         return EXIT_FAILURE;
     }
 }

@@ -32,9 +32,15 @@
 #include <MCLogger>
 #include <MCObjectFactory>
 
+#include <Device>
+#include <SoundManager>
+#include <Sound>
+
 #include <QDir>
 #include <QTime>
 #include <QApplication>
+
+#include <SDL/SDL.h>
 
 #include <cassert>
 
@@ -55,6 +61,8 @@ Game::Game()
 , m_trackLoader(new TrackLoader(*m_objectFactory))
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
+, m_soundDevice(new SFX::Device)
+, m_soundManager(new SFX::SoundManager)
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
@@ -137,10 +145,6 @@ EventHandler & Game::eventHandler() const
     return *m_eventHandler;
 }
 
-void Game::finish()
-{
-}
-
 Renderer * Game::renderer() const
 {
     return m_renderer;
@@ -155,8 +159,7 @@ bool Game::loadTracks()
     }
     else
     {
-        MCLogger().error() << "No valid race tracks found.";
-        return false;
+        throw MCException("No valid race tracks found.");
     }
 
     return true;
@@ -181,27 +184,55 @@ void Game::initScene()
     m_renderer->setScene(*m_scene);
 }
 
+bool Game::initAudio()
+{
+    MCLogger().info() << "Initing SDL audio..";
+
+    // Init SDL with AUDIO only
+    if (SDL_Init(SDL_INIT_AUDIO) != 0)
+    {
+        throw MCException("Initing SDL failed!");
+    }
+
+    if (!m_soundDevice->init())
+    {
+        throw MCException("Initing SDL mixer failed!");
+    }
+
+    return true;
+}
+
+void Game::loadSounds()
+{
+    const std::string soundConfigPath(
+        std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "sounds.conf");
+    MCLogger().info() << "Loading sound config from '" << soundConfigPath << "'..";
+    m_soundManager->load(soundConfigPath, std::string(Config::Common::dataPath));
+}
+
 bool Game::init()
 {
-    try
+    if (initAudio())
     {
-        m_assetManager->load();
-
-        if (loadTracks())
-        {
-            initScene();
-
-            return true;
-        }
+        loadSounds();
     }
-    catch (MCException & e)
+    else
     {
-        MCLogger().fatal() << e.what();
-
         return false;
     }
 
-    return false;
+    m_assetManager->load();
+
+    if (loadTracks())
+    {
+        initScene();
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void Game::start()
@@ -268,4 +299,8 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
+    delete m_soundDevice;
+    delete m_soundManager;
+
+    SDL_Quit();
 }

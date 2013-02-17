@@ -51,12 +51,12 @@ MCMesh & MCMeshManager::createMesh(
 }
 
 void MCMeshManager::load(
-    const std::string & configPath, const std::string & baseDataPath) throw (MCException)
+    const std::string & configFilePath, const std::string & baseDataPath) throw (MCException)
 {
     MCMeshConfigLoader configLoader;
     MCMeshLoader       modelLoader;
 
-    if (configLoader.load(configPath))
+    if (configLoader.load(configFilePath))
     {
         for (unsigned int i = 0; i < configLoader.meshCount(); i++)
         {
@@ -77,7 +77,7 @@ void MCMeshManager::load(
     }
     else
     {
-        throw MCException("Parsing '" + configPath + "' failed!");
+        throw MCException("Parsing '" + configFilePath + "' failed!");
     }
 }
 

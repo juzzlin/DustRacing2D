@@ -27,7 +27,7 @@
 
 #include "mcexception.hh"
 #include "mcmacros.hh"
-#include "mcsurfacedata.hh"
+#include "mcsurfacemetadata.hh"
 
 class MCSurface;
 
@@ -75,13 +75,13 @@ public:
     //! Destructor
     virtual ~MCSurfaceManager();
 
-    //! Loads texture config from strBasePath using the given mapping file strFile.
-    //! \param filePath Path to the XML-based input file.
+    //! Loads texture config from strBasePath using the given mapping file.
+    //! \param configFilePath Path to the XML-based input file.
     //! \param baseDataPath The absolute search path for an image is
-    //! baseDataPath + baseImagePath + file. baseImagePath and the file are
+    //! baseDataPath + baseImagePath + fileName. baseImagePath and the fileName are
     //! defined in the input file.
     virtual void load(
-        const std::string & filePath, const std::string & baseDataPath) throw (MCException);
+        const std::string & configFilePath, const std::string & baseDataPath) throw (MCException);
 
     //! Returns a surface object associated with given strId.
     //! Corresponding OpenGL texture handle can be obtained
@@ -96,12 +96,12 @@ public:
     //! Creates an MCSurface containing a 2D OpenGL texture from a QImage + texture meta data.
     //! MCSurfaceManager keeps the ownership.
     MCSurface & createSurfaceFromImage(
-        const MCSurfaceData & data, const QImage & image) throw (MCException);
+        const MCSurfaceMetaData & data, const QImage & image) throw (MCException);
 
     //! Creates an MCSurface containing two 2D OpenGL textures from two QImages + texture meta data.
     //! MCSurfaceManager keeps the ownership.
     MCSurface & createSurfaceFromImages(
-        const MCSurfaceData & data, const QImage & image1, const QImage & image2) throw (MCException);
+        const MCSurfaceMetaData & data, const QImage & image1, const QImage & image2) throw (MCException);
 
 private:
 
@@ -113,7 +113,7 @@ private:
     QImage createNearest2PowNImage(const QImage & image);
 
     //! Helper to create the actual OpenGL texture.
-    GLuint create2DTextureFromImage(const MCSurfaceData & data, const QImage & image);
+    GLuint create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image);
 
     //! Map for resulting surface objects
     typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;

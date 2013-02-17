@@ -23,7 +23,7 @@
 #include <QFile>
 
 #include "mcsurfaceconfigloader.hh"
-#include "mcsurfacedata.hh"
+#include "mcsurfacemetadata.hh"
 #include "mclogger.hh"
 
 #include <cassert>
@@ -53,12 +53,10 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
     if (root.nodeName() == "surfaces")
     {
         const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
-
-        SurfaceDataPtr newData;
         QDomNode node = root.firstChild();
         while(!node.isNull() && node.nodeName() == "surface")
         {
-            newData.reset(new MCSurfaceData);
+            SurfaceDataPtr newData(new MCSurfaceMetaData);
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
@@ -238,7 +236,7 @@ unsigned int MCSurfaceConfigLoader::surfaceCount() const
     return m_surfaces.size();
 }
 
-MCSurfaceData & MCSurfaceConfigLoader::surface(unsigned int index) const
+const MCSurfaceMetaData & MCSurfaceConfigLoader::surface(unsigned int index) const
 {
     assert(index < static_cast<unsigned int>(m_surfaces.size()));
     assert(m_surfaces.at(index));

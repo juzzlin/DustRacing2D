@@ -32,6 +32,11 @@ class TrackLoader;
 class MCObjectFactory;
 class MCAssetManager;
 
+namespace SFX {
+class Device;
+class SoundManager;
+}
+
 //! The main game class.
 class Game : public QObject
 {
@@ -98,12 +103,13 @@ private slots:
     void updateAnimations();
     void renderFrame();
     void countRenderFps();
-    void finish();
 
 private:
 
-    bool loadTracks();
     void initScene();
+    bool initAudio();
+    bool loadTracks();
+    void loadSounds();
 
     StateMachine         * m_stateMachine;
     Renderer             * m_renderer;
@@ -113,6 +119,8 @@ private:
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;
     EventHandler         * m_eventHandler;
+    SFX::Device          * m_soundDevice;
+    SFX::SoundManager    * m_soundManager;
     unsigned int           m_updateFps;
     unsigned int           m_updateDelay;
     float                  m_timeStep;

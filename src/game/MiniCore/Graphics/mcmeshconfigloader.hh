@@ -41,7 +41,7 @@ public:
     unsigned int meshCount() const;
 
     //! Get mesh data of given index.
-    MCMeshMetaData & mesh(unsigned int index) const;
+    const MCMeshMetaData & mesh(unsigned int index) const;
 
 private:
 

@@ -60,12 +60,12 @@ public:
     virtual ~MCMeshManager() {};
 
     //! Loads mesh config from strBasePath using the given mapping file strFile.
-    //! \param configPath Path to the XML-based input file.
+    //! \param configFilePath Path to the XML-based input file.
     //! \param baseDataPath The absolute search path for an mesh is
-    //! baseDataPath + baseModelPath + file. baseModelPath and the file are
+    //! baseDataPath + baseModelPath + fileName. baseModelPath and the fileName are
     //! defined in the input file.
     virtual void load(
-        const std::string & configPath, const std::string & baseDataPath) throw (MCException);
+        const std::string & configFilePath, const std::string & baseDataPath) throw (MCException);
 
     //! Returns a mesh object associated with given strId.
     //! MCMeshManager will keep the ownership.

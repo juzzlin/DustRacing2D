@@ -52,12 +52,10 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
     if (root.nodeName() == "meshes")
     {
         const std::string baseModelPath = root.attribute("baseModelPath", "./").toStdString();
-
-        MeshMetaDataPtr newData;
         QDomNode node = root.firstChild();
         while(!node.isNull() && node.nodeName() == "mesh")
         {
-            newData.reset(new MCMeshMetaData);
+            MeshMetaDataPtr newData(new MCMeshMetaData);
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
@@ -86,7 +84,7 @@ unsigned int MCMeshConfigLoader::meshCount() const
     return m_meshes.size();
 }
 
-MCMeshMetaData & MCMeshConfigLoader::mesh(unsigned int index) const
+const MCMeshMetaData & MCMeshConfigLoader::mesh(unsigned int index) const
 {
     assert(index < static_cast<unsigned int>(m_meshes.size()));
     assert(m_meshes.at(index));

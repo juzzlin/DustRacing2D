@@ -26,7 +26,7 @@
 
 #include <MCGLEW> // For GLenum.
 
-class MCSurfaceData;
+class MCSurfaceMetaData;
 
 //! Loads the surface config.
 class MCSurfaceConfigLoader
@@ -44,14 +44,14 @@ public:
     unsigned int surfaceCount() const;
 
     //! Get surface data of given index.
-    MCSurfaceData & surface(unsigned int index) const;
+    const MCSurfaceMetaData & surface(unsigned int index) const;
 
 private:
 
     //! Convert alpha blend function string to enum.
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 
-    typedef std::shared_ptr<MCSurfaceData> SurfaceDataPtr;
+    typedef std::shared_ptr<MCSurfaceMetaData> SurfaceDataPtr;
     std::vector<SurfaceDataPtr> m_surfaces;
 };
 
