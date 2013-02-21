@@ -26,6 +26,7 @@ set(SRC
     credits.cpp
     eventhandler.cpp
     game.cpp
+    graphicsfactory.cpp
     help.cpp
     inputhandler.cpp
     intro.cpp

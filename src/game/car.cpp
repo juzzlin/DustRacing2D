@@ -15,6 +15,7 @@
 
 #include "car.hpp"
 #include "centrifugalforcegenerator.hpp"
+#include "graphicsfactory.hpp"
 #include "layers.hpp"
 #include "particlemanager.hpp"
 #include "radius.hpp"
@@ -34,16 +35,8 @@
 #include <MCTypes>
 #include <MCVector2d>
 
-// These are needed to generate the number plate surface on top of the car.
-#include <QFont>
-#include <QFontMetrics>
-#include <QPainter>
-#include <QPixmap>
-
 #include <cassert>
 #include <string>
-
-static std::vector<std::string> NUMBER_PLATES({"1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x"});
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(&surface, "Car")
@@ -61,7 +54,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_turnRight(false)
 , m_index(index)
 , m_tireAngle(0)
-, m_number(generateNumberSurface(index))
+, m_number(GraphicsFactory::generateNumberSurface(index))
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
 , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
 , m_speedInKmh(0)
@@ -75,45 +68,12 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_sparkleCounter(0)
 , m_mudCounter(0)
 {
-    assert(static_cast<int>(NUMBER_PLATES.size()) == Scene::NUM_CARS);
-
     setProperties(desc);
-
     initForceGenerators(desc);
 
     m_brakeGlow.setShaderProgram(&Renderer::instance().program("master"));
     m_frontTire.setShaderProgram(&Renderer::instance().program("master"));
     m_number.setShaderProgram(&Renderer::instance().program("master"));
-}
-
-MCSurface & Car::generateNumberSurface(MCUint index)
-{
-    const int w = 32;
-    const int h = 32;
-
-    QPixmap numberPixmap(w, h);
-    numberPixmap.fill(Qt::white);
-
-    QPainter painter;
-    painter.begin(&numberPixmap);
-    QFont font;
-    font.setPixelSize(32);
-    font.setBold(true);
-    painter.setFont(font);
-    painter.setPen(QColor(0, 0, 0));
-    QFontMetrics fm = painter.fontMetrics();
-    QString text = NUMBER_PLATES.at(index).c_str();
-    painter.drawText(w / 2 - fm.width(text) / 2, h / 2 + fm.height() / 2 - fm.descent(), text);
-    painter.end();
-
-    MCSurfaceData surfaceData;
-    surfaceData.height        = 11;
-    surfaceData.heightSet     = true;
-    surfaceData.width         = 11;
-    surfaceData.widthSet      = true;
-
-    return
-        MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
 
 void Car::setProperties(Description & desc)
