@@ -34,7 +34,8 @@ static MCTextureText HELP_TEXT(
     "Accelerate : W / LEFT SHIFT\n"
     "Brake      : S / LEFT CTRL\n\n"
     "Quit       : ESC/Q\n"
-    "Pause      : P"
+    "Pause      : P\n\n"
+    "http://dustrac.sourceforge.net"
 );
 
 Help::Help(std::string id, int width, int height)
