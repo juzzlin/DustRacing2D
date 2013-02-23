@@ -78,10 +78,16 @@ endif()
 
 # Copy desktop file
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(DesktopFileSourcePath)
+    if(Ubuntu)
+        set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-editor.desktop.opt.in)
+    else()
+        set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-editor.desktop.in)
+    endif()
     add_custom_target(desktop-file-editor ALL
-        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/src/dustrac-editor.desktop.in
+        COMMAND cmake -E copy ${DesktopFileSourcePath}
             ${CMAKE_BINARY_DIR}/dustrac-editor.desktop
-        DEPENDS ${EDITOR_BINARY_NAME})
+    DEPENDS ${EDITOR_BINARY_NAME})
 endif()
 
 # Add the executable

@@ -92,7 +92,7 @@ MainWindow::MainWindow(QString trackFile)
         qFatal("MainWindow already instantiated!");
     }
 
-    setWindowIcon(QIcon(":/DustRacingEditor.png"));
+    setWindowIcon(QIcon(":/dustrac-editor.png"));
 
     // Init widgets
     init();

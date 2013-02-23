@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>DustRacing.png</file>
-        <file>DustRacingEditor.png</file>
+        <file>dustrac-editor.png</file>
+        <file>dustrac-game.png</file>
     </qresource>
 </RCC>

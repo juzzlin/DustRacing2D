@@ -20,7 +20,7 @@
 // This is the main data path and should come as a define
 // from the build system.
 const char * Config::Common::dataPath                    = DATA_PATH;
-const char * Config::Common::QSETTINGS_COMPANY_NAME      = "DustRacing";
+const char * Config::Common::QSETTINGS_COMPANY_NAME      = "dustrac";
 const char * Config::Common::TRACK_SEARCH_PATH           = "DustRacingTracks";
 
 // **** Editor variables ****

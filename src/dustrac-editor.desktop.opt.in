@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Dust Racing 2D Level Editor
 Comment=2D racing game level editor
-Exec=dustrac-editor
+Exec=/opt/dustrac/dustrac-editor
 Icon=dustrac-editor
 Type=Application
 Categories=Game

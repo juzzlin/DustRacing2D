@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Dust Racing 2D
 Comment=2D racing game
-Exec=dustrac-game
+Exec=/opt/dustrac/dustrac-game
 Icon=dustrac-game
 Type=Application
 Categories=Game

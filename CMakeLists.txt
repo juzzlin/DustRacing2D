@@ -17,7 +17,14 @@ set(BIN_PATH bin)
 
 if(ReleaseBuild)
     message(STATUS "Release build.")
-    set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
+    if(Ubuntu)
+        message(STATUS "Installing to /opt.")
+        set(BIN_PATH /opt/dustrac)
+        set(DATA_PATH /opt/dustrac/data)
+        set(CMAKE_INSTALL_PREFIX /usr)
+    else()
+        set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
+    endif()
 else()
     message(STATUS "NOTE!!: This is a development build without install targets!")
     set(DATA_PATH ./data)
@@ -49,21 +56,24 @@ add_subdirectory(src/game)
 
 # Install binaries & data
 if(ReleaseBuild)
+    # Install binaries and game data
     install(PROGRAMS dustrac-game DESTINATION ${BIN_PATH})
     install(PROGRAMS dustrac-editor DESTINATION ${BIN_PATH})
-    install(FILES data/editorModels.conf data/textures.conf data/fonts.conf DESTINATION ${DATA_PATH})
+    install(DIRECTORY data DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.conf")
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.jpg")
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
 
-    # Install icons and the .desktop file
+    # Install .desktop files
     install(FILES dustrac-game.desktop DESTINATION share/applications)
     install(FILES dustrac-editor.desktop DESTINATION share/applications)
-    install(FILES data/icons/DustRacing.png DESTINATION share/pixmaps)
-    install(FILES data/icons/DustRacing.png DESTINATION share/icons/hicolor/64x64/apps)
-    install(FILES data/icons/DustRacingEditor.png DESTINATION share/pixmaps)
-    install(FILES data/icons/DustRacingEditor.png DESTINATION share/icons/hicolor/64x64/apps)
+    
+    # Install icons
+    install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
+    install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
+    install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
+    install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
 endif()
 

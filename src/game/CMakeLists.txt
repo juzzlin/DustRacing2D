@@ -94,10 +94,16 @@ add_custom_target(runtime ALL
 
 # Copy desktop file
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(DesktopFileSourcePath)
+    if(Ubuntu)
+        set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.opt.in)
+    else()
+        set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.in)
+    endif()
     add_custom_target(desktop-file-game ALL
-        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.in
+        COMMAND cmake -E copy ${DesktopFileSourcePath}
             ${CMAKE_BINARY_DIR}/dustrac-game.desktop
-        DEPENDS ${GAME_BINARY_NAME})
+    DEPENDS ${GAME_BINARY_NAME})
 endif()
 
 # Resource compilation for MinGW
