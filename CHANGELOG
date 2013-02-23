@@ -1,3 +1,11 @@
+1.0.2
+-----
+
+* Fixes install targets.
+* Adds support for USC.
+* Make sure the first track is always unlocked.
+* Updates packaging.
+
 1.0.1
 -----
 
