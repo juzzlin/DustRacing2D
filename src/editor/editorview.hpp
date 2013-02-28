@@ -63,13 +63,18 @@ private slots:
 
 private:
 
+    void addCurrentToolBarObjectToScene();
     void createTileContextMenu();
     void createObjectContextMenu();
     void createTargetNodeContextMenu();
+    void eraseObjectAtCurrentClickedPos();
+    void handleMousePressEventOnTile(QMouseEvent & event, TrackTile & tile);
     void handleLeftButtonClickOnTile(TrackTile & tile);
     void handleRightButtonClickOnTile(TrackTile & tile);
+    void handleMousePressEventOnObject(QMouseEvent & event, Object & object);
     void handleLeftButtonClickOnObject(Object & object);
     void handleRightButtonClickOnObject(Object & object);
+    void handleMousePressEventOnTargetNode(QMouseEvent & event, TargetNode & tnode);
     void handleLeftButtonClickOnTargetNode(TargetNode & tnode);
     void handleRightButtonClickOnTargetNode(TargetNode & tnode);
     void handleTileDragRelease(QMouseEvent * event);

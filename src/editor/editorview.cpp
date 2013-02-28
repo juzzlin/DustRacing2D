@@ -146,105 +146,121 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         m_clickedPos      = event->pos();
         m_clickedScenePos = mapToScene(m_clickedPos);
 
-        // Fetch all items at the location
-        QList<QGraphicsItem *> items = scene()->items(
-            m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
-
         // User is erasing an object
         if (m_editorData.mode() == EditorData::EM_ERASE_OBJECT)
         {
-            // We need to find the first object to be erased, because
-            // there might be also overlapping TargetNodes.
-            for (QGraphicsItem * item : items)
-            {
-                if (Object * object = dynamic_cast<Object *>(item))
-                {
-                    // Remove from track data.
-                    m_editorData.trackData()->objects().remove(*object);
-
-                    // Remove from scene.
-                    scene()->removeItem(object);
-
-                    break;
-                }
-            }
+            eraseObjectAtCurrentClickedPos();
         }
         // User is adding an object
         else if (m_editorData.mode() == EditorData::EM_ADD_OBJECT)
         {
-            if (QAction * action = MainWindow::instance()->currentToolBarAction())
-            {
-                if (scene())
-                {
-                    // Create the object
-                    Object & object = ObjectFactory::createObject(action->data().toString());
-                    object.setLocation(m_clickedScenePos);
-
-                    // Add to scene
-                    scene()->addItem(&object);
-
-                    // Add to track data
-                    m_editorData.trackData()->objects().add(object);
-                    m_editorData.setSelectedObject(&object);
-                }
-            }
+            addCurrentToolBarObjectToScene();
         }
         // Default actions
         else
         {
+            // Fetch all items at the location
+            QList<QGraphicsItem *> items = scene()->items(
+                m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
+
             if (items.size())
             {
                 QGraphicsItem * item = *items.begin();
                 if (Object * object = dynamic_cast<Object *>(item))
                 {
-                    // Handle right button click
-                    if (event->button() == Qt::RightButton)
-                    {
-                        handleRightButtonClickOnObject(*object);
-                    }
-                    // Handle left button click
-                    else if (event->button() == Qt::LeftButton)
-                    {
-                        handleLeftButtonClickOnObject(*object);
-                    }
-
-                    QWidget::mousePressEvent(event);
+                    handleMousePressEventOnObject(*event, *object);
                 }
                 else if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
                 {
-                    // Handle right button click
-                    if (event->button() == Qt::RightButton)
-                    {
-                        handleRightButtonClickOnTargetNode(*tnode);
-                    }
-                    // Handle left button click
-                    else if (event->button() == Qt::LeftButton)
-                    {
-                        handleLeftButtonClickOnTargetNode(*tnode);
-                    }
-
-                    QWidget::mousePressEvent(event);
+                    handleMousePressEventOnTargetNode(*event, *tnode);
                 }
                 else if (TrackTile * tile = dynamic_cast<TrackTile *>(item))
                 {
-                    tile->setActive(true);
-
-                    // Handle right button click
-                    if (event->button() == Qt::RightButton)
-                    {
-                        handleRightButtonClickOnTile(*tile);
-                    }
-                    // Handle left button click
-                    else if (event->button() == Qt::LeftButton)
-                    {
-                        handleLeftButtonClickOnTile(*tile);
-                    }
-
-                    QWidget::mousePressEvent(event);
+                    handleMousePressEventOnTile(*event, *tile);
                 }
             }
         }
     }
+}
+
+void EditorView::eraseObjectAtCurrentClickedPos()
+{
+    // Fetch all items at the location
+    QList<QGraphicsItem *> items = scene()->items(
+        m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
+
+    // We need to find the first object to be erased, because
+    // there might be also overlapping TargetNodes.
+    for (QGraphicsItem * item : items)
+    {
+        if (Object * object = dynamic_cast<Object *>(item))
+        {
+            m_editorData.trackData()->objects().remove(*object);
+            scene()->removeItem(object);
+            break;
+        }
+    }
+}
+
+void EditorView::addCurrentToolBarObjectToScene()
+{
+    if (QAction * action = MainWindow::instance()->currentToolBarAction())
+    {
+        if (scene())
+        {
+            Object & object = ObjectFactory::createObject(action->data().toString());
+            object.setLocation(m_clickedScenePos);
+
+            scene()->addItem(&object);
+
+            m_editorData.trackData()->objects().add(object);
+            m_editorData.setSelectedObject(&object);
+        }
+    }
+}
+
+void EditorView::handleMousePressEventOnObject(QMouseEvent & event, Object & object)
+{
+    if (event.button() == Qt::RightButton)
+    {
+        handleRightButtonClickOnObject(object);
+    }
+    else if (event.button() == Qt::LeftButton)
+    {
+        handleLeftButtonClickOnObject(object);
+    }
+
+    QWidget::mousePressEvent(&event);
+}
+
+void EditorView::handleMousePressEventOnTargetNode(QMouseEvent & event, TargetNode & tnode)
+{
+    if (event.button() == Qt::RightButton)
+    {
+        handleRightButtonClickOnTargetNode(tnode);
+    }
+    else if (event.button() == Qt::LeftButton)
+    {
+        handleLeftButtonClickOnTargetNode(tnode);
+    }
+
+    QWidget::mousePressEvent(&event);
+}
+
+void EditorView::handleMousePressEventOnTile(QMouseEvent & event, TrackTile & tile)
+{
+    tile.setActive(true);
+
+    if (event.button() == Qt::RightButton)
+    {
+        handleRightButtonClickOnTile(tile);
+    }
+    else if (event.button() == Qt::LeftButton)
+    {
+        handleLeftButtonClickOnTile(tile);
+    }
+
+    QWidget::mousePressEvent(&event);
 }
 
 void EditorView::handleLeftButtonClickOnObject(Object & object)
