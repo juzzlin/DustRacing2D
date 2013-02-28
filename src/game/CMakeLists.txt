@@ -94,7 +94,7 @@ add_custom_target(runtime ALL
     COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
 
 # Copy desktop file
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DesktopFileSourcePath)
     if(Ubuntu)
         set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.opt.in)

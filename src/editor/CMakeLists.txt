@@ -77,7 +77,7 @@ if(MINGW)
 endif()
 
 # Copy desktop file
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DesktopFileSourcePath)
     if(Ubuntu)
         set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-editor.desktop.opt.in)

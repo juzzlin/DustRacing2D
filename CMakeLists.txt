@@ -12,6 +12,9 @@ set(EDITOR_BINARY_NAME "dustrac-editor")
 # Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
 option(ReleaseBuild "ReleaseBuild" OFF)
 
+# Enable install layout required by USC.
+option(Ubuntu "Ubuntu" OFF)
+
 # Set install paths
 set(BIN_PATH bin)
 
