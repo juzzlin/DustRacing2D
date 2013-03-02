@@ -115,12 +115,12 @@ private:
     Renderer             * m_renderer;
     Scene                * m_scene;
     MCAssetManager       * m_assetManager;
+    SFX::Device          * m_soundDevice;
+    SFX::SoundManager    * m_soundManager;
     MCObjectFactory      * m_objectFactory;
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;
     EventHandler         * m_eventHandler;
-    SFX::Device          * m_soundDevice;
-    SFX::SoundManager    * m_soundManager;
     unsigned int           m_updateFps;
     unsigned int           m_updateDelay;
     float                  m_timeStep;

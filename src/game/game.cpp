@@ -57,12 +57,12 @@ Game::Game()
     std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "textures.conf",
     std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "fonts.conf",
     std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "meshes.conf"))
+, m_soundDevice(new SFX::Device)
+, m_soundManager(new SFX::SoundManager)
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
 , m_trackLoader(new TrackLoader(*m_objectFactory))
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
-, m_soundDevice(new SFX::Device)
-, m_soundManager(new SFX::SoundManager)
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
@@ -231,6 +231,9 @@ bool Game::init()
     {
         return false;
     }
+
+    m_eventHandler->setMenuClickSound(m_soundManager->newSound("menuClick"));
+    m_eventHandler->setMenuSelectSound(m_soundManager->newSound("menuSelect"));
 
     return true;
 }

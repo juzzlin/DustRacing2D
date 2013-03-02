@@ -21,6 +21,10 @@
 #include <QKeyEvent>
 #include <QObject>
 
+namespace SFX {
+class Sound;
+}
+
 //! Handles key and mouse events.
 class EventHandler : public QObject
 {
@@ -31,11 +35,15 @@ public:
     //! Constructor.
     EventHandler(InputHandler & inputHandler);
 
+    void enableCaptureMode(InputHandler::InputAction action, int player);
+
     bool handleKeyPressEvent(QKeyEvent * event);
 
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
-    void enableCaptureMode(InputHandler::InputAction action, int player);
+    void setMenuClickSound(SFX::Sound & menuClick);
+
+    void setMenuSelectSound(SFX::Sound & menuSelect);
 
 signals:
 
@@ -51,30 +59,33 @@ private:
         InputHandler::InputAction action;
     };
 
+    bool applyMatchingAction(QKeyEvent * event, bool press);
+
+    void disableCaptureMode();
+
     bool handleMenuKeyPressEvent(QKeyEvent * event);
 
     bool handleGameKeyPressEvent(QKeyEvent * event);
 
     bool handleGameKeyReleaseEvent(QKeyEvent * event);
 
-    bool applyMatchingAction(QKeyEvent * event, bool press);
+    void loadKeyMappings();
 
     bool mapKeyToAction(int player, InputHandler::InputAction action, int key);
 
-    void disableCaptureMode();
+    void playMenuClickSound();
 
-    void loadKeyMappings();
+    void playMenuSelectSound();
 
     typedef std::map<int, ActionMapping> KeyToActionMap;
-    KeyToActionMap m_keyToActionMap;
 
-    InputHandler & m_inputHandler;
-
-    bool m_captureMode;
-
+    KeyToActionMap            m_keyToActionMap;
+    InputHandler            & m_inputHandler;
+    bool                      m_captureMode;
     InputHandler::InputAction m_captureAction;
-
-    int m_capturePlayer;
+    int                       m_capturePlayer;
+    SFX::Sound              * m_menuClick;
+    SFX::Sound              * m_menuSelect;
 };
 
 #endif // EVENTHANDLER_HPP

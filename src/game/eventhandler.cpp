@@ -19,12 +19,15 @@
 #include "statemachine.hpp"
 
 #include <MenuManager>
+#include <Sound>
 
 #include <cassert>
 
 EventHandler::EventHandler(InputHandler & inputHandler)
 : m_inputHandler(inputHandler)
 , m_captureMode(false)
+, m_menuClick(nullptr)
+, m_menuSelect(nullptr)
 {
     // Default key bindings
     m_keyToActionMap[KeyCodes::LSHIFT] = {1, InputHandler::IA_UP};
@@ -119,23 +122,29 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
         switch (event->key())
         {
         case Qt::Key_Left:
+            playMenuClickSound();
             MTFH::MenuManager::instance().left();
             break;
         case Qt::Key_Right:
+            playMenuClickSound();
             MTFH::MenuManager::instance().right();
             break;
         case Qt::Key_Up:
+            playMenuClickSound();
             MTFH::MenuManager::instance().up();
             break;
         case Qt::Key_Down:
+            playMenuClickSound();
             MTFH::MenuManager::instance().down();
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
+            playMenuSelectSound();
             MTFH::MenuManager::instance().selectCurrentItem();
             break;
         case Qt::Key_Escape:
         case Qt::Key_Q:
+            playMenuSelectSound();
             MTFH::MenuManager::instance().popMenu();
             if (MTFH::MenuManager::instance().done())
             {
@@ -230,4 +239,30 @@ bool EventHandler::mapKeyToAction(int player, InputHandler::InputAction action, 
     }
 
     return false;
+}
+
+void EventHandler::setMenuClickSound(SFX::Sound & menuClick)
+{
+    m_menuClick = &menuClick;
+}
+
+void EventHandler::setMenuSelectSound(SFX::Sound & menuSelect)
+{
+    m_menuSelect = &menuSelect;
+}
+
+void EventHandler::playMenuClickSound()
+{
+    if (m_menuClick)
+    {
+        m_menuClick->play();
+    }
+}
+
+void EventHandler::playMenuSelectSound()
+{
+    if (m_menuSelect)
+    {
+        m_menuSelect->play();
+    }
 }

@@ -69,7 +69,7 @@ public:
     /*! Play sound for given times using Sound::volume() as the volume.
      * \param loops Number of loops to be played
      * \return channel playing, -1 on failure. */
-    int play(int loops);
+    int play(int loops = 0);
 
     //! Stop sound
     void stop();
