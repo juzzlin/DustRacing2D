@@ -16,10 +16,14 @@
 #ifndef STATEMACHINE_HPP
 #define STATEMACHINE_HPP
 
-#include "updateableif.hpp"
 #include "renderer.hpp"
+#include "updateableif.hpp"
+
 #include <MCTypes>
 #include <QApplication>
+
+#include <functional>
+#include <map>
 
 class Intro;
 class Race;
@@ -54,43 +58,19 @@ public:
     //! Return the singleton instance.
     static StateMachine & instance();
 
-    void setIntro(Intro & intro)
-    {
-        m_intro = &intro;
-    }
+    void setIntro(Intro & intro);
 
-    void setTrack(Track & track)
-    {
-        m_track = &track;
-    }
+    void setTrack(Track & track);
 
-    void setRenderer(Renderer & renderer)
-    {
-        m_renderer = &renderer;
-        m_renderer->setEnabled(false);
-    }
+    void setRenderer(Renderer & renderer);
 
-    void setRace(Race & race)
-    {
-        m_race = &race;
-    }
+    void setRace(Race & race);
 
-    void setStartlights(Startlights & startlights)
-    {
-        m_startlights = &startlights;
-    }
+    void setStartlights(Startlights & startlights);
 
-    void quit()
-    {
-        if (m_state == StateMachine::Play)
-        {
-            m_returnToMenu = true;
-        }
-        else if (m_state == StateMachine::Menu)
-        {
-            QApplication::quit();
-        }
-    }
+    void setThemeSong(SFX::Music & themeSong);
+
+    void quit();
 
     StateMachine::State state() const;
 
@@ -104,17 +84,38 @@ public:
 
 private:
 
+    void stateInit();
+
+    void stateDoIntro();
+
+    void stateMenu();
+
+    void stateMenuTransitionIn();
+
+    void stateMenuTransitionOut();
+
+    void stateGameTransitionIn();
+
+    void stateGameTransitionOut();
+
+    void stateDoStartlights();
+
+    void statePlay();
+
     static StateMachine * m_instance;
 
-    State         m_state;
-    bool          m_isFading;
-    Intro       * m_intro;
-    Startlights * m_startlights;
-    Race        * m_race;
-    Renderer    * m_renderer;
-    Track       * m_track;
-    MCFloat       m_fadeValue;
-    bool          m_returnToMenu;
+    typedef std::map<State, std::function<void()> > StateToFunctionMap;
+
+    StateToFunctionMap m_stateToFunctionMap;
+    State              m_state;
+    bool               m_isFading;
+    Intro            * m_intro;
+    Startlights      * m_startlights;
+    Race             * m_race;
+    Renderer         * m_renderer;
+    Track            * m_track;
+    MCFloat            m_fadeValue;
+    bool               m_returnToMenu;
 };
 
 #endif // STATEMACHINE_HPP
