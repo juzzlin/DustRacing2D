@@ -160,9 +160,9 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    fullScreen = settings.value("fullScreen", false).toBool();
-    hRes       = settings.value("hRes", Config::Game::WINDOW_WIDTH).toInt();
-    vRes       = settings.value("vRes", Config::Game::WINDOW_HEIGHT).toInt();
+    fullScreen = settings.value("fullScreen", true).toBool();
+    hRes       = settings.value("hRes", 0).toInt();
+    vRes       = settings.value("vRes", 0).toInt();
     settings.endGroup();
 }
 
