@@ -409,6 +409,7 @@ void MCObject::setMass(MCFloat newMass, bool stationary_)
 
         m_mass = newMass;
 
+        // This is just a default guess. The shape should set the "correct" value.
         setMomentOfInertia(newMass * 10.0);
     }
     else
