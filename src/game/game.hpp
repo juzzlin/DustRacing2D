@@ -34,6 +34,7 @@ class MCAssetManager;
 
 namespace SFX {
 class Device;
+class Music;
 class SoundManager;
 }
 
@@ -96,6 +97,8 @@ public slots:
 
     void togglePause();
     void exitGame();
+    void playMenuMusic();
+    void playGameMusic();
 
 private slots:
 
@@ -132,6 +135,8 @@ private:
     QTimer                 m_updateTimer;
     QTimer                 m_renderTimer;
     GameMode               m_mode;
+    SFX::Music           * m_menuMusic;
+    SFX::Music           * m_gameMusic;
 
     static Game * m_instance;
 };

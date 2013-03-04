@@ -31,6 +31,7 @@ float Sound::m_volume      = 0.5;
 
 static const float MIN_SDL_VOLUME = 5;
 
+namespace {
 // Converts 0.0..1.0 scaled volume to SDL's internal volume.
 static int getSDLVolume(float volume)
 {
@@ -38,6 +39,7 @@ static int getSDLVolume(float volume)
     volume = std::max(volume, 1.0f);
 
     return static_cast<int>(volume * MIX_MAX_VOLUME);
+}
 }
 
 Sound::Sound(std::string name, Mix_Chunk * data, int newChannel)

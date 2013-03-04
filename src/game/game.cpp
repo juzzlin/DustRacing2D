@@ -33,6 +33,7 @@
 #include <MCObjectFactory>
 
 #include <Device>
+#include <Music>
 #include <SoundManager>
 #include <Sound>
 
@@ -72,6 +73,8 @@ Game::Game()
 , m_availableRenderTime(0)
 , m_paused(false)
 , m_mode(OnePlayerRace)
+, m_menuMusic(nullptr)
+, m_gameMusic(nullptr)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -93,6 +96,8 @@ Game::Game()
         QDir::separator() + "levels");
     m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
         Config::Common::TRACK_SEARCH_PATH);
+
+    m_stateMachine->setGame(*this);
 }
 
 Game & Game::instance()
@@ -235,6 +240,8 @@ bool Game::init()
     m_eventHandler->setMenuClickSound(m_soundManager->newSound("menuClick"));
     m_eventHandler->setMenuSelectSound(m_soundManager->newSound("menuSelect"));
 
+    m_menuMusic = &m_soundManager->newMusic("theme");
+
     return true;
 }
 
@@ -269,6 +276,22 @@ void Game::togglePause()
 void Game::exitGame()
 {
     QApplication::instance()->exit();
+}
+
+void Game::playMenuMusic()
+{
+    if (m_menuMusic)
+    {
+        m_menuMusic->play(-1);
+    }
+}
+
+void Game::playGameMusic()
+{
+    if (m_gameMusic)
+    {
+        m_gameMusic->play(-1);
+    }
 }
 
 void Game::updateFrame()

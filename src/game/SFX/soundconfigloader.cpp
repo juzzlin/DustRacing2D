@@ -69,6 +69,7 @@ bool SoundConfigLoader::load(const std::string & filePath)
                         baseSoundPath +
                         QDir::separator().toAscii() +
                         tag.attribute("file", "").toStdString();
+                    newData->isMusic  = isMusic;
                 }
 
                 m_sounds.push_back(newData);

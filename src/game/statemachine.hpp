@@ -25,11 +25,16 @@
 #include <functional>
 #include <map>
 
+class Game;
 class Intro;
 class Race;
 class Renderer;
 class Startlights;
 class Track;
+
+namespace SFX {
+class Music;
+}
 
 //! The main state machine of the game.
 class StateMachine : public UpdateableIf
@@ -58,6 +63,8 @@ public:
     //! Return the singleton instance.
     static StateMachine & instance();
 
+    void setGame(Game & game);
+
     void setIntro(Intro & intro);
 
     void setTrack(Track & track);
@@ -67,8 +74,6 @@ public:
     void setRace(Race & race);
 
     void setStartlights(Startlights & startlights);
-
-    void setThemeSong(SFX::Music & themeSong);
 
     void quit();
 
@@ -109,6 +114,7 @@ private:
     StateToFunctionMap m_stateToFunctionMap;
     State              m_state;
     bool               m_isFading;
+    Game             * m_game;
     Intro            * m_intro;
     Startlights      * m_startlights;
     Race             * m_race;
@@ -116,6 +122,7 @@ private:
     Track            * m_track;
     MCFloat            m_fadeValue;
     bool               m_returnToMenu;
+    SFX::Music       * m_themeSong;
 };
 
 #endif // STATEMACHINE_HPP

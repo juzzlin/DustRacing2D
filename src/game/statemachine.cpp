@@ -15,6 +15,7 @@
 
 #include "statemachine.hpp"
 
+#include "game.hpp"
 #include "intro.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
@@ -22,7 +23,7 @@
 #include "track.hpp"
 
 #include <MenuManager>
-
+#include <Music>
 #include <cassert>
 
 StateMachine * StateMachine::m_instance = nullptr;
@@ -33,6 +34,7 @@ static const float FADE_SPEED_GAME = 0.01;
 StateMachine::StateMachine()
 : m_state(Init)
 , m_isFading(false)
+, m_game(nullptr)
 , m_intro(nullptr)
 , m_startlights(nullptr)
 , m_race(nullptr)
@@ -40,6 +42,7 @@ StateMachine::StateMachine()
 , m_track(nullptr)
 , m_fadeValue(0.0)
 , m_returnToMenu(false)
+, m_themeSong(nullptr)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
@@ -64,6 +67,11 @@ StateMachine & StateMachine::instance()
 {
     assert(StateMachine::m_instance);
     return *StateMachine::m_instance;
+}
+
+void StateMachine::setGame(Game & game)
+{
+    m_game = &game;
 }
 
 void StateMachine::setIntro(Intro & intro)
@@ -104,11 +112,6 @@ void StateMachine::quit()
     }
 }
 
-void StateMachine::setThemeSong(SFX::Music & themeSong)
-{
-    m_themeSong = &themeSong;
-}
-
 bool StateMachine::update()
 {
     m_stateToFunctionMap[m_state]();
@@ -129,6 +132,7 @@ void StateMachine::stateDoIntro()
     if (m_intro->update()) // Intro return true when done.
     {
         m_renderer->setFadeValue(1.0);
+        m_game->playMenuMusic();
         m_state = Menu;
     }
 }
@@ -156,6 +160,8 @@ void StateMachine::stateMenuTransitionIn()
         m_isFading  = false;
         m_state     = Menu;
 
+        m_game->playMenuMusic();
+
         // Re-init the track selection menu
         MTFH::MenuManager::instance().enterCurrentMenu();
     }
@@ -175,11 +181,15 @@ void StateMachine::stateMenuTransitionOut()
         m_state     = GameTransitionIn;
         m_fadeValue = 0.0;
         m_isFading  = false;
+
+        SFX::Music::stop();
     }
     else
     {
         m_fadeValue -= FADE_SPEED_MENU;
         m_isFading   = true;
+
+        SFX::Music::fadeOut(1000);
     }
 
     m_renderer->setFadeValue(m_fadeValue);

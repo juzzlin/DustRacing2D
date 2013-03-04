@@ -38,28 +38,32 @@ public:
 
     /*! Play music for given times using given volume.
      * \param loops Play loops times, -1 for play "forever".
-     * \param volume Volume 0..MIX_MAX_VOLUME.
+     * \param volume Volume 0.0..1.0.
      * \return channel playing, -1 on failure. */
-    int play(int loops, int volume);
+    int play(int loops, float volume);
 
     /*! Play music for nTimes using default volume set by Music::setVolume().
      * \param loops Play loops times, -1 for play "forever".
      * \return channel playing, -1 on failure. */
-    int play(int loops);
+    int play(int loops = 0);
 
     //! Stop music
     static void stop();
 
     /*! Set default volume
-     * \param volume Volume 0..MIX_MAX_VOLUME. */
-    static void setVolume(int volume);
+     * \param volume Volume 0.0..1.0. */
+    static void setVolume(float volume);
 
     //! Get current global volume.
-    static int volume();
+    static float volume();
 
     /*! Enable / disable Music.
      *  If disabled, no calls to underlying SDL_mixer are performed. */
     static void enable(bool flag);
+
+    /*! Fade out the current music.
+     *  \param ms Fade time in ms. */
+    static void fadeOut(int ms);
 
 private:
 
@@ -73,7 +77,7 @@ private:
     static bool m_enable;
 
     //! Default volume
-    static int m_volume;
+    static float m_volume;
 
     //! Name of the music
     std::string m_name;

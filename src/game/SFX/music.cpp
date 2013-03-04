@@ -16,20 +16,30 @@
 #include "music.hpp"
 
 namespace SFX {
+namespace {
+// Converts 0.0..1.0 scaled volume to SDL's internal volume.
+static int getSDLVolume(float volume)
+{
+    volume = std::min(volume, 0.0f);
+    volume = std::max(volume, 1.0f);
 
-bool Music::m_enable = true;
-int  Music::m_volume = MIX_MAX_VOLUME;
+    return static_cast<int>(volume * MIX_MAX_VOLUME);
+}
+}
+
+bool  Music::m_enable = true;
+float Music::m_volume = 0.5;
 
 Music::Music(std::string name, Mix_Music * data)
 : m_name(name)
 , m_data(data)
 {}
 
-int Music::play(int loops, int newVolume)
+int Music::play(int loops, float volume)
 {
     if (Music::m_enable)
     {
-        Mix_VolumeMusic(newVolume);
+        Mix_VolumeMusic(getSDLVolume(volume));
         return Mix_PlayMusic(m_data, loops);
     }
 
@@ -40,7 +50,7 @@ int Music::play(int loops)
 {
     if (Music::m_enable)
     {
-        Mix_VolumeMusic(Music::m_volume);
+        Mix_VolumeMusic(getSDLVolume(Music::m_volume));
         return Mix_PlayMusic(m_data, loops);
     }
 
@@ -60,16 +70,24 @@ void Music::enable(bool flag)
     Music::m_enable = flag;
 }
 
-void Music::setVolume(int newVolume)
+void Music::fadeOut(int ms)
 {
     if (Music::m_enable)
     {
-        Music::m_volume = newVolume;
-        Mix_VolumeMusic(newVolume);
+        Mix_FadeOutMusic(ms);
     }
 }
 
-int Music::volume()
+void Music::setVolume(float volume)
+{
+    if (Music::m_enable)
+    {
+        Music::m_volume = volume;
+        Mix_VolumeMusic(getSDLVolume(volume));
+    }
+}
+
+float Music::volume()
 {
     return Music::m_volume;
 }
