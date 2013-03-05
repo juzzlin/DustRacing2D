@@ -168,11 +168,12 @@ void Scene::createCars()
             // Introduce some variance to the power of computer players so that the
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
-            desc.power           = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
-            desc.dragQuadratic   = 0.5 * (humanDrag + humanDrag - (i + 1) * humanDrag  / NUM_CARS);
-            desc.turningImpulse  = 0.3;
-            desc.slideFriction   = 1.0;
-            desc.brakingFriction = 2.0;
+            desc.power                = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
+            desc.accelerationFriction = 0.5 + 0.3 * float(i + 1) / NUM_CARS;
+            desc.dragQuadratic        = humanDrag;
+            desc.turningImpulse       = 0.3;
+            desc.slideFriction        = 1.0;
+            desc.brakingFriction      = 2.0;
 
             if (i == NUM_CARS - 1)
             {

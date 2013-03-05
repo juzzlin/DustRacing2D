@@ -192,10 +192,15 @@ void Car::accelerate(bool deccelerate)
     m_pBrakingFriction->enable(false);
 
     const MCFloat gravity = 9.81;
-    MCFloat effForce = mass() * m_desc.accelerationFriction * gravity;
+    const MCFloat frictionLimit = mass() * m_desc.accelerationFriction * gravity;
+    MCFloat effForce = frictionLimit;
     if (!velocity().isZero())
     {
-        effForce = std::min(m_desc.power / velocity().lengthFast(), effForce);
+        const MCFloat powerLimit = m_desc.power / velocity().lengthFast();
+        if (powerLimit < frictionLimit)
+        {
+            effForce = powerLimit;
+        }
     }
 
     const MCVector2d<MCFloat> direction(m_dx, m_dy);
