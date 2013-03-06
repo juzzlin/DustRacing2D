@@ -37,9 +37,11 @@ void main(void)
     else
     {
         // Sky reflection
-        if (texColor.r < 0.75 && texColor.g > 0.75 && texColor.b < 0.75)
+        const float keyThreshold = 0.75;
+        if (texColor.r < keyThreshold && texColor.g > keyThreshold && texColor.b < keyThreshold)
         {
-            fragColor = sky * 0.75 * texColor.g * vColor;
+            float intensity = 0.75;
+            fragColor = sky * intensity * texColor.g * vColor;
         }
         else
         {
