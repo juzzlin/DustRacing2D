@@ -18,11 +18,19 @@
 #include "messageoverlay.hpp"
 
 Startlights::Startlights(MessageOverlay & messageOverlay)
-: m_state(LightsInit)
+: m_state(Init)
 , m_counter(0)
 , m_stepsPerState(60)
 , m_messageOverlay(messageOverlay)
 {
+    m_stateToFunctionMap[Init]      = std::bind(&Startlights::stateInit,      this);
+    m_stateToFunctionMap[Appear]    = std::bind(&Startlights::stateAppear,    this);
+    m_stateToFunctionMap[FirstRow]  = std::bind(&Startlights::stateFirstRow,  this);
+    m_stateToFunctionMap[SecondRow] = std::bind(&Startlights::stateSecondRow, this);
+    m_stateToFunctionMap[ThirdRow]  = std::bind(&Startlights::stateThirdRow,  this);
+    m_stateToFunctionMap[Go]        = std::bind(&Startlights::stateGo,        this);
+    m_stateToFunctionMap[Disappear] = std::bind(&Startlights::stateDisappear, this);
+    m_stateToFunctionMap[End]       = std::bind(&Startlights::stateEnd,       this);
 }
 
 bool Startlights::timeElapsed(MCUint limit)
@@ -37,83 +45,7 @@ bool Startlights::timeElapsed(MCUint limit)
 
 bool Startlights::update()
 {
-    const MCUint second = m_stepsPerState;
-    switch (m_state)
-    {
-    case LightsInit:
-        m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
-        m_animation.init(
-             m_pos,
-             m_pos,
-             MCVector3dF(m_pos.i(), m_height / 2, 0),
-             second / 3);
-        m_state = LightsAppear;
-        m_glowScale = 1.0;
-        InputHandler::setEnabled(false);
-        return true;
-
-    case LightsAppear:
-        m_animation.update();
-        if (timeElapsed(second))
-        {
-            m_state = LightsFirstRow;
-            m_messageOverlay.addMessage("3");
-        }
-        return true;
-
-    case LightsFirstRow:
-        if (timeElapsed(second))
-        {
-            m_state = LightsSecondRow;
-            m_messageOverlay.addMessage("2");
-        }
-        return true;
-
-    case LightsSecondRow:
-        if (timeElapsed(second))
-        {
-            m_state = LightsThirdRow;
-            m_messageOverlay.addMessage("1");
-        }
-        return true;
-
-    case LightsThirdRow:
-        if (timeElapsed(second))
-        {
-            m_state = LightsGo;
-            m_messageOverlay.addMessage("GO!!!");
-            InputHandler::setEnabled(true);
-            emit raceStarted();
-        }
-        return true;
-
-    case LightsGo:
-        if (timeElapsed(second))
-        {
-            m_state = LightsDisappear;
-            m_animation.init(
-                m_pos,
-                m_pos,
-                MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
-                second / 3);
-        }
-
-        m_glowScale *= 0.75;
-
-        return true;
-
-    case LightsDisappear:
-        if (m_animation.update())
-        {
-            m_state = LightsEnd;
-        }
-        return true;
-
-    case LightsEnd:
-        return false;
-    }
-
-    return true;
+    return m_stateToFunctionMap[m_state]();
 }
 
 void Startlights::setDimensions(MCUint width, MCUint height)
@@ -124,10 +56,10 @@ void Startlights::setDimensions(MCUint width, MCUint height)
 
 void Startlights::reset()
 {
-    m_state = LightsInit;
+    m_state = Init;
 }
 
-Startlights::LightState Startlights::state() const
+Startlights::State Startlights::state() const
 {
     return m_state;
 }
@@ -141,3 +73,110 @@ MCFloat Startlights::glowScale() const
 {
     return m_glowScale;
 }
+
+bool Startlights::stateInit()
+{
+    const MCUint second = m_stepsPerState;
+
+    m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
+    m_animation.init(
+         m_pos,
+         m_pos,
+         MCVector3dF(m_pos.i(), m_height / 2, 0),
+         second / 3);
+    m_state = Appear;
+    m_glowScale = 1.0;
+    InputHandler::setEnabled(false);
+
+    return true;
+}
+
+bool Startlights::stateAppear()
+{
+    const MCUint second = m_stepsPerState;
+
+    m_animation.update();
+    if (timeElapsed(second))
+    {
+        m_state = FirstRow;
+        m_messageOverlay.addMessage("3");
+    }
+
+    return true;
+}
+
+bool Startlights::stateFirstRow()
+{
+    const MCUint second = m_stepsPerState;
+
+    if (timeElapsed(second))
+    {
+        m_state = SecondRow;
+        m_messageOverlay.addMessage("2");
+    }
+
+    return true;
+}
+
+bool Startlights::stateSecondRow()
+{
+    const MCUint second = m_stepsPerState;
+
+    if (timeElapsed(second))
+    {
+        m_state = ThirdRow;
+        m_messageOverlay.addMessage("1");
+    }
+
+    return true;
+}
+
+bool Startlights::stateThirdRow()
+{
+    const MCUint second = m_stepsPerState;
+
+    if (timeElapsed(second))
+    {
+        m_state = Go;
+        m_messageOverlay.addMessage("GO!!!");
+        InputHandler::setEnabled(true);
+        emit raceStarted();
+    }
+
+    return true;
+}
+
+bool Startlights::stateGo()
+{
+    const MCUint second = m_stepsPerState;
+
+    if (timeElapsed(second))
+    {
+        m_state = Disappear;
+        m_animation.init(
+            m_pos,
+            m_pos,
+            MCVector3dF(m_pos.i(), 3 * m_height / 2, 0),
+            second / 3);
+    }
+
+    m_glowScale *= 0.75;
+
+    return true;
+}
+
+bool Startlights::stateDisappear()
+{
+    if (m_animation.update())
+    {
+        m_state = End;
+    }
+
+    return true;
+}
+
+bool Startlights::stateEnd()
+{
+    return false;
+}
+

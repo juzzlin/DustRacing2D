@@ -23,6 +23,9 @@
 
 #include "updateableif.hpp"
 
+#include <functional>
+#include <map>
+
 class MessageOverlay;
 class Race;
 
@@ -35,16 +38,16 @@ class Startlights : public QObject, public UpdateableIf
 public:
 
     //! Startlights animation sequence states.
-    enum LightState
+    enum State
     {
-        LightsInit,
-        LightsAppear,
-        LightsFirstRow,
-        LightsSecondRow,
-        LightsThirdRow,
-        LightsGo,
-        LightsDisappear,
-        LightsEnd
+        Init,
+        Appear,
+        FirstRow,
+        SecondRow,
+        ThirdRow,
+        Go,
+        Disappear,
+        End
     };
 
     //! Constructor.
@@ -56,7 +59,7 @@ public:
     //! \reimp
     virtual void reset();
 
-    LightState state() const;
+    State state() const;
 
     void setDimensions(MCUint width, MCUint height);
 
@@ -70,9 +73,28 @@ signals:
 
 private:
 
+    typedef std::map<State, std::function<bool()> > StateToFunctionMap;
+    StateToFunctionMap m_stateToFunctionMap;
+
+    bool stateInit();
+
+    bool stateAppear();
+
+    bool stateFirstRow();
+
+    bool stateSecondRow();
+
+    bool stateThirdRow();
+
+    bool stateGo();
+
+    bool stateDisappear();
+
+    bool stateEnd();
+
     bool timeElapsed(MCUint limit);
 
-    LightState        m_state;
+    State             m_state;
     MCUint            m_counter;
     MCUint            m_stepsPerState;
     MCVector3dF       m_pos;

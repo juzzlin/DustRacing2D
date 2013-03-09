@@ -97,28 +97,28 @@ void StartlightsOverlay::render()
 
     switch (m_model.state())
     {
-    case Startlights::LightsFirstRow:
+    case Startlights::FirstRow:
         renderLights(3, 1, m_model.glowScale());
         break;
 
-    case Startlights::LightsSecondRow:
+    case Startlights::SecondRow:
         renderLights(3, 2, m_model.glowScale());
         break;
 
-    case Startlights::LightsThirdRow:
+    case Startlights::ThirdRow:
         renderLights(3, 3, m_model.glowScale());
         break;
 
-    case Startlights::LightsGo:
+    case Startlights::Go:
         renderLights(3, 0, m_model.glowScale(), true);
         break;
 
-    case Startlights::LightsAppear:
-    case Startlights::LightsDisappear:
+    case Startlights::Appear:
+    case Startlights::Disappear:
         renderLights(3, 0, m_model.glowScale());
         break;
 
-    case Startlights::LightsEnd:
+    case Startlights::End:
         break;
 
     default:
