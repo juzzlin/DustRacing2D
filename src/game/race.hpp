@@ -84,11 +84,19 @@ public slots:
 private:
 
     void checkForNewLapRecord();
+
     void checkForNewBestPosition(const Car & car);
+
     void checkIfCarIsStuck(Car & car);
+
     bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
+
     void moveCarOntoPreviousCheckPoint(Car & car);
+
     void setTrack(Track & track);
+
+    void translateCarsToStartPositions();
+
     void updateRouteProgress(Car & car);
 
     typedef std::vector<Car *> CarVector;

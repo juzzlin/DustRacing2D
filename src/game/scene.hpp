@@ -106,7 +106,6 @@ private:
     void renderPlayerScene(MCCamera & camera);
     void resizeOverlays();
     void setWorldDimensions();
-    void translateCarsToStartPositions();
     void updateAI();
     void updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object);
     void updateRace();

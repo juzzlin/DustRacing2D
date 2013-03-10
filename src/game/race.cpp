@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <cassert>
 
+#include <MCLogger>
+
 static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
 static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
@@ -50,6 +52,7 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 void Race::init(Track & track, int lapCount)
 {
     setTrack(track);
+    translateCarsToStartPositions();
 
     for(Car * car : m_cars)
     {
@@ -67,6 +70,111 @@ void Race::init(Track & track, int lapCount)
     m_winnerFinished       = false;
     m_started              = false;
     m_lapCount             = lapCount;
+}
+
+void Race::translateCarsToStartPositions()
+{
+    assert(m_track);
+
+    if (TrackTile * finishLine = m_track->finishLine())
+    {
+        const MCFloat startTileX = finishLine->location().x();
+        const MCFloat startTileY = finishLine->location().y();
+        const MCFloat tileWidth  = TrackTile::TILE_W;
+        const MCFloat tileHeight = TrackTile::TILE_H;
+        const MCFloat spacing    = 0.75 * TrackTile::TILE_W;
+        const MCFloat oddOffset  = TrackTile::TILE_W / 8;
+
+        // Reverse order
+        std::vector<Car *> order = m_cars;
+        std::reverse(order.begin(), order.end());
+
+        // Move the human player to a starting place that equals the best position
+        // of the current race track.
+        if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
+        {
+            const int bestPos = Settings::instance().loadBestPos(*m_track);
+            if (bestPos > 0)
+            {
+                order.insert(order.begin() + bestPos - 1, *m_cars.begin());
+                order.pop_back();
+            }
+        }
+
+        // Position the cars into two queues.
+        const int routeDirection = finishLine->rotation() % 360;
+        switch (routeDirection)
+        {
+        case 90:
+        case -270:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(180);
+            }
+            break;
+
+        default:
+        case 270:
+        case -90:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX - rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(0);
+            }
+            break;
+
+        case 0:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
+                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY - colPos));
+
+                order.at(i)->rotate(90);
+            }
+            break;
+
+        case 180:
+        case -180:
+            for (MCUint i = 0; i < order.size(); i++)
+            {
+                const MCFloat rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
+                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
+
+                order.at(i)->translate(
+                    MCVector2d<MCFloat>(
+                        startTileX + rowPos,
+                        startTileY + colPos));
+
+                order.at(i)->rotate(270);
+            }
+            break;
+        }
+    }
+    else
+    {
+        MCLogger().error() << "Finish line tile not found in track '" <<
+            m_track->trackData().name().toStdString() << "'";
+    }
 }
 
 void Race::start()
