@@ -19,15 +19,15 @@
 #include <MCTextureText>
 
 static MCTextureText CREDITS_TEXT(
-    "PROGRAMMING\n\n"
+    "PROGRAMMING BY\n\n"
     "* Jussi Lind\n\n"
-    "GRAPHICS\n\n"
+    "GRAPHICS BY\n\n"
     "* Jussi Lind\n"
     "* Ville Makiranta\n"
     "* FindIcons.com\n\n"
-    "MUSIC\n\n"
+    "MUSIC PLAYED & COMPOSED BY\n\n"
     "* Jussi Lind\n\n"
-    "RACE TRACKS\n\n"
+    "RACE TRACKS BY\n\n"
     "* Jussi Lind\n\n"
     "FONT\n\n"
     "* Ubuntu Monospace\n\n"

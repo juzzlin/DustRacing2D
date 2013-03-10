@@ -35,8 +35,8 @@ namespace {
 // Converts 0.0..1.0 scaled volume to SDL's internal volume.
 static int getSDLVolume(float volume)
 {
-    volume = std::min(volume, 0.0f);
-    volume = std::max(volume, 1.0f);
+    volume = std::max(volume, 0.0f);
+    volume = std::min(volume, 1.0f);
 
     return static_cast<int>(volume * MIX_MAX_VOLUME);
 }
@@ -101,13 +101,13 @@ void Sound::stop()
     }
 }
 
-void Sound::stop(int newChannel)
+void Sound::stop(int channel)
 {
     if (Sound::m_enabled)
     {
-        if (newChannel != -1)
+        if (channel != -1)
         {
-            Mix_HaltChannel(newChannel);
+            Mix_HaltChannel(channel);
         }
     }
 }
@@ -184,7 +184,11 @@ void Sound::enable(bool bFlag)
 
 void Sound::setVolume(float volume)
 {
-    Sound::m_volume = volume;
+    if (Sound::m_enabled)
+    {
+        Sound::m_volume = volume;
+        Mix_VolumeChunk(m_data, getSDLVolume(Sound::m_volume));
+    }
 }
 
 float Sound::volume()
@@ -198,6 +202,11 @@ void Sound::setChannels(int numChannels)
     {
         Mix_AllocateChannels(numChannels);
     }
+}
+
+const std::string & Sound::name() const
+{
+    return m_name;
 }
 
 Sound::~Sound()

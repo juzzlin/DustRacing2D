@@ -45,7 +45,8 @@
 
 #include <cassert>
 
-static const unsigned int MAX_PLAYERS = 2;
+static const unsigned int MAX_PLAYERS    = 2;
+static const float        DEFAULT_VOLUME = 0.5;
 
 Game * Game::m_instance = nullptr;
 
@@ -79,11 +80,11 @@ Game::Game()
     assert(!Game::m_instance);
     Game::m_instance = this;
 
-    // Connect pause toggling
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
-
-    // Connect signal that exits the whole game
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
+    connect(
+        m_eventHandler, SIGNAL(soundRequested(const std::string &)),
+        this, SLOT(playSound(const std::string &)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
@@ -237,10 +238,7 @@ bool Game::init()
         return false;
     }
 
-    m_eventHandler->setMenuClickSound(m_soundManager->newSound("menuClick"));
-    m_eventHandler->setMenuSelectSound(m_soundManager->newSound("menuSelect"));
-
-    m_menuMusic = &m_soundManager->newMusic("theme");
+    m_menuMusic  = &m_soundManager->music("theme");
 
     return true;
 }
@@ -282,7 +280,7 @@ void Game::playMenuMusic()
 {
     if (m_menuMusic)
     {
-        m_menuMusic->play(-1);
+        m_menuMusic->play(-1, DEFAULT_VOLUME);
     }
 }
 
@@ -290,8 +288,14 @@ void Game::playGameMusic()
 {
     if (m_gameMusic)
     {
-        m_gameMusic->play(-1);
+        m_gameMusic->play(-1, DEFAULT_VOLUME);
     }
+}
+
+void Game::playSound(const std::string & handle)
+{
+    SFX::Sound & sound = m_soundManager->sound(handle);
+    sound.play(0, DEFAULT_VOLUME);
 }
 
 void Game::updateFrame()

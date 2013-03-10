@@ -65,6 +65,9 @@ public:
      *  \param ms Fade time in ms. */
     static void fadeOut(int ms);
 
+    //! \return The name/handle of the music object.
+    const std::string & name() const;
+
 private:
 
     //! Hidden assignment

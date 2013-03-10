@@ -21,9 +21,7 @@
 #include <QKeyEvent>
 #include <QObject>
 
-namespace SFX {
-class Sound;
-}
+#include <string>
 
 //! Handles key and mouse events.
 class EventHandler : public QObject
@@ -41,15 +39,13 @@ public:
 
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
-    void setMenuClickSound(SFX::Sound & menuClick);
-
-    void setMenuSelectSound(SFX::Sound & menuSelect);
-
 signals:
 
     void pauseToggled();
 
     void gameExited();
+
+    void soundRequested(const std::string & handle);
 
 private:
 
@@ -73,10 +69,6 @@ private:
 
     bool mapKeyToAction(int player, InputHandler::InputAction action, int key);
 
-    void playMenuClickSound();
-
-    void playMenuSelectSound();
-
     typedef std::map<int, ActionMapping> KeyToActionMap;
 
     KeyToActionMap            m_keyToActionMap;
@@ -84,8 +76,6 @@ private:
     bool                      m_captureMode;
     InputHandler::InputAction m_captureAction;
     int                       m_capturePlayer;
-    SFX::Sound              * m_menuClick;
-    SFX::Sound              * m_menuSelect;
 };
 
 #endif // EVENTHANDLER_HPP

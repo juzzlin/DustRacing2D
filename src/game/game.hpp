@@ -35,6 +35,7 @@ class MCAssetManager;
 namespace SFX {
 class Device;
 class Music;
+class Sound;
 class SoundManager;
 }
 
@@ -99,6 +100,7 @@ public slots:
     void exitGame();
     void playMenuMusic();
     void playGameMusic();
+    void playSound(const std::string & handle);
 
 private slots:
 

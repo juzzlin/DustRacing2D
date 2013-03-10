@@ -24,8 +24,8 @@
 namespace SFX {
 
 SoundManager::SoundManager()
-: m_listSounds()
-, m_listMusics()
+: m_soundObjectLlist()
+, m_musicObjectList()
 , m_mapChunks()
 , m_mapMusics()
 , m_channel(0)
@@ -74,35 +74,62 @@ void SoundManager::load(
     }
 }
 
-Sound & SoundManager::newSound(const std::string & strId) throw (MCException)
+Sound & SoundManager::sound(const std::string & handle) throw (MCException)
 {
-    const auto chunkIter = m_mapChunks.find(strId);
+    const auto chunkIter = m_mapChunks.find(handle);
     if (chunkIter == m_mapChunks.end())
     {
-        throw MCException("Cannot find sound data for handle '" + strId + "'");
+        throw MCException("Cannot find sound data for handle '" + handle + "'");
     }
 
-    Sound * sound = new Sound(strId, chunkIter->second, m_channel);
+    for (auto soundIter = m_soundObjectLlist.begin(); soundIter != m_soundObjectLlist.end(); soundIter++)
+    {
+        if ((*soundIter)->name() == handle)
+        {
+            return **soundIter;
+        }
+    }
 
-    // Store for deletion
-    m_listSounds.push_back(SoundPtr(sound));
+    Sound * sound = new Sound(handle, chunkIter->second, m_channel);
+    m_soundObjectLlist.push_back(SoundPtr(sound));
 
     assert(sound);
     return *sound;
 }
 
-Music & SoundManager::newMusic(const std::string & strId) throw (MCException)
+Sound & SoundManager::createSound(const std::string & handle) throw (MCException)
 {
-    const auto musicIter = m_mapMusics.find(strId);
-    if (musicIter == m_mapMusics.end())
+    const auto chunkIter = m_mapChunks.find(handle);
+    if (chunkIter == m_mapChunks.end())
     {
-        throw MCException("Cannot find music data for handle '" + strId + "'");
+        throw MCException("Cannot find sound data for handle '" + handle + "'");
     }
 
-    Music * music = new Music(strId, musicIter->second);
+    Sound * sound = new Sound(handle, chunkIter->second, m_channel);
+    m_soundObjectLlist.push_back(SoundPtr(sound));
 
-    // Store for deletion
-    m_listMusics.push_back(MusicPtr(music));
+    assert(sound);
+    return *sound;
+}
+
+Music & SoundManager::music(const std::string & handle) throw (MCException)
+{
+    const auto musicIter = m_mapMusics.find(handle);
+    if (musicIter == m_mapMusics.end())
+    {
+        throw MCException("Cannot find music data for handle '" + handle + "'");
+    }
+
+    for (auto musicIter = m_musicObjectList.begin(); musicIter != m_musicObjectList.end(); musicIter++)
+    {
+        if ((*musicIter)->name() == handle)
+        {
+            return **musicIter;
+        }
+    }
+
+    Music * music = new Music(handle, musicIter->second);
+    m_musicObjectList.push_back(MusicPtr(music));
 
     assert(music);
     return *music;

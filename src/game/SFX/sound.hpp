@@ -80,6 +80,13 @@ public:
     //! Get channel of the sound
     int channel() const;
 
+    /*! Set volume.
+     * \param volume Volume: 0.0..1.0 */
+    void setVolume(float volume);
+
+    //! Get volume.
+    float volume();
+
     //! Add listener object to scale volume with.
     static void addListener(Sound::SoundListenerIf & listener);
 
@@ -96,16 +103,12 @@ public:
      *  No calls to underlying SDL_mixer are done when disabled. */
     static void enable(bool flag);
 
-    /*! Set global default volume.
-     * \param volume Volume 0.0..1.0 */
-    static void setVolume(float volume);
-
-    //! Get global volume
-    static float volume();
-
     //! Set/allocate channels
     static void setChannels(int numChannels);
   
+    //! \return The name/handle of the sound object.
+    const std::string & name() const;
+
 private:
 
     //! Hidden assignment

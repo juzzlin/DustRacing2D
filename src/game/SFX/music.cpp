@@ -20,8 +20,8 @@ namespace {
 // Converts 0.0..1.0 scaled volume to SDL's internal volume.
 static int getSDLVolume(float volume)
 {
-    volume = std::min(volume, 0.0f);
-    volume = std::max(volume, 1.0f);
+    volume = std::max(volume, 0.0f);
+    volume = std::min(volume, 1.0f);
 
     return static_cast<int>(volume * MIX_MAX_VOLUME);
 }
@@ -90,6 +90,11 @@ void Music::setVolume(float volume)
 float Music::volume()
 {
     return Music::m_volume;
+}
+
+const std::string & Music::name() const
+{
+    return m_name;
 }
 
 Music::~Music()

@@ -31,16 +31,39 @@ namespace SFX {
 class Sound;
 class Music;
 
-/*! \class SoundManager
- *  \brief Sound/music management class operating on (wrapping) SDL's sound stuff. */
+/*!
+ * \class SoundManager
+ * \brief Sound/music management class based on SDL Mixer.
+ *
+ * Reads a config file that maps sound data to given handles.
+ * User then requests sound objects from the manager by using
+ * the defined handles.
+ *
+ * Example sound config file:
+ *
+ * <?xml version="1.0"?>
+ *
+ * <!-- This file maps sound handles used in the game to sound data files -->
+ * <sounds baseSoundPath="./sounds/">
+ *
+ * <!-- Sound files -->
+ * <sound handle="menuClick" file="menuClick.ogg"/>
+ * <sound handle="menuSelect" file="menuSelect.ogg"/>
+ *
+ * <!-- Music files -->
+ * <music handle="theme" file="theme.ogg"/>
+ *
+ * </sounds>
+ *
+ */
 class SoundManager
 {
 public:
 
-    //! Constructor
+    //! Constructor.
     SoundManager();
 
-    //! Destructor
+    //! Destructor.
     virtual ~SoundManager();
 
     //! Loads sounds from strBasePath using the given mapping file.
@@ -52,11 +75,20 @@ public:
         const std::string & configFilePath,
         const std::string & baseDataPath) throw (MCException);
 
-    //! Returns a new sound object using the sound data associated with strId.
-    Sound & newSound(const std::string & strId) throw (MCException);
+    /*! Returns the first sound object using the sound data associated with handle.
+     *  Game objects can share the same sound objects, but if the sounds need
+     *  to be, for example, stopped individually, then multiple instances
+     *  needs to be used. See Sound::createSound().
+     *  SoundManager keeps the ownership of the returned object. */
+    Sound & sound(const std::string & handle) throw (MCException);
 
-    //! Returns a new music object using the music data associated with strId.
-    Music & newMusic(const std::string & strId) throw (MCException);
+    /*! Returns a NEW sound object using the sound data associated with handle.
+     *  SoundManager keeps the ownership of the returned object. */
+    Sound & createSound(const std::string & handle) throw (MCException);
+
+    /*! Returns the first music object using the sound data associated with handle.
+     *  SoundManager keeps the ownership of the returned object. */
+    Music & music(const std::string & handle) throw (MCException);
 
 private:
 
@@ -69,12 +101,12 @@ private:
   //! Vector for resulting Sounds
   typedef std::shared_ptr<Sound> SoundPtr;
   typedef std::list<SoundPtr> SoundList;
-  SoundList m_listSounds;
+  SoundList m_soundObjectLlist;
 
   //! Vector for resulting Musics
   typedef std::shared_ptr<Music> MusicPtr;
   typedef std::list<MusicPtr> MusicList;
-  MusicList m_listMusics;
+  MusicList m_musicObjectList;
 
   //! Map for SDL's Mix_Chunks
   typedef std::unordered_map<std::string, Mix_Chunk *> ChunkHash;
