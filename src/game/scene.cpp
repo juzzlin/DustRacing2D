@@ -96,6 +96,10 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 {
     QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
 
+    QObject::connect(
+        m_startlights, SIGNAL(soundRequested(const std::string &)),
+        &m_game, SLOT(playSound(const std::string &)));
+
     m_stateMachine.setRenderer(renderer);
     m_stateMachine.setRace(m_race);
     m_stateMachine.setStartlights(*m_startlights);

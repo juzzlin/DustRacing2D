@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <map>
+#include <string>
 
 class MessageOverlay;
 class Race;
@@ -69,6 +70,7 @@ public:
 
 signals:
 
+    void soundRequested(const std::string & handle);
     void raceStarted();
 
 private:

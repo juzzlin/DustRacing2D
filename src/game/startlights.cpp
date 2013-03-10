@@ -100,6 +100,7 @@ bool Startlights::stateAppear()
     {
         m_state = FirstRow;
         m_messageOverlay.addMessage("3");
+        emit soundRequested("startlightsBeep");
     }
 
     return true;
@@ -113,6 +114,7 @@ bool Startlights::stateFirstRow()
     {
         m_state = SecondRow;
         m_messageOverlay.addMessage("2");
+        emit soundRequested("startlightsBeep");
     }
 
     return true;
@@ -126,6 +128,7 @@ bool Startlights::stateSecondRow()
     {
         m_state = ThirdRow;
         m_messageOverlay.addMessage("1");
+        emit soundRequested("startlightsBeep");
     }
 
     return true;
@@ -141,6 +144,7 @@ bool Startlights::stateThirdRow()
         m_messageOverlay.addMessage("GO!!!");
         InputHandler::setEnabled(true);
         emit raceStarted();
+        emit soundRequested("startlightsGo");
     }
 
     return true;
