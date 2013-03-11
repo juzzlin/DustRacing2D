@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "device.hpp"
+#include "sound.hpp"
 
 #include <SDL/SDL_mixer.h>
 #include <cassert>
@@ -41,6 +42,8 @@ bool Device::init(int sampleRate, int numChannels)
     {
         return false;
     }
+
+    Sound::init();
 
     m_inited = true;
 

@@ -19,6 +19,8 @@
 #include <MCObject>
 #include <MCVector2d>
 
+#include <Sound>
+
 #include "updateableif.hpp"
 
 class MCSurface;
@@ -26,7 +28,7 @@ class MCFrictionGenerator;
 class Route;
 
 //! Base class for race cars.
-class Car : public MCObject, public UpdateableIf
+class Car : public MCObject, public UpdateableIf, public SFX::Sound::SoundListenerIf
 {
 public:
 
@@ -132,6 +134,12 @@ public:
 
     //! \reimp
     virtual void reset();
+
+    //! \reimp
+    virtual int getEarX();
+
+    //! \reimp
+    virtual int getEarY();
 
     void setLeftSideOffTrack(bool state);
 

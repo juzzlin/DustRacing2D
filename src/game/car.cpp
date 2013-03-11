@@ -14,12 +14,16 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
+#include "game.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
 #include "particlemanager.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
+
+#include <Sound>
+#include <SoundManager>
 
 #include <MCAssetManager>
 #include <MCCollisionEvent>
@@ -386,6 +390,16 @@ void Car::reset()
 {
 }
 
+int Car::getEarX()
+{
+    return location().i();
+}
+
+int Car::getEarY()
+{
+    return location().j();
+}
+
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
@@ -423,6 +437,23 @@ void Car::collisionEvent(MCCollisionEvent & event)
             ParticleManager::instance().doSparkle(
                 event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
             ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+
+            if (std::rand()%2 == 0)
+            {
+                SFX::Sound & hitSound = Game::instance().soundManager().sound("carHit");
+                if (!hitSound.isPlaying())
+                {
+                    hitSound.play(location().i(), location().j());
+                }
+            }
+            else
+            {
+                SFX::Sound & hitSound = Game::instance().soundManager().sound("carHit2");
+                if (!hitSound.isPlaying())
+                {
+                    hitSound.play(location().i(), location().j());
+                }
+            }
         }
         // Check if the car is colliding with trees or plants.
         else if (
@@ -431,6 +462,8 @@ void Car::collisionEvent(MCCollisionEvent & event)
         {
             ParticleManager::instance().doLeaf(
                 event.contactPoint(), velocity() * 0.1, 0.0, 0.75, 0.0, 0.75);
+
+            Game::instance().soundManager().sound("ouch").play(location().i(), location().j());
         }
     }
 

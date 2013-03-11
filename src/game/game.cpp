@@ -218,6 +218,12 @@ EventHandler & Game::eventHandler() const
     return *m_eventHandler;
 }
 
+SFX::SoundManager & Game::soundManager() const
+{
+    assert(m_soundManager);
+    return *m_soundManager;
+}
+
 Renderer & Game::renderer() const
 {
     assert(m_renderer);
@@ -363,7 +369,8 @@ void Game::playGameMusic()
 void Game::playSound(const std::string & handle)
 {
     SFX::Sound & sound = m_soundManager->sound(handle);
-    sound.play(0, DEFAULT_VOLUME);
+    sound.setVolume(DEFAULT_VOLUME);
+    sound.play();
 }
 
 void Game::updateFrame()

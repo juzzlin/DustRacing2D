@@ -101,6 +101,8 @@ public:
 
     EventHandler & eventHandler() const;
 
+    SFX::SoundManager & soundManager() const;
+
 public slots:
 
     void togglePause();

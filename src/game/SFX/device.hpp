@@ -27,7 +27,7 @@ public:
     Device();
 
     //! Destructor.
-    ~Device();
+    virtual ~Device();
 
     //! \returns The singleton instance.
     static Device & instance();
@@ -39,6 +39,12 @@ public:
     bool inited() const;
 
 private:
+
+    //! Hidden copy constructor.
+    Device(const Device &);
+
+    //! Hidden assignment.
+    Device & operator=(const Device &);
 
     bool m_inited;
 

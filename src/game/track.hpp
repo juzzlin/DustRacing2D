@@ -44,10 +44,10 @@ public:
     //! Render as seen through the given camera window.
     void render(MCCamera * pCamera);
 
-    //! Return width in pixels.
+    //! Return width in length units.
     MCUint width() const;
 
-    //! Return height in pixels.
+    //! Return height in length units.
     MCUint height() const;
 
     //! Return the track data.

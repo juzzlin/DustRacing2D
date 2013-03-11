@@ -18,14 +18,16 @@
 
 #include <SDL/SDL_mixer.h>
 
+#include <map>
 #include <string>
 #include <vector>
+
+#include "device.hpp"
 
 namespace SFX {
 
 /*! \class Sound
- *  \brief A wrapper for SDL's Mix_Chunk with automatic panning feature.
- */
+ *  \brief A wrapper for SDL's Mix_Chunk with automatic positional volume control. */
 class Sound
 {
 public:
@@ -43,10 +45,10 @@ public:
     };
 
     /*! Constructor
-     * \param name    Name / handle of the sound.
-     * \param data    The actual sound data.
-     * \param channel Default channel for the sound. */
-    Sound(std::string name, Mix_Chunk * data, int channel);
+     * \param name Name / handle of the sound.
+     * \param data The actual sound data.
+     * \param defaultChannel Default channel for the sound. */
+    Sound(std::string name, Mix_Chunk * data, int defaultChannel = -1);
 
     //! Destructor
     virtual ~Sound();
@@ -58,16 +60,16 @@ public:
      * \param sourceY Y-coordinate for the sound.
      * \param loops Number of loops to be played.
      * \return channel playing, -1 on failure. */
-    int play(int sourceX, int sourceY, int loops);
+    int play(int sourceX, int sourceY, int loops = 0);
+
+    //! Get x-coordinate
+    int sourceX() const;
+
+    //! Get y-coordinate
+    int sourceY() const;
 
     /*! Play sound
      * \param loops Number of loops to be played.
-     * \param volume Volume 0.0..1.0
-     * \return channel playing, -1 on failure. */
-    int play(int loops, float volume);
-
-    /*! Play sound for given times using Sound::volume() as the volume.
-     * \param loops Number of loops to be played
      * \return channel playing, -1 on failure. */
     int play(int loops = 0);
 
@@ -77,8 +79,11 @@ public:
     //! Stop sound (all sounds in the given channel)
     void stop(int channel);
 
+    //! Set channel.
+    void setDefaultChannel(int channel);
+
     //! Get channel of the sound
-    int channel() const;
+    int currentChannel() const;
 
     /*! Set volume.
      * \param volume Volume: 0.0..1.0 */
@@ -87,14 +92,20 @@ public:
     //! Get volume.
     float volume();
 
+    /*! \return True, if the sound is playing. */
+    bool isPlaying();
+
+    //! \return The name/handle of the sound object.
+    const std::string & name() const;
+
     //! Add listener object to scale volume with.
     static void addListener(Sound::SoundListenerIf & listener);
 
     //! Remove all listeners.
     static void removeListeners();
 
-    //! Set area boundaries.
-    static void setSoundAreaBoundaries(int x1, int y1, int x2, int y2);
+    //! Set maximum distance that equals zero volume.
+    static void setMaximumDistance(int distance);
 
     //! Stop all currently playing sounds.
     static void stopSounds();
@@ -103,11 +114,13 @@ public:
      *  No calls to underlying SDL_mixer are done when disabled. */
     static void enable(bool flag);
 
-    //! Set/allocate channels
-    static void setChannels(int numChannels);
-  
-    //! \return The name/handle of the sound object.
-    const std::string & name() const;
+    /*! Allocate channels.
+     * \return The number of channels allocated */
+    static int allocateChannels(int numChannels);
+
+    /*! Update volume. Must be periodically called if dynamic changes in volume
+     *  due to moving listeners is wanted. */
+    static void updateVolumes();
 
 private:
 
@@ -117,32 +130,54 @@ private:
     //! Hidden copy constructor
     Sound(const Sound & r);
 
+    static void init();
+
+    //! Called, when a channel finishes.
+    static void channelCallback(int channel);
+
+    static void calculateAverageListenerPosition(int & listenerX, int & listenerY);
+
+    //! Sound volume scaler logic
+    static float getScaledVolume(int sourceX, int sourceY);
+
     //! Enable / disable sound system
     static bool m_enabled;
 
-    //! Global max sound level
-    static float m_volume;
-
-    //! Vector of reference objects (sound sources)
-    static std::vector<SoundListenerIf *> m_listeners;
-
-    //! Area boundaries
-    static int m_soundAreaX1, m_soundAreaY1, m_soundAreaX2, m_soundAreaY2;
-
-    //! Maximum distance within the sound is played
+    //! Maximum distance within which the sound is played
     static int m_maxDist;
-
-    //! Sound volume scaler logic
-    int getScaledSDLVolume(int sourceX, int sourceY);
 
     //! Name of the sound
     std::string m_name;
 
+    //! Current volume
+    float m_volume;
+
+    //! default channel
+    int m_defaultChannel;
+
     //! Current channel
-    int m_channel;
+    int m_currentChannel;
+
+    //! X-coordinate of the source.
+    int m_sourceX;
+
+    //! Y-coordinate of the source.
+    int m_sourceY;
 
     //! SDL sound data
     Mix_Chunk * m_data;
+
+    bool m_positional;
+
+    //! Vector of sound listeners.
+    typedef std::vector<SoundListenerIf *> ListenerVector;
+    static ListenerVector m_listeners;
+
+    //! Channel to sound object mapping.
+    typedef std::map<int, Sound *> ChannelToSoundMap;
+    static ChannelToSoundMap m_channelToSoundMap;
+
+    friend class Device;
 };
 
 } // namespace SFX
