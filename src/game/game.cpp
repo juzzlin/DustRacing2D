@@ -56,9 +56,9 @@ Game::Game()
 , m_scene(nullptr)
 , m_assetManager(new MCAssetManager(
     Config::Common::dataPath,
-    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "textures.conf",
-    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "fonts.conf",
-    std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "meshes.conf"))
+    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "textures.conf",
+    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "fonts.conf",
+    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "meshes.conf"))
 , m_soundDevice(new SFX::Device)
 , m_soundManager(new SFX::SoundManager)
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
@@ -211,7 +211,7 @@ bool Game::initAudio()
 void Game::loadSounds()
 {
     const std::string soundConfigPath(
-        std::string(Config::Common::dataPath) + QDir::separator().toAscii() + "sounds.conf");
+        std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "sounds.conf");
     MCLogger().info() << "Loading sound config from '" << soundConfigPath << "'..";
     m_soundManager->load(soundConfigPath, std::string(Config::Common::dataPath));
 }

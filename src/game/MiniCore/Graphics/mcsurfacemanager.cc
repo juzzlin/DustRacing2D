@@ -230,13 +230,13 @@ void MCSurfaceManager::load(
             const MCSurfaceMetaData & data = loader.surface(i);
 
             const std::string path =
-                baseDataPath + QDir::separator().toAscii() + data.imagePath1;
+                baseDataPath + QDir::separator().toLatin1() + data.imagePath1;
 
             // Create a 3D texture if data.imagePath2 is set.
             if (!data.imagePath2.empty())
             {
                 const std::string path2 =
-                    baseDataPath + QDir::separator().toAscii() + data.imagePath2;
+                    baseDataPath + QDir::separator().toLatin1() + data.imagePath2;
 
                 // Load the images and create a multitexture.
                 QImage textureImage1;
@@ -282,7 +282,7 @@ void MCSurfaceManager::load(
 MCSurface & MCSurfaceManager::surface(const std::string & id) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (m_surfaceMap.find(id) == m_surfaceMap.end())
+    if (m_surfaceMap.count(id) == 0)
     {
         throw MCException("Cannot find texture object for handle '" + id + "'");
     }

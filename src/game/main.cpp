@@ -54,7 +54,9 @@ int main(int argc, char ** argv)
         Settings settings;
 
         // Create the QApplication
+#ifndef USE_QT5
         QApplication::setGraphicsSystem("opengl");
+#endif
         QApplication app(argc, argv);
 
         initLogger();

@@ -112,7 +112,7 @@ MCTextureFont & MCTextureFontManager::font(
     const std::string & name) const throw (MCException)
 {
     // Try to find existing texture for the surface
-    if (m_fontHash.find(name) == m_fontHash.end())
+    if (m_fontHash.count(name) == 0)
     {
         // No:
         throw MCException("Cannot find font object called '" + name + "'");

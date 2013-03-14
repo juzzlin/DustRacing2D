@@ -42,7 +42,7 @@ void SoundManager::load(
         for (unsigned int i = 0; i < loader.soundCount(); i++)
         {
             const SoundMetaData & data = loader.sound(i);
-            const std::string path = baseDataPath + QDir::separator().toAscii() + data.filePath;
+            const std::string path = baseDataPath + QDir::separator().toLatin1() + data.filePath;
 
             if (data.isMusic)
             {

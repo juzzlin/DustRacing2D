@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.8)
 
 project(DustRacing2D)
 
@@ -8,6 +8,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions 
 
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
+
+# Enable Qt5 support
+option(UseQt5 "UseQt5" OFF)
 
 # Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
 option(ReleaseBuild "ReleaseBuild" OFF)
@@ -47,10 +50,20 @@ add_definitions(-DDATA_PATH="${DATA_PATH}")
 #add_definitions(-DGL_GLEXT_PROTOTYPES) 
 add_definitions(-DGLEW_STATIC)
 
-# Find Qt4 and needed additional components.
-find_package(Qt4 4.7.0 REQUIRED COMPONENTS QtXml QtOpenGL)
-include(${QT_USE_FILE})
-include_directories(${QT_INCLUDES})
+if (UseQt5)
+    add_definitions(-DUSE_QT5)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
+    find_package(Qt5Core REQUIRED)
+    find_package(Qt5OpenGL REQUIRED)
+    find_package(Qt5Xml REQUIRED)
+    find_package(Qt5Widgets REQUIRED)
+else()
+    # Find Qt4 and needed additional components.
+    find_package(Qt4 4.7.0 REQUIRED COMPONENTS QtXml QtOpenGL)
+    include(${QT_USE_FILE})
+    include_directories(${QT_INCLUDES})
+endif()
 
 # Find OpenGL (this is for some glu functions used by the
 # game binary)

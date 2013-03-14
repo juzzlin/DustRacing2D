@@ -77,23 +77,18 @@ set(SRC
     ../common/tracktilebase.cpp
     ../common/mapbase.cpp)
 
-set(MOC_HDRS
-    aboutdlg.hpp
-    eventhandler.hpp
-    game.hpp
-    race.hpp
-    renderer.hpp
-    startlights.hpp
-    timing.hpp)
-
-# Add the resource file
 set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# This command will generate rules that will run rcc
-qt4_add_resources(RC_SRC ${RCS})
-qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
+if (UseQt5)
+    qt5_add_resources(RC_SRC ${RCS})
+else()
+    set(MOC_HDRS
+        aboutdlg.hpp eventhandler.hpp game.hpp race.hpp renderer.hpp startlights.hpp timing.hpp)
+    qt4_add_resources(RC_SRC ${RCS})
+    qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
+endif()
 
 # Add target to copy runtime files to the binary dir.
 add_custom_target(runtime ALL
@@ -128,12 +123,17 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
 
+if(UseQt5)
+    qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
+else()
+    target_link_libraries(${QT_LIBRARIES})
+endif()
+
 target_link_libraries(
     ${GAME_BINARY_NAME}
     MiniCore
     MTFH
     SFX
-    ${QT_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
     ${OPENGL_glu_LIBRARY}
     ${SDL_LIBRARY}

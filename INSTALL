@@ -8,9 +8,15 @@ Build dependencies
 
 Dustrac currently uses CMake as the build system.
 
-Currently the build depends only on Qt (>= 4.7).
+Currently the build depends on Qt4/Qt5, SDL (1.2) and SDL_mixer.
+SDL is used for sounds and music only.
 
-Dustrac also exploits some features of the new C++11
+Both Qt4 and Qt5 are supported, and Qt4 is used by default.
+
+Qt5 can be enabled by passing -DUseQt5=1 to cmake or to
+the configure script.
+
+Dustrac also exploits some features of the C++11
 standard, so a compliant compiler is required (GCC >= 4.6).
 
 Building in the command line on Linux (tested on Ubuntu 12.04)
@@ -18,9 +24,10 @@ Building in the command line on Linux (tested on Ubuntu 12.04)
 
 Development build (the game can be run without installing anything):
 
-1) Install Qt development files (libqt4-dev on Ubuntu 12.04).
-2) Install CMake.
-3) Go to the source directory and run:
+1) Install Qt4 development files (libqt4-dev on Ubuntu).
+2) Install SDL 1.2 development files (libsdl1.2-dev, libsdl-mixer1.2-dev on Ubuntu)
+3) Install CMake.
+4) Go to the source directory and run:
 
 $ ./configure
 
@@ -72,22 +79,23 @@ Building by using QtCreator on Windows (tested on Windows 7)
 ------------------------------------------------------------
 
 1) Download and install CMake.
-2) Download and install QtCreator + Qt SDK.
-3) Download the newest MinGW (GNU compiler tools for Windows).
-   Replace the MinGW that came with QtCreator with the one you
-   downloaded. No need to do this, if the version of g++ in Qt SDK
-   is already >= 4.6.
-4) Make sure that the path to Qt binaries are in your PATH
+2) Download and install QtCreator and Qt libraries.
+3) Download and install SDL development libraries.
+4) Download MinGW (GNU compiler tools for Windows) >= 4.6.
+5) Make sure that the path to Qt binaries and SDL are in your PATH
    (You should be able to run qmake from the command prompt without
    the absolute path).
-5) Start QtCreator and open the top-level CMakeLists.txt from the
+6) Start QtCreator and open the top-level CMakeLists.txt from the
    Dust Racing source directory.
-6) Run CMake and build.
+7) Run CMake and build.
 
-Building by using QtCreator on Linux (tested on Ubuntu 12.04) 
--------------------------------------------------------------
+If you encounter problems, try to build one of the Qt example projects 
+to ensure the toolchains are properly set up.
 
-1) Install QtCreator and CMake from the package repository.
+Building by using QtCreator on Linux (tested on Ubuntu 12.04, 12.10 and 13.04) 
+------------------------------------------------------------------------------
+
+1) Install QtCreator, SDL development libraries and CMake from the package repository.
 2) Start QtCreator and open the top-level CMakeLists.txt from the
    Dust Racing source directory.
 3) Run CMake and build.
@@ -110,3 +118,4 @@ can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
 to cmake (or to the configure script).
 
 -- Jussi Lind <jussi.lind@iki.fi>
+

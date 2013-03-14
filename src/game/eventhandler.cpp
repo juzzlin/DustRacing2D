@@ -170,7 +170,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
 {
     if (!event->isAutoRepeat())
     {
-        if (m_keyToActionMap.find(event->nativeScanCode()) != m_keyToActionMap.end())
+        if (m_keyToActionMap.count(event->nativeScanCode()) > 0)
         {
             const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player;
             const InputHandler::InputAction action =
@@ -179,7 +179,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
             return true;
         }
 
-        if (m_keyToActionMap.find(event->key()) != m_keyToActionMap.end())
+        if (m_keyToActionMap.count(event->key()) > 0)
         {
             const unsigned int player = m_keyToActionMap[event->key()].player;
             const InputHandler::InputAction action =

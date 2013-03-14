@@ -19,6 +19,10 @@
 #include <QStatusBar>
 #include <QString>
 
+#ifdef USE_QT5
+#include <QTransform>
+#endif
+
 #include "editordata.hpp"
 #include "editorview.hpp"
 #include "mainwindow.hpp"
@@ -49,12 +53,20 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
     {
         const QPointF mappedPos = mapToScene(event->pos());
 
+#ifdef USE_QT5
+        QTransform dummy;
+        if (TrackTile * tile =
+            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos, dummy)))
+        {
+            tile->setActive(true);
+        }
+#else
         if (TrackTile * tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos)))
         {
             tile->setActive(true);
         }
-
+#endif
         // Tile drag'n'drop active?
         if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
         {
@@ -485,20 +497,38 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
 
 void EditorView::doRotateTile90CW()
 {
+#ifdef USE_QT5
+    QTransform dummy;
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
+    {
+        tile->rotate90CW();
+    }
+#else
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->rotate90CW();
     }
+#endif
 }
 
 void EditorView::doRotateTile90CCW()
 {
+#ifdef USE_QT5
+    QTransform dummy;
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
+    {
+        tile->rotate90CCW();
+    }
+#else
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->rotate90CCW();
     }
+#endif
 }
 
 void EditorView::doRotateObject()
@@ -542,9 +572,18 @@ void EditorView::doSetComputerHintBrake()
 
 void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
 {
+#ifdef USE_QT5
+    QTransform dummy;
+    if (TrackTile * tile =
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
+    {
+        tile->setComputerHint(hint);
+    }
+#else
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
     {
         tile->setComputerHint(hint);
     }
+#endif
 }

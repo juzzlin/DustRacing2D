@@ -66,7 +66,7 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
 
                 if (!model.empty())
                 {
-                    newData->modelPath = baseModelPath + QDir::separator().toAscii() + model;
+                    newData->modelPath = baseModelPath + QDir::separator().toLatin1() + model;
                 }
             }
 

@@ -64,7 +64,7 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                 const unsigned int height = tag.attribute("h", "0").toUInt();
                 const std::string  image1 = tag.attribute("image1", "").toStdString();
                 const std::string  image2 = tag.attribute("image2", "").toStdString();
-                newData->imagePath1       = baseImagePath + QDir::separator().toAscii() + image1;
+                newData->imagePath1       = baseImagePath + QDir::separator().toLatin1() + image1;
                 newData->handle           = tag.attribute("handle", "").toStdString();
                 newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
                 newData->z0               = tag.attribute("z0", "0").toInt();
@@ -74,7 +74,7 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 
                 if (!image2.empty())
                 {
-                    newData->imagePath2 = baseImagePath + QDir::separator().toAscii() + image2;
+                    newData->imagePath2 = baseImagePath + QDir::separator().toLatin1() + image2;
                 }
 
                 if (width)

@@ -65,17 +65,15 @@ Text/mctextureglyph.cc
 Text/mctexturetext.cc
 )
 
-link_libraries(
-#   ${SDL_LIBRARY}
-#   ${SDLMIXER_LIBRARY}
-#   ${OPENGL_gl_LIBRARY}
-#   ${OPENGL_glu_LIBRARY}
-#   ${QT_QTGUI_LIBRARY}
-   ${QT_QTCORE_LIBRARY}
-   ${QT_QTOPENGL_LIBRARY}
-   ${QT_QTXML_LIBRARY}
+add_library(MiniCore ${MiniCoreSRC})
+
+if(UseQt5)
+    qt5_use_modules(MiniCore Core OpenGL Xml)
+else()
+    link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTXML_LIBRARY}
 )
 
-add_library(MiniCore ${MiniCoreSRC})
+endif()
+
 add_subdirectory(UnitTests)
 

@@ -21,9 +21,10 @@
 
 int main(int argc, char ** argv)
 {
+#ifndef USE_QT5
     QApplication::setGraphicsSystem("raster");
+#endif
     QApplication app(argc, argv);
-
     // Track file can be given as command line argument.
     const QString trackFile = argc > 1 ? argv[1] : "";
     MainWindow mainWindow(trackFile);

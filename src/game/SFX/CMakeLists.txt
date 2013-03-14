@@ -12,3 +12,6 @@ set(SFX_SRC
 
 add_library(SFX ${SFX_SRC})
 
+if(UseQt5)
+    qt5_use_modules(SFX Core Xml)
+endif()

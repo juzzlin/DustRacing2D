@@ -63,7 +63,7 @@ void MCMeshManager::load(
             const MCMeshMetaData & metaData = configLoader.mesh(i);
 
             const std::string modelPath =
-                baseDataPath + QDir::separator().toAscii() + metaData.modelPath;
+                baseDataPath + QDir::separator().toLatin1() + metaData.modelPath;
 
             if (modelLoader.load(modelPath))
             {
@@ -84,7 +84,7 @@ void MCMeshManager::load(
 MCMesh & MCMeshManager::mesh(const std::string & handle) const throw (MCException)
 {
     // Try to find existing mesh for the handle
-    if (m_meshMap.find(handle) == m_meshMap.end())
+    if (m_meshMap.count(handle) == 0)
     {
         throw MCException("Cannot find mesh object for handle '" + handle + "'");
     }

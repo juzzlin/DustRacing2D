@@ -67,7 +67,7 @@ bool SoundConfigLoader::load(const std::string & filePath)
                     newData->handle   = tag.attribute("handle", "").toStdString();
                     newData->filePath =
                         baseSoundPath +
-                        QDir::separator().toAscii() +
+                        QDir::separator().toLatin1() +
                         tag.attribute("file", "").toStdString();
                     newData->isMusic  = isMusic;
                 }

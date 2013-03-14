@@ -33,7 +33,9 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDesktopWidget>
+#ifndef USE_QT5
 #include <QDesktopServices>
+#endif
 #include <QFileDialog>
 #include <QGraphicsLineItem>
 #include <QMenu>
@@ -43,6 +45,9 @@
 #include <QSettings>
 #include <QSlider>
 #include <QSplitter>
+#ifdef USE_QT5
+#include <QStandardPaths>
+#endif
 #include <QTextEdit>
 #include <QTimer>
 #include <QTransform>
@@ -504,7 +509,11 @@ void MainWindow::openTrack()
 
     settings.beginGroup(SETTINGS_GROUP);
     QString path = settings.value("recentPath",
-        QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString();
+#ifdef USE_QT5
+    QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
+#else
+    QDesktopServices::configLocation(QDesktopServices::HomeLocation)).toString();
+#endif
     settings.endGroup();
 
     QString fileName = QFileDialog::getOpenFileName(this,
@@ -621,8 +630,12 @@ void MainWindow::saveTrack()
 void MainWindow::saveAsTrack()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Open a track"),
+        tr("Save a track"),
+#ifdef USE_QT5
+        QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
+#else
         QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+#endif
         tr("Track Files (*.trk)"));
 
     if (!fileName.endsWith(".trk"))
