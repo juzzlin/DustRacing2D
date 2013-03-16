@@ -126,7 +126,7 @@ add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
 else()
-    target_link_libraries(${QT_LIBRARIES})
+    target_link_libraries(${GAME_BINARY_NAME} ${QT_LIBRARIES})
 endif()
 
 target_link_libraries(
