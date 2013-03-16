@@ -1,13 +1,4 @@
-cmake_minimum_required(VERSION 2.8.8)
-
 project(DustRacing2D)
-
-set(CMAKE_VERBOSE_MAKEFILE OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
-
-set(GAME_BINARY_NAME "dustrac-game")
-set(EDITOR_BINARY_NAME "dustrac-editor")
 
 # Enable Qt5 support
 option(UseQt5 "UseQt5" OFF)
@@ -20,6 +11,19 @@ option(DebugBuild "DebugBuild" OFF)
 
 # Enable install layout required by USC.
 option(Ubuntu "Ubuntu" OFF)
+
+if(UseQt5)
+    cmake_minimum_required(VERSION 2.8.8)
+else()
+    cmake_minimum_required(VERSION 2.8.7)
+endif()
+
+set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
+
+set(GAME_BINARY_NAME "dustrac-game")
+set(EDITOR_BINARY_NAME "dustrac-editor")
 
 # Set install paths
 set(BIN_PATH bin)
