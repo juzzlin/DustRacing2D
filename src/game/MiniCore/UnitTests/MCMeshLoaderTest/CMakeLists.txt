@@ -5,6 +5,7 @@ set(SRC MCMeshLoaderTest.cpp)
 if(NOT UseQt5)
     set(MOC_HDRS MCMeshLoaderTest.hpp)
     set(QT_USE_QTTEST TRUE)
+    include(${QT_USE_FILE})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 endif()
 

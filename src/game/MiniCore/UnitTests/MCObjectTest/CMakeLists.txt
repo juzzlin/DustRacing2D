@@ -7,6 +7,7 @@ if(NOT UseQt5)
     set(QT_USE_QTXML TRUE)
     set(QT_USE_QTOPENGL TRUE)
     set(QT_USE_QTTEST TRUE)
+    include(${QT_USE_FILE})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 endif()
 
