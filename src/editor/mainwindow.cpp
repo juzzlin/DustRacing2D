@@ -512,7 +512,7 @@ void MainWindow::openTrack()
 #ifdef USE_QT5
     QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
 #else
-    QDesktopServices::configLocation(QDesktopServices::HomeLocation)).toString();
+    QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString();
 #endif
     settings.endGroup();
 
