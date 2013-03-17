@@ -81,6 +81,9 @@ private:
     void handleObjectDragRelease(QMouseEvent * event);
     void handleTargetNodeDragRelease(QMouseEvent * event);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
+    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill);
+
+    static void setTileType(TrackTile & tile, QAction * action);
 
     QMenu        m_tileContextMenu;
     QMenu        m_objectContextMenu;

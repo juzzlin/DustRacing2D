@@ -319,9 +319,21 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
-            tile.setTileType(action->data().toString());
-            tile.setPixmap(action->icon().pixmap(
-                TrackTile::TILE_W, TrackTile::TILE_H));
+            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+
+            if (modifiers & Qt::ControlModifier)
+            {
+                QString typeToFill = tile.tileType();
+
+                if (typeToFill != action->data().toString())
+                {
+                    floodFill(tile, action, typeToFill);
+                }
+            }
+            else
+            {
+                setTileType(tile, action);
+            }
         }
     }
     // User is initiating a drag'n'drop
@@ -586,4 +598,46 @@ void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
         tile->setComputerHint(hint);
     }
 #endif
+}
+
+void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill)
+{
+    static const int DIRECTION_COUNT = 4;
+
+    // Coordinates of neighbor tiles can be calculated by adding these
+    // adjustments to tile coordinates.
+    static const QPoint neighborAdjustments[DIRECTION_COUNT] =
+    {
+        QPoint( 1,  0),  // right
+        QPoint( 0, -1),  // up
+        QPoint(-1,  0),  // left
+        QPoint( 0,  1)   // down
+    };
+
+    setTileType(tile, action);
+
+    MapBase & map = m_editorData.trackData()->map();
+    QPoint location = tile.matrixLocation();
+
+    for (int i = 0; i < DIRECTION_COUNT; ++i)
+    {
+        int x = location.x() + neighborAdjustments[i].x();
+        int y = location.y() + neighborAdjustments[i].y();
+
+        if (x >= 0 && y >= 0)
+        {
+            TrackTile * tile = dynamic_cast<TrackTile *>(map.getTile(x, y));
+
+            if (tile != nullptr && tile->tileType() == typeToFill)
+            {
+                floodFill(*tile, action, typeToFill);
+            }
+        }
+    }
+}
+
+void EditorView::setTileType(TrackTile & tile, QAction * action)
+{
+    tile.setTileType(action->data().toString());
+    tile.setPixmap(action->icon().pixmap(TrackTile::TILE_W, TrackTile::TILE_H));
 }
