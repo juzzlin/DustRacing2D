@@ -19,7 +19,6 @@
 
 #include <MCGLEW>
 #include <MCLogger>
-#include <GL/glu.h>
 
 #include "mcglscene.hh"
 #include "mcglshaderprogram.hh"
@@ -86,7 +85,6 @@ void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat
     const MCUint  vW2  = sceneWidth  / 2;
     const MCFloat eyeZ = vH2 /
         std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
-    gluLookAt(vW2, vH2, eyeZ, vW2, vH2, 0, 0, 1, 0);
 
     m_modelViewMatrix  = glm::mat4(1.0);
     m_modelViewMatrix *= glm::lookAt(
