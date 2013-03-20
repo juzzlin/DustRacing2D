@@ -122,11 +122,6 @@ void MCGLScene::updateViewport()
         setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
 
         glViewport(0, 0, m_viewWidth, m_viewHeight);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(m_viewAngle, static_cast<GLfloat>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
 
         setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
     }
@@ -135,12 +130,6 @@ void MCGLScene::updateViewport()
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
 
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(
-            m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
 
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
     }
@@ -149,12 +138,6 @@ void MCGLScene::updateViewport()
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
 
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(
-            m_viewAngle, static_cast<GLfloat>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
 
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
     }
