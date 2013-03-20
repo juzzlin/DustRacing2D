@@ -65,9 +65,17 @@ int main(int argc, char ** argv)
 
         // Create the main window / renderer
         int hRes, vRes;
-        bool fullScreen;
-        Settings::instance().loadResolution(hRes, vRes, fullScreen);
-        MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
+        bool fullResolution;
+        bool windowed = false;
+        Settings::instance().loadResolution(hRes, vRes, fullResolution);
+
+        if (fullResolution)
+        {
+            hRes = QApplication::desktop()->width();
+            vRes = QApplication::desktop()->height();
+        }
+
+        MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullResolution;
 
         QGLFormat qglFormat;
         qglFormat.setVersion(3, 0);
@@ -75,12 +83,12 @@ int main(int argc, char ** argv)
         qglFormat.setSampleBuffers(false);
 
         MCLogger().info() << "Creating the renderer..";
-        Renderer renderer(qglFormat, hRes, vRes, fullScreen);
+        Renderer renderer(qglFormat, hRes, vRes, fullResolution, windowed);
         renderer.activateWindow();
 
-        if (fullScreen)
+        // Adjust scene height so that window aspect ratio is taken into account.
+        if (!windowed)
         {
-            // Adjust scene height so that window aspect ratio is taken into account.
             const int newSceneHeight =
                 Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
             Scene::setSize(Scene::width(), newSceneHeight);
@@ -89,7 +97,6 @@ int main(int argc, char ** argv)
         }
         else
         {
-            // Adjust scene height so that window aspect ratio is taken into account.
             const int newSceneHeight = Scene::width() * vRes / hRes;
             Scene::setSize(Scene::width(), newSceneHeight);
 

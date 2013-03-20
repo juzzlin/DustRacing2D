@@ -630,18 +630,20 @@ void Scene::render()
 {
     const MCFloat fadeValue = Renderer::instance().fadeValue();
 
-    if (m_stateMachine.state() == StateMachine::DoIntro)
+    switch (m_stateMachine.state())
     {
-        m_renderer.glScene().setSplitType(MCGLScene::Single);
+    case StateMachine::DoIntro:
 
+        m_renderer.glScene().setSplitType(MCGLScene::Single);
         m_intro->setFadeValue(fadeValue);
         m_intro->render();
-    }
-    else if (
-        m_stateMachine.state() == StateMachine::Menu              ||
-        m_stateMachine.state() == StateMachine::MenuTransitionOut ||
-        m_stateMachine.state() == StateMachine::MenuTransitionIn)
-    {
+
+        break;
+
+    case StateMachine::Menu:
+    case StateMachine::MenuTransitionOut:
+    case StateMachine::MenuTransitionIn:
+
         if (m_stateMachine.isFading())
         {
             Renderer::instance().program("menu").setFadeValue(fadeValue);
@@ -653,13 +655,14 @@ void Scene::render()
         m_renderer.glScene().setSplitType(MCGLScene::Single);
 
         m_menuManager->render();
-    }
-    else if (
-        m_stateMachine.state() == StateMachine::GameTransitionIn  ||
-        m_stateMachine.state() == StateMachine::GameTransitionOut ||
-        m_stateMachine.state() == StateMachine::DoStartlights     ||
-        m_stateMachine.state() == StateMachine::Play)
-    {
+
+        break;
+
+    case StateMachine::GameTransitionIn:
+    case StateMachine::GameTransitionOut:
+    case StateMachine::DoStartlights:
+    case StateMachine::Play:
+
         if (m_stateMachine.isFading())
         {
             Renderer::instance().program("master").setFadeValue(fadeValue);
@@ -689,7 +692,12 @@ void Scene::render()
 
         m_renderer.glScene().setSplitType(MCGLScene::Single);
         renderCommonScene();
-    }
+
+        break;
+
+    default:
+        break;
+    };
 }
 
 void Scene::renderPlayerScene(MCCamera & camera)

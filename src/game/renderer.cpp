@@ -35,16 +35,20 @@
 #include <QApplication>
 #include <QIcon>
 #include <QDesktopWidget>
+#include <QGLFramebufferObject>
 #include <QGLShader>
 #include <QGLShaderProgram>
 #include <QKeyEvent>
 
-#include <GL/glu.h>
-
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(
-    const QGLFormat & qglFormat, int hRes, int vRes, bool fullScreen, QWidget * parent)
+    const QGLFormat & qglFormat,
+    int hRes,
+    int vRes,
+    bool fullResolution,
+    bool windowed,
+    QWidget * parent)
 : QGLWidget(qglFormat, parent)
 , m_scene(nullptr)
 , m_glScene(new MCGLScene)
@@ -52,6 +56,8 @@ Renderer::Renderer(
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
 , m_enabled(true)
+, m_hRes(hRes)
+, m_vRes(vRes)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -60,7 +66,7 @@ Renderer::Renderer(
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/dustrac-game.png"));
 
-    if (!fullScreen)
+    if (windowed && !fullResolution)
     {
         // Set window size & disable resize
         resize(hRes, vRes);
@@ -114,16 +120,17 @@ void Renderer::createProgram(
 
 void Renderer::loadShaders()
 {
-    createProgram("tile2d",        "tile2d.fsh",         "tile.vsh");
-    createProgram("tile3d",        "tile3d.fsh",         "tile.vsh");
-    createProgram("menu",          "menu.fsh",           "menu.vsh");
     createProgram("car",           "car.fsh",            "car.vsh");
+    createProgram("fbo",           "fbo.fsh",            "fbo.vsh");
     createProgram("master",        "master.fsh",         "master.vsh");
     createProgram("masterShadow",  "master2dShadow.fsh", "master2dShadow.vsh");
-    createProgram("text",          "text.fsh",           "text.vsh");
-    createProgram("textShadow",    "text2dShadow.fsh",   "text.vsh");
+    createProgram("menu",          "menu.fsh",           "menu.vsh");
     createProgram("particle",      "particle.fsh",       "master.vsh");
     createProgram("pointParticle", "particle.fsh",       "pointParticle.vsh");
+    createProgram("text",          "text.fsh",           "text.vsh");
+    createProgram("textShadow",    "text2dShadow.fsh",   "text.vsh");
+    createProgram("tile2d",        "tile2d.fsh",         "tile.vsh");
+    createProgram("tile3d",        "tile3d.fsh",         "tile.vsh");
 
     // Make sure that shaders have the current model view projection matrix.
     m_glScene->updateModelViewProjectionMatrixAndShaders();
@@ -161,6 +168,14 @@ float Renderer::fadeValue() const
 
 void Renderer::paintGL()
 {
+    // Render the game scene to the frame buffer object
+
+    resizeGL(m_hRes, m_vRes);
+
+    static QGLFramebufferObject fbo(m_hRes, m_vRes);
+
+    fbo.bind();
+
     if (m_enabled)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -170,6 +185,20 @@ void Renderer::paintGL()
             m_scene->render();
         }
     }
+
+    fbo.release();
+
+    // Render the frame buffer object onto the screen
+
+    const int fullVRes = QApplication::desktop()->height();
+    const int fullHRes = QApplication::desktop()->width();
+
+    resizeGL(fullHRes, fullVRes);
+
+    MCSurface sd(fbo.texture(), 0, Scene::width(), Scene::height());
+    sd.setShaderProgram(&program("fbo"));
+    sd.bindTexture();
+    sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 
     swapBuffers();
 }

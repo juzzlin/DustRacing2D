@@ -107,12 +107,10 @@ public:
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
-    void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
-        bool autoBind = true);
+    void render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
-        bool autoBind = true);
+    void renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render the vertex buffer only. bind() must be called separately.
     void render();

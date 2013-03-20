@@ -44,7 +44,12 @@ public:
 
     //! Constructor.
     Renderer(
-        const QGLFormat & qglFormat, int hRes, int vRes, bool fullScreen, QWidget * parent = nullptr);
+        const QGLFormat & qglFormat,
+        int hRes,
+        int vRes,
+        bool fullResolution,
+        bool windowed,
+        QWidget * parent = nullptr);
 
     //! Destructor.
     virtual ~Renderer();
@@ -113,6 +118,8 @@ private:
     float               m_fadeValue;
     ShaderHash          m_shaderHash;
     bool                m_enabled;
+    int                 m_hRes;
+    int                 m_vRes;
 
     static Renderer * m_instance;
 };
