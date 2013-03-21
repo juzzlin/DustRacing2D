@@ -19,6 +19,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "settings.hpp"
+
 class EventHandler;
 class InputHandler;
 class Renderer;
@@ -66,9 +68,8 @@ public:
     //! Set target value for frames per second. Default is 60.
     void setFps(unsigned int fps);
 
-    void setRenderer(Renderer * renderer);
-
-    Renderer * renderer() const;
+    //! \return The renderer.
+    Renderer & renderer() const;
 
     //! Init the game.
     //! \return True on success.
@@ -111,11 +112,14 @@ private slots:
 
 private:
 
+    void adjustSceneSize(int hRes, int vRes, bool windowed);
+    void createRenderer();
     void initScene();
     bool initAudio();
     bool loadTracks();
     void loadSounds();
 
+    Settings               m_settings;
     StateMachine         * m_stateMachine;
     Renderer             * m_renderer;
     Scene                * m_scene;

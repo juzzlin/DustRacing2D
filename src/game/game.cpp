@@ -37,9 +37,10 @@
 #include <SoundManager>
 #include <Sound>
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QTime>
-#include <QApplication>
 
 #include <SDL/SDL.h>
 
@@ -80,6 +81,8 @@ Game::Game()
     assert(!Game::m_instance);
     Game::m_instance = this;
 
+    createRenderer();
+
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
     connect(
@@ -107,22 +110,74 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
+void Game::createRenderer()
+{
+    // Create the main window / renderer
+    int hRes, vRes;
+    bool nativeResolution = true;
+    bool windowed         = false;
+
+    m_settings.loadResolution(hRes, vRes, nativeResolution);
+
+    if (nativeResolution)
+    {
+        hRes = QApplication::desktop()->width();
+        vRes = QApplication::desktop()->height();
+    }
+
+    adjustSceneSize(hRes, vRes, windowed);
+
+    MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << nativeResolution;
+
+    QGLFormat qglFormat;
+    qglFormat.setVersion(3, 0);
+    qglFormat.setProfile(QGLFormat::CoreProfile);
+    qglFormat.setSampleBuffers(false);
+
+    MCLogger().info() << "Creating the renderer..";
+    m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, windowed);
+    m_renderer->activateWindow();
+
+    if (windowed)
+    {
+        m_renderer->show();
+    }
+    else
+    {
+        m_renderer->showFullScreen();
+    }
+
+    m_renderer->setFocus();
+    m_renderer->setCursor(Qt::BlankCursor);
+
+    // Note that this must be called before loading textures in order
+    // to load textures to correct OpenGL context.
+    m_renderer->makeCurrent();
+    m_renderer->setEventHandler(*m_eventHandler);
+}
+
+void Game::adjustSceneSize(int hRes, int vRes, bool windowed)
+{
+    // Adjust scene height so that view aspect ratio is taken into account.
+    if (!windowed)
+    {
+        const int newSceneHeight =
+            Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
+        Scene::setSize(Scene::width(), newSceneHeight);
+    }
+    else
+    {
+        const int newSceneHeight = Scene::width() * vRes / hRes;
+        Scene::setSize(Scene::width(), newSceneHeight);
+    }
+}
+
 void Game::setFps(unsigned int fps)
 {
     m_renderFps   = fps;
     m_renderDelay = 1000 / m_renderFps;
 
     m_renderTimer.setInterval(m_renderDelay);
-}
-
-void Game::setRenderer(Renderer * newRenderer)
-{
-    m_renderer = newRenderer;
-
-    // Note that this must be called before loading textures in order
-    // to load textures to correct OpenGL context.
-    m_renderer->makeCurrent();
-    m_renderer->setEventHandler(*m_eventHandler);
 }
 
 void Game::setMode(GameMode gameMode)
@@ -151,9 +206,10 @@ EventHandler & Game::eventHandler() const
     return *m_eventHandler;
 }
 
-Renderer * Game::renderer() const
+Renderer & Game::renderer() const
 {
-    return m_renderer;
+    assert(m_renderer);
+    return *m_renderer;
 }
 
 bool Game::loadTracks()
@@ -322,6 +378,7 @@ void Game::countRenderFps()
 
 Game::~Game()
 {
+    delete m_renderer;
     delete m_stateMachine;
     delete m_scene;
     delete m_assetManager;

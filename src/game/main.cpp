@@ -14,15 +14,12 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QGLFormat>
 #include <QDir>
 #include <QHBoxLayout>
 #include <QMessageBox>
 
 #include "game.hpp"
-#include "renderer.hpp"
-#include "scene.hpp"
-#include "settings.hpp"
 
 #include <MCException>
 #include <MCLogger>
@@ -51,8 +48,6 @@ int main(int argc, char ** argv)
 {
     try
     {
-        Settings settings;
-
         // Create the QApplication
 #ifndef USE_QT5
         QApplication::setGraphicsSystem("opengl");
@@ -60,56 +55,11 @@ int main(int argc, char ** argv)
         QApplication app(argc, argv);
 
         initLogger();
-
         checkOpenGLVersion();
-
-        // Create the main window / renderer
-        int hRes, vRes;
-        bool fullResolution;
-        bool windowed = false;
-        Settings::instance().loadResolution(hRes, vRes, fullResolution);
-
-        if (fullResolution)
-        {
-            hRes = QApplication::desktop()->width();
-            vRes = QApplication::desktop()->height();
-        }
-
-        MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << fullResolution;
-
-        QGLFormat qglFormat;
-        qglFormat.setVersion(3, 0);
-        qglFormat.setProfile(QGLFormat::CoreProfile);
-        qglFormat.setSampleBuffers(false);
-
-        MCLogger().info() << "Creating the renderer..";
-        Renderer renderer(qglFormat, hRes, vRes, fullResolution, windowed);
-        renderer.activateWindow();
-
-        // Adjust scene height so that window aspect ratio is taken into account.
-        if (!windowed)
-        {
-            const int newSceneHeight =
-                Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
-            Scene::setSize(Scene::width(), newSceneHeight);
-
-            renderer.showFullScreen();
-        }
-        else
-        {
-            const int newSceneHeight = Scene::width() * vRes / hRes;
-            Scene::setSize(Scene::width(), newSceneHeight);
-
-            renderer.show();
-        }
-
-        renderer.setFocus();
-        renderer.setCursor(Qt::BlankCursor);
 
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";
         Game game;
-        game.setRenderer(&renderer);
         game.setFps(Settings::instance().loadFps());
 
         // Initialize and start the game

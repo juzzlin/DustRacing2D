@@ -46,7 +46,7 @@ Renderer::Renderer(
     const QGLFormat & qglFormat,
     int hRes,
     int vRes,
-    bool fullResolution,
+    bool nativeResolution,
     bool windowed,
     QWidget * parent)
 : QGLWidget(qglFormat, parent)
@@ -58,6 +58,8 @@ Renderer::Renderer(
 , m_enabled(true)
 , m_hRes(hRes)
 , m_vRes(vRes)
+, m_nativeResolution(nativeResolution)
+, m_windowed(windowed)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -66,7 +68,7 @@ Renderer::Renderer(
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/dustrac-game.png"));
 
-    if (windowed && !fullResolution)
+    if (windowed && !nativeResolution)
     {
         // Set window size & disable resize
         resize(hRes, vRes);
@@ -166,7 +168,20 @@ float Renderer::fadeValue() const
     return m_fadeValue;
 }
 
-void Renderer::paintGL()
+void Renderer::renderNativeResolutionOrWindowed()
+{
+    if (m_enabled)
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (m_scene)
+        {
+            m_scene->render();
+        }
+    }
+}
+
+void Renderer::renderCustomResolution()
 {
     // Render the game scene to the frame buffer object
 
@@ -199,6 +214,18 @@ void Renderer::paintGL()
     sd.setShaderProgram(&program("fbo"));
     sd.bindTexture();
     sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+}
+
+void Renderer::paintGL()
+{
+    if (m_windowed || m_nativeResolution)
+    {
+        renderNativeResolutionOrWindowed();
+    }
+    else
+    {
+        renderCustomResolution();
+    }
 
     swapBuffers();
 }

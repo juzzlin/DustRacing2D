@@ -47,7 +47,7 @@ public:
         const QGLFormat & qglFormat,
         int hRes,
         int vRes,
-        bool fullResolution,
+        bool nativeResolution,
         bool windowed,
         QWidget * parent = nullptr);
 
@@ -108,19 +108,24 @@ private:
     void createProgram(
         const std::string & handle, const std::string & fshPath, const std::string & vshPath);
 
+    void renderNativeResolutionOrWindowed();
+
+    void renderCustomResolution();
+
     typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
-    Scene             * m_scene;
-    MCGLScene         * m_glScene;
-    EventHandler      * m_eventHandler;
-    const float         m_viewAngle;
-    float               m_fadeValue;
-    ShaderHash          m_shaderHash;
-    bool                m_enabled;
-    int                 m_hRes;
-    int                 m_vRes;
-
+    Scene           * m_scene;
+    MCGLScene       * m_glScene;
+    EventHandler    * m_eventHandler;
+    const float       m_viewAngle;
+    float             m_fadeValue;
+    ShaderHash        m_shaderHash;
+    bool              m_enabled;
+    int               m_hRes;
+    int               m_vRes;
+    bool              m_nativeResolution;
+    bool              m_windowed;
     static Renderer * m_instance;
 };
 
