@@ -47,7 +47,7 @@ Renderer::Renderer(
     int hRes,
     int vRes,
     bool nativeResolution,
-    bool windowed,
+    bool fullScreen,
     QWidget * parent)
 : QGLWidget(qglFormat, parent)
 , m_scene(nullptr)
@@ -59,7 +59,7 @@ Renderer::Renderer(
 , m_hRes(hRes)
 , m_vRes(vRes)
 , m_nativeResolution(nativeResolution)
-, m_windowed(windowed)
+, m_fullScreen(fullScreen)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -68,7 +68,7 @@ Renderer::Renderer(
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/dustrac-game.png"));
 
-    if (windowed && !nativeResolution)
+    if (!fullScreen)
     {
         // Set window size & disable resize
         resize(hRes, vRes);
@@ -218,7 +218,7 @@ void Renderer::renderCustomResolution()
 
 void Renderer::paintGL()
 {
-    if (m_windowed || m_nativeResolution)
+    if (!m_fullScreen || m_nativeResolution)
     {
         renderNativeResolutionOrWindowed();
     }

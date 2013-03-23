@@ -45,8 +45,8 @@ public:
     bool loadTrackUnlockStatus(const Track & track) const;
     void resetTrackUnlockStatuses();
 
-    void saveResolution(int hRes, int vRes, bool fullScreen = false);
-    void loadResolution(int & hRes, int & vRes, bool & fullScreen);
+    void saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen);
+    void loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen);
 
     void saveFps(int fps);
     int loadFps();

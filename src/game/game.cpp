@@ -115,9 +115,9 @@ void Game::createRenderer()
     // Create the main window / renderer
     int hRes, vRes;
     bool nativeResolution = true;
-    bool windowed         = false;
+    bool fullScreen       = false;
 
-    m_settings.loadResolution(hRes, vRes, nativeResolution);
+    m_settings.loadResolution(hRes, vRes, nativeResolution, fullScreen);
 
     if (nativeResolution)
     {
@@ -125,9 +125,10 @@ void Game::createRenderer()
         vRes = QApplication::desktop()->height();
     }
 
-    adjustSceneSize(hRes, vRes, windowed);
+    adjustSceneSize(hRes, vRes, fullScreen);
 
-    MCLogger().info() << "Resolution: " << hRes << " " << vRes << " " << nativeResolution;
+    MCLogger().info()
+        << "Resolution: " << hRes << " " << vRes << " " << nativeResolution << " " << fullScreen;
 
     QGLFormat qglFormat;
     qglFormat.setVersion(3, 0);
@@ -135,16 +136,16 @@ void Game::createRenderer()
     qglFormat.setSampleBuffers(false);
 
     MCLogger().info() << "Creating the renderer..";
-    m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, windowed);
+    m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
 
-    if (windowed)
+    if (fullScreen)
     {
-        m_renderer->show();
+        m_renderer->showFullScreen();
     }
     else
     {
-        m_renderer->showFullScreen();
+        m_renderer->show();
     }
 
     m_renderer->setFocus();
@@ -156,10 +157,10 @@ void Game::createRenderer()
     m_renderer->setEventHandler(*m_eventHandler);
 }
 
-void Game::adjustSceneSize(int hRes, int vRes, bool windowed)
+void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
 {
     // Adjust scene height so that view aspect ratio is taken into account.
-    if (!windowed)
+    if (fullScreen)
     {
         const int newSceneHeight =
             Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();

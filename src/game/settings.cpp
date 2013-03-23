@@ -142,7 +142,7 @@ void Settings::resetTrackUnlockStatuses()
     settings.endGroup();
 }
 
-void Settings::saveResolution(int hRes, int vRes, bool fullScreen)
+void Settings::saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
@@ -150,19 +150,21 @@ void Settings::saveResolution(int hRes, int vRes, bool fullScreen)
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     settings.setValue("hRes", hRes);
     settings.setValue("vRes", vRes);
+    settings.setValue("nativeResolution", nativeResolution);
     settings.setValue("fullScreen", fullScreen);
     settings.endGroup();
 }
 
-void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
+void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    fullScreen = settings.value("fullScreen", true).toBool();
-    hRes       = settings.value("hRes", 0).toInt();
-    vRes       = settings.value("vRes", 0).toInt();
+    nativeResolution = settings.value("nativeResolution", true).toBool();
+    fullScreen       = settings.value("fullScreen", false).toBool();
+    hRes             = settings.value("hRes", 0).toInt();
+    vRes             = settings.value("vRes", 0).toInt();
     settings.endGroup();
 }
 

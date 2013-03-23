@@ -112,7 +112,7 @@ private slots:
 
 private:
 
-    void adjustSceneSize(int hRes, int vRes, bool windowed);
+    void adjustSceneSize(int hRes, int vRes, bool fullScreen);
     void createRenderer();
     void initScene();
     bool initAudio();

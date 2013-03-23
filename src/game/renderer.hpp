@@ -48,7 +48,7 @@ public:
         int hRes,
         int vRes,
         bool nativeResolution,
-        bool windowed,
+        bool fullScreen,
         QWidget * parent = nullptr);
 
     //! Destructor.
@@ -125,7 +125,7 @@ private:
     int               m_hRes;
     int               m_vRes;
     bool              m_nativeResolution;
-    bool              m_windowed;
+    bool              m_fullScreen;
     static Renderer * m_instance;
 };
 

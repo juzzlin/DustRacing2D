@@ -25,11 +25,13 @@ class ResolutionMenu : public SurfaceMenu
 public:
 
     //! Constructor.
-    ResolutionMenu(ConfirmationMenu & confirmationMenu, std::string id, int width, int height);
+    ResolutionMenu(
+        ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen);
 
 private:
 
     ConfirmationMenu & m_confirmationMenu;
+    bool m_fullScreen;
 };
 
 #endif // RESOLUTIONMENU_HPP

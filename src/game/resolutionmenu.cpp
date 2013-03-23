@@ -26,6 +26,9 @@
 
 #include <MCLogger>
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include <sstream>
 
 struct Resolution
@@ -35,11 +38,11 @@ struct Resolution
 
 static Resolution RESOLUTIONS[] =
 {
+    {400,  300},
     {640,  480},
     {800,  600},
     {854,  480},
     {960,  540},
-    {1024, 576},
     {1024, 768},
     {1280, 720},
     {1280, 960},
@@ -57,8 +60,9 @@ public:
     public:
 
         //! Constructor.
-        SaveResolutionAction(ResolutionItem & parent)
+        SaveResolutionAction(ResolutionItem & parent, bool fullScreen)
         : m_parent(parent)
+        , m_fullScreen(fullScreen)
         {
         }
 
@@ -67,24 +71,28 @@ public:
         {
             const int  hRes = m_parent.hRes();
             const int  vRes = m_parent.vRes();
-            const bool fullScreen = !hRes && !vRes;
-            Settings::instance().saveResolution(hRes, vRes, fullScreen);
-            MCLogger().info() << "Resolution set: " << hRes << " " << vRes << " " << fullScreen;
+            const bool nativeResolution = !hRes && !vRes;
+            Settings::instance().saveResolution(hRes, vRes, nativeResolution, m_fullScreen);
+            MCLogger().info()
+                << "Resolution set: " << hRes << " " << vRes
+                << " Native: " << nativeResolution
+                << " Full screen: " << m_fullScreen;
             Game::instance().exitGame();
         }
 
     private:
 
         ResolutionItem & m_parent;
+        bool m_fullScreen;
     };
 
     //! Constructor.
     ResolutionItem(
         ConfirmationMenu & confirmationMenu,
-        int hRes, int vRes, int width, int height, std::string text = "")
+        int hRes, int vRes, bool fullScreen, int width, int height, std::string text = "")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
-    , m_saveResolutionAction(*this)
+    , m_saveResolutionAction(*this, fullScreen)
     , m_hRes(hRes)
     , m_vRes(vRes)
     {
@@ -119,30 +127,52 @@ private:
     SaveResolutionAction m_saveResolutionAction;
     int                  m_hRes;
     int                  m_vRes;
+
 };
 
 ResolutionMenu::ResolutionMenu(
-    ConfirmationMenu & confirmationMenu, std::string id, int width, int height)
+    ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen)
 : SurfaceMenu("helpBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
+, m_fullScreen(fullScreen)
 {
     const int resolutions = sizeof(RESOLUTIONS) / sizeof(Resolution);
-    const int itemHeight  = height / (resolutions + 2);
+
+    int availableResolutions = 0;
+    for (int i = 0; i < resolutions; i++)
+    {
+        const int hRes = RESOLUTIONS[i].hRes;
+        const int vRes = RESOLUTIONS[i].vRes;
+
+        if (hRes <= QApplication::desktop()->width() && vRes <= QApplication::desktop()->height())
+        {
+            availableResolutions++;
+        }
+    }
+
+    const int itemHeight = height / (availableResolutions + 2);
 
     for (int i = 0; i < resolutions; i++)
     {
         const int hRes = RESOLUTIONS[i].hRes;
         const int vRes = RESOLUTIONS[i].vRes;
-        std::stringstream resString;
-        resString << hRes << "x" << vRes;
+
+        if (hRes < QApplication::desktop()->width() && vRes < QApplication::desktop()->height())
+        {
+            std::stringstream resString;
+            resString << hRes << "x" << vRes;
+            ResolutionItem * resolution =
+                new ResolutionItem(m_confirmationMenu, hRes, vRes, fullScreen, width, itemHeight, resString.str());
+            resolution->setView(new TextMenuItemView(20, *resolution), true);
+            addItem(*resolution, true);
+        }
+    }
+
+    if (fullScreen)
+    {
         ResolutionItem * resolution =
-            new ResolutionItem(m_confirmationMenu, hRes, vRes, width, itemHeight, resString.str());
+            new ResolutionItem(m_confirmationMenu, 0, 0, true, width, itemHeight, "Native resolution");
         resolution->setView(new TextMenuItemView(20, *resolution), true);
         addItem(*resolution, true);
     }
-
-    ResolutionItem * resolution =
-        new ResolutionItem(m_confirmationMenu, 0, 0, width, itemHeight, "Full screen");
-    resolution->setView(new TextMenuItemView(20, *resolution), true);
-    addItem(*resolution, true);
 }

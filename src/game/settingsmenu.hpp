@@ -36,7 +36,8 @@ private:
     void populateFpsMenu(int width, int height);
 
     ConfirmationMenu m_confirmationMenu;
-    ResolutionMenu   m_resolutionMenu;
+    ResolutionMenu   m_fullScreenResolutionMenu;
+    ResolutionMenu   m_windowedResolutionMenu;
     SurfaceMenu      m_gameModeMenu;
     SurfaceMenu      m_fpsMenu;
     KeyConfigMenu    m_keyConfigMenu;

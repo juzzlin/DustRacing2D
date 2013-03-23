@@ -104,16 +104,18 @@ private:
     ConfirmationMenu & m_confirmationMenu;
 };
 
-static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
-static const char * RESOLUTION_MENU_ID   = "resolutionMenu";
-static const char * GAME_MODE_MENU_ID    = "gameModeMenu";
-static const char * FPS_MENU_ID          = "fpsMenu";
-static const char * KEY_CONFIG_MENU_ID   = "keyConfigMenu";
+static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
+static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
+static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
+static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
+static const char * FPS_MENU_ID                    = "fpsMenu";
+static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
-, m_resolutionMenu(m_confirmationMenu, RESOLUTION_MENU_ID, width, height)
+, m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
+, m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
@@ -125,7 +127,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     using MTFH::MenuManager;
 
     MenuManager::instance().addMenu(m_confirmationMenu);
-    MenuManager::instance().addMenu(m_resolutionMenu);
+    MenuManager::instance().addMenu(m_windowedResolutionMenu);
+    MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
@@ -133,7 +136,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 
 void SettingsMenu::populate(int width, int height)
 {
-    const int itemHeight = height / 8;
+    const int itemHeight = height / 10;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -153,9 +156,13 @@ void SettingsMenu::populate(int width, int height)
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
-    MenuItem * selectResolution = new MenuItem(width, itemHeight, "Select resolution >");
-    selectResolution->setView(new TextMenuItemView(20, *selectResolution), true);
-    selectResolution->setMenuOpenAction(RESOLUTION_MENU_ID);
+    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, "Select full screen resolution >");
+    selectFullScreenResolution->setView(new TextMenuItemView(20, *selectFullScreenResolution), true);
+    selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
+
+    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, "Select windowed resolution >");
+    selectWindowedResolution->setView(new TextMenuItemView(20, *selectWindowedResolution), true);
+    selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
     MenuItem * gameMode = new MenuItem(width, itemHeight, "Game mode >");
     gameMode->setView(new TextMenuItemView(20, *gameMode), true);
@@ -169,13 +176,14 @@ void SettingsMenu::populate(int width, int height)
     configureKeys->setView(new TextMenuItemView(20, *configureKeys), true);
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
-    addItem(*resetRecordTimes,    true);
-    addItem(*resetBestPositions,  true);
-    addItem(*resetUnlockedTracks, true);
-    addItem(*configureKeys,       true);
-    addItem(*selectFps,           true);
-    addItem(*selectResolution,    true);
-    addItem(*gameMode,            true);
+    addItem(*resetRecordTimes,           true);
+    addItem(*resetBestPositions,         true);
+    addItem(*resetUnlockedTracks,        true);
+    addItem(*configureKeys,              true);
+    addItem(*selectFps,                  true);
+    addItem(*selectWindowedResolution,   true);
+    addItem(*selectFullScreenResolution, true);
+    addItem(*gameMode,                   true);
 }
 
 void SettingsMenu::populateGameModeMenu(int width, int height)
@@ -264,7 +272,8 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     m_fpsMenu.addItem(*fps60, true);
 
     MenuManager::instance().addMenu(m_confirmationMenu);
-    MenuManager::instance().addMenu(m_resolutionMenu);
+    MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
+    MenuManager::instance().addMenu(m_windowedResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
