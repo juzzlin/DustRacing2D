@@ -45,7 +45,7 @@ public:
         , rollingFrictionOffTrack(0.75)
         , rotationFriction(1.0)
         , slideFriction(0.9)
-        , turningImpulse(0.3)
+        , turningImpulse(0.28)
         , power(5000.0)
         , mass(1000.0)
         , momentOfInertia(mass * 10.0)
