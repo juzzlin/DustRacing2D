@@ -26,33 +26,44 @@
 #include <QPainter>
 #include <QPixmap>
 
+#include <cassert>
+
 MCSurface & GraphicsFactory::generateNumberSurface(int index)
 {
     static std::vector<std::string> numberPlates(
         {"1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x"});
+    assert(index < static_cast<int>(numberPlates.size()));
 
-    const int w = 32;
-    const int h = 32;
+    const int pixmapWidth  = 32;
+    const int pixmapHeight = 32;
 
-    QPixmap numberPixmap(w, h);
+    QPixmap numberPixmap(pixmapWidth, pixmapHeight);
     numberPixmap.fill(Qt::white);
 
     QPainter painter;
     painter.begin(&numberPixmap);
+
     QFont font;
-    font.setPixelSize(32);
+    font.setPixelSize(pixmapHeight);
     font.setBold(true);
+
     painter.setFont(font);
     painter.setPen(QColor(0, 0, 0));
     const QFontMetrics fm = painter.fontMetrics();
     const QString text = numberPlates.at(index).c_str();
-    painter.drawText(w / 2 - fm.width(text) / 2, h / 2 + fm.height() / 2 - fm.descent(), text);
+
+    painter.drawText(
+        pixmapWidth / 2 - fm.width(text) / 2,
+        pixmapHeight / 2 + fm.height() / 2 - fm.descent(),
+        text);
     painter.end();
 
+    // Note, that the size of the pixmap doesn't affect the size of the actual
+    // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height    = 11;
+    surfaceData.height    = 9;
     surfaceData.heightSet = true;
-    surfaceData.width     = 11;
+    surfaceData.width     = 9;
     surfaceData.widthSet  = true;
 
     return

@@ -52,13 +52,13 @@ public:
         , restitution(0.05)
         , dragLinear(1.0)
         , dragQuadratic(5.0)
-        , numberPos(-7, 0)
-        , leftFrontTirePos(15, 11)
-        , rightFrontTirePos(15, -11)
-        , leftRearTirePos(-15, 11)
-        , rightRearTirePos(-15, -11)
-        , leftBrakeGlowPos(-27, 11)
-        , rightBrakeGlowPos(-27, -11)
+        , numberPos(-5, 0)
+        , leftFrontTirePos(12, 8)
+        , rightFrontTirePos(12, -8)
+        , leftRearTirePos(-12, 8)
+        , rightRearTirePos(-12, -8)
+        , leftBrakeGlowPos(-21, 8)
+        , rightBrakeGlowPos(-21, -8)
         {}
 
         MCFloat maxLinearVelocity;
