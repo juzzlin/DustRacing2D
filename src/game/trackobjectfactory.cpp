@@ -55,7 +55,6 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setRestitution(0.5);
         data.setMass(1000);
         data.setMeshId(role.toStdString());
         data.setSurfaceId(role.toStdString());
@@ -101,7 +100,6 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setRestitution(0.5);
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
@@ -118,13 +116,26 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setRestitution(0.5);
         data.setMass(5000);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setLayer(Layers::Walls);
 
         object = &m_objectFactory.build(data);
+    }
+    else if (role == "sandAreaCurve")
+    {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setStationary(true);
+        data.setSurfaceId(role.toStdString());
+        data.setLayer(Layers::Ground);
+
+        object = &m_objectFactory.build(data);
+        object->setPhysicsObject(false);
+        object->view()->setHasShadow(false);
     }
     else if (role == "tire")
     {
@@ -151,7 +162,6 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setRestitution(0.5);
         data.setStationary(true);
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
@@ -175,7 +185,6 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setRestitution(0.5);
         data.setStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
