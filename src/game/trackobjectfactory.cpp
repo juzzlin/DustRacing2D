@@ -123,7 +123,7 @@ TrackObject & TrackObjectFactory::build(
 
         object = &m_objectFactory.build(data);
     }
-    else if (role == "sandAreaCurve")
+    else if (role == "sandAreaCurve" || role == "sandAreaBig")
     {
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
