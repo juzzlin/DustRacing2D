@@ -21,13 +21,13 @@
 
 #include <cassert>
 
-MCTextureGlyph::MCTextureGlyph(int glyph, UV uv0, UV uv1, UV uv2, UV uv3)
+MCTextureGlyph::MCTextureGlyph(int glyph, UV uv0, UV uv1)
 : m_glyph(glyph)
 {
     m_uv[0] = uv0;
-    m_uv[1] = uv1;
-    m_uv[2] = uv2;
-    m_uv[3] = uv3;
+    m_uv[1] = UV(uv1.m_u, uv0.m_v);
+    m_uv[2] = uv1;
+    m_uv[3] = UV(uv0.m_u, uv1.m_v);
 }
 
 const MCTextureGlyph::UV & MCTextureGlyph::uv(MCUint vertex) const

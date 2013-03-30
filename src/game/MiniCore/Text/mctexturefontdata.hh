@@ -23,22 +23,16 @@
 #include <string>
 #include <vector>
 
-//! Data class used by MCTextureFontConfigLoader.
-class MCTextureFontData
+//! Data structure used by MCTextureFontConfigLoader.
+struct MCTextureFontData
 {
-public:
-
-    //! Glyph row.
-    struct Row
+    //! Glyph data in the XML config.
+    struct Glyph
     {
-        //! Y-coordinate of the row.
-        int y;
+        int x0, y0, x1, y1;
 
-        //! Height of the row.
-        int h;
-
-        //! Glyphs in the row.
-        std::string glyphs;
+        //! Name of the glyph e.g. 'a'.
+        std::string name;
     };
 
     //! Name of the font.
@@ -47,11 +41,8 @@ public:
     //! MCSurface handle including the glyphs.
     std::string surface;
 
-    //! Max number of glyphs per row in the texture image.
-    int maxGlyphsPerRow;
-
-    //! Glyph rows.
-    std::vector<Row> rows;
+    //! Glyphs.
+    std::vector<Glyph> glyphs;
 };
 
 #endif // MCTEXTUREFONTDATA_HH

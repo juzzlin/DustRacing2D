@@ -63,10 +63,8 @@ bool MCTextureFontConfigLoader::loadFonts()
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                newData->name            = tag.attribute("name", "").toStdString();
-                newData->surface         = tag.attribute("surface", "").toStdString();
-                newData->maxGlyphsPerRow = tag.attribute(
-                    "maxGlyphsPerRow", "0").toInt();
+                newData->name    = tag.attribute("name", "").toStdString();
+                newData->surface = tag.attribute("surface", "").toStdString();
 
                 MCLogger().info() << "Loading font '" << newData->name.c_str() << "'..";
 
@@ -74,17 +72,19 @@ bool MCTextureFontConfigLoader::loadFonts()
                 QDomNode childNode = node.firstChild();
                 while(!childNode.isNull())
                 {
-                    if (childNode.nodeName() == "row")
+                    if (childNode.nodeName() == "glyph")
                     {
                         QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            MCTextureFontData::Row row;
-                            row.y      = tag.attribute("y", "0").toInt();
-                            row.h      = tag.attribute("h", "0").toInt();
-                            row.glyphs = tag.attribute("glyphs", "").toStdString();
+                            MCTextureFontData::Glyph glyph;
+                            glyph.x0   = tag.attribute("x0", "0").toInt();
+                            glyph.y0   = tag.attribute("y0", "0").toInt();
+                            glyph.x1   = tag.attribute("x1", "0").toInt();
+                            glyph.y1   = tag.attribute("y1", "0").toInt();
+                            glyph.name = tag.attribute("name", "").toStdString();
 
-                            newData->rows.push_back(row);
+                            newData->glyphs.push_back(glyph);
                         }
                     }
 

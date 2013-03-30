@@ -74,34 +74,24 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
     MCTextureFont * newFont = new MCTextureFont(surface);
 
     // Generate glyph structures from the loaded data.
-    // Loop thru glyph rows.
-    for (MCUint j = 0; j < data.rows.size(); j++)
+    // Loop thru glyphs.
+    for (MCUint j = 0; j < data.glyphs.size(); j++)
     {
         // Loop through glyphs in the row.
-        const MCTextureFontData::Row & row       = data.rows.at(j);
-        const std::string            & rowGlyphs = row.glyphs;
-        for (MCUint i = 0; i < rowGlyphs.length(); i++)
-        {
-            const GLfloat fi = i;
-            const GLfloat fy = row.y;
-            const GLfloat fh = row.h;
-            const GLfloat fH = surface.height();
+        const MCTextureFontData::Glyph & glyph = data.glyphs.at(j);
 
-            // Calculate the uv-coordinates for the glyph.
-            MCTextureGlyph newGlyph(
-                rowGlyphs.at(i),
-                MCTextureGlyph::UV(
-                    clamp(fi / data.maxGlyphsPerRow),       clamp((fH - fy) / fH)),
-                MCTextureGlyph::UV(
-                    clamp((fi + 1) / data.maxGlyphsPerRow), clamp((fH - fy) / fH)),
-                MCTextureGlyph::UV(
-                    clamp((fi + 1) / data.maxGlyphsPerRow), clamp((fH - (fy + fh)) / fH)),
-                MCTextureGlyph::UV(
-                    clamp(fi / data.maxGlyphsPerRow),       clamp((fH - (fy + fh)) / fH)));
+        // Calculate the uv-coordinates for the glyph.
+        MCTextureGlyph newGlyph(
+            glyph.name.at(0),
+            MCTextureGlyph::UV(
+                static_cast<float>(glyph.x0) / surface.width(),
+                static_cast<float>(glyph.y0) / surface.height()),
+            MCTextureGlyph::UV(
+                static_cast<float>(glyph.x1) / surface.width(),
+                static_cast<float>(glyph.y1) / surface.height()));
 
-            // Add glyph mapping to the font.
-            newFont->addGlyphMapping(rowGlyphs.at(i), newGlyph);
-        }
+        // Add glyph mapping to the font.
+        newFont->addGlyphMapping(glyph.name.at(0), newGlyph);
     }
 
     // Store the font.

@@ -21,14 +21,12 @@
 #include "mcsurface.hh"
 
 MCTextureFont::MCTextureFont(MCSurface & surface)
-  : m_default(
-    0,
-    MCTextureGlyph::UV(0, 0),
-    MCTextureGlyph::UV(1, 0),
-    MCTextureGlyph::UV(1, 1),
-    MCTextureGlyph::UV(0, 1))
-  , m_glyphLookUp(256, m_default)
-  , m_surface(surface)
+: m_default(
+      0,
+      MCTextureGlyph::UV(0, 0),
+      MCTextureGlyph::UV(1, 1))
+, m_glyphLookUp(256, m_default)
+, m_surface(surface)
 {
 }
 

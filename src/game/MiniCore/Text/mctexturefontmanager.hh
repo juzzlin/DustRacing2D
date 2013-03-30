@@ -30,25 +30,51 @@ class MCTextureFont;
 class MCTextureFontData;
 class MCSurfaceManager;
 
-/*! A singleton manager for textured monospace fonts.
+/*! A manager class for textured monospace fonts.
  *
- *  Example config file for a MCTextureFont containing glyphs
+ *  Example XML config file for a MCTextureFont containing glyphs
  *  of a monospace font. Surface "monospace" refers to a
- *  MCSurface handle loaded by MCSurfaceManager:
+ *  MCSurface handle loaded by MCSurfaceManager, containing all the glyphs:
+ *
+ *  \code
  *
  *  <?xml version="1.0"?>
  *  <!-- Config file for texture mapped fonts. -->
  *  <fonts>
- *      <font name="default" surface="monospace" maxGlyphsPerRow="15">
- *          <row y="0"   h="80" glyphs="abcdefghijklmn"/>
- *          <row y="86"  h="80" glyphs="opqrstuvwxyzåäö"/>
- *          <row y="168" h="80" glyphs="ABCDEFGHIJKLMN"/>
- *          <row y="258" h="80" glyphs="OPQRSTUVWXYZÅÄÖ"/>
- *          <row y="342" h="80" glyphs="0123456789"/>
- *          <row y="424" h="80" glyphs=" !&quot;#$%&amp;&apos;()*+,-."/>
- *          <row y="508" h="80" glyphs="/:;&lt;=&gt;?"/>
+ *      <font name="default" surface="monospace">
+ *          <glyph name="A" x0="0" y0="581" x1="34" y1="517"/>
+ *          <glyph name="B" x0="34" y0="581" x1="68" y1="517"/>
+ *          <glyph name="C" x0="68" y0="581" x1="102" y1="517"/>
+ *          <glyph name="D" x0="102" y0="581" x1="136" y1="517"/>
+ *          <glyph name="E" x0="136" y0="581" x1="170" y1="517"/>
+ *          <glyph name="F" x0="170" y0="581" x1="204" y1="517"/>
+ *          <glyph name="G" x0="204" y0="581" x1="238" y1="517"/>
+ *          <glyph name="H" x0="238" y0="581" x1="273" y1="517"/>
+ *          <glyph name="I" x0="273" y0="581" x1="307" y1="517"/>
+ *          <glyph name="J" x0="307" y0="581" x1="341" y1="517"/>
+ *          <glyph name="K" x0="341" y0="581" x1="375" y1="517"/>
+ *          <glyph name="L" x0="375" y0="581" x1="409" y1="517"/>
+ *          <glyph name="M" x0="409" y0="581" x1="443" y1="517"/>
+ *          <glyph name="N" x0="443" y0="581" x1="477" y1="517"/>
+ *          <glyph name="O" x0="0" y0="494" x1="34" y1="430"/>
+ *          <glyph name="P" x0="34" y0="494" x1="68" y1="430"/>
+ *          <glyph name="Q" x0="68" y0="494" x1="102" y1="430"/>
+ *          <glyph name="R" x0="102" y0="494" x1="136" y1="430"/>
+ *          <glyph name="S" x0="136" y0="494" x1="170" y1="430"/>
+ *          <glyph name="T" x0="170" y0="494" x1="204" y1="430"/>
+ *          <glyph name="U" x0="204" y0="494" x1="238" y1="430"/>
+ *          <glyph name="V" x0="238" y0="494" x1="273" y1="430"/>
+ *          <glyph name="W" x0="273" y0="494" x1="307" y1="430"/>
+ *          <glyph name="X" x0="307" y0="494" x1="341" y1="430"/>
+ *          <glyph name="Y" x0="341" y0="494" x1="375" y1="430"/>
+ *          <glyph name="Z" x0="375" y0="494" x1="409" y1="430"/>
  *      </font>
  *  </fonts>
+ *
+ *  \endcode
+ *
+ *  (x0, y0) is the upper left coordinate of the glyph.
+ *  (x1, y1) is the lower right coordinate of the glyph.
  */
 class MCTextureFontManager
 {

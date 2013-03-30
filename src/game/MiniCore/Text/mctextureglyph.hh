@@ -37,10 +37,18 @@ public:
         GLfloat m_u, m_v;
     };
 
-    //! Constructor.
-    MCTextureGlyph(int glyph, UV uv0, UV uv1, UV uv2, UV uv3);
+    /*! Constructor.
+     * \param glyph UTF-8 (ASCII) index of the glyph.
+     * \param uv0 Upper left texture coordinates.
+     * \param uv0 Lower right texture coordinates. */
+    MCTextureGlyph(int glyph, UV uv0, UV uv1);
 
-    //! Return UV for the given vertex.
+    /*! Return UV for the given vertex index:
+     *
+     *  0 - 1
+     *  |   |
+     *  3 - 2
+     */
     const UV & uv(MCUint vertex) const;
 
 private:
