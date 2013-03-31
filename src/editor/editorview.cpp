@@ -177,12 +177,24 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
             if (items.size())
             {
-                QGraphicsItem * item = *items.begin();
-                if (Object * object = dynamic_cast<Object *>(item))
+                // Check if there's an object at the position and handle that.
+                // Otherwise it would be difficult to select objects that are surrounded
+                // by a target node area.
+                auto iter = items.begin();
+                while (iter != items.end())
                 {
-                    handleMousePressEventOnObject(*event, *object);
+                    QGraphicsItem * item = *iter;
+                    if (Object * object = dynamic_cast<Object *>(item))
+                    {
+                        handleMousePressEventOnObject(*event, *object);
+                        return;
+                    }
+
+                    iter++;
                 }
-                else if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
+
+                QGraphicsItem * item = *items.begin();
+                if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
                 {
                     handleMousePressEventOnTargetNode(*event, *tnode);
                 }
