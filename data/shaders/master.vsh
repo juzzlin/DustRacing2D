@@ -53,7 +53,7 @@ void main()
     float diffuseLightIntensity = dot(normalize(diffuseLightDir), vec4(-inNormal, 1)) * diffuseLightColor.a;
     vColor = inColor * color * (
         vec4(ambientLightColor.rgb, 1.0) * ambientLightColor.a +
-        vec4(diffuseLightColor.rgb, 1.0) * diffuseLightIntensity) * fade;
+        vec4(diffuseLightColor.rgb, 1.0) * diffuseLightIntensity) * vec4(fade, fade, fade, 1.0);
 
     // Copy texture coorinates
     texCoord0 = inTexCoord;
