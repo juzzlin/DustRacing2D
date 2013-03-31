@@ -20,6 +20,7 @@
 #include "layers.hpp"
 
 #include <MCAssetManager>
+#include <MCLogger>
 #include <MCObject>
 #include <MCObjectFactory>
 #include <MCShapeView>
@@ -123,7 +124,11 @@ TrackObject & TrackObjectFactory::build(
 
         object = &m_objectFactory.build(data);
     }
-    else if (role == "sandAreaCurve" || role == "sandAreaBig")
+    else if (
+        role == "sandAreaCurve"        ||
+        role == "sandAreaCurve45"      ||
+        role == "sandAreaCurve45Right" ||
+        role == "sandAreaBig")
     {
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
@@ -192,6 +197,11 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
         object = &m_objectFactory.build(data);
+    }
+
+    if (!object)
+    {
+        MCLogger().fatal() << "Failed to create object '" << role.toStdString() << "'";
     }
 
     assert(object);
