@@ -36,8 +36,7 @@ NewTrackDialog::NewTrackDialog(QWidget *parent) :
 {
     setWindowTitle(tr("Create a new track"));
 
-    m_colsEdit->setValidator(new QIntValidator(this));
-    m_rowsEdit->setValidator(new QIntValidator(this));
+    m_okButton->setEnabled(false);
 
     m_layout->addWidget(m_nameLabel, 0, 0);
     m_layout->addWidget(m_nameEdit, 0, 1);
@@ -51,6 +50,9 @@ NewTrackDialog::NewTrackDialog(QWidget *parent) :
     m_layout->addWidget(m_okButton, 3, 0);
     m_layout->addWidget(m_cancelButton, 3, 1);
 
+    connect(m_nameEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
+    connect(m_rowsEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
+    connect(m_colsEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
     connect(m_okButton, SIGNAL(clicked()), this, SLOT(accept()));
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
@@ -69,3 +71,12 @@ QString NewTrackDialog::name() const
 {
     return m_nameEdit->text();
 }
+
+void NewTrackDialog::validateData()
+{
+    m_okButton->setEnabled(
+        m_nameEdit->text().length() > 0 &&
+        m_colsEdit->text().toInt()  > 1 &&
+        m_rowsEdit->text().toInt()  > 1);
+}
+

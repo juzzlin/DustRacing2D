@@ -42,6 +42,10 @@ public:
     //! Get name.
     QString name() const;
 
+private slots:
+
+    void validateData();
+
 private:
 
     QGridLayout * m_layout;
