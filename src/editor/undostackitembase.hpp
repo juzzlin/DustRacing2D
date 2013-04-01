@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Markus Rinne <markus.ka.rinne@gmail.com>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,33 +13,29 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TILEANIMATOR_HPP
-#define TILEANIMATOR_HPP
+#ifndef UNDOSTACKITEMBASE_HPP
+#define UNDOSTACKITEMBASE_HPP
 
-#include <QObject>
-#include <QTimeLine>
+class ObjectModelLoader;
+class TrackData;
 
-class TrackTile;
-
-class TileAnimator : public QTimeLine
+//! An operation that can executed with 'undo' and 'redo'.
+class UndoStackItemBase
 {
-    Q_OBJECT
-
 public:
 
-    explicit TileAnimator(TrackTile * tile);
+    UndoStackItemBase()
+    {
+    }
 
-    bool rotate90CW(qreal * newRotation);
-    bool rotate90CCW(qreal * newRotation);
+    virtual void executeUndo(TrackData * track, const ObjectModelLoader & loader) = 0;
 
-private slots:
-
-    void setTileRotation(int frame);
+    virtual void executeRedo(TrackData * track, const ObjectModelLoader & loader) = 0;
 
 private:
 
-    TrackTile * m_tile;
-    int m_a0, m_a1;
+    UndoStackItemBase(const UndoStackItemBase &);
+    UndoStackItemBase & operator = (const UndoStackItemBase &);
 };
 
-#endif // TILEANIMATOR_HPP
+#endif // UNDOSTACKITEMBASE_HPP

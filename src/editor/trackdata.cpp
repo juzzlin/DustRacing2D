@@ -15,11 +15,14 @@
 
 #include "trackdata.hpp"
 #include "tracktile.hpp"
+#include "undostackitembase.hpp"
 
 TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
 : m_name(name)
 , m_map(*this, cols, rows)
 , m_route()
+, m_undoStack()
+, m_undoStackPosition()
 {}
 
 QString TrackData::name() const
@@ -79,4 +82,40 @@ void TrackData::enlargeVerSize()
 
 TrackData::~TrackData()
 {
+}
+
+void TrackData::addItemToUndoStack(UndoStackItemBase * item)
+{
+    // "Redo" actions are lost when new items are added to undo stack.
+    m_undoStack.erase(m_undoStackPosition, m_undoStack.end());
+
+    m_undoStack.push_back(std::shared_ptr< UndoStackItemBase >(item));
+
+    m_undoStackPosition = m_undoStack.end();
+}
+
+bool TrackData::undo(const ObjectModelLoader & loader)
+{
+    UndoStack::const_iterator begin = m_undoStack.begin();
+
+    if (m_undoStackPosition != begin)
+    {
+        --m_undoStackPosition;
+        m_undoStackPosition->get()->executeUndo(this, loader);
+    }
+
+    return m_undoStackPosition != begin;
+}
+
+bool TrackData::redo(const ObjectModelLoader & loader)
+{
+    UndoStack::const_iterator end = m_undoStack.end();
+
+    if (m_undoStackPosition != end)
+    {
+        m_undoStackPosition->get()->executeRedo(this, loader);
+        ++m_undoStackPosition;
+    }
+
+    return m_undoStackPosition != end;
 }

@@ -24,6 +24,7 @@
 
 class MainWindow;
 class Object;
+class ObjectModelLoader;
 class TargetNode;
 class TargetNodeBase;
 class TrackData;
@@ -144,6 +145,12 @@ public:
 
     //! Clear the current route only.
     void clearRoute();
+
+    //! Returns true if there are more undoable operations left after the undo, false otherwise.
+    bool undo(const ObjectModelLoader & loader);
+
+    //! Returns true if there are more redoable operations left after the redo, false otherwise.
+    bool redo(const ObjectModelLoader & loader);
 
 private:
 

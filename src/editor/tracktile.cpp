@@ -119,14 +119,14 @@ TrackTile * TrackTile::activeTile()
     return TrackTile::m_activeTile;
 }
 
-void TrackTile::rotate90CW()
+bool TrackTile::rotate90CW(qreal * newRotation)
 {
-    m_animator->rotate90CW();
+    return m_animator->rotate90CW(newRotation);
 }
 
-void TrackTile::rotate90CCW()
+bool TrackTile::rotate90CCW(qreal * newRotation)
 {
-    m_animator->rotate90CCW();
+    return m_animator->rotate90CCW(newRotation);
 }
 
 void TrackTile::setTileType(const QString & type)

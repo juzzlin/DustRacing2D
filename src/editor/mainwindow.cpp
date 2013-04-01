@@ -219,6 +219,8 @@ void MainWindow::init()
     QList<int> sizes;
     sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
     splitter->setSizes(sizes);
+
+    connect(m_editorView, SIGNAL(itemAddedToUndoStack()), SLOT(handleItemAddedToUndoStack()));
 }
 
 void MainWindow::setTitle(QString openFileName)
@@ -362,6 +364,18 @@ void MainWindow::populateMenuBar()
 
     // Create "edit"-menu
     QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
+
+    // Add "undo"-action
+    m_undoAction = new QAction(tr("Undo"), this);
+    editMenu->addAction(m_undoAction);
+    connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
+    m_undoAction->setEnabled(false);
+
+    // Add "redo"-action
+    m_redoAction = new QAction(tr("Redo"), this);
+    editMenu->addAction(m_redoAction);
+    connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
+    m_redoAction->setEnabled(false);
 
     // Add "clear all"-action
     m_clearAllAction = new QAction(tr("&Clear all"), this);
@@ -533,6 +547,22 @@ void MainWindow::showAboutQtDlg()
     QMessageBox::aboutQt(this, tr("About Qt"));
 }
 
+void MainWindow::undo()
+{
+    bool hasMoreItemsToUndo = m_editorData->undo(*m_objectModelLoader);
+
+    m_undoAction->setEnabled(hasMoreItemsToUndo);
+    m_redoAction->setEnabled(true);
+}
+
+void MainWindow::redo()
+{
+    bool hasMoreItemsToRedo = m_editorData->redo(*m_objectModelLoader);
+
+    m_undoAction->setEnabled(true);
+    m_redoAction->setEnabled(hasMoreItemsToRedo);
+}
+
 void MainWindow::clear()
 {
     assert(m_editorData);
@@ -554,6 +584,10 @@ bool MainWindow::doOpenTrack(QString fileName)
     }
 
     assert(m_editorData);
+
+    // Undo stack will be cleared.
+    m_undoAction->setEnabled(false);
+    m_redoAction->setEnabled(false);
 
     if (m_editorData->loadTrackData(fileName))
     {
@@ -680,6 +714,10 @@ void MainWindow::initializeNewTrack()
         m_editorView->setScene(m_editorScene);
         m_editorView->ensureVisible(0, 0, 0, 0);
 
+        // Undo stack has been cleared.
+        m_undoAction->setEnabled(false);
+        m_redoAction->setEnabled(false);
+
         m_editorData->addTilesToScene();
         m_editorData->addObjectsToScene();
 
@@ -786,6 +824,12 @@ void MainWindow::endSetRoute()
     assert(m_editorData);
     m_editorData->endSetRoute();
     console(tr("Set route: route finished."));
+}
+
+void MainWindow::handleItemAddedToUndoStack()
+{
+    m_undoAction->setEnabled(true);
+    m_redoAction->setEnabled(false);
 }
 
 void MainWindow::console(QString text)

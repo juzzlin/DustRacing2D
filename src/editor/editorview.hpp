@@ -37,6 +37,10 @@ public:
 
     explicit EditorView(EditorData & editorData, QWidget * parent = 0);
 
+signals:
+
+    void itemAddedToUndoStack();
+
 protected:
 
     //! \reimp
@@ -63,6 +67,7 @@ private slots:
 
 private:
 
+
     void addCurrentToolBarObjectToScene();
     void createTileContextMenu();
     void createObjectContextMenu();
@@ -81,7 +86,10 @@ private:
     void handleObjectDragRelease(QMouseEvent * event);
     void handleTargetNodeDragRelease(QMouseEvent * event);
     void doSetComputerHint(TrackTileBase::ComputerHint hint);
-    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill);
+    void doFloodFill(TrackTile & tile, QAction * action, QString typeToFill);
+    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions);
+    void changeTileType(TrackTile & tile, QAction * action);
+    void addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation);
 
     static void setTileType(TrackTile & tile, QAction * action);
 

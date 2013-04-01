@@ -30,8 +30,10 @@
 #include "objectfactory.hpp"
 #include "objectmodelloader.hpp"
 #include "rotatedialog.hpp"
+#include "rotatetileundostackitem.hpp"
 #include "targetnode.hpp"
 #include "targetnodesizedlg.hpp"
+#include "tiletypeundostackitem.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
@@ -339,12 +341,12 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 
                 if (typeToFill != action->data().toString())
                 {
-                    floodFill(tile, action, typeToFill);
+                    doFloodFill(tile, action, typeToFill);
                 }
             }
             else
             {
-                setTileType(tile, action);
+                changeTileType(tile, action);
             }
         }
     }
@@ -525,16 +527,19 @@ void EditorView::doRotateTile90CW()
     QTransform dummy;
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
-    {
-        tile->rotate90CW();
-    }
 #else
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-    {
-        tile->rotate90CW();
-    }
 #endif
+    {
+        qreal oldRotation = tile->rotation();
+        qreal newRotation;
+
+        if (tile->rotate90CW(&newRotation))
+        {
+            addRotateUndoStackItem(tile, oldRotation, newRotation);
+        }
+    }
 }
 
 void EditorView::doRotateTile90CCW()
@@ -543,16 +548,19 @@ void EditorView::doRotateTile90CCW()
     QTransform dummy;
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
-    {
-        tile->rotate90CCW();
-    }
 #else
     if (TrackTile * tile =
         dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-    {
-        tile->rotate90CCW();
-    }
 #endif
+    {
+        qreal oldRotation = tile->rotation();
+        qreal newRotation;
+
+        if (tile->rotate90CCW(&newRotation))
+        {
+            addRotateUndoStackItem(tile, oldRotation, newRotation);
+        }
+    }
 }
 
 void EditorView::doRotateObject()
@@ -612,7 +620,20 @@ void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
 #endif
 }
 
-void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill)
+void EditorView::doFloodFill(TrackTile & tile, QAction * action, QString typeToFill)
+{
+    std::vector< QPoint > positions;
+
+    floodFill(tile, action, typeToFill, positions);
+
+    QString newType = action->data().toString();
+    UndoStackItemBase * item = new TileTypeUndoStackItem(positions, typeToFill, newType);
+    m_editorData.trackData()->addItemToUndoStack(item);
+
+    emit itemAddedToUndoStack();
+}
+
+void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions)
 {
     static const int DIRECTION_COUNT = 4;
 
@@ -628,6 +649,8 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
     setTileType(tile, action);
 
+    positions.push_back(tile.matrixLocation());
+
     MapBase & map = m_editorData.trackData()->map();
     QPoint location = tile.matrixLocation();
 
@@ -642,10 +665,36 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
             if (tile != nullptr && tile->tileType() == typeToFill)
             {
-                floodFill(*tile, action, typeToFill);
+                floodFill(*tile, action, typeToFill, positions);
             }
         }
     }
+}
+
+void EditorView::changeTileType(TrackTile & tile, QAction * action)
+{
+    QString oldType = tile.tileType();
+
+    setTileType(tile, action);
+
+    QString newType = tile.tileType();
+
+    std::vector< QPoint > positions;
+    positions.push_back(tile.matrixLocation());
+    UndoStackItemBase * item = new TileTypeUndoStackItem(positions, oldType, newType);
+    m_editorData.trackData()->addItemToUndoStack(item);
+
+    emit itemAddedToUndoStack();
+}
+
+void EditorView::addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation)
+{
+    QPoint pos = tile->matrixLocation();
+    UndoStackItemBase * item = new RotateTileUndoStackItem(pos, oldRotation, newRotation);
+
+    m_editorData.trackData()->addItemToUndoStack(item);
+
+    emit itemAddedToUndoStack();
 }
 
 void EditorView::setTileType(TrackTile & tile, QAction * action)

@@ -12,9 +12,11 @@ set(SRC
     objectfactory.cpp
     objectmodelloader.cpp
     rotatedialog.cpp
+    rotatetileundostackitem.cpp
     targetnode.cpp
     targetnodesizedlg.cpp
     tiletypedialog.cpp
+    tiletypeundostackitem.cpp
     tileanimator.cpp
     trackdata.cpp
     trackio.cpp

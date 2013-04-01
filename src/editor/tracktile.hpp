@@ -66,10 +66,10 @@ public:
     static void setActiveTile(TrackTile * tile);
 
     //! Rotate 90 degrees CW
-    void rotate90CW();
+    bool rotate90CW(qreal * newRotation);
 
     //! Rotate 90 degrees CCW
-    void rotate90CCW();
+    bool rotate90CCW(qreal * newRotation);
 
     //! Get the current pixmap
     QPixmap pixmap() const;

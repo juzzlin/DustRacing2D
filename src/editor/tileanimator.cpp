@@ -29,7 +29,7 @@ TileAnimator::TileAnimator(TrackTile * tile)
     connect(this, SIGNAL(frameChanged(int)), this, SLOT(setTileRotation(int)));
 }
 
-void TileAnimator::rotate90CW()
+bool TileAnimator::rotate90CW(qreal * newRotation)
 {
     if (state() == QTimeLine::NotRunning)
     {
@@ -37,10 +37,15 @@ void TileAnimator::rotate90CW()
         m_a1 = m_tile->rotation() + 90;
 
         start();
+
+        *newRotation = m_a1;
+        return true;
     }
+
+    return false;
 }
 
-void TileAnimator::rotate90CCW()
+bool TileAnimator::rotate90CCW(qreal * newRotation)
 {
     if (state() == QTimeLine::NotRunning)
     {
@@ -48,7 +53,12 @@ void TileAnimator::rotate90CCW()
         m_a1 = m_tile->rotation() - 90;
 
         start();
+
+        *newRotation = m_a1;
+        return true;
     }
+
+    return false;
 }
 
 void TileAnimator::setTileRotation(int frame)

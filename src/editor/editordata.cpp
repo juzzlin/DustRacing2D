@@ -350,3 +350,27 @@ void EditorData::clearRoute()
 
     m_mainWindow->console(QString(QObject::tr("Route cleared.")));
 }
+
+bool EditorData::undo(const ObjectModelLoader & loader)
+{
+    TrackData * track = m_trackData.get();
+
+    if (track != NULL)
+    {
+        return track->undo(loader);
+    }
+
+    return false;
+}
+
+bool EditorData::redo(const ObjectModelLoader & loader)
+{
+    TrackData * track = m_trackData.get();
+
+    if (track != NULL)
+    {
+        return track->redo(loader);
+    }
+
+    return false;
+}

@@ -84,6 +84,8 @@ public slots:
     //! \reimp
     void setVisible(bool visible);
 
+    void handleItemAddedToUndoStack();
+
 protected:
 
     //! \reimp
@@ -91,6 +93,8 @@ protected:
 
 private slots:
 
+    void undo();
+    void redo();
     void clear();
     void clearRoute();
     bool doOpenTrack(QString fileName);
@@ -125,6 +129,8 @@ private:
     QAction           * m_saveAction;
     QAction           * m_saveAsAction;
     QAction           * m_currentToolBarAction;
+    QAction           * m_undoAction;
+    QAction           * m_redoAction;
     QAction           * m_clearAllAction;
     QAction           * m_enlargeHorSize;
     QAction           * m_enlargeVerSize;

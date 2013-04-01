@@ -25,6 +25,9 @@
 
 #include "map.hpp"
 
+class ObjectModelLoader;
+class UndoStackItemBase;
+
 class TrackData : public TrackDataBase
 {
 public:
@@ -68,13 +71,26 @@ public:
     //! Enlarge vertical size.
     void enlargeVerSize();
 
+    //! Add item to undo stack.
+    void addItemToUndoStack(UndoStackItemBase * item);
+
+    //! Returns true if there are more undoable operations left after the undo, false otherwise.
+    bool undo(const ObjectModelLoader & loader);
+
+    //! Returns true if there are more redoable operations left after the redo, false otherwise.
+    bool redo(const ObjectModelLoader & loader);
+
 private:
+
+    typedef std::vector< std::shared_ptr< UndoStackItemBase > > UndoStack;
 
     QString      m_name;
     QString      m_fileName;
     Map          m_map;
     Objects      m_objects;
     Route        m_route;
+    UndoStack    m_undoStack;
+    UndoStack::iterator m_undoStackPosition;
 };
 
 #endif // TRACKDATA_HPP
