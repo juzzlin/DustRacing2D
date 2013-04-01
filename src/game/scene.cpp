@@ -604,8 +604,7 @@ void Scene::initRace()
     translateCarsToStartPositions();
 
     assert(m_activeTrack);
-    m_race.setTrack(*m_activeTrack);
-    m_race.init();
+    m_race.init(*m_activeTrack, m_game.lapCount());
 }
 
 Track & Scene::activeTrack() const

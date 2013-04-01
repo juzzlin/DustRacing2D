@@ -73,6 +73,7 @@ Game::Game()
 , m_renderDelay(1000 / m_renderFps)
 , m_renderCount(0)
 , m_availableRenderTime(0)
+, m_lapCount(5)
 , m_paused(false)
 , m_mode(OnePlayerRace)
 , m_menuMusic(nullptr)
@@ -189,6 +190,16 @@ void Game::setMode(GameMode gameMode)
 Game::GameMode Game::mode() const
 {
     return m_mode;
+}
+
+void Game::setLapCount(int lapCount)
+{
+    m_lapCount = lapCount;
+}
+
+int Game::lapCount() const
+{
+    return m_lapCount;
 }
 
 bool Game::hasTwoHumanPlayers() const

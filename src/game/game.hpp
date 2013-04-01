@@ -87,6 +87,12 @@ public:
     //! Get the game mode.
     GameMode mode() const;
 
+    //! Set the lap count.
+    void setLapCount(int lapCount);
+
+    //! Get the lap count.
+    int lapCount() const;
+
     //! \return True if the current mode has two human players.
     bool hasTwoHumanPlayers() const;
 
@@ -137,6 +143,7 @@ private:
     unsigned int           m_renderDelay;
     unsigned int           m_renderCount;
     int                    m_availableRenderTime;
+    int                    m_lapCount;
     bool                   m_paused;
     QTimer                 m_updateTimer;
     QTimer                 m_renderTimer;

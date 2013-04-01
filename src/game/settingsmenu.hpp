@@ -34,11 +34,13 @@ private:
     void populate(int width, int height);
     void populateGameModeMenu(int width, int height);
     void populateFpsMenu(int width, int height);
+    void populateLapCountMenu(int width, int height);
 
     ConfirmationMenu m_confirmationMenu;
     ResolutionMenu   m_fullScreenResolutionMenu;
     ResolutionMenu   m_windowedResolutionMenu;
     SurfaceMenu      m_gameModeMenu;
+    SurfaceMenu      m_lapCountMenu;
     SurfaceMenu      m_fpsMenu;
     KeyConfigMenu    m_keyConfigMenu;
 };

@@ -30,6 +30,8 @@
 
 #include <MCLogger>
 
+#include <sstream>
+
 class ResetAction : public MTFH::MenuItemAction
 {
 public:
@@ -108,6 +110,7 @@ static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
 static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
+static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
 static const char * FPS_MENU_ID                    = "fpsMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 
@@ -117,12 +120,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_lapCountMenu("helpBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
     populateGameModeMenu(width, height);
     populateFpsMenu(width, height);
+    populateLapCountMenu(width, height);
 
     using MTFH::MenuManager;
 
@@ -130,13 +135,15 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_windowedResolutionMenu);
     MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
+    MenuManager::instance().addMenu(m_lapCountMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
 }
 
 void SettingsMenu::populate(int width, int height)
 {
-    const int itemHeight = height / 10;
+    const int numItems   = 9;
+    const int itemHeight = height / (numItems + 2);
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -168,6 +175,10 @@ void SettingsMenu::populate(int width, int height)
     gameMode->setView(new TextMenuItemView(20, *gameMode), true);
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
+    MenuItem * lapCount = new MenuItem(width, itemHeight, "Lap Count >");
+    lapCount->setView(new TextMenuItemView(20, *lapCount), true);
+    lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
+
     MenuItem * selectFps = new MenuItem(width, itemHeight, "Select FPS >");
     selectFps->setView(new TextMenuItemView(20, *selectFps), true);
     selectFps->setMenuOpenAction(FPS_MENU_ID);
@@ -183,12 +194,14 @@ void SettingsMenu::populate(int width, int height)
     addItem(*selectFps,                  true);
     addItem(*selectWindowedResolution,   true);
     addItem(*selectFullScreenResolution, true);
+    addItem(*lapCount,                   true);
     addItem(*gameMode,                   true);
 }
 
 void SettingsMenu::populateGameModeMenu(int width, int height)
 {
-    const int itemHeight = height / 8;
+    const int numItems   = 4;
+    const int itemHeight = height / (numItems + 4);
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -241,7 +254,8 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
 
 void SettingsMenu::populateFpsMenu(int width, int height)
 {
-    const int itemHeight = height / 8;
+    const int numItems   = 2;
+    const int itemHeight = height / (numItems + 6);
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -270,11 +284,36 @@ void SettingsMenu::populateFpsMenu(int width, int height)
 
     m_fpsMenu.addItem(*fps30, true);
     m_fpsMenu.addItem(*fps60, true);
+}
 
-    MenuManager::instance().addMenu(m_confirmationMenu);
-    MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
-    MenuManager::instance().addMenu(m_windowedResolutionMenu);
-    MenuManager::instance().addMenu(m_gameModeMenu);
-    MenuManager::instance().addMenu(m_fpsMenu);
-    MenuManager::instance().addMenu(m_keyConfigMenu);
+void SettingsMenu::populateLapCountMenu(int width, int height)
+{
+    static int LAP_COUNTS[] =
+    {
+        100, 50, 25, 20, 15, 10, 5
+    };
+
+    const int numLapCounts = sizeof(LAP_COUNTS) / sizeof(int);
+    const int itemHeight   = height / (numLapCounts + 2);
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+
+    for (int i = 0; i < numLapCounts; i++)
+    {
+        std::stringstream itemText;
+        itemText << LAP_COUNTS[i];
+
+        MenuItem * lapCountItem = new MenuItem(width, itemHeight, itemText.str());
+        lapCountItem->setView(new TextMenuItemView(20, *lapCountItem), true);
+        lapCountItem->setAction(
+            [i]()
+            {
+                MCLogger().info() << LAP_COUNTS[i] << " laps selected.";
+                Game::instance().setLapCount(LAP_COUNTS[i]);
+                MenuManager::instance().popMenu();
+            });
+
+        m_lapCountMenu.addItem(*lapCountItem, true);
+    }
 }

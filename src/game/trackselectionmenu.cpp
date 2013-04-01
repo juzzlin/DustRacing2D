@@ -15,10 +15,11 @@
 
 #include "trackselectionmenu.hpp"
 
-#include "renderer.hpp"
+#include "game.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
 #include "statemachine.hpp"
+#include "renderer.hpp"
 #include "timing.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -225,7 +226,7 @@ void TrackItem::render(int x, int y)
 
     // Render track properties
     ss.str("");
-    ss << "  Laps: " << m_track.trackData().lapCount();
+    ss << "  Laps: " << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);

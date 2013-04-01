@@ -46,19 +46,16 @@ public:
     virtual ~Race();
 
     //! Init the race.
-    void init();
+    void init(Track & track, int lapCount);
 
     //! Return true, if race has started.
     bool started();
-
-    //! Set the current race track.
-    void setTrack(Track & track);
 
     //! Get the position of the given car (0 == N/A, 1 == first, 2 == second..).
     unsigned int getPositionOfCar(const Car & car) const;
 
     //! Get the number of laps.
-    unsigned int lapCount() const;
+    int lapCount() const;
 
     //! Add a car to the race.
     void addCar(Car & car);
@@ -86,12 +83,13 @@ public slots:
 
 private:
 
-    void updateRouteProgress(Car & car);
     void checkForNewLapRecord();
     void checkForNewBestPosition(const Car & car);
     void checkIfCarIsStuck(Car & car);
     bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
     void moveCarOntoPreviousCheckPoint(Car & car);
+    void setTrack(Track & track);
+    void updateRouteProgress(Car & car);
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
@@ -111,7 +109,7 @@ private:
     typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
-    unsigned int     m_lapCount;
+    int              m_lapCount;
     Timing           m_timing;
     Track          * m_track;
     bool             m_started;

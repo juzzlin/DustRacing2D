@@ -35,7 +35,7 @@ static const int HUMAN_PLAYER_INDEX2 = 1;
 static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
 
 Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay)
-: m_lapCount(0)
+: m_lapCount(5)
 , m_timing(numCars)
 , m_track(nullptr)
 , m_started(false)
@@ -47,8 +47,10 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 {
 }
 
-void Race::init()
+void Race::init(Track & track, int lapCount)
 {
+    setTrack(track);
+
     for(Car * car : m_cars)
     {
         car->setCurrentTargetNodeIndex(0);
@@ -64,6 +66,7 @@ void Race::init()
     m_checkeredFlagEnabled = false;
     m_winnerFinished       = false;
     m_started              = false;
+    m_lapCount             = lapCount;
 }
 
 void Race::start()
@@ -88,7 +91,7 @@ void Race::update()
     }
 
     // Enable the checkered flag if leader has done at least 95% of the last lap.
-    if (m_timing.leadersLap() + 1 == static_cast<int>(m_lapCount))
+    if (m_timing.leadersLap() + 1 == m_lapCount)
     {
         Car                  & leader = getLeadingCar();
         const Route          & route  = m_track->trackData().route();
@@ -101,7 +104,7 @@ void Race::update()
         }
     }
     // Check if winner has finished
-    else if (m_timing.leadersLap() == static_cast<int>(m_lapCount))
+    else if (m_timing.leadersLap() == m_lapCount)
     {
         if (!m_winnerFinished)
         {
@@ -329,8 +332,7 @@ Car & Race::getLeadingCar() const
 void Race::setTrack(Track & track)
 {
     m_track   = &track;
-    m_lapCount = m_track->trackData().lapCount();
-    m_bestPos  = Settings::instance().loadBestPos(*m_track);
+    m_bestPos = Settings::instance().loadBestPos(*m_track);
 
     m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
 
@@ -340,7 +342,7 @@ void Race::setTrack(Track & track)
     }
 }
 
-unsigned int Race::lapCount() const
+int Race::lapCount() const
 {
     return m_lapCount;
 }
