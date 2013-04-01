@@ -161,17 +161,15 @@ TrackData * TrackLoader::loadTrack(QString path)
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        const QString      name     = root.attribute("name",     "undefined");
-        const unsigned int cols     = root.attribute("cols",     "0").toUInt();
-        const unsigned int rows     = root.attribute("rows",     "0").toUInt();
-        const unsigned int lapCount = root.attribute("lapCount", "1").toUInt();
-        const unsigned int index    = root.attribute("index",    "999").toUInt();
+        const QString      name  = root.attribute("name",  "undefined");
+        const unsigned int cols  = root.attribute("cols",  "0").toUInt();
+        const unsigned int rows  = root.attribute("rows",  "0").toUInt();
+        const unsigned int index = root.attribute("index", "999").toUInt();
 
         if (cols > 0 && rows > 0)
         {
             newData = new TrackData(name, cols, rows);
             newData->setFileName(path);
-            newData->setLapCount(lapCount);
             newData->setIndex(index);
 
             // A temporary route vector.

@@ -41,12 +41,6 @@ public:
     //! Set file name.
     virtual void setFileName(QString fileName) = 0;
 
-    //! Get lap count.
-    virtual unsigned int lapCount() const;
-
-    //! Set lap count.
-    virtual void setLapCount(unsigned int laps);
-
     //! Get lap index.
     virtual unsigned int index() const;
 
@@ -73,7 +67,6 @@ public:
 
 private:
 
-    unsigned int m_lapCount;
     unsigned int m_index;
 };
 

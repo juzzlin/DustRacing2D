@@ -23,12 +23,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 
-/*! Dialog to set various track properties:
- *  - Lap count
- *  - Order number
- *  - Is unlocked by default
- *  - Unlocked by which track
- */
+/*! Dialog to set track properties */
 class TrackPropertiesDialog : public QDialog
 {
     Q_OBJECT
@@ -36,11 +31,7 @@ class TrackPropertiesDialog : public QDialog
 public:
 
     //! Constructor.
-    TrackPropertiesDialog(
-        unsigned int lapCount, unsigned int index, QWidget * parent = nullptr);
-
-    //! Get lap count.
-    unsigned int lapCount() const;
+    TrackPropertiesDialog(unsigned int index, QWidget * parent = nullptr);
 
     //! Get index.
     unsigned int index() const;
@@ -50,8 +41,6 @@ private:
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_lapCountEdit;
-    QLabel      * m_lapCountLabel;
     QLineEdit   * m_indexEdit;
     QLabel      * m_indexLabel;
 };
