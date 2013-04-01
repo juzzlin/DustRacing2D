@@ -367,12 +367,14 @@ void MainWindow::populateMenuBar()
 
     // Add "undo"-action
     m_undoAction = new QAction(tr("Undo"), this);
+    m_undoAction->setShortcut(QKeySequence("Ctrl+Z"));
     editMenu->addAction(m_undoAction);
     connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
     m_undoAction->setEnabled(false);
 
     // Add "redo"-action
     m_redoAction = new QAction(tr("Redo"), this);
+    m_redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
     editMenu->addAction(m_redoAction);
     connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
     m_redoAction->setEnabled(false);
