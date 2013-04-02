@@ -37,7 +37,7 @@ SlideFrictionGenerator::SlideFrictionGenerator(
 void SlideFrictionGenerator::setTireWearOutFactor(MCFloat value)
 {
     m_tireWearOutFactor = value;
-    m_tireWearOutFactor = std::max(0.25f, m_tireWearOutFactor);
+    m_tireWearOutFactor = std::max(0.33f, m_tireWearOutFactor);
     m_tireWearOutFactor = std::min(1.00f, m_tireWearOutFactor);
 }
 
