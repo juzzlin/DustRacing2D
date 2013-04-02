@@ -154,10 +154,10 @@ void ShaderProgram::translate(const MCVector3dF & p)
     m_program.setUniformValue(POS, p.i(), p.j(), p.k(), 0);
 }
 
-void ShaderProgram::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void ShaderProgram::setColor(const MCGLColor & color)
 {
     AutoBindRelease ab(*this);
-    m_program.setUniformValue(COLOR, r, g, b, a);
+    m_program.setUniformValue(COLOR, color.r(), color.g(), color.b(), color.a());
 }
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)

@@ -43,15 +43,18 @@ void TextMenuItemView::render(int x, int y)
 
     if (owner().focused())
     {
-        text.setColor(1.0, 1.0, 0.0, 1.0);
+        const MCGLColor yellow(1.0, 1.0, 0.0, 1.0);
+        text.setColor(yellow);
     }
     else if (owner().selected())
     {
-        text.setColor(1.0, 0.0, 0.0, 1.0);
+        const MCGLColor red(1.0, 0.0, 0.0, 1.0);
+        text.setColor(red);
     }
     else
     {
-        text.setColor(1.0, 1.0, 1.0, 1.0);
+        const MCGLColor white(1.0, 1.0, 1.0, 1.0);
+        text.setColor(white);
     }
 
     text.setShadowOffset(shadowX, shadowY);

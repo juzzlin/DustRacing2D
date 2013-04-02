@@ -174,10 +174,7 @@ void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat heig
     m_dst            = GL_ONE_MINUS_SRC_ALPHA;
     m_program        = nullptr;
     m_shadowProgram  = nullptr;
-    m_r              = 1.0;
-    m_g              = 1.0;
-    m_b              = 1.0;
-    m_a              = 1.0;
+    m_color          = MCGLColor(1.0, 1.0, 1.0, 1.0);
     m_sx             = 1.0;
     m_sy             = 1.0;
     m_sz             = 1.0;
@@ -275,12 +272,9 @@ void MCSurface::setTexCoords(const MCGLTexCoord texCoords[4])
         GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
 }
 
-void MCSurface::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+void MCSurface::setColor(const MCGLColor & color)
 {
-    m_r = r;
-    m_g = g;
-    m_b = b;
-    m_a = a;
+    m_color = color;
 }
 
 void MCSurface::setScale(MCFloat x, MCFloat y, MCFloat z)
@@ -359,7 +353,7 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
 
         m_program->bind();
         m_program->setScale(m_sx, m_sy, m_sz);
-        m_program->setColor(m_r, m_g, m_b, m_a);
+        m_program->setColor(m_color);
 
         if (m_centerSet)
         {

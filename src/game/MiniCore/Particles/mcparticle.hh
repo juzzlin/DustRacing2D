@@ -87,7 +87,7 @@ public:
   bool dieWhenOffScreen() const;
 
   //! \reimp
-  virtual void stepTime();
+  virtual void stepTime(MCFloat step);
 
   //! \reimp
   virtual void render(MCCamera * camera = nullptr);

@@ -738,19 +738,8 @@ MCBBox<MCFloat> MCObject::bbox() const
     }
 }
 
-void MCObject::stepTime()
+void MCObject::stepTime(MCFloat /* step */)
 {
-    m_time++;
-}
-
-MCUint MCObject::time() const
-{
-    return m_time;
-}
-
-void MCObject::resetTime()
-{
-    m_time = 0;
 }
 
 void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)

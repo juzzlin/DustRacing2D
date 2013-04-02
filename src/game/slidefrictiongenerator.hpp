@@ -31,6 +31,13 @@ public:
 
     //! \reimp
     virtual void updateForce(MCObject & object);
+
+    //! Set tire wear-out factor in the range of (0.0..1.0)
+    void setTireWearOutFactor(MCFloat value);
+
+private:
+
+    MCFloat m_tireWearOutFactor;
 };
 
 #endif // SLIDEFRICTIONGENERATOR_HPP

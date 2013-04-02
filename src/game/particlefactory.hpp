@@ -75,7 +75,7 @@ private:
 
     void preCreatePointParticles(int count,
         std::string typeId, ParticleType typeEnum,
-        float r, float g, float b, float a);
+        const MCGLColor & color);
 
     void preCreateRectParticles(int count, std::string typeId, ParticleType typeEnum);
 

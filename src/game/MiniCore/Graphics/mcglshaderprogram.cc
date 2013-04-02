@@ -91,7 +91,7 @@ void MCGLShaderProgram::translate(const MCVector3dF &)
 {
 }
 
-void MCGLShaderProgram::setColor(GLfloat, GLfloat, GLfloat, GLfloat)
+void MCGLShaderProgram::setColor(const MCGLColor &)
 {
 }
 

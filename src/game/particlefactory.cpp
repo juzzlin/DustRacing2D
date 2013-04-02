@@ -46,11 +46,11 @@ ParticleFactory & ParticleFactory::instance()
 
 void ParticleFactory::preCreatePointParticles(int count,
     std::string typeId, ParticleFactory::ParticleType typeEnum,
-    float r, float g, float b, float a)
+    const MCGLColor & color)
 {
     for (int i = 0; i < count; i++)
     {
-        MCGLPointParticle * particle = new MCGLPointParticle(typeId, MCGLColor(r, g, b, a));
+        MCGLPointParticle * particle = new MCGLPointParticle(typeId, color);
         particle->setFreeList(m_freeLists[typeEnum]);
 
         if (typeEnum == ParticleFactory::OnTrackSkidMark)
@@ -95,31 +95,31 @@ void ParticleFactory::preCreateParticles()
 {
     preCreateRectParticles(500, "MUD", Mud);
 
-    preCreatePointParticles(500, "ONSKID", OnTrackSkidMark, 0.1, 0.1, 0.1, 0.95);
+    preCreatePointParticles(500, "ONSKID", OnTrackSkidMark, MCGLColor(0.1, 0.1, 0.1, 0.95));
     m_renderers[OnTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
     m_renderers[OnTrackSkidMark].setTexture(MCAssetManager::surfaceManager().surface("skid").handle1());
     m_renderers[OnTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[OnTrackSkidMark].setAlphaBlend(true);
 
-    preCreatePointParticles(500, "OFFSKID", OffTrackSkidMark, 0.3, 0.2, 0.0, 0.95);
+    preCreatePointParticles(500, "OFFSKID", OffTrackSkidMark, MCGLColor(0.3, 0.2, 0.0, 0.95));
     m_renderers[OffTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
     m_renderers[OffTrackSkidMark].setTexture(MCAssetManager::surfaceManager().surface("skid").handle1());
     m_renderers[OffTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[OffTrackSkidMark].setAlphaBlend(true);
 
-    preCreatePointParticles(500, "SMOKE", Smoke, 0.75, 0.75, 0.75, 0.75);
+    preCreatePointParticles(500, "SMOKE", Smoke, MCGLColor(0.75, 0.75, 0.75, 0.75));
     m_renderers[Smoke].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[Smoke].setTexture(MCAssetManager::surfaceManager().surface("smoke").handle1());
     m_renderers[Smoke].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[Smoke].setAlphaBlend(true);
 
-    preCreatePointParticles(500, "OFFSMOKE", OffTrackSmoke, 0.6, 0.4, 0.0, 0.5);
+    preCreatePointParticles(500, "OFFSMOKE", OffTrackSmoke, MCGLColor(0.6, 0.4, 0.0, 0.5));
     m_renderers[OffTrackSmoke].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[OffTrackSmoke].setTexture(MCAssetManager::surfaceManager().surface("smoke").handle1());
     m_renderers[OffTrackSmoke].setPointSize(scalePointSizeWithResolution(48));
     m_renderers[OffTrackSmoke].setAlphaBlend(true);
 
-    preCreatePointParticles(500, "SPARKLE", Sparkle, 1.0, 0.75, 0.0, 1.0);
+    preCreatePointParticles(500, "SPARKLE", Sparkle, MCGLColor(1.0, 0.75, 0.0, 1.0));
     m_renderers[Sparkle].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[Sparkle].setTexture(MCAssetManager::surfaceManager().surface("sparkle").handle1());
     m_renderers[Sparkle].setPointSize(scalePointSizeWithResolution(16));
@@ -260,7 +260,7 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
         freeList.pop_back();
 
         mud->init(location, 4, 120);
-        mud->setColor(0.2, 0.1, 0.0, 1.0);
+        mud->setColor(MCGLColor(0.2, 0.1, 0.0, 1.0));
         mud->setAnimationStyle(MCParticle::Shrink);
         mud->rotate(MCRandom::getValue() * 360);
         mud->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
@@ -298,7 +298,7 @@ void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
         leaf->init(location, 10, 120);
         leaf->setAnimationStyle(MCParticle::Shrink);
         leaf->rotate(MCRandom::getValue() * 360);
-        leaf->setColor(0.0, 0.75, 0.0, 0.75);
+        leaf->setColor(MCGLColor(0.0, 0.75, 0.0, 0.75));
         leaf->setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());
         leaf->setAcceleration(MCVector3dF(0, 0, -5.0f));
         leaf->addToWorld();

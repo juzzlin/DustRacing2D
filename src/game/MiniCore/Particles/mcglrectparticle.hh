@@ -21,6 +21,7 @@
 #define MCGLRECTPARTICLE_HH
 
 #include "mcparticle.hh"
+#include "mcglcolor.hh"
 
 #include <MCGLEW>
 
@@ -41,7 +42,7 @@ public:
     virtual ~MCGLRectParticle();
 
     //! Set color
-    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
+    void setColor(const MCGLColor & color);
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);
@@ -62,7 +63,7 @@ private:
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
-    GLfloat m_r, m_g, m_b, m_a;
+    MCGLColor m_color;
     static GLuint m_vbo;
     static GLuint m_vao;
     MCGLShaderProgram * m_program;

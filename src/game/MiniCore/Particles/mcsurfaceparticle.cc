@@ -38,9 +38,9 @@ void MCSurfaceParticle::endBatch()
     view()->endBatch();
 }
 
-void MCSurfaceParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void MCSurfaceParticle::setColor(const MCGLColor & color)
 {
-    static_cast<MCSurfaceView *>(view())->surface()->setColor(r, g, b, a);
+    static_cast<MCSurfaceView *>(view())->surface()->setColor(color);
 }
 
 void MCSurfaceParticle::setSurface(MCSurface & surface)

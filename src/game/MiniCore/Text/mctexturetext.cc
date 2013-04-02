@@ -33,10 +33,7 @@ MCTextureText::MCTextureText(const std::string & text)
 : m_text(text)
 , m_glyphWidth(32)
 , m_glyphHeight(32)
-, m_r(1.0)
-, m_g(1.0)
-, m_b(1.0)
-, m_a(1.0)
+, m_color(1.0, 1.0, 1.0, 1.0)
 , m_xOffset(2.0)
 , m_yOffset(-2.0)
 {
@@ -100,20 +97,14 @@ int MCTextureText::glyphHeight() const
     return m_glyphHeight;
 }
 
-void MCTextureText::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+void MCTextureText::setColor(const MCGLColor & color)
 {
-    m_r = r;
-    m_g = g;
-    m_b = b;
-    m_a = a;
+    m_color = color;
 }
 
-void MCTextureText::getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const
+const MCGLColor & MCTextureText::color() const
 {
-    r = m_r;
-    g = m_g;
-    b = m_b;
-    a = m_a;
+    return m_color;
 }
 
 void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
@@ -136,7 +127,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
     MCTextureFont & font, bool shadow)
 {
     font.surface().bind();
-    font.surface().setColor(m_r, m_g, m_b, m_a);
+    font.surface().setColor(m_color);
 
     glDisable(GL_DEPTH_TEST);
 

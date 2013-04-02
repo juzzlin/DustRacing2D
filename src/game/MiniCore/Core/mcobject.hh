@@ -304,15 +304,8 @@ public:
     void setView(MCShapeView * newView);
 
     //! \brief Step internal time.
-    //! This is called AFTER every integration step. Must call base-class'
-    //! implementation in the overidden version.
-    virtual void stepTime();
-
-    //! Return internal time.
-    MCUint time() const;
-
-    //! Reset internal time.
-    void resetTime();
+    //! This is called AFTER every integration step. The default implementation does nothing.
+    virtual void stepTime(MCFloat step);
 
     //! Get view
     MCShapeView * view() const;

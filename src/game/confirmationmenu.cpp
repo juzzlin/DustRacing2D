@@ -79,7 +79,7 @@ void ConfirmationMenu::render()
     const int shadowY = -2;
     const int shadowX =  2;
 
-    text.setColor(0.25, 0.75, 1.0, 1.0);
+    text.setColor(MCGLColor(0.25, 0.75, 1.0, 1.0));
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
 

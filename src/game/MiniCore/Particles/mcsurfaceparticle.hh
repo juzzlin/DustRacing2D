@@ -22,6 +22,7 @@
 
 #include "mcparticle.hh"
 #include "mccamera.hh"
+#include "mcglcolor.hh"
 #include "mcsurface.hh"
 
 #include <string>
@@ -48,7 +49,7 @@ public:
     }
 
     //! Set color.
-    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
+    void setColor(const MCGLColor & color);
 
     //! Set the surface.
     void setSurface(MCSurface & surface);

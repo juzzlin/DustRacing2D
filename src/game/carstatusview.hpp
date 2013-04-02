@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,21 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "overlaybase.hpp"
+#ifndef CARSTATUSVIEW_HPP
+#define CARSTATUSVIEW_HPP
 
-OverlayBase::OverlayBase()
-{
-}
+#include "renderable.hpp"
 
-bool OverlayBase::update()
-{
-    return false;
-}
+class MCSurface;
+class Car;
 
-void OverlayBase::reset()
+//! Shows the tire and fuel status of a car.
+class CarStatusView : public Renderable
 {
-}
+public:
 
-OverlayBase::~OverlayBase()
-{
-}
+    //! Constructor.
+    CarStatusView();
+
+    //! \reimp
+    virtual void render();
+
+    void setCarToFollow(const Car & car);
+
+private:
+
+    MCSurface & m_body;
+    MCSurface & m_tires;
+    const Car * m_car;
+};
+
+#endif // CARSTATUSVIEW_HPP

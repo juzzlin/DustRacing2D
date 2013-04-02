@@ -25,6 +25,7 @@
 #include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcbbox.hh"
+#include "mcglcolor.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -93,7 +94,7 @@ public:
     void setTexCoords(const MCGLTexCoord texCoords[4]);
 
     //! Set color.
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
+    void setColor(const MCGLColor & color);
 
     //! Set scaling factors.
     void setScale(MCFloat x, MCFloat y, MCFloat z);
@@ -189,7 +190,7 @@ private:
     GLenum m_dst;
     GLuint m_vbo;
     GLuint m_vao;
-    GLfloat m_r, m_g, m_b, m_a;
+    MCGLColor m_color;
     MCFloat m_sx, m_sy, m_sz;
     MCGLShaderProgram * m_program;
     MCGLShaderProgram * m_shadowProgram;

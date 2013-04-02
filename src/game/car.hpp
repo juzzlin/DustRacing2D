@@ -53,6 +53,7 @@ public:
         , restitution(0.05)
         , dragLinear(1.0)
         , dragQuadratic(5.0)
+        , tireWearOutCapacity(100)
         , numberPos(-5, 0)
         , leftFrontTirePos(12, 8)
         , rightFrontTirePos(12, -8)
@@ -62,21 +63,22 @@ public:
         , rightBrakeGlowPos(-21, -8)
         {}
 
-        MCFloat maxLinearVelocity;
-        MCFloat maxAngularVelocity;
-        MCFloat accelerationFriction;
-        MCFloat brakingFriction;
-        MCFloat rollingFrictionOnTrack;
-        MCFloat rollingFrictionOffTrack;
-        MCFloat rotationFriction;
-        MCFloat slideFriction;
-        MCFloat turningImpulse;
-        MCFloat power;
-        MCFloat mass;
-        MCFloat momentOfInertia;
-        MCFloat restitution;
-        MCFloat dragLinear;
-        MCFloat dragQuadratic;
+        float maxLinearVelocity;
+        float maxAngularVelocity;
+        float accelerationFriction;
+        float brakingFriction;
+        float rollingFrictionOnTrack;
+        float rollingFrictionOffTrack;
+        float rotationFriction;
+        float slideFriction;
+        float turningImpulse;
+        float power;
+        float mass;
+        float momentOfInertia;
+        float restitution;
+        float dragLinear;
+        float dragQuadratic;
+        float tireWearOutCapacity;
 
         MCVector2dF numberPos;
         MCVector2dF leftFrontTirePos;
@@ -130,7 +132,7 @@ public:
     virtual void collisionEvent(MCCollisionEvent & event);
 
     //! \reimp
-    virtual void stepTime();
+    virtual void stepTime(MCFloat step);
 
     //! \reimp
     virtual bool update();
@@ -146,7 +148,7 @@ public:
 
     bool rightSideOffTrack() const;
 
-    void setTurningImpulse(MCFloat impulse);
+    void setTurningImpulse(float impulse);
 
     void setCurrentTargetNodeIndex(int index);
 
@@ -176,6 +178,9 @@ public:
 
     bool isHuman() const;
 
+    //! \return Tire wear level. 1.0 means no wear, 0.0 means totally worn-out tires.
+    float tireWearLevel() const;
+
 private:
 
     void setProperties(Description & desc);
@@ -195,7 +200,8 @@ private:
     bool                     m_turnLeft;
     bool                     m_turnRight;
     MCUint                   m_index;
-    MCFloat                  m_tireAngle;
+    float                    m_tireAngle;
+    float                    m_tireWearOutCapacity;
     MCSurface              & m_number;
     MCSurface              & m_frontTire;
     MCSurface              & m_brakeGlow;

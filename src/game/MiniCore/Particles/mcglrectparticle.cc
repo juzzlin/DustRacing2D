@@ -29,19 +29,15 @@
 GLuint MCGLRectParticle::m_vbo = 0;
 GLuint MCGLRectParticle::m_vao = 0;
 
-static const int NUM_VERTICES         = 6;
-static const int NUM_COLOR_COMPONENTS = 4;
-static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
-static const int NORMAL_DATA_SIZE     = sizeof(MCGLVertex) * NUM_VERTICES;
-static const int COLOR_DATA_SIZE      = sizeof(GLfloat)    * NUM_VERTICES * NUM_COLOR_COMPONENTS;
-static const int TOTAL_DATA_SIZE      = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + COLOR_DATA_SIZE;
+static const int NUM_VERTICES     = 6;
+static const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+static const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+static const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
+static const int TOTAL_DATA_SIZE  = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 : MCParticle(typeID)
-, m_r(1.0)
-, m_g(1.0)
-, m_b(1.0)
-, m_a(1.0)
+, m_color(1.0, 1.0, 1.0, 1.0)
 , m_program(nullptr)
 {
     if (m_vbo == 0 && m_vao == 0)
@@ -67,14 +63,14 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
             { 0, 0, 1}
         };
 
-        const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
+        const MCGLColor colors[NUM_VERTICES] =
         {
-            m_r, m_g, m_b, m_a,
-            m_r, m_g, m_b, m_a,
-            m_r, m_g, m_b, m_a,
-            m_r, m_g, m_b, m_a,
-            m_r, m_g, m_b, m_a,
-            m_r, m_g, m_b, m_a
+            m_color,
+            m_color,
+            m_color,
+            m_color,
+            m_color,
+            m_color
         };
 
         int offset = 0;
@@ -129,12 +125,9 @@ void MCGLRectParticle::setShaderProgram(MCGLShaderProgram * program)
     m_program = program;
 }
 
-void MCGLRectParticle::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void MCGLRectParticle::setColor(const MCGLColor & color)
 {
-    m_r = r;
-    m_g = g;
-    m_b = b;
-    m_a = a;
+    m_color = color;
 }
 
 void MCGLRectParticle::beginBatch()
@@ -172,15 +165,16 @@ void MCGLRectParticle::render(MCCamera * camera)
         }
 
         // Scale alpha if fading out.
-        GLfloat alpha = m_a;
+        GLfloat alpha = m_color.a();
         if (animationStyle() == FadeOut)
         {
             alpha *= scale();
         }
+        m_color.setA(alpha);
 
         m_program->translate(MCVector3dF(x, y, location().k()));
         m_program->rotate(angle());
-        m_program->setColor(m_r, m_g, m_b, alpha);
+        m_program->setColor(m_color);
         m_program->setScale(r, r, 1.0);
 
         glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);

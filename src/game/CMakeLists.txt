@@ -21,6 +21,7 @@ set(SRC
     ai.cpp
     car.cpp
     carparticleeffectmanager.cpp
+    carstatusview.cpp
     checkeredflag.cpp
     confirmationmenu.cpp
     credits.cpp

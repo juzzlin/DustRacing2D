@@ -20,8 +20,10 @@
 #ifndef MCTEXTURETEXT_HH
 #define MCTEXTURETEXT_HH
 
+#include "mcglcolor.hh"
 #include "mctypes.hh"
 #include "mcmacros.hh"
+
 #include <string>
 
 class MCCamera;
@@ -49,10 +51,10 @@ public:
     void setGlyphSize(int width, int height);
 
     //! Set color.
-    void setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a = 1.0);
+    void setColor(const MCGLColor & color);
 
     //! Get color.
-    void getColor(MCFloat & r, MCFloat & g, MCFloat & b, MCFloat & a) const;
+    const MCGLColor & color() const;
 
     //! Set shadow offset. Effective if renderWithShadow() is called.
     void setShadowOffset(MCFloat xOffset, MCFloat yOffset);
@@ -85,7 +87,7 @@ private:
     std::string m_text;
     int m_glyphWidth, m_glyphHeight;
     int m_textWidth, m_textHeight;
-    MCFloat m_r, m_g, m_b, m_a;
+    MCGLColor m_color;
     MCFloat m_xOffset, m_yOffset;
 };
 

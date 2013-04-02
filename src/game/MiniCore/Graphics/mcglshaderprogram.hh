@@ -24,6 +24,7 @@
 #include <MCGLM>
 
 #include "mcglambientlight.hh"
+#include "mcglcolor.hh"
 #include "mcgldiffuselight.hh"
 #include "mctypes.hh"
 #include "mcvector3d.hh"
@@ -81,8 +82,7 @@ public:
     virtual bool addFragmentShader(const std::string & path);
 
     //! Set model view projection matrix.
-    virtual void setModelViewProjectionMatrix(
-        const glm::mat4x4 & modelViewProjectionMatrix);
+    virtual void setModelViewProjectionMatrix(const glm::mat4x4 & modelViewProjectionMatrix);
 
     //! Set rotation (about Z-axis).
     virtual void rotate(GLfloat angle);
@@ -91,7 +91,7 @@ public:
     virtual void translate(const MCVector3dF & pos);
 
     //! Set color.
-    virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
+    virtual void setColor(const MCGLColor & color);
 
     //! Set scale.
     virtual void setScale(GLfloat x = 1.0, GLfloat y = 1.0, GLfloat z = 1.0);

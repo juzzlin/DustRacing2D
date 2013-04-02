@@ -16,7 +16,9 @@
 #ifndef TIMINGOVERLAY_HPP
 #define TIMINGOVERLAY_HPP
 
+#include "carstatusview.hpp"
 #include "overlaybase.hpp"
+
 #include <vector>
 #include <string>
 
@@ -53,14 +55,29 @@ public:
 
 private:
 
+    void renderCurrentLap();
+
+    void renderPosition();
+
+    void renderSpeed();
+
+    void renderCurrentLapTime();
+
+    void renderLastLapTime();
+
+    void renderRecordLapTime();
+
+    void renderCarStatusView();
+
     MCTextureFontManager   & m_fontManager;
     MCTextureFont          & m_font;
     MCTextureText            m_text;
-    const Car              * m_pCar;
-    Timing                 * m_pTiming;
-    Race                   * m_pRace;
+    const Car              * m_car;
+    Timing                 * m_timing;
+    Race                   * m_race;
     std::vector<std::string> m_posTexts;
     bool                     m_showRecordTime;
+    CarStatusView            m_carStatusView;
 };
 
 #endif // TIMINGOVERLAY_HPP

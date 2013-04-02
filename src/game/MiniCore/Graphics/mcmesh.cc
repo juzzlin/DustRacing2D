@@ -38,10 +38,7 @@ MCMesh::MCMesh(const FaceVector & faces, GLuint handle1, GLuint handle2)
 , m_handle2(handle2)
 , m_w(1.0)
 , m_h(1.0)
-, m_r(1.0)
-, m_g(1.0)
-, m_b(1.0)
-, m_a(1.0)
+, m_color(1.0, 1.0, 1.0, 1.0)
 , m_sx(1.0)
 , m_sy(1.0)
 , m_sz(1.0)
@@ -226,12 +223,9 @@ MCGLShaderProgram * MCMesh::shadowShaderProgram() const
     return m_shadowProgram;
 }
 
-void MCMesh::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
+void MCMesh::setColor(const MCGLColor & color)
 {
-    m_r = r;
-    m_g = g;
-    m_b = b;
-    m_a = a;
+    m_color = color;
 }
 
 void MCMesh::setScale(MCFloat x, MCFloat y, MCFloat z)
@@ -262,7 +256,7 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool aut
 
         m_program->bind();
         m_program->setScale(m_sx, m_sy, m_sz);
-        m_program->setColor(m_r, m_g, m_b, m_a);
+        m_program->setColor(m_color);
         m_program->translate(MCVector3dF(x, y, z));
         m_program->rotate(angle);
 

@@ -19,6 +19,8 @@
 #include <MCMathUtil>
 #include <MCTrigonom>
 
+#include <algorithm>
+
 namespace
 {
     const MCFloat FRICTION_MIN_SPEED = 0.001f;
@@ -29,7 +31,15 @@ namespace
 SlideFrictionGenerator::SlideFrictionGenerator(
     MCFloat coeff, MCFloat gravity)
 : MCFrictionGenerator(coeff, coeff, gravity)
+, m_tireWearOutFactor(1.0)
 {}
+
+void SlideFrictionGenerator::setTireWearOutFactor(MCFloat value)
+{
+    m_tireWearOutFactor = value;
+    m_tireWearOutFactor = std::max(0.25f, m_tireWearOutFactor);
+    m_tireWearOutFactor = std::min(1.00f, m_tireWearOutFactor);
+}
 
 void SlideFrictionGenerator::updateForce(MCObject & object)
 {
@@ -42,7 +52,7 @@ void SlideFrictionGenerator::updateForce(MCObject & object)
     if (s.lengthFast() > FRICTION_MIN_SPEED)
     {
         MCVector2d<MCFloat> impulse = -s * coeffLin();
-        impulse.clampFast(FRICTION_LIMIT);
+        impulse.clampFast(FRICTION_LIMIT * m_tireWearOutFactor);
         object.addLinearImpulse(impulse * coeffLin() * SLIDE_FACTOR);
     }
 }

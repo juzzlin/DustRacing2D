@@ -64,7 +64,7 @@ public:
     virtual void translate(const MCVector3dF & pos);
 
     //! \reimp
-    virtual void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    virtual void setColor(const MCGLColor & color);
 
     //! \reimp
     virtual void setScale(GLfloat x, GLfloat y, GLfloat z);

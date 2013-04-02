@@ -54,6 +54,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_turnRight(false)
 , m_index(index)
 , m_tireAngle(0)
+, m_tireWearOutCapacity(desc.tireWearOutCapacity)
 , m_number(GraphicsFactory::generateNumberSurface(index))
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
 , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
@@ -84,10 +85,10 @@ void Car::setProperties(Description & desc)
     setMaximumAngularVelocity(desc.maxAngularVelocity);
     setRestitution(desc.restitution);
 
-    setShadowOffset(MCVector2d<MCFloat>(5, -5));
+    setShadowOffset(MCVector2dF(5, -5));
 
-    const MCFloat width  = static_cast<MCRectShape *>(shape())->width();
-    const MCFloat height = static_cast<MCRectShape *>(shape())->height();
+    const float width  = static_cast<MCRectShape *>(shape())->width();
+    const float height = static_cast<MCRectShape *>(shape())->height();
     m_length = std::max(width, height);
 }
 
@@ -136,7 +137,7 @@ void Car::turnLeft()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
+        float velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25 ? 0.25 : velScaling;
 
         if (!m_reverse)
@@ -165,7 +166,7 @@ void Car::turnRight()
 
     if (std::abs(m_speedInKmh) > 1)
     {
-        MCFloat velScaling = 1.0 - m_speedInKmh / 600.0;
+        float velScaling = 1.0 - m_speedInKmh / 600.0;
         velScaling = velScaling < 0.25 ? 0.25 : velScaling;
 
         if (!m_reverse)
@@ -191,12 +192,12 @@ void Car::accelerate(bool deccelerate)
     m_pBrakingFriction->enable(false);
     m_skidding = true;
 
-    const MCFloat gravity = 9.81;
-    const MCFloat frictionLimit = mass() * m_desc.accelerationFriction * gravity;
-    MCFloat effForce = frictionLimit;
+    const float gravity = 9.81;
+    const float frictionLimit = mass() * m_desc.accelerationFriction * gravity;
+    float effForce = frictionLimit;
     if (!velocity().isZero())
     {
-        const MCFloat powerLimit = m_desc.power / velocity().lengthFast();
+        const float powerLimit = m_desc.power / velocity().lengthFast();
         if (powerLimit < frictionLimit)
         {
             effForce   = powerLimit;
@@ -204,7 +205,7 @@ void Car::accelerate(bool deccelerate)
         }
     }
 
-    const MCVector2d<MCFloat> direction(m_dx, m_dy);
+    const MCVector2dF direction(m_dx, m_dy);
 
     if (deccelerate)
     {
@@ -349,19 +350,34 @@ void Car::collisionEvent(MCCollisionEvent & event)
     event.accept();
 }
 
-void Car::stepTime()
+void Car::stepTime(MCFloat step)
 {
     // Cache dx and dy.
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
     // Cache speed in km/h. Use value of twice as big as the "real" value.
-    m_speedInKmh = velocity().dot(MCVector3d<MCFloat>(m_dx, m_dy, 0)) * 3.6 * 2;
+    m_speedInKmh = velocity().dot(MCVector3d<float>(m_dx, m_dy, 0)) * 3.6 * 2;
 
     if (m_leftSideOffTrack || m_rightSideOffTrack)
     {
         m_pOffTrackFriction->enable(true);
         m_pOnTrackFriction->enable(false);
+
+        if (isHuman())
+        {
+            if (m_tireWearOutCapacity > 0)
+            {
+                m_tireWearOutCapacity -= velocity().lengthFast() * step;
+            }
+            else
+            {
+                m_tireWearOutCapacity = 0;
+            }
+
+            static_cast<SlideFrictionGenerator *>(
+                m_pSlideFriction)->setTireWearOutFactor(tireWearLevel());
+        }
     }
     else
     {
@@ -392,7 +408,7 @@ bool Car::rightSideOffTrack() const
     return m_rightSideOffTrack;
 }
 
-void Car::setTurningImpulse(MCFloat impulse)
+void Car::setTurningImpulse(float impulse)
 {
     m_desc.turningImpulse = impulse;
 }
@@ -430,6 +446,11 @@ int Car::routeProgression() const
 bool Car::isHuman() const
 {
     return m_isHuman;
+}
+
+float Car::tireWearLevel() const
+{
+    return m_tireWearOutCapacity / m_desc.tireWearOutCapacity;
 }
 
 Car::~Car()

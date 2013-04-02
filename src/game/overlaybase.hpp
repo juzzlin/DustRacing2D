@@ -19,43 +19,25 @@
 #include <MCBBox>
 #include <MCTypes>
 
+#include "renderable.hpp"
 #include "updateableif.hpp"
 
-class MCCamera;
-
-//! Base class for overlays that are rendered on top of
-//! the game scene.
-class OverlayBase : public UpdateableIf
+//! Base class for overlays that are rendered on top of the game scene.
+class OverlayBase : public UpdateableIf, public Renderable
 {
 public:
 
     //! Constructor.
     OverlayBase();
 
-    //! Set overlay dimensions.
-    virtual void setDimensions(int width, int height);
-
-    //! Get overlay width.
-    int width() const;
-
-    //! Get overlay height.
-    int height() const;
-
     //! Destructor.
     virtual ~OverlayBase();
-
-    //! Render.
-    virtual void render() = 0;
 
     //! \reimp
     virtual bool update();
 
     //! \reimp
     virtual void reset();
-
-private:
-
-    int m_width, m_height;
 };
 
 #endif // OVERLAYBASE_HPP

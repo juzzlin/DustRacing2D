@@ -151,11 +151,11 @@ void TrackItem::render()
 
                     if (m_track.trackData().isLocked())
                     {
-                        pSurface->setColor(0.5, 0.5, 0.5);
+                        pSurface->setColor(MCGLColor(0.5, 0.5, 0.5));
                     }
                     else
                     {
-                        pSurface->setColor(1.0, 1.0, 1.0);
+                        pSurface->setColor(MCGLColor(1.0, 1.0, 1.0));
                     }
 
                     pSurface->setScale(tileH, tileW);
@@ -199,13 +199,13 @@ void TrackItem::render()
             // The range of m_bestPos is 1..NUM_CARS
             if (m_bestPos != -1 && Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos - 1)
             {
-                m_star.setColor(1.0, 1.0, 0.0);
+                m_star.setColor(MCGLColor(1.0, 1.0, 0.0));
                 m_glow.render(
                     nullptr, MCVector3dF(startX + i * starW, y() - height() / 2 + starH / 2, 0), 0);
             }
             else
             {
-                m_star.setColor(0.75, 0.75, 0.75);
+                m_star.setColor(MCGLColor(0.75, 0.75, 0.75));
             }
 
             m_star.render(

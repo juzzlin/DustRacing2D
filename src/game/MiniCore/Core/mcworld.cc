@@ -113,7 +113,7 @@ void MCWorld::integrate(MCFloat step)
             object.integrate(step);
         }
 
-        object.stepTime();
+        object.stepTime(step);
     }
 }
 
