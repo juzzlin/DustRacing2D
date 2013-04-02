@@ -26,7 +26,6 @@ set(SRC
     aboutdlg.cpp
     ai.cpp
     car.cpp
-    centrifugalforcegenerator.cpp
     checkeredflag.cpp
     confirmationmenu.cpp
     credits.cpp
@@ -45,7 +44,6 @@ set(SRC
     offtrackdetector.cpp
     overlaybase.cpp
     race.cpp
-    radius.cpp
     renderer.cpp
     resolutionmenu.cpp
     scene.cpp

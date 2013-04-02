@@ -14,11 +14,9 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
-#include "centrifugalforcegenerator.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
 #include "particlemanager.hpp"
-#include "radius.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
