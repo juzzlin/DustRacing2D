@@ -48,10 +48,6 @@ int main(int argc, char ** argv)
 {
     try
     {
-        // Create the QApplication
-#ifndef USE_QT5
-        QApplication::setGraphicsSystem("opengl");
-#endif
         QApplication app(argc, argv);
 
         initLogger();
