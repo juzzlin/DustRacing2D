@@ -163,11 +163,11 @@ void SettingsMenu::populate(int width, int height)
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
-    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, "Select full screen resolution >");
+    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, "Full screen resolution >");
     selectFullScreenResolution->setView(new TextMenuItemView(20, *selectFullScreenResolution), true);
     selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
 
-    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, "Select windowed resolution >");
+    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, "Windowed resolution >");
     selectWindowedResolution->setView(new TextMenuItemView(20, *selectWindowedResolution), true);
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
@@ -179,11 +179,11 @@ void SettingsMenu::populate(int width, int height)
     lapCount->setView(new TextMenuItemView(20, *lapCount), true);
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
-    MenuItem * selectFps = new MenuItem(width, itemHeight, "Select FPS >");
+    MenuItem * selectFps = new MenuItem(width, itemHeight, "FPS >");
     selectFps->setView(new TextMenuItemView(20, *selectFps), true);
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
-    MenuItem * configureKeys = new MenuItem(width, itemHeight, "Configure keys >");
+    MenuItem * configureKeys = new MenuItem(width, itemHeight, "Key configuration >");
     configureKeys->setView(new TextMenuItemView(20, *configureKeys), true);
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
