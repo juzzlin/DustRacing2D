@@ -13,8 +13,10 @@ option(DebugBuild "DebugBuild" OFF)
 option(Ubuntu "Ubuntu" OFF)
 
 if(UseQt5)
+    message(STATUS "Using Qt5.")
     cmake_minimum_required(VERSION 2.8.8)
 else()
+    message(STATUS "Using Qt4. Add -DUseQt5=ON to build for Qt5.")
     cmake_minimum_required(VERSION 2.8.7)
 endif()
 
