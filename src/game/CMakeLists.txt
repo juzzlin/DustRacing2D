@@ -4,9 +4,6 @@ add_subdirectory(MiniCore)
 # Sub build: Menu Toolkit From Hell
 add_subdirectory(MTFH)
 
-# Sub build: Sound Toolkit
-add_subdirectory(SFX)
-
 # Engine include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Asset")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
@@ -17,9 +14,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
 
 # Menu toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
-
-# Sound toolkit include paths
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/SFX")
 
 # Set sources
 set(SRC
@@ -131,9 +125,6 @@ target_link_libraries(
     ${GAME_BINARY_NAME}
     MiniCore
     MTFH
-    SFX
     ${OPENGL_gl_LIBRARY}
     ${OPENGL_glu_LIBRARY}
-    ${SDL_LIBRARY}
-    ${SDLMIXER_LIBRARY}
 )

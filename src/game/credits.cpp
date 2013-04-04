@@ -25,8 +25,6 @@ static MCTextureText CREDITS_TEXT(
     "* Jussi Lind\n"
     "* Ville Makiranta\n"
     "* FindIcons.com\n\n"
-    "MUSIC PLAYED & COMPOSED BY\n\n"
-    "* Jussi Lind\n\n"
     "RACE TRACKS BY\n\n"
     "* Jussi Lind\n\n"
     "FONT\n\n"

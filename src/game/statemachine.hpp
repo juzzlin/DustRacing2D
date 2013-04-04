@@ -32,10 +32,6 @@ class Renderer;
 class Startlights;
 class Track;
 
-namespace SFX {
-class Music;
-}
-
 //! The main state machine of the game.
 class StateMachine : public UpdateableIf
 {
@@ -122,7 +118,6 @@ private:
     Track            * m_track;
     MCFloat            m_fadeValue;
     bool               m_returnToMenu;
-    SFX::Music       * m_themeSong;
 };
 
 #endif // STATEMACHINE_HPP

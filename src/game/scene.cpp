@@ -65,8 +65,6 @@
 #include <QObject>
 #include <QApplication>
 
-#include <Sound>
-
 #include <algorithm>
 #include <cassert>
 
@@ -97,10 +95,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_particleManager(new ParticleManager)
 {
     QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
-
-    QObject::connect(
-        m_startlights, SIGNAL(soundRequested(const std::string &)),
-        &m_game, SLOT(playSound(const std::string &)));
 
     m_stateMachine.setRenderer(renderer);
     m_stateMachine.setRace(m_race);
@@ -150,8 +144,6 @@ void Scene::createCars()
 {
     const int   humanPower = 200000; // This in Watts
     const float humanDrag  = 5.0;
-
-    SFX::Sound::removeListeners();
 
     m_race.removeCars();
     m_cars.clear();
@@ -212,11 +204,9 @@ void Scene::createCars()
 
     if (m_game.hasTwoHumanPlayers())
     {
-        SFX::Sound::addListener(*m_cars.at(1));
         m_timingOverlay[1].setCarToFollow(*m_cars.at(1));
     }
 
-    SFX::Sound::addListener(*m_cars.at(0));
     m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
 }
 
@@ -434,8 +424,6 @@ void Scene::setActiveTrack(Track & activeTrack)
     {
         ai->setTrack(activeTrack);
     }
-
-    SFX::Sound::setMaximumDistance(512);
 }
 
 void Scene::setWorldDimensions()

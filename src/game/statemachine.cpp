@@ -23,7 +23,6 @@
 #include "track.hpp"
 
 #include <MenuManager>
-#include <Music>
 #include <cassert>
 
 StateMachine * StateMachine::m_instance = nullptr;
@@ -42,7 +41,6 @@ StateMachine::StateMachine()
 , m_track(nullptr)
 , m_fadeValue(0.0)
 , m_returnToMenu(false)
-, m_themeSong(nullptr)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
@@ -132,7 +130,6 @@ void StateMachine::stateDoIntro()
     if (m_intro->update()) // Intro return true when done.
     {
         m_renderer->setFadeValue(1.0);
-        m_game->playMenuMusic();
         m_state = Menu;
     }
 }
@@ -160,8 +157,6 @@ void StateMachine::stateMenuTransitionIn()
         m_isFading  = false;
         m_state     = Menu;
 
-        m_game->playMenuMusic();
-
         // Re-init the track selection menu
         MTFH::MenuManager::instance().enterCurrentMenu();
     }
@@ -181,15 +176,11 @@ void StateMachine::stateMenuTransitionOut()
         m_state     = GameTransitionIn;
         m_fadeValue = 0.0;
         m_isFading  = false;
-
-        SFX::Music::stop();
     }
     else
     {
         m_fadeValue -= FADE_SPEED_MENU;
         m_isFading   = true;
-
-        SFX::Music::fadeOut(1000);
     }
 
     m_renderer->setFadeValue(m_fadeValue);

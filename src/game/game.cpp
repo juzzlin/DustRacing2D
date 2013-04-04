@@ -32,17 +32,10 @@
 #include <MCLogger>
 #include <MCObjectFactory>
 
-#include <Device>
-#include <Music>
-#include <SoundManager>
-#include <Sound>
-
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTime>
-
-#include <SDL/SDL.h>
 
 #include <cassert>
 
@@ -60,8 +53,6 @@ Game::Game()
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "textures.conf",
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "fonts.conf",
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "meshes.conf"))
-, m_soundDevice(new SFX::Device)
-, m_soundManager(new SFX::SoundManager)
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
 , m_trackLoader(new TrackLoader(*m_objectFactory))
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
@@ -76,8 +67,6 @@ Game::Game()
 , m_lapCount(5)
 , m_paused(false)
 , m_mode(OnePlayerRace)
-, m_menuMusic(nullptr)
-, m_gameMusic(nullptr)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -86,9 +75,6 @@ Game::Game()
 
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
-    connect(
-        m_eventHandler, SIGNAL(soundRequested(const std::string &)),
-        this, SLOT(playSound(const std::string &)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
@@ -218,12 +204,6 @@ EventHandler & Game::eventHandler() const
     return *m_eventHandler;
 }
 
-SFX::SoundManager & Game::soundManager() const
-{
-    assert(m_soundManager);
-    return *m_soundManager;
-}
-
 Renderer & Game::renderer() const
 {
     assert(m_renderer);
@@ -264,43 +244,8 @@ void Game::initScene()
     m_renderer->setScene(*m_scene);
 }
 
-bool Game::initAudio()
-{
-    MCLogger().info() << "Initing SDL audio..";
-
-    // Init SDL with AUDIO only
-    if (SDL_Init(SDL_INIT_AUDIO) != 0)
-    {
-        throw MCException("Initing SDL failed!");
-    }
-
-    if (!m_soundDevice->init())
-    {
-        throw MCException("Initing SDL mixer failed!");
-    }
-
-    return true;
-}
-
-void Game::loadSounds()
-{
-    const std::string soundConfigPath(
-        std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "sounds.conf");
-    MCLogger().info() << "Loading sound config from '" << soundConfigPath << "'..";
-    m_soundManager->load(soundConfigPath, std::string(Config::Common::dataPath));
-}
-
 bool Game::init()
 {
-    if (initAudio())
-    {
-        loadSounds();
-    }
-    else
-    {
-        return false;
-    }
-
     m_assetManager->load();
 
     if (loadTracks())
@@ -311,8 +256,6 @@ bool Game::init()
     {
         return false;
     }
-
-    m_menuMusic  = &m_soundManager->music("theme");
 
     return true;
 }
@@ -350,29 +293,6 @@ void Game::exitGame()
     QApplication::instance()->exit();
 }
 
-void Game::playMenuMusic()
-{
-    if (m_menuMusic)
-    {
-        m_menuMusic->play(-1, DEFAULT_VOLUME);
-    }
-}
-
-void Game::playGameMusic()
-{
-    if (m_gameMusic)
-    {
-        m_gameMusic->play(-1, DEFAULT_VOLUME);
-    }
-}
-
-void Game::playSound(const std::string & handle)
-{
-    SFX::Sound & sound = m_soundManager->sound(handle);
-    sound.setVolume(DEFAULT_VOLUME);
-    sound.play();
-}
-
 void Game::updateFrame()
 {
     updateAnimations();
@@ -405,8 +325,4 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
-    delete m_soundDevice;
-    delete m_soundManager;
-
-    SDL_Quit();
 }

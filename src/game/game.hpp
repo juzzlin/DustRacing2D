@@ -34,13 +34,6 @@ class TrackLoader;
 class MCObjectFactory;
 class MCAssetManager;
 
-namespace SFX {
-class Device;
-class Music;
-class Sound;
-class SoundManager;
-}
-
 //! The main game class.
 class Game : public QObject
 {
@@ -101,15 +94,10 @@ public:
 
     EventHandler & eventHandler() const;
 
-    SFX::SoundManager & soundManager() const;
-
 public slots:
 
     void togglePause();
     void exitGame();
-    void playMenuMusic();
-    void playGameMusic();
-    void playSound(const std::string & handle);
 
 private slots:
 
@@ -123,17 +111,13 @@ private:
     void adjustSceneSize(int hRes, int vRes, bool fullScreen);
     void createRenderer();
     void initScene();
-    bool initAudio();
     bool loadTracks();
-    void loadSounds();
 
     Settings               m_settings;
     StateMachine         * m_stateMachine;
     Renderer             * m_renderer;
     Scene                * m_scene;
     MCAssetManager       * m_assetManager;
-    SFX::Device          * m_soundDevice;
-    SFX::SoundManager    * m_soundManager;
     MCObjectFactory      * m_objectFactory;
     TrackLoader          * m_trackLoader;
     InputHandler         * m_inputHandler;
@@ -150,8 +134,6 @@ private:
     QTimer                 m_updateTimer;
     QTimer                 m_renderTimer;
     GameMode               m_mode;
-    SFX::Music           * m_menuMusic;
-    SFX::Music           * m_gameMusic;
 
     static Game * m_instance;
 };

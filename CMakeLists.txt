@@ -73,15 +73,6 @@ endif()
 # game binary)
 find_package(OpenGL REQUIRED)
 
-# REQUIRED does not work in CMake <=2.4.6 for SDL
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
-
-# Workaround for the non-working REQUIRED flag
-if (NOT SDL_FOUND)
-   message (FATAL_ERROR "SDL libraries not found!")
-endif (NOT SDL_FOUND)
-
 # Enable CMake's unit test framework
 enable_testing()
 
@@ -99,14 +90,12 @@ if(ReleaseBuild)
     install(FILES data/fonts.conf DESTINATION ${DATA_PATH})
     install(FILES data/meshes.conf DESTINATION ${DATA_PATH})
     install(FILES data/textures.conf DESTINATION ${DATA_PATH})
-    install(FILES data/sounds.conf DESTINATION ${DATA_PATH})
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.jpg")
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
     install(DIRECTORY data/models DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.obj")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
-    install(DIRECTORY data/sounds DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.ogg")
 
     # Install .desktop files
     install(FILES dustrac-game.desktop DESTINATION share/applications)
