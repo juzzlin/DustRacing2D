@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "mainmenu.hpp"
-#include "game.hpp"
 #include "renderer.hpp"
 #include "textmenuitemview.hpp"
 
@@ -28,16 +27,6 @@
 #include <MCSurfaceManager>
 
 #include <QApplication>
-
-class QuitAction : public MTFH::MenuItemAction
-{
-    //! \reimp
-    void fire()
-    {
-        MCLogger().info() << "Quit selected from the main menu.";
-        Game::instance().exitGame();
-    }
-};
 
 MainMenu::MainMenu(std::string id, int width, int height)
 : SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
@@ -58,9 +47,14 @@ MainMenu::MainMenu(std::string id, int width, int height)
     credits->setView(new TextMenuItemView(40, *credits), true);
     credits->setMenuOpenAction("credits");
 
-    MenuItem * quit = new MenuItem(width, itemHeight, "Quit");
+    MTFH::MenuItem * quit = new MenuItem(width, itemHeight, "Quit");
     quit->setView(new TextMenuItemView(40, *quit), true);
-    quit->setAction(new QuitAction, true);
+    quit->setAction(
+        [this]()
+        {
+            MCLogger().info() << "Quit selected from the main menu.";
+            emit exitGameRequested();
+        });
 
     MenuItem * settings = new MenuItem(width, itemHeight, "Settings");
     settings->setView(new TextMenuItemView(40, *settings), true);

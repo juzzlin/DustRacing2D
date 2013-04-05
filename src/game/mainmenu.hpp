@@ -16,15 +16,22 @@
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
+#include <QObject>
 #include "surfacemenu.hpp"
 
 //! The main menu of the game.
-class MainMenu : public SurfaceMenu
+class MainMenu : public QObject, public SurfaceMenu
 {
+    Q_OBJECT
+
 public:
 
     //! Constructor.
     MainMenu(std::string id, int width, int height);
+
+signals:
+
+    void exitGameRequested();
 };
 
 #endif // MAINMENU_HPP

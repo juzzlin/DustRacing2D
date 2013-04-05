@@ -231,6 +231,8 @@ void Scene::createMenus()
     m_menuManager = new MTFH::MenuManager;
 
     m_mainMenu = new MainMenu("main", width(), height());
+    QObject::connect(
+        static_cast<MainMenu *>(m_mainMenu), SIGNAL(exitGameRequested()), &m_game, SLOT(exitGame()));
     m_menuManager->addMenu(*m_mainMenu);
 
     m_help = new Help("help", width(), height());
