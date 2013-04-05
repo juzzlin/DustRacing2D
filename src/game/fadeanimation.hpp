@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,35 +13,46 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef INTRO_HPP
-#define INTRO_HPP
+#ifndef FADEANIMATION_HPP
+#define FADEANIMATION_HPP
 
-#include "overlaybase.hpp"
-
+#include <QObject>
 #include <QTimer>
 
-class MCSurface;
-class MCTextureFont;
-
-//! The intro animation.
-class Intro : public OverlayBase
+class FadeAnimation : public QObject
 {
+    Q_OBJECT
+
 public:
 
-    //! Constructor.
-    Intro();
+    explicit FadeAnimation(int updateFps = 60);
 
-    //! \reimp
-    void render();
+    bool isFading() const;
 
-    void setFadeValue(float value);
+signals:
 
-    //! \reimp
-    void setDimensions(int width, int height);
+    void fadeInFinished();
+    void fadeOutFinished();
+    void fadeValueChanged(float);
+
+public slots:
+
+    void beginFadeIn(int preDelayMSec, int msec, int postDelayMSec);
+    void beginFadeOut(int preDelayMSec, int msec, int postDelayMSec);
+
+private slots:
+
+    void updateAnimation();
 
 private:
 
-    MCSurface & m_back;
+    QTimer m_timer;
+    float  m_updateFps;
+    float  m_fadeValue;
+    float  m_step;
+    int    m_preDelayMSec;
+    int    m_postDelayMSec;
+    bool   m_fadeIn;
 };
 
-#endif // INTRO_HPP
+#endif // FADEANIMATION_HPP

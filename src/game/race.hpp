@@ -68,10 +68,12 @@ public:
 
     bool checkeredFlagEnabled() const;
 
-    //! Return true if the race has finished
-    bool finished() const;
-
     Car & getLeadingCar() const;
+
+signals:
+
+    //! A race has finished
+    void finished();
 
 public slots:
 
@@ -90,6 +92,8 @@ private:
     void checkIfCarIsStuck(Car & car);
 
     bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
+
+    bool isRaceFinished() const;
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 

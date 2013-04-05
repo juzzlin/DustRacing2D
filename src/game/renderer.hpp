@@ -64,17 +64,21 @@ public:
     //! Set event handler to be used.
     void setEventHandler(EventHandler & eventHandler);
 
-    void setEnabled(bool enable);
-
-    void setFadeShaderEnabled(bool enable);
-
-    void setFadeValue(float value);
-
     MCGLShaderProgram & program(const std::string & id);
 
     MCGLScene & glScene();
 
     float fadeValue() const;
+
+signals:
+
+    void closed();
+
+public slots:
+
+    void setEnabled(bool enable);
+
+    void setFadeValue(float value);
 
 protected:
 
@@ -95,10 +99,6 @@ protected:
 
     //! \reimp
     void closeEvent(QCloseEvent * event);
-
-signals:
-
-    void closed();
 
 private:
 

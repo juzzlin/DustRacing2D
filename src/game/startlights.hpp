@@ -17,11 +17,10 @@
 #define STARTLIGHTS_HPP
 
 #include <QObject>
+#include <QTimer>
 
 #include "MiniCore/Core/MCTypes"
 #include "MiniCore/Core/MCVectorAnimation"
-
-#include "updateableif.hpp"
 
 #include <functional>
 #include <map>
@@ -32,7 +31,7 @@ class Race;
 
 //! Startlight model that controls the position and animation
 //! of the startlights.
-class Startlights : public QObject, public UpdateableIf
+class Startlights : public QObject
 {
     Q_OBJECT
 
@@ -54,12 +53,6 @@ public:
     //! Constructor.
     Startlights(MessageOverlay & messageOverlay);
 
-    //! \reimp
-    virtual bool update();
-
-    //! \reimp
-    virtual void reset();
-
     State state() const;
 
     void setDimensions(MCUint width, MCUint height);
@@ -72,27 +65,29 @@ signals:
 
     void soundRequested(const std::string & handle);
     void raceStarted();
+    void animationEnded();
+
+public slots:
+
+    void beginAnimation();
+
+private slots:
+
+    void updateAnimation();
 
 private:
 
-    typedef std::map<State, std::function<bool()> > StateToFunctionMap;
+    typedef std::map<State, std::function<void()> > StateToFunctionMap;
     StateToFunctionMap m_stateToFunctionMap;
 
-    bool stateInit();
-
-    bool stateAppear();
-
-    bool stateFirstRow();
-
-    bool stateSecondRow();
-
-    bool stateThirdRow();
-
-    bool stateGo();
-
-    bool stateDisappear();
-
-    bool stateEnd();
+    void stateInit();
+    void stateAppear();
+    void stateFirstRow();
+    void stateSecondRow();
+    void stateThirdRow();
+    void stateGo();
+    void stateDisappear();
+    void stateEnd();
 
     bool timeElapsed(MCUint limit);
 
@@ -105,6 +100,7 @@ private:
     MCFloat           m_glowScale;
     MCVectorAnimation m_animation;
     MessageOverlay  & m_messageOverlay;
+    QTimer            m_timer;
 };
 
 #endif // STARTLIGHTS_HPP

@@ -27,6 +27,7 @@
 
 class AI;
 class CheckeredFlag;
+class FadeAnimation;
 class Game;
 class InputHandler;
 class Intro;
@@ -134,6 +135,7 @@ private:
     MTFH::MenuManager   * m_menuManager;
     Intro               * m_intro;
     ParticleManager     * m_particleManager;
+    FadeAnimation       * m_fadeAnimation;
 
     typedef std::shared_ptr<Car> CarPtr;
     typedef std::vector<CarPtr> CarVector;

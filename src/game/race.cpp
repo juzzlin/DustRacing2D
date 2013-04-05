@@ -193,48 +193,57 @@ bool Race::started()
 
 void Race::update()
 {
-    for(Car * pCar : m_cars)
+    if (!isRaceFinished())
     {
-        updateRouteProgress(*pCar);
-    }
-
-    // Enable the checkered flag if leader has done at least 95% of the last lap.
-    if (m_timing.leadersLap() + 1 == m_lapCount)
-    {
-        Car                  & leader = getLeadingCar();
-        const Route          & route  = m_track->trackData().route();
-        const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
-
-        if (tnode.index() >=
-            static_cast<int>(9 * route.numNodes() / 10))
+        for(Car * pCar : m_cars)
         {
-            m_checkeredFlagEnabled = true;
+            updateRouteProgress(*pCar);
         }
-    }
-    // Check if winner has finished
-    else if (m_timing.leadersLap() == m_lapCount)
-    {
-        if (!m_winnerFinished)
+
+        // Enable the checkered flag if leader has done at least 95% of the last lap.
+        if (m_timing.leadersLap() + 1 == m_lapCount)
         {
-            m_winnerFinished = true;
+            Car                  & leader = getLeadingCar();
+            const Route          & route  = m_track->trackData().route();
+            const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
 
-            Car & leader = getLeadingCar();
-            m_timing.setRaceCompleted(leader.index(), true);
-
-            if (m_game.mode() == Game::TimeTrial)
+            if (tnode.index() >=
+                static_cast<int>(9 * route.numNodes() / 10))
             {
-                m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
-            }
-            else
-            {
-                m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+                m_checkeredFlagEnabled = true;
             }
         }
-    }
+        // Check if winner has finished
+        else if (m_timing.leadersLap() == m_lapCount)
+        {
+            if (!m_winnerFinished)
+            {
+                m_winnerFinished = true;
 
-    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
-    {
-        otd->update();
+                Car & leader = getLeadingCar();
+                m_timing.setRaceCompleted(leader.index(), true);
+
+                if (m_game.mode() == Game::TimeTrial)
+                {
+                    m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
+                }
+                else
+                {
+                    m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+                }
+            }
+        }
+
+        for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+        {
+            otd->update();
+        }
+
+        // Check here to send it only once
+        if (isRaceFinished())
+        {
+            emit finished();
+        }
     }
 }
 
@@ -480,7 +489,7 @@ bool Race::checkeredFlagEnabled() const
     return m_checkeredFlagEnabled;
 }
 
-bool Race::finished() const
+bool Race::isRaceFinished() const
 {
     if (m_game.hasTwoHumanPlayers())
     {

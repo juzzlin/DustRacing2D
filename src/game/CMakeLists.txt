@@ -24,6 +24,7 @@ set(SRC
     confirmationmenu.cpp
     credits.cpp
     eventhandler.cpp
+    fadeanimation.cpp
     game.cpp
     graphicsfactory.cpp
     help.cpp

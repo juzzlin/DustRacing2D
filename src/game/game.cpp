@@ -87,8 +87,6 @@ Game::Game()
         QDir::separator() + "levels");
     m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
         Config::Common::TRACK_SEARCH_PATH);
-
-    m_stateMachine->setGame(*this);
 }
 
 Game & Game::instance()
@@ -142,6 +140,8 @@ void Game::createRenderer()
     // to load textures to correct OpenGL context.
     m_renderer->makeCurrent();
     m_renderer->setEventHandler(*m_eventHandler);
+
+    connect(m_stateMachine, SIGNAL(renderingEnabled(bool)), m_renderer, SLOT(setEnabled(bool)));
 }
 
 void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
@@ -290,6 +290,8 @@ void Game::togglePause()
 
 void Game::exitGame()
 {
+    stop();
+
     QApplication::instance()->exit();
 }
 

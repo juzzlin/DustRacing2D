@@ -55,7 +55,7 @@ Renderer::Renderer(
 , m_eventHandler(nullptr)
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
-, m_enabled(true)
+, m_enabled(false)
 , m_hRes(hRes)
 , m_vRes(vRes)
 , m_nativeResolution(nativeResolution)
@@ -184,47 +184,49 @@ void Renderer::renderNativeResolutionOrWindowed()
 void Renderer::renderCustomResolution()
 {
     // Render the game scene to the frame buffer object
-
-    resizeGL(m_hRes, m_vRes);
-
-    static QGLFramebufferObject fbo(m_hRes, m_vRes);
-
-    fbo.bind();
-
     if (m_enabled)
     {
+        resizeGL(m_hRes, m_vRes);
+
+        static QGLFramebufferObject fbo(m_hRes, m_vRes);
+
+        fbo.bind();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (m_scene)
         {
             m_scene->render();
         }
+
+        fbo.release();
+
+        // Render the frame buffer object onto the screen
+
+        const int fullVRes = QApplication::desktop()->height();
+        const int fullHRes = QApplication::desktop()->width();
+
+        resizeGL(fullHRes, fullVRes);
+
+        MCSurface sd(fbo.texture(), 0, Scene::width(), Scene::height());
+        sd.setShaderProgram(&program("fbo"));
+        sd.bindTexture();
+        sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
     }
-
-    fbo.release();
-
-    // Render the frame buffer object onto the screen
-
-    const int fullVRes = QApplication::desktop()->height();
-    const int fullHRes = QApplication::desktop()->width();
-
-    resizeGL(fullHRes, fullVRes);
-
-    MCSurface sd(fbo.texture(), 0, Scene::width(), Scene::height());
-    sd.setShaderProgram(&program("fbo"));
-    sd.bindTexture();
-    sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 }
 
 void Renderer::paintGL()
 {
-    if (!m_fullScreen || m_nativeResolution)
+    if (m_enabled)
     {
-        renderNativeResolutionOrWindowed();
-    }
-    else
-    {
-        renderCustomResolution();
+        if (!m_fullScreen || m_nativeResolution)
+        {
+            renderNativeResolutionOrWindowed();
+        }
+        else
+        {
+            renderCustomResolution();
+        }
     }
 
     swapBuffers();

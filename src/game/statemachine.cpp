@@ -15,32 +15,15 @@
 
 #include "statemachine.hpp"
 
-#include "game.hpp"
-#include "intro.hpp"
-#include "race.hpp"
-#include "renderer.hpp"
-#include "startlights.hpp"
-#include "track.hpp"
-
 #include <MenuManager>
 #include <cassert>
 
 StateMachine * StateMachine::m_instance = nullptr;
 
-static const float FADE_SPEED_MENU = 0.02;
-static const float FADE_SPEED_GAME = 0.01;
-
 StateMachine::StateMachine()
 : m_state(Init)
-, m_isFading(false)
-, m_game(nullptr)
-, m_intro(nullptr)
-, m_startlights(nullptr)
-, m_race(nullptr)
-, m_renderer(nullptr)
-, m_track(nullptr)
-, m_fadeValue(0.0)
-, m_returnToMenu(false)
+, m_oldState(Init)
+, m_raceFinished(false)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
@@ -67,42 +50,11 @@ StateMachine & StateMachine::instance()
     return *StateMachine::m_instance;
 }
 
-void StateMachine::setGame(Game & game)
-{
-    m_game = &game;
-}
-
-void StateMachine::setIntro(Intro & intro)
-{
-    m_intro = &intro;
-}
-
-void StateMachine::setTrack(Track & track)
-{
-    m_track = &track;
-}
-
-void StateMachine::setRenderer(Renderer & renderer)
-{
-    m_renderer = &renderer;
-    m_renderer->setEnabled(false);
-}
-
-void StateMachine::setRace(Race & race)
-{
-    m_race = &race;
-}
-
-void StateMachine::setStartlights(Startlights & startlights)
-{
-    m_startlights = &startlights;
-}
-
 void StateMachine::quit()
 {
     if (m_state == StateMachine::Play)
     {
-        m_returnToMenu = true;
+        m_state = GameTransitionOut;
     }
     else if (m_state == StateMachine::Menu)
     {
@@ -112,154 +64,125 @@ void StateMachine::quit()
 
 bool StateMachine::update()
 {
-    m_stateToFunctionMap[m_state]();
+    // Run the state function on transition
+    if (m_state == Init || m_oldState != m_state)
+    {
+        m_oldState = m_state;
+        m_stateToFunctionMap[m_state]();
+    }
+
+    // Transition logic that needs to be constantly updated
+    switch (m_state)
+    {
+    case Menu:
+        if (MTFH::MenuManager::instance().done())
+        {
+            m_state = MenuTransitionOut;
+        }
+        break;
+    default:
+        break;
+   }
 
     return true;
 }
 
-void StateMachine::stateInit()
+void StateMachine::endFadeIn()
 {
-    m_state     = DoIntro;
-    m_fadeValue = 0.0;
-}
-
-void StateMachine::stateDoIntro()
-{
-    assert(m_renderer);
-
-    if (m_intro->update()) // Intro return true when done.
+    if (m_state == DoIntro)
     {
-        m_renderer->setFadeValue(1.0);
+        m_state = Menu;
+    }
+    else if (m_state == GameTransitionIn)
+    {
+        m_state = DoStartlights;
+    }
+    else if (m_state == MenuTransitionIn)
+    {
         m_state = Menu;
     }
 }
 
+void StateMachine::endFadeOut()
+{
+    if (m_state == MenuTransitionOut)
+    {
+        m_state = GameTransitionIn;
+    }
+    else if (m_state == GameTransitionOut)
+    {
+        m_state = MenuTransitionIn;
+    }
+}
+
+void StateMachine::endStartlightAnimation()
+{
+    m_state = Play;
+}
+
+void StateMachine::stateInit()
+{
+    m_state = DoIntro;
+}
+
+void StateMachine::stateDoIntro()
+{
+    emit fadeInRequested(0, 5000, 5000);
+    emit renderingEnabled(true);
+}
+
 void StateMachine::stateMenu()
 {
-    m_returnToMenu = false;
-    m_fadeValue    = 1.0;
-    m_isFading     = true; // Must be set to apply the initial fade value is set in Scene.
-    m_renderer->setFadeValue(m_fadeValue);
-
-    if (MTFH::MenuManager::instance().done())
-    {
-        m_state = MenuTransitionOut;
-    }
+    // Re-init the current menu
+    MTFH::MenuManager::instance().enterCurrentMenu();
 }
 
 void StateMachine::stateMenuTransitionIn()
 {
-    assert(m_renderer);
-
-    if (m_fadeValue >= 1.0)
-    {
-        m_fadeValue = 1.0;
-        m_isFading  = false;
-        m_state     = Menu;
-
-        // Re-init the track selection menu
-        MTFH::MenuManager::instance().enterCurrentMenu();
-    }
-    else
-    {
-        m_fadeValue += FADE_SPEED_MENU;
-        m_isFading   = true;
-    }
-
-    m_renderer->setFadeValue(m_fadeValue);
+    emit fadeInRequested(0, 2000, 0);
 }
 
 void StateMachine::stateMenuTransitionOut()
 {
-    if (m_fadeValue <= 0.0)
-    {
-        m_state     = GameTransitionIn;
-        m_fadeValue = 0.0;
-        m_isFading  = false;
-    }
-    else
-    {
-        m_fadeValue -= FADE_SPEED_MENU;
-        m_isFading   = true;
-    }
-
-    m_renderer->setFadeValue(m_fadeValue);
+    emit fadeOutRequested(0, 2000, 0);
 }
 
 void StateMachine::stateGameTransitionIn()
 {
-    assert(m_track);
-
-    if (m_fadeValue >= 1.0)
-    {
-        m_fadeValue = 1.0;
-        m_isFading  = false;
-        m_state     = DoStartlights;
-
-        m_startlights->reset();
-    }
-    else
-    {
-        m_fadeValue += FADE_SPEED_MENU;
-        m_isFading   = true;
-    }
-
-    m_renderer->setFadeValue(m_fadeValue);
+    emit fadeInRequested(0, 2000, 0);
 }
 
 void StateMachine::stateGameTransitionOut()
 {
-    assert(m_renderer);
-
-    if (m_fadeValue >= FADE_SPEED_GAME)
+    if (m_raceFinished)
     {
-        m_fadeValue -= FADE_SPEED_GAME;
-        m_isFading   = true;
+        emit fadeOutRequested(5000, 5000, 0);
     }
     else
     {
-        m_fadeValue = 0.0;
-        m_isFading  = false;
-        m_state     = MenuTransitionIn;
+        emit fadeOutRequested(0, 2000, 0);
     }
-
-    m_renderer->setFadeValue(std::fmin(m_fadeValue, 1.0));
 }
 
 void StateMachine::stateDoStartlights()
 {
-    assert(m_startlights);
-
-    if (!m_startlights->update())
-    {
-        m_state = Play;
-    }
+    emit startlightAnimationRequested();
 }
 
 void StateMachine::statePlay()
 {
-    assert(m_race);
+    m_raceFinished = false;
+}
 
-    if (m_race->finished())
-    {
-        m_fadeValue = 3.0; // Add some delay with a value greater than 1.0
-        m_state     = GameTransitionOut;
-    }
-    else if (m_returnToMenu)
-    {
-        m_fadeValue = 1.0;
-        m_state     = GameTransitionOut;
-    }
+void StateMachine::finishRace()
+{
+    m_state = GameTransitionOut;
+    m_raceFinished = true;
 }
 
 StateMachine::State StateMachine::state() const
 {
     return m_state;
-}
-
-bool StateMachine::isFading() const
-{
-    return m_isFading;
 }
 
 void StateMachine::reset()

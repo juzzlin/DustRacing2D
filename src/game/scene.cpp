@@ -19,6 +19,7 @@
 #include "car.hpp"
 #include "checkeredflag.hpp"
 #include "credits.hpp"
+#include "fadeanimation.hpp"
 #include "game.hpp"
 #include "inputhandler.hpp"
 #include "intro.hpp"
@@ -93,13 +94,24 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 , m_particleManager(new ParticleManager)
+, m_fadeAnimation(new FadeAnimation)
 {
     QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
-
-    m_stateMachine.setRenderer(renderer);
-    m_stateMachine.setRace(m_race);
-    m_stateMachine.setStartlights(*m_startlights);
-    m_stateMachine.setIntro(*m_intro);
+    QObject::connect(
+        m_startlights, SIGNAL(animationEnded()), &m_stateMachine, SLOT(endStartlightAnimation()));
+    QObject::connect(
+        &m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
+    QObject::connect(
+        &m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
+    QObject::connect(
+        &m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
+    QObject::connect(
+        m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));
+    QObject::connect(
+        m_fadeAnimation, SIGNAL(fadeInFinished()), &m_stateMachine, SLOT(endFadeIn()));
+    QObject::connect(
+        m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
+    QObject::connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
 
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
@@ -119,23 +131,25 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     MCAssetManager::textureFontManager().font("default").surface().setShaderProgram(
-        &Renderer::instance().program("text"));
+        &m_renderer.program("text"));
     MCAssetManager::textureFontManager().font("default").surface().setShadowShaderProgram(
-        &Renderer::instance().program("textShadow"));
+        &m_renderer.program("textShadow"));
 
     const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.5);
     const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -0.25), 1.0, 0.9, 0.85, 0.75);
 
-    Renderer::instance().program("car").setDiffuseLight(diffuseLight);
-    Renderer::instance().program("car").setAmbientLight(ambientLight);
-    Renderer::instance().program("master").setDiffuseLight(diffuseLight);
-    Renderer::instance().program("master").setAmbientLight(ambientLight);
-    Renderer::instance().program("particle").setDiffuseLight(diffuseLight);
-    Renderer::instance().program("particle").setAmbientLight(ambientLight);
-    Renderer::instance().program("tile2d").setDiffuseLight(diffuseLight);
-    Renderer::instance().program("tile2d").setAmbientLight(ambientLight);
-    Renderer::instance().program("tile3d").setDiffuseLight(diffuseLight);
-    Renderer::instance().program("tile3d").setAmbientLight(ambientLight);
+    m_renderer.program("car").setDiffuseLight(diffuseLight);
+    m_renderer.program("car").setAmbientLight(ambientLight);
+    m_renderer.program("master").setDiffuseLight(diffuseLight);
+    m_renderer.program("master").setAmbientLight(ambientLight);
+    m_renderer.program("particle").setDiffuseLight(diffuseLight);
+    m_renderer.program("particle").setAmbientLight(ambientLight);
+    m_renderer.program("tile2d").setDiffuseLight(diffuseLight);
+    m_renderer.program("tile2d").setAmbientLight(ambientLight);
+    m_renderer.program("tile3d").setDiffuseLight(diffuseLight);
+    m_renderer.program("tile3d").setAmbientLight(ambientLight);
+
+    m_renderer.setFadeValue(0.0);
 
     createMenus();
 }
@@ -194,8 +208,8 @@ void Scene::createCars()
         if (car)
         {
             car->setLayer(Layers::Cars);
-            car->view()->setShaderProgram(&Renderer::instance().program("car"));
-            car->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+            car->view()->setShaderProgram(&m_renderer.program("car"));
+            car->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
 
             m_cars.push_back(CarPtr(car));
             m_race.addCar(*car);
@@ -244,8 +258,7 @@ void Scene::createMenus()
     m_settings = new SettingsMenu("settings", width(), height());
     m_menuManager->addMenu(*m_settings);
 
-    m_trackSelectionMenu = new TrackSelectionMenu("trackSelection",
-        width(), height(), *this, m_stateMachine);
+    m_trackSelectionMenu = new TrackSelectionMenu("trackSelection", width(), height(), *this);
     m_menuManager->addMenu(*m_trackSelectionMenu);
 
     m_menuManager->enterMenu(*m_mainMenu);
@@ -387,7 +400,6 @@ void Scene::updateAI()
 void Scene::setActiveTrack(Track & activeTrack)
 {
     m_activeTrack = &activeTrack;
-    m_stateMachine.setTrack(*m_activeTrack);
 
     m_world->removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
@@ -518,7 +530,7 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
 
 void Scene::render()
 {
-    const MCFloat fadeValue = Renderer::instance().fadeValue();
+    const MCFloat fadeValue = m_renderer.fadeValue();
 
     switch (m_stateMachine.state())
     {
@@ -534,13 +546,10 @@ void Scene::render()
     case StateMachine::MenuTransitionOut:
     case StateMachine::MenuTransitionIn:
 
-        if (m_stateMachine.isFading())
-        {
-            Renderer::instance().program("menu").setFadeValue(fadeValue);
-            Renderer::instance().program("tile2d").setFadeValue(fadeValue);
-            Renderer::instance().program("tile3d").setFadeValue(fadeValue);
-            Renderer::instance().program("text").setFadeValue(fadeValue);
-        }
+        m_renderer.program("menu").setFadeValue(fadeValue);
+        m_renderer.program("tile2d").setFadeValue(fadeValue);
+        m_renderer.program("tile3d").setFadeValue(fadeValue);
+        m_renderer.program("text").setFadeValue(fadeValue);
 
         m_renderer.glScene().setSplitType(MCGLScene::Single);
 
@@ -553,14 +562,14 @@ void Scene::render()
     case StateMachine::DoStartlights:
     case StateMachine::Play:
 
-        if (m_stateMachine.isFading())
+        if (m_fadeAnimation->isFading())
         {
-            Renderer::instance().program("master").setFadeValue(fadeValue);
-            Renderer::instance().program("car").setFadeValue(fadeValue);
-            Renderer::instance().program("particle").setFadeValue(fadeValue);
-            Renderer::instance().program("tile2d").setFadeValue(fadeValue);
-            Renderer::instance().program("tile3d").setFadeValue(fadeValue);
-            Renderer::instance().program("text").setFadeValue(fadeValue);
+            m_renderer.program("master").setFadeValue(fadeValue);
+            m_renderer.program("car").setFadeValue(fadeValue);
+            m_renderer.program("particle").setFadeValue(fadeValue);
+            m_renderer.program("tile2d").setFadeValue(fadeValue);
+            m_renderer.program("tile3d").setFadeValue(fadeValue);
+            m_renderer.program("text").setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -609,15 +618,16 @@ void Scene::renderCommonScene()
 
 Scene::~Scene()
 {
-    delete m_settings;
     delete m_credits;
+    delete m_fadeAnimation;
     delete m_help;
     delete m_intro;
     delete m_mainMenu;
     delete m_menuManager;
+    delete m_messageOverlay;
+    delete m_particleManager;
+    delete m_settings;
     delete m_startlights;
     delete m_startlightsOverlay;
     delete m_trackSelectionMenu;
-    delete m_messageOverlay;
-    delete m_particleManager;
 }

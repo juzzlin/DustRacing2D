@@ -18,7 +18,6 @@
 #include "game.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
-#include "statemachine.hpp"
 #include "renderer.hpp"
 #include "timing.hpp"
 #include "track.hpp"
@@ -252,11 +251,10 @@ void TrackItem::render(int x, int y)
 }
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
-    int width, int height, Scene & scene, StateMachine & sm)
+    int width, int height, Scene & scene)
 : SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
-, m_sm(sm)
 {
     setWrapAround(false);
 }
@@ -298,7 +296,6 @@ void TrackSelectionMenu::selectCurrentItem()
     if (!selection.trackData().isLocked())
     {
         m_selectedTrack = &selection;
-        m_sm.setTrack(*m_selectedTrack);
         m_scene.setActiveTrack(*m_selectedTrack);
         MCLogger().info() <<
             "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";

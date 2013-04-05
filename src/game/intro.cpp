@@ -19,10 +19,6 @@
 
 #include <MCSurface>
 #include <MCAssetManager>
-#include <MCVectorAnimation>
-
-static MCVector3dF       fade;
-static MCVectorAnimation fadeAnim;
 
 Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))
@@ -39,24 +35,12 @@ void Intro::setFadeValue(float value)
 void Intro::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
-
-    static MCVector3dF fade0(0.0, 0.0, 0.0);
-    static MCVector3dF fade1(1.0, 1.0, 1.0);
-
-    fadeAnim.init(fade, fade0, fade1, 120, 0, 120);
-}
-
-bool Intro::update()
-{
-    Renderer::instance().setEnabled(true);
-    return fadeAnim.update();
 }
 
 void Intro::render()
 {
     const int w2 = width()  / 2;
     const int h2 = height() / 2;
-    m_back.shaderProgram()->setFadeValue(fade.i());
     m_back.setScale(width(), height());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
 }

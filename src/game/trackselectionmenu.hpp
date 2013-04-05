@@ -21,7 +21,6 @@
 class Track;
 class TrackItem;
 class Scene;
-class StateMachine;
 class MCSurface;
 
 //! Allows the user to select a track to play.
@@ -30,8 +29,7 @@ class TrackSelectionMenu : public SurfaceMenu
 public:
 
     //! Constructor.
-    TrackSelectionMenu(std::string id,
-        int width, int height, Scene & scene, StateMachine & sm);
+    TrackSelectionMenu(std::string id, int width, int height, Scene & scene);
 
     //! Add a track to the list of selectable tracks.
     void addTrack(Track & track);
@@ -56,9 +54,8 @@ public:
 
 private:
 
-    Track        * m_selectedTrack;
-    Scene        & m_scene;
-    StateMachine & m_sm;
+    Track * m_selectedTrack;
+    Scene & m_scene;
 };
 
 #endif // TRACKSELECTIONMENU_HPP

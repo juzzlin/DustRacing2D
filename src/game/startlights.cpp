@@ -31,6 +31,9 @@ Startlights::Startlights(MessageOverlay & messageOverlay)
     m_stateToFunctionMap[Go]        = std::bind(&Startlights::stateGo,        this);
     m_stateToFunctionMap[Disappear] = std::bind(&Startlights::stateDisappear, this);
     m_stateToFunctionMap[End]       = std::bind(&Startlights::stateEnd,       this);
+
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateAnimation()));
+    m_timer.setInterval(1000 / m_stepsPerState);
 }
 
 bool Startlights::timeElapsed(MCUint limit)
@@ -43,20 +46,21 @@ bool Startlights::timeElapsed(MCUint limit)
     return false;
 }
 
-bool Startlights::update()
+void Startlights::updateAnimation()
 {
-    return m_stateToFunctionMap[m_state]();
+    m_stateToFunctionMap[m_state]();
+}
+
+void Startlights::beginAnimation()
+{
+    m_state = Init;
+    m_timer.start();
 }
 
 void Startlights::setDimensions(MCUint width, MCUint height)
 {
     m_width  = width;
     m_height = height;
-}
-
-void Startlights::reset()
-{
-    m_state = Init;
 }
 
 Startlights::State Startlights::state() const
@@ -74,7 +78,7 @@ MCFloat Startlights::glowScale() const
     return m_glowScale;
 }
 
-bool Startlights::stateInit()
+void Startlights::stateInit()
 {
     const MCUint second = m_stepsPerState;
 
@@ -87,11 +91,9 @@ bool Startlights::stateInit()
     m_state = Appear;
     m_glowScale = 1.0;
     InputHandler::setEnabled(false);
-
-    return true;
 }
 
-bool Startlights::stateAppear()
+void Startlights::stateAppear()
 {
     const MCUint second = m_stepsPerState;
 
@@ -102,11 +104,9 @@ bool Startlights::stateAppear()
         m_messageOverlay.addMessage("3");
         emit soundRequested("startlightsBeep");
     }
-
-    return true;
 }
 
-bool Startlights::stateFirstRow()
+void Startlights::stateFirstRow()
 {
     const MCUint second = m_stepsPerState;
 
@@ -116,11 +116,9 @@ bool Startlights::stateFirstRow()
         m_messageOverlay.addMessage("2");
         emit soundRequested("startlightsBeep");
     }
-
-    return true;
 }
 
-bool Startlights::stateSecondRow()
+void Startlights::stateSecondRow()
 {
     const MCUint second = m_stepsPerState;
 
@@ -130,11 +128,9 @@ bool Startlights::stateSecondRow()
         m_messageOverlay.addMessage("1");
         emit soundRequested("startlightsBeep");
     }
-
-    return true;
 }
 
-bool Startlights::stateThirdRow()
+void Startlights::stateThirdRow()
 {
     const MCUint second = m_stepsPerState;
 
@@ -146,11 +142,9 @@ bool Startlights::stateThirdRow()
         emit raceStarted();
         emit soundRequested("startlightsGo");
     }
-
-    return true;
 }
 
-bool Startlights::stateGo()
+void Startlights::stateGo()
 {
     const MCUint second = m_stepsPerState;
 
@@ -165,22 +159,18 @@ bool Startlights::stateGo()
     }
 
     m_glowScale *= 0.75;
-
-    return true;
 }
 
-bool Startlights::stateDisappear()
+void Startlights::stateDisappear()
 {
     if (m_animation.update())
     {
         m_state = End;
     }
-
-    return true;
 }
 
-bool Startlights::stateEnd()
+void Startlights::stateEnd()
 {
-    return false;
+    m_timer.stop();
+    emit animationEnded();
 }
-

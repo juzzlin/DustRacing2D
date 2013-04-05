@@ -20,21 +20,18 @@
 #include "updateableif.hpp"
 
 #include <MCTypes>
+
 #include <QApplication>
+#include <QObject>
 
 #include <functional>
 #include <map>
 
-class Game;
-class Intro;
-class Race;
-class Renderer;
-class Startlights;
-class Track;
-
 //! The main state machine of the game.
-class StateMachine : public UpdateableIf
+class StateMachine : public QObject, public UpdateableIf
 {
+    Q_OBJECT
+
 public:
 
     enum State
@@ -59,29 +56,35 @@ public:
     //! Return the singleton instance.
     static StateMachine & instance();
 
-    void setGame(Game & game);
-
-    void setIntro(Intro & intro);
-
-    void setTrack(Track & track);
-
-    void setRenderer(Renderer & renderer);
-
-    void setRace(Race & race);
-
-    void setStartlights(Startlights & startlights);
-
     void quit();
 
     StateMachine::State state() const;
-
-    bool isFading() const;
 
     //! \reimp
     virtual bool update();
 
     //! \reimp
     virtual void reset();
+
+public slots:
+
+    void endFadeIn();
+
+    void endFadeOut();
+
+    void endStartlightAnimation();
+
+    void finishRace();
+
+signals:
+
+    void fadeInRequested(int, int, int);
+
+    void fadeOutRequested(int, int, int);
+
+    void startlightAnimationRequested();
+
+    void renderingEnabled(bool);
 
 private:
 
@@ -109,15 +112,8 @@ private:
 
     StateToFunctionMap m_stateToFunctionMap;
     State              m_state;
-    bool               m_isFading;
-    Game             * m_game;
-    Intro            * m_intro;
-    Startlights      * m_startlights;
-    Race             * m_race;
-    Renderer         * m_renderer;
-    Track            * m_track;
-    MCFloat            m_fadeValue;
-    bool               m_returnToMenu;
+    State              m_oldState;
+    bool               m_raceFinished;
 };
 
 #endif // STATEMACHINE_HPP
