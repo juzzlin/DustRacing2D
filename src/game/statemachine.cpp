@@ -72,17 +72,13 @@ bool StateMachine::update()
     }
 
     // Transition logic that needs to be constantly updated
-    switch (m_state)
+    if (m_state == Menu)
     {
-    case Menu:
         if (MTFH::MenuManager::instance().done())
         {
             m_state = MenuTransitionOut;
         }
-        break;
-    default:
-        break;
-   }
+    }
 
     return true;
 }
