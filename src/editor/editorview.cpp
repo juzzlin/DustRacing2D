@@ -222,7 +222,9 @@ void EditorView::eraseObjectAtCurrentClickedPos()
         if (Object * object = dynamic_cast<Object *>(item))
         {
             m_editorData.trackData()->objects().remove(*object);
+            m_editorData.setSelectedObject(nullptr);
             scene()->removeItem(object);
+            delete object;
             break;
         }
     }
