@@ -29,6 +29,8 @@ static MCTextureText CREDITS_TEXT(
     "* Jussi Lind\n\n"
     "FONT\n\n"
     "* Ubuntu Monospace\n\n"
+    "PATCHES\n\n"
+    "* Markus Rinne\n\n"
     "SPECIAL THANKS\n\n"
     "* Tommi Martela"
 );

@@ -84,10 +84,11 @@ add_subdirectory(src/editor)
 add_subdirectory(src/game)
 
 # Install binaries & data
-if(ReleaseBuild)
+if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
     # Install binaries and game data
-    install(PROGRAMS dustrac-game DESTINATION ${BIN_PATH})
-    install(PROGRAMS dustrac-editor DESTINATION ${BIN_PATH})
+    install(PROGRAMS ${GAME_BINARY_NAME} DESTINATION ${BIN_PATH})
+    install(PROGRAMS ${EDITOR_BINARY_NAME} DESTINATION ${BIN_PATH})
     install(FILES data/editorModels.conf DESTINATION ${DATA_PATH})
     install(FILES data/fonts.conf DESTINATION ${DATA_PATH})
     install(FILES data/meshes.conf DESTINATION ${DATA_PATH})
@@ -108,5 +109,12 @@ if(ReleaseBuild)
     install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
     install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
     install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
+    
+    # Create symlinks to targets
+    if (Ubuntu)
+        execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${GAME_BINARY_NAME} /usr/bin/${GAME_BINARY_NAME})
+        execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${EDITOR_BINARY_NAME} /usr/bin/${EDITOR_BINARY_NAME})
+    endif()
+    
 endif()
 

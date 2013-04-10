@@ -1,3 +1,50 @@
+1.2.1
+-----
+
+* Swap buffers only when renderer is enabled.
+* Add 1 lap to lap count selection.
+* Fine tune the font.
+* Editor: Delete objects after they have been removed from the scene. Patch by Markus Rinne.
+* Refactor StateMachine.
+* Use Qt signal and lambda to exit game from menu.
+* CMake: Print message about used Qt version.
+* Move Scene::translateCarsToStartPositions() to Race::
+* Simplify menu texts.
+* Removes useless QApplication::setGraphicsSystem("opengl")
+* Removes dead code.
+* Editor: The New Track Dialog validates entered values.
+* Editor: Add shortcuts for undo and redo.
+* Editor: Add Undo. Patch by Markus Rinne.
+* Remove lap count property from race tracks.
+* Add lap count menu.
+* Add sandAreaCurve45 and sandAreaCurve45Right.
+* Editor: Handle objects before target nodes.
+* Correctly fade alpha.
+* Adds sandAreaBig object.
+* Adds sandAreaCurve object.
+* Even smaller cars.
+* Smaller turning impulse.
+* More off-track friction.
+* Simplifies the texture font system and config.
+* Separate resolution menus for windowed and full screen.
+* Refactor main.cpp
+* Resolution scaling.
+* Remove obsolete OpenGL stuff from MCGLScene.
+* Remove obsolete OpenGL stuff from MCGLScene.
+* Editor: Add flood fill. Patch by Markus Rinne.
+* Prepare the project for Qt5.
+* Refactors Startlights.
+* More variance to computer speeds.
+* Full screen by default.
+* Add a comment about moment of intertia.
+* Refactors StateMachine.
+* Updates packaging.
+* Editor: Refactors mouse event handling in EditorView.
+* Generate desktop files only if ReleaseBuild defined.
+* Adds home site url to the Help page.
+* Refactors the number plate generation to GraphicsFactory.
+
+
 1.0.2
 -----
 
