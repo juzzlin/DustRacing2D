@@ -78,7 +78,16 @@ if (UseQt5)
     qt5_add_resources(RC_SRC ${RCS})
 else()
     set(MOC_HDRS
-        aboutdlg.hpp eventhandler.hpp game.hpp race.hpp renderer.hpp startlights.hpp timing.hpp)
+        aboutdlg.hpp
+        eventhandler.hpp
+        fadeanimation.hpp
+        mainmenu.hpp 
+        game.hpp
+        race.hpp
+        renderer.hpp
+        statemachine.hpp
+        startlights.hpp
+        timing.hpp)
     qt4_add_resources(RC_SRC ${RCS})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 endif()
