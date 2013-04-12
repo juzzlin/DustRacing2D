@@ -125,16 +125,12 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
 
+set(COMMON_LIBS ${GAME_BINARY_NAME} MiniCore MTFH ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
+    target_link_libraries(${COMMON_LIBS})
 else()
-    target_link_libraries(${GAME_BINARY_NAME} ${QT_LIBRARIES})
+    target_link_libraries(${COMMON_LIBS} ${QT_LIBRARIES})
 endif()
 
-target_link_libraries(
-    ${GAME_BINARY_NAME}
-    MiniCore
-    MTFH
-    ${OPENGL_gl_LIBRARY}
-    ${OPENGL_glu_LIBRARY}
-)
+
