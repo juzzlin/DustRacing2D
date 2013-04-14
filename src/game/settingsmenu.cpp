@@ -290,7 +290,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
 {
     static int LAP_COUNTS[] =
     {
-        100, 50, 25, 20, 15, 10, 1
+        100, 50, 25, 20, 15, 10, 5, 3, 1
     };
 
     const int numLapCounts = sizeof(LAP_COUNTS) / sizeof(int);
