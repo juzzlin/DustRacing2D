@@ -1,3 +1,14 @@
+dustrac (1.2.2-1) precise; urgency=low
+
+  * Tune car parameters.
+  * Fix track unlocking.
+  * Add 3 and 5 to lap count selection.
+  * CMake: Use target_link_libraries for MiniCore.
+  * CMake: Support for CPack.
+  * Fix build on Windows.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 14 Apr 2013 18:34:18 +0300
+
 dustrac (1.2.1-1) precise; urgency=low
 
   * Swap buffers only when renderer is enabled.

@@ -1,3 +1,13 @@
+1.2.2
+-----
+
+* Tune car parameters.
+* Fix track unlocking.
+* Add 3 and 5 to lap count selection.
+* CMake: Use target_link_libraries for MiniCore.
+* CMake: Support for CPack.
+* Fix build on Windows.
+
 1.2.1
 -----
 
