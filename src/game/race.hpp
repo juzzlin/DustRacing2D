@@ -127,6 +127,7 @@ private:
     bool             m_started;
     bool             m_checkeredFlagEnabled;
     bool             m_winnerFinished;
+    bool             m_isfinishedSignalSent;
     int              m_bestPos;
     MessageOverlay & m_messageOverlay;
     const Game     & m_game;

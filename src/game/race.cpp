@@ -43,6 +43,7 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 , m_started(false)
 , m_checkeredFlagEnabled(false)
 , m_winnerFinished(false)
+, m_isfinishedSignalSent(false)
 , m_bestPos(-1)
 , m_messageOverlay(messageOverlay)
 , m_game(game)
@@ -68,6 +69,7 @@ void Race::init(Track & track, int lapCount)
 
     m_checkeredFlagEnabled = false;
     m_winnerFinished       = false;
+    m_isfinishedSignalSent = false;
     m_started              = false;
     m_lapCount             = lapCount;
 }
@@ -193,57 +195,54 @@ bool Race::started()
 
 void Race::update()
 {
-    if (!isRaceFinished())
+    for(Car * pCar : m_cars)
     {
-        for(Car * pCar : m_cars)
-        {
-            updateRouteProgress(*pCar);
-        }
+        updateRouteProgress(*pCar);
+    }
 
-        // Enable the checkered flag if leader has done at least 95% of the last lap.
-        if (m_timing.leadersLap() + 1 == m_lapCount)
-        {
-            Car                  & leader = getLeadingCar();
-            const Route          & route  = m_track->trackData().route();
-            const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
+    // Enable the checkered flag if leader has done at least 95% of the last lap.
+    if (m_timing.leadersLap() + 1 == m_lapCount)
+    {
+        Car                  & leader = getLeadingCar();
+        const Route          & route  = m_track->trackData().route();
+        const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
 
-            if (tnode.index() >=
+        if (tnode.index() >=
                 static_cast<int>(9 * route.numNodes() / 10))
+        {
+            m_checkeredFlagEnabled = true;
+        }
+    }
+    // Check if winner has finished
+    else if (m_timing.leadersLap() == m_lapCount)
+    {
+        if (!m_winnerFinished)
+        {
+            m_winnerFinished = true;
+
+            Car & leader = getLeadingCar();
+            m_timing.setRaceCompleted(leader.index(), true);
+
+            if (m_game.mode() == Game::TimeTrial)
             {
-                m_checkeredFlagEnabled = true;
+                m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
+            }
+            else
+            {
+                m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
             }
         }
-        // Check if winner has finished
-        else if (m_timing.leadersLap() == m_lapCount)
-        {
-            if (!m_winnerFinished)
-            {
-                m_winnerFinished = true;
+    }
 
-                Car & leader = getLeadingCar();
-                m_timing.setRaceCompleted(leader.index(), true);
+    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+    {
+        otd->update();
+    }
 
-                if (m_game.mode() == Game::TimeTrial)
-                {
-                    m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
-                }
-                else
-                {
-                    m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
-                }
-            }
-        }
-
-        for (OffTrackDetectorPtr otd : m_offTrackDetectors)
-        {
-            otd->update();
-        }
-
-        // Check here to send it only once
-        if (isRaceFinished())
-        {
-            emit finished();
-        }
+    if (isRaceFinished() && !m_isfinishedSignalSent)
+    {
+        emit finished();
+        m_isfinishedSignalSent = true;
     }
 }
 
