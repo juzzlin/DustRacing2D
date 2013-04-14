@@ -1,5 +1,8 @@
 project(DustRacing2D)
 
+# Global game version
+set(VERSION "1.2.1")
+
 # Enable Qt5 support
 option(UseQt5 "UseQt5" OFF)
 
@@ -27,31 +30,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions 
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
 
-# Set install paths
-set(BIN_PATH bin)
-
-if(ReleaseBuild)
-    message(STATUS "Release build.")
-    if(Ubuntu)
-        message(STATUS "Installing to /opt.")
-        set(BIN_PATH /opt/dustrac)
-        set(DATA_PATH /opt/dustrac/data)
-        set(CMAKE_INSTALL_PREFIX /usr)
-    else()
-        set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
-    endif()
-else()
-    message(STATUS "NOTE!!: This is a development build without install targets!")
-    set(DATA_PATH ./data)
-    
-    if (DebugBuild)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-    endif()
-endif()
-
-# This is the main data path given to the game and editor binaries.
-add_definitions(-DDATA_PATH="${DATA_PATH}")
-
 # This is not needed with GLEW (built-in with MiniCore)
 #add_definitions(-DGL_GLEXT_PROTOTYPES) 
 add_definitions(-DGLEW_STATIC)
@@ -78,13 +56,42 @@ find_package(OpenGL REQUIRED)
 # Enable CMake's unit test framework
 enable_testing()
 
+# Set default install paths
+set(BIN_PATH bin)
+set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
+set(DOC_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/)
+
+if(ReleaseBuild)
+    message(STATUS "Release build with system install targets.")
+    if(Ubuntu)
+        message(STATUS "Installing to /opt.")
+        set(BIN_PATH /opt/dustrac)
+        set(DATA_PATH /opt/dustrac/data)
+        set(DOC_PATH /opt/dustrac/)
+        set(CMAKE_INSTALL_PREFIX /usr)
+    endif()
+else()
+    message(STATUS "Development build.")
+    set(BIN_PATH .)
+    set(DATA_PATH ./data)
+    set(DOC_PATH .)
+    
+    if (DebugBuild)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+    endif()
+endif()
+
+# This is the main data path given to the game and editor binaries.
+add_definitions(-DDATA_PATH="${DATA_PATH}")
+add_definitions(-DVERSION="${VERSION}")
+
 # Sub build: editor
 add_subdirectory(src/editor)
 # Sub build: game binary
 add_subdirectory(src/game)
 
 # Install binaries & data
-if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
     # Install binaries and game data
     install(PROGRAMS ${GAME_BINARY_NAME} DESTINATION ${BIN_PATH})
@@ -93,6 +100,7 @@ if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     install(FILES data/fonts.conf DESTINATION ${DATA_PATH})
     install(FILES data/meshes.conf DESTINATION ${DATA_PATH})
     install(FILES data/textures.conf DESTINATION ${DATA_PATH})
+    install(FILES AUTHORS CHANGELOG COPYING README DESTINATION ${DOC_PATH})
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.jpg")
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
@@ -100,21 +108,32 @@ if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
     install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
 
-    # Install .desktop files
-    install(FILES dustrac-game.desktop DESTINATION share/applications)
-    install(FILES dustrac-editor.desktop DESTINATION share/applications)
+    if(ReleaseBuild)
+        # Install .desktop files
+        install(FILES dustrac-game.desktop DESTINATION share/applications)
+        install(FILES dustrac-editor.desktop DESTINATION share/applications)
     
-    # Install icons
-    install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
-    install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
-    install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
-    install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
+        # Install icons
+        install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
+        install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
+        install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
+        install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
     
-    # Create symlinks to targets
-    if (Ubuntu)
-        execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${GAME_BINARY_NAME} /usr/bin/${GAME_BINARY_NAME})
-        execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${EDITOR_BINARY_NAME} /usr/bin/${EDITOR_BINARY_NAME})
-    endif()
-    
+        # Create symlinks to targets
+        if (Ubuntu)
+            execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${GAME_BINARY_NAME} /usr/bin/${GAME_BINARY_NAME})
+            execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${EDITOR_BINARY_NAME} /usr/bin/${EDITOR_BINARY_NAME})
+        endif()
+    endif()    
+
+    # CPack config to create e.g. self-extracting packages
+    set(CPACK_BINARY_STGZ "ON")
+    set(CPACK_BINARY_TGZ "ON")
+    set(CPACK_BINARY_TZ "OFF")
+    set(CPACK_PACKAGE_FILE_NAME "dustrac-${VERSION}-linux-${CMAKE_HOST_SYSTEM_PROCESSOR}")
+    set(CPACK_RESOURCE_FILE_LICENSE "COPYING")
+    set(CPACK_RESOURCE_FILE_README "README")
+    include(CPack)
+
 endif()
 
