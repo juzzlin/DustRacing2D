@@ -171,8 +171,9 @@ void Scene::createCars()
         Car * car = nullptr;
         if (i == 0 || (i == 1 && m_game.hasTwoHumanPlayers()))
         {
-            desc.power         = humanPower;
-            desc.dragQuadratic = humanDrag;
+            desc.power                = humanPower;
+            desc.dragQuadratic        = humanDrag;
+            desc.accelerationFriction = 0.6;
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
@@ -183,7 +184,7 @@ void Scene::createCars()
             // slowest cars have less power than the human player and the fastest
             // cars have more power than the human player.
             desc.power                = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
-            desc.accelerationFriction = 0.5 + 0.3 * float(i + 1) / NUM_CARS;
+            desc.accelerationFriction = 0.3 + 0.45 * float(i + 1) / NUM_CARS;
             desc.dragQuadratic        = humanDrag;
             desc.turningImpulse       = 0.3;
             desc.slideFriction        = 1.0;
