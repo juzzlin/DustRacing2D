@@ -48,6 +48,7 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
 
 void MCGLScene::initialize()
 {
+    glewExperimental = GL_TRUE; // Needed with CoreProfile 3.3
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
