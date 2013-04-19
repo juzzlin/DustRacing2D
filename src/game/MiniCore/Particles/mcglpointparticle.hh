@@ -20,51 +20,42 @@
 #ifndef MCGLPOINTPARTICLE_HH
 #define MCGLPOINTPARTICLE_HH
 
-#include <MCGLEW>
+#include "mcglcolor.hh"
 #include "mcparticle.hh"
-
-class MCCamera;
-class MCGLShaderProgram;
 
 /*! \class MCGLRectParticle
  *  \brief A particle that renders as a simple OpenGL point. Final class.
- */
+ *  A corresponding MCGLRectParticleRenderer must be registered to MCWorld. */
 class MCGLPointParticle : public MCParticle
 {
 public:
 
     //! Constructor.
-    MCGLPointParticle(const std::string & typeID);
+    MCGLPointParticle(const std::string & typeID, const MCGLColor & color);
 
     //! Destructor.
     virtual ~MCGLPointParticle();
 
-    //! Set color
-    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.0);
-
-    //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
-
-    //! \reimp
-    void render(MCCamera * pCamera = nullptr);
-
-    //! \reimp
-    void renderShadow(MCCamera * pCamera = nullptr);
-
-    //! \reimp
-    void beginBatch();
-
-    //! \reimp
-    void endBatch();
+    //! Get the color.
+    MCGLColor & color();
 
 private:
 
+    //! \reimp
+    void render(MCCamera *) {}
+
+    //! \reimp
+    void renderShadow(MCCamera *) {}
+
+    //! \reimp
+    void beginBatch() {}
+
+    //! \reimp
+    void endBatch() {}
+
     DISABLE_COPY(MCGLPointParticle);
     DISABLE_ASSI(MCGLPointParticle);
-    GLfloat m_r, m_g, m_b, m_a;
-    static GLuint m_vbo;
-    static GLuint m_vba;
-    MCGLShaderProgram * m_program;
+    MCGLColor m_color;
 };
 
 #endif // MCGLPOINTPARTICLE_HH

@@ -36,7 +36,7 @@ class MCObject;
 class MCSurface;
 class MCWorld;
 class MessageOverlay;
-class ParticleManager;
+class ParticleFactory;
 class Renderer;
 class Startlights;
 class StartlightsOverlay;
@@ -134,7 +134,7 @@ private:
     MTFH::Menu          * m_settings;
     MTFH::MenuManager   * m_menuManager;
     Intro               * m_intro;
-    ParticleManager     * m_particleManager;
+    ParticleFactory     * m_particleFactory;
     FadeAnimation       * m_fadeAnimation;
 
     typedef std::shared_ptr<Car> CarPtr;

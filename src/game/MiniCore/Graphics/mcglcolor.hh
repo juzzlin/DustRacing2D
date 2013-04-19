@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,58 +17,63 @@
 // MA  02110-1301, USA.
 //
 
-#ifndef MCGLVERTEX_HPP
-#define MCGLVERTEX_HPP
+#ifndef MCGLCOLOR_HH
+#define MCGLCOLOR_HH
 
 #include <MCGLEW>
 
-class MCGLVertex
+class MCGLColor
 {
 public:
 
-    MCGLVertex()
-    : m_x(0), m_y(0), m_z(0)
+    explicit MCGLColor(GLfloat r = 1.0, GLfloat g = 1.0, GLfloat b = 1.0, GLfloat a = 1.0)
+    : m_r(r), m_g(g), m_b(b), m_a(a)
     {
     }
 
-    MCGLVertex(GLfloat x, GLfloat y, GLfloat z)
-    : m_x(x), m_y(y), m_z(z)
+    inline GLfloat r() const
     {
+        return m_r;
     }
 
-    inline GLfloat x() const
+    inline GLfloat g() const
     {
-        return m_x;
+        return m_g;
     }
 
-    inline GLfloat y() const
+    inline GLfloat b() const
     {
-        return m_y;
+        return m_b;
     }
 
-    inline GLfloat z() const
+    inline GLfloat a() const
     {
-        return m_z;
+        return m_a;
     }
 
-    inline void setX(GLfloat x)
+    inline void setR(GLfloat r)
     {
-        m_x = x;
+        m_r = r;
     }
 
-    inline void setY(GLfloat y)
+    inline void setG(GLfloat g)
     {
-        m_y = y;
+        m_g = g;
     }
 
-    inline void setZ(GLfloat z)
+    inline void setB(GLfloat b)
     {
-        m_z = z;
+        m_b = b;
+    }
+
+    inline void setA(GLfloat a)
+    {
+        m_a = a;
     }
 
 private:
 
-    GLfloat m_x, m_y, m_z;
+    GLfloat m_r, m_g, m_b, m_a;
 };
 
-#endif // MCGLVERTEX_HPP
+#endif // MCGLCOLOR_HH

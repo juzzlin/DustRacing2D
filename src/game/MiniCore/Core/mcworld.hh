@@ -24,18 +24,19 @@
 #include <map>
 #include <unordered_set>
 
-#include "mcvector2d.hh"
-#include "mcvector3d.hh"
+#include "mccollisiondetector.hh"
+#include "mcforceregistry.hh"
+#include "mcimpulsegenerator.hh"
 #include "mcmacros.hh"
 #include "mctypes.hh"
-#include "mcforceregistry.hh"
-#include "mccollisiondetector.hh"
-#include "mcimpulsegenerator.hh"
+#include "mcvector2d.hh"
+#include "mcvector3d.hh"
 
 class MCObjectTree;
 class MCForceGenerator;
 class MCCamera;
 class MCContact;
+class MCGLPointParticleRenderer;
 class MCObject;
 
 //! \class World base class
@@ -135,6 +136,13 @@ public:
     //! \param enableShadows Render shadows, if true.
     void render(MCCamera * pCamera = nullptr, bool enableShadows = true);
 
+    /*! Each used MCGLPointParticle should have a corresponding MCGLPointParticleRenderer
+     *  registered in MCWorld. As for rendering, point particles are special cases, because
+     *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
+     *  \param typeId Type id of the point particle. \see MCGLPointParticle.
+     *  \param renderer Reference to the renderer to be used for this type id. */
+    void registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer);
+
     //! \brief Return reference to the object objectTree.
     //! \return Pointer to the objectTree.
     MCObjectTree & objectTree() const;
@@ -209,11 +217,11 @@ private:
     MCFloat m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
     static MCFloat m_metersPerPixel;
     static MCFloat m_metersPerPixelSquared;
-    typedef std::unordered_set<MCObject *> LayerHash;
-    LayerHash layers[MCWorld::MaxLayers];
-    typedef std::map<MCUint, std::vector<MCObject *> > BatchHash;
-    BatchHash m_objectBatches[MCWorld::MaxLayers];
-    BatchHash m_particleBatches[MCWorld::MaxLayers];
+    typedef std::unordered_set<MCObject *> LayerSet;
+    LayerSet layers[MCWorld::MaxLayers];
+    typedef std::map<MCUint, std::vector<MCObject *> > BatchMap;
+    BatchMap m_objectBatches[MCWorld::MaxLayers];
+    BatchMap m_particleBatches[MCWorld::MaxLayers];
     bool m_depthTestEnabled[MCWorld::MaxLayers];
     MCWorld::ObjectVector objs;
     MCWorld::ObjectVector removeObjs;
@@ -225,6 +233,8 @@ private:
     MCUint numResolverLoops;
     MCFloat resolverStep;
     std::vector<MCCamera *> m_visibilityCameras;
+    typedef std::map<MCUint, MCGLPointParticleRenderer *> ParticleRendererMap;
+    ParticleRendererMap m_particleRenderers;
 };
 
 #endif // MCWORLD_HH

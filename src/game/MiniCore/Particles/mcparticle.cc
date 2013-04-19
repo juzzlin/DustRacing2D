@@ -67,7 +67,14 @@ void MCParticle::setFreeList(ParticleFreeList & freeList)
 
 MCFloat MCParticle::radius() const
 {
-    return m_radius;
+    if (animationStyle() == MCParticle::Shrink)
+    {
+        return m_scale * m_radius;
+    }
+    else
+    {
+        return m_radius;
+    }
 }
 
 MCUint MCParticle::lifeTime() const

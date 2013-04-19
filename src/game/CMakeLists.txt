@@ -35,7 +35,7 @@ set(SRC
     mainmenu.cpp
     map.cpp
     messageoverlay.cpp
-    particlemanager.cpp
+    particlefactory.cpp
     offtrackdetector.cpp
     overlaybase.cpp
     race.cpp
@@ -81,7 +81,7 @@ else()
         aboutdlg.hpp
         eventhandler.hpp
         fadeanimation.hpp
-        mainmenu.hpp 
+        mainmenu.hpp
         game.hpp
         race.hpp
         renderer.hpp

@@ -375,6 +375,9 @@ public:
     //! these values. The defaults are 0.01.
     void setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit);
 
+    //! Return integer id corresponding to the given object name.
+    static MCUint getTypeIDForName(const std::string & typeName);
+
 protected:
 
     //! Event handler.
@@ -394,8 +397,6 @@ protected:
 
     //! \brief Register a new type and get a unique type id.
     static MCUint registerType(const std::string & typeName);
-
-    static MCUint getTypeIDForName(const std::string & typeName);
 
 private:
 

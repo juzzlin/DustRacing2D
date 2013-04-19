@@ -19,6 +19,8 @@
 
 #include "mcworld.hh"
 #include "mcbbox.hh"
+#include "mcglpointparticle.hh"
+#include "mcglpointparticlerenderer.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
@@ -138,6 +140,11 @@ void MCWorld::render(MCCamera * pCamera, bool enableShadows)
     renderBatches(pCamera);
 }
 
+void MCWorld::registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer)
+{
+    m_particleRenderers[typeId] = &renderer;
+}
+
 void MCWorld::buildBatches(MCCamera * pCamera)
 {
     // In the case of Dust Racing 2D, it was faster to just loop through
@@ -157,12 +164,10 @@ void MCWorld::buildBatches(MCCamera * pCamera)
         m_objectBatches[i].clear();
         m_particleBatches[i].clear();
 
-        LayerHash::iterator j = layers[i].begin();
-        const LayerHash::iterator end = layers[i].end();
-
-        for (; j != end; j++)
+        const auto end = layers[i].end();
+        for (auto objectIter = layers[i].begin(); objectIter != end; objectIter++)
         {
-            MCObject & object = **j;
+            MCObject & object = **objectIter;
             if (object.renderable())
             {
                 // Check if view is set and is visible
@@ -273,32 +278,52 @@ void MCWorld::renderObjectBatches(MCCamera * pCamera, int layer)
     }
 }
 
-void MCWorld::renderParticleBatches(MCCamera * pCamera, int layer)
+void MCWorld::renderParticleBatches(MCCamera * camera, int layer)
 {
     // Render particle batches
-    auto iter = m_particleBatches[layer].begin();
+    auto batchIter = m_particleBatches[layer].begin();
     const auto end = m_particleBatches[layer].end();
-    while (iter != end)
+    while (batchIter != end)
     {
-        const int i2 = iter->second.size();
-        for (int i = 0; i < i2; i++)
+        if (!batchIter->second.size())
         {
-            MCParticle * particle = static_cast<MCParticle *>(iter->second[i]);
+            continue;
+        }
 
-            if (i == 0)
+        // Check if the batch is of MCGLPointParticles
+        if (MCGLPointParticle * particle = dynamic_cast<MCGLPointParticle *>(batchIter->second[0]))
+        {
+            auto rendererIter = m_particleRenderers.find(particle->typeID());
+            assert(rendererIter != m_particleRenderers.end());
+            MCGLPointParticleRenderer * renderer = rendererIter->second;
+            renderer->setBatch(batchIter->second, camera);
+            renderer->render();
+        }
+        // Generic particles
+        else
+        {
+            const int i2 = batchIter->second.size();
+            for (int i = 0; i < i2; i++)
             {
-                particle->beginBatch();
-            }
+                MCParticle * particle = static_cast<MCParticle *>(batchIter->second[i]);
 
-            particle->render(pCamera);
+                // First particle of the batch
+                if (i == 0)
+                {
+                    particle->beginBatch();
+                }
 
-            if (i == i2 - 1)
-            {
-                particle->endBatch();
+                particle->render(camera);
+
+                // Last particle of the batch
+                if (i == i2 - 1)
+                {
+                    particle->endBatch();
+                }
             }
         }
 
-        iter++;
+        batchIter++;
     }
 }
 

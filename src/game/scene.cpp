@@ -27,7 +27,7 @@
 #include "layers.hpp"
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
-#include "particlemanager.hpp"
+#include "particlefactory.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -93,7 +93,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_settings(nullptr)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
-, m_particleManager(new ParticleManager)
+, m_particleFactory(new ParticleFactory)
 , m_fadeAnimation(new FadeAnimation)
 {
     QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
@@ -568,6 +568,8 @@ void Scene::render()
             m_renderer.program("master").setFadeValue(fadeValue);
             m_renderer.program("car").setFadeValue(fadeValue);
             m_renderer.program("particle").setFadeValue(fadeValue);
+            m_renderer.program("pointParticle").setFadeValue(fadeValue);
+            m_renderer.program("pointParticleDiscard").setFadeValue(fadeValue);
             m_renderer.program("tile2d").setFadeValue(fadeValue);
             m_renderer.program("tile3d").setFadeValue(fadeValue);
             m_renderer.program("text").setFadeValue(fadeValue);
@@ -626,7 +628,7 @@ Scene::~Scene()
     delete m_mainMenu;
     delete m_menuManager;
     delete m_messageOverlay;
-    delete m_particleManager;
+    delete m_particleFactory;
     delete m_settings;
     delete m_startlights;
     delete m_startlightsOverlay;

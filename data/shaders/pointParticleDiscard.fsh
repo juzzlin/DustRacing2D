@@ -15,21 +15,21 @@
 
 #version 130
 
-in vec3 inVertex;
-in vec3 inNormal;
-in vec4 inColor;
+uniform sampler2D tex0;
 
-uniform mat4 mvp;
-uniform float fade;
+in vec4 vColor;
+out vec4 fragColor;
 
-out vec4 vColor;
-
-void main()
+void main(void)
 {
-    // Simple transform
-    gl_Position = mvp * vec4(inVertex, 1);
-    
-    // Copy the primary color
-    vColor = inColor * fade;
+    vec4 texColor = texture2D(tex0, gl_PointCoord) * vColor;
+    if (texColor.a < 0.1)
+    {
+        discard;
+    }
+    else
+    {
+        fragColor = texColor;
+    }
 }
 

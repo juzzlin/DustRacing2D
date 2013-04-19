@@ -17,7 +17,7 @@
 #include "game.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
-#include "particlemanager.hpp"
+#include "particlefactory.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
@@ -327,14 +327,12 @@ bool Car::update()
     {
         if (!m_leftSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(
-                leftRearTireLocation(), angle(), 0, 0, 0, 0.25);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftRearTireLocation());
         }
 
         if (!m_rightSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(
-                rightRearTireLocation(), angle(), 0, 0, 0, 0.25);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightRearTireLocation());
         }
     }
 
@@ -344,28 +342,24 @@ bool Car::update()
         bool smoke = false;
         if (m_leftSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(
-                leftFrontTireLocation(), angle(), 0.3, 0.2, 0.0, 0.5);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftFrontTireLocation());
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                ParticleManager::instance().doMud(
-                    leftRearTireLocation(), velocity() * 0.5, 0.3, 0.2, 0.0, 0.9);
+                ParticleFactory::instance().doParticle(ParticleFactory::Mud, leftFrontTireLocation(), velocity() * 0.5);
                 m_mudCounter = 0;
             }
         }
 
         if (m_rightSideOffTrack)
         {
-            ParticleManager::instance().doSkidMark(
-                rightFrontTireLocation(), angle(), 0.3, 0.2, 0.0, 0.5);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightFrontTireLocation());
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                ParticleManager::instance().doMud(
-                    rightRearTireLocation(), velocity() * 0.5, 0.3, 0.2, 0.0, 0.9);
+                ParticleFactory::instance().doParticle(ParticleFactory::Mud, rightFrontTireLocation(), velocity() * 0.5);
                 m_mudCounter = 0;
             }
         }
@@ -375,7 +369,7 @@ bool Car::update()
             if (++m_smokeCounter >= 2)
             {
                 MCVector3dF smokeLocation = (leftRearTireLocation() + rightRearTireLocation()) * 0.5;
-                ParticleManager::instance().doSmoke(smokeLocation, 0.75, 0.75, 0.75, 0.5);
+                ParticleFactory::instance().doParticle(ParticleFactory::Smoke, smokeLocation);
             }
         }
     }
@@ -406,9 +400,9 @@ void Car::collisionEvent(MCCollisionEvent & event)
         {
             if (++m_sparkleCounter >= 10)
             {
-                ParticleManager::instance().doSparkle(
-                    event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
-                ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+                ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
+                    event.contactPoint(), velocity() * 0.5);
+                ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
                 m_sparkleCounter = 0;
             }
         }
@@ -421,17 +415,17 @@ void Car::collisionEvent(MCCollisionEvent & event)
             event.collidingObject().typeID() == wallLong ||
             event.collidingObject().typeID() == rock)
         {
-            ParticleManager::instance().doSparkle(
-                event.contactPoint(), velocity() * 0.5, 1.0, 0.8, 0.0, 0.75);
-            ParticleManager::instance().doSmoke(event.contactPoint(), 0.75, 0.75, 0.75, 0.5);
+            ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
+                event.contactPoint(), velocity() * 0.5);
+            ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
         }
         // Check if the car is colliding with trees or plants.
         else if (
             event.collidingObject().typeID() == tree ||
             event.collidingObject().typeID() == plant)
         {
-            ParticleManager::instance().doLeaf(
-                event.contactPoint(), velocity() * 0.1, 0.0, 0.75, 0.0, 0.75);
+            ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
+                event.contactPoint(), velocity() * 0.1);
         }
     }
 

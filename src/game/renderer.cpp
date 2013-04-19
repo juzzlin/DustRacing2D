@@ -122,17 +122,18 @@ void Renderer::createProgram(
 
 void Renderer::loadShaders()
 {
-    createProgram("car",           "car.fsh",            "car.vsh");
-    createProgram("fbo",           "fbo.fsh",            "fbo.vsh");
-    createProgram("master",        "master.fsh",         "master.vsh");
-    createProgram("masterShadow",  "master2dShadow.fsh", "master2dShadow.vsh");
-    createProgram("menu",          "menu.fsh",           "menu.vsh");
-    createProgram("particle",      "particle.fsh",       "master.vsh");
-    createProgram("pointParticle", "particle.fsh",       "pointParticle.vsh");
-    createProgram("text",          "text.fsh",           "text.vsh");
-    createProgram("textShadow",    "text2dShadow.fsh",   "text.vsh");
-    createProgram("tile2d",        "tile2d.fsh",         "tile.vsh");
-    createProgram("tile3d",        "tile3d.fsh",         "tile.vsh");
+    createProgram("car",                  "car.fsh",                  "car.vsh");
+    createProgram("fbo",                  "fbo.fsh",                  "fbo.vsh");
+    createProgram("master",               "master.fsh",               "master.vsh");
+    createProgram("masterShadow",         "master2dShadow.fsh",       "master2dShadow.vsh");
+    createProgram("menu",                 "menu.fsh",                 "menu.vsh");
+    createProgram("particle",             "particle.fsh",             "master.vsh");
+    createProgram("pointParticle",        "pointParticle.fsh",        "pointParticle.vsh");
+    createProgram("pointParticleDiscard", "pointParticleDiscard.fsh", "pointParticle.vsh");
+    createProgram("text",                 "text.fsh",                 "text.vsh");
+    createProgram("textShadow",           "text2dShadow.fsh",         "text.vsh");
+    createProgram("tile2d",               "tile2d.fsh",               "tile.vsh");
+    createProgram("tile3d",               "tile3d.fsh",               "tile.vsh");
 
     // Make sure that shaders have the current model view projection matrix.
     m_glScene->updateModelViewProjectionMatrixAndShaders();

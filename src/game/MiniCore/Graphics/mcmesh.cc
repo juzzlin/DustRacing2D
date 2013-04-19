@@ -74,30 +74,30 @@ void MCMesh::init(const FaceVector & faces)
 
         for (int faceVertexIndex = 0; faceVertexIndex < numFaceVertices; faceVertexIndex++)
         {
-            vertices[vertexIndex].x  = face.vertices.at(faceVertexIndex).x;
-            vertices[vertexIndex].y  = face.vertices.at(faceVertexIndex).y;
-            vertices[vertexIndex].z  = face.vertices.at(faceVertexIndex).z;
+            vertices[vertexIndex].setX(face.vertices.at(faceVertexIndex).x);
+            vertices[vertexIndex].setY(face.vertices.at(faceVertexIndex).y);
+            vertices[vertexIndex].setZ(face.vertices.at(faceVertexIndex).z);
 
-            normals[vertexIndex].x   = face.vertices.at(faceVertexIndex).i;
-            normals[vertexIndex].y   = face.vertices.at(faceVertexIndex).j;
-            normals[vertexIndex].z   = face.vertices.at(faceVertexIndex).k;
+            normals[vertexIndex].setX(face.vertices.at(faceVertexIndex).i);
+            normals[vertexIndex].setY(face.vertices.at(faceVertexIndex).j);
+            normals[vertexIndex].setZ(face.vertices.at(faceVertexIndex).k);
 
             texCoords[vertexIndex].u = face.vertices.at(faceVertexIndex).u;
             texCoords[vertexIndex].v = face.vertices.at(faceVertexIndex).v;
 
             if (!vertexIndex)
             {
-                minX = vertices[vertexIndex].x;
-                maxX = vertices[vertexIndex].x;
-                minY = vertices[vertexIndex].y;
-                maxY = vertices[vertexIndex].y;
+                minX = vertices[vertexIndex].x();
+                maxX = vertices[vertexIndex].x();
+                minY = vertices[vertexIndex].y();
+                maxY = vertices[vertexIndex].y();
             }
             else
             {
-                minX = std::min(minX, static_cast<int>(vertices[vertexIndex].x));
-                maxX = std::max(maxX, static_cast<int>(vertices[vertexIndex].x));
-                minY = std::min(minY, static_cast<int>(vertices[vertexIndex].y));
-                maxY = std::max(maxY, static_cast<int>(vertices[vertexIndex].y));
+                minX = std::min(minX, static_cast<int>(vertices[vertexIndex].x()));
+                maxX = std::max(maxX, static_cast<int>(vertices[vertexIndex].x()));
+                minY = std::min(minY, static_cast<int>(vertices[vertexIndex].y()));
+                maxY = std::max(maxY, static_cast<int>(vertices[vertexIndex].y()));
             }
 
             vertexIndex++;

@@ -49,22 +49,22 @@ MCSurface::MCSurface(
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
     {
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, z2},
-        {-(GLfloat)m_w2,  (GLfloat)m_h2, z1},
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, z0},
-        { (GLfloat)m_w2, -(GLfloat)m_h2, z3},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, z2}
+        MCGLVertex(-(GLfloat)m_w2, -(GLfloat)m_h2, z0),
+        MCGLVertex( (GLfloat)m_w2,  (GLfloat)m_h2, z2),
+        MCGLVertex(-(GLfloat)m_w2,  (GLfloat)m_h2, z1),
+        MCGLVertex(-(GLfloat)m_w2, -(GLfloat)m_h2, z0),
+        MCGLVertex( (GLfloat)m_w2, -(GLfloat)m_h2, z3),
+        MCGLVertex( (GLfloat)m_w2,  (GLfloat)m_h2, z2)
     };
 
     // Calculate normals
 
-    const MCVector3dF v0(vertices[0].x, vertices[0].y, vertices[0].z);
-    const MCVector3dF v1(vertices[1].x, vertices[1].y, vertices[1].z);
-    const MCVector3dF v2(vertices[2].x, vertices[2].y, vertices[2].z);
-    const MCVector3dF v3(vertices[3].x, vertices[3].y, vertices[3].z);
-    const MCVector3dF v4(vertices[4].x, vertices[4].y, vertices[4].z);
-    const MCVector3dF v5(vertices[5].x, vertices[5].y, vertices[5].z);
+    const MCVector3dF v0(vertices[0].x(), vertices[0].y(), vertices[0].z());
+    const MCVector3dF v1(vertices[1].x(), vertices[1].y(), vertices[1].z());
+    const MCVector3dF v2(vertices[2].x(), vertices[2].y(), vertices[2].z());
+    const MCVector3dF v3(vertices[3].x(), vertices[3].y(), vertices[3].z());
+    const MCVector3dF v4(vertices[4].x(), vertices[4].y(), vertices[4].z());
+    const MCVector3dF v5(vertices[5].x(), vertices[5].y(), vertices[5].z());
 
     const MCVector3dF n0(((v1 - v0) % (v2 - v0)).normalized());
     const MCVector3dF n1(n0);
