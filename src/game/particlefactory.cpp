@@ -153,7 +153,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location) const
         smoke = static_cast<MCGLPointParticle *>(freeList.back());
         freeList.pop_back();
 
-        smoke->init(location, 10, 60);
+        smoke->init(location, 10, 180);
         smoke->setAnimationStyle(MCParticle::FadeOut);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
