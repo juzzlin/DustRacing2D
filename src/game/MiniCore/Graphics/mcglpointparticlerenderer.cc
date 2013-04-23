@@ -51,7 +51,7 @@ MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
     glBindVertexArray(m_vba);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_DYNAMIC_DRAW);
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
