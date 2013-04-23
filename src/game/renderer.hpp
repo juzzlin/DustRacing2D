@@ -51,6 +51,9 @@ public:
         bool fullScreen,
         QWidget * parent = nullptr);
 
+    int hRes() const {return m_hRes;}
+    int vRes() const {return m_vRes;}
+
     //! Destructor.
     virtual ~Renderer();
 

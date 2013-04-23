@@ -62,28 +62,33 @@ void ParticleFactory::preCreatePointParticles(int count,
         MCObject::getTypeIDForName(typeId), m_renderers[typeEnum]);
 }
 
+int scalePointSizeWithResolution(int size)
+{
+    return Renderer::instance().hRes() * size / 1600;
+}
+
 void ParticleFactory::preCreateParticles()
 {
     preCreatePointParticles(500, "MUD", Mud, 1.0, 1.0, 1.0, 1.0);
     m_renderers[Mud].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
     m_renderers[Mud].setTexture(MCAssetManager::surfaceManager().surface("mud").handle1());
-    m_renderers[Mud].setPointSize(12);
+    m_renderers[Mud].setPointSize(scalePointSizeWithResolution(12));
 
     preCreatePointParticles(500, "SKI", SkidMark, 0.3, 0.2, 0.0, 0.5);
     m_renderers[SkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
     m_renderers[SkidMark].setTexture(MCAssetManager::surfaceManager().surface("mud").handle1());
-    m_renderers[SkidMark].setPointSize(1);
+    m_renderers[SkidMark].setPointSize(scalePointSizeWithResolution(1));
 
     preCreatePointParticles(500, "SMO", Smoke, 0.75, 0.75, 0.75, 0.75);
     m_renderers[Smoke].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[Smoke].setTexture(MCAssetManager::surfaceManager().surface("smoke").handle1());
-    m_renderers[Smoke].setPointSize(32);
+    m_renderers[Smoke].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[Smoke].setAlphaBlend(true);
 
     preCreatePointParticles(500, "SPA", Sparkle, 1.0, 0.75, 0.0, 1.0);
     m_renderers[Sparkle].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[Sparkle].setTexture(MCAssetManager::surfaceManager().surface("sparkle").handle1());
-    m_renderers[Sparkle].setPointSize(16);
+    m_renderers[Sparkle].setPointSize(scalePointSizeWithResolution(16));
     m_renderers[Sparkle].setAlphaBlend(true);
 
     // Pre-create some leaf particles
