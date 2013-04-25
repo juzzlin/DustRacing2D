@@ -101,6 +101,12 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent * event);
 
     //! \reimp
+    void mousePressEvent(QMouseEvent * event);
+
+    //! \reimp
+    void mouseReleaseEvent(QMouseEvent * event);
+
+    //! \reimp
     void closeEvent(QCloseEvent * event);
 
 private:

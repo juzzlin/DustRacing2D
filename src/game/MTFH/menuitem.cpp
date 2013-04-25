@@ -49,6 +49,22 @@ int MenuItem::height() const
     return m_height + m_tMargin + m_bMargin;
 }
 
+void MenuItem::setPos(int x, int y)
+{
+    m_x = x;
+    m_y = y;
+}
+
+int MenuItem::x() const
+{
+    return m_x;
+}
+
+int MenuItem::y() const
+{
+    return m_y;
+}
+
 void MenuItem::setView(MenuItemView * view, bool takeOwnership)
 {
     m_view = view;
@@ -164,11 +180,11 @@ bool MenuItem::selectable() const
     return m_selectable;
 }
 
-void MenuItem::render(int x, int y)
+void MenuItem::render()
 {
     if (m_view)
     {
-        m_view->render(x, y);
+        m_view->render(m_x, m_y);
     }
 }
 

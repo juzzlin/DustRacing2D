@@ -39,6 +39,10 @@ public:
 
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
+    bool handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
+
+    bool handleMouseReleaseEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
+
 signals:
 
     void pauseToggled();

@@ -92,7 +92,8 @@ void Menu::render()
         int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            item->render(m_width / 2, startY);
+            item->setPos(m_width / 2, startY);
+            item->render();
             startY += item->height();
         }
     }
@@ -109,14 +110,16 @@ void Menu::render()
         int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            item->render(startX, m_height / 2);
+            item->setPos(startX, m_height / 2);
+            item->render();
             startX += item->width();
         }
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
         MenuItem & item = *m_items.at(m_currentIndex);
-        item.render(m_width / 2, m_height / 2);
+        item.setPos(m_width / 2, m_height / 2);
+        item.render();
     }
 }
 
@@ -169,6 +172,51 @@ void Menu::selectCurrentItem()
 
         m_items.at(m_currentIndex)->setSelected(true);
         m_selectedIndex = m_currentIndex;
+    }
+}
+
+void Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
+{
+    x = x * width()  / screenWidth;
+    y = y * height() / screenHeight;
+
+    for (unsigned int i = 0; i < m_items.size(); i++)
+    {
+        MenuItem & item = *m_items.at(i);
+        const int x1 = item.x() - item.width()  / 2;
+        const int x2 = item.x() + item.width()  / 2;
+        const int y1 = item.y() - item.height() / 2;
+        const int y2 = item.y() + item.height() / 2;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        {
+            setCurrentIndex(i);
+            break;
+        }
+    }
+}
+
+void Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
+{
+    x = x * width()  / screenWidth;
+    y = y * height() / screenHeight;
+
+    for (unsigned int i = 0; i < m_items.size(); i++)
+    {
+        MenuItem & item = *m_items.at(i);
+        const int x1 = item.x() - item.width()  / 2;
+        const int x2 = item.x() + item.width()  / 2;
+        const int y1 = item.y() - item.height() / 2;
+        const int y2 = item.y() + item.height() / 2;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        {
+            if (static_cast<int>(i) == m_currentIndex)
+            {
+                selectCurrentItem();
+            }
+            break;
+        }
     }
 }
 

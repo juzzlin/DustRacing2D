@@ -138,7 +138,7 @@ void Game::createRenderer()
     }
 
     m_renderer->setFocus();
-    m_renderer->setCursor(Qt::BlankCursor);
+    //m_renderer->setCursor(Qt::BlankCursor);
 
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.

@@ -82,7 +82,7 @@ public:
     }
 
     //! \reimp
-    virtual void render(int x, int y);
+    virtual void render();
 
 private:
 
@@ -97,7 +97,7 @@ private:
 };
 
 // TODO: Split this fugly monster function into subs.
-void TrackItem::render(int x, int y)
+void TrackItem::render()
 {
     const MapBase & rMap = m_track.trackData().map();
 
@@ -123,14 +123,14 @@ void TrackItem::render(int x, int y)
     int initX, initY;
     if (rMap.cols() % 2 == 0)
     {
-        initX = x - rMap.cols() * tileW / 2 + tileW / 4 + m_xDisplacement;
+        initX = x() - rMap.cols() * tileW / 2 + tileW / 4 + m_xDisplacement;
     }
     else
     {
-        initX = x - rMap.cols() * tileW / 2 + m_xDisplacement;
+        initX = x() - rMap.cols() * tileW / 2 + m_xDisplacement;
     }
 
-    initY = y - rMap.rows() * tileH / 2;
+    initY = y() - rMap.rows() * tileH / 2;
 
     // Loop through the visible tile matrix and draw the tiles
     MCFloat tileX, tileY;
@@ -174,7 +174,7 @@ void TrackItem::render(int x, int y)
 
     MCTextureText text("");
 
-    const int textX   = x - width() / 2;
+    const int textX   = x() - width() / 2;
     const int shadowY = -2;
     const int shadowX =  2;
 
@@ -184,14 +184,14 @@ void TrackItem::render(int x, int y)
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
-    text.render(x - text.width() / 2, y + height() / 2 + text.height(), nullptr, m_monospace);
+    text.render(x() - text.width() / 2, y() + height() / 2 + text.height(), nullptr, m_monospace);
 
     // Render stars
     if (!m_track.trackData().isLocked())
     {
         const int starW    = m_star.width();
         const int starH    = m_star.height();
-        const int startX   = x - 5 * starW + starW / 2 + m_xDisplacement;
+        const int startX   = x() - 5 * starW + starW / 2 + m_xDisplacement;
         const int numStars = 10;
 
         for (int i = 0; i < numStars; i++)
@@ -201,8 +201,7 @@ void TrackItem::render(int x, int y)
             {
                 m_star.setColor(1.0, 1.0, 0.0);
                 m_glow.render(
-                    nullptr,
-                    MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+                    nullptr, MCVector3dF(startX + i * starW, y() - height() / 2 + starH / 2, 0), 0);
             }
             else
             {
@@ -210,17 +209,14 @@ void TrackItem::render(int x, int y)
             }
 
             m_star.render(
-                nullptr,
-                MCVector3dF(startX + i * starW, y - height() / 2 + starH / 2, 0), 0);
+                nullptr, MCVector3dF(startX + i * starW, y() - height() / 2 + starH / 2, 0), 0);
         }
     }
 
     // Render the lock
     if (m_track.trackData().isLocked())
     {
-        m_lock.render(
-            nullptr,
-            MCVector3dF(x + m_xDisplacement, y, 0), 0);
+        m_lock.render(nullptr, MCVector3dF(x() + m_xDisplacement, y(), 0), 0);
     }
 
     // Render track properties
@@ -228,21 +224,21 @@ void TrackItem::render(int x, int y)
     ss << "  Laps: " << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
-    text.render(textX, y - height() / 2 - text.height() * 2, nullptr, m_monospace);
+    text.render(textX, y() - height() / 2 - text.height() * 2, nullptr, m_monospace);
 
     ss.str("");
     ss << "Length: "
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
        << " m";
     text.setText(ss.str());
-    text.render(textX, y - height() / 2 - text.height() * 3, nullptr, m_monospace);
+    text.render(textX, y() - height() / 2 - text.height() * 3, nullptr, m_monospace);
 
     if (!m_track.trackData().isLocked())
     {
         ss.str("");
         ss << "Record: " << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
-        text.render(textX, y - height() / 2 - text.height() * 4, nullptr, m_monospace);
+        text.render(textX, y() - height() / 2 - text.height() * 4, nullptr, m_monospace);
     }
 
     text.setText("Use arrows to browse and enter to select..");

@@ -62,6 +62,12 @@ public:
     //! Select the current item.
     virtual void selectCurrentItem();
 
+    //! Handle mouse press at given screen coordinates.
+    virtual void handleMousePress(int x, int y, int screenWidth, int screenHeight);
+
+    //! Handle mouse release at given screen coordinates.
+    virtual void handleMouseRelease(int x, int y, int screenWidth, int screenHeight);
+
     //! Return current item or nullptr if no items added.
     MenuItem * currentItem() const;
 

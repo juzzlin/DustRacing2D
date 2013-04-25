@@ -256,6 +256,18 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
     }
 }
 
+void Renderer::mousePressEvent(QMouseEvent * event)
+{
+    assert(m_eventHandler);
+    m_eventHandler->handleMousePressEvent(event, width(), height(), true);
+}
+
+void Renderer::mouseReleaseEvent(QMouseEvent * event)
+{
+    assert(m_eventHandler);
+    m_eventHandler->handleMouseReleaseEvent(event, width(), height(), true);
+}
+
 void Renderer::closeEvent(QCloseEvent * event)
 {
     event->accept();

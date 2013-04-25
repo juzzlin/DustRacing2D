@@ -104,6 +104,40 @@ bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
     return false;
 }
 
+bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)
+{
+    if (StateMachine::instance().state() == StateMachine::Menu)
+    {
+        if (mirrorY)
+        {
+            MTFH::MenuManager::instance().mousePress(event->x(), screenHeight - event->y(), screenWidth, screenHeight);
+        }
+        else
+        {
+            MTFH::MenuManager::instance().mousePress(event->x(), event->y(), screenWidth, screenHeight);
+        }
+    }
+
+    return true;
+}
+
+bool EventHandler::handleMouseReleaseEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)
+{
+    if (StateMachine::instance().state() == StateMachine::Menu)
+    {
+        if (mirrorY)
+        {
+            MTFH::MenuManager::instance().mouseRelease(event->x(), screenHeight - event->y(), screenWidth, screenHeight);
+        }
+        else
+        {
+            MTFH::MenuManager::instance().mouseRelease(event->x(), event->y(), screenWidth, screenHeight);
+        }
+    }
+
+    return true;
+}
+
 bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
 {
     if (m_captureMode)

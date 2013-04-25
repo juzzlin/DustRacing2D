@@ -39,6 +39,12 @@ public:
 
     int height() const;
 
+    void setPos(int x, int y);
+
+    int x() const;
+
+    int y() const;
+
     const std::string & text() const;
 
     void setView(MenuItemView * view, bool takeOwnership = false);
@@ -53,7 +59,7 @@ public:
 
     MenuItemAction * action() const;
 
-    virtual void render(int x, int y);
+    virtual void render();
 
     virtual void onLeft();
 
@@ -91,7 +97,7 @@ private:
     bool m_focused;
     bool m_selected;
     bool m_selectable;
-    int m_width, m_height;
+    int m_width, m_height, m_x, m_y;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
 };
 
