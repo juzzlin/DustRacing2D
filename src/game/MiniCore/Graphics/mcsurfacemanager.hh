@@ -41,7 +41,7 @@ class MCSurface;
  * intended to be invisible. Dimensions are forced to the nearest power of 2.
  *
  * Texture surfaces will also be flipped about X-axis if desired.
- *  
+ *
  * MCSurface objects can be accessed via handles specified in the XML-based mapping file.
  *
  * Example mapping file:
@@ -108,9 +108,6 @@ private:
     //! Apply given color key (set alpha values on / of).
     void applyColorKey(QImage & textureImage,
         MCUint r, MCUint g, MCUint b) const;
-
-    //! Creates a scaled image with dimensions forced to the nearest power of two.
-    QImage createNearest2PowNImage(const QImage & image);
 
     //! Helper to create the actual OpenGL texture.
     GLuint create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image);

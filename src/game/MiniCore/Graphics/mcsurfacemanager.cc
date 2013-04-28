@@ -32,19 +32,6 @@ MCSurfaceManager::MCSurfaceManager()
 {
 }
 
-QImage MCSurfaceManager::createNearest2PowNImage(const QImage & image)
-{
-    double w = image.width();
-    double h = image.height();
-
-    w = pow(2, 1 + int(log(w - w / 2) / log(2) + .5));
-    w = w < 2 ? 2 : w;
-    h = pow(2, 1 + int(log(h - h / 2) / log(2) + .5));
-    h = h < 2 ? 2 : h;
-
-    return image.scaled(w, h);
-}
-
 inline bool colorMatch(int val1, int val2, int threshold)
 {
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
@@ -115,8 +102,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImages(
 GLuint MCSurfaceManager::create2DTextureFromImage(
     const MCSurfaceMetaData & data, const QImage & image)
 {
-    // Create a surface with dimensions of 2^n
-    QImage textureImage = createNearest2PowNImage(image);
+    QImage textureImage = image;
 
     // Flip pA about X-axis if set active
     if (data.xAxisMirror)
