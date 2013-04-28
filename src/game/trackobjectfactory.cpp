@@ -86,7 +86,7 @@ TrackObject & TrackObjectFactory::build(
         data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setStationary(true);
+        data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
 
@@ -101,7 +101,7 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setStationary(true);
+        data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
         data.setShapeWidth(plantBodyRadius);
@@ -125,6 +125,7 @@ TrackObject & TrackObjectFactory::build(
         object = &m_objectFactory.build(data);
     }
     else if (
+        role == "grid"                 ||
         role == "sandAreaCurve"        ||
         role == "sandAreaCurve45"      ||
         role == "sandAreaCurve45Right" ||
@@ -134,12 +135,12 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setBatchMode(true);
-        data.setStationary(true);
+        data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::Ground);
 
         object = &m_objectFactory.build(data);
-        object->setPhysicsObject(false);
+        object->setIsPhysicsObject(false);
         object->view()->setHasShadow(false);
     }
     else if (role == "tire")
@@ -167,7 +168,7 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setStationary(true);
+        data.setIsStationary(true);
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
         data.setShapeHeight(treeBodyRadius);
@@ -190,7 +191,7 @@ TrackObject & TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setXYFriction(1.0);
-        data.setStationary(true);
+        data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
         data.setLayer(Layers::Walls);

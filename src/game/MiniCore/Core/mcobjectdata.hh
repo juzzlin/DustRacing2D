@@ -89,7 +89,7 @@ public:
     MCFloat xyFriction() const;
 
     //! Set stationary.
-    void setStationary(bool stationary);
+    void setIsStationary(bool stationary);
 
     //! Return true if stationary.
     bool stationary() const;

@@ -21,7 +21,7 @@
 
 MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
 : MCObjectData(typeId)
-, m_surfaceId("")
+, m_surfaceId(typeId)
 , m_defaultCircleShape(false)
 , m_batchMode(false)
 {

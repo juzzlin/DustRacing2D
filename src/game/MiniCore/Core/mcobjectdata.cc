@@ -106,7 +106,7 @@ MCFloat MCObjectData::xyFriction() const
     return m_xyFriction;
 }
 
-void MCObjectData::setStationary(bool stationary)
+void MCObjectData::setIsStationary(bool stationary)
 {
     m_stationary = stationary;
 }

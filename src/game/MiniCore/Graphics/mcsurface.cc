@@ -20,6 +20,7 @@
 #include "mcsurface.hh"
 #include "mccamera.hh"
 #include "mcbbox.hh"
+#include "mcexception.hh"
 #include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
 #include "mcgltexcoord.hh"
@@ -348,8 +349,7 @@ MCGLShaderProgram * MCSurface::shadowShaderProgram() const
     return m_shadowProgram;
 }
 
-void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
-    bool autoBind)
+void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
     if (m_program)
     {
@@ -386,6 +386,12 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle,
             glDisable(GL_BLEND);
         }
     }
+    else
+    {
+        // Save the user from debugging as to why nothing is being drawn.
+        throw MCException(
+            "Trying to render surface but shader program for it not set!");
+    }
 }
 
 void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
@@ -418,6 +424,11 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
         m_shadowProgram->rotate(angle);
 
         doRenderShadow(autoBind);
+    }
+    else
+    {
+        // Save the user from debugging as to why nothing is being drawn.
+        throw MCException("Trying to render shadow for surface, but shader program for it not set!");
     }
 }
 

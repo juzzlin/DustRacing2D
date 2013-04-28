@@ -213,7 +213,7 @@ public:
 
     //! \brief Sets whether the physics of the object should be updated.
     //! True is the default.
-    void setPhysicsObject(bool flag);
+    void setIsPhysicsObject(bool flag);
 
     //! \brief Return whether the object is a physics object.
     bool physicsObject() const;

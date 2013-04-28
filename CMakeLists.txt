@@ -31,7 +31,7 @@ set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
 
 # This is not needed with GLEW (built-in with MiniCore)
-#add_definitions(-DGL_GLEXT_PROTOTYPES) 
+#add_definitions(-DGL_GLEXT_PROTOTYPES)
 add_definitions(-DGLEW_STATIC)
 
 if (UseQt5)
@@ -75,9 +75,10 @@ else()
     set(BIN_PATH .)
     set(DATA_PATH ./data)
     set(DOC_PATH .)
-    
+
     if (DebugBuild)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+        add_definitions(-DDEBUG)
     endif()
 endif()
 
@@ -112,19 +113,19 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         # Install .desktop files
         install(FILES dustrac-game.desktop DESTINATION share/applications)
         install(FILES dustrac-editor.desktop DESTINATION share/applications)
-    
+
         # Install icons
         install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
         install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
         install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
         install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
-    
+
         # Create symlinks to targets
         if (Ubuntu)
             execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${GAME_BINARY_NAME} /usr/bin/${GAME_BINARY_NAME})
             execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${EDITOR_BINARY_NAME} /usr/bin/${EDITOR_BINARY_NAME})
         endif()
-    endif()    
+    endif()
 
     # CPack config to create e.g. self-extracting packages
     set(CPACK_BINARY_STGZ "ON")

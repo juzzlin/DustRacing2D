@@ -31,8 +31,6 @@
 #include <cmath>
 #include <string>
 
-using std::string;
-
 class MCCamera;
 class MCGLShaderProgram;
 class MCGLTexCoord;
@@ -45,49 +43,50 @@ class MCSurface
 {
 public:
 
-    //! Constructor.
-    //! \param handle Handle of the corresponding OpenGL texture 1.
-    //! \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
-    //! \param width  Desired width of the surface when rendered 1:1.
-    //! \param height Desired height of the surface when rendered 1:1.
-    //! \param z0     Z-coordinate for vertex[0]. Enables tilted surfaces.
-    //! \param z1     Z-coordinate for vertex[1]. Enables tilted surfaces.
-    //! \param z2     Z-coordinate for vertex[2]. Enables tilted surfaces.
-    //! \param z3     Z-coordinate for vertex[3]. Enables tilted surfaces.
+    /*! Constructor.
+     *  \param handle Handle of the corresponding OpenGL texture 1.
+     *  \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
+     *  \param width  Desired width of the surface when rendered 1:1.
+     *  \param height Desired height of the surface when rendered 1:1.
+     *  \param z0 Z-coordinate for vertex[0]. Enables tilted surfaces.
+     *  \param z1 Z-coordinate for vertex[1]. Enables tilted surfaces.
+     *  \param z2 Z-coordinate for vertex[2]. Enables tilted surfaces.
+     *  \param z3 Z-coordinate for vertex[3]. Enables tilted surfaces. */
     MCSurface(
         GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
         MCFloat z0 = 0, MCFloat z1 = 0, MCFloat z2 = 0, MCFloat z3 = 0);
 
-    //! Constructor.
-    //! \param handle Handle of the corresponding OpenGL texture 1.
-    //! \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
-    //! \param width  Desired width of the surface when rendered 1:1.
-    //! \param height Desired height of the surface when rendered 1:1.
-    //! \param texCoords Array including texture coordinates of the four vertices.
-    MCSurface(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
+    /*! Constructor.
+     *  \param handle Handle of the corresponding OpenGL texture 1.
+     *  \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
+     *  \param width  Desired width of the surface when rendered 1:1.
+     *  \param height Desired height of the surface when rendered 1:1.
+     *  \param texCoords Array including texture coordinates of the four vertices. */
+    MCSurface(
+        GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
         const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
     virtual ~MCSurface();
 
-    //! Set the point the surface is centered about.
-    //! \param center Vector that defines a custom rotation point other than
-    //!        (width / 2, height / 2) which is the default.
+    /*! Set the point the surface is centered about.
+     *  \param center Vector that defines a custom rotation point other than
+     *         (width / 2, height / 2) which is the default. */
     void setCenter(MCVector2dFR center);
 
-    //! Enable / disable alpha blend.
-    //! \param useAlphaBlend Alpha blending is enabled if true.
-    //! \param src Source alpha function used in the alpha blending. Has no effect
-    //!        if useAlphaBlend equals false.
-    //! \param dst Destination alpha function used in the alpha blending. Has no effect
-    //!        if useAlphaBlend equals false.
+    /*! Enable / disable alpha blend.
+     *  \param useAlphaBlend Alpha blending is enabled if true.
+     *  \param src Source alpha function used in the alpha blending. Has no effect
+     *         if useAlphaBlend equals false.
+     *  \param dst Destination alpha function used in the alpha blending. Has no effect
+     *         if useAlphaBlend equals false. */
     void setAlphaBlend(
         bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
 
-    //! Runs the corresponding GL-commands defined in setAlphaBlend().
-    //! This is done automatically, but doAlphaBlend() can be used if
-    //! someone else renders the surface by using the texture
-    //! handle and wants to run the configured alpha blending.
+    /*! Runs the corresponding GL-commands defined in setAlphaBlend().
+     *  This is done automatically, but doAlphaBlend() can be used if
+     *  someone else renders the surface by using the texture
+     *  handle and wants to run the configured alpha blending. */
     void doAlphaBlend() const;
 
     //! Set texture coordinates.

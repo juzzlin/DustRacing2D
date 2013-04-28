@@ -17,11 +17,14 @@
 
 #include "car.hpp"
 #include "game.hpp"
+#include "layers.hpp"
 #include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
+#include "renderer.hpp"
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
+#include "trackobjectfactory.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
@@ -31,13 +34,18 @@
 #include <cassert>
 
 #include <MCLogger>
+#include <MCAssetManager>
+#include <MCObjectFactory>
+#include <MCShapeView>
+#include <MCSurfaceManager>
 
 static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
 static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
 
 Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay)
-: m_lapCount(5)
+: m_numCars(numCars)
+, m_lapCount(5)
 , m_timing(numCars)
 , m_track(nullptr)
 , m_started(false)
@@ -48,6 +56,26 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 , m_messageOverlay(messageOverlay)
 , m_game(game)
 {
+    createStartGridObjects();
+}
+
+void Race::createStartGridObjects()
+{
+    static MCObjectFactory objectFactory(MCAssetManager::instance());
+    for (int i = 0; i < m_numCars; i++)
+    {
+        MCSurfaceObjectData data("grid");
+        data.setBatchMode(true);
+        data.setIsStationary(true);
+        data.setSurfaceId("grid");
+        data.setLayer(Layers::Ground);
+
+        MCObject * object(&objectFactory.build(data));
+        object->view()->setHasShadow(false);
+        object->view()->setShaderProgram(&Renderer::instance().program("master"));
+        object->setIsPhysicsObject(false);
+        m_startGridObjects.push_back(object);
+    }
 }
 
 void Race::init(Track & track, int lapCount)
@@ -74,6 +102,19 @@ void Race::init(Track & track, int lapCount)
     m_lapCount             = lapCount;
 }
 
+void placeCar(Car & car, MCFloat x, MCFloat y, int angle)
+{
+    car.translate(MCVector2d<MCFloat>(x, y));
+    car.rotate(angle);
+}
+
+void placeStartGrid(MCObject & grid, MCFloat x, MCFloat y, int angle)
+{
+    grid.translate(MCVector2d<MCFloat>(x, y));
+    grid.rotate(angle);
+    grid.addToWorld();
+}
+
 void Race::translateCarsToStartPositions()
 {
     assert(m_track);
@@ -86,6 +127,7 @@ void Race::translateCarsToStartPositions()
         const MCFloat tileHeight = TrackTile::TILE_H;
         const MCFloat spacing    = 0.75 * TrackTile::TILE_W;
         const MCFloat oddOffset  = TrackTile::TILE_W / 8;
+        const MCFloat gridOffset = 24;
 
         // Reverse order
         std::vector<Car *> order = m_cars;
@@ -113,13 +155,8 @@ void Race::translateCarsToStartPositions()
             {
                 const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
-
-                order.at(i)->translate(
-                    MCVector2d<MCFloat>(
-                        startTileX + rowPos,
-                        startTileY + colPos));
-
-                order.at(i)->rotate(180);
+                placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 180);
+                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos - gridOffset, startTileY + colPos, 180);
             }
             break;
 
@@ -130,13 +167,8 @@ void Race::translateCarsToStartPositions()
             {
                 const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
-
-                order.at(i)->translate(
-                    MCVector2d<MCFloat>(
-                        startTileX - rowPos,
-                        startTileY + colPos));
-
-                order.at(i)->rotate(0);
+                placeCar(*order.at(i), startTileX - rowPos, startTileY + colPos, 0);
+                placeStartGrid(*m_startGridObjects.at(i), startTileX - rowPos + gridOffset, startTileY + colPos, 0);
             }
             break;
 
@@ -145,13 +177,8 @@ void Race::translateCarsToStartPositions()
             {
                 const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
                 const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
-
-                order.at(i)->translate(
-                    MCVector2d<MCFloat>(
-                        startTileX + rowPos,
-                        startTileY - colPos));
-
-                order.at(i)->rotate(90);
+                placeCar(*order.at(i), startTileX + rowPos, startTileY - colPos, 90);
+                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY - colPos + gridOffset, 90);
             }
             break;
 
@@ -161,13 +188,8 @@ void Race::translateCarsToStartPositions()
             {
                 const MCFloat rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
                 const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
-
-                order.at(i)->translate(
-                    MCVector2d<MCFloat>(
-                        startTileX + rowPos,
-                        startTileY + colPos));
-
-                order.at(i)->rotate(270);
+                placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 270);
+                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY + colPos - gridOffset, 270);
             }
             break;
         }

@@ -478,7 +478,7 @@ void MCObject::addAngularImpulse(MCFloat impulse)
     toggleSleep(false);
 }
 
-void MCObject::setPhysicsObject(bool flag)
+void MCObject::setIsPhysicsObject(bool flag)
 {
     m_physicsObject = flag;
 }

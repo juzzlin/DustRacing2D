@@ -34,7 +34,7 @@ MCParticle::MCParticle(const std::string & typeID)
 {
     setShape(new MCCircleShape(nullptr, 0.0));
     setBypassCollisions(true);
-    setPhysicsObject(true);
+    setIsPhysicsObject(true);
     setIsParticle(true);
 }
 
@@ -53,7 +53,7 @@ void MCParticle::init(
     m_delta          = m_scale / m_initLifeTime;
     m_radius         = newRadius;
 
-    setPhysicsObject(true);
+    setIsPhysicsObject(true);
 
     translate(newLocation);
 

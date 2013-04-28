@@ -17,7 +17,7 @@
 #define RACE_HPP
 
 #include <QObject>
-
+#include <MCObject>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -91,6 +91,8 @@ private:
 
     void checkIfCarIsStuck(Car & car);
 
+    void createStartGridObjects();
+
     bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
 
     bool isRaceFinished() const;
@@ -105,6 +107,9 @@ private:
 
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
+
+    typedef std::vector<MCObject *> StartGridObjectVector;
+    StartGridObjectVector m_startGridObjects;
 
     // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
@@ -121,6 +126,7 @@ private:
     typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
+    int              m_numCars;
     int              m_lapCount;
     Timing           m_timing;
     Track          * m_track;
