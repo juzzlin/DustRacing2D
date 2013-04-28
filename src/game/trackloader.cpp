@@ -40,6 +40,8 @@
 #include <algorithm>
 #include <cassert>
 
+static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
+
 TrackLoader * TrackLoader::m_instance = nullptr;
 
 TrackLoader::TrackLoader(MCObjectFactory & objectFactory)
@@ -114,6 +116,17 @@ void TrackLoader::setLockedTracks()
         else
         {
             track->trackData().setIsLocked(false);
+
+            // This is needed in the case new tracks are added to the game afterwards.
+            const int bestPos = Settings::instance().loadBestPos(*track);
+            if (bestPos >= 1 && bestPos <= UNLOCK_LIMIT)
+            {
+                if (track->next())
+                {
+                    track->next()->trackData().setIsLocked(false);
+                    Settings::instance().saveTrackUnlockStatus(*track->next());
+                }
+            }
         }
     }
 
