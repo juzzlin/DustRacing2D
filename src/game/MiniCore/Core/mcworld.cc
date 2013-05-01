@@ -18,9 +18,14 @@
 //
 
 #include "mcworld.hh"
+
 #include "mcbbox.hh"
-#include "mcglpointparticle.hh"
-#include "mcglpointparticlerenderer.hh"
+#include "mccamera.hh"
+#include "mccollisiondetector.hh"
+#include "mcforcegenerator.hh"
+#include "mcforceregistry.hh"
+#include "mcfrictiongenerator.hh"
+#include "mcimpulsegenerator.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
 #include "mcobjecttree.hh"
@@ -29,14 +34,11 @@
 #include "mcshapeview.hh"
 #include "mcrectshape.hh"
 #include "mctrigonom.hh"
-#include "mccamera.hh"
-#include "mcforcegenerator.hh"
-#include "mcfrictiongenerator.hh"
+#include "mcworldrenderer.hh"
 
-#include <MCGLEW>
 #include <cassert>
 
-MCWorld * MCWorld::pInstance               = nullptr;
+MCWorld * MCWorld::m_instance               = nullptr;
 MCFloat   MCWorld::m_metersPerPixel        = 1.0;
 MCFloat   MCWorld::m_metersPerPixelSquared = 1.0;
 
@@ -48,24 +50,28 @@ const MCFloat MinLeafHeight = 64;
 }
 
 MCWorld::MCWorld()
-: m_objectTree(nullptr)
+: m_renderer(new MCWorldRenderer)
+, m_forceRegistry(new MCForceRegistry)
+, m_collisionDetector(new MCCollisionDetector)
+, m_impulseGenerator(new MCImpulseGenerator)
+, m_objectTree(nullptr)
 , m_minX(0)
 , m_maxX(0)
 , m_minY(0)
 , m_maxY(0)
 , m_minZ(0)
 , m_maxZ(0)
-, pLeft(nullptr)
-, pRight(nullptr)
-, pTop(nullptr)
-, pBottom(nullptr)
-, numCollisions(0)
-, numResolverLoops(5)
-, resolverStep(1.0 / numResolverLoops)
+, m_leftWallObject(nullptr)
+, m_rightWallObject(nullptr)
+, m_topWallObject(nullptr)
+, m_bottomWallObject(nullptr)
+, m_numCollisions(0)
+, m_numResolverLoops(5)
+, m_resolverStep(1.0 / m_numResolverLoops)
 {
-    if (!MCWorld::pInstance)
+    if (!MCWorld::m_instance)
     {
-        MCWorld::pInstance = this;
+        MCWorld::m_instance = this;
     }
     else
     {
@@ -75,34 +81,33 @@ MCWorld::MCWorld()
 
     // Default dimensions. Creates also MCObjectTree.
     setDimensions(0.0, MinLeafWidth, 0.0, MinLeafHeight, 0.0, 1.0, 1.0);
-
-    for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
-    {
-        m_depthTestEnabled[i] = false;
-    }
 }
 
 MCWorld::~MCWorld()
 {
     clear();
 
+    delete m_renderer;
+    delete m_forceRegistry;
+    delete m_collisionDetector;
+    delete m_impulseGenerator;
     delete m_objectTree;
-    delete pLeft;
-    delete pRight;
-    delete pTop;
-    delete pBottom;
+    delete m_leftWallObject;
+    delete m_rightWallObject;
+    delete m_topWallObject;
+    delete m_bottomWallObject;
 
-    MCWorld::pInstance = nullptr;
+    MCWorld::m_instance = nullptr;
 }
 
 void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
-    forceRegistry.update();
-    const MCUint i2 = objs.size();
+    m_forceRegistry->update();
+    const MCUint i2 = m_objs.size();
     for (MCUint i = 0; i < i2; i++)
     {
-        MCObject & object(*objs[i]);
+        MCObject & object(*m_objs[i]);
         if (object.physicsObject() && !object.stationary())
         {
             object.integrate(step);
@@ -115,269 +120,33 @@ void MCWorld::integrate(MCFloat step)
 void MCWorld::detectCollisions()
 {
     // Check collisions for all registered objects
-    numCollisions = collisionDetector.detectCollisions(*m_objectTree);
+    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectTree);
 }
 
 void MCWorld::generateImpulses()
 {
-    impulseGenerator.generateImpulsesFromDeepestContacts(objs);
+    m_impulseGenerator->generateImpulsesFromDeepestContacts(m_objs);
 }
 
 void MCWorld::resolvePositions(MCFloat accuracy)
 {
-    impulseGenerator.resolvePositions(objs, accuracy);
+    m_impulseGenerator->resolvePositions(m_objs, accuracy);
 }
 
 void MCWorld::render(MCCamera * pCamera, bool enableShadows)
 {
-    buildBatches(pCamera);
-
-    if (enableShadows)
-    {
-        renderShadows(pCamera);
-    }
-
-    renderBatches(pCamera);
-}
-
-void MCWorld::registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer)
-{
-    m_particleRenderers[typeId] = &renderer;
-}
-
-void MCWorld::buildBatches(MCCamera * pCamera)
-{
-    // In the case of Dust Racing 2D, it was faster to just loop through
-    // all objects on all layers and perform visibility tests instead of
-    // just fetching all "visible" objects from MCObjectTree.
-
-    // This code tests the visibility and sorts the objects with respect
-    // to their view id's into "batches". MCWorld::render()
-    // (and MCWorld::renderShadows()) then goes through these batches
-    // and perform the actual rendering.
-
-    // Grouping the objects like this reduces texture switches etc and increases
-    // overall performance.
-
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
-    {
-        m_objectBatches[i].clear();
-        m_particleBatches[i].clear();
-
-        const auto end = layers[i].end();
-        for (auto objectIter = layers[i].begin(); objectIter != end; objectIter++)
-        {
-            MCObject & object = **objectIter;
-            if (object.renderable())
-            {
-                // Check if view is set and is visible
-                if (object.shape())
-                {
-                    if (!object.isParticle())
-                    {
-                        if (object.shape()->view())
-                        {
-                            MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
-                            bbox.translate(MCVector2dF(object.location()));
-                            if (!pCamera || pCamera->isVisible(bbox))
-                            {
-                                m_objectBatches[i][object.typeID()].push_back(&object);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (pCamera)
-                        {
-                            if (pCamera->isVisible(object.bbox()))
-                            {
-                                m_particleBatches[i][object.typeID()].push_back(&object);
-                            }
-                            else
-                            {
-                                // Optimization that kills non-visible particles.
-                                bool isVisibleInAnyCamera = false;
-                                for (MCCamera * camera : m_visibilityCameras)
-                                {
-                                    if (camera != pCamera && camera->isVisible(object.bbox()))
-                                    {
-                                        isVisibleInAnyCamera = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!isVisibleInAnyCamera)
-                                {
-                                    static_cast<MCParticle &>(object).die();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            m_particleBatches[i][object.typeID()].push_back(&object);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void MCWorld::renderBatches(MCCamera * pCamera)
-{
-    // Render in the order of the layers. Depth test is
-    // layer-specific.
-    glPushAttrib(GL_ENABLE_BIT);
-
-    for (MCUint layer = 0; layer < MCWorld::MaxLayers; layer++)
-    {
-        // The depth test is enabled/disabled separately on
-        // each object layer.
-        if (m_depthTestEnabled[layer])
-        {
-            glEnable(GL_DEPTH_TEST);
-        }
-        else
-        {
-            glDisable(GL_DEPTH_TEST);
-        }
-
-        renderObjectBatches(pCamera, layer);
-        renderParticleBatches(pCamera, layer);
-    }
-
-    glPopAttrib();
-}
-
-void MCWorld::renderObjectBatches(MCCamera * pCamera, int layer)
-{
-    auto iter = m_objectBatches[layer].begin();
-    const auto end = m_objectBatches[layer].end();
-    while (iter != end)
-    {
-        const int i2 = iter->second.size();
-        for (int i = 0; i < i2; i++)
-        {
-            MCObject    * object = iter->second[i];
-            MCShapeView * view = object->shape()->view();
-
-            if (i == 0)
-            {
-                view->beginBatch();
-            }
-
-            object->render(pCamera);
-
-            if (i == i2 - 1)
-            {
-                view->endBatch();
-            }
-        }
-
-        iter++;
-    }
-}
-
-void MCWorld::renderParticleBatches(MCCamera * camera, int layer)
-{
-    // Render particle batches
-    auto batchIter = m_particleBatches[layer].begin();
-    const auto end = m_particleBatches[layer].end();
-    while (batchIter != end)
-    {
-        if (!batchIter->second.size())
-        {
-            continue;
-        }
-
-        // Check if the batch is of MCGLPointParticles
-        if (MCGLPointParticle * particle = dynamic_cast<MCGLPointParticle *>(batchIter->second[0]))
-        {
-            auto rendererIter = m_particleRenderers.find(particle->typeID());
-            assert(rendererIter != m_particleRenderers.end());
-            MCGLPointParticleRenderer * renderer = rendererIter->second;
-            renderer->setBatch(batchIter->second, camera);
-            renderer->render();
-        }
-        // Generic particles
-        else
-        {
-            const int i2 = batchIter->second.size();
-            for (int i = 0; i < i2; i++)
-            {
-                MCParticle * particle = static_cast<MCParticle *>(batchIter->second[i]);
-
-                // First particle of the batch
-                if (i == 0)
-                {
-                    particle->beginBatch();
-                }
-
-                particle->render(camera);
-
-                // Last particle of the batch
-                if (i == i2 - 1)
-                {
-                    particle->endBatch();
-                }
-            }
-        }
-
-        batchIter++;
-    }
-}
-
-void MCWorld::renderShadows(MCCamera * pCamera)
-{
-    glPushAttrib(GL_ENABLE_BIT);
-
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
-    {
-        glDisable(GL_DEPTH_TEST);
-
-        // Render batches
-        auto iter = m_objectBatches[i].begin();
-        const auto end = m_objectBatches[i].end();
-        while (iter != end)
-        {
-            const int i2 = iter->second.size();
-            for (int i = 0; i < i2; i++)
-            {
-                MCObject    * object = iter->second[i];
-                MCShapeView * view   = object->shape()->view();
-
-                if (view && view->hasShadow())
-                {
-                    if (i == 0)
-                    {
-                        view->beginShadowBatch();
-                    }
-
-                    object->renderShadow(pCamera);
-
-                    if (i == i2 - 1)
-                    {
-                        view->endShadowBatch();
-                    }
-                }
-            }
-
-            iter++;
-        }
-    }
-
-    glPopAttrib();
+    m_renderer->render(pCamera, enableShadows);
 }
 
 MCWorld & MCWorld::instance()
 {
-    if (!MCWorld::pInstance)
+    if (!MCWorld::m_instance)
     {
         std::cerr << "ERROR!!: MCWorld instance not created!" << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    return *MCWorld::pInstance;
+    return *MCWorld::m_instance;
 }
 
 void MCWorld::clear()
@@ -385,7 +154,7 @@ void MCWorld::clear()
     // This does the same as removeObject(), but the removal
     // process here is simpler as all data structures will be
     // cleared and all objects will be removed at once.
-    for (MCObject * object : objs)
+    for (MCObject * object : m_objs)
     {
         object->deleteContacts();
         object->resetMotion();
@@ -397,14 +166,10 @@ void MCWorld::clear()
         }
     }
 
+    m_renderer->clear();
     m_objectTree->removeAll();
-    objs.clear();
-    removeObjs.clear();
-
-    for (unsigned int i = 0; i < MCWorld::MaxLayers; i++)
-    {
-        layers[i].clear();
-    }
+    m_objs.clear();
+    m_removeObjs.clear();
 }
 
 void MCWorld::setDimensions(
@@ -432,57 +197,57 @@ void MCWorld::setDimensions(
     const MCFloat w = m_maxX - m_minX;
     const MCFloat h = m_maxY - m_minY;
 
-    if (pLeft)
+    if (m_leftWallObject)
     {
-        removeObjectNow(*pLeft);
-        delete pLeft;
+        removeObjectNow(*m_leftWallObject);
+        delete m_leftWallObject;
     }
 
-    pLeft = new MCObject("LEFT_WALL");
-    pLeft->setShape(new MCRectShape(nullptr, w, h));
-    pLeft->setMass(0, true);
-    pLeft->setRestitution(0.25);
-    pLeft->addToWorld();
-    pLeft->translate(MCVector3dF(-w / 2, h / 2, 0));
+    m_leftWallObject = new MCObject("LEFT_WALL");
+    m_leftWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_leftWallObject->setMass(0, true);
+    m_leftWallObject->setRestitution(0.25);
+    m_leftWallObject->addToWorld();
+    m_leftWallObject->translate(MCVector3dF(-w / 2, h / 2, 0));
 
-    if (pRight)
+    if (m_rightWallObject)
     {
-        removeObjectNow(*pRight);
-        delete pRight;
+        removeObjectNow(*m_rightWallObject);
+        delete m_rightWallObject;
     }
 
-    pRight = new MCObject("RIGHT_WALL");
-    pRight->setShape(new MCRectShape(nullptr, w, h));
-    pRight->setMass(0, true);
-    pRight->setRestitution(0.25);
-    pRight->addToWorld();
-    pRight->translate(MCVector3dF(w + w / 2, h / 2, 0));
+    m_rightWallObject = new MCObject("RIGHT_WALL");
+    m_rightWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_rightWallObject->setMass(0, true);
+    m_rightWallObject->setRestitution(0.25);
+    m_rightWallObject->addToWorld();
+    m_rightWallObject->translate(MCVector3dF(w + w / 2, h / 2, 0));
 
-    if (pTop)
+    if (m_topWallObject)
     {
-        removeObjectNow(*pTop);
-        delete pTop;
+        removeObjectNow(*m_topWallObject);
+        delete m_topWallObject;
     }
 
-    pTop = new MCObject("TOP_WALL");
-    pTop->setShape(new MCRectShape(nullptr, w, h));
-    pTop->setMass(0, true);
-    pTop->setRestitution(0.25);
-    pTop->addToWorld();
-    pTop->translate(MCVector3dF(w / 2, h + h / 2, 0));
+    m_topWallObject = new MCObject("TOP_WALL");
+    m_topWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_topWallObject->setMass(0, true);
+    m_topWallObject->setRestitution(0.25);
+    m_topWallObject->addToWorld();
+    m_topWallObject->translate(MCVector3dF(w / 2, h + h / 2, 0));
 
-    if (pBottom)
+    if (m_bottomWallObject)
     {
-        removeObjectNow(*pBottom);
-        delete pBottom;
+        removeObjectNow(*m_bottomWallObject);
+        delete m_bottomWallObject;
     }
 
-    pBottom = new MCObject("BOTTOM_WALL");
-    pBottom->setShape(new MCRectShape(nullptr, w, h));
-    pBottom->setMass(0, true);
-    pBottom->setRestitution(0.25);
-    pBottom->addToWorld();
-    pBottom->translate(MCVector3dF(w / 2, -h / 2, 0));
+    m_bottomWallObject = new MCObject("BOTTOM_WALL");
+    m_bottomWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_bottomWallObject->setMass(0, true);
+    m_bottomWallObject->setRestitution(0.25);
+    m_bottomWallObject->addToWorld();
+    m_bottomWallObject->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
 
 MCFloat MCWorld::minX() const
@@ -522,11 +287,11 @@ void MCWorld::addObject(MCObject & object)
         if (object.index() == -1)
         {
             // Add to layer map
-            addToLayerMap(object);
+            m_renderer->addToLayerMap(object);
 
             // Add to object vector (O(1))
-            objs.push_back(&object);
-            object.setIndex(objs.size() - 1);
+            m_objs.push_back(&object);
+            object.setIndex(m_objs.size() - 1);
 
             // Add to ObjectTree
             if (object.physicsObject() && !object.bypassCollisions())
@@ -538,7 +303,7 @@ void MCWorld::addObject(MCObject & object)
             const MCFloat FrictionThreshold = 0.001;
             if (object.xyFriction() > FrictionThreshold)
             {
-                forceRegistry.addForceGenerator(
+                m_forceRegistry->addForceGenerator(
                     *new MCFrictionGenerator(
                         object.xyFriction(), object.xyFriction()), object, true);
             }
@@ -555,7 +320,7 @@ void MCWorld::removeObject(MCObject & object)
     if (object.index() >= 0)
     {
         object.setRemoving(true);
-        removeObjs.push_back(&object);
+        m_removeObjs.push_back(&object);
     }
 }
 
@@ -564,7 +329,7 @@ void MCWorld::removeObjectNow(MCObject & object)
     if (object.index() >= 0)
     {
         object.setRemoving(true);
-        for (MCObject * obj : objs)
+        for (MCObject * obj : m_objs)
         {
             if (obj != &object)
             {
@@ -585,14 +350,14 @@ void MCWorld::doRemoveObject(MCObject & object)
     object.resetMotion();
 
     // Remove from the layer map
-    removeFromLayerMap(object);
+    m_renderer->removeFromLayerMap(object);
 
     // Remove from object vector (O(1))
-    if (object.index() > -1 && object.index() < static_cast<int>(objs.size()))
+    if (object.index() > -1 && object.index() < static_cast<int>(m_objs.size()))
     {
-        objs[object.index()] = objs.back();
-        objs[object.index()]->setIndex(object.index());
-        objs.pop_back();
+        m_objs[object.index()] = m_objs.back();
+        m_objs[object.index()]->setIndex(object.index());
+        m_objs.pop_back();
         object.setIndex(-1);
     }
 
@@ -608,11 +373,11 @@ void MCWorld::doRemoveObject(MCObject & object)
 void MCWorld::removeObjectFromIntegration(MCObject & object)
 {
     // Remove from object vector (O(1))
-    if (object.index() > -1 && object.index() < static_cast<int>(objs.size()))
+    if (object.index() > -1 && object.index() < static_cast<int>(m_objs.size()))
     {
-        objs[object.index()] = objs.back();
-        objs[object.index()]->setIndex(object.index());
-        objs.pop_back();
+        m_objs[object.index()] = m_objs.back();
+        m_objs[object.index()]->setIndex(object.index());
+        m_objs.pop_back();
         object.setIndex(-1);
     }
 }
@@ -622,14 +387,14 @@ void MCWorld::restoreObjectToIntegration(MCObject & object)
     if (object.index() == -1)
     {
         // Add to object vector (O(1))
-        objs.push_back(&object);
-        object.setIndex(objs.size() - 1);
+        m_objs.push_back(&object);
+        object.setIndex(m_objs.size() - 1);
     }
 }
 
 void MCWorld::processRemovedObjects()
 {
-    for (MCObject * obj : removeObjs)
+    for (MCObject * obj : m_removeObjs)
     {
         if (obj->removing())
         {
@@ -637,77 +402,45 @@ void MCWorld::processRemovedObjects()
         }
     }
 
-    removeObjs.clear();
+    m_removeObjs.clear();
 }
 
 void MCWorld::processCollisions()
 {
     detectCollisions();
 
-    if (numCollisions)
+    if (m_numCollisions)
     {
-        for (MCUint i = 0; i < numResolverLoops; i++)
+        for (MCUint i = 0; i < m_numResolverLoops; i++)
         {
             generateImpulses();
         }
 
         // Process contacts and generate impulses
-        collisionDetector.enableCollisionEvents(false);
-        for (MCUint i = 0; i < numResolverLoops; i++)
+        m_collisionDetector->enableCollisionEvents(false);
+        for (MCUint i = 0; i < m_numResolverLoops; i++)
         {
             detectCollisions();
-            resolvePositions(resolverStep);
+            resolvePositions(m_resolverStep);
         }
-        collisionDetector.enableCollisionEvents(true);
+        m_collisionDetector->enableCollisionEvents(true);
     }
-}
-
-void MCWorld::addToLayerMap(MCObject & object)
-{
-    const MCUint layerIndex =
-        object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
-    layers[layerIndex].insert(&object);
-}
-
-void MCWorld::removeFromLayerMap(MCObject & object)
-{
-    const MCUint layerIndex =
-        object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
-    layers[layerIndex].erase(&object);
-}
-
-void MCWorld::enableDepthTestOnLayer(MCUint layer, bool enable)
-{
-    if (layer < MCWorld::MaxLayers)
-    {
-        m_depthTestEnabled[layer] = enable;
-    }
-}
-
-void MCWorld::addParticleVisibilityCamera(MCCamera & camera)
-{
-    m_visibilityCameras.push_back(&camera);
-}
-
-void MCWorld::removeParticleVisibilityCameras()
-{
-    m_visibilityCameras.clear();
 }
 
 void MCWorld::addForceGenerator(
     MCForceGenerator & gen, MCObject & obj, bool takeOwnership)
 {
-    forceRegistry.addForceGenerator(gen, obj, takeOwnership);
+    m_forceRegistry->addForceGenerator(gen, obj, takeOwnership);
 }
 
 void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
 {
-    forceRegistry.removeForceGenerator(gen, obj);
+    m_forceRegistry->removeForceGenerator(gen, obj);
 }
 
 void MCWorld::removeForceGenerators(MCObject & obj)
 {
-    forceRegistry.removeForceGenerators(obj);
+    m_forceRegistry->removeForceGenerators(obj);
 }
 
 void MCWorld::stepTime(MCFloat step)
@@ -724,13 +457,19 @@ void MCWorld::stepTime(MCFloat step)
 
 MCWorld::ObjectVector MCWorld::objects() const
 {
-    return objs;
+    return m_objs;
 }
 
 MCObjectTree & MCWorld::objectTree() const
 {
     assert(m_objectTree);
     return *m_objectTree;
+}
+
+MCWorldRenderer & MCWorld::renderer() const
+{
+    assert(m_renderer);
+    return *m_renderer;
 }
 
 void MCWorld::setMetersPerPixel(MCFloat value)
@@ -741,7 +480,7 @@ void MCWorld::setMetersPerPixel(MCFloat value)
 
 MCFloat MCWorld::metersPerPixel()
 {
-    assert(MCWorld::pInstance);
+    assert(MCWorld::m_instance);
     return MCWorld::m_metersPerPixel;
 }
 

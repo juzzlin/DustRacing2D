@@ -18,19 +18,21 @@
 //
 
 #include "mcobject.hh"
+
+#include "mccamera.hh"
+#include "mccircleshape.hh"
+#include "mccollisionevent.hh"
+#include "mcevent.hh"
+#include "mcoutofboundariesevent.hh"
+#include "mcrectshape.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
-#include "mccircleshape.hh"
-#include "mcrectshape.hh"
 #include "mcsurface.hh"
-#include "mcworld.hh"
-#include "mcevent.hh"
-#include "mccollisionevent.hh"
-#include "mcoutofboundariesevent.hh"
 #include "mctimerevent.hh"
-#include "mccamera.hh"
 #include "mctrigonom.hh"
 #include "mcsurfaceview.hh"
+#include "mcworld.hh"
+#include "mcworldrenderer.hh"
 
 #include <cassert>
 
@@ -755,9 +757,9 @@ void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
 {
     if (updateWorldLayers)
     {
-        MCWorld::instance().removeFromLayerMap(*this);
+        MCWorld::instance().renderer().removeFromLayerMap(*this);
         m_layer = newLayer;
-        MCWorld::instance().addToLayerMap(*this);
+        MCWorld::instance().renderer().addToLayerMap(*this);
     }
     else
     {

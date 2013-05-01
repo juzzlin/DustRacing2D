@@ -38,6 +38,7 @@ Graphics/mcsurfaceobjectdata.cc
 Graphics/mcsurfaceview.cc
 Graphics/mcsurfaceconfigloader.cc
 Graphics/mcsurfacemanager.cc
+Graphics/mcworldrenderer.cc
 Particles/mcparticle.cc
 Particles/mcglpointparticle.cc
 Particles/mcglrectparticle.cc

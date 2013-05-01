@@ -21,10 +21,12 @@
 #define MCGLPOINTPARTICLERENDERER_HH
 
 #include <MCGLEW>
-#include <MCMacros>
-#include <MCWorld>
-#include <MCGLVertex>
-#include <MCGLColor>
+
+#include "mcmacros.hh"
+#include "mcglvertex.hh"
+#include "mcglcolor.hh"
+#include "mcworldrenderer.hh"
+
 #include <vector>
 
 class MCGLPointParticle;
@@ -33,7 +35,7 @@ class MCCamera;
 class MCObject;
 
 /*! Each MCGLPointParticle id should have a corresponding MCGLPointParticleRenderer
- *  registered in MCWorld. As for rendering, point particles are special cases, because
+ *  registered to MCWorldRenderer. As for rendering, point particles are special cases, because
  *  they need to be as efficient as possible. This is why a dedicated renderer is needed. */
 class MCGLPointParticleRenderer
 {
@@ -85,7 +87,7 @@ private:
     GLenum              m_src;
     GLenum              m_dst;
 
-    friend class MCWorld;
+    friend class MCWorldRenderer;
 };
 
 #endif // MCGLPOINTPARTICLERENDERER_HH

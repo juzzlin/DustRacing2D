@@ -24,6 +24,8 @@
 #include <MCGLRectParticle>
 #include <MCRandom>
 #include <MCSurfaceParticle>
+#include <MCWorld>
+#include <MCWorldRenderer>
 
 #include <cassert>
 
@@ -58,7 +60,7 @@ void ParticleFactory::preCreatePointParticles(int count,
         m_delete.push_back(std::shared_ptr<MCParticle>(particle));
     }
 
-    MCWorld::instance().registerPointParticleRenderer(
+    MCWorld::instance().renderer().registerPointParticleRenderer(
         MCObject::getTypeIDForName(typeId), m_renderers[typeEnum]);
 }
 

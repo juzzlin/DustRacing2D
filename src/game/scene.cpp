@@ -126,8 +126,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_timingOverlay[1].setTiming(m_race.timing());
     m_timingOverlay[1].setRace(m_race);
 
-    m_world->enableDepthTestOnLayer(Layers::Tree, true);
-    m_world->enableDepthTestOnLayer(Layers::Meshes, true);
+    m_world->renderer().enableDepthTestOnLayer(Layers::Tree, true);
+    m_world->renderer().enableDepthTestOnLayer(Layers::Meshes, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     MCAssetManager::textureFontManager().font("default").surface().setShaderProgram(
@@ -402,22 +402,22 @@ void Scene::setActiveTrack(Track & activeTrack)
 {
     m_activeTrack = &activeTrack;
 
-    m_world->removeParticleVisibilityCameras();
+    m_world->renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
         m_camera[0].init(
             Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->addParticleVisibilityCamera(m_camera[0]);
+        m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
 
         m_camera[1].init(
             Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->addParticleVisibilityCamera(m_camera[1]);
+        m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
     }
     else
     {
         m_camera[0].init(
             Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->addParticleVisibilityCamera(m_camera[0]);
+        m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
     }
 
     // Remove previous objects;

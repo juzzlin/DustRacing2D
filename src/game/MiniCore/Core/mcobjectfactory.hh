@@ -24,6 +24,9 @@
 #include "mcmeshobjectdata.hh"
 #include "mcobject.hh"
 
+#include <memory>
+#include <vector>
+
 class MCAssetManager;
 
 //! MCObjectFactory is a factory class that can be used when loading objects from file.
