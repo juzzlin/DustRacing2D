@@ -38,7 +38,7 @@
 
 #include <cassert>
 
-MCWorld * MCWorld::m_instance               = nullptr;
+MCWorld * MCWorld::m_instance              = nullptr;
 MCFloat   MCWorld::m_metersPerPixel        = 1.0;
 MCFloat   MCWorld::m_metersPerPixelSquared = 1.0;
 
@@ -104,8 +104,8 @@ void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     m_forceRegistry->update();
-    const MCUint i2 = m_objs.size();
-    for (MCUint i = 0; i < i2; i++)
+    const MCUint objectCount = m_objs.size();
+    for (MCUint i = 0; i < objectCount; i++)
     {
         MCObject & object(*m_objs[i]);
         if (object.physicsObject() && !object.stationary())
