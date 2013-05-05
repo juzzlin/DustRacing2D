@@ -75,7 +75,7 @@ private:
     virtual void render();
 
     GLuint              m_vbo;
-    GLuint              m_vba;
+    GLuint              m_vao;
     GLuint              m_texture;
     MCGLShaderProgram * m_program;
     int                 m_batchSize;

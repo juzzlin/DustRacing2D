@@ -46,9 +46,9 @@ MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
     const int TOTAL_DATA_SIZE  = VERTEX_DATA_SIZE   + NORMAL_DATA_SIZE + COLOR_DATA_SIZE;
 
-    glGenVertexArrays(1, &m_vba);
+    glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
-    glBindVertexArray(m_vba);
+    glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_DYNAMIC_DRAW);
@@ -89,7 +89,7 @@ void MCGLPointParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GL
 void MCGLPointParticleRenderer::setBatch(
     const MCGLPointParticleRenderer::ParticleVector & particles, MCCamera * camera)
 {
-    glBindVertexArray(m_vba);
+    glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
     int offset = 0;
@@ -178,10 +178,10 @@ MCGLPointParticleRenderer::~MCGLPointParticleRenderer()
         m_vbo = 0;
     }
 
-    if (m_vba != 0)
+    if (m_vao != 0)
     {
-        glDeleteVertexArrays(1, &m_vba);
-        m_vba = 0;
+        glDeleteVertexArrays(1, &m_vao);
+        m_vao = 0;
     }
 }
 

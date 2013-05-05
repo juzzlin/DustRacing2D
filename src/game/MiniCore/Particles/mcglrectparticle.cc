@@ -27,7 +27,7 @@
 #include <cassert>
 
 GLuint MCGLRectParticle::m_vbo = 0;
-GLuint MCGLRectParticle::m_vba = 0;
+GLuint MCGLRectParticle::m_vao = 0;
 
 static const int NUM_VERTICES         = 6;
 static const int NUM_COLOR_COMPONENTS = 4;
@@ -44,7 +44,7 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 , m_a(1.0)
 , m_program(nullptr)
 {
-    if (m_vbo == 0 && m_vba == 0)
+    if (m_vbo == 0 && m_vao == 0)
     {
         // Init vertice data for a quad
         const MCGLVertex vertices[NUM_VERTICES] =
@@ -79,9 +79,9 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 
         int offset = 0;
 
-        glGenVertexArrays(1, &m_vba);
+        glGenVertexArrays(1, &m_vao);
         glGenBuffers(1, &m_vbo);
-        glBindVertexArray(m_vba);
+        glBindVertexArray(m_vao);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
@@ -117,10 +117,10 @@ MCGLRectParticle::~MCGLRectParticle()
         m_vbo = 0;
     }
 
-    if (m_vba != 0)
+    if (m_vao != 0)
     {
-        glDeleteVertexArrays(1, &m_vba);
-        m_vba = 0;
+        glDeleteVertexArrays(1, &m_vao);
+        m_vao = 0;
     }
 }
 
@@ -144,7 +144,7 @@ void MCGLRectParticle::beginBatch()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     m_program->bind();
-    glBindVertexArray(m_vba);
+    glBindVertexArray(m_vao);
 }
 
 void MCGLRectParticle::endBatch()

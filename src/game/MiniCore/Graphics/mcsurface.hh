@@ -188,7 +188,7 @@ private:
     GLenum m_src;
     GLenum m_dst;
     GLuint m_vbo;
-    GLuint m_vba;
+    GLuint m_vao;
     GLfloat m_r, m_g, m_b, m_a;
     MCFloat m_sx, m_sy, m_sz;
     MCGLShaderProgram * m_program;

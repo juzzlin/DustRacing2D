@@ -136,9 +136,9 @@ void MCMesh::initVBOs(
 
     int offset = 0;
 
-    glGenVertexArrays(1, &m_vba);
+    glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
-    glBindVertexArray(m_vba);
+    glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER,
@@ -296,7 +296,7 @@ void MCMesh::bind(bool enable) const
 {
     if (enable)
     {
-        glBindVertexArray(m_vba);
+        glBindVertexArray(m_vao);
         bindTexture();
     }
     else
@@ -319,7 +319,7 @@ void MCMesh::bindShadow(bool enable) const
 {
     if (enable)
     {
-        glBindVertexArray(m_vba);
+        glBindVertexArray(m_vao);
         bindTexture(true);
     }
     else
@@ -361,5 +361,5 @@ MCFloat MCMesh::height() const
 MCMesh::~MCMesh()
 {
     glDeleteBuffers(1, &m_vbo);
-    glDeleteVertexArrays(1, &m_vba);
+    glDeleteVertexArrays(1, &m_vao);
 }
