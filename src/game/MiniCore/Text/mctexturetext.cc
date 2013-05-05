@@ -132,7 +132,7 @@ int MCTextureText::height() const
     return m_textHeight;
 }
 
-void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
+void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
     MCTextureFont & font, bool shadow)
 {
     font.surface().bind();
@@ -179,11 +179,11 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * pCamera,
 
             if (shadow)
             {
-                font.surface().renderShadow(pCamera,
+                font.surface().renderShadow(camera,
                     MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
             }
 
-            font.surface().render(pCamera,
+            font.surface().render(camera,
                 MCVector3dF(glyphXPos, glyphYPos, 0), 0, false);
 
             glyphXPos += m_glyphWidth;

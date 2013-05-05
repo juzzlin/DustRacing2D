@@ -42,19 +42,19 @@ void MCWorldRenderer::registerPointParticleRenderer(MCUint typeId, MCGLPointPart
     m_particleRenderers[typeId] = &renderer;
 }
 
-void MCWorldRenderer::render(MCCamera * pCamera, bool enableShadows)
+void MCWorldRenderer::render(MCCamera * camera, bool enableShadows)
 {
-    buildBatches(pCamera);
+    buildBatches(camera);
 
     if (enableShadows)
     {
-        renderShadows(pCamera);
+        renderShadows(camera);
     }
 
-    renderBatches(pCamera);
+    renderBatches(camera);
 }
 
-void MCWorldRenderer::buildBatches(MCCamera * pCamera)
+void MCWorldRenderer::buildBatches(MCCamera * camera)
 {
     // In the case of Dust Racing 2D, it was faster to just loop through
     // all objects on all layers and perform visibility tests instead of
@@ -88,7 +88,7 @@ void MCWorldRenderer::buildBatches(MCCamera * pCamera)
                         {
                             MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
                             bbox.translate(MCVector2dF(object.location()));
-                            if (!pCamera || pCamera->isVisible(bbox))
+                            if (!camera || camera->isVisible(bbox))
                             {
                                 m_objectBatches[i][object.typeID()].push_back(&object);
                             }
@@ -96,9 +96,9 @@ void MCWorldRenderer::buildBatches(MCCamera * pCamera)
                     }
                     else
                     {
-                        if (pCamera)
+                        if (camera)
                         {
-                            if (pCamera->isVisible(object.bbox()))
+                            if (camera->isVisible(object.bbox()))
                             {
                                 m_particleBatches[i][object.typeID()].push_back(&object);
                             }
@@ -106,9 +106,9 @@ void MCWorldRenderer::buildBatches(MCCamera * pCamera)
                             {
                                 // Optimization that kills non-visible particles.
                                 bool isVisibleInAnyCamera = false;
-                                for (MCCamera * camera : m_visibilityCameras)
+                                for (MCCamera * visibilityCamera : m_visibilityCameras)
                                 {
-                                    if (camera != pCamera && camera->isVisible(object.bbox()))
+                                    if (visibilityCamera != camera && visibilityCamera->isVisible(object.bbox()))
                                     {
                                         isVisibleInAnyCamera = true;
                                         break;
@@ -132,7 +132,7 @@ void MCWorldRenderer::buildBatches(MCCamera * pCamera)
     }
 }
 
-void MCWorldRenderer::renderBatches(MCCamera * pCamera)
+void MCWorldRenderer::renderBatches(MCCamera * camera)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
@@ -151,14 +151,14 @@ void MCWorldRenderer::renderBatches(MCCamera * pCamera)
             glDisable(GL_DEPTH_TEST);
         }
 
-        renderObjectBatches(pCamera, layer);
-        renderParticleBatches(pCamera, layer);
+        renderObjectBatches(camera, layer);
+        renderParticleBatches(camera, layer);
     }
 
     glPopAttrib();
 }
 
-void MCWorldRenderer::renderObjectBatches(MCCamera * pCamera, int layer)
+void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
 {
     auto iter = m_objectBatches[layer].begin();
     const auto end = m_objectBatches[layer].end();
@@ -175,7 +175,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * pCamera, int layer)
                 view->beginBatch();
             }
 
-            object->render(pCamera);
+            object->render(camera);
 
             if (i == itemCountInBatch - 1)
             {
@@ -236,7 +236,7 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
     }
 }
 
-void MCWorldRenderer::renderShadows(MCCamera * pCamera)
+void MCWorldRenderer::renderShadows(MCCamera * camera)
 {
     glPushAttrib(GL_ENABLE_BIT);
 
@@ -262,7 +262,7 @@ void MCWorldRenderer::renderShadows(MCCamera * pCamera)
                         view->beginShadowBatch();
                     }
 
-                    object->renderShadow(pCamera);
+                    object->renderShadow(camera);
 
                     if (i == itemCountInBatch - 1)
                     {

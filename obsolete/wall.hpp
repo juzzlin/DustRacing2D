@@ -33,10 +33,10 @@ public:
     virtual ~Wall();
 
     //! Render wall.
-    virtual void render(MCCamera * pCamera);
+    virtual void render(MCCamera * camera);
 
     //! Render wall shadows.
-    virtual void renderShadow(MCCamera * pCamera);
+    virtual void renderShadow(MCCamera * camera);
 
 private:
 

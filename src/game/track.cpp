@@ -113,10 +113,10 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
     j2 = j2  >= m_rows ? m_rows - 1 : j2;
 }
 
-void Track::render(MCCamera * pCamera)
+void Track::render(MCCamera * camera)
 {
     // Get the Camera window
-    MCBBox<MCFloat> cameraBox(pCamera->bbox());
+    MCBBox<MCFloat> cameraBox(camera->bbox());
 
     // Calculate which tiles are visible
     MCUint i2, j2, i0, j0;
@@ -124,17 +124,17 @@ void Track::render(MCCamera * pCamera)
 
     MCGLShaderProgram & prog2d = Renderer::instance().program("tile2d");
     prog2d.bind();
-    renderAsphalt(pCamera, prog2d, i0, i2, j0, j2);
+    renderAsphalt(camera, prog2d, i0, i2, j0, j2);
     prog2d.release();
 
     MCGLShaderProgram & prog3d = Renderer::instance().program("tile3d");
     prog3d.bind();
-    renderTiles(pCamera, prog3d, i0, i2, j0, j2);
+    renderTiles(camera, prog3d, i0, i2, j0, j2);
     prog3d.release();
 }
 
 void Track::renderAsphalt(
-    MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
     const MapBase & rMap = m_pTrackData->map();
 
@@ -162,7 +162,7 @@ void Track::renderAsphalt(
                 {
                     x1 = x;
                     y1 = y;
-                    pCamera->mapToCamera(x1, y1);
+                    camera->mapToCamera(x1, y1);
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     prog.rotate(0);
                     m_asphalt.render();
@@ -177,7 +177,7 @@ void Track::renderAsphalt(
 }
 
 void Track::renderTiles(
-    MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
     const MapBase & rMap = m_pTrackData->map();
 
@@ -206,7 +206,7 @@ void Track::renderTiles(
                 {
                     x1 = x;
                     y1 = y;
-                    pCamera->mapToCamera(x1, y1);
+                    camera->mapToCamera(x1, y1);
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     prog.rotate(pTile->rotation());
                     pSurface->setShaderProgram(&prog);

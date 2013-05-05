@@ -133,10 +133,10 @@ public:
     void stepTime(MCFloat step);
 
     /*! \brief Render all registered objects.
-     *  \param pCamera The camera window to be used. If nullptr, then
+     *  \param camera The camera window to be used. If nullptr, then
      *         no any translations or clipping done.
      *  \param enableShadows Render shadows, if true. */
-    virtual void render(MCCamera * pCamera = nullptr, bool enableShadows = true);
+    virtual void render(MCCamera * camera = nullptr, bool enableShadows = true);
 
     //! \return Reference to the objectTree.
     MCObjectTree & objectTree() const;

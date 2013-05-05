@@ -47,10 +47,10 @@ public:
     void setShaderProgram(MCGLShaderProgram * program);
 
     //! \reimp
-    void render(MCCamera * pCamera = nullptr);
+    void render(MCCamera * camera = nullptr);
 
     //! \reimp
-    void renderShadow(MCCamera * pCamera = nullptr);
+    void renderShadow(MCCamera * camera = nullptr);
 
     //! \reimp
     void beginBatch();

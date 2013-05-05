@@ -70,14 +70,14 @@ void MCGLCircleParticle::setColor(MCFloat r, MCFloat g, MCFloat b, MCFloat a)
   m_pImpl->m_a = a;
 }
 
-void MCGLCircleParticle::render(MCCamera * pCamera)
+void MCGLCircleParticle::render(MCCamera * camera)
 {
   MCFloat x = location().i();
   MCFloat y = location().j();
   MCFloat z = location().k();
 
-  if (pCamera) {
-    pCamera->mapToCamera(x, y);
+  if (camera) {
+    camera->mapToCamera(x, y);
   }
 
   // Disable texturing

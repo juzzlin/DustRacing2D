@@ -38,7 +38,7 @@ TreeView::~TreeView()
 {
 }
 
-void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera)
+void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * camera)
 {
     m_top.setI(MCTrigonom::cos(m_topCosAngle));
     m_top.setJ(MCTrigonom::sin(m_topSinAngle / 2));
@@ -54,7 +54,7 @@ void TreeView::render(const MCVector3d<MCFloat> & l, MCFloat, MCCamera * pCamera
         MCFloat y = l.j() + m_top.j() * branchHeight / 4;
 
         surface()->setScale(r * 2, r * 2);
-        surface()->render(pCamera, MCVector3dF(x, y, z), angle, false);
+        surface()->render(camera, MCVector3dF(x, y, z), angle, false);
 
         branchHeight += m_dBranchHeight;
         z            += m_dBranchHeight;

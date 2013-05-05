@@ -72,7 +72,7 @@ public:
     //! Render at (x,y) as seen thru the
     //! given camera window (can be nullptr) using the
     //! given font.
-    void render(MCFloat x, MCFloat y, MCCamera * pCamera,
+    void render(MCFloat x, MCFloat y, MCCamera * camera,
         MCTextureFont & font, bool shadow = true);
 
 private:

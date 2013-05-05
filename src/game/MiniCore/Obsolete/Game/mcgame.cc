@@ -118,10 +118,10 @@ void MCGame::updateScene()
   m_pImpl->m_pWorld->stepTime(m_pImpl->m_fpsSceneDelay_s);
 }
 
-void MCGame::renderCamera(MCCamera * pCamera)
+void MCGame::renderCamera(MCCamera * camera)
 {
-  m_pImpl->m_pWorld->renderShadows(pCamera);
-  m_pImpl->m_pWorld->render(pCamera);
+  m_pImpl->m_pWorld->renderShadows(camera);
+  m_pImpl->m_pWorld->render(camera);
 }
 
 MCWorld * MCGame::world() const

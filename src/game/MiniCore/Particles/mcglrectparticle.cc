@@ -153,7 +153,7 @@ void MCGLRectParticle::endBatch()
     glDisable(GL_BLEND);
 }
 
-void MCGLRectParticle::render(MCCamera * pCamera)
+void MCGLRectParticle::render(MCCamera * camera)
 {
     // Scale radius if fading out
     MCFloat r = radius();
@@ -167,9 +167,9 @@ void MCGLRectParticle::render(MCCamera * pCamera)
         MCFloat x = location().i();
         MCFloat y = location().j();
 
-        if (pCamera)
+        if (camera)
         {
-            pCamera->mapToCamera(x, y);
+            camera->mapToCamera(x, y);
         }
 
         // Scale alpha if fading out.

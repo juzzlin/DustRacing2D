@@ -131,10 +131,10 @@ protected:
    */
   virtual void updateScene();
 
-  /*! \brief Render the World as seen through pCamera.
+  /*! \brief Render the World as seen through camera.
    * Base class implementation must be called if overridden.
    */
-  virtual void renderCamera(MCCamera * pCamera);
+  virtual void renderCamera(MCCamera * camera);
 
   //! Return pointer to the MCWorld object
   MCWorld * world() const;

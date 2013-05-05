@@ -36,14 +36,14 @@ Wall::Wall(MCSurface & surface, int, int, int newWx, int newWy, int newH)
     setRestitution(1.0);
 }
 
-void Wall::render(MCCamera * pCamera)
+void Wall::render(MCCamera * camera)
 {
     MCFloat x = getX();
     MCFloat y = getY();
 
-    if (pCamera)
+    if (camera)
     {
-        pCamera->mapToCamera(x, y);
+        camera->mapToCamera(x, y);
     }
 
     // Enable depth test because walls are real 3d objects
@@ -123,7 +123,7 @@ void Wall::render(MCCamera * pCamera)
     glPopAttrib();
 }
 
-void Wall::renderShadow(MCCamera * pCamera)
+void Wall::renderShadow(MCCamera * camera)
 {
     // TODO: Real OpenGL shadows ?
 
@@ -131,13 +131,13 @@ void Wall::renderShadow(MCCamera * pCamera)
     int y = getY();
 
     // Get absolute (screen) coordinates
-    if (pCamera)
+    if (camera)
     {
         const int shadowOffsetX = wx2 / 2;
         const int shadowOffsetY = wy2 / 2;
 
-        x = pCamera->mapXToCamera(x + shadowOffsetX);
-        y = pCamera->mapYToCamera(y - shadowOffsetY);
+        x = camera->mapXToCamera(x + shadowOffsetX);
+        y = camera->mapYToCamera(y - shadowOffsetY);
     }
 
     // Disable texturing, enable alpha

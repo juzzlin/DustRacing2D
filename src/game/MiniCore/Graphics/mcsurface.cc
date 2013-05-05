@@ -342,7 +342,7 @@ MCGLShaderProgram * MCSurface::shadowShaderProgram() const
     return m_shadowProgram;
 }
 
-void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool autoBind)
+void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
     if (m_program)
     {
@@ -350,9 +350,9 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool
         MCFloat y = pos.j();
         MCFloat z = pos.k();
 
-        if (pCamera)
+        if (camera)
         {
-            pCamera->mapToCamera(x, y);
+            camera->mapToCamera(x, y);
         }
 
         doAlphaBlend();
@@ -387,7 +387,7 @@ void MCSurface::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool
     }
 }
 
-void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle,
+void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
     bool autoBind)
 {
     if (m_shadowProgram)
@@ -396,9 +396,9 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
         MCFloat y = pos.j();
         MCFloat z = 0;
 
-        if (pCamera)
+        if (camera)
         {
-            pCamera->mapToCamera(x, y);
+            camera->mapToCamera(x, y);
         }
 
         m_shadowProgram->bind();

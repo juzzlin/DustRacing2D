@@ -247,7 +247,7 @@ void MCMesh::setScale(MCFloat w, MCFloat h)
     m_sy = h / m_h;
 }
 
-void MCMesh::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool autoBind)
+void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
     if (m_program)
     {
@@ -255,9 +255,9 @@ void MCMesh::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool au
         MCFloat y = pos.j();
         MCFloat z = pos.k();
 
-        if (pCamera)
+        if (camera)
         {
-            pCamera->mapToCamera(x, y);
+            camera->mapToCamera(x, y);
         }
 
         m_program->bind();
@@ -270,7 +270,7 @@ void MCMesh::render(MCCamera * pCamera, MCVector3dFR pos, MCFloat angle, bool au
     }
 }
 
-void MCMesh::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle, bool autoBind)
+void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
 {
     if (m_shadowProgram)
     {
@@ -278,9 +278,9 @@ void MCMesh::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle, b
         MCFloat y = pos.j();
         MCFloat z = 0;
 
-        if (pCamera)
+        if (camera)
         {
-            pCamera->mapToCamera(x, y);
+            camera->mapToCamera(x, y);
         }
 
         m_shadowProgram->bind();

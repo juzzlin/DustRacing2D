@@ -42,7 +42,7 @@ public:
     virtual ~Track();
 
     //! Render as seen through the given camera window.
-    void render(MCCamera * pCamera);
+    void render(MCCamera * camera);
 
     //! Return width in length units.
     MCUint width() const;
@@ -77,10 +77,10 @@ private:
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
     void renderAsphalt(
-        MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
 
     void renderTiles(
-        MCCamera * pCamera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
 
     TrackData * m_pTrackData;
     MCUint      m_rows, m_cols, m_width, m_height;

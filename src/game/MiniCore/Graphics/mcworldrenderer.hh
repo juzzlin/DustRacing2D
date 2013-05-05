@@ -59,21 +59,21 @@ public:
 
     void removeParticleVisibilityCameras();
 
-    void buildBatches(MCCamera * pCamera = nullptr);
+    void buildBatches(MCCamera * camera = nullptr);
 
-    void render(MCCamera * pCamera, bool enableShadows);
+    void render(MCCamera * camera, bool enableShadows);
 
     void clear();
 
 private:
 
-    void renderBatches(MCCamera * pCamera = nullptr);
+    void renderBatches(MCCamera * camera = nullptr);
 
-    void renderShadows(MCCamera * pCamera = nullptr);
+    void renderShadows(MCCamera * camera = nullptr);
 
-    void renderObjectBatches(MCCamera * pCamera, int layer);
+    void renderObjectBatches(MCCamera * camera, int layer);
 
-    void renderParticleBatches(MCCamera * pCamera, int layer);
+    void renderParticleBatches(MCCamera * camera, int layer);
 
     typedef std::unordered_set<MCObject *> LayerSet;
     LayerSet m_layers[MCWorld::MaxLayers];

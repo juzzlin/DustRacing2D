@@ -120,29 +120,29 @@ void MCParticle::timeOut()
     die();
 }
 
-void MCParticle::render(MCCamera * pCamera)
+void MCParticle::render(MCCamera * camera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
         const MCFloat d = m_scale * m_radius * 2;
-        shape()->renderScaled(d, d, pCamera);
+        shape()->renderScaled(d, d, camera);
     }
     else
     {
-        shape()->render(pCamera);
+        shape()->render(camera);
     }
 }
 
-void MCParticle::renderShadow(MCCamera * pCamera)
+void MCParticle::renderShadow(MCCamera * camera)
 {
     if (animationStyle() == MCParticle::Shrink)
     {
         const MCFloat d = m_scale * m_radius * 2;
-        shape()->renderShadowScaled(d, d, pCamera);
+        shape()->renderShadowScaled(d, d, camera);
     }
     else
     {
-        shape()->renderShadow(pCamera);
+        shape()->renderShadow(camera);
     }
 }
 

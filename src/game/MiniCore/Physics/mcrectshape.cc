@@ -173,14 +173,14 @@ void MCRectShape::resize(MCFloat width, MCFloat height)
     m_height = height;
 }
 
-void MCRectShape::render(MCCamera * pCamera)
+void MCRectShape::render(MCCamera * camera)
 {
-    MCShape::render(pCamera);
+    MCShape::render(camera);
 }
 
-void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * pCamera)
+void MCRectShape::renderScaled(MCFloat wr, MCFloat hr, MCCamera * camera)
 {
-    MCShape::renderScaled(wr, hr, pCamera);
+    MCShape::renderScaled(wr, hr, camera);
 }
 
 MCFloat MCRectShape::radius() const

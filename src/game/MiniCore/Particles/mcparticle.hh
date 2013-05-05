@@ -85,10 +85,10 @@ public:
   virtual void stepTime();
 
   //! \reimp
-  virtual void render(MCCamera * pCamera = nullptr);
+  virtual void render(MCCamera * camera = nullptr);
 
   //! \reimp
-  virtual void renderShadow(MCCamera * pCamera = nullptr);
+  virtual void renderShadow(MCCamera * camera = nullptr);
 
   virtual void beginBatch();
 
