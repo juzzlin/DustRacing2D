@@ -305,28 +305,21 @@ void MCSurface::doRender(bool autoBind)
 {
     if (autoBind)
     {
-        bind(true);
-        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-        bind(false);
+        bind();
     }
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-    }
+
+    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
+
 }
 
 void MCSurface::doRenderShadow(bool autoBind)
 {
     if (autoBind)
     {
-        bindShadow(true);
-        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-        bindShadow(false);
+        bindShadow();
     }
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-    }
+
+    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
 }
 
 void MCSurface::setShaderProgram(MCGLShaderProgram * program)
@@ -432,40 +425,16 @@ void MCSurface::renderShadow(MCCamera * pCamera, MCVector2dFR pos, MCFloat angle
     }
 }
 
-void MCSurface::bind(bool enable) const
+void MCSurface::bind() const
 {
-    if (enable)
-    {
-        glBindVertexArray(m_vba);
-        bindTexture();
-    }
-    else
-    {
-        glBindVertexArray(0);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        m_program->bindTextureUnit0(0);
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        m_program->bindTextureUnit1(0);
-
-        glActiveTexture(GL_TEXTURE0);
-    }
+    glBindVertexArray(m_vba);
+    bindTexture();
 }
 
-void MCSurface::bindShadow(bool enable) const
+void MCSurface::bindShadow() const
 {
-    if (enable)
-    {
-        glBindVertexArray(m_vba);
-        bindTexture(true);
-    }
-    else
-    {
-        glBindVertexArray(0);
-    }
+    glBindVertexArray(m_vba);
+    bindTexture(true);
 }
 
 void MCSurface::bindTexture(bool bindOnlyFirstTexture) const

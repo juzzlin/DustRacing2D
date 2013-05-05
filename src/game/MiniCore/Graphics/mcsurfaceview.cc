@@ -104,32 +104,24 @@ void MCSurfaceView::beginBatch()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->bind(true);
+        m_surface->bind();
     }
 }
 
 void MCSurfaceView::endBatch()
 {
-    if (m_batchMode && m_surface)
-    {
-        m_surface->bind(false);
-    }
 }
 
 void MCSurfaceView::beginBatchShadow()
 {
     if (m_batchMode && m_surface)
     {
-        m_surface->bindShadow(true);
+        m_surface->bindShadow();
     }
 }
 
 void MCSurfaceView::endBatchShadow()
 {
-    if (m_batchMode && m_surface)
-    {
-        m_surface->bindShadow(false);
-    }
 }
 
 MCBBox<MCFloat> MCSurfaceView::bbox() const

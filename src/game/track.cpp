@@ -145,7 +145,7 @@ void Track::renderAsphalt(
 
     // Set common client state for all tiles using the same surface.
     m_asphalt.setShaderProgram(&prog);
-    m_asphalt.bind(true);
+    m_asphalt.bind();
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -174,8 +174,6 @@ void Track::renderAsphalt(
 
         y += h;
     }
-
-    m_asphalt.bind(false);
 }
 
 void Track::renderTiles(
@@ -191,7 +189,7 @@ void Track::renderTiles(
     // Set common client state for all tiles.
     TrackTile * firstTile = static_cast<TrackTile *>(rMap.getTile(0, 0));
     firstTile->surface()->setShaderProgram(&prog);
-    firstTile->surface()->bind(true);
+    firstTile->surface()->bind();
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -222,8 +220,6 @@ void Track::renderTiles(
 
         y += h;
     }
-
-    static_cast<TrackTile *>(rMap.getTile(0, 0))->surface()->bind(false);
 }
 
 void Track::setNext(Track & next)

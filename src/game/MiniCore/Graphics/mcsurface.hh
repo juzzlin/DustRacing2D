@@ -118,14 +118,13 @@ public:
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
      *  \see render() */
-    void bind(bool enable) const;
+    void bind() const;
 
     /*! Manually enable/disable OpenGL client states and texturing environment.
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
-     *  \see renderShadow()
-     */
-    void bindShadow(bool enable) const;
+     *  \see renderShadow() */
+    void bindShadow() const;
 
     //! Bind the current texture.
     void bindTexture(bool bindOnlyFirstTexture = false) const;

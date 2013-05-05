@@ -71,22 +71,20 @@ void TreeView::renderShadow(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 
 void TreeView::beginBatch()
 {
-    surface()->bind(true);
+    surface()->bind();
 }
 
 void TreeView::endBatch()
 {
-    surface()->bind(false);
 }
 
 void TreeView::beginShadowBatch()
 {
-    surface()->bindShadow(true);
+    surface()->bindShadow();
 }
 
 void TreeView::endShadowBatch()
 {
-    surface()->bindShadow(false);
 }
 
 bool TreeView::update()
