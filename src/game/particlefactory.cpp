@@ -66,7 +66,7 @@ void ParticleFactory::preCreatePointParticles(int count,
 
 int scalePointSizeWithResolution(int size)
 {
-    return Renderer::instance().hRes() * size / 1600;
+    return Renderer::instance().hRes() * size / 1600 + 1;
 }
 
 void ParticleFactory::preCreateParticles()
@@ -79,7 +79,7 @@ void ParticleFactory::preCreateParticles()
     preCreatePointParticles(500, "SKI", SkidMark, 0.3, 0.2, 0.0, 0.5);
     m_renderers[SkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
     m_renderers[SkidMark].setTexture(MCAssetManager::surfaceManager().surface("mud").handle1());
-    m_renderers[SkidMark].setPointSize(scalePointSizeWithResolution(1));
+    m_renderers[SkidMark].setPointSize(scalePointSizeWithResolution(12));
 
     preCreatePointParticles(500, "SMO", Smoke, 0.75, 0.75, 0.75, 0.75);
     m_renderers[Smoke].setShaderProgram(&Renderer::instance().program("pointParticle"));
