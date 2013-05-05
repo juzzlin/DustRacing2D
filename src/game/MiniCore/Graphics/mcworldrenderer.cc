@@ -165,22 +165,23 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
     while (iter != end)
     {
         const int itemCountInBatch = iter->second.size();
-        for (int i = 0; i < itemCountInBatch; i++)
+        if (itemCountInBatch > 0)
         {
-            MCObject    * object = iter->second[i];
+            MCObject * object = iter->second[0];
             MCShapeView * view = object->shape()->view();
-
-            if (i == 0)
-            {
-                view->beginBatch();
-            }
-
+            view->beginBatch();
             object->render(camera);
 
-            if (i == itemCountInBatch - 1)
+            for (int i = 1; i < itemCountInBatch - 1; i++)
             {
-                view->endBatch();
+                iter->second[i]->render(camera);
             }
+
+            object = iter->second[itemCountInBatch - 1];
+            object->render(camera);
+
+            view = object->shape()->view();
+            view->endBatch();
         }
 
         iter++;
@@ -212,23 +213,18 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
         else
         {
             const int itemCountInBatch = batchIter->second.size();
-            for (int i = 0; i < itemCountInBatch; i++)
+            if (itemCountInBatch > 0)
             {
-                MCParticle * particle = static_cast<MCParticle *>(batchIter->second[i]);
+                static_cast<MCParticle *>(batchIter->second[0])->beginBatch();
+                static_cast<MCParticle *>(batchIter->second[0])->render(camera);
 
-                // First particle of the batch
-                if (i == 0)
+                for (int i = 1; i < itemCountInBatch - 1; i++)
                 {
-                    particle->beginBatch();
+                    static_cast<MCParticle *>(batchIter->second[i])->render(camera);
                 }
 
-                particle->render(camera);
-
-                // Last particle of the batch
-                if (i == itemCountInBatch - 1)
-                {
-                    particle->endBatch();
-                }
+                static_cast<MCParticle *>(batchIter->second[itemCountInBatch - 1])->render(camera);
+                static_cast<MCParticle *>(batchIter->second[itemCountInBatch - 1])->endBatch();
             }
         }
 
@@ -250,24 +246,25 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
         while (iter != end)
         {
             const int itemCountInBatch = iter->second.size();
-            for (int i = 0; i < itemCountInBatch; i++)
+            if (itemCountInBatch > 0)
             {
-                MCObject    * object = iter->second[i];
-                MCShapeView * view   = object->shape()->view();
-
+                MCObject * object = iter->second[0];
+                MCShapeView * view = object->shape()->view();
                 if (view && view->hasShadow())
                 {
-                    if (i == 0)
-                    {
-                        view->beginShadowBatch();
-                    }
-
+                    view->beginShadowBatch();
                     object->renderShadow(camera);
 
-                    if (i == itemCountInBatch - 1)
+                    for (int i = 1; i < itemCountInBatch - 1; i++)
                     {
-                        view->endShadowBatch();
+                        iter->second[i]->renderShadow(camera);
                     }
+
+                    object = iter->second[itemCountInBatch - 1];
+                    object->renderShadow(camera);
+
+                    view = object->shape()->view();
+                    view->endShadowBatch();
                 }
             }
 
