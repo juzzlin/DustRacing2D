@@ -27,18 +27,18 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 , m_captureMode(false)
 {
     // Default key bindings
-    m_keyToActionMap[KeyCodes::LSHIFT] = {1, InputHandler::IA_UP};
-    m_keyToActionMap[KeyCodes::RSHIFT] = {0, InputHandler::IA_UP};
-    m_keyToActionMap[KeyCodes::LCTRL]  = {1, InputHandler::IA_DOWN};
-    m_keyToActionMap[KeyCodes::RCTRL]  = {0, InputHandler::IA_DOWN};
-    m_keyToActionMap[Qt::Key_Left]     = {0, InputHandler::IA_LEFT};
-    m_keyToActionMap[Qt::Key_Right]    = {0, InputHandler::IA_RIGHT};
-    m_keyToActionMap[Qt::Key_A]        = {1, InputHandler::IA_LEFT};
-    m_keyToActionMap[Qt::Key_D]        = {1, InputHandler::IA_RIGHT};
-    m_keyToActionMap[Qt::Key_Up]       = {0, InputHandler::IA_UP};
-    m_keyToActionMap[Qt::Key_Down]     = {0, InputHandler::IA_DOWN};
-    m_keyToActionMap[Qt::Key_W]        = {1, InputHandler::IA_UP};
-    m_keyToActionMap[Qt::Key_S]        = {1, InputHandler::IA_DOWN};
+    m_keyToActionMap[KeyCodes::LSHIFT] = ActionMapping(1, InputHandler::IA_UP);
+    m_keyToActionMap[KeyCodes::RSHIFT] = ActionMapping(0, InputHandler::IA_UP);
+    m_keyToActionMap[KeyCodes::LCTRL]  = ActionMapping(1, InputHandler::IA_DOWN);
+    m_keyToActionMap[KeyCodes::RCTRL]  = ActionMapping(0, InputHandler::IA_DOWN);
+    m_keyToActionMap[Qt::Key_Left]     = ActionMapping(0, InputHandler::IA_LEFT);
+    m_keyToActionMap[Qt::Key_Right]    = ActionMapping(0, InputHandler::IA_RIGHT);
+    m_keyToActionMap[Qt::Key_A]        = ActionMapping(1, InputHandler::IA_LEFT);
+    m_keyToActionMap[Qt::Key_D]        = ActionMapping(1, InputHandler::IA_RIGHT);
+    m_keyToActionMap[Qt::Key_Up]       = ActionMapping(0, InputHandler::IA_UP);
+    m_keyToActionMap[Qt::Key_Down]     = ActionMapping(0, InputHandler::IA_DOWN);
+    m_keyToActionMap[Qt::Key_W]        = ActionMapping(1, InputHandler::IA_UP);
+    m_keyToActionMap[Qt::Key_S]        = ActionMapping(1, InputHandler::IA_DOWN);
 
     loadKeyMappings();
 }
@@ -172,18 +172,18 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
     {
         if (m_keyToActionMap.count(event->nativeScanCode()) > 0)
         {
-            const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player;
+            const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player();
             const InputHandler::InputAction action =
-                m_keyToActionMap[event->nativeScanCode()].action;
+                m_keyToActionMap[event->nativeScanCode()].action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
 
         if (m_keyToActionMap.count(event->key()) > 0)
         {
-            const unsigned int player = m_keyToActionMap[event->key()].player;
+            const unsigned int player = m_keyToActionMap[event->key()].player();
             const InputHandler::InputAction action =
-                m_keyToActionMap[event->key()].action;
+                m_keyToActionMap[event->key()].action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
@@ -219,8 +219,7 @@ bool EventHandler::mapKeyToAction(int player, InputHandler::InputAction action, 
         auto iter = m_keyToActionMap.begin();
         while (iter != m_keyToActionMap.end())
         {
-            if (iter->second.action == action &&
-                iter->second.player == player)
+            if (iter->second.action() == action && iter->second.player() == player)
             {
                 iter = m_keyToActionMap.erase(iter);
             }

@@ -49,10 +49,32 @@ signals:
 
 private:
 
-    struct ActionMapping
+    class ActionMapping
     {
-        int player;
-        InputHandler::InputAction action;
+    public:
+
+        ActionMapping(int player, InputHandler::InputAction action)
+        : m_player(player)
+        , m_action(action)
+        {}
+
+        ActionMapping()
+        {}
+
+        int player() const
+        {
+            return m_player;
+        }
+
+        InputHandler::InputAction action() const
+        {
+            return m_action;
+        }
+
+    private:
+
+        int m_player;
+        InputHandler::InputAction m_action;
     };
 
     bool applyMatchingAction(QKeyEvent * event, bool press);
