@@ -87,6 +87,12 @@ void ParticleFactory::preCreateParticles()
     m_renderers[Smoke].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[Smoke].setAlphaBlend(true);
 
+    preCreatePointParticles(500, "OFFSMO", OffTrackSmoke, 0.6, 0.4, 0.0, 0.5);
+    m_renderers[OffTrackSmoke].setShaderProgram(&Renderer::instance().program("pointParticle"));
+    m_renderers[OffTrackSmoke].setTexture(MCAssetManager::surfaceManager().surface("smoke").handle1());
+    m_renderers[OffTrackSmoke].setPointSize(scalePointSizeWithResolution(48));
+    m_renderers[OffTrackSmoke].setAlphaBlend(true);
+
     preCreatePointParticles(500, "SPA", Sparkle, 1.0, 0.75, 0.0, 1.0);
     m_renderers[Sparkle].setShaderProgram(&Renderer::instance().program("pointParticle"));
     m_renderers[Sparkle].setTexture(MCAssetManager::surfaceManager().surface("sparkle").handle1());
@@ -125,6 +131,10 @@ void ParticleFactory::doParticle(
         doSmoke(location);
         break;
 
+    case OffTrackSmoke:
+        doOffTrackSmoke(location);
+        break;
+
     case SkidMark:
         doSkidMark(location);
         break;
@@ -150,6 +160,23 @@ void ParticleFactory::doSmoke(MCVector3dFR location) const
 {
     MCGLPointParticle * smoke = nullptr;
     MCParticle::ParticleFreeList & freeList = m_freeLists[Smoke];
+    if (freeList.size())
+    {
+        smoke = static_cast<MCGLPointParticle *>(freeList.back());
+        freeList.pop_back();
+
+        smoke->init(location, 10, 180);
+        smoke->setAnimationStyle(MCParticle::FadeOut);
+        smoke->rotate(MCRandom::getValue() * 360);
+        smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
+        smoke->addToWorld();
+    }
+}
+
+void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
+{
+    MCGLPointParticle * smoke = nullptr;
+    MCParticle::ParticleFreeList & freeList = m_freeLists[OffTrackSmoke];
     if (freeList.size())
     {
         smoke = static_cast<MCGLPointParticle *>(freeList.back());

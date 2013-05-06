@@ -369,7 +369,7 @@ bool Car::update()
             if (++m_smokeCounter >= 2)
             {
                 MCVector3dF smokeLocation = (leftRearTireLocation() + rightRearTireLocation()) * 0.5;
-                ParticleFactory::instance().doParticle(ParticleFactory::Smoke, smokeLocation);
+                ParticleFactory::instance().doParticle(ParticleFactory::OffTrackSmoke, smokeLocation);
             }
         }
     }

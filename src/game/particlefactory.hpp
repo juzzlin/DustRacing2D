@@ -32,6 +32,7 @@ public:
     enum ParticleType
     {
         Smoke = 0,
+        OffTrackSmoke,
         SkidMark,
         Sparkle,
         Mud,
@@ -56,6 +57,8 @@ public:
 private:
 
     void doSmoke(MCVector3dFR location) const;
+
+    void doOffTrackSmoke(MCVector3dFR location) const;
 
     void doSkidMark(MCVector3dFR location) const;
 
