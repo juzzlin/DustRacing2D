@@ -74,6 +74,8 @@ private:
         std::string typeId, ParticleType typeEnum,
         float r, float g, float b, float a);
 
+    void preCreateRectParticles(int count, std::string typeId, ParticleType typeEnum);
+
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticles];
 

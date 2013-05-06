@@ -64,6 +64,23 @@ void ParticleFactory::preCreatePointParticles(int count,
         MCObject::getTypeIDForName(typeId), m_renderers[typeEnum]);
 }
 
+void ParticleFactory::preCreateRectParticles(int count,
+    std::string typeId, ParticleFactory::ParticleType typeEnum)
+{
+    for (int i = 0; i < count; i++)
+    {
+        MCGLRectParticle * particle = new MCGLRectParticle(typeId);
+        particle->setFreeList(m_freeLists[typeEnum]);
+        particle->setShaderProgram(&Renderer::instance().program("particle"));
+
+        // Initially push to list of free particles
+        m_freeLists[typeEnum].push_back(particle);
+
+        // Store for deletion
+        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+    }
+}
+
 int scalePointSizeWithResolution(int size)
 {
     return Renderer::instance().hRes() * size / 1600 + 1;
@@ -71,10 +88,7 @@ int scalePointSizeWithResolution(int size)
 
 void ParticleFactory::preCreateParticles()
 {
-    preCreatePointParticles(500, "MUD", Mud, 1.0, 1.0, 1.0, 1.0);
-    m_renderers[Mud].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
-    m_renderers[Mud].setTexture(MCAssetManager::surfaceManager().surface("mud").handle1());
-    m_renderers[Mud].setPointSize(scalePointSizeWithResolution(12));
+    preCreateRectParticles(500, "MUD", Mud);
 
     preCreatePointParticles(500, "SKI", SkidMark, 0.3, 0.2, 0.0, 0.5);
     m_renderers[SkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
@@ -209,17 +223,20 @@ void ParticleFactory::doSkidMark(MCVector3dFR location) const
 
 void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    MCGLPointParticle * mud = nullptr;
+    MCGLRectParticle * mud = nullptr;
     MCParticle::ParticleFreeList & freeList = m_freeLists[Mud];
     if (freeList.size())
     {
-        mud = static_cast<MCGLPointParticle *>(freeList.back());
+        mud = static_cast<MCGLRectParticle *>(freeList.back());
         freeList.pop_back();
 
         mud->init(location, 4, 120);
+        mud->setColor(0.2, 0.1, 0.0, 1.0);
         mud->setAnimationStyle(MCParticle::Shrink);
-        mud->setVelocity(velocity + MCVector3dF(0, 0, 2.0f));
+        mud->rotate(MCRandom::getValue() * 360);
+        mud->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         mud->setAcceleration(MCVector3dF(0, 0, -10.0f));
+        mud->setLayer(Layers::Mud);
         mud->addToWorld();
     }
 }

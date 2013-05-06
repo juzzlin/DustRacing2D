@@ -342,24 +342,24 @@ bool Car::update()
         bool smoke = false;
         if (m_leftSideOffTrack)
         {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftFrontTireLocation());
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftRearTireLocation());
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                ParticleFactory::instance().doParticle(ParticleFactory::Mud, leftFrontTireLocation(), velocity() * 0.5);
+                ParticleFactory::instance().doParticle(ParticleFactory::Mud, leftRearTireLocation(), velocity() * 0.5);
                 m_mudCounter = 0;
             }
         }
 
         if (m_rightSideOffTrack)
         {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightFrontTireLocation());
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightRearTireLocation());
             smoke = true;
 
             if (++m_mudCounter >= 5)
             {
-                ParticleFactory::instance().doParticle(ParticleFactory::Mud, rightFrontTireLocation(), velocity() * 0.5);
+                ParticleFactory::instance().doParticle(ParticleFactory::Mud, rightRearTireLocation(), velocity() * 0.5);
                 m_mudCounter = 0;
             }
         }

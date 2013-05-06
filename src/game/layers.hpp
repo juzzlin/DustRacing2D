@@ -28,8 +28,9 @@ public:
         Meshes      = 1,
         Cars        = 2,
         Smoke       = 3,
-        Walls       = 4,
-        GrandStands = 5,
+        Mud         = 4,
+        Walls       = 5,
+        GrandStands = 6,
         Tree        = 10
     };
 };

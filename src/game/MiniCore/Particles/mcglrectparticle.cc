@@ -149,7 +149,6 @@ void MCGLRectParticle::beginBatch()
 
 void MCGLRectParticle::endBatch()
 {
-    glBindVertexArray(0);
     glDisable(GL_BLEND);
 }
 
