@@ -60,34 +60,32 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                const unsigned int width  = tag.attribute("w", "0").toUInt();
-                const unsigned int height = tag.attribute("h", "0").toUInt();
-                const std::string  image1 = tag.attribute("image1", "").toStdString();
-                const std::string  image2 = tag.attribute("image2", "").toStdString();
-                newData->imagePath1       = baseImagePath + QDir::separator().toLatin1() + image1;
-                newData->handle           = tag.attribute("handle", "").toStdString();
-                newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
-                newData->z0               = tag.attribute("z0", "0").toInt();
-                newData->z1               = tag.attribute("z1", "0").toInt();
-                newData->z2               = tag.attribute("z2", "0").toInt();
-                newData->z3               = tag.attribute("z3", "0").toInt();
+                const std::string image1 = tag.attribute("image1", "").toStdString();
+                const std::string image2 = tag.attribute("image2", "").toStdString();
+                newData->imagePath1      = baseImagePath + QDir::separator().toLatin1() + image1;
+                newData->handle          = tag.attribute("handle", "").toStdString();
+                newData->xAxisMirror     = tag.attribute("xAxisMirror", "0").toInt();
+                newData->z0              = tag.attribute("z0", "0").toInt();
+                newData->z1              = tag.attribute("z1", "0").toInt();
+                newData->z2              = tag.attribute("z2", "0").toInt();
+                newData->z3              = tag.attribute("z3", "0").toInt();
 
                 if (!image2.empty())
                 {
                     newData->imagePath2 = baseImagePath + QDir::separator().toLatin1() + image2;
                 }
 
-                if (width)
-                {
-                    newData->width    = width;
-                    newData->widthSet = true;
-                }
+                const unsigned int width = tag.attribute("w", "0").toUInt();
+                newData->width = std::pair<int, bool>(width, width > 0);
 
-                if (height)
-                {
-                    newData->height    = height;
-                    newData->heightSet = true;
-                }
+                const unsigned int height = tag.attribute("h", "0").toUInt();
+                newData->height = std::pair<int, bool>(height, height > 0);
+
+                const float contrast = tag.attribute("contrast", "0").toFloat();
+                newData->contrast = std::pair<float, bool>(contrast, (contrast > 0.1));
+
+                const float brightness = tag.attribute("brightness", "0").toFloat();
+                newData->brightness = std::pair<float, bool>(brightness, (brightness > 0.1));
 
                 // Read child nodes of surface node.
                 QDomNode childNode = node.firstChild();
@@ -109,14 +107,14 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                         QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            newData->alphaBlend.m_src =
+                            newData->alphaBlend.first.m_src =
                                 alphaBlendStringToEnum(
                                     tag.attribute("src", "srcAlpha").toStdString());
-                            newData->alphaBlend.m_dst =
+                            newData->alphaBlend.first.m_dst =
                                 alphaBlendStringToEnum(
                                     tag.attribute(
                                         "dst", "srcAlphaMinusOne").toStdString());
-                            newData->alphaBlendSet = true;
+                            newData->alphaBlend.second = true;
                         }
                     }
                     else if (childNode.nodeName() == "center")
@@ -127,8 +125,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                             const int x = tag.attribute("x", "0").toInt();
                             const int y = tag.attribute("y", "0").toInt();
 
-                            newData->center    = MCVector2d<int>(x, y);
-                            newData->centerSet = true;
+                            newData->center.first  = MCVector2d<int>(x, y);
+                            newData->center.second = true;
                         }
                     }
                     else if (childNode.nodeName() == "filter")
@@ -136,18 +134,16 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                         QDomElement tag = childNode.toElement();
                         if(!tag.isNull())
                         {
-                            std::string min = tag.attribute("min", "").toStdString();
-                            std::string mag = tag.attribute("mag", "").toStdString();
+                            const std::string min = tag.attribute("min", "").toStdString();
+                            const std::string mag = tag.attribute("mag", "").toStdString();
 
                             if (min == "linear")
                             {
-                                newData->minFilterSet = true;
-                                newData->minFilter    = GL_LINEAR;
+                                newData->minFilter = std::pair<GLint, bool>(GL_LINEAR, true);
                             }
                             else if (min == "nearest")
                             {
-                                newData->minFilterSet = true;
-                                newData->minFilter    = GL_NEAREST;
+                                newData->minFilter = std::pair<GLint, bool>(GL_NEAREST, true);
                             }
                             else
                             {
@@ -156,13 +152,11 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 
                             if (mag == "linear")
                             {
-                                newData->magFilterSet = true;
-                                newData->magFilter    = GL_LINEAR;
+                                newData->magFilter = std::pair<GLint, bool>(GL_LINEAR, true);
                             }
                             else if (mag == "nearest")
                             {
-                                newData->magFilterSet = true;
-                                newData->magFilter    = GL_NEAREST;
+                                newData->magFilter = std::pair<GLint, bool>(GL_NEAREST, true);
                             }
                             else
                             {

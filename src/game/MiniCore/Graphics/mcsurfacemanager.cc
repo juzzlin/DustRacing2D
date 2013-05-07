@@ -41,8 +41,8 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
     const MCSurfaceMetaData & data, const QImage & image) throw (MCException)
 {
     // Store original width of the image
-    int origH = data.heightSet ? data.height : image.height();
-    int origW = data.widthSet  ? data.width  : image.width();
+    int origH = data.height.second ? data.height.first : image.height();
+    int origW = data.width.second  ? data.width.first  : image.width();
 
     GLuint textureHandle = create2DTextureFromImage(data, image);
 
@@ -51,13 +51,12 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
         new MCSurface(textureHandle, 0, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Enable alpha blend, if set
-    pSurface->setAlphaBlend(
-        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
+    pSurface->setAlphaBlend(data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Set custom center if it was set
-    if (data.centerSet)
+    if (data.center.second)
     {
-        pSurface->setCenter(data.center);
+        pSurface->setCenter(data.center.first);
     }
 
     // Store MCSurface to map
@@ -71,25 +70,24 @@ MCSurface & MCSurfaceManager::createSurfaceFromImages(
     const MCSurfaceMetaData & data, const QImage & image1, const QImage & image2) throw (MCException)
 {
     // Store original width of the image
-    int origH = data.heightSet ? data.height : image1.height();
-    int origW = data.widthSet  ? data.width  : image1.width();
+    int origH = data.height.second ? data.height.first : image1.height();
+    int origW = data.width.second  ? data.width.first  : image1.width();
 
     GLuint textureHandle1 = create2DTextureFromImage(data, image1);
     GLuint textureHandle2 = create2DTextureFromImage(data, image2);
 
     // Create a new MCSurface object
     MCSurface * pSurface =
-        new MCSurface(
-            textureHandle1, textureHandle2, origW, origH, data.z0, data.z1, data.z2, data.z3);
+        new MCSurface(textureHandle1, textureHandle2, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Enable alpha blend, if set
     pSurface->setAlphaBlend(
-        data.alphaBlendSet, data.alphaBlend.m_src, data.alphaBlend.m_dst);
+        data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Set custom center if it was set
-    if (data.centerSet)
+    if (data.center.second)
     {
-        pSurface->setCenter(data.center);
+        pSurface->setCenter(data.center.first);
     }
 
     // Store MCSurface to map
@@ -116,8 +114,7 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     // Apply colorkey if it was set (set or clear alpha)
     if (data.colorKeySet)
     {
-        applyColorKey(textureImage,
-            data.colorKey.m_r, data.colorKey.m_g, data.colorKey.m_b);
+        applyColorKey(textureImage, data.colorKey.m_r, data.colorKey.m_g, data.colorKey.m_b);
     }
 
     // Convert to GL_RGBA
@@ -131,9 +128,9 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     glBindTexture(GL_TEXTURE_2D, textureHandle);
 
     // Set min filter.
-    if (data.minFilterSet)
+    if (data.minFilter.second)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, data.minFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, data.minFilter.first);
     }
     else
     {
@@ -141,9 +138,9 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     }
 
     // Set mag filter.
-    if (data.magFilterSet)
+    if (data.magFilter.second)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, data.magFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, data.magFilter.first);
     }
     else
     {

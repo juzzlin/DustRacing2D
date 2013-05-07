@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
 
@@ -24,21 +24,15 @@
 #include "mcvector2d.hh"
 
 #include <MCGLEW> // For GLenum
+#include <map>
 #include <string>
 
 //! Surface metadata structure used by MCSurfaceConfigLoader.
 struct MCSurfaceMetaData
 {
     MCSurfaceMetaData()
-    : centerSet(false)
-    , heightSet(false)
-    , widthSet(false)
-    , colorKeySet(false)
-    , alphaTestSet(false)
-    , alphaBlendSet(false)
+    : colorKeySet(false)
     , xAxisMirror(false)
-    , minFilterSet(false)
-    , magFilterSet(false)
     , z0(0)
     , z1(0)
     , z2(0)
@@ -54,23 +48,14 @@ struct MCSurfaceMetaData
     //! Image path for the second texture if multitexturing is wanted.
     std::string imagePath2;
 
-    //! True if center was set
-    bool centerSet;
-
     //! Center coordinate, if set
-    MCVector2d<int> center;
-
-    //! True if height was set
-    bool heightSet;
+    std::pair<MCVector2d<int>, bool> center;
 
     //! Height
-    int height;
-
-    //! True if width was set
-    bool widthSet;
+    std::pair<int, bool> height;
 
     //! Width
-    int width;
+    std::pair<int, bool> width;
 
     //! Possible colorkey setting
     struct ColorKey
@@ -85,22 +70,6 @@ struct MCSurfaceMetaData
     //! True, if colorkey was set
     bool colorKeySet;
 
-    //! Possible alphaTest setting
-    struct AlphaTest
-    {
-        //! Alpha test function
-        GLenum m_function;
-
-        //! Alpha test threshold
-        GLclampf m_threshold;
-    };
-
-    //! Alpha test settings, if set
-    AlphaTest alphaTest;
-
-    //! True, if alpha test was set
-    bool alphaTestSet;
-
     //! Possible alphaBlend setting
     struct AlphaBlend
     {
@@ -112,25 +81,22 @@ struct MCSurfaceMetaData
     };
 
     //! Alpha blend settings, if set
-    AlphaBlend alphaBlend;
-
-    //! True, if alpha blend was set
-    bool alphaBlendSet;
+    std::pair<AlphaBlend, bool> alphaBlend;
 
     //! True if X-Axis mirroring is wanted
     bool xAxisMirror;
 
     //! Min filter value
-    GLint minFilter;
-
-    //! True, if min filter was set
-    bool minFilterSet;
+    std::pair<GLint, bool> minFilter;
 
     //! Mag filter value
-    GLint magFilter;
+    std::pair<GLint, bool> magFilter;
 
-    //! True, if mag filter was set
-    bool magFilterSet;
+    //! Brightness setting
+    std::pair<float, bool> brightness;
+
+    //! Contrast setting
+    std::pair<float, bool> contrast;
 
     //! Z-coordinate of vertex[0].
     int z0;
