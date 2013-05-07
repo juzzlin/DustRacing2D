@@ -27,6 +27,7 @@
 #include <MCGLEW>
 
 #include <cassert>
+#include <cmath>
 
 MCSurfaceManager::MCSurfaceManager()
 {
@@ -117,6 +118,18 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
         applyColorKey(textureImage, data.colorKey.m_r, data.colorKey.m_g, data.colorKey.m_b);
     }
 
+    // Apply brightness if it was set
+    if (data.brightness.second)
+    {
+        applyBrightness(textureImage, data.brightness.first);
+    }
+
+    // Apply contrast if it was set
+    if (data.contrast.second)
+    {
+        applyContrast(textureImage, data.contrast.first);
+    }
+
     // Convert to GL_RGBA
     textureImage = QGLWidget::convertToGLFormat(textureImage);
 
@@ -171,6 +184,79 @@ void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, 
             {
                 textureImage.setPixel(i, j, textureImage.pixel(i, j) | 0xff000000);
             }
+        }
+    }
+}
+
+void MCSurfaceManager::applyBrightness(QImage & textureImage, float brightness) const
+{
+    for (int i = 0; i < textureImage.width(); i++)
+    {
+        for (int j = 0; j < textureImage.height(); j++)
+        {
+            int r = (textureImage.pixel(i, j) & 0x00ff0000) >> 16;
+            int g = (textureImage.pixel(i, j) & 0x0000ff00) >> 8;
+            int b = (textureImage.pixel(i, j) & 0x000000ff);
+
+            const unsigned int a = (textureImage.pixel(i, j) & 0xff000000);
+
+            r = static_cast<int>((static_cast<float>(r)) * brightness);
+            g = static_cast<int>((static_cast<float>(g)) * brightness);
+            b = static_cast<int>((static_cast<float>(b)) * brightness);
+
+            r = r < 0   ? 0   : r;
+            r = r > 255 ? 255 : r;
+            g = g < 0   ? 0   : g;
+            g = g > 255 ? 255 : g;
+            b = b < 0   ? 0   : b;
+            b = b > 255 ? 255 : b;
+
+            textureImage.setPixel(i, j, r << 16 | g << 8 | b | a);
+        }
+    }
+}
+
+void MCSurfaceManager::applyContrast(QImage & textureImage, float contrast) const
+{
+    for (int i = 0; i < textureImage.width(); i++)
+    {
+        for (int j = 0; j < textureImage.height(); j++)
+        {
+            int r = (textureImage.pixel(i, j) & 0x00ff0000) >> 16;
+            int g = (textureImage.pixel(i, j) & 0x0000ff00) >> 8;
+            int b = (textureImage.pixel(i, j) & 0x000000ff);
+
+            const unsigned int a = (textureImage.pixel(i, j) & 0xff000000);
+
+            float fr = static_cast<float>(r) / 256.0;
+            float fg = static_cast<float>(g) / 256.0;
+            float fb = static_cast<float>(b) / 256.0;
+
+            if (contrast > 1.0)
+            {
+                fr = fr > 0.5 ? fr + (contrast - 1.0) : fr - (contrast - 1.0);
+                fg = fg > 0.5 ? fg + (contrast - 1.0) : fg - (contrast - 1.0);
+                fb = fb > 0.5 ? fb + (contrast - 1.0) : fb - (contrast - 1.0);
+            }
+            else
+            {
+                fr = fr > 0.5 ? fr - (1.0 - contrast) : fr + (1.0 - contrast);
+                fg = fg > 0.5 ? fg - (1.0 - contrast) : fg + (1.0 - contrast);
+                fb = fb > 0.5 ? fb - (1.0 - contrast) : fb + (1.0 - contrast);
+            }
+
+            r = static_cast<int>(fr * 256.0);
+            g = static_cast<int>(fg * 256.0);
+            b = static_cast<int>(fb * 256.0);
+
+            r = r < 0   ? 0   : r;
+            r = r > 255 ? 255 : r;
+            g = g < 0   ? 0   : g;
+            g = g > 255 ? 255 : g;
+            b = b < 0   ? 0   : b;
+            b = b > 255 ? 255 : b;
+
+            textureImage.setPixel(i, j, r << 16 | g << 8 | b | a);
         }
     }
 }
