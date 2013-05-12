@@ -50,11 +50,11 @@ public:
   //! Finish the particle. Automatically called on timeOut().
   void die();
 
-  //! (Re-)Init a particle.
-  //! \param location Initial location.
-  //! \param radius   Initial radius.
-  //! \param lifeTime Life time / number of frames. The life time is decremented
-  //! each time stepTime() is called.
+  /*! (Re-)Init a particle.
+   *  \param location Initial location.
+   *  \param radius   Initial radius.
+   *  \param lifeTime Life time / number of frames. The life time is decremented
+   *  each time stepTime() is called. */
   void init(const MCVector3d<MCFloat> & location, MCFloat radius, MCUint lifeTime);
 
   //! Particle will be added to the given vector when it dies.
@@ -74,12 +74,17 @@ public:
 
   /*! \brief Set animation style.
    * This parameter defines the animation performed linearily during
-   * the life time. Default is None.
-   */
+   * the life time. Default is None. */
   void setAnimationStyle(MCParticle::AnimationStyle style);
 
   //! Return animation style
   MCParticle::AnimationStyle animationStyle() const;
+
+  /*! Optimization: if set to true, the particle is immediately killed if it goes off screen.
+   *  Default is true. */
+  void setDieWhenOffScreen(bool flag);
+
+  bool dieWhenOffScreen() const;
 
   //! \reimp
   virtual void stepTime();
@@ -90,8 +95,10 @@ public:
   //! \reimp
   virtual void renderShadow(MCCamera * camera = nullptr);
 
+  //! Called when a render batch of a particle type begins.
   virtual void beginBatch();
 
+  //! Called when a render batch of a particle type ends.
   virtual void endBatch();
 
   //! Get timeline scale from 1.0 to 0.0
@@ -118,6 +125,7 @@ private:
   MCUint m_initLifeTime;
   MCParticle::AnimationStyle m_animationStyle;
   bool m_isActive;
+  bool m_dieWhenOffScreen;
   MCFloat m_scale;
   MCFloat m_delta;
   MCFloat m_radius;

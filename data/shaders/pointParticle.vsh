@@ -22,6 +22,7 @@ in vec4 inColor;
 uniform mat4 mvp;
 uniform float fade;
 
+out mat2 rotationMatrix;
 out vec4 vColor;
 
 void main()
@@ -31,5 +32,8 @@ void main()
     
     // Copy the primary color
     vColor = inColor * fade;
+    
+    // Rotation matrix to rotate a point sprite (sin and cos delivered as normals)
+    rotationMatrix = mat2(inNormal.x, inNormal.y, -inNormal.y, inNormal.x);
 }
 

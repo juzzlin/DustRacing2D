@@ -20,6 +20,7 @@ set(SRC
     aboutdlg.cpp
     ai.cpp
     car.cpp
+    carparticleeffectmanager.cpp
     checkeredflag.cpp
     confirmationmenu.cpp
     credits.cpp

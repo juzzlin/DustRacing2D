@@ -18,11 +18,13 @@
 uniform sampler2D tex0;
 
 in vec4 vColor;
+in mat2 rotationMatrix;
+
 out vec4 fragColor;
 
 void main(void)
 {
-    vec4 texColor = texture2D(tex0, gl_PointCoord) * vColor;
+    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor * 0.5;
     if (texColor.a < 0.1)
     {
         discard;

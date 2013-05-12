@@ -105,19 +105,23 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
                             else
                             {
                                 // Optimization that kills non-visible particles.
-                                bool isVisibleInAnyCamera = false;
-                                for (MCCamera * visibilityCamera : m_visibilityCameras)
+                                MCParticle & particle = static_cast<MCParticle &>(object);
+                                if (particle.dieWhenOffScreen())
                                 {
-                                    if (visibilityCamera != camera && visibilityCamera->isVisible(object.bbox()))
+                                    bool isVisibleInAnyCamera = false;
+                                    for (MCCamera * visibilityCamera : m_visibilityCameras)
                                     {
-                                        isVisibleInAnyCamera = true;
-                                        break;
+                                        if (visibilityCamera != camera && visibilityCamera->isVisible(particle.bbox()))
+                                        {
+                                            isVisibleInAnyCamera = true;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                if (!isVisibleInAnyCamera)
-                                {
-                                    static_cast<MCParticle &>(object).die();
+                                    if (!isVisibleInAnyCamera)
+                                    {
+                                        particle.die();
+                                    }
                                 }
                             }
                         }

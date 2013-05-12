@@ -20,6 +20,7 @@
 #include <MCVector2d>
 
 #include "updateableif.hpp"
+#include "carparticleeffectmanager.hpp"
 
 class MCSurface;
 class MCFrictionGenerator;
@@ -110,6 +111,10 @@ public:
     //! Brake.
     void brake();
 
+    bool isBraking() const;
+
+    bool isSkidding() const;
+
     void setBrakeLightState(bool state);
 
     //! User isn't steering.
@@ -135,7 +140,11 @@ public:
 
     void setLeftSideOffTrack(bool state);
 
+    bool leftSideOffTrack() const;
+
     void setRightSideOffTrack(bool state);
+
+    bool rightSideOffTrack() const;
 
     void setTurningImpulse(MCFloat impulse);
 
@@ -172,34 +181,32 @@ private:
     void setProperties(Description & desc);
     void initForceGenerators(Description & desc);
 
-    Description           m_desc;
-
-    MCFrictionGenerator * m_pBrakingFriction;
-    MCFrictionGenerator * m_pOnTrackFriction;
-    MCFrictionGenerator * m_pOffTrackFriction;
-    MCFrictionGenerator * m_pSlideFriction;
-    bool                  m_leftSideOffTrack;
-    bool                  m_rightSideOffTrack;
-    bool                  m_accelerating;
-    bool                  m_braking;
-    bool                  m_reverse;
-    bool                  m_turnLeft;
-    bool                  m_turnRight;
-    MCUint                m_index;
-    MCFloat               m_tireAngle;
-    MCSurface           & m_number;
-    MCSurface           & m_frontTire;
-    MCSurface           & m_brakeGlow;
-    MCFloat               m_length;
-    int                   m_speedInKmh;
-    MCFloat               m_dx, m_dy;
-    int                   m_currentTargetNodeIndex;
-    int                   m_prevTargetNodeIndex;
-    int                   m_routeProgression;
-    bool                  m_isHuman;
-    mutable int           m_smokeCounter;
-    mutable int           m_sparkleCounter;
-    mutable int           m_mudCounter;
+    Description              m_desc;
+    MCFrictionGenerator    * m_pBrakingFriction;
+    MCFrictionGenerator    * m_pOnTrackFriction;
+    MCFrictionGenerator    * m_pOffTrackFriction;
+    MCFrictionGenerator    * m_pSlideFriction;
+    bool                     m_leftSideOffTrack;
+    bool                     m_rightSideOffTrack;
+    bool                     m_accelerating;
+    bool                     m_braking;
+    bool                     m_reverse;
+    bool                     m_skidding;
+    bool                     m_turnLeft;
+    bool                     m_turnRight;
+    MCUint                   m_index;
+    MCFloat                  m_tireAngle;
+    MCSurface              & m_number;
+    MCSurface              & m_frontTire;
+    MCSurface              & m_brakeGlow;
+    MCFloat                  m_length;
+    int                      m_speedInKmh;
+    MCFloat                  m_dx, m_dy;
+    int                      m_currentTargetNodeIndex;
+    int                      m_prevTargetNodeIndex;
+    int                      m_routeProgression;
+    bool                     m_isHuman;
+    CarParticleEffectManager m_effectManager;
 };
 
 #endif // CAR_HPP

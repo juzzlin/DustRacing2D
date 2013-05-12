@@ -28,6 +28,7 @@ MCParticle::MCParticle(const std::string & typeID)
 , m_initLifeTime(0)
 , m_animationStyle(MCParticle::None)
 , m_isActive(false)
+, m_dieWhenOffScreen(true)
 , m_scale(1.0)
 , m_delta(0.0)
 , m_freeList(nullptr)
@@ -95,6 +96,16 @@ void MCParticle::setAnimationStyle(MCParticle::AnimationStyle style)
 MCParticle::AnimationStyle MCParticle::animationStyle() const
 {
     return m_animationStyle;
+}
+
+void MCParticle::setDieWhenOffScreen(bool flag)
+{
+    m_dieWhenOffScreen = flag;
+}
+
+bool MCParticle::dieWhenOffScreen() const
+{
+    return m_dieWhenOffScreen;
 }
 
 void MCParticle::stepTime()

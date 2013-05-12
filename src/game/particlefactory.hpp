@@ -33,7 +33,8 @@ public:
     {
         Smoke = 0,
         OffTrackSmoke,
-        SkidMark,
+        OnTrackSkidMark,
+        OffTrackSkidMark,
         Sparkle,
         Mud,
         Leaf,
@@ -49,10 +50,10 @@ public:
     static ParticleFactory & instance();
 
     void doParticle(
-        ParticleType type, MCVector3dFR location, MCVector3dFR initialVelocity);
-
-    void doParticle(
-        ParticleType type, MCVector3dFR location);
+        ParticleType type,
+        MCVector3dFR location,
+        MCVector3dFR initialVelocity = MCVector3dF(0, 0, 0),
+        int angle = 0);
 
 private:
 
@@ -60,7 +61,9 @@ private:
 
     void doOffTrackSmoke(MCVector3dFR location) const;
 
-    void doSkidMark(MCVector3dFR location) const;
+    void doOnTrackSkidMark(MCVector3dFR location, int angle) const;
+
+    void doOffTrackSkidMark(MCVector3dFR location, int angle) const;
 
     void doSparkle(MCVector3dFR location, MCVector3dFR velocity) const;
 

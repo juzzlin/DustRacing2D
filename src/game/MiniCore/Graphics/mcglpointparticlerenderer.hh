@@ -81,6 +81,7 @@ private:
     int                 m_batchSize;
     int                 m_maxBatchSize;
     MCGLVertex        * m_vertices;
+    MCGLVertex        * m_normals;
     MCGLColor         * m_colors;
     int                 m_pointSize;
     bool                m_useAlphaBlend;

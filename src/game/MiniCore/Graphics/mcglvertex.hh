@@ -31,7 +31,7 @@ public:
     {
     }
 
-    MCGLVertex(GLfloat x, GLfloat y, GLfloat z)
+    MCGLVertex(GLfloat x, GLfloat y, GLfloat z = 0)
     : m_x(x), m_y(y), m_z(z)
     {
     }

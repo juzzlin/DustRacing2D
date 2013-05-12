@@ -23,6 +23,7 @@
 #include "mcglpointparticle.hh"
 #include "mcglshaderprogram.hh"
 #include "mcglcolor.hh"
+#include "mctrigonom.hh"
 #include "mcglvertex.hh"
 
 #include <algorithm>
@@ -36,6 +37,7 @@ MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
 , m_batchSize(0)
 , m_maxBatchSize(maxBatchSize)
 , m_vertices(new MCGLVertex[maxBatchSize])
+, m_normals(new MCGLVertex[maxBatchSize])
 , m_colors(new MCGLColor[maxBatchSize])
 , m_pointSize(8)
 , m_useAlphaBlend(false)
@@ -98,6 +100,7 @@ void MCGLPointParticleRenderer::setBatch(
 
     const int NUM_VERTICES     = m_batchSize;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+    const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
 
     for (int i = 0; i < m_batchSize; i++)
@@ -120,14 +123,23 @@ void MCGLPointParticleRenderer::setBatch(
         {
             m_colors[i].setA(m_colors[i].a() * particle->scale());
         }
+
+        // Use normal data for sin and cos in order to rotate texture coordinates.
+        // We cannot apply transformations for GL_POINT's.
+        m_normals[i] = MCGLVertex(
+            MCTrigonom::cos(particle->angle()),
+            MCTrigonom::sin(particle->angle()));
     }
 
     // Vertex data
     glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, m_vertices);
-
     const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
+    offset += MAX_VERTEX_DATA_SIZE;
+
+    // Normal data
+    glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, m_normals);
     const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
-    offset += MAX_VERTEX_DATA_SIZE + MAX_NORMAL_DATA_SIZE;
+    offset += MAX_NORMAL_DATA_SIZE;
 
     // Vertex color data
     glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, m_colors);
@@ -170,6 +182,7 @@ void MCGLPointParticleRenderer::render()
 MCGLPointParticleRenderer::~MCGLPointParticleRenderer()
 {
     delete [] m_vertices;
+    delete [] m_normals;
     delete [] m_colors;
 
     if (m_vbo != 0)

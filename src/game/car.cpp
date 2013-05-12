@@ -17,7 +17,6 @@
 #include "game.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
-#include "particlefactory.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
@@ -35,6 +34,7 @@
 #include <MCVector2d>
 
 #include <cassert>
+#include <cmath>
 #include <string>
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
@@ -49,6 +49,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_accelerating(false)
 , m_braking(false)
 , m_reverse(false)
+, m_skidding(false)
 , m_turnLeft(false)
 , m_turnRight(false)
 , m_index(index)
@@ -63,9 +64,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_prevTargetNodeIndex(-1)
 , m_routeProgression(0)
 , m_isHuman(isHuman)
-, m_smokeCounter(0)
-, m_sparkleCounter(0)
-, m_mudCounter(0)
+, m_effectManager(*this)
 {
     setProperties(desc);
     initForceGenerators(desc);
@@ -121,6 +120,7 @@ void Car::clearStatuses()
     m_accelerating = false;
     m_braking      = false;
     m_reverse      = false;
+    m_skidding     = false;
 }
 
 MCUint Car::index() const
@@ -189,6 +189,7 @@ void Car::turnRight()
 void Car::accelerate(bool deccelerate)
 {
     m_pBrakingFriction->enable(false);
+    m_skidding = true;
 
     const MCFloat gravity = 9.81;
     const MCFloat frictionLimit = mass() * m_desc.accelerationFriction * gravity;
@@ -198,7 +199,8 @@ void Car::accelerate(bool deccelerate)
         const MCFloat powerLimit = m_desc.power / velocity().lengthFast();
         if (powerLimit < frictionLimit)
         {
-            effForce = powerLimit;
+            effForce   = powerLimit;
+            m_skidding = false;
         }
     }
 
@@ -236,6 +238,16 @@ void Car::brake()
         m_braking = true;
         m_pBrakingFriction->enable(true);
     }
+}
+
+bool Car::isBraking() const
+{
+    return m_braking;
+}
+
+bool Car::isSkidding() const
+{
+    return m_skidding;
 }
 
 void Car::noSteering()
@@ -323,57 +335,7 @@ void Car::render(MCCamera *p)
 
 bool Car::update()
 {
-    if (m_braking && m_speedInKmh > 5 && m_speedInKmh < 25)
-    {
-        if (!m_leftSideOffTrack)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftRearTireLocation());
-        }
-
-        if (!m_rightSideOffTrack)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightRearTireLocation());
-        }
-    }
-
-    // Particle animations due to the car being off the track.
-    if (std::abs(m_speedInKmh) > 10)
-    {
-        bool smoke = false;
-        if (m_leftSideOffTrack)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, leftRearTireLocation());
-            smoke = true;
-
-            if (++m_mudCounter >= 5)
-            {
-                ParticleFactory::instance().doParticle(ParticleFactory::Mud, leftRearTireLocation(), velocity() * 0.5);
-                m_mudCounter = 0;
-            }
-        }
-
-        if (m_rightSideOffTrack)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::SkidMark, rightRearTireLocation());
-            smoke = true;
-
-            if (++m_mudCounter >= 5)
-            {
-                ParticleFactory::instance().doParticle(ParticleFactory::Mud, rightRearTireLocation(), velocity() * 0.5);
-                m_mudCounter = 0;
-            }
-        }
-
-        if (smoke)
-        {
-            if (++m_smokeCounter >= 2)
-            {
-                MCVector3dF smokeLocation = (leftRearTireLocation() + rightRearTireLocation()) * 0.5;
-                ParticleFactory::instance().doParticle(ParticleFactory::OffTrackSmoke, smokeLocation);
-            }
-        }
-    }
-
+    m_effectManager.update();
     return true;
 }
 
@@ -383,52 +345,7 @@ void Car::reset()
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
-    // Cache type id integers.
-    static MCUint crate              = MCObject::typeID("crate");
-    static MCUint dustRacing2DBanner = MCObject::typeID("dustRacing2DBanner");
-    static MCUint grandstand         = MCObject::typeID("grandstand");
-    static MCUint wall               = MCObject::typeID("wall");
-    static MCUint wallLong           = MCObject::typeID("wallLong");
-    static MCUint rock               = MCObject::typeID("rock");
-    static MCUint tree               = MCObject::typeID("tree");
-    static MCUint plant              = MCObject::typeID("plant");
-
-    if (m_speedInKmh > 25)
-    {
-        // Check if the car is colliding with another car.
-        if (event.collidingObject().typeID() == typeID())
-        {
-            if (++m_sparkleCounter >= 10)
-            {
-                ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                    event.contactPoint(), velocity() * 0.5);
-                ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
-                m_sparkleCounter = 0;
-            }
-        }
-        // Check if the car is colliding with hard stationary objects.
-        else if (
-            event.collidingObject().typeID() == crate ||
-            event.collidingObject().typeID() == dustRacing2DBanner ||
-            event.collidingObject().typeID() == grandstand ||
-            event.collidingObject().typeID() == wall ||
-            event.collidingObject().typeID() == wallLong ||
-            event.collidingObject().typeID() == rock)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                event.contactPoint(), velocity() * 0.5);
-            ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
-        }
-        // Check if the car is colliding with trees or plants.
-        else if (
-            event.collidingObject().typeID() == tree ||
-            event.collidingObject().typeID() == plant)
-        {
-            ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
-                event.contactPoint(), velocity() * 0.1);
-        }
-    }
-
+    m_effectManager.collision(event);
     event.accept();
 }
 
@@ -459,10 +376,20 @@ void Car::setLeftSideOffTrack(bool state)
     m_leftSideOffTrack = state;
 }
 
+bool Car::leftSideOffTrack() const
+{
+    return m_leftSideOffTrack;
+}
+
 void Car::setRightSideOffTrack(bool state)
 {
     // Enable off-track friction if right side is off the track.
     m_rightSideOffTrack = state;
+}
+
+bool Car::rightSideOffTrack() const
+{
+    return m_rightSideOffTrack;
 }
 
 void Car::setTurningImpulse(MCFloat impulse)
