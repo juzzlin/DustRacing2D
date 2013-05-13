@@ -77,19 +77,16 @@ private:
 
     void updateViewport();
 
-    SplitType m_splitType;
-    MCUint    m_viewWidth;
-    MCUint    m_viewHeight;
-    MCUint    m_sceneWidth;
-    MCUint    m_sceneHeight;
-    MCFloat   m_viewAngle;
-
-    glm::mat4 m_modelViewMatrix;
-    glm::mat4 m_projectionMatrix;
-
-    mutable glm::mat4 m_modelViewProjectionMatrix;
-    mutable bool      m_updateModelViewProjection;
-
+    SplitType                        m_splitType;
+    MCUint                           m_viewWidth;
+    MCUint                           m_viewHeight;
+    MCUint                           m_sceneWidth;
+    MCUint                           m_sceneHeight;
+    MCFloat                          m_viewAngle;
+    glm::mat4                        m_modelViewMatrix;
+    glm::mat4                        m_projectionMatrix;
+    mutable glm::mat4                m_modelViewProjectionMatrix;
+    mutable bool                     m_updateModelViewProjection;
     std::vector<MCGLShaderProgram *> m_shaders;
 };
 
