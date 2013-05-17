@@ -1,3 +1,35 @@
+dustrac (1.3.0-1) precise; urgency=low
+
+  * Include Qt version in CPack package names.
+  * Point sprite skid marks.
+  * Fix Z-buffering of grandstands.
+  * Set brightness and contrast in the surface config.
+  * Refactor MCSurfaceMetaData.
+  * Mud particles as MCGLRectParticles.
+  * Soften grandstand.png.
+  * Off-track smoke.
+  * Fix zero glPointSize().
+  * Optimize batch rendering.
+  * Rename pCamera to camera.
+  * Add constructor for ActionMapping.
+  * Renames m_vba => m_vao.
+  * Optimize texture and VAO usage.
+  * Adds starting grid to all race tracks.
+  * Refactors rendering stuff out from MCWorld to MCWorldRenderer.
+  * Adds ring.trk
+  * Fix unlocking of new race tracks.
+  * Fix performance issues due to faulty texture scaling.
+  * Increase smoke timeout.
+  * Scale particle point size with resolution.
+  * GL_DYNAMIC_DRAW hint for particles.
+  * Font improvements.
+  * High contrast graphics.
+  * Proper batching for point sprites.
+  * Fix crash with OpenGL 3.3
+  * Remove obsolete keyword maxGlyphsPerRow.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 18 May 2013 00:56:59 +0300
+
 dustrac (1.2.2-1) precise; urgency=low
 
   * Tune car parameters.
