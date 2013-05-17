@@ -128,6 +128,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
     m_world->renderer().enableDepthTestOnLayer(Layers::Tree, true);
     m_world->renderer().enableDepthTestOnLayer(Layers::Meshes, true);
+    m_world->renderer().enableDepthTestOnLayer(Layers::GrandStands, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
     MCAssetManager::textureFontManager().font("default").surface().setShaderProgram(
