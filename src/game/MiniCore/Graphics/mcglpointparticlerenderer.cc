@@ -150,6 +150,9 @@ void MCGLPointParticleRenderer::render()
     assert(m_program);
     m_program->bind();
 
+    // Note: This is not needed from OpenGL 3.3 onwards
+    glEnable(GL_POINT_SPRITE);
+
     if (m_useAlphaBlend)
     {
         glEnable(GL_BLEND);
@@ -175,6 +178,8 @@ void MCGLPointParticleRenderer::render()
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    glDisable(GL_POINT_SPRITE);
 
     glBindVertexArray(0);
 }
