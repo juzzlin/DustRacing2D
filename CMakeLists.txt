@@ -1,7 +1,7 @@
 project(DustRacing2D)
 
 # Global game version
-set(VERSION "1.3.0")
+set(VERSION "1.3.1")
 
 # Enable Qt5 support
 option(UseQt5 "UseQt5" OFF)
