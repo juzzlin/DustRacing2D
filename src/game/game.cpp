@@ -117,17 +117,8 @@ void Game::createRenderer()
 
     QGLFormat qglFormat;
 
-    // Use OpenGL 3.3 Core Profile if available (NVIDIA drivers for 3.0 are buggy).
     // Availability of 3.0 is currently tested in main.cpp.
-    if (QGLFormat::openGLVersionFlags() >= QGLFormat::OpenGL_Version_3_3)
-    {
-        qglFormat.setVersion(3, 3);
-    }
-    else
-    {
-        qglFormat.setVersion(3, 0);
-    }
-
+    qglFormat.setVersion(3, 0);
     qglFormat.setProfile(QGLFormat::CoreProfile);
     qglFormat.setSampleBuffers(false);
 
