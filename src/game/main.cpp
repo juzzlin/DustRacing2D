@@ -32,6 +32,7 @@ static void initLogger()
     MCLogger::init(logPath.toStdString().c_str());
     MCLogger::setEchoMode(true);
     MCLogger::setDateTime(true);
+    MCLogger().info() << "Dust Racing 2D version " << VERSION;
 }
 
 static void checkOpenGLVersion()
