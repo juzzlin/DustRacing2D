@@ -20,8 +20,6 @@
 #include "updateableif.hpp"
 
 #include <MCTypes>
-
-#include <QApplication>
 #include <QObject>
 
 #include <functional>
@@ -85,6 +83,8 @@ signals:
     void startlightAnimationRequested();
 
     void renderingEnabled(bool);
+
+    void exitGameRequested();
 
 private:
 

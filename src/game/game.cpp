@@ -82,6 +82,8 @@ Game::Game()
     connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(renderFrame()));
     m_renderTimer.setInterval(m_renderDelay);
 
+    connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
+
     // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
         QDir::separator() + "levels");
@@ -293,8 +295,8 @@ void Game::togglePause()
 void Game::exitGame()
 {
     stop();
-
-    QApplication::instance()->exit();
+    m_renderer->close();
+    QApplication::quit();
 }
 
 void Game::updateFrame()

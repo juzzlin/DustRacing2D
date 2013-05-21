@@ -58,7 +58,7 @@ void StateMachine::quit()
     }
     else if (m_state == StateMachine::Menu)
     {
-        QApplication::quit();
+        emit exitGameRequested();
     }
 }
 
