@@ -228,9 +228,9 @@ void Renderer::paintGL()
         {
             renderCustomResolution();
         }
-    }
 
-    swapBuffers();
+        swapBuffers();
+    }
 }
 
 void Renderer::updateFrame()
