@@ -15,22 +15,31 @@
 
 #include "surfacemenu.hpp"
 #include "renderer.hpp"
+#include "textmenuitemview.hpp"
 
 #include <MCSurface>
 #include <MCTextureFont>
 #include <MCAssetManager>
 
+#include <MenuItem>
+
 #include <cassert>
 
-SurfaceMenu::SurfaceMenu(
-    std::string surfaceId, std::string id, int width, int height,
-    Menu::MenuStyle style)
+SurfaceMenu::SurfaceMenu(std::string surfaceId, std::string id, int width, int height, Menu::MenuStyle style, bool quitItem)
 : Menu(id, width, height, style)
 , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
 , m_font(MCAssetManager::textureFontManager().font("default"))
 {
     m_back.setShaderProgram(&Renderer::instance().program("menu"));
     m_back.setColor(0.5, 0.5, 0.5, 1.0);
+
+    if (quitItem)
+    {
+        const int textSize = 40;
+        MTFH::MenuItem * quit = new MTFH::MenuItem(textSize, textSize, "X");
+        quit->setView(new TextMenuItemView(textSize, *quit), true);
+        addQuitItem(*quit, true);
+    }
 }
 
 void SurfaceMenu::render()

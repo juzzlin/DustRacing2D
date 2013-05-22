@@ -144,47 +144,48 @@ void SettingsMenu::populate(int width, int height)
 {
     const int numItems   = 9;
     const int itemHeight = height / (numItems + 2);
+    const int textSize   = 20;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
     MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, "Reset record times");
-    resetRecordTimes->setView(new TextMenuItemView(20, *resetRecordTimes), true);
+    resetRecordTimes->setView(new TextMenuItemView(textSize, *resetRecordTimes), true);
     resetRecordTimes->setAction(
         new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu), true);
 
     MenuItem * resetBestPositions = new MenuItem(width, itemHeight, "Reset best positions");
-    resetBestPositions->setView(new TextMenuItemView(20, *resetBestPositions), true);
+    resetBestPositions->setView(new TextMenuItemView(textSize, *resetBestPositions), true);
     resetBestPositions->setAction(
         new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu), true);
 
     MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, "Reset unlocked tracks");
-    resetUnlockedTracks->setView(new TextMenuItemView(20, *resetUnlockedTracks), true);
+    resetUnlockedTracks->setView(new TextMenuItemView(textSize, *resetUnlockedTracks), true);
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
     MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, "Full screen resolution >");
-    selectFullScreenResolution->setView(new TextMenuItemView(20, *selectFullScreenResolution), true);
+    selectFullScreenResolution->setView(new TextMenuItemView(textSize, *selectFullScreenResolution), true);
     selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
 
     MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, "Windowed resolution >");
-    selectWindowedResolution->setView(new TextMenuItemView(20, *selectWindowedResolution), true);
+    selectWindowedResolution->setView(new TextMenuItemView(textSize, *selectWindowedResolution), true);
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
     MenuItem * gameMode = new MenuItem(width, itemHeight, "Game mode >");
-    gameMode->setView(new TextMenuItemView(20, *gameMode), true);
+    gameMode->setView(new TextMenuItemView(textSize, *gameMode), true);
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
     MenuItem * lapCount = new MenuItem(width, itemHeight, "Lap Count >");
-    lapCount->setView(new TextMenuItemView(20, *lapCount), true);
+    lapCount->setView(new TextMenuItemView(textSize, *lapCount), true);
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
     MenuItem * selectFps = new MenuItem(width, itemHeight, "FPS >");
-    selectFps->setView(new TextMenuItemView(20, *selectFps), true);
+    selectFps->setView(new TextMenuItemView(textSize, *selectFps), true);
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
     MenuItem * configureKeys = new MenuItem(width, itemHeight, "Key configuration >");
-    configureKeys->setView(new TextMenuItemView(20, *configureKeys), true);
+    configureKeys->setView(new TextMenuItemView(textSize, *configureKeys), true);
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
     addItem(*resetRecordTimes,           true);

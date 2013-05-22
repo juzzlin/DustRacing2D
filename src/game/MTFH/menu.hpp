@@ -78,6 +78,10 @@ public:
     //! Add item to the menu.
     virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
 
+    /*! Add quit item to the menu. It's a special item that will always be located
+     *  at the upper right corner of the menu. */
+    virtual void addQuitItem(MenuItem & menuItem, bool takeOwnership = false);
+
     //! Use this if the current menu stack needs to be
     //! completely quit, for example when the execution
     //! should move from the menu to the actual game.
@@ -116,6 +120,7 @@ private:
     void updateFocus();
 
     std::vector<MenuItem *> m_items;
+    MenuItem * m_quitItem;
     typedef std::shared_ptr<MenuItem> MenuItemPtr;
     typedef std::vector<MenuItemPtr> MenuItemVector;
     MenuItemVector m_ownedMenuItems;

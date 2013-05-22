@@ -248,7 +248,7 @@ void TrackItem::render()
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene)
-: SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE)
+: SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE, false)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 {

@@ -59,9 +59,12 @@ void MenuManager::enterMenu(std::string menuId)
 
 void MenuManager::pushMenu(Menu & newMenu)
 {
-    m_menuStack.push_back(&newMenu);
-    newMenu.enter();
-    newMenu.render();
+    if (!m_menuStack.size() || m_menuStack.back() != &newMenu)
+    {
+        m_menuStack.push_back(&newMenu);
+        newMenu.enter();
+        newMenu.render();
+    }
 }
 
 void MenuManager::pushMenu(std::string menuId)

@@ -29,7 +29,7 @@
 #include <QApplication>
 
 MainMenu::MainMenu(std::string id, int width, int height)
-: SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST)
+: SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST, false)
 {
     using MTFH::MenuItem;
 

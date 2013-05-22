@@ -22,7 +22,8 @@
 namespace MTFH {
 
 Menu::Menu(std::string id, int width, int height, MenuStyle style)
-: m_id(id)
+: m_quitItem(nullptr)
+, m_id(id)
 , m_width(width)
 , m_height(height)
 , m_currentIndex(-1)
@@ -50,6 +51,13 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
     }
 
     updateFocus();
+}
+
+void Menu::addQuitItem(MenuItem & menuItem, bool takeOwnership)
+{
+    m_quitItem = &menuItem;
+
+    addItem(menuItem, takeOwnership);
 }
 
 MenuItem * Menu::currentItem() const
@@ -85,16 +93,22 @@ void Menu::render()
         int totalHeight = 0;
         for (MenuItem * item : m_items)
         {
-            totalHeight += item->height();
+            if (item != m_quitItem)
+            {
+                totalHeight += item->height();
+            }
         }
 
         // Render centered items
         int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            item->setPos(m_width / 2, startY);
-            item->render();
-            startY += item->height();
+            if (item != m_quitItem)
+            {
+                item->setPos(m_width / 2, startY);
+                item->render();
+                startY += item->height();
+            }
         }
     }
     else if (m_style == Menu::MS_HORIZONTAL_LIST)
@@ -103,23 +117,39 @@ void Menu::render()
         int totalWidth = 0;
         for (MenuItem * item : m_items)
         {
-            totalWidth += item->width();
+            if (item != m_quitItem)
+            {
+                totalWidth += item->width();
+            }
         }
 
         // Render centered items
         int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            item->setPos(startX, m_height / 2);
-            item->render();
-            startX += item->width();
+            if (item != m_quitItem)
+            {
+                item->setPos(startX, m_height / 2);
+                item->render();
+                startX += item->width();
+            }
         }
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
-        MenuItem & item = *m_items.at(m_currentIndex);
-        item.setPos(m_width / 2, m_height / 2);
-        item.render();
+        MenuItem * item = m_items.at(m_currentIndex);
+        if (item != m_quitItem)
+        {
+            item->setPos(m_width / 2, m_height / 2);
+            item->render();
+        }
+    }
+
+    // Render the quit item, if set
+    if (m_quitItem)
+    {
+        m_quitItem->setPos(m_width - m_quitItem->width(), m_height - m_quitItem->height());
+        m_quitItem->render();
     }
 }
 
@@ -165,13 +195,23 @@ void Menu::selectCurrentItem()
 {
     if (m_items.size())
     {
-        for (MenuItem * item : m_items)
+        if (m_items.at(m_currentIndex) == m_quitItem)
         {
-            item->setSelected(false);
+            // The quit item was clicked. Cancel the current index in order to
+            // make the quit item not selected when the menu is opened again.
+            m_currentIndex = m_selectedIndex;
+            exit();
         }
+        else
+        {
+            for (MenuItem * item : m_items)
+            {
+                item->setSelected(false);
+            }
 
-        m_items.at(m_currentIndex)->setSelected(true);
-        m_selectedIndex = m_currentIndex;
+            m_items.at(m_currentIndex)->setSelected(true);
+            m_selectedIndex = m_currentIndex;
+        }
     }
 }
 
