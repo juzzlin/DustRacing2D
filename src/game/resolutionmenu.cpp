@@ -175,4 +175,28 @@ ResolutionMenu::ResolutionMenu(
         resolution->setView(new TextMenuItemView(20, *resolution), true);
         addItem(*resolution, true);
     }
+
+    enter();
+}
+
+void ResolutionMenu::enter()
+{
+    // Set the current active resolution selected
+    for (unsigned int i = 0; i < itemCount(); i++)
+    {
+        if (ResolutionItem * resolution = dynamic_cast<ResolutionItem *>(item(i)))
+        {
+            int  hRes       = 0;
+            int  vRes       = 0;
+            bool native     = false;
+            bool fullScreen = false;
+
+            Settings::instance().loadResolution(hRes, vRes, native, fullScreen);
+            if (resolution->hRes() == hRes && resolution->vRes() == vRes)
+            {
+                setCurrentIndex(resolution->index());
+                break;
+            }
+        }
+    }
 }

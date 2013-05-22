@@ -28,6 +28,11 @@ public:
     ResolutionMenu(
         ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen);
 
+protected:
+
+    //! \reimp
+    virtual void enter();
+
 private:
 
     ConfirmationMenu & m_confirmationMenu;

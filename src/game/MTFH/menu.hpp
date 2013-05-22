@@ -20,6 +20,8 @@
 #include <vector>
 #include <memory>
 
+#include "menumanager.hpp"
+
 namespace MTFH {
 
 class MenuItem;
@@ -68,12 +70,18 @@ public:
     //! Handle mouse release at given screen coordinates.
     virtual void handleMouseRelease(int x, int y, int screenWidth, int screenHeight);
 
-    //! Return current item or nullptr if no items added.
+    //! \return current item or nullptr if no items added.
     MenuItem * currentItem() const;
 
-    //! Return selected item or nullptr if no item added.
-    //! Pressing enter on an item selects it.
+    /*! \return selected item or nullptr if no item added.
+     *  Pressing enter on an item selects it. */
     MenuItem * selectedItem() const;
+
+    //! \return current item at given index or nullptr.
+    MenuItem * item(unsigned int index) const;
+
+    //! \return number of currently added items.
+    unsigned int itemCount() const;
 
     //! Add item to the menu.
     virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
@@ -89,9 +97,6 @@ public:
 
     //! \returns true if done.
     bool done() const;
-
-    //! Called when the menu is entered. Call parent implementation if overridden.
-    virtual void enter();
 
     //! Returns the width of the menu.
     int width() const;
@@ -115,6 +120,11 @@ public:
     //! also by itself.
     void exit();
 
+protected:
+
+    //! Called when the menu is entered. Call parent implementation if overridden.
+    virtual void enter();
+
 private:
 
     void updateFocus();
@@ -131,6 +141,8 @@ private:
     MenuStyle m_style;
     bool m_done;
     bool m_wrapAround;
+
+    friend class MenuManager;
 };
 
 } // namespace MTFH

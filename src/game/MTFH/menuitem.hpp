@@ -35,6 +35,10 @@ public:
 
     virtual ~MenuItem();
 
+    void setIndex(int index);
+
+    int index() const;
+
     int width() const;
 
     int height() const;
@@ -99,6 +103,7 @@ private:
     bool m_selectable;
     int m_width, m_height, m_x, m_y;
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
+    int m_index;
 };
 
 } // namespace MTFH

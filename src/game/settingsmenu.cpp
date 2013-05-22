@@ -285,6 +285,16 @@ void SettingsMenu::populateFpsMenu(int width, int height)
 
     m_fpsMenu.addItem(*fps30, true);
     m_fpsMenu.addItem(*fps60, true);
+
+    const int fps = Settings::instance().loadFps();
+    if (fps == 30)
+    {
+        m_fpsMenu.setCurrentIndex(fps30->index());
+    }
+    else
+    {
+        m_fpsMenu.setCurrentIndex(fps60->index());
+    }
 }
 
 void SettingsMenu::populateLapCountMenu(int width, int height)

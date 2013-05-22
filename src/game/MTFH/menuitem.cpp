@@ -36,6 +36,7 @@ MenuItem::MenuItem(int width, int height, std::string text, bool selectable)
 , m_rMargin(1)
 , m_tMargin(1)
 , m_bMargin(1)
+, m_index(-1)
 {
 }
 
@@ -47,6 +48,16 @@ int MenuItem::width() const
 int MenuItem::height() const
 {
     return m_height + m_tMargin + m_bMargin;
+}
+
+void MenuItem::setIndex(int index)
+{
+    m_index = index;
+}
+
+int MenuItem::index() const
+{
+    return m_index;
 }
 
 void MenuItem::setPos(int x, int y)

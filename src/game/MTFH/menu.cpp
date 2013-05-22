@@ -42,8 +42,9 @@ std::string Menu::id() const
 void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
 {
     m_items.push_back(&menuItem);
-    m_currentIndex  = m_items.size() - 1;
+    m_currentIndex = m_items.size() - 1;
     m_selectedIndex = m_currentIndex;
+    menuItem.setIndex(m_items.size() - 1);
 
     if (takeOwnership)
     {
@@ -78,6 +79,21 @@ MenuItem * Menu::selectedItem() const
     }
 
     return nullptr;
+}
+
+MenuItem * Menu::item(unsigned int index) const
+{
+    if (index < m_items.size())
+    {
+        return m_items.at(index);
+    }
+
+    return nullptr;
+}
+
+unsigned int Menu::itemCount() const
+{
+    return m_items.size();
 }
 
 void Menu::render()
