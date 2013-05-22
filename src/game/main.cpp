@@ -24,6 +24,10 @@
 #include <MCException>
 #include <MCLogger>
 
+#include <iostream>
+#include <vector>
+#include <string>
+
 static const char * INIT_ERROR = "Initing the game failed!";
 
 static void initLogger()
@@ -45,11 +49,28 @@ static void checkOpenGLVersion()
     }
 }
 
+static void printHelp()
+{
+    std::cout << "Dust Racing 2D version " << VERSION << std::endl;
+    std::cout << "Copyright (c) 2011-2013 Jussi Lind." << std::endl << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "--show-cursor Show the mouse cursor in menus." << std::endl;
+    std::cout << "--help        Show this help." << std::endl;
+    std::cout << std::endl;
+}
+
 int main(int argc, char ** argv)
 {
     try
     {
         QApplication app(argc, argv);
+        std::vector<std::string> args(argv, argv + argc);
+
+        if (std::find(args.begin(), args.end(), "--help") != args.end())
+        {
+            printHelp();
+            exit(EXIT_SUCCESS);
+        }
 
         initLogger();
         checkOpenGLVersion();
@@ -58,6 +79,7 @@ int main(int argc, char ** argv)
         MCLogger().info() << "Creating game object..";
         Game game;
         game.setFps(Settings::instance().loadFps());
+        game.setShowCursor(std::find(args.begin(), args.end(), "--show-cursor") != args.end());
 
         // Initialize and start the game
         if (game.init())

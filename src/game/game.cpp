@@ -138,7 +138,6 @@ void Game::createRenderer()
     }
 
     m_renderer->setFocus();
-    //m_renderer->setCursor(Qt::BlankCursor);
 
     // Note that this must be called before loading textures in order
     // to load textures to correct OpenGL context.
@@ -170,6 +169,18 @@ void Game::setFps(unsigned int fps)
     m_renderDelay = 1000 / m_renderFps;
 
     m_renderTimer.setInterval(m_renderDelay);
+}
+
+void Game::setShowCursor(bool showCursor)
+{
+    if (!showCursor)
+    {
+        m_renderer->setCursor(Qt::BlankCursor);
+    }
+    else
+    {
+        m_renderer->setCursor(Qt::ArrowCursor);
+    }
 }
 
 void Game::setMode(GameMode gameMode)

@@ -61,6 +61,9 @@ public:
     //! Set target value for frames per second. Default is 60.
     void setFps(unsigned int fps);
 
+    //! Show/hide mouse cursor.
+    void setShowCursor(bool showCursor);
+
     //! \return The renderer.
     Renderer & renderer() const;
 
