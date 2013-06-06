@@ -45,9 +45,13 @@ public:
     //! Add path to search level files for.
     void addTrackSearchPath(QString path);
 
-    //! Load all tracks found in the added paths.
-    //! \return Number of track loaded.
-    int loadTracks();
+    /*! Load all tracks found in the added paths.
+     *  Lock/unlock tracks according to the given lap count.
+     *  \return Number of track loaded. */
+    int loadTracks(int lapCount);
+
+    //! Update locked tracks when lap count changes.
+    void updateLockedTracks(int lapCount);
 
     //! Get track count.
     unsigned int tracks() const;
@@ -62,8 +66,6 @@ private:
     //! Load the given track.
     //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);
-
-    void setLockedTracks();
 
     void sortTracks();
 

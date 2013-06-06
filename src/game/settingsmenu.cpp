@@ -310,6 +310,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
+    int selectedIndex = 0;
     for (int i = 0; i < numLapCounts; i++)
     {
         std::stringstream itemText;
@@ -326,5 +327,12 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
             });
 
         m_lapCountMenu.addItem(*lapCountItem, true);
+
+        if (Game::instance().lapCount() == LAP_COUNTS[i])
+        {
+            selectedIndex = lapCountItem->index();
+        }
     }
+
+    m_lapCountMenu.setCurrentIndex(selectedIndex);
 }

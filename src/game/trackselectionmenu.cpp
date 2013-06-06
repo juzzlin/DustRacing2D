@@ -51,7 +51,7 @@ public:
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
-    , m_bestPos(Settings::instance().loadBestPos(m_track))
+    , m_bestPos(Settings::instance().loadBestPos(m_track, Game::instance().lapCount()))
     {
         m_star.setShaderProgram(&Renderer::instance().program("menu"));
         m_glow.setShaderProgram(&Renderer::instance().program("menu"));
@@ -78,7 +78,7 @@ public:
         MenuItem::setFocused(focused);
 
         m_lapRecord = Settings::instance().loadLapRecord(m_track);
-        m_bestPos   = Settings::instance().loadBestPos(m_track);
+        m_bestPos   = Settings::instance().loadBestPos(m_track, Game::instance().lapCount());
     }
 
     //! \reimp

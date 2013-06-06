@@ -80,6 +80,8 @@ void Race::createStartGridObjects()
 
 void Race::init(Track & track, int lapCount)
 {
+    m_lapCount = lapCount;
+
     setTrack(track);
     translateCarsToStartPositions();
 
@@ -99,7 +101,6 @@ void Race::init(Track & track, int lapCount)
     m_winnerFinished       = false;
     m_isfinishedSignalSent = false;
     m_started              = false;
-    m_lapCount             = lapCount;
 }
 
 void placeCar(Car & car, MCFloat x, MCFloat y, int angle)
@@ -137,7 +138,7 @@ void Race::translateCarsToStartPositions()
         // of the current race track.
         if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
         {
-            const int bestPos = Settings::instance().loadBestPos(*m_track);
+            const int bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount);
             if (bestPos > 0)
             {
                 order.insert(order.begin() + bestPos - 1, *m_cars.begin());
@@ -381,7 +382,7 @@ void Race::checkForNewBestPosition(const Car & car)
             const int pos = getPositionOfCar(car);
             if (pos < m_bestPos || m_bestPos == -1)
             {
-                Settings::instance().saveBestPos(*m_track, pos);
+                Settings::instance().saveBestPos(*m_track, pos, m_lapCount);
                 m_messageOverlay.addMessage(QObject::tr("A new best pos!"));
             }
 
@@ -391,7 +392,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 if (pos <= UNLOCK_LIMIT)
                 {
                     next->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*next);
+                    Settings::instance().saveTrackUnlockStatus(*next, m_lapCount);
                     m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
                 }
                 else
@@ -470,7 +471,7 @@ Car & Race::getLeadingCar() const
 void Race::setTrack(Track & track)
 {
     m_track   = &track;
-    m_bestPos = Settings::instance().loadBestPos(*m_track);
+    m_bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount);
 
     m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
 

@@ -64,7 +64,7 @@ void TrackLoader::addTrackSearchPath(QString path)
     m_paths.push_back(path);
 }
 
-int TrackLoader::loadTracks()
+int TrackLoader::loadTracks(int lapCount)
 {
     int numLoaded = 0;
     for (QString path : m_paths)
@@ -96,20 +96,20 @@ int TrackLoader::loadTracks()
 
     if (numLoaded)
     {
-        setLockedTracks();
+        updateLockedTracks(lapCount);
     }
 
     return numLoaded;
 }
 
-void TrackLoader::setLockedTracks()
+void TrackLoader::updateLockedTracks(int lapCount)
 {
     sortTracks();
 
     // Check if the tracks are locked/unlocked.
     for (Track * track : m_tracks)
     {
-        if (!Settings::instance().loadTrackUnlockStatus(*track))
+        if (!Settings::instance().loadTrackUnlockStatus(*track, lapCount))
         {
             track->trackData().setIsLocked(true);
         }
@@ -118,13 +118,13 @@ void TrackLoader::setLockedTracks()
             track->trackData().setIsLocked(false);
 
             // This is needed in the case new tracks are added to the game afterwards.
-            const int bestPos = Settings::instance().loadBestPos(*track);
+            const int bestPos = Settings::instance().loadBestPos(*track, lapCount);
             if (bestPos >= 1 && bestPos <= UNLOCK_LIMIT)
             {
                 if (track->next())
                 {
                     track->next()->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*track->next());
+                    Settings::instance().saveTrackUnlockStatus(*track->next(), lapCount);
                 }
             }
         }

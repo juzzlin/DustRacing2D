@@ -37,12 +37,12 @@ public:
     int loadLapRecord(const Track & track) const;
     void resetLapRecords();
 
-    void saveBestPos(const Track & track, int pos);
-    int loadBestPos(const Track & track) const;
+    void saveBestPos(const Track & track, int pos, int lapCount);
+    int loadBestPos(const Track & track, int lapCount) const;
     void resetBestPos();
 
-    void saveTrackUnlockStatus(const Track & track);
-    bool loadTrackUnlockStatus(const Track & track) const;
+    void saveTrackUnlockStatus(const Track & track, int lapCount);
+    bool loadTrackUnlockStatus(const Track & track, int lapCount) const;
     void resetTrackUnlockStatuses();
 
     void saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen);

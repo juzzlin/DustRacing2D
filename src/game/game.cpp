@@ -196,6 +196,7 @@ Game::GameMode Game::mode() const
 void Game::setLapCount(int lapCount)
 {
     m_lapCount = lapCount;
+    m_trackLoader->updateLockedTracks(lapCount);
 }
 
 int Game::lapCount() const
@@ -228,7 +229,7 @@ Renderer & Game::renderer() const
 bool Game::loadTracks()
 {
     // Load track data
-    if (int numLoaded = m_trackLoader->loadTracks())
+    if (int numLoaded = m_trackLoader->loadTracks(m_lapCount))
     {
         MCLogger().info() << "A total of " << numLoaded << " race track(s) loaded.";
     }
