@@ -49,6 +49,19 @@ TrackObject & TrackObjectFactory::build(
 
         object = &m_objectFactory.build(data);
     }
+    else if (role == "bushArea")
+    {
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(MCVector3dF(location) + MCVector3dF(0, 0, 10));
+        data.setInitialAngle(angle);
+        data.setBatchMode(true);
+        data.setIsStationary(true);
+        data.setSurfaceId(role.toStdString());
+        data.setLayer(Layers::Tree);
+
+        object = &m_objectFactory.build(data);
+        object->setIsPhysicsObject(false);
+    }
     else if (role == "crate")
     {
         MCMeshObjectData data(role.toStdString());
