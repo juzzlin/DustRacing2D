@@ -31,6 +31,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QCheckBox>
 #include <QDateTime>
 #include <QDesktopWidget>
 #ifndef USE_QT5
@@ -86,6 +87,7 @@ MainWindow::MainWindow(QString trackFile)
 , m_setTrackPropertiesAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
+, m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
 , m_saved(false)
 {
     if (!m_instance)
@@ -192,6 +194,7 @@ void MainWindow::init()
     QHBoxLayout * sliderLayout = new QHBoxLayout;
     sliderLayout->addWidget(new QLabel(tr("Scale:")));
     sliderLayout->addWidget(m_scaleSlider);
+    sliderLayout->addWidget(m_randomRotationCheck);
     centralLayout->addLayout(sliderLayout);
 
     // Add console to the splitter and splitter to the layout
@@ -228,6 +231,11 @@ void MainWindow::setTitle(QString openFileName)
     setWindowTitle(
         QString(Config::Editor::EDITOR_NAME) + " " + Config::Editor::EDITOR_VERSION + " - " +
         openFileName);
+}
+
+bool MainWindow::randomlyRotateObjects() const
+{
+    return m_randomRotationCheck->isChecked();
 }
 
 bool MainWindow::loadObjectModels(QString objectFilePath)

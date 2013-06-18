@@ -239,6 +239,11 @@ void EditorView::addCurrentToolBarObjectToScene()
             Object & object = ObjectFactory::createObject(action->data().toString());
             object.setLocation(m_clickedScenePos);
 
+            if (MainWindow::instance()->randomlyRotateObjects())
+            {
+                object.setRotation(std::rand() % 360);
+            }
+
             scene()->addItem(&object);
 
             m_editorData.trackData()->objects().add(object);

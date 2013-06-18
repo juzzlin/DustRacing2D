@@ -67,7 +67,6 @@ private slots:
 
 private:
 
-
     void addCurrentToolBarObjectToScene();
     void createTileContextMenu();
     void createObjectContextMenu();

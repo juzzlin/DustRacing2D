@@ -26,6 +26,7 @@ class EditorView;
 class EditorScene;
 class ObjectModelLoader;
 class QAction;
+class QCheckBox;
 class QSlider;
 class QTextEdit;
 class QToolBar;
@@ -45,7 +46,7 @@ public:
     //! Config::DATA_PATH/objects.conf.
     //! \param trackFile Track given as command line argument.
     explicit MainWindow(QString trackFile = "");
-    
+
     //! Destructor
     ~MainWindow();
 
@@ -72,6 +73,9 @@ public:
 
     //! Set Windows title + the given file name.
     void setTitle(QString openFileName);
+
+    //! Return true if objects will be rotated at random.
+    bool randomlyRotateObjects() const;
 
 public slots:
 
@@ -139,6 +143,7 @@ private:
     QAction           * m_setTrackPropertiesAction;
     QSlider           * m_scaleSlider;
     QToolBar          * m_toolBar;
+    QCheckBox         * m_randomRotationCheck;
 
     bool                m_saved;
 
