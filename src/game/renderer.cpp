@@ -209,7 +209,7 @@ void Renderer::renderCustomResolution()
 
         resizeGL(fullHRes, fullVRes);
 
-        MCSurface sd(fbo.texture(), 0, Scene::width(), Scene::height());
+        MCSurface sd(fbo.texture(), 0, 0, Scene::width(), Scene::height());
         sd.setShaderProgram(&program("fbo"));
         sd.bindTexture();
         sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);

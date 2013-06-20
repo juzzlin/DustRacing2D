@@ -60,20 +60,16 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                const std::string image1 = tag.attribute("image1", "").toStdString();
-                const std::string image2 = tag.attribute("image2", "").toStdString();
-                newData->imagePath1      = baseImagePath + QDir::separator().toLatin1() + image1;
-                newData->handle          = tag.attribute("handle", "").toStdString();
-                newData->xAxisMirror     = tag.attribute("xAxisMirror", "0").toInt();
-                newData->z0              = tag.attribute("z0", "0").toInt();
-                newData->z1              = tag.attribute("z1", "0").toInt();
-                newData->z2              = tag.attribute("z2", "0").toInt();
-                newData->z3              = tag.attribute("z3", "0").toInt();
-
-                if (!image2.empty())
-                {
-                    newData->imagePath2 = baseImagePath + QDir::separator().toLatin1() + image2;
-                }
+                const std::string image   = tag.attribute("image", "").toStdString();
+                newData->imagePath        = baseImagePath + QDir::separator().toLatin1() + image;
+                newData->handle           = tag.attribute("handle", "").toStdString();
+                newData->handle2          = tag.attribute("handle2", "").toStdString();
+                newData->handle3          = tag.attribute("handle3", "").toStdString();
+                newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
+                newData->z0               = tag.attribute("z0", "0").toInt();
+                newData->z1               = tag.attribute("z1", "0").toInt();
+                newData->z2               = tag.attribute("z2", "0").toInt();
+                newData->z3               = tag.attribute("z3", "0").toInt();
 
                 const unsigned int width = tag.attribute("w", "0").toUInt();
                 newData->width = std::pair<int, bool>(width, width > 0);

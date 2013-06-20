@@ -26,6 +26,7 @@ static const char * DIFFUSE_LIGHT_COLOR = "diffuseLightColor";
 static const char * FADE                = "fade";
 static const char * TEX0                = "tex0";
 static const char * TEX1                = "tex1";
+static const char * TEX2                = "tex2";
 static const char * MVP                 = "mvp";
 static const char * ANGLE               = "angle";
 static const char * POS                 = "pos";
@@ -199,6 +200,12 @@ void ShaderProgram::bindTextureUnit1(GLuint index)
 {
     AutoBindRelease ab(*this);
     m_program.setUniformValue(TEX1, index);
+}
+
+void ShaderProgram::bindTextureUnit2(GLuint index)
+{
+    AutoBindRelease ab(*this);
+    m_program.setUniformValue(TEX2, index);
 }
 
 ShaderProgram::~ShaderProgram()

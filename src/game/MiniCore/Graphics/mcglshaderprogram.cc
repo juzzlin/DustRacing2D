@@ -111,6 +111,10 @@ void MCGLShaderProgram::bindTextureUnit1(GLuint)
 {
 }
 
+void MCGLShaderProgram::bindTextureUnit2(GLuint)
+{
+}
+
 void MCGLShaderProgram::setAmbientLight(const MCGLAmbientLight &)
 {
 }

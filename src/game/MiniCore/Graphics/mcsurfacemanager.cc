@@ -45,57 +45,35 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
     int origH = data.height.second ? data.height.first : image.height();
     int origW = data.width.second  ? data.width.first  : image.width();
 
-    GLuint textureHandle = create2DTextureFromImage(data, image);
+    const GLuint textureHandle1 = create2DTextureFromImage(data, image);
+    const GLuint textureHandle2 = data.handle2.length() ? surface(data.handle2).handle1() : 0;
+    const GLuint textureHandle3 = data.handle3.length() ? surface(data.handle3).handle1() : 0;
 
     // Create a new MCSurface object
-    MCSurface * pSurface =
-        new MCSurface(textureHandle, 0, origW, origH, data.z0, data.z1, data.z2, data.z3);
+    MCSurface * surface =
+        new MCSurface(textureHandle1, textureHandle2, textureHandle3,
+            origW, origH, data.z0, data.z1, data.z2, data.z3);
 
-    // Enable alpha blend, if set
-    pSurface->setAlphaBlend(data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
+    assert(surface);
+    createSurfaceCommon(*surface, data);
 
-    // Set custom center if it was set
-    if (data.center.second)
-    {
-        pSurface->setCenter(data.center.first);
-    }
-
-    // Store MCSurface to map
-    m_surfaceMap[data.handle] = pSurface;
-
-    assert(pSurface);
-    return *pSurface;
+    return *surface;
 }
 
-MCSurface & MCSurfaceManager::createSurfaceFromImages(
-    const MCSurfaceMetaData & data, const QImage & image1, const QImage & image2) throw (MCException)
+void MCSurfaceManager::createSurfaceCommon(MCSurface & surface, const MCSurfaceMetaData & data)
 {
-    // Store original width of the image
-    int origH = data.height.second ? data.height.first : image1.height();
-    int origW = data.width.second  ? data.width.first  : image1.width();
-
-    GLuint textureHandle1 = create2DTextureFromImage(data, image1);
-    GLuint textureHandle2 = create2DTextureFromImage(data, image2);
-
-    // Create a new MCSurface object
-    MCSurface * pSurface =
-        new MCSurface(textureHandle1, textureHandle2, origW, origH, data.z0, data.z1, data.z2, data.z3);
-
     // Enable alpha blend, if set
-    pSurface->setAlphaBlend(
+    surface.setAlphaBlend(
         data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Set custom center if it was set
     if (data.center.second)
     {
-        pSurface->setCenter(data.center.first);
+        surface.setCenter(data.center.first);
     }
 
     // Store MCSurface to map
-    m_surfaceMap[data.handle] = pSurface;
-
-    assert(pSurface);
-    return *pSurface;
+    m_surfaceMap[data.handle] = &surface;
 }
 
 GLuint MCSurfaceManager::create2DTextureFromImage(
@@ -299,45 +277,17 @@ void MCSurfaceManager::load(
             const MCSurfaceMetaData & data = loader.surface(i);
 
             const std::string path =
-                baseDataPath + QDir::separator().toLatin1() + data.imagePath1;
+                baseDataPath + QDir::separator().toLatin1() + data.imagePath;
 
-            // Create a 3D texture if data.imagePath2 is set.
-            if (!data.imagePath2.empty())
+            // Load the image and create a 2D texture.
+            QImage textureImage;
+            if (textureImage.load(path.c_str()))
             {
-                const std::string path2 =
-                    baseDataPath + QDir::separator().toLatin1() + data.imagePath2;
-
-                // Load the images and create a multitexture.
-                QImage textureImage1;
-                if (textureImage1.load(path.c_str()))
-                {
-                    QImage textureImage2;
-                    if (textureImage2.load(path2.c_str()))
-                    {
-                        createSurfaceFromImages(data, textureImage1, textureImage2);
-                    }
-                    else
-                    {
-                        throw MCException("Cannot read file '" + path2 + "'");
-                    }
-                }
-                else
-                {
-                    throw MCException("Cannot read file '" + path + "'");
-                }
+                createSurfaceFromImage(data, textureImage);
             }
             else
             {
-                // Load the image and create a 2D texture.
-                QImage textureImage;
-                if (textureImage.load(path.c_str()))
-                {
-                    createSurfaceFromImage(data, textureImage);
-                }
-                else
-                {
-                    throw MCException("Cannot read file '" + path + "'");
-                }
+                throw MCException("Cannot read file '" + path + "'");
             }
         }
     }

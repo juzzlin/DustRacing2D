@@ -43,10 +43,13 @@ struct MCSurfaceMetaData
     std::string handle;
 
     //! Image path
-    std::string imagePath1;
+    std::string imagePath;
 
-    //! Image path for the second texture if multitexturing is wanted.
-    std::string imagePath2;
+    //! Handle for the second texture if multitexturing is wanted.
+    std::string handle2;
+
+    //! Handle for the third texture if multitexturing is wanted.
+    std::string handle3;
 
     //! Center coordinate, if set
     std::pair<MCVector2d<int>, bool> center;

@@ -105,6 +105,9 @@ public:
     //! Bind given texture unit to the sampler 1 for multitexturing.
     virtual void bindTextureUnit1(GLuint index);
 
+    //! Bind given texture unit to the sampler 2 for multitexturing.
+    virtual void bindTextureUnit2(GLuint index);
+
     //! Set ambient light.
     virtual void setAmbientLight(const MCGLAmbientLight & light);
 

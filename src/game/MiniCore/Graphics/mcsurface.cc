@@ -42,10 +42,10 @@ static const int TOTAL_DATA_SIZE          =
     VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCSurface::MCSurface(
-    GLuint handle1, GLuint handle2, MCFloat width, MCFloat height,
+    GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height,
     MCFloat z0, MCFloat z1, MCFloat z2, MCFloat z3)
 {
-    init(handle1, handle2, width, height);
+    init(handle1, handle2, handle3, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
@@ -108,9 +108,9 @@ MCSurface::MCSurface(
 }
 
 MCSurface::MCSurface(
-    GLuint handle1, GLuint handle2, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
+    GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
 {
-    init(handle1, handle2, width, height);
+    init(handle1, handle2, handle3, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
@@ -156,10 +156,11 @@ MCSurface::MCSurface(
     initVBOs(vertices, normals, texCoordsAll, colors);
 }
 
-void MCSurface::init(GLuint handle1, GLuint handle2, MCFloat width, MCFloat height)
+void MCSurface::init(GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height)
 {
     m_handle1        = handle1;
     m_handle2        = handle2;
+    m_handle3        = handle3;
     m_w              = width;
     m_w2             = width / 2;
     m_h              = height;
@@ -435,19 +436,31 @@ void MCSurface::bindTexture(bool bindOnlyFirstTexture) const
 {
     assert(m_program);
 
-    if (m_handle2 && !bindOnlyFirstTexture)
+    if (bindOnlyFirstTexture || (!m_handle2 && !m_handle3))
+    {
+        glBindTexture(GL_TEXTURE_2D, m_handle1);
+    }
+    else
     {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_handle1);
         m_program->bindTextureUnit0(0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_handle2);
-        m_program->bindTextureUnit1(1);
+
+        if (m_handle2)
+        {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, m_handle2);
+            m_program->bindTextureUnit1(1);
+
+            if (m_handle3)
+            {
+                glActiveTexture(GL_TEXTURE2);
+                glBindTexture(GL_TEXTURE_2D, m_handle3);
+                m_program->bindTextureUnit2(2);
+            }
+        }
+
         glActiveTexture(GL_TEXTURE0);
-    }
-    else
-    {
-        glBindTexture(GL_TEXTURE_2D, m_handle1);
     }
 }
 
@@ -459,6 +472,11 @@ GLuint MCSurface::handle1() const
 GLuint MCSurface::handle2() const
 {
     return m_handle2;
+}
+
+GLuint MCSurface::handle3() const
+{
+    return m_handle3;
 }
 
 MCFloat MCSurface::width() const
