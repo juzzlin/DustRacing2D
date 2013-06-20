@@ -17,6 +17,7 @@
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
+uniform sampler2D tex2;
 
 in vec2 texCoord0;
 in vec4 vColor;
@@ -27,6 +28,7 @@ void main(void)
 {
     vec4 color0 = texture2D(tex0, texCoord0);
     vec4 color1 = texture2D(tex1, texCoord0);
+    vec4 color2 = texture2D(tex2, texCoord0);
     
     // Alpha test
     if (color0.a < 0.1)
@@ -35,11 +37,15 @@ void main(void)
     }
     else
     {
-        if (color0.r < 0.1 && color0.g > 0.9 && color0.r < 0.1)
+        if (color0.r == 0.0 && color0.b == 0.0)
+        {
+            color0 = mix(color1, color2, color0.g);
+        }
+        else if (color0.g == 0.0 && color0.b == 0.0)
         {
             color0 = color1;
-        }   
-
+        }
+        
         fragColor = color0 * vColor;
     }
 }
