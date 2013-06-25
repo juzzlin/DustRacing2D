@@ -69,7 +69,6 @@ private:
 
     static MCUint m_typeID;
     MCFloat m_radius;
-    MCFloat m_momentOfInertiaFactor;
 };
 
 #endif // MCCIRCLESHAPE_HH
