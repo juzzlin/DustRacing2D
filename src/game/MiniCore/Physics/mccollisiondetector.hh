@@ -25,9 +25,10 @@
 
 #include <vector>
 
-class MCCollisionDetectorImpl;
+class MCCircleShape;
 class MCObject;
 class MCObjectTree;
+class MCRectShape;
 
 //! Contact resolver / collision detector
 class MCCollisionDetector
@@ -47,17 +48,14 @@ public:
 
 private:
 
-    /*! Process a suspected collision.
-     * \param object1 1st object.
-     * \param object2 2nd object.
-     * \return true if objects really collided.
-     */
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
+
+    bool testRectAgainstRect(MCRectShape & object1, MCRectShape & object2);
+
+    bool m_enableCollisionEvents;
 
     DISABLE_COPY(MCCollisionDetector);
     DISABLE_ASSI(MCCollisionDetector);
-    MCCollisionDetectorImpl * const m_pImpl;
-    friend class MCCollisionDetectorImpl;
 };
 
 #endif // MCCOLLISIONDETECTOR_HH

@@ -22,42 +22,26 @@
 #include "mcobject.hh"
 #include "mcsegment.hh"
 #include "mcshape.hh"
+#include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mccollisionevent.hh"
 
 #include <cassert>
 
-class MCCollisionDetectorImpl
-{
-    MCCollisionDetectorImpl();
-    virtual ~MCCollisionDetectorImpl();
-    bool processRectRect(MCRectShape & object1, MCRectShape & object2);
-    bool enableCollisionEvents;
-    friend class MCCollisionDetector;
-};
-
-MCCollisionDetectorImpl::MCCollisionDetectorImpl()
-: enableCollisionEvents(false)
-{}
-
-MCCollisionDetectorImpl::~MCCollisionDetectorImpl()
-{}
-
-MCCollisionDetector::MCCollisionDetector() :
-    m_pImpl(new MCCollisionDetectorImpl)
+MCCollisionDetector::MCCollisionDetector()
+: m_enableCollisionEvents(false)
 {}
 
 void MCCollisionDetector::enableCollisionEvents(bool enable)
 {
-    m_pImpl->enableCollisionEvents = enable;
+    m_enableCollisionEvents = enable;
 }
 
 MCCollisionDetector::~MCCollisionDetector()
 {
-    delete m_pImpl;
 }
 
-bool MCCollisionDetectorImpl::processRectRect(
+bool MCCollisionDetector::testRectAgainstRect(
     MCRectShape & shape1, MCRectShape & shape2)
 {
     if (&shape1.parent() == &shape2.parent())
@@ -83,7 +67,7 @@ bool MCCollisionDetectorImpl::processRectRect(
             // if accepted.
             MCCollisionEvent ev1(shape2.parent(), obbox1.vertex(i));
 
-            if (enableCollisionEvents)
+            if (m_enableCollisionEvents)
             {
                 MCObject::sendEvent(shape1.parent(), ev1);
             }
@@ -92,7 +76,7 @@ bool MCCollisionDetectorImpl::processRectRect(
             depth      = 0;
             depthIsSet = false;
 
-            if (!enableCollisionEvents || ev1.accepted())
+            if (!m_enableCollisionEvents || ev1.accepted())
             {
                 depth = shape2.interpenetrationDepth(
                     MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
@@ -108,12 +92,12 @@ bool MCCollisionDetectorImpl::processRectRect(
             // Send collision event to owner of shape2 and generate a contact
             // if accepted.
             MCCollisionEvent ev2(shape1.parent(), obbox1.vertex(i));
-            if (enableCollisionEvents)
+            if (m_enableCollisionEvents)
             {
                 MCObject::sendEvent(shape2.parent(), ev2);
             }
 
-            if (!enableCollisionEvents || ev2.accepted())
+            if (!m_enableCollisionEvents || ev2.accepted())
             {
                 if (!depthIsSet)
                 {
@@ -142,7 +126,6 @@ bool MCCollisionDetector::processPossibleCollision(
     // Check that both objects contain a shape
     if (object1.shape() && object2.shape())
     {
-        // Store id's
         const MCUint id1 = object1.shape()->instanceTypeID();
         const MCUint id2 = object2.shape()->instanceTypeID();
 
@@ -151,12 +134,12 @@ bool MCCollisionDetector::processPossibleCollision(
         {
             // We must test first object1 against object2 and then
             // the other way around.
-            const bool shape1shape2 = m_pImpl->processRectRect(
+            const bool shape1shape2 = testRectAgainstRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object1.shape()),
                 *static_cast<MCRectShape *>(object2.shape()));
 
-            const bool shape2shape1 = m_pImpl->processRectRect(
+            const bool shape2shape1 = testRectAgainstRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object2.shape()),
                 *static_cast<MCRectShape *>(object1.shape()));
