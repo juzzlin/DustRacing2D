@@ -22,8 +22,8 @@
 
 MCUint MCCollisionEvent::m_typeID = MCEvent::registerType();
 
-MCCollisionEvent::MCCollisionEvent(MCObject & object, MCVector3dF contactPoint)
-: m_collidingObject(object)
+MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint)
+: m_collidingObject(collidingObject)
 , m_contactPoint(contactPoint)
 {}
 

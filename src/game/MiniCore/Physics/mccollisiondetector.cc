@@ -37,86 +37,189 @@ void MCCollisionDetector::enableCollisionEvents(bool enable)
     m_enableCollisionEvents = enable;
 }
 
-MCCollisionDetector::~MCCollisionDetector()
+bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
 {
-}
-
-bool MCCollisionDetector::testRectAgainstRect(
-    MCRectShape & shape1, MCRectShape & shape2)
-{
-    if (&shape1.parent() == &shape2.parent())
+    if (&rect1.parent() == &rect2.parent())
     {
         return false;
     }
 
-    const MCOBBox<MCFloat> & obbox1(shape1.obbox());
+    const MCOBBox<MCFloat> & obbox1(rect1.obbox());
 
-    MCVector2dF vertex;
-    MCVector2dF contactNormal;
+    bool collided = false;
 
-    MCFloat depth   = 0;
-    bool depthIsSet = false;
-    bool collided   = false;
-
-    // Loop thru all vertices of shape1 and generate contacts
+    // Loop thru all vertices of rect1 and generate contacts for colliding vertices.
     for (MCUint i = 0; i < 4; i++)
     {
-        if (shape2.contains(obbox1.vertex(i)))
+        if (rect2.contains(obbox1.vertex(i)))
         {
-            // Send collision event to owner of shape1 and generate a contact
-            // if accepted.
-            MCCollisionEvent ev1(shape2.parent(), obbox1.vertex(i));
+            // Send collision event to owner of rect1 and generate a contact if accepted.
+            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
 
             if (m_enableCollisionEvents)
             {
-                MCObject::sendEvent(shape1.parent(), ev1);
+                MCObject::sendEvent(rect1.parent(), ev1);
             }
 
-            vertex     = obbox1.vertex(i);
-            depth      = 0;
-            depthIsSet = false;
+            MCVector2dF contactNormal;
+            MCVector2dF vertex = obbox1.vertex(i);
+            MCFloat depth = rect2.interpenetrationDepth(
+                MCSegment<MCFloat>(vertex, rect1.location()), contactNormal);
 
             if (!m_enableCollisionEvents || ev1.accepted())
             {
-                depth = shape2.interpenetrationDepth(
-                    MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
-                depthIsSet = true;
-
                 MCContact & contact = MCContact::create();
-                contact.init(shape2.parent(), vertex, contactNormal, depth);
-                shape1.parent().addContact(contact);
-
+                contact.init(rect2.parent(), vertex, contactNormal, depth);
+                rect1.parent().addContact(contact);
                 collided = true;
             }
 
-            // Send collision event to owner of shape2 and generate a contact
-            // if accepted.
-            MCCollisionEvent ev2(shape1.parent(), obbox1.vertex(i));
+            // Send collision event to owner of rect2 and generate a contact if accepted.
+            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i));
             if (m_enableCollisionEvents)
             {
-                MCObject::sendEvent(shape2.parent(), ev2);
+                MCObject::sendEvent(rect2.parent(), ev2);
             }
 
             if (!m_enableCollisionEvents || ev2.accepted())
             {
-                if (!depthIsSet)
-                {
-                    depth = shape2.interpenetrationDepth(
-                        MCSegment<MCFloat>(vertex, shape1.location()), contactNormal);
-                }
-
                 MCContact & contact = MCContact::create();
-                contact.init(shape1.parent(), vertex, -contactNormal, depth);
-                shape2.parent().addContact(contact);
+                contact.init(rect1.parent(), vertex, -contactNormal, depth);
+                rect2.parent().addContact(contact);
             }
+
+            // Don't break here in the case of a collision, because we don't know
+            // yet which contact is the deepest. MCImpulseGenerator handles that.
         }
     }
 
     return collided;
 }
 
-bool MCCollisionDetector::processPossibleCollision(
-    MCObject & object1, MCObject & object2)
+bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShape & circle)
+{
+    if (&rect.parent() == &circle.parent())
+    {
+        return false;
+    }
+
+    bool collided = false;
+
+    const MCOBBox<MCFloat> & obbox(rect.obbox());
+
+    // Loop through all vertices of the rect and find possible contact points with
+    // the circle. This algorithm is not perfectly accurate, but will do the job.
+    for (MCUint i = 0; i < 5; i++)
+    {
+        MCVector2dF rectVertex;
+        if (i < 4)
+        {
+            rectVertex = obbox.vertex(i);
+        }
+        else
+        {
+            rectVertex = rect.location();
+        }
+
+        MCVector2dF circleVertex(rectVertex - MCVector2dF(circle.location()));
+        circleVertex.clampFast(circle.radius());
+        circleVertex += MCVector2dF(circle.location());
+        if (rect.contains(circleVertex))
+        {
+            // Send collision event to owner of circle and generate a contact if accepted.
+            MCCollisionEvent ev1(rect.parent(), circleVertex);
+            if (m_enableCollisionEvents)
+            {
+                MCObject::sendEvent(circle.parent(), ev1);
+            }
+
+            MCVector2dF contactNormal;
+            MCFloat depth = rect.interpenetrationDepth(
+                MCSegment<MCFloat>(circleVertex, circle.location()), contactNormal);
+
+            if (!m_enableCollisionEvents || ev1.accepted())
+            {
+                MCContact & contact = MCContact::create();
+                contact.init(rect.parent(), circleVertex, contactNormal, depth);
+                circle.parent().addContact(contact);
+                collided = true;
+            }
+
+            // Send collision event to owner of rect and generate a contact if accepted.
+            MCCollisionEvent ev2(circle.parent(), circleVertex);
+            if (m_enableCollisionEvents)
+            {
+                MCObject::sendEvent(rect.parent(), ev2);
+            }
+
+            if (!m_enableCollisionEvents || ev2.accepted())
+            {
+                MCContact & contact = MCContact::create();
+                contact.init(circle.parent(), circleVertex, -contactNormal, depth);
+                rect.parent().addContact(contact);
+            }
+
+            // Don't break here in the case of a collision, because we don't know
+            // yet which contact is the deepest. MCImpulseGenerator handles that.
+        }
+    }
+
+    return collided;
+}
+
+bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCircleShape & circle2)
+{
+    if (&circle1.parent() == &circle2.parent())
+    {
+        return false;
+    }
+
+    bool collided = false;
+    const MCVector2dF diff = circle2.location() - circle1.location();
+    const MCFloat dist = diff.lengthFast();
+    const MCVector2dF circleVertex(MCVector2dF(circle1.location()) + diff.normalizedFast() * circle1.radius());
+
+    if (dist < circle1.radius() + circle2.radius())
+    {
+        // Send collision event to owner of circle2 and generate a contact if accepted.
+        MCCollisionEvent ev1(circle1.parent(), circleVertex);
+        if (m_enableCollisionEvents)
+        {
+            MCObject::sendEvent(circle2.parent(), ev1);
+        }
+
+        MCVector2dF contactNormal;
+        MCFloat depth = circle2.interpenetrationDepth(
+            MCSegment<MCFloat>(circleVertex, circle1.location()), contactNormal);
+
+        if (!m_enableCollisionEvents || ev1.accepted())
+        {
+            MCContact & contact = MCContact::create();
+            contact.init(circle1.parent(), circleVertex, -contactNormal, depth);
+            circle2.parent().addContact(contact);
+            collided = true;
+        }
+
+        // Send collision event to owner of circle1 and generate a contact if accepted.
+        MCCollisionEvent ev2(circle2.parent(), circleVertex);
+        if (m_enableCollisionEvents)
+        {
+            MCObject::sendEvent(circle1.parent(), ev2);
+        }
+
+        if (!m_enableCollisionEvents || ev2.accepted())
+        {
+            MCContact & contact = MCContact::create();
+            contact.init(circle1.parent(), circleVertex, contactNormal, depth);
+            circle1.parent().addContact(contact);
+            collided = true;
+        }
+    }
+
+    return collided;
+}
+
+bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
 {
     if (&object1 == &object2)
     {
@@ -129,22 +232,41 @@ bool MCCollisionDetector::processPossibleCollision(
         const MCUint id1 = object1.shape()->instanceTypeID();
         const MCUint id2 = object2.shape()->instanceTypeID();
 
-        // Both rects ?
+        // Rect against rect
         if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID())
         {
             // We must test first object1 against object2 and then
             // the other way around.
-            const bool shape1shape2 = testRectAgainstRect(
+            if (testRectAgainstRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object1.shape()),
-                *static_cast<MCRectShape *>(object2.shape()));
-
-            const bool shape2shape1 = testRectAgainstRect(
+                *static_cast<MCRectShape *>(object2.shape())))
+            {
+                return true;
+            }
+            else if (testRectAgainstRect(
                 // Static cast because we know the types now.
                 *static_cast<MCRectShape *>(object2.shape()),
-                *static_cast<MCRectShape *>(object1.shape()));
-
-            return shape1shape2 || shape2shape1;
+                *static_cast<MCRectShape *>(object1.shape())))
+            {
+                return true;
+            }
+        }
+        // Rect against circle
+        else if (id1 == MCRectShape::typeID() && id2 == MCCircleShape::typeID())
+        {
+            // Static cast because we know the types now.
+            return testRectAgainstCircle(
+                *static_cast<MCRectShape *>(object1.shape()),
+                *static_cast<MCCircleShape *>(object2.shape()));
+        }
+        // Circle against circle
+        else if (id1 == MCCircleShape::typeID() && id2 == MCCircleShape::typeID())
+        {
+            // Static cast because we know the types now.
+            return testCircleAgainstCircle(
+                *static_cast<MCCircleShape *>(object1.shape()),
+                *static_cast<MCCircleShape *>(object2.shape()));
         }
     }
 

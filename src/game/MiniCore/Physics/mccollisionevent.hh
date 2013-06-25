@@ -38,9 +38,8 @@ class MCCollisionEvent : public MCEvent
 public:
 
     /*! Constructor.
-     * \param object This event is sent to an object that has collided with object.
-     */
-    MCCollisionEvent(MCObject & object, MCVector3dF contactPoint);
+     * \param collidingObject The colliding object. */
+    MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint);
 
     //! Destructor.
     ~MCCollisionEvent();

@@ -30,15 +30,15 @@ class MCObject;
 class MCObjectTree;
 class MCRectShape;
 
-//! Contact resolver / collision detector
+//! Collision detector and contact generator.
 class MCCollisionDetector
 {
 public:
-    //! Constructor
+    //! Constructor.
     MCCollisionDetector();
 
-    //! Destructor
-    virtual ~MCCollisionDetector();
+    //! Destructor.
+    virtual ~MCCollisionDetector() {};
 
     //! Detect collisions and generate contacts. Contacts are stored to MCObject.
     MCUint detectCollisions(MCObjectTree & objectTree);
@@ -51,6 +51,10 @@ private:
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
     bool testRectAgainstRect(MCRectShape & object1, MCRectShape & object2);
+
+    bool testRectAgainstCircle(MCRectShape & object1, MCCircleShape & object2);
+
+    bool testCircleAgainstCircle(MCCircleShape & object1, MCCircleShape & object2);
 
     bool m_enableCollisionEvents;
 
