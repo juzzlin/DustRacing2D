@@ -99,7 +99,7 @@ bool ShaderProgram::isLinked() const
     return m_program.isLinked();
 }
 
-bool ShaderProgram::addVertexShader(const std::string & fileName)
+bool ShaderProgram::addVertexShaderFromFile(const std::string & fileName)
 {
     if (!m_vertexShader.compileSourceFile(fileName.c_str()))
     {
@@ -115,11 +115,36 @@ bool ShaderProgram::addVertexShader(const std::string & fileName)
     return m_program.addShader(&m_vertexShader);
 }
 
-bool ShaderProgram::addFragmentShader(const std::string & fileName)
+bool ShaderProgram::addFragmentShaderFromFile(const std::string & fileName)
 {
     if (!m_fragmentShader.compileSourceFile(fileName.c_str()))
     {
         MCLogger().error() << "Cannot compile '" << fileName << "'";
+        throw MCException("Compiling a fragment shader failed.");
+    }
+
+    return m_program.addShader(&m_fragmentShader);
+}
+
+bool ShaderProgram::addVertexShaderFromSource(const std::string & source)
+{
+    if (!m_vertexShader.compileSourceCode(source.c_str()))
+    {
+        throw MCException("Compiling a vertex shader failed.");
+    }
+
+    m_program.bindAttributeLocation("inVertex",   MCGLShaderProgram::VAL_Vertex);
+    m_program.bindAttributeLocation("inNormal",   MCGLShaderProgram::VAL_Normal);
+    m_program.bindAttributeLocation("inTexCoord", MCGLShaderProgram::VAL_TexCoords);
+    m_program.bindAttributeLocation("inColor",    MCGLShaderProgram::VAL_Color);
+
+    return m_program.addShader(&m_vertexShader);
+}
+
+bool ShaderProgram::addFragmentShaderFromSource(const std::string & source)
+{
+    if (!m_fragmentShader.compileSourceCode(source.c_str()))
+    {
         throw MCException("Compiling a fragment shader failed.");
     }
 

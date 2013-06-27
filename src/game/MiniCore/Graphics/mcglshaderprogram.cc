@@ -69,14 +69,34 @@ bool MCGLShaderProgram::isLinked() const
     return false;
 }
 
-bool MCGLShaderProgram::addVertexShader(const std::string &)
+bool MCGLShaderProgram::addVertexShaderFromFile(const std::string &)
 {
-    return true;
+    return false;
 }
 
-bool MCGLShaderProgram::addFragmentShader(const std::string &)
+bool MCGLShaderProgram::addFragmentShaderFromFile(const std::string &)
 {
-    return true;
+    return false;
+}
+
+bool MCGLShaderProgram::addGeometryShaderFromFile(const std::string &)
+{
+    return false;
+}
+
+bool MCGLShaderProgram::addVertexShaderFromSource(const std::string &)
+{
+    return false;
+}
+
+bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string &)
+{
+    return false;
+}
+
+bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)
+{
+    return false;
 }
 
 void MCGLShaderProgram::setModelViewProjectionMatrix(const glm::mat4x4 &)

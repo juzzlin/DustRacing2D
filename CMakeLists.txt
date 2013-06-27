@@ -106,8 +106,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
     install(DIRECTORY data/models DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.obj")
-    install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.fsh")
-    install(DIRECTORY data/shaders DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.vsh")
 
     if(ReleaseBuild)
         # Install .desktop files
@@ -131,7 +129,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CPACK_BINARY_STGZ "ON")
     set(CPACK_BINARY_TGZ "ON")
     set(CPACK_BINARY_TZ "OFF")
-    
+
     set(QT_VER_STR "qt4")
     if(UseQt5)
         set(QT_VER_STR "qt5")

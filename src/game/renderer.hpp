@@ -114,8 +114,11 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
-    void createProgram(
+    void createProgramFromFile(
         const std::string & handle, const std::string & fshPath, const std::string & vshPath);
+
+    void createProgramFromSource(
+        const std::string & handle, const std::string & fshSource, const std::string & vshSource);
 
     void renderNativeResolutionOrWindowed();
 

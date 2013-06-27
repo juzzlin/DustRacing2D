@@ -18,6 +18,7 @@
 #include "eventhandler.hpp"
 #include "scene.hpp"
 #include "shaderprogram.hpp"
+#include "shaders.h"
 #include "../common/config.hpp"
 
 #include <MCGLScene>
@@ -106,34 +107,46 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
         m_viewAngle);
 }
 
-void Renderer::createProgram(
+void Renderer::createProgramFromFile(
     const std::string & handle, const std::string & fshPath, const std::string & vshPath)
 {
     // Note: ShaderProgram throws on error.
 
     MCGLShaderProgram * program = new ShaderProgram(context(), *m_glScene);
-    program->addFragmentShader(
+    program->addFragmentShaderFromFile(
         std::string(Config::Common::dataPath) + "/shaders/" + fshPath);
-    program->addVertexShader(
+    program->addVertexShaderFromFile(
         std::string(Config::Common::dataPath) + "/shaders/" + vshPath);
+    program->link();
+    m_shaderHash[handle].reset(program);
+}
+
+void Renderer::createProgramFromSource(
+    const std::string & handle, const std::string & fshSource, const std::string & vshSource)
+{
+    // Note: ShaderProgram throws on error.
+
+    MCGLShaderProgram * program = new ShaderProgram(context(), *m_glScene);
+    program->addFragmentShaderFromSource(fshSource);
+    program->addVertexShaderFromSource(vshSource);
     program->link();
     m_shaderHash[handle].reset(program);
 }
 
 void Renderer::loadShaders()
 {
-    createProgram("car",                  "car.fsh",                  "car.vsh");
-    createProgram("fbo",                  "fbo.fsh",                  "fbo.vsh");
-    createProgram("master",               "master.fsh",               "master.vsh");
-    createProgram("masterShadow",         "master2dShadow.fsh",       "master2dShadow.vsh");
-    createProgram("menu",                 "menu.fsh",                 "menu.vsh");
-    createProgram("particle",             "particle.fsh",             "master.vsh");
-    createProgram("pointParticle",        "pointParticle.fsh",        "pointParticle.vsh");
-    createProgram("pointParticleDiscard", "pointParticleDiscard.fsh", "pointParticle.vsh");
-    createProgram("text",                 "text.fsh",                 "text.vsh");
-    createProgram("textShadow",           "text2dShadow.fsh",         "text.vsh");
-    createProgram("tile2d",               "tile2d.fsh",               "tile.vsh");
-    createProgram("tile3d",               "tile3d.fsh",               "tile.vsh");
+    createProgramFromSource("car",           carFshDesktop,              carVshDesktop);
+    createProgramFromSource("fbo",           fboFshDesktop,              fboVshDesktop);
+    createProgramFromSource("master",        masterFshDesktop,           masterVshDesktop);
+    createProgramFromSource("masterShadow",  masterShadowFshDesktop,     masterShadowVshDesktop);
+    createProgramFromSource("menu",          menuFshDesktop,             menuVshDesktop);
+    createProgramFromSource("particle",      particleFshDesktop,         masterVshDesktop);
+    createProgramFromSource("pointParticle", pointParticleFshDesktop,    pointParticleVshDesktop);
+    createProgramFromSource("pointParticleDiscard", pointParticleDiscardFshDesktop, pointParticleVshDesktop);
+    createProgramFromSource("text",          textFshDesktop,             textVshDesktop);
+    createProgramFromSource("textShadow",    textShadowFshDesktop,       textVshDesktop);
+    createProgramFromSource("tile2d",        tile2dFshDesktop,           tileVshDesktop);
+    createProgramFromSource("tile3d",        tile3dFshDesktop,           tileVshDesktop);
 
     // Make sure that shaders have the current model view projection matrix.
     m_glScene->updateModelViewProjectionMatrixAndShaders();

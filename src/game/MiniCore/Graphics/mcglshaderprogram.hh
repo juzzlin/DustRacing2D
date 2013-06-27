@@ -75,11 +75,27 @@ public:
 
     /*! Add a vertex shader.
      *  \return true if succeeded. */
-    virtual bool addVertexShader(const std::string & path);
+    virtual bool addVertexShaderFromFile(const std::string & path);
 
     /*! Add a fragment shader.
      *  \return true if succeeded. */
-    virtual bool addFragmentShader(const std::string & path);
+    virtual bool addFragmentShaderFromFile(const std::string & path);
+
+    /*! Add a geometry shader.
+     *  \return true if succeeded. */
+    virtual bool addGeometryShaderFromFile(const std::string & path);
+
+    /*! Add a vertex shader.
+     *  \return true if succeeded. */
+    virtual bool addVertexShaderFromSource(const std::string & source);
+
+    /*! Add a fragment shader.
+     *  \return true if succeeded. */
+    virtual bool addFragmentShaderFromSource(const std::string & source);
+
+    /*! Add a geometry shader.
+     *  \return true if succeeded. */
+    virtual bool addGeometryShaderFromSource(const std::string & source);
 
     //! Set model view projection matrix.
     virtual void setModelViewProjectionMatrix(const glm::mat4x4 & modelViewProjectionMatrix);

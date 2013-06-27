@@ -48,10 +48,16 @@ public:
     virtual bool isLinked() const;
 
     //! \reimp
-    virtual bool addVertexShader(const std::string & path);
+    virtual bool addVertexShaderFromFile(const std::string & path);
 
     //! \reimp
-    virtual bool addFragmentShader(const std::string & path);
+    virtual bool addFragmentShaderFromFile(const std::string & path);
+
+    //! \reimp
+    virtual bool addVertexShaderFromSource(const std::string & source);
+
+    //! \reimp
+    virtual bool addFragmentShaderFromSource(const std::string & source);
 
     //! \reimp
     virtual void setModelViewProjectionMatrix(
