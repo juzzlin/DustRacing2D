@@ -104,32 +104,24 @@ void MCMeshView::beginBatch()
 {
     if (m_batchMode && m_mesh)
     {
-        m_mesh->bind(true);
+        m_mesh->bind();
     }
 }
 
 void MCMeshView::endBatch()
 {
-    if (m_batchMode && m_mesh)
-    {
-        m_mesh->bind(false);
-    }
 }
 
 void MCMeshView::beginShadowBatch()
 {
     if (m_batchMode && m_mesh)
     {
-        m_mesh->bindShadow(true);
+        m_mesh->bindShadow();
     }
 }
 
 void MCMeshView::endShadowBatch()
 {
-    if (m_batchMode && m_mesh)
-    {
-        m_mesh->bindShadow(false);
-    }
 }
 
 MCBBox<MCFloat> MCMeshView::bbox() const

@@ -54,8 +54,14 @@ public:
     //! Release the VBO.
     void releaseVBO();
 
+    //! Helper to bind texturing and VAO.
+    void bind();
+
+    //! Helper to bind texturing and VAO for shadow rendering.
+    void bindShadow();
+
     //! Bind the current texture setup.
-    void bindTextures(bool bindOnlyFirstTexture = false);
+    void bindTextures(bool bindOnlyFirstTexture = false, bool bindForShadow = false);
 
     //! Set texture handle #1 or zero.
     void setTexture1(GLuint handle);

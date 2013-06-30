@@ -182,9 +182,8 @@ void MCMesh::doRender(bool autoBind)
 {
     if (autoBind)
     {
-        bind(true);
+        bind();
         glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-        bind(false);
     }
     else
     {
@@ -196,9 +195,8 @@ void MCMesh::doRenderShadow(bool autoBind)
 {
     if (autoBind)
     {
-        bindShadow(true);
+        bindShadow();
         glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-        bindShadow(false);
     }
     else
     {
@@ -266,32 +264,6 @@ void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bo
         shadowShaderProgram()->rotate(angle);
 
         doRenderShadow(autoBind);
-    }
-}
-
-void MCMesh::bind(bool enable)
-{
-    if (enable)
-    {
-        bindVAO();
-        bindTextures();
-    }
-    else
-    {
-        releaseVAO();
-    }
-}
-
-void MCMesh::bindShadow(bool enable)
-{
-    if (enable)
-    {
-        bindVAO();
-        bindTextures(true);
-    }
-    else
-    {
-        releaseVAO();
     }
 }
 

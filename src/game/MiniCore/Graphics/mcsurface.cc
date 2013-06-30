@@ -395,18 +395,6 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
     }
 }
 
-void MCSurface::bind()
-{
-    bindVAO();
-    bindTextures();
-}
-
-void MCSurface::bindShadow()
-{
-    bindVAO();
-    bindTextures(true);
-}
-
 MCFloat MCSurface::width() const
 {
     return m_w;

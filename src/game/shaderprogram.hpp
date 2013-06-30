@@ -85,13 +85,13 @@ public:
     virtual void setFadeValue(GLfloat f);
 
     //! \reimp
-    virtual void bindTextureUnit0(GLuint index);
+    virtual void bindTextureUnit0(GLuint index = 0);
 
     //! \reimp
-    virtual void bindTextureUnit1(GLuint index);
+    virtual void bindTextureUnit1(GLuint index = 1);
 
     //! \reimp
-    virtual void bindTextureUnit2(GLuint index);
+    virtual void bindTextureUnit2(GLuint index = 2);
 
 private:
 

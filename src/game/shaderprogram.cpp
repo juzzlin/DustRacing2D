@@ -33,35 +33,6 @@ static const char * POS                 = "pos";
 static const char * COLOR               = "color";
 static const char * SCALE               = "scale";
 
-namespace
-{
-class AutoBindRelease
-{
-public:
-
-    AutoBindRelease(ShaderProgram & shaderProgram)
-    : m_program(shaderProgram)
-    , m_wasBound(shaderProgram.isBound())
-    {
-        m_wasBound = shaderProgram.isBound();
-        shaderProgram.bind();
-    }
-
-    ~AutoBindRelease()
-    {
-        if (!m_wasBound)
-        {
-            m_program.release();
-        }
-    }
-
-private:
-
-    ShaderProgram & m_program;
-    bool m_wasBound;
-};
-}
-
 ShaderProgram::ShaderProgram(const QGLContext * context, MCGLScene & scene)
 : MCGLShaderProgram(scene)
 , m_program(context)
@@ -154,86 +125,74 @@ bool ShaderProgram::addFragmentShaderFromSource(const std::string & source)
 void ShaderProgram::setModelViewProjectionMatrix(
     const glm::mat4x4 & modelViewProjectionMatrix)
 {
-    if (!isBound())
-    {
-        bind();
-        glUniformMatrix4fv(
-            m_program.uniformLocation(MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
-        release();
-    }
-    else
-    {
-        glUniformMatrix4fv(
-            m_program.uniformLocation(MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
-    }
+    bind();
+    glUniformMatrix4fv(
+        m_program.uniformLocation(MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
 }
 
 void ShaderProgram::rotate(GLfloat angle)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(ANGLE, MCTrigonom::sin(angle), MCTrigonom::cos(angle));
 }
 
 void ShaderProgram::translate(const MCVector3dF & p)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(POS, p.i(), p.j(), p.k(), 0);
 }
 
 void ShaderProgram::setColor(const MCGLColor & color)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(COLOR, color.r(), color.g(), color.b(), color.a());
 }
 
 void ShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(SCALE, x, y, z, 1);
 }
 
 void ShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
 {
-    AutoBindRelease ab(*this);
-
+    bind();
     m_program.setUniformValue(
         DIFFUSE_LIGHT_DIR, light.direction().i(), light.direction().j(), light.direction().k(), 1);
-
     m_program.setUniformValue(
         DIFFUSE_LIGHT_COLOR, light.r(), light.g(), light.b(), light.i());
 }
 
 void ShaderProgram::setAmbientLight(const MCGLAmbientLight & light)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(AMBIENT_LIGHT_COLOR, light.r(), light.g(), light.b(), light.i());
 }
 
 void ShaderProgram::setFadeValue(GLfloat f)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(FADE, f);
 }
 
 void ShaderProgram::bindTextureUnit0(GLuint index)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(TEX0, index);
 }
 
 void ShaderProgram::bindTextureUnit1(GLuint index)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(TEX1, index);
 }
 
 void ShaderProgram::bindTextureUnit2(GLuint index)
 {
-    AutoBindRelease ab(*this);
+    bind();
     m_program.setUniformValue(TEX2, index);
 }
 
 ShaderProgram::~ShaderProgram()
 {
 }
-

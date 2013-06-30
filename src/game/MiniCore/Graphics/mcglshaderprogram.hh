@@ -116,13 +116,13 @@ public:
     virtual void setFadeValue(GLfloat f = 1.0);
 
     //! Bind given texture unit to the sampler 0.
-    virtual void bindTextureUnit0(GLuint index);
+    virtual void bindTextureUnit0(GLuint index = 0);
 
     //! Bind given texture unit to the sampler 1 for multitexturing.
-    virtual void bindTextureUnit1(GLuint index);
+    virtual void bindTextureUnit1(GLuint index = 1);
 
     //! Bind given texture unit to the sampler 2 for multitexturing.
-    virtual void bindTextureUnit2(GLuint index);
+    virtual void bindTextureUnit2(GLuint index = 2);
 
     //! Set ambient light.
     virtual void setAmbientLight(const MCGLAmbientLight & light);

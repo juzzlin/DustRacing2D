@@ -116,18 +116,6 @@ public:
     //! Render the vertex buffer only. bind() must be called separately.
     void render();
 
-    /*! Manually enable/disable OpenGL client states and texturing environment.
-     *  This can be used to save some function calls when rendering the same
-     *  surface multiple times.
-     *  \see render() */
-    void bind();
-
-    /*! Manually enable/disable OpenGL client states and texturing environment.
-     *  This can be used to save some function calls when rendering the same
-     *  surface multiple times.
-     *  \see renderShadow() */
-    void bindShadow();
-
     //! Get width
     MCFloat width() const;
 

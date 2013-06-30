@@ -120,36 +120,52 @@ void MCGLObjectBase::createVBO()
     }
 }
 
-void MCGLObjectBase::bindTextures(bool bindOnlyFirstTexture)
+void MCGLObjectBase::bindTextures(bool bindOnlyFirstTexture, bool bindForShadow)
 {
-    assert(m_program);
+    MCGLShaderProgram * program =
+        bindForShadow ? m_shadowProgram : m_program;
+    assert(program);
 
     if (bindOnlyFirstTexture || (!m_texture2 && !m_texture3))
     {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_texture1);
+        program->bindTextureUnit0(0);
     }
     else
     {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_texture1);
-        m_program->bindTextureUnit0(0);
+        program->bindTextureUnit0(0);
 
         if (m_texture2)
         {
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, m_texture2);
-            m_program->bindTextureUnit1(1);
+            program->bindTextureUnit1(1);
 
             if (m_texture3)
             {
                 glActiveTexture(GL_TEXTURE2);
                 glBindTexture(GL_TEXTURE_2D, m_texture3);
-                m_program->bindTextureUnit2(2);
+                program->bindTextureUnit2(2);
             }
         }
 
         glActiveTexture(GL_TEXTURE0);
     }
+}
+
+void MCGLObjectBase::bind()
+{
+    bindVAO();
+    bindTextures();
+}
+
+void MCGLObjectBase::bindShadow()
+{
+    bindVAO();
+    bindTextures(true, true);
 }
 
 MCGLObjectBase::~MCGLObjectBase()
