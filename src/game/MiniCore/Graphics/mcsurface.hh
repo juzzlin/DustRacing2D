@@ -188,7 +188,6 @@ private:
     MCFloat m_h2;
     MCVector2dF m_center;
     bool m_centerSet;
-    bool m_useAlphaTest;
     GLenum m_alphaFunc;
     GLclampf m_alphaThreshold;
     bool m_useAlphaBlend;

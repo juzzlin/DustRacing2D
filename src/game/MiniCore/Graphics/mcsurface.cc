@@ -167,7 +167,6 @@ void MCSurface::init(GLuint handle1, GLuint handle2, GLuint handle3, MCFloat wid
     m_h2             = height / 2;
     m_center         = MCVector2dF(m_w2, m_h2);
     m_centerSet      = false;
-    m_useAlphaTest   = false;
     m_alphaFunc      = GL_ALWAYS;
     m_alphaThreshold = 0.0;
     m_useAlphaBlend  = false;
