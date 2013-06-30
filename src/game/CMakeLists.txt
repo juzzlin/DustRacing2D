@@ -17,7 +17,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 
 # Set sources
 set(SRC
-    aboutdlg.cpp
     ai.cpp
     car.cpp
     carparticleeffectmanager.cpp
@@ -80,7 +79,6 @@ if (UseQt5)
     qt5_add_resources(RC_SRC ${RCS})
 else()
     set(MOC_HDRS
-        aboutdlg.hpp
         eventhandler.hpp
         fadeanimation.hpp
         mainmenu.hpp
