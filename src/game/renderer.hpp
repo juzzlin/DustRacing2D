@@ -29,8 +29,6 @@
 class InputHandler;
 class MCGLScene;
 class MCGLShaderProgram;
-class QGLShaderProgram;
-class QGLShader;
 class QKeyEvent;
 class QPaintEvent;
 class Scene;

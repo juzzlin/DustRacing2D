@@ -37,8 +37,6 @@
 #include <QIcon>
 #include <QDesktopWidget>
 #include <QGLFramebufferObject>
-#include <QGLShader>
-#include <QGLShaderProgram>
 #include <QKeyEvent>
 
 Renderer * Renderer::m_instance = nullptr;
