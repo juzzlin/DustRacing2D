@@ -41,9 +41,9 @@ MCMesh & MCMeshManager::createMesh(
         new MCMesh(
             faces,
             data.texture1 != "" ?
-                MCAssetManager::surfaceManager().surface(data.texture1).handle1() : 0,
+                MCAssetManager::surfaceManager().surface(data.texture1).texture1() : 0,
             data.texture2 != "" ?
-                MCAssetManager::surfaceManager().surface(data.texture2).handle2() : 0));
+                MCAssetManager::surfaceManager().surface(data.texture2).texture2() : 0));
 
     m_meshMap[data.handle] = mesh;
 

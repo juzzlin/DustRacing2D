@@ -210,7 +210,7 @@ void Track::renderTiles(
                     prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     prog.rotate(pTile->rotation());
                     pSurface->setShaderProgram(&prog);
-                    pSurface->bindTexture();
+                    pSurface->bindTextures();
                     pSurface->render();
                 }
             }

@@ -46,8 +46,8 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
     int origW = data.width.second  ? data.width.first  : image.width();
 
     const GLuint textureHandle1 = create2DTextureFromImage(data, image);
-    const GLuint textureHandle2 = data.handle2.length() ? surface(data.handle2).handle1() : 0;
-    const GLuint textureHandle3 = data.handle3.length() ? surface(data.handle3).handle1() : 0;
+    const GLuint textureHandle2 = data.handle2.length() ? surface(data.handle2).texture1() : 0;
+    const GLuint textureHandle3 = data.handle3.length() ? surface(data.handle3).texture1() : 0;
 
     // Create a new MCSurface object
     MCSurface * surface =
@@ -249,10 +249,10 @@ MCSurfaceManager::~MCSurfaceManager()
         {
             MCSurface * p = iter->second;
 
-            GLuint dummyHandle1 = p->handle1();
+            GLuint dummyHandle1 = p->texture1();
             glDeleteTextures(1, &dummyHandle1);
 
-            GLuint dummyHandle2 = p->handle2();
+            GLuint dummyHandle2 = p->texture2();
             if (dummyHandle2)
             {
                 glDeleteTextures(1, &dummyHandle2);

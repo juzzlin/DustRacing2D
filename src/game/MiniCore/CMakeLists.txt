@@ -24,6 +24,7 @@ Graphics/glew/glew.c
 Graphics/mccamera.cc
 Graphics/mcglambientlight.cc
 Graphics/mcgldiffuselight.cc
+Graphics/mcglobjectbase.cc
 Graphics/mcglpointparticlerenderer.cc
 Graphics/mcglscene.cc
 Graphics/mcglshaderprogram.cc

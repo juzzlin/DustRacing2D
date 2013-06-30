@@ -26,6 +26,7 @@
 #include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcglcolor.hh"
+#include "mcglobjectbase.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -41,7 +42,7 @@ class MCGLTexCoord;
 class MCGLVertex;
 
 /** Renderable 3d mesh object. */
-class MCMesh
+class MCMesh : public MCGLObjectBase
 {
 public:
 
@@ -65,7 +66,7 @@ public:
     explicit MCMesh(const FaceVector & faces, GLuint handle1 = 0, GLuint handle2 = 0);
 
     //! Destructor.
-    virtual ~MCMesh();
+    virtual ~MCMesh() {};
 
     //! Set color.
     void setColor(const MCGLColor & color);
@@ -95,29 +96,14 @@ public:
      *  This can be used to save some function calls when rendering the same
      *  mesh multiple times.
      *  \see render() */
-    void bind(bool enable) const;
+    void bind(bool enable);
 
     /*! Manually enable/disable OpenGL client states and texturing environment.
      *  This can be used to save some function calls when rendering the same
      *  mesh multiple times.
      *  \see renderShadow()
      */
-    void bindShadow(bool enable) const;
-
-    //! Bind the current texture.
-    void bindTexture(bool bindOnlyFirstTexture = false) const;
-
-    //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
-
-    //! Set the shader program to be used for 2d shadows.
-    void setShadowShaderProgram(MCGLShaderProgram * program);
-
-    //! Get the shader program to be used.
-    MCGLShaderProgram * shaderProgram() const;
-
-    //! Get the shader program to be used for 2d shadows.
-    MCGLShaderProgram * shadowShaderProgram() const;
+    void bindShadow(bool enable);
 
     //! Get width
     MCFloat width() const;
@@ -138,16 +124,10 @@ private:
     void doRender(bool autoBind);
     void doRenderShadow(bool autoBind);
 
-    int                 m_numVertices;
-    GLuint              m_handle1;
-    GLuint              m_handle2;
-    MCFloat             m_w, m_h;
-    GLuint              m_vbo;
-    GLuint              m_vao;
-    MCGLColor           m_color;
-    MCFloat             m_sx, m_sy, m_sz;
-    MCGLShaderProgram * m_program;
-    MCGLShaderProgram * m_shadowProgram;
+    int       m_numVertices;
+    MCFloat   m_w, m_h;
+    MCGLColor m_color;
+    MCFloat   m_sx, m_sy, m_sz;
 };
 
 #endif // MCMESH_HH

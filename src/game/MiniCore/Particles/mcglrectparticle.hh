@@ -22,8 +22,7 @@
 
 #include "mcparticle.hh"
 #include "mcglcolor.hh"
-
-#include <MCGLEW>
+#include "mcglobjectbase.hh"
 
 class MCCamera;
 class MCGLShaderProgram;
@@ -39,7 +38,7 @@ public:
     MCGLRectParticle(const std::string & typeID);
 
     //! Destructor.
-    virtual ~MCGLRectParticle();
+    virtual ~MCGLRectParticle() {};
 
     //! Set color
     void setColor(const MCGLColor & color);
@@ -64,8 +63,10 @@ private:
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
     MCGLColor m_color;
-    static GLuint m_vbo;
-    static GLuint m_vao;
+    // Static variable instead of inheritance allows the VAO and VBO to be
+    // shared between similar particles.
+    static MCGLObjectBase m_glObjectBase;
+    static bool m_inited;
     MCGLShaderProgram * m_program;
 };
 

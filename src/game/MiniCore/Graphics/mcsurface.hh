@@ -26,6 +26,7 @@
 #include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcglcolor.hh"
+#include "mcglobjectbase.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -38,9 +39,8 @@ class MCGLTexCoord;
 class MCGLVertex;
 
 /*! MCSurface is a renderable object bound to an OpenGL texture handle.
- *  MCSurface can be rendered straightly as a standalone object.
- */
-class MCSurface
+ *  MCSurface can be rendered straightly as a standalone object. */
+class MCSurface : public MCGLObjectBase
 {
 public:
 
@@ -70,7 +70,7 @@ public:
         const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
-    virtual ~MCSurface();
+    virtual ~MCSurface() {};
 
     /*! Set the point the surface is centered about.
      *  \param center Vector that defines a custom rotation point other than
@@ -107,8 +107,7 @@ public:
     /*! Render by using the default size.
      * \param pos The position.
      * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height.
-     */
+     * \param hr Half of the wanted height. */
     void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render (fake) shadow
@@ -121,37 +120,13 @@ public:
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
      *  \see render() */
-    void bind() const;
+    void bind();
 
     /*! Manually enable/disable OpenGL client states and texturing environment.
      *  This can be used to save some function calls when rendering the same
      *  surface multiple times.
      *  \see renderShadow() */
-    void bindShadow() const;
-
-    //! Bind the current texture.
-    void bindTexture(bool bindOnlyFirstTexture = false) const;
-
-    //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
-
-    //! Set the shader program to be used for 2d shadows.
-    void setShadowShaderProgram(MCGLShaderProgram * program);
-
-    //! Get the shader program to be used.
-    MCGLShaderProgram * shaderProgram() const;
-
-    //! Get the shader program to be used for 2d shadows.
-    MCGLShaderProgram * shadowShaderProgram() const;
-
-    //! Get OpenGL texture handle #1 or zero.
-    GLuint handle1() const;
-
-    //! Get OpenGL texture handle #2 or zero.
-    GLuint handle2() const;
-
-    //! Get OpenGL texture handle #3 or zero.
-    GLuint handle3() const;
+    void bindShadow();
 
     //! Get width
     MCFloat width() const;
@@ -179,26 +154,19 @@ private:
 
     void doRenderShadow(bool autoBind);
 
-    GLuint m_handle1;
-    GLuint m_handle2;
-    GLuint m_handle3;
-    MCFloat m_w;
-    MCFloat m_w2;
-    MCFloat m_h;
-    MCFloat m_h2;
+    MCFloat     m_w;
+    MCFloat     m_w2;
+    MCFloat     m_h;
+    MCFloat     m_h2;
     MCVector2dF m_center;
-    bool m_centerSet;
-    GLenum m_alphaFunc;
-    GLclampf m_alphaThreshold;
-    bool m_useAlphaBlend;
-    GLenum m_src;
-    GLenum m_dst;
-    GLuint m_vbo;
-    GLuint m_vao;
-    MCGLColor m_color;
-    MCFloat m_sx, m_sy, m_sz;
-    MCGLShaderProgram * m_program;
-    MCGLShaderProgram * m_shadowProgram;
+    bool        m_centerSet;
+    GLenum      m_alphaFunc;
+    GLclampf    m_alphaThreshold;
+    bool        m_useAlphaBlend;
+    GLenum      m_src;
+    GLenum      m_dst;
+    MCGLColor   m_color;
+    MCFloat     m_sx, m_sy, m_sz;
 };
 
 #endif // MCSURFACE_HH

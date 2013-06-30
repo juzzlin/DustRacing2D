@@ -34,17 +34,16 @@ static const int NUM_COLOR_COMPONENTS     = 4;
 static const int NUM_TEX_COORD_COMPONENTS = 2;
 
 MCMesh::MCMesh(const FaceVector & faces, GLuint handle1, GLuint handle2)
-: m_handle1(handle1)
-, m_handle2(handle2)
-, m_w(1.0)
+: m_w(1.0)
 , m_h(1.0)
 , m_color(1.0, 1.0, 1.0, 1.0)
 , m_sx(1.0)
 , m_sy(1.0)
 , m_sz(1.0)
-, m_program(nullptr)
-, m_shadowProgram(nullptr)
 {
+    setTexture1(handle1);
+    setTexture2(handle2);
+
     init(faces);
 }
 
@@ -133,11 +132,12 @@ void MCMesh::initVBOs(
 
     int offset = 0;
 
-    glGenVertexArrays(1, &m_vao);
-    glGenBuffers(1, &m_vbo);
-    glBindVertexArray(m_vao);
+    createVAO();
+    createVBO();
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    bindVAO();
+    bindVBO();
+
     glBufferData(GL_ARRAY_BUFFER,
         TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
 
@@ -168,6 +168,9 @@ void MCMesh::initVBOs(
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
     glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+
+    releaseVBO();
+    releaseVAO();
 }
 
 void MCMesh::render()
@@ -203,26 +206,6 @@ void MCMesh::doRenderShadow(bool autoBind)
     }
 }
 
-void MCMesh::setShaderProgram(MCGLShaderProgram * program)
-{
-    m_program = program;
-}
-
-void MCMesh::setShadowShaderProgram(MCGLShaderProgram * program)
-{
-    m_shadowProgram = program;
-}
-
-MCGLShaderProgram * MCMesh::shaderProgram() const
-{
-    return m_program;
-}
-
-MCGLShaderProgram * MCMesh::shadowShaderProgram() const
-{
-    return m_shadowProgram;
-}
-
 void MCMesh::setColor(const MCGLColor & color)
 {
     m_color = color;
@@ -243,7 +226,7 @@ void MCMesh::setScale(MCFloat w, MCFloat h)
 
 void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
-    if (m_program)
+    if (shaderProgram())
     {
         MCFloat x = pos.i();
         MCFloat y = pos.j();
@@ -254,11 +237,11 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool aut
             camera->mapToCamera(x, y);
         }
 
-        m_program->bind();
-        m_program->setScale(m_sx, m_sy, m_sz);
-        m_program->setColor(m_color);
-        m_program->translate(MCVector3dF(x, y, z));
-        m_program->rotate(angle);
+        shaderProgram()->bind();
+        shaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shaderProgram()->setColor(m_color);
+        shaderProgram()->translate(MCVector3dF(x, y, z));
+        shaderProgram()->rotate(angle);
 
         doRender(autoBind);
     }
@@ -266,7 +249,7 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool aut
 
 void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
 {
-    if (m_shadowProgram)
+    if (shadowShaderProgram())
     {
         MCFloat x = pos.i();
         MCFloat y = pos.j();
@@ -277,68 +260,38 @@ void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bo
             camera->mapToCamera(x, y);
         }
 
-        m_shadowProgram->bind();
-        m_shadowProgram->setScale(m_sx, m_sy, m_sz);
-        m_shadowProgram->translate(MCVector3dF(x, y, z));
-        m_shadowProgram->rotate(angle);
+        shadowShaderProgram()->bind();
+        shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shadowShaderProgram()->translate(MCVector3dF(x, y, z));
+        shadowShaderProgram()->rotate(angle);
 
         doRenderShadow(autoBind);
     }
 }
 
-void MCMesh::bind(bool enable) const
+void MCMesh::bind(bool enable)
 {
     if (enable)
     {
-        glBindVertexArray(m_vao);
-        bindTexture();
+        bindVAO();
+        bindTextures();
     }
     else
     {
-        glBindVertexArray(0);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        m_program->bindTextureUnit0(0);
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        m_program->bindTextureUnit1(0);
-
-        glActiveTexture(GL_TEXTURE0);
+        releaseVAO();
     }
 }
 
-void MCMesh::bindShadow(bool enable) const
+void MCMesh::bindShadow(bool enable)
 {
     if (enable)
     {
-        glBindVertexArray(m_vao);
-        bindTexture(true);
+        bindVAO();
+        bindTextures(true);
     }
     else
     {
-        glBindVertexArray(0);
-    }
-}
-
-void MCMesh::bindTexture(bool bindOnlyFirstTexture) const
-{
-    assert(m_program);
-
-    if (m_handle2 && !bindOnlyFirstTexture)
-    {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_handle1);
-        m_program->bindTextureUnit0(0);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_handle2);
-        m_program->bindTextureUnit1(1);
-        glActiveTexture(GL_TEXTURE0);
-    }
-    else
-    {
-        glBindTexture(GL_TEXTURE_2D, m_handle1);
+        releaseVAO();
     }
 }
 
@@ -350,10 +303,4 @@ MCFloat MCMesh::width() const
 MCFloat MCMesh::height() const
 {
     return m_h;
-}
-
-MCMesh::~MCMesh()
-{
-    glDeleteBuffers(1, &m_vbo);
-    glDeleteVertexArrays(1, &m_vao);
 }
