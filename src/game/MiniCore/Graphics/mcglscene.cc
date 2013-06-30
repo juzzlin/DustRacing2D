@@ -48,6 +48,7 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
 
 void MCGLScene::initialize()
 {
+#ifndef MC_NO_GLEW
     glewExperimental = GL_TRUE; // Needed with CoreProfile 3.3
     GLenum err = glewInit();
     if (GLEW_OK != err)
@@ -56,7 +57,7 @@ void MCGLScene::initialize()
     }
 
     MCLogger().info() << "Using GLEW " << glewGetString(GLEW_VERSION);
-
+#endif
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
