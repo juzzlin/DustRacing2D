@@ -16,7 +16,6 @@
 #include <QApplication>
 #include <QGLFormat>
 #include <QDir>
-#include <QHBoxLayout>
 #include <QMessageBox>
 
 #include "game.hpp"
@@ -41,12 +40,21 @@ static void initLogger()
 
 static void checkOpenGLVersion()
 {
+#ifdef __MC_GLES__
+    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_ES_Version_2_0)
+    {
+        QString versionError = QObject::tr("At least OpenGL ES 2.0 is required!");
+        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
+        throw MCException(versionError.toStdString());
+    }
+#else
     if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
     {
         QString versionError = QObject::tr("At least OpenGL 3.0 is required!");
         QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
         throw MCException(versionError.toStdString());
     }
+#endif
 }
 
 static void printHelp()

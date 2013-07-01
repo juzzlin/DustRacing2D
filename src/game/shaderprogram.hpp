@@ -93,6 +93,9 @@ public:
     //! \reimp
     virtual void bindTextureUnit2(GLuint index = 2);
 
+    //! \reimp
+    virtual void setPointSize(GLfloat pointSize);
+
 private:
 
     QGLShaderProgram m_program;

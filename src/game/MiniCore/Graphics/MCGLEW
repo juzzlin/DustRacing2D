@@ -1,6 +1,10 @@
-// This is just wrapper header for glew
-#ifndef MC_NO_GLEW
-#include "glew/glew.h"
+// This is just wrapper header for glew.
+#ifndef __MC_NO_GLEW__
+  #include "glew/glew.h"
 #else
-#include <GL/gl.h>
+  #ifndef __MC_GLES__
+    #include <GL/gl.h>
+  #else
+    #include <GLES/gl.h>
+  #endif
 #endif

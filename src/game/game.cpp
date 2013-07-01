@@ -117,14 +117,20 @@ void Game::createRenderer()
     MCLogger().info()
         << "Resolution: " << hRes << " " << vRes << " " << nativeResolution << " " << fullScreen;
 
+    MCLogger().info() << "Creating the renderer..";
+    // At least for now the QGLFormat needs to be passed to the constructor of QGLWidget,
+    // because setting it afterwards by using QGLWidget::setFormat() resulted in a black
+    // window on Windows 7. It worked on Ubuntu, though.
     QGLFormat qglFormat;
-
+#ifdef __MC_GLES__
+    // Availability of ES 2.0 is currently tested in main.cpp.
+    qglFormat.setSampleBuffers(false);
+#else
     // Availability of 3.0 is currently tested in main.cpp.
     qglFormat.setVersion(3, 0);
     qglFormat.setProfile(QGLFormat::CoreProfile);
     qglFormat.setSampleBuffers(false);
-
-    MCLogger().info() << "Creating the renderer..";
+#endif
     m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
 
@@ -325,7 +331,7 @@ void Game::updateAnimations()
 
 void Game::renderFrame()
 {
-    m_renderer->updateFrame();
+    m_renderer->render();
 }
 
 void Game::countRenderFps()

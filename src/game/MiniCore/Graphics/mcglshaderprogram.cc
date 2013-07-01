@@ -143,3 +143,6 @@ void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight &)
 {
 }
 
+void MCGLShaderProgram::setPointSize(GLfloat)
+{
+}

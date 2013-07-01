@@ -18,7 +18,13 @@
 #include "eventhandler.hpp"
 #include "scene.hpp"
 #include "shaderprogram.hpp"
+
+#ifdef __MC_GLES__
+#include "shadersGLES.h"
+#else
 #include "shaders.h"
+#endif
+
 #include "../common/config.hpp"
 
 #include <MCGLScene>
@@ -62,7 +68,6 @@ Renderer::Renderer(
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
-    setFocusPolicy(Qt::StrongFocus);
 
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/dustrac-game.png"));
@@ -106,7 +111,7 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
 }
 
 void Renderer::createProgramFromFile(
-    const std::string & handle, const std::string & fshPath, const std::string & vshPath)
+    const std::string & handle, const std::string & vshPath, const std::string & fshPath)
 {
     // Note: ShaderProgram throws on error.
 
@@ -120,7 +125,7 @@ void Renderer::createProgramFromFile(
 }
 
 void Renderer::createProgramFromSource(
-    const std::string & handle, const std::string & fshSource, const std::string & vshSource)
+    const std::string & handle, const std::string & vshSource, const std::string & fshSource)
 {
     // Note: ShaderProgram throws on error.
 
@@ -133,18 +138,18 @@ void Renderer::createProgramFromSource(
 
 void Renderer::loadShaders()
 {
-    createProgramFromSource("car",           carFshDesktop,              carVshDesktop);
-    createProgramFromSource("fbo",           fboFshDesktop,              fboVshDesktop);
-    createProgramFromSource("master",        masterFshDesktop,           masterVshDesktop);
-    createProgramFromSource("masterShadow",  masterShadowFshDesktop,     masterShadowVshDesktop);
-    createProgramFromSource("menu",          menuFshDesktop,             menuVshDesktop);
-    createProgramFromSource("particle",      particleFshDesktop,         masterVshDesktop);
-    createProgramFromSource("pointParticle", pointParticleFshDesktop,    pointParticleVshDesktop);
-    createProgramFromSource("pointParticleDiscard", pointParticleDiscardFshDesktop, pointParticleVshDesktop);
-    createProgramFromSource("text",          textFshDesktop,             textVshDesktop);
-    createProgramFromSource("textShadow",    textShadowFshDesktop,       textVshDesktop);
-    createProgramFromSource("tile2d",        tile2dFshDesktop,           tileVshDesktop);
-    createProgramFromSource("tile3d",        tile3dFshDesktop,           tileVshDesktop);
+    createProgramFromSource("car",           carVsh,              carFsh);
+    createProgramFromSource("fbo",           fboVsh,              fboFsh);
+    createProgramFromSource("master",        masterVsh,           masterFsh);
+    createProgramFromSource("masterShadow",  masterShadowVsh,     masterShadowFsh);
+    createProgramFromSource("menu",          menuVsh,             menuFsh);
+    createProgramFromSource("particle",      masterVsh,           particleFsh);
+    createProgramFromSource("pointParticle", pointParticleVsh,    pointParticleFsh);
+    createProgramFromSource("pointParticleDiscard", pointParticleVsh, pointParticleDiscardFsh);
+    createProgramFromSource("text",          textVsh,             textFsh);
+    createProgramFromSource("textShadow",    textVsh,             textShadowFsh);
+    createProgramFromSource("tile2d",        tileVsh,             tile2dFsh);
+    createProgramFromSource("tile3d",        tileVsh,             tile3dFsh);
 
     // Make sure that shaders have the current model view projection matrix.
     m_glScene->updateModelViewProjectionMatrixAndShaders();
@@ -182,49 +187,43 @@ float Renderer::fadeValue() const
 
 void Renderer::renderNativeResolutionOrWindowed()
 {
-    if (m_enabled)
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (m_scene)
-        {
-            m_scene->render();
-        }
+    if (m_scene)
+    {
+        m_scene->render();
     }
 }
 
 void Renderer::renderCustomResolution()
 {
     // Render the game scene to the frame buffer object
-    if (m_enabled)
+    resizeGL(m_hRes, m_vRes);
+
+    static QGLFramebufferObject fbo(m_hRes, m_vRes);
+
+    fbo.bind();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (m_scene)
     {
-        resizeGL(m_hRes, m_vRes);
-
-        static QGLFramebufferObject fbo(m_hRes, m_vRes);
-
-        fbo.bind();
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        if (m_scene)
-        {
-            m_scene->render();
-        }
-
-        fbo.release();
-
-        // Render the frame buffer object onto the screen
-
-        const int fullVRes = QApplication::desktop()->height();
-        const int fullHRes = QApplication::desktop()->width();
-
-        resizeGL(fullHRes, fullVRes);
-
-        MCSurface sd(fbo.texture(), 0, 0, Scene::width(), Scene::height());
-        sd.setShaderProgram(&program("fbo"));
-        sd.bindTextures();
-        sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+        m_scene->render();
     }
+
+    fbo.release();
+
+    // Render the frame buffer object onto the screen
+
+    const int fullVRes = QApplication::desktop()->height();
+    const int fullHRes = QApplication::desktop()->width();
+
+    resizeGL(fullHRes, fullVRes);
+
+    MCSurface sd(fbo.texture(), 0, 0, Scene::width(), Scene::height());
+    sd.setShaderProgram(&program("fbo"));
+    sd.bindTextures();
+    sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 }
 
 void Renderer::paintGL()
@@ -244,7 +243,7 @@ void Renderer::paintGL()
     }
 }
 
-void Renderer::updateFrame()
+void Renderer::render()
 {
     paintGL();
 }

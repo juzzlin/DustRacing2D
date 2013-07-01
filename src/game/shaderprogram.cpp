@@ -32,6 +32,7 @@ static const char * ANGLE               = "angle";
 static const char * POS                 = "pos";
 static const char * COLOR               = "color";
 static const char * SCALE               = "scale";
+static const char * POINT_SIZE          = "pointSize";
 
 ShaderProgram::ShaderProgram(const QGLContext * context, MCGLScene & scene)
 : MCGLShaderProgram(scene)
@@ -191,6 +192,12 @@ void ShaderProgram::bindTextureUnit2(GLuint index)
 {
     bind();
     m_program.setUniformValue(TEX2, index);
+}
+
+void ShaderProgram::setPointSize(GLfloat pointSize)
+{
+    bind();
+    m_program.setUniformValue(POINT_SIZE, pointSize);
 }
 
 ShaderProgram::~ShaderProgram()

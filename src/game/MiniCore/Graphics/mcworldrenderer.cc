@@ -140,7 +140,6 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
-    glPushAttrib(GL_ENABLE_BIT);
 
     for (MCUint layer = 0; layer < MCWorld::MaxLayers; layer++)
     {
@@ -158,8 +157,6 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
         renderObjectBatches(camera, layer);
         renderParticleBatches(camera, layer);
     }
-
-    glPopAttrib();
 }
 
 void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
@@ -238,8 +235,6 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
 
 void MCWorldRenderer::renderShadows(MCCamera * camera)
 {
-    glPushAttrib(GL_ENABLE_BIT);
-
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
         glDisable(GL_DEPTH_TEST);
@@ -275,8 +270,6 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
             iter++;
         }
     }
-
-    glPopAttrib();
 }
 
 void MCWorldRenderer::enableDepthTestOnLayer(MCUint layer, bool enable)

@@ -15,6 +15,12 @@ option(DebugBuild "DebugBuild" OFF)
 # Enable install layout required by USC.
 option(Ubuntu "Ubuntu" OFF)
 
+# Enable MiniCore build for GLES.
+option(GLES "GLES" OFF)
+
+# Don't use GLEW if enabled.
+option(NO_GLEW "NO_GLEW" OFF)
+
 if(UseQt5)
     message(STATUS "Using Qt5.")
     cmake_minimum_required(VERSION 2.8.8)
@@ -30,9 +36,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions 
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
 
-# This is not needed with GLEW (built-in with MiniCore)
-#add_definitions(-DGL_GLEXT_PROTOTYPES)
+if(GLES)
+    add_definitions(-D__MC_GLES__)
+endif()
+
+if(NO_GLEW)
+    add_definitions(-D__MC_NO_GLEW__)
+endif()
+
 add_definitions(-DGLEW_STATIC)
+add_definitions(-DGLEW_NO_GLU)
 
 if (UseQt5)
     add_definitions(-DUSE_QT5)

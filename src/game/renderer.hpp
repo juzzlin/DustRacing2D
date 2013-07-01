@@ -49,15 +49,14 @@ public:
         bool fullScreen,
         QWidget * parent = nullptr);
 
-    int hRes() const {return m_hRes;}
-    int vRes() const {return m_vRes;}
-
     //! Destructor.
     virtual ~Renderer();
 
+    //! \return the single instance.
     static Renderer & instance();
 
-    void updateFrame();
+    //! Render the scene.
+    void render();
 
     //! Set game scene to be rendered.
     void setScene(Scene & scene);
@@ -65,11 +64,26 @@ public:
     //! Set event handler to be used.
     void setEventHandler(EventHandler & eventHandler);
 
+    //! \return shader program object by the given id string.
     MCGLShaderProgram & program(const std::string & id);
 
+    //! \return current scene.
     MCGLScene & glScene();
 
+    //! \return scene face factor 0.0..1.0.
     float fadeValue() const;
+
+    //! \return horizontal resolution.
+    int hRes() const
+    {
+        return m_hRes;
+    }
+
+    //! \return vertical resolution.
+    int vRes() const
+    {
+        return m_vRes;
+    }
 
 signals:
 
@@ -113,10 +127,10 @@ private:
     void loadShaders();
 
     void createProgramFromFile(
-        const std::string & handle, const std::string & fshPath, const std::string & vshPath);
+        const std::string & handle, const std::string & vshPath, const std::string & fshPath);
 
     void createProgramFromSource(
-        const std::string & handle, const std::string & fshSource, const std::string & vshSource);
+        const std::string & handle, const std::string & vshSource, const std::string & fshSource);
 
     void renderNativeResolutionOrWindowed();
 

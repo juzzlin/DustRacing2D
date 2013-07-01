@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "fadeanimation.hpp"
+#include <cmath>
 
 FadeAnimation::FadeAnimation(int updateFps)
 : m_updateFps(updateFps)
@@ -64,12 +65,20 @@ void FadeAnimation::updateAnimation()
     else if (m_fadeIn && m_fadeValue < 1.0)
     {
         m_fadeValue += m_step;
+#ifdef __ANDROID__
+        emit fadeValueChanged(fmin(m_fadeValue, 1.0));
+#else
         emit fadeValueChanged(std::fmin(m_fadeValue, 1.0));
+#endif
     }
     else if (!m_fadeIn && m_fadeValue > 0.0)
     {
         m_fadeValue -= m_step;
+#ifdef __ANDROID__
+        emit fadeValueChanged(fmax(m_fadeValue, 0.0));
+#else
         emit fadeValueChanged(std::fmax(m_fadeValue, 0.0));
+#endif
     }
     else if (m_postDelayMSec)
     {

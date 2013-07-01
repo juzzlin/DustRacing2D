@@ -48,14 +48,13 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
 
 void MCGLScene::initialize()
 {
-#ifndef MC_NO_GLEW
+#ifndef __MC_NO_GLEW__
     glewExperimental = GL_TRUE; // Needed with CoreProfile 3.3
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
         MCLogger().fatal() << "Initing GLEW failed: " << glewGetErrorString(err);
     }
-
     MCLogger().info() << "Using GLEW " << glewGetString(GLEW_VERSION);
 #endif
     glShadeModel(GL_SMOOTH);
@@ -65,7 +64,12 @@ void MCGLScene::initialize()
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+#ifndef __MC_GLES__
     glClearDepth(1.0);
+#else
+    glClearDepthf(1.0);
+#endif
 }
 
 void MCGLScene::resize(
