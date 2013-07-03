@@ -80,10 +80,10 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_stateMachine(stateMachine)
 , m_renderer(renderer)
 , m_messageOverlay(new MessageOverlay)
-, m_race(game, NUM_CARS, *m_messageOverlay)
+, m_race(game, NUM_CARS)
 , m_activeTrack(nullptr)
 , m_world(new MCWorld)
-, m_startlights(new Startlights(*m_messageOverlay))
+, m_startlights(new Startlights)
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
 , m_trackSelectionMenu(nullptr)
@@ -112,6 +112,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     QObject::connect(
         m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
     QObject::connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
+    QObject::connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+    QObject::connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
 
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;

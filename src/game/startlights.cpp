@@ -15,13 +15,11 @@
 
 #include "startlights.hpp"
 #include "inputhandler.hpp"
-#include "messageoverlay.hpp"
 
-Startlights::Startlights(MessageOverlay & messageOverlay)
+Startlights::Startlights()
 : m_state(Init)
 , m_counter(0)
 , m_stepsPerState(60)
-, m_messageOverlay(messageOverlay)
 {
     m_stateToFunctionMap[Init]      = std::bind(&Startlights::stateInit,      this);
     m_stateToFunctionMap[Appear]    = std::bind(&Startlights::stateAppear,    this);
@@ -101,7 +99,7 @@ void Startlights::stateAppear()
     if (timeElapsed(second))
     {
         m_state = FirstRow;
-        m_messageOverlay.addMessage("3");
+        emit messageRequested("3");
         emit soundRequested("startlightsBeep");
     }
 }
@@ -113,7 +111,7 @@ void Startlights::stateFirstRow()
     if (timeElapsed(second))
     {
         m_state = SecondRow;
-        m_messageOverlay.addMessage("2");
+        emit messageRequested("2");
         emit soundRequested("startlightsBeep");
     }
 }
@@ -125,7 +123,7 @@ void Startlights::stateSecondRow()
     if (timeElapsed(second))
     {
         m_state = ThirdRow;
-        m_messageOverlay.addMessage("1");
+        emit messageRequested("1");
         emit soundRequested("startlightsBeep");
     }
 }
@@ -137,10 +135,10 @@ void Startlights::stateThirdRow()
     if (timeElapsed(second))
     {
         m_state = Go;
-        m_messageOverlay.addMessage("GO!!!");
-        InputHandler::setEnabled(true);
+        emit messageRequested(QObject::tr("GO!!!"));
         emit raceStarted();
         emit soundRequested("startlightsGo");
+        InputHandler::setEnabled(true);
     }
 }
 

@@ -17,6 +17,7 @@
 #define RACE_HPP
 
 #include <QObject>
+#include <QString>
 #include <MCObject>
 #include <memory>
 #include <unordered_map>
@@ -26,7 +27,6 @@
 
 class Car;
 class Game;
-class MessageOverlay;
 class OffTrackDetector;
 class Route;
 class Track;
@@ -40,7 +40,7 @@ class Race : public QObject
 public:
 
     //! Constructor.
-    Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay);
+    Race(const Game & game, unsigned int numCars);
 
     //! Destructor.
     virtual ~Race();
@@ -72,15 +72,14 @@ public:
 
 signals:
 
-    //! A race has finished
     void finished();
+
+    void messageRequested(QString message);
 
 public slots:
 
-    //! Start the race and timing.
     void start();
 
-    //! Update situation.
     void update();
 
 private:
@@ -126,17 +125,16 @@ private:
     typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
-    int              m_numCars;
-    int              m_lapCount;
-    Timing           m_timing;
-    Track          * m_track;
-    bool             m_started;
-    bool             m_checkeredFlagEnabled;
-    bool             m_winnerFinished;
-    bool             m_isfinishedSignalSent;
-    int              m_bestPos;
-    MessageOverlay & m_messageOverlay;
-    const Game     & m_game;
+    int          m_numCars;
+    int          m_lapCount;
+    Timing       m_timing;
+    Track      * m_track;
+    bool         m_started;
+    bool         m_checkeredFlagEnabled;
+    bool         m_winnerFinished;
+    bool         m_isfinishedSignalSent;
+    int          m_bestPos;
+    const Game & m_game;
 };
 
 #endif // RACE_HPP

@@ -17,6 +17,7 @@
 #define STARTLIGHTS_HPP
 
 #include <QObject>
+#include <QString>
 #include <QTimer>
 
 #include "MiniCore/Core/MCTypes"
@@ -26,7 +27,6 @@
 #include <map>
 #include <string>
 
-class MessageOverlay;
 class Race;
 
 //! Startlight model that controls the position and animation
@@ -51,7 +51,7 @@ public:
     };
 
     //! Constructor.
-    Startlights(MessageOverlay & messageOverlay);
+    Startlights();
 
     State state() const;
 
@@ -63,8 +63,12 @@ public:
 
 signals:
 
-    void soundRequested(const std::string & handle);
+    void soundRequested(QString handle);
+
+    void messageRequested(QString message);
+
     void raceStarted();
+
     void animationEnded();
 
 public slots:
@@ -99,7 +103,6 @@ private:
     MCUint            m_height;
     MCFloat           m_glowScale;
     MCVectorAnimation m_animation;
-    MessageOverlay  & m_messageOverlay;
     QTimer            m_timer;
 };
 

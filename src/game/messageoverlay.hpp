@@ -19,6 +19,7 @@
 #include "overlaybase.hpp"
 
 #include <MCTextureText>
+#include <QObject>
 #include <QString>
 #include <list>
 
@@ -26,8 +27,10 @@ class MCTextureFontManager;
 class MCTextureFont;
 
 //! A class that draws the radar, texts and displays messages.
-class MessageOverlay : public OverlayBase
+class MessageOverlay : public QObject, public OverlayBase
 {
+    Q_OBJECT
+
 public:
 
     //! Alignment of the MessageOverlay messages.
@@ -42,6 +45,8 @@ public:
 
     //! \reimp
     virtual bool update();
+
+public slots:
 
     //! Add a message to the MessageOverlay.
     void addMessage(const std::string & msg);

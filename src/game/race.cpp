@@ -18,7 +18,6 @@
 #include "car.hpp"
 #include "game.hpp"
 #include "layers.hpp"
-#include "messageoverlay.hpp"
 #include "offtrackdetector.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -43,7 +42,7 @@ static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
 static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
 
-Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOverlay)
+Race::Race(const Game & game, unsigned int numCars)
 : m_numCars(numCars)
 , m_lapCount(5)
 , m_timing(numCars)
@@ -53,7 +52,6 @@ Race::Race(const Game & game, unsigned int numCars, MessageOverlay & messageOver
 , m_winnerFinished(false)
 , m_isfinishedSignalSent(false)
 , m_bestPos(-1)
-, m_messageOverlay(messageOverlay)
 , m_game(game)
 {
     createStartGridObjects();
@@ -248,11 +246,11 @@ void Race::update()
 
             if (m_game.mode() == Game::TimeTrial)
             {
-                m_messageOverlay.addMessage(QObject::tr("The Time Trial has ended!"));
+                emit messageRequested(QObject::tr("The Time Trial has ended!"));
             }
             else
             {
-                m_messageOverlay.addMessage(QObject::tr("The winner has finished!"));
+                emit messageRequested(QObject::tr("The winner has finished!"));
             }
         }
     }
@@ -367,7 +365,7 @@ void Race::checkForNewLapRecord()
     if (m_timing.newLapRecordAchieved())
     {
         Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
-        m_messageOverlay.addMessage(QObject::tr("New lap record!"));
+        emit messageRequested(QObject::tr("New lap record!"));
     }
 }
 
@@ -383,7 +381,7 @@ void Race::checkForNewBestPosition(const Car & car)
             if (pos < m_bestPos || m_bestPos == -1)
             {
                 Settings::instance().saveBestPos(*m_track, pos, m_lapCount);
-                m_messageOverlay.addMessage(QObject::tr("A new best pos!"));
+                emit messageRequested(QObject::tr("A new best pos!"));
             }
 
             Track * next = m_track->next();
@@ -393,11 +391,11 @@ void Race::checkForNewBestPosition(const Car & car)
                 {
                     next->trackData().setIsLocked(false);
                     Settings::instance().saveTrackUnlockStatus(*next, m_lapCount);
-                    m_messageOverlay.addMessage(QObject::tr("A new track unlocked!"));
+                    emit messageRequested(QObject::tr("A new track unlocked!"));
                 }
                 else
                 {
-                    m_messageOverlay.addMessage(QObject::tr("Better luck next time.."));
+                    emit messageRequested(QObject::tr("Better luck next time.."));
                 }
             }
         }

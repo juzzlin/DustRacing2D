@@ -82,6 +82,7 @@ else()
         eventhandler.hpp
         fadeanimation.hpp
         mainmenu.hpp
+        messageoverlay.hpp
         game.hpp
         race.hpp
         renderer.hpp
