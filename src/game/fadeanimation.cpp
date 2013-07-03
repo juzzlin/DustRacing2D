@@ -65,7 +65,7 @@ void FadeAnimation::updateAnimation()
     else if (m_fadeIn && m_fadeValue < 1.0)
     {
         m_fadeValue += m_step;
-#ifdef __ANDROID__
+#ifdef Q_OS_ANDROID
         emit fadeValueChanged(fmin(m_fadeValue, 1.0));
 #else
         emit fadeValueChanged(std::fmin(m_fadeValue, 1.0));
@@ -74,7 +74,7 @@ void FadeAnimation::updateAnimation()
     else if (!m_fadeIn && m_fadeValue > 0.0)
     {
         m_fadeValue -= m_step;
-#ifdef __ANDROID__
+#ifdef Q_OS_ANDROID
         emit fadeValueChanged(fmax(m_fadeValue, 0.0));
 #else
         emit fadeValueChanged(std::fmax(m_fadeValue, 0.0));

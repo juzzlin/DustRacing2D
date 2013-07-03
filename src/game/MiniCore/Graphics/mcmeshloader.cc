@@ -32,9 +32,9 @@ MCMeshLoader::MCMeshLoader()
     m_keyToFunctionMap["f"]  = std::bind(&MCMeshLoader::parseF,  this, std::placeholders::_1);
 }
 
-bool MCMeshLoader::load(const std::string & filePath)
+bool MCMeshLoader::load(QString filePath)
 {
-    QFile file(filePath.c_str());
+    QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         return false;

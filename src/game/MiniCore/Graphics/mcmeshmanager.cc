@@ -27,6 +27,7 @@
 #include "mcsurface.hh"
 
 #include <QDir>
+#include <QString>
 #include <cassert>
 
 MCMeshManager::MCMeshManager()
@@ -62,8 +63,10 @@ void MCMeshManager::load(
         {
             const MCMeshMetaData & metaData = configLoader.mesh(i);
 
-            const std::string modelPath =
-                baseDataPath + QDir::separator().toLatin1() + metaData.modelPath;
+            QString modelPath =
+                QString(baseDataPath.c_str()) + QDir::separator().toLatin1() + metaData.modelPath.c_str();
+            modelPath.replace("./", "");
+            modelPath.replace("//", "/");
 
             if (modelLoader.load(modelPath))
             {
@@ -71,7 +74,7 @@ void MCMeshManager::load(
             }
             else
             {
-                throw MCException("Loading mesh '" + modelPath + "' failed!");
+                throw MCException("Loading mesh '" + modelPath.toStdString() + "' failed!");
             }
         }
     }

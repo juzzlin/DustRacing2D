@@ -19,7 +19,12 @@
 
 #include "mclogger.hh"
 #include <ctime>
+
+#ifdef Q_OS_ANDROID
+#include <QDebug>
+#else
 #include <cstdio>
+#endif
 
 bool   MCLogger::m_echoMode = false;
 bool   MCLogger::m_dateTime = true;
@@ -45,7 +50,11 @@ bool MCLogger::init(const char * fileName, bool append)
 
         if (!m_file)
         {
+#ifdef Q_OS_ANDROID
+            qDebug() << "ERROR!!: Couldn't open '" << fileName << "' for write.";
+#else
             fprintf(stderr, "ERROR!!: Couldn't open '%s' for write.\n", fileName);
+#endif
             return false;
         }
     }
@@ -114,8 +123,12 @@ MCLogger::~MCLogger()
 
     if (MCLogger::m_echoMode)
     {
+#ifdef Q_OS_ANDROID
+        qDebug() << m_oss.str().c_str();
+#else
         fprintf(stdout, "%s", m_oss.str().c_str());
         fprintf(stdout, "\n");
         fflush(stdout);
+#endif
     }
 }

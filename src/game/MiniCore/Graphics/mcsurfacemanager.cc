@@ -22,7 +22,10 @@
 #include "mcsurfaceconfigloader.hh"
 #include "mcsurfacemanager.hh"
 
+#include <QByteArray>
 #include <QDir>
+#include <QFile>
+#include <QImage>
 #include <QSysInfo>
 #include <MCGLEW>
 
@@ -386,21 +389,24 @@ void MCSurfaceManager::load(
     {
         for (unsigned int i = 0; i < loader.surfaceCount(); i++)
         {
-            const MCSurfaceMetaData & data = loader.surface(i);
+            const MCSurfaceMetaData & metaData = loader.surface(i);
 
-            const std::string path =
-                baseDataPath + QDir::separator().toLatin1() + data.imagePath;
+            // Load the image and create a 2D texture. Due to possible Android asset URLs,
+            // an explicit QFile-based loading is used instead of directly using QImage::loadFromFile().
+            QString path = QString(baseDataPath.c_str()) + QDir::separator() + metaData.imagePath.c_str();
+            path.replace("./", "");
+            path.replace("//", "/");
 
-            // Load the image and create a 2D texture.
+            QFile imageFile(path);
+            if (!imageFile.open(QIODevice::ReadOnly))
+            {
+                throw MCException("Cannot read file '" + path.toStdString() + "'");
+            }
+            QByteArray blob = imageFile.readAll();
+
             QImage textureImage;
-            if (textureImage.load(path.c_str()))
-            {
-                createSurfaceFromImage(data, textureImage);
-            }
-            else
-            {
-                throw MCException("Cannot read file '" + path + "'");
-            }
+            textureImage.loadFromData(blob);
+            createSurfaceFromImage(metaData, textureImage);
         }
     }
     else

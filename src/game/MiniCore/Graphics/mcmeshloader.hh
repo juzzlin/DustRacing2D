@@ -37,7 +37,7 @@ public:
     MCMeshLoader();
 
     //! Load the given .obj-file.
-    bool load(const std::string & filePath);
+    bool load(QString filePath);
 
     const MCMesh::FaceVector & faces() const;
 

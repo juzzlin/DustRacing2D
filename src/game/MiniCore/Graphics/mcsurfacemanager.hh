@@ -20,14 +20,14 @@
 #ifndef MCSURFACEMANAGER_HH
 #define MCSURFACEMANAGER_HH
 
-#include <QImage>
-
 #include <string>
 #include <unordered_map>
 
 #include "mcexception.hh"
 #include "mcmacros.hh"
 #include "mcsurfacemetadata.hh"
+
+class QImage;
 
 class MCSurface;
 
