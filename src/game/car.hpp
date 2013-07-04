@@ -148,6 +148,8 @@ public:
 
     bool rightSideOffTrack() const;
 
+    bool isOffTrack() const;
+
     void setTurningImpulse(float impulse);
 
     void setCurrentTargetNodeIndex(int index);

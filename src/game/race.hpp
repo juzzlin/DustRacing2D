@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QTimer>
 #include <MCObject>
 #include <memory>
 #include <unordered_map>
@@ -90,6 +91,8 @@ private:
 
     void checkIfCarIsStuck(Car & car);
 
+    void checkIfCarIsOffTrack(Car & car);
+
     void createStartGridObjects();
 
     bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
@@ -134,6 +137,7 @@ private:
     bool         m_winnerFinished;
     bool         m_isfinishedSignalSent;
     int          m_bestPos;
+    QTimer       m_offTrackMessageTimer;
     const Game & m_game;
 };
 

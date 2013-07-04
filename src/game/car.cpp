@@ -408,6 +408,11 @@ bool Car::rightSideOffTrack() const
     return m_rightSideOffTrack;
 }
 
+bool Car::isOffTrack() const
+{
+    return leftSideOffTrack() || rightSideOffTrack();
+}
+
 void Car::setTurningImpulse(float impulse)
 {
     m_desc.turningImpulse = impulse;

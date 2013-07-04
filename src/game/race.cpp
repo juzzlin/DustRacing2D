@@ -55,6 +55,9 @@ Race::Race(const Game & game, unsigned int numCars)
 , m_game(game)
 {
     createStartGridObjects();
+
+    m_offTrackMessageTimer.setSingleShot(true);
+    m_offTrackMessageTimer.setInterval(30000);
 }
 
 void Race::createStartGridObjects()
@@ -308,6 +311,12 @@ void Race::updateRouteProgress(Car & car)
                 checkIfCarIsStuck(car);
             }
 
+            // Check is car is off track and display a message.
+            if (car.isHuman())
+            {
+                checkIfCarIsOffTrack(car);
+            }
+
             // Give a bit more tolerance for other than the finishing check point.
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
@@ -423,6 +432,15 @@ void Race::checkIfCarIsStuck(Car & car)
                 moveCarOntoPreviousCheckPoint(car);
             }
         }
+    }
+}
+
+void Race::checkIfCarIsOffTrack(Car & car)
+{
+    if (car.isOffTrack() && !m_offTrackMessageTimer.isActive())
+    {
+        emit messageRequested(QObject::tr("Stay on track!"));
+        m_offTrackMessageTimer.start();
     }
 }
 
