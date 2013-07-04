@@ -1,3 +1,35 @@
+1.4.1
+-----
+
+* Display a message when off track.
+* Refactor on-display messaging.
+* Android compatibility improvements.
+* GLES compatibility improvements.
+* Simplify texture and program binding.
+* Add MC_NO_GLEW define to allow compilation without GLEW.
+* Drop dependency to QGLWidget in MCSurfaceManager.
+* Add missing virtual destructor body to MCGravityGenerator.
+* Move common GL stuff into MCGLObjectBase.
+* Move aboutdlg.* to obsolete/
+* Remove useless variable.
+* Remove useless includes.
+* Fix CPack on out-of-source builds.
+* Load shaders from source code.
+* Multitextured sand.
+* Support third texture.
+* Update curvastone.trk
+* Update monza.trk
+* Editor: Object rotation can be set randomly.
+* Add bushArea object.
+* Tires wear out when off track.
+* Track locking and best positions per lap count.
+* Menus remember saved values.
+* Add a generic quit item (X) to menus.
+* Show cursor with --show-cursor.
+* Menu items can be selected with a mouse.
+* Don't try to swap buffers if not enabled.
+* Fix app shutdown on Windows.
+
 1.3.1
 -----
 

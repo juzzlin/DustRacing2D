@@ -6,7 +6,7 @@
 !define COMPANYNAME            "Jussi Lind"
 !define DESCRIPTION            "A nice little racing game."
 !define VERSIONMAJOR           1
-!define VERSIONMINOR           3
+!define VERSIONMINOR           4
 !define VERSIONBUILD           1
 !define HELPURL                "http://dustrac.sourceforge.net"
 !define UPDATEURL              "http://dustrac.sourceforge.net"
