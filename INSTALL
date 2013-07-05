@@ -6,7 +6,8 @@ These are build & install instructions for Dust Racing 2D.
 Build dependencies
 ------------------
 
-Dustrac currently uses CMake as the build system.
+Dustrac currently uses CMake as the build system for Windows and Linux builds.
+CPack is used to generate generic binary packages.
 
 Currently the build depends on Qt4/Qt5 only.
 
@@ -17,6 +18,9 @@ the configure script.
 
 Dustrac also exploits some features of the C++11
 standard, so a compliant compiler is required (GCC >= 4.6).
+
+NOTE!!: Building with Microsoft Visual C++ might not work, because it has an incomplete
+        support for the C++11 standard. Should be possible with minor code tweaks, though.
 
 Building in the command line on Linux (tested on Ubuntu 12.04)
 --------------------------------------------------------------
@@ -31,10 +35,10 @@ $ ./configure
 
 This runs CMake that generates the makefiles.
 You can also run cmake directly. The configure script
-is only for convenience and is just a wrapper for cmake. 
+is only for convenience and is just a wrapper for cmake.
 
 If everything went ok, run:
-  
+
 $ make
 
 This will build the editor and the game binaries.
@@ -65,37 +69,38 @@ $ sudo make install
 This install also the desktop files so Dust Racing
 should appear in your application menu.
 
-Run the game:
-
-$ dustrac-game
-
-Run the editor:
-
-$ dustrac-editor
-
 Building by using QtCreator on Windows (tested on Windows 7)
 ------------------------------------------------------------
 
 1) Download and install CMake.
-2) Download and install QtCreator and Qt libraries.
-3) Download MinGW (GNU compiler tools for Windows) >= 4.6.
-4) Make sure that the path to Qt binaries are in your PATH
-   (You should be able to run qmake from the command prompt without
-   the absolute path).
-5) Start QtCreator and open the top-level CMakeLists.txt from the
+2) Download and install Qt SDK.
+3) Start QtCreator and open the top-level CMakeLists.txt from the
    Dust Racing source directory.
-6) Run CMake and build.
+4) Run CMake, configure desired Kits and build.
 
-If you encounter problems, try to build one of the Qt example projects 
+If you encounter problems, first try to build one of the Qt example projects
 to ensure the toolchains are properly set up.
 
-Building by using QtCreator on Linux (tested on Ubuntu 12.04, 12.10 and 13.04) 
+Building by using QtCreator on Linux (tested on Ubuntu 12.04, 12.10 and 13.04)
 ------------------------------------------------------------------------------
 
+Download the complete Qt SDK, like on Windows, or:
+
 1) Install QtCreator and CMake from the package repository.
-2) Start QtCreator and open the top-level CMakeLists.txt from the
-   Dust Racing source directory.
+2) Start QtCreator and open the top-level CMakeLists.txt from the Dust Racing source directory.
 3) Run CMake and build.
+
+CPack
+-----
+
+Dust Racing 2D has a support for CPack. It's not complete, but can be used to generate
+some generic binary packages.
+
+After a successful build run CPack:
+
+$ cpack
+
+This will generate .tar.gz and .sh binary packages on Linux and .zip on Windows.
 
 For packagers
 -------------
@@ -113,6 +118,7 @@ and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
 to cmake (or to the configure script).
+
 
 -- Jussi Lind <jussi.lind@iki.fi>
 
