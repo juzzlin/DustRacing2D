@@ -52,6 +52,7 @@ Race::Race(const Game & game, unsigned int numCars)
 , m_winnerFinished(false)
 , m_isfinishedSignalSent(false)
 , m_bestPos(-1)
+, m_offTrackCounter(0)
 , m_game(game)
 {
     createStartGridObjects();
@@ -439,8 +440,25 @@ void Race::checkIfCarIsOffTrack(Car & car)
 {
     if (car.isOffTrack() && !m_offTrackMessageTimer.isActive())
     {
-        emit messageRequested(QObject::tr("Stay on track!"));
-        m_offTrackMessageTimer.start();
+        static const int OFF_TRACK_LIMIT = 60; // 1 sec
+
+        m_offTrackCounter++;
+        if (m_offTrackCounter > OFF_TRACK_LIMIT)
+        {
+            if (rand() % 2 == 0)
+            {
+                emit messageRequested(QObject::tr("You must stay on track!"));
+            }
+            else
+            {
+                emit messageRequested(QObject::tr("Watch your tires!"));
+            }
+            m_offTrackMessageTimer.start();
+        }
+    }
+    else
+    {
+        m_offTrackCounter = 0;
     }
 }
 

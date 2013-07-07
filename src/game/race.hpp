@@ -138,6 +138,7 @@ private:
     bool         m_isfinishedSignalSent;
     int          m_bestPos;
     QTimer       m_offTrackMessageTimer;
+    int          m_offTrackCounter;
     const Game & m_game;
 };
 
