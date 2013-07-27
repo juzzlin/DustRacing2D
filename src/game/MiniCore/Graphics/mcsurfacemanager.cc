@@ -327,15 +327,15 @@ void MCSurfaceManager::applyContrast(QImage & textureImage, float contrast) cons
 
             if (contrast > 1.0)
             {
-                fr = fr > 0.5 ? fr + (contrast - 1.0) : fr - (contrast - 1.0);
-                fg = fg > 0.5 ? fg + (contrast - 1.0) : fg - (contrast - 1.0);
-                fb = fb > 0.5 ? fb + (contrast - 1.0) : fb - (contrast - 1.0);
+                fr = fr > 0.5 ? fr * contrast : fr / contrast;
+                fg = fg > 0.5 ? fg * contrast : fg / contrast;
+                fb = fb > 0.5 ? fb * contrast : fb / contrast;
             }
             else
             {
-                fr = fr > 0.5 ? fr - (1.0 - contrast) : fr + (1.0 - contrast);
-                fg = fg > 0.5 ? fg - (1.0 - contrast) : fg + (1.0 - contrast);
-                fb = fb > 0.5 ? fb - (1.0 - contrast) : fb + (1.0 - contrast);
+                fr = fr > 0.5 ? fr / contrast : fr * contrast;
+                fg = fg > 0.5 ? fg / contrast : fg * contrast;
+                fb = fb > 0.5 ? fb / contrast : fb * contrast;
             }
 
             r = static_cast<int>(fr * 256.0);
