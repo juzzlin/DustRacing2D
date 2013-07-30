@@ -22,7 +22,7 @@
 MCObjectData::MCObjectData(const std::string & typeId)
 : m_typeId(typeId)
 , m_mass(0.0)
-, m_shape(MCObjectData::None)
+, m_shape(MCObjectData::Default)
 , m_shapeRadius(0.0)
 , m_shapeWidth(0.0)
 , m_shapeHeight(0.0)

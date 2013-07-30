@@ -54,13 +54,13 @@ MCObject::MCObject(MCShape * pShape, const std::string & typeId)
     setShape(pShape);
 }
 
-MCObject::MCObject(MCSurface * pSurface, const std::string & typeId)
+MCObject::MCObject(MCSurface * pSurface, const std::string & typeId, bool batchMode)
 {
     init(typeId);
 
     // Create an MCRectShape using pSurface with an MCSurfaceView
     MCRectShape * rectShape = new MCRectShape(
-        new MCSurfaceView(typeId, pSurface),
+        new MCSurfaceView(typeId, pSurface, batchMode),
         pSurface ? pSurface->width() : 0,
         pSurface ? pSurface->height() : 0);
     setShape(rectShape);

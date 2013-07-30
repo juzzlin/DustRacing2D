@@ -46,81 +46,57 @@ MCSurface * MCSurfaceView::surface() const
 
 void MCSurfaceView::setShaderProgram(MCGLShaderProgram * program)
 {
-    if (m_surface)
-    {
-        m_surface->setShaderProgram(program);
-    }
+    m_surface->setShaderProgram(program);
 }
 
 void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgram * program)
 {
-    if (m_surface)
-    {
-        m_surface->setShadowShaderProgram(program);
-    }
+    m_surface->setShadowShaderProgram(program);
 }
 
 void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_surface)
-    {
-        m_surface->setScale(1.0, 1.0, 1.0);
-        m_surface->render(p, l, angle, !m_batchMode);
-    }
+    m_surface->setScale(1.0, 1.0, 1.0);
+    m_surface->render(p, l, angle, !m_batchMode);
 }
 
 void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
-    if (m_surface)
-    {
-        m_surface->setScale(1.0, 1.0, 1.0);
-        m_surface->renderShadow(p, l, angle, !m_batchMode);
-    }
+    m_surface->setScale(1.0, 1.0, 1.0);
+    m_surface->renderShadow(p, l, angle, !m_batchMode);
 }
 
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCFloat w, MCFloat h, MCCamera * p)
 {
-    if (m_surface)
-    {
-        m_surface->setScale(w, h);
-        m_surface->render(p, l, angle, !m_batchMode);
-    }
+    m_surface->setScale(w, h);
+    m_surface->render(p, l, angle, !m_batchMode);
 }
 
 void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCFloat angle, MCFloat w, MCFloat h, MCCamera * p)
 {
-    if (m_surface)
-    {
-        m_surface->setScale(w, h);
-        m_surface->renderShadow(p, l, angle, !m_batchMode);
-    }
+    m_surface->setScale(w, h);
+    m_surface->renderShadow(p, l, angle, !m_batchMode);
 }
 
 void MCSurfaceView::beginBatch()
 {
-    if (m_batchMode && m_surface)
-    {
-        m_surface->bind();
-    }
+    m_surface->bind();
 }
 
 void MCSurfaceView::endBatch()
 {
 }
 
-void MCSurfaceView::beginBatchShadow()
+void MCSurfaceView::beginShadowBatch()
 {
-    if (m_batchMode && m_surface)
-    {
-        m_surface->bindShadow();
-    }
+    m_surface->bindShadow();
 }
 
-void MCSurfaceView::endBatchShadow()
+void MCSurfaceView::endShadowBatch()
 {
 }
 

@@ -71,7 +71,8 @@ public:
     //! MCObject won't take the ownership, because the same surface
     //! can be used to draw multiple objects.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
-    MCObject(MCSurface * pSurface, const std::string & typeId);
+    //! \param batchMode \see MCSurfaceView::setBatchMode(bool).
+    MCObject(MCSurface * pSurface, const std::string & typeId, bool batchMode = false);
 
     //! Destructor. It's the callers responsibility to first remove
     //! the object from MCWorld before deleting the object.

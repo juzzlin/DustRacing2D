@@ -41,29 +41,27 @@ MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
 
 MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
-    MCShape     * pShape   = nullptr;
-    MCShapeView * pView    = nullptr;
-    MCObject    * pObject  = nullptr;
-
-    MCSurface   & surface  = m_assetManager.surfaceManager().surface(data.surfaceId());
+    MCShape     * pShape  = nullptr;
+    MCShapeView * pView   = nullptr;
+    MCObject    * pObject = nullptr;
+    MCSurface   & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
-    case MCObjectData::None:
+    case MCObjectData::Default:
         // Circle shape according to surface dimensions
         if (data.defaultCirleShape())
         {
             pObject = new MCObject(data.typeId());
             pView   = new MCSurfaceView(data.typeId(), &surface, data.batchMode());
-            pShape  = new MCCircleShape(pView,
-                std::max(surface.width(), surface.height()) / 2);
+            pShape  = new MCCircleShape(pView, std::max(surface.width(), surface.height()) / 2);
             pObject->setShape(pShape);
         }
         // Rect shape according to surface dimensions (default)
         else
         {
-            pObject = new MCObject(&surface, data.typeId());
+            pObject = new MCObject(&surface, data.typeId(), data.batchMode());
         }
         break;
 
@@ -95,16 +93,15 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
 
 MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
 {
-    MCShape     * pShape   = nullptr;
-    MCShapeView * pView    = nullptr;
-    MCObject    * pObject  = nullptr;
-
-    MCMesh      & mesh     = m_assetManager.meshManager().mesh(data.meshId());
+    MCShape     * pShape  = nullptr;
+    MCShapeView * pView   = nullptr;
+    MCObject    * pObject = nullptr;
+    MCMesh      & mesh    = m_assetManager.meshManager().mesh(data.meshId());
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
-    case MCObjectData::None:
+    case MCObjectData::Default:
         // Circle shape according to surface dimensions
         if (data.defaultCirleShape())
         {
@@ -151,14 +148,14 @@ MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
 
 MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
 {
-    MCShape     * pShape   = nullptr;
-    MCShapeView * pView    = &view;
-    MCObject    * pObject  = nullptr;
+    MCShape     * pShape  = nullptr;
+    MCShapeView * pView   = &view;
+    MCObject    * pObject = nullptr;
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
-    case MCObjectData::None:
+    case MCObjectData::Default:
         // Auto shape not supported.
         break;
 

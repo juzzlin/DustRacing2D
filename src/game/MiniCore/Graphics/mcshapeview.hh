@@ -160,7 +160,7 @@ public:
     }
 
     /*! Called for the first object in a batch of same kind
-     *  of views when the render begins. E.g. VBO's can be
+     *  of views when the render begins. E.g. VBOs can be
      *  set here to be shared between multiple views.
      *  The default implementation does nothing. */
     virtual void beginBatch() {}
@@ -171,7 +171,7 @@ public:
     virtual void endBatch() {}
 
     /*! Called for the first object in a batch of same kind
-     * of views when the render of "shadows" begins. E.g. VBO's can be
+     * of views when the render of "shadows" begins. E.g. VBOs can be
      * set here to be shared between multiple views.
      * The default implementation does nothing. */
     virtual void beginShadowBatch() {}

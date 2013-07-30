@@ -38,7 +38,7 @@ public:
     /*! Possible shape types:
      *  Rect   = MCRectShape.
      *  Circle = MCCircleShape. */
-    enum Shape {None, Rect, Circle};
+    enum Shape {Default, Rect, Circle};
 
     //! Constructor.
     explicit MCObjectData(const std::string & typeId);

@@ -159,6 +159,7 @@ TrackObject & TrackObjectFactory::build(
     else if (role == "tire")
     {
         MCSurfaceObjectData data(role.toStdString());
+        data.setDefaultCircleShape(true);
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setBatchMode(true);
