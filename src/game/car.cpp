@@ -157,7 +157,8 @@ float Car::calculateSteeringCoeff() const
 {
     float stabilize = 1.0 - std::fabs(m_speedInKmh) / 600.0;
     stabilize = stabilize < 0.25 ? 0.25 : stabilize;
-    const float nonLinear = std::pow(std::fabs(m_speedInKmh) / 100.0, 0.3);
+
+    const float nonLinear = std::pow(std::fabs(m_speedInKmh) / 50.0, 0.5);
     const float effScaling = std::min(stabilize, nonLinear);
     return effScaling;
 }
