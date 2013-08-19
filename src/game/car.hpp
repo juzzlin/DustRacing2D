@@ -186,7 +186,10 @@ public:
 private:
 
     void setProperties(Description & desc);
+
     void initForceGenerators(Description & desc);
+
+    float calculateSteeringCoeff() const;
 
     Description              m_desc;
     MCFrictionGenerator    * m_pBrakingFriction;
