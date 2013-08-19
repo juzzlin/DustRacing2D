@@ -129,49 +129,41 @@ MCUint Car::index() const
     return m_index;
 }
 
-float Car::calculateSteeringCoeff() const
-{
-    float stabilize = 1.0 - m_speedInKmh / 500.0;
-    stabilize = stabilize < 0.25 ? 0.25 : stabilize;
-    const float nonLinear = std::pow(m_speedInKmh / 100.0, 0.3);
-    const float effScaling = std::min(stabilize, nonLinear);
-    return effScaling;
-}
-
 void Car::turnLeft()
 {
-    if (m_tireAngle < 45) m_tireAngle++;
+    if (m_tireAngle < 45)
+    {
+        m_tireAngle++;
+    }
 
     m_turnLeft = true;
 
-    if (std::abs(m_speedInKmh) > 0)
-    {
-        const float effScaling = calculateSteeringCoeff();
-
-        if (!m_reverse)
-        {
-            if (m_braking)
-            {
-                addAngularImpulse(m_desc.turningImpulse * effScaling / 2);
-            }
-            else
-            {
-                addAngularImpulse(m_desc.turningImpulse * effScaling);
-            }
-        }
-        else
-        {
-            addAngularImpulse(-m_desc.turningImpulse * effScaling);
-        }
-    }
+    steer();
 }
 
 void Car::turnRight()
 {
-    if (m_tireAngle > -45) m_tireAngle--;
+    if (m_tireAngle > -45)
+    {
+        m_tireAngle--;
+    }
 
     m_turnRight = true;
 
+    steer(-1);
+}
+
+float Car::calculateSteeringCoeff() const
+{
+    float stabilize = 1.0 - std::fabs(m_speedInKmh) / 500.0;
+    stabilize = stabilize < 0.25 ? 0.25 : stabilize;
+    const float nonLinear = std::pow(std::fabs(m_speedInKmh) / 100.0, 0.3);
+    const float effScaling = std::min(stabilize, nonLinear);
+    return effScaling;
+}
+
+void Car::steer(int direction)
+{
     if (std::abs(m_speedInKmh) > 0)
     {
         const float effScaling = calculateSteeringCoeff();
@@ -180,16 +172,16 @@ void Car::turnRight()
         {
             if (m_braking)
             {
-                addAngularImpulse(-m_desc.turningImpulse * effScaling / 2);
+                addAngularImpulse(m_desc.turningImpulse * effScaling * direction * 0.5);
             }
             else
             {
-                addAngularImpulse(-m_desc.turningImpulse * effScaling);
+                addAngularImpulse(m_desc.turningImpulse * effScaling * direction);
             }
         }
         else
         {
-            addAngularImpulse(m_desc.turningImpulse * effScaling);
+            addAngularImpulse(-m_desc.turningImpulse * effScaling * direction);
         }
     }
 }
