@@ -15,10 +15,10 @@
 
 #include "intro.hpp"
 #include "renderer.hpp"
-#include "shaderprogram.hpp"
 
 #include <MCSurface>
 #include <MCAssetManager>
+#include <MCGLShaderProgram>
 
 Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))

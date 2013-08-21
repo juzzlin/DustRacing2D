@@ -36,7 +36,7 @@ class MCGLScene;
 /*! Base class for GLSL shader programs compatible with MiniCore.
  *  The user needs to inherit from this class and re-implement the
  *  desired features so that they are forwarded to the actual
- *  shaders as uniforms. The default implementation does nothing. */
+ *  shaders as uniforms. */
 class MCGLShaderProgram
 {
 public:
@@ -75,23 +75,23 @@ public:
 
     /*! Add a vertex shader.
      *  \return true if succeeded. */
-    virtual bool addVertexShaderFromFile(const std::string & path);
-
-    /*! Add a fragment shader.
-     *  \return true if succeeded. */
-    virtual bool addFragmentShaderFromFile(const std::string & path);
-
-    /*! Add a geometry shader.
-     *  \return true if succeeded. */
-    virtual bool addGeometryShaderFromFile(const std::string & path);
-
-    /*! Add a vertex shader.
-     *  \return true if succeeded. */
     virtual bool addVertexShaderFromSource(const std::string & source);
 
     /*! Add a fragment shader.
      *  \return true if succeeded. */
     virtual bool addFragmentShaderFromSource(const std::string & source);
+
+    /*! Get the default vertex shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultVertexShaderSource();
+
+    /*! Get the default fragment shader. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultFragmentShaderSource();
+
+    /*! Get the default shadow vertex shader. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultShadowVertexShaderSource();
+
+    /*! get the default shadow fragment shader. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultShadowFragmentShaderSource();
 
     /*! Add a geometry shader.
      *  \return true if succeeded. */
@@ -139,6 +139,9 @@ private:
 
     MCGLScene & m_scene;
     bool        m_isBound;
+    GLuint      m_program;
+    GLuint      m_fragmentShader;
+    GLuint      m_vertexShader;
 };
 
 #endif // MCGLSHADERPROGRAM_HH

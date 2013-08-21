@@ -17,7 +17,6 @@
 
 #include "eventhandler.hpp"
 #include "scene.hpp"
-#include "shaderprogram.hpp"
 
 #ifdef __MC_GLES__
 #include "shadersGLES.h"
@@ -97,10 +96,7 @@ void Renderer::initializeGL()
 
     m_glScene->initialize();
 
-    if (QGLShader::hasOpenGLShaders(QGLShader::Fragment, context()))
-    {
-        loadShaders();
-    }
+    loadShaders();
 }
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
@@ -110,26 +106,12 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
         m_viewAngle);
 }
 
-void Renderer::createProgramFromFile(
-    const std::string & handle, const std::string & vshPath, const std::string & fshPath)
-{
-    // Note: ShaderProgram throws on error.
-
-    MCGLShaderProgram * program = new ShaderProgram(context(), *m_glScene);
-    program->addFragmentShaderFromFile(
-        std::string(Config::Common::dataPath) + "/shaders/" + fshPath);
-    program->addVertexShaderFromFile(
-        std::string(Config::Common::dataPath) + "/shaders/" + vshPath);
-    program->link();
-    m_shaderHash[handle].reset(program);
-}
-
 void Renderer::createProgramFromSource(
     const std::string & handle, const std::string & vshSource, const std::string & fshSource)
 {
     // Note: ShaderProgram throws on error.
 
-    MCGLShaderProgram * program = new ShaderProgram(context(), *m_glScene);
+    MCGLShaderProgram * program = new MCGLShaderProgram(*m_glScene);
     program->addFragmentShaderFromSource(fshSource);
     program->addVertexShaderFromSource(vshSource);
     program->link();
@@ -138,12 +120,19 @@ void Renderer::createProgramFromSource(
 
 void Renderer::loadShaders()
 {
+    // Engine defaults
+    createProgramFromSource("master",
+        MCGLShaderProgram::getDefaultVertexShaderSource(),
+        MCGLShaderProgram::getDefaultFragmentShaderSource());
+    createProgramFromSource("masterShadow",
+        MCGLShaderProgram::getDefaultShadowVertexShaderSource(),
+        MCGLShaderProgram::getDefaultShadowFragmentShaderSource());
+
+    // Custom shaders
     createProgramFromSource("car",           carVsh,              carFsh);
     createProgramFromSource("fbo",           fboVsh,              fboFsh);
-    createProgramFromSource("master",        masterVsh,           masterFsh);
-    createProgramFromSource("masterShadow",  masterShadowVsh,     masterShadowFsh);
     createProgramFromSource("menu",          menuVsh,             menuFsh);
-    createProgramFromSource("particle",      masterVsh,           particleFsh);
+    createProgramFromSource("particle",      MCGLShaderProgram::getDefaultVertexShaderSource(), particleFsh);
     createProgramFromSource("pointParticle", pointParticleVsh,    pointParticleFsh);
     createProgramFromSource("pointParticleDiscard", pointParticleVsh, pointParticleDiscardFsh);
     createProgramFromSource("text",          textVsh,             textFsh);

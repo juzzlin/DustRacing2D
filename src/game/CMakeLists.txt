@@ -43,7 +43,6 @@ set(SRC
     renderer.cpp
     resolutionmenu.cpp
     scene.cpp
-    shaderprogram.cpp
     slidefrictiongenerator.cpp
     settings.cpp
     settingsmenu.cpp

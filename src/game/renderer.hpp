@@ -126,9 +126,6 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
-    void createProgramFromFile(
-        const std::string & handle, const std::string & vshPath, const std::string & fshPath);
-
     void createProgramFromSource(
         const std::string & handle, const std::string & vshSource, const std::string & fshSource);
 
