@@ -1,3 +1,29 @@
+dustrac (1.4.2-1) precise; urgency=low
+
+  * Fix computer diriving lines in monza.trk
+  * Make the game a bit more challenging.
+  * More sane shader API.
+  * Fix normals.
+  * Normal mapping for cars.
+  * Tune car parameters.
+  * Move ShaderProgram to MiniCore.
+  * Refactor steering.
+  * Improve steering stability.
+  * Updates triangle.trk.
+  * Updates rock.png.
+  * No contrast setting for the grandstand.
+  * Add some crates to straight.trk.
+  * Fix batched rendering of surface shadows.
+  * Collision detection for MCCircleShape.
+  * Refactor MCCollisionDetector.
+  * Remove unused variable from MCCircleShape.
+  * Fix the contrast algorithm.
+  * Less aggressive off track message.
+  * Update INSTALL.
+  * Move install stuff to InstallLinux.cmake and InstallWindows.cmake.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Tue, 03 Sep 2013 23:16:20 +0300
+
 dustrac (1.4.1-1) precise; urgency=low
 
   * Display a message when off track.

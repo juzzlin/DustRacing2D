@@ -1,3 +1,28 @@
+1.4.2
+-----
+
+* Fix computer driving lines in monza.trk
+* Make the game a bit more challenging.
+* More sane shader API.
+* Fix normals.
+* Normal mapping for cars.
+* Tune car parameters.
+* Move ShaderProgram to MiniCore.
+* Refactor steering.
+* Improve steering stability.
+* Updates triangle.trk.
+* Updates rock.png.
+* No contrast setting for the grandstand.
+* Add some crates to straight.trk.
+* Fix batched rendering of surface shadows.
+* Collision detection for MCCircleShape.
+* Refactor MCCollisionDetector.
+* Remove unused variable from MCCircleShape.
+* Fix the contrast algorithm.
+* Less aggressive off track message.
+* Update INSTALL.
+* Move install stuff to InstallLinux.cmake and InstallWindows.cmake.
+
 1.4.1
 -----
 
