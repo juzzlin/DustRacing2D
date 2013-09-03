@@ -163,8 +163,7 @@ void Track::renderAsphalt(
                     x1 = x;
                     y1 = y;
                     camera->mapToCamera(x1, y1);
-                    prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
-                    prog.rotate(0);
+                    prog.setTransform(0, MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     m_asphalt.render();
                 }
             }
@@ -207,8 +206,7 @@ void Track::renderTiles(
                     x1 = x;
                     y1 = y;
                     camera->mapToCamera(x1, y1);
-                    prog.translate(MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
-                    prog.rotate(pTile->rotation());
+                    prog.setTransform(pTile->rotation(), MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     pSurface->setShaderProgram(&prog);
                     pSurface->bindTextures();
                     pSurface->render();

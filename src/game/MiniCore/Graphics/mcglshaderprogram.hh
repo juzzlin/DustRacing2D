@@ -97,14 +97,11 @@ public:
      *  \return true if succeeded. */
     virtual bool addGeometryShaderFromSource(const std::string & source);
 
-    //! Set model view projection matrix.
-    virtual void setModelViewProjectionMatrix(const glm::mat4x4 & modelViewProjectionMatrix);
+    //! Set view projection matrix. Done automatically by MCGLScene.
+    virtual void setViewProjectionMatrix(const glm::mat4x4 & viewProjectionMatrix);
 
-    //! Set rotation (about Z-axis).
-    virtual void rotate(GLfloat angle);
-
-    //! Set translation.
-    virtual void translate(const MCVector3dF & pos);
+    //! Set transformation: rotation (about Z-axis) + position.
+    virtual void setTransform(GLfloat angle, const MCVector3dF & pos);
 
     //! Set color.
     virtual void setColor(const MCGLColor & color);

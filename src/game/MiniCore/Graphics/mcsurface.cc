@@ -333,14 +333,12 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
 
         if (m_centerSet)
         {
-            shaderProgram()->translate(MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+            shaderProgram()->setTransform(angle, MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
-            shaderProgram()->translate(MCVector3dF(x, y, z));
+            shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
         }
-
-        shaderProgram()->rotate(angle);
 
         doRender(autoBind);
 
@@ -376,15 +374,13 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
 
         if (m_centerSet)
         {
-            shadowShaderProgram()->translate(
+            shadowShaderProgram()->setTransform(angle,
                 MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
         }
         else
         {
-            shadowShaderProgram()->translate(MCVector3dF(x, y, z));
+            shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
         }
-
-        shadowShaderProgram()->rotate(angle);
 
         doRenderShadow(autoBind);
     }

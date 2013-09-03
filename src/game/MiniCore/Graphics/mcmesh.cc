@@ -238,8 +238,7 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool aut
         shaderProgram()->bind();
         shaderProgram()->setScale(m_sx, m_sy, m_sz);
         shaderProgram()->setColor(m_color);
-        shaderProgram()->translate(MCVector3dF(x, y, z));
-        shaderProgram()->rotate(angle);
+        shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
         doRender(autoBind);
     }
@@ -260,8 +259,7 @@ void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bo
 
         shadowShaderProgram()->bind();
         shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
-        shadowShaderProgram()->translate(MCVector3dF(x, y, z));
-        shadowShaderProgram()->rotate(angle);
+        shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
         doRenderShadow(autoBind);
     }

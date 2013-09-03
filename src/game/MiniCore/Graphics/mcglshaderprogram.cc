@@ -39,9 +39,8 @@ static const char * FADE                = "fade";
 static const char * TEX0                = "tex0";
 static const char * TEX1                = "tex1";
 static const char * TEX2                = "tex2";
-static const char * MVP                 = "mvp";
-static const char * ANGLE               = "angle";
-static const char * POS                 = "pos";
+static const char * VP                  = "vp";
+static const char * MODEL               = "model";
 static const char * COLOR               = "color";
 static const char * SCALE               = "scale";
 static const char * POINT_SIZE          = "pointSize";
@@ -113,6 +112,26 @@ bool MCGLShaderProgram::isLinked() const
     return status == GL_TRUE;
 }
 
+std::string getShaderLog(GLuint obj)
+{
+    int logLength = 0;
+    int charsWritten = 0;
+    char *rawLog;
+
+    glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &logLength);
+
+    if (logLength > 0)
+    {
+        rawLog = (char *)malloc(logLength);
+        glGetShaderInfoLog(obj, logLength, &charsWritten, rawLog);
+        std::string log = rawLog;
+        free(rawLog);
+        return log;
+    }
+
+    return "";
+}
+
 bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
 {
     GLint len = source.length();
@@ -124,7 +143,7 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
     glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw MCException("Compiling a vertex shader failed.");
+        throw MCException("Compiling a vertex shader failed: " + getShaderLog(m_vertexShader));
     }
 
     glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Vertex,    "inVertex");
@@ -181,26 +200,21 @@ bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)
     return false;
 }
 
-void MCGLShaderProgram::setModelViewProjectionMatrix(
-    const glm::mat4x4 & modelViewProjectionMatrix)
+void MCGLShaderProgram::setViewProjectionMatrix(
+    const glm::mat4x4 & viewProjectionMatrix)
 {
     bind();
     glUniformMatrix4fv(
-        glGetUniformLocation(m_program, MVP), 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+        glGetUniformLocation(m_program, VP), 1, GL_FALSE, &viewProjectionMatrix[0][0]);
 }
 
-void MCGLShaderProgram::rotate(GLfloat angle)
+void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
 {
     bind();
-    glUniform2f(
-        glGetUniformLocation(m_program, ANGLE), MCTrigonom::sin(angle), MCTrigonom::cos(angle));
-}
-
-void MCGLShaderProgram::translate(const MCVector3dF & p)
-{
-    bind();
-    glUniform4f(
-        glGetUniformLocation(m_program, POS), p.i(), p.j(), p.k(), 0);
+    glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(pos.i(), pos.j(), pos.k()));
+    glm::mat4 rotation  = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glUniformMatrix4fv(
+        glGetUniformLocation(m_program, MODEL), 1, GL_FALSE, &rotation[0][0]);
 }
 
 void MCGLShaderProgram::setColor(const MCGLColor & color)

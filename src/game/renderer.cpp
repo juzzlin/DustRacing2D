@@ -140,8 +140,8 @@ void Renderer::loadShaders()
     createProgramFromSource("tile2d",        tileVsh,             tile2dFsh);
     createProgramFromSource("tile3d",        tileVsh,             tile3dFsh);
 
-    // Make sure that shaders have the current model view projection matrix.
-    m_glScene->updateModelViewProjectionMatrixAndShaders();
+    // Make sure that shaders have the current view projection matrix.
+    m_glScene->updateViewProjectionMatrixAndShaders();
 }
 
 void Renderer::setEnabled(bool enable)

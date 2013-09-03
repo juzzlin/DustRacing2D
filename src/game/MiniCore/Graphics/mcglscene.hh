@@ -52,7 +52,7 @@ public:
 
     /*! Updates the model view projection matrix and sends it
      *  to the added shaders. */
-    void updateModelViewProjectionMatrixAndShaders();
+    void updateViewProjectionMatrixAndShaders();
 
     //! Initializes OpenGL and GLEW. Re-implement if desired.
     virtual void initialize();
@@ -70,8 +70,8 @@ public:
     //! Set viewport split type.
     void setSplitType(SplitType splitType = Single);
 
-    //! Get the resulting MVP matrix to be used in shaders.
-    const glm::mat4 & modelViewProjectionMatrix() const;
+    //! Get the resulting view projection matrix to be used in shaders.
+    const glm::mat4 & viewProjectionMatrix() const;
 
 private:
 
@@ -83,10 +83,10 @@ private:
     MCUint                           m_sceneWidth;
     MCUint                           m_sceneHeight;
     MCFloat                          m_viewAngle;
-    glm::mat4                        m_modelViewMatrix;
+    glm::mat4                        m_viewMatrix;
     glm::mat4                        m_projectionMatrix;
-    mutable glm::mat4                m_modelViewProjectionMatrix;
-    mutable bool                     m_updateModelViewProjection;
+    mutable glm::mat4                m_viewProjectionMatrix;
+    mutable bool                     m_updateViewProjection;
     std::vector<MCGLShaderProgram *> m_shaders;
 };
 

@@ -157,8 +157,7 @@ void MCGLRectParticle::render(MCCamera * camera)
         }
         m_color.setA(alpha);
 
-        m_program->translate(MCVector3dF(x, y, location().k()));
-        m_program->rotate(angle());
+        m_program->setTransform(angle(), MCVector3dF(x, y, location().k()));
         m_program->setColor(m_color);
         m_program->setScale(r, r, 1.0);
 
