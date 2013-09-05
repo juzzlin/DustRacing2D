@@ -31,8 +31,8 @@ endfunction()
 function(setup_install_targets)
 
     # Install binaries and game data
-    install(PROGRAMS ${GAME_BINARY_NAME} DESTINATION ${BIN_PATH})
-    install(PROGRAMS ${EDITOR_BINARY_NAME} DESTINATION ${BIN_PATH})
+    install(PROGRAMS ${CMAKE_BINARY_DIR}/${GAME_BINARY_NAME} DESTINATION ${BIN_PATH})
+    install(PROGRAMS ${CMAKE_BINARY_DIR}/${EDITOR_BINARY_NAME} DESTINATION ${BIN_PATH})
     install(FILES data/editorModels.conf DESTINATION ${DATA_PATH})
     install(FILES data/fonts.conf DESTINATION ${DATA_PATH})
     install(FILES data/meshes.conf DESTINATION ${DATA_PATH})
