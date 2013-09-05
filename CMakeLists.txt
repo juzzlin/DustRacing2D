@@ -96,3 +96,11 @@ setup_install_targets()
 add_subdirectory(src/editor)
 add_subdirectory(src/game)
 
+# Add target to copy text files to the binary dir. This is not actually needed
+# by CPack, but it's nice to have for possible manual packaging, like manually
+# running NSIS on Windows.
+add_custom_target(doc ALL
+    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/AUTHORS ${CMAKE_BINARY_DIR}/AUTHORS
+    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
+    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
+    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README)
