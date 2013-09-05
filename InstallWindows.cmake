@@ -28,14 +28,25 @@ function(setup_install_targets)
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
     install(DIRECTORY data/models DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.obj")
 
-    # CPack config to create e.g. self-extracting packages
-    set(CPACK_BINARY_ZIP ON)
-    set(CPACK_BINARY_NSIS OFF)
-
     set(QT_VER_STR "qt4")
     if(UseQt5)
         set(QT_VER_STR "qt5")
+    else()
+        # Runtime libraries for Qt 4.8
+        install(DIRECTORY deps/win32/qt4/graphicssystems DESTINATION ${BIN_PATH})
+        install(DIRECTORY deps/win32/qt4/imageformats DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/qt4/QtCore4.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/qt4/QtGui4.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/qt4/QtOpenGL4.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/qt4/QtXml4.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/mingw32/libgcc_s_dw2-1.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/mingw32/libstdc++-6.dll DESTINATION ${BIN_PATH})
+        install(FILES deps/win32/mingw32/mingwm10.dll DESTINATION ${BIN_PATH})
     endif()
+
+    # CPack config to create e.g. self-extracting packages
+    set(CPACK_BINARY_ZIP ON)
+    set(CPACK_BINARY_NSIS OFF)
 
     set(CPACK_PACKAGE_FILE_NAME "dustrac-${VERSION}-windows-${CMAKE_HOST_SYSTEM_PROCESSOR}-${QT_VER_STR}")
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
