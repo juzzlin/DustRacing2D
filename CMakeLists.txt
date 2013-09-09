@@ -24,6 +24,9 @@ option(GLES "GLES" OFF)
 # Don't use GLEW if enabled.
 option(NO_GLEW "NO_GLEW" OFF)
 
+# Enable OpenGL 3.0 shaders (default is 2.1)
+option(GL30 "GL30" OFF)
+
 if(UseQt5)
     message(STATUS "Using Qt5.")
     cmake_minimum_required(VERSION 2.8.8)
@@ -47,6 +50,14 @@ set(EDITOR_BINARY_NAME "dustrac-editor")
 
 if(GLES)
     add_definitions(-D__MC_GLES__)
+    message(STATUS "Compiling for OpenGL ES 2.0")
+else()
+    if(GL30)
+        add_definitions(-D__MC_GL30__)
+        message(STATUS "Compiling for OpenGL 3.0")
+    else()
+        message(STATUS "Compiling for OpenGL 2.1")
+    endif()
 endif()
 
 if(NO_GLEW)

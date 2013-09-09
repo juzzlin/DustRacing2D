@@ -22,6 +22,8 @@
 
 #ifdef __MC_GLES__
 #include "mcshadersGLES.hh"
+#elseif defined(__MC_GL30__)
+#include "mcshaders30.hh"
 #else
 #include "mcshaders.hh"
 #endif
@@ -143,7 +145,8 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
     glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw MCException("Compiling a vertex shader failed: " + getShaderLog(m_vertexShader));
+        throw MCException("Compiling a vertex shader failed.\n" +
+            getShaderLog(m_vertexShader) + "\n" + source);
     }
 
     glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Vertex,    "inVertex");
@@ -167,7 +170,8 @@ bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
     glGetShaderiv(m_fragmentShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw MCException("Compiling a fragment shader failed.");
+        throw MCException("Compiling a fragment shader failed.\n" +
+            getShaderLog(m_fragmentShader) + "\n" + source);
     }
 
     glAttachShader(m_program, m_fragmentShader);

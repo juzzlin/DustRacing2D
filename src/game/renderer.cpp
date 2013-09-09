@@ -20,6 +20,8 @@
 
 #ifdef __MC_GLES__
 #include "shadersGLES.h"
+#elseif defined(__MC_GL30__)
+#include "shaders30.h"
 #else
 #include "shaders.h"
 #endif
@@ -131,13 +133,13 @@ void Renderer::loadShaders()
     // Custom shaders
     createProgramFromSource("car",           carVsh,              carFsh);
     createProgramFromSource("fbo",           fboVsh,              fboFsh);
-    createProgramFromSource("menu",          menuVsh,             menuFsh);
+    createProgramFromSource("menu",          menuVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("particle",      MCGLShaderProgram::getDefaultVertexShaderSource(), particleFsh);
     createProgramFromSource("pointParticle", pointParticleVsh,    pointParticleFsh);
     createProgramFromSource("pointParticleDiscard", pointParticleVsh, pointParticleDiscardFsh);
-    createProgramFromSource("text",          textVsh,             textFsh);
+    createProgramFromSource("text",          textVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("textShadow",    textVsh,             textShadowFsh);
-    createProgramFromSource("tile2d",        tileVsh,             tile2dFsh);
+    createProgramFromSource("tile2d",        tileVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("tile3d",        tileVsh,             tile3dFsh);
 
     // Make sure that shaders have the current view projection matrix.

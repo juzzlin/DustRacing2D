@@ -47,10 +47,17 @@ static void checkOpenGLVersion()
         QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
         throw MCException(versionError.toStdString());
     }
-#else
+#elif defined (__MC_GL30__)
     if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
     {
         QString versionError = QObject::tr("At least OpenGL 3.0 is required!");
+        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
+        throw MCException(versionError.toStdString());
+    }
+#else
+    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_2_1)
+    {
+        QString versionError = QObject::tr("At least OpenGL 2.1 is required!");
         QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
         throw MCException(versionError.toStdString());
     }

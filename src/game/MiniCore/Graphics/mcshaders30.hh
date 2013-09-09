@@ -1,30 +1,31 @@
-// This file is part of Dust Racing 2D.
+// This file belongs to the "MiniCore" game engine.
 // Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
 //
-// Dust Racing 2D is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// Dust Racing 2D is distributed in the hope that it will be useful,
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+// MA  02110-1301, USA.
+//
 
-#ifndef MCSHADERS_HH
-#define MCSHADERS_HH
+#ifndef MCSHADERS30_HH
+#define MCSHADERS30_HH
 
 static const char * MCMasterVsh =
-"#version 100\n"
-""
-"precision mediump float;\n"
-"precision mediump int;\n"
-"attribute vec3 inVertex;\n"
-"attribute vec3 inNormal;\n"
-"attribute vec2 inTexCoord;\n"
-"attribute vec4 inColor;\n"
+"#version 130\n"
+"in vec3 inVertex;\n"
+"in vec3 inNormal;\n"
+"in vec2 inTexCoord;\n"
+"in vec4 inColor;\n"
 "uniform vec4 scale;\n"
 "uniform vec4 color;\n"
 "uniform mat4 vp;\n"
@@ -33,8 +34,8 @@ static const char * MCMasterVsh =
 "uniform vec4 diffuseLightDir;\n"
 "uniform vec4 diffuseLightColor;\n"
 "uniform vec4 ambientLightColor;\n"
-"varying vec2 texCoord0;\n"
-"varying vec4 vColor;\n"
+"out vec2 texCoord0;\n"
+"out vec4 vColor;\n"
 ""
 "void main()\n"
 "{"
@@ -50,13 +51,12 @@ static const char * MCMasterVsh =
 "}\n";
 
 static const char * MCMasterFsh =
-"#version 100\n"
+"#version 130\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
-"varying vec2 texCoord0;\n"
-"varying vec4 vColor;\n"
+"in vec2 texCoord0;\n"
+"in vec4 vColor;\n"
+"out vec4 fragColor;\n"
 ""
 "void main(void)\n"
 "{\n"
@@ -68,25 +68,23 @@ static const char * MCMasterFsh =
 "    }\n"
 "    else\n"
 "    {\n"
-"        gl_FragColor = vColor * texColor;\n"
+"        fragColor = vColor * texColor;\n"
 "    }\n"
 "}\n";
 
 static const char * MCMasterShadowVsh =
-"#version 100\n"
+"#version 130\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
-"attribute vec3 inVertex;\n"
-"attribute vec3 inNormal;\n"
-"attribute vec2 inTexCoord;\n"
-"attribute vec4 inColor;\n"
+"in vec3 inVertex;\n"
+"in vec3 inNormal;\n"
+"in vec2 inTexCoord;\n"
+"in vec4 inColor;\n"
 "uniform vec4 scale;\n"
 "uniform vec4 color;\n"
 "uniform mat4 vp;\n"
 "uniform mat4 model;\n"
-"varying vec2 texCoord0;\n"
-"varying vec4 vColor;\n"
+"out vec2 texCoord0;\n"
+"out vec4 vColor;\n"
 ""
 "void main()\n"
 "{\n"
@@ -96,24 +94,23 @@ static const char * MCMasterShadowVsh =
 "}\n";
 
 static const char * MCMasterShadowFsh =
-"#version 100\n"
+"#version 130\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
-"uniform sampler2D texture;\n"
-"varying vec2 texCoord0;\n"
+"uniform sampler2D tex0;\n"
+"in vec2 texCoord0;\n"
+"out vec4 fragColor;\n"
 ""
 "void main(void)\n"
 "{\n"
-"    vec4 color = texture2D(texture, texCoord0);\n"
+"    vec4 color = texture2D(tex0, texCoord0);\n"
 "    if (color.a < 0.1)\n"
 "    {\n"
 "        discard;\n"
 "    }\n"
 "    else\n"
 "    {\n"
-"        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
+"        fragColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
 "    }\n"
 "}\n";
 
-#endif // MCSHADERS_HH
+#endif // MCSHADERS30_HH

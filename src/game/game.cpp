@@ -126,8 +126,8 @@ void Game::createRenderer()
     // Availability of ES 2.0 is currently tested in main.cpp.
     qglFormat.setSampleBuffers(false);
 #else
-    // Availability of 3.0 is currently tested in main.cpp.
-    qglFormat.setVersion(3, 0);
+    // Availability of 2.1 is currently tested in main.cpp.
+    qglFormat.setVersion(2, 1);
     qglFormat.setProfile(QGLFormat::CoreProfile);
     qglFormat.setSampleBuffers(false);
 #endif
