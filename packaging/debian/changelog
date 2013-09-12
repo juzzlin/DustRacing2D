@@ -1,3 +1,13 @@
+dustrac (1.4.3-1) precise; urgency=low
+
+  * Support OpenGL 2.1 by default.
+  * Add custom targets for doc files.
+  * Fix CPack binary paths.
+  * Add install targets for Windows deps.
+  * Add deps for win32.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Thu, 12 Sep 2013 18:13:24 +0300
+
 dustrac (1.4.2-1) precise; urgency=low
 
   * Fix computer diriving lines in monza.trk

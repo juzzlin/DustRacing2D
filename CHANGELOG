@@ -1,3 +1,12 @@
+1.4.3
+-----
+
+* Support OpenGL 2.1 by default.
+* Add custom targets for doc files.
+* Fix CPack binary paths.
+* Add install targets for Windows deps.
+* Add deps for win32.
+
 1.4.2
 -----
 
