@@ -92,10 +92,6 @@ else()
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 endif()
 
-# Add target to copy runtime files to the binary dir.
-add_custom_target(runtime ALL
-    COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
-
 # Copy desktop file
 if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DesktopFileSourcePath)

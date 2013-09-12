@@ -10,12 +10,13 @@ set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 option(UseQt5 "UseQt5" OFF)
 
 # Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
+# This should be used when creating DEB and RPM packages.
 option(ReleaseBuild "ReleaseBuild" OFF)
 
 # Enable debug build.
 option(DebugBuild "DebugBuild" OFF)
 
-# Enable install layout required by USC.
+# Enable install layout required by USC i.e. installs to /opt.
 option(Ubuntu "Ubuntu" OFF)
 
 # Enable MiniCore build for GLES.
@@ -95,23 +96,12 @@ find_package(OpenGL REQUIRED)
 # Enable CMake's unit test framework
 enable_testing()
 
-# Set default install paths
-set(BIN_PATH .)
-set(DATA_PATH ./data)
-set(DOC_PATH .)
-
 # Install paths depend on the build type and target platform
+set(BIN_PATH .)
+set(DATA_PATH .)
+set(DOC_PATH .)
 resolve_install_paths()
 setup_install_targets()
 
 add_subdirectory(src/editor)
 add_subdirectory(src/game)
-
-# Add target to copy text files to the binary dir. This is not actually needed
-# by CPack, but it's nice to have for possible manual packaging, like manually
-# running NSIS on Windows.
-add_custom_target(doc ALL
-    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/AUTHORS ${CMAKE_BINARY_DIR}/AUTHORS
-    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
-    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
-    COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README)

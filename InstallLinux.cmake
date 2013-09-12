@@ -19,6 +19,14 @@ function(resolve_install_paths)
         set(BIN_PATH .)
         set(DATA_PATH ./data)
         set(DOC_PATH .)
+
+        # Add target to copy runtime files to the binary dir.
+        add_custom_target(runtime ALL
+            COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/AUTHORS ${CMAKE_BINARY_DIR}/AUTHORS
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README)
     endif()
 
     # This is the main data path given to the game and editor binaries.

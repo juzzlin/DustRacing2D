@@ -10,6 +10,31 @@ function(resolve_install_paths)
     # This is the main data path given to the game and editor binaries.
     add_definitions(-DDATA_PATH="${DATA_PATH}")
 
+    # Add target to copy runtime files to the binary dir.
+    add_custom_target(runtimeData ALL
+        COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/AUTHORS ${CMAKE_BINARY_DIR}/AUTHORS
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README)
+
+    if (NOT UseQt5)
+        add_custom_target(runtimeQt4 ALL
+            COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/deps/win32/qt4/graphicssystems ${CMAKE_BINARY_DIR}/graphicssystems
+            COMMAND cmake -E copy_directory ${CMAKE_SOURCE_DIR}/deps/win32/qt4/imageformats ${CMAKE_BINARY_DIR}/imageformats
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/qt4/QtCore4.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/qt4/QtGui4.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/qt4/QtOpenGL4.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/qt4/QtXml4.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/libgcc_s_dw2-1.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/libstdc++-6.dll ${CMAKE_BINARY_DIR}
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/mingwm10.dll ${CMAKE_BINARY_DIR})        
+    endif()
+
+    # Copy NSIS script for manual packaging
+    add_custom_target(nsis ALL
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/packaging/windows/dustrac.nsi ${CMAKE_BINARY_DIR})
+
 endfunction()
 
 # **** Instal targets for Windows ****
