@@ -15,6 +15,15 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
 # Menu toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 
+# Translation files in src/game/translations (without .ts)
+set(TS dustrac-game_fi)
+set(TS_FILES)
+set(QM_FILES)
+foreach(TS_FILE ${TS})
+    list(APPEND TS_FILES ${CMAKE_SOURCE_DIR}/src/game/translations/${TS_FILE}.ts)
+    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/src/game/${TS_FILE}.qm)
+endforeach()
+
 # Set sources
 set(SRC
     ai.cpp
@@ -68,7 +77,8 @@ set(SRC
     ../common/targetnodebase.cpp
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp
-    ../common/mapbase.cpp)
+    ../common/mapbase.cpp
+    )
 
 set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
@@ -76,6 +86,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 if (UseQt5)
     qt5_add_resources(RC_SRC ${RCS})
+    qt5_add_translation(QM ${TS_FILES})
 else()
     set(MOC_HDRS
         eventhandler.hpp
@@ -90,6 +101,7 @@ else()
         timing.hpp)
     qt4_add_resources(RC_SRC ${RCS})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
+    qt4_add_translation(QM ${TS_FILES})
 endif()
 
 # Copy desktop file
@@ -119,7 +131,7 @@ endif()
 
 # The main game executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC})
+add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
 set(COMMON_LIBS ${GAME_BINARY_NAME} MiniCore MTFH ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 if(UseQt5)
@@ -129,4 +141,11 @@ else()
     target_link_libraries(${COMMON_LIBS} ${QT_LIBRARIES})
 endif()
 
-
+foreach(TS_FILE ${TS})
+    # Make targets to copy generated qm files to data dir. This is done the hard
+    # way, because qt4_add_translation() generates the qm files to ${CMAKE_CURRENT_SOURCE_DIR}
+    add_custom_target(copy-translation-file-${TS_FILE} ALL
+        COMMAND cmake -E copy ${CMAKE_BINARY_DIR}/src/game/${TS_FILE}.qm
+            ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm
+        DEPENDS ${GAME_BINARY_NAME})
+endforeach()

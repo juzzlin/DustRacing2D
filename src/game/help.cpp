@@ -17,26 +17,7 @@
 #include "renderer.hpp"
 
 #include <MCTextureText>
-
-static MCTextureText HELP_TEXT(
-    "GAME GOAL\n\n"
-    "You are racing against eleven\ncomputer players.\n\n"
-    "Your best position will be\nthe next start position.\n\n"
-    "Finish in TOP-6 to unlock\na new race track!\n\n"
-    "CONTROLS FOR PLAYER 1\n\n"
-    "Turn left  : Left\n"
-    "Turn right : Right\n"
-    "Accelerate : Up / RIGHT SHIFT\n"
-    "Brake      : Down / RIGHT CTRL\n\n"
-    "CONTROLS FOR PLAYER 2\n\n"
-    "Turn left  : A\n"
-    "Turn right : D\n"
-    "Accelerate : W / LEFT SHIFT\n"
-    "Brake      : S / LEFT CTRL\n\n"
-    "Quit       : ESC/Q\n"
-    "Pause      : P\n\n"
-    "http://dustrac.sourceforge.net"
-);
+#include <QObject> // For QObject::tr()
 
 Help::Help(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
@@ -45,6 +26,26 @@ Help::Help(std::string id, int width, int height)
 
 void Help::render()
 {
+    static MCTextureText HELP_TEXT(
+        QObject::tr("GAME GOAL\n\n"
+        "You are racing against eleven\ncomputer players.\n\n"
+        "Your best position will be\nthe next start position.\n\n"
+        "Finish in TOP-6 to unlock\na new race track!\n\n"
+        "CONTROLS FOR PLAYER 1\n\n"
+        "Turn left  : Left\n"
+        "Turn right : Right\n"
+        "Accelerate : Up / RIGHT SHIFT\n"
+        "Brake      : Down / RIGHT CTRL\n\n"
+        "CONTROLS FOR PLAYER 2\n\n"
+        "Turn left  : A\n"
+        "Turn right : D\n"
+        "Accelerate : W / LEFT SHIFT\n"
+        "Brake      : S / LEFT CTRL\n\n"
+        "Quit       : ESC/Q\n"
+        "Pause      : P\n\n"
+        "http://dustrac.sourceforge.net").toStdString()
+    );
+
     SurfaceMenu::render();
 
     HELP_TEXT.setGlyphSize(20, 20);

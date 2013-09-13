@@ -16,7 +16,9 @@
 #include <QApplication>
 #include <QGLFormat>
 #include <QDir>
+#include <QLocale>
 #include <QMessageBox>
+#include <QTranslator>
 
 #include "game.hpp"
 
@@ -74,11 +76,24 @@ static void printHelp()
     std::cout << std::endl;
 }
 
+static void initTranslations(QTranslator & appTranslator, QApplication & app)
+{
+    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + QLocale::system().name()))
+    {
+        app.installTranslator(&appTranslator);
+    }
+    else
+    {
+        MCLogger().info() << "Failed to load translations for " << QLocale::system().name().toStdString();
+    }
+}
+
 int main(int argc, char ** argv)
 {
     try
     {
         QApplication app(argc, argv);
+        QTranslator appTranslator;
         std::vector<std::string> args(argv, argv + argc);
 
         if (std::find(args.begin(), args.end(), "--help") != args.end())
@@ -88,6 +103,7 @@ int main(int argc, char ** argv)
         }
 
         initLogger();
+        initTranslations(appTranslator, app);
         checkOpenGLVersion();
 
         // Create the game object and set the renderer

@@ -17,23 +17,7 @@
 #include "renderer.hpp"
 
 #include <MCTextureText>
-
-static MCTextureText CREDITS_TEXT(
-    "PROGRAMMING BY\n\n"
-    "* Jussi Lind\n\n"
-    "GRAPHICS BY\n\n"
-    "* Jussi Lind\n"
-    "* Ville Makiranta\n"
-    "* FindIcons.com\n\n"
-    "RACE TRACKS BY\n\n"
-    "* Jussi Lind\n\n"
-    "FONT\n\n"
-    "* Ubuntu Monospace\n\n"
-    "PATCHES\n\n"
-    "* Markus Rinne\n\n"
-    "SPECIAL THANKS\n\n"
-    "* Tommi Martela"
-);
+#include <QObject> // For QObject::tr()
 
 Credits::Credits(std::string id, int width, int height)
 : SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST)
@@ -42,6 +26,23 @@ Credits::Credits(std::string id, int width, int height)
 
 void Credits::render()
 {
+    static MCTextureText CREDITS_TEXT(
+        QObject::tr("PROGRAMMING BY\n\n"
+        "* Jussi Lind\n\n"
+        "GRAPHICS BY\n\n"
+        "* Jussi Lind\n"
+        "* Ville Makiranta\n"
+        "* FindIcons.com\n\n"
+        "RACE TRACKS BY\n\n"
+        "* Jussi Lind\n\n"
+        "FONT\n\n"
+        "* Ubuntu Monospace\n\n"
+        "PATCHES\n\n"
+        "* Markus Rinne\n\n"
+        "SPECIAL THANKS\n\n"
+        "* Tommi Martela").toStdString()
+    );
+
     SurfaceMenu::render();
 
     CREDITS_TEXT.setGlyphSize(20, 20);

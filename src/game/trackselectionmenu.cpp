@@ -38,6 +38,8 @@
 #include <cassert>
 #include <sstream>
 
+#include <QObject> // For QObject::tr()
+
 class TrackItem : public MTFH::MenuItem
 {
 public:
@@ -221,22 +223,22 @@ void TrackItem::render()
 
     // Render track properties
     ss.str("");
-    ss << "  Laps: " << Game::instance().lapCount();
+    ss << QObject::tr("  Laps: ").toStdString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.render(textX, y() - height() / 2 - text.height() * 2, nullptr, m_monospace);
 
     ss.str("");
-    ss << "Length: "
+    ss << QObject::tr("Length: ").toStdString()
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
-       << " m";
+       << QObject::tr(" m").toStdString();
     text.setText(ss.str());
     text.render(textX, y() - height() / 2 - text.height() * 3, nullptr, m_monospace);
 
     if (!m_track.trackData().isLocked())
     {
         ss.str("");
-        ss << "Record: " << Timing::msecsToString(m_lapRecord);
+        ss << QObject::tr("Record: ").toStdString() << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
         text.render(textX, y() - height() / 2 - text.height() * 4, nullptr, m_monospace);
     }

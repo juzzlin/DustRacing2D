@@ -34,7 +34,7 @@ function(resolve_install_paths)
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README
-            DEPENDS ${GAME_BINARY_NAME})
+            DEPENDS ${GAME_BINARY_NAME} ${QM_FILES})
     endif()
 
     message(STATUS "BIN_PATH: " ${BIN_PATH})
@@ -63,6 +63,7 @@ function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
     install(DIRECTORY data/images DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.png")
     install(DIRECTORY data/levels DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.trk")
     install(DIRECTORY data/models DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.obj")
+    install(DIRECTORY data/translations DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.qm")
 
     if(ReleaseBuild)
         # Install .desktop files

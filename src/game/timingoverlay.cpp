@@ -27,6 +27,8 @@
 #include <cassert>
 #include <sstream>
 
+#include <QObject> // For QObject::tr()
+
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCAssetManager::textureFontManager())
 , m_font(m_fontManager.font("default"))
@@ -34,7 +36,20 @@ TimingOverlay::TimingOverlay()
 , m_car(nullptr)
 , m_timing(nullptr)
 , m_race(nullptr)
-, m_posTexts({"---", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"})
+, m_posTexts({
+    QObject::tr("---").toStdString(),
+    QObject::tr("1st").toStdString(),
+    QObject::tr("2nd").toStdString(),
+    QObject::tr("3rd").toStdString(),
+    QObject::tr("4th").toStdString(),
+    QObject::tr("5th").toStdString(),
+    QObject::tr("6th").toStdString(),
+    QObject::tr("7th").toStdString(),
+    QObject::tr("8th").toStdString(),
+    QObject::tr("9th").toStdString(),
+    QObject::tr("10th").toStdString(),
+    QObject::tr("11th").toStdString(),
+    QObject::tr("12th").toStdString()})
 , m_showRecordTime(true)
 {
     assert(Scene::NUM_CARS == static_cast<int>(m_posTexts.size()) - 1);
@@ -86,7 +101,7 @@ void TimingOverlay::renderCurrentLap()
 
     // Render the current lap number
     std::stringstream ss;
-    ss << " LAP:" << (leadersLap <= laps ? leadersLap : laps) << "/" << laps;
+    ss << QObject::tr(" LAP:").toStdString() << (leadersLap <= laps ? leadersLap : laps) << "/" << laps;
 
     const MCGLColor white(1.0, 1.0, 1.0);
 
@@ -102,12 +117,14 @@ void TimingOverlay::renderPosition()
     const int leadersLap = m_timing->leadersLap() + 1;
 
     std::stringstream ss;
-    ss << " POS:" << m_posTexts.at(pos);
+    ss << QObject::tr(" POS:").toStdString() << m_posTexts.at(pos);
 
     const int lapDiff = leadersLap - lap;
     if (lapDiff > 0)
     {
-        ss << "+" << lapDiff << (lapDiff == 1 ? "LAP" : "LAPS");
+        ss << "+"
+           << lapDiff
+           << (lapDiff == 1 ? QObject::tr("LAP").toStdString() : QObject::tr("LAPS").toStdString());
     }
 
     const MCGLColor yellow(1.0, 1.0, 0.0);
@@ -146,7 +163,7 @@ void TimingOverlay::renderSpeed()
     const int h = m_text.height();
     m_text.render(0, h, nullptr, m_font);
 
-    m_text.setText(" KM/H");
+    m_text.setText(QObject::tr(" KM/H").toStdString());
     m_text.setGlyphSize(20, 20);
     m_text.setColor(white);
     m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
@@ -206,7 +223,7 @@ void TimingOverlay::renderLastLapTime()
     m_text.setColor(white);
 
     std::stringstream ss;
-    ss << "L:" << m_timing->msecsToString(lastLapTime);
+    ss << QObject::tr("L:").toStdString() << m_timing->msecsToString(lastLapTime);
     m_text.setText(ss.str());
     m_text.render(
         width() - m_text.width(),
@@ -226,7 +243,7 @@ void TimingOverlay::renderRecordLapTime()
         m_text.setColor(white);
 
         std::stringstream ss;
-        ss << "R:" << m_timing->msecsToString(recordLapTime);
+        ss << QObject::tr("R:").toStdString() << m_timing->msecsToString(recordLapTime);
         m_text.setText(ss.str());
         m_text.render(
             width()  - m_text.width(),

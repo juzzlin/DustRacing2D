@@ -32,6 +32,8 @@
 
 #include <sstream>
 
+#include <QObject> // For QObject::tr()
+
 class ResetAction : public MTFH::MenuItemAction
 {
 public:
@@ -55,7 +57,7 @@ private:
         {
         case RT_POSITIONS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText("Reset best positions?");
+            m_confirmationMenu.setText(QObject::tr("Reset best positions?").toStdString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -67,7 +69,7 @@ private:
 
         case RT_TIMES:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText("Reset record times?");
+            m_confirmationMenu.setText(QObject::tr("Reset record times?").toStdString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -79,7 +81,7 @@ private:
 
         case RT_TRACKS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText("Reset unlocked tracks?");
+            m_confirmationMenu.setText(QObject::tr("Reset unlocked tracks?").toStdString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -149,42 +151,42 @@ void SettingsMenu::populate(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
-    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, "Reset record times");
+    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdString());
     resetRecordTimes->setView(new TextMenuItemView(textSize, *resetRecordTimes), true);
     resetRecordTimes->setAction(
         new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu), true);
 
-    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, "Reset best positions");
+    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdString());
     resetBestPositions->setView(new TextMenuItemView(textSize, *resetBestPositions), true);
     resetBestPositions->setAction(
         new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu), true);
 
-    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, "Reset unlocked tracks");
+    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdString());
     resetUnlockedTracks->setView(new TextMenuItemView(textSize, *resetUnlockedTracks), true);
     resetUnlockedTracks->setAction(
         new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu), true);
 
-    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, "Full screen resolution >");
+    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toStdString());
     selectFullScreenResolution->setView(new TextMenuItemView(textSize, *selectFullScreenResolution), true);
     selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
 
-    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, "Windowed resolution >");
+    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toStdString());
     selectWindowedResolution->setView(new TextMenuItemView(textSize, *selectWindowedResolution), true);
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
-    MenuItem * gameMode = new MenuItem(width, itemHeight, "Game mode >");
+    MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdString());
     gameMode->setView(new TextMenuItemView(textSize, *gameMode), true);
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
-    MenuItem * lapCount = new MenuItem(width, itemHeight, "Lap Count >");
+    MenuItem * lapCount = new MenuItem(width, itemHeight, QObject::tr("Lap Count >").toStdString());
     lapCount->setView(new TextMenuItemView(textSize, *lapCount), true);
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
-    MenuItem * selectFps = new MenuItem(width, itemHeight, "FPS >");
+    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdString());
     selectFps->setView(new TextMenuItemView(textSize, *selectFps), true);
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
-    MenuItem * configureKeys = new MenuItem(width, itemHeight, "Key configuration >");
+    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdString());
     configureKeys->setView(new TextMenuItemView(textSize, *configureKeys), true);
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
@@ -207,7 +209,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
-    MenuItem * twoPlayers = new MenuItem(width, itemHeight, "Two player race");
+    MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toStdString());
     twoPlayers->setView(new TextMenuItemView(20, *twoPlayers), true);
     twoPlayers->setAction(
         []()
@@ -217,7 +219,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * onePlayer = new MenuItem(width, itemHeight, "One player race");
+    MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toStdString());
     onePlayer->setView(new TextMenuItemView(20, *onePlayer), true);
     onePlayer->setAction(
         []()
@@ -227,7 +229,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * timeTrial = new MenuItem(width, itemHeight, "Time Trial");
+    MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toStdString());
     timeTrial->setView(new TextMenuItemView(20, *timeTrial), true);
     timeTrial->setAction(
         []()
@@ -237,7 +239,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * duel = new MenuItem(width, itemHeight, "Duel");
+    MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toStdString());
     duel->setView(new TextMenuItemView(20, *duel), true);
     duel->setAction(
         []()
@@ -261,7 +263,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
-    MenuItem * fps30 = new MenuItem(width, itemHeight, "30 fps");
+    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toStdString());
     fps30->setView(new TextMenuItemView(20, *fps30), true);
     fps30->setAction(
         []()
@@ -272,7 +274,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * fps60 = new MenuItem(width, itemHeight, "60 fps");
+    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toStdString());
     fps60->setView(new TextMenuItemView(20, *fps60), true);
     fps60->setAction(
         []()
