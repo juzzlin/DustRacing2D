@@ -540,7 +540,7 @@ void Scene::render()
     {
     case StateMachine::DoIntro:
 
-        m_renderer.glScene().setSplitType(MCGLScene::Single);
+        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         m_intro->setFadeValue(fadeValue);
         m_intro->render();
 
@@ -555,7 +555,7 @@ void Scene::render()
         m_renderer.program("tile3d").setFadeValue(fadeValue);
         m_renderer.program("text").setFadeValue(fadeValue);
 
-        m_renderer.glScene().setSplitType(MCGLScene::Single);
+        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->render();
 
@@ -580,22 +580,22 @@ void Scene::render()
 
         if (m_game.hasTwoHumanPlayers())
         {
-            m_renderer.glScene().setSplitType(MCGLScene::Left);
+            m_renderer.glScene().setSplitType(MCGLScene::ShowOnLeft);
             renderPlayerScene(m_camera[1]);
             m_timingOverlay[1].render();
 
-            m_renderer.glScene().setSplitType(MCGLScene::Right);
+            m_renderer.glScene().setSplitType(MCGLScene::ShowOnRight);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
         }
         else
         {
-            m_renderer.glScene().setSplitType(MCGLScene::Single);
+            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
         }
 
-        m_renderer.glScene().setSplitType(MCGLScene::Single);
+        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         renderCommonScene();
 
         break;

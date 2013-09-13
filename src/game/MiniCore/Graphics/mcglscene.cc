@@ -28,7 +28,7 @@
 #include <cmath>
 
 MCGLScene::MCGLScene()
-: m_splitType(Single)
+: m_splitType(ShowFullScreen)
 , m_viewWidth(0)
 , m_viewHeight(0)
 , m_sceneWidth(0)
@@ -121,29 +121,26 @@ void MCGLScene::updateViewport()
     static const float zNear = 1.0;
     static const float zFar  = 1000.0;
 
-    if (m_splitType == Single)
+    switch (m_splitType)
     {
+    default:
+    case ShowFullScreen:
         setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
-
         glViewport(0, 0, m_viewWidth, m_viewHeight);
-
         setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
-    }
-    else if (m_splitType == Left)
-    {
-        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+        break;
 
+    case ShowOnLeft:
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
-
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
-    }
-    else if (m_splitType == Right)
-    {
+        break;
+
+    case ShowOnRight:
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
-
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
-
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
+        break;
     }
 
     updateViewProjectionMatrixAndShaders();

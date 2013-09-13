@@ -35,9 +35,11 @@ public:
     //! Viewport split type for two-player setup.
     enum SplitType
     {
-        Single = 0,
-        Left,
-        Right
+        ShowFullScreen = 0,
+        ShowOnLeft,
+        ShowOnRight,
+        ShowOnTop,
+        ShowOnBottom
     };
 
     //! Constructor.
@@ -68,7 +70,7 @@ public:
     virtual void setProjection(float aspectRatio, float zNear, float zFar);
 
     //! Set viewport split type.
-    void setSplitType(SplitType splitType = Single);
+    void setSplitType(SplitType splitType = ShowFullScreen);
 
     //! Get the resulting view projection matrix to be used in shaders.
     const glm::mat4 & viewProjectionMatrix() const;
