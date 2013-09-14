@@ -1,3 +1,13 @@
+1.4.4
+-----
+
+* Fix regression with install paths.
+* Set cmake policy to the required version.
+* Ubuntu => USC in CMakelists.txt
+* Add DEPENDS to runtime targets.
+* Refactor runtime targets.
+* Don't set CMAKE_INSTALL_PREFIX in the code.
+  
 1.4.3
 -----
 
