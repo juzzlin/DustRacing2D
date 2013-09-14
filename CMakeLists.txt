@@ -99,11 +99,7 @@ find_package(OpenGL REQUIRED)
 enable_testing()
 
 # Install paths depend on the build type and target platform
-set(BIN_PATH .)
-set(DATA_PATH .)
-set(DOC_PATH .)
 resolve_install_paths()
-setup_install_targets()
 
 add_subdirectory(src/editor)
 add_subdirectory(src/game)

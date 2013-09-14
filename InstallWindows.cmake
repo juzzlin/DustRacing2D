@@ -38,10 +38,12 @@ function(resolve_install_paths)
         COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/packaging/windows/dustrac.nsi ${CMAKE_BINARY_DIR}
         DEPENDS ${GAME_BINARY_NAME})
 
+    setup_install_targets(${BIN_PATH} ${DATA_PATH} ${DOC_PATH})
+
 endfunction()
 
 # **** Instal targets for Windows ****
-function(setup_install_targets)
+function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
 
     # Install binaries and game data
     install(PROGRAMS ${CMAKE_BINARY_DIR}/${GAME_BINARY_NAME}.exe DESTINATION ${BIN_PATH})

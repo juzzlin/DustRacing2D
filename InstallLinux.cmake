@@ -33,10 +33,12 @@ function(resolve_install_paths)
     # This is the main data path given to the game and editor binaries.
     add_definitions(-DDATA_PATH="${DATA_PATH}")
 
+    setup_install_targets(${BIN_PATH} ${DATA_PATH} ${DOC_PATH})
+
 endfunction()
 
 # **** Instal targets for Linux ****
-function(setup_install_targets)
+function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
 
     # Install binaries and game data
     install(PROGRAMS ${CMAKE_BINARY_DIR}/${GAME_BINARY_NAME} DESTINATION ${BIN_PATH})
