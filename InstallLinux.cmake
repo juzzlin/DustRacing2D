@@ -8,7 +8,7 @@ function(resolve_install_paths)
 
     if(ReleaseBuild)
         message(STATUS "Linux release build with system install targets.")
-        if(Ubuntu)
+        if(USC)
             message(STATUS "Installing to /opt.")
             set(BIN_PATH /opt/dustrac)
             set(DATA_PATH /opt/dustrac/data)
@@ -63,7 +63,7 @@ function(setup_install_targets)
         install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
 
         # Create symlinks to targets
-        if (Ubuntu)
+        if(USC)
             execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${GAME_BINARY_NAME} /usr/bin/${GAME_BINARY_NAME})
             execute_process(COMMAND cmake -E create_symlink ${BIN_PATH}/${EDITOR_BINARY_NAME} /usr/bin/${EDITOR_BINARY_NAME})
         endif()

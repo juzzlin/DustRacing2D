@@ -95,7 +95,7 @@ endif()
 # Copy desktop file
 if(ReleaseBuild AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DesktopFileSourcePath)
-    if(Ubuntu)
+    if(USC)
         set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.opt.in)
     else()
         set(DesktopFileSourcePath ${CMAKE_SOURCE_DIR}/src/dustrac-game.desktop.in)
