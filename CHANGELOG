@@ -1,3 +1,9 @@
+1.4.5
+-----
+
+* Improve documentation of CMake's options.
+* Optional DATA_PATH, BIN_PATH and DOC_PATH.
+
 1.4.4
 -----
 

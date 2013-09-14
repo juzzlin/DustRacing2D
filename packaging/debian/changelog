@@ -1,3 +1,10 @@
+dustrac (1.4.5-1) precise; urgency=low
+
+  * Improve documentation of CMake's options.
+  * Optional DATA_PATH, BIN_PATH and DOC_PATH.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 14 Sep 2013 16:25:39 +0300
+
 dustrac (1.4.4-1) precise; urgency=low
 
   * Fix regression with install paths.

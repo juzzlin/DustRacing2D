@@ -3,7 +3,7 @@ project(DustRacing2D)
 # Global game version
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "4")
-set(VERSION_PATCH "4")
+set(VERSION_PATCH "5")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 option(UseQt5 "Build for Qt5." OFF)
