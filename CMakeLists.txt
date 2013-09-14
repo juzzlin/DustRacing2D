@@ -6,30 +6,24 @@ set(VERSION_MINOR "4")
 set(VERSION_PATCH "4")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-# Enable Qt5 support
-option(UseQt5 "UseQt5" OFF)
+option(UseQt5 "Build for Qt5." OFF)
 
-# Enable release build by giving e.g. -DReleaseBuild=1 to cmake.
-# This should be used when creating DEB and RPM packages.
-option(ReleaseBuild "ReleaseBuild" OFF)
+option(ReleaseBuild "This should be used when creating DEB and RPM packages." OFF)
 
-# Enable debug build.
-option(DebugBuild "DebugBuild" OFF)
+option(DebugBuild "Enable debug build. Effectively adds -g." OFF)
 
-# Enable install layout required by Ubuntu Software Center i.e. installs to /opt.
-option(USC "USC" OFF)
+option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
-# Enable MiniCore build for GLES.
-option(GLES "GLES" OFF)
+option(GLES "Build for OpenGL ES 2.0" OFF)
 
-# Don't use GLEW if enabled.
-option(NO_GLEW "NO_GLEW" OFF)
+option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." OFF)
 
-# Enable OpenGL 3.0 shaders (default is 2.1)
-option(GL30 "GL30" OFF)
+option(GL30 "Build for OpenGL 3.0 shaders (default is 2.1)" OFF)
 
 option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
+
 option(BIN_PATH "Optional BIN_PATH for Linux release build." "")
+
 option(DOC_PATH "Optional DOC_PATH for Linux release build." "")
 
 if(UseQt5)
