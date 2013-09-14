@@ -16,8 +16,8 @@ option(ReleaseBuild "ReleaseBuild" OFF)
 # Enable debug build.
 option(DebugBuild "DebugBuild" OFF)
 
-# Enable install layout required by USC i.e. installs to /opt.
-option(Ubuntu "Ubuntu" OFF)
+# Enable install layout required by Ubuntu Software Center i.e. installs to /opt.
+option(USC "USC" OFF)
 
 # Enable MiniCore build for GLES.
 option(GLES "GLES" OFF)

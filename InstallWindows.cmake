@@ -16,7 +16,8 @@ function(resolve_install_paths)
         COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/AUTHORS ${CMAKE_BINARY_DIR}/AUTHORS
         COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/CHANGELOG ${CMAKE_BINARY_DIR}/CHANGELOG
         COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/COPYING ${CMAKE_BINARY_DIR}/COPYING
-        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README)
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README
+        DEPENDS ${GAME_BINARY_NAME})
 
     if (NOT UseQt5)
         add_custom_target(runtimeQt4 ALL
@@ -28,12 +29,14 @@ function(resolve_install_paths)
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/qt4/QtXml4.dll ${CMAKE_BINARY_DIR}
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/libgcc_s_dw2-1.dll ${CMAKE_BINARY_DIR}
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/libstdc++-6.dll ${CMAKE_BINARY_DIR}
-            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/mingwm10.dll ${CMAKE_BINARY_DIR})        
+            COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/deps/win32/mingw32/mingwm10.dll ${CMAKE_BINARY_DIR}
+            DEPENDS ${GAME_BINARY_NAME})        
     endif()
 
     # Copy NSIS script for manual packaging
     add_custom_target(nsis ALL
-        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/packaging/windows/dustrac.nsi ${CMAKE_BINARY_DIR})
+        COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/packaging/windows/dustrac.nsi ${CMAKE_BINARY_DIR}
+        DEPENDS ${GAME_BINARY_NAME})
 
 endfunction()
 
