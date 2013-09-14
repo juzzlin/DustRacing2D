@@ -28,6 +28,10 @@ option(NO_GLEW "NO_GLEW" OFF)
 # Enable OpenGL 3.0 shaders (default is 2.1)
 option(GL30 "GL30" OFF)
 
+option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
+option(BIN_PATH "Optional BIN_PATH for Linux release build." "")
+option(DOC_PATH "Optional DOC_PATH for Linux release build." "")
+
 if(UseQt5)
     message(STATUS "Using Qt5.")
     cmake_minimum_required(VERSION 2.8.8)

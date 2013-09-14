@@ -1,10 +1,17 @@
 # **** Resolve install and data paths ****
 function(resolve_install_paths)
 
-    # Set default install paths
-    set(BIN_PATH bin)
-    set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/data)
-    set(DOC_PATH ${CMAKE_INSTALL_PREFIX}/share/games/DustRacing/)
+    # Set default install paths for release builds.
+    set(DEFAULT_DATA_PATH_BASE share/games/DustRacing2D)
+    if(NOT DATA_PATH)
+        set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/${DEFAULT_DATA_PATH_BASE}/data)
+    endif()
+    if(NOT BIN_PATH)
+        set(BIN_PATH bin)
+    endif()
+    if(NOT DOC_PATH)
+        set(DOC_PATH ${CMAKE_INSTALL_PREFIX}/${DEFAULT_DATA_PATH_BASE}/)
+    endif()
 
     if(ReleaseBuild)
         message(STATUS "Linux release build with system install targets.")
@@ -29,6 +36,10 @@ function(resolve_install_paths)
             COMMAND cmake -E copy ${CMAKE_SOURCE_DIR}/README ${CMAKE_BINARY_DIR}/README
             DEPENDS ${GAME_BINARY_NAME})
     endif()
+
+    message(STATUS "BIN_PATH: " ${BIN_PATH})
+    message(STATUS "DATA_PATH: " ${DATA_PATH})
+    message(STATUS "DOC_PATH:" ${DOC_PATH})
 
     # This is the main data path given to the game and editor binaries.
     add_definitions(-DDATA_PATH="${DATA_PATH}")
