@@ -18,6 +18,7 @@
 #include "renderer.hpp"
 
 #include <MCAssetManager>
+#include <MCGLColor>
 #include <MCSurface>
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
@@ -25,9 +26,11 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 , m_startLightOff(MCAssetManager::surfaceManager().surface("startLightOff"))
 , m_startLightGlow(MCAssetManager::surfaceManager().surface("startLightGlow"))
 , m_model(model)
+, m_alpha(1.0)
 {
     m_startLightOn.setShaderProgram(&Renderer::instance().program("master"));
     m_startLightOff.setShaderProgram(&Renderer::instance().program("master"));
+    m_startLightOff.setAlphaBlend(true);
     m_startLightGlow.setShaderProgram(&Renderer::instance().program("master"));
 }
 
@@ -98,6 +101,7 @@ void StartlightsOverlay::render()
     switch (m_model.state())
     {
     case Startlights::FirstRow:
+        m_alpha = 1.0;
         renderLights(3, 1, m_model.glowScale());
         break;
 
@@ -110,11 +114,14 @@ void StartlightsOverlay::render()
         break;
 
     case Startlights::Go:
+        m_alpha *= 0.98;
+        m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
         renderLights(3, 0, m_model.glowScale(), true);
         break;
 
-    case Startlights::Appear:
     case Startlights::Disappear:
+    case Startlights::Appear:
+        m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
         renderLights(3, 0, m_model.glowScale());
         break;
 

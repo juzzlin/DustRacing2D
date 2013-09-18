@@ -42,10 +42,11 @@ private:
 
     void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;
 
-    MCSurface & m_startLightOn;
-    MCSurface & m_startLightOff;
-    MCSurface & m_startLightGlow;
+    MCSurface   & m_startLightOn;
+    MCSurface   & m_startLightOff;
+    MCSurface   & m_startLightGlow;
     Startlights & m_model;
+    float         m_alpha;
 };
 
 #endif // STARTLIGHTSOVERLAY_HPP
