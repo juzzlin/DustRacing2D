@@ -14,8 +14,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="straight.svg"
-   inkscape:export-filename="/home/jussil/Home-Laptop-12.04/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/straight.png"
+   sodipodi:docname="finish.svg"
+   inkscape:export-filename="/home/jussil/Home-Laptop-12.04/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/finish.png"
    inkscape:export-xdpi="45"
    inkscape:export-ydpi="45">
   <defs
@@ -27,16 +27,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="257.19192"
-     inkscape:cy="281.02981"
+     inkscape:zoom="0.70000001"
+     inkscape:cx="173.85317"
+     inkscape:cy="271.23548"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1307"
      inkscape:window-height="752"
-     inkscape:window-x="181"
-     inkscape:window-y="134"
+     inkscape:window-x="209"
+     inkscape:window-y="84"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -54,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,19 +64,19 @@
      id="layer1"
      transform="translate(0,-540.36218)">
     <rect
-       style="fill:#00ff00;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.00096571px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#00ff00;fill-rule:evenodd;stroke:#00ff00;stroke-width:0.99124753px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="rect2985"
-       width="51.199036"
-       height="512.99902"
-       x="-0.49951717"
-       y="539.86273" />
+       width="50.208752"
+       height="513.00873"
+       x="0.49562377"
+       y="539.85779" />
     <rect
-       style="fill:#00ff00;fill-rule:evenodd;stroke:#00ff00;stroke-width:1.00096571px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#00ff00;fill-rule:evenodd;stroke:#00ff00;stroke-width:0.99124753px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="rect2985-5"
-       width="51.199036"
-       height="512.99902"
-       x="461.30045"
-       y="539.86267" />
+       width="50.208752"
+       height="513.00873"
+       x="461.29559"
+       y="539.85785" />
     <rect
        style="fill:#f9f9f9;stroke:#f9f9f9;stroke-width:1.11268008;stroke-opacity:1"
        id="rect3885"
@@ -105,5 +105,12 @@
        height="512.88733"
        x="439.35635"
        y="539.91852" />
+    <rect
+       style="fill:#f9f9f9;stroke:#f9f9f9;stroke-width:1.02411699000000000;stroke-opacity:1"
+       id="rect3941"
+       width="388.97589"
+       height="15.975883"
+       x="62.512054"
+       y="539.87427" />
   </g>
 </svg>
