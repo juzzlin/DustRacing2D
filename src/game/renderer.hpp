@@ -119,6 +119,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent * event);
 
     //! \reimp
+    void mouseMoveEvent(QMouseEvent * event);
+
+    //! \reimp
     void closeEvent(QCloseEvent * event);
 
 private:

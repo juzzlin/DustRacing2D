@@ -71,7 +71,6 @@ static void printHelp()
     std::cout << "Dust Racing 2D version " << VERSION << std::endl;
     std::cout << "Copyright (c) 2011-2013 Jussi Lind." << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << "--show-cursor Show the mouse cursor in menus." << std::endl;
     std::cout << "--help        Show this help." << std::endl;
     std::cout << std::endl;
 }
@@ -110,7 +109,6 @@ int main(int argc, char ** argv)
         MCLogger().info() << "Creating game object..";
         Game game;
         game.setFps(Settings::instance().loadFps());
-        game.setShowCursor(std::find(args.begin(), args.end(), "--show-cursor") != args.end());
 
         // Initialize and start the game
         if (game.init())

@@ -75,6 +75,8 @@ Game::Game()
 
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
+    connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
+    connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
@@ -177,16 +179,14 @@ void Game::setFps(unsigned int fps)
     m_renderTimer.setInterval(m_renderDelay);
 }
 
-void Game::setShowCursor(bool showCursor)
+void Game::showCursor()
 {
-    if (!showCursor)
-    {
-        m_renderer->setCursor(Qt::BlankCursor);
-    }
-    else
-    {
-        m_renderer->setCursor(Qt::ArrowCursor);
-    }
+    m_renderer->setCursor(Qt::ArrowCursor);
+}
+
+void Game::hideCursor()
+{
+    m_renderer->setCursor(Qt::BlankCursor);
 }
 
 void Game::setMode(GameMode gameMode)

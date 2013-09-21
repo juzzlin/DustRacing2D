@@ -41,6 +41,10 @@ EventHandler::EventHandler(InputHandler & inputHandler)
     m_keyToActionMap[Qt::Key_S]        = ActionMapping(1, InputHandler::IA_DOWN);
 
     loadKeyMappings();
+
+    m_mouseCursorTimer.setSingleShot(true);
+    m_mouseCursorTimer.setInterval(3000);
+    connect(&m_mouseCursorTimer, SIGNAL(timeout()), this, SIGNAL(cursorHid()));
 }
 
 void EventHandler::loadKeyMappings()
@@ -135,6 +139,14 @@ bool EventHandler::handleMouseReleaseEvent(QMouseEvent * event, int screenWidth,
         }
     }
 
+    return true;
+}
+
+bool EventHandler::handleMouseMoveEvent(QMouseEvent * event)
+{
+    Q_UNUSED(event)
+    m_mouseCursorTimer.start();
+    emit cursorRevealed();
     return true;
 }
 

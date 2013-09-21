@@ -20,6 +20,7 @@
 
 #include <QKeyEvent>
 #include <QObject>
+#include <QTimer>
 
 #include <string>
 
@@ -39,6 +40,8 @@ public:
 
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
+    bool handleMouseMoveEvent(QMouseEvent * event);
+
     bool handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
 
     bool handleMouseReleaseEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
@@ -50,6 +53,10 @@ signals:
     void gameExited();
 
     void soundRequested(const std::string & handle);
+
+    void cursorRevealed();
+
+    void cursorHid();
 
 private:
 
@@ -102,6 +109,7 @@ private:
     bool                      m_captureMode;
     InputHandler::InputAction m_captureAction;
     int                       m_capturePlayer;
+    QTimer                    m_mouseCursorTimer;
 };
 
 #endif // EVENTHANDLER_HPP

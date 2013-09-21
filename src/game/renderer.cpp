@@ -72,6 +72,7 @@ Renderer::Renderer(
 
     setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setWindowIcon(QIcon(":/dustrac-game.png"));
+    setMouseTracking(true);
 
     if (!fullScreen)
     {
@@ -267,6 +268,12 @@ void Renderer::mouseReleaseEvent(QMouseEvent * event)
 {
     assert(m_eventHandler);
     m_eventHandler->handleMouseReleaseEvent(event, width(), height(), true);
+}
+
+void Renderer::mouseMoveEvent(QMouseEvent * event)
+{
+    assert(m_eventHandler);
+    m_eventHandler->handleMouseMoveEvent(event);
 }
 
 void Renderer::closeEvent(QCloseEvent * event)
