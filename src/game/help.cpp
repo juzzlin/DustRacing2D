@@ -48,7 +48,7 @@ void Help::render()
 
     SurfaceMenu::render();
 
-    HELP_TEXT.setGlyphSize(20, 20);
+    HELP_TEXT.setGlyphSize(20, 20 * height() / 640);
     HELP_TEXT.render(
         width()  / 2 - HELP_TEXT.width()  / 2,
         height() / 2 + HELP_TEXT.height() / 2, nullptr, font());
