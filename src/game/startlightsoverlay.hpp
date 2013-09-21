@@ -43,7 +43,9 @@ private:
     void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;
 
     MCSurface   & m_startLightOn;
+    MCSurface   & m_startLightOnCorner;
     MCSurface   & m_startLightOff;
+    MCSurface   & m_startLightOffCorner;
     MCSurface   & m_startLightGlow;
     Startlights & m_model;
     float         m_alpha;

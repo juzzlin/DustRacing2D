@@ -23,15 +23,21 @@
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
 : m_startLightOn(MCAssetManager::surfaceManager().surface("startLightOn"))
+, m_startLightOnCorner(MCAssetManager::surfaceManager().surface("startLightOnCorner"))
 , m_startLightOff(MCAssetManager::surfaceManager().surface("startLightOff"))
+, m_startLightOffCorner(MCAssetManager::surfaceManager().surface("startLightOffCorner"))
 , m_startLightGlow(MCAssetManager::surfaceManager().surface("startLightGlow"))
 , m_model(model)
 , m_alpha(1.0)
 {
-    m_startLightOn.setShaderProgram(&Renderer::instance().program("master"));
-    m_startLightOff.setShaderProgram(&Renderer::instance().program("master"));
+    MCGLShaderProgram * const shader = &Renderer::instance().program("master");
+    m_startLightOn.setShaderProgram(shader);
+    m_startLightOnCorner.setShaderProgram(shader);
+    m_startLightOff.setShaderProgram(shader);
     m_startLightOff.setAlphaBlend(true);
-    m_startLightGlow.setShaderProgram(&Renderer::instance().program("master"));
+    m_startLightOffCorner.setShaderProgram(shader);
+    m_startLightOffCorner.setAlphaBlend(true);
+    m_startLightGlow.setShaderProgram(shader);
 }
 
 void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bool glowAlways) const
@@ -47,23 +53,55 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
     {
         for (int col = 0; col < cols; col++)
         {
+            const MCVector3dF pos(
+                x + col * m_startLightOff.width(),
+                y + h - row * m_startLightOff.height());
+
             if (row < litRows)
             {
-                m_startLightOn.render(
-                    nullptr,
-                    MCVector3dF(
-                        x + col * m_startLightOn.width(),
-                        y + h - row * m_startLightOn.height()),
-                    0);
+                if (row == 0 && col == 0)
+                {
+                    m_startLightOnCorner.render(nullptr, pos, 0);
+                }
+                else if (row == rows - 1 && col == 0)
+                {
+                    m_startLightOnCorner.render(nullptr, pos, 90);
+                }
+                else if (row == rows - 1 && col == cols - 1)
+                {
+                    m_startLightOnCorner.render(nullptr, pos, 180);
+                }
+                else if (row == 0 && col == cols - 1)
+                {
+                    m_startLightOnCorner.render(nullptr, pos, 270);
+                }
+                else
+                {
+                    m_startLightOn.render(nullptr, pos, 0);
+                }
             }
             else
             {
-                m_startLightOff.render(
-                    nullptr,
-                    MCVector3dF(
-                        x + col * m_startLightOff.width(),
-                        y + h - row * m_startLightOff.height()),
-                    0);
+                if (row == 0 && col == 0)
+                {
+                    m_startLightOffCorner.render(nullptr, pos, 0);
+                }
+                else if (row == rows - 1 && col == 0)
+                {
+                    m_startLightOffCorner.render(nullptr, pos, 90);
+                }
+                else if (row == rows - 1 && col == cols - 1)
+                {
+                    m_startLightOffCorner.render(nullptr, pos, 180);
+                }
+                else if (row == 0 && col == cols - 1)
+                {
+                    m_startLightOffCorner.render(nullptr, pos, 270);
+                }
+                else
+                {
+                    m_startLightOff.render(nullptr, pos, 0);
+                }
             }
         }
     }
@@ -116,12 +154,14 @@ void StartlightsOverlay::render()
     case Startlights::Go:
         m_alpha *= 0.98;
         m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
+        m_startLightOffCorner.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
         renderLights(3, 0, m_model.glowScale(), true);
         break;
 
     case Startlights::Disappear:
     case Startlights::Appear:
         m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
+        m_startLightOffCorner.setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
         renderLights(3, 0, m_model.glowScale());
         break;
 
