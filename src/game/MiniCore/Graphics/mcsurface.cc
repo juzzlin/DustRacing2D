@@ -281,7 +281,7 @@ void MCSurface::setScale(MCFloat x, MCFloat y, MCFloat z)
     m_sz = z;
 }
 
-void MCSurface::setScale(MCFloat w, MCFloat h)
+void MCSurface::setSize(MCFloat w, MCFloat h)
 {
     m_sx = w / m_w;
     m_sy = h / m_h;

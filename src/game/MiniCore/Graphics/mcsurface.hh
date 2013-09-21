@@ -101,8 +101,8 @@ public:
     //! Set scaling factors.
     void setScale(MCFloat x, MCFloat y, MCFloat z);
 
-    //! Set scaling by dimensions.
-    void setScale(MCFloat w, MCFloat h);
+    //! Set texture size.
+    void setSize(MCFloat w, MCFloat h);
 
     /*! Render by using the default size.
      * \param pos The position.

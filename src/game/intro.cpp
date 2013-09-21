@@ -41,6 +41,6 @@ void Intro::render()
 {
     const int w2 = width()  / 2;
     const int h2 = height() / 2;
-    m_back.setScale(width(), height());
+    m_back.setSize(width(), height());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
 }

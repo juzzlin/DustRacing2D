@@ -160,7 +160,7 @@ void TrackItem::render()
                         pSurface->setColor(MCGLColor(1.0, 1.0, 1.0));
                     }
 
-                    pSurface->setScale(tileH, tileW);
+                    pSurface->setSize(tileH, tileW);
                     pSurface->render(
                         nullptr,
                         MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),

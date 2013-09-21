@@ -166,7 +166,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
                 font.surface().setTexCoords(uv);
             }
 
-            font.surface().setScale(m_glyphWidth, m_glyphHeight);
+            font.surface().setSize(m_glyphWidth, m_glyphHeight);
 
             if (shadow)
             {

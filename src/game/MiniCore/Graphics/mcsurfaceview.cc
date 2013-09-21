@@ -71,14 +71,14 @@ void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCFloat w, MCFloat h, MCCamera * p)
 {
-    m_surface->setScale(w, h);
+    m_surface->setSize(w, h);
     m_surface->render(p, l, angle, !m_batchMode);
 }
 
 void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCFloat angle, MCFloat w, MCFloat h, MCCamera * p)
 {
-    m_surface->setScale(w, h);
+    m_surface->setSize(w, h);
     m_surface->renderShadow(p, l, angle, !m_batchMode);
 }
 
