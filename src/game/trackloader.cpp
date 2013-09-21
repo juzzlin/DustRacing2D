@@ -303,10 +303,6 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     {
         return TrackTile::TT_SAND_GRASS_STRAIGHT;
     }
-    else if (str == "sandGrassStraight45Female")
-    {
-        return TrackTile::TT_SAND_GRASS_STRAIGHT_45_FEMALE;
-    }
     else if (str == "sandGrassCorner")
     {
         return TrackTile::TT_SAND_GRASS_CORNER;

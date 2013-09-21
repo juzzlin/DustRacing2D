@@ -39,7 +39,6 @@ public:
         TT_GRASS,
         TT_SAND,
         TT_SAND_GRASS_STRAIGHT,
-        TT_SAND_GRASS_STRAIGHT_45_FEMALE,
         TT_SAND_GRASS_CORNER,
         TT_SAND_GRASS_CORNER_2,
         TT_FINISH

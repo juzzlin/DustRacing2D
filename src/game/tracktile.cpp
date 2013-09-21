@@ -79,7 +79,6 @@ void TrackTile::setTileTypeEnum(TrackTile::TileType type)
     case TT_STRAIGHT_45_MALE:
     case TT_STRAIGHT_45_FEMALE:
     case TT_SAND_GRASS_STRAIGHT:
-    case TT_SAND_GRASS_STRAIGHT_45_FEMALE:
     case TT_FINISH:
         m_hasAsphalt = true;
         break;
