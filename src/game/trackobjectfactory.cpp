@@ -30,7 +30,7 @@ TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 {
 }
 
-TrackObject & TrackObjectFactory::build(
+TrackObject * TrackObjectFactory::build(
     QString category, QString role, MCVector2dF location, int angle)
 {
     MCObject * object = nullptr;
@@ -140,8 +140,6 @@ TrackObject & TrackObjectFactory::build(
     else if (
         role == "grid"                 ||
         role == "sandAreaCurve"        ||
-        role == "sandAreaCurve45"      ||
-        role == "sandAreaCurve45Right" ||
         role == "sandAreaBig")
     {
         MCSurfaceObjectData data(role.toStdString());
@@ -196,7 +194,7 @@ TrackObject & TrackObjectFactory::build(
         MCObject & object = m_objectFactory.build(data, *view);
 
         // Wrap the MCObject in a TrackObject
-        return *new TrackObject(category, role, object);
+        return new TrackObject(category, role, object);
     }
     else if (role == "wall" || role == "wallLong")
     {
@@ -216,14 +214,15 @@ TrackObject & TrackObjectFactory::build(
 
     if (!object)
     {
-        MCLogger().fatal() << "Failed to create object '" << role.toStdString() << "'";
+        MCLogger().warning() << "Unknown or deprecated object '" << role.toStdString() << "'";
+        return nullptr;
     }
+    else
+    {
+        object->view()->setShaderProgram(&Renderer::instance().program("master"));
+        object->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
-    assert(object);
-
-    object->view()->setShaderProgram(&Renderer::instance().program("master"));
-    object->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
-
-    // Wrap the MCObject in a TrackObject
-    return *new TrackObject(category, role, *object);
+        // Wrap the MCObject in a TrackObject
+        return new TrackObject(category, role, *object);
+    }
 }

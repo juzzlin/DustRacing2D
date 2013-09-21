@@ -352,8 +352,10 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // The y-coordinates needs to be mirrored, because the y-axis is pointing
     // down in the editor's coordinate system.
     MCVector2dF location(x, h - y);
-
-    newData.objects().add(m_trackObjectFactory.build(category, role, location, angle), true);
+    if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle))
+    {
+        newData.objects().add(*object, true);
+    }
 }
 
 void TrackLoader::readTargetNode(

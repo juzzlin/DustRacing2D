@@ -242,10 +242,6 @@
  <o r="sandAreaCurve" c="free" x="4582" y="1000" o="180"/>
  <o r="sandAreaCurve" c="free" x="538" y="536" o="0"/>
  <o r="sandAreaCurve" c="free" x="538" y="998" o="-90"/>
- <o r="sandAreaCurve45" c="free" x="2177" y="604" o="0"/>
- <o r="sandAreaCurve45" c="free" x="2943" y="933" o="180"/>
- <o r="sandAreaCurve45Right" c="free" x="2943" y="604" o="0"/>
- <o r="sandAreaCurve45Right" c="free" x="2177" y="931" o="180"/>
  <o r="crate" c="free" x="2556" y="514" o="211"/>
  <o r="crate" c="free" x="2558" y="471" o="205"/>
  <o r="crate" c="free" x="2554" y="434" o="194"/>

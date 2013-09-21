@@ -29,8 +29,9 @@ public:
     //! Constructor.
     TrackObjectFactory(MCObjectFactory & objectFactory);
 
-    //! Build and return an MCObject wrapped in TrackObject.
-    TrackObject & build(QString category, QString role, MCVector2dF location, int angle);
+    /*! Build and return an MCObject wrapped in TrackObject.
+     *  \return nullptr on an unknown or deprecated object. */
+    TrackObject * build(QString category, QString role, MCVector2dF location, int angle);
 
 private:
 
