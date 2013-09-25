@@ -22,6 +22,7 @@
 #include <QDomElement>
 #include <QFile>
 
+#include "mcexception.hh"
 #include "mcsurfaceconfigloader.hh"
 #include "mcsurfacemetadata.hh"
 #include "mclogger.hh"
@@ -30,7 +31,16 @@
 
 MCSurfaceConfigLoader::MCSurfaceConfigLoader()
 : m_surfaces()
-{}
+{
+    m_blendFuncMap["one"]              = GL_ONE;
+    m_blendFuncMap["zero"]             = GL_ZERO;
+    m_blendFuncMap["srcColor"]         = GL_SRC_COLOR;
+    m_blendFuncMap["oneMinusSrcColor"] = GL_ONE_MINUS_SRC_COLOR;
+    m_blendFuncMap["srcAlpha"]         = GL_SRC_ALPHA;
+    m_blendFuncMap["oneMinusSrcAlpha"] = GL_ONE_MINUS_SRC_ALPHA;
+    m_blendFuncMap["dstColor"]         = GL_DST_COLOR;
+    m_blendFuncMap["oneMinusDstColor"] = GL_ONE_MINUS_DST_COLOR;
+}
 
 bool MCSurfaceConfigLoader::load(const std::string & path)
 {
@@ -60,16 +70,16 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                const std::string image   = tag.attribute("image", "").toStdString();
-                newData->imagePath        = baseImagePath + QDir::separator().toLatin1() + image;
-                newData->handle           = tag.attribute("handle", "").toStdString();
-                newData->handle2          = tag.attribute("handle2", "").toStdString();
-                newData->handle3          = tag.attribute("handle3", "").toStdString();
-                newData->xAxisMirror      = tag.attribute("xAxisMirror", "0").toInt();
-                newData->z0               = tag.attribute("z0", "0").toInt();
-                newData->z1               = tag.attribute("z1", "0").toInt();
-                newData->z2               = tag.attribute("z2", "0").toInt();
-                newData->z3               = tag.attribute("z3", "0").toInt();
+                const std::string image = tag.attribute("image", "").toStdString();
+                newData->imagePath      = baseImagePath + QDir::separator().toLatin1() + image;
+                newData->handle         = tag.attribute("handle", "").toStdString();
+                newData->handle2        = tag.attribute("handle2", "").toStdString();
+                newData->handle3        = tag.attribute("handle3", "").toStdString();
+                newData->xAxisMirror    = tag.attribute("xAxisMirror", "0").toInt();
+                newData->z0             = tag.attribute("z0", "0").toInt();
+                newData->z1             = tag.attribute("z1", "0").toInt();
+                newData->z2             = tag.attribute("z2", "0").toInt();
+                newData->z3             = tag.attribute("z3", "0").toInt();
 
                 const unsigned int width = tag.attribute("w", "0").toUInt();
                 newData->width = std::pair<int, bool>(width, width > 0);
@@ -143,7 +153,7 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                             }
                             else
                             {
-                                MCLogger().error() << "Unknown min filter '" << min.c_str() << "'";
+                                throw MCException("Unknown min filter '" + min + "'");
                             }
 
                             if (mag == "linear")
@@ -156,14 +166,13 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                             }
                             else
                             {
-                                MCLogger().error() << "Unknown mag filter '" << mag.c_str() << "'";
+                                throw MCException("Unknown mag filter '" + mag + "'");
                             }
                         }
                     }
                     else
                     {
-                        MCLogger().error() <<
-                            "Unknown tag '" << childNode.nodeName().toStdString() << "'";
+                        throw MCException("Unknown tag '" + childNode.nodeName().toStdString() + "'");
                     }
 
                     childNode = childNode.nextSibling();
@@ -182,43 +191,16 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
     const std::string & function) const
 {
-    if (function == "one")
+    try
     {
-        return GL_ONE;
+        return m_blendFuncMap.at(function);
     }
-    else if (function == "zero")
+    catch (...)
     {
-        return GL_ZERO;
+        throw MCException("Unknown alpha blend function '" + function + "'");
     }
-    else if (function == "srcColor")
-    {
-        return GL_SRC_COLOR;
-    }
-    else if (function == "oneMinusSrcColor")
-    {
-        return GL_ONE_MINUS_SRC_COLOR;
-    }
-    else if (function == "srcAlpha")
-    {
-        return GL_SRC_ALPHA;
-    }
-    else if (function == "oneMinusSrcAlpha")
-    {
-        return GL_ONE_MINUS_SRC_ALPHA;
-    }
-    else if (function == "dstColor")
-    {
-        return GL_DST_COLOR;
-    }
-    else if (function == "oneMinusDstColor")
-    {
-        return GL_ONE_MINUS_DST_COLOR;
-    }
-    else
-    {
-        MCLogger().error() << "Unknown alpha blend function '" << function << "'";
-        return GL_SRC_ALPHA;
-    }
+
+    return GL_SRC_ALPHA;
 }
 
 unsigned int MCSurfaceConfigLoader::surfaceCount() const

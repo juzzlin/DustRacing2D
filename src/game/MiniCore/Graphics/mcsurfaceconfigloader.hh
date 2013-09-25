@@ -21,6 +21,7 @@
 #define MCSURFACECONFIGLOADER_HH
 
 #include <string>
+#include <map>
 #include <vector>
 #include <memory>
 
@@ -53,6 +54,9 @@ private:
 
     typedef std::shared_ptr<MCSurfaceMetaData> SurfaceDataPtr;
     std::vector<SurfaceDataPtr> m_surfaces;
+
+    typedef std::map<std::string, GLenum> BlendFuncMap;
+    BlendFuncMap m_blendFuncMap;
 };
 
 #endif // MCSURFACECONFIGLOADER_HH
