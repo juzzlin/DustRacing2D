@@ -250,7 +250,7 @@ void TrackItem::render()
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene)
-: SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE, false)
+: SurfaceMenu("trackSelectionBack", id, width, height, Menu::MS_SHOW_ONE, true, true, true)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 {
@@ -297,7 +297,7 @@ void TrackSelectionMenu::selectCurrentItem()
         m_scene.setActiveTrack(*m_selectedTrack);
         MCLogger().info() <<
             "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";
-        setDone(true);
+        setIsDone(true);
     }
 }
 

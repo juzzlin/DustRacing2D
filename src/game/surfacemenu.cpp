@@ -25,7 +25,15 @@
 
 #include <cassert>
 
-SurfaceMenu::SurfaceMenu(std::string surfaceId, std::string id, int width, int height, Menu::MenuStyle style, bool quitItem)
+SurfaceMenu::SurfaceMenu(
+    std::string surfaceId,
+    std::string id,
+    int width,
+    int height,
+    Menu::MenuStyle style,
+    bool quitItem,
+    bool prevItem,
+    bool nextItem)
 : Menu(id, width, height, style)
 , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
 , m_font(MCAssetManager::textureFontManager().font("default"))
@@ -38,7 +46,23 @@ SurfaceMenu::SurfaceMenu(std::string surfaceId, std::string id, int width, int h
         const int textSize = 40;
         MTFH::MenuItem * quit = new MTFH::MenuItem(textSize, textSize, "X");
         quit->setView(new TextMenuItemView(textSize, *quit), true);
-        addQuitItem(*quit, true);
+        addMouseItem(MTFH::Menu::MI_QUIT, *quit, true);
+    }
+
+    if (prevItem)
+    {
+        const int textSize = 40;
+        MTFH::MenuItem * prev = new MTFH::MenuItem(textSize, textSize, "<");
+        prev->setView(new TextMenuItemView(textSize, *prev), true);
+        addMouseItem(MTFH::Menu::MI_PREV, *prev, true);
+    }
+
+    if (nextItem)
+    {
+        const int textSize = 40;
+        MTFH::MenuItem * next = new MTFH::MenuItem(textSize, textSize, ">");
+        next->setView(new TextMenuItemView(textSize, *next), true);
+        addMouseItem(MTFH::Menu::MI_NEXT, *next, true);
     }
 }
 

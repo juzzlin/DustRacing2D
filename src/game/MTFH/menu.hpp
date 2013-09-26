@@ -38,6 +38,13 @@ public:
         MS_SHOW_ONE // Show only one item at a time
     };
 
+    enum MouseItemType
+    {
+        MI_QUIT,
+        MI_PREV,
+        MI_NEXT
+    };
+
     //! Constructor.
     Menu(std::string id, int width, int height, MenuStyle style = MS_VERTICAL_LIST);
 
@@ -86,17 +93,16 @@ public:
     //! Add item to the menu.
     virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
 
-    /*! Add quit item to the menu. It's a special item that will always be located
-     *  at the upper right corner of the menu. */
-    virtual void addQuitItem(MenuItem & menuItem, bool takeOwnership = false);
+    //! Add mouse control item.
+    virtual void addMouseItem(MouseItemType type, MenuItem & menuItem, bool takeOwnership = false);
 
     //! Use this if the current menu stack needs to be
     //! completely quit, for example when the execution
     //! should move from the menu to the actual game.
-    void setDone(bool done);
+    void setIsDone(bool done);
 
     //! \returns true if done.
-    bool done() const;
+    bool isDone() const;
 
     //! Returns the width of the menu.
     int width() const;
@@ -127,10 +133,28 @@ protected:
 
 private:
 
+    struct MouseItem
+    {
+        MenuItem * item;
+        MouseItemType type;
+    };
+
+    void handleMousePressOnItem(int x, int y);
+
+    bool handleMousePressOnMouseItem(int x, int y);
+
+    void handleMouseReleaseOnItem(int x, int y);
+
+    bool handleMouseReleaseOnMouseItem(int x, int y);
+
+    void renderItems();
+
+    void renderMouseItems();
+
     void updateFocus();
 
     std::vector<MenuItem *> m_items;
-    MenuItem * m_quitItem;
+    std::vector<MouseItem> m_mouseItems;
     typedef std::shared_ptr<MenuItem> MenuItemPtr;
     typedef std::vector<MenuItemPtr> MenuItemVector;
     MenuItemVector m_ownedMenuItems;
@@ -139,7 +163,7 @@ private:
     int m_currentIndex;
     int m_selectedIndex;
     MenuStyle m_style;
-    bool m_done;
+    bool m_isDone;
     bool m_wrapAround;
 
     friend class MenuManager;

@@ -22,14 +22,13 @@
 namespace MTFH {
 
 Menu::Menu(std::string id, int width, int height, MenuStyle style)
-: m_quitItem(nullptr)
-, m_id(id)
+: m_id(id)
 , m_width(width)
 , m_height(height)
 , m_currentIndex(-1)
 , m_selectedIndex(-1)
 , m_style(style)
-, m_done(false)
+, m_isDone(false)
 , m_wrapAround(true)
 {
 }
@@ -54,11 +53,17 @@ void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
     updateFocus();
 }
 
-void Menu::addQuitItem(MenuItem & menuItem, bool takeOwnership)
+void Menu::addMouseItem(Menu::MouseItemType type, MenuItem & menuItem, bool takeOwnership)
 {
-    m_quitItem = &menuItem;
+    MouseItem mouseItem;
+    mouseItem.item = &menuItem;
+    mouseItem.type = type;
+    m_mouseItems.push_back(mouseItem);
 
-    addItem(menuItem, takeOwnership);
+    if (takeOwnership)
+    {
+        m_ownedMenuItems.push_back(MenuItemPtr(&menuItem));
+    }
 }
 
 MenuItem * Menu::currentItem() const
@@ -98,6 +103,12 @@ unsigned int Menu::itemCount() const
 
 void Menu::render()
 {
+    renderItems();
+    renderMouseItems();
+}
+
+void Menu::renderItems()
+{
     if (!m_items.size())
     {
         return;
@@ -109,22 +120,16 @@ void Menu::render()
         int totalHeight = 0;
         for (MenuItem * item : m_items)
         {
-            if (item != m_quitItem)
-            {
-                totalHeight += item->height();
-            }
+            totalHeight += item->height();
         }
 
         // Render centered items
         int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            if (item != m_quitItem)
-            {
-                item->setPos(m_width / 2, startY);
-                item->render();
-                startY += item->height();
-            }
+            item->setPos(m_width / 2, startY);
+            item->render();
+            startY += item->height();
         }
     }
     else if (m_style == Menu::MS_HORIZONTAL_LIST)
@@ -133,39 +138,47 @@ void Menu::render()
         int totalWidth = 0;
         for (MenuItem * item : m_items)
         {
-            if (item != m_quitItem)
-            {
-                totalWidth += item->width();
-            }
+            totalWidth += item->width();
         }
 
         // Render centered items
         int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
         for (MenuItem * item : m_items)
         {
-            if (item != m_quitItem)
-            {
-                item->setPos(startX, m_height / 2);
-                item->render();
-                startX += item->width();
-            }
+            item->setPos(startX, m_height / 2);
+            item->render();
+            startX += item->width();
         }
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
         MenuItem * item = m_items.at(m_currentIndex);
-        if (item != m_quitItem)
-        {
-            item->setPos(m_width / 2, m_height / 2);
-            item->render();
-        }
+        item->setPos(m_width / 2, m_height / 2);
+        item->render();
     }
+}
 
-    // Render the quit item, if set
-    if (m_quitItem)
+void Menu::renderMouseItems()
+{
+    for (MouseItem item : m_mouseItems)
     {
-        m_quitItem->setPos(m_width - m_quitItem->width(), m_height - m_quitItem->height());
-        m_quitItem->render();
+        switch (item.type)
+        {
+        case Menu::MI_QUIT:
+            item.item->setPos(m_width - item.item->width(), m_height - item.item->height());
+            item.item->render();
+            break;
+
+        case Menu::MI_PREV:
+            item.item->setPos(item.item->width(), m_height / 2);
+            item.item->render();
+            break;
+
+        case Menu::MI_NEXT:
+            item.item->setPos(m_width - item.item->width(), m_height / 2);
+            item.item->render();
+            break;
+        }
     }
 }
 
@@ -211,22 +224,68 @@ void Menu::selectCurrentItem()
 {
     if (m_items.size())
     {
-        if (m_items.at(m_currentIndex) == m_quitItem)
+        for (MenuItem * item : m_items)
         {
-            // The quit item was clicked. Cancel the current index in order to
-            // make the quit item not selected when the menu is opened again.
-            m_currentIndex = m_selectedIndex;
-            exit();
+            item->setSelected(false);
         }
-        else
-        {
-            for (MenuItem * item : m_items)
-            {
-                item->setSelected(false);
-            }
 
-            m_items.at(m_currentIndex)->setSelected(true);
-            m_selectedIndex = m_currentIndex;
+        m_items.at(m_currentIndex)->setSelected(true);
+        m_selectedIndex = m_currentIndex;
+    }
+}
+
+bool Menu::handleMousePressOnMouseItem(int x, int y)
+{
+    for (MouseItem mouseItem : m_mouseItems)
+    {
+        MenuItem & item = *mouseItem.item;
+        const int x1 = item.x() - item.width()  / 2;
+        const int x2 = item.x() + item.width()  / 2;
+        const int y1 = item.y() - item.height() / 2;
+        const int y2 = item.y() + item.height() / 2;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        {
+            item.setFocused(true);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void Menu::handleMousePressOnItem(int x, int y)
+{
+    for (MouseItem mouseItem : m_mouseItems)
+    {
+        MenuItem & item = *mouseItem.item;
+        const int x1 = item.x() - item.width()  / 2;
+        const int x2 = item.x() + item.width()  / 2;
+        const int y1 = item.y() - item.height() / 2;
+        const int y2 = item.y() + item.height() / 2;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        {
+            item.setFocused(true);
+            return;
+        }
+    }
+
+    if (m_style != Menu::MS_SHOW_ONE)
+    {
+        for (unsigned int i = 0; i < m_items.size(); i++)
+        {
+            MenuItem & item = *m_items.at(i);
+            const int x1 = item.x() - item.width()  / 2;
+            const int x2 = item.x() + item.width()  / 2;
+            const int y1 = item.y() - item.height() / 2;
+            const int y2 = item.y() + item.height() / 2;
+
+            if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+            {
+                setCurrentIndex(i);
+                break;
+            }
         }
     }
 }
@@ -236,9 +295,23 @@ void Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
     x = x * width()  / screenWidth;
     y = y * height() / screenHeight;
 
-    for (unsigned int i = 0; i < m_items.size(); i++)
+    if (!handleMousePressOnMouseItem(x, y))
     {
-        MenuItem & item = *m_items.at(i);
+        handleMousePressOnItem(x, y);
+    }
+}
+
+bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
+{
+    for (MouseItem mouseItem : m_mouseItems)
+    {
+        MenuItem & item = *mouseItem.item;
+        item.setFocused(false);
+    }
+
+    for (MouseItem mouseItem : m_mouseItems)
+    {
+        MenuItem & item = *mouseItem.item;
         const int x1 = item.x() - item.width()  / 2;
         const int x2 = item.x() + item.width()  / 2;
         const int y1 = item.y() - item.height() / 2;
@@ -246,8 +319,59 @@ void Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
 
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
-            setCurrentIndex(i);
-            break;
+            switch (mouseItem.type)
+            {
+            case Menu::MI_QUIT:
+                exit();
+                return true;
+
+            case Menu::MI_PREV:
+                left();
+                return true;
+
+            case Menu::MI_NEXT:
+                right();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void Menu::handleMouseReleaseOnItem(int x, int y)
+{
+    if (m_style == Menu::MS_SHOW_ONE)
+    {
+        MenuItem & item = *currentItem();
+        const int x1 = item.x() - item.width()  / 2;
+        const int x2 = item.x() + item.width()  / 2;
+        const int y1 = item.y() - item.height() / 2;
+        const int y2 = item.y() + item.height() / 2;
+
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        {
+            selectCurrentItem();
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < m_items.size(); i++)
+        {
+            MenuItem & item = *m_items.at(i);
+            const int x1 = item.x() - item.width()  / 2;
+            const int x2 = item.x() + item.width()  / 2;
+            const int y1 = item.y() - item.height() / 2;
+            const int y2 = item.y() + item.height() / 2;
+
+            if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+            {
+                if (static_cast<int>(i) == m_currentIndex)
+                {
+                    selectCurrentItem();
+                }
+                break;
+            }
         }
     }
 }
@@ -257,22 +381,9 @@ void Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
     x = x * width()  / screenWidth;
     y = y * height() / screenHeight;
 
-    for (unsigned int i = 0; i < m_items.size(); i++)
+    if (!handleMouseReleaseOnMouseItem(x, y))
     {
-        MenuItem & item = *m_items.at(i);
-        const int x1 = item.x() - item.width()  / 2;
-        const int x2 = item.x() + item.width()  / 2;
-        const int y1 = item.y() - item.height() / 2;
-        const int y2 = item.y() + item.height() / 2;
-
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
-        {
-            if (static_cast<int>(i) == m_currentIndex)
-            {
-                selectCurrentItem();
-            }
-            break;
-        }
+        handleMouseReleaseOnItem(x, y);
     }
 }
 
@@ -340,19 +451,19 @@ void Menu::setCurrentIndexWrapAround(int index)
     }
 }
 
-bool Menu::done() const
+bool Menu::isDone() const
 {
-    return m_done;
+    return m_isDone;
 }
 
-void Menu::setDone(bool done)
+void Menu::setIsDone(bool done)
 {
-    m_done = done;
+    m_isDone = done;
 }
 
 void Menu::enter()
 {
-    m_done = false;
+    m_isDone = false;
 
     updateFocus();
 }

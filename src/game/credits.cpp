@@ -20,7 +20,7 @@
 #include <QObject> // For QObject::tr()
 
 Credits::Credits(std::string id, int width, int height)
-: SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST)
+: SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST, true)
 {
 }
 

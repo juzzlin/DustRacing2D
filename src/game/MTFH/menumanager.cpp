@@ -166,7 +166,7 @@ void MenuManager::selectCurrentItem()
     }
 }
 
-bool MenuManager::done() const
+bool MenuManager::isDone() const
 {
     if (!m_menuStack.size())
     {
@@ -174,7 +174,7 @@ bool MenuManager::done() const
     }
     else
     {
-        return m_menuStack.back()->done();
+        return m_menuStack.back()->isDone();
     }
 }
 

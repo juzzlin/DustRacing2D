@@ -189,7 +189,7 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
         case Qt::Key_Q:
             emit soundRequested("menuSelect");
             MTFH::MenuManager::instance().popMenu();
-            if (MTFH::MenuManager::instance().done())
+            if (MTFH::MenuManager::instance().isDone())
             {
                 emit gameExited();
             }

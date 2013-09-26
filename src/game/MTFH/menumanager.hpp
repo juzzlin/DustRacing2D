@@ -84,7 +84,7 @@ public:
     void mouseRelease(int x, int y, int screenWidth, int screenHeight);
 
     //! \returns true when done.
-    bool done() const;
+    bool isDone() const;
 
     static MenuManager & instance();
 

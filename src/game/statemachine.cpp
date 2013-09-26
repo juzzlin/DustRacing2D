@@ -74,7 +74,7 @@ bool StateMachine::update()
     // Transition logic that needs to be constantly updated
     if (m_state == Menu)
     {
-        if (MTFH::MenuManager::instance().done())
+        if (MTFH::MenuManager::instance().isDone())
         {
             m_state = MenuTransitionOut;
         }
