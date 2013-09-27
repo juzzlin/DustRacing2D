@@ -408,13 +408,26 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_world->renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
-        m_camera[0].init(
-            Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
+        if (m_game.splitType() == Game::Vertical)
+        {
+            m_camera[0].init(
+                Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+            m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
 
-        m_camera[1].init(
-            Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
+            m_camera[1].init(
+                Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+            m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
+        }
+        else
+        {
+            m_camera[0].init(
+                Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
+            m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
+
+            m_camera[1].init(
+                Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
+            m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
+        }
     }
     else
     {
@@ -499,8 +512,16 @@ void Scene::resizeOverlays()
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        m_timingOverlay[0].setDimensions(width() / 2, height());
-        m_timingOverlay[1].setDimensions(width() / 2, height());
+        if (m_game.splitType() == Game::Vertical)
+        {
+            m_timingOverlay[0].setDimensions(width() / 2, height());
+            m_timingOverlay[1].setDimensions(width() / 2, height());
+        }
+        else
+        {
+            m_timingOverlay[0].setDimensions(width(), height() / 2);
+            m_timingOverlay[1].setDimensions(width(), height() / 2);
+        }
     }
     else
     {
@@ -580,11 +601,23 @@ void Scene::render()
 
         if (m_game.hasTwoHumanPlayers())
         {
-            m_renderer.glScene().setSplitType(MCGLScene::ShowOnLeft);
+            MCGLScene::SplitType p1, p0;
+            if (m_game.splitType() == Game::Vertical)
+            {
+                p1 = MCGLScene::ShowOnLeft;
+                p0 = MCGLScene::ShowOnRight;
+            }
+            else
+            {
+                p1 = MCGLScene::ShowOnTop;
+                p0 = MCGLScene::ShowOnBottom;
+            }
+
+            m_renderer.glScene().setSplitType(p1);
             renderPlayerScene(m_camera[1]);
             m_timingOverlay[1].render();
 
-            m_renderer.glScene().setSplitType(MCGLScene::ShowOnRight);
+            m_renderer.glScene().setSplitType(p0);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
         }

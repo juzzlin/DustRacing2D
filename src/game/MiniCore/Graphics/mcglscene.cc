@@ -108,10 +108,10 @@ void MCGLScene::setSplitType(SplitType splitType)
     updateViewport();
 }
 
-void MCGLScene::setProjection(float aspectRatio, float zNear, float zFar)
+void MCGLScene::setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, MCFloat viewAngle)
 {
     m_projectionMatrix  = glm::mat4(1.0);
-    m_projectionMatrix *= glm::perspective(m_viewAngle, aspectRatio, zNear, zFar);
+    m_projectionMatrix *= glm::perspective(viewAngle, aspectRatio, zNear, zFar);
 
     m_updateViewProjection = true;
 }
@@ -125,21 +125,33 @@ void MCGLScene::updateViewport()
     {
     default:
     case ShowFullScreen:
-        setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar);
+        setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth, m_viewHeight);
         setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnLeft:
-        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnRight:
-        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar);
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
+        break;
+
+    case ShowOnTop:
+        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
+        glViewport(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
+        setViewerPosition(m_sceneWidth, m_sceneHeight / 2, m_viewAngle / 2);
+        break;
+
+    case ShowOnBottom:
+        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
+        glViewport(0, 0, m_viewWidth, m_viewHeight / 2);
+        setViewerPosition(m_sceneWidth, m_sceneHeight / 2, m_viewAngle / 2);
         break;
     }
 

@@ -67,6 +67,7 @@ Game::Game()
 , m_lapCount(5)
 , m_paused(false)
 , m_mode(OnePlayerRace)
+, m_splitType(Vertical)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -197,6 +198,16 @@ void Game::setMode(GameMode gameMode)
 Game::GameMode Game::mode() const
 {
     return m_mode;
+}
+
+void Game::setSplitType(SplitType splitType)
+{
+    m_splitType = splitType;
+}
+
+Game::SplitType Game::splitType() const
+{
+    return m_splitType;
 }
 
 void Game::setLapCount(int lapCount)

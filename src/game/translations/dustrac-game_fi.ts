@@ -327,77 +327,92 @@ ERITYISKIITOKSET
         <translation>Nollaa lukitsemattomat radat?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="154"/>
+        <location filename="../settingsmenu.cpp" line="158"/>
         <source>Reset record times</source>
         <translation>Nollaa ennätysajat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="159"/>
+        <location filename="../settingsmenu.cpp" line="163"/>
         <source>Reset best positions</source>
         <translation>Nollaa parhaat sijat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="164"/>
+        <location filename="../settingsmenu.cpp" line="168"/>
         <source>Reset unlocked tracks</source>
         <translation>Nollaa lukitsemattomat radat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="169"/>
+        <location filename="../settingsmenu.cpp" line="173"/>
         <source>Full screen resolution &gt;</source>
         <translation>Koko näytön resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="173"/>
+        <location filename="../settingsmenu.cpp" line="177"/>
         <source>Windowed resolution &gt;</source>
         <translation>Ikkunoitu resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="177"/>
+        <location filename="../settingsmenu.cpp" line="181"/>
+        <source>Split type &gt;</source>
+        <translation>Ruudunjaon tyyppi &gt;</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="185"/>
         <source>Game mode &gt;</source>
         <translation>Pelimoodi &gt; </translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="181"/>
+        <location filename="../settingsmenu.cpp" line="189"/>
         <source>Lap Count &gt;</source>
         <translation>Kierrosmäärä &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="185"/>
+        <location filename="../settingsmenu.cpp" line="193"/>
         <source>FPS &gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="189"/>
+        <location filename="../settingsmenu.cpp" line="197"/>
         <source>Key configuration &gt;</source>
         <translation>Kontrollit &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="212"/>
+        <location filename="../settingsmenu.cpp" line="221"/>
         <source>Two player race</source>
         <translation>Kahden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="222"/>
+        <location filename="../settingsmenu.cpp" line="231"/>
         <source>One player race</source>
         <translation>Yhden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="232"/>
+        <location filename="../settingsmenu.cpp" line="241"/>
         <source>Time Trial</source>
         <translation>Aika-ajo</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="242"/>
+        <location filename="../settingsmenu.cpp" line="251"/>
         <source>Duel</source>
         <translation>Kaksintaistelu</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="266"/>
+        <location filename="../settingsmenu.cpp" line="275"/>
+        <source>Vertical</source>
+        <translation>Pysty</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="285"/>
+        <source>Horizontal</source>
+        <translation>Vaaka</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="307"/>
         <source>30 fps</source>
         <translation>30 ruutua/s</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="277"/>
+        <location filename="../settingsmenu.cpp" line="318"/>
         <source>60 fps</source>
         <translation>60 ruutua/s</translation>
     </message>

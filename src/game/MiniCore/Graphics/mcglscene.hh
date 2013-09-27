@@ -63,17 +63,19 @@ public:
     virtual void resize(MCUint viewWidth, MCUint viewHeight,
         MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
 
-    //! Set viewer's position. Automatically called by resize().
-    virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
-
-    //! Set projection. Automatically called by resize().
-    virtual void setProjection(float aspectRatio, float zNear, float zFar);
-
     //! Set viewport split type.
     void setSplitType(SplitType splitType = ShowFullScreen);
 
     //! Get the resulting view projection matrix to be used in shaders.
     const glm::mat4 & viewProjectionMatrix() const;
+
+protected:
+
+    //! Set viewer's position. Automatically called by resize().
+    virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
+
+    //! Set projection. Automatically called by resize().
+    virtual void setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, MCFloat viewAngle);
 
 private:
 

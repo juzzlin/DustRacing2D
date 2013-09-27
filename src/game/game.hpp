@@ -49,6 +49,12 @@ public:
         Duel
     };
 
+    enum SplitType
+    {
+        Horizontal,
+        Vertical
+    };
+
     //! Constructor
     Game();
 
@@ -79,6 +85,12 @@ public:
 
     //! Get the game mode.
     GameMode mode() const;
+
+    //! Set the split type on two-player game.
+    void setSplitType(SplitType splitType);
+
+    //! Get the split type.
+    SplitType splitType() const;
 
     //! Set the lap count.
     void setLapCount(int lapCount);
@@ -136,6 +148,7 @@ private:
     QTimer            m_updateTimer;
     QTimer            m_renderTimer;
     GameMode          m_mode;
+    SplitType         m_splitType;
 
     static Game * m_instance;
 };

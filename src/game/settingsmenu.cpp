@@ -109,12 +109,13 @@ private:
 };
 
 static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
-static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
-static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
-static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
-static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
 static const char * FPS_MENU_ID                    = "fpsMenu";
+static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
+static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
+static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
+static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
+static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
@@ -122,12 +123,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
 , m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_splitTypeMenu("helpBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_lapCountMenu("helpBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
     populateGameModeMenu(width, height);
+    populateSplitTypeMenu(width, height);
     populateFpsMenu(width, height);
     populateLapCountMenu(width, height);
 
@@ -137,6 +140,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_windowedResolutionMenu);
     MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
+    MenuManager::instance().addMenu(m_splitTypeMenu);
     MenuManager::instance().addMenu(m_lapCountMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
@@ -174,6 +178,10 @@ void SettingsMenu::populate(int width, int height)
     selectWindowedResolution->setView(new TextMenuItemView(textSize, *selectWindowedResolution), true);
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
+    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdString());
+    splitType->setView(new TextMenuItemView(textSize, *splitType), true);
+    splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
+
     MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdString());
     gameMode->setView(new TextMenuItemView(textSize, *gameMode), true);
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
@@ -198,6 +206,7 @@ void SettingsMenu::populate(int width, int height)
     addItem(*selectWindowedResolution,   true);
     addItem(*selectFullScreenResolution, true);
     addItem(*lapCount,                   true);
+    addItem(*splitType,                  true);
     addItem(*gameMode,                   true);
 }
 
@@ -253,6 +262,38 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     m_gameModeMenu.addItem(*timeTrial,  true);
     m_gameModeMenu.addItem(*twoPlayers, true);
     m_gameModeMenu.addItem(*onePlayer,  true);
+}
+
+void SettingsMenu::populateSplitTypeMenu(int width, int height)
+{
+    const int numItems   = 2;
+    const int itemHeight = height / (numItems + 4);
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+
+    MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toStdString());
+    vertical->setView(new TextMenuItemView(20, *vertical), true);
+    vertical->setAction(
+        []()
+        {
+            MCLogger().info() << "Vertical split selected.";
+            Game::instance().setSplitType(Game::Vertical);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toStdString());
+    horizontal->setView(new TextMenuItemView(20, *horizontal), true);
+    horizontal->setAction(
+        []()
+        {
+            MCLogger().info() << "Horizontal split selected.";
+            Game::instance().setSplitType(Game::Horizontal);
+            MenuManager::instance().popMenu();
+        });
+
+    m_splitTypeMenu.addItem(*horizontal, true);
+    m_splitTypeMenu.addItem(*vertical, true);
 }
 
 void SettingsMenu::populateFpsMenu(int width, int height)
