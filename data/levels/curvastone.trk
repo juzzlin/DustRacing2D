@@ -870,10 +870,8 @@
  <o o="-90" r="sandAreaCurve" c="free" x="5143" y="3817"/>
  <o o="0" r="dustRacing2DBanner" c="free" x="4479" y="3595"/>
  <o o="0" r="dustRacing2DBanner" c="free" x="4737" y="3595"/>
- <o o="0" r="sandAreaCurve45Right" c="free" x="4223" y="3933"/>
  <o o="-90" r="sandAreaBig" c="free" x="5373" y="1495"/>
  <o o="90" r="sandAreaBig" c="free" x="1283" y="1759"/>
- <o o="180" r="sandAreaCurve45" c="free" x="895" y="1189"/>
  <o o="0" r="bushArea" c="free" x="935" y="888"/>
  <o o="328" r="bushArea" c="free" x="878" y="949"/>
  <o o="151" r="bushArea" c="free" x="847" y="1029"/>

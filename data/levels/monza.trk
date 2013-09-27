@@ -961,16 +961,9 @@
  <o x="8631" y="3645" o="90" r="grandstand" c="free"/>
  <o x="8485" y="3096" o="45" r="dustRacing2DBanner" c="free"/>
  <o x="8488" y="3811" o="135" r="dustRacing2DBanner" c="free"/>
- <o x="1151" y="604" o="0" r="sandAreaCurve45Right" c="free"/>
- <o x="993" y="1811" o="45" r="sandAreaCurve45" c="free"/>
  <o x="1042" y="1377" o="45" r="sandAreaBig" c="free"/>
  <o x="1022" y="3368" o="-90" r="sandAreaBig" c="free"/>
- <o x="1371" y="3713" o="270" r="sandAreaCurve45Right" c="free"/>
- <o x="2575" y="4065" o="225" r="sandAreaCurve45Right" c="free"/>
- <o x="3346" y="4128" o="-45" r="sandAreaCurve45" c="free"/>
- <o x="4994" y="2909" o="0" r="sandAreaCurve45" c="free"/>
  <o x="4070" y="2818" o="180" r="sandAreaBig" c="free"/>
- <o x="3711" y="2465" o="180" r="sandAreaCurve45" c="free"/>
  <o x="3784" y="3796" o="171" r="bushArea" c="free"/>
  <o x="3860" y="3800" o="309" r="bushArea" c="free"/>
  <o x="3955" y="3804" o="326" r="bushArea" c="free"/>
