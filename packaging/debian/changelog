@@ -1,3 +1,27 @@
+dustrac (1.4.6-1) precise; urgency=low
+
+  * Option for horizontal split.
+  * Tune sliding parameters.
+  * Remove deprecated sandAreaCurve45*.
+  * Make track selection menu usable with mouse.
+  * Refactor MCSurfaceConfigLoader.
+  * Add blur to star.png
+  * Rework tile graphics.
+  * Remove sandGrassStraight45Female.
+  * Remove glPushAttrib() from StartlightsOverlay.
+  * Rework startlights.
+  * Remove sandAreaCurve45*. Graphics to be added directly to the tile.
+  * Remove unused src images.
+  * Fix artifacts in the textured font.
+  * Fix Help on wide screens.
+  * Rename confusing MCSurface::setScale() to ::setSize().
+  * Automatically show/hide mouse cursor.
+  * Fade startlights out on GO.
+  * Refactor view splitting.
+  * Support translations via Qt.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 28 Sep 2013 14:00:20 +0300
+
 dustrac (1.4.5-1) precise; urgency=low
 
   * Improve documentation of CMake's options.
