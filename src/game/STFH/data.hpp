@@ -13,53 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "source.hpp"
+#ifndef DATA_HPP
+#define DATA_HPP
+
+#include <memory>
+#include <string>
 
 namespace STFH {
 
-Source::Source()
-    : m_pitch(1.0)
-    , m_volume(1.0)
+class Data
 {
-}
+public:
 
-void Source::setData(DataPtr data) throw ()
-{
-    m_data = data;
-}
+    //! Constructor.
+    Data();
 
-void Source::setVolume(float volume)
-{
-    m_volume = volume;
-}
+    //! Load the data. Re-implement and call parent.
+    virtual void load(const std::string & path) throw ();
 
-float Source::volume() const
-{
-    return m_volume;
-}
+    //! Destructor.
+    virtual ~Data();
 
-void Source::setPitch(float pitch)
-{
-    m_pitch = pitch;
-}
+    //! \return path given to load.
+    const std::string & path() const;
 
-float Source::pitch() const
-{
-    return m_pitch;
-}
+private:
 
-void Source::setLocation(const Location & location)
-{
-    m_location = location;
-}
+    std::string m_path;
+};
 
-const Location & Source::location() const
-{
-    return m_location;
-}
-
-Source::~Source()
-{
-}
+typedef std::shared_ptr<Data> DataPtr;
 
 } // STFH
+
+#endif // DATA_HPP

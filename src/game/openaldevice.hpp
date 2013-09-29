@@ -13,53 +13,35 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "source.hpp"
+#ifndef OPENALDEVICE_HPP
+#define OPENALDEVICE_HPP
 
-namespace STFH {
+#include <Device>
 
-Source::Source()
-    : m_pitch(1.0)
-    , m_volume(1.0)
+#include <AL/al.h>
+#include <AL/alc.h>
+
+//! OpenAL sound device wrapper class.
+class OpenALDevice : public STFH::Device
 {
-}
+public:
 
-void Source::setData(DataPtr data) throw ()
-{
-    m_data = data;
-}
+    //! Constructor.
+    OpenALDevice();
 
-void Source::setVolume(float volume)
-{
-    m_volume = volume;
-}
+    //! \reimp
+    virtual void initialize() throw ();
 
-float Source::volume() const
-{
-    return m_volume;
-}
+    //! \reimp
+    virtual void shutDown();
 
-void Source::setPitch(float pitch)
-{
-    m_pitch = pitch;
-}
+    //! Destructor.
+    virtual ~OpenALDevice();
 
-float Source::pitch() const
-{
-    return m_pitch;
-}
+private:
 
-void Source::setLocation(const Location & location)
-{
-    m_location = location;
-}
+    ALCdevice  * m_device;
+    ALCcontext * m_context;
+};
 
-const Location & Source::location() const
-{
-    return m_location;
-}
-
-Source::~Source()
-{
-}
-
-} // STFH
+#endif // OPENALDEVICE_HPP

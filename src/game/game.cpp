@@ -18,6 +18,7 @@
 #include "game.hpp"
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
+#include "openaldevice.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "statemachine.hpp"
@@ -68,6 +69,7 @@ Game::Game()
 , m_paused(false)
 , m_mode(OnePlayerRace)
 , m_splitType(Vertical)
+, m_openALDevice(new OpenALDevice)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -277,9 +279,16 @@ void Game::initScene()
     m_renderer->setScene(*m_scene);
 }
 
+void Game::initAudio()
+{
+    m_openALDevice->initialize(); // Throws on failure
+}
+
 bool Game::init()
 {
     m_assetManager->load();
+
+    initAudio();
 
     if (loadTracks())
     {
@@ -360,4 +369,5 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
+    delete m_openALDevice;
 }

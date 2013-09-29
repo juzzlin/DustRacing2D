@@ -13,60 +13,45 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include <memory>
+#ifndef OPENALSOURCE_HPP
+#define OPENALSOURCE_HPP
 
-#include "data.hpp"
-#include "location.hpp"
+#include <Data>
+#include <Source>
 
-namespace STFH {
+#include <AL/al.h>
+#include <AL/alc.h>
 
-class Source
+#include <string>
+
+class OpenALSource : public STFH::Source
 {
 public:
 
     //! Constructor.
-    Source();
+    OpenALSource();
 
     //! Destructor.
-    virtual ~Source();
+    virtual ~OpenALSource();
 
-    //! Set the sound data.
-    virtual void setData(DataPtr data) throw ();
+    //! \reimp
+    virtual void setData(STFH::DataPtr data) throw ();
 
-    //! Play the sound.
-    virtual void play(bool loop = false) = 0;
+    //! \reimp
+    virtual void play(bool loop = false);
 
-    //! Stop the sound.
-    virtual void stop() = 0;
+    //! \reimp
+    virtual void stop();
 
-    /*! Set volume.
-     *  \param volume 0.0..1.0 */
+    //! \reimp
     virtual void setVolume(float volume);
 
-    //! \return volume.
-    virtual float volume() const;
-
-    /*! Set pitch.
-     *  \param pitch 0.0..1.0 */
+    //! \reimp
     virtual void setPitch(float pitch);
-
-    //! \return pitch.
-    virtual float pitch() const;
-
-    //! Set location.
-    virtual void setLocation(const Location & location);
-
-    //! \return location.
-    virtual const Location & location() const;
 
 private:
 
-    Location m_location;
-    float    m_pitch;
-    float    m_volume;
-    DataPtr  m_data;
+    ALuint m_handle;
 };
 
-typedef std::shared_ptr<Source> SourcePtr;
-
-} // STFH
+#endif // OPENALSOURCE_HPP

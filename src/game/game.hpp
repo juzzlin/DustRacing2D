@@ -23,6 +23,7 @@
 
 class EventHandler;
 class InputHandler;
+class OpenALDevice;
 class Renderer;
 class Scene;
 class Speedometer;
@@ -125,6 +126,7 @@ private:
     void adjustSceneSize(int hRes, int vRes, bool fullScreen);
     void createRenderer();
     void initScene();
+    void initAudio();
     bool loadTracks();
 
     Settings          m_settings;
@@ -149,6 +151,7 @@ private:
     QTimer            m_renderTimer;
     GameMode          m_mode;
     SplitType         m_splitType;
+    OpenALDevice    * m_openALDevice;
 
     static Game * m_instance;
 };

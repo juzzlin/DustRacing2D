@@ -13,53 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "source.hpp"
+#ifndef DATAMANAGER_HPP
+#define DATAMANAGER_HPP
 
 namespace STFH {
 
-Source::Source()
-    : m_pitch(1.0)
-    , m_volume(1.0)
+class DataManager
 {
-}
+public:
 
-void Source::setData(DataPtr data) throw ()
-{
-    m_data = data;
-}
-
-void Source::setVolume(float volume)
-{
-    m_volume = volume;
-}
-
-float Source::volume() const
-{
-    return m_volume;
-}
-
-void Source::setPitch(float pitch)
-{
-    m_pitch = pitch;
-}
-
-float Source::pitch() const
-{
-    return m_pitch;
-}
-
-void Source::setLocation(const Location & location)
-{
-    m_location = location;
-}
-
-const Location & Source::location() const
-{
-    return m_location;
-}
-
-Source::~Source()
-{
-}
+    DataManager();
+};
 
 } // STFH
+
+#endif // DATAMANAGER_HPP

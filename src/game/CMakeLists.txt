@@ -18,6 +18,9 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
 # Menu toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 
+# Sound toolkit include paths
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
+
 # Translation files in src/game/translations (without .ts)
 set(TS dustrac-game_fi)
 set(TS_FILES)
@@ -50,6 +53,9 @@ set(SRC
     messageoverlay.cpp
     particlefactory.cpp
     offtrackdetector.cpp
+    openaldevice.cpp
+    openalsource.cpp
+    openalwavdata.cpp
     overlaybase.cpp
     race.cpp
     renderer.cpp
@@ -136,7 +142,17 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
-set(COMMON_LIBS ${GAME_BINARY_NAME} MiniCore MTFH STFH ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+# Common libs for Qt4 and Qt5 builds
+set(COMMON_LIBS
+    ${GAME_BINARY_NAME}
+    MiniCore
+    MTFH
+    STFH
+    ${OPENGL_gl_LIBRARY}
+    ${OPENGL_glu_LIBRARY}
+    ${OPENAL_LIBRARY}
+    ${ALUT_LIBRARY})
+
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
     target_link_libraries(${COMMON_LIBS})
