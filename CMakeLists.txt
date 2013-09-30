@@ -77,6 +77,7 @@ if(UseQt5)
     find_package(Qt5OpenGL REQUIRED)
     find_package(Qt5Xml REQUIRED)
     find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5LinguistTools REQUIRED)
 else()
     # Find Qt4 and needed additional components.
     find_package(Qt4 4.7.0 REQUIRED COMPONENTS QtXml QtOpenGL)
