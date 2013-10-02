@@ -86,7 +86,7 @@ private:
     MCGLPointParticleRenderer m_renderers[NumParticles];
 
     // Particles to delete.
-    std::vector<std::shared_ptr<MCParticle> > m_delete;
+    std::vector<std::unique_ptr<MCParticle> > m_delete;
 
     static ParticleFactory * m_instance;
 };

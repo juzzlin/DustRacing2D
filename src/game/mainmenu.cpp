@@ -34,19 +34,19 @@ MainMenu::MainMenu(std::string id, int width, int height)
     const int itemHeight = height / 8;
 
     MenuItem * play = new MenuItem(width, itemHeight, tr("Play").toStdString());
-    play->setView(new TextMenuItemView(40, *play), true);
+    play->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *play)));
     play->setMenuOpenAction("trackSelection");
 
     MenuItem * help = new MenuItem(width, itemHeight, tr("Help").toStdString());
-    help->setView(new TextMenuItemView(40, *help), true);
+    help->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *help)));
     help->setMenuOpenAction("help");
 
     MenuItem * credits = new MenuItem(width, itemHeight, tr("Credits").toStdString());
-    credits->setView(new TextMenuItemView(40, *credits), true);
+    credits->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *credits)));
     credits->setMenuOpenAction("credits");
 
     MTFH::MenuItem * quit = new MenuItem(width, itemHeight, tr("Quit").toStdString());
-    quit->setView(new TextMenuItemView(40, *quit), true);
+    quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *quit)));
     quit->setAction(
         [this]()
         {
@@ -55,12 +55,12 @@ MainMenu::MainMenu(std::string id, int width, int height)
         });
 
     MenuItem * settings = new MenuItem(width, itemHeight, tr("Settings").toStdString());
-    settings->setView(new TextMenuItemView(40, *settings), true);
+    settings->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *settings)));
     settings->setMenuOpenAction("settings");
 
-    addItem(*quit,     true);
-    addItem(*credits,  true);
-    addItem(*settings, true);
-    addItem(*help,     true);
-    addItem(*play,     true);
+    addItem(MTFH::MenuItemPtr(quit));
+    addItem(MTFH::MenuItemPtr(credits));
+    addItem(MTFH::MenuItemPtr(settings));
+    addItem(MTFH::MenuItemPtr(help));
+    addItem(MTFH::MenuItemPtr(play));
 }

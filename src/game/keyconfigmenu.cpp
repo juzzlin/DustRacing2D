@@ -91,7 +91,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
 
     MenuItem * playerOneAccelerate =
         new MenuItem(width, itemHeight, QObject::tr("Player One Accelerate").toStdString());
-    playerOneAccelerate->setView(new TextMenuItemView(20, *playerOneAccelerate), true);
+    playerOneAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneAccelerate)));
     playerOneAccelerate->setAction(
         []()
         {
@@ -101,7 +101,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
 
     MenuItem * playerOneBrake =
         new MenuItem(width, itemHeight, QObject::tr("Player One Brake").toStdString());
-    playerOneBrake->setView(new TextMenuItemView(20, *playerOneBrake), true);
+    playerOneBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneBrake)));
     playerOneBrake->setAction(
         []()
         {
@@ -111,7 +111,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
 
     MenuItem * playerOneTurnLeft =
         new MenuItem(width, itemHeight, QObject::tr("Player One Turn Left").toStdString());
-    playerOneTurnLeft->setView(new TextMenuItemView(20, *playerOneTurnLeft), true);
+    playerOneTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnLeft)));
     playerOneTurnLeft->setAction(
         []()
         {
@@ -121,7 +121,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
 
     MenuItem * playerOneTurnRight =
         new MenuItem(width, itemHeight, QObject::tr("Player One Turn Right").toStdString());
-    playerOneTurnRight->setView(new TextMenuItemView(20, *playerOneTurnRight), true);
+    playerOneTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnRight)));
     playerOneTurnRight->setAction(
         []()
         {
@@ -129,10 +129,10 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
-    addItem(*playerOneBrake,      true);
-    addItem(*playerOneAccelerate, true);
-    addItem(*playerOneTurnRight,  true);
-    addItem(*playerOneTurnLeft,   true);
+    addItem(MTFH::MenuItemPtr(playerOneBrake));
+    addItem(MTFH::MenuItemPtr(playerOneAccelerate));
+    addItem(MTFH::MenuItemPtr(playerOneTurnRight));
+    addItem(MTFH::MenuItemPtr(playerOneTurnLeft));
 }
 
 void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
@@ -144,7 +144,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
 
     MenuItem * playerTwoAccelerate =
         new MenuItem(width, itemHeight, QObject::tr("Player Two Accelerate").toStdString());
-    playerTwoAccelerate->setView(new TextMenuItemView(20, *playerTwoAccelerate), true);
+    playerTwoAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoAccelerate)));
     playerTwoAccelerate->setAction(
         []()
         {
@@ -154,7 +154,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
 
     MenuItem * playerTwoBrake =
         new MenuItem(width, itemHeight, QObject::tr("Player Two Brake").toStdString());
-    playerTwoBrake->setView(new TextMenuItemView(20, *playerTwoBrake), true);
+    playerTwoBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoBrake)));
     playerTwoBrake->setAction(
         []()
         {
@@ -164,7 +164,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
 
     MenuItem * playerTwoTurnLeft =
         new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Left").toStdString());
-    playerTwoTurnLeft->setView(new TextMenuItemView(20, *playerTwoTurnLeft), true);
+    playerTwoTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnLeft)));
     playerTwoTurnLeft->setAction(
         []()
         {
@@ -174,7 +174,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
 
     MenuItem * playerTwoTurnRight =
         new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Right").toStdString());
-    playerTwoTurnRight->setView(new TextMenuItemView(20, *playerTwoTurnRight), true);
+    playerTwoTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnRight)));
     playerTwoTurnRight->setAction(
         []()
         {
@@ -182,10 +182,10 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
-    addItem(*playerTwoBrake,      true);
-    addItem(*playerTwoAccelerate, true);
-    addItem(*playerTwoTurnRight,  true);
-    addItem(*playerTwoTurnLeft,   true);
+    addItem(MTFH::MenuItemPtr(playerTwoBrake));
+    addItem(MTFH::MenuItemPtr(playerTwoAccelerate));
+    addItem(MTFH::MenuItemPtr(playerTwoTurnRight));
+    addItem(MTFH::MenuItemPtr(playerTwoTurnLeft));
 }
 
 KeyConfigMenu::~KeyConfigMenu()

@@ -15,7 +15,6 @@
 
 #include "menuitem.hpp"
 #include "menuitemaction.hpp"
-#include "menuitemview.hpp"
 #include "menu.hpp"
 #include "menumanager.hpp"
 
@@ -76,29 +75,19 @@ int MenuItem::y() const
     return m_y;
 }
 
-void MenuItem::setView(MenuItemView * view, bool takeOwnership)
+void MenuItem::setView(MenuItemViewPtr view)
 {
     m_view = view;
-
-    if (takeOwnership)
-    {
-        m_ownedView = MenuItemViewPtr(view);
-    }
 }
 
-MenuItemView * MenuItem::view()
+MenuItemViewPtr MenuItem::view()
 {
     return m_view;
 }
 
-void MenuItem::setAction(MenuItemAction * action, bool takeOwnership)
+void MenuItem::setAction(MenuItemActionPtr action)
 {
     m_action = action;
-
-    if (takeOwnership)
-    {
-        m_ownedAction = MenuItemActionPtr(action);
-    }
 }
 
 void MenuItem::setAction(std::function<void()> actionFunction)
@@ -111,7 +100,7 @@ void MenuItem::setMenuOpenAction(const std::string & menuId)
     m_menuOpenActionMenuId = menuId;
 }
 
-MenuItemAction * MenuItem::action() const
+MenuItemActionPtr MenuItem::action() const
 {
     return m_action;
 }

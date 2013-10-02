@@ -35,6 +35,7 @@
 #include <MCLogger>
 #include <MCAssetManager>
 #include <MCObjectFactory>
+#include <MCShape>
 #include <MCShapeView>
 #include <MCSurfaceManager>
 
@@ -73,8 +74,8 @@ void Race::createStartGridObjects()
         data.setLayer(Layers::Ground);
 
         MCObject * object(&objectFactory.build(data));
-        object->view()->setHasShadow(false);
-        object->view()->setShaderProgram(&Renderer::instance().program("master"));
+        object->shape()->view()->setHasShadow(false);
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("master"));
         object->setIsPhysicsObject(false);
         m_startGridObjects.push_back(object);
     }

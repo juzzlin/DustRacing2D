@@ -20,11 +20,13 @@
 #include <string>
 #include <memory>
 
+#include "menuitemview.hpp"
+#include "menuitemaction.hpp"
+
 namespace MTFH {
 
 class Menu;
 class MenuItemAction;
-class MenuItemView;
 
 //! Base class for items used in menus.
 class MenuItem
@@ -51,17 +53,17 @@ public:
 
     const std::string & text() const;
 
-    void setView(MenuItemView * view, bool takeOwnership = false);
+    void setView(MenuItemViewPtr view);
 
-    MenuItemView * view();
+    MenuItemViewPtr view();
 
-    void setAction(MenuItemAction * action, bool takeOwnership = false);
+    void setAction(MenuItemActionPtr action);
 
     void setAction(std::function<void()> actionFunction);
 
     void setMenuOpenAction(const std::string & menuId);
 
-    MenuItemAction * action() const;
+    MenuItemActionPtr action() const;
 
     virtual void render();
 
@@ -91,13 +93,9 @@ private:
 
     std::string m_text;
     std::string m_menuOpenActionMenuId;
-    MenuItemAction * m_action;
+    MenuItemActionPtr m_action;
     std::function<void()> m_actionFunction;
-    MenuItemView * m_view;
-    typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
-    MenuItemActionPtr m_ownedAction;
-    typedef std::shared_ptr<MenuItemView> MenuItemViewPtr;
-    MenuItemViewPtr m_ownedView;
+    MenuItemViewPtr m_view;
     bool m_focused;
     bool m_selected;
     bool m_selectable;
@@ -105,6 +103,8 @@ private:
     int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
     int m_index;
 };
+
+typedef std::shared_ptr<MTFH::MenuItem> MenuItemPtr;
 
 } // namespace MTFH
 

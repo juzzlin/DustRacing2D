@@ -41,10 +41,10 @@ MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
 
 MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
-    MCShape     * pShape  = nullptr;
-    MCShapeView * pView   = nullptr;
-    MCObject    * pObject = nullptr;
-    MCSurface   & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
+    MCShapeViewPtr view;
+    MCShapePtr     shape;
+    MCSurface    & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
+    MCObject     * object  = nullptr;
 
     switch (data.shape())
     {
@@ -53,50 +53,50 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
         // Circle shape according to surface dimensions
         if (data.defaultCirleShape())
         {
-            pObject = new MCObject(data.typeId());
-            pView   = new MCSurfaceView(data.typeId(), &surface, data.batchMode());
-            pShape  = new MCCircleShape(pView, std::max(surface.width(), surface.height()) / 2);
-            pObject->setShape(pShape);
+            object = new MCObject(data.typeId());
+            view.reset(new MCSurfaceView(data.typeId(), &surface, data.batchMode()));
+            shape.reset(new MCCircleShape(view, std::max(surface.width(), surface.height()) / 2));
+            object->setShape(shape);
         }
         // Rect shape according to surface dimensions (default)
         else
         {
-            pObject = new MCObject(&surface, data.typeId(), data.batchMode());
+            object = new MCObject(surface, data.typeId(), data.batchMode());
         }
         break;
 
     // Explicit circle shape
     case MCObjectData::Circle:
-        pObject = new MCObject(data.typeId());
-        pView   = new MCSurfaceView(data.typeId(), &surface, data.batchMode());
-        pShape  = new MCCircleShape(pView, data.shapeRadius());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        view.reset(new MCSurfaceView(data.typeId(), &surface, data.batchMode()));
+        shape.reset(new MCCircleShape(view, data.shapeRadius()));
+        object->setShape(shape);
         break;
 
     // Explicit rect shape
     case MCObjectData::Rect:
-        pObject = new MCObject(data.typeId());
-        pView   = new MCSurfaceView(data.typeId(), &surface);
-        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        view.reset(new MCSurfaceView(data.typeId(), &surface));
+        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
+        object->setShape(shape);
         break;
     }
 
-    assert(pObject);
-    setCommonProperties(*pObject, data);
+    assert(object);
+    setCommonProperties(*object, data);
 
     // Store for deletion
-    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
+    m_objects.push_back(std::unique_ptr<MCObject>(object));
 
-    return *pObject;
+    return *object;
 }
 
 MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
 {
-    MCShape     * pShape  = nullptr;
-    MCShapeView * pView   = nullptr;
-    MCObject    * pObject = nullptr;
-    MCMesh      & mesh    = m_assetManager.meshManager().mesh(data.meshId());
+    MCShapeViewPtr view;
+    MCShapePtr     shape;
+    MCObject     * object = nullptr;
+    MCMesh       & mesh   = m_assetManager.meshManager().mesh(data.meshId());
 
     switch (data.shape())
     {
@@ -105,52 +105,51 @@ MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
         // Circle shape according to surface dimensions
         if (data.defaultCirleShape())
         {
-            pObject = new MCObject(data.typeId());
-            pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
-            pShape  = new MCCircleShape(pView, std::max(mesh.width(), mesh.height()) / 2);
-            pObject->setShape(pShape);
+            object = new MCObject(data.typeId());
+            view.reset(new MCMeshView(data.typeId(), &mesh, data.batchMode()));
+            shape.reset(new MCCircleShape(view, std::max(mesh.width(), mesh.height()) / 2));
+            object->setShape(shape);
         }
         // Rect shape according to mesh dimensions (default)
         else
         {
-            pObject = new MCObject(data.typeId());
-            pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
-            pShape  = new MCRectShape(pView, mesh.width(), mesh.height());
-            pObject->setShape(pShape);
+            object = new MCObject(data.typeId());
+            view.reset(new MCMeshView(data.typeId(), &mesh, data.batchMode()));
+            shape.reset(new MCRectShape(view, mesh.width(), mesh.height()));
+            object->setShape(shape);
         }
         break;
 
     // Explicit circle shape
     case MCObjectData::Circle:
-        pObject = new MCObject(data.typeId());
-        pView   = new MCMeshView(data.typeId(), &mesh, data.batchMode());
-        pShape  = new MCCircleShape(pView, data.shapeRadius());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        view.reset(new MCMeshView(data.typeId(), &mesh, data.batchMode()));
+        shape.reset(new MCCircleShape(view, data.shapeRadius()));
+        object->setShape(shape);
         break;
 
     // Explicit rect shape
     case MCObjectData::Rect:
-        pObject = new MCObject(data.typeId());
-        pView   = new MCMeshView(data.typeId(), &mesh);
-        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        view.reset(new MCMeshView(data.typeId(), &mesh));
+        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
+        object->setShape(shape);
         break;
     }
 
-    assert(pObject);
-    setCommonProperties(*pObject, data);
+    assert(object);
+    setCommonProperties(*object, data);
 
     // Store for deletion
-    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
+    m_objects.push_back(std::unique_ptr<MCObject>(object));
 
-    return *pObject;
+    return *object;
 }
 
-MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
+MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr view)
 {
-    MCShape     * pShape  = nullptr;
-    MCShapeView * pView   = &view;
-    MCObject    * pObject = nullptr;
+    MCShapePtr shape;
+    MCObject * object = nullptr;
 
     switch (data.shape())
     {
@@ -161,26 +160,26 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeView & view)
 
     // Explicit circle shape
     case MCObjectData::Circle:
-        pObject = new MCObject(data.typeId());
-        pShape  = new MCCircleShape(pView, data.shapeRadius());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        shape.reset(new MCCircleShape(view, data.shapeRadius()));
+        object->setShape(shape);
         break;
 
     // Explicit rect shape
     case MCObjectData::Rect:
-        pObject = new MCObject(data.typeId());
-        pShape  = new MCRectShape(pView, data.shapeWidth(), data.shapeHeight());
-        pObject->setShape(pShape);
+        object = new MCObject(data.typeId());
+        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
+        object->setShape(shape);
         break;
     }
 
-    assert(pObject);
-    setCommonProperties(*pObject, data);
+    assert(object);
+    setCommonProperties(*object, data);
 
     // Store for deletion
-    m_objects.push_back(std::shared_ptr<MCObject>(pObject));
+    m_objects.push_back(std::unique_ptr<MCObject>(object));
 
-    return *pObject;
+    return *object;
 }
 
 void MCObjectFactory::setCommonProperties(

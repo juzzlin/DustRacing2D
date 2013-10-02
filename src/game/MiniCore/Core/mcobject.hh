@@ -24,6 +24,7 @@
 #include "mccontact.hh"
 #include "mcmacros.hh"
 #include "mcobjecttree.hh"
+#include "mcshape.hh"
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 #include "mcworld.hh"
@@ -33,7 +34,6 @@
 #include <vector>
 #include <string>
 
-class MCShape;
 class MCShapeView;
 class MCSurface;
 class MCEvent;
@@ -59,20 +59,19 @@ public:
 
     //! Constructor.
     //! Construct MCObject using the given shape.
-    //! \param pShape Pointer to the surface to be used.
-    //! MCObject will take the ownership.
+    //! \param shape Pointer to the shape to be used.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
-    MCObject(MCShape * pShape, const std::string & typeId);
+    MCObject(MCShapePtr shape, const std::string & typeId);
 
     //! Constructor.
     //! Construct MCObject implicitly using MCRectShape with
     //! MCSurfaceView for the given MCSurface.
-    //! \param pSurface Pointer to the (shared) surface to be used.
+    //! \param surface Pointer to the (shared) surface to be used.
     //! MCObject won't take the ownership, because the same surface
-    //! can be used to draw multiple objects.
+    //! can be used to draw multiple objects and is managed by MCSurfaceManager.
     //! \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
     //! \param batchMode \see MCSurfaceView::setBatchMode(bool).
-    MCObject(MCSurface * pSurface, const std::string & typeId, bool batchMode = false);
+    MCObject(MCSurface & surface, const std::string & typeId, bool batchMode = false);
 
     //! Destructor. It's the callers responsibility to first remove
     //! the object from MCWorld before deleting the object.
@@ -295,21 +294,15 @@ public:
     //! Get global friction.
     MCFloat xyFriction() const;
 
-    //! Set shape. MCObject will take the ownership.
-    void setShape(MCShape * newShape);
+    //! Set shape.
+    void setShape(MCShapePtr shape);
 
     //! Get shape.
-    MCShape * shape() const;
-
-    //! Set view. MCObject will take the ownership.
-    void setView(MCShapeView * newView);
+    MCShapePtr shape() const;
 
     //! \brief Step internal time.
     //! This is called AFTER every integration step. The default implementation does nothing.
     virtual void stepTime(MCFloat step);
-
-    //! Get view
-    MCShapeView * view() const;
 
     //! Integrate forces. Usually called by MCWorld.
     //! \param step Time step to be integrated.
@@ -455,7 +448,7 @@ private:
     MCVector3dF m_location;
     MCVector3dF m_forces;
     MCVector2dF centerOfRotation;
-    MCShape * pShape;
+    MCShapePtr m_shape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
     static TypeHash typeHash;
     typedef std::vector<MCObject * > TimerEventObjectsList;

@@ -23,6 +23,7 @@
 #include "mcsurfaceobjectdata.hh"
 #include "mcmeshobjectdata.hh"
 #include "mcobject.hh"
+#include "mcshapeview.hh"
 
 #include <memory>
 #include <vector>
@@ -50,7 +51,7 @@ public:
 
     /*! Build an object with a custom view.
      *  MCObjectFactory keeps the ownership. */
-    MCObject & build(const MCObjectData & data, MCShapeView & view);
+    MCObject & build(const MCObjectData & data, MCShapeViewPtr view);
 
 private:
 
@@ -59,7 +60,7 @@ private:
 
     void setCommonProperties(MCObject & object, const MCObjectData & data) const;
 
-    std::vector<std::shared_ptr<MCObject> > m_objects;
+    std::vector<std::unique_ptr<MCObject> > m_objects;
     MCAssetManager & m_assetManager;
 };
 

@@ -259,7 +259,7 @@ TrackSelectionMenu::TrackSelectionMenu(std::string id,
 
 void TrackSelectionMenu::addTrack(Track & track)
 {
-    addItem(*new TrackItem(width() / 2, height() / 2, track), true);
+    addItem(MTFH::MenuItemPtr(new TrackItem(width() / 2, height() / 2, track)));
     setCurrentIndex(0);
 }
 
@@ -290,7 +290,7 @@ void TrackSelectionMenu::down()
 void TrackSelectionMenu::selectCurrentItem()
 {
     Menu::selectCurrentItem();
-    Track & selection = static_cast<TrackItem *>(currentItem())->track();
+    Track & selection = static_cast<TrackItem *>(currentItem().get())->track();
     if (!selection.trackData().isLocked())
     {
         m_selectedTrack = &selection;

@@ -33,7 +33,7 @@ MCParticle::MCParticle(const std::string & typeID)
 , m_delta(0.0)
 , m_freeList(nullptr)
 {
-    setShape(new MCCircleShape(nullptr, 0.0));
+    setShape(MCShapePtr(new MCCircleShape(nullptr, 0.0)));
     setBypassCollisions(true);
     setIsPhysicsObject(true);
     setIsParticle(true);

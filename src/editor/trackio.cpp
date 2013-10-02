@@ -156,14 +156,12 @@ void TrackIO::readObject(TrackData & newData, const QDomElement & element)
     const int     y        = element.attribute("y", "0").toInt();
     const int     o        = element.attribute("o", "0").toInt();
 
-    ObjectModel model = MainWindow::instance()->objectModelLoader().getObjectModelByRole(role);
-
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
     Object & object = ObjectFactory::createObject(role);
     object.setLocation(QPointF(x, y));
     object.setRotation(o);
-    newData.objects().add(object);
+    newData.objects().add(std::shared_ptr<Object>(&object));
 }
 
 void TrackIO::readTargetNode(

@@ -23,6 +23,8 @@
 #include "mcmacros.hh"
 #include "mctypes.hh"
 
+#include <memory>
+
 class MCObject;
 class MCForceGeneratorImpl;
 
@@ -53,5 +55,7 @@ private:
 
     MCForceGeneratorImpl * const m_pImpl;
 };
+
+typedef std::shared_ptr<MCForceGenerator> MCForceGeneratorPtr;
 
 #endif // MCFORCEGENERATOR_HH

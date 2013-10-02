@@ -21,13 +21,13 @@
 #define MCFORCEREGISTRY_HH
 
 #include "mcmacros.hh"
+#include "mcforcegenerator.hh"
 
 #include <map>
 #include <memory>
 #include <set>
 #include <vector>
 
-class MCForceGenerator;
 class MCObject;
 
 /*! \class MCForceRegistry
@@ -42,16 +42,13 @@ public:
 
   /*! Add given force generator to given object
    * \param generator Force generator to be attached.
-   * \param object Target object.
-   * \param takeOwnership If true, MCWorld takes the Ownership
-   *        and handles deletion of generator. */
-  void addForceGenerator(MCForceGenerator & generator,
-      MCObject & object, bool takeOwnership = false);
+   * \param object Target object. */
+  void addForceGenerator(MCForceGeneratorPtr generator, MCObject & object);
 
   /*! Remove given force generator to given object
    * \param generator Force generator to be matched.
    * \param object Object to be matched */
-  void removeForceGenerator(MCForceGenerator & generator, MCObject & object);
+  void removeForceGenerator(MCForceGeneratorPtr generator, MCObject & object);
 
   /*! Remove all force generators bound to given object.
    * \param object Object to be matched */
@@ -69,12 +66,9 @@ private:
   DISABLE_ASSI(MCForceRegistry);
 
   // Prefer map and set here for iteration performance.
-  typedef std::vector<MCForceGenerator *> Registry;
+  typedef std::vector<MCForceGeneratorPtr> Registry;
   typedef std::map<MCObject *, Registry> RegistryHash;
   RegistryHash m_registryHash;
-
-  typedef std::shared_ptr<MCForceGenerator> MCForceGeneratorPtr;
-  std::set<MCForceGeneratorPtr> m_owned;
 };
 
 #endif // MCFORCEREGISTRY_HH

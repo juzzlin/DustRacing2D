@@ -350,7 +350,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     MCVector2dF location(x, h - y);
     if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle))
     {
-        newData.objects().add(*object, true);
+        newData.objects().add(std::shared_ptr<TrackObject>(object));
     }
 }
 

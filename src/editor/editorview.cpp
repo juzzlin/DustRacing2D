@@ -246,7 +246,7 @@ void EditorView::addCurrentToolBarObjectToScene()
 
             scene()->addItem(&object);
 
-            m_editorData.trackData()->objects().add(object);
+            m_editorData.trackData()->objects().add(std::shared_ptr<Object>(&object));
             m_editorData.setSelectedObject(&object);
         }
     }

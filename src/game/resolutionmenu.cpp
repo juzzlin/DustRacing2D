@@ -92,7 +92,7 @@ public:
         int hRes, int vRes, bool fullScreen, int width, int height, std::string text = "")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
-    , m_saveResolutionAction(*this, fullScreen)
+    , m_saveResolutionAction(new SaveResolutionAction(*this, fullScreen))
     , m_hRes(hRes)
     , m_vRes(vRes)
     {
@@ -123,11 +123,10 @@ public:
 
 private:
 
-    ConfirmationMenu &   m_confirmationMenu;
-    SaveResolutionAction m_saveResolutionAction;
-    int                  m_hRes;
-    int                  m_vRes;
-
+    ConfirmationMenu &      m_confirmationMenu;
+    MTFH::MenuItemActionPtr m_saveResolutionAction;
+    int                     m_hRes;
+    int                     m_vRes;
 };
 
 ResolutionMenu::ResolutionMenu(
@@ -163,8 +162,8 @@ ResolutionMenu::ResolutionMenu(
             resString << hRes << "x" << vRes;
             ResolutionItem * resolution =
                 new ResolutionItem(m_confirmationMenu, hRes, vRes, fullScreen, width, itemHeight, resString.str());
-            resolution->setView(new TextMenuItemView(20, *resolution), true);
-            addItem(*resolution, true);
+            resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
+            addItem(MTFH::MenuItemPtr(resolution));
         }
     }
 
@@ -172,8 +171,8 @@ ResolutionMenu::ResolutionMenu(
     {
         ResolutionItem * resolution =
             new ResolutionItem(m_confirmationMenu, 0, 0, true, width, itemHeight, "Native resolution");
-        resolution->setView(new TextMenuItemView(20, *resolution), true);
-        addItem(*resolution, true);
+        resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
+        addItem(MTFH::MenuItemPtr(resolution));
     }
 
     enter();
@@ -184,7 +183,7 @@ void ResolutionMenu::enter()
     // Set the current active resolution selected
     for (unsigned int i = 0; i < itemCount(); i++)
     {
-        if (ResolutionItem * resolution = dynamic_cast<ResolutionItem *>(item(i)))
+        if (auto resolution = dynamic_cast<ResolutionItem *>(item(i).get()))
         {
             int  hRes       = 0;
             int  vRes       = 0;

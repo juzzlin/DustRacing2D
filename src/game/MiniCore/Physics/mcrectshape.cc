@@ -20,15 +20,14 @@
 #include "mcrectshape.hh"
 #include "mccamera.hh"
 #include "mcobject.hh"
-#include "mcshapeview.hh"
 #include "mcmathutil.hh"
 
 #include <cassert>
 
 MCUint MCRectShape::m_typeID = MCShape::registerType();
 
-MCRectShape::MCRectShape(MCShapeView * pView, MCFloat width, MCFloat height)
-: MCShape(pView)
+MCRectShape::MCRectShape(MCShapeViewPtr view, MCFloat width, MCFloat height)
+: MCShape(view)
 , m_obbox(width / 2, height / 2, MCVector2dF())
 , m_radius(std::max(width, height) / 2)
 , m_width(width)

@@ -16,6 +16,8 @@
 #ifndef MENUITEMACTION_HPP
 #define MENUITEMACTION_HPP
 
+#include <memory>
+
 namespace MTFH {
 
 //! Base class for menu item actions triggered when
@@ -38,6 +40,8 @@ public:
 
 private:
 };
+
+typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
 
 } // namespace MTFH
 

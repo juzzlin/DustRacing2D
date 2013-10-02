@@ -26,6 +26,8 @@
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 
+#include <memory>
+
 class MCCamera;
 
 /*! \class MCShapeView.
@@ -203,5 +205,7 @@ private:
     MCGLShaderProgram * m_shadowShaderProgram;
     bool m_hasShadow;
 };
+
+typedef std::shared_ptr<MCShapeView> MCShapeViewPtr;
 
 #endif // MCSHAPEVIEW_HH

@@ -45,24 +45,24 @@ SurfaceMenu::SurfaceMenu(
     {
         const int textSize = 40;
         MTFH::MenuItem * quit = new MTFH::MenuItem(textSize, textSize, "X");
-        quit->setView(new TextMenuItemView(textSize, *quit), true);
-        addMouseItem(MTFH::Menu::MI_QUIT, *quit, true);
+        quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *quit)));
+        addMouseItem(MTFH::Menu::MI_QUIT, MTFH::MenuItemPtr(quit));
     }
 
     if (prevItem)
     {
         const int textSize = 40;
         MTFH::MenuItem * prev = new MTFH::MenuItem(textSize, textSize, "<");
-        prev->setView(new TextMenuItemView(textSize, *prev), true);
-        addMouseItem(MTFH::Menu::MI_PREV, *prev, true);
+        prev->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *prev)));
+        addMouseItem(MTFH::Menu::MI_PREV, MTFH::MenuItemPtr(prev));
     }
 
     if (nextItem)
     {
         const int textSize = 40;
         MTFH::MenuItem * next = new MTFH::MenuItem(textSize, textSize, ">");
-        next->setView(new TextMenuItemView(textSize, *next), true);
-        addMouseItem(MTFH::Menu::MI_NEXT, *next, true);
+        next->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *next)));
+        addMouseItem(MTFH::Menu::MI_NEXT, MTFH::MenuItemPtr(next));
     }
 }
 

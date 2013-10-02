@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "menumanager.hpp"
+#include "menuitem.hpp"
 
 namespace MTFH {
 
@@ -78,23 +79,23 @@ public:
     virtual void handleMouseRelease(int x, int y, int screenWidth, int screenHeight);
 
     //! \return current item or nullptr if no items added.
-    MenuItem * currentItem() const;
+    MenuItemPtr currentItem() const;
 
     /*! \return selected item or nullptr if no item added.
      *  Pressing enter on an item selects it. */
-    MenuItem * selectedItem() const;
+    MenuItemPtr selectedItem() const;
 
     //! \return current item at given index or nullptr.
-    MenuItem * item(unsigned int index) const;
+    MenuItemPtr item(unsigned int index) const;
 
     //! \return number of currently added items.
     unsigned int itemCount() const;
 
     //! Add item to the menu.
-    virtual void addItem(MenuItem & menuItem, bool takeOwnership = false);
+    virtual void addItem(MenuItemPtr menuItem);
 
     //! Add mouse control item.
-    virtual void addMouseItem(MouseItemType type, MenuItem & menuItem, bool takeOwnership = false);
+    virtual void addMouseItem(MouseItemType type, MenuItemPtr menuItem);
 
     //! Use this if the current menu stack needs to be
     //! completely quit, for example when the execution
@@ -135,7 +136,7 @@ private:
 
     struct MouseItem
     {
-        MenuItem * item;
+        MenuItemPtr item;
         MouseItemType type;
     };
 
@@ -153,11 +154,8 @@ private:
 
     void updateFocus();
 
-    std::vector<MenuItem *> m_items;
+    std::vector<MenuItemPtr > m_items;
     std::vector<MouseItem> m_mouseItems;
-    typedef std::shared_ptr<MenuItem> MenuItemPtr;
-    typedef std::vector<MenuItemPtr> MenuItemVector;
-    MenuItemVector m_ownedMenuItems;
     std::string m_id;
     int m_width, m_height;
     int m_currentIndex;

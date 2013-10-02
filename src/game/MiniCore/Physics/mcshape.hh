@@ -26,10 +26,10 @@
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include "mcsegment.hh"
+#include "mcshapeview.hh"
 
 #include <memory>
 
-class MCShapeView;
 class MCObject;
 class MCCamera;
 
@@ -41,9 +41,8 @@ class MCShape
 public:
 
     /*! Constructor.
-     * \param pView View for the shape. MCShape takes the ownership.
-     */
-    explicit MCShape(MCShapeView * pView = nullptr);
+     * \param pView View for the shape. */
+    explicit MCShape(MCShapeViewPtr view = nullptr);
 
     //! Destructor.
     virtual ~MCShape();
@@ -55,16 +54,11 @@ public:
     //! Get the parent object.
     MCObject & parent() const;
 
-    //! Set view object. MCShape takes the ownership.
-    void setView(MCShapeView * p);
+    /*! Set view object. The same view can be shared between multiple objects; */
+    void setView(MCShapeViewPtr view);
 
-    /*! Set view object. Use this if you want to share the same view
-     *  between multiple objects;
-     */
-    void setView(std::shared_ptr<MCShapeView> p);
-
-    //! Get view class.
-    MCShapeView * view() const;
+    //! Get view object.
+    MCShapeViewPtr view() const;
 
     /*! Render.
      * \param p Camera window to be used
@@ -159,7 +153,10 @@ private:
     MCVector3d<MCFloat> m_location;
     MCVector2d<MCFloat> m_shadowOffset;
     MCFloat m_angle;
-    std::shared_ptr<MCShapeView> m_pView;
+
+    MCShapeViewPtr m_view;
 };
+
+typedef std::shared_ptr<MCShape> MCShapePtr;
 
 #endif // MCSHAPE_HH

@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "menu.hpp"
-#include "menuitem.hpp"
 #include "menumanager.hpp"
 
 #include <cassert>
@@ -38,35 +37,25 @@ std::string Menu::id() const
     return m_id;
 }
 
-void Menu::addItem(MenuItem & menuItem, bool takeOwnership)
+void Menu::addItem(MenuItemPtr menuItem)
 {
-    m_items.push_back(&menuItem);
+    m_items.push_back(menuItem);
     m_currentIndex = m_items.size() - 1;
     m_selectedIndex = m_currentIndex;
-    menuItem.setIndex(m_items.size() - 1);
-
-    if (takeOwnership)
-    {
-        m_ownedMenuItems.push_back(MenuItemPtr(&menuItem));
-    }
+    menuItem->setIndex(m_items.size() - 1);
 
     updateFocus();
 }
 
-void Menu::addMouseItem(Menu::MouseItemType type, MenuItem & menuItem, bool takeOwnership)
+void Menu::addMouseItem(Menu::MouseItemType type, MenuItemPtr menuItem)
 {
     MouseItem mouseItem;
-    mouseItem.item = &menuItem;
+    mouseItem.item = menuItem;
     mouseItem.type = type;
     m_mouseItems.push_back(mouseItem);
-
-    if (takeOwnership)
-    {
-        m_ownedMenuItems.push_back(MenuItemPtr(&menuItem));
-    }
 }
 
-MenuItem * Menu::currentItem() const
+MenuItemPtr Menu::currentItem() const
 {
     if (m_items.size())
     {
@@ -76,7 +65,7 @@ MenuItem * Menu::currentItem() const
     return nullptr;
 }
 
-MenuItem * Menu::selectedItem() const
+MenuItemPtr Menu::selectedItem() const
 {
     if (m_items.size())
     {
@@ -86,7 +75,7 @@ MenuItem * Menu::selectedItem() const
     return nullptr;
 }
 
-MenuItem * Menu::item(unsigned int index) const
+MenuItemPtr Menu::item(unsigned int index) const
 {
     if (index < m_items.size())
     {
@@ -118,14 +107,14 @@ void Menu::renderItems()
     {
         // Calculate total height
         int totalHeight = 0;
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             totalHeight += item->height();
         }
 
         // Render centered items
         int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             item->setPos(m_width / 2, startY);
             item->render();
@@ -136,14 +125,14 @@ void Menu::renderItems()
     {
         // Calculate total height
         int totalWidth = 0;
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             totalWidth += item->width();
         }
 
         // Render centered items
         int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             item->setPos(startX, m_height / 2);
             item->render();
@@ -152,7 +141,7 @@ void Menu::renderItems()
     }
     else if (m_style == Menu::MS_SHOW_ONE)
     {
-        MenuItem * item = m_items.at(m_currentIndex);
+        auto item = m_items.at(m_currentIndex);
         item->setPos(m_width / 2, m_height / 2);
         item->render();
     }
@@ -224,7 +213,7 @@ void Menu::selectCurrentItem()
 {
     if (m_items.size())
     {
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             item->setSelected(false);
         }
@@ -238,15 +227,15 @@ bool Menu::handleMousePressOnMouseItem(int x, int y)
 {
     for (MouseItem mouseItem : m_mouseItems)
     {
-        MenuItem & item = *mouseItem.item;
-        const int x1 = item.x() - item.width()  / 2;
-        const int x2 = item.x() + item.width()  / 2;
-        const int y1 = item.y() - item.height() / 2;
-        const int y2 = item.y() + item.height() / 2;
+        auto item = mouseItem.item;
+        const int x1 = item->x() - item->width()  / 2;
+        const int x2 = item->x() + item->width()  / 2;
+        const int y1 = item->y() - item->height() / 2;
+        const int y2 = item->y() + item->height() / 2;
 
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
-            item.setFocused(true);
+            item->setFocused(true);
             return true;
         }
     }
@@ -258,15 +247,15 @@ void Menu::handleMousePressOnItem(int x, int y)
 {
     for (MouseItem mouseItem : m_mouseItems)
     {
-        MenuItem & item = *mouseItem.item;
-        const int x1 = item.x() - item.width()  / 2;
-        const int x2 = item.x() + item.width()  / 2;
-        const int y1 = item.y() - item.height() / 2;
-        const int y2 = item.y() + item.height() / 2;
+        auto item = mouseItem.item;
+        const int x1 = item->x() - item->width()  / 2;
+        const int x2 = item->x() + item->width()  / 2;
+        const int y1 = item->y() - item->height() / 2;
+        const int y2 = item->y() + item->height() / 2;
 
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
-            item.setFocused(true);
+            item->setFocused(true);
             return;
         }
     }
@@ -275,11 +264,11 @@ void Menu::handleMousePressOnItem(int x, int y)
     {
         for (unsigned int i = 0; i < m_items.size(); i++)
         {
-            MenuItem & item = *m_items.at(i);
-            const int x1 = item.x() - item.width()  / 2;
-            const int x2 = item.x() + item.width()  / 2;
-            const int y1 = item.y() - item.height() / 2;
-            const int y2 = item.y() + item.height() / 2;
+            auto item = m_items.at(i);
+            const int x1 = item->x() - item->width()  / 2;
+            const int x2 = item->x() + item->width()  / 2;
+            const int y1 = item->y() - item->height() / 2;
+            const int y2 = item->y() + item->height() / 2;
 
             if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
             {
@@ -305,17 +294,16 @@ bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
 {
     for (MouseItem mouseItem : m_mouseItems)
     {
-        MenuItem & item = *mouseItem.item;
-        item.setFocused(false);
+        mouseItem.item->setFocused(false);
     }
 
     for (MouseItem mouseItem : m_mouseItems)
     {
-        MenuItem & item = *mouseItem.item;
-        const int x1 = item.x() - item.width()  / 2;
-        const int x2 = item.x() + item.width()  / 2;
-        const int y1 = item.y() - item.height() / 2;
-        const int y2 = item.y() + item.height() / 2;
+        auto item = mouseItem.item;
+        const int x1 = item->x() - item->width()  / 2;
+        const int x2 = item->x() + item->width()  / 2;
+        const int y1 = item->y() - item->height() / 2;
+        const int y2 = item->y() + item->height() / 2;
 
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
@@ -343,11 +331,11 @@ void Menu::handleMouseReleaseOnItem(int x, int y)
 {
     if (m_style == Menu::MS_SHOW_ONE)
     {
-        MenuItem & item = *currentItem();
-        const int x1 = item.x() - item.width()  / 2;
-        const int x2 = item.x() + item.width()  / 2;
-        const int y1 = item.y() - item.height() / 2;
-        const int y2 = item.y() + item.height() / 2;
+        auto item = currentItem();
+        const int x1 = item->x() - item->width()  / 2;
+        const int x2 = item->x() + item->width()  / 2;
+        const int y1 = item->y() - item->height() / 2;
+        const int y2 = item->y() + item->height() / 2;
 
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
@@ -358,11 +346,11 @@ void Menu::handleMouseReleaseOnItem(int x, int y)
     {
         for (unsigned int i = 0; i < m_items.size(); i++)
         {
-            MenuItem & item = *m_items.at(i);
-            const int x1 = item.x() - item.width()  / 2;
-            const int x2 = item.x() + item.width()  / 2;
-            const int y1 = item.y() - item.height() / 2;
-            const int y2 = item.y() + item.height() / 2;
+            auto item = m_items.at(i);
+            const int x1 = item->x() - item->width()  / 2;
+            const int x2 = item->x() + item->width()  / 2;
+            const int y1 = item->y() - item->height() / 2;
+            const int y2 = item->y() + item->height() / 2;
 
             if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
             {
@@ -391,7 +379,7 @@ void Menu::updateFocus()
 {
     if (m_items.size())
     {
-        for (MenuItem * item : m_items)
+        for (auto item : m_items)
         {
             item->setFocused(false);
         }

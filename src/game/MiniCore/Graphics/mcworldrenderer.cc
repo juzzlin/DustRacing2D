@@ -169,7 +169,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
         if (itemCountInBatch > 0)
         {
             MCObject * object = iter->second[0];
-            MCShapeView * view = object->shape()->view();
+            std::shared_ptr<MCShapeView> view = object->shape()->view();
             view->beginBatch();
             object->render(camera);
 
@@ -248,7 +248,7 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
             if (itemCountInBatch > 0)
             {
                 MCObject * object = iter->second[0];
-                MCShapeView * view = object->shape()->view();
+                std::shared_ptr<MCShapeView> view = object->shape()->view();
                 if (view && view->hasShadow())
                 {
                     view->beginShadowBatch();

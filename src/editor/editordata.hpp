@@ -159,7 +159,7 @@ private:
 
     void pushTargetNodeToRoute(TargetNodeBase & tnode);
 
-    std::shared_ptr<TrackData>       m_trackData;
+    std::unique_ptr<TrackData>       m_trackData;
     EditorMode                       m_mode;
     TrackTile                      * m_dragAndDropSourceTile;
     Object                         * m_dragAndDropObject;

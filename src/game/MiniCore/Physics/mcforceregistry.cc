@@ -19,11 +19,9 @@
 
 #include "mcobject.hh"
 #include "mcforceregistry.hh"
-#include "mcforcegenerator.hh"
 
 MCForceRegistry::MCForceRegistry()
 : m_registryHash()
-, m_owned()
 {}
 
 void MCForceRegistry::update()
@@ -47,24 +45,16 @@ void MCForceRegistry::update()
     }
 }
 
-void MCForceRegistry::addForceGenerator(
-    MCForceGenerator & generator, MCObject & object, bool takeOwnership)
+void MCForceRegistry::addForceGenerator(MCForceGeneratorPtr generator, MCObject & object)
 {
     MCForceRegistry::Registry & registry = m_registryHash[&object];
-
-    if (find(registry.begin(), registry.end(), &generator) == registry.end())
+    if (find(registry.begin(), registry.end(), generator) == registry.end())
     {
-        registry.push_back(&generator);
-
-        if (takeOwnership)
-        {
-            m_owned.insert(MCForceGeneratorPtr(&generator));
-        }
+        registry.push_back(generator);
     }
 }
 
-void MCForceRegistry::removeForceGenerator(
-    MCForceGenerator & generator, MCObject & object)
+void MCForceRegistry::removeForceGenerator(MCForceGeneratorPtr generator, MCObject & object)
 {
     auto iter = m_registryHash.find(&object);
     if (iter != m_registryHash.end())
@@ -72,7 +62,7 @@ void MCForceRegistry::removeForceGenerator(
         Registry & registry = iter->second;
         for (MCUint i = 0; i < registry.size(); i++)
         {
-            if (registry[i] == &generator && iter->first == &object)
+            if (registry[i] == generator && iter->first == &object)
             {
                 registry[i] = registry.back();
                 registry.pop_back();

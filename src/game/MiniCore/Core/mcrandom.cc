@@ -44,7 +44,7 @@ private:
   friend class MCRandom;
 };
 
-std::shared_ptr<MCRandomImpl> const MCRandom::m_pImpl(new MCRandomImpl);
+std::unique_ptr<MCRandomImpl> const MCRandom::m_pImpl(new MCRandomImpl);
 
 MCRandomImpl::MCRandomImpl() :
     m_valPtr(0),

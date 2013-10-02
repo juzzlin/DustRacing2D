@@ -21,23 +21,18 @@ Objects::Objects()
 {
 }
 
-void Objects::add(ObjectBase & object, bool takeOwnership)
+void Objects::add(ObjectPtr object)
 {
-    if (std::find(m_objects.begin(), m_objects.end(), &object) ==
-        m_objects.end())
+    auto i = std::find(m_objects.begin(), m_objects.end(), object);
+    if (i == m_objects.end())
     {
-        m_objects.push_back(&object);
-
-        if (takeOwnership)
-        {
-            m_owned.push_back(std::shared_ptr<ObjectBase>(&object));
-        }
+        m_objects.push_back(object);
     }
 }
 
 void Objects::remove(ObjectBase & object)
 {
-    auto i = std::find(m_objects.begin(), m_objects.end(), &object);
+    auto i = std::find(m_objects.begin(), m_objects.end(), ObjectPtr(&object));
     if (i != m_objects.end())
     {
         m_objects.erase(i);

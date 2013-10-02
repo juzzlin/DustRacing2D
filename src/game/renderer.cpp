@@ -154,7 +154,7 @@ void Renderer::setEnabled(bool enable)
 
 MCGLShaderProgram & Renderer::program(const std::string & id)
 {
-    MCGLShaderProgramPtr program = m_shaderHash[id];
+    MCGLShaderProgramPtr program(m_shaderHash[id]);
     if (!program.get())
     {
         throw MCException("Cannot find shader program '" + id +"'");

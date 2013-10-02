@@ -25,7 +25,6 @@
 #include "mcevent.hh"
 #include "mcoutofboundariesevent.hh"
 #include "mcrectshape.hh"
-#include "mcshape.hh"
 #include "mcshapeview.hh"
 #include "mcsurface.hh"
 #include "mctimerevent.hh"
@@ -47,22 +46,23 @@ MCObject::MCObject(const std::string & typeId)
     init(typeId);
 }
 
-MCObject::MCObject(MCShape * pShape, const std::string & typeId)
+MCObject::MCObject(MCShapePtr shape, const std::string & typeId)
 {
     init(typeId);
 
-    setShape(pShape);
+    setShape(shape);
 }
 
-MCObject::MCObject(MCSurface * pSurface, const std::string & typeId, bool batchMode)
+MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMode)
 {
     init(typeId);
 
-    // Create an MCRectShape using pSurface with an MCSurfaceView
-    MCRectShape * rectShape = new MCRectShape(
-        new MCSurfaceView(typeId, pSurface, batchMode),
-        pSurface ? pSurface->width() : 0,
-        pSurface ? pSurface->height() : 0);
+    // Create an MCRectShape using surface with an MCSurfaceView
+    MCShapePtr rectShape(new MCRectShape(
+        MCShapeViewPtr(new MCSurfaceView(typeId, &surface, batchMode)),
+        surface.width(),
+        surface.height()));
+
     setShape(rectShape);
 }
 
@@ -90,7 +90,6 @@ void MCObject::init(const std::string & typeId)
     m_j0                     = 0;
     m_j1                     = 0;
     m_initialAngle           = 0;
-    pShape                   = nullptr;
     damping                  = DAMPING;
     timerEventObjectsIndex   = -1;
     m_sleeping               = false;
@@ -175,7 +174,7 @@ void MCObject::integrateLinear(MCFloat step)
 
 void MCObject::integrateAngular(MCFloat step)
 {
-    if (pShape)
+    if (m_shape)
     {
         if (m_momentOfInertia > 0.0)
         {
@@ -205,10 +204,10 @@ void MCObject::integrateAngular(MCFloat step)
 void MCObject::doOutOfBoundariesEvent()
 {
     // Use shape bbox if shape is defined.
-    if (pShape)
+    if (m_shape)
     {
-        checkXBoundariesAndSendEvent(pShape->bbox().x1(), pShape->bbox().x2());
-        checkYBoundariesAndSendEvent(pShape->bbox().y1(), pShape->bbox().y2());
+        checkXBoundariesAndSendEvent(m_shape->bbox().x1(), m_shape->bbox().x2());
+        checkYBoundariesAndSendEvent(m_shape->bbox().y1(), m_shape->bbox().y2());
     }
     else
     {
@@ -380,17 +379,17 @@ void MCObject::removeFromWorldNow()
 
 void MCObject::render(MCCamera * p)
 {
-    if (pShape)
+    if (m_shape)
     {
-        pShape->render(p);
+        m_shape->render(p);
     }
 }
 
 void MCObject::renderShadow(MCCamera * p)
 {
-    if (pShape)
+    if (m_shape)
     {
-        pShape->renderShadow(p);
+        m_shape->renderShadow(p);
     }
 }
 
@@ -571,9 +570,9 @@ void MCObject::translate(const MCVector3dF & newLocation)
 
     m_location = newLocation;
 
-    if (pShape)
+    if (m_shape)
     {
-        pShape->translate(newLocation);
+        m_shape->translate(newLocation);
     }
 
     if (wasInWorld)
@@ -594,8 +593,8 @@ const MCVector3dF & MCObject::location() const
 
 void MCObject::setShadowOffset(const MCVector2dF & p)
 {
-    assert(pShape);
-    pShape->setShadowOffset(p);
+    assert(m_shape);
+    m_shape->setShadowOffset(p);
 }
 
 MCFloat MCObject::getX() const
@@ -636,17 +635,17 @@ void MCObject::doRotate(MCFloat newAngle)
             centerOfRotation.setZero();
         }
 
-        if (pShape)
+        if (m_shape)
         {
-            if (pShape->instanceTypeID() == MCCircleShape::typeID())
+            if (m_shape->instanceTypeID() == MCCircleShape::typeID())
             {
-                pShape->rotate(newAngle);
+                m_shape->rotate(newAngle);
             }
             else
             {
                 const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
 
-                pShape->rotate(newAngle);
+                m_shape->rotate(newAngle);
 
                 if (wasInWorld)
                 {
@@ -679,31 +678,19 @@ MCFloat MCObject::restitution() const
     return m_restitution;
 }
 
-void MCObject::setShape(MCShape * newShape)
+void MCObject::setShape(MCShapePtr shape)
 {
-    delete pShape;
-    pShape = newShape;
+    m_shape = shape;
 
-    if (pShape)
+    if (m_shape)
     {
-        pShape->setParent(*this);
+        m_shape->setParent(*this);
     }
 }
 
-MCShape * MCObject::shape() const
+MCShapePtr MCObject::shape() const
 {
-    return pShape;
-}
-
-void MCObject::setView(MCShapeView * newView)
-{
-    assert(pShape);
-    pShape->setView(newView);
-}
-
-MCShapeView * MCObject::view() const
-{
-    return pShape ? pShape->view() : nullptr;
+    return m_shape;
 }
 
 void MCObject::addForce(const MCVector3dF & force)
@@ -728,9 +715,9 @@ void MCObject::clearForces()
 
 MCBBox<MCFloat> MCObject::bbox() const
 {
-    if (pShape)
+    if (m_shape)
     {
-        return pShape->bbox();
+        return m_shape->bbox();
     }
     else
     {
@@ -900,5 +887,4 @@ void MCObject::toggleSleep(bool state)
 MCObject::~MCObject()
 {
     deleteContacts();
-    delete pShape;
 }

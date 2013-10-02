@@ -23,6 +23,7 @@
 #include <MCLogger>
 #include <MCObject>
 #include <MCObjectFactory>
+#include <MCShape>
 #include <MCShapeView>
 
 TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
@@ -152,7 +153,7 @@ TrackObject * TrackObjectFactory::build(
 
         object = &m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
-        object->view()->setHasShadow(false);
+        object->shape()->view()->setHasShadow(false);
     }
     else if (role == "tire")
     {
@@ -187,11 +188,11 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::Tree);
 
         // Create a custom view.
-        MCShapeView * view = new TreeView(
-            MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5);
+        MCShapeViewPtr view(new TreeView(
+            MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5));
         view->setShaderProgram(&(Renderer::instance().program("master")));
         view->setShadowShaderProgram(&(Renderer::instance().program("masterShadow")));
-        MCObject & object = m_objectFactory.build(data, *view);
+        MCObject & object = m_objectFactory.build(data, view);
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -219,8 +220,8 @@ TrackObject * TrackObjectFactory::build(
     }
     else
     {
-        object->view()->setShaderProgram(&Renderer::instance().program("master"));
-        object->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("master"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, *object);

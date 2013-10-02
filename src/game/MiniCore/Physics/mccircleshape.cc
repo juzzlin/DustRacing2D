@@ -18,13 +18,12 @@
 //
 
 #include "mccircleshape.hh"
-#include "mcshapeview.hh"
 #include "mcobject.hh"
 
 MCUint MCCircleShape::m_typeID = MCShape::registerType();
 
-MCCircleShape::MCCircleShape(MCShapeView * pView, MCFloat radius)
-: MCShape(pView)
+MCCircleShape::MCCircleShape(MCShapeViewPtr view, MCFloat radius)
+: MCShape(view)
 , m_radius(radius)
 {}
 

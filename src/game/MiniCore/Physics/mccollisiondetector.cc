@@ -239,15 +239,15 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
             // the other way around.
             if (testRectAgainstRect(
                 // Static cast because we know the types now.
-                *static_cast<MCRectShape *>(object1.shape()),
-                *static_cast<MCRectShape *>(object2.shape())))
+                *static_cast<MCRectShape *>(object1.shape().get()),
+                *static_cast<MCRectShape *>(object2.shape().get())))
             {
                 return true;
             }
             else if (testRectAgainstRect(
                 // Static cast because we know the types now.
-                *static_cast<MCRectShape *>(object2.shape()),
-                *static_cast<MCRectShape *>(object1.shape())))
+                *static_cast<MCRectShape *>(object2.shape().get()),
+                *static_cast<MCRectShape *>(object1.shape().get())))
             {
                 return true;
             }
@@ -257,16 +257,16 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
         {
             // Static cast because we know the types now.
             return testRectAgainstCircle(
-                *static_cast<MCRectShape *>(object1.shape()),
-                *static_cast<MCCircleShape *>(object2.shape()));
+                *static_cast<MCRectShape *>(object1.shape().get()),
+                *static_cast<MCCircleShape *>(object2.shape().get()));
         }
         // Circle against circle
         else if (id1 == MCCircleShape::typeID() && id2 == MCCircleShape::typeID())
         {
             // Static cast because we know the types now.
             return testCircleAgainstCircle(
-                *static_cast<MCCircleShape *>(object1.shape()),
-                *static_cast<MCCircleShape *>(object2.shape()));
+                *static_cast<MCCircleShape *>(object1.shape().get()),
+                *static_cast<MCCircleShape *>(object2.shape().get()));
         }
     }
 

@@ -58,19 +58,19 @@ MCForceRegistryTest::MCForceRegistryTest()
 void MCForceRegistryTest::testAddUpdateRemove()
 {
     MCForceRegistry dut;
-    TestForceGenerator force;
+    MCForceGeneratorPtr force(new TestForceGenerator);
     MCObject object("TestObject");
     MCWorld world;
     dut.addForceGenerator(force, object);
     dut.update();
-    QVERIFY(force.m_updated == false);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == false);
     world.addObject(object);
     dut.update();
-    QVERIFY(force.m_updated == true);
-    force.m_updated = false;
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == true);
+    static_cast<TestForceGenerator *>(force.get())->m_updated = false;
     dut.removeForceGenerator(force, object);
     dut.update();
-    QVERIFY(force.m_updated == false);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == false);
 }
 
 void MCForceRegistryTest::testAddUpdateRemoveMulti()
@@ -79,32 +79,32 @@ void MCForceRegistryTest::testAddUpdateRemoveMulti()
     TestForceGenerator::m_destructorCallCount = 0;
 
     {
-        std::vector<TestForceGenerator *> forces;
+        std::vector<MCForceGeneratorPtr> forces;
 
         MCForceRegistry dut;
         MCWorld world;
 
-        std::vector<std::shared_ptr<MCObject> > objects;
+        std::vector<std::unique_ptr<MCObject> > objects;
         for (MCUint i = 0; i < NUM_OBJECTS; i++)
         {
             MCObject * object = new MCObject("TestObject");
-            objects.push_back(std::shared_ptr<MCObject>(object));
+            objects.push_back(std::unique_ptr<MCObject>(object));
             world.addObject(*object);
-            TestForceGenerator * force = new TestForceGenerator;
-            dut.addForceGenerator(*force, *object, true);
+            MCForceGeneratorPtr force(new TestForceGenerator);
+            dut.addForceGenerator(force, *object);
             forces.push_back(force);
         }
 
         for (MCUint i = 0; i < NUM_OBJECTS; i++)
         {
-            QVERIFY(forces[i]->m_updated == false);
+            QVERIFY(static_cast<TestForceGenerator *>(forces[i].get())->m_updated == false);
         }
 
         dut.update();
 
         for (MCUint i = 0; i < NUM_OBJECTS; i++)
         {
-            QVERIFY(forces[i]->m_updated == true);
+            QVERIFY(static_cast<TestForceGenerator *>(forces[i].get())->m_updated == true);
         }
     }
 
@@ -116,33 +116,33 @@ void MCForceRegistryTest::testAddUpdateRemoveMulti()
 void MCForceRegistryTest::testUpdateWithEnable()
 {
     MCForceRegistry dut;
-    TestForceGenerator force;
+    MCForceGeneratorPtr force(new TestForceGenerator);
     MCObject object("TestObject");
     MCWorld world;
     dut.addForceGenerator(force, object);
     world.addObject(object);
     dut.update();
-    QVERIFY(force.m_updated == true);
-    force.m_updated = false;
-    force.enable(false);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == true);
+    static_cast<TestForceGenerator *>(force.get())->m_updated = false;
+    force->enable(false);
     dut.update();
-    QVERIFY(force.m_updated == false);
-    force.enable(true);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == false);
+    force->enable(true);
     dut.update();
-    QVERIFY(force.m_updated == true);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == true);
 }
 
 void MCForceRegistryTest::testClear()
 {
     MCForceRegistry dut;
-    TestForceGenerator force;
+    MCForceGeneratorPtr force(new TestForceGenerator);
     MCObject object("TestObject");
     MCWorld world;
     dut.addForceGenerator(force, object);
     world.addObject(object);
     dut.clear();
     dut.update();
-    QVERIFY(force.m_updated == false);
+    QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == false);
 }
 
 QTEST_MAIN(MCForceRegistryTest)

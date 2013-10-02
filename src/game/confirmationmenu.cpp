@@ -16,8 +16,6 @@
 #include "confirmationmenu.hpp"
 #include "textmenuitemview.hpp"
 
-#include <MenuItem>
-#include <MenuItemAction>
 #include <MenuItemView>
 #include <MenuManager>
 
@@ -31,16 +29,16 @@ ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
 , m_cancelItem(new MTFH::MenuItem(width / 4, height, "Cancel"))
 , m_text("")
 {
-    m_acceptItem->setView(new TextMenuItemView(20, *m_acceptItem), true);
-    m_cancelItem->setView(new TextMenuItemView(20, *m_cancelItem), true);
+    m_acceptItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_acceptItem)));
+    m_cancelItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_cancelItem)));
 
-    addItem(*m_acceptItem, true);
-    addItem(*m_cancelItem, true);
+    addItem(MTFH::MenuItemPtr(m_acceptItem));
+    addItem(MTFH::MenuItemPtr(m_cancelItem));
 }
 
-void ConfirmationMenu::setAcceptAction(MTFH::MenuItemAction & action)
+void ConfirmationMenu::setAcceptAction(MTFH::MenuItemActionPtr action)
 {
-    m_acceptItem->setAction(&action);
+    m_acceptItem->setAction(action);
 }
 
 void ConfirmationMenu::setAcceptAction(std::function<void()> actionFunction)
@@ -48,9 +46,9 @@ void ConfirmationMenu::setAcceptAction(std::function<void()> actionFunction)
     m_acceptItem->setAction(actionFunction);
 }
 
-void ConfirmationMenu::setCancelAction(MTFH::MenuItemAction & action)
+void ConfirmationMenu::setCancelAction(MTFH::MenuItemActionPtr action)
 {
-    m_cancelItem->setAction(&action);
+    m_cancelItem->setAction(action);
 }
 
 void ConfirmationMenu::setCancelAction(std::function<void()> actionFunction)

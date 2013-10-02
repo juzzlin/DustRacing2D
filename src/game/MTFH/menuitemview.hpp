@@ -16,6 +16,8 @@
 #ifndef MENUITEMVIEW_HPP
 #define MENUITEMVIEW_HPP
 
+#include <memory>
+
 namespace MTFH {
 
 class MenuItem;
@@ -41,6 +43,8 @@ private:
 
     MenuItem & m_owner;
 };
+
+typedef std::shared_ptr<MenuItemView> MenuItemViewPtr;
 
 } // namespace MTFH
 

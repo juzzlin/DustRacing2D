@@ -20,10 +20,8 @@
 
 #include "surfacemenu.hpp"
 
-namespace MTFH {
-class MenuItem;
-class MenuItemAction;
-}
+#include <MenuItem>
+#include <MenuItemAction>
 
 //! Yes/No menu.
 class ConfirmationMenu : public SurfaceMenu
@@ -33,11 +31,11 @@ public:
     //! Constructor.
     ConfirmationMenu(std::string id, int width, int height);
 
-    void setAcceptAction(MTFH::MenuItemAction & action);
+    void setAcceptAction(MTFH::MenuItemActionPtr action);
 
     void setAcceptAction(std::function<void()> actionFunction);
 
-    void setCancelAction(MTFH::MenuItemAction & action);
+    void setCancelAction(MTFH::MenuItemActionPtr action);
 
     void setCancelAction(std::function<void()> actionFunction);
 
@@ -51,8 +49,8 @@ public:
 
 private:
 
-    MTFH::MenuItem * m_acceptItem;
-    MTFH::MenuItem * m_cancelItem;
+    MTFH::MenuItemPtr m_acceptItem;
+    MTFH::MenuItemPtr m_cancelItem;
 
     std::string m_text;
 };

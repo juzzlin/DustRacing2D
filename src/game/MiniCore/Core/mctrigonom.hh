@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
 
@@ -76,7 +76,7 @@ private:
 
     DISABLE_COPY(MCTrigonom);
     DISABLE_ASSI(MCTrigonom);
-    static std::shared_ptr<MCTrigonomImpl> const m_pImpl;
+    static std::unique_ptr<MCTrigonomImpl> const m_pImpl;
 };
 
 #endif // MCTRIGONOM_HH

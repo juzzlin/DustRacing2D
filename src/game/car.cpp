@@ -24,6 +24,7 @@
 #include <MCAssetManager>
 #include <MCCollisionEvent>
 #include <MCDragForceGenerator>
+#include <MCForceRegistry>
 #include <MCFrictionGenerator>
 #include <MCMathUtil>
 #include <MCRectShape>
@@ -32,13 +33,14 @@
 #include <MCTrigonom>
 #include <MCTypes>
 #include <MCVector2d>
+#include <MCWorld>
 
 #include <cassert>
 #include <cmath>
 #include <string>
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
-: MCObject(&surface, "Car")
+: MCObject(surface, "Car")
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
@@ -87,30 +89,30 @@ void Car::setProperties(Description & desc)
 
     setShadowOffset(MCVector2dF(5, -5));
 
-    const float width  = static_cast<MCRectShape *>(shape())->width();
-    const float height = static_cast<MCRectShape *>(shape())->height();
+    const float width  = static_cast<MCRectShape *>(shape().get())->width();
+    const float height = static_cast<MCRectShape *>(shape().get())->height();
     m_length = std::max(width, height);
 }
 
 void Car::initForceGenerators(Description & desc)
 {
     // Add slide friction generator
-    MCWorld::instance().addForceGenerator(*m_pSlideFriction, *this, true);
+    MCWorld::instance().forceRegistry().addForceGenerator(m_pSlideFriction, *this);
 
     // Add braking friction generator
-    MCWorld::instance().addForceGenerator(*m_pBrakingFriction, *this, true);
+    MCWorld::instance().forceRegistry().addForceGenerator(m_pBrakingFriction, *this);
     m_pBrakingFriction->enable(false);
 
     // Add rolling friction generator (on-track)
-    MCWorld::instance().addForceGenerator(*m_pOnTrackFriction, *this, true);
+    MCWorld::instance().forceRegistry().addForceGenerator(m_pOnTrackFriction, *this);
     m_pOnTrackFriction->enable(true);
 
     // Add rolling friction generator (off-track)
-    MCWorld::instance().addForceGenerator(*m_pOffTrackFriction, *this, true);
+    MCWorld::instance().forceRegistry().addForceGenerator(m_pOffTrackFriction, *this);
     m_pOffTrackFriction->enable(false);
 
-    MCForceGenerator * drag = new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic);
-    MCWorld::instance().addForceGenerator(*drag, *this, true);
+    MCForceGeneratorPtr drag(new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic));
+    MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
 }
 
 void Car::clearStatuses()
@@ -376,7 +378,7 @@ void Car::stepTime(MCFloat step)
             }
 
             static_cast<SlideFrictionGenerator *>(
-                m_pSlideFriction)->setTireWearOutFactor(tireWearLevel());
+                m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
         }
     }
     else
@@ -460,5 +462,5 @@ float Car::tireWearLevel() const
 
 Car::~Car()
 {
-    MCWorld::instance().removeForceGenerators(*this);
+    MCWorld::instance().forceRegistry().removeForceGenerators(*this);
 }

@@ -62,7 +62,7 @@ void ParticleFactory::preCreatePointParticles(int count,
         m_freeLists[typeEnum].push_back(particle);
 
         // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
     }
 
     MCWorld::instance().renderer().registerPointParticleRenderer(
@@ -82,7 +82,7 @@ void ParticleFactory::preCreateRectParticles(int count,
         m_freeLists[typeEnum].push_back(particle);
 
         // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
     }
 }
 
@@ -138,7 +138,7 @@ void ParticleFactory::preCreateParticles()
         m_freeLists[Leaf].push_back(particle);
 
         // Store for deletion
-        m_delete.push_back(std::shared_ptr<MCParticle>(particle));
+        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
     }
 }
 

@@ -24,6 +24,7 @@
 #include "mcobbox.hh"
 #include "mcedge.hh"
 #include "mcsegment.hh"
+#include "mcshapeview.hh"
 
 class MCShapeView;
 class MCObject;
@@ -38,9 +39,8 @@ class MCRectShape : public MCShape
 public:
 
     /*! Constructor
-     * \param pView View for the shape. May be nullptr.
-     */
-    MCRectShape(MCShapeView * pView, MCFloat width, MCFloat height);
+     * \param view View for the shape. May be nullptr. */
+    MCRectShape(MCShapeViewPtr view, MCFloat width, MCFloat height);
 
     //! Destructor
     virtual ~MCRectShape();

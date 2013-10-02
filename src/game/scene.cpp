@@ -57,6 +57,7 @@
 #include <MCGLShaderProgram>
 #include <MCLogger>
 #include <MCObject>
+#include <MCShape>
 #include <MCSurface>
 #include <MCSurfaceView>
 #include <MCTextureFont>
@@ -212,8 +213,8 @@ void Scene::createCars()
         if (car)
         {
             car->setLayer(Layers::Cars);
-            car->view()->setShaderProgram(&m_renderer.program("car"));
-            car->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
+            car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
+            car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
 
             m_cars.push_back(CarPtr(car));
             m_race.addCar(*car);
@@ -501,7 +502,7 @@ void Scene::addTrackObjectsToWorld()
         mcObject.translate(mcObject.initialLocation());
         mcObject.rotate(mcObject.initialAngle());
 
-        if (TreeView * treeView = dynamic_cast<TreeView *>(mcObject.view()))
+        if (TreeView * treeView = dynamic_cast<TreeView *>(mcObject.shape()->view().get()))
         {
             m_treeViews.push_back(treeView);
         }

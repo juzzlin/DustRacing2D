@@ -21,8 +21,7 @@
 #define MCCIRCLESHAPE_HH
 
 #include "mcshape.hh"
-
-class MCShapeView;
+#include "mcshapeview.hh"
 
 //! Circular shape model
 class MCCircleShape : public MCShape
@@ -31,9 +30,8 @@ public:
 
     /*! Constructor
      * \param radius Radius of the shape
-     * \param pView  View for the shape. May be nullptr.
-     */
-    MCCircleShape(MCShapeView * pView, MCFloat radius);
+     * \param view View for the shape. May be nullptr. */
+    MCCircleShape(MCShapeViewPtr view, MCFloat radius);
 
     //! Destructor
     virtual ~MCCircleShape();

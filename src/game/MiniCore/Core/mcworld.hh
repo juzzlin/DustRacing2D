@@ -30,7 +30,6 @@
 class MCCamera;
 class MCCollisionDetector;
 class MCContact;
-class MCForceGenerator;
 class MCForceRegistry;
 class MCImpulseGenerator;
 class MCObject;
@@ -109,23 +108,8 @@ public:
     //! Restart integrating the given object.
     void restoreObjectToIntegration(MCObject & object);
 
-    /*! \brief Add force generator to an object.
-     *  \param generator Generator to be added.
-     *  \param object Target object the force applies to.
-     *  \param takeOwnership If true, MCWorld takes the Ownership
-     *         and handles deletion of generator. */
-    void addForceGenerator(
-        MCForceGenerator & generator,
-        MCObject & object, bool takeOwnership = false);
-
-    /*! \brief Remove force generator assigned to an object.
-     *  \param generator Generator to be added.
-     *  \param object Target object the force applies to. */
-    void removeForceGenerator(
-        MCForceGenerator & generator, MCObject & object);
-
-    //! \brief Remove all force generators assigned to an object.
-    void removeForceGenerators(MCObject & object);
+    //! \return Force registry. Use this to add force generators to objects.
+    MCForceRegistry & forceRegistry() const;
 
     /*! \brief Step world time
      *  This causes the integration of physics and executes collision detections.

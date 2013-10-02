@@ -204,7 +204,7 @@ void MCWorld::setDimensions(
     }
 
     m_leftWallObject = new MCObject("LEFT_WALL");
-    m_leftWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_leftWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
     m_leftWallObject->setMass(0, true);
     m_leftWallObject->setRestitution(0.25);
     m_leftWallObject->addToWorld();
@@ -217,7 +217,7 @@ void MCWorld::setDimensions(
     }
 
     m_rightWallObject = new MCObject("RIGHT_WALL");
-    m_rightWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_rightWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
     m_rightWallObject->setMass(0, true);
     m_rightWallObject->setRestitution(0.25);
     m_rightWallObject->addToWorld();
@@ -230,7 +230,7 @@ void MCWorld::setDimensions(
     }
 
     m_topWallObject = new MCObject("TOP_WALL");
-    m_topWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_topWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
     m_topWallObject->setMass(0, true);
     m_topWallObject->setRestitution(0.25);
     m_topWallObject->addToWorld();
@@ -243,7 +243,7 @@ void MCWorld::setDimensions(
     }
 
     m_bottomWallObject = new MCObject("BOTTOM_WALL");
-    m_bottomWallObject->setShape(new MCRectShape(nullptr, w, h));
+    m_bottomWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
     m_bottomWallObject->setMass(0, true);
     m_bottomWallObject->setRestitution(0.25);
     m_bottomWallObject->addToWorld();
@@ -304,8 +304,8 @@ void MCWorld::addObject(MCObject & object)
             if (object.xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(
-                    *new MCFrictionGenerator(
-                        object.xyFriction(), object.xyFriction()), object, true);
+                    MCForceGeneratorPtr(new MCFrictionGenerator(
+                        object.xyFriction(), object.xyFriction())), object);
             }
         }
     }
@@ -427,20 +427,10 @@ void MCWorld::processCollisions()
     }
 }
 
-void MCWorld::addForceGenerator(
-    MCForceGenerator & gen, MCObject & obj, bool takeOwnership)
+MCForceRegistry & MCWorld::forceRegistry() const
 {
-    m_forceRegistry->addForceGenerator(gen, obj, takeOwnership);
-}
-
-void MCWorld::removeForceGenerator(MCForceGenerator & gen, MCObject & obj)
-{
-    m_forceRegistry->removeForceGenerator(gen, obj);
-}
-
-void MCWorld::removeForceGenerators(MCObject & obj)
-{
-    m_forceRegistry->removeForceGenerators(obj);
+    assert(m_forceRegistry);
+    return *m_forceRegistry;
 }
 
 void MCWorld::stepTime(MCFloat step)

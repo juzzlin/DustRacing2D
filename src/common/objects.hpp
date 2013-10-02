@@ -26,13 +26,14 @@ class Objects
 {
 public:
 
-    typedef std::vector<ObjectBase *> ObjectVector;
+    typedef std::shared_ptr<ObjectBase> ObjectPtr;
+    typedef std::vector<ObjectPtr> ObjectVector;
 
     //! Constructor.
     Objects();
 
     //! Add an object.
-    void add(ObjectBase & object, bool takeOwnership = false);
+    void add(ObjectPtr object);
 
     //! Remove an object.
     void remove(ObjectBase & object);
@@ -46,7 +47,6 @@ public:
 private:
 
     ObjectVector m_objects;
-    std::vector<std::shared_ptr<ObjectBase> > m_owned;
 };
 
 #endif // OBJECTS_HPP

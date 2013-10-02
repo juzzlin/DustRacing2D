@@ -20,37 +20,38 @@
 #include "mcsurfaceparticle.hh"
 #include "mcsurface.hh"
 #include "mcsurfaceview.hh"
+#include "mcshape.hh"
 
 MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
 : MCParticle(viewId)
 {
-    setView(new MCSurfaceView(viewId, nullptr, true));
-    view()->setHasShadow(false);
+    shape()->setView(std::shared_ptr<MCShapeView>(new MCSurfaceView(viewId, nullptr, true)));
+    shape()->view()->setHasShadow(false);
 }
 
 void MCSurfaceParticle::beginBatch()
 {
-    view()->beginBatch();
+    shape()->view()->beginBatch();
 }
 
 void MCSurfaceParticle::endBatch()
 {
-    view()->endBatch();
+    shape()->view()->endBatch();
 }
 
 void MCSurfaceParticle::setColor(const MCGLColor & color)
 {
-    static_cast<MCSurfaceView *>(view())->surface()->setColor(color);
+    static_cast<MCSurfaceView *>(shape()->view().get())->surface()->setColor(color);
 }
 
 void MCSurfaceParticle::setSurface(MCSurface & surface)
 {
-    static_cast<MCSurfaceView *>(view())->setSurface(surface);
+    static_cast<MCSurfaceView *>(shape()->view().get())->setSurface(surface);
 }
 
 void MCSurfaceParticle::setShaderProgram(MCGLShaderProgram * program)
 {
-    static_cast<MCSurfaceView *>(view())->surface()->setShaderProgram(program);
+    static_cast<MCSurfaceView *>(shape()->view().get())->surface()->setShaderProgram(program);
 }
 
 MCSurfaceParticle::~MCSurfaceParticle()
