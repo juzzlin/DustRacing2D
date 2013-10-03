@@ -96,13 +96,13 @@ void ParticleFactory::preCreateParticles()
     preCreateRectParticles(500, "MUD", Mud);
 
     preCreatePointParticles(500, "ONSKID", OnTrackSkidMark, MCGLColor(0.1, 0.1, 0.1, 0.95));
-    m_renderers[OnTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
+    m_renderers[OnTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleRotate"));
     m_renderers[OnTrackSkidMark].setTexture1(MCAssetManager::surfaceManager().surface("skid").texture1());
     m_renderers[OnTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[OnTrackSkidMark].setAlphaBlend(true);
 
     preCreatePointParticles(500, "OFFSKID", OffTrackSkidMark, MCGLColor(0.3, 0.2, 0.0, 0.95));
-    m_renderers[OffTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleDiscard"));
+    m_renderers[OffTrackSkidMark].setShaderProgram(&Renderer::instance().program("pointParticleRotate"));
     m_renderers[OffTrackSkidMark].setTexture1(MCAssetManager::surfaceManager().surface("skid").texture1());
     m_renderers[OffTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
     m_renderers[OffTrackSkidMark].setAlphaBlend(true);
@@ -148,7 +148,7 @@ void ParticleFactory::doParticle(
     switch (type)
     {
     case Smoke:
-        doSmoke(location);
+        doSmoke(location, initialVelocity);
         break;
 
     case OffTrackSmoke:
@@ -180,7 +180,7 @@ void ParticleFactory::doParticle(
     };
 }
 
-void ParticleFactory::doSmoke(MCVector3dFR location) const
+void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) const
 {
     MCGLPointParticle * smoke = nullptr;
     MCParticle::ParticleFreeList & freeList = m_freeLists[Smoke];
@@ -192,7 +192,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location) const
         smoke->init(location, 10, 180);
         smoke->setAnimationStyle(MCParticle::FadeOut);
         smoke->rotate(MCRandom::getValue() * 360);
-        smoke->setVelocity(MCRandom::randomVector2d() * 0.1);
+        smoke->setVelocity(MCVector2dF(velocity) + MCRandom::randomVector2d() * 0.1);
         smoke->addToWorld();
     }
 }

@@ -201,7 +201,7 @@ static const char * pointParticleFsh =
 "    gl_FragColor = texture2D(tex0, gl_PointCoord) * vColor;\n"
 "}\n";
 
-static const char * pointParticleDiscardFsh =
+static const char * pointParticleRotateFsh =
 "#version 100\n"
 ""
 "precision mediump float;\n"
@@ -213,15 +213,8 @@ static const char * pointParticleDiscardFsh =
 "void main(void)\n"
 "{\n"
 "    mat2 rotationMatrix = mat2(rotationMatrixTegra3Hack.x, rotationMatrixTegra3Hack.y, rotationMatrixTegra3Hack.z, rotationMatrixTegra3Hack.w);\n"
-"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor * 0.5;\n"
-"    if (texColor.a < 0.1)\n"
-"    {\n"
-"        discard;\n"
-"    }\n"
-"    else\n"
-"    {\n"
-"        gl_FragColor = texColor;\n"
-"    }\n"
+"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor;\n"
+"    gl_FragColor = texColor;\n"
 "}\n";
 
 static const char * textVsh =

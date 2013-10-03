@@ -137,7 +137,7 @@ void Renderer::loadShaders()
     createProgramFromSource("menu",          menuVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("particle",      MCGLShaderProgram::getDefaultVertexShaderSource(), particleFsh);
     createProgramFromSource("pointParticle", pointParticleVsh,    pointParticleFsh);
-    createProgramFromSource("pointParticleDiscard", pointParticleVsh, pointParticleDiscardFsh);
+    createProgramFromSource("pointParticleRotate", pointParticleVsh, pointParticleRotateFsh);
     createProgramFromSource("text",          textVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("textShadow",    textVsh,             textShadowFsh);
     createProgramFromSource("tile2d",        tileVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());

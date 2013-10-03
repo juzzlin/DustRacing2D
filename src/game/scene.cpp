@@ -594,7 +594,7 @@ void Scene::render()
             m_renderer.program("car").setFadeValue(fadeValue);
             m_renderer.program("particle").setFadeValue(fadeValue);
             m_renderer.program("pointParticle").setFadeValue(fadeValue);
-            m_renderer.program("pointParticleDiscard").setFadeValue(fadeValue);
+            m_renderer.program("pointParticleRotate").setFadeValue(fadeValue);
             m_renderer.program("tile2d").setFadeValue(fadeValue);
             m_renderer.program("tile3d").setFadeValue(fadeValue);
             m_renderer.program("text").setFadeValue(fadeValue);

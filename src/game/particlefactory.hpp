@@ -57,7 +57,7 @@ public:
 
 private:
 
-    void doSmoke(MCVector3dFR location) const;
+    void doSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
 
     void doOffTrackSmoke(MCVector3dFR location) const;
 

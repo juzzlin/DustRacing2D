@@ -201,7 +201,8 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                     event.contactPoint(), m_car.velocity() * 0.5);
-                ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
+                ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
+                    event.contactPoint(), m_car.velocity() * 0.1);
                 m_sparkleCounter = 0;
             }
         }
@@ -216,7 +217,8 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                 event.contactPoint(), m_car.velocity() * 0.5);
-            ParticleFactory::instance().doParticle(ParticleFactory::Smoke, event.contactPoint());
+            ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
+                event.contactPoint(), m_car.velocity() * 0.1);
         }
         // Check if the car is colliding with trees or plants.
         else if (

@@ -186,7 +186,7 @@ static const char * pointParticleFsh =
 "    fragColor = texture2D(tex0, gl_PointCoord) * vColor;\n"
 "}\n";
 
-static const char * pointParticleDiscardFsh =
+static const char * pointParticleRotateFsh =
 "#version 130\n"
 ""
 "uniform sampler2D tex0;\n"
@@ -196,15 +196,8 @@ static const char * pointParticleDiscardFsh =
 ""
 "void main(void)\n"
 "{\n"
-"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor * 0.5;\n"
-"    if (texColor.a < 0.1)\n"
-"    {\n"
-"        discard;\n"
-"    }\n"
-"    else\n"
-"    {\n"
-"        fragColor = texColor;\n"
-"    }\n"
+"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor;\n"
+"    fragColor = texColor;\n"
 "}\n";
 
 static const char * textVsh =
