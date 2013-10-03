@@ -450,13 +450,13 @@ private:
     MCVector2dF centerOfRotation;
     MCShapePtr m_shape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
-    static TypeHash typeHash;
+    static TypeHash m_typeHash;
     typedef std::vector<MCObject * > TimerEventObjectsList;
-    static TimerEventObjectsList timerEventObjects;
-    static MCUint typeIDCount;
+    static TimerEventObjectsList m_timerEventObjects;
+    static MCUint m_typeIDCount;
     MCObject::ContactHash m_contacts;
-    MCFloat damping;
-    int timerEventObjectsIndex;
+    MCFloat m_damping;
+    int m_timerEventObjectsIndex;
     bool m_sleeping;
     MCFloat m_linearSleepLimit;
     MCFloat m_angularSleepLimit;

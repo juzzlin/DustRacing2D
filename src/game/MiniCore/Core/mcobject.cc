@@ -35,9 +35,9 @@
 
 #include <cassert>
 
-MCUint MCObject::typeIDCount = 1;
-MCObject::TypeHash MCObject::typeHash;
-MCObject::TimerEventObjectsList MCObject::timerEventObjects;
+MCUint MCObject::m_typeIDCount = 1;
+MCObject::TypeHash MCObject::m_typeHash;
+MCObject::TimerEventObjectsList MCObject::m_timerEventObjects;
 
 static const MCFloat DAMPING = 0.999;
 
@@ -90,8 +90,8 @@ void MCObject::init(const std::string & typeId)
     m_j0                     = 0;
     m_j1                     = 0;
     m_initialAngle           = 0;
-    damping                  = DAMPING;
-    timerEventObjectsIndex   = -1;
+    m_damping                = DAMPING;
+    m_timerEventObjectsIndex = -1;
     m_sleeping               = false;
     m_linearSleepLimit       = 0.01;
     m_angularSleepLimit      = 0.01;
@@ -111,18 +111,18 @@ void MCObject::setFlag(MCUint flag, bool enable)
 
 MCUint MCObject::getTypeIDForName(const std::string & typeName)
 {
-    auto i(typeHash.find(typeName));
-    return i == typeHash.end() ? 0 : i->second;
+    auto i(m_typeHash.find(typeName));
+    return i == m_typeHash.end() ? 0 : i->second;
 }
 
 MCUint MCObject::registerType(const std::string & typeName)
 {
-    auto i(typeHash.find(typeName));
-    if (i == typeHash.end())
+    auto i(m_typeHash.find(typeName));
+    if (i == m_typeHash.end())
     {
-        typeIDCount++;
-        typeHash[typeName] = typeIDCount;
-        return typeIDCount;
+        m_typeIDCount++;
+        m_typeHash[typeName] = m_typeIDCount;
+        return m_typeIDCount;
     }
     else
     {
@@ -158,7 +158,7 @@ void MCObject::integrateLinear(MCFloat step)
     MCVector3dF totAcceleration(m_acceleration);
     totAcceleration += m_forces * m_invMass;
     m_velocity      += totAcceleration * step + m_linearImpulse;
-    m_velocity      *= damping;
+    m_velocity      *= m_damping;
 
     // Note that this code doesn't take the z-component into consideration
     if (m_maximumVelocity > 0)
@@ -181,7 +181,7 @@ void MCObject::integrateAngular(MCFloat step)
             MCFloat totAngularAcceleration(m_angularAcceleration);
             totAngularAcceleration += m_torque * m_invMomentOfInertia;
             m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
-            m_angularVelocity      *= damping;
+            m_angularVelocity      *= m_damping;
 
             if (m_angularVelocity > m_maximumAngularVelocity)
             {
@@ -328,29 +328,29 @@ void MCObject::sendEvent(MCObject & object, MCEvent & event)
 
 void MCObject::subscribeTimerEvent(MCObject & object)
 {
-    if (object.timerEventObjectsIndex == -1)
+    if (object.m_timerEventObjectsIndex == -1)
     {
-        timerEventObjects.push_back(&object);
-        object.timerEventObjectsIndex = timerEventObjects.size() - 1;
+        m_timerEventObjects.push_back(&object);
+        object.m_timerEventObjectsIndex = m_timerEventObjects.size() - 1;
     }
 }
 
 void MCObject::unsubscribeTimerEvent(MCObject & object)
 {
-    if (object.timerEventObjectsIndex > -1)
+    if (object.m_timerEventObjectsIndex > -1)
     {
-        timerEventObjects.back()->timerEventObjectsIndex =
-            object.timerEventObjectsIndex;
-        timerEventObjects.at(object.timerEventObjectsIndex) =
-            timerEventObjects.back();
-        timerEventObjects.pop_back();
-        object.timerEventObjectsIndex = -1;
+        m_timerEventObjects.back()->m_timerEventObjectsIndex =
+            object.m_timerEventObjectsIndex;
+        m_timerEventObjects.at(object.m_timerEventObjectsIndex) =
+            m_timerEventObjects.back();
+        m_timerEventObjects.pop_back();
+        object.m_timerEventObjectsIndex = -1;
     }
 }
 
 void MCObject::sendTimerEvent(MCTimerEvent & event)
 {
-    for (MCObject * obj : timerEventObjects)
+    for (MCObject * obj : m_timerEventObjects)
     {
         MCObject::sendEvent(*obj, event);
     }
@@ -393,11 +393,11 @@ void MCObject::renderShadow(MCCamera * p)
     }
 }
 
-void MCObject::setMass(MCFloat newMass, bool stationary_)
+void MCObject::setMass(MCFloat newMass, bool stationary)
 {
-    m_stationary = stationary_;
+    m_stationary = stationary;
 
-    if (!stationary_)
+    if (!stationary)
     {
         if (newMass > 0)
         {
@@ -852,7 +852,7 @@ MCFloat MCObject::xyFriction() const
 
 void MCObject::setDamping(MCFloat value)
 {
-    damping = value;
+    m_damping = value;
 }
 
 bool MCObject::sleeping() const
