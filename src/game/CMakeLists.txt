@@ -4,6 +4,9 @@ add_subdirectory(MiniCore)
 # Sub build: Menu Toolkit From Hell
 add_subdirectory(MTFH)
 
+# Sub build: Sound Toolkit From Hell
+add_subdirectory(STFH)
+
 # Engine include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Asset")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
@@ -133,7 +136,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
-set(COMMON_LIBS ${GAME_BINARY_NAME} MiniCore MTFH ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+set(COMMON_LIBS ${GAME_BINARY_NAME} MiniCore MTFH STFH ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
     target_link_libraries(${COMMON_LIBS})

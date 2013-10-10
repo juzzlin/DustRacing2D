@@ -62,6 +62,7 @@ The source tree layout:
 src/game/          : Source files for the game.
 src/game/MiniCore/ : Graphics and physics engine.
 src/game/MTFH/     : Menu Toolkit From Hell.
+src/game/STFH/     : Sound Toolkit From Hell.
 src/editor/        : Source files for the track editor.
 src/common/        : Shared files between the editor and the game.
 src/images/        : Some SVG-images used as the source for final images.
