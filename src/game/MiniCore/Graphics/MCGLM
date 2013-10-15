@@ -1,4 +1,4 @@
 // This is just wrapper header for glm
-#include "glm/ogl-math/glm/glm.hpp"
-#include "glm/ogl-math/glm/gtc/matrix_transform.hpp"
+#include "contrib/glm/ogl-math/glm/glm.hpp"
+#include "contrib/glm/ogl-math/glm/gtc/matrix_transform.hpp"
 
