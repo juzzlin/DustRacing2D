@@ -16,9 +16,10 @@
 #include "../common/config.hpp"
 
 #include "game.hpp"
+
+#include "audiothread.hpp"
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
-#include "openaldevice.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "statemachine.hpp"
@@ -69,7 +70,7 @@ Game::Game()
 , m_paused(false)
 , m_mode(OnePlayerRace)
 , m_splitType(Vertical)
-, m_openALDevice(new OpenALDevice)
+, m_audioThread(new AudioThread(this))
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -80,6 +81,7 @@ Game::Game()
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
     connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
     connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
+    connect(m_eventHandler, SIGNAL(soundRequested(std::string)), m_audioThread, SLOT(playSound(std::string)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
@@ -281,7 +283,8 @@ void Game::initScene()
 
 void Game::initAudio()
 {
-    m_openALDevice->initialize(); // Throws on failure
+    m_audioThread->init(); // Throws on failure
+    m_audioThread->start();
 }
 
 bool Game::init()
@@ -334,6 +337,7 @@ void Game::exitGame()
 {
     stop();
     m_renderer->close();
+    m_audioThread->quit();
     QApplication::quit();
 }
 
@@ -369,5 +373,4 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
-    delete m_openALDevice;
 }

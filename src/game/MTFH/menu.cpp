@@ -243,7 +243,7 @@ bool Menu::handleMousePressOnMouseItem(int x, int y)
     return false;
 }
 
-void Menu::handleMousePressOnItem(int x, int y)
+bool Menu::handleMousePressOnItem(int x, int y)
 {
     for (MouseItem mouseItem : m_mouseItems)
     {
@@ -256,7 +256,7 @@ void Menu::handleMousePressOnItem(int x, int y)
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
             item->setFocused(true);
-            return;
+            return true;
         }
     }
 
@@ -273,21 +273,25 @@ void Menu::handleMousePressOnItem(int x, int y)
             if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
             {
                 setCurrentIndex(i);
-                break;
+                return true;
             }
         }
     }
+
+    return false;
 }
 
-void Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
+bool Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
 {
     x = x * width()  / screenWidth;
     y = y * height() / screenHeight;
 
-    if (!handleMousePressOnMouseItem(x, y))
+    if (handleMousePressOnMouseItem(x, y) || handleMousePressOnItem(x, y))
     {
-        handleMousePressOnItem(x, y);
+        return true;
     }
+
+    return false;
 }
 
 bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
@@ -327,7 +331,7 @@ bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
     return false;
 }
 
-void Menu::handleMouseReleaseOnItem(int x, int y)
+bool Menu::handleMouseReleaseOnItem(int x, int y)
 {
     if (m_style == Menu::MS_SHOW_ONE)
     {
@@ -340,6 +344,7 @@ void Menu::handleMouseReleaseOnItem(int x, int y)
         if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
         {
             selectCurrentItem();
+            return true;
         }
     }
     else
@@ -358,21 +363,26 @@ void Menu::handleMouseReleaseOnItem(int x, int y)
                 {
                     selectCurrentItem();
                 }
-                break;
+
+                return true;
             }
         }
     }
+
+    return false;
 }
 
-void Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
+bool Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
 {
     x = x * width()  / screenWidth;
     y = y * height() / screenHeight;
 
-    if (!handleMouseReleaseOnMouseItem(x, y))
+    if (handleMouseReleaseOnMouseItem(x, y) || handleMouseReleaseOnItem(x, y))
     {
-        handleMouseReleaseOnItem(x, y);
+        return true;
     }
+
+    return false;
 }
 
 void Menu::updateFocus()

@@ -21,9 +21,9 @@
 
 #include "settings.hpp"
 
+class AudioThread;
 class EventHandler;
 class InputHandler;
-class OpenALDevice;
 class Renderer;
 class Scene;
 class Speedometer;
@@ -128,6 +128,7 @@ private:
     void initScene();
     void initAudio();
     bool loadTracks();
+    void loadSounds();
 
     Settings          m_settings;
     StateMachine    * m_stateMachine;
@@ -151,7 +152,7 @@ private:
     QTimer            m_renderTimer;
     GameMode          m_mode;
     SplitType         m_splitType;
-    OpenALDevice    * m_openALDevice;
+    AudioThread     * m_audioThread;
 
     static Game * m_instance;
 };

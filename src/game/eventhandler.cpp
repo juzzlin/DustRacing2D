@@ -114,11 +114,17 @@ bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, i
     {
         if (mirrorY)
         {
-            MTFH::MenuManager::instance().mousePress(event->x(), screenHeight - event->y(), screenWidth, screenHeight);
+            if (MTFH::MenuManager::instance().mousePress(event->x(), screenHeight - event->y(), screenWidth, screenHeight))
+            {
+                emit soundRequested("menuClick");
+            }
         }
         else
         {
-            MTFH::MenuManager::instance().mousePress(event->x(), event->y(), screenWidth, screenHeight);
+            if (MTFH::MenuManager::instance().mousePress(event->x(), event->y(), screenWidth, screenHeight))
+            {
+                emit soundRequested("menuClick");
+            }
         }
     }
 
@@ -182,12 +188,12 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
-            emit soundRequested("menuSelect");
+            emit soundRequested("menuClick");
             MTFH::MenuManager::instance().selectCurrentItem();
             break;
         case Qt::Key_Escape:
         case Qt::Key_Q:
-            emit soundRequested("menuSelect");
+            emit soundRequested("menuClick");
             MTFH::MenuManager::instance().popMenu();
             if (MTFH::MenuManager::instance().isDone())
             {

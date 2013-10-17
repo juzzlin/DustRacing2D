@@ -25,7 +25,7 @@ class OpenALWavData : public STFH::Data
 public:
 
     //! Constructor.
-    OpenALWavData();
+    OpenALWavData(const std::string & path);
 
     //! Destructor.
     virtual ~OpenALWavData();

@@ -13,27 +13,41 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include <memory>
+#include "audiothread.hpp"
+#include "openalwavdata.hpp"
 
-namespace STFH {
-
-class Device
+AudioThread::AudioThread(QObject * parent)
+    : QThread(parent)
+    , m_openALDevice(new OpenALDevice)
 {
-public:
+}
 
-    //! Constructor.
-    Device();
+void AudioThread::init()
+{
+    m_openALDevice->initialize(); // Throws on failure
 
-    //! Destructor.
-    virtual ~Device();
+    loadSounds();
+}
 
-    //! Initialize the device.
-    virtual void initialize() throw () = 0;
+void AudioThread::loadSounds()
+{
+    m_menuClick.reset(new OpenALSource(
+        STFH::DataPtr(new OpenALWavData("data/sounds/146721__fins__menu-click.wav"))));
+}
 
-    //! Shut the device down.
-    virtual void shutDown() = 0;
-};
+void AudioThread::playSound(const std::string & handle)
+{
+    if (handle == "menuClick")
+    {
+        m_menuClick->play();
+    }
+}
 
-typedef std::shared_ptr<Device> DevicePtr;
+void AudioThread::run()
+{
+    QThread::run();
+}
 
-} // STFH
+AudioThread::~AudioThread()
+{
+}

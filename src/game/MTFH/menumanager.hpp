@@ -77,11 +77,13 @@ public:
     //! Select the current item.
     void selectCurrentItem();
 
-    //! Handle mouse press at given screen coordinates.
-    void mousePress(int x, int y, int screenWidth, int screenHeight);
+    /*! Handle mouse press at given screen coordinates.
+     *  \return true if on a valid item. */
+    bool mousePress(int x, int y, int screenWidth, int screenHeight);
 
-    //! Handle mouse release at given screen coordinates.
-    void mouseRelease(int x, int y, int screenWidth, int screenHeight);
+    /*! Handle mouse release at given screen coordinates.
+     *  \return true if on a valid item. */
+    bool mouseRelease(int x, int y, int screenWidth, int screenHeight);
 
     //! \returns true when done.
     bool isDone() const;

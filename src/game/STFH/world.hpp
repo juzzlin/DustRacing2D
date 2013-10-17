@@ -34,12 +34,15 @@ public:
 
     virtual void addListener(ListenerPtr listener);
 
+    virtual void removeListeners();
+
     virtual void addSource(SourcePtr source);
+
+    virtual void removeSources();
 
     virtual void setDimensions(float x1, float y1, float x2, float y2);
 
     virtual void updateVolumes();
-
 
 private:
 
@@ -49,6 +52,8 @@ private:
     std::vector<ListenerPtr> m_listeners;
 
     float m_x1, m_y1, m_x2, m_y2;
+
+    Location m_averageLocation;
 };
 
 } // STFH

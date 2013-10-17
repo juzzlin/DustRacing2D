@@ -33,6 +33,7 @@ endforeach()
 # Set sources
 set(SRC
     ai.cpp
+    audiothread.cpp
     car.cpp
     carparticleeffectmanager.cpp
     carstatusview.cpp
@@ -98,6 +99,7 @@ if (UseQt5)
     qt5_add_translation(QM ${TS_FILES})
 else()
     set(MOC_HDRS
+        audiothread.hpp
         eventhandler.hpp
         fadeanimation.hpp
         mainmenu.hpp

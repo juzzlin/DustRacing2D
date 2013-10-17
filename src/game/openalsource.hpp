@@ -29,7 +29,7 @@ class OpenALSource : public STFH::Source
 public:
 
     //! Constructor.
-    OpenALSource();
+    OpenALSource(STFH::DataPtr data);
 
     //! Destructor.
     virtual ~OpenALSource();

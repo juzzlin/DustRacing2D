@@ -30,9 +30,19 @@ void World::addListener(ListenerPtr listener)
     m_listeners.push_back(listener);
 }
 
+void World::removeListeners()
+{
+    m_listeners.clear();
+}
+
 void World::addSource(SourcePtr source)
 {
     m_sources.push_back(source);
+}
+
+void World::removeSources()
+{
+    m_sources.clear();
 }
 
 void World::setDimensions(float x1, float y1, float x2, float y2)
@@ -45,6 +55,7 @@ void World::setDimensions(float x1, float y1, float x2, float y2)
 
 void World::updateVolumes()
 {
+    m_averageLocation = getAverageListenerLocation();
 }
 
 Location World::getAverageListenerLocation()

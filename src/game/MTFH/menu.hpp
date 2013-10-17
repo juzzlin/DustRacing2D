@@ -72,11 +72,13 @@ public:
     //! Select the current item.
     virtual void selectCurrentItem();
 
-    //! Handle mouse press at given screen coordinates.
-    virtual void handleMousePress(int x, int y, int screenWidth, int screenHeight);
+    /*! Handle mouse press at given screen coordinates.
+     *  \return true if on a valid item. */
+    virtual bool handleMousePress(int x, int y, int screenWidth, int screenHeight);
 
-    //! Handle mouse release at given screen coordinates.
-    virtual void handleMouseRelease(int x, int y, int screenWidth, int screenHeight);
+    /*! Handle mouse release at given screen coordinates.
+     *  \return true if on a valid item. */
+    virtual bool handleMouseRelease(int x, int y, int screenWidth, int screenHeight);
 
     //! \return current item or nullptr if no items added.
     MenuItemPtr currentItem() const;
@@ -140,11 +142,11 @@ private:
         MouseItemType type;
     };
 
-    void handleMousePressOnItem(int x, int y);
+    bool handleMousePressOnItem(int x, int y);
 
     bool handleMousePressOnMouseItem(int x, int y);
 
-    void handleMouseReleaseOnItem(int x, int y);
+    bool handleMouseReleaseOnItem(int x, int y);
 
     bool handleMouseReleaseOnMouseItem(int x, int y);
 

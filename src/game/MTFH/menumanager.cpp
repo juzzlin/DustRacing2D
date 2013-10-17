@@ -142,20 +142,24 @@ void MenuManager::right()
     }
 }
 
-void MenuManager::mousePress(int x, int y, int screenWidth, int screenHeight)
+bool MenuManager::mousePress(int x, int y, int screenWidth, int screenHeight)
 {
     if (m_menuStack.size())
     {
-        m_menuStack.back()->handleMousePress(x, y, screenWidth, screenHeight);
+        return m_menuStack.back()->handleMousePress(x, y, screenWidth, screenHeight);
     }
+
+    return false;
 }
 
-void MenuManager::mouseRelease(int x, int y, int screenWidth, int screenHeight)
+bool MenuManager::mouseRelease(int x, int y, int screenWidth, int screenHeight)
 {
     if (m_menuStack.size())
     {
-        m_menuStack.back()->handleMouseRelease(x, y, screenWidth, screenHeight);
+        return m_menuStack.back()->handleMouseRelease(x, y, screenWidth, screenHeight);
     }
+
+    return false;
 }
 
 void MenuManager::selectCurrentItem()
