@@ -4,7 +4,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(STFHSRC
     data.cpp
-    datamanager.cpp
     device.cpp
     listener.cpp
     location.cpp
