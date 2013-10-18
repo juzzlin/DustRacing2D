@@ -34,6 +34,7 @@ void AudioThread::init()
 void AudioThread::loadSounds()
 {
     loadSound("menuClick", "146721__fins__menu-click.wav");
+    loadSound("carEngine", "147242__qubodup__car-engine-loop.wav");
 }
 
 void AudioThread::loadSound(const std::string & handle, const std::string & path)
