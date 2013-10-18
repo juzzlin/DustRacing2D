@@ -29,10 +29,10 @@
 #include <set>
 #include <vector>
 
-//! A geometrically structured MCObjectTree used for fast collision detection.
-//! The tree stores objects inherited from MCObject -class.
-//! A (2d) collision test for a given object can be requested against all
-//! objects of a given typeid.
+/*! A geometrically structured MCObjectTree used for fast collision detection.
+ *  The tree stores objects inherited from MCObject -class.
+ *  A (2d) collision test for a given object can be requested against all
+ *  objects of a given typeid. */
 class MCObjectTree
 {
 public:
@@ -44,13 +44,11 @@ public:
     struct GridCell
     {
         GridCell()
-        : m_dirty(true)
-        , m_hadCollisions(false)
+        : m_dirty(true) // Cell is dirty if its object configuration has changed
         {}
 
         ObjectSet m_objects;
         bool      m_dirty;
-        bool      m_hadCollisions;
     };
 
     //! Constructor.
