@@ -281,17 +281,10 @@ void Game::initScene()
     m_renderer->setScene(*m_scene);
 }
 
-void Game::initAudio()
-{
-    m_audioThread->init(); // Throws on failure
-    m_audioThread->start();
-}
-
 bool Game::init()
 {
+    m_audioThread->start();
     m_assetManager->load();
-
-    initAudio();
 
     if (loadTracks())
     {

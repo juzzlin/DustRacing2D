@@ -126,7 +126,6 @@ private:
     void adjustSceneSize(int hRes, int vRes, bool fullScreen);
     void createRenderer();
     void initScene();
-    void initAudio();
     bool loadTracks();
     void loadSounds();
 

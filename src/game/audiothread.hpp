@@ -33,18 +33,20 @@ public:
 
     virtual void run();
 
-    void init();
-
 public slots:
 
     void playSound(const std::string & handle);
 
 private:
 
+    void init();
+
     void loadSounds();
 
     STFH::DevicePtr m_openALDevice;
     STFH::SourcePtr m_menuClick;
+
+    bool m_inited;
 };
 
 #endif // AUDIOTHREAD_HPP

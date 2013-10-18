@@ -22,14 +22,13 @@
 AudioThread::AudioThread(QObject * parent)
     : QThread(parent)
     , m_openALDevice(new OpenALDevice)
+    , m_inited(false)
 {
 }
 
 void AudioThread::init()
 {
     m_openALDevice->initialize(); // Throws on failure
-
-    loadSounds();
 }
 
 void AudioThread::loadSounds()
@@ -43,14 +42,25 @@ void AudioThread::loadSounds()
 
 void AudioThread::playSound(const std::string & handle)
 {
-    if (handle == "menuClick")
+    if (m_inited)
     {
-        m_menuClick->play();
+        if (handle == "menuClick")
+        {
+            m_menuClick->play();
+        }
     }
 }
 
 void AudioThread::run()
 {
+    if (!m_inited)
+    {
+        init();
+        loadSounds();
+
+        m_inited = true;
+    }
+
     QThread::run();
 }
 
