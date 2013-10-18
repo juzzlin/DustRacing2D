@@ -17,6 +17,7 @@
 #define AUDIOTHREAD_HPP
 
 #include <QThread>
+#include <map>
 
 #include "openaldevice.hpp"
 #include "openalsource.hpp"
@@ -42,9 +43,12 @@ private:
     void init();
 
     void loadSounds();
+    void loadSound(const std::string & handle, const std::string & path);
 
     STFH::DevicePtr m_openALDevice;
-    STFH::SourcePtr m_menuClick;
+
+    typedef std::map<std::string, STFH::SourcePtr> SoundMap;
+    SoundMap m_soundMap;
 
     bool m_inited;
 };

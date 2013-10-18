@@ -33,20 +33,26 @@ void AudioThread::init()
 
 void AudioThread::loadSounds()
 {
+    loadSound("menuClick", "146721__fins__menu-click.wav");
+}
+
+void AudioThread::loadSound(const std::string & handle, const std::string & path)
+{
     const std::string soundPath =
         (QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator()).toStdString();
 
-    m_menuClick.reset(new OpenALSource(
-        STFH::DataPtr(new OpenALWavData(soundPath + "146721__fins__menu-click.wav"))));
+    m_soundMap[handle] =
+        STFH::SourcePtr(new OpenALSource(
+            STFH::DataPtr(new OpenALWavData(soundPath + path))));
 }
 
 void AudioThread::playSound(const std::string & handle)
 {
     if (m_inited)
     {
-        if (handle == "menuClick")
+        if (m_soundMap.count(handle))
         {
-            m_menuClick->play();
+            m_soundMap[handle]->play();
         }
     }
 }
