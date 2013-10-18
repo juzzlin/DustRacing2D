@@ -16,6 +16,9 @@
 #include "audiothread.hpp"
 #include "openalwavdata.hpp"
 
+#include <QDir>
+#include <QString>
+
 AudioThread::AudioThread(QObject * parent)
     : QThread(parent)
     , m_openALDevice(new OpenALDevice)
@@ -31,8 +34,11 @@ void AudioThread::init()
 
 void AudioThread::loadSounds()
 {
+    const std::string soundPath =
+        (QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator()).toStdString();
+
     m_menuClick.reset(new OpenALSource(
-        STFH::DataPtr(new OpenALWavData("data/sounds/146721__fins__menu-click.wav"))));
+        STFH::DataPtr(new OpenALWavData(soundPath + "146721__fins__menu-click.wav"))));
 }
 
 void AudioThread::playSound(const std::string & handle)
