@@ -17,6 +17,7 @@
 #include "openalwavdata.hpp"
 
 #include <MCException>
+#include <QMutexLocker>
 
 #include <AL/alc.h>
 
@@ -62,23 +63,27 @@ void OpenALSource::setData(STFH::DataPtr data) throw ()
 
 void OpenALSource::play(bool loop)
 {
+    QMutexLocker locker(&m_mutex);
     alSourcei(m_handle, AL_LOOPING, loop);
     alSourcePlay(m_handle);
 }
 
 void OpenALSource::stop()
 {
+    QMutexLocker locker(&m_mutex);
     alSourceStop(m_handle);
 }
 
 void OpenALSource::setVolume(float volume)
 {
+    QMutexLocker locker(&m_mutex);
     STFH::Source::setVolume(volume);
     alSourcef(m_handle, AL_GAIN, STFH::Source::volume());
 }
 
 void OpenALSource::setPitch(float pitch)
 {
+    QMutexLocker locker(&m_mutex);
     STFH::Source::setPitch(pitch);
     alSourcef(m_handle, AL_PITCH, STFH::Source::pitch());
 }

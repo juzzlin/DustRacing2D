@@ -22,6 +22,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
+#include <QMutex>
+
 #include <string>
 
 class OpenALSource : public STFH::Source
@@ -52,6 +54,7 @@ public:
 private:
 
     ALuint m_handle;
+    QMutex m_mutex;
 };
 
 #endif // OPENALSOURCE_HPP
