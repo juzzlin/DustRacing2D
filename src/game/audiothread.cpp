@@ -58,6 +58,39 @@ void AudioThread::playSound(const std::string & handle)
     }
 }
 
+void AudioThread::stopSound(const std::string & handle)
+{
+    if (m_inited)
+    {
+        if (m_soundMap.count(handle))
+        {
+            m_soundMap[handle]->stop();
+        }
+    }
+}
+
+void AudioThread::setPitch(const std::string & handle, float pitch)
+{
+    if (m_inited)
+    {
+        if (m_soundMap.count(handle))
+        {
+            m_soundMap[handle]->setPitch(pitch);
+        }
+    }
+}
+
+void AudioThread::setVolume(const std::string & handle, float volume)
+{
+    if (m_inited)
+    {
+        if (m_soundMap.count(handle))
+        {
+            m_soundMap[handle]->setVolume(volume);
+        }
+    }
+}
+
 void AudioThread::run()
 {
     if (!m_inited)

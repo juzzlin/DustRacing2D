@@ -17,6 +17,7 @@
 #define AUDIOTHREAD_HPP
 
 #include <QThread>
+
 #include <map>
 
 #include "openaldevice.hpp"
@@ -37,6 +38,12 @@ public:
 public slots:
 
     void playSound(const std::string & handle);
+
+    void stopSound(const std::string & handle);
+
+    void setPitch(const std::string & handle, float pitch);
+
+    void setVolume(const std::string & handle, float pitch);
 
 private:
 
