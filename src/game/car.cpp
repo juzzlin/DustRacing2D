@@ -67,7 +67,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_prevTargetNodeIndex(-1)
 , m_routeProgression(0)
 , m_isHuman(isHuman)
-, m_effectManager(*this)
+, m_particleEffectManager(*this)
+, m_soundEffectManager(*this)
 {
     setProperties(desc);
     initForceGenerators(desc);
@@ -337,7 +338,7 @@ void Car::render(MCCamera *p)
 
 bool Car::update()
 {
-    m_effectManager.update();
+    m_particleEffectManager.update();
     return true;
 }
 
@@ -347,7 +348,7 @@ void Car::reset()
 
 void Car::collisionEvent(MCCollisionEvent & event)
 {
-    m_effectManager.collision(event);
+    m_particleEffectManager.collision(event);
     event.accept();
 }
 

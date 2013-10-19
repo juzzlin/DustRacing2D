@@ -22,6 +22,7 @@
 
 #include "updateableif.hpp"
 #include "carparticleeffectmanager.hpp"
+#include "carsoundeffectmanager.hpp"
 
 class MCSurface;
 class MCFrictionGenerator;
@@ -218,7 +219,8 @@ private:
     int                      m_prevTargetNodeIndex;
     int                      m_routeProgression;
     bool                     m_isHuman;
-    CarParticleEffectManager m_effectManager;
+    CarParticleEffectManager m_particleEffectManager;
+    CarSoundEffectManager    m_soundEffectManager;
 };
 
 #endif // CAR_HPP

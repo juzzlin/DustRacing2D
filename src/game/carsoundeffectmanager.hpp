@@ -13,52 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENALSOURCE_HPP
-#define OPENALSOURCE_HPP
+#ifndef CARSOUNDEFFECTMANAGER_HPP
+#define CARSOUNDEFFECTMANAGER_HPP
 
-#include <Data>
-#include <Source>
+#include <QObject>
 
-#include <AL/al.h>
-#include <AL/alc.h>
+class Car;
 
-#include <QMutex>
-
-#include <string>
-
-class OpenALSource : public STFH::Source
+/*! Manages sound effects, like the engine sound. These are connected
+ *  to the AudioThread via Qt signals. */
+class CarSoundEffectManager : public QObject
 {
+    Q_OBJECT
+
 public:
 
     //! Constructor.
-    OpenALSource(STFH::DataPtr data);
+    CarSoundEffectManager(Car & car);
 
     //! Destructor.
-    virtual ~OpenALSource();
+    virtual ~CarSoundEffectManager();
 
-    //! \reimp
-    virtual void setData(STFH::DataPtr data) throw ();
-
-    //! \reimp
-    //! This is thread-safe.
-    virtual void play(bool loop = false);
-
-    //! \reimp
-    //! This is thread-safe.
-    virtual void stop();
-
-    //! \reimp
-    //! This is thread-safe.
-    virtual void setVolume(float volume);
-
-    //! \reimp
-    //! This is thread-safe.
-    virtual void setPitch(float pitch);
+    void update();
 
 private:
 
-    ALuint m_handle;
-    QMutex m_mutex;
+    Car & m_car;
 };
 
-#endif // OPENALSOURCE_HPP
+#endif // CARSOUNDEFFECTMANAGER_HPP

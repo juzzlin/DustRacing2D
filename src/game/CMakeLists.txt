@@ -36,6 +36,7 @@ set(SRC
     audiothread.cpp
     car.cpp
     carparticleeffectmanager.cpp
+    carsoundeffectmanager.cpp
     carstatusview.cpp
     checkeredflag.cpp
     confirmationmenu.cpp
@@ -100,6 +101,7 @@ if (UseQt5)
 else()
     set(MOC_HDRS
         audiothread.hpp
+        carsoundeffectmanager.hpp
         eventhandler.hpp
         fadeanimation.hpp
         mainmenu.hpp
