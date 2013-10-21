@@ -27,20 +27,19 @@ Credits::Credits(std::string id, int width, int height)
 void Credits::render()
 {
     static MCTextureText CREDITS_TEXT(
-        QObject::tr("PROGRAMMING BY\n\n"
-        "* Jussi Lind\n\n"
-        "GRAPHICS BY\n\n"
-        "* Jussi Lind\n"
-        "* Ville Makiranta\n"
-        "* FindIcons.com\n\n"
-        "RACE TRACKS BY\n\n"
-        "* Jussi Lind\n\n"
-        "FONT\n\n"
-        "* Ubuntu Monospace\n\n"
-        "PATCHES\n\n"
-        "* Markus Rinne\n\n"
-        "SPECIAL THANKS\n\n"
-        "* Tommi Martela").toStdString()
+        (QObject::tr("PROGRAMMING BY") + "\n\n" +
+        "* Jussi Lind\n\n" +
+        QObject::tr("GRAPHICS BY") + "\n\n" +
+        "* Jussi Lind\n\n" +
+        QObject::tr("RACE TRACKS BY") + "\n\n" +
+        "* Jussi Lind\n\n" +
+        QObject::tr("FONT") + "\n\n" +
+        "* Ubuntu Monospace\n\n" +
+        QObject::tr("PATCHES") + "\n\n" +
+        "* Markus Rinne\n\n" +
+        QObject::tr("SPECIAL THANKS") + "\n\n" +
+        "* Tommi Martela\n\n"
+        "* Alex Rietveld\n").toStdString()
     );
 
     SurfaceMenu::render();

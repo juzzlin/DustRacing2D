@@ -54,42 +54,42 @@
         <translation>Vähintään OpenGL 2.1 vaaditaan!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="253"/>
+        <location filename="../race.cpp" line="254"/>
         <source>The Time Trial has ended!</source>
         <translation>Aika-ajo päättyi!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="257"/>
+        <location filename="../race.cpp" line="258"/>
         <source>The winner has finished!</source>
         <translation>Voittaja tuli maaliin!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="378"/>
+        <location filename="../race.cpp" line="379"/>
         <source>New lap record!</source>
         <translation>Uusi kierrosennätys!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="394"/>
+        <location filename="../race.cpp" line="395"/>
         <source>A new best pos!</source>
         <translation>Uusi paras sijoitus!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="404"/>
+        <location filename="../race.cpp" line="405"/>
         <source>A new track unlocked!</source>
         <translation>Uusi rata avattu!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="408"/>
+        <location filename="../race.cpp" line="409"/>
         <source>Better luck next time..</source>
         <translation>Parempaa onnea ensi kerralla..</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="450"/>
+        <location filename="../race.cpp" line="451"/>
         <source>You must stay on track!</source>
         <translation>Pysy radalla!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="454"/>
+        <location filename="../race.cpp" line="455"/>
         <source>Watch your tires!</source>
         <translation>Varo renkaitasi!</translation>
     </message>
@@ -259,7 +259,6 @@ Pause      : P
 http://dustrac.sourceforge.net</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="30"/>
         <source>PROGRAMMING BY
 
 * Jussi Lind
@@ -285,7 +284,7 @@ PATCHES
 SPECIAL THANKS
 
 * Tommi Martela</source>
-        <translation>OHJELMOINTI
+        <translation type="obsolete">OHJELMOINTI
 
 * Jussi Lind
 
@@ -327,92 +326,92 @@ ERITYISKIITOKSET
         <translation>Nollaa lukitsemattomat radat?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="158"/>
+        <location filename="../settingsmenu.cpp" line="160"/>
         <source>Reset record times</source>
         <translation>Nollaa ennätysajat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="163"/>
+        <location filename="../settingsmenu.cpp" line="165"/>
         <source>Reset best positions</source>
         <translation>Nollaa parhaat sijat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="168"/>
+        <location filename="../settingsmenu.cpp" line="170"/>
         <source>Reset unlocked tracks</source>
         <translation>Nollaa lukitsemattomat radat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="173"/>
+        <location filename="../settingsmenu.cpp" line="175"/>
         <source>Full screen resolution &gt;</source>
         <translation>Koko näytön resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="177"/>
+        <location filename="../settingsmenu.cpp" line="179"/>
         <source>Windowed resolution &gt;</source>
         <translation>Ikkunoitu resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="181"/>
+        <location filename="../settingsmenu.cpp" line="183"/>
         <source>Split type &gt;</source>
         <translation>Ruudunjaon tyyppi &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="185"/>
+        <location filename="../settingsmenu.cpp" line="187"/>
         <source>Game mode &gt;</source>
         <translation>Pelimoodi &gt; </translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="189"/>
+        <location filename="../settingsmenu.cpp" line="191"/>
         <source>Lap Count &gt;</source>
         <translation>Kierrosmäärä &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="193"/>
+        <location filename="../settingsmenu.cpp" line="195"/>
         <source>FPS &gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="197"/>
+        <location filename="../settingsmenu.cpp" line="199"/>
         <source>Key configuration &gt;</source>
         <translation>Kontrollit &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="221"/>
+        <location filename="../settingsmenu.cpp" line="226"/>
         <source>Two player race</source>
         <translation>Kahden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="231"/>
+        <location filename="../settingsmenu.cpp" line="236"/>
         <source>One player race</source>
         <translation>Yhden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="241"/>
+        <location filename="../settingsmenu.cpp" line="246"/>
         <source>Time Trial</source>
         <translation>Aika-ajo</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="251"/>
+        <location filename="../settingsmenu.cpp" line="256"/>
         <source>Duel</source>
         <translation>Kaksintaistelu</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="275"/>
+        <location filename="../settingsmenu.cpp" line="283"/>
         <source>Vertical</source>
         <translation>Pysty</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="285"/>
+        <location filename="../settingsmenu.cpp" line="293"/>
         <source>Horizontal</source>
         <translation>Vaaka</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="307"/>
+        <location filename="../settingsmenu.cpp" line="316"/>
         <source>30 fps</source>
         <translation>30 ruutua/s</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="318"/>
+        <location filename="../settingsmenu.cpp" line="327"/>
         <source>60 fps</source>
         <translation>60 ruutua/s</translation>
     </message>
@@ -480,6 +479,72 @@ ERITYISKIITOKSET
         <location filename="../keyconfigmenu.cpp" line="176"/>
         <source>Player Two Turn Right</source>
         <translation>Pelaaja 2 Oikealle</translation>
+    </message>
+    <message>
+        <source>PROGRAMMING BY
+
+</source>
+        <translation type="obsolete">OHJELMOINTI\n</translation>
+    </message>
+    <message>
+        <source>GRAPHICS BY
+
+</source>
+        <translation type="obsolete">GRAFIIKKA</translation>
+    </message>
+    <message>
+        <source>RACE TRACKS BY
+
+</source>
+        <translation type="obsolete">RADAT</translation>
+    </message>
+    <message>
+        <source>FONT
+
+</source>
+        <translation type="obsolete">FONTTI</translation>
+    </message>
+    <message>
+        <source>PATCHES
+
+</source>
+        <translation type="obsolete">PÄTSIT</translation>
+    </message>
+    <message>
+        <source>SPECIAL THANKS
+
+</source>
+        <translation type="obsolete">ERITYISKIITOKSET</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="30"/>
+        <source>PROGRAMMING BY</source>
+        <translation>OHJELMOINTI</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="32"/>
+        <source>GRAPHICS BY</source>
+        <translation>GRAFIIKKA</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="34"/>
+        <source>RACE TRACKS BY</source>
+        <translation>RADAT</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="36"/>
+        <source>FONT</source>
+        <translation>FONTTI</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="38"/>
+        <source>PATCHES</source>
+        <translation>PÄTSIT</translation>
+    </message>
+    <message>
+        <location filename="../credits.cpp" line="40"/>
+        <source>SPECIAL THANKS</source>
+        <translation>ERITYISKIITOKSET</translation>
     </message>
 </context>
 </TS>
