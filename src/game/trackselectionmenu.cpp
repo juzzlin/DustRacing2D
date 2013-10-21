@@ -139,10 +139,10 @@ void TrackItem::render()
     tileY = initY;
     const int j2 = rMap.rows();
     const int i2 = rMap.cols();
-    for (int j = 0; j <= j2; j++)
+    for (int j = 0; j < j2; j++)
     {
         tileX = initX;
-        for (int i = 0; i <= i2; i++)
+        for (int i = 0; i < i2; i++)
         {
             if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
             {
