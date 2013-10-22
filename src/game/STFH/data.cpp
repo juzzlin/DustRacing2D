@@ -21,7 +21,7 @@ Data::Data()
 {
 }
 
-void Data::load(const std::string & path) throw ()
+void Data::load(const std::string & path)
 {
     m_path = path;
 }

@@ -37,7 +37,7 @@ public:
     virtual ~OpenALSource();
 
     //! \reimp
-    virtual void setData(STFH::DataPtr data) throw ();
+    virtual void setData(STFH::DataPtr data);
 
     //! \reimp
     //! This is thread-safe.

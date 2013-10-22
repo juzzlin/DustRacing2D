@@ -31,7 +31,7 @@ public:
     virtual ~OpenALWavData();
 
     //! \reimp
-    virtual void load(const std::string & path) throw ();
+    virtual void load(const std::string & path);
 
     //! \return the data chunk.
     virtual ALvoid * data();

@@ -30,8 +30,8 @@ public:
     //! Destructor.
     virtual ~Source();
 
-    //! Set the sound data.
-    virtual void setData(DataPtr data) throw ();
+    //! Set the sound data. Throw on failure.
+    virtual void setData(DataPtr data);
 
     //! Play the sound.
     virtual void play(bool loop = false) = 0;

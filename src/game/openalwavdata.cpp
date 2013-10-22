@@ -33,7 +33,7 @@ OpenALWavData::OpenALWavData(const std::string & path)
     load(path);
 }
 
-void OpenALWavData::load(const std::string & path) throw ()
+void OpenALWavData::load(const std::string & path)
 {
     Data::load(path);
 

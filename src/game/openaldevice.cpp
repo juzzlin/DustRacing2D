@@ -24,7 +24,7 @@ OpenALDevice::OpenALDevice()
 {
 }
 
-void OpenALDevice::initialize() throw ()
+void OpenALDevice::initialize()
 {
     m_device = alcOpenDevice(alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER));
     if (!m_device)

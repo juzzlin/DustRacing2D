@@ -27,8 +27,8 @@ public:
     //! Destructor.
     virtual ~Device();
 
-    //! Initialize the device.
-    virtual void initialize() throw () = 0;
+    //! Initialize the device. Throw on failure.
+    virtual void initialize() = 0;
 
     //! Shut the device down.
     virtual void shutDown() = 0;

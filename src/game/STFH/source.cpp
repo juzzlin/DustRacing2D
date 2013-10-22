@@ -23,7 +23,7 @@ Source::Source()
 {
 }
 
-void Source::setData(DataPtr data) throw ()
+void Source::setData(DataPtr data)
 {
     m_data = data;
 }

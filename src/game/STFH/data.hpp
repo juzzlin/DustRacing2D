@@ -28,8 +28,8 @@ public:
     //! Constructor.
     Data();
 
-    //! Load the data. Re-implement and call parent.
-    virtual void load(const std::string & path) throw ();
+    //! Load the data. Re-implement and call parent. Throw on failure.
+    virtual void load(const std::string & path);
 
     //! Destructor.
     virtual ~Data();

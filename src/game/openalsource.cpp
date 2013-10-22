@@ -41,7 +41,7 @@ OpenALSource::OpenALSource(STFH::DataPtr data)
     setData(data);
 }
 
-void OpenALSource::setData(STFH::DataPtr data) throw ()
+void OpenALSource::setData(STFH::DataPtr data)
 {
     alGetError();
 

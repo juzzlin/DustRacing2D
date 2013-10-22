@@ -30,7 +30,7 @@ public:
     OpenALDevice();
 
     //! \reimp
-    virtual void initialize() throw ();
+    virtual void initialize();
 
     //! \reimp
     virtual void shutDown();
