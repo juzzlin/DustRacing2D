@@ -16,13 +16,47 @@
 #include "carsoundeffectmanager.hpp"
 #include "car.hpp"
 
-CarSoundEffectManager::CarSoundEffectManager(Car & car)
+static std::vector<float> gearRatios = {1.0, 0.8, 0.6, 0.5, 0.4, 0.3};
+
+CarSoundEffectManager::CarSoundEffectManager(Car & car, QString engineSoundHandle)
     : m_car(car)
+    , m_engineSoundHandle(engineSoundHandle)
+    , m_gear(0)
+{
+}
+
+void CarSoundEffectManager::startEngineSound()
+{
+    emit playRequested(m_engineSoundHandle, true);
+}
+
+void CarSoundEffectManager::stopEngineSound()
 {
 }
 
 void CarSoundEffectManager::update()
 {
+    const float speed      = m_car.speedInKmh();
+    const float virtualRev = speed * 50;
+    const float effRev     = virtualRev * gearRatios[m_gear];
+    float pitch            = 1.0 + effRev / 5000;
+
+    if (effRev > 3000)
+    {
+        if (m_gear < static_cast<int>(gearRatios.size() - 1))
+        {
+            m_gear++;
+        }
+    }
+    else if (effRev < 1000)
+    {
+        if (m_gear)
+        {
+            m_gear--;
+        }
+    }
+
+    emit pitchChangeRequested(m_engineSoundHandle, pitch);
 }
 
 CarSoundEffectManager::~CarSoundEffectManager()

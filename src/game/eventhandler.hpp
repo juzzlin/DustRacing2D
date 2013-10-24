@@ -52,7 +52,7 @@ signals:
 
     void gameExited();
 
-    void soundRequested(const std::string & handle);
+    void soundRequested(QString handle);
 
     void cursorRevealed();
 

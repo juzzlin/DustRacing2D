@@ -68,7 +68,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_routeProgression(0)
 , m_isHuman(isHuman)
 , m_particleEffectManager(*this)
-, m_soundEffectManager(*this)
 {
     setProperties(desc);
     initForceGenerators(desc);
@@ -339,6 +338,12 @@ void Car::render(MCCamera *p)
 bool Car::update()
 {
     m_particleEffectManager.update();
+
+    if (m_soundEffectManager)
+    {
+        m_soundEffectManager->update();
+    }
+
     return true;
 }
 
@@ -458,6 +463,16 @@ bool Car::isHuman() const
 float Car::tireWearLevel() const
 {
     return m_tireWearOutCapacity / m_desc.tireWearOutCapacity;
+}
+
+void Car::setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager)
+{
+    m_soundEffectManager = soundEffectManager;
+}
+
+CarSoundEffectManagerPtr Car::soundEffectManager() const
+{
+    return m_soundEffectManager;
 }
 
 Car::~Car()

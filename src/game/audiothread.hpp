@@ -17,6 +17,7 @@
 #define AUDIOTHREAD_HPP
 
 #include <QThread>
+#include <QString>
 
 #include <map>
 
@@ -37,24 +38,25 @@ public:
 
 public slots:
 
-    void playSound(const std::string & handle);
+    void playSound(QString handle, bool loop = false);
 
-    void stopSound(const std::string & handle);
+    void stopSound(QString handle);
 
-    void setPitch(const std::string & handle, float pitch);
+    void setPitch(QString handle, float pitch);
 
-    void setVolume(const std::string & handle, float pitch);
+    void setVolume(QString handle, float pitch);
 
 private:
 
     void init();
 
     void loadSounds();
-    void loadSound(const std::string & handle, const std::string & path);
+
+    void loadSound(QString handle, QString path);
 
     STFH::DevicePtr m_openALDevice;
 
-    typedef std::map<std::string, STFH::SourcePtr> SoundMap;
+    typedef std::map<QString, STFH::SourcePtr> SoundMap;
     SoundMap m_soundMap;
 
     bool m_inited;

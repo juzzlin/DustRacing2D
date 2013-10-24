@@ -16,6 +16,7 @@
 #include "race.hpp"
 
 #include "car.hpp"
+#include "carsoundeffectmanager.hpp"
 #include "game.hpp"
 #include "layers.hpp"
 #include "offtrackdetector.hpp"
@@ -95,6 +96,11 @@ void Race::init(Track & track, int lapCount)
         car->setRouteProgression(0);
 
         m_stuckHash[car->index()] = StuckTileCounter(nullptr, 0);
+
+        if (car->soundEffectManager())
+        {
+            car->soundEffectManager()->startEngineSound();
+        }
     }
 
     m_timing.reset();

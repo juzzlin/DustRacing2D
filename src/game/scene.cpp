@@ -16,7 +16,9 @@
 #include "scene.hpp"
 
 #include "ai.hpp"
+#include "audiothread.hpp"
 #include "car.hpp"
+#include "carsoundeffectmanager.hpp"
 #include "checkeredflag.hpp"
 #include "credits.hpp"
 #include "fadeanimation.hpp"
@@ -160,7 +162,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
 void Scene::createCars()
 {
-    const int   humanPower = 175000; // This in Watts
+    const int   humanPower = 200000; // This in Watts
     const float humanDrag  = 5.0;
 
     m_race.removeCars();
@@ -181,6 +183,13 @@ void Scene::createCars()
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
+
+            CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(*car, "carEngine"));
+            sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
+                &m_game.audioThread(), SLOT(playSound(QString, bool)));
+            sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
+                &m_game.audioThread(), SLOT(setPitch(QString, float)));
+            car->setSoundEffectManager(sfx);
         }
         else if (m_game.hasComputerPlayers())
         {

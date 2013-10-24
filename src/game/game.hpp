@@ -107,6 +107,8 @@ public:
 
     EventHandler & eventHandler() const;
 
+    AudioThread & audioThread();
+
 public slots:
 
     void togglePause();

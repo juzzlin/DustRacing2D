@@ -81,7 +81,7 @@ Game::Game()
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
     connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
     connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
-    connect(m_eventHandler, SIGNAL(soundRequested(std::string)), m_audioThread, SLOT(playSound(std::string)));
+    connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioThread, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
@@ -239,6 +239,12 @@ EventHandler & Game::eventHandler() const
 {
     assert(m_eventHandler);
     return *m_eventHandler;
+}
+
+AudioThread & Game::audioThread()
+{
+    assert(m_audioThread);
+    return *m_audioThread;
 }
 
 Renderer & Game::renderer() const

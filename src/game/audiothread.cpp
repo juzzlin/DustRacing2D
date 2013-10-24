@@ -37,28 +37,28 @@ void AudioThread::loadSounds()
     loadSound("carEngine", "147242__qubodup__car-engine-loop.wav");
 }
 
-void AudioThread::loadSound(const std::string & handle, const std::string & path)
+void AudioThread::loadSound(QString handle, QString path)
 {
-    const std::string soundPath =
-        (QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator()).toStdString();
+    const QString soundPath =
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
 
     m_soundMap[handle] =
         STFH::SourcePtr(new OpenALSource(
-            STFH::DataPtr(new OpenALWavData(soundPath + path))));
+            STFH::DataPtr(new OpenALWavData((soundPath + path).toStdString()))));
 }
 
-void AudioThread::playSound(const std::string & handle)
+void AudioThread::playSound(QString handle, bool loop)
 {
     if (m_inited)
     {
         if (m_soundMap.count(handle))
         {
-            m_soundMap[handle]->play();
+            m_soundMap[handle]->play(loop);
         }
     }
 }
 
-void AudioThread::stopSound(const std::string & handle)
+void AudioThread::stopSound(QString handle)
 {
     if (m_inited)
     {
@@ -69,7 +69,7 @@ void AudioThread::stopSound(const std::string & handle)
     }
 }
 
-void AudioThread::setPitch(const std::string & handle, float pitch)
+void AudioThread::setPitch(QString handle, float pitch)
 {
     if (m_inited)
     {
@@ -80,7 +80,7 @@ void AudioThread::setPitch(const std::string & handle, float pitch)
     }
 }
 
-void AudioThread::setVolume(const std::string & handle, float volume)
+void AudioThread::setVolume(QString handle, float volume)
 {
     if (m_inited)
     {

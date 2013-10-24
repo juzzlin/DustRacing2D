@@ -17,6 +17,8 @@
 #define CARSOUNDEFFECTMANAGER_HPP
 
 #include <QObject>
+#include <QString>
+#include <memory>
 
 class Car;
 
@@ -29,16 +31,36 @@ class CarSoundEffectManager : public QObject
 public:
 
     //! Constructor.
-    CarSoundEffectManager(Car & car);
+    CarSoundEffectManager(Car & car, QString engineSoundHandle);
 
     //! Destructor.
     virtual ~CarSoundEffectManager();
 
     void update();
 
+public slots:
+
+    void startEngineSound();
+
+    void stopEngineSound();
+
+signals:
+
+    void playRequested(QString handle, bool loop);
+
+    void stopRequested(QString handle);
+
+    void pitchChangeRequested(QString handle, float pitch);
+
+    void volumeChangeRequested(QString handle, float pitch);
+
 private:
 
     Car & m_car;
+    QString m_engineSoundHandle;
+    int m_gear;
 };
+
+typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;
 
 #endif // CARSOUNDEFFECTMANAGER_HPP
