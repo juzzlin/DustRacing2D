@@ -22,6 +22,7 @@ CarSoundEffectManager::CarSoundEffectManager(Car & car, QString engineSoundHandl
     : m_car(car)
     , m_engineSoundHandle(engineSoundHandle)
     , m_gear(0)
+    , m_prevSpeed(0)
 {
 }
 
@@ -36,27 +37,31 @@ void CarSoundEffectManager::stopEngineSound()
 
 void CarSoundEffectManager::update()
 {
-    const float speed      = m_car.speedInKmh();
-    const float virtualRev = speed * 50;
-    const float effRev     = virtualRev * gearRatios[m_gear];
-    float pitch            = 1.0 + effRev / 5000;
-
-    if (effRev > 3000)
+    const int speed = m_car.speedInKmh();
+    if (speed != m_prevSpeed)
     {
-        if (m_gear < static_cast<int>(gearRatios.size() - 1))
-        {
-            m_gear++;
-        }
-    }
-    else if (effRev < 1000)
-    {
-        if (m_gear)
-        {
-            m_gear--;
-        }
-    }
+        const float virtualRev = speed * 50;
+        const float effRev     = virtualRev * gearRatios[m_gear];
+        float pitch            = 1.0 + effRev / 5000;
 
-    emit pitchChangeRequested(m_engineSoundHandle, pitch);
+        if (effRev > 3000)
+        {
+            if (m_gear < static_cast<int>(gearRatios.size() - 1))
+            {
+                m_gear++;
+            }
+        }
+        else if (effRev < 1000)
+        {
+            if (m_gear)
+            {
+                m_gear--;
+            }
+        }
+
+        m_prevSpeed = speed;
+        emit pitchChangeRequested(m_engineSoundHandle, pitch);
+    }
 }
 
 CarSoundEffectManager::~CarSoundEffectManager()

@@ -59,6 +59,7 @@ private:
     Car & m_car;
     QString m_engineSoundHandle;
     int m_gear;
+    int m_prevSpeed;
 };
 
 typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;
