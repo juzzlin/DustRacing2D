@@ -22,8 +22,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include <QMutex>
-
 #include <string>
 
 class OpenALSource : public STFH::Source
@@ -40,25 +38,29 @@ public:
     virtual void setData(STFH::DataPtr data);
 
     //! \reimp
-    //! This is thread-safe.
     virtual void play(bool loop = false);
 
     //! \reimp
-    //! This is thread-safe.
     virtual void stop();
 
     //! \reimp
-    //! This is thread-safe.
     virtual void setVolume(float volume);
 
     //! \reimp
-    //! This is thread-safe.
     virtual void setPitch(float pitch);
+
+    //! \reimp
+    virtual void setLocation(const STFH::Location & location);
+
+    //! \reimp
+    virtual void setMaxDist(float maxDist);
+
+    //! \reimp
+    virtual void setReferenceDist(float refDist);
 
 private:
 
     ALuint m_handle;
-    QMutex m_mutex;
 };
 
 #endif // OPENALSOURCE_HPP

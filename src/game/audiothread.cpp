@@ -19,22 +19,30 @@
 #include <QDir>
 #include <QString>
 
+#include <sstream>
+
+#include <AL/al.h>
+
 AudioThread::AudioThread(QObject * parent)
     : QThread(parent)
     , m_openALDevice(new OpenALDevice)
     , m_inited(false)
+    , m_masterVolume(1.0)
 {
 }
 
 void AudioThread::init()
 {
     m_openALDevice->initialize(); // Throws on failure
+
+    alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+    alSpeedOfSound(1000.0);
 }
 
 void AudioThread::loadSounds()
 {
     loadSound("menuClick", "146721__fins__menu-click.wav");
-    loadSound("carEngine", "147242__qubodup__car-engine-loop.wav");
+    loadEngineSounds("147242__qubodup__car-engine-loop.wav");
 }
 
 void AudioThread::loadSound(QString handle, QString path)
@@ -47,48 +55,62 @@ void AudioThread::loadSound(QString handle, QString path)
             STFH::DataPtr(new OpenALWavData((soundPath + path).toStdString()))));
 }
 
+void AudioThread::loadEngineSounds(QString path)
+{
+    const QString soundPath =
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
+
+    STFH::DataPtr sharedData(new OpenALWavData((soundPath + path).toStdString()));
+
+    for (int i = 0; i < 10; i++)
+    {
+        std::stringstream ss;
+        ss << "carEngine" << i;
+        STFH::SourcePtr source(new OpenALSource(sharedData));
+        m_soundMap[ss.str().c_str()] = source;
+        source->setMaxDist(1000);
+        source->setReferenceDist(0);
+    }
+}
+
 void AudioThread::playSound(QString handle, bool loop)
 {
-    if (m_inited)
-    {
-        if (m_soundMap.count(handle))
-        {
-            m_soundMap[handle]->play(loop);
-        }
-    }
+    if (m_soundMap.count(handle))
+        m_soundMap[handle]->play(loop);
 }
 
 void AudioThread::stopSound(QString handle)
 {
-    if (m_inited)
-    {
-        if (m_soundMap.count(handle))
-        {
-            m_soundMap[handle]->stop();
-        }
-    }
+    if (m_soundMap.count(handle))
+        m_soundMap[handle]->stop();
 }
 
 void AudioThread::setPitch(QString handle, float pitch)
 {
-    if (m_inited)
-    {
-        if (m_soundMap.count(handle))
-        {
-            m_soundMap[handle]->setPitch(pitch);
-        }
-    }
+    if (m_soundMap.count(handle))
+        m_soundMap[handle]->setPitch(pitch);
 }
 
 void AudioThread::setVolume(QString handle, float volume)
 {
-    if (m_inited)
-    {
-        if (m_soundMap.count(handle))
-        {
-            m_soundMap[handle]->setVolume(volume);
-        }
-    }
+    if (m_soundMap.count(handle))
+        m_soundMap[handle]->setVolume(volume);
+}
+
+void AudioThread::setMasterVolume(float volume)
+{
+    m_masterVolume = volume;
+}
+
+void AudioThread::setLocation(QString handle, float x, float y)
+{
+    if (m_soundMap.count(handle))
+        m_soundMap[handle]->setLocation(STFH::Location(x, y));
+}
+
+void AudioThread::setListenerLocation(float x, float y)
+{
+    alListener3f(AL_POSITION, x, y, 1);
 }
 
 void AudioThread::run()

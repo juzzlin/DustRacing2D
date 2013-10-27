@@ -59,11 +59,19 @@ public:
     //! \return location.
     virtual const Location & location() const;
 
+    //! Set maximum distance.
+    virtual void setMaxDist(float maxDist);
+
+    //! Set reference distance.
+    virtual void setReferenceDist(float refDist);
+
 private:
 
     Location m_location;
     float    m_pitch;
     float    m_volume;
+    float    m_maxDist;
+    float    m_refDist;
     DataPtr  m_data;
 };
 

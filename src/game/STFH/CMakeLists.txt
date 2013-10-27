@@ -8,7 +8,6 @@ set(STFHSRC
     listener.cpp
     location.cpp
     source.cpp
-    world.cpp
 )
 
 add_library(STFH ${STFHSRC})

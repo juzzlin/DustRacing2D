@@ -183,13 +183,6 @@ void Scene::createCars()
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
-
-            CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(*car, "carEngine"));
-            sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
-                &m_game.audioThread(), SLOT(playSound(QString, bool)));
-            sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
-                &m_game.audioThread(), SLOT(setPitch(QString, float)));
-            car->setSoundEffectManager(sfx);
         }
         else if (m_game.hasComputerPlayers())
         {
@@ -224,6 +217,17 @@ void Scene::createCars()
             car->setLayer(Layers::Cars);
             car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
             car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
+
+            std::stringstream sample;
+            sample << "carEngine" << i;
+            CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(*car, sample.str().c_str()));
+            sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
+                &m_game.audioThread(), SLOT(playSound(QString, bool)));
+            sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
+                &m_game.audioThread(), SLOT(setPitch(QString, float)));
+            sfx->connect(sfx.get(), SIGNAL(locationChanged(QString, float, float)),
+                &m_game.audioThread(), SLOT(setLocation(QString, float, float)));
+            car->setSoundEffectManager(sfx);
 
             m_cars.push_back(CarPtr(car));
             m_race.addCar(*car);
@@ -341,6 +345,8 @@ void Scene::updateRace()
 {
     // Update race situation
     m_race.update();
+
+    m_game.audioThread().setListenerLocation(m_cars[0]->location().i(), m_cars[0]->location().j());
 }
 
 void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object)

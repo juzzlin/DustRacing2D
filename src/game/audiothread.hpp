@@ -46,6 +46,12 @@ public slots:
 
     void setVolume(QString handle, float pitch);
 
+    void setMasterVolume(float volume);
+
+    void setLocation(QString handle, float x, float y);
+
+    void setListenerLocation(float x, float y);
+
 private:
 
     void init();
@@ -54,12 +60,16 @@ private:
 
     void loadSound(QString handle, QString path);
 
+    void loadEngineSounds(QString path);
+
     STFH::DevicePtr m_openALDevice;
 
     typedef std::map<QString, STFH::SourcePtr> SoundMap;
     SoundMap m_soundMap;
 
     bool m_inited;
+
+    float m_masterVolume;
 };
 
 #endif // AUDIOTHREAD_HPP

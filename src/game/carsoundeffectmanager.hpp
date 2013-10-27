@@ -19,6 +19,8 @@
 #include <QObject>
 #include <QString>
 #include <memory>
+#include <Location>
+#include <MCVector3d>
 
 class Car;
 
@@ -54,12 +56,15 @@ signals:
 
     void volumeChangeRequested(QString handle, float pitch);
 
+    void locationChanged(QString handle, float x, float y);
+
 private:
 
     Car & m_car;
     QString m_engineSoundHandle;
     int m_gear;
     int m_prevSpeed;
+    MCVector3dF m_prevLocation;
 };
 
 typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;

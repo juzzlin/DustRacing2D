@@ -20,6 +20,8 @@ namespace STFH {
 Source::Source()
     : m_pitch(1.0)
     , m_volume(1.0)
+    , m_maxDist(0.0)
+    , m_refDist(0.0)
 {
 }
 
@@ -56,6 +58,16 @@ void Source::setLocation(const Location & location)
 const Location & Source::location() const
 {
     return m_location;
+}
+
+void Source::setMaxDist(float maxDist)
+{
+    m_maxDist = maxDist;
+}
+
+void Source::setReferenceDist(float refDist)
+{
+    m_refDist = refDist;
 }
 
 Source::~Source()
