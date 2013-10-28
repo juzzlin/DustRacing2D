@@ -95,8 +95,6 @@ find_package(OpenGL REQUIRED)
 
 # OpenAL and ALUT for sounds
 find_package(OpenAL REQUIRED)
-set(ALUT_DIR ${CMAKE_SOURCE_DIR})
-find_package(ALUT REQUIRED)
 
 # Enable CMake's unit test framework
 enable_testing()

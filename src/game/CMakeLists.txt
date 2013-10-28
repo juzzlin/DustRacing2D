@@ -154,8 +154,7 @@ set(COMMON_LIBS
     STFH
     ${OPENGL_gl_LIBRARY}
     ${OPENGL_glu_LIBRARY}
-    ${OPENAL_LIBRARY}
-    ${ALUT_LIBRARY})
+    ${OPENAL_LIBRARY})
 
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
