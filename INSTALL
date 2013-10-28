@@ -18,36 +18,38 @@ libraries are linked statically by default (no DLLs needed).
 Build dependencies
 ==================
 
-Currently the build depends on Qt only.
+Currently the build depends on Qt, OpenGL, OpenAL and Vorbis.
 
-Both Qt4 and Qt5 are supported, and Qt4 is used by default.
-
-Qt5 can be enabled by passing -DUseQt5=1 to cmake or to
-the configure script.
+Qt5 can be enabled by passing -DUseQt5=1 to cmake or to the configure script.
 
 Dustrac also exploits some features of the C++11
 standard, so a compliant compiler is required (GCC >= 4.6).
 
 NOTE!!: Building with Microsoft Visual C++ might not work, because it has an incomplete
         support for the C++11 standard. Should be possible with minor code tweaks, though.
+	GCC/MinGW is the only "officially" supported toolchain.
 
-Building in the command line on Linux (tested on Ubuntu 12.04)
-==============================================================
+Building in the command line on Linux (tested on Ubuntu 12.04..13.10)
+=====================================================================
 
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt4 development files (libqt4-dev on Ubuntu).
-2) Install CMake.
-3) Go to the source directory and run:
+1) Install Qt4 development files (libqt4-dev on Debian/Ubuntu).
+2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
+3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
+4) Install CMake (cmake on Debian/Ubuntu).
+5) Go to the source directory and run:
 
 $ ./configure
 
 This runs CMake that generates the makefiles.
-You can also run cmake directly. The configure script
-is only for convenience and is just a wrapper for cmake.
 
-If everything went ok, run:
+You can also run cmake directly or use Qt Creator to open the top-level
+CMakeLists.txt and build inside Qt Creator. The configure script is only
+for convenience and is just a wrapper for cmake.
+
+Anyway, if everything went ok with cmake, run:
 
 $ make
 
@@ -57,7 +59,7 @@ Run the game:
 
 $ ./dustrac-game
 
-Run the editor:
+Optionally run the track editor:
 
 $ ./dustrac-editor
 
@@ -77,7 +79,7 @@ Install the binaries and data files:
 
 $ sudo make install
 
-This install also the desktop files so Dust Racing
+This installs also the desktop files so Dust Racing
 should appear in your application menu.
 
 Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 13.10)
@@ -116,6 +118,8 @@ and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
 to cmake (or to the configure script).
+
+There's an example Debian packaging in packaging/debian/.
 
 
 -- Jussi Lind <jussi.lind@iki.fi>
