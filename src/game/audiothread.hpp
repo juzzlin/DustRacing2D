@@ -30,7 +30,7 @@ class AudioThread : public QThread
 
 public:
 
-    explicit AudioThread(QObject * parent = nullptr);
+    explicit AudioThread(int numCars, QObject * parent = nullptr);
 
     virtual ~AudioThread();
 
@@ -70,6 +70,8 @@ private:
     bool m_inited;
 
     float m_masterVolume;
+
+    int m_numCars;
 };
 
 #endif // AUDIOTHREAD_HPP

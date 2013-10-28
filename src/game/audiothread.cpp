@@ -24,11 +24,12 @@
 
 #include <AL/al.h>
 
-AudioThread::AudioThread(QObject * parent)
+AudioThread::AudioThread(int numCars, QObject * parent)
     : QThread(parent)
     , m_openALDevice(new OpenALDevice)
     , m_inited(false)
     , m_masterVolume(1.0)
+    , m_numCars(numCars)
 {
 }
 
@@ -63,13 +64,13 @@ void AudioThread::loadEngineSounds(QString path)
 
     STFH::DataPtr sharedData(new OpenALOggData((soundPath + path).toStdString()));
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < m_numCars; i++)
     {
         std::stringstream ss;
         ss << "carEngine" << i;
         STFH::SourcePtr source(new OpenALSource(sharedData));
         m_soundMap[ss.str().c_str()] = source;
-        source->setMaxDist(1000);
+        source->setMaxDist(500);
         source->setReferenceDist(0);
     }
 }

@@ -70,7 +70,7 @@ Game::Game()
 , m_paused(false)
 , m_mode(OnePlayerRace)
 , m_splitType(Vertical)
-, m_audioThread(new AudioThread(this))
+, m_audioThread(new AudioThread(Scene::NUM_CARS, this))
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
