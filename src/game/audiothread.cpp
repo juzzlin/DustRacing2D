@@ -15,6 +15,7 @@
 
 #include "audiothread.hpp"
 #include "openalwavdata.hpp"
+#include "openaloggdata.hpp"
 
 #include <QDir>
 #include <QString>
@@ -41,8 +42,8 @@ void AudioThread::init()
 
 void AudioThread::loadSounds()
 {
-    loadSound("menuClick", "146721__fins__menu-click.wav");
-    loadEngineSounds("147242__qubodup__car-engine-loop.wav");
+    loadSound("menuClick", "146721__fins__menu-click.ogg");
+    loadEngineSounds("147242__qubodup__car-engine-loop.ogg");
 }
 
 void AudioThread::loadSound(QString handle, QString path)
@@ -52,7 +53,7 @@ void AudioThread::loadSound(QString handle, QString path)
 
     m_soundMap[handle] =
         STFH::SourcePtr(new OpenALSource(
-            STFH::DataPtr(new OpenALWavData((soundPath + path).toStdString()))));
+            STFH::DataPtr(new OpenALOggData((soundPath + path).toStdString()))));
 }
 
 void AudioThread::loadEngineSounds(QString path)
@@ -60,7 +61,7 @@ void AudioThread::loadEngineSounds(QString path)
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
 
-    STFH::DataPtr sharedData(new OpenALWavData((soundPath + path).toStdString()));
+    STFH::DataPtr sharedData(new OpenALOggData((soundPath + path).toStdString()));
 
     for (int i = 0; i < 10; i++)
     {

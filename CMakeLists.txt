@@ -96,6 +96,9 @@ find_package(OpenGL REQUIRED)
 # OpenAL and ALUT for sounds
 find_package(OpenAL REQUIRED)
 
+set(Vorbis_DIR "${CMAKE_SOURCE_DIR}")
+find_package(Vorbis REQUIRED)
+
 # Enable CMake's unit test framework
 enable_testing()
 

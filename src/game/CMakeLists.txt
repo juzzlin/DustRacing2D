@@ -57,6 +57,7 @@ set(SRC
     offtrackdetector.cpp
     openaldevice.cpp
     openalsource.cpp
+    openaloggdata.cpp
     openalwavdata.cpp
     overlaybase.cpp
     race.cpp
@@ -154,7 +155,8 @@ set(COMMON_LIBS
     STFH
     ${OPENGL_gl_LIBRARY}
     ${OPENGL_glu_LIBRARY}
-    ${OPENAL_LIBRARY})
+    ${OPENAL_LIBRARY}
+    ${VORBISFILE_LIBRARY})
 
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
