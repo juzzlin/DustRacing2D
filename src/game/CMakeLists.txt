@@ -55,6 +55,7 @@ set(SRC
     messageoverlay.cpp
     particlefactory.cpp
     offtrackdetector.cpp
+    openaldata.cpp
     openaldevice.cpp
     openalsource.cpp
     openaloggdata.cpp

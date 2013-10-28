@@ -16,11 +16,10 @@
 #ifndef OPENALWAVDATA_HPP
 #define OPENALWAVDATA_HPP
 
-#include <AL/al.h>
-#include <Data>
+#include "openaldata.hpp"
 
-//! OpenAL WAV data loader using ALUT.
-class OpenALWavData : public STFH::Data
+//! OpenAL WAV data loader.
+class OpenALWavData : public OpenALData
 {
 public:
 
@@ -33,20 +32,8 @@ public:
     //! \reimp
     virtual void load(const std::string & path);
 
-    //! \return the data chunk.
-    virtual ALvoid * data();
-
-    //! \return size.
-    virtual ALsizei size();
-
-    //! \return frequency.
-    virtual ALsizei freq();
-
-    //! \return format.
-    virtual ALenum format();
-
-    //! \return OpenAL buffer handle.
-    virtual ALuint buffer();
+    //! \reimp
+    virtual ALuint buffer() const;
 
 private:
 

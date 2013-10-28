@@ -78,6 +78,8 @@ static void loadOgg(const char * fileName, std::vector<char> & buffer, ALenum & 
 
 OpenALOggData::OpenALOggData(const std::string & path)
     : m_data(nullptr)
+    , m_size(0)
+    , m_freq(0)
     , m_buffer(0)
     , m_loop(AL_FALSE)
 {
@@ -106,27 +108,7 @@ void OpenALOggData::load(const std::string & path)
     }
 }
 
-ALvoid * OpenALOggData::data()
-{
-    return m_data;
-}
-
-ALsizei OpenALOggData::size()
-{
-    return m_size;
-}
-
-ALsizei OpenALOggData::freq()
-{
-    return m_freq;
-}
-
-ALenum OpenALOggData::format()
-{
-    return m_format;
-}
-
-ALuint OpenALOggData::buffer()
+ALuint OpenALOggData::buffer() const
 {
     return m_buffer;
 }

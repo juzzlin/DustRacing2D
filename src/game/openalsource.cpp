@@ -14,8 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "openalsource.hpp"
-#include "openalwavdata.hpp"
-#include "openaloggdata.hpp"
+#include "openaldata.hpp"
 
 #include <MCException>
 
@@ -45,20 +44,10 @@ void OpenALSource::setData(STFH::DataPtr data)
 {
     alGetError();
 
-    if (OpenALWavData * wavData = dynamic_cast<OpenALWavData *>(data.get()))
+    if (OpenALData * soundData = dynamic_cast<OpenALData *>(data.get()))
     {
         Source::setData(data);
-        alSourcei(m_handle, AL_BUFFER, wavData->buffer());
-
-        if (!checkError())
-        {
-            throw MCException("Failed to bind '" + data->path() + "'");
-        }
-    }
-    else if (OpenALOggData * oggData = dynamic_cast<OpenALOggData *>(data.get()))
-    {
-        Source::setData(data);
-        alSourcei(m_handle, AL_BUFFER, oggData->buffer());
+        alSourcei(m_handle, AL_BUFFER, soundData->buffer());
 
         if (!checkError())
         {

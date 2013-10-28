@@ -149,6 +149,8 @@ static bool loadWavFile(
 
 OpenALWavData::OpenALWavData(const std::string & path)
     : m_data(nullptr)
+    , m_size(0)
+    , m_freq(0)
     , m_buffer(0)
     , m_loop(AL_FALSE)
 {
@@ -157,14 +159,7 @@ OpenALWavData::OpenALWavData(const std::string & path)
 
 void OpenALWavData::load(const std::string & path)
 {
-    Data::load(path);
-
-    alGetError();
-
-    if (!m_buffer)
-    {
-        alGenBuffers(1, &m_buffer);
-    }
+    OpenALData::load(path);
 
     if (!loadWavFile(path, &m_buffer, &m_size, &m_freq, &m_format))
     {
@@ -177,27 +172,7 @@ void OpenALWavData::load(const std::string & path)
     }
 }
 
-ALvoid * OpenALWavData::data()
-{
-    return m_data;
-}
-
-ALsizei OpenALWavData::size()
-{
-    return m_size;
-}
-
-ALsizei OpenALWavData::freq()
-{
-    return m_freq;
-}
-
-ALenum OpenALWavData::format()
-{
-    return m_format;
-}
-
-ALuint OpenALWavData::buffer()
+ALuint OpenALWavData::buffer() const
 {
     return m_buffer;
 }

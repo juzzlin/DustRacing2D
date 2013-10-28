@@ -13,35 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OPENALOGGDATA_HPP
-#define OPENALOGGDATA_HPP
+#ifndef OPENALDATA_HPP
+#define OPENALDATA_HPP
 
-#include "openaldata.hpp"
+#include <Data>
+#include <AL/al.h>
 
-//! OpenAL Ogg data loader.
-class OpenALOggData : public OpenALData
+//! Abstract base class for ogg, wav etc. data loader classes.
+class OpenALData : public STFH::Data
 {
 public:
 
     //! Constructor.
-    OpenALOggData(const std::string & path);
+    OpenALData();
 
     //! Destructor.
-    virtual ~OpenALOggData();
+    virtual ~OpenALData();
 
-    //! \reimp
-    virtual void load(const std::string & path);
-
-    //! \reimp
-    virtual ALuint buffer() const;
-
-private:
-
-    ALvoid *  m_data;
-    ALsizei   m_size, m_freq;
-    ALenum    m_format;
-    ALuint    m_buffer;
-    ALboolean m_loop;
+    //! \return OpenAL buffer handle.
+    virtual ALuint buffer() const = 0;
 };
 
-#endif // OPENALOGGDATA_HPP
+#endif // OPENALDATA_HPP
