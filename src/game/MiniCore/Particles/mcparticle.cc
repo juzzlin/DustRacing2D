@@ -72,6 +72,10 @@ MCFloat MCParticle::radius() const
     {
         return m_scale * m_radius;
     }
+    else if (animationStyle() == MCParticle::FadeOutAndExpand)
+    {
+        return (2.0 - m_scale) * m_radius;
+    }
     else
     {
         return m_radius;

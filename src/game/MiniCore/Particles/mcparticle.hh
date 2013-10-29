@@ -39,7 +39,7 @@ public:
   typedef std::vector<MCParticle *> ParticleFreeList;
 
   //! Style of the disappear animation
-  enum AnimationStyle {None = 0, Shrink, FadeOut};
+  enum AnimationStyle {None = 0, Shrink, FadeOut, FadeOutAndExpand};
 
   //! Constructor.
   MCParticle(const std::string & typeID);

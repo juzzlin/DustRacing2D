@@ -190,7 +190,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
         freeList.pop_back();
 
         smoke->init(location, 10, 180);
-        smoke->setAnimationStyle(MCParticle::FadeOut);
+        smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCVector2dF(velocity) + MCRandom::randomVector2d() * 0.1);
         smoke->addToWorld();

@@ -105,12 +105,17 @@ void MCGLPointParticleRenderer::setBatch(
             camera->mapToCamera(x, y);
         }
 
-        m_vertices[i] = MCGLVertex(x, y, location.k());
+        m_vertices[i] = MCGLVertex(x, y, 1);
         m_colors[i]   = particle->color();
 
         if (particle->animationStyle() == MCParticle::FadeOut)
         {
             m_colors[i].setA(m_colors[i].a() * particle->scale());
+        }
+        else if (particle->animationStyle() == MCParticle::FadeOutAndExpand)
+        {
+            m_colors[i].setA(m_colors[i].a() * particle->scale());
+            m_vertices[i].setZ(2.0 - 2.0 * particle->scale());
         }
 
         // Use normal data for sin and cos in order to rotate texture coordinates.

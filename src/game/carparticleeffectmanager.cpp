@@ -200,9 +200,9 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             if (++m_sparkleCounter >= 10)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                    event.contactPoint(), m_car.velocity() * 0.5);
+                    event.contactPoint(), m_car.velocity() * 0.75);
                 ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                    event.contactPoint(), m_car.velocity() * 0.1);
+                    event.contactPoint(), m_car.velocity() * 0.5);
                 m_sparkleCounter = 0;
             }
         }
