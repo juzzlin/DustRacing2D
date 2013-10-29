@@ -70,8 +70,8 @@ void AudioThread::loadEngineSounds(QString path)
         ss << "carEngine" << i;
         STFH::SourcePtr source(new OpenALSource(sharedData));
         m_soundMap[ss.str().c_str()] = source;
-        source->setMaxDist(500);
-        source->setReferenceDist(0);
+        source->setMaxDist(250);
+        source->setReferenceDist(50);
     }
 }
 
