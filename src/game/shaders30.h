@@ -168,7 +168,7 @@ static const char * pointParticleVsh =
 "void main()\n"
 "{\n"
 "    gl_Position = vp * vec4(inVertex, 1);\n"
-"    gl_PointSize = pointSize;\n"
+"    gl_PointSize = pointSize * inVertex.z;\n"
 "    vColor = inColor * fade;\n"
 "    // Rotation matrix to rotate a point sprite (sin and cos delivered as normals)\n"
 "    rotationMatrix = mat2(inNormal.x, inNormal.y, -inNormal.y, inNormal.x);\n"
