@@ -82,7 +82,6 @@ void Car::setProperties(Description & desc)
     setLayer(Layers::Cars);
 
     setMass(desc.mass);
-    setMomentOfInertia(desc.momentOfInertia);
     setMaximumVelocity(desc.maxLinearVelocity);
     setMaximumAngularVelocity(desc.maxAngularVelocity);
     setRestitution(desc.restitution);

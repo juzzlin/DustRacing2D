@@ -50,7 +50,6 @@ public:
         , turningImpulse(0.28)
         , power(5000.0)
         , mass(1000.0)
-        , momentOfInertia(mass * 10.0)
         , restitution(0.05)
         , dragLinear(1.0)
         , dragQuadratic(5.0)
@@ -75,7 +74,6 @@ public:
         float turningImpulse;
         float power;
         float mass;
-        float momentOfInertia;
         float restitution;
         float dragLinear;
         float dragQuadratic;
