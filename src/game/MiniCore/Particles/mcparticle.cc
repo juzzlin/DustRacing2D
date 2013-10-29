@@ -137,9 +137,9 @@ void MCParticle::timeOut()
 
 void MCParticle::render(MCCamera * camera)
 {
-    if (animationStyle() == MCParticle::Shrink)
+    if (animationStyle() != MCParticle::None)
     {
-        const MCFloat d = m_scale * m_radius * 2;
+        const MCFloat d = radius() * 2;
         shape()->renderScaled(d, d, camera);
     }
     else
@@ -150,9 +150,9 @@ void MCParticle::render(MCCamera * camera)
 
 void MCParticle::renderShadow(MCCamera * camera)
 {
-    if (animationStyle() == MCParticle::Shrink)
+    if (animationStyle() != MCParticle::None)
     {
-        const MCFloat d = m_scale * m_radius * 2;
+        const MCFloat d = radius() * 2;
         shape()->renderShadowScaled(d, d, camera);
     }
     else
