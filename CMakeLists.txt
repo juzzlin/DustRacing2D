@@ -101,4 +101,4 @@ enable_testing()
 resolve_install_paths()
 
 add_subdirectory(src/editor)
-#add_subdirectory(src/game)
+add_subdirectory(src/game)
