@@ -77,8 +77,11 @@ public:
     //! Update physics and objects by the given time step.
     void updateFrame(InputHandler & handler, float timeStep);
 
-    //! Update animations.
+    //! Update/trigger animations.
     void updateAnimations();
+
+    //! Update HUD overlays.
+    void updateOverlays();
 
     //! Set the active race track.
     void setActiveTrack(Track & activeTrack);

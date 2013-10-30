@@ -342,14 +342,11 @@ void Game::exitGame()
 
 void Game::updateFrame()
 {
-    updateAnimations();
     m_stateMachine->update();
-    m_scene->updateFrame(*m_inputHandler, m_timeStep);
-}
 
-void Game::updateAnimations()
-{
+    m_scene->updateFrame(*m_inputHandler, m_timeStep);
     m_scene->updateAnimations();
+    m_scene->updateOverlays();
 }
 
 void Game::renderFrame()

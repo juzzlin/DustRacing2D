@@ -313,7 +313,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
     }
 }
 
-void Scene::updateAnimations()
+void Scene::updateOverlays()
 {
     if (m_game.hasTwoHumanPlayers())
     {
@@ -323,7 +323,10 @@ void Scene::updateAnimations()
     m_timingOverlay[0].update();
 
     m_messageOverlay->update();
+}
 
+void Scene::updateAnimations()
+{
     for (CarPtr car : m_cars)
     {
         car->update();
