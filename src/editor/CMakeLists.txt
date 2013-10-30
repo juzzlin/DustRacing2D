@@ -58,7 +58,7 @@ if(MINGW)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o
         COMMAND
-            windres.exe
+            ${CMAKE_RC_COMPILER}
             -I${CMAKE_SOURCE_DIR} -i${CMAKE_SOURCE_DIR}/data/icons/WindowsEditor.rc
             -o ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
     set(SRC ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/windowsrc.o)
