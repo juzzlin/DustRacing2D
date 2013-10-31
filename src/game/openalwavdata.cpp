@@ -16,6 +16,7 @@
 #include "openalwavdata.hpp"
 #include <MCException>
 
+#include <cstdio>
 #include <AL/alc.h>
 
 static bool checkError()
@@ -68,7 +69,7 @@ static bool loadWavFile(
             throw MCException(filename);
 
         // Read in the first chunk into the struct
-        size_t bytesRead = fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
+        size_t bytesRead = std::fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
         (void)(bytesRead); // Suppress warnings about ignored return value of fread.
 
         //check for RIFF and WAVE tag in memeory
@@ -83,7 +84,7 @@ static bool loadWavFile(
             throw MCException("Invalid RIFF or WAVE Header");
 
         //Read in the 2nd chunk for the wave info
-        bytesRead = fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
+        bytesRead = std::fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
         //check for fmt tag in memory
         if (wave_format.subChunkID[0] != 'f' ||
                 wave_format.subChunkID[1] != 'm' ||
@@ -93,10 +94,10 @@ static bool loadWavFile(
 
         //check for extra parameters;
         if (wave_format.subChunkSize > 16)
-            fseek(soundFile, sizeof(int16_t), SEEK_CUR);
+            std::fseek(soundFile, sizeof(int16_t), SEEK_CUR);
 
         //Read in the the last byte of data before the sound file
-        bytesRead = fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
+        bytesRead = std::fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
         //check for data tag in memory
         if (wave_data.subChunkID[0] != 'd' ||
                 wave_data.subChunkID[1] != 'a' ||
@@ -108,7 +109,7 @@ static bool loadWavFile(
         data = new unsigned char[wave_data.subChunk2Size];
 
         // Read in the sound data into the soundData variable
-        if (!fread(data, wave_data.subChunk2Size, 1, soundFile))
+        if (!std::fread(data, wave_data.subChunk2Size, 1, soundFile))
             throw MCException("error loading WAVE data into struct!");
 
         //Now we set the variables that we passed in with the
@@ -141,7 +142,7 @@ static bool loadWavFile(
         return true;
     } catch(std::string error) {
         //clean up memory if wave loading fails
-        fclose(soundFile);
+        std::fclose(soundFile);
         //return false to indicate the failure to load wave
         return false;
     }

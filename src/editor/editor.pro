@@ -4,7 +4,7 @@ TEMPLATE = app
 TARGET   = dustrac-editor
 
 DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.0\\\"
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=gnu++11
 
 QT += widgets xml
 DEFINES += USE_QT5

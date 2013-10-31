@@ -4,11 +4,15 @@ TEMPLATE = app
 TARGET   = dustrac-game
 
 DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.0\\\"
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=gnu++11
 
 QT += opengl widgets xml
 DEFINES += USE_QT5
 DEFINES += GLEW_STATIC GLEW_NO_GLU
+
+# Sound libraries
+CONFIG += link_pkgconfig
+PKGCONFIG += openal vorbisfile
 
 INCLUDEPATH += . \
     MiniCore/Core \
@@ -18,6 +22,7 @@ INCLUDEPATH += . \
     MiniCore/Asset \
     MiniCore/Particles \
     MTFH \
+    STFH \
 
 # Input
 HEADERS += \
@@ -30,8 +35,10 @@ HEADERS += \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
     ai.hpp \
+    audiothread.hpp \
     car.hpp \
     carparticleeffectmanager.hpp \
+    carsoundeffectmanager.hpp \
     carstatusview.hpp \
     checkeredflag.hpp \
     confirmationmenu.hpp \
@@ -50,6 +57,11 @@ HEADERS += \
     map.hpp \
     messageoverlay.hpp \
     offtrackdetector.hpp \
+    openaldata.hpp \
+    openaldevice.hpp \
+    openaloggdata.hpp \
+    openalsource.hpp \
+    openalwavdata.hpp \
     overlaybase.hpp \
     particlefactory.hpp \
     race.hpp \
@@ -161,6 +173,11 @@ HEADERS += \
     MiniCore/Text/mctexturefontmanager.hh \
     MiniCore/Text/mctextureglyph.hh \
     MiniCore/Text/mctexturetext.hh \
+    STFH/data.hpp \
+    STFH/device.hpp \
+    STFH/listener.hpp \
+    STFH/location.hpp \
+    STFH/source.hpp \
 
 SOURCES += \
     ../common/config.cpp \
@@ -172,8 +189,10 @@ SOURCES += \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
     ai.cpp \
+    audiothread.cpp \
     car.cpp \
     carparticleeffectmanager.cpp \
+    carsoundeffectmanager.cpp \
     carstatusview.cpp \
     checkeredflag.cpp \
     confirmationmenu.cpp \
@@ -191,6 +210,11 @@ SOURCES += \
     map.cpp \
     messageoverlay.cpp \
     offtrackdetector.cpp \
+    openaldata.cpp \
+    openaldevice.cpp \
+    openaloggdata.cpp \
+    openalsource.cpp \
+    openalwavdata.cpp \
     overlaybase.cpp \
     particlefactory.cpp \
     race.cpp \
@@ -277,7 +301,12 @@ SOURCES += \
     MiniCore/Text/mctexturefontmanager.cc \
     MiniCore/Text/mctextureglyph.cc \
     MiniCore/Text/mctexturetext.cc \
-    MiniCore/Graphics/glew/glew.c \
+    MiniCore/Graphics/contrib/glew/glew.c \
+    STFH/data.cpp \
+    STFH/device.cpp \
+    STFH/listener.cpp \
+    STFH/location.cpp \
+    STFH/source.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 TRANSLATIONS += translations/dustrac-game_fi.ts
