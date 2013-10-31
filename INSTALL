@@ -20,13 +20,12 @@ Toolchains
 
 GCC/MinGW is the only "officially" supported toolchain.
 
-Building with Microsoft Visual C++ might not work, because it has an incomplete
-support for the C++11 standard. Should be possible with minor code tweaks, though.
+Building with Microsoft Visual C++ or Clang is not tested.
 
 Build dependencies
 ==================
 
-Currently the build depends on Qt, OpenGL, OpenAL and Vorbis.
+Currently the build depends on Qt, libopenal and libvorbisfile.
 
 Qt5 can be enabled by passing -DUseQt5=1 to cmake or to the configure script.
 
