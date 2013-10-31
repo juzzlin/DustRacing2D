@@ -3,13 +3,22 @@ Build & install instructions
 
 These are build & install instructions for Dust Racing 2D.
 
+Build systems
+=============
+
+The "official" build system for Linux is CMake.
+
+There are also qmake project files for easier cross-compilation for Windows and Android.
+Qmake project files requires Qt5 at the moment, but CMake can build for Qt4 and Qt5.
+
+I used to make Windows releases also with CMake, but in the future I'll cross-compile for Windows
+on Ubuntu host by using MXE and qmake. MXE is a cool cross-compilation environment and all
+libraries are linked statically by default (no DLLs needed).
+
 Build dependencies
-------------------
+==================
 
-Dustrac currently uses CMake as the build system for Windows and Linux builds.
-CPack is used to generate generic binary packages.
-
-Currently the build depends on Qt4/Qt5 only.
+Currently the build depends on Qt only.
 
 Both Qt4 and Qt5 are supported, and Qt4 is used by default.
 
@@ -23,9 +32,10 @@ NOTE!!: Building with Microsoft Visual C++ might not work, because it has an inc
         support for the C++11 standard. Should be possible with minor code tweaks, though.
 
 Building in the command line on Linux (tested on Ubuntu 12.04)
---------------------------------------------------------------
+==============================================================
 
 Development build (the game can be run without installing anything):
+-------------------------------------------------------------------
 
 1) Install Qt4 development files (libqt4-dev on Ubuntu).
 2) Install CMake.
@@ -52,6 +62,7 @@ Run the editor:
 $ ./dustrac-editor
 
 Release build (in this example game installs under /usr):
+--------------------------------------------------------
 
 $ ./configure -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
 
@@ -69,29 +80,16 @@ $ sudo make install
 This install also the desktop files so Dust Racing
 should appear in your application menu.
 
-Building by using QtCreator on Windows (tested on Windows 7)
-------------------------------------------------------------
+Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 13.10)
+======================================================================
 
-1) Download and install CMake.
-2) Download and install Qt SDK.
-3) Start QtCreator and open the top-level CMakeLists.txt from the
-   Dust Racing source directory.
-4) Run CMake, configure desired Kits and build.
-
-If you encounter problems, first try to build one of the Qt example projects
-to ensure the toolchains are properly set up.
-
-Building by using QtCreator on Linux (tested on Ubuntu 12.04, 12.10 and 13.04)
-------------------------------------------------------------------------------
-
-Download the complete Qt SDK, like on Windows, or:
-
-1) Install QtCreator and CMake from the package repository.
-2) Start QtCreator and open the top-level CMakeLists.txt from the Dust Racing source directory.
-3) Run CMake and build.
+1) Install MXE (http://mxe.cc)
+2) Install Qt5 with MXE
+3) Run <Your MXE installation dir>/usr/i686-pc-mingw32/qt5/bin/qmake dustrac.pro
+4) make
 
 CPack
------
+=====
 
 Dust Racing 2D has a support for CPack. It's not complete, but can be used to generate
 some generic binary packages.
@@ -100,10 +98,10 @@ After a successful build run CPack:
 
 $ cpack
 
-This will generate .tar.gz and .sh binary packages on Linux and .zip on Windows.
+This will generate .tar.gz and .sh binary packages on Linux.
 
 For packagers
--------------
+=============
 
 The binaries only need to find the data dir that includes
 all the runtime data. This can be set in the main CMakeLists.txt
