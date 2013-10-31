@@ -99,24 +99,18 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_particleFactory(new ParticleFactory)
 , m_fadeAnimation(new FadeAnimation)
 {
-    QObject::connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
-    QObject::connect(
-        m_startlights, SIGNAL(animationEnded()), &m_stateMachine, SLOT(endStartlightAnimation()));
-    QObject::connect(
-        &m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
-    QObject::connect(
-        &m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
-    QObject::connect(
-        &m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
-    QObject::connect(
-        m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));
-    QObject::connect(
-        m_fadeAnimation, SIGNAL(fadeInFinished()), &m_stateMachine, SLOT(endFadeIn()));
-    QObject::connect(
-        m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
-    QObject::connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
-    QObject::connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
-    QObject::connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+    connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
+    connect(m_startlights, SIGNAL(animationEnded()), &m_stateMachine, SLOT(endStartlightAnimation()));
+    connect(&m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
+    connect(&m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
+    connect(&m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
+    connect(m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));
+    connect(m_fadeAnimation, SIGNAL(fadeInFinished()), &m_stateMachine, SLOT(endFadeIn()));
+    connect(m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
+    connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
+    connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+    connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+    connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioThread(), SLOT(setListenerLocation(float, float)));
 
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
@@ -263,7 +257,7 @@ void Scene::createMenus()
     m_menuManager = new MTFH::MenuManager;
 
     m_mainMenu = new MainMenu("main", width(), height());
-    QObject::connect(
+    connect(
         static_cast<MainMenu *>(m_mainMenu), SIGNAL(exitGameRequested()), &m_game, SLOT(exitGame()));
     m_menuManager->addMenu(*m_mainMenu);
 
@@ -349,7 +343,7 @@ void Scene::updateRace()
     // Update race situation
     m_race.update();
 
-    m_game.audioThread().setListenerLocation(m_cars[0]->location().i(), m_cars[0]->location().j());
+    emit listenerLocationChanged(m_cars[0]->location().i(), m_cars[0]->location().j());
 }
 
 void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object)

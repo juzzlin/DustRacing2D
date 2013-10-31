@@ -20,8 +20,8 @@
 #include "race.hpp"
 #include "timingoverlay.hpp"
 
+#include <QObject>
 #include <MCCamera>
-
 #include <memory>
 #include <vector>
 
@@ -51,8 +51,10 @@ class MenuManager;
 }
 
 //! The game scene.
-class Scene
+class Scene : public QObject
 {
+    Q_OBJECT
+
 public:
 
     static const int NUM_CARS = 12;
@@ -97,6 +99,10 @@ public:
 
     //! Render all components.
     void render();
+
+signals:
+
+    void listenerLocationChanged(float x, float y);
 
 private:
 

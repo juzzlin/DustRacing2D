@@ -111,6 +111,7 @@ else()
         game.hpp
         race.hpp
         renderer.hpp
+        scene.hpp
         statemachine.hpp
         startlights.hpp
         timing.hpp)
