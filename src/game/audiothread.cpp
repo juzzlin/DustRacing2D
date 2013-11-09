@@ -43,8 +43,8 @@ void AudioThread::init()
 
 void AudioThread::loadSounds()
 {
-    loadSound("menuClick", "146721__fins__menu-click.ogg");
-    loadEngineSounds("147242__qubodup__car-engine-loop.ogg");
+    loadSound("menuClick", "menuClick.ogg");
+    loadEngineSounds("carEngine.ogg");
 }
 
 void AudioThread::loadSound(QString handle, QString path)
