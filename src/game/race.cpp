@@ -220,6 +220,17 @@ void Race::start()
     }
 }
 
+void Race::stopEngineSounds()
+{
+    for(Car * car : m_cars)
+    {
+        if (car->soundEffectManager())
+        {
+            car->soundEffectManager()->stopEngineSound();
+        }
+    }
+}
+
 bool Race::started()
 {
     return m_started;

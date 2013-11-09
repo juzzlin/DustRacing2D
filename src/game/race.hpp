@@ -81,6 +81,8 @@ public slots:
 
     void start();
 
+    void stopEngineSounds();
+
     void update();
 
 private:

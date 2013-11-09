@@ -101,14 +101,19 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 {
     connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
     connect(m_startlights, SIGNAL(animationEnded()), &m_stateMachine, SLOT(endStartlightAnimation()));
+
     connect(&m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
     connect(&m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
     connect(&m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
+    connect(&m_stateMachine, SIGNAL(soundsStopped()), &m_race, SLOT(stopEngineSounds()));
+
     connect(m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));
     connect(m_fadeAnimation, SIGNAL(fadeInFinished()), &m_stateMachine, SLOT(endFadeIn()));
     connect(m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
+
     connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
     connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+
     connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
     connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioThread(), SLOT(setListenerLocation(float, float)));
 
@@ -217,6 +222,8 @@ void Scene::createCars()
             CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(*car, sample.str().c_str()));
             sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
                 &m_game.audioThread(), SLOT(playSound(QString, bool)));
+            sfx->connect(sfx.get(), SIGNAL(stopRequested(QString)),
+                &m_game.audioThread(), SLOT(stopSound(QString)));
             sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
                 &m_game.audioThread(), SLOT(setPitch(QString, float)));
             sfx->connect(sfx.get(), SIGNAL(locationChanged(QString, float, float)),

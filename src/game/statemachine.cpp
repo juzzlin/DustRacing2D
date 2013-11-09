@@ -136,6 +136,7 @@ void StateMachine::stateMenu()
 void StateMachine::stateMenuTransitionIn()
 {
     emit fadeInRequested(0, 2000, 0);
+    emit soundsStopped();
 }
 
 void StateMachine::stateMenuTransitionOut()

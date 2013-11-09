@@ -34,6 +34,7 @@ void CarSoundEffectManager::startEngineSound()
 
 void CarSoundEffectManager::stopEngineSound()
 {
+    emit stopRequested(m_engineSoundHandle);
 }
 
 void CarSoundEffectManager::update()
