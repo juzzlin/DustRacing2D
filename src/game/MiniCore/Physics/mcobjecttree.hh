@@ -43,12 +43,7 @@ public:
     //! Container for objects.
     struct GridCell
     {
-        GridCell()
-        : m_dirty(true) // Cell is dirty if its object configuration has changed
-        {}
-
         ObjectSet m_objects;
-        bool      m_dirty;
     };
 
     //! Constructor.
@@ -101,6 +96,9 @@ private:
     MCFloat m_helpHor;
     MCFloat m_helpVer;
     MCObjectTree::GridCell * m_matrix;
+
+    typedef std::set<GridCell *> DirtyCellCache;
+    DirtyCellCache m_dirtyCellCache;
 };
 
 #endif // MCOBJECTTREE_HH

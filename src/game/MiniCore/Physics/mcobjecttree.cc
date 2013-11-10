@@ -73,8 +73,9 @@ void MCObjectTree::insert(MCObject & object)
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
-            m_matrix[index].m_objects.insert(&object);
-            m_matrix[index].m_dirty = true;
+            GridCell & cell = m_matrix[index];
+            cell.m_objects.insert(&object);
+            m_dirtyCellCache.insert(&cell);
         }
     }
 }
@@ -89,13 +90,18 @@ bool MCObjectTree::remove(MCObject & object)
         for (MCUint i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
-            const auto iter(m_matrix[index].m_objects.find(&object));
-            const auto end(m_matrix[index].m_objects.end());
+            GridCell & cell = m_matrix[index];
+            const auto iter(cell.m_objects.find(&object));
+            const auto end(cell.m_objects.end());
             if (iter != end)
             {
-                m_matrix[index].m_objects.erase(iter);
-                m_matrix[index].m_dirty = true;
+                cell.m_objects.erase(iter);
                 removed = true;
+
+                if (!cell.m_objects.size())
+                {
+                    m_dirtyCellCache.erase(&cell);
+                }
             }
         }
     }
@@ -110,9 +116,10 @@ void MCObjectTree::removeAll()
         {
             const int index = j * m_horSize + i;
             m_matrix[index].m_objects.clear();
-            m_matrix[index].m_dirty = true;
         }
     }
+
+    m_dirtyCellCache.clear();
 }
 
 void MCObjectTree::build()
@@ -134,45 +141,46 @@ void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
     // Optimization: ignore collisions between sleeping objects.
     // Note that stationary objects are also sleeping objects.
 
-    const MCUint matrixSize = m_verSize * m_horSize;
-    for (MCUint i = 0; i < matrixSize; i++)
+    auto cellIter = m_dirtyCellCache.begin();
+    while (cellIter != m_dirtyCellCache.end())
     {
-        if (m_matrix[i].m_dirty)
-        {
-            bool hadCollisions = false;
-            const MCObjectTree::ObjectSet & objects = m_matrix[i].m_objects;
+        bool hadCollisions = false;
+        const MCObjectTree::ObjectSet & objects = (*cellIter)->m_objects;
 
-            auto outer(objects.begin());
-            const auto end(objects.end());
-            while (outer != end)
+        auto outer(objects.begin());
+        const auto end(objects.end());
+        while (outer != end)
+        {
+            MCObject * obj1 = *outer;
+            auto inner = objects.begin();
+            while (inner != end)
             {
-                MCObject * obj1 = *outer;
-                auto inner = objects.begin();
-                while (inner != end)
+                MCObject * obj2 = *inner;
+                if (obj1 != obj2)
                 {
-                    MCObject * obj2 = *inner;
-                    if (obj1 != obj2)
+                    if (!obj1->sleeping() || !obj2->sleeping())
                     {
-                        if (!obj1->sleeping() || !obj2->sleeping())
+                        if (obj1->bbox().intersects(obj2->bbox()))
                         {
-                            if (obj1->bbox().intersects(obj2->bbox()))
-                            {
-                                result[obj1].insert(obj2);
-                                hadCollisions = true;
-                            }
+                            result[obj1].insert(obj2);
+                            hadCollisions = true;
                         }
                     }
-
-                    inner++;
                 }
 
-                outer++;
+                inner++;
             }
 
-            if (!hadCollisions)
-            {
-                m_matrix[i].m_dirty = false;
-            }
+            outer++;
+        }
+
+        if (!hadCollisions)
+        {
+            cellIter = m_dirtyCellCache.erase(cellIter);
+        }
+        else
+        {
+            cellIter++;
         }
     }
 }
