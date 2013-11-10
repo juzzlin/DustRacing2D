@@ -29,7 +29,7 @@
 #include <set>
 #include <vector>
 
-/*! A geometrically structured MCObjectTree used for fast collision detection.
+/*! A tree (actually a grid) used for fast collision detection.
  *  The tree stores objects inherited from MCObject -class.
  *  A (2d) collision test for a given object can be requested against all
  *  objects of a given typeid. */
@@ -46,9 +46,9 @@ public:
         ObjectSet m_objects;
     };
 
-    //! Constructor.
-    //! \param x1,y1,x2,y2 represent the size of the first-level bounding box.
-    //! \param leafMaxW,leafMaxH are the maximum dimensions for leaves.
+    /*! Constructor.
+     *  \param x1,y1,x2,y2 represent the size of the first-level bounding box.
+     *  \param leafMaxW,leafMaxH are the maximum dimensions for leaves. */
     MCObjectTree(
         MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
         MCUint leafMaxW, MCUint leafMaxH);
@@ -56,13 +56,13 @@ public:
     //! Destructor.
     ~MCObjectTree();
 
-    //! Insert an object into the tree (O(1)).
-    //! \param object is the object to be inserted.
+    /*! Insert an object into the tree (O(1)).
+     *  \param object is the object to be inserted. */
     void insert(MCObject & object);
 
-    //! Remove an object from the tree (O(1)).
-    //! \param object is the object to be removed.
-    //! \return true if was removed.
+    /*! Remove an object from the tree (O(1)).
+     *  \param object is the object to be removed.
+     *  \return true if was removed. */
     bool remove(MCObject & object);
 
     //! Remove all objects.
