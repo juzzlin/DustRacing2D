@@ -215,11 +215,11 @@ void Car::accelerate(bool deccelerate)
     else
     {
         addForce(direction * effForce);
+        m_accelerating = true;
+        m_reverse = false;
     }
 
-    m_accelerating = true;
-    m_braking      = false;
-    m_reverse      = false;
+    m_braking = false;
 }
 
 void Car::brake()
