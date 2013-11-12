@@ -11,6 +11,10 @@ Graphics:
 Level design:
 * Jussi Lind
 
+Translations:
+* Paolo Straffi (it)
+* Jussi Lind (fi)
+
 Patches:
 * Antti Kervinen
 * Markus Rinne
@@ -18,3 +22,4 @@ Patches:
 Special Thanks:
 * Tommi Martela
 * Alex Rietveld
+* Matthias Mailänder
