@@ -26,7 +26,6 @@ class Objects
 {
 public:
 
-    typedef std::shared_ptr<ObjectBase> ObjectPtr;
     typedef std::vector<ObjectPtr> ObjectVector;
 
     //! Constructor.

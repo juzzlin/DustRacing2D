@@ -21,6 +21,10 @@ ObjectBase::ObjectBase(QString category, QString role)
 {
 }
 
+ObjectBase::~ObjectBase()
+{
+}
+
 QPointF ObjectBase::location() const
 {
     return m_location;

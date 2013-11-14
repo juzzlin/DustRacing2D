@@ -19,6 +19,8 @@
 #include <QString>
 #include <QPointF>
 
+#include <memory>
+
 //! Base class for freely placeable objects in the editor.
 class ObjectBase
 {
@@ -26,6 +28,9 @@ public:
 
     //! Constructor.
     ObjectBase(QString category, QString role);
+
+    //! Destructor.
+    virtual ~ObjectBase();
 
     //! Get location in world / scene.
     virtual QPointF location() const;
@@ -50,5 +55,7 @@ private:
     //! Coordinates in the world.
     QPointF m_location;
 };
+
+typedef std::shared_ptr<ObjectBase> ObjectPtr;
 
 #endif // OBJECTBASE_HPP

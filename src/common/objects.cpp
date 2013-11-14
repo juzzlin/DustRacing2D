@@ -32,10 +32,13 @@ void Objects::add(ObjectPtr object)
 
 void Objects::remove(ObjectBase & object)
 {
-    auto i = std::find(m_objects.begin(), m_objects.end(), ObjectPtr(&object));
-    if (i != m_objects.end())
+    for (auto i = m_objects.begin(); i != m_objects.end(); i++)
     {
-        m_objects.erase(i);
+        if ((*i).get() == &object)
+        {
+            m_objects.erase(i);
+            return;
+        }
     }
 }
 

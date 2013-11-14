@@ -161,7 +161,7 @@ void TrackIO::readObject(TrackData & newData, const QDomElement & element)
     Object & object = ObjectFactory::createObject(role);
     object.setLocation(QPointF(x, y));
     object.setRotation(o);
-    newData.objects().add(std::shared_ptr<Object>(&object));
+    newData.objects().add(ObjectPtr(&object));
 }
 
 void TrackIO::readTargetNode(
