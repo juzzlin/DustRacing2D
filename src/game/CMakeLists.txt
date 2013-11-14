@@ -34,6 +34,7 @@ endforeach()
 set(SRC
     ai.cpp
     audiothread.cpp
+    audiosource.cpp
     car.cpp
     carparticleeffectmanager.cpp
     carsoundeffectmanager.cpp
@@ -54,6 +55,7 @@ set(SRC
     map.cpp
     messageoverlay.cpp
     particlefactory.cpp
+    pit.cpp
     offtrackdetector.cpp
     openaldata.cpp
     openaldevice.cpp
@@ -103,12 +105,14 @@ if (UseQt5)
 else()
     set(MOC_HDRS
         audiothread.hpp
+        audiosource.hpp
         carsoundeffectmanager.hpp
         eventhandler.hpp
         fadeanimation.hpp
         mainmenu.hpp
         messageoverlay.hpp
         game.hpp
+        pit.hpp
         race.hpp
         renderer.hpp
         scene.hpp

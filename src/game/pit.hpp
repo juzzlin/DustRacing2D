@@ -13,48 +13,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CARSOUNDEFFECTMANAGER_HPP
-#define CARSOUNDEFFECTMANAGER_HPP
+#ifndef PIT_HPP
+#define PIT_HPP
 
-#include <QString>
-#include <memory>
-#include <Location>
-#include <MCVector3d>
-#include "audiosource.hpp"
+#include <MCObject>
+#include <QObject>
 
+#include <map>
+
+class MCCollisionEvent;
+class MCSurface;
 class Car;
 
-/*! Manages sound effects, like the engine sound. These are connected
- *  to the AudioThread via Qt signals. */
-class CarSoundEffectManager : public AudioSource
+//! The pit object.
+class Pit : public QObject, public MCObject
 {
     Q_OBJECT
 
 public:
 
     //! Constructor.
-    CarSoundEffectManager(Car & car, QString engineSoundHandle);
+    Pit(MCSurface & surface);
 
-    //! Destructor.
-    virtual ~CarSoundEffectManager();
+    //! \reimp
+    virtual void collisionEvent(MCCollisionEvent & event);
 
-    void update();
+    //! \reimp
+    virtual void stepTime(MCFloat step);
 
-public slots:
+signals:
 
-    void startEngineSound();
-
-    void stopEngineSound();
+    void pitStop(Car & car);
 
 private:
 
-    Car & m_car;
-    QString m_engineSoundHandle;
-    int m_gear;
-    int m_prevSpeed;
-    MCVector3dF m_prevLocation;
+    std::map<Car *, int> m_pittingCars;
+    int                  m_tag;
 };
 
-typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;
-
-#endif // CARSOUNDEFFECTMANAGER_HPP
+#endif // PIT_HPP

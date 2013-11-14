@@ -30,6 +30,7 @@
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
 #include "particlefactory.hpp"
+#include "pit.hpp"
 #include "race.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -117,6 +118,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
     connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioThread(), SLOT(setListenerLocation(float, float)));
 
+    m_game.audioThread().connectAudioSource(m_race);
+
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
 
@@ -162,14 +165,7 @@ void Scene::setupAudio(Car & car, int index)
     std::stringstream sample;
     sample << "carEngine" << index;
     CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, sample.str().c_str()));
-    sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
-        &m_game.audioThread(), SLOT(playSound(QString, bool)));
-    sfx->connect(sfx.get(), SIGNAL(stopRequested(QString)),
-        &m_game.audioThread(), SLOT(stopSound(QString)));
-    sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
-        &m_game.audioThread(), SLOT(setPitch(QString, float)));
-    sfx->connect(sfx.get(), SIGNAL(locationChanged(QString, float, float)),
-        &m_game.audioThread(), SLOT(setLocation(QString, float, float)));
+    m_game.audioThread().connectAudioSource(*sfx);
     car.setSoundEffectManager(sfx);
 }
 
@@ -543,6 +539,10 @@ void Scene::addTrackObjectsToWorld()
         if (TreeView * treeView = dynamic_cast<TreeView *>(mcObject.shape()->view().get()))
         {
             m_treeViews.push_back(treeView);
+        }
+        else if (Pit * pit = dynamic_cast<Pit *>(&mcObject))
+        {
+            connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
         }
     }
 }

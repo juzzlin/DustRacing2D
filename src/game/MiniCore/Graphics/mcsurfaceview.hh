@@ -35,12 +35,10 @@ public:
 
     /*! Constructor.
      * \param typeId See MCShapeView::MCShapeView().
-     * \param surface Surface to be used. Ownership of surface is not changed.
-     * \param batchMode Render similar views in batches. */
+     * \param surface Surface to be used. Ownership of surface is not changed. */
     explicit MCSurfaceView(
         const std::string & viewID,
-        MCSurface * surface = nullptr,
-        bool batchMode = false);
+        MCSurface * surface = nullptr);
 
     //! Destructor
     virtual ~MCSurfaceView();
@@ -89,13 +87,7 @@ public:
     virtual void beginBatch();
 
     //! \reimp
-    virtual void endBatch();
-
-    //! \reimp
     virtual void beginShadowBatch();
-
-    //! \reimp
-    virtual void endShadowBatch();
 
 private:
 
@@ -103,7 +95,6 @@ private:
     DISABLE_ASSI(MCSurfaceView);
 
     MCSurface * m_surface;
-    bool m_batchMode;
 };
 
 #endif // MCSURFACEVIEW_HH

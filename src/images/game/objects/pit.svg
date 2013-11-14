@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2986"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="pit.svg"
+   inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/pit.png"
+   inkscape:export-xdpi="31.32"
+   inkscape:export-ydpi="31.32">
+  <defs
+     id="defs2988" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="361.61755"
+     inkscape:cy="400.70535"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-global="true"
+     inkscape:window-width="1304"
+     inkscape:window-height="924"
+     inkscape:window-x="239"
+     inkscape:window-y="70"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2994" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2991">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path2998-3"
+       style="opacity:0.5020576;fill:none;stroke:#ffff00;stroke-width:3.34614015;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 458.14915,610.05277 -169.67359,0.36955 c 0,0 -41.41712,-1.98733 -41.52604,45.29778 l 250.99541,-0.36954 m 0.1107,0 c -0.1107,-48.53335 -41.52604,-45.29779 -41.52604,-45.29779"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/pit.png"
+       inkscape:export-xdpi="31.32"
+       inkscape:export-ydpi="31.32" />
+    <text
+       xml:space="preserve"
+       style="font-size:13.38456059px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.51028807;fill:#ffff00;fill-opacity:1;stroke:#ffff00;stroke-width:0.33461401;stroke-opacity:1;font-family:Sans"
+       x="-270.48587"
+       y="-661.29926"
+       id="text3834"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/pit.png"
+       inkscape:export-xdpi="31.32"
+       inkscape:export-ydpi="31.32"
+       transform="scale(-1.0341777,-0.96695184)"><tspan
+         sodipodi:role="line"
+         id="tspan3836"
+         x="-270.48587"
+         y="-661.29926"
+         style="stroke-width:0.33461401">PIT</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:13.38456059px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.51028807;fill:#ffff00;fill-opacity:1;stroke:#ffff00;stroke-width:0.33461401;stroke-opacity:1;font-family:Sans"
+       x="449.70044"
+       y="671.05664"
+       id="text3834-8"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/pit.png"
+       inkscape:export-xdpi="31.32"
+       inkscape:export-ydpi="31.32"
+       transform="scale(1.0341777,0.96695184)"><tspan
+         sodipodi:role="line"
+         id="tspan3836-6"
+         x="449.70044"
+         y="671.05664"
+         style="stroke-width:0.33461401">PIT</tspan></text>
+  </g>
+</svg>

@@ -13,48 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CARSOUNDEFFECTMANAGER_HPP
-#define CARSOUNDEFFECTMANAGER_HPP
+#ifndef AUDIOSOURCE_HPP
+#define AUDIOSOURCE_HPP
 
-#include <QString>
-#include <memory>
-#include <Location>
-#include <MCVector3d>
-#include "audiosource.hpp"
+#include <QObject>
 
-class Car;
+#include "audiothread.hpp"
 
-/*! Manages sound effects, like the engine sound. These are connected
- *  to the AudioThread via Qt signals. */
-class CarSoundEffectManager : public AudioSource
+//! Class that defines a set of signals used to play sounds.
+class AudioSource : public QObject
 {
     Q_OBJECT
 
 public:
 
     //! Constructor.
-    CarSoundEffectManager(Car & car, QString engineSoundHandle);
+    AudioSource();
 
     //! Destructor.
-    virtual ~CarSoundEffectManager();
+    virtual ~AudioSource();
 
-    void update();
+signals:
 
-public slots:
+    void playRequested(QString handle, bool loop);
 
-    void startEngineSound();
+    void stopRequested(QString handle);
 
-    void stopEngineSound();
+    void pitchChangeRequested(QString handle, float pitch);
 
-private:
+    void volumeChangeRequested(QString handle, float pitch);
 
-    Car & m_car;
-    QString m_engineSoundHandle;
-    int m_gear;
-    int m_prevSpeed;
-    MCVector3dF m_prevLocation;
+    void locationChanged(QString handle, float x, float y);
 };
 
-typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;
-
-#endif // CARSOUNDEFFECTMANAGER_HPP
+#endif // AUDIOSOURCE_HPP

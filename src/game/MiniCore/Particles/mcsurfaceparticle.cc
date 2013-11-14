@@ -25,8 +25,9 @@
 MCSurfaceParticle::MCSurfaceParticle(const std::string & viewId)
 : MCParticle(viewId)
 {
-    shape()->setView(std::shared_ptr<MCShapeView>(new MCSurfaceView(viewId, nullptr, true)));
+    shape()->setView(std::shared_ptr<MCShapeView>(new MCSurfaceView(viewId, nullptr)));
     shape()->view()->setHasShadow(false);
+    shape()->view()->setBatchMode(true);
 }
 
 void MCSurfaceParticle::beginBatch()

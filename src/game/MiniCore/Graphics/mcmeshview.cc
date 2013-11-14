@@ -26,11 +26,9 @@
 
 MCMeshView::MCMeshView(
     const std::string & viewId,
-    MCMesh * mesh,
-    bool batchMode)
+    MCMesh * mesh)
 : MCShapeView(viewId)
 , m_mesh(mesh)
-, m_batchMode(batchMode)
 {}
 
 MCMeshView::~MCMeshView()
@@ -67,7 +65,7 @@ void MCMeshView::render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera *
     if (m_mesh)
     {
         m_mesh->setScale(1.0, 1.0, 1.0);
-        m_mesh->render(p, l, angle, !m_batchMode);
+        m_mesh->render(p, l, angle, !batchMode());
     }
 }
 
@@ -76,7 +74,7 @@ void MCMeshView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCa
     if (m_mesh)
     {
         m_mesh->setScale(1.0, 1.0, 1.0);
-        m_mesh->renderShadow(p, l, angle, !m_batchMode);
+        m_mesh->renderShadow(p, l, angle, !batchMode());
     }
 }
 
@@ -86,7 +84,7 @@ void MCMeshView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     if (m_mesh)
     {
         m_mesh->setScale(w, h);
-        m_mesh->render(p, l, angle, !m_batchMode);
+        m_mesh->render(p, l, angle, !batchMode());
     }
 }
 
@@ -96,32 +94,24 @@ void MCMeshView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     if (m_mesh)
     {
         m_mesh->setScale(w, h);
-        m_mesh->renderShadow(p, l, angle, !m_batchMode);
+        m_mesh->renderShadow(p, l, angle, !batchMode());
     }
 }
 
 void MCMeshView::beginBatch()
 {
-    if (m_batchMode && m_mesh)
+    if (batchMode() && m_mesh)
     {
         m_mesh->bind();
     }
 }
 
-void MCMeshView::endBatch()
-{
-}
-
 void MCMeshView::beginShadowBatch()
 {
-    if (m_batchMode && m_mesh)
+    if (batchMode() && m_mesh)
     {
         m_mesh->bindShadow();
     }
-}
-
-void MCMeshView::endShadowBatch()
-{
 }
 
 MCBBox<MCFloat> MCMeshView::bbox() const

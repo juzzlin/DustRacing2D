@@ -24,6 +24,8 @@
 #include "openaldevice.hpp"
 #include "openalsource.hpp"
 
+class AudioSource;
+
 class AudioThread : public QThread
 {
     Q_OBJECT
@@ -35,6 +37,10 @@ public:
     virtual ~AudioThread();
 
     virtual void run();
+
+    void connectAudioSource(AudioSource & source);
+
+    void disconnectAudioSource(AudioSource & source);
 
 public slots:
 

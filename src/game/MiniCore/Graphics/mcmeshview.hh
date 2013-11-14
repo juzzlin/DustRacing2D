@@ -32,10 +32,7 @@ public:
     /*! Constructor.
      * \param typeId See MCShapeView::MCShapeView().
      * \param mesh mesh to be used. Ownership of mesh is not changed. */
-    explicit MCMeshView(
-        const std::string & viewID,
-        MCMesh * mesh = nullptr,
-        bool batchMode = false);
+    explicit MCMeshView(const std::string & viewID, MCMesh * mesh = nullptr);
 
     //! Destructor
     virtual ~MCMeshView();
@@ -84,13 +81,7 @@ public:
     virtual void beginBatch();
 
     //! \reimp
-    virtual void endBatch();
-
-    //! \reimp
     virtual void beginShadowBatch();
-
-    //! \reimp
-    virtual void endShadowBatch();
 
 private:
 
@@ -98,7 +89,6 @@ private:
     DISABLE_ASSI(MCMeshView);
 
     MCMesh * m_mesh;
-    bool m_batchMode;
 };
 
 #endif // MCMESHVIEW_HH

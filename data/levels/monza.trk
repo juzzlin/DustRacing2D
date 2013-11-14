@@ -1,4 +1,4 @@
-<track version="1.4.1" cols="35" rows="19" index="3" name="Monza">
+<track version="1.4.6" cols="35" rows="19" index="3" name="Monza">
  <t i="0" j="0" o="180" t="sand"/>
  <t i="0" j="1" o="0" t="sand"/>
  <t i="0" j="2" o="0" t="sand"/>
@@ -1268,6 +1268,7 @@
  <o x="8243" y="2707" o="107" r="bushArea" c="free"/>
  <o x="8477" y="2679" o="232" r="bushArea" c="free"/>
  <o x="8433" y="2722" o="148" r="bushArea" c="free"/>
+ <o x="5517" y="3902" o="180" r="pit" c="free"/>
  <n w="256" x="5248" y="3972" h="256" i="0"/>
  <n w="256" x="3791" y="3999" h="256" i="1"/>
  <n w="256" x="3363" y="4044" h="512" i="2"/>

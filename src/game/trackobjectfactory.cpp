@@ -14,10 +14,12 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "trackobjectfactory.hpp"
+
+#include "layers.hpp"
+#include "pit.hpp"
+#include "renderer.hpp"
 #include "trackobject.hpp"
 #include "treeview.hpp"
-#include "renderer.hpp"
-#include "layers.hpp"
 
 #include <MCAssetManager>
 #include <MCLogger>
@@ -154,6 +156,18 @@ TrackObject * TrackObjectFactory::build(
         object = m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
         object->shape()->view()->setHasShadow(false);
+    }
+    else if (role == "pit")
+    {
+        object = MCObjectPtr(new Pit(MCAssetManager::surfaceManager().surface("pit")));
+        object->setInitialLocation(location);
+        object->setInitialAngle(angle);
+        object->setMass(1, true); // Stationary
+        object->setLayer(Layers::Ground, false);
+        object->setIsPhysicsObject(false);
+        object->setIsTriggerObject(true);
+        object->shape()->view()->setHasShadow(false);
+        object->shape()->view()->setBatchMode(true);
     }
     else if (role == "tire")
     {

@@ -48,6 +48,7 @@ public:
     , m_shaderProgram(nullptr)
     , m_shadowShaderProgram(nullptr)
     , m_hasShadow(true)
+    , m_batchMode(false)
     {}
 
     //! Destructor.
@@ -161,6 +162,18 @@ public:
         (void)p;
     }
 
+    //! Enable/disable batch mode. \see the methods below.
+    void setBatchMode(bool enable)
+    {
+        m_batchMode = enable;
+    }
+
+    //! \return batch mode.
+    bool batchMode() const
+    {
+        return m_batchMode;
+    }
+
     /*! Called for the first object in a batch of same kind
      *  of views when the render begins. E.g. VBOs can be
      *  set here to be shared between multiple views.
@@ -204,6 +217,7 @@ private:
     MCGLShaderProgram * m_shaderProgram;
     MCGLShaderProgram * m_shadowShaderProgram;
     bool m_hasShadow;
+    bool m_batchMode;
 };
 
 typedef std::shared_ptr<MCShapeView> MCShapeViewPtr;

@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "audiosource.hpp"
 #include "timing.hpp"
 
 class Car;
@@ -34,7 +35,7 @@ class Track;
 class TrackTile;
 
 //! Class that controls the race event, checkpoints and timing.
-class Race : public QObject
+class Race : public AudioSource
 {
     Q_OBJECT
 
@@ -88,6 +89,8 @@ public slots:
     void stopEngineSounds();
 
     void update();
+
+    void pitStop(Car & car);
 
 private:
 

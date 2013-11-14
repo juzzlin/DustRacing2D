@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "audiothread.hpp"
+#include "audiosource.hpp"
 #include "openalwavdata.hpp"
 #include "openaloggdata.hpp"
 
@@ -41,9 +42,35 @@ void AudioThread::init()
     alSpeedOfSound(1000.0);
 }
 
+void AudioThread::connectAudioSource(AudioSource & source)
+{
+    connect(&source, SIGNAL(playRequested(QString, bool)),
+        this, SLOT(playSound(QString, bool)));
+    connect(&source, SIGNAL(stopRequested(QString)),
+        this, SLOT(stopSound(QString)));
+    connect(&source, SIGNAL(pitchChangeRequested(QString, float)),
+        this, SLOT(setPitch(QString, float)));
+    connect(&source, SIGNAL(locationChanged(QString, float, float)),
+        this, SLOT(setLocation(QString, float, float)));
+}
+
+void AudioThread::disconnectAudioSource(AudioSource & source)
+{
+    disconnect(&source, SIGNAL(playRequested(QString, bool)),
+        this, SLOT(playSound(QString, bool)));
+    disconnect(&source, SIGNAL(stopRequested(QString)),
+        this, SLOT(stopSound(QString)));
+    disconnect(&source, SIGNAL(pitchChangeRequested(QString, float)),
+        this, SLOT(setPitch(QString, float)));
+    disconnect(&source, SIGNAL(locationChanged(QString, float, float)),
+        this, SLOT(setLocation(QString, float, float)));
+}
+
 void AudioThread::loadSounds()
 {
     loadSound("menuClick", "menuClick.ogg");
+    loadSound("pit", "pit.ogg");
+
     loadEngineSounds("carEngine.ogg");
 }
 

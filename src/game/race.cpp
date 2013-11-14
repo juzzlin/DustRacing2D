@@ -308,6 +308,16 @@ void Race::update()
     }
 }
 
+void Race::pitStop(Car & car)
+{
+    if (m_timing.lap(car.index()) > 0)
+    {
+        emit messageRequested(QObject::tr("Pit stop!"));
+        emit locationChanged("pit", car.location().i(), car.location().j());
+        emit playRequested("pit", false);
+    }
+}
+
 bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
 {
     const int width2  = tnode.size().width()  / 2;

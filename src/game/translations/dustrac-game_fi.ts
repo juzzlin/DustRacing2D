@@ -74,27 +74,32 @@
         <translation>Uusi kilpailuennätys!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="414"/>
+        <location filename="../race.cpp" line="315"/>
+        <source>Pit stop!</source>
+        <translation>Varikkopysähdys!</translation>
+    </message>
+    <message>
+        <location filename="../race.cpp" line="422"/>
         <source>A new best pos!</source>
         <translation>Uusi paras sijoitus!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="424"/>
+        <location filename="../race.cpp" line="432"/>
         <source>A new track unlocked!</source>
         <translation>Uusi rata avattu!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="428"/>
+        <location filename="../race.cpp" line="436"/>
         <source>Better luck next time..</source>
         <translation>Parempaa onnea ensi kerralla..</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="470"/>
+        <location filename="../race.cpp" line="478"/>
         <source>You must stay on track!</source>
         <translation>Pysy radalla!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="474"/>
+        <location filename="../race.cpp" line="482"/>
         <source>Watch your tires!</source>
         <translation>Varo renkaitasi!</translation>
     </message>
@@ -584,7 +589,7 @@ ERITYISKIITOKSET
         <translation>Käynnistä uudelleen vaihtaaksesi resoluution.</translation>
     </message>
     <message>
-        <location filename="../resolutionmenu.cpp" line="175"/>
+        <location filename="../resolutionmenu.cpp" line="174"/>
         <source>Native resolution</source>
         <translation>Natiiviresoluutio</translation>
     </message>

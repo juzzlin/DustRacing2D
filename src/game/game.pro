@@ -64,6 +64,7 @@ HEADERS += \
     openalwavdata.hpp \
     overlaybase.hpp \
     particlefactory.hpp \
+    pit.hpp \
     race.hpp \
     renderable.hpp \
     renderer.hpp \
@@ -217,6 +218,7 @@ SOURCES += \
     openalwavdata.cpp \
     overlaybase.cpp \
     particlefactory.cpp \
+    pit.cpp \
     race.cpp \
     renderer.cpp \
     resolutionmenu.cpp \

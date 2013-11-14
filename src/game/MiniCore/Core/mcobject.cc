@@ -59,9 +59,11 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMo
 
     // Create an MCRectShape using surface with an MCSurfaceView
     MCShapePtr rectShape(new MCRectShape(
-        MCShapeViewPtr(new MCSurfaceView(typeId, &surface, batchMode)),
+        MCShapeViewPtr(new MCSurfaceView(typeId, &surface)),
         surface.width(),
         surface.height()));
+
+    rectShape->view()->setBatchMode(batchMode);
 
     setShape(rectShape);
 }

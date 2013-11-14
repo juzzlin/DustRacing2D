@@ -24,11 +24,9 @@
 
 MCSurfaceView::MCSurfaceView(
     const std::string & viewId,
-    MCSurface * surface,
-    bool batchMode)
+    MCSurface * surface)
 : MCShapeView(viewId)
 , m_surface(surface)
-, m_batchMode(batchMode)
 {}
 
 MCSurfaceView::~MCSurfaceView()
@@ -58,28 +56,28 @@ void MCSurfaceView::render(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
     m_surface->setScale(1.0, 1.0, 1.0);
-    m_surface->render(p, l, angle, !m_batchMode);
+    m_surface->render(p, l, angle, !batchMode());
 }
 
 void MCSurfaceView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCCamera * p)
 {
     m_surface->setScale(1.0, 1.0, 1.0);
-    m_surface->renderShadow(p, l, angle, !m_batchMode);
+    m_surface->renderShadow(p, l, angle, !batchMode());
 }
 
 void MCSurfaceView::renderScaled(const MCVector3d<MCFloat> & l, MCFloat angle,
     MCFloat w, MCFloat h, MCCamera * p)
 {
     m_surface->setSize(w, h);
-    m_surface->render(p, l, angle, !m_batchMode);
+    m_surface->render(p, l, angle, !batchMode());
 }
 
 void MCSurfaceView::renderShadowScaled(const MCVector3d<MCFloat> & l,
     MCFloat angle, MCFloat w, MCFloat h, MCCamera * p)
 {
     m_surface->setSize(w, h);
-    m_surface->renderShadow(p, l, angle, !m_batchMode);
+    m_surface->renderShadow(p, l, angle, !batchMode());
 }
 
 void MCSurfaceView::beginBatch()
@@ -87,17 +85,9 @@ void MCSurfaceView::beginBatch()
     m_surface->bind();
 }
 
-void MCSurfaceView::endBatch()
-{
-}
-
 void MCSurfaceView::beginShadowBatch()
 {
     m_surface->bindShadow();
-}
-
-void MCSurfaceView::endShadowBatch()
-{
 }
 
 MCBBox<MCFloat> MCSurfaceView::bbox() const
