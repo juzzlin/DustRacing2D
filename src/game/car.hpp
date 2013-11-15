@@ -197,6 +197,8 @@ private:
 
     void steer(int direction = 1);
 
+    void wearOutTires(MCFloat step, MCFloat factor);
+
     Description              m_desc;
     MCForceGeneratorPtr      m_pBrakingFriction;
     MCForceGeneratorPtr      m_pOnTrackFriction;

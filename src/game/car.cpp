@@ -357,6 +357,21 @@ void Car::collisionEvent(MCCollisionEvent & event)
     event.accept();
 }
 
+void Car::wearOutTires(MCFloat step, MCFloat factor)
+{
+    if (m_tireWearOutCapacity > 0)
+    {
+        m_tireWearOutCapacity -= velocity().lengthFast() * step * factor;
+    }
+    else
+        {
+        m_tireWearOutCapacity = 0;
+    }
+
+    static_cast<SlideFrictionGenerator *>(
+        m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
+}
+
 void Car::stepTime(MCFloat step)
 {
     // Cache dx and dy.
@@ -366,30 +381,25 @@ void Car::stepTime(MCFloat step)
     // Cache speed in km/h. Use value of twice as big as the "real" value.
     m_speedInKmh = velocity().dot(MCVector3d<float>(m_dx, m_dy, 0)) * 3.6 * 2;
 
-    if (m_leftSideOffTrack || m_rightSideOffTrack)
+    if (m_isHuman)
     {
-        m_pOffTrackFriction->enable(true);
-        m_pOnTrackFriction->enable(false);
-
-        if (isHuman())
+        if (m_braking || (m_accelerating && (m_turnLeft || m_turnRight)))
         {
-            if (m_tireWearOutCapacity > 0)
-            {
-                m_tireWearOutCapacity -= velocity().lengthFast() * step;
-            }
-            else
-            {
-                m_tireWearOutCapacity = 0;
-            }
-
-            static_cast<SlideFrictionGenerator *>(
-                m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
+            wearOutTires(step, 0.05);
         }
-    }
-    else
-    {
-        m_pOffTrackFriction->enable(false);
-        m_pOnTrackFriction->enable(true);
+
+        if (m_leftSideOffTrack || m_rightSideOffTrack)
+        {
+            m_pOffTrackFriction->enable(true);
+            m_pOnTrackFriction->enable(false);
+
+            wearOutTires(step, 1.0);
+        }
+        else
+        {
+            m_pOffTrackFriction->enable(false);
+            m_pOnTrackFriction->enable(true);
+        }
     }
 }
 
