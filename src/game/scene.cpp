@@ -157,6 +157,22 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     createMenus();
 }
 
+void Scene::setupAudio(Car & car, int index)
+{
+    std::stringstream sample;
+    sample << "carEngine" << index;
+    CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, sample.str().c_str()));
+    sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
+        &m_game.audioThread(), SLOT(playSound(QString, bool)));
+    sfx->connect(sfx.get(), SIGNAL(stopRequested(QString)),
+        &m_game.audioThread(), SLOT(stopSound(QString)));
+    sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
+        &m_game.audioThread(), SLOT(setPitch(QString, float)));
+    sfx->connect(sfx.get(), SIGNAL(locationChanged(QString, float, float)),
+        &m_game.audioThread(), SLOT(setLocation(QString, float, float)));
+    car.setSoundEffectManager(sfx);
+}
+
 void Scene::createCars()
 {
     const int   humanPower = 200000; // This in Watts
@@ -193,44 +209,36 @@ void Scene::createCars()
             desc.slideFriction        = 1.0;
             desc.brakingFriction      = 2.0;
 
-            if (i == NUM_CARS - 1)
+            // Select car image
+            switch (i)
             {
+            case NUM_CARS - 1:
                 car = new Car(desc, MCAssetManager::surfaceManager().surface("carBlack"), i, false);
-            }
-            else if (i == NUM_CARS - 2)
-            {
+                break;
+            case NUM_CARS - 2:
                 car = new Car(desc, MCAssetManager::surfaceManager().surface("carOrange"), i, false);
-            }
-            else
-            {
+                break;
+            default:
                 car = new Car(desc, MCAssetManager::surfaceManager().surface("carYellow"), i, false);
+                break;
             }
+        }
 
+        assert(car);
+
+        if (!car->isHuman())
+        {
             m_ai.push_back(AIPtr(new AI(*car)));
         }
 
-        if (car)
-        {
-            car->setLayer(Layers::Cars);
-            car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
-            car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
+        car->setLayer(Layers::Cars);
+        car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
+        car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
 
-            std::stringstream sample;
-            sample << "carEngine" << i;
-            CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(*car, sample.str().c_str()));
-            sfx->connect(sfx.get(), SIGNAL(playRequested(QString, bool)),
-                &m_game.audioThread(), SLOT(playSound(QString, bool)));
-            sfx->connect(sfx.get(), SIGNAL(stopRequested(QString)),
-                &m_game.audioThread(), SLOT(stopSound(QString)));
-            sfx->connect(sfx.get(), SIGNAL(pitchChangeRequested(QString, float)),
-                &m_game.audioThread(), SLOT(setPitch(QString, float)));
-            sfx->connect(sfx.get(), SIGNAL(locationChanged(QString, float, float)),
-                &m_game.audioThread(), SLOT(setLocation(QString, float, float)));
-            car->setSoundEffectManager(sfx);
+        setupAudio(*car, i);
 
-            m_cars.push_back(CarPtr(car));
-            m_race.addCar(*car);
-        }
+        m_cars.push_back(CarPtr(car));
+        m_race.addCar(*car);
     }
 
     if (m_game.hasTwoHumanPlayers())
@@ -419,10 +427,8 @@ void Scene::updateAI()
     }
 }
 
-void Scene::setActiveTrack(Track & activeTrack)
+void Scene::setupCameras(Track & activeTrack)
 {
-    m_activeTrack = &activeTrack;
-
     m_world->renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
@@ -453,9 +459,24 @@ void Scene::setActiveTrack(Track & activeTrack)
             Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
         m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
     }
+}
 
-    // Remove previous objects;
+void Scene::setupAI(Track & activeTrack)
+{
+    for (AIPtr ai : m_ai)
+    {
+        ai->setTrack(activeTrack);
+    }
+}
+
+void Scene::setActiveTrack(Track & activeTrack)
+{
+    m_activeTrack = &activeTrack;
+
+    // Remove previous objects
     m_world->clear();
+
+    setupCameras(activeTrack);
 
     setWorldDimensions();
 
@@ -469,10 +490,7 @@ void Scene::setActiveTrack(Track & activeTrack)
 
     initRace();
 
-    for (AIPtr ai : m_ai)
-    {
-        ai->setTrack(activeTrack);
-    }
+    setupAI(activeTrack);
 }
 
 void Scene::setWorldDimensions()

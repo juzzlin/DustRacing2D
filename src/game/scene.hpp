@@ -115,6 +115,9 @@ private:
     void renderCommonScene();
     void renderPlayerScene(MCCamera & camera);
     void resizeOverlays();
+    void setupAudio(Car & car, int index);
+    void setupAI(Track & activeTrack);
+    void setupCameras(Track & activeTrack);
     void setWorldDimensions();
     void updateAI();
     void updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object);
