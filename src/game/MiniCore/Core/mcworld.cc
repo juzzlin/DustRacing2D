@@ -294,7 +294,7 @@ void MCWorld::addObject(MCObject & object)
             object.setIndex(m_objs.size() - 1);
 
             // Add to ObjectTree
-            if (object.physicsObject() && !object.bypassCollisions())
+            if ((object.physicsObject() || object.triggerObject()) && !object.bypassCollisions())
             {
                 m_objectTree->insert(object);
             }

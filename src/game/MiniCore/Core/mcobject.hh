@@ -211,12 +211,20 @@ public:
     //! Resets all forces + velocities.
     void resetMotion();
 
-    //! \brief Sets whether the physics of the object should be updated.
-    //! True is the default.
+    /*! \brief Sets whether the physics of the object should be updated.
+     *  True is the default. */
     void setIsPhysicsObject(bool flag);
 
     //! \brief Return whether the object is a physics object.
     bool physicsObject() const;
+
+    /*! \brief Sets whether the object behaves as a trigger object.
+     *  Trigger object produces collision events even though it's not a
+     *  physics object. False is the default. */
+    void setIsTriggerObject(bool flag);
+
+    //! \brief Return whether the object is a trigger object.
+    bool triggerObject() const;
 
     //! \brief Sets whether the collision detection for this object is totally bypassed.
     //! False is the default.
@@ -458,6 +466,7 @@ private:
     MCFloat                      m_linearSleepLimit;
     MCFloat                      m_angularSleepLimit;
     bool                         m_physicsObject;
+    bool                         m_triggerObject;
     bool                         m_stationary;
     bool                         m_renderable;
     bool                         m_bypassCollisions;

@@ -29,7 +29,7 @@
 #include <cassert>
 
 MCCollisionDetector::MCCollisionDetector()
-: m_enableCollisionEvents(false)
+: m_enableCollisionEvents(true)
 {}
 
 void MCCollisionDetector::enableCollisionEvents(bool enable)
@@ -53,6 +53,8 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
     {
         if (rect2.contains(obbox1.vertex(i)))
         {
+            const bool triggerObjectInvolved = rect1.parent().triggerObject() || rect2.parent().triggerObject();
+
             // Send collision event to owner of rect1 and generate a contact if accepted.
             MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
 
@@ -66,12 +68,15 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
             MCFloat depth = rect2.interpenetrationDepth(
                 MCSegment<MCFloat>(vertex, rect1.location()), contactNormal);
 
-            if (!m_enableCollisionEvents || ev1.accepted())
+            if (!triggerObjectInvolved) // Trigger objects should only trigger events
             {
-                MCContact & contact = MCContact::create();
-                contact.init(rect2.parent(), vertex, contactNormal, depth);
-                rect1.parent().addContact(contact);
-                collided = true;
+                if (!m_enableCollisionEvents || ev1.accepted())
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(rect2.parent(), vertex, contactNormal, depth);
+                    rect1.parent().addContact(contact);
+                    collided = true;
+                }
             }
 
             // Send collision event to owner of rect2 and generate a contact if accepted.
@@ -81,11 +86,14 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
                 MCObject::sendEvent(rect2.parent(), ev2);
             }
 
-            if (!m_enableCollisionEvents || ev2.accepted())
+            if (!triggerObjectInvolved) // Trigger objects should only trigger events
             {
-                MCContact & contact = MCContact::create();
-                contact.init(rect1.parent(), vertex, -contactNormal, depth);
-                rect2.parent().addContact(contact);
+                if (!m_enableCollisionEvents || ev2.accepted())
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(rect1.parent(), vertex, -contactNormal, depth);
+                    rect2.parent().addContact(contact);
+                }
             }
 
             // Don't break here in the case of a collision, because we don't know
@@ -291,8 +299,8 @@ MCUint MCCollisionDetector::detectCollisions(MCObjectTree & objectTree)
         {
             MCObject * obj2(*iter2);
 
-            if (obj1->physicsObject() && !obj1->bypassCollisions() &&
-                obj2->physicsObject() && !obj2->bypassCollisions())
+            if ((obj1->physicsObject() || obj1->triggerObject()) && !obj1->bypassCollisions() &&
+                (obj2->physicsObject() || obj2->triggerObject()) && !obj2->bypassCollisions())
             {
                 if (processPossibleCollision(*obj1, *obj2))
                 {

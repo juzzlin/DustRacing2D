@@ -95,6 +95,7 @@ void MCObject::init(const std::string & typeId)
     m_linearSleepLimit       = 0.01;
     m_angularSleepLimit      = 0.01;
     m_physicsObject          = true;
+    m_triggerObject          = false;
     m_stationary             = false;
     m_renderable             = true;
     m_bypassCollisions       = false;
@@ -479,6 +480,16 @@ void MCObject::setIsPhysicsObject(bool flag)
 bool MCObject::physicsObject() const
 {
     return m_physicsObject;
+}
+
+void MCObject::setIsTriggerObject(bool flag)
+{
+    m_triggerObject = flag;
+}
+
+bool MCObject::triggerObject() const
+{
+    return m_triggerObject;
 }
 
 void MCObject::setBypassCollisions(bool flag)
