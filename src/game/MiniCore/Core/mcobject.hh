@@ -418,56 +418,53 @@ private:
     void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
     void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
     void checkZBoundariesAndSendEvent();
-    void setFlag(MCUint flag, bool enable);
     void doRotate(MCFloat newAngle);
 
-    MCUint m_typeID;
-    MCUint m_time;
-    MCFloat m_invMass;
-    MCFloat m_mass;
-    MCFloat m_restitution;
-    MCFloat m_xyFriction;
-    MCFloat m_angle; // Degrees
-    MCFloat m_angularAcceleration; // Radians / s^2
-    MCFloat m_angularVelocity; // Radians / s
-    MCFloat m_angularImpulse;
-    MCFloat m_maximumAngularVelocity; // Radians / s
-    MCFloat m_maximumVelocity;
-    MCFloat m_torque;
-    MCFloat m_invMomentOfInertia;
-    MCFloat m_momentOfInertia;
-    MCUint m_layer;
-    int m_index;
-    MCUint flags;
-    MCUint m_i0, m_i1, m_j0, m_j1;
-    MCVector3dF m_acceleration;
-    MCVector3dF m_velocity;
-    MCVector3dF m_linearImpulse;
-    MCVector3dF m_initialLocation;
-    int m_initialAngle;
-    MCVector3dF m_location;
-    MCVector3dF m_forces;
-    MCVector2dF centerOfRotation;
-    MCShapePtr m_shape;
+    MCUint                       m_typeID;
+    MCFloat                      m_invMass;
+    MCFloat                      m_mass;
+    MCFloat                      m_restitution;
+    MCFloat                      m_xyFriction;
+    MCFloat                      m_angle; // Degrees
+    MCFloat                      m_angularAcceleration; // Radians / s^2
+    MCFloat                      m_angularVelocity; // Radians / s
+    MCFloat                      m_angularImpulse;
+    MCFloat                      m_maximumAngularVelocity; // Radians / s
+    MCFloat                      m_maximumVelocity;
+    MCFloat                      m_torque;
+    MCFloat                      m_invMomentOfInertia;
+    MCFloat                      m_momentOfInertia;
+    MCUint                       m_layer;
+    int                          m_index;
+    MCUint                       m_i0, m_i1, m_j0, m_j1;
+    MCVector3dF                  m_acceleration;
+    MCVector3dF                  m_velocity;
+    MCVector3dF                  m_linearImpulse;
+    MCVector3dF                  m_initialLocation;
+    int                          m_initialAngle;
+    MCVector3dF                  m_location;
+    MCVector3dF                  m_forces;
+    MCVector2dF                  m_centerOfRotation;
+    MCShapePtr                   m_shape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
-    static TypeHash m_typeHash;
+    static TypeHash              m_typeHash;
     typedef std::vector<MCObject * > TimerEventObjectsList;
     static TimerEventObjectsList m_timerEventObjects;
-    static MCUint m_typeIDCount;
-    MCObject::ContactHash m_contacts;
-    MCFloat m_damping;
-    int m_timerEventObjectsIndex;
-    bool m_sleeping;
-    MCFloat m_linearSleepLimit;
-    MCFloat m_angularSleepLimit;
-    bool m_physicsObject;
-    bool m_stationary;
-    bool m_renderable;
-    bool m_bypassCollisions;
-    bool m_hasShadow;
-    bool m_removing;
-    bool m_renderOutline;
-    bool m_isParticle;
+    static MCUint                m_typeIDCount;
+    MCObject::ContactHash        m_contacts;
+    MCFloat                      m_damping;
+    int                          m_timerEventObjectsIndex;
+    bool                         m_sleeping;
+    MCFloat                      m_linearSleepLimit;
+    MCFloat                      m_angularSleepLimit;
+    bool                         m_physicsObject;
+    bool                         m_stationary;
+    bool                         m_renderable;
+    bool                         m_bypassCollisions;
+    bool                         m_hasShadow;
+    bool                         m_removing;
+    bool                         m_renderOutline;
+    bool                         m_isParticle;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);

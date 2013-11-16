@@ -69,7 +69,6 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMo
 void MCObject::init(const std::string & typeId)
 {
     m_typeID                 = registerType(typeId);
-    m_time                   = 0;
     m_invMass                = std::numeric_limits<MCFloat>::max();
     m_mass                   = 0;
     m_restitution            = 0.5;
@@ -102,11 +101,6 @@ void MCObject::init(const std::string & typeId)
     m_removing               = false;
     m_renderOutline          = false;
     m_isParticle             = false;
-}
-
-void MCObject::setFlag(MCUint flag, bool enable)
-{
-    flags = enable ? flags | flag : flags & ~flag;
 }
 
 MCUint MCObject::getTypeIDForName(const std::string & typeName)
@@ -614,7 +608,7 @@ MCFloat MCObject::getZ() const
 
 void MCObject::setCenterOfRotation(MCVector2dF center)
 {
-    centerOfRotation = center - MCVector2dF(location());
+    m_centerOfRotation = center - MCVector2dF(location());
 }
 
 void MCObject::rotate(MCFloat newAngle)
@@ -627,12 +621,11 @@ void MCObject::doRotate(MCFloat newAngle)
 {
     if (newAngle != m_angle)
     {
-        if (!centerOfRotation.isZero())
+        if (!m_centerOfRotation.isZero())
         {
-            MCVector2dF centerOfRotation1;
-            MCTrigonom::rotatedVector(centerOfRotation, centerOfRotation1, newAngle - m_angle);
-            displace(centerOfRotation - centerOfRotation1);
-            centerOfRotation.setZero();
+            MCVector2dF centerOfRotation;
+            MCTrigonom::rotatedVector(m_centerOfRotation, centerOfRotation, newAngle - m_angle);
+            displace(m_centerOfRotation - centerOfRotation);
         }
 
         if (m_shape)
