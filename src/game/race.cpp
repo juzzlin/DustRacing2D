@@ -78,10 +78,11 @@ void Race::createStartGridObjects()
         data.setSurfaceId("grid");
         data.setLayer(Layers::Ground);
 
-        MCObject * object(&objectFactory.build(data));
+        MCObjectPtr object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);
         object->shape()->view()->setShaderProgram(&Renderer::instance().program("master"));
         object->setIsPhysicsObject(false);
+
         m_startGridObjects.push_back(object);
     }
 }

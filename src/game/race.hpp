@@ -114,7 +114,9 @@ private:
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
-    typedef std::vector<MCObject *> StartGridObjectVector;
+    // Used only to keep references to the start grid objects.
+    // They are common for all races and created only once.
+    typedef std::vector<MCObjectPtr> StartGridObjectVector;
     StartGridObjectVector m_startGridObjects;
 
     // Map from car route progression to car order vector.

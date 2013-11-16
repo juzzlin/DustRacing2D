@@ -39,7 +39,7 @@ MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
 {
 }
 
-MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
+MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
     MCShapeViewPtr view;
     MCShapePtr     shape;
@@ -85,13 +85,10 @@ MCObject & MCObjectFactory::build(const MCSurfaceObjectData & data)
     assert(object);
     setCommonProperties(*object, data);
 
-    // Store for deletion
-    m_objects.push_back(std::unique_ptr<MCObject>(object));
-
-    return *object;
+    return MCObjectPtr(object);
 }
 
-MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
+MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
 {
     MCShapeViewPtr view;
     MCShapePtr     shape;
@@ -140,13 +137,10 @@ MCObject & MCObjectFactory::build(const MCMeshObjectData & data)
     assert(object);
     setCommonProperties(*object, data);
 
-    // Store for deletion
-    m_objects.push_back(std::unique_ptr<MCObject>(object));
-
-    return *object;
+    return MCObjectPtr(object);
 }
 
-MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr view)
+MCObjectPtr MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr view)
 {
     MCShapePtr shape;
     MCObject * object = nullptr;
@@ -176,10 +170,7 @@ MCObject & MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr view
     assert(object);
     setCommonProperties(*object, data);
 
-    // Store for deletion
-    m_objects.push_back(std::unique_ptr<MCObject>(object));
-
-    return *object;
+    return MCObjectPtr(object);
 }
 
 void MCObjectFactory::setCommonProperties(

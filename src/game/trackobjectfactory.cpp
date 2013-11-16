@@ -34,7 +34,7 @@ TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 TrackObject * TrackObjectFactory::build(
     QString category, QString role, MCVector2dF location, int angle)
 {
-    MCObject * object = nullptr;
+    MCObjectPtr object;
 
     if (role == "brake")
     {
@@ -48,7 +48,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "bushArea")
     {
@@ -60,7 +60,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::Tree);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
     }
     else if (role == "crate")
@@ -76,7 +76,7 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.9);
         data.setLayer(Layers::Meshes);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "dustRacing2DBanner")
     {
@@ -90,7 +90,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "grandstand")
     {
@@ -104,7 +104,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::GrandStands);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "plant")
     {
@@ -122,7 +122,7 @@ TrackObject * TrackObjectFactory::build(
         data.setShapeHeight(plantBodyRadius);
         data.setLayer(Layers::Tree);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "rock")
     {
@@ -136,11 +136,11 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.9);
         data.setLayer(Layers::Walls);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (
-        role == "grid"                 ||
-        role == "sandAreaCurve"        ||
+        role == "grid"          ||
+        role == "sandAreaCurve" ||
         role == "sandAreaBig")
     {
         MCSurfaceObjectData data(role.toStdString());
@@ -151,7 +151,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
         data.setLayer(Layers::Ground);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
         object->shape()->view()->setHasShadow(false);
     }
@@ -169,7 +169,7 @@ TrackObject * TrackObjectFactory::build(
         data.setXYFriction(0.25);
         data.setLayer(Layers::Walls);
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
     else if (role == "tree")
     {
@@ -192,7 +192,7 @@ TrackObject * TrackObjectFactory::build(
             MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5));
         view->setShaderProgram(&(Renderer::instance().program("master")));
         view->setShadowShaderProgram(&(Renderer::instance().program("masterShadow")));
-        MCObject & object = m_objectFactory.build(data, view);
+        MCObjectPtr object = m_objectFactory.build(data, view);
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -210,7 +210,7 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::Walls);
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
-        object = &m_objectFactory.build(data);
+        object = m_objectFactory.build(data);
     }
 
     if (!object)
@@ -224,6 +224,6 @@ TrackObject * TrackObjectFactory::build(
         object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
 
         // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, *object);
+        return new TrackObject(category, role, object);
     }
 }

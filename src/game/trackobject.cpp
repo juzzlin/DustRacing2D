@@ -15,12 +15,12 @@
 
 #include "trackobject.hpp"
 
-TrackObject::TrackObject(QString category, QString role, MCObject & object)
+TrackObject::TrackObject(QString category, QString role, MCObjectPtr object)
 : ObjectBase(category, role)
 , m_object(object)
 {}
 
 MCObject & TrackObject::object() const
 {
-    return m_object;
+    return *(m_object.get());
 }

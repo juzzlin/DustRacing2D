@@ -17,8 +17,9 @@
 #define TRACKOBJECT_HPP
 
 #include "../common/objectbase.hpp"
+#include <memory>
 
-class MCObject;
+#include <MCObject>
 
 //! TrackObject is a container class used in TrackData.
 class TrackObject : public ObjectBase
@@ -26,15 +27,15 @@ class TrackObject : public ObjectBase
 public:
 
     //! Constructor.
-    TrackObject(QString category, QString role, MCObject & object);
+    TrackObject(QString category, QString role, MCObjectPtr object);
 
-    //! Gets the associated MCObject.
+    //! \return reference to the associated MCObject.
     MCObject & object() const;
 
 private:
 
     //! The associated MCObject.
-    MCObject & m_object;
+    MCObjectPtr m_object;
 };
 
 #endif // TRACKOBJECT_HPP

@@ -41,17 +41,14 @@ public:
     //! Destructor
     virtual ~MCObjectFactory();
 
-    /*! Build an object with a surface view.
-     *  MCObjectFactory keeps the ownership. */
-    MCObject & build(const MCSurfaceObjectData & data);
+    /*! Build an object with a surface view. */
+    MCObjectPtr build(const MCSurfaceObjectData & data);
 
-    /*! Build an object with a mesh view.
-     *  MCObjectFactory keeps the ownership.*/
-    MCObject & build(const MCMeshObjectData & data);
+    /*! Build an object with a mesh view. */
+    MCObjectPtr build(const MCMeshObjectData & data);
 
-    /*! Build an object with a custom view.
-     *  MCObjectFactory keeps the ownership. */
-    MCObject & build(const MCObjectData & data, MCShapeViewPtr view);
+    /*! Build an object with a custom view. */
+    MCObjectPtr build(const MCObjectData & data, MCShapeViewPtr view);
 
 private:
 
@@ -60,7 +57,6 @@ private:
 
     void setCommonProperties(MCObject & object, const MCObjectData & data) const;
 
-    std::vector<std::unique_ptr<MCObject> > m_objects;
     MCAssetManager & m_assetManager;
 };
 
