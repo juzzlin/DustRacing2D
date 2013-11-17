@@ -84,13 +84,13 @@ public:
     /*! Get the default vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultVertexShaderSource();
 
-    /*! Get the default fragment shader. Defining __MC_GLES__ will select GLES version. */
+    /*! Get the default fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultFragmentShaderSource();
 
-    /*! Get the default shadow vertex shader. Defining __MC_GLES__ will select GLES version. */
+    /*! Get the default shadow vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowVertexShaderSource();
 
-    /*! get the default shadow fragment shader. Defining __MC_GLES__ will select GLES version. */
+    /*! Get the default shadow fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowFragmentShaderSource();
 
     /*! Add a geometry shader.
