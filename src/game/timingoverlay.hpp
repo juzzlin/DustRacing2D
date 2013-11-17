@@ -55,19 +55,21 @@ public:
 
 private:
 
+    void renderCarStatusView();
+
     void renderCurrentLap();
-
-    void renderPosition();
-
-    void renderSpeed();
 
     void renderCurrentLapTime();
 
     void renderLastLapTime();
 
+    void renderPosition();
+
+    void renderRaceTime();
+
     void renderRecordLapTime();
 
-    void renderCarStatusView();
+    void renderSpeed();
 
     MCTextureFontManager   & m_fontManager;
     MCTextureFont          & m_font;

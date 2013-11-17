@@ -23,6 +23,7 @@ Timing::Timing(MCUint cars, QObject *parent)
 , m_times(cars, Timing::Times())
 , m_started(false)
 , m_lapRecord(-1)
+, m_raceRecord(-1)
 , m_newLapRecordAchieved(false)
 {
 }
@@ -33,8 +34,8 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
     times.lap++;
 
     const int elapsed = m_time.elapsed();
-    times.lastLapTime = elapsed - times.totalTime;
-    times.totalTime   = elapsed;
+    times.lastLapTime = elapsed - times.raceTime;
+    times.raceTime    = elapsed;
 
     // Check if a new personal record achieved.
     if (times.lastLapTime < times.recordLapTime ||
@@ -56,10 +57,21 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
     }
 }
 
-void Timing::setRaceCompleted(MCUint index, bool state)
+void Timing::setRaceCompleted(MCUint index, bool state, bool isHuman)
 {
     Timing::Times & times = m_times.at(index);
     times.raceCompleted = state;
+    times.raceTime = m_time.elapsed();
+
+    if (isHuman)
+    {
+        if (times.raceTime < m_raceRecord || m_raceRecord == -1)
+        {
+            m_raceRecord = times.raceTime;
+
+            // TODO emit signal
+        }
+    }
 }
 
 bool Timing::raceCompleted(MCUint index) const
@@ -101,7 +113,7 @@ int Timing::leadersLap() const
     return maxLap;
 }
 
-int Timing::currentTime(MCUint index) const
+int Timing::currentLapTime(MCUint index) const
 {
     if (!m_started)
     {
@@ -109,10 +121,10 @@ int Timing::currentTime(MCUint index) const
     }
 
     const Timing::Times & times = m_times.at(index);
-    return m_time.elapsed() - times.totalTime;
+    return m_time.elapsed() - times.raceTime;
 }
 
-int Timing::recordTime(MCUint index) const
+int Timing::recordLapTime(MCUint index) const
 {
     if (!m_started)
     {
@@ -120,6 +132,38 @@ int Timing::recordTime(MCUint index) const
     }
 
     return m_times.at(index).recordLapTime;
+}
+
+int Timing::raceTime() const
+{
+    if (!m_started)
+    {
+        return 0;
+    }
+
+    return m_time.elapsed();
+}
+
+int Timing::raceTime(MCUint index) const
+{
+    if (!m_times.at(index).raceCompleted)
+    {
+        return raceTime();
+    }
+    else
+    {
+        return m_times.at(index).raceTime;
+    }
+}
+
+int Timing::recordRaceTime(MCUint index) const
+{
+    if (!m_started)
+    {
+        return -1;
+    }
+
+    return m_times.at(index).recordRaceTime;
 }
 
 int Timing::lapRecord() const
@@ -130,6 +174,16 @@ int Timing::lapRecord() const
 void Timing::setLapRecord(int msecs)
 {
     m_lapRecord = msecs;
+}
+
+int Timing::raceRecord() const
+{
+    return m_raceRecord;
+}
+
+void Timing::setRaceRecord(int msecs)
+{
+    m_raceRecord = msecs;
 }
 
 bool Timing::newLapRecordAchieved() const

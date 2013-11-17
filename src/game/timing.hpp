@@ -37,40 +37,58 @@ public:
     void lapCompleted(MCUint index, bool isHuman);
 
     //! Completes the race for the given car.
-    void setRaceCompleted(MCUint index, bool state);
+    void setRaceCompleted(MCUint index, bool state, bool isHuman);
 
-    //! Returns if the race is completed for the given car.
+    //! \return if the race is completed for the given car.
     bool raceCompleted(MCUint index) const;
 
+    //! Toggle timing activity of the given car.
     void setIsActive(MCUint index, bool state);
 
+    //! \return timing activity of the given car.
     bool isActive(MCUint index) const;
 
-    //! Returns the current lap for the given car.
+    //! \return the current lap for the given car.
     int lap(MCUint index) const;
 
-    //! Returns the lap for the leading car.
+    //! \return the lap for the leading car.
     int leadersLap() const;
 
-    //! Returns last lap time in msecs for the given car or
-    //! -1 if invalid car or time not set.
+    //! \return the race time in msecs.
+    int raceTime() const;
+
+    //! \return the race time of given car in msecs.
+    int raceTime(MCUint index) const;
+
+    /*! \return the record race time for the given car in msecs or
+     *  -1 if invalid car or time not set. */
+    int recordRaceTime(MCUint index) const;
+
+    /*! \return last lap time in msecs for the given car or
+     *  -1 if invalid car or time not set. */
     int lastLapTime(MCUint index) const;
 
-    //! Returns the current lap time in msecs for the given car or
-    //! -1 if invalid car or time not set.
-    int currentTime(MCUint index) const;
+    /*! \return the current lap time in msecs for the given car or
+     *  -1 if invalid car or time not set. */
+    int currentLapTime(MCUint index) const;
 
-    //! Returns the record lap time in msecs for the given car or
-    //! -1 if invalid car or time not set.
-    int recordTime(MCUint index) const;
+    /*! \return the record lap time in msecs for the given car or
+     *  -1 if invalid car or time not set. */
+    int recordLapTime(MCUint index) const;
 
-    //! Return the current lap record or -1 if not set.
+    //! \return the current lap record or -1 if not set.
     int lapRecord() const;
 
     //! Set the current lap record.
     void setLapRecord(int msecs);
 
-    //! Returns true, if new lap record just achieved.
+    //! \return the current race record or -1 if not set.
+    int raceRecord() const;
+
+    //! Set the current race record.
+    void setRaceRecord(int msecs);
+
+    //! \return true, if new lap record just achieved.
     bool newLapRecordAchieved() const;
 
     //! Force the state of active new lap record.
@@ -97,25 +115,27 @@ private:
         Times()
         : lastLapTime(-1)
         , recordLapTime(-1)
-        , totalTime(0)
+        , raceTime(0)
         , lap(0)
         , raceCompleted(false)
         , isActive(true)
         {}
 
-        int lastLapTime;
-        int recordLapTime; // Personal best
-        int totalTime;
-        int lap;
+        int  lastLapTime;
+        int  recordLapTime; // Personal best
+        int  raceTime;
+        int  recordRaceTime; // Personal best
+        int  lap;
         bool raceCompleted;
         bool isActive;
     };
 
     std::vector<Timing::Times> m_times;
-    QTime m_time;
-    bool m_started;
-    int m_lapRecord;
-    bool m_newLapRecordAchieved;
+    QTime                      m_time;
+    bool                       m_started;
+    int                        m_lapRecord;
+    int                        m_raceRecord;
+    bool                       m_newLapRecordAchieved;
 };
 
 #endif // TIMING_HPP

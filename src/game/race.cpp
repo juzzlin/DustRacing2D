@@ -264,7 +264,7 @@ void Race::update()
             m_winnerFinished = true;
 
             Car & leader = getLeadingCar();
-            m_timing.setRaceCompleted(leader.index(), true);
+            m_timing.setRaceCompleted(leader.index(), true, leader.isHuman());
 
             if (m_game.mode() == Game::TimeTrial)
             {
@@ -378,7 +378,7 @@ bool Race::isLapCompleted(Car & car, const Route & route, unsigned int currentTa
         // Finish the race if winner has already finished.
         if (m_winnerFinished)
         {
-            m_timing.setRaceCompleted(car.index(), true);
+            m_timing.setRaceCompleted(car.index(), true, car.isHuman());
         }
 
         return true;

@@ -29,6 +29,17 @@
 
 #include <QObject> // For QObject::tr()
 
+static const int RACE_TIME_POS         = 1;
+static const int CURRENT_LAP_TIME_POS  = 2;
+static const int LAST_LAP_TIME_POS     = 3;
+static const int RECORD_LAP_TIME_POS   = 4;
+static const int LAP_TIME_Y            = 5;
+static const int LAP_TIME_X            = 5;
+static const int RACE_TIME_Y           = 5;
+static const int RACE_TIME_X           = 5;
+static const int GLYPH_W               = 15;
+static const int GLYPH_H               = 15;
+
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCAssetManager::textureFontManager())
 , m_font(m_fontManager.font("default"))
@@ -81,6 +92,8 @@ void TimingOverlay::render()
         renderPosition();
 
         renderSpeed();
+
+        renderRaceTime();
 
         renderCurrentLapTime();
 
@@ -172,20 +185,21 @@ void TimingOverlay::renderSpeed()
 void TimingOverlay::renderCurrentLapTime()
 {
     const int lastLapTime = m_timing->lastLapTime(m_car->index());
-    const int currentLapTime = m_timing->currentTime(m_car->index());
+    const int currentLapTime = m_timing->currentLapTime(m_car->index());
     const MCGLColor red(1.0, 0.0, 0.0);
     const MCGLColor white(1.0, 1.0, 1.0);
 
     std::stringstream ss;
+    ss << QObject::tr("LAP:").toStdString();
     if (m_timing->raceCompleted(m_car->index()))
     {
-        ss << "  " << m_timing->msecsToString(lastLapTime);
+        ss << m_timing->msecsToString(lastLapTime);
 
         m_text.setColor(white);
     }
     else
     {
-        ss << "  " << m_timing->msecsToString(currentLapTime);
+        ss << m_timing->msecsToString(currentLapTime);
 
         // Set color to white, if lastLapTime is not set.
         if (lastLapTime == -1 || currentLapTime == lastLapTime)
@@ -206,10 +220,10 @@ void TimingOverlay::renderCurrentLapTime()
     }
 
     m_text.setText(ss.str());
-    m_text.setGlyphSize(20, 20);
+    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
     m_text.render(
-        width() - m_text.width(),
-        height() - m_text.height(),
+        width()  - m_text.width()  - LAP_TIME_X,
+        height() - m_text.height() * CURRENT_LAP_TIME_POS - LAP_TIME_Y,
         nullptr,
         m_font);
 }
@@ -219,15 +233,15 @@ void TimingOverlay::renderLastLapTime()
     const int lastLapTime = m_timing->lastLapTime(m_car->index());
     const MCGLColor white(1.0, 1.0, 1.0);
 
-    m_text.setGlyphSize(20, 20);
+    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
     m_text.setColor(white);
 
     std::stringstream ss;
     ss << QObject::tr("L:").toStdString() << m_timing->msecsToString(lastLapTime);
     m_text.setText(ss.str());
     m_text.render(
-        width() - m_text.width(),
-        height() - m_text.height() * 2,
+        width()  - m_text.width()  - LAP_TIME_X,
+        height() - m_text.height() * LAST_LAP_TIME_POS - LAP_TIME_Y,
         nullptr,
         m_font);
 }
@@ -239,18 +253,36 @@ void TimingOverlay::renderRecordLapTime()
         const int recordLapTime = m_timing->lapRecord();
         const MCGLColor white(1.0, 1.0, 1.0);
 
-        m_text.setGlyphSize(20, 20);
+        m_text.setGlyphSize(GLYPH_W, GLYPH_H);
         m_text.setColor(white);
 
         std::stringstream ss;
         ss << QObject::tr("R:").toStdString() << m_timing->msecsToString(recordLapTime);
         m_text.setText(ss.str());
         m_text.render(
-            width()  - m_text.width(),
-            height() - m_text.height() * 3,
+            width()  - m_text.width()  - LAP_TIME_X,
+            height() - m_text.height() * RECORD_LAP_TIME_POS - LAP_TIME_Y,
             nullptr,
             m_font);
     }
+}
+
+void TimingOverlay::renderRaceTime()
+{
+    const int raceTime = m_timing->raceTime(m_car->index());
+    const MCGLColor white(1.0, 1.0, 1.0);
+
+    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
+    m_text.setColor(white);
+
+    std::stringstream ss;
+    ss << QObject::tr("TOT:").toStdString() << m_timing->msecsToString(raceTime);
+    m_text.setText(ss.str());
+    m_text.render(
+        width()  - m_text.width()  - RACE_TIME_X,
+        height() - m_text.height() * RACE_TIME_POS - RACE_TIME_Y,
+        nullptr,
+        m_font);
 }
 
 void TimingOverlay::renderCarStatusView()
