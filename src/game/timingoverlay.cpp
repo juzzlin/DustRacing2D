@@ -33,10 +33,6 @@ static const int RACE_TIME_POS         = 1;
 static const int CURRENT_LAP_TIME_POS  = 2;
 static const int LAST_LAP_TIME_POS     = 3;
 static const int RECORD_LAP_TIME_POS   = 4;
-static const int LAP_TIME_Y            = 5;
-static const int LAP_TIME_X            = 5;
-static const int RACE_TIME_Y           = 5;
-static const int RACE_TIME_X           = 5;
 static const int GLYPH_W               = 15;
 static const int GLYPH_H               = 15;
 
@@ -110,7 +106,7 @@ void TimingOverlay::renderCurrentLap()
     const int leadersLap = m_timing->leadersLap() + 1;
     const int laps       = m_race->lapCount();
 
-    m_text.setGlyphSize(20, 20);
+    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
 
     // Render the current lap number
     std::stringstream ss;
@@ -128,6 +124,8 @@ void TimingOverlay::renderPosition()
     const int pos        = m_race->getPositionOfCar(*m_car);
     const int lap        = m_timing->lap(m_car->index()) + 1;
     const int leadersLap = m_timing->leadersLap() + 1;
+
+    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
 
     std::stringstream ss;
     ss << QObject::tr(" POS:").toStdString() << m_posTexts.at(pos);
@@ -222,8 +220,8 @@ void TimingOverlay::renderCurrentLapTime()
     m_text.setText(ss.str());
     m_text.setGlyphSize(GLYPH_W, GLYPH_H);
     m_text.render(
-        width()  - m_text.width()  - LAP_TIME_X,
-        height() - m_text.height() * CURRENT_LAP_TIME_POS - LAP_TIME_Y,
+        width()  - m_text.width(),
+        height() - m_text.height() * CURRENT_LAP_TIME_POS,
         nullptr,
         m_font);
 }
@@ -240,8 +238,8 @@ void TimingOverlay::renderLastLapTime()
     ss << QObject::tr("L:").toStdString() << m_timing->msecsToString(lastLapTime);
     m_text.setText(ss.str());
     m_text.render(
-        width()  - m_text.width()  - LAP_TIME_X,
-        height() - m_text.height() * LAST_LAP_TIME_POS - LAP_TIME_Y,
+        width()  - m_text.width(),
+        height() - m_text.height() * LAST_LAP_TIME_POS,
         nullptr,
         m_font);
 }
@@ -260,8 +258,8 @@ void TimingOverlay::renderRecordLapTime()
         ss << QObject::tr("R:").toStdString() << m_timing->msecsToString(recordLapTime);
         m_text.setText(ss.str());
         m_text.render(
-            width()  - m_text.width()  - LAP_TIME_X,
-            height() - m_text.height() * RECORD_LAP_TIME_POS - LAP_TIME_Y,
+            width()  - m_text.width(),
+            height() - m_text.height() * RECORD_LAP_TIME_POS,
             nullptr,
             m_font);
     }
@@ -279,8 +277,8 @@ void TimingOverlay::renderRaceTime()
     ss << QObject::tr("TOT:").toStdString() << m_timing->msecsToString(raceTime);
     m_text.setText(ss.str());
     m_text.render(
-        width()  - m_text.width()  - RACE_TIME_X,
-        height() - m_text.height() * RACE_TIME_POS - RACE_TIME_Y,
+        width()  - m_text.width(),
+        height() - m_text.height() * RACE_TIME_POS,
         nullptr,
         m_font);
 }
