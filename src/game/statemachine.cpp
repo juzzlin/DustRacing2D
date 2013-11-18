@@ -153,7 +153,7 @@ void StateMachine::stateGameTransitionOut()
 {
     if (m_raceFinished)
     {
-        emit fadeOutRequested(5000, 5000, 0);
+        emit fadeOutRequested(10000, 10000, 0);
     }
     else
     {
