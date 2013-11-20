@@ -1,7 +1,7 @@
 // This file is part of Dust Racing 2D.
 // Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
-// Dust Racing 2D is free software: you can redistribute it and/or modify
+// Dust Racing 2D is free software: you can REDistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
@@ -30,12 +30,19 @@
 #include <QObject> // For QObject::tr()
 #include <QTimer>
 
-static const int RACE_TIME_POS         = 1;
-static const int CURRENT_LAP_TIME_POS  = 2;
-static const int LAST_LAP_TIME_POS     = 3;
-static const int RECORD_LAP_TIME_POS   = 4;
-static const int GLYPH_W               = 15;
-static const int GLYPH_H               = 15;
+static const int RACE_TIME_POS        = 1;
+static const int CURRENT_LAP_TIME_POS = 2;
+static const int LAST_LAP_TIME_POS    = 3;
+static const int RECORD_LAP_TIME_POS  = 4;
+static const int GLYPH_W_TIMES        = 15;
+static const int GLYPH_H_TIMES        = 15;
+static const int GLYPH_W_POS          = 20;
+static const int GLYPH_H_POS          = 20;
+
+static const MCGLColor RED    (1.0, 0.0, 0.0);
+static const MCGLColor GREEN  (0.0, 1.0, 0.0);
+static const MCGLColor YELLOW (1.0, 1.0, 0.0);
+static const MCGLColor WHITE  (1.0, 1.0, 1.0);
 
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCAssetManager::textureFontManager())
@@ -149,16 +156,14 @@ void TimingOverlay::renderCurrentLap()
     const int leadersLap = m_timing->leadersLap() + 1;
     const int laps       = m_race->lapCount();
 
-    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
+    m_text.setGlyphSize(GLYPH_W_POS, GLYPH_H_POS);
 
     // Render the current lap number
     std::stringstream ss;
     ss << QObject::tr(" LAP:").toStdString() << (leadersLap <= laps ? leadersLap : laps) << "/" << laps;
 
-    const MCGLColor white(1.0, 1.0, 1.0);
-
     m_text.setText(ss.str());
-    m_text.setColor(white);
+    m_text.setColor(WHITE);
     m_text.render(0, height() - m_text.height(), nullptr, m_font);
 }
 
@@ -168,10 +173,11 @@ void TimingOverlay::renderPosition()
     const int lap        = m_timing->lap(m_car->index()) + 1;
     const int leadersLap = m_timing->leadersLap() + 1;
 
-    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
+    m_text.setGlyphSize(GLYPH_W_POS, GLYPH_H_POS);
 
     std::stringstream ss;
-    ss << QObject::tr(" POS:").toStdString() << m_posTexts.at(pos);
+    ss << QObject::tr(" POS:").toStdString();
+    ss << m_posTexts.at(pos);
 
     const int lapDiff = leadersLap - lap;
     if (lapDiff > 0)
@@ -181,19 +187,34 @@ void TimingOverlay::renderPosition()
            << (lapDiff == 1 ? QObject::tr("LAP").toStdString() : QObject::tr("LAPS").toStdString());
     }
 
-    const MCGLColor yellow(1.0, 1.0, 0.0);
-
     m_text.setText(ss.str());
-    m_text.setColor(yellow);
+
+    if (pos > 8)
+    {
+        m_text.setColor(RED);
+    }
+    else if (pos > 4)
+    {
+        m_text.setColor(YELLOW);
+    }
+    else if (pos > 1)
+    {
+        m_text.setColor(WHITE);
+    }
+    else if (pos == 1)
+    {
+        m_text.setColor(GREEN);
+    }
+    else
+    {
+        m_text.setColor(WHITE);
+    }
+
     m_text.render(0, height() - m_text.height() * 2, nullptr, m_font);
 }
 
 void TimingOverlay::renderSpeed()
 {
-    const MCGLColor white(1.0, 1.0, 1.0);
-    const MCGLColor yellow(1.0, 1.0, 0.0);
-    const MCGLColor red(1.0, 0.0, 0.0);
-
     int speed = m_car->speedInKmh();
     speed = speed < 0 ? 0 : speed;
 
@@ -201,15 +222,15 @@ void TimingOverlay::renderSpeed()
     ss << " " << speed;
     if (speed < 100)
     {
-        m_text.setColor(white);
+        m_text.setColor(WHITE);
     }
     else if (speed < 200)
     {
-        m_text.setColor(yellow);
+        m_text.setColor(YELLOW);
     }
     else
     {
-        m_text.setColor(red);
+        m_text.setColor(RED);
     }
 
     m_text.setText(ss.str());
@@ -219,7 +240,7 @@ void TimingOverlay::renderSpeed()
 
     m_text.setText(QObject::tr(" KM/H").toStdString());
     m_text.setGlyphSize(20, 20);
-    m_text.setColor(white);
+    m_text.setColor(WHITE);
     m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
 }
 
@@ -227,8 +248,6 @@ void TimingOverlay::renderCurrentLapTime()
 {
     const int lastLapTime = m_timing->lastLapTime(m_car->index());
     const int currentLapTime = m_timing->currentLapTime(m_car->index());
-    const MCGLColor red(1.0, 0.0, 0.0);
-    const MCGLColor white(1.0, 1.0, 1.0);
 
     std::stringstream ss;
     ss << QObject::tr("LAP:").toStdString();
@@ -236,32 +255,31 @@ void TimingOverlay::renderCurrentLapTime()
     {
         ss << m_timing->msecsToString(lastLapTime);
 
-        m_text.setColor(white);
+        m_text.setColor(WHITE);
     }
     else
     {
         ss << m_timing->msecsToString(currentLapTime);
 
-        // Set color to white, if lastLapTime is not set.
+        // Set color to WHITE, if lastLapTime is not set.
         if (lastLapTime == -1 || currentLapTime == lastLapTime)
         {
-            m_text.setColor(white);
+            m_text.setColor(WHITE);
         }
-        // Set color to green, if current time is ahead of the last lap time.
+        // Set color to GREEN, if current time is ahead of the last lap time.
         else if (currentLapTime < lastLapTime)
         {
-            const MCGLColor green(0.0, 1.0, 0.0);
-            m_text.setColor(green);
+            m_text.setColor(GREEN);
         }
-        // Set color to red (current time is slower than the last lap time).
+        // Set color to RED (current time is slower than the last lap time).
         else
         {
-            m_text.setColor(red);
+            m_text.setColor(RED);
         }
     }
 
     m_text.setText(ss.str());
-    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
+    m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
     m_text.render(
         width()  - m_text.width(),
         height() - m_text.height() * CURRENT_LAP_TIME_POS,
@@ -272,10 +290,9 @@ void TimingOverlay::renderCurrentLapTime()
 void TimingOverlay::renderLastLapTime()
 {
     const int lastLapTime = m_timing->lastLapTime(m_car->index());
-    const MCGLColor white(1.0, 1.0, 1.0);
 
-    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
-    m_text.setColor(white);
+    m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
+    m_text.setColor(WHITE);
 
     std::stringstream ss;
     ss << QObject::tr("L:").toStdString() << m_timing->msecsToString(lastLapTime);
@@ -292,10 +309,9 @@ void TimingOverlay::renderRecordLapTime()
     if (m_showLapRecordTime)
     {
         const int recordLapTime = m_timing->lapRecord();
-        const MCGLColor white(1.0, 1.0, 1.0);
 
-        m_text.setGlyphSize(GLYPH_W, GLYPH_H);
-        m_text.setColor(white);
+        m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
+        m_text.setColor(WHITE);
 
         std::stringstream ss;
         ss << QObject::tr("R:").toStdString() << m_timing->msecsToString(recordLapTime);
@@ -313,10 +329,9 @@ void TimingOverlay::renderRaceTime()
     if (m_showRaceTime)
     {
         const int raceTime = m_timing->raceTime(m_car->index());
-        const MCGLColor white(1.0, 1.0, 1.0);
 
-        m_text.setGlyphSize(GLYPH_W, GLYPH_H);
-        m_text.setColor(white);
+        m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
+        m_text.setColor(WHITE);
 
         std::stringstream ss;
         ss << QObject::tr("TOT:").toStdString() << m_timing->msecsToString(raceTime);
