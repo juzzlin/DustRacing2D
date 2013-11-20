@@ -125,9 +125,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_startlightsOverlay->setDimensions(width(), height());
     m_messageOverlay->setDimensions(width(), height());
 
-    m_timingOverlay[0].setTiming(m_race.timing());
     m_timingOverlay[0].setRace(m_race);
-    m_timingOverlay[1].setTiming(m_race.timing());
     m_timingOverlay[1].setRace(m_race);
 
     m_world->renderer().enableDepthTestOnLayer(Layers::Tree, true);

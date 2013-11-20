@@ -114,7 +114,8 @@ else()
         scene.hpp
         statemachine.hpp
         startlights.hpp
-        timing.hpp)
+        timing.hpp
+        timingoverlay.hpp)
     qt4_add_resources(RC_SRC ${RCS})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
     qt4_add_translation(QM ${TS_FILES})

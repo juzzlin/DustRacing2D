@@ -24,8 +24,19 @@ Settings * Settings::m_instance = nullptr;
 
 static const char * SETTINGS_GROUP_CONFIG = "Config";
 static const char * SETTINGS_GROUP_LAP    = "LapRecords";
+static const char * SETTINGS_GROUP_RACE   = "RaceRecords";
 static const char * SETTINGS_GROUP_POS    = "BestPositions";
 static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracks";
+
+static QString combineTrackAndLapCount(const Track & track, int lapCount)
+{
+    return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount));
+}
+
+static QString combineTrackAndLapCountBase64(const Track & track, int lapCount)
+{
+    return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount)).toLatin1().toBase64();
+}
 
 Settings::Settings()
 {
@@ -76,9 +87,38 @@ void Settings::resetLapRecords()
     settings.endGroup();
 }
 
-static QString combineTrackAndLapCount(const Track & track, int lapCount)
+void Settings::saveRaceRecord(const Track & track, int msecs, int lapCount)
 {
-    return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount));
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
+
+    settings.beginGroup(SETTINGS_GROUP_RACE);
+    settings.setValue(trackNameAndLapCount, msecs);
+    settings.endGroup();
+}
+
+int Settings::loadRaceRecord(const Track & track, int lapCount) const
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
+
+    settings.beginGroup(SETTINGS_GROUP_RACE);
+    const int time = settings.value(trackNameAndLapCount, -1).toInt();
+    settings.endGroup();
+
+    return time;
+}
+
+void Settings::resetRaceRecords()
+{
+    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
+        Config::Game::QSETTINGS_SOFTWARE_NAME);
+
+    settings.beginGroup(SETTINGS_GROUP_RACE);
+    settings.remove("");
+    settings.endGroup();
 }
 
 void Settings::saveBestPos(const Track & track, int pos, int lapCount)
@@ -113,11 +153,6 @@ void Settings::resetBestPos()
     settings.beginGroup(SETTINGS_GROUP_POS);
     settings.remove("");
     settings.endGroup();
-}
-
-static QString combineTrackAndLapCountBase64(const Track & track, int lapCount)
-{
-    return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount)).toLatin1().toBase64();
 }
 
 void Settings::saveTrackUnlockStatus(const Track & track, int lapCount)

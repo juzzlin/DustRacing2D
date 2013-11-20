@@ -61,6 +61,10 @@ Race::Race(const Game & game, unsigned int numCars)
 
     m_offTrackMessageTimer.setSingleShot(true);
     m_offTrackMessageTimer.setInterval(30000);
+
+    connect(&m_timing, SIGNAL(lapRecordAchieved(int)), this, SLOT(setLapRecord(int)));
+
+    connect(&m_timing, SIGNAL(raceRecordAchieved(int)), this, SLOT(setRaceRecord(int)));
 }
 
 void Race::createStartGridObjects()
@@ -211,6 +215,20 @@ void Race::translateCarsToStartPositions()
     }
 }
 
+void Race::setRaceRecord(int msecs)
+{
+    Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
+
+    emit messageRequested(QObject::tr("New race record!"));
+}
+
+void Race::setLapRecord(int msecs)
+{
+    Settings::instance().saveLapRecord(*m_track, msecs);
+
+    emit messageRequested(QObject::tr("New lap record!"));
+}
+
 void Race::start()
 {
     if (!m_started)
@@ -340,10 +358,7 @@ void Race::updateRouteProgress(Car & car)
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
-                if (isLapCompleted(car, route, currentTargetNodeIndex))
-                {
-                    checkForNewLapRecord();
-                }
+                checkIfLapIsCompleted(car, route, currentTargetNodeIndex);
 
                 // Increase progress and update the positions hash
                 car.setRouteProgression(car.routeProgression() + 1);
@@ -368,7 +383,7 @@ void Race::updateRouteProgress(Car & car)
     }
 }
 
-bool Race::isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex)
+void Race::checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex)
 {
     if (currentTargetNodeIndex == 0 &&
         car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
@@ -380,20 +395,6 @@ bool Race::isLapCompleted(Car & car, const Route & route, unsigned int currentTa
         {
             m_timing.setRaceCompleted(car.index(), true, car.isHuman());
         }
-
-        return true;
-    }
-
-    return false;
-}
-
-void Race::checkForNewLapRecord()
-{
-    // Check if we have a new lap record
-    if (m_timing.newLapRecordAchieved())
-    {
-        Settings::instance().saveLapRecord(*m_track, m_timing.lapRecord());
-        emit messageRequested(QObject::tr("New lap record!"));
     }
 }
 

@@ -53,6 +53,7 @@ public:
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
+    , m_raceRecord(Settings::instance().loadRaceRecord(m_track, Game::instance().lapCount()))
     , m_bestPos(Settings::instance().loadBestPos(m_track, Game::instance().lapCount()))
     {
         m_star.setShaderProgram(&Renderer::instance().program("menu"));
@@ -79,8 +80,9 @@ public:
     {
         MenuItem::setFocused(focused);
 
-        m_lapRecord = Settings::instance().loadLapRecord(m_track);
-        m_bestPos   = Settings::instance().loadBestPos(m_track, Game::instance().lapCount());
+        m_lapRecord  = Settings::instance().loadLapRecord(m_track);
+        m_raceRecord = Settings::instance().loadRaceRecord(m_track, Game::instance().lapCount());
+        m_bestPos    = Settings::instance().loadBestPos(m_track, Game::instance().lapCount());
     }
 
     //! \reimp
@@ -95,6 +97,7 @@ private:
     MCSurface     & m_lock;
     int             m_xDisplacement;
     int             m_lapRecord;
+    int             m_raceRecord;
     int             m_bestPos;
 };
 
@@ -223,13 +226,13 @@ void TrackItem::render()
 
     // Render track properties
     ss.str("");
-    ss << QObject::tr("  Laps: ").toStdString() << Game::instance().lapCount();
+    ss << QObject::tr("       Laps: ").toStdString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.render(textX, y() - height() / 2 - text.height() * 2, nullptr, m_monospace);
 
     ss.str("");
-    ss << QObject::tr("Length: ").toStdString()
+    ss << QObject::tr("     Length: ").toStdString()
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
        << QObject::tr(" m").toStdString();
     text.setText(ss.str());
@@ -238,14 +241,15 @@ void TrackItem::render()
     if (!m_track.trackData().isLocked())
     {
         ss.str("");
-        ss << QObject::tr("Record: ").toStdString() << Timing::msecsToString(m_lapRecord);
+        ss << QObject::tr(" Lap Record: ").toStdString() << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
         text.render(textX, y() - height() / 2 - text.height() * 4, nullptr, m_monospace);
-    }
 
-    text.setText("Use arrows to browse and enter to select..");
-    text.setGlyphSize(10, 10);
-    text.render(10, text.height(), nullptr, m_monospace);
+        ss.str("");
+        ss << QObject::tr("Race Record: ").toStdString() << Timing::msecsToString(m_raceRecord);
+        text.setText(ss.str());
+        text.render(textX, y() - height() / 2 - text.height() * 5, nullptr, m_monospace);
+    }
 }
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,

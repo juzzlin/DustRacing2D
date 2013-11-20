@@ -37,6 +37,10 @@ public:
     int loadLapRecord(const Track & track) const;
     void resetLapRecords();
 
+    void saveRaceRecord(const Track & track, int msecs, int lapCount);
+    int loadRaceRecord(const Track & track, int lapCount) const;
+    void resetRaceRecords();
+
     void saveBestPos(const Track & track, int pos, int lapCount);
     int loadBestPos(const Track & track, int lapCount) const;
     void resetBestPos();

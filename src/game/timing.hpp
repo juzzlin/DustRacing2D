@@ -88,12 +88,6 @@ public:
     //! Set the current race record.
     void setRaceRecord(int msecs);
 
-    //! \return true, if new lap record just achieved.
-    bool newLapRecordAchieved() const;
-
-    //! Force the state of active new lap record.
-    void setNewLapRecordAchieved(bool state);
-
     //! Starts the timing.
     void start();
 
@@ -105,6 +99,12 @@ public:
 
     //! Converts msecs to string "mm:ss.zz".
     static std::string msecsToString(int msec);
+
+signals:
+
+    void lapRecordAchieved(int msec);
+
+    void raceRecordAchieved(int msec);
 
 private:
 
@@ -135,7 +135,6 @@ private:
     bool                       m_started;
     int                        m_lapRecord;
     int                        m_raceRecord;
-    bool                       m_newLapRecordAchieved;
 };
 
 #endif // TIMING_HPP

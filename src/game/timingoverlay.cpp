@@ -28,6 +28,7 @@
 #include <sstream>
 
 #include <QObject> // For QObject::tr()
+#include <QTimer>
 
 static const int RACE_TIME_POS         = 1;
 static const int CURRENT_LAP_TIME_POS  = 2;
@@ -57,7 +58,8 @@ TimingOverlay::TimingOverlay()
     QObject::tr("10th").toStdString(),
     QObject::tr("11th").toStdString(),
     QObject::tr("12th").toStdString()})
-, m_showRecordTime(true)
+, m_showLapRecordTime(true)
+, m_showRaceTime(true)
 {
     assert(Scene::NUM_CARS == static_cast<int>(m_posTexts.size()) - 1);
     m_text.setShadowOffset(2, -2);
@@ -69,14 +71,55 @@ void TimingOverlay::setCarToFollow(const Car & car)
     m_carStatusView.setCarToFollow(car);
 }
 
-void TimingOverlay::setTiming(Timing & timing)
-{
-    m_timing = &timing;
-}
-
 void TimingOverlay::setRace(Race & race)
 {
-    m_race = &race;
+    m_race   = &race;
+    m_timing = &m_race->timing();
+
+    connect(m_timing, SIGNAL(lapRecordAchieved(int)), this, SLOT(setLapRecord(int)));
+    connect(m_timing, SIGNAL(raceRecordAchieved(int)), this, SLOT(setRaceRecord(int)));
+}
+
+void TimingOverlay::setLapRecord(int)
+{
+    blinkLapRecord();
+}
+
+void TimingOverlay::setRaceRecord(int)
+{
+    blinkRaceRecord();
+}
+
+void TimingOverlay::blinkLapRecord()
+{
+    static int count = 0;
+    if (count < 10)
+    {
+        QTimer::singleShot(250, this, SLOT(blinkLapRecord()));
+        m_showLapRecordTime = !m_showLapRecordTime;
+        count++;
+    }
+    else
+    {
+        m_showLapRecordTime = true;
+        count = 0;
+    }
+}
+
+void TimingOverlay::blinkRaceRecord()
+{
+    static int count = 0;
+    if (count < 10)
+    {
+        QTimer::singleShot(250, this, SLOT(blinkRaceRecord()));
+        m_showRaceTime = !m_showRaceTime;
+        count++;
+    }
+    else
+    {
+        m_showRaceTime = true;
+        count = 0;
+    }
 }
 
 void TimingOverlay::render()
@@ -246,7 +289,7 @@ void TimingOverlay::renderLastLapTime()
 
 void TimingOverlay::renderRecordLapTime()
 {
-    if (m_showRecordTime)
+    if (m_showLapRecordTime)
     {
         const int recordLapTime = m_timing->lapRecord();
         const MCGLColor white(1.0, 1.0, 1.0);
@@ -267,20 +310,23 @@ void TimingOverlay::renderRecordLapTime()
 
 void TimingOverlay::renderRaceTime()
 {
-    const int raceTime = m_timing->raceTime(m_car->index());
-    const MCGLColor white(1.0, 1.0, 1.0);
+    if (m_showRaceTime)
+    {
+        const int raceTime = m_timing->raceTime(m_car->index());
+        const MCGLColor white(1.0, 1.0, 1.0);
 
-    m_text.setGlyphSize(GLYPH_W, GLYPH_H);
-    m_text.setColor(white);
+        m_text.setGlyphSize(GLYPH_W, GLYPH_H);
+        m_text.setColor(white);
 
-    std::stringstream ss;
-    ss << QObject::tr("TOT:").toStdString() << m_timing->msecsToString(raceTime);
-    m_text.setText(ss.str());
-    m_text.render(
-        width()  - m_text.width(),
-        height() - m_text.height() * RACE_TIME_POS,
-        nullptr,
-        m_font);
+        std::stringstream ss;
+        ss << QObject::tr("TOT:").toStdString() << m_timing->msecsToString(raceTime);
+        m_text.setText(ss.str());
+        m_text.render(
+            width()  - m_text.width(),
+            height() - m_text.height() * RACE_TIME_POS,
+            nullptr,
+            m_font);
+    }
 }
 
 void TimingOverlay::renderCarStatusView()
@@ -291,35 +337,5 @@ void TimingOverlay::renderCarStatusView()
 
 bool TimingOverlay::update()
 {
-    // Blink the record time a couple of times if a new record time set.
-    // 60 Hz update rate is assumed here.
-
-    static int blink   = 0;
-    static int blinked = 0;
-
-    if (m_timing->newLapRecordAchieved())
-    {
-        if (blinked < 8)
-        {
-            blink++;
-            if (blink > 15)
-            {
-                m_showRecordTime = !m_showRecordTime;
-                blink = 0;
-                blinked++;
-            }
-        }
-        else
-        {
-            m_timing->setNewLapRecordAchieved(false);
-            blinked = 0;
-            m_showRecordTime = true;
-        }
-    }
-    else
-    {
-        m_showRecordTime = true;
-    }
-
     return true;
 }

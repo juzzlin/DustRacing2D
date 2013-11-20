@@ -75,6 +75,7 @@ private:
                 {
                     MCLogger().info() << "Reset times selected.";
                     Settings::instance().resetLapRecords();
+                    Settings::instance().resetRaceRecords();
                 });
             m_confirmationMenu.setCurrentIndex(1);
             break;

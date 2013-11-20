@@ -19,6 +19,8 @@
 #include "carstatusview.hpp"
 #include "overlaybase.hpp"
 
+#include <QObject>
+
 #include <vector>
 #include <string>
 
@@ -31,8 +33,10 @@ class Race;
 class Timing;
 
 //! Renders timeing information on top of the game scene.
-class TimingOverlay : public OverlayBase
+class TimingOverlay : public QObject, public OverlayBase
 {
+    Q_OBJECT
+
 public:
 
     //! Constructor.
@@ -47,11 +51,18 @@ public:
     //! Show timing for the given car.
     void setCarToFollow(const Car & car);
 
-    //! Set the timing data.
-    void setTiming(Timing & timing);
-
     //! Set current race.
     void setRace(Race & race);
+
+private slots:
+
+    void setLapRecord(int msecs);
+
+    void setRaceRecord(int msecs);
+
+    void blinkLapRecord();
+
+    void blinkRaceRecord();
 
 private:
 
@@ -78,7 +89,8 @@ private:
     Timing                 * m_timing;
     Race                   * m_race;
     std::vector<std::string> m_posTexts;
-    bool                     m_showRecordTime;
+    bool                     m_showLapRecordTime;
+    bool                     m_showRaceTime;
     CarStatusView            m_carStatusView;
 };
 

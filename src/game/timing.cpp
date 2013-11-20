@@ -24,7 +24,6 @@ Timing::Timing(MCUint cars, QObject *parent)
 , m_started(false)
 , m_lapRecord(-1)
 , m_raceRecord(-1)
-, m_newLapRecordAchieved(false)
 {
 }
 
@@ -46,13 +45,13 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
 
     // Check if a new lap record achieved.
     // Accept new lap records only by human players.
-    m_newLapRecordAchieved = false;
     if (isHuman)
     {
         if (times.lastLapTime < m_lapRecord || m_lapRecord == -1)
         {
             m_lapRecord = times.lastLapTime;
-            m_newLapRecordAchieved = true;
+
+            emit lapRecordAchieved(m_lapRecord);
         }
     }
 }
@@ -69,7 +68,7 @@ void Timing::setRaceCompleted(MCUint index, bool state, bool isHuman)
         {
             m_raceRecord = times.raceTime;
 
-            // TODO emit signal
+            emit raceRecordAchieved(m_raceRecord);
         }
     }
 }
@@ -186,16 +185,6 @@ void Timing::setRaceRecord(int msecs)
     m_raceRecord = msecs;
 }
 
-bool Timing::newLapRecordAchieved() const
-{
-    return m_newLapRecordAchieved;
-}
-
-void Timing::setNewLapRecordAchieved(bool state)
-{
-    m_newLapRecordAchieved = state;
-}
-
 int Timing::lastLapTime(MCUint index) const
 {
     if (!m_started)
@@ -220,9 +209,8 @@ void Timing::stop()
 
 void Timing::reset()
 {
-    m_time                 = QTime(0, 0, 0, 0);
-    m_started              = false;
-    m_newLapRecordAchieved = false;
+    m_time    = QTime(0, 0, 0, 0);
+    m_started = false;
 
     for (Timing::Times & time : m_times)
     {

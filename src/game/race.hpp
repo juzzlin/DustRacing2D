@@ -79,6 +79,10 @@ signals:
 
 public slots:
 
+    void setLapRecord(int msecs);
+
+    void setRaceRecord(int msecs);
+
     void start();
 
     void stopEngineSounds();
@@ -87,17 +91,15 @@ public slots:
 
 private:
 
-    void checkForNewLapRecord();
-
     void checkForNewBestPosition(const Car & car);
 
     void checkIfCarIsStuck(Car & car);
 
     void checkIfCarIsOffTrack(Car & car);
 
-    void createStartGridObjects();
+    void checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
 
-    bool isLapCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
+    void createStartGridObjects();
 
     bool isRaceFinished() const;
 
