@@ -28,6 +28,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QObject> // for tr()
 
 #include <sstream>
 
@@ -106,7 +107,7 @@ public:
     {
         MenuItem::setSelected(flag);
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-        m_confirmationMenu.setText("Restart to change the resolution.");
+        m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdString());
         m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
         m_confirmationMenu.setCurrentIndex(1);
     }
@@ -170,7 +171,8 @@ ResolutionMenu::ResolutionMenu(
     if (fullScreen)
     {
         ResolutionItem * resolution =
-            new ResolutionItem(m_confirmationMenu, 0, 0, true, width, itemHeight, "Native resolution");
+            new ResolutionItem(m_confirmationMenu, 0, 0, true, width, itemHeight,
+                QObject::tr("Native resolution").toStdString());
         resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
         addItem(MTFH::MenuItemPtr(resolution));
     }
