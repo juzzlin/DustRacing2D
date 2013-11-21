@@ -71,7 +71,7 @@
     <message>
         <location filename="../race.cpp" line="223"/>
         <source>New race record!</source>
-        <translation type="unfinished"></translation>
+        <translation>Uusi kilpailuennätys!</translation>
     </message>
     <message>
         <location filename="../race.cpp" line="414"/>
@@ -196,7 +196,7 @@
     <message>
         <location filename="../timingoverlay.cpp" line="253"/>
         <source>LAP:</source>
-        <translation type="unfinished"></translation>
+        <translation>KIE:</translation>
     </message>
     <message>
         <location filename="../timingoverlay.cpp" line="298"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../timingoverlay.cpp" line="337"/>
         <source>TOT:</source>
-        <translation type="unfinished"></translation>
+        <translation>KOK:</translation>
     </message>
     <message>
         <location filename="../help.cpp" line="30"/>
@@ -441,12 +441,12 @@ ERITYISKIITOKSET
     <message>
         <location filename="../trackselectionmenu.cpp" line="229"/>
         <source>       Laps: </source>
-        <translation type="unfinished"></translation>
+        <translation>     Kierrokset:</translation>
     </message>
     <message>
         <location filename="../trackselectionmenu.cpp" line="235"/>
         <source>     Length: </source>
-        <translation type="unfinished"></translation>
+        <translation>         Pituus:</translation>
     </message>
     <message>
         <location filename="../trackselectionmenu.cpp" line="237"/>
@@ -456,12 +456,12 @@ ERITYISKIITOKSET
     <message>
         <location filename="../trackselectionmenu.cpp" line="244"/>
         <source> Lap Record: </source>
-        <translation type="unfinished"></translation>
+        <translation> Kierrosennätys:</translation>
     </message>
     <message>
         <location filename="../trackselectionmenu.cpp" line="249"/>
         <source>Race Record: </source>
-        <translation type="unfinished"></translation>
+        <translation>Kilpailuennätys:</translation>
     </message>
     <message>
         <source>Record: </source>
@@ -577,6 +577,16 @@ ERITYISKIITOKSET
         <location filename="../credits.cpp" line="40"/>
         <source>SPECIAL THANKS</source>
         <translation>ERITYISKIITOKSET</translation>
+    </message>
+    <message>
+        <location filename="../resolutionmenu.cpp" line="110"/>
+        <source>Restart to change the resolution.</source>
+        <translation>Käynnistä uudelleen vaihtaaksesi resoluution.</translation>
+    </message>
+    <message>
+        <location filename="../resolutionmenu.cpp" line="175"/>
+        <source>Native resolution</source>
+        <translation>Natiiviresoluutio</translation>
     </message>
 </context>
 </TS>
