@@ -31,9 +31,6 @@
 #include <memory>
 #include <vector>
 
-class MCObject;
-class MCObjectData;
-
 MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
 : m_assetManager(assetManager)
 {

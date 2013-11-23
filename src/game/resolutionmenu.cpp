@@ -134,7 +134,6 @@ ResolutionMenu::ResolutionMenu(
     ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen)
 : SurfaceMenu("settingsBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
-, m_fullScreen(fullScreen)
 {
     const int resolutions = sizeof(RESOLUTIONS) / sizeof(Resolution);
 

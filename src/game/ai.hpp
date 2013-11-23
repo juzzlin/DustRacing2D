@@ -54,7 +54,6 @@ private:
     Car         & m_car;
     Track       * m_track;
     const Route * m_route;
-    unsigned int  m_targetIndex;
     int           m_lastDiff;
     int           m_lastTargetNodeIndex;
     MCVector2dF   m_randomTolerance;

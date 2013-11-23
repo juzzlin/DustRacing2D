@@ -33,10 +33,10 @@
 #include <cmath>
 #include <string>
 
-class MCCamera;
-class MCGLShaderProgram;
-class MCGLTexCoord;
-class MCGLVertex;
+class  MCCamera;
+class  MCGLShaderProgram;
+struct MCGLTexCoord;
+class  MCGLVertex;
 
 /*! MCSurface is a renderable object bound to an OpenGL texture handle.
  *  MCSurface can be rendered straightly as a standalone object. */

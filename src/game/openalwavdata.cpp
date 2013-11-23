@@ -149,11 +149,9 @@ static bool loadWavFile(
 }
 
 OpenALWavData::OpenALWavData(const std::string & path)
-    : m_data(nullptr)
-    , m_size(0)
+    : m_size(0)
     , m_freq(0)
     , m_buffer(0)
-    , m_loop(AL_FALSE)
 {
     load(path);
 }

@@ -31,11 +31,6 @@ CheckeredFlag::CheckeredFlag()
     m_surface.setShaderProgram(&Renderer::instance().program("master"));
 }
 
-void CheckeredFlag::setDimensions(MCUint width, MCUint height)
-{
-    OverlayBase::setDimensions(width, height);
-}
-
 void CheckeredFlag::render()
 {
     MCVector3dF pos(width() / 2, height() - FLAG_H / 2 - V_SPACING);

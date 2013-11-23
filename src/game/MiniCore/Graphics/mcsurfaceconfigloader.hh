@@ -27,7 +27,7 @@
 
 #include <MCGLEW> // For GLenum.
 
-class MCSurfaceMetaData;
+struct MCSurfaceMetaData;
 
 //! Loads the surface config.
 class MCSurfaceConfigLoader

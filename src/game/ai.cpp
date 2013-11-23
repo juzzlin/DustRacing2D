@@ -30,7 +30,6 @@ AI::AI(Car & car)
 : m_car(car)
 , m_track(nullptr)
 , m_route(nullptr)
-, m_targetIndex(0)
 , m_lastDiff(0)
 {
 }

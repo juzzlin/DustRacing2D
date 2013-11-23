@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-class MCTextureFontData;
+struct MCTextureFontData;
 
 //! Loads the texture font config XML-file and creates
 //! MCTextureFontData's used by MCTextureFontManager.

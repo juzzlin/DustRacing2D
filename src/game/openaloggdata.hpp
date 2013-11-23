@@ -37,11 +37,9 @@ public:
 
 private:
 
-    ALvoid *  m_data;
-    ALsizei   m_size, m_freq;
-    ALenum    m_format;
-    ALuint    m_buffer;
-    ALboolean m_loop;
+    ALsizei m_freq;
+    ALenum  m_format;
+    ALuint  m_buffer;
 };
 
 #endif // OPENALOGGDATA_HPP

@@ -36,10 +36,10 @@
 
 using std::string;
 
-class MCCamera;
-class MCGLShaderProgram;
-class MCGLTexCoord;
-class MCGLVertex;
+class  MCCamera;
+class  MCGLShaderProgram;
+struct MCGLTexCoord;
+class  MCGLVertex;
 
 /** Renderable 3d mesh object. */
 class MCMesh : public MCGLObjectBase

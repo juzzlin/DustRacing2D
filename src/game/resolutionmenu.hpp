@@ -36,7 +36,6 @@ protected:
 private:
 
     ConfirmationMenu & m_confirmationMenu;
-    bool m_fullScreen;
 };
 
 #endif // RESOLUTIONMENU_HPP

@@ -29,9 +29,6 @@ public:
     CheckeredFlag();
 
     //! \reimp
-    virtual void setDimensions(MCUint width, MCUint height);
-
-    //! \reimp
     virtual void render();
 
 private:

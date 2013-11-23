@@ -26,9 +26,9 @@
 #include "mcexception.hh"
 #include "mcmacros.hh"
 
-class MCTextureFont;
-class MCTextureFontData;
-class MCSurfaceManager;
+class  MCTextureFont;
+struct MCTextureFontData;
+class  MCSurfaceManager;
 
 /*! A manager class for textured monospace fonts.
  *
