@@ -48,7 +48,7 @@ private:
 };
 
 PressKeyMenu::PressKeyMenu(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
+: SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
 , m_text(QObject::tr("Press a key..").toStdString())
 {
 }
@@ -73,7 +73,7 @@ void PressKeyMenu::render()
 static const char * PRESS_KEY_MENU_ID = "pressKeyMenu";
 
 KeyConfigMenu::KeyConfigMenu(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
+: SurfaceMenu("settingsBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_pressKeyMenu(new PressKeyMenu(PRESS_KEY_MENU_ID, width, height))
 {
     MTFH::MenuManager::instance().addMenu(*m_pressKeyMenu);

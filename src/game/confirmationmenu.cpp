@@ -24,7 +24,7 @@
 #include <MCTextureText>
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST, false)
+: SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST, false)
 , m_acceptItem(new MTFH::MenuItem(width / 4, height, "Ok"))
 , m_cancelItem(new MTFH::MenuItem(width / 4, height, "Cancel"))
 , m_text("")

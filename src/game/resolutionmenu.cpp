@@ -132,7 +132,7 @@ private:
 
 ResolutionMenu::ResolutionMenu(
     ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen)
-: SurfaceMenu("helpBack", id, width, height)
+: SurfaceMenu("settingsBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
 , m_fullScreen(fullScreen)
 {

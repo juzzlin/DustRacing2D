@@ -119,14 +119,14 @@ static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST)
+: SurfaceMenu("settingsBack", id, width, height, Menu::MS_VERTICAL_LIST)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
-, m_gameModeMenu("helpBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_splitTypeMenu("helpBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_lapCountMenu("helpBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_fpsMenu("helpBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_fpsMenu("settingsBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
