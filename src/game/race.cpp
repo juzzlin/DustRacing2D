@@ -316,6 +316,7 @@ void Race::pitStop(Car & car)
         emit messageRequested(QObject::tr("Pit stop!"));
         emit locationChanged(pitSoundHandle, car.location().i(), car.location().j());
         emit playRequested(pitSoundHandle, false);
+        emit tiresChanged(car);
     }
 }
 

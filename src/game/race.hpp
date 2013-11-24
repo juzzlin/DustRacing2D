@@ -78,6 +78,8 @@ signals:
 
     void messageRequested(QString message);
 
+    void tiresChanged(const Car & car);
+
 public slots:
 
     void setLapRecord(int msecs);

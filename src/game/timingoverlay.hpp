@@ -54,6 +54,11 @@ public:
     //! Set current race.
     void setRace(Race & race);
 
+public slots:
+
+    //! Blink car status view if followed car matches the argument.
+    void blinkCarStatus(const Car &);
+
 private slots:
 
     void setLapRecord(int msecs);
@@ -63,6 +68,8 @@ private slots:
     void blinkLapRecord();
 
     void blinkRaceRecord();
+
+    void blinkCarStatus();
 
 private:
 
@@ -91,6 +98,7 @@ private:
     std::vector<std::string> m_posTexts;
     bool                     m_showLapRecordTime;
     bool                     m_showRaceTime;
+    bool                     m_showCarStatus;
     CarStatusView            m_carStatusView;
 };
 

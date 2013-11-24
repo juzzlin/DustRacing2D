@@ -67,6 +67,7 @@ TimingOverlay::TimingOverlay()
     QObject::tr("12th").toStdString()})
 , m_showLapRecordTime(true)
 , m_showRaceTime(true)
+, m_showCarStatus(true)
 {
     assert(Scene::NUM_CARS == static_cast<int>(m_posTexts.size()) - 1);
     m_text.setShadowOffset(2, -2);
@@ -85,6 +86,7 @@ void TimingOverlay::setRace(Race & race)
 
     connect(m_timing, SIGNAL(lapRecordAchieved(int)), this, SLOT(setLapRecord(int)));
     connect(m_timing, SIGNAL(raceRecordAchieved(int)), this, SLOT(setRaceRecord(int)));
+    connect(m_race, SIGNAL(tiresChanged(const Car &)), this, SLOT(blinkCarStatus(const Car &)));
 }
 
 void TimingOverlay::setLapRecord(int)
@@ -126,6 +128,30 @@ void TimingOverlay::blinkRaceRecord()
     {
         m_showRaceTime = true;
         count = 0;
+    }
+}
+
+void TimingOverlay::blinkCarStatus()
+{
+    static int count = 0;
+    if (count < 10)
+    {
+        QTimer::singleShot(250, this, SLOT(blinkCarStatus()));
+        m_showCarStatus = !m_showCarStatus;
+        count++;
+    }
+    else
+    {
+        m_showCarStatus = true;
+        count = 0;
+    }
+}
+
+void TimingOverlay::blinkCarStatus(const Car & car)
+{
+    if (m_car == &car)
+    {
+        blinkCarStatus();
     }
 }
 
@@ -346,8 +372,11 @@ void TimingOverlay::renderRaceTime()
 
 void TimingOverlay::renderCarStatusView()
 {
-    m_carStatusView.setPos(width() - m_carStatusView.width(), m_carStatusView.height() + 10);
-    m_carStatusView.render();
+    if (m_showCarStatus)
+    {
+        m_carStatusView.setPos(width() - m_carStatusView.width(), m_carStatusView.height() + 10);
+        m_carStatusView.render();
+    }
 }
 
 bool TimingOverlay::update()
