@@ -312,9 +312,10 @@ void Race::pitStop(Car & car)
 {
     if (m_timing.lap(car.index()) > 0)
     {
+        const QString pitSoundHandle("pit");
         emit messageRequested(QObject::tr("Pit stop!"));
-        emit locationChanged("pit", car.location().i(), car.location().j());
-        emit playRequested("pit", false);
+        emit locationChanged(pitSoundHandle, car.location().i(), car.location().j());
+        emit playRequested(pitSoundHandle, false);
     }
 }
 
