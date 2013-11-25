@@ -542,6 +542,7 @@ void Race::setTrack(Track & track)
     m_bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount);
 
     m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
+    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, m_lapCount));
 
     for (OffTrackDetectorPtr otd : m_offTrackDetectors)
     {
