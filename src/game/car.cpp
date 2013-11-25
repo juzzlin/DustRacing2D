@@ -364,12 +364,25 @@ void Car::wearOutTires(MCFloat step, MCFloat factor)
         m_tireWearOutCapacity -= velocity().lengthFast() * step * factor;
     }
     else
-        {
+    {
         m_tireWearOutCapacity = 0;
     }
 
     static_cast<SlideFrictionGenerator *>(
         m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
+}
+
+void Car::resetTireWear()
+{
+    m_tireWearOutCapacity = m_desc.tireWearOutCapacity;
+
+    static_cast<SlideFrictionGenerator *>(
+        m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
+}
+
+float Car::tireWearLevel() const
+{
+    return m_tireWearOutCapacity / m_desc.tireWearOutCapacity;
 }
 
 void Car::stepTime(MCFloat step)
@@ -468,11 +481,6 @@ int Car::routeProgression() const
 bool Car::isHuman() const
 {
     return m_isHuman;
-}
-
-float Car::tireWearLevel() const
-{
-    return m_tireWearOutCapacity / m_desc.tireWearOutCapacity;
 }
 
 void Car::setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager)

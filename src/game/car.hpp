@@ -183,6 +183,8 @@ public:
     //! \return Tire wear level. 1.0 means no wear, 0.0 means totally worn-out tires.
     float tireWearLevel() const;
 
+    void resetTireWear();
+
     void setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager);
 
     CarSoundEffectManagerPtr soundEffectManager() const;
