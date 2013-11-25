@@ -269,10 +269,15 @@ void Race::update()
         const Route          & route  = m_track->trackData().route();
         const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
 
-        if (tnode.index() >=
-                static_cast<int>(9 * route.numNodes() / 10))
+        if (tnode.index() >= static_cast<int>(9 * route.numNodes() / 10))
         {
-            m_checkeredFlagEnabled = true;
+            if (!m_checkeredFlagEnabled)
+            {
+                const QString bellSoundHandle("bell");
+                emit playRequested(bellSoundHandle, false);
+
+                m_checkeredFlagEnabled = true;
+            }
         }
     }
     // Check if winner has finished
