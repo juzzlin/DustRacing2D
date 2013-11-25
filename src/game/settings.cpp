@@ -38,6 +38,16 @@ static QString combineTrackAndLapCountBase64(const Track & track, int lapCount)
     return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount)).toLatin1().toBase64();
 }
 
+QString Settings::fpsKey()
+{
+    return "fps";
+}
+
+QString Settings::lapCountKey()
+{
+    return "lapCount";
+}
+
 Settings::Settings()
 {
     assert(!Settings::m_instance);

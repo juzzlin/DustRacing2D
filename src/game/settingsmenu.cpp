@@ -34,8 +34,8 @@
 
 #include <QObject> // For QObject::tr()
 
-static const QString FPS_KEY("fps");
-static const QString LAP_COUNT_KEY("lapCount");
+static const QString FPS_KEY(Settings::fpsKey());
+static const QString LAP_COUNT_KEY(Settings::lapCountKey());
 
 class ResetAction : public MTFH::MenuItemAction
 {

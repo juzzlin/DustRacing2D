@@ -52,11 +52,14 @@ public:
     void saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen);
     void loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen);
 
+    void saveKeyMapping(int player, InputHandler::InputAction action, int key);
+    int loadKeyMapping(int player, InputHandler::InputAction action);
+
     void saveValue(QString key, int value);
     int loadValue(QString key, int defaultValue = 0);
 
-    void saveKeyMapping(int player, InputHandler::InputAction action, int key);
-    int loadKeyMapping(int player, InputHandler::InputAction action);
+    static QString fpsKey();
+    static QString lapCountKey();
 
 private:
 
