@@ -50,6 +50,8 @@ void AudioThread::connectAudioSource(AudioSource & source)
         this, SLOT(stopSound(QString)));
     connect(&source, SIGNAL(pitchChangeRequested(QString, float)),
         this, SLOT(setPitch(QString, float)));
+    connect(&source, SIGNAL(volumeChangeRequested(QString, float)),
+        this, SLOT(setVolume(QString, float)));
     connect(&source, SIGNAL(locationChanged(QString, float, float)),
         this, SLOT(setLocation(QString, float, float)));
 }
@@ -62,6 +64,8 @@ void AudioThread::disconnectAudioSource(AudioSource & source)
         this, SLOT(stopSound(QString)));
     disconnect(&source, SIGNAL(pitchChangeRequested(QString, float)),
         this, SLOT(setPitch(QString, float)));
+    disconnect(&source, SIGNAL(volumeChangeRequested(QString, float)),
+        this, SLOT(setVolume(QString, float)));
     disconnect(&source, SIGNAL(locationChanged(QString, float, float)),
         this, SLOT(setLocation(QString, float, float)));
 }
