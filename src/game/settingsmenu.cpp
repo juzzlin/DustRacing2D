@@ -35,6 +35,7 @@
 #include <QObject> // For QObject::tr()
 
 static const QString FPS_KEY("fps");
+static const QString LAP_COUNT_KEY("lapCount");
 
 class ResetAction : public MTFH::MenuItemAction
 {
@@ -379,6 +380,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
             {
                 MCLogger().info() << LAP_COUNTS[i] << " laps selected.";
                 Game::instance().setLapCount(LAP_COUNTS[i]);
+                Settings::instance().saveValue(LAP_COUNT_KEY, LAP_COUNTS[i]);
                 MenuManager::instance().popMenu();
             });
 
