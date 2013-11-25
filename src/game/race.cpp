@@ -297,6 +297,7 @@ void Race::update()
             else
             {
                 emit messageRequested(QObject::tr("The winner has finished!"));
+                emit playRequested("cheering", false);
             }
         }
     }

@@ -68,9 +68,10 @@ void AudioThread::disconnectAudioSource(AudioSource & source)
 
 void AudioThread::loadSounds()
 {
-    loadSound("bell", "bell.ogg");
+    loadSound("bell",      "bell.ogg");
+    loadSound("cheering",  "cheering.ogg");
     loadSound("menuClick", "menuClick.ogg");
-    loadSound("pit", "pit.ogg");
+    loadSound("pit",       "pit.ogg");
 
     loadEngineSounds("carEngine.ogg");
 }
