@@ -215,27 +215,27 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
     settings.endGroup();
 }
 
-void Settings::saveFps(int fps)
+void Settings::saveValue(QString key, int fps)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    settings.setValue("fps", fps);
+    settings.setValue(key, fps);
     settings.endGroup();
 }
 
-int Settings::loadFps()
+int Settings::loadValue(QString key, int defaultValue)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
-    int fps = 0;
+    int value = 0;
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    fps = settings.value("fps", 60).toInt();
+    value = settings.value(key, defaultValue).toInt();
     settings.endGroup();
 
-    return fps;
+    return value;
 }
 
 QString Settings::combineActionAndPlayer(int player, InputHandler::InputAction action)

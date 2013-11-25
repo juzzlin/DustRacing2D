@@ -34,6 +34,8 @@
 
 #include <QObject> // For QObject::tr()
 
+static const QString FPS_KEY("fps");
+
 class ResetAction : public MTFH::MenuItemAction
 {
 public:
@@ -321,7 +323,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
         {
             MCLogger().info() << "30 fps selected.";
             Game::instance().setFps(30);
-            Settings::instance().saveFps(30);
+            Settings::instance().saveValue(FPS_KEY, 30);
             MenuManager::instance().popMenu();
         });
 
@@ -332,14 +334,14 @@ void SettingsMenu::populateFpsMenu(int width, int height)
         {
             MCLogger().info() << "60 fps selected.";
             Game::instance().setFps(60);
-            Settings::instance().saveFps(60);
+            Settings::instance().saveValue(FPS_KEY, 60);
             MenuManager::instance().popMenu();
         });
 
     m_fpsMenu.addItem(MTFH::MenuItemPtr(fps30));
     m_fpsMenu.addItem(MTFH::MenuItemPtr(fps60));
 
-    const int fps = Settings::instance().loadFps();
+    const int fps = Settings::instance().loadValue(FPS_KEY, 60);
     if (fps == 30)
     {
         m_fpsMenu.setCurrentIndex(fps30->index());

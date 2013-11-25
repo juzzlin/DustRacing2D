@@ -52,8 +52,8 @@ public:
     void saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen);
     void loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen);
 
-    void saveFps(int fps);
-    int loadFps();
+    void saveValue(QString key, int value);
+    int loadValue(QString key, int defaultValue = 0);
 
     void saveKeyMapping(int player, InputHandler::InputAction action, int key);
     int loadKeyMapping(int player, InputHandler::InputAction action);
