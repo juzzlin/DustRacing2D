@@ -100,7 +100,6 @@ void Startlights::stateAppear()
     {
         m_state = FirstRow;
         emit messageRequested("3");
-        emit soundRequested("startlightsBeep");
     }
 }
 
@@ -112,7 +111,6 @@ void Startlights::stateFirstRow()
     {
         m_state = SecondRow;
         emit messageRequested("2");
-        emit soundRequested("startlightsBeep");
     }
 }
 
@@ -124,7 +122,6 @@ void Startlights::stateSecondRow()
     {
         m_state = ThirdRow;
         emit messageRequested("1");
-        emit soundRequested("startlightsBeep");
     }
 }
 
@@ -137,7 +134,6 @@ void Startlights::stateThirdRow()
         m_state = Go;
         emit messageRequested(QObject::tr("GO!!!"));
         emit raceStarted();
-        emit soundRequested("startlightsGo");
         InputHandler::setEnabled(true);
     }
 }

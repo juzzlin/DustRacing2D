@@ -20,8 +20,8 @@
 #include <QString>
 #include <QTimer>
 
-#include "MiniCore/Core/MCTypes"
-#include "MiniCore/Core/MCVectorAnimation"
+#include <MCTypes>
+#include <MCVectorAnimation>
 
 #include <functional>
 #include <map>
@@ -62,8 +62,6 @@ public:
     MCFloat glowScale() const;
 
 signals:
-
-    void soundRequested(QString handle);
 
     void messageRequested(QString message);
 
