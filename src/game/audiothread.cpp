@@ -77,10 +77,11 @@ void AudioThread::loadSounds()
     loadCommonSound("menuClick", "menuClick.ogg");
     loadCommonSound("pit",       "pit.ogg");
 
-    loadMultiSound("carEngine", "carEngine.ogg");
-    loadMultiSound("carHit", "carHit.ogg");
+    loadMultiSound("carEngine",  "carEngine.ogg");
+    loadMultiSound("carHit",     "carHit.ogg");
+    loadMultiSound("skid",       "skid.ogg");
 
-    loadSceneSound("carHit2", "carHit2.ogg");
+    loadSceneSound("carHit2",    "carHit2.ogg");
 }
 
 void AudioThread::loadSceneSound(QString handle, QString path)

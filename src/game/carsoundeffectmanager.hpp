@@ -40,6 +40,7 @@ public:
     {
         QString engineSoundHandle;
         QString hitSoundHandle;
+        QString skidSoundHandle;
     };
 
     //! Constructor.
@@ -65,7 +66,9 @@ private:
     int               m_prevSpeed;
     MCVector3dF       m_prevLocation;
     QTimer            m_hitTimer;
+    QTimer            m_skidTimer;
     MultiSoundHandles m_handles;
+    bool              m_skidPlaying;
 };
 
 typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;

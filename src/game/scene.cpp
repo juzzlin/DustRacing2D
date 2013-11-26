@@ -168,9 +168,13 @@ void Scene::setupAudio(Car & car, int index)
     std::stringstream hit;
     hit << "carHit" << index;
 
+    std::stringstream skid;
+    skid << "skid" << index;
+
     CarSoundEffectManager::MultiSoundHandles handles;
     handles.engineSoundHandle = engine.str().c_str();
     handles.hitSoundHandle    = hit.str().c_str();
+    handles.skidSoundHandle   = skid.str().c_str();
 
     CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, handles));
     m_game.audioThread().connectAudioSource(*sfx);

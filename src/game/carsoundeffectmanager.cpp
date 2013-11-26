@@ -17,7 +17,8 @@
 #include "car.hpp"
 
 #include <MCCollisionEvent>
-#include <cstdlib>
+#include <MCTrigonom>
+#include <MCMathUtil>
 
 static std::vector<float> gearRatios = {1.0, 0.8, 0.6, 0.5, 0.4, 0.3};
 
@@ -27,9 +28,13 @@ CarSoundEffectManager::CarSoundEffectManager(
     , m_gear(0)
     , m_prevSpeed(0)
     , m_handles(handles)
+    , m_skidPlaying(false)
 {
     m_hitTimer.setSingleShot(true);
     m_hitTimer.setInterval(500);
+
+    m_skidTimer.setSingleShot(true);
+    m_skidTimer.setInterval(100);
 }
 
 void CarSoundEffectManager::startEngineSound()
@@ -75,6 +80,29 @@ void CarSoundEffectManager::update()
     {
         emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
         m_prevLocation = m_car.location();
+    }
+
+    const MCFloat bodyNormalAngle = m_car.angle() + 90;
+    const MCVector2d<MCFloat> n(
+        MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
+    const MCVector2d<MCFloat> & v = m_car.velocity().normalized();
+    const MCVector2d<MCFloat>   s = MCMathUtil::projection(v, n);
+
+    if (m_car.speed() > 7.5 && s.lengthFast() > 0.25)
+    {
+        if (!m_skidTimer.isActive())
+        {
+            emit locationChanged(m_handles.skidSoundHandle, m_car.location().i(), m_car.location().j());
+            emit volumeChangeRequested(m_handles.skidSoundHandle, s.lengthFast());
+            emit playRequested(m_handles.skidSoundHandle, false);
+            m_skidPlaying = true;
+            m_skidTimer.start();
+        }
+    }
+    else if (m_skidPlaying)
+    {
+        emit stopRequested(m_handles.skidSoundHandle);
+        m_skidPlaying = false;
     }
 }
 
