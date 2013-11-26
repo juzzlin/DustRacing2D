@@ -188,7 +188,7 @@ void Scene::createCars()
         {
             desc.power                = humanPower;
             desc.dragQuadratic        = humanDrag;
-            desc.accelerationFriction = 0.6;
+            desc.accelerationFriction = 0.7;
 
             const std::string image = i ? "carGrey" : "carPink";
             car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
