@@ -162,9 +162,17 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
 void Scene::setupAudio(Car & car, int index)
 {
-    std::stringstream sample;
-    sample << "carEngine" << index;
-    CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, sample.str().c_str()));
+    std::stringstream engine;
+    engine << "carEngine" << index;
+
+    std::stringstream hit;
+    hit << "carHit" << index;
+
+    CarSoundEffectManager::MultiSoundHandles handles;
+    handles.engineSoundHandle = engine.str().c_str();
+    handles.hitSoundHandle    = hit.str().c_str();
+
+    CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, handles));
     m_game.audioThread().connectAudioSource(*sfx);
     car.setSoundEffectManager(sfx);
 }

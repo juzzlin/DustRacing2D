@@ -355,6 +355,7 @@ void Car::reset()
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     m_particleEffectManager.collision(event);
+    m_soundEffectManager->collision(event);
     event.accept();
 }
 

@@ -72,15 +72,30 @@ void AudioThread::disconnectAudioSource(AudioSource & source)
 
 void AudioThread::loadSounds()
 {
-    loadSound("bell",      "bell.ogg");
-    loadSound("cheering",  "cheering.ogg");
-    loadSound("menuClick", "menuClick.ogg");
-    loadSound("pit",       "pit.ogg");
+    loadCommonSound("bell",      "bell.ogg");
+    loadCommonSound("cheering",  "cheering.ogg");
+    loadCommonSound("menuClick", "menuClick.ogg");
+    loadCommonSound("pit",       "pit.ogg");
 
-    loadEngineSounds("carEngine.ogg");
+    loadMultiSound("carEngine", "carEngine.ogg");
+    loadMultiSound("carHit", "carHit.ogg");
+
+    loadSceneSound("carHit2", "carHit2.ogg");
 }
 
-void AudioThread::loadSound(QString handle, QString path)
+void AudioThread::loadSceneSound(QString handle, QString path)
+{
+    const QString soundPath =
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
+
+    STFH::SourcePtr source(new OpenALSource(
+        STFH::DataPtr(new OpenALOggData((soundPath + path).toStdString()))));
+    source->setMaxDist(250);
+    source->setReferenceDist(50);
+    m_soundMap[handle] = source;
+}
+
+void AudioThread::loadCommonSound(QString handle, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
@@ -90,7 +105,7 @@ void AudioThread::loadSound(QString handle, QString path)
             STFH::DataPtr(new OpenALOggData((soundPath + path).toStdString()))));
 }
 
-void AudioThread::loadEngineSounds(QString path)
+void AudioThread::loadMultiSound(QString baseName, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
@@ -100,7 +115,7 @@ void AudioThread::loadEngineSounds(QString path)
     for (int i = 0; i < m_numCars; i++)
     {
         std::stringstream ss;
-        ss << "carEngine" << i;
+        ss << baseName.toStdString() << i;
         STFH::SourcePtr source(new OpenALSource(sharedData));
         m_soundMap[ss.str().c_str()] = source;
         source->setMaxDist(250);

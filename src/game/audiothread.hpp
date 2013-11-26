@@ -64,9 +64,11 @@ private:
 
     void loadSounds();
 
-    void loadSound(QString handle, QString path);
+    void loadCommonSound(QString handle, QString path);
 
-    void loadEngineSounds(QString path);
+    void loadSceneSound(QString handle, QString path);
+
+    void loadMultiSound(QString baseName, QString path);
 
     STFH::DevicePtr m_openALDevice;
 

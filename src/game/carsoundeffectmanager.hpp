@@ -17,12 +17,15 @@
 #define CARSOUNDEFFECTMANAGER_HPP
 
 #include <QString>
+#include <QTimer>
+
 #include <memory>
 #include <Location>
 #include <MCVector3d>
 #include "audiosource.hpp"
 
 class Car;
+class MCCollisionEvent;
 
 /*! Manages sound effects, like the engine sound. These are connected
  *  to the AudioThread via Qt signals. */
@@ -32,13 +35,22 @@ class CarSoundEffectManager : public AudioSource
 
 public:
 
+    /*! Handles to special sounds that can be played simultaneously by each car */
+    struct MultiSoundHandles
+    {
+        QString engineSoundHandle;
+        QString hitSoundHandle;
+    };
+
     //! Constructor.
-    CarSoundEffectManager(Car & car, QString engineSoundHandle);
+    CarSoundEffectManager(Car & car, const MultiSoundHandles & handles);
 
     //! Destructor.
     virtual ~CarSoundEffectManager();
 
     void update();
+
+    void collision(const MCCollisionEvent & event);
 
 public slots:
 
@@ -48,11 +60,12 @@ public slots:
 
 private:
 
-    Car & m_car;
-    QString m_engineSoundHandle;
-    int m_gear;
-    int m_prevSpeed;
-    MCVector3dF m_prevLocation;
+    Car &             m_car;
+    int               m_gear;
+    int               m_prevSpeed;
+    MCVector3dF       m_prevLocation;
+    QTimer            m_hitTimer;
+    MultiSoundHandles m_handles;
 };
 
 typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;

@@ -16,25 +16,31 @@
 #include "carsoundeffectmanager.hpp"
 #include "car.hpp"
 
+#include <MCCollisionEvent>
+#include <cstdlib>
+
 static std::vector<float> gearRatios = {1.0, 0.8, 0.6, 0.5, 0.4, 0.3};
 
-CarSoundEffectManager::CarSoundEffectManager(Car & car, QString engineSoundHandle)
+CarSoundEffectManager::CarSoundEffectManager(
+    Car & car, const CarSoundEffectManager::MultiSoundHandles & handles)
     : m_car(car)
-    , m_engineSoundHandle(engineSoundHandle)
     , m_gear(0)
     , m_prevSpeed(0)
+    , m_handles(handles)
 {
+    m_hitTimer.setSingleShot(true);
+    m_hitTimer.setInterval(500);
 }
 
 void CarSoundEffectManager::startEngineSound()
 {
-    emit playRequested(m_engineSoundHandle, true);
-    emit locationChanged(m_engineSoundHandle, m_car.location().i(), m_car.location().j());
+    emit playRequested(m_handles.engineSoundHandle, true);
+    emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
 }
 
 void CarSoundEffectManager::stopEngineSound()
 {
-    emit stopRequested(m_engineSoundHandle);
+    emit stopRequested(m_handles.engineSoundHandle);
 }
 
 void CarSoundEffectManager::update()
@@ -62,13 +68,45 @@ void CarSoundEffectManager::update()
         }
 
         m_prevSpeed = speed;
-        emit pitchChangeRequested(m_engineSoundHandle, pitch);
+        emit pitchChangeRequested(m_handles.engineSoundHandle, pitch);
     }
 
     if ((m_car.location() - m_prevLocation).lengthFast() > 10)
     {
-        emit locationChanged(m_engineSoundHandle, m_car.location().i(), m_car.location().j());
+        emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
         m_prevLocation = m_car.location();
+    }
+}
+
+void CarSoundEffectManager::collision(const MCCollisionEvent & event)
+{
+    // Cache type id integers.
+    static MCUint grandstand = MCObject::typeID("grandstand");
+    static MCUint wall       = MCObject::typeID("wall");
+    static MCUint wallLong   = MCObject::typeID("wallLong");
+    static MCUint rock       = MCObject::typeID("rock");
+    static MCUint tree       = MCObject::typeID("tree");
+
+    const MCVector3dF speedDiff(event.collidingObject().velocity() - m_car.velocity());
+    if (!m_hitTimer.isActive() && speedDiff.lengthFast() > 4.0)
+    {
+        if (event.collidingObject().typeID() == m_car.typeID() ||
+            event.collidingObject().typeID() == grandstand     ||
+            event.collidingObject().typeID() == tree           ||
+            event.collidingObject().typeID() == rock)
+        {
+            emit locationChanged(m_handles.hitSoundHandle, m_car.location().i(), m_car.location().j());
+            emit playRequested(m_handles.hitSoundHandle, false);
+            m_hitTimer.start();
+        }
+        else if (
+            event.collidingObject().typeID() == wall ||
+            event.collidingObject().typeID() == wallLong)
+        {
+            emit locationChanged("carHit2", m_car.location().i(), m_car.location().j());
+            emit playRequested("carHit2", false);
+            m_hitTimer.start();
+        }
     }
 }
 
