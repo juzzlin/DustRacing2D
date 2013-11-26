@@ -208,11 +208,11 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
         }
         // Check if the car is colliding with hard stationary objects.
         else if (
-            event.collidingObject().typeID() == crate ||
+            event.collidingObject().typeID() == crate              ||
             event.collidingObject().typeID() == dustRacing2DBanner ||
-            event.collidingObject().typeID() == grandstand ||
-            event.collidingObject().typeID() == wall ||
-            event.collidingObject().typeID() == wallLong ||
+            event.collidingObject().typeID() == grandstand         ||
+            event.collidingObject().typeID() == wall               ||
+            event.collidingObject().typeID() == wallLong           ||
             event.collidingObject().typeID() == rock)
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
