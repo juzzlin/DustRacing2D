@@ -682,57 +682,6 @@
  <o x="1705" y="4122" o="0" r="crate" c="free"/>
  <o x="1748" y="4113" o="20" r="crate" c="free"/>
  <o x="1792" y="4118" o="0" r="crate" c="free"/>
- <o x="1839" y="4118" o="0" r="crate" c="free"/>
- <o x="1876" y="4124" o="0" r="crate" c="free"/>
- <o x="1909" y="4115" o="45" r="crate" c="free"/>
- <o x="1945" y="4110" o="0" r="crate" c="free"/>
- <o x="1984" y="4114" o="0" r="crate" c="free"/>
- <o x="2027" y="4116" o="340" r="crate" c="free"/>
- <o x="2066" y="4115" o="0" r="crate" c="free"/>
- <o x="2110" y="4110" o="45" r="crate" c="free"/>
- <o x="2149" y="4111" o="0" r="crate" c="free"/>
- <o x="2196" y="4111" o="190" r="crate" c="free"/>
- <o x="2235" y="4118" o="0" r="crate" c="free"/>
- <o x="2278" y="4116" o="0" r="crate" c="free"/>
- <o x="2322" y="4120" o="0" r="crate" c="free"/>
- <o x="2353" y="4119" o="45" r="crate" c="free"/>
- <o x="2390" y="4123" o="0" r="crate" c="free"/>
- <o x="2422" y="4119" o="0" r="crate" c="free"/>
- <o x="2489" y="4115" o="0" r="crate" c="free"/>
- <o x="2534" y="4120" o="0" r="crate" c="free"/>
- <o x="2572" y="4112" o="0" r="crate" c="free"/>
- <o x="2613" y="4121" o="45" r="crate" c="free"/>
- <o x="2653" y="4117" o="0" r="crate" c="free"/>
- <o x="2692" y="4117" o="20" r="crate" c="free"/>
- <o x="2732" y="4116" o="340" r="crate" c="free"/>
- <o x="2772" y="4117" o="0" r="crate" c="free"/>
- <o x="2831" y="4113" o="0" r="crate" c="free"/>
- <o x="2872" y="4119" o="0" r="crate" c="free"/>
- <o x="2903" y="4116" o="45" r="crate" c="free"/>
- <o x="2947" y="4107" o="0" r="crate" c="free"/>
- <o x="2992" y="4117" o="0" r="crate" c="free"/>
- <o x="3031" y="4113" o="340" r="crate" c="free"/>
- <o x="3073" y="4111" o="0" r="crate" c="free"/>
- <o x="3123" y="4111" o="0" r="crate" c="free"/>
- <o x="3158" y="4111" o="340" r="crate" c="free"/>
- <o x="3197" y="4111" o="45" r="crate" c="free"/>
- <o x="3237" y="4104" o="0" r="crate" c="free"/>
- <o x="3288" y="4117" o="0" r="crate" c="free"/>
- <o x="3345" y="4098" o="0" r="crate" c="free"/>
- <o x="3383" y="4100" o="0" r="crate" c="free"/>
- <o x="3439" y="4113" o="45" r="crate" c="free"/>
- <o x="3480" y="4115" o="0" r="crate" c="free"/>
- <o x="3518" y="4113" o="20" r="crate" c="free"/>
- <o x="3563" y="4117" o="0" r="crate" c="free"/>
- <o x="3609" y="4116" o="45" r="crate" c="free"/>
- <o x="3659" y="4116" o="0" r="crate" c="free"/>
- <o x="3711" y="4107" o="0" r="crate" c="free"/>
- <o x="3752" y="4117" o="340" r="crate" c="free"/>
- <o x="3805" y="4115" o="0" r="crate" c="free"/>
- <o x="3854" y="4123" o="0" r="crate" c="free"/>
- <o x="3911" y="4121" o="0" r="crate" c="free"/>
- <o x="3952" y="4102" o="0" r="crate" c="free"/>
- <o x="3986" y="4113" o="0" r="crate" c="free"/>
  <o x="1006" y="2689" o="270" r="dustRacing2DBanner" c="free"/>
  <o x="1008" y="3201" o="270" r="dustRacing2DBanner" c="free"/>
  <o x="556" y="561" o="-45" r="grandstand" c="free"/>
