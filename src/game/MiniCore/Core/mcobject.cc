@@ -541,6 +541,11 @@ const MCVector3dF & MCObject::velocity() const
     return m_velocity;
 }
 
+MCFloat MCObject::speed() const
+{
+    return velocity().dot(MCVector3dF(direction()));
+}
+
 void MCObject::setAngularVelocity(MCFloat newVelocity)
 {
     m_angularVelocity = newVelocity;

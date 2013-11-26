@@ -168,6 +168,9 @@ public:
     //! Return current velocity.
     const MCVector3dF & velocity() const;
 
+    //! Return current speed.
+    MCFloat speed() const;
+
     /*! Set current angular velocity to the given value.
      *  Unit: rad/s.
      *  \param newVelocity The new velocity. */

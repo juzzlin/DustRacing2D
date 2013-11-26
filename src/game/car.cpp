@@ -156,17 +156,18 @@ void Car::turnRight()
 
 float Car::calculateSteeringCoeff() const
 {
-    float stabilize = 1.0 - std::fabs(m_speedInKmh) / 600.0;
+    const float absSpeed = velocity().lengthFast();
+    float stabilize = 1.0 - absSpeed / 80.0;
     stabilize = stabilize < 0.25 ? 0.25 : stabilize;
 
-    const float nonLinear = std::pow(std::fabs(m_speedInKmh) / 50.0, 0.5);
+    const float nonLinear = std::pow(absSpeed / 7.0, 0.5);
     const float effScaling = std::min(stabilize, nonLinear);
     return effScaling;
 }
 
 void Car::steer(int direction)
 {
-    if (std::abs(m_speedInKmh) > 0)
+    if (velocity().lengthFast() > 0)
     {
         const float effScaling = calculateSteeringCoeff();
 
@@ -391,8 +392,8 @@ void Car::stepTime(MCFloat step)
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
-    // Cache speed in km/h. Use value of twice as big as the "real" value.
-    m_speedInKmh = velocity().dot(MCVector3d<float>(m_dx, m_dy, 0)) * 3.6 * 2;
+    // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
+    m_speedInKmh = speed() * 3.6 * 2.5;
 
     if (m_isHuman)
     {

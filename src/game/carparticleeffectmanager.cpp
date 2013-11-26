@@ -192,7 +192,7 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
     static MCUint tree               = MCObject::typeID("tree");
     static MCUint plant              = MCObject::typeID("plant");
 
-    if (m_car.speedInKmh() > 25)
+    if (m_car.velocity().lengthFast() > 4.0)
     {
         // Check if the car is colliding with another car.
         if (event.collidingObject().typeID() == m_car.typeID())
