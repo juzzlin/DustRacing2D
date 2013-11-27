@@ -388,8 +388,6 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
 
 void Scene::processUserInput(InputHandler & handler)
 {
-    bool steering = false;
-
     for (int i = 0; i < (m_game.hasTwoHumanPlayers() ? 2 : 1); i++)
     {
         m_cars.at(i)->clearStatuses();
@@ -414,15 +412,12 @@ void Scene::processUserInput(InputHandler & handler)
         if (handler.getActionState(i, InputHandler::IA_LEFT))
         {
             m_cars.at(i)->turnLeft();
-            steering = true;
         }
         else if (handler.getActionState(i, InputHandler::IA_RIGHT))
         {
             m_cars.at(i)->turnRight();
-            steering = true;
         }
-
-        if (!steering)
+        else
         {
             m_cars.at(i)->noSteering();
         }

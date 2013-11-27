@@ -14,16 +14,18 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "statemachine.hpp"
+#include "inputhandler.hpp"
 
 #include <MenuManager>
 #include <cassert>
 
 StateMachine * StateMachine::m_instance = nullptr;
 
-StateMachine::StateMachine()
+StateMachine::StateMachine(InputHandler & inputHandler)
 : m_state(Init)
 , m_oldState(Init)
 , m_raceFinished(false)
+, m_inputHandler(inputHandler)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
@@ -147,6 +149,8 @@ void StateMachine::stateMenuTransitionOut()
 void StateMachine::stateGameTransitionIn()
 {
     emit fadeInRequested(0, 2000, 0);
+
+    m_inputHandler.reset();
 }
 
 void StateMachine::stateGameTransitionOut()

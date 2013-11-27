@@ -36,19 +36,22 @@ public:
     void setActionState(MCUint playerIndex, InputAction action, bool state);
 
     //! Get state of the given action of the given player.
-    bool getActionState(MCUint playerIndex,
-        InputAction action) const;
+    bool getActionState(MCUint playerIndex, InputAction action) const;
+
+    //! Reset the current actions.
+    void reset();
 
     //! Enable/disable controls. Enabled by default.
     static void setEnabled(bool state);
 
+    //! Return true if enabled.
     static bool enabled();
 
 private:
 
     typedef std::vector<std::bitset<IA_END_OF_ENUM> > ActionVector;
     ActionVector m_playerActions;
-    static bool m_enabled;
+    static bool  m_enabled;
 };
 
 #endif // INPUTHANDLER_HPP

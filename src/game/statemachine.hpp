@@ -25,6 +25,8 @@
 #include <functional>
 #include <map>
 
+class InputHandler;
+
 //! The main state machine of the game.
 class StateMachine : public QObject, public UpdateableIf
 {
@@ -46,7 +48,7 @@ public:
     };
 
     //! Constructor.
-    StateMachine();
+    StateMachine(InputHandler & inputHandler);
 
     //! Destructor.
     virtual ~StateMachine();
@@ -116,6 +118,7 @@ private:
     State              m_state;
     State              m_oldState;
     bool               m_raceFinished;
+    InputHandler     & m_inputHandler;
 };
 
 #endif // STATEMACHINE_HPP

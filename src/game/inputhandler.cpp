@@ -25,13 +25,11 @@ InputHandler::InputHandler(MCUint maxPlayers)
 
 bool InputHandler::getActionState(MCUint playerIndex, InputAction action) const
 {
-    assert(playerIndex < m_playerActions.size());
     return InputHandler::m_enabled && m_playerActions[playerIndex][action];
 }
 
 void InputHandler::setActionState(MCUint playerIndex, InputAction action, bool state)
 {
-    assert(playerIndex < m_playerActions.size());
     m_playerActions[playerIndex][action] = state;
 }
 
@@ -43,4 +41,12 @@ void InputHandler::setEnabled(bool state)
 bool InputHandler::enabled()
 {
     return m_enabled;
+}
+
+void InputHandler::reset()
+{
+    for (auto & i : m_playerActions)
+    {
+        i.reset();
+    }
 }

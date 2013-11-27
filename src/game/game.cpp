@@ -47,7 +47,9 @@ static const float        DEFAULT_VOLUME = 0.5;
 Game * Game::m_instance = nullptr;
 
 Game::Game()
-: m_stateMachine(new StateMachine)
+: m_inputHandler(new InputHandler(MAX_PLAYERS))
+, m_eventHandler(new EventHandler(*m_inputHandler))
+, m_stateMachine(new StateMachine(*m_inputHandler))
 , m_renderer(nullptr)
 , m_scene(nullptr)
 , m_assetManager(new MCAssetManager(
@@ -57,8 +59,6 @@ Game::Game()
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "meshes.conf"))
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
 , m_trackLoader(new TrackLoader(*m_objectFactory))
-, m_inputHandler(new InputHandler(MAX_PLAYERS))
-, m_eventHandler(new EventHandler(*m_inputHandler))
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)

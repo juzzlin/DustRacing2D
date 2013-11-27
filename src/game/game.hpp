@@ -131,14 +131,14 @@ private:
     void loadSounds();
 
     Settings          m_settings;
+    InputHandler    * m_inputHandler;
+    EventHandler    * m_eventHandler;
     StateMachine    * m_stateMachine;
     Renderer        * m_renderer;
     Scene           * m_scene;
     MCAssetManager  * m_assetManager;
     MCObjectFactory * m_objectFactory;
     TrackLoader     * m_trackLoader;
-    InputHandler    * m_inputHandler;
-    EventHandler    * m_eventHandler;
     unsigned int      m_updateFps;
     unsigned int      m_updateDelay;
     float             m_timeStep;
