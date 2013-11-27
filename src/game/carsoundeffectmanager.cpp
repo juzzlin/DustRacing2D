@@ -79,7 +79,7 @@ void CarSoundEffectManager::processEngineSound()
         }
 
         m_prevSpeed = speed;
-        emit pitchChangeRequested(m_handles.engineSoundHandle, pitch);
+        emit pitchChanged(m_handles.engineSoundHandle, pitch);
     }
 
     emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
@@ -99,7 +99,7 @@ void CarSoundEffectManager::processSkidSound()
         if (!m_skidTimer.isActive())
         {
             emit locationChanged(m_handles.skidSoundHandle, m_car.location().i(), m_car.location().j());
-            emit volumeChangeRequested(m_handles.skidSoundHandle, s.lengthFast());
+            emit volumeChanged(m_handles.skidSoundHandle, s.lengthFast());
             emit playRequested(m_handles.skidSoundHandle, false);
             m_skidPlaying = true;
             m_skidTimer.start();

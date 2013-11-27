@@ -39,9 +39,9 @@ signals:
 
     void stopRequested(QString handle);
 
-    void pitchChangeRequested(QString handle, float pitch);
+    void pitchChanged(QString handle, float pitch);
 
-    void volumeChangeRequested(QString handle, float pitch);
+    void volumeChanged(QString handle, float pitch);
 
     void locationChanged(QString handle, float x, float y);
 };
