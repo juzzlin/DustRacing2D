@@ -50,7 +50,13 @@ void CarSoundEffectManager::stopEngineSound()
 
 void CarSoundEffectManager::update()
 {
-    const int speed = m_car.speedInKmh();
+    processEngineSound();
+    processSkidSound();
+}
+
+void CarSoundEffectManager::processEngineSound()
+{
+    const int speed = static_cast<int>(m_car.absSpeed() * 9.0);
     if (speed != m_prevSpeed)
     {
         const float virtualRev = speed * 50;
@@ -76,19 +82,19 @@ void CarSoundEffectManager::update()
         emit pitchChangeRequested(m_handles.engineSoundHandle, pitch);
     }
 
-    if ((m_car.location() - m_prevLocation).lengthFast() > 10)
-    {
-        emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
-        m_prevLocation = m_car.location();
-    }
+    emit locationChanged(m_handles.engineSoundHandle, m_car.location().i(), m_car.location().j());
+    m_prevLocation = m_car.location();
+}
 
+void CarSoundEffectManager::processSkidSound()
+{
     const MCFloat bodyNormalAngle = m_car.angle() + 90;
-    const MCVector2d<MCFloat> n(
+    const MCVector2dF n(
         MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
-    const MCVector2d<MCFloat> & v = m_car.velocity().normalized();
-    const MCVector2d<MCFloat>   s = MCMathUtil::projection(v, n);
+    const MCVector2dF & v = m_car.velocity().normalized();
+    const MCVector2dF   s = MCMathUtil::projection(v, n);
 
-    if (m_car.speed() > 7.5 && s.lengthFast() > 0.25)
+    if (m_car.absSpeed() > 7.5 && s.lengthFast() > 0.25)
     {
         if (!m_skidTimer.isActive())
         {

@@ -61,6 +61,10 @@ public slots:
 
 private:
 
+    void processEngineSound();
+
+    void processSkidSound();
+
     Car &             m_car;
     int               m_gear;
     int               m_prevSpeed;

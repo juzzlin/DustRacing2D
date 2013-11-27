@@ -122,8 +122,11 @@ public:
     //! User isn't steering.
     void noSteering();
 
-    //! Get estimated speed in km/h. This is used by the speedometer.
+    //! Get estimated speed in km/h. This is used e.g. by the speedometer.
     int speedInKmh() const;
+
+    //! Get cached speed.
+    MCFloat absSpeed() const;
 
     //! \reimp
     virtual void render(MCCamera *p);
@@ -222,6 +225,7 @@ private:
     MCSurface              & m_brakeGlow;
     MCFloat                  m_length;
     int                      m_speedInKmh;
+    MCFloat                  m_absSpeed;
     MCFloat                  m_dx, m_dy;
     int                      m_currentTargetNodeIndex;
     int                      m_prevTargetNodeIndex;

@@ -127,7 +127,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     bool accelerate = true;
     bool brake      = false;
 
-    const float absSpeed = m_car.speed();
+    const float absSpeed = m_car.absSpeed();
     if (isRaceCompleted)
     {
         accelerate = false;

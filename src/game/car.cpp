@@ -61,6 +61,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
 , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
 , m_speedInKmh(0)
+, m_absSpeed(0)
 , m_dx(0)
 , m_dy(0)
 , m_currentTargetNodeIndex(-1)
@@ -273,6 +274,11 @@ int Car::speedInKmh() const
     return m_speedInKmh;
 }
 
+MCFloat Car::absSpeed() const
+{
+    return m_absSpeed;
+}
+
 MCVector3dF Car::leftFrontTireLocation() const
 {
     MCVector2dF pos;
@@ -394,7 +400,8 @@ void Car::stepTime(MCFloat step)
     m_dy = MCTrigonom::sin(angle());
 
     // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
-    m_speedInKmh = speed() * 3.6 * 2.5;
+    m_absSpeed   = speed();
+    m_speedInKmh = m_absSpeed * 3.6 * 2.5;
 
     if (m_isHuman)
     {
