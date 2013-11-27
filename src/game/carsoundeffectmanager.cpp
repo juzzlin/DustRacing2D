@@ -99,7 +99,7 @@ void CarSoundEffectManager::processSkidSound()
         if (!m_skidTimer.isActive())
         {
             emit locationChanged(m_handles.skidSoundHandle, m_car.location().i(), m_car.location().j());
-            emit volumeChanged(m_handles.skidSoundHandle, s.lengthFast());
+            emit volumeChanged(m_handles.skidSoundHandle, 0.25);
             emit playRequested(m_handles.skidSoundHandle, false);
             m_skidPlaying = true;
             m_skidTimer.start();
