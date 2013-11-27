@@ -20,7 +20,8 @@
 
 #include "audiothread.hpp"
 
-//! Class that defines a set of signals used to play sounds.
+/*! Class that defines a set of signals used to play sounds.
+ *  AudioThread can connect to a class inherited from AudioSource. */
 class AudioSource : public QObject
 {
     Q_OBJECT
@@ -35,15 +36,15 @@ public:
 
 signals:
 
-    void playRequested(QString handle, bool loop);
+    void playRequested(const QString & handle, bool loop);
 
-    void stopRequested(QString handle);
+    void stopRequested(const QString & handle);
 
-    void pitchChanged(QString handle, float pitch);
+    void pitchChanged(const QString & handle, float pitch);
 
-    void volumeChanged(QString handle, float pitch);
+    void volumeChanged(const QString & handle, float pitch);
 
-    void locationChanged(QString handle, float x, float y);
+    void locationChanged(const QString & handle, float x, float y);
 };
 
 #endif // AUDIOSOURCE_HPP

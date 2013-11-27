@@ -124,25 +124,25 @@ void AudioThread::loadMultiSound(QString baseName, QString path)
     }
 }
 
-void AudioThread::playSound(QString handle, bool loop)
+void AudioThread::playSound(const QString & handle, bool loop)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->play(loop);
 }
 
-void AudioThread::stopSound(QString handle)
+void AudioThread::stopSound(const QString & handle)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->stop();
 }
 
-void AudioThread::setPitch(QString handle, float pitch)
+void AudioThread::setPitch(const QString & handle, float pitch)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setPitch(pitch);
 }
 
-void AudioThread::setVolume(QString handle, float volume)
+void AudioThread::setVolume(const QString & handle, float volume)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setVolume(volume);
@@ -153,7 +153,7 @@ void AudioThread::setMasterVolume(float volume)
     m_masterVolume = volume;
 }
 
-void AudioThread::setLocation(QString handle, float x, float y)
+void AudioThread::setLocation(const QString & handle, float x, float y)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setLocation(STFH::Location(x, y));

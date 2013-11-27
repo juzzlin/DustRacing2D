@@ -44,17 +44,17 @@ public:
 
 public slots:
 
-    void playSound(QString handle, bool loop = false);
+    void playSound(const QString & handle, bool loop = false);
 
-    void stopSound(QString handle);
+    void stopSound(const QString & handle);
 
-    void setPitch(QString handle, float pitch);
+    void setPitch(const QString & handle, float pitch);
 
-    void setVolume(QString handle, float pitch);
+    void setVolume(const QString & handle, float pitch);
 
     void setMasterVolume(float volume);
 
-    void setLocation(QString handle, float x, float y);
+    void setLocation(const QString & handle, float x, float y);
 
     void setListenerLocation(float x, float y);
 
