@@ -39,3 +39,17 @@ src/game/MiniCore/UnitTests/cmake_install.cmake
 src/game/MiniCore/cmake_install.cmake
 src/game/cmake_install.cmake
 src/game/renderer.cpp.autosave
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile.Debug
+Makefile.Release
+data/translations/
+dustrac-1.4.6.zip
+dustrac-game_plugin_import.cpp
+object_script.dustrac-game.Debug
+object_script.dustrac-game.Release
+release/
+src/game/dustrac-game_fi.qm
+src/game/dustrac-game_it.qm
+src/game/trackobjectfactory.cpp.orig
+
