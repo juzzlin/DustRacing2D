@@ -127,30 +127,39 @@ void MCGLScene::updateViewport()
     case ShowFullScreen:
         setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth, m_viewHeight);
+        glDisable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnLeft:
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
+        glScissor(0, 0, m_viewWidth / 2, m_viewHeight);
+        glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnRight:
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
+        glScissor(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
+        glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnTop:
         setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
         glViewport(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
+        glScissor(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
+        glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth, m_sceneHeight / 2, m_viewAngle / 2);
         break;
 
     case ShowOnBottom:
         setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
         glViewport(0, 0, m_viewWidth, m_viewHeight / 2);
+        glScissor(0, 0, m_viewWidth, m_viewHeight / 2);
+        glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth, m_sceneHeight / 2, m_viewAngle / 2);
         break;
     }
