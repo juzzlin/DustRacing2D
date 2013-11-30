@@ -36,6 +36,7 @@ HEADERS += \
     ../common/tracktilebase.hpp \
     ai.hpp \
     audiothread.hpp \
+    audiosource.hpp \
     car.hpp \
     carparticleeffectmanager.hpp \
     carsoundeffectmanager.hpp \
@@ -191,6 +192,7 @@ SOURCES += \
     ../common/tracktilebase.cpp \
     ai.cpp \
     audiothread.cpp \
+    audiosource.cpp \
     car.cpp \
     carparticleeffectmanager.cpp \
     carsoundeffectmanager.cpp \

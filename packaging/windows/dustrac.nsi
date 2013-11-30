@@ -39,7 +39,7 @@ InstallDir "$PROGRAMFILES\${PRODUCTNAME}"
  
 Name "${PRODUCTNAME}"
 Icon "data\icons\DustRacing.ico"
-OutFile "dustrac-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-i386_setup.exe"
+OutFile "dustrac-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-windows-x86-qt5_setup.exe"
 
 !insertmacro MUI_LANGUAGE "English"
  
@@ -70,9 +70,6 @@ Section "install"
 	File dustrac-game.exe
 	File dustrac-editor.exe
  	File /r data
-	File /r graphicssystems
-	File /r imageformats
-	File *.dll
 	File CHANGELOG
 	File COPYING
 	File AUTHORS
@@ -146,9 +143,6 @@ Section "uninstall"
 	Delete   $INSTDIR\dustrac-game.exe
 	Delete   $INSTDIR\dustrac-editor.exe
  	RmDir /r $INSTDIR\data
-	RmDir /r $INSTDIR\graphicssystems
-	RmDir /r $INSTDIR\imageformats
-	Delete   $INSTDIR\*.dll
 	Delete   $INSTDIR\CHANGELOG
 	Delete   $INSTDIR\COPYING
 	Delete   $INSTDIR\AUTHORS

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Assumes, that you have installed qt5, libopenal and libvorbisfile via MXE.
+
+MXE_QT5_QMAKE=~/mxe/usr/i686-pc-mingw32/qt5/bin/qmake
+ZIP=zip
+UNIX2DOS=unix2dos
+MAKENSIS=makensis
+
+# Build
+
+$MXE_QT5_QMAKE && make
+
+# Install to packaging dir
+
+CREATE_PACKAGE_PATH=dustrac-1.5.0-windows-x86-qt5
+rm -rf $CREATE_PACKAGE_PATH
+mkdir $CREATE_PACKAGE_PATH
+
+cp -v ./src/game/release/dustrac-game.exe $CREATE_PACKAGE_PATH
+cp -v ./src/editor/release/dustrac-editor.exe $CREATE_PACKAGE_PATH
+cp -rv data $CREATE_PACKAGE_PATH
+
+TEXT_FILES="AUTHORS CHANGELOG COPYING README"
+cp -v $TEXT_FILES $CREATE_PACKAGE_PATH
+cd $CREATE_PACKAGE_PATH
+$UNIX2DOS $TEXT_FILES
+cd ..
+
+# Create zip archive
+
+ZIP_ARCHIVE=$CREATE_PACKAGE_PATH.zip
+rm -f $ZIP_ARCHIVE
+$ZIP -rv $ZIP_ARCHIVE $CREATE_PACKAGE_PATH
+
+# Create NSIS installer
+
+cp packaging/windows/dustrac.nsi $CREATE_PACKAGE_PATH
+cd $CREATE_PACKAGE_PATH
+$MAKENSIS dustrac.nsi
+cd ..
+cp $CREATE_PACKAGE_PATH/*setup.exe .
+
+ls -ltr
+
+echo "Done."
+
