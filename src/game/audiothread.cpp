@@ -19,6 +19,7 @@
 #include "openaloggdata.hpp"
 
 #include <QDir>
+#include <QFile>
 #include <QString>
 
 #include <sstream>
@@ -40,6 +41,14 @@ void AudioThread::init()
 
     alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
     alSpeedOfSound(1000.0);
+}
+
+void AudioThread::checkFile(QString path) throw (MCException)
+{
+    if (!QFile(path).exists())
+    {
+        throw MCException("File not found: '" + path.toStdString() + "'");
+    }
 }
 
 void AudioThread::connectAudioSource(AudioSource & source)
@@ -87,10 +96,11 @@ void AudioThread::loadSounds()
 void AudioThread::loadSceneSound(QString handle, QString path)
 {
     const QString soundPath =
-        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
+    checkFile(soundPath);
 
     STFH::SourcePtr source(new OpenALSource(
-        STFH::DataPtr(new OpenALOggData((soundPath + path).toStdString()))));
+        STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
     source->setMaxDist(250);
     source->setReferenceDist(50);
     m_soundMap[handle] = source;
@@ -99,19 +109,21 @@ void AudioThread::loadSceneSound(QString handle, QString path)
 void AudioThread::loadCommonSound(QString handle, QString path)
 {
     const QString soundPath =
-        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
+    checkFile(soundPath);
 
     m_soundMap[handle] =
         STFH::SourcePtr(new OpenALSource(
-            STFH::DataPtr(new OpenALOggData((soundPath + path).toStdString()))));
+            STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
 }
 
 void AudioThread::loadMultiSound(QString baseName, QString path)
 {
     const QString soundPath =
-        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator();
+        QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
+    checkFile(soundPath);
 
-    STFH::DataPtr sharedData(new OpenALOggData((soundPath + path).toStdString()));
+    STFH::DataPtr sharedData(new OpenALOggData(soundPath.toStdString()));
 
     for (int i = 0; i < m_numCars; i++)
     {

@@ -24,6 +24,8 @@
 #include "openaldevice.hpp"
 #include "openalsource.hpp"
 
+#include <MCException>
+
 class AudioSource;
 
 class AudioThread : public QThread
@@ -61,6 +63,8 @@ public slots:
 private:
 
     void init();
+
+    void checkFile(QString path) throw (MCException);
 
     void loadSounds();
 
