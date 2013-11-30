@@ -1,3 +1,107 @@
+dustrac (1.5.2-1) precise; urgency=low
+
+  * Add script to build and package for Windows on Linux.
+  * Move mxeEnv.sh to scripts/
+  * Remove unused variable from MCTextureGlyph.
+  * Don't send pit signal twice.
+  * Add scissor tests for split screen modes.
+  * Pass QString as const reference in audio signals.
+  * More quiet skid sound.
+  * Update .gitignore
+  * Shorter audio signal names.
+  * Reset input handler on race start.
+  * Refactor CarSoundEffectManager.
+  * Add skid sound.
+  * Hit sounds.
+  * Less aggressive tire wear on grass.
+  * Remove some crates from curvastone.trk
+  * A bit more acceleration friction.
+  * More realistic kmh values.
+  * Refactor Startlights.
+  * Connect volume change signals.
+  * Play cheering when winner finishes, not the human player.
+  * Add bell sound when checkered flag appears.
+  * Add predefined keys to Settings.
+  * Save lap count.
+  * Add generic value setter/getter to Settings.
+  * Slide a bit more on worn-out tires.
+  * Init race record when new track is set.
+  * Reset tire wear on pit stop.
+  * Blink car status view on pit stop.
+  * Add pit stops.
+  * Make tires wear when turning and accelerating or just braking.
+  * Fix clang warnings.
+  * New background image for settings.
+  * Update Finnish translations.
+  * Translate resolutionmenu.cpp
+  * Fix documentation typos.
+  * MCObjectFactory returns MCObjectPtr's instead of references.
+  * Fix comment format in mcobject.hh
+  * Support for trigger objects.
+  * Cosmetics in MCObject.
+  * Add red car.
+  * Refactors Scene.
+  * Render different positions with different colors.
+  * Save and load race records.
+  * Longer fade out from game.
+  * Smaller font for timing data.
+  * Show race time.
+  * Fix editor crash on object deletion.
+  * Add Italian translations.
+  * Fix turning direction on reverse.
+  * Add dirty cell cache to MCObjectTree.
+  * Rename sound files.
+  * Stop engine sounds after a race.
+  * Update INSTALL.
+  * Set listener location via a signal.
+  * Use pkg_check_modules to find libvorbisfile.
+  * Update qmake project files to link to libopenal and libvorbisfile.
+  * Refactor Scene::updateFrame()
+  * Tune engine sound parameters.
+  * Common base class for OpenALWavData and OpenALOggData.
+  * Update the example debian/rules
+  * Add engine sound for all computers.
+  * Ogg Vorbis support.
+  * Drop dependency to ALUT.
+  * Add sound for each car.
+  * Optimize pitch changes.
+  * LPF the engine sound.
+  * Initial engine sound.
+  * Remove throw()'s from STFH.
+  * Add CarSoundEffectManager.
+  * Add stopSound(), setPitch(), setVolume() to AudioThread.
+  * Add mutex to OpenALSource.
+  * Add engine sound wave.
+  * Load sounds into a map.
+  * Load sounds concurrently with the rest of init.
+  * Use DATA_PATH in AudioThread::loadSounds()
+  * Remove needless STFH::DataManager.
+  * Add menu sounds.
+  * OpenAL implementation of STFH.
+  * Add STFH.
+  * Move glew and glm under contrib/
+  * Remove deps installation from InstallWindows.cmake
+  * Remove obsolete/
+  * Remove deps: assume statically linked libs on Windows builds.
+  * Add experimental qmake project files.
+  * Add mxeEnv.sh helper.
+  * Use CMAKE_RC_COMPILER instead of hard-coded windres.exe
+  * Correctly handle particle animation types in MCParticle.
+  * Support varying point size also in GL30 and GLES shaders.
+  * Reduce moment of inertia.
+  * Revisit smoke particle effects.
+  * Update AUTHORS
+  * Fix loop limits in TrackSelectionMenu.
+  * Small refactoring in MCObjectTree.
+  * Set to initial slide friction to 0.90.
+  * Rename some variables according to current naming convention.
+  * Improve smoke particle.
+  * Use smart pointers always when ownership is in question.
+  * New dir layout for source images.
+  * Fix translations on Qt5.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 30 Nov 2013 17:02:45 +0200
+
 dustrac (1.4.6-1) precise; urgency=low
 
   * Option for horizontal split.

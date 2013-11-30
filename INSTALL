@@ -18,19 +18,20 @@ libraries are linked statically by default (no DLLs needed).
 Toolchains
 ==========
 
-GCC/MinGW is the only "officially" supported toolchain.
+GCC/MinGW and Clang are the only "officially" supported toolchains.
 
-Building with Microsoft Visual C++ or Clang is not tested.
+Building with Microsoft Visual C++ is not tested.
 
 Build dependencies
 ==================
 
 Currently the build depends on Qt, libopenal and libvorbisfile.
+On Linux pkg-config is required.
 
 Qt5 can be enabled by passing -DUseQt5=1 to cmake or to the configure script.
 
 Dustrac also exploits some features of the C++11 standard,
-so a compliant compiler is required (GCC >= 4.6).
+so a somewhat compliant compiler is required (GCC >= 4.6).
 
 Building in the command line on Linux (tested on Ubuntu 12.04..13.10)
 =====================================================================
