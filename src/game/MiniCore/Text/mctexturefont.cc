@@ -22,7 +22,6 @@
 
 MCTextureFont::MCTextureFont(MCSurface & surface)
 : m_default(
-      0,
       MCTextureGlyph::UV(0, 0),
       MCTextureGlyph::UV(1, 1))
 , m_glyphLookUp(256, m_default)

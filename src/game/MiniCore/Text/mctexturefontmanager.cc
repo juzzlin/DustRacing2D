@@ -82,7 +82,6 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
         // Calculate the uv-coordinates for the glyph.
         MCTextureGlyph newGlyph(
-            glyph.name.at(0),
             MCTextureGlyph::UV(
                 static_cast<float>(glyph.x0) / surface.width(),
                 static_cast<float>(glyph.y0) / surface.height()),

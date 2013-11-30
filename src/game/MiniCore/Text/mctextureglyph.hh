@@ -38,10 +38,9 @@ public:
     };
 
     /*! Constructor.
-     * \param glyph UTF-8 (ASCII) index of the glyph.
      * \param uv0 Upper left texture coordinates.
      * \param uv0 Lower right texture coordinates. */
-    MCTextureGlyph(int glyph, UV uv0, UV uv1);
+    MCTextureGlyph(UV uv0, UV uv1);
 
     /*! Return UV for the given vertex index:
      *
@@ -53,7 +52,6 @@ public:
 
 private:
 
-    int m_glyph;
     UV  m_uv[4];
 };
 

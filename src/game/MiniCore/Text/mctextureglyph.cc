@@ -21,8 +21,7 @@
 
 #include <cassert>
 
-MCTextureGlyph::MCTextureGlyph(int glyph, UV uv0, UV uv1)
-: m_glyph(glyph)
+MCTextureGlyph::MCTextureGlyph(UV uv0, UV uv1)
 {
     m_uv[0] = uv0;
     m_uv[1] = UV(uv1.m_u, uv0.m_v);
