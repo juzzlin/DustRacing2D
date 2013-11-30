@@ -51,7 +51,7 @@ void Pit::stepTime(MCFloat)
     auto i = m_pittingCars.begin();
     while (i != m_pittingCars.end())
     {
-        if (i->second + 1 < m_tag)
+        if (i->second < m_tag)
         {
             i = m_pittingCars.erase(i);
         }
