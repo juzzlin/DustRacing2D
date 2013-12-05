@@ -29,7 +29,7 @@ static void initTranslations(QTranslator & appTranslator, QApplication & app)
     }
     else
     {
-        //
+        std::cerr << "Translations for " << QLocale::system().name().toStdString() << " not found.." << std::endl;
     }
 }
 
