@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "messageoverlay.hpp"
+#include "game.hpp"
 #include <MCCamera>
 #include <MCAssetManager>
 
@@ -22,7 +23,7 @@ static const int GLYPH_HEIGHT = 20;
 
 MessageOverlay::MessageOverlay(MESSAGE_ALIGN align, int messageMaxTime)
 : m_fontManager(MCAssetManager::textureFontManager())
-, m_font(m_fontManager.font("default"))
+, m_font(m_fontManager.font(Game::instance().fontName()))
 , m_text("")
 , m_messageMaxTime(messageMaxTime)
 , m_align(align)

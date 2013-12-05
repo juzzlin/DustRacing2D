@@ -16,12 +16,16 @@
 #ifndef GRAPHICSFACTORY_HPP
 #define GRAPHICSFACTORY_HPP
 
+#include <MCTextureFontData>
+
 class MCSurface;
 
 //! Helper functions to create miscellaneous graphic items.
 namespace GraphicsFactory {
 
 MCSurface & generateNumberSurface(int index);
+
+MCTextureFontData generateFont();
 
 } // namespace GraphicsFactory
 

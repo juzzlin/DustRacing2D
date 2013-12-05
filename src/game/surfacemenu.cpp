@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "surfacemenu.hpp"
+#include "game.hpp"
 #include "renderer.hpp"
 #include "textmenuitemview.hpp"
 
@@ -36,7 +37,7 @@ SurfaceMenu::SurfaceMenu(
     bool nextItem)
 : Menu(id, width, height, style)
 , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
-, m_font(MCAssetManager::textureFontManager().font("default"))
+, m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
     m_back.setShaderProgram(&Renderer::instance().program("menu"));
     m_back.setColor(MCGLColor(0.5, 0.5, 0.5, 1.0));

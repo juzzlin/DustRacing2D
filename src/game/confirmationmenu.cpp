@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "confirmationmenu.hpp"
+#include "game.hpp"
 #include "textmenuitemview.hpp"
 
 #include <MenuItemView>
@@ -72,7 +73,7 @@ void ConfirmationMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font(Game::instance().fontName());
 
     const int shadowY = -2;
     const int shadowX =  2;

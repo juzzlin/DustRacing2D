@@ -136,9 +136,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_world->renderer().enableDepthTestOnLayer(Layers::GrandStands, true);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 
-    MCAssetManager::textureFontManager().font("default").surface().setShaderProgram(
+    MCAssetManager::textureFontManager().font(m_game.fontName()).surface().setShaderProgram(
         &m_renderer.program("text"));
-    MCAssetManager::textureFontManager().font("default").surface().setShadowShaderProgram(
+    MCAssetManager::textureFontManager().font(m_game.fontName()).surface().setShadowShaderProgram(
         &m_renderer.program("textShadow"));
 
     const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.5);

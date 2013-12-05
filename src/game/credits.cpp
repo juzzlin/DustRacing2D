@@ -33,10 +33,9 @@ void Credits::render()
         "* Jussi Lind\n\n" +
         QObject::tr("RACE TRACKS BY") + "\n\n" +
         "* Jussi Lind\n\n" +
-        QObject::tr("FONT") + "\n\n" +
-        "* Ubuntu Monospace\n\n" +
         QObject::tr("PATCHES") + "\n\n" +
         "* Markus Rinne\n\n" +
+        "* Paolo Straffi\n\n" +
         QObject::tr("SPECIAL THANKS") + "\n\n" +
         "* Tommi Martela\n\n"
         "* Alex Rietveld\n").toStdString()

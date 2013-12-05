@@ -58,7 +58,7 @@ void PressKeyMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font(Game::instance().fontName());
 
     const int shadowY = -2;
     const int shadowX =  2;

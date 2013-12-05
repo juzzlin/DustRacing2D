@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "textmenuitemview.hpp"
+#include "game.hpp"
 #include <MenuItem>
 
 #include <MCAssetManager>
@@ -34,7 +35,7 @@ void TextMenuItemView::setTextSize(int size)
 void TextMenuItemView::render(int x, int y)
 {
     MCTextureText text(owner().text());
-    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font("default");
+    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font(Game::instance().fontName());
 
     const int shadowY = -2;
     const int shadowX =  2;

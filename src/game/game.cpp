@@ -18,6 +18,7 @@
 #include "game.hpp"
 
 #include "audiothread.hpp"
+#include "graphicsfactory.hpp"
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
 #include "renderer.hpp"
@@ -55,7 +56,7 @@ Game::Game()
 , m_assetManager(new MCAssetManager(
     Config::Common::dataPath,
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "textures.conf",
-    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "fonts.conf",
+    "",
     std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "meshes.conf"))
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
 , m_trackLoader(new TrackLoader(*m_objectFactory))
@@ -76,6 +77,8 @@ Game::Game()
     Game::m_instance = this;
 
     createRenderer();
+
+    m_assetManager->textureFontManager().createFontFromData(GraphicsFactory::generateFont());
 
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
@@ -245,6 +248,12 @@ AudioThread & Game::audioThread()
 {
     assert(m_audioThread);
     return *m_audioThread;
+}
+
+const std::string & Game::fontName() const
+{
+    static const std::string fontName("generated");
+    return fontName;
 }
 
 Renderer & Game::renderer() const

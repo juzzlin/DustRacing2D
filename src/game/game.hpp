@@ -109,6 +109,8 @@ public:
 
     AudioThread & audioThread();
 
+    const std::string & fontName() const;
+
 public slots:
 
     void togglePause();

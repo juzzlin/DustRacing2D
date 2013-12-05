@@ -46,7 +46,7 @@ static const MCGLColor WHITE  (1.0, 1.0, 1.0);
 
 TimingOverlay::TimingOverlay()
 : m_fontManager(MCAssetManager::textureFontManager())
-, m_font(m_fontManager.font("default"))
+, m_font(m_fontManager.font(Game::instance().fontName()))
 , m_text("")
 , m_car(nullptr)
 , m_timing(nullptr)

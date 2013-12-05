@@ -29,7 +29,11 @@ struct MCTextureFontData
     //! Glyph data in the XML config.
     struct Glyph
     {
-        int x0, y0, x1, y1;
+        //! UPPER-LEFT coordinate. Y-axis points upwards.
+        int x0, y0;
+
+        //! LOWER-RIGHT coordinate. Y-axis points upwards.
+        int x1, y1;
 
         //! Name of the glyph e.g. 'a'.
         std::string name;

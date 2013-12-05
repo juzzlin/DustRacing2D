@@ -47,7 +47,7 @@ public:
     TrackItem(int width, int height, Track & track)
     : MenuItem(width, height)
     , m_track(track)
-    , m_monospace(MCAssetManager::textureFontManager().font("default"))
+    , m_monospace(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
     , m_star(MCAssetManager::surfaceManager().surface("star"))
     , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
