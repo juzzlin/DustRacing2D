@@ -38,7 +38,7 @@ void Credits::render()
         "* Paolo Straffi\n\n" +
         QObject::tr("SPECIAL THANKS") + "\n\n" +
         "* Tommi Martela\n\n"
-        "* Alex Rietveld\n").toStdString()
+        "* Alex Rietveld\n").toStdWString()
     );
 
     SurfaceMenu::render();

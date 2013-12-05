@@ -36,16 +36,16 @@ class MCTextureText
 public:
 
     //! Constructor.
-    explicit MCTextureText(const std::string & text);
+    explicit MCTextureText(const std::wstring & text);
 
     //! Destructor.
     ~MCTextureText();
 
     //! Set the text.
-    void setText(const std::string & text);
+    void setText(const std::wstring & text);
 
     //! Get the text.
-    const std::string & text() const;
+    const std::wstring & text() const;
 
     //! Set size of one glyph.
     void setGlyphSize(int width, int height);
@@ -84,11 +84,14 @@ private:
 
     void updateTextDimensions();
 
-    std::string m_text;
-    int m_glyphWidth, m_glyphHeight;
-    int m_textWidth, m_textHeight;
-    MCGLColor m_color;
-    MCFloat m_xOffset, m_yOffset;
+    std::wstring m_text;
+    int          m_glyphWidth;
+    int          m_glyphHeight;
+    int          m_textWidth;
+    int          m_textHeight;
+    MCGLColor    m_color;
+    MCFloat      m_xOffset;
+    MCFloat      m_yOffset;
 };
 
 #endif // MCTEXTUREGLYPH_HH

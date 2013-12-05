@@ -218,11 +218,11 @@ void Timing::reset()
     }
 }
 
-std::string Timing::msecsToString(int msec)
+std::wstring Timing::msecsToString(int msec)
 {
     if (msec < 0)
     {
-        return "--:--.--";
+        return L"--:--.--";
     }
 
     const int hh = msec / 3600000;
@@ -233,7 +233,7 @@ std::string Timing::msecsToString(int msec)
     const int ms = mr   % 1000;
 
     const QTime time(hh, mm, ss, ms);
-    std::string strTime(time.toString("mm:ss.zzz").toStdString());
+    std::wstring strTime(time.toString("mm:ss.zzz").toStdWString());
     strTime.erase(strTime.length() - 1, 1); // Reduce .zzz to .zz
     return strTime;
 }

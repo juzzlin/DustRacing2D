@@ -98,7 +98,7 @@ public:
     void reset();
 
     //! Converts msecs to string "mm:ss.zz".
-    static std::string msecsToString(int msec);
+    static std::wstring msecsToString(int msec);
 
 signals:
 

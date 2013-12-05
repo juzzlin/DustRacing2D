@@ -24,11 +24,13 @@
 #include <MCTextureFont>
 #include <MCTextureText>
 
+#include <QObject>
+
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
 : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST, false)
-, m_acceptItem(new MTFH::MenuItem(width / 4, height, "Ok"))
-, m_cancelItem(new MTFH::MenuItem(width / 4, height, "Cancel"))
-, m_text("")
+, m_acceptItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Ok").toStdWString()))
+, m_cancelItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Cancel").toStdWString()))
+, m_text(L"")
 {
     m_acceptItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_acceptItem)));
     m_cancelItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_cancelItem)));
@@ -57,7 +59,7 @@ void ConfirmationMenu::setCancelAction(std::function<void()> actionFunction)
     m_cancelItem->setAction(actionFunction);
 }
 
-void ConfirmationMenu::setText(std::string text)
+void ConfirmationMenu::setText(std::wstring text)
 {
     m_text = text;
 }

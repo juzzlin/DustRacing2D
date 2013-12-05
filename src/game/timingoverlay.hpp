@@ -89,17 +89,17 @@ private:
 
     void renderSpeed();
 
-    MCTextureFontManager   & m_fontManager;
-    MCTextureFont          & m_font;
-    MCTextureText            m_text;
-    const Car              * m_car;
-    Timing                 * m_timing;
-    Race                   * m_race;
-    std::vector<std::string> m_posTexts;
-    bool                     m_showLapRecordTime;
-    bool                     m_showRaceTime;
-    bool                     m_showCarStatus;
-    CarStatusView            m_carStatusView;
+    MCTextureFontManager    & m_fontManager;
+    MCTextureFont           & m_font;
+    MCTextureText             m_text;
+    const Car               * m_car;
+    Timing                  * m_timing;
+    Race                    * m_race;
+    std::vector<std::wstring> m_posTexts;
+    bool                      m_showLapRecordTime;
+    bool                      m_showRaceTime;
+    bool                      m_showCarStatus;
+    CarStatusView             m_carStatusView;
 };
 
 #endif // TIMINGOVERLAY_HPP

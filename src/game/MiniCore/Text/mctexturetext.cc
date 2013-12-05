@@ -29,7 +29,7 @@
 #include <map>
 #include <vector>
 
-MCTextureText::MCTextureText(const std::string & text)
+MCTextureText::MCTextureText(const std::wstring & text)
 : m_text(text)
 , m_glyphWidth(32)
 , m_glyphHeight(32)
@@ -69,13 +69,13 @@ void MCTextureText::updateTextDimensions()
     m_textWidth = maxLength * m_glyphWidth;
 }
 
-void MCTextureText::setText(const std::string & text)
+void MCTextureText::setText(const std::wstring & text)
 {
     m_text = text;
     updateTextDimensions();
 }
 
-const std::string & MCTextureText::text() const
+const std::wstring & MCTextureText::text() const
 {
     return m_text;
 }
@@ -131,10 +131,10 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
 
     glDisable(GL_DEPTH_TEST);
 
-    int prevGlyph = 0;
-    int glyph     = 0;
-    int glyphXPos = x;
-    int glyphYPos = y;
+    wchar_t prevGlyph = 0;
+    wchar_t glyph     = 0;
+    int     glyphXPos = x;
+    int     glyphYPos = y;
 
     for (int i = 0; i < static_cast<int>(m_text.size()); i++)
     {

@@ -90,7 +90,7 @@ public:
     //! Constructor.
     ResolutionItem(
         ConfirmationMenu & confirmationMenu,
-        int hRes, int vRes, bool fullScreen, int width, int height, std::string text = "")
+        int hRes, int vRes, bool fullScreen, int width, int height, std::wstring text = L"")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
     , m_saveResolutionAction(new SaveResolutionAction(*this, fullScreen))
@@ -107,7 +107,7 @@ public:
     {
         MenuItem::setSelected(flag);
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-        m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdString());
+        m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdWString());
         m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
         m_confirmationMenu.setCurrentIndex(1);
     }
@@ -158,7 +158,7 @@ ResolutionMenu::ResolutionMenu(
 
         if (hRes < QApplication::desktop()->width() && vRes < QApplication::desktop()->height())
         {
-            std::stringstream resString;
+            std::wstringstream resString;
             resString << hRes << "x" << vRes;
             ResolutionItem * resolution =
                 new ResolutionItem(m_confirmationMenu, hRes, vRes, fullScreen, width, itemHeight, resString.str());
@@ -171,7 +171,7 @@ ResolutionMenu::ResolutionMenu(
     {
         ResolutionItem * resolution =
             new ResolutionItem(m_confirmationMenu, 0, 0, true, width, itemHeight,
-                QObject::tr("Native resolution").toStdString());
+                QObject::tr("Native resolution").toStdWString());
         resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
         addItem(MTFH::MenuItemPtr(resolution));
     }

@@ -33,7 +33,7 @@ class MenuItem
 {
 public:
 
-    MenuItem(int width, int height, std::string text = "", bool selectable = false);
+    MenuItem(int width, int height, std::wstring text = L"", bool selectable = false);
 
     virtual ~MenuItem();
 
@@ -51,7 +51,7 @@ public:
 
     int y() const;
 
-    const std::string & text() const;
+    const std::wstring & text() const;
 
     void setView(MenuItemViewPtr view);
 
@@ -91,7 +91,7 @@ public:
 
 private:
 
-    std::string m_text;
+    std::wstring m_text;
     std::string m_menuOpenActionMenuId;
     MenuItemActionPtr m_action;
     std::function<void()> m_actionFunction;

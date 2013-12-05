@@ -24,7 +24,7 @@ static const int GLYPH_HEIGHT = 20;
 MessageOverlay::MessageOverlay(MESSAGE_ALIGN align, int messageMaxTime)
 : m_fontManager(MCAssetManager::textureFontManager())
 , m_font(m_fontManager.font(Game::instance().fontName()))
-, m_text("")
+, m_text(L"")
 , m_messageMaxTime(messageMaxTime)
 , m_align(align)
 {
@@ -76,7 +76,7 @@ bool MessageOverlay::update()
     return false;
 }
 
-void MessageOverlay::addMessage(const std::string & msg)
+void MessageOverlay::addMessage(const std::wstring & msg)
 {
     // Create a new message
     MessageOverlay::Message myMsg;
@@ -95,12 +95,12 @@ void MessageOverlay::addMessage(const std::string & msg)
 
 void MessageOverlay::addMessage(QString msg)
 {
-    addMessage(msg.toStdString());
+    addMessage(msg.toStdWString());
 }
 
-void MessageOverlay::addMessage(const char * msg)
+void MessageOverlay::addMessage(const wchar_t * msg)
 {
-    addMessage(std::string(msg));
+    addMessage(std::wstring(msg));
 }
 
 void MessageOverlay::renderMessages()

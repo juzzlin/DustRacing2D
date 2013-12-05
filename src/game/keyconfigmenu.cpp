@@ -44,12 +44,12 @@ public:
 
 private:
 
-    std::string m_text;
+    std::wstring m_text;
 };
 
 PressKeyMenu::PressKeyMenu(std::string id, int width, int height)
 : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
-, m_text(QObject::tr("Press a key..").toStdString())
+, m_text(QObject::tr("Press a key..").toStdWString())
 {
 }
 
@@ -90,7 +90,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     using MTFH::MenuManager;
 
     MenuItem * playerOneAccelerate =
-        new MenuItem(width, itemHeight, QObject::tr("Player One Accelerate").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player One Accelerate").toStdWString());
     playerOneAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneAccelerate)));
     playerOneAccelerate->setAction(
         []()
@@ -100,7 +100,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
         });
 
     MenuItem * playerOneBrake =
-        new MenuItem(width, itemHeight, QObject::tr("Player One Brake").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player One Brake").toStdWString());
     playerOneBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneBrake)));
     playerOneBrake->setAction(
         []()
@@ -110,7 +110,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
         });
 
     MenuItem * playerOneTurnLeft =
-        new MenuItem(width, itemHeight, QObject::tr("Player One Turn Left").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player One Turn Left").toStdWString());
     playerOneTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnLeft)));
     playerOneTurnLeft->setAction(
         []()
@@ -120,7 +120,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
         });
 
     MenuItem * playerOneTurnRight =
-        new MenuItem(width, itemHeight, QObject::tr("Player One Turn Right").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player One Turn Right").toStdWString());
     playerOneTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnRight)));
     playerOneTurnRight->setAction(
         []()
@@ -143,7 +143,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     using MTFH::MenuManager;
 
     MenuItem * playerTwoAccelerate =
-        new MenuItem(width, itemHeight, QObject::tr("Player Two Accelerate").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player Two Accelerate").toStdWString());
     playerTwoAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoAccelerate)));
     playerTwoAccelerate->setAction(
         []()
@@ -153,7 +153,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
         });
 
     MenuItem * playerTwoBrake =
-        new MenuItem(width, itemHeight, QObject::tr("Player Two Brake").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player Two Brake").toStdWString());
     playerTwoBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoBrake)));
     playerTwoBrake->setAction(
         []()
@@ -163,7 +163,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
          });
 
     MenuItem * playerTwoTurnLeft =
-        new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Left").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Left").toStdWString());
     playerTwoTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnLeft)));
     playerTwoTurnLeft->setAction(
         []()
@@ -173,7 +173,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
         });
 
     MenuItem * playerTwoTurnRight =
-        new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Right").toStdString());
+        new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Right").toStdWString());
     playerTwoTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnRight)));
     playerTwoTurnRight->setAction(
         []()

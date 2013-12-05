@@ -43,7 +43,7 @@ void Help::render()
         "Brake      : S / LEFT CTRL\n\n"
         "Quit       : ESC/Q\n"
         "Pause      : P\n\n"
-        "http://dustrac.sourceforge.net").toStdString()
+        "http://dustrac.sourceforge.net").toStdWString()
     );
 
     SurfaceMenu::render();

@@ -177,15 +177,15 @@ void TrackItem::render()
         tileY += tileH;
     }
 
-    MCTextureText text("");
+    MCTextureText text(L"");
 
     const int textX   = x() - width() / 2;
     const int shadowY = -2;
     const int shadowX =  2;
 
     // Render title
-    std::stringstream ss;
-    ss << m_track.trackData().name().toStdString();
+    std::wstringstream ss;
+    ss << m_track.trackData().name().toStdWString();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
@@ -225,28 +225,28 @@ void TrackItem::render()
     }
 
     // Render track properties
-    ss.str("");
-    ss << QObject::tr("       Laps: ").toStdString() << Game::instance().lapCount();
+    ss.str(L"");
+    ss << QObject::tr("       Laps: ").toStdWString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.render(textX, y() - height() / 2 - text.height() * 2, nullptr, m_monospace);
 
-    ss.str("");
-    ss << QObject::tr("     Length: ").toStdString()
+    ss.str(L"");
+    ss << QObject::tr("     Length: ").toStdWString()
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerPixel())
-       << QObject::tr(" m").toStdString();
+       << QObject::tr(" m").toStdWString();
     text.setText(ss.str());
     text.render(textX, y() - height() / 2 - text.height() * 3, nullptr, m_monospace);
 
     if (!m_track.trackData().isLocked())
     {
-        ss.str("");
-        ss << QObject::tr(" Lap Record: ").toStdString() << Timing::msecsToString(m_lapRecord);
+        ss.str(L"");
+        ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
         text.render(textX, y() - height() / 2 - text.height() * 4, nullptr, m_monospace);
 
-        ss.str("");
-        ss << QObject::tr("Race Record: ").toStdString() << Timing::msecsToString(m_raceRecord);
+        ss.str(L"");
+        ss << QObject::tr("Race Record: ").toStdWString() << Timing::msecsToString(m_raceRecord);
         text.setText(ss.str());
         text.render(textX, y() - height() / 2 - text.height() * 5, nullptr, m_monospace);
     }
@@ -299,8 +299,6 @@ void TrackSelectionMenu::selectCurrentItem()
     {
         m_selectedTrack = &selection;
         m_scene.setActiveTrack(*m_selectedTrack);
-        MCLogger().info() <<
-            "Track '" << m_selectedTrack->trackData().name().toStdString() << "' selected.";
         setIsDone(true);
     }
 }

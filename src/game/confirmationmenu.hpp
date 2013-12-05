@@ -39,7 +39,7 @@ public:
 
     void setCancelAction(std::function<void()> actionFunction);
 
-    void setText(std::string text);
+    void setText(std::wstring text);
 
     //! \reimp
     virtual void selectCurrentItem();
@@ -52,7 +52,7 @@ private:
     MTFH::MenuItemPtr m_acceptItem;
     MTFH::MenuItemPtr m_cancelItem;
 
-    std::string m_text;
+    std::wstring m_text;
 };
 
 #endif // CONFIRMATIONMENU_HPP

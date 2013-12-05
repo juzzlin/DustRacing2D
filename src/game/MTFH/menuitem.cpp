@@ -20,7 +20,7 @@
 
 namespace MTFH {
 
-MenuItem::MenuItem(int width, int height, std::string text, bool selectable)
+MenuItem::MenuItem(int width, int height, std::wstring text, bool selectable)
 : m_text(text)
 , m_menuOpenActionMenuId("")
 , m_action(nullptr)
@@ -188,7 +188,7 @@ void MenuItem::render()
     }
 }
 
-const std::string & MenuItem::text() const
+const std::wstring & MenuItem::text() const
 {
     return m_text;
 }

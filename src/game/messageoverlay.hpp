@@ -49,13 +49,13 @@ public:
 public slots:
 
     //! Add a message to the MessageOverlay.
-    void addMessage(const std::string & msg);
+    void addMessage(const std::wstring & msg);
 
     //! Add a message to the MessageOverlay.
     void addMessage(QString msg);
 
     //! Add a message to the MessageOverlay.
-    void addMessage(const char * msg);
+    void addMessage(const wchar_t * msg);
 
 private:
 
@@ -78,7 +78,7 @@ private:
         float targetY;
 
         //! Message
-        std::string text;
+        std::wstring text;
 
         //! True, if y is initialized
         bool isYInitialized;

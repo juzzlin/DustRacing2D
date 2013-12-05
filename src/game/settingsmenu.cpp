@@ -60,7 +60,7 @@ private:
         {
         case RT_POSITIONS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText(QObject::tr("Reset best positions?").toStdString());
+            m_confirmationMenu.setText(QObject::tr("Reset best positions?").toStdWString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -72,7 +72,7 @@ private:
 
         case RT_TIMES:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText(QObject::tr("Reset record times?").toStdString());
+            m_confirmationMenu.setText(QObject::tr("Reset record times?").toStdWString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -85,7 +85,7 @@ private:
 
         case RT_TRACKS:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText(QObject::tr("Reset unlocked tracks?").toStdString());
+            m_confirmationMenu.setText(QObject::tr("Reset unlocked tracks?").toStdWString());
             m_confirmationMenu.setAcceptAction(
                 []()
                 {
@@ -161,46 +161,46 @@ void SettingsMenu::populate(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuItemActionPtr;
 
-    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdString());
+    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdWString());
     resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
     resetRecordTimes->setAction(
         MenuItemActionPtr(new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu)));
 
-    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdString());
+    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdWString());
     resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
     resetBestPositions->setAction(
         MenuItemActionPtr(new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu)));
 
-    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdString());
+    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdWString());
     resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
     resetUnlockedTracks->setAction(
         MenuItemActionPtr(new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu)));
 
-    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toStdString());
+    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toStdWString());
     selectFullScreenResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFullScreenResolution)));
     selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
 
-    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toStdString());
+    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toStdWString());
     selectWindowedResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectWindowedResolution)));
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
-    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdString());
+    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdWString());
     splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
     splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
 
-    MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdString());
+    MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdWString());
     gameMode->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gameMode)));
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
-    MenuItem * lapCount = new MenuItem(width, itemHeight, QObject::tr("Lap Count >").toStdString());
+    MenuItem * lapCount = new MenuItem(width, itemHeight, QObject::tr("Lap Count >").toStdWString());
     lapCount->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCount)));
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
-    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdString());
+    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdWString());
     selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
-    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdString());
+    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdWString());
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
@@ -227,7 +227,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
 
-    MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toStdString());
+    MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toStdWString());
     twoPlayers->setView(MenuItemViewPtr(new TextMenuItemView(20, *twoPlayers)));
     twoPlayers->setAction(
         []()
@@ -237,7 +237,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toStdString());
+    MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toStdWString());
     onePlayer->setView(MenuItemViewPtr(new TextMenuItemView(20, *onePlayer)));
     onePlayer->setAction(
         []()
@@ -247,7 +247,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toStdString());
+    MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toStdWString());
     timeTrial->setView(MenuItemViewPtr(new TextMenuItemView(20, *timeTrial)));
     timeTrial->setAction(
         []()
@@ -257,7 +257,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toStdString());
+    MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toStdWString());
     duel->setView(MenuItemViewPtr(new TextMenuItemView(20, *duel)));
     duel->setAction(
         []()
@@ -284,7 +284,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
 
-    MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toStdString());
+    MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toStdWString());
     vertical->setView(MenuItemViewPtr(new TextMenuItemView(20, *vertical)));
     vertical->setAction(
         []()
@@ -294,7 +294,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toStdString());
+    MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toStdWString());
     horizontal->setView(MenuItemViewPtr(new TextMenuItemView(20, *horizontal)));
     horizontal->setAction(
         []()
@@ -317,7 +317,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
 
-    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toStdString());
+    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toStdWString());
     fps30->setView(MenuItemViewPtr(new TextMenuItemView(20, *fps30)));
     fps30->setAction(
         []()
@@ -328,7 +328,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
-    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toStdString());
+    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toStdWString());
     fps60->setView(MenuItemViewPtr(new TextMenuItemView(20, *fps60)));
     fps60->setAction(
         []()
@@ -370,7 +370,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
     int selectedIndex = 0;
     for (int i = 0; i < numLapCounts; i++)
     {
-        std::stringstream itemText;
+        std::wstringstream itemText;
         itemText << LAP_COUNTS[i];
 
         MenuItem * lapCountItem = new MenuItem(width, itemHeight, itemText.str());
