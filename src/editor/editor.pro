@@ -79,8 +79,9 @@ SOURCES += \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 TRANSLATIONS += 
-    translations/dustrac-editor_fi.ts
-    translations/dustrac-editor_it.ts
+    translations/dustrac-editor_fi.ts \
+    translations/dustrac-editor_it.ts \
+    translations/dustrac-editor_cs.ts 
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target
