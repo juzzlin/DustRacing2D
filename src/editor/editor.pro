@@ -78,7 +78,9 @@ SOURCES += \
     tracktile.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
-TRANSLATIONS += translations/dustrac-editor_it.ts
+TRANSLATIONS += 
+    translations/dustrac-editor_fi.ts
+    translations/dustrac-editor_it.ts
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target

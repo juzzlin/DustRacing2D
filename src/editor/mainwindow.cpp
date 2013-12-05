@@ -145,7 +145,7 @@ void MainWindow::showTip()
 
 void MainWindow::init()
 {
-    setTitle("New file");
+    setTitle(tr("New file"));
 
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Editor::QSETTINGS_SOFTWARE_NAME);
@@ -738,7 +738,7 @@ void MainWindow::initializeNewTrack()
             .arg(m_editorData->trackData()->map().cols())
             .arg(m_editorData->trackData()->map().rows()));
 
-        setTitle("New file");
+        setTitle(tr("New file"));
 
         m_saved = false;
     }
