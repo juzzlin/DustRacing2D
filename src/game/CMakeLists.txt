@@ -22,7 +22,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
 
 # Translation files in src/game/translations (without .ts)
-set(TS dustrac-game_fi dustrac-game_it)
+set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs)
 set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
