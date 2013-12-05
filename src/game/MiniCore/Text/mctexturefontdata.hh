@@ -38,7 +38,7 @@ struct MCTextureFontData
     //! Name of the font.
     std::string name;
 
-    //! MCSurface handle including the glyphs.
+    //! Handle to an MCSurface that includes the glyphs.
     std::string surface;
 
     //! Glyphs.
