@@ -86,19 +86,19 @@ public:
     //! Destructor.
     virtual ~MCTextureFontManager();
 
-    //! Loads texture config from the given config file.
-    //! \param filePath Path to the XML-based input file.
+    /*! Loads texture config from the given config file.
+     *  \param filePath Path to the XML-based input file. */
     virtual void load(const std::string & filePath) throw (MCException);
 
-    //! Returns a font object associated with given name.
-    //! MCTextureFontManager will keep the ownership.
-    //! \param name Name defined in the fonts XML file.
-    //! \return Reference to the corresponding MCTextureFont.
-    //! \throws MCException on failure.
+    /*! Returns a font object associated with given name.
+     *  MCTextureFontManager will keep the ownership.
+     *  \param name Name defined in the fonts XML file.
+     *  \return Reference to the corresponding MCTextureFont.
+     *  \throws MCException on failure. */
     MCTextureFont & font(const std::string & name) const throw (MCException);
 
-    //! Creates a new font object from the given data and adds it
-    //! to the font hash.
+    /*! Creates a new font object from the given data and adds it
+     *  to the font hash. */
     void createFontFromData(const MCTextureFontData & data);
 
 private:
