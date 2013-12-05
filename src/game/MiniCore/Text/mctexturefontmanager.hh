@@ -97,6 +97,10 @@ public:
     //! \throws MCException on failure.
     MCTextureFont & font(const std::string & name) const throw (MCException);
 
+    //! Creates a new font object from the given data and adds it
+    //! to the font hash.
+    void createFontFromData(const MCTextureFontData & data);
+
 private:
 
     //! Disable copy constructor
@@ -104,10 +108,6 @@ private:
 
     //! Disable assignment
     DISABLE_ASSI(MCTextureFontManager);
-
-    //! Creates a new font object from the given data and adds it
-    //! to the font hash.
-    void createFontFromData(const MCTextureFontData & data);
 
     //! Map for resulting font objects.
     typedef std::unordered_map<std::string, MCTextureFont *> FontHash;
