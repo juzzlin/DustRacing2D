@@ -38,11 +38,11 @@ public:
 
     //! Add a mapping from given glyph id to given MCTextureGlyph.
     //! MCTextureGlyph includes e.g. uv-coordinates.
-    void addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph);
+    void addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph);
 
     //! Return an MCTextureGlyph for the given id. Default containing
     //! the whole texture is returned if not found.
-    MCTextureGlyph & glyph(int glyphId);
+    MCTextureGlyph & glyph(wchar_t glyphId);
 
     //! Return the associated surface.
     MCSurface & surface() const;
@@ -50,7 +50,7 @@ public:
 private:
 
     MCTextureGlyph m_default;
-    typedef std::unordered_map<int, MCTextureGlyph> GlyphHash;
+    typedef std::unordered_map<wchar_t, MCTextureGlyph> GlyphHash;
     GlyphHash m_glyphs;
     typedef std::vector<MCTextureGlyph> GlyphLookUp;
     GlyphLookUp m_glyphLookUp;

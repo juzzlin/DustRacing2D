@@ -90,7 +90,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
                 static_cast<float>(glyph.y1) / surface.height()));
 
         // Add glyph mapping to the font.
-        newFont->addGlyphMapping(glyph.name.at(0), newGlyph);
+        newFont->addGlyphMapping(glyph.name, newGlyph);
     }
 
     // Store the font.

@@ -36,7 +36,7 @@ struct MCTextureFontData
         int x1, y1;
 
         //! Name of the glyph e.g. 'a'.
-        std::string name;
+        wchar_t name;
     };
 
     //! Name of the font.

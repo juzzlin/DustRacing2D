@@ -72,19 +72,19 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
 
 MCTextureFontData GraphicsFactory::generateFont()
 {
-    static std::vector<QString> glyphs(
-        {"A", "B", "C", "D", "E", "F", "G", "H",
-         "I", "J", "K", "L", "M", "N", "O", "P",
-         "Q", "R", "S", "T", "U", "V", "W", "X",
-         "Y", "Z", "Å", "Ä", "Ö", "Ü", "",  "",
-         "a", "b", "c", "d", "e", "f", "g", "h",
-         "i", "j", "k", "l", "m", "n", "o", "p",
-         "q", "r", "s", "t", "u", "v", "w", "x",
-         "y", "z", "å", "ä", "ö", "ü", "",  "",
-         "0", "1", "2", "3", "4", "5", "6", "7",
-         "8", "9", "!", "\"","#", "$", "%", "&",
-         "'", "(", ")", "*", "+", ",", "-", ".",
-         "/", ":", ";", "<", "=", ">", "?", " "});
+    static std::vector<wchar_t> glyphs(
+        {L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H',
+         L'I', L'J', L'K', L'L', L'M', L'N', L'O', L'P',
+         L'Q', L'R', L'S', L'T', L'U', L'V', L'W', L'X',
+         L'Y', L'Z', L' ', L'Ä', L'Ö', L'Ü', L'Å', L' ',
+         L'a', L'b', L'c', L'd', L'e', L'f', L'g', L'h',
+         L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p',
+         L'q', L'r', L's', L't', L'u', L'v', L'w', L'x',
+         L'y', L'z', L' ', L'ä', L'ö', L'ü', L'å', L'\"',
+         L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
+         L'8', L'9', L'!', L'\"',L'#', L'$', L'%', L'&',
+         L' ', L'(', L')', L'*', L'+', L',', L'-', L'.',
+         L'/', L':', L';', L'<', L'=', L'>', L'?', L' '});
 
     const int cols        = 8;
     const int rows        = glyphs.size() / cols;
@@ -104,7 +104,7 @@ MCTextureFontData GraphicsFactory::generateFont()
         for (int i = 0; i < cols; i++)
         {
             const int glyphIndex = j * cols + i;
-            const QString text = glyphs.at(glyphIndex);
+            const QString text(glyphs.at(glyphIndex));
 
             if (text.length())
             {
@@ -127,7 +127,7 @@ MCTextureFontData GraphicsFactory::generateFont()
                 painter.end();
 
                 MCTextureFontData::Glyph glyph;
-                glyph.name = text.toStdString();
+                glyph.name = glyphs.at(glyphIndex);
                 glyph.x0   = i * textureW / cols;
                 glyph.y0   = (rows - j) * textureH / rows;
                 glyph.x1   = (i + 1) * textureW / cols;

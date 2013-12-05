@@ -29,7 +29,7 @@ MCTextureFont::MCTextureFont(MCSurface & surface)
 {
 }
 
-void MCTextureFont::addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph)
+void MCTextureFont::addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph)
 {
     if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
     {
@@ -41,7 +41,7 @@ void MCTextureFont::addGlyphMapping(int glyphId, MCTextureGlyph textureGlyph)
     }
 }
 
-MCTextureGlyph & MCTextureFont::glyph(int glyphId)
+MCTextureGlyph & MCTextureFont::glyph(wchar_t glyphId)
 {
     if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
     {
