@@ -12,14 +12,17 @@ Level design:
 * Jussi Lind
 
 Translations:
-* Paolo Straffi (it)
+* Pavel Fric <pavelfric@seznam.cz> (cs)
+* Paolo Straffi <p_straffi@hotmail.com> (it)
 * Jussi Lind (fi)
 
 Patches:
+* Paolo Straffi <p_straffi@hotmail.com>
+* Markus Rinne <markus.ka.rinne@gmail.com>
 * Antti Kervinen
-* Markus Rinne
 
 Special Thanks:
 * Tommi Martela
 * Alex Rietveld
 * Matthias Mailänder
+
