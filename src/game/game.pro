@@ -313,7 +313,7 @@ SOURCES += \
     STFH/source.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
-TRANSLATIONS += translations/dustrac-game_fi.ts
+TRANSLATIONS += translations/dustrac-game_fi.ts translations/dustrac-game_it.ts
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target
