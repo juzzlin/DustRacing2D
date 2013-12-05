@@ -1,3 +1,11 @@
+# Translation files in src/editor/translations (without .ts)
+set(TS dustrac-editor_it)
+set(TS_FILES)
+set(QM_FILES)
+foreach(TS_FILE ${TS})
+    list(APPEND TS_FILES ${CMAKE_SOURCE_DIR}/src/editor/translations/${TS_FILE}.ts)
+    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/src/editor/${TS_FILE}.qm)
+endforeach()
 # Set sources
 set(SRC
     aboutdlg.cpp
@@ -39,6 +47,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common)
 
 if (UseQt5)
     qt5_add_resources(RC_SRC ${RCS})
+    qt5_add_translation(QM ${TS_FILES})
     qt5_wrap_ui(UI_HDRS ${UIS})
 else()
     set(MOC_HDRS
@@ -48,6 +57,7 @@ else()
     qt4_add_resources(RC_SRC ${RCS})
     qt4_wrap_ui(UI_HDRS ${UIS})
     qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
+    qt4_add_translation(QM ${TS_FILES})
 endif()
 
 # We need this to be able to include headers produced by uic in our code
@@ -80,10 +90,19 @@ endif()
 
 # Add the executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS})
+add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS} ${QM})
 
 if(UseQt5)
     qt5_use_modules(${EDITOR_BINARY_NAME} Widgets Xml)
 else()
     target_link_libraries(${EDITOR_BINARY_NAME} ${QT_LIBRARIES})
 endif()
+
+foreach(TS_FILE ${TS})
+    # Make targets to copy generated qm files to data dir. This is done the hard
+    # way, because qt4_add_translation() generates the qm files to ${CMAKE_CURRENT_SOURCE_DIR}
+    add_custom_target(copy-translation-file-${TS_FILE} ALL
+        COMMAND cmake -E copy ${CMAKE_BINARY_DIR}/src/editor/${TS_FILE}.qm
+            ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm
+        DEPENDS ${EDITOR_BINARY_NAME})
+endforeach()

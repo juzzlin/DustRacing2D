@@ -15,9 +15,23 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QLocale>
+#include <QTranslator>
 #include <iostream>
 
 #include "mainwindow.hpp"
+
+static void initTranslations(QTranslator & appTranslator, QApplication & app)
+{
+    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-editor_" + QLocale::system().name()))
+    {
+        app.installTranslator(&appTranslator);
+    }
+    else
+    {
+        //
+    }
+}
 
 int main(int argc, char ** argv)
 {
@@ -25,6 +39,8 @@ int main(int argc, char ** argv)
     QApplication::setGraphicsSystem("raster");
 #endif
     QApplication app(argc, argv);
+    QTranslator appTranslator;
+    initTranslations(appTranslator, app);
     // Track file can be given as command line argument.
     const QString trackFile = argc > 1 ? argv[1] : "";
     MainWindow mainWindow(trackFile);

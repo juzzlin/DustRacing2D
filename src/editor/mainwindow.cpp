@@ -316,7 +316,7 @@ void MainWindow::updateScale(int value)
     transform.scale(scale, scale);
     m_editorView->setTransform(transform);
 
-    console(QString("Scale set to %1%").arg(value));
+    console(QString(tr("Scale set to %1%")).arg(value));
 }
 
 void MainWindow::closeEvent(QCloseEvent * event)
