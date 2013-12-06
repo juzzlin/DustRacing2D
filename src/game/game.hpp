@@ -130,7 +130,7 @@ private:
     void createRenderer();
     void initScene();
     bool loadTracks();
-    void loadSounds();
+    void loadFonts();
 
     Settings          m_settings;
     InputHandler    * m_inputHandler;

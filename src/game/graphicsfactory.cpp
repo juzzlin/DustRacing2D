@@ -112,9 +112,10 @@ MCTextureFontData GraphicsFactory::generateFont()
                 painter.begin(&fontPixmap);
 
                 QFont font;
+                font.setFamily("Ubuntu Mono");
+                font.setStyleHint(QFont::Monospace);
                 font.setPixelSize(glyphHeight);
                 font.setBold(true);
-                font.setFamily("Monospace");
 
                 painter.setFont(font);
                 painter.setPen(QColor(255, 255, 255));

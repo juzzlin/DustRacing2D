@@ -36,6 +36,7 @@
 #include <MCObjectFactory>
 
 #include <QApplication>
+#include <QFontDatabase>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTime>
@@ -77,6 +78,8 @@ Game::Game()
     Game::m_instance = this;
 
     createRenderer();
+
+    loadFonts();
 
     m_assetManager->textureFontManager().createFontFromData(GraphicsFactory::generateFont());
 
@@ -275,6 +278,25 @@ bool Game::loadTracks()
     }
 
     return true;
+}
+
+void Game::loadFonts()
+{
+    const std::vector<QString> fonts = {"UbuntuMono-R.ttf", "UbuntuMono-B.ttf"};
+    for (auto font : fonts)
+    {
+        const QString path =
+            QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
+        MCLogger().info() << "Loading font " << path.toStdString() << "..";
+
+        QFile fontFile(path);
+        fontFile.open(QFile::ReadOnly);
+        const int appFontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
+        if (appFontId < 0)
+        {
+            MCLogger().warning() << "Failed to load font " << path.toStdString() << "..";
+        }
+    }
 }
 
 void Game::initScene()
