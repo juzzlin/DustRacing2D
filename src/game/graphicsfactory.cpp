@@ -88,7 +88,7 @@ MCTextureFontData GraphicsFactory::generateFont()
 
     const int cols        = 8;
     const int rows        = glyphs.size() / cols;
-    const int slotWidth   = 36;
+    const int slotWidth   = 30;
     const int slotHeight  = 64;
     const int glyphHeight = 52;
     const int textureW    = cols * slotWidth;
