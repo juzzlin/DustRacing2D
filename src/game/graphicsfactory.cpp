@@ -55,9 +55,13 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
     const QString text = numberPlates.at(index).c_str();
 
     painter.drawText(
-        pixmapWidth / 2 - fm.width(text) / 2,
-        pixmapHeight / 2 + fm.height() / 2 - fm.descent(),
+        0,
+        0,
+        pixmapWidth,
+        pixmapHeight,
+        Qt::AlignCenter,
         text);
+
     painter.end();
 
     // Note, that the size of the pixmap doesn't affect the size of the actual
@@ -122,9 +126,13 @@ MCTextureFontData GraphicsFactory::generateFont()
                 const QFontMetrics fm = painter.fontMetrics();
 
                 painter.drawText(
-                    i * slotWidth  + slotWidth  / 2 - fm.width(text) / 2,
-                    j * slotHeight + slotHeight / 2 + fm.height()    / 2 - fm.descent(),
+                    i * slotWidth,
+                    j * slotHeight,
+                    slotWidth,
+                    slotHeight,
+                    Qt::AlignCenter,
                     text);
+
                 painter.end();
 
                 MCTextureFontData::Glyph glyph;
