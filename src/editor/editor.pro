@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-editor
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.2\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.4\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
 QT += widgets xml
@@ -78,7 +78,7 @@ SOURCES += \
     tracktile.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
-TRANSLATIONS += 
+TRANSLATIONS += \
     translations/dustrac-editor_fi.ts \
     translations/dustrac-editor_it.ts \
     translations/dustrac-editor_cs.ts 

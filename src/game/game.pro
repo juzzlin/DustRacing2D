@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.2\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.4\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
 QT += opengl widgets xml
@@ -313,7 +313,7 @@ SOURCES += \
     STFH/source.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
-TRANSLATIONS +=
+TRANSLATIONS += \
     translations/dustrac-game_fi.ts \
     translations/dustrac-game_it.ts \
     translations/dustrac-game_cs.ts

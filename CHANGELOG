@@ -1,3 +1,34 @@
+1.5.4
+-----
+
+* Remove swap interval setting.
+* Remove unused variable.
+* Less dramatic tire wear when off-track.
+* Remove FPS setting completely.
+* Add install target for fonts.
+* Add fallback glyphs.
+* Add unlimited FPS setting.
+* Use updateGL to update.
+* Use the bounding rect version of QPainter::drawText().
+* Make text more dense.
+* Font generator tries to use Ubuntu Mono.
+* Add Ubuntu Mono fonts to data/fonts.
+* Switch to wide chars.
+* Use wchar_t in the font map.
+* Update AUTHORS.
+* Add Czech translations for the editor.
+* Generate game font on-the-fly.
+* Fix some documentation formatting.
+* Make createFontFromData a public function.
+* Cosmetics.
+* Add message about missing translation.
+* Add Finnish translations for the editor.
+* Add Czech translations.
+* Update qmake project files.
+* Update Italian translations.
+* Add Italian translations for the editor.
+* Add blue car.
+
 1.5.2
 -----
 
