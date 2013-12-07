@@ -59,6 +59,11 @@ MCTextureGlyph & MCTextureFont::glyph(wchar_t glyphId)
     return m_default;
 }
 
+void MCTextureFont::setGlyphFallback(wchar_t glyph, wchar_t fallback)
+{
+    addGlyphMapping(glyph, this->glyph(fallback));
+}
+
 MCSurface & MCTextureFont::surface() const
 {
     return m_surface;

@@ -93,6 +93,13 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
         newFont->addGlyphMapping(glyph.name, newGlyph);
     }
 
+    auto i = data.fallback.begin();
+    while (i != data.fallback.end())
+    {
+        newFont->setGlyphFallback(i->first, i->second);
+        i++;
+    }
+
     // Store the font.
     m_fontHash[data.name] = newFont;
 }

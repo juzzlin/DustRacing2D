@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 //! Data structure used by MCTextureFontConfigLoader.
 struct MCTextureFontData
@@ -47,6 +48,9 @@ struct MCTextureFontData
 
     //! Glyphs.
     std::vector<Glyph> glyphs;
+
+    //! Fallback map.
+    std::map<wchar_t, wchar_t> fallback;
 };
 
 #endif // MCTEXTUREFONTDATA_HH

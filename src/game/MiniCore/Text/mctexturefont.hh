@@ -31,18 +31,22 @@ class MCTextureFont
 {
 public:
 
-    //! Constructor.
-    //! \param surface Reference to the surface object containing
-    //! all the monospace glyphs.
+    /*! Constructor.
+     * \param surface Reference to the surface object containing
+     * all the monospace glyphs. */
     MCTextureFont(MCSurface & surface);
 
-    //! Add a mapping from given glyph id to given MCTextureGlyph.
-    //! MCTextureGlyph includes e.g. uv-coordinates.
-    void addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph);
+    /*! Add a mapping from given glyp to given MCTextureGlyph.
+     *  MCTextureGlyph includes e.g. uv-coordinates. */
+    void addGlyphMapping(wchar_t glyph, MCTextureGlyph textureGlyph);
 
-    //! Return an MCTextureGlyph for the given id. Default containing
-    //! the whole texture is returned if not found.
-    MCTextureGlyph & glyph(wchar_t glyphId);
+    /*! Return an MCTextureGlyph for the given glyph. Default containing
+     *  the whole texture is returned if not found. */
+    MCTextureGlyph & glyph(wchar_t glyph);
+
+    /*! Set a fallback glyph for the given glyph. Must be call AFTER
+     *  all other glyphs are added. */
+    void setGlyphFallback(wchar_t glyph, wchar_t fallback);
 
     //! Return the associated surface.
     MCSurface & surface() const;
@@ -50,10 +54,13 @@ public:
 private:
 
     MCTextureGlyph m_default;
+
     typedef std::unordered_map<wchar_t, MCTextureGlyph> GlyphHash;
     GlyphHash m_glyphs;
+
     typedef std::vector<MCTextureGlyph> GlyphLookUp;
     GlyphLookUp m_glyphLookUp;
+
     MCSurface & m_surface;
 };
 

@@ -74,22 +74,61 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
         MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
 
+static const std::vector<wchar_t> glyphs(
+    {L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H',
+     L'I', L'J', L'K', L'L', L'M', L'N', L'O', L'P',
+     L'Q', L'R', L'S', L'T', L'U', L'V', L'W', L'X',
+     L'Y', L'Z', L' ', L'Ä', L'Ö', L'Ü', L'Å', L' ',
+     L'a', L'b', L'c', L'd', L'e', L'f', L'g', L'h',
+     L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p',
+     L'q', L'r', L's', L't', L'u', L'v', L'w', L'x',
+     L'y', L'z', L' ', L'ä', L'ö', L'ü', L'å', L'\"',
+     L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
+     L'8', L'9', L'!', L'\"',L'#', L'$', L'%', L'&',
+     L' ', L'(', L')', L'*', L'+', L',', L'-', L'.',
+     L'/', L':', L';', L'<', L'=', L'>', L'?', L' '});
+
+static void addFallbacks(MCTextureFontData & fontData)
+{
+    fontData.fallback[L'Á'] = L'A';
+    fontData.fallback[L'á'] = L'a';
+    fontData.fallback[L'à'] = L'a';
+    fontData.fallback[L'Č'] = L'C';
+    fontData.fallback[L'č'] = L'c';
+    fontData.fallback[L'Ď'] = L'D';
+    fontData.fallback[L'É'] = L'E';
+    fontData.fallback[L'é'] = L'e';
+    fontData.fallback[L'Ě'] = L'E';
+    fontData.fallback[L'ě'] = L'e';
+    fontData.fallback[L'è'] = L'e';
+    fontData.fallback[L'Í'] = L'I';
+    fontData.fallback[L'ì'] = L'i';
+    fontData.fallback[L'í'] = L'i';
+    fontData.fallback[L'î'] = L'i';
+    fontData.fallback[L'Ň'] = L'N';
+    fontData.fallback[L'ň'] = L'n';
+    fontData.fallback[L'Ó'] = L'O';
+    fontData.fallback[L'ò'] = L'o';
+    fontData.fallback[L'ó'] = L'o';
+    fontData.fallback[L'Ř'] = L'R';
+    fontData.fallback[L'ř'] = L'r';
+    fontData.fallback[L'Š'] = L'S';
+    fontData.fallback[L'š'] = L's';
+    fontData.fallback[L'Ť'] = L'T';
+    fontData.fallback[L'ť'] = L't';
+    fontData.fallback[L'Ú'] = L'U';
+    fontData.fallback[L'ú'] = L'u';
+    fontData.fallback[L'Ů'] = L'U';
+    fontData.fallback[L'ů'] = L'u';
+    fontData.fallback[L'ù'] = L'u';
+    fontData.fallback[L'Ý'] = L'Y';
+    fontData.fallback[L'ý'] = L'y';
+    fontData.fallback[L'Ž'] = L'Z';
+    fontData.fallback[L'ž'] = L'z';
+}
+
 MCTextureFontData GraphicsFactory::generateFont()
 {
-    static std::vector<wchar_t> glyphs(
-        {L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H',
-         L'I', L'J', L'K', L'L', L'M', L'N', L'O', L'P',
-         L'Q', L'R', L'S', L'T', L'U', L'V', L'W', L'X',
-         L'Y', L'Z', L' ', L'Ä', L'Ö', L'Ü', L'Å', L' ',
-         L'a', L'b', L'c', L'd', L'e', L'f', L'g', L'h',
-         L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p',
-         L'q', L'r', L's', L't', L'u', L'v', L'w', L'x',
-         L'y', L'z', L' ', L'ä', L'ö', L'ü', L'å', L'\"',
-         L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
-         L'8', L'9', L'!', L'\"',L'#', L'$', L'%', L'&',
-         L' ', L'(', L')', L'*', L'+', L',', L'-', L'.',
-         L'/', L':', L';', L'<', L'=', L'>', L'?', L' '});
-
     const int cols        = 8;
     const int rows        = glyphs.size() / cols;
     const int slotWidth   = 30;
@@ -159,6 +198,8 @@ MCTextureFontData GraphicsFactory::generateFont()
     MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, fontPixmap.toImage());
     fontData.name = Game::instance().fontName();
     fontData.surface = surfaceData.handle;
+
+    addFallbacks(fontData);
 
     return fontData;
 }
