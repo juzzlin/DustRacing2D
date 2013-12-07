@@ -65,9 +65,6 @@ public:
     //! Return the game instance.
     static Game & instance();
 
-    //! Set target value for frames per second. Default is 60.
-    void setFps(unsigned int fps);
-
     //! \return The renderer.
     Renderer & renderer() const;
 
@@ -143,7 +140,6 @@ private:
     unsigned int      m_updateFps;
     unsigned int      m_updateDelay;
     float             m_timeStep;
-    unsigned int      m_renderFps;
     unsigned int      m_renderDelay;
     unsigned int      m_renderCount;
     int               m_availableRenderTime;

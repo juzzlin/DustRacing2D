@@ -58,7 +58,6 @@ public:
     void saveValue(QString key, int value);
     int loadValue(QString key, int defaultValue = 0);
 
-    static QString fpsKey();
     static QString lapCountKey();
 
 private:

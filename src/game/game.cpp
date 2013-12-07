@@ -64,8 +64,7 @@ Game::Game()
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
-, m_renderFps(60)
-, m_renderDelay(1000 / m_renderFps)
+, m_renderDelay(0)
 , m_renderCount(0)
 , m_availableRenderTime(0)
 , m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
@@ -180,14 +179,6 @@ void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
         const int newSceneHeight = Scene::width() * vRes / hRes;
         Scene::setSize(Scene::width(), newSceneHeight);
     }
-}
-
-void Game::setFps(unsigned int fps)
-{
-    m_renderFps   = fps;
-    m_renderDelay = 1000 / m_renderFps;
-
-    m_renderTimer.setInterval(m_renderDelay);
 }
 
 void Game::showCursor()
