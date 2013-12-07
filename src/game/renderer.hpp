@@ -55,9 +55,6 @@ public:
     //! \return the single instance.
     static Renderer & instance();
 
-    //! Render the scene.
-    void render();
-
     //! Set game scene to be rendered.
     void setScene(Scene & scene);
 

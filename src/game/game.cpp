@@ -92,7 +92,7 @@ Game::Game()
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(m_updateDelay);
 
-    connect(&m_renderTimer, SIGNAL(timeout()), this, SLOT(renderFrame()));
+    connect(&m_renderTimer, SIGNAL(timeout()), m_renderer, SLOT(updateGL()));
     m_renderTimer.setInterval(m_renderDelay);
 
     connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
@@ -141,8 +141,8 @@ void Game::createRenderer()
 #else
     // Availability of 2.1 is currently tested in main.cpp.
     qglFormat.setVersion(2, 1);
-    qglFormat.setProfile(QGLFormat::CoreProfile);
     qglFormat.setSampleBuffers(false);
+    qglFormat.setSwapInterval(1);
 #endif
     m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
@@ -378,11 +378,6 @@ void Game::updateFrame()
     m_scene->updateFrame(*m_inputHandler, m_timeStep);
     m_scene->updateAnimations();
     m_scene->updateOverlays();
-}
-
-void Game::renderFrame()
-{
-    m_renderer->render();
 }
 
 void Game::countRenderFps()

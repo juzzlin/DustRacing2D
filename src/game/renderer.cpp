@@ -230,14 +230,7 @@ void Renderer::paintGL()
         {
             renderCustomResolution();
         }
-
-        swapBuffers();
     }
-}
-
-void Renderer::render()
-{
-    paintGL();
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)

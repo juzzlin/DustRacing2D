@@ -121,7 +121,6 @@ public slots:
 private slots:
 
     void updateFrame();
-    void renderFrame();
     void countRenderFps();
 
 private:
