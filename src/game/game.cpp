@@ -140,7 +140,6 @@ void Game::createRenderer()
     // Availability of 2.1 is currently tested in main.cpp.
     qglFormat.setVersion(2, 1);
     qglFormat.setSampleBuffers(false);
-    qglFormat.setSwapInterval(1);
 #endif
     m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
