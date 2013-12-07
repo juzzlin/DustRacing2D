@@ -142,7 +142,6 @@ private:
     float             m_timeStep;
     unsigned int      m_renderDelay;
     unsigned int      m_renderCount;
-    int               m_availableRenderTime;
     int               m_lapCount;
     bool              m_paused;
     QTimer            m_updateTimer;
