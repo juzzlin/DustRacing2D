@@ -415,7 +415,7 @@ void Car::stepTime(MCFloat step)
             m_pOffTrackFriction->enable(true);
             m_pOnTrackFriction->enable(false);
 
-            wearOutTires(step, 0.75);
+            wearOutTires(step, 0.10);
         }
         else
         {
