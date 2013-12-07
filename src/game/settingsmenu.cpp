@@ -310,7 +310,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 
 void SettingsMenu::populateFpsMenu(int width, int height)
 {
-    const int numItems   = 2;
+    const int numItems   = 3;
     const int itemHeight = height / (numItems + 6);
 
     using MTFH::MenuItem;
@@ -339,17 +339,37 @@ void SettingsMenu::populateFpsMenu(int width, int height)
             MenuManager::instance().popMenu();
         });
 
+    const int unlimited = 1000000;
+    MenuItem * fpsUnlimited = new MenuItem(width, itemHeight, QObject::tr("Unlimited").toStdWString());
+    fpsUnlimited->setView(MenuItemViewPtr(new TextMenuItemView(20, *fpsUnlimited)));
+    fpsUnlimited->setAction(
+        []()
+        {
+            MCLogger().info() << "Unlimited fps selected.";
+            Game::instance().setFps(unlimited);
+            Settings::instance().saveValue(FPS_KEY, unlimited);
+            MenuManager::instance().popMenu();
+        });
+
+
     m_fpsMenu.addItem(MTFH::MenuItemPtr(fps30));
     m_fpsMenu.addItem(MTFH::MenuItemPtr(fps60));
+    m_fpsMenu.addItem(MTFH::MenuItemPtr(fpsUnlimited));
 
-    const int fps = Settings::instance().loadValue(FPS_KEY, 60);
-    if (fps == 30)
+    const int fps = Settings::instance().loadValue(FPS_KEY, unlimited);
+    switch (fps)
     {
+    case 30:
         m_fpsMenu.setCurrentIndex(fps30->index());
-    }
-    else
-    {
+        break;
+
+    case 60:
         m_fpsMenu.setCurrentIndex(fps60->index());
+        break;
+
+    default:
+        m_fpsMenu.setCurrentIndex(fpsUnlimited->index());
+        break;
     }
 }
 
