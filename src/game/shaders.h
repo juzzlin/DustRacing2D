@@ -19,8 +19,6 @@
 static const char * carVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -58,8 +56,6 @@ static const char * carVsh =
 static const char * carFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "uniform sampler2D tex1;\n"
 "uniform sampler2D tex2;\n"
@@ -98,8 +94,6 @@ static const char * carFsh =
 static const char * fboVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec2 inTexCoord;\n"
 "uniform vec4 scale;\n"
@@ -116,8 +110,6 @@ static const char * fboVsh =
 static const char * fboFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "varying vec2 texCoord0;\n"
 ""
@@ -129,8 +121,6 @@ static const char * fboFsh =
 static const char * menuVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -153,8 +143,6 @@ static const char * menuVsh =
 static const char * particleFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "varying vec4 vColor;\n"
 ""
 "void main(void)\n"
@@ -165,8 +153,6 @@ static const char * particleFsh =
 static const char * pointParticleVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec4 inColor;\n"
@@ -191,8 +177,6 @@ static const char * pointParticleVsh =
 static const char * pointParticleFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "varying vec4 vColor;\n"
 ""
@@ -204,8 +188,6 @@ static const char * pointParticleFsh =
 static const char * pointParticleRotateFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "varying vec4 rotationMatrixTegra3Hack;\n"
 "varying vec4 vColor;\n"
@@ -220,8 +202,6 @@ static const char * pointParticleRotateFsh =
 static const char * textVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -244,8 +224,6 @@ static const char * textVsh =
 static const char * textShadowFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D texture;\n"
 "varying vec2 texCoord0;\n"
 ""
@@ -265,8 +243,6 @@ static const char * textShadowFsh =
 static const char * tileVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -297,8 +273,6 @@ static const char * tileVsh =
 static const char * tile3dFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "uniform sampler2D tex1;\n"
 "uniform sampler2D tex2;\n"

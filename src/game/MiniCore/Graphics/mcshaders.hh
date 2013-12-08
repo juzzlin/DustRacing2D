@@ -19,8 +19,6 @@
 static const char * MCMasterVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -52,8 +50,6 @@ static const char * MCMasterVsh =
 static const char * MCMasterFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D tex0;\n"
 "varying vec2 texCoord0;\n"
 "varying vec4 vColor;\n"
@@ -75,8 +71,6 @@ static const char * MCMasterFsh =
 static const char * MCMasterShadowVsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
 "attribute vec2 inTexCoord;\n"
@@ -98,8 +92,6 @@ static const char * MCMasterShadowVsh =
 static const char * MCMasterShadowFsh =
 "#version 100\n"
 ""
-"precision mediump float;\n"
-"precision mediump int;\n"
 "uniform sampler2D texture;\n"
 "varying vec2 texCoord0;\n"
 ""
