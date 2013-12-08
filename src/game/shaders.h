@@ -17,7 +17,7 @@
 #define SHADERS_H
 
 static const char * carVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -54,7 +54,7 @@ static const char * carVsh =
 "}\n";
 
 static const char * carFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "uniform sampler2D tex1;\n"
@@ -92,7 +92,7 @@ static const char * carFsh =
 "}\n";
 
 static const char * fboVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec2 inTexCoord;\n"
@@ -108,7 +108,7 @@ static const char * fboVsh =
 "}\n";
 
 static const char * fboFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "varying vec2 texCoord0;\n"
@@ -119,7 +119,7 @@ static const char * fboFsh =
 "}\n";
 
 static const char * menuVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -141,7 +141,7 @@ static const char * menuVsh =
 "}\n";
 
 static const char * particleFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "varying vec4 vColor;\n"
 ""
@@ -151,7 +151,7 @@ static const char * particleFsh =
 "}\n";
 
 static const char * pointParticleVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -175,7 +175,7 @@ static const char * pointParticleVsh =
 "}\n";
 
 static const char * pointParticleFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "varying vec4 vColor;\n"
@@ -186,7 +186,7 @@ static const char * pointParticleFsh =
 "}\n";
 
 static const char * pointParticleRotateFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "varying vec4 rotationMatrixTegra3Hack;\n"
@@ -200,7 +200,7 @@ static const char * pointParticleRotateFsh =
 "}\n";
 
 static const char * textVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -222,7 +222,7 @@ static const char * textVsh =
 "}\n";
 
 static const char * textShadowFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D texture;\n"
 "varying vec2 texCoord0;\n"
@@ -241,7 +241,7 @@ static const char * textShadowFsh =
 "}\n";
 
 static const char * tileVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -271,7 +271,7 @@ static const char * tileVsh =
 "}\n";
 
 static const char * tile3dFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "uniform sampler2D tex1;\n"

@@ -17,7 +17,7 @@
 #define MCSHADERS_HH
 
 static const char * MCMasterVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -48,7 +48,7 @@ static const char * MCMasterVsh =
 "}\n";
 
 static const char * MCMasterFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
 "varying vec2 texCoord0;\n"
@@ -69,7 +69,7 @@ static const char * MCMasterFsh =
 "}\n";
 
 static const char * MCMasterShadowVsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec3 inNormal;\n"
@@ -90,7 +90,7 @@ static const char * MCMasterShadowVsh =
 "}\n";
 
 static const char * MCMasterShadowFsh =
-"#version 100\n"
+"#version 120\n"
 ""
 "uniform sampler2D texture;\n"
 "varying vec2 texCoord0;\n"
