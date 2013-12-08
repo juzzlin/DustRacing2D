@@ -108,6 +108,7 @@ int main(int argc, char ** argv)
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";
         Game game;
+        game.setFps(Settings::instance().loadValue(Settings::fpsKey(), 60));
 
         // Initialize and start the game
         if (game.init())

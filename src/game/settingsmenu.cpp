@@ -34,6 +34,7 @@
 
 #include <QObject> // For QObject::tr()
 
+static const QString FPS_KEY(Settings::fpsKey());
 static const QString LAP_COUNT_KEY(Settings::lapCountKey());
 
 class ResetAction : public MTFH::MenuItemAction
@@ -112,6 +113,7 @@ private:
 };
 
 static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
+static const char * FPS_MENU_ID                    = "fpsMenu";
 static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
@@ -127,11 +129,13 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_fpsMenu("settingsBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
     populateGameModeMenu(width, height);
     populateSplitTypeMenu(width, height);
+    populateFpsMenu(width, height);
     populateLapCountMenu(width, height);
 
     using MTFH::MenuManager;
@@ -142,6 +146,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_splitTypeMenu);
     MenuManager::instance().addMenu(m_lapCountMenu);
+    MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
 }
 
@@ -191,6 +196,10 @@ void SettingsMenu::populate(int width, int height)
     lapCount->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCount)));
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
+    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdWString());
+    selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
+    selectFps->setMenuOpenAction(FPS_MENU_ID);
+
     MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdWString());
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
@@ -201,6 +210,7 @@ void SettingsMenu::populate(int width, int height)
     addItem(MenuItemPtr(resetBestPositions));
     addItem(MenuItemPtr(resetUnlockedTracks));
     addItem(MenuItemPtr(configureKeys));
+    addItem(MenuItemPtr(selectFps));
     addItem(MenuItemPtr(selectWindowedResolution));
     addItem(MenuItemPtr(selectFullScreenResolution));
     addItem(MenuItemPtr(lapCount));
@@ -296,6 +306,71 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 
     m_splitTypeMenu.addItem(MTFH::MenuItemPtr(horizontal));
     m_splitTypeMenu.addItem(MTFH::MenuItemPtr(vertical));
+}
+
+void SettingsMenu::populateFpsMenu(int width, int height)
+{
+    const int numItems   = 3;
+    const int itemHeight = height / (numItems + 6);
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toStdWString());
+    fps30->setView(MenuItemViewPtr(new TextMenuItemView(20, *fps30)));
+    fps30->setAction(
+        []()
+        {
+            MCLogger().info() << "30 fps selected.";
+            Game::instance().setFps(30);
+            Settings::instance().saveValue(FPS_KEY, 30);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toStdWString());
+    fps60->setView(MenuItemViewPtr(new TextMenuItemView(20, *fps60)));
+    fps60->setAction(
+        []()
+        {
+            MCLogger().info() << "60 fps selected.";
+            Game::instance().setFps(60);
+            Settings::instance().saveValue(FPS_KEY, 60);
+            MenuManager::instance().popMenu();
+        });
+
+    const int unlimited = 1000000;
+    MenuItem * fpsUnlimited = new MenuItem(width, itemHeight, QObject::tr("Unlimited").toStdWString());
+    fpsUnlimited->setView(MenuItemViewPtr(new TextMenuItemView(20, *fpsUnlimited)));
+    fpsUnlimited->setAction(
+        []()
+        {
+            MCLogger().info() << "Unlimited fps selected.";
+            Game::instance().setFps(unlimited);
+            Settings::instance().saveValue(FPS_KEY, unlimited);
+            MenuManager::instance().popMenu();
+        });
+
+
+    m_fpsMenu.addItem(MTFH::MenuItemPtr(fps30));
+    m_fpsMenu.addItem(MTFH::MenuItemPtr(fps60));
+    m_fpsMenu.addItem(MTFH::MenuItemPtr(fpsUnlimited));
+
+    const int fps = Settings::instance().loadValue(FPS_KEY, unlimited);
+    switch (fps)
+    {
+    case 30:
+        m_fpsMenu.setCurrentIndex(fps30->index());
+        break;
+
+    case 60:
+        m_fpsMenu.setCurrentIndex(fps60->index());
+        break;
+
+    default:
+        m_fpsMenu.setCurrentIndex(fpsUnlimited->index());
+        break;
+    }
 }
 
 void SettingsMenu::populateLapCountMenu(int width, int height)

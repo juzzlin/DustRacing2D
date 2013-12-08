@@ -38,6 +38,11 @@ static QString combineTrackAndLapCountBase64(const Track & track, int lapCount)
     return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount)).toLatin1().toBase64();
 }
 
+QString Settings::fpsKey()
+{
+    return "fps";
+}
+
 QString Settings::lapCountKey()
 {
     return "lapCount";
@@ -220,13 +225,13 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
     settings.endGroup();
 }
 
-void Settings::saveValue(QString key, int value)
+void Settings::saveValue(QString key, int fps)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    settings.setValue(key, value);
+    settings.setValue(key, fps);
     settings.endGroup();
 }
 
