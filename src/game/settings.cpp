@@ -214,7 +214,7 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     nativeResolution = settings.value("nativeResolution", true).toBool();
-    fullScreen       = settings.value("fullScreen", false).toBool();
+    fullScreen       = settings.value("fullScreen", true).toBool();
     hRes             = settings.value("hRes", 0).toInt();
     vRes             = settings.value("vRes", 0).toInt();
     settings.endGroup();
