@@ -340,7 +340,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
         });
 
     const int unlimited = 1000000;
-    MenuItem * fpsUnlimited = new MenuItem(width, itemHeight, QObject::tr("Unlimited").toStdWString());
+    MenuItem * fpsUnlimited = new MenuItem(width, itemHeight, QObject::tr("Unlimited (driver vsync)").toStdWString());
     fpsUnlimited->setView(MenuItemViewPtr(new TextMenuItemView(20, *fpsUnlimited)));
     fpsUnlimited->setAction(
         []()
