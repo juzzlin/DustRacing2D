@@ -3,8 +3,8 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.4\\\"
-QMAKE_CXXFLAGS += -std=gnu++11
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.5.5\\\"
+QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 QT += opengl widgets xml
 DEFINES += USE_QT5
@@ -13,6 +13,8 @@ DEFINES += GLEW_STATIC GLEW_NO_GLU
 # Sound libraries
 CONFIG += link_pkgconfig
 PKGCONFIG += openal vorbisfile
+
+CONFIG += console
 
 INCLUDEPATH += . \
     MiniCore/Core \
@@ -313,6 +315,7 @@ SOURCES += \
     STFH/source.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
+RC_FILE = ../../data/icons/WindowsGame.rc
 TRANSLATIONS += \
     translations/dustrac-game_fi.ts \
     translations/dustrac-game_it.ts \

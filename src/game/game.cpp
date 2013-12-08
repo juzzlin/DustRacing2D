@@ -132,21 +132,18 @@ void Game::createRenderer()
     // At least for now the QGLFormat needs to be passed to the constructor of QGLWidget,
     // because setting it afterwards by using QGLWidget::setFormat() resulted in a black
     // window on Windows 7. It worked on Ubuntu, though.
-    QGLFormat qglFormat;
+    QGLFormat format;
 #ifdef __MC_GL30__
-    format.setMajorVersion(3);
-    format.setMinorVersion(0);
+    format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #elif defined(__MC_GLES__)
-    format.setMajorVersion(1);
-    format.setMinorVersion(0);
+    format.setVersion(1, 0);
 #else
-    format.setMajorVersion(2);
-    format.setMinorVersion(1);
+    format.setVersion(2, 1);
 #endif
-    format.setSamples(1);
+    format.setSamples(0);
 
-    m_renderer = new Renderer(qglFormat, hRes, vRes, nativeResolution, fullScreen);
+    m_renderer = new Renderer(format, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
 
     if (fullScreen)

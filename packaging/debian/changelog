@@ -1,3 +1,11 @@
+dustrac (1.5.5-1) precise; urgency=low
+
+  * #ifdef for GL versions in game.cpp
+  * Set version 120 for OpenGL 2.1 shaders.
+  * Remove precision qualifiers from ver 1.00 desktop shaders.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 08 Dec 2013 15:29:58 +0200
+
 dustrac (1.5.4-1) precise; urgency=low
 
   * Remove swap interval setting.

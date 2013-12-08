@@ -1,3 +1,11 @@
+1.5.5
+-----
+
+* Full screen mode by default.
+* #ifdef for GL versions in game.cpp
+* Set version 120 for OpenGL 2.1 shaders.
+* Remove precision qualifiers from ver 1.00 desktop shaders.
+
 1.5.4
 -----
 
