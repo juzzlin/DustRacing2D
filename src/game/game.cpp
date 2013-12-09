@@ -136,7 +136,7 @@ void Game::createRenderer()
     QGLFormat format;
 #ifdef __MC_GL30__
     format.setVersion(3, 0);
-    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setProfile(QGLFormat::CoreProfile);
 #elif defined(__MC_GLES__)
     format.setVersion(1, 0);
 #else
