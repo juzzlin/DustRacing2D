@@ -238,6 +238,9 @@ void Scene::createCars()
             case NUM_CARS - 6:
                 car = new Car(desc, MCAssetManager::surfaceManager().surface("carViolet"), i, false);
                 break;
+            case NUM_CARS - 7:
+                car = new Car(desc, MCAssetManager::surfaceManager().surface("carCyan"), i, false);
+                break;
             default:
                 car = new Car(desc, MCAssetManager::surfaceManager().surface("carYellow"), i, false);
                 break;
