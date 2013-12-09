@@ -218,36 +218,23 @@ void Scene::createCars()
             desc.brakingFriction      = 2.0;
 
             // Select car image
-            switch (i)
+            std::map<int, std::string> carImageMap;
+            carImageMap[NUM_CARS - 1] = "carBlack";
+            carImageMap[NUM_CARS - 2] = "carOrange";
+            carImageMap[NUM_CARS - 3] = "carRed";
+            carImageMap[NUM_CARS - 4] = "carBlue";
+            carImageMap[NUM_CARS - 5] = "carGreen";
+            carImageMap[NUM_CARS - 6] = "carViolet";
+            carImageMap[NUM_CARS - 7] = "carCyan";
+            carImageMap[NUM_CARS - 8] = "carBrown";
+
+            std::string carImage("carYellow");
+            if (carImageMap.count(i))
             {
-            case NUM_CARS - 1:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carBlack"), i, false);
-                break;
-            case NUM_CARS - 2:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carOrange"), i, false);
-                break;
-            case NUM_CARS - 3:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carRed"), i, false);
-                break;
-            case NUM_CARS - 4:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carBlue"), i, false);
-                break;
-            case NUM_CARS - 5:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carGreen"), i, false);
-                break;
-            case NUM_CARS - 6:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carViolet"), i, false);
-                break;
-            case NUM_CARS - 7:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carCyan"), i, false);
-                break;
-            case NUM_CARS - 8:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carBrown"), i, false);
-                break;
-            default:
-                car = new Car(desc, MCAssetManager::surfaceManager().surface("carYellow"), i, false);
-                break;
+                carImage = carImageMap[i];
             }
+
+            car = new Car(desc, MCAssetManager::surfaceManager().surface(carImage), i, false);
         }
 
         assert(car);
