@@ -143,7 +143,7 @@ void Track::renderAsphalt(
 
     MCFloat x1, y1; // Coordinates mapped to camera
 
-    // Set common client state for all tiles using the same surface.
+    // Bind common geometry and textures for all asphalt tiles.
     m_asphalt.setShaderProgram(&prog);
     m_asphalt.bind();
 
@@ -185,12 +185,17 @@ void Track::renderTiles(
 
     MCFloat x1, y1; // Coordinates mapped to camera
 
-    // Set common client state for all tiles.
-    TrackTile * firstTile = static_cast<TrackTile *>(rMap.getTile(0, 0));
-    firstTile->surface()->setShaderProgram(&prog);
-    firstTile->surface()->bind();
+    struct SortedTile
+    {
+        TrackTile * tile;
+        MCFloat x1, y1;
+    };
 
-    // Loop through the visible tile matrix and draw the tiles
+    // The tiles are sorted with respect to their surface in order
+    // to minimize GPU context switches.
+    std::map<MCSurface *, std::vector<SortedTile> > sortedTiles;
+
+    // Loop through the visible tile matrix and sort the tiles.
     int initX = i0 * w;
     int x     = initX;
     int y     = j0 * h;
@@ -199,17 +204,19 @@ void Track::renderTiles(
         x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
-            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            if (TrackTile * tile = static_cast<TrackTile *>(rMap.getTile(i, j)))
             {
-                if (MCSurface * pSurface = pTile->surface())
+                if (MCSurface * surface = tile->surface())
                 {
                     x1 = x;
                     y1 = y;
                     camera->mapToCamera(x1, y1);
-                    prog.setTransform(pTile->rotation(), MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
-                    pSurface->setShaderProgram(&prog);
-                    pSurface->bindTextures();
-                    pSurface->render();
+
+                    SortedTile sortedTile;
+                    sortedTile.tile = tile;
+                    sortedTile.x1 = x1;
+                    sortedTile.y1 = y1;
+                    sortedTiles[surface].push_back(sortedTile);
                 }
             }
 
@@ -217,6 +224,27 @@ void Track::renderTiles(
         }
 
         y += h;
+    }
+
+    // Render the tiles.
+    auto iter = sortedTiles.begin();
+    while (iter != sortedTiles.end())
+    {
+        MCSurface * surface = iter->first;
+        surface->setShaderProgram(&prog);
+        surface->bindTextures();
+
+        for (unsigned int i = 0; i < iter->second.size(); i++)
+        {
+            x1 = iter->second[i].x1;
+            y1 = iter->second[i].y1;
+
+            const TrackTile * tile = iter->second[i].tile;
+            prog.setTransform(tile->rotation(), MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+            surface->render();
+        }
+
+        iter++;
     }
 }
 
