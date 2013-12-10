@@ -64,11 +64,9 @@ Game::Game()
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
-, m_renderFps(60)
-, m_renderDelay(1000 / m_renderFps)
-, m_renderCount(0)
 , m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
 , m_paused(false)
+, m_renderElapsed(0)
 , m_mode(OnePlayerRace)
 , m_splitType(Vertical)
 , m_audioThread(new AudioThread(Scene::NUM_CARS, this))
@@ -89,10 +87,7 @@ Game::Game()
     connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioThread, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    m_updateTimer.setInterval(m_updateDelay);
-
-    connect(&m_renderTimer, SIGNAL(timeout()), m_renderer, SLOT(updateGL()));
-    m_renderTimer.setInterval(m_renderDelay);
+    m_updateTimer.setInterval(0);
 
     connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
 
@@ -101,6 +96,8 @@ Game::Game()
         QDir::separator() + "levels");
     m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
         Config::Common::TRACK_SEARCH_PATH);
+
+    m_elapsed.start();
 }
 
 Game & Game::instance()
@@ -143,6 +140,7 @@ void Game::createRenderer()
     format.setVersion(2, 1);
 #endif
     format.setSamples(0);
+    format.setSwapInterval(0);
 
     m_renderer = new Renderer(format, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();
@@ -184,10 +182,6 @@ void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
 
 void Game::setFps(unsigned int fps)
 {
-    m_renderFps   = fps;
-    m_renderDelay = 1000 / m_renderFps;
-
-    m_renderTimer.setInterval(m_renderDelay);
 }
 
 void Game::showCursor()
@@ -339,14 +333,12 @@ void Game::start()
 {
     m_paused = false;
     m_updateTimer.start();
-    m_renderTimer.start();
 }
 
 void Game::stop()
 {
     m_paused = true;
     m_updateTimer.stop();
-    m_renderTimer.stop();
 }
 
 void Game::togglePause()
@@ -373,16 +365,25 @@ void Game::exitGame()
 
 void Game::updateFrame()
 {
-    m_stateMachine->update();
+    if (m_elapsed.elapsed() > 17 - m_renderElapsed)
+    {
+        m_stateMachine->update();
 
-    m_scene->updateFrame(*m_inputHandler, m_timeStep);
-    m_scene->updateAnimations();
-    m_scene->updateOverlays();
-}
+        m_scene->updateFrame(*m_inputHandler, m_timeStep);
+        m_scene->updateAnimations();
+        m_scene->updateOverlays();
 
-void Game::countRenderFps()
-{
-    m_renderCount = 0;
+        m_elapsed.restart();
+
+        m_renderElapsed = 0;
+    }
+    else
+    {
+        QTime elapsed;
+        elapsed.start();
+        m_renderer->updateGL();
+        m_renderElapsed = elapsed.elapsed();
+    }
 }
 
 Game::~Game()

@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QTime>
 
 #include "settings.hpp"
 
@@ -96,6 +97,7 @@ public:
     //! Set the lap count.
     void setLapCount(int lapCount);
 
+
     //! Get the lap count.
     int lapCount() const;
 
@@ -121,7 +123,6 @@ public slots:
 private slots:
 
     void updateFrame();
-    void countRenderFps();
 
 private:
 
@@ -143,13 +144,11 @@ private:
     unsigned int      m_updateFps;
     unsigned int      m_updateDelay;
     float             m_timeStep;
-    unsigned int      m_renderFps;
-    unsigned int      m_renderDelay;
-    unsigned int      m_renderCount;
     int               m_lapCount;
     bool              m_paused;
     QTimer            m_updateTimer;
-    QTimer            m_renderTimer;
+    QTime             m_elapsed;
+    int               m_renderElapsed;
     GameMode          m_mode;
     SplitType         m_splitType;
     AudioThread     * m_audioThread;
