@@ -36,16 +36,18 @@ private:
     void populateSplitTypeMenu(int width, int height);
     void populateFpsMenu(int width, int height);
     void populateGfxMenu(int width, int height);
+    void populateResetMenu(int width, int height);
     void populateLapCountMenu(int width, int height);
 
     ConfirmationMenu m_confirmationMenu;
     ResolutionMenu   m_fullScreenResolutionMenu;
     ResolutionMenu   m_windowedResolutionMenu;
-    SurfaceMenu      m_gameModeMenu;
-    SurfaceMenu      m_splitTypeMenu;
-    SurfaceMenu      m_lapCountMenu;
     SurfaceMenu      m_fpsMenu;
+    SurfaceMenu      m_gameModeMenu;
     SurfaceMenu      m_gfxMenu;
+    SurfaceMenu      m_lapCountMenu;
+    SurfaceMenu      m_resetMenu;
+    SurfaceMenu      m_splitTypeMenu;
     KeyConfigMenu    m_keyConfigMenu;
 };
 

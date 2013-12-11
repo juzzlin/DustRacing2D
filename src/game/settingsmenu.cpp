@@ -119,6 +119,7 @@ static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
 static const char * GFX_MENU_ID                    = "gfxMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
+static const char * RESET_MENU_ID                  = "resetMenu";
 static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 
@@ -127,58 +128,46 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
-, m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("settingsBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_gfxMenu("settingsBack", GFX_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_resetMenu("settingsBack", RESET_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
-    populate(width, height);
-    populateGameModeMenu(width, height);
-    populateSplitTypeMenu(width, height);
-    populateFpsMenu(width, height);
-    populateGfxMenu(width, height);
-    populateLapCountMenu(width, height);
+    populate              (width, height);
+    populateGameModeMenu  (width, height);
+    populateSplitTypeMenu (width, height);
+    populateFpsMenu       (width, height);
+    populateGfxMenu       (width, height);
+    populateLapCountMenu  (width, height);
+    populateResetMenu     (width, height);
 
     using MTFH::MenuManager;
 
     MenuManager::instance().addMenu(m_confirmationMenu);
-    MenuManager::instance().addMenu(m_windowedResolutionMenu);
+    MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
-    MenuManager::instance().addMenu(m_splitTypeMenu);
-    MenuManager::instance().addMenu(m_lapCountMenu);
-    MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_gfxMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
+    MenuManager::instance().addMenu(m_lapCountMenu);
+    MenuManager::instance().addMenu(m_resetMenu);
+    MenuManager::instance().addMenu(m_splitTypeMenu);
+    MenuManager::instance().addMenu(m_windowedResolutionMenu);
 }
 
 void SettingsMenu::populate(int width, int height)
 {
-    const int numItems   = 9;
-    const int itemHeight = height / (numItems + 2);
+    const int numItems   = 5;
+    const int itemHeight = height / (numItems + 4);
     const int textSize   = 20;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuItemActionPtr;
-
-    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdWString());
-    resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
-    resetRecordTimes->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu)));
-
-    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdWString());
-    resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
-    resetBestPositions->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu)));
-
-    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdWString());
-    resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
-    resetUnlockedTracks->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu)));
 
     MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdWString());
     gameMode->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gameMode)));
@@ -196,11 +185,13 @@ void SettingsMenu::populate(int width, int height)
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
+    MenuItem * reset = new MenuItem(width, itemHeight, QObject::tr("Reset >").toStdWString());
+    reset->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *reset)));
+    reset->setMenuOpenAction(RESET_MENU_ID);
+
     using MTFH::MenuItemPtr;
 
-    addItem(MenuItemPtr(resetRecordTimes));
-    addItem(MenuItemPtr(resetBestPositions));
-    addItem(MenuItemPtr(resetUnlockedTracks));
+    addItem(MenuItemPtr(reset));
     addItem(MenuItemPtr(configureKeys));
     addItem(MenuItemPtr(gfx));
     addItem(MenuItemPtr(lapCount));
@@ -393,6 +384,38 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     m_gfxMenu.addItem(MenuItemPtr(splitType));
     m_gfxMenu.addItem(MenuItemPtr(selectWindowedResolution));
     m_gfxMenu.addItem(MenuItemPtr(selectFullScreenResolution));
+}
+
+void SettingsMenu::populateResetMenu(int width, int height)
+{
+    const int numItems   = 3;
+    const int itemHeight = height / (numItems + 6);
+    const int textSize   = 20;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuItemPtr;
+    using MTFH::MenuItemActionPtr;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdWString());
+    resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
+    resetRecordTimes->setAction(
+        MenuItemActionPtr(new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu)));
+
+    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdWString());
+    resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
+    resetBestPositions->setAction(
+        MenuItemActionPtr(new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu)));
+
+    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdWString());
+    resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
+    resetUnlockedTracks->setAction(
+        MenuItemActionPtr(new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu)));
+
+    m_resetMenu.addItem(MenuItemPtr(resetRecordTimes));
+    m_resetMenu.addItem(MenuItemPtr(resetBestPositions));
+    m_resetMenu.addItem(MenuItemPtr(resetUnlockedTracks));
 }
 
 void SettingsMenu::populateLapCountMenu(int width, int height)
