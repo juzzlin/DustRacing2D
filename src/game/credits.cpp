@@ -33,17 +33,19 @@ void Credits::render()
         "* Jussi Lind\n\n" +
         QObject::tr("RACE TRACKS BY") + "\n\n" +
         "* Jussi Lind\n\n" +
-        QObject::tr("PATCHES") + "\n\n" +
+        QObject::tr("CONTRIBUTORS") + "\n\n" +
         "* Markus Rinne\n\n" +
         "* Paolo Straffi\n\n" +
+        "* Pavel Fric\n\n" +
         QObject::tr("SPECIAL THANKS") + "\n\n" +
         "* Tommi Martela\n\n"
-        "* Alex Rietveld\n").toStdWString()
+        "* Alex Rietveld\n\n"
+        "* Matthias Mailänder\n").toStdWString()
     );
 
     SurfaceMenu::render();
 
-    CREDITS_TEXT.setGlyphSize(20, 20);
+    CREDITS_TEXT.setGlyphSize(20, 20 * height() / 640);
     CREDITS_TEXT.render(
         width()  / 2 - CREDITS_TEXT.width()  / 2,
         height() / 2 + CREDITS_TEXT.height() / 2, nullptr, font());
