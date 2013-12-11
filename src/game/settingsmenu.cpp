@@ -116,6 +116,7 @@ static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
 static const char * FPS_MENU_ID                    = "fpsMenu";
 static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
+static const char * GFX_MENU_ID                    = "gfxMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
 static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
@@ -130,12 +131,14 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_fpsMenu("settingsBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_gfxMenu("settingsBack", GFX_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate(width, height);
     populateGameModeMenu(width, height);
     populateSplitTypeMenu(width, height);
     populateFpsMenu(width, height);
+    populateGfxMenu(width, height);
     populateLapCountMenu(width, height);
 
     using MTFH::MenuManager;
@@ -147,6 +150,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_splitTypeMenu);
     MenuManager::instance().addMenu(m_lapCountMenu);
     MenuManager::instance().addMenu(m_fpsMenu);
+    MenuManager::instance().addMenu(m_gfxMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
 }
 
@@ -176,18 +180,6 @@ void SettingsMenu::populate(int width, int height)
     resetUnlockedTracks->setAction(
         MenuItemActionPtr(new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu)));
 
-    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toStdWString());
-    selectFullScreenResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFullScreenResolution)));
-    selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
-
-    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toStdWString());
-    selectWindowedResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectWindowedResolution)));
-    selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
-
-    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdWString());
-    splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
-    splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
-
     MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toStdWString());
     gameMode->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gameMode)));
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
@@ -196,9 +188,9 @@ void SettingsMenu::populate(int width, int height)
     lapCount->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCount)));
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
-    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdWString());
-    selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
-    selectFps->setMenuOpenAction(FPS_MENU_ID);
+    MenuItem * gfx = new MenuItem(width, itemHeight, QObject::tr("GFX >").toStdWString());
+    gfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gfx)));
+    gfx->setMenuOpenAction(GFX_MENU_ID);
 
     MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdWString());
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
@@ -210,11 +202,8 @@ void SettingsMenu::populate(int width, int height)
     addItem(MenuItemPtr(resetBestPositions));
     addItem(MenuItemPtr(resetUnlockedTracks));
     addItem(MenuItemPtr(configureKeys));
-    addItem(MenuItemPtr(selectFps));
-    addItem(MenuItemPtr(selectWindowedResolution));
-    addItem(MenuItemPtr(selectFullScreenResolution));
+    addItem(MenuItemPtr(gfx));
     addItem(MenuItemPtr(lapCount));
-    addItem(MenuItemPtr(splitType));
     addItem(MenuItemPtr(gameMode));
 }
 
@@ -371,6 +360,39 @@ void SettingsMenu::populateFpsMenu(int width, int height)
         m_fpsMenu.setCurrentIndex(fpsUnlimited->index());
         break;
     }
+}
+
+void SettingsMenu::populateGfxMenu(int width, int height)
+{
+    const int numItems   = 3;
+    const int itemHeight = height / (numItems + 6);
+    const int textSize   = 20;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuItemPtr;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toStdWString());
+    selectFullScreenResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFullScreenResolution)));
+    selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
+
+    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toStdWString());
+    selectWindowedResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectWindowedResolution)));
+    selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
+
+    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdWString());
+    splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
+    splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
+
+    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toStdWString());
+    selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
+    selectFps->setMenuOpenAction(FPS_MENU_ID);
+
+    m_gfxMenu.addItem(MenuItemPtr(selectFps));
+    m_gfxMenu.addItem(MenuItemPtr(splitType));
+    m_gfxMenu.addItem(MenuItemPtr(selectWindowedResolution));
+    m_gfxMenu.addItem(MenuItemPtr(selectFullScreenResolution));
 }
 
 void SettingsMenu::populateLapCountMenu(int width, int height)

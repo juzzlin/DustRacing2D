@@ -35,6 +35,7 @@ private:
     void populateGameModeMenu(int width, int height);
     void populateSplitTypeMenu(int width, int height);
     void populateFpsMenu(int width, int height);
+    void populateGfxMenu(int width, int height);
     void populateLapCountMenu(int width, int height);
 
     ConfirmationMenu m_confirmationMenu;
@@ -44,6 +45,7 @@ private:
     SurfaceMenu      m_splitTypeMenu;
     SurfaceMenu      m_lapCountMenu;
     SurfaceMenu      m_fpsMenu;
+    SurfaceMenu      m_gfxMenu;
     KeyConfigMenu    m_keyConfigMenu;
 };
 
