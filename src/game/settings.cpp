@@ -48,6 +48,11 @@ QString Settings::lapCountKey()
     return "lapCount";
 }
 
+QString Settings::vsyncKey()
+{
+    return "vsync";
+}
+
 Settings::Settings()
 {
     assert(!Settings::m_instance);
@@ -225,13 +230,13 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
     settings.endGroup();
 }
 
-void Settings::saveValue(QString key, int fps)
+void Settings::saveValue(QString key, int value)
 {
     QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
         Config::Game::QSETTINGS_SOFTWARE_NAME);
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    settings.setValue(key, fps);
+    settings.setValue(key, value);
     settings.endGroup();
 }
 

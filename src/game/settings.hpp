@@ -60,6 +60,7 @@ public:
 
     static QString fpsKey();
     static QString lapCountKey();
+    static QString vsyncKey();
 
 private:
 

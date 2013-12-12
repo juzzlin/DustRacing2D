@@ -20,6 +20,7 @@
 #include "keyconfigmenu.hpp"
 #include "resolutionmenu.hpp"
 #include "surfacemenu.hpp"
+#include "vsyncmenu.hpp"
 
 //! The settings menu.
 class SettingsMenu : public SurfaceMenu
@@ -48,6 +49,7 @@ private:
     SurfaceMenu      m_lapCountMenu;
     SurfaceMenu      m_resetMenu;
     SurfaceMenu      m_splitTypeMenu;
+    VSyncMenu        m_vsyncMenu;
     KeyConfigMenu    m_keyConfigMenu;
 };
 

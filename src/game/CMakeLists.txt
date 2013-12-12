@@ -85,6 +85,7 @@ set(SRC
     trackselectionmenu.cpp
     tracktile.cpp
     treeview.cpp
+    vsyncmenu.cpp
     ../common/config.cpp
     ../common/objectbase.cpp
     ../common/objects.cpp

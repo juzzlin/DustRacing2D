@@ -121,6 +121,7 @@ static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
 static const char * RESET_MENU_ID                  = "resetMenu";
 static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
+static const char * VSYNC_MENU_ID                  = "vsyncMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
@@ -128,12 +129,13 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
-, m_fpsMenu("settingsBack", FPS_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_gfxMenu("settingsBack", GFX_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
-, m_resetMenu("settingsBack", RESET_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_fpsMenu("settingsBack",       FPS_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
+, m_gameModeMenu("settingsBack",  GAME_MODE_MENU_ID,  width, height, Menu::MS_VERTICAL_LIST)
+, m_gfxMenu("settingsBack",       GFX_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
+, m_lapCountMenu("settingsBack",  LAP_COUNT_MENU_ID,  width, height, Menu::MS_VERTICAL_LIST)
+, m_resetMenu("settingsBack",     RESET_MENU_ID,      width, height, Menu::MS_VERTICAL_LIST)
 , m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_vsyncMenu(m_confirmationMenu, VSYNC_MENU_ID,      width, height)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate              (width, height);
@@ -155,6 +157,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_lapCountMenu);
     MenuManager::instance().addMenu(m_resetMenu);
     MenuManager::instance().addMenu(m_splitTypeMenu);
+    MenuManager::instance().addMenu(m_vsyncMenu);
     MenuManager::instance().addMenu(m_windowedResolutionMenu);
 }
 
@@ -380,6 +383,11 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
+    MenuItem * vsync = new MenuItem(width, itemHeight, QObject::tr("VSync >").toStdWString());
+    vsync->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vsync)));
+    vsync->setMenuOpenAction(VSYNC_MENU_ID);
+
+    m_gfxMenu.addItem(MenuItemPtr(vsync));
     m_gfxMenu.addItem(MenuItemPtr(selectFps));
     m_gfxMenu.addItem(MenuItemPtr(splitType));
     m_gfxMenu.addItem(MenuItemPtr(selectWindowedResolution));
