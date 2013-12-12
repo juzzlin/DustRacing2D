@@ -392,7 +392,7 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="194"/>
-        <source>Key configuration &gt;</source>
+        <source>Controls &gt;</source>
         <translation>Nastavení kláves &gt;</translation>
     </message>
     <message>

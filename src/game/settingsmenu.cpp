@@ -181,7 +181,7 @@ void SettingsMenu::populate(int width, int height)
     gfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gfx)));
     gfx->setMenuOpenAction(GFX_MENU_ID);
 
-    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Key configuration >").toStdWString());
+    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Controls >").toStdWString());
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 

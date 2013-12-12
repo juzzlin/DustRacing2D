@@ -270,7 +270,7 @@ http://dustrac.sourceforge.net</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="203"/>
-        <source>Key configuration &gt;</source>
+        <source>Controls &gt;</source>
         <translation>Configurazione tasti &gt;</translation>
     </message>
     <message>

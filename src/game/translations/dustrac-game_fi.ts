@@ -392,7 +392,7 @@ ERITYISKIITOKSET
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="200"/>
-        <source>Key configuration &gt;</source>
+        <source>Controls &gt;</source>
         <translation>Kontrollit &gt;</translation>
     </message>
     <message>
