@@ -96,6 +96,7 @@ static void addFallbacks(MCTextureFontData & fontData)
     fontData.fallback[L'Č'] = L'C';
     fontData.fallback[L'č'] = L'c';
     fontData.fallback[L'Ď'] = L'D';
+    fontData.fallback[L'ď'] = L'd';
     fontData.fallback[L'É'] = L'E';
     fontData.fallback[L'é'] = L'e';
     fontData.fallback[L'Ě'] = L'E';
