@@ -35,7 +35,6 @@ private:
     void populate(int width, int height);
     void populateGameModeMenu(int width, int height);
     void populateSplitTypeMenu(int width, int height);
-    void populateFpsMenu(int width, int height);
     void populateGfxMenu(int width, int height);
     void populateResetMenu(int width, int height);
     void populateLapCountMenu(int width, int height);
@@ -43,7 +42,6 @@ private:
     ConfirmationMenu m_confirmationMenu;
     ResolutionMenu   m_fullScreenResolutionMenu;
     ResolutionMenu   m_windowedResolutionMenu;
-    SurfaceMenu      m_fpsMenu;
     SurfaceMenu      m_gameModeMenu;
     SurfaceMenu      m_gfxMenu;
     SurfaceMenu      m_lapCountMenu;

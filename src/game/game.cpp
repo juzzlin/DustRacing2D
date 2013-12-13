@@ -180,10 +180,6 @@ void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
     }
 }
 
-void Game::setFps(unsigned int fps)
-{
-}
-
 void Game::showCursor()
 {
     m_renderer->setCursor(Qt::ArrowCursor);
@@ -365,7 +361,7 @@ void Game::exitGame()
 
 void Game::updateFrame()
 {
-    if (m_elapsed.elapsed() > 17 - m_renderElapsed)
+    if (m_elapsed.elapsed() > m_updateDelay - m_renderElapsed)
     {
         m_stateMachine->update();
 

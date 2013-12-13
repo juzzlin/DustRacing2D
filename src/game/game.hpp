@@ -66,9 +66,6 @@ public:
     //! Return the game instance.
     static Game & instance();
 
-    //! Set target value for frames per second. Default is 60.
-    void setFps(unsigned int fps);
-
     //! \return The renderer.
     Renderer & renderer() const;
 
@@ -96,7 +93,6 @@ public:
 
     //! Set the lap count.
     void setLapCount(int lapCount);
-
 
     //! Get the lap count.
     int lapCount() const;
@@ -141,8 +137,8 @@ private:
     MCAssetManager  * m_assetManager;
     MCObjectFactory * m_objectFactory;
     TrackLoader     * m_trackLoader;
-    unsigned int      m_updateFps;
-    unsigned int      m_updateDelay;
+    int               m_updateFps;
+    int               m_updateDelay;
     float             m_timeStep;
     int               m_lapCount;
     bool              m_paused;
