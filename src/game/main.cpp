@@ -72,12 +72,18 @@ static void printHelp()
     std::cout << "Copyright (c) 2011-2013 Jussi Lind." << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
+    std::cout << "--lang [lang] Force language: fi, it, cs." << std::endl;
     std::cout << std::endl;
 }
 
-static void initTranslations(QTranslator & appTranslator, QApplication & app)
+static void initTranslations(QTranslator & appTranslator, QApplication & app, QString lang = "")
 {
-    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + QLocale::system().name()))
+    if (lang == "")
+    {
+        lang = QLocale::system().name();
+    }
+
+    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + lang))
     {
         app.installTranslator(&appTranslator);
     }
@@ -93,16 +99,27 @@ int main(int argc, char ** argv)
     {
         QApplication app(argc, argv);
         QTranslator appTranslator;
-        std::vector<std::string> args(argv, argv + argc);
+        QString lang = "";
 
+        std::vector<QString> args(argv, argv + argc);
         if (std::find(args.begin(), args.end(), "--help") != args.end())
         {
             printHelp();
             exit(EXIT_SUCCESS);
         }
+        else
+        {
+            for (unsigned int i = 0; i < args.size(); i++)
+            {
+                if (args[i] == "--lang" && (i + i) < args.size())
+                {
+                    lang = args[i + 1];
+                }
+            }
+        }
 
         initLogger();
-        initTranslations(appTranslator, app);
+        initTranslations(appTranslator, app, lang);
         checkOpenGLVersion();
 
         // Create the game object and set the renderer
