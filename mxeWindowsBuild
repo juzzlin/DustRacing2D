@@ -6,10 +6,16 @@ MXE_QT5_QMAKE=~/mxe/usr/i686-pc-mingw32/qt5/bin/qmake
 ZIP=zip
 UNIX2DOS=unix2dos
 MAKENSIS=makensis
+LRELEASE=lrelease
 
 # Build
 
 $MXE_QT5_QMAKE && make
+
+# Update translations
+
+$LRELEASE ./src/game/game.pro
+$LRELEASE ./src/editor/editor.pro
 
 # Install to packaging dir
 
@@ -17,6 +23,9 @@ CREATE_PACKAGE_PATH=dustrac-1.5.5-windows-x86-qt5
 rm -rf $CREATE_PACKAGE_PATH
 mkdir $CREATE_PACKAGE_PATH
 
+mkdir -p data/translations
+cp -v ./src/game/translations/*.qm data/translations
+cp -v ./src/editor/translations/*.qm data/translations
 cp -v ./src/game/release/dustrac-game.exe $CREATE_PACKAGE_PATH
 cp -v ./src/editor/release/dustrac-editor.exe $CREATE_PACKAGE_PATH
 cp -rv data $CREATE_PACKAGE_PATH
