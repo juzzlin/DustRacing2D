@@ -140,7 +140,7 @@ void Game::createRenderer()
     format.setVersion(2, 1);
 #endif
     format.setSamples(0);
-    format.setSwapInterval(0);
+    format.setSwapInterval(Settings::instance().loadValue(Settings::vsyncKey(), 0));
 
     m_renderer = new Renderer(format, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();

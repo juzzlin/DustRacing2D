@@ -45,7 +45,7 @@ public:
         //! \reimp
         virtual void fire()
         {
-            const bool vsync = m_parent.vsync();
+            const int vsync = m_parent.vsync();
             Settings::instance().saveValue(Settings::vsyncKey(), vsync);
             MCLogger().info() << "VSync set: " << vsync;
             Game::instance().exitGame();
@@ -59,7 +59,7 @@ public:
     //! Constructor.
     VSyncItem(
         ConfirmationMenu & confirmationMenu,
-        bool vsync, int width, int height, std::wstring text = L"")
+        int vsync, int width, int height, std::wstring text = L"")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
     , m_saveVSyncAction(new SaveVSyncAction(*this))
@@ -75,12 +75,12 @@ public:
     {
         MenuItem::setSelected(flag);
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-        m_confirmationMenu.setText(QObject::tr("Restart to change the VSync.").toStdWString());
+        m_confirmationMenu.setText(QObject::tr("Restart to change VSync setting.").toStdWString());
         m_confirmationMenu.setAcceptAction(m_saveVSyncAction);
         m_confirmationMenu.setCurrentIndex(1);
     }
 
-    bool vsync() const
+    int vsync() const
     {
         return m_vsync;
     }
@@ -89,7 +89,7 @@ private:
 
     ConfirmationMenu &      m_confirmationMenu;
     MTFH::MenuItemActionPtr m_saveVSyncAction;
-    bool                    m_vsync;
+    int                     m_vsync;
 };
 
 VSyncMenu::VSyncMenu(
@@ -100,12 +100,12 @@ VSyncMenu::VSyncMenu(
     const int itemHeight = height / 5;
 
     VSyncItem * off =
-        new VSyncItem(m_confirmationMenu, false, width, itemHeight, QObject::tr("Off").toStdWString());
+        new VSyncItem(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());
     off->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *off)));
     addItem(MTFH::MenuItemPtr(off));
 
     VSyncItem * on =
-        new VSyncItem(m_confirmationMenu, true, width, itemHeight, QObject::tr("On").toStdWString());
+        new VSyncItem(m_confirmationMenu, 1, width, itemHeight, QObject::tr("On").toStdWString());
     on->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *on)));
     addItem(MTFH::MenuItemPtr(on));
 
@@ -115,7 +115,7 @@ VSyncMenu::VSyncMenu(
 void VSyncMenu::enter()
 {
     // Set the currently selected VSync setting
-    const bool vsync = Settings::instance().loadValue(Settings::vsyncKey(), false);
+    const int vsync = Settings::instance().loadValue(Settings::vsyncKey(), 0);
     for (unsigned int i = 0; i < itemCount(); i++)
     {
         if (auto vsyncItem = dynamic_cast<VSyncItem *>(item(i).get()))
