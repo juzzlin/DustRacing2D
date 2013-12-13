@@ -27,20 +27,25 @@ Credits::Credits(std::string id, int width, int height)
 void Credits::render()
 {
     static MCTextureText CREDITS_TEXT(
-        (QObject::tr("PROGRAMMING BY") + "\n\n" +
-        "* Jussi Lind\n\n" +
-        QObject::tr("GRAPHICS BY") + "\n\n" +
-        "* Jussi Lind\n\n" +
-        QObject::tr("RACE TRACKS BY") + "\n\n" +
-        "* Jussi Lind\n\n" +
-        QObject::tr("CONTRIBUTORS") + "\n\n" +
-        "* Markus Rinne\n\n" +
-        "* Paolo Straffi\n\n" +
-        "* Pavel Fric\n\n" +
-        QObject::tr("SPECIAL THANKS") + "\n\n" +
-        "* Tommi Martela\n\n"
-        "* Alex Rietveld\n\n"
-        "* Matthias Mailänder\n").toStdWString()
+        (QObject::tr("PROGRAMMING BY").toStdWString() +
+        L"\n\n" +
+        L"* Jussi Lind\n\n" +
+        QObject::tr("GRAPHICS BY").toStdWString() +
+        L"\n\n" +
+        L"* Jussi Lind\n\n" +
+        QObject::tr("RACE TRACKS BY").toStdWString() +
+        L"\n\n" +
+        L"* Jussi Lind\n\n" +
+        QObject::tr("CONTRIBUTORS").toStdWString() +
+        L"\n\n" +
+        L"* Markus Rinne\n\n" +
+        L"* Paolo Straffi\n\n" +
+        L"* Pavel Fric\n\n" +
+        QObject::tr("SPECIAL THANKS").toStdWString() +
+        L"\n\n" +
+        L"* Tommi Martela\n\n"
+        L"* Alex Rietveld\n\n"
+        L"* Matthias Mailänder\n")
     );
 
     SurfaceMenu::render();
