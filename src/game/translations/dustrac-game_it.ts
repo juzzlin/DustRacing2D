@@ -209,109 +209,138 @@ http://dustrac.sourceforge.net</translation>
         <translation>Controlla le gomme!</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="63"/>
+        <location filename="../settingsmenu.cpp" line="66"/>
         <source>Reset best positions?</source>
         <translation>Azzerare migliori posizioni?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="75"/>
+        <location filename="../settingsmenu.cpp" line="78"/>
         <source>Reset record times?</source>
         <translation>Azzerare tempi record?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="88"/>
+        <location filename="../settingsmenu.cpp" line="91"/>
         <source>Reset unlocked tracks?</source>
         <translation>Azzerare tracciati sbloccati?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="164"/>
+        <location filename="../settingsmenu.cpp" line="185"/>
+        <source>Sounds &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="189"/>
+        <source>GFX &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="197"/>
+        <source>Reset &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="324"/>
+        <source>VSync &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="343"/>
+        <location filename="../vsyncmenu.cpp" line="103"/>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="356"/>
+        <location filename="../vsyncmenu.cpp" line="108"/>
+        <source>On</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="390"/>
         <source>Reset record times</source>
         <translation>Azzera tempi record</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="169"/>
+        <location filename="../settingsmenu.cpp" line="395"/>
         <source>Reset best positions</source>
         <translation>Azzera migliori posizioni</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="174"/>
+        <location filename="../settingsmenu.cpp" line="400"/>
         <source>Reset unlocked tracks</source>
         <translation>Azzera tracciati sbloccati</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="179"/>
+        <location filename="../settingsmenu.cpp" line="312"/>
         <source>Full screen resolution &gt;</source>
         <translation>Risoluzione a schermo intero &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="183"/>
+        <location filename="../settingsmenu.cpp" line="316"/>
         <source>Windowed resolution &gt;</source>
         <translation>Risoluzione in finestra &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="187"/>
+        <location filename="../settingsmenu.cpp" line="320"/>
         <source>Split type &gt;</source>
         <translation>Divisione schermo &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="191"/>
+        <location filename="../settingsmenu.cpp" line="177"/>
         <source>Game mode &gt;</source>
         <translation>Modalità di gioco &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="195"/>
+        <location filename="../settingsmenu.cpp" line="181"/>
         <source>Lap Count &gt;</source>
         <translation>Numero di giri &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="199"/>
         <source>FPS &gt;</source>
-        <translation>FPS &gt;</translation>
+        <translation type="obsolete">FPS &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="203"/>
+        <location filename="../settingsmenu.cpp" line="193"/>
         <source>Controls &gt;</source>
         <translation>Configurazione tasti &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="230"/>
+        <location filename="../settingsmenu.cpp" line="220"/>
         <source>Two player race</source>
         <translation>Gareggia con due giocatori</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="240"/>
+        <location filename="../settingsmenu.cpp" line="230"/>
         <source>One player race</source>
         <translation>Gareggia con un giocatore</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="250"/>
+        <location filename="../settingsmenu.cpp" line="240"/>
         <source>Time Trial</source>
         <translation>Prova cronometrata</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="260"/>
+        <location filename="../settingsmenu.cpp" line="250"/>
         <source>Duel</source>
         <translation>Duello</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="287"/>
+        <location filename="../settingsmenu.cpp" line="278"/>
         <source>Vertical</source>
         <translation>Verticale</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="297"/>
+        <location filename="../settingsmenu.cpp" line="288"/>
         <source>Horizontal</source>
         <translation>Orizzontale</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="320"/>
         <source>30 fps</source>
-        <translation>30 fps</translation>
+        <translation type="obsolete">30 fps</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="331"/>
         <source>60 fps</source>
-        <translation>60 fps</translation>
+        <translation type="obsolete">60 fps</translation>
     </message>
     <message>
         <location filename="../startlights.cpp" line="135"/>
@@ -459,27 +488,30 @@ http://dustrac.sourceforge.net</translation>
         <translation>PROGRAMMATO DA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="32"/>
+        <location filename="../credits.cpp" line="33"/>
         <source>GRAPHICS BY</source>
         <translation>GRAFICA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="34"/>
+        <location filename="../credits.cpp" line="36"/>
         <source>RACE TRACKS BY</source>
         <translation>TRACCIATI</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="36"/>
+        <location filename="../credits.cpp" line="39"/>
+        <source>CONTRIBUTORS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>FONT</source>
-        <translation>FONT</translation>
+        <translation type="obsolete">FONT</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="38"/>
         <source>PATCHES</source>
-        <translation>PATCH</translation>
+        <translation type="obsolete">PATCH</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="40"/>
+        <location filename="../credits.cpp" line="44"/>
         <source>SPECIAL THANKS</source>
         <translation>RINGRAZIAMENTI SPECIALI</translation>
     </message>
@@ -492,6 +524,21 @@ http://dustrac.sourceforge.net</translation>
         <location filename="../resolutionmenu.cpp" line="174"/>
         <source>Native resolution</source>
         <translation>Risoluzione nativa</translation>
+    </message>
+    <message>
+        <location filename="../confirmationmenu.cpp" line="31"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../confirmationmenu.cpp" line="32"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../vsyncmenu.cpp" line="78"/>
+        <source>Restart to change VSync setting.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
