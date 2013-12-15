@@ -15,6 +15,7 @@
 
 #include "settingsmenu.hpp"
 
+#include "audiothread.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -35,6 +36,9 @@
 #include <QObject> // For QObject::tr()
 
 static const QString LAP_COUNT_KEY(Settings::lapCountKey());
+
+static const int ITEM_HEIGHT_DIV = 10;
+static const int ITEM_TEXT_SIZE  = 20;
 
 class ResetAction : public MTFH::MenuItemAction
 {
@@ -118,6 +122,7 @@ static const char * GFX_MENU_ID                    = "gfxMenu";
 static const char * KEY_CONFIG_MENU_ID             = "keyConfigMenu";
 static const char * LAP_COUNT_MENU_ID              = "lapCountMenu";
 static const char * RESET_MENU_ID                  = "resetMenu";
+static const char * SFX_MENU_ID                    = "sfxMenu";
 static const char * SPLIT_TYPE_MENU_ID             = "splitTypeMenu";
 static const char * VSYNC_MENU_ID                  = "vsyncMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
@@ -131,16 +136,18 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_gfxMenu("settingsBack",       GFX_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
 , m_lapCountMenu("settingsBack",  LAP_COUNT_MENU_ID,  width, height, Menu::MS_VERTICAL_LIST)
 , m_resetMenu("settingsBack",     RESET_MENU_ID,      width, height, Menu::MS_VERTICAL_LIST)
+, m_sfxMenu("settingsBack",       SFX_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
 , m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
 , m_vsyncMenu(m_confirmationMenu, VSYNC_MENU_ID,      width, height)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate              (width, height);
     populateGameModeMenu  (width, height);
-    populateSplitTypeMenu (width, height);
     populateGfxMenu       (width, height);
     populateLapCountMenu  (width, height);
     populateResetMenu     (width, height);
+    populateSfxMenu       (width, height);
+    populateSplitTypeMenu (width, height);
 
     using MTFH::MenuManager;
 
@@ -151,6 +158,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_keyConfigMenu);
     MenuManager::instance().addMenu(m_lapCountMenu);
     MenuManager::instance().addMenu(m_resetMenu);
+    MenuManager::instance().addMenu(m_sfxMenu);
     MenuManager::instance().addMenu(m_splitTypeMenu);
     MenuManager::instance().addMenu(m_vsyncMenu);
     MenuManager::instance().addMenu(m_windowedResolutionMenu);
@@ -158,9 +166,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 
 void SettingsMenu::populate(int width, int height)
 {
-    const int numItems   = 5;
-    const int itemHeight = height / (numItems + 4);
-    const int textSize   = 20;
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -174,6 +181,10 @@ void SettingsMenu::populate(int width, int height)
     MenuItem * lapCount = new MenuItem(width, itemHeight, QObject::tr("Lap Count >").toStdWString());
     lapCount->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCount)));
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
+
+    MenuItem * sfx = new MenuItem(width, itemHeight, QObject::tr("Sounds >").toStdWString());
+    sfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *sfx)));
+    sfx->setMenuOpenAction(SFX_MENU_ID);
 
     MenuItem * gfx = new MenuItem(width, itemHeight, QObject::tr("GFX >").toStdWString());
     gfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gfx)));
@@ -191,6 +202,7 @@ void SettingsMenu::populate(int width, int height)
 
     addItem(MenuItemPtr(reset));
     addItem(MenuItemPtr(configureKeys));
+    addItem(MenuItemPtr(sfx));
     addItem(MenuItemPtr(gfx));
     addItem(MenuItemPtr(lapCount));
     addItem(MenuItemPtr(gameMode));
@@ -198,15 +210,15 @@ void SettingsMenu::populate(int width, int height)
 
 void SettingsMenu::populateGameModeMenu(int width, int height)
 {
-    const int numItems   = 4;
-    const int itemHeight = height / (numItems + 4);
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
 
     MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toStdWString());
-    twoPlayers->setView(MenuItemViewPtr(new TextMenuItemView(20, *twoPlayers)));
+    twoPlayers->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *twoPlayers)));
     twoPlayers->setAction(
         []()
         {
@@ -216,7 +228,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         });
 
     MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toStdWString());
-    onePlayer->setView(MenuItemViewPtr(new TextMenuItemView(20, *onePlayer)));
+    onePlayer->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onePlayer)));
     onePlayer->setAction(
         []()
         {
@@ -226,7 +238,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         });
 
     MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toStdWString());
-    timeTrial->setView(MenuItemViewPtr(new TextMenuItemView(20, *timeTrial)));
+    timeTrial->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *timeTrial)));
     timeTrial->setAction(
         []()
         {
@@ -236,7 +248,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         });
 
     MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toStdWString());
-    duel->setView(MenuItemViewPtr(new TextMenuItemView(20, *duel)));
+    duel->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *duel)));
     duel->setAction(
         []()
         {
@@ -257,13 +269,14 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 {
     const int numItems   = 2;
     const int itemHeight = height / (numItems + 4);
+    const int textSize   = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
 
     MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toStdWString());
-    vertical->setView(MenuItemViewPtr(new TextMenuItemView(20, *vertical)));
+    vertical->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vertical)));
     vertical->setAction(
         []()
         {
@@ -273,7 +286,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
         });
 
     MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toStdWString());
-    horizontal->setView(MenuItemViewPtr(new TextMenuItemView(20, *horizontal)));
+    horizontal->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *horizontal)));
     horizontal->setAction(
         []()
         {
@@ -288,9 +301,8 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 
 void SettingsMenu::populateGfxMenu(int width, int height)
 {
-    const int numItems   = 3;
-    const int itemHeight = height / (numItems + 6);
-    const int textSize   = 20;
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuItemPtr;
@@ -319,11 +331,55 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     m_gfxMenu.addItem(MenuItemPtr(selectFullScreenResolution));
 }
 
+void SettingsMenu::populateSfxMenu(int width, int height)
+{
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * offItem = new MenuItem(width, itemHeight, QObject::tr("Off").toStdWString());
+    offItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *offItem)));
+    offItem->setAction(
+        []()
+        {
+            MCLogger().info() << "Sounds off selected.";
+            Game::instance().audioThread().setEnabled(false);
+            Settings::instance().saveValue(Settings::soundsKey(), false);
+            MenuManager::instance().popMenu();
+        });
+
+    m_sfxMenu.addItem(MTFH::MenuItemPtr(offItem));
+
+    MenuItem * onItem = new MenuItem(width, itemHeight, QObject::tr("On").toStdWString());
+    onItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onItem)));
+    onItem->setAction(
+        []()
+        {
+            MCLogger().info() << "Sounds on selected.";
+            Game::instance().audioThread().setEnabled(true);
+            Settings::instance().saveValue(Settings::soundsKey(), true);
+            MenuManager::instance().popMenu();
+        });
+
+    m_sfxMenu.addItem(MTFH::MenuItemPtr(onItem));
+
+    if (Game::instance().audioThread().enabled())
+    {
+        m_sfxMenu.setCurrentIndex(onItem->index());
+    }
+    else
+    {
+        m_sfxMenu.setCurrentIndex(offItem->index());
+    }
+}
+
 void SettingsMenu::populateResetMenu(int width, int height)
 {
-    const int numItems   = 3;
-    const int itemHeight = height / (numItems + 6);
-    const int textSize   = 20;
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuItemPtr;
@@ -360,6 +416,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
 
     const int numLapCounts = sizeof(LAP_COUNTS) / sizeof(int);
     const int itemHeight   = height / (numLapCounts + 2);
+    const int textSize     = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuManager;
@@ -372,7 +429,7 @@ void SettingsMenu::populateLapCountMenu(int width, int height)
         itemText << LAP_COUNTS[i];
 
         MenuItem * lapCountItem = new MenuItem(width, itemHeight, itemText.str());
-        lapCountItem->setView(MenuItemViewPtr(new TextMenuItemView(20, *lapCountItem)));
+        lapCountItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCountItem)));
         lapCountItem->setAction(
             [i]()
             {

@@ -331,107 +331,112 @@ ERITYISKIITOKSET
 * Tommi Martela</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="62"/>
+        <location filename="../settingsmenu.cpp" line="66"/>
         <source>Reset best positions?</source>
         <translation>Nollaa parhaat sijat?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="74"/>
+        <location filename="../settingsmenu.cpp" line="78"/>
         <source>Reset record times?</source>
         <translation>Nollaa ennätysajat?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="87"/>
+        <location filename="../settingsmenu.cpp" line="91"/>
         <source>Reset unlocked tracks?</source>
         <translation>Nollaa lukitsemattomat radat?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="178"/>
+        <location filename="../settingsmenu.cpp" line="185"/>
+        <source>Sounds &gt;</source>
+        <translation>Äänet &gt;</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="189"/>
         <source>GFX &gt;</source>
         <translation>Grafiikka &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="186"/>
+        <location filename="../settingsmenu.cpp" line="197"/>
         <source>Reset &gt;</source>
         <translation>Nollaus &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="312"/>
+        <location filename="../settingsmenu.cpp" line="324"/>
         <source>VSync &gt;</source>
         <translation>VSync &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="334"/>
+        <location filename="../settingsmenu.cpp" line="390"/>
         <source>Reset record times</source>
         <translation>Nollaa ennätysajat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="339"/>
+        <location filename="../settingsmenu.cpp" line="395"/>
         <source>Reset best positions</source>
         <translation>Nollaa parhaat sijat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="344"/>
+        <location filename="../settingsmenu.cpp" line="400"/>
         <source>Reset unlocked tracks</source>
         <translation>Nollaa lukitsemattomat radat</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="300"/>
+        <location filename="../settingsmenu.cpp" line="312"/>
         <source>Full screen resolution &gt;</source>
         <translation>Koko näytön resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="304"/>
+        <location filename="../settingsmenu.cpp" line="316"/>
         <source>Windowed resolution &gt;</source>
         <translation>Ikkunoitu resoluutio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="308"/>
+        <location filename="../settingsmenu.cpp" line="320"/>
         <source>Split type &gt;</source>
         <translation>Ruudunjaon tyyppi &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="170"/>
+        <location filename="../settingsmenu.cpp" line="177"/>
         <source>Game mode &gt;</source>
         <translation>Pelimoodi &gt; </translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="174"/>
+        <location filename="../settingsmenu.cpp" line="181"/>
         <source>Lap Count &gt;</source>
         <translation>Kierrosmäärä &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="182"/>
+        <location filename="../settingsmenu.cpp" line="193"/>
         <source>Controls &gt;</source>
         <translation>Kontrollit &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="208"/>
+        <location filename="../settingsmenu.cpp" line="220"/>
         <source>Two player race</source>
         <translation>Kahden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="218"/>
+        <location filename="../settingsmenu.cpp" line="230"/>
         <source>One player race</source>
         <translation>Yhden pelaajan kisa</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="228"/>
+        <location filename="../settingsmenu.cpp" line="240"/>
         <source>Time Trial</source>
         <translation>Aika-ajo</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="238"/>
+        <location filename="../settingsmenu.cpp" line="250"/>
         <source>Duel</source>
         <translation>Kaksintaistelu</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="265"/>
+        <location filename="../settingsmenu.cpp" line="278"/>
         <source>Vertical</source>
         <translation>Pysty</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="275"/>
+        <location filename="../settingsmenu.cpp" line="288"/>
         <source>Horizontal</source>
         <translation>Vaaka</translation>
     </message>
@@ -567,17 +572,17 @@ ERITYISKIITOKSET
         <translation>OHJELMOINTI</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="32"/>
+        <location filename="../credits.cpp" line="33"/>
         <source>GRAPHICS BY</source>
         <translation>GRAFIIKKA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="34"/>
+        <location filename="../credits.cpp" line="36"/>
         <source>RACE TRACKS BY</source>
         <translation>RADAT</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="36"/>
+        <location filename="../credits.cpp" line="39"/>
         <source>CONTRIBUTORS</source>
         <translation>AVUSTAJAT</translation>
     </message>
@@ -590,7 +595,7 @@ ERITYISKIITOKSET
         <translation type="obsolete">PÄTSIT</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="40"/>
+        <location filename="../credits.cpp" line="44"/>
         <source>SPECIAL THANKS</source>
         <translation>ERITYISKIITOKSET</translation>
     </message>
@@ -620,11 +625,13 @@ ERITYISKIITOKSET
         <translation>Uudelleenkäynnistys vaaditaan.</translation>
     </message>
     <message>
+        <location filename="../settingsmenu.cpp" line="343"/>
         <location filename="../vsyncmenu.cpp" line="103"/>
         <source>Off</source>
         <translation>Pois</translation>
     </message>
     <message>
+        <location filename="../settingsmenu.cpp" line="356"/>
         <location filename="../vsyncmenu.cpp" line="108"/>
         <source>On</source>
         <translation>Päälle</translation>

@@ -143,7 +143,7 @@ private:
     MTFH::Menu          * m_mainMenu;
     MTFH::Menu          * m_help;
     MTFH::Menu          * m_credits;
-    MTFH::Menu          * m_settings;
+    MTFH::Menu          * m_settingsMenu;
     MTFH::MenuManager   * m_menuManager;
     Intro               * m_intro;
     ParticleFactory     * m_particleFactory;

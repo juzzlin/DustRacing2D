@@ -34,7 +34,7 @@ class AudioThread : public QThread
 
 public:
 
-    explicit AudioThread(int numCars, QObject * parent = nullptr);
+    AudioThread(int numCars, bool enabled, QObject * parent = nullptr);
 
     virtual ~AudioThread();
 
@@ -43,6 +43,8 @@ public:
     void connectAudioSource(AudioSource & source);
 
     void disconnectAudioSource(AudioSource & source);
+
+    bool enabled() const;
 
 public slots:
 
@@ -59,6 +61,8 @@ public slots:
     void setLocation(const QString & handle, float x, float y);
 
     void setListenerLocation(float x, float y);
+
+    void setEnabled(bool enabled);
 
 private:
 
@@ -84,6 +88,8 @@ private:
     float m_masterVolume;
 
     int m_numCars;
+
+    bool m_enabled;
 };
 
 #endif // AUDIOTHREAD_HPP

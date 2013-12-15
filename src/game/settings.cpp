@@ -42,6 +42,10 @@ QString Settings::lapCountKey()
 {
     return "lapCount";
 }
+QString Settings::soundsKey()
+{
+    return "sounds";
+}
 
 QString Settings::vsyncKey()
 {

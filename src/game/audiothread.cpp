@@ -17,6 +17,7 @@
 #include "audiosource.hpp"
 #include "openalwavdata.hpp"
 #include "openaloggdata.hpp"
+#include "settings.hpp"
 
 #include <QDir>
 #include <QFile>
@@ -26,12 +27,13 @@
 
 #include <AL/al.h>
 
-AudioThread::AudioThread(int numCars, QObject * parent)
+AudioThread::AudioThread(int numCars, bool enabled, QObject * parent)
     : QThread(parent)
     , m_openALDevice(new OpenALDevice)
     , m_inited(false)
     , m_masterVolume(1.0)
     , m_numCars(numCars)
+    , m_enabled(enabled)
 {
 }
 
@@ -49,6 +51,11 @@ void AudioThread::checkFile(QString path) throw (MCException)
     {
         throw MCException("File not found: '" + path.toStdString() + "'");
     }
+}
+
+bool AudioThread::enabled() const
+{
+    return m_enabled;
 }
 
 void AudioThread::connectAudioSource(AudioSource & source)
@@ -138,7 +145,7 @@ void AudioThread::loadMultiSound(QString baseName, QString path)
 
 void AudioThread::playSound(const QString & handle, bool loop)
 {
-    if (m_soundMap.count(handle))
+    if (m_soundMap.count(handle) && m_enabled)
         m_soundMap[handle]->play(loop);
 }
 
@@ -174,6 +181,11 @@ void AudioThread::setLocation(const QString & handle, float x, float y)
 void AudioThread::setListenerLocation(float x, float y)
 {
     alListener3f(AL_POSITION, x, y, 1);
+}
+
+void AudioThread::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
 }
 
 void AudioThread::run()

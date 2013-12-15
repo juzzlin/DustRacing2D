@@ -94,7 +94,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 , m_mainMenu(nullptr)
 , m_help(nullptr)
 , m_credits(nullptr)
-, m_settings(nullptr)
+, m_settingsMenu(nullptr)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 , m_particleFactory(new ParticleFactory)
@@ -293,8 +293,8 @@ void Scene::createMenus()
     m_credits = new Credits("credits", width(), height());
     m_menuManager->addMenu(*m_credits);
 
-    m_settings = new SettingsMenu("settings", width(), height());
-    m_menuManager->addMenu(*m_settings);
+    m_settingsMenu = new SettingsMenu("settings", width(), height());
+    m_menuManager->addMenu(*m_settingsMenu);
 
     m_trackSelectionMenu = new TrackSelectionMenu("trackSelection", width(), height(), *this);
     m_menuManager->addMenu(*m_trackSelectionMenu);
@@ -713,7 +713,7 @@ Scene::~Scene()
     delete m_menuManager;
     delete m_messageOverlay;
     delete m_particleFactory;
-    delete m_settings;
+    delete m_settingsMenu;
     delete m_startlights;
     delete m_startlightsOverlay;
     delete m_trackSelectionMenu;

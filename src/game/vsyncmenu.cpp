@@ -97,7 +97,7 @@ VSyncMenu::VSyncMenu(
 : SurfaceMenu("settingsBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
 {
-    const int itemHeight = height / 5;
+    const int itemHeight = height / 10;
 
     VSyncItem * off =
         new VSyncItem(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());

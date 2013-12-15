@@ -59,6 +59,7 @@ public:
     int loadValue(QString key, int defaultValue = 0);
 
     static QString lapCountKey();
+    static QString soundsKey();
     static QString vsyncKey();
 
 private:
