@@ -226,34 +226,34 @@ http://dustrac.sourceforge.net</translation>
     <message>
         <location filename="../settingsmenu.cpp" line="185"/>
         <source>Sounds &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="189"/>
         <source>GFX &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>GFX &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="197"/>
         <source>Reset &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Reset &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="324"/>
         <source>VSync &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>VSync &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="343"/>
         <location filename="../vsyncmenu.cpp" line="103"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Spento</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="356"/>
         <location filename="../vsyncmenu.cpp" line="108"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceso</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="390"/>
@@ -296,10 +296,6 @@ http://dustrac.sourceforge.net</translation>
         <translation>Numero di giri &gt;</translation>
     </message>
     <message>
-        <source>FPS &gt;</source>
-        <translation type="obsolete">FPS &gt;</translation>
-    </message>
-    <message>
         <location filename="../settingsmenu.cpp" line="193"/>
         <source>Controls &gt;</source>
         <translation>Configurazione tasti &gt;</translation>
@@ -333,14 +329,6 @@ http://dustrac.sourceforge.net</translation>
         <location filename="../settingsmenu.cpp" line="288"/>
         <source>Horizontal</source>
         <translation>Orizzontale</translation>
-    </message>
-    <message>
-        <source>30 fps</source>
-        <translation type="obsolete">30 fps</translation>
-    </message>
-    <message>
-        <source>60 fps</source>
-        <translation type="obsolete">60 fps</translation>
     </message>
     <message>
         <location filename="../startlights.cpp" line="135"/>
@@ -500,15 +488,7 @@ http://dustrac.sourceforge.net</translation>
     <message>
         <location filename="../credits.cpp" line="39"/>
         <source>CONTRIBUTORS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FONT</source>
-        <translation type="obsolete">FONT</translation>
-    </message>
-    <message>
-        <source>PATCHES</source>
-        <translation type="obsolete">PATCH</translation>
+        <translation>CON IL CONTRIBUTO DI</translation>
     </message>
     <message>
         <location filename="../credits.cpp" line="44"/>
@@ -528,17 +508,17 @@ http://dustrac.sourceforge.net</translation>
     <message>
         <location filename="../confirmationmenu.cpp" line="31"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../confirmationmenu.cpp" line="32"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../vsyncmenu.cpp" line="78"/>
         <source>Restart to change VSync setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvia per cambiare le impostazioni VSync.</translation>
     </message>
 </context>
 </TS>
