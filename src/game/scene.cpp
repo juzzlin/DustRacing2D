@@ -228,6 +228,7 @@ void Scene::createCars()
             carImageMap[NUM_CARS - 7] = "carCyan";
             carImageMap[NUM_CARS - 8] = "carBrown";
             carImageMap[NUM_CARS - 9] = "carDarkGreen";
+            carImageMap[NUM_CARS - 10] = "carDarkRed";
 
             std::string carImage("carYellow");
             if (carImageMap.count(i))

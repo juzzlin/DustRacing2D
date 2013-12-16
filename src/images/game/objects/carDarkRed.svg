@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="744.09448"
+   height="1052.3622"
+   id="svg3786"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="carDarkRed.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="719"
+     id="namedview4580"
+     showgrid="false"
+     inkscape:zoom="1.2685914"
+     inkscape:cx="314.05962"
+     inkscape:cy="415.06263"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3786" />
+  <defs
+     id="defs3788">
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5746">
+      <feGaussianBlur
+         id="feGaussianBlur5748"
+         stdDeviation="0.19796422" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5726">
+      <feGaussianBlur
+         id="feGaussianBlur5728"
+         stdDeviation="1.3316814" />
+    </filter>
+    <radialGradient
+       cx="484.31754"
+       cy="368.1535"
+       r="5.503686"
+       fx="484.31754"
+       fy="368.1535"
+       id="radialGradient5796"
+       xlink:href="#linearGradient5782"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7263863,-0.03283298,0.026297,1.5989641,-845.80048,-204.60915)" />
+    <linearGradient
+       id="linearGradient5790">
+      <stop
+         id="stop5792"
+         style="stop-color:#ffc0db;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5794"
+         style="stop-color:#ffc0db;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       cx="484.31754"
+       cy="368.1535"
+       r="5.503686"
+       fx="484.31754"
+       fy="368.1535"
+       id="radialGradient5804"
+       xlink:href="#linearGradient5798"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7263863,-0.03283298,0.026297,1.5989641,-845.80048,-204.60915)" />
+    <linearGradient
+       id="linearGradient5798">
+      <stop
+         id="stop5800"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop5802"
+         style="stop-color:#ffcaca;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5261-9-2-7">
+      <feGaussianBlur
+         id="feGaussianBlur5263-5-9-3"
+         stdDeviation="0.072522634" />
+    </filter>
+    <radialGradient
+       cx="484.31757"
+       cy="368.15353"
+       r="5.503686"
+       fx="484.31757"
+       fy="368.15353"
+       id="radialGradient5788"
+       xlink:href="#linearGradient5782"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6136766,0.01482455,-0.02377189,1.8947573,-288.46264,-336.58786)" />
+    <linearGradient
+       id="linearGradient5782">
+      <stop
+         id="stop5784"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop5786"
+         style="stop-color:#ffc0db;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       cx="484.31754"
+       cy="368.1535"
+       r="5.503686"
+       fx="484.31754"
+       fy="368.1535"
+       id="radialGradient5780"
+       xlink:href="#linearGradient5774"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6136768,0.01482236,-0.010747,0.85672806,-293.25785,45.567363)" />
+    <linearGradient
+       id="linearGradient5774">
+      <stop
+         id="stop5776"
+         style="stop-color:#ffcaca;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5778"
+         style="stop-color:#ffb3bc;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5235-1-0-4">
+      <feGaussianBlur
+         id="feGaussianBlur5237-2-9-7"
+         stdDeviation="1.9229465" />
+    </filter>
+    <radialGradient
+       cx="280.59601"
+       cy="93.772873"
+       r="14.186927"
+       fx="280.59601"
+       fy="93.772873"
+       id="radialGradient4123-3-4-8"
+       xlink:href="#linearGradient5218-3-9-0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7382232,-0.12492274,-0.04771019,-0.71987694,-476.37617,783.67443)" />
+    <linearGradient
+       id="linearGradient5218-3-9-0">
+      <stop
+         id="stop5220-9-9-5"
+         style="stop-color:#ddfdff;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop5222-7-8-3"
+         style="stop-color:#f1f4da;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       x1="300.73566"
+       y1="-9.2670832"
+       x2="432"
+       y2="-8"
+       id="linearGradient4121-2-9-9"
+       xlink:href="#linearGradient3842-8-3-3-8"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3842-8-3-3-8">
+      <stop
+         id="stop3844-8-3-8-3"
+         style="stop-color:#00ff00;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop3846-1-0-2-7"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5195-4-5-5">
+      <feGaussianBlur
+         id="feGaussianBlur5197-8-0-0"
+         stdDeviation="0.36666441" />
+    </filter>
+    <linearGradient
+       x1="301.77286"
+       y1="57.328194"
+       x2="424"
+       y2="56"
+       id="linearGradient4119-4-4-5"
+       xlink:href="#linearGradient3842-8-3-3-8"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3697">
+      <stop
+         id="stop3699"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3701"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5191-3-8-9">
+      <feGaussianBlur
+         id="feGaussianBlur5193-9-5-4"
+         stdDeviation="0.36666441" />
+    </filter>
+    <radialGradient
+       cx="280.59601"
+       cy="93.772873"
+       r="14.186927"
+       fx="280.59601"
+       fy="93.772873"
+       id="radialGradient4117-2-7-7"
+       xlink:href="#linearGradient5218-3-9-0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7382232,0.12492274,-0.04771019,0.71987694,-477.00117,516.63734)" />
+    <linearGradient
+       id="linearGradient3710">
+      <stop
+         id="stop3712"
+         style="stop-color:#ddfdff;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3714"
+         style="stop-color:#f1f4da;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       x1="296"
+       y1="16"
+       x2="336"
+       y2="16"
+       id="linearGradient4115-4-1-5"
+       xlink:href="#linearGradient3842-8-3-3-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.79453206,0,0,1,611.89401,0)" />
+    <linearGradient
+       id="linearGradient3717">
+      <stop
+         id="stop3719"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3721"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5183-9-9-4">
+      <feGaussianBlur
+         id="feGaussianBlur5185-0-8-1"
+         stdDeviation="0.36666441" />
+    </filter>
+    <linearGradient
+       x1="296"
+       y1="16"
+       x2="336"
+       y2="16"
+       id="linearGradient4113-5-6-0"
+       xlink:href="#linearGradient3842-8-3-3-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.79453206,0,0,1,61.196906,0)" />
+    <linearGradient
+       id="linearGradient3726">
+      <stop
+         id="stop3728"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <stop
+         id="stop3730"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5187-7-6-1">
+      <feGaussianBlur
+         id="feGaussianBlur5189-4-9-1"
+         stdDeviation="0.36666441" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter5199-7-2-6">
+      <feGaussianBlur
+         id="feGaussianBlur5201-6-0-0"
+         stdDeviation="0.36666441" />
+    </filter>
+    <radialGradient
+       cx="375"
+       cy="-372.36218"
+       r="5.25"
+       fx="375"
+       fy="-372.36218"
+       id="radialGradient4111-6-3-5"
+       xlink:href="#linearGradient5100-2-3-7-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.04717533,3.0520474,-7.6899167,-0.11886266,-2470.7434,-1561.1399)" />
+    <linearGradient
+       id="linearGradient5100-2-3-7-8">
+      <stop
+         id="stop5112-9-0-3-9"
+         style="stop-color:#343434;stop-opacity:0.76785713"
+         offset="0" />
+      <stop
+         id="stop5114-8-9-1-9"
+         style="stop-color:#343434;stop-opacity:1"
+         offset="1" />
+      <stop
+         id="stop5104-2-0-5-8"
+         style="stop-color:#343434;stop-opacity:0.79464287"
+         offset="1" />
+    </linearGradient>
+    <filter
+       x="-0.10434783"
+       y="-0.034782611"
+       width="1.2086957"
+       height="1.0695652"
+       color-interpolation-filters="sRGB"
+       id="filter5132-9-8-5-3">
+      <feGaussianBlur
+         id="feGaussianBlur5134-0-0-9-2"
+         stdDeviation="0.43478261" />
+    </filter>
+    <radialGradient
+       cx="375"
+       cy="-372.36218"
+       r="5.25"
+       fx="375"
+       fy="-372.36218"
+       id="radialGradient4109-1-8-1"
+       xlink:href="#linearGradient5100-9-5-7-4"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.04717533,3.0520474,-7.6899167,-0.11886266,-2470.7434,-1561.1399)" />
+    <linearGradient
+       id="linearGradient5100-9-5-7-4">
+      <stop
+         id="stop5112-7-1-5-3"
+         style="stop-color:#343434;stop-opacity:0.76785713"
+         offset="0" />
+      <stop
+         id="stop5114-2-0-8-8"
+         style="stop-color:#343434;stop-opacity:1"
+         offset="1" />
+      <stop
+         id="stop5104-3-3-9-2"
+         style="stop-color:#343434;stop-opacity:0.79464287"
+         offset="1" />
+    </linearGradient>
+    <filter
+       x="-0.10434783"
+       y="-0.034782611"
+       width="1.2086957"
+       height="1.0695652"
+       color-interpolation-filters="sRGB"
+       id="filter5132-5-9-4-7">
+      <feGaussianBlur
+         id="feGaussianBlur5134-2-5-0-0"
+         stdDeviation="0.43478261" />
+    </filter>
+    <radialGradient
+       cx="375"
+       cy="-372.36218"
+       r="5.25"
+       fx="375"
+       fy="-372.36218"
+       id="radialGradient4107-8-0-8"
+       xlink:href="#linearGradient5100-5-9-1-6"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.04717533,3.0520474,-7.6899167,-0.11886266,-2470.7434,-1561.1399)" />
+    <linearGradient
+       id="linearGradient5100-5-9-1-6">
+      <stop
+         id="stop5112-1-6-2-9"
+         style="stop-color:#343434;stop-opacity:0.76785713"
+         offset="0" />
+      <stop
+         id="stop5114-4-2-2-7"
+         style="stop-color:#343434;stop-opacity:1"
+         offset="1" />
+      <stop
+         id="stop5104-9-5-2-8"
+         style="stop-color:#343434;stop-opacity:0.79464287"
+         offset="1" />
+    </linearGradient>
+    <filter
+       x="-0.10434783"
+       y="-0.034782611"
+       width="1.2086957"
+       height="1.0695652"
+       color-interpolation-filters="sRGB"
+       id="filter5132-8-7-2-5">
+      <feGaussianBlur
+         id="feGaussianBlur5134-8-6-5-3"
+         stdDeviation="0.43478261" />
+    </filter>
+    <radialGradient
+       cx="375"
+       cy="-372.36218"
+       r="5.25"
+       fx="375"
+       fy="-372.36218"
+       id="radialGradient5125"
+       xlink:href="#linearGradient5100-8-2-0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.04717533,3.0520474,-7.6899167,-0.11886266,-2470.7434,-1561.1399)" />
+    <linearGradient
+       id="linearGradient5100-8-2-0">
+      <stop
+         id="stop5112-5-1-5"
+         style="stop-color:#343434;stop-opacity:0.76785713"
+         offset="0" />
+      <stop
+         id="stop5114-9-9-5"
+         style="stop-color:#343434;stop-opacity:1"
+         offset="1" />
+      <stop
+         id="stop5104-30-5-9"
+         style="stop-color:#343434;stop-opacity:0.79464287"
+         offset="1" />
+    </linearGradient>
+    <filter
+       x="-0.10434783"
+       y="-0.034782611"
+       width="1.2086957"
+       height="1.0695652"
+       color-interpolation-filters="sRGB"
+       id="filter5132-2-7-9">
+      <feGaussianBlur
+         id="feGaussianBlur5134-5-5-8"
+         stdDeviation="0.43478261" />
+    </filter>
+    <radialGradient
+       cx="375"
+       cy="-372.36218"
+       r="5.25"
+       fx="375"
+       fy="-372.36218"
+       id="radialGradient3784"
+       xlink:href="#linearGradient5100-8-2-0"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.04717533,3.0520474,-7.6899167,-0.11886266,-2470.7434,-1561.1399)" />
+  </defs>
+  <metadata
+     id="metadata3791">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     transform="translate(147.15234,-124.85653)">
+    <rect
+       width="10"
+       height="30"
+       ry="1.9695424"
+       x="370"
+       y="-387.36218"
+       transform="matrix(0,1,1,0,550.20987,312.21229)"
+       id="rect4069-7-5-4"
+       style="fill:url(#radialGradient4109-1-8-1);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-5-9-4-7)"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <rect
+       width="10"
+       height="30"
+       ry="1.9695424"
+       x="370"
+       y="-387.36218"
+       transform="matrix(0,1,1,0,549.7048,238.97618)"
+       id="rect4071-7-3-4"
+       style="fill:url(#radialGradient4111-6-3-5);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-9-8-5-3)"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,-72 c 22.16,0 48,17 40,39 -8,22 0,44 0,88 0,44 -17.84,33 -40,33 -22.16,0 -40,11 -40,-33 0,-44 8,-66 0,-88 -8,-22 17.84,-39 40,-39 z"
+       transform="matrix(0,0.82719392,-1,0,233.10804,372.61825)"
+       id="path4073-9-0-0"
+       style="fill:#8b1111;fill-opacity:1;stroke:#8b1111;stroke-width:17.5890007;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 296.3784,-8 c 6.35625,0 12.71251,16 12.71251,24 0,8 0,16 0,24 -5.87633,0.413439 -12.71251,-8 -12.71251,-16 1.21585,-13.826201 -2.81451,-31.9366265 0,-32 z"
+       transform="matrix(0,0.82719392,-1.1666667,0,231.77471,372.61825)"
+       id="path4075-4-3-8"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5187-7-6-1)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="M 376.71251,-8 C 370.35626,-8 364,8 364,16 c 0,8 0,16 0,24 5.87633,0.413439 12.71251,-8 12.71251,-16 -1.21585,-13.826201 2.81451,-31.9366265 0,-32 z"
+       transform="matrix(0,0.82719392,-1.1666667,0,231.77471,372.61825)"
+       id="path4077-1-9-7"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5183-9-9-4)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 287.83383,622.42913 c -15.81989,0.77744 -13.74389,-6.7876 -13.74389,-10.85766 0,-4.07008 12.87418,0.0397 17.22149,2.45071 4.34732,2.41102 12.34228,7.62951 -3.4776,8.40695 z"
+       id="path4079-7-7-2"
+       style="fill:url(#radialGradient4117-2-7-7);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,66.8 c 18.282,0 26.92238,-1.362757 33,-4.5825 6.07762,-3.219743 0,-5.17 0,-10.34 C 369,46.7075 354.282,48 336,48 c -18.282,0 -33,-1.2925 -33,3.8775 0,5.17 -6.50129,7.120257 0,10.34 6.50129,3.219743 14.718,4.5825 33,4.5825 z"
+       transform="matrix(0,0.82719392,-1.2765957,0,238.38464,374.29539)"
+       id="path4556-5-6"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,66.8 c 18.282,0 26.92238,-1.362757 33,-4.5825 6.07762,-3.219743 0,-5.17 0,-10.34 C 369,46.7075 354.282,48 336,48 c -18.282,0 -33,-1.2925 -33,3.8775 0,5.17 -6.50129,7.120257 0,10.34 6.50129,3.219743 14.718,4.5825 33,4.5825 z"
+       transform="matrix(0,0.82719392,-1.2765957,0,238.38464,374.29539)"
+       id="path4087-8-5-1"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,-26.8 c 18.836,0 36,-1.835 34,8.4825 -2,10.3175 -6,9.57 -6,19.14 C 364,10.3925 354.836,8 336,8 317.164,8 308,10.3925 308,0.8225 308,-8.7475 304,-8 302,-18.3175 300,-28.635 317.164,-26.8 336,-26.8 z"
+       transform="matrix(0,0.82719392,-1,0,233.10804,372.61825)"
+       id="path4089-8-5-7"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,-26.8 c 18.836,0 36,-1.835 34,8.4825 -2,10.3175 -6,9.57 -6,19.14 C 364,10.3925 354.836,8 336,8 317.164,8 308,10.3925 308,0.8225 308,-8.7475 304,-8 302,-18.3175 300,-28.635 317.164,-26.8 336,-26.8 z"
+       transform="matrix(0,0.82719392,-1,0,233.10804,372.61825)"
+       id="path4091-4-8-7"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 288.45886,677.88264 c -15.81988,-0.77744 -13.74389,6.7876 -13.74389,10.85766 0,4.07008 12.87418,-0.0397 17.2215,-2.45071 4.34731,-2.41102 12.34227,-7.62951 -3.47761,-8.40695 z"
+       id="path4093-2-5-3"
+       style="fill:url(#radialGradient4123-3-4-8);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 144.11866,625.38959 c -9.71209,8.33686 -4.74544,10.75487 -7.17996,8.12983 -0.25337,-4.63452 1.51711,-10.22263 4.11527,-12.88303 9.57182,-9.80115 12.77678,-3.58365 3.06469,4.7532 z"
+       id="path4095-3-5-4"
+       style="opacity:0.44247814;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 144.11866,676.08693 c -9.71209,-8.33686 -4.74544,-10.75487 -7.17996,-8.12983 -0.25337,4.63452 1.51711,10.22263 4.11527,12.88303 9.57182,9.80115 12.77678,3.58365 3.06469,-4.7532 z"
+       id="path4097-8-1-5"
+       style="opacity:0.43999999;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 336,-72 c 22.16,0 48,17 40,39 -8,22 0,44 0,88 0,44 -17.84,33 -40,33 -22.16,0 -40,11 -40,-33 0,-44 8,-66 0,-88 -8,-22 17.84,-39 40,-39 z"
+       transform="matrix(0,0.98660876,-1.0769023,0,234.16823,319.11219)"
+       id="path4099-4-3-9"
+       style="fill:none;stroke:#343434;stroke-width:1.09918118;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5235-1-0-4)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 488.57143,366.0229 c -3.21125,-0.70218 -5.59406,-0.27964 -7.67826,1.3562 -0.59179,0.46448 -1.16581,1.00038 -1.26159,1.60828 -0.26352,1.67248 -0.12716,1.73985 1.25697,1.54805 1.47434,-0.2043 2.61675,-0.52119 4.09862,-0.48437 2.28143,0.0567 1.13588,0.19611 2.38083,-1.701 0.37616,-0.57322 1.90141,-0.10477 1.73196,-0.65103 -0.0852,-0.27452 -0.17629,-1.59911 -0.52853,-1.67613 z"
+       transform="matrix(0,1.1960459,-1.3977198,0,755.29604,29.49038)"
+       id="path4101-1-0-1"
+       style="fill:#e6e6e6;fill-opacity:1;stroke:#b3b3b3;stroke-width:1.0000335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5261-9-2-7)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+    <path
+       d="m 488.57143,366.0229 c -3.21125,-0.70218 -5.59406,-0.27964 -7.67826,1.3562 -0.59179,0.46448 -1.16581,1.00038 -1.26159,1.60828 -0.26352,1.67248 -0.12716,1.73985 1.25697,1.54805 1.47434,-0.2043 2.61675,-0.52119 4.09862,-0.48437 2.28143,0.0567 1.13588,0.19611 2.38083,-1.701 0.37616,-0.57322 1.90141,-0.10477 1.73196,-0.65103 -0.0852,-0.27452 -0.17629,-1.59911 -0.52853,-1.67613 z"
+       transform="matrix(0,-1.1960459,-1.3977198,0,755.48996,1272.5849)"
+       id="path4103-3-6-0"
+       style="fill:#e6e6e6;fill-opacity:1;stroke:#b3b3b3;stroke-width:1.0000335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5261-9-2-7)"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carGreen.png"
+       inkscape:export-xdpi="85.57"
+       inkscape:export-ydpi="85.57" />
+  </g>
+</svg>
