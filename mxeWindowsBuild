@@ -19,7 +19,7 @@ $LRELEASE ./src/editor/editor.pro
 
 # Install to packaging dir
 
-CREATE_PACKAGE_PATH=dustrac-1.5.5-windows-x86-qt5
+CREATE_PACKAGE_PATH=dustrac-1.6.1-windows-x86-qt5
 rm -rf $CREATE_PACKAGE_PATH
 mkdir $CREATE_PACKAGE_PATH
 

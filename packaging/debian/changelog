@@ -1,3 +1,36 @@
+dustrac (1.6.1-1) precise; urgency=low
+
+  * Use colorful cars only in TOP-6.
+  * Updates README.
+  * Update Czech translations.
+  * Add dark red car.
+  * Add dark green car.
+  * Update Italian translations.
+  * Update cs and it source strings.
+  * Add option to set sounds on/off.
+  * Add fallback char for ď.
+  * Add translations to mxeWindowsBuild.
+  * Use wide strings in credits.cpp.
+  * Add command line option to force language.
+  * Update Finnish translations.
+  * Remove the FPS menu and settings.
+  * Use the vsync setting in Game.
+  * Add VSyncMenu.
+  * Rename 'Key configuration' to 'Controls'.
+  * Update credits menu content.
+  * Move reset settings to a new reset menu.
+  * Move graphics settings to a new GFX menu.
+  * New game loop.
+  * Fix build for OpenGL 3.0
+  * Refcator car image switching.
+  * Add cyan car.
+  * Add violet car.
+  * Add green car.
+  * Sort tiles before rendering.
+  * Add notion of driver vsync.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Tue, 17 Dec 2013 20:09:26 +0200
+
 dustrac (1.5.5-1) precise; urgency=low
 
   * #ifdef for GL versions in game.cpp
