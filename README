@@ -8,7 +8,7 @@ Dust Racing comes with a Qt-based level editor for easy level creation.
 A separate engine, MiniCore, is used for physics modeling.
 
 License
--------
+=======
 
 Dust Racing source code is licensed under GNU GPLv3. 
 See COPYING for the complete license text.
@@ -23,71 +23,66 @@ All image files, except where otherwise noted, are licensed under
 CC BY-NC 3.0: http://creativecommons.org/licenses/by-nc/3.0/
 
 Playing
--------
+=======
 
-The player one controls the pink race car:
+Controls
+--------
 
-Accelerate : Up / RIGHT SHIFT
-Brake      : Down / RIGHT CTRL
-Turn left  : Left
-Turn right : Right
+The default controls for player one (the pink race car):
 
-The player two controls the grey race car (game mode
-can be selected in the Settings menu):
+Accelerate | Brake | Turn left | Turn right
+---------- | ----- | --------- | ----------
+Up         | Down  | Left      | Right
 
-Accelerate : W / LEFT SHIFT
-Brake      : S / LEFT CTRL
-Turn left  : A
-Turn right : D
+The default controls for player two (the grey race car):
 
-The key configuration can be changed in the settings menu.
+Accelerate | Brake | Turn left | Turn right
+---------- | ----- | --------- | ----------
+W          | S     | A         | D
+
+The key configuration and game mode can be changed in the settings menu.
 
 ESC or Q exits the race and also the current menu.
 
 P pauses the game.
 
+Races
+-----
+
+In the race modes there are always 12 cars. By finishing in TOP-6 a new track
+will be unlocked.
+
+The record times and best positions are stored separately for each lap count.
+
+Pit stops
+---------
+
+Your tires will wear out as the race progresses. This causes more and more sliding.
+
+Fortunately there's a pit (the yellow rectangle). 
+By stopping on the pit your tires will be repaired.
+
+Custom track files
+------------------
+
 Dust Racing searches for race tracks also in ~/DustRacingTracks/
 where you can place your own race tracks.
 
 Command line options
---------------------
+====================
 
 --lang [lang] forces the language. Currently available: fi, cs, it. 
 
 E.g. ./dustrac-game --lang it
 
 Performance
------------
+===========
 
 Dust Racing 2D tries to render at least at 60 fps. If you experience very slow
 performance, try first to set vsync off (Settings => GFX => Vsync).
 
 Another option would be to force Vsync off via your driver settings.
 
-Source code
------------
-
-The source tree includes source code for the track editor and
-the game itself. The game uses an 2D engine called MiniCore
-written by Jussi Lind. The code is "documented" by using
-Doxygen tags.
-
-The source tree layout:
-
-src/game/          : Source files for the game.
-src/game/MiniCore/ : Graphics and physics engine.
-src/game/MTFH/     : Menu Toolkit From Hell.
-src/game/STFH/     : Sound Toolkit From Hell.
-src/editor/        : Source files for the track editor.
-src/common/        : Shared files between the editor and the game.
-src/images/        : Some SVG-images used as the source for final images.
-data/              : Data mapping and configuration files.
-data/images/       : Image files and textures loaded by the game.
-data/levels/       : Level data.
-data/shaders/      : GLSL shaders.
-packaging/         : Example packaging for Ubuntu/Debian.
-
-See INSTALL for build and install instructions.
 
 -- Jussi Lind <jussi.lind@iki.fi>
 

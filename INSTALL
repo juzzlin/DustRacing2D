@@ -3,6 +3,29 @@ Build & install instructions
 
 These are build & install instructions for Dust Racing 2D.
 
+Source code
+===========
+
+The source tree includes source code for the track editor and
+the game itself. The game uses an 2D engine called MiniCore
+written by Jussi Lind. The code is "documented" by using
+Doxygen tags.
+
+The source tree layout:
+
+src/game/          : Source files for the game.
+src/game/MiniCore/ : Graphics and physics engine.
+src/game/MTFH/     : Menu Toolkit From Hell.
+src/game/STFH/     : Sound Toolkit From Hell.
+src/editor/        : Source files for the track editor.
+src/common/        : Shared files between the editor and the game.
+src/images/        : Some SVG-images used as the source for final images.
+data/              : Data mapping and configuration files.
+data/images/       : Image files and textures loaded by the game.
+data/levels/       : Level data.
+data/shaders/      : GLSL shaders.
+packaging/         : Example packaging for Ubuntu/Debian.
+
 Build systems
 =============
 
