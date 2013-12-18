@@ -1,3 +1,10 @@
+dustrac (1.6.2-1) precise; urgency=low
+
+  * Update README and INSTALL.
+  * Fix time trial mode.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Wed, 18 Dec 2013 18:52:37 +0200
+
 dustrac (1.6.1-1) precise; urgency=low
 
   * Use colorful cars only in TOP-6.

@@ -1,5 +1,5 @@
-VERSION=1.6.1
-DEBIAN_VERSION=1.6.1-1
+VERSION=1.6.2
+DEBIAN_VERSION=1.6.2-1
 rm -rf *${VERSION}*
 cp ../sourceforge-git/dustrac-code/dustrac-$VERSION.tar.gz .
 mv dustrac-$VERSION.tar.gz dustrac_$VERSION.orig.tar.gz 
