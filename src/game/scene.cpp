@@ -235,21 +235,22 @@ void Scene::createCars()
             car = new Car(desc, MCAssetManager::surfaceManager().surface(carImage), i, false);
         }
 
-        assert(car);
-
-        if (!car->isHuman())
+        if (car)
         {
-            m_ai.push_back(AIPtr(new AI(*car)));
+            if (!car->isHuman())
+            {
+                m_ai.push_back(AIPtr(new AI(*car)));
+            }
+
+            car->setLayer(Layers::Cars);
+            car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
+            car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
+
+            setupAudio(*car, i);
+
+            m_cars.push_back(CarPtr(car));
+            m_race.addCar(*car);
         }
-
-        car->setLayer(Layers::Cars);
-        car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
-        car->shape()->view()->setShadowShaderProgram(&m_renderer.program("masterShadow"));
-
-        setupAudio(*car, i);
-
-        m_cars.push_back(CarPtr(car));
-        m_race.addCar(*car);
     }
 
     if (m_game.hasTwoHumanPlayers())
