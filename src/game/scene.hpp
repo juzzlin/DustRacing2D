@@ -16,6 +16,7 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
+#include "ai.hpp"
 #include "car.hpp"
 #include "race.hpp"
 #include "timingoverlay.hpp"
@@ -25,7 +26,6 @@
 #include <memory>
 #include <vector>
 
-class AI;
 class CheckeredFlag;
 class FadeAnimation;
 class Game;
@@ -149,11 +149,9 @@ private:
     ParticleFactory     * m_particleFactory;
     FadeAnimation       * m_fadeAnimation;
 
-    typedef std::shared_ptr<Car> CarPtr;
     typedef std::vector<CarPtr> CarVector;
     CarVector m_cars;
 
-    typedef std::shared_ptr<AI> AIPtr;
     typedef std::vector<AIPtr> AIVector;
     AIVector m_ai;
 

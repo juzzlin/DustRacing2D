@@ -24,6 +24,8 @@
 #include "carparticleeffectmanager.hpp"
 #include "carsoundeffectmanager.hpp"
 
+#include <memory>
+
 class MCSurface;
 class MCFrictionGenerator;
 class Route;
@@ -234,5 +236,7 @@ private:
     CarParticleEffectManager m_particleEffectManager;
     CarSoundEffectManagerPtr m_soundEffectManager;
 };
+
+typedef std::shared_ptr<Car> CarPtr;
 
 #endif // CAR_HPP

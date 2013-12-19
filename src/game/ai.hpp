@@ -18,6 +18,8 @@
 
 #include <MCVector2d>
 
+#include <memory>
+
 class Car;
 class Route;
 class TargetNodeBase;
@@ -58,5 +60,7 @@ private:
     int           m_lastTargetNodeIndex;
     MCVector2dF   m_randomTolerance;
 };
+
+typedef std::shared_ptr<AI> AIPtr;
 
 #endif // AI_HPP

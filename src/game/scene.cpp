@@ -18,6 +18,7 @@
 #include "ai.hpp"
 #include "audiothread.hpp"
 #include "car.hpp"
+#include "carfactory.hpp"
 #include "carsoundeffectmanager.hpp"
 #include "checkeredflag.hpp"
 #include "credits.hpp"
@@ -183,9 +184,6 @@ void Scene::setupAudio(Car & car, int index)
 
 void Scene::createCars()
 {
-    const int   humanPower = 200000; // This in Watts
-    const float humanDrag  = 5.0;
-
     m_race.removeCars();
     m_cars.clear();
     m_ai.clear();
@@ -193,48 +191,7 @@ void Scene::createCars()
     // Create and add cars.
     for (int i = 0; i < NUM_CARS; i++)
     {
-        Car::Description desc;
-
-        Car * car = nullptr;
-        if (i == 0 || (i == 1 && m_game.hasTwoHumanPlayers()))
-        {
-            desc.power                = humanPower;
-            desc.dragQuadratic        = humanDrag;
-            desc.accelerationFriction = 0.7;
-
-            const std::string image = i ? "carGrey" : "carPink";
-            car = new Car(desc, MCAssetManager::surfaceManager().surface(image), i, true);
-        }
-        else if (m_game.hasComputerPlayers())
-        {
-            // Introduce some variance to the power of computer players so that the
-            // slowest cars have less power than the human player and the fastest
-            // cars have more power than the human player.
-            desc.power                = humanPower / 2 + (i + 1) * humanPower / NUM_CARS;
-            desc.accelerationFriction = 0.3 + 0.45 * float(i + 1) / NUM_CARS;
-            desc.dragQuadratic        = humanDrag;
-            desc.turningImpulse       = 0.3;
-            desc.slideFriction        = 1.0;
-            desc.brakingFriction      = 2.0;
-
-            // Select car image
-            std::map<int, std::string> carImageMap;
-            carImageMap[NUM_CARS - 1] = "carBlack";
-            carImageMap[NUM_CARS - 2] = "carOrange";
-            carImageMap[NUM_CARS - 3] = "carRed";
-            carImageMap[NUM_CARS - 4] = "carBlue";
-            carImageMap[NUM_CARS - 5] = "carDarkGreen";
-            carImageMap[NUM_CARS - 6] = "carBrown";
-
-            std::string carImage("carYellow");
-            if (carImageMap.count(i))
-            {
-                carImage = carImageMap[i];
-            }
-
-            car = new Car(desc, MCAssetManager::surfaceManager().surface(carImage), i, false);
-        }
-
+        CarPtr car(CarFactory::buildCar(i, NUM_CARS, m_game));
         if (car)
         {
             if (!car->isHuman())

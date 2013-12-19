@@ -40,6 +40,7 @@ HEADERS += \
     audiothread.hpp \
     audiosource.hpp \
     car.hpp \
+    carfactory.hpp \
     carparticleeffectmanager.hpp \
     carsoundeffectmanager.hpp \
     carstatusview.hpp \
@@ -197,6 +198,7 @@ SOURCES += \
     audiothread.cpp \
     audiosource.cpp \
     car.cpp \
+    carfactory.cpp \
     carparticleeffectmanager.cpp \
     carsoundeffectmanager.cpp \
     carstatusview.cpp \

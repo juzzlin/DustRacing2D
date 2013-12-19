@@ -36,6 +36,7 @@ set(SRC
     audiothread.cpp
     audiosource.cpp
     car.cpp
+    carfactory.cpp
     carparticleeffectmanager.cpp
     carsoundeffectmanager.cpp
     carstatusview.cpp
