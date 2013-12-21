@@ -218,9 +218,12 @@ void Race::translateCarsToStartPositions()
 
 void Race::setRaceRecord(int msecs)
 {
-    Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
+    if (m_game.hasComputerPlayers())
+    {
+        Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
 
-    emit messageRequested(QObject::tr("New race record!"));
+        emit messageRequested(QObject::tr("New race record!"));
+    }
 }
 
 void Race::setLapRecord(int msecs)
