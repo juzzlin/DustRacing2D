@@ -89,9 +89,24 @@ void Race::createStartGridObjects()
 
 void Race::init(Track & track, int lapCount)
 {
-    m_lapCount = lapCount;
+    setTrack(track, lapCount);
 
-    setTrack(track);
+    clearPositions();
+    clearRaceFlags();
+
+    initTiming();
+    initCars();
+}
+
+void Race::initTiming()
+{
+    m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
+    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, m_lapCount));
+    m_timing.reset();
+}
+
+void Race::initCars()
+{
     translateCarsToStartPositions();
 
     for(Car * car : m_cars)
@@ -107,10 +122,15 @@ void Race::init(Track & track, int lapCount)
             car->soundEffectManager()->startEngineSound();
         }
     }
+}
 
-    m_timing.reset();
+void Race::clearPositions()
+{
     m_positions.clear();
+}
 
+void Race::clearRaceFlags()
+{
     m_checkeredFlagEnabled = false;
     m_winnerFinished       = false;
     m_isfinishedSignalSent = false;
@@ -545,13 +565,11 @@ Car & Race::getLeadingCar() const
     return *bestCar;
 }
 
-void Race::setTrack(Track & track)
+void Race::setTrack(Track & track, int lapCount)
 {
-    m_track   = &track;
-    m_bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount);
-
-    m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
-    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, m_lapCount));
+    m_lapCount = lapCount;
+    m_track    = &track;
+    m_bestPos  = Settings::instance().loadBestPos(*m_track, m_lapCount);
 
     for (OffTrackDetectorPtr otd : m_offTrackDetectors)
     {

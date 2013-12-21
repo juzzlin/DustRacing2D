@@ -104,13 +104,21 @@ private:
 
     void checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
 
+    void clearPositions();
+
+    void clearRaceFlags();
+
     void createStartGridObjects();
+
+    void initCars();
+
+    void initTiming();
 
     bool isRaceFinished() const;
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
-    void setTrack(Track & track);
+    void setTrack(Track & track, int lapCount);
 
     void translateCarsToStartPositions();
 
