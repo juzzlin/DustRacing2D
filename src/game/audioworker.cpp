@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "audiothread.hpp"
+#include "audioworker.hpp"
 #include "audiosource.hpp"
 #include "openalwavdata.hpp"
 #include "openaloggdata.hpp"
@@ -27,9 +27,8 @@
 
 #include <AL/al.h>
 
-AudioThread::AudioThread(int numCars, bool enabled, QObject * parent)
-    : QThread(parent)
-    , m_openALDevice(new OpenALDevice)
+AudioWorker::AudioWorker(int numCars, bool enabled)
+    : m_openALDevice(new OpenALDevice)
     , m_inited(false)
     , m_masterVolume(1.0)
     , m_numCars(numCars)
@@ -37,7 +36,7 @@ AudioThread::AudioThread(int numCars, bool enabled, QObject * parent)
 {
 }
 
-void AudioThread::init()
+void AudioWorker::init()
 {
     m_openALDevice->initialize(); // Throws on failure
 
@@ -45,7 +44,7 @@ void AudioThread::init()
     alSpeedOfSound(1000.0);
 }
 
-void AudioThread::checkFile(QString path) throw (MCException)
+void AudioWorker::checkFile(QString path) throw (MCException)
 {
     if (!QFile(path).exists())
     {
@@ -53,12 +52,12 @@ void AudioThread::checkFile(QString path) throw (MCException)
     }
 }
 
-bool AudioThread::enabled() const
+bool AudioWorker::enabled() const
 {
     return m_enabled;
 }
 
-void AudioThread::connectAudioSource(AudioSource & source)
+void AudioWorker::connectAudioSource(AudioSource & source)
 {
     connect(&source, SIGNAL(playRequested(QString, bool)),
         this, SLOT(playSound(QString, bool)));
@@ -72,7 +71,7 @@ void AudioThread::connectAudioSource(AudioSource & source)
         this, SLOT(setLocation(QString, float, float)));
 }
 
-void AudioThread::disconnectAudioSource(AudioSource & source)
+void AudioWorker::disconnectAudioSource(AudioSource & source)
 {
     disconnect(&source, SIGNAL(playRequested(QString, bool)),
         this, SLOT(playSound(QString, bool)));
@@ -86,7 +85,7 @@ void AudioThread::disconnectAudioSource(AudioSource & source)
         this, SLOT(setLocation(QString, float, float)));
 }
 
-void AudioThread::loadSounds()
+void AudioWorker::loadSounds()
 {
     loadCommonSound("bell",      "bell.ogg");
     loadCommonSound("cheering",  "cheering.ogg");
@@ -100,7 +99,7 @@ void AudioThread::loadSounds()
     loadSceneSound("carHit2",    "carHit2.ogg");
 }
 
-void AudioThread::loadSceneSound(QString handle, QString path)
+void AudioWorker::loadSceneSound(QString handle, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -113,7 +112,7 @@ void AudioThread::loadSceneSound(QString handle, QString path)
     m_soundMap[handle] = source;
 }
 
-void AudioThread::loadCommonSound(QString handle, QString path)
+void AudioWorker::loadCommonSound(QString handle, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -124,7 +123,7 @@ void AudioThread::loadCommonSound(QString handle, QString path)
             STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
 }
 
-void AudioThread::loadMultiSound(QString baseName, QString path)
+void AudioWorker::loadMultiSound(QString baseName, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -143,64 +142,51 @@ void AudioThread::loadMultiSound(QString baseName, QString path)
     }
 }
 
-void AudioThread::playSound(const QString & handle, bool loop)
+void AudioWorker::playSound(const QString & handle, bool loop)
 {
     if (m_soundMap.count(handle) && m_enabled)
         m_soundMap[handle]->play(loop);
 }
 
-void AudioThread::stopSound(const QString & handle)
+void AudioWorker::stopSound(const QString & handle)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->stop();
 }
 
-void AudioThread::setPitch(const QString & handle, float pitch)
+void AudioWorker::setPitch(const QString & handle, float pitch)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setPitch(pitch);
 }
 
-void AudioThread::setVolume(const QString & handle, float volume)
+void AudioWorker::setVolume(const QString & handle, float volume)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setVolume(volume);
 }
 
-void AudioThread::setMasterVolume(float volume)
+void AudioWorker::setMasterVolume(float volume)
 {
     m_masterVolume = volume;
 }
 
-void AudioThread::setLocation(const QString & handle, float x, float y)
+void AudioWorker::setLocation(const QString & handle, float x, float y)
 {
     if (m_soundMap.count(handle))
         m_soundMap[handle]->setLocation(STFH::Location(x, y));
 }
 
-void AudioThread::setListenerLocation(float x, float y)
+void AudioWorker::setListenerLocation(float x, float y)
 {
     alListener3f(AL_POSITION, x, y, 1);
 }
 
-void AudioThread::setEnabled(bool enabled)
+void AudioWorker::setEnabled(bool enabled)
 {
     m_enabled = enabled;
 }
 
-void AudioThread::run()
-{
-    if (!m_inited)
-    {
-        init();
-        loadSounds();
-
-        m_inited = true;
-    }
-
-    QThread::run();
-}
-
-AudioThread::~AudioThread()
+AudioWorker::~AudioWorker()
 {
 }

@@ -17,12 +17,13 @@
 #define GAME_HPP
 
 #include <QObject>
+#include <QThread>
 #include <QTimer>
 #include <QTime>
 
 #include "settings.hpp"
 
-class AudioThread;
+class AudioWorker;
 class EventHandler;
 class InputHandler;
 class Renderer;
@@ -105,7 +106,7 @@ public:
 
     EventHandler & eventHandler() const;
 
-    AudioThread & audioThread();
+    AudioWorker & audioWorker();
 
     const std::string & fontName() const;
 
@@ -147,7 +148,8 @@ private:
     int               m_renderElapsed;
     GameMode          m_mode;
     SplitType         m_splitType;
-    AudioThread     * m_audioThread;
+    AudioWorker     * m_audioWorker;
+    QThread           m_audioThread;
 
     static Game * m_instance;
 };

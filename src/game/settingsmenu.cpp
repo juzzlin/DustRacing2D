@@ -15,7 +15,7 @@
 
 #include "settingsmenu.hpp"
 
-#include "audiothread.hpp"
+#include "audioworker.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -346,7 +346,7 @@ void SettingsMenu::populateSfxMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Sounds off selected.";
-            Game::instance().audioThread().setEnabled(false);
+            Game::instance().audioWorker().setEnabled(false);
             Settings::instance().saveValue(Settings::soundsKey(), false);
             MenuManager::instance().popMenu();
         });
@@ -359,14 +359,14 @@ void SettingsMenu::populateSfxMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Sounds on selected.";
-            Game::instance().audioThread().setEnabled(true);
+            Game::instance().audioWorker().setEnabled(true);
             Settings::instance().saveValue(Settings::soundsKey(), true);
             MenuManager::instance().popMenu();
         });
 
     m_sfxMenu.addItem(MTFH::MenuItemPtr(onItem));
 
-    if (Game::instance().audioThread().enabled())
+    if (Game::instance().audioWorker().enabled())
     {
         m_sfxMenu.setCurrentIndex(onItem->index());
     }

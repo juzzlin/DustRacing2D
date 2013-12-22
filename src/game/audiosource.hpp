@@ -18,10 +18,8 @@
 
 #include <QObject>
 
-#include "audiothread.hpp"
-
 /*! Class that defines a set of signals used to play sounds.
- *  AudioThread can connect to a class inherited from AudioSource. */
+ *  AudioWorker can connect to a class inherited from AudioSource. */
 class AudioSource : public QObject
 {
     Q_OBJECT

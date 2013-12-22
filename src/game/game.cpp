@@ -17,7 +17,7 @@
 
 #include "game.hpp"
 
-#include "audiothread.hpp"
+#include "audioworker.hpp"
 #include "graphicsfactory.hpp"
 #include "eventhandler.hpp"
 #include "inputhandler.hpp"
@@ -69,8 +69,8 @@ Game::Game()
 , m_renderElapsed(0)
 , m_mode(OnePlayerRace)
 , m_splitType(Vertical)
-, m_audioThread(new AudioThread(
-      Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true), this))
+, m_audioWorker(new AudioWorker(
+      Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -85,7 +85,7 @@ Game::Game()
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
     connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
     connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
-    connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioThread, SLOT(playSound(QString)));
+    connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
     m_updateTimer.setInterval(0);
@@ -238,10 +238,10 @@ EventHandler & Game::eventHandler() const
     return *m_eventHandler;
 }
 
-AudioThread & Game::audioThread()
+AudioWorker & Game::audioWorker()
 {
-    assert(m_audioThread);
-    return *m_audioThread;
+    assert(m_audioWorker);
+    return *m_audioWorker;
 }
 
 const std::string & Game::fontName() const
@@ -311,7 +311,11 @@ void Game::initScene()
 
 bool Game::init()
 {
-    m_audioThread->start();
+    m_audioThread.start();
+    m_audioWorker->moveToThread(&m_audioThread);
+    QMetaObject::invokeMethod(m_audioWorker, "init");
+    QMetaObject::invokeMethod(m_audioWorker, "loadSounds");
+
     m_assetManager->load();
 
     if (loadTracks())
@@ -356,7 +360,10 @@ void Game::exitGame()
 {
     stop();
     m_renderer->close();
-    m_audioThread->quit();
+
+    m_audioThread.quit();
+    m_audioThread.wait();
+
     QApplication::quit();
 }
 
@@ -393,4 +400,5 @@ Game::~Game()
     delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
+    delete m_audioWorker;
 }

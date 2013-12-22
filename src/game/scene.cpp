@@ -16,7 +16,7 @@
 #include "scene.hpp"
 
 #include "ai.hpp"
-#include "audiothread.hpp"
+#include "audioworker.hpp"
 #include "car.hpp"
 #include "carfactory.hpp"
 #include "carsoundeffectmanager.hpp"
@@ -117,9 +117,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
 
     connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
-    connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioThread(), SLOT(setListenerLocation(float, float)));
+    connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioWorker(), SLOT(setListenerLocation(float, float)));
 
-    m_game.audioThread().connectAudioSource(m_race);
+    m_game.audioWorker().connectAudioSource(m_race);
 
     m_cameraOffset[0] = 0.0;
     m_cameraOffset[1] = 0.0;
@@ -178,7 +178,7 @@ void Scene::setupAudio(Car & car, int index)
     handles.skidSoundHandle   = skid.str().c_str();
 
     CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, handles));
-    m_game.audioThread().connectAudioSource(*sfx);
+    m_game.audioWorker().connectAudioSource(*sfx);
     car.setSoundEffectManager(sfx);
 }
 

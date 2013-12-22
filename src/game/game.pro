@@ -37,8 +37,8 @@ HEADERS += \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
     ai.hpp \
-    audiothread.hpp \
     audiosource.hpp \
+    audioworker.hpp \
     car.hpp \
     carfactory.hpp \
     carparticleeffectmanager.hpp \
@@ -195,8 +195,8 @@ SOURCES += \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
     ai.cpp \
-    audiothread.cpp \
     audiosource.cpp \
+    audioworker.cpp \
     car.cpp \
     carfactory.cpp \
     carparticleeffectmanager.cpp \

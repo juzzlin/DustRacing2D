@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef AUDIOTHREAD_HPP
-#define AUDIOTHREAD_HPP
+#ifndef AUDIOWORKER_HPP
+#define AUDIOWORKER_HPP
 
-#include <QThread>
+#include <QObject>
 #include <QString>
 
 #include <map>
@@ -28,17 +28,15 @@
 
 class AudioSource;
 
-class AudioThread : public QThread
+class AudioWorker : public QObject
 {
     Q_OBJECT
 
 public:
 
-    AudioThread(int numCars, bool enabled, QObject * parent = nullptr);
+    AudioWorker(int numCars, bool enabled);
 
-    virtual ~AudioThread();
-
-    virtual void run();
+    virtual ~AudioWorker();
 
     void connectAudioSource(AudioSource & source);
 
@@ -47,6 +45,10 @@ public:
     bool enabled() const;
 
 public slots:
+
+    void init();
+
+    void loadSounds();
 
     void playSound(const QString & handle, bool loop = false);
 
@@ -66,11 +68,7 @@ public slots:
 
 private:
 
-    void init();
-
     void checkFile(QString path) throw (MCException);
-
-    void loadSounds();
 
     void loadCommonSound(QString handle, QString path);
 
@@ -92,4 +90,4 @@ private:
     bool m_enabled;
 };
 
-#endif // AUDIOTHREAD_HPP
+#endif // AUDIOWORKER_HPP

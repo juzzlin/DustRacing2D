@@ -33,7 +33,7 @@ endforeach()
 # Set sources
 set(SRC
     ai.cpp
-    audiothread.cpp
+    audioworker.cpp
     audiosource.cpp
     car.cpp
     carfactory.cpp
@@ -106,8 +106,8 @@ if (UseQt5)
     qt5_add_translation(QM ${TS_FILES})
 else()
     set(MOC_HDRS
-        audiothread.hpp
         audiosource.hpp
+        audioworker.hpp
         carsoundeffectmanager.hpp
         eventhandler.hpp
         fadeanimation.hpp
