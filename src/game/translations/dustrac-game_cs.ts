@@ -349,12 +349,12 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../settingsmenu.cpp" line="185"/>
         <source>Sounds &gt;</source>
-        <translation>Zvuky &gt;</translation>
+        <translation>Zvuk &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="189"/>
         <source>GFX &gt;</source>
-        <translation>GFX &gt;</translation>
+        <translation>Obraz &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="193"/>
@@ -369,7 +369,7 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../settingsmenu.cpp" line="324"/>
         <source>VSync &gt;</source>
-        <translation>VSync &gt;</translation>
+        <translation>Svislá synchronizace &gt;</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="343"/>
@@ -599,7 +599,7 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../vsyncmenu.cpp" line="78"/>
         <source>Restart to change VSync setting.</source>
-        <translation>Pro změnu nastavení VSync spusťte znovu.</translation>
+        <translation>Pro změnu nastavení svislé synchronizace spusťte znovu.</translation>
     </message>
 </context>
 </TS>
