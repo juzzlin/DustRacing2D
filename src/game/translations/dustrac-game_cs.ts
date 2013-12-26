@@ -381,7 +381,7 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
         <location filename="../settingsmenu.cpp" line="356"/>
         <location filename="../vsyncmenu.cpp" line="108"/>
         <source>On</source>
-        <translation>Na</translation>
+        <translation>Zapnuto</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="390"/>
@@ -454,12 +454,12 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../settingsmenu.cpp" line="278"/>
         <source>Vertical</source>
-        <translation>Svislý</translation>
+        <translation>Svislé</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="288"/>
         <source>Horizontal</source>
-        <translation>Vodorovný</translation>
+        <translation>Vodorovné</translation>
     </message>
     <message>
         <source>30 fps</source>
