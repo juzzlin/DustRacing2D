@@ -29,10 +29,19 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         {NUM_CARS - 3, "carRed"      },
         {NUM_CARS - 4, "carBlue"     },
         {NUM_CARS - 5, "carDarkGreen"},
-        {NUM_CARS - 6, "carBrown"    }
+        {NUM_CARS - 6, "carBrown"    },
+        {1,            "carGrey"     },
+        {0,            "carPink"     }
     };
 
     Car::Description desc;
+
+    // Select car image
+    std::string carImage("carYellow");
+    if (carImageMap.count(index))
+    {
+        carImage = carImageMap[index];
+    }
 
     CarPtr car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
@@ -41,8 +50,7 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         desc.dragQuadratic        = humanDrag;
         desc.accelerationFriction = 0.7;
 
-        const std::string image = index ? "carGrey" : "carPink";
-        car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(image), index, true));
+        car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
     }
     else if (game.hasComputerPlayers())
     {
@@ -55,13 +63,6 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         desc.turningImpulse       = 0.3;
         desc.slideFriction        = 1.0;
         desc.brakingFriction      = 2.0;
-
-        // Select car image
-        std::string carImage("carYellow");
-        if (carImageMap.count(index))
-        {
-            carImage = carImageMap[index];
-        }
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, false));
     }
