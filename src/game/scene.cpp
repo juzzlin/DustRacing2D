@@ -142,8 +142,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     MCAssetManager::textureFontManager().font(m_game.fontName()).surface().setShadowShaderProgram(
         &m_renderer.program("textShadow"));
 
-    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.5);
-    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -0.25), 1.0, 0.9, 0.85, 0.75);
+    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.7);
+    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.85, 0.3);
 
     m_renderer.program("car").setDiffuseLight(diffuseLight);
     m_renderer.program("car").setAmbientLight(ambientLight);

@@ -34,9 +34,9 @@
 #include <cassert>
 
 // Uniform names
-static const char * AMBIENT_LIGHT_COLOR = "ambientLightColor";
-static const char * DIFFUSE_LIGHT_DIR   = "diffuseLightDir";
-static const char * DIFFUSE_LIGHT_COLOR = "diffuseLightColor";
+static const char * AMBIENT_LIGHT_COLOR = "ac";
+static const char * DIFFUSE_LIGHT_DIR   = "dd";
+static const char * DIFFUSE_LIGHT_COLOR = "dc";
 static const char * FADE                = "fade";
 static const char * TEX0                = "tex0";
 static const char * TEX1                = "tex1";

@@ -41,7 +41,7 @@ static const char * MCMasterVsh =
 "    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
 ""
 "    mat4 normalRot = mat4(mat3(model));\n"
-"    float diffuseLightIntensity = dot(normalize(diffuseLightDir), normalRot * vec4(-inNormal, 1)) * diffuseLightColor.a;\n"
+"    float diffuseLightIntensity = dot(diffuseLightDir, normalRot * vec4(-inNormal, 1)) * diffuseLightColor.a;\n"
 "    vColor = inColor * color * (\n"
 "    vec4(ambientLightColor.rgb, 1.0) * ambientLightColor.a +\n"
 "    vec4(diffuseLightColor.rgb, 1.0) * diffuseLightIntensity) * vec4(fade, fade, fade, 1.0);\n"

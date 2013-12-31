@@ -22,7 +22,7 @@
 MCGLDiffuseLight::MCGLDiffuseLight(
     MCVector3dF direction, GLfloat r, GLfloat g, GLfloat b, GLfloat i)
 : MCGLAmbientLight(r, g, b, i)
-, m_direction(direction)
+, m_direction(direction.normalized())
 {
 }
 
@@ -33,5 +33,5 @@ const MCVector3dF & MCGLDiffuseLight::direction() const
 
 void MCGLDiffuseLight::setDirection(MCVector3dF direction)
 {
-    m_direction = direction;
+    m_direction = direction.normalized();
 }
