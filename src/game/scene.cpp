@@ -149,6 +149,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_renderer.program("car").setAmbientLight(ambientLight);
     m_renderer.program("master").setDiffuseLight(diffuseLight);
     m_renderer.program("master").setAmbientLight(ambientLight);
+    m_renderer.program("masterSpecular").setDiffuseLight(diffuseLight);
+    m_renderer.program("masterSpecular").setAmbientLight(ambientLight);
     m_renderer.program("particle").setDiffuseLight(diffuseLight);
     m_renderer.program("particle").setAmbientLight(ambientLight);
     m_renderer.program("tile2d").setDiffuseLight(diffuseLight);
@@ -594,6 +596,7 @@ void Scene::render()
         if (m_fadeAnimation->isFading())
         {
             m_renderer.program("master").setFadeValue(fadeValue);
+            m_renderer.program("masterSpecular").setFadeValue(fadeValue);
             m_renderer.program("car").setFadeValue(fadeValue);
             m_renderer.program("particle").setFadeValue(fadeValue);
             m_renderer.program("pointParticle").setFadeValue(fadeValue);

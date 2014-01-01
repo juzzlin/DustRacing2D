@@ -189,6 +189,11 @@ const char * MCGLShaderProgram::getDefaultFragmentShaderSource()
     return MCMasterFsh;
 }
 
+const char * MCGLShaderProgram::getDefaultSpecularFragmentShaderSource()
+{
+    return MCMasterFshSpecular;
+}
+
 const char * MCGLShaderProgram::getDefaultShadowVertexShaderSource()
 {
     return MCMasterShadowVsh;

@@ -87,6 +87,9 @@ public:
     /*! Get the default fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultFragmentShaderSource();
 
+    /*! Get the default fragment shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultSpecularFragmentShaderSource();
+
     /*! Get the default shadow vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowVertexShaderSource();
 

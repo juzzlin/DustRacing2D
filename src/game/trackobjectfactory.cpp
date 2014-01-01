@@ -27,6 +27,7 @@
 #include <MCObjectFactory>
 #include <MCShape>
 #include <MCShapeView>
+#include <MCSurface>
 
 TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 : m_objectFactory(objectFactory)
@@ -225,6 +226,11 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("masterSpecular"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("masterShadow"));
+
+        // Wrap the MCObject in a TrackObject
+        return new TrackObject(category, role, object);
     }
 
     if (!object)

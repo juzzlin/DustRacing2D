@@ -135,6 +135,11 @@ void Renderer::loadShaders()
     createProgramFromSource("master",
         MCGLShaderProgram::getDefaultVertexShaderSource(),
         MCGLShaderProgram::getDefaultFragmentShaderSource());
+
+    createProgramFromSource("masterSpecular",
+        MCGLShaderProgram::getDefaultVertexShaderSource(),
+        MCGLShaderProgram::getDefaultSpecularFragmentShaderSource());
+
     createProgramFromSource("masterShadow",
         MCGLShaderProgram::getDefaultShadowVertexShaderSource(),
         MCGLShaderProgram::getDefaultShadowFragmentShaderSource());
