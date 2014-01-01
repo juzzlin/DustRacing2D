@@ -127,7 +127,7 @@ private:
     void loadShaders();
 
     void createProgramFromSource(
-        const std::string & handle, const std::string & vshSource, const std::string & fshSource);
+        const std::string & handle, std::string vshSource, std::string fshSource);
 
     void renderNativeResolutionOrWindowed();
 

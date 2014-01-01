@@ -22,7 +22,7 @@
 
 #ifdef __MC_GLES__
 #include "mcshadersGLES.hh"
-#elseif defined(__MC_GL30__)
+#elif defined(__MC_GL30__)
 #include "mcshaders30.hh"
 #else
 #include "mcshaders.hh"

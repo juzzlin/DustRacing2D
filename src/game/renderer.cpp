@@ -18,12 +18,10 @@
 #include "eventhandler.hpp"
 #include "scene.hpp"
 
-#ifdef __MC_GLES__
-#include "shadersGLES.h"
-#elseif defined(__MC_GL30__)
+#ifdef __MC_GL30__
 #include "shaders30.h"
 #else
-#include "shaders.h"
+#include "shaders.h" // These are also for GLES now
 #endif
 
 #include "../common/config.hpp"
@@ -110,10 +108,20 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
 }
 
 void Renderer::createProgramFromSource(
-    const std::string & handle, const std::string & vshSource, const std::string & fshSource)
+    const std::string & handle, std::string vshSource, std::string fshSource)
 {
-    // Note: ShaderProgram throws on error.
+    // Inject precision qualifiers
+#ifdef __MC_GLES__
+    QString origVsh(vshSource.c_str());
+    origVsh.replace("#version 120", "#version 100\nprecision mediump float;\nprecision mediump int;\n");
+    vshSource = origVsh.toStdString();
 
+    QString origFsh(fshSource.c_str());
+    origFsh.replace("#version 120", "#version 100\nprecision mediump float;\nprecision mediump int;\n");
+    fshSource = origFsh.toStdString();
+#endif
+
+    // Note: ShaderProgram throws on error.
     MCGLShaderProgram * program = new MCGLShaderProgram(*m_glScene);
     program->addFragmentShaderFromSource(fshSource);
     program->addVertexShaderFromSource(vshSource);
