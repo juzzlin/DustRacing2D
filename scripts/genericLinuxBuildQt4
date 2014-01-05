@@ -1,0 +1,66 @@
+#!/bin/bash
+
+QMAKE=qmake-qt4
+TAR=tar
+LRELEASE=lrelease
+NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+
+# Package naming
+
+NAME=dustrac
+VERSION=1.6.2
+ARCH=linux-x86_64
+QT=qt4
+
+# Build
+
+$QMAKE && make -j$NUM_CPUS || exit -1
+
+# Update translations
+
+$LRELEASE ./src/game/game.pro && $LRELEASE ./src/editor/editor.pro || exit -1
+
+# Install to packaging dir
+
+PACKAGE_PATH=$NAME-$VERSION-$ARCH-$QT
+rm -rf $PACKAGE_PATH
+mkdir $PACKAGE_PATH
+
+mkdir -p data/translations
+cp -v ./src/game/translations/*.qm data/translations   &&
+cp -v ./src/editor/translations/*.qm data/translations &&
+cp -v ./src/game/dustrac-game $PACKAGE_PATH            &&
+cp -v ./src/editor/dustrac-editor $PACKAGE_PATH        &&
+cp -rv data $PACKAGE_PATH                              || exit -1
+
+TEXT_FILES="AUTHORS CHANGELOG COPYING README"
+cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
+
+# Copy some needed dependecies
+
+DEPS="ogg vorbis openal Qt"
+for lib in $DEPS; do
+cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep $lib | awk '{print $3}') $PACKAGE_PATH
+done
+
+# Copy Qt plugins
+
+cp -r -v $($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2) $PACKAGE_PATH
+
+# Create start script for the game
+
+SCRIPT=$PACKAGE_PATH/dustrac-game.sh
+echo "#!/bin/sh" > $SCRIPT
+echo "LD_LIBRARY_PATH=. ./dustrac-game" >> $SCRIPT
+chmod 755 $SCRIPT
+
+# Create tgz archive
+
+TGZ_ARCHIVE=$PACKAGE_PATH.tar.gz
+rm -f $TGZ_ARCHIVE
+$TAR czvf $TGZ_ARCHIVE $PACKAGE_PATH
+
+ls -ltr
+
+echo "Done."
+
