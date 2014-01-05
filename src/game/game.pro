@@ -85,7 +85,6 @@ HEADERS += \
     settingsmenu.hpp \
     shaders.h \
     shaders30.h \
-    shadersGLES.h \
     slidefrictiongenerator.hpp \
     startlights.hpp \
     startlightsoverlay.hpp \
