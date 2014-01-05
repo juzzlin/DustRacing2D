@@ -12,6 +12,10 @@ option(ReleaseBuild "This should be used when creating DEB and RPM packages." OF
 
 option(DebugBuild "Enable debug build. Effectively adds -g." OFF)
 
+option(StaticVorbisLibs "Try to find static version of vorbis libs." OFF)
+
+option(StaticVorbisLibsPath "Optional path hint for static versions of vorbis libs." "")
+
 option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
 option(GLES "Build for OpenGL ES 2.0" OFF)
@@ -93,11 +97,22 @@ endif()
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# OpenAL and ALUT for sounds
+# OpenAL for sounds
 find_package(OpenAL REQUIRED)
 
-INCLUDE(FindPkgConfig)
-pkg_check_modules(VORBISFILE REQUIRED vorbisfile)
+# Vorbis libs for reading Ogg files
+if(StaticVorbisLibs)
+    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a HINTS ${StaticVorbisLibsPath})
+    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a HINTS ${StaticVorbisLibsPath})
+    find_library(OGG_STATIC_LIB NAMES libogg.a HINTS ${StaticVorbisLibsPath})
+    message(STATUS "Using static versions of vorbis libs:")
+    message(STATUS "  ${VORBISFILE_STATIC_LIB}")
+    message(STATUS "  ${VORBIS_STATIC_LIB}")
+    message(STATUS "  ${OGG_STATIC_LIB}")
+else()
+    include(FindPkgConfig)
+    pkg_check_modules(VORBISFILE REQUIRED vorbisfile)
+endif()
 
 # Enable CMake's unit test framework
 enable_testing()

@@ -165,7 +165,10 @@ set(COMMON_LIBS
     ${OPENGL_gl_LIBRARY}
     ${OPENGL_glu_LIBRARY}
     ${OPENAL_LIBRARY}
-    ${VORBISFILE_LIBRARIES})
+    ${VORBISFILE_LIBRARIES}
+    ${VORBISFILE_STATIC_LIB} # Valid only if static lib was used
+    ${VORBIS_STATIC_LIB}     # Valid only if static lib was used
+    ${OGG_STATIC_LIB})       # Valid only if static lib was used
 
 if(UseQt5)
     qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
