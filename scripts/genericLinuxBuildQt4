@@ -38,7 +38,7 @@ cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 
 # Copy some needed dependecies
 
-DEPS="ogg vorbis openal Qt"
+DEPS="audio ogg vorbis openal png Qt"
 for lib in $DEPS; do
 cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep $lib | awk '{print $3}') $PACKAGE_PATH
 done
@@ -52,6 +52,13 @@ cp -r -v $($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2) $PACKAGE_PATH
 SCRIPT=$PACKAGE_PATH/dustrac-game.sh
 echo "#!/bin/sh" > $SCRIPT
 echo "LD_LIBRARY_PATH=. ./dustrac-game" >> $SCRIPT
+chmod 755 $SCRIPT
+
+# Create start script for the editor
+
+SCRIPT=$PACKAGE_PATH/dustrac-editor.sh
+echo "#!/bin/sh" > $SCRIPT
+echo "LD_LIBRARY_PATH=. ./dustrac-editor" >> $SCRIPT
 chmod 755 $SCRIPT
 
 # Create tgz archive
