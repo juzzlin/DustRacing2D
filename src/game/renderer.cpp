@@ -155,9 +155,6 @@ void Renderer::loadShaders()
     createProgramFromSource("textShadow",    textVsh,             textShadowFsh);
     createProgramFromSource("tile2d",        tileVsh,             MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("tile3d",        tileVsh,             tile3dFsh);
-
-    // Make sure that shaders have the current view projection matrix.
-    m_glScene->updateViewProjectionMatrixAndShaders();
 }
 
 void Renderer::setEnabled(bool enable)

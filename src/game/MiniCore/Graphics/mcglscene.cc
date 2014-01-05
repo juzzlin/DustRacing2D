@@ -43,6 +43,9 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
     if (std::find(m_shaders.begin(), m_shaders.end(), &shader) == m_shaders.end())
     {
         m_shaders.push_back(&shader);
+
+        // Ensure current projection
+        shader.setViewProjectionMatrix(viewProjectionMatrix());
     }
 }
 

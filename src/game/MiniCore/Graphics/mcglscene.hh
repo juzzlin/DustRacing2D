@@ -52,10 +52,6 @@ public:
      *  the projection changes. */
     void addShaderProgram(MCGLShaderProgram & shader);
 
-    /*! Updates the model view projection matrix and sends it
-     *  to the added shaders. */
-    void updateViewProjectionMatrixAndShaders();
-
     //! Initializes OpenGL and GLEW. Re-implement if desired.
     virtual void initialize();
 
@@ -84,6 +80,8 @@ protected:
 private:
 
     void updateViewport();
+
+    void updateViewProjectionMatrixAndShaders();
 
     SplitType                        m_splitType;
     MCUint                           m_viewWidth;
