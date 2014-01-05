@@ -577,11 +577,7 @@ void Scene::render()
     case StateMachine::MenuTransitionOut:
     case StateMachine::MenuTransitionIn:
 
-        m_renderer.program("menu").setFadeValue(fadeValue);
-        m_renderer.program("tile2d").setFadeValue(fadeValue);
-        m_renderer.program("tile3d").setFadeValue(fadeValue);
-        m_renderer.program("text").setFadeValue(fadeValue);
-
+        m_renderer.glScene().setFadeValue(fadeValue);
         m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->render();
@@ -595,15 +591,7 @@ void Scene::render()
 
         if (m_fadeAnimation->isFading())
         {
-            m_renderer.program("master").setFadeValue(fadeValue);
-            m_renderer.program("masterSpecular").setFadeValue(fadeValue);
-            m_renderer.program("car").setFadeValue(fadeValue);
-            m_renderer.program("particle").setFadeValue(fadeValue);
-            m_renderer.program("pointParticle").setFadeValue(fadeValue);
-            m_renderer.program("pointParticleRotate").setFadeValue(fadeValue);
-            m_renderer.program("tile2d").setFadeValue(fadeValue);
-            m_renderer.program("tile3d").setFadeValue(fadeValue);
-            m_renderer.program("text").setFadeValue(fadeValue);
+            m_renderer.glScene().setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())

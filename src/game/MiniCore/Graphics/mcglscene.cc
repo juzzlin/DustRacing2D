@@ -186,6 +186,14 @@ void MCGLScene::updateViewProjectionMatrixAndShaders()
     }
 }
 
+void MCGLScene::setFadeValue(MCFloat value)
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setFadeValue(value);
+    }
+}
+
 MCGLScene::~MCGLScene()
 {
 }

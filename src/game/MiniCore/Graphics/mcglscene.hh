@@ -69,6 +69,10 @@ public:
     //! Get the resulting view projection matrix to be used in shaders.
     const glm::mat4 & viewProjectionMatrix() const;
 
+    /*! Set fade value used in fade in/out animations.
+     *  This sets the fade uniform in all registered shaders. */
+    void setFadeValue(MCFloat value);
+
 protected:
 
     //! Set viewer's position. Automatically called by resize().
