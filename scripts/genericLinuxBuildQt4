@@ -47,6 +47,12 @@ done
 
 cp -r -v $($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2) $PACKAGE_PATH
 
+# Create qt.conf (this is needed for possible plugin conflicts)
+
+QTCONF=$PACKAGE_PATH/qt.conf
+echo "[Paths]" > $QTCONF
+echo "Plugins = '.'" >> $QTCONF
+
 # Create start script for the game
 
 SCRIPT=$PACKAGE_PATH/dustrac-game.sh
