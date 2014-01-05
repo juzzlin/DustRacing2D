@@ -38,6 +38,20 @@ cp -rv data $PACKAGE_PATH                              || exit -1
 TEXT_FILES="AUTHORS CHANGELOG COPYING README"
 cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 
+# Copy some needed dependecies
+
+DEPS="ogg vorbis openal"
+for lib in $DEPS; do
+cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep $lib | awk '{print $3}') $PACKAGE_PATH
+done
+
+# Create start script for the game
+
+SCRIPT=$PACKAGE_PATH/dustrac-game.sh
+echo "#!/bin/sh" > $SCRIPT
+echo "LD_LIBRARY_PATH=. ./dustrac-game" >> $SCRIPT
+chmod 755 $SCRIPT
+
 # Create tgz archive
 
 TGZ_ARCHIVE=$PACKAGE_PATH.tar.gz
