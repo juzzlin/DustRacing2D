@@ -51,7 +51,8 @@ cp -r -v $($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2) $PACKAGE_PATH
 
 QTCONF=$PACKAGE_PATH/qt.conf
 echo "[Paths]" > $QTCONF
-echo "Plugins = '.'" >> $QTCONF
+echo "Prefix  = ." >> $QTCONF
+echo "Plugins = ./plugins" >> $QTCONF
 
 # Create start script for the game
 
