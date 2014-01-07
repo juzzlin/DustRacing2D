@@ -36,16 +36,23 @@ cp -rv data $PACKAGE_PATH                              || exit -1
 TEXT_FILES="AUTHORS CHANGELOG COPYING README"
 cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 
-# Copy some needed dependecies
+# Copy dependecies
 
-DEPS="audio ogg vorbis openal png Qt"
-for lib in $DEPS; do
-cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep $lib | awk '{print $3}') $PACKAGE_PATH
+cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep "/usr/lib" | grep -v libX | grep -v fontconfig | grep -v gobject | awk '{print $3}') $PACKAGE_PATH
+
+# Additional libs
+
+LIBS=png
+for lib in $LIBS; do
+cp -v $(ldd $PACKAGE_PATH/$BIN | grep $lib | awk '{print $3}') $PACKAGE_PATH
 done
 
-# Copy Qt plugins
+# Copy needed Qt plugins
 
-cp -r -v $($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2) $PACKAGE_PATH
+mkdir $PACKAGE_PATH/plugins
+QT_PLUGIN_DIR=$($QMAKE -query | grep QT_INSTALL_PLUGINS | cut -d: -f2)
+cp -r -v $QT_PLUGIN_DIR/imageformats $PACKAGE_PATH/plugins
+cp -r -v $QT_PLUGIN_DIR/graphicssystems $PACKAGE_PATH/plugins
 
 # Create qt.conf (this is needed for possible plugin conflicts)
 
@@ -56,16 +63,18 @@ echo "Plugins = ./plugins" >> $QTCONF
 
 # Create start script for the game
 
-SCRIPT=$PACKAGE_PATH/dustrac-game.sh
+cp $PACKAGE_PATH/dustrac-game $PACKAGE_PATH/g.bin
+SCRIPT=$PACKAGE_PATH/dustrac-game
 echo "#!/bin/sh" > $SCRIPT
-echo "LD_LIBRARY_PATH=. ./dustrac-game" >> $SCRIPT
+echo "LD_LIBRARY_PATH=. ./g.bin" >> $SCRIPT
 chmod 755 $SCRIPT
 
 # Create start script for the editor
 
-SCRIPT=$PACKAGE_PATH/dustrac-editor.sh
+cp $PACKAGE_PATH/dustrac-editor $PACKAGE_PATH/e.bin
+SCRIPT=$PACKAGE_PATH/dustrac-editor
 echo "#!/bin/sh" > $SCRIPT
-echo "LD_LIBRARY_PATH=. ./dustrac-editor" >> $SCRIPT
+echo "LD_LIBRARY_PATH=. ./e.bin" >> $SCRIPT
 chmod 755 $SCRIPT
 
 # Create tgz archive
