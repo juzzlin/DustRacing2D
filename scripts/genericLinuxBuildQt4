@@ -38,7 +38,14 @@ cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 
 # Copy dependecies
 
-cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep "/usr/lib" | grep -v libX | grep -v fontconfig | grep -v gobject | awk '{print $3}') $PACKAGE_PATH
+cp -v $(ldd $PACKAGE_PATH/dustrac-game | 
+  grep "/usr/lib"    | 
+  grep -v libX       |
+  grep -v fontconfig |
+  grep -v gobject    |
+  grep -v libGL      |
+  grep -v libgl      |
+  grep -v xcb        | awk '{print $3}') $PACKAGE_PATH
 
 # Additional libs
 
