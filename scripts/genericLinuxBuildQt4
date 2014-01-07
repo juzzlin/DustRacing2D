@@ -51,7 +51,7 @@ cp -v $(ldd $PACKAGE_PATH/dustrac-game |
 
 LIBS=png
 for lib in $LIBS; do
-cp -v $(ldd $PACKAGE_PATH/$BIN | grep $lib | awk '{print $3}') $PACKAGE_PATH
+cp -v $(ldd $PACKAGE_PATH/dustrac-game | grep $lib | awk '{print $3}') $PACKAGE_PATH
 done
 
 # Copy needed Qt plugins
