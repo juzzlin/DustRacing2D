@@ -6,8 +6,15 @@ TARGET   = dustrac-game
 DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.6.2\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
+# Qt version check
+message("Building for Qt version $${QT_VERSION}.")
+contains(QT_VERSION, ^5\\..*) {
 QT += opengl widgets xml
 DEFINES += USE_QT5
+} else {
+QT += opengl gui xml
+}
+
 DEFINES += GLEW_STATIC GLEW_NO_GLU
 
 # Sound libraries

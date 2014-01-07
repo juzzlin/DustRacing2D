@@ -6,8 +6,14 @@ TARGET   = dustrac-editor
 DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.6.2\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
+# Qt version check
+message("Building for Qt version $${QT_VERSION}.")
+contains(QT_VERSION, ^5\\..*) {
 QT += widgets xml
 DEFINES += USE_QT5
+} else {
+QT += gui xml
+}
 
 INCLUDEPATH += .
 
