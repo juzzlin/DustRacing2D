@@ -145,18 +145,8 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.7);
     const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.85, 0.3);
 
-    m_renderer.program("car").setDiffuseLight(diffuseLight);
-    m_renderer.program("car").setAmbientLight(ambientLight);
-    m_renderer.program("master").setDiffuseLight(diffuseLight);
-    m_renderer.program("master").setAmbientLight(ambientLight);
-    m_renderer.program("masterSpecular").setDiffuseLight(diffuseLight);
-    m_renderer.program("masterSpecular").setAmbientLight(ambientLight);
-    m_renderer.program("particle").setDiffuseLight(diffuseLight);
-    m_renderer.program("particle").setAmbientLight(ambientLight);
-    m_renderer.program("tile2d").setDiffuseLight(diffuseLight);
-    m_renderer.program("tile2d").setAmbientLight(ambientLight);
-    m_renderer.program("tile3d").setDiffuseLight(diffuseLight);
-    m_renderer.program("tile3d").setAmbientLight(ambientLight);
+    m_renderer.glScene().setAmbientLight(ambientLight);
+    m_renderer.glScene().setDiffuseLight(diffuseLight);
 
     m_renderer.setFadeValue(0.0);
 

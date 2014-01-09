@@ -25,6 +25,8 @@
 #include <vector>
 
 class MCGLShaderProgram;
+class MCGLAmbientLight;
+class MCGLDiffuseLight;
 
 /*! Basic initializations of an OpenGL scene suitable for
  *  2D/2.5D games. Internally MCGLScene uses glm and glew libraries. */
@@ -68,6 +70,12 @@ public:
     /*! Set fade value used in fade in/out animations.
      *  This sets the fade uniform in all registered shaders. */
     void setFadeValue(MCFloat value);
+
+    /*! Set ambient light for all registered shaders. */
+    void setAmbientLight(const MCGLAmbientLight & light);
+
+    /*! Set diffuse light for all registered shaders. */
+    void setDiffuseLight(const MCGLDiffuseLight & light);
 
 protected:
 

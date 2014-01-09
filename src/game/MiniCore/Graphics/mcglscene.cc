@@ -21,6 +21,8 @@
 #include <MCLogger>
 
 #include "mcglscene.hh"
+#include "mcglambientlight.hh"
+#include "mcgldiffuselight.hh"
 #include "mcglshaderprogram.hh"
 #include "mctrigonom.hh"
 
@@ -194,6 +196,22 @@ void MCGLScene::setFadeValue(MCFloat value)
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setFadeValue(value);
+    }
+}
+
+void MCGLScene::setAmbientLight(const MCGLAmbientLight & light)
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setAmbientLight(light);
+    }
+}
+
+void MCGLScene::setDiffuseLight(const MCGLDiffuseLight & light)
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setDiffuseLight(light);
     }
 }
 
