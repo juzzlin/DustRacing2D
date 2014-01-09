@@ -43,7 +43,7 @@ public:
 
     void removeFromLayerMap(MCObject & object);
 
-    void enableDepthTestOnLayer(MCUint layer, bool enable);
+    void enableDepthTestOnLayer(MCUint layer, bool enable = true);
 
     /*! Each used MCGLPointParticle should have a corresponding MCGLPointParticleRenderer
      *  registered in MCWorld. As for rendering, point particles are special cases, because
