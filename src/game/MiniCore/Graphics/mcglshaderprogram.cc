@@ -34,18 +34,20 @@
 #include <cassert>
 
 // Uniform names
-static const char * AMBIENT_LIGHT_COLOR = "ac";
-static const char * DIFFUSE_LIGHT_DIR   = "dd";
-static const char * DIFFUSE_LIGHT_COLOR = "dc";
-static const char * FADE                = "fade";
-static const char * TEX0                = "tex0";
-static const char * TEX1                = "tex1";
-static const char * TEX2                = "tex2";
-static const char * VP                  = "vp";
-static const char * MODEL               = "model";
-static const char * COLOR               = "color";
-static const char * SCALE               = "scale";
-static const char * POINT_SIZE          = "pointSize";
+static const char * AMBIENT_LIGHT_COLOR  = "ac";
+static const char * DIFFUSE_LIGHT_DIR    = "dd";
+static const char * DIFFUSE_LIGHT_COLOR  = "dc";
+static const char * SPECULAR_LIGHT_DIR   = "sd";
+static const char * SPECULAR_LIGHT_COLOR = "sc";
+static const char * FADE                 = "fade";
+static const char * TEX0                 = "tex0";
+static const char * TEX1                 = "tex1";
+static const char * TEX2                 = "tex2";
+static const char * VP                   = "vp";
+static const char * MODEL                = "model";
+static const char * COLOR                = "color";
+static const char * SCALE                = "scale";
+static const char * POINT_SIZE           = "pointSize";
 
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 
@@ -248,6 +250,17 @@ void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
             light.direction().i(), light.direction().j(), light.direction().k(), 1);
     glUniform4f(
         glGetUniformLocation(m_program, DIFFUSE_LIGHT_COLOR),
+            light.r(), light.g(), light.b(), light.i());
+}
+
+void MCGLShaderProgram::setSpecularLight(const MCGLDiffuseLight & light)
+{
+    bind();
+    glUniform4f(
+        glGetUniformLocation(m_program, SPECULAR_LIGHT_DIR),
+            light.direction().i(), light.direction().j(), light.direction().k(), 1);
+    glUniform4f(
+        glGetUniformLocation(m_program, SPECULAR_LIGHT_COLOR),
             light.r(), light.g(), light.b(), light.i());
 }
 

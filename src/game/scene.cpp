@@ -144,9 +144,11 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 
     const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.7);
     const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.85, 0.3);
+    const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 1.0, 10);
 
     m_renderer.glScene().setAmbientLight(ambientLight);
     m_renderer.glScene().setDiffuseLight(diffuseLight);
+    m_renderer.glScene().setSpecularLight(specularLight);
 
     m_renderer.setFadeValue(0.0);
 

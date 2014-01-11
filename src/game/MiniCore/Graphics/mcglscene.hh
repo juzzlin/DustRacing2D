@@ -77,6 +77,9 @@ public:
     /*! Set diffuse light for all registered shaders. */
     void setDiffuseLight(const MCGLDiffuseLight & light);
 
+    /*! Set specular light for all registered shaders. */
+    void setSpecularLight(const MCGLDiffuseLight & light);
+
 protected:
 
     //! Set viewer's position. Automatically called by resize().

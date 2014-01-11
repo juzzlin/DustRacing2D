@@ -130,6 +130,9 @@ public:
     //! Set diffuse light.
     virtual void setDiffuseLight(const MCGLDiffuseLight & light);
 
+    //! Set specular light.
+    virtual void setSpecularLight(const MCGLDiffuseLight & light);
+
     //! Set point size for point sprites.
     virtual void setPointSize(GLfloat pointSize);
 

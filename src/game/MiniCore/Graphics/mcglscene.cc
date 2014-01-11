@@ -215,6 +215,14 @@ void MCGLScene::setDiffuseLight(const MCGLDiffuseLight & light)
     }
 }
 
+void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setSpecularLight(light);
+    }
+}
+
 MCGLScene::~MCGLScene()
 {
 }
