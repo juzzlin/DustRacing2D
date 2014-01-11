@@ -16,7 +16,7 @@
 #ifndef MCSHADERSGLES_HH
 #define MCSHADERSGLES_HH
 
-static const char * MCMasterVsh =
+static const char * MCDefaultVsh =
 "#version 100\n"
 ""
 "precision mediump float;\n"
@@ -49,7 +49,7 @@ static const char * MCMasterVsh =
 "    texCoord0 = inTexCoord;\n"
 "}\n";
 
-static const char * MCMasterFsh =
+static const char * MCDefaultFsh =
 "#version 100\n"
 ""
 "precision mediump float;\n"
@@ -72,7 +72,7 @@ static const char * MCMasterFsh =
 "    }\n"
 "}\n";
 
-static const char * MCMasterShadowVsh =
+static const char * MCDefaultShadowVsh =
 "#version 100\n"
 ""
 "precision mediump float;\n"
@@ -95,7 +95,7 @@ static const char * MCMasterShadowVsh =
 "    texCoord0   = inTexCoord;\n"
 "}\n";
 
-static const char * MCMasterShadowFsh =
+static const char * MCDefaultShadowFsh =
 "#version 100\n"
 ""
 "precision mediump float;\n"

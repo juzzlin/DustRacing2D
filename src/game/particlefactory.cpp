@@ -130,7 +130,7 @@ void ParticleFactory::preCreateParticles()
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
         particle->setSurface(MCAssetManager::surfaceManager().surface("leaf"));
-        particle->setShaderProgram(&Renderer::instance().program("master"));
+        particle->setShaderProgram(&Renderer::instance().program("default"));
         particle->setLayer(Layers::Tree);
         particle->setFreeList(m_freeLists[Leaf]);
 

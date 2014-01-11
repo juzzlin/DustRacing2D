@@ -30,7 +30,7 @@
 AudioWorker::AudioWorker(int numCars, bool enabled)
     : m_openALDevice(new OpenALDevice)
     , m_inited(false)
-    , m_masterVolume(1.0)
+    , m_defaultVolume(1.0)
     , m_numCars(numCars)
     , m_enabled(enabled)
 {
@@ -166,9 +166,9 @@ void AudioWorker::setVolume(const QString & handle, float volume)
         m_soundMap[handle]->setVolume(volume);
 }
 
-void AudioWorker::setMasterVolume(float volume)
+void AudioWorker::setDefaultVolume(float volume)
 {
-    m_masterVolume = volume;
+    m_defaultVolume = volume;
 }
 
 void AudioWorker::setLocation(const QString & handle, float x, float y)

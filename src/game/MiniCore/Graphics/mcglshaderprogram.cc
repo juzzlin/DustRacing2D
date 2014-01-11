@@ -183,27 +183,27 @@ bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
 
 const char * MCGLShaderProgram::getDefaultVertexShaderSource()
 {
-    return MCMasterVsh;
+    return MCDefaultVsh;
 }
 
 const char * MCGLShaderProgram::getDefaultFragmentShaderSource()
 {
-    return MCMasterFsh;
+    return MCDefaultFsh;
 }
 
 const char * MCGLShaderProgram::getDefaultSpecularFragmentShaderSource()
 {
-    return MCMasterFshSpecular;
+    return MCDefaultFshSpecular;
 }
 
 const char * MCGLShaderProgram::getDefaultShadowVertexShaderSource()
 {
-    return MCMasterShadowVsh;
+    return MCDefaultShadowVsh;
 }
 
 const char * MCGLShaderProgram::getDefaultShadowFragmentShaderSource()
 {
-    return MCMasterShadowFsh;
+    return MCDefaultShadowFsh;
 }
 
 bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)

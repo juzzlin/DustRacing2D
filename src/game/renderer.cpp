@@ -132,15 +132,15 @@ void Renderer::createProgramFromSource(
 void Renderer::loadShaders()
 {
     // Engine defaults
-    createProgramFromSource("master",
+    createProgramFromSource("default",
         MCGLShaderProgram::getDefaultVertexShaderSource(),
         MCGLShaderProgram::getDefaultFragmentShaderSource());
 
-    createProgramFromSource("masterSpecular",
+    createProgramFromSource("defaultSpecular",
         MCGLShaderProgram::getDefaultVertexShaderSource(),
         MCGLShaderProgram::getDefaultSpecularFragmentShaderSource());
 
-    createProgramFromSource("masterShadow",
+    createProgramFromSource("defaultShadow",
         MCGLShaderProgram::getDefaultShadowVertexShaderSource(),
         MCGLShaderProgram::getDefaultShadowFragmentShaderSource());
 

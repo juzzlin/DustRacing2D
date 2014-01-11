@@ -16,7 +16,7 @@
 #ifndef MCSHADERS_HH
 #define MCSHADERS_HH
 
-static const char * MCMasterVsh =
+static const char * MCDefaultVsh =
 "#version 120\n"
 ""
 "attribute vec3  inVertex;\n"
@@ -47,7 +47,7 @@ static const char * MCMasterVsh =
 "    texCoord0 = inTexCoord;\n"
 "}\n";
 
-static const char * MCMasterFsh =
+static const char * MCDefaultFsh =
 "#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
@@ -70,7 +70,7 @@ static const char * MCMasterFsh =
 "    }\n"
 "}\n";
 
-static const char * MCMasterFshSpecular =
+static const char * MCDefaultFshSpecular =
 "#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
@@ -109,7 +109,7 @@ static const char * MCMasterFshSpecular =
 "    }\n"
 "}\n";
 
-static const char * MCMasterShadowVsh =
+static const char * MCDefaultShadowVsh =
 "#version 120\n"
 ""
 "attribute vec3 inVertex;\n"
@@ -130,7 +130,7 @@ static const char * MCMasterShadowVsh =
 "    texCoord0   = inTexCoord;\n"
 "}\n";
 
-static const char * MCMasterShadowFsh =
+static const char * MCDefaultShadowFsh =
 "#version 120\n"
 ""
 "uniform sampler2D texture;\n"

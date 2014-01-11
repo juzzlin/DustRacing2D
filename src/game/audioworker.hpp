@@ -58,7 +58,7 @@ public slots:
 
     void setVolume(const QString & handle, float pitch);
 
-    void setMasterVolume(float volume);
+    void setDefaultVolume(float volume);
 
     void setLocation(const QString & handle, float x, float y);
 
@@ -83,7 +83,7 @@ private:
 
     bool m_inited;
 
-    float m_masterVolume;
+    float m_defaultVolume;
 
     int m_numCars;
 
