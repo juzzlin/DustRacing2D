@@ -84,11 +84,11 @@ public:
     /*! Get the default vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultVertexShaderSource();
 
-    /*! Get the default fragment shader source. Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultFragmentShaderSource();
+    /*! Get the default vertext shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultSpecularVertexShaderSource();
 
     /*! Get the default fragment shader source. Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultSpecularFragmentShaderSource();
+    static const char * getDefaultFragmentShaderSource();
 
     /*! Get the default shadow vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowVertexShaderSource();
@@ -99,6 +99,9 @@ public:
     /*! Add a geometry shader.
      *  \return true if succeeded. */
     virtual bool addGeometryShaderFromSource(const std::string & source);
+
+    //! Set view matrix. Done automatically by MCGLScene.
+    virtual void setViewMatrix(const glm::mat4x4 & viewMatrix);
 
     //! Set view projection matrix. Done automatically by MCGLScene.
     virtual void setViewProjectionMatrix(const glm::mat4x4 & viewProjectionMatrix);

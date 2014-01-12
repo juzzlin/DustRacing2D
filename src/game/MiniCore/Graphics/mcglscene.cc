@@ -188,6 +188,7 @@ void MCGLScene::updateViewProjectionMatrixAndShaders()
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setViewProjectionMatrix(viewProjectionMatrix());
+        p->setViewMatrix(m_viewMatrix);
     }
 }
 

@@ -44,6 +44,7 @@ static const char * TEX0                 = "tex0";
 static const char * TEX1                 = "tex1";
 static const char * TEX2                 = "tex2";
 static const char * VP                   = "vp";
+static const char * V                    = "v";
 static const char * MODEL                = "model";
 static const char * COLOR                = "color";
 static const char * SCALE                = "scale";
@@ -186,14 +187,14 @@ const char * MCGLShaderProgram::getDefaultVertexShaderSource()
     return MCDefaultVsh;
 }
 
+const char * MCGLShaderProgram::getDefaultSpecularVertexShaderSource()
+{
+    return MCDefaultVshSpecular;
+}
+
 const char * MCGLShaderProgram::getDefaultFragmentShaderSource()
 {
     return MCDefaultFsh;
-}
-
-const char * MCGLShaderProgram::getDefaultSpecularFragmentShaderSource()
-{
-    return MCDefaultFshSpecular;
 }
 
 const char * MCGLShaderProgram::getDefaultShadowVertexShaderSource()
@@ -217,6 +218,14 @@ void MCGLShaderProgram::setViewProjectionMatrix(
     bind();
     glUniformMatrix4fv(
         glGetUniformLocation(m_program, VP), 1, GL_FALSE, &viewProjectionMatrix[0][0]);
+}
+
+void MCGLShaderProgram::setViewMatrix(
+    const glm::mat4x4 & viewMatrix)
+{
+    bind();
+    glUniformMatrix4fv(
+        glGetUniformLocation(m_program, V), 1, GL_FALSE, &viewMatrix[0][0]);
 }
 
 void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
