@@ -160,14 +160,16 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
     int origH = data.height.second ? data.height.first : image.height();
     int origW = data.width.second  ? data.width.first  : image.width();
 
-    const GLuint textureHandle1 = create2DTextureFromImage(data, image);
-    const GLuint textureHandle2 = data.handle2.length() ? surface(data.handle2).texture1() : 0;
-    const GLuint textureHandle3 = data.handle3.length() ? surface(data.handle3).texture1() : 0;
+    // Create material. Possible secondary textures are taken from surfaces
+    // that are initialized before this surface.
+    MCGLMaterialPtr material(new MCGLMaterial);
+    material->setTexture(create2DTextureFromImage(data, image), 0);
+    material->setTexture(data.handle2.length() ? surface(data.handle2).material()->texture(0) : 0, 1);
+    material->setTexture(data.handle3.length() ? surface(data.handle3).material()->texture(0) : 0, 2);
 
     // Create a new MCSurface object
     MCSurface * surface =
-        new MCSurface(textureHandle1, textureHandle2, textureHandle3,
-            origW, origH, data.z0, data.z1, data.z2, data.z3);
+        new MCSurface(material, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     assert(surface);
     createSurfaceCommon(*surface, data);
@@ -363,16 +365,11 @@ MCSurfaceManager::~MCSurfaceManager()
         if (iter->second)
         {
             MCSurface * p = iter->second;
-
-            GLuint dummyHandle1 = p->texture1();
-            glDeleteTextures(1, &dummyHandle1);
-
-            GLuint dummyHandle2 = p->texture2();
-            if (dummyHandle2)
+            for (unsigned int i = 0; i < MCGLMaterial::MAX_TEXTURES; i++)
             {
-                glDeleteTextures(1, &dummyHandle2);
+                GLuint dummyHandle1 = p->material()->texture(i);
+                glDeleteTextures(1, &dummyHandle1);
             }
-
             delete p;
         }
         iter++;

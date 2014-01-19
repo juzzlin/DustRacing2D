@@ -27,6 +27,7 @@
 #include "mcbbox.hh"
 #include "mcglcolor.hh"
 #include "mcglobjectbase.hh"
+#include "mcglmaterial.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -45,9 +46,6 @@ class MCSurface : public MCGLObjectBase
 public:
 
     /*! Constructor.
-     *  \param handle Handle of the corresponding OpenGL texture 1.
-     *  \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
-     *  \param handle Handle of the corresponding OpenGL texture 3 (multitexturing) or zero.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param z0 Z-coordinate for vertex[0]. Enables tilted surfaces.
@@ -55,18 +53,15 @@ public:
      *  \param z2 Z-coordinate for vertex[2]. Enables tilted surfaces.
      *  \param z3 Z-coordinate for vertex[3]. Enables tilted surfaces. */
     MCSurface(
-        GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height,
+        MCGLMaterialPtr material, MCFloat width, MCFloat height,
         MCFloat z0 = 0, MCFloat z1 = 0, MCFloat z2 = 0, MCFloat z3 = 0);
 
     /*! Constructor.
-     *  \param handle Handle of the corresponding OpenGL texture 1.
-     *  \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero.
-     *  \param handle Handle of the corresponding OpenGL texture 3 (multitexturing) or zero.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param texCoords Array including texture coordinates of the four vertices. */
     MCSurface(
-        GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height,
+        MCGLMaterialPtr material, MCFloat width, MCFloat height,
         const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
@@ -130,7 +125,7 @@ private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 
-    void init(GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height);
+    void init(MCGLMaterialPtr material, MCFloat width, MCFloat height);
 
     void initVBOs(
         const MCGLVertex   * vertices,

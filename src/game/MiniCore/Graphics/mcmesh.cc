@@ -33,7 +33,7 @@ static const int NUM_VERTEX_COMPONENTS    = 3;
 static const int NUM_COLOR_COMPONENTS     = 4;
 static const int NUM_TEX_COORD_COMPONENTS = 2;
 
-MCMesh::MCMesh(const FaceVector & faces, GLuint handle1, GLuint handle2)
+MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
 : m_w(1.0)
 , m_h(1.0)
 , m_color(1.0, 1.0, 1.0, 1.0)
@@ -41,10 +41,9 @@ MCMesh::MCMesh(const FaceVector & faces, GLuint handle1, GLuint handle2)
 , m_sy(1.0)
 , m_sz(1.0)
 {
-    setTexture1(handle1);
-    setTexture2(handle2);
-
     init(faces);
+
+    setMaterial(material);
 }
 
 void MCMesh::init(const FaceVector & faces)

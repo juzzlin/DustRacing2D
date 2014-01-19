@@ -155,10 +155,7 @@ void MCGLPointParticleRenderer::render()
         glBlendFunc(m_src, m_dst);
     }
 
-    if (texture1())
-    {
-        bindTextures(true);
-    }
+    bindMaterial(true);
 
     shaderProgram()->setPointSize(m_pointSize);
 

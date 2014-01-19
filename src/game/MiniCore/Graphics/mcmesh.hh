@@ -27,6 +27,7 @@
 #include "mcbbox.hh"
 #include "mcglcolor.hh"
 #include "mcglobjectbase.hh"
+#include "mcglmaterial.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -60,10 +61,8 @@ public:
 
     typedef std::vector<Face> FaceVector;
 
-    /*! Constructor.
-     *  \param handle Handle of the corresponding OpenGL texture 1.
-     *  \param handle Handle of the corresponding OpenGL texture 2 (multitexturing) or zero. */
-    explicit MCMesh(const FaceVector & faces, GLuint handle1 = 0, GLuint handle2 = 0);
+    //! Constructor.
+    explicit MCMesh(const FaceVector & faces, MCGLMaterialPtr material);
 
     //! Destructor.
     virtual ~MCMesh() {};

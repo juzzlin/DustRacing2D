@@ -20,6 +20,7 @@
 #include "mcsurface.hh"
 #include "mccamera.hh"
 #include "mcbbox.hh"
+#include "mcglmaterial.hh"
 #include "mcexception.hh"
 #include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
@@ -42,10 +43,10 @@ static const int TOTAL_DATA_SIZE          =
     VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCSurface::MCSurface(
-    GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height,
+    MCGLMaterialPtr material, MCFloat width, MCFloat height,
     MCFloat z0, MCFloat z1, MCFloat z2, MCFloat z3)
 {
-    init(handle1, handle2, handle3, width, height);
+    init(material, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
@@ -108,9 +109,9 @@ MCSurface::MCSurface(
 }
 
 MCSurface::MCSurface(
-    GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
+    MCGLMaterialPtr material, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
 {
-    init(handle1, handle2, handle3, width, height);
+    init(material, width, height);
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
@@ -156,11 +157,9 @@ MCSurface::MCSurface(
     initVBOs(vertices, normals, texCoordsAll, colors);
 }
 
-void MCSurface::init(GLuint handle1, GLuint handle2, GLuint handle3, MCFloat width, MCFloat height)
+void MCSurface::init(MCGLMaterialPtr material, MCFloat width, MCFloat height)
 {
-    setTexture1(handle1);
-    setTexture2(handle2);
-    setTexture3(handle3);
+    setMaterial(material);
 
     m_w              = width;
     m_w2             = width / 2;

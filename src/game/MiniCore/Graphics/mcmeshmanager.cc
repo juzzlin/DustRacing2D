@@ -20,6 +20,7 @@
 #include "mcmeshmanager.hh"
 
 #include "mcassetmanager.hh"
+#include "mcglmaterial.hh"
 #include "mctypes.hh"
 #include "mcmesh.hh"
 #include "mcmeshconfigloader.hh"
@@ -37,14 +38,21 @@ MCMeshManager::MCMeshManager()
 MCMesh & MCMeshManager::createMesh(
     const MCMeshMetaData & data, const MCMesh::FaceVector & faces) throw (MCException)
 {
+    // Create material
+    MCGLMaterialPtr material(new MCGLMaterial);
+
+    material->setTexture(
+        data.texture1 != "" ?
+        MCAssetManager::surfaceManager().surface(data.texture1).material()->texture(0) : 0,
+        0);
+
+    material->setTexture(
+        data.texture2 != "" ?
+        MCAssetManager::surfaceManager().surface(data.texture2).material()->texture(0) : 0,
+        1);
+
     // Create a new MCMesh object
-    MeshPtr mesh(
-        new MCMesh(
-            faces,
-            data.texture1 != "" ?
-                MCAssetManager::surfaceManager().surface(data.texture1).texture1() : 0,
-            data.texture2 != "" ?
-                MCAssetManager::surfaceManager().surface(data.texture2).texture2() : 0));
+    MeshPtr mesh(new MCMesh(faces, material));
 
     m_meshMap[data.handle] = mesh;
 

@@ -203,6 +203,7 @@ void Renderer::renderCustomResolution()
     resizeGL(m_hRes, m_vRes);
 
     static QGLFramebufferObject fbo(m_hRes, m_vRes);
+    static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
 
     fbo.bind();
 
@@ -222,9 +223,10 @@ void Renderer::renderCustomResolution()
 
     resizeGL(fullHRes, fullVRes);
 
-    MCSurface sd(fbo.texture(), 0, 0, Scene::width(), Scene::height());
+    dummyMaterial->setTexture(fbo.texture(), 0);
+    MCSurface sd(dummyMaterial, Scene::width(), Scene::height());
     sd.setShaderProgram(&program("fbo"));
-    sd.bindTextures();
+    sd.bindMaterial();
     sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 }
 

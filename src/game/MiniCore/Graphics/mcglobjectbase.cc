@@ -24,44 +24,11 @@
 #include <cassert>
 
 MCGLObjectBase::MCGLObjectBase()
-: m_texture1(0)
-, m_texture2(0)
-, m_texture3(0)
-, m_vao(0)
+: m_vao(0)
 , m_vbo(0)
 , m_program(nullptr)
 , m_shadowProgram(nullptr)
 {
-}
-
-void MCGLObjectBase::setTexture1(GLuint handle)
-{
-    m_texture1 = handle;
-}
-
-void MCGLObjectBase::setTexture2(GLuint handle)
-{
-    m_texture2 = handle;
-}
-
-void MCGLObjectBase::setTexture3(GLuint handle)
-{
-    m_texture3 = handle;
-}
-
-GLuint MCGLObjectBase::texture1() const
-{
-    return m_texture1;
-}
-
-GLuint MCGLObjectBase::texture2() const
-{
-    return m_texture2;
-}
-
-GLuint MCGLObjectBase::texture3() const
-{
-    return m_texture3;
 }
 
 void MCGLObjectBase::setShaderProgram(MCGLShaderProgram * program)
@@ -120,52 +87,68 @@ void MCGLObjectBase::createVBO()
     }
 }
 
-void MCGLObjectBase::bindTextures(bool bindOnlyFirstTexture, bool bindForShadow)
+void MCGLObjectBase::bindMaterial(bool bindOnlyFirstTexture, bool bindForShadow)
 {
-    MCGLShaderProgram * program =
-        bindForShadow ? m_shadowProgram : m_program;
-    assert(program);
-
-    if (bindOnlyFirstTexture || (!m_texture2 && !m_texture3))
+    if (m_material)
     {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_texture1);
-        program->bindTextureUnit0(0);
-    }
-    else
-    {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_texture1);
-        program->bindTextureUnit0(0);
+        MCGLShaderProgram * program = bindForShadow ? m_shadowProgram : m_program;
+        assert(program);
 
-        if (m_texture2)
+        const GLuint texture1 = m_material->texture(0);
+        const GLuint texture2 = m_material->texture(1);
+        const GLuint texture3 = m_material->texture(2);
+
+        if (bindOnlyFirstTexture || (!texture2 && !texture3))
         {
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, m_texture2);
-            program->bindTextureUnit1(1);
-
-            if (m_texture3)
-            {
-                glActiveTexture(GL_TEXTURE2);
-                glBindTexture(GL_TEXTURE_2D, m_texture3);
-                program->bindTextureUnit2(2);
-            }
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture1);
+            program->bindTextureUnit0(0);
         }
+        else
+        {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture1);
+            program->bindTextureUnit0(0);
 
-        glActiveTexture(GL_TEXTURE0);
+            if (texture2)
+            {
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_2D, texture2);
+                program->bindTextureUnit1(1);
+
+                if (texture3)
+                {
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, texture3);
+                    program->bindTextureUnit2(2);
+                }
+            }
+
+            glActiveTexture(GL_TEXTURE0);
+        }
     }
 }
 
 void MCGLObjectBase::bind()
 {
     bindVAO();
-    bindTextures();
+    bindMaterial();
 }
 
 void MCGLObjectBase::bindShadow()
 {
     bindVAO();
-    bindTextures(true, true);
+    bindMaterial(true, true);
+}
+
+void MCGLObjectBase::setMaterial(MCGLMaterialPtr material)
+{
+    m_material = material;
+}
+
+MCGLMaterialPtr MCGLObjectBase::material() const
+{
+    return m_material;
 }
 
 MCGLObjectBase::~MCGLObjectBase()

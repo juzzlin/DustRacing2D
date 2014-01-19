@@ -152,7 +152,7 @@ void TrackItem::render()
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
                     pSurface->setShaderProgram(&Renderer::instance().program("menu"));
-                    pSurface->bindTextures();
+                    pSurface->bindMaterial();
 
                     if (m_track.trackData().isLocked())
                     {

@@ -21,6 +21,7 @@
 #define MCGLOBJECTBASE_HH
 
 #include <MCGLEW>
+#include "mcglmaterial.hh"
 
 class MCGLShaderProgram;
 
@@ -60,26 +61,8 @@ public:
     //! Helper to bind texturing and VAO for shadow rendering.
     void bindShadow();
 
-    //! Bind the current texture setup.
-    void bindTextures(bool bindOnlyFirstTexture = false, bool bindForShadow = false);
-
-    //! Set texture handle #1 or zero.
-    void setTexture1(GLuint handle);
-
-    //! Set texture handle #2 or zero.
-    void setTexture2(GLuint handle);
-
-    //! Set texture handle #2 or zero.
-    void setTexture3(GLuint handle);
-
-    //! Return texture handle #1 or zero.
-    GLuint texture1() const;
-
-    //! Return texture handle #2 or zero.
-    GLuint texture2() const;
-
-    //! Return texture handle #3 or zero.
-    GLuint texture3() const;
+    //! Bind the current matrial setup.
+    void bindMaterial(bool bindOnlyFirstTexture = false, bool bindForShadow = false);
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);
@@ -93,15 +76,19 @@ public:
     //! Get the shader program to be used for 2d shadows.
     MCGLShaderProgram * shadowShaderProgram() const;
 
+    //! Set material.
+    void setMaterial(MCGLMaterialPtr material);
+
+    //! Get material if set.
+    MCGLMaterialPtr material() const;
+
 private:
 
-    GLuint              m_texture1;
-    GLuint              m_texture2;
-    GLuint              m_texture3;
     GLuint              m_vao;
     GLuint              m_vbo;
     MCGLShaderProgram * m_program;
     MCGLShaderProgram * m_shadowProgram;
+    MCGLMaterialPtr     m_material;
 };
 
 #endif // MCGLOBJECTBASE_HH
