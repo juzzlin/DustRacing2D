@@ -66,11 +66,7 @@ void OffTrackDetector::update()
 
 bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) const
 {
-    if (tile.tileTypeEnum() == TrackTile::TT_GRASS               ||
-        tile.tileTypeEnum() == TrackTile::TT_SAND                ||
-        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_STRAIGHT ||
-        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_CORNER   ||
-        tile.tileTypeEnum() == TrackTile::TT_SAND_GRASS_CORNER_2)
+    if (!tile.hasAsphalt())
     {
         return true;
     }
