@@ -39,6 +39,7 @@ static const char * DIFFUSE_LIGHT_DIR    = "dd";
 static const char * DIFFUSE_LIGHT_COLOR  = "dc";
 static const char * SPECULAR_LIGHT_DIR   = "sd";
 static const char * SPECULAR_LIGHT_COLOR = "sc";
+static const char * SPECULAR_COEFF       = "sCoeff";
 static const char * FADE                 = "fade";
 static const char * TEX0                 = "tex0";
 static const char * TEX1                 = "tex1";
@@ -311,6 +312,8 @@ void MCGLShaderProgram::bindTextureUnit2(GLuint index)
 
 void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
 {
+    bind();
+
     const GLuint texture1 = material->texture(0);
     const GLuint texture2 = material->texture(1);
     const GLuint texture3 = material->texture(2);
@@ -328,6 +331,9 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
     bindTextureUnit2(2);
 
     glActiveTexture(GL_TEXTURE0);
+
+    glUniform1f(
+        glGetUniformLocation(m_program, SPECULAR_COEFF), material->specularCoeff());
 }
 
 void MCGLShaderProgram::setPointSize(GLfloat pointSize)
