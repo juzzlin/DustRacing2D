@@ -94,38 +94,7 @@ void MCGLObjectBase::bindMaterial(bool bindOnlyFirstTexture, bool bindForShadow)
         MCGLShaderProgram * program = bindForShadow ? m_shadowProgram : m_program;
         assert(program);
 
-        const GLuint texture1 = m_material->texture(0);
-        const GLuint texture2 = m_material->texture(1);
-        const GLuint texture3 = m_material->texture(2);
-
-        if (bindOnlyFirstTexture || (!texture2 && !texture3))
-        {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture1);
-            program->bindTextureUnit0(0);
-        }
-        else
-        {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture1);
-            program->bindTextureUnit0(0);
-
-            if (texture2)
-            {
-                glActiveTexture(GL_TEXTURE1);
-                glBindTexture(GL_TEXTURE_2D, texture2);
-                program->bindTextureUnit1(1);
-
-                if (texture3)
-                {
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, texture3);
-                    program->bindTextureUnit2(2);
-                }
-            }
-
-            glActiveTexture(GL_TEXTURE0);
-        }
+        program->bindMaterial(m_material, bindOnlyFirstTexture);
     }
 }
 

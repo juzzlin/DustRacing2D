@@ -309,6 +309,42 @@ void MCGLShaderProgram::bindTextureUnit2(GLuint index)
         glGetUniformLocation(m_program, TEX2), index);
 }
 
+void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material, bool bindOnlyFirstTexture)
+{
+    const GLuint texture1 = material->texture(0);
+    const GLuint texture2 = material->texture(1);
+    const GLuint texture3 = material->texture(2);
+
+    if (bindOnlyFirstTexture || (!texture2 && !texture3))
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        bindTextureUnit0(0);
+    }
+    else
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        bindTextureUnit0(0);
+
+        if (texture2)
+        {
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, texture2);
+            bindTextureUnit1(1);
+
+            if (texture3)
+            {
+                glActiveTexture(GL_TEXTURE2);
+                glBindTexture(GL_TEXTURE_2D, texture3);
+                bindTextureUnit2(2);
+            }
+        }
+
+        glActiveTexture(GL_TEXTURE0);
+    }
+}
+
 void MCGLShaderProgram::setPointSize(GLfloat pointSize)
 {
     bind();

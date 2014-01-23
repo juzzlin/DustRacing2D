@@ -26,6 +26,7 @@
 #include "mcglambientlight.hh"
 #include "mcglcolor.hh"
 #include "mcgldiffuselight.hh"
+#include "mcglmaterial.hh"
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 
@@ -118,14 +119,8 @@ public:
     /*! Set fade factor. The final color should be multiplied with this factor. */
     virtual void setFadeValue(GLfloat f = 1.0);
 
-    //! Bind given texture unit to the sampler 0.
-    virtual void bindTextureUnit0(GLuint index = 0);
-
-    //! Bind given texture unit to the sampler 1 for multitexturing.
-    virtual void bindTextureUnit1(GLuint index = 1);
-
-    //! Bind given texture unit to the sampler 2 for multitexturing.
-    virtual void bindTextureUnit2(GLuint index = 2);
+    //! Bind given material.
+    virtual void bindMaterial(MCGLMaterialPtr material, bool bindOnlyFirstTexture);
 
     //! Set ambient light.
     virtual void setAmbientLight(const MCGLAmbientLight & light);
@@ -140,6 +135,12 @@ public:
     virtual void setPointSize(GLfloat pointSize);
 
 private:
+
+    void bindTextureUnit0(GLuint index);
+
+    void bindTextureUnit1(GLuint index);
+
+    void bindTextureUnit2(GLuint index);
 
     static MCGLShaderProgram * m_activeProgram;
 
