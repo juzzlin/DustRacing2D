@@ -120,7 +120,7 @@ public:
     virtual void setFadeValue(GLfloat f = 1.0);
 
     //! Bind given material.
-    virtual void bindMaterial(MCGLMaterialPtr material, bool bindOnlyFirstTexture);
+    virtual void bindMaterial(MCGLMaterialPtr material);
 
     //! Set ambient light.
     virtual void setAmbientLight(const MCGLAmbientLight & light);

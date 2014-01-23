@@ -62,7 +62,7 @@ public:
     void bindShadow();
 
     //! Bind the current matrial setup.
-    void bindMaterial(bool bindOnlyFirstTexture = false, bool bindForShadow = false);
+    void bindMaterial(bool bindForShadow = false);
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgram * program);

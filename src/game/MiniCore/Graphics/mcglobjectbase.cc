@@ -87,14 +87,14 @@ void MCGLObjectBase::createVBO()
     }
 }
 
-void MCGLObjectBase::bindMaterial(bool bindOnlyFirstTexture, bool bindForShadow)
+void MCGLObjectBase::bindMaterial(bool bindForShadow)
 {
     if (m_material)
     {
         MCGLShaderProgram * program = bindForShadow ? m_shadowProgram : m_program;
         assert(program);
 
-        program->bindMaterial(m_material, bindOnlyFirstTexture);
+        program->bindMaterial(m_material);
     }
 }
 
@@ -107,7 +107,7 @@ void MCGLObjectBase::bind()
 void MCGLObjectBase::bindShadow()
 {
     bindVAO();
-    bindMaterial(true, true);
+    bindMaterial(true);
 }
 
 void MCGLObjectBase::setMaterial(MCGLMaterialPtr material)

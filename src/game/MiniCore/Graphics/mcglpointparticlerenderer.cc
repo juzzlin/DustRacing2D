@@ -155,7 +155,7 @@ void MCGLPointParticleRenderer::render()
         glBlendFunc(m_src, m_dst);
     }
 
-    bindMaterial(true);
+    bindMaterial();
 
     shaderProgram()->setPointSize(m_pointSize);
 
