@@ -52,6 +52,11 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::GrandStands);
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+
+        // Wrap the MCObject in a TrackObject
+        return new TrackObject(category, role, object);
     }
     else if (role == "bushArea")
     {
@@ -80,6 +85,8 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::Meshes);
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
     }
     else if (role == "dustRacing2DBanner")
     {
@@ -94,6 +101,11 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::GrandStands);
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+
+        // Wrap the MCObject in a TrackObject
+        return new TrackObject(category, role, object);
     }
     else if (role == "grandstand")
     {
@@ -185,6 +197,12 @@ TrackObject * TrackObjectFactory::build(
         data.setLayer(Layers::Walls);
 
         object = m_objectFactory.build(data);
+
+        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+
+        // Wrap the MCObject in a TrackObject
+        return new TrackObject(category, role, object);
     }
     else if (role == "tree")
     {

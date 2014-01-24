@@ -93,6 +93,9 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                 const float brightness = tag.attribute("brightness", "0").toFloat();
                 newData->brightness = std::pair<float, bool>(brightness, (brightness > 0.1));
 
+                const float specularCoeff = tag.attribute("specularCoeff", "1").toFloat();
+                newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, (specularCoeff > 1.0));
+
                 // Read child nodes of surface node.
                 QDomNode childNode = node.firstChild();
                 while(!childNode.isNull())

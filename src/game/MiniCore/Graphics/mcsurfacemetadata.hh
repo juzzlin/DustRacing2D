@@ -101,6 +101,9 @@ struct MCSurfaceMetaData
     //! Contrast setting
     std::pair<float, bool> contrast;
 
+    //! Specular coeff
+    std::pair<GLfloat, bool> specularCoeff;
+
     //! Z-coordinate of vertex[0].
     int z0;
 

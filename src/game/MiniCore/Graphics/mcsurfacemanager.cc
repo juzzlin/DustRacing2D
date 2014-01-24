@@ -167,6 +167,11 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(
     material->setTexture(data.handle2.length() ? surface(data.handle2).material()->texture(0) : 0, 1);
     material->setTexture(data.handle3.length() ? surface(data.handle3).material()->texture(0) : 0, 2);
 
+    if (data.specularCoeff.second)
+    {
+        material->setSpecularCoeff(data.specularCoeff.first);
+    }
+
     // Create a new MCSurface object
     MCSurface * surface =
         new MCSurface(material, origW, origH, data.z0, data.z1, data.z2, data.z3);
