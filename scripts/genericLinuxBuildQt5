@@ -47,9 +47,18 @@ done
 
 # Create start script for the game
 
-SCRIPT=$PACKAGE_PATH/dustrac-game.sh
+cp $PACKAGE_PATH/dustrac-game $PACKAGE_PATH/g.bin
+SCRIPT=$PACKAGE_PATH/dustrac-game
 echo "#!/bin/sh" > $SCRIPT
-echo "LD_LIBRARY_PATH=. ./dustrac-game" >> $SCRIPT
+echo "LD_LIBRARY_PATH=. ./g.bin" >> $SCRIPT
+chmod 755 $SCRIPT
+
+# Create start script for the editor
+
+cp $PACKAGE_PATH/dustrac-editor $PACKAGE_PATH/e.bin
+SCRIPT=$PACKAGE_PATH/dustrac-editor
+echo "#!/bin/sh" > $SCRIPT
+echo "LD_LIBRARY_PATH=. ./e.bin" >> $SCRIPT
 chmod 755 $SCRIPT
 
 # Create tgz archive
