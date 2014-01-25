@@ -176,7 +176,7 @@ TrackObject * TrackObjectFactory::build(
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
         object->setMass(1, true); // Stationary
-        object->setLayer(Layers::Ground, false);
+        object->setLayer(Layers::Ground);
         object->setIsPhysicsObject(false);
         object->setIsTriggerObject(true);
         object->shape()->view()->setHasShadow(false);

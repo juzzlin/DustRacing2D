@@ -25,13 +25,13 @@ public:
     enum Order
     {
         Ground      = 0,
-        Meshes      = 1,
-        Cars        = 2,
-        Smoke       = 3,
-        Mud         = 4,
-        Walls       = 5,
-        GrandStands = 6,
-        Tree        = 10
+        Meshes      = 0,
+        Cars        = 1,
+        Smoke       = 2,
+        Mud         = 0,
+        Walls       = 0,
+        GrandStands = 0,
+        Tree        = 3
     };
 };
 

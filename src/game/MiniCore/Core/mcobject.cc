@@ -740,9 +740,9 @@ void MCObject::stepTime(MCFloat /* step */)
 {
 }
 
-void MCObject::setLayer(MCUint newLayer, bool updateWorldLayers)
+void MCObject::setLayer(MCUint newLayer)
 {
-    if (updateWorldLayers)
+    if (m_index != -1) // Check that the object is added to world
     {
         MCWorld::instance().renderer().removeFromLayerMap(*this);
         m_layer = newLayer;
