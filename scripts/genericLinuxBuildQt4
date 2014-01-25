@@ -8,7 +8,7 @@ NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 # Package naming
 
 NAME=dustrac
-VERSION=1.6.2
+VERSION=1.6.3
 ARCH=linux-x86_64
 QT=qt4
 

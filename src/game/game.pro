@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.6.2\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.6.3\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
@@ -133,6 +133,7 @@ HEADERS += \
     MiniCore/Graphics/mcglambientlight.hh \
     MiniCore/Graphics/mcglcolor.hh \
     MiniCore/Graphics/mcgldiffuselight.hh \
+    MiniCore/Graphics/mcglmaterial.hh \
     MiniCore/Graphics/mcglobjectbase.hh \
     MiniCore/Graphics/mcglpointparticlerenderer.hh \
     MiniCore/Graphics/mcglscene.hh \
@@ -275,6 +276,7 @@ SOURCES += \
     MiniCore/Graphics/mccamera.cc \
     MiniCore/Graphics/mcglambientlight.cc \
     MiniCore/Graphics/mcgldiffuselight.cc \
+    MiniCore/Graphics/mcglmaterial.cc \
     MiniCore/Graphics/mcglobjectbase.cc \
     MiniCore/Graphics/mcglpointparticlerenderer.cc \
     MiniCore/Graphics/mcglscene.cc \

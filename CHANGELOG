@@ -1,3 +1,28 @@
+1.6.3
+-----
+
+* Add specular lighting.
+* Set race record only if race with computers.
+* Fix audio threading.
+* Cars 0 and 1 as pink and grey.
+* Introduce MCGLMaterial.
+* Rename master to default when referring to shaders.
+* Default argument value for MCWorldRenderer::enableDepthTestOnLayer()
+* Scene-level setters for ambient and diffuse lights.
+* Remove shadersGLES.h from game.pro
+* CMake option to statically link vorbis libs.
+* Move MCGLScene::updateViewProjectionMatrixAndShaders() to private scope.
+* Add MCGLScene::setFadeValue().
+* Use tile.hasAsphalt() instead of listing non-asphalt tiles.
+* Separate generic Linux build scripts for Qt4 and Qt5.
+* Remove needless shadersGLES.
+* Refactor lighting in shaders.
+* update mxeWindowsBuild.
+* Update Czech translations.
+* Move MXE script to scripts/
+* Refactor race.cpp.
+* Refactor car creation into CarFactory.
+
 1.6.2
 -----
 
