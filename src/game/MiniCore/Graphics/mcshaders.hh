@@ -92,9 +92,9 @@ static const char * MCDefaultVshSpecular =
 "        si = max(0.0, pow(dot(R, V), sCoeff));\n"
 "    }\n"
 ""
-"    vColor = inColor * color * (\n"
+"    vColor = (inColor * color * (\n"
 "        vec4(ac.rgb, 1.0) * ac.a +\n"
-"        vec4(dc.rgb, 1.0) * di) * vec4(fade, fade, fade, 1.0) + vec4(sc.xyz, 1.0) * si;\n"
+"        vec4(dc.rgb, 1.0) * di) + vec4(sc.xyz, 1.0) * si) * vec4(fade, fade, fade, 1.0);\n"
 ""
 "    texCoord0 = inTexCoord;\n"
 "}\n";
