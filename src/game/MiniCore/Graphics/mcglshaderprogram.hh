@@ -31,6 +31,7 @@
 #include "mcvector3d.hh"
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class MCGLScene;
@@ -139,8 +140,13 @@ private:
 
     void bindTextureUnit(GLuint index, const char * uniform);
 
+    int getUniformLocation(const char * uniform);
+
     static MCGLShaderProgram * m_activeProgram;
     static std::vector<GLuint> m_activeTexture;
+
+    typedef std::unordered_map<const char *, int> UniformLocationHash;
+    UniformLocationHash m_uniformLocationHash;
 
     MCGLScene & m_scene;
     bool        m_isBound;
