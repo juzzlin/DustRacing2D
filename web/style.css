@@ -6,8 +6,9 @@ header
 
 body
 {
-    background-color:black;
-    color:white;
+    background-color: black;
+    color:            white;
+    font-family:      Arial, Helvetica, sans-serif;
 }
 
 footer
@@ -66,3 +67,13 @@ a:active
     -webkit-transform:scale(1.1, 1.1); /* Safari and Chrome */
 } 
 
+.Title
+{
+    background-color: white;
+    color:            black;
+    height:           50px;
+    line-height:      50px;
+    font-size:        50px;
+    font-family:      "Arial Black", Gadget, sans-serif;
+    border-radius:    4px;
+}
