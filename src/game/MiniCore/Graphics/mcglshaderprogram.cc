@@ -52,6 +52,7 @@ static const char * SCALE                = "scale";
 static const char * POINT_SIZE           = "pointSize";
 
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
+std::vector<GLuint> MCGLShaderProgram::m_activeTexture(MCGLMaterial::MAX_TEXTURES, 0);
 
 MCGLShaderProgram::MCGLShaderProgram(MCGLScene & scene)
 : m_scene(scene)
@@ -289,25 +290,11 @@ void MCGLShaderProgram::setFadeValue(GLfloat f)
         glGetUniformLocation(m_program, FADE), f);
 }
 
-void MCGLShaderProgram::bindTextureUnit0(GLuint index)
+void MCGLShaderProgram::bindTextureUnit(GLuint index, const char * uniform)
 {
     bind();
     glUniform1i(
-        glGetUniformLocation(m_program, TEX0), index);
-}
-
-void MCGLShaderProgram::bindTextureUnit1(GLuint index)
-{
-    bind();
-    glUniform1i(
-        glGetUniformLocation(m_program, TEX1), index);
-}
-
-void MCGLShaderProgram::bindTextureUnit2(GLuint index)
-{
-    bind();
-    glUniform1i(
-        glGetUniformLocation(m_program, TEX2), index);
+        glGetUniformLocation(m_program, uniform), index);
 }
 
 void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
@@ -318,17 +305,32 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
     const GLuint texture2 = material->texture(1);
     const GLuint texture3 = material->texture(2);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    bindTextureUnit0(0);
+    if (MCGLShaderProgram::m_activeTexture[0] != texture1)
+    {
+        MCGLShaderProgram::m_activeTexture[0] = texture1;
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+    }
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    bindTextureUnit1(1);
+    bindTextureUnit(0, TEX0);
 
-    glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, texture3);
-    bindTextureUnit2(2);
+    if (MCGLShaderProgram::m_activeTexture[1] != texture2)
+    {
+        MCGLShaderProgram::m_activeTexture[1] = texture2;
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+    }
+
+    bindTextureUnit(1, TEX1);
+
+    if (MCGLShaderProgram::m_activeTexture[2] != texture3)
+    {
+        MCGLShaderProgram::m_activeTexture[2] = texture3;
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture3);
+    }
+
+    bindTextureUnit(2, TEX2);
 
     glActiveTexture(GL_TEXTURE0);
 

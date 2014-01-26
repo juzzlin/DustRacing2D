@@ -31,6 +31,7 @@
 #include "mcvector3d.hh"
 
 #include <string>
+#include <vector>
 
 class MCGLScene;
 
@@ -136,13 +137,10 @@ public:
 
 private:
 
-    void bindTextureUnit0(GLuint index);
-
-    void bindTextureUnit1(GLuint index);
-
-    void bindTextureUnit2(GLuint index);
+    void bindTextureUnit(GLuint index, const char * uniform);
 
     static MCGLShaderProgram * m_activeProgram;
+    static std::vector<GLuint> m_activeTexture;
 
     MCGLScene & m_scene;
     bool        m_isBound;
