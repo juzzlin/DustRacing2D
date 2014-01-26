@@ -40,3 +40,29 @@ a:active
     color:white;
 }
 
+.ImageView img
+{
+    width:320px;
+}
+
+.ImageView .image1
+{
+    transform:rotate(7deg);
+    -ms-transform:rotate(7deg); /* IE 9 */
+    -webkit-transform:rotate(7deg); /* Safari and Chrome */
+} 
+
+.ImageView .image2
+{
+    transform:translateY(20px);
+    -ms-transform:translateY(20px); /* IE 9 */
+    -webkit-transform:translateY(20px); /* Safari and Chrome */
+} 
+
+.ImageView .image3
+{
+    transform:scale(1.1, 1.1);
+    -ms-transform:scale(1.1, 1.1); /* IE 9 */
+    -webkit-transform:scale(1.1, 1.1); /* Safari and Chrome */
+} 
+
