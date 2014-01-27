@@ -30,8 +30,8 @@
 #include "mctypes.hh"
 #include "mcvector3d.hh"
 
+#include <map>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 class MCGLScene;
@@ -138,15 +138,41 @@ public:
 
 private:
 
-    void bindTextureUnit(GLuint index, const char * uniform);
+    //! Uniform enums used when caching uniform locations
+    enum Uniform
+    {
+        AmbientLightColor,
+        DiffuseLightDir,
+        DiffuseLightColor,
+        SpecularLightDir,
+        SpecularLightColor,
+        SpecularCoeff,
+        Fade,
+        Tex0,
+        Tex1,
+        Tex2,
+        ViewProjection,
+        View,
+        Model,
+        Color,
+        Scale,
+        PointSize
+    };
 
-    int getUniformLocation(const char * uniform);
+    void bindTextureUnit(GLuint index, Uniform uniform);
+
+    int getUniformLocation(Uniform uniform);
+
+    void initUniformLocationCache();
 
     static MCGLShaderProgram * m_activeProgram;
     static std::vector<GLuint> m_activeTexture;
 
-    typedef std::unordered_map<const char *, int> UniformLocationHash;
+    typedef std::map<Uniform, int> UniformLocationHash;
     UniformLocationHash m_uniformLocationHash;
+
+    typedef std::map<Uniform, std::string> Uniforms;
+    Uniforms m_uniforms;
 
     MCGLScene & m_scene;
     bool        m_isBound;

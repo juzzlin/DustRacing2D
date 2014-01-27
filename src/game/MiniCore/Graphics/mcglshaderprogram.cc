@@ -33,24 +33,6 @@
 #include <MCTrigonom>
 #include <cassert>
 
-// Uniform names
-static const char * AMBIENT_LIGHT_COLOR  = "ac";
-static const char * DIFFUSE_LIGHT_DIR    = "dd";
-static const char * DIFFUSE_LIGHT_COLOR  = "dc";
-static const char * SPECULAR_LIGHT_DIR   = "sd";
-static const char * SPECULAR_LIGHT_COLOR = "sc";
-static const char * SPECULAR_COEFF       = "sCoeff";
-static const char * FADE                 = "fade";
-static const char * TEX0                 = "tex0";
-static const char * TEX1                 = "tex1";
-static const char * TEX2                 = "tex2";
-static const char * VP                   = "vp";
-static const char * V                    = "v";
-static const char * MODEL                = "model";
-static const char * COLOR                = "color";
-static const char * SCALE                = "scale";
-static const char * POINT_SIZE           = "pointSize";
-
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 std::vector<GLuint> MCGLShaderProgram::m_activeTexture(MCGLMaterial::MAX_TEXTURES, 0);
 
@@ -61,6 +43,23 @@ MCGLShaderProgram::MCGLShaderProgram(MCGLScene & scene)
 , m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
 , m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
 {
+    // Map uniform enums to uniform names used in the shaders
+    m_uniforms[AmbientLightColor]  = "ac";
+    m_uniforms[DiffuseLightDir]    = "dd";
+    m_uniforms[DiffuseLightColor]  = "dc";
+    m_uniforms[SpecularLightDir]   = "sd";
+    m_uniforms[SpecularLightColor] = "sc";
+    m_uniforms[SpecularCoeff]      = "sCoeff";
+    m_uniforms[Fade]               = "fade";
+    m_uniforms[Tex0]               = "tex0";
+    m_uniforms[Tex1]               = "tex1";
+    m_uniforms[Tex2]               = "tex2";
+    m_uniforms[ViewProjection]     = "vp";
+    m_uniforms[View]               = "v";
+    m_uniforms[Model]              = "model";
+    m_uniforms[Color]              = "color";
+    m_uniforms[Scale]              = "scale";
+    m_uniforms[PointSize]          = "pointSize";
 }
 
 MCGLShaderProgram::~MCGLShaderProgram()
@@ -70,18 +69,20 @@ MCGLShaderProgram::~MCGLShaderProgram()
     glDeleteShader(m_fragmentShader);
 }
 
-int MCGLShaderProgram::getUniformLocation(const char * uniform)
+int MCGLShaderProgram::getUniformLocation(Uniform uniform)
 {
-    auto iter = m_uniformLocationHash.find(uniform);
-    if (iter != m_uniformLocationHash.end())
+    return m_uniformLocationHash[uniform];
+}
+
+void MCGLShaderProgram::initUniformLocationCache()
+{
+    assert(isLinked());
+
+    auto iter = m_uniforms.begin();
+    while (iter != m_uniforms.end())
     {
-        return iter->second;
-    }
-    else
-    {
-        const int location = glGetUniformLocation(m_program, uniform);
-        m_uniformLocationHash[uniform] = location;
-        return location;
+        m_uniformLocationHash[iter->first] = glGetUniformLocation(m_program, iter->second.c_str());
+        iter++;
     }
 }
 
@@ -125,6 +126,7 @@ void MCGLShaderProgram::link()
     glLinkProgram(m_program);
     assert(isLinked());
 
+    initUniformLocationCache();
     m_scene.addShaderProgram(*this);
 }
 
@@ -234,14 +236,14 @@ void MCGLShaderProgram::setViewProjectionMatrix(
     const glm::mat4x4 & viewProjectionMatrix)
 {
     bind();
-    glUniformMatrix4fv(getUniformLocation(VP), 1, GL_FALSE, &viewProjectionMatrix[0][0]);
+    glUniformMatrix4fv(getUniformLocation(ViewProjection), 1, GL_FALSE, &viewProjectionMatrix[0][0]);
 }
 
 void MCGLShaderProgram::setViewMatrix(
     const glm::mat4x4 & viewMatrix)
 {
     bind();
-    glUniformMatrix4fv(getUniformLocation(V), 1, GL_FALSE, &viewMatrix[0][0]);
+    glUniformMatrix4fv(getUniformLocation(View), 1, GL_FALSE, &viewMatrix[0][0]);
 }
 
 void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
@@ -249,29 +251,29 @@ void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
     bind();
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(pos.i(), pos.j(), pos.k()));
     glm::mat4 rotation  = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(getUniformLocation(MODEL), 1, GL_FALSE, &rotation[0][0]);
+    glUniformMatrix4fv(getUniformLocation(Model), 1, GL_FALSE, &rotation[0][0]);
 }
 
 void MCGLShaderProgram::setColor(const MCGLColor & color)
 {
     bind();
-    glUniform4f(getUniformLocation(COLOR), color.r(), color.g(), color.b(), color.a());
+    glUniform4f(getUniformLocation(Color), color.r(), color.g(), color.b(), color.a());
 }
 
 void MCGLShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
     bind();
-    glUniform4f(getUniformLocation(SCALE), x, y, z, 1);
+    glUniform4f(getUniformLocation(Scale), x, y, z, 1);
 }
 
 void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
 {
     bind();
     glUniform4f(
-        getUniformLocation(DIFFUSE_LIGHT_DIR),
+        getUniformLocation(DiffuseLightDir),
             light.direction().i(), light.direction().j(), light.direction().k(), 1);
     glUniform4f(
-        getUniformLocation(DIFFUSE_LIGHT_COLOR),
+        getUniformLocation(DiffuseLightColor),
             light.r(), light.g(), light.b(), light.i());
 }
 
@@ -279,10 +281,10 @@ void MCGLShaderProgram::setSpecularLight(const MCGLDiffuseLight & light)
 {
     bind();
     glUniform4f(
-        getUniformLocation(SPECULAR_LIGHT_DIR),
+        getUniformLocation(SpecularLightDir),
             light.direction().i(), light.direction().j(), light.direction().k(), 1);
     glUniform4f(
-        getUniformLocation(SPECULAR_LIGHT_COLOR),
+        getUniformLocation(SpecularLightColor),
             light.r(), light.g(), light.b(), light.i());
 }
 
@@ -290,17 +292,17 @@ void MCGLShaderProgram::setAmbientLight(const MCGLAmbientLight & light)
 {
     bind();
     glUniform4f(
-        getUniformLocation(AMBIENT_LIGHT_COLOR),
+        getUniformLocation(AmbientLightColor),
             light.r(), light.g(), light.b(), light.i());
 }
 
 void MCGLShaderProgram::setFadeValue(GLfloat f)
 {
     bind();
-    glUniform1f(getUniformLocation(FADE), f);
+    glUniform1f(getUniformLocation(Fade), f);
 }
 
-void MCGLShaderProgram::bindTextureUnit(GLuint index, const char * uniform)
+void MCGLShaderProgram::bindTextureUnit(GLuint index, Uniform uniform)
 {
     bind();
     glUniform1i(getUniformLocation(uniform), index);
@@ -321,7 +323,7 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
         glBindTexture(GL_TEXTURE_2D, texture1);
     }
 
-    bindTextureUnit(0, TEX0);
+    bindTextureUnit(0, Tex0);
 
     if (MCGLShaderProgram::m_activeTexture[1] != texture2)
     {
@@ -330,7 +332,7 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
         glBindTexture(GL_TEXTURE_2D, texture2);
     }
 
-    bindTextureUnit(1, TEX1);
+    bindTextureUnit(1, Tex1);
 
     if (MCGLShaderProgram::m_activeTexture[2] != texture3)
     {
@@ -339,15 +341,15 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
         glBindTexture(GL_TEXTURE_2D, texture3);
     }
 
-    bindTextureUnit(2, TEX2);
+    bindTextureUnit(2, Tex2);
 
     glActiveTexture(GL_TEXTURE0);
 
-    glUniform1f(getUniformLocation(SPECULAR_COEFF), material->specularCoeff());
+    glUniform1f(getUniformLocation(SpecularCoeff), material->specularCoeff());
 }
 
 void MCGLShaderProgram::setPointSize(GLfloat pointSize)
 {
     bind();
-    glUniform1f(getUniformLocation(POINT_SIZE), pointSize);
+    glUniform1f(getUniformLocation(PointSize), pointSize);
 }
