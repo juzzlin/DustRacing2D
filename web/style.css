@@ -1,12 +1,12 @@
 header
 {
-    background-color: #222222;
+    background-color: #111111;
     color:            #dddddd;
 }
 
 body
 {
-    background-color: #222222;
+    background-color: #111111;
     color:            #dddddd;
     color:            white;
     font-family:      Arial, Helvetica, sans-serif;
@@ -14,8 +14,9 @@ body
 
 footer
 {
-    background-color: #222222;
+    background-color: #111111;
     color:            #dddddd;
+    padding-top:      25px;
     padding-bottom:   10px;
 }
     
@@ -38,6 +39,11 @@ a:hover
 a:active
 {
     text-decoration:none;   
+}
+
+.ImageView
+{
+    width:100%;
 }
 
 .ImageView img
@@ -101,4 +107,47 @@ a:active
     right:            10%;
     bottom:           0%;
 }
+
+.row
+{
+    width: 75%;
+}
+
+/* Tested on Samsung Galaxy S2 */
+@media only screen and (max-device-width: 500px) {
+
+    .Title
+    {
+        height:           100px;
+        width:            100%;
+        line-height:      100px;
+        font-size:        100px;
+    }
+
+    .ImageView
+    {
+        padding-top: 50px;
+    }
+
+    .ImageView img
+    {
+        width: 600px;
+    }
+
+    .TextArea
+    {
+        font-size: 3em;
+    }
+
+    h3
+    {
+        font-size: 4em;
+    }
+
+    small
+    {
+        font-size: 2em;
+    }
+}
+
 
