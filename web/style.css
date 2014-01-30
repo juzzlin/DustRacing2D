@@ -77,13 +77,27 @@ a:active
 
 .TextArea
 {
-    width:            90%;
-    height:           320px;
+    width:            75%;
     font-family:      "Arial Black", Gadget, sans-serif;
     color:            #cccccc;
     text-align:       left;
     text-indent:      1em;
     border-radius:    2px;
     padding:          10px;
+}
+
+.SoftPediaAward
+{
+    position:         relative;
+    width:            90%;
+    height:           75px;
+}
+
+.SoftPediaAward img
+{
+    position:         absolute;
+    height:           100px;
+    right:            10%;
+    bottom:           0%;
 }
 
