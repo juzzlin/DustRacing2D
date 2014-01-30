@@ -1,32 +1,31 @@
 header
 {
-    background-color:black;
-    color:white;
+    background-color: #222222;
+    color:            #dddddd;
 }
 
 body
 {
-    background-color: black;
+    background-color: #222222;
+    color:            #dddddd;
     color:            white;
     font-family:      Arial, Helvetica, sans-serif;
 }
 
 footer
 {
-    background-color:black;
-    color:white;
+    background-color: #222222;
+    color:            #dddddd;
 }
     
 a:link
 {
     text-decoration:none;
-    color:white;
 }
 
 a:visited
 {
     text-decoration:none;
-    color:white;
 }
 
 a:hover
@@ -38,7 +37,6 @@ a:hover
 a:active
 {
     text-decoration:none;   
-    color:white;
 }
 
 .ImageView img
@@ -69,11 +67,23 @@ a:active
 
 .Title
 {
-    background-color: white;
-    color:            black;
     height:           50px;
+    width:            90%;
     line-height:      50px;
     font-size:        50px;
     font-family:      "Arial Black", Gadget, sans-serif;
-    border-radius:    4px;
+    border-radius:    2px;
 }
+
+.TextArea
+{
+    width:            90%;
+    height:           320px;
+    font-family:      "Arial Black", Gadget, sans-serif;
+    color:            #cccccc;
+    text-align:       left;
+    text-indent:      1em;
+    border-radius:    2px;
+    padding:          10px;
+}
+
