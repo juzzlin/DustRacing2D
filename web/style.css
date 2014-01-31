@@ -113,6 +113,11 @@ a:active
     width: 75%;
 }
 
+.container
+{
+    padding: 0;
+}
+
 /* Tested on Samsung Galaxy S2 */
 @media only screen and (max-device-width: 500px) {
 
