@@ -59,7 +59,7 @@ public:
     };
 
     //! Constructor
-    Game();
+    Game(bool forceNoVSync = false);
 
     //! Destructor
     virtual ~Game();
@@ -124,7 +124,7 @@ private slots:
 private:
 
     void adjustSceneSize(int hRes, int vRes, bool fullScreen);
-    void createRenderer();
+    void createRenderer(bool forceNoVSync);
     void initScene();
     bool loadTracks();
     void loadFonts();

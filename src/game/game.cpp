@@ -48,7 +48,7 @@ static const float        DEFAULT_VOLUME = 0.5;
 
 Game * Game::m_instance = nullptr;
 
-Game::Game()
+Game::Game(bool forceNoVSync)
 : m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
 , m_stateMachine(new StateMachine(*m_inputHandler))
@@ -75,7 +75,7 @@ Game::Game()
     assert(!Game::m_instance);
     Game::m_instance = this;
 
-    createRenderer();
+    createRenderer(forceNoVSync);
 
     loadFonts();
 
@@ -107,7 +107,7 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
-void Game::createRenderer()
+void Game::createRenderer(bool forceNoVSync)
 {
     // Create the main window / renderer
     int hRes, vRes;
@@ -141,7 +141,15 @@ void Game::createRenderer()
     format.setVersion(2, 1);
 #endif
     format.setSamples(0);
-    format.setSwapInterval(Settings::instance().loadValue(Settings::vsyncKey(), 0));
+
+    if (forceNoVSync)
+    {
+        format.setSwapInterval(0);
+    }
+    else
+    {
+        format.setSwapInterval(Settings::instance().loadValue(Settings::vsyncKey(), 0));
+    }
 
     m_renderer = new Renderer(format, hRes, vRes, nativeResolution, fullScreen);
     m_renderer->activateWindow();

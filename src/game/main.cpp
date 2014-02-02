@@ -73,6 +73,7 @@ static void printHelp()
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
     std::cout << "--lang [lang] Force language: fi, it, cs." << std::endl;
+    std::cout << "--no-vsync    Force vsync off." << std::endl;
     std::cout << std::endl;
 }
 
@@ -101,6 +102,7 @@ int main(int argc, char ** argv)
         QTranslator appTranslator;
         QString lang = "";
 
+        bool forceNoVSync = false;
         std::vector<QString> args(argv, argv + argc);
         if (std::find(args.begin(), args.end(), "--help") != args.end())
         {
@@ -115,6 +117,10 @@ int main(int argc, char ** argv)
                 {
                     lang = args[i + 1];
                 }
+                else if (args[i] == "--no-vsync")
+                {
+                    forceNoVSync = true;
+                }
             }
         }
 
@@ -124,7 +130,7 @@ int main(int argc, char ** argv)
 
         // Create the game object and set the renderer
         MCLogger().info() << "Creating game object..";
-        Game game;
+        Game game(forceNoVSync);
 
         // Initialize and start the game
         if (game.init())
