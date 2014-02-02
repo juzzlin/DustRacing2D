@@ -19,9 +19,11 @@
 
 #include "mcrandom.hh"
 #include "mccast.hh"
+
 #include <cstdlib>
+#include <limits>
+#include <random>
 #include <vector>
-#include <QDateTime>
 
 namespace
 {
@@ -55,10 +57,12 @@ MCRandomImpl::MCRandomImpl() :
 
 void MCRandomImpl::buildLUT()
 {
-    // Create the LUT
-    std::srand(QDateTime().time().msec());
+    std::random_device rd;
+    std::mt19937 engine(rd());
+    std::uniform_real_distribution<MCFloat> dist(0, 1);
+
     for (MCUint i = 0; i < LUT_SIZE; i++) {
-        m_data[i] = (TO_DOUBLE(std::rand() % RAND_MAX)) / RAND_MAX;
+        m_data[i] = dist(engine);
     }
 }
 
