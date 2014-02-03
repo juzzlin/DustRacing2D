@@ -305,7 +305,11 @@ void MCGLShaderProgram::setFadeValue(GLfloat f)
 void MCGLShaderProgram::bindTextureUnit(GLuint index, Uniform uniform)
 {
     bind();
-    glUniform1i(getUniformLocation(uniform), index);
+    const int location = getUniformLocation(uniform);
+    if (location != -1)
+    {
+        glUniform1i(getUniformLocation(uniform), index);
+    }
 }
 
 void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)

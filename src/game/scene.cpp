@@ -607,15 +607,16 @@ void Scene::render()
             m_renderer.glScene().setSplitType(p0);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
+
+            // Setup for common scene
+            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
-            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
         }
 
-        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         renderCommonScene();
 
         break;
