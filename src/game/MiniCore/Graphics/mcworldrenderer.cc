@@ -141,17 +141,20 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
     // Render in the order of the layers. Depth test is
     // layer-specific.
 
+    bool depthTest = false;
     for (MCUint layer = 0; layer < MCWorld::MaxLayers; layer++)
     {
         // The depth test is enabled/disabled separately on
         // each object layer.
-        if (m_depthTestEnabled[layer])
+        if (m_depthTestEnabled[layer] && !depthTest)
         {
             glEnable(GL_DEPTH_TEST);
+            depthTest = true;
         }
-        else
+        else if (depthTest)
         {
             glDisable(GL_DEPTH_TEST);
+            depthTest = false;
         }
 
         renderObjectBatches(camera, layer);
@@ -235,10 +238,10 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
 
 void MCWorldRenderer::renderShadows(MCCamera * camera)
 {
+    glDisable(GL_DEPTH_TEST);
+
     for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
     {
-        glDisable(GL_DEPTH_TEST);
-
         // Render batches
         auto iter = m_objectBatches[i].begin();
         const auto end = m_objectBatches[i].end();
