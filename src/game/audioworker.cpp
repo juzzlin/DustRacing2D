@@ -97,6 +97,7 @@ void AudioWorker::loadSounds()
     loadMultiSound("skid",       "skid.ogg");
 
     loadSceneSound("carHit2",    "carHit2.ogg");
+    loadSceneSound("carHit3",    "carHit3.ogg");
 }
 
 void AudioWorker::loadSceneSound(QString handle, QString path)
