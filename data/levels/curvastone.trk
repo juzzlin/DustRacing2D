@@ -1,4 +1,4 @@
-<track version="1.4.6" cols="30" rows="18" index="8" name="Curvastone">
+<track version="1.6.3" cols="30" rows="18" index="8" name="Curvastone">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
@@ -930,6 +930,11 @@
  <o x="4964" y="2906" o="0" r="bushArea" c="free"/>
  <o x="4968" y="2994" o="143" r="bushArea" c="free"/>
  <o x="2676" y="3903" o="180" r="pit" c="free"/>
+ <o x="5018" y="3608" o="22" r="right" c="free"/>
+ <o x="7047" y="2697" o="45" r="left" c="free"/>
+ <o x="5634" y="2183" o="180" r="left" c="free"/>
+ <o x="5889" y="2185" o="0" r="right" c="free"/>
+ <o x="1303" y="3352" o="180" r="left" c="free"/>
  <n w="256" x="2941" y="3969" h="256" i="0"/>
  <n w="256" x="3708" y="3944" h="320" i="1"/>
  <n w="256" x="3989" y="3871" h="512" i="2"/>

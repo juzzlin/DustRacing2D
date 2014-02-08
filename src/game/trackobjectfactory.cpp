@@ -39,7 +39,7 @@ TrackObject * TrackObjectFactory::build(
 {
     MCObjectPtr object;
 
-    if (role == "brake")
+    if (role == "brake" || role == "left" || role == "right")
     {
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);

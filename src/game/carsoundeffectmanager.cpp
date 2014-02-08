@@ -116,10 +116,13 @@ void CarSoundEffectManager::collision(const MCCollisionEvent & event)
 {
     // Cache type id integers.
     static MCUint banner     = MCObject::typeID("dustRacing2DBanner");
+    static MCUint brake      = MCObject::typeID("brake");
     static MCUint crate      = MCObject::typeID("crate");
     static MCUint grandstand = MCObject::typeID("grandstand");
+    static MCUint left       = MCObject::typeID("left");
     static MCUint wall       = MCObject::typeID("wall");
     static MCUint wallLong   = MCObject::typeID("wallLong");
+    static MCUint right      = MCObject::typeID("right");
     static MCUint rock       = MCObject::typeID("rock");
     static MCUint plant      = MCObject::typeID("plant");
     static MCUint tree       = MCObject::typeID("tree");
@@ -146,10 +149,13 @@ void CarSoundEffectManager::collision(const MCCollisionEvent & event)
             m_hitTimer.start();
         }
         else if (
-                 event.collidingObject().typeID() == banner ||
-                 event.collidingObject().typeID() == crate  ||
-                 event.collidingObject().typeID() == plant  ||
-                 event.collidingObject().typeID() == tire)
+            event.collidingObject().typeID() == banner ||
+            event.collidingObject().typeID() == brake  ||
+            event.collidingObject().typeID() == crate  ||
+            event.collidingObject().typeID() == left   ||
+            event.collidingObject().typeID() == plant  ||
+            event.collidingObject().typeID() == right  ||
+            event.collidingObject().typeID() == tire)
         {
             emit locationChanged("carHit3", m_car.location().i(), m_car.location().j());
             emit playRequested("carHit3", false);

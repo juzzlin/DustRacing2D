@@ -1,4 +1,4 @@
-<track version="1.4.6" cols="42" rows="4" index="7" name="Straight">
+<track version="1.6.3" cols="42" rows="4" index="7" name="Straight">
  <t i="0" j="0" o="0" t="grass"/>
  <t i="0" j="1" o="0" t="grass"/>
  <t i="0" j="2" o="0" t="grass"/>
@@ -342,12 +342,18 @@
  <o x="73" y="686" o="150" r="crate" c="free"/>
  <o x="75" y="614" o="226" r="crate" c="free"/>
  <o x="10374" y="224" o="219" r="crate" c="free"/>
- <o x="10425" y="254" o="163" r="crate" c="free"/>
- <o x="10471" y="293" o="134" r="crate" c="free"/>
+ <o x="10427" y="247" o="163" r="crate" c="free"/>
+ <o x="10477" y="286" o="134" r="crate" c="free"/>
  <o x="10503" y="341" o="355" r="crate" c="free"/>
  <o x="10519" y="400" o="14" r="crate" c="free"/>
  <o x="10559" y="334" o="193" r="crate" c="free"/>
  <o x="1395" y="319" o="180" r="pit" c="free"/>
+ <o x="8985" y="243" o="90" r="right" c="free"/>
+ <o x="10436" y="302" o="45" r="right" c="free"/>
+ <o x="10451" y="712" o="135" r="right" c="free"/>
+ <o x="310" y="305" o="-45" r="right" c="free"/>
+ <o x="316" y="724" o="-135" r="right" c="free"/>
+ <o x="1531" y="784" o="-90" r="right" c="free"/>
  <n w="256" x="1652" y="380" h="256" i="0"/>
  <n w="256" x="2940" y="383" h="256" i="1"/>
  <n w="256" x="4218" y="380" h="256" i="2"/>
