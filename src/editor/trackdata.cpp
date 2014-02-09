@@ -17,18 +17,13 @@
 #include "tracktile.hpp"
 #include "undostackitembase.hpp"
 
-TrackData::TrackData(QString name, unsigned int cols, unsigned int rows)
-: m_name(name)
+TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
+: TrackDataBase(name, isUserTrack)
 , m_map(*this, cols, rows)
 , m_route()
 , m_undoStack()
 , m_undoStackPosition()
 {}
-
-QString TrackData::name() const
-{
-    return m_name;
-}
 
 QString TrackData::fileName() const
 {

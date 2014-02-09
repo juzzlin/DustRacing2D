@@ -30,13 +30,10 @@ class TrackData : public TrackDataBase
 public:
 
     //! Constructor.
-    TrackData(QString name, unsigned int cols, unsigned int rows);
+    TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows);
 
     //! Destructor.
     virtual ~TrackData();
-
-    //! Get name.
-    QString name() const;
 
     //! Get file name.
     QString fileName() const;
@@ -70,7 +67,6 @@ public:
 
 private:
 
-    QString m_name;
     QString m_fileName;
     Map     m_map;
     Objects m_objects;

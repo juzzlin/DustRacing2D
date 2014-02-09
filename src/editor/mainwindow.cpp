@@ -711,7 +711,7 @@ void MainWindow::initializeNewTrack()
 
         m_editorData->removeTilesFromScene();
         m_editorData->removeObjectsFromScene();
-        m_editorData->setTrackData(new TrackData(dialog.name(), cols, rows));
+        m_editorData->setTrackData(new TrackData(dialog.name(), dialog.isUserTrack(), cols, rows));
 
         delete m_editorScene;
         m_editorScene = new EditorScene;

@@ -18,6 +18,7 @@
 
 #include <QDialog>
 
+class QCheckBox;
 class QGridLayout;
 class QLabel;
 class QLineEdit;
@@ -42,6 +43,9 @@ public:
     //! Get name.
     QString name() const;
 
+    //! Return true if unlocked user track.
+    bool isUserTrack() const;
+
 private slots:
 
     void validateData();
@@ -57,6 +61,8 @@ private:
     QLabel      * m_colsLabel;
     QLabel      * m_rowsLabel;
     QLabel      * m_nameLabel;
+    QLabel      * m_userLabel;
+    QCheckBox   * m_userCheck;
 };
 
 #endif // NEWTRACKDIALOG_HPP

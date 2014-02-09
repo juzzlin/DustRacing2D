@@ -15,9 +15,21 @@
 
 #include "trackdatabase.hpp"
 
-TrackDataBase::TrackDataBase()
-: m_index(999)
+TrackDataBase::TrackDataBase(QString name, bool isUserTrack)
+: m_name(name)
+, m_index(999)
+, m_isUserTrack(isUserTrack)
 {
+}
+
+QString TrackDataBase::name() const
+{
+    return m_name;
+}
+
+bool TrackDataBase::isUserTrack() const
+{
+    return m_isUserTrack;
 }
 
 unsigned int TrackDataBase::index() const
