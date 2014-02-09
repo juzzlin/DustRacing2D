@@ -399,7 +399,7 @@
  <t i="22" j="1" o="0" t="grass"/>
  <t i="22" j="2" o="0" t="grass"/>
  <t i="22" j="3" o="0" t="grass"/>
- <t i="22" j="4" o="90" t="straight"/>
+ <t i="22" j="4" o="90" t="straight" c="1"/>
  <t i="22" j="5" o="0" t="grass"/>
  <t i="22" j="6" o="0" t="corner90"/>
  <t i="22" j="7" o="0" t="straight" c="1"/>
