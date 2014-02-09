@@ -30,6 +30,7 @@ public:
     enum TileType
     {
         TT_NONE = 0,
+        TT_BRIDGE,
         TT_CORNER_90,
         TT_CORNER_45_LEFT,
         TT_CORNER_45_RIGHT,

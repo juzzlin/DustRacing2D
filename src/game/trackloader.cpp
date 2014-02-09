@@ -267,7 +267,11 @@ void TrackLoader::readTile(
 
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 {
-    if (str == "corner90")
+    if (str == "bridge")
+    {
+        return TrackTile::TT_BRIDGE;
+    }
+    else if (str == "corner90")
     {
         return TrackTile::TT_CORNER_90;
     }

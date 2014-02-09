@@ -72,6 +72,7 @@ void TrackTile::setTileTypeEnum(TrackTile::TileType type)
 
     switch (type)
     {
+    case TT_BRIDGE:
     case TT_CORNER_90:
     case TT_CORNER_45_LEFT:
     case TT_CORNER_45_RIGHT:
