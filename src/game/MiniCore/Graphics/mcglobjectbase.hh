@@ -95,6 +95,9 @@ private:
     MCGLShaderProgram * m_program;
     MCGLShaderProgram * m_shadowProgram;
     MCGLMaterialPtr     m_material;
+
+    static GLuint m_boundVao;
+    static GLuint m_boundVbo;
 };
 
 #endif // MCGLOBJECTBASE_HH

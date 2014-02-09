@@ -23,6 +23,9 @@
 
 #include <cassert>
 
+GLuint MCGLObjectBase::m_boundVao = -1;
+GLuint MCGLObjectBase::m_boundVbo = -1;
+
 MCGLObjectBase::MCGLObjectBase()
 : m_vao(0)
 , m_vbo(0)
@@ -53,12 +56,16 @@ MCGLShaderProgram * MCGLObjectBase::shadowShaderProgram() const
 
 void MCGLObjectBase::bindVAO()
 {
-    glBindVertexArray(m_vao);
+    if (MCGLObjectBase::m_boundVao != m_vao)
+    {
+        glBindVertexArray(m_vao);
+        MCGLObjectBase::m_boundVao = m_vao;
+    }
 }
 
 void MCGLObjectBase::releaseVAO()
 {
-    glBindVertexArray(0);
+    // Do nothing
 }
 
 void MCGLObjectBase::createVAO()
@@ -71,12 +78,16 @@ void MCGLObjectBase::createVAO()
 
 void MCGLObjectBase::bindVBO()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    if (MCGLObjectBase::m_boundVbo != m_vbo)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        MCGLObjectBase::m_boundVao = m_vbo;
+    }
 }
 
 void MCGLObjectBase::releaseVBO()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Do nothing
 }
 
 void MCGLObjectBase::createVBO()
