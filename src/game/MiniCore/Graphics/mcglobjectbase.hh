@@ -56,10 +56,16 @@ public:
     void releaseVBO();
 
     //! Helper to bind texturing and VAO.
-    void bind();
+    virtual void bind();
 
     //! Helper to bind texturing and VAO for shadow rendering.
-    void bindShadow();
+    virtual void bindShadow();
+
+    //! Helper to bind texturing and VAO.
+    virtual void release();
+
+    //! Helper to bind texturing and VAO for shadow rendering.
+    virtual void releaseShadow();
 
     //! Bind the current matrial setup.
     void bindMaterial(bool bindForShadow = false);

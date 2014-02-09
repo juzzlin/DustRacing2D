@@ -90,6 +90,16 @@ void MCSurfaceView::beginShadowBatch()
     m_surface->bindShadow();
 }
 
+void MCSurfaceView::endBatch()
+{
+    m_surface->release();
+}
+
+void MCSurfaceView::endShadowBatch()
+{
+    m_surface->releaseShadow();
+}
+
 MCBBox<MCFloat> MCSurfaceView::bbox() const
 {
     // TODO: Fix this! The view should know the angle of the

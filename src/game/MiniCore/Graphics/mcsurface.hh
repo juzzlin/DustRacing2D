@@ -120,6 +120,18 @@ public:
     //! Get center
     MCVector2d<MCFloat> center() const;
 
+    //! \reimp
+    virtual void bind();
+
+    //! \reimp
+    virtual void bindShadow();
+
+    //! \reimp
+    virtual void release();
+
+    //! \reimp
+    virtual void releaseShadow();
+
 private:
 
     DISABLE_COPY(MCSurface);
@@ -132,10 +144,6 @@ private:
         const MCGLVertex   * normals,
         const MCGLTexCoord * texCoords,
         const GLfloat      * colors);
-
-    void doRender(bool autoBind);
-
-    void doRenderShadow(bool autoBind);
 
     MCFloat     m_w;
     MCFloat     m_w2;

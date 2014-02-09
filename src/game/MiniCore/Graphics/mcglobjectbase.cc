@@ -100,14 +100,42 @@ void MCGLObjectBase::bindMaterial(bool bindForShadow)
 
 void MCGLObjectBase::bind()
 {
-    bindVAO();
-    bindMaterial();
+    if (shaderProgram())
+    {
+        shaderProgram()->bind();
+
+        bindVAO();
+        bindMaterial();
+    }
+    else
+    {
+        // Save the user from debugging as to why nothing is being drawn.
+        throw MCException("Trying to bind MCGLObject but shader program for it not set!");
+    }
 }
 
 void MCGLObjectBase::bindShadow()
 {
-    bindVAO();
-    bindMaterial(true);
+    if (shadowShaderProgram())
+    {
+        shadowShaderProgram()->bind();
+
+        bindVAO();
+        bindMaterial(true);
+    }
+    else
+    {
+        // Save the user from debugging as to why nothing is being drawn.
+        throw MCException("Trying to render shadow for surface, but shader program for it not set!");
+    }
+}
+
+void MCGLObjectBase::release()
+{
+}
+
+void MCGLObjectBase::releaseShadow()
+{
 }
 
 void MCGLObjectBase::setMaterial(MCGLMaterialPtr material)

@@ -286,107 +286,106 @@ void MCSurface::setSize(MCFloat w, MCFloat h)
     m_sy = h / m_h;
 }
 
+void MCSurface::bind()
+{
+    MCGLObjectBase::bind();
+
+    doAlphaBlend();
+}
+
+void MCSurface::bindShadow()
+{
+    MCGLObjectBase::bindShadow();
+}
+
+void MCSurface::release()
+{
+    if (m_useAlphaBlend)
+    {
+        glDisable(GL_BLEND);
+    }
+}
+
+void MCSurface::releaseShadow()
+{
+
+}
+
 void MCSurface::render()
 {
     glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
 }
 
-void MCSurface::doRender(bool autoBind)
+void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
     if (autoBind)
     {
         bind();
     }
 
-    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+    MCFloat z = pos.k();
+
+    if (camera)
+    {
+        camera->mapToCamera(x, y);
+    }
+
+    shaderProgram()->setScale(m_sx, m_sy, m_sz);
+    shaderProgram()->setColor(m_color);
+
+    if (m_centerSet)
+    {
+        shaderProgram()->setTransform(angle, MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
+    }
+    else
+    {
+        shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+    }
+
+    render();
+
+    if (autoBind)
+    {
+        release();
+    }
 }
 
-void MCSurface::doRenderShadow(bool autoBind)
+void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
 {
     if (autoBind)
     {
         bindShadow();
     }
 
-    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-}
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+    MCFloat z = 0;
 
-void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
-{
-    if (shaderProgram())
+    if (camera)
     {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = pos.k();
+        camera->mapToCamera(x, y);
+    }
 
-        if (camera)
-        {
-            camera->mapToCamera(x, y);
-        }
+    shadowShaderProgram()->bind();
+    shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
 
-        doAlphaBlend();
-
-        shaderProgram()->bind();
-        shaderProgram()->setScale(m_sx, m_sy, m_sz);
-        shaderProgram()->setColor(m_color);
-
-        if (m_centerSet)
-        {
-            shaderProgram()->setTransform(angle, MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
-        }
-        else
-        {
-            shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
-        }
-
-        doRender(autoBind);
-
-        if (m_useAlphaBlend)
-        {
-            glDisable(GL_BLEND);
-        }
+    if (m_centerSet)
+    {
+        shadowShaderProgram()->setTransform(angle,
+            MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
     }
     else
     {
-        // Save the user from debugging as to why nothing is being drawn.
-        throw MCException(
-            "Trying to render surface but shader program for it not set!");
+        shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
     }
-}
 
-void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
-    bool autoBind)
-{
-    if (shadowShaderProgram())
+    render();
+
+    if (autoBind)
     {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = 0;
-
-        if (camera)
-        {
-            camera->mapToCamera(x, y);
-        }
-
-        shadowShaderProgram()->bind();
-        shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
-
-        if (m_centerSet)
-        {
-            shadowShaderProgram()->setTransform(angle,
-                MCVector3dF(x + m_w2 - m_center.i(), y + m_h2 - m_center.j(), z));
-        }
-        else
-        {
-            shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
-        }
-
-        doRenderShadow(autoBind);
-    }
-    else
-    {
-        // Save the user from debugging as to why nothing is being drawn.
-        throw MCException("Trying to render shadow for surface, but shader program for it not set!");
+        releaseShadow();
     }
 }
 
