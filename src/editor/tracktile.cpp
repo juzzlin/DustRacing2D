@@ -63,6 +63,12 @@ void TrackTile::paint(QPainter * painter,
         painter->drawPixmap(boundingRect().x(), boundingRect().y(),
             boundingRect().width(), boundingRect().height(),
             m_pixmap);
+
+        // Mark the tile if it has computer hints set
+        if (computerHint() != TrackTileBase::CH_NONE)
+        {
+            painter->fillRect(boundingRect(), QBrush(QColor(255, 0, 0, 64)));
+        }
     }
     else
     {
@@ -132,6 +138,12 @@ bool TrackTile::rotate90CCW(qreal * newRotation)
 void TrackTile::setTileType(const QString & type)
 {
     TrackTileBase::setTileType(type);
+    update();
+}
+
+void TrackTile::setComputerHint(ComputerHint hint)
+{
+    TrackTileBase::setComputerHint(hint);
     update();
 }
 

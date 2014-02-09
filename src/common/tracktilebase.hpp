@@ -62,13 +62,13 @@ public:
     virtual QPoint matrixLocation() const;
 
     //! Set type: "corner", "straight", "grass", "finish", "clear"..
-    void setTileType(const QString & type);
+    virtual void setTileType(const QString & type);
 
     //! Get type
     const QString & tileType() const;
 
     //! Set computer hint
-    void setComputerHint(ComputerHint hint);
+    virtual void setComputerHint(ComputerHint hint);
 
     //! Get computer hint
     ComputerHint computerHint() const;

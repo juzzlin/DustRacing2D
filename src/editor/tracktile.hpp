@@ -58,6 +58,9 @@ public:
     //! \reimp
     virtual void setTileType(const QString & type);
 
+    //! \reimp
+    virtual void setComputerHint(ComputerHint hint);
+
     //! Get current active tile.
     //! \returns Valid pointer or nullptr if not set.
     static TrackTile * activeTile();
