@@ -32,13 +32,18 @@ public:
 signals:
 
     void fadeInFinished();
+
     void fadeOutFinished();
+
     void fadeValueChanged(float);
 
 public slots:
 
     void beginFadeIn(int preDelayMSec, int msec, int postDelayMSec);
+
     void beginFadeOut(int preDelayMSec, int msec, int postDelayMSec);
+
+    void beginFadeOutFlash(int preDelayMSec, int msec, int postDelayMSec);
 
 private slots:
 

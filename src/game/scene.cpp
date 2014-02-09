@@ -107,6 +107,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     connect(&m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
     connect(&m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
     connect(&m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
+    connect(&m_stateMachine, SIGNAL(fadeOutFlashRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOutFlash(int, int, int)));
     connect(&m_stateMachine, SIGNAL(soundsStopped()), &m_race, SLOT(stopEngineSounds()));
 
     connect(m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));

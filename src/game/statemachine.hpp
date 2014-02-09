@@ -82,6 +82,8 @@ signals:
 
     void fadeOutRequested(int, int, int);
 
+    void fadeOutFlashRequested(int, int, int);
+
     void soundsStopped();
 
     void startlightAnimationRequested();

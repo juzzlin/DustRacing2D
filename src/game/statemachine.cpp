@@ -143,7 +143,7 @@ void StateMachine::stateMenuTransitionIn()
 
 void StateMachine::stateMenuTransitionOut()
 {
-    emit fadeOutRequested(0, 2000, 0);
+    emit fadeOutFlashRequested(0, 2000, 0);
 }
 
 void StateMachine::stateGameTransitionIn()

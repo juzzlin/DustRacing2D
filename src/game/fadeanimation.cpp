@@ -48,7 +48,20 @@ void FadeAnimation::beginFadeOut(int preDelayMSec, int msec, int postDelayMSec)
     m_preDelayMSec  = preDelayMSec / m_updateFps;
     m_postDelayMSec = postDelayMSec / m_updateFps;
     m_fadeValue     = 1.0;
-    m_step          = 1.0 / (msec / m_updateFps);
+    m_step          = m_fadeValue / (msec / m_updateFps);
+    m_fadeIn        = false;
+
+    emit fadeValueChanged(m_fadeValue);
+
+    m_timer.start();
+}
+
+void FadeAnimation::beginFadeOutFlash(int preDelayMSec, int msec, int postDelayMSec)
+{
+    m_preDelayMSec  = preDelayMSec / m_updateFps;
+    m_postDelayMSec = postDelayMSec / m_updateFps;
+    m_fadeValue     = 10.0;
+    m_step          = m_fadeValue / (msec / m_updateFps);
     m_fadeIn        = false;
 
     emit fadeValueChanged(m_fadeValue);
