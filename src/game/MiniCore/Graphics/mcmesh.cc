@@ -177,32 +177,6 @@ void MCMesh::render()
     glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
 }
 
-void MCMesh::doRender(bool autoBind)
-{
-    if (autoBind)
-    {
-        bind();
-        glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-    }
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-    }
-}
-
-void MCMesh::doRenderShadow(bool autoBind)
-{
-    if (autoBind)
-    {
-        bindShadow();
-        glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-    }
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-    }
-}
-
 void MCMesh::setColor(const MCGLColor & color)
 {
     m_color = color;
@@ -223,44 +197,58 @@ void MCMesh::setScale(MCFloat w, MCFloat h)
 
 void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
-    if (shaderProgram())
+    if (autoBind)
     {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = pos.k();
+        bind();
+    }
 
-        if (camera)
-        {
-            camera->mapToCamera(x, y);
-        }
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+    MCFloat z = pos.k();
 
-        shaderProgram()->bind();
-        shaderProgram()->setScale(m_sx, m_sy, m_sz);
-        shaderProgram()->setColor(m_color);
-        shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+    if (camera)
+    {
+        camera->mapToCamera(x, y);
+    }
 
-        doRender(autoBind);
+    shaderProgram()->bind();
+    shaderProgram()->setScale(m_sx, m_sy, m_sz);
+    shaderProgram()->setColor(m_color);
+    shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+
+    render();
+
+    if (autoBind)
+    {
+        release();
     }
 }
 
 void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
 {
-    if (shadowShaderProgram())
+    if (autoBind)
     {
-        MCFloat x = pos.i();
-        MCFloat y = pos.j();
-        MCFloat z = 0;
+        bindShadow();
+    }
 
-        if (camera)
-        {
-            camera->mapToCamera(x, y);
-        }
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+    MCFloat z = 0;
 
-        shadowShaderProgram()->bind();
-        shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
-        shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+    if (camera)
+    {
+        camera->mapToCamera(x, y);
+    }
 
-        doRenderShadow(autoBind);
+    shadowShaderProgram()->bind();
+    shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+
+    render();
+
+    if (autoBind)
+    {
+        releaseShadow();
     }
 }
 

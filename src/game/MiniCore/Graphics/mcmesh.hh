@@ -81,12 +81,10 @@ public:
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
-    void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle,
-        bool autoBind = true);
+    void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
-        bool autoBind = true);
+    void renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render the vertex buffer only. bind() must be called separately.
     void render();
@@ -106,9 +104,6 @@ private:
         const MCGLVertex   * normals,
         const MCGLTexCoord * texCoords,
         const GLfloat      * colors);
-
-    void doRender(bool autoBind);
-    void doRenderShadow(bool autoBind);
 
     int       m_numVertices;
     MCFloat   m_w, m_h;
