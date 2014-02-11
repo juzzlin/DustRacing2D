@@ -76,7 +76,7 @@ void Race::createStartGridObjects()
         data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId("grid");
-        data.setLayer(Layers::Ground);
+        data.setRenderLayer(Layers::Ground);
 
         MCObjectPtr object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);

@@ -328,10 +328,17 @@ public:
      * first. This can be used when creating complex objects from
      * 2d-surfaces only.
      * \param layer The new layer. */
-    void setLayer(MCUint layer);
+    void setRenderLayer(MCUint layer);
 
     //! Return the render layer.
-    MCUint layer() const;
+    MCUint renderLayer() const;
+
+    /*! Set collision layer. Only objects on the same layer can collide. The default is 0.
+     * \param layer The new layer. */
+    void setCollisionLayer(MCUint layer);
+
+    //! Return the collision layer.
+    MCUint collisionLayer() const;
 
     //! Add a collision contact.
     void addContact(MCContact & contact);
@@ -443,7 +450,8 @@ private:
     MCFloat                      m_torque;
     MCFloat                      m_invMomentOfInertia;
     MCFloat                      m_momentOfInertia;
-    MCUint                       m_layer;
+    MCUint                       m_renderLayer;
+    MCUint                       m_collisionLayer;
     int                          m_index;
     MCUint                       m_i0, m_i1, m_j0, m_j1;
     MCVector3dF                  m_acceleration;

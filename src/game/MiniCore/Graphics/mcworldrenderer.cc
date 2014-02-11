@@ -286,14 +286,14 @@ void MCWorldRenderer::enableDepthTestOnLayer(MCUint layer, bool enable)
 void MCWorldRenderer::addToLayerMap(MCObject & object)
 {
     const MCUint layerIndex =
-        object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
+        object.renderLayer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.renderLayer();
     m_layers[layerIndex].insert(&object);
 }
 
 void MCWorldRenderer::removeFromLayerMap(MCObject & object)
 {
     const MCUint layerIndex =
-        object.layer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.layer();
+        object.renderLayer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.renderLayer();
     m_layers[layerIndex].erase(&object);
 }
 

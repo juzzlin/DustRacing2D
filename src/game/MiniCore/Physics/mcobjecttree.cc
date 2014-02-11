@@ -156,16 +156,13 @@ void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
             while (inner != end)
             {
                 MCObject * obj2 = *inner;
-                if (obj1 != obj2)
+                if (obj1 != obj2 &&
+                    (!obj1->sleeping() || !obj2->sleeping()) &&
+                    (obj1->collisionLayer() == obj2->collisionLayer()) &&
+                    (obj1->bbox().intersects(obj2->bbox())))
                 {
-                    if (!obj1->sleeping() || !obj2->sleeping())
-                    {
-                        if (obj1->bbox().intersects(obj2->bbox()))
-                        {
-                            result[obj1].insert(obj2);
-                            hadCollisions = true;
-                        }
-                    }
+                    result[obj1].insert(obj2);
+                    hadCollisions = true;
                 }
 
                 inner++;

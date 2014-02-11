@@ -194,7 +194,7 @@ void Scene::createCars()
                 m_ai.push_back(AIPtr(new AI(*car)));
             }
 
-            car->setLayer(Layers::Cars);
+            car->setRenderLayer(Layers::Cars);
             car->shape()->view()->setShaderProgram(&m_renderer.program("car"));
             car->shape()->view()->setShadowShaderProgram(&m_renderer.program("defaultShadow"));
 

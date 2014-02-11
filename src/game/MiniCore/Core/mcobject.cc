@@ -84,7 +84,8 @@ void MCObject::init(const std::string & typeId)
     m_torque                 = 0.0;
     m_invMomentOfInertia     = std::numeric_limits<MCFloat>::max();
     m_momentOfInertia        = 0;
-    m_layer                  = 0;
+    m_renderLayer            = 0;
+    m_collisionLayer         = 0;
     m_index                  = -1;
     m_i0                     = 0;
     m_i1                     = 0;
@@ -740,23 +741,33 @@ void MCObject::stepTime(MCFloat /* step */)
 {
 }
 
-void MCObject::setLayer(MCUint newLayer)
+void MCObject::setRenderLayer(MCUint layer)
 {
     if (m_index != -1) // Check that the object is added to world
     {
         MCWorld::instance().renderer().removeFromLayerMap(*this);
-        m_layer = newLayer;
+        m_renderLayer = layer;
         MCWorld::instance().renderer().addToLayerMap(*this);
     }
     else
     {
-        m_layer = newLayer;
+        m_renderLayer = layer;
     }
 }
 
-MCUint MCObject::layer() const
+MCUint MCObject::renderLayer() const
 {
-    return m_layer;
+    return m_renderLayer;
+}
+
+void MCObject::setCollisionLayer(MCUint layer)
+{
+    m_collisionLayer = layer;
+}
+
+MCUint MCObject::collisionLayer() const
+{
+    return m_collisionLayer;
 }
 
 void MCObject::setIndex(int newIndex)

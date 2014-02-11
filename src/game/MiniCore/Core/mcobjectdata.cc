@@ -29,7 +29,7 @@ MCObjectData::MCObjectData(const std::string & typeId)
 , m_restitution(0.5)
 , m_xyFriction(0.0)
 , m_stationary(false)
-, m_layer(0)
+, m_renderLayer(0)
 {
 }
 
@@ -116,14 +116,14 @@ bool MCObjectData::stationary() const
     return m_stationary;
 }
 
-void MCObjectData::setLayer(int layer)
+void MCObjectData::setRenderLayer(int layer)
 {
-    m_layer = layer;
+    m_renderLayer = layer;
 }
 
-int MCObjectData::layer() const
+int MCObjectData::renderLayer() const
 {
-    return m_layer;
+    return m_renderLayer;
 }
 
 void MCObjectData::setInitialLocation(MCVector3dF location)

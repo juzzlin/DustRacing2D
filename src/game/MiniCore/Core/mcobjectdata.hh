@@ -95,10 +95,10 @@ public:
     bool stationary() const;
 
     //! Set the rendering layer.
-    void setLayer(int layer);
+    void setRenderLayer(int layer);
 
     //! Get the rendering layer.
-    int layer() const;
+    int renderLayer() const;
 
     //! Set the initial location.
     void setInitialLocation(MCVector3dF location);
@@ -126,7 +126,7 @@ private:
     MCFloat             m_restitution;
     MCFloat             m_xyFriction;
     bool                m_stationary;
-    int                 m_layer;
+    int                 m_renderLayer;
     MCVector3dF         m_location;
     int                 m_angle;
 };

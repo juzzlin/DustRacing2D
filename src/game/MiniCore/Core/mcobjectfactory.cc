@@ -183,7 +183,7 @@ void MCObjectFactory::setCommonProperties(
     object.setMass(data.mass(), data.stationary());
     object.setXYFriction(data.xyFriction());
     object.setRestitution(data.restitution());
-    object.setLayer(data.layer());
+    object.setRenderLayer(data.renderLayer());
     object.setInitialLocation(data.initialLocation());
     object.setInitialAngle(data.initialAngle());
 }
