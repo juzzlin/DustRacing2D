@@ -377,22 +377,20 @@ void Game::exitGame()
 
 void Game::updateFrame()
 {
-    if (m_elapsed.elapsed() > m_updateDelay - m_renderElapsed)
+    const int TUNE = 2;
+    if (m_elapsed.elapsed() >= m_updateDelay - m_renderElapsed - TUNE)
     {
         m_stateMachine->update();
-
         m_scene->updateFrame(*m_inputHandler, m_timeStep);
         m_scene->updateAnimations();
         m_scene->updateOverlays();
-
         m_elapsed.restart();
-
         m_renderElapsed = 0;
     }
     else
     {
-        QTime elapsed;
-        elapsed.start();
+        static QTime elapsed;
+        elapsed.restart();
         m_renderer->updateGL();
         m_renderElapsed = elapsed.elapsed();
     }
