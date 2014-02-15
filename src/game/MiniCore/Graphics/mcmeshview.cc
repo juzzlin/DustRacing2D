@@ -44,7 +44,7 @@ MCMesh * MCMeshView::mesh() const
     return m_mesh;
 }
 
-void MCMeshView::setShaderProgram(MCGLShaderProgram * program)
+void MCMeshView::setShaderProgram(MCGLShaderProgramPtr program)
 {
     if (m_mesh)
     {
@@ -52,7 +52,7 @@ void MCMeshView::setShaderProgram(MCGLShaderProgram * program)
     }
 }
 
-void MCMeshView::setShadowShaderProgram(MCGLShaderProgram * program)
+void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
     if (m_mesh)
     {

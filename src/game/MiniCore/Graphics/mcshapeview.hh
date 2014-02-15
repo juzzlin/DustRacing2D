@@ -21,6 +21,7 @@
 #define MCSHAPEVIEW_HH
 
 #include "mcbbox.hh"
+#include "mcglscene.hh"
 #include "mcglshaderprogram.hh"
 #include "mcmacros.hh"
 #include "mctypes.hh"
@@ -45,8 +46,8 @@ public:
     //! beginBatch() and endBatch() are called based on this.
     MCShapeView(const std::string & viewId)
     : m_viewId(viewId)
-    , m_shaderProgram(nullptr)
-    , m_shadowShaderProgram(nullptr)
+    , m_shaderProgram(MCGLScene::instance().defaultShaderProgram())
+    , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
     , m_hasShadow(true)
     , m_batchMode(false)
     {}
@@ -54,27 +55,27 @@ public:
     //! Destructor.
     virtual ~MCShapeView() {};
 
-    //! Set the default shader program that is used when rendering.
-    virtual void setShaderProgram(MCGLShaderProgram * shaderProgram)
+    //! Set the shader program that is used when rendering.
+    virtual void setShaderProgram(MCGLShaderProgramPtr shaderProgram)
     {
         m_shaderProgram = shaderProgram;
     }
 
-    //! Set the default shader program that is used when rendering
+    //! Set the shader program that is used when rendering
     //! the (fake) 2d shadow.
-    virtual void setShadowShaderProgram(MCGLShaderProgram * shaderProgram)
+    virtual void setShadowShaderProgram(MCGLShaderProgramPtr shaderProgram)
     {
         m_shadowShaderProgram = shaderProgram;
     }
 
-    //! Return the default shader program or nullptr if not set.
-    MCGLShaderProgram * shaderProgram() const
+    //! Return the default shader program.
+    MCGLShaderProgramPtr shaderProgram() const
     {
         return m_shaderProgram;
     }
 
-    //! Return the default shadow shader program or nullptr if not set.
-    MCGLShaderProgram * shadowShaderProgram() const
+    //! Return the default shadow shader program.
+    MCGLShaderProgramPtr shadowShaderProgram() const
     {
         return m_shadowShaderProgram;
     }
@@ -214,8 +215,8 @@ private:
     DISABLE_COPY(MCShapeView);
 
     std::string m_viewId;
-    MCGLShaderProgram * m_shaderProgram;
-    MCGLShaderProgram * m_shadowShaderProgram;
+    MCGLShaderProgramPtr m_shaderProgram;
+    MCGLShaderProgramPtr m_shadowShaderProgram;
     bool m_hasShadow;
     bool m_batchMode;
 };

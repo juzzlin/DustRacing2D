@@ -56,9 +56,9 @@ public:
     , m_raceRecord(Settings::instance().loadRaceRecord(m_track, Game::instance().lapCount()))
     , m_bestPos(Settings::instance().loadBestPos(m_track, Game::instance().lapCount()))
     {
-        m_star.setShaderProgram(&Renderer::instance().program("menu"));
-        m_glow.setShaderProgram(&Renderer::instance().program("menu"));
-        m_lock.setShaderProgram(&Renderer::instance().program("menu"));
+        m_star.setShaderProgram(Renderer::instance().program("menu"));
+        m_glow.setShaderProgram(Renderer::instance().program("menu"));
+        m_lock.setShaderProgram(Renderer::instance().program("menu"));
     }
 
     Track & track() const
@@ -151,7 +151,7 @@ void TrackItem::render()
             {
                 if (MCSurface * pSurface = pTile->previewSurface())
                 {
-                    pSurface->setShaderProgram(&Renderer::instance().program("menu"));
+                    pSurface->setShaderProgram(Renderer::instance().program("menu"));
                     pSurface->bindMaterial();
 
                     if (m_track.trackData().isLocked())

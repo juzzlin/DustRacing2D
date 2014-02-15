@@ -50,7 +50,7 @@ void MCSurfaceParticle::setSurface(MCSurface & surface)
     static_cast<MCSurfaceView *>(shape()->view().get())->setSurface(surface);
 }
 
-void MCSurfaceParticle::setShaderProgram(MCGLShaderProgram * program)
+void MCSurfaceParticle::setShaderProgram(MCGLShaderProgramPtr program)
 {
     static_cast<MCSurfaceView *>(shape()->view().get())->surface()->setShaderProgram(program);
 }

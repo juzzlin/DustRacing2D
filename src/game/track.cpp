@@ -122,19 +122,19 @@ void Track::render(MCCamera * camera)
     MCUint i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
-    MCGLShaderProgram & prog2d = Renderer::instance().program("tile2d");
-    prog2d.bind();
+    MCGLShaderProgramPtr prog2d = Renderer::instance().program("tile2d");
+    prog2d->bind();
     renderAsphalt(camera, prog2d, i0, i2, j0, j2);
-    prog2d.release();
+    prog2d->release();
 
-    MCGLShaderProgram & prog3d = Renderer::instance().program("tile3d");
-    prog3d.bind();
+    MCGLShaderProgramPtr prog3d = Renderer::instance().program("tile3d");
+    prog3d->bind();
     renderTiles(camera, prog3d, i0, i2, j0, j2);
-    prog3d.release();
+    prog3d->release();
 }
 
 void Track::renderAsphalt(
-    MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
     const MapBase & rMap = m_pTrackData->map();
 
@@ -144,7 +144,7 @@ void Track::renderAsphalt(
     MCFloat x1, y1; // Coordinates mapped to camera
 
     // Bind common geometry and textures for all asphalt tiles.
-    m_asphalt.setShaderProgram(&prog);
+    m_asphalt.setShaderProgram(prog);
     m_asphalt.bind();
 
     // Loop through the visible tile matrix and draw the tiles
@@ -163,7 +163,7 @@ void Track::renderAsphalt(
                     x1 = x;
                     y1 = y;
                     camera->mapToCamera(x1, y1);
-                    prog.setTransform(0, MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+                    prog->setTransform(0, MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
                     m_asphalt.render();
                 }
             }
@@ -176,7 +176,7 @@ void Track::renderAsphalt(
 }
 
 void Track::renderTiles(
-    MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
     const MapBase & rMap = m_pTrackData->map();
 
@@ -231,7 +231,7 @@ void Track::renderTiles(
     while (iter != sortedTiles.end())
     {
         MCSurface * surface = iter->first;
-        surface->setShaderProgram(&prog);
+        surface->setShaderProgram(prog);
         surface->bindMaterial();
 
         for (unsigned int i = 0; i < iter->second.size(); i++)
@@ -240,7 +240,7 @@ void Track::renderTiles(
             y1 = iter->second[i].y1;
 
             const TrackTile * tile = iter->second[i].tile;
-            prog.setTransform(tile->rotation(), MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+            prog->setTransform(tile->rotation(), MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
             surface->render();
         }
 

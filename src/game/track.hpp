@@ -19,12 +19,12 @@
 #include "updateableif.hpp"
 
 #include <MCBBox>
+#include <MCGLShaderProgram>
 #include <MCTypes>
 
 class TrackData;
 class TrackTile;
 class MCCamera;
-class MCGLShaderProgram;
 class MCSurface;
 
 //! A renderable race track object constructed from
@@ -77,10 +77,10 @@ private:
         MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
 
     void renderAsphalt(
-        MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
 
     void renderTiles(
-        MCCamera * camera, MCGLShaderProgram & prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
 
     TrackData * m_pTrackData;
     MCUint      m_rows, m_cols, m_width, m_height;

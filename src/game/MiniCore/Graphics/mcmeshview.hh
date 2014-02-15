@@ -44,10 +44,10 @@ public:
     MCMesh * mesh() const;
 
     //! \reimp
-    void setShaderProgram(MCGLShaderProgram * program);
+    void setShaderProgram(MCGLShaderProgramPtr program);
 
     //! \reimp
-    void setShadowShaderProgram(MCGLShaderProgram * program);
+    void setShadowShaderProgram(MCGLShaderProgramPtr program);
 
     //! \reimp
     virtual void render(

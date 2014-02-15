@@ -23,12 +23,12 @@
 #include "mcparticle.hh"
 #include "mccamera.hh"
 #include "mcglcolor.hh"
+#include "mcglshaderprogram.hh"
 #include "mcsurface.hh"
 
 #include <string>
 
 class MCSurface;
-class MCGLShaderProgram;
 
 /*! \class MCSurfaceParticle
  *  \brief A particle that renders as an MCSurface. Can be inherited.
@@ -55,7 +55,7 @@ public:
     void setSurface(MCSurface & surface);
 
     //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
+    void setShaderProgram(MCGLShaderProgramPtr program);
 
     //! Destructor.
     virtual ~MCSurfaceParticle();

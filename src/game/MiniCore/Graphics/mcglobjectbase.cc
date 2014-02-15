@@ -18,7 +18,6 @@
 //
 
 #include "mcglobjectbase.hh"
-#include "mcglshaderprogram.hh"
 #include "mcexception.hh"
 
 #include <cassert>
@@ -29,27 +28,25 @@ GLuint MCGLObjectBase::m_boundVbo = -1;
 MCGLObjectBase::MCGLObjectBase()
 : m_vao(0)
 , m_vbo(0)
-, m_program(nullptr)
-, m_shadowProgram(nullptr)
 {
 }
 
-void MCGLObjectBase::setShaderProgram(MCGLShaderProgram * program)
+void MCGLObjectBase::setShaderProgram(MCGLShaderProgramPtr program)
 {
     m_program = program;
 }
 
-void MCGLObjectBase::setShadowShaderProgram(MCGLShaderProgram * program)
+void MCGLObjectBase::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
     m_shadowProgram = program;
 }
 
-MCGLShaderProgram * MCGLObjectBase::shaderProgram() const
+MCGLShaderProgramPtr MCGLObjectBase::shaderProgram() const
 {
     return m_program;
 }
 
-MCGLShaderProgram * MCGLObjectBase::shadowShaderProgram() const
+MCGLShaderProgramPtr MCGLObjectBase::shadowShaderProgram() const
 {
     return m_shadowProgram;
 }
@@ -102,8 +99,8 @@ void MCGLObjectBase::bindMaterial(bool bindForShadow)
 {
     if (m_material)
     {
-        MCGLShaderProgram * program = bindForShadow ? m_shadowProgram : m_program;
-        assert(program);
+        MCGLShaderProgramPtr program = bindForShadow ? m_shadowProgram : m_program;
+        assert(program.get());
 
         program->bindMaterial(m_material);
     }

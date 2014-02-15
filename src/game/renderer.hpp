@@ -62,7 +62,7 @@ public:
     void setEventHandler(EventHandler & eventHandler);
 
     //! \return shader program object by the given id string.
-    MCGLShaderProgram & program(const std::string & id);
+    MCGLShaderProgramPtr program(const std::string & id);
 
     //! \return current scene.
     MCGLScene & glScene();

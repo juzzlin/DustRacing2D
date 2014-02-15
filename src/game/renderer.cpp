@@ -150,14 +150,14 @@ void Renderer::setEnabled(bool enable)
     m_enabled = enable;
 }
 
-MCGLShaderProgram & Renderer::program(const std::string & id)
+MCGLShaderProgramPtr Renderer::program(const std::string & id)
 {
     MCGLShaderProgramPtr program(m_shaderHash[id]);
-    if (!program.get())
+    if (!program)
     {
         throw MCException("Cannot find shader program '" + id +"'");
     }
-    return *program;
+    return program;
 }
 
 MCGLScene & Renderer::glScene()
@@ -213,7 +213,7 @@ void Renderer::renderCustomResolution()
 
     dummyMaterial->setTexture(fbo.texture(), 0);
     MCSurface sd(dummyMaterial, Scene::width(), Scene::height());
-    sd.setShaderProgram(&program("fbo"));
+    sd.setShaderProgram(program("fbo"));
     sd.bindMaterial();
     sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 }

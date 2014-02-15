@@ -39,7 +39,7 @@ SurfaceMenu::SurfaceMenu(
 , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
 , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
-    m_back.setShaderProgram(&Renderer::instance().program("menu"));
+    m_back.setShaderProgram(Renderer::instance().program("menu"));
     m_back.setColor(MCGLColor(0.5, 0.5, 0.5, 1.0));
 
     if (quitItem)

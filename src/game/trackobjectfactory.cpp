@@ -52,8 +52,8 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(Layers::GrandStands);
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -85,8 +85,8 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(Layers::Meshes);
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
     }
     else if (role == "dustRacing2DBanner")
     {
@@ -101,8 +101,8 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(Layers::GrandStands);
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -198,8 +198,8 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
 
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -223,8 +223,8 @@ TrackObject * TrackObjectFactory::build(
         // Create a custom view.
         MCShapeViewPtr view(new TreeView(
             MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5));
-        view->setShaderProgram(&(Renderer::instance().program("default")));
-        view->setShadowShaderProgram(&(Renderer::instance().program("defaultShadow")));
+        view->setShaderProgram(Renderer::instance().program("default"));
+        view->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
         MCObjectPtr object = m_objectFactory.build(data, view);
 
         // Wrap the MCObject in a TrackObject
@@ -244,8 +244,8 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("defaultSpecular"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
@@ -258,8 +258,8 @@ TrackObject * TrackObjectFactory::build(
     }
     else
     {
-        object->shape()->view()->setShaderProgram(&Renderer::instance().program("default"));
-        object->shape()->view()->setShadowShaderProgram(&Renderer::instance().program("defaultShadow"));
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("default"));
+        object->shape()->view()->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);

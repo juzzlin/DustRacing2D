@@ -38,7 +38,6 @@
 using std::string;
 
 class  MCCamera;
-class  MCGLShaderProgram;
 struct MCGLTexCoord;
 class  MCGLVertex;
 

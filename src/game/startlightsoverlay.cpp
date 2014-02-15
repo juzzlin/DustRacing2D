@@ -30,7 +30,7 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 , m_model(model)
 , m_alpha(1.0)
 {
-    MCGLShaderProgram * const shader = &Renderer::instance().program("default");
+    MCGLShaderProgramPtr shader = Renderer::instance().program("default");
     m_startLightOn.setShaderProgram(shader);
     m_startLightOnCorner.setShaderProgram(shader);
     m_startLightOff.setShaderProgram(shader);

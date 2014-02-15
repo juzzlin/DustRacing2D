@@ -18,7 +18,6 @@
 //
 
 #include "mcglrectparticle.hh"
-#include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
 #include "mccamera.hh"
 
@@ -106,7 +105,7 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
     }
 }
 
-void MCGLRectParticle::setShaderProgram(MCGLShaderProgram * program)
+void MCGLRectParticle::setShaderProgram(MCGLShaderProgramPtr program)
 {
     m_program = program;
 }

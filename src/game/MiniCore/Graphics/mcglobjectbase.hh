@@ -22,8 +22,7 @@
 
 #include <MCGLEW>
 #include "mcglmaterial.hh"
-
-class MCGLShaderProgram;
+#include "mcglshaderprogram.hh"
 
 /*! Base class for GL objects in MiniCore. Automatically creates VBO, VAO and
  *  basic texturing support. */
@@ -71,16 +70,16 @@ public:
     void bindMaterial(bool bindForShadow = false);
 
     //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
+    void setShaderProgram(MCGLShaderProgramPtr program);
 
     //! Set the shader program to be used for 2d shadows.
-    void setShadowShaderProgram(MCGLShaderProgram * program);
+    void setShadowShaderProgram(MCGLShaderProgramPtr program);
 
     //! Get the shader program to be used.
-    MCGLShaderProgram * shaderProgram() const;
+    MCGLShaderProgramPtr shaderProgram() const;
 
     //! Get the shader program to be used for 2d shadows.
-    MCGLShaderProgram * shadowShaderProgram() const;
+    MCGLShaderProgramPtr shadowShaderProgram() const;
 
     //! Set material.
     void setMaterial(MCGLMaterialPtr material);
@@ -90,11 +89,11 @@ public:
 
 private:
 
-    GLuint              m_vao;
-    GLuint              m_vbo;
-    MCGLShaderProgram * m_program;
-    MCGLShaderProgram * m_shadowProgram;
-    MCGLMaterialPtr     m_material;
+    GLuint               m_vao;
+    GLuint               m_vbo;
+    MCGLShaderProgramPtr m_program;
+    MCGLShaderProgramPtr m_shadowProgram;
+    MCGLMaterialPtr      m_material;
 
     static GLuint m_boundVao;
     static GLuint m_boundVbo;

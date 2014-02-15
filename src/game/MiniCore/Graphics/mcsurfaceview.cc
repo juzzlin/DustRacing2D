@@ -42,13 +42,15 @@ MCSurface * MCSurfaceView::surface() const
     return m_surface;
 }
 
-void MCSurfaceView::setShaderProgram(MCGLShaderProgram * program)
+void MCSurfaceView::setShaderProgram(MCGLShaderProgramPtr program)
 {
+    MCShapeView::setShaderProgram(program);
     m_surface->setShaderProgram(program);
 }
 
-void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgram * program)
+void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
+    MCShapeView::setShadowShaderProgram(program);
     m_surface->setShadowShaderProgram(program);
 }
 

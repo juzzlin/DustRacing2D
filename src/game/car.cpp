@@ -73,9 +73,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     setProperties(desc);
     initForceGenerators(desc);
 
-    m_brakeGlow.setShaderProgram(&Renderer::instance().program("default"));
-    m_frontTire.setShaderProgram(&Renderer::instance().program("default"));
-    m_number.setShaderProgram(&Renderer::instance().program("default"));
+    m_brakeGlow.setShaderProgram(Renderer::instance().program("default"));
+    m_frontTire.setShaderProgram(Renderer::instance().program("default"));
+    m_number.setShaderProgram(Renderer::instance().program("default"));
 }
 
 void Car::setProperties(Description & desc)

@@ -23,9 +23,9 @@
 #include "mcparticle.hh"
 #include "mcglcolor.hh"
 #include "mcglobjectbase.hh"
+#include "mcglshaderprogram.hh"
 
 class MCCamera;
-class MCGLShaderProgram;
 
 /*! \class MCGLRectParticle
  *  \brief A particle that renders as a simple OpenGL rectangle. Final class.
@@ -44,7 +44,7 @@ public:
     void setColor(const MCGLColor & color);
 
     //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgram * program);
+    void setShaderProgram(MCGLShaderProgramPtr program);
 
     //! \reimp
     void render(MCCamera * camera = nullptr);
@@ -67,7 +67,7 @@ private:
     // shared between similar particles.
     static MCGLObjectBase m_glObjectBase;
     static bool m_inited;
-    MCGLShaderProgram * m_program;
+    MCGLShaderProgramPtr m_program;
 };
 
 #endif // MCGLRECTPARTICLE_HH
