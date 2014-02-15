@@ -21,10 +21,10 @@
 #define MCGLSCENE_HH
 
 #include <MCGLM>
+#include "mcglshaderprogram.hh"
 #include "mctypes.hh"
 #include <vector>
 
-class MCGLShaderProgram;
 class MCGLAmbientLight;
 class MCGLDiffuseLight;
 
@@ -50,9 +50,8 @@ public:
     //! Destructor.
     virtual ~MCGLScene();
 
-    /*! Adds a shader program. Added programs are updated when e.g.
-     *  the projection changes. */
-    void addShaderProgram(MCGLShaderProgram & shader);
+    //! Get the singleton instance.
+    static MCGLScene & instance();
 
     //! Initializes OpenGL and GLEW. Re-implement if desired.
     virtual void initialize();
@@ -80,6 +79,15 @@ public:
     /*! Set specular light for all registered shaders. */
     void setSpecularLight(const MCGLDiffuseLight & light);
 
+    //! Get default shader program.
+    MCGLShaderProgramPtr defaultShaderProgram();
+
+    //! Get default specular shader program.
+    MCGLShaderProgramPtr defaultSpecularShaderProgram();
+
+    //! Get default shadow shader program.
+    MCGLShaderProgramPtr defaultShadowShaderProgram();
+
 protected:
 
     //! Set viewer's position. Automatically called by resize().
@@ -89,6 +97,12 @@ protected:
     virtual void setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, MCFloat viewAngle);
 
 private:
+
+    /*! Adds a shader program. Added programs are updated when e.g.
+     *  the projection changes. MCGLShaderProgram calls this when linked. */
+    void addShaderProgram(MCGLShaderProgram & shader);
+
+    void createDefaultShaderPrograms();
 
     void updateViewport();
 
@@ -105,6 +119,13 @@ private:
     mutable glm::mat4                m_viewProjectionMatrix;
     mutable bool                     m_updateViewProjection;
     std::vector<MCGLShaderProgram *> m_shaders;
+    MCGLShaderProgramPtr             m_defaultShader;
+    MCGLShaderProgramPtr             m_defaultSpecularShader;
+    MCGLShaderProgramPtr             m_defaultShadowShader;
+
+    static MCGLScene               * m_instance;
+
+    friend class MCGLShaderProgram;
 };
 
 #endif // MCGLSCENE_HH

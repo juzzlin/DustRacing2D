@@ -27,7 +27,6 @@
 #include "../common/config.hpp"
 
 #include <MCGLScene>
-#include <MCGLShaderProgram>
 #include <MCException>
 #include <MCLogger>
 #include <MCSurface>
@@ -122,27 +121,16 @@ void Renderer::createProgramFromSource(
 #endif
 
     // Note: ShaderProgram throws on error.
-    MCGLShaderProgram * program = new MCGLShaderProgram(*m_glScene);
-    program->addFragmentShaderFromSource(fshSource);
-    program->addVertexShaderFromSource(vshSource);
-    program->link();
+    MCGLShaderProgram * program = new MCGLShaderProgram(vshSource, fshSource);
     m_shaderHash[handle].reset(program);
 }
 
 void Renderer::loadShaders()
 {
     // Engine defaults
-    createProgramFromSource("default",
-        MCGLShaderProgram::getDefaultVertexShaderSource(),
-        MCGLShaderProgram::getDefaultFragmentShaderSource());
-
-    createProgramFromSource("defaultSpecular",
-        MCGLShaderProgram::getDefaultSpecularVertexShaderSource(),
-        MCGLShaderProgram::getDefaultFragmentShaderSource());
-
-    createProgramFromSource("defaultShadow",
-        MCGLShaderProgram::getDefaultShadowVertexShaderSource(),
-        MCGLShaderProgram::getDefaultShadowFragmentShaderSource());
+    m_shaderHash["default"] =  MCGLScene::instance().defaultShaderProgram();
+    m_shaderHash["defaultSpecular"] = MCGLScene::instance().defaultSpecularShaderProgram();
+    m_shaderHash["defaultShadow"] = MCGLScene::instance().defaultShadowShaderProgram();
 
     // Custom shaders
     createProgramFromSource("car",           carVsh,              carFsh);

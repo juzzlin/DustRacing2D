@@ -36,12 +36,32 @@
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 std::vector<GLuint> MCGLShaderProgram::m_activeTexture(MCGLMaterial::MAX_TEXTURES, 0);
 
-MCGLShaderProgram::MCGLShaderProgram(MCGLScene & scene)
-: m_scene(scene)
-, m_isBound(false)
-, m_program(glCreateProgram())
-, m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
-, m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
+MCGLShaderProgram::MCGLShaderProgram()
+    : m_scene(MCGLScene::instance())
+    , m_isBound(false)
+    , m_program(glCreateProgram())
+    , m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
+    , m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
+{
+    initUniformNameMap();
+}
+
+MCGLShaderProgram::MCGLShaderProgram(
+    const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
+    : m_scene(MCGLScene::instance())
+    , m_isBound(false)
+    , m_program(glCreateProgram())
+    , m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
+    , m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
+{
+    initUniformNameMap();
+
+    addVertexShaderFromSource(vertexShaderSource);
+    addFragmentShaderFromSource(fragmentShaderSource);
+    link();
+}
+
+void MCGLShaderProgram::initUniformNameMap()
 {
     // Map uniform enums to uniform names used in the shaders
     m_uniforms[AmbientLightColor]  = "ac";

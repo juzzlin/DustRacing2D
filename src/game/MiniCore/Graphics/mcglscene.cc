@@ -18,16 +18,18 @@
 //
 
 #include <MCGLEW>
-#include <MCLogger>
 
+#include "mcexception.hh"
 #include "mcglscene.hh"
 #include "mcglambientlight.hh"
 #include "mcgldiffuselight.hh"
-#include "mcglshaderprogram.hh"
+#include "mclogger.hh"
 #include "mctrigonom.hh"
 
 #include <algorithm>
 #include <cmath>
+
+MCGLScene * MCGLScene::m_instance = nullptr;
 
 MCGLScene::MCGLScene()
 : m_splitType(ShowFullScreen)
@@ -37,7 +39,21 @@ MCGLScene::MCGLScene()
 , m_sceneHeight(0)
 , m_viewAngle(0)
 , m_updateViewProjection(false)
+, m_defaultShader(nullptr)
+, m_defaultSpecularShader(nullptr)
+, m_defaultShadowShader(nullptr)
 {
+    if (!MCGLScene::m_instance) {
+        MCGLScene::m_instance = this;
+    } else {
+        throw MCException("MCGLScene already created!");
+    }
+}
+
+MCGLScene & MCGLScene::instance()
+{
+    assert(MCGLScene::m_instance);
+    return *MCGLScene::m_instance;
 }
 
 void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
@@ -49,6 +65,24 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
         // Ensure current projection
         shader.setViewProjectionMatrix(viewProjectionMatrix());
     }
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultShaderProgram()
+{
+    assert(m_defaultShader.get());
+    return m_defaultShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultSpecularShaderProgram()
+{
+    assert(m_defaultSpecularShader.get());
+    return m_defaultSpecularShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultShadowShaderProgram()
+{
+    assert(m_defaultShadowShader.get());
+    return m_defaultShadowShader;
 }
 
 void MCGLScene::initialize()
@@ -75,6 +109,18 @@ void MCGLScene::initialize()
 #else
     glClearDepthf(1.0);
 #endif
+
+    createDefaultShaderPrograms();
+}
+
+void MCGLScene::createDefaultShaderPrograms()
+{
+    m_defaultShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+    m_defaultSpecularShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultSpecularVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+    m_defaultShadowShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultShadowVertexShaderSource(), MCGLShaderProgram::getDefaultShadowFragmentShaderSource()));
 }
 
 void MCGLScene::resize(

@@ -31,6 +31,7 @@
 #include "mcvector3d.hh"
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -53,8 +54,14 @@ public:
         VAL_Color     = 3
     };
 
-    //! Constructor.
-    MCGLShaderProgram(MCGLScene & scene);
+    /*! Default constructor. MCGLScene must have been created before creating
+     *  shader programs. */
+    MCGLShaderProgram();
+
+    /*! Constructor. MCGLScene must have been created before creating shader programs.
+     *  Adds the given source and links the program. */
+    MCGLShaderProgram(
+        const std::string & vertexShaderSource, const std::string & fragmentShaderSource);
 
     //! Destructor.
     virtual ~MCGLShaderProgram();
@@ -163,6 +170,8 @@ private:
 
     int getUniformLocation(Uniform uniform);
 
+    void initUniformNameMap();
+
     void initUniformLocationCache();
 
     static MCGLShaderProgram * m_activeProgram;
@@ -180,5 +189,7 @@ private:
     GLuint      m_fragmentShader;
     GLuint      m_vertexShader;
 };
+
+typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
 
 #endif // MCGLSHADERPROGRAM_HH

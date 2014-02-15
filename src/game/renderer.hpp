@@ -17,6 +17,7 @@
 #define RENDERER_HPP
 
 #include <MCGLEW>
+#include <MCGLShaderProgram>
 
 #include "eventhandler.hpp"
 
@@ -28,7 +29,6 @@
 
 class InputHandler;
 class MCGLScene;
-class MCGLShaderProgram;
 class QKeyEvent;
 class QPaintEvent;
 class Scene;
@@ -133,7 +133,6 @@ private:
 
     void renderCustomResolution();
 
-    typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
     Scene           * m_scene;
