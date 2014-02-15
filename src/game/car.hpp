@@ -58,10 +58,10 @@ public:
         , dragQuadratic(5.0)
         , tireWearOutCapacity(100)
         , numberPos(-5, 0)
-        , leftFrontTirePos(12, 8)
-        , rightFrontTirePos(12, -8)
-        , leftRearTirePos(-12, 8)
-        , rightRearTirePos(-12, -8)
+        , leftFrontTirePos(12, 9)
+        , rightFrontTirePos(12, -9)
+        , leftRearTirePos(-12, 9)
+        , rightRearTirePos(-12, -9)
         , leftBrakeGlowPos(-21, 8)
         , rightBrakeGlowPos(-21, -8)
         {}
@@ -181,8 +181,6 @@ public:
     //! Get location of the right rear tire.
     MCVector3dF rightRearTireLocation() const;
 
-    MCVector3dF numberLocation() const;
-
     bool isHuman() const;
 
     //! \return Tire wear level. 1.0 means no wear, 0.0 means totally worn-out tires.
@@ -222,7 +220,6 @@ private:
     MCUint                   m_index;
     float                    m_tireAngle;
     float                    m_tireWearOutCapacity;
-    MCSurface              & m_number;
     MCSurface              & m_frontTire;
     MCSurface              & m_brakeGlow;
     MCFloat                  m_length;
@@ -235,6 +232,8 @@ private:
     bool                     m_isHuman;
     CarParticleEffectManager m_particleEffectManager;
     CarSoundEffectManagerPtr m_soundEffectManager;
+    MCObjectPtr              m_leftFrontTire;
+    MCObjectPtr              m_rightFrontTire;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

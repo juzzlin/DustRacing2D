@@ -108,7 +108,7 @@ void MCWorld::integrate(MCFloat step)
     for (MCUint i = 0; i < objectCount; i++)
     {
         MCObject & object(*m_objs[i]);
-        if (object.physicsObject() && !object.stationary())
+        if (object.isPhysicsObject() && !object.stationary())
         {
             object.integrate(step);
         }
@@ -176,6 +176,10 @@ void MCWorld::setDimensions(
     MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
     MCFloat metersPerPixel)
 {
+    // TODO: MinLeafWidth and MinLeafHeight should be dynamic
+    assert(maxX - minX >= MinLeafWidth);
+    assert(maxY - minY >= MinLeafHeight);
+
     MCWorld::setMetersPerPixel(metersPerPixel);
 
     // Set dimensions
@@ -294,7 +298,7 @@ void MCWorld::addObject(MCObject & object)
             object.setIndex(m_objs.size() - 1);
 
             // Add to ObjectTree
-            if ((object.physicsObject() || object.triggerObject()) && !object.bypassCollisions())
+            if ((object.isPhysicsObject() || object.isTriggerObject()) && !object.bypassCollisions())
             {
                 m_objectTree->insert(object);
             }
@@ -333,7 +337,7 @@ void MCWorld::removeObjectNow(MCObject & object)
         {
             if (obj != &object)
             {
-                if (obj->physicsObject())
+                if (obj->isPhysicsObject())
                 {
                     obj->deleteContacts(object);
                 }
@@ -362,7 +366,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     }
 
     // Remove from ObjectTree
-    if (object.physicsObject() && !object.bypassCollisions())
+    if (object.isPhysicsObject() && !object.bypassCollisions())
     {
         m_objectTree->remove(object);
     }

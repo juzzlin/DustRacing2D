@@ -96,8 +96,7 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
     else if (tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_MALE)
     {
         const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
-        MCVector2dF rotatedDiff;
-        MCTrigonom::rotatedVector(diff, rotatedDiff, tile.rotation() - 45);
+        const MCVector2dF rotatedDiff = MCTrigonom::rotatedVector(diff, tile.rotation() - 45);
 
         if (rotatedDiff.j() > m_tileHLimit || rotatedDiff.j() < -m_tileHLimit)
         {
@@ -108,8 +107,7 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
         tile.tileTypeEnum() == TrackTile::TT_STRAIGHT_45_FEMALE)
     {
         const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
-        MCVector2dF rotatedDiff;
-        MCTrigonom::rotatedVector(diff, rotatedDiff, 360 - tile.rotation() - 45);
+        const MCVector2dF rotatedDiff = MCTrigonom::rotatedVector(diff, 360 - tile.rotation() - 45);
 
         if (rotatedDiff.j() < m_tileHLimit)
         {

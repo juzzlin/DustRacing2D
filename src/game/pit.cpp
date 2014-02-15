@@ -30,7 +30,6 @@ void Pit::collisionEvent(MCCollisionEvent & event)
     // Cache type id integers.
     static MCUint carType = MCObject::typeID("Car");
 
-    // Check if the car is colliding with another car.
     if (event.collidingObject().typeID() == carType)
     {
         Car & car = static_cast<Car &>(event.collidingObject());

@@ -35,6 +35,7 @@ set(SRC
     ai.cpp
     audioworker.cpp
     audiosource.cpp
+    bridge.cpp
     car.cpp
     carfactory.cpp
     carparticleeffectmanager.cpp

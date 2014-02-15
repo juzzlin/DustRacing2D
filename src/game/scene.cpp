@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 #include "ai.hpp"
 #include "audioworker.hpp"
+#include "bridge.hpp"
 #include "car.hpp"
 #include "carfactory.hpp"
 #include "carsoundeffectmanager.hpp"
@@ -486,6 +487,8 @@ void Scene::addTrackObjectsToWorld()
 
     m_treeViews.clear();
 
+    // ==== Normal objects ====
+
     for (unsigned int i = 0; i < trackObjectCount; i++)
     {
         TrackObject & trackObject = static_cast<TrackObject &>(
@@ -502,6 +505,36 @@ void Scene::addTrackObjectsToWorld()
         else if (Pit * pit = dynamic_cast<Pit *>(&mcObject))
         {
             connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
+        }
+    }
+
+    // ==== Bridges ====
+
+    const MapBase & rMap = m_activeTrack->trackData().map();
+
+    static const int w = TrackTile::TILE_W;
+    static const int h = TrackTile::TILE_H;
+
+    for (MCUint j = 0; j <= rMap.rows(); j++)
+    {
+        for (MCUint i = 0; i <= rMap.cols(); i++)
+        {
+            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            {
+                if (pTile->tileTypeEnum() == TrackTile::TT_BRIDGE)
+                {
+                    MCObjectPtr bridge(new Bridge(
+                        MCAssetManager::instance().surfaceManager().surface("bridgeObject"),
+                        MCAssetManager::instance().surfaceManager().surface("wallLong")
+                    ));
+
+                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2));
+                    bridge->rotate(pTile->rotation());
+                    bridge->addToWorld();
+
+                    m_bridges.push_back(bridge);
+                }
+            }
         }
     }
 }

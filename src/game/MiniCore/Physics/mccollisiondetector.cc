@@ -53,7 +53,7 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
     {
         if (rect2.contains(obbox1.vertex(i)))
         {
-            const bool triggerObjectInvolved = rect1.parent().triggerObject() || rect2.parent().triggerObject();
+            const bool triggerObjectInvolved = rect1.parent().isTriggerObject() || rect2.parent().isTriggerObject();
 
             // Send collision event to owner of rect1 and generate a contact if accepted.
             MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
@@ -299,8 +299,8 @@ MCUint MCCollisionDetector::detectCollisions(MCObjectTree & objectTree)
         {
             MCObject * obj2(*iter2);
 
-            if ((obj1->physicsObject() || obj1->triggerObject()) && !obj1->bypassCollisions() &&
-                (obj2->physicsObject() || obj2->triggerObject()) && !obj2->bypassCollisions())
+            if ((obj1->isPhysicsObject() || obj1->isTriggerObject()) && !obj1->bypassCollisions() &&
+                (obj2->isPhysicsObject() || obj2->isTriggerObject()) && !obj2->bypassCollisions())
             {
                 if (processPossibleCollision(*obj1, *obj2))
                 {

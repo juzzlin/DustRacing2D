@@ -24,11 +24,28 @@ class MCObjectTest : public QObject
     Q_OBJECT
 
 public:
+
     MCObjectTest();
 
 private slots:
+
+    void testAddChildren();
+    void testAddToWorld();
+    void testAngularVelocityAndSleep();
+    void testAngularVelocityIntegration();
+    void testChildRotate();
+    void testChildTranslate();
+    void testCollisionLayer();
+    void testDefaultFlags();
+    void testInitialAngle();
+    void testInitialLocation();
     void testMass();
+    void testRenderLayer();
+    void testRotate();
     void testTimerEvent();
+    void testTranslate();
+    void testVelocityAndSleep();
+    void testVelocityIntegration();
 
 private:
 

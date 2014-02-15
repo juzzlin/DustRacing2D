@@ -43,6 +43,8 @@ class MCOutOfBoundariesEvent;
 class MCTimerEvent;
 class MCCamera;
 
+typedef std::shared_ptr<MCObject> MCObjectPtr;
+
 /*! \class MCObject.
  *  \brief MCObject is the base for all MiniCore objects.
  *
@@ -220,7 +222,7 @@ public:
     void setIsPhysicsObject(bool flag);
 
     //! \brief Return whether the object is a physics object.
-    bool physicsObject() const;
+    bool isPhysicsObject() const;
 
     /*! \brief Sets whether the object behaves as a trigger object.
      *  Trigger object produces collision events even though it's not a
@@ -228,7 +230,7 @@ public:
     void setIsTriggerObject(bool flag);
 
     //! \brief Return whether the object is a trigger object.
-    bool triggerObject() const;
+    bool isTriggerObject() const;
 
     /*! \brief Sets whether the collision detection for this object is totally bypassed.
      *  False is the default. */
@@ -239,19 +241,20 @@ public:
 
     /*! \brief Sets whether the object should be rendered automatically.
      *  True is the default. */
-    void setRenderable(bool flag);
+    void setIsRenderable(bool flag);
 
     //! \brief Return whether the object should be automatically rendered.
-    bool renderable() const;
-
-    //! Return true if the object is a particle.
-    bool isParticle() const;
+    bool isRenderable() const;
 
     //! Set the object as a particle.
     void setIsParticle(bool flag);
 
+    //! Return true if the object is a particle.
+    bool isParticle() const;
+
     /*! Set location
-     *  \param newLocation The new location. */
+     *  \param newLocation The new location. If the object has a parent,
+     *  the new location will be relative to the parent. */
     void translate(const MCVector3dF & newLocation);
 
     /*! Displace object
@@ -381,6 +384,22 @@ public:
     //! Return integer id corresponding to the given object name.
     static MCUint getTypeIDForName(const std::string & typeName);
 
+    //! Add child object. Used on composite objects.
+    void addChildObject(
+        MCObjectPtr object,
+        const MCVector3dF & relativeLocation = MCVector3dF(),
+        MCFloat relativeAngle = 0);
+
+    //! Set parent object. Used on composite objects.
+    void setParent(MCObject & parent);
+
+    //! Get parent or self;
+    MCObject & parent() const;
+
+    /*! Set parent relative rotation ("yaw") angle about Z-axis.
+     *  \param newAngle The new angle in degrees [0..360]. */
+    void rotateRelative(MCFloat newAngle);
+
 protected:
 
     /*! Event handler.
@@ -403,38 +422,47 @@ protected:
 
 private:
 
-    //! TODO: Replace this with constructor chaining when GCC supports.
-    void init(const std::string & typeId);
-
-    /*! Set index in worlds' object vector.
-     *  Used by MCWorld. */
-    void setIndex(int index);
-
     /*! Cache range of objectTree cells the object is touching.
      *  Used by MCObjectTree. */
     void cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1);
 
+    void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
+
+    void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
+
+    void checkZBoundariesAndSendEvent();
+
+    void doOutOfBoundariesEvent();
+
+    void doRotate(MCFloat newAngle);
+
+    //! TODO: Replace this with constructor chaining when GCC supports.
+    void init(const std::string & typeId);
+
+    void integrateLinear(MCFloat step);
+
+    void integrateAngular(MCFloat step);
+
+    /*! Return true, if object is to be removed.
+     *  Used by MCWorld. */
+    bool removing() const;
+
     /*! Get cached index range.
      *  Used by MCObjectTree. */
     void restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1);
+
+    /*! Set index in worlds' object vector.
+     *  Used by MCWorld. */
+    void setIndex(int index);
 
     /*! Set object to be removed. Objects cannot be removed immediately, because
      *  they might be involved in collision calculations of other objects yet to
      *  be completed. Used by MCWorld. */
     void setRemoving(bool flag);
 
-    /*! Return true, if object is to be removed.
-     *  Used by MCWorld. */
-    bool removing() const;
-
     void toggleSleep(bool state);
-    void integrateLinear(MCFloat step);
-    void integrateAngular(MCFloat step);
-    void doOutOfBoundariesEvent();
-    void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
-    void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
-    void checkZBoundariesAndSendEvent();
-    void doRotate(MCFloat newAngle);
+
+    void updateChildTransforms();
 
     MCUint                       m_typeID;
     MCFloat                      m_invMass;
@@ -442,6 +470,7 @@ private:
     MCFloat                      m_restitution;
     MCFloat                      m_xyFriction;
     MCFloat                      m_angle; // Degrees
+    MCFloat                      m_relativeAngle; // Degrees
     MCFloat                      m_angularAcceleration; // Radians / s^2
     MCFloat                      m_angularVelocity; // Radians / s
     MCFloat                      m_angularImpulse;
@@ -460,6 +489,7 @@ private:
     MCVector3dF                  m_initialLocation;
     int                          m_initialAngle;
     MCVector3dF                  m_location;
+    MCVector3dF                  m_relativeLocation;
     MCVector3dF                  m_forces;
     MCVector2dF                  m_centerOfRotation;
     MCShapePtr                   m_shape;
@@ -483,6 +513,9 @@ private:
     bool                         m_removing;
     bool                         m_renderOutline;
     bool                         m_isParticle;
+    typedef std::vector<MCObjectPtr> Children;
+    Children                     m_children;
+    MCObject *                   m_parent;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);
@@ -493,7 +526,5 @@ private:
     friend class MCWorld;
     friend class MCCollisionDetector;
 };
-
-typedef std::shared_ptr<MCObject> MCObjectPtr;
 
 #endif // MCOBJECT_HH

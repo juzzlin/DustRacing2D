@@ -56,7 +56,7 @@ public:
 
     //! Constructor
     template <typename U>
-    MCVector3d(const MCVector2d<U> & r);
+    MCVector3d(const MCVector2d<U> & r, U k = 0);
 
     //! Copy constructor
     template <typename U>
@@ -221,10 +221,10 @@ MCVector3d<T>::MCVector3d(const MCVector3d<U> & r) :
 
 template <typename T>
 template <typename U>
-MCVector3d<T>::MCVector3d(const MCVector2d<U> & r) :
+MCVector3d<T>::MCVector3d(const MCVector2d<U> & r, U k) :
     m_i(r.i()),
     m_j(r.j()),
-    m_k(0)
+    m_k(k)
 {}
 
 template <typename T>

@@ -63,11 +63,13 @@ public:
     static void rotatedCoordinates(
         MCFloat x0, MCFloat y0, MCFloat & x1, MCFloat & y1, MCFloat angle);
 
-    //! Rotate given vector v0 by given angle and store result
-    //! to v1.
-    static void rotatedVector(
-        const MCVector2d<MCFloat> & v0, MCVector2d<MCFloat> & v1,
+    //! Rotate given vector v0 by given angle and store result to v1.
+    static void rotateVector(
+        const MCVector2dF & v0, MCVector2dF & v1,
         MCFloat angle);
+
+    //! Rotate given vector v0 by given angle.
+    static MCVector2dF rotatedVector(const MCVector2dF & v0, MCFloat angle);
 
 private:
 

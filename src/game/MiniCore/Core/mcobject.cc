@@ -76,6 +76,7 @@ void MCObject::init(const std::string & typeId)
     m_restitution            = 0.5;
     m_xyFriction             = 0.0;
     m_angle                  = 0;
+    m_relativeAngle          = 0;
     m_angularAcceleration    = 0.0;
     m_angularVelocity        = 0.0;
     m_angularImpulse         = 0.0;
@@ -105,12 +106,34 @@ void MCObject::init(const std::string & typeId)
     m_removing               = false;
     m_renderOutline          = false;
     m_isParticle             = false;
+    m_parent                 = this;
 }
 
 MCUint MCObject::getTypeIDForName(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
     return i == m_typeHash.end() ? 0 : i->second;
+}
+
+void MCObject::addChildObject(
+    MCObjectPtr object, const MCVector3dF & relativeLocation, MCFloat relativeAngle)
+{
+    assert(object.get() != this);
+    m_children.push_back(object);
+    object->setParent(*this);
+    object->m_relativeLocation = relativeLocation;
+    object->m_relativeAngle    = relativeAngle;
+}
+
+void MCObject::setParent(MCObject & parent)
+{
+    m_parent = &parent;
+}
+
+MCObject & MCObject::parent() const
+{
+    assert(m_parent);
+    return *m_parent;
 }
 
 MCUint MCObject::registerType(const std::string & typeName)
@@ -130,7 +153,9 @@ MCUint MCObject::registerType(const std::string & typeName)
 
 void MCObject::integrate(MCFloat step)
 {
-    if (!m_sleeping)
+    // Integrate, if the object is not sleeping and it doesn't
+    // have a parent object.
+    if (!m_sleeping && m_parent == this)
     {
         integrateLinear(step);
         integrateAngular(step);
@@ -172,28 +197,25 @@ void MCObject::integrateLinear(MCFloat step)
 
 void MCObject::integrateAngular(MCFloat step)
 {
-    if (m_shape)
+    if (m_shape && m_momentOfInertia > 0.0)
     {
-        if (m_momentOfInertia > 0.0)
+        MCFloat totAngularAcceleration(m_angularAcceleration);
+        totAngularAcceleration += m_torque * m_invMomentOfInertia;
+        m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
+        m_angularVelocity      *= m_damping;
+
+        if (m_angularVelocity > m_maximumAngularVelocity)
         {
-            MCFloat totAngularAcceleration(m_angularAcceleration);
-            totAngularAcceleration += m_torque * m_invMomentOfInertia;
-            m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
-            m_angularVelocity      *= m_damping;
-
-            if (m_angularVelocity > m_maximumAngularVelocity)
-            {
-                m_angularVelocity = m_maximumAngularVelocity;
-            }
-            else if (m_angularVelocity < -m_maximumAngularVelocity)
-            {
-                m_angularVelocity = -m_maximumAngularVelocity;
-            }
-
-            const MCFloat newAngle = m_angle + MCTrigonom::radToDeg(m_angularVelocity * step);
-            doRotate(newAngle);
-            m_angle = newAngle;
+            m_angularVelocity = m_maximumAngularVelocity;
         }
+        else if (m_angularVelocity < -m_maximumAngularVelocity)
+        {
+            m_angularVelocity = -m_maximumAngularVelocity;
+        }
+
+        const MCFloat newAngle = m_angle + MCTrigonom::radToDeg(m_angularVelocity * step);
+        doRotate(newAngle);
+        m_angle = newAngle;
     }
 
     m_torque = 0.0;
@@ -357,22 +379,43 @@ void MCObject::sendTimerEvent(MCTimerEvent & event)
 void MCObject::addToWorld()
 {
     MCWorld::instance().addObject(*this);
+
+    for (auto child : m_children)
+    {
+        MCWorld::instance().addObject(*child);
+    }
 }
 
 void MCObject::addToWorld(MCFloat x, MCFloat y, MCFloat z)
 {
     MCWorld::instance().addObject(*this);
+
+    for (auto child : m_children)
+    {
+        MCWorld::instance().addObject(*child);
+    }
+
     translate(MCVector3dF(x, y, z));
 }
 
 void MCObject::removeFromWorld()
 {
     MCWorld::instance().removeObject(*this);
+
+    for (auto child : m_children)
+    {
+        MCWorld::instance().removeObject(*child);
+    }
 }
 
 void MCObject::removeFromWorldNow()
 {
     MCWorld::instance().removeObjectNow(*this);
+
+    for (auto child : m_children)
+    {
+        MCWorld::instance().removeObjectNow(*child);
+    }
 }
 
 void MCObject::render(MCCamera * p)
@@ -480,7 +523,7 @@ void MCObject::setIsPhysicsObject(bool flag)
     m_physicsObject = flag;
 }
 
-bool MCObject::physicsObject() const
+bool MCObject::isPhysicsObject() const
 {
     return m_physicsObject;
 }
@@ -490,7 +533,7 @@ void MCObject::setIsTriggerObject(bool flag)
     m_triggerObject = flag;
 }
 
-bool MCObject::triggerObject() const
+bool MCObject::isTriggerObject() const
 {
     return m_triggerObject;
 }
@@ -505,12 +548,12 @@ bool MCObject::bypassCollisions() const
     return m_bypassCollisions;
 }
 
-void MCObject::setRenderable(bool flag)
+void MCObject::setIsRenderable(bool flag)
 {
     m_renderable = flag;
 }
 
-bool MCObject::renderable() const
+bool MCObject::isRenderable() const
 {
     return m_renderable;
 }
@@ -588,6 +631,8 @@ void MCObject::translate(const MCVector3dF & newLocation)
         m_shape->translate(newLocation);
     }
 
+    updateChildTransforms();
+
     if (wasInWorld)
     {
         MCWorld::instance().objectTree().insert(*this);
@@ -634,6 +679,13 @@ void MCObject::rotate(MCFloat newAngle)
 {
     doRotate(newAngle);
     m_angle = newAngle;
+
+    updateChildTransforms();
+}
+
+void MCObject::rotateRelative(MCFloat newAngle)
+{
+    m_relativeAngle = newAngle;
 }
 
 void MCObject::doRotate(MCFloat newAngle)
@@ -642,9 +694,7 @@ void MCObject::doRotate(MCFloat newAngle)
     {
         if (!m_centerOfRotation.isZero())
         {
-            MCVector2dF centerOfRotation;
-            MCTrigonom::rotatedVector(m_centerOfRotation, centerOfRotation, newAngle - m_angle);
-            displace(m_centerOfRotation - centerOfRotation);
+            displace(m_centerOfRotation - MCTrigonom::rotatedVector(m_centerOfRotation, newAngle - m_angle));
         }
 
         if (m_shape)
@@ -903,6 +953,18 @@ void MCObject::toggleSleep(bool state)
         {
             MCWorld::instance().restoreObjectToIntegration(*this);
         }
+    }
+}
+
+void MCObject::updateChildTransforms()
+{
+    for (auto child : m_children)
+    {
+        const float newAngle = m_angle + child->m_relativeAngle;
+        child->rotate(newAngle);
+        child->translate(m_location +
+            MCVector3dF(MCTrigonom::rotatedVector(child->m_relativeLocation, m_angle),
+                child->m_relativeLocation.k()));
     }
 }
 

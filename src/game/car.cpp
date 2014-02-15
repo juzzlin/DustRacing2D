@@ -57,7 +57,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_index(index)
 , m_tireAngle(0)
 , m_tireWearOutCapacity(desc.tireWearOutCapacity)
-, m_number(GraphicsFactory::generateNumberSurface(index))
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
 , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
 , m_speedInKmh(0)
@@ -72,6 +71,18 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 {
     setProperties(desc);
     initForceGenerators(desc);
+
+    MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
+    addChildObject(numberPlate, m_desc.numberPos, 90);
+    numberPlate->setRenderLayer(Layers::Cars + 1);
+
+    m_leftFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
+    addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
+    m_leftFrontTire->setRenderLayer(Layers::Cars - 1);
+
+    m_rightFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
+    addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
+    m_rightFrontTire->setRenderLayer(Layers::Cars - 1);
 }
 
 void Car::setProperties(Description & desc)
@@ -277,65 +288,40 @@ MCFloat Car::absSpeed() const
 
 MCVector3dF Car::leftFrontTireLocation() const
 {
-    MCVector2dF pos;
-    MCTrigonom::rotatedVector(m_desc.leftFrontTirePos, pos, angle());
-    return pos + MCVector2dF(location());
+    return m_leftFrontTire->location();
 }
 
 MCVector3dF Car::rightFrontTireLocation() const
 {
-    MCVector2dF pos;
-    MCTrigonom::rotatedVector(m_desc.rightFrontTirePos, pos, angle());
-    return pos + MCVector2dF(location());
-}
-
-MCVector3dF Car::numberLocation() const
-{
-    MCVector2dF pos;
-    MCTrigonom::rotatedVector(m_desc.numberPos, pos, angle());
-    return pos + MCVector2dF(location());
+    return m_rightFrontTire->location();
 }
 
 MCVector3dF Car::leftRearTireLocation() const
 {
-    MCVector2dF pos;
-    MCTrigonom::rotatedVector(m_desc.leftRearTirePos, pos, angle());
-    return pos + MCVector2dF(location());
+    return MCTrigonom::rotatedVector(m_desc.leftRearTirePos, angle()) + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightRearTireLocation() const
 {
-    MCVector2dF pos;
-    MCTrigonom::rotatedVector(m_desc.rightRearTirePos, pos, angle());
-    return pos + MCVector2dF(location());
+    return MCTrigonom::rotatedVector(m_desc.rightRearTirePos, angle()) + MCVector2dF(location());
 }
 
 void Car::render(MCCamera *p)
 {
-    // Render left front tire.
-    m_frontTire.render(p, leftFrontTireLocation(), m_tireAngle + angle());
-
-    // Render right front tire.
-    m_frontTire.render(p, rightFrontTireLocation(), m_tireAngle + angle());
-
     // Render body.
     MCObject::render(p);
 
     // Render brake light glows if braking.
     if (m_braking && m_speedInKmh > 0)
     {
-        MCVector2dF leftBrakeGlow;
-        MCTrigonom::rotatedVector(m_desc.leftBrakeGlowPos, leftBrakeGlow, angle());
-        leftBrakeGlow += MCVector2dF(location());
+        const MCVector2dF leftBrakeGlow =
+            MCTrigonom::rotatedVector(m_desc.leftBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
-        MCVector2dF rightBrakeGlow;
-        MCTrigonom::rotatedVector(m_desc.rightBrakeGlowPos, rightBrakeGlow, angle());
-        rightBrakeGlow += MCVector2dF(location());
+        const MCVector2dF rightBrakeGlow =
+            MCTrigonom::rotatedVector(m_desc.rightBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
-
-    m_number.render(p, numberLocation(), angle() + 90);
 }
 
 bool Car::update()
@@ -346,6 +332,9 @@ bool Car::update()
     {
         m_soundEffectManager->update();
     }
+
+    m_leftFrontTire->rotateRelative(m_tireAngle);
+    m_rightFrontTire->rotateRelative(m_tireAngle);
 
     return true;
 }

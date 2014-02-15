@@ -46,6 +46,7 @@ HEADERS += \
     ai.hpp \
     audiosource.hpp \
     audioworker.hpp \
+    bridge.hpp \
     car.hpp \
     carfactory.hpp \
     carparticleeffectmanager.hpp \
@@ -204,6 +205,7 @@ SOURCES += \
     ai.cpp \
     audiosource.cpp \
     audioworker.cpp \
+    bridge.cpp \
     car.cpp \
     carfactory.cpp \
     carparticleeffectmanager.cpp \

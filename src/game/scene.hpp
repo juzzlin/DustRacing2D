@@ -157,6 +157,9 @@ private:
 
     // TreeViews need to be separately updated.
     std::vector<TreeView *> m_treeViews;
+
+    // Bridges
+    std::vector<MCObjectPtr> m_bridges;
 };
 
 #endif // SCENE_HPP

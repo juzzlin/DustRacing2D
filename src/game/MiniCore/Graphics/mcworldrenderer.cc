@@ -77,7 +77,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
         for (auto objectIter = m_layers[i].begin(); objectIter != end; objectIter++)
         {
             MCObject & object = **objectIter;
-            if (object.renderable())
+            if (object.isRenderable())
             {
                 // Check if view is set and is visible
                 if (object.shape())
