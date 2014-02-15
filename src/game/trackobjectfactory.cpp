@@ -84,7 +84,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(Layers::Meshes);
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     }
     else if (role == "dustRacing2DBanner")
     {
@@ -194,7 +193,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(Layers::Walls);
 
         object = m_objectFactory.build(data);
-        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
