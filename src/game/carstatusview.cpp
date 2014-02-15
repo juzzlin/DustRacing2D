@@ -25,9 +25,6 @@ CarStatusView::CarStatusView()
 , m_tires(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorTires"))
 , m_car(nullptr)
 {
-    m_body.setShaderProgram(Renderer::instance().program("default"));
-    m_tires.setShaderProgram(Renderer::instance().program("default"));
-
     setDimensions(m_body.height(), m_tires.width());
 
     m_body.setColor(MCGLColor(1.0, 1.0, 1.0, 0.9));

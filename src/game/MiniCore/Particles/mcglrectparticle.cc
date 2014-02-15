@@ -23,7 +23,7 @@
 
 #include <cassert>
 
-MCGLObjectBase MCGLRectParticle::m_glObjectBase;
+MCGLObjectBase * MCGLRectParticle::m_glObjectBase = nullptr;
 bool MCGLRectParticle::m_inited = false;
 
 static const int NUM_VERTICES     = 6;
@@ -39,8 +39,9 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 {
     if (!m_inited)
     {
-        m_glObjectBase.createVAO();
-        m_glObjectBase.createVBO();
+        m_glObjectBase = new MCGLObjectBase;
+        m_glObjectBase->createVAO();
+        m_glObjectBase->createVBO();
 
         // Init vertice data for a quad
         const MCGLVertex vertices[NUM_VERTICES] =
@@ -75,8 +76,8 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 
         int offset = 0;
 
-        m_glObjectBase.bindVAO();
-        m_glObjectBase.bindVBO();
+        m_glObjectBase->bindVAO();
+        m_glObjectBase->bindVBO();
 
         glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
 
@@ -121,7 +122,7 @@ void MCGLRectParticle::beginBatch()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     m_program->bind();
-    m_glObjectBase.bindVAO();
+    m_glObjectBase->bindVAO();
 }
 
 void MCGLRectParticle::endBatch()

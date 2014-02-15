@@ -18,6 +18,7 @@
 //
 
 #include "mcglobjectbase.hh"
+#include "mcglscene.hh"
 #include "mcexception.hh"
 
 #include <cassert>
@@ -28,6 +29,8 @@ GLuint MCGLObjectBase::m_boundVbo = -1;
 MCGLObjectBase::MCGLObjectBase()
 : m_vao(0)
 , m_vbo(0)
+, m_program(MCGLScene::instance().defaultShaderProgram())
+, m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
 {
 }
 

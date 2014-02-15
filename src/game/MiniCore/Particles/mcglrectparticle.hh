@@ -65,7 +65,7 @@ private:
     MCGLColor m_color;
     // Static variable instead of inheritance allows the VAO and VBO to be
     // shared between similar particles.
-    static MCGLObjectBase m_glObjectBase;
+    static MCGLObjectBase * m_glObjectBase;
     static bool m_inited;
     MCGLShaderProgramPtr m_program;
 };

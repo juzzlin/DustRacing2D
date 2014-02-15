@@ -24,7 +24,7 @@
 #include "mcglmaterial.hh"
 #include "mcglshaderprogram.hh"
 
-/*! Base class for GL objects in MiniCore. Automatically creates VBO, VAO and
+/*! Base class for GL renderables in MiniCore. Automatically creates VBO, VAO and
  *  basic texturing support. */
 class MCGLObjectBase
 {

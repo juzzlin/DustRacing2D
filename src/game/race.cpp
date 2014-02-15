@@ -80,7 +80,6 @@ void Race::createStartGridObjects()
 
         MCObjectPtr object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);
-        object->shape()->view()->setShaderProgram(Renderer::instance().program("default"));
         object->setIsPhysicsObject(false);
 
         m_startGridObjects.push_back(object);

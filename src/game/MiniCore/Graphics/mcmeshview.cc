@@ -37,6 +37,8 @@ MCMeshView::~MCMeshView()
 void MCMeshView::setMesh(MCMesh & mesh)
 {
     m_mesh = &mesh;
+    m_mesh->setShaderProgram(shaderProgram());
+    m_mesh->setShadowShaderProgram(shadowShaderProgram());
 }
 
 MCMesh * MCMeshView::mesh() const
@@ -48,6 +50,7 @@ void MCMeshView::setShaderProgram(MCGLShaderProgramPtr program)
 {
     if (m_mesh)
     {
+        MCShapeView::setShaderProgram(program);
         m_mesh->setShaderProgram(program);
     }
 }
@@ -56,6 +59,7 @@ void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
     if (m_mesh)
     {
+        MCShapeView::setShadowShaderProgram(program);
         m_mesh->setShadowShaderProgram(program);
     }
 }

@@ -27,7 +27,13 @@ MCSurfaceView::MCSurfaceView(
     MCSurface * surface)
 : MCShapeView(viewId)
 , m_surface(surface)
-{}
+{
+    if (surface)
+    {
+        m_surface->setShaderProgram(shaderProgram());
+        m_surface->setShadowShaderProgram(shadowShaderProgram());
+    }
+}
 
 MCSurfaceView::~MCSurfaceView()
 {}
@@ -35,6 +41,8 @@ MCSurfaceView::~MCSurfaceView()
 void MCSurfaceView::setSurface(MCSurface & surface)
 {
     m_surface = &surface;
+    m_surface->setShaderProgram(shaderProgram());
+    m_surface->setShadowShaderProgram(shadowShaderProgram());
 }
 
 MCSurface * MCSurfaceView::surface() const

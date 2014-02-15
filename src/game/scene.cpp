@@ -196,7 +196,6 @@ void Scene::createCars()
 
             car->setRenderLayer(Layers::Cars);
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
-            car->shape()->view()->setShadowShaderProgram(m_renderer.program("defaultShadow"));
 
             setupAudio(*car, i);
 
