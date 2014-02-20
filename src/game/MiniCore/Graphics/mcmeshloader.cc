@@ -41,6 +41,8 @@ bool MCMeshLoader::load(QString filePath)
     }
 
     QTextStream in(&file);
+    in.setCodec("UTF-8");
+
     return readStream(in);
 }
 
