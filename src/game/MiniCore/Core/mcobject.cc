@@ -810,12 +810,12 @@ MCUint MCObject::renderLayer() const
     return m_renderLayer;
 }
 
-void MCObject::setCollisionLayer(MCUint layer)
+void MCObject::setCollisionLayer(int layer)
 {
     m_collisionLayer = layer;
 }
 
-MCUint MCObject::collisionLayer() const
+int MCObject::collisionLayer() const
 {
     return m_collisionLayer;
 }

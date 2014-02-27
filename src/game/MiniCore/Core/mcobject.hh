@@ -336,12 +336,13 @@ public:
     //! Return the render layer.
     MCUint renderLayer() const;
 
-    /*! Set collision layer. Only objects on the same layer can collide. The default is 0.
+    /*! Set collision layer. Only objects on the same layer can collide.
+     * -1 will collide with all layers. The default is 0.
      * \param layer The new layer. */
-    void setCollisionLayer(MCUint layer);
+    void setCollisionLayer(int layer);
 
     //! Return the collision layer.
-    MCUint collisionLayer() const;
+    int collisionLayer() const;
 
     //! Add a collision contact.
     void addContact(MCContact & contact);
@@ -480,7 +481,7 @@ private:
     MCFloat                      m_invMomentOfInertia;
     MCFloat                      m_momentOfInertia;
     MCUint                       m_renderLayer;
-    MCUint                       m_collisionLayer;
+    int                          m_collisionLayer;
     int                          m_index;
     MCUint                       m_i0, m_i1, m_j0, m_j1;
     MCVector3dF                  m_acceleration;
