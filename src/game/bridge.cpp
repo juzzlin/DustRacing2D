@@ -29,8 +29,10 @@ Bridge::Bridge(MCSurface & surface, MCSurface & rail)
 , m_rail0(MCObjectPtr(new MCObject(rail, "Rail")))
 , m_rail1(MCObjectPtr(new MCObject(rail, "Rail")))
 {
-    addChildObject(m_rail0, MCVector3dF(0, -102, 10));
-    addChildObject(m_rail1, MCVector3dF(0,  102, 10));
+    const int railYDisplacement = 107;
+    const int railZ = 10;
+    addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, railZ));
+    addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, railZ));
 
     setRenderLayer(Layers::Bridge);
     setCollisionLayer(-1);
@@ -61,7 +63,8 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
         Car & car = dynamic_cast<Car &>(event.collidingObject());
         const MCVector2dF bridgeOrientation(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
         const MCFloat dot = MCVector2dF(car.velocity()).normalizedFast().dot(bridgeOrientation);
-        if (dot < -0.5 || dot > 0.5)
+        const float directionLimit = 0.5;
+        if (dot < -directionLimit || dot > directionLimit)
         {
             event.collidingObject().setCollisionLayer(Layers::BridgeRails);
             event.collidingObject().setRenderLayer(Layers::BridgeRails);
@@ -75,7 +78,7 @@ void Bridge::stepTime(MCFloat)
     auto iter = m_carsOnBridge.begin();
     while (iter != m_carsOnBridge.end())
     {
-        if (m_tag > iter->second + 10)
+        if (m_tag > iter->second + 1)
         {
             iter->first->setCollisionLayer(Layers::Ground);
             iter->first->setRenderLayer(Layers::Cars);
