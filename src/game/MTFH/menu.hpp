@@ -142,6 +142,14 @@ private:
         MouseItemType type;
     };
 
+    bool isNextAllowed() const;
+
+    bool isPrevAllowed() const;
+
+    bool checkIfHit(MenuItemPtr item, int x, int y);
+
+    bool doHandleMousePressOnMouseItem(MenuItemPtr item, int x, int y);
+
     bool handleMousePressOnItem(int x, int y);
 
     bool handleMousePressOnMouseItem(int x, int y);

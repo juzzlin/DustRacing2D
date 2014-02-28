@@ -147,6 +147,16 @@ void Menu::renderItems()
     }
 }
 
+bool Menu::isNextAllowed() const
+{
+    return m_wrapAround || m_currentIndex + 1 < static_cast<int>(m_items.size());
+}
+
+bool Menu::isPrevAllowed() const
+{
+    return m_wrapAround || m_currentIndex > 0;
+}
+
 void Menu::renderMouseItems()
 {
     for (MouseItem item : m_mouseItems)
@@ -159,13 +169,19 @@ void Menu::renderMouseItems()
             break;
 
         case Menu::MI_PREV:
-            item.item->setPos(item.item->width(), m_height / 2);
-            item.item->render();
+            if (isPrevAllowed())
+            {
+                item.item->setPos(item.item->width(), m_height / 2);
+                item.item->render();
+            }
             break;
 
         case Menu::MI_NEXT:
-            item.item->setPos(m_width - item.item->width(), m_height / 2);
-            item.item->render();
+            if (isNextAllowed())
+            {
+                item.item->setPos(m_width - item.item->width(), m_height / 2);
+                item.item->render();
+            }
             break;
         }
     }
@@ -223,20 +239,43 @@ void Menu::selectCurrentItem()
     }
 }
 
+bool Menu::checkIfHit(MenuItemPtr item, int x, int y)
+{
+    const int x1 = item->x() - item->width()  / 2;
+    const int x2 = item->x() + item->width()  / 2;
+    const int y1 = item->y() - item->height() / 2;
+    const int y2 = item->y() + item->height() / 2;
+
+    if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+    {
+        item->setFocused(true);
+        return true;
+    }
+
+    return false;
+}
+
 bool Menu::handleMousePressOnMouseItem(int x, int y)
 {
     for (MouseItem mouseItem : m_mouseItems)
     {
         auto item = mouseItem.item;
-        const int x1 = item->x() - item->width()  / 2;
-        const int x2 = item->x() + item->width()  / 2;
-        const int y1 = item->y() - item->height() / 2;
-        const int y2 = item->y() + item->height() / 2;
-
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        switch (mouseItem.type)
         {
-            item->setFocused(true);
-            return true;
+        case MI_QUIT:
+            return checkIfHit(item, x, y);
+        case MI_PREV:
+            if (isPrevAllowed())
+            {
+                return checkIfHit(item, x, y);
+            }
+            break;
+        case MI_NEXT:
+            if (isNextAllowed())
+            {
+                return checkIfHit(item, x, y);
+            }
+            break;
         }
     }
 
@@ -248,12 +287,7 @@ bool Menu::handleMousePressOnItem(int x, int y)
     for (MouseItem mouseItem : m_mouseItems)
     {
         auto item = mouseItem.item;
-        const int x1 = item->x() - item->width()  / 2;
-        const int x2 = item->x() + item->width()  / 2;
-        const int y1 = item->y() - item->height() / 2;
-        const int y2 = item->y() + item->height() / 2;
-
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        if (checkIfHit(item, x, y))
         {
             item->setFocused(true);
             return true;
@@ -265,12 +299,7 @@ bool Menu::handleMousePressOnItem(int x, int y)
         for (unsigned int i = 0; i < m_items.size(); i++)
         {
             auto item = m_items.at(i);
-            const int x1 = item->x() - item->width()  / 2;
-            const int x2 = item->x() + item->width()  / 2;
-            const int y1 = item->y() - item->height() / 2;
-            const int y2 = item->y() + item->height() / 2;
-
-            if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+            if (checkIfHit(item, x, y))
             {
                 setCurrentIndex(i);
                 return true;
@@ -304,12 +333,7 @@ bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
     for (MouseItem mouseItem : m_mouseItems)
     {
         auto item = mouseItem.item;
-        const int x1 = item->x() - item->width()  / 2;
-        const int x2 = item->x() + item->width()  / 2;
-        const int y1 = item->y() - item->height() / 2;
-        const int y2 = item->y() + item->height() / 2;
-
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        if (checkIfHit(item, x, y))
         {
             switch (mouseItem.type)
             {
@@ -318,12 +342,19 @@ bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
                 return true;
 
             case Menu::MI_PREV:
-                left();
-                return true;
-
+                if (isPrevAllowed())
+                {
+                    left();
+                    return true;
+                }
+                break;
             case Menu::MI_NEXT:
-                right();
-                return true;
+                if (isNextAllowed())
+                {
+                    right();
+                    return true;
+                }
+                break;
             }
         }
     }
@@ -336,12 +367,7 @@ bool Menu::handleMouseReleaseOnItem(int x, int y)
     if (m_style == Menu::MS_SHOW_ONE)
     {
         auto item = currentItem();
-        const int x1 = item->x() - item->width()  / 2;
-        const int x2 = item->x() + item->width()  / 2;
-        const int y1 = item->y() - item->height() / 2;
-        const int y2 = item->y() + item->height() / 2;
-
-        if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+        if (checkIfHit(item, x, y))
         {
             selectCurrentItem();
             return true;
@@ -352,12 +378,7 @@ bool Menu::handleMouseReleaseOnItem(int x, int y)
         for (unsigned int i = 0; i < m_items.size(); i++)
         {
             auto item = m_items.at(i);
-            const int x1 = item->x() - item->width()  / 2;
-            const int x2 = item->x() + item->width()  / 2;
-            const int y1 = item->y() - item->height() / 2;
-            const int y2 = item->y() + item->height() / 2;
-
-            if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
+            if (checkIfHit(item, x, y))
             {
                 if (static_cast<int>(i) == m_currentIndex)
                 {
