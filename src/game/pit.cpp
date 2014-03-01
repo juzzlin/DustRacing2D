@@ -20,7 +20,7 @@
 #include <MCSurface>
 
 Pit::Pit(MCSurface & surface)
-: MCObject(surface, "Pit")
+: MCObject(surface, "pit")
 , m_tag(0)
 {
 }
@@ -28,7 +28,7 @@ Pit::Pit(MCSurface & surface)
 void Pit::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
-    static MCUint carType = MCObject::typeID("Car");
+    static MCUint carType = MCObject::typeID("car");
 
     if (event.collidingObject().typeID() == carType)
     {

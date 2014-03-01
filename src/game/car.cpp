@@ -40,7 +40,7 @@
 #include <string>
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
-: MCObject(surface, "Car")
+: MCObject(surface, "car")
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))

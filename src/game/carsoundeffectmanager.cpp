@@ -125,6 +125,7 @@ void CarSoundEffectManager::collision(const MCCollisionEvent & event)
     static MCUint right      = MCObject::typeID("right");
     static MCUint rock       = MCObject::typeID("rock");
     static MCUint plant      = MCObject::typeID("plant");
+    static MCUint rail       = MCObject::typeID("rail");
     static MCUint tree       = MCObject::typeID("tree");
     static MCUint tire       = MCObject::typeID("tire");
 
@@ -142,6 +143,7 @@ void CarSoundEffectManager::collision(const MCCollisionEvent & event)
         }
         else if (
             event.collidingObject().typeID() == wall ||
+            event.collidingObject().typeID() == rail ||
             event.collidingObject().typeID() == wallLong)
         {
             emit locationChanged("carHit2", m_car.location().i(), m_car.location().j());

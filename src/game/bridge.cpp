@@ -23,11 +23,14 @@
 #include <MCSurface>
 #include <MCVector2d>
 
-Bridge::Bridge(MCSurface & surface, MCSurface & rail)
-: MCObject(surface, "Bridge")
+static const char * BRIDGE_ID = "bridge";
+static const char * RAIL_ID   = "rail";
+
+Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
+: MCObject(surface, BRIDGE_ID)
 , m_tag(0)
-, m_rail0(MCObjectPtr(new MCObject(rail, "Rail")))
-, m_rail1(MCObjectPtr(new MCObject(rail, "Rail")))
+, m_rail0(MCObjectPtr(new MCObject(railSurface, RAIL_ID)))
+, m_rail1(MCObjectPtr(new MCObject(railSurface, RAIL_ID)))
 {
     const int railYDisplacement = 107;
     const int railZ = 10;
@@ -57,7 +60,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & rail)
 
 void Bridge::collisionEvent(MCCollisionEvent & event)
 {
-    static MCUint carType = MCObject::typeID("Car");
+    static MCUint carType = MCObject::typeID("car");
     if (event.collidingObject().typeID() == carType)
     {
         Car & car = dynamic_cast<Car &>(event.collidingObject());
