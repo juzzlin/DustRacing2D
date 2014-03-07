@@ -74,15 +74,15 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
     addChildObject(numberPlate, m_desc.numberPos, 90);
-    numberPlate->setRenderLayer(Layers::Cars + 1);
+    numberPlate->setRenderLayerRelative(1);
 
     m_leftFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
-    m_leftFrontTire->setRenderLayer(Layers::Cars - 1);
+    m_leftFrontTire->setRenderLayerRelative(-1);
 
     m_rightFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
-    m_rightFrontTire->setRenderLayer(Layers::Cars - 1);
+    m_rightFrontTire->setRenderLayerRelative(-1);
 }
 
 void Car::setProperties(Description & desc)

@@ -315,14 +315,8 @@ void MCObjectTest::testCollisionLayer()
     root.setCollisionLayer(1);
 
     QVERIFY(root.collisionLayer() == 1);
-    QVERIFY(child1->collisionLayer() == 0);
-    QVERIFY(child2->collisionLayer() == 0);
-
-    child1->setCollisionLayer(2);
-
-    QVERIFY(root.collisionLayer() == 1);
-    QVERIFY(child1->collisionLayer() == 2);
-    QVERIFY(child2->collisionLayer() == 0);
+    QVERIFY(child1->collisionLayer() == 1);
+    QVERIFY(child2->collisionLayer() == 1);
 }
 
 void MCObjectTest::testInitialAngle()
@@ -378,14 +372,46 @@ void MCObjectTest::testRenderLayer()
     root.setRenderLayer(1);
 
     QVERIFY(root.renderLayer() == 1);
+    QVERIFY(child1->renderLayer() == 1);
+    QVERIFY(child2->renderLayer() == 1);
+}
+
+void MCObjectTest::testRenderLayerRelative()
+{
+    MCWorld world;
+    world.setDimensions(0, 1024, 0, 768, 0, 100, 1);
+
+    MCObject root("root");
+    MCObjectPtr child1(new MCObject("child1"));
+    MCObjectPtr child2(new MCObject("child2"));
+
+    root.addChildObject(child1);
+    root.addChildObject(child2);
+
+    root.addToWorld();
+
+    QVERIFY(root.renderLayer() == 0);
     QVERIFY(child1->renderLayer() == 0);
     QVERIFY(child2->renderLayer() == 0);
 
-    child1->setRenderLayer(2);
+    root.setRenderLayer(2);
 
-    QVERIFY(root.renderLayer() == 1);
+    QVERIFY(root.renderLayer() == 2);
     QVERIFY(child1->renderLayer() == 2);
-    QVERIFY(child2->renderLayer() == 0);
+    QVERIFY(child2->renderLayer() == 2);
+
+    child1->setRenderLayerRelative(1);
+    child2->setRenderLayerRelative(-1);
+
+    QVERIFY(root.renderLayer() == 2);
+    QVERIFY(child1->renderLayer() == 3);
+    QVERIFY(child2->renderLayer() == 1);
+
+    root.setRenderLayer(3);
+
+    QVERIFY(root.renderLayer() == 3);
+    QVERIFY(child1->renderLayer() == 4);
+    QVERIFY(child2->renderLayer() == 2);
 }
 
 void MCObjectTest::testRotate()

@@ -331,10 +331,13 @@ public:
      * first. This can be used when creating complex objects from
      * 2d-surfaces only.
      * \param layer The new layer. */
-    void setRenderLayer(MCUint layer);
+    void setRenderLayer(int layer);
+
+    /*! Like setRenderLayer(), relative to parent. */
+    void setRenderLayerRelative(int layer);
 
     //! Return the render layer.
-    MCUint renderLayer() const;
+    int renderLayer() const;
 
     /*! Set collision layer. Only objects on the same layer can collide.
      * -1 will collide with all layers. The default is 0.
@@ -480,7 +483,8 @@ private:
     MCFloat                      m_torque;
     MCFloat                      m_invMomentOfInertia;
     MCFloat                      m_momentOfInertia;
-    MCUint                       m_renderLayer;
+    int                          m_renderLayer;
+    int                          m_renderLayerRelative;
     int                          m_collisionLayer;
     int                          m_index;
     MCUint                       m_i0, m_i1, m_j0, m_j1;

@@ -41,6 +41,7 @@ private slots:
     void testInitialLocation();
     void testMass();
     void testRenderLayer();
+    void testRenderLayerRelative();
     void testRotate();
     void testTimerEvent();
     void testTranslate();

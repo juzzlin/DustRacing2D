@@ -147,7 +147,7 @@ public:
     MCFloat maxZ() const;
 
     //! Max number of rendering layers
-    static const MCUint MaxLayers = 32;
+    static const int MaxLayers = 32;
 
 protected:
 
