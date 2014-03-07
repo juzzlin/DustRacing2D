@@ -195,7 +195,7 @@ void Scene::createCars()
                 m_ai.push_back(AIPtr(new AI(*car)));
             }
 
-            car->setRenderLayer(Layers::Cars);
+            car->setRenderLayer(Layers::Objects);
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
 
             setupAudio(*car, i);

@@ -60,32 +60,27 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 
 void Bridge::collisionEvent(MCCollisionEvent & event)
 {
-    static MCUint carType = MCObject::typeID("car");
-    if (event.collidingObject().typeID() == carType)
+    const MCVector2dF bridgeOrientation(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
+    const MCFloat dot = MCVector2dF(event.collidingObject().velocity()).normalizedFast().dot(bridgeOrientation);
+    const float directionLimit = 0.5;
+    if (dot < -directionLimit || dot > directionLimit)
     {
-        Car & car = dynamic_cast<Car &>(event.collidingObject());
-        const MCVector2dF bridgeOrientation(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
-        const MCFloat dot = MCVector2dF(car.velocity()).normalizedFast().dot(bridgeOrientation);
-        const float directionLimit = 0.5;
-        if (dot < -directionLimit || dot > directionLimit)
-        {
-            event.collidingObject().setCollisionLayer(Layers::BridgeRails);
-            event.collidingObject().setRenderLayer(Layers::BridgeRails);
-            m_carsOnBridge[&car] = m_tag;
-        }
+        event.collidingObject().setCollisionLayer(Layers::BridgeRails);
+        event.collidingObject().setRenderLayer(Layers::BridgeRails);
+        m_objectsOnBridge[&event.collidingObject()] = m_tag;
     }
 }
 
 void Bridge::stepTime(MCFloat)
 {
-    auto iter = m_carsOnBridge.begin();
-    while (iter != m_carsOnBridge.end())
+    auto iter = m_objectsOnBridge.begin();
+    while (iter != m_objectsOnBridge.end())
     {
         if (m_tag > iter->second + 1)
         {
             iter->first->setCollisionLayer(Layers::Ground);
-            iter->first->setRenderLayer(Layers::Cars);
-            iter = m_carsOnBridge.erase(iter);
+            iter->first->setRenderLayer(Layers::Objects);
+            iter = m_objectsOnBridge.erase(iter);
         }
         else
         {

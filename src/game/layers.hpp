@@ -26,7 +26,7 @@ public:
     {
         Ground      = 0,
         Meshes      = 0,
-        Cars        = 2,
+        Objects     = 2,
         Smoke       = 3,
         Bridge      = 4,
         BridgeRails = 5,

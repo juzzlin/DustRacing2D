@@ -39,9 +39,7 @@ public:
 
 signals:
 
-    void onBridge(Car & car);
-
-    std::map<Car *, int> m_carsOnBridge;
+    std::map<MCObject *, int> m_objectsOnBridge;
     int                  m_tag;
 
     MCObjectPtr          m_rail0;

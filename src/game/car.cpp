@@ -87,7 +87,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
 void Car::setProperties(Description & desc)
 {
-    setRenderLayer(Layers::Cars);
+    setRenderLayer(Layers::Objects);
 
     setMass(desc.mass);
     setMaximumVelocity(desc.maxLinearVelocity);
