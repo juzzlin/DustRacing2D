@@ -3,14 +3,29 @@
 # Assumes, that you have installed (static) qt5 to ~/qt5.
 
 QT5_QMAKE=~/qt5/bin/qmake
+if ! which $QT5_QMAKE; then
+    echo "$QT5_QMAKE not found."
+    exit -1
+fi
+
 TAR=tar
+if ! which $TAR; then
+    echo "$TAR not found."
+    exit -1
+fi
+
 LRELEASE=lrelease
+if ! which $LRELEASE; then
+    echo "$LRELEASE not found."
+    exit -1
+fi
+
 NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 
 # Package naming
 
 NAME=dustrac
-VERSION=1.6.3
+VERSION=${DUSTRAC_RELEASE_VERSION?"is not set."}
 ARCH=linux-x86_64
 QT=qt5
 

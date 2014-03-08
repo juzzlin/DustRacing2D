@@ -1,3 +1,30 @@
+dustrac (1.7.0-1) precise; urgency=medium
+
+  * Don't show prev/next if on first/last item.
+  * Add twister.trk
+  * Add bridge object.
+  * Remove specular shaders from crate and tire.
+  * Small improvements to render timing.
+  * Move user tracks to the beginning of the track array.
+  * Fix computer driving line in curvastone.trk
+  * Editor: visualize computer hints.
+  * Fix off-track detection on 'sand grass straight' tile.
+  * Optimize VBO, VAO and texture binding.
+  * Add fade out flash transition.
+  * Add turn left and turn right signs.
+  * Update brake.png
+  * Add a new crash sound.
+  * Increase the initial slide friction to 1.0
+  * Optimize viewport switching.
+  * Optimize the use of GL_DEPTH_TEST.
+  * Add CLI option to force vsync off.
+  * Use random functionality from C++11.
+  * Improve sky reflection.
+  * Add cache for uniform locations.
+  * Update scripts/genericLinuxBuildQt5
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 08 Mar 2014 14:48:41 +0200
+
 dustrac (1.6.3-1) precise; urgency=low
 
   * Add specular lighting.

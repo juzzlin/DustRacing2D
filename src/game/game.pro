@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.6.3\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.7.0\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check

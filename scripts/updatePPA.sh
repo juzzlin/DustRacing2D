@@ -1,6 +1,6 @@
-VERSION=1.6.3
-DEBIAN_VERSION=1.6.3-1
-rm -rf *${VERSION}*
+VERSION=${DUSTRAC_RELEASE_VERSION?"is not set."}
+DEBIAN_VERSION=$VERSION-1
+rm -rf *${VERSION}
 cp ../sourceforge-git/dustrac-code/dustrac-$VERSION.tar.gz .
 mv dustrac-$VERSION.tar.gz dustrac_$VERSION.orig.tar.gz 
 tar xzvf dustrac_$VERSION.orig.tar.gz
