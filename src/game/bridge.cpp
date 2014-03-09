@@ -32,8 +32,8 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 , m_rail0(MCObjectPtr(new MCObject(railSurface, RAIL_ID)))
 , m_rail1(MCObjectPtr(new MCObject(railSurface, RAIL_ID)))
 {
-    const int railYDisplacement = 107;
-    const int railZ = 10;
+    const int railYDisplacement = 110;
+    const int railZ = 8;
     addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, railZ));
     addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, railZ));
 

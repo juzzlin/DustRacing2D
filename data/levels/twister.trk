@@ -1,4 +1,4 @@
-<track name="Twister" version="1.6.3" rows="8" index="10" cols="8">
+<track version="1.7.0" cols="8" index="10" name="Twister" rows="8">
  <t o="0" t="grass" i="0" j="0"/>
  <t o="0" t="grass" i="0" j="1"/>
  <t o="0" t="grass" i="0" j="2"/>
@@ -121,15 +121,18 @@
  <o o="0" r="tree" c="free" x="710" y="1180"/>
  <o o="0" r="tree" c="free" x="723" y="1330"/>
  <o o="0" r="tree" c="free" x="732" y="1463"/>
- <o o="0" r="tree" c="free" x="267" y="780"/>
+ <o o="0" r="tree" c="free" x="253" y="802"/>
  <o o="0" r="tree" c="free" x="213" y="916"/>
- <o o="0" r="tire" c="free" x="753" y="785"/>
- <o o="0" r="tire" c="free" x="735" y="779"/>
- <o o="0" r="tire" c="free" x="714" y="787"/>
- <o o="0" r="tire" c="free" x="689" y="783"/>
- <o o="0" r="tire" c="free" x="667" y="783"/>
- <o o="0" r="tire" c="free" x="641" y="784"/>
- <o o="0" r="tire" c="free" x="762" y="769"/>
+ <o o="0" r="wallLong" c="free" x="640" y="786"/>
+ <o o="0" r="wallLong" c="free" x="384" y="786"/>
+ <o o="0" r="tire" c="free" x="308" y="819"/>
+ <o o="0" r="tire" c="free" x="296" y="838"/>
+ <o o="0" r="tire" c="free" x="254" y="833"/>
+ <o o="0" r="tire" c="free" x="268" y="871"/>
+ <o o="0" r="tire" c="free" x="234" y="863"/>
+ <o o="0" r="tire" c="free" x="272" y="849"/>
+ <o o="0" r="dustRacing2DBanner" c="free" x="1041" y="247"/>
+ <o o="0" r="dustRacing2DBanner" c="free" x="1303" y="246"/>
  <n w="256" x="638" y="1668" h="256" i="0"/>
  <n w="256" x="442" y="1580" h="256" i="1"/>
  <n w="256" x="386" y="1334" h="256" i="2"/>
