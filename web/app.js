@@ -26,7 +26,8 @@ app.controller("ImageController", function ($scope, $timeout) {
         'screenshots/1.6.3/5_600x333.jpg',
         'screenshots/1.6.3/6_600x333.jpg',
         'screenshots/1.6.3/7_600x333.jpg',
-        'screenshots/1.6.3/8_600x333.jpg'];
+        'screenshots/1.6.3/8_600x333.jpg',
+        'screenshots/1.7.1/dustrac-1.7.1-1_600x333.jpg'];
 
     $scope.image3 = images[imageIndex];
     $scope.intervalFunction = function() {
