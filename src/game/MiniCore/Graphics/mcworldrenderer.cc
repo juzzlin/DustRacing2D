@@ -68,7 +68,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
     // Grouping the objects like this reduces texture switches etc and increases
     // overall performance.
 
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
+    for (int i = 0; i < MCWorld::MaxLayers; i++)
     {
         m_objectBatches[i].clear();
         m_particleBatches[i].clear();
@@ -142,7 +142,7 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
     // layer-specific.
 
     bool depthTest = false;
-    for (MCUint layer = 0; layer < MCWorld::MaxLayers; layer++)
+    for (int layer = 0; layer < MCWorld::MaxLayers; layer++)
     {
         // The depth test is enabled/disabled separately on
         // each object layer.
@@ -240,7 +240,7 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
 {
     glDisable(GL_DEPTH_TEST);
 
-    for (MCUint i = 0; i < MCWorld::MaxLayers; i++)
+    for (int i = 0; i < MCWorld::MaxLayers; i++)
     {
         // Render batches
         auto iter = m_objectBatches[i].begin();
@@ -275,7 +275,7 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
     }
 }
 
-void MCWorldRenderer::enableDepthTestOnLayer(MCUint layer, bool enable)
+void MCWorldRenderer::enableDepthTestOnLayer(int layer, bool enable)
 {
     if (layer < MCWorld::MaxLayers)
     {
@@ -285,14 +285,14 @@ void MCWorldRenderer::enableDepthTestOnLayer(MCUint layer, bool enable)
 
 void MCWorldRenderer::addToLayerMap(MCObject & object)
 {
-    const MCUint layerIndex =
+    const int layerIndex =
         object.renderLayer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.renderLayer();
     m_layers[layerIndex].insert(&object);
 }
 
 void MCWorldRenderer::removeFromLayerMap(MCObject & object)
 {
-    const MCUint layerIndex =
+    const int layerIndex =
         object.renderLayer() >= MCWorld::MaxLayers ? MCWorld::MaxLayers - 1 : object.renderLayer();
     m_layers[layerIndex].erase(&object);
 }
@@ -309,7 +309,7 @@ void MCWorldRenderer::removeParticleVisibilityCameras()
 
 void MCWorldRenderer::clear()
 {
-    for (unsigned int i = 0; i < MCWorld::MaxLayers; i++)
+    for (int i = 0; i < MCWorld::MaxLayers; i++)
     {
         m_layers[i].clear();
     }

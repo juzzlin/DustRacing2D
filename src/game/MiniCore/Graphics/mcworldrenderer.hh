@@ -43,7 +43,7 @@ public:
 
     void removeFromLayerMap(MCObject & object);
 
-    void enableDepthTestOnLayer(MCUint layer, bool enable = true);
+    void enableDepthTestOnLayer(int layer, bool enable = true);
 
     /*! Each used MCGLPointParticle should have a corresponding MCGLPointParticleRenderer
      *  registered in MCWorld. As for rendering, point particles are special cases, because
@@ -78,7 +78,7 @@ private:
     typedef std::unordered_set<MCObject *> LayerSet;
     LayerSet m_layers[MCWorld::MaxLayers];
 
-    typedef std::map<MCUint, std::vector<MCObject *> > BatchMap;
+    typedef std::map<int, std::vector<MCObject *> > BatchMap;
     BatchMap m_objectBatches[MCWorld::MaxLayers];
     BatchMap m_particleBatches[MCWorld::MaxLayers];
 
@@ -86,7 +86,7 @@ private:
 
     std::vector<MCCamera *> m_visibilityCameras;
 
-    typedef std::map<MCUint, MCGLPointParticleRenderer *> ParticleRendererMap;
+    typedef std::map<int, MCGLPointParticleRenderer *> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
 };
 

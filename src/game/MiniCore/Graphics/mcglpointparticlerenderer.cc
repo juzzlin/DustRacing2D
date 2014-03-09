@@ -29,8 +29,6 @@
 #include <algorithm>
 #include <cassert>
 
-static const int NUM_COLOR_COMPONENTS = 4;
-
 MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
 : m_batchSize(0)
 , m_maxBatchSize(maxBatchSize)

@@ -31,9 +31,7 @@
 #include <cassert>
 
 static const int NUM_VERTICES             = 6;
-static const int NUM_VERTEX_COMPONENTS    = 3;
 static const int NUM_COLOR_COMPONENTS     = 4;
-static const int NUM_TEX_COORD_COMPONENTS = 2;
 
 static const int VERTEX_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;
 static const int NORMAL_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;

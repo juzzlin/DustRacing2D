@@ -146,7 +146,7 @@ void TrackLoader::sortTracks()
     // Sort tracks with respect to their indices. Move user tracks to the
     // beginning of the track array.
     std::stable_sort(m_tracks.begin(), m_tracks.end(),
-        [](Track * lhs, Track * rhs)
+        [](Track * lhs, Track * rhs) -> bool
         {
              const int left = lhs->trackData().isUserTrack() ? -1 : lhs->trackData().index();
              return left < static_cast<int>(rhs->trackData().index());

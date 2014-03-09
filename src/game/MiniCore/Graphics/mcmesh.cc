@@ -29,9 +29,7 @@
 
 #include <algorithm>
 
-static const int NUM_VERTEX_COMPONENTS    = 3;
-static const int NUM_COLOR_COMPONENTS     = 4;
-static const int NUM_TEX_COORD_COMPONENTS = 2;
+static const int NUM_COLOR_COMPONENTS = 4;
 
 MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
 : m_w(1.0)
