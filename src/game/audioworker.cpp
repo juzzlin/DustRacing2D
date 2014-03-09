@@ -27,6 +27,9 @@
 
 #include <AL/al.h>
 
+static const int MAX_DIST       = 250;
+static const int REFERENCE_DIST = 50;
+
 AudioWorker::AudioWorker(int numCars, bool enabled)
     : m_openALDevice(new OpenALDevice)
     , m_inited(false)
@@ -87,20 +90,21 @@ void AudioWorker::disconnectAudioSource(AudioSource & source)
 
 void AudioWorker::loadSounds()
 {
-    loadCommonSound("bell",      "bell.ogg");
-    loadCommonSound("cheering",  "cheering.ogg");
+    loadCommonSound("bell", "bell.ogg");
+    loadCommonSound("cheering", "cheering.ogg");
+    loadCommonSound("menuBoom", "menuBoom.ogg");
     loadCommonSound("menuClick", "menuClick.ogg");
-    loadCommonSound("pit",       "pit.ogg");
+    loadCommonSound("pit", "pit.ogg");
 
-    loadMultiSound("carEngine",  "carEngine.ogg");
-    loadMultiSound("carHit",     "carHit.ogg");
-    loadMultiSound("skid",       "skid.ogg");
+    loadMultiInstanceCarSound("carEngine", "carEngine.ogg");
+    loadMultiInstanceCarSound("carHit", "carHit.ogg");
+    loadMultiInstanceCarSound("skid", "skid.ogg");
 
-    loadSceneSound("carHit2",    "carHit2.ogg");
-    loadSceneSound("carHit3",    "carHit3.ogg");
+    loadSingleInstanceCarSound("carHit2", "carHit2.ogg");
+    loadSingleInstanceCarSound("carHit3", "carHit3.ogg");
 }
 
-void AudioWorker::loadSceneSound(QString handle, QString path)
+void AudioWorker::loadSingleInstanceCarSound(QString handle, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -108,8 +112,8 @@ void AudioWorker::loadSceneSound(QString handle, QString path)
 
     STFH::SourcePtr source(new OpenALSource(
         STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
-    source->setMaxDist(250);
-    source->setReferenceDist(50);
+    source->setMaxDist(MAX_DIST);
+    source->setReferenceDist(REFERENCE_DIST);
     m_soundMap[handle] = source;
 }
 
@@ -124,7 +128,7 @@ void AudioWorker::loadCommonSound(QString handle, QString path)
             STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
 }
 
-void AudioWorker::loadMultiSound(QString baseName, QString path)
+void AudioWorker::loadMultiInstanceCarSound(QString baseName, QString path)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -138,8 +142,8 @@ void AudioWorker::loadMultiSound(QString baseName, QString path)
         ss << baseName.toStdString() << i;
         STFH::SourcePtr source(new OpenALSource(sharedData));
         m_soundMap[ss.str().c_str()] = source;
-        source->setMaxDist(250);
-        source->setReferenceDist(50);
+        source->setMaxDist(MAX_DIST);
+        source->setReferenceDist(REFERENCE_DIST);
     }
 }
 

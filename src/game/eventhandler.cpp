@@ -143,6 +143,11 @@ bool EventHandler::handleMouseReleaseEvent(QMouseEvent * event, int screenWidth,
         {
             MTFH::MenuManager::instance().mouseRelease(event->x(), event->y(), screenWidth, screenHeight);
         }
+
+        if (MTFH::MenuManager::instance().isDone())
+        {
+            emit soundRequested("menuBoom");
+        }
     }
 
     return true;
@@ -188,8 +193,15 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
-            emit soundRequested("menuClick");
             MTFH::MenuManager::instance().selectCurrentItem();
+            if (MTFH::MenuManager::instance().isDone())
+            {
+                emit soundRequested("menuBoom");
+            }
+            else
+            {
+                emit soundRequested("menuClick");
+            }
             break;
         case Qt::Key_Escape:
         case Qt::Key_Q:
