@@ -168,24 +168,24 @@ private:
     void resolvePositions(MCFloat accuracy);
     MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
 
-    static MCWorld * m_instance;
-    MCWorldRenderer * m_renderer;
-    MCForceRegistry * m_forceRegistry;
+    static MCWorld      * m_instance;
+    MCWorldRenderer     * m_renderer;
+    MCForceRegistry     * m_forceRegistry;
     MCCollisionDetector * m_collisionDetector;
-    MCImpulseGenerator * m_impulseGenerator;
-    MCObjectTree * m_objectTree;
-    static MCFloat m_metersPerPixel;
-    static MCFloat m_metersPerPixelSquared;
-    MCFloat m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
+    MCImpulseGenerator  * m_impulseGenerator;
+    MCObjectTree        * m_objectTree;
+    static MCFloat        m_metersPerPixel;
+    static MCFloat        m_metersPerPixelSquared;
+    MCFloat               m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
     MCWorld::ObjectVector m_objs;
     MCWorld::ObjectVector m_removeObjs;
-    MCObject * m_leftWallObject;
-    MCObject * m_rightWallObject;
-    MCObject * m_topWallObject;
-    MCObject * m_bottomWallObject;
-    MCUint m_numCollisions;
-    MCUint m_numResolverLoops;
-    MCFloat m_resolverStep;
+    MCObject            * m_leftWallObject;
+    MCObject            * m_rightWallObject;
+    MCObject            * m_topWallObject;
+    MCObject            * m_bottomWallObject;
+    MCUint                m_numCollisions;
+    MCUint                m_numResolverLoops;
+    MCFloat               m_resolverStep;
 };
 
 #endif // MCWORLD_HH
