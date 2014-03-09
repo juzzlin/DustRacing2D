@@ -1,3 +1,9 @@
+dustrac (1.7.1-1) precise; urgency=medium
+
+  * Add missing bridge model for editor.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 09 Mar 2014 14:40:07 +0200
+
 dustrac (1.7.0-1) precise; urgency=medium
 
   * Don't show prev/next if on first/last item.

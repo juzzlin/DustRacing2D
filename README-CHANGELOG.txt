@@ -1,3 +1,10 @@
+1.7.1
+=====
+
+Bug fixes:
+
+* Add missing bridge model for editor.
+
 1.7.0
 =====
 
