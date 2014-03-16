@@ -1,10 +1,65 @@
 Contribution "instructions"
 ===========================
 
+Getting the up-to-date source
+-----------------------------
+
+git clone git://git.code.sf.net/p/dustrac/code dustrac-code
+
+- master branch has the current released stuff and is stable
+- dev branch has unreleased stuff and might be unstable
+
+Create a new branch of master for your work.
+
 Game / Editor
 -------------
 
-I you have fixed a bug or modified the game in some other acceptable way,
-I most likely want to receive the change as a Git patch (make a commit of your changes, and then take git diff master > your_change.patch). 
+If you have fixed a bug or modified the game in some other acceptable way,
+I most likely want to receive the change as a Git patch (make a commit of your changes
+in your working branch, and then take "git diff master > your_change.patch"). 
+
+Please follow the existing coding style and use spaces for indentation instead of tabs.
+
+Adding/updating translations
+----------------------------
+
+Qt's translation source files for the game are at:
+
+src/game/translations/
+
+Editor:
+
+src/editor/translations/
+
+You can just copy these files as a new locale and edit, but the recommended way is
+to generate/update the file from source code to make sure that the source strings
+are up-to-date:
+
+$ lupdate src/game/*.cpp -ts  src/game/translations/dustrac-game_fr.ts
+$ lupdate src/editor/*.cpp -ts  src/editor/translations/dustrac-editor_fr.ts
+
+..as an example for French.
+
+The .ts-files can then be opened in Qt's translation GUI, linguist.
+
+For Qt4, the Ubuntu package for these tools is qt4-linguist-tools.
+
+A fallback character mapping is in src/game/graphicsfactory, as the texture font used in the
+game doesn't support all accented characters, e.g. "á" is mapped to "a". This map can also
+be extended, if needed.
+
+In the case of a new locale, src/game/CMakeLists.txt and src/editor/CMakeLists.txt
+need to be modified so that the .ts files are compiled into corresponding .qm files.
+The .qm files are binary files that are actually used by the application:
+
+  # Translation files in src/game/translations (without .ts)
+  set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs)
+
+Add your file to the list for both the game and the editor.
+
+Remember to TEST the translations.
+
+
+-- Jussi Lind <jussi.lind@iki.fi>
 
 
