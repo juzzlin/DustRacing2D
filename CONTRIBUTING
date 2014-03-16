@@ -1,0 +1,10 @@
+Contribution "instructions"
+===========================
+
+Game / Editor
+-------------
+
+I you have fixed a bug or modified the game in some other acceptable way,
+I most likely want to receive the change as a Git patch (make a commit of your changes, and then take git diff master > your_change.patch). 
+
+
