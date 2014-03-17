@@ -1,141 +1,141 @@
-<track version="1.7.0" cols="8" index="10" name="Twister" rows="8">
- <t o="0" t="grass" i="0" j="0"/>
- <t o="0" t="grass" i="0" j="1"/>
- <t o="0" t="grass" i="0" j="2"/>
- <t o="0" t="grass" i="0" j="3"/>
- <t o="0" t="grass" i="0" j="4"/>
- <t o="0" t="grass" i="0" j="5"/>
- <t o="0" t="grass" i="0" j="6"/>
- <t o="0" t="grass" i="0" j="7"/>
- <t o="0" t="grass" i="1" j="0"/>
- <t o="0" t="grass" i="1" j="1"/>
- <t o="0" t="grass" i="1" j="2"/>
- <t o="0" t="corner90" i="1" j="3"/>
- <t o="0" t="straight" c="2" i="1" j="4"/>
- <t o="0" t="straight" i="1" j="5"/>
- <t o="-90" t="corner90" i="1" j="6"/>
- <t o="0" t="grass" i="1" j="7"/>
- <t o="0" t="grass" i="2" j="0"/>
- <t o="0" t="grass" i="2" j="1"/>
- <t o="0" t="grass" i="2" j="2"/>
- <t o="90" t="straight" i="2" j="3"/>
- <t o="0" t="grass" i="2" j="4"/>
- <t o="0" t="grass" i="2" j="5"/>
- <t o="-90" t="finish" i="2" j="6"/>
- <t o="0" t="grass" i="2" j="7"/>
- <t o="0" t="grass" i="3" j="0"/>
- <t o="0" t="corner90" i="3" j="1"/>
- <t o="0" t="straight" i="3" j="2"/>
- <t o="0" t="bridge" i="3" j="3"/>
- <t o="0" t="straight" c="2" i="3" j="4"/>
- <t o="-90" t="corner90" i="3" j="5"/>
- <t o="90" t="straight" c="2" i="3" j="6"/>
- <t o="0" t="grass" i="3" j="7"/>
- <t o="0" t="grass" i="4" j="0"/>
- <t o="90" t="straight" i="4" j="1"/>
- <t o="0" t="grass" i="4" j="2"/>
- <t o="90" t="straight" c="1" i="4" j="3"/>
- <t o="0" t="grass" i="4" j="4"/>
- <t o="90" t="straight" i="4" j="5"/>
- <t o="90" t="straight" i="4" j="6"/>
- <t o="0" t="grass" i="4" j="7"/>
- <t o="0" t="grass" i="5" j="0"/>
- <t o="90" t="corner90" i="5" j="1"/>
- <t o="0" t="straight" c="2" i="5" j="2"/>
- <t o="90" t="bridge" i="5" j="3"/>
- <t o="-90" t="corner90" i="5" j="4"/>
- <t o="-90" t="straight" c="2" i="5" j="5"/>
- <t o="90" t="straight" i="5" j="6"/>
- <t o="0" t="grass" i="5" j="7"/>
- <t o="0" t="grass" i="6" j="0"/>
- <t o="0" t="grass" i="6" j="1"/>
- <t o="0" t="grass" i="6" j="2"/>
- <t o="90" t="corner90" i="6" j="3"/>
- <t o="-180" t="corner90" i="6" j="4"/>
- <t o="90" t="corner90" i="6" j="5"/>
- <t o="180" t="corner90" i="6" j="6"/>
- <t o="0" t="grass" i="6" j="7"/>
- <t o="0" t="grass" i="7" j="0"/>
- <t o="0" t="grass" i="7" j="1"/>
- <t o="0" t="grass" i="7" j="2"/>
- <t o="0" t="grass" i="7" j="3"/>
- <t o="0" t="grass" i="7" j="4"/>
- <t o="0" t="grass" i="7" j="5"/>
- <t o="0" t="grass" i="7" j="6"/>
- <t o="0" t="grass" i="7" j="7"/>
- <o o="0" r="right" c="free" x="544" y="1082"/>
- <o o="0" r="right" c="free" x="196" y="1077"/>
- <o o="90" r="right" c="free" x="1600" y="741"/>
- <o o="90" r="right" c="free" x="1713" y="768"/>
- <o o="0" r="bushArea" c="free" x="1052" y="541"/>
- <o o="0" r="bushArea" c="free" x="1141" y="533"/>
- <o o="0" r="bushArea" c="free" x="1230" y="550"/>
- <o o="0" r="bushArea" c="free" x="1275" y="620"/>
- <o o="0" r="bushArea" c="free" x="1262" y="692"/>
- <o o="0" r="bushArea" c="free" x="1196" y="715"/>
- <o o="0" r="bushArea" c="free" x="1120" y="719"/>
- <o o="0" r="bushArea" c="free" x="1038" y="705"/>
- <o o="0" r="bushArea" c="free" x="1041" y="627"/>
- <o o="0" r="bushArea" c="free" x="1171" y="613"/>
- <o o="0" r="bushArea" c="free" x="1115" y="628"/>
- <o o="0" r="bushArea" c="free" x="1282" y="499"/>
- <o o="0" r="bushArea" c="free" x="1286" y="538"/>
- <o o="0" r="bushArea" c="free" x="1060" y="740"/>
- <o o="0" r="bushArea" c="free" x="1168" y="754"/>
- <o o="0" r="bushArea" c="free" x="1217" y="761"/>
- <o o="0" r="bushArea" c="free" x="1070" y="1074"/>
- <o o="0" r="bushArea" c="free" x="1132" y="1080"/>
- <o o="0" r="bushArea" c="free" x="1221" y="1091"/>
- <o o="0" r="bushArea" c="free" x="1275" y="1156"/>
- <o o="0" r="bushArea" c="free" x="1298" y="1225"/>
- <o o="0" r="bushArea" c="free" x="1205" y="1231"/>
- <o o="0" r="bushArea" c="free" x="1129" y="1172"/>
- <o o="0" r="bushArea" c="free" x="1087" y="1179"/>
- <o o="0" r="bushArea" c="free" x="1032" y="1241"/>
- <o o="0" r="bushArea" c="free" x="1128" y="1276"/>
- <o o="0" r="bushArea" c="free" x="1223" y="1190"/>
- <o o="0" r="bushArea" c="free" x="1257" y="1279"/>
- <o o="0" r="bushArea" c="free" x="1223" y="1041"/>
- <o o="0" r="dustRacing2DBanner" c="free" x="1422" y="1538"/>
- <o o="0" r="dustRacing2DBanner" c="free" x="1157" y="1538"/>
- <o o="0" r="dustRacing2DBanner" c="free" x="892" y="1538"/>
- <o o="0" r="crate" c="free" x="1388" y="1278"/>
- <o o="0" r="crate" c="free" x="1429" y="1284"/>
- <o o="0" r="crate" c="free" x="1470" y="1277"/>
- <o o="0" r="crate" c="free" x="1516" y="1292"/>
- <o o="0" r="crate" c="free" x="1568" y="1277"/>
- <o o="0" r="crate" c="free" x="1601" y="1291"/>
- <o o="0" r="crate" c="free" x="1641" y="1276"/>
- <o o="0" r="crate" c="free" x="1679" y="1295"/>
- <o o="0" r="crate" c="free" x="1701" y="1266"/>
- <o o="-90" r="grandstand" c="free" x="174" y="1572"/>
- <o o="-90" r="grandstand" c="free" x="173" y="1442"/>
- <o o="-90" r="grandstand" c="free" x="173" y="1310"/>
- <o o="90" r="grandstand" c="free" x="584" y="1193"/>
- <o o="90" r="grandstand" c="free" x="585" y="1327"/>
- <o o="90" r="grandstand" c="free" x="585" y="1460"/>
- <o o="0" r="grandstand" c="free" x="686" y="707"/>
- <o o="0" r="grandstand" c="free" x="552" y="707"/>
- <o o="0" r="grandstand" c="free" x="416" y="707"/>
- <o o="0" r="tree" c="free" x="694" y="1066"/>
- <o o="0" r="tree" c="free" x="710" y="1180"/>
- <o o="0" r="tree" c="free" x="723" y="1330"/>
- <o o="0" r="tree" c="free" x="732" y="1463"/>
- <o o="0" r="tree" c="free" x="253" y="802"/>
- <o o="0" r="tree" c="free" x="213" y="916"/>
- <o o="0" r="wallLong" c="free" x="640" y="786"/>
- <o o="0" r="wallLong" c="free" x="384" y="786"/>
- <o o="0" r="tire" c="free" x="308" y="819"/>
- <o o="0" r="tire" c="free" x="296" y="838"/>
- <o o="0" r="tire" c="free" x="254" y="833"/>
- <o o="0" r="tire" c="free" x="268" y="871"/>
- <o o="0" r="tire" c="free" x="234" y="863"/>
- <o o="0" r="tire" c="free" x="272" y="849"/>
- <o o="0" r="dustRacing2DBanner" c="free" x="1041" y="247"/>
- <o o="0" r="dustRacing2DBanner" c="free" x="1303" y="246"/>
- <n w="256" x="638" y="1668" h="256" i="0"/>
- <n w="256" x="442" y="1580" h="256" i="1"/>
- <n w="256" x="386" y="1334" h="256" i="2"/>
+<track version="1.7.1" cols="8" rows="8" index="10" name="Twister">
+ <t i="0" j="0" o="0" t="grass"/>
+ <t i="0" j="1" o="0" t="grass"/>
+ <t i="0" j="2" o="0" t="grass"/>
+ <t i="0" j="3" o="0" t="grass"/>
+ <t i="0" j="4" o="0" t="grass"/>
+ <t i="0" j="5" o="0" t="grass"/>
+ <t i="0" j="6" o="0" t="grass"/>
+ <t i="0" j="7" o="0" t="grass"/>
+ <t i="1" j="0" o="0" t="grass"/>
+ <t i="1" j="1" o="0" t="grass"/>
+ <t i="1" j="2" o="0" t="grass"/>
+ <t i="1" j="3" o="0" t="corner90"/>
+ <t i="1" j="4" o="0" t="straight" c="1"/>
+ <t i="1" j="5" o="0" t="straight"/>
+ <t i="1" j="6" o="-90" t="corner90"/>
+ <t i="1" j="7" o="0" t="grass"/>
+ <t i="2" j="0" o="0" t="grass"/>
+ <t i="2" j="1" o="0" t="grass"/>
+ <t i="2" j="2" o="0" t="grass"/>
+ <t i="2" j="3" o="90" t="straight"/>
+ <t i="2" j="4" o="0" t="grass"/>
+ <t i="2" j="5" o="0" t="grass"/>
+ <t i="2" j="6" o="-90" t="finish" c="1"/>
+ <t i="2" j="7" o="0" t="grass"/>
+ <t i="3" j="0" o="0" t="grass"/>
+ <t i="3" j="1" o="0" t="corner90"/>
+ <t i="3" j="2" o="0" t="straight"/>
+ <t i="3" j="3" o="0" t="bridge"/>
+ <t i="3" j="4" o="0" t="straight" c="2"/>
+ <t i="3" j="5" o="-90" t="corner90"/>
+ <t i="3" j="6" o="90" t="straight" c="2"/>
+ <t i="3" j="7" o="0" t="grass"/>
+ <t i="4" j="0" o="0" t="grass"/>
+ <t i="4" j="1" o="90" t="straight"/>
+ <t i="4" j="2" o="0" t="grass"/>
+ <t i="4" j="3" o="90" t="straight" c="1"/>
+ <t i="4" j="4" o="0" t="grass"/>
+ <t i="4" j="5" o="90" t="straight"/>
+ <t i="4" j="6" o="90" t="straight"/>
+ <t i="4" j="7" o="0" t="grass"/>
+ <t i="5" j="0" o="0" t="grass"/>
+ <t i="5" j="1" o="90" t="corner90"/>
+ <t i="5" j="2" o="0" t="straight" c="2"/>
+ <t i="5" j="3" o="90" t="bridge"/>
+ <t i="5" j="4" o="-90" t="corner90"/>
+ <t i="5" j="5" o="-90" t="straight" c="2"/>
+ <t i="5" j="6" o="90" t="straight"/>
+ <t i="5" j="7" o="0" t="grass"/>
+ <t i="6" j="0" o="0" t="grass"/>
+ <t i="6" j="1" o="0" t="grass"/>
+ <t i="6" j="2" o="0" t="grass"/>
+ <t i="6" j="3" o="90" t="corner90" c="1"/>
+ <t i="6" j="4" o="-180" t="corner90"/>
+ <t i="6" j="5" o="90" t="corner90"/>
+ <t i="6" j="6" o="180" t="corner90"/>
+ <t i="6" j="7" o="0" t="grass"/>
+ <t i="7" j="0" o="0" t="grass"/>
+ <t i="7" j="1" o="0" t="grass"/>
+ <t i="7" j="2" o="0" t="grass"/>
+ <t i="7" j="3" o="0" t="grass"/>
+ <t i="7" j="4" o="0" t="grass"/>
+ <t i="7" j="5" o="0" t="grass"/>
+ <t i="7" j="6" o="0" t="grass"/>
+ <t i="7" j="7" o="0" t="grass"/>
+ <o x="544" y="1082" o="0" r="right" c="free"/>
+ <o x="196" y="1077" o="0" r="right" c="free"/>
+ <o x="1600" y="741" o="90" r="right" c="free"/>
+ <o x="1713" y="768" o="90" r="right" c="free"/>
+ <o x="1052" y="541" o="0" r="bushArea" c="free"/>
+ <o x="1141" y="533" o="0" r="bushArea" c="free"/>
+ <o x="1230" y="550" o="0" r="bushArea" c="free"/>
+ <o x="1275" y="620" o="0" r="bushArea" c="free"/>
+ <o x="1262" y="692" o="0" r="bushArea" c="free"/>
+ <o x="1196" y="715" o="0" r="bushArea" c="free"/>
+ <o x="1120" y="719" o="0" r="bushArea" c="free"/>
+ <o x="1038" y="705" o="0" r="bushArea" c="free"/>
+ <o x="1041" y="627" o="0" r="bushArea" c="free"/>
+ <o x="1171" y="613" o="0" r="bushArea" c="free"/>
+ <o x="1115" y="628" o="0" r="bushArea" c="free"/>
+ <o x="1282" y="499" o="0" r="bushArea" c="free"/>
+ <o x="1286" y="538" o="0" r="bushArea" c="free"/>
+ <o x="1060" y="740" o="0" r="bushArea" c="free"/>
+ <o x="1168" y="754" o="0" r="bushArea" c="free"/>
+ <o x="1217" y="761" o="0" r="bushArea" c="free"/>
+ <o x="1070" y="1074" o="0" r="bushArea" c="free"/>
+ <o x="1132" y="1080" o="0" r="bushArea" c="free"/>
+ <o x="1221" y="1091" o="0" r="bushArea" c="free"/>
+ <o x="1275" y="1156" o="0" r="bushArea" c="free"/>
+ <o x="1298" y="1225" o="0" r="bushArea" c="free"/>
+ <o x="1205" y="1231" o="0" r="bushArea" c="free"/>
+ <o x="1129" y="1172" o="0" r="bushArea" c="free"/>
+ <o x="1087" y="1179" o="0" r="bushArea" c="free"/>
+ <o x="1032" y="1241" o="0" r="bushArea" c="free"/>
+ <o x="1128" y="1276" o="0" r="bushArea" c="free"/>
+ <o x="1223" y="1190" o="0" r="bushArea" c="free"/>
+ <o x="1257" y="1279" o="0" r="bushArea" c="free"/>
+ <o x="1223" y="1041" o="0" r="bushArea" c="free"/>
+ <o x="1422" y="1538" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1157" y="1538" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="892" y="1538" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1388" y="1278" o="0" r="crate" c="free"/>
+ <o x="1429" y="1284" o="0" r="crate" c="free"/>
+ <o x="1470" y="1277" o="0" r="crate" c="free"/>
+ <o x="1516" y="1292" o="0" r="crate" c="free"/>
+ <o x="1568" y="1277" o="0" r="crate" c="free"/>
+ <o x="1601" y="1291" o="0" r="crate" c="free"/>
+ <o x="1641" y="1276" o="0" r="crate" c="free"/>
+ <o x="1679" y="1295" o="0" r="crate" c="free"/>
+ <o x="1701" y="1266" o="0" r="crate" c="free"/>
+ <o x="174" y="1572" o="-90" r="grandstand" c="free"/>
+ <o x="173" y="1442" o="-90" r="grandstand" c="free"/>
+ <o x="173" y="1310" o="-90" r="grandstand" c="free"/>
+ <o x="584" y="1193" o="90" r="grandstand" c="free"/>
+ <o x="585" y="1327" o="90" r="grandstand" c="free"/>
+ <o x="585" y="1460" o="90" r="grandstand" c="free"/>
+ <o x="686" y="707" o="0" r="grandstand" c="free"/>
+ <o x="552" y="707" o="0" r="grandstand" c="free"/>
+ <o x="416" y="707" o="0" r="grandstand" c="free"/>
+ <o x="694" y="1066" o="0" r="tree" c="free"/>
+ <o x="710" y="1180" o="0" r="tree" c="free"/>
+ <o x="723" y="1330" o="0" r="tree" c="free"/>
+ <o x="732" y="1463" o="0" r="tree" c="free"/>
+ <o x="253" y="802" o="0" r="tree" c="free"/>
+ <o x="213" y="916" o="0" r="tree" c="free"/>
+ <o x="640" y="786" o="0" r="wallLong" c="free"/>
+ <o x="384" y="786" o="0" r="wallLong" c="free"/>
+ <o x="308" y="819" o="0" r="tire" c="free"/>
+ <o x="296" y="838" o="0" r="tire" c="free"/>
+ <o x="254" y="833" o="0" r="tire" c="free"/>
+ <o x="268" y="871" o="0" r="tire" c="free"/>
+ <o x="234" y="863" o="0" r="tire" c="free"/>
+ <o x="272" y="849" o="0" r="tire" c="free"/>
+ <o x="1041" y="247" o="0" r="dustRacing2DBanner" c="free"/>
+ <o x="1303" y="246" o="0" r="dustRacing2DBanner" c="free"/>
+ <n w="256" x="645" y="1672" h="256" i="0"/>
+ <n w="320" x="442" y="1580" h="320" i="1"/>
+ <n w="256" x="385" y="1325" h="256" i="2"/>
  <n w="256" x="370" y="1110" h="256" i="3"/>
  <n w="256" x="456" y="940" h="256" i="4"/>
  <n w="256" x="722" y="886" h="256" i="5"/>
@@ -156,13 +156,13 @@
  <n w="256" x="912" y="696" h="256" i="20"/>
  <n w="256" x="896" y="1078" h="256" i="21"/>
  <n w="256" x="926" y="1242" h="256" i="22"/>
- <n w="256" x="1030" y="1344" h="256" i="23"/>
+ <n w="256" x="1030" y="1344" h="320" i="23"/>
  <n w="256" x="1286" y="1376" h="256" i="24"/>
  <n w="256" x="1498" y="1391" h="256" i="25"/>
- <n w="256" x="1598" y="1502" h="256" i="26"/>
- <n w="256" x="1582" y="1604" h="256" i="27"/>
+ <n w="320" x="1598" y="1502" h="320" i="26"/>
+ <n w="256" x="1582" y="1604" h="320" i="27"/>
  <n w="256" x="1480" y="1640" h="256" i="28"/>
- <n w="256" x="1284" y="1646" h="256" i="29"/>
+ <n w="256" x="1284" y="1646" h="320" i="29"/>
  <n w="256" x="924" y="1666" h="256" i="30"/>
- <n w="256" x="638" y="1668" h="256" i="31"/>
+ <n w="256" x="645" y="1669" h="256" i="31"/>
 </track>
