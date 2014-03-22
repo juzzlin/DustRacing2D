@@ -86,26 +86,24 @@ static const std::vector<wchar_t> glyphs(
      L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
      L'8', L'9', L'!', L'\"',L'#', L'$', L'%', L'&',
      L' ', L'(', L')', L'*', L'+', L',', L'-', L'.',
-     L'/', L':', L';', L'<', L'=', L'>', L'?', L' '});
+     L'/', L':', L';', L'<', L'=', L'>', L'?', L' ',
+     L'Â', L'À', L'É', L'È', L'Ê', L'Ë', L'Î', L'Ï',
+     L'Ô', L'Û', L'Ç', L'â', L'à', L'é', L'è', L'ê',
+     L'ë', L'î', L'ï', L'ô', L'û', L'ç', L'\'',L' '});
 
 static void addFallbacks(MCTextureFontData & fontData)
 {
     fontData.fallback[L'Á'] = L'A';
     fontData.fallback[L'á'] = L'a';
-    fontData.fallback[L'à'] = L'a';
     fontData.fallback[L'Č'] = L'C';
     fontData.fallback[L'č'] = L'c';
     fontData.fallback[L'Ď'] = L'D';
     fontData.fallback[L'ď'] = L'd';
-    fontData.fallback[L'É'] = L'E';
-    fontData.fallback[L'é'] = L'e';
     fontData.fallback[L'Ě'] = L'E';
     fontData.fallback[L'ě'] = L'e';
-    fontData.fallback[L'è'] = L'e';
     fontData.fallback[L'Í'] = L'I';
     fontData.fallback[L'ì'] = L'i';
     fontData.fallback[L'í'] = L'i';
-    fontData.fallback[L'î'] = L'i';
     fontData.fallback[L'Ň'] = L'N';
     fontData.fallback[L'ň'] = L'n';
     fontData.fallback[L'Ó'] = L'O';

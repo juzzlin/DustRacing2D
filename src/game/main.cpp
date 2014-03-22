@@ -72,7 +72,7 @@ static void printHelp()
     std::cout << "Copyright (c) 2011-2013 Jussi Lind." << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, it, cs." << std::endl;
+    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
     std::cout << "--no-vsync    Force vsync off." << std::endl;
     std::cout << std::endl;
 }

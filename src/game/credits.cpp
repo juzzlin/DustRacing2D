@@ -41,6 +41,7 @@ void Credits::render()
         L"* Markus Rinne\n\n" +
         L"* Paolo Straffi\n\n" +
         L"* Pavel Fric\n\n" +
+        L"* Rémi Verschelde\n\n" +
         QObject::tr("SPECIAL THANKS").toStdWString() +
         L"\n\n" +
         L"* Tommi Martela\n\n"
