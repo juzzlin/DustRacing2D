@@ -17,6 +17,7 @@
 #include "game.hpp"
 
 #include <MCAssetManager>
+#include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceMetaData>
 #include <MCSurfaceManager>
@@ -135,6 +136,8 @@ MCTextureFontData GraphicsFactory::generateFont()
     const int glyphHeight = 52;
     const int textureW    = cols * slotWidth;
     const int textureH    = rows * slotHeight;
+
+    MCLogger().info() << "Font texture size: " << textureW << "x" << textureH;
 
     QPixmap fontPixmap(textureW, textureH);
     fontPixmap.fill(Qt::transparent);
