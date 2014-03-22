@@ -332,6 +332,7 @@ RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsGame.rc
 TRANSLATIONS += \
     translations/dustrac-game_fi.ts \
+    translations/dustrac-game_fr.ts \
     translations/dustrac-game_it.ts \
     translations/dustrac-game_cs.ts
 

@@ -87,6 +87,7 @@ RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsEditor.rc
 TRANSLATIONS += \
     translations/dustrac-editor_fi.ts \
+    translations/dustrac-editor_fr.ts \
     translations/dustrac-editor_it.ts \
     translations/dustrac-editor_cs.ts 
 
