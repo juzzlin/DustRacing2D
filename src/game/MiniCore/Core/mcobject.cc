@@ -758,14 +758,21 @@ MCShapePtr MCObject::shape() const
 
 void MCObject::addForce(const MCVector3dF & force)
 {
-    m_forces  += force;
+    m_forces += force;
+
+    toggleSleep(false);
+}
+
+void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
+{
+    addTorque((force % (pos - m_location)).k());
 
     toggleSleep(false);
 }
 
 void MCObject::addTorque(MCFloat torque)
 {
-    torque    += torque;
+    torque += torque;
 
     toggleSleep(false);
 }

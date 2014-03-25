@@ -198,9 +198,14 @@ public:
      *  \param force Force vector to be added. */
     void addForce(const MCVector3dF & force);
 
-    /*! Add a moment (Nm) to the object for a single frame.
-     *  \param moment Value to be added. */
-    void addTorque(MCFloat moment);
+    /*! Add a force (N) vector to the object for a single frame.
+     *  \param force Force vector to be added.
+     *  \param pos Position of the force (in world coordinates). */
+    void addForce(const MCVector3dF & force, const MCVector3dF & pos);
+
+    /*! Add torque (Nm) to the object for a single frame.
+     *  \param torque Value to be added. */
+    void addTorque(MCFloat torque);
 
     //! Set moment of inertia.
     void setMomentOfInertia(MCFloat momentOfInertia);
