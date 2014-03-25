@@ -183,17 +183,6 @@ void MCObject::integrateLinear(MCFloat step)
     totAcceleration += m_forces * m_invMass;
     m_velocity      += totAcceleration * step + m_linearImpulse;
     m_velocity      *= m_damping;
-
-    // Note that this code doesn't take the z-component into consideration
-    if (m_maximumVelocity > 0)
-    {
-        const MCFloat l = MCVector2dF(m_velocity).lengthFast();
-        if (l > m_maximumVelocity)
-        {
-            m_velocity /= l;
-            m_velocity *= m_maximumVelocity;
-        }
-    }
 }
 
 void MCObject::integrateAngular(MCFloat step)
@@ -204,15 +193,6 @@ void MCObject::integrateAngular(MCFloat step)
         totAngularAcceleration += m_torque * m_invMomentOfInertia;
         m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
         m_angularVelocity      *= m_damping;
-
-        if (m_angularVelocity > m_maximumAngularVelocity)
-        {
-            m_angularVelocity = m_maximumAngularVelocity;
-        }
-        else if (m_angularVelocity < -m_maximumAngularVelocity)
-        {
-            m_angularVelocity = -m_maximumAngularVelocity;
-        }
 
         const MCFloat newAngle = m_angle + MCTrigonom::radToDeg(m_angularVelocity * step);
         doRotate(newAngle);
