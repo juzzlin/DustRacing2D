@@ -752,7 +752,7 @@ void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 
 void MCObject::addTorque(MCFloat torque)
 {
-    torque += torque;
+    m_torque += torque;
 
     toggleSleep(false);
 }
