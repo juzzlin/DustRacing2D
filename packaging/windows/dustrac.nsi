@@ -4,10 +4,10 @@
 !define APPNAME-GAME           "Dust Racing 2D"
 !define APPNAME-EDITOR         "Dust Racing 2D Level Editor"
 !define COMPANYNAME            "Jussi Lind"
-!define DESCRIPTION            "A nice little racing game."
+!define DESCRIPTION            "A traditional top-down racing game."
 !define VERSIONMAJOR           1
 !define VERSIONMINOR           7
-!define VERSIONBUILD           1
+!define VERSIONBUILD           2
 !define HELPURL                "http://dustrac.sourceforge.net"
 !define UPDATEURL              "http://dustrac.sourceforge.net"
 !define ABOUTURL               "http://dustrac.sourceforge.net"

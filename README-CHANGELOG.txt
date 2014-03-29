@@ -1,3 +1,14 @@
+1.7.2
+=====
+
+New features
+
+* French translations
+
+Bug fixes:
+
+* Fix computer driving lines in twister.trk
+
 1.7.1
 =====
 
