@@ -98,19 +98,18 @@ void AI::steerControl(TargetNodeBase & tnode)
 
     // PID-controller. This makes the computer players to turn and react faster
     // than the human player, but hey...they are stupid.
-    MCFloat control = diff * 0.01 + (diff - m_lastDiff) * 0.01;
+    MCFloat control = diff * 0.05 + (diff - m_lastDiff) * 0.05;
     const MCFloat maxControl = 1.0;
     control = control < 0 ? -control : control;
     control = control > maxControl ? maxControl : control;
-    m_car.setTurningImpulse(control);
 
-    if (diff < -3.0)
+    if (diff < -2.5)
     {
-        m_car.turnRight();
+        m_car.turnRight(control);
     }
-    else if (diff > 3.0)
+    else if (diff > 2.5)
     {
-        m_car.turnLeft();
+        m_car.turnLeft(control);
     }
 
     // Store the last difference
@@ -135,10 +134,10 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     else
     {
         // The following speed limits are experimentally defined.
-
+        float scale = 0.9;
         if (currentTile.computerHint() == TrackTile::CH_BRAKE)
         {
-            if (absSpeed > 14.0)
+            if (absSpeed > 14.0 * scale)
             {
                 brake = true;
             }
@@ -146,7 +145,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
         {
-            if (absSpeed > 10.5)
+            if (absSpeed > 9.5 * scale)
             {
                 brake = true;
             }
@@ -154,7 +153,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
         {
-            if (absSpeed > 7.0)
+            if (absSpeed > 7.0 * scale)
             {
                 accelerate = false;
             }
@@ -163,13 +162,13 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
             currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
-            if (absSpeed > 8.3)
+            if (absSpeed > 8.3 * scale)
             {
                 accelerate = false;
             }
         }
 
-        if (absSpeed < 3.6)
+        if (absSpeed < 3.6 * scale)
         {
             accelerate = true;
             brake = false;

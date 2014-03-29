@@ -19,8 +19,8 @@
 
 CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
 {
-    const int   humanPower = 200000; // This in Watts
-    const float humanDrag  = 5.0;
+    const int   defaultPower = 200000; // This in Watts
+    const float defaultDrag  = 5.0;
 
     static const int NUM_CARS = numCars;
     static std::map<int, std::string> carImageMap = {
@@ -46,9 +46,9 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
     CarPtr car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
     {
-        desc.power                = humanPower;
-        desc.dragQuadratic        = humanDrag;
-        desc.accelerationFriction = 0.7;
+        desc.power                = 0.75 * defaultPower;
+        desc.dragQuadratic        = defaultDrag;
+        desc.accelerationFriction = 0.55;
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
     }
@@ -57,11 +57,9 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         // Introduce some variance to the power of computer players so that the
         // slowest cars have less power than the human player and the fastest
         // cars have more power than the human player.
-        desc.power                = humanPower / 2 + (index + 1) * humanPower / NUM_CARS;
-        desc.accelerationFriction = 0.3 + 0.45 * float(index + 1) / NUM_CARS;
-        desc.dragQuadratic        = humanDrag;
-        desc.turningImpulse       = 0.3;
-        desc.slideFriction        = 1.0;
+        desc.power                = defaultPower / 2 + (index + 1) * defaultPower / NUM_CARS;
+        desc.accelerationFriction = 0.3 + 0.4 * float(index + 1) / NUM_CARS;
+        desc.dragQuadratic        = defaultDrag;
         desc.brakingFriction      = 2.0;
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, false));

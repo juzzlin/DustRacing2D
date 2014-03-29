@@ -49,10 +49,8 @@ public:
         , rollingFrictionOnTrack(0.1)
         , rollingFrictionOffTrack(0.75)
         , rotationFriction(1.0)
-        , slideFriction(1.0)
-        , turningImpulse(0.28)
         , power(5000.0)
-        , mass(1000.0)
+        , mass(1500.0)
         , restitution(0.05)
         , dragLinear(1.0)
         , dragQuadratic(5.0)
@@ -73,8 +71,6 @@ public:
         float rollingFrictionOnTrack;
         float rollingFrictionOffTrack;
         float rotationFriction;
-        float slideFriction;
-        float turningImpulse;
         float power;
         float mass;
         float restitution;
@@ -104,10 +100,10 @@ public:
     void clearStatuses();
 
     //! Turn left.
-    void turnLeft();
+    void turnLeft(MCFloat control = 1.0);
 
     //! Turn right.
-    void turnRight();
+    void turnRight(MCFloat control = 1.0);
 
     //! Accelerate.
     void accelerate(bool deccelerate = false);
@@ -194,13 +190,9 @@ public:
 
 private:
 
-    float calculateSteeringCoeff() const;
-
     void initForceGenerators(Description & desc);
 
     void setProperties(Description & desc);
-
-    void steer(int direction = 1);
 
     void wearOutTires(MCFloat step, MCFloat factor);
 
@@ -234,6 +226,8 @@ private:
     CarSoundEffectManagerPtr m_soundEffectManager;
     MCObjectPtr              m_leftFrontTire;
     MCObjectPtr              m_rightFrontTire;
+    MCObjectPtr              m_leftRearTire;
+    MCObjectPtr              m_rightRearTire;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

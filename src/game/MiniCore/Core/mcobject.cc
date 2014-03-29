@@ -745,7 +745,19 @@ void MCObject::addForce(const MCVector3dF & force)
 
 void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    addTorque((force % (pos - m_location)).k());
+    // This ad-hoc scaling affects the balance between linear and angular components.
+    MCFloat linearBalance = 1.0;
+    if (shape())
+    {
+        MCFloat d = shape()->radius();
+        MCWorld::toMeters(d);
+        MCFloat linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+            MCVector2dF(pos - location()), MCVector2dF(force)) / d;
+        linearBalance = linearBalance < 0 ? 0 : linearBalance;
+    }
+
+    addTorque(((force) % (pos - m_location)).k());
+    m_forces += force * linearBalance;
 
     toggleSleep(false);
 }

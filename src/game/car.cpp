@@ -20,6 +20,7 @@
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "slidefrictiongenerator.hpp"
+#include "tire.hpp"
 
 #include <MCAssetManager>
 #include <MCCollisionEvent>
@@ -45,7 +46,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
 , m_pOffTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOffTrack, desc.rotationFriction))
-, m_pSlideFriction(new SlideFrictionGenerator(desc.slideFriction))
+, m_pSlideFriction(nullptr)
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -76,13 +77,23 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     addChildObject(numberPlate, m_desc.numberPos, 90);
     numberPlate->setRenderLayerRelative(1);
 
-    m_leftFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
+    const MCFloat frontFriction = 1.0;
+    m_leftFrontTire.reset(new Tire(frontFriction));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
 
-    m_rightFrontTire.reset(new MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire"));
+    m_rightFrontTire.reset(new Tire(frontFriction));
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
     m_rightFrontTire->setRenderLayerRelative(-1);
+
+    const MCFloat rearFriction = 0.95;
+    m_leftRearTire.reset(new Tire(rearFriction));
+    addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
+    m_leftRearTire->setRenderLayerRelative(-1);
+
+    m_rightRearTire.reset(new Tire(rearFriction));
+    addChildObject(m_rightRearTire, m_desc.rightRearTirePos, 0);
+    m_rightRearTire->setRenderLayerRelative(-1);
 }
 
 void Car::setProperties(Description & desc)
@@ -90,6 +101,7 @@ void Car::setProperties(Description & desc)
     setRenderLayer(Layers::Objects);
 
     setMass(desc.mass);
+    setMomentOfInertia(desc.mass * 1.5);
     setMaximumVelocity(desc.maxLinearVelocity);
     setMaximumAngularVelocity(desc.maxAngularVelocity);
     setRestitution(desc.restitution);
@@ -103,9 +115,6 @@ void Car::setProperties(Description & desc)
 
 void Car::initForceGenerators(Description & desc)
 {
-    // Add slide friction generator
-    MCWorld::instance().forceRegistry().addForceGenerator(m_pSlideFriction, *this);
-
     // Add braking friction generator
     MCWorld::instance().forceRegistry().addForceGenerator(m_pBrakingFriction, *this);
     m_pBrakingFriction->enable(false);
@@ -125,7 +134,6 @@ void Car::initForceGenerators(Description & desc)
 void Car::clearStatuses()
 {
     m_pBrakingFriction->enable(false);
-    m_pSlideFriction->enable(true);
 
     m_accelerating = false;
     m_braking      = false;
@@ -138,63 +146,18 @@ MCUint Car::index() const
     return m_index;
 }
 
-void Car::turnLeft()
+void Car::turnLeft(MCFloat control)
 {
-    if (m_tireAngle < 45)
-    {
-        m_tireAngle++;
-    }
+    m_tireAngle = static_cast<int>(-8.0 * control);
 
     m_turnLeft = true;
-
-    steer();
 }
 
-void Car::turnRight()
+void Car::turnRight(MCFloat control)
 {
-    if (m_tireAngle > -45)
-    {
-        m_tireAngle--;
-    }
+    m_tireAngle = static_cast<int>(8.0 * control);
 
     m_turnRight = true;
-
-    steer(-1);
-}
-
-float Car::calculateSteeringCoeff() const
-{
-    const float absSpeed = velocity().lengthFast();
-    float stabilize = 1.0 - absSpeed / 80.0;
-    stabilize = stabilize < 0.25 ? 0.25 : stabilize;
-
-    const float nonLinear = std::pow(absSpeed / 7.0, 0.5);
-    const float effScaling = std::min(stabilize, nonLinear);
-    return effScaling;
-}
-
-void Car::steer(int direction)
-{
-    if (velocity().lengthFast() > 0)
-    {
-        const float effScaling = calculateSteeringCoeff();
-
-        if (!m_reverse)
-        {
-            if (m_braking)
-            {
-                addAngularImpulse(m_desc.turningImpulse * effScaling * direction * 0.5);
-            }
-            else
-            {
-                addAngularImpulse(m_desc.turningImpulse * effScaling * direction);
-            }
-        }
-        else
-        {
-            addAngularImpulse(-m_desc.turningImpulse * effScaling * direction);
-        }
-    }
 }
 
 void Car::accelerate(bool deccelerate)
@@ -263,16 +226,8 @@ bool Car::isSkidding() const
 
 void Car::noSteering()
 {
-    if (m_tireAngle < 0)
-    {
-        m_tireAngle++;
-    }
-    else if (m_tireAngle > 0)
-    {
-        m_tireAngle--;
-    }
-
-    m_turnLeft = false;
+    m_tireAngle = 0;
+    m_turnLeft  = false;
     m_turnRight = false;
 }
 
@@ -360,17 +315,11 @@ void Car::wearOutTires(MCFloat step, MCFloat factor)
     {
         m_tireWearOutCapacity = 0;
     }
-
-    static_cast<SlideFrictionGenerator *>(
-        m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
 }
 
 void Car::resetTireWear()
 {
     m_tireWearOutCapacity = m_desc.tireWearOutCapacity;
-
-    static_cast<SlideFrictionGenerator *>(
-        m_pSlideFriction.get())->setTireWearOutFactor(tireWearLevel());
 }
 
 float Car::tireWearLevel() const
@@ -435,11 +384,6 @@ bool Car::rightSideOffTrack() const
 bool Car::isOffTrack() const
 {
     return leftSideOffTrack() || rightSideOffTrack();
-}
-
-void Car::setTurningImpulse(float impulse)
-{
-    m_desc.turningImpulse = impulse;
 }
 
 void Car::setCurrentTargetNodeIndex(int index)

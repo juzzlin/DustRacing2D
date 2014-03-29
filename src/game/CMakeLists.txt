@@ -79,6 +79,7 @@ set(SRC
     textmenuitemview.cpp
     timing.cpp
     timingoverlay.cpp
+    tire.cpp
     track.cpp
     trackdata.cpp
     trackloader.cpp
