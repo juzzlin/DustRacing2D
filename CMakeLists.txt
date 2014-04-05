@@ -40,13 +40,12 @@ else()
     cmake_policy(VERSION 2.8.7)
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(UNIX)
     include("InstallLinux.cmake")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+elseif(WIN32)
     include("InstallWindows.cmake")
 endif()
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
 
