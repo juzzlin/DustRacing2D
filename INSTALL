@@ -117,6 +117,12 @@ Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 13.10)
 3) Run <Your MXE installation dir>/usr/i686-pc-mingw32/qt5/bin/qmake dustrac.pro
 4) make
 
+There's also a script to build the game with a Windows installer:
+1) export DUSTRAC_RELEASE_VERSION=1.7.3
+2) ./scripts/mxeWindowsBuild
+
+The script checks that needed binaries are found.
+
 CPack
 =====
 

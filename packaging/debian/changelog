@@ -1,3 +1,14 @@
+dustrac (1.7.3-1) precise; urgency=medium
+
+  * Revert "Optimize VBO, VAO and texture binding."
+  * Fix MCObject::addTorque()
+  * Remove linear and angular velocity limits.
+  * Add support for positional force.
+  * Fix build with GL30=ON.
+  * Enable build on FreeBSD.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 23 Aug 2014 00:26:14 +0300
+
 dustrac (1.7.2-1) precise; urgency=medium
 
   * Log the font texture size.

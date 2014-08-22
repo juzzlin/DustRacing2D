@@ -1,3 +1,14 @@
+1.7.3
+-----
+
+* Revert "Optimize VBO, VAO and texture binding."
+  - Caused missing number plate of the first car
+* Fix MCObject::addTorque()
+* Remove linear and angular velocity limits.
+* Add support for positional force.
+* Fix build with GL30=ON.
+* Enable build on FreeBSD.
+
 1.7.2
 -----
 
