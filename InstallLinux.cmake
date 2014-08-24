@@ -65,12 +65,12 @@ function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
     install(DIRECTORY data/models DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.obj")
     install(DIRECTORY data/sounds DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.ogg")
     install(DIRECTORY data/fonts DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.ttf")
-    install(DIRECTORY data/translations DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.qm")
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/data/translations DESTINATION ${DATA_PATH} FILES_MATCHING PATTERN "*.qm")
 
     if(ReleaseBuild)
         # Install .desktop files
-        install(FILES dustrac-game.desktop DESTINATION share/applications)
-        install(FILES dustrac-editor.desktop DESTINATION share/applications)
+        install(FILES ${CMAKE_BINARY_DIR}/dustrac-game.desktop DESTINATION share/applications)
+        install(FILES ${CMAKE_BINARY_DIR}/dustrac-editor.desktop DESTINATION share/applications)
 
         # Install icons
         install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
