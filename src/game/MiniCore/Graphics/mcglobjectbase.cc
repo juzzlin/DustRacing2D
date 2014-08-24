@@ -23,6 +23,8 @@
 
 #include <cassert>
 
+GLuint MCGLObjectBase::m_boundVbo = 0;
+
 MCGLObjectBase::MCGLObjectBase()
 : m_vao(0)
 , m_vbo(0)
@@ -71,12 +73,16 @@ void MCGLObjectBase::createVAO()
 
 void MCGLObjectBase::bindVBO()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    if (MCGLObjectBase::m_boundVbo != m_vbo)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        MCGLObjectBase::m_boundVbo = m_vbo;
+    }
 }
 
 void MCGLObjectBase::releaseVBO()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    MCGLObjectBase::m_boundVbo = 0;
 }
 
 void MCGLObjectBase::createVBO()
