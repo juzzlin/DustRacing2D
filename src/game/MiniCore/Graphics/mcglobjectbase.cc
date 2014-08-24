@@ -60,7 +60,7 @@ void MCGLObjectBase::bindVAO()
 
 void MCGLObjectBase::releaseVAO()
 {
-    glBindVertexArray(0);
+    // Intentionally do nothing
 }
 
 void MCGLObjectBase::createVAO()
