@@ -148,6 +148,10 @@ void MCGLShaderProgram::link()
 
     initUniformLocationCache();
     m_scene.addShaderProgram(*this);
+
+    bindTextureUnit(0, Tex0);
+    bindTextureUnit(1, Tex1);
+    bindTextureUnit(2, Tex2);
 }
 
 bool MCGLShaderProgram::isLinked() const
@@ -347,25 +351,19 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
         glBindTexture(GL_TEXTURE_2D, texture1);
     }
 
-    bindTextureUnit(0, Tex0);
-
-    if (MCGLShaderProgram::m_activeTexture[1] != texture2)
+    if (texture2 && MCGLShaderProgram::m_activeTexture[1] != texture2)
     {
         MCGLShaderProgram::m_activeTexture[1] = texture2;
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
     }
 
-    bindTextureUnit(1, Tex1);
-
-    if (MCGLShaderProgram::m_activeTexture[2] != texture3)
+    if (texture3 && MCGLShaderProgram::m_activeTexture[2] != texture3)
     {
         MCGLShaderProgram::m_activeTexture[2] = texture3;
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, texture3);
     }
-
-    bindTextureUnit(2, Tex2);
 
     glActiveTexture(GL_TEXTURE0);
 
