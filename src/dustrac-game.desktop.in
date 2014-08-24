@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Dust Racing 2D
+GenericName=Top-down 2D racing game
 Comment=2D racing game
 Exec=dustrac-game
 Icon=dustrac-game
 Type=Application
-Categories=Game
+Categories=Game;SportsGame;
 StartupNotify=true
