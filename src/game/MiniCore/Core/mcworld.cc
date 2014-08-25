@@ -100,6 +100,11 @@ MCWorld::~MCWorld()
     MCWorld::m_instance = nullptr;
 }
 
+MCFloat MCWorld::gravity()
+{
+    return 9.81;
+}
+
 void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects

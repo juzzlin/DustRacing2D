@@ -22,6 +22,7 @@
 
 #include "mcforcegenerator.hh"
 #include "mcmacros.hh"
+#include "mcworld.hh"
 
 /*!
  * \class MCFrictionGenerator
@@ -43,7 +44,7 @@ public:
      * \param gravity Gravitational acceleration.
      */
     explicit MCFrictionGenerator(
-        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = 9.81);
+        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = MCWorld::gravity());
 
     //! Destructor.
     virtual ~MCFrictionGenerator();

@@ -24,7 +24,7 @@ class SlideFrictionGenerator : public MCFrictionGenerator
 public:
 
     //! Constructor.
-    explicit SlideFrictionGenerator(MCFloat coeff, MCFloat gravity = 9.81);
+    explicit SlideFrictionGenerator(MCFloat coeff, MCFloat gravity = MCWorld::gravity());
 
     //! Destructor.
     virtual ~SlideFrictionGenerator() {};

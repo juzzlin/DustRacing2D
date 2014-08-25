@@ -36,7 +36,7 @@ void Tire::stepTime(MCFloat)
     MCVector2d<MCFloat> s = MCMathUtil::projection(v, tire);
 
     MCVector2d<MCFloat> impulse;
-    const float massFactor = parent().mass() * 9.81 * m_friction;
+    const float massFactor = parent().mass() * MCWorld::gravity() * m_friction;
     if (s.lengthFast() < 1.0f) {
         impulse = -s * massFactor;
     } else {

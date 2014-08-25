@@ -165,8 +165,7 @@ void Car::accelerate(bool deccelerate)
     m_pBrakingFriction->enable(false);
     m_skidding = true;
 
-    const float gravity = 9.81;
-    const float frictionLimit = mass() * m_desc.accelerationFriction * gravity;
+    const float frictionLimit = mass() * m_desc.accelerationFriction * MCWorld::gravity();
     float effForce = frictionLimit;
     if (!velocity().isZero())
     {

@@ -86,6 +86,8 @@ public:
     //! Convert pixels to meters.
     static void toMeters(MCVector3dF & pixels);
 
+    static MCFloat gravity();
+
     /*! Add object to the world. Object's current location is used.
      *  \param object Object to be added. */
     void addObject(MCObject & object);
