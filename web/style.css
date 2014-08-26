@@ -67,7 +67,7 @@ a:active
 .dr2-image-view img
 {
     width:100%;
-    height:100%;
+    height:auto;
 }
 
 .dr2-image-view .image1
