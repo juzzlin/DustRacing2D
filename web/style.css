@@ -4,22 +4,16 @@ header
     color:            #dddddd;
 }
 
-body
+body, html
 {
     background-color: #111111;
     color:            #dddddd;
     color:            white;
     font-family:      Arial, Helvetica, sans-serif;
+    text-align:       center;
+    height:           100%;
 }
 
-footer
-{
-    background-color: #111111;
-    color:            #dddddd;
-    padding-top:      25px;
-    padding-bottom:   10px;
-}
-    
 a:link
 {
     text-decoration:none;
@@ -38,126 +32,77 @@ a:hover
 
 a:active
 {
-    text-decoration:none;   
+    text-decoration:none;
 }
 
-.ImageView
+.dr2-main-content {
+    width: 100%;
+    min-height: 100%;
+    padding: 0;
+    background-color: #111111;
+}
+
+.dr2-main-content .container {
+    padding: 0;
+}
+
+.dr2-title {
+    margin-bottom: 10px;
+}
+
+.dr2-title h1 {
+    font-weight: bold;
+}
+
+.dr2-image-view
 {
     width:100%;
 }
 
-.ImageView img
+.dr2-image-view .container
 {
-    width:320px;
-    height:200px;
+    padding: 0;
 }
 
-.ImageView .image1
+.dr2-image-view img
 {
-    transform:rotate(7deg);
-    -ms-transform:rotate(7deg); /* IE 9 */
-    -webkit-transform:rotate(7deg); /* Safari and Chrome */
-} 
-
-.ImageView .image2
-{
-    transform:translateY(20px);
-    -ms-transform:translateY(20px); /* IE 9 */
-    -webkit-transform:translateY(20px); /* Safari and Chrome */
-} 
-
-.ImageView .image3
-{
-    transform:scale(1.1, 1.1);
-    -ms-transform:scale(1.1, 1.1); /* IE 9 */
-    -webkit-transform:scale(1.1, 1.1); /* Safari and Chrome */
-    box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
-    -moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
-    -webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
-} 
-
-.Title
-{
-    height:           50px;
-    width:            90%;
-    line-height:      50px;
-    font-size:        50px;
-    font-family:      "Arial Black", Gadget, sans-serif;
-    border-radius:    2px;
+    width:100%;
+    height:100%;
 }
 
-.TextArea
+.dr2-image-view .image1
 {
-    width:            75%;
+    margin-bottom: 2px;
+}
+
+.dr2-image-view .image2
+{
+    margin-bottom: 2px;
+}
+
+.dr2-image-view .image3
+{
+    margin-bottom: 2px;
+}
+
+.dr2-text-area
+{
+    width:            100%;
     font-family:      "Arial Black", Gadget, sans-serif;
     color:            #cccccc;
     text-align:       left;
     text-indent:      1em;
     border-radius:    2px;
-    padding:          10px;
+    padding-left:     20px;
+    padding-right:    20px;
 }
 
-.SoftPediaAward
+.dr2-footer
 {
-    position:         relative;
-    width:            90%;
-    height:           75px;
+    background-color: #444444;
+    color:            #dddddd;
+    width:            100%;
+    height:           32px;
+    line-height:      32px;
+    margin-top:       20px;
 }
-
-.SoftPediaAward img
-{
-    position:         absolute;
-    height:           100px;
-    right:            10%;
-    bottom:           0%;
-}
-
-.row
-{
-    width: 75%;
-}
-
-.container
-{
-    padding: 0;
-}
-
-/* Tested on Samsung Galaxy S2 */
-@media only screen and (max-device-width: 500px) {
-
-    .Title
-    {
-        height:           100px;
-        width:            100%;
-        line-height:      100px;
-        font-size:        100px;
-    }
-
-    .ImageView
-    {
-        padding-top: 50px;
-    }
-
-    .ImageView img
-    {
-        width: 600px;
-        height: 375px;
-    }
-
-    .TextArea
-    {
-        font-size: 3em;
-    }
-
-    h3
-    {
-        font-size: 4em;
-    }
-
-    small
-    {
-        font-size: 2em;
-    }
-}
-
-
