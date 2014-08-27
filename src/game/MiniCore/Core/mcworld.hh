@@ -118,11 +118,16 @@ public:
      *  \param step Time step to be updated */
     void stepTime(MCFloat step);
 
-    /*! \brief Render all registered objects.
+    /*! \brief Call this (once) before calling render() or renderShadows().
      *  \param camera The camera window to be used. If nullptr, then
-     *         no any translations or clipping done.
-     *  \param enableShadows Render shadows, if true. */
-    virtual void render(MCCamera * camera = nullptr, bool enableShadows = true);
+     *         no any translations or clipping done. */
+    virtual void prepareRendering(MCCamera * camera = nullptr);
+
+    /*! \brief Render all registered objects. */
+    virtual void render();
+
+    /*! \brief Render shadows of all registered objects. */
+    virtual void renderShadows();
 
     //! \return Reference to the objectTree.
     MCObjectTree & objectTree() const;

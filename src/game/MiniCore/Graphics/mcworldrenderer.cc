@@ -30,6 +30,7 @@
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
+    : m_renderCamera(nullptr)
 {
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -42,20 +43,15 @@ void MCWorldRenderer::registerPointParticleRenderer(MCUint typeId, MCGLPointPart
     m_particleRenderers[typeId] = &renderer;
 }
 
-void MCWorldRenderer::render(MCCamera * camera, bool enableShadows)
+void MCWorldRenderer::render()
 {
-    buildBatches(camera);
-
-    if (enableShadows)
-    {
-        renderShadows(camera);
-    }
-
-    renderBatches(camera);
+    renderBatches(m_renderCamera);
 }
 
 void MCWorldRenderer::buildBatches(MCCamera * camera)
 {
+    m_renderCamera = camera;
+
     // In the case of Dust Racing 2D, it was faster to just loop through
     // all objects on all layers and perform visibility tests instead of
     // just fetching all "visible" objects from MCObjectTree.
@@ -236,9 +232,11 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
     }
 }
 
-void MCWorldRenderer::renderShadows(MCCamera * camera)
+void MCWorldRenderer::renderShadows()
 {
     glDisable(GL_DEPTH_TEST);
+
+    MCCamera * const camera = m_renderCamera;
 
     for (int i = 0; i < MCWorld::MaxLayers; i++)
     {

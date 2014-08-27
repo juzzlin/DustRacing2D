@@ -138,9 +138,19 @@ void MCWorld::resolvePositions(MCFloat accuracy)
     m_impulseGenerator->resolvePositions(m_objs, accuracy);
 }
 
-void MCWorld::render(MCCamera * camera, bool enableShadows)
+void MCWorld::prepareRendering(MCCamera * camera)
 {
-    m_renderer->render(camera, enableShadows);
+    m_renderer->buildBatches(camera);
+}
+
+void MCWorld::render()
+{
+    m_renderer->render();
+}
+
+void MCWorld::renderShadows()
+{
+    m_renderer->renderShadows();
 }
 
 MCWorld & MCWorld::instance()

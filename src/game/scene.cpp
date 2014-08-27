@@ -662,7 +662,9 @@ void Scene::render()
 void Scene::renderPlayerScene(MCCamera & camera)
 {
     m_activeTrack->render(&camera);
-    m_world->render(&camera);
+    m_world->prepareRendering(&camera);
+    m_world->renderShadows();
+    m_world->render();
 }
 
 void Scene::renderCommonScene()

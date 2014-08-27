@@ -52,24 +52,25 @@ public:
      *  \param renderer Reference to the renderer to be used for this type id. */
     void registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer);
 
-    //! If a particle gets off all visibility cameras, it'll be killed.
-    //! This is just an optimization. We cannot use just the camera given
-    //! to render(), because there might be multiple cameras and viewports.
+    /*! If a particle gets off all visibility cameras, it'll be killed.
+     *  This is just an optimization. We cannot use just the camera given
+     *  to render(), because there might be multiple cameras and viewports. */
     void addParticleVisibilityCamera(MCCamera & camera);
 
     void removeParticleVisibilityCameras();
 
+    /*! Must be called before calls to render() or renderShadows() */
     void buildBatches(MCCamera * camera = nullptr);
 
-    void render(MCCamera * camera, bool enableShadows);
+    void render();
+
+    void renderShadows();
 
     void clear();
 
 private:
 
     void renderBatches(MCCamera * camera = nullptr);
-
-    void renderShadows(MCCamera * camera = nullptr);
 
     void renderObjectBatches(MCCamera * camera, int layer);
 
@@ -88,6 +89,8 @@ private:
 
     typedef std::map<int, MCGLPointParticleRenderer *> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
+
+    MCCamera * m_renderCamera;
 };
 
 #endif // MCWORLDRENDERER_HH
