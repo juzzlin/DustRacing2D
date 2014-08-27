@@ -97,8 +97,11 @@ public:
     //! Return track selection menu.
     TrackSelectionMenu & trackSelectionMenu() const;
 
-    //! Render all components.
-    void render();
+    void renderTrack();
+
+    void renderObjectShadows();
+
+    void renderObjects();
 
 signals:
 
@@ -112,8 +115,9 @@ private:
     void createMenus();
     void initRace();
     void processUserInput(InputHandler & handler);
-    void renderCommonScene();
+    void renderCommonHUD();
     void renderPlayerScene(MCCamera & camera);
+    void renderPlayerSceneShadows(MCCamera & camera);
     void resizeOverlays();
     void setupAudio(Car & car, int index);
     void setupAI(Track & activeTrack);

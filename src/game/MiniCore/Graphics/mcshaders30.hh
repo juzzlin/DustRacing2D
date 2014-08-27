@@ -160,7 +160,7 @@ static const char * MCDefaultShadowFsh =
 "    }\n"
 "    else\n"
 "    {\n"
-"        fragColor = vec4(0.0, 0.0, 0.0, 1.0);\n"
+"        fragColor = vec4(0.0, 0.0, 0.0, 0.6);\n"
 "    }\n"
 "}\n";
 

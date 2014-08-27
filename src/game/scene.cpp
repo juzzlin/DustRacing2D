@@ -584,7 +584,106 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
     return *m_trackSelectionMenu;
 }
 
-void Scene::render()
+void Scene::renderTrack()
+{
+    const MCFloat fadeValue = m_renderer.fadeValue();
+
+    switch (m_stateMachine.state())
+    {
+    case StateMachine::GameTransitionIn:
+    case StateMachine::GameTransitionOut:
+    case StateMachine::DoStartlights:
+    case StateMachine::Play:
+
+        if (m_fadeAnimation->isFading())
+        {
+            m_renderer.glScene().setFadeValue(fadeValue);
+        }
+
+        if (m_game.hasTwoHumanPlayers())
+        {
+            MCGLScene::SplitType p1, p0;
+            if (m_game.splitType() == Game::Vertical)
+            {
+                p1 = MCGLScene::ShowOnLeft;
+                p0 = MCGLScene::ShowOnRight;
+            }
+            else
+            {
+                p1 = MCGLScene::ShowOnTop;
+                p0 = MCGLScene::ShowOnBottom;
+            }
+
+            m_renderer.glScene().setSplitType(p1);
+            m_activeTrack->render(&m_camera[1]);
+
+            m_renderer.glScene().setSplitType(p0);
+            m_activeTrack->render(&m_camera[0]);
+        }
+        else
+        {
+            m_activeTrack->render(&m_camera[0]);
+        }
+
+        break;
+
+    default:
+        break;
+    };
+}
+
+void Scene::renderObjectShadows()
+{
+    const MCFloat fadeValue = m_renderer.fadeValue();
+
+    switch (m_stateMachine.state())
+    {
+    case StateMachine::GameTransitionIn:
+    case StateMachine::GameTransitionOut:
+    case StateMachine::DoStartlights:
+    case StateMachine::Play:
+
+        if (m_fadeAnimation->isFading())
+        {
+            m_renderer.glScene().setFadeValue(fadeValue);
+        }
+
+        if (m_game.hasTwoHumanPlayers())
+        {
+            MCGLScene::SplitType p1, p0;
+            if (m_game.splitType() == Game::Vertical)
+            {
+                p1 = MCGLScene::ShowOnLeft;
+                p0 = MCGLScene::ShowOnRight;
+            }
+            else
+            {
+                p1 = MCGLScene::ShowOnTop;
+                p0 = MCGLScene::ShowOnBottom;
+            }
+
+            m_renderer.glScene().setSplitType(p1);
+            renderPlayerSceneShadows(m_camera[1]);
+
+            m_renderer.glScene().setSplitType(p0);
+            renderPlayerSceneShadows(m_camera[0]);
+
+            // Setup for common scene
+            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+        }
+        else
+        {
+            renderPlayerSceneShadows(m_camera[0]);
+        }
+
+        break;
+
+    default:
+        break;
+    };
+}
+
+void Scene::renderObjects()
 {
     const MCFloat fadeValue = m_renderer.fadeValue();
 
@@ -650,7 +749,7 @@ void Scene::render()
             m_timingOverlay[0].render();
         }
 
-        renderCommonScene();
+        renderCommonHUD();
 
         break;
 
@@ -661,13 +760,17 @@ void Scene::render()
 
 void Scene::renderPlayerScene(MCCamera & camera)
 {
-    m_activeTrack->render(&camera);
-    m_world->prepareRendering(&camera);
-    m_world->renderShadows();
+    // Assume that m_world->prepareRendering(&camera) is already called.
     m_world->render();
 }
 
-void Scene::renderCommonScene()
+void Scene::renderPlayerSceneShadows(MCCamera & camera)
+{
+    m_world->prepareRendering(&camera);
+    m_world->renderShadows();
+}
+
+void Scene::renderCommonHUD()
 {
     if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
     {

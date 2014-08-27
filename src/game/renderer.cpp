@@ -181,17 +181,34 @@ void Renderer::renderNativeResolutionOrWindowed()
 
     if (m_scene)
     {
-        m_scene->render();
+        m_scene->renderTrack();
+        m_scene->renderObjectShadows();
+        m_scene->renderObjects();
     }
 }
 
 void Renderer::renderCustomResolution()
 {
+    const int fullVRes = QApplication::desktop()->height();
+    const int fullHRes = QApplication::desktop()->width();
+
     // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
 
     static QGLFramebufferObject fbo(m_hRes, m_vRes);
+    static QGLFramebufferObject shadowFbo(m_hRes, m_vRes);
     static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
+
+    shadowFbo.bind();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (m_scene)
+    {
+        m_scene->renderObjectShadows();
+    }
+
+    shadowFbo.release();
 
     fbo.bind();
 
@@ -199,15 +216,25 @@ void Renderer::renderCustomResolution()
 
     if (m_scene)
     {
-        m_scene->render();
+        m_scene->renderTrack();
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        dummyMaterial->setTexture(shadowFbo.texture(), 0);
+        MCSurface ss(dummyMaterial, Scene::width(), Scene::height());
+        ss.setShaderProgram(program("fbo"));
+        ss.bindMaterial();
+        ss.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+
+        glDisable(GL_BLEND);
+
+        m_scene->renderObjects();
     }
 
     fbo.release();
 
     // Render the frame buffer object onto the screen
-
-    const int fullVRes = QApplication::desktop()->height();
-    const int fullHRes = QApplication::desktop()->width();
 
     resizeGL(fullHRes, fullVRes);
 
