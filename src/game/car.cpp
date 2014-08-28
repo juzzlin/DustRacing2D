@@ -19,7 +19,6 @@
 #include "layers.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
-#include "slidefrictiongenerator.hpp"
 #include "tire.hpp"
 
 #include <MCAssetManager>
@@ -46,7 +45,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
 , m_pOffTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOffTrack, desc.rotationFriction))
-, m_pSlideFriction(nullptr)
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -148,14 +146,14 @@ MCUint Car::index() const
 
 void Car::turnLeft(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(-8.0 * control);
+    m_tireAngle = static_cast<int>(-6.0 * control);
 
     m_turnLeft = true;
 }
 
 void Car::turnRight(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(8.0 * control);
+    m_tireAngle = static_cast<int>(6.0 * control);
 
     m_turnRight = true;
 }

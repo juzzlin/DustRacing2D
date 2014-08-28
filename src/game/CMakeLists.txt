@@ -69,7 +69,6 @@ set(SRC
     renderer.cpp
     resolutionmenu.cpp
     scene.cpp
-    slidefrictiongenerator.cpp
     settings.cpp
     settingsmenu.cpp
     startlights.cpp

@@ -31,17 +31,7 @@ void Tire::stepTime(MCFloat)
     const MCFloat tireNormalAngle = angle() + 90;
     const MCVector2d<MCFloat> tire(
         MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
-
-    const MCVector2d<MCFloat> & v = parent().velocity().normalizedFast();
-    MCVector2d<MCFloat> s = MCMathUtil::projection(v, tire);
-
-    MCVector2d<MCFloat> impulse;
-    const float massFactor = parent().mass() * MCWorld::gravity() * m_friction;
-    if (s.lengthFast() < 1.0f) {
-        impulse = -s * massFactor;
-    } else {
-        impulse = -s.normalizedFast() * massFactor;
-    }
-
-    parent().addForce(impulse, location());
+    const MCVector2d<MCFloat> & v = velocity().normalizedFast();
+    MCVector2d<MCFloat> impulse = -MCMathUtil::projection(v, tire) * 0.25;
+    parent().addLinearImpulse(impulse, location());
 }

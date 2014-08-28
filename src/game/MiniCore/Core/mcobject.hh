@@ -160,6 +160,10 @@ public:
      *  \param impulse The velocity component. */
     void addLinearImpulse(const MCVector3dF & impulse);
 
+    /*! \brief Add velocity component of an impulse vector.
+     *  \param impulse The velocity component. */
+    void addLinearImpulse(const MCVector3dF & impulse, const MCVector3dF & pos);
+
     //! Add rotational impulse in rad/s.
     void addAngularImpulse(MCFloat impulse);
 

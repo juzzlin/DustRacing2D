@@ -86,7 +86,6 @@ HEADERS += \
     settingsmenu.hpp \
     shaders.h \
     shaders30.h \
-    slidefrictiongenerator.hpp \
     startlights.hpp \
     startlightsoverlay.hpp \
     statemachine.hpp \
@@ -241,7 +240,6 @@ SOURCES += \
     scene.cpp \
     settings.cpp \
     settingsmenu.cpp \
-    slidefrictiongenerator.cpp \
     startlights.cpp \
     startlightsoverlay.cpp \
     statemachine.cpp \

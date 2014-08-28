@@ -174,6 +174,10 @@ void MCObject::integrate(MCFloat step)
         m_angularImpulse = 0.0;
 
         translate(location() + velocity());
+
+        for (MCObjectPtr child : m_children) {
+            child->m_velocity = m_velocity;
+        }
     }
 }
 
@@ -492,6 +496,23 @@ void MCObject::addLinearImpulse(const MCVector3dF & impulse)
     toggleSleep(false);
 }
 
+void MCObject::addLinearImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
+{
+    MCFloat linearBalance = 1.0f;
+    if (shape())
+    {
+        const MCFloat d = shape()->radius();
+        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+            MCVector2dF(pos - location()), MCVector2dF(impulse)) / d;
+        linearBalance = linearBalance < 0 ? 0 : linearBalance;
+    }
+
+    m_linearImpulse += impulse * (1.0f - linearBalance);
+    addAngularImpulse(((impulse * linearBalance) % (pos - m_location)).k());
+
+    toggleSleep(false);
+}
+
 void MCObject::addAngularImpulse(MCFloat impulse)
 {
     m_angularImpulse += impulse;
@@ -745,19 +766,17 @@ void MCObject::addForce(const MCVector3dF & force)
 
 void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    // This ad-hoc scaling affects the balance between linear and angular components.
     MCFloat linearBalance = 1.0;
     if (shape())
     {
         MCFloat d = shape()->radius();
-        MCWorld::toMeters(d);
-        MCFloat linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
             MCVector2dF(pos - location()), MCVector2dF(force)) / d;
         linearBalance = linearBalance < 0 ? 0 : linearBalance;
     }
 
-    addTorque(((force) % (pos - m_location)).k());
-    m_forces += force * linearBalance;
+    addTorque(((force * linearBalance) % (pos - m_location)).k());
+    m_forces += force * (1.0 - linearBalance);
 
     toggleSleep(false);
 }
