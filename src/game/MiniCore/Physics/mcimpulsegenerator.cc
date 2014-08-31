@@ -85,8 +85,7 @@ void MCImpulseGenerator::generateImpulsesFromContact(
         }
 
         const MCFloat effRestitution = 1.0 + restitution;
-        pa.addLinearImpulse(
-            linearImpulse * effRestitution * massScaling * linearBalance);
+        pa.addImpulse(linearImpulse * effRestitution * massScaling * linearBalance);
 
         // Angular component
         const MCVector3dF rotationalImpulse = MCVector3dF(linearImpulse) % armA;

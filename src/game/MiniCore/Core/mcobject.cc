@@ -489,23 +489,16 @@ bool MCObject::stationary() const
     return m_stationary;
 }
 
-void MCObject::addLinearImpulse(const MCVector3dF & impulse)
+void MCObject::addImpulse(const MCVector3dF & impulse)
 {
     m_linearImpulse += impulse;
 
     toggleSleep(false);
 }
 
-void MCObject::addLinearImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
+void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
 {
-    MCFloat linearBalance = 1.0f;
-    if (shape())
-    {
-        const MCFloat d = shape()->radius();
-        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
-            MCVector2dF(pos - location()), MCVector2dF(impulse)) / d;
-        linearBalance = linearBalance < 0 ? 0 : linearBalance;
-    }
+    const MCFloat linearBalance = calculateLinearBalance(impulse, pos);
 
     m_linearImpulse += impulse * (1.0f - linearBalance);
     addAngularImpulse(((impulse * linearBalance) % (pos - m_location)).k());
@@ -766,14 +759,7 @@ void MCObject::addForce(const MCVector3dF & force)
 
 void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    MCFloat linearBalance = 1.0;
-    if (shape())
-    {
-        MCFloat d = shape()->radius();
-        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
-            MCVector2dF(pos - location()), MCVector2dF(force)) / d;
-        linearBalance = linearBalance < 0 ? 0 : linearBalance;
-    }
+    const MCFloat linearBalance = calculateLinearBalance(force, pos);
 
     addTorque(((force * linearBalance) % (pos - m_location)).k());
     m_forces += force * (1.0 - linearBalance);
@@ -1005,6 +991,20 @@ void MCObject::updateChildTransforms()
             MCVector3dF(MCTrigonom::rotatedVector(child->m_relativeLocation, m_angle),
                 child->m_relativeLocation.k()));
     }
+}
+
+MCFloat MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
+{
+    MCFloat linearBalance = 1.0;
+    if (shape())
+    {
+        MCFloat d = shape()->radius();
+        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+            MCVector2dF(pos - location()), MCVector2dF(force)) / d;
+        linearBalance = linearBalance < 0 ? 0 : linearBalance;
+    }
+
+    return linearBalance;
 }
 
 MCObject::~MCObject()

@@ -156,13 +156,15 @@ public:
      *                     Usually pixels / sec. */
     void setMaximumVelocity(MCFloat maxVelocity);
 
-    /*! \brief Add velocity component of an impulse vector.
-     *  \param impulse The velocity component. */
-    void addLinearImpulse(const MCVector3dF & impulse);
+    /*! \brief Add an impulse.
+     *  \param impulse The velocity component of the impulse. */
+    void addImpulse(const MCVector3dF & impulse);
 
-    /*! \brief Add velocity component of an impulse vector.
-     *  \param impulse The velocity component. */
-    void addLinearImpulse(const MCVector3dF & impulse, const MCVector3dF & pos);
+    /*! \brief Add an impulse.
+     *  Causes angular impulse depending on object's shape and position of the impulse vector.
+     *  \param impulse The velocity component of the impulse.
+     *  \param pos     Position of the impulse. */
+    void addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos);
 
     //! Add rotational impulse in rad/s.
     void addAngularImpulse(MCFloat impulse);
@@ -476,6 +478,8 @@ private:
     void toggleSleep(bool state);
 
     void updateChildTransforms();
+
+    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
 
     MCUint                       m_typeID;
     MCFloat                      m_invMass;
