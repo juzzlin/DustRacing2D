@@ -129,9 +129,7 @@ private:
     void createProgramFromSource(
         const std::string & handle, std::string vshSource, std::string fshSource);
 
-    void renderNativeResolutionOrWindowed();
-
-    void renderCustomResolution();
+    void render();
 
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 

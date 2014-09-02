@@ -103,6 +103,8 @@ public:
 
     void renderObjects();
 
+    void renderCommonHUD();
+
 signals:
 
     void listenerLocationChanged(float x, float y);
@@ -115,7 +117,6 @@ private:
     void createMenus();
     void initRace();
     void processUserInput(InputHandler & handler);
-    void renderCommonHUD();
     void renderPlayerScene(MCCamera & camera);
     void renderPlayerSceneShadows(MCCamera & camera);
     void resizeOverlays();

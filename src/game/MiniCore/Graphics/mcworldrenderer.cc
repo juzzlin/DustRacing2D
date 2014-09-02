@@ -30,7 +30,6 @@
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
-    : m_renderCamera(nullptr)
 {
     for (unsigned i = 0; i < MCWorld::MaxLayers; i++)
     {
@@ -43,15 +42,13 @@ void MCWorldRenderer::registerPointParticleRenderer(MCUint typeId, MCGLPointPart
     m_particleRenderers[typeId] = &renderer;
 }
 
-void MCWorldRenderer::render()
+void MCWorldRenderer::render(MCCamera * camera)
 {
-    renderBatches(m_renderCamera);
+    renderBatches(camera);
 }
 
 void MCWorldRenderer::buildBatches(MCCamera * camera)
 {
-    m_renderCamera = camera;
-
     // In the case of Dust Racing 2D, it was faster to just loop through
     // all objects on all layers and perform visibility tests instead of
     // just fetching all "visible" objects from MCObjectTree.
@@ -66,8 +63,8 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
 
     for (int i = 0; i < MCWorld::MaxLayers; i++)
     {
-        m_objectBatches[i].clear();
-        m_particleBatches[i].clear();
+        m_objectBatches[camera][i].clear();
+        m_particleBatches[camera][i].clear();
 
         const auto end = m_layers[i].end();
         for (auto objectIter = m_layers[i].begin(); objectIter != end; objectIter++)
@@ -86,7 +83,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
                             bbox.translate(MCVector2dF(object.location()));
                             if (!camera || camera->isVisible(bbox))
                             {
-                                m_objectBatches[i][object.typeID()].push_back(&object);
+                                m_objectBatches[camera][i][object.typeID()].push_back(&object);
                             }
                         }
                     }
@@ -96,7 +93,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
                         {
                             if (camera->isVisible(object.bbox()))
                             {
-                                m_particleBatches[i][object.typeID()].push_back(&object);
+                                m_particleBatches[camera][i][object.typeID()].push_back(&object);
                             }
                             else
                             {
@@ -123,7 +120,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
                         }
                         else
                         {
-                            m_particleBatches[i][object.typeID()].push_back(&object);
+                            m_particleBatches[camera][i][object.typeID()].push_back(&object);
                         }
                     }
                 }
@@ -160,8 +157,8 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
 
 void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
 {
-    auto iter = m_objectBatches[layer].begin();
-    const auto end = m_objectBatches[layer].end();
+    auto iter = m_objectBatches[camera][layer].begin();
+    const auto end = m_objectBatches[camera][layer].end();
     while (iter != end)
     {
         const int itemCountInBatch = iter->second.size();
@@ -191,8 +188,8 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, int layer)
 void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
 {
     // Render particle batches
-    auto batchIter = m_particleBatches[layer].begin();
-    const auto end = m_particleBatches[layer].end();
+    auto batchIter = m_particleBatches[camera][layer].begin();
+    const auto end = m_particleBatches[camera][layer].end();
     while (batchIter != end)
     {
         if (!batchIter->second.size())
@@ -232,17 +229,15 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, int layer)
     }
 }
 
-void MCWorldRenderer::renderShadows()
+void MCWorldRenderer::renderShadows(MCCamera * camera)
 {
     glDisable(GL_DEPTH_TEST);
-
-    MCCamera * const camera = m_renderCamera;
 
     for (int i = 0; i < MCWorld::MaxLayers; i++)
     {
         // Render batches
-        auto iter = m_objectBatches[i].begin();
-        const auto end = m_objectBatches[i].end();
+        auto iter = m_objectBatches[camera][i].begin();
+        const auto end = m_objectBatches[camera][i].end();
         while (iter != end)
         {
             const int itemCountInBatch = iter->second.size();

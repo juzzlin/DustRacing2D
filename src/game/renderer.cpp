@@ -175,22 +175,15 @@ float Renderer::fadeValue() const
     return m_fadeValue;
 }
 
-void Renderer::renderNativeResolutionOrWindowed()
+void Renderer::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    if (m_scene)
+    if (!m_scene)
     {
-        m_scene->renderTrack();
-        m_scene->renderObjectShadows();
-        m_scene->renderObjects();
+        return;
     }
-}
 
-void Renderer::renderCustomResolution()
-{
-    const int fullVRes = QApplication::desktop()->height();
-    const int fullHRes = QApplication::desktop()->width();
+    const int fullVRes = m_fullScreen ? QApplication::desktop()->height() : height();
+    const int fullHRes = m_fullScreen ? QApplication::desktop()->width()  : width();
 
     // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
@@ -203,10 +196,7 @@ void Renderer::renderCustomResolution()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_scene)
-    {
-        m_scene->renderObjectShadows();
-    }
+    m_scene->renderObjectShadows();
 
     shadowFbo.release();
 
@@ -214,23 +204,22 @@ void Renderer::renderCustomResolution()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_scene)
-    {
-        m_scene->renderTrack();
+    m_scene->renderTrack();
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        dummyMaterial->setTexture(shadowFbo.texture(), 0);
-        MCSurface ss(dummyMaterial, Scene::width(), Scene::height());
-        ss.setShaderProgram(program("fbo"));
-        ss.bindMaterial();
-        ss.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+    dummyMaterial->setTexture(shadowFbo.texture(), 0);
+    MCSurface ss(dummyMaterial, Scene::width(), Scene::height());
+    ss.setShaderProgram(program("fbo"));
+    ss.bindMaterial();
+    ss.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 
-        glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
-        m_scene->renderObjects();
-    }
+    m_scene->renderObjects();
+
+    m_scene->renderCommonHUD();
 
     fbo.release();
 
@@ -247,17 +236,7 @@ void Renderer::renderCustomResolution()
 
 void Renderer::paintGL()
 {
-    if (m_enabled)
-    {
-        if (!m_fullScreen || m_nativeResolution)
-        {
-            renderNativeResolutionOrWindowed();
-        }
-        else
-        {
-            renderCustomResolution();
-        }
-    }
+    render();
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)

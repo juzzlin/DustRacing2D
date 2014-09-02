@@ -193,7 +193,7 @@ void MCGLScene::updateViewport()
     case ShowOnRight:
         setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
-        glScissor(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
+        glScissor(m_viewWidth / 2 + 2, 0, m_viewWidth / 2 - 2, m_viewHeight);
         glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth / 2, m_sceneHeight, m_viewAngle);
         break;
@@ -201,7 +201,7 @@ void MCGLScene::updateViewport()
     case ShowOnTop:
         setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
         glViewport(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
-        glScissor(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
+        glScissor(0, m_viewHeight / 2 + 2, m_viewWidth - 2, m_viewHeight / 2);
         glEnable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth, m_sceneHeight / 2, m_viewAngle / 2);
         break;

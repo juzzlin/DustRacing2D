@@ -60,11 +60,11 @@ public:
     void removeParticleVisibilityCameras();
 
     /*! Must be called before calls to render() or renderShadows() */
-    void buildBatches(MCCamera * camera = nullptr);
+    void buildBatches(MCCamera * camera);
 
-    void render();
+    void render(MCCamera * camera);
 
-    void renderShadows();
+    void renderShadows(MCCamera * camera);
 
     void clear();
 
@@ -80,8 +80,10 @@ private:
     LayerSet m_layers[MCWorld::MaxLayers];
 
     typedef std::map<int, std::vector<MCObject *> > BatchMap;
-    BatchMap m_objectBatches[MCWorld::MaxLayers];
-    BatchMap m_particleBatches[MCWorld::MaxLayers];
+    typedef std::map<MCCamera *, BatchMap[MCWorld::MaxLayers]> CameraBatchMap;
+
+    CameraBatchMap m_objectBatches;
+    CameraBatchMap m_particleBatches;
 
     bool m_depthTestEnabled[MCWorld::MaxLayers];
 
@@ -89,8 +91,6 @@ private:
 
     typedef std::map<int, MCGLPointParticleRenderer *> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
-
-    MCCamera * m_renderCamera;
 };
 
 #endif // MCWORLDRENDERER_HH

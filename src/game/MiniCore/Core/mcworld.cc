@@ -143,14 +143,14 @@ void MCWorld::prepareRendering(MCCamera * camera)
     m_renderer->buildBatches(camera);
 }
 
-void MCWorld::render()
+void MCWorld::render(MCCamera * camera)
 {
-    m_renderer->render();
+    m_renderer->render(camera);
 }
 
-void MCWorld::renderShadows()
+void MCWorld::renderShadows(MCCamera * camera)
 {
-    m_renderer->renderShadows();
+    m_renderer->renderShadows(camera);
 }
 
 MCWorld & MCWorld::instance()

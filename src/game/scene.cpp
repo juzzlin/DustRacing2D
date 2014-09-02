@@ -619,6 +619,9 @@ void Scene::renderTrack()
 
             m_renderer.glScene().setSplitType(p0);
             m_activeTrack->render(&m_camera[0]);
+
+            // Setup for common scene
+            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
@@ -749,8 +752,6 @@ void Scene::renderObjects()
             m_timingOverlay[0].render();
         }
 
-        renderCommonHUD();
-
         break;
 
     default:
@@ -761,24 +762,34 @@ void Scene::renderObjects()
 void Scene::renderPlayerScene(MCCamera & camera)
 {
     // Assume that m_world->prepareRendering(&camera) is already called.
-    m_world->render();
+    m_world->render(&camera);
 }
 
 void Scene::renderPlayerSceneShadows(MCCamera & camera)
 {
     m_world->prepareRendering(&camera);
-    m_world->renderShadows();
+    m_world->renderShadows(&camera);
 }
 
 void Scene::renderCommonHUD()
 {
-    if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
+    switch (m_stateMachine.state())
     {
-        m_checkeredFlag->render();
-    }
+    case StateMachine::GameTransitionIn:
+    case StateMachine::GameTransitionOut:
+    case StateMachine::DoStartlights:
+    case StateMachine::Play:
+        if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
+        {
+            m_checkeredFlag->render();
+        }
 
-    m_startlightsOverlay->render();
-    m_messageOverlay->render();
+        m_startlightsOverlay->render();
+        m_messageOverlay->render();
+        break;
+    default:
+        break;
+    };
 }
 
 Scene::~Scene()
