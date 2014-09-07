@@ -584,6 +584,20 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
     return *m_trackSelectionMenu;
 }
 
+void Scene::setSplitType(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1)
+{
+    if (m_game.splitType() == Game::Vertical)
+    {
+        p1 = MCGLScene::ShowOnLeft;
+        p0 = MCGLScene::ShowOnRight;
+    }
+    else
+    {
+        p1 = MCGLScene::ShowOnTop;
+        p0 = MCGLScene::ShowOnBottom;
+    }
+}
+
 void Scene::renderTrack()
 {
     const MCFloat fadeValue = m_renderer.fadeValue();
@@ -603,16 +617,7 @@ void Scene::renderTrack()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            if (m_game.splitType() == Game::Vertical)
-            {
-                p1 = MCGLScene::ShowOnLeft;
-                p0 = MCGLScene::ShowOnRight;
-            }
-            else
-            {
-                p1 = MCGLScene::ShowOnTop;
-                p0 = MCGLScene::ShowOnBottom;
-            }
+            setSplitType(p1, p0);
 
             m_renderer.glScene().setSplitType(p1);
             m_activeTrack->render(&m_camera[1]);
@@ -654,16 +659,7 @@ void Scene::renderObjectShadows()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            if (m_game.splitType() == Game::Vertical)
-            {
-                p1 = MCGLScene::ShowOnLeft;
-                p0 = MCGLScene::ShowOnRight;
-            }
-            else
-            {
-                p1 = MCGLScene::ShowOnTop;
-                p0 = MCGLScene::ShowOnBottom;
-            }
+            setSplitType(p1, p0);
 
             m_renderer.glScene().setSplitType(p1);
             renderPlayerSceneShadows(m_camera[1]);
@@ -724,16 +720,7 @@ void Scene::renderObjects()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            if (m_game.splitType() == Game::Vertical)
-            {
-                p1 = MCGLScene::ShowOnLeft;
-                p0 = MCGLScene::ShowOnRight;
-            }
-            else
-            {
-                p1 = MCGLScene::ShowOnTop;
-                p0 = MCGLScene::ShowOnBottom;
-            }
+            setSplitType(p1, p0);
 
             m_renderer.glScene().setSplitType(p1);
             renderPlayerScene(m_camera[1]);

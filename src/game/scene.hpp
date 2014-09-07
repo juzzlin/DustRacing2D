@@ -123,6 +123,7 @@ private:
     void setupAudio(Car & car, int index);
     void setupAI(Track & activeTrack);
     void setupCameras(Track & activeTrack);
+    void setSplitType(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1);
     void setWorldDimensions();
     void updateAI();
     void updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object);
