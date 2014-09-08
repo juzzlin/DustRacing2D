@@ -500,7 +500,7 @@ void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
 {
     const MCFloat linearBalance = calculateLinearBalance(impulse, pos);
     m_linearImpulse += impulse * linearBalance;
-    addAngularImpulse(((impulse % (pos - m_location)).k()) / 6.28f);
+    addAngularImpulse((-(impulse % (pos - m_location)).k()) / 6.28f);
     toggleSleep(false);
 }
 
@@ -759,7 +759,7 @@ void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 {
     const MCFloat linearBalance = calculateLinearBalance(force, pos);
 
-    addTorque((force % (pos - m_location)).k());
+    addTorque(-(force % (pos - m_location)).k());
     m_forces += force * linearBalance;
 
     toggleSleep(false);
