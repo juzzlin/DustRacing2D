@@ -24,6 +24,7 @@ Tire::Tire(MCFloat friction)
     : MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire")
     , m_friction(friction)
 {
+    setBypassCollisions(true);
 }
 
 void Tire::stepTime(MCFloat)
