@@ -46,8 +46,11 @@ elseif(WIN32)
     include("InstallWindows.cmake")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
+# GCC-specific flags
+if(CMAKE_COMPILER_IS_GNUCXX OR MINGW)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
+endif()
 
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
