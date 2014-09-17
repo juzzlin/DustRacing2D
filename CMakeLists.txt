@@ -104,9 +104,9 @@ find_package(OpenAL REQUIRED)
 
 # Vorbis libs for reading Ogg files
 if(StaticVorbisLibs)
-    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a HINTS ${StaticVorbisLibsPath})
-    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a HINTS ${StaticVorbisLibsPath})
-    find_library(OGG_STATIC_LIB NAMES libogg.a HINTS ${StaticVorbisLibsPath})
+    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a vorbisfile.lib HINTS ${StaticVorbisLibsPath})
+    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a vorbis.lib HINTS ${StaticVorbisLibsPath})
+    find_library(OGG_STATIC_LIB NAMES libogg.a ogg.lib HINTS ${StaticVorbisLibsPath})
     message(STATUS "Using static versions of vorbis libs:")
     message(STATUS "  ${VORBISFILE_STATIC_LIB}")
     message(STATUS "  ${VORBIS_STATIC_LIB}")
