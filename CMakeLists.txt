@@ -95,7 +95,6 @@ find_package(OpenGL REQUIRED)
 # OpenAL for sounds. OpenAL directory can be given by -DOPENAL_DIR=...
 set(ENV{OPENALDIR} ${OpenALDir})
 find_package(OpenAL REQUIRED)
-message(STATUS "OpenAL library: " ${OPENAL_LIBRARY})
 
 # Vorbis libs for reading Ogg files
 if(StaticVorbisLibs)
