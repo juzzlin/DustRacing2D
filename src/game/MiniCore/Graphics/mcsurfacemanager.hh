@@ -17,6 +17,8 @@
 // MA  02110-1301, USA.
 //
 
+#pragma warning( disable : 4290 )
+
 #ifndef MCSURFACEMANAGER_HH
 #define MCSURFACEMANAGER_HH
 

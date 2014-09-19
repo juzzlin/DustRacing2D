@@ -17,6 +17,8 @@
 // MA  02110-1301, USA.
 //
 
+#pragma warning( disable : 4290 )
+
 #ifndef MCMESHMANAGER_HH
 #define MCMESHMANAGER_HH
 

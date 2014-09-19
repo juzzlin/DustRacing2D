@@ -10,8 +10,6 @@ option(UseQt5 "Build for Qt5." OFF)
 
 option(ReleaseBuild "This should be used when creating DEB and RPM packages." OFF)
 
-option(DebugBuild "Enable debug build. Effectively adds -g." OFF)
-
 option(StaticVorbisLibs "Try to find static version of vorbis libs." OFF)
 
 option(StaticVorbisLibsPath "Optional path hint for static versions of vorbis libs." "")
@@ -91,22 +89,19 @@ else()
     include_directories(${QT_INCLUDES})
 endif()
 
-if(DebugBuild)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-    add_definitions(-DDEBUG)
-endif()
-
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# OpenAL for sounds
+# OpenAL for sounds. OpenAL directory can be given by -DOPENAL_DIR=...
+set(ENV{OPENALDIR} ${OpenALDir})
 find_package(OpenAL REQUIRED)
+message(STATUS "OpenAL library: " ${OPENAL_LIBRARY})
 
 # Vorbis libs for reading Ogg files
 if(StaticVorbisLibs)
-    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a vorbisfile.lib HINTS ${StaticVorbisLibsPath})
-    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a vorbis.lib HINTS ${StaticVorbisLibsPath})
-    find_library(OGG_STATIC_LIB NAMES libogg.a ogg.lib HINTS ${StaticVorbisLibsPath})
+    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a libvorbisfile_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
+    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a libvorbis_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
+    find_library(OGG_STATIC_LIB NAMES libogg.a libogg_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
     message(STATUS "Using static versions of vorbis libs:")
     message(STATUS "  ${VORBISFILE_STATIC_LIB}")
     message(STATUS "  ${VORBIS_STATIC_LIB}")
