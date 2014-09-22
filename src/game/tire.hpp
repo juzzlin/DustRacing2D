@@ -22,13 +22,19 @@ class Tire : public MCObject
 {
 public:
 
-    Tire(MCFloat friction);
+    Tire(MCFloat friction, MCFloat offTrackFriction);
 
     virtual void stepTime(MCFloat step);
 
+    void setIsOffTrack(bool flag);
+
 private:
 
+    bool m_isOffTrack;
+
     MCFloat m_friction;
+
+    MCFloat m_offTrackFriction;
 };
 
 #endif // TIRE_HPP

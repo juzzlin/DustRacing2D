@@ -199,7 +199,6 @@ private:
     Description              m_desc;
     MCForceGeneratorPtr      m_pBrakingFriction;
     MCForceGeneratorPtr      m_pOnTrackFriction;
-    MCForceGeneratorPtr      m_pOffTrackFriction;
     bool                     m_leftSideOffTrack;
     bool                     m_rightSideOffTrack;
     bool                     m_accelerating;

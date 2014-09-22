@@ -44,7 +44,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
 , m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
-, m_pOffTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOffTrack, desc.rotationFriction))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -75,21 +74,22 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     addChildObject(numberPlate, m_desc.numberPos, 90);
     numberPlate->setRenderLayerRelative(1);
 
+    const MCFloat offTrackFriction = 0.5;
     const MCFloat frontFriction = 1.0;
-    m_leftFrontTire.reset(new Tire(frontFriction));
+    m_leftFrontTire.reset(new Tire(frontFriction, offTrackFriction));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
 
-    m_rightFrontTire.reset(new Tire(frontFriction));
+    m_rightFrontTire.reset(new Tire(frontFriction, offTrackFriction));
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
     m_rightFrontTire->setRenderLayerRelative(-1);
 
     const MCFloat rearFriction = 0.95;
-    m_leftRearTire.reset(new Tire(rearFriction));
+    m_leftRearTire.reset(new Tire(rearFriction, offTrackFriction));
     addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
     m_leftRearTire->setRenderLayerRelative(-1);
 
-    m_rightRearTire.reset(new Tire(rearFriction));
+    m_rightRearTire.reset(new Tire(rearFriction, offTrackFriction));
     addChildObject(m_rightRearTire, m_desc.rightRearTirePos, 0);
     m_rightRearTire->setRenderLayerRelative(-1);
 }
@@ -120,10 +120,6 @@ void Car::initForceGenerators(Description & desc)
     // Add rolling friction generator (on-track)
     MCWorld::instance().forceRegistry().addForceGenerator(m_pOnTrackFriction, *this);
     m_pOnTrackFriction->enable(true);
-
-    // Add rolling friction generator (off-track)
-    MCWorld::instance().forceRegistry().addForceGenerator(m_pOffTrackFriction, *this);
-    m_pOffTrackFriction->enable(false);
 
     MCForceGeneratorPtr drag(new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic));
     MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
@@ -341,17 +337,30 @@ void Car::stepTime(MCFloat step)
             wearOutTires(step, 0.05);
         }
 
-        if (m_leftSideOffTrack || m_rightSideOffTrack)
+        if (m_leftSideOffTrack)
         {
-            m_pOffTrackFriction->enable(true);
-            m_pOnTrackFriction->enable(false);
+            static_cast<Tire *>(m_leftFrontTire.get())->setIsOffTrack(true);
+            static_cast<Tire *>(m_leftRearTire.get())->setIsOffTrack(true);
 
             wearOutTires(step, 0.10);
         }
         else
         {
-            m_pOffTrackFriction->enable(false);
-            m_pOnTrackFriction->enable(true);
+            static_cast<Tire *>(m_leftFrontTire.get())->setIsOffTrack(false);
+            static_cast<Tire *>(m_leftRearTire.get())->setIsOffTrack(false);
+        }
+
+        if (m_rightSideOffTrack)
+        {
+            static_cast<Tire *>(m_rightFrontTire.get())->setIsOffTrack(true);
+            static_cast<Tire *>(m_rightRearTire.get())->setIsOffTrack(true);
+
+            wearOutTires(step, 0.10);
+        }
+        else
+        {
+            static_cast<Tire *>(m_rightFrontTire.get())->setIsOffTrack(false);
+            static_cast<Tire *>(m_rightRearTire.get())->setIsOffTrack(false);
         }
     }
 }

@@ -20,11 +20,18 @@
 #include <MCSurface>
 #include <MCTrigonom>
 
-Tire::Tire(MCFloat friction)
+Tire::Tire(MCFloat friction, MCFloat offTrackFriction)
     : MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire")
+    , m_isOffTrack(false)
     , m_friction(friction)
+    , m_offTrackFriction(offTrackFriction)
 {
     setBypassCollisions(true);
+}
+
+void Tire::setIsOffTrack(bool flag)
+{
+    m_isOffTrack = flag;
 }
 
 void Tire::stepTime(MCFloat)
@@ -35,7 +42,9 @@ void Tire::stepTime(MCFloat)
     if (velocity().lengthFast() > 0.5)
     {
         const MCVector2d<MCFloat> & v = velocity().normalizedFast();
-        MCVector2d<MCFloat> impulse = MCMathUtil::projection(v, tire) * m_friction * 0.30;
+        const MCFloat magicConstant = 0.30;
+        MCVector2d<MCFloat> impulse =
+            MCMathUtil::projection(v, tire) * (m_isOffTrack ? m_offTrackFriction : m_friction) * magicConstant;
         parent().addImpulse(-impulse, location());
     }
 }
