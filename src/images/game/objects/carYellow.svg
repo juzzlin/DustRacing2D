@@ -14,7 +14,7 @@
    width="744.09448"
    height="1052.3622"
    id="svg3786"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="carYellow.svg"
    inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.png"
    inkscape:export-xdpi="85.57"
@@ -28,14 +28,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1615"
+     inkscape:window-width="1621"
      inkscape:window-height="1026"
      id="namedview113"
      showgrid="false"
      inkscape:zoom="1.7940591"
-     inkscape:cx="252.88572"
+     inkscape:cx="303.92556"
      inkscape:cy="452.84225"
-     inkscape:window-x="65"
+     inkscape:window-x="59"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
@@ -475,7 +475,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -491,7 +491,7 @@
        transform="matrix(0,1,1,0,532.37321,285.45728)"
        id="rect4069-7-5-4"
        style="fill:url(#radialGradient4109-1-8-1);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-5-9-4-7)"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <rect
@@ -503,16 +503,16 @@
        transform="matrix(0,1,1,0,531.86814,212.22122)"
        id="rect4071-7-3-4"
        style="fill:url(#radialGradient4111-6-3-5);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5132-9-8-5-3)"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
        d="m 336,-72 c 22.16,0 48,17 40,39 -8,22 0,44 0,88 0,44 -17.84,33 -40,33 -22.16,0 -40,11 -40,-33 0,-44 8,-66 0,-88 -8,-22 17.84,-39 40,-39 z"
        transform="matrix(0,0.82719392,-1,0,215.27139,345.86324)"
        id="path4073-9-0-0"
-       style="fill:#feef33;fill-opacity:1;stroke:#feef33;stroke-width:17.5890007;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
+       style="fill:#ffd716;fill-opacity:1;stroke:#ffd416;stroke-width:17.58874603;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5199-7-2-6)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -521,7 +521,7 @@
        id="path4075-4-3-8"
        style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5187-7-6-1)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -530,7 +530,7 @@
        id="path4077-1-9-7"
        style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5183-9-9-4)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -538,7 +538,7 @@
        id="path4079-7-7-2"
        style="fill:url(#radialGradient4117-2-7-7);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -547,7 +547,7 @@
        id="path4556-5-6"
        style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -556,7 +556,7 @@
        id="path4087-8-5-1"
        style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5191-3-8-9)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -565,7 +565,7 @@
        id="path4089-8-5-7"
        style="fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -574,7 +574,7 @@
        id="path4091-4-8-7"
        style="fill:#00ff00;fill-opacity:1;stroke:none;filter:url(#filter5195-4-5-5)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -582,7 +582,7 @@
        id="path4093-2-5-3"
        style="fill:url(#radialGradient4123-3-4-8);fill-opacity:1;stroke:#b6b6b6;stroke-width:0.90604234;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -590,7 +590,7 @@
        id="path4095-3-5-4"
        style="opacity:0.44247808;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -598,7 +598,7 @@
        id="path4097-8-1-5"
        style="opacity:0.43999999;fill:#ff0000;fill-opacity:1;stroke:#cb0000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -607,7 +607,7 @@
        id="path4099-4-3-9"
        style="fill:none;stroke:#343434;stroke-width:1.09918118;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter5235-1-0-4)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -616,7 +616,7 @@
        id="path4101-1-0-1"
        style="fill:#ffffff;fill-opacity:1;stroke:#e6e6e6;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5261-9-2-7)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -625,7 +625,7 @@
        id="path4103-3-6-0"
        style="fill:#ffffff;fill-opacity:1;stroke:#e6e6e6;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5261-9-2-7)"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -633,7 +633,7 @@
        d="m 166.09955,613.57937 35,0"
        id="path4584"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -643,7 +643,7 @@
        inkscape:connector-curvature="0"
        inkscape:transform-center-x="2.4999978"
        inkscape:transform-center-y="4.9999996"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -651,7 +651,7 @@
        d="m 248.09955,613.57937 35,0"
        id="path4584-7"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
     <path
@@ -659,7 +659,7 @@
        d="m 248.09955,633.57937 35,0"
        id="path4584-7-2"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/src/images/carYellow.svg.png"
+       inkscape:export-filename="/home/jussil/Home/Desktop-13.10/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/carYellow.png"
        inkscape:export-xdpi="85.57"
        inkscape:export-ydpi="85.57" />
   </g>
