@@ -81,7 +81,7 @@ static const char * carFsh =
 "        vec4  N = (map - vec4(0.5, 0.5, 0.5, 0.0)) * 2.0;\n"
 "        float di = dot(-ddRotated, N) * dc.a;\n"
 "        float refl = 0.33 * ((1.0 - texColor.r) + texColor.g + (1.0 - texColor.b));\n"
-"        refl *= refl;\n"
+"        refl *= refl * refl;\n"
 "        gl_FragColor = 0.80 * (sky * refl + texColor * (1.0 - refl) + vec4(dc.rgb, 1.0) * di) * fade;\n"
 "    }\n"
 "}\n";
