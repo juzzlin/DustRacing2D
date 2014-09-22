@@ -69,6 +69,8 @@ set(SRC
     renderer.cpp
     resolutionmenu.cpp
     scene.cpp
+    shaders.h
+    shaders30.h
     settings.cpp
     settingsmenu.cpp
     startlights.cpp
