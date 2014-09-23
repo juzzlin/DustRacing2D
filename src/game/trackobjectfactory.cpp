@@ -93,7 +93,7 @@ TrackObject * TrackObjectFactory::build(
         data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setMass(50000);
+        data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRenderLayer(Layers::GrandStands);
 
