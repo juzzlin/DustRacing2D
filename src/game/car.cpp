@@ -138,14 +138,14 @@ MCUint Car::index() const
 
 void Car::turnLeft(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(16.0 * control);
+    m_tireAngle = static_cast<int>(14.0 * control);
 
     m_turnLeft = true;
 }
 
 void Car::turnRight(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(-16.0 * control);
+    m_tireAngle = static_cast<int>(-14.0 * control);
 
     m_turnRight = true;
 }
@@ -277,8 +277,8 @@ bool Car::update()
         m_soundEffectManager->update();
     }
 
-    m_leftFrontTire->rotateRelative(m_tireAngle);
-    m_rightFrontTire->rotateRelative(m_tireAngle);
+    m_leftFrontTire->rotateRelative(m_tireAngle - 2.0);
+    m_rightFrontTire->rotateRelative(m_tireAngle + 2.0);
 
     return true;
 }

@@ -494,7 +494,11 @@ void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
 {
     const MCFloat linearBalance = calculateLinearBalance(impulse, pos);
     m_linearImpulse += impulse * linearBalance;
-    addAngularImpulse((-(impulse % (pos - m_location)).k()) / 6.28f);
+    const MCFloat r = (pos - m_location).lengthFast();
+    if (r > 0.001)
+    {
+        addAngularImpulse((-(impulse % (pos - m_location)).k()) / r);
+    }
     toggleSleep(false);
 }
 

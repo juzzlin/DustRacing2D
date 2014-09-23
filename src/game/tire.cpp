@@ -43,10 +43,10 @@ void Tire::stepTime(MCFloat step)
     if (velocity().lengthFast() > 0.1)
     {
         const MCVector2d<MCFloat> & v = velocity().normalizedFast();
-        const MCFloat magicConstant = 20.0;
+        const MCFloat magicConstant = 40.0;
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) * (m_isOffTrack ? m_offTrackFriction : m_friction) * magicConstant * step;
-        impulse.clampFast(0.25);
+        impulse.clampFast(0.22);
         parent().addImpulse(-impulse, location());
     }
 }
