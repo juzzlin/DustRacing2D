@@ -99,11 +99,11 @@ void AI::steerControl(TargetNodeBase & tnode)
     // PID-controller. This makes the computer players to turn and react faster
     // than the human player, but hey...they are stupid.
     MCFloat control = diff * 0.025 + (diff - m_lastDiff) * 0.025;
-    const MCFloat maxControl = 1.0;
+    const MCFloat maxControl = 1.5;
     control = control < 0 ? -control : control;
     control = control > maxControl ? maxControl : control;
 
-    const MCFloat maxDelta = 2.5;
+    const MCFloat maxDelta = 3.0;
     if (diff < -maxDelta)
     {
         m_car.turnRight(control);

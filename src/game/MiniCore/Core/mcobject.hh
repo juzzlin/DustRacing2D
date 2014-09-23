@@ -151,11 +151,6 @@ public:
     //! Return true if object is stationary.
     bool stationary() const;
 
-    /*! \brief Set maximum velocity.
-     *  \param maxVelocity The new max velocity in length units / sec.
-     *                     Usually pixels / sec. */
-    void setMaximumVelocity(MCFloat maxVelocity);
-
     /*! \brief Add an impulse.
      *  \param impulse The velocity component of the impulse. */
     void addImpulse(const MCVector3dF & impulse);
@@ -187,10 +182,6 @@ public:
     /*! Return current angular velocity.
      *  Unit: rad/s. */
     MCFloat angularVelocity() const;
-
-    /*! \brief Set maximum angular velocity.
-     *  \param maxVelocity The new angular max velocity in rad/s. */
-    void setMaximumAngularVelocity(MCFloat maxVelocity);
 
     /*! Set constant acceleration (e.g. gravity). Use addForce()
      *  to cause acceleration that varies from frame to frame.
@@ -278,15 +269,6 @@ public:
 
     //! Return location
     const MCVector3dF & location() const;
-
-    //! Convenience getter for location.
-    MCFloat getX() const;
-
-    //! Convenience getter for location.
-    MCFloat getY() const;
-
-    //! Convenience getter for location.
-    MCFloat getZ() const;
 
     /*! Set rotation ("yaw") angle about Z-axis.
      *  \param newAngle The new angle in degrees [0..360]. */
@@ -491,8 +473,6 @@ private:
     MCFloat                      m_angularAcceleration; // Radians / s^2
     MCFloat                      m_angularVelocity; // Radians / s
     MCFloat                      m_angularImpulse;
-    MCFloat                      m_maximumAngularVelocity; // Radians / s
-    MCFloat                      m_maximumVelocity;
     MCFloat                      m_torque;
     MCFloat                      m_invMomentOfInertia;
     MCFloat                      m_momentOfInertia;

@@ -69,7 +69,7 @@ TimingOverlay::TimingOverlay()
 , m_showRaceTime(true)
 , m_showCarStatus(true)
 {
-    assert(Scene::NUM_CARS == static_cast<int>(m_posTexts.size()) - 1);
+    assert(Scene::NUM_CARS <= static_cast<int>(m_posTexts.size()) - 1);
     m_text.setShadowOffset(2, -2);
 }
 

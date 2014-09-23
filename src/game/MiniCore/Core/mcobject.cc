@@ -80,8 +80,6 @@ void MCObject::init(const std::string & typeId)
     m_angularAcceleration    = 0.0;
     m_angularVelocity        = 0.0;
     m_angularImpulse         = 0.0;
-    m_maximumAngularVelocity = 4 * 3.1415;
-    m_maximumVelocity        = -1;
     m_torque                 = 0.0;
     m_invMomentOfInertia     = std::numeric_limits<MCFloat>::max();
     m_momentOfInertia        = 0;
@@ -173,11 +171,7 @@ void MCObject::integrate(MCFloat step)
         m_linearImpulse.setZero();
         m_angularImpulse = 0.0;
 
-        translate(location() + velocity());
-
-        for (MCObjectPtr child : m_children) {
-            child->m_velocity = m_velocity;
-        }
+        translate(location() + m_velocity);
     }
 }
 
@@ -561,11 +555,6 @@ void MCObject::setIsParticle(bool flag)
     m_isParticle = flag;
 }
 
-void MCObject::setMaximumVelocity(MCFloat maxVelocity)
-{
-    m_maximumVelocity = maxVelocity;
-}
-
 void MCObject::setVelocity(const MCVector3dF & newVelocity)
 {
     m_velocity = newVelocity;
@@ -595,11 +584,6 @@ MCFloat MCObject::angularVelocity() const
     return m_angularVelocity;
 }
 
-void MCObject::setMaximumAngularVelocity(MCFloat newVelocity)
-{
-    m_maximumAngularVelocity = newVelocity;
-}
-
 void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
 {
     m_acceleration = newAcceleration;
@@ -616,6 +600,11 @@ void MCObject::translate(const MCVector3dF & newLocation)
 {
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
+
+    if (m_parent != this)
+    {
+        m_velocity = (newLocation - m_shape->location());
+    }
 
     m_location = newLocation;
 
@@ -646,21 +635,6 @@ void MCObject::setShadowOffset(const MCVector2dF & p)
 {
     assert(m_shape);
     m_shape->setShadowOffset(p);
-}
-
-MCFloat MCObject::getX() const
-{
-    return m_location.i();
-}
-
-MCFloat MCObject::getY() const
-{
-    return m_location.j();
-}
-
-MCFloat MCObject::getZ() const
-{
-    return m_location.k();
 }
 
 void MCObject::setCenterOfRotation(MCVector2dF center)
@@ -786,7 +760,7 @@ MCBBox<MCFloat> MCObject::bbox() const
     }
     else
     {
-        return MCBBox<MCFloat>(getX(), getY(), getX() + 1, getY() + 1);
+        return MCBBox<MCFloat>(m_location.i(), m_location.j(), m_location.i() + 1, m_location.j() + 1);
     }
 }
 

@@ -42,12 +42,9 @@ public:
 
         //! Constructor.
         Description()
-        : maxLinearVelocity(50.0)
-        , maxAngularVelocity(10.0)
-        , accelerationFriction(0.75)
+        : accelerationFriction(0.75)
         , brakingFriction(1.5)
         , rollingFrictionOnTrack(0.1)
-        , rollingFrictionOffTrack(0.75)
         , rotationFriction(1.0)
         , power(5000.0)
         , mass(1500.0)
@@ -56,20 +53,17 @@ public:
         , dragQuadratic(5.0)
         , tireWearOutCapacity(100)
         , numberPos(-5, 0)
-        , leftFrontTirePos(12, 9)
-        , rightFrontTirePos(12, -9)
-        , leftRearTirePos(-12, 9)
-        , rightRearTirePos(-12, -9)
+        , leftFrontTirePos(14, 9)
+        , rightFrontTirePos(14, -9)
+        , leftRearTirePos(-14, 9)
+        , rightRearTirePos(-14, -9)
         , leftBrakeGlowPos(-21, 8)
         , rightBrakeGlowPos(-21, -8)
         {}
 
-        float maxLinearVelocity;
-        float maxAngularVelocity;
         float accelerationFriction;
         float brakingFriction;
         float rollingFrictionOnTrack;
-        float rollingFrictionOffTrack;
         float rotationFriction;
         float power;
         float mass;

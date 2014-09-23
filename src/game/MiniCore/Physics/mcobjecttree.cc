@@ -207,8 +207,8 @@ void MCObjectTree::getObjectsWithinDistance(
             while (iter != end)
             {
                 p = *iter;
-                const MCFloat x2 = x - p->getX();
-                const MCFloat y2 = y - p->getY();
+                const MCFloat x2 = x - p->location().i();
+                const MCFloat y2 = y - p->location().j();
 
                 if (x2 * x2 + y2 * y2 < d)
                 {

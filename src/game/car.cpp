@@ -43,7 +43,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(surface, "car")
 , m_desc(desc)
 , m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
-, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, desc.rotationFriction))
+, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -74,22 +74,22 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     addChildObject(numberPlate, m_desc.numberPos, 90);
     numberPlate->setRenderLayerRelative(1);
 
-    const MCFloat offTrackFriction = 0.5;
-    const MCFloat frontFriction = 1.0;
-    m_leftFrontTire.reset(new Tire(frontFriction, offTrackFriction));
+    const MCFloat offTrackFrictionFactor = 0.75;
+    const MCFloat frontFriction = 0.75;
+    m_leftFrontTire.reset(new Tire(frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
 
-    m_rightFrontTire.reset(new Tire(frontFriction, offTrackFriction));
+    m_rightFrontTire.reset(new Tire(frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
     m_rightFrontTire->setRenderLayerRelative(-1);
 
     const MCFloat rearFriction = 0.95;
-    m_leftRearTire.reset(new Tire(rearFriction, offTrackFriction));
+    m_leftRearTire.reset(new Tire(rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
     m_leftRearTire->setRenderLayerRelative(-1);
 
-    m_rightRearTire.reset(new Tire(rearFriction, offTrackFriction));
+    m_rightRearTire.reset(new Tire(rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_rightRearTire, m_desc.rightRearTirePos, 0);
     m_rightRearTire->setRenderLayerRelative(-1);
 }
@@ -97,13 +97,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 void Car::setProperties(Description & desc)
 {
     setRenderLayer(Layers::Objects);
-
     setMass(desc.mass);
-    setMomentOfInertia(desc.mass * 1.5);
-    setMaximumVelocity(desc.maxLinearVelocity);
-    setMaximumAngularVelocity(desc.maxAngularVelocity);
+    setMomentOfInertia(desc.mass * 5);
     setRestitution(desc.restitution);
-
     setShadowOffset(MCVector2dF(5, -5));
 
     const float width  = static_cast<MCRectShape *>(shape().get())->width();
