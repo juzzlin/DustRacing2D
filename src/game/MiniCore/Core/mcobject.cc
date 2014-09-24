@@ -495,8 +495,7 @@ void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
     const MCFloat linearBalance = calculateLinearBalance(impulse, pos);
     m_linearImpulse += impulse * linearBalance;
     const MCFloat r = (pos - m_location).lengthFast();
-    if (r > 0.001)
-    {
+    if (r > 0) {
         addAngularImpulse((-(impulse % (pos - m_location)).k()) / r);
     }
     toggleSleep(false);
@@ -605,9 +604,13 @@ void MCObject::translate(const MCVector3dF & newLocation)
     const bool wasInWorld = !removing() &&
         MCWorld::instance().objectTree().remove(*this);
 
+    // Calculate velocity if this object is a child object and is thus moved
+    // by the parent. This way we'll automatically get linear velocity +
+    // possible orbital velocity.
+    // TODO: do we need to take the time step into account here?
     if (m_parent != this)
     {
-        m_velocity = (newLocation - m_shape->location());
+        m_velocity = (newLocation - m_location);
     }
 
     m_location = newLocation;
