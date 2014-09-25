@@ -47,6 +47,7 @@ HEADERS += \
     audiosource.hpp \
     audioworker.hpp \
     bridge.hpp \
+    bridgetrigger.hpp \
     car.hpp \
     carfactory.hpp \
     carparticleeffectmanager.hpp \
@@ -205,6 +206,7 @@ SOURCES += \
     audiosource.cpp \
     audioworker.cpp \
     bridge.cpp \
+    bridgetrigger.cpp \
     car.cpp \
     carfactory.cpp \
     carparticleeffectmanager.cpp \

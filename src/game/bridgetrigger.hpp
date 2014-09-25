@@ -13,41 +13,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef BRIDGE_HPP
-#define BRIDGE_HPP
+#ifndef BRIDGETRIGGER_HPP
+#define BRIDGETRIGGER_HPP
 
 #include <MCObject>
 
-#include <map>
-
-class MCCollisionEvent;
-class MCSurface;
-class Car;
-
-class Bridge : public MCObject
+class BridgeTrigger : public MCObject
 {
 public:
 
-    Bridge(MCSurface & surface, MCSurface & rail);
+    BridgeTrigger();
 
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event);
-
-    //! \reimp
-    virtual void stepTime(MCFloat step);
-
-private:
-
-    std::map<MCObject *, int> m_objectsOnBridge;
-
-    int m_tag;
-
-    MCObjectPtr m_rail0;
-    MCObjectPtr m_rail1;
-    MCObjectPtr m_railLower0;
-    MCObjectPtr m_railLower1;
-    MCObjectPtr m_trigger0;
-    MCObjectPtr m_trigger1;
 };
 
-#endif // BRIDGE_HPP
+#endif // BRIDGETRIGGER_HPP

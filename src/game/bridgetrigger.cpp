@@ -13,41 +13,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef BRIDGE_HPP
-#define BRIDGE_HPP
+#include "bridgetrigger.hpp"
+#include "layers.hpp"
 
-#include <MCObject>
+#include "MCCollisionEvent"
+#include "MCRectShape"
 
-#include <map>
+static const char * BRIDGE_TRIGGER_ID = "bridgeTrigger";
 
-class MCCollisionEvent;
-class MCSurface;
-class Car;
-
-class Bridge : public MCObject
+BridgeTrigger::BridgeTrigger()
+: MCObject(BRIDGE_TRIGGER_ID)
 {
-public:
+    MCRectShape * shape = new MCRectShape(nullptr, 32, 224);
+    setShape(MCShapePtr(shape));
 
-    Bridge(MCSurface & surface, MCSurface & rail);
+    setRenderLayer(Layers::Bridge);
+    setCollisionLayer(-1);
 
-    //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event);
+    setIsPhysicsObject(false);
+    setIsTriggerObject(true);
 
-    //! \reimp
-    virtual void stepTime(MCFloat step);
+    setMass(0, true);
+}
 
-private:
-
-    std::map<MCObject *, int> m_objectsOnBridge;
-
-    int m_tag;
-
-    MCObjectPtr m_rail0;
-    MCObjectPtr m_rail1;
-    MCObjectPtr m_railLower0;
-    MCObjectPtr m_railLower1;
-    MCObjectPtr m_trigger0;
-    MCObjectPtr m_trigger1;
-};
-
-#endif // BRIDGE_HPP
+void BridgeTrigger::collisionEvent(MCCollisionEvent & event)
+{
+    event.collidingObject().setCollisionLayer(Layers::BridgeRails);
+    event.collidingObject().setRenderLayer(Layers::BridgeRails);
+}

@@ -30,12 +30,20 @@ foreach(TS_FILE ${TS})
     list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/src/game/${TS_FILE}.qm)
 endforeach()
 
+# Set headers that don't have a corresponding cpp file
+set(HDR
+    layers.hpp
+    shaders.h
+    shaders30.h
+)
+
 # Set sources
 set(SRC
     ai.cpp
     audioworker.cpp
     audiosource.cpp
     bridge.cpp
+    bridgetrigger.cpp
     car.cpp
     carfactory.cpp
     carparticleeffectmanager.cpp
@@ -69,8 +77,6 @@ set(SRC
     renderer.cpp
     resolutionmenu.cpp
     scene.cpp
-    shaders.h
-    shaders30.h
     settings.cpp
     settingsmenu.cpp
     startlights.cpp
@@ -157,7 +163,7 @@ endif()
 
 # The main game executable
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-add_executable(${GAME_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
+add_executable(${GAME_BINARY_NAME} WIN32 ${HDR} ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
 # Common libs for Qt4 and Qt5 builds
 set(COMMON_LIBS
