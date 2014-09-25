@@ -40,12 +40,14 @@ void Tire::stepTime(MCFloat step)
     const MCVector2d<MCFloat> tire(
         MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
 
-    if (velocity().lengthFast() > 0.1)
+    if (velocity().lengthFast() > 0)
     {
-        const MCVector2d<MCFloat> & v = velocity().normalizedFast();
+        MCVector2d<MCFloat> v = velocity();
+        v.clampFast(0.9); // Clamp instead of normalizing to avoid artifacts on small values
         const MCFloat magicConstant = 40.0;
         MCVector2d<MCFloat> impulse =
-            MCMathUtil::projection(v, tire) * (m_isOffTrack ? m_offTrackFriction : m_friction) * magicConstant * step;
+            MCMathUtil::projection(v, tire) *
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * magicConstant * step;
         impulse.clampFast(0.22);
         parent().addImpulse(-impulse, location());
     }
