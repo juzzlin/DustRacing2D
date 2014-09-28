@@ -488,7 +488,7 @@ void Race::checkIfCarIsStuck(Car & car)
             counter.first  = currentTile;
             counter.second = 0;
         }
-        else if (counter.first == currentTile && !currentTile->hasAsphalt())
+        else if (counter.first == currentTile)
         {
             if (++counter.second >= STUCK_LIMIT)
             {
