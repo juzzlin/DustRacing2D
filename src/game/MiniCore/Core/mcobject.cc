@@ -975,14 +975,15 @@ void MCObject::updateChildTransforms()
 MCFloat MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
 {
     MCFloat linearBalance = 1.0;
-    if (shape())
-    {
-        MCFloat d = shape()->radius();
-        linearBalance = 1.0 - MCMathUtil::distanceFromVector(
-            MCVector2dF(pos - location()), MCVector2dF(force)) / d;
-        linearBalance = linearBalance < 0 ? 0 : linearBalance;
+    if (shape()) {
+        const MCFloat r = shape()->radius();
+        if (r > 0) {
+            linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+                MCVector2dF(pos - location()), MCVector2dF(force)) / r;
+            linearBalance = linearBalance < 0 ? 0 : linearBalance;
+            linearBalance = linearBalance > 1 ? 1 : linearBalance;
+        }
     }
-
     return linearBalance;
 }
 

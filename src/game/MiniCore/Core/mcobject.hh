@@ -397,6 +397,8 @@ public:
      *  \param newAngle The new angle in degrees [0..360]. */
     void rotateRelative(MCFloat newAngle);
 
+    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
+
 protected:
 
     /*! Event handler.
@@ -460,8 +462,6 @@ private:
     void toggleSleep(bool state);
 
     void updateChildTransforms();
-
-    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
 
     MCUint                       m_typeID;
     MCFloat                      m_invMass;
