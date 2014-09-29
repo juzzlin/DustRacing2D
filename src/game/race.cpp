@@ -529,7 +529,13 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     const Route    & route = m_track->trackData().route();
     TargetNodeBase & tnode = route.get(car.prevTargetNodeIndex());
 
-    car.translate(MCVector3dF(tnode.location().x(), tnode.location().y()));
+    // Randomize the target location a bit, because otherwise multiple
+    // stuck cars could be sent to the exactly same location and that would
+    // result in really bad things.
+    const int randRadius = 64;
+    car.translate(MCVector3dF(
+        tnode.location().x() + rand()%randRadius - randRadius / 2,
+        tnode.location().y() + rand()%randRadius - randRadius / 2));
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
