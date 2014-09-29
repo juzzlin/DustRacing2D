@@ -60,11 +60,11 @@ void MCImpulseGenerator::generateImpulsesFromContact(
     const MCVector3dF & linearImpulse,
     MCFloat restitution)
 {
-    const MCFloat invMassA = pa.invMass();
-    const MCFloat invMassB = pb.invMass();
-
     if (!pa.stationary())
     {
+        const MCFloat invMassA = pa.invMass();
+        const MCFloat invMassB = pb.invMass();
+
         const MCVector3dF & contactPoint(contact.contactPoint());
         MCVector3dF armA = contactPoint - pa.location();
 
@@ -107,8 +107,7 @@ void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, MCFloa
     }
 }
 
-void MCImpulseGenerator::generateImpulsesFromDeepestContacts(
-    std::vector<MCObject *> & objs)
+void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObject *> & objs)
 {
     for (MCObject * object : objs)
     {

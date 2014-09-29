@@ -608,9 +608,9 @@ void MCObject::translate(const MCVector3dF & newLocation)
     // by the parent. This way we'll automatically get linear velocity +
     // possible orbital velocity.
     // TODO: do we need to take the time step into account here?
-    if (m_parent != this)
+    if (m_parent != this && !m_parent->stationary())
     {
-        m_velocity = (newLocation - m_location);
+        m_velocity = newLocation - m_location;
     }
 
     m_location = newLocation;
