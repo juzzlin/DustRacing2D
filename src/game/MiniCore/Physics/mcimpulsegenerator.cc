@@ -138,6 +138,8 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
 
                 // Remove contact with pa from pb, because it was already handled here.
                 pb.deleteContacts(pa);
+
+                break;
             }
         }
 
