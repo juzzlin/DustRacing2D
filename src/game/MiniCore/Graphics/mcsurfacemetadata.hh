@@ -95,12 +95,6 @@ struct MCSurfaceMetaData
     //! Mag filter value
     std::pair<GLint, bool> magFilter;
 
-    //! Brightness setting
-    std::pair<float, bool> brightness;
-
-    //! Contrast setting
-    std::pair<float, bool> contrast;
-
     //! Specular coeff
     std::pair<GLfloat, bool> specularCoeff;
 

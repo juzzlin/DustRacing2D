@@ -87,12 +87,6 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                 const unsigned int height = tag.attribute("h", "0").toUInt();
                 newData->height = std::pair<int, bool>(height, height > 0);
 
-                const float contrast = tag.attribute("contrast", "0").toFloat();
-                newData->contrast = std::pair<float, bool>(contrast, (contrast > 0.1));
-
-                const float brightness = tag.attribute("brightness", "0").toFloat();
-                newData->brightness = std::pair<float, bool>(brightness, (brightness > 0.1));
-
                 const float specularCoeff = tag.attribute("specularCoeff", "1").toFloat();
                 newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, (specularCoeff > 1.0));
 

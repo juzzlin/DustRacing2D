@@ -104,12 +104,6 @@ private:
     //! Apply given color key (set alpha values on / off based on the given color).
     void applyColorKey(QImage & textureImage, MCUint r, MCUint g, MCUint b) const;
 
-    //! Apply given brightness.
-    void applyBrightness(QImage & textureImage, float brightness) const;
-
-    //! Apply given contrast.
-    void applyContrast(QImage & textureImage, float contrast) const;
-
     //! Helper to create the actual OpenGL texture.
     GLuint create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image);
 
