@@ -68,8 +68,10 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height = std::pair<int, bool>(9, true);
-    surfaceData.width  = std::pair<int, bool>(9, true);
+    surfaceData.height    = std::pair<int, bool>(9, true);
+    surfaceData.width     = std::pair<int, bool>(9, true);
+    surfaceData.minFilter = std::pair<int, bool>(GL_LINEAR, true);
+    surfaceData.magFilter = std::pair<int, bool>(GL_LINEAR, true);
 
     return
         MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
