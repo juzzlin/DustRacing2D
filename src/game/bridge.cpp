@@ -63,7 +63,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_rail1->setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    const int railXDisplacement = 92;
+    const int railXDisplacement = 96;
 
     addChildObject(m_railLower0, MCVector3dF(-railXDisplacement, 0, 0));
     m_railLower0->rotateRelative(90);
@@ -90,7 +90,10 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 
 void Bridge::collisionEvent(MCCollisionEvent & event)
 {
-    m_objectsOnBridge[&event.collidingObject()] = m_tag;
+    if (!event.collidingObject().stationary())
+    {
+        m_objectsOnBridge[&event.collidingObject()] = m_tag;
+    }
 }
 
 void Bridge::stepTime(MCFloat)

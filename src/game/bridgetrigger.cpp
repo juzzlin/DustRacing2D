@@ -38,6 +38,9 @@ BridgeTrigger::BridgeTrigger()
 
 void BridgeTrigger::collisionEvent(MCCollisionEvent & event)
 {
-    event.collidingObject().setCollisionLayer(Layers::BridgeRails);
-    event.collidingObject().setRenderLayer(Layers::BridgeRails);
+    if (!event.collidingObject().stationary())
+    {
+        event.collidingObject().setCollisionLayer(Layers::BridgeRails);
+        event.collidingObject().setRenderLayer(Layers::BridgeRails);
+    }
 }
