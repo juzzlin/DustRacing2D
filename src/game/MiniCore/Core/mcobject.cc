@@ -282,6 +282,11 @@ void MCObject::resetMotion()
     m_angularAcceleration = 0.0;
     m_angularVelocity     = 0.0;
     m_angularImpulse      = 0.0;
+
+    for (auto child: m_children)
+    {
+        child->resetMotion();
+    }
 }
 
 MCUint MCObject::typeID() const

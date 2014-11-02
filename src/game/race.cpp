@@ -493,6 +493,8 @@ void Race::checkIfCarIsStuck(Car & car)
             if (++counter.second >= STUCK_LIMIT)
             {
                 moveCarOntoPreviousCheckPoint(car);
+                counter.first  = nullptr;
+                counter.second = 0;
             }
         }
     }
@@ -536,6 +538,7 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     car.translate(MCVector3dF(
         tnode.location().x() + rand()%randRadius - randRadius / 2,
         tnode.location().y() + rand()%randRadius - randRadius / 2));
+    car.resetMotion();
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const
