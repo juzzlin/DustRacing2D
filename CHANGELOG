@@ -1,3 +1,40 @@
+1.8.0
+-----
+
+* Improve target zones of ring.trk
+* Improvements to twister.trk
+* Linear filtering for the generated font texture.
+* Improve positioning of stuck cars.
+* Remove the crap brightness/contrast functionality.
+* Texture tuning.
+* Break after resolving the deepest contact.
+* Help stuck cars more eagerly.
+* Rewrite bridge logic.
+* Make the Dust Racing 2d banner stationary
+* Completely tire-controlled car.
+* Improve sky reflection.
+* Add shader headers to project.
+* Tune color of the yellow car.
+* Improve effect when off-track.
+* Remove redundant message print
+* Improvements for Visual Studio build.
+* Add names of static vorbis libs commonly used in Windows
+* Set cxx flags only if compiler is GNUCXX or MINGW
+* Fix tires appearing on top of the car on bridge.
+* Refactor scene.cpp
+* Refactor MCObject.
+* Render shadows onto a texture.
+* Decouple shadow rendering from object rendering.
+* Remove SlideFrictionGenerator.
+* Fix website image sizes on mobile.
+* Rewrite index.html
+* Refactor gravitational constant.
+* Optimize texture binding.
+* Optimize VAO release.
+* Optimize VBO binding.
+* Fix installing the game when not built in the source root. Patch by Rémi Verschelde.
+* Enhancement of the desktop files. Patch by Rémi Verschelde.
+
 1.7.3
 -----
 

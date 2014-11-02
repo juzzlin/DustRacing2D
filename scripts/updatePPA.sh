@@ -6,5 +6,5 @@ mv dustrac-$VERSION.tar.gz dustrac_$VERSION.orig.tar.gz
 tar xzvf dustrac_$VERSION.orig.tar.gz
 cd dustrac-$VERSION
 cp -rv packaging/debian .
-debuild -S -sa && cd .. && dput ppa:jussi-lind/ppa "dustrac_${DEBIAN_VERSION}_source.changes"
+debuild -S -sa && cd .. && dput ppa:jussi-lind/dustrac "dustrac_${DEBIAN_VERSION}_source.changes"
 

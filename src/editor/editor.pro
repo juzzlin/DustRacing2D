@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-editor
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.7.3\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.8.0\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
 # Qt version check

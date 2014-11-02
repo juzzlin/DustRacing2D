@@ -1,3 +1,27 @@
+1.8.0
+=====
+
+New features:
+
+* More realistic and dynamic car physics for funnier gameplay.
+* Rewritten bridge object that now actually even works
+* Some graphics improvements (they are still shitty, though)
+  - Transparent shadows
+  - Two-player game views separated by a narrow line
+  - Filtering added to some textures
+  - Some car graphics improved
+* Driving off-track is now more merciful
+
+Bug fixes:
+
+* Fix installing the game when not built in the source root. Patch by Rémi Verschelde.
+* Enhancement of the desktop files. Patch by Rémi Verschelde.
+* Fix bridge
+
+Other:
+
+* Improve target zones of ring.trk
+
 1.7.3
 =====
 

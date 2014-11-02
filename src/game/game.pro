@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.7.3\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.8.0\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
@@ -94,6 +94,7 @@ HEADERS += \
     textmenuitemview.hpp \
     timing.hpp \
     timingoverlay.hpp \
+    tire.hpp \
     track.hpp \
     trackdata.hpp \
     trackloader.hpp \
@@ -249,6 +250,7 @@ SOURCES += \
     textmenuitemview.cpp \
     timing.cpp \
     timingoverlay.cpp \
+    tire.cpp \
     track.cpp \
     trackdata.cpp \
     trackloader.cpp \
