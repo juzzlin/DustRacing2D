@@ -35,9 +35,6 @@ static void initTranslations(QTranslator & appTranslator, QApplication & app)
 
 int main(int argc, char ** argv)
 {
-#ifndef USE_QT5
-    QApplication::setGraphicsSystem("raster");
-#endif
     QApplication app(argc, argv);
     QTranslator appTranslator;
     initTranslations(appTranslator, app);

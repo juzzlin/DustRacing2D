@@ -74,11 +74,7 @@ Text/mctexturetext.cc
 
 add_library(MiniCore ${MiniCoreSRC})
 
-if(UseQt5)
-    qt5_use_modules(MiniCore Core OpenGL Xml)
-else()
-    target_link_libraries(MiniCore ${QT_QTCORE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTXML_LIBRARY})
-endif()
+qt5_use_modules(MiniCore Core OpenGL Xml)
 
 add_subdirectory(UnitTests)
 

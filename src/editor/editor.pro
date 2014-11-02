@@ -7,12 +7,11 @@ DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.8.0\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
 # Qt version check
-message("Building for Qt version $${QT_VERSION}.")
 contains(QT_VERSION, ^5\\..*) {
-QT += widgets xml
-DEFINES += USE_QT5
+    message("Building for Qt version $${QT_VERSION}.")
+    QT += widgets xml
 } else {
-QT += gui xml
+    error("Qt5 is required!")
 }
 
 INCLUDEPATH += .

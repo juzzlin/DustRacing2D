@@ -7,12 +7,11 @@ DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.8.0\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
-message("Building for Qt version $${QT_VERSION}.")
 contains(QT_VERSION, ^5\\..*) {
-QT += opengl widgets xml
-DEFINES += USE_QT5
+    message("Building for Qt version $${QT_VERSION}.")
+    QT += opengl widgets xml
 } else {
-QT += opengl gui xml
+    error("Qt5 is required!")
 }
 
 DEFINES += GLEW_STATIC GLEW_NO_GLU

@@ -90,10 +90,7 @@ function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
     set(CPACK_BINARY_TGZ ON)
     set(CPACK_BINARY_TZ OFF)
 
-    set(QT_VER_STR "qt4")
-    if(UseQt5)
-        set(QT_VER_STR "qt5")
-    endif()
+    set(QT_VER_STR "qt5")
 
     set(CPACK_PACKAGE_FILE_NAME "dustrac-${VERSION}-linux-${CMAKE_HOST_SYSTEM_PROCESSOR}-${QT_VER_STR}")
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)

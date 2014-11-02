@@ -18,10 +18,7 @@
 #include <QMouseEvent>
 #include <QStatusBar>
 #include <QString>
-
-#ifdef USE_QT5
 #include <QTransform>
-#endif
 
 #include "editordata.hpp"
 #include "editorview.hpp"
@@ -54,21 +51,12 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
     if (scene())
     {
         const QPointF mappedPos = mapToScene(event->pos());
+        if (TrackTile * tile =
+            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos, QTransform())))
+        {
+            tile->setActive(true);
+        }
 
-#ifdef USE_QT5
-        QTransform dummy;
-        if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos, dummy)))
-        {
-            tile->setActive(true);
-        }
-#else
-        if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos)))
-        {
-            tile->setActive(true);
-        }
-#endif
         // Tile drag'n'drop active?
         if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
         {
@@ -529,14 +517,8 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
 
 void EditorView::doRotateTile90CW()
 {
-#ifdef USE_QT5
-    QTransform dummy;
     if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
-#else
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-#endif
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
     {
         qreal oldRotation = tile->rotation();
         qreal newRotation;
@@ -550,14 +532,8 @@ void EditorView::doRotateTile90CW()
 
 void EditorView::doRotateTile90CCW()
 {
-#ifdef USE_QT5
-    QTransform dummy;
     if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
-#else
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-#endif
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
     {
         qreal oldRotation = tile->rotation();
         qreal newRotation;
@@ -610,20 +586,11 @@ void EditorView::doSetComputerHintBrake()
 
 void EditorView::doSetComputerHint(TrackTileBase::ComputerHint hint)
 {
-#ifdef USE_QT5
-    QTransform dummy;
     if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), dummy)))
+        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
     {
         tile->setComputerHint(hint);
     }
-#else
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos))))
-    {
-        tile->setComputerHint(hint);
-    }
-#endif
 }
 
 void EditorView::doFloodFill(TrackTile & tile, QAction * action, QString typeToFill)

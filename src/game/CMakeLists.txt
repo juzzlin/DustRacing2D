@@ -110,31 +110,8 @@ set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-if (UseQt5)
-    qt5_add_resources(RC_SRC ${RCS})
-    qt5_add_translation(QM ${TS_FILES})
-else()
-    set(MOC_HDRS
-        audiosource.hpp
-        audioworker.hpp
-        carsoundeffectmanager.hpp
-        eventhandler.hpp
-        fadeanimation.hpp
-        mainmenu.hpp
-        messageoverlay.hpp
-        game.hpp
-        pit.hpp
-        race.hpp
-        renderer.hpp
-        scene.hpp
-        statemachine.hpp
-        startlights.hpp
-        timing.hpp
-        timingoverlay.hpp)
-    qt4_add_resources(RC_SRC ${RCS})
-    qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
-    qt4_add_translation(QM ${TS_FILES})
-endif()
+qt5_add_resources(RC_SRC ${RCS})
+qt5_add_translation(QM ${TS_FILES})
 
 # Copy desktop file
 if(ReleaseBuild AND UNIX)
@@ -165,7 +142,6 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${HDR} ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
-# Common libs for Qt4 and Qt5 builds
 set(COMMON_LIBS
     ${GAME_BINARY_NAME}
     MiniCore
@@ -179,12 +155,8 @@ set(COMMON_LIBS
     ${VORBIS_STATIC_LIB}     # Valid only if static lib was used
     ${OGG_STATIC_LIB})       # Valid only if static lib was used
 
-if(UseQt5)
-    qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
-    target_link_libraries(${COMMON_LIBS})
-else()
-    target_link_libraries(${COMMON_LIBS} ${QT_LIBRARIES})
-endif()
+qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
+target_link_libraries(${COMMON_LIBS})
 
 foreach(TS_FILE ${TS})
     # Make targets to copy generated qm files to data dir. This is done the hard

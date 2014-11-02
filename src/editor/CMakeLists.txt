@@ -45,20 +45,9 @@ set(RCS ${CMAKE_SOURCE_DIR}/data/images/editor.qrc ${CMAKE_SOURCE_DIR}/data/icon
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common)
 
-if (UseQt5)
-    qt5_add_resources(RC_SRC ${RCS})
-    qt5_add_translation(QM ${TS_FILES})
-    qt5_wrap_ui(UI_HDRS ${UIS})
-else()
-    set(MOC_HDRS
-        aboutdlg.hpp editorview.hpp editorscene.hpp mainwindow.hpp newtrackdialog.hpp
-        rotatedialog.hpp targetnodesizedlg.hpp tiletypedialog.hpp tileanimator.hpp
-        trackpropertiesdialog.hpp)
-    qt4_add_resources(RC_SRC ${RCS})
-    qt4_wrap_ui(UI_HDRS ${UIS})
-    qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
-    qt4_add_translation(QM ${TS_FILES})
-endif()
+qt5_add_resources(RC_SRC ${RCS})
+qt5_add_translation(QM ${TS_FILES})
+qt5_wrap_ui(UI_HDRS ${UIS})
 
 # We need this to be able to include headers produced by uic in our code
 include_directories(${CMAKE_BINARY_DIR})
@@ -92,11 +81,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS} ${QM})
 
-if(UseQt5)
-    qt5_use_modules(${EDITOR_BINARY_NAME} Widgets Xml)
-else()
-    target_link_libraries(${EDITOR_BINARY_NAME} ${QT_LIBRARIES})
-endif()
+qt5_use_modules(${EDITOR_BINARY_NAME} Widgets Xml)
 
 foreach(TS_FILE ${TS})
     # Make targets to copy generated qm files to data dir. This is done the hard
