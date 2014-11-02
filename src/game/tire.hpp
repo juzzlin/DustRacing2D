@@ -18,11 +18,13 @@
 
 #include <MCObject>
 
+class Car;
+
 class Tire : public MCObject
 {
 public:
 
-    Tire(MCFloat friction, MCFloat offTrackFriction);
+    Tire(Car & car, MCFloat friction, MCFloat offTrackFriction);
 
     virtual void stepTime(MCFloat step);
 
@@ -35,6 +37,8 @@ private:
     MCFloat m_friction;
 
     MCFloat m_offTrackFriction;
+
+    Car & m_car;
 };
 
 #endif // TIRE_HPP

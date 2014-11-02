@@ -14,17 +14,19 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tire.hpp"
+#include "car.hpp"
 
 #include <MCAssetManager>
 #include <MCMathUtil>
 #include <MCSurface>
 #include <MCTrigonom>
 
-Tire::Tire(MCFloat friction, MCFloat offTrackFriction)
+Tire::Tire(Car & car, MCFloat friction, MCFloat offTrackFriction)
     : MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire")
     , m_isOffTrack(false)
     , m_friction(friction)
     , m_offTrackFriction(offTrackFriction)
+    , m_car(car)
 {
     setBypassCollisions(true);
 }
@@ -46,7 +48,7 @@ void Tire::stepTime(MCFloat)
         v.clampFast(0.99); // Clamp instead of normalizing to avoid artifacts on small values
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) * parent().mass() * 10;
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * 1.1 * 9.81 * parent().mass() * m_car.tireWearLevel();
         parent().addForce(-impulse, location());
     }
 }

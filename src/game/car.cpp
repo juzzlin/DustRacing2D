@@ -76,20 +76,20 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
     const MCFloat offTrackFrictionFactor = 0.65;
     const MCFloat frontFriction = 0.85;
-    m_leftFrontTire.reset(new Tire(frontFriction, frontFriction * offTrackFrictionFactor));
+    m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
 
-    m_rightFrontTire.reset(new Tire(frontFriction, frontFriction * offTrackFrictionFactor));
+    m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
     m_rightFrontTire->setRenderLayerRelative(-1);
 
     const MCFloat rearFriction = 0.95;
-    m_leftRearTire.reset(new Tire(rearFriction, rearFriction * offTrackFrictionFactor));
+    m_leftRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
     m_leftRearTire->setRenderLayerRelative(-1);
 
-    m_rightRearTire.reset(new Tire(rearFriction, rearFriction * offTrackFrictionFactor));
+    m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_rightRearTire, m_desc.rightRearTirePos, 0);
     m_rightRearTire->setRenderLayerRelative(-1);
 }
@@ -313,7 +313,7 @@ void Car::resetTireWear()
 
 float Car::tireWearLevel() const
 {
-    return m_tireWearOutCapacity / m_desc.tireWearOutCapacity;
+    return 0.75 + (m_tireWearOutCapacity / m_desc.tireWearOutCapacity) * 0.25;
 }
 
 void Car::stepTime(MCFloat step)
