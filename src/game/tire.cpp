@@ -43,11 +43,10 @@ void Tire::stepTime(MCFloat)
     if (velocity().lengthFast() > 0)
     {
         MCVector2d<MCFloat> v = velocity();
-        v.clampFast(0.9); // Clamp instead of normalizing to avoid artifacts on small values
+        v.clampFast(0.99); // Clamp instead of normalizing to avoid artifacts on small values
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction);
-        impulse.clampFast(0.25);
-        parent().addImpulse(-impulse, location());
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * parent().mass() * 10;
+        parent().addForce(-impulse, location());
     }
 }

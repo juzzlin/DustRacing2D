@@ -75,7 +75,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     numberPlate->setRenderLayerRelative(1);
 
     const MCFloat offTrackFrictionFactor = 0.65;
-    const MCFloat frontFriction = 0.65;
+    const MCFloat frontFriction = 0.85;
     m_leftFrontTire.reset(new Tire(frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
