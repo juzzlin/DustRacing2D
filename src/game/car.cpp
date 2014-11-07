@@ -98,7 +98,7 @@ void Car::setProperties(Description & desc)
 {
     setRenderLayer(Layers::Objects);
     setMass(desc.mass);
-    setMomentOfInertia(desc.mass * 5);
+    setMomentOfInertia(desc.mass * 3);
     setRestitution(desc.restitution);
     setShadowOffset(MCVector2dF(5, -5));
 
@@ -138,14 +138,14 @@ MCUint Car::index() const
 
 void Car::turnLeft(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(14.0 * control);
+    m_tireAngle = static_cast<int>(12.0 * control);
 
     m_turnLeft = true;
 }
 
 void Car::turnRight(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(-14.0 * control);
+    m_tireAngle = static_cast<int>(-12.0 * control);
 
     m_turnRight = true;
 }
