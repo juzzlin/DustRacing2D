@@ -1,3 +1,14 @@
+1.8.1
+=====
+
+Improvements:
+
+* Tune car parameters
+
+Other:
+
+* Drop support for Qt4
+
 1.8.0
 =====
 
