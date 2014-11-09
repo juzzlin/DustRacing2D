@@ -20,6 +20,7 @@
 #include "audioworker.hpp"
 #include "graphicsfactory.hpp"
 #include "eventhandler.hpp"
+#include "fontfactory.hpp"
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
@@ -79,7 +80,7 @@ Game::Game(bool forceNoVSync)
 
     loadFonts();
 
-    m_assetManager->textureFontManager().createFontFromData(GraphicsFactory::generateFont());
+    m_assetManager->textureFontManager().createFontFromData(FontFactory::generateFont());
 
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));

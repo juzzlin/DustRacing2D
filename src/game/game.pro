@@ -57,6 +57,7 @@ HEADERS += \
     credits.hpp \
     eventhandler.hpp \
     fadeanimation.hpp \
+    fontfactory.hpp \
     game.hpp \
     graphicsfactory.hpp \
     help.hpp \
@@ -217,6 +218,7 @@ SOURCES += \
     credits.cpp \
     eventhandler.cpp \
     fadeanimation.cpp \
+    fontfactory.cpp \
     game.cpp \
     graphicsfactory.cpp \
     help.cpp \

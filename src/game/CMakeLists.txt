@@ -54,6 +54,7 @@ set(SRC
     credits.cpp
     eventhandler.cpp
     fadeanimation.cpp
+    fontfactory.cpp
     game.cpp
     graphicsfactory.cpp
     help.cpp

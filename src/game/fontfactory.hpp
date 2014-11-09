@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,16 +13,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GRAPHICSFACTORY_HPP
-#define GRAPHICSFACTORY_HPP
+#ifndef FONTFACTORY_HPP
+#define FONTFACTORY_HPP
+
+#include <MCTextureFontData>
 
 class MCSurface;
 
-//! Helper functions to create miscellaneous graphic items.
-namespace GraphicsFactory {
+namespace FontFactory {
 
-MCSurface & generateNumberSurface(int index);
+MCTextureFontData generateFont();
 
-} // namespace GraphicsFactory
+} // namespace FontFactory
 
-#endif // GRAPHICSFACTORY_HPP
+#endif // FONTFACTORY_HPP
