@@ -23,7 +23,6 @@
 static const int   FLAG_W           = 32;
 static const int   FLAG_H           = 24;
 static const int   V_SPACING        = 20;
-static const float APPEARANCE_SPEED = 0.05f;
 
 CheckeredFlag::CheckeredFlag()
 : m_surface(MCAssetManager::surfaceManager().surface("checkeredFlag"))

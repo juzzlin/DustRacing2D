@@ -44,8 +44,7 @@
 
 #include <cassert>
 
-static const unsigned int MAX_PLAYERS    = 2;
-static const float        DEFAULT_VOLUME = 0.5;
+static const unsigned int MAX_PLAYERS = 2;
 
 Game * Game::m_instance = nullptr;
 
