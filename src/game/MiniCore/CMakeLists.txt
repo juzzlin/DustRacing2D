@@ -29,6 +29,7 @@ Graphics/mcglobjectbase.cc
 Graphics/mcglpointparticlerenderer.cc
 Graphics/mcglscene.cc
 Graphics/mcglshaderprogram.cc
+Graphics/mcrenderlayer.cc
 Graphics/mcshaders.hh
 Graphics/mcshaders30.hh
 Graphics/mcshadersGLES.hh

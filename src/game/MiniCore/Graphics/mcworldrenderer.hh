@@ -20,6 +20,7 @@
 #ifndef MCWORLDRENDERER_HH
 #define MCWORLDRENDERER_HH
 
+#include "mcrenderlayer.hh"
 #include "mctypes.hh"
 #include "mcworld.hh"
 
@@ -72,24 +73,17 @@ private:
 
     void renderBatches(MCCamera * camera = nullptr);
 
-    void renderObjectBatches(MCCamera * camera, int layer);
+    void renderObjectBatches(MCCamera * camera, MCRenderLayer & layer);
 
-    void renderParticleBatches(MCCamera * camera, int layer);
+    void renderParticleBatches(MCCamera * camera, MCRenderLayer & layer);
 
-    typedef std::unordered_set<MCObject *> LayerSet;
-    LayerSet m_layers[MCWorld::MaxLayers];
-
-    typedef std::map<int, std::vector<MCObject *> > BatchMap;
-    typedef std::map<MCCamera *, BatchMap[MCWorld::MaxLayers]> CameraBatchMap;
-
-    CameraBatchMap m_objectBatches;
-    CameraBatchMap m_particleBatches;
-
-    bool m_depthTestEnabled[MCWorld::MaxLayers];
+    typedef int LayerId;
+    std::map<LayerId, MCRenderLayer> m_layers;
 
     std::vector<MCCamera *> m_visibilityCameras;
 
-    typedef std::map<int, MCGLPointParticleRenderer *> ParticleRendererMap;
+    typedef int ParticleTypeId;
+    typedef std::map<ParticleTypeId, MCGLPointParticleRenderer *> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
 };
 

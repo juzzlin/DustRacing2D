@@ -152,6 +152,7 @@ HEADERS += \
     MiniCore/Graphics/mcshaders.hh \
     MiniCore/Graphics/mcshaders30.hh \
     MiniCore/Graphics/mcshadersGLES.hh \
+    MiniCore/Graphics/mcrenderlayer.hh \
     MiniCore/Graphics/mcshapeview.hh \
     MiniCore/Graphics/mcsurface.hh \
     MiniCore/Graphics/mcsurfaceconfigloader.hh \
@@ -292,6 +293,7 @@ SOURCES += \
     MiniCore/Graphics/mcmeshmanager.cc \
     MiniCore/Graphics/mcmeshobjectdata.cc \
     MiniCore/Graphics/mcmeshview.cc \
+    MiniCore/Graphics/mcrenderlayer.cc \
     MiniCore/Graphics/mcsurface.cc \
     MiniCore/Graphics/mcsurfaceconfigloader.cc \
     MiniCore/Graphics/mcsurfacemanager.cc \
