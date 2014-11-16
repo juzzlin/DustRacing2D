@@ -430,10 +430,7 @@ void MCWorld::processCollisions()
 
     if (m_numCollisions)
     {
-        for (MCUint i = 0; i < m_numResolverLoops; i++)
-        {
-            generateImpulses();
-        }
+        generateImpulses();
 
         // Process contacts and generate impulses
         m_collisionDetector->enableCollisionEvents(false);
