@@ -46,9 +46,10 @@ void Tire::stepTime(MCFloat)
     {
         MCVector2d<MCFloat> v = velocity();
         v.clampFast(0.99); // Clamp instead of normalizing to avoid artifacts on small values
+        const MCFloat magicCalibration = 1.15;
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) * 1.1 * 9.81 * parent().mass() * m_car.tireWearLevel();
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * magicCalibration * 9.81 * parent().mass() * m_car.tireWearLevel();
         parent().addForce(-impulse, location());
     }
 }
