@@ -187,7 +187,7 @@ TrackObject * TrackObjectFactory::build(
         data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setMass(1000); // Exaggerate the mass on purpose
+        data.setMass(500); // Exaggerate the mass on purpose
         data.setSurfaceId(role.toStdString());
         data.setXYFriction(0.25);
         data.setRenderLayer(Layers::Walls);
