@@ -138,14 +138,14 @@ MCUint Car::index() const
 
 void Car::turnLeft(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(12.0 * control);
+    m_tireAngle = static_cast<int>(15.0 * control);
 
     m_turnLeft = true;
 }
 
 void Car::turnRight(MCFloat control)
 {
-    m_tireAngle = static_cast<int>(-12.0 * control);
+    m_tireAngle = static_cast<int>(-15.0 * control);
 
     m_turnRight = true;
 }
