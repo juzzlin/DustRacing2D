@@ -135,7 +135,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_timingOverlay[1].setRace(m_race);
 
     m_world->renderer().enableDepthTestOnLayer(Layers::Tree);
-    m_world->renderer().enableDepthTestOnLayer(Layers::Meshes);
+    m_world->renderer().enableDepthTestOnLayer(Layers::Objects);
     m_world->renderer().enableDepthTestOnLayer(Layers::GrandStands);
     m_world->setMetersPerPixel(METERS_PER_PIXEL);
 

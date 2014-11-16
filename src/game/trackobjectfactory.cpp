@@ -49,7 +49,7 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.5);
         data.setMass(1000);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(Layers::GrandStands);
+        data.setRenderLayer(Layers::Objects);
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
@@ -81,7 +81,7 @@ TrackObject * TrackObjectFactory::build(
         data.setMeshId(role.toStdString());
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
-        data.setRenderLayer(Layers::Meshes);
+        data.setRenderLayer(Layers::Objects);
 
         object = m_objectFactory.build(data);
     }

@@ -24,16 +24,15 @@ public:
 
     enum Order
     {
-        Ground      = 0,
-        Meshes      = 0,
-        Objects     = 2,
-        Smoke       = 3,
         Bridge      = 4,
         BridgeRails = 5,
-        Mud         = 0,
-        Walls       = 0,
         GrandStands = 0,
-        Tree        = 10
+        Ground      = 0,
+        Mud         = 1,
+        Objects     = 2,
+        Smoke       = 3,
+        Tree        = 10,
+        Walls       = 1
     };
 };
 
