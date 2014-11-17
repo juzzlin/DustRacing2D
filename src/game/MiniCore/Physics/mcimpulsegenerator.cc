@@ -66,7 +66,6 @@ void MCImpulseGenerator::generateImpulsesFromContact(
         const MCFloat invMassB = pb.invMass();
 
         const MCVector3dF & contactPoint(contact.contactPoint());
-        MCVector3dF armA = contactPoint - pa.location();
 
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
@@ -74,8 +73,10 @@ void MCImpulseGenerator::generateImpulsesFromContact(
         pa.addImpulse(linearImpulse * effRestitution * massScaling);
 
         // Angular component
+        const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerPixel();
         const MCVector3dF rotationalImpulse = MCVector3dF(linearImpulse) * MCWorld::metersPerPixel() % armA;
-        pa.addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling);
+        const MCFloat calibration = 3.14;
+        pa.addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration);
     }
 }
 
