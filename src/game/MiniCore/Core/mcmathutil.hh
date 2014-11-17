@@ -102,7 +102,7 @@ bool MCMathUtil::equals(T x, T y)
 template <typename T>
 T MCMathUtil::distanceFromVector(const MCVector2d<T> & p, const MCVector2d<T> & v)
 {
-    return abs(p.dot(MCVector2d<MCFloat>(-v.j(), v.i()).normalizedFast()));
+    return abs(p.dot(MCVector2d<MCFloat>(-v.j(), v.i()).normalized()));
 }
 
 template <typename T>
