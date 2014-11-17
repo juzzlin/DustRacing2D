@@ -1,3 +1,21 @@
+1.8.2
+=====
+
+New features:
+
+* New race track suzuka.trk
+
+Improvements:
+
+* Physics improvements
+  - More stable and agile car handling
+  - Lighter tire object
+
+Bug fixes:
+
+* Fix multiple bugs in the bridge component
+* Fix compilation with Clang
+
 1.8.1
 =====
 

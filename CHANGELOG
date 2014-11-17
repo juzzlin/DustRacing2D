@@ -1,3 +1,22 @@
+1.8.2
+-----
+
+* More accurate contact normal calculations.
+* Fix bridges collision layers.
+* Add small collision margin.
+* More accurate distance from veactor calculations.
+* Improvements to physics regarding angular impulse.
+* Remove impulse generation loops.
+* Lighter tire object.
+* More agile car.
+* Add slightly more grip.
+* Fix some object layering issues.
+* Add suzuka.trk
+* Refactor layer logic.
+* Fix some compilation warnings.
+* Set CXX flags for Clang.
+* Move font generation from GraphicsFactory to FontFactory.
+
 1.8.1
 -----
 
