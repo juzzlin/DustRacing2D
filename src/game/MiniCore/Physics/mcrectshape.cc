@@ -138,7 +138,7 @@ MCVector2dF MCRectShape::contactNormal(const MCSegmentF & segment) const
     // Get the crossing edge for p and build a normal vector from it
     static const MCVector3dF DOWN(0, 0, -1);
     MCVector3dF normal(MCVector3dF(edgeForSegment(segment).edge) % DOWN);
-    return MCVector2dF(normal).normalizedFast();
+    return MCVector2dF(normal).normalized();
 }
 
 MCVector2dF MCRectShape::contactNormal(const MCSegmentF &, const MCEdgeF & edge) const
@@ -146,7 +146,7 @@ MCVector2dF MCRectShape::contactNormal(const MCSegmentF &, const MCEdgeF & edge)
     // Get the crossing edge for p and build a normal vector from it
     static const MCVector3dF DOWN(0, 0, -1);
     MCVector3dF normal(MCVector3dF(edge.edge) % DOWN);
-    return MCVector2dF(normal).normalizedFast();
+    return MCVector2dF(normal).normalized();
 }
 
 MCUint MCRectShape::typeID()
