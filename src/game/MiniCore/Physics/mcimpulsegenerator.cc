@@ -129,9 +129,10 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
 
                 if (projection > 0)
                 {
+                    const MCFloat margin(1.1);
                     const MCVector3dF linearImpulse(
                         contact->contactNormal() *
-                        contact->contactNormal().dot(velocityDelta));
+                        contact->contactNormal().dot(velocityDelta) * margin);
 
                     generateImpulsesFromContact(pa, pb, *contact, linearImpulse, restitution);
                     generateImpulsesFromContact(pb, pa, *contact, -linearImpulse, restitution);
