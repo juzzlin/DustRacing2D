@@ -63,7 +63,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_rail1->setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    const int railXDisplacement = 96;
+    const int railXDisplacement = 256 / 2 - 32 / 2;
 
     addChildObject(m_railLower0, MCVector3dF(-railXDisplacement, 0, 0));
     m_railLower0->rotateRelative(90);
@@ -71,18 +71,16 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_railLower1->rotateRelative(90);
 
     m_railLower0->setRenderLayer(Layers::Walls);
-    m_railLower0->setCollisionLayer(Layers::Walls);
     m_railLower0->setMass(0, true);
     m_railLower0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower0->setIsRenderable(false);
 
     m_railLower1->setRenderLayer(Layers::Walls);
-    m_railLower1->setCollisionLayer(Layers::Walls);
     m_railLower1->setMass(0, true);
     m_railLower1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower1->setIsRenderable(false);
 
-    const int triggerXDisplacement = 256 / 2 - 32 / 2 - 1; // The trigger boundaries must be inside the bridge tile
+    const int triggerXDisplacement = 256 / 2;
 
     addChildObject(m_trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
     addChildObject(m_trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
@@ -104,7 +102,7 @@ void Bridge::stepTime(MCFloat)
     {
         if (m_tag > iter->second + frameTolerance)
         {
-            iter->first->setCollisionLayer(Layers::Ground);
+            iter->first->setCollisionLayer(0); // MCObject default collision layer
             iter->first->setRenderLayer(Layers::Objects);
             iter = m_objectsOnBridge.erase(iter);
         }

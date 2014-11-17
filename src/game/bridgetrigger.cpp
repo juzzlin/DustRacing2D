@@ -24,7 +24,7 @@ static const char * BRIDGE_TRIGGER_ID = "bridgeTrigger";
 BridgeTrigger::BridgeTrigger()
 : MCObject(BRIDGE_TRIGGER_ID)
 {
-    MCRectShape * shape = new MCRectShape(nullptr, 32, 224);
+    MCRectShape * shape = new MCRectShape(nullptr, 8, 224);
     setShape(MCShapePtr(shape));
 
     setRenderLayer(Layers::Bridge);
