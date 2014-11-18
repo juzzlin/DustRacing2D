@@ -1,3 +1,10 @@
+1.8.3
+=====
+
+Bug fixes:
+
+* Fix some physics issues
+
 1.8.2
 =====
 

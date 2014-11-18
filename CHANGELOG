@@ -1,3 +1,9 @@
+1.8.3
+-----
+
+* Fix bug in child object velocity calculation.
+* Tune impulse calibration.
+
 1.8.2
 -----
 

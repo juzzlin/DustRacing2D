@@ -1,3 +1,10 @@
+dustrac (1.8.3-1) trusty; urgency=medium
+
+  * Fix bug in child object velocity calculation.
+  * Tune impulse calibration.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Tue, 18 Nov 2014 20:01:48 +0200
+
 dustrac (1.8.2-1) trusty; urgency=medium
 
   * More accurate contact normal calculations.
