@@ -41,7 +41,12 @@ class MCGLScene;
  *  The user needs to inherit from this class and re-implement the
  *  desired features so that they are forwarded to the actual
  *  shaders as uniforms. */
+#ifdef __MC_QOPENGLFUNCTIONS__
+#include <QOpenGLFunctions>
+class MCGLShaderProgram : protected QOpenGLFunctions
+#else
 class MCGLShaderProgram
+#endif
 {
 public:
 
@@ -81,7 +86,7 @@ public:
     virtual void link();
 
     //! \return true if linked.
-    virtual bool isLinked() const;
+    virtual bool isLinked();
 
     /*! Add a vertex shader.
      *  \return true if succeeded. */
@@ -189,6 +194,8 @@ private:
     };
 
     void bindTextureUnit(GLuint index, Uniform uniform);
+
+    std::string getShaderLog(GLuint obj);
 
     int getUniformLocation(Uniform uniform);
 

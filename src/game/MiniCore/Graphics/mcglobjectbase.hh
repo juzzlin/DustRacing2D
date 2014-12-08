@@ -27,7 +27,13 @@
 
 /*! Base class for GL renderables in MiniCore. Automatically creates VBO, VAO and
  *  basic texturing support. */
+#ifdef __MC_QOPENGLFUNCTIONS__
+#include <QOpenGLFunctions>
+#include <QOpenGLVertexArrayObject>
+class MCGLObjectBase : protected QOpenGLFunctions
+#else
 class MCGLObjectBase
+#endif
 {
 public:
 
@@ -108,8 +114,11 @@ private:
 
     static GLuint m_boundVbo;
 
+#ifdef __MC_QOPENGLFUNCTIONS__
+    QOpenGLVertexArrayObject m_vao;
+#else
     GLuint m_vao;
-
+#endif
     GLuint m_vbo;
 
     MCGLShaderProgramPtr m_program;
@@ -127,6 +136,8 @@ private:
     int m_texCoordDataSize;
 
     int m_colorDataSize;
+
+    bool m_hasVao;
 
     friend class MCGLRectParticle; // Direct access to protected methods without inheritance
 };

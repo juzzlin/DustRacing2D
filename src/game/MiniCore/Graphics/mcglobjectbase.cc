@@ -35,7 +35,11 @@ MCGLObjectBase::MCGLObjectBase()
 , m_normalDataSize(0)
 , m_texCoordDataSize(0)
 , m_colorDataSize(0)
+, m_hasVao(true)
 {
+#ifdef __MC_QOPENGLFUNCTIONS__
+    initializeOpenGLFunctions();
+#endif
 }
 
 void MCGLObjectBase::setShaderProgram(MCGLShaderProgramPtr program)
@@ -60,7 +64,18 @@ MCGLShaderProgramPtr MCGLObjectBase::shadowShaderProgram() const
 
 void MCGLObjectBase::bindVAO()
 {
+#ifdef __MC_QOPENGLFUNCTIONS__
+    if (m_hasVao)
+    {
+        m_vao.bind();
+    }
+    else
+    {
+        setAttributePointers();
+    }
+#else
     glBindVertexArray(m_vao);
+#endif
 }
 
 void MCGLObjectBase::releaseVAO()
@@ -70,10 +85,14 @@ void MCGLObjectBase::releaseVAO()
 
 void MCGLObjectBase::createVAO()
 {
+#ifdef __MC_QOPENGLFUNCTIONS__
+    m_hasVao = m_vao.create();
+#else
     if (m_vao == 0)
     {
         glGenVertexArrays(1, &m_vao);
     }
+#endif
 }
 
 void MCGLObjectBase::bindVBO()
@@ -247,10 +266,11 @@ MCGLObjectBase::~MCGLObjectBase()
         glDeleteBuffers(1, &m_vbo);
         m_vbo = 0;
     }
-
+#ifndef __MC_QOPENGLFUNCTIONS__
     if (m_vao != 0)
     {
         glDeleteVertexArrays(1, &m_vao);
         m_vao = 0;
     }
+#endif
 }

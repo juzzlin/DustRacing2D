@@ -17,15 +17,37 @@ option(StaticVorbisLibsPath "Optional path hint for static versions of vorbis li
 
 option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
-option(GLES "Build for OpenGL ES 2.0" OFF)
-
-option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." OFF)
-
 option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
 
 option(BIN_PATH "Optional BIN_PATH for Linux release build." "")
 
 option(DOC_PATH "Optional DOC_PATH for Linux release build." "")
+
+option(GLES "Build for OpenGL ES 2.0" OFF)
+
+option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." OFF)
+
+option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." OFF)
+
+if(GLES)
+    add_definitions(-D__MC_GLES__)
+    message(STATUS "Compiling for OpenGL ES 2.0")
+else()
+    message(STATUS "Compiling for OpenGL 2.1")
+endif()
+
+if(NO_GLEW)
+    add_definitions(-D__MC_NO_GLEW__)
+endif()
+
+if(QOpenGLFunctions)
+    message(STATUS "Using QOpenGLFunctions")
+    add_definitions(-D__MC_QOPENGLFUNCTIONS__)
+    add_definitions(-D__MC_NO_GLEW__)
+endif()
+
+add_definitions(-DGLEW_STATIC)
+add_definitions(-DGLEW_NO_GLU)
 
 if(UNIX)
     include("InstallLinux.cmake")
@@ -41,19 +63,6 @@ endif()
 set(GAME_BINARY_NAME "dustrac-game")
 set(EDITOR_BINARY_NAME "dustrac-editor")
 
-if(GLES)
-    add_definitions(-D__MC_GLES__)
-    message(STATUS "Compiling for OpenGL ES 2.0")
-else()
-    message(STATUS "Compiling for OpenGL 2.1")
-endif()
-
-if(NO_GLEW)
-    add_definitions(-D__MC_NO_GLEW__)
-endif()
-
-add_definitions(-DGLEW_STATIC)
-add_definitions(-DGLEW_NO_GLU)
 add_definitions(-DVERSION="${VERSION}")
 
 set(CMAKE_AUTOMOC ON)

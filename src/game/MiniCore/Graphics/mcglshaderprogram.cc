@@ -39,22 +39,30 @@ std::vector<GLuint> MCGLShaderProgram::m_activeTexture(MCGLMaterial::MAX_TEXTURE
 MCGLShaderProgram::MCGLShaderProgram()
     : m_scene(MCGLScene::instance())
     , m_isBound(false)
-    , m_program(glCreateProgram())
-    , m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
-    , m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
 {
+#ifdef __MC_QOPENGLFUNCTIONS__
+    initializeOpenGLFunctions();
+#endif
     initUniformNameMap();
+
+    m_program = glCreateProgram();
+    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 }
 
 MCGLShaderProgram::MCGLShaderProgram(
     const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
     : m_scene(MCGLScene::instance())
     , m_isBound(false)
-    , m_program(glCreateProgram())
-    , m_fragmentShader(glCreateShader(GL_FRAGMENT_SHADER))
-    , m_vertexShader(glCreateShader(GL_VERTEX_SHADER))
 {
+#ifdef __MC_QOPENGLFUNCTIONS__
+    initializeOpenGLFunctions();
+#endif
     initUniformNameMap();
+
+    m_program = glCreateProgram();
+    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     addVertexShaderFromSource(vertexShaderSource);
     addFragmentShaderFromSource(fragmentShaderSource);
@@ -154,14 +162,14 @@ void MCGLShaderProgram::link()
     bindTextureUnit(2, Tex2);
 }
 
-bool MCGLShaderProgram::isLinked() const
+bool MCGLShaderProgram::isLinked()
 {
     GLint status = GL_FALSE;
     glGetProgramiv(m_program, GL_LINK_STATUS, &status);
     return status == GL_TRUE;
 }
 
-std::string getShaderLog(GLuint obj)
+std::string MCGLShaderProgram::getShaderLog(GLuint obj)
 {
     int logLength = 0;
     int charsWritten = 0;
