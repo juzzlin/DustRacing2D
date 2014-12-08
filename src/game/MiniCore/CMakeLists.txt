@@ -9,6 +9,13 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Text")
 
 set(MiniCoreSRC
 Asset/mcassetmanager.cc
+Asset/mcmeshconfigloader.cc
+Asset/mcmeshloader.cc
+Asset/mcmeshmanager.cc
+Asset/mcmeshobjectdata.cc
+Asset/mcsurfaceobjectdata.cc
+Asset/mcsurfaceconfigloader.cc
+Asset/mcsurfacemanager.cc
 Core/mcevent.cc
 Core/mcexception.cc
 Core/mclogger.cc
@@ -34,16 +41,9 @@ Graphics/mcshaders.hh
 Graphics/mcshaders30.hh
 Graphics/mcshadersGLES.hh
 Graphics/mcmesh.cc
-Graphics/mcmeshconfigloader.cc
-Graphics/mcmeshloader.cc
-Graphics/mcmeshmanager.cc
-Graphics/mcmeshobjectdata.cc
 Graphics/mcmeshview.cc
 Graphics/mcsurface.cc
-Graphics/mcsurfaceobjectdata.cc
 Graphics/mcsurfaceview.cc
-Graphics/mcsurfaceconfigloader.cc
-Graphics/mcsurfacemanager.cc
 Graphics/mcworldrenderer.cc
 Particles/mcparticle.cc
 Particles/mcglpointparticle.cc

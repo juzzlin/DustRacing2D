@@ -20,7 +20,7 @@
 #define MC_UNIT_TEST
 
 #include <QTest>
-#include "../Graphics/mcmeshloader.hh"
+#include "../Asset/mcmeshloader.hh"
 
 class MCMeshLoaderTest : public QObject
 {
