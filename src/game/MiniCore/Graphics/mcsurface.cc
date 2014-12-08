@@ -182,47 +182,18 @@ void MCSurface::initVBOs(
     const MCGLTexCoord * texCoords,
     const GLfloat      * colors)
 {
-    int offset = 0;
+    initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
 
-    createVAO();
-    createVBO();
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(vertices));
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(normals));
+    addBufferSubData(
+        MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, reinterpret_cast<const GLfloat *>(texCoords));
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(colors));
 
-    bindVAO();
-    bindVBO();
-
-    glBufferData(GL_ARRAY_BUFFER,
-        TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
-
-    // Vertex data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
-    offset += VERTEX_DATA_SIZE;
-
-    // Normal data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, normals);
-    offset += NORMAL_DATA_SIZE;
-
-    // Texture coordinate data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, TEXCOORD_DATA_SIZE, texCoords);
-    offset += TEXCOORD_DATA_SIZE;
-
-    // Vertex color data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, colors);
-
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex,    3, GL_FLOAT, GL_FALSE, 0, 0);
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal,    3, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Color,     4, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE));
-
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
-
-    releaseVBO();
-    releaseVAO();
+    finishBufferData();
 }
 
 void MCSurface::setCenter(MCVector2dFR center)

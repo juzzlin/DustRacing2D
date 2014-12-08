@@ -30,6 +30,11 @@ MCGLObjectBase::MCGLObjectBase()
 , m_vbo(0)
 , m_program(MCGLScene::instance().defaultShaderProgram())
 , m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
+, m_bufferDataOffset(0)
+, m_vertexDataSize(0)
+, m_normalDataSize(0)
+, m_texCoordDataSize(0)
+, m_colorDataSize(0)
 {
 }
 
@@ -152,6 +157,87 @@ void MCGLObjectBase::setMaterial(MCGLMaterialPtr material)
 MCGLMaterialPtr MCGLObjectBase::material() const
 {
     return m_material;
+}
+
+void MCGLObjectBase::initBufferData(int totalDataSize, GLuint drawType)
+{
+    createVAO();
+    createVBO();
+
+    bindVAO();
+    bindVBO();
+
+    glBufferData(GL_ARRAY_BUFFER, totalDataSize, nullptr, drawType);
+
+    m_bufferDataOffset = 0;
+}
+
+void MCGLObjectBase::addBufferSubData(
+    MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data)
+{
+    addBufferSubData(dataType, dataSize, dataSize, data);
+}
+
+void MCGLObjectBase::addBufferSubData(
+    MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data)
+{
+    assert(dataSize <= offsetJump);
+
+    glBufferSubData(GL_ARRAY_BUFFER, m_bufferDataOffset, dataSize, data);
+
+    m_bufferDataOffset += offsetJump;
+
+    switch (dataType) {
+    case MCGLShaderProgram::VAL_Vertex:
+        m_vertexDataSize = dataSize;
+        break;
+    case MCGLShaderProgram::VAL_Normal:
+        m_normalDataSize = dataSize;
+        break;
+    case MCGLShaderProgram::VAL_TexCoords:
+        m_texCoordDataSize = dataSize;
+        break;
+    case MCGLShaderProgram::VAL_Color:
+        m_colorDataSize = dataSize;
+        break;
+    default:
+        assert(false);
+    }
+}
+
+void MCGLObjectBase::setAttributePointers()
+{
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
+
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
+        reinterpret_cast<GLvoid *>(m_vertexDataSize));
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
+
+    glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
+        reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize));
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
+
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Color, 4, GL_FLOAT, GL_FALSE, 0,
+        reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize + m_texCoordDataSize));
+    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+}
+
+void MCGLObjectBase::finishBufferData()
+{
+    setAttributePointers();
+
+    releaseVBO();
+    releaseVAO();
+}
+
+
+void MCGLObjectBase::initUpdateBufferData()
+{
+    bindVAO();
+    bindVBO();
+
+    m_bufferDataOffset = 0;
 }
 
 MCGLObjectBase::~MCGLObjectBase()

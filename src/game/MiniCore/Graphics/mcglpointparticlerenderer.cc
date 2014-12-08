@@ -44,23 +44,16 @@ MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
     const int TOTAL_DATA_SIZE  = VERTEX_DATA_SIZE   + NORMAL_DATA_SIZE + COLOR_DATA_SIZE;
 
-    createVAO();
-    createVBO();
+    initBufferData(TOTAL_DATA_SIZE, GL_DYNAMIC_DRAW);
 
-    bindVAO();
-    bindVBO();
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_vertices));
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_normals));
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
 
-    glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_DYNAMIC_DRAW);
-
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Color,  4, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
-
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+    finishBufferData();
 }
 
 void MCGLPointParticleRenderer::setPointSize(int pointSize)
@@ -78,11 +71,6 @@ void MCGLPointParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GL
 void MCGLPointParticleRenderer::setBatch(
     const MCGLPointParticleRenderer::ParticleVector & particles, MCCamera * camera)
 {
-    bindVAO();
-    bindVBO();
-
-    int offset = 0;
-
     m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
 
     const int NUM_VERTICES     = m_batchSize;
@@ -123,18 +111,20 @@ void MCGLPointParticleRenderer::setBatch(
             MCTrigonom::sin(particle->angle()));
     }
 
-    // Vertex data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, m_vertices);
+    initUpdateBufferData();
+
     const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
-    offset += MAX_VERTEX_DATA_SIZE;
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
+                reinterpret_cast<const GLfloat *>(m_vertices));
 
-    // Normal data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, m_normals);
     const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
-    offset += MAX_NORMAL_DATA_SIZE;
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
+                reinterpret_cast<const GLfloat *>(m_normals));
 
-    // Vertex color data
-    glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, m_colors);
+    addBufferSubData(
+        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
 }
 
 void MCGLPointParticleRenderer::render()

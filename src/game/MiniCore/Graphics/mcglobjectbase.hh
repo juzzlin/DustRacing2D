@@ -87,16 +87,45 @@ public:
     //! Get material if set.
     MCGLMaterialPtr material() const;
 
+protected:
+
+    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
+
+    void addBufferSubData(
+        MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);
+
+    void addBufferSubData(
+        MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data);
+
+    void finishBufferData();
+
+    void initUpdateBufferData();
+
 private:
+
+    void setAttributePointers();
 
     static GLuint m_boundVbo;
 
-    GLuint               m_vao;
-    GLuint               m_vbo;
-    MCGLShaderProgramPtr m_program;
-    MCGLShaderProgramPtr m_shadowProgram;
-    MCGLMaterialPtr      m_material;
+    GLuint m_vao;
 
+    GLuint m_vbo;
+
+    MCGLShaderProgramPtr m_program;
+
+    MCGLShaderProgramPtr m_shadowProgram;
+
+    MCGLMaterialPtr m_material;
+
+    int m_bufferDataOffset;
+
+    int m_vertexDataSize;
+
+    int m_normalDataSize;
+
+    int m_texCoordDataSize;
+
+    int m_colorDataSize;
 };
 
 #endif // MCGLOBJECTBASE_HH
