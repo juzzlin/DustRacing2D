@@ -1,5 +1,8 @@
 project(DustRacing2D)
 
+cmake_minimum_required(VERSION 2.8.8)
+cmake_policy(VERSION 2.8.8)
+
 # Global game version
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "8")
@@ -24,20 +27,13 @@ option(BIN_PATH "Optional BIN_PATH for Linux release build." "")
 
 option(DOC_PATH "Optional DOC_PATH for Linux release build." "")
 
-cmake_minimum_required(VERSION 2.8.8)
-cmake_policy(VERSION 2.8.8)
-
 if(UNIX)
     include("InstallLinux.cmake")
 elseif(WIN32)
     include("InstallWindows.cmake")
 endif()
 
-# GCC-specific flags
-if(CMAKE_COMPILER_IS_GNUCXX OR MINGW)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -W -Wall -O3 -pedantic")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -O3 -pedantic")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
 endif()
