@@ -106,8 +106,7 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
         m_viewAngle);
 }
 
-void Renderer::createProgramFromSource(
-    const std::string & handle, std::string vshSource, std::string fshSource)
+void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
 {
     // Inject precision qualifiers
 #ifdef __MC_GLES__
@@ -155,7 +154,7 @@ MCGLShaderProgramPtr Renderer::program(const std::string & id)
     MCGLShaderProgramPtr program(m_shaderHash[id]);
     if (!program)
     {
-        throw MCException("Cannot find shader program '" + id +"'");
+        throw MCException("Cannot find shader program '" + id + "'");
     }
     return program;
 }
