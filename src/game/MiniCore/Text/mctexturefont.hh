@@ -21,6 +21,8 @@
 #define MCTEXTUREFONT_HH
 
 #include "mctextureglyph.hh"
+#include "mcglshaderprogram.hh"
+
 #include <unordered_map>
 #include <vector>
 
@@ -50,6 +52,12 @@ public:
 
     //! Return the associated surface.
     MCSurface & surface() const;
+
+    //! Set the shader program to be used.
+    void setShaderProgram(MCGLShaderProgramPtr program);
+
+    //! Set the shader program to be used for 2d shadows.
+    void setShadowShaderProgram(MCGLShaderProgramPtr program);
 
 private:
 

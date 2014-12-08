@@ -68,3 +68,13 @@ MCSurface & MCTextureFont::surface() const
 {
     return m_surface;
 }
+
+void MCTextureFont::setShaderProgram(MCGLShaderProgramPtr program)
+{
+    surface().setShaderProgram(program);
+}
+
+void MCTextureFont::setShadowShaderProgram(MCGLShaderProgramPtr program)
+{
+    surface().setShadowShaderProgram(program);
+}
