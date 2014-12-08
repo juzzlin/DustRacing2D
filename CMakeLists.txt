@@ -18,8 +18,6 @@ option(GLES "Build for OpenGL ES 2.0" OFF)
 
 option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." OFF)
 
-option(GL30 "Build for OpenGL 3.0 shaders (default is 2.1)" OFF)
-
 option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
 
 option(BIN_PATH "Optional BIN_PATH for Linux release build." "")
@@ -51,12 +49,7 @@ if(GLES)
     add_definitions(-D__MC_GLES__)
     message(STATUS "Compiling for OpenGL ES 2.0")
 else()
-    if(GL30)
-        add_definitions(-D__MC_GL30__)
-        message(STATUS "Compiling for OpenGL 3.0")
-    else()
-        message(STATUS "Compiling for OpenGL 2.1")
-    endif()
+    message(STATUS "Compiling for OpenGL 2.1")
 endif()
 
 if(NO_GLEW)
