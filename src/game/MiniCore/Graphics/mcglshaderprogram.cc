@@ -251,6 +251,41 @@ const char * MCGLShaderProgram::getDefaultShadowFragmentShaderSource()
     return MCDefaultShadowFsh;
 }
 
+const char * MCGLShaderProgram::getDefaultPointParticleVertexShaderSource()
+{
+    return MCDefaultPointParticleVsh;
+}
+
+const char * MCGLShaderProgram::getDefaultParticleFragmentShaderSource()
+{
+    return MCDefaultParticleFsh;
+}
+
+const char * MCGLShaderProgram::getDefaultPointParticleFragmentShaderSource()
+{
+    return MCDefaultPointParticleFsh;
+}
+
+const char * MCGLShaderProgram::getDefaultPointParticleRotateFragmentShaderSource()
+{
+    return MCDefaultPointParticleRotateFsh;
+}
+
+const char * MCGLShaderProgram::getDefaultTextVertexShaderSource()
+{
+    return MCDefaultTextVsh;
+}
+
+const char * MCGLShaderProgram::getDefaultTextFragmentShaderSource()
+{
+    return MCDefaultFsh;
+}
+
+const char * MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource()
+{
+    return MCDefaultTextShadowFsh;
+}
+
 bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)
 {
     return false;

@@ -88,6 +88,21 @@ public:
     //! Get default shadow shader program.
     MCGLShaderProgramPtr defaultShadowShaderProgram();
 
+    //! Get default shader program for particles.
+    MCGLShaderProgramPtr defaultParticleShaderProgram();
+
+    //! Get default shader program for point particles.
+    MCGLShaderProgramPtr defaultPointParticleShaderProgram();
+
+    //! Get default shader program for rotated point particles.
+    MCGLShaderProgramPtr defaultPointParticleRotateShaderProgram();
+
+    //! Get default shader program for text.
+    MCGLShaderProgramPtr defaultTextShaderProgram();
+
+    //! Get default shader program for text shadow.
+    MCGLShaderProgramPtr defaultTextShadowShaderProgram();
+
 protected:
 
     //! Set viewer's position. Automatically called by resize().
@@ -108,22 +123,45 @@ private:
 
     void updateViewProjectionMatrixAndShaders();
 
-    SplitType                        m_splitType;
-    MCUint                           m_viewWidth;
-    MCUint                           m_viewHeight;
-    MCUint                           m_sceneWidth;
-    MCUint                           m_sceneHeight;
-    MCFloat                          m_viewAngle;
-    glm::mat4                        m_viewMatrix;
-    glm::mat4                        m_projectionMatrix;
-    mutable glm::mat4                m_viewProjectionMatrix;
-    mutable bool                     m_updateViewProjection;
-    std::vector<MCGLShaderProgram *> m_shaders;
-    MCGLShaderProgramPtr             m_defaultShader;
-    MCGLShaderProgramPtr             m_defaultSpecularShader;
-    MCGLShaderProgramPtr             m_defaultShadowShader;
+    SplitType m_splitType;
 
-    static MCGLScene               * m_instance;
+    MCUint m_viewWidth;
+
+    MCUint m_viewHeight;
+
+    MCUint m_sceneWidth;
+
+    MCUint m_sceneHeight;
+
+    MCFloat m_viewAngle;
+
+    glm::mat4 m_viewMatrix;
+
+    glm::mat4 m_projectionMatrix;
+
+    mutable glm::mat4 m_viewProjectionMatrix;
+
+    mutable bool m_updateViewProjection;
+
+    std::vector<MCGLShaderProgram *> m_shaders;
+
+    MCGLShaderProgramPtr m_defaultShader;
+
+    MCGLShaderProgramPtr m_defaultSpecularShader;
+
+    MCGLShaderProgramPtr m_defaultShadowShader;
+
+    MCGLShaderProgramPtr m_defaultParticleShader;
+
+    MCGLShaderProgramPtr m_defaultPointParticleShader;
+
+    MCGLShaderProgramPtr m_defaultPointParticleRotateShader;
+
+    MCGLShaderProgramPtr m_defaultTextShader;
+
+    MCGLShaderProgramPtr m_defaultTextShadowShader;
+
+    static MCGLScene * m_instance;
 
     friend class MCGLShaderProgram;
 };

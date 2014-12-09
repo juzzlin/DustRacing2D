@@ -39,9 +39,6 @@ MCGLScene::MCGLScene()
 , m_sceneHeight(0)
 , m_viewAngle(0)
 , m_updateViewProjection(false)
-, m_defaultShader(nullptr)
-, m_defaultSpecularShader(nullptr)
-, m_defaultShadowShader(nullptr)
 {
     if (!MCGLScene::m_instance) {
         MCGLScene::m_instance = this;
@@ -85,6 +82,36 @@ MCGLShaderProgramPtr MCGLScene::defaultShadowShaderProgram()
     return m_defaultShadowShader;
 }
 
+MCGLShaderProgramPtr MCGLScene::defaultParticleShaderProgram()
+{
+    assert(m_defaultParticleShader.get());
+    return m_defaultParticleShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultPointParticleShaderProgram()
+{
+    assert(m_defaultPointParticleShader.get());
+    return m_defaultPointParticleShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultPointParticleRotateShaderProgram()
+{
+    assert(m_defaultPointParticleRotateShader.get());
+    return m_defaultPointParticleRotateShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultTextShaderProgram()
+{
+    assert(m_defaultTextShader.get());
+    return m_defaultTextShader;
+}
+
+MCGLShaderProgramPtr MCGLScene::defaultTextShadowShaderProgram()
+{
+    assert(m_defaultTextShadowShader.get());
+    return m_defaultTextShadowShader;
+}
+
 void MCGLScene::initialize()
 {
 #ifndef __MC_NO_GLEW__
@@ -117,10 +144,27 @@ void MCGLScene::createDefaultShaderPrograms()
 {
     m_defaultShader.reset(new MCGLShaderProgram(
         MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+
     m_defaultSpecularShader.reset(new MCGLShaderProgram(
         MCGLShaderProgram::getDefaultSpecularVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+
     m_defaultShadowShader.reset(new MCGLShaderProgram(
         MCGLShaderProgram::getDefaultShadowVertexShaderSource(), MCGLShaderProgram::getDefaultShadowFragmentShaderSource()));
+
+    m_defaultParticleShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultParticleFragmentShaderSource()));
+
+    m_defaultPointParticleShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultPointParticleVertexShaderSource(), MCGLShaderProgram::getDefaultPointParticleFragmentShaderSource()));
+
+    m_defaultPointParticleRotateShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultPointParticleVertexShaderSource(), MCGLShaderProgram::getDefaultPointParticleRotateFragmentShaderSource()));
+
+    m_defaultTextShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextFragmentShaderSource()));
+
+    m_defaultTextShadowShader.reset(new MCGLShaderProgram(
+        MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource()));
 }
 
 void MCGLScene::resize(

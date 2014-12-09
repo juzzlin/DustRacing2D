@@ -170,4 +170,69 @@ static const char * MCDefaultShadowFsh =
 "    }\n"
 "}\n";
 
+static const char * MCDefaultPointParticleVsh =
+"#version 100\n"
+""
+"precision mediump float;\n"
+"precision mediump int;\n"
+"attribute vec3 inVertex;\n"
+"attribute vec3 inNormal;\n"
+"attribute vec4 inColor;\n"
+"uniform mat4 vp;\n"
+"uniform float fade;\n"
+"uniform float pointSize;\n"
+"varying vec4 rotationMatrixTegra3Hack;\n"
+"varying vec4 vColor;\n"
+""
+"void main()\n"
+"{\n"
+"    gl_Position = vp * vec4(inVertex, 1);\n"
+"    gl_PointSize = pointSize * inVertex.z;\n"
+"    vColor = inColor * fade;\n"
+""
+"    // Rotation matrix to rotate a point sprite (sin and cos delivered as normals)\n"
+"    // The matrix is delivered as a vec4, as on Nexus 7 gives error if mat2 is used:\n"
+"    // L0007: Cannot find vertex shader varying for declared fragment shader varyingrotationMatrix\n"
+"    rotationMatrixTegra3Hack = vec4(inNormal.x, inNormal.y, -inNormal.y, inNormal.x);\n"
+"}\n";
+
+static const char * MCDefaultPointParticleFsh =
+"#version 100\n"
+""
+"precision mediump float;\n"
+"precision mediump int;\n"
+"uniform sampler2D tex0;\n"
+"varying vec4 vColor;\n"
+""
+"void main(void)\n"
+"{\n"
+"    gl_FragColor = texture2D(tex0, gl_PointCoord) * vColor;\n"
+"}\n";
+
+static const char * MCDefaultPointParticleRotateFsh =
+"#version 100\n"
+""
+"precision mediump float;\n"
+"precision mediump int;\n"
+"uniform sampler2D tex0;\n"
+"varying vec4 rotationMatrixTegra3Hack;\n"
+"varying vec4 vColor;\n"
+""
+"void main(void)\n"
+"{\n"
+"    mat2 rotationMatrix = mat2(rotationMatrixTegra3Hack.x, rotationMatrixTegra3Hack.y, rotationMatrixTegra3Hack.z, rotationMatrixTegra3Hack.w);\n"
+"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor;\n"
+"    gl_FragColor = texColor;\n"
+"}\n";
+
+static const char * MCDefaultParticleFsh =
+"#version 100\n"
+""
+"varying vec4 vColor;\n"
+""
+"void main(void)\n"
+"{\n"
+"    gl_FragColor = vColor;\n"
+"}\n";
+
 #endif // MCSHADERSGLES_HH

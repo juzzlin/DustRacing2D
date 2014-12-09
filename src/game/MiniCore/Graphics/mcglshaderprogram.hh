@@ -106,6 +106,28 @@ public:
     /*! Get the default shadow fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowFragmentShaderSource();
 
+    /*! Get the default point particle vertex shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultPointParticleVertexShaderSource();
+
+    /*! Get the default particle fragment shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultParticleFragmentShaderSource();
+
+    /*! Get the default point particle fragment shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultPointParticleFragmentShaderSource();
+
+    /*! Get the default point particle fragment shader source with rotation support.
+     *  Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultPointParticleRotateFragmentShaderSource();
+
+    /*! Get the default text vertex shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultTextVertexShaderSource();
+
+    /*! Get the default text fragment shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultTextFragmentShaderSource();
+
+    /*! Get the default text shadow fragment shader source. Defining __MC_GLES__ will select GLES version. */
+    static const char * getDefaultTextShadowFragmentShaderSource();
+
     /*! Add a geometry shader.
      *  \return true if succeeded. */
     virtual bool addGeometryShaderFromSource(const std::string & source);
