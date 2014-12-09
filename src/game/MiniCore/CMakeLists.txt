@@ -3,7 +3,6 @@ project(MiniCore)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Asset")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Core")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Graphics")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Particles")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Physics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Text")
 
@@ -33,22 +32,22 @@ Graphics/mcglambientlight.cc
 Graphics/mcgldiffuselight.cc
 Graphics/mcglmaterial.cc
 Graphics/mcglobjectbase.cc
+Graphics/mcglpointparticle.cc
 Graphics/mcglpointparticlerenderer.cc
+Graphics/mcglrectparticle.cc
 Graphics/mcglscene.cc
 Graphics/mcglshaderprogram.cc
+Graphics/mcmesh.cc
+Graphics/mcmeshview.cc
+Graphics/mcparticle.cc
 Graphics/mcrenderlayer.cc
 Graphics/mcshaders.hh
 Graphics/mcshaders30.hh
 Graphics/mcshadersGLES.hh
-Graphics/mcmesh.cc
-Graphics/mcmeshview.cc
+Graphics/mcsurfaceparticle.cc
 Graphics/mcsurface.cc
 Graphics/mcsurfaceview.cc
 Graphics/mcworldrenderer.cc
-Particles/mcparticle.cc
-Particles/mcglpointparticle.cc
-Particles/mcglrectparticle.cc
-Particles/mcsurfaceparticle.cc
 Physics/mccircleshape.cc
 Physics/mccollisiondetector.cc
 Physics/mccollisionevent.cc
