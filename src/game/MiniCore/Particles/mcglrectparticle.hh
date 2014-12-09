@@ -22,10 +22,10 @@
 
 #include "mcparticle.hh"
 #include "mcglcolor.hh"
-#include "mcglobjectbase.hh"
 #include "mcglshaderprogram.hh"
 
 class MCCamera;
+class MCGLObjectBase;
 
 /*! \class MCGLRectParticle
  *  \brief A particle that renders as a simple OpenGL rectangle. Final class.

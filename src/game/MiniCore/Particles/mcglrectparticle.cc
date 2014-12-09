@@ -18,6 +18,7 @@
 //
 
 #include "mcglrectparticle.hh"
+#include "mcglobjectbase.hh"
 #include "mcglvertex.hh"
 #include "mccamera.hh"
 
@@ -39,10 +40,6 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
 {
     if (!m_inited)
     {
-        m_glObjectBase = new MCGLObjectBase;
-        m_glObjectBase->createVAO();
-        m_glObjectBase->createVBO();
-
         // Init vertice data for a quad
         const MCGLVertex vertices[NUM_VERTICES] =
         {
@@ -74,33 +71,17 @@ MCGLRectParticle::MCGLRectParticle(const std::string & typeID)
             m_color
         };
 
-        int offset = 0;
+        m_glObjectBase = new MCGLObjectBase;
+        m_glObjectBase->initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
 
-        m_glObjectBase->bindVAO();
-        m_glObjectBase->bindVBO();
+        m_glObjectBase->addBufferSubData(
+            MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(vertices));
+        m_glObjectBase->addBufferSubData(
+            MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(normals));
+        m_glObjectBase->addBufferSubData(
+            MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(colors));
 
-        glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, nullptr, GL_STATIC_DRAW);
-
-        // Vertex data
-        glBufferSubData(GL_ARRAY_BUFFER, offset, VERTEX_DATA_SIZE, vertices);
-        offset += VERTEX_DATA_SIZE;
-
-        // Normal data
-        glBufferSubData(GL_ARRAY_BUFFER, offset, NORMAL_DATA_SIZE, normals);
-        offset += NORMAL_DATA_SIZE;
-
-        // Vertex color data
-        glBufferSubData(GL_ARRAY_BUFFER, offset, COLOR_DATA_SIZE, colors);
-
-        glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
-            reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE));
-        glVertexAttribPointer(MCGLShaderProgram::VAL_Color,  4, GL_FLOAT, GL_FALSE, 0,
-            reinterpret_cast<GLvoid *>(VERTEX_DATA_SIZE + NORMAL_DATA_SIZE));
-
-        glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
-        glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
-        glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+        m_glObjectBase->finishBufferData();
 
         m_inited = true;
     }

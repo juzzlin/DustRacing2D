@@ -22,6 +22,7 @@
 
 #include <MCGLEW>
 #include "mcglmaterial.hh"
+#include "mcglrectparticle.hh"
 #include "mcglshaderprogram.hh"
 
 /*! Base class for GL renderables in MiniCore. Automatically creates VBO, VAO and
@@ -126,6 +127,8 @@ private:
     int m_texCoordDataSize;
 
     int m_colorDataSize;
+
+    friend class MCGLRectParticle; // Direct access to protected methods without inheritance
 };
 
 #endif // MCGLOBJECTBASE_HH
