@@ -69,7 +69,7 @@ static void checkOpenGLVersion()
 static void printHelp()
 {
     std::cout << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << "Copyright (c) 2011-2013 Jussi Lind." << std::endl << std::endl;
+    std::cout << "Copyright (c) 2011-2015 Jussi Lind." << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
     std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
