@@ -34,8 +34,8 @@ public:
 
     //! Constructor.
     explicit MCAssetManager(
-        const std::string & baseDataPath,
-        const std::string & surfaceConfigPath,
+        const std::string & baseDataPath = "",
+        const std::string & surfaceConfigPath = "",
         const std::string & fontConfigPath = "",
         const std::string & meshConfigPath = "");
 
