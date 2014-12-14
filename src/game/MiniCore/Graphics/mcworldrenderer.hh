@@ -40,10 +40,6 @@ public:
 
     MCWorldRenderer();
 
-    void addToLayerMap(MCObject & object);
-
-    void removeFromLayerMap(MCObject & object);
-
     void enableDepthTestOnLayer(int layer, bool enable = true);
 
     /*! Each used MCGLPointParticle should have a corresponding MCGLPointParticleRenderer
@@ -60,22 +56,26 @@ public:
 
     void removeParticleVisibilityCameras();
 
+private:
+
+    void addToLayerMap(MCObject & object);
+
     /*! Must be called before calls to render() or renderShadows() */
     void buildBatches(MCCamera * camera);
 
-    void render(MCCamera * camera);
-
-    void renderShadows(MCCamera * camera);
-
     void clear();
 
-private:
+    void removeFromLayerMap(MCObject & object);
+
+    void render(MCCamera * camera);
 
     void renderBatches(MCCamera * camera = nullptr);
 
     void renderObjectBatches(MCCamera * camera, MCRenderLayer & layer);
 
     void renderParticleBatches(MCCamera * camera, MCRenderLayer & layer);
+
+    void renderShadows(MCCamera * camera);
 
     typedef int LayerId;
     std::map<LayerId, MCRenderLayer> m_layers;
@@ -85,6 +85,9 @@ private:
     typedef int ParticleTypeId;
     typedef std::map<ParticleTypeId, MCGLPointParticleRenderer *> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
+
+    friend class MCWorld;
+    friend class MCObject;
 };
 
 #endif // MCWORLDRENDERER_HH
