@@ -27,7 +27,7 @@
 
 class MCCircleShape;
 class MCObject;
-class MCObjectTree;
+class MCObjectGrid;
 class MCRectShape;
 
 //! Collision detector and contact generator.
@@ -41,7 +41,7 @@ public:
     virtual ~MCCollisionDetector() {};
 
     //! Detect collisions and generate contacts. Contacts are stored to MCObject.
-    MCUint detectCollisions(MCObjectTree & objectTree);
+    MCUint detectCollisions(MCObjectGrid & objectGrid);
 
     /*! Turn collision events on/off. This is used by MCWorld when iterating
      *  the collision resolution. */

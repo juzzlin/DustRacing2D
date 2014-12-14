@@ -17,11 +17,11 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobjecttree.hh"
+#include "mcobjectgrid.hh"
 
 #include <algorithm>
 
-MCObjectTree::MCObjectTree(
+MCObjectGrid::MCObjectGrid(
     MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
     MCUint leafMaxW, MCUint leafMaxH)
 : m_bbox(x1, y1, x2, y2)
@@ -35,12 +35,12 @@ MCObjectTree::MCObjectTree(
     build();
 }
 
-MCObjectTree::~MCObjectTree()
+MCObjectGrid::~MCObjectGrid()
 {
     delete [] m_matrix;
 }
 
-void MCObjectTree::setIndexRange(const MCBBox<MCFloat> & bbox)
+void MCObjectGrid::setIndexRange(const MCBBox<MCFloat> & bbox)
 {
     int temp = static_cast<int>(bbox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
@@ -63,7 +63,7 @@ void MCObjectTree::setIndexRange(const MCBBox<MCFloat> & bbox)
     m_j1 = static_cast<MCUint>(temp);
 }
 
-void MCObjectTree::insert(MCObject & object)
+void MCObjectGrid::insert(MCObject & object)
 {
     setIndexRange(object.bbox());
     object.cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
@@ -80,7 +80,7 @@ void MCObjectTree::insert(MCObject & object)
     }
 }
 
-bool MCObjectTree::remove(MCObject & object)
+bool MCObjectGrid::remove(MCObject & object)
 {
     bool removed = false;
     object.restoreIndexRange(&m_i0, &m_i1, &m_j0, &m_j1);
@@ -108,7 +108,7 @@ bool MCObjectTree::remove(MCObject & object)
     return removed;
 }
 
-void MCObjectTree::removeAll()
+void MCObjectGrid::removeAll()
 {
     for (MCUint j = 0; j < m_verSize; j++)
     {
@@ -122,19 +122,19 @@ void MCObjectTree::removeAll()
     m_dirtyCellCache.clear();
 }
 
-void MCObjectTree::build()
+void MCObjectGrid::build()
 {
-    m_matrix = new MCObjectTree::GridCell[m_horSize * m_verSize];
+    m_matrix = new MCObjectGrid::GridCell[m_horSize * m_verSize];
     for (MCUint j = 0; j < m_verSize; j++)
     {
         for (MCUint i = 0; i < m_horSize; i++)
         {
-            m_matrix[j * m_horSize + i].m_objects = MCObjectTree::ObjectSet();
+            m_matrix[j * m_horSize + i].m_objects = MCObjectGrid::ObjectSet();
         }
     }
 }
 
-void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
+void MCObjectGrid::getBBoxCollisions(MCObjectGrid::CollisionVector & result)
 {
     result.clear();
 
@@ -145,7 +145,7 @@ void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
     while (cellIter != m_dirtyCellCache.end())
     {
         bool hadCollisions = false;
-        const MCObjectTree::ObjectSet & objects = (*cellIter)->m_objects;
+        const MCObjectGrid::ObjectSet & objects = (*cellIter)->m_objects;
 
         auto outer(objects.begin());
         const auto end(objects.end());
@@ -184,9 +184,9 @@ void MCObjectTree::getBBoxCollisions(MCObjectTree::CollisionVector & result)
     }
 }
 
-void MCObjectTree::getObjectsWithinDistance(
+void MCObjectGrid::getObjectsWithinDistance(
     MCFloat x, MCFloat y, MCFloat d,
-    MCObjectTree::ObjectSet & resultObjs)
+    MCObjectGrid::ObjectSet & resultObjs)
 {
     setIndexRange(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
 
@@ -194,7 +194,7 @@ void MCObjectTree::getObjectsWithinDistance(
     d *= d;
 
     resultObjs.clear();
-    MCObjectTree::ObjectSet::iterator iter;
+    MCObjectGrid::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
     for (MCUint j = m_j0; j <= m_j1; j++)
@@ -221,14 +221,14 @@ void MCObjectTree::getObjectsWithinDistance(
     }
 }
 
-void MCObjectTree::getObjectsWithinBBox(
+void MCObjectGrid::getObjectsWithinBBox(
     const MCBBox<MCFloat> & bbox,
-    MCObjectTree::ObjectSet & resultObjs)
+    MCObjectGrid::ObjectSet & resultObjs)
 {
     setIndexRange(bbox);
 
     resultObjs.clear();
-    MCObjectTree::ObjectSet::iterator iter;
+    MCObjectGrid::ObjectSet::iterator iter;
     MCObject * p = nullptr;
 
     for (MCUint j = m_j0; j <= m_j1; j++)
@@ -251,7 +251,7 @@ void MCObjectTree::getObjectsWithinBBox(
     }
 }
 
-const MCBBox<MCFloat> & MCObjectTree::bbox() const
+const MCBBox<MCFloat> & MCObjectGrid::bbox() const
 {
     return m_bbox;
 }

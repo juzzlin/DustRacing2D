@@ -29,11 +29,11 @@
 #include <set>
 #include <vector>
 
-/*! A tree (actually a grid) used for fast collision detection.
+/*! A grid used for fast collision detection.
  *  The tree stores objects inherited from MCObject -class.
  *  A (2d) collision test for a given object can be requested against all
  *  objects of a given typeid. */
-class MCObjectTree
+class MCObjectGrid
 {
 public:
 
@@ -49,12 +49,12 @@ public:
     /*! Constructor.
      *  \param x1,y1,x2,y2 represent the size of the first-level bounding box.
      *  \param leafMaxW,leafMaxH are the maximum dimensions for leaves. */
-    MCObjectTree(
+    MCObjectGrid(
         MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
         MCUint leafMaxW, MCUint leafMaxH);
 
     //! Destructor.
-    ~MCObjectTree();
+    ~MCObjectGrid();
 
     /*! Insert an object into the tree (O(1)).
      *  \param object is the object to be inserted. */
@@ -84,8 +84,8 @@ public:
 
 private:
 
-    DISABLE_COPY(MCObjectTree);
-    DISABLE_ASSI(MCObjectTree);
+    DISABLE_COPY(MCObjectGrid);
+    DISABLE_ASSI(MCObjectGrid);
 
     void setIndexRange(const MCBBox<MCFloat> & bbox);
     void build();
@@ -95,7 +95,7 @@ private:
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCFloat m_helpHor;
     MCFloat m_helpVer;
-    MCObjectTree::GridCell * m_matrix;
+    MCObjectGrid::GridCell * m_matrix;
 
     typedef std::set<GridCell *> DirtyCellCache;
     DirtyCellCache m_dirtyCellCache;

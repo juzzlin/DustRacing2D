@@ -607,7 +607,7 @@ const MCVector3dF & MCObject::acceleration() const
 void MCObject::translate(const MCVector3dF & newLocation)
 {
     const bool wasInWorld = !removing() &&
-        MCWorld::instance().objectTree().remove(*this);
+        MCWorld::instance().objectGrid().remove(*this);
 
     // Calculate velocity if this object is a child object and is thus moved
     // by the parent. This way we'll automatically get linear velocity +
@@ -629,7 +629,7 @@ void MCObject::translate(const MCVector3dF & newLocation)
 
     if (wasInWorld)
     {
-        MCWorld::instance().objectTree().insert(*this);
+        MCWorld::instance().objectGrid().insert(*this);
     }
 }
 
@@ -686,13 +686,13 @@ void MCObject::doRotate(MCFloat newAngle)
             }
             else
             {
-                const bool wasInWorld = MCWorld::instance().objectTree().remove(*this);
+                const bool wasInWorld = MCWorld::instance().objectGrid().remove(*this);
 
                 m_shape->rotate(newAngle);
 
                 if (wasInWorld)
                 {
-                    MCWorld::instance().objectTree().insert(*this);
+                    MCWorld::instance().objectGrid().insert(*this);
                 }
             }
         }

@@ -28,7 +28,7 @@
 #include "mcimpulsegenerator.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
-#include "mcobjecttree.hh"
+#include "mcobjectgrid.hh"
 #include "mcparticle.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
@@ -44,7 +44,7 @@ MCFloat   MCWorld::m_metersPerPixelSquared = 1.0;
 
 namespace
 {
-// Set dimensions for minimum objectTree leaves
+// Set dimensions for minimum objectGrid leaves
 const MCFloat MinLeafWidth  = 64;
 const MCFloat MinLeafHeight = 64;
 }
@@ -54,7 +54,7 @@ MCWorld::MCWorld()
 , m_forceRegistry(new MCForceRegistry)
 , m_collisionDetector(new MCCollisionDetector)
 , m_impulseGenerator(new MCImpulseGenerator)
-, m_objectTree(nullptr)
+, m_objectGrid(nullptr)
 , m_minX(0)
 , m_maxX(0)
 , m_minY(0)
@@ -79,7 +79,7 @@ MCWorld::MCWorld()
         exit(EXIT_FAILURE);
     }
 
-    // Default dimensions. Creates also MCObjectTree.
+    // Default dimensions. Creates also MCObjectGrid.
     setDimensions(0.0, MinLeafWidth, 0.0, MinLeafHeight, 0.0, 1.0, 1.0);
 }
 
@@ -91,7 +91,7 @@ MCWorld::~MCWorld()
     delete m_forceRegistry;
     delete m_collisionDetector;
     delete m_impulseGenerator;
-    delete m_objectTree;
+    delete m_objectGrid;
     delete m_leftWallObject;
     delete m_rightWallObject;
     delete m_topWallObject;
@@ -125,7 +125,7 @@ void MCWorld::integrate(MCFloat step)
 void MCWorld::detectCollisions()
 {
     // Check collisions for all registered objects
-    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectTree);
+    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectGrid);
 }
 
 void MCWorld::generateImpulses()
@@ -182,7 +182,7 @@ void MCWorld::clear()
     }
 
     m_renderer->clear();
-    m_objectTree->removeAll();
+    m_objectGrid->removeAll();
     m_objs.clear();
     m_removeObjs.clear();
 }
@@ -205,9 +205,9 @@ void MCWorld::setDimensions(
     m_minZ = minZ;
     m_maxZ = maxZ;
 
-    // Init objectTree
-    delete m_objectTree;
-    m_objectTree = new MCObjectTree(
+    // Init objectGrid
+    delete m_objectGrid;
+    m_objectGrid = new MCObjectGrid(
         m_minX, m_minY,
         m_maxX, m_maxY,
         MinLeafWidth, MinLeafHeight);
@@ -315,7 +315,7 @@ void MCWorld::addObject(MCObject & object)
             // Add to ObjectTree
             if ((object.isPhysicsObject() || object.isTriggerObject()) && !object.bypassCollisions())
             {
-                m_objectTree->insert(object);
+                m_objectGrid->insert(object);
             }
 
             // Add xy friction
@@ -383,7 +383,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     // Remove from ObjectTree
     if (object.isPhysicsObject() && !object.bypassCollisions())
     {
-        m_objectTree->remove(object);
+        m_objectGrid->remove(object);
     }
 
     object.setRemoving(false);
@@ -466,10 +466,10 @@ MCWorld::ObjectVector MCWorld::objects() const
     return m_objs;
 }
 
-MCObjectTree & MCWorld::objectTree() const
+MCObjectGrid & MCWorld::objectGrid() const
 {
-    assert(m_objectTree);
-    return *m_objectTree;
+    assert(m_objectGrid);
+    return *m_objectGrid;
 }
 
 MCWorldRenderer & MCWorld::renderer() const

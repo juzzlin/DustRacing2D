@@ -23,7 +23,7 @@
 #include "mcbbox.hh"
 #include "mccontact.hh"
 #include "mcmacros.hh"
-#include "mcobjecttree.hh"
+#include "mcobjectgrid.hh"
 #include "mcshape.hh"
 #include "mctypes.hh"
 #include "mcvector3d.hh"
@@ -421,8 +421,8 @@ protected:
 
 private:
 
-    /*! Cache range of objectTree cells the object is touching.
-     *  Used by MCObjectTree. */
+    /*! Cache range of objectGrid cells the object is touching.
+     *  Used by MCObjectGrid. */
     void cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1);
 
     void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
@@ -447,7 +447,7 @@ private:
     bool removing() const;
 
     /*! Get cached index range.
-     *  Used by MCObjectTree. */
+     *  Used by MCObjectGrid. */
     void restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1);
 
     /*! Set index in worlds' object vector.
@@ -520,8 +520,8 @@ private:
     DISABLE_COPY(MCObject);
     DISABLE_ASSI(MCObject);
 
-    friend class MCObjectTree;
-    friend class MCObjectTreeImpl;
+    friend class MCObjectGrid;
+    friend class MCObjectGridImpl;
     friend class MCWorld;
     friend class MCCollisionDetector;
 };

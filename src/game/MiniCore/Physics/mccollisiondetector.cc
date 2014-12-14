@@ -281,10 +281,10 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     return false;
 }
 
-MCUint MCCollisionDetector::detectCollisions(MCObjectTree & objectTree)
+MCUint MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
 {
-    static MCObjectTree::CollisionVector possibleCollisions;
-    objectTree.getBBoxCollisions(possibleCollisions);
+    static MCObjectGrid::CollisionVector possibleCollisions;
+    objectGrid.getBBoxCollisions(possibleCollisions);
 
     // Check collisions for all registered objects
     MCUint numCollisions = 0;

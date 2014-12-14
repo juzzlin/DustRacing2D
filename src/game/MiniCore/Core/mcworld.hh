@@ -33,7 +33,7 @@ class MCContact;
 class MCForceRegistry;
 class MCImpulseGenerator;
 class MCObject;
-class MCObjectTree;
+class MCObjectGrid;
 class MCWorldRenderer;
 
 /*! \class World base class.
@@ -129,8 +129,8 @@ public:
     /*! \brief Render shadows of all registered objects. */
     virtual void renderShadows(MCCamera * camera);
 
-    //! \return Reference to the objectTree.
-    MCObjectTree & objectTree() const;
+    //! \return Reference to the objectGrid.
+    MCObjectGrid & objectGrid() const;
 
     //! \return The world renderer.
     MCWorldRenderer & renderer() const;
@@ -180,7 +180,7 @@ private:
     MCForceRegistry     * m_forceRegistry;
     MCCollisionDetector * m_collisionDetector;
     MCImpulseGenerator  * m_impulseGenerator;
-    MCObjectTree        * m_objectTree;
+    MCObjectGrid        * m_objectGrid;
     static MCFloat        m_metersPerPixel;
     static MCFloat        m_metersPerPixelSquared;
     MCFloat               m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;

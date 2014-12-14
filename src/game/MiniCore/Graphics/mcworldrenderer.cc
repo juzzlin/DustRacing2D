@@ -47,7 +47,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
 {
     // In the case of Dust Racing 2D, it was faster to just loop through
     // all objects on all layers and perform visibility tests instead of
-    // just fetching all "visible" objects from MCObjectTree.
+    // just fetching all "visible" objects from MCObjectGrid.
 
     // This code tests the visibility and sorts the objects with respect
     // to their view id's into "batches". MCWorld::render()

@@ -58,7 +58,7 @@ Physics/mcforceregistry.cc
 Physics/mcfrictiongenerator.cc
 Physics/mcgravitygenerator.cc
 Physics/mcimpulsegenerator.cc
-Physics/mcobjecttree.cc
+Physics/mcobjectgrid.cc
 Physics/mcoutofboundariesevent.cc
 Physics/mcrectshape.cc
 Physics/mcshape.cc
