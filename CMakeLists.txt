@@ -25,9 +25,9 @@ option(DOC_PATH "Optional DOC_PATH for Linux release build." "")
 
 option(GLES "Build for OpenGL ES 2.0" OFF)
 
-option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." OFF)
+option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
 
-option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." OFF)
+option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
 
 if(GLES)
     add_definitions(-D__MC_GLES__)

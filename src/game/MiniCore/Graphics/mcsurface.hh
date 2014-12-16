@@ -85,7 +85,7 @@ public:
      *  This is done automatically, but doAlphaBlend() can be used if
      *  someone else renders the surface by using the texture
      *  handle and wants to run the configured alpha blending. */
-    void doAlphaBlend() const;
+    void doAlphaBlend();
 
     //! Set texture coordinates.
     void setTexCoords(const MCGLTexCoord texCoords[4]);

@@ -112,6 +112,10 @@ private:
 
     void setAttributePointers();
 
+    void enableAttributePointers();
+
+    void disableAttributePointers();
+
     static GLuint m_boundVbo;
 
 #ifdef __MC_QOPENGLFUNCTIONS__

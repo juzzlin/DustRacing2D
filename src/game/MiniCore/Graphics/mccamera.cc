@@ -68,6 +68,16 @@ void MCCamera::setPos(MCFloat x, MCFloat y)
     m_y = y;
 }
 
+MCFloat MCCamera::x() const
+{
+    return m_x;
+}
+
+MCFloat MCCamera::y() const
+{
+    return m_y;
+}
+
 MCFloat MCCamera::width() const
 {
     return m_w;

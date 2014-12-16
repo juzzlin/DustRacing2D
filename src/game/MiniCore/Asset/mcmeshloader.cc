@@ -140,3 +140,18 @@ const MCMesh::FaceVector & MCMeshLoader::faces() const
 {
     return m_faces;
 }
+
+const std::vector<MCMeshLoader::V> & MCMeshLoader::vertices() const
+{
+    return m_v;
+}
+
+const std::vector<MCMeshLoader::VN> & MCMeshLoader::normals() const
+{
+    return m_vn;
+}
+
+const std::vector<MCMeshLoader::VT> & MCMeshLoader::textureCoords() const
+{
+    return m_vt;
+}

@@ -3,6 +3,10 @@
   #include "contrib/glew/glew.h"
 #else
   #ifndef __MC_GLES__
+    #ifdef _MSC_VER
+      #include <windows.h>
+      #include <wingdi.h>
+    #endif
     #include <GL/gl.h>
   #else
     #include <GLES/gl.h>

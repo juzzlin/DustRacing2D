@@ -67,6 +67,10 @@ public:
      */
     void setPos(MCFloat x, MCFloat y);
 
+    MCFloat x() const;
+
+    MCFloat y() const;
+
     //! Get bounding box
     MCBBox<MCFloat> bbox() const;
 

@@ -33,16 +33,6 @@ class MCMeshLoader
 {
 public:
 
-    //! Constructor.
-    MCMeshLoader();
-
-    //! Load the given .obj-file.
-    bool load(QString filePath);
-
-    const MCMesh::FaceVector & faces() const;
-
-private:
-
     struct V
     {
         float x, y, z;
@@ -58,13 +48,23 @@ private:
         float u, v;
     };
 
-    std::map<QString, std::function<void(QString)> > m_keyToFunctionMap;
+    //! Constructor.
+    MCMeshLoader();
 
-#ifdef MC_UNIT_TEST
-public:
-#endif
+    //! Load the given .obj-file.
+    bool load(QString filePath);
+
+    const MCMesh::FaceVector & faces() const;
 
     bool readStream(QTextStream & stream);
+
+    const std::vector<V> & vertices() const;
+
+    const std::vector<VN> & normals() const;
+
+    const std::vector<VT> & textureCoords() const;
+
+protected:
 
     void processLine(QString line);
 
@@ -76,9 +76,16 @@ public:
 
     void parseF(QString line);
 
+private:
+
+    std::map<QString, std::function<void(QString)> > m_keyToFunctionMap;
+
     std::vector<V>  m_v;
+
     std::vector<VN> m_vn;
+
     std::vector<VT> m_vt;
+
     MCMesh::FaceVector m_faces;
 };
 

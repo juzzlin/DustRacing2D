@@ -139,9 +139,9 @@ void MCMeshLoaderTest::testSimple()
     QTextStream testStream(&testData);
     m_dut.readStream(testStream);
 
-    QVERIFY(m_dut.m_v.size()  == 8);
-    QVERIFY(m_dut.m_vt.size() == 36);
-    QVERIFY(m_dut.m_vn.size() == 36);
+    QVERIFY(m_dut.vertices().size() == 8);
+    QVERIFY(m_dut.textureCoords().size() == 36);
+    QVERIFY(m_dut.normals().size() == 36);
 }
 
 void MCMeshLoaderTest::testFace()

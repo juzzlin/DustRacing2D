@@ -61,6 +61,10 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
 
         // Ensure current projection
         shader.setViewProjectionMatrix(viewProjectionMatrix());
+
+        // Lighting defaults
+        shader.setAmbientLight(MCGLAmbientLight(1, 1, 1, 1));
+        shader.setFadeValue(1.0);
     }
 }
 
@@ -124,7 +128,7 @@ void MCGLScene::initialize()
     MCLogger().info() << "Using GLEW " << glewGetString(GLEW_VERSION);
 #endif
     glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDepthFunc(GL_LEQUAL);
@@ -275,43 +279,53 @@ const glm::mat4 & MCGLScene::viewProjectionMatrix() const
 
 void MCGLScene::updateViewProjectionMatrixAndShaders()
 {
+    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setViewProjectionMatrix(viewProjectionMatrix());
         p->setViewMatrix(m_viewMatrix);
     }
+    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setFadeValue(MCFloat value)
 {
+    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setFadeValue(value);
     }
+    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setAmbientLight(const MCGLAmbientLight & light)
 {
+    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setAmbientLight(light);
     }
+    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setDiffuseLight(const MCGLDiffuseLight & light)
 {
+    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setDiffuseLight(light);
     }
+    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
 {
+    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setSpecularLight(light);
     }
+    MCGLShaderProgram::popProgram();
 }
 
 MCGLScene::~MCGLScene()

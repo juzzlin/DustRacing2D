@@ -133,6 +133,12 @@ public:
     /*! Get the default text shadow fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultTextShadowFragmentShaderSource();
 
+    //! Push the current active program to a stack
+    static void pushProgram();
+
+    //! Pop the program stack and bind the program
+    static void popProgram();
+
     /*! Add a geometry shader.
      *  \return true if succeeded. */
     virtual bool addGeometryShaderFromSource(const std::string & source);
@@ -205,6 +211,8 @@ private:
 
     static MCGLShaderProgram * m_activeProgram;
     static std::vector<GLuint> m_activeTexture;
+
+    static std::vector<MCGLShaderProgram *> m_programStack;
 
     typedef std::map<Uniform, int> UniformLocationHash;
     UniformLocationHash m_uniformLocationHash;

@@ -36,6 +36,8 @@
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 std::vector<GLuint> MCGLShaderProgram::m_activeTexture(MCGLMaterial::MAX_TEXTURES, 0);
 
+std::vector<MCGLShaderProgram *> MCGLShaderProgram::m_programStack;
+
 MCGLShaderProgram::MCGLShaderProgram()
     : m_scene(MCGLScene::instance())
     , m_isBound(false)
@@ -116,32 +118,13 @@ void MCGLShaderProgram::initUniformLocationCache()
 
 void MCGLShaderProgram::bind()
 {
-    if (!m_isBound)
-    {
-        m_isBound = true;
-
-        if (MCGLShaderProgram::m_activeProgram && MCGLShaderProgram::m_activeProgram != this)
-        {
-            MCGLShaderProgram::m_activeProgram->release();
-        }
-
-        MCGLShaderProgram::m_activeProgram = this;
-
-        glUseProgram(m_program);
-    }
+    MCGLShaderProgram::m_activeProgram = this;
+    glUseProgram(m_program);
 }
 
 void MCGLShaderProgram::release()
 {
-    if (m_isBound)
-    {
-        m_isBound = false;
-
-        if (MCGLShaderProgram::m_activeProgram == this)
-        {
-            MCGLShaderProgram::m_activeProgram = nullptr;
-        }
-    }
+    MCGLShaderProgram::m_activeProgram = nullptr;
 }
 
 bool MCGLShaderProgram::isBound() const
@@ -299,6 +282,21 @@ bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)
     return false;
 }
 
+void MCGLShaderProgram::pushProgram()
+{
+    if (MCGLShaderProgram::m_activeProgram) {
+        m_programStack.push_back(MCGLShaderProgram::m_activeProgram);
+    }
+}
+
+void MCGLShaderProgram::popProgram()
+{
+    if (m_programStack.size()) {
+        m_programStack.back()->bind();
+        m_programStack.pop_back();
+    }
+}
+
 void MCGLShaderProgram::setViewProjectionMatrix(
     const glm::mat4x4 & viewProjectionMatrix)
 {
@@ -387,26 +385,12 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
     const GLuint texture2 = material->texture(1);
     const GLuint texture3 = material->texture(2);
 
-    if (MCGLShaderProgram::m_activeTexture[0] != texture1)
-    {
-        MCGLShaderProgram::m_activeTexture[0] = texture1;
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
-    }
-
-    if (texture2 && MCGLShaderProgram::m_activeTexture[1] != texture2)
-    {
-        MCGLShaderProgram::m_activeTexture[1] = texture2;
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
-    }
-
-    if (texture3 && MCGLShaderProgram::m_activeTexture[2] != texture3)
-    {
-        MCGLShaderProgram::m_activeTexture[2] = texture3;
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, texture3);
-    }
 
     glActiveTexture(GL_TEXTURE0);
 

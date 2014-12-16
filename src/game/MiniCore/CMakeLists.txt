@@ -26,7 +26,6 @@ Core/mctimerevent.cc
 Core/mctrigonom.cc
 Core/mcvectoranimation.cc
 Core/mcworld.cc
-Graphics/contrib/glew/glew.c
 Graphics/mccamera.cc
 Graphics/mcglambientlight.cc
 Graphics/mcgldiffuselight.cc
@@ -71,6 +70,10 @@ Text/mctexturefontmanager.cc
 Text/mctextureglyph.cc
 Text/mctexturetext.cc
 )
+
+if(NOT QOpenGLFunctions)
+set(MiniCoreSRC ${MiniCoreSRC} Graphics/contrib/glew/glew.c)
+endif()
 
 add_library(MiniCore ${MiniCoreSRC})
 

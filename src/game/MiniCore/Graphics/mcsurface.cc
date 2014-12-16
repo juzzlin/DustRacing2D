@@ -210,7 +210,7 @@ void MCSurface::setAlphaBlend(
     m_dst            = dst;
 }
 
-void MCSurface::doAlphaBlend() const
+void MCSurface::doAlphaBlend()
 {
     if (m_useAlphaBlend)
     {
@@ -269,6 +269,8 @@ void MCSurface::bindShadow()
 
 void MCSurface::release()
 {
+    MCGLObjectBase::release();
+
     if (m_useAlphaBlend)
     {
         glDisable(GL_BLEND);
