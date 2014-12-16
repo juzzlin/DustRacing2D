@@ -111,6 +111,15 @@ HEADERS += \
     MTFH/menuitemview.hpp \
     MTFH/menumanager.hpp \
     MiniCore/Asset/mcassetmanager.hh \
+    MiniCore/Asset/mcmeshconfigloader.hh \
+    MiniCore/Asset/mcmeshloader.hh \
+    MiniCore/Asset/mcmeshmanager.hh \
+    MiniCore/Asset/mcmeshmetadata.hh \
+    MiniCore/Asset/mcmeshobjectdata.hh \
+    MiniCore/Asset/mcsurfaceconfigloader.hh \
+    MiniCore/Asset/mcsurfacemanager.hh \
+    MiniCore/Asset/mcsurfacemetadata.hh \
+    MiniCore/Asset/mcsurfaceobjectdata.hh \
     MiniCore/Core/mcbbox.hh \
     MiniCore/Core/mccast.hh \
     MiniCore/Core/mcevent.hh \
@@ -143,11 +152,6 @@ HEADERS += \
     MiniCore/Graphics/mcgltexcoord.hh \
     MiniCore/Graphics/mcglvertex.hh \
     MiniCore/Graphics/mcmesh.hh \
-    MiniCore/Graphics/mcmeshconfigloader.hh \
-    MiniCore/Graphics/mcmeshloader.hh \
-    MiniCore/Graphics/mcmeshmanager.hh \
-    MiniCore/Graphics/mcmeshmetadata.hh \
-    MiniCore/Graphics/mcmeshobjectdata.hh \
     MiniCore/Graphics/mcmeshview.hh \
     MiniCore/Graphics/mcshaders.hh \
     MiniCore/Graphics/mcshaders30.hh \
@@ -155,16 +159,12 @@ HEADERS += \
     MiniCore/Graphics/mcrenderlayer.hh \
     MiniCore/Graphics/mcshapeview.hh \
     MiniCore/Graphics/mcsurface.hh \
-    MiniCore/Graphics/mcsurfaceconfigloader.hh \
-    MiniCore/Graphics/mcsurfacemanager.hh \
-    MiniCore/Graphics/mcsurfacemetadata.hh \
-    MiniCore/Graphics/mcsurfaceobjectdata.hh \
     MiniCore/Graphics/mcsurfaceview.hh \
     MiniCore/Graphics/mcworldrenderer.hh \
-    MiniCore/Particles/mcglpointparticle.hh \
-    MiniCore/Particles/mcglrectparticle.hh \
-    MiniCore/Particles/mcparticle.hh \
-    MiniCore/Particles/mcsurfaceparticle.hh \
+    MiniCore/Graphics/mcglpointparticle.hh \
+    MiniCore/Graphics/mcglrectparticle.hh \
+    MiniCore/Graphics/mcparticle.hh \
+    MiniCore/Graphics/mcsurfaceparticle.hh \
     MiniCore/Physics/mccircleshape.hh \
     MiniCore/Physics/mccollisiondetector.hh \
     MiniCore/Physics/mccollisionevent.hh \
@@ -176,7 +176,7 @@ HEADERS += \
     MiniCore/Physics/mcfrictiongenerator.hh \
     MiniCore/Physics/mcgravitygenerator.hh \
     MiniCore/Physics/mcimpulsegenerator.hh \
-    MiniCore/Physics/mcobjecttree.hh \
+    MiniCore/Physics/mcobjectgrid.hh \
     MiniCore/Physics/mcoutofboundariesevent.hh \
     MiniCore/Physics/mcrectshape.hh \
     MiniCore/Physics/mcsegment.hh \
@@ -268,6 +268,13 @@ SOURCES += \
     MTFH/menuitemview.cpp \
     MTFH/menumanager.cpp \
     MiniCore/Asset/mcassetmanager.cc \
+    MiniCore/Asset/mcmeshconfigloader.cc \
+    MiniCore/Asset/mcmeshloader.cc \
+    MiniCore/Asset/mcmeshmanager.cc \
+    MiniCore/Asset/mcmeshobjectdata.cc \
+    MiniCore/Asset/mcsurfaceconfigloader.cc \
+    MiniCore/Asset/mcsurfacemanager.cc \
+    MiniCore/Asset/mcsurfaceobjectdata.cc \
     MiniCore/Core/mcevent.cc \
     MiniCore/Core/mcexception.cc \
     MiniCore/Core/mclogger.cc \
@@ -288,22 +295,15 @@ SOURCES += \
     MiniCore/Graphics/mcglscene.cc \
     MiniCore/Graphics/mcglshaderprogram.cc \
     MiniCore/Graphics/mcmesh.cc \
-    MiniCore/Graphics/mcmeshconfigloader.cc \
-    MiniCore/Graphics/mcmeshloader.cc \
-    MiniCore/Graphics/mcmeshmanager.cc \
-    MiniCore/Graphics/mcmeshobjectdata.cc \
     MiniCore/Graphics/mcmeshview.cc \
     MiniCore/Graphics/mcrenderlayer.cc \
     MiniCore/Graphics/mcsurface.cc \
-    MiniCore/Graphics/mcsurfaceconfigloader.cc \
-    MiniCore/Graphics/mcsurfacemanager.cc \
-    MiniCore/Graphics/mcsurfaceobjectdata.cc \
     MiniCore/Graphics/mcsurfaceview.cc \
     MiniCore/Graphics/mcworldrenderer.cc \
-    MiniCore/Particles/mcglpointparticle.cc \
-    MiniCore/Particles/mcglrectparticle.cc \
-    MiniCore/Particles/mcparticle.cc \
-    MiniCore/Particles/mcsurfaceparticle.cc \
+    MiniCore/Graphics/mcglpointparticle.cc \
+    MiniCore/Graphics/mcglrectparticle.cc \
+    MiniCore/Graphics/mcparticle.cc \
+    MiniCore/Graphics/mcsurfaceparticle.cc \
     MiniCore/Physics/mccircleshape.cc \
     MiniCore/Physics/mccollisiondetector.cc \
     MiniCore/Physics/mccollisionevent.cc \
@@ -314,7 +314,7 @@ SOURCES += \
     MiniCore/Physics/mcfrictiongenerator.cc \
     MiniCore/Physics/mcgravitygenerator.cc \
     MiniCore/Physics/mcimpulsegenerator.cc \
-    MiniCore/Physics/mcobjecttree.cc \
+    MiniCore/Physics/mcobjectgrid.cc \
     MiniCore/Physics/mcoutofboundariesevent.cc \
     MiniCore/Physics/mcrectshape.cc \
     MiniCore/Physics/mcshape.cc \
