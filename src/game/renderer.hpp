@@ -21,7 +21,8 @@
 
 #include "eventhandler.hpp"
 
-#include <QGLWidget>
+#include <QWindow>
+#include <QOpenGLFunctions>
 
 #include <memory>
 #include <string>
@@ -34,7 +35,7 @@ class QPaintEvent;
 class Scene;
 
 //! The singleton renderer widget and the main "window".
-class Renderer : public QGLWidget
+class Renderer : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
 
@@ -42,18 +43,18 @@ public:
 
     //! Constructor.
     Renderer(
-        const QGLFormat & qglFormat,
         int hRes,
         int vRes,
         bool nativeResolution,
-        bool fullScreen,
-        QWidget * parent = nullptr);
+        bool fullScreen);
 
     //! Destructor.
     virtual ~Renderer();
 
     //! \return the single instance.
     static Renderer & instance();
+
+    void initialize();
 
     //! Set game scene to be rendered.
     void setScene(Scene & scene);
@@ -86,28 +87,34 @@ signals:
 
     void closed();
 
+    void initialized();
+
 public slots:
 
     void setEnabled(bool enable);
 
     void setFadeValue(float value);
 
+    void renderLater();
+
+    void renderNow();
+
 protected:
 
     //! \reimp
-    virtual void initializeGL();
+    bool event(QEvent *);
 
     //! \reimp
-    virtual void resizeGL(int viewWidth, int viewHeight);
+    void exposeEvent(QExposeEvent *);
 
     //! \reimp
-    virtual void paintGL();
+    void resizeEvent(QResizeEvent *);
 
     //! \reimp
-    virtual void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event);
 
     //! \reimp
-    virtual void keyReleaseEvent(QKeyEvent * event);
+    void keyReleaseEvent(QKeyEvent * event);
 
     //! \reimp
     void mousePressEvent(QMouseEvent * event);
@@ -126,12 +133,17 @@ private:
     //! Load vertex and fragment shaders.
     void loadShaders();
 
+    void loadFonts();
+
     void createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource);
 
     void render();
 
+    void resizeGL(int viewWidth, int viewHeight);
+
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
+    QOpenGLContext  * m_context;
     Scene           * m_scene;
     MCGLScene       * m_glScene;
     EventHandler    * m_eventHandler;
@@ -143,6 +155,7 @@ private:
     int               m_vRes;
     bool              m_nativeResolution;
     bool              m_fullScreen;
+    bool              m_updatePending;
     static Renderer * m_instance;
 };
 

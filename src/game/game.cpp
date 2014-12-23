@@ -20,7 +20,6 @@
 #include "audioworker.hpp"
 #include "graphicsfactory.hpp"
 #include "eventhandler.hpp"
-#include "fontfactory.hpp"
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
@@ -37,10 +36,10 @@
 #include <MCObjectFactory>
 
 #include <QApplication>
-#include <QFontDatabase>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTime>
+#include <QSurfaceFormat>
 
 #include <cassert>
 
@@ -77,10 +76,6 @@ Game::Game(bool forceNoVSync)
 
     createRenderer(forceNoVSync);
 
-    loadFonts();
-
-    m_assetManager->textureFontManager().createFontFromData(FontFactory::generateFont());
-
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
     connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
@@ -88,7 +83,7 @@ Game::Game(bool forceNoVSync)
     connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    m_updateTimer.setInterval(0);
+    m_updateTimer.setInterval(1000 / 60);
 
     connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
 
@@ -128,13 +123,12 @@ void Game::createRenderer(bool forceNoVSync)
         << "Resolution: " << hRes << " " << vRes << " " << nativeResolution << " " << fullScreen;
 
     MCLogger().info() << "Creating the renderer..";
-    // At least for now the QGLFormat needs to be passed to the constructor of QGLWidget,
-    // because setting it afterwards by using QGLWidget::setFormat() resulted in a black
-    // window on Windows 7. It worked on Ubuntu, though.
-    QGLFormat format;
+
+    QSurfaceFormat format;
+
 #ifdef __MC_GL30__
     format.setVersion(3, 0);
-    format.setProfile(QGLFormat::CoreProfile);
+    format.setProfile(QSurfaceFormat::CoreProfile);
 #elif defined(__MC_GLES__)
     format.setVersion(1, 0);
 #else
@@ -142,6 +136,7 @@ void Game::createRenderer(bool forceNoVSync)
 #endif
     format.setSamples(0);
 
+#if 0 // Supported only in Qt 5.3+
     if (forceNoVSync)
     {
         format.setSwapInterval(0);
@@ -150,9 +145,12 @@ void Game::createRenderer(bool forceNoVSync)
     {
         format.setSwapInterval(Settings::instance().loadValue(Settings::vsyncKey(), 0));
     }
+#else
+    Q_UNUSED(forceNoVSync);
+#endif
 
-    m_renderer = new Renderer(format, hRes, vRes, nativeResolution, fullScreen);
-    m_renderer->activateWindow();
+    m_renderer = new Renderer(hRes, vRes, nativeResolution, fullScreen);
+    m_renderer->setFormat(format);
 
     if (fullScreen)
     {
@@ -163,12 +161,9 @@ void Game::createRenderer(bool forceNoVSync)
         m_renderer->show();
     }
 
-    m_renderer->setFocus();
-
-    // Note that this must be called before loading textures in order
-    // to load textures to correct OpenGL context.
-    m_renderer->makeCurrent();
     m_renderer->setEventHandler(*m_eventHandler);
+
+    connect(m_renderer, SIGNAL(initialized()), this, SLOT(init()));
 
     connect(m_stateMachine, SIGNAL(renderingEnabled(bool)), m_renderer, SLOT(setEnabled(bool)));
 }
@@ -279,25 +274,6 @@ bool Game::loadTracks()
     return true;
 }
 
-void Game::loadFonts()
-{
-    const std::vector<QString> fonts = {"UbuntuMono-R.ttf", "UbuntuMono-B.ttf"};
-    for (auto font : fonts)
-    {
-        const QString path =
-            QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
-        MCLogger().info() << "Loading font " << path.toStdString() << "..";
-
-        QFile fontFile(path);
-        fontFile.open(QFile::ReadOnly);
-        const int appFontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
-        if (appFontId < 0)
-        {
-            MCLogger().warning() << "Failed to load font " << path.toStdString() << "..";
-        }
-    }
-}
-
 void Game::initScene()
 {
     assert(m_stateMachine);
@@ -317,7 +293,7 @@ void Game::initScene()
     m_renderer->setScene(*m_scene);
 }
 
-bool Game::init()
+void Game::init()
 {
     m_audioThread.start();
     m_audioWorker->moveToThread(&m_audioThread);
@@ -332,10 +308,10 @@ bool Game::init()
     }
     else
     {
-        return false;
+        throw MCException("Couldn't load tracks.");
     }
 
-    return true;
+    start();
 }
 
 void Game::start()
@@ -377,23 +353,11 @@ void Game::exitGame()
 
 void Game::updateFrame()
 {
-    const int TUNE = 2;
-    if (m_elapsed.elapsed() >= m_updateDelay - m_renderElapsed - TUNE)
-    {
-        m_stateMachine->update();
-        m_scene->updateFrame(*m_inputHandler, m_timeStep);
-        m_scene->updateAnimations();
-        m_scene->updateOverlays();
-        m_elapsed.restart();
-        m_renderElapsed = 0;
-    }
-    else
-    {
-        static QTime elapsed;
-        elapsed.restart();
-        m_renderer->updateGL();
-        m_renderElapsed = elapsed.elapsed();
-    }
+    m_stateMachine->update();
+    m_scene->updateFrame(*m_inputHandler, m_timeStep);
+    m_scene->updateAnimations();
+    m_scene->updateOverlays();
+    m_renderer->renderNow();
 }
 
 Game::~Game()

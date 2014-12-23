@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include <QApplication>
-#include <QGLFormat>
 #include <QDir>
+#include <QApplication>
 #include <QLocale>
 #include <QMessageBox>
 #include <QTranslator>
@@ -40,32 +39,6 @@ static void initLogger()
     MCLogger().info() << "Dust Racing 2D version " << VERSION;
 }
 
-static void checkOpenGLVersion()
-{
-#ifdef __MC_GLES__
-    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_ES_Version_2_0)
-    {
-        QString versionError = QObject::tr("At least OpenGL ES 2.0 is required!");
-        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
-        throw MCException(versionError.toStdString());
-    }
-#elif defined (__MC_GL30__)
-    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_3_0)
-    {
-        QString versionError = QObject::tr("At least OpenGL 3.0 is required!");
-        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
-        throw MCException(versionError.toStdString());
-    }
-#else
-    if (QGLFormat::openGLVersionFlags() < QGLFormat::OpenGL_Version_2_1)
-    {
-        QString versionError = QObject::tr("At least OpenGL 2.1 is required!");
-        QMessageBox::critical(nullptr, QObject::tr("Cannot start Dust Racing 2D"), versionError);
-        throw MCException(versionError.toStdString());
-    }
-#endif
-}
-
 static void printHelp()
 {
     std::cout << "Dust Racing 2D version " << VERSION << std::endl;
@@ -77,7 +50,7 @@ static void printHelp()
     std::cout << std::endl;
 }
 
-static void initTranslations(QTranslator & appTranslator, QApplication & app, QString lang = "")
+static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
 {
     if (lang == "")
     {
@@ -126,22 +99,11 @@ int main(int argc, char ** argv)
 
         initLogger();
         initTranslations(appTranslator, app, lang);
-        checkOpenGLVersion();
 
-        // Create the game object and set the renderer
+        // Create the main game object. The game loop starts immediately after
+        // the Renderer has been initialized.
         MCLogger().info() << "Creating game object..";
         Game game(forceNoVSync);
-
-        // Initialize and start the game
-        if (game.init())
-        {
-            game.start();
-        }
-        else
-        {
-            MCLogger().fatal() << INIT_ERROR;
-            return EXIT_FAILURE;
-        }
 
         return app.exec();
     }

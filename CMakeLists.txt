@@ -67,11 +67,12 @@ add_definitions(-DVERSION="${VERSION}")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-find_package(Qt5Core REQUIRED)
-find_package(Qt5OpenGL REQUIRED)
-find_package(Qt5Xml REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
+set(QT_MIN_VER 5.2.1)
+find_package(Qt5Core ${QT_MIN_VER} REQUIRED)
+find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
+find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
+find_package(Qt5Widgets ${QT_MIN_VER} REQUIRED)
+find_package(Qt5LinguistTools ${QT_MIN_VER} REQUIRED)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)

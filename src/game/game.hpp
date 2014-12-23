@@ -70,10 +70,6 @@ public:
     //! \return The renderer.
     Renderer & renderer() const;
 
-    //! Init the game.
-    //! \return True on success.
-    bool init();
-
     //! Start the game.
     void start();
 
@@ -121,13 +117,14 @@ private slots:
 
     void updateFrame();
 
+    void init();
+
 private:
 
     void adjustSceneSize(int hRes, int vRes, bool fullScreen);
     void createRenderer(bool forceNoVSync);
     void initScene();
     bool loadTracks();
-    void loadFonts();
 
     Settings          m_settings;
     InputHandler    * m_inputHandler;

@@ -156,7 +156,7 @@ set(COMMON_LIBS
     ${VORBIS_STATIC_LIB}     # Valid only if static lib was used
     ${OGG_STATIC_LIB})       # Valid only if static lib was used
 
-qt5_use_modules(${GAME_BINARY_NAME} OpenGL Widgets Xml)
+qt5_use_modules(${GAME_BINARY_NAME} OpenGL Xml)
 target_link_libraries(${COMMON_LIBS})
 
 foreach(TS_FILE ${TS})

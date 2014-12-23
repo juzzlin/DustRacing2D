@@ -16,6 +16,7 @@
 #include "renderer.hpp"
 
 #include "eventhandler.hpp"
+#include "fontfactory.hpp"
 #include "scene.hpp"
 
 #ifdef __MC_GL30__
@@ -27,6 +28,7 @@
 #include "../common/config.hpp"
 
 #include <MCGLScene>
+#include <MCAssetManager>
 #include <MCException>
 #include <MCLogger>
 #include <MCSurface>
@@ -40,19 +42,20 @@
 #include <QApplication>
 #include <QIcon>
 #include <QDesktopWidget>
+#include <QDir>
+#include <QFontDatabase>
 #include <QGLFramebufferObject>
 #include <QKeyEvent>
+#include <QScreen>
 
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(
-    const QGLFormat & qglFormat,
     int hRes,
     int vRes,
     bool nativeResolution,
-    bool fullScreen,
-    QWidget * parent)
-: QGLWidget(qglFormat, parent)
+    bool fullScreen)
+: m_context(nullptr)
 , m_scene(nullptr)
 , m_glScene(new MCGLScene)
 , m_eventHandler(nullptr)
@@ -63,25 +66,16 @@ Renderer::Renderer(
 , m_vRes(vRes)
 , m_nativeResolution(nativeResolution)
 , m_fullScreen(fullScreen)
+, m_updatePending(false)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
 
-    setWindowTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
-    setWindowIcon(QIcon(":/dustrac-game.png"));
-    setMouseTracking(true);
+    setSurfaceType(QWindow::OpenGLSurface);
 
-    if (!fullScreen)
-    {
-        // Set window size & disable resize
-        resize(hRes, vRes);
-        setMinimumSize(hRes, vRes);
-        setMaximumSize(hRes, vRes);
-
-        // Try to center the window.
-        QRect geometry(QApplication::desktop()->availableGeometry());
-        move(geometry.width() / 2 - width() / 2, geometry.height() / 2 - height() / 2);
-    }
+    setTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
+    setIcon(QIcon(":/dustrac-game.png"));
+    //setMouseTracking(true);
 }
 
 Renderer & Renderer::instance()
@@ -90,13 +84,31 @@ Renderer & Renderer::instance()
     return *Renderer::m_instance;
 }
 
-void Renderer::initializeGL()
+void Renderer::initialize()
 {
     MCLogger().info() << "OpenGL Version: " << glGetString(GL_VERSION);
 
+    if (!m_fullScreen)
+    {
+        // Set window size & disable resize
+        resize(m_hRes, m_vRes);
+        setMinimumSize(QSize(m_hRes, m_vRes));
+        setMaximumSize(QSize(m_hRes, m_vRes));
+
+        // Try to center the window
+        const int fullVRes = QGuiApplication::primaryScreen()->geometry().height();
+        const int fullHRes = QGuiApplication::primaryScreen()->geometry().width();
+        setPosition(fullHRes / 2 - m_hRes / 2, fullVRes / 2 - m_vRes / 2);
+    }
+
     m_glScene->initialize();
 
+    resizeGL(m_hRes, m_vRes);
+
     loadShaders();
+    loadFonts();
+
+    emit initialized();
 }
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
@@ -137,11 +149,32 @@ void Renderer::loadShaders()
     m_shaderHash["textShadow"]          = MCGLScene::instance().defaultTextShadowShaderProgram();
 
     // Custom shaders
-    createProgramFromSource("car",        carVsh,  carFsh);
-    createProgramFromSource("fbo",        fboVsh,  fboFsh);
-    createProgramFromSource("menu",       menuVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
-    createProgramFromSource("tile2d",     tileVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
-    createProgramFromSource("tile3d",     tileVsh, tile3dFsh);
+    createProgramFromSource("car",    carVsh,  carFsh);
+    createProgramFromSource("fbo",    fboVsh,  fboFsh);
+    createProgramFromSource("menu",   menuVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
+    createProgramFromSource("tile2d", tileVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
+    createProgramFromSource("tile3d", tileVsh, tile3dFsh);
+}
+
+void Renderer::loadFonts()
+{
+    const std::vector<QString> fonts = {"UbuntuMono-R.ttf", "UbuntuMono-B.ttf"};
+    for (auto font : fonts)
+    {
+        const QString path =
+            QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
+        MCLogger().info() << "Loading font " << path.toStdString() << "..";
+
+        QFile fontFile(path);
+        fontFile.open(QFile::ReadOnly);
+        const int appFontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
+        if (appFontId < 0)
+        {
+            MCLogger().warning() << "Failed to load font " << path.toStdString() << "..";
+        }
+    }
+
+    MCAssetManager::instance().textureFontManager().createFontFromData(FontFactory::generateFont());
 }
 
 void Renderer::setEnabled(bool enable)
@@ -233,9 +266,78 @@ void Renderer::render()
     sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
 }
 
-void Renderer::paintGL()
+void Renderer::renderLater()
 {
+    if (!m_updatePending)
+    {
+        m_updatePending = true;
+        QCoreApplication::postEvent(this, new QEvent(QEvent::UpdateRequest));
+    }
+}
+
+bool Renderer::event(QEvent *event)
+{
+    switch (event->type())
+    {
+    case QEvent::UpdateRequest:
+        m_updatePending = false;
+        renderNow();
+        return true;
+    default:
+        return QWindow::event(event);
+    }
+}
+
+void Renderer::exposeEvent(QExposeEvent *)
+{
+    if (isExposed())
+    {
+        renderNow();
+    }
+}
+
+void Renderer::renderNow()
+{
+    if (!isExposed())
+    {
+        return;
+    }
+
+    bool needsInitialize = false;
+
+    if (!m_context)
+    {
+        m_context = new QOpenGLContext(this);
+        m_context->setFormat(requestedFormat());
+        m_context->create();
+
+        if (!m_context->isValid())
+        {
+            std::stringstream ss;
+            ss << "Cannot create context for OpenGL version " <<
+                  requestedFormat().majorVersion() << "." << requestedFormat().minorVersion();
+            throw MCException(ss.str());
+        }
+
+        needsInitialize = true;
+    }
+
+    m_context->makeCurrent(this);
+
+    if (needsInitialize)
+    {
+        initializeOpenGLFunctions();
+        initialize();
+    }
+
     render();
+
+    m_context->swapBuffers(this);
+}
+
+void Renderer::resizeEvent(QResizeEvent * event)
+{
+    resizeGL(event->size().width(), event->size().height());
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)
@@ -243,7 +345,7 @@ void Renderer::keyPressEvent(QKeyEvent * event)
     assert(m_eventHandler);
     if (!m_eventHandler->handleKeyPressEvent(event))
     {
-        QGLWidget::keyPressEvent(event);
+        QWindow::keyPressEvent(event);
     }
 }
 
@@ -252,7 +354,7 @@ void Renderer::keyReleaseEvent(QKeyEvent * event)
     assert(m_eventHandler);
     if (!m_eventHandler->handleKeyReleaseEvent(event))
     {
-        QGLWidget::keyReleaseEvent(event);
+        QWindow::keyReleaseEvent(event);
     }
 }
 
