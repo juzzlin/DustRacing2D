@@ -42,7 +42,8 @@ class MCSurface;
  *
  * Texture surfaces will also be flipped about X-axis if desired.
  *
- * MCSurface objects can be accessed via handles specified in the XML-based mapping file.
+ * MCSurface objects can be accessed via handles specified in the XML-based mapping file
+ * and are loaded with MCSurfaceManager::load().
  *
  * Example mapping file:
  *
@@ -64,6 +65,8 @@ class MCSurface;
  *   </surface>
  *   <surface handle="WINDOW_ICON" image="logo_v2.bmp"/>
  * </surfaces>
+ *
+ * Another option is to use MCSurfaceManager::createSurfaceFromImage() directly.
  *
  */
 class MCSurfaceManager
