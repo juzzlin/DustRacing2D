@@ -34,7 +34,7 @@ class MCRandom
 {
 public:
 
-    //! Get next random value in the table
+    //! Get next random value [0.0..1.0] in the table
     static MCFloat getValue();
 
     //! Return a random 2d vector

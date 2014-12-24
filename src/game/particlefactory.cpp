@@ -304,6 +304,8 @@ void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
         leaf->rotate(MCRandom::getValue() * 360);
         leaf->setColor(MCGLColor(0.0, 0.75, 0.0, 0.75));
         leaf->setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());
+        leaf->setAngularVelocity((MCRandom::getValue() - 0.5) * 10.0f);
+        leaf->setMomentOfInertia(1.0);
         leaf->setAcceleration(MCVector3dF(0, 0, -5.0f));
         leaf->addToWorld();
     }
