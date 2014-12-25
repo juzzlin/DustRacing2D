@@ -199,6 +199,8 @@ private:
         PointSize
     };
 
+    void bindPendingMaterial();
+
     void bindTextureUnit(GLuint index, Uniform uniform);
 
     std::string getShaderLog(GLuint obj);
@@ -209,8 +211,27 @@ private:
 
     void initUniformLocationCache();
 
+    void setPendingAmbientLight();
+
+    void setPendingColor();
+
+    void setPendingDiffuseLight();
+
+    void setPendingFadeValue();
+
+    void setPendingPointSize();
+
+    void setPendingScale();
+
+    void setPendingSpecularLight();
+
+    void setPendingTransform();
+
+    void setPendingViewProjectionMatrix();
+
+    void setPendingViewMatrix();
+
     static MCGLShaderProgram * m_activeProgram;
-    static std::vector<GLuint> m_activeTexture;
 
     static std::vector<MCGLShaderProgram *> m_programStack;
 
@@ -221,10 +242,58 @@ private:
     Uniforms m_uniforms;
 
     MCGLScene & m_scene;
-    bool        m_isBound;
-    GLuint      m_program;
-    GLuint      m_fragmentShader;
-    GLuint      m_vertexShader;
+
+    GLuint m_program;
+
+    GLuint m_fragmentShader;
+
+    GLuint m_vertexShader;
+
+    glm::mat4x4 m_viewProjectionMatrix;
+
+    bool m_viewProjectionMatrixPending;
+
+    glm::mat4x4 m_viewMatrix;
+
+    bool m_viewMatrixPending;
+
+    GLfloat m_angle;
+
+    MCVector3dF m_pos;
+
+    bool m_transformPending;
+
+    MCGLMaterialPtr m_material;
+
+    bool m_materialPending;
+
+    GLfloat m_fadeValue;
+
+    bool m_fadeValuePending;
+
+    MCGLColor m_color;
+
+    bool m_colorPending;
+
+    MCVector3dF m_scale;
+
+    bool m_scalePending;
+
+    GLfloat m_pointSize;
+
+    bool m_pointSizePending;
+
+    MCGLDiffuseLight m_diffuseLight;
+
+    bool m_diffuseLightPending;
+
+    MCGLDiffuseLight m_specularLight;
+
+    bool m_specularLightPending;
+
+    MCGLAmbientLight m_ambientLight;
+
+    bool m_ambientLightPending;
 };
 
 typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;

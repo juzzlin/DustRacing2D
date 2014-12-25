@@ -339,7 +339,6 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
         camera->mapToCamera(x, y);
     }
 
-    shadowShaderProgram()->bind();
     shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
 
     if (m_centerSet)

@@ -59,12 +59,18 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
     {
         m_shaders.push_back(&shader);
 
+        // For some very "funny" reason we have to bind here after adding or
+        // else the multi-texturing breaks. Like..wtf?
+        shader.bind();
+
         // Ensure current projection
         shader.setViewProjectionMatrix(viewProjectionMatrix());
 
         // Lighting defaults
         shader.setAmbientLight(MCGLAmbientLight(1, 1, 1, 1));
         shader.setFadeValue(1.0);
+
+        shader.release();
     }
 }
 
@@ -279,53 +285,43 @@ const glm::mat4 & MCGLScene::viewProjectionMatrix() const
 
 void MCGLScene::updateViewProjectionMatrixAndShaders()
 {
-    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setViewProjectionMatrix(viewProjectionMatrix());
         p->setViewMatrix(m_viewMatrix);
     }
-    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setFadeValue(MCFloat value)
 {
-    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setFadeValue(value);
     }
-    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setAmbientLight(const MCGLAmbientLight & light)
 {
-    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setAmbientLight(light);
     }
-    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setDiffuseLight(const MCGLDiffuseLight & light)
 {
-    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setDiffuseLight(light);
     }
-    MCGLShaderProgram::popProgram();
 }
 
 void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
 {
-    MCGLShaderProgram::pushProgram();
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setSpecularLight(light);
     }
-    MCGLShaderProgram::popProgram();
 }
 
 MCGLScene::~MCGLScene()

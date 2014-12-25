@@ -33,6 +33,8 @@ public:
         MCVector3dF direction,
         GLfloat r, GLfloat g, GLfloat b, GLfloat i);
 
+    MCGLDiffuseLight();
+
     const MCVector3dF & direction() const;
 
     void setDirection(MCVector3dF direction);

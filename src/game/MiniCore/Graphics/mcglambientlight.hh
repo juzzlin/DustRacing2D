@@ -34,6 +34,8 @@ public:
      *  \param i Intensity (0.0 - 1.0). */
     MCGLAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat i);
 
+    MCGLAmbientLight();
+
     GLfloat r() const;
 
     GLfloat g() const;

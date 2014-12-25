@@ -26,6 +26,12 @@ MCGLDiffuseLight::MCGLDiffuseLight(
 {
 }
 
+MCGLDiffuseLight::MCGLDiffuseLight()
+: MCGLAmbientLight(1.0f, 1.0f, 1.0f, 1.0f)
+, m_direction(MCVector3dF(0.0f, 0.0f, -1.0f))
+{
+}
+
 const MCVector3dF & MCGLDiffuseLight::direction() const
 {
     return m_direction;

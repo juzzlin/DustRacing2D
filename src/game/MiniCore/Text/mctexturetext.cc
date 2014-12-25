@@ -126,15 +126,63 @@ int MCTextureText::height() const
 void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
     MCTextureFont & font, bool shadow)
 {
-    font.surface().bind();
-    font.surface().setColor(m_color);
-
     glDisable(GL_DEPTH_TEST);
 
     wchar_t prevGlyph = 0;
     wchar_t glyph     = 0;
     int     glyphXPos = x;
     int     glyphYPos = y;
+
+    if (shadow)
+    {
+        font.surface().bindShadow();
+
+        for (int i = 0; i < static_cast<int>(m_text.size()); i++)
+        {
+            prevGlyph = glyph;
+            glyph     = m_text[i];
+
+            if (glyph == '\n')
+            {
+                glyphXPos  = x;
+                glyphYPos -= m_glyphHeight;
+            }
+            else if (glyph == ' ')
+            {
+                glyphXPos += m_glyphWidth;
+            }
+            else
+            {
+                if (glyph != prevGlyph)
+                {
+                    MCTextureGlyph & texGlyph = font.glyph(glyph);
+                    const MCGLTexCoord uv[4] =
+                    {
+                        {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
+                        {texGlyph.uv(0).m_u, texGlyph.uv(0).m_v},
+                        {texGlyph.uv(1).m_u, texGlyph.uv(1).m_v},
+                        {texGlyph.uv(2).m_u, texGlyph.uv(2).m_v}
+                    };
+
+                    font.surface().setTexCoords(uv);
+                }
+
+                font.surface().setSize(m_glyphWidth, m_glyphHeight);
+                font.surface().renderShadow(camera,
+                    MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
+
+                glyphXPos += m_glyphWidth;
+            }
+        }
+    }
+
+    font.surface().bind();
+    font.surface().setColor(m_color);
+
+    prevGlyph = 0;
+    glyph     = 0;
+    glyphXPos = x;
+    glyphYPos = y;
 
     for (int i = 0; i < static_cast<int>(m_text.size()); i++)
     {
@@ -167,13 +215,6 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
             }
 
             font.surface().setSize(m_glyphWidth, m_glyphHeight);
-
-            if (shadow)
-            {
-                font.surface().renderShadow(camera,
-                    MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
-            }
-
             font.surface().render(camera,
                 MCVector3dF(glyphXPos, glyphYPos, 0), 0, false);
 
