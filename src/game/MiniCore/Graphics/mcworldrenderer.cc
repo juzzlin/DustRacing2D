@@ -62,8 +62,8 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
     {
         MCRenderLayer & layer = layerIter->second;
 
-        layer.objectBatches().clear();
-        layer.particleBatches().clear();
+        layer.objectBatches()[camera].clear();
+        layer.particleBatches()[camera].clear();
 
         for (auto objectIter = layer.objectSet().begin(); objectIter != layer.objectSet().end(); objectIter++)
         {
