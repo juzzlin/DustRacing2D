@@ -35,6 +35,11 @@
 
 #include <QObject> // For QObject::tr()
 
+// Swap interval supported only in Qt 5.3+, see also game.cpp
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
+#define VSYNC_MENU
+#endif
+
 static const QString LAP_COUNT_KEY(Settings::lapCountKey());
 
 static const int ITEM_HEIGHT_DIV = 10;
@@ -160,7 +165,9 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_resetMenu);
     MenuManager::instance().addMenu(m_sfxMenu);
     MenuManager::instance().addMenu(m_splitTypeMenu);
+#ifdef VSYNC_MENU
     MenuManager::instance().addMenu(m_vsyncMenu);
+#endif
     MenuManager::instance().addMenu(m_windowedResolutionMenu);
 }
 
@@ -320,12 +327,12 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toStdWString());
     splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
     splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
-
+#ifdef VSYNC_MENU
     MenuItem * vsync = new MenuItem(width, itemHeight, QObject::tr("VSync >").toStdWString());
     vsync->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vsync)));
     vsync->setMenuOpenAction(VSYNC_MENU_ID);
-
     m_gfxMenu.addItem(MenuItemPtr(vsync));
+#endif
     m_gfxMenu.addItem(MenuItemPtr(splitType));
     m_gfxMenu.addItem(MenuItemPtr(selectWindowedResolution));
     m_gfxMenu.addItem(MenuItemPtr(selectFullScreenResolution));

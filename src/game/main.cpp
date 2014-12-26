@@ -37,6 +37,7 @@ static void initLogger()
     MCLogger::setEchoMode(true);
     MCLogger::setDateTime(true);
     MCLogger().info() << "Dust Racing 2D version " << VERSION;
+    MCLogger().info() << "Compiled against Qt version " << QT_VERSION_STR;
 }
 
 static void printHelp()

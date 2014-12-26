@@ -136,7 +136,8 @@ void Game::createRenderer(bool forceNoVSync)
 #endif
     format.setSamples(0);
 
-#if 0 // Supported only in Qt 5.3+
+// Supported only in Qt 5.3+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
     if (forceNoVSync)
     {
         format.setSwapInterval(0);
