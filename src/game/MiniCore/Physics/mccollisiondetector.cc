@@ -134,6 +134,8 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
         circleVertex += MCVector2dF(circle.location());
         if (rect.contains(circleVertex))
         {
+            const bool triggerObjectInvolved = rect.parent().isTriggerObject() || circle.parent().isTriggerObject();
+
             // Send collision event to owner of circle and generate a contact if accepted.
             MCCollisionEvent ev1(rect.parent(), circleVertex);
             if (m_enableCollisionEvents)
@@ -145,12 +147,15 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
             MCFloat depth = rect.interpenetrationDepth(
                 MCSegment<MCFloat>(circleVertex, circle.location()), contactNormal);
 
-            if (!m_enableCollisionEvents || ev1.accepted())
+            if (!triggerObjectInvolved) // Trigger objects should only trigger events
             {
-                MCContact & contact = MCContact::create();
-                contact.init(rect.parent(), circleVertex, contactNormal, depth);
-                circle.parent().addContact(contact);
-                collided = true;
+                if (!m_enableCollisionEvents || ev1.accepted())
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(rect.parent(), circleVertex, contactNormal, depth);
+                    circle.parent().addContact(contact);
+                    collided = true;
+                }
             }
 
             // Send collision event to owner of rect and generate a contact if accepted.
@@ -160,11 +165,14 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
                 MCObject::sendEvent(rect.parent(), ev2);
             }
 
-            if (!m_enableCollisionEvents || ev2.accepted())
+            if (!triggerObjectInvolved) // Trigger objects should only trigger events
             {
-                MCContact & contact = MCContact::create();
-                contact.init(circle.parent(), circleVertex, -contactNormal, depth);
-                rect.parent().addContact(contact);
+                if (!m_enableCollisionEvents || ev2.accepted())
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(circle.parent(), circleVertex, -contactNormal, depth);
+                    rect.parent().addContact(contact);
+                }
             }
 
             // Don't break here in the case of a collision, because we don't know
@@ -189,6 +197,8 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
     if (dist < circle1.radius() + circle2.radius())
     {
+        const bool triggerObjectInvolved = circle1.parent().isTriggerObject() || circle2.parent().isTriggerObject();
+
         // Send collision event to owner of circle2 and generate a contact if accepted.
         MCCollisionEvent ev1(circle1.parent(), circleVertex);
         if (m_enableCollisionEvents)
@@ -200,12 +210,15 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
         MCFloat depth = circle2.interpenetrationDepth(
             MCSegment<MCFloat>(circleVertex, circle1.location()), contactNormal);
 
-        if (!m_enableCollisionEvents || ev1.accepted())
+        if (!triggerObjectInvolved) // Trigger objects should only trigger events
         {
-            MCContact & contact = MCContact::create();
-            contact.init(circle1.parent(), circleVertex, -contactNormal, depth);
-            circle2.parent().addContact(contact);
-            collided = true;
+            if (!m_enableCollisionEvents || ev1.accepted())
+            {
+                MCContact & contact = MCContact::create();
+                contact.init(circle1.parent(), circleVertex, -contactNormal, depth);
+                circle2.parent().addContact(contact);
+                collided = true;
+            }
         }
 
         // Send collision event to owner of circle1 and generate a contact if accepted.
@@ -215,12 +228,15 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
             MCObject::sendEvent(circle1.parent(), ev2);
         }
 
-        if (!m_enableCollisionEvents || ev2.accepted())
+        if (!triggerObjectInvolved) // Trigger objects should only trigger events
         {
-            MCContact & contact = MCContact::create();
-            contact.init(circle1.parent(), circleVertex, contactNormal, depth);
-            circle1.parent().addContact(contact);
-            collided = true;
+            if (!m_enableCollisionEvents || ev2.accepted())
+            {
+                MCContact & contact = MCContact::create();
+                contact.init(circle1.parent(), circleVertex, contactNormal, depth);
+                circle1.parent().addContact(contact);
+                collided = true;
+            }
         }
     }
 
