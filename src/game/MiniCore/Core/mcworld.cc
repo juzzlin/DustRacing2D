@@ -39,15 +39,8 @@
 #include <cassert>
 
 MCWorld * MCWorld::m_instance              = nullptr;
-MCFloat   MCWorld::m_metersPerPixel        = 1.0;
-MCFloat   MCWorld::m_metersPerPixelSquared = 1.0;
-
-namespace
-{
-// Set dimensions for minimum objectGrid leaves
-const MCFloat MinLeafWidth  = 64;
-const MCFloat MinLeafHeight = 64;
-}
+MCFloat   MCWorld::m_metersPerUnit        = 1.0;
+MCFloat   MCWorld::m_metersPerUnitSquared = 1.0;
 
 MCWorld::MCWorld()
 : m_renderer(new MCWorldRenderer)
@@ -80,7 +73,7 @@ MCWorld::MCWorld()
     }
 
     // Default dimensions. Creates also MCObjectGrid.
-    setDimensions(0.0, MinLeafWidth, 0.0, MinLeafHeight, 0.0, 1.0, 1.0);
+    setDimensions(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0);
 }
 
 MCWorld::~MCWorld()
@@ -194,13 +187,13 @@ void MCWorld::clear()
 
 void MCWorld::setDimensions(
     MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
-    MCFloat metersPerPixel)
+    MCFloat metersPerUnit, int gridSize)
 {
-    // TODO: MinLeafWidth and MinLeafHeight should be dynamic
-    assert(maxX - minX >= MinLeafWidth);
-    assert(maxY - minY >= MinLeafHeight);
+    assert(maxX - minX > 0);
+    assert(maxY - minY > 0);
+    assert(maxZ - minZ > 0);
 
-    MCWorld::setMetersPerPixel(metersPerPixel);
+    MCWorld::setMetersPerUnit(metersPerUnit);
 
     // Set dimensions
     m_minX = minX;
@@ -211,11 +204,13 @@ void MCWorld::setDimensions(
     m_maxZ = maxZ;
 
     // Init objectGrid
+    const MCFloat leafWidth = (maxX - minX) / gridSize;
+    const MCFloat leafHeight = (maxY - minY) / gridSize;
     delete m_objectGrid;
     m_objectGrid = new MCObjectGrid(
         m_minX, m_minY,
         m_maxX, m_maxY,
-        MinLeafWidth, MinLeafHeight);
+        leafWidth, leafHeight);
 
     // Create "wall" objects
     const MCFloat w = m_maxX - m_minX;
@@ -483,29 +478,29 @@ MCWorldRenderer & MCWorld::renderer() const
     return *m_renderer;
 }
 
-void MCWorld::setMetersPerPixel(MCFloat value)
+void MCWorld::setMetersPerUnit(MCFloat value)
 {
-    MCWorld::m_metersPerPixel        = value;
-    MCWorld::m_metersPerPixelSquared = value * value;
+    MCWorld::m_metersPerUnit        = value;
+    MCWorld::m_metersPerUnitSquared = value * value;
 }
 
-MCFloat MCWorld::metersPerPixel()
+MCFloat MCWorld::metersPerUnit()
 {
     assert(MCWorld::m_instance);
-    return MCWorld::m_metersPerPixel;
+    return MCWorld::m_metersPerUnit;
 }
 
-void MCWorld::toMeters(MCFloat & pixels)
+void MCWorld::toMeters(MCFloat & units)
 {
-    pixels *= MCWorld::m_metersPerPixel;
+    units *= MCWorld::m_metersPerUnit;
 }
 
-void MCWorld::toMeters(MCVector2dF & pixels)
+void MCWorld::toMeters(MCVector2dF & units)
 {
-    pixels *= MCWorld::m_metersPerPixel;
+    units *= MCWorld::m_metersPerUnit;
 }
 
-void MCWorld::toMeters(MCVector3dF & pixels)
+void MCWorld::toMeters(MCVector3dF & units)
 {
-    pixels *= MCWorld::m_metersPerPixel;
+    units *= MCWorld::m_metersPerUnit;
 }

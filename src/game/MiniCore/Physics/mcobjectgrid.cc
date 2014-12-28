@@ -23,7 +23,7 @@
 
 MCObjectGrid::MCObjectGrid(
     MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-    MCUint leafMaxW, MCUint leafMaxH)
+    MCFloat leafMaxW, MCFloat leafMaxH)
 : m_bbox(x1, y1, x2, y2)
 , m_leafMaxW(leafMaxW)
 , m_leafMaxH(leafMaxH)

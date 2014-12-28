@@ -75,11 +75,11 @@
 #include <algorithm>
 #include <cassert>
 
-// Default scene size.
+// Default visible scene size.
 int Scene::m_width  = 1024;
 int Scene::m_height = 768;
 
-static const MCFloat METERS_PER_PIXEL = 0.05f;
+static const MCFloat METERS_PER_UNIT = 0.05f;
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
 : m_game(game)
@@ -137,7 +137,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_world->renderer().enableDepthTestOnLayer(Layers::Tree);
     m_world->renderer().enableDepthTestOnLayer(Layers::Objects);
     m_world->renderer().enableDepthTestOnLayer(Layers::GrandStands);
-    m_world->setMetersPerPixel(METERS_PER_PIXEL);
+    m_world->setMetersPerUnit(METERS_PER_UNIT);
 
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
         m_renderer.program("text"));
@@ -466,7 +466,7 @@ void Scene::setWorldDimensions()
     const MCUint minZ = 0;
     const MCUint maxZ = 1000;
 
-    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_PIXEL);
+    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
 }
 
 void Scene::addCarsToWorld()

@@ -31,6 +31,7 @@ private slots:
 
     void testAddToWorld();
     void testSetDimensions();
+    void testSimpleCollision();
 
 private:
 

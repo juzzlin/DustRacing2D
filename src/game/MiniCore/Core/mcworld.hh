@@ -68,25 +68,33 @@ public:
     //! Remove all objects.
     void clear();
 
-    //! Set dimensions of the world box in pixels.
+    /*! Set dimensions of the world box in units.
+     *
+     *  \param metersPerUnit You could have, for example, a game object that is a
+     *  MCSurface of 10x20 units, but want it to behave like an real-world object
+     *  of 1x2 meters, so the metersPerUnits would be 0.1 in that case.
+     *
+     *  \param gridSize ver and hor size of the object grid. This affects the collision
+     *  detection performance.
+     */
     void setDimensions(
         MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
-        MCFloat metersPerPixel);
+        MCFloat metersPerUnit = 1.0f, int gridSize = 128);
 
-    //! Set how many meters equal one pixel.
-    static void setMetersPerPixel(MCFloat value);
+    //! Set how many meters equal one unit in the scene.
+    static void setMetersPerUnit(MCFloat value);
 
-    //! Get how many meters equal one pixel.
-    static MCFloat metersPerPixel();
+    //! Get how many meters equal one unit in the scene.
+    static MCFloat metersPerUnit();
 
-    //! Convert pixels to meters.
-    static void toMeters(MCFloat & pixels);
+    //! Convert scene units to meters.
+    static void toMeters(MCFloat & units);
 
-    //! Convert pixels to meters.
-    static void toMeters(MCVector2dF & pixels);
+    //! Convert scene units to meters.
+    static void toMeters(MCVector2dF & units);
 
-    //! Convert pixels to meters.
-    static void toMeters(MCVector3dF & pixels);
+    //! Convert scene units to meters.
+    static void toMeters(MCVector3dF & units);
 
     static MCFloat gravity();
 
@@ -183,8 +191,8 @@ private:
     MCCollisionDetector * m_collisionDetector;
     MCImpulseGenerator  * m_impulseGenerator;
     MCObjectGrid        * m_objectGrid;
-    static MCFloat        m_metersPerPixel;
-    static MCFloat        m_metersPerPixelSquared;
+    static MCFloat        m_metersPerUnit;
+    static MCFloat        m_metersPerUnitSquared;
     MCFloat               m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
     MCWorld::ObjectVector m_objs;
     MCWorld::ObjectVector m_removeObjs;

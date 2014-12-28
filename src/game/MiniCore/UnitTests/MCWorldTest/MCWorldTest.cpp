@@ -20,6 +20,27 @@
 #include "MCWorldTest.hpp"
 #include "../../Core/mcworld.hh"
 #include "../../Core/mcobject.hh"
+#include "../../Physics/mcrectshape.hh"
+#include "../../Physics/mccollisionevent.hh"
+
+class TestObject : public MCObject
+{
+public:
+
+    TestObject()
+    : MCObject("TEST_OBJECT")
+    , m_collisionEventReceived(false)
+    {
+    }
+
+    virtual void collisionEvent(MCCollisionEvent & event)
+    {
+        m_collisionEventReceived = true;
+        event.accept();
+    }
+
+    bool m_collisionEventReceived;
+};
 
 MCWorldTest::MCWorldTest()
 {
@@ -53,10 +74,10 @@ void MCWorldTest::testSetDimensions()
     const MCFloat maxY = 768;
     const MCFloat minZ = 0;
     const MCFloat maxZ = 1000;
-    const MCFloat metersPerPixel = 0.4;
+    const MCFloat metersPerUnit = 0.4;
 
     MCWorld world;
-    world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerPixel);
+    world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerUnit);
 
     QVERIFY(qFuzzyCompare(world.minX(), minX));
     QVERIFY(qFuzzyCompare(world.maxX(), maxX));
@@ -65,7 +86,34 @@ void MCWorldTest::testSetDimensions()
     QVERIFY(qFuzzyCompare(world.minZ(), minZ));
     QVERIFY(qFuzzyCompare(world.maxZ(), maxZ));
 
-    QVERIFY(qFuzzyCompare(world.metersPerPixel(), metersPerPixel));
+    QVERIFY(qFuzzyCompare(world.metersPerUnit(), metersPerUnit));
+}
+
+void MCWorldTest::testSimpleCollision()
+{
+    MCWorld world;
+    world.setDimensions(-10, 10, -10, 10, -10, 10);
+
+    TestObject object1;
+    MCRectShape * shape1 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
+    object1.setShape(MCShapePtr(shape1));
+    object1.preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
+
+    TestObject object2;
+    MCRectShape * shape2 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
+    object2.setShape(MCShapePtr(shape2));
+    object2.preventSleeping(true);
+
+    world.addObject(object1);
+    world.addObject(object2);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1.0);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
 }
 
 QTEST_MAIN(MCWorldTest)
