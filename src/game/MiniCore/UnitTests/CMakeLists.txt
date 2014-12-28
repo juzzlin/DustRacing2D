@@ -1,3 +1,5 @@
 add_subdirectory(MCForceRegistryTest)
 add_subdirectory(MCObjectTest)
 add_subdirectory(MCMeshLoaderTest)
+add_subdirectory(MCWorldTest)
+

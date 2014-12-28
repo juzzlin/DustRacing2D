@@ -106,10 +106,10 @@ void MCObjectTest::testAddToWorld()
     MCWorld world;
     MCObject object("test");
     QVERIFY(object.index() == -1);
-    world.addObject(object);
+    object.addToWorld();
     QVERIFY(object.index() >= 0);
 
-    world.removeObject(object); // Lazy removal
+    object.removeFromWorld(); // Lazy removal
     QVERIFY(object.index() >= 0);
     world.stepTime(1);
     QVERIFY(object.index() == -1);
@@ -117,7 +117,7 @@ void MCObjectTest::testAddToWorld()
     object.addToWorld();
     QVERIFY(object.index() >= 0);
 
-    world.removeObjectNow(object); // Immediate removal
+    object.removeFromWorldNow(); // Immediate removal
     QVERIFY(object.index() == -1);
 }
 

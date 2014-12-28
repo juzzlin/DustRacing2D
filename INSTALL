@@ -87,6 +87,10 @@ Optionally run the track editor:
 
 $ ./dustrac-editor
 
+Run unit tests:
+
+$ ctest
+
 Release build (in this example game installs under /usr):
 --------------------------------------------------------
 
