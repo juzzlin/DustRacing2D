@@ -186,7 +186,7 @@ static const char * tile3dFsh =
 "    }\n"
 "    else\n"
 "    {\n"
-"        if ((color0.r + color0.b) < 0.01)\n"
+"        if ((color0.r + color0.b) <= color0.g)\n"
 "        {\n"
 "            color0 = mix(color1, color2, color0.g);\n"
 "        }\n"

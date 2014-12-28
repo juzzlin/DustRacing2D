@@ -167,6 +167,41 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                             }
                         }
                     }
+                    else if (childNode.nodeName() == "wrap")
+                    {
+                        QDomElement tag = childNode.toElement();
+                        if(!tag.isNull())
+                        {
+                            const std::string s = tag.attribute("s", "").toStdString();
+                            const std::string t = tag.attribute("t", "").toStdString();
+
+                            if (s == "clamp")
+                            {
+                                newData->wrapS = std::pair<GLint, bool>(GL_CLAMP, true);
+                            }
+                            else if (s == "repeat")
+                            {
+                                newData->wrapS = std::pair<GLint, bool>(GL_REPEAT, true);
+                            }
+                            else
+                            {
+                                throw MCException("Unknown s wrap '" + s + "'");
+                            }
+
+                            if (t == "clamp")
+                            {
+                                newData->wrapT = std::pair<GLint, bool>(GL_CLAMP, true);
+                            }
+                            else if (t == "repeat")
+                            {
+                                newData->wrapT = std::pair<GLint, bool>(GL_REPEAT, true);
+                            }
+                            else
+                            {
+                                throw MCException("Unknown t wrap '" + t + "'");
+                            }
+                        }
+                    }
                     else
                     {
                         throw MCException("Unknown tag '" + childNode.nodeName().toStdString() + "'");

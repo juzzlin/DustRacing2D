@@ -95,6 +95,12 @@ struct MCSurfaceMetaData
     //! Mag filter value
     std::pair<GLint, bool> magFilter;
 
+    //! Texture wrap s value
+    std::pair<GLint, bool> wrapS;
+
+    //! Texture wrap t value
+    std::pair<GLint, bool> wrapT;
+
     //! Specular coeff
     std::pair<GLfloat, bool> specularCoeff;
 
