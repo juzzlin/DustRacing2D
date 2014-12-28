@@ -397,7 +397,8 @@ public:
      *  \param newAngle The new angle in degrees [0..360]. */
     void rotateRelative(MCFloat newAngle);
 
-    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
+    /*! The object won't sleep if enabled. */
+    void preventSleeping(bool flag);
 
 protected:
 
@@ -420,6 +421,8 @@ protected:
     static MCUint registerType(const std::string & typeName);
 
 private:
+
+    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
 
     /*! Cache range of objectGrid cells the object is touching.
      *  Used by MCObjectGrid. */
@@ -500,6 +503,7 @@ private:
     MCFloat                      m_damping;
     int                          m_timerEventObjectsIndex;
     bool                         m_sleeping;
+    bool                         m_sleepingPrevented;
     MCFloat                      m_linearSleepLimit;
     MCFloat                      m_angularSleepLimit;
     bool                         m_physicsObject;

@@ -73,6 +73,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
     addChildObject(numberPlate, m_desc.numberPos, 90);
     numberPlate->setRenderLayerRelative(1);
+    numberPlate->setBypassCollisions(true);
 
     const MCFloat offTrackFrictionFactor = 0.65;
     const MCFloat frontFriction = 0.85;

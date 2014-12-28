@@ -34,8 +34,8 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 , m_rail1(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
 , m_railLower0(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
 , m_railLower1(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
-, m_trigger0(MCObjectPtr(new BridgeTrigger))
-, m_trigger1(MCObjectPtr(new BridgeTrigger))
+, m_trigger0(MCObjectPtr(new BridgeTrigger(*this)))
+, m_trigger1(MCObjectPtr(new BridgeTrigger(*this)))
 {
     setRenderLayer(Layers::Bridge);
     setCollisionLayer(-1);
@@ -86,11 +86,27 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     addChildObject(m_trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
 }
 
+void Bridge::enterObject(MCObject & object)
+{
+    object.setCollisionLayer(Layers::BridgeRails);
+    object.setRenderLayer(Layers::BridgeRails);
+
+    m_objectsEntered[&object] = true;
+    m_objectsOnBridge[&object] = m_tag;
+}
+
 void Bridge::collisionEvent(MCCollisionEvent & event)
 {
-    if (!event.collidingObject().stationary())
+    MCObject & object = event.collidingObject();
+    if (!object.stationary())
     {
-        m_objectsOnBridge[&event.collidingObject()] = m_tag;
+        if (m_objectsEntered.count(&object))
+        {
+            object.setCollisionLayer(Layers::BridgeRails);
+            object.setRenderLayer(Layers::BridgeRails);
+            object.preventSleeping(true);
+            m_objectsOnBridge[&object] = m_tag;
+        }
     }
 }
 
@@ -102,8 +118,11 @@ void Bridge::stepTime(MCFloat)
     {
         if (m_tag > iter->second + frameTolerance)
         {
-            iter->first->setCollisionLayer(0); // MCObject default collision layer
-            iter->first->setRenderLayer(Layers::Objects);
+            MCObject & object = *iter->first;
+            object.setCollisionLayer(0); // MCObject default collision layer
+            object.setRenderLayer(Layers::Objects);
+            object.preventSleeping(false);
+            m_objectsEntered.erase(&object);
             iter = m_objectsOnBridge.erase(iter);
         }
         else

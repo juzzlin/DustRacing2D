@@ -36,9 +36,13 @@ public:
     //! \reimp
     virtual void stepTime(MCFloat step);
 
+    void enterObject(MCObject & object);
+
 private:
 
     std::map<MCObject *, int> m_objectsOnBridge;
+
+    std::map<MCObject *, bool> m_objectsEntered;
 
     int m_tag;
 

@@ -18,14 +18,20 @@
 
 #include <MCObject>
 
+class Bridge;
+
 class BridgeTrigger : public MCObject
 {
 public:
 
-    BridgeTrigger();
+    BridgeTrigger(Bridge & bridge);
 
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event);
+
+private:
+
+    Bridge & m_bridge;
 };
 
 #endif // BRIDGETRIGGER_HPP

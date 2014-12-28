@@ -95,6 +95,7 @@ void MCObject::init(const std::string & typeId)
     m_damping                = DAMPING;
     m_timerEventObjectsIndex = -1;
     m_sleeping               = false;
+    m_sleepingPrevented      = false;
     m_linearSleepLimit       = 0.01;
     m_angularSleepLimit      = 0.01;
     m_physicsObject          = true;
@@ -949,6 +950,11 @@ void MCObject::setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimi
 
 void MCObject::toggleSleep(bool state)
 {
+    if (state && m_sleepingPrevented)
+    {
+        return;
+    }
+
     m_sleeping = state;
 
     // Optimization: dynamically remove from the integration vector
@@ -991,6 +997,11 @@ MCFloat MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVect
         }
     }
     return linearBalance;
+}
+
+void MCObject::preventSleeping(bool flag)
+{
+    m_sleepingPrevented = flag;
 }
 
 MCObject::~MCObject()
