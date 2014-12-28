@@ -20,7 +20,7 @@ Dust Racing includes the source code for the GLM library.
 See src/game/MiniCore/Graphics/glm/ogl-math/glm/glm.hpp for the license text.
 
 All image files, except where otherwise noted, are licensed under
-CC BY-NC 3.0: http://creativecommons.org/licenses/by-nc/3.0/
+CC BY-SA 3.0: http://creativecommons.org/licenses/by-sa/3.0/
 
 Playing
 =======

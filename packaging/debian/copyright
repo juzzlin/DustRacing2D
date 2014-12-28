@@ -8,11 +8,11 @@ License: GPL-3.0+
 
 Files: data/images/*
 Copyright: 2012 Jussi Lind <jussi.lind@iki.fi>
-License: CC BY-NC 3.0
+License: CC BY-SA 3.0
 
 Files: data/icons/*
 Copyright: 2012 Jussi Lind <jussi.lind@iki.fi>
-License: CC BY-NC 3.0
+License: CC BY-SA 3.0
 
 Files: debian/*
 Copyright: 2012 Jussi Lind <jussi.lind@iki.fi>
@@ -35,8 +35,8 @@ License: GPL-3.0+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
 
-License: CC BY-NC 3.0
- http://creativecommons.org/licenses/by-nc/3.0/
+License: CC BY-SA 3.0
+ http://creativecommons.org/licenses/by-sa/3.0/
 
 # Please also look if there are files or directories which have a
 # different copyright/license attached and list them here.
