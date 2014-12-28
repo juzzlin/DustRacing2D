@@ -386,21 +386,27 @@ void MCObject::addToWorld(MCFloat x, MCFloat y, MCFloat z)
 
 void MCObject::removeFromWorld()
 {
-    MCWorld::instance().removeObject(*this);
-
-    for (auto child : m_children)
+    if (MCWorld::hasInstance())
     {
-        MCWorld::instance().removeObject(*child);
+        MCWorld::instance().removeObject(*this);
+
+        for (auto child : m_children)
+        {
+            MCWorld::instance().removeObject(*child);
+        }
     }
 }
 
 void MCObject::removeFromWorldNow()
 {
-    MCWorld::instance().removeObjectNow(*this);
-
-    for (auto child : m_children)
+    if (MCWorld::hasInstance())
     {
-        MCWorld::instance().removeObjectNow(*child);
+        MCWorld::instance().removeObjectNow(*this);
+
+        for (auto child : m_children)
+        {
+            MCWorld::instance().removeObjectNow(*child);
+        }
     }
 }
 
@@ -1006,5 +1012,6 @@ void MCObject::preventSleeping(bool flag)
 
 MCObject::~MCObject()
 {
+    removeFromWorldNow();
     deleteContacts();
 }

@@ -63,6 +63,8 @@ public:
     //! Return the one-and-only MCWorld instance.
     static MCWorld & instance();
 
+    static bool hasInstance();
+
     //! Remove all objects.
     void clear();
 

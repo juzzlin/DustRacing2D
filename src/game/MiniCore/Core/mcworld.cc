@@ -153,6 +153,11 @@ void MCWorld::renderShadows(MCCamera * camera)
     m_renderer->renderShadows(camera);
 }
 
+bool MCWorld::hasInstance()
+{
+    return MCWorld::m_instance;
+}
+
 MCWorld & MCWorld::instance()
 {
     if (!MCWorld::m_instance)
