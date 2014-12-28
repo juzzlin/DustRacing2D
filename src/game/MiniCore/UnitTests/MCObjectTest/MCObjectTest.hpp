@@ -46,6 +46,7 @@ private slots:
     void testTimerEvent();
     void testTranslate();
     void testVelocityAndSleep();
+    void testVelocityAndPreventSleeping();
     void testVelocityIntegration();
 
 private:

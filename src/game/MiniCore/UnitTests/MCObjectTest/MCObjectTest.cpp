@@ -504,6 +504,35 @@ void MCObjectTest::testVelocityAndSleep()
     QVERIFY(object.index() == -1);
 }
 
+void MCObjectTest::testVelocityAndPreventSleeping()
+{
+    MCWorld world;
+    MCObject object("TestObject");
+    object.addToWorld();
+
+    object.setVelocity(MCVector3dF(1, 1, 1));
+
+    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.index() >= 0);
+    vector3dCompare(object.velocity(), MCVector3dF(1, 1, 1));
+
+    object.preventSleeping(true);
+
+    object.setVelocity(MCVector3dF(0, 0, 0));
+
+    vector3dCompare(object.velocity(), MCVector3dF(0, 0, 0));
+
+    world.stepTime(1);
+    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.index() >= 0);
+
+    object.preventSleeping(false);
+
+    world.stepTime(1);
+    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.index() == -1);
+}
+
 void MCObjectTest::testVelocityIntegration()
 {
     MCWorld world;
