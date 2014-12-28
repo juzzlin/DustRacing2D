@@ -163,9 +163,6 @@ public:
     //! Get maximum Z
     MCFloat maxZ() const;
 
-    //! Max number of rendering layers
-    static const int MaxLayers = 32;
-
 protected:
 
     //! Get registered objects
