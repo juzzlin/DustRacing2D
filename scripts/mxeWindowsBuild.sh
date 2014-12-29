@@ -2,7 +2,7 @@
 
 # Assumes, that you have installed qt5, libopenal and libvorbisfile via MXE.
 
-MXE_QT5_QMAKE=~/mxe/usr/i686-pc-mingw32/qt5/bin/qmake
+MXE_QT5_QMAKE=~/mxe/usr/i686-w64-mingw32.static/qt5/bin/qmake
 
 ZIP=zip
 if ! which $ZIP; then

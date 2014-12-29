@@ -1,3 +1,28 @@
+1.9.1
+=====
+
+New features:
+
+* Rotating leaf particles
+* Show game version in the intro screen.
+
+Improvements:
+
+* Set VSync default to 'ON'.
+* Force QSettings to .INI-format on Windows.
+* Make the code compile with MS Visual C++ 2013.
+* Improved tile graphics
+* Re-license artwork under CC BY-SA
+* Switch to the new QSurface-based graphics stack
+* Engine improvements
+
+Bug fixes:
+
+* Fix broken OpenGL scene size on virtual desktops.
+* Fix multiple bridge issues
+* Fix crash when quitting
+* Fix rendering of two-player game
+
 1.8.3
 =====
 

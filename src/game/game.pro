@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.8.3\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.9.1\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
@@ -15,6 +15,7 @@ contains(QT_VERSION, ^5\\..*) {
 }
 
 DEFINES += GLEW_STATIC GLEW_NO_GLU
+DEFINES += __MC_NO_GLEW__ __MC_QOPENGLFUNCTIONS__
 
 # Sound libraries
 CONFIG += link_pkgconfig

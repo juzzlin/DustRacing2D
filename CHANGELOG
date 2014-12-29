@@ -1,3 +1,44 @@
+1.9.1
+-----
+
+* Set VSync default to 'ON'.
+* Force QSettings to .INI-format on Windows.
+* Show game version in the intro screen.
+* Fix broken OpenGL scene size on virtual desktops.
+* Make the code compile with MS Visual C++ 2013.
+* Adjustable object grid size.
+* Add unit test for sleep prevention.
+* Add MCWorldTest.
+* Fix crash when quitting.
+* Fix multiple bridge issues.
+* Fix a bug where tire objects couldn't get on a bridge.
+* Improve bridge graphics.
+* Improve tile graphics.
+* Re-license artwork under CC BY-SA.
+* Enable vsync menu if QT_VERSION >= 5.3.0
+* Make shaders able to have pending property changes.
+* Fix rendering of two-player game.
+* Darker asphalt tile.
+* New rotating leaf particles.
+* Switch to the new QSurface-based graphics stack.
+* Improve doc of MCSurfaceManager.
+* Fix MiniCore compatibility with QML.
+* Fix game.pro
+* Remove obsolete files.
+* Not mandatory to give paths to MCAssetManager.
+* MCObjectTree => MCObjectGrid
+* Move some MCWorldRenderer methods to private scope.
+* Update printHelp().
+* Add support for QOpenGLFunctions.
+* Move Particles/* to Graphics/
+* Refactor vertex attribute array stuff from MCGLRectParticle to MCGLObjectBase.
+* Move some default shaders from the game to engine's side.
+* Refactor vertex attribute array stuff from child classes to MCGLObjectBase.
+* Add proxy methods to set shaders for texture fonts.
+* Refactor CMakeLists.txt
+* Remove option to build for OpenGL 3.0 because shaders are not up-to-date.
+* Refactor MiniCore file layout.
+
 1.8.3
 -----
 
