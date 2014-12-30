@@ -81,7 +81,7 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
 
 unsigned int MCMeshConfigLoader::meshCount() const
 {
-    return m_meshes.size();
+    return static_cast<unsigned int>(m_meshes.size());
 }
 
 const MCMeshMetaData & MCMeshConfigLoader::mesh(unsigned int index) const

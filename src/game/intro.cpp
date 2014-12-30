@@ -24,7 +24,7 @@ Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))
 {
     m_back.setShaderProgram(Renderer::instance().program("text"));
-    m_back.setColor(MCGLColor(0.9, 0.9, 0.9, 1.0));
+    m_back.setColor(MCGLColor(0.9f, 0.9f, 0.9f, 1.0f));
 }
 
 void Intro::setFadeValue(float value)

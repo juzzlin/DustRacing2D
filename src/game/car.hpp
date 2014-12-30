@@ -42,15 +42,15 @@ public:
 
         //! Constructor.
         Description()
-        : accelerationFriction(0.75)
-        , brakingFriction(1.5)
-        , rollingFrictionOnTrack(0.1)
-        , rotationFriction(1.0)
-        , power(5000.0)
-        , mass(1500.0)
-        , restitution(0.05)
-        , dragLinear(1.0)
-        , dragQuadratic(5.0)
+        : accelerationFriction(0.75f)
+        , brakingFriction(1.5f)
+        , rollingFrictionOnTrack(0.1f)
+        , rotationFriction(1.0f)
+        , power(5000.0f)
+        , mass(1500.0f)
+        , restitution(0.05f)
+        , dragLinear(1.0f)
+        , dragQuadratic(5.0f)
         , tireWearOutCapacity(100)
         , numberPos(-5, 0)
         , leftFrontTirePos(14, 9)
@@ -94,10 +94,10 @@ public:
     void clearStatuses();
 
     //! Turn left.
-    void turnLeft(MCFloat control = 1.0);
+    void turnLeft(MCFloat control = 1.0f);
 
     //! Turn right.
-    void turnRight(MCFloat control = 1.0);
+    void turnRight(MCFloat control = 1.0f);
 
     //! Accelerate.
     void accelerate(bool deccelerate = false);

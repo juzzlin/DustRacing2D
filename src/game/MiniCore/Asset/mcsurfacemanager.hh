@@ -85,7 +85,7 @@ public:
      *  baseDataPath + baseImagePath + fileName. baseImagePath and the fileName are
      *  defined in the input file. */
     virtual void load(
-        const std::string & configFilePath, const std::string & baseDataPath) throw (MCException);
+        const std::string & configFilePath, const std::string & baseDataPath);
 
     /*! Returns a surface object associated with given strId.
      *  Corresponding OpenGL texture handle can be obtained
@@ -95,12 +95,12 @@ public:
      *  \return Reference to the corresponding MCSurface.
      *  \throws MCException on failure. */
     MCSurface & surface(
-        const std::string & handle) const throw (MCException);
+        const std::string & handle) const;
 
     /*! Creates an MCSurface containing an OpenGL texture from a QImage + texture meta data.
      *  MCSurfaceManager keeps the ownership. */
     MCSurface & createSurfaceFromImage(
-        const MCSurfaceMetaData & data, const QImage & image) throw (MCException);
+        const MCSurfaceMetaData & data, const QImage & image);
 
 private:
 

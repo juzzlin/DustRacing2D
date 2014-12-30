@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
+#include <QString>
+
 //! Config data for editor and for the game.
 class Config
 {
@@ -24,14 +26,14 @@ public:
     public:
 
         //! The base data path.
-        static const char * dataPath;
+        static QString dataPath;
 
         //! "Company" name used in QSettings.
-        static const char * QSETTINGS_COMPANY_NAME;
+        static QString QSETTINGS_COMPANY_NAME;
 
         //! Path used to search "3rd party" race tracks under the home dir:
         //! ~/TRACK_SEARCH_PATH/
-        static const char * TRACK_SEARCH_PATH;
+        static QString TRACK_SEARCH_PATH;
     };
 
     //! Editor-specific config data.
@@ -39,19 +41,19 @@ public:
     {
     public:
 
-        static const char * EDITOR_NAME;
-        static const char * EDITOR_VERSION;
-        static const char * MODEL_CONFIG_FILE_NAME;
-        static const char * QSETTINGS_SOFTWARE_NAME;
+        static QString EDITOR_NAME;
+        static QString EDITOR_VERSION;
+        static QString MODEL_CONFIG_FILE_NAME;
+        static QString QSETTINGS_SOFTWARE_NAME;
 
         //! Path to the "select" icon.
-        static const char * SELECT_PATH;
+        static QString SELECT_PATH;
 
         //! Path to the "erase" icon.
-        static const char * ERASE_PATH;
+        static QString ERASE_PATH;
 
         //! Path to the "clear" tile.
-        static const char * CLEAR_PATH;
+        static QString CLEAR_PATH;
     };
 
     //! Game-specific config data.
@@ -59,9 +61,9 @@ public:
     {
     public:
 
-        static const char * GAME_NAME;
-        static const char * GAME_VERSION;
-        static const char * QSETTINGS_SOFTWARE_NAME;
+        static QString GAME_NAME;
+        static QString GAME_VERSION;
+        static QString QSETTINGS_SOFTWARE_NAME;
 
         //! Default window width.
         static const unsigned int WINDOW_WIDTH;

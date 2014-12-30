@@ -39,7 +39,7 @@ MCUint MCObject::m_typeIDCount = 1;
 MCObject::TypeHash MCObject::m_typeHash;
 MCObject::TimerEventObjectsList MCObject::m_timerEventObjects;
 
-static const MCFloat DAMPING = 0.999;
+static const MCFloat DAMPING = 0.999f;
 
 MCObject::MCObject(const std::string & typeId)
 {
@@ -96,8 +96,8 @@ void MCObject::init(const std::string & typeId)
     m_timerEventObjectsIndex = -1;
     m_sleeping               = false;
     m_sleepingPrevented      = false;
-    m_linearSleepLimit       = 0.01;
-    m_angularSleepLimit      = 0.01;
+    m_linearSleepLimit       = 0.01f;
+    m_angularSleepLimit      = 0.01f;
     m_physicsObject          = true;
     m_triggerObject          = false;
     m_stationary             = false;

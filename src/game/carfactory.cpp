@@ -48,7 +48,7 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
     {
         desc.power                = 0.75 * defaultPower;
         desc.dragQuadratic        = defaultDrag;
-        desc.accelerationFriction = 0.55;
+        desc.accelerationFriction = 0.55f;
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
     }

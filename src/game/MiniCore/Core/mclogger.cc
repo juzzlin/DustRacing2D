@@ -17,6 +17,8 @@
 // MA  02110-1301, USA.
 //
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "mclogger.hh"
 #include <ctime>
 

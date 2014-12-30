@@ -30,47 +30,47 @@ public:
     {
         struct Header
         {
-            static constexpr const char * VER   = "version";
-            static constexpr const char * TRACK = "track";
-            static constexpr const char * NAME  = "name";
-            static constexpr const char * COLS  = "cols";
-            static constexpr const char * ROWS  = "rows";
-            static constexpr const char * INDEX = "index";
-            static constexpr const char * USER  = "isUserTrack";
+            static QString VER()   { return "version"; }
+            static QString TRACK() { return "track"; }
+            static QString NAME()  { return "name"; }
+            static QString COLS()  { return "cols"; }
+            static QString ROWS()  { return "rows"; }
+            static QString INDEX() { return "index"; }
+            static QString USER()  { return "isUserTrack"; }
         };
 
         struct Track
         {
-            static constexpr const char * NODE   = "n";
-            static constexpr const char * TILE   = "t";
-            static constexpr const char * OBJECT = "o";
+            static QString NODE()   { return "n"; }
+            static QString TILE()   { return "t"; }
+            static QString OBJECT() { return "o"; }
         };
 
         struct Node
         {
-            static constexpr const char * INDEX  = "i";
-            static constexpr const char * X      = "x";
-            static constexpr const char * Y      = "y";
-            static constexpr const char * WIDTH  = "w";
-            static constexpr const char * HEIGHT = "h";
+            static QString INDEX()  { return "i"; }
+            static QString X()      { return "x"; }
+            static QString Y()      { return "y"; }
+            static QString WIDTH()  { return "w"; }
+            static QString HEIGHT() { return "h"; }
         };
 
         struct Tile
         {
-            static constexpr const char * TYPE          = "t";
-            static constexpr const char * I             = "i";
-            static constexpr const char * J             = "j";
-            static constexpr const char * ORIENTATION   = "o";
-            static constexpr const char * COMPUTER_HINT = "c";
+            static QString TYPE()          { return "t"; }
+            static QString I()             { return "i"; }
+            static QString J()             { return "j"; }
+            static QString ORIENTATION()   { return "o"; }
+            static QString COMPUTER_HINT() { return "c"; }
         };
 
         struct Object
         {
-            static constexpr const char * ROLE        = "r";
-            static constexpr const char * CATEGORY    = "c";
-            static constexpr const char * X           = "x";
-            static constexpr const char * Y           = "y";
-            static constexpr const char * ORIENTATION = "o";
+            static QString ROLE()        { return "r"; }
+            static QString CATEGORY()    { return "c"; }
+            static QString X()           { return "x"; }
+            static QString Y()           { return "y"; }
+            static QString ORIENTATION() { return "o"; }
         };
     };
 

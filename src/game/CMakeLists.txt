@@ -152,9 +152,9 @@ set(COMMON_LIBS
     ${OPENGL_glu_LIBRARY}
     ${OPENAL_LIBRARY}
     ${VORBISFILE_LIBRARIES}
-    ${VORBISFILE_STATIC_LIB} # Valid only if static lib was used
-    ${VORBIS_STATIC_LIB}     # Valid only if static lib was used
-    ${OGG_STATIC_LIB})       # Valid only if static lib was used
+    ${VORBISFILE_LIB} # Valid only with MSVC
+    ${VORBIS_LIB}     # Valid only with MSVC
+    ${OGG_LIB})       # Valid only with MSVC
 
 qt5_use_modules(${GAME_BINARY_NAME} OpenGL Xml)
 target_link_libraries(${COMMON_LIBS})

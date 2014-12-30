@@ -30,7 +30,7 @@
 #include <cmath>
 
 // Damping factor defined in MCObject
-static const MCFloat DAMPING = 0.999;
+static const MCFloat DAMPING = 0.999f;
 
 class TestObject : public MCObject
 {

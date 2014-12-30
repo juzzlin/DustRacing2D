@@ -35,7 +35,7 @@ MCTextureFontManager::MCTextureFontManager(
 }
 
 void MCTextureFontManager::load(
-    const std::string & fileName) throw (MCException)
+    const std::string & fileName)
 {
     MCTextureFontConfigLoader loader;
     loader.setConfigPath(fileName);
@@ -105,7 +105,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 }
 
 MCTextureFont & MCTextureFontManager::font(
-    const std::string & name) const throw (MCException)
+    const std::string & name) const
 {
     // Try to find existing texture for the surface
     if (m_fontHash.count(name) == 0)

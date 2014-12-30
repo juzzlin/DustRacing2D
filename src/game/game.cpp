@@ -54,10 +54,10 @@ Game::Game(bool forceNoVSync)
 , m_renderer(nullptr)
 , m_scene(nullptr)
 , m_assetManager(new MCAssetManager(
-    Config::Common::dataPath,
-    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "textures.conf",
+    Config::Common::dataPath.toStdString(),
+    (Config::Common::dataPath + QDir::separator().toLatin1() + "textures.conf").toStdString(),
     "",
-    std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + "meshes.conf"))
+    (Config::Common::dataPath + QDir::separator().toLatin1() + "meshes.conf").toStdString()))
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
 , m_trackLoader(new TrackLoader(*m_objectFactory))
 , m_updateFps(60)

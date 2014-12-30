@@ -184,15 +184,15 @@ TrackData * TrackLoader::loadTrack(QString path)
     if (root.nodeName() == "track")
     {
         const QString name =
-            root.attribute(TrackDataBase::IO::Header::NAME, "undefined");
+            root.attribute(TrackDataBase::IO::Header::NAME(), "undefined");
         const unsigned int cols =
-            root.attribute(TrackDataBase::IO::Header::COLS, "0").toUInt();
+            root.attribute(TrackDataBase::IO::Header::COLS(), "0").toUInt();
         const unsigned int rows =
-            root.attribute(TrackDataBase::IO::Header::ROWS, "0").toUInt();
+            root.attribute(TrackDataBase::IO::Header::ROWS(), "0").toUInt();
         const unsigned int index =
-            root.attribute(TrackDataBase::IO::Header::INDEX, "999").toUInt();
+            root.attribute(TrackDataBase::IO::Header::INDEX(), "999").toUInt();
         const bool isUserTrack =
-            root.attribute(TrackDataBase::IO::Header::USER, "0").toUInt();
+            root.attribute(TrackDataBase::IO::Header::USER(), "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
@@ -210,17 +210,17 @@ TrackData * TrackLoader::loadTrack(QString path)
                 if(!element.isNull())
                 {
                     // Read a tile element
-                    if (element.nodeName() == TrackDataBase::IO::Track::TILE)
+                    if (element.nodeName() == TrackDataBase::IO::Track::TILE())
                     {
                         readTile(element, *newData);
                     }
                     // Read an object element
-                    else if (element.nodeName() == TrackDataBase::IO::Track::OBJECT)
+                    else if (element.nodeName() == TrackDataBase::IO::Track::OBJECT())
                     {
                         readObject(element, *newData);
                     }
                     // Read a target node element
-                    else if (element.nodeName() == TrackDataBase::IO::Track::NODE)
+                    else if (element.nodeName() == TrackDataBase::IO::Track::NODE())
                     {
                         readTargetNode(element, *newData, route);
                     }
@@ -240,15 +240,15 @@ void TrackLoader::readTile(
     QDomElement & element, TrackData & newData)
 {
     const std::string id =
-        element.attribute(TrackDataBase::IO::Tile::TYPE, "clear").toStdString();
+        element.attribute(TrackDataBase::IO::Tile::TYPE(), "clear").toStdString();
     const unsigned int computerHint =
-        element.attribute(TrackDataBase::IO::Tile::COMPUTER_HINT, "0").toUInt();
+        element.attribute(TrackDataBase::IO::Tile::COMPUTER_HINT(), "0").toUInt();
 
     // X-coordinate in the tile matrix
-    unsigned int i = element.attribute(TrackDataBase::IO::Tile::I, "0").toUInt();
+    unsigned int i = element.attribute(TrackDataBase::IO::Tile::I(), "0").toUInt();
 
     // Y-coordinate in the tile matrix
-    unsigned int j = element.attribute(TrackDataBase::IO::Tile::J, "0").toUInt();
+    unsigned int j = element.attribute(TrackDataBase::IO::Tile::J(), "0").toUInt();
 
     // Orientation angle in degrees.
     int o = element.attribute("o", "0").toInt();
@@ -350,18 +350,18 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 
 void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 {
-    const QString role = element.attribute(TrackDataBase::IO::Object::ROLE, "");
-    const QString category = element.attribute(TrackDataBase::IO::Object::CATEGORY, "");
+    const QString role = element.attribute(TrackDataBase::IO::Object::ROLE(), "");
+    const QString category = element.attribute(TrackDataBase::IO::Object::CATEGORY(), "");
 
     // X-coordinate in the world
-    const int x = element.attribute(TrackDataBase::IO::Object::X, "0").toInt();
+    const int x = element.attribute(TrackDataBase::IO::Object::X(), "0").toInt();
 
     // Y-coordinate in the world
-    const int y = element.attribute(TrackDataBase::IO::Object::Y, "0").toInt();
+    const int y = element.attribute(TrackDataBase::IO::Object::Y(), "0").toInt();
 
     // Mirror the angle, because the y-axis is pointing
     // down in the editor's coordinate system.
-    const int angle = -element.attribute(TrackDataBase::IO::Object::ORIENTATION, "0").toInt();
+    const int angle = -element.attribute(TrackDataBase::IO::Object::ORIENTATION(), "0").toInt();
 
     // Height of the map.
     const int h = newData.map().rows() * TrackTile::TILE_H;
@@ -378,11 +378,11 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 void TrackLoader::readTargetNode(
     QDomElement & element, TrackData & newData, std::vector<TargetNodeBase *> & route)
 {
-    const int x = element.attribute(TrackDataBase::IO::Node::X,      "0").toInt();
-    const int y = element.attribute(TrackDataBase::IO::Node::Y,      "0").toInt();
-    const int w = element.attribute(TrackDataBase::IO::Node::WIDTH,  "0").toInt();
-    const int h = element.attribute(TrackDataBase::IO::Node::HEIGHT, "0").toInt();
-    const int i = element.attribute(TrackDataBase::IO::Node::INDEX,  "0").toInt();
+    const int x = element.attribute(TrackDataBase::IO::Node::X(),      "0").toInt();
+    const int y = element.attribute(TrackDataBase::IO::Node::Y(),      "0").toInt();
+    const int w = element.attribute(TrackDataBase::IO::Node::WIDTH(),  "0").toInt();
+    const int h = element.attribute(TrackDataBase::IO::Node::HEIGHT(), "0").toInt();
+    const int i = element.attribute(TrackDataBase::IO::Node::INDEX(),  "0").toInt();
 
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.

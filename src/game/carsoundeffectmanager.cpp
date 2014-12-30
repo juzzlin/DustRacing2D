@@ -20,7 +20,7 @@
 #include <MCTrigonom>
 #include <MCMathUtil>
 
-static std::vector<float> gearRatios = {1.0, 0.8, 0.6, 0.5, 0.4, 0.3};
+static std::vector<float> gearRatios = {1.0f, 0.8f, 0.6f, 0.5f, 0.4f, 0.3f};
 
 CarSoundEffectManager::CarSoundEffectManager(
     Car & car, const CarSoundEffectManager::MultiSoundHandles & handles)

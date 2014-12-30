@@ -36,7 +36,7 @@ MCMeshManager::MCMeshManager()
 }
 
 MCMesh & MCMeshManager::createMesh(
-    const MCMeshMetaData & data, const MCMesh::FaceVector & faces) throw (MCException)
+    const MCMeshMetaData & data, const MCMesh::FaceVector & faces)
 {
     // Create material
     MCGLMaterialPtr material(new MCGLMaterial);
@@ -60,7 +60,7 @@ MCMesh & MCMeshManager::createMesh(
 }
 
 void MCMeshManager::load(
-    const std::string & configFilePath, const std::string & baseDataPath) throw (MCException)
+    const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCMeshConfigLoader configLoader;
     MCMeshLoader       modelLoader;
@@ -92,7 +92,7 @@ void MCMeshManager::load(
     }
 }
 
-MCMesh & MCMeshManager::mesh(const std::string & handle) const throw (MCException)
+MCMesh & MCMeshManager::mesh(const std::string & handle) const
 {
     // Try to find existing mesh for the handle
     if (m_meshMap.count(handle) == 0)

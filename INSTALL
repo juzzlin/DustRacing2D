@@ -33,16 +33,21 @@ The "official" build system for Linux is CMake.
 
 There are also qmake project files for easier cross-compilation for Windows and Android. Qt5 is required.
 
-I used to make Windows releases also with CMake, but in the future I'll cross-compile for Windows
-on Ubuntu host by using MXE and qmake. MXE is a cool cross-compilation environment and all
-libraries are linked statically by default (no DLLs needed).
+I used to make Windows releases also with CMake, but in the future I'll cross-compile for Windows on Ubuntu host by using MXE and qmake. MXE is a cool cross-compilation environment
+and all libraries are linked statically by default (no DLLs needed).
 
 Toolchains
 ==========
 
-GCC/MinGW and Clang are the only "officially" supported toolchains.
+GCC/MinGW and Clang are the only "officially" supported toolchains on Linux.
 
-Building with Microsoft Visual C++ is not tested.
+Windows builds are done on Ubuntu with MXE (web: mxe.cc). The build script
+also generates automatically an NSIS Windows installer and a ZIP-archive.
+See scripts/mxeWindowsBuild.sh.
+
+Building the project with Microsoft Visual C++ 2013 also works, but no automatic
+packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
+manually copied in place. See more detailed instructions below.
 
 Build dependencies
 ==================
@@ -110,7 +115,7 @@ $ sudo make install
 This installs also the desktop files so Dust Racing
 should appear in your application menu.
 
-Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 13.10)
+Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 14.04)
 ======================================================================
 
 1) Install MXE (http://mxe.cc)
@@ -135,6 +140,21 @@ After a successful build run CPack:
 $ cpack
 
 This will generate .tar.gz and .sh binary packages on Linux.
+
+Building with Microsoft Visual C++
+==================================
+
+The project has been successfully compiled and executed with MSVC with the following setup: 
+
+* Windows 8.1 Pro
+* Windows SDK for Windows 8.1
+* CMake 3.0
+* Qt 5.3 32-bit SDK for MSVC
+* MS Visual Studio 2013 for Desktop Windows
+
+1) Download and build Vorbis libraries and OpenAL Soft with the same toolchain
+2) Open the top-level CMakeLists.txt in Qt Creator, configure and build
+3) Copy the runtime files, like OpenAL DLL, to the same directory with the game binary
 
 For packagers
 =============

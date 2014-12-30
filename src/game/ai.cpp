@@ -135,10 +135,10 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     else
     {
         // The following speed limits are experimentally defined.
-        float scale = 0.9;
+        float scale = 0.9f;
         if (currentTile.computerHint() == TrackTile::CH_BRAKE)
         {
-            if (absSpeed > 14.0 * scale)
+            if (absSpeed > 14.0f * scale)
             {
                 brake = true;
             }
@@ -146,7 +146,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
         {
-            if (absSpeed > 9.5 * scale)
+            if (absSpeed > 9.5f * scale)
             {
                 brake = true;
             }
@@ -154,7 +154,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
         {
-            if (absSpeed > 7.0 * scale)
+            if (absSpeed > 7.0f * scale)
             {
                 accelerate = false;
             }
@@ -163,13 +163,13 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
         if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
             currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
         {
-            if (absSpeed > 8.3 * scale)
+            if (absSpeed > 8.3f * scale)
             {
                 accelerate = false;
             }
         }
 
-        if (absSpeed < 3.6 * scale)
+        if (absSpeed < 3.6f * scale)
         {
             accelerate = true;
             brake = false;

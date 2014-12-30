@@ -95,7 +95,7 @@ MCWorld::~MCWorld()
 
 MCFloat MCWorld::gravity()
 {
-    return 9.81;
+    return 9.81f;
 }
 
 void MCWorld::integrate(MCFloat step)
@@ -319,7 +319,7 @@ void MCWorld::addObject(MCObject & object)
             }
 
             // Add xy friction
-            const MCFloat FrictionThreshold = 0.001;
+            const MCFloat FrictionThreshold = 0.001f;
             if (object.xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(

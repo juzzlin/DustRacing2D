@@ -2,6 +2,10 @@ project(DustRacing2D)
 
 cmake_minimum_required(VERSION 2.8.8)
 cmake_policy(VERSION 2.8.8)
+cmake_policy(SET CMP0020 NEW)
+if(CMAKE_MAJOR_VERSION GREATER 2)
+  cmake_policy(SET CMP0043 NEW)
+endif()
 
 # Global game version
 set(VERSION_MAJOR "1")
@@ -11,9 +15,9 @@ set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 option(ReleaseBuild "This should be used when creating DEB and RPM packages." OFF)
 
-option(StaticVorbisLibs "Try to find static version of vorbis libs." OFF)
+option(VorbisLibsPath "Optional path hint for vorbis libs (libvorbis, libvorbisfile)." "")
 
-option(StaticVorbisLibsPath "Optional path hint for static versions of vorbis libs." "")
+option(OggLibPath "Optional path hint for ogg lib (libogg)." "")
 
 option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
@@ -58,6 +62,8 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -O3 -pedantic")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
+elseif(MSVC)
+    add_definitions(-DNOMINMAX)
 endif()
 
 set(GAME_BINARY_NAME "dustrac-game")
@@ -77,19 +83,22 @@ find_package(Qt5LinguistTools ${QT_MIN_VER} REQUIRED)
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# OpenAL for sounds. OpenAL directory can be given by -DOPENAL_DIR=...
+# OpenAL for sounds. OpenAL directory can be given by -DOPENALDIR=...
 set(ENV{OPENALDIR} ${OpenALDir})
 find_package(OpenAL REQUIRED)
+include_directories(${OPENAL_INCLUDE_DIR}/..)
 
 # Vorbis libs for reading Ogg files
-if(StaticVorbisLibs)
-    find_library(VORBISFILE_STATIC_LIB NAMES libvorbisfile.a libvorbisfile_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
-    find_library(VORBIS_STATIC_LIB NAMES libvorbis.a libvorbis_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
-    find_library(OGG_STATIC_LIB NAMES libogg.a libogg_static.lib HINTS ${StaticVorbisLibsPath} REQUIRED)
+if(MSVC)
+    find_library(VORBISFILE_LIB NAMES libvorbisfile.a libvorbisfile_static.lib HINTS ${VorbisLibsPath} REQUIRED)
+    find_library(VORBIS_LIB NAMES libvorbis.a libvorbis_static.lib HINTS ${VorbisLibsPath} REQUIRED)
+    include_directories(${VorbisLibsPath}/include)
+    find_library(OGG_LIB NAMES libogg.a libogg_static.lib HINTS ${OggLibPath} REQUIRED)
+    include_directories(${OggLibPath}/include)
     message(STATUS "Using static versions of vorbis libs:")
-    message(STATUS "  ${VORBISFILE_STATIC_LIB}")
-    message(STATUS "  ${VORBIS_STATIC_LIB}")
-    message(STATUS "  ${OGG_STATIC_LIB}")
+    message(STATUS "  ${VORBISFILE_LIB}")
+    message(STATUS "  ${VORBIS_LIB}")
+    message(STATUS "  ${OGG_LIB}")
 else()
     include(FindPkgConfig)
     pkg_check_modules(VORBISFILE REQUIRED vorbisfile)

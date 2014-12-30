@@ -22,7 +22,7 @@
 #include "mcobject.hh"
 #include "mcshape.hh"
 
-static const MCFloat ROTATION_DECAY = 0.01;
+static const MCFloat ROTATION_DECAY = 0.01f;
 
 MCFrictionGenerator::MCFrictionGenerator(
     MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity)

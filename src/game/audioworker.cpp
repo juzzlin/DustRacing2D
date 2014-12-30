@@ -47,7 +47,7 @@ void AudioWorker::init()
     alSpeedOfSound(1000.0);
 }
 
-void AudioWorker::checkFile(QString path) throw (MCException)
+void AudioWorker::checkFile(QString path)
 {
     if (!QFile(path).exists())
     {

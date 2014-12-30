@@ -46,7 +46,7 @@ MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
 
 void MCMesh::init(const FaceVector & faces)
 {
-    const int NUM_FACES = faces.size();
+    const int NUM_FACES = static_cast<int>(faces.size());
     m_numVertices = NUM_FACES * 3; // Only triagles accepted
 
     MCGLVertex   * vertices  = new MCGLVertex[m_numVertices];
@@ -62,7 +62,7 @@ void MCMesh::init(const FaceVector & faces)
     for (int faceIndex = 0; faceIndex < NUM_FACES; faceIndex++)
     {
         const MCMesh::Face & face = faces.at(faceIndex);
-        const int numFaceVertices = face.vertices.size();
+        const int numFaceVertices = static_cast<int>(face.vertices.size());
         assert(numFaceVertices == 3); // Only triagles accepted
 
         for (int faceVertexIndex = 0; faceVertexIndex < numFaceVertices; faceVertexIndex++)

@@ -1,4 +1,4 @@
-// This file is part of Dust Racing 2D.
+﻿// This file is part of Dust Racing 2D.
 // Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
@@ -18,6 +18,10 @@
 
 #include <MCTextureText>
 #include <QObject> // For QObject::tr()
+
+// Note!!: MSVC requires that this file is saved in "UTF-8 with BOM" format
+// in order to make all the wide chars work correctly. On Linux/Unix it doesn't
+// matter whether there's a BOM or not.
 
 Credits::Credits(std::string id, int width, int height)
 : SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST, true)

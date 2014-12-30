@@ -44,7 +44,7 @@ void Objects::remove(ObjectBase & object)
 
 unsigned int Objects::count() const
 {
-    return m_objects.size();
+    return static_cast<int>(m_objects.size());
 }
 
 ObjectBase & Objects::object(unsigned int index) const

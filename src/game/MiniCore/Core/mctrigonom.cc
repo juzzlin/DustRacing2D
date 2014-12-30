@@ -26,7 +26,7 @@
 namespace
 {
     const MCUint  LutSize = 7200;
-    const MCFloat PI      = 3.1415926535897932384626;
+    const MCFloat PI      = 3.1415926536f;
 }
 
 //! Implementation class for MCTrigonom
@@ -49,27 +49,27 @@ MCTrigonomImpl::MCTrigonomImpl()
 {
     for (MCUint i = 0; i < LutSize; i++) {
         MCTrigonomImpl::m_sin.at(i) =
-            std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0 - 3600));
+            std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
         MCTrigonomImpl::m_cos.at(i) =
-            std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0 - 3600));
+            std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
     }
 }
 
 MCFloat MCTrigonom::degToRad(MCFloat angle)
 {
-    static const MCFloat DegToRad(PI / 180.0);
+    static const MCFloat DegToRad(PI / 180.0f);
     return angle * DegToRad;
 }
 
 MCFloat MCTrigonom::radToDeg(MCFloat angle)
 {
-    static const MCFloat RadToDeg(180.0 / PI);
+    static const MCFloat RadToDeg(180.0f / PI);
     return angle * RadToDeg;
 }
 
 MCFloat MCTrigonom::sin(MCFloat angle)
 {
-    const int index = static_cast<int>(angle * 10.0) + 3600;
+    const int index = static_cast<int>(angle * 10.0f) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))
     {
         return m_pImpl->m_sin[index];
@@ -79,7 +79,7 @@ MCFloat MCTrigonom::sin(MCFloat angle)
 
 MCFloat MCTrigonom::cos(MCFloat angle)
 {
-    const int index = static_cast<int>(angle * 10.0) + 3600;
+    const int index = static_cast<int>(angle * 10.0f) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))
     {
         return m_pImpl->m_cos[index];

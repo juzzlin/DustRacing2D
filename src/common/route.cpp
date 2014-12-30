@@ -28,7 +28,7 @@ void Route::clear()
 
 bool Route::push(TargetNodeBase & tnode)
 {
-    tnode.setIndex(m_route.size());
+    tnode.setIndex(static_cast<int>(m_route.size()));
     m_route.push_back(&tnode);
     return isClosed();
 }
@@ -51,7 +51,7 @@ bool Route::isClosed() const
 
 unsigned int Route::numNodes() const
 {
-    return m_route.size();
+    return static_cast<unsigned int>(m_route.size());
 }
 
 TargetNodeBase & Route::get(unsigned int index) const

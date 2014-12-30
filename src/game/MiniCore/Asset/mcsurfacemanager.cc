@@ -154,7 +154,7 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
 }
 
 MCSurface & MCSurfaceManager::createSurfaceFromImage(
-    const MCSurfaceMetaData & data, const QImage & image) throw (MCException)
+    const MCSurfaceMetaData & data, const QImage & image)
 {
     // Store original width of the image
     int origH = data.height.second ? data.height.first : image.height();
@@ -307,7 +307,7 @@ MCSurfaceManager::~MCSurfaceManager()
 }
 
 void MCSurfaceManager::load(
-    const std::string & configFilePath, const std::string & baseDataPath) throw (MCException)
+    const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCSurfaceConfigLoader loader;
 
@@ -343,7 +343,7 @@ void MCSurfaceManager::load(
     }
 }
 
-MCSurface & MCSurfaceManager::surface(const std::string & id) const throw (MCException)
+MCSurface & MCSurfaceManager::surface(const std::string & id) const
 {
     // Try to find existing texture for the surface
     if (m_surfaceMap.count(id) == 0)

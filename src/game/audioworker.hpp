@@ -68,7 +68,7 @@ public slots:
 
 private:
 
-    void checkFile(QString path) throw (MCException);
+    void checkFile(QString path);
 
     void loadCommonSound(QString handle, QString path);
 

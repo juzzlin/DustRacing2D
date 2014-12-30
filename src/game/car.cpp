@@ -75,8 +75,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     numberPlate->setRenderLayerRelative(1);
     numberPlate->setBypassCollisions(true);
 
-    const MCFloat offTrackFrictionFactor = 0.65;
-    const MCFloat frontFriction = 0.85;
+    const MCFloat offTrackFrictionFactor = 0.65f;
+    const MCFloat frontFriction = 0.85f;
     m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
     m_leftFrontTire->setRenderLayerRelative(-1);
@@ -85,7 +85,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
     m_rightFrontTire->setRenderLayerRelative(-1);
 
-    const MCFloat rearFriction = 0.95;
+    const MCFloat rearFriction = 0.95f;
     m_leftRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
     m_leftRearTire->setRenderLayerRelative(-1);
@@ -331,7 +331,7 @@ void Car::stepTime(MCFloat step)
     {
         if (m_braking || (m_accelerating && (m_turnLeft || m_turnRight)))
         {
-            wearOutTires(step, 0.05);
+            wearOutTires(step, 0.05f);
         }
 
         if (m_leftSideOffTrack)
@@ -339,7 +339,7 @@ void Car::stepTime(MCFloat step)
             static_cast<Tire *>(m_leftFrontTire.get())->setIsOffTrack(true);
             static_cast<Tire *>(m_leftRearTire.get())->setIsOffTrack(true);
 
-            wearOutTires(step, 0.10);
+            wearOutTires(step, 0.10f);
         }
         else
         {
@@ -352,7 +352,7 @@ void Car::stepTime(MCFloat step)
             static_cast<Tire *>(m_rightFrontTire.get())->setIsOffTrack(true);
             static_cast<Tire *>(m_rightRearTire.get())->setIsOffTrack(true);
 
-            wearOutTires(step, 0.10);
+            wearOutTires(step, 0.10f);
         }
         else
         {
