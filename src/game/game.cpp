@@ -113,11 +113,12 @@ void Game::createRenderer(bool forceNoVSync)
 
     if (nativeResolution)
     {
-        hRes = QApplication::desktop()->width();
-        vRes = QApplication::desktop()->height();
+        QDesktopWidget * desktop = QApplication::desktop();
+        hRes = desktop->screenGeometry(desktop->primaryScreen()).width();
+        vRes = desktop->screenGeometry(desktop->primaryScreen()).height();
     }
 
-    adjustSceneSize(hRes, vRes, fullScreen);
+    adjustSceneSize(hRes, vRes);
 
     MCLogger().info()
         << "Resolution: " << hRes << " " << vRes << " " << nativeResolution << " " << fullScreen;
@@ -169,20 +170,11 @@ void Game::createRenderer(bool forceNoVSync)
     connect(m_stateMachine, SIGNAL(renderingEnabled(bool)), m_renderer, SLOT(setEnabled(bool)));
 }
 
-void Game::adjustSceneSize(int hRes, int vRes, bool fullScreen)
+void Game::adjustSceneSize(int hRes, int vRes)
 {
     // Adjust scene height so that view aspect ratio is taken into account.
-    if (fullScreen)
-    {
-        const int newSceneHeight =
-            Scene::width() * QApplication::desktop()->height() / QApplication::desktop()->width();
-        Scene::setSize(Scene::width(), newSceneHeight);
-    }
-    else
-    {
-        const int newSceneHeight = Scene::width() * vRes / hRes;
-        Scene::setSize(Scene::width(), newSceneHeight);
-    }
+    const int newSceneHeight = Scene::width() * vRes / hRes;
+    Scene::setSize(Scene::width(), newSceneHeight);
 }
 
 void Game::showCursor()

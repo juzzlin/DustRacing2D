@@ -214,9 +214,6 @@ void Renderer::render()
         return;
     }
 
-    const int fullVRes = m_fullScreen ? QApplication::desktop()->height() : height();
-    const int fullHRes = m_fullScreen ? QApplication::desktop()->width()  : width();
-
     // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
 
@@ -257,7 +254,7 @@ void Renderer::render()
 
     // Render the frame buffer object onto the screen
 
-    resizeGL(fullHRes, fullVRes);
+    resizeGL(m_hRes, m_vRes);
 
     dummyMaterial->setTexture(fbo.texture(), 0);
     MCSurface sd(dummyMaterial, Scene::width(), Scene::height());

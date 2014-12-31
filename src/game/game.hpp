@@ -121,7 +121,7 @@ private slots:
 
 private:
 
-    void adjustSceneSize(int hRes, int vRes, bool fullScreen);
+    void adjustSceneSize(int hRes, int vRes);
     void createRenderer(bool forceNoVSync);
     void initScene();
     bool loadTracks();
