@@ -115,7 +115,7 @@ VSyncMenu::VSyncMenu(
 void VSyncMenu::enter()
 {
     // Set the currently selected VSync setting
-    const int vsync = Settings::instance().loadValue(Settings::vsyncKey(), 0);
+    const int vsync = Settings::instance().loadVSync();
     for (unsigned int i = 0; i < itemCount(); i++)
     {
         if (auto vsyncItem = dynamic_cast<VSyncItem *>(item(i).get()))

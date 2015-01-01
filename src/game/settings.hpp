@@ -55,6 +55,9 @@ public:
     void saveKeyMapping(int player, InputHandler::InputAction action, int key);
     int loadKeyMapping(int player, InputHandler::InputAction action);
 
+    void saveVSync(int value);
+    int loadVSync();
+
     void saveValue(QString key, int value);
     int loadValue(QString key, int defaultValue = 0);
 

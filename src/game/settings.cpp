@@ -214,6 +214,16 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
     settings.endGroup();
 }
 
+void Settings::saveVSync(int value)
+{
+    saveValue(Settings::vsyncKey(), value);
+}
+
+int Settings::loadVSync()
+{
+    return loadValue(Settings::vsyncKey(), 1); // On by default
+}
+
 void Settings::saveValue(QString key, int value)
 {
     QSettings settings;

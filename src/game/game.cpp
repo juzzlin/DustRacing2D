@@ -145,7 +145,7 @@ void Game::createRenderer(bool forceNoVSync)
     }
     else
     {
-        format.setSwapInterval(Settings::instance().loadValue(Settings::vsyncKey(), 0));
+        format.setSwapInterval(Settings::instance().loadVSync());
     }
 #else
     Q_UNUSED(forceNoVSync);
