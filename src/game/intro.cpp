@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,14 +14,17 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "intro.hpp"
+#include "game.hpp"
 #include "renderer.hpp"
 
-#include <MCSurface>
 #include <MCAssetManager>
 #include <MCGLShaderProgram>
+#include <MCSurface>
+#include <MCTextureText>
 
 Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))
+, m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
     m_back.setShaderProgram(Renderer::instance().program("text"));
     m_back.setColor(MCGLColor(0.9f, 0.9f, 0.9f, 1.0f));
@@ -43,4 +46,11 @@ void Intro::render()
     const int h2 = height() / 2;
     m_back.setSize(width(), height());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
+
+    static QString version = QString("v") + VERSION;
+    static MCTextureText versionText(version.toStdWString());
+    versionText.setGlyphSize(20, 20 * height() / 640);
+    versionText.render(
+        versionText.height(),
+        versionText.height(), nullptr, m_font);
 }

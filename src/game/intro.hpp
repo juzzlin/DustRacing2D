@@ -42,6 +42,8 @@ public:
 private:
 
     MCSurface & m_back;
+
+    MCTextureFont & m_font;
 };
 
 #endif // INTRO_HPP
