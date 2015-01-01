@@ -142,8 +142,7 @@ void MainWindow::init()
 {
     setTitle(tr("New file"));
 
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Editor::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     // Read dialog size data
     settings.beginGroup(SETTINGS_GROUP);
@@ -317,8 +316,7 @@ void MainWindow::updateScale(int value)
 void MainWindow::closeEvent(QCloseEvent * event)
 {
     // Open settings file
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Editor::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     // Save window size
     settings.beginGroup(SETTINGS_GROUP);
@@ -523,8 +521,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 void MainWindow::openTrack()
 {
     // Load recent path
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Editor::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP);
     QString path = settings.value("recentPath",
@@ -597,8 +594,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         setTitle(fileName);
 
         // Save recent path
-        QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-            Config::Editor::QSETTINGS_SOFTWARE_NAME);
+        QSettings settings;
 
         settings.beginGroup(SETTINGS_GROUP);
         settings.setValue("recentPath", fileName);

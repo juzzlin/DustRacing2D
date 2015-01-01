@@ -16,7 +16,6 @@
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
-#include "../common/config.hpp"
 #include <QSettings>
 #include <cassert>
 
@@ -71,8 +70,7 @@ Settings & Settings::instance()
 
 void Settings::saveLapRecord(const Track & track, int msecs)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_LAP);
     settings.setValue(track.trackData().name(), msecs);
@@ -81,8 +79,7 @@ void Settings::saveLapRecord(const Track & track, int msecs)
 
 int Settings::loadLapRecord(const Track & track) const
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_LAP);
     const int time = settings.value(track.trackData().name(), -1).toInt();
@@ -93,8 +90,7 @@ int Settings::loadLapRecord(const Track & track) const
 
 void Settings::resetLapRecords()
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_LAP);
     settings.remove("");
@@ -103,8 +99,7 @@ void Settings::resetLapRecords()
 
 void Settings::saveRaceRecord(const Track & track, int msecs, int lapCount)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_RACE);
@@ -114,8 +109,7 @@ void Settings::saveRaceRecord(const Track & track, int msecs, int lapCount)
 
 int Settings::loadRaceRecord(const Track & track, int lapCount) const
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_RACE);
@@ -127,8 +121,7 @@ int Settings::loadRaceRecord(const Track & track, int lapCount) const
 
 void Settings::resetRaceRecords()
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_RACE);
     settings.remove("");
@@ -137,8 +130,7 @@ void Settings::resetRaceRecords()
 
 void Settings::saveBestPos(const Track & track, int pos, int lapCount)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_POS);
@@ -148,8 +140,7 @@ void Settings::saveBestPos(const Track & track, int pos, int lapCount)
 
 int Settings::loadBestPos(const Track & track, int lapCount) const
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCount(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_POS);
@@ -161,8 +152,7 @@ int Settings::loadBestPos(const Track & track, int lapCount) const
 
 void Settings::resetBestPos()
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_POS);
     settings.remove("");
@@ -171,8 +161,7 @@ void Settings::resetBestPos()
 
 void Settings::saveTrackUnlockStatus(const Track & track, int lapCount)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCountBase64(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_UNLOCK);
@@ -182,8 +171,7 @@ void Settings::saveTrackUnlockStatus(const Track & track, int lapCount)
 
 bool Settings::loadTrackUnlockStatus(const Track & track, int lapCount) const
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
     const QString trackNameAndLapCount = combineTrackAndLapCountBase64(track, lapCount);
 
     settings.beginGroup(SETTINGS_GROUP_UNLOCK);
@@ -195,8 +183,7 @@ bool Settings::loadTrackUnlockStatus(const Track & track, int lapCount) const
 
 void Settings::resetTrackUnlockStatuses()
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_UNLOCK);
     settings.remove("");
@@ -205,8 +192,7 @@ void Settings::resetTrackUnlockStatuses()
 
 void Settings::saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     settings.setValue("hRes", hRes);
@@ -218,8 +204,7 @@ void Settings::saveResolution(int hRes, int vRes, bool nativeResolution, bool fu
 
 void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     nativeResolution = settings.value("nativeResolution", true).toBool();
@@ -231,8 +216,7 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, b
 
 void Settings::saveValue(QString key, int value)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     settings.setValue(key, value);
@@ -241,8 +225,7 @@ void Settings::saveValue(QString key, int value)
 
 int Settings::loadValue(QString key, int defaultValue)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     int value = 0;
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
@@ -259,8 +242,7 @@ QString Settings::combineActionAndPlayer(int player, InputHandler::InputAction a
 
 void Settings::saveKeyMapping(int player, InputHandler::InputAction action, int key)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     settings.setValue(combineActionAndPlayer(player, action), key);
@@ -269,8 +251,7 @@ void Settings::saveKeyMapping(int player, InputHandler::InputAction action, int 
 
 int Settings::loadKeyMapping(int player, InputHandler::InputAction action)
 {
-    QSettings settings(Config::Common::QSETTINGS_COMPANY_NAME,
-        Config::Game::QSETTINGS_SOFTWARE_NAME);
+    QSettings settings;
 
     int key = 0;
     settings.beginGroup(SETTINGS_GROUP_CONFIG);

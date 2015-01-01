@@ -16,9 +16,11 @@
 #include <QApplication>
 #include <QFile>
 #include <QLocale>
+#include <QSettings>
 #include <QTranslator>
 #include <iostream>
 
+#include "../common/config.hpp"
 #include "mainwindow.hpp"
 
 static void initTranslations(QTranslator & appTranslator, QApplication & app)
@@ -35,11 +37,20 @@ static void initTranslations(QTranslator & appTranslator, QApplication & app)
 
 int main(int argc, char ** argv)
 {
+    QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
+    QApplication::setApplicationName(Config::Editor::QSETTINGS_SOFTWARE_NAME);
+#ifdef Q_OS_WIN32
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+#endif
+
     QApplication app(argc, argv);
+
     QTranslator appTranslator;
     initTranslations(appTranslator, app);
+
     // Track file can be given as command line argument.
     const QString trackFile = argc > 1 ? argv[1] : "";
+
     MainWindow mainWindow(trackFile);
     mainWindow.show();
 

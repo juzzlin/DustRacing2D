@@ -17,8 +17,10 @@
 #include <QApplication>
 #include <QLocale>
 #include <QMessageBox>
+#include <QSettings>
 #include <QTranslator>
 
+#include "../common/config.hpp"
 #include "game.hpp"
 
 #include <MCException>
@@ -70,6 +72,12 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
 
 int main(int argc, char ** argv)
 {
+    QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
+    QApplication::setApplicationName(Config::Game::QSETTINGS_SOFTWARE_NAME);
+#ifdef Q_OS_WIN32
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+#endif
+
     try
     {
         QApplication app(argc, argv);
