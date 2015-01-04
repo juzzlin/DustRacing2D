@@ -50,7 +50,7 @@ public:
     //! Destructor.
     virtual ~MCGLScene();
 
-    //! Get the singleton instance.
+    //! \return the singleton instance.
     static MCGLScene & instance();
 
     //! Initializes OpenGL and GLEW. Re-implement if desired.
@@ -63,7 +63,7 @@ public:
     //! Set viewport split type.
     void setSplitType(SplitType splitType = ShowFullScreen);
 
-    //! Get the resulting view projection matrix to be used in shaders.
+    //! \return the resulting view projection matrix to be used in shaders.
     const glm::mat4 & viewProjectionMatrix() const;
 
     /*! Set fade value used in fade in/out animations.
@@ -79,34 +79,34 @@ public:
     /*! Set specular light for all registered shaders. */
     void setSpecularLight(const MCGLDiffuseLight & light);
 
-    //! Get default shader program.
+    //! \return default shader program.
     MCGLShaderProgramPtr defaultShaderProgram();
 
-    //! Get default specular shader program.
+    //! \return default specular shader program.
     MCGLShaderProgramPtr defaultSpecularShaderProgram();
 
-    //! Get default shadow shader program.
+    //! \return default shadow shader program.
     MCGLShaderProgramPtr defaultShadowShaderProgram();
 
-    //! Get default shader program for particles.
+    //! \return default shader program for particles.
     MCGLShaderProgramPtr defaultParticleShaderProgram();
 
-    //! Get default shader program for point particles.
+    //! \return default shader program for point particles.
     MCGLShaderProgramPtr defaultPointParticleShaderProgram();
 
-    //! Get default shader program for rotated point particles.
+    //! \return default shader program for rotated point particles.
     MCGLShaderProgramPtr defaultPointParticleRotateShaderProgram();
 
-    //! Get default shader program for text.
+    //! \return default shader program for text.
     MCGLShaderProgramPtr defaultTextShaderProgram();
 
-    //! Get default shader program for text shadow.
+    //! \return default shader program for text shadow.
     MCGLShaderProgramPtr defaultTextShadowShaderProgram();
 
-    //! Get current view angle
+    //! \return current view angle
     MCFloat viewAngle() const;
 
-    //! Get current eye distance
+    //! \return current eye distance
     MCFloat eyeZ() const;
 
 protected:
