@@ -103,6 +103,12 @@ public:
     //! Get default shader program for text shadow.
     MCGLShaderProgramPtr defaultTextShadowShaderProgram();
 
+    //! Get current view angle
+    MCFloat viewAngle() const;
+
+    //! Get current eye distance
+    MCFloat eyeZ() const;
+
 protected:
 
     //! Set viewer's position. Automatically called by resize().
@@ -134,6 +140,8 @@ private:
     MCUint m_sceneHeight;
 
     MCFloat m_viewAngle;
+
+    MCFloat m_eyeZ;
 
     glm::mat4 m_viewMatrix;
 

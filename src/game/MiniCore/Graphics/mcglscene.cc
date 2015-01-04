@@ -38,6 +38,7 @@ MCGLScene::MCGLScene()
 , m_sceneWidth(0)
 , m_sceneHeight(0)
 , m_viewAngle(0)
+, m_eyeZ(0)
 , m_updateViewProjection(false)
 {
     if (!MCGLScene::m_instance) {
@@ -192,14 +193,13 @@ void MCGLScene::resize(
 void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
 {
     // Set eye position so that the scene looks like a pure 2D-scene
-    const MCUint  vH2  = sceneHeight / 2;
-    const MCUint  vW2  = sceneWidth  / 2;
-    const MCFloat eyeZ = vH2 /
-        std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
+    const MCUint vH2 = sceneHeight / 2;
+    const MCUint vW2 = sceneWidth  / 2;
+    m_eyeZ = vH2 / std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
 
     m_viewMatrix  = glm::mat4(1.0);
     m_viewMatrix *= glm::lookAt(
-        glm::vec3(vW2, vH2, eyeZ),
+        glm::vec3(vW2, vH2, m_eyeZ),
         glm::vec3(vW2, vH2, 0),
         glm::vec3(0,   1,   0));
 
@@ -322,6 +322,16 @@ void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
     {
         p->setSpecularLight(light);
     }
+}
+
+MCFloat MCGLScene::viewAngle() const
+{
+    return m_viewAngle;
+}
+
+MCFloat MCGLScene::eyeZ() const
+{
+    return m_eyeZ;
 }
 
 MCGLScene::~MCGLScene()
