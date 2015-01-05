@@ -102,7 +102,7 @@ void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
     m_forceRegistry->update();
-    const MCUint objectCount = m_objs.size();
+    const MCUint objectCount = static_cast<MCUint>(m_objs.size());
     for (MCUint i = 0; i < objectCount; i++)
     {
         MCObject & object(*m_objs[i]);
@@ -310,7 +310,7 @@ void MCWorld::addObject(MCObject & object)
 
             // Add to object vector (O(1))
             m_objs.push_back(&object);
-            object.setIndex(m_objs.size() - 1);
+            object.setIndex(static_cast<int>(m_objs.size()) - 1);
 
             // Add to ObjectTree
             if ((object.isPhysicsObject() || object.isTriggerObject()) && !object.bypassCollisions())
@@ -407,7 +407,7 @@ void MCWorld::restoreObjectToIntegration(MCObject & object)
     {
         // Add to object vector (O(1))
         m_objs.push_back(&object);
-        object.setIndex(m_objs.size() - 1);
+        object.setIndex(static_cast<int>(m_objs.size()) - 1);
     }
 }
 

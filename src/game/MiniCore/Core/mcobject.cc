@@ -337,7 +337,7 @@ void MCObject::subscribeTimerEvent(MCObject & object)
     if (object.m_timerEventObjectsIndex == -1)
     {
         m_timerEventObjects.push_back(&object);
-        object.m_timerEventObjectsIndex = m_timerEventObjects.size() - 1;
+        object.m_timerEventObjectsIndex = static_cast<int>(m_timerEventObjects.size()) - 1;
     }
 }
 

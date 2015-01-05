@@ -237,7 +237,7 @@ GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
 
 unsigned int MCSurfaceConfigLoader::surfaceCount() const
 {
-    return m_surfaces.size();
+    return static_cast<unsigned int>(m_surfaces.size());
 }
 
 const MCSurfaceMetaData & MCSurfaceConfigLoader::surface(unsigned int index) const

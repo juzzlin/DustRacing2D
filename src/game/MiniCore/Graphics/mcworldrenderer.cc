@@ -166,7 +166,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
     const auto end = layer.objectBatches()[camera].end();
     while (iter != end)
     {
-        const int itemCountInBatch = iter->second.size();
+        const int itemCountInBatch = static_cast<const int>(iter->second.size());
         if (itemCountInBatch > 0)
         {
             MCObject * object = iter->second[0];
@@ -214,7 +214,7 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
         // Generic particles
         else
         {
-            const int itemCountInBatch = batchIter->second.size();
+            const int itemCountInBatch = static_cast<const int>(batchIter->second.size());
             if (itemCountInBatch > 0)
             {
                 static_cast<MCParticle *>(batchIter->second[0])->beginBatch();
@@ -248,7 +248,7 @@ void MCWorldRenderer::renderShadows(MCCamera * camera)
         const auto end = layer.objectBatches()[camera].end();
         while (batchIter != end)
         {
-            const int itemCountInBatch = batchIter->second.size();
+            const int itemCountInBatch = static_cast<const int>(batchIter->second.size());
             if (itemCountInBatch > 0)
             {
                 MCObject * object = batchIter->second[0];

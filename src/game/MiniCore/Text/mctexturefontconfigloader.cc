@@ -103,7 +103,7 @@ bool MCTextureFontConfigLoader::loadFonts()
 
 unsigned int MCTextureFontConfigLoader::fonts() const
 {
-    return m_fonts.size();
+    return static_cast<unsigned int>(m_fonts.size());
 }
 
 MCTextureFontData & MCTextureFontConfigLoader::font(unsigned int index) const

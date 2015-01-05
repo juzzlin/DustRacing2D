@@ -212,7 +212,7 @@ std::string MCGLShaderProgram::getShaderLog(GLuint obj)
 
 bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
 {
-    GLint len = source.length();
+    GLint len = static_cast<GLint>(source.length());
     const GLchar * data = source.c_str();
     glShaderSource(m_vertexShader, 1, &data, &len);
     glCompileShader(m_vertexShader);
@@ -237,7 +237,7 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
 
 bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
 {
-    GLint len = source.length();
+    GLint len = static_cast<GLint>(source.length());
     const GLchar * data = source.c_str();
     glShaderSource(m_fragmentShader, 1, &data, &len);
     glCompileShader(m_fragmentShader);
