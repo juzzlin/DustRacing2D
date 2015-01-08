@@ -91,14 +91,11 @@ static const char * fboVsh =
 ""
 "attribute vec3 inVertex;\n"
 "attribute vec2 inTexCoord;\n"
-"uniform vec4 scale;\n"
-"uniform mat4 vp;\n"
-"uniform mat4 model;\n"
 "varying vec2 texCoord0;\n"
 ""
 "void main()\n"
 "{\n"
-"    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
+"    gl_Position = vec4(inVertex, 1);\n"
 "    texCoord0 = inTexCoord;\n"
 "}\n";
 

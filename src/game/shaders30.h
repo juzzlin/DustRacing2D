@@ -98,16 +98,13 @@ static const char * carFsh =
 static const char * fboVsh =
 "#version 130\n"
 ""
-"in      vec3 inVertex;\n"
-"in      vec2 inTexCoord;\n"
-"uniform vec4 scale;\n"
-"uniform mat4 vp;\n"
-"uniform mat4 model;\n"
-"out     vec2 texCoord0;\n"
+"in  vec3 inVertex;\n"
+"in  vec2 inTexCoord;\n"
+"out vec2 texCoord0;\n"
 ""
 "void main()\n"
 "{\n"
-"    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
+"    gl_Position = vec4(inVertex, 1);\n"
 "    texCoord0 = inTexCoord;\n"
 "}\n";
 

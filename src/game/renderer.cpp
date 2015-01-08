@@ -239,10 +239,10 @@ void Renderer::render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     dummyMaterial->setTexture(shadowFbo.texture(), 0);
-    MCSurface ss(dummyMaterial, Scene::width(), Scene::height());
+    MCSurface ss(dummyMaterial, 2.0f, 2.0f);
     ss.setShaderProgram(program("fbo"));
     ss.bindMaterial();
-    ss.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+    ss.render(nullptr, MCVector3dF(), 0);
 
     glDisable(GL_BLEND);
 
@@ -257,10 +257,10 @@ void Renderer::render()
     resizeGL(m_hRes, m_vRes);
 
     dummyMaterial->setTexture(fbo.texture(), 0);
-    MCSurface sd(dummyMaterial, Scene::width(), Scene::height());
+    MCSurface sd(dummyMaterial, 2.0f, 2.0f);
     sd.setShaderProgram(program("fbo"));
     sd.bindMaterial();
-    sd.render(nullptr, MCVector3dF(Scene::width() / 2, Scene::height() / 2, 0), 0);
+    sd.render(nullptr, MCVector3dF(), 0);
 }
 
 void Renderer::renderLater()
