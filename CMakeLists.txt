@@ -2,9 +2,17 @@ project(DustRacing2D)
 
 cmake_minimum_required(VERSION 2.8.8)
 cmake_policy(VERSION 2.8.8)
-cmake_policy(SET CMP0020 NEW)
-if(CMAKE_MAJOR_VERSION GREATER 2)
-  cmake_policy(SET CMP0043 NEW)
+
+if(POLICY CMP0005)
+    cmake_policy(SET CMP0005 NEW)
+endif()
+
+if(POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)
+endif()
+
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW)
 endif()
 
 # Global game version
