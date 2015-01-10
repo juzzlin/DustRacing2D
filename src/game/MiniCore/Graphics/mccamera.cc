@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@
 //
 
 #include "mccamera.hh"
+#include "mcvector2d.hh"
 
 MCCamera::MCCamera()
 {
@@ -35,8 +36,6 @@ void MCCamera::init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MC
     m_h     = h;
     m_halfW = w / 2;
     m_halfH = h / 2;
-    m_x     = x;
-    m_y     = y;
     m_maxX  = maxX;
     m_maxY  = maxY;
 
@@ -45,6 +44,14 @@ void MCCamera::init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MC
 
 void MCCamera::setPos(MCFloat x, MCFloat y)
 {
+    setPos(MCVector2dF(x, y));
+}
+
+void MCCamera::setPos(const MCVector2dF & pos)
+{
+    MCFloat x = pos.i();
+    MCFloat y = pos.j();
+
     if (x < m_halfW)
     {
         x = m_halfW;
@@ -54,7 +61,7 @@ void MCCamera::setPos(MCFloat x, MCFloat y)
         x = m_maxX - m_halfW;
     }
 
-    m_x = x;
+    m_pos.setI(x);
 
     if (y < m_halfH)
     {
@@ -65,17 +72,22 @@ void MCCamera::setPos(MCFloat x, MCFloat y)
         y = m_maxY - m_halfH;
     }
 
-    m_y = y;
+    m_pos.setJ(y);
+}
+
+const MCVector2dF & MCCamera::pos() const
+{
+    return m_pos;
 }
 
 MCFloat MCCamera::x() const
 {
-    return m_x;
+    return m_pos.i();
 }
 
 MCFloat MCCamera::y() const
 {
-    return m_y;
+    return m_pos.j();
 }
 
 MCFloat MCCamera::width() const
@@ -91,5 +103,5 @@ MCFloat MCCamera::height() const
 MCBBox<MCFloat> MCCamera::bbox() const
 {
     return MCBBox<MCFloat>(
-        m_x - m_halfW, m_y - m_halfH, m_x + m_halfW, m_y + m_halfH);
+        m_pos.i() - m_halfW, m_pos.j() - m_halfH, m_pos.i() + m_halfW, m_pos.j() + m_halfH);
 }

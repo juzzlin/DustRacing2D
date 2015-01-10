@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -67,6 +67,13 @@ public:
      */
     void setPos(MCFloat x, MCFloat y);
 
+    /*! \brief Set Camera location in the scene.
+     *  \param pos Center location of the window.
+     */
+    void setPos(const MCVector2dF & pos);
+
+    const MCVector2dF & pos() const;
+
     MCFloat x() const;
 
     MCFloat y() const;
@@ -81,56 +88,56 @@ public:
     MCFloat height() const;
 
     //! Translate given scene x-coordinate into Camera coordinate
-    inline MCFloat mapXToCamera(MCFloat x) const
+    MCFloat mapXToCamera(MCFloat x) const
     {
-        return x - m_x + m_halfW;
+        return x - m_pos.i() + m_halfW;
     }
 
     //! Translate given scene y-coordinate into Camera coordinate
-    inline MCFloat mapYToCamera(MCFloat y) const
+    MCFloat mapYToCamera(MCFloat y) const
     {
-        return y - m_y + m_halfH;
+        return y - m_pos.j() + m_halfH;
     }
 
     //! Translate given scene coordinates in-place into Camera coordinates
-    inline void mapToCamera(MCFloat & x, MCFloat & y)
+    void mapToCamera(MCFloat & x, MCFloat & y)
     {
-        x = x - m_x + m_halfW;
-        y = y - m_y + m_halfH;
+        x = x - m_pos.i() + m_halfW;
+        y = y - m_pos.j() + m_halfH;
     }
 
     //! Translate given Camera x-coordinate into scene coordinate
-    inline MCFloat mapXToScene(MCFloat x) const
+    MCFloat mapXToScene(MCFloat x) const
     {
-        return x + m_x - m_halfW;
+        return x + m_pos.i() - m_halfW;
     }
 
     //! Translate given Camera y-coordinate into scene coordinate
-    inline MCFloat mapYToScene(MCFloat y) const
+    MCFloat mapYToScene(MCFloat y) const
     {
-        return y + m_y - m_halfH;
+        return y + m_pos.j() - m_halfH;
     }
 
     //! Translate given Camera coordinates in-place into scene coordinates
-    inline void mapToScene(MCFloat & x, MCFloat & y)
+    void mapToScene(MCFloat & x, MCFloat & y)
     {
-        x = x + m_x - m_halfW;
-        y = y + m_y - m_halfH;
+        x = x + m_pos.i() - m_halfW;
+        y = y + m_pos.j() - m_halfH;
     }
 
     //! Test if given BBox is visible through the current
     //! camera window
-    inline bool isVisible(const MCBBox<MCFloat> & r) const
+    bool isVisible(const MCBBox<MCFloat> & r) const
     {
         const MCFloat w2 = r.width()  / 2;
         const MCFloat h2 = r.height() / 2;
 
         // Give some space to possible shadows, that's why we're adding w2 and h2.
         return MCBBox<MCFloat>(
-            m_x - m_halfW - w2,
-            m_y - m_halfH - h2,
-            m_x + m_halfW + w2,
-            m_y + m_halfH + h2).intersects(r);
+            m_pos.i() - m_halfW - w2,
+            m_pos.j() - m_halfH - h2,
+            m_pos.i() + m_halfW + w2,
+            m_pos.j() + m_halfH + h2).intersects(r);
     }
 
 private:
@@ -148,7 +155,7 @@ private:
   MCFloat m_halfW, m_halfH;
 
   //! Coordinates of the center of the camera window
-  MCFloat m_x, m_y;
+  MCVector2dF m_pos;
 
   //! Maximum camera coordinates
   MCFloat m_maxX, m_maxY;

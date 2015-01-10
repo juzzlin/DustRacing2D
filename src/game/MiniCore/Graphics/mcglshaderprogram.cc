@@ -46,6 +46,7 @@ MCGLShaderProgram::MCGLShaderProgram()
     , m_materialPending(false)
     , m_fadeValue(1.0f)
     , m_fadeValuePending(false)
+    , m_cameraPending(false)
     , m_colorPending(false)
     , m_scalePending(false)
     , m_pointSize(1.0f)
@@ -53,6 +54,8 @@ MCGLShaderProgram::MCGLShaderProgram()
     , m_diffuseLightPending(false)
     , m_specularLightPending(false)
     , m_ambientLightPending(false)
+    , m_userData1Pending(false)
+    , m_userData2Pending(false)
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -74,6 +77,7 @@ MCGLShaderProgram::MCGLShaderProgram(
     , m_materialPending(false)
     , m_fadeValue(1.0f)
     , m_fadeValuePending(false)
+    , m_cameraPending(false)
     , m_colorPending(false)
     , m_scalePending(false)
     , m_pointSize(1.0f)
@@ -81,6 +85,8 @@ MCGLShaderProgram::MCGLShaderProgram(
     , m_diffuseLightPending(false)
     , m_specularLightPending(false)
     , m_ambientLightPending(false)
+    , m_userData1Pending(false)
+    , m_userData2Pending(false)
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -100,6 +106,8 @@ void MCGLShaderProgram::initUniformNameMap()
 {
     // Map uniform enums to uniform names used in the shaders
     m_uniforms[AmbientLightColor]  = "ac";
+    m_uniforms[Camera]             = "camera";
+    m_uniforms[Color]              = "color";
     m_uniforms[DiffuseLightDir]    = "dd";
     m_uniforms[DiffuseLightColor]  = "dc";
     m_uniforms[SpecularLightDir]   = "sd";
@@ -109,12 +117,14 @@ void MCGLShaderProgram::initUniformNameMap()
     m_uniforms[Tex0]               = "tex0";
     m_uniforms[Tex1]               = "tex1";
     m_uniforms[Tex2]               = "tex2";
+    m_uniforms[UserData1]          = "userData1";
+    m_uniforms[UserData2]          = "userData2";
     m_uniforms[ViewProjection]     = "vp";
     m_uniforms[View]               = "v";
     m_uniforms[Model]              = "model";
-    m_uniforms[Color]              = "color";
     m_uniforms[Scale]              = "scale";
     m_uniforms[PointSize]          = "pointSize";
+    m_uniforms[Camera]             = "camera";
 }
 
 MCGLShaderProgram::~MCGLShaderProgram()
@@ -147,6 +157,7 @@ void MCGLShaderProgram::bind()
     glUseProgram(m_program);
 
     setPendingAmbientLight();
+    setPendingCamera();
     setPendingColor();
     setPendingDiffuseLight();
     setPendingFadeValue();
@@ -154,6 +165,8 @@ void MCGLShaderProgram::bind()
     setPendingScale();
     setPendingSpecularLight();
     setPendingTransform();
+    setPendingUserData1();
+    setPendingUserData2();
     setPendingViewMatrix();
     setPendingViewProjectionMatrix();
 
@@ -390,6 +403,60 @@ void MCGLShaderProgram::setPendingTransform()
         glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_pos.i(), m_pos.j(), m_pos.k()));
         glm::mat4 rotation  = glm::rotate(translate, m_angle, glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(getUniformLocation(Model), 1, GL_FALSE, &rotation[0][0]);
+    }
+}
+
+void MCGLShaderProgram::setUserData1(const MCVector2dF & data)
+{
+    m_userData1 = data;
+    m_userData1Pending = true;
+
+    if (isBound()) {
+        setPendingUserData1();
+    }
+}
+
+void MCGLShaderProgram::setPendingUserData1()
+{
+    if (m_userData1Pending) {
+        m_userData1Pending = false;
+        glUniform2f(getUniformLocation(UserData1), m_userData1.i(), m_userData1.j());
+    }
+}
+
+void MCGLShaderProgram::setUserData2(const MCVector2dF & data)
+{
+    m_userData2 = data;
+    m_userData2Pending = true;
+
+    if (isBound()) {
+        setPendingUserData2();
+    }
+}
+
+void MCGLShaderProgram::setPendingUserData2()
+{
+    if (m_userData2Pending) {
+        m_userData2Pending = false;
+        glUniform2f(getUniformLocation(UserData2), m_userData2.i(), m_userData2.j());
+    }
+}
+
+void MCGLShaderProgram::setCamera(const MCVector2dF & camera)
+{
+    m_camera = camera;
+    m_cameraPending = true;
+
+    if (isBound()) {
+        setPendingCamera();
+    }
+}
+
+void MCGLShaderProgram::setPendingCamera()
+{
+    if (m_cameraPending) {
+        m_cameraPending = false;
+        glUniform2f(getUniformLocation(Camera), m_camera.i(), m_camera.j());
     }
 }
 

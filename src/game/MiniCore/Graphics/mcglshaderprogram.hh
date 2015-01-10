@@ -176,6 +176,14 @@ public:
     //! Set point size for point sprites.
     virtual void setPointSize(GLfloat pointSize);
 
+    /*! Set camera location. Currently not used by MiniCore, but
+     *  can be used in e.g. fragment shader effects */
+    virtual void setCamera(const MCVector2dF & camera);
+
+    virtual void setUserData1(const MCVector2dF & data);
+
+    virtual void setUserData2(const MCVector2dF & data);
+
 private:
 
     //! Uniform enums used when caching uniform locations
@@ -196,7 +204,10 @@ private:
         Model,
         Color,
         Scale,
-        PointSize
+        PointSize,
+        Camera,
+        UserData1,
+        UserData2,
     };
 
     void bindPendingMaterial();
@@ -213,6 +224,8 @@ private:
 
     void setPendingAmbientLight();
 
+    void setPendingCamera();
+
     void setPendingColor();
 
     void setPendingDiffuseLight();
@@ -226,6 +239,10 @@ private:
     void setPendingSpecularLight();
 
     void setPendingTransform();
+
+    void setPendingUserData1();
+
+    void setPendingUserData2();
 
     void setPendingViewProjectionMatrix();
 
@@ -271,6 +288,10 @@ private:
 
     bool m_fadeValuePending;
 
+    MCVector2dF m_camera;
+
+    bool m_cameraPending;
+
     MCGLColor m_color;
 
     bool m_colorPending;
@@ -294,6 +315,15 @@ private:
     MCGLAmbientLight m_ambientLight;
 
     bool m_ambientLightPending;
+
+    MCVector2dF m_userData1;
+
+    bool m_userData1Pending;
+
+    MCVector2dF m_userData2;
+
+    bool m_userData2Pending;
+
 };
 
 typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;
