@@ -153,12 +153,19 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
     }
 }
 
-MCSurface & MCSurfaceManager::createSurfaceFromImage(
-    const MCSurfaceMetaData & data, const QImage & image)
+MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image)
 {
     // Store original width of the image
     int origH = data.height.second ? data.height.first : image.height();
     int origW = data.width.second  ? data.width.first  : image.width();
+
+    // Take maximum supported texture size into account
+    GLint maxTextureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    while (image.width() > maxTextureSize || image.height() > maxTextureSize)
+    {
+        image = image.scaled(image.width() / 2, image.height() / 2);
+    }
 
     // Create material. Possible secondary textures are taken from surfaces
     // that are initialized before this surface.

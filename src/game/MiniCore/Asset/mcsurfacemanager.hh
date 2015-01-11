@@ -99,8 +99,7 @@ public:
 
     /*! Creates an MCSurface containing an OpenGL texture from a QImage + texture meta data.
      *  MCSurfaceManager keeps the ownership. */
-    MCSurface & createSurfaceFromImage(
-        const MCSurfaceMetaData & data, const QImage & image);
+    MCSurface & createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image);
 
 private:
 
