@@ -75,7 +75,6 @@ Renderer::Renderer(
 
     setTitle(QString(Config::Game::GAME_NAME) + " " + Config::Game::GAME_VERSION);
     setIcon(QIcon(":/dustrac-game.png"));
-    //setMouseTracking(true);
 }
 
 Renderer & Renderer::instance()
