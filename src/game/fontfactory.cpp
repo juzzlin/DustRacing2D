@@ -24,7 +24,6 @@
 #include <MCTextureGlyph>
 
 #include <QFont>
-#include <QFontMetrics>
 #include <QPainter>
 #include <QPixmap>
 
@@ -123,8 +122,6 @@ MCTextureFontData FontFactory::generateFont()
 
                 painter.setFont(font);
                 painter.setPen(QColor(255, 255, 255));
-                const QFontMetrics fm = painter.fontMetrics();
-
                 painter.drawText(
                     i * slotWidth,
                     j * slotHeight,
