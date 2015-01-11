@@ -40,12 +40,12 @@
 #include <cassert>
 
 #include <QApplication>
-#include <QIcon>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFontDatabase>
-#include <QGLFramebufferObject>
+#include <QIcon>
 #include <QKeyEvent>
+#include <QOpenGLFramebufferObject>
 #include <QScreen>
 
 Renderer * Renderer::m_instance = nullptr;
@@ -217,8 +217,8 @@ void Renderer::render()
     // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
 
-    static QGLFramebufferObject fbo(m_hRes, m_vRes);
-    static QGLFramebufferObject shadowFbo(m_hRes, m_vRes);
+    static QOpenGLFramebufferObject fbo(m_hRes, m_vRes);
+    static QOpenGLFramebufferObject shadowFbo(m_hRes, m_vRes);
     static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
 
     shadowFbo.bind();
