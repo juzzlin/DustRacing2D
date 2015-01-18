@@ -1,3 +1,22 @@
+1.9.2
+=====
+
+Bug fixes:
+
+* Fix rendering of the windowed mode.
+* Fix rendering in other than native resolutions.
+
+Improvements:
+
+* Take maximum supported texture size into account.
+* QGLFramebufferObject => QOpenGLFramebufferObject.
+* Add camera location support to MCGLShaderProgram.
+* Simplify FBO shading.
+* CMake: Check for polices before setting.
+* Fix some MSVC compilation warnings.
+* Improve documentaton in mcglscene.hh
+* Add getters for eyeZ and viewAngle.
+
 1.9.1
 =====
 
