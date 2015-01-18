@@ -247,8 +247,14 @@ void Renderer::render()
     fbo.release();
 
     // Render the frame buffer object onto the screen
-
-    resizeGL(m_fullHRes, m_fullVRes);
+    if (m_fullScreen)
+    {
+        resizeGL(m_fullHRes, m_fullVRes);
+    }
+    else
+    {
+        resizeGL(m_hRes, m_vRes);
+    }
 
     dummyMaterial->setTexture(fbo.texture(), 0);
     MCSurface sd(dummyMaterial, 2.0f, 2.0f);
