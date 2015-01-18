@@ -190,27 +190,25 @@ void Settings::resetTrackUnlockStatuses()
     settings.endGroup();
 }
 
-void Settings::saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen)
+void Settings::saveResolution(int hRes, int vRes, bool fullScreen)
 {
     QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     settings.setValue("hRes", hRes);
     settings.setValue("vRes", vRes);
-    settings.setValue("nativeResolution", nativeResolution);
     settings.setValue("fullScreen", fullScreen);
     settings.endGroup();
 }
 
-void Settings::loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen)
+void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
 {
     QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    nativeResolution = settings.value("nativeResolution", true).toBool();
-    fullScreen       = settings.value("fullScreen", true).toBool();
-    hRes             = settings.value("hRes", 0).toInt();
-    vRes             = settings.value("vRes", 0).toInt();
+    fullScreen = settings.value("fullScreen", true).toBool();
+    hRes       = settings.value("hRes", 0).toInt();
+    vRes       = settings.value("vRes", 0).toInt();
     settings.endGroup();
 }
 

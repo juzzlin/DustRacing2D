@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTime>
+#include <QScreen>
 #include <QSurfaceFormat>
 
 #include <cassert>
@@ -106,22 +107,20 @@ void Game::createRenderer(bool forceNoVSync)
 {
     // Create the main window / renderer
     int hRes, vRes;
-    bool nativeResolution = true;
-    bool fullScreen       = false;
+    bool fullScreen = false;
 
-    m_settings.loadResolution(hRes, vRes, nativeResolution, fullScreen);
+    m_settings.loadResolution(hRes, vRes, fullScreen);
 
-    if (nativeResolution)
+    if (!hRes || !vRes)
     {
-        QDesktopWidget * desktop = QApplication::desktop();
-        hRes = desktop->screenGeometry(desktop->primaryScreen()).width();
-        vRes = desktop->screenGeometry(desktop->primaryScreen()).height();
+        hRes = QGuiApplication::primaryScreen()->geometry().width();
+        vRes = QGuiApplication::primaryScreen()->geometry().height();
     }
 
     adjustSceneSize(hRes, vRes);
 
     MCLogger().info()
-        << "Resolution: " << hRes << " " << vRes << " " << nativeResolution << " " << fullScreen;
+        << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
 
     MCLogger().info() << "Creating the renderer..";
 
@@ -151,7 +150,7 @@ void Game::createRenderer(bool forceNoVSync)
     Q_UNUSED(forceNoVSync);
 #endif
 
-    m_renderer = new Renderer(hRes, vRes, nativeResolution, fullScreen);
+    m_renderer = new Renderer(hRes, vRes, fullScreen);
     m_renderer->setFormat(format);
 
     if (fullScreen)

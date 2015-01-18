@@ -42,11 +42,7 @@ class Renderer : public QWindow, protected QOpenGLFunctions
 public:
 
     //! Constructor.
-    Renderer(
-        int hRes,
-        int vRes,
-        bool nativeResolution,
-        bool fullScreen);
+    Renderer(int hRes, int vRes, bool fullScreen);
 
     //! Destructor.
     virtual ~Renderer();
@@ -153,7 +149,8 @@ private:
     bool              m_enabled;
     int               m_hRes;
     int               m_vRes;
-    bool              m_nativeResolution;
+    int               m_fullHRes;
+    int               m_fullVRes;
     bool              m_fullScreen;
     bool              m_updatePending;
     static Renderer * m_instance;

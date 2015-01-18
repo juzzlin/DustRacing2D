@@ -50,11 +50,7 @@
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(
-    int hRes,
-    int vRes,
-    bool nativeResolution,
-    bool fullScreen)
+Renderer::Renderer(int hRes, int vRes, bool fullScreen)
 : m_context(nullptr)
 , m_scene(nullptr)
 , m_glScene(new MCGLScene)
@@ -64,7 +60,8 @@ Renderer::Renderer(
 , m_enabled(false)
 , m_hRes(hRes)
 , m_vRes(vRes)
-, m_nativeResolution(nativeResolution)
+, m_fullHRes(QGuiApplication::primaryScreen()->geometry().width())
+, m_fullVRes(QGuiApplication::primaryScreen()->geometry().height())
 , m_fullScreen(fullScreen)
 , m_updatePending(false)
 {
@@ -95,9 +92,7 @@ void Renderer::initialize()
         setMaximumSize(QSize(m_hRes, m_vRes));
 
         // Try to center the window
-        const int fullVRes = QGuiApplication::primaryScreen()->geometry().height();
-        const int fullHRes = QGuiApplication::primaryScreen()->geometry().width();
-        setPosition(fullHRes / 2 - m_hRes / 2, fullVRes / 2 - m_vRes / 2);
+        setPosition(m_fullHRes / 2 - m_hRes / 2, m_fullVRes / 2 - m_vRes / 2);
     }
 
     m_glScene->initialize();
@@ -253,7 +248,7 @@ void Renderer::render()
 
     // Render the frame buffer object onto the screen
 
-    resizeGL(m_hRes, m_vRes);
+    resizeGL(m_fullHRes, m_fullVRes);
 
     dummyMaterial->setTexture(fbo.texture(), 0);
     MCSurface sd(dummyMaterial, 2.0f, 2.0f);

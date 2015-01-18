@@ -49,8 +49,8 @@ public:
     bool loadTrackUnlockStatus(const Track & track, int lapCount) const;
     void resetTrackUnlockStatuses();
 
-    void saveResolution(int hRes, int vRes, bool nativeResolution, bool fullScreen);
-    void loadResolution(int & hRes, int & vRes, bool & nativeResolution, bool & fullScreen);
+    void saveResolution(int hRes, int vRes, bool fullScreen);
+    void loadResolution(int & hRes, int & vRes, bool & fullScreen);
 
     void saveKeyMapping(int player, InputHandler::InputAction action, int key);
     int loadKeyMapping(int player, InputHandler::InputAction action);

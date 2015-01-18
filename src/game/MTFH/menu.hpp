@@ -96,6 +96,9 @@ public:
     //! Add item to the menu.
     virtual void addItem(MenuItemPtr menuItem);
 
+    //! Reverse the item vector.
+    virtual void reverseItems();
+
     //! Add mouse control item.
     virtual void addMouseItem(MouseItemType type, MenuItemPtr menuItem);
 

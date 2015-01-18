@@ -16,6 +16,7 @@
 #include "menu.hpp"
 #include "menumanager.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 namespace MTFH {
@@ -45,6 +46,18 @@ void Menu::addItem(MenuItemPtr menuItem)
     menuItem->setIndex(m_items.size() - 1);
 
     updateFocus();
+}
+
+void Menu::reverseItems()
+{
+    std::reverse(m_items.begin(), m_items.end());
+    m_currentIndex = (m_items.size() - 1) - m_currentIndex;
+    m_selectedIndex = m_currentIndex;
+
+    for (size_t i = 0; i < m_items.size(); i++)
+    {
+        m_items.at(i)->setIndex(i);
+    }
 }
 
 void Menu::addMouseItem(Menu::MouseItemType type, MenuItemPtr menuItem)
