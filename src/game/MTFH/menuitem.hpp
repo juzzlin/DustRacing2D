@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -92,15 +92,37 @@ public:
 private:
 
     std::wstring m_text;
+
     std::string m_menuOpenActionMenuId;
+
     MenuItemActionPtr m_action;
+
     std::function<void()> m_actionFunction;
+
     MenuItemViewPtr m_view;
+
     bool m_focused;
+
     bool m_selected;
+
     bool m_selectable;
-    int m_width, m_height, m_x, m_y;
-    int m_lMargin, m_rMargin, m_tMargin, m_bMargin;
+
+    int m_width;
+
+    int m_height;
+
+    int m_x;
+
+    int m_y;
+
+    int m_lMargin;
+
+    int m_rMargin;
+
+    int m_tMargin;
+
+    int m_bMargin;
+
     int m_index;
 };
 

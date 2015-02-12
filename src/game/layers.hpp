@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,24 +16,28 @@
 #ifndef LAYERS_HPP
 #define LAYERS_HPP
 
-//! Layers define the rendering order (stacking)
-//! of different objects.
-class Layers
-{
-public:
+namespace Layers {
 
-    enum Order
-    {
-        Bridge      = 4,
-        BridgeRails = 5,
-        GrandStands = 0,
-        Ground      = 0,
-        Mud         = 1,
-        Objects     = 2,
-        Smoke       = 3,
-        Tree        = 10,
-        Walls       = 1
-    };
+/*! Define the rendering layer (group) for different kinds of objects.
+ *  For example, some particle effects are rendered with depth test turned
+ *  off, so the order matters. */
+enum class Render : int
+{
+    Ground      = 0,
+    Mud         = 1,
+    Objects     = 2,
+    Smoke       = 3
 };
+
+/*! Define the collision layers for different kinds of objects. */
+enum class Collision : int
+{
+    Ground      = 0,
+    Objects     = 1,
+    Bridge      = 2,
+    BridgeRails = 3
+};
+
+}
 
 #endif // LAYERS_HPP

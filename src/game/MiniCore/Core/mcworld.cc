@@ -93,11 +93,6 @@ MCWorld::~MCWorld()
     MCWorld::m_instance = nullptr;
 }
 
-MCFloat MCWorld::gravity()
-{
-    return 9.81f;
-}
-
 void MCWorld::integrate(MCFloat step)
 {
     // Integrate and update all registered objects
@@ -136,14 +131,14 @@ void MCWorld::prepareRendering(MCCamera * camera)
     m_renderer->buildBatches(camera);
 }
 
-void MCWorld::render(MCCamera * camera)
+void MCWorld::render(MCCamera * camera, const std::vector<int> & layers)
 {
-    m_renderer->render(camera);
+    m_renderer->render(camera, layers);
 }
 
-void MCWorld::renderShadows(MCCamera * camera)
+void MCWorld::renderShadows(MCCamera * camera, const std::vector<int> & layers)
 {
-    m_renderer->renderShadows(camera);
+    m_renderer->renderShadows(camera, layers);
 }
 
 bool MCWorld::hasInstance()
@@ -476,6 +471,16 @@ MCWorldRenderer & MCWorld::renderer() const
 {
     assert(m_renderer);
     return *m_renderer;
+}
+
+void MCWorld::setGravity(const MCVector3dF & gravity)
+{
+    m_gravity = gravity;
+}
+
+const MCVector3dF & MCWorld::gravity() const
+{
+    return m_gravity;
 }
 
 void MCWorld::setMetersPerUnit(MCFloat value)

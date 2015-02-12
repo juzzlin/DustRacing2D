@@ -20,7 +20,7 @@
 #include <QObject> // For QObject::tr()
 
 Help::Help(std::string id, int width, int height)
-: SurfaceMenu("helpBack", id, width, height, Menu::MS_VERTICAL_LIST, true)
+    : SurfaceMenu("helpBack", id, width, height, Menu::Style::VerticalList, true)
 {
 }
 

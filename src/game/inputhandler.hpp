@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,16 +27,23 @@ class InputHandler
 public:
 
     //! Possible actions.
-    enum InputAction {IA_LEFT = 0, IA_RIGHT, IA_UP, IA_DOWN, IA_END_OF_ENUM};
+    enum class Action : int
+    {
+        Left = 0,
+        Right,
+        Up,
+        Down,
+        EndOfEnum
+    };
 
     //! Constructor.
     InputHandler(MCUint maxPlayers);
 
     //! Set state of the given action of the given player.
-    void setActionState(MCUint playerIndex, InputAction action, bool state);
+    void setActionState(MCUint playerIndex, Action action, bool state);
 
     //! Get state of the given action of the given player.
-    bool getActionState(MCUint playerIndex, InputAction action) const;
+    bool getActionState(MCUint playerIndex, Action action) const;
 
     //! Reset the current actions.
     void reset();
@@ -49,9 +56,11 @@ public:
 
 private:
 
-    typedef std::vector<std::bitset<IA_END_OF_ENUM> > ActionVector;
+    typedef std::vector<std::bitset<static_cast<int>(Action::EndOfEnum)>> ActionVector;
+
     ActionVector m_playerActions;
-    static bool  m_enabled;
+
+    static bool m_enabled;
 };
 
 #endif // INPUTHANDLER_HPP

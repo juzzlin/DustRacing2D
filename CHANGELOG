@@ -624,7 +624,7 @@
 0.16.0
 ------
 
-* Fixes typo in textures.conf
+* Fixes typo in surfaces.conf
 * New grandstand texture.
 * Refactors object creation in TrackLoader.
 * Updates the help text.

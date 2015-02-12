@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,15 +44,15 @@ class Game : public QObject
 
 public:
 
-    enum GameMode
+    enum class Mode
     {
-        OnePlayerRace = 0,
+        OnePlayerRace,
         TwoPlayerRace,
         TimeTrial,
         Duel
     };
 
-    enum SplitType
+    enum class SplitType
     {
         Horizontal,
         Vertical
@@ -77,10 +77,10 @@ public:
     void stop();
 
     //! Set the game mode.
-    void setMode(GameMode gameMode);
+    void setMode(Mode mode);
 
     //! Get the game mode.
-    GameMode mode() const;
+    Mode mode() const;
 
     //! Set the split type on two-player game.
     void setSplitType(SplitType splitType);
@@ -109,8 +109,11 @@ public:
 public slots:
 
     void togglePause();
+
     void exitGame();
+
     void showCursor();
+
     void hideCursor();
 
 private slots:
@@ -122,31 +125,54 @@ private slots:
 private:
 
     void adjustSceneSize(int hRes, int vRes);
+
     void createRenderer(bool forceNoVSync);
+
     void initScene();
+
     bool loadTracks();
 
-    Settings          m_settings;
-    InputHandler    * m_inputHandler;
-    EventHandler    * m_eventHandler;
-    StateMachine    * m_stateMachine;
-    Renderer        * m_renderer;
-    Scene           * m_scene;
-    MCAssetManager  * m_assetManager;
+    Settings m_settings;
+
+    InputHandler * m_inputHandler;
+
+    EventHandler * m_eventHandler;
+
+    StateMachine * m_stateMachine;
+
+    Renderer * m_renderer;
+
+    Scene * m_scene;
+
+    MCAssetManager * m_assetManager;
+
     MCObjectFactory * m_objectFactory;
-    TrackLoader     * m_trackLoader;
-    int               m_updateFps;
-    int               m_updateDelay;
-    float             m_timeStep;
-    int               m_lapCount;
-    bool              m_paused;
-    QTimer            m_updateTimer;
-    QTime             m_elapsed;
-    int               m_renderElapsed;
-    GameMode          m_mode;
-    SplitType         m_splitType;
-    AudioWorker     * m_audioWorker;
-    QThread           m_audioThread;
+
+    TrackLoader * m_trackLoader;
+
+    int m_updateFps;
+
+    int m_updateDelay;
+
+    float m_timeStep;
+
+    int m_lapCount;
+
+    bool m_paused;
+
+    QTimer m_updateTimer;
+
+    QTime m_elapsed;
+
+    int m_renderElapsed;
+
+    Mode m_mode;
+
+    SplitType m_splitType;
+
+    AudioWorker * m_audioWorker;
+
+    QThread m_audioThread;
 
     static Game * m_instance;
 };

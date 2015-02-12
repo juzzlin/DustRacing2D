@@ -31,6 +31,7 @@
 class InputHandler;
 class MCGLScene;
 class QKeyEvent;
+class QOpenGLFramebufferObject;
 class QPaintEvent;
 class Scene;
 
@@ -67,16 +68,14 @@ public:
     //! \return scene face factor 0.0..1.0.
     float fadeValue() const;
 
-    //! \return horizontal resolution.
-    int hRes() const
+    QSize resolution() const
     {
-        return m_hRes;
+        return QSize(m_hRes, m_vRes);
     }
 
-    //! \return vertical resolution.
-    int vRes() const
+    bool fullScreen() const
     {
-        return m_vRes;
+        return m_fullScreen;
     }
 
 signals:
@@ -90,6 +89,8 @@ public slots:
     void setEnabled(bool enable);
 
     void setFadeValue(float value);
+
+    void setResolution(QSize resolution);
 
     void renderLater();
 
@@ -140,20 +141,38 @@ private:
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
 
     QOpenGLContext  * m_context;
-    Scene           * m_scene;
-    MCGLScene       * m_glScene;
-    EventHandler    * m_eventHandler;
-    const float       m_viewAngle;
-    float             m_fadeValue;
-    ShaderHash        m_shaderHash;
-    bool              m_enabled;
-    int               m_hRes;
-    int               m_vRes;
-    int               m_fullHRes;
-    int               m_fullVRes;
-    bool              m_fullScreen;
-    bool              m_updatePending;
+
+    Scene * m_scene;
+
+    MCGLScene * m_glScene;
+
+    EventHandler * m_eventHandler;
+
+    const float m_viewAngle;
+
+    float m_fadeValue;
+
+    ShaderHash m_shaderHash;
+
+    bool m_enabled;
+
+    int m_hRes;
+
+    int m_vRes;
+
+    int m_fullHRes;
+
+    int m_fullVRes;
+
+    bool m_fullScreen;
+
+    bool m_updatePending;
+
     static Renderer * m_instance;
+
+    std::unique_ptr<QOpenGLFramebufferObject> m_fbo;
+
+    std::unique_ptr<QOpenGLFramebufferObject> m_shadowFbo;
 };
 
 #endif // RENDERER_HPP

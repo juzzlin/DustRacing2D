@@ -16,11 +16,14 @@
 #include "timing.hpp"
 #include "car.hpp"
 
+#include <QString>
+
 #include <cassert>
 
 Timing::Timing(MCUint cars, QObject *parent)
 : QObject(parent)
 , m_times(cars, Timing::Times())
+, m_time(0)
 , m_started(false)
 , m_lapRecord(-1)
 , m_raceRecord(-1)
@@ -32,7 +35,7 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
     Timing::Times & times = m_times.at(index);
     times.lap++;
 
-    const int elapsed = m_time.elapsed();
+    const int elapsed = m_time;
     times.lastLapTime = elapsed - times.raceTime;
     times.raceTime    = elapsed;
 
@@ -60,7 +63,7 @@ void Timing::setRaceCompleted(MCUint index, bool state, bool isHuman)
 {
     Timing::Times & times = m_times.at(index);
     times.raceCompleted = state;
-    times.raceTime = m_time.elapsed();
+    times.raceTime = m_time;
 
     if (isHuman)
     {
@@ -120,7 +123,7 @@ int Timing::currentLapTime(MCUint index) const
     }
 
     const Timing::Times & times = m_times.at(index);
-    return m_time.elapsed() - times.raceTime;
+    return m_time - times.raceTime;
 }
 
 int Timing::recordLapTime(MCUint index) const
@@ -140,7 +143,7 @@ int Timing::raceTime() const
         return 0;
     }
 
-    return m_time.elapsed();
+    return m_time;
 }
 
 int Timing::raceTime(MCUint index) const
@@ -197,8 +200,7 @@ int Timing::lastLapTime(MCUint index) const
 
 void Timing::start()
 {
-    m_time = QTime(0, 0, 0, 0);
-    m_time.start();
+    m_time = 0;
     m_started = true;
 }
 
@@ -209,12 +211,20 @@ void Timing::stop()
 
 void Timing::reset()
 {
-    m_time    = QTime(0, 0, 0, 0);
+    m_time = 0;
     m_started = false;
 
     for (Timing::Times & time : m_times)
     {
         time = Timing::Times();
+    }
+}
+
+void Timing::tick()
+{
+    if (m_started)
+    {
+        m_time += 1000 / 60;
     }
 }
 
@@ -225,16 +235,12 @@ std::wstring Timing::msecsToString(int msec)
         return L"--:--.--";
     }
 
-    const int hh = msec / 3600000;
     const int hr = msec % 3600000;
     const int mm = hr   / 60000;
     const int mr = hr   % 60000;
     const int ss = mr   / 1000;
     const int ms = mr   % 1000;
 
-    const QTime time(hh, mm, ss, ms);
-    std::wstring strTime(time.toString("mm:ss.zzz").toStdWString());
-    strTime.erase(strTime.length() - 1, 1); // Reduce .zzz to .zz
-    return strTime;
+    return QString().sprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
 }
 

@@ -25,6 +25,8 @@ Core/mcrandom.cc
 Core/mctimerevent.cc
 Core/mctrigonom.cc
 Core/mcvectoranimation.cc
+Core/mcvector2d.hh
+Core/mcvector3d.hh
 Core/mcworld.cc
 Graphics/mccamera.cc
 Graphics/mcglambientlight.cc

@@ -59,6 +59,12 @@ public:
     /*! Constructor.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
+     *  \param z Z-coordinate common for all vertices. */
+    MCSurface(MCGLMaterialPtr material, MCFloat width, MCFloat height, MCFloat z);
+
+    /*! Constructor.
+     *  \param width  Desired width of the surface when rendered 1:1.
+     *  \param height Desired height of the surface when rendered 1:1.
      *  \param texCoords Array including texture coordinates of the four vertices. */
     MCSurface(
         MCGLMaterialPtr material, MCFloat width, MCFloat height,

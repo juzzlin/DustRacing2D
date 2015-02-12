@@ -27,6 +27,8 @@
 #include "mcshape.hh"
 #include "mcshapeview.hh"
 
+#include <algorithm>
+
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
@@ -38,9 +40,9 @@ void MCWorldRenderer::registerPointParticleRenderer(MCUint typeId, MCGLPointPart
     m_particleRenderers[typeId] = &renderer;
 }
 
-void MCWorldRenderer::render(MCCamera * camera)
+void MCWorldRenderer::render(MCCamera * camera, const std::vector<int> & layers)
 {
-    renderBatches(camera);
+    renderBatches(camera, layers);
 }
 
 void MCWorldRenderer::buildBatches(MCCamera * camera)
@@ -129,7 +131,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
     }
 }
 
-void MCWorldRenderer::renderBatches(MCCamera * camera)
+void MCWorldRenderer::renderBatches(MCCamera * camera, const std::vector<int> & layers)
 {
     // Render in the order of the layers. Depth test is
     // layer-specific.
@@ -138,23 +140,27 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
     auto layerIter = m_layers.begin();
     while (layerIter != m_layers.end())
     {
-        MCRenderLayer & layer = layerIter->second;
-
-        // The depth test is enabled/disabled separately on
-        // each object layer.
-        if (layer.depthTestEnabled() && !depthTest)
+        // Render only given layers or all
+        if (!layers.size() || std::find(layers.begin(), layers.end(), layerIter->first) != layers.end())
         {
-            glEnable(GL_DEPTH_TEST);
-            depthTest = true;
-        }
-        else if (depthTest)
-        {
-            glDisable(GL_DEPTH_TEST);
-            depthTest = false;
-        }
+            MCRenderLayer & layer = layerIter->second;
 
-        renderObjectBatches(camera, layer);
-        renderParticleBatches(camera, layer);
+            // The depth test is enabled/disabled separately on
+            // each object layer.
+            if (layer.depthTestEnabled() && !depthTest)
+            {
+                glEnable(GL_DEPTH_TEST);
+                depthTest = true;
+            }
+            else if (depthTest)
+            {
+                glDisable(GL_DEPTH_TEST);
+                depthTest = false;
+            }
+
+            renderObjectBatches(camera, layer);
+            renderParticleBatches(camera, layer);
+        }
 
         layerIter++;
     }
@@ -234,44 +240,48 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
     }
 }
 
-void MCWorldRenderer::renderShadows(MCCamera * camera)
+void MCWorldRenderer::renderShadows(MCCamera * camera, const std::vector<int> & layers)
 {
     glDisable(GL_DEPTH_TEST);
 
     auto layerIter = m_layers.begin();
     while (layerIter != m_layers.end())
     {
-        MCRenderLayer & layer = layerIter->second;
-
-        // Render batches
-        auto batchIter = layer.objectBatches()[camera].begin();
-        const auto end = layer.objectBatches()[camera].end();
-        while (batchIter != end)
+        // Render only given layers or all
+        if (!layers.size() || std::find(layers.begin(), layers.end(), layerIter->first) != layers.end())
         {
-            const int itemCountInBatch = static_cast<const int>(batchIter->second.size());
-            if (itemCountInBatch > 0)
+            MCRenderLayer & layer = layerIter->second;
+
+            // Render batches
+            auto batchIter = layer.objectBatches()[camera].begin();
+            const auto end = layer.objectBatches()[camera].end();
+            while (batchIter != end)
             {
-                MCObject * object = batchIter->second[0];
-                std::shared_ptr<MCShapeView> view = object->shape()->view();
-                if (view && view->hasShadow())
+                const int itemCountInBatch = static_cast<const int>(batchIter->second.size());
+                if (itemCountInBatch > 0)
                 {
-                    view->beginShadowBatch();
-                    object->renderShadow(camera);
-
-                    for (int i = 1; i < itemCountInBatch - 1; i++)
+                    MCObject * object = batchIter->second[0];
+                    std::shared_ptr<MCShapeView> view = object->shape()->view();
+                    if (view && view->hasShadow())
                     {
-                        batchIter->second[i]->renderShadow(camera);
+                        view->beginShadowBatch();
+                        object->renderShadow(camera);
+
+                        for (int i = 1; i < itemCountInBatch - 1; i++)
+                        {
+                            batchIter->second[i]->renderShadow(camera);
+                        }
+
+                        object = batchIter->second[itemCountInBatch - 1];
+                        object->renderShadow(camera);
+
+                        view = object->shape()->view();
+                        view->endShadowBatch();
                     }
-
-                    object = batchIter->second[itemCountInBatch - 1];
-                    object->renderShadow(camera);
-
-                    view = object->shape()->view();
-                    view->endShadowBatch();
                 }
-            }
 
-            batchIter++;
+                batchIter++;
+            }
         }
 
         layerIter++;

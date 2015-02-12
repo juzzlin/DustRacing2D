@@ -134,10 +134,11 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_timingOverlay[0].setRace(m_race);
     m_timingOverlay[1].setRace(m_race);
 
-    m_world->renderer().enableDepthTestOnLayer(Layers::Tree);
-    m_world->renderer().enableDepthTestOnLayer(Layers::Objects);
-    m_world->renderer().enableDepthTestOnLayer(Layers::GrandStands);
     m_world->setMetersPerUnit(METERS_PER_UNIT);
+    m_world->setGravity(MCVector3dF(0, 0, -9.81));
+
+    m_world->renderer().enableDepthTestOnLayer(static_cast<int>(Layers::Render::Mud), false);
+    m_world->renderer().enableDepthTestOnLayer(static_cast<int>(Layers::Render::Smoke), false);
 
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
         m_renderer.program("text"));
@@ -195,7 +196,7 @@ void Scene::createCars()
                 m_ai.push_back(AIPtr(new AI(*car)));
             }
 
-            car->setRenderLayer(Layers::Objects);
+            car->setRenderLayer(static_cast<int>(Layers::Render::Objects));
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
 
             setupAudio(*car, i);
@@ -255,10 +256,10 @@ void Scene::createMenus()
 
 void Scene::updateFrame(InputHandler & handler, float timeStep)
 {
-    if (m_stateMachine.state() == StateMachine::GameTransitionIn  ||
-        m_stateMachine.state() == StateMachine::GameTransitionOut ||
-        m_stateMachine.state() == StateMachine::DoStartlights     ||
-        m_stateMachine.state() == StateMachine::Play)
+    if (m_stateMachine.state() == StateMachine::State::GameTransitionIn  ||
+        m_stateMachine.state() == StateMachine::State::GameTransitionOut ||
+        m_stateMachine.state() == StateMachine::State::DoStartlights     ||
+        m_stateMachine.state() == StateMachine::State::Play)
     {
         if (m_activeTrack)
         {
@@ -346,14 +347,14 @@ void Scene::processUserInput(InputHandler & handler)
         m_cars.at(i)->clearStatuses();
 
         // Handle accelerating / braking
-        if (handler.getActionState(i, InputHandler::IA_DOWN))
+        if (handler.getActionState(i, InputHandler::Action::Down))
         {
             if (!m_race.timing().raceCompleted(i))
             {
                 m_cars.at(i)->brake();
             }
         }
-        else if (handler.getActionState(i, InputHandler::IA_UP))
+        else if (handler.getActionState(i, InputHandler::Action::Up))
         {
             if (!m_race.timing().raceCompleted(i))
             {
@@ -362,11 +363,11 @@ void Scene::processUserInput(InputHandler & handler)
         }
 
         // Handle turning
-        if (handler.getActionState(i, InputHandler::IA_LEFT))
+        if (handler.getActionState(i, InputHandler::Action::Left))
         {
             m_cars.at(i)->turnLeft();
         }
-        else if (handler.getActionState(i, InputHandler::IA_RIGHT))
+        else if (handler.getActionState(i, InputHandler::Action::Right))
         {
             m_cars.at(i)->turnRight();
         }
@@ -391,7 +392,7 @@ void Scene::setupCameras(Track & activeTrack)
     m_world->renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
-        if (m_game.splitType() == Game::Vertical)
+        if (m_game.splitType() == Game::SplitType::Vertical)
         {
             m_camera[0].init(
                 Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
@@ -528,7 +529,7 @@ void Scene::addTrackObjectsToWorld()
                         MCAssetManager::instance().surfaceManager().surface("wallLong")
                     ));
 
-                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2));
+                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, 4));
                     bridge->rotate(pTile->rotation());
                     bridge->addToWorld();
 
@@ -543,7 +544,7 @@ void Scene::resizeOverlays()
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        if (m_game.splitType() == Game::Vertical)
+        if (m_game.splitType() == Game::SplitType::Vertical)
         {
             m_timingOverlay[0].setDimensions(width() / 2, height());
             m_timingOverlay[1].setDimensions(width() / 2, height());
@@ -586,7 +587,7 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
 
 void Scene::setSplitType(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1)
 {
-    if (m_game.splitType() == Game::Vertical)
+    if (m_game.splitType() == Game::SplitType::Vertical)
     {
         p1 = MCGLScene::ShowOnLeft;
         p0 = MCGLScene::ShowOnRight;
@@ -604,10 +605,10 @@ void Scene::renderTrack()
 
     switch (m_stateMachine.state())
     {
-    case StateMachine::GameTransitionIn:
-    case StateMachine::GameTransitionOut:
-    case StateMachine::DoStartlights:
-    case StateMachine::Play:
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
 
         if (m_fadeAnimation->isFading())
         {
@@ -646,10 +647,10 @@ void Scene::renderObjectShadows()
 
     switch (m_stateMachine.state())
     {
-    case StateMachine::GameTransitionIn:
-    case StateMachine::GameTransitionOut:
-    case StateMachine::DoStartlights:
-    case StateMachine::Play:
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
 
         if (m_fadeAnimation->isFading())
         {
@@ -688,7 +689,7 @@ void Scene::renderObjects()
 
     switch (m_stateMachine.state())
     {
-    case StateMachine::DoIntro:
+    case StateMachine::State::DoIntro:
 
         m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
         m_intro->setFadeValue(fadeValue);
@@ -696,9 +697,9 @@ void Scene::renderObjects()
 
         break;
 
-    case StateMachine::Menu:
-    case StateMachine::MenuTransitionOut:
-    case StateMachine::MenuTransitionIn:
+    case StateMachine::State::Menu:
+    case StateMachine::State::MenuTransitionOut:
+    case StateMachine::State::MenuTransitionIn:
 
         m_renderer.glScene().setFadeValue(fadeValue);
         m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
@@ -707,10 +708,10 @@ void Scene::renderObjects()
 
         break;
 
-    case StateMachine::GameTransitionIn:
-    case StateMachine::GameTransitionOut:
-    case StateMachine::DoStartlights:
-    case StateMachine::Play:
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
 
         if (m_fadeAnimation->isFading())
         {
@@ -762,10 +763,10 @@ void Scene::renderCommonHUD()
 {
     switch (m_stateMachine.state())
     {
-    case StateMachine::GameTransitionIn:
-    case StateMachine::GameTransitionOut:
-    case StateMachine::DoStartlights:
-    case StateMachine::Play:
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
         if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
         {
             m_checkeredFlag->render();

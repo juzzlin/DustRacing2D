@@ -70,25 +70,66 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
             QDomElement tag = node.toElement();
             if(!tag.isNull())
             {
-                const std::string image = tag.attribute("image", "").toStdString();
-                newData->imagePath      = baseImagePath + QDir::separator().toLatin1() + image;
-                newData->handle         = tag.attribute("handle", "").toStdString();
-                newData->handle2        = tag.attribute("handle2", "").toStdString();
-                newData->handle3        = tag.attribute("handle3", "").toStdString();
-                newData->xAxisMirror    = tag.attribute("xAxisMirror", "0").toInt();
-                newData->z0             = tag.attribute("z0", "0").toInt();
-                newData->z1             = tag.attribute("z1", "0").toInt();
-                newData->z2             = tag.attribute("z2", "0").toInt();
-                newData->z3             = tag.attribute("z3", "0").toInt();
+                if (tag.hasAttribute("image"))
+                {
+                    const std::string image = tag.attribute("image", "").toStdString();
+                    newData->imagePath = baseImagePath + QDir::separator().toLatin1() + image;
+                }
+                else
+                {
+                    throw MCException("Attribute 'image' is required for a surface!");
+                }
 
-                const unsigned int width = tag.attribute("w", "0").toUInt();
-                newData->width = std::pair<int, bool>(width, width > 0);
+                if (tag.hasAttribute("handle"))
+                {
+                    newData->handle = tag.attribute("handle", "").toStdString();
+                }
+                else
+                {
+                    throw MCException("Attribute 'handle' is required for a surface!");
+                }
 
-                const unsigned int height = tag.attribute("h", "0").toUInt();
-                newData->height = std::pair<int, bool>(height, height > 0);
+                newData->handle2 = tag.attribute("handle2", "").toStdString();
+                newData->handle3 = tag.attribute("handle3", "").toStdString();
+                newData->xAxisMirror = tag.attribute("xAxisMirror", "0").toInt();
 
-                const float specularCoeff = tag.attribute("specularCoeff", "1").toFloat();
-                newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, (specularCoeff > 1.0));
+                if (tag.hasAttribute("z")) // Shorthand z
+                {
+                    const float z = tag.attribute("z", "0").toFloat();
+                    newData->z0 = z;
+                    newData->z1 = z;
+                    newData->z2 = z;
+                    newData->z3 = z;
+                }
+                else if (
+                    tag.hasAttribute("z0") &&
+                    tag.hasAttribute("z1") &&
+                    tag.hasAttribute("z2") &&
+                    tag.hasAttribute("z3"))
+                {
+                    newData->z0 = tag.attribute("z0", "0").toFloat();
+                    newData->z1 = tag.attribute("z1", "0").toFloat();
+                    newData->z2 = tag.attribute("z2", "0").toFloat();
+                    newData->z3 = tag.attribute("z3", "0").toFloat();
+                }
+
+                if (tag.hasAttribute("w"))
+                {
+                    const unsigned int width = tag.attribute("w", "0").toUInt();
+                    newData->width = std::pair<int, bool>(width, width > 0);
+                }
+
+                if (tag.hasAttribute("h"))
+                {
+                    const unsigned int height = tag.attribute("h", "0").toUInt();
+                    newData->height = std::pair<int, bool>(height, height > 0);
+                }
+
+                if (tag.hasAttribute("specularCoeff"))
+                {
+                    const float specularCoeff = tag.attribute("specularCoeff", "1").toFloat();
+                    newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, specularCoeff > 1.0f);
+                }
 
                 // Read child nodes of surface node.
                 QDomNode childNode = node.firstChild();

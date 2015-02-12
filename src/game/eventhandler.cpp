@@ -27,18 +27,18 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 , m_captureMode(false)
 {
     // Default key bindings
-    m_keyToActionMap[KeyCodes::LSHIFT] = ActionMapping(1, InputHandler::IA_UP);
-    m_keyToActionMap[KeyCodes::RSHIFT] = ActionMapping(0, InputHandler::IA_UP);
-    m_keyToActionMap[KeyCodes::LCTRL]  = ActionMapping(1, InputHandler::IA_DOWN);
-    m_keyToActionMap[KeyCodes::RCTRL]  = ActionMapping(0, InputHandler::IA_DOWN);
-    m_keyToActionMap[Qt::Key_Left]     = ActionMapping(0, InputHandler::IA_LEFT);
-    m_keyToActionMap[Qt::Key_Right]    = ActionMapping(0, InputHandler::IA_RIGHT);
-    m_keyToActionMap[Qt::Key_A]        = ActionMapping(1, InputHandler::IA_LEFT);
-    m_keyToActionMap[Qt::Key_D]        = ActionMapping(1, InputHandler::IA_RIGHT);
-    m_keyToActionMap[Qt::Key_Up]       = ActionMapping(0, InputHandler::IA_UP);
-    m_keyToActionMap[Qt::Key_Down]     = ActionMapping(0, InputHandler::IA_DOWN);
-    m_keyToActionMap[Qt::Key_W]        = ActionMapping(1, InputHandler::IA_UP);
-    m_keyToActionMap[Qt::Key_S]        = ActionMapping(1, InputHandler::IA_DOWN);
+    m_keyToActionMap[KeyCodes::LSHIFT] = ActionMapping(1, InputHandler::Action::Up);
+    m_keyToActionMap[KeyCodes::RSHIFT] = ActionMapping(0, InputHandler::Action::Up);
+    m_keyToActionMap[KeyCodes::LCTRL]  = ActionMapping(1, InputHandler::Action::Down);
+    m_keyToActionMap[KeyCodes::RCTRL]  = ActionMapping(0, InputHandler::Action::Down);
+    m_keyToActionMap[Qt::Key_Left]     = ActionMapping(0, InputHandler::Action::Left);
+    m_keyToActionMap[Qt::Key_Right]    = ActionMapping(0, InputHandler::Action::Right);
+    m_keyToActionMap[Qt::Key_A]        = ActionMapping(1, InputHandler::Action::Left);
+    m_keyToActionMap[Qt::Key_D]        = ActionMapping(1, InputHandler::Action::Right);
+    m_keyToActionMap[Qt::Key_Up]       = ActionMapping(0, InputHandler::Action::Up);
+    m_keyToActionMap[Qt::Key_Down]     = ActionMapping(0, InputHandler::Action::Down);
+    m_keyToActionMap[Qt::Key_W]        = ActionMapping(1, InputHandler::Action::Up);
+    m_keyToActionMap[Qt::Key_S]        = ActionMapping(1, InputHandler::Action::Down);
 
     loadKeyMappings();
 
@@ -49,18 +49,18 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 
 void EventHandler::loadKeyMappings()
 {
-    std::vector<InputHandler::InputAction> actions =
+    std::vector<InputHandler::Action> actions =
     {
-        InputHandler::IA_UP,
-        InputHandler::IA_DOWN,
-        InputHandler::IA_LEFT,
-        InputHandler::IA_RIGHT
+        InputHandler::Action::Up,
+        InputHandler::Action::Down,
+        InputHandler::Action::Left,
+        InputHandler::Action::Right
     };
 
     const int numPlayers = 2;
     for (int player = 0; player < numPlayers; player++)
     {
-        for (InputHandler::InputAction action : actions)
+        for (InputHandler::Action action : actions)
         {
             mapKeyToAction(
                 player,
@@ -70,7 +70,7 @@ void EventHandler::loadKeyMappings()
     }
 }
 
-void EventHandler::enableCaptureMode(InputHandler::InputAction action, int player)
+void EventHandler::enableCaptureMode(InputHandler::Action action, int player)
 {
     assert(player == 0 || player == 1);
 
@@ -86,7 +86,7 @@ void EventHandler::disableCaptureMode()
 
 bool EventHandler::handleKeyPressEvent(QKeyEvent * event)
 {
-    if (StateMachine::instance().state() != StateMachine::Menu)
+    if (StateMachine::instance().state() != StateMachine::State::Menu)
     {
         return handleGameKeyPressEvent(event);
     }
@@ -100,7 +100,7 @@ bool EventHandler::handleKeyPressEvent(QKeyEvent * event)
 
 bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
 {
-    if (StateMachine::instance().state() != StateMachine::Menu)
+    if (StateMachine::instance().state() != StateMachine::State::Menu)
     {
         return handleGameKeyReleaseEvent(event);
     }
@@ -110,7 +110,7 @@ bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
 
 bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)
 {
-    if (StateMachine::instance().state() == StateMachine::Menu)
+    if (StateMachine::instance().state() == StateMachine::State::Menu)
     {
         if (mirrorY)
         {
@@ -133,7 +133,7 @@ bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, i
 
 bool EventHandler::handleMouseReleaseEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)
 {
-    if (StateMachine::instance().state() == StateMachine::Menu)
+    if (StateMachine::instance().state() == StateMachine::State::Menu)
     {
         if (mirrorY)
         {
@@ -237,8 +237,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
         if (m_keyToActionMap.count(event->nativeScanCode()) > 0)
         {
             const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player();
-            const InputHandler::InputAction action =
-                m_keyToActionMap[event->nativeScanCode()].action();
+            const InputHandler::Action action = m_keyToActionMap[event->nativeScanCode()].action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
@@ -246,8 +245,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
         if (m_keyToActionMap.count(event->key()) > 0)
         {
             const unsigned int player = m_keyToActionMap[event->key()].player();
-            const InputHandler::InputAction action =
-                m_keyToActionMap[event->key()].action();
+            const InputHandler::Action action = m_keyToActionMap[event->key()].action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
@@ -272,7 +270,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
     return false;
 }
 
-bool EventHandler::mapKeyToAction(int player, InputHandler::InputAction action, int key)
+bool EventHandler::mapKeyToAction(int player, InputHandler::Action action, int key)
 {
     if (key &&
         key != Qt::Key_Escape &&

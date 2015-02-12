@@ -24,8 +24,11 @@
 #include <MCSurface>
 #include <MCVector2d>
 
+namespace {
 static const char * BRIDGE_ID      = "bridge";
 static const char * BRIDGE_RAIL_ID = "bridgeRail";
+static const int    RAIL_Z         = 8;
+}
 
 Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 : MCObject(surface, BRIDGE_ID)
@@ -37,7 +40,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 , m_trigger0(MCObjectPtr(new BridgeTrigger(*this)))
 , m_trigger1(MCObjectPtr(new BridgeTrigger(*this)))
 {
-    setRenderLayer(Layers::Bridge);
+    setRenderLayer(static_cast<int>(Layers::Render::Objects));
     setCollisionLayer(-1);
 
     setIsPhysicsObject(false);
@@ -48,18 +51,17 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     shape()->view()->setBatchMode(true);
 
     const int railYDisplacement = 110;
-    const int railZ = 8;
 
-    addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, railZ));
-    addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, railZ));
+    addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
+    addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, RAIL_Z));
 
-    m_rail0->setRenderLayer(Layers::BridgeRails);
-    m_rail0->setCollisionLayer(Layers::BridgeRails);
+    m_rail0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
+    m_rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     m_rail0->setMass(0, true);
     m_rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    m_rail1->setRenderLayer(Layers::BridgeRails);
-    m_rail1->setCollisionLayer(Layers::BridgeRails);
+    m_rail1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
+    m_rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     m_rail1->setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
@@ -70,12 +72,12 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     addChildObject(m_railLower1, MCVector3dF( railXDisplacement, 0, 0));
     m_railLower1->rotateRelative(90);
 
-    m_railLower0->setRenderLayer(Layers::Walls);
+    m_railLower0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_railLower0->setMass(0, true);
     m_railLower0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower0->setIsRenderable(false);
 
-    m_railLower1->setRenderLayer(Layers::Walls);
+    m_railLower1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_railLower1->setMass(0, true);
     m_railLower1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower1->setIsRenderable(false);
@@ -88,8 +90,11 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 
 void Bridge::enterObject(MCObject & object)
 {
-    object.setCollisionLayer(Layers::BridgeRails);
-    object.setRenderLayer(Layers::BridgeRails);
+    object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
+
+    const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + 10.0);
+    object.translate(newLocation);
 
     m_objectsEntered[&object] = true;
     m_objectsOnBridge[&object] = m_tag;
@@ -102,9 +107,13 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
     {
         if (m_objectsEntered.count(&object))
         {
-            object.setCollisionLayer(Layers::BridgeRails);
-            object.setRenderLayer(Layers::BridgeRails);
+            object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+            object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(true);
+
+            const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + 10.0);
+            object.translate(newLocation);
+
             m_objectsOnBridge[&object] = m_tag;
         }
     }
@@ -120,8 +129,12 @@ void Bridge::stepTime(MCFloat)
         {
             MCObject & object = *iter->first;
             object.setCollisionLayer(0); // MCObject default collision layer
-            object.setRenderLayer(Layers::Objects);
+            object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(false);
+
+            const MCVector3dF newLocation(object.location().i(), object.location().j(), 0.0);
+            object.translate(newLocation);
+
             m_objectsEntered.erase(&object);
             iter = m_objectsOnBridge.erase(iter);
         }

@@ -48,7 +48,7 @@ private:
 };
 
 PressKeyMenu::PressKeyMenu(std::string id, int width, int height)
-: SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST)
+    : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::Style::HorizontalList)
 , m_text(QObject::tr("Press a key..").toStdWString())
 {
 }
@@ -73,7 +73,7 @@ void PressKeyMenu::render()
 static const char * PRESS_KEY_MENU_ID = "pressKeyMenu";
 
 KeyConfigMenu::KeyConfigMenu(std::string id, int width, int height)
-: SurfaceMenu("settingsBack", id, width, height, Menu::MS_VERTICAL_LIST)
+    : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
 , m_pressKeyMenu(new PressKeyMenu(PRESS_KEY_MENU_ID, width, height))
 {
     MTFH::MenuManager::instance().addMenu(*m_pressKeyMenu);
@@ -95,7 +95,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     playerOneAccelerate->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_UP, 0);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Up, 0);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -105,7 +105,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     playerOneBrake->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_DOWN, 0);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Down, 0);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -115,7 +115,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     playerOneTurnLeft->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_LEFT, 0);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Left, 0);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -125,7 +125,7 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     playerOneTurnRight->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_RIGHT, 0);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Right, 0);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -148,7 +148,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     playerTwoAccelerate->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_UP, 1);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Up, 1);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -158,7 +158,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     playerTwoBrake->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_DOWN, 1);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Down, 1);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
          });
 
@@ -168,7 +168,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     playerTwoTurnLeft->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_LEFT, 1);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Left, 1);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 
@@ -178,7 +178,7 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     playerTwoTurnRight->setAction(
         []()
         {
-            Game::instance().eventHandler().enableCaptureMode(InputHandler::IA_RIGHT, 1);
+            Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Right, 1);
             MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
         });
 

@@ -40,11 +40,8 @@ public:
 
     /*! Constructor.
      * \param coeffLin Linear friction coefficient.
-     * \param coeffRot Rotational friction coefficient.
-     * \param gravity Gravitational acceleration.
-     */
-    explicit MCFrictionGenerator(
-        MCFloat coeffLin, MCFloat coeffRot, MCFloat gravity = MCWorld::gravity());
+     * \param coeffRot Rotational friction coefficient. */
+    explicit MCFrictionGenerator(MCFloat coeffLin, MCFloat coeffRot);
 
     //! Destructor.
     virtual ~MCFrictionGenerator();
@@ -52,21 +49,14 @@ public:
     //! \reimp
     virtual void updateForce(MCObject & object);
 
-    //! Return linear coeff.
-    MCFloat coeffLin() const;
-
-    //! Return rotational coeff.
-    MCFloat coeffRot() const;
-
-    //! Return gravity.
-    MCFloat gravity() const;
-
 private:
 
     DISABLE_COPY(MCFrictionGenerator);
     DISABLE_ASSI(MCFrictionGenerator);
 
-    MCFloat m_coeffLin, m_coeffRot, m_gravity, m_coeffLinTot, m_coeffRotTot;
+    MCFloat m_coeffLinTot;
+
+    MCFloat m_coeffRotTot;
 };
 
 #endif // MCFRICTIONGENERATOR_HH

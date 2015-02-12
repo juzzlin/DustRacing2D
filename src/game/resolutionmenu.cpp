@@ -16,6 +16,7 @@
 #include "resolutionmenu.hpp"
 #include "confirmationmenu.hpp"
 #include "game.hpp"
+#include "renderer.hpp"
 #include "settings.hpp"
 #include "textmenuitemview.hpp"
 
@@ -53,6 +54,11 @@ public:
         {
         }
 
+        bool fullScreen() const
+        {
+            return m_fullScreen;
+        }
+
         //! \reimp
         virtual void fire()
         {
@@ -62,7 +68,15 @@ public:
             MCLogger().info()
                 << "Resolution set: " << hRes << " " << vRes
                 << " Full screen: " << m_fullScreen;
-            Game::instance().exitGame();
+
+            if (Game::instance().renderer().fullScreen() && m_fullScreen)
+            {
+                Game::instance().renderer().setResolution(QSize(hRes, vRes));
+            }
+            else
+            {
+                Game::instance().exitGame();
+            }
         }
 
     private:
@@ -90,10 +104,20 @@ public:
     virtual void setSelected(bool flag)
     {
         MenuItem::setSelected(flag);
-        MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-        m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdWString());
-        m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
-        m_confirmationMenu.setCurrentIndex(1);
+
+        // Change the virtual resolution immediately if changing from fullscreen to fullscreen
+        if (Game::instance().renderer().fullScreen() &&
+            static_cast<SaveResolutionAction *>(m_saveResolutionAction.get())->fullScreen())
+        {
+            m_saveResolutionAction->fire();
+        }
+        else
+        {
+            MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
+            m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdWString());
+            m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
+            m_confirmationMenu.setCurrentIndex(1);
+        }
     }
 
     int hRes() const

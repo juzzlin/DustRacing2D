@@ -34,11 +34,10 @@ class MessageOverlay : public QObject, public OverlayBase
 public:
 
     //! Alignment of the MessageOverlay messages.
-    enum MESSAGE_ALIGN {MA_TOP, MA_BOTTOM};
+    enum class Alignment {Top, Bottom};
 
     //! Constructor.
-    MessageOverlay(
-        MessageOverlay::MESSAGE_ALIGN align = MA_BOTTOM, int messageMaxTime = 180);
+    MessageOverlay(Alignment align = Alignment::Bottom, int messageMaxTime = 180);
 
     //! \reimp
     virtual void render();
@@ -90,7 +89,7 @@ private:
     MCTextureFont        & m_font;
     MCTextureText          m_text;
     int                    m_messageMaxTime;
-    MESSAGE_ALIGN          m_align;
+    Alignment              m_align;
     std::list<Message>     m_listMessages;
 };
 

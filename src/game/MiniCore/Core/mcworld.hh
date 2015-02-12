@@ -81,6 +81,13 @@ public:
         MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
         MCFloat metersPerUnit = 1.0f, int gridSize = 128);
 
+    /*! Set gravity vector used by default friction generators (on XY-plane).
+     *  The default is [0, 0, 0]. Set the gravity (acceleration) for objects
+     *  independently when needed. */
+    void setGravity(const MCVector3dF & gravity);
+
+    const MCVector3dF & gravity() const;
+
     //! Set how many meters equal one unit in the scene.
     static void setMetersPerUnit(MCFloat value);
 
@@ -95,8 +102,6 @@ public:
 
     //! Convert scene units to meters.
     static void toMeters(MCVector3dF & units);
-
-    static MCFloat gravity();
 
     /*! Add object to the world. Object's current location is used.
      *  \param object Object to be added. */
@@ -133,11 +138,15 @@ public:
      *         no any translations or clipping done. */
     virtual void prepareRendering(MCCamera * camera);
 
-    /*! \brief Render all registered objects. */
-    virtual void render(MCCamera * camera);
+    /*! \brief Render all registered objects.
+     *  \param camera Camera box, can be nullptr.
+     *  \param layers Optional list of layer id's to be rendered. */
+    virtual void render(MCCamera * camera, const std::vector<int> & layers = std::vector<int>());
 
-    /*! \brief Render shadows of all registered objects. */
-    virtual void renderShadows(MCCamera * camera);
+    /*! \brief Render shadows of all registered objects.
+     *  \param camera Camera box, can be nullptr.
+     *  \param layers Optional list of layer id's to be rendered. */
+    virtual void renderShadows(MCCamera * camera, const std::vector<int> & layers = std::vector<int>());
 
     //! \return Reference to the objectGrid.
     MCObjectGrid & objectGrid() const;
@@ -200,6 +209,7 @@ private:
     MCUint                m_numCollisions;
     MCUint                m_numResolverLoops;
     MCFloat               m_resolverStep;
+    MCVector3dF           m_gravity;
 };
 
 #endif // MCWORLD_HH

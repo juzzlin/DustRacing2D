@@ -97,7 +97,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
 void Car::setProperties(Description & desc)
 {
-    setRenderLayer(Layers::Objects);
+    setRenderLayer(static_cast<int>(Layers::Render::Objects));
     setMass(desc.mass);
     setMomentOfInertia(desc.mass * 3);
     setRestitution(desc.restitution);
@@ -156,7 +156,7 @@ void Car::accelerate(bool deccelerate)
     m_pBrakingFriction->enable(false);
     m_skidding = true;
 
-    const float frictionLimit = mass() * m_desc.accelerationFriction * MCWorld::gravity();
+    const float frictionLimit = mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
     float effForce = frictionLimit;
     if (!velocity().isZero())
     {

@@ -13,34 +13,33 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MENUITEMACTION_HPP
-#define MENUITEMACTION_HPP
+#include "application.hpp"
 
-#include <memory>
+#include <MCException>
+#include <MCLogger>
 
-namespace MTFH {
+namespace {
+static const char * INIT_ERROR = "Initializing the game failed!";
+}
 
-//! Base class for menu item actions triggered when
-//! the item gets selected.
-class MenuItemAction
+Application::Application(int argc, char ** argv)
+    : QApplication(argc, argv)
 {
-public:
+}
 
-    //! Constructor.
-    MenuItemAction();
-
-    //! Called on select.
-    virtual void fire()
+bool Application::notify(QObject * receiver, QEvent * event)
+{
+    try
     {
-        // Do nothing by default.
+        return QApplication::notify(receiver, event);
     }
+    catch (MCException & e)
+    {
+        MCLogger().fatal() << e.what();
+        MCLogger().fatal() << INIT_ERROR;
 
-    //! Destructor.
-    virtual ~MenuItemAction();
-};
+        QApplication::exit(EXIT_FAILURE);
 
-typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
-
-} // namespace MTFH
-
-#endif // MENUITEMACTION_HPP
+        return false;
+    }
+}

@@ -649,7 +649,7 @@ dustrac (1.0.0-1) precise; urgency=low
 
 dustrac (0.16.0-1) precise; urgency=low
 
-  * Fixes typo in textures.conf
+  * Fixes typo in surfaces.conf
   * New grandstand texture.
   * Refactors object creation in TrackLoader.
   * Updates the help text.

@@ -88,7 +88,8 @@ void ParticleFactory::preCreateRectParticles(int count,
 
 int scalePointSizeWithResolution(int size)
 {
-    return Renderer::instance().hRes() * size / 1600 + 1;
+    const int referenceWidth = 1600;
+    return Renderer::instance().resolution().width() * size / referenceWidth + 1;
 }
 
 void ParticleFactory::preCreateParticles()
@@ -130,7 +131,7 @@ void ParticleFactory::preCreateParticles()
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
         particle->setSurface(MCAssetManager::surfaceManager().surface("leaf"));
-        particle->setRenderLayer(Layers::Tree);
+        particle->setRenderLayer(static_cast<int>(Layers::Render::Objects));
         particle->setFreeList(m_freeLists[Leaf]);
 
         // Initially push to list of free particles
@@ -192,7 +193,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
         smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCVector2dF(velocity) + MCRandom::randomVector2d() * 0.1f);
-        smoke->setRenderLayer(Layers::Smoke);
+        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         smoke->addToWorld();
     }
 }
@@ -210,7 +211,7 @@ void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
         smoke->setAnimationStyle(MCParticle::FadeOut);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(MCRandom::randomVector2d() * 0.1f);
-        smoke->setRenderLayer(Layers::Ground);
+        smoke->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         smoke->addToWorld();
     }
 }
@@ -229,7 +230,7 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
         skidMark->rotate(angle);
         skidMark->setVelocity(MCVector3dF(0, 0, 0));
         skidMark->setAcceleration(MCVector3dF(0, 0, 0));
-        skidMark->setRenderLayer(Layers::Ground);
+        skidMark->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         skidMark->addToWorld();
     }
 }
@@ -248,7 +249,7 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
         skidMark->rotate(angle);
         skidMark->setVelocity(MCVector3dF(0, 0, 0));
         skidMark->setAcceleration(MCVector3dF(0, 0, 0));
-        skidMark->setRenderLayer(Layers::Ground);
+        skidMark->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         skidMark->addToWorld();
     }
 }
@@ -268,7 +269,7 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
         mud->rotate(MCRandom::getValue() * 360);
         mud->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         mud->setAcceleration(MCVector3dF(0, 0, -10.0f));
-        mud->setRenderLayer(Layers::Mud);
+        mud->setRenderLayer(static_cast<int>(Layers::Render::Mud));
         mud->addToWorld();
     }
 }
@@ -285,7 +286,7 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
         sparkle->init(location, 6, 120);
         sparkle->setAnimationStyle(MCParticle::FadeOut);
         sparkle->setVelocity(velocity);
-        sparkle->setRenderLayer(Layers::Smoke);
+        sparkle->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         sparkle->addToWorld();
     }
 }

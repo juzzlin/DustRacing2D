@@ -106,6 +106,10 @@ MCSurface::MCSurface(
     initVBOs(vertices, normals, texCoords, colors);
 }
 
+MCSurface::MCSurface(MCGLMaterialPtr material, MCFloat width, MCFloat height, MCFloat z)
+    : MCSurface(material, width, height, z, z, z, z)
+{}
+
 MCSurface::MCSurface(
     MCGLMaterialPtr material, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
 {

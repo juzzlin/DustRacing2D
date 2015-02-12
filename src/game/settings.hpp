@@ -52,8 +52,8 @@ public:
     void saveResolution(int hRes, int vRes, bool fullScreen);
     void loadResolution(int & hRes, int & vRes, bool & fullScreen);
 
-    void saveKeyMapping(int player, InputHandler::InputAction action, int key);
-    int loadKeyMapping(int player, InputHandler::InputAction action);
+    void saveKeyMapping(int player, InputHandler::Action action, int key);
+    int loadKeyMapping(int player, InputHandler::Action action);
 
     void saveVSync(int value);
     int loadVSync();
@@ -67,10 +67,10 @@ public:
 
 private:
 
-    QString combineActionAndPlayer(int player, InputHandler::InputAction action);
+    QString combineActionAndPlayer(int player, InputHandler::Action action);
 
     static Settings * m_instance;
-    std::map<InputHandler::InputAction, QString> m_actionToStringMap;
+    std::map<InputHandler::Action, QString> m_actionToStringMap;
 };
 
 #endif // SETTINGS_HPP

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ Game::Game(bool forceNoVSync)
 , m_scene(nullptr)
 , m_assetManager(new MCAssetManager(
     Config::Common::dataPath.toStdString(),
-    (Config::Common::dataPath + QDir::separator().toLatin1() + "textures.conf").toStdString(),
+    (Config::Common::dataPath + QDir::separator().toLatin1() + "surfaces.conf").toStdString(),
     "",
     (Config::Common::dataPath + QDir::separator().toLatin1() + "meshes.conf").toStdString()))
 , m_objectFactory(new MCObjectFactory(*m_assetManager))
@@ -67,8 +67,8 @@ Game::Game(bool forceNoVSync)
 , m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
 , m_paused(false)
 , m_renderElapsed(0)
-, m_mode(OnePlayerRace)
-, m_splitType(Vertical)
+, m_mode(Mode::OnePlayerRace)
+, m_splitType(SplitType::Vertical)
 , m_audioWorker(new AudioWorker(
       Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
 {
@@ -186,17 +186,17 @@ void Game::hideCursor()
     m_renderer->setCursor(Qt::BlankCursor);
 }
 
-void Game::setMode(GameMode gameMode)
+void Game::setMode(Game::Mode mode)
 {
-    m_mode = gameMode;
+    m_mode = mode;
 }
 
-Game::GameMode Game::mode() const
+Game::Mode Game::mode() const
 {
     return m_mode;
 }
 
-void Game::setSplitType(SplitType splitType)
+void Game::setSplitType(Game::SplitType splitType)
 {
     m_splitType = splitType;
 }
@@ -219,12 +219,12 @@ int Game::lapCount() const
 
 bool Game::hasTwoHumanPlayers() const
 {
-    return m_mode == TwoPlayerRace || m_mode == Duel;
+    return m_mode == Mode::TwoPlayerRace || m_mode == Mode::Duel;
 }
 
 bool Game::hasComputerPlayers() const
 {
-    return m_mode == TwoPlayerRace || m_mode == OnePlayerRace;
+    return m_mode == Mode::TwoPlayerRace || m_mode == Mode::OnePlayerRace;
 }
 
 EventHandler & Game::eventHandler() const

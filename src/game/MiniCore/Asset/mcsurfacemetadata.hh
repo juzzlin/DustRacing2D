@@ -33,10 +33,10 @@ struct MCSurfaceMetaData
     MCSurfaceMetaData()
     : colorKeySet(false)
     , xAxisMirror(false)
-    , z0(0)
-    , z1(0)
-    , z2(0)
-    , z3(0)
+    , z0(0.0f)
+    , z1(0.0f)
+    , z2(0.0f)
+    , z3(0.0f)
     {}
 
     //! Handle of the surface
@@ -105,16 +105,16 @@ struct MCSurfaceMetaData
     std::pair<GLfloat, bool> specularCoeff;
 
     //! Z-coordinate of vertex[0].
-    int z0;
+    float z0;
 
     //! Z-coordinate of vertex[1].
-    int z1;
+    float z1;
 
     //! Z-coordinate of vertex[2].
-    int z2;
+    float z2;
 
     //! Z-coordinate of vertex[3].
-    int z3;
+    float z3;
 };
 
 #endif // MCSURFACEMETADATA_HH

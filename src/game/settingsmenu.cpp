@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -49,9 +49,14 @@ class ResetAction : public MTFH::MenuItemAction
 {
 public:
 
-    enum ResetType {RT_TIMES, RT_POSITIONS, RT_TRACKS};
+    enum class Type
+    {
+        Times,
+        Positions,
+        Tracks
+    };
 
-    ResetAction(ResetType type, ConfirmationMenu & menu)
+    ResetAction(Type type, ConfirmationMenu & menu)
     : m_type(type)
     , m_confirmationMenu(menu)
     {
@@ -66,7 +71,7 @@ private:
 
         switch (m_type)
         {
-        case RT_POSITIONS:
+        case Type::Positions:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText(QObject::tr("Reset best positions?").toStdWString());
             m_confirmationMenu.setAcceptAction(
@@ -78,7 +83,7 @@ private:
             m_confirmationMenu.setCurrentIndex(1);
             break;
 
-        case RT_TIMES:
+        case Type::Times:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText(QObject::tr("Reset record times?").toStdWString());
             m_confirmationMenu.setAcceptAction(
@@ -91,7 +96,7 @@ private:
             m_confirmationMenu.setCurrentIndex(1);
             break;
 
-        case RT_TRACKS:
+        case Type::Tracks:
             MenuManager::instance().pushMenu(m_confirmationMenu.id());
             m_confirmationMenu.setText(QObject::tr("Reset unlocked tracks?").toStdWString());
             m_confirmationMenu.setAcceptAction(
@@ -116,7 +121,8 @@ private:
         }
     }
 
-    ResetType          m_type;
+    Type m_type;
+
     ConfirmationMenu & m_confirmationMenu;
 };
 
@@ -133,16 +139,16 @@ static const char * VSYNC_MENU_ID                  = "vsyncMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID    = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
-: SurfaceMenu("settingsBack", id, width, height, Menu::MS_VERTICAL_LIST)
+: SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
-, m_gameModeMenu("settingsBack",  GAME_MODE_MENU_ID,  width, height, Menu::MS_VERTICAL_LIST)
-, m_gfxMenu("settingsBack",       GFX_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
-, m_lapCountMenu("settingsBack",  LAP_COUNT_MENU_ID,  width, height, Menu::MS_VERTICAL_LIST)
-, m_resetMenu("settingsBack",     RESET_MENU_ID,      width, height, Menu::MS_VERTICAL_LIST)
-, m_sfxMenu("settingsBack",       SFX_MENU_ID,        width, height, Menu::MS_VERTICAL_LIST)
-, m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::MS_VERTICAL_LIST)
+, m_gameModeMenu("settingsBack",  GAME_MODE_MENU_ID,  width, height, Menu::Style::VerticalList)
+, m_gfxMenu("settingsBack",       GFX_MENU_ID,        width, height, Menu::Style::VerticalList)
+, m_lapCountMenu("settingsBack",  LAP_COUNT_MENU_ID,  width, height, Menu::Style::VerticalList)
+, m_resetMenu("settingsBack",     RESET_MENU_ID,      width, height, Menu::Style::VerticalList)
+, m_sfxMenu("settingsBack",       SFX_MENU_ID,        width, height, Menu::Style::VerticalList)
+, m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList)
 , m_vsyncMenu(m_confirmationMenu, VSYNC_MENU_ID,      width, height)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
@@ -230,7 +236,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Two player race selected.";
-            Game::instance().setMode(Game::TwoPlayerRace);
+            Game::instance().setMode(Game::Mode::TwoPlayerRace);
             MenuManager::instance().popMenu();
         });
 
@@ -240,7 +246,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "One player race selected.";
-            Game::instance().setMode(Game::OnePlayerRace);
+            Game::instance().setMode(Game::Mode::OnePlayerRace);
             MenuManager::instance().popMenu();
         });
 
@@ -250,7 +256,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Time Trial selected.";
-            Game::instance().setMode(Game::TimeTrial);
+            Game::instance().setMode(Game::Mode::TimeTrial);
             MenuManager::instance().popMenu();
         });
 
@@ -260,7 +266,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Duel selected.";
-            Game::instance().setMode(Game::Duel);
+            Game::instance().setMode(Game::Mode::Duel);
             MenuManager::instance().popMenu();
         });
 
@@ -288,7 +294,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Vertical split selected.";
-            Game::instance().setSplitType(Game::Vertical);
+            Game::instance().setSplitType(Game::SplitType::Vertical);
             MenuManager::instance().popMenu();
         });
 
@@ -298,7 +304,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
         []()
         {
             MCLogger().info() << "Horizontal split selected.";
-            Game::instance().setSplitType(Game::Horizontal);
+            Game::instance().setSplitType(Game::SplitType::Horizontal);
             MenuManager::instance().popMenu();
         });
 
@@ -397,17 +403,17 @@ void SettingsMenu::populateResetMenu(int width, int height)
     MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toStdWString());
     resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
     resetRecordTimes->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_TIMES, m_confirmationMenu)));
+        MenuItemActionPtr(new ResetAction(ResetAction::Type::Times, m_confirmationMenu)));
 
     MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toStdWString());
     resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
     resetBestPositions->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_POSITIONS, m_confirmationMenu)));
+        MenuItemActionPtr(new ResetAction(ResetAction::Type::Positions, m_confirmationMenu)));
 
     MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toStdWString());
     resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
     resetUnlockedTracks->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::RT_TRACKS, m_confirmationMenu)));
+        MenuItemActionPtr(new ResetAction(ResetAction::Type::Tracks, m_confirmationMenu)));
 
     m_resetMenu.addItem(MenuItemPtr(resetRecordTimes));
     m_resetMenu.addItem(MenuItemPtr(resetBestPositions));

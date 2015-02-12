@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,23 +22,23 @@
 StateMachine * StateMachine::m_instance = nullptr;
 
 StateMachine::StateMachine(InputHandler & inputHandler)
-: m_state(Init)
-, m_oldState(Init)
+: m_state(State::Init)
+, m_oldState(State::Init)
 , m_raceFinished(false)
 , m_inputHandler(inputHandler)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
 
-    m_stateToFunctionMap[Init]              = std::bind(&StateMachine::stateInit,              this);
-    m_stateToFunctionMap[DoIntro]           = std::bind(&StateMachine::stateDoIntro,           this);
-    m_stateToFunctionMap[Menu]              = std::bind(&StateMachine::stateMenu,              this);
-    m_stateToFunctionMap[MenuTransitionIn]  = std::bind(&StateMachine::stateMenuTransitionIn,  this);
-    m_stateToFunctionMap[MenuTransitionOut] = std::bind(&StateMachine::stateMenuTransitionOut, this);
-    m_stateToFunctionMap[GameTransitionIn]  = std::bind(&StateMachine::stateGameTransitionIn,  this);
-    m_stateToFunctionMap[GameTransitionOut] = std::bind(&StateMachine::stateGameTransitionOut, this);
-    m_stateToFunctionMap[DoStartlights]     = std::bind(&StateMachine::stateDoStartlights,     this);
-    m_stateToFunctionMap[Play]              = std::bind(&StateMachine::statePlay,              this);
+    m_stateToFunctionMap[State::Init]              = std::bind(&StateMachine::stateInit,              this);
+    m_stateToFunctionMap[State::DoIntro]           = std::bind(&StateMachine::stateDoIntro,           this);
+    m_stateToFunctionMap[State::Menu]              = std::bind(&StateMachine::stateMenu,              this);
+    m_stateToFunctionMap[State::MenuTransitionIn]  = std::bind(&StateMachine::stateMenuTransitionIn,  this);
+    m_stateToFunctionMap[State::MenuTransitionOut] = std::bind(&StateMachine::stateMenuTransitionOut, this);
+    m_stateToFunctionMap[State::GameTransitionIn]  = std::bind(&StateMachine::stateGameTransitionIn,  this);
+    m_stateToFunctionMap[State::GameTransitionOut] = std::bind(&StateMachine::stateGameTransitionOut, this);
+    m_stateToFunctionMap[State::DoStartlights]     = std::bind(&StateMachine::stateDoStartlights,     this);
+    m_stateToFunctionMap[State::Play]              = std::bind(&StateMachine::statePlay,              this);
 }
 
 StateMachine::~StateMachine()
@@ -54,11 +54,11 @@ StateMachine & StateMachine::instance()
 
 void StateMachine::quit()
 {
-    if (m_state == StateMachine::Play)
+    if (m_state == StateMachine::State::Play)
     {
-        m_state = GameTransitionOut;
+        m_state = State::GameTransitionOut;
     }
-    else if (m_state == StateMachine::Menu)
+    else if (m_state == StateMachine::State::Menu)
     {
         emit exitGameRequested();
     }
@@ -67,18 +67,18 @@ void StateMachine::quit()
 bool StateMachine::update()
 {
     // Run the state function on transition
-    if (m_state == Init || m_oldState != m_state)
+    if (m_state == State::Init || m_oldState != m_state)
     {
         m_oldState = m_state;
         m_stateToFunctionMap[m_state]();
     }
 
     // Transition logic that needs to be constantly updated
-    if (m_state == Menu)
+    if (m_state == State::Menu)
     {
         if (MTFH::MenuManager::instance().isDone())
         {
-            m_state = MenuTransitionOut;
+            m_state = State::MenuTransitionOut;
         }
     }
 
@@ -87,40 +87,45 @@ bool StateMachine::update()
 
 void StateMachine::endFadeIn()
 {
-    if (m_state == DoIntro)
+    switch (m_state)
     {
-        m_state = Menu;
-    }
-    else if (m_state == GameTransitionIn)
-    {
-        m_state = DoStartlights;
-    }
-    else if (m_state == MenuTransitionIn)
-    {
-        m_state = Menu;
+    case State::DoIntro:
+        m_state = State::Menu;
+        break;
+    case State::GameTransitionIn:
+        m_state = State::DoStartlights;
+        break;
+    case State::MenuTransitionIn:
+        m_state = State::Menu;
+        break;
+    default:
+        break;
     }
 }
 
 void StateMachine::endFadeOut()
 {
-    if (m_state == MenuTransitionOut)
+    switch (m_state)
     {
-        m_state = GameTransitionIn;
-    }
-    else if (m_state == GameTransitionOut)
-    {
-        m_state = MenuTransitionIn;
+    case State::MenuTransitionOut:
+        m_state = State::GameTransitionIn;
+        break;
+    case State::GameTransitionOut:
+        m_state = State::MenuTransitionIn;
+        break;
+    default:
+        break;
     }
 }
 
 void StateMachine::endStartlightAnimation()
 {
-    m_state = Play;
+    m_state = State::Play;
 }
 
 void StateMachine::stateInit()
 {
-    m_state = DoIntro;
+    m_state = State::DoIntro;
 }
 
 void StateMachine::stateDoIntro()
@@ -177,7 +182,7 @@ void StateMachine::statePlay()
 
 void StateMachine::finishRace()
 {
-    m_state = GameTransitionOut;
+    m_state = State::GameTransitionOut;
     m_raceFinished = true;
 }
 
@@ -188,5 +193,5 @@ StateMachine::State StateMachine::state() const
 
 void StateMachine::reset()
 {
-    m_state = Init;
+    m_state = State::Init;
 }

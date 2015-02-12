@@ -24,7 +24,7 @@
 // matter whether there's a BOM or not.
 
 Credits::Credits(std::string id, int width, int height)
-: SurfaceMenu("creditsBack", id, width, height, Menu::MS_VERTICAL_LIST, true)
+    : SurfaceMenu("creditsBack", id, width, height, Menu::Style::VerticalList, true)
 {
 }
 

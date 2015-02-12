@@ -67,15 +67,15 @@ private:
 
     void removeFromLayerMap(MCObject & object);
 
-    void render(MCCamera * camera);
+    void render(MCCamera * camera, const std::vector<int> & layers);
 
-    void renderBatches(MCCamera * camera = nullptr);
+    void renderBatches(MCCamera * camera = nullptr, const std::vector<int> & layers = std::vector<int>());
 
     void renderObjectBatches(MCCamera * camera, MCRenderLayer & layer);
 
     void renderParticleBatches(MCCamera * camera, MCRenderLayer & layer);
 
-    void renderShadows(MCCamera * camera);
+    void renderShadows(MCCamera * camera, const std::vector<int> & layers);
 
     typedef int LayerId;
     std::map<LayerId, MCRenderLayer> m_layers;

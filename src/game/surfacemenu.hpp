@@ -29,7 +29,7 @@ public:
     //! Constructor.
     SurfaceMenu(
         std::string surfaceId, std::string id, int width, int height,
-        MenuStyle style = Menu::MS_VERTICAL_LIST,
+        Menu::Style style = Menu::Style::VerticalList,
         bool quitItem = true, bool prevItem = false, bool nextItem = false);
 
     //! Destructor.

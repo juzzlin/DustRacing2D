@@ -13,34 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MENUITEMACTION_HPP
-#define MENUITEMACTION_HPP
+#ifndef APPLICATION_HPP
+#define APPLICATION_HPP
 
-#include <memory>
+#include <QApplication>
 
-namespace MTFH {
-
-//! Base class for menu item actions triggered when
-//! the item gets selected.
-class MenuItemAction
+class Application : public QApplication
 {
+    Q_OBJECT
+
 public:
 
-    //! Constructor.
-    MenuItemAction();
+    explicit Application(int argc, char ** argv);
 
-    //! Called on select.
-    virtual void fire()
-    {
-        // Do nothing by default.
-    }
-
-    //! Destructor.
-    virtual ~MenuItemAction();
+    /** Re-implementing this is required to make exceptions work with slots. */
+    bool notify(QObject * receiver, QEvent * e) override;
 };
 
-typedef std::shared_ptr<MenuItemAction> MenuItemActionPtr;
-
-} // namespace MTFH
-
-#endif // MENUITEMACTION_HPP
+#endif // APPLICATION_HPP

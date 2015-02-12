@@ -76,7 +76,7 @@ void Race::createStartGridObjects()
         data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId("grid");
-        data.setRenderLayer(Layers::Ground);
+        data.setRenderLayer(static_cast<int>(Layers::Render::Ground));
 
         MCObjectPtr object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);
@@ -312,7 +312,7 @@ void Race::update()
             Car & leader = getLeadingCar();
             m_timing.setRaceCompleted(leader.index(), true, leader.isHuman());
 
-            if (m_game.mode() == Game::TimeTrial)
+            if (m_game.mode() == Game::Mode::TimeTrial)
             {
                 emit messageRequested(QObject::tr("The Time Trial has ended!"));
             }
@@ -334,6 +334,8 @@ void Race::update()
         emit finished();
         m_isfinishedSignalSent = true;
     }
+
+    m_timing.tick();
 }
 
 void Race::pitStop(Car & car)
@@ -445,7 +447,7 @@ void Race::checkForNewBestPosition(const Car & car)
 {
     // Check if the race is completed for a human player and if so,
     // check if new best pos achieved and save it.
-    if (m_game.mode() == Game::OnePlayerRace || m_game.mode() == Game::TwoPlayerRace)
+    if (m_game.mode() == Game::Mode::OnePlayerRace || m_game.mode() == Game::Mode::TwoPlayerRace)
     {
         if (car.isHuman())
         {

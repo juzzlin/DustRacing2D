@@ -22,7 +22,7 @@
 #include "mcobject.hh"
 
 MCRenderLayer::MCRenderLayer()
-    : m_depthTestEnabled(false)
+    : m_depthTestEnabled(true)
 {
 }
 

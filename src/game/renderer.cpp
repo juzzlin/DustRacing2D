@@ -97,8 +97,6 @@ void Renderer::initialize()
 
     m_glScene->initialize();
 
-    resizeGL(m_hRes, m_vRes);
-
     loadShaders();
     loadFonts();
 
@@ -196,6 +194,15 @@ void Renderer::setFadeValue(float value)
     m_fadeValue = value;
 }
 
+void Renderer::setResolution(QSize resolution)
+{
+    m_hRes = resolution.width();
+    m_vRes = resolution.height();
+
+    m_fbo.reset();
+    m_shadowFbo.reset();
+}
+
 float Renderer::fadeValue() const
 {
     return m_fadeValue;
@@ -211,19 +218,29 @@ void Renderer::render()
     // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
 
-    static QOpenGLFramebufferObject fbo(m_hRes, m_vRes);
-    static QOpenGLFramebufferObject shadowFbo(m_hRes, m_vRes);
+    if (!m_fbo)
+    {
+        m_fbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
+        m_fbo->setAttachment(QOpenGLFramebufferObject::Depth);
+    }
+
+    if (!m_shadowFbo)
+    {
+        m_shadowFbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
+
+    }
+
     static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
 
-    shadowFbo.bind();
+    m_shadowFbo->bind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_scene->renderObjectShadows();
 
-    shadowFbo.release();
+    m_shadowFbo->release();
 
-    fbo.bind();
+    m_fbo->bind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -232,7 +249,7 @@ void Renderer::render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    dummyMaterial->setTexture(shadowFbo.texture(), 0);
+    dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
     MCSurface ss(dummyMaterial, 2.0f, 2.0f);
     ss.setShaderProgram(program("fbo"));
     ss.bindMaterial();
@@ -244,7 +261,7 @@ void Renderer::render()
 
     m_scene->renderCommonHUD();
 
-    fbo.release();
+    m_fbo->release();
 
     // Render the frame buffer object onto the screen
     if (m_fullScreen)
@@ -256,7 +273,7 @@ void Renderer::render()
         resizeGL(m_hRes, m_vRes);
     }
 
-    dummyMaterial->setTexture(fbo.texture(), 0);
+    dummyMaterial->setTexture(m_fbo->texture(), 0);
     MCSurface sd(dummyMaterial, 2.0f, 2.0f);
     sd.setShaderProgram(program("fbo"));
     sd.bindMaterial();

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,17 +20,17 @@
 bool InputHandler::m_enabled = true;
 
 InputHandler::InputHandler(MCUint maxPlayers)
-  : m_playerActions(maxPlayers, std::bitset<IA_END_OF_ENUM>())
+  : m_playerActions(maxPlayers, std::bitset<static_cast<int>(Action::EndOfEnum)>())
 {}
 
-bool InputHandler::getActionState(MCUint playerIndex, InputAction action) const
+bool InputHandler::getActionState(MCUint playerIndex, Action action) const
 {
-    return InputHandler::m_enabled && m_playerActions[playerIndex][action];
+    return InputHandler::m_enabled && m_playerActions[playerIndex][static_cast<int>(action)];
 }
 
-void InputHandler::setActionState(MCUint playerIndex, InputAction action, bool state)
+void InputHandler::setActionState(MCUint playerIndex, Action action, bool state)
 {
-    m_playerActions[playerIndex][action] = state;
+    m_playerActions[playerIndex][static_cast<int>(action)] = state;
 }
 
 void InputHandler::setEnabled(bool state)

@@ -21,7 +21,7 @@
 static const int GLYPH_WIDTH  = 20;
 static const int GLYPH_HEIGHT = 20;
 
-MessageOverlay::MessageOverlay(MESSAGE_ALIGN align, int messageMaxTime)
+MessageOverlay::MessageOverlay(Alignment align, int messageMaxTime)
 : m_fontManager(MCAssetManager::textureFontManager())
 , m_font(m_fontManager.font(Game::instance().fontName()))
 , m_text(L"")
@@ -111,7 +111,7 @@ void MessageOverlay::renderMessages()
     // Y delta
     int dY;
 
-    if (m_align == MessageOverlay::MA_BOTTOM)
+    if (m_align == MessageOverlay::Alignment::Bottom)
     {
         // Y-coordinate for the fist message
         y  = GLYPH_HEIGHT;

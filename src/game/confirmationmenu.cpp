@@ -27,7 +27,7 @@
 #include <QObject>
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
-: SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::MS_HORIZONTAL_LIST, false)
+    : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::Style::HorizontalList, false)
 , m_acceptItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Ok").toStdWString()))
 , m_cancelItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Cancel").toStdWString()))
 , m_text(L"")

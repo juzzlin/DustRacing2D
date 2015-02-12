@@ -17,7 +17,6 @@
 #define TIMING_HPP
 
 #include <QObject>
-#include <QTime>
 #include <string>
 #include <vector>
 #include <MCTypes>
@@ -97,6 +96,9 @@ public:
     //! Resets the timing.
     void reset();
 
+    //! Increase timer assuming 60 Hz update rate
+    void tick();
+
     //! Converts msecs to string "mm:ss.zz".
     static std::wstring msecsToString(int msec);
 
@@ -131,7 +133,7 @@ private:
     };
 
     std::vector<Timing::Times> m_times;
-    QTime                      m_time;
+    int                        m_time;
     bool                       m_started;
     int                        m_lapRecord;
     int                        m_raceRecord;

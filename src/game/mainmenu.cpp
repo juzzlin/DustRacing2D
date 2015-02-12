@@ -27,7 +27,7 @@
 #include <MCSurfaceManager>
 
 MainMenu::MainMenu(std::string id, int width, int height)
-: SurfaceMenu("mainMenuBack", id, width, height, Menu::MS_VERTICAL_LIST, false)
+    : SurfaceMenu("mainMenuBack", id, width, height, Menu::Style::VerticalList, false)
 {
     using MTFH::MenuItem;
 

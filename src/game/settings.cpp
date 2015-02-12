@@ -56,10 +56,10 @@ Settings::Settings()
     assert(!Settings::m_instance);
     Settings::m_instance = this;
 
-    m_actionToStringMap[InputHandler::IA_UP]    = "IA_UP";
-    m_actionToStringMap[InputHandler::IA_DOWN]  = "IA_DOWN";
-    m_actionToStringMap[InputHandler::IA_LEFT]  = "IA_LEFT";
-    m_actionToStringMap[InputHandler::IA_RIGHT] = "IA_RIGHT";
+    m_actionToStringMap[InputHandler::Action::Up]    = "IA_UP";
+    m_actionToStringMap[InputHandler::Action::Down]  = "IA_DOWN";
+    m_actionToStringMap[InputHandler::Action::Left]  = "IA_LEFT";
+    m_actionToStringMap[InputHandler::Action::Right] = "IA_RIGHT";
 }
 
 Settings & Settings::instance()
@@ -243,12 +243,12 @@ int Settings::loadValue(QString key, int defaultValue)
     return value;
 }
 
-QString Settings::combineActionAndPlayer(int player, InputHandler::InputAction action)
+QString Settings::combineActionAndPlayer(int player, InputHandler::Action action)
 {
     return QString("%2_%1").arg(player).arg(m_actionToStringMap[action]);
 }
 
-void Settings::saveKeyMapping(int player, InputHandler::InputAction action, int key)
+void Settings::saveKeyMapping(int player, InputHandler::Action action, int key)
 {
     QSettings settings;
 
@@ -257,7 +257,7 @@ void Settings::saveKeyMapping(int player, InputHandler::InputAction action, int 
     settings.endGroup();
 }
 
-int Settings::loadKeyMapping(int player, InputHandler::InputAction action)
+int Settings::loadKeyMapping(int player, InputHandler::Action action)
 {
     QSettings settings;
 

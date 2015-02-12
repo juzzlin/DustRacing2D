@@ -14,23 +14,20 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDir>
-#include <QApplication>
 #include <QLocale>
 #include <QMessageBox>
 #include <QSettings>
 #include <QTranslator>
 
 #include "../common/config.hpp"
+#include "application.hpp"
 #include "game.hpp"
 
-#include <MCException>
 #include <MCLogger>
 
 #include <iostream>
 #include <vector>
 #include <string>
-
-static const char * INIT_ERROR = "Initing the game failed!";
 
 static void initLogger()
 {
@@ -78,50 +75,39 @@ int main(int argc, char ** argv)
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    try
-    {
-        QApplication app(argc, argv);
-        QTranslator appTranslator;
-        QString lang = "";
+    Application app(argc, argv);
+    QTranslator appTranslator;
+    QString lang = "";
 
-        bool forceNoVSync = false;
-        std::vector<QString> args(argv, argv + argc);
-        if (std::find(args.begin(), args.end(), "--help") != args.end())
+    bool forceNoVSync = false;
+    std::vector<QString> args(argv, argv + argc);
+    if (std::find(args.begin(), args.end(), "--help") != args.end())
+    {
+        printHelp();
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        for (unsigned int i = 0; i < args.size(); i++)
         {
-            printHelp();
-            exit(EXIT_SUCCESS);
-        }
-        else
-        {
-            for (unsigned int i = 0; i < args.size(); i++)
+            if (args[i] == "--lang" && (i + i) < args.size())
             {
-                if (args[i] == "--lang" && (i + i) < args.size())
-                {
-                    lang = args[i + 1];
-                }
-                else if (args[i] == "--no-vsync")
-                {
-                    forceNoVSync = true;
-                }
+                lang = args[i + 1];
+            }
+            else if (args[i] == "--no-vsync")
+            {
+                forceNoVSync = true;
             }
         }
-
-        initLogger();
-        initTranslations(appTranslator, app, lang);
-
-        // Create the main game object. The game loop starts immediately after
-        // the Renderer has been initialized.
-        MCLogger().info() << "Creating game object..";
-        Game game(forceNoVSync);
-
-        return app.exec();
     }
-    // Catch some errors during game initialization e.g.
-    // a vertex shader not found.
-    catch (MCException & e)
-    {
-        MCLogger().fatal() << e.what();
-        MCLogger().fatal() << INIT_ERROR;
-        return EXIT_FAILURE;
-    }
+
+    initLogger();
+    initTranslations(appTranslator, app, lang);
+
+    // Create the main game object. The game loop starts immediately after
+    // the Renderer has been initialized.
+    MCLogger().info() << "Creating game object..";
+    Game game(forceNoVSync);
+
+    return app.exec();
 }

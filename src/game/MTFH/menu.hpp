@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,22 +32,22 @@ class Menu
 public:
 
     //! Default styles
-    enum MenuStyle
+    enum class Style
     {
-        MS_VERTICAL_LIST,
-        MS_HORIZONTAL_LIST,
-        MS_SHOW_ONE // Show only one item at a time
+        VerticalList,
+        HorizontalList,
+        ShowOne // Show only one item at a time
     };
 
-    enum MouseItemType
+    enum class MouseItemType
     {
-        MI_QUIT,
-        MI_PREV,
-        MI_NEXT
+        Quit,
+        Prev,
+        Next
     };
 
     //! Constructor.
-    Menu(std::string id, int width, int height, MenuStyle style = MS_VERTICAL_LIST);
+    Menu(std::string id, int width, int height, Style style = Style::VerticalList);
 
     //! Destructor.
     virtual ~Menu();
@@ -168,13 +168,23 @@ private:
     void updateFocus();
 
     std::vector<MenuItemPtr > m_items;
+
     std::vector<MouseItem> m_mouseItems;
+
     std::string m_id;
-    int m_width, m_height;
+
+    int m_width;
+
+    int m_height;
+
     int m_currentIndex;
+
     int m_selectedIndex;
-    MenuStyle m_style;
+
+    Style m_style;
+
     bool m_isDone;
+
     bool m_wrapAround;
 
     friend class MenuManager;

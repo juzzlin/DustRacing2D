@@ -40,6 +40,7 @@ set(HDR
 # Set sources
 set(SRC
     ai.cpp
+    application.cpp
     audioworker.cpp
     audiosource.cpp
     bridge.cpp

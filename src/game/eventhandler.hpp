@@ -34,7 +34,7 @@ public:
     //! Constructor.
     EventHandler(InputHandler & inputHandler);
 
-    void enableCaptureMode(InputHandler::InputAction action, int player);
+    void enableCaptureMode(InputHandler::Action action, int player);
 
     bool handleKeyPressEvent(QKeyEvent * event);
 
@@ -64,7 +64,7 @@ private:
     {
     public:
 
-        ActionMapping(int player, InputHandler::InputAction action)
+        ActionMapping(int player, InputHandler::Action action)
         : m_player(player)
         , m_action(action)
         {}
@@ -77,7 +77,7 @@ private:
             return m_player;
         }
 
-        InputHandler::InputAction action() const
+        InputHandler::Action action() const
         {
             return m_action;
         }
@@ -85,7 +85,7 @@ private:
     private:
 
         int m_player;
-        InputHandler::InputAction m_action;
+        InputHandler::Action m_action;
     };
 
     bool applyMatchingAction(QKeyEvent * event, bool press);
@@ -100,16 +100,21 @@ private:
 
     void loadKeyMappings();
 
-    bool mapKeyToAction(int player, InputHandler::InputAction action, int key);
+    bool mapKeyToAction(int player, InputHandler::Action action, int key);
 
     typedef std::map<int, ActionMapping> KeyToActionMap;
 
-    KeyToActionMap            m_keyToActionMap;
-    InputHandler            & m_inputHandler;
-    bool                      m_captureMode;
-    InputHandler::InputAction m_captureAction;
-    int                       m_capturePlayer;
-    QTimer                    m_mouseCursorTimer;
+    KeyToActionMap m_keyToActionMap;
+
+    InputHandler & m_inputHandler;
+
+    bool m_captureMode;
+
+    InputHandler::Action m_captureAction;
+
+    int m_capturePlayer;
+
+    QTimer m_mouseCursorTimer;
 };
 
 #endif // EVENTHANDLER_HPP
