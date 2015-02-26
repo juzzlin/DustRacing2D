@@ -24,7 +24,7 @@ class Application : public QApplication
 
 public:
 
-    explicit Application(int argc, char ** argv);
+    explicit Application(int & argc, char ** argv);
 
     /** Re-implementing this is required to make exceptions work with slots. */
     bool notify(QObject * receiver, QEvent * e) override;

@@ -44,6 +44,7 @@ HEADERS += \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
     ai.hpp \
+    application.hpp \
     audiosource.hpp \
     audioworker.hpp \
     bridge.hpp \
@@ -206,6 +207,7 @@ SOURCES += \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
     ai.cpp \
+    application.cpp \
     audiosource.cpp \
     audioworker.cpp \
     bridge.cpp \

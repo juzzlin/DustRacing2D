@@ -22,7 +22,7 @@ namespace {
 static const char * INIT_ERROR = "Initializing the game failed!";
 }
 
-Application::Application(int argc, char ** argv)
+Application::Application(int & argc, char ** argv)
     : QApplication(argc, argv)
 {
 }
