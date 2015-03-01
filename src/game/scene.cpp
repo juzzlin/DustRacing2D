@@ -481,16 +481,18 @@ void Scene::addCarsToWorld()
 
 void Scene::addTrackObjectsToWorld()
 {
-    assert(m_activeTrack);
+    createNormalObjects();
 
-    const unsigned int trackObjectCount =
-        m_activeTrack->trackData().objects().count();
+    createBridgeObjects();
+}
+
+void Scene::createNormalObjects()
+{
+    assert(m_activeTrack);
 
     m_treeViews.clear();
 
-    // ==== Normal objects ====
-
-    for (unsigned int i = 0; i < trackObjectCount; i++)
+    for (unsigned int i = 0; i < m_activeTrack->trackData().objects().count(); i++)
     {
         TrackObject & trackObject = static_cast<TrackObject &>(
             m_activeTrack->trackData().objects().object(i));
@@ -508,8 +510,11 @@ void Scene::addTrackObjectsToWorld()
             connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
         }
     }
+}
 
-    // ==== Bridges ====
+void Scene::createBridgeObjects()
+{
+    assert(m_activeTrack);
 
     const MapBase & rMap = m_activeTrack->trackData().map();
 
@@ -529,7 +534,7 @@ void Scene::addTrackObjectsToWorld()
                         MCAssetManager::instance().surfaceManager().surface("wallLong")
                     ));
 
-                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, 4));
+                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset()));
                     bridge->rotate(pTile->rotation());
                     bridge->addToWorld();
 

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@ namespace {
 static const char * BRIDGE_ID      = "bridge";
 static const char * BRIDGE_RAIL_ID = "bridgeRail";
 static const int    RAIL_Z         = 8;
+static const float  OBJECT_Z_DELTA = 5.0f;
+static const float  OBJECT_Z_ZERO  = 0.0f;
+static const int    WIDTH          = 256;
+static const int    RAIL_X_OFFSET  = 32;
 }
 
 Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
@@ -65,7 +69,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_rail1->setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    const int railXDisplacement = 256 / 2 - 32 / 2;
+    const int railXDisplacement = WIDTH / 2 - RAIL_X_OFFSET / 2;
 
     addChildObject(m_railLower0, MCVector3dF(-railXDisplacement, 0, 0));
     m_railLower0->rotateRelative(90);
@@ -82,7 +86,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_railLower1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower1->setIsRenderable(false);
 
-    const int triggerXDisplacement = 256 / 2;
+    const int triggerXDisplacement = WIDTH / 2;
 
     addChildObject(m_trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
     addChildObject(m_trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
@@ -93,7 +97,7 @@ void Bridge::enterObject(MCObject & object)
     object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
-    const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + 10.0);
+    const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
     object.translate(newLocation);
 
     m_objectsEntered[&object] = true;
@@ -111,7 +115,7 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
             object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(true);
 
-            const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + 10.0);
+            const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
             object.translate(newLocation);
 
             m_objectsOnBridge[&object] = m_tag;
@@ -132,7 +136,7 @@ void Bridge::stepTime(MCFloat)
             object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(false);
 
-            const MCVector3dF newLocation(object.location().i(), object.location().j(), 0.0);
+            const MCVector3dF newLocation(object.location().i(), object.location().j(), OBJECT_Z_ZERO);
             object.translate(newLocation);
 
             m_objectsEntered.erase(&object);

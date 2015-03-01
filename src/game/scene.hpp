@@ -113,8 +113,10 @@ private:
 
     void addCarsToWorld();
     void addTrackObjectsToWorld();
+    void createBridgeObjects();
     void createCars();
     void createMenus();
+    void createNormalObjects();
     void initRace();
     void processUserInput(InputHandler & handler);
     void renderPlayerScene(MCCamera & camera);

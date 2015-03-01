@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,6 +27,11 @@ class Car;
 class Bridge : public MCObject
 {
 public:
+
+    static MCFloat zOffset()
+    {
+        return 5.0f;
+    }
 
     Bridge(MCSurface & surface, MCSurface & rail);
 
