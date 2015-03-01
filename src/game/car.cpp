@@ -101,7 +101,7 @@ void Car::setProperties(Description & desc)
     setMass(desc.mass);
     setMomentOfInertia(desc.mass * 3);
     setRestitution(desc.restitution);
-    setShadowOffset(MCVector2dF(5, -5));
+    setShadowOffset(MCVector3dF(5, -5, 1));
 
     const float width  = static_cast<MCRectShape *>(shape().get())->width();
     const float height = static_cast<MCRectShape *>(shape().get())->height();

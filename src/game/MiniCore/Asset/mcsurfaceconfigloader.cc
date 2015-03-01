@@ -102,9 +102,9 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                     newData->z3 = z;
                 }
                 else if (
-                    tag.hasAttribute("z0") &&
-                    tag.hasAttribute("z1") &&
-                    tag.hasAttribute("z2") &&
+                    tag.hasAttribute("z0") ||
+                    tag.hasAttribute("z1") ||
+                    tag.hasAttribute("z2") ||
                     tag.hasAttribute("z3"))
                 {
                     newData->z0 = tag.attribute("z0", "0").toFloat();

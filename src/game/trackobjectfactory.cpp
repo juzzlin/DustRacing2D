@@ -60,7 +60,7 @@ TrackObject * TrackObjectFactory::build(
     else if (role == "bushArea")
     {
         MCSurfaceObjectData data(role.toStdString());
-        data.setInitialLocation(MCVector3dF(location) + MCVector3dF(0, 0, 10));
+        data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setBatchMode(true);
         data.setIsStationary(true);

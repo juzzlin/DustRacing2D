@@ -242,7 +242,7 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
 
 void MCWorldRenderer::renderShadows(MCCamera * camera, const std::vector<int> & layers)
 {
-    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     auto layerIter = m_layers.begin();
     while (layerIter != m_layers.end())
@@ -286,6 +286,8 @@ void MCWorldRenderer::renderShadows(MCCamera * camera, const std::vector<int> & 
 
         layerIter++;
     }
+
+    glDisable(GL_DEPTH_TEST);
 }
 
 void MCWorldRenderer::enableDepthTestOnLayer(int layer, bool enable)

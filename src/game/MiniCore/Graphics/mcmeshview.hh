@@ -44,22 +44,22 @@ public:
     MCMesh * mesh() const;
 
     //! \reimp
-    void setShaderProgram(MCGLShaderProgramPtr program);
+    void setShaderProgram(MCGLShaderProgramPtr program) override;
 
     //! \reimp
-    void setShadowShaderProgram(MCGLShaderProgramPtr program);
+    void setShadowShaderProgram(MCGLShaderProgramPtr program) override;
 
     //! \reimp
     virtual void render(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCCamera * p = nullptr);
+        MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadow(
         const MCVector3d<MCFloat> & l,
         MCFloat angle,
-        MCCamera * p = nullptr);
+        MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderScaled(
@@ -67,21 +67,21 @@ public:
         MCFloat angle,
         MCFloat w,
         MCFloat h,
-        MCCamera * p = nullptr);
+        MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadowScaled(
         const MCVector3d<MCFloat> & l, MCFloat angle,
-        MCFloat w, MCFloat h, MCCamera * p = nullptr);
+        MCFloat w, MCFloat h, MCCamera * p = nullptr) override;
 
     //! \reimp
-    virtual MCBBox<MCFloat> bbox() const;
+    virtual MCBBox<MCFloat> bbox() const override;
 
     //! \reimp
-    virtual void beginBatch();
+    virtual void beginBatch() override;
 
     //! \reimp
-    virtual void beginShadowBatch();
+    virtual void beginShadowBatch() override;
 
 private:
 

@@ -108,7 +108,7 @@ void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
     m_glScene->resize(
         viewWidth, viewHeight, Scene::width(), Scene::height(),
-        m_viewAngle);
+        m_viewAngle, 10.0, 1000.0);
 }
 
 void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
@@ -230,40 +230,33 @@ void Renderer::render()
     if (!m_shadowFbo)
     {
         m_shadowFbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
-
+        m_shadowFbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
 
     static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
 
-    m_shadowFbo->bind();
-
+    m_fbo->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_scene->renderTrack();
+    m_scene->renderObjects();
+    m_scene->renderCommonHUD();
+    m_fbo->release();
 
+    m_shadowFbo->bind();
+    glClear(GL_COLOR_BUFFER_BIT);
+    QOpenGLFramebufferObject::blitFramebuffer(m_shadowFbo.get(), m_fbo.get(), GL_DEPTH_BUFFER_BIT);
     m_scene->renderObjectShadows();
-
     m_shadowFbo->release();
 
     m_fbo->bind();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    m_scene->renderTrack();
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
     MCSurface ss(dummyMaterial, 2.0f, 2.0f);
     ss.setShaderProgram(program("fbo"));
     ss.bindMaterial();
     ss.render(nullptr, MCVector3dF(), 0);
-
     glDisable(GL_BLEND);
-
-    m_scene->renderObjects();
-
-    m_scene->renderCommonHUD();
-
     m_fbo->release();
 
     // Render the frame buffer object onto the screen

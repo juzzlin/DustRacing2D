@@ -47,16 +47,16 @@ public:
     void setShaderProgram(MCGLShaderProgramPtr program);
 
     //! \reimp
-    void render(MCCamera * camera = nullptr);
+    void render(MCCamera * camera = nullptr) override;
 
     //! \reimp
-    void renderShadow(MCCamera * camera = nullptr);
+    void renderShadow(MCCamera * camera = nullptr) override;
 
     //! \reimp
-    void beginBatch();
+    void beginBatch() override;
 
     //! \reimp
-    void endBatch();
+    void endBatch() override;
 
 private:
 

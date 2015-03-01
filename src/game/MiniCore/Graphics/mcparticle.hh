@@ -87,13 +87,13 @@ public:
   bool dieWhenOffScreen() const;
 
   //! \reimp
-  virtual void stepTime(MCFloat step);
+  virtual void stepTime(MCFloat step) override;
 
   //! \reimp
-  virtual void render(MCCamera * camera = nullptr);
+  virtual void render(MCCamera * camera = nullptr) override;
 
   //! \reimp
-  virtual void renderShadow(MCCamera * camera = nullptr);
+  virtual void renderShadow(MCCamera * camera = nullptr) override;
 
   //! Called when a render batch of a particle type begins.
   virtual void beginBatch();

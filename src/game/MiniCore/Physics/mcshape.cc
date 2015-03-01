@@ -34,7 +34,7 @@ MCShape::MCShape(MCShapeViewPtr view)
     }
 
     // Set default shadow offset
-    setShadowOffset(MCVector2dF(2, -2));
+    setShadowOffset(MCVector3dF(2, -2, 0));
 }
 
 void MCShape::setParent(MCObject & parent)
@@ -110,9 +110,14 @@ const MCVector3dF & MCShape::location() const
     return m_location;
 }
 
-void MCShape::setShadowOffset(const MCVector2dF & p)
+void MCShape::setShadowOffset(const MCVector3dF & p)
 {
     m_shadowOffset = p;
+}
+
+const MCVector3dF & MCShape::shadowOffset() const
+{
+    return m_shadowOffset;
 }
 
 void MCShape::rotate(MCFloat newAngle)

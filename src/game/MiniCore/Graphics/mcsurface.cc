@@ -327,7 +327,7 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
     }
 }
 
-void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
+void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
 {
     if (autoBind)
     {
@@ -336,7 +336,6 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
 
     MCFloat x = pos.i();
     MCFloat y = pos.j();
-    MCFloat z = 0;
 
     if (camera)
     {
@@ -344,6 +343,8 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle,
     }
 
     shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+
+    const MCFloat z = pos.k();
 
     if (m_centerSet)
     {

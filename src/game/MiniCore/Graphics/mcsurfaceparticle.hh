@@ -43,7 +43,7 @@ public:
     MCSurfaceParticle(const std::string & viewId);
 
     //! \reimp
-    virtual void renderShadow(MCCamera *)
+    virtual void renderShadow(MCCamera *) override
     {
         // Do nothing
     }
@@ -61,10 +61,10 @@ public:
     virtual ~MCSurfaceParticle();
 
     //! \reimp
-    void beginBatch();
+    void beginBatch() override;
 
     //! \reimp
-    void endBatch();
+    void endBatch() override;
 
 private:
 

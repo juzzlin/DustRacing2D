@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -112,7 +112,7 @@ public:
     void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind = true);
+    void renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind = true);
 
     //! Render the vertex buffer only. bind() must be called separately.
     void render();
@@ -124,19 +124,19 @@ public:
     MCFloat height() const;
 
     //! Get center
-    MCVector2d<MCFloat> center() const;
+    MCVector2dF center() const;
 
     //! \reimp
-    virtual void bind();
+    virtual void bind() override;
 
     //! \reimp
-    virtual void bindShadow();
+    virtual void bindShadow() override;
 
     //! \reimp
-    virtual void release();
+    virtual void release() override;
 
     //! \reimp
-    virtual void releaseShadow();
+    virtual void releaseShadow() override;
 
 private:
 

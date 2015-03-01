@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ MCGLScene::MCGLScene()
 , m_sceneHeight(0)
 , m_viewAngle(0)
 , m_eyeZ(0)
+, m_zNear(0.1f)
+, m_zFar(1000.0f)
 , m_updateViewProjection(false)
 {
     if (!MCGLScene::m_instance) {
@@ -135,7 +137,6 @@ void MCGLScene::initialize()
     MCLogger().info() << "Using GLEW " << glewGetString(GLEW_VERSION);
 #endif
     glShadeModel(GL_SMOOTH);
-    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDepthFunc(GL_LEQUAL);
@@ -179,13 +180,15 @@ void MCGLScene::createDefaultShaderPrograms()
 }
 
 void MCGLScene::resize(
-    MCUint viewWidth, MCUint viewHeight, MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
+    MCUint viewWidth, MCUint viewHeight, MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle, MCFloat zNear, MCFloat zFar)
 {
     m_viewWidth   = viewWidth;
     m_viewHeight  = viewHeight;
     m_sceneWidth  = sceneWidth;
     m_sceneHeight = sceneHeight;
     m_viewAngle   = viewAngle;
+    m_zNear       = zNear;
+    m_zFar        = zFar;
 
     updateViewport();
 }
@@ -223,21 +226,18 @@ void MCGLScene::setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, 
 
 void MCGLScene::updateViewport()
 {
-    static const float zNear = 1.0;
-    static const float zFar  = 1000.0;
-
     switch (m_splitType)
     {
     default:
     case ShowFullScreen:
-        setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, zNear, zFar, m_viewAngle);
+        setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth, m_viewHeight);
         glDisable(GL_SCISSOR_TEST);
         setViewerPosition(m_sceneWidth, m_sceneHeight, m_viewAngle);
         break;
 
     case ShowOnLeft:
-        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth / 2, m_viewHeight);
         glScissor(0, 0, m_viewWidth / 2, m_viewHeight);
         glEnable(GL_SCISSOR_TEST);
@@ -245,7 +245,7 @@ void MCGLScene::updateViewport()
         break;
 
     case ShowOnRight:
-        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, zNear, zFar, m_viewAngle);
+        setProjection(static_cast<float>(m_sceneWidth / 2) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle);
         glViewport(m_viewWidth / 2, 0, m_viewWidth / 2, m_viewHeight);
         glScissor(m_viewWidth / 2 + 2, 0, m_viewWidth / 2 - 2, m_viewHeight);
         glEnable(GL_SCISSOR_TEST);
@@ -253,7 +253,7 @@ void MCGLScene::updateViewport()
         break;
 
     case ShowOnTop:
-        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
+        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle / 2);
         glViewport(0, m_viewHeight / 2, m_viewWidth, m_viewHeight / 2);
         glScissor(0, m_viewHeight / 2 + 2, m_viewWidth - 2, m_viewHeight / 2);
         glEnable(GL_SCISSOR_TEST);
@@ -261,7 +261,7 @@ void MCGLScene::updateViewport()
         break;
 
     case ShowOnBottom:
-        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, zNear, zFar, m_viewAngle / 2);
+        setProjection(static_cast<float>(m_sceneWidth * 2) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle / 2);
         glViewport(0, 0, m_viewWidth, m_viewHeight / 2);
         glScissor(0, 0, m_viewWidth, m_viewHeight / 2);
         glEnable(GL_SCISSOR_TEST);

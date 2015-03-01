@@ -42,16 +42,16 @@ public:
 private:
 
     //! \reimp
-    void render(MCCamera *) {}
+    void render(MCCamera *) override {}
 
     //! \reimp
-    void renderShadow(MCCamera *) {}
+    void renderShadow(MCCamera *) override {}
 
     //! \reimp
-    void beginBatch() {}
+    void beginBatch() override {}
 
     //! \reimp
-    void endBatch() {}
+    void endBatch() override {}
 
     DISABLE_COPY(MCGLPointParticle);
     DISABLE_ASSI(MCGLPointParticle);

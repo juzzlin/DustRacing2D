@@ -95,7 +95,10 @@ public:
     /*! Set offset for the fake shadow.
      * \param p The new offset.
      */
-    void setShadowOffset(const MCVector2dF & p);
+    void setShadowOffset(const MCVector3dF & p);
+
+    /*! \return Set offset for the fake shadow. */
+    const MCVector3dF & shadowOffset() const;
 
     /*! Rotate.
      * \param a The new rotation angle in degrees
@@ -150,8 +153,8 @@ private:
 
     static MCUint m_typeCount;
     MCObject * m_pParent;
-    MCVector3d<MCFloat> m_location;
-    MCVector2d<MCFloat> m_shadowOffset;
+    MCVector3dF m_location;
+    MCVector3dF m_shadowOffset;
     MCFloat m_angle;
 
     MCShapeViewPtr m_view;
