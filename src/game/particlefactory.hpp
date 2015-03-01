@@ -55,6 +55,9 @@ public:
         MCVector3dFR initialVelocity = MCVector3dF(0, 0, 0),
         int angle = 0);
 
+    //! Update point sizes after e.g. resolution change.
+    void updatePointSizes();
+
 private:
 
     void doSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
