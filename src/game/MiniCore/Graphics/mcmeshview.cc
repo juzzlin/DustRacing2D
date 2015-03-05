@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -24,9 +24,7 @@
 #include "mcmesh.hh"
 #include "mcmeshview.hh"
 
-MCMeshView::MCMeshView(
-    const std::string & viewId,
-    MCMesh * mesh)
+MCMeshView::MCMeshView(const std::string & viewId, MCMesh * mesh)
 : MCShapeView(viewId)
 , m_mesh(mesh)
 {}
@@ -118,7 +116,7 @@ void MCMeshView::beginShadowBatch()
     }
 }
 
-MCBBox<MCFloat> MCMeshView::bbox() const
+MCBBox3dF MCMeshView::bbox() const
 {
     // TODO: Fix this! The view should know the angle of the
     // shape somehow. Now we just return a naive bbox.
@@ -127,5 +125,5 @@ MCBBox<MCFloat> MCMeshView::bbox() const
     const MCFloat h = m_mesh->height() / 2;
     const MCFloat r = std::max(w, h);
 
-    return MCBBox<MCFloat>(-r, -r, r, r);
+    return MCBBox3dF(-r, -r, m_mesh->minZ(), r, r, m_mesh->maxZ());
 }

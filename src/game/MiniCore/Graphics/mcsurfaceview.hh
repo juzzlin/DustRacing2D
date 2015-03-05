@@ -81,7 +81,7 @@ public:
         MCFloat w, MCFloat h, MCCamera * p = nullptr) override;
 
     //! \reimp
-    virtual MCBBox<MCFloat> bbox() const override;
+    virtual MCBBox3dF bbox() const override;
 
     //! \reimp
     virtual void beginBatch() override;

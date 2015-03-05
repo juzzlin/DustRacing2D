@@ -20,7 +20,7 @@
 #ifndef MCSHAPEVIEW_HH
 #define MCSHAPEVIEW_HH
 
-#include "mcbbox.hh"
+#include "mcbbox3d.hh"
 #include "mcglscene.hh"
 #include "mcglshaderprogram.hh"
 #include "mcmacros.hh"
@@ -200,7 +200,7 @@ public:
     /*! Return non-rotated, non-translated bounding box of the view.
      *  This is used to optimize rendering. Shouldn't be used to detect
      *  collisions or anything that needs exact precision. */
-    virtual MCBBox<MCFloat> bbox() const = 0;
+    virtual MCBBox3dF bbox() const = 0;
 
     //! Return the view ID.
     const std::string & viewId() const

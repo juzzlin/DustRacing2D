@@ -94,6 +94,12 @@ public:
     //! Get height
     MCFloat height() const;
 
+    //! Get minimum Z
+    MCFloat minZ() const;
+
+    //! Get maximum Z
+    MCFloat maxZ() const;
+
 private:
 
     void init(const FaceVector & faces);
@@ -106,6 +112,7 @@ private:
 
     int       m_numVertices;
     MCFloat   m_w, m_h;
+    MCFloat   m_minZ, m_maxZ;
     MCGLColor m_color;
     MCFloat   m_sx, m_sy, m_sz;
 };

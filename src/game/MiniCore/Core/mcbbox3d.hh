@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2009 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,46 +13,40 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
 
-#ifndef MCBBOX_HH
-#define MCBBOX_HH
+#ifndef MCBBOX3D_HH
+#define MCBBOX3D_HH
 
-#include <algorithm>
-#include "mcvector2d.hh"
+#include "mcbbox.hh"
+#include "mcvector3d.hh"
 #include "mctypes.hh"
 
-//! Bounding box structure in 2d
+//! Bounding box structure in 3d
 template <typename T>
-class MCBBox
+class MCBBox3d
 {
 public:
 
     //! Constructor
-    MCBBox() :
-        m_x1(0), m_y1(0),
-        m_x2(0), m_y2(0)
+    MCBBox3d() :
+        m_x1(0), m_y1(0), m_z1(0),
+        m_x2(0), m_y2(0), m_z2(0)
     {}
 
     //! Constructor
-    MCBBox(const MCVector2d<T> & v1_, T width_, T height_) :
-        m_x1(v1_.i()), m_y1(v1_.j()),
-        m_x2(m_x1 + width_), m_y2(m_y1 + height_)
-    {}
-
-    //! Constructor
-    MCBBox(T x1_, T y1_, T x2_, T y2_) :
-        m_x1(x1_), m_y1(y1_),
-        m_x2(x2_), m_y2(y2_)
+    MCBBox3d(T x1, T y1, T z1, T x2, T y2, T z2) :
+        m_x1(x1), m_y1(y1), m_z1(z1),
+        m_x2(x2), m_y2(y2), m_z2(z2)
     {}
 
     //! Copy constructor
     template <typename U>
-    MCBBox(const MCBBox<U> & r) :
-        m_x1(r.x1()), m_y1(r.y1()),
-        m_x2(r.x2()), m_y2(r.y2())
+    MCBBox3d(const MCBBox3d<U> & r) :
+        m_x1(r.x1()), m_y1(r.y1()), m_z1(r.z1()),
+        m_x2(r.x2()), m_y2(r.y2()), m_z2(r.z2())
     {}
 
     //! Get the leftmost x
@@ -67,11 +61,11 @@ public:
     //! Get the higher y
     inline T y2() const {return m_y2;}
 
-    //! Get the leftmost vertex
-    const MCVector2d<T> v1() const {return MCVector2d<T>(m_x1, m_y1);}
+    //! Get the lower z
+    inline T z1() const {return m_z1;}
 
-    //! Get the rightmost vertex
-    const MCVector2d<T> v2() const {return MCVector2d<T>(m_x2, m_y2);}
+    //! Get the higher z
+    inline T z2() const {return m_z2;}
 
     //! Get width
     inline T width() const {return m_x2 - m_x1;}
@@ -91,69 +85,85 @@ public:
     //! Set the higher y
     void setY2(T v) {m_y2 = v;}
 
+    //! Set the lower z
+    void setZ1(T v) {m_z1 = v;}
+
+    //! Set the higher z
+    void setZ2(T v) {m_z2 = v;}
+
     //! Assignment operator
     template <typename U>
-    MCBBox<T> & operator =(const MCBBox<U> & r)
+    MCBBox3d<T> & operator =(const MCBBox3d<U> & r)
     {
-        if (reinterpret_cast<void *>(const_cast<MCBBox<U> *>(&r)) != reinterpret_cast<void *>(this))
+        if (reinterpret_cast<void *>(const_cast<MCBBox3d<U> *>(&r)) != reinterpret_cast<void *>(this))
         {
             m_x1 = r.x1();
             m_x2 = r.x2();
             m_y1 = r.y1();
             m_y2 = r.y2();
+            m_z1 = r.z1();
+            m_z2 = r.z2();
         }
 
         return *this;
     }
 
-    //! Return the MCBBox the union of two boxes
-    static MCBBox<T> unionMCBBox(const MCBBox<T> & l, const MCBBox<T> & r)
-    {
-        return MCBBox<T>(std::min(l.m_x1, r.m_x1), std::min(l.m_y1, r.m_y1),
-            std::max(l.m_x2, r.m_x2), std::max(l.m_y2, r.m_y2));
-    }
-
-    //! Test if MCBBox intersects another one
+    //! Test if MCBBox3d intersects another one
     template <typename U>
-    bool intersects(const MCBBox<U> & r) const
+    bool intersects(const MCBBox3d<U> & r) const
     {
         if (r.x1() >= m_x2) {return false;}
         if (r.x2() <= m_x1) {return false;}
         if (r.y1() >= m_y2) {return false;}
         if (r.y2() <= m_y1) {return false;}
+        if (r.z1() >= m_z2) {return false;}
+        if (r.z2() <= m_z1) {return false;}
         return true;
     }
 
-    //! Test if MCBBox contains another one
+    //! Test if MCBBox3d contains another one
     template <typename U>
-    bool contains(const MCBBox<U> & r) const
+    bool contains(const MCBBox3d<U> & r) const
     {
-        return r.x1() >= m_x1 && r.x2() <= m_x2 && r.y1() >= m_y1 && r.y2() <= m_y2;
+        return
+            r.x1() >= m_x1 && r.x2() <= m_x2 &&
+            r.y1() >= m_y1 && r.y2() <= m_y2 &&
+            r.z1() >= m_z1 && r.z2() <= m_z2;
     }
 
-    //! Test if MCBBox contains given point
+    //! Test if MCBBox3d contains given point
     template <typename U>
-    bool contains(const MCVector2d<U> & r) const
+    bool contains(const MCVector3d<U> & r) const
     {
-        return r.i() >= m_x1 && r.i() <= m_x2 && r.j() >= m_y1 && r.j() <= m_y2;
+        return
+            r.i() >= m_x1 && r.i() <= m_x2 &&
+            r.j() >= m_y1 && r.j() <= m_y2 &&
+            r.k() >= m_z1 && r.k() <= m_z2;
     }
 
     //! Translate.
     template <typename U>
-    void translate(const MCVector2d<U> & r)
+    void translate(const MCVector3d<U> & r)
     {
         m_x1 += r.i();
         m_y1 += r.j();
+        m_z1 += r.k();
         m_x2 += r.i();
         m_y2 += r.j();
+        m_z2 += r.k();
+    }
+
+    MCBBox<T> toBBox() const
+    {
+        return MCBBox<T>(m_x1, m_y1, m_x2, m_y2);
     }
 
 private:
 
     //! Vertex coordinates
-    T m_x1, m_y1, m_x2, m_y2;
+    T m_x1, m_y1, m_z1, m_x2, m_y2, m_z2;
 };
 
-typedef MCBBox<MCFloat> MCBBoxF;
+typedef MCBBox3d<MCFloat> MCBBox3dF;
 
-#endif // MCBBOX_HH
+#endif // MCBBOX3D_HH

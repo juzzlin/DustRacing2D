@@ -15,6 +15,8 @@ Asset/mcmeshobjectdata.cc
 Asset/mcsurfaceobjectdata.cc
 Asset/mcsurfaceconfigloader.cc
 Asset/mcsurfacemanager.cc
+Core/mcbbox.hh
+Core/mcbbox3d.hh
 Core/mcevent.cc
 Core/mcexception.cc
 Core/mclogger.cc
@@ -45,6 +47,7 @@ Graphics/mcrenderlayer.cc
 Graphics/mcshaders.hh
 Graphics/mcshaders30.hh
 Graphics/mcshadersGLES.hh
+Graphics/mcshapeview.hh
 Graphics/mcsurfaceparticle.cc
 Graphics/mcsurface.cc
 Graphics/mcsurfaceview.cc

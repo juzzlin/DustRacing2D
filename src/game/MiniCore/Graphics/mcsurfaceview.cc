@@ -110,7 +110,7 @@ void MCSurfaceView::endShadowBatch()
     m_surface->releaseShadow();
 }
 
-MCBBox<MCFloat> MCSurfaceView::bbox() const
+MCBBox3dF MCSurfaceView::bbox() const
 {
     // TODO: Fix this! The view should know the angle of the
     // shape somehow. Now we just return a naive bbox.
@@ -119,6 +119,6 @@ MCBBox<MCFloat> MCSurfaceView::bbox() const
     const MCFloat h = m_surface->height() / 2;
     const MCFloat r = std::max(w, h);
 
-    return MCBBox<MCFloat>(-r, -r, r, r);
+    return MCBBox3dF(-r, -r, m_surface->minZ(), r, r, m_surface->maxZ());
 }
 

@@ -21,6 +21,7 @@
 #define MCSHAPE_HH
 
 #include "mcbbox.hh"
+#include "mcbbox3d.hh"
 #include "mcmacros.hh"
 #include "mctypes.hh"
 #include "mcvector2d.hh"
@@ -108,7 +109,7 @@ public:
     //! Return the current angle.
     MCFloat angle() const;
 
-    //! Return non-rotated, translated bounding box of the shape.
+    //! Return non-rotated, translated bounding box of the shape in 2d.
     virtual MCBBoxF bbox() const = 0;
 
     /*! Tests if shape contains the given point.

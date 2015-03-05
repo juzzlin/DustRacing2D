@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include "mctrigonom.hh"
 #include "mcvector3d.hh"
 
+#include <algorithm>
 #include <cassert>
 
 static const int NUM_VERTICES             = 6;
@@ -45,6 +46,9 @@ MCSurface::MCSurface(
     MCFloat z0, MCFloat z1, MCFloat z2, MCFloat z3)
 {
     init(material, width, height);
+
+    m_minZ = std::min(std::min(z0, z1), std::min(z2, z3));
+    m_maxZ = std::max(std::max(z0, z1), std::max(z2, z3));
 
     // Init vertice data for two triangles.
     const MCGLVertex vertices[NUM_VERTICES] =
@@ -167,6 +171,8 @@ void MCSurface::init(MCGLMaterialPtr material, MCFloat width, MCFloat height)
     m_w2             = width / 2;
     m_h              = height;
     m_h2             = height / 2;
+    m_minZ           = 0;
+    m_maxZ           = 0;
     m_center         = MCVector2dF(m_w2, m_h2);
     m_centerSet      = false;
     m_alphaFunc      = GL_ALWAYS;
@@ -372,6 +378,16 @@ MCFloat MCSurface::width() const
 MCFloat MCSurface::height() const
 {
     return m_h;
+}
+
+MCFloat MCSurface::minZ() const
+{
+    return m_minZ;
+}
+
+MCFloat MCSurface::maxZ() const
+{
+    return m_maxZ;
 }
 
 MCVector2dF MCSurface::center() const

@@ -52,13 +52,13 @@ public:
         , dragLinear(1.0f)
         , dragQuadratic(5.0f)
         , tireWearOutCapacity(100)
-        , numberPos(-5, 0)
-        , leftFrontTirePos(14, 9)
-        , rightFrontTirePos(14, -9)
-        , leftRearTirePos(-14, 9)
-        , rightRearTirePos(-14, -9)
-        , leftBrakeGlowPos(-21, 8)
-        , rightBrakeGlowPos(-21, -8)
+        , numberPos(-5, 0, 0)
+        , leftFrontTirePos(14, 9, 0)
+        , rightFrontTirePos(14, -9, 0)
+        , leftRearTirePos(-14, 9, 0)
+        , rightRearTirePos(-14, -9, 0)
+        , leftBrakeGlowPos(-21, 8, 0)
+        , rightBrakeGlowPos(-21, -8, 0)
         {}
 
         float accelerationFriction;
@@ -72,13 +72,13 @@ public:
         float dragQuadratic;
         float tireWearOutCapacity;
 
-        MCVector2dF numberPos;
-        MCVector2dF leftFrontTirePos;
-        MCVector2dF rightFrontTirePos;
-        MCVector2dF leftRearTirePos;
-        MCVector2dF rightRearTirePos;
-        MCVector2dF leftBrakeGlowPos;
-        MCVector2dF rightBrakeGlowPos;
+        MCVector3dF numberPos;
+        MCVector3dF leftFrontTirePos;
+        MCVector3dF rightFrontTirePos;
+        MCVector3dF leftRearTirePos;
+        MCVector3dF rightRearTirePos;
+        MCVector3dF leftBrakeGlowPos;
+        MCVector3dF rightBrakeGlowPos;
     };
 
     //! Constructor.

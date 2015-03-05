@@ -70,29 +70,32 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     setProperties(desc);
     initForceGenerators(desc);
 
+    // Note that the z-coordinate of the actual car body is 0. The small lift is done in the
+    // surface vertex level and configured in surfaces.conf.
+
     MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
-    addChildObject(numberPlate, m_desc.numberPos, 90);
-    numberPlate->setRenderLayerRelative(1);
+    addChildObject(numberPlate, m_desc.numberPos + MCVector3dF(0, 0, surface.maxZ() + 1), 90);
     numberPlate->setBypassCollisions(true);
+    numberPlate->shape()->view()->setHasShadow(false);
 
     const MCFloat offTrackFrictionFactor = 0.65f;
     const MCFloat frontFriction = 0.85f;
+    const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
     m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
-    addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos, 0);
-    m_leftFrontTire->setRenderLayerRelative(-1);
+    addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos + tireZ, 0);
 
     m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
-    addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos, 0);
-    m_rightFrontTire->setRenderLayerRelative(-1);
+    addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos + tireZ, 0);
 
     const MCFloat rearFriction = 0.95f;
     m_leftRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
-    addChildObject(m_leftRearTire, m_desc.leftRearTirePos, 0);
-    m_leftRearTire->setRenderLayerRelative(-1);
+    addChildObject(m_leftRearTire, m_desc.leftRearTirePos + tireZ, 0);
 
     m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
-    addChildObject(m_rightRearTire, m_desc.rightRearTirePos, 0);
-    m_rightRearTire->setRenderLayerRelative(-1);
+    addChildObject(m_rightRearTire, m_desc.rightRearTirePos + tireZ, 0);
+
+    m_desc.leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
+    m_desc.rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
 }
 
 void Car::setProperties(Description & desc)

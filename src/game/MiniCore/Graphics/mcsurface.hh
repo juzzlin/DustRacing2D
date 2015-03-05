@@ -123,6 +123,12 @@ public:
     //! Get height
     MCFloat height() const;
 
+    //! Get minimum Z
+    MCFloat minZ() const;
+
+    //! Get maximum Z
+    MCFloat maxZ() const;
+
     //! Get center
     MCVector2dF center() const;
 
@@ -155,6 +161,8 @@ private:
     MCFloat     m_w2;
     MCFloat     m_h;
     MCFloat     m_h2;
+    MCFloat     m_minZ;
+    MCFloat     m_maxZ;
     MCVector2dF m_center;
     bool        m_centerSet;
     GLenum      m_alphaFunc;

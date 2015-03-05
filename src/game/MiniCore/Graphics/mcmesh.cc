@@ -34,6 +34,8 @@ static const int NUM_COLOR_COMPONENTS = 4;
 MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
 : m_w(1.0)
 , m_h(1.0)
+, m_minZ(0)
+, m_maxZ(0)
 , m_color(1.0, 1.0, 1.0, 1.0)
 , m_sx(1.0)
 , m_sy(1.0)
@@ -53,10 +55,12 @@ void MCMesh::init(const FaceVector & faces)
     MCGLVertex   * normals   = new MCGLVertex[m_numVertices];
     MCGLTexCoord * texCoords = new MCGLTexCoord[m_numVertices];
 
-    int minX = 0;
-    int maxX = 0;
-    int minY = 0;
-    int maxY = 0;
+    float minX = std::numeric_limits<float>::max();
+    float maxX = std::numeric_limits<float>::min();
+    float minY = std::numeric_limits<float>::max();
+    float maxY = std::numeric_limits<float>::min();
+    float minZ = std::numeric_limits<float>::max();
+    float maxZ = std::numeric_limits<float>::min();
 
     int vertexIndex = 0;
     for (int faceIndex = 0; faceIndex < NUM_FACES; faceIndex++)
@@ -87,10 +91,12 @@ void MCMesh::init(const FaceVector & faces)
             }
             else
             {
-                minX = std::min(minX, static_cast<int>(vertices[vertexIndex].x()));
-                maxX = std::max(maxX, static_cast<int>(vertices[vertexIndex].x()));
-                minY = std::min(minY, static_cast<int>(vertices[vertexIndex].y()));
-                maxY = std::max(maxY, static_cast<int>(vertices[vertexIndex].y()));
+                minX = std::min(minX, vertices[vertexIndex].x());
+                maxX = std::max(maxX, vertices[vertexIndex].x());
+                maxZ = std::max(maxZ, vertices[vertexIndex].z());
+                minY = std::min(minY, vertices[vertexIndex].y());
+                maxY = std::max(maxY, vertices[vertexIndex].y());
+                maxZ = std::max(maxZ, vertices[vertexIndex].z());
             }
 
             vertexIndex++;
@@ -99,6 +105,9 @@ void MCMesh::init(const FaceVector & faces)
 
     m_w = maxX - minX;
     m_h = maxY - minY;
+
+    m_minZ = minZ;
+    m_maxZ = maxZ;
 
     GLfloat * colors = new GLfloat[m_numVertices * NUM_COLOR_COMPONENTS];
     for (int colorIndex = 0; colorIndex < m_numVertices * NUM_COLOR_COMPONENTS; colorIndex++)
@@ -229,4 +238,14 @@ MCFloat MCMesh::width() const
 MCFloat MCMesh::height() const
 {
     return m_h;
+}
+
+MCFloat MCMesh::minZ() const
+{
+    return m_minZ;
+}
+
+MCFloat MCMesh::maxZ() const
+{
+    return m_maxZ;
 }

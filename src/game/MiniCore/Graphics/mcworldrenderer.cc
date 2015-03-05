@@ -79,7 +79,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
                     {
                         if (object.shape()->view())
                         {
-                            MCBBox<MCFloat> bbox(object.shape()->view()->bbox());
+                            MCBBox<MCFloat> bbox(object.shape()->view()->bbox().toBBox());
                             bbox.translate(MCVector2dF(object.location()));
                             if (!camera || camera->isVisible(bbox))
                             {
