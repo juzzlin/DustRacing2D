@@ -136,7 +136,6 @@ void MCWorldRenderer::renderBatches(MCCamera * camera, const std::vector<int> & 
     // Render in the order of the layers. Depth test is
     // layer-specific.
 
-    bool depthTest = false;
     auto layerIter = m_layers.begin();
     while (layerIter != m_layers.end())
     {
@@ -147,15 +146,13 @@ void MCWorldRenderer::renderBatches(MCCamera * camera, const std::vector<int> & 
 
             // The depth test is enabled/disabled separately on
             // each object layer.
-            if (layer.depthTestEnabled() && !depthTest)
+            if (layer.depthTestEnabled())
             {
                 glEnable(GL_DEPTH_TEST);
-                depthTest = true;
             }
-            else if (depthTest)
+            else
             {
                 glDisable(GL_DEPTH_TEST);
-                depthTest = false;
             }
 
             renderObjectBatches(camera, layer);
