@@ -137,7 +137,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_world->setMetersPerUnit(METERS_PER_UNIT);
     m_world->setGravity(MCVector3dF(0, 0, -9.81));
 
-    m_world->renderer().enableDepthTestOnLayer(static_cast<int>(Layers::Render::Mud), false);
     m_world->renderer().enableDepthTestOnLayer(static_cast<int>(Layers::Render::Smoke), false);
 
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
