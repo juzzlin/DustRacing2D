@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -29,6 +29,9 @@
 
 struct MCSurfaceMetaData;
 
+class QDomElement;
+class QDomNode;
+
 //! Loads the surface config.
 class MCSurfaceConfigLoader
 {
@@ -53,6 +56,11 @@ private:
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 
     typedef std::shared_ptr<MCSurfaceMetaData> SurfaceDataPtr;
+
+    void parseAttributes(const QDomElement & element, SurfaceDataPtr newData, const std::string & baseImagePath);
+
+    void parseChildNodes(const QDomNode & node, SurfaceDataPtr newData);
+
     std::vector<SurfaceDataPtr> m_surfaces;
 
     typedef std::map<std::string, GLenum> BlendFuncMap;
