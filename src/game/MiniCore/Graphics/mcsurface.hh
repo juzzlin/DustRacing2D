@@ -39,8 +39,10 @@ class  MCGLShaderProgram;
 struct MCGLTexCoord;
 class  MCGLVertex;
 
-/*! MCSurface is a renderable object bound to an OpenGL texture handle.
- *  MCSurface can be rendered straightly as a standalone object. */
+/*! MCSurface is a (2D) renderable object bound to an OpenGL texture handle.
+ *  MCSurface can be rendered as a standalone object. Despite being a
+ *  2D object, it's possible to assign Z-values to the vertices in order to
+ *  easily create tilted surfaces. */
 class MCSurface : public MCGLObjectBase
 {
 public:
@@ -84,8 +86,7 @@ public:
      *         if useAlphaBlend equals false.
      *  \param dst Destination alpha function used in the alpha blending. Has no effect
      *         if useAlphaBlend equals false. */
-    void setAlphaBlend(
-        bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
+    void setAlphaBlend(bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
 
     /*! Runs the corresponding GL-commands defined in setAlphaBlend().
      *  This is done automatically, but doAlphaBlend() can be used if
@@ -165,8 +166,6 @@ private:
     MCFloat     m_maxZ;
     MCVector2dF m_center;
     bool        m_centerSet;
-    GLenum      m_alphaFunc;
-    GLclampf    m_alphaThreshold;
     bool        m_useAlphaBlend;
     GLenum      m_src;
     GLenum      m_dst;

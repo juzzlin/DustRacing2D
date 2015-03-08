@@ -31,14 +31,14 @@
 #include <algorithm>
 #include <cassert>
 
-static const int NUM_VERTICES             = 6;
-static const int NUM_COLOR_COMPONENTS     = 4;
+static const int NUM_VERTICES         = 6;
+static const int NUM_COLOR_COMPONENTS = 4;
 
-static const int VERTEX_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;
-static const int NORMAL_DATA_SIZE         = sizeof(MCGLVertex)   * NUM_VERTICES;
-static const int TEXCOORD_DATA_SIZE       = sizeof(MCGLTexCoord) * NUM_VERTICES;
-static const int COLOR_DATA_SIZE          = sizeof(GLfloat)      * NUM_VERTICES * NUM_COLOR_COMPONENTS;
-static const int TOTAL_DATA_SIZE          =
+static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex)   * NUM_VERTICES;
+static const int NORMAL_DATA_SIZE     = sizeof(MCGLVertex)   * NUM_VERTICES;
+static const int TEXCOORD_DATA_SIZE   = sizeof(MCGLTexCoord) * NUM_VERTICES;
+static const int COLOR_DATA_SIZE      = sizeof(GLfloat)      * NUM_VERTICES * NUM_COLOR_COMPONENTS;
+static const int TOTAL_DATA_SIZE      =
     VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCSurface::MCSurface(
@@ -175,8 +175,6 @@ void MCSurface::init(MCGLMaterialPtr material, MCFloat width, MCFloat height)
     m_maxZ           = 0;
     m_center         = MCVector2dF(m_w2, m_h2);
     m_centerSet      = false;
-    m_alphaFunc      = GL_ALWAYS;
-    m_alphaThreshold = 0.0;
     m_useAlphaBlend  = false;
     m_src            = GL_SRC_ALPHA;
     m_dst            = GL_ONE_MINUS_SRC_ALPHA;
@@ -212,12 +210,11 @@ void MCSurface::setCenter(MCVector2dFR center)
     m_center    = center;
 }
 
-void MCSurface::setAlphaBlend(
-    bool useAlphaBlend, GLenum src, GLenum dst)
+void MCSurface::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
 {
-    m_useAlphaBlend  = useAlphaBlend;
-    m_src            = src;
-    m_dst            = dst;
+    m_useAlphaBlend = useAlphaBlend;
+    m_src           = src;
+    m_dst           = dst;
 }
 
 void MCSurface::doAlphaBlend()
@@ -289,7 +286,6 @@ void MCSurface::release()
 
 void MCSurface::releaseShadow()
 {
-
 }
 
 void MCSurface::render()
