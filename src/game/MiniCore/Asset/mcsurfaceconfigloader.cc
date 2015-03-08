@@ -133,12 +133,12 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 
                 // Read child nodes of surface node.
                 QDomNode childNode = node.firstChild();
-                while(!childNode.isNull())
+                while (!childNode.isNull())
                 {
                     if (childNode.nodeName() == "colorKey")
                     {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        const QDomElement tag = childNode.toElement();
+                        if (!tag.isNull())
                         {
                             newData->colorKey.m_r = tag.attribute("r", "0").toUInt();
                             newData->colorKey.m_g = tag.attribute("g", "0").toUInt();
@@ -148,8 +148,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                     }
                     else if (childNode.nodeName() == "alphaBlend")
                     {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        const QDomElement tag = childNode.toElement();
+                        if (!tag.isNull())
                         {
                             newData->alphaBlend.first.m_src =
                                 alphaBlendStringToEnum(
@@ -163,8 +163,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                     }
                     else if (childNode.nodeName() == "center")
                     {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        const QDomElement tag = childNode.toElement();
+                        if (!tag.isNull())
                         {
                             const int x = tag.attribute("x", "0").toInt();
                             const int y = tag.attribute("y", "0").toInt();
@@ -175,8 +175,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                     }
                     else if (childNode.nodeName() == "filter")
                     {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        const QDomElement tag = childNode.toElement();
+                        if (!tag.isNull())
                         {
                             const std::string min = tag.attribute("min", "").toStdString();
                             const std::string mag = tag.attribute("mag", "").toStdString();
@@ -210,8 +210,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
                     }
                     else if (childNode.nodeName() == "wrap")
                     {
-                        QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        const QDomElement tag = childNode.toElement();
+                        if (!tag.isNull())
                         {
                             const std::string s = tag.attribute("s", "").toStdString();
                             const std::string t = tag.attribute("t", "").toStdString();
