@@ -112,7 +112,6 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
         if (m_objectsEntered.count(&object))
         {
             object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-            object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(true);
 
             const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
@@ -133,7 +132,6 @@ void Bridge::stepTime(MCFloat)
         {
             MCObject & object = *iter->first;
             object.setCollisionLayer(0); // MCObject default collision layer
-            object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
             object.preventSleeping(false);
 
             const MCVector3dF newLocation(object.location().i(), object.location().j(), OBJECT_Z_ZERO);
