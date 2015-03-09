@@ -239,7 +239,6 @@ void Renderer::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_scene->renderTrack();
     m_scene->renderObjects();
-    m_scene->renderCommonHUD();
     m_fbo->release();
 
     m_shadowFbo->bind();
@@ -257,6 +256,7 @@ void Renderer::render()
     ss.bindMaterial();
     ss.render(nullptr, MCVector3dF(), 0);
     glDisable(GL_BLEND);
+    m_scene->renderCommonHUD();
     m_fbo->release();
 
     // Render the frame buffer object onto the screen
