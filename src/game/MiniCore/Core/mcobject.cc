@@ -107,7 +107,7 @@ void MCObject::init(const std::string & typeId)
     m_renderOutline          = false;
     m_isParticle             = false;
     m_parent                 = this;
-    m_displacementActive     = false;
+    m_isIntegrating          = false;
 }
 
 MCUint MCObject::getTypeIDForName(const std::string & typeName)
@@ -158,6 +158,8 @@ void MCObject::integrate(MCFloat step)
     // have a parent object.
     if (!m_sleeping && m_parent == this)
     {
+        m_isIntegrating = true;
+
         integrateLinear(step);
         integrateAngular(step);
         doOutOfBoundariesEvent();
@@ -174,6 +176,8 @@ void MCObject::integrate(MCFloat step)
         m_angularImpulse = 0.0;
 
         translate(location() + m_velocity);
+
+        m_isIntegrating = false;
     }
 }
 
@@ -620,7 +624,7 @@ void MCObject::translate(const MCVector3dF & newLocation)
     // by the parent. This way we'll automatically get linear velocity +
     // possible orbital velocity.
     // TODO: do we need to take the time step into account here?
-    if (m_parent != this && !m_parent->stationary() && !m_displacementActive)
+    if (m_parent != this && m_parent->m_isIntegrating && !m_parent->stationary())
     {
         m_velocity = newLocation - m_location;
     }
@@ -642,9 +646,7 @@ void MCObject::translate(const MCVector3dF & newLocation)
 
 void MCObject::displace(const MCVector3dF & displacement)
 {
-    m_displacementActive = true;
     translate(m_location + displacement);
-    m_displacementActive = false;
 }
 
 const MCVector3dF & MCObject::location() const
@@ -983,7 +985,6 @@ void MCObject::updateChildTransforms()
     {
         const float newAngle = m_angle + child->m_relativeAngle;
         child->rotate(newAngle);
-        child->m_displacementActive = m_displacementActive;
         child->translate(m_location +
             MCVector3dF(MCTrigonom::rotatedVector(child->m_relativeLocation, m_angle),
                 child->m_relativeLocation.k()));

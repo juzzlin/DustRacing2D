@@ -515,7 +515,7 @@ private:
     bool                         m_removing;
     bool                         m_renderOutline;
     bool                         m_isParticle;
-    bool                         m_displacementActive;
+    bool                         m_isIntegrating;
     typedef std::vector<MCObjectPtr> Children;
     Children                     m_children;
     MCObject *                   m_parent;
