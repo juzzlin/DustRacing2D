@@ -20,6 +20,7 @@ Core/mcbbox3d.hh
 Core/mcevent.cc
 Core/mcexception.cc
 Core/mclogger.cc
+Core/mcobbox.hh
 Core/mcobject.cc
 Core/mcobjectdata.cc
 Core/mcobjectfactory.cc

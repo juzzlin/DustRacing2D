@@ -49,11 +49,17 @@ public:
      */
     MCOBBox(T hx, T hy, const MCVector2d<T> & loc);
 
-    //! Copy-constructor.
+    //! Copy constructor.
     MCOBBox<T>(const MCOBBox<T> & other);
+
+    //! Move constructor.
+    MCOBBox<T>(const MCOBBox<T> && other);
 
     //! Assignment operator.
     MCOBBox<T> & operator=(const MCOBBox<T> & other);
+
+    //! Move assignment operator.
+    MCOBBox<T> & operator=(const MCOBBox<T> && other);
 
     //! Return current angle
     inline MCFloat angle() const
@@ -159,6 +165,19 @@ MCOBBox<T>::MCOBBox(const MCOBBox<T> & other)
 }
 
 template <typename T>
+MCOBBox<T>::MCOBBox(const MCOBBox<T> && other)
+: m_hx(other.m_hx)
+, m_hy(other.m_hy)
+, m_p(other.m_p)
+, m_a(other.m_a)
+{
+    std::swap(m_v[0], other.m_v[0]);
+    std::swap(m_v[1], other.m_v[1]);
+    std::swap(m_v[2], other.m_v[2]);
+    std::swap(m_v[3], other.m_v[3]);
+}
+
+template <typename T>
 MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
 {
     if (this != &other)
@@ -172,6 +191,21 @@ MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
         m_v[2] = other.m_v[2];
         m_v[3] = other.m_v[3];
     }
+
+    return *this;
+}
+
+template <typename T>
+MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> && other)
+{
+    m_hx   = other.m_hx;
+    m_hy   = other.m_hy;
+    m_p    = other.m_p;
+    m_a    = other.m_a;
+    m_v[0] = other.m_v[0];
+    m_v[1] = other.m_v[1];
+    m_v[2] = other.m_v[2];
+    m_v[3] = other.m_v[3];
 
     return *this;
 }
