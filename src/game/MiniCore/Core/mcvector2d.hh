@@ -58,12 +58,20 @@ public:
     template <typename U>
     MCVector2d(const MCVector2d<U> & r);
 
+    //! Move constructor
+    template <typename U>
+    MCVector2d(const MCVector2d<U> && r);
+
     //! Destructor
     inline ~MCVector2d() {}
 
     //! Assignment
     template <typename U>
     MCVector2d<T> & operator = (const MCVector2d<U> & r);
+
+    //! Move assignment
+    template <typename U>
+    MCVector2d<T> & operator = (const MCVector2d<U> && r);
 
     //! Cross product. Returns the resulting component.
     template <typename U>
@@ -204,6 +212,13 @@ MCVector2d<T>::MCVector2d(const MCVector2d<U> & r) :
 
 template <typename T>
 template <typename U>
+MCVector2d<T>::MCVector2d(const MCVector2d<U> && r) :
+    m_i(r.i()),
+    m_j(r.j())
+{}
+
+template <typename T>
+template <typename U>
 MCVector2d<T> & MCVector2d<T>::operator = (const MCVector2d<U> & r)
 {
     if (reinterpret_cast<const void *>(&r) != reinterpret_cast<void *>(this))
@@ -211,6 +226,16 @@ MCVector2d<T> & MCVector2d<T>::operator = (const MCVector2d<U> & r)
         m_i = r.i();
         m_j = r.j();
     }
+
+    return *this;
+}
+
+template <typename T>
+template <typename U>
+MCVector2d<T> & MCVector2d<T>::operator = (const MCVector2d<U> && r)
+{
+    m_i = r.i();
+    m_j = r.j();
 
     return *this;
 }

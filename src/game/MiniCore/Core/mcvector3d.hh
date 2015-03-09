@@ -62,6 +62,10 @@ public:
     template <typename U>
     MCVector3d(const MCVector3d<U> & r);
 
+    //! Move constructor
+    template <typename U>
+    MCVector3d(const MCVector3d<U> && r);
+
     //! Destructor
     inline ~MCVector3d() {}
 
@@ -72,6 +76,10 @@ public:
     //! Assignment
     template <typename U>
     MCVector3d<T> & operator = (const MCVector3d<U> & r);
+
+    //! Move assignment
+    template <typename U>
+    MCVector3d<T> & operator = (const MCVector3d<U> && r);
 
     //! Cross product. Returns the resulting vector.
     template <typename U>
@@ -221,6 +229,14 @@ MCVector3d<T>::MCVector3d(const MCVector3d<U> & r) :
 
 template <typename T>
 template <typename U>
+MCVector3d<T>::MCVector3d(const MCVector3d<U> && r) :
+    m_i(r.i()),
+    m_j(r.j()),
+    m_k(r.k())
+{}
+
+template <typename T>
+template <typename U>
 MCVector3d<T>::MCVector3d(const MCVector2d<U> & r, U k) :
     m_i(r.i()),
     m_j(r.j()),
@@ -244,6 +260,17 @@ MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> & r)
         m_j = r.j();
         m_k = r.k();
     }
+
+    return *this;
+}
+
+template <typename T>
+template <typename U>
+MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> && r)
+{
+    m_i = r.i();
+    m_j = r.j();
+    m_k = r.k();
 
     return *this;
 }
