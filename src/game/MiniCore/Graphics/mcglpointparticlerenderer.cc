@@ -105,7 +105,7 @@ void MCGLPointParticleRenderer::setBatch(
         }
 
         // Use normal data for sin and cos in order to rotate texture coordinates.
-        // We cannot apply transformations for GL_POINT's.
+        // We cannot apply transformations to GL_POINT's.
         m_normals[i] = MCGLVertex(
             MCTrigonom::cos(particle->angle()),
             MCTrigonom::sin(particle->angle()));
