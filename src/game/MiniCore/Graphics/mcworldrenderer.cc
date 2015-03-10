@@ -22,6 +22,7 @@
 #include "mccamera.hh"
 #include "mcglpointparticle.hh"
 #include "mcglpointparticlerenderer.hh"
+#include "mcglrectparticlerenderer.hh"
 #include "mcobject.hh"
 #include "mcparticle.hh"
 #include "mcshape.hh"
@@ -37,7 +38,12 @@ MCWorldRenderer::MCWorldRenderer()
 
 void MCWorldRenderer::registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer)
 {
-    m_particleRenderers[typeId] = &renderer;
+    m_pointParticleRenderers[typeId] = &renderer;
+}
+
+void MCWorldRenderer::registerRectParticleRenderer(MCUint typeId, MCGLRectParticleRenderer & renderer)
+{
+    m_rectParticleRenderers[typeId] = &renderer;
 }
 
 void MCWorldRenderer::render(MCCamera * camera, const std::vector<int> & layers)
@@ -208,9 +214,18 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
         // Check if the batch is of MCGLPointParticles
         if (MCGLPointParticle * particle = dynamic_cast<MCGLPointParticle *>(batchIter->second[0]))
         {
-            auto rendererIter = m_particleRenderers.find(particle->typeID());
-            assert(rendererIter != m_particleRenderers.end());
+            auto rendererIter = m_pointParticleRenderers.find(particle->typeID());
+            assert(rendererIter != m_pointParticleRenderers.end());
             MCGLPointParticleRenderer * renderer = rendererIter->second;
+            renderer->setBatch(batchIter->second, camera);
+            renderer->render();
+        }
+        // Check if the batch is of MCGLRectParticles
+        else if (MCGLRectParticle * particle = dynamic_cast<MCGLRectParticle *>(batchIter->second[0]))
+        {
+            auto rendererIter = m_rectParticleRenderers.find(particle->typeID());
+            assert(rendererIter != m_rectParticleRenderers.end());
+            MCGLRectParticleRenderer * renderer = rendererIter->second;
             renderer->setBatch(batchIter->second, camera);
             renderer->render();
         }

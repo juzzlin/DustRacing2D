@@ -147,7 +147,10 @@ HEADERS += \
     MiniCore/Graphics/mcgldiffuselight.hh \
     MiniCore/Graphics/mcglmaterial.hh \
     MiniCore/Graphics/mcglobjectbase.hh \
+    MiniCore/Graphics/mcglpointparticle.hh \
     MiniCore/Graphics/mcglpointparticlerenderer.hh \
+    MiniCore/Graphics/mcglrectparticle.hh \
+    MiniCore/Graphics/mcglrectparticlerenderer.hh \
     MiniCore/Graphics/mcglscene.hh \
     MiniCore/Graphics/mcglshaderprogram.hh \
     MiniCore/Graphics/mcgltexcoord.hh \
@@ -162,8 +165,6 @@ HEADERS += \
     MiniCore/Graphics/mcsurface.hh \
     MiniCore/Graphics/mcsurfaceview.hh \
     MiniCore/Graphics/mcworldrenderer.hh \
-    MiniCore/Graphics/mcglpointparticle.hh \
-    MiniCore/Graphics/mcglrectparticle.hh \
     MiniCore/Graphics/mcparticle.hh \
     MiniCore/Graphics/mcsurfaceparticle.hh \
     MiniCore/Physics/mccircleshape.hh \
@@ -293,7 +294,6 @@ SOURCES += \
     MiniCore/Graphics/mcgldiffuselight.cc \
     MiniCore/Graphics/mcglmaterial.cc \
     MiniCore/Graphics/mcglobjectbase.cc \
-    MiniCore/Graphics/mcglpointparticlerenderer.cc \
     MiniCore/Graphics/mcglscene.cc \
     MiniCore/Graphics/mcglshaderprogram.cc \
     MiniCore/Graphics/mcmesh.cc \
@@ -303,7 +303,9 @@ SOURCES += \
     MiniCore/Graphics/mcsurfaceview.cc \
     MiniCore/Graphics/mcworldrenderer.cc \
     MiniCore/Graphics/mcglpointparticle.cc \
+    MiniCore/Graphics/mcglpointparticlerenderer.cc \
     MiniCore/Graphics/mcglrectparticle.cc \
+    MiniCore/Graphics/mcglrectparticlerenderer.cc \
     MiniCore/Graphics/mcparticle.cc \
     MiniCore/Graphics/mcsurfaceparticle.cc \
     MiniCore/Physics/mccircleshape.cc \

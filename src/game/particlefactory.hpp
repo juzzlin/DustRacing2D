@@ -18,6 +18,7 @@
 
 #include <MCParticle>
 #include <MCGLPointParticleRenderer>
+#include <MCGLRectParticleRenderer>
 #include <MCTypes>
 #include <MCVector3d>
 
@@ -38,7 +39,7 @@ public:
         Sparkle,
         Mud,
         Leaf,
-        NumParticles
+        NumParticleTypes
     };
 
     //! Constructor.
@@ -83,10 +84,13 @@ private:
     void preCreateRectParticles(int count, std::string typeId, ParticleType typeEnum);
 
     // Free lists (recycling) for different types of particles.
-    mutable MCParticle::ParticleFreeList m_freeLists[NumParticles];
+    mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];
 
-    // Renderers for different particle types.
-    MCGLPointParticleRenderer m_renderers[NumParticles];
+    // Renderers for different point particle types.
+    MCGLPointParticleRenderer m_pointParticleRenderers[NumParticleTypes];
+
+    // Renderers for different rect particle types.
+    MCGLRectParticleRenderer m_rectParticleRenderers[NumParticleTypes];
 
     // Particles to delete.
     std::vector<std::unique_ptr<MCParticle> > m_delete;

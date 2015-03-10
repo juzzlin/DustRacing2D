@@ -31,6 +31,7 @@
 
 class MCCamera;
 class MCGLPointParticleRenderer;
+class MCGLRectParticleRenderer;
 class MCObject;
 
 //! Helper class used by MCWorld. Renders all objects in the scene.
@@ -48,6 +49,13 @@ public:
      *  \param typeId Type id of the point particle. \see MCGLPointParticle.
      *  \param renderer Reference to the renderer to be used for this type id. */
     void registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer);
+
+    /*! Each used MCGLRectParticle should have a corresponding MCGLRectParticleRenderer
+     *  registered in MCWorld. As for rendering, rect particles are special cases, because
+     *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
+     *  \param typeId Type id of the rect particle. \see MCGLRectParticle.
+     *  \param renderer Reference to the renderer to be used for this type id. */
+    void registerRectParticleRenderer(MCUint typeId, MCGLRectParticleRenderer & renderer);
 
     /*! If a particle gets off all visibility cameras, it'll be killed.
      *  This is just an optimization. We cannot use just the camera given
@@ -83,8 +91,11 @@ private:
     std::vector<MCCamera *> m_visibilityCameras;
 
     typedef int ParticleTypeId;
-    typedef std::map<ParticleTypeId, MCGLPointParticleRenderer *> ParticleRendererMap;
-    ParticleRendererMap m_particleRenderers;
+    typedef std::map<ParticleTypeId, MCGLPointParticleRenderer *> PointParticleRendererMap;
+    PointParticleRendererMap m_pointParticleRenderers;
+
+    typedef std::map<ParticleTypeId, MCGLRectParticleRenderer *> RectParticleRendererMap;
+    RectParticleRendererMap m_rectParticleRenderers;
 
     friend class MCWorld;
     friend class MCObject;

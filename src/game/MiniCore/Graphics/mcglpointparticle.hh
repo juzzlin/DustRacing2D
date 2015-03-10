@@ -37,7 +37,7 @@ public:
     virtual ~MCGLPointParticle();
 
     //! Get the color.
-    MCGLColor & color();
+    const MCGLColor & color();
 
 private:
 

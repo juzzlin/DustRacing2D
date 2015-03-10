@@ -27,7 +27,7 @@ MCGLPointParticle::MCGLPointParticle(const std::string & typeID, const MCGLColor
 {
 }
 
-MCGLColor & MCGLPointParticle::color()
+const MCGLColor & MCGLPointParticle::color()
 {
     return m_color;
 }

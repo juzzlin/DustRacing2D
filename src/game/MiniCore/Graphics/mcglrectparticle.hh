@@ -43,31 +43,27 @@ public:
     //! Set color
     void setColor(const MCGLColor & color);
 
-    //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgramPtr program);
-
-    //! \reimp
-    void render(MCCamera * camera = nullptr) override;
-
-    //! \reimp
-    void renderShadow(MCCamera * camera = nullptr) override;
-
-    //! \reimp
-    void beginBatch() override;
-
-    //! \reimp
-    void endBatch() override;
+    //! Get the color.
+    const MCGLColor & color();
 
 private:
 
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
+
+    //! \reimp
+    void render(MCCamera *) override {}
+
+    //! \reimp
+    void renderShadow(MCCamera *) override {}
+
+    //! \reimp
+    void beginBatch() override {}
+
+    //! \reimp
+    void endBatch() override {}
+
     MCGLColor m_color;
-    // Static variable instead of inheritance allows the VAO and VBO to be
-    // shared between similar particles.
-    static MCGLObjectBase * m_glObjectBase;
-    static bool m_inited;
-    MCGLShaderProgramPtr m_program;
 };
 
 #endif // MCGLRECTPARTICLE_HH
