@@ -15,8 +15,8 @@
 
 #include "application.hpp"
 
-#include <MCException>
 #include <MCLogger>
+#include <exception>
 
 namespace {
 static const char * INIT_ERROR = "Initializing the game failed!";
@@ -33,7 +33,7 @@ bool Application::notify(QObject * receiver, QEvent * event)
     {
         return QApplication::notify(receiver, event);
     }
-    catch (MCException & e)
+    catch (std::exception & e)
     {
         MCLogger().fatal() << e.what();
         MCLogger().fatal() << INIT_ERROR;

@@ -51,7 +51,7 @@ void AudioWorker::checkFile(QString path)
 {
     if (!QFile(path).exists())
     {
-        throw MCException("File not found: '" + path.toStdString() + "'");
+        throw std::runtime_error("File not found: '" + path.toStdString() + "'");
     }
 }
 

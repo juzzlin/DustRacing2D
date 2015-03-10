@@ -23,7 +23,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "mcexception.hh"
 #include "mcmacros.hh"
 
 class  MCTextureFont;
@@ -94,7 +93,7 @@ public:
      *  MCTextureFontManager will keep the ownership.
      *  \param name Name defined in the fonts XML file.
      *  \return Reference to the corresponding MCTextureFont.
-     *  \throws MCException on failure. */
+     *  \throws std::runtime_error on failure. */
     MCTextureFont & font(const std::string & name) const;
 
     /*! Creates a new font object from the given data and adds it

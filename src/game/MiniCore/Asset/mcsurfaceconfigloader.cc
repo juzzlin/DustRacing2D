@@ -22,12 +22,12 @@
 #include <QDomElement>
 #include <QFile>
 
-#include "mcexception.hh"
 #include "mcsurfaceconfigloader.hh"
 #include "mcsurfacemetadata.hh"
 #include "mclogger.hh"
 
 #include <cassert>
+#include <exception>
 
 MCSurfaceConfigLoader::MCSurfaceConfigLoader()
 : m_surfaces()
@@ -51,7 +51,7 @@ void MCSurfaceConfigLoader::parseAttributes(const QDomElement & element, Surface
     }
     else
     {
-        throw MCException("Attribute 'image' is required for a surface!");
+        throw std::runtime_error("Attribute 'image' is required for a surface!");
     }
 
     if (element.hasAttribute("handle"))
@@ -60,7 +60,7 @@ void MCSurfaceConfigLoader::parseAttributes(const QDomElement & element, Surface
     }
     else
     {
-        throw MCException("Attribute 'handle' is required for a surface!");
+        throw std::runtime_error("Attribute 'handle' is required for a surface!");
     }
 
     newData->handle2 = element.attribute("handle2", "").toStdString();
@@ -168,7 +168,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 }
                 else
                 {
-                    throw MCException("Unknown min filter '" + min + "'");
+                    throw std::runtime_error("Unknown min filter '" + min + "'");
                 }
 
                 if (mag == "linear")
@@ -181,7 +181,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 }
                 else
                 {
-                    throw MCException("Unknown mag filter '" + mag + "'");
+                    throw std::runtime_error("Unknown mag filter '" + mag + "'");
                 }
             }
         }
@@ -203,7 +203,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 }
                 else
                 {
-                    throw MCException("Unknown s wrap '" + s + "'");
+                    throw std::runtime_error("Unknown s wrap '" + s + "'");
                 }
 
                 if (t == "clamp")
@@ -216,13 +216,13 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 }
                 else
                 {
-                    throw MCException("Unknown t wrap '" + t + "'");
+                    throw std::runtime_error("Unknown t wrap '" + t + "'");
                 }
             }
         }
         else
         {
-            throw MCException("Unknown element '" + childNode.nodeName().toStdString() + "'");
+            throw std::runtime_error("Unknown element '" + childNode.nodeName().toStdString() + "'");
         }
 
         childNode = childNode.nextSibling();
@@ -279,7 +279,7 @@ GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
     }
     catch (...)
     {
-        throw MCException("Unknown alpha blend function '" + function + "'");
+        throw std::runtime_error("Unknown alpha blend function '" + function + "'");
     }
 
     return GL_SRC_ALPHA;

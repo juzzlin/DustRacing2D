@@ -30,7 +30,6 @@
 
 #include <MCGLScene>
 #include <MCAssetManager>
-#include <MCException>
 #include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceManager>
@@ -180,7 +179,7 @@ MCGLShaderProgramPtr Renderer::program(const std::string & id)
     MCGLShaderProgramPtr program(m_shaderHash[id]);
     if (!program)
     {
-        throw MCException("Cannot find shader program '" + id + "'");
+        throw std::runtime_error("Cannot find shader program '" + id + "'");
     }
     return program;
 }
@@ -326,7 +325,7 @@ void Renderer::renderNow()
             std::stringstream ss;
             ss << "Cannot create context for OpenGL version " <<
                   requestedFormat().majorVersion() << "." << requestedFormat().minorVersion();
-            throw MCException(ss.str());
+            throw std::runtime_error(ss.str());
         }
 
         needsInitialize = true;

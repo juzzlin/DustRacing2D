@@ -26,6 +26,7 @@
 #include "mcsurfacemanager.hh"
 
 #include <cassert>
+#include <exception>
 
 MCTextureFontManager::MCTextureFontManager(
     const MCSurfaceManager & surfaceManager)
@@ -53,7 +54,7 @@ void MCTextureFontManager::load(
     else
     {
         // Throw an exception
-        throw MCException("Parsing '" + fileName + "' failed!");
+        throw std::runtime_error("Parsing '" + fileName + "' failed!");
     }
 }
 
@@ -111,7 +112,7 @@ MCTextureFont & MCTextureFontManager::font(
     if (m_fontHash.count(name) == 0)
     {
         // No:
-        throw MCException("Cannot find font object called '" + name + "'");
+        throw std::runtime_error("Cannot find font object called '" + name + "'");
     }
 
     MCTextureFont * font = m_fontHash.find(name)->second;

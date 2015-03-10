@@ -31,7 +31,6 @@
 
 #include <MCAssetManager>
 #include <MCCamera>
-#include <MCException>
 #include <MCLogger>
 #include <MCObjectFactory>
 
@@ -260,7 +259,7 @@ bool Game::loadTracks()
     }
     else
     {
-        throw MCException("No valid race tracks found.");
+        throw std::runtime_error("No valid race tracks found.");
     }
 
     return true;
@@ -300,7 +299,7 @@ void Game::init()
     }
     else
     {
-        throw MCException("Couldn't load tracks.");
+        throw std::runtime_error("Couldn't load tracks.");
     }
 
     start();

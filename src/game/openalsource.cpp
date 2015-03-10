@@ -16,8 +16,6 @@
 #include "openalsource.hpp"
 #include "openaldata.hpp"
 
-#include <MCException>
-
 #include <AL/alc.h>
 
 static bool checkError()
@@ -51,12 +49,12 @@ void OpenALSource::setData(STFH::DataPtr data)
 
         if (!checkError())
         {
-            throw MCException("Failed to bind '" + data->path() + "'");
+            throw std::runtime_error("Failed to bind '" + data->path() + "'");
         }
     }
     else
     {
-        throw MCException("Incompatible sound data container for '" + data->path() + "'");
+        throw std::runtime_error("Incompatible sound data container for '" + data->path() + "'");
     }
 }
 

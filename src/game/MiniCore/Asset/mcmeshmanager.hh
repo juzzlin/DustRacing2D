@@ -24,7 +24,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "mcexception.hh"
 #include "mcmacros.hh"
 #include "mcmesh.hh"
 #include "mcmeshmetadata.hh"
@@ -71,7 +70,7 @@ public:
     //! MCMeshManager will keep the ownership.
     //! \param handle Handle defined in the mesh config file.
     //! \return Reference to the corresponding MCMesh.
-    //! \throws MCException on failure.
+    //! \throws std::runtime_error on failure.
     MCMesh & mesh(
         const std::string & handle) const;
 

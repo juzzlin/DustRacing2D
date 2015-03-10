@@ -16,7 +16,6 @@
 #include "openaldevice.hpp"
 
 #include <MCLogger>
-#include <MCException>
 
 OpenALDevice::OpenALDevice()
     : m_device(nullptr)
@@ -29,7 +28,7 @@ void OpenALDevice::initialize()
     m_device = alcOpenDevice(alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER));
     if (!m_device)
     {
-        throw MCException("Failed to open default sound device");
+        throw std::runtime_error("Failed to open default sound device");
     }
 
     MCLogger().info() << "Sound device: " << alcGetString(m_device, ALC_DEVICE_SPECIFIER);
@@ -37,7 +36,7 @@ void OpenALDevice::initialize()
     m_context = alcCreateContext(m_device, NULL);
     if (!alcMakeContextCurrent(m_context))
     {
-        throw MCException("Failed to create default sound context");
+        throw std::runtime_error("Failed to create default sound context");
     }
 }
 

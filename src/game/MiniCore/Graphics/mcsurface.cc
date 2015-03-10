@@ -21,7 +21,6 @@
 #include "mccamera.hh"
 #include "mcbbox.hh"
 #include "mcglmaterial.hh"
-#include "mcexception.hh"
 #include "mcglshaderprogram.hh"
 #include "mcglvertex.hh"
 #include "mcgltexcoord.hh"

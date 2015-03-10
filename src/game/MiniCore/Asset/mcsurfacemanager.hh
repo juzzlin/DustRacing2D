@@ -23,7 +23,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "mcexception.hh"
 #include "mcmacros.hh"
 #include "mcsurfacemetadata.hh"
 
@@ -93,7 +92,7 @@ public:
      *  MCSurfaceManager will keep the ownership.
      *  \param handle Handle defined in the textures XML file.
      *  \return Reference to the corresponding MCSurface.
-     *  \throws MCException on failure. */
+     *  \throws std::runtime_error on failure. */
     MCSurface & surface(
         const std::string & handle) const;
 

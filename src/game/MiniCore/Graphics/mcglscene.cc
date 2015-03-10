@@ -19,7 +19,6 @@
 
 #include <MCGLEW>
 
-#include "mcexception.hh"
 #include "mcglscene.hh"
 #include "mcglambientlight.hh"
 #include "mcgldiffuselight.hh"
@@ -28,6 +27,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <exception>
 
 MCGLScene * MCGLScene::m_instance = nullptr;
 
@@ -46,7 +46,7 @@ MCGLScene::MCGLScene()
     if (!MCGLScene::m_instance) {
         MCGLScene::m_instance = this;
     } else {
-        throw MCException("MCGLScene already created!");
+        throw std::runtime_error("MCGLScene already created!");
     }
 }
 

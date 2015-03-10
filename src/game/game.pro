@@ -125,7 +125,6 @@ HEADERS += \
     MiniCore/Core/mcbbox.hh \
     MiniCore/Core/mccast.hh \
     MiniCore/Core/mcevent.hh \
-    MiniCore/Core/mcexception.hh \
     MiniCore/Core/mclogger.hh \
     MiniCore/Core/mcmacros.hh \
     MiniCore/Core/mcmathutil.hh \

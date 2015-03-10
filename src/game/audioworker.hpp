@@ -24,8 +24,6 @@
 #include "openaldevice.hpp"
 #include "openalsource.hpp"
 
-#include <MCException>
-
 class AudioSource;
 
 class AudioWorker : public QObject

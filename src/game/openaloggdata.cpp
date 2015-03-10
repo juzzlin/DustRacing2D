@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "openaloggdata.hpp"
-#include <MCException>
 
 #include <AL/alc.h>
 
@@ -101,7 +100,7 @@ void OpenALOggData::load(const std::string & path)
 
     if (!checkError())
     {
-        throw MCException("Failed to set buffer data of '" + path + "'");
+        throw std::runtime_error("Failed to set buffer data of '" + path + "'");
     }
 }
 

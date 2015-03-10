@@ -19,9 +19,10 @@
 
 #include "mcglobjectbase.hh"
 #include "mcglscene.hh"
-#include "mcexception.hh"
 #include "mclogger.hh"
+
 #include <cassert>
+#include <exception>
 
 GLuint MCGLObjectBase::m_boundVbo = 0;
 
@@ -145,7 +146,7 @@ void MCGLObjectBase::bind()
     else
     {
         // Save the user from debugging as to why nothing is being drawn.
-        throw MCException("Trying to bind MCGLObject but shader program for it not set!");
+        throw std::runtime_error("Trying to bind MCGLObject but shader program for it not set!");
     }
 }
 
@@ -161,7 +162,7 @@ void MCGLObjectBase::bindShadow()
     else
     {
         // Save the user from debugging as to why nothing is being drawn.
-        throw MCException("Trying to render shadow for surface, but shader program for it not set!");
+        throw std::runtime_error("Trying to render shadow for surface, but shader program for it not set!");
     }
 }
 

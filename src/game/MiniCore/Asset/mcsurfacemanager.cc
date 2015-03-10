@@ -31,6 +31,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <exception>
 
 MCSurfaceManager::MCSurfaceManager()
 {
@@ -334,7 +335,7 @@ void MCSurfaceManager::load(
             QFile imageFile(path);
             if (!imageFile.open(QIODevice::ReadOnly))
             {
-                throw MCException("Cannot read file '" + path.toStdString() + "'");
+                throw std::runtime_error("Cannot read file '" + path.toStdString() + "'");
             }
             QByteArray blob = imageFile.readAll();
 
@@ -346,7 +347,7 @@ void MCSurfaceManager::load(
     else
     {
         // Throw an exception
-        throw MCException("Parsing '" + configFilePath + "' failed!");
+        throw std::runtime_error("Parsing '" + configFilePath + "' failed!");
     }
 }
 
@@ -355,7 +356,7 @@ MCSurface & MCSurfaceManager::surface(const std::string & id) const
     // Try to find existing texture for the surface
     if (m_surfaceMap.count(id) == 0)
     {
-        throw MCException("Cannot find texture object for handle '" + id + "'");
+        throw std::runtime_error("Cannot find texture object for handle '" + id + "'");
     }
 
     // Yes: return handle for the texture

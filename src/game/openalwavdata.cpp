@@ -16,7 +16,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "openalwavdata.hpp"
-#include <MCException>
 
 #include <cstdio>
 #include <AL/alc.h>
@@ -68,7 +67,7 @@ static bool loadWavFile(
     try {
         soundFile = fopen(filename.c_str(), "rb");
         if (!soundFile)
-            throw MCException(filename);
+            throw std::runtime_error(filename);
 
         // Read in the first chunk into the struct
         size_t bytesRead = std::fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
@@ -83,7 +82,7 @@ static bool loadWavFile(
                  riff_header.format[1] != 'A' ||
                  riff_header.format[2] != 'V' ||
                  riff_header.format[3] != 'E'))
-            throw MCException("Invalid RIFF or WAVE Header");
+            throw std::runtime_error("Invalid RIFF or WAVE Header");
 
         //Read in the 2nd chunk for the wave info
         bytesRead = std::fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
@@ -92,7 +91,7 @@ static bool loadWavFile(
                 wave_format.subChunkID[1] != 'm' ||
                 wave_format.subChunkID[2] != 't' ||
                 wave_format.subChunkID[3] != ' ')
-            throw MCException("Invalid Wave Format");
+            throw std::runtime_error("Invalid Wave Format");
 
         //check for extra parameters;
         if (wave_format.subChunkSize > 16)
@@ -105,14 +104,14 @@ static bool loadWavFile(
                 wave_data.subChunkID[1] != 'a' ||
                 wave_data.subChunkID[2] != 't' ||
                 wave_data.subChunkID[3] != 'a')
-            throw MCException("Invalid data header");
+            throw std::runtime_error("Invalid data header");
 
         //Allocate memory for data
         data = new unsigned char[wave_data.subChunk2Size];
 
         // Read in the sound data into the soundData variable
         if (!std::fread(data, wave_data.subChunk2Size, 1, soundFile))
-            throw MCException("error loading WAVE data into struct!");
+            throw std::runtime_error("error loading WAVE data into struct!");
 
         //Now we set the variables that we passed in with the
         //data from the structs
@@ -164,12 +163,12 @@ void OpenALWavData::load(const std::string & path)
 
     if (!loadWavFile(path, &m_buffer, &m_size, &m_freq, &m_format))
     {
-        throw MCException("Failed to load '" + path + "'");
+        throw std::runtime_error("Failed to load '" + path + "'");
     }
 
     if (!checkError())
     {
-        throw MCException("Failed to set buffer data of '" + path + "'");
+        throw std::runtime_error("Failed to set buffer data of '" + path + "'");
     }
 }
 

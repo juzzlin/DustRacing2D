@@ -28,10 +28,11 @@
 #include "mcshaders.hh"
 #endif
 
-#include <MCException>
 #include <MCLogger>
 #include <MCTrigonom>
+
 #include <cassert>
+#include <exception>
 
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 
@@ -234,7 +235,7 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
     glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw MCException("Compiling a vertex shader failed.\n" +
+        throw std::runtime_error("Compiling a vertex shader failed.\n" +
             getShaderLog(m_vertexShader) + "\n" + source);
     }
 
@@ -259,7 +260,7 @@ bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
     glGetShaderiv(m_fragmentShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw MCException("Compiling a fragment shader failed.\n" +
+        throw std::runtime_error("Compiling a fragment shader failed.\n" +
             getShaderLog(m_fragmentShader) + "\n" + source);
     }
 

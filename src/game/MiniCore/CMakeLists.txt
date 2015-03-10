@@ -18,7 +18,6 @@ Asset/mcsurfacemanager.cc
 Core/mcbbox.hh
 Core/mcbbox3d.hh
 Core/mcevent.cc
-Core/mcexception.cc
 Core/mclogger.cc
 Core/mcobbox.hh
 Core/mcobject.cc
