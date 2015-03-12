@@ -33,7 +33,7 @@ public:
     explicit Timing(MCUint cars, QObject * parent = nullptr);
 
     //! Completes the current lap for the given car.
-    void lapCompleted(MCUint index, bool isHuman);
+    void setLapCompleted(MCUint index, bool isHuman);
 
     //! Completes the race for the given car.
     void setRaceCompleted(MCUint index, bool state, bool isHuman);
@@ -103,6 +103,8 @@ public:
     static std::wstring msecsToString(int msec);
 
 signals:
+
+    void lapCompleted(MCUint index, int msec);
 
     void lapRecordAchieved(int msec);
 

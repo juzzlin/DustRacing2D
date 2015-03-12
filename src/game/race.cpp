@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -62,9 +62,21 @@ Race::Race(const Game & game, unsigned int numCars)
     m_offTrackMessageTimer.setSingleShot(true);
     m_offTrackMessageTimer.setInterval(30000);
 
-    connect(&m_timing, SIGNAL(lapRecordAchieved(int)), this, SLOT(setLapRecord(int)));
+    connect(&m_timing, &Timing::lapRecordAchieved, [this] (int msecs) {
+        Settings::instance().saveLapRecord(*m_track, msecs);
+        emit messageRequested(QObject::tr("New lap record!"));
+    });
 
-    connect(&m_timing, SIGNAL(raceRecordAchieved(int)), this, SLOT(setRaceRecord(int)));
+    connect(&m_timing, &Timing::raceRecordAchieved, [this] (int msecs) {
+        if (m_game.hasComputerPlayers()) {
+            Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
+            emit messageRequested(QObject::tr("New race record!"));
+        }
+    });
+
+    connect(&m_timing, &Timing::lapCompleted, [this] (MCUint, int msecs) {
+        emit messageRequested(QString::fromWCharArray(Timing::msecsToString(msecs).c_str()));
+    });
 }
 
 void Race::createStartGridObjects()
@@ -233,23 +245,6 @@ void Race::translateCarsToStartPositions()
         MCLogger().error() << "Finish line tile not found in track '" <<
             m_track->trackData().name().toStdString() << "'";
     }
-}
-
-void Race::setRaceRecord(int msecs)
-{
-    if (m_game.hasComputerPlayers())
-    {
-        Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
-
-        emit messageRequested(QObject::tr("New race record!"));
-    }
-}
-
-void Race::setLapRecord(int msecs)
-{
-    Settings::instance().saveLapRecord(*m_track, msecs);
-
-    emit messageRequested(QObject::tr("New lap record!"));
 }
 
 void Race::start()
@@ -433,7 +428,7 @@ void Race::checkIfLapIsCompleted(Car & car, const Route & route, unsigned int cu
     if (currentTargetNodeIndex == 0 &&
         car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
     {
-        m_timing.lapCompleted(car.index(), car.isHuman());
+        m_timing.setLapCompleted(car.index(), car.isHuman());
 
         // Finish the race if winner has already finished.
         if (m_winnerFinished)

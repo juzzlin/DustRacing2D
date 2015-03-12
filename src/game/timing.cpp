@@ -30,7 +30,7 @@ Timing::Timing(MCUint cars, QObject *parent)
 {
 }
 
-void Timing::lapCompleted(MCUint index, bool isHuman)
+void Timing::setLapCompleted(MCUint index, bool isHuman)
 {
     Timing::Times & times = m_times.at(index);
     times.lap++;
@@ -56,6 +56,8 @@ void Timing::lapCompleted(MCUint index, bool isHuman)
 
             emit lapRecordAchieved(m_lapRecord);
         }
+
+        emit lapCompleted(index, times.lastLapTime);
     }
 }
 
