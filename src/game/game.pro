@@ -167,6 +167,7 @@ HEADERS += \
     MiniCore/Graphics/mcworldrenderer.hh \
     MiniCore/Graphics/mcparticle.hh \
     MiniCore/Graphics/mcsurfaceparticle.hh \
+    MiniCore/Graphics/mcsurfaceparticlerenderer.hh \
     MiniCore/Physics/mccircleshape.hh \
     MiniCore/Physics/mccollisiondetector.hh \
     MiniCore/Physics/mccollisionevent.hh \
@@ -308,6 +309,7 @@ SOURCES += \
     MiniCore/Graphics/mcglrectparticlerenderer.cc \
     MiniCore/Graphics/mcparticle.cc \
     MiniCore/Graphics/mcsurfaceparticle.cc \
+    MiniCore/Graphics/mcsurfaceparticlerenderer.cc \
     MiniCore/Physics/mccircleshape.cc \
     MiniCore/Physics/mccollisiondetector.cc \
     MiniCore/Physics/mccollisionevent.cc \

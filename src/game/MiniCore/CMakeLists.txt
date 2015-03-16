@@ -51,6 +51,7 @@ Graphics/mcshaders30.hh
 Graphics/mcshadersGLES.hh
 Graphics/mcshapeview.hh
 Graphics/mcsurfaceparticle.cc
+Graphics/mcsurfaceparticlerenderer.cc
 Graphics/mcsurface.cc
 Graphics/mcsurfaceview.cc
 Graphics/mcworldrenderer.cc

@@ -43,6 +43,8 @@ MCGLRectParticleRenderer::MCGLRectParticleRenderer(int maxBatchSize)
     , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
     , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
     , m_useAlphaBlend(false)
+    , m_src(0)
+    , m_dst(0)
 {
     const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;

@@ -30,13 +30,15 @@
 #include <cassert>
 
 MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
-: m_batchSize(0)
-, m_maxBatchSize(maxBatchSize)
-, m_vertices(new MCGLVertex[maxBatchSize])
-, m_normals(new MCGLVertex[maxBatchSize])
-, m_colors(new MCGLColor[maxBatchSize])
-, m_pointSize(8)
-, m_useAlphaBlend(false)
+    : m_batchSize(0)
+    , m_maxBatchSize(maxBatchSize)
+    , m_vertices(new MCGLVertex[maxBatchSize])
+    , m_normals(new MCGLVertex[maxBatchSize])
+    , m_colors(new MCGLColor[maxBatchSize])
+    , m_pointSize(8)
+    , m_useAlphaBlend(false)
+    , m_src(0)
+    , m_dst(0)
 {
     const int NUM_VERTICES     = maxBatchSize;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
