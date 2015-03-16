@@ -30,7 +30,11 @@
 #include <cassert>
 
 namespace {
+#ifdef __MC_GLES__
 const int NUM_VERTICES_PER_PARTICLE = 6;
+#else
+const int NUM_VERTICES_PER_PARTICLE = 4;
+#endif
 }
 
 MCGLRectParticleRenderer::MCGLRectParticleRenderer(int maxBatchSize)
@@ -79,8 +83,10 @@ void MCGLRectParticleRenderer::setBatch(
 
     static const MCGLVertex vertices[NUM_VERTICES_PER_PARTICLE] =
     {
+    #ifdef __MC_GLES__
         {-1, -1, 0},
         { 1,  1, 0},
+    #endif
         {-1,  1, 0},
         {-1, -1, 0},
         { 1, -1, 0},
@@ -89,8 +95,10 @@ void MCGLRectParticleRenderer::setBatch(
 
     static const MCGLVertex normals[NUM_VERTICES_PER_PARTICLE] =
     {
+    #ifdef __MC_GLES__
         { 0, 0, 1},
         { 0, 0, 1},
+    #endif
         { 0, 0, 1},
         { 0, 0, 1},
         { 0, 0, 1},
@@ -171,8 +179,11 @@ void MCGLRectParticleRenderer::render()
     shaderProgram()->setScale(1.0f, 1.0f, 1.0f);
     shaderProgram()->setColor(MCGLColor());
 
+#ifdef __MC_GLES__
     glDrawArrays(GL_TRIANGLES, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
-
+#else
+    glDrawArrays(GL_QUADS, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
+#endif
     glDisable(GL_BLEND);
 
     releaseVBO();
