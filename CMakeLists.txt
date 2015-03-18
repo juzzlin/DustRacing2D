@@ -1,7 +1,7 @@
 project(DustRacing2D)
 
-cmake_minimum_required(VERSION 2.8.8)
-cmake_policy(VERSION 2.8.8)
+cmake_minimum_required(VERSION 2.8.12)
+cmake_policy(VERSION 2.8.12)
 
 if(POLICY CMP0005)
     cmake_policy(SET CMP0005 NEW)
@@ -68,8 +68,8 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -O3 -pedantic")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fomit-frame-pointer -finline-functions -ffast-math")
+    add_compile_options(-std=c++11 -W -Wall -O3 -pedantic)
+    add_compile_options(-fomit-frame-pointer -finline-functions -ffast-math)
 elseif(MSVC)
     add_definitions(-DNOMINMAX)
 endif()
