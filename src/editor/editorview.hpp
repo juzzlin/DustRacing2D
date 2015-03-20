@@ -55,33 +55,25 @@ protected:
     //! \reimp
     void keyPressEvent(QKeyEvent * event);
 
-private slots:
-
-    void doRotateTile90CW();
-
-    void doRotateTile90CCW();
-
-    void doRotateObject();
-
-    void doClearComputerHint();
-
-    void doSetComputerHintBrakeHard();
-
-    void doSetComputerHintBrake();
-
-    void doSetTargetNodeSize();
-
 private:
 
     void addCurrentToolBarObjectToScene();
 
-    void createTileContextMenu();
+    void addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation);
 
-    void createObjectContextMenu();
+    void changeTileType(TrackTile & tile, QAction * action);
 
-    void createTargetNodeContextMenu();
+    void createTileContextMenuActions();
+
+    void createObjectContextMenuActions();
+
+    void createTargetNodeContextMenuActions();
+
+    void doFloodFill(TrackTile & tile, QAction * action, QString typeToFill);
 
     void eraseObjectAtCurrentClickedPos();
+
+    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions);
 
     void handleMousePressEventOnTile(QMouseEvent & event, TrackTile & tile);
 
@@ -107,15 +99,7 @@ private:
 
     void handleTargetNodeDragRelease(QMouseEvent * event);
 
-    void doSetComputerHint(TrackTileBase::ComputerHint hint);
-
-    void doFloodFill(TrackTile & tile, QAction * action, QString typeToFill);
-
-    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions);
-
-    void changeTileType(TrackTile & tile, QAction * action);
-
-    void addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation);
+    void setComputerHint(TrackTileBase::ComputerHint hint);
 
     static void setTileType(TrackTile & tile, QAction * action);
 
