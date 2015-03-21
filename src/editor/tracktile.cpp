@@ -15,7 +15,6 @@
 
 #include "tracktile.hpp"
 #include "trackdata.hpp"
-#include "tiletypedialog.hpp"
 #include "tileanimator.hpp"
 #include "mainwindow.hpp"
 

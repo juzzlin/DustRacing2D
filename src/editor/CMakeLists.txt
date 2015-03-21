@@ -23,7 +23,6 @@ set(SRC
     rotatetileundostackitem.cpp
     targetnode.cpp
     targetnodesizedlg.cpp
-    tiletypedialog.cpp
     tiletypeundostackitem.cpp
     tileanimator.cpp
     trackdata.cpp
@@ -38,8 +37,6 @@ set(SRC
     ../common/targetnodebase.cpp
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp)
-
-#set(UIS ui/about.ui ui/settings.ui)
 
 set(RCS ${CMAKE_SOURCE_DIR}/data/images/editor.qrc ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 

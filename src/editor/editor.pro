@@ -42,7 +42,6 @@ HEADERS +=  \
     targetnode.hpp \
     targetnodesizedlg.hpp \
     tileanimator.hpp \
-    tiletypedialog.hpp \
     tiletypeundostackitem.hpp \
     trackdata.hpp \
     trackio.hpp \
@@ -75,7 +74,6 @@ SOURCES += \
     targetnode.cpp \
     targetnodesizedlg.cpp \
     tileanimator.cpp \
-    tiletypedialog.cpp \
     tiletypeundostackitem.cpp \
     trackdata.cpp \
     trackio.cpp \
