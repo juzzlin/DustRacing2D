@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,60 +15,53 @@
 
 #include <QString>
 
-//! Config data for editor and for the game.
-class Config
+//! Config variables for editor and for the game.
+namespace Config
 {
-public:
-
-    //! Common config data.
     class Common
     {
     public:
-
-        //! The base data path.
-        static QString dataPath;
+        //! The base data path given by -DDATA_PATH.
+        static const QString dataPath;
 
         //! "Company" name used in QSettings.
-        static QString QSETTINGS_COMPANY_NAME;
+        static const QString QSETTINGS_COMPANY_NAME;
 
         //! Path used to search "3rd party" race tracks under the home dir:
         //! ~/TRACK_SEARCH_PATH/
-        static QString TRACK_SEARCH_PATH;
+        static const QString TRACK_SEARCH_PATH;
+
+        static const QString COPYRIGHT;
     };
 
-    //! Editor-specific config data.
     class Editor
     {
     public:
+        static const QString EDITOR_NAME;
 
-        static QString EDITOR_NAME;
-        static QString EDITOR_VERSION;
-        static QString MODEL_CONFIG_FILE_NAME;
-        static QString QSETTINGS_SOFTWARE_NAME;
+        static const QString EDITOR_VERSION;
 
-        //! Path to the "select" icon.
-        static QString SELECT_PATH;
+        static const QString MODEL_CONFIG_FILE_NAME;
 
-        //! Path to the "erase" icon.
-        static QString ERASE_PATH;
+        static const QString QSETTINGS_SOFTWARE_NAME;
 
-        //! Path to the "clear" tile.
-        static QString CLEAR_PATH;
+        static const QString SELECT_ICON_PATH;
+
+        static const QString ERASE_ICON_PATH;
+
+        static const QString CLEAR_ICON_PATH;
     };
 
-    //! Game-specific config data.
     class Game
     {
     public:
+        static const QString GAME_NAME;
 
-        static QString GAME_NAME;
-        static QString GAME_VERSION;
-        static QString QSETTINGS_SOFTWARE_NAME;
+        static const QString GAME_VERSION;
 
-        //! Default window width.
-        static const unsigned int WINDOW_WIDTH;
-
-        //! Default window height.
-        static const unsigned int WINDOW_HEIGHT;
+        static const QString QSETTINGS_SOFTWARE_NAME;
     };
-};
+
+} // Config
+
+

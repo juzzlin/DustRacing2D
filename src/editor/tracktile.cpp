@@ -77,7 +77,7 @@ void TrackTile::paint(QPainter * painter,
     {
         painter->drawPixmap(boundingRect().x(), boundingRect().y(),
             boundingRect().width(), boundingRect().height(),
-            QPixmap(Config::Editor::CLEAR_PATH));
+            QPixmap(Config::Editor::CLEAR_ICON_PATH));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);

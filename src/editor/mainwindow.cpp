@@ -435,18 +435,18 @@ void MainWindow::populateMenuBar()
 void MainWindow::populateToolBar()
 {
     // Add "select"-action
-    QAction * p = new QAction(QIcon(QPixmap(Config::Editor::SELECT_PATH)), tr("Select"), this);
+    QAction * p = new QAction(QIcon(QPixmap(Config::Editor::SELECT_ICON_PATH)), tr("Select"), this);
     p->setData(QVariant(QString("select")));
     m_toolBar->addAction(p);
 
     // Add "erase"-action
     p = new QAction(
-        QIcon(QPixmap(Config::Editor::ERASE_PATH)), tr("Erase object"), this);
+        QIcon(QPixmap(Config::Editor::ERASE_ICON_PATH)), tr("Erase object"), this);
     p->setData(QVariant(QString("erase")));
     m_toolBar->addAction(p);
 
     // Add "clear"-action
-    p = new QAction(QIcon(QPixmap(Config::Editor::CLEAR_PATH)), tr("Clear"), this);
+    p = new QAction(QIcon(QPixmap(Config::Editor::CLEAR_ICON_PATH)), tr("Clear"), this);
     p->setData(QVariant(QString("clear")));
     m_toolBar->addAction(p);
 

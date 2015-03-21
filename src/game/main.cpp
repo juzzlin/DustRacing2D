@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,8 +41,8 @@ static void initLogger()
 
 static void printHelp()
 {
-    std::cout << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << "Copyright (c) 2011-2015 Jussi Lind." << std::endl << std::endl;
+    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
+    std::cout << Config::Common::COPYRIGHT.toStdString() << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
     std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
