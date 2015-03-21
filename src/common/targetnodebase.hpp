@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,10 +20,14 @@
 #include <QString>
 #include <QPointF>
 
+#include <memory>
+
 //! Base class for freely placeable target nodes in the editor.
 class TargetNodeBase
 {
 public:
+
+    typedef std::shared_ptr<TargetNodeBase> TargetNodePtr;
 
     //! Constructor.
     TargetNodeBase();
@@ -41,19 +45,22 @@ public:
 
     virtual void setIndex(int index);
 
-    virtual void setNext(TargetNodeBase * tnode);
+    virtual void setNext(TargetNodePtr tnode);
 
-    virtual TargetNodeBase * next() const;
+    virtual TargetNodePtr next() const;
 
-    virtual void setPrev(TargetNodeBase * tnode);
+    virtual void setPrev(TargetNodePtr tnode);
 
-    virtual TargetNodeBase * prev() const;
+    virtual TargetNodePtr prev() const;
 
     virtual void setSize(QSizeF size);
 
     virtual QSizeF size() const;
 
 private:
+
+    TargetNodeBase(TargetNodeBase & other);
+    TargetNodeBase & operator= (TargetNodeBase & other);
 
     //! Coordinates in the world.
     QPointF m_location;
@@ -64,9 +71,11 @@ private:
     //! Index in the route.
     int m_index;
 
-    TargetNodeBase * m_next;
+    TargetNodePtr m_next;
 
-    TargetNodeBase * m_prev;
+    TargetNodePtr m_prev;
 };
 
-#endif // TargetNodeBase_HPP
+typedef std::shared_ptr<TargetNodeBase> TargetNodePtr;
+
+#endif // TARGETNODEBASE_HPP

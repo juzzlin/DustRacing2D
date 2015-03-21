@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -117,6 +117,9 @@ public:
     virtual const Objects & objects() const = 0;
 
 private:
+
+    TrackDataBase(TrackDataBase & other);
+    TrackDataBase & operator= (TrackDataBase & other);
 
     QString m_name;
 

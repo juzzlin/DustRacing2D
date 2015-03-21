@@ -143,17 +143,28 @@ private:
     typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
-    int          m_numCars;
-    int          m_lapCount;
-    Timing       m_timing;
-    Track      * m_track;
-    bool         m_started;
-    bool         m_checkeredFlagEnabled;
-    bool         m_winnerFinished;
-    bool         m_isfinishedSignalSent;
-    int          m_bestPos;
-    QTimer       m_offTrackMessageTimer;
-    int          m_offTrackCounter;
+    int m_numCars;
+
+    int m_lapCount;
+
+    Timing m_timing;
+
+    Track * m_track;
+
+    bool m_started;
+
+    bool m_checkeredFlagEnabled;
+
+    bool m_winnerFinished;
+
+    bool m_isfinishedSignalSent;
+
+    int m_bestPos;
+
+    QTimer m_offTrackMessageTimer;
+
+    int m_offTrackCounter;
+
     const Game & m_game;
 };
 

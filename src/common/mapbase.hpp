@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@ public:
     //! Destructor.
     virtual ~MapBase();
 
-    //! Get track data.
-    TrackDataBase & trackData();
-
     //! Get column count
     unsigned int cols() const;
 
@@ -52,10 +49,32 @@ public:
     //! Returns nullptr if no tile set or impossible coordinates.
     TrackTileBase * getTile(unsigned int x, unsigned int y) const;
 
+    //! Insert column after given index
+    virtual void insertColumn(unsigned int at);
+
+    //! Delete column at given index
+    virtual void deleteColumn(unsigned int at);
+
+    //! Insert row after given index
+    virtual void insertRow(unsigned int at);
+
+    //! Delete row at given index
+    virtual void deleteRow(unsigned int at);
+
+protected:
+
+    //! Get track data reference.
+    TrackDataBase & trackData();
+
 private:
 
+    MapBase(MapBase & other);
+    MapBase & operator= (MapBase & other);
+
     TrackDataBase & m_trackData;
+
     unsigned int m_cols, m_rows;
+
     typedef std::vector<TrackTileBase *> TrackTileRow;
     typedef std::vector<TrackTileRow> TrackTileMap;
     TrackTileMap m_map;

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,10 +24,10 @@
 #include <cassert>
 
 MapBase::MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows)
-  : m_trackData(trackData)
-  , m_cols(cols)
-  , m_rows(rows)
-  , m_map(rows, TrackTileRow(m_cols, nullptr))
+    : m_trackData(trackData)
+    , m_cols(cols)
+    , m_rows(rows)
+    , m_map(rows, TrackTileRow(m_cols, nullptr))
 {}
 
 unsigned int MapBase::cols() const
@@ -75,6 +75,48 @@ TrackTileBase * MapBase::getTile(unsigned int x, unsigned int y) const
         return nullptr;
 
     return m_map[y][x];
+}
+
+void MapBase::insertColumn(unsigned int at)
+{
+    assert(at >= 0 && at < m_cols);
+
+    for (auto & row : m_map)
+    {
+        row.insert(row.begin() + at, nullptr);
+    }
+
+    m_cols++;
+}
+
+void MapBase::deleteColumn(unsigned int at)
+{
+    assert(at >= 0 && at < m_cols);
+
+    for (auto & row : m_map)
+    {
+        row.erase(row.begin() + at);
+    }
+
+    m_cols--;
+}
+
+void MapBase::insertRow(unsigned int at)
+{
+    assert(at >= 0 && at < m_rows);
+
+    m_map.insert(m_map.begin() + at, TrackTileRow(m_cols, nullptr));
+
+    m_rows++;
+}
+
+void MapBase::deleteRow(unsigned int at)
+{
+    assert(at >= 0 && at < m_rows);
+
+    m_map.erase(m_map.begin() + at);
+
+    m_rows--;
 }
 
 TrackDataBase & MapBase::trackData()

@@ -106,7 +106,7 @@ TrackData * TrackIO::open(QString path)
         newData->setIndex(index);
 
         // Temporary route vector.
-        std::vector<TargetNodeBase *> route;
+        std::vector<TargetNodePtr> route;
 
         QDomNode node = root.firstChild();
         while(!node.isNull())
@@ -180,8 +180,7 @@ void TrackIO::readObject(TrackData & newData, const QDomElement & element)
     newData.objects().add(ObjectPtr(&object));
 }
 
-void TrackIO::readTargetNode(
-   std::vector<TargetNodeBase *> & route, const QDomElement & element)
+void TrackIO::readTargetNode(std::vector<TargetNodePtr> & route, const QDomElement & element)
 {
     const int x = element.attribute(TrackDataBase::IO::Node::X(),      "0").toInt();
     const int y = element.attribute(TrackDataBase::IO::Node::Y(),      "0").toInt();
@@ -200,7 +199,7 @@ void TrackIO::readTargetNode(
         tnode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(tnode);
+    route.push_back(TargetNodePtr(tnode));
 }
 
 void TrackIO::writeTiles(
@@ -229,19 +228,18 @@ void TrackIO::writeTiles(
     }
 }
 
-void TrackIO::writeObjects(
-    const TrackData & trackData, QDomElement & root, QDomDocument & doc)
+void TrackIO::writeObjects(const TrackData & trackData, QDomElement & root, QDomDocument & doc)
 {
     for (unsigned int i = 0; i < trackData.objects().count(); i++)
     {
         QDomElement objectElement = doc.createElement(TrackDataBase::IO::Track::OBJECT());
-        Object    & object        = static_cast<Object &>(trackData.objects().object(i));
+        Object *    object        = static_cast<Object *>(trackData.objects().object(i).get());
 
-        objectElement.setAttribute(TrackDataBase::IO::Object::CATEGORY(), object.category());
-        objectElement.setAttribute(TrackDataBase::IO::Object::ROLE(), object.role());
-        objectElement.setAttribute(TrackDataBase::IO::Object::X(), static_cast<int>(object.location().x()));
-        objectElement.setAttribute(TrackDataBase::IO::Object::Y(), static_cast<int>(object.location().y()));
-        objectElement.setAttribute(TrackDataBase::IO::Object::ORIENTATION(), static_cast<int>(object.rotation()));
+        objectElement.setAttribute(TrackDataBase::IO::Object::CATEGORY(), object->category());
+        objectElement.setAttribute(TrackDataBase::IO::Object::ROLE(), object->role());
+        objectElement.setAttribute(TrackDataBase::IO::Object::X(), static_cast<int>(object->location().x()));
+        objectElement.setAttribute(TrackDataBase::IO::Object::Y(), static_cast<int>(object->location().y()));
+        objectElement.setAttribute(TrackDataBase::IO::Object::ORIENTATION(), static_cast<int>(object->rotation()));
 
         root.appendChild(objectElement);
     }
@@ -253,14 +251,14 @@ void TrackIO::writeTargetNodes(
     const Route & route = trackData.route();
     for (unsigned int i = 0; i < route.numNodes(); i++)
     {
-        QDomElement      tnodeElement = doc.createElement(TrackDataBase::IO::Track::NODE());
-        TargetNodeBase & tnode        = route.get(i);
+        QDomElement   tnodeElement = doc.createElement(TrackDataBase::IO::Track::NODE());
+        TargetNodePtr tnode        = route.get(i);
 
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::INDEX(), tnode.index());
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::X(), static_cast<int>(tnode.location().x()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::Y(), static_cast<int>(tnode.location().y()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::WIDTH(), static_cast<int>(tnode.size().width()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::HEIGHT(), static_cast<int>(tnode.size().height()));
+        tnodeElement.setAttribute(TrackDataBase::IO::Node::INDEX(), tnode->index());
+        tnodeElement.setAttribute(TrackDataBase::IO::Node::X(), static_cast<int>(tnode->location().x()));
+        tnodeElement.setAttribute(TrackDataBase::IO::Node::Y(), static_cast<int>(tnode->location().y()));
+        tnodeElement.setAttribute(TrackDataBase::IO::Node::WIDTH(), static_cast<int>(tnode->size().width()));
+        tnodeElement.setAttribute(TrackDataBase::IO::Node::HEIGHT(), static_cast<int>(tnode->size().height()));
 
         root.appendChild(tnodeElement);
     }

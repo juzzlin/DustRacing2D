@@ -47,7 +47,7 @@ unsigned int Objects::count() const
     return static_cast<int>(m_objects.size());
 }
 
-ObjectBase & Objects::object(unsigned int index) const
+ObjectPtr Objects::object(unsigned int index) const
 {
-    return *m_objects.at(index);
+    return m_objects.at(index);
 }

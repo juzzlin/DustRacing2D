@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -75,8 +75,70 @@ void TrackData::enlargeVerSize()
     m_map.resize(m_map.cols(), m_map.rows() + 1);
 }
 
-TrackData::~TrackData()
+void TrackData::insertColumn(unsigned int at)
 {
+    m_map.insertColumn(at);
+
+    moveObjectsAfterColumnInsert(at);
+
+    moveTargetNodesAfterColumnInsert(at);
+}
+
+void TrackData::insertRow(unsigned int at)
+{
+    m_map.insertRow(at);
+
+    moveObjectsAfterRowInsert(at);
+
+    moveTargetNodesAfterRowInsert(at);
+}
+
+void TrackData::moveObjectsAfterColumnInsert(unsigned int at)
+{
+    for (unsigned int i = 0; i < m_objects.count(); i++)
+    {
+        ObjectPtr object = m_objects.object(i);
+        if (object->location().x() > TrackTile::TILE_W * at)
+        {
+            object->setLocation(QPointF(object->location().x() + TrackTile::TILE_W, object->location().y()));
+        }
+    }
+}
+
+void TrackData::moveObjectsAfterRowInsert(unsigned int at)
+{
+    for (unsigned int i = 0; i < m_objects.count(); i++)
+    {
+        ObjectPtr object = m_objects.object(i);
+        if (object->location().y() > TrackTile::TILE_H * at)
+        {
+            object->setLocation(QPointF(object->location().x(), object->location().y() + TrackTile::TILE_H));
+        }
+    }
+}
+
+void TrackData::moveTargetNodesAfterColumnInsert(unsigned int at)
+{
+    for (unsigned int i = 0; i < m_route.numNodes(); i++)
+    {
+        TargetNodePtr tnode = m_route.get(i);
+        if (tnode->location().x() > TrackTile::TILE_W * at)
+        {
+            tnode->setLocation(QPointF(tnode->location().x() + TrackTile::TILE_W, tnode->location().y()));
+        }
+    }
+}
+
+void TrackData::moveTargetNodesAfterRowInsert(unsigned int at)
+{
+    for (unsigned int i = 0; i < m_route.numNodes(); i++)
+    {
+        TargetNodePtr tnode = m_route.get(i);
+        if (tnode->location().y() > TrackTile::TILE_H * at)
+        {
+            tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() + TrackTile::TILE_H));
+        }
+    }
 }
 
 void TrackData::addItemToUndoStack(UndoStackItemBase * item)
@@ -113,4 +175,8 @@ bool TrackData::redo(const ObjectModelLoader & loader)
     }
 
     return m_undoStackPosition != end;
+}
+
+TrackData::~TrackData()
+{
 }

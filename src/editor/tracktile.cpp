@@ -150,6 +150,14 @@ void TrackTile::setComputerHint(ComputerHint hint)
     update();
 }
 
+void TrackTile::setLocation(QPointF location)
+{
+    TrackTileBase::setLocation(location);
+
+    setPos(location);
+    update();
+}
+
 QPixmap TrackTile::pixmap() const
 {
     return m_pixmap;

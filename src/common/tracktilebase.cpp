@@ -34,9 +34,19 @@ QPointF TrackTileBase::location() const
     return m_location;
 }
 
+void TrackTileBase::setLocation(QPointF location)
+{
+    m_location = location;
+}
+
 QPoint TrackTileBase::matrixLocation() const
 {
     return m_matrixLocation;
+}
+
+void TrackTileBase::setMatrixLocation(QPoint matrixLocation)
+{
+    m_matrixLocation = matrixLocation;
 }
 
 void TrackTileBase::setTileType(const QString & type)

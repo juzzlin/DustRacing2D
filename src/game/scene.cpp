@@ -493,9 +493,12 @@ void Scene::createNormalObjects()
 
     for (unsigned int i = 0; i < m_activeTrack->trackData().objects().count(); i++)
     {
-        TrackObject & trackObject = static_cast<TrackObject &>(
-            m_activeTrack->trackData().objects().object(i));
-        MCObject & mcObject = trackObject.object();
+        TrackObject * trackObject = dynamic_cast<TrackObject *>(
+            m_activeTrack->trackData().objects().object(i).get());
+
+        assert(trackObject);
+
+        MCObject & mcObject = trackObject->object();
         mcObject.addToWorld();
         mcObject.translate(mcObject.initialLocation());
         mcObject.rotate(mcObject.initialAngle());

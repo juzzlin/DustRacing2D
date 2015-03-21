@@ -37,6 +37,8 @@ public:
 
     explicit EditorView(EditorData & editorData, QWidget * parent = 0);
 
+    void updateSceneRect();
+
 signals:
 
     void itemAddedToUndoStack();
@@ -95,7 +97,15 @@ private:
 
     void handleTargetNodeDragRelease(QMouseEvent * event);
 
+    void openObjectContextMenu();
+
+    void openTargetNodeContextMenu();
+
+    void openTileContextMenu(TrackTile & tile);
+
     void setComputerHint(TrackTileBase::ComputerHint hint);
+
+    void updateCoordinates(QPointF mappedPos);
 
     static void setTileType(TrackTile & tile, QAction * action);
 
@@ -114,6 +124,14 @@ private:
     QAction * m_setComputerHintBrakeHard;
 
     QAction * m_setComputerHintBrake;
+
+    QAction * m_insertRow;
+
+    QAction * m_deleteRow;
+
+    QAction * m_insertCol;
+
+    QAction * m_deleteCol;
 
     EditorData & m_editorData;
 };

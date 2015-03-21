@@ -19,7 +19,6 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 #include "../common/route.hpp"
-#include "../common/targetnodebase.hpp"
 #include "../common/tracktilebase.hpp"
 
 #include <MCRandom>
@@ -50,12 +49,10 @@ void AI::update(bool isRaceCompleted)
 
         m_car.clearStatuses();
 
-        const Route    & route       = m_track->trackData().route();
-        TargetNodeBase & tnode       = route.get(m_car.currentTargetNodeIndex());
-        TrackTile      & currentTile = *m_track->trackTileAtLocation(
-            m_car.location().i(), m_car.location().j());
+        const Route & route = m_track->trackData().route();
+        steerControl(route.get(m_car.currentTargetNodeIndex()));
 
-        steerControl(tnode);
+        TrackTile & currentTile = *m_track->trackTileAtLocation(m_car.location().i(), m_car.location().j());
         speedControl(currentTile, isRaceCompleted);
 
         m_lastTargetNodeIndex = m_car.currentTargetNodeIndex();
@@ -67,10 +64,10 @@ void AI::setRandomTolerance()
     m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::TILE_W / 8;
 }
 
-void AI::steerControl(TargetNodeBase & tnode)
+void AI::steerControl(TargetNodePtr tnode)
 {
     // Initial target coordinates
-    MCVector3dF target(tnode.location().x(), tnode.location().y());
+    MCVector3dF target(tnode->location().x(), tnode->location().y());
     target -= MCVector3dF(m_car.location() + MCVector3dF(m_randomTolerance));
 
     MCFloat angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));

@@ -57,6 +57,8 @@ public:
 
     virtual void setComputerHint(ComputerHint hint) override;
 
+    virtual void setLocation(QPointF location) override;
+
     //! Get current active tile.
     //! \returns Valid pointer or nullptr if not set.
     static TrackTile * activeTile();

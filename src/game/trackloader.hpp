@@ -22,6 +22,8 @@
 #include "tracktile.hpp"
 #include "trackobjectfactory.hpp"
 
+#include "../common/targetnodebase.hpp"
+
 class TargetNodeBase;
 class Track;
 class TrackData;
@@ -76,8 +78,7 @@ private:
     void readObject(QDomElement & element, TrackData & newData);
 
     //! Read a target node element and push to the given vector.
-    void readTargetNode(
-        QDomElement & element, TrackData & newData, std::vector<TargetNodeBase *> & route);
+    void readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodePtr> & route);
 
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);

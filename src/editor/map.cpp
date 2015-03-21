@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,29 +23,15 @@
 Map::Map(TrackData & trackData, unsigned int cols, unsigned int rows)
   : MapBase(trackData, cols, rows)
 {
-    // Create tiles and set coordinates.
-    for (unsigned int i = 0; i < cols; i++)
-    {
-        for (unsigned int j = 0; j < rows; j++)
-        {
-            TrackTileBase * newTile = new TrackTile(
-                trackData,
-                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                QPoint(i, j));
-            setTile(i, j, newTile);
-        }
-    }
+    createEmptyTiles();
 }
 
-void Map::resize(unsigned int newCols, unsigned int newRows)
+void Map::createEmptyTiles()
 {
-    MapBase::resize(newCols, newRows);
-
     // Create tiles and set coordinates.
-    for (unsigned int i = 0; i < cols(); i++)
+    for (unsigned int j = 0; j < rows(); j++)
     {
-        for (unsigned int j = 0; j < rows(); j++)
+        for (unsigned int i = 0; i < cols(); i++)
         {
             if (!getTile(i, j))
             {
@@ -56,8 +42,47 @@ void Map::resize(unsigned int newCols, unsigned int newRows)
                     QPoint(i, j));
                 setTile(i, j, newTile);
             }
+            else
+            {
+                getTile(i, j)->setLocation(
+                    QPointF(
+                        TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                        TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
+                getTile(i, j)->setMatrixLocation(QPoint(i, j));
+            }
         }
     }
+}
+
+void Map::resize(unsigned int newCols, unsigned int newRows)
+{
+    MapBase::resize(newCols, newRows);
+
+    createEmptyTiles();
+}
+
+void Map::insertColumn(unsigned int at)
+{
+    MapBase::insertColumn(at);
+
+    createEmptyTiles();
+}
+
+void Map::deleteColumn(unsigned int at)
+{
+    MapBase::deleteColumn(at);
+}
+
+void Map::insertRow(unsigned int at)
+{
+    MapBase::insertRow(at);
+
+    createEmptyTiles();
+}
+
+void Map::deleteRow(unsigned int at)
+{
+    MapBase::deleteRow(at);
 }
 
 Map::~Map()

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -28,11 +28,22 @@ public:
     //! Constuctor.
     Map(TrackData & trackData, unsigned int cols, unsigned int rows);
 
-    //! Resize the map.
-    void resize(unsigned int newCols, unsigned int newRows);
+    void resize(unsigned int newCols, unsigned int newRows) override;
+
+    void insertColumn(unsigned int at) override;
+
+    void deleteColumn(unsigned int at) override;
+
+    void insertRow(unsigned int at) override;
+
+    void deleteRow(unsigned int at) override;
 
     //! Destructor.
     virtual ~Map();
+
+private:
+
+    void createEmptyTiles();
 };
 
 #endif // MAP_HPP

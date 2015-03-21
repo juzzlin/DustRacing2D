@@ -34,16 +34,36 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
+#include <cassert>
+
 EditorView::EditorView(EditorData & editorData, QWidget * parent)
 : QGraphicsView(parent)
 , m_clearComputerHint(nullptr)
 , m_setComputerHintBrakeHard(nullptr)
 , m_setComputerHintBrake(nullptr)
+, m_insertRow(nullptr)
+, m_deleteRow(nullptr)
+, m_insertCol(nullptr)
+, m_deleteCol(nullptr)
 , m_editorData(editorData)
 {
     createTileContextMenuActions();
     createObjectContextMenuActions();
     createTargetNodeContextMenuActions();
+}
+
+void EditorView::updateSceneRect()
+{
+    const QRectF newSceneRect(
+        0,
+        0,
+        m_editorData.trackData()->map().cols() * TrackTile::TILE_W,
+        m_editorData.trackData()->map().rows() * TrackTile::TILE_H);
+
+    setSceneRect(newSceneRect);
+
+    assert(scene());
+    scene()->setSceneRect(newSceneRect);
 }
 
 void EditorView::mouseMoveEvent(QMouseEvent * event)
@@ -73,13 +93,29 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
             tnode->setLocation(mappedPos);
         }
 
-        // Show coordinates in status bar
+        updateCoordinates(mappedPos);
+    }
+}
+
+void EditorView::updateCoordinates(QPointF mappedPos)
+{
+    if (m_editorData.trackData())
+    {
+        const int maxCols = static_cast<int>(m_editorData.trackData()->map().cols());
+        int column = mappedPos.x() / TrackTile::TILE_W;
+        column = column >= maxCols ? maxCols - 1 : column;
+        column = column < 0 ? 0 : column;
+
+        const int maxRows = static_cast<int>(m_editorData.trackData()->map().rows());
+        int row = mappedPos.y() / TrackTile::TILE_H;
+        row = row >= maxRows ? maxRows - 1 : row;
+        row = row < 0 ? 0 : row;
+
+        m_editorData.setActiveRow(static_cast<unsigned int>(row));
+        m_editorData.setActiveColumn(static_cast<unsigned int>(column));
+
         QString coordinates("X: %1 Y: %2 I: %3 J: %4");
-        coordinates = coordinates.arg(
-            mappedPos.x()).arg(
-            mappedPos.y()).arg(
-            static_cast<int>(mappedPos.x() / TrackTile::TILE_W)).arg(
-            static_cast<int>(mappedPos.y() / TrackTile::TILE_H));
+        coordinates = coordinates.arg(mappedPos.x()).arg(mappedPos.y()).arg(column).arg(row);
         MainWindow::instance()->statusBar()->showMessage(coordinates);
     }
 }
@@ -136,6 +172,36 @@ void EditorView::createTileContextMenuActions()
         setComputerHint(TrackTileBase::CH_BRAKE);
     });
 
+    m_insertRow = new QAction(
+        QWidget::tr("Insert row.."), &m_tileContextMenu);
+    QObject::connect(m_insertRow, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertRow(m_editorData.activeRow());
+        m_editorData.addTilesToScene();
+        updateSceneRect();
+        update();
+    });
+
+    m_deleteRow = new QAction(
+        QWidget::tr("Delete row.."), &m_tileContextMenu);
+    QObject::connect(m_deleteRow, &QAction::triggered, [this] () {
+        m_editorData.trackData()->map().deleteRow(m_editorData.activeRow());
+    });
+
+    m_insertCol = new QAction(
+        QWidget::tr("Insert column.."), &m_tileContextMenu);
+    QObject::connect(m_insertCol, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertColumn(m_editorData.activeColumn());
+        m_editorData.addTilesToScene();
+        updateSceneRect();
+        update();
+    });
+
+    m_deleteCol = new QAction(
+        QWidget::tr("Delete column.."), &m_tileContextMenu);
+    QObject::connect(m_deleteCol, &QAction::triggered, [this] () {
+        m_editorData.trackData()->map().deleteColumn(m_editorData.activeColumn());
+    });
+
     // Populate the menu
     m_tileContextMenu.addAction(rotate90CW);
     m_tileContextMenu.addAction(rotate90CCW);
@@ -143,6 +209,10 @@ void EditorView::createTileContextMenuActions()
     m_tileContextMenu.addAction(m_clearComputerHint);
     m_tileContextMenu.addAction(m_setComputerHintBrakeHard);
     m_tileContextMenu.addAction(m_setComputerHintBrake);
+    m_tileContextMenu.addAction(m_insertRow);
+    m_tileContextMenu.addAction(m_deleteRow);
+    m_tileContextMenu.addAction(m_insertCol);
+    m_tileContextMenu.addAction(m_deleteCol);
 }
 
 void EditorView::createObjectContextMenuActions()
@@ -398,9 +468,9 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
     }
 }
 
-void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
+void EditorView::openTileContextMenu(TrackTile & tile)
 {
-    // Enable all hints by default
+    // Enable all hint actions by default
     m_clearComputerHint->setEnabled(true);
     m_setComputerHintBrakeHard->setEnabled(true);
     m_setComputerHintBrake->setEnabled(true);
@@ -420,27 +490,45 @@ void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
         break;
     }
 
-    // Show the context menu
-    QPoint globalPos = mapToGlobal(m_clickedPos);
+    if (m_editorData.trackData())
+    {
+        m_deleteCol->setEnabled(m_editorData.trackData()->map().cols() > 2);
+        m_deleteRow->setEnabled(m_editorData.trackData()->map().rows() > 2);
+    }
+
+    const QPoint globalPos = mapToGlobal(m_clickedPos);
     m_tileContextMenu.exec(globalPos);
+}
+
+void EditorView::handleRightButtonClickOnTile(TrackTile & tile)
+{
+    openTileContextMenu(tile);
+}
+
+void EditorView::openObjectContextMenu()
+{
+    const QPoint globalPos = mapToGlobal(m_clickedPos);
+    m_objectContextMenu.exec(globalPos);
 }
 
 void EditorView::handleRightButtonClickOnObject(Object & object)
 {
     m_editorData.setSelectedObject(&object);
 
-    // Show the context menu
-    QPoint globalPos = mapToGlobal(m_clickedPos);
-    m_objectContextMenu.exec(globalPos);
+    openObjectContextMenu();
+}
+
+void EditorView::openTargetNodeContextMenu()
+{
+    const QPoint globalPos = mapToGlobal(m_clickedPos);
+    m_targetNodeContextMenu.exec(globalPos);
 }
 
 void EditorView::handleRightButtonClickOnTargetNode(TargetNode & tnode)
 {
     m_editorData.setSelectedTargetNode(&tnode);
 
-    // Show the context menu
-    QPoint globalPos = mapToGlobal(m_clickedPos);
-    m_targetNodeContextMenu.exec(globalPos);
+    openTargetNodeContextMenu();
 }
 
 void EditorView::mouseReleaseEvent(QMouseEvent * event)
@@ -608,7 +696,6 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
         if (x >= 0 && y >= 0)
         {
             TrackTile * tile = dynamic_cast<TrackTile *>(map.getTile(x, y));
-
             if (tile != nullptr && tile->tileType() == typeToFill)
             {
                 floodFill(*tile, action, typeToFill, positions);

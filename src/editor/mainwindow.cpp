@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@ MainWindow * MainWindow::m_instance = nullptr;
 namespace
 {
     const char *       SETTINGS_GROUP = "MainWindow";
-    const int          MARGIN         = 0;
     const unsigned int MIN_ZOOM       = 0;
     const unsigned int MAX_ZOOM       = 200;
     const unsigned int INI_ZOOM       = 100;
@@ -75,7 +74,6 @@ MainWindow::MainWindow(QString trackFile)
 , m_saveAction(nullptr)
 , m_saveAsAction(nullptr)
 , m_currentToolBarAction(nullptr)
-, m_clearAllAction(nullptr)
 , m_enlargeHorSize(nullptr)
 , m_enlargeVerSize(nullptr)
 , m_setRouteAction(nullptr)
@@ -380,12 +378,6 @@ void MainWindow::populateMenuBar()
     connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
     m_redoAction->setEnabled(false);
 
-    // Add "clear all"-action
-    m_clearAllAction = new QAction(tr("&Clear all"), this);
-    editMenu->addAction(m_clearAllAction);
-    connect(m_clearAllAction, SIGNAL(triggered()), this, SLOT(clear()));
-    m_clearAllAction->setEnabled(false);
-
     // Add "enlarge hor size"-action
     m_enlargeHorSize = new QAction(tr("Enlarge hor size"), this);
     editMenu->addAction(m_enlargeHorSize);
@@ -561,12 +553,6 @@ void MainWindow::redo()
     m_redoAction->setEnabled(hasMoreItemsToRedo);
 }
 
-void MainWindow::clear()
-{
-    assert(m_editorData);
-    m_editorData->clear();
-}
-
 void MainWindow::clearRoute()
 {
     assert(m_editorData);
@@ -607,14 +593,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         delete m_editorScene;
         m_editorScene = new EditorScene;
 
-        QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + m_editorData->trackData()->map().cols() * TrackTile::TILE_W,
-            2 * MARGIN + m_editorData->trackData()->map().rows() * TrackTile::TILE_H);
-
-        m_editorScene->setSceneRect(newSceneRect);
-
         m_editorView->setScene(m_editorScene);
-        m_editorView->setSceneRect(newSceneRect);
+        m_editorView->updateSceneRect();
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         m_editorData->addTilesToScene();
@@ -692,19 +672,13 @@ void MainWindow::initializeNewTrack()
 
         assert(m_editorData);
 
-        m_editorData->removeTilesFromScene();
-        m_editorData->removeObjectsFromScene();
-        m_editorData->setTrackData(new TrackData(dialog.name(), dialog.isUserTrack(), cols, rows));
+        m_editorData->setTrackData(TrackDataPtr(new TrackData(dialog.name(), dialog.isUserTrack(), cols, rows)));
 
         delete m_editorScene;
         m_editorScene = new EditorScene;
 
-        QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + cols * TrackTile::TILE_W,
-            2 * MARGIN + rows * TrackTile::TILE_H);
-
-        m_editorScene->setSceneRect(newSceneRect);
         m_editorView->setScene(m_editorScene);
+        m_editorView->updateSceneRect();
         m_editorView->ensureVisible(0, 0, 0, 0);
 
         // Undo stack has been cleared.
@@ -732,7 +706,6 @@ void MainWindow::setActionStatesOnNewTrack()
     m_saveAction->setEnabled(true);
     m_saveAsAction->setEnabled(true);
     m_toolBar->setEnabled(true);
-    m_clearAllAction->setEnabled(true);
     m_enlargeHorSize->setEnabled(true);
     m_enlargeVerSize->setEnabled(true);
     m_setRouteAction->setEnabled(true);
@@ -755,32 +728,24 @@ void MainWindow::setTrackProperties()
 void MainWindow::enlargeHorSize()
 {
     assert(m_editorData);
-    if (TrackData * trackData = m_editorData->trackData())
+    if (m_editorData->trackData())
     {
-        trackData->enlargeHorSize();
+        m_editorData->trackData()->enlargeHorSize();
         m_editorData->addTilesToScene();
 
-        QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + trackData->map().cols() * TrackTile::TILE_W,
-            2 * MARGIN + trackData->map().rows() * TrackTile::TILE_H);
-
-        m_editorView->setSceneRect(newSceneRect);
+        m_editorView->updateSceneRect();
     }
 }
 
 void MainWindow::enlargeVerSize()
 {
     assert(m_editorData);
-    if (TrackData * trackData = m_editorData->trackData())
+    if (m_editorData->trackData())
     {
-        trackData->enlargeVerSize();
+        m_editorData->trackData()->enlargeVerSize();
         m_editorData->addTilesToScene();
 
-        QRectF newSceneRect(-MARGIN, -MARGIN,
-            2 * MARGIN + trackData->map().cols() * TrackTile::TILE_W,
-            2 * MARGIN + trackData->map().rows() * TrackTile::TILE_H);
-
-        m_editorView->setSceneRect(newSceneRect);
+        m_editorView->updateSceneRect();
     }
 }
 

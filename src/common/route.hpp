@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
 #ifndef ROUTE_HPP
 #define ROUTE_HPP
 
+#include "targetnodebase.hpp"
+
 #include <vector>
 
 class TrackTileBase;
@@ -27,34 +29,40 @@ class Route
 {
 public:
 
+    //! Constructor.
+    Route();
+
     //! Clear the current route.
     void clear();
 
     //! Push new target to the route and return true
     //! if the route got closed.
-    bool push(TargetNodeBase & target);
+    bool push(TargetNodePtr target);
 
     //! Build route from an (unordered) vector of Targets.
     //! Will be sorted with respect to their indices.
-    void buildFromVector(std::vector<TargetNodeBase *> & routeVector);
+    void buildFromVector(std::vector<TargetNodePtr> & routeVector);
 
     //! Return number of target nodes.
     unsigned int numNodes() const;
 
     //! Return Target for the given index.
-    TargetNodeBase & get(unsigned int index) const;
+    TargetNodePtr get(unsigned int index) const;
 
     //! Get all nodes.
-    void getAll(std::vector<TargetNodeBase *> & routeVector) const;
+    void getAll(std::vector<TargetNodePtr> & routeVector) const;
 
     //! Return length based on target node locations.
     unsigned int geometricLength() const;
 
 private:
 
+    Route(Route & other);
+    Route & operator= (Route & other);
+
     bool isClosed() const;
 
-    std::vector<TargetNodeBase *> m_route;
+    std::vector<TargetNodePtr> m_route;
 };
 
 #endif // ROUTE_HPP

@@ -17,12 +17,11 @@
 #define AI_HPP
 
 #include <MCVector2d>
-
 #include <memory>
+#include "../common/targetnodebase.hpp"
 
 class Car;
 class Route;
-class TargetNodeBase;
 class Track;
 class TrackTile;
 
@@ -46,7 +45,7 @@ public:
 private:
 
     //! Steering logic.
-    void steerControl(TargetNodeBase & tnode);
+    void steerControl(TargetNodePtr tnode);
 
     //! Brake/accelerate logic.
     void speedControl(TrackTile & currentTile, bool isRaceCompleted);

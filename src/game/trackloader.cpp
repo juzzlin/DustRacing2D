@@ -21,9 +21,6 @@
 #include <QDomElement>
 
 #include "layers.hpp"
-
-#include "../common/targetnodebase.hpp"
-
 #include "renderer.hpp"
 #include "settings.hpp"
 #include "track.hpp"
@@ -201,7 +198,7 @@ TrackData * TrackLoader::loadTrack(QString path)
             newData->setIndex(index);
 
             // A temporary route vector.
-            std::vector<TargetNodeBase *> route;
+            std::vector<TargetNodePtr> route;
 
             QDomNode node = root.firstChild();
             while(!node.isNull())
@@ -375,8 +372,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
 }
 
-void TrackLoader::readTargetNode(
-    QDomElement & element, TrackData & newData, std::vector<TargetNodeBase *> & route)
+void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodePtr> & route)
 {
     const int x = element.attribute(TrackDataBase::IO::Node::X(),      "0").toInt();
     const int y = element.attribute(TrackDataBase::IO::Node::Y(),      "0").toInt();
@@ -397,7 +393,7 @@ void TrackLoader::readTargetNode(
         tnode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(tnode);
+    route.push_back(TargetNodePtr(tnode));
 }
 
 unsigned int TrackLoader::tracks() const

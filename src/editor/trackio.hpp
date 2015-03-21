@@ -19,7 +19,8 @@
 #include <QString>
 #include <vector>
 
-class TargetNodeBase;
+#include "../common/targetnodebase.hpp"
+
 class TrackData;
 class QDomDocument;
 class QDomElement;
@@ -38,7 +39,7 @@ private:
 
     static void readTile(TrackData & newData, const QDomElement & element);
     static void readObject(TrackData & newData, const QDomElement & element);
-    static void readTargetNode(std::vector<TargetNodeBase *> & route, const QDomElement & element);
+    static void readTargetNode(std::vector<TargetNodePtr> & route, const QDomElement & element);
     static void writeTiles(
         const TrackData & newData, QDomElement & element, QDomDocument & doc);
     static void writeObjects(

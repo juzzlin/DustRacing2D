@@ -19,27 +19,25 @@
 TargetNodeBase::TargetNodeBase()
 : m_size(QSize(TrackTileBase::TILE_H, TrackTileBase::TILE_W))
 , m_index(-1)
-, m_next(nullptr)
-, m_prev(nullptr)
 {
 }
 
-void TargetNodeBase::setNext(TargetNodeBase * tnode)
+void TargetNodeBase::setNext(TargetNodePtr tnode)
 {
     m_next = tnode;
 }
 
-TargetNodeBase * TargetNodeBase::next() const
+TargetNodePtr TargetNodeBase::next() const
 {
     return m_next;
 }
 
-void TargetNodeBase::setPrev(TargetNodeBase * tnode)
+void TargetNodeBase::setPrev(TargetNodePtr tnode)
 {
     m_prev = tnode;
 }
 
-TargetNodeBase * TargetNodeBase::prev() const
+TargetNodePtr TargetNodeBase::prev() const
 {
     return m_prev;
 }

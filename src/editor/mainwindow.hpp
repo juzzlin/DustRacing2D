@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -97,7 +97,6 @@ private slots:
 
     void undo();
     void redo();
-    void clear();
     void clearRoute();
     bool doOpenTrack(QString fileName);
     void enlargeHorSize();
@@ -133,7 +132,6 @@ private:
     QAction           * m_currentToolBarAction;
     QAction           * m_undoAction;
     QAction           * m_redoAction;
-    QAction           * m_clearAllAction;
     QAction           * m_enlargeHorSize;
     QAction           * m_enlargeVerSize;
     QAction           * m_clearRouteAction;

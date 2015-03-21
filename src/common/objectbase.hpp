@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -45,6 +45,9 @@ public:
     QString role() const;
 
 private:
+
+    ObjectBase(ObjectBase & other);
+    ObjectBase & operator= (ObjectBase & other);
 
     //! Category of this object.
     QString m_category;

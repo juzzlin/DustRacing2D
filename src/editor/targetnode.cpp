@@ -91,7 +91,7 @@ void TargetNode::setLocation(QPointF newLocation)
 
     updateRouteLine();
 
-    if (TargetNode * pPrev = dynamic_cast<TargetNode *>(prev()))
+    if (TargetNode * pPrev = dynamic_cast<TargetNode *>(prev().get()))
     {
         pPrev->updateRouteLine();
     }

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,12 +22,13 @@
 #include <QString>
 #include <QPointF>
 
+#include "trackdata.hpp"
+
 class MainWindow;
 class Object;
 class ObjectModelLoader;
 class TargetNode;
 class TargetNodeBase;
-class TrackData;
 class TrackTile;
 class QGraphicsLineItem;
 
@@ -61,7 +62,7 @@ public:
     bool saveTrackDataAs(QString fileName);
 
     //! Set track data as the given data.
-    void setTrackData(TrackData * newTrackData);
+    void setTrackData(TrackDataPtr newTrackData);
 
     //! Check if it's possible to set route.
     bool canRouteBeSet() const;
@@ -84,7 +85,7 @@ public:
     void removeRouteFromScene();
 
     //! Returns current track data object. Returns NULL if not set.
-    TrackData * trackData();
+    TrackDataPtr trackData();
 
     //! Returns current editing mode.
     EditorMode mode() const;
@@ -134,15 +135,6 @@ public:
     //! Add objects in current track data object to the scene.
     void addObjectsToScene();
 
-    //! Remove all tiles from the scene.
-    void removeTilesFromScene();
-
-    //! Remove all objects from the scene.
-    void removeObjectsFromScene();
-
-    //! Clear all.
-    void clear();
-
     //! Clear the current route only.
     void clearRoute();
 
@@ -152,14 +144,30 @@ public:
     //! Returns true if there are more redoable operations left after the redo, false otherwise.
     bool redo(const ObjectModelLoader & loader);
 
+    void setActiveColumn(unsigned int column);
+
+    unsigned int activeColumn() const;
+
+    void setActiveRow(unsigned int row);
+
+    unsigned int activeRow() const;
+
 private:
 
     EditorData(const EditorData & e);
     EditorData & operator= (const EditorData & e);
 
-    void pushTargetNodeToRoute(TargetNodeBase & tnode);
+    void clearScene();
 
-    std::unique_ptr<TrackData>       m_trackData;
+    void pushTargetNodeToRoute(TargetNodePtr tnode);
+
+    void removeTilesFromScene();
+
+    void removeObjectsFromScene();
+
+    void removeTargetNodesFromScene();
+
+    TrackDataPtr                     m_trackData;
     EditorMode                       m_mode;
     TrackTile                      * m_dragAndDropSourceTile;
     Object                         * m_dragAndDropObject;
@@ -169,6 +177,8 @@ private:
     QPointF                          m_dragAndDropSourcePos;
     MainWindow                     * m_mainWindow;
     std::vector<QGraphicsLineItem *> m_targetNodes;
+    unsigned int                     m_activeColumn;
+    unsigned int                     m_activeRow;
 };
 
 #endif // EDITORDATA_HPP

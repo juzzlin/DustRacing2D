@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,8 +58,12 @@ public:
     //! Get location in world / scene.
     virtual QPointF location() const;
 
+    virtual void setLocation(QPointF location);
+
     //! Get location in the tile matrix.
     virtual QPoint matrixLocation() const;
+
+    virtual void setMatrixLocation(QPoint matrixLocation);
 
     //! Set type: "corner", "straight", "grass", "finish", "clear"..
     virtual void setTileType(const QString & type);
@@ -74,6 +78,9 @@ public:
     ComputerHint computerHint() const;
 
 private:
+
+    TrackTileBase(TrackTileBase & other);
+    TrackTileBase & operator= (TrackTileBase & other);
 
     //! Type string.
     QString m_tileType;

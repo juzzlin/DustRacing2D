@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,18 +18,25 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 
+namespace {
 static const int CLOSING_TH = 32;
+}
+
+Route::Route()
+{
+}
 
 void Route::clear()
 {
     m_route.clear();
 }
 
-bool Route::push(TargetNodeBase & tnode)
+bool Route::push(TargetNodePtr tnode)
 {
-    tnode.setIndex(static_cast<int>(m_route.size()));
-    m_route.push_back(&tnode);
+    tnode->setIndex(static_cast<int>(m_route.size()));
+    m_route.push_back(tnode);
     return isClosed();
 }
 
@@ -54,32 +61,32 @@ unsigned int Route::numNodes() const
     return static_cast<unsigned int>(m_route.size());
 }
 
-TargetNodeBase & Route::get(unsigned int index) const
+TargetNodePtr Route::get(unsigned int index) const
 {
     assert (index < numNodes());
-    return *m_route[index];
+    return m_route[index];
 }
 
-void Route::getAll(std::vector<TargetNodeBase *> & routeVector) const
+void Route::getAll(std::vector<TargetNodePtr> & routeVector) const
 {
     routeVector = m_route;
 }
 
-void Route::buildFromVector(std::vector<TargetNodeBase *> & routeVector)
+void Route::buildFromVector(std::vector<TargetNodePtr> & routeVector)
 {
     clear();
 
     std::sort(routeVector.begin(), routeVector.end(),
-        [] (const TargetNodeBase * lhs, const TargetNodeBase * rhs)
+        [] (const TargetNodePtr lhs, const TargetNodePtr rhs)
         {
             return lhs->index() < rhs->index();
         });
 
-    for (TargetNodeBase * tnode : routeVector)
+    for (TargetNodePtr tnode : routeVector)
     {
         if (tnode && tnode->index() >= 0)
         {
-            push(*tnode);
+            push(tnode);
         }
     }
 }
@@ -94,12 +101,12 @@ unsigned int Route::geometricLength() const
         {
             int dx = m_route[i]->location().x() - m_route[i + 1]->location().x();
             int dy = m_route[i]->location().y() - m_route[i + 1]->location().y();
-            result += sqrt(dx * dx + dy * dy);
+            result += std::sqrt(dx * dx + dy * dy);
         }
 
         int dx = m_route[m_route.size() - 1]->location().x() - m_route[0]->location().x();
         int dy = m_route[m_route.size() - 1]->location().y() - m_route[0]->location().y();
-        result += sqrt(dx * dx + dy * dy);
+        result += std::sqrt(dx * dx + dy * dy);
     }
 
     return result;

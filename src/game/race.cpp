@@ -282,11 +282,11 @@ void Race::update()
     // Enable the checkered flag if leader has done at least 95% of the last lap.
     if (m_timing.leadersLap() + 1 == m_lapCount)
     {
-        Car                  & leader = getLeadingCar();
-        const Route          & route  = m_track->trackData().route();
-        const TargetNodeBase & tnode  = route.get(leader.currentTargetNodeIndex());
+        Car               & leader = getLeadingCar();
+        const Route       & route  = m_track->trackData().route();
+        const TargetNodePtr tnode  = route.get(leader.currentTargetNodeIndex());
 
-        if (tnode.index() >= static_cast<int>(9 * route.numNodes() / 10))
+        if (tnode->index() >= static_cast<int>(9 * route.numNodes() / 10))
         {
             if (!m_checkeredFlagEnabled)
             {
@@ -347,24 +347,24 @@ void Race::pitStop(Car & car)
     }
 }
 
-bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
+bool isInsideCheckPoint(Car & car, TargetNodePtr tnode, int tolerance)
 {
-    const int width2  = tnode.size().width()  / 2;
-    const int height2 = tnode.size().height() / 2;
+    const int width2  = tnode->size().width()  / 2;
+    const int height2 = tnode->size().height() / 2;
 
-    if (car.location().i() < tnode.location().x() - width2 - tolerance)
+    if (car.location().i() < tnode->location().x() - width2 - tolerance)
     {
         return false;
     }
-    else if (car.location().i() > tnode.location().x() + width2 + tolerance)
+    else if (car.location().i() > tnode->location().x() + width2 + tolerance)
     {
         return false;
     }
-    else if (car.location().j() < tnode.location().y() - height2 - tolerance)
+    else if (car.location().j() < tnode->location().y() - height2 - tolerance)
     {
         return false;
     }
-    else if (car.location().j() > tnode.location().y() + height2 + tolerance)
+    else if (car.location().j() > tnode->location().y() + height2 + tolerance)
     {
         return false;
     }
@@ -374,10 +374,6 @@ bool isInsideCheckPoint(Car & car, TargetNodeBase & tnode, int tolerance)
 
 void Race::updateRouteProgress(Car & car)
 {
-    const Route    & route = m_track->trackData().route();
-    unsigned int     currentTargetNodeIndex = car.currentTargetNodeIndex();
-    TargetNodeBase & tnode = route.get(currentTargetNodeIndex);
-
     if (m_timing.isActive(car.index()))
     {
         if (!m_timing.raceCompleted(car.index()))
@@ -395,6 +391,9 @@ void Race::updateRouteProgress(Car & car)
             }
 
             // Give a bit more tolerance for other than the finishing check point.
+            const Route & route = m_track->trackData().route();
+            unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
+            TargetNodePtr tnode = route.get(currentTargetNodeIndex);
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
@@ -525,16 +524,15 @@ void Race::checkIfCarIsOffTrack(Car & car)
 
 void Race::moveCarOntoPreviousCheckPoint(Car & car)
 {
-    const Route    & route = m_track->trackData().route();
-    TargetNodeBase & tnode = route.get(car.prevTargetNodeIndex());
-
     // Randomize the target location a bit, because otherwise multiple
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
+    const Route & route = m_track->trackData().route();
+    TargetNodePtr tnode = route.get(car.prevTargetNodeIndex());
     const int randRadius = 64;
     car.translate(MCVector3dF(
-        tnode.location().x() + rand()%randRadius - randRadius / 2,
-        tnode.location().y() + rand()%randRadius - randRadius / 2));
+        tnode->location().x() + rand() % randRadius - randRadius / 2,
+        tnode->location().y() + rand() % randRadius - randRadius / 2));
     car.resetMotion();
 }
 
