@@ -85,15 +85,13 @@ public slots:
     //! End marking the route.
     void endSetRoute();
 
-    //! \reimp
-    void setVisible(bool visible);
+    void setVisible(bool visible) override;
 
     void handleItemAddedToUndoStack();
 
 protected:
 
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
+    void closeEvent(QCloseEvent * event) override;
 
 private slots:
 

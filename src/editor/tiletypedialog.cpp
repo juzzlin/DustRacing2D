@@ -15,7 +15,7 @@
 
 #include "tiletypedialog.hpp"
 
-TileTypeDialog::TileTypeDialog(QWidget *parent) :
+TileTypeDialog::TileTypeDialog(QWidget * parent) :
     QDialog(parent)
 {
 }

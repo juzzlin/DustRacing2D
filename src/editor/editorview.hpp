@@ -43,17 +43,13 @@ signals:
 
 protected:
 
-    //! \reimp
-    void mouseMoveEvent(QMouseEvent * event);
+    void mouseMoveEvent(QMouseEvent * event) override;
 
-    //! \reimp
-    void mousePressEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event) override;
 
-    //! \reimp
-    void mouseReleaseEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event) override;
 
-    //! \reimp
-    void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
 
 private:
 

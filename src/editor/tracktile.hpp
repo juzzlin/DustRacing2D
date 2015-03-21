@@ -45,21 +45,17 @@ public:
     //! Destructor
     virtual ~TrackTile();
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+    virtual QRectF boundingRect () const override;
 
-    //! \reimp
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
 
-    //! \reimp
-    virtual void setTileType(const QString & type);
+    virtual void setTileType(const QString & type) override;
 
-    //! \reimp
-    virtual void setComputerHint(ComputerHint hint);
+    virtual void setComputerHint(ComputerHint hint) override;
 
     //! Get current active tile.
     //! \returns Valid pointer or nullptr if not set.

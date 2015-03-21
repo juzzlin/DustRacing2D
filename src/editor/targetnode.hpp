@@ -29,16 +29,13 @@ public:
     //! Constructor.
     TargetNode();
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+    virtual QRectF boundingRect () const override;
 
-    //! \reimp
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
-    //! \reimp
     //! Sets the TargetNode and QGraphicsItem locations.
-    virtual void setLocation(QPointF newLocation);
+    virtual void setLocation(QPointF newLocation) override;
 
     //! Set a line item that is drawn from a node to the next node.
     void setRouteLine(QGraphicsLineItem * routeLine);

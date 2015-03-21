@@ -29,16 +29,13 @@ public:
     //! Constructor.
     Object(QString category, QString role, QSizeF size, QPixmap pixmap);
 
-    //! \reimp
-    virtual QRectF boundingRect () const;
+    virtual QRectF boundingRect () const override;
 
-    //! \reimp
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
-    //! \reimp
     //! Sets the Object and QGraphicsItem locations.
-    virtual void setLocation(QPointF newLocation);
+    virtual void setLocation(QPointF newLocation) override;
 
 private:
 

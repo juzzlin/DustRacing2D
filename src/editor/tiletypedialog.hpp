@@ -23,12 +23,8 @@ class TileTypeDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TileTypeDialog(QWidget *parent = 0);
 
-signals:
-
-public slots:
-
+    explicit TileTypeDialog(QWidget * parent = nullptr);
 };
 
 #endif // TILETYPEDIALOG_HPP

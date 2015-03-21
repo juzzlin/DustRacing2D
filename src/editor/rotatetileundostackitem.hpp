@@ -28,9 +28,9 @@ public:
     //! Constructor
     RotateTileUndoStackItem(const QPoint & position, qreal oldRotation, qreal newRotation);
 
-    virtual void executeUndo(TrackData * track, const ObjectModelLoader & loader);
+    virtual void executeUndo(TrackData * track, const ObjectModelLoader & loader) override;
 
-    virtual void executeRedo(TrackData * track, const ObjectModelLoader & loader);
+    virtual void executeRedo(TrackData * track, const ObjectModelLoader & loader) override;
 
 private:
 
