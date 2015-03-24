@@ -29,6 +29,9 @@ public:
     //! Constructor.
     ObjectBase(QString category, QString role);
 
+    ObjectBase(ObjectBase & other) = delete;
+    ObjectBase & operator= (ObjectBase & other) = delete;
+
     //! Destructor.
     virtual ~ObjectBase();
 
@@ -45,9 +48,6 @@ public:
     QString role() const;
 
 private:
-
-    ObjectBase(ObjectBase & other);
-    ObjectBase & operator= (ObjectBase & other);
 
     //! Category of this object.
     QString m_category;

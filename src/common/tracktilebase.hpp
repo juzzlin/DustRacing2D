@@ -49,6 +49,9 @@ public:
     TrackTileBase(TrackDataBase & trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
+    TrackTileBase(TrackTileBase & other) = delete;
+    TrackTileBase & operator= (TrackTileBase & other) = delete;
+
     //! Destructor.
     virtual ~TrackTileBase();
 
@@ -78,9 +81,6 @@ public:
     ComputerHint computerHint() const;
 
 private:
-
-    TrackTileBase(TrackTileBase & other);
-    TrackTileBase & operator= (TrackTileBase & other);
 
     //! Type string.
     QString m_tileType;

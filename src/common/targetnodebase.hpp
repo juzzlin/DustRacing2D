@@ -32,6 +32,9 @@ public:
     //! Constructor.
     TargetNodeBase();
 
+    TargetNodeBase(TargetNodeBase & other) = delete;
+    TargetNodeBase & operator= (TargetNodeBase & other) = delete;
+
     //! Destructor.
     virtual ~TargetNodeBase() {};
 
@@ -58,9 +61,6 @@ public:
     virtual QSizeF size() const;
 
 private:
-
-    TargetNodeBase(TargetNodeBase & other);
-    TargetNodeBase & operator= (TargetNodeBase & other);
 
     //! Coordinates in the world.
     QPointF m_location;

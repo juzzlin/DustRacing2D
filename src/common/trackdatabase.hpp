@@ -77,6 +77,9 @@ public:
     //! Constructor.
     TrackDataBase(QString name, bool isUserTrack);
 
+    TrackDataBase(TrackDataBase & other) = delete;
+    TrackDataBase & operator= (TrackDataBase & other) = delete;
+
     //! Destructor.
     virtual ~TrackDataBase();
 
@@ -117,9 +120,6 @@ public:
     virtual const Objects & objects() const = 0;
 
 private:
-
-    TrackDataBase(TrackDataBase & other);
-    TrackDataBase & operator= (TrackDataBase & other);
 
     QString m_name;
 

@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -101,7 +101,6 @@ private:
     static MCUint m_typeID;
     inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
     MCOBBox<MCFloat> m_obbox;
-    MCFloat m_momentOfInertiaFactor;
     MCFloat m_radius;
     MCFloat m_width;
     MCFloat m_height;

@@ -31,6 +31,9 @@ public:
     //! Constructor.
     Objects();
 
+    Objects(Objects & other) = delete;
+    Objects & operator= (Objects & other) = delete;
+
     //! Add an object.
     void add(ObjectPtr object);
 
@@ -44,9 +47,6 @@ public:
     ObjectPtr object(unsigned int index) const;
 
 private:
-
-    Objects(Objects & other);
-    Objects & operator= (Objects & other);
 
     ObjectVector m_objects;
 };

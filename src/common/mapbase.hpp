@@ -29,6 +29,9 @@ public:
     //! Constructor.
     MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows);
 
+    MapBase(MapBase & other) = delete;
+    MapBase & operator= (MapBase & other) = delete;
+
     //! Destructor.
     virtual ~MapBase();
 
@@ -67,9 +70,6 @@ protected:
     TrackDataBase & trackData();
 
 private:
-
-    MapBase(MapBase & other);
-    MapBase & operator= (MapBase & other);
 
     TrackDataBase & m_trackData;
 

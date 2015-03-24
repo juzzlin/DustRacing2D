@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2009 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@
 #define MCMACROS_HH
 
 //! Disable copy constructor
-#define DISABLE_COPY(className) private: className(const className & r)
+#define DISABLE_COPY(className) className(const className & r) = delete
 
 //! Disable assignment / assignment
-#define DISABLE_ASSI(className) private: className & operator=(const className & r)
+#define DISABLE_ASSI(className) className & operator=(const className & r) = delete
 
 #endif // MCMACROS_HH

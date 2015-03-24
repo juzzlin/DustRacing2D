@@ -19,6 +19,7 @@ Core/mcbbox.hh
 Core/mcbbox3d.hh
 Core/mcevent.cc
 Core/mclogger.cc
+Core/mcmacros.hh
 Core/mcobbox.hh
 Core/mcobject.cc
 Core/mcobjectdata.cc

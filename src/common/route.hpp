@@ -32,6 +32,9 @@ public:
     //! Constructor.
     Route();
 
+    Route(Route & other) = delete;
+    Route & operator= (Route & other) = delete;
+
     //! Clear the current route.
     void clear();
 
@@ -56,9 +59,6 @@ public:
     unsigned int geometricLength() const;
 
 private:
-
-    Route(Route & other);
-    Route & operator= (Route & other);
 
     bool isClosed() const;
 

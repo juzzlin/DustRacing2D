@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -96,8 +96,6 @@ private:
     MCUint m_i0, m_i1, m_j0, m_j1;
     MCFloat m_helpHor;
     MCFloat m_helpVer;
-    MCFloat m_avgObjectSize;
-    int m_objectCount;
     MCObjectGrid::GridCell * m_matrix;
 
     typedef std::set<GridCell *> DirtyCellCache;
