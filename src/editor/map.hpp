@@ -32,16 +32,20 @@ public:
 
     void insertColumn(unsigned int at) override;
 
-    void deleteColumn(unsigned int at) override;
+    std::vector<TrackTilePtr> deleteColumn(unsigned int at) override;
 
     void insertRow(unsigned int at) override;
 
-    void deleteRow(unsigned int at) override;
+    std::vector<TrackTilePtr> deleteRow(unsigned int at) override;
 
     //! Destructor.
     virtual ~Map();
 
 private:
+
+    void moveTilesAfterColumnDeletion(unsigned int at);
+
+    void moveTilesAfterRowDeletion(unsigned int at);
 
     void createEmptyTiles();
 };

@@ -64,12 +64,12 @@ TargetNodePtr Route::get(unsigned int index) const
     return m_route[index];
 }
 
-void Route::getAll(std::vector<TargetNodePtr> & routeVector) const
+void Route::getAll(RouteVector & routeVector) const
 {
     routeVector = m_route;
 }
 
-void Route::buildFromVector(std::vector<TargetNodePtr> & routeVector)
+void Route::buildFromVector(RouteVector & routeVector)
 {
     clear();
 
@@ -107,4 +107,24 @@ unsigned int Route::geometricLength() const
     }
 
     return result;
+}
+
+Route::RouteVector::iterator Route::begin()
+{
+    return m_route.begin();
+}
+
+Route::RouteVector::iterator Route::end()
+{
+    return m_route.end();
+}
+
+Route::RouteVector::const_iterator Route::cbegin() const
+{
+    return m_route.cbegin();
+}
+
+Route::RouteVector::const_iterator Route::cend() const
+{
+    return m_route.cend();
 }

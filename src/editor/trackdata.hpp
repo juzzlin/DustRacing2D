@@ -74,6 +74,12 @@ public:
     //! Insert tile row at given index and move objects.
     void insertRow(unsigned int at);
 
+    //! Delete tile column at given index and move objects.
+    std::vector<TrackTilePtr> deleteColumn(unsigned int at);
+
+    //! Delete tile row at given index and move objects.
+    std::vector<TrackTilePtr> deleteRow(unsigned int at);
+
     //! Add item to undo stack.
     void addItemToUndoStack(UndoStackItemBase * item);
 
@@ -85,13 +91,21 @@ public:
 
 private:
 
-    void moveObjectsAfterColumnInsert(unsigned int at);
+    void moveObjectsAfterColumnInsertion(unsigned int at);
 
-    void moveObjectsAfterRowInsert(unsigned int at);
+    void moveObjectsAfterRowInsertion(unsigned int at);
 
-    void moveTargetNodesAfterColumnInsert(unsigned int at);
+    void moveTargetNodesAfterColumnInsertion(unsigned int at);
 
-    void moveTargetNodesAfterRowInsert(unsigned int at);
+    void moveTargetNodesAfterRowInsertion(unsigned int at);
+
+    void moveObjectsAfterColumnDeletion(unsigned int at);
+
+    void moveObjectsAfterRowDeletion(unsigned int at);
+
+    void moveTargetNodesAfterColumnDeletion(unsigned int at);
+
+    void moveTargetNodesAfterRowDeletion(unsigned int at);
 
     typedef std::vector< std::shared_ptr< UndoStackItemBase > > UndoStack;
 

@@ -54,6 +54,38 @@ void Map::createEmptyTiles()
     }
 }
 
+void Map::moveTilesAfterColumnDeletion(unsigned int at)
+{
+    for (unsigned int j = 0; j < rows(); j++)
+    {
+        for (unsigned int i = at + 1; i < cols(); i++)
+        {
+            const QPointF location(getTile(i, j)->location());
+            getTile(i, j)->setLocation(
+                QPointF(
+                    location.x() - TrackTile::TILE_W,
+                    location.y()));
+            getTile(i, j)->setMatrixLocation(QPoint(i - 1, j));
+        }
+    }
+}
+
+void Map::moveTilesAfterRowDeletion(unsigned int at)
+{
+    for (unsigned int j = at + 1; j < rows(); j++)
+    {
+        for (unsigned int i = 0; i < cols(); i++)
+        {
+            const QPointF location(getTile(i, j)->location());
+            getTile(i, j)->setLocation(
+                QPointF(
+                    location.x(),
+                    location.y() - TrackTile::TILE_H));
+            getTile(i, j)->setMatrixLocation(QPoint(i, j - 1));
+        }
+    }
+}
+
 void Map::resize(unsigned int newCols, unsigned int newRows)
 {
     MapBase::resize(newCols, newRows);
@@ -68,9 +100,10 @@ void Map::insertColumn(unsigned int at)
     createEmptyTiles();
 }
 
-void Map::deleteColumn(unsigned int at)
+std::vector<TrackTilePtr> Map::deleteColumn(unsigned int at)
 {
-    MapBase::deleteColumn(at);
+    moveTilesAfterColumnDeletion(at);
+    return MapBase::deleteColumn(at);
 }
 
 void Map::insertRow(unsigned int at)
@@ -80,9 +113,10 @@ void Map::insertRow(unsigned int at)
     createEmptyTiles();
 }
 
-void Map::deleteRow(unsigned int at)
+std::vector<TrackTilePtr> Map::deleteRow(unsigned int at)
 {
-    MapBase::deleteRow(at);
+    moveTilesAfterRowDeletion(at);
+    return MapBase::deleteRow(at);
 }
 
 Map::~Map()

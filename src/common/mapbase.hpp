@@ -52,17 +52,17 @@ public:
      *  Returns nullptr if no tile set or impossible coordinates. */
     TrackTilePtr getTile(unsigned int x, unsigned int y) const;
 
-    //! Insert column after given index
+    //! Insert column after given index.
     virtual void insertColumn(unsigned int at);
 
-    //! Delete column at given index
-    virtual void deleteColumn(unsigned int at);
+    //! Delete column at given index. Return deleted tiles.
+    virtual std::vector<TrackTilePtr> deleteColumn(unsigned int at);
 
-    //! Insert row after given index
+    //! Insert row after given index.
     virtual void insertRow(unsigned int at);
 
-    //! Delete row at given index
-    virtual void deleteRow(unsigned int at);
+    //! Delete row at given index. Return deleted tiles.
+    virtual std::vector<TrackTilePtr> deleteRow(unsigned int at);
 
 protected:
 

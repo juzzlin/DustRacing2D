@@ -184,7 +184,12 @@ void EditorView::createTileContextMenuActions()
     m_deleteRow = new QAction(
         QWidget::tr("Delete row.."), &m_tileContextMenu);
     QObject::connect(m_deleteRow, &QAction::triggered, [this] () {
-        m_editorData.trackData()->map().deleteRow(m_editorData.activeRow());
+        auto deleted = m_editorData.trackData()->deleteRow(m_editorData.activeRow());
+        for (auto tile : deleted) {
+            m_editorData.removeTileFromScene(tile);
+        }
+        updateSceneRect();
+        update();
     });
 
     m_insertCol = new QAction(
@@ -199,7 +204,12 @@ void EditorView::createTileContextMenuActions()
     m_deleteCol = new QAction(
         QWidget::tr("Delete column.."), &m_tileContextMenu);
     QObject::connect(m_deleteCol, &QAction::triggered, [this] () {
-        m_editorData.trackData()->map().deleteColumn(m_editorData.activeColumn());
+        auto deleted = m_editorData.trackData()->deleteColumn(m_editorData.activeColumn());
+        for (auto tile : deleted) {
+            m_editorData.removeTileFromScene(tile);
+        }
+        updateSceneRect();
+        update();
     });
 
     // Populate the menu

@@ -89,16 +89,21 @@ void MapBase::insertColumn(unsigned int at)
     m_cols++;
 }
 
-void MapBase::deleteColumn(unsigned int at)
+std::vector<TrackTilePtr> MapBase::deleteColumn(unsigned int at)
 {
     assert(at >= 0 && at < m_cols);
 
+    std::vector<TrackTilePtr> deleted;
+
     for (auto & row : m_map)
     {
+        deleted.push_back(*(row.begin() + at));
         row.erase(row.begin() + at);
     }
 
     m_cols--;
+
+    return deleted;
 }
 
 void MapBase::insertRow(unsigned int at)
@@ -110,13 +115,16 @@ void MapBase::insertRow(unsigned int at)
     m_rows++;
 }
 
-void MapBase::deleteRow(unsigned int at)
+std::vector<TrackTilePtr> MapBase::deleteRow(unsigned int at)
 {
     assert(at >= 0 && at < m_rows);
 
+    std::vector<TrackTilePtr> deleted = *(m_map.begin() + at);
     m_map.erase(m_map.begin() + at);
 
     m_rows--;
+
+    return deleted;
 }
 
 TrackDataBase & MapBase::trackData()

@@ -79,25 +79,42 @@ void TrackData::insertColumn(unsigned int at)
 {
     m_map.insertColumn(at);
 
-    moveObjectsAfterColumnInsert(at);
+    moveObjectsAfterColumnInsertion(at);
 
-    moveTargetNodesAfterColumnInsert(at);
+    moveTargetNodesAfterColumnInsertion(at);
 }
 
 void TrackData::insertRow(unsigned int at)
 {
     m_map.insertRow(at);
 
-    moveObjectsAfterRowInsert(at);
+    moveObjectsAfterRowInsertion(at);
 
-    moveTargetNodesAfterRowInsert(at);
+    moveTargetNodesAfterRowInsertion(at);
 }
 
-void TrackData::moveObjectsAfterColumnInsert(unsigned int at)
+std::vector<TrackTilePtr> TrackData::deleteColumn(unsigned int at)
 {
-    for (unsigned int i = 0; i < m_objects.count(); i++)
+    moveObjectsAfterColumnDeletion(at);
+
+    moveTargetNodesAfterColumnDeletion(at);
+
+    return m_map.deleteColumn(at);
+}
+
+std::vector<TrackTilePtr> TrackData::deleteRow(unsigned int at)
+{
+    moveObjectsAfterRowDeletion(at);
+
+    moveTargetNodesAfterRowDeletion(at);
+
+    return m_map.deleteRow(at);
+}
+
+void TrackData::moveObjectsAfterColumnInsertion(unsigned int at)
+{
+    for (auto object : m_objects)
     {
-        ObjectPtr object = m_objects.object(i);
         if (object->location().x() > TrackTile::TILE_W * at)
         {
             object->setLocation(QPointF(object->location().x() + TrackTile::TILE_W, object->location().y()));
@@ -105,11 +122,10 @@ void TrackData::moveObjectsAfterColumnInsert(unsigned int at)
     }
 }
 
-void TrackData::moveObjectsAfterRowInsert(unsigned int at)
+void TrackData::moveObjectsAfterRowInsertion(unsigned int at)
 {
-    for (unsigned int i = 0; i < m_objects.count(); i++)
+    for (auto object : m_objects)
     {
-        ObjectPtr object = m_objects.object(i);
         if (object->location().y() > TrackTile::TILE_H * at)
         {
             object->setLocation(QPointF(object->location().x(), object->location().y() + TrackTile::TILE_H));
@@ -117,11 +133,10 @@ void TrackData::moveObjectsAfterRowInsert(unsigned int at)
     }
 }
 
-void TrackData::moveTargetNodesAfterColumnInsert(unsigned int at)
+void TrackData::moveTargetNodesAfterColumnInsertion(unsigned int at)
 {
-    for (unsigned int i = 0; i < m_route.numNodes(); i++)
+    for (auto tnode : m_route)
     {
-        TargetNodePtr tnode = m_route.get(i);
         if (tnode->location().x() > TrackTile::TILE_W * at)
         {
             tnode->setLocation(QPointF(tnode->location().x() + TrackTile::TILE_W, tnode->location().y()));
@@ -129,14 +144,57 @@ void TrackData::moveTargetNodesAfterColumnInsert(unsigned int at)
     }
 }
 
-void TrackData::moveTargetNodesAfterRowInsert(unsigned int at)
+void TrackData::moveTargetNodesAfterRowInsertion(unsigned int at)
 {
-    for (unsigned int i = 0; i < m_route.numNodes(); i++)
+    for (auto tnode : m_route)
     {
-        TargetNodePtr tnode = m_route.get(i);
         if (tnode->location().y() > TrackTile::TILE_H * at)
         {
             tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() + TrackTile::TILE_H));
+        }
+    }
+}
+
+void TrackData::moveObjectsAfterColumnDeletion(unsigned int at)
+{
+    for (auto object : m_objects)
+    {
+        if (object->location().x() > TrackTile::TILE_W * at)
+        {
+            object->setLocation(QPointF(object->location().x() - TrackTile::TILE_W, object->location().y()));
+        }
+    }
+}
+
+void TrackData::moveObjectsAfterRowDeletion(unsigned int at)
+{
+    for (auto object : m_objects)
+    {
+        if (object->location().y() > TrackTile::TILE_H * at)
+        {
+            object->setLocation(QPointF(object->location().x(), object->location().y() - TrackTile::TILE_H));
+        }
+    }
+}
+
+void TrackData::moveTargetNodesAfterColumnDeletion(unsigned int at)
+{
+    for (auto tnode : m_route)
+    {
+        if (tnode->location().x() > TrackTile::TILE_W * at)
+        {
+            tnode->setLocation(QPointF(tnode->location().x() - TrackTile::TILE_W, tnode->location().y()));
+        }
+    }
+}
+
+void TrackData::moveTargetNodesAfterRowDeletion(unsigned int at)
+{
+    for (auto tnode : m_route)
+    {
+        if (tnode->location().y() > TrackTile::TILE_H * at)
+        {
+            tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() - TrackTile::TILE_H));
         }
     }
 }

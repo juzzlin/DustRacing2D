@@ -48,20 +48,20 @@ bool EditorData::loadTrackData(QString fileName)
 {
     clearScene();
 
-    m_trackData.reset(TrackIO::open(fileName));
-    return static_cast<bool>(m_trackData.get());
+    m_trackData = TrackIO::open(fileName);
+    return static_cast<bool>(m_trackData);
 }
 
 bool EditorData::saveTrackData()
 {
     assert(m_trackData);
-    return TrackIO::save(m_trackData.get(), m_trackData->fileName());
+    return TrackIO::save(m_trackData, m_trackData->fileName());
 }
 
 bool EditorData::saveTrackDataAs(QString fileName)
 {
     assert(m_trackData);
-    if (TrackIO::save(m_trackData.get(), fileName))
+    if (TrackIO::save(m_trackData, fileName))
     {
         m_trackData->setFileName(fileName);
         return true;
@@ -160,13 +160,14 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
 
 void EditorData::removeRouteFromScene()
 {
-    for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
+    for (auto tnodePtr : m_trackData->route())
     {
-        TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get());
+        TargetNode * tnode = dynamic_cast<TargetNode *>(tnodePtr.get());
         assert(tnode);
 
         m_mainWindow->editorScene().removeItem(tnode);
         m_mainWindow->editorScene().removeItem(tnode->routeLine());
+
         delete tnode->routeLine();
     }
 
@@ -290,6 +291,16 @@ void EditorData::addObjectsToScene()
     }
 }
 
+void EditorData::removeTileFromScene(TrackTilePtr trackTile)
+{
+    TrackTile::setActiveTile(nullptr);
+
+    TrackTile * tile = dynamic_cast<TrackTile *>(trackTile.get());
+    assert(tile);
+
+    m_mainWindow->editorScene().removeItem(tile);
+}
+
 void EditorData::removeTilesFromScene()
 {
     if (m_trackData)
@@ -333,9 +344,9 @@ void EditorData::removeTargetNodesFromScene()
 {
     if (m_trackData)
     {
-        for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
+        for (auto tnodePtr : m_trackData->route())
         {
-            TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get());
+            TargetNode * tnode = dynamic_cast<TargetNode *>(tnodePtr.get());
             assert(tnode);
 
             m_mainWindow->editorScene().removeItem(tnode);

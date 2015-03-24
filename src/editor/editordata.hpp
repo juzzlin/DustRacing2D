@@ -84,6 +84,9 @@ public:
     //! Removes target node and line objects from the scene.
     void removeRouteFromScene();
 
+    //! Removes given tile from the scene.
+    void removeTileFromScene(TrackTilePtr trackTile);
+
     //! Returns current track data object. Returns NULL if not set.
     TrackDataPtr trackData();
 

@@ -35,6 +35,8 @@ public:
     Route(Route & other) = delete;
     Route & operator= (Route & other) = delete;
 
+    typedef std::vector<TargetNodePtr> RouteVector;
+
     //! Clear the current route.
     void clear();
 
@@ -44,7 +46,7 @@ public:
 
     //! Build route from an (unordered) vector of Targets.
     //! Will be sorted with respect to their indices.
-    void buildFromVector(std::vector<TargetNodePtr> & routeVector);
+    void buildFromVector(RouteVector & routeVector);
 
     //! Return number of target nodes.
     unsigned int numNodes() const;
@@ -53,10 +55,18 @@ public:
     TargetNodePtr get(unsigned int index) const;
 
     //! Get all nodes.
-    void getAll(std::vector<TargetNodePtr> & routeVector) const;
+    void getAll(RouteVector & routeVector) const;
 
     //! Return length based on target node locations.
     unsigned int geometricLength() const;
+
+    RouteVector::iterator begin();
+
+    RouteVector::iterator end();
+
+    RouteVector::const_iterator cbegin() const;
+
+    RouteVector::const_iterator cend() const;
 
 private:
 

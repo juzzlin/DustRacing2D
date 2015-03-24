@@ -46,6 +46,14 @@ public:
     //! Return given object.
     ObjectPtr object(unsigned int index) const;
 
+    ObjectVector::iterator begin();
+
+    ObjectVector::iterator end();
+
+    ObjectVector::const_iterator cbegin() const;
+
+    ObjectVector::const_iterator cend() const;
+
 private:
 
     ObjectVector m_objects;
