@@ -59,17 +59,17 @@ void MapBase::resize(unsigned int newCols, unsigned int newRows)
     m_rows = newRows;
 }
 
-bool MapBase::setTile(unsigned int x, unsigned int y, TrackTileBase * pTile)
+bool MapBase::setTile(unsigned int x, unsigned int y, TrackTilePtr tile)
 {
     if (x >= m_cols || y >= m_rows)
         return false;
 
-    m_map[y][x] = pTile;
+    m_map[y][x] = tile;
 
     return true;
 }
 
-TrackTileBase * MapBase::getTile(unsigned int x, unsigned int y) const
+TrackTilePtr MapBase::getTile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
         return nullptr;

@@ -695,7 +695,7 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
         if (x >= 0 && y >= 0)
         {
-            TrackTile * tile = dynamic_cast<TrackTile *>(map.getTile(x, y));
+            TrackTile * tile = dynamic_cast<TrackTile *>(map.getTile(x, y).get());
             if (tile != nullptr && tile->tileType() == typeToFill)
             {
                 floodFill(*tile, action, typeToFill, positions);

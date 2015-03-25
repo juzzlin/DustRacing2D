@@ -20,6 +20,8 @@
 #include <QPointF>
 #include <QString>
 
+#include <memory>
+
 class TrackDataBase;
 
 //! Base class for track tiles used in the editor and in the game.
@@ -41,11 +43,11 @@ public:
         CH_BRAKE
     };
 
-    //! Constructor.
-    //! \param trackData Reference to the "parent" TrackData.
-    //! \param location Location (coordinates) in the track scene.
-    //! \param matrixLocation Location in the tile matrix.
-    //! \param type Type of the tile. See setType().
+    /*! Constructor.
+     *  \param trackData Reference to the "parent" TrackData.
+     *  \param location Location (coordinates) in the track scene.
+     *  \param matrixLocation Location in the tile matrix.
+     *  \param type Type of the tile. See setType(). */
     TrackTileBase(TrackDataBase & trackData, QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
@@ -97,5 +99,7 @@ private:
     //! Computer hint
     ComputerHint m_computerHint;
 };
+
+typedef std::shared_ptr<TrackTileBase> TrackTilePtr;
 
 #endif // TRACKTILEBASE_HPP

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 #include "../common/config.hpp"
 #include "../common/objectbase.hpp"
 #include "../common/targetnodebase.hpp"
+
+#include <cassert>
 
 bool TrackIO::save(const TrackData * trackData, QString path)
 {
@@ -156,13 +158,12 @@ void TrackIO::readTile(TrackData & newData, const QDomElement & element)
 
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
-    if (TrackTile * tile = static_cast<TrackTile *>(newData.map().getTile(i, j)))
-    {
-        tile->setRotation(orientation);
-        tile->setTileType(id);
-        tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(id));
-        tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
-    }
+    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j).get());
+    assert(tile);
+    tile->setRotation(orientation);
+    tile->setTileType(id);
+    tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(id));
+    tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
 }
 
 void TrackIO::readObject(TrackData & newData, const QDomElement & element)
@@ -209,21 +210,21 @@ void TrackIO::writeTiles(
     {
         for (unsigned int j = 0; j < trackData.map().rows(); j++)
         {
-            if (TrackTile * tile = static_cast<TrackTile *>(trackData.map().getTile(i, j)))
+            TrackTile * tile = dynamic_cast<TrackTile *>(trackData.map().getTile(i, j).get());
+            assert(tile);
+
+            QDomElement tileElement = doc.createElement(TrackDataBase::IO::Track::TILE());
+            tileElement.setAttribute(TrackDataBase::IO::Tile::TYPE(), tile->tileType());
+            tileElement.setAttribute(TrackDataBase::IO::Tile::I(), i);
+            tileElement.setAttribute(TrackDataBase::IO::Tile::J(), j);
+            tileElement.setAttribute(TrackDataBase::IO::Tile::ORIENTATION(), tile->rotation());
+
+            if (tile->computerHint() != TrackTile::CH_NONE)
             {
-                QDomElement tileElement = doc.createElement(TrackDataBase::IO::Track::TILE());
-                tileElement.setAttribute(TrackDataBase::IO::Tile::TYPE(), tile->tileType());
-                tileElement.setAttribute(TrackDataBase::IO::Tile::I(), i);
-                tileElement.setAttribute(TrackDataBase::IO::Tile::J(), j);
-                tileElement.setAttribute(TrackDataBase::IO::Tile::ORIENTATION(), tile->rotation());
-
-                if (tile->computerHint() != TrackTile::CH_NONE)
-                {
-                    tileElement.setAttribute(TrackDataBase::IO::Tile::COMPUTER_HINT(), tile->computerHint());
-                }
-
-                root.appendChild(tileElement);
+                tileElement.setAttribute(TrackDataBase::IO::Tile::COMPUTER_HINT(), tile->computerHint());
             }
+
+            root.appendChild(tileElement);
         }
     }
 }
@@ -232,9 +233,10 @@ void TrackIO::writeObjects(const TrackData & trackData, QDomElement & root, QDom
 {
     for (unsigned int i = 0; i < trackData.objects().count(); i++)
     {
-        QDomElement objectElement = doc.createElement(TrackDataBase::IO::Track::OBJECT());
-        Object *    object        = static_cast<Object *>(trackData.objects().object(i).get());
+        Object * object = dynamic_cast<Object *>(trackData.objects().object(i).get());
+        assert(object);
 
+        QDomElement objectElement = doc.createElement(TrackDataBase::IO::Track::OBJECT());
         objectElement.setAttribute(TrackDataBase::IO::Object::CATEGORY(), object->category());
         objectElement.setAttribute(TrackDataBase::IO::Object::ROLE(), object->role());
         objectElement.setAttribute(TrackDataBase::IO::Object::X(), static_cast<int>(object->location().x()));
@@ -251,9 +253,9 @@ void TrackIO::writeTargetNodes(
     const Route & route = trackData.route();
     for (unsigned int i = 0; i < route.numNodes(); i++)
     {
-        QDomElement   tnodeElement = doc.createElement(TrackDataBase::IO::Track::NODE());
-        TargetNodePtr tnode        = route.get(i);
+        TargetNodePtr tnode = route.get(i);
 
+        QDomElement tnodeElement = doc.createElement(TrackDataBase::IO::Track::NODE());
         tnodeElement.setAttribute(TrackDataBase::IO::Node::INDEX(), tnode->index());
         tnodeElement.setAttribute(TrackDataBase::IO::Node::X(), static_cast<int>(tnode->location().x()));
         tnodeElement.setAttribute(TrackDataBase::IO::Node::Y(), static_cast<int>(tnode->location().y()));

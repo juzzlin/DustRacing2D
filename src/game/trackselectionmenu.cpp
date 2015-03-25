@@ -147,28 +147,26 @@ void TrackItem::render()
         tileX = initX;
         for (int i = 0; i < i2; i++)
         {
-            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            if (MCSurface * pSurface = pTile->previewSurface())
             {
-                if (MCSurface * pSurface = pTile->previewSurface())
+                pSurface->setShaderProgram(Renderer::instance().program("menu"));
+                pSurface->bindMaterial();
+
+                if (m_track.trackData().isLocked())
                 {
-                    pSurface->setShaderProgram(Renderer::instance().program("menu"));
-                    pSurface->bindMaterial();
-
-                    if (m_track.trackData().isLocked())
-                    {
-                        pSurface->setColor(MCGLColor(0.5, 0.5, 0.5));
-                    }
-                    else
-                    {
-                        pSurface->setColor(MCGLColor(1.0, 1.0, 1.0));
-                    }
-
-                    pSurface->setSize(tileH, tileW);
-                    pSurface->render(
-                        nullptr,
-                        MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
-                        pTile->rotation());
+                    pSurface->setColor(MCGLColor(0.5, 0.5, 0.5));
                 }
+                else
+                {
+                    pSurface->setColor(MCGLColor(1.0, 1.0, 1.0));
+                }
+
+                pSurface->setSize(tileH, tileW);
+                pSurface->render(
+                            nullptr,
+                            MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
+                            pTile->rotation());
             }
 
             tileX += tileW;

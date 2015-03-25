@@ -107,7 +107,7 @@ public:
 
         // Change the virtual resolution immediately if changing from fullscreen to fullscreen
         if (Game::instance().renderer().fullScreen() &&
-            static_cast<SaveResolutionAction *>(m_saveResolutionAction.get())->fullScreen())
+            dynamic_cast<SaveResolutionAction *>(m_saveResolutionAction.get())->fullScreen())
         {
             m_saveResolutionAction->fire();
         }

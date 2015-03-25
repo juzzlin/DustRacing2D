@@ -106,8 +106,8 @@ void Car::setProperties(Description & desc)
     setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
-    const float width  = static_cast<MCRectShape *>(shape().get())->width();
-    const float height = static_cast<MCRectShape *>(shape().get())->height();
+    const float width  = dynamic_cast<MCRectShape *>(shape().get())->width();
+    const float height = dynamic_cast<MCRectShape *>(shape().get())->height();
     m_length = std::max(width, height);
 }
 

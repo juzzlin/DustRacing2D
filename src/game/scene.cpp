@@ -527,21 +527,19 @@ void Scene::createBridgeObjects()
     {
         for (MCUint i = 0; i <= rMap.cols(); i++)
         {
-            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            TrackTile * pTile = dynamic_cast<TrackTile *>(rMap.getTile(i, j).get());
+            if (pTile && pTile->tileTypeEnum() == TrackTile::TT_BRIDGE)
             {
-                if (pTile->tileTypeEnum() == TrackTile::TT_BRIDGE)
-                {
-                    MCObjectPtr bridge(new Bridge(
-                        MCAssetManager::instance().surfaceManager().surface("bridgeObject"),
-                        MCAssetManager::instance().surfaceManager().surface("wallLong")
-                    ));
+                MCObjectPtr bridge(new Bridge(
+                    MCAssetManager::instance().surfaceManager().surface("bridgeObject"),
+                    MCAssetManager::instance().surfaceManager().surface("wallLong")
+                ));
 
-                    bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset()));
-                    bridge->rotate(pTile->rotation());
-                    bridge->addToWorld();
+                bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset()));
+                bridge->rotate(pTile->rotation());
+                bridge->addToWorld();
 
-                    m_bridges.push_back(bridge);
-                }
+                m_bridges.push_back(bridge);
             }
         }
     }

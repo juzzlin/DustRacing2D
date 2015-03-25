@@ -255,7 +255,7 @@ void TrackLoader::readTile(
     o = -o;
     j = newData.map().rows() - 1 - j;
 
-    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j));
+    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j).get());
     assert(tile);
 
     tile->setRotation(o);

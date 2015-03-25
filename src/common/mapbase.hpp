@@ -17,8 +17,8 @@
 #define MAPBASE_HPP
 
 #include <vector>
+#include "tracktilebase.hpp"
 
-class TrackTileBase;
 class TrackDataBase;
 
 //! Base class for the tile matrix used by TrackData.
@@ -44,13 +44,13 @@ public:
     //! Resize the map.
     virtual void resize(unsigned int newCols, unsigned int newRows);
 
-    //! Set given tile to given coordinates.
-    //! Returns false if impossible coordinates.
-    bool setTile(unsigned int x, unsigned int y, TrackTileBase * pTile);
+    /*! Set given tile to given coordinates.
+     *  Returns false if impossible coordinates. */
+    bool setTile(unsigned int x, unsigned int y, TrackTilePtr tile);
 
-    //! Get tile at given coordinates.
-    //! Returns nullptr if no tile set or impossible coordinates.
-    TrackTileBase * getTile(unsigned int x, unsigned int y) const;
+    /*! Get tile at given coordinates.
+     *  Returns nullptr if no tile set or impossible coordinates. */
+    TrackTilePtr getTile(unsigned int x, unsigned int y) const;
 
     //! Insert column after given index
     virtual void insertColumn(unsigned int at);
@@ -75,7 +75,7 @@ private:
 
     unsigned int m_cols, m_rows;
 
-    typedef std::vector<TrackTileBase *> TrackTileRow;
+    typedef std::vector<TrackTilePtr> TrackTileRow;
     typedef std::vector<TrackTileRow> TrackTileMap;
     TrackTileMap m_map;
 };

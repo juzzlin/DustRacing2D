@@ -40,7 +40,7 @@ void TileTypeUndoStackItem::setTiles(TrackData * track, const ObjectModelLoader 
 {
     for (auto iter = m_positions.begin(); iter != m_positions.end(); ++iter)
     {
-        TrackTileBase * base = track->map().getTile(iter->x(), iter->y());
+        TrackTileBase * base = track->map().getTile(iter->x(), iter->y()).get();
         TrackTile * tile = dynamic_cast<TrackTile *>(base);
 
         tile->setTileType(type);

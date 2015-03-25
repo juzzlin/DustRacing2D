@@ -40,7 +40,7 @@ void Map::createEmptyTiles()
                     QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                     TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
                     QPoint(i, j));
-                setTile(i, j, newTile);
+                setTile(i, j, TrackTilePtr(newTile));
             }
             else
             {

@@ -197,7 +197,8 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
     MCParticle::ParticleFreeList & freeList = m_freeLists[Smoke];
     if (freeList.size())
     {
-        smoke = static_cast<MCGLPointParticle *>(freeList.back());
+        smoke = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(smoke);
         freeList.pop_back();
 
         smoke->init(location, 10, 180);
@@ -215,7 +216,8 @@ void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
     MCParticle::ParticleFreeList & freeList = m_freeLists[OffTrackSmoke];
     if (freeList.size())
     {
-        smoke = static_cast<MCGLPointParticle *>(freeList.back());
+        smoke = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(smoke);
         freeList.pop_back();
 
         smoke->init(location, 10, 180);
@@ -233,7 +235,8 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
     MCParticle::ParticleFreeList & freeList = m_freeLists[OnTrackSkidMark];
     if (freeList.size())
     {
-        skidMark = static_cast<MCGLPointParticle *>(freeList.back());
+        skidMark = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(skidMark);
         freeList.pop_back();
 
         skidMark->init(location, 4, 1000);
@@ -252,7 +255,8 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
     MCParticle::ParticleFreeList & freeList = m_freeLists[OffTrackSkidMark];
     if (freeList.size())
     {
-        skidMark = static_cast<MCGLPointParticle *>(freeList.back());
+        skidMark = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(skidMark);
         freeList.pop_back();
 
         skidMark->init(location, 4, 1000);
@@ -271,7 +275,8 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
     MCParticle::ParticleFreeList & freeList = m_freeLists[Mud];
     if (freeList.size())
     {
-        mud = static_cast<MCGLRectParticle *>(freeList.back());
+        mud = dynamic_cast<MCGLRectParticle *>(freeList.back());
+        assert(mud);
         freeList.pop_back();
 
         mud->init(location, 4, 120);
@@ -291,7 +296,8 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
     MCParticle::ParticleFreeList & freeList = m_freeLists[Sparkle];
     if (freeList.size())
     {
-        sparkle = static_cast<MCGLPointParticle *>(freeList.back());
+        sparkle = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(sparkle);
         freeList.pop_back();
 
         sparkle->init(location, 6, 120);
@@ -308,7 +314,8 @@ void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
     MCParticle::ParticleFreeList & freeList = m_freeLists[Leaf];
     if (freeList.size())
     {
-        leaf = static_cast<MCSurfaceParticle *>(freeList.back());
+        leaf = dynamic_cast<MCSurfaceParticle *>(freeList.back());
+        assert(leaf);
         freeList.pop_back();
 
         leaf->init(location, 10, 120);

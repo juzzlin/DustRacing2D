@@ -66,7 +66,7 @@ TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
     MCUint j = y * m_rows / m_height;
     j = j >= m_rows ? m_rows - 1 : j;
 
-    return static_cast<TrackTile *>(m_pTrackData->map().getTile(i, j));
+    return static_cast<TrackTile *>(m_pTrackData->map().getTile(i, j).get());
 }
 
 TrackTile * Track::finishLine() const
@@ -76,12 +76,10 @@ TrackTile * Track::finishLine() const
     {
         for (MCUint i = 0; i < rMap.cols(); i++)
         {
-            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
             {
-                if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
-                {
-                    return pTile;
-                }
+                return pTile;
             }
         }
     }
@@ -156,16 +154,14 @@ void Track::renderAsphalt(
         x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
-            if (TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            if (pTile->hasAsphalt())
             {
-                if (pTile->hasAsphalt())
-                {
-                    x1 = x;
-                    y1 = y;
-                    camera->mapToCamera(x1, y1);
-                    prog->setTransform(0, MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
-                    m_asphalt.render();
-                }
+                x1 = x;
+                y1 = y;
+                camera->mapToCamera(x1, y1);
+                prog->setTransform(0, MCVector3dF(x1 + w / 2, y1 + h / 2, 0));
+                m_asphalt.render();
             }
 
             x += w;
@@ -204,20 +200,18 @@ void Track::renderTiles(
         x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
-            if (TrackTile * tile = static_cast<TrackTile *>(rMap.getTile(i, j)))
+            TrackTile * tile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            if (MCSurface * surface = tile->surface())
             {
-                if (MCSurface * surface = tile->surface())
-                {
-                    x1 = x;
-                    y1 = y;
-                    camera->mapToCamera(x1, y1);
+                x1 = x;
+                y1 = y;
+                camera->mapToCamera(x1, y1);
 
-                    SortedTile sortedTile;
-                    sortedTile.tile = tile;
-                    sortedTile.x1 = x1;
-                    sortedTile.y1 = y1;
-                    sortedTiles[surface].push_back(sortedTile);
-                }
+                SortedTile sortedTile;
+                sortedTile.tile = tile;
+                sortedTile.x1 = x1;
+                sortedTile.y1 = y1;
+                sortedTiles[surface].push_back(sortedTile);
             }
 
             x += w;

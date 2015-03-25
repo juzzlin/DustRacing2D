@@ -128,17 +128,18 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
         prev->setNext(tnode);
         tnode->setPrev(prev);
 
-        static_cast<TargetNode *>(prev.get())->updateRouteLine();
+        dynamic_cast<TargetNode *>(prev.get())->updateRouteLine();
     }
 
     const bool loopClosed = route.push(tnode);
 
     QGraphicsLineItem * routeLine = new QGraphicsLineItem;
-    static_cast<TargetNode *>(tnode.get())->setRouteLine(routeLine);
+    TargetNode * ptr = dynamic_cast<TargetNode *>(tnode.get());
+    ptr->setRouteLine(routeLine);
 
-    m_mainWindow->editorScene().addItem(static_cast<TargetNode *>(tnode.get()));
+    m_mainWindow->editorScene().addItem(ptr);
     m_mainWindow->editorScene().addItem(routeLine);
-    static_cast<TargetNode *>(tnode.get())->setZValue(10);
+    ptr->setZValue(10);
     routeLine->setZValue(10);
 
     // Check if we might have a loop => end
@@ -147,8 +148,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
         setMode(EditorData::EM_NONE);
         m_mainWindow->endSetRoute();
 
-        static_cast<TargetNode *>(route.get(route.numNodes() - 1).get())->setLocation(
-            static_cast<TargetNode *>(route.get(0).get())->location());
+        route.get(route.numNodes() - 1)->setLocation(route.get(0)->location());
 
         tnode->setNext(route.get(0));
         route.get(0)->setPrev(tnode);
@@ -159,10 +159,12 @@ void EditorData::removeRouteFromScene()
 {
     for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
     {
-        TargetNodePtr tnode = m_trackData->route().get(i);
-        m_mainWindow->editorScene().removeItem(static_cast<TargetNode *>(tnode.get()));
-        m_mainWindow->editorScene().removeItem(static_cast<TargetNode *>(tnode.get())->routeLine());
-        delete static_cast<TargetNode *>(tnode.get())->routeLine();
+        if (TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get()))
+        {
+            m_mainWindow->editorScene().removeItem(tnode);
+            m_mainWindow->editorScene().removeItem(tnode->routeLine());
+            delete tnode->routeLine();
+        }
     }
 
     m_mainWindow->editorView().update();
@@ -254,7 +256,7 @@ void EditorData::addTilesToScene()
     {
         for (unsigned int j = 0; j < rows; j++)
         {
-            if (TrackTile * tile = static_cast<TrackTile *>(m_trackData->map().getTile(i, j)))
+            if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get()))
             {
                 if (!tile->added())
                 {
@@ -265,9 +267,9 @@ void EditorData::addTilesToScene()
         }
     }
 
-    if (m_trackData->map().getTile(0, 0))
+    if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(0, 0).get()))
     {
-        static_cast<TrackTile *>(m_trackData->map().getTile(0, 0))->setActive(true);
+        tile->setActive(true);
     }
 }
 
@@ -298,10 +300,9 @@ void EditorData::removeTilesFromScene()
         {
             for (unsigned int j = 0; j < rows; j++)
             {
-                if (TrackTile * tile = static_cast<TrackTile *>(m_trackData->map().getTile(i, j)))
+                if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get()))
                 {
                     m_mainWindow->editorScene().removeItem(tile);
-                    delete tile;
                 }
             }
         }
