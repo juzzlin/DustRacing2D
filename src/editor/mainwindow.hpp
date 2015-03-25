@@ -115,6 +115,7 @@ private slots:
 private:
 
     void addObjectsToToolBar();
+    void fitScale();
     void init();
     bool loadObjectModels(QString objectFilePath);
     void populateMenuBar();

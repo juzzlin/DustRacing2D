@@ -595,11 +595,12 @@ bool MainWindow::doOpenTrack(QString fileName)
 
         m_editorView->setScene(m_editorScene);
         m_editorView->updateSceneRect();
-        m_editorView->ensureVisible(0, 0, 0, 0);
 
         m_editorData->addTilesToScene();
         m_editorData->addObjectsToScene();
         m_editorData->addExistingRouteToScene();
+
+        fitScale();
 
         m_saved = true;
 
@@ -679,7 +680,6 @@ void MainWindow::initializeNewTrack()
 
         m_editorView->setScene(m_editorScene);
         m_editorView->updateSceneRect();
-        m_editorView->ensureVisible(0, 0, 0, 0);
 
         // Undo stack has been cleared.
         m_undoAction->setEnabled(false);
@@ -687,6 +687,8 @@ void MainWindow::initializeNewTrack()
 
         m_editorData->addTilesToScene();
         m_editorData->addObjectsToScene();
+
+        fitScale();
 
         setActionStatesOnNewTrack();
 
@@ -794,6 +796,12 @@ void MainWindow::console(QString text)
 {
     QDateTime date = QDateTime::currentDateTime();
     m_console->append(QString("(") + date.toString("hh:mm:ss") + "): " + text);
+}
+
+void MainWindow::fitScale()
+{
+    m_editorView->centerOn(m_editorView->sceneRect().center());
+    m_scaleSlider->setValue(m_editorView->viewport()->height() * 100 / m_editorView->sceneRect().height());
 }
 
 MainWindow::~MainWindow()
