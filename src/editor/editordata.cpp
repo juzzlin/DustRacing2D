@@ -162,12 +162,12 @@ void EditorData::removeRouteFromScene()
 {
     for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
     {
-        if (TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get()))
-        {
-            m_mainWindow->editorScene().removeItem(tnode);
-            m_mainWindow->editorScene().removeItem(tnode->routeLine());
-            delete tnode->routeLine();
-        }
+        TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get());
+        assert(tnode);
+
+        m_mainWindow->editorScene().removeItem(tnode);
+        m_mainWindow->editorScene().removeItem(tnode->routeLine());
+        delete tnode->routeLine();
     }
 
     m_mainWindow->editorView().update();
@@ -259,21 +259,21 @@ void EditorData::addTilesToScene()
     {
         for (unsigned int j = 0; j < rows; j++)
         {
-            if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get()))
+            TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get());
+            assert(tile);
+
+            if (!tile->added())
             {
-                if (!tile->added())
-                {
-                    m_mainWindow->editorScene().addItem(tile);
-                    tile->setAdded(true);
-                }
+                m_mainWindow->editorScene().addItem(tile);
+                tile->setAdded(true);
             }
         }
     }
 
-    if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(0, 0).get()))
-    {
-        tile->setActive(true);
-    }
+    TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(0, 0).get());
+    assert(tile);
+
+    tile->setActive(true);
 }
 
 void EditorData::addObjectsToScene()
@@ -282,11 +282,11 @@ void EditorData::addObjectsToScene()
 
     for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
     {
-        if (Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get()))
-        {
-            m_mainWindow->editorScene().addItem(object);
-            object->setZValue(10);
-        }
+        Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get());
+        assert(object);
+
+        m_mainWindow->editorScene().addItem(object);
+        object->setZValue(10);
     }
 }
 
@@ -303,10 +303,10 @@ void EditorData::removeTilesFromScene()
         {
             for (unsigned int j = 0; j < rows; j++)
             {
-                if (TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get()))
-                {
-                    m_mainWindow->editorScene().removeItem(tile);
-                }
+                TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get());
+                assert(tile);
+
+                m_mainWindow->editorScene().removeItem(tile);
             }
         }
     }
@@ -318,10 +318,10 @@ void EditorData::removeObjectsFromScene()
     {
         for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
         {
-            if (Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get()))
-            {
-                m_mainWindow->editorScene().removeItem(object);
-            }
+            Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get());
+            assert(object);
+
+            m_mainWindow->editorScene().removeItem(object);
         }
     }
 
@@ -335,10 +335,10 @@ void EditorData::removeTargetNodesFromScene()
     {
         for (unsigned int i = 0; i < m_trackData->route().numNodes(); i++)
         {
-            if (TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get()))
-            {
-                m_mainWindow->editorScene().removeItem(tnode);
-            }
+            TargetNode * tnode = dynamic_cast<TargetNode *>(m_trackData->route().get(i).get());
+            assert(tnode);
+
+            m_mainWindow->editorScene().removeItem(tnode);
         }
     }
 }
