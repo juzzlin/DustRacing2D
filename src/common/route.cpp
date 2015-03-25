@@ -47,10 +47,7 @@ bool Route::isClosed() const
         const int dx = std::abs(m_route[0]->location().x() - m_route.back()->location().x());
         const int dy = std::abs(m_route[0]->location().y() - m_route.back()->location().y());
 
-        if (dx < CLOSING_TH && dy < CLOSING_TH)
-        {
-            return true;
-        }
+        return dx < CLOSING_TH && dy < CLOSING_TH;
     }
 
     return false;

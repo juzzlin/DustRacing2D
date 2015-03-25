@@ -139,8 +139,10 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
 
     m_mainWindow->editorScene().addItem(ptr);
     m_mainWindow->editorScene().addItem(routeLine);
-    ptr->setZValue(10);
-    routeLine->setZValue(10);
+
+    const int routeLineZ = 10;
+    ptr->setZValue(routeLineZ);
+    routeLine->setZValue(routeLineZ);
 
     // Check if we might have a loop => end
     if (loopClosed)
@@ -148,10 +150,11 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
         setMode(EditorData::EM_NONE);
         m_mainWindow->endSetRoute();
 
-        route.get(route.numNodes() - 1)->setLocation(route.get(0)->location());
+        TargetNodePtr firstNode = route.get(0);
+        route.get(route.numNodes() - 1)->setLocation(firstNode->location());
 
-        tnode->setNext(route.get(0));
-        route.get(0)->setPrev(tnode);
+        tnode->setNext(firstNode);
+        firstNode->setPrev(tnode);
     }
 }
 
