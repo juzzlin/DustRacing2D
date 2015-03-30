@@ -112,10 +112,6 @@ public slots:
 
     void exitGame();
 
-    void showCursor();
-
-    void hideCursor();
-
 private slots:
 
     void init();

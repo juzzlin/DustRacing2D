@@ -78,8 +78,15 @@ Game::Game(bool forceNoVSync)
 
     connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
     connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
-    connect(m_eventHandler, SIGNAL(cursorRevealed()), this, SLOT(showCursor()));
-    connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
+
+    connect(m_eventHandler, &EventHandler::cursorRevealed, [this] () {
+        m_renderer->setCursor(Qt::ArrowCursor);
+    });
+
+    connect(m_eventHandler, &EventHandler::cursorHid, [this] () {
+        m_renderer->setCursor(Qt::BlankCursor);
+    });
+
     connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
@@ -180,16 +187,6 @@ void Game::adjustSceneSize(int hRes, int vRes)
     // Adjust scene height so that view aspect ratio is taken into account.
     const int newSceneHeight = Scene::width() * vRes / hRes;
     Scene::setSize(Scene::width(), newSceneHeight);
-}
-
-void Game::showCursor()
-{
-    m_renderer->setCursor(Qt::ArrowCursor);
-}
-
-void Game::hideCursor()
-{
-    m_renderer->setCursor(Qt::BlankCursor);
 }
 
 void Game::setMode(Game::Mode mode)
