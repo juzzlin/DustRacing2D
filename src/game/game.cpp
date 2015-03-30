@@ -83,7 +83,7 @@ Game::Game(bool forceNoVSync)
     connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
 
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-    m_updateTimer.setInterval(1000 / 60);
+    m_updateTimer.setInterval(m_updateDelay);
 
     connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
 
