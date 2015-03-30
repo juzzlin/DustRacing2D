@@ -76,8 +76,8 @@ Game::Game(bool forceNoVSync)
 
     createRenderer(forceNoVSync);
 
-    connect(m_eventHandler, SIGNAL(pauseToggled()), this, SLOT(togglePause()));
-    connect(m_eventHandler, SIGNAL(gameExited()), this, SLOT(exitGame()));
+    connect(m_eventHandler, &EventHandler::pauseToggled, this, &Game::togglePause);
+    connect(m_eventHandler, &EventHandler::gameExited, this, &Game::exitGame);
 
     connect(m_eventHandler, &EventHandler::cursorRevealed, [this] () {
         m_renderer->setCursor(Qt::ArrowCursor);
@@ -99,7 +99,7 @@ Game::Game(bool forceNoVSync)
 
     m_updateTimer.setInterval(m_updateDelay);
 
-    connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
+    connect(m_stateMachine, &StateMachine::exitGameRequested, this, &Game::exitGame);
 
     // Add race track search paths
     m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
@@ -177,9 +177,9 @@ void Game::createRenderer(bool forceNoVSync)
 
     m_renderer->setEventHandler(*m_eventHandler);
 
-    connect(m_renderer, SIGNAL(initialized()), this, SLOT(init()));
+    connect(m_renderer, &Renderer::initialized, this, &Game::init);
 
-    connect(m_stateMachine, SIGNAL(renderingEnabled(bool)), m_renderer, SLOT(setEnabled(bool)));
+    connect(m_stateMachine, &StateMachine::renderingEnabled, m_renderer, &Renderer::setEnabled);
 }
 
 void Game::adjustSceneSize(int hRes, int vRes)

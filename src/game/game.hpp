@@ -108,13 +108,13 @@ public:
 
 public slots:
 
-    void togglePause();
-
     void exitGame();
 
 private slots:
 
     void init();
+
+    void togglePause();
 
 private:
 
