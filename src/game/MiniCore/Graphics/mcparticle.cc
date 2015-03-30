@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ MCParticle::MCParticle(const std::string & typeID)
 , m_scale(1.0)
 , m_delta(0.0)
 , m_freeList(nullptr)
+, m_customDeathCondition(nullptr)
 {
     setShape(MCShapePtr(new MCCircleShape(nullptr, 0.0)));
     setBypassCollisions(true);
@@ -118,6 +119,11 @@ void MCParticle::stepTime(MCFloat /* step */)
     {
         m_lifeTime--;
         m_scale -= m_delta;
+
+        if (m_customDeathCondition && m_customDeathCondition(*this))
+        {
+            m_lifeTime = 0;
+        }
     }
     else
     {
@@ -133,42 +139,6 @@ MCFloat MCParticle::scale() const
 void MCParticle::timeOut()
 {
     die();
-}
-
-void MCParticle::render(MCCamera * camera)
-{
-    if (animationStyle() != MCParticle::None)
-    {
-        const MCFloat d = radius() * 2;
-        shape()->renderScaled(d, d, camera);
-    }
-    else
-    {
-        shape()->render(camera);
-    }
-}
-
-void MCParticle::renderShadow(MCCamera * camera)
-{
-    if (animationStyle() != MCParticle::None)
-    {
-        const MCFloat d = radius() * 2;
-        shape()->renderShadowScaled(d, d, camera);
-    }
-    else
-    {
-        shape()->renderShadow(camera);
-    }
-}
-
-void MCParticle::beginBatch()
-{
-    // Do nothing by default.
-}
-
-void MCParticle::endBatch()
-{
-    // Do nothing by default.
 }
 
 bool MCParticle::isActive() const
@@ -196,4 +166,9 @@ void MCParticle::die()
 int MCParticle::numActiveParticles()
 {
     return MCParticle::m_numActiveParticles;
+}
+
+void MCParticle::setCustomDeathCondition(CustomDeathConditionFunction customDeathCondition)
+{
+    m_customDeathCondition = customDeathCondition;
 }

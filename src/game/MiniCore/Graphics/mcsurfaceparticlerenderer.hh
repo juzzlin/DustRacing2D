@@ -26,6 +26,7 @@
 #include "mcglvertex.hh"
 #include "mcglcolor.hh"
 #include "mcglobjectbase.hh"
+#include "mcgltexcoord.hh"
 #include "mcworldrenderer.hh"
 
 #include <vector>
@@ -35,7 +36,7 @@ class MCGLShaderProgram;
 class MCCamera;
 class MCObject;
 
-/*! Each MCSurfaceParticle id should have a corresponding MCSurfaceParticleRenderer
+/*! Each MCGLRectParticle id should have a corresponding MCSurfaceParticleRenderer
  *  registered to MCWorldRenderer. As for rendering, surface particles are special cases, because
  *  they need to be as efficient as possible. This is why a dedicated renderer is needed. */
 class MCSurfaceParticleRenderer : public MCGLObjectBase
@@ -56,9 +57,34 @@ private:
     DISABLE_COPY(MCSurfaceParticleRenderer);
     DISABLE_ASSI(MCSurfaceParticleRenderer);
 
-    int    m_maxBatchSize;
-    bool   m_useAlphaBlend;
+    /*! Populate the current batch.
+     *  \param particles The vector of particle data to be rendered.
+     *  \param camera The camera window. */
+    typedef std::vector<MCObject *> ParticleVector;
+    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr);
+
+    //! Render the current particle batch.
+    void render();
+
+    //! Render the current particle batch as shadows.
+    void renderShadows();
+
+    int m_batchSize;
+
+    int m_maxBatchSize;
+
+    MCGLVertex * m_vertices;
+
+    MCGLVertex * m_normals;
+
+    MCGLTexCoord * m_texCoords;
+
+    MCGLColor * m_colors;
+
+    bool m_useAlphaBlend;
+
     GLenum m_src;
+
     GLenum m_dst;
 
     friend class MCWorldRenderer;

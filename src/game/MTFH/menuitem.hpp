@@ -59,7 +59,8 @@ public:
 
     void setAction(MenuItemActionPtr action);
 
-    void setAction(std::function<void()> actionFunction);
+    typedef std::function<void()> ActionFunction;
+    void setAction(ActionFunction actionFunction);
 
     void setMenuOpenAction(const std::string & menuId);
 
@@ -97,7 +98,7 @@ private:
 
     MenuItemActionPtr m_action;
 
-    std::function<void()> m_actionFunction;
+    ActionFunction m_actionFunction;
 
     MenuItemViewPtr m_view;
 

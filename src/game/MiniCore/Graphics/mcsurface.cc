@@ -96,14 +96,14 @@ MCSurface::MCSurface(
         {1, 1}
     };
 
-    const GLfloat colors[COLOR_DATA_SIZE] =
+    const MCGLColor colors[NUM_VERTICES] =
     {
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor()
     };
 
     initVBOs(vertices, normals, texCoords, colors);
@@ -149,14 +149,14 @@ MCSurface::MCSurface(
         texCoords[2]
     };
 
-    const GLfloat colors[NUM_VERTICES * NUM_COLOR_COMPONENTS] =
+    const MCGLColor colors[NUM_VERTICES] =
     {
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor(),
+        MCGLColor()
     };
 
     initVBOs(vertices, normals, texCoordsAll, colors);
@@ -187,7 +187,7 @@ void MCSurface::initVBOs(
     const MCGLVertex   * vertices,
     const MCGLVertex   * normals,
     const MCGLTexCoord * texCoords,
-    const GLfloat      * colors)
+    const MCGLColor    * colors)
 {
     initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
 

@@ -76,6 +76,9 @@ public:
      *  \param batchMode \see MCShapeView::setBatchMode(). */
     MCObject(MCSurface & surface, const std::string & typeId, bool batchMode = false);
 
+    //! Return integer id corresponding to the given object name.
+    static MCUint getTypeIDForName(const std::string & typeName);
+
     /*! Destructor. It's the callers responsibility to first remove
      *  the object from MCWorld before deleting the object. */
     virtual ~MCObject();
@@ -377,9 +380,6 @@ public:
     /*! Object goes to sleep if linear and angular velocities drops below
      *  these values. The defaults are 0.01. */
     void setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit);
-
-    //! Return integer id corresponding to the given object name.
-    static MCUint getTypeIDForName(const std::string & typeName);
 
     //! Add child object. Used on composite objects.
     void addChildObject(

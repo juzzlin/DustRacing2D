@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ class MCSurface;
 /*! \class MCSurfaceParticle
  *  \brief A particle that renders as an MCSurface. Can be inherited.
  *
- *  Use MCObject::setSurface() to set the surface.
+ *  \see MCSurfaceParticleRenderer.
  */
 class MCSurfaceParticle : public MCParticle
 {
@@ -42,34 +42,21 @@ public:
     //! Constructor.
     MCSurfaceParticle(const std::string & viewId);
 
-    //! \reimp
-    virtual void renderShadow(MCCamera *) override
-    {
-        // Do nothing
-    }
+    //! Destructor.
+    virtual ~MCSurfaceParticle() {};
 
-    //! Set color.
+    //! Set color
     void setColor(const MCGLColor & color);
 
-    //! Set the surface.
-    void setSurface(MCSurface & surface);
-
-    //! Set the shader program to be used.
-    void setShaderProgram(MCGLShaderProgramPtr program);
-
-    //! Destructor.
-    virtual ~MCSurfaceParticle();
-
-    //! \reimp
-    void beginBatch() override;
-
-    //! \reimp
-    void endBatch() override;
+    //! Get the color.
+    const MCGLColor & color();
 
 private:
 
     DISABLE_COPY(MCSurfaceParticle);
     DISABLE_ASSI(MCSurfaceParticle);
+
+    MCGLColor m_color;
 };
 
 #endif // MCSURFACEPARTICLE_HH

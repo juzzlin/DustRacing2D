@@ -51,18 +51,6 @@ private:
     DISABLE_COPY(MCGLRectParticle);
     DISABLE_ASSI(MCGLRectParticle);
 
-    //! \reimp
-    void render(MCCamera *) override {}
-
-    //! \reimp
-    void renderShadow(MCCamera *) override {}
-
-    //! \reimp
-    void beginBatch() override {}
-
-    //! \reimp
-    void endBatch() override {}
-
     MCGLColor m_color;
 };
 

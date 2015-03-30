@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <MCGLColor>
 #include <MCGLPointParticle>
 #include <MCGLRectParticle>
+#include <MCParticle>
 #include <MCRandom>
 #include <MCSurfaceParticle>
 #include <MCWorld>
@@ -88,6 +89,29 @@ void ParticleFactory::preCreateRectParticles(int count,
         MCObject::getTypeIDForName(typeId), m_rectParticleRenderers[typeEnum]);
 }
 
+void ParticleFactory::preCreateSurfaceParticles(int count,
+    std::string typeId, ParticleFactory::ParticleType typeEnum)
+{
+    for (int i = 0; i < count; i++)
+    {
+        MCSurfaceParticle * particle = new MCSurfaceParticle(typeId);
+        particle->setRenderLayer(static_cast<int>(Layers::Render::Objects));
+        particle->setFreeList(m_freeLists[typeEnum]);
+        particle->setCustomDeathCondition([] (MCParticle & self) {
+            return self.location().k() <= 0;
+        });
+
+        // Initially push to list of free particles
+        m_freeLists[typeEnum].push_back(particle);
+
+        // Store for deletion
+        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
+    }
+
+    MCWorld::instance().renderer().registerSurfaceParticleRenderer(
+        MCObject::getTypeIDForName(typeId), m_surfaceParticleRenderers[typeEnum]);
+}
+
 int scalePointSizeWithResolution(int size)
 {
     const int referenceWidth = 1600;
@@ -135,20 +159,11 @@ void ParticleFactory::preCreateParticles()
     m_pointParticleRenderers[Sparkle].setMaterial(MCAssetManager::surfaceManager().surface("sparkle").material());
     m_pointParticleRenderers[Sparkle].setAlphaBlend(true);
 
-    // Pre-create some leaf particles
-    for (int i = 0; i < 100; i++)
-    {
-        MCSurfaceParticle * particle = new MCSurfaceParticle("LEAF");
-        particle->setSurface(MCAssetManager::surfaceManager().surface("leaf"));
-        particle->setRenderLayer(static_cast<int>(Layers::Render::Objects));
-        particle->setFreeList(m_freeLists[Leaf]);
-
-        // Initially push to list of free particles
-        m_freeLists[Leaf].push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
-    }
+    preCreateSurfaceParticles(100, "LEAF", Leaf);
+    m_surfaceParticleRenderers[Leaf].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[Leaf].setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
+    m_surfaceParticleRenderers[Leaf].setMaterial(MCAssetManager::surfaceManager().surface("leaf").material());
+    m_surfaceParticleRenderers[Leaf].setAlphaBlend(false);
 
     updatePointSizes();
 }
@@ -318,14 +333,14 @@ void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
         assert(leaf);
         freeList.pop_back();
 
-        leaf->init(location, 10, 120);
+        leaf->init(location, 10, 360);
         leaf->setAnimationStyle(MCParticle::Shrink);
         leaf->rotate(MCRandom::getValue() * 360);
         leaf->setColor(MCGLColor(0.0, 0.75, 0.0, 0.75));
         leaf->setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());
         leaf->setAngularVelocity((MCRandom::getValue() - 0.5) * 10.0f);
         leaf->setMomentOfInertia(1.0);
-        leaf->setAcceleration(MCVector3dF(0, 0, -5.0f));
+        leaf->setAcceleration(MCVector3dF(0, 0, -2.5f));
         leaf->addToWorld();
     }
 }

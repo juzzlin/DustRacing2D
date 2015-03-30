@@ -156,7 +156,7 @@ private:
         const MCGLVertex   * vertices,
         const MCGLVertex   * normals,
         const MCGLTexCoord * texCoords,
-        const GLfloat      * colors);
+        const MCGLColor    * colors);
 
     MCFloat     m_w;
     MCFloat     m_w2;

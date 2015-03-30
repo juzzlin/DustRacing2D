@@ -90,7 +90,7 @@ void MenuItem::setAction(MenuItemActionPtr action)
     m_action = action;
 }
 
-void MenuItem::setAction(std::function<void()> actionFunction)
+void MenuItem::setAction(ActionFunction actionFunction)
 {
     m_actionFunction = actionFunction;
 }

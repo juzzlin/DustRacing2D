@@ -41,20 +41,9 @@ public:
 
 private:
 
-    //! \reimp
-    void render(MCCamera *) override {}
-
-    //! \reimp
-    void renderShadow(MCCamera *) override {}
-
-    //! \reimp
-    void beginBatch() override {}
-
-    //! \reimp
-    void endBatch() override {}
-
     DISABLE_COPY(MCGLPointParticle);
     DISABLE_ASSI(MCGLPointParticle);
+
     MCGLColor m_color;
 };
 

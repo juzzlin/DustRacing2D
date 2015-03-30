@@ -64,10 +64,10 @@ private:
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
     typedef std::vector<MCObject *> ParticleVector;
-    virtual void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr);
+    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr);
 
     //! Render the current particle batch.
-    virtual void render();
+    void render();
 
     int          m_batchSize;
     int          m_maxBatchSize;

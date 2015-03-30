@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include <MCParticle>
 #include <MCGLPointParticleRenderer>
 #include <MCGLRectParticleRenderer>
+#include <MCSurfaceParticleRenderer>
 #include <MCTypes>
 #include <MCVector3d>
 
@@ -83,6 +84,8 @@ private:
 
     void preCreateRectParticles(int count, std::string typeId, ParticleType typeEnum);
 
+    void preCreateSurfaceParticles(int count, std::string typeId, ParticleType typeEnum);
+
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];
 
@@ -91,6 +94,9 @@ private:
 
     // Renderers for different rect particle types.
     MCGLRectParticleRenderer m_rectParticleRenderers[NumParticleTypes];
+
+    // Renderers for different surface particle types.
+    MCSurfaceParticleRenderer m_surfaceParticleRenderers[NumParticleTypes];
 
     // Particles to delete.
     std::vector<std::unique_ptr<MCParticle> > m_delete;

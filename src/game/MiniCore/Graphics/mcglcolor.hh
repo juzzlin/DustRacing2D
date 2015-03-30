@@ -26,7 +26,7 @@ class MCGLColor
 {
 public:
 
-    explicit MCGLColor(GLfloat r = 1.0, GLfloat g = 1.0, GLfloat b = 1.0, GLfloat a = 1.0)
+    explicit MCGLColor(GLfloat r = 1.0f, GLfloat g = 1.0f, GLfloat b = 1.0f, GLfloat a = 1.0f)
     : m_r(r), m_g(g), m_b(b), m_a(a)
     {
     }

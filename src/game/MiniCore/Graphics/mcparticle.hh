@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include "mcobject.hh"
 #include "mcrecycler.hh"
 
+#include <functional>
 #include <vector>
 
 /*! \class MCParticle
@@ -89,20 +90,14 @@ public:
   //! \reimp
   virtual void stepTime(MCFloat step) override;
 
-  //! \reimp
-  virtual void render(MCCamera * camera = nullptr) override;
-
-  //! \reimp
-  virtual void renderShadow(MCCamera * camera = nullptr) override;
-
-  //! Called when a render batch of a particle type begins.
-  virtual void beginBatch();
-
-  //! Called when a render batch of a particle type ends.
-  virtual void endBatch();
-
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;
+
+  /*! Set custom death condition function.
+   *  The function will be called on each update with this as the parameter.
+   *  If the function returns true, the particle will be killed. */
+  typedef std::function<bool(MCParticle &)> CustomDeathConditionFunction;
+  void setCustomDeathCondition(CustomDeathConditionFunction customDeathCondition);
 
   //! Get number of active particles.
   static int numActiveParticles();
@@ -122,14 +117,24 @@ private:
   DISABLE_ASSI(MCParticle);
 
   MCUint m_lifeTime;
+
   MCUint m_initLifeTime;
+
   MCParticle::AnimationStyle m_animationStyle;
+
   bool m_isActive;
+
   bool m_dieWhenOffScreen;
+
   MCFloat m_scale;
+
   MCFloat m_delta;
+
   MCFloat m_radius;
+
   MCParticle::ParticleFreeList * m_freeList;
+
+  CustomDeathConditionFunction m_customDeathCondition;
 };
 
 #endif // MCPARTICLE_HH
