@@ -82,7 +82,14 @@ Game::Game(bool forceNoVSync)
     connect(m_eventHandler, SIGNAL(cursorHid()), this, SLOT(hideCursor()));
     connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
 
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+    connect(&m_updateTimer, &QTimer::timeout, [this] () {
+        m_stateMachine->update();
+        m_scene->updateFrame(*m_inputHandler, m_timeStep);
+        m_scene->updateAnimations();
+        m_scene->updateOverlays();
+        m_renderer->renderNow();
+    });
+
     m_updateTimer.setInterval(m_updateDelay);
 
     connect(m_stateMachine, SIGNAL(exitGameRequested()), this, SLOT(exitGame()));
@@ -340,15 +347,6 @@ void Game::exitGame()
     m_audioThread.wait();
 
     QApplication::quit();
-}
-
-void Game::updateFrame()
-{
-    m_stateMachine->update();
-    m_scene->updateFrame(*m_inputHandler, m_timeStep);
-    m_scene->updateAnimations();
-    m_scene->updateOverlays();
-    m_renderer->renderNow();
 }
 
 Game::~Game()

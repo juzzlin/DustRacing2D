@@ -118,8 +118,6 @@ public slots:
 
 private slots:
 
-    void updateFrame();
-
     void init();
 
 private:
