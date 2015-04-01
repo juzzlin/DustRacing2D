@@ -220,10 +220,7 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
                 event.contactPoint(), m_car.velocity() * 0.1);
         }
-        // Check if the car is colliding with trees or plants.
-        else if (
-            event.collidingObject().typeID() == tree ||
-            event.collidingObject().typeID() == plant)
+        else if (event.collidingObject().typeID() == tree)
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
                 event.contactPoint(), m_car.velocity() * 0.1);
