@@ -129,11 +129,6 @@ void ParticleFactory::updatePointSizes()
 
 void ParticleFactory::preCreateParticles()
 {
-    preCreateRectParticles(500, "MUD", Mud);
-    m_rectParticleRenderers[Mud].setShaderProgram(Renderer::instance().program("particle"));
-    m_rectParticleRenderers[Mud].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_rectParticleRenderers[Mud].setAlphaBlend(true);
-
     preCreatePointParticles(500, "ONSKID", OnTrackSkidMark, MCGLColor(0.1f, 0.1f, 0.1f, 0.95f));
     m_pointParticleRenderers[OnTrackSkidMark].setShaderProgram(Renderer::instance().program("pointParticleRotate"));
     m_pointParticleRenderers[OnTrackSkidMark].setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
@@ -164,6 +159,12 @@ void ParticleFactory::preCreateParticles()
     m_surfaceParticleRenderers[Leaf].setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
     m_surfaceParticleRenderers[Leaf].setMaterial(MCAssetManager::surfaceManager().surface("leaf").material());
     m_surfaceParticleRenderers[Leaf].setAlphaBlend(false);
+
+    preCreateSurfaceParticles(500, "MUD", Mud);
+    m_surfaceParticleRenderers[Mud].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[Mud].setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
+    m_surfaceParticleRenderers[Mud].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
+    m_surfaceParticleRenderers[Mud].setAlphaBlend(false);
 
     updatePointSizes();
 }
@@ -286,20 +287,20 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
 
 void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    MCGLRectParticle * mud = nullptr;
+    MCSurfaceParticle * mud = nullptr;
     MCParticle::ParticleFreeList & freeList = m_freeLists[Mud];
     if (freeList.size())
     {
-        mud = dynamic_cast<MCGLRectParticle *>(freeList.back());
+        mud = dynamic_cast<MCSurfaceParticle *>(freeList.back());
         assert(mud);
         freeList.pop_back();
 
-        mud->init(location, 4, 120);
+        mud->init(location, 4, 180);
         mud->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 1.0f));
         mud->setAnimationStyle(MCParticle::Shrink);
         mud->rotate(MCRandom::getValue() * 360);
         mud->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
-        mud->setAcceleration(MCVector3dF(0, 0, -10.0f));
+        mud->setAcceleration(MCWorld::instance().gravity());
         mud->setRenderLayer(static_cast<int>(Layers::Render::Mud));
         mud->addToWorld();
     }
