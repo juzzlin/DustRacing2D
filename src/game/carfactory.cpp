@@ -30,6 +30,10 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         {NUM_CARS - 4, "carBlue"     },
         {NUM_CARS - 5, "carDarkGreen"},
         {NUM_CARS - 6, "carBrown"    },
+        {NUM_CARS - 7, "carCyan"     },
+        {NUM_CARS - 8, "carViolet"   },
+        {NUM_CARS - 9, "carGreen"    },
+        {NUM_CARS - 10,"carDarkRed"  },
         {1,            "carGrey"     },
         {0,            "carPink"     }
     };
