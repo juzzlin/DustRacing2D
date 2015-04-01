@@ -193,6 +193,7 @@ TrackObject * TrackObjectFactory::build(
         data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
