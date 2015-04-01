@@ -43,6 +43,9 @@ public:
     //! Return a random 3d vector
     static MCVector3d<MCFloat> randomVector3d();
 
+    //! Return a random 3d vector with a positive Z only
+    static MCVector3d<MCFloat> randomVector3dPositiveZ();
+
 private:
 
     //! Constructor disabled

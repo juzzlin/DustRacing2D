@@ -42,7 +42,12 @@ public:
 
     MCWorldRenderer();
 
+    /*! Enables/disables depth test on given render layer. Default is true. */
     void enableDepthTestOnLayer(int layer, bool enable = true);
+
+    /*! Enables/disables depth mask (write to depth buffer) on given render layer.
+     *  Default is true. */
+    void enableDepthMaskOnLayer(int layer, bool enable = true);
 
     /*! Each used MCGLPointParticle type should have a corresponding MCGLPointParticleRenderer
      *  registered in MCWorld. As for rendering, point particles are special cases, because

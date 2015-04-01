@@ -169,8 +169,12 @@ void MCWorldRenderer::renderBatches(MCCamera * camera, const std::vector<int> & 
                 glDisable(GL_DEPTH_TEST);
             }
 
+            glDepthMask(layer.depthMaskEnabled());
+
             renderObjectBatches(camera, layer);
             renderParticleBatches(camera, layer);
+
+            glDepthMask(GL_TRUE);
         }
 
         layerIter++;
@@ -330,6 +334,11 @@ void MCWorldRenderer::enableDepthTestOnLayer(int layer, bool enable)
     m_layers[layer].setDepthTestEnabled(enable);
 }
 
+void MCWorldRenderer::enableDepthMaskOnLayer(int layer, bool enable)
+{
+    m_layers[layer].setDepthMaskEnabled(enable);
+}
+
 void MCWorldRenderer::addToLayerMap(MCObject & object)
 {
     m_layers[object.renderLayer()].objectSet().insert(&object);
@@ -352,5 +361,10 @@ void MCWorldRenderer::removeParticleVisibilityCameras()
 
 void MCWorldRenderer::clear()
 {
-    m_layers.clear();
+    auto layerIter = m_layers.begin();
+    while (layerIter != m_layers.end())
+    {
+        layerIter->second.clear();
+        layerIter++;
+    }
 }

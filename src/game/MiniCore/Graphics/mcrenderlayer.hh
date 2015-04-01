@@ -33,9 +33,15 @@ public:
 
     MCRenderLayer();
 
+    void clear();
+
     void setDepthTestEnabled(bool enable);
 
     bool depthTestEnabled() const;
+
+    void setDepthMaskEnabled(bool enable);
+
+    bool depthMaskEnabled() const;
 
     typedef std::unordered_set<MCObject *> ObjectSet;
 
@@ -52,6 +58,8 @@ public:
 private:
 
     bool m_depthTestEnabled;
+
+    bool m_depthMaskEnabled;
 
     ObjectSet m_objectSet;
 

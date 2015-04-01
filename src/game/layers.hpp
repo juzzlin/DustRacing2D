@@ -24,9 +24,8 @@ namespace Layers {
 enum class Render : int
 {
     Ground      = 0,
-    Mud         = 1,
-    Objects     = 2,
-    Smoke       = 3
+    Objects     = 1,
+    Smoke       = 2
 };
 
 /*! Define the collision layers for different kinds of objects. */

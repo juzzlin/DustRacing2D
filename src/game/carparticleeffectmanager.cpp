@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,10 +15,15 @@
 
 #include "carparticleeffectmanager.hpp"
 #include "car.hpp"
-#include "particlefactory.hpp"
 
 #include <cmath>
 #include <MCCollisionEvent>
+
+namespace {
+static const int SKID_MARK_DENSITY = 8;
+static const int NEW_SKID_LIMIT = SKID_MARK_DENSITY * 4;
+static const int OFF_TRACK_ANIMATION_SPEED_MIN = 10;
+}
 
 CarParticleEffectManager::CarParticleEffectManager(Car & car)
 : m_car(car)
@@ -35,95 +40,64 @@ void CarParticleEffectManager::update()
     doOffTrackAnimations();
 }
 
+MCFloat CarParticleEffectManager::calculateSkidAngle(MCFloat distance, double dx, double dy)
+{
+    return distance > NEW_SKID_LIMIT ? m_car.angle() : std::atan2(dy, dx) * 180 / 3.1415;
+}
+
+void CarParticleEffectManager::doLeftSkidMark(ParticleFactory::ParticleType type)
+{
+    const MCVector2dF skidLocation(m_car.leftRearTireLocation());
+    const MCFloat distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
+    if (distance > SKID_MARK_DENSITY)
+    {
+        const double dx = skidLocation.i() - m_prevLeftSkidMarkLocation.i();
+        const double dy = skidLocation.j() - m_prevLeftSkidMarkLocation.j();
+        const int angle = static_cast<int>(calculateSkidAngle(distance, dx, dy));
+        ParticleFactory::instance().doParticle(type, skidLocation, MCVector3dF(0, 0, 0), angle);
+        m_prevLeftSkidMarkLocation = skidLocation;
+    }
+}
+
+void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType type)
+{
+    const MCVector2dF skidLocation(m_car.rightRearTireLocation());
+    const MCFloat distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
+    if (distance > SKID_MARK_DENSITY)
+    {
+        const double dx = skidLocation.i() - m_prevRightSkidMarkLocation.i();
+        const double dy = skidLocation.j() - m_prevRightSkidMarkLocation.j();
+        const int angle = static_cast<int>(calculateSkidAngle(distance, dx, dy));
+        ParticleFactory::instance().doParticle(type, skidLocation, MCVector3dF(0, 0, 0), angle);
+        m_prevRightSkidMarkLocation = skidLocation;
+    }
+}
+
 void CarParticleEffectManager::doOnTrackAnimations()
 {
     if (m_car.isBraking() && m_car.speedInKmh() > 5 && m_car.speedInKmh() < 100)
     {
-        const int skidMarkDensity = 16;
-        const int newSkidLimit    = skidMarkDensity * 4;
-
         if (!m_car.leftSideOffTrack())
         {
-            const MCVector2dF skidLocation(m_car.leftRearTireLocation());
-            const MCFloat distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
-            if (distance > skidMarkDensity)
-            {
-                const double dx = skidLocation.i() - m_prevLeftSkidMarkLocation.i();
-                const double dy = skidLocation.j() - m_prevLeftSkidMarkLocation.j();
-
-                int angle = 0;
-                if (distance > newSkidLimit)
-                {
-                    angle = m_car.angle();
-                }
-                else
-                {
-                    angle = static_cast<int>(std::atan2(dy, dx) * 180 / 3.1415);
-                }
-
-                ParticleFactory::instance().doParticle(
-                    ParticleFactory::OnTrackSkidMark, skidLocation, MCVector3dF(0, 0, 0), angle);
-                m_prevLeftSkidMarkLocation = skidLocation;
-            }
+            doLeftSkidMark(ParticleFactory::OnTrackSkidMark);
         }
 
         if (!m_car.rightSideOffTrack())
         {
-            const MCVector2dF skidLocation(m_car.rightRearTireLocation());
-            const MCFloat distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
-            if (distance > skidMarkDensity)
-            {
-                const double dx = skidLocation.i() - m_prevRightSkidMarkLocation.i();
-                const double dy = skidLocation.j() - m_prevRightSkidMarkLocation.j();
-
-                int angle = 0;
-                if (distance > newSkidLimit)
-                {
-                    angle = m_car.angle();
-                }
-                else
-                {
-                    angle = static_cast<int>(std::atan2(dy, dx) * 180 / 3.1415);
-                }
-
-                ParticleFactory::instance().doParticle(
-                    ParticleFactory::OnTrackSkidMark, skidLocation, MCVector3dF(0, 0, 0), angle);
-                m_prevRightSkidMarkLocation = skidLocation;
-            }
+            doRightSkidMark(ParticleFactory::OnTrackSkidMark);
         }
     }
 }
 
 void CarParticleEffectManager::doOffTrackAnimations()
 {
-    if (std::abs(m_car.speedInKmh()) > 10)
+    if (std::abs(m_car.speedInKmh()) > OFF_TRACK_ANIMATION_SPEED_MIN)
     {
-        const int skidMarkDensity = 16;
-        const int newSkidLimit    = skidMarkDensity * 4;
         bool smoke = false;
+
         if (m_car.leftSideOffTrack())
         {
-            const MCVector2dF skidLocation(m_car.leftRearTireLocation());
-            const MCFloat distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
-            if (distance > skidMarkDensity)
-            {
-                const double dx = skidLocation.i() - m_prevLeftSkidMarkLocation.i();
-                const double dy = skidLocation.j() - m_prevLeftSkidMarkLocation.j();
-
-                int angle = 0;
-                if (distance > newSkidLimit)
-                {
-                    angle = m_car.angle();
-                }
-                else
-                {
-                    angle = static_cast<int>(std::atan2(dy, dx) * 180 / 3.1415);
-                }
-
-                ParticleFactory::instance().doParticle(
-                    ParticleFactory::OffTrackSkidMark, skidLocation, MCVector3dF(0, 0, 0), angle);
-                m_prevLeftSkidMarkLocation = skidLocation;
-            }
+            doLeftSkidMark(ParticleFactory::OffTrackSkidMark);
 
             smoke = true;
 
@@ -137,27 +111,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
 
         if (m_car.rightSideOffTrack())
         {
-            const MCVector2dF skidLocation(m_car.rightRearTireLocation());
-            const MCFloat distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
-            if (distance > skidMarkDensity)
-            {
-                const double dx = skidLocation.i() - m_prevRightSkidMarkLocation.i();
-                const double dy = skidLocation.j() - m_prevRightSkidMarkLocation.j();
-
-                int angle = 0;
-                if (distance > newSkidLimit)
-                {
-                    angle = m_car.angle();
-                }
-                else
-                {
-                    angle = static_cast<int>(std::atan2(dy, dx) * 180 / 3.1415);
-                }
-
-                ParticleFactory::instance().doParticle(
-                    ParticleFactory::OffTrackSkidMark, skidLocation, MCVector3dF(0, 0, 0), angle);
-                m_prevRightSkidMarkLocation = skidLocation;
-            }
+            doRightSkidMark(ParticleFactory::OffTrackSkidMark);
 
             smoke = true;
 
@@ -190,7 +144,6 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
     static MCUint wallLong           = MCObject::typeID("wallLong");
     static MCUint rock               = MCObject::typeID("rock");
     static MCUint tree               = MCObject::typeID("tree");
-    static MCUint plant              = MCObject::typeID("plant");
 
     if (m_car.velocity().lengthFast() > 4.0)
     {

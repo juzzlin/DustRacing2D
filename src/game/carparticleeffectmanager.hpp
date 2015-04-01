@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2013 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #define CARPARTICLEEFFECTMANAGER_HPP
 
 #include <MCVector2d>
+
+#include "particlefactory.hpp"
 
 class Car;
 class MCCollisionEvent;
@@ -38,6 +40,12 @@ private:
     void doOnTrackAnimations();
 
     void doOffTrackAnimations();
+
+    void doLeftSkidMark(ParticleFactory::ParticleType type);
+
+    void doRightSkidMark(ParticleFactory::ParticleType type);
+
+    MCFloat calculateSkidAngle(MCFloat distance, double dx, double dy);
 
     Car &       m_car;
     int         m_sparkleCounter;

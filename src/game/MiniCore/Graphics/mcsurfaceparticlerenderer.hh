@@ -52,6 +52,8 @@ public:
     virtual void setAlphaBlend(
         bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
 
+    virtual void setHasShadow(bool hasShadow);
+
 private:
 
     DISABLE_COPY(MCSurfaceParticleRenderer);
@@ -86,6 +88,8 @@ private:
     GLenum m_src;
 
     GLenum m_dst;
+
+    bool m_hasShadow;
 
     friend class MCWorldRenderer;
 };

@@ -120,8 +120,6 @@ int scalePointSizeWithResolution(int size)
 
 void ParticleFactory::updatePointSizes()
 {
-    m_pointParticleRenderers[OnTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
-    m_pointParticleRenderers[OffTrackSkidMark].setPointSize(scalePointSizeWithResolution(32));
     m_pointParticleRenderers[Smoke].setPointSize(scalePointSizeWithResolution(32));
     m_pointParticleRenderers[OffTrackSmoke].setPointSize(scalePointSizeWithResolution(48));
     m_pointParticleRenderers[Sparkle].setPointSize(scalePointSizeWithResolution(16));
@@ -129,25 +127,15 @@ void ParticleFactory::updatePointSizes()
 
 void ParticleFactory::preCreateParticles()
 {
-    preCreatePointParticles(500, "ONSKID", OnTrackSkidMark, MCGLColor(0.1f, 0.1f, 0.1f, 0.95f));
-    m_pointParticleRenderers[OnTrackSkidMark].setShaderProgram(Renderer::instance().program("pointParticleRotate"));
-    m_pointParticleRenderers[OnTrackSkidMark].setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
-    m_pointParticleRenderers[OnTrackSkidMark].setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "SMOKE", Smoke);
+    m_surfaceParticleRenderers[Smoke].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[Smoke].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
+    m_surfaceParticleRenderers[Smoke].setAlphaBlend(true);
 
-    preCreatePointParticles(500, "OFFSKID", OffTrackSkidMark, MCGLColor(0.3f, 0.2f, 0.0f, 0.95f));
-    m_pointParticleRenderers[OffTrackSkidMark].setShaderProgram(Renderer::instance().program("pointParticleRotate"));
-    m_pointParticleRenderers[OffTrackSkidMark].setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
-    m_pointParticleRenderers[OffTrackSkidMark].setAlphaBlend(true);
-
-    preCreatePointParticles(500, "SMOKE", Smoke, MCGLColor(0.75f, 0.75f, 0.75f, 0.75f));
-    m_pointParticleRenderers[Smoke].setShaderProgram(Renderer::instance().program("pointParticle"));
-    m_pointParticleRenderers[Smoke].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_pointParticleRenderers[Smoke].setAlphaBlend(true);
-
-    preCreatePointParticles(500, "OFFSMOKE", OffTrackSmoke, MCGLColor(0.6f, 0.4f, 0.0f, 0.5f));
-    m_pointParticleRenderers[OffTrackSmoke].setShaderProgram(Renderer::instance().program("pointParticle"));
-    m_pointParticleRenderers[OffTrackSmoke].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_pointParticleRenderers[OffTrackSmoke].setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "OFFSMOKE", OffTrackSmoke);
+    m_surfaceParticleRenderers[OffTrackSmoke].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[OffTrackSmoke].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
+    m_surfaceParticleRenderers[OffTrackSmoke].setAlphaBlend(true);
 
     preCreatePointParticles(500, "SPARKLE", Sparkle, MCGLColor(1.0f, 0.75f, 0.0f, 1.0f));
     m_pointParticleRenderers[Sparkle].setShaderProgram(Renderer::instance().program("pointParticle"));
@@ -159,12 +147,24 @@ void ParticleFactory::preCreateParticles()
     m_surfaceParticleRenderers[Leaf].setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
     m_surfaceParticleRenderers[Leaf].setMaterial(MCAssetManager::surfaceManager().surface("leaf").material());
     m_surfaceParticleRenderers[Leaf].setAlphaBlend(false);
+    m_surfaceParticleRenderers[Leaf].setHasShadow(true);
 
     preCreateSurfaceParticles(500, "MUD", Mud);
     m_surfaceParticleRenderers[Mud].setShaderProgram(Renderer::instance().program("default"));
     m_surfaceParticleRenderers[Mud].setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
     m_surfaceParticleRenderers[Mud].setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
     m_surfaceParticleRenderers[Mud].setAlphaBlend(false);
+    m_surfaceParticleRenderers[Mud].setHasShadow(true);
+
+    preCreateSurfaceParticles(500, "ONSKID", OnTrackSkidMark);
+    m_surfaceParticleRenderers[OnTrackSkidMark].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[OnTrackSkidMark].setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
+    m_surfaceParticleRenderers[OnTrackSkidMark].setAlphaBlend(true);
+
+    preCreateSurfaceParticles(500, "OFFSKID", OffTrackSkidMark);
+    m_surfaceParticleRenderers[OffTrackSkidMark].setShaderProgram(Renderer::instance().program("default"));
+    m_surfaceParticleRenderers[OffTrackSkidMark].setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
+    m_surfaceParticleRenderers[OffTrackSkidMark].setAlphaBlend(true);
 
     updatePointSizes();
 }
@@ -207,20 +207,43 @@ void ParticleFactory::doParticle(
     };
 }
 
-void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) const
+MCSurfaceParticle * ParticleFactory::newSurfaceParticle(ParticleType typeEnum) const
 {
-    MCGLPointParticle * smoke = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[Smoke];
+    MCSurfaceParticle * p = nullptr;
+    MCParticle::ParticleFreeList & freeList = m_freeLists[typeEnum];
     if (freeList.size())
     {
-        smoke = dynamic_cast<MCGLPointParticle *>(freeList.back());
-        assert(smoke);
+        p = dynamic_cast<MCSurfaceParticle *>(freeList.back());
+        assert(p);
         freeList.pop_back();
+    }
 
-        smoke->init(location, 10, 180);
+    return p;
+}
+
+MCGLPointParticle * ParticleFactory::newPointParticle(ParticleType typeEnum) const
+{
+    MCGLPointParticle * p = nullptr;
+    MCParticle::ParticleFreeList & freeList = m_freeLists[typeEnum];
+    if (freeList.size())
+    {
+        p = dynamic_cast<MCGLPointParticle *>(freeList.back());
+        assert(p);
+        freeList.pop_back();
+    }
+
+    return p;
+}
+
+void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) const
+{
+    if (MCSurfaceParticle * smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    {
+        smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
+        smoke->setColor(MCGLColor(0.75f, 0.75f, 0.75f, 0.5f));
         smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
-        smoke->setVelocity(MCVector2dF(velocity) + MCRandom::randomVector2d() * 0.1f);
+        smoke->setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.1f);
         smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         smoke->addToWorld();
     }
@@ -228,34 +251,24 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
 
 void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
 {
-    MCGLPointParticle * smoke = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[OffTrackSmoke];
-    if (freeList.size())
+    if (MCSurfaceParticle * smoke = ParticleFactory::newSurfaceParticle(OffTrackSmoke))
     {
-        smoke = dynamic_cast<MCGLPointParticle *>(freeList.back());
-        assert(smoke);
-        freeList.pop_back();
-
-        smoke->init(location, 10, 180);
+        smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
+        smoke->setColor(MCGLColor(0.6f, 0.4f, 0.0f, 0.5f));
         smoke->setAnimationStyle(MCParticle::FadeOut);
         smoke->rotate(MCRandom::getValue() * 360);
-        smoke->setVelocity(MCRandom::randomVector2d() * 0.1f);
-        smoke->setRenderLayer(static_cast<int>(Layers::Render::Ground));
+        smoke->setVelocity(MCRandom::randomVector3dPositiveZ() * 0.1f);
+        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         smoke->addToWorld();
     }
 }
 
 void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
 {
-    MCGLPointParticle * skidMark = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[OnTrackSkidMark];
-    if (freeList.size())
+    if (MCSurfaceParticle * skidMark = newSurfaceParticle(OnTrackSkidMark))
     {
-        skidMark = dynamic_cast<MCGLPointParticle *>(freeList.back());
-        assert(skidMark);
-        freeList.pop_back();
-
-        skidMark->init(location, 4, 1000);
+        skidMark->init(location + MCVector3dF(0, 0, 1), 8, 1000);
+        skidMark->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 1.0f));
         skidMark->setAnimationStyle(MCParticle::FadeOut);
         skidMark->rotate(angle);
         skidMark->setVelocity(MCVector3dF(0, 0, 0));
@@ -267,15 +280,10 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
 
 void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
 {
-    MCGLPointParticle * skidMark = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[OffTrackSkidMark];
-    if (freeList.size())
+    if (MCSurfaceParticle * skidMark = newSurfaceParticle(OffTrackSkidMark))
     {
-        skidMark = dynamic_cast<MCGLPointParticle *>(freeList.back());
-        assert(skidMark);
-        freeList.pop_back();
-
-        skidMark->init(location, 4, 1000);
+        skidMark->init(location + MCVector3dF(0, 0, 1), 8, 1000);
+        skidMark->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 1.0f));
         skidMark->setAnimationStyle(MCParticle::FadeOut);
         skidMark->rotate(angle);
         skidMark->setVelocity(MCVector3dF(0, 0, 0));
@@ -287,35 +295,22 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
 
 void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    MCSurfaceParticle * mud = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[Mud];
-    if (freeList.size())
+    if (MCSurfaceParticle * mud = newSurfaceParticle(Mud))
     {
-        mud = dynamic_cast<MCSurfaceParticle *>(freeList.back());
-        assert(mud);
-        freeList.pop_back();
-
         mud->init(location, 4, 180);
         mud->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 1.0f));
         mud->setAnimationStyle(MCParticle::Shrink);
-        mud->rotate(MCRandom::getValue() * 360);
         mud->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         mud->setAcceleration(MCWorld::instance().gravity());
-        mud->setRenderLayer(static_cast<int>(Layers::Render::Mud));
+        mud->setRenderLayer(static_cast<int>(Layers::Render::Objects));
         mud->addToWorld();
     }
 }
 
 void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    MCGLPointParticle * sparkle = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[Sparkle];
-    if (freeList.size())
+    if (MCGLPointParticle * sparkle = ParticleFactory::newPointParticle(Sparkle))
     {
-        sparkle = dynamic_cast<MCGLPointParticle *>(freeList.back());
-        assert(sparkle);
-        freeList.pop_back();
-
         sparkle->init(location, 6, 120);
         sparkle->setAnimationStyle(MCParticle::FadeOut);
         sparkle->setVelocity(velocity);
@@ -326,14 +321,8 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
 
 void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    MCSurfaceParticle * leaf = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[Leaf];
-    if (freeList.size())
+    if (MCSurfaceParticle * leaf = newSurfaceParticle(Leaf))
     {
-        leaf = dynamic_cast<MCSurfaceParticle *>(freeList.back());
-        assert(leaf);
-        freeList.pop_back();
-
         leaf->init(location, 10, 360);
         leaf->setAnimationStyle(MCParticle::Shrink);
         leaf->rotate(MCRandom::getValue() * 360);

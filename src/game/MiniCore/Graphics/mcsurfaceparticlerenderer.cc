@@ -21,6 +21,8 @@
 #include "mcsurfaceparticle.hh"
 #include "mctrigonom.hh"
 
+#include <algorithm>
+
 namespace {
 #ifdef __MC_GLES__
 const int NUM_VERTICES_PER_PARTICLE = 6;
@@ -39,6 +41,7 @@ MCSurfaceParticleRenderer::MCSurfaceParticleRenderer(int maxBatchSize)
     , m_useAlphaBlend(false)
     , m_src(0)
     , m_dst(0)
+    , m_hasShadow(false)
 {
     const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -68,10 +71,19 @@ void MCSurfaceParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GL
     m_dst           = dst;
 }
 
-void MCSurfaceParticleRenderer::setBatch(
-    const MCSurfaceParticleRenderer::ParticleVector & particles, MCCamera * camera)
+void MCSurfaceParticleRenderer::setHasShadow(bool hasShadow)
 {
+    m_hasShadow = hasShadow;
+}
+
+void MCSurfaceParticleRenderer::setBatch(
+    const MCSurfaceParticleRenderer::ParticleVector & particles_, MCCamera * camera)
+{
+    MCSurfaceParticleRenderer::ParticleVector particles = std::move(particles_);
     m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
+    std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
+        return l->location().k() < r->location().k();
+    });
 
     const int NUM_VERTICES = m_batchSize * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -134,13 +146,8 @@ void MCSurfaceParticleRenderer::setBatch(
 
         for (int j = 0; j < NUM_VERTICES_PER_PARTICLE; j++)
         {
-            const MCFloat vertexX = vertices[j].x() * particle->radius() * particle->scale();
-            const MCFloat vertexY = vertices[j].y() * particle->radius() * particle->scale();
-            m_vertices[vertexIndex] =
-                MCGLVertex(
-                    x + MCTrigonom::rotatedX(vertexX, vertexY, particle->angle()),
-                    y + MCTrigonom::rotatedY(vertexX, vertexY, particle->angle()),
-                    z);
+            MCFloat vertexX = vertices[j].x() * particle->radius();
+            MCFloat vertexY = vertices[j].y() * particle->radius();
 
             m_colors[vertexIndex] = particle->color();
             if (particle->animationStyle() == MCParticle::FadeOut)
@@ -150,7 +157,20 @@ void MCSurfaceParticleRenderer::setBatch(
             else if (particle->animationStyle() == MCParticle::FadeOutAndExpand)
             {
                 m_colors[vertexIndex].setA(m_colors[vertexIndex].a() * particle->scale());
+                vertexX *= particle->scale();
+                vertexY *= particle->scale();
             }
+            else if (particle->animationStyle() == MCParticle::Shrink)
+            {
+                vertexX *= particle->scale();
+                vertexY *= particle->scale();
+            }
+
+            m_vertices[vertexIndex] =
+                MCGLVertex(
+                    x + MCTrigonom::rotatedX(vertexX, vertexY, particle->angle()),
+                    y + MCTrigonom::rotatedY(vertexX, vertexY, particle->angle()),
+                    z);
 
             m_normals[vertexIndex] = normals[j];
 
@@ -211,23 +231,26 @@ void MCSurfaceParticleRenderer::render()
 
 void MCSurfaceParticleRenderer::renderShadows()
 {
-    assert(shadowShaderProgram());
-    shadowShaderProgram()->bind();
+    if (m_hasShadow)
+    {
+        assert(shadowShaderProgram());
+        shadowShaderProgram()->bind();
 
-    bindMaterial(true);
+        bindMaterial(true);
 
-    shadowShaderProgram()->setTransform(0, MCVector3dF(0, 0, 0));
-    shadowShaderProgram()->setScale(1.0f, 1.0f, 1.0f);
+        shadowShaderProgram()->setTransform(0, MCVector3dF(0, 0, 0));
+        shadowShaderProgram()->setScale(1.0f, 1.0f, 1.0f);
 
-#ifdef __MC_GLES__
-    glDrawArrays(GL_TRIANGLES, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
-#else
-    glDrawArrays(GL_QUADS, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
-#endif
-    glDisable(GL_BLEND);
+    #ifdef __MC_GLES__
+        glDrawArrays(GL_TRIANGLES, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
+    #else
+        glDrawArrays(GL_QUADS, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
+    #endif
+        glDisable(GL_BLEND);
 
-    releaseVBO();
-    releaseVAO();
+        releaseVBO();
+        releaseVAO();
+    }
 }
 
 MCSurfaceParticleRenderer::~MCSurfaceParticleRenderer()

@@ -73,9 +73,13 @@ void MCGLRectParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GLe
 }
 
 void MCGLRectParticleRenderer::setBatch(
-    const MCGLRectParticleRenderer::ParticleVector & particles, MCCamera * camera)
+    const MCGLRectParticleRenderer::ParticleVector & particles_, MCCamera * camera)
 {
+    MCGLRectParticleRenderer::ParticleVector particles = std::move(particles_);
     m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
+    std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
+        return l->location().k() < r->location().k();
+    });
 
     const int NUM_VERTICES = m_batchSize * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -125,13 +129,8 @@ void MCGLRectParticleRenderer::setBatch(
 
         for (int j = 0; j < NUM_VERTICES_PER_PARTICLE; j++)
         {
-            const MCFloat vertexX = vertices[j].x() * particle->radius() * particle->scale();
-            const MCFloat vertexY = vertices[j].y() * particle->radius() * particle->scale();
-            m_vertices[vertexIndex] =
-                MCGLVertex(
-                    x + MCTrigonom::rotatedX(vertexX, vertexY, particle->angle()),
-                    y + MCTrigonom::rotatedY(vertexX, vertexY, particle->angle()),
-                    z);
+            MCFloat vertexX = vertices[j].x() * particle->radius() * particle->scale();
+            MCFloat vertexY = vertices[j].y() * particle->radius() * particle->scale();
 
             m_colors[vertexIndex] = particle->color();
             if (particle->animationStyle() == MCParticle::FadeOut)
@@ -141,7 +140,20 @@ void MCGLRectParticleRenderer::setBatch(
             else if (particle->animationStyle() == MCParticle::FadeOutAndExpand)
             {
                 m_colors[vertexIndex].setA(m_colors[vertexIndex].a() * particle->scale());
+                vertexX *= particle->scale();
+                vertexY *= particle->scale();
             }
+            else if (particle->animationStyle() == MCParticle::Shrink)
+            {
+                vertexX *= particle->scale();
+                vertexY *= particle->scale();
+            }
+
+            m_vertices[vertexIndex] =
+                MCGLVertex(
+                    x + MCTrigonom::rotatedX(vertexX, vertexY, particle->angle()),
+                    y + MCTrigonom::rotatedY(vertexX, vertexY, particle->angle()),
+                    z);
 
             m_normals[vertexIndex] = normals[j];
 

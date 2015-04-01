@@ -71,9 +71,13 @@ void MCGLPointParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GL
 }
 
 void MCGLPointParticleRenderer::setBatch(
-    const MCGLPointParticleRenderer::ParticleVector & particles, MCCamera * camera)
+    const MCGLPointParticleRenderer::ParticleVector & particles_, MCCamera * camera)
 {
+    MCGLPointParticleRenderer::ParticleVector particles = std::move(particles_);
     m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
+    std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
+        return l->location().k() < r->location().k();
+    });
 
     const int NUM_VERTICES     = m_batchSize;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;

@@ -90,3 +90,8 @@ MCVector3d<MCFloat> MCRandom::randomVector3d()
 {
     return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, getValue() - .5f).normalized();
 }
+
+MCVector3d<MCFloat> MCRandom::randomVector3dPositiveZ()
+{
+    return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, std::fabs(getValue() - .5f)).normalized();
+}

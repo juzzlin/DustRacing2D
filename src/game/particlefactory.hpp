@@ -86,6 +86,10 @@ private:
 
     void preCreateSurfaceParticles(int count, std::string typeId, ParticleType typeEnum);
 
+    MCSurfaceParticle * newSurfaceParticle(ParticleType typeEnum) const;
+
+    MCGLPointParticle * newPointParticle(ParticleType typeEnum) const;
+
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];
 

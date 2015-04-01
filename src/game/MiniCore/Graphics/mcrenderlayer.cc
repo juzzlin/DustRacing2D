@@ -23,7 +23,15 @@
 
 MCRenderLayer::MCRenderLayer()
     : m_depthTestEnabled(true)
+    , m_depthMaskEnabled(true)
 {
+}
+
+void MCRenderLayer::clear()
+{
+    m_objectSet.clear();
+    m_objectBatches.clear();
+    m_particleBatches.clear();
 }
 
 void MCRenderLayer::setDepthTestEnabled(bool enable)
@@ -34,6 +42,16 @@ void MCRenderLayer::setDepthTestEnabled(bool enable)
 bool MCRenderLayer::depthTestEnabled() const
 {
     return m_depthTestEnabled;
+}
+
+void MCRenderLayer::setDepthMaskEnabled(bool enable)
+{
+    m_depthMaskEnabled = enable;
+}
+
+bool MCRenderLayer::depthMaskEnabled() const
+{
+    return m_depthMaskEnabled;
 }
 
 MCRenderLayer::ObjectSet & MCRenderLayer::objectSet()
