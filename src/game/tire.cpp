@@ -38,17 +38,17 @@ void Tire::setIsOffTrack(bool flag)
 
 void Tire::stepTime(MCFloat)
 {
-    const MCFloat tireNormalAngle = angle() + 90;
-    const MCVector2d<MCFloat> tire(
-        MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
-
     if (velocity().lengthFast() > 0)
     {
+        const MCFloat tireNormalAngle = angle() + 90;
+        const MCVector2d<MCFloat> tire(
+            MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
         MCVector2d<MCFloat> v = velocity();
         v.clampFast(0.999); // Clamp instead of normalizing to avoid artifacts on small values
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) * 9.81 * parent().mass() * m_car.tireWearLevel();
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * -MCWorld::instance().gravity().k() * parent().mass();
+        impulse.clampFast(parent().mass() * 7.0f * m_car.tireWearLevel());
         parent().addForce(-impulse, location());
     }
 }
