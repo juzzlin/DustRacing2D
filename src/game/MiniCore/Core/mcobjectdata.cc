@@ -30,6 +30,7 @@ MCObjectData::MCObjectData(const std::string & typeId)
 , m_xyFriction(0.0)
 , m_stationary(false)
 , m_renderLayer(0)
+, m_angle(0)
 {
 }
 

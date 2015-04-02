@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,10 +41,13 @@ private:
     //! Test if the given location is off the track on the given tile.
     bool isOffTrack(MCVector2dF tire, const TrackTile & tile) const;
 
-    Car   & m_car;
-    Track * m_pTrack;
-    float   m_tileWLimit;
-    float   m_tileHLimit;
+    Car & m_car;
+
+    Track * m_track;
+
+    float m_tileWLimit;
+
+    float m_tileHLimit;
 };
 
 #endif // OFFTRACKDETECTOR_HPP

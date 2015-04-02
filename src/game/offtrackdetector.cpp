@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 OffTrackDetector::OffTrackDetector(Car & car)
 : m_car(car)
+, m_track(nullptr)
 , m_tileWLimit(TrackTile::TILE_W / 2 - TrackTile::TILE_W / 10)
 , m_tileHLimit(TrackTile::TILE_H / 2 - TrackTile::TILE_H / 10)
 {
@@ -30,16 +31,16 @@ OffTrackDetector::OffTrackDetector(Car & car)
 
 void OffTrackDetector::setTrack(Track & track)
 {
-    m_pTrack = &track;
+    m_track = &track;
 }
 
 void OffTrackDetector::update()
 {
-    assert(m_pTrack);
+    assert(m_track);
 
     {
         const MCVector3dF leftFrontTirePos(m_car.leftFrontTireLocation());
-        TrackTile & tile = *m_pTrack->trackTileAtLocation(
+        TrackTile & tile = *m_track->trackTileAtLocation(
             leftFrontTirePos.i(), leftFrontTirePos.j());
 
         m_car.setLeftSideOffTrack(false);
@@ -52,7 +53,7 @@ void OffTrackDetector::update()
 
     {
         const MCVector3dF rightFrontTirePos(m_car.rightFrontTireLocation());
-        TrackTile & tile = *m_pTrack->trackTileAtLocation(
+        TrackTile & tile = *m_track->trackTileAtLocation(
             rightFrontTirePos.i(), rightFrontTirePos.j());
 
         m_car.setRightSideOffTrack(false);

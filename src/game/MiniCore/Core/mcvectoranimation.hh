@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -57,13 +57,20 @@ private:
     DISABLE_ASSI(MCVectorAnimation);
 
     MCVector3dF * m_vect;
-    MCVector3dF   m_start;
-    MCVector3dF   m_end;
-    MCVector3dF   m_delta;
-    MCUint        m_steps;
-    MCUint        m_step;
-    MCUint        m_preDelay;
-    MCUint        m_postDelay;
+
+    MCVector3dF m_start;
+
+    MCVector3dF m_end;
+
+    MCVector3dF m_delta;
+
+    MCUint m_steps;
+
+    MCUint m_step;
+
+    MCUint m_preDelay;
+
+    MCUint m_postDelay;
 };
 
 #endif // MCVECTORANIMATION_HH

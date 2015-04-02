@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -52,12 +52,17 @@ private:
 
     void setRandomTolerance();
 
-    Car         & m_car;
-    Track       * m_track;
+    Car & m_car;
+
+    Track * m_track;
+
     const Route * m_route;
-    int           m_lastDiff;
-    int           m_lastTargetNodeIndex;
-    MCVector2dF   m_randomTolerance;
+
+    int m_lastDiff;
+
+    int m_lastTargetNodeIndex;
+
+    MCVector2dF m_randomTolerance;
 };
 
 typedef std::shared_ptr<AI> AIPtr;

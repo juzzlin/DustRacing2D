@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -120,25 +120,36 @@ private:
         : lastLapTime(-1)
         , recordLapTime(-1)
         , raceTime(0)
+        , recordRaceTime(0)
         , lap(0)
         , raceCompleted(false)
         , isActive(true)
         {}
 
-        int  lastLapTime;
-        int  recordLapTime; // Personal best
-        int  raceTime;
-        int  recordRaceTime; // Personal best
-        int  lap;
+        int lastLapTime;
+
+        int recordLapTime; // Personal best
+
+        int raceTime;
+
+        int recordRaceTime; // Personal best
+
+        int lap;
+
         bool raceCompleted;
+
         bool isActive;
     };
 
     std::vector<Timing::Times> m_times;
-    int                        m_time;
-    bool                       m_started;
-    int                        m_lapRecord;
-    int                        m_raceRecord;
+
+    int m_time;
+
+    bool m_started;
+
+    int m_lapRecord;
+
+    int m_raceRecord;
 };
 
 #endif // TIMING_HPP
