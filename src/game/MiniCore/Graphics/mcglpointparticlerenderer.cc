@@ -30,15 +30,11 @@
 #include <cassert>
 
 MCGLPointParticleRenderer::MCGLPointParticleRenderer(int maxBatchSize)
-    : m_batchSize(0)
-    , m_maxBatchSize(maxBatchSize)
+    : MCParticleRendererBase(maxBatchSize)
     , m_vertices(new MCGLVertex[maxBatchSize])
     , m_normals(new MCGLVertex[maxBatchSize])
     , m_colors(new MCGLColor[maxBatchSize])
     , m_pointSize(8)
-    , m_useAlphaBlend(false)
-    , m_src(0)
-    , m_dst(0)
 {
     const int NUM_VERTICES     = maxBatchSize;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -63,28 +59,27 @@ void MCGLPointParticleRenderer::setPointSize(int pointSize)
     m_pointSize = pointSize;
 }
 
-void MCGLPointParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
-{
-    m_useAlphaBlend = useAlphaBlend;
-    m_src           = src;
-    m_dst           = dst;
-}
-
 void MCGLPointParticleRenderer::setBatch(
-    const MCGLPointParticleRenderer::ParticleVector & particles_, MCCamera * camera)
+    const MCParticleRendererBase::ParticleVector & particles_, MCCamera * camera)
 {
-    MCGLPointParticleRenderer::ParticleVector particles = std::move(particles_);
-    m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
+    if (!particles_.size()) {
+        return;
+    }
+
+    ParticleVector particles = std::move(particles_);
+    setBatchSize(std::min(static_cast<int>(particles.size()), maxBatchSize()));
     std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();
     });
 
-    const int NUM_VERTICES     = m_batchSize;
+    const int NUM_VERTICES     = batchSize();
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
 
-    for (int i = 0; i < m_batchSize; i++)
+    assert(dynamic_cast<MCGLPointParticle *>(particles.at(0)));
+
+    for (int i = 0; i < batchSize(); i++)
     {
         MCGLPointParticle * particle = static_cast<MCGLPointParticle *>(particles[i]);
         MCVector3dF location(particle->location());
@@ -119,12 +114,12 @@ void MCGLPointParticleRenderer::setBatch(
 
     initUpdateBufferData();
 
-    const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
+    const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize();
     addBufferSubData(
         MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
                 reinterpret_cast<const GLfloat *>(m_vertices));
 
-    const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize;
+    const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize();
     addBufferSubData(
         MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
                 reinterpret_cast<const GLfloat *>(m_normals));
@@ -143,19 +138,19 @@ void MCGLPointParticleRenderer::render()
     glEnable(GL_POINT_SPRITE);
 #endif
 
-    if (m_useAlphaBlend)
+    if (useAlphaBlend())
     {
         glEnable(GL_BLEND);
-        glBlendFunc(m_src, m_dst);
+        glBlendFunc(alphaSrc(), alphaDst());
     }
 
     bindMaterial();
 
     shaderProgram()->setPointSize(m_pointSize);
 
-    glDrawArrays(GL_POINTS, 0, m_batchSize);
+    glDrawArrays(GL_POINTS, 0, batchSize());
 
-    if (m_useAlphaBlend)
+    if (useAlphaBlend())
     {
         glDisable(GL_BLEND);
     }

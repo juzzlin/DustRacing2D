@@ -38,14 +38,10 @@ const int NUM_VERTICES_PER_PARTICLE = 4;
 }
 
 MCGLRectParticleRenderer::MCGLRectParticleRenderer(int maxBatchSize)
-    : m_batchSize(0)
-    , m_maxBatchSize(maxBatchSize)
+    : MCParticleRendererBase(maxBatchSize)
     , m_vertices(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
     , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
     , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
-    , m_useAlphaBlend(false)
-    , m_src(0)
-    , m_dst(0)
 {
     const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -65,23 +61,20 @@ MCGLRectParticleRenderer::MCGLRectParticleRenderer(int maxBatchSize)
     finishBufferData();
 }
 
-void MCGLRectParticleRenderer::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
-{
-    m_useAlphaBlend = useAlphaBlend;
-    m_src           = src;
-    m_dst           = dst;
-}
-
 void MCGLRectParticleRenderer::setBatch(
-    const MCGLRectParticleRenderer::ParticleVector & particles_, MCCamera * camera)
+    const MCParticleRendererBase::ParticleVector & particles_, MCCamera * camera)
 {
-    MCGLRectParticleRenderer::ParticleVector particles = std::move(particles_);
-    m_batchSize = std::min(static_cast<int>(particles.size()), m_maxBatchSize);
+    if (!particles_.size()) {
+        return;
+    }
+
+    ParticleVector particles = std::move(particles_);
+    setBatchSize(std::min(static_cast<int>(particles.size()), maxBatchSize()));
     std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();
     });
 
-    const int NUM_VERTICES = m_batchSize * NUM_VERTICES_PER_PARTICLE;
+    const int NUM_VERTICES = batchSize() * NUM_VERTICES_PER_PARTICLE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor)  * NUM_VERTICES;
@@ -112,8 +105,10 @@ void MCGLRectParticleRenderer::setBatch(
         { 0, 0, 1}
     };
 
+    assert(dynamic_cast<MCGLRectParticle *>(particles.at(0)));
+
     int vertexIndex = 0;
-    for (int i = 0; i < m_batchSize; i++)
+    for (int i = 0; i < batchSize(); i++)
     {
         MCGLRectParticle * particle = static_cast<MCGLRectParticle *>(particles[i]);
         MCVector3dF location(particle->location());
@@ -163,12 +158,12 @@ void MCGLRectParticleRenderer::setBatch(
 
     initUpdateBufferData();
 
-    const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize * NUM_VERTICES_PER_PARTICLE;
+    const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_PARTICLE;
     addBufferSubData(
         MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
                 reinterpret_cast<const GLfloat *>(m_vertices));
 
-    const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * m_maxBatchSize * NUM_VERTICES_PER_PARTICLE;
+    const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_PARTICLE;
     addBufferSubData(
         MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
                 reinterpret_cast<const GLfloat *>(m_normals));
@@ -182,10 +177,10 @@ void MCGLRectParticleRenderer::render()
     assert(shaderProgram());
     shaderProgram()->bind();
 
-    if (m_useAlphaBlend)
+    if (useAlphaBlend())
     {
         glEnable(GL_BLEND);
-        glBlendFunc(m_src, m_dst);
+        glBlendFunc(alphaSrc(), alphaDst());
     }
 
     bindMaterial();
@@ -195,9 +190,9 @@ void MCGLRectParticleRenderer::render()
     shaderProgram()->setColor(MCGLColor());
 
 #ifdef __MC_GLES__
-    glDrawArrays(GL_TRIANGLES, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
+    glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
 #else
-    glDrawArrays(GL_QUADS, 0, m_batchSize * NUM_VERTICES_PER_PARTICLE);
+    glDrawArrays(GL_QUADS, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
 #endif
     glDisable(GL_BLEND);
 

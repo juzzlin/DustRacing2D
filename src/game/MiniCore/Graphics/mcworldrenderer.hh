@@ -20,6 +20,7 @@
 #ifndef MCWORLDRENDERER_HH
 #define MCWORLDRENDERER_HH
 
+#include "mcparticlerendererbase.hh"
 #include "mcrenderlayer.hh"
 #include "mctypes.hh"
 #include "mcworld.hh"
@@ -30,9 +31,6 @@
 #include <vector>
 
 class MCCamera;
-class MCGLPointParticleRenderer;
-class MCGLRectParticleRenderer;
-class MCSurfaceParticleRenderer;
 class MCObject;
 
 //! Helper class used by MCWorld. Renders all objects in the scene.
@@ -49,26 +47,12 @@ public:
      *  Default is true. */
     void enableDepthMaskOnLayer(int layer, bool enable = true);
 
-    /*! Each used MCGLPointParticle type should have a corresponding MCGLPointParticleRenderer
-     *  registered in MCWorld. As for rendering, point particles are special cases, because
+    /*! Each used particle type should have a corresponding particle renderer
+     *  registered in MCWorld. As for rendering, particles are special cases, because
      *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
-     *  \param typeId Type id of the point particle. \see MCObject::getTypeIDForName().
+     *  \param typeId Type id of the particle. \see MCObject::getTypeIDForName().
      *  \param renderer Reference to the renderer to be used for this type id. */
-    void registerPointParticleRenderer(MCUint typeId, MCGLPointParticleRenderer & renderer);
-
-    /*! Each used MCGLRectParticle type should have a corresponding MCGLRectParticleRenderer
-     *  registered in MCWorld. As for rendering, rect particles are special cases, because
-     *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
-     *  \param typeId Type id of the rect particle. \see MCObject::getTypeIDForName().
-     *  \param renderer Reference to the renderer to be used for this type id. */
-    void registerRectParticleRenderer(MCUint typeId, MCGLRectParticleRenderer & renderer);
-
-    /*! Each used MCSurfaceParticle type should have a corresponding MCSurfaceParticleRenderer
-     *  registered in MCWorld. As for rendering, rect particles are special cases, because
-     *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
-     *  \param typeId Type id of the rect particle. \see MCObject::getTypeIDForName().
-     *  \param renderer Reference to the renderer to be used for this type id. */
-    void registerSurfaceParticleRenderer(MCUint typeId, MCSurfaceParticleRenderer & renderer);
+    void registerParticleRenderer(MCUint typeId, MCParticleRendererPtr renderer);
 
     /*! If a particle gets off all visibility cameras, it'll be killed.
      *  This is just an optimization. We cannot use just the camera given
@@ -108,14 +92,8 @@ private:
     std::vector<MCCamera *> m_visibilityCameras;
 
     typedef int ParticleTypeId;
-    typedef std::map<ParticleTypeId, MCGLPointParticleRenderer *> PointParticleRendererMap;
-    PointParticleRendererMap m_pointParticleRenderers;
-
-    typedef std::map<ParticleTypeId, MCGLRectParticleRenderer *> RectParticleRendererMap;
-    RectParticleRendererMap m_rectParticleRenderers;
-
-    typedef std::map<ParticleTypeId, MCSurfaceParticleRenderer *> SurfaceParticleRendererMap;
-    SurfaceParticleRendererMap m_surfaceParticleRenderers;
+    typedef std::map<ParticleTypeId, MCParticleRendererPtr> ParticleRendererMap;
+    ParticleRendererMap m_particleRenderers;
 
     friend class MCWorld;
     friend class MCObject;

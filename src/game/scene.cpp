@@ -68,6 +68,7 @@
 #include <MCTextureFont>
 #include <MCTypes>
 #include <MCWorld>
+#include <MCWorldRenderer>
 
 #include <QObject>
 #include <QApplication>

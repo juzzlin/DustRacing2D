@@ -17,14 +17,15 @@
 #define PARTICLEFACTORY_HPP
 
 #include <MCParticle>
-#include <MCGLPointParticleRenderer>
-#include <MCGLRectParticleRenderer>
-#include <MCSurfaceParticleRenderer>
+#include <MCParticleRendererBase>
 #include <MCTypes>
 #include <MCVector3d>
 
 #include <vector>
 #include <memory>
+
+class MCSurfaceParticle;
+class MCGLPointParticle;
 
 //! ParticleFactory takes care of spawning and recycling particles.
 class ParticleFactory
@@ -93,14 +94,8 @@ private:
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];
 
-    // Renderers for different point particle types.
-    MCGLPointParticleRenderer m_pointParticleRenderers[NumParticleTypes];
-
-    // Renderers for different rect particle types.
-    MCGLRectParticleRenderer m_rectParticleRenderers[NumParticleTypes];
-
-    // Renderers for different surface particle types.
-    MCSurfaceParticleRenderer m_surfaceParticleRenderers[NumParticleTypes];
+    // Renderers for different particle types.
+    MCParticleRendererPtr m_particleRenderers[NumParticleTypes];
 
     // Particles to delete.
     std::vector<std::unique_ptr<MCParticle> > m_delete;

@@ -23,22 +23,19 @@
 #include <MCGLEW>
 
 #include "mcmacros.hh"
-#include "mcglvertex.hh"
-#include "mcglcolor.hh"
-#include "mcglobjectbase.hh"
+#include "mcparticlerendererbase.hh"
 #include "mcworldrenderer.hh"
 
 #include <vector>
 
 class MCGLPointParticle;
-class MCGLShaderProgram;
 class MCCamera;
 class MCObject;
 
-/*! Each MCGLPointParticle id should have a corresponding MCGLPointParticleRenderer
- *  registered to MCWorldRenderer. As for rendering, point particles are special cases, because
- *  they need to be as efficient as possible. This is why a dedicated renderer is needed. */
-class MCGLPointParticleRenderer : public MCGLObjectBase
+/*! Renders point particle batches.
+ *  Each MCGLPointParticle id should have a corresponding MCGLPointParticleRenderer
+ *  registered to MCWorldRenderer. */
+class MCGLPointParticleRenderer : public MCParticleRendererBase
 {
 public:
 
@@ -51,10 +48,6 @@ public:
     //! Set default size of the points.
     virtual void setPointSize(int pointSize);
 
-    //! Enable/disable blending.
-    virtual void setAlphaBlend(
-        bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
-
 private:
 
     DISABLE_COPY(MCGLPointParticleRenderer);
@@ -63,21 +56,20 @@ private:
     /*! Populate the current batch.
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
-    typedef std::vector<MCObject *> ParticleVector;
-    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr);
+    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr) override;
 
     //! Render the current particle batch.
-    void render();
+    void render() override;
 
-    int          m_batchSize;
-    int          m_maxBatchSize;
+    void renderShadows() override {}
+
     MCGLVertex * m_vertices;
+
     MCGLVertex * m_normals;
+
     MCGLColor  * m_colors;
-    int          m_pointSize;
-    bool         m_useAlphaBlend;
-    GLenum       m_src;
-    GLenum       m_dst;
+
+    int m_pointSize;
 
     friend class MCWorldRenderer;
 };

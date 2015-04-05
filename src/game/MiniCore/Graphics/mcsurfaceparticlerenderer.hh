@@ -23,23 +23,19 @@
 #include <MCGLEW>
 
 #include "mcmacros.hh"
-#include "mcglvertex.hh"
-#include "mcglcolor.hh"
-#include "mcglobjectbase.hh"
-#include "mcgltexcoord.hh"
+#include "mcparticlerendererbase.hh"
 #include "mcworldrenderer.hh"
 
 #include <vector>
 
 class MCSurfaceParticle;
-class MCGLShaderProgram;
 class MCCamera;
 class MCObject;
 
-/*! Each MCGLRectParticle id should have a corresponding MCSurfaceParticleRenderer
- *  registered to MCWorldRenderer. As for rendering, surface particles are special cases, because
- *  they need to be as efficient as possible. This is why a dedicated renderer is needed. */
-class MCSurfaceParticleRenderer : public MCGLObjectBase
+/*! Renders surface particle (textured particles) batches.
+ *  Each MCSurfaceParticle id should have a corresponding MCSurfaceParticleRenderer
+ *  registered to MCWorldRenderer. */
+class MCSurfaceParticleRenderer : public MCParticleRendererBase
 {
 public:
 
@@ -47,12 +43,6 @@ public:
 
     //! Destructor.
     virtual ~MCSurfaceParticleRenderer();
-
-    //! Enable/disable blending.
-    virtual void setAlphaBlend(
-        bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
-
-    virtual void setHasShadow(bool hasShadow);
 
 private:
 
@@ -62,18 +52,13 @@ private:
     /*! Populate the current batch.
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
-    typedef std::vector<MCObject *> ParticleVector;
-    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr);
+    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr) override;
 
     //! Render the current particle batch.
-    void render();
+    void render() override;
 
     //! Render the current particle batch as shadows.
-    void renderShadows();
-
-    int m_batchSize;
-
-    int m_maxBatchSize;
+    void renderShadows() override;
 
     MCGLVertex * m_vertices;
 
@@ -82,14 +67,6 @@ private:
     MCGLTexCoord * m_texCoords;
 
     MCGLColor * m_colors;
-
-    bool m_useAlphaBlend;
-
-    GLenum m_src;
-
-    GLenum m_dst;
-
-    bool m_hasShadow;
 
     friend class MCWorldRenderer;
 };

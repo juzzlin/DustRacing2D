@@ -45,6 +45,7 @@ Graphics/mcglshaderprogram.cc
 Graphics/mcmesh.cc
 Graphics/mcmeshview.cc
 Graphics/mcparticle.cc
+Graphics/mcparticlerendererbase.cc
 Graphics/mcrenderlayer.cc
 Graphics/mcshaders.hh
 Graphics/mcshaders30.hh
