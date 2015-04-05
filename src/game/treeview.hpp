@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,39 +36,52 @@ public:
 
     //! \reimp
     virtual void render(const MCVector3dF & l, MCFloat angle,
-        MCCamera * p = nullptr);
+        MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadow(const MCVector3dF & l, MCFloat angle,
-        MCCamera * p = nullptr);
+        MCCamera * p = nullptr) override;
 
     //! \reimp
-    virtual void beginBatch();
+    virtual void beginBatch() override;
 
     //! \reimp
-    virtual void endBatch();
+    virtual void endBatch() override;
 
     //! \reimp
-    virtual void beginShadowBatch();
+    virtual void beginShadowBatch() override;
 
     //! \reimp
-    virtual void endShadowBatch();
+    virtual void endShadowBatch() override;
 
     //! \reimp
-    virtual bool update();
+    virtual bool update() override;
 
     //! \reimp
-    virtual void reset();
+    virtual void reset() override;
 
 private:
 
-    int m_r0, m_r1, m_treeHeight;
+    int m_r0;
+
+    int m_r1;
+
+    int m_treeHeight;
+
     int m_branches;
-    int m_branchHeight, m_dBranchHeight;
+
+    int m_branchHeight;
+
+    int m_dBranchHeight;
+
     int m_dr;
+
     int m_dAngle;
+
     MCUint m_topSinAngle;
+
     MCUint m_topCosAngle;
+
     MCVector2dF m_top;
 };
 
