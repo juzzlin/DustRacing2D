@@ -21,6 +21,8 @@
 #include <QTimer>
 #include <QTime>
 
+#include <MCWorld>
+
 #include "settings.hpp"
 
 class AudioWorker;
@@ -167,6 +169,8 @@ private:
     AudioWorker * m_audioWorker;
 
     QThread m_audioThread;
+
+    MCWorld m_world;
 
     static Game * m_instance;
 };

@@ -29,11 +29,11 @@
 #include <unordered_map>
 
 class InputHandler;
-class MCGLScene;
 class QKeyEvent;
 class QOpenGLFramebufferObject;
 class QPaintEvent;
 class Scene;
+class MCGLScene;
 
 //! The singleton renderer widget and the main "window".
 class Renderer : public QWindow, protected QOpenGLFunctions
@@ -43,7 +43,7 @@ class Renderer : public QWindow, protected QOpenGLFunctions
 public:
 
     //! Constructor.
-    Renderer(int hRes, int vRes, bool fullScreen);
+    Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene);
 
     //! Destructor.
     virtual ~Renderer();
@@ -61,9 +61,6 @@ public:
 
     //! \return shader program object by the given id string.
     MCGLShaderProgramPtr program(const std::string & id);
-
-    //! \return current scene.
-    MCGLScene & glScene();
 
     //! \return scene face factor 0.0..1.0.
     float fadeValue() const;
@@ -144,8 +141,6 @@ private:
 
     Scene * m_scene;
 
-    MCGLScene * m_glScene;
-
     EventHandler * m_eventHandler;
 
     const float m_viewAngle;
@@ -173,6 +168,8 @@ private:
     std::unique_ptr<QOpenGLFramebufferObject> m_fbo;
 
     std::unique_ptr<QOpenGLFramebufferObject> m_shadowFbo;
+
+    MCGLScene & m_glScene;
 };
 
 #endif // RENDERER_HPP

@@ -82,14 +82,14 @@ int Scene::m_height = 768;
 
 static const MCFloat METERS_PER_UNIT = 0.05f;
 
-Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
+Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world)
 : m_game(game)
 , m_stateMachine(stateMachine)
 , m_renderer(renderer)
 , m_messageOverlay(new MessageOverlay)
 , m_race(game, NUM_CARS)
 , m_activeTrack(nullptr)
-, m_world(new MCWorld)
+, m_world(world)
 , m_startlights(new Startlights)
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
@@ -135,11 +135,10 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     m_timingOverlay[0].setRace(m_race);
     m_timingOverlay[1].setRace(m_race);
 
-    m_world->setMetersPerUnit(METERS_PER_UNIT);
-    m_world->setGravity(MCVector3dF(0, 0, -9.81));
+    m_world.setMetersPerUnit(METERS_PER_UNIT);
 
-    m_world->renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Smoke), false);
-    m_world->renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Ground), false);
+    m_world.renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Smoke), false);
+    m_world.renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Ground), false);
 
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
         m_renderer.program("text"));
@@ -150,9 +149,10 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer)
     const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.85, 0.3);
     const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 1.0, 1.0);
 
-    m_renderer.glScene().setAmbientLight(ambientLight);
-    m_renderer.glScene().setDiffuseLight(diffuseLight);
-    m_renderer.glScene().setSpecularLight(specularLight);
+    MCGLScene & glScene = MCWorld::instance().renderer().glScene();
+    glScene.setAmbientLight(ambientLight);
+    glScene.setDiffuseLight(diffuseLight);
+    glScene.setSpecularLight(specularLight);
 
     m_renderer.setFadeValue(0.0);
 
@@ -314,7 +314,7 @@ void Scene::updateAnimations()
 void Scene::updateWorld(float timeStep)
 {
     // Step time
-    m_world->stepTime(timeStep);
+    m_world.stepTime(timeStep);
 }
 
 void Scene::updateRace()
@@ -390,35 +390,35 @@ void Scene::updateAI()
 
 void Scene::setupCameras(Track & activeTrack)
 {
-    m_world->renderer().removeParticleVisibilityCameras();
+    m_world.renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
         if (m_game.splitType() == Game::SplitType::Vertical)
         {
             m_camera[0].init(
                 Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-            m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
+            m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
 
             m_camera[1].init(
                 Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-            m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
+            m_world.renderer().addParticleVisibilityCamera(m_camera[1]);
         }
         else
         {
             m_camera[0].init(
                 Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
-            m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
+            m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
 
             m_camera[1].init(
                 Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
-            m_world->renderer().addParticleVisibilityCamera(m_camera[1]);
+            m_world.renderer().addParticleVisibilityCamera(m_camera[1]);
         }
     }
     else
     {
         m_camera[0].init(
             Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world->renderer().addParticleVisibilityCamera(m_camera[0]);
+        m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
     }
 }
 
@@ -435,7 +435,7 @@ void Scene::setActiveTrack(Track & activeTrack)
     m_activeTrack = &activeTrack;
 
     // Remove previous objects
-    m_world->clear();
+    m_world.clear();
 
     setupCameras(activeTrack);
 
@@ -456,7 +456,6 @@ void Scene::setActiveTrack(Track & activeTrack)
 
 void Scene::setWorldDimensions()
 {
-    assert(m_world);
     assert(m_activeTrack);
 
     // Update world dimensions according to the
@@ -468,7 +467,7 @@ void Scene::setWorldDimensions()
     const MCUint minZ = 0;
     const MCUint maxZ = 1000;
 
-    m_world->setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
+    m_world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
 }
 
 void Scene::addCarsToWorld()
@@ -580,12 +579,6 @@ Track & Scene::activeTrack() const
     return *m_activeTrack;
 }
 
-MCWorld & Scene::world() const
-{
-    assert(m_world);
-    return *m_world;
-}
-
 TrackSelectionMenu & Scene::trackSelectionMenu() const
 {
     assert(m_trackSelectionMenu);
@@ -616,10 +609,11 @@ void Scene::renderTrack()
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
     case StateMachine::State::Play:
-
+    {
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
         if (m_fadeAnimation->isFading())
         {
-            m_renderer.glScene().setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -627,14 +621,14 @@ void Scene::renderTrack()
             MCGLScene::SplitType p1, p0;
             setSplitType(p1, p0);
 
-            m_renderer.glScene().setSplitType(p1);
+            glScene.setSplitType(p1);
             m_activeTrack->render(&m_camera[1]);
 
-            m_renderer.glScene().setSplitType(p0);
+            glScene.setSplitType(p0);
             m_activeTrack->render(&m_camera[0]);
 
             // Setup for common scene
-            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+            glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
@@ -642,7 +636,7 @@ void Scene::renderTrack()
         }
 
         break;
-
+    }
     default:
         break;
     };
@@ -658,10 +652,12 @@ void Scene::renderObjectShadows()
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
     case StateMachine::State::Play:
+    {
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
 
         if (m_fadeAnimation->isFading())
         {
-            m_renderer.glScene().setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -669,14 +665,14 @@ void Scene::renderObjectShadows()
             MCGLScene::SplitType p1, p0;
             setSplitType(p1, p0);
 
-            m_renderer.glScene().setSplitType(p1);
+            glScene.setSplitType(p1);
             renderPlayerSceneShadows(m_camera[1]);
 
-            m_renderer.glScene().setSplitType(p0);
+            glScene.setSplitType(p0);
             renderPlayerSceneShadows(m_camera[0]);
 
             // Setup for common scene
-            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+            glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
@@ -684,7 +680,7 @@ void Scene::renderObjectShadows()
         }
 
         break;
-
+    }
     default:
         break;
     };
@@ -693,12 +689,13 @@ void Scene::renderObjectShadows()
 void Scene::renderObjects()
 {
     const MCFloat fadeValue = m_renderer.fadeValue();
+    MCGLScene & glScene = MCWorld::instance().renderer().glScene();
 
     switch (m_stateMachine.state())
     {
     case StateMachine::State::DoIntro:
 
-        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+        glScene.setSplitType(MCGLScene::ShowFullScreen);
         m_intro->setFadeValue(fadeValue);
         m_intro->render();
 
@@ -708,8 +705,8 @@ void Scene::renderObjects()
     case StateMachine::State::MenuTransitionOut:
     case StateMachine::State::MenuTransitionIn:
 
-        m_renderer.glScene().setFadeValue(fadeValue);
-        m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+        glScene.setFadeValue(fadeValue);
+        glScene.setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->render();
 
@@ -722,7 +719,7 @@ void Scene::renderObjects()
 
         if (m_fadeAnimation->isFading())
         {
-            m_renderer.glScene().setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -730,16 +727,16 @@ void Scene::renderObjects()
             MCGLScene::SplitType p1, p0;
             setSplitType(p1, p0);
 
-            m_renderer.glScene().setSplitType(p1);
+            glScene.setSplitType(p1);
             renderPlayerScene(m_camera[1]);
             m_timingOverlay[1].render();
 
-            m_renderer.glScene().setSplitType(p0);
+            glScene.setSplitType(p0);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
 
             // Setup for common scene
-            m_renderer.glScene().setSplitType(MCGLScene::ShowFullScreen);
+            glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
@@ -756,14 +753,14 @@ void Scene::renderObjects()
 
 void Scene::renderPlayerScene(MCCamera & camera)
 {
-    // Assume that m_world->prepareRendering(&camera) is already called.
-    m_world->render(&camera);
+    // Assume that m_world.prepareRendering(&camera) is already called.
+    m_world.render(&camera);
 }
 
 void Scene::renderPlayerSceneShadows(MCCamera & camera)
 {
-    m_world->prepareRendering(&camera);
-    m_world->renderShadows(&camera);
+    m_world.prepareRendering(&camera);
+    m_world.renderShadows(&camera);
 }
 
 void Scene::renderCommonHUD()

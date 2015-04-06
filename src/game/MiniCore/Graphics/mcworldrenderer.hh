@@ -20,6 +20,7 @@
 #ifndef MCWORLDRENDERER_HH
 #define MCWORLDRENDERER_HH
 
+#include "mcglscene.hh"
 #include "mcparticlerendererbase.hh"
 #include "mcrenderlayer.hh"
 #include "mctypes.hh"
@@ -40,6 +41,9 @@ public:
 
     MCWorldRenderer();
 
+    //! \return the current OpenGL scene object.
+    MCGLScene & glScene();
+
     /*! Enables/disables depth test on given render layer. Default is true. */
     void enableDepthTestOnLayer(int layer, bool enable = true);
 
@@ -54,11 +58,13 @@ public:
      *  \param renderer Reference to the renderer to be used for this type id. */
     void registerParticleRenderer(MCUint typeId, MCParticleRendererPtr renderer);
 
-    /*! If a particle gets off all visibility cameras, it'll be killed.
-     *  This is just an optimization. We cannot use just the camera given
-     *  to render(), because there might be multiple cameras and viewports. */
+    /*! If a particle gets outside all visibility cameras, it'll be killed.
+     *  This is just an optimization. The camera given to render()
+     *  cannot be used, because there might be multiple cameras and viewports.
+     *  If no cameras are set, particles will be always drawn. */
     void addParticleVisibilityCamera(MCCamera & camera);
 
+    /*! Remove all particle visibility cameras. */
     void removeParticleVisibilityCameras();
 
 private:
@@ -94,6 +100,8 @@ private:
     typedef int ParticleTypeId;
     typedef std::map<ParticleTypeId, MCParticleRendererPtr> ParticleRendererMap;
     ParticleRendererMap m_particleRenderers;
+
+    MCGLScene m_glScene;
 
     friend class MCWorld;
     friend class MCObject;

@@ -34,7 +34,6 @@
 #include <MCSurface>
 #include <MCSurfaceManager>
 #include <MCTrigonom>
-#include <MCWorld>
 
 #include <cmath>
 #include <cassert>
@@ -50,10 +49,9 @@
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(int hRes, int vRes, bool fullScreen)
+Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
 : m_context(nullptr)
 , m_scene(nullptr)
-, m_glScene(new MCGLScene)
 , m_eventHandler(nullptr)
 , m_viewAngle(45.0)
 , m_fadeValue(1.0)
@@ -64,6 +62,7 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen)
 , m_fullVRes(QGuiApplication::primaryScreen()->geometry().height())
 , m_fullScreen(fullScreen)
 , m_updatePending(false)
+, m_glScene(glScene)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -95,7 +94,7 @@ void Renderer::initialize()
         setPosition(m_fullHRes / 2 - m_hRes / 2, m_fullVRes / 2 - m_vRes / 2);
     }
 
-    m_glScene->initialize();
+    m_glScene.initialize();
 
     loadShaders();
     loadFonts();
@@ -105,9 +104,8 @@ void Renderer::initialize()
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-    m_glScene->resize(
-        viewWidth, viewHeight, Scene::width(), Scene::height(),
-        m_viewAngle, 10.0, 1000.0);
+    m_glScene.resize(
+        viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, 10.0, 1000.0);
 }
 
 void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
@@ -182,11 +180,6 @@ MCGLShaderProgramPtr Renderer::program(const std::string & id)
         throw std::runtime_error("Cannot find shader program '" + id + "'");
     }
     return program;
-}
-
-MCGLScene & Renderer::glScene()
-{
-    return *m_glScene;
 }
 
 void Renderer::setFadeValue(float value)
@@ -403,5 +396,4 @@ void Renderer::setEventHandler(EventHandler & eventHandler)
 
 Renderer::~Renderer()
 {
-    delete m_glScene;
 }

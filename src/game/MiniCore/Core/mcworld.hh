@@ -82,7 +82,7 @@ public:
         MCFloat metersPerUnit = 1.0f, int gridSize = 128);
 
     /*! Set gravity vector used by default friction generators (on XY-plane).
-     *  The default is [0, 0, 0]. Set the gravity (acceleration) for objects
+     *  The default is [0, 0, -9.81]. Set the gravity (acceleration) for objects
      *  independently when needed. */
     void setGravity(const MCVector3dF & gravity);
 

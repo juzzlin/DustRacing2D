@@ -61,6 +61,7 @@ MCWorld::MCWorld()
 , m_numCollisions(0)
 , m_numResolverLoops(5)
 , m_resolverStep(1.0 / m_numResolverLoops)
+, m_gravity(MCVector3dF(0, 0, -9.81))
 {
     if (!MCWorld::m_instance)
     {

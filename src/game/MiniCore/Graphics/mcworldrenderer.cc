@@ -39,6 +39,11 @@ MCWorldRenderer::MCWorldRenderer()
 {
 }
 
+MCGLScene & MCWorldRenderer::glScene()
+{
+    return m_glScene;
+}
+
 void MCWorldRenderer::registerParticleRenderer(MCUint typeId, MCParticleRendererPtr renderer)
 {
     m_particleRenderers[typeId] = renderer;

@@ -60,7 +60,7 @@ public:
     static const int NUM_CARS = 12;
 
     //! Constructor.
-    Scene(Game & game, StateMachine & stateMachine, Renderer & renderer);
+    Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world);
 
     //! Destructor.
     ~Scene();
@@ -90,9 +90,6 @@ public:
 
     //! Return the active race track.
     Track & activeTrack() const;
-
-    //! Return the world.
-    MCWorld & world() const;
 
     //! Return track selection menu.
     TrackSelectionMenu & trackSelectionMenu() const;
@@ -140,7 +137,7 @@ private:
     MessageOverlay      * m_messageOverlay;
     Race                  m_race;
     Track               * m_activeTrack;
-    MCWorld             * m_world;
+    MCWorld             & m_world;
     TimingOverlay         m_timingOverlay[2];
     Startlights         * m_startlights;
     StartlightsOverlay  * m_startlightsOverlay;

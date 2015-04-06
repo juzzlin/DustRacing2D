@@ -33,6 +33,7 @@
 #include <MCCamera>
 #include <MCLogger>
 #include <MCObjectFactory>
+#include <MCWorldRenderer>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -163,7 +164,7 @@ void Game::createRenderer(bool forceNoVSync)
     Q_UNUSED(forceNoVSync);
 #endif
 
-    m_renderer = new Renderer(hRes, vRes, fullScreen);
+    m_renderer = new Renderer(hRes, vRes, fullScreen, m_world.renderer().glScene());
     m_renderer->setFormat(format);
 
     if (fullScreen)
@@ -275,7 +276,7 @@ void Game::initScene()
     assert(m_renderer);
 
     // Create the scene
-    m_scene = new Scene(*this, *m_stateMachine, *m_renderer);
+    m_scene = new Scene(*this, *m_stateMachine, *m_renderer, m_world);
 
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
