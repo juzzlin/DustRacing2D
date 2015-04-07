@@ -21,8 +21,6 @@
 #include <QPoint>
 #include <QPointF>
 
-#include <cassert>
-
 MapBase::MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows)
     : m_trackData(trackData)
     , m_cols(cols)
@@ -79,8 +77,6 @@ TrackTilePtr MapBase::getTile(unsigned int x, unsigned int y) const
 
 void MapBase::insertColumn(unsigned int at)
 {
-    assert(at >= 0 && at < m_cols);
-
     for (auto & row : m_map)
     {
         row.insert(row.begin() + at, nullptr);
@@ -91,8 +87,6 @@ void MapBase::insertColumn(unsigned int at)
 
 std::vector<TrackTilePtr> MapBase::deleteColumn(unsigned int at)
 {
-    assert(at >= 0 && at < m_cols);
-
     std::vector<TrackTilePtr> deleted;
 
     for (auto & row : m_map)
@@ -108,8 +102,6 @@ std::vector<TrackTilePtr> MapBase::deleteColumn(unsigned int at)
 
 void MapBase::insertRow(unsigned int at)
 {
-    assert(at >= 0 && at < m_rows);
-
     m_map.insert(m_map.begin() + at, TrackTileRow(m_cols, nullptr));
 
     m_rows++;
@@ -117,8 +109,6 @@ void MapBase::insertRow(unsigned int at)
 
 std::vector<TrackTilePtr> MapBase::deleteRow(unsigned int at)
 {
-    assert(at >= 0 && at < m_rows);
-
     std::vector<TrackTilePtr> deleted = *(m_map.begin() + at);
     m_map.erase(m_map.begin() + at);
 
