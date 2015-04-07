@@ -20,7 +20,7 @@
 CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
 {
     const int   defaultPower = 200000; // This in Watts
-    const float defaultDrag  = 5.0;
+    const float defaultDrag  = 2.5f;
 
     static const int NUM_CARS = numCars;
     static std::map<int, std::string> carImageMap = {
