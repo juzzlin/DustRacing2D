@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.9.2\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.10.0\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
@@ -166,6 +166,7 @@ HEADERS += \
     MiniCore/Graphics/mcsurfaceview.hh \
     MiniCore/Graphics/mcworldrenderer.hh \
     MiniCore/Graphics/mcparticle.hh \
+    MiniCore/Graphics/mcparticlerendererbase.hh \
     MiniCore/Graphics/mcsurfaceparticle.hh \
     MiniCore/Graphics/mcsurfaceparticlerenderer.hh \
     MiniCore/Physics/mccircleshape.hh \
@@ -280,7 +281,6 @@ SOURCES += \
     MiniCore/Asset/mcsurfacemanager.cc \
     MiniCore/Asset/mcsurfaceobjectdata.cc \
     MiniCore/Core/mcevent.cc \
-    MiniCore/Core/mcexception.cc \
     MiniCore/Core/mclogger.cc \
     MiniCore/Core/mcobject.cc \
     MiniCore/Core/mcobjectdata.cc \
@@ -308,6 +308,7 @@ SOURCES += \
     MiniCore/Graphics/mcglrectparticle.cc \
     MiniCore/Graphics/mcglrectparticlerenderer.cc \
     MiniCore/Graphics/mcparticle.cc \
+    MiniCore/Graphics/mcparticlerendererbase.cc \
     MiniCore/Graphics/mcsurfaceparticle.cc \
     MiniCore/Graphics/mcsurfaceparticlerenderer.cc \
     MiniCore/Physics/mccircleshape.cc \

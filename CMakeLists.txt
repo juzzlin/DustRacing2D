@@ -17,8 +17,8 @@ endif()
 
 # Global game version
 set(VERSION_MAJOR "1")
-set(VERSION_MINOR "9")
-set(VERSION_PATCH "2")
+set(VERSION_MINOR "10")
+set(VERSION_PATCH "0")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 option(ReleaseBuild "This should be used when creating DEB and RPM packages." OFF)

@@ -1,3 +1,85 @@
+dustrac (1.10.0-1) trusty; urgency=medium
+
+  * Remove some needless assert's.
+  * Reduce quadratic drag.
+  * Move brake signs a bit further.
+  * Add a chicane to straight.trk and make it shorter.
+  * Move MCGLScene to MCWorldRenderer.
+  * Common base class for all particle renderers.
+  * Refactor particle rendering.
+  * Smaller tree swing amplitude.
+  * Fix cppcheck warnings.
+  * Mud particles as surface particles.
+  * Make it possible to spin.
+  * Take more car colors in to use.
+  * Simple specular effect for the cars.
+  * Fix specular lighting of the tire object.
+  * No leaf particle when colliding with plants.
+  * Higher z for the plant object.
+  * Implement batching and shadows for MCSurfaceParticles.
+  * New-style signal connections in Game.
+  * Lambda slots for show/hide cursor.
+  * Lambda slot for the update timer.
+  * Eliminate magic numbers.
+  * Add MCSurfaceParticleRenderer.
+  * Longer start grid to Suzuka.
+  * Editor: Implement row and col deletion.
+  * Editor: replace some if's with asserts.
+  * Editor: Fit track properly when loading a track.
+  * More sane use of casts.
+  * C++11 way to disable copy ctor's.
+  * Cosmetic changes to tracktile.hpp.
+  * Editor: Implement row and column insertion.
+  * Refactor Config.
+  * Remove unused class TileTypeDialog.
+  * Editor: Use C++11's override specifier.
+  * Editor: Replace private slots with lambdas in EditorView.
+  * Editor: Cosmetic changes to EditorView.
+  * Use add_compile_options() instead of appending CMAKE_CXX_FLAGS.
+  * Render rect particles as quads if not GLES.
+  * Add MCGLRectParticleRenderer.
+  * Show lap time in message area.
+  * Fix a typo.
+  * Remove obsolete images.
+  * Use GLSL's reflect().
+  * Replace MCException with std::runtime_error.
+  * Use C++11's move semantics in MCBBox and MCBBox3d.
+  * Use C++11's move semantics in MCVector2d and MCVector3d.
+  * Refactor child velocity logic.
+  * Don't set render layer when on bridge.
+  * Render hud after shadows.
+  * Refactor MCSurfaceConfigLoader.
+  * Enable depth test for smoke.
+  * Fix depth test toggling in MCWorldRenderer.
+  * Remove render layers from cars' sub-objects.
+  * Render shadows with depth information.
+  * Update point sizes after resolution change.
+  * Refactor bridge creation.
+  * Fix build with qmake.
+  * Rescue corrupted dev branch.
+  * Set z-offsets for car surfaces.
+  * Add optional z attribute to MCSurface / surface config loader.
+  * Fix exception handling.
+  * Rename textures.conf => surfaces.conf
+  * Add mcvector2d.hh and mcvector3d.hh to CMakeLists.txt
+  * Divide layers into render and collision layers.
+  * Fix depth buffering.
+  * Add option to filter layers to be rendered.
+  * Use C++11 enum class in ResetAction.
+  * Use C++11 enum class in InputHandler.
+  * Use C++11 enum class in Game.
+  * Use C++11 enum class in MTFH::Menu.
+  * Use C++11 enum class for state.
+  * Use C++11 enum class for layers.
+  * Editor: Improve some tile graphics.
+  * Editor: Different colors for brake and brake hard.
+  * Refactor the use of gravity.
+  * Make timing based on frames instead of QTime.
+  * Fix a bug where mouse release outside pressed item caused two items being focused.
+  * Instantly change the virtual resolution between fullscreen modes.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Tue, 07 Apr 2015 19:56:55 +0300
+
 dustrac (1.9.2-1) trusty; urgency=medium
 
   * Fix rendering of the windowed mode.

@@ -1,4 +1,4 @@
-<track version="1.7.3" cols="30" rows="18" index="8" name="Curvastone">
+<track name="Curvastone" rows="18" version="1.9.2" cols="30" index="8">
  <t i="0" j="0" o="180" t="sandGrassCorner2"/>
  <t i="0" j="1" o="90" t="sandGrassStraight"/>
  <t i="0" j="2" o="90" t="sandGrassStraight"/>
@@ -310,7 +310,7 @@
  <t i="17" j="2" o="-90" t="straight45Female"/>
  <t i="17" j="3" o="0" t="corner45Left"/>
  <t i="17" j="4" o="0" t="straight" c="2"/>
- <t i="17" j="5" o="180" t="corner45Left"/>
+ <t i="17" j="5" o="180" t="corner45Left" c="2"/>
  <t i="17" j="6" o="90" t="straight45Female"/>
  <t i="17" j="7" o="0" t="grass"/>
  <t i="17" j="8" o="0" t="grass"/>

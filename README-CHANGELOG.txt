@@ -1,3 +1,78 @@
+1.10.0
+======
+
+In this release multiple issues with shadow rendering are fixed.
+Particle rendering is completely reworked and also the track editor
+is given some love. Issues with depth testing are fixed. A lot of
+bug fixes and miscellaneous improvements and changes.
+
+New features:
+
+* Add a chicane to straight.trk and make it shorter
+* Instantly change the virtual resolution between fullscreen modes
+* Longer start grid to Suzuka
+* Make it possible to spin
+* Show lap time in message area
+* Simple specular effect for the cars
+* Take more car colors in to use
+* Editor: Different colors for brake and brake hard
+* Editor: Implement row and col deletion
+* Editor: Implement row and column insertion
+
+Improvements:
+
+* Enable depth test for smoke
+* Implement batching and shadows for MCSurfaceParticles
+* Make timing based on frames instead of QTime
+* Mud particles as surface particles
+* No leaf particle when colliding with plants
+* Reduce quadratic drag
+* Refactor particle rendering
+* Rename textures.conf => surfaces.conf
+* Render rect particles as quads if not GLES
+* Render shadows with depth information
+* Set z-offsets for car surfaces
+* Smaller tree swing amplitude
+* Use GLSL's reflect()
+* Editor: Fit track properly when loading a track
+* Editor: Improve some tile graphics
+* Editor: Replace private slots with lambdas in EditorView
+* Editor: Replace some if's with asserts
+* Editor: Use C++11's override specifier
+
+Bug fixes:
+
+* Fix a bug where mouse release outside pressed item caused two items being focused
+* Fix build with qmake
+* Fix cppcheck warnings
+* Fix depth buffering
+* Fix exception handling
+* Fix specular lighting of the tire object
+
+Other:
+
+* Add optional z attribute to MCSurface / surface config loader
+* Add mcvector2d.hh and mcvector3d.hh to CMakeLists.txt
+* Add option to filter layers to be rendered
+* C++11 way to disable copy ctor's
+* Common base class for all particle renderers
+* Divide layers into render and collision layers
+* Lambda slots for show/hide cursor
+* Lambda slot for the update timer
+* More sane use of casts
+* Move MCGLScene to MCWorldRenderer
+* New-style signal connections in Game
+* Refactor bridge creation
+* Refactor Config
+* Refactor child velocity logic
+* Refactor MCSurfaceConfigLoader
+* Remove obsolete images
+* Remove render layers from cars' sub-objects
+* Replace MCException with std::runtime_error
+* Use add_compile_options() instead of appending CMAKE_CXX_FLAGS
+* Use C++11's move semantics in MCBBox and MCBBox3d
+* Use C++11's move semantics in MCVector2d and MCVector3d
+
 1.9.2
 =====
 
