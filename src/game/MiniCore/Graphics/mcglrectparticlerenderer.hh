@@ -51,7 +51,7 @@ private:
     /*! Populate the current batch.
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
-    void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr) override;
+    void setBatch(ParticleVector & particles, MCCamera * camera = nullptr) override;
 
     //! Render the current particle batch.
     void render() override;

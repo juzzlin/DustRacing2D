@@ -61,14 +61,12 @@ MCGLRectParticleRenderer::MCGLRectParticleRenderer(int maxBatchSize)
     finishBufferData();
 }
 
-void MCGLRectParticleRenderer::setBatch(
-    const MCParticleRendererBase::ParticleVector & particles_, MCCamera * camera)
+void MCGLRectParticleRenderer::setBatch(MCParticleRendererBase::ParticleVector & particles, MCCamera * camera)
 {
-    if (!particles_.size()) {
+    if (!particles.size()) {
         return;
     }
 
-    ParticleVector particles = std::move(particles_);
     setBatchSize(std::min(static_cast<int>(particles.size()), maxBatchSize()));
     std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();

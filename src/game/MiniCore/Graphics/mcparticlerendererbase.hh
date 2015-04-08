@@ -39,7 +39,7 @@ public:
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
     typedef std::vector<MCObject *> ParticleVector;
-    virtual void setBatch(const ParticleVector & particles, MCCamera * camera = nullptr) = 0;
+    virtual void setBatch(ParticleVector & particles, MCCamera * camera = nullptr) = 0;
 
     //! Render the current particle batch.
     virtual void render() = 0;
