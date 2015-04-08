@@ -21,7 +21,6 @@
 #define MCWORLDRENDERER_HH
 
 #include "mcglscene.hh"
-#include "mcparticlerendererbase.hh"
 #include "mcrenderlayer.hh"
 #include "mctypes.hh"
 #include "mcworld.hh"
@@ -34,12 +33,16 @@
 class MCCamera;
 class MCObject;
 
+class MCSurfaceParticleRenderer;
+
 //! Helper class used by MCWorld. Renders all objects in the scene.
 class MCWorldRenderer
 {
 public:
 
     MCWorldRenderer();
+
+    ~MCWorldRenderer();
 
     //! \return the current OpenGL scene object.
     MCGLScene & glScene();
@@ -50,13 +53,6 @@ public:
     /*! Enables/disables depth mask (write to depth buffer) on given render layer.
      *  Default is true. */
     void enableDepthMaskOnLayer(int layer, bool enable = true);
-
-    /*! Each used particle type should have a corresponding particle renderer
-     *  registered in MCWorld. As for rendering, particles are special cases, because
-     *  they need to be as efficient as possible. This is why a dedicated renderer is needed.
-     *  \param typeId Type id of the particle. \see MCObject::getTypeIDForName().
-     *  \param renderer Reference to the renderer to be used for this type id. */
-    void registerParticleRenderer(MCUint typeId, MCParticleRendererPtr renderer);
 
     /*! If a particle gets outside all visibility cameras, it'll be killed.
      *  This is just an optimization. The camera given to render()
@@ -97,9 +93,7 @@ private:
 
     std::vector<MCCamera *> m_visibilityCameras;
 
-    typedef int ParticleTypeId;
-    typedef std::map<ParticleTypeId, MCParticleRendererPtr> ParticleRendererMap;
-    ParticleRendererMap m_particleRenderers;
+    MCSurfaceParticleRenderer * m_surfaceParticleRenderer;
 
     MCGLScene m_glScene;
 

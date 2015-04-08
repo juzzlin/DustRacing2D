@@ -20,10 +20,7 @@
 #include "mcworldrenderer.hh"
 
 #include "mccamera.hh"
-#include "mcglpointparticle.hh"
-#include "mcglpointparticlerenderer.hh"
-#include "mcglrectparticle.hh"
-#include "mcglrectparticlerenderer.hh"
+#include "mclogger.hh"
 #include "mcsurfaceparticle.hh"
 #include "mcsurfaceparticlerenderer.hh"
 #include "mcobject.hh"
@@ -36,17 +33,13 @@
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
+    : m_surfaceParticleRenderer(nullptr)
 {
 }
 
 MCGLScene & MCWorldRenderer::glScene()
 {
     return m_glScene;
-}
-
-void MCWorldRenderer::registerParticleRenderer(MCUint typeId, MCParticleRendererPtr renderer)
-{
-    m_particleRenderers[typeId] = renderer;
 }
 
 void MCWorldRenderer::render(MCCamera * camera, const std::vector<int> & layers)
@@ -214,13 +207,15 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
     {
         if (batchIter->second.size())
         {
-            if (MCParticle * particle = dynamic_cast<MCParticle *>(batchIter->second[0]))
+            if (dynamic_cast<MCSurfaceParticle *>(batchIter->second[0]))
             {
-                auto rendererIter = m_particleRenderers.find(particle->typeID());
-                assert(rendererIter != m_particleRenderers.end());
-                auto renderer = rendererIter->second;
-                renderer->setBatch(batchIter->second, camera);
-                renderer->render();
+                if (!m_surfaceParticleRenderer)
+                {
+                    m_surfaceParticleRenderer = new MCSurfaceParticleRenderer;
+                }
+
+                m_surfaceParticleRenderer->setBatch(batchIter->second, camera);
+                m_surfaceParticleRenderer->render();
             }
         }
 
@@ -294,13 +289,15 @@ void MCWorldRenderer::renderParticleShadowBatches(MCCamera * camera, MCRenderLay
             // Currently support shadows only for surface particles.
             if (MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(batchIter->second[0]))
             {
-                auto rendererIter = m_particleRenderers.find(particle->typeID());
-                assert(rendererIter != m_particleRenderers.end());
-                auto renderer = rendererIter->second;
-                if (renderer->hasShadow() && renderer->shadowShaderProgram())
+                if (particle->hasShadow())
                 {
-                    renderer->setBatch(batchIter->second, camera);
-                    renderer->renderShadows();
+                    if (!m_surfaceParticleRenderer)
+                    {
+                        m_surfaceParticleRenderer = new MCSurfaceParticleRenderer;
+                    }
+
+                    m_surfaceParticleRenderer->setBatch(batchIter->second, camera);
+                    m_surfaceParticleRenderer->renderShadows();
                 }
             }
         }
@@ -347,4 +344,9 @@ void MCWorldRenderer::clear()
         layerIter->second.clear();
         layerIter++;
     }
+}
+
+MCWorldRenderer::~MCWorldRenderer()
+{
+    delete m_surfaceParticleRenderer;
 }

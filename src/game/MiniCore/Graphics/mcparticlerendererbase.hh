@@ -20,6 +20,7 @@
 #ifndef MCPARTICLERENDERERBASE_HH
 #define MCPARTICLERENDERERBASE_HH
 
+#include "mcobject.hh"
 #include "mcglobjectbase.hh"
 #include "mcglvertex.hh"
 #include "mcglcolor.hh"

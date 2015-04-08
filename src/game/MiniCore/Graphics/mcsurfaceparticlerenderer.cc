@@ -114,7 +114,12 @@ void MCSurfaceParticleRenderer::setBatch(MCParticleRendererBase::ParticleVector 
         {1, 1}
     };
 
-    assert(dynamic_cast<MCSurfaceParticle *>(particles.at(0)));
+    // Take common properties from the first particle in the batch
+    MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(particles.at(0));
+    assert(particle);
+    setMaterial(particle->surface().material());
+    setHasShadow(particle->hasShadow());
+    setAlphaBlend(particle->useAlphaBlend(), particle->alphaSrc(), particle->alphaDst());
 
     int vertexIndex = 0;
     for (int i = 0; i < batchSize(); i++)

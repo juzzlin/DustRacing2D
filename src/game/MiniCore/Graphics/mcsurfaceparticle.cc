@@ -19,9 +19,14 @@
 
 #include "mcsurfaceparticle.hh"
 
-MCSurfaceParticle::MCSurfaceParticle(const std::string & typeID)
+MCSurfaceParticle::MCSurfaceParticle(const std::string & typeID, MCSurface & surface)
 : MCParticle(typeID)
 , m_color(1.0, 1.0, 1.0, 1.0)
+, m_surface(surface)
+, m_hasShadow(false)
+, m_useAlphaBlend(false)
+, m_src(0)
+, m_dst(0)
 {
 }
 
@@ -30,7 +35,45 @@ void MCSurfaceParticle::setColor(const MCGLColor & color)
     m_color = color;
 }
 
-const MCGLColor & MCSurfaceParticle::color()
+const MCGLColor & MCSurfaceParticle::color() const
 {
     return m_color;
 }
+
+MCSurface & MCSurfaceParticle::surface()
+{
+    return m_surface;
+}
+
+void MCSurfaceParticle::setHasShadow(bool hasShadow)
+{
+    m_hasShadow = hasShadow;
+}
+
+bool MCSurfaceParticle::hasShadow() const
+{
+    return m_hasShadow;
+}
+
+void MCSurfaceParticle::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
+{
+    m_useAlphaBlend = useAlphaBlend;
+    m_src           = src;
+    m_dst           = dst;
+}
+
+bool MCSurfaceParticle::useAlphaBlend() const
+{
+    return m_useAlphaBlend;
+}
+
+GLenum MCSurfaceParticle::alphaSrc() const
+{
+    return m_src;
+}
+
+GLenum MCSurfaceParticle::alphaDst() const
+{
+    return m_dst;
+}
+

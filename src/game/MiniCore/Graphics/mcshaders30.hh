@@ -159,64 +159,6 @@ static const char * MCDefaultShadowFsh =
 "    }\n"
 "}\n";
 
-static const char * MCDefaultParticleFsh =
-"#version 130\n"
-""
-"in  vec4 vColor;\n"
-"out vec4 fragColor;\n"
-""
-"void main(void)\n"
-"{\n"
-"    fragColor = vColor;\n"
-"}\n";
-
-static const char * MCDefaultPointParticleVsh =
-"#version 130\n"
-""
-"in      vec3  inVertex;\n"
-"in      vec3  inNormal;\n"
-"in      vec4  inColor;\n"
-"uniform mat4  vp;\n"
-"uniform float fade;\n"
-"uniform float pointSize;\n"
-"out     mat2  rotationMatrix;\n"
-"out     vec4  vColor;\n"
-""
-"void main()\n"
-"{\n"
-"    gl_Position = vp * vec4(inVertex, 1);\n"
-"    gl_PointSize = pointSize * inVertex.z;\n"
-"    vColor = inColor * fade;\n"
-"    // Rotation matrix to rotate a point sprite (sin and cos delivered as normals)\n"
-"    rotationMatrix = mat2(inNormal.x, inNormal.y, -inNormal.y, inNormal.x);\n"
-"}\n";
-
-static const char * MCDefaultPointParticleFsh =
-"#version 130\n"
-""
-"uniform sampler2D tex0;\n"
-"in      vec4      vColor;\n"
-"out     vec4      fragColor;\n"
-""
-"void main(void)\n"
-"{\n"
-"    fragColor = texture2D(tex0, gl_PointCoord) * vColor;\n"
-"}\n";
-
-static const char * MCDefaultPointParticleRotateFsh =
-"#version 130\n"
-""
-"uniform sampler2D tex0;\n"
-"in      vec4      vColor;\n"
-"in      mat2      rotationMatrix;\n"
-"out     vec4      fragColor;\n"
-""
-"void main(void)\n"
-"{\n"
-"    vec4 texColor = texture2D(tex0, rotationMatrix * gl_PointCoord) * vColor;\n"
-"    fragColor = texColor;\n"
-"}\n";
-
 static const char * MCDefaulTextVsh =
 "#version 130\n"
 ""

@@ -95,24 +95,6 @@ MCGLShaderProgramPtr MCGLScene::defaultShadowShaderProgram()
     return m_defaultShadowShader;
 }
 
-MCGLShaderProgramPtr MCGLScene::defaultParticleShaderProgram()
-{
-    assert(m_defaultParticleShader.get());
-    return m_defaultParticleShader;
-}
-
-MCGLShaderProgramPtr MCGLScene::defaultPointParticleShaderProgram()
-{
-    assert(m_defaultPointParticleShader.get());
-    return m_defaultPointParticleShader;
-}
-
-MCGLShaderProgramPtr MCGLScene::defaultPointParticleRotateShaderProgram()
-{
-    assert(m_defaultPointParticleRotateShader.get());
-    return m_defaultPointParticleRotateShader;
-}
-
 MCGLShaderProgramPtr MCGLScene::defaultTextShaderProgram()
 {
     assert(m_defaultTextShader.get());
@@ -162,15 +144,6 @@ void MCGLScene::createDefaultShaderPrograms()
 
     m_defaultShadowShader.reset(new MCGLShaderProgram(
         MCGLShaderProgram::getDefaultShadowVertexShaderSource(), MCGLShaderProgram::getDefaultShadowFragmentShaderSource()));
-
-    m_defaultParticleShader.reset(new MCGLShaderProgram(
-        MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultParticleFragmentShaderSource()));
-
-    m_defaultPointParticleShader.reset(new MCGLShaderProgram(
-        MCGLShaderProgram::getDefaultPointParticleVertexShaderSource(), MCGLShaderProgram::getDefaultPointParticleFragmentShaderSource()));
-
-    m_defaultPointParticleRotateShader.reset(new MCGLShaderProgram(
-        MCGLShaderProgram::getDefaultPointParticleVertexShaderSource(), MCGLShaderProgram::getDefaultPointParticleRotateFragmentShaderSource()));
 
     m_defaultTextShader.reset(new MCGLShaderProgram(
         MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextFragmentShaderSource()));

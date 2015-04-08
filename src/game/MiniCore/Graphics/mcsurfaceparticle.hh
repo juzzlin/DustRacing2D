@@ -39,8 +39,11 @@ class MCSurfaceParticle : public MCParticle
 {
 public:
 
-    //! Constructor.
-    MCSurfaceParticle(const std::string & viewId);
+    /*! Constructor.
+     *  \param viewId id for the particle. All particles of a same kind should
+     *  use the same id. E.g. batching is carried out based on this id.
+     *  \param surface Surface used by the particle. */
+    MCSurfaceParticle(const std::string & viewId, MCSurface & surface);
 
     //! Destructor.
     virtual ~MCSurfaceParticle() {};
@@ -49,7 +52,24 @@ public:
     void setColor(const MCGLColor & color);
 
     //! Get the color.
-    const MCGLColor & color();
+    const MCGLColor & color() const;
+
+    MCSurface & surface();
+
+    //! Enable/disable blending.
+    void setAlphaBlend(bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
+
+    bool useAlphaBlend() const;
+
+    GLenum alphaSrc() const;
+
+    GLenum alphaDst() const;
+
+    //! \return Set if shadow needs to be rendered
+    void setHasShadow(bool hasShadow);
+
+    //! \return True if shadow needs to be rendered
+    bool hasShadow() const;
 
 private:
 
@@ -57,6 +77,16 @@ private:
     DISABLE_ASSI(MCSurfaceParticle);
 
     MCGLColor m_color;
+
+    MCSurface & m_surface;
+
+    bool m_hasShadow;
+
+    bool m_useAlphaBlend;
+
+    GLenum m_src;
+
+    GLenum m_dst;
 };
 
 #endif // MCSURFACEPARTICLE_HH

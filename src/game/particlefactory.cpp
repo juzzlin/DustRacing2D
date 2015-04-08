@@ -20,8 +20,6 @@
 
 #include <MCAssetManager>
 #include <MCGLColor>
-#include <MCGLRectParticle>
-#include <MCGLRectParticleRenderer>
 #include <MCParticle>
 #include <MCRandom>
 #include <MCSurfaceParticle>
@@ -46,40 +44,21 @@ ParticleFactory & ParticleFactory::instance()
     return *ParticleFactory::m_instance;
 }
 
-void ParticleFactory::preCreateRectParticles(int count,
-    std::string typeId, ParticleFactory::ParticleType typeEnum)
-{
-    m_particleRenderers[typeEnum] = MCParticleRendererPtr(new MCGLRectParticleRenderer);
-
-    for (int i = 0; i < count; i++)
-    {
-        MCGLRectParticle * particle = new MCGLRectParticle(typeId);
-        particle->setFreeList(m_freeLists[typeEnum]);
-
-        // Initially push to list of free particles
-        m_freeLists[typeEnum].push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
-    }
-
-    MCWorld::instance().renderer().registerParticleRenderer(
-        MCObject::getTypeIDForName(typeId), m_particleRenderers[typeEnum]);
-}
-
-void ParticleFactory::preCreateSurfaceParticles(int count,
-    std::string typeId, ParticleFactory::ParticleType typeEnum)
+void ParticleFactory::preCreateSurfaceParticles(
+    int count, std::string typeId, ParticleFactory::ParticleType typeEnum, MCSurface & surface, bool alphaBlend, bool hasShadow)
 {
     m_particleRenderers[typeEnum] = MCParticleRendererPtr(new MCSurfaceParticleRenderer);
 
     for (int i = 0; i < count; i++)
     {
-        MCSurfaceParticle * particle = new MCSurfaceParticle(typeId);
+        MCSurfaceParticle * particle = new MCSurfaceParticle(typeId, surface);
         particle->setRenderLayer(static_cast<int>(Layers::Render::Objects));
         particle->setFreeList(m_freeLists[typeEnum]);
         particle->setCustomDeathCondition([] (MCParticle & self) {
             return self.location().k() <= 0;
         });
+        particle->setAlphaBlend(alphaBlend);
+        particle->setHasShadow(hasShadow);
 
         // Initially push to list of free particles
         m_freeLists[typeEnum].push_back(particle);
@@ -87,51 +66,23 @@ void ParticleFactory::preCreateSurfaceParticles(int count,
         // Store for deletion
         m_delete.push_back(std::unique_ptr<MCParticle>(particle));
     }
-
-    MCWorld::instance().renderer().registerParticleRenderer(
-        MCObject::getTypeIDForName(typeId), m_particleRenderers[typeEnum]);
 }
 
 void ParticleFactory::preCreateParticles()
 {
-    preCreateSurfaceParticles(500, "SMOKE", Smoke);
-    m_particleRenderers[Smoke]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[Smoke]->setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_particleRenderers[Smoke]->setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "SMOKE", Smoke, MCAssetManager::surfaceManager().surface("smoke"), true);
 
-    preCreateSurfaceParticles(500, "OFFSMOKE", OffTrackSmoke);
-    m_particleRenderers[OffTrackSmoke]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[OffTrackSmoke]->setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_particleRenderers[OffTrackSmoke]->setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "OFFSMOKE", OffTrackSmoke, MCAssetManager::surfaceManager().surface("smoke"), true);
 
-    preCreateSurfaceParticles(500, "SPARKLE", Sparkle);
-    m_particleRenderers[Sparkle]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[Sparkle]->setMaterial(MCAssetManager::surfaceManager().surface("sparkle").material());
-    m_particleRenderers[Sparkle]->setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "SPARKLE", Sparkle, MCAssetManager::surfaceManager().surface("sparkle"), true);
 
-    preCreateSurfaceParticles(100, "LEAF", Leaf);
-    m_particleRenderers[Leaf]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[Leaf]->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
-    m_particleRenderers[Leaf]->setMaterial(MCAssetManager::surfaceManager().surface("leaf").material());
-    m_particleRenderers[Leaf]->setAlphaBlend(false);
-    m_particleRenderers[Leaf]->setHasShadow(true);
+    preCreateSurfaceParticles(100, "LEAF", Leaf, MCAssetManager::surfaceManager().surface("leaf"), false, true);
 
-    preCreateSurfaceParticles(500, "MUD", Mud);
-    m_particleRenderers[Mud]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[Mud]->setShadowShaderProgram(Renderer::instance().program("defaultShadow"));
-    m_particleRenderers[Mud]->setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
-    m_particleRenderers[Mud]->setAlphaBlend(false);
-    m_particleRenderers[Mud]->setHasShadow(true);
+    preCreateSurfaceParticles(500, "MUD", Mud, MCAssetManager::surfaceManager().surface("smoke"), false, true);
 
-    preCreateSurfaceParticles(500, "ONSKID", OnTrackSkidMark);
-    m_particleRenderers[OnTrackSkidMark]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[OnTrackSkidMark]->setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
-    m_particleRenderers[OnTrackSkidMark]->setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "ONSKID", OnTrackSkidMark, MCAssetManager::surfaceManager().surface("skid"), true);
 
-    preCreateSurfaceParticles(500, "OFFSKID", OffTrackSkidMark);
-    m_particleRenderers[OffTrackSkidMark]->setShaderProgram(Renderer::instance().program("default"));
-    m_particleRenderers[OffTrackSkidMark]->setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
-    m_particleRenderers[OffTrackSkidMark]->setAlphaBlend(true);
+    preCreateSurfaceParticles(500, "OFFSKID", OffTrackSkidMark, MCAssetManager::surfaceManager().surface("skid"), true);
 }
 
 void ParticleFactory::doParticle(

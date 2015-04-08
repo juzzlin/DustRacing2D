@@ -131,9 +131,6 @@ void Renderer::loadShaders()
     m_shaderHash["default"]             = MCGLScene::instance().defaultShaderProgram();
     m_shaderHash["defaultSpecular"]     = MCGLScene::instance().defaultSpecularShaderProgram();
     m_shaderHash["defaultShadow"]       = MCGLScene::instance().defaultShadowShaderProgram();
-    m_shaderHash["particle"]            = MCGLScene::instance().defaultParticleShaderProgram();
-    m_shaderHash["pointParticle"]       = MCGLScene::instance().defaultPointParticleShaderProgram();
-    m_shaderHash["pointParticleRotate"] = MCGLScene::instance().defaultPointParticleRotateShaderProgram();
     m_shaderHash["text"]                = MCGLScene::instance().defaultTextShaderProgram();
     m_shaderHash["textShadow"]          = MCGLScene::instance().defaultTextShadowShaderProgram();
 

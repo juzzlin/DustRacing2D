@@ -50,8 +50,6 @@ MCGLShaderProgram::MCGLShaderProgram()
     , m_cameraPending(false)
     , m_colorPending(false)
     , m_scalePending(false)
-    , m_pointSize(1.0f)
-    , m_pointSizePending(false)
     , m_diffuseLightPending(false)
     , m_specularLightPending(false)
     , m_ambientLightPending(false)
@@ -81,8 +79,6 @@ MCGLShaderProgram::MCGLShaderProgram(
     , m_cameraPending(false)
     , m_colorPending(false)
     , m_scalePending(false)
-    , m_pointSize(1.0f)
-    , m_pointSizePending(false)
     , m_diffuseLightPending(false)
     , m_specularLightPending(false)
     , m_ambientLightPending(false)
@@ -124,7 +120,6 @@ void MCGLShaderProgram::initUniformNameMap()
     m_uniforms[View]               = "v";
     m_uniforms[Model]              = "model";
     m_uniforms[Scale]              = "scale";
-    m_uniforms[PointSize]          = "pointSize";
     m_uniforms[Camera]             = "camera";
 }
 
@@ -162,7 +157,6 @@ void MCGLShaderProgram::bind()
     setPendingColor();
     setPendingDiffuseLight();
     setPendingFadeValue();
-    setPendingPointSize();
     setPendingScale();
     setPendingSpecularLight();
     setPendingTransform();
@@ -292,26 +286,6 @@ const char * MCGLShaderProgram::getDefaultShadowVertexShaderSource()
 const char * MCGLShaderProgram::getDefaultShadowFragmentShaderSource()
 {
     return MCDefaultShadowFsh;
-}
-
-const char * MCGLShaderProgram::getDefaultPointParticleVertexShaderSource()
-{
-    return MCDefaultPointParticleVsh;
-}
-
-const char * MCGLShaderProgram::getDefaultParticleFragmentShaderSource()
-{
-    return MCDefaultParticleFsh;
-}
-
-const char * MCGLShaderProgram::getDefaultPointParticleFragmentShaderSource()
-{
-    return MCDefaultPointParticleFsh;
-}
-
-const char * MCGLShaderProgram::getDefaultPointParticleRotateFragmentShaderSource()
-{
-    return MCDefaultPointParticleRotateFsh;
 }
 
 const char * MCGLShaderProgram::getDefaultTextVertexShaderSource()
@@ -578,24 +552,6 @@ void MCGLShaderProgram::setPendingFadeValue()
     if (m_fadeValuePending) {
         m_fadeValuePending = false;
         glUniform1f(getUniformLocation(Fade), m_fadeValue);
-    }
-}
-
-void MCGLShaderProgram::setPointSize(GLfloat pointSize)
-{
-    m_pointSize = pointSize;
-    m_pointSizePending = true;
-
-    if (isBound()) {
-        setPendingPointSize();
-    }
-}
-
-void MCGLShaderProgram::setPendingPointSize()
-{
-    if (m_pointSizePending) {
-        m_pointSizePending = false;
-        glUniform1f(getUniformLocation(PointSize), m_pointSize);
     }
 }
 

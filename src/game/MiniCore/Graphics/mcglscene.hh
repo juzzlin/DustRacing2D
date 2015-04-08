@@ -88,15 +88,6 @@ public:
     //! \return default shadow shader program.
     MCGLShaderProgramPtr defaultShadowShaderProgram();
 
-    //! \return default shader program for particles.
-    MCGLShaderProgramPtr defaultParticleShaderProgram();
-
-    //! \return default shader program for point particles.
-    MCGLShaderProgramPtr defaultPointParticleShaderProgram();
-
-    //! \return default shader program for rotated point particles.
-    MCGLShaderProgramPtr defaultPointParticleRotateShaderProgram();
-
     //! \return default shader program for text.
     MCGLShaderProgramPtr defaultTextShaderProgram();
 
@@ -162,12 +153,6 @@ private:
     MCGLShaderProgramPtr m_defaultSpecularShader;
 
     MCGLShaderProgramPtr m_defaultShadowShader;
-
-    MCGLShaderProgramPtr m_defaultParticleShader;
-
-    MCGLShaderProgramPtr m_defaultPointParticleShader;
-
-    MCGLShaderProgramPtr m_defaultPointParticleRotateShader;
 
     MCGLShaderProgramPtr m_defaultTextShader;
 

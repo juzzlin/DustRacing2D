@@ -36,10 +36,6 @@ Graphics/mcglambientlight.cc
 Graphics/mcgldiffuselight.cc
 Graphics/mcglmaterial.cc
 Graphics/mcglobjectbase.cc
-Graphics/mcglpointparticle.cc
-Graphics/mcglpointparticlerenderer.cc
-Graphics/mcglrectparticle.cc
-Graphics/mcglrectparticlerenderer.cc
 Graphics/mcglscene.cc
 Graphics/mcglshaderprogram.cc
 Graphics/mcmesh.cc

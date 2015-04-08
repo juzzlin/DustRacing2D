@@ -111,19 +111,6 @@ public:
     /*! Get the default shadow fragment shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultShadowFragmentShaderSource();
 
-    /*! Get the default point particle vertex shader source. Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultPointParticleVertexShaderSource();
-
-    /*! Get the default particle fragment shader source. Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultParticleFragmentShaderSource();
-
-    /*! Get the default point particle fragment shader source. Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultPointParticleFragmentShaderSource();
-
-    /*! Get the default point particle fragment shader source with rotation support.
-     *  Defining __MC_GLES__ will select GLES version. */
-    static const char * getDefaultPointParticleRotateFragmentShaderSource();
-
     /*! Get the default text vertex shader source. Defining __MC_GLES__ will select GLES version. */
     static const char * getDefaultTextVertexShaderSource();
 
@@ -173,9 +160,6 @@ public:
     //! Set specular light.
     virtual void setSpecularLight(const MCGLDiffuseLight & light);
 
-    //! Set point size for point sprites.
-    virtual void setPointSize(GLfloat pointSize);
-
     /*! Set camera location. Currently not used by MiniCore, but
      *  can be used in e.g. fragment shader effects */
     virtual void setCamera(const MCVector2dF & camera);
@@ -204,7 +188,6 @@ private:
         Model,
         Color,
         Scale,
-        PointSize,
         Camera,
         UserData1,
         UserData2,
@@ -300,10 +283,6 @@ private:
 
     bool m_scalePending;
 
-    GLfloat m_pointSize;
-
-    bool m_pointSizePending;
-
     MCGLDiffuseLight m_diffuseLight;
 
     bool m_diffuseLightPending;
@@ -323,7 +302,6 @@ private:
     MCVector2dF m_userData2;
 
     bool m_userData2Pending;
-
 };
 
 typedef std::shared_ptr<MCGLShaderProgram> MCGLShaderProgramPtr;

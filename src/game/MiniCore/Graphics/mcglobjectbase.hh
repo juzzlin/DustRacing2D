@@ -22,7 +22,6 @@
 
 #include <MCGLEW>
 #include "mcglmaterial.hh"
-#include "mcglrectparticle.hh"
 #include "mcglshaderprogram.hh"
 
 /*! Base class for GL renderables in MiniCore. Automatically creates VBO, VAO and
