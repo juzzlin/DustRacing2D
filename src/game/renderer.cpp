@@ -17,7 +17,6 @@
 
 #include "eventhandler.hpp"
 #include "fontfactory.hpp"
-#include "particlefactory.hpp"
 #include "scene.hpp"
 
 #ifdef __MC_GL30__
@@ -194,8 +193,6 @@ void Renderer::setResolution(QSize resolution)
 
     m_fbo.reset();
     m_shadowFbo.reset();
-
-    ParticleFactory::instance().updatePointSizes();
 }
 
 float Renderer::fadeValue() const

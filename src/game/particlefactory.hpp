@@ -25,7 +25,6 @@
 #include <memory>
 
 class MCSurfaceParticle;
-class MCGLPointParticle;
 
 //! ParticleFactory takes care of spawning and recycling particles.
 class ParticleFactory
@@ -58,9 +57,6 @@ public:
         MCVector3dFR initialVelocity = MCVector3dF(0, 0, 0),
         int angle = 0);
 
-    //! Update point sizes after e.g. resolution change.
-    void updatePointSizes();
-
 private:
 
     void doSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
@@ -79,17 +75,11 @@ private:
 
     void preCreateParticles();
 
-    void preCreatePointParticles(int count,
-        std::string typeId, ParticleType typeEnum,
-        const MCGLColor & color);
-
     void preCreateRectParticles(int count, std::string typeId, ParticleType typeEnum);
 
     void preCreateSurfaceParticles(int count, std::string typeId, ParticleType typeEnum);
 
     MCSurfaceParticle * newSurfaceParticle(ParticleType typeEnum) const;
-
-    MCGLPointParticle * newPointParticle(ParticleType typeEnum) const;
 
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];

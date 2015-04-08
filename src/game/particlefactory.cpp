@@ -20,8 +20,6 @@
 
 #include <MCAssetManager>
 #include <MCGLColor>
-#include <MCGLPointParticle>
-#include <MCGLPointParticleRenderer>
 #include <MCGLRectParticle>
 #include <MCGLRectParticleRenderer>
 #include <MCParticle>
@@ -46,33 +44,6 @@ ParticleFactory & ParticleFactory::instance()
 {
     assert(ParticleFactory::m_instance);
     return *ParticleFactory::m_instance;
-}
-
-void ParticleFactory::preCreatePointParticles(int count,
-    std::string typeId, ParticleFactory::ParticleType typeEnum,
-    const MCGLColor & color)
-{
-    m_particleRenderers[typeEnum] = MCParticleRendererPtr(new MCGLPointParticleRenderer);
-
-    for (int i = 0; i < count; i++)
-    {
-        MCGLPointParticle * particle = new MCGLPointParticle(typeId, color);
-        particle->setFreeList(m_freeLists[typeEnum]);
-
-        if (typeEnum == ParticleFactory::OnTrackSkidMark)
-        {
-            particle->setDieWhenOffScreen(false);
-        }
-
-        // Initially push to list of free particles
-        m_freeLists[typeEnum].push_back(particle);
-
-        // Store for deletion
-        m_delete.push_back(std::unique_ptr<MCParticle>(particle));
-    }
-
-    MCWorld::instance().renderer().registerParticleRenderer(
-        MCObject::getTypeIDForName(typeId), m_particleRenderers[typeEnum]);
 }
 
 void ParticleFactory::preCreateRectParticles(int count,
@@ -121,19 +92,6 @@ void ParticleFactory::preCreateSurfaceParticles(int count,
         MCObject::getTypeIDForName(typeId), m_particleRenderers[typeEnum]);
 }
 
-int scalePointSizeWithResolution(int size)
-{
-    const int referenceWidth = 1600;
-    return Renderer::instance().resolution().width() * size / referenceWidth + 1;
-}
-
-void ParticleFactory::updatePointSizes()
-{
-    auto renderer = dynamic_cast<MCGLPointParticleRenderer *>(m_particleRenderers[Sparkle].get());
-    assert(renderer);
-    renderer->setPointSize(scalePointSizeWithResolution(16));
-}
-
 void ParticleFactory::preCreateParticles()
 {
     preCreateSurfaceParticles(500, "SMOKE", Smoke);
@@ -146,8 +104,8 @@ void ParticleFactory::preCreateParticles()
     m_particleRenderers[OffTrackSmoke]->setMaterial(MCAssetManager::surfaceManager().surface("smoke").material());
     m_particleRenderers[OffTrackSmoke]->setAlphaBlend(true);
 
-    preCreatePointParticles(500, "SPARKLE", Sparkle, MCGLColor(1.0f, 0.75f, 0.0f, 1.0f));
-    m_particleRenderers[Sparkle]->setShaderProgram(Renderer::instance().program("pointParticle"));
+    preCreateSurfaceParticles(500, "SPARKLE", Sparkle);
+    m_particleRenderers[Sparkle]->setShaderProgram(Renderer::instance().program("default"));
     m_particleRenderers[Sparkle]->setMaterial(MCAssetManager::surfaceManager().surface("sparkle").material());
     m_particleRenderers[Sparkle]->setAlphaBlend(true);
 
@@ -174,8 +132,6 @@ void ParticleFactory::preCreateParticles()
     m_particleRenderers[OffTrackSkidMark]->setShaderProgram(Renderer::instance().program("default"));
     m_particleRenderers[OffTrackSkidMark]->setMaterial(MCAssetManager::surfaceManager().surface("skid").material());
     m_particleRenderers[OffTrackSkidMark]->setAlphaBlend(true);
-
-    updatePointSizes();
 }
 
 void ParticleFactory::doParticle(
@@ -223,20 +179,6 @@ MCSurfaceParticle * ParticleFactory::newSurfaceParticle(ParticleType typeEnum) c
     if (freeList.size())
     {
         p = dynamic_cast<MCSurfaceParticle *>(freeList.back());
-        assert(p);
-        freeList.pop_back();
-    }
-
-    return p;
-}
-
-MCGLPointParticle * ParticleFactory::newPointParticle(ParticleType typeEnum) const
-{
-    MCGLPointParticle * p = nullptr;
-    MCParticle::ParticleFreeList & freeList = m_freeLists[typeEnum];
-    if (freeList.size())
-    {
-        p = dynamic_cast<MCGLPointParticle *>(freeList.back());
         assert(p);
         freeList.pop_back();
     }
@@ -318,12 +260,14 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 
 void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (MCGLPointParticle * sparkle = ParticleFactory::newPointParticle(Sparkle))
+    if (MCSurfaceParticle * sparkle = ParticleFactory::newSurfaceParticle(Sparkle))
     {
         sparkle->init(location, 6, 120);
+        sparkle->setColor(MCGLColor(1.0f, 0.75f, 0.0f, 1.0f));
         sparkle->setAnimationStyle(MCParticle::FadeOut);
-        sparkle->setVelocity(velocity);
-        sparkle->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
+        sparkle->setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
+        sparkle->setAcceleration(MCWorld::instance().gravity() * 0.5f);
+        sparkle->setRenderLayer(static_cast<int>(Layers::Render::Sparkles));
         sparkle->addToWorld();
     }
 }

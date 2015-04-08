@@ -25,7 +25,8 @@ enum class Render : int
 {
     Ground      = 0,
     Objects     = 1,
-    Smoke       = 2
+    Smoke       = 2,
+    Sparkles    = 3
 };
 
 /*! Define the collision layers for different kinds of objects. */
