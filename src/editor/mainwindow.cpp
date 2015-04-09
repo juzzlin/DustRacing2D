@@ -520,11 +520,12 @@ void MainWindow::openTrack()
     QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
     settings.endGroup();
 
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open a track"),
-                                                    path,
-                                                    tr("Track Files (*.trk)"));
-    doOpenTrack(fileName);
+    const QString fileName = QFileDialog::getOpenFileName(
+        this, tr("Open a track"), path, tr("Track Files (*.trk)"));
+    if (!fileName.isEmpty())
+    {
+        doOpenTrack(fileName);
+    }
 }
 
 void MainWindow::showAboutDlg()
