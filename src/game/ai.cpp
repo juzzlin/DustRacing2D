@@ -104,11 +104,11 @@ void AI::steerControl(TargetNodePtr tnode)
     const MCFloat maxDelta = 3.0;
     if (diff < -maxDelta)
     {
-        m_car.turnRight(control);
+        m_car.steer(Car::Steer::Right, control);
     }
     else if (diff > maxDelta)
     {
-        m_car.turnLeft(control);
+        m_car.steer(Car::Steer::Left, control);
     }
 
     // Store the last difference

@@ -35,6 +35,12 @@ class Car : public MCObject, public UpdateableIf
 {
 public:
 
+    enum class Steer {
+        Neutral,
+        Left,
+        Right
+    };
+
     //! Defines the (default) car properties.
     class Description
     {
@@ -93,11 +99,8 @@ public:
     //! Clear statuses before setting any states.
     void clearStatuses();
 
-    //! Turn left.
-    void turnLeft(MCFloat control = 1.0f);
-
-    //! Turn right.
-    void turnRight(MCFloat control = 1.0f);
+    //! Steer.
+    void steer(Steer direction, MCFloat control = 1.0f);
 
     //! Accelerate.
     void accelerate(bool deccelerate = false);
@@ -110,9 +113,6 @@ public:
     bool isSkidding() const;
 
     void setBrakeLightState(bool state);
-
-    //! User isn't steering.
-    void noSteering();
 
     //! Get estimated speed in km/h. This is used e.g. by the speedometer.
     int speedInKmh() const;
@@ -199,8 +199,7 @@ private:
     bool                     m_braking;
     bool                     m_reverse;
     bool                     m_skidding;
-    bool                     m_turnLeft;
-    bool                     m_turnRight;
+    Steer                    m_steer;
     MCUint                   m_index;
     float                    m_tireAngle;
     float                    m_tireWearOutCapacity;

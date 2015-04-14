@@ -50,8 +50,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_braking(false)
 , m_reverse(false)
 , m_skidding(false)
-, m_turnLeft(false)
-, m_turnRight(false)
+, m_steer(Steer::Neutral)
 , m_index(index)
 , m_tireAngle(0)
 , m_tireWearOutCapacity(desc.tireWearOutCapacity)
@@ -140,18 +139,19 @@ MCUint Car::index() const
     return m_index;
 }
 
-void Car::turnLeft(MCFloat control)
+void Car::steer(Steer direction, MCFloat control)
 {
-    m_tireAngle = static_cast<int>(15.0 * control);
+    if (direction == Steer::Neutral)
+    {
+        m_tireAngle = 0;
+    }
+    else
+    {
+        const float maxAngle = 15.0f * (direction == Steer::Left ? 1 : -1);
+        m_tireAngle = static_cast<int>(maxAngle * control);
+    }
 
-    m_turnLeft = true;
-}
-
-void Car::turnRight(MCFloat control)
-{
-    m_tireAngle = static_cast<int>(-15.0 * control);
-
-    m_turnRight = true;
+    m_steer = direction;
 }
 
 void Car::accelerate(bool deccelerate)
@@ -215,13 +215,6 @@ bool Car::isBraking() const
 bool Car::isSkidding() const
 {
     return m_skidding;
-}
-
-void Car::noSteering()
-{
-    m_tireAngle = 0;
-    m_turnLeft  = false;
-    m_turnRight = false;
 }
 
 int Car::speedInKmh() const
@@ -332,7 +325,7 @@ void Car::stepTime(MCFloat step)
 
     if (m_isHuman)
     {
-        if (m_braking || (m_accelerating && (m_turnLeft || m_turnRight)))
+        if (m_braking || (m_accelerating && m_steer != Steer::Neutral))
         {
             wearOutTires(step, 0.05f);
         }

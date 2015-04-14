@@ -366,15 +366,15 @@ void Scene::processUserInput(InputHandler & handler)
         // Handle turning
         if (handler.getActionState(i, InputHandler::Action::Left))
         {
-            m_cars.at(i)->turnLeft();
+            m_cars.at(i)->steer(Car::Steer::Left);
         }
         else if (handler.getActionState(i, InputHandler::Action::Right))
         {
-            m_cars.at(i)->turnRight();
+            m_cars.at(i)->steer(Car::Steer::Right);
         }
         else
         {
-            m_cars.at(i)->noSteering();
+            m_cars.at(i)->steer(Car::Steer::Neutral);
         }
     }
 }
