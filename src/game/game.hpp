@@ -102,9 +102,11 @@ public:
     //! \return True if the current mode has computer players.
     bool hasComputerPlayers() const;
 
-    EventHandler & eventHandler() const;
+    EventHandler & eventHandler();
 
     AudioWorker & audioWorker();
+
+    DifficultyProfile & difficultyProfile();
 
     const std::string & fontName() const;
 
@@ -129,6 +131,8 @@ private:
     bool loadTracks();
 
     Settings m_settings;
+
+    DifficultyProfile m_difficultyProfile;
 
     InputHandler * m_inputHandler;
 

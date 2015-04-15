@@ -42,7 +42,7 @@ class Race : public AudioSource
 public:
 
     //! Constructor.
-    Race(const Game & game, unsigned int numCars);
+    Race(Game & game, unsigned int numCars);
 
     //! Destructor.
     virtual ~Race();
@@ -165,7 +165,7 @@ private:
 
     int m_offTrackCounter;
 
-    const Game & m_game;
+    Game & m_game;
 };
 
 #endif // RACE_HPP

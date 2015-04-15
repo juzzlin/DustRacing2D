@@ -44,7 +44,7 @@ static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
 static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
 
-Race::Race(const Game & game, unsigned int numCars)
+Race::Race(Game & game, unsigned int numCars)
 : m_numCars(numCars)
 , m_lapCount(5)
 , m_timing(numCars)
@@ -69,7 +69,7 @@ Race::Race(const Game & game, unsigned int numCars)
 
     connect(&m_timing, &Timing::raceRecordAchieved, [this] (int msecs) {
         if (m_game.hasComputerPlayers()) {
-            Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount);
+            Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount, m_game.difficultyProfile().difficulty());
             emit messageRequested(QObject::tr("New race record!"));
         }
     });
@@ -112,7 +112,7 @@ void Race::init(Track & track, int lapCount)
 void Race::initTiming()
 {
     m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
-    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, m_lapCount));
+    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, m_lapCount, m_game.difficultyProfile().difficulty()));
     m_timing.reset();
 }
 
@@ -183,7 +183,7 @@ void Race::translateCarsToStartPositions()
         // of the current race track.
         if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
         {
-            const int bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount);
+            const int bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount, m_game.difficultyProfile().difficulty());
             if (bestPos > 0)
             {
                 order.insert(order.begin() + bestPos - 1, *m_cars.begin());
@@ -448,7 +448,7 @@ void Race::checkForNewBestPosition(const Car & car)
             const int pos = getPositionOfCar(car);
             if (pos < m_bestPos || m_bestPos == -1)
             {
-                Settings::instance().saveBestPos(*m_track, pos, m_lapCount);
+                Settings::instance().saveBestPos(*m_track, pos, m_lapCount, m_game.difficultyProfile().difficulty());
                 emit messageRequested(QObject::tr("A new best pos!"));
             }
 
@@ -458,7 +458,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 if (pos <= UNLOCK_LIMIT)
                 {
                     next->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*next, m_lapCount);
+                    Settings::instance().saveTrackUnlockStatus(*next, m_lapCount, m_game.difficultyProfile().difficulty());
                     emit messageRequested(QObject::tr("A new track unlocked!"));
                 }
                 else
@@ -572,7 +572,7 @@ void Race::setTrack(Track & track, int lapCount)
 {
     m_lapCount = lapCount;
     m_track    = &track;
-    m_bestPos  = Settings::instance().loadBestPos(*m_track, m_lapCount);
+    m_bestPos  = Settings::instance().loadBestPos(*m_track, m_lapCount, m_game.difficultyProfile().difficulty());
 
     for (OffTrackDetectorPtr otd : m_offTrackDetectors)
     {

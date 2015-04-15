@@ -46,15 +46,18 @@ public:
 
     TrackItem(int width, int height, Track & track)
     : MenuItem(width, height)
+    , m_game(Game::instance())
     , m_track(track)
-    , m_monospace(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
+    , m_monospace(MCAssetManager::textureFontManager().font(m_game.fontName()))
     , m_star(MCAssetManager::surfaceManager().surface("star"))
     , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
     , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
-    , m_raceRecord(Settings::instance().loadRaceRecord(m_track, Game::instance().lapCount()))
-    , m_bestPos(Settings::instance().loadBestPos(m_track, Game::instance().lapCount()))
+    , m_raceRecord(Settings::instance().loadRaceRecord(
+        m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
+    , m_bestPos(Settings::instance().loadBestPos(
+        m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
     {
         m_star.setShaderProgram(Renderer::instance().program("menu"));
         m_glow.setShaderProgram(Renderer::instance().program("menu"));
@@ -81,8 +84,10 @@ public:
         MenuItem::setFocused(focused);
 
         m_lapRecord  = Settings::instance().loadLapRecord(m_track);
-        m_raceRecord = Settings::instance().loadRaceRecord(m_track, Game::instance().lapCount());
-        m_bestPos    = Settings::instance().loadBestPos(m_track, Game::instance().lapCount());
+        m_raceRecord = Settings::instance().loadRaceRecord(
+            m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+        m_bestPos = Settings::instance().loadBestPos(
+            m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
     }
 
     //! \reimp
@@ -90,6 +95,7 @@ public:
 
 private:
 
+    Game          & m_game;
     Track         & m_track;
     MCTextureFont & m_monospace;
     MCSurface     & m_star;

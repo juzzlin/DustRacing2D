@@ -38,16 +38,16 @@ public:
     int loadLapRecord(const Track & track) const;
     void resetLapRecords();
 
-    void saveRaceRecord(const Track & track, int msecs, int lapCount);
-    int loadRaceRecord(const Track & track, int lapCount) const;
+    void saveRaceRecord(const Track & track, int msecs, int lapCount, DifficultyProfile::Difficulty difficulty);
+    int loadRaceRecord(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
     void resetRaceRecords();
 
-    void saveBestPos(const Track & track, int pos, int lapCount);
-    int loadBestPos(const Track & track, int lapCount) const;
+    void saveBestPos(const Track & track, int pos, int lapCount, DifficultyProfile::Difficulty difficulty);
+    int loadBestPos(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
     void resetBestPos();
 
-    void saveTrackUnlockStatus(const Track & track, int lapCount);
-    bool loadTrackUnlockStatus(const Track & track, int lapCount) const;
+    void saveTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty);
+    bool loadTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
     void resetTrackUnlockStatuses();
 
     void saveResolution(int hRes, int vRes, bool fullScreen);

@@ -15,6 +15,73 @@
 
 #include "difficultyprofile.hpp"
 
-DifficultyProfile::DifficultyProfile()
+#include <cassert>
+
+DifficultyProfile * DifficultyProfile::m_instance = nullptr;
+
+DifficultyProfile::DifficultyProfile(Difficulty difficulty)
+    : m_difficulty(difficulty)
 {
+    assert(!m_instance);
+    m_instance = this;
+}
+
+DifficultyProfile & DifficultyProfile::instance()
+{
+    assert(m_instance);
+    return *m_instance;
+}
+
+void DifficultyProfile::setDifficulty(Difficulty difficulty)
+{
+    m_difficulty = difficulty;
+
+    emit difficultyChanged();
+}
+
+DifficultyProfile::Difficulty DifficultyProfile::difficulty() const
+{
+    return m_difficulty;
+}
+
+bool DifficultyProfile::hasTireWearOut() const
+{
+    switch (m_difficulty)
+    {
+    case Difficulty::Easy:
+    case Difficulty::Medium:
+        return false;
+    case Difficulty::Senna:
+        return true;
+    }
+}
+
+bool DifficultyProfile::hasBodyDamage() const
+{
+    switch (m_difficulty)
+    {
+    case Difficulty::Easy:
+        return false;
+    case Difficulty::Medium:
+    case Difficulty::Senna:
+        return true;
+    }
+}
+
+float DifficultyProfile::accelerationFrictionMultiplier(bool isHuman) const
+{
+    switch (m_difficulty)
+    {
+    case Difficulty::Easy:
+        return isHuman ? 0.70f : 0.65f;
+    case Difficulty::Medium:
+        return isHuman ? 0.78f : 0.75f;
+    case Difficulty::Senna:
+        return 1.0f;
+    }
+}
+
+DifficultyProfile::~DifficultyProfile()
+{
+    m_instance = nullptr;
 }

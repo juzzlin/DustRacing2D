@@ -19,6 +19,7 @@
 #include <QString>
 #include <vector>
 
+#include "difficultyprofile.hpp"
 #include "tracktile.hpp"
 #include "trackobjectfactory.hpp"
 
@@ -50,10 +51,10 @@ public:
     /*! Load all tracks found in the added paths.
      *  Lock/unlock tracks according to the given lap count.
      *  \return Number of track loaded. */
-    int loadTracks(int lapCount);
+    int loadTracks(int lapCount, DifficultyProfile::Difficulty difficulty);
 
     //! Update locked tracks when lap count changes.
-    void updateLockedTracks(int lapCount);
+    void updateLockedTracks(int lapCount, DifficultyProfile::Difficulty difficulty);
 
     //! Get track count.
     unsigned int tracks() const;
@@ -83,8 +84,10 @@ private:
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);
 
-    TrackObjectFactory   m_trackObjectFactory;
+    TrackObjectFactory m_trackObjectFactory;
+
     std::vector<QString> m_paths;
+
     std::vector<Track *> m_tracks;
 
     static TrackLoader * m_instance;

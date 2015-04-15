@@ -49,7 +49,9 @@ static const unsigned int MAX_PLAYERS = 2;
 Game * Game::m_instance = nullptr;
 
 Game::Game(bool forceNoVSync)
-: m_inputHandler(new InputHandler(MAX_PLAYERS))
+: m_settings()
+, m_difficultyProfile(m_settings.loadDifficulty())
+, m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
 , m_stateMachine(new StateMachine(*m_inputHandler))
 , m_renderer(nullptr)
@@ -76,6 +78,10 @@ Game::Game(bool forceNoVSync)
     Game::m_instance = this;
 
     createRenderer(forceNoVSync);
+
+    connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, [this] () {
+        m_trackLoader->updateLockedTracks(m_lapCount, m_difficultyProfile.difficulty());
+    });
 
     connect(m_eventHandler, &EventHandler::pauseToggled, this, &Game::togglePause);
     connect(m_eventHandler, &EventHandler::gameExited, this, &Game::exitGame);
@@ -213,7 +219,7 @@ Game::SplitType Game::splitType() const
 void Game::setLapCount(int lapCount)
 {
     m_lapCount = lapCount;
-    m_trackLoader->updateLockedTracks(lapCount);
+    m_trackLoader->updateLockedTracks(lapCount, m_difficultyProfile.difficulty());
 }
 
 int Game::lapCount() const
@@ -231,7 +237,7 @@ bool Game::hasComputerPlayers() const
     return m_mode == Mode::TwoPlayerRace || m_mode == Mode::OnePlayerRace;
 }
 
-EventHandler & Game::eventHandler() const
+EventHandler & Game::eventHandler()
 {
     assert(m_eventHandler);
     return *m_eventHandler;
@@ -241,6 +247,11 @@ AudioWorker & Game::audioWorker()
 {
     assert(m_audioWorker);
     return *m_audioWorker;
+}
+
+DifficultyProfile & Game::difficultyProfile()
+{
+    return m_difficultyProfile;
 }
 
 const std::string & Game::fontName() const
@@ -258,7 +269,7 @@ Renderer & Game::renderer() const
 bool Game::loadTracks()
 {
     // Load track data
-    if (int numLoaded = m_trackLoader->loadTracks(m_lapCount))
+    if (int numLoaded = m_trackLoader->loadTracks(m_lapCount, m_difficultyProfile.difficulty()))
     {
         MCLogger().info() << "A total of " << numLoaded << " race track(s) loaded.";
     }

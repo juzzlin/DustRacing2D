@@ -16,8 +16,14 @@
 #ifndef DIFFICULTYPROFILE_HPP
 #define DIFFICULTYPROFILE_HPP
 
-class DifficultyProfile
+#include <QObject>
+
+/** A singleton class that stores configurations
+ *  for different difficulty levels. */
+class DifficultyProfile : public QObject
 {
+    Q_OBJECT
+
 public:
 
     enum class Difficulty {
@@ -26,7 +32,43 @@ public:
         Senna
     };
 
-    DifficultyProfile();
+    /*! Constructor.
+     *  \param difficulty The active difficulty setting. */
+    DifficultyProfile(Difficulty difficulty);
+
+    //! Destructor.
+    ~DifficultyProfile();
+
+    //! \return The singleton.
+    static DifficultyProfile & instance();
+
+    //! Set the active difficulty.
+    void setDifficulty(Difficulty difficulty);
+
+    //! \return the active difficulty.
+    Difficulty difficulty() const;
+
+    //! \return if tires are allowed to wear out.
+    bool hasTireWearOut() const;
+
+    //! \return if body damage is allowed.
+    bool hasBodyDamage() const;
+
+    float accelerationFrictionMultiplier(bool isHuman) const;
+
+signals:
+
+    void difficultyChanged();
+
+private:
+
+    DifficultyProfile(DifficultyProfile & other) = delete;
+
+    DifficultyProfile & operator =(DifficultyProfile & other) = delete;
+
+    static DifficultyProfile * m_instance;
+
+    Difficulty m_difficulty;
 };
 
 #endif // DIFFICULTYPROFILE_HPP

@@ -42,9 +42,9 @@ static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
 TrackLoader * TrackLoader::m_instance = nullptr;
 
 TrackLoader::TrackLoader(MCObjectFactory & objectFactory)
-: m_trackObjectFactory(objectFactory)
-, m_paths()
-, m_tracks()
+    : m_trackObjectFactory(objectFactory)
+    , m_paths()
+    , m_tracks()
 {
     assert(!TrackLoader::m_instance);
     TrackLoader::m_instance = this;
@@ -61,7 +61,7 @@ void TrackLoader::addTrackSearchPath(QString path)
     m_paths.push_back(path);
 }
 
-int TrackLoader::loadTracks(int lapCount)
+int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficulty)
 {
     int numLoaded = 0;
     for (QString path : m_paths)
@@ -93,13 +93,13 @@ int TrackLoader::loadTracks(int lapCount)
 
     if (numLoaded)
     {
-        updateLockedTracks(lapCount);
+        updateLockedTracks(lapCount, difficulty);
     }
 
     return numLoaded;
 }
 
-void TrackLoader::updateLockedTracks(int lapCount)
+void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty difficulty)
 {
     sortTracks();
 
@@ -109,7 +109,7 @@ void TrackLoader::updateLockedTracks(int lapCount)
     for (Track * track : m_tracks)
     {
         if (!track->trackData().isUserTrack() &&
-            !Settings::instance().loadTrackUnlockStatus(*track, lapCount))
+            !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
         {
             track->trackData().setIsLocked(true);
         }
@@ -118,13 +118,13 @@ void TrackLoader::updateLockedTracks(int lapCount)
             track->trackData().setIsLocked(false);
 
             // This is needed in the case new tracks are added to the game afterwards.
-            const int bestPos = Settings::instance().loadBestPos(*track, lapCount);
+            const int bestPos = Settings::instance().loadBestPos(*track, lapCount, difficulty);
             if (bestPos >= 1 && bestPos <= UNLOCK_LIMIT)
             {
                 if (track->next())
                 {
                     track->next()->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*track->next(), lapCount);
+                    Settings::instance().saveTrackUnlockStatus(*track->next(), lapCount, difficulty);
                 }
             }
         }

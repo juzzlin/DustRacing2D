@@ -50,9 +50,9 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
     CarPtr car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
     {
-        desc.power                = 0.75 * defaultPower;
+        desc.power                = defaultPower;
         desc.dragQuadratic        = defaultDrag;
-        desc.accelerationFriction = 0.55f;
+        desc.accelerationFriction = 0.55f * Game::instance().difficultyProfile().accelerationFrictionMultiplier(true);
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
     }
@@ -62,9 +62,10 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         // slowest cars have less power than the human player and the fastest
         // cars have more power than the human player.
         desc.power                = defaultPower / 2 + (index + 1) * defaultPower / NUM_CARS;
-        desc.accelerationFriction = 0.3 + 0.4 * float(index + 1) / NUM_CARS;
+        desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / NUM_CARS) *
+            Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
         desc.dragQuadratic        = defaultDrag;
-        desc.brakingFriction      = 2.0;
+        desc.brakingFriction      = 2.0f;
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, false));
     }

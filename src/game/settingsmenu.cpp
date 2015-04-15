@@ -335,7 +335,9 @@ void SettingsMenu::populateDifficultyMenu(int width, int height)
     easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
     easyItem->setAction([] () {
         MCLogger().info() << "Easy selected.";
-        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Easy);
+        const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Easy;
+        Settings::instance().saveDifficulty(chosenDifficulty);
+        Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);
         MenuManager::instance().popMenu();
     });
 
@@ -343,7 +345,9 @@ void SettingsMenu::populateDifficultyMenu(int width, int height)
     mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
     mediumItem->setAction([] () {
         MCLogger().info() << "Medium selected.";
-        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Medium);
+        const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Medium;
+        Settings::instance().saveDifficulty(chosenDifficulty);
+        Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);
         MenuManager::instance().popMenu();
     });
 
@@ -351,15 +355,17 @@ void SettingsMenu::populateDifficultyMenu(int width, int height)
     sennaItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *sennaItem)));
     sennaItem->setAction([] () {
         MCLogger().info() << "Senna selected.";
-        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Senna);
+        const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Senna;
+        Settings::instance().saveDifficulty(chosenDifficulty);
+        Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);
         MenuManager::instance().popMenu();
     });
 
-    m_difficultyMenu.addItem(MTFH::MenuItemPtr(easyItem));
-    m_difficultyMenu.addItem(MTFH::MenuItemPtr(mediumItem));
     m_difficultyMenu.addItem(MTFH::MenuItemPtr(sennaItem));
+    m_difficultyMenu.addItem(MTFH::MenuItemPtr(mediumItem));
+    m_difficultyMenu.addItem(MTFH::MenuItemPtr(easyItem));
 
-    const DifficultyProfile::Difficulty difficulty = Settings::instance().loadDifficulty();
+    const DifficultyProfile::Difficulty difficulty = Game::instance().difficultyProfile().difficulty();
     switch (difficulty)
     {
     case DifficultyProfile::Difficulty::Easy:
