@@ -33,24 +33,40 @@ public:
 private:
 
     void populate(int width, int height);
+
     void populateGameModeMenu(int width, int height);
-    void populateSplitTypeMenu(int width, int height);
+
     void populateGfxMenu(int width, int height);
-    void populateSfxMenu(int width, int height);
-    void populateResetMenu(int width, int height);
+
     void populateLapCountMenu(int width, int height);
 
+    void populateSfxMenu(int width, int height);
+
+    void populateSplitTypeMenu(int width, int height);
+
+    void populateResetMenu(int width, int height);
+
     ConfirmationMenu m_confirmationMenu;
-    ResolutionMenu   m_fullScreenResolutionMenu;
-    ResolutionMenu   m_windowedResolutionMenu;
-    SurfaceMenu      m_gameModeMenu;
-    SurfaceMenu      m_gfxMenu;
-    SurfaceMenu      m_lapCountMenu;
-    SurfaceMenu      m_resetMenu;
-    SurfaceMenu      m_sfxMenu;
-    SurfaceMenu      m_splitTypeMenu;
-    VSyncMenu        m_vsyncMenu;
-    KeyConfigMenu    m_keyConfigMenu;
+
+    ResolutionMenu m_fullScreenResolutionMenu;
+
+    ResolutionMenu m_windowedResolutionMenu;
+
+    SurfaceMenu m_gameModeMenu;
+
+    SurfaceMenu m_gfxMenu;
+
+    SurfaceMenu m_lapCountMenu;
+
+    SurfaceMenu m_resetMenu;
+
+    SurfaceMenu m_sfxMenu;
+
+    SurfaceMenu m_splitTypeMenu;
+
+    VSyncMenu m_vsyncMenu;
+
+    KeyConfigMenu m_keyConfigMenu;
 };
 
 #endif // SETTINGSMENU_HPP
