@@ -57,6 +57,7 @@ HEADERS += \
     checkeredflag.hpp \
     confirmationmenu.hpp \
     credits.hpp \
+    difficultyprofile.hpp \
     eventhandler.hpp \
     fadeanimation.hpp \
     fontfactory.hpp \
@@ -218,6 +219,7 @@ SOURCES += \
     checkeredflag.cpp \
     confirmationmenu.cpp \
     credits.cpp \
+    difficultyprofile.cpp \
     eventhandler.cpp \
     fadeanimation.cpp \
     fontfactory.cpp \

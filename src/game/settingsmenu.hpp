@@ -34,6 +34,8 @@ private:
 
     void populate(int width, int height);
 
+    void populateDifficultyMenu(int width, int height);
+
     void populateGameModeMenu(int width, int height);
 
     void populateGfxMenu(int width, int height);
@@ -51,6 +53,8 @@ private:
     ResolutionMenu m_fullScreenResolutionMenu;
 
     ResolutionMenu m_windowedResolutionMenu;
+
+    SurfaceMenu m_difficultyMenu;
 
     SurfaceMenu m_gameModeMenu;
 

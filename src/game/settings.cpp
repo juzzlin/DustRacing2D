@@ -37,10 +37,16 @@ static QString combineTrackAndLapCountBase64(const Track & track, int lapCount)
     return (QString("%1_%2").arg(track.trackData().name()).arg(lapCount)).toLatin1().toBase64();
 }
 
+QString Settings::difficultyKey()
+{
+    return "difficulty";
+}
+
 QString Settings::lapCountKey()
 {
     return "lapCount";
 }
+
 QString Settings::soundsKey()
 {
     return "sounds";
@@ -267,4 +273,25 @@ int Settings::loadKeyMapping(int player, InputHandler::Action action)
     settings.endGroup();
 
     return key;
+}
+
+void Settings::saveDifficulty(DifficultyProfile::Difficulty difficulty)
+{
+    QSettings settings;
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    settings.setValue(difficultyKey(), static_cast<int>(difficulty));
+    settings.endGroup();
+}
+
+DifficultyProfile::Difficulty Settings::loadDifficulty() const
+{
+    QSettings settings;
+
+    DifficultyProfile::Difficulty difficulty = DifficultyProfile::Difficulty::Medium;
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    difficulty = static_cast<DifficultyProfile::Difficulty>(settings.value(difficultyKey(), 0).toInt());
+    settings.endGroup();
+
+    return difficulty;
 }

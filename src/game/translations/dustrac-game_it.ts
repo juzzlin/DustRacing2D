@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>MainMenu</name>
     <message>
@@ -137,196 +137,210 @@ http://dustrac.sourceforge.net</translation>
         <translation>Il giocatore 2 gira a destra</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="48"/>
         <source>At least OpenGL ES 2.0 is required!</source>
-        <translation>È richiesta almeno OpenGL ES 2.0!</translation>
+        <translation type="vanished">È richiesta almeno OpenGL ES 2.0!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="49"/>
-        <location filename="../main.cpp" line="56"/>
-        <location filename="../main.cpp" line="63"/>
         <source>Cannot start Dust Racing 2D</source>
-        <translation>Impossibile avviare Dust Racing 2D</translation>
+        <translation type="vanished">Impossibile avviare Dust Racing 2D</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="55"/>
         <source>At least OpenGL 3.0 is required!</source>
-        <translation>È richiesta almeno OpenGL 3.0!</translation>
+        <translation type="vanished">È richiesta almeno OpenGL 3.0!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="62"/>
         <source>At least OpenGL 2.1 is required!</source>
-        <translation>È richiesta almeno OpenGL 2.1!</translation>
+        <translation type="vanished">È richiesta almeno OpenGL 2.1!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="295"/>
+        <location filename="../race.cpp" line="312"/>
         <source>The Time Trial has ended!</source>
         <translation>La prova cronometrata è terminata!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="299"/>
+        <location filename="../race.cpp" line="316"/>
         <source>The winner has finished!</source>
         <translation>Il vincitore ha finito!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="230"/>
+        <location filename="../race.cpp" line="67"/>
         <source>New lap record!</source>
         <translation>Nuovo record sul giro!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="223"/>
+        <location filename="../race.cpp" line="73"/>
         <source>New race record!</source>
         <translation>Nuovo record sul giro!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="322"/>
+        <location filename="../race.cpp" line="341"/>
         <source>Pit stop!</source>
         <translation>Pit stop!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="434"/>
+        <location filename="../race.cpp" line="452"/>
         <source>A new best pos!</source>
         <translation>Nuova migliore posizione!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="444"/>
+        <location filename="../race.cpp" line="462"/>
         <source>A new track unlocked!</source>
         <translation>Nuovo tracciato sbloccato!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="448"/>
+        <location filename="../race.cpp" line="466"/>
         <source>Better luck next time..</source>
         <translation>La prossima volta sarai più fortunato..</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="490"/>
+        <location filename="../race.cpp" line="510"/>
         <source>You must stay on track!</source>
         <translation>Devi rimanere sul tracciato!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="494"/>
+        <location filename="../race.cpp" line="514"/>
         <source>Watch your tires!</source>
         <translation>Controlla le gomme!</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="66"/>
+        <location filename="../settingsmenu.cpp" line="77"/>
         <source>Reset best positions?</source>
         <translation>Azzerare migliori posizioni?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="78"/>
+        <location filename="../settingsmenu.cpp" line="89"/>
         <source>Reset record times?</source>
         <translation>Azzerare tempi record?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="91"/>
+        <location filename="../settingsmenu.cpp" line="102"/>
         <source>Reset unlocked tracks?</source>
         <translation>Azzerare tracciati sbloccati?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="185"/>
+        <location filename="../settingsmenu.cpp" line="203"/>
+        <source>Difficulty &gt;</source>
+        <translation>Difficoltà &gt;</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="207"/>
         <source>Sounds &gt;</source>
         <translation>Audio &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="189"/>
+        <location filename="../settingsmenu.cpp" line="211"/>
         <source>GFX &gt;</source>
         <translation>GFX &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="197"/>
+        <location filename="../settingsmenu.cpp" line="219"/>
         <source>Reset &gt;</source>
         <translation>Reset &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="324"/>
+        <location filename="../settingsmenu.cpp" line="334"/>
+        <source>Easy</source>
+        <translation>Facile</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="342"/>
+        <source>Medium</source>
+        <translation>Medio</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="350"/>
+        <source>Senna</source>
+        <translation>Senna</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="401"/>
         <source>VSync &gt;</source>
         <translation>VSync &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="343"/>
+        <location filename="../settingsmenu.cpp" line="420"/>
         <location filename="../vsyncmenu.cpp" line="103"/>
         <source>Off</source>
         <translation>Spento</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="356"/>
+        <location filename="../settingsmenu.cpp" line="433"/>
         <location filename="../vsyncmenu.cpp" line="108"/>
         <source>On</source>
         <translation>Acceso</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="390"/>
+        <location filename="../settingsmenu.cpp" line="467"/>
         <source>Reset record times</source>
         <translation>Azzera tempi record</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="395"/>
+        <location filename="../settingsmenu.cpp" line="472"/>
         <source>Reset best positions</source>
         <translation>Azzera migliori posizioni</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="400"/>
+        <location filename="../settingsmenu.cpp" line="477"/>
         <source>Reset unlocked tracks</source>
         <translation>Azzera tracciati sbloccati</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="312"/>
+        <location filename="../settingsmenu.cpp" line="389"/>
         <source>Full screen resolution &gt;</source>
         <translation>Risoluzione a schermo intero &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="316"/>
+        <location filename="../settingsmenu.cpp" line="393"/>
         <source>Windowed resolution &gt;</source>
         <translation>Risoluzione in finestra &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="320"/>
+        <location filename="../settingsmenu.cpp" line="397"/>
         <source>Split type &gt;</source>
         <translation>Divisione schermo &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="177"/>
+        <location filename="../settingsmenu.cpp" line="195"/>
         <source>Game mode &gt;</source>
         <translation>Modalità di gioco &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="181"/>
+        <location filename="../settingsmenu.cpp" line="199"/>
         <source>Lap Count &gt;</source>
         <translation>Numero di giri &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="193"/>
+        <location filename="../settingsmenu.cpp" line="215"/>
         <source>Controls &gt;</source>
         <translation>Configurazione tasti &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="220"/>
+        <location filename="../settingsmenu.cpp" line="243"/>
         <source>Two player race</source>
         <translation>Gareggia con due giocatori</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="230"/>
+        <location filename="../settingsmenu.cpp" line="253"/>
         <source>One player race</source>
         <translation>Gareggia con un giocatore</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="240"/>
+        <location filename="../settingsmenu.cpp" line="263"/>
         <source>Time Trial</source>
         <translation>Prova cronometrata</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="250"/>
+        <location filename="../settingsmenu.cpp" line="273"/>
         <source>Duel</source>
         <translation>Duello</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="278"/>
+        <location filename="../settingsmenu.cpp" line="301"/>
         <source>Vertical</source>
         <translation>Verticale</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="288"/>
+        <location filename="../settingsmenu.cpp" line="311"/>
         <source>Horizontal</source>
         <translation>Orizzontale</translation>
     </message>
@@ -446,64 +460,63 @@ http://dustrac.sourceforge.net</translation>
         <translation>TOT:</translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="229"/>
+        <location filename="../trackselectionmenu.cpp" line="227"/>
         <source>       Laps: </source>
         <translation>       Giri: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="235"/>
+        <location filename="../trackselectionmenu.cpp" line="233"/>
         <source>     Length: </source>
         <translation>     Lunghezza: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="237"/>
+        <location filename="../trackselectionmenu.cpp" line="235"/>
         <source> m</source>
         <translation> m</translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="244"/>
+        <location filename="../trackselectionmenu.cpp" line="242"/>
         <source> Lap Record: </source>
         <translation> Record sul giro: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="249"/>
+        <location filename="../trackselectionmenu.cpp" line="247"/>
         <source>Race Record: </source>
         <translation>Record tracciato: </translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="30"/>
+        <location filename="../credits.cpp" line="34"/>
         <source>PROGRAMMING BY</source>
         <translation>PROGRAMMATO DA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="33"/>
+        <location filename="../credits.cpp" line="37"/>
         <source>GRAPHICS BY</source>
         <translation>GRAFICA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="36"/>
+        <location filename="../credits.cpp" line="40"/>
         <source>RACE TRACKS BY</source>
         <translation>TRACCIATI</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="39"/>
+        <location filename="../credits.cpp" line="43"/>
         <source>CONTRIBUTORS</source>
         <translation>CON IL CONTRIBUTO DI</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="44"/>
+        <location filename="../credits.cpp" line="49"/>
         <source>SPECIAL THANKS</source>
         <translation>RINGRAZIAMENTI SPECIALI</translation>
     </message>
     <message>
-        <location filename="../resolutionmenu.cpp" line="110"/>
+        <location filename="../resolutionmenu.cpp" line="117"/>
         <source>Restart to change the resolution.</source>
         <translation>Riavvia per modificare la risoluzione.</translation>
     </message>
     <message>
-        <location filename="../resolutionmenu.cpp" line="174"/>
         <source>Native resolution</source>
-        <translation>Risoluzione nativa</translation>
+        <translation type="vanished">Risoluzione nativa</translation>
     </message>
     <message>
         <location filename="../confirmationmenu.cpp" line="31"/>

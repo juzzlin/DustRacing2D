@@ -16,6 +16,7 @@
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
+#include "difficultyprofile.hpp"
 #include "inputhandler.hpp"
 
 #include <map>
@@ -55,12 +56,16 @@ public:
     void saveKeyMapping(int player, InputHandler::Action action, int key);
     int loadKeyMapping(int player, InputHandler::Action action);
 
+    void saveDifficulty(DifficultyProfile::Difficulty difficulty);
+    DifficultyProfile::Difficulty loadDifficulty() const;
+
     void saveVSync(int value);
     int loadVSync();
 
     void saveValue(QString key, int value);
     int loadValue(QString key, int defaultValue = 0);
 
+    static QString difficultyKey();
     static QString lapCountKey();
     static QString soundsKey();
     static QString vsyncKey();

@@ -16,6 +16,7 @@
 #include "settingsmenu.hpp"
 
 #include "audioworker.hpp"
+#include "difficultyprofile.hpp"
 #include "game.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -127,6 +128,7 @@ private:
 };
 
 static const char * CONFIRMATION_MENU_ID           = "confirmationMenu";
+static const char * DIFFICULTY_MENU_ID             = "difficultyMenu";
 static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 static const char * GAME_MODE_MENU_ID              = "gameModeMenu";
 static const char * GFX_MENU_ID                    = "gfxMenu";
@@ -143,16 +145,18 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_confirmationMenu(CONFIRMATION_MENU_ID, width, height)
 , m_fullScreenResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true)
 , m_windowedResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false)
-, m_gameModeMenu("settingsBack",  GAME_MODE_MENU_ID,  width, height, Menu::Style::VerticalList)
-, m_gfxMenu("settingsBack",       GFX_MENU_ID,        width, height, Menu::Style::VerticalList)
-, m_lapCountMenu("settingsBack",  LAP_COUNT_MENU_ID,  width, height, Menu::Style::VerticalList)
-, m_resetMenu("settingsBack",     RESET_MENU_ID,      width, height, Menu::Style::VerticalList)
-, m_sfxMenu("settingsBack",       SFX_MENU_ID,        width, height, Menu::Style::VerticalList)
+, m_difficultyMenu("settingsBack", DIFFICULTY_MENU_ID, width, height, Menu::Style::VerticalList)
+, m_gameModeMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList)
+, m_gfxMenu("settingsBack", GFX_MENU_ID, width, height, Menu::Style::VerticalList)
+, m_lapCountMenu("settingsBack", LAP_COUNT_MENU_ID, width, height, Menu::Style::VerticalList)
+, m_resetMenu("settingsBack", RESET_MENU_ID, width, height, Menu::Style::VerticalList)
+, m_sfxMenu("settingsBack", SFX_MENU_ID, width, height, Menu::Style::VerticalList)
 , m_splitTypeMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList)
-, m_vsyncMenu(m_confirmationMenu, VSYNC_MENU_ID,      width, height)
+, m_vsyncMenu(m_confirmationMenu, VSYNC_MENU_ID, width, height)
 , m_keyConfigMenu(KEY_CONFIG_MENU_ID, width, height)
 {
     populate              (width, height);
+    populateDifficultyMenu(width, height);
     populateGameModeMenu  (width, height);
     populateGfxMenu       (width, height);
     populateLapCountMenu  (width, height);
@@ -163,6 +167,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     using MTFH::MenuManager;
 
     MenuManager::instance().addMenu(m_confirmationMenu);
+    MenuManager::instance().addMenu(m_difficultyMenu);
     MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_gfxMenu);
@@ -195,6 +200,10 @@ void SettingsMenu::populate(int width, int height)
     lapCount->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCount)));
     lapCount->setMenuOpenAction(LAP_COUNT_MENU_ID);
 
+    MenuItem * difficulty = new MenuItem(width, itemHeight, QObject::tr("Difficulty >").toStdWString());
+    difficulty->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *difficulty)));
+    difficulty->setMenuOpenAction(DIFFICULTY_MENU_ID);
+
     MenuItem * sfx = new MenuItem(width, itemHeight, QObject::tr("Sounds >").toStdWString());
     sfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *sfx)));
     sfx->setMenuOpenAction(SFX_MENU_ID);
@@ -217,6 +226,7 @@ void SettingsMenu::populate(int width, int height)
     addItem(MenuItemPtr(configureKeys));
     addItem(MenuItemPtr(sfx));
     addItem(MenuItemPtr(gfx));
+    addItem(MenuItemPtr(difficulty));
     addItem(MenuItemPtr(lapCount));
     addItem(MenuItemPtr(gameMode));
 }
@@ -310,6 +320,60 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 
     m_splitTypeMenu.addItem(MTFH::MenuItemPtr(horizontal));
     m_splitTypeMenu.addItem(MTFH::MenuItemPtr(vertical));
+}
+
+void SettingsMenu::populateDifficultyMenu(int width, int height)
+{
+    const int itemHeight = height / ITEM_HEIGHT_DIV;
+    const int textSize   = ITEM_TEXT_SIZE;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toStdWString());
+    easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
+    easyItem->setAction([] () {
+        MCLogger().info() << "Easy selected.";
+        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Easy);
+        MenuManager::instance().popMenu();
+    });
+
+    MenuItem * mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toStdWString());
+    mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
+    mediumItem->setAction([] () {
+        MCLogger().info() << "Medium selected.";
+        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Medium);
+        MenuManager::instance().popMenu();
+    });
+
+    MenuItem * sennaItem = new MenuItem(width, itemHeight, QObject::tr("Senna").toStdWString());
+    sennaItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *sennaItem)));
+    sennaItem->setAction([] () {
+        MCLogger().info() << "Senna selected.";
+        Settings::instance().saveDifficulty(DifficultyProfile::Difficulty::Senna);
+        MenuManager::instance().popMenu();
+    });
+
+    m_difficultyMenu.addItem(MTFH::MenuItemPtr(easyItem));
+    m_difficultyMenu.addItem(MTFH::MenuItemPtr(mediumItem));
+    m_difficultyMenu.addItem(MTFH::MenuItemPtr(sennaItem));
+
+    const DifficultyProfile::Difficulty difficulty = Settings::instance().loadDifficulty();
+    switch (difficulty)
+    {
+    case DifficultyProfile::Difficulty::Easy:
+        m_difficultyMenu.setCurrentIndex(easyItem->index());
+        break;
+
+    case DifficultyProfile::Difficulty::Medium:
+        m_difficultyMenu.setCurrentIndex(mediumItem->index());
+        break;
+
+    case DifficultyProfile::Difficulty::Senna:
+        m_difficultyMenu.setCurrentIndex(sennaItem->index());
+        break;
+    }
 }
 
 void SettingsMenu::populateGfxMenu(int width, int height)
