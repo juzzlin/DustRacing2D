@@ -57,14 +57,6 @@ public:
         , restitution(0.05f)
         , dragLinear(1.0f)
         , dragQuadratic(5.0f)
-        , tireWearOutCapacity(100)
-        , numberPos(-5, 0, 0)
-        , leftFrontTirePos(14, 9, 0)
-        , rightFrontTirePos(14, -9, 0)
-        , leftRearTirePos(-14, 9, 0)
-        , rightRearTirePos(-14, -9, 0)
-        , leftBrakeGlowPos(-21, 8, 0)
-        , rightBrakeGlowPos(-21, -8, 0)
         {}
 
         float accelerationFriction;
@@ -76,15 +68,6 @@ public:
         float restitution;
         float dragLinear;
         float dragQuadratic;
-        float tireWearOutCapacity;
-
-        MCVector3dF numberPos;
-        MCVector3dF leftFrontTirePos;
-        MCVector3dF rightFrontTirePos;
-        MCVector3dF leftRearTirePos;
-        MCVector3dF rightRearTirePos;
-        MCVector3dF leftBrakeGlowPos;
-        MCVector3dF rightBrakeGlowPos;
     };
 
     //! Constructor.
@@ -202,6 +185,7 @@ private:
     Steer                    m_steer;
     MCUint                   m_index;
     float                    m_tireAngle;
+    float                    m_initTireWearOutCapacity;
     float                    m_tireWearOutCapacity;
     MCSurface              & m_frontTire;
     MCSurface              & m_brakeGlow;
@@ -219,6 +203,13 @@ private:
     MCObjectPtr              m_rightFrontTire;
     MCObjectPtr              m_leftRearTire;
     MCObjectPtr              m_rightRearTire;
+    MCVector3dF              m_numberPos;
+    MCVector3dF              m_leftFrontTirePos;
+    MCVector3dF              m_rightFrontTirePos;
+    MCVector3dF              m_leftRearTirePos;
+    MCVector3dF              m_rightRearTirePos;
+    MCVector3dF              m_leftBrakeGlowPos;
+    MCVector3dF              m_rightBrakeGlowPos;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

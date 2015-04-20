@@ -53,7 +53,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_steer(Steer::Neutral)
 , m_index(index)
 , m_tireAngle(0)
-, m_tireWearOutCapacity(desc.tireWearOutCapacity)
+, m_initTireWearOutCapacity(100)
+, m_tireWearOutCapacity(m_initTireWearOutCapacity)
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
 , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
 , m_speedInKmh(0)
@@ -65,6 +66,13 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_routeProgression(0)
 , m_isHuman(isHuman)
 , m_particleEffectManager(*this)
+, m_numberPos(-5, 0, 0)
+, m_leftFrontTirePos(14, 9, 0)
+, m_rightFrontTirePos(14, -9, 0)
+, m_leftRearTirePos(-14, 9, 0)
+, m_rightRearTirePos(-14, -9, 0)
+, m_leftBrakeGlowPos(-21, 8, 0)
+, m_rightBrakeGlowPos(-21, -8, 0)
 {
     setProperties(desc);
     initForceGenerators(desc);
@@ -73,7 +81,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     // surface vertex level and configured in surfaces.conf.
 
     MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
-    addChildObject(numberPlate, m_desc.numberPos + MCVector3dF(0, 0, surface.maxZ() + 1), 90);
+    addChildObject(numberPlate, m_numberPos + MCVector3dF(0, 0, surface.maxZ() + 1), 90);
     numberPlate->setBypassCollisions(true);
     numberPlate->shape()->view()->setHasShadow(false);
 
@@ -81,20 +89,20 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     const MCFloat frontFriction = 0.85f;
     const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
     m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
-    addChildObject(m_leftFrontTire, m_desc.leftFrontTirePos + tireZ, 0);
+    addChildObject(m_leftFrontTire, m_leftFrontTirePos + tireZ, 0);
 
     m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
-    addChildObject(m_rightFrontTire, m_desc.rightFrontTirePos + tireZ, 0);
+    addChildObject(m_rightFrontTire, m_rightFrontTirePos + tireZ, 0);
 
     const MCFloat rearFriction = 0.95f;
     m_leftRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
-    addChildObject(m_leftRearTire, m_desc.leftRearTirePos + tireZ, 0);
+    addChildObject(m_leftRearTire, m_leftRearTirePos + tireZ, 0);
 
     m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
-    addChildObject(m_rightRearTire, m_desc.rightRearTirePos + tireZ, 0);
+    addChildObject(m_rightRearTire, m_rightRearTirePos + tireZ, 0);
 
-    m_desc.leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
-    m_desc.rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
+    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
+    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
 }
 
 void Car::setProperties(Description & desc)
@@ -148,7 +156,15 @@ void Car::steer(Steer direction, MCFloat control)
     else
     {
         const float maxAngle = 15.0f * (direction == Steer::Left ? 1 : -1);
-        m_tireAngle = static_cast<int>(maxAngle * control);
+
+        if (!m_isHuman)
+        {
+            m_tireAngle = static_cast<int>(maxAngle * control);
+        }
+        else
+        {
+            m_tireAngle = m_tireAngle + (maxAngle - m_tireAngle) * 0.5f;
+        }
     }
 
     m_steer = direction;
@@ -239,12 +255,12 @@ MCVector3dF Car::rightFrontTireLocation() const
 
 MCVector3dF Car::leftRearTireLocation() const
 {
-    return MCTrigonom::rotatedVector(m_desc.leftRearTirePos, angle()) + MCVector2dF(location());
+    return MCTrigonom::rotatedVector(m_leftRearTirePos, angle()) + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightRearTireLocation() const
 {
-    return MCTrigonom::rotatedVector(m_desc.rightRearTirePos, angle()) + MCVector2dF(location());
+    return MCTrigonom::rotatedVector(m_rightRearTirePos, angle()) + MCVector2dF(location());
 }
 
 void Car::render(MCCamera *p)
@@ -256,11 +272,11 @@ void Car::render(MCCamera *p)
     if (m_braking && m_speedInKmh > 0)
     {
         const MCVector2dF leftBrakeGlow =
-            MCTrigonom::rotatedVector(m_desc.leftBrakeGlowPos, angle()) + MCVector2dF(location());
+            MCTrigonom::rotatedVector(m_leftBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         const MCVector2dF rightBrakeGlow =
-            MCTrigonom::rotatedVector(m_desc.rightBrakeGlowPos, angle()) + MCVector2dF(location());
+            MCTrigonom::rotatedVector(m_rightBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
 }
@@ -305,12 +321,12 @@ void Car::wearOutTires(MCFloat step, MCFloat factor)
 
 void Car::resetTireWear()
 {
-    m_tireWearOutCapacity = m_desc.tireWearOutCapacity;
+    m_tireWearOutCapacity = m_initTireWearOutCapacity;
 }
 
 float Car::tireWearLevel() const
 {
-    return 0.75 + (m_tireWearOutCapacity / m_desc.tireWearOutCapacity) * 0.25;
+    return 0.75f + (m_tireWearOutCapacity / m_initTireWearOutCapacity) * 0.25f;
 }
 
 void Car::stepTime(MCFloat step)
