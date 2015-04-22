@@ -156,16 +156,16 @@ public:
 
     /*! \brief Add an impulse.
      *  \param impulse The velocity component of the impulse. */
-    void addImpulse(const MCVector3dF & impulse);
+    virtual void addImpulse(const MCVector3dF & impulse, bool isCollision = false);
 
     /*! \brief Add an impulse.
      *  Causes angular impulse depending on object's shape and position of the impulse vector.
      *  \param impulse The velocity component of the impulse.
      *  \param pos     Position of the impulse. */
-    void addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos);
+    virtual void addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision = false);
 
     //! Add rotational impulse in rad/s.
-    void addAngularImpulse(MCFloat impulse);
+    virtual void addAngularImpulse(MCFloat impulse, bool isCollision = false);
 
     /*! Set current velocity to the given value.
      *  \param newVelocity The new velocity. */

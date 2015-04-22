@@ -32,6 +32,8 @@ CarStatusView::CarStatusView()
 
 void CarStatusView::render()
 {
+    const float damageLevel = m_car->damageLevel();
+    m_body.setColor(MCGLColor(1.0f, damageLevel, damageLevel, 0.9f));
     m_body.render(nullptr, MCVector3dF(x(), y(), 0), 0);
 
     const float tireWearLevel = m_car->tireWearLevel();

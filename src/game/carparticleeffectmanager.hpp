@@ -37,6 +37,8 @@ public:
 
 private:
 
+    void doDamageSmoke();
+
     void doOnTrackAnimations();
 
     void doOffTrackAnimations();

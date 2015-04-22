@@ -49,7 +49,6 @@ public:
         //! Constructor.
         Description()
         : accelerationFriction(0.75f)
-        , brakingFriction(1.5f)
         , rollingFrictionOnTrack(0.1f)
         , rotationFriction(1.0f)
         , power(5000.0f)
@@ -60,7 +59,6 @@ public:
         {}
 
         float accelerationFriction;
-        float brakingFriction;
         float rollingFrictionOnTrack;
         float rotationFriction;
         float power;
@@ -103,20 +101,25 @@ public:
     //! Get cached speed.
     MCFloat absSpeed() const;
 
-    //! \reimp
-    virtual void render(MCCamera *p);
+    void addDamage(float damage);
 
     //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event);
+    virtual void addImpulse(const MCVector3dF & impulse, bool isCollision = false) override;
 
     //! \reimp
-    virtual void stepTime(MCFloat step);
+    virtual void render(MCCamera *p) override;
 
     //! \reimp
-    virtual bool update();
+    virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
-    virtual void reset();
+    virtual void stepTime(MCFloat step) override;
+
+    //! \reimp
+    virtual bool update() override;
+
+    //! \reimp
+    virtual void reset() override;
 
     void setLeftSideOffTrack(bool state);
 
@@ -156,10 +159,17 @@ public:
 
     bool isHuman() const;
 
-    //! \return Tire wear level. 1.0 means no wear, 0.0 means totally worn-out tires.
+    float tireWearFactor() const;
+
     float tireWearLevel() const;
 
     void resetTireWear();
+
+    float damageFactor() const;
+
+    float damageLevel() const;
+
+    void resetDamage();
 
     void setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager);
 
@@ -174,8 +184,7 @@ private:
     void wearOutTires(MCFloat step, MCFloat factor);
 
     Description              m_desc;
-    MCForceGeneratorPtr      m_pBrakingFriction;
-    MCForceGeneratorPtr      m_pOnTrackFriction;
+    MCForceGeneratorPtr      m_onTrackFriction;
     bool                     m_leftSideOffTrack;
     bool                     m_rightSideOffTrack;
     bool                     m_accelerating;
@@ -185,6 +194,8 @@ private:
     Steer                    m_steer;
     MCUint                   m_index;
     float                    m_tireAngle;
+    float                    m_initDamageCapacity;
+    float                    m_damageCapacity;
     float                    m_initTireWearOutCapacity;
     float                    m_tireWearOutCapacity;
     MCSurface              & m_frontTire;

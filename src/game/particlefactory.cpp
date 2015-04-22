@@ -90,6 +90,10 @@ void ParticleFactory::doParticle(
 {
     switch (type)
     {
+    case DamageSmoke:
+        doDamageSmoke(location, initialVelocity);
+        break;
+
     case Smoke:
         doSmoke(location, initialVelocity);
         break;
@@ -135,6 +139,20 @@ MCSurfaceParticle * ParticleFactory::newSurfaceParticle(ParticleType typeEnum) c
     }
 
     return p;
+}
+
+void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity) const
+{
+    if (MCSurfaceParticle * smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    {
+        smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
+        smoke->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.75f));
+        smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
+        smoke->rotate(MCRandom::getValue() * 360);
+        smoke->setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.2f);
+        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
+        smoke->addToWorld();
+    }
 }
 
 void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) const

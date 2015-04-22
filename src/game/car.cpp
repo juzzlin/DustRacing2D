@@ -42,8 +42,7 @@
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(surface, "car")
 , m_desc(desc)
-, m_pBrakingFriction(new MCFrictionGenerator(desc.brakingFriction, 0.0))
-, m_pOnTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
+, m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_accelerating(false)
@@ -53,6 +52,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_steer(Steer::Neutral)
 , m_index(index)
 , m_tireAngle(0)
+, m_initDamageCapacity(100)
+, m_damageCapacity(m_initDamageCapacity)
 , m_initTireWearOutCapacity(100)
 , m_tireWearOutCapacity(m_initTireWearOutCapacity)
 , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
@@ -120,13 +121,9 @@ void Car::setProperties(Description & desc)
 
 void Car::initForceGenerators(Description & desc)
 {
-    // Add braking friction generator
-    MCWorld::instance().forceRegistry().addForceGenerator(m_pBrakingFriction, *this);
-    m_pBrakingFriction->enable(false);
-
     // Add rolling friction generator (on-track)
-    MCWorld::instance().forceRegistry().addForceGenerator(m_pOnTrackFriction, *this);
-    m_pOnTrackFriction->enable(true);
+    MCWorld::instance().forceRegistry().addForceGenerator(m_onTrackFriction, *this);
+    m_onTrackFriction->enable(true);
 
     MCForceGeneratorPtr drag(new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic));
     MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
@@ -134,8 +131,6 @@ void Car::initForceGenerators(Description & desc)
 
 void Car::clearStatuses()
 {
-    m_pBrakingFriction->enable(false);
-
     m_accelerating = false;
     m_braking      = false;
     m_reverse      = false;
@@ -172,10 +167,10 @@ void Car::steer(Steer direction, MCFloat control)
 
 void Car::accelerate(bool deccelerate)
 {
-    m_pBrakingFriction->enable(false);
     m_skidding = true;
 
-    const float frictionLimit = mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
+    const float frictionLimit =
+        mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k()) * damageFactor();
     float effForce = frictionLimit;
     if (!velocity().isZero())
     {
@@ -219,7 +214,6 @@ void Car::brake()
     else
     {
         m_braking = true;
-        m_pBrakingFriction->enable(true);
     }
 }
 
@@ -290,8 +284,9 @@ bool Car::update()
         m_soundEffectManager->update();
     }
 
-    m_leftFrontTire->rotateRelative(m_tireAngle - 2.0);
-    m_rightFrontTire->rotateRelative(m_tireAngle + 2.0);
+    const float offset = 2.0f;
+    m_leftFrontTire->rotateRelative(m_tireAngle - offset);
+    m_rightFrontTire->rotateRelative(m_tireAngle + offset);
 
     return true;
 }
@@ -300,22 +295,52 @@ void Car::reset()
 {
 }
 
+void Car::addImpulse(const MCVector3dF & impulse, bool isCollision)
+{
+    MCObject::addImpulse(impulse, isCollision);
+
+    if (Game::instance().difficultyProfile().hasBodyDamage() && isCollision)
+    {
+        addDamage((isHuman() ? 0.5f : 0.25f) * impulse.lengthFast());
+    }
+}
+
 void Car::collisionEvent(MCCollisionEvent & event)
 {
-    m_particleEffectManager.collision(event);
-    m_soundEffectManager->collision(event);
+    if (!event.collidingObject().isTriggerObject())
+    {
+        m_particleEffectManager.collision(event);
+        m_soundEffectManager->collision(event);
+    }
+
     event.accept();
+}
+
+void Car::addDamage(float damage)
+{
+    if (m_damageCapacity > damage)
+    {
+        m_damageCapacity -= damage;
+    }
+    else
+    {
+        m_damageCapacity = 0;
+    }
 }
 
 void Car::wearOutTires(MCFloat step, MCFloat factor)
 {
-    if (m_tireWearOutCapacity > 0)
+    if (Game::instance().difficultyProfile().hasTireWearOut())
     {
-        m_tireWearOutCapacity -= velocity().lengthFast() * step * factor;
-    }
-    else
-    {
-        m_tireWearOutCapacity = 0;
+        const MCFloat wearOut = velocity().lengthFast() * step * factor;
+        if (m_tireWearOutCapacity >= wearOut)
+        {
+            m_tireWearOutCapacity -= wearOut;
+        }
+        else
+        {
+            m_tireWearOutCapacity = 0;
+        }
     }
 }
 
@@ -324,9 +349,29 @@ void Car::resetTireWear()
     m_tireWearOutCapacity = m_initTireWearOutCapacity;
 }
 
+float Car::tireWearFactor() const
+{
+    return 0.5f + m_tireWearOutCapacity * 0.5f / m_initTireWearOutCapacity;
+}
+
 float Car::tireWearLevel() const
 {
-    return 0.75f + (m_tireWearOutCapacity / m_initTireWearOutCapacity) * 0.25f;
+    return m_tireWearOutCapacity / m_initTireWearOutCapacity;
+}
+
+void Car::resetDamage()
+{
+    m_damageCapacity = m_initDamageCapacity;
+}
+
+float Car::damageFactor() const
+{
+    return 0.7f + (m_damageCapacity / m_initDamageCapacity) * 0.3f;
+}
+
+float Car::damageLevel() const
+{
+    return m_damageCapacity / m_initDamageCapacity;
 }
 
 void Car::stepTime(MCFloat step)

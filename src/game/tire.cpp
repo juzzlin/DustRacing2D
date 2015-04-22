@@ -44,11 +44,20 @@ void Tire::stepTime(MCFloat)
         const MCVector2d<MCFloat> tire(
             MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
         MCVector2d<MCFloat> v = velocity();
-        v.clampFast(0.999); // Clamp instead of normalizing to avoid artifacts on small values
+        v.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
         MCVector2d<MCFloat> impulse =
             MCMathUtil::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) * -MCWorld::instance().gravity().k() * parent().mass();
-        impulse.clampFast(parent().mass() * 7.0f * m_car.tireWearLevel());
+                (m_isOffTrack ? m_offTrackFriction : m_friction) *
+                    -MCWorld::instance().gravity().k() * parent().mass();
+        impulse.clampFast(parent().mass() * 7.0f * m_car.tireWearFactor());
         parent().addForce(-impulse, location());
+
+        if (m_car.isBraking())
+        {
+            MCVector2d<MCFloat> impulse =
+                v * 0.5f * (m_isOffTrack ? m_offTrackFriction : m_friction) *
+                    -MCWorld::instance().gravity().k() * parent().mass() * m_car.tireWearFactor();
+            parent().addForce(-impulse, location());
+        }
     }
 }

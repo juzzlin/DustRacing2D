@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <MCCollisionEvent>
+#include <MCRandom>
 
 namespace {
 static const int SKID_MARK_DENSITY = 8;
@@ -38,6 +39,8 @@ void CarParticleEffectManager::update()
     doOnTrackAnimations();
 
     doOffTrackAnimations();
+
+    doDamageSmoke();
 }
 
 MCFloat CarParticleEffectManager::calculateSkidAngle(MCFloat distance, double dx, double dy)
@@ -73,6 +76,15 @@ void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType typ
     }
 }
 
+void CarParticleEffectManager::doDamageSmoke()
+{
+    if (m_car.damageLevel() <= 0.5f && MCRandom::getValue() > m_car.damageLevel())
+    {
+        MCVector3dF smokeLocation = (m_car.leftFrontTireLocation() + m_car.rightFrontTireLocation()) * 0.5f;
+        ParticleFactory::instance().doParticle(ParticleFactory::DamageSmoke, smokeLocation);
+    }
+}
+
 void CarParticleEffectManager::doOnTrackAnimations()
 {
     if (m_car.isBraking() && m_car.speedInKmh() > 5 && m_car.speedInKmh() < 100)
@@ -104,7 +116,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
             if (++m_mudCounter >= 5)
             {
                 ParticleFactory::instance().doParticle(
-                    ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.velocity() * 0.5);
+                    ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.velocity() * 0.5f);
                 m_mudCounter = 0;
             }
         }
@@ -118,7 +130,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
             if (++m_mudCounter >= 5)
             {
                 ParticleFactory::instance().doParticle(
-                    ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.velocity() * 0.5);
+                    ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.velocity() * 0.5f);
                 m_mudCounter = 0;
             }
         }
@@ -127,7 +139,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
         {
             if (++m_smokeCounter >= 2)
             {
-                MCVector3dF smokeLocation = (m_car.leftRearTireLocation() + m_car.rightRearTireLocation()) * 0.5;
+                MCVector3dF smokeLocation = (m_car.leftRearTireLocation() + m_car.rightRearTireLocation()) * 0.5f;
                 ParticleFactory::instance().doParticle(ParticleFactory::OffTrackSmoke, smokeLocation);
             }
         }
@@ -136,16 +148,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
 
 void CarParticleEffectManager::collision(const MCCollisionEvent & event)
 {
-    // Cache type id integers.
-    static MCUint crate              = MCObject::typeID("crate");
-    static MCUint dustRacing2DBanner = MCObject::typeID("dustRacing2DBanner");
-    static MCUint grandstand         = MCObject::typeID("grandstand");
-    static MCUint wall               = MCObject::typeID("wall");
-    static MCUint wallLong           = MCObject::typeID("wallLong");
-    static MCUint rock               = MCObject::typeID("rock");
-    static MCUint tree               = MCObject::typeID("tree");
-
-    if (m_car.velocity().lengthFast() > 4.0)
+    if (m_car.velocity().lengthFast() > 4.0f)
     {
         // Check if the car is colliding with another car.
         if (event.collidingObject().typeID() == m_car.typeID())
@@ -153,30 +156,30 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             if (++m_sparkleCounter >= 10)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                    event.contactPoint(), m_car.velocity() * 0.75);
+                    event.contactPoint(), m_car.velocity() * 0.75f);
                 ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                    event.contactPoint(), m_car.velocity() * 0.5);
+                    event.contactPoint(), m_car.velocity() * 0.5f);
                 m_sparkleCounter = 0;
             }
         }
         // Check if the car is colliding with hard stationary objects.
         else if (
-            event.collidingObject().typeID() == crate              ||
-            event.collidingObject().typeID() == dustRacing2DBanner ||
-            event.collidingObject().typeID() == grandstand         ||
-            event.collidingObject().typeID() == wall               ||
-            event.collidingObject().typeID() == wallLong           ||
-            event.collidingObject().typeID() == rock)
+            event.collidingObject().typeID() == MCObject::typeID("crate")              ||
+            event.collidingObject().typeID() == MCObject::typeID("dustRacing2DBanner") ||
+            event.collidingObject().typeID() == MCObject::typeID("grandstand")         ||
+            event.collidingObject().typeID() == MCObject::typeID("wall")               ||
+            event.collidingObject().typeID() == MCObject::typeID("wallLong")           ||
+            event.collidingObject().typeID() == MCObject::typeID("rock"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                event.contactPoint(), m_car.velocity() * 0.5);
+                event.contactPoint(), m_car.velocity() * 0.5f);
             ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                event.contactPoint(), m_car.velocity() * 0.1);
+                event.contactPoint(), m_car.velocity() * 0.1f);
         }
-        else if (event.collidingObject().typeID() == tree)
+        else if (event.collidingObject().typeID() == MCObject::typeID("tree"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
-                event.contactPoint(), m_car.velocity() * 0.1);
+                event.contactPoint(), m_car.velocity() * 0.1f);
         }
     }
 }

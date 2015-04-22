@@ -46,26 +46,12 @@ DifficultyProfile::Difficulty DifficultyProfile::difficulty() const
 
 bool DifficultyProfile::hasTireWearOut() const
 {
-    switch (m_difficulty)
-    {
-    case Difficulty::Easy:
-    case Difficulty::Medium:
-        return false;
-    case Difficulty::Senna:
-        return true;
-    }
+    return true;
 }
 
 bool DifficultyProfile::hasBodyDamage() const
 {
-    switch (m_difficulty)
-    {
-    case Difficulty::Easy:
-        return false;
-    case Difficulty::Medium:
-    case Difficulty::Senna:
-        return true;
-    }
+    return true;
 }
 
 float DifficultyProfile::accelerationFrictionMultiplier(bool isHuman) const

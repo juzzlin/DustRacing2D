@@ -33,7 +33,8 @@ public:
 
     enum ParticleType
     {
-        Smoke = 0,
+        DamageSmoke = 0,
+        Smoke,
         OffTrackSmoke,
         OnTrackSkidMark,
         OffTrackSkidMark,
@@ -58,6 +59,8 @@ public:
         int angle = 0);
 
 private:
+
+    void doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
 
     void doSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
 

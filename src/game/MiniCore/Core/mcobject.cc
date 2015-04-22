@@ -500,24 +500,24 @@ bool MCObject::stationary() const
     return m_stationary;
 }
 
-void MCObject::addImpulse(const MCVector3dF & impulse)
+void MCObject::addImpulse(const MCVector3dF & impulse, bool)
 {
     m_linearImpulse += impulse;
 
     toggleSleep(false);
 }
 
-void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos)
+void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision)
 {
     m_linearImpulse += impulse;
     const MCFloat r = (pos - m_location).lengthFast();
     if (r > 0) {
-        addAngularImpulse((-(impulse % (pos - m_location)).k()) / r);
+        addAngularImpulse((-(impulse % (pos - m_location)).k()) / r, isCollision);
     }
     toggleSleep(false);
 }
 
-void MCObject::addAngularImpulse(MCFloat impulse)
+void MCObject::addAngularImpulse(MCFloat impulse, bool)
 {
     m_angularImpulse += impulse;
 

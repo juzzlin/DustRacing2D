@@ -125,6 +125,8 @@ void Race::initCars()
         car->setCurrentTargetNodeIndex(0);
         car->setPrevTargetNodeIndex(0);
         car->setRouteProgression(0);
+        car->resetDamage();
+        car->resetTireWear();
 
         m_stuckHash[car->index()] = StuckTileCounter(nullptr, 0);
 
@@ -343,6 +345,7 @@ void Race::pitStop(Car & car)
         emit playRequested(pitSoundHandle, false);
         emit tiresChanged(car);
 
+        car.resetDamage();
         car.resetTireWear();
     }
 }
