@@ -104,6 +104,7 @@ private slots:
     void handleToolBarActionClick(QAction * action);
     void initializeNewTrack();
     void setTrackProperties();
+    void openArgTrack();
     void openTrack();
     void saveTrack();
     void saveAsTrack();
@@ -141,7 +142,7 @@ private:
     QSlider           * m_scaleSlider;
     QToolBar          * m_toolBar;
     QCheckBox         * m_randomRotationCheck;
-
+    QString             m_argTrackFile;
     bool                m_saved;
 
     static MainWindow * m_instance;

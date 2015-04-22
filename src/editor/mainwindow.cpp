@@ -81,6 +81,7 @@ MainWindow::MainWindow(QString trackFile)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
 , m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
+, m_argTrackFile(trackFile)
 , m_saved(false)
 {
     if (!m_instance)
@@ -94,7 +95,6 @@ MainWindow::MainWindow(QString trackFile)
 
     setWindowIcon(QIcon(":/dustrac-editor.png"));
 
-    // Init widgets
     init();
 
     console("CWD: " + QDir::currentPath());
@@ -104,17 +104,20 @@ MainWindow::MainWindow(QString trackFile)
         QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
     loadObjectModels(objectFilePath);
 
-    if (!trackFile.isEmpty())
+    if (!m_argTrackFile.isEmpty())
     {
-        // Print a welcome message
-        console(tr("Loading '%1'..").arg(trackFile));
-        doOpenTrack(trackFile);
+        QTimer::singleShot(0, this, SLOT(openArgTrack()));
     }
     else
     {
-        // Print a welcome message
         console(tr("Choose 'File -> New' or 'File -> Open' to start."));
     }
+}
+
+void MainWindow::openArgTrack()
+{
+    console(tr("Loading '%1'..").arg(m_argTrackFile));
+    doOpenTrack(m_argTrackFile);
 }
 
 void MainWindow::setVisible(bool visible)
