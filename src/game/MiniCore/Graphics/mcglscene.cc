@@ -309,5 +309,6 @@ MCFloat MCGLScene::eyeZ() const
 
 MCGLScene::~MCGLScene()
 {
+    MCGLScene::m_instance = nullptr;
 }
 
