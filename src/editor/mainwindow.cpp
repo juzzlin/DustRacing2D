@@ -650,8 +650,11 @@ void MainWindow::saveAsTrack()
         QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
         tr("Track Files (*.trk)"));
 
-    if (!fileName.endsWith(".trk"))
-        fileName += ".trk";
+    const QString trackFileExtension(".trk");
+    if (!fileName.endsWith(trackFileExtension))
+    {
+        fileName += trackFileExtension;
+    }
 
     assert(m_editorData);
     if (m_editorData->saveTrackDataAs(fileName))
