@@ -150,7 +150,7 @@ void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity
         smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.2f);
-        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
+        smoke->setRenderLayer(static_cast<int>(Layers::Render::DamageSmoke));
         smoke->addToWorld();
     }
 }
