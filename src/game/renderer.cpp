@@ -204,7 +204,6 @@ void Renderer::render()
         return;
     }
 
-    // Render the game scene to the frame buffer object
     resizeGL(m_hRes, m_vRes);
 
     if (!m_fbo)
@@ -245,7 +244,6 @@ void Renderer::render()
     m_scene->renderCommonHUD();
     m_fbo->release();
 
-    // Render the frame buffer object onto the screen
     if (m_fullScreen)
     {
         resizeGL(m_fullHRes, m_fullVRes);
