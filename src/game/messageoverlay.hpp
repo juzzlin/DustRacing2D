@@ -40,10 +40,10 @@ public:
     MessageOverlay(Alignment align = Alignment::Bottom, int messageMaxTime = 180);
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
     //! \reimp
-    virtual bool update();
+    virtual bool update() override;
 
 public slots:
 

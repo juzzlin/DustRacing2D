@@ -124,16 +124,16 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 
     m_game.audioWorker().connectAudioSource(m_race);
 
-    m_cameraOffset[0] = 0.0;
-    m_cameraOffset[1] = 0.0;
+    for (int i = 0; i < 2; i++)
+    {
+        m_cameraOffset[i] = 0.0f;
+        m_timingOverlay[i].setRace(m_race);
+    }
 
     m_checkeredFlag->setDimensions(width(), height());
     m_intro->setDimensions(width(), height());
     m_startlightsOverlay->setDimensions(width(), height());
     m_messageOverlay->setDimensions(width(), height());
-
-    m_timingOverlay[0].setRace(m_race);
-    m_timingOverlay[1].setRace(m_race);
 
     m_world.setMetersPerUnit(METERS_PER_UNIT);
 
@@ -210,9 +210,11 @@ void Scene::createCars()
     if (m_game.hasTwoHumanPlayers())
     {
         m_timingOverlay[1].setCarToFollow(*m_cars.at(1));
+        m_crashOverlay[1].setCarToFollow(*m_cars.at(1));
     }
 
     m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
+    m_crashOverlay[0].setCarToFollow(*m_cars.at(0));
 }
 
 int Scene::width()
@@ -275,8 +277,10 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
 
             if (m_game.hasTwoHumanPlayers())
             {
-                updateCameraLocation(m_camera[0], m_cameraOffset[0], *m_cars.at(0));
-                updateCameraLocation(m_camera[1], m_cameraOffset[1], *m_cars.at(1));
+                for (int i = 0; i < 2; i++)
+                {
+                    updateCameraLocation(m_camera[i], m_cameraOffset[i], *m_cars.at(i));
+                }
             }
             else
             {
@@ -291,9 +295,11 @@ void Scene::updateOverlays()
     if (m_game.hasTwoHumanPlayers())
     {
         m_timingOverlay[1].update();
+        m_crashOverlay[1].update();
     }
 
     m_timingOverlay[0].update();
+    m_crashOverlay[0].update();
 
     m_messageOverlay->update();
 }
@@ -393,25 +399,20 @@ void Scene::setupCameras(Track & activeTrack)
     m_world.renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
-        if (m_game.splitType() == Game::SplitType::Vertical)
+        for (int i = 0; i < 2; i++)
         {
-            m_camera[0].init(
-                Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-            m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
-
-            m_camera[1].init(
-                Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-            m_world.renderer().addParticleVisibilityCamera(m_camera[1]);
-        }
-        else
-        {
-            m_camera[0].init(
-                Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
-            m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
-
-            m_camera[1].init(
-                Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
-            m_world.renderer().addParticleVisibilityCamera(m_camera[1]);
+            if (m_game.splitType() == Game::SplitType::Vertical)
+            {
+                m_camera[i].init(
+                    Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+                m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
+            }
+            else
+            {
+                m_camera[i].init(
+                    Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
+                m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
+            }
         }
     }
     else
@@ -552,18 +553,25 @@ void Scene::resizeOverlays()
     {
         if (m_game.splitType() == Game::SplitType::Vertical)
         {
-            m_timingOverlay[0].setDimensions(width() / 2, height());
-            m_timingOverlay[1].setDimensions(width() / 2, height());
+            for (int i = 0; i < 2; i++)
+            {
+                m_timingOverlay[i].setDimensions(width() / 2, height());
+                m_crashOverlay[i].setDimensions(width() / 2, height());
+            }
         }
         else
         {
-            m_timingOverlay[0].setDimensions(width(), height() / 2);
-            m_timingOverlay[1].setDimensions(width(), height() / 2);
+            for (int i = 0; i < 2; i++)
+            {
+                m_timingOverlay[i].setDimensions(width(), height() / 2);
+                m_crashOverlay[i].setDimensions(width(), height() / 2);
+            }
         }
     }
     else
     {
         m_timingOverlay[0].setDimensions(width(), height());
+        m_crashOverlay[0].setDimensions(width(), height());
     }
 }
 
@@ -742,6 +750,7 @@ void Scene::renderObjects()
         {
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
+            m_crashOverlay[0].render();
         }
 
         break;

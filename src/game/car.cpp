@@ -18,7 +18,6 @@
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
-#include "scene.hpp"
 #include "tire.hpp"
 
 #include <MCAssetManager>
@@ -74,6 +73,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_rightRearTirePos(-14, -9, 0)
 , m_leftBrakeGlowPos(-21, 8, 0)
 , m_rightBrakeGlowPos(-21, -8, 0)
+, m_hadHardCrash(false)
 {
     setProperties(desc);
     initForceGenerators(desc);
@@ -301,7 +301,14 @@ void Car::addImpulse(const MCVector3dF & impulse, bool isCollision)
 
     if (Game::instance().difficultyProfile().hasBodyDamage() && isCollision)
     {
-        addDamage((isHuman() ? 0.5f : 0.25f) * impulse.lengthFast());
+        const float damage = (isHuman() ? 0.5f : 0.25f) * impulse.lengthFast();
+        addDamage(damage);
+
+        const float hardCrashDamageLimit = 4.0f;
+        if (damage >= hardCrashDamageLimit)
+        {
+            m_hadHardCrash = true;
+        }
     }
 }
 
@@ -372,6 +379,16 @@ float Car::damageFactor() const
 float Car::damageLevel() const
 {
     return m_damageCapacity / m_initDamageCapacity;
+}
+
+bool Car::hadHardCrash()
+{
+    if (m_hadHardCrash)
+    {
+        m_hadHardCrash = false;
+        return true;
+    }
+    return false;
 }
 
 void Car::stepTime(MCFloat step)

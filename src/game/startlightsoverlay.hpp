@@ -33,10 +33,10 @@ public:
     StartlightsOverlay(Startlights & model);
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
     //! \reimp
-    virtual void setDimensions(int width, int height);
+    virtual void setDimensions(int width, int height) override;
 
 private:
 

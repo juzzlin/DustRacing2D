@@ -56,6 +56,7 @@ HEADERS += \
     carstatusview.hpp \
     checkeredflag.hpp \
     confirmationmenu.hpp \
+    crashoverlay.hpp \
     credits.hpp \
     difficultyprofile.hpp \
     eventhandler.hpp \
@@ -218,6 +219,7 @@ SOURCES += \
     carstatusview.cpp \
     checkeredflag.cpp \
     confirmationmenu.cpp \
+    crashoverlay.cpp \
     credits.cpp \
     difficultyprofile.cpp \
     eventhandler.cpp \

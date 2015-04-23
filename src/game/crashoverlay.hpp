@@ -13,31 +13,40 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef OVERLAYBASE_HPP
-#define OVERLAYBASE_HPP
+#ifndef CRASHOVERLAY_HPP
+#define CRASHOVERLAY_HPP
 
-#include <MCBBox>
-#include <MCTypes>
+#include "overlaybase.hpp"
 
-#include "renderable.hpp"
-#include "updateableif.hpp"
+class MCSurface;
+class Car;
 
-//! Base class for overlays that are rendered on top of the game scene.
-class OverlayBase : public UpdateableIf, public Renderable
+class CrashOverlay : public OverlayBase
 {
 public:
 
-    //! Constructor.
-    OverlayBase();
+    CrashOverlay();
 
-    //! Destructor.
-    virtual ~OverlayBase();
+    //! \reimp
+    virtual void render() override;
+
+    //! \reimp
+    virtual void setDimensions(int width, int height) override;
 
     //! \reimp
     virtual bool update() override;
 
-    //! \reimp
-    virtual void reset() override;
+    void setCarToFollow(Car & car);
+
+private:
+
+    MCSurface & m_surface;
+
+    float m_alpha;
+
+    Car * m_car;
+
+    bool m_isTriggered;
 };
 
-#endif // OVERLAYBASE_HPP
+#endif // CRASHOVERLAY_HPP

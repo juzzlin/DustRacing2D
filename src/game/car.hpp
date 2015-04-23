@@ -171,6 +171,8 @@ public:
 
     void resetDamage();
 
+    bool hadHardCrash();
+
     void setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager);
 
     CarSoundEffectManagerPtr soundEffectManager() const;
@@ -221,6 +223,7 @@ private:
     MCVector3dF              m_rightRearTirePos;
     MCVector3dF              m_leftBrakeGlowPos;
     MCVector3dF              m_rightBrakeGlowPos;
+    bool                     m_hadHardCrash;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

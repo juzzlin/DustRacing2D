@@ -15,7 +15,6 @@
 
 #include "startlightsoverlay.hpp"
 #include "startlights.hpp"
-#include "renderer.hpp"
 
 #include <MCAssetManager>
 #include <MCGLColor>
@@ -30,14 +29,8 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 , m_model(model)
 , m_alpha(1.0)
 {
-    MCGLShaderProgramPtr shader = Renderer::instance().program("default");
-    m_startLightOn.setShaderProgram(shader);
-    m_startLightOnCorner.setShaderProgram(shader);
-    m_startLightOff.setShaderProgram(shader);
     m_startLightOff.setAlphaBlend(true);
-    m_startLightOffCorner.setShaderProgram(shader);
     m_startLightOffCorner.setAlphaBlend(true);
-    m_startLightGlow.setShaderProgram(shader);
 }
 
 void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bool glowAlways) const

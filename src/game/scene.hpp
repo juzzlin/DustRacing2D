@@ -18,6 +18,7 @@
 
 #include "ai.hpp"
 #include "car.hpp"
+#include "crashoverlay.hpp"
 #include "race.hpp"
 #include "timingoverlay.hpp"
 
@@ -138,6 +139,7 @@ private:
     Race                  m_race;
     Track               * m_activeTrack;
     MCWorld             & m_world;
+    CrashOverlay          m_crashOverlay[2];
     TimingOverlay         m_timingOverlay[2];
     Startlights         * m_startlights;
     StartlightsOverlay  * m_startlightsOverlay;

@@ -52,6 +52,7 @@ set(SRC
     carstatusview.cpp
     checkeredflag.cpp
     confirmationmenu.cpp
+    crashoverlay.cpp
     credits.cpp
     difficultyprofile.cpp
     eventhandler.cpp

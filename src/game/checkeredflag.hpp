@@ -29,7 +29,7 @@ public:
     CheckeredFlag();
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
 private:
 

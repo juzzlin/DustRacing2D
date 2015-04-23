@@ -43,10 +43,10 @@ public:
     TimingOverlay();
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
     //! \reimp
-    virtual bool update();
+    virtual bool update() override;
 
     //! Show timing for the given car.
     void setCarToFollow(const Car & car);
