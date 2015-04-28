@@ -304,7 +304,7 @@ void Car::addImpulse(const MCVector3dF & impulse, bool isCollision)
         const float damage = (isHuman() ? 0.5f : 0.25f) * impulse.lengthFast();
         addDamage(damage);
 
-        const float hardCrashDamageLimit = 4.0f;
+        const float hardCrashDamageLimit = 3.5f;
         if (damage >= hardCrashDamageLimit)
         {
             m_hadHardCrash = true;

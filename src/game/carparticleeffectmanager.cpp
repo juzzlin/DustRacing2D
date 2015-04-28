@@ -78,7 +78,7 @@ void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType typ
 
 void CarParticleEffectManager::doDamageSmoke()
 {
-    if (m_car.damageLevel() <= 0.5f && MCRandom::getValue() > m_car.damageLevel())
+    if (m_car.damageLevel() <= 0.3f && MCRandom::getValue() > m_car.damageLevel())
     {
         MCVector3dF smokeLocation = (m_car.leftFrontTireLocation() + m_car.rightFrontTireLocation()) * 0.5f;
         ParticleFactory::instance().doParticle(ParticleFactory::DamageSmoke, smokeLocation);

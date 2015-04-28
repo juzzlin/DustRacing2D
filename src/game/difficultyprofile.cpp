@@ -59,12 +59,14 @@ float DifficultyProfile::accelerationFrictionMultiplier(bool isHuman) const
     switch (m_difficulty)
     {
     case Difficulty::Easy:
-        return isHuman ? 0.70f : 0.65f;
+        return isHuman ? 0.70f : 0.70f * 0.85f;
     case Difficulty::Medium:
-        return isHuman ? 0.78f : 0.75f;
+        return isHuman ? 0.85f : 0.85f * 0.85f;
     case Difficulty::Senna:
-        return 1.0f;
+        return isHuman ? 1.0f : 1.0f * 0.9f;
     }
+
+    return 1.0f;
 }
 
 DifficultyProfile::~DifficultyProfile()
