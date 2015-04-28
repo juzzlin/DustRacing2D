@@ -1,3 +1,30 @@
+1.11.0
+======
+
+New features:
+
+* Finally a difficulty setting with three levels: Easy, Medium and Senna
+* Show a red overlay on hard crashes
+* Cars can get damaged
+
+Improvements:
+
+* Remove alpha blending from the plant object
+* Stabilize the steering a bit
+
+Bug fixes:
+
+* Editor: Fix wrong scale when track given as a CLI argument
+* Editor: Don't try to open a track if filename is empty
+* Fix unit tests
+
+Other:
+
+* Refactor settingsmenu.hpp
+* Refactor steering logic
+* Sparkles as surface particles
+* Use same renderer for all particle batches
+
 1.10.0
 ======
 
