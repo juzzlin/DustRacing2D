@@ -32,74 +32,68 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../main.cpp" line="48"/>
         <source>At least OpenGL ES 2.0 is required!</source>
         <translation>Je vyžadováno alespoň OpenGL ES 2.0!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="49"/>
-        <location filename="../main.cpp" line="56"/>
-        <location filename="../main.cpp" line="63"/>
         <source>Cannot start Dust Racing 2D</source>
         <translation>Nelze spustit Dust Racing 2D</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="55"/>
         <source>At least OpenGL 3.0 is required!</source>
         <translation>Je vyžadováno alespoň OpenGL 3.0!</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="62"/>
         <source>At least OpenGL 2.1 is required!</source>
         <translation>Je vyžadováno alespoň OpenGL 2.1!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="295"/>
+        <location filename="../race.cpp" line="314"/>
         <source>The Time Trial has ended!</source>
         <translation>Časová zkouška!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="299"/>
+        <location filename="../race.cpp" line="318"/>
         <source>The winner has finished!</source>
         <translation>Vítěz dokončil!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="230"/>
+        <location filename="../race.cpp" line="67"/>
         <source>New lap record!</source>
         <translation>Nový rekord kola!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="223"/>
+        <location filename="../race.cpp" line="73"/>
         <source>New race record!</source>
         <translation>Nový rekord závodu!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="322"/>
+        <location filename="../race.cpp" line="343"/>
         <source>Pit stop!</source>
         <translation>Díra!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="434"/>
+        <location filename="../race.cpp" line="455"/>
         <source>A new best pos!</source>
         <translation>Nové nejlepší umístění!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="444"/>
+        <location filename="../race.cpp" line="465"/>
         <source>A new track unlocked!</source>
         <translation>Odemknuta nová trať!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="448"/>
+        <location filename="../race.cpp" line="469"/>
         <source>Better luck next time..</source>
         <translation>Příště víc štěstí..</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="490"/>
+        <location filename="../race.cpp" line="513"/>
         <source>You must stay on track!</source>
         <translation>Musíte zůstat na trati!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="494"/>
+        <location filename="../race.cpp" line="517"/>
         <source>Watch your tires!</source>
         <translation>Kontrolujte pláště!</translation>
     </message>
@@ -332,94 +326,114 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
 * Tommi Martela</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="66"/>
+        <location filename="../settingsmenu.cpp" line="77"/>
         <source>Reset best positions?</source>
         <translation>Vynulovat nejlepší umístění?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="78"/>
+        <location filename="../settingsmenu.cpp" line="89"/>
         <source>Reset record times?</source>
         <translation>Vynulovat rekordní časy?</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="91"/>
+        <location filename="../settingsmenu.cpp" line="102"/>
         <source>Reset unlocked tracks?</source>
         <translation>Vynulovat odemknuté tratě!</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="185"/>
+        <location filename="../settingsmenu.cpp" line="203"/>
+        <source>Difficulty &gt;</source>
+        <translation>Obtížnost &gt;</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="207"/>
         <source>Sounds &gt;</source>
         <translation>Zvuk &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="189"/>
+        <location filename="../settingsmenu.cpp" line="211"/>
         <source>GFX &gt;</source>
         <translation>Obraz &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="193"/>
+        <location filename="../settingsmenu.cpp" line="215"/>
         <source>Controls &gt;</source>
         <translation>Ovládání &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="197"/>
+        <location filename="../settingsmenu.cpp" line="219"/>
         <source>Reset &gt;</source>
         <translation>Vynulování &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="324"/>
+        <location filename="../settingsmenu.cpp" line="334"/>
+        <source>Easy</source>
+        <translation>Lehká</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="344"/>
+        <source>Medium</source>
+        <translation>Střední</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="354"/>
+        <source>Senna</source>
+        <translation>Sennova</translation>
+    </message>
+    <message>
+        <location filename="../settingsmenu.cpp" line="407"/>
         <source>VSync &gt;</source>
         <translation>Svislá synchronizace &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="343"/>
+        <location filename="../settingsmenu.cpp" line="426"/>
         <location filename="../vsyncmenu.cpp" line="103"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="356"/>
+        <location filename="../settingsmenu.cpp" line="439"/>
         <location filename="../vsyncmenu.cpp" line="108"/>
         <source>On</source>
         <translation>Zapnuto</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="390"/>
+        <location filename="../settingsmenu.cpp" line="473"/>
         <source>Reset record times</source>
         <translation>Vynulovat rekordní časy</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="395"/>
+        <location filename="../settingsmenu.cpp" line="478"/>
         <source>Reset best positions</source>
         <translation>Vynulovat nejlepší umístění</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="400"/>
+        <location filename="../settingsmenu.cpp" line="483"/>
         <source>Reset unlocked tracks</source>
         <translation>Vynulovat odemknuté tratě</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="312"/>
+        <location filename="../settingsmenu.cpp" line="395"/>
         <source>Full screen resolution &gt;</source>
         <translation>Rozlišení v režimu na celou obrazovku &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="316"/>
+        <location filename="../settingsmenu.cpp" line="399"/>
         <source>Windowed resolution &gt;</source>
         <translation>Rozlišení v okenním režimu &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="320"/>
+        <location filename="../settingsmenu.cpp" line="403"/>
         <source>Split type &gt;</source>
         <translation>Typ rozdělení &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="177"/>
+        <location filename="../settingsmenu.cpp" line="195"/>
         <source>Game mode &gt;</source>
         <translation>Herní režim &gt; </translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="181"/>
+        <location filename="../settingsmenu.cpp" line="199"/>
         <source>Lap Count &gt;</source>
         <translation>Počet kol &gt;</translation>
     </message>
@@ -432,32 +446,32 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
         <translation type="obsolete">Nastavení kláves &gt;</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="220"/>
+        <location filename="../settingsmenu.cpp" line="243"/>
         <source>Two player race</source>
         <translation>Závod se dvěma závodníky</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="230"/>
+        <location filename="../settingsmenu.cpp" line="253"/>
         <source>One player race</source>
         <translation>Závod s jedním závodníkem</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="240"/>
+        <location filename="../settingsmenu.cpp" line="263"/>
         <source>Time Trial</source>
         <translation>Časová zkouška</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="250"/>
+        <location filename="../settingsmenu.cpp" line="273"/>
         <source>Duel</source>
         <translation>Duel</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="278"/>
+        <location filename="../settingsmenu.cpp" line="301"/>
         <source>Vertical</source>
         <translation>Svislé</translation>
     </message>
     <message>
-        <location filename="../settingsmenu.cpp" line="288"/>
+        <location filename="../settingsmenu.cpp" line="311"/>
         <source>Horizontal</source>
         <translation>Vodorovné</translation>
     </message>
@@ -478,27 +492,27 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
         <translation type="obsolete">Délka: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="229"/>
+        <location filename="../trackselectionmenu.cpp" line="233"/>
         <source>       Laps: </source>
         <translation>       Kol: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="235"/>
+        <location filename="../trackselectionmenu.cpp" line="239"/>
         <source>     Length: </source>
         <translation>       Délka: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="237"/>
+        <location filename="../trackselectionmenu.cpp" line="241"/>
         <source> m</source>
         <translation> m</translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="244"/>
+        <location filename="../trackselectionmenu.cpp" line="248"/>
         <source> Lap Record: </source>
         <translation> Rekord kola: </translation>
     </message>
     <message>
-        <location filename="../trackselectionmenu.cpp" line="249"/>
+        <location filename="../trackselectionmenu.cpp" line="253"/>
         <source>Race Record: </source>
         <translation>Rekord závodu: </translation>
     </message>
@@ -562,37 +576,36 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="30"/>
+        <location filename="../credits.cpp" line="34"/>
         <source>PROGRAMMING BY</source>
         <translation>PROGRAMOVÁNÍ</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="33"/>
+        <location filename="../credits.cpp" line="37"/>
         <source>GRAPHICS BY</source>
         <translation>OBRAZOVÁ STRÁNKA</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="36"/>
+        <location filename="../credits.cpp" line="40"/>
         <source>RACE TRACKS BY</source>
         <translation>ZÁVODNÍ TRATĚ</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="39"/>
+        <location filename="../credits.cpp" line="43"/>
         <source>CONTRIBUTORS</source>
         <translation>PŘISPĚVATELÉ</translation>
     </message>
     <message>
-        <location filename="../credits.cpp" line="44"/>
+        <location filename="../credits.cpp" line="49"/>
         <source>SPECIAL THANKS</source>
         <translation>ZVLÁŠTNÍ PODĚKOVÁNÍ</translation>
     </message>
     <message>
-        <location filename="../resolutionmenu.cpp" line="110"/>
+        <location filename="../resolutionmenu.cpp" line="117"/>
         <source>Restart to change the resolution.</source>
         <translation>Pro změnu rozlišení spusťte znovu.</translation>
     </message>
     <message>
-        <location filename="../resolutionmenu.cpp" line="174"/>
         <source>Native resolution</source>
         <translation>Přirozené rozlišení</translation>
     </message>
