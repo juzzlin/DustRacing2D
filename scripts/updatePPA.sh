@@ -1,5 +1,10 @@
 VERSION=${DUSTRAC_RELEASE_VERSION?"is not set."}
-DEBIAN_VERSION=$VERSION-5
+
+# $VERSION-1 for trusty
+# $VERSION-2 for utopic
+# $VERSION-3 for vivid
+
+DEBIAN_VERSION=$VERSION-3
 rm -rf *${VERSION}*
 cp ../sourceforge-git/dustrac-code/dustrac-$VERSION.tar.gz .
 tar xzvf dustrac-$VERSION.tar.gz
