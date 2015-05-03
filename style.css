@@ -1,0 +1,108 @@
+header
+{
+    background-color: #111111;
+    color:            #dddddd;
+}
+
+body, html
+{
+    background-color: #111111;
+    color:            #dddddd;
+    color:            white;
+    font-family:      Arial, Helvetica, sans-serif;
+    text-align:       center;
+    height:           100%;
+}
+
+a:link
+{
+    text-decoration:none;
+}
+
+a:visited
+{
+    text-decoration:none;
+}
+
+a:hover
+{
+    text-decoration:none;
+    color:yellow;
+}
+
+a:active
+{
+    text-decoration:none;
+}
+
+.dr2-main-content {
+    width: 100%;
+    min-height: 100%;
+    padding: 0;
+    background-color: #111111;
+}
+
+.dr2-main-content .container {
+    padding: 0;
+}
+
+.dr2-title {
+    margin-bottom: 10px;
+}
+
+.dr2-title h1 {
+    font-weight: bold;
+}
+
+.dr2-image-view
+{
+    width:100%;
+}
+
+.dr2-image-view .container
+{
+    padding: 0;
+}
+
+.dr2-image-view img
+{
+    width:100%;
+    height:auto;
+}
+
+.dr2-image-view .image1
+{
+    margin-bottom: 2px;
+}
+
+.dr2-image-view .image2
+{
+    margin-bottom: 2px;
+}
+
+.dr2-image-view .image3
+{
+    margin-bottom: 2px;
+}
+
+.dr2-text-area
+{
+    width:            100%;
+    font-family:      "Arial Black", Gadget, sans-serif;
+    color:            #cccccc;
+    text-align:       left;
+    text-indent:      1em;
+    border-radius:    2px;
+    padding-left:     20px;
+    padding-right:    20px;
+}
+
+.dr2-footer
+{
+    background-color: #444444;
+    color:            #dddddd;
+    width:            100%;
+    height:           32px;
+    line-height:      32px;
+    margin-top:       20px;
+}
