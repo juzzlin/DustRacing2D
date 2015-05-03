@@ -1,3 +1,27 @@
+dustrac (1.11.0-2) utopic; urgency=medium
+
+  * Show a red overlay on hard crashes.
+  * Fix unit tests.
+  * Own layer for damage smoke.
+  * Remove misleading comments.
+  * Eliminate copy-paste.
+  * Editor: Fix wrong scale when track given as a CLI argument.
+  * Add body damage system.
+  * Stabilize the steering a bit.
+  * Make difficulty setting affect game speed.
+  * Add difficulty selection.
+  * Refactor settingsmenu.hpp
+  * Refactor steering logic.
+  * Editor: Don't try to open a track if filename is empty.
+  * Use same renderer for all particle batches.
+  * Sparkles as surface particles.
+  * Remove alpha blending from the plant object.
+  * Add screenshots of 1.10.0
+  * Sort particles in place.
+  * Update web/index.html
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 03 May 2015 20:25:29 +0300
+
 dustrac (1.11.0-1) trusty; urgency=medium
 
   * Show a red overlay on hard crashes.
