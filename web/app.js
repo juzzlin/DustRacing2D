@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
+// Redirect to the new pages
+window.location = "http://juzzlin.github.io/DustRacing2D/";
+
 var app = angular.module("App", []);
 
 app.controller("ImageController", function ($scope, $timeout) {
