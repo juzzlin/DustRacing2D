@@ -1,5 +1,15 @@
-README
-======
+## Dust Racing 2D
+
+<table>
+  <tr>
+    <td>
+      <img src="https://cloud.githubusercontent.com/assets/2587783/7400283/69f106fa-eec4-11e4-9014-76c086f54d89.jpg" width="100%"></img>
+    </td>
+    <td>
+      <img src="https://cloud.githubusercontent.com/assets/2587783/7400318/956180d0-eec4-11e4-9d3a-96e83d4b0e52.jpg" width="100%"></img>
+    </td>
+  </tr>
+</table>
 
 Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written
 in Qt (C++) and OpenGL.
@@ -7,8 +17,25 @@ in Qt (C++) and OpenGL.
 Dust Racing comes with a Qt-based level editor for easy level creation.
 A separate engine, MiniCore, is used for physics modeling.
 
-License
-=======
+## Features
+
+* 1-2 human players againts 11 challenging computer players
+* 3 difficulty settings: Easy, Medium, Senna
+* Split-screen two player game (vertical or horizontal)
+* Game modes: Race, Time Trial, Duel
+* 2D graphics with some 3D objects
+* Smooth game play and physics
+* Multiple race tracks
+* Finishing in TOP-6 will unlock the next race track
+* Star ratings based on the best positions on each race track
+* Easy to create new race tracks with the level editor
+* Engine and collision sounds
+* Pit stops
+* Runs windowed or fullscreen
+* Portable source code using CMake as the build system
+* Will be forever completely free
+
+## License
 
 Dust Racing source code is licensed under GNU GPLv3. 
 See COPYING for the complete license text.
@@ -22,11 +49,9 @@ See src/game/MiniCore/Graphics/glm/ogl-math/glm/glm.hpp for the license text.
 All image files, except where otherwise noted, are licensed under
 CC BY-SA 3.0: http://creativecommons.org/licenses/by-sa/3.0/
 
-Playing
-=======
+## Playing
 
-Controls
---------
+### Controls
 
 The default controls for player one (the pink race car):
 
@@ -42,47 +67,39 @@ W          | S     | A         | D
 
 The key configuration and game mode can be changed in the settings menu.
 
-ESC or Q exits the race and also the current menu.
+**ESC** or **Q** exits the race and also the current menu.
 
-P pauses the game.
+**P** pauses the game.
 
-Races
------
+### Races
 
 In the race modes there are always 12 cars. By finishing in TOP-6 a new track
 will be unlocked.
 
 The record times and best positions are stored separately for each lap count.
 
-Pit stops
----------
+### Pit stops
 
 Your tires will wear out as the race progresses. This causes more and more sliding.
 
 Fortunately there's a pit (the yellow rectangle). 
 By stopping on the pit your tires will be repaired.
 
-Custom track files
-------------------
+### Custom track files
 
 Dust Racing searches for race tracks also in ~/DustRacingTracks/
 where you can place your own race tracks.
 
-Command line options
-====================
+## Command line options
 
 --lang [lang] forces the language. Currently available: fi, cs, it, fr.
 
 E.g. ./dustrac-game --lang it
 
-Performance
-===========
+## Building the project
 
-Dust Racing 2D tries to render at least at 60 fps. If you experience very slow
-performance, try first to set vsync off (Settings => GFX => Vsync).
-
-Another option would be to force Vsync off via your driver settings.
-
+Please refer to the INSTALL document for build/install instructions if you're
+going to build Dust Racing 2D from sources.
 
 -- Jussi Lind <jussi.lind@iki.fi>
 
