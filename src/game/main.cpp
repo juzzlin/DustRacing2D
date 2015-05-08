@@ -60,10 +60,11 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
     if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + lang))
     {
         app.installTranslator(&appTranslator);
+        MCLogger().info() << "Loaded translations for " << lang.toStdString();
     }
     else
     {
-        MCLogger().info() << "Failed to load translations for " << QLocale::system().name().toStdString();
+        MCLogger().warning() << "Failed to load translations for " << lang.toStdString();
     }
 }
 
