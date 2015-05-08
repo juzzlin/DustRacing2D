@@ -462,8 +462,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         // Select-action
         if (action->data() == "select")
         {
-            QApplication::restoreOverrideCursor();
-            m_editorData->setMode(EditorData::EM_NONE);
+            clearEditMode();
         }
         // The user wants to erase an object.
         else if (action->data() == "erase")
@@ -498,14 +497,15 @@ void MainWindow::handleToolBarActionClick(QAction * action)
     }
     else
     {
-        QApplication::restoreOverrideCursor();
-        m_editorData->setMode(EditorData::EM_NONE);
+        clearEditMode();
         m_currentToolBarAction = nullptr;
     }
 }
 
 void MainWindow::openTrack()
 {
+    clearEditMode();
+
     // Load recent path
     QSettings settings;
 
@@ -612,6 +612,8 @@ bool MainWindow::doOpenTrack(QString fileName)
 
 void MainWindow::saveTrack()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+
     if (!m_saved)
     {
         saveAsTrack();
@@ -632,10 +634,14 @@ void MainWindow::saveTrack()
                 tr("Failed to save track '")) + m_editorData->trackData()->fileName() + "'.");
         }
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::saveAsTrack()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+
     QString fileName = QFileDialog::getSaveFileName(this,
         tr("Save a track"),
         QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
@@ -658,10 +664,14 @@ void MainWindow::saveAsTrack()
     {
         console(QString(tr("Failed to save track as '")) + fileName + "'.");
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::initializeNewTrack()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+
     // Show a dialog asking some questions about the track
     NewTrackDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted)
@@ -699,6 +709,8 @@ void MainWindow::initializeNewTrack()
 
         m_saved = false;
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::setActionStatesOnNewTrack()
@@ -794,6 +806,12 @@ void MainWindow::console(QString text)
 {
     QDateTime date = QDateTime::currentDateTime();
     m_console->append(QString("(") + date.toString("hh:mm:ss") + "): " + text);
+}
+
+void MainWindow::clearEditMode()
+{
+    QApplication::restoreOverrideCursor();
+    m_editorData->setMode(EditorData::EM_NONE);
 }
 
 void MainWindow::fitScale()
