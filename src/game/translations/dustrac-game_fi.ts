@@ -240,9 +240,7 @@ Accelerate : W / LEFT SHIFT
 Brake      : S / LEFT CTRL
 
 Quit       : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</source>
+Pause      : P</source>
         <translation>PELIN TARKOITUS
 
 Vastassasi on 11 autoa.
@@ -268,9 +266,7 @@ Kaasuta    : W / VASEN SHIFT
 Jarruta    : S / VASEN CTRL
 
 Poistu     : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</translation>
+Pause      : P</translation>
     </message>
     <message>
         <source>PROGRAMMING BY

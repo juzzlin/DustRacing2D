@@ -24,14 +24,16 @@ namespace Config
         //! The base data path given by -DDATA_PATH.
         static const QString dataPath;
 
+        static const QString COPYRIGHT;
+
         //! "Company" name used in QSettings.
         static const QString QSETTINGS_COMPANY_NAME;
 
-        //! Path used to search "3rd party" race tracks under the home dir:
-        //! ~/TRACK_SEARCH_PATH/
+        /*! Path used to search "3rd party" race tracks under the home dir:
+         *  ~/TRACK_SEARCH_PATH/ */
         static const QString TRACK_SEARCH_PATH;
 
-        static const QString COPYRIGHT;
+        static const QString WEB_SITE_URL;
     };
 
     class Editor

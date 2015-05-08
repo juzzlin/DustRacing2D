@@ -240,9 +240,7 @@ Accelerate : W / LEFT SHIFT
 Brake      : S / LEFT CTRL
 
 Quit       : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</source>
+Pause      : P</source>
         <translation>CÍL HRY
 
 Závodíte s jedenácti
@@ -269,9 +267,7 @@ Zrychlit: W / levý SHIFT
 Brzdit: S / levý CTRL
 
 Ukončit: ESC/Q
-Pozastavit: P
-
-http://dustrac.sourceforge.net</translation>
+Pozastavit: P</translation>
     </message>
     <message>
         <source>PROGRAMMING BY

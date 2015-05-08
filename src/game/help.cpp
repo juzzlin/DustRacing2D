@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
+#include "../common/config.hpp"
 #include "help.hpp"
 #include "renderer.hpp"
 
@@ -27,7 +28,7 @@ Help::Help(std::string id, int width, int height)
 void Help::render()
 {
     static MCTextureText HELP_TEXT(
-        QObject::tr("GAME GOAL\n\n"
+        (QObject::tr("GAME GOAL\n\n"
         "You are racing against eleven\ncomputer players.\n\n"
         "Your best position will be\nthe next start position.\n\n"
         "Finish in TOP-6 to unlock\na new race track!\n\n"
@@ -42,8 +43,8 @@ void Help::render()
         "Accelerate : W / LEFT SHIFT\n"
         "Brake      : S / LEFT CTRL\n\n"
         "Quit       : ESC/Q\n"
-        "Pause      : P\n\n"
-        "http://dustrac.sourceforge.net").toStdWString()
+        "Pause      : P") + "\n\n" +
+        Config::Common::WEB_SITE_URL).toStdWString()
     );
 
     SurfaceMenu::render();

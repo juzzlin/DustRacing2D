@@ -94,9 +94,7 @@ Accelerate : W / LEFT SHIFT
 Brake      : S / LEFT CTRL
 
 Quit       : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</source>
+Pause      : P</source>
         <translation>OBJECTIF DU JEU
 
 Vous concourrez contre 11 véhicules
@@ -116,9 +114,7 @@ Accélérer        : Haut / Maj Droite
 Freiner          : Bas / Ctrl Droite
 
 Quitter          : Échap / Q
-Pause            : P
-
-http://dustrac.sourceforge.net</translation>
+Pause            : P</translation>
     </message>
     <message>
         <location filename="../keyconfigmenu.cpp" line="52"/>

@@ -59,9 +59,7 @@ Accelerate : W / LEFT SHIFT
 Brake      : S / LEFT CTRL
 
 Quit       : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</source>
+Pause      : P</source>
         <translation>OBIETTIVO DEL GIOCO
 
 Corri contro undici giocatori
@@ -87,9 +85,7 @@ Accelera   : W / MAIUSC SINISTRO
 Frena      : S / CTRL SINISTRO
 
 Esci       : ESC/Q
-Pause      : P
-
-http://dustrac.sourceforge.net</translation>
+Pause      : P</translation>
     </message>
     <message>
         <location filename="../keyconfigmenu.cpp" line="52"/>

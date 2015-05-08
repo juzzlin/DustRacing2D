@@ -42,8 +42,8 @@ void AboutDlg::initWidgets()
         QString("<h2>") + Config::Game::GAME_NAME + " v" + Config::Game::GAME_VERSION + "</h2>"
         + "<p>" + Config::Game::GAME_NAME + " is licenced under GNU GPLv3.</p>"
         + "<p>" + Config::Common::COPYRIGHT + "</p>"
-        + "<a href='http://dustrac.sourceforge.net'>"
-        + "http://dustrac.sourceforge.net</a>");
+        + "<a href='" + Config::Common::WEB_SITE_URL + "'>"
+        + Config::Common::WEB_SITE_URL + "</a>");
 
     vLayout->addWidget(infoLabel);
 
