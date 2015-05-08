@@ -491,15 +491,6 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         else if (m_objectModelLoader->getCategoryByRole(
             action->data().toString()) == "free")
         {
-            ObjectModel objectData = m_objectModelLoader->getObjectModelByRole(
-                action->data().toString());
-
-            unsigned int w = objectData.width;
-            w = w > 0 ? w : objectData.pixmap.width();
-
-            unsigned int h = objectData.height;
-            h = h > 0 ? h : objectData.pixmap.height();
-
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(":/cursor2.png")));
             m_editorData->setMode(EditorData::EM_ADD_OBJECT);
