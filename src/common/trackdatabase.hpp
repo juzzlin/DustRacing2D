@@ -26,51 +26,148 @@ class TrackDataBase
 {
 public:
 
-    struct IO
+    /** Keywords used in the track data files.
+     *  TODO: Use constexpr when MSVC supports it properly. */
+    struct DataKeywords
     {
         struct Header
         {
-            static QString VER()   { return "version"; }
-            static QString TRACK() { return "track"; }
-            static QString NAME()  { return "name"; }
-            static QString COLS()  { return "cols"; }
-            static QString ROWS()  { return "rows"; }
-            static QString INDEX() { return "index"; }
-            static QString USER()  { return "isUserTrack"; }
+            static QString ver()
+            {
+                return "version";
+            }
+
+            static QString track()
+            {
+                return "track";
+            }
+
+            static QString name()
+            {
+                return "name";
+            }
+
+            static QString cols()
+            {
+                return "cols";
+            }
+
+            static QString rows()
+            {
+                return "rows";
+            }
+
+            static QString index()
+            {
+                return "index";
+            }
+
+            static QString user()
+            {
+                return "isUserTrack";
+            }
         };
 
         struct Track
         {
-            static QString NODE()   { return "n"; }
-            static QString TILE()   { return "t"; }
-            static QString OBJECT() { return "o"; }
+            static QString node()
+            {
+                return "n";
+            }
+
+            static QString tile()
+            {
+                return "t";
+            }
+
+            static QString object()
+            {
+                return "o";
+            }
         };
 
         struct Node
         {
-            static QString INDEX()  { return "i"; }
-            static QString X()      { return "x"; }
-            static QString Y()      { return "y"; }
-            static QString WIDTH()  { return "w"; }
-            static QString HEIGHT() { return "h"; }
+            static QString index()
+            {
+                return "i";
+            }
+
+            static QString x()
+            {
+                return "x";
+            }
+
+            static QString y()
+            {
+                return "y";
+            }
+
+            static QString width()
+            {
+                return "w";
+            }
+
+            static QString height()
+            {
+                return "h";
+            }
         };
 
         struct Tile
         {
-            static QString TYPE()          { return "t"; }
-            static QString I()             { return "i"; }
-            static QString J()             { return "j"; }
-            static QString ORIENTATION()   { return "o"; }
-            static QString COMPUTER_HINT() { return "c"; }
+            static QString type()
+            {
+                return "t";
+            }
+
+            static QString i()
+            {
+                return "i";
+            }
+
+            static QString j()
+            {
+                return "j";
+            }
+
+            static QString orientation()
+            {
+                return "o";
+            }
+
+            static QString computerHint()
+            {
+                return "c";
+            }
         };
 
         struct Object
         {
-            static QString ROLE()        { return "r"; }
-            static QString CATEGORY()    { return "c"; }
-            static QString X()           { return "x"; }
-            static QString Y()           { return "y"; }
-            static QString ORIENTATION() { return "o"; }
+            static QString role()
+            {
+                return "r";
+            }
+
+            static QString category()
+            {
+                return "c";
+            }
+
+            static QString x()
+            {
+                return "x";
+            }
+
+            static QString y()
+            {
+                return "y";
+            }
+
+            static QString orientation()
+            {
+                return "o";
+            }
         };
     };
 

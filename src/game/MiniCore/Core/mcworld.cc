@@ -265,22 +265,22 @@ void MCWorld::setDimensions(
     m_bottomWallObject->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
 
-MCFloat MCWorld::minX() const
+MCFloat MCWorld::minx() const
 {
     return m_minX;
 }
 
-MCFloat MCWorld::maxX() const
+MCFloat MCWorld::maxx() const
 {
     return m_maxX;
 }
 
-MCFloat MCWorld::minY() const
+MCFloat MCWorld::miny() const
 {
     return m_minY;
 }
 
-MCFloat MCWorld::maxY() const
+MCFloat MCWorld::maxy() const
 {
     return m_maxY;
 }

@@ -155,16 +155,16 @@ public:
     MCWorldRenderer & renderer() const;
 
     //! Get minimum X
-    MCFloat minX() const;
+    MCFloat minx() const;
 
     //! Get maximum X
-    MCFloat maxX() const;
+    MCFloat maxx() const;
 
     //! Get minimum Y
-    MCFloat minY() const;
+    MCFloat miny() const;
 
     //! Get maximum Y
-    MCFloat maxY() const;
+    MCFloat maxy() const;
 
     //! Get minimum Z
     MCFloat minZ() const;

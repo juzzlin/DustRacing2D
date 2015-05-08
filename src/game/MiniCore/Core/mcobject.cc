@@ -227,12 +227,12 @@ void MCObject::doOutOfBoundariesEvent()
 void MCObject::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
 {
     const MCWorld & world = MCWorld::instance();
-    if (minX < world.minX())
+    if (minX < world.minx())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West);
         outOfBoundariesEvent(e);
     }
-    else if (maxX > world.maxX())
+    else if (maxX > world.maxx())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::East);
         outOfBoundariesEvent(e);
@@ -242,12 +242,12 @@ void MCObject::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
 void MCObject::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
 {
     const MCWorld & world = MCWorld::instance();
-    if (minY < world.minY())
+    if (minY < world.miny())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South);
         outOfBoundariesEvent(e);
     }
-    else if (maxY > world.maxY())
+    else if (maxY > world.maxy())
     {
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::North);
         outOfBoundariesEvent(e);

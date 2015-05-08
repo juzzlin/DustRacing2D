@@ -79,10 +79,10 @@ void MCWorldTest::testSetDimensions()
     MCWorld world;
     world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerUnit);
 
-    QVERIFY(qFuzzyCompare(world.minX(), minX));
-    QVERIFY(qFuzzyCompare(world.maxX(), maxX));
-    QVERIFY(qFuzzyCompare(world.minY(), minY));
-    QVERIFY(qFuzzyCompare(world.maxY(), maxY));
+    QVERIFY(qFuzzyCompare(world.minx(), minX));
+    QVERIFY(qFuzzyCompare(world.maxx(), maxX));
+    QVERIFY(qFuzzyCompare(world.miny(), minY));
+    QVERIFY(qFuzzyCompare(world.maxy(), maxY));
     QVERIFY(qFuzzyCompare(world.minZ(), minZ));
     QVERIFY(qFuzzyCompare(world.maxZ(), maxZ));
 

@@ -269,7 +269,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
             if (m_race.started())
             {
                 processUserInput(handler);
-                updateAI();
+                updateAi();
             }
 
             updateWorld(timeStep);
@@ -385,7 +385,7 @@ void Scene::processUserInput(InputHandler & handler)
     }
 }
 
-void Scene::updateAI()
+void Scene::updateAi()
 {
     for (AIPtr ai : m_ai)
     {

@@ -39,15 +39,15 @@ namespace {
 void readTile(TrackData & newData, const QDomElement & element)
 {
     const QString id =
-        element.attribute(TrackDataBase::IO::Tile::TYPE(), "clear");
+        element.attribute(TrackDataBase::DataKeywords::Tile::type(), "clear");
     const unsigned int i =
-        element.attribute(TrackDataBase::IO::Tile::I(), "0").toUInt();
+        element.attribute(TrackDataBase::DataKeywords::Tile::i(), "0").toUInt();
     const unsigned int j =
-        element.attribute(TrackDataBase::IO::Tile::J(), "0").toUInt();
+        element.attribute(TrackDataBase::DataKeywords::Tile::j(), "0").toUInt();
     const int orientation =
-        element.attribute(TrackDataBase::IO::Tile::ORIENTATION(), "0").toInt();
+        element.attribute(TrackDataBase::DataKeywords::Tile::orientation(), "0").toInt();
     const int computerHint =
-        element.attribute(TrackDataBase::IO::Tile::COMPUTER_HINT(), "0").toInt();
+        element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toInt();
 
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
@@ -61,10 +61,10 @@ void readTile(TrackData & newData, const QDomElement & element)
 
 void readObject(TrackData & newData, const QDomElement & element)
 {
-    const QString role = element.attribute(TrackDataBase::IO::Object::ROLE(), "clear");
-    const int x = element.attribute(TrackDataBase::IO::Object::X(),            "0").toInt();
-    const int y = element.attribute(TrackDataBase::IO::Object::Y(),            "0").toInt();
-    const int o = element.attribute(TrackDataBase::IO::Object::ORIENTATION(),  "0").toInt();
+    const QString role = element.attribute(TrackDataBase::DataKeywords::Object::role(), "clear");
+    const int x = element.attribute(TrackDataBase::DataKeywords::Object::x(),            "0").toInt();
+    const int y = element.attribute(TrackDataBase::DataKeywords::Object::y(),            "0").toInt();
+    const int o = element.attribute(TrackDataBase::DataKeywords::Object::orientation(),  "0").toInt();
 
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
@@ -76,11 +76,11 @@ void readObject(TrackData & newData, const QDomElement & element)
 
 void readTargetNode(std::vector<TargetNodePtr> & route, const QDomElement & element)
 {
-    const int x = element.attribute(TrackDataBase::IO::Node::X(),      "0").toInt();
-    const int y = element.attribute(TrackDataBase::IO::Node::Y(),      "0").toInt();
-    const int w = element.attribute(TrackDataBase::IO::Node::WIDTH(),  "0").toInt();
-    const int h = element.attribute(TrackDataBase::IO::Node::HEIGHT(), "0").toInt();
-    const int i = element.attribute(TrackDataBase::IO::Node::INDEX(),  "0").toInt();
+    const int x = element.attribute(TrackDataBase::DataKeywords::Node::x(),      "0").toInt();
+    const int y = element.attribute(TrackDataBase::DataKeywords::Node::y(),      "0").toInt();
+    const int w = element.attribute(TrackDataBase::DataKeywords::Node::width(),  "0").toInt();
+    const int h = element.attribute(TrackDataBase::DataKeywords::Node::height(), "0").toInt();
+    const int i = element.attribute(TrackDataBase::DataKeywords::Node::index(),  "0").toInt();
 
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
@@ -105,15 +105,15 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
             TrackTile * tile = dynamic_cast<TrackTile *>(trackData->map().getTile(i, j).get());
             assert(tile);
 
-            QDomElement tileElement = doc.createElement(TrackDataBase::IO::Track::TILE());
-            tileElement.setAttribute(TrackDataBase::IO::Tile::TYPE(), tile->tileType());
-            tileElement.setAttribute(TrackDataBase::IO::Tile::I(), i);
-            tileElement.setAttribute(TrackDataBase::IO::Tile::J(), j);
-            tileElement.setAttribute(TrackDataBase::IO::Tile::ORIENTATION(), tile->rotation());
+            QDomElement tileElement = doc.createElement(TrackDataBase::DataKeywords::Track::tile());
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::type(), tile->tileType());
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::i(), i);
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::j(), j);
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::orientation(), tile->rotation());
 
             if (tile->computerHint() != TrackTile::CH_NONE)
             {
-                tileElement.setAttribute(TrackDataBase::IO::Tile::COMPUTER_HINT(), tile->computerHint());
+                tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::computerHint(), tile->computerHint());
             }
 
             root.appendChild(tileElement);
@@ -128,12 +128,12 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
         Object * object = dynamic_cast<Object *>(objectPtr.get());
         assert(object);
 
-        QDomElement objectElement = doc.createElement(TrackDataBase::IO::Track::OBJECT());
-        objectElement.setAttribute(TrackDataBase::IO::Object::CATEGORY(), object->category());
-        objectElement.setAttribute(TrackDataBase::IO::Object::ROLE(), object->role());
-        objectElement.setAttribute(TrackDataBase::IO::Object::X(), static_cast<int>(object->location().x()));
-        objectElement.setAttribute(TrackDataBase::IO::Object::Y(), static_cast<int>(object->location().y()));
-        objectElement.setAttribute(TrackDataBase::IO::Object::ORIENTATION(), static_cast<int>(object->rotation()));
+        QDomElement objectElement = doc.createElement(TrackDataBase::DataKeywords::Track::object());
+        objectElement.setAttribute(TrackDataBase::DataKeywords::Object::category(), object->category());
+        objectElement.setAttribute(TrackDataBase::DataKeywords::Object::role(), object->role());
+        objectElement.setAttribute(TrackDataBase::DataKeywords::Object::x(), static_cast<int>(object->location().x()));
+        objectElement.setAttribute(TrackDataBase::DataKeywords::Object::y(), static_cast<int>(object->location().y()));
+        objectElement.setAttribute(TrackDataBase::DataKeywords::Object::orientation(), static_cast<int>(object->rotation()));
 
         root.appendChild(objectElement);
     }
@@ -143,12 +143,12 @@ void writeTargetNodes(TrackDataPtr trackData, QDomElement & root, QDomDocument &
 {
     for (auto tnode : trackData->route())
     {
-        QDomElement tnodeElement = doc.createElement(TrackDataBase::IO::Track::NODE());
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::INDEX(), tnode->index());
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::X(), static_cast<int>(tnode->location().x()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::Y(), static_cast<int>(tnode->location().y()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::WIDTH(), static_cast<int>(tnode->size().width()));
-        tnodeElement.setAttribute(TrackDataBase::IO::Node::HEIGHT(), static_cast<int>(tnode->size().height()));
+        QDomElement tnodeElement = doc.createElement(TrackDataBase::DataKeywords::Track::node());
+        tnodeElement.setAttribute(TrackDataBase::DataKeywords::Node::index(), tnode->index());
+        tnodeElement.setAttribute(TrackDataBase::DataKeywords::Node::x(), static_cast<int>(tnode->location().x()));
+        tnodeElement.setAttribute(TrackDataBase::DataKeywords::Node::y(), static_cast<int>(tnode->location().y()));
+        tnodeElement.setAttribute(TrackDataBase::DataKeywords::Node::width(), static_cast<int>(tnode->size().width()));
+        tnodeElement.setAttribute(TrackDataBase::DataKeywords::Node::height(), static_cast<int>(tnode->size().height()));
 
         root.appendChild(tnodeElement);
     }
@@ -160,16 +160,16 @@ bool TrackIO::save(TrackDataPtr trackData, QString path)
 {
     // Create content
     QDomDocument doc;
-    QDomElement root = doc.createElement(TrackDataBase::IO::Header::TRACK());
-    root.setAttribute(TrackDataBase::IO::Header::VER(),   Config::Editor::EDITOR_VERSION);
-    root.setAttribute(TrackDataBase::IO::Header::NAME(),  trackData->name());
-    root.setAttribute(TrackDataBase::IO::Header::COLS(),  trackData->map().cols());
-    root.setAttribute(TrackDataBase::IO::Header::ROWS(),  trackData->map().rows());
-    root.setAttribute(TrackDataBase::IO::Header::INDEX(), trackData->index());
+    QDomElement root = doc.createElement(TrackDataBase::DataKeywords::Header::track());
+    root.setAttribute(TrackDataBase::DataKeywords::Header::ver(),   Config::Editor::EDITOR_VERSION);
+    root.setAttribute(TrackDataBase::DataKeywords::Header::name(),  trackData->name());
+    root.setAttribute(TrackDataBase::DataKeywords::Header::cols(),  trackData->map().cols());
+    root.setAttribute(TrackDataBase::DataKeywords::Header::rows(),  trackData->map().rows());
+    root.setAttribute(TrackDataBase::DataKeywords::Header::index(), trackData->index());
 
     if (trackData->isUserTrack()) // Don't add the attribute at all, if not set
     {
-        root.setAttribute(TrackDataBase::IO::Header::USER(), true);
+        root.setAttribute(TrackDataBase::DataKeywords::Header::user(), true);
     }
 
     doc.appendChild(root);
@@ -212,15 +212,15 @@ TrackDataPtr TrackIO::open(QString path)
     const QDomElement root = doc.documentElement();
 
     const QString name =
-        root.attribute(TrackDataBase::IO::Header::NAME(), "undefined");
+        root.attribute(TrackDataBase::DataKeywords::Header::name(), "undefined");
     const unsigned int cols =
-        root.attribute(TrackDataBase::IO::Header::COLS(), "0").toUInt();
+        root.attribute(TrackDataBase::DataKeywords::Header::cols(), "0").toUInt();
     const unsigned int rows =
-        root.attribute(TrackDataBase::IO::Header::ROWS(), "0").toUInt();
+        root.attribute(TrackDataBase::DataKeywords::Header::rows(), "0").toUInt();
     const unsigned int index =
-        root.attribute(TrackDataBase::IO::Header::INDEX(), "0").toUInt();
+        root.attribute(TrackDataBase::DataKeywords::Header::index(), "0").toUInt();
     const bool isUserTrack =
-        root.attribute(TrackDataBase::IO::Header::USER(), "0").toInt();
+        root.attribute(TrackDataBase::DataKeywords::Header::user(), "0").toInt();
 
     TrackData * newData = nullptr;
     if (cols && rows)
@@ -239,17 +239,17 @@ TrackDataPtr TrackIO::open(QString path)
             if(!element.isNull())
             {
                 // Read a tile element
-                if (element.nodeName() == TrackDataBase::IO::Track::TILE())
+                if (element.nodeName() == TrackDataBase::DataKeywords::Track::tile())
                 {
                     readTile(*newData, element);
                 }
                 // Read an object element
-                else if (element.nodeName() == TrackDataBase::IO::Track::OBJECT())
+                else if (element.nodeName() == TrackDataBase::DataKeywords::Track::object())
                 {
                     readObject(*newData, element);
                 }
                 // Read a target node element
-                else if (element.nodeName() == TrackDataBase::IO::Track::NODE())
+                else if (element.nodeName() == TrackDataBase::DataKeywords::Track::node())
                 {
                     readTargetNode(route, element);
                 }
