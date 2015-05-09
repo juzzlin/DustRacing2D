@@ -30,6 +30,7 @@
 #include "mcobject.hh"
 #include "mcobjectgrid.hh"
 #include "mcparticle.hh"
+#include "mcphysicscomponent.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
 #include "mcrectshape.hh"
@@ -102,12 +103,12 @@ void MCWorld::integrate(MCFloat step)
     for (MCUint i = 0; i < objectCount; i++)
     {
         MCObject & object(*m_objs[i]);
-        if (object.isPhysicsObject() && !object.stationary())
+        if (object.isPhysicsObject() && !object.physicsComponent().isStationary())
         {
-            object.integrate(step);
+            object.stepTime(step);
         }
 
-        object.stepTime(step);
+        object.onStepTime(step);
     }
 }
 
@@ -166,7 +167,7 @@ void MCWorld::clear()
     for (MCObject * object : m_objs)
     {
         object->deleteContacts();
-        object->resetMotion();
+        object->physicsComponent().reset();
         object->setIndex(-1);
 
         if (object->isParticle())
@@ -218,10 +219,12 @@ void MCWorld::setDimensions(
         delete m_leftWallObject;
     }
 
+    const MCFloat wallRestitution = 0.25f;
+
     m_leftWallObject = new MCObject("LEFT_WALL");
     m_leftWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
-    m_leftWallObject->setMass(0, true);
-    m_leftWallObject->setRestitution(0.25);
+    m_leftWallObject->physicsComponent().setMass(0, true);
+    m_leftWallObject->physicsComponent().setRestitution(wallRestitution);
     m_leftWallObject->addToWorld();
     m_leftWallObject->translate(MCVector3dF(-w / 2, h / 2, 0));
 
@@ -233,8 +236,8 @@ void MCWorld::setDimensions(
 
     m_rightWallObject = new MCObject("RIGHT_WALL");
     m_rightWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
-    m_rightWallObject->setMass(0, true);
-    m_rightWallObject->setRestitution(0.25);
+    m_rightWallObject->physicsComponent().setMass(0, true);
+    m_rightWallObject->physicsComponent().setRestitution(wallRestitution);
     m_rightWallObject->addToWorld();
     m_rightWallObject->translate(MCVector3dF(w + w / 2, h / 2, 0));
 
@@ -246,8 +249,8 @@ void MCWorld::setDimensions(
 
     m_topWallObject = new MCObject("TOP_WALL");
     m_topWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
-    m_topWallObject->setMass(0, true);
-    m_topWallObject->setRestitution(0.25);
+    m_topWallObject->physicsComponent().setMass(0, true);
+    m_topWallObject->physicsComponent().setRestitution(wallRestitution);
     m_topWallObject->addToWorld();
     m_topWallObject->translate(MCVector3dF(w / 2, h + h / 2, 0));
 
@@ -259,8 +262,8 @@ void MCWorld::setDimensions(
 
     m_bottomWallObject = new MCObject("BOTTOM_WALL");
     m_bottomWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
-    m_bottomWallObject->setMass(0, true);
-    m_bottomWallObject->setRestitution(0.25);
+    m_bottomWallObject->physicsComponent().setMass(0, true);
+    m_bottomWallObject->physicsComponent().setRestitution(wallRestitution);
     m_bottomWallObject->addToWorld();
     m_bottomWallObject->translate(MCVector3dF(w / 2, -h / 2, 0));
 }
@@ -316,11 +319,11 @@ void MCWorld::addObject(MCObject & object)
 
             // Add xy friction
             const MCFloat FrictionThreshold = 0.001f;
-            if (object.xyFriction() > FrictionThreshold)
+            if (object.physicsComponent().xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(
                     MCForceGeneratorPtr(new MCFrictionGenerator(
-                        object.xyFriction(), object.xyFriction())), object);
+                        object.physicsComponent().xyFriction(), object.physicsComponent().xyFriction())), object);
             }
         }
     }
@@ -362,7 +365,7 @@ void MCWorld::removeObjectNow(MCObject & object)
 void MCWorld::doRemoveObject(MCObject & object)
 {
     // Reset motion
-    object.resetMotion();
+    object.physicsComponent().reset();
 
     // Remove from the layer map
     m_renderer->removeFromLayerMap(object);

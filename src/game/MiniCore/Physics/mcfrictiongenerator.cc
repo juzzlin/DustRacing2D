@@ -20,6 +20,7 @@
 #include "mcfrictiongenerator.hh"
 #include "mcmathutil.hh"
 #include "mcobject.hh"
+#include "mcphysicscomponent.hh"
 #include "mcshape.hh"
 
 #include <cmath>
@@ -34,22 +35,23 @@ MCFrictionGenerator::MCFrictionGenerator(MCFloat coeffLin, MCFloat coeffRot)
 void MCFrictionGenerator::updateForce(MCObject & object)
 {
     // Simulated friction caused by linear motion.
-    const MCFloat length = object.velocity().lengthFast();
-    const MCVector2d<MCFloat> v(object.velocity().normalizedFast());
+    MCPhysicsComponent & physicsComponent = object.physicsComponent();
+    const MCFloat length = physicsComponent.velocity().lengthFast();
+    const MCVector2d<MCFloat> v(physicsComponent.velocity().normalizedFast());
     if (length >= 1.0)
     {
-        object.addForce(-v * m_coeffLinTot * object.mass());
+        physicsComponent.addForce(-v * m_coeffLinTot * physicsComponent.mass());
     }
     else
     {
-        object.addForce(-v * length * m_coeffLinTot * object.mass());
+        physicsComponent.addForce(-v * length * m_coeffLinTot * physicsComponent.mass());
     }
 
     // Simulated friction caused by angular torque.
     if (object.shape())
     {
-        const MCFloat a = object.angularVelocity();
-        object.addAngularImpulse(-a * m_coeffRotTot);
+        const MCFloat a = physicsComponent.angularVelocity();
+        physicsComponent.addAngularImpulse(-a * m_coeffRotTot);
     }
 }
 

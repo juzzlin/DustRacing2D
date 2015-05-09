@@ -36,6 +36,7 @@
 #include <MCLogger>
 #include <MCAssetManager>
 #include <MCObjectFactory>
+#include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurfaceManager>
@@ -536,7 +537,7 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     car.translate(MCVector3dF(
         tnode->location().x() + rand() % randRadius - randRadius / 2,
         tnode->location().y() + rand() % randRadius - randRadius / 2));
-    car.resetMotion();
+    car.physicsComponent().reset();
 }
 
 unsigned int Race::getPositionOfCar(const Car & car) const

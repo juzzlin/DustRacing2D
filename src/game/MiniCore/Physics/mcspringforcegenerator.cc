@@ -20,6 +20,7 @@
 #include "mcspringforcegenerator.hh"
 #include "mccontact.hh"
 #include "mcobject.hh"
+#include "mcphysicscomponent.hh"
 
 MCSpringForceGenerator::MCSpringForceGenerator(
     MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max)
@@ -47,8 +48,8 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
     // the nodes.
     if (length > m_max)
     {
-        const MCFloat m1 = object1.invMass();
-        const MCFloat m2 = m_p2->invMass();
+        const MCFloat m1 = object1.physicsComponent().invMass();
+        const MCFloat m2 = m_p2->physicsComponent().invMass();
         MCContact & contact1 = MCContact::create();
         contact1.init(
             *m_p2, object1.location(), -diff, (length - m_max) * m2 / (m1 + m2));
@@ -57,8 +58,8 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
     }
     else if (length < m_min)
     {
-        const MCFloat m1 = object1.invMass();
-        const MCFloat m2 = m_p2->invMass();
+        const MCFloat m1 = object1.physicsComponent().invMass();
+        const MCFloat m2 = m_p2->physicsComponent().invMass();
         MCContact & contact1 = MCContact::create();
         contact1.init(
             *m_p2, object1.location(), diff, (m_min - length) * m2 / (m1 + m2));
@@ -67,7 +68,7 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
 
     // Update force
     diff *= (m_length - length) * m_coeff;
-    object1.addForce(diff);
+    object1.physicsComponent().addForce(diff);
 }
 
 MCSpringForceGenerator::~MCSpringForceGenerator()

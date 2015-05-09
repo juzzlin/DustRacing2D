@@ -88,7 +88,7 @@ public:
   bool dieWhenOffScreen() const;
 
   //! \reimp
-  virtual void stepTime(MCFloat step) override;
+  virtual void onStepTime(MCFloat step) override;
 
   //! Get timeline scale from 1.0 to 0.0
   MCFloat scale() const;

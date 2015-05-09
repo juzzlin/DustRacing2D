@@ -17,8 +17,9 @@
 #include "bridge.hpp"
 #include "layers.hpp"
 
-#include "MCCollisionEvent"
-#include "MCRectShape"
+#include <MCCollisionEvent>
+#include <MCRectShape>
+#include <MCPhysicsComponent>
 
 static const char * BRIDGE_TRIGGER_ID = "bridgeTrigger";
 
@@ -35,12 +36,12 @@ BridgeTrigger::BridgeTrigger(Bridge & bridge)
     setIsPhysicsObject(false);
     setIsTriggerObject(true);
 
-    setMass(0, true);
+    physicsComponent().setMass(0, true);
 }
 
 void BridgeTrigger::collisionEvent(MCCollisionEvent & event)
 {
-    if (!event.collidingObject().stationary())
+    if (!event.collidingObject().physicsComponent().isStationary())
     {
         m_bridge.enterObject(event.collidingObject());
     }

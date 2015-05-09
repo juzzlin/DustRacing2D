@@ -17,6 +17,7 @@
 #include "car.hpp"
 
 #include <MCCollisionEvent>
+#include <MCPhysicsComponent>
 #include <MCTrigonom>
 #include <MCMathUtil>
 
@@ -91,7 +92,7 @@ void CarSoundEffectManager::processSkidSound()
     const MCFloat bodyNormalAngle = m_car.angle() + 90;
     const MCVector2dF n(
         MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
-    const MCVector2dF & v = m_car.velocity().normalized();
+    const MCVector2dF & v = m_car.physicsComponent().velocity().normalized();
     const MCVector2dF   s = MCMathUtil::projection(v, n);
 
     if (m_car.absSpeed() > 7.5 && s.lengthFast() > 0.25)
@@ -114,7 +115,8 @@ void CarSoundEffectManager::processSkidSound()
 
 void CarSoundEffectManager::collision(const MCCollisionEvent & event)
 {
-    const MCVector3dF speedDiff(event.collidingObject().velocity() - m_car.velocity());
+    const MCVector3dF speedDiff(event.collidingObject().physicsComponent().velocity() -
+        m_car.physicsComponent().velocity());
     if (!m_hitTimer.isActive() && speedDiff.lengthFast() > 4.0)
     {
         if (event.collidingObject().typeID() == m_car.typeID()                 ||

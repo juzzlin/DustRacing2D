@@ -22,6 +22,7 @@
 #include "mcassetmanager.hh"
 #include "mccircleshape.hh"
 #include "mcmeshview.hh"
+#include "mcphysicscomponent.hh"
 #include "mcrectshape.hh"
 #include "mcsurface.hh"
 #include "mcsurfacemanager.hh"
@@ -180,9 +181,10 @@ MCObjectPtr MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr vie
 void MCObjectFactory::setCommonProperties(
     MCObject & object, const MCObjectData & data) const
 {
-    object.setMass(data.mass(), data.stationary());
-    object.setXYFriction(data.xyFriction());
-    object.setRestitution(data.restitution());
+    object.physicsComponent().setMass(data.mass(), data.stationary());
+    object.physicsComponent().setXYFriction(data.xyFriction());
+    object.physicsComponent().setRestitution(data.restitution());
+
     object.setRenderLayer(data.renderLayer());
     object.setInitialLocation(data.initialLocation());
     object.setInitialAngle(data.initialAngle());

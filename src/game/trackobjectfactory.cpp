@@ -25,6 +25,7 @@
 #include <MCLogger>
 #include <MCObject>
 #include <MCObjectFactory>
+#include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
@@ -171,7 +172,7 @@ TrackObject * TrackObjectFactory::build(
         object = MCObjectPtr(new Pit(MCAssetManager::surfaceManager().surface("pit")));
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
-        object->setMass(1, true); // Stationary
+        object->physicsComponent().setMass(1, true); // Stationary
         object->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         object->setIsPhysicsObject(false);
         object->setIsTriggerObject(true);

@@ -20,6 +20,7 @@
 #include "mcimpulsegenerator.hh"
 #include "mccontact.hh"
 #include "mcobject.hh"
+#include "mcphysicscomponent.hh"
 #include "mcmathutil.hh"
 #include "mcshape.hh"
 
@@ -45,10 +46,10 @@ MCContact * MCImpulseGenerator::getDeepestInterpenetration(
 void MCImpulseGenerator::displace(
      MCObject & pa, MCObject & pb, const MCVector3dF & displacement)
 {
-    if (!pa.stationary())
+    if (!pa.physicsComponent().isStationary())
     {
-        const MCFloat invMassA    = pa.invMass();
-        const MCFloat invMassB    = pb.invMass();
+        const MCFloat invMassA    = pa.physicsComponent().invMass();
+        const MCFloat invMassB    = pb.physicsComponent().invMass();
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
 
         pa.displace(displacement * massScaling);
@@ -60,23 +61,23 @@ void MCImpulseGenerator::generateImpulsesFromContact(
     const MCVector3dF & linearImpulse,
     MCFloat restitution)
 {
-    if (!pa.stationary())
+    if (!pa.physicsComponent().isStationary())
     {
-        const MCFloat invMassA = pa.invMass();
-        const MCFloat invMassB = pb.invMass();
+        const MCFloat invMassA = pa.physicsComponent().invMass();
+        const MCFloat invMassB = pb.physicsComponent().invMass();
 
         const MCVector3dF & contactPoint(contact.contactPoint());
 
         // Linear component
         const MCFloat massScaling = invMassA / (invMassA + invMassB);
         const MCFloat effRestitution = 1.0 + restitution;
-        pa.addImpulse(linearImpulse * effRestitution * massScaling, true);
+        pa.physicsComponent().addImpulse(linearImpulse * effRestitution * massScaling, true);
 
         // Angular component
         const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit();
         const MCVector3dF rotationalImpulse = linearImpulse % armA;
         const MCFloat calibration = 0.5;
-        pa.addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
+        pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
     }
 }
 
@@ -122,9 +123,9 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
                 MCObject & pb(contact->object());
 
                 const MCFloat restitution(
-                    std::min(pa.restitution(), pb.restitution()));
+                    std::min(pa.physicsComponent().restitution(), pb.physicsComponent().restitution()));
 
-                const MCVector2dF velocityDelta(pb.velocity() - pa.velocity());
+                const MCVector2dF velocityDelta(pb.physicsComponent().velocity() - pa.physicsComponent().velocity());
                 const MCFloat projection = contact->contactNormal().dot(velocityDelta);
 
                 if (projection > 0)

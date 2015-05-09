@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,25 +17,38 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcdragforcegenerator.hh"
+#ifndef MCOBJECTCOMPONENT_HH
+#define MCOBJECTCOMPONENT_HH
+
+#include "mcmacros.hh"
 #include "mcobject.hh"
-#include "mcphysicscomponent.hh"
 
-MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2)
-: m_coeff1(coeff1)
-, m_coeff2(coeff2)
-{}
-
-void MCDragForceGenerator::updateForce(MCObject & object)
+/** Base class for object components.
+ *  For example, \see MCPhysicsComponent. */
+class MCObjectComponent
 {
-  MCVector3d<MCFloat> force(object.physicsComponent().velocity());
-  MCFloat v = force.length();
-  v = m_coeff1 * v + m_coeff2 * v * v;
-  force.normalize();
-  force *= -v;
-  object.physicsComponent().addForce(force);
-}
+public:
 
-MCDragForceGenerator::~MCDragForceGenerator()
-{
-}
+    MCObjectComponent();
+
+    void setObject(MCObject & object);
+
+    virtual ~MCObjectComponent();
+
+    virtual void stepTime(MCFloat step);
+
+    virtual void reset();
+
+protected:
+
+    MCObject & object() const;
+
+private:
+
+    DISABLE_ASSI(MCObjectComponent);
+    DISABLE_COPY(MCObjectComponent);
+
+    MCObject * m_object;
+};
+
+#endif // MCOBJECTCOMPONENT_HH

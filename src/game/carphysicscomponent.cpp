@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,32 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TIRE_HPP
-#define TIRE_HPP
+#include "carphysicscomponent.hpp"
 
-#include <MCObject>
+#include "car.hpp"
+#include "difficultyprofile.hpp"
+#include "game.hpp"
 
-class Car;
-
-class Tire : public MCObject
+CarPhysicsComponent::CarPhysicsComponent(Car & car)
+    : m_car(car)
 {
-public:
+}
 
-    Tire(Car & car, MCFloat friction, MCFloat offTrackFriction);
+void CarPhysicsComponent::addImpulse(const MCVector3dF & impulse, bool isCollision)
+{
+    MCPhysicsComponent::addImpulse(impulse, isCollision);
 
-    virtual void onStepTime(MCFloat step);
-
-    void setIsOffTrack(bool flag);
-
-private:
-
-    bool m_isOffTrack;
-
-    MCFloat m_friction;
-
-    MCFloat m_offTrackFriction;
-
-    Car & m_car;
-};
-
-#endif // TIRE_HPP
+    if (Game::instance().difficultyProfile().hasBodyDamage() && isCollision)
+    {
+        const float damage = (m_car.isHuman() ? 0.5f : 0.25f) * impulse.lengthFast();
+        m_car.addDamage(damage);
+    }
+}

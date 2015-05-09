@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,25 +17,31 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcdragforcegenerator.hh"
-#include "mcobject.hh"
-#include "mcphysicscomponent.hh"
+#include "mcobjectcomponent.hh"
 
-MCDragForceGenerator::MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2)
-: m_coeff1(coeff1)
-, m_coeff2(coeff2)
-{}
-
-void MCDragForceGenerator::updateForce(MCObject & object)
+MCObjectComponent::MCObjectComponent()
+    : m_object(nullptr)
 {
-  MCVector3d<MCFloat> force(object.physicsComponent().velocity());
-  MCFloat v = force.length();
-  v = m_coeff1 * v + m_coeff2 * v * v;
-  force.normalize();
-  force *= -v;
-  object.physicsComponent().addForce(force);
 }
 
-MCDragForceGenerator::~MCDragForceGenerator()
+void MCObjectComponent::setObject(MCObject & object)
+{
+    m_object = &object;
+}
+
+MCObject & MCObjectComponent::object() const
+{
+    return *m_object;
+}
+
+void MCObjectComponent::stepTime(MCFloat)
+{
+}
+
+void MCObjectComponent::reset()
+{
+}
+
+MCObjectComponent::~MCObjectComponent()
 {
 }

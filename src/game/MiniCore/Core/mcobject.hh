@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ class MCSurface;
 class MCEvent;
 class MCCollisionEvent;
 class MCOutOfBoundariesEvent;
+class MCPhysicsComponent;
 class MCTimerEvent;
 class MCCamera;
 
@@ -121,6 +122,25 @@ public:
      *  \param p Camera window to be used. */
     virtual void renderShadow(MCCamera * p = nullptr);
 
+    /*! Set rendering layer (0 is considered the lowest and is rendered
+     * first. This can be used when creating complex objects from
+     * 2d-surfaces only.
+     * \param layer The new layer. */
+    void setRenderLayer(int layer);
+
+    /*! Like setRenderLayer(), relative to parent. */
+    void setRenderLayerRelative(int layer);
+
+    //! Return the render layer.
+    int renderLayer() const;
+
+    /*! \brief Sets whether the object should be rendered automatically.
+     *  True is the default. */
+    void setIsRenderable(bool flag);
+
+    //! \brief Return whether the object should be automatically rendered.
+    bool isRenderable() const;
+
     /*! \brief Add object to the World.
      *  Convenience method to add object to the MCWorld instance.
      *  Composite objects may override this and add all their sub-objects. */
@@ -139,117 +159,35 @@ public:
      *  Composite objects may re-implement this and remove all their sub-objects. */
     virtual void removeFromWorldNow();
 
-    /*! Set mass.
-     *  \param newMass The new mass.
-     *  \param stationary Sets inverse mass to zero if true.
-     *         This results in "infinite" mass for stationary objects. */
-    void setMass(MCFloat newMass, bool stationary = false);
-
-    //! Get inverse mass.
-    MCFloat invMass() const;
-
-    //! Get mass.
-    MCFloat mass() const;
-
-    //! Return true if object is stationary.
-    bool stationary() const;
-
-    /*! \brief Add an impulse.
-     *  \param impulse The velocity component of the impulse. */
-    virtual void addImpulse(const MCVector3dF & impulse, bool isCollision = false);
-
-    /*! \brief Add an impulse.
-     *  Causes angular impulse depending on object's shape and position of the impulse vector.
-     *  \param impulse The velocity component of the impulse.
-     *  \param pos     Position of the impulse. */
-    virtual void addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision = false);
-
-    //! Add rotational impulse in rad/s.
-    virtual void addAngularImpulse(MCFloat impulse, bool isCollision = false);
-
-    /*! Set current velocity to the given value.
-     *  \param newVelocity The new velocity. */
-    void setVelocity(const MCVector3dF & newVelocity);
-
-    //! Return current velocity.
-    const MCVector3dF & velocity() const;
-
-    //! Return current speed.
-    MCFloat speed() const;
-
-    /*! Set current angular velocity to the given value.
-     *  Unit: rad/s.
-     *  \param newVelocity The new velocity. */
-    void setAngularVelocity(MCFloat newVelocity);
-
-    /*! Return current angular velocity.
-     *  Unit: rad/s. */
-    MCFloat angularVelocity() const;
-
-    /*! Set constant acceleration (e.g. gravity). Use addForce()
-     *  to cause acceleration that varies from frame to frame.
-     *  \param newAcceleration The new acceleration. */
-    void setAcceleration(const MCVector3dF & newAcceleration);
-
-    //! Return constant acceleration.
-    const MCVector3dF & acceleration() const;
-
-    /*! Add a force (N) vector to the object for a single frame.
-     *  \param force Force vector to be added. */
-    void addForce(const MCVector3dF & force);
-
-    /*! Add a force (N) vector to the object for a single frame.
-     *  \param force Force vector to be added.
-     *  \param pos Position of the force (in world coordinates). */
-    void addForce(const MCVector3dF & force, const MCVector3dF & pos);
-
-    /*! Add torque (Nm) to the object for a single frame.
-     *  \param torque Value to be added. */
-    void addTorque(MCFloat torque);
-
-    //! Set moment of inertia.
-    void setMomentOfInertia(MCFloat momentOfInertia);
-
-    //! Get moment of inertia.
-    MCFloat momentOfInertia() const;
-
-    //! Get inverse moment of inertia.
-    MCFloat invMomentOfInertia() const;
-
-    //! Clear accumulated forces.
-    void clearForces();
-
-    //! Resets all forces + velocities.
-    void resetMotion();
-
     /*! \brief Sets whether the physics of the object should be updated.
      *  True is the default. */
     void setIsPhysicsObject(bool flag);
 
-    //! \brief Return whether the object is a physics object.
+    //! Return whether the object is a physics object.
     bool isPhysicsObject() const;
+
+    /*! Override the default physics component.
+     *  MCObject will take the ownership. */
+    void setPhysicsComponent(MCPhysicsComponent & physicsComponent);
+
+    /*! \brief The physics component of the object.
+     *  All physics functionality is accessed via this component. */
+    MCPhysicsComponent & physicsComponent();
 
     /*! \brief Sets whether the object behaves as a trigger object.
      *  Trigger object produces collision events even though it's not a
      *  physics object. False is the default. */
     void setIsTriggerObject(bool flag);
 
-    //! \brief Return whether the object is a trigger object.
+    //! Return whether the object is a trigger object.
     bool isTriggerObject() const;
 
     /*! \brief Sets whether the collision detection for this object is totally bypassed.
      *  False is the default. */
     void setBypassCollisions(bool flag);
 
-    //! \brief Return whether collisions are bypassed.
+    //! Return whether collisions are bypassed.
     bool bypassCollisions() const;
-
-    /*! \brief Sets whether the object should be rendered automatically.
-     *  True is the default. */
-    void setIsRenderable(bool flag);
-
-    //! \brief Return whether the object should be automatically rendered.
-    bool isRenderable() const;
 
     //! Set the object as a particle.
     void setIsParticle(bool flag);
@@ -275,7 +213,7 @@ public:
 
     /*! Set rotation ("yaw") angle about Z-axis.
      *  \param newAngle The new angle in degrees [0..360]. */
-    void rotate(MCFloat newAngle);
+    void rotate(MCFloat newAngle, bool updateChildTransforms = true);
 
     //! Set center of rotation in world coordinates.
     void setCenterOfRotation(MCVector2dF center);
@@ -286,25 +224,6 @@ public:
     //! Get direction vector.
     MCVector2dF direction() const;
 
-    /*! \brief Set restitution.
-     *  \param newRestitution The new restitution [0.0..1.0]
-     *  (0.0 means a totally "soft" object, 1.0 means hard).
-     *  Default is 0.5. */
-    void setRestitution(MCFloat newRestitution);
-
-    //! Get restitution.
-    MCFloat restitution() const;
-
-    /*! Set global friction. A friction coeff > 0 results in a
-     *  implicit creation of a MCFrictionGenarator when the
-     *  object is being added to the world.
-     *  Use a custom friction generator if a more controlled
-     *  friction is wanted. */
-    void setXYFriction(MCFloat friction);
-
-    //! Get global friction.
-    MCFloat xyFriction() const;
-
     //! Set shape.
     void setShape(MCShapePtr shape);
 
@@ -312,28 +231,16 @@ public:
     MCShapePtr shape() const;
 
     /*! \brief Step internal time.
-     *  This is called AFTER every integration step. The default implementation does nothing. */
-    virtual void stepTime(MCFloat step);
+     *  This is called AFTER every update step. The default implementation does nothing. */
+    virtual void onStepTime(MCFloat step);
 
-    /*! Integrate forces. Usually called by MCWorld.
-     *  \param step Time step to be integrated. */
-    void integrate(MCFloat step);
+    /*! Update all components. Usually called by MCWorld.
+     *  \param step Update time step. */
+    void stepTime(MCFloat step);
 
     /*! Return current bounding box. Default implementation returns
      *  the bbox of the shape if set, and (0, 0, 1, 1) otherwise. */
     MCBBox<MCFloat> bbox() const;
-
-    /*! Set rendering layer (0 is considered the lowest and is rendered
-     * first. This can be used when creating complex objects from
-     * 2d-surfaces only.
-     * \param layer The new layer. */
-    void setRenderLayer(int layer);
-
-    /*! Like setRenderLayer(), relative to parent. */
-    void setRenderLayerRelative(int layer);
-
-    //! Return the render layer.
-    int renderLayer() const;
 
     /*! Set collision layer. Only objects on the same layer can collide.
      * -1 will collide with all layers. The default is 0.
@@ -370,25 +277,14 @@ public:
     //! Get initial angle.
     int initialAngle() const;
 
-    /*! Set the damping factor used in physics calculations. The default is 0.999.
-     *  Use smaller value if the object is too unstable. */
-    void setDamping(MCFloat value);
-
-    //! Return true, if the obejct is sleeping.
-    bool sleeping() const;
-
-    /*! Object goes to sleep if linear and angular velocities drops below
-     *  these values. The defaults are 0.01. */
-    void setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit);
-
     //! Add child object. Used on composite objects.
     void addChildObject(
         MCObjectPtr object,
         const MCVector3dF & relativeLocation = MCVector3dF(),
         MCFloat relativeAngle = 0);
 
-    //! Set parent object. Used on composite objects.
-    void setParent(MCObject & parent);
+    typedef std::vector<MCObjectPtr> Children;
+    const Children & children() const;
 
     //! Get parent or self;
     MCObject & parent() const;
@@ -397,8 +293,7 @@ public:
      *  \param newAngle The new angle in degrees [0..360]. */
     void rotateRelative(MCFloat newAngle);
 
-    /*! The object won't sleep if enabled. */
-    void preventSleeping(bool flag);
+    void checkBoundaries();
 
 protected:
 
@@ -434,16 +329,10 @@ private:
 
     void checkZBoundariesAndSendEvent();
 
-    void doOutOfBoundariesEvent();
-
     void doRotate(MCFloat newAngle);
 
     //! TODO: Replace this with constructor chaining when GCC supports.
     void init(const std::string & typeId);
-
-    void integrateLinear(MCFloat step);
-
-    void integrateAngular(MCFloat step);
 
     /*! Return true, if object is to be removed.
      *  Used by MCWorld. */
@@ -457,41 +346,28 @@ private:
      *  Used by MCWorld. */
     void setIndex(int index);
 
+    //! Set parent object. Used on composite objects.
+    void setParent(MCObject & parent);
+
     /*! Set object to be removed. Objects cannot be removed immediately, because
      *  they might be involved in collision calculations of other objects yet to
      *  be completed. Used by MCWorld. */
     void setRemoving(bool flag);
 
-    void toggleSleep(bool state);
-
     void updateChildTransforms();
 
     MCUint                       m_typeID;
-    MCFloat                      m_invMass;
-    MCFloat                      m_mass;
-    MCFloat                      m_restitution;
-    MCFloat                      m_xyFriction;
     MCFloat                      m_angle; // Degrees
     MCFloat                      m_relativeAngle; // Degrees
-    MCFloat                      m_angularAcceleration; // Radians / s^2
-    MCFloat                      m_angularVelocity; // Radians / s
-    MCFloat                      m_angularImpulse;
-    MCFloat                      m_torque;
-    MCFloat                      m_invMomentOfInertia;
-    MCFloat                      m_momentOfInertia;
     int                          m_renderLayer;
     int                          m_renderLayerRelative;
     int                          m_collisionLayer;
     int                          m_index;
     MCUint                       m_i0, m_i1, m_j0, m_j1;
-    MCVector3dF                  m_acceleration;
-    MCVector3dF                  m_velocity;
-    MCVector3dF                  m_linearImpulse;
     MCVector3dF                  m_initialLocation;
     int                          m_initialAngle;
     MCVector3dF                  m_location;
     MCVector3dF                  m_relativeLocation;
-    MCVector3dF                  m_forces;
     MCVector2dF                  m_centerOfRotation;
     MCShapePtr                   m_shape;
     typedef std::unordered_map<std::string, MCUint> TypeHash;
@@ -500,25 +376,19 @@ private:
     static TimerEventObjectsList m_timerEventObjects;
     static MCUint                m_typeIDCount;
     MCObject::ContactHash        m_contacts;
-    MCFloat                      m_damping;
     int                          m_timerEventObjectsIndex;
-    bool                         m_sleeping;
-    bool                         m_sleepingPrevented;
-    MCFloat                      m_linearSleepLimit;
-    MCFloat                      m_angularSleepLimit;
     bool                         m_physicsObject;
     bool                         m_triggerObject;
-    bool                         m_stationary;
     bool                         m_renderable;
     bool                         m_bypassCollisions;
     bool                         m_hasShadow;
     bool                         m_removing;
     bool                         m_renderOutline;
     bool                         m_isParticle;
-    bool                         m_isIntegrating;
-    typedef std::vector<MCObjectPtr> Children;
     Children                     m_children;
     MCObject *                   m_parent;
+
+    MCPhysicsComponent *         m_physicsComponent;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);

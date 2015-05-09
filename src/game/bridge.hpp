@@ -39,7 +39,7 @@ public:
     virtual void collisionEvent(MCCollisionEvent & event);
 
     //! \reimp
-    virtual void stepTime(MCFloat step);
+    virtual void onStepTime(MCFloat step);
 
     void enterObject(MCObject & object);
 

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -104,16 +104,13 @@ public:
     void addDamage(float damage);
 
     //! \reimp
-    virtual void addImpulse(const MCVector3dF & impulse, bool isCollision = false) override;
-
-    //! \reimp
     virtual void render(MCCamera *p) override;
 
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
-    virtual void stepTime(MCFloat step) override;
+    virtual void onStepTime(MCFloat step) override;
 
     //! \reimp
     virtual bool update() override;

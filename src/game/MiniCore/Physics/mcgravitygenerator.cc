@@ -19,6 +19,7 @@
 
 #include "mcgravitygenerator.hh"
 #include "mcobject.hh"
+#include "mcphysicscomponent.hh"
 
 MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g)
 : m_g(g)
@@ -27,8 +28,9 @@ MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g)
 void MCGravityGenerator::updateForce(MCObject & object)
 {
     // G = m * g
-    if (!object.stationary())
+    MCPhysicsComponent & physicsComponent = object.physicsComponent();
+    if (!physicsComponent.isStationary())
     {
-        object.addForce(m_g * object.mass());
+        physicsComponent.addForce(m_g * physicsComponent.mass());
     }
 }

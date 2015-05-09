@@ -18,6 +18,7 @@
 //
 
 #include "mcobjectgrid.hh"
+#include "mcphysicscomponent.hh"
 
 #include <algorithm>
 
@@ -159,7 +160,7 @@ void MCObjectGrid::getBBoxCollisions(MCObjectGrid::CollisionVector & result)
                 if (obj1 != obj2 &&
                     &obj1->parent() != obj2 &&
                     &obj2->parent() != obj1 &&
-                    (!obj1->sleeping() || !obj2->sleeping()) &&
+                    (!obj1->physicsComponent().isSleeping() || !obj2->physicsComponent().isSleeping()) &&
                     (obj1->collisionLayer() == obj2->collisionLayer() || obj1->collisionLayer() == -1) &&
                     (obj1->bbox().intersects(obj2->bbox())))
                 {

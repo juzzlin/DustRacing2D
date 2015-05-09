@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
+#include "carphysicscomponent.hpp"
 #include "game.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
@@ -26,6 +27,7 @@
 #include <MCForceRegistry>
 #include <MCFrictionGenerator>
 #include <MCMathUtil>
+#include <MCPhysicsComponent>
 #include <MCRectShape>
 #include <MCShape>
 #include <MCSurface>
@@ -75,6 +77,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_rightBrakeGlowPos(-21, -8, 0)
 , m_hadHardCrash(false)
 {
+    // Override the default physics component to handle damage from impulses
+    setPhysicsComponent(*(new CarPhysicsComponent(*this)));
+
     setProperties(desc);
     initForceGenerators(desc);
 
@@ -109,9 +114,9 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 void Car::setProperties(Description & desc)
 {
     setRenderLayer(static_cast<int>(Layers::Render::Objects));
-    setMass(desc.mass);
-    setMomentOfInertia(desc.mass * 3);
-    setRestitution(desc.restitution);
+    physicsComponent().setMass(desc.mass);
+    physicsComponent().setMomentOfInertia(desc.mass * 3);
+    physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
     const float width  = dynamic_cast<MCRectShape *>(shape().get())->width();
@@ -170,11 +175,11 @@ void Car::accelerate(bool deccelerate)
     m_skidding = true;
 
     const float frictionLimit =
-        mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k()) * damageFactor();
+        physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k()) * damageFactor();
     float effForce = frictionLimit;
-    if (!velocity().isZero())
+    if (!physicsComponent().velocity().isZero())
     {
-        const float powerLimit = m_desc.power / velocity().lengthFast();
+        const float powerLimit = m_desc.power / physicsComponent().velocity().lengthFast();
         if (powerLimit < frictionLimit)
         {
             effForce   = powerLimit;
@@ -182,18 +187,18 @@ void Car::accelerate(bool deccelerate)
         }
     }
 
-    const MCVector2dF direction(m_dx, m_dy);
-
+    MCVector2dF direction(m_dx, m_dy);
     if (deccelerate)
     {
-        addForce(-direction * effForce);
+        direction *= -1;
     }
     else
     {
-        addForce(direction * effForce);
         m_accelerating = true;
         m_reverse = false;
     }
+
+    physicsComponent().addForce(direction * effForce);
 
     m_braking = false;
 }
@@ -295,23 +300,6 @@ void Car::reset()
 {
 }
 
-void Car::addImpulse(const MCVector3dF & impulse, bool isCollision)
-{
-    MCObject::addImpulse(impulse, isCollision);
-
-    if (Game::instance().difficultyProfile().hasBodyDamage() && isCollision)
-    {
-        const float damage = (isHuman() ? 0.5f : 0.25f) * impulse.lengthFast();
-        addDamage(damage);
-
-        const float hardCrashDamageLimit = 3.5f;
-        if (damage >= hardCrashDamageLimit)
-        {
-            m_hadHardCrash = true;
-        }
-    }
-}
-
 void Car::collisionEvent(MCCollisionEvent & event)
 {
     if (!event.collidingObject().isTriggerObject())
@@ -333,13 +321,19 @@ void Car::addDamage(float damage)
     {
         m_damageCapacity = 0;
     }
+
+    const float hardCrashDamageLimit = 3.5f;
+    if (damage >= hardCrashDamageLimit)
+    {
+        m_hadHardCrash = true;
+    }
 }
 
 void Car::wearOutTires(MCFloat step, MCFloat factor)
 {
     if (Game::instance().difficultyProfile().hasTireWearOut())
     {
-        const MCFloat wearOut = velocity().lengthFast() * step * factor;
+        const MCFloat wearOut = physicsComponent().velocity().lengthFast() * step * factor;
         if (m_tireWearOutCapacity >= wearOut)
         {
             m_tireWearOutCapacity -= wearOut;
@@ -391,14 +385,14 @@ bool Car::hadHardCrash()
     return false;
 }
 
-void Car::stepTime(MCFloat step)
+void Car::onStepTime(MCFloat step)
 {
     // Cache dx and dy.
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
     // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
-    m_absSpeed   = speed();
+    m_absSpeed   = physicsComponent().speed();
     m_speedInKmh = m_absSpeed * 3.6 * 2.5;
 
     if (m_isHuman)

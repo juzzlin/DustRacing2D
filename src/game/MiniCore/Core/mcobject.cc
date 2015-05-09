@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2010 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 #include "mccollisionevent.hh"
 #include "mcevent.hh"
 #include "mcoutofboundariesevent.hh"
+#include "mcphysicscomponent.hh"
 #include "mcrectshape.hh"
 #include "mcshapeview.hh"
 #include "mcsurface.hh"
@@ -39,14 +40,14 @@ MCUint MCObject::m_typeIDCount = 1;
 MCObject::TypeHash MCObject::m_typeHash;
 MCObject::TimerEventObjectsList MCObject::m_timerEventObjects;
 
-static const MCFloat DAMPING = 0.999f;
-
 MCObject::MCObject(const std::string & typeId)
+    : m_physicsComponent(nullptr)
 {
     init(typeId);
 }
 
 MCObject::MCObject(MCShapePtr shape, const std::string & typeId)
+    : m_physicsComponent(nullptr)
 {
     init(typeId);
 
@@ -54,6 +55,7 @@ MCObject::MCObject(MCShapePtr shape, const std::string & typeId)
 }
 
 MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMode)
+    : m_physicsComponent(nullptr)
 {
     init(typeId);
 
@@ -70,19 +72,11 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMo
 
 void MCObject::init(const std::string & typeId)
 {
+    setPhysicsComponent(*(new MCPhysicsComponent));
+
     m_typeID                 = registerType(typeId);
-    m_invMass                = std::numeric_limits<MCFloat>::max();
-    m_mass                   = 0;
-    m_restitution            = 0.5;
-    m_xyFriction             = 0.0;
     m_angle                  = 0;
     m_relativeAngle          = 0;
-    m_angularAcceleration    = 0.0;
-    m_angularVelocity        = 0.0;
-    m_angularImpulse         = 0.0;
-    m_torque                 = 0.0;
-    m_invMomentOfInertia     = std::numeric_limits<MCFloat>::max();
-    m_momentOfInertia        = 0;
     m_renderLayer            = 0;
     m_renderLayerRelative    = 0;
     m_collisionLayer         = 0;
@@ -92,22 +86,15 @@ void MCObject::init(const std::string & typeId)
     m_j0                     = 0;
     m_j1                     = 0;
     m_initialAngle           = 0;
-    m_damping                = DAMPING;
     m_timerEventObjectsIndex = -1;
-    m_sleeping               = false;
-    m_sleepingPrevented      = false;
-    m_linearSleepLimit       = 0.01f;
-    m_angularSleepLimit      = 0.01f;
     m_physicsObject          = true;
     m_triggerObject          = false;
-    m_stationary             = false;
     m_renderable             = true;
     m_bypassCollisions       = false;
     m_removing               = false;
     m_renderOutline          = false;
     m_isParticle             = false;
     m_parent                 = this;
-    m_isIntegrating          = false;
 }
 
 MCUint MCObject::getTypeIDForName(const std::string & typeName)
@@ -124,6 +111,11 @@ void MCObject::addChildObject(
     object->setParent(*this);
     object->m_relativeLocation = relativeLocation;
     object->m_relativeAngle    = relativeAngle;
+}
+
+const MCObject::Children & MCObject::children() const
+{
+    return m_children;
 }
 
 void MCObject::setParent(MCObject & parent)
@@ -152,61 +144,12 @@ MCUint MCObject::registerType(const std::string & typeName)
     }
 }
 
-void MCObject::integrate(MCFloat step)
+void MCObject::stepTime(MCFloat step)
 {
-    // Integrate, if the object is not sleeping and it doesn't
-    // have a parent object.
-    if (!m_sleeping && m_parent == this)
-    {
-        m_isIntegrating = true;
-
-        integrateLinear(step);
-        integrateAngular(step);
-        doOutOfBoundariesEvent();
-
-        if (m_velocity.lengthFast() < m_linearSleepLimit &&
-            m_angularVelocity       < m_angularSleepLimit)
-        {
-            toggleSleep(true);
-            resetMotion();
-        }
-
-        m_forces.setZero();
-        m_linearImpulse.setZero();
-        m_angularImpulse = 0.0;
-
-        translate(location() + m_velocity);
-
-        m_isIntegrating = false;
-    }
+    m_physicsComponent->stepTime(step);
 }
 
-void MCObject::integrateLinear(MCFloat step)
-{
-    MCVector3dF totAcceleration(m_acceleration);
-    totAcceleration += m_forces * m_invMass;
-    m_velocity      += totAcceleration * step + m_linearImpulse;
-    m_velocity      *= m_damping;
-}
-
-void MCObject::integrateAngular(MCFloat step)
-{
-    if (m_shape && m_momentOfInertia > 0.0)
-    {
-        MCFloat totAngularAcceleration(m_angularAcceleration);
-        totAngularAcceleration += m_torque * m_invMomentOfInertia;
-        m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
-        m_angularVelocity      *= m_damping;
-
-        const MCFloat newAngle = m_angle + MCTrigonom::radToDeg(m_angularVelocity * step);
-        doRotate(newAngle);
-        m_angle = newAngle;
-    }
-
-    m_torque = 0.0;
-}
-
-void MCObject::doOutOfBoundariesEvent()
+void MCObject::checkBoundaries()
 {
     // Use shape bbox if shape is defined.
     if (m_shape)
@@ -259,7 +202,7 @@ void MCObject::checkZBoundariesAndSendEvent()
     const MCWorld & world = MCWorld::instance();
     if (m_location.k() < world.minZ())
     {
-        m_velocity.setK(0); m_forces.setK(0);
+        m_physicsComponent->resetZ();
         translate(
             MCVector3dF(m_location.i(), m_location.j(), world.minZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Bottom);
@@ -267,31 +210,11 @@ void MCObject::checkZBoundariesAndSendEvent()
     }
     else if (m_location.k() > world.maxZ())
     {
-        m_velocity.setK(0); m_forces.setK(0);
+        m_physicsComponent->resetZ();
         translate(
             MCVector3dF(m_location.i(), m_location.j(), world.maxZ()));
         MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::Top);
         outOfBoundariesEvent(e);
-    }
-}
-
-void MCObject::resetMotion()
-{
-    // Reset linear motion
-    m_forces.setZero();
-    m_velocity.setZero();
-    m_acceleration.setZero();
-    m_linearImpulse.setZero();
-
-    // Reset angular motion
-    m_torque              = 0.0;
-    m_angularAcceleration = 0.0;
-    m_angularVelocity     = 0.0;
-    m_angularImpulse      = 0.0;
-
-    for (auto child: m_children)
-    {
-        child->resetMotion();
     }
 }
 
@@ -430,100 +353,6 @@ void MCObject::renderShadow(MCCamera * p)
     }
 }
 
-void MCObject::setMass(MCFloat newMass, bool stationary)
-{
-    m_stationary = stationary;
-
-    if (!stationary)
-    {
-        if (newMass > 0)
-        {
-            m_invMass = 1.0 / newMass;
-        }
-        else
-        {
-            m_invMass = std::numeric_limits<MCFloat>::max();
-        }
-
-        m_mass = newMass;
-
-        // This is just a default guess. The shape should set the "correct" value.
-        setMomentOfInertia(newMass);
-    }
-    else
-    {
-        m_invMass  = 0;
-        m_mass     = std::numeric_limits<MCFloat>::max();
-
-        m_sleeping = true;
-
-        setMomentOfInertia(std::numeric_limits<MCFloat>::max());
-    }
-}
-
-MCFloat MCObject::invMass() const
-{
-    return m_invMass;
-}
-
-MCFloat MCObject::mass() const
-{
-    return m_mass;
-}
-
-void MCObject::setMomentOfInertia(MCFloat newMomentOfInertia)
-{
-    if (newMomentOfInertia > 0)
-    {
-        m_invMomentOfInertia = 1.0 / newMomentOfInertia;
-    }
-    else
-    {
-        m_invMomentOfInertia = std::numeric_limits<MCFloat>::max();
-    }
-
-    m_momentOfInertia = newMomentOfInertia;
-}
-
-MCFloat MCObject::momentOfInertia() const
-{
-    return m_momentOfInertia;
-}
-
-MCFloat MCObject::invMomentOfInertia() const
-{
-    return m_invMomentOfInertia;
-}
-
-bool MCObject::stationary() const
-{
-    return m_stationary;
-}
-
-void MCObject::addImpulse(const MCVector3dF & impulse, bool)
-{
-    m_linearImpulse += impulse;
-
-    toggleSleep(false);
-}
-
-void MCObject::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision)
-{
-    m_linearImpulse += impulse;
-    const MCFloat r = (pos - m_location).lengthFast();
-    if (r > 0) {
-        addAngularImpulse((-(impulse % (pos - m_location)).k()) / r, isCollision);
-    }
-    toggleSleep(false);
-}
-
-void MCObject::addAngularImpulse(MCFloat impulse, bool)
-{
-    m_angularImpulse += impulse;
-
-    toggleSleep(false);
-}
-
 void MCObject::setIsPhysicsObject(bool flag)
 {
     m_physicsObject = flag;
@@ -574,47 +403,6 @@ void MCObject::setIsParticle(bool flag)
     m_isParticle = flag;
 }
 
-void MCObject::setVelocity(const MCVector3dF & newVelocity)
-{
-    m_velocity = newVelocity;
-
-    toggleSleep(false);
-}
-
-const MCVector3dF & MCObject::velocity() const
-{
-    return m_velocity;
-}
-
-MCFloat MCObject::speed() const
-{
-    return velocity().dot(MCVector3dF(direction()));
-}
-
-void MCObject::setAngularVelocity(MCFloat newVelocity)
-{
-    m_angularVelocity = newVelocity;
-
-    toggleSleep(false);
-}
-
-MCFloat MCObject::angularVelocity() const
-{
-    return m_angularVelocity;
-}
-
-void MCObject::setAcceleration(const MCVector3dF & newAcceleration)
-{
-    m_acceleration = newAcceleration;
-
-    toggleSleep(false);
-}
-
-const MCVector3dF & MCObject::acceleration() const
-{
-    return m_acceleration;
-}
-
 void MCObject::translate(const MCVector3dF & newLocation)
 {
     const bool wasInWorld = !removing() &&
@@ -624,9 +412,11 @@ void MCObject::translate(const MCVector3dF & newLocation)
     // by the parent. This way we'll automatically get linear velocity +
     // possible orbital velocity.
     // TODO: do we need to take the time step into account here?
-    if (m_parent != this && m_parent->m_isIntegrating && !m_parent->stationary())
+    if (m_parent != this &&
+        m_parent->physicsComponent().isIntegrating() &&
+        !m_parent->physicsComponent().isStationary())
     {
-        m_velocity = newLocation - m_location;
+        m_physicsComponent->setVelocity(newLocation - m_location);
     }
 
     m_location = newLocation;
@@ -665,12 +455,15 @@ void MCObject::setCenterOfRotation(MCVector2dF center)
     m_centerOfRotation = center - MCVector2dF(location());
 }
 
-void MCObject::rotate(MCFloat newAngle)
+void MCObject::rotate(MCFloat newAngle, bool updateChildTransforms_)
 {
     doRotate(newAngle);
     m_angle = newAngle;
 
-    updateChildTransforms();
+    if (updateChildTransforms_)
+    {
+        updateChildTransforms();
+    }
 }
 
 void MCObject::rotateRelative(MCFloat newAngle)
@@ -718,18 +511,6 @@ MCVector2dF MCObject::direction() const
     return MCVector2dF(MCTrigonom::cos(angle()), MCTrigonom::sin(angle()));
 }
 
-void MCObject::setRestitution(MCFloat newRestitution)
-{
-    newRestitution = newRestitution < 0.0 ? 0.0 : newRestitution;
-    newRestitution = newRestitution > 1.0 ? 1.0 : newRestitution;
-    m_restitution = newRestitution;
-}
-
-MCFloat MCObject::restitution() const
-{
-    return m_restitution;
-}
-
 void MCObject::setShape(MCShapePtr shape)
 {
     m_shape = shape;
@@ -745,34 +526,6 @@ MCShapePtr MCObject::shape() const
     return m_shape;
 }
 
-void MCObject::addForce(const MCVector3dF & force)
-{
-    m_forces += force;
-
-    toggleSleep(false);
-}
-
-void MCObject::addForce(const MCVector3dF & force, const MCVector3dF & pos)
-{
-    addTorque(-(force % (pos - m_location)).k());
-    m_forces += force;
-
-    toggleSleep(false);
-}
-
-void MCObject::addTorque(MCFloat torque)
-{
-    m_torque += torque;
-
-    toggleSleep(false);
-}
-
-void MCObject::clearForces()
-{
-    m_forces.setZero();
-    m_torque = 0.0;
-}
-
 MCBBox<MCFloat> MCObject::bbox() const
 {
     if (m_shape)
@@ -785,7 +538,7 @@ MCBBox<MCFloat> MCObject::bbox() const
     }
 }
 
-void MCObject::stepTime(MCFloat /* step */)
+void MCObject::onStepTime(MCFloat /* step */)
 {
 }
 
@@ -930,55 +683,6 @@ int MCObject::initialAngle() const
     return m_initialAngle;
 }
 
-void MCObject::setXYFriction(MCFloat friction)
-{
-    m_xyFriction = friction;
-}
-
-MCFloat MCObject::xyFriction() const
-{
-    return m_xyFriction;
-}
-
-void MCObject::setDamping(MCFloat value)
-{
-    m_damping = value;
-}
-
-bool MCObject::sleeping() const
-{
-    return m_sleeping;
-}
-
-void MCObject::setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit)
-{
-    m_linearSleepLimit  = linearSleepLimit;
-    m_angularSleepLimit = angularSleepLimit;
-}
-
-void MCObject::toggleSleep(bool state)
-{
-    if (state && m_sleepingPrevented)
-    {
-        return;
-    }
-
-    m_sleeping = state;
-
-    // Optimization: dynamically remove from the integration vector
-    if (!isParticle())
-    {
-        if (state)
-        {
-            MCWorld::instance().removeObjectFromIntegration(*this);
-        }
-        else
-        {
-            MCWorld::instance().restoreObjectToIntegration(*this);
-        }
-    }
-}
-
 void MCObject::updateChildTransforms()
 {
     for (auto child : m_children)
@@ -1006,13 +710,21 @@ MCFloat MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVect
     return linearBalance;
 }
 
-void MCObject::preventSleeping(bool flag)
+void MCObject::setPhysicsComponent(MCPhysicsComponent & physicsComponent)
 {
-    m_sleepingPrevented = flag;
+    delete m_physicsComponent;
+    m_physicsComponent = &physicsComponent;
+    m_physicsComponent->setObject(*this);
+}
+
+MCPhysicsComponent & MCObject::physicsComponent()
+{
+    return *m_physicsComponent;
 }
 
 MCObject::~MCObject()
 {
     removeFromWorldNow();
     deleteContacts();
+    delete m_physicsComponent;
 }

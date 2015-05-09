@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2014 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,32 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TIRE_HPP
-#define TIRE_HPP
+#ifndef CARPHYSICSCOMPONENT_HPP
+#define CARPHYSICSCOMPONENT_HPP
 
-#include <MCObject>
+#include <MCPhysicsComponent>
 
 class Car;
 
-class Tire : public MCObject
+class CarPhysicsComponent : public MCPhysicsComponent
 {
 public:
 
-    Tire(Car & car, MCFloat friction, MCFloat offTrackFriction);
+    CarPhysicsComponent(Car & car);
 
-    virtual void onStepTime(MCFloat step);
-
-    void setIsOffTrack(bool flag);
+    //! \reimp
+    void addImpulse(const MCVector3dF & impulse, bool isCollision) override;
 
 private:
-
-    bool m_isOffTrack;
-
-    MCFloat m_friction;
-
-    MCFloat m_offTrackFriction;
 
     Car & m_car;
 };
 
-#endif // TIRE_HPP
+#endif // CARPHYSICSCOMPONENT_HPP

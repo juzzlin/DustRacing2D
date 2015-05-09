@@ -21,6 +21,7 @@
 #include "../../Physics/mcforcegenerator.hh"
 #include "../../Physics/mcforceregistry.hh"
 #include "../../Physics/mcrectshape.hh"
+#include "../../Physics/mcphysicscomponent.hh"
 #include "../../Core/mcworld.hh"
 #include "../../Core/mcobject.hh"
 #include "../../Core/mctimerevent.hh"
@@ -127,24 +128,24 @@ void MCObjectTest::testAngularVelocityAndSleep()
     MCObject object("TestObject");
     object.addToWorld();
 
-    QVERIFY(qFuzzyCompare(object.angularVelocity(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.physicsComponent().isSleeping() == true);
     QVERIFY(object.index() == -1); // Removed from integration
 
-    object.setAngularVelocity(1);
+    object.physicsComponent().setAngularVelocity(1);
 
-    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.physicsComponent().isSleeping() == false);
     QVERIFY(object.index() >= 0);
-    QVERIFY(qFuzzyCompare(object.angularVelocity(), MCFloat(1)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(1)));
 
-    object.setAngularVelocity(0);
+    object.physicsComponent().setAngularVelocity(0);
 
-    QVERIFY(qFuzzyCompare(object.angularVelocity(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.physicsComponent().isSleeping() == true);
     QVERIFY(object.index() == -1);
 }
 
@@ -154,13 +155,13 @@ void MCObjectTest::testAngularVelocityIntegration()
     MCObject object("TestObject");
     object.addToWorld();
 
-    QVERIFY(qFuzzyCompare(object.angularVelocity(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
     QVERIFY(qFuzzyCompare(object.angle(), MCFloat(0)));
 
     const MCFloat step = 1;
     MCFloat aVel = 1;
 
-    object.setAngularVelocity(aVel);
+    object.physicsComponent().setAngularVelocity(aVel);
     world.stepTime(step);
 
     // Nothing should happen without shape
@@ -168,8 +169,8 @@ void MCObjectTest::testAngularVelocityIntegration()
 
     MCShapePtr shape(new MCRectShape(nullptr, 10, 10));
     object.setShape(shape);
-    object.setMomentOfInertia(1); // Needs to be > 0.1 to enable angular integration
-    object.setAngularVelocity(aVel);
+    object.physicsComponent().setMomentOfInertia(1); // Needs to be > 0.1 to enable angular integration
+    object.physicsComponent().setAngularVelocity(aVel);
 
     world.stepTime(step);
 
@@ -339,16 +340,16 @@ void MCObjectTest::testInitialLocation()
 void MCObjectTest::testMass()
 {
     MCObject object("TestObject");
-    QVERIFY(qFuzzyCompare(object.mass(), MCFloat(0.0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), MCFloat(0.0)));
 
-    object.setMass(MCFloat(1000.0));
-    QVERIFY(qFuzzyCompare(object.mass(), MCFloat(1000.0)));
-    QVERIFY(qFuzzyCompare(object.invMass(), MCFloat(1.0 / 1000.0)));
+    object.physicsComponent().setMass(MCFloat(1000.0));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), MCFloat(1000.0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), MCFloat(1.0 / 1000.0)));
 
-    object.setMass(1, true);
-    QVERIFY(object.stationary());
-    QVERIFY(object.sleeping());
-    QVERIFY(qFuzzyCompare(object.invMass(), MCFloat(0.0)));
+    object.physicsComponent().setMass(1, true);
+    QVERIFY(object.physicsComponent().isStationary());
+    QVERIFY(object.physicsComponent().isSleeping());
+    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), MCFloat(0.0)));
 }
 
 void MCObjectTest::testRenderLayer()
@@ -483,24 +484,24 @@ void MCObjectTest::testVelocityAndSleep()
     MCObject object("TestObject");
     object.addToWorld();
 
-    vector3dCompare(object.velocity(), MCVector3dF(0, 0, 0));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(0, 0, 0));
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.physicsComponent().isSleeping() == true);
     QVERIFY(object.index() == -1); // Removed from integration
 
-    object.setVelocity(MCVector3dF(1, 1, 1));
+    object.physicsComponent().setVelocity(MCVector3dF(1, 1, 1));
 
-    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.physicsComponent().isSleeping() == false);
     QVERIFY(object.index() >= 0);
-    vector3dCompare(object.velocity(), MCVector3dF(1, 1, 1));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(1, 1, 1));
 
-    object.setVelocity(MCVector3dF(0, 0, 0));
+    object.physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
 
-    vector3dCompare(object.velocity(), MCVector3dF(0, 0, 0));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(0, 0, 0));
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.physicsComponent().isSleeping() == true);
     QVERIFY(object.index() == -1);
 }
 
@@ -510,26 +511,26 @@ void MCObjectTest::testVelocityAndPreventSleeping()
     MCObject object("TestObject");
     object.addToWorld();
 
-    object.setVelocity(MCVector3dF(1, 1, 1));
+    object.physicsComponent().setVelocity(MCVector3dF(1, 1, 1));
 
-    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.physicsComponent().isSleeping() == false);
     QVERIFY(object.index() >= 0);
-    vector3dCompare(object.velocity(), MCVector3dF(1, 1, 1));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(1, 1, 1));
 
-    object.preventSleeping(true);
+    object.physicsComponent().preventSleeping(true);
 
-    object.setVelocity(MCVector3dF(0, 0, 0));
+    object.physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
 
-    vector3dCompare(object.velocity(), MCVector3dF(0, 0, 0));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(0, 0, 0));
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == false);
+    QVERIFY(object.physicsComponent().isSleeping() == false);
     QVERIFY(object.index() >= 0);
 
-    object.preventSleeping(false);
+    object.physicsComponent().preventSleeping(false);
 
     world.stepTime(1);
-    QVERIFY(object.sleeping() == true);
+    QVERIFY(object.physicsComponent().isSleeping() == true);
     QVERIFY(object.index() == -1);
 }
 
@@ -541,10 +542,10 @@ void MCObjectTest::testVelocityIntegration()
     object.addToWorld();
 
     vector3dCompare(object.location(), MCVector3dF(0, 0, 0));
-    vector3dCompare(object.velocity(), MCVector3dF(0, 0, 0));
+    vector3dCompare(object.physicsComponent().velocity(), MCVector3dF(0, 0, 0));
 
     MCVector3dF velocity(1, 2, 3);
-    object.setVelocity(velocity);
+    object.physicsComponent().setVelocity(velocity);
 
     world.stepTime(1);
 

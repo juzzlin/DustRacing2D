@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <MCCollisionEvent>
+#include <MCPhysicsComponent>
 #include <MCRandom>
 
 namespace {
@@ -116,7 +117,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
             if (++m_mudCounter >= 5)
             {
                 ParticleFactory::instance().doParticle(
-                    ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.velocity() * 0.5f);
+                    ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
                 m_mudCounter = 0;
             }
         }
@@ -130,7 +131,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
             if (++m_mudCounter >= 5)
             {
                 ParticleFactory::instance().doParticle(
-                    ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.velocity() * 0.5f);
+                    ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
                 m_mudCounter = 0;
             }
         }
@@ -148,7 +149,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
 
 void CarParticleEffectManager::collision(const MCCollisionEvent & event)
 {
-    if (m_car.velocity().lengthFast() > 4.0f)
+    if (m_car.physicsComponent().velocity().lengthFast() > 4.0f)
     {
         // Check if the car is colliding with another car.
         if (event.collidingObject().typeID() == m_car.typeID())
@@ -156,9 +157,9 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             if (++m_sparkleCounter >= 10)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                    event.contactPoint(), m_car.velocity() * 0.75f);
+                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.75f);
                 ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                    event.contactPoint(), m_car.velocity() * 0.5f);
+                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
                 m_sparkleCounter = 0;
             }
         }
@@ -172,14 +173,14 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             event.collidingObject().typeID() == MCObject::typeID("rock"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                event.contactPoint(), m_car.velocity() * 0.5f);
+                event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
             ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                event.contactPoint(), m_car.velocity() * 0.1f);
+                event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
         }
         else if (event.collidingObject().typeID() == MCObject::typeID("tree"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
-                event.contactPoint(), m_car.velocity() * 0.1f);
+                event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
         }
     }
 }

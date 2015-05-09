@@ -62,6 +62,7 @@
 #include <MCGLShaderProgram>
 #include <MCLogger>
 #include <MCObject>
+#include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCSurface>
 #include <MCSurfaceView>
@@ -341,7 +342,7 @@ void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject &
     const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6 : 13.8;
     const float smooth              = 0.2;
 
-    offset += (object.velocity().lengthFast() - offset) * smooth;
+    offset += (object.physicsComponent().velocity().lengthFast() - offset) * smooth;
     loc    += object.direction() * offset * offsetAmplification;
 
     camera.setPos(loc.i(), loc.j());

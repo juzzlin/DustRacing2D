@@ -22,6 +22,7 @@ Core/mclogger.cc
 Core/mcmacros.hh
 Core/mcobbox.hh
 Core/mcobject.cc
+Core/mcobjectcomponent.cc
 Core/mcobjectdata.cc
 Core/mcobjectfactory.cc
 Core/mcrandom.cc
@@ -64,6 +65,7 @@ Physics/mcgravitygenerator.cc
 Physics/mcimpulsegenerator.cc
 Physics/mcobjectgrid.cc
 Physics/mcoutofboundariesevent.cc
+Physics/mcphysicscomponent.cc
 Physics/mcrectshape.cc
 Physics/mcshape.cc
 Physics/mcspringforcegenerator.cc

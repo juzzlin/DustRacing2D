@@ -22,6 +22,7 @@
 #include "../../Core/mcobject.hh"
 #include "../../Physics/mcrectshape.hh"
 #include "../../Physics/mccollisionevent.hh"
+#include "../../Physics/mcphysicscomponent.hh"
 
 class TestObject : public MCObject
 {
@@ -97,12 +98,12 @@ void MCWorldTest::testSimpleCollision()
     TestObject object1;
     MCRectShape * shape1 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
     object1.setShape(MCShapePtr(shape1));
-    object1.preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
+    object1.physicsComponent().preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
 
     TestObject object2;
     MCRectShape * shape2 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
     object2.setShape(MCShapePtr(shape2));
-    object2.preventSleeping(true);
+    object2.physicsComponent().preventSleeping(true);
 
     world.addObject(object1);
     world.addObject(object2);

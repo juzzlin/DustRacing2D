@@ -23,6 +23,7 @@
 #include <MCRectShape>
 #include <MCSurface>
 #include <MCVector2d>
+#include <MCPhysicsComponent>
 
 namespace {
 static const char * BRIDGE_ID      = "bridge";
@@ -49,7 +50,7 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 
     setIsPhysicsObject(false);
     setIsTriggerObject(true);
-    setMass(0, true);
+    physicsComponent().setMass(0, true);
 
     shape()->view()->setHasShadow(false);
     shape()->view()->setBatchMode(true);
@@ -61,12 +62,12 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 
     m_rail0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-    m_rail0->setMass(0, true);
+    m_rail0->physicsComponent().setMass(0, true);
     m_rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
     m_rail1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-    m_rail1->setMass(0, true);
+    m_rail1->physicsComponent().setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
     const int railXDisplacement = WIDTH / 2 - RAIL_X_OFFSET / 2;
@@ -77,12 +78,12 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_railLower1->rotateRelative(90);
 
     m_railLower0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
-    m_railLower0->setMass(0, true);
+    m_railLower0->physicsComponent().setMass(0, true);
     m_railLower0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower0->setIsRenderable(false);
 
     m_railLower1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
-    m_railLower1->setMass(0, true);
+    m_railLower1->physicsComponent().setMass(0, true);
     m_railLower1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
     m_railLower1->setIsRenderable(false);
 
@@ -107,12 +108,12 @@ void Bridge::enterObject(MCObject & object)
 void Bridge::collisionEvent(MCCollisionEvent & event)
 {
     MCObject & object = event.collidingObject();
-    if (!object.stationary())
+    if (!object.physicsComponent().isStationary())
     {
         if (m_objectsEntered.count(&object))
         {
             object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-            object.preventSleeping(true);
+            object.physicsComponent().preventSleeping(true);
 
             const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
             object.translate(newLocation);
@@ -122,7 +123,7 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
     }
 }
 
-void Bridge::stepTime(MCFloat)
+void Bridge::onStepTime(MCFloat)
 {
     const int frameTolerance = 2;
     auto iter = m_objectsOnBridge.begin();
@@ -132,7 +133,7 @@ void Bridge::stepTime(MCFloat)
         {
             MCObject & object = *iter->first;
             object.setCollisionLayer(0); // MCObject default collision layer
-            object.preventSleeping(false);
+            object.physicsComponent().preventSleeping(false);
 
             const MCVector3dF newLocation(object.location().i(), object.location().j(), OBJECT_Z_ZERO);
             object.translate(newLocation);

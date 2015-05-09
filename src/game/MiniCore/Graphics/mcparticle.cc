@@ -113,7 +113,7 @@ bool MCParticle::dieWhenOffScreen() const
     return m_dieWhenOffScreen;
 }
 
-void MCParticle::stepTime(MCFloat /* step */)
+void MCParticle::onStepTime(MCFloat /* step */)
 {
     if (m_lifeTime > 0)
     {

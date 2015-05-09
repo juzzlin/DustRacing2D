@@ -45,7 +45,7 @@ void Pit::collisionEvent(MCCollisionEvent & event)
     }
 }
 
-void Pit::stepTime(MCFloat)
+void Pit::onStepTime(MCFloat)
 {
     auto i = m_pittingCars.begin();
     while (i != m_pittingCars.end())
