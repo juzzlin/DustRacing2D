@@ -127,20 +127,15 @@ static const char * MCDefaultShadowVsh =
 "precision mediump float;\n"
 "precision mediump int;\n"
 "attribute vec3    inVertex;\n"
-"attribute vec3    inNormal;\n"
 "attribute vec2    inTexCoord;\n"
-"attribute vec4    inColor;\n"
 "uniform   vec4    scale;\n"
-"uniform   vec4    color;\n"
 "uniform   mat4    vp;\n"
 "uniform   mat4    model;\n"
 "varying   vec2    texCoord0;\n"
-"varying   vec4    vColor;\n"
 ""
 "void main()\n"
 "{\n"
 "    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
-"    vColor      = inColor * color;\n"
 "    texCoord0   = inTexCoord;\n"
 "}\n";
 
@@ -161,7 +156,7 @@ static const char * MCDefaultShadowFsh =
 "    }\n"
 "    else\n"
 "    {\n"
-"        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.6);\n"
+"        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.5);\n"
 "    }\n"
 "}\n";
 
