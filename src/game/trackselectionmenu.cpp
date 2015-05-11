@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2012 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -91,24 +91,42 @@ public:
     }
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
 private:
 
-    Game          & m_game;
-    Track         & m_track;
+    void renderTiles();
+
+    void renderTitle();
+
+    void renderStars();
+
+    void renderLock();
+
+    void renderTrackProperties();
+
+    Game & m_game;
+
+    Track & m_track;
+
     MCTextureFont & m_monospace;
-    MCSurface     & m_star;
-    MCSurface     & m_glow;
-    MCSurface     & m_lock;
-    int             m_xDisplacement;
-    int             m_lapRecord;
-    int             m_raceRecord;
-    int             m_bestPos;
+
+    MCSurface & m_star;
+
+    MCSurface & m_glow;
+
+    MCSurface & m_lock;
+
+    int m_xDisplacement;
+
+    int m_lapRecord;
+
+    int m_raceRecord;
+
+    int m_bestPos;
 };
 
-// TODO: Split this fugly monster function into subs.
-void TrackItem::render()
+void TrackItem::renderTiles()
 {
     const MapBase & rMap = m_track.trackData().map();
 
@@ -180,53 +198,75 @@ void TrackItem::render()
 
         tileY += tileH;
     }
+}
 
+void TrackItem::renderTitle()
+{
     MCTextureText text(L"");
 
-    const int textX   = x() - width() / 2;
     const int shadowY = -2;
     const int shadowX =  2;
 
-    // Render title
     std::wstringstream ss;
     ss << m_track.trackData().name().toStdWString();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
     text.render(x() - text.width() / 2, y() + height() / 2 + text.height(), nullptr, m_monospace);
+}
 
-    // Render stars
+void TrackItem::renderStars()
+{
     if (!m_track.trackData().isLocked())
     {
-        const int starW    = m_star.width();
-        const int starH    = m_star.height();
-        const int startX   = x() - 5 * starW + starW / 2 + m_xDisplacement;
+        const int starW = m_star.width();
+        const int starH = m_star.height();
+        const int startX = x() - 5 * starW + starW / 2 + m_xDisplacement;
         const int numStars = 10;
+        const MCGLColor yellow(1.0, 1.0, 0.0);
+        const MCGLColor grey(.75, .75, .75);
 
         for (int i = 0; i < numStars; i++)
         {
+            const MCVector3dF starPos(startX + i * starW, y() - height() / 2 + starH / 2, 0);
+
             // The range of m_bestPos is 1..NUM_CARS
-            if (m_bestPos != -1 && Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos - 1)
+            if (m_bestPos != -1 &&
+                Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos - 1)
             {
-                m_star.setColor(MCGLColor(1.0, 1.0, 0.0));
-                m_glow.render(
-                    nullptr, MCVector3dF(startX + i * starW, y() - height() / 2 + starH / 2, 0), 0);
+                m_star.setColor(yellow);
+                m_glow.render(nullptr, starPos, 0);
             }
             else
             {
-                m_star.setColor(MCGLColor(0.75, 0.75, 0.75));
+                m_star.setColor(grey);
             }
 
-            m_star.render(
-                nullptr, MCVector3dF(startX + i * starW, y() - height() / 2 + starH / 2, 0), 0);
+            m_star.render(nullptr, starPos, 0);
         }
     }
+}
 
-    // Render the lock
+void TrackItem::renderLock()
+{
     if (m_track.trackData().isLocked())
     {
         m_lock.render(nullptr, MCVector3dF(x() + m_xDisplacement, y(), 0), 0);
     }
+}
+
+void TrackItem::renderTrackProperties()
+{
+    MCTextureText text(L"");
+
+    const int shadowY = -2;
+    const int shadowX =  2;
+
+    std::wstringstream ss;
+    text.setGlyphSize(20, 20);
+    text.setShadowOffset(shadowX, shadowY);
+
+    const int textX = x() - width() / 2;
 
     // Render track properties
     ss.str(L"");
@@ -254,6 +294,19 @@ void TrackItem::render()
         text.setText(ss.str());
         text.render(textX, y() - height() / 2 - text.height() * 5, nullptr, m_monospace);
     }
+}
+
+void TrackItem::render()
+{
+    renderTiles();
+
+    renderTitle();
+
+    renderStars();
+
+    renderLock();
+
+    renderTrackProperties();
 }
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
