@@ -141,6 +141,7 @@ void MCGLObjectBase::bind()
         shaderProgram()->bind();
 
         bindVAO();
+        bindVBO();
         bindMaterial();
     }
     else
@@ -157,6 +158,7 @@ void MCGLObjectBase::bindShadow()
         shadowShaderProgram()->bind();
 
         bindVAO();
+        bindVBO();
         bindMaterial(true);
     }
     else
