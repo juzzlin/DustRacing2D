@@ -53,8 +53,6 @@ private:
 
     MCObjectPtr m_rail0;
     MCObjectPtr m_rail1;
-    MCObjectPtr m_railLower0;
-    MCObjectPtr m_railLower1;
     MCObjectPtr m_trigger0;
     MCObjectPtr m_trigger1;
 };

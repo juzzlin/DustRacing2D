@@ -40,8 +40,6 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 , m_tag(0)
 , m_rail0(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
 , m_rail1(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
-, m_railLower0(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
-, m_railLower1(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
 , m_trigger0(MCObjectPtr(new BridgeTrigger(*this)))
 , m_trigger1(MCObjectPtr(new BridgeTrigger(*this)))
 {
@@ -69,23 +67,6 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     m_rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     m_rail1->physicsComponent().setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
-    const int railXDisplacement = WIDTH / 2 - RAIL_X_OFFSET / 2;
-
-    addChildObject(m_railLower0, MCVector3dF(-railXDisplacement, 0, 0));
-    m_railLower0->rotateRelative(90);
-    addChildObject(m_railLower1, MCVector3dF( railXDisplacement, 0, 0));
-    m_railLower1->rotateRelative(90);
-
-    m_railLower0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
-    m_railLower0->physicsComponent().setMass(0, true);
-    m_railLower0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-    m_railLower0->setIsRenderable(false);
-
-    m_railLower1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
-    m_railLower1->physicsComponent().setMass(0, true);
-    m_railLower1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-    m_railLower1->setIsRenderable(false);
 
     const int triggerXDisplacement = WIDTH / 2;
 
