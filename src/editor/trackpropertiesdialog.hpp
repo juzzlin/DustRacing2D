@@ -21,6 +21,7 @@
 class QGridLayout;
 class QLabel;
 class QLineEdit;
+class QCheckBox;
 class QPushButton;
 
 /*! Dialog to set track properties */
@@ -31,18 +32,28 @@ class TrackPropertiesDialog : public QDialog
 public:
 
     //! Constructor.
-    TrackPropertiesDialog(unsigned int index, QWidget * parent = nullptr);
+    TrackPropertiesDialog(QString name, unsigned int index, bool isUserTrack, QWidget * parent = nullptr);
 
     //! Get index.
     unsigned int index() const;
+
+    //! Get name.
+    QString name() const;
+
+    //! Get user track property.
+    bool isUserTrack() const;
 
 private:
 
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
+    QLineEdit   * m_nameEdit;
+    QLabel      * m_nameLabel;
     QLineEdit   * m_indexEdit;
     QLabel      * m_indexLabel;
+    QCheckBox   * m_isUserTrackCheckBox;
+    QLabel      * m_isUserTrackLabel;
 };
 
 #endif // TRACKPROPERTIESDIALOG_HPP

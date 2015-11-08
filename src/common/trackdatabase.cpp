@@ -37,6 +37,17 @@ unsigned int TrackDataBase::index() const
     return m_index;
 }
 
+
+void TrackDataBase::setName(QString name)
+{
+    m_name = name;
+}
+
+void TrackDataBase::setUserTrack(bool isUserTrack)
+{
+    m_isUserTrack = isUserTrack;
+}
+
 void TrackDataBase::setIndex(unsigned int index)
 {
     m_index = index;
