@@ -183,6 +183,9 @@ public:
     //! Get name.
     virtual QString name() const;
 
+    //! Set name.
+    virtual void setName(QString name);
+
     //! Get file name.
     virtual QString fileName() const = 0;
 
@@ -197,6 +200,9 @@ public:
 
     //! Get if the track is user track (unlocked by default).
     virtual bool isUserTrack() const;
+
+    //! Set user track option.
+    virtual void setUserTrack(bool isUserTrack);
 
     //! Get map object.
     virtual MapBase & map() = 0;

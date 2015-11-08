@@ -728,12 +728,13 @@ void MainWindow::setTrackProperties()
 {
     // Show a dialog to set some properties e.g. lap count.
     assert(m_editorData);
-    TrackPropertiesDialog dialog(m_editorData->trackData()->index(), this);
+    TrackPropertiesDialog dialog(m_editorData->trackData()->name(), m_editorData->trackData()->index(), m_editorData->trackData()->isUserTrack(), this);
     if (dialog.exec() == QDialog::Accepted)
     {
+        m_editorData->trackData()->setName(dialog.name());
         m_editorData->trackData()->setIndex(dialog.index());
-        console(QString(tr("Index set to '%1'."))
-            .arg(m_editorData->trackData()->index()));
+        m_editorData->trackData()->setUserTrack(dialog.isUserTrack());
+        console(QString(tr("Track properties updated.")));
     }
 }
 
