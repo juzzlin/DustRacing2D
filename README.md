@@ -94,7 +94,7 @@ where you can place your own race tracks.
 
 ## Command line options
 
---lang [lang] forces the language. Currently available: fi, cs, it, fr.
+--lang [lang] forces the language. Currently available: fi, cs, de, it, fr.
 
 E.g. ./dustrac-game --lang it
 
