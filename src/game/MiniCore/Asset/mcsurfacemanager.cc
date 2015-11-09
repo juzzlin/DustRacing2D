@@ -260,10 +260,18 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, data.wrapS.first);
     }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    }
 
     if (data.wrapT.second)
     {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, data.wrapT.first);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
 
     // Edit image data using the information textureImage gives us

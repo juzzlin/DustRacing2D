@@ -195,7 +195,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
 
                 if (s == "clamp")
                 {
-                    newData->wrapS = std::pair<GLint, bool>(GL_CLAMP, true);
+                    newData->wrapS = std::pair<GLint, bool>(GL_CLAMP_TO_EDGE, true);
                 }
                 else if (s == "repeat")
                 {
@@ -208,7 +208,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
 
                 if (t == "clamp")
                 {
-                    newData->wrapT = std::pair<GLint, bool>(GL_CLAMP, true);
+                    newData->wrapT = std::pair<GLint, bool>(GL_CLAMP_TO_EDGE, true);
                 }
                 else if (t == "repeat")
                 {
