@@ -406,6 +406,7 @@ void MainWindow::populateMenuBar()
     m_clearRouteAction = new QAction(tr("Clear &route"), this);
     routeMenu->addAction(m_clearRouteAction);
     connect(m_clearRouteAction, SIGNAL(triggered()), this, SLOT(clearRoute()));
+    m_clearRouteAction->setEnabled(false);
 
     // Add "set order"-action
     m_setRouteAction = new QAction(tr("&Set route.."), this);
@@ -552,6 +553,7 @@ void MainWindow::clearRoute()
 {
     assert(m_editorData);
     m_editorData->clearRoute();
+    m_clearRouteAction->setEnabled(false);
 }
 
 bool MainWindow::doOpenTrack(QString fileName)
@@ -598,6 +600,8 @@ bool MainWindow::doOpenTrack(QString fileName)
         fitScale();
 
         m_saved = true;
+
+        m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
 
         return true;
     }
@@ -707,6 +711,8 @@ void MainWindow::initializeNewTrack()
 
         setTitle(tr("New file"));
 
+        m_clearRouteAction->setEnabled(false);
+
         m_saved = false;
     }
 
@@ -794,6 +800,7 @@ void MainWindow::endSetRoute()
 {
     assert(m_editorData);
     m_editorData->endSetRoute();
+    m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
     console(tr("Set route: route finished."));
 }
 
