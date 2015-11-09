@@ -10,8 +10,7 @@ Getting the up-to-date source
 
 git clone https://github.com/juzzlin/DustRacing2D.git
 
-- master branch has the currently released stuff and is stable
-- dev branch has unreleased stuff and might be unstable
+- master branch has the currently released stuff and is stable.
 
 Game / Editor
 -------------
@@ -50,7 +49,7 @@ $ lupdate src/editor/*.cpp -ts  src/editor/translations/dustrac-editor_fr.ts
 
 The .ts-files can then be opened in Qt's translation GUI, linguist.
 
-For Qt4, the Ubuntu package for these tools is qt4-linguist-tools.
+For Qt5, the Ubuntu package for these tools is qttools5-dev-tools.
 
 A fallback character mapping is in src/game/graphicsfactory, as the texture font used in the
 game doesn't support all accented characters, e.g. "á" is mapped to "a". This map can also
@@ -159,5 +158,3 @@ MyFooClass::~MyFooClass()
 }
 
 -- Jussi Lind <jussi.lind@iki.fi>
-
-
