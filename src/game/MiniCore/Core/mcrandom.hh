@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2009 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -38,13 +38,16 @@ public:
     static MCFloat getValue();
 
     //! Return a random 2d vector
-    static MCVector2d<MCFloat> randomVector2d();
+    static MCVector2dF randomVector2d();
 
     //! Return a random 3d vector
-    static MCVector3d<MCFloat> randomVector3d();
+    static MCVector3dF randomVector3d();
 
     //! Return a random 3d vector with a positive Z only
-    static MCVector3d<MCFloat> randomVector3dPositiveZ();
+    static MCVector3dF randomVector3dPositiveZ();
+
+    //! Set random seed (before getValue() is called the first time).
+    static void setSeed(int seed);
 
 private:
 
@@ -57,7 +60,7 @@ private:
     //! Disable assignment
     DISABLE_ASSI(MCRandom);
 
-    static std::unique_ptr<MCRandomImpl> const m_pImpl;
+    static std::unique_ptr<MCRandomImpl> const m_impl;
 };
 
 #endif // MCRANDOM_HH

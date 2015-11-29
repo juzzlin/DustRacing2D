@@ -1,5 +1,5 @@
 // This file belongs to the "MiniCore" game engine.
-// Copyright (C) 2009 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2015 Jussi Lind <jussi.lind@iki.fi>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -21,14 +21,15 @@
 #include "mccast.hh"
 
 #include <cstdlib>
+#include <chrono>
 #include <limits>
 #include <random>
 #include <vector>
 
 namespace
 {
-const MCUint LUT_SIZE = 0x1000;
-const MCUint MOD_MASK = 0x0fff;
+const MCUint LUT_SIZE = 1024;
+const MCUint MOD_MASK = 0x3ff;
 }
 
 //! Implementation class for MCRandom
@@ -36,62 +37,70 @@ class MCRandomImpl
 {
 public:
   MCRandomImpl();
-  inline MCFloat getValue() const;
+  inline MCFloat getValue();
 
 private:
   void buildLUT();
 
   mutable MCUint m_valPtr;
   std::vector<MCFloat> m_data;
+  int m_seed;
+  bool m_isBuilt;
   friend class MCRandom;
 };
 
-std::unique_ptr<MCRandomImpl> const MCRandom::m_pImpl(new MCRandomImpl);
+std::unique_ptr<MCRandomImpl> const MCRandom::m_impl(new MCRandomImpl);
 
 MCRandomImpl::MCRandomImpl() :
     m_valPtr(0),
-    m_data(LUT_SIZE, 0)
+    m_data(LUT_SIZE, 0),
+    m_seed(0),
+    m_isBuilt(false)
 {
-    buildLUT();
 }
 
 void MCRandomImpl::buildLUT()
 {
-    std::random_device rd;
-    std::mt19937 engine(rd());
+    std::mt19937 engine(m_seed);
     std::uniform_real_distribution<MCFloat> dist(0, 1);
 
     for (MCUint i = 0; i < LUT_SIZE; i++) {
         m_data[i] = dist(engine);
     }
+
+    m_isBuilt = true;
 }
 
-MCFloat MCRandomImpl::getValue() const
+MCFloat MCRandomImpl::getValue()
 {
-    // Increment the value pointer and mask in
-    // the valid range
-    m_valPtr = (m_valPtr + 1) & MOD_MASK;
+    if (!MCRandomImpl::m_isBuilt) {
+        MCRandomImpl::buildLUT();
+    }
 
-    // Return the value pointed by m_valPtr
-    return MCRandomImpl::m_data[m_valPtr];
+    return MCRandomImpl::m_data[++m_valPtr & MOD_MASK];
 }
 
 MCFloat MCRandom::getValue()
 {
-    return MCRandom::m_pImpl->getValue();
+    return MCRandom::m_impl->getValue();
 }
 
-MCVector2d<MCFloat> MCRandom::randomVector2d()
+void MCRandom::setSeed(int seed)
 {
-    return MCVector2d<MCFloat>(getValue() - .5f, getValue() - .5f).normalized();
+    MCRandom::m_impl->m_seed = seed;
 }
 
-MCVector3d<MCFloat> MCRandom::randomVector3d()
+MCVector2dF MCRandom::randomVector2d()
 {
-    return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, getValue() - .5f).normalized();
+    return MCVector2dF(getValue() - .5f, getValue() - .5f).normalized();
 }
 
-MCVector3d<MCFloat> MCRandom::randomVector3dPositiveZ()
+MCVector3dF MCRandom::randomVector3d()
 {
-    return MCVector3d<MCFloat>(getValue() - .5f, getValue() - .5f, std::fabs(getValue() - .5f)).normalized();
+    return MCVector3dF(getValue() - .5f, getValue() - .5f, getValue() - .5f).normalized();
+}
+
+MCVector3dF MCRandom::randomVector3dPositiveZ()
+{
+    return MCVector3dF(getValue() - .5f, getValue() - .5f, std::fabs(getValue() - .5f)).normalized();
 }
