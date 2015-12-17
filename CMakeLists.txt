@@ -11,10 +11,6 @@ if(POLICY CMP0020)
     cmake_policy(SET CMP0020 NEW)
 endif()
 
-if(POLICY CMP0054)
-    cmake_policy(SET CMP0054 NEW)
-endif()
-
 # Global game version
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "11")
@@ -67,7 +63,7 @@ elseif(WIN32)
     include("InstallWindows.cmake")
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     add_compile_options(-std=c++11 -W -Wall -O3 -pedantic)
     add_compile_options(-fomit-frame-pointer -finline-functions -ffast-math)
 elseif(MSVC)
