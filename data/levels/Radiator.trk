@@ -1,0 +1,308 @@
+<track cols="14" rows="15" version="1.11.0" name="Radiator" index="17">
+ <t i="0" j="0" t="sand" o="0"/>
+ <t i="0" j="1" t="sand" o="0"/>
+ <t i="0" j="2" t="sandGrassStraight" o="180"/>
+ <t i="0" j="3" t="grass" o="0"/>
+ <t i="0" j="4" t="grass" o="0"/>
+ <t i="0" j="5" t="grass" o="0"/>
+ <t i="0" j="6" t="grass" o="0"/>
+ <t i="0" j="7" t="grass" o="0"/>
+ <t i="0" j="8" t="grass" o="0"/>
+ <t i="0" j="9" t="grass" o="0"/>
+ <t i="0" j="10" t="grass" o="0"/>
+ <t i="0" j="11" t="grass" o="0"/>
+ <t i="0" j="12" t="sandGrassStraight" o="0"/>
+ <t i="0" j="13" t="sand" o="0"/>
+ <t i="0" j="14" t="sand" o="0"/>
+ <t i="1" j="0" t="sand" o="0"/>
+ <t i="1" j="1" t="sand" o="0"/>
+ <t i="1" j="2" t="sandGrassStraight" o="180"/>
+ <t i="1" j="3" t="grass" o="0"/>
+ <t i="1" j="4" t="grass" o="0"/>
+ <t i="1" j="5" t="grass" o="0"/>
+ <t i="1" j="6" t="grass" o="0"/>
+ <t i="1" j="7" t="grass" o="0"/>
+ <t i="1" j="8" t="grass" o="0"/>
+ <t i="1" j="9" t="grass" o="0"/>
+ <t i="1" j="10" t="grass" o="0"/>
+ <t i="1" j="11" t="grass" o="0"/>
+ <t i="1" j="12" t="sandGrassStraight" o="0"/>
+ <t i="1" j="13" t="sand" o="0"/>
+ <t i="1" j="14" t="sand" o="0"/>
+ <t i="2" j="0" t="sand" o="0"/>
+ <t i="2" j="1" t="sand" o="0"/>
+ <t i="2" j="2" t="sandGrassStraight" o="180"/>
+ <t i="2" j="3" t="grass" o="0"/>
+ <t i="2" j="4" t="grass" o="0"/>
+ <t i="2" j="5" t="grass" o="0"/>
+ <t i="2" j="6" t="grass" o="0"/>
+ <t i="2" j="7" t="grass" o="0"/>
+ <t i="2" j="8" t="grass" o="0"/>
+ <t i="2" j="9" t="grass" o="0"/>
+ <t i="2" j="10" t="grass" o="0"/>
+ <t i="2" j="11" t="grass" o="0"/>
+ <t i="2" j="12" t="sandGrassStraight" o="0"/>
+ <t i="2" j="13" t="sand" o="0"/>
+ <t i="2" j="14" t="sand" o="0"/>
+ <t i="3" j="0" t="sand" o="0"/>
+ <t i="3" j="1" t="sand" o="0"/>
+ <t i="3" j="2" t="sandGrassStraight" o="180"/>
+ <t i="3" j="3" t="grass" o="0"/>
+ <t i="3" j="4" t="grass" o="0"/>
+ <t i="3" j="5" t="grass" o="0"/>
+ <t i="3" j="6" t="grass" o="0"/>
+ <t i="3" c="1" j="7" t="corner90" o="0"/>
+ <t i="3" j="8" t="straight" o="0"/>
+ <t i="3" c="2" j="9" t="straight" o="0"/>
+ <t i="3" c="1" j="10" t="straight" o="0"/>
+ <t i="3" j="11" t="corner90" o="270"/>
+ <t i="3" j="12" t="sandGrassStraight" o="0"/>
+ <t i="3" j="13" t="sand" o="0"/>
+ <t i="3" j="14" t="sand" o="0"/>
+ <t i="4" j="0" t="sand" o="0"/>
+ <t i="4" j="1" t="sand" o="0"/>
+ <t i="4" j="2" t="sandGrassStraight" o="180"/>
+ <t i="4" j="3" t="corner90" o="0"/>
+ <t i="4" c="1" j="4" t="straight" o="0"/>
+ <t i="4" c="2" j="5" t="straight" o="0"/>
+ <t i="4" j="6" t="finish" o="0"/>
+ <t i="4" j="7" t="bridge" o="720"/>
+ <t i="4" j="8" t="straight" o="0"/>
+ <t i="4" j="9" t="straight" o="0"/>
+ <t i="4" j="10" t="straight" o="0"/>
+ <t i="4" j="11" t="corner90" o="180"/>
+ <t i="4" j="12" t="sandGrassStraight" o="0"/>
+ <t i="4" j="13" t="sand" o="0"/>
+ <t i="4" j="14" t="sand" o="0"/>
+ <t i="5" j="0" t="sand" o="0"/>
+ <t i="5" j="1" t="sand" o="90"/>
+ <t i="5" j="2" t="sandGrassStraight" o="180"/>
+ <t i="5" j="3" t="corner90" o="90"/>
+ <t i="5" j="4" t="straight" o="0"/>
+ <t i="5" j="5" t="straight" o="0"/>
+ <t i="5" j="6" t="straight" o="0"/>
+ <t i="5" j="7" t="bridge" o="720"/>
+ <t i="5" j="8" t="straight" o="0"/>
+ <t i="5" c="2" j="9" t="straight" o="0"/>
+ <t i="5" c="1" j="10" t="straight" o="0"/>
+ <t i="5" j="11" t="corner90" o="-90"/>
+ <t i="5" j="12" t="sandGrassStraight" o="0"/>
+ <t i="5" j="13" t="sand" o="0"/>
+ <t i="5" j="14" t="sand" o="0"/>
+ <t i="6" j="0" t="sand" o="0"/>
+ <t i="6" j="1" t="sand" o="-90"/>
+ <t i="6" j="2" t="sandGrassStraight" o="180"/>
+ <t i="6" j="3" t="corner90" o="0"/>
+ <t i="6" c="1" j="4" t="straight" o="0"/>
+ <t i="6" c="2" j="5" t="straight" o="0"/>
+ <t i="6" j="6" t="straight" o="0"/>
+ <t i="6" j="7" t="bridge" o="360"/>
+ <t i="6" j="8" t="straight" o="0"/>
+ <t i="6" j="9" t="straight" o="0"/>
+ <t i="6" j="10" t="straight" o="0"/>
+ <t i="6" j="11" t="corner90" o="180"/>
+ <t i="6" j="12" t="sandGrassStraight" o="0"/>
+ <t i="6" j="13" t="sand" o="0"/>
+ <t i="6" j="14" t="sand" o="0"/>
+ <t i="7" j="0" t="sand" o="0"/>
+ <t i="7" j="1" t="sand" o="90"/>
+ <t i="7" j="2" t="sandGrassStraight" o="180"/>
+ <t i="7" j="3" t="corner90" o="90"/>
+ <t i="7" j="4" t="straight" o="0"/>
+ <t i="7" j="5" t="straight" o="0"/>
+ <t i="7" j="6" t="straight" o="0"/>
+ <t i="7" j="7" t="bridge" o="360"/>
+ <t i="7" j="8" t="straight" o="0"/>
+ <t i="7" c="2" j="9" t="straight" o="0"/>
+ <t i="7" c="1" j="10" t="straight" o="0"/>
+ <t i="7" j="11" t="corner90" o="270"/>
+ <t i="7" j="12" t="sandGrassStraight" o="0"/>
+ <t i="7" j="13" t="sand" o="0"/>
+ <t i="7" j="14" t="sand" o="0"/>
+ <t i="8" j="0" t="sand" o="0"/>
+ <t i="8" j="1" t="sand" o="90"/>
+ <t i="8" j="2" t="sandGrassStraight" o="180"/>
+ <t i="8" j="3" t="corner90" o="0"/>
+ <t i="8" c="1" j="4" t="straight" o="0"/>
+ <t i="8" c="2" j="5" t="straight" o="0"/>
+ <t i="8" j="6" t="straight" o="0"/>
+ <t i="8" j="7" t="bridge" o="360"/>
+ <t i="8" j="8" t="straight" o="0"/>
+ <t i="8" j="9" t="straight" o="0"/>
+ <t i="8" j="10" t="straight" o="180"/>
+ <t i="8" j="11" t="corner90" o="-180"/>
+ <t i="8" j="12" t="sandGrassStraight" o="0"/>
+ <t i="8" j="13" t="sand" o="0"/>
+ <t i="8" j="14" t="sand" o="0"/>
+ <t i="9" j="0" t="sand" o="0"/>
+ <t i="9" j="1" t="sand" o="90"/>
+ <t i="9" j="2" t="sandGrassStraight" o="180"/>
+ <t i="9" j="3" t="corner90" o="90"/>
+ <t i="9" j="4" t="straight" o="0"/>
+ <t i="9" j="5" t="straight" o="0"/>
+ <t i="9" j="6" t="straight" o="0"/>
+ <t i="9" j="7" t="bridge" o="720"/>
+ <t i="9" j="8" t="straight" o="0"/>
+ <t i="9" c="2" j="9" t="straight" o="0"/>
+ <t i="9" c="1" j="10" t="straight" o="0"/>
+ <t i="9" j="11" t="corner90" o="-90"/>
+ <t i="9" j="12" t="sandGrassStraight" o="360"/>
+ <t i="9" j="13" t="sand" o="90"/>
+ <t i="9" j="14" t="sand" o="0"/>
+ <t i="10" j="0" t="sand" o="0"/>
+ <t i="10" j="1" t="sand" o="0"/>
+ <t i="10" j="2" t="sandGrassStraight" o="180"/>
+ <t i="10" j="3" t="grass" o="0"/>
+ <t i="10" j="4" t="grass" o="0"/>
+ <t i="10" j="5" t="grass" o="0"/>
+ <t i="10" j="6" t="grass" o="0"/>
+ <t i="10" c="1" j="7" t="corner90" o="90"/>
+ <t i="10" c="1" j="8" t="straight" o="0"/>
+ <t i="10" j="9" t="straight" o="0"/>
+ <t i="10" j="10" t="straight" o="0"/>
+ <t i="10" j="11" t="corner90" o="180"/>
+ <t i="10" j="12" t="sandGrassStraight" o="0"/>
+ <t i="10" j="13" t="sand" o="-90"/>
+ <t i="10" j="14" t="sand" o="0"/>
+ <t i="11" j="0" t="sand" o="0"/>
+ <t i="11" j="1" t="sand" o="0"/>
+ <t i="11" j="2" t="sandGrassStraight" o="180"/>
+ <t i="11" j="3" t="grass" o="0"/>
+ <t i="11" j="4" t="grass" o="0"/>
+ <t i="11" j="5" t="grass" o="0"/>
+ <t i="11" j="6" t="grass" o="0"/>
+ <t i="11" j="7" t="grass" o="90"/>
+ <t i="11" j="8" t="grass" o="90"/>
+ <t i="11" j="9" t="grass" o="0"/>
+ <t i="11" j="10" t="grass" o="0"/>
+ <t i="11" j="11" t="grass" o="90"/>
+ <t i="11" j="12" t="sandGrassStraight" o="0"/>
+ <t i="11" j="13" t="sand" o="0"/>
+ <t i="11" j="14" t="sand" o="0"/>
+ <t i="12" j="0" t="sand" o="0"/>
+ <t i="12" j="1" t="sand" o="0"/>
+ <t i="12" j="2" t="sandGrassStraight" o="180"/>
+ <t i="12" j="3" t="grass" o="0"/>
+ <t i="12" j="4" t="grass" o="0"/>
+ <t i="12" j="5" t="grass" o="0"/>
+ <t i="12" j="6" t="grass" o="0"/>
+ <t i="12" j="7" t="grass" o="-90"/>
+ <t i="12" j="8" t="grass" o="90"/>
+ <t i="12" j="9" t="grass" o="90"/>
+ <t i="12" j="10" t="grass" o="0"/>
+ <t i="12" j="11" t="grass" o="0"/>
+ <t i="12" j="12" t="sandGrassStraight" o="0"/>
+ <t i="12" j="13" t="sand" o="0"/>
+ <t i="12" j="14" t="sand" o="0"/>
+ <t i="13" j="0" t="sand" o="0"/>
+ <t i="13" j="1" t="sand" o="0"/>
+ <t i="13" j="2" t="sandGrassStraight" o="180"/>
+ <t i="13" j="3" t="grass" o="0"/>
+ <t i="13" j="4" t="grass" o="0"/>
+ <t i="13" j="5" t="grass" o="0"/>
+ <t i="13" j="6" t="grass" o="0"/>
+ <t i="13" j="7" t="grass" o="0"/>
+ <t i="13" j="8" t="grass" o="-90"/>
+ <t i="13" j="9" t="grass" o="90"/>
+ <t i="13" j="10" t="grass" o="0"/>
+ <t i="13" j="11" t="grass" o="0"/>
+ <t i="13" j="12" t="sandGrassStraight" o="0"/>
+ <t i="13" j="13" t="sand" o="0"/>
+ <t i="13" j="14" t="sand" o="0"/>
+ <o c="free" r="pit" x="1081" y="1156" o="90"/>
+ <o c="free" r="wallLong" x="2688" y="1807" o="0"/>
+ <o c="free" r="wallLong" x="893" y="1808" o="0"/>
+ <o c="free" r="wallLong" x="1280" y="1150" o="90"/>
+ <o c="free" r="wallLong" x="1532" y="1149" o="90"/>
+ <o c="free" r="wallLong" x="1791" y="1142" o="90"/>
+ <o c="free" r="wallLong" x="2043" y="1153" o="90"/>
+ <o c="free" r="wallLong" x="2304" y="1153" o="90"/>
+ <o c="free" r="wallLong" x="1277" y="1418" o="90"/>
+ <o c="free" r="wallLong" x="1277" y="1681" o="90"/>
+ <o c="free" r="wallLong" x="1281" y="2164" o="90"/>
+ <o c="free" r="wallLong" x="1281" y="2428" o="90"/>
+ <o c="free" r="wallLong" x="1281" y="2695" o="90"/>
+ <o c="free" r="wallLong" x="1283" y="2964" o="90"/>
+ <o c="free" r="wallLong" x="1536" y="2170" o="90"/>
+ <o c="free" r="wallLong" x="1536" y="2430" o="90"/>
+ <o c="free" r="wallLong" x="1536" y="2697" o="90"/>
+ <o c="free" r="wallLong" x="1529" y="1412" o="90"/>
+ <o c="free" r="wallLong" x="1532" y="1676" o="90"/>
+ <o c="free" r="wallLong" x="1792" y="1411" o="90"/>
+ <o c="free" r="wallLong" x="1792" y="1677" o="90"/>
+ <o c="free" r="wallLong" x="2039" y="1415" o="90"/>
+ <o c="free" r="wallLong" x="2039" y="1678" o="90"/>
+ <o c="free" r="wallLong" x="2302" y="1683" o="90"/>
+ <o c="free" r="wallLong" x="2304" y="1418" o="90"/>
+ <o c="free" r="wallLong" x="1791" y="2157" o="90"/>
+ <o c="free" r="wallLong" x="1790" y="2425" o="90"/>
+ <o c="free" r="wallLong" x="1790" y="2687" o="90"/>
+ <o c="free" r="wallLong" x="1787" y="2953" o="90"/>
+ <o c="free" r="wallLong" x="2300" y="2954" o="90"/>
+ <o c="free" r="wallLong" x="2298" y="2688" o="90"/>
+ <o c="free" r="wallLong" x="2298" y="2426" o="90"/>
+ <o c="free" r="wallLong" x="2302" y="2166" o="90"/>
+ <o c="free" r="wallLong" x="2559" y="2157" o="90"/>
+ <o c="free" r="wallLong" x="2560" y="2421" o="90"/>
+ <o c="free" r="wallLong" x="2561" y="2691" o="90"/>
+ <o c="free" r="wallLong" x="2050" y="2163" o="90"/>
+ <o c="free" r="wallLong" x="2050" y="2429" o="90"/>
+ <o c="free" r="wallLong" x="2050" y="2691" o="90"/>
+ <o c="free" r="wallLong" x="1022" y="2707" o="90"/>
+ <o c="free" r="wallLong" x="1022" y="2442" o="90"/>
+ <o c="free" r="wallLong" x="1022" y="2176" o="90"/>
+ <o c="free" r="wallLong" x="1533" y="883" o="90"/>
+ <o c="free" r="wallLong" x="2043" y="881" o="90"/>
+ <o c="free" r="bushArea" x="555" y="2916" o="58"/>
+ <o c="free" r="bushArea" x="531" y="2515" o="176"/>
+ <o c="free" r="bushArea" x="508" y="2237" o="296"/>
+ <o c="free" r="bushArea" x="374" y="1632" o="53"/>
+ <o c="free" r="bushArea" x="337" y="1404" o="98"/>
+ <o c="free" r="bushArea" x="513" y="1224" o="161"/>
+ <o c="free" r="bushArea" x="821" y="954" o="264"/>
+ <o c="free" r="bushArea" x="352" y="937" o="116"/>
+ <o c="free" r="bushArea" x="3206" y="2960" o="33"/>
+ <o c="free" r="bushArea" x="3385" y="2486" o="144"/>
+ <o c="free" r="bushArea" x="3104" y="2502" o="348"/>
+ <o c="free" r="bushArea" x="3241" y="2145" o="330"/>
+ <o c="free" r="bushArea" x="3110" y="1723" o="125"/>
+ <o c="free" r="bushArea" x="3429" y="1795" o="252"/>
+ <o c="free" r="bushArea" x="2903" y="1413" o="201"/>
+ <o c="free" r="bushArea" x="3259" y="1003" o="148"/>
+ <o c="free" r="bushArea" x="2945" y="1017" o="258"/>
+ <o c="free" r="bushArea" x="3353" y="1239" o="66"/>
+ <o c="free" r="bushArea" x="3334" y="1503" o="213"/>
+ <o c="free" r="grandstand" x="937" y="1340" o="-90"/>
+ <o c="free" r="grandstand" x="942" y="1502" o="-90"/>
+ <o c="free" r="grandstand" x="947" y="1668" o="-90"/>
+ <o c="free" r="grandstand" x="698" y="2141" o="-90"/>
+ <o c="free" r="grandstand" x="699" y="2785" o="-90"/>
+ <o c="free" r="grandstand" x="697" y="2528" o="-90"/>
+ <o c="free" r="grandstand" x="699" y="2657" o="-90"/>
+ <o c="free" r="grandstand" x="937" y="1173" o="-90"/>
+ <o c="free" r="grandstand" x="2909" y="2231" o="90"/>
+ <o c="free" r="grandstand" x="2639" y="1600" o="90"/>
+ <o c="free" r="grandstand" x="2648" y="996" o="90"/>
+ <o c="free" r="dustRacing2DBanner" x="747" y="1946" o="-90"/>
+ <o c="free" r="dustRacing2DBanner" x="746" y="2335" o="-90"/>
+ <o c="free" r="grandstand" x="699" y="2913" o="270"/>
+ <n i="0" w="256" x="1167" y="1415" h="256"/>
+ <n i="1" w="256" x="1145" y="896" h="256"/>
+ <n i="2" w="256" x="1395" y="904" h="256"/>
+ <n i="3" w="256" x="1423" y="2958" h="256"/>
+ <n i="4" w="256" x="1660" y="2956" h="256"/>
+ <n i="5" w="256" x="1671" y="889" h="256"/>
+ <n i="6" w="256" x="1893" y="891" h="256"/>
+ <n i="7" w="256" x="1929" y="2938" h="256"/>
+ <n i="8" w="256" x="2164" y="2934" h="256"/>
+ <n i="9" w="256" x="2180" y="890" h="256"/>
+ <n i="10" w="256" x="2429" y="888" h="256"/>
+ <n i="11" w="256" x="2445" y="2941" h="256"/>
+ <n i="12" w="256" x="2690" y="2948" h="256"/>
+ <n i="13" w="256" x="2693" y="1935" h="256"/>
+ <n i="14" w="256" x="1791" y="1925" h="200"/>
+ <n i="15" w="256" x="919" y="1922" h="256"/>
+ <n i="16" w="256" x="900" y="2945" h="256"/>
+ <n i="17" w="256" x="1157" y="2943" h="256"/>
+ <n i="18" w="256" x="1167" y="1415" h="256"/>
+</track>
