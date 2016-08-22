@@ -72,6 +72,9 @@ function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
         install(FILES ${CMAKE_BINARY_DIR}/dustrac-game.desktop DESTINATION share/applications)
         install(FILES ${CMAKE_BINARY_DIR}/dustrac-editor.desktop DESTINATION share/applications)
 
+        # Install app store meta data
+        install(FILES src/dustrac.appdata.xml DESTINATION share/appdata)
+
         # Install icons
         install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
         install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
