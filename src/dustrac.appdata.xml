@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>dustrac-game.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0 and CC BY-SA-3.0</project_license>
+  <name>Dust Racing 2D</name>
+  <summary>Traditional top-down car racing game including a level editor.</summary>
+  <description>
+    <p>
+      Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written in Qt (C++) and OpenGL.
+    </p>
+    <p>
+      Features
+    </p>
+    <ul>
+      <li>1-2 human players againts 11 challenging computer players</li>
+      <li>3 difficulty settings: Easy, Medium, Senna</li>
+      <li>Split-screen two player game (vertical or horizontal)</li>
+      <li>Game modes: Race, Time Trial, Duel</li>
+      <li>2D graphics with some 3D objects</li>
+      <li>Smooth game play and physics</li>
+      <li>Multiple race tracks</li>
+      <li>Finishing in TOP-6 will unlock the next race track</li>
+      <li>Star ratings based on the best positions on each race track</li>
+      <li>Easy to create new race tracks with the level editor</li>
+      <li>Engine and collision sounds</li>
+      <li>Pit stops</li>
+      <li>Runs windowed or fullscreen</li>
+      <li>Will be forever completely free</li>
+    </ul>
+    <p>
+      Dust Racing comes with a Qt-based level editor for easy level creation. A separate engine, MiniCore, is used for physics modeling.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://cloud.githubusercontent.com/assets/2587783/7400283/69f106fa-eec4-11e4-9014-76c086f54d89.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>https://cloud.githubusercontent.com/assets/2587783/7400318/956180d0-eec4-11e4-9d3a-96e83d4b0e52.jpg</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://juzzlin.github.io/DustRacing2D/</url>
+  <update_contact>jussi.lind@iki.fi</update_contact>
+</component>
