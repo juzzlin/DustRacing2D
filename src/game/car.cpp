@@ -163,7 +163,7 @@ void Car::steer(Steer direction, MCFloat control)
         }
         else
         {
-            m_tireAngle = m_tireAngle + (maxAngle - m_tireAngle) * 0.5f;
+            m_tireAngle = m_tireAngle + (maxAngle - m_tireAngle) * 0.15f;
         }
     }
 
@@ -289,7 +289,7 @@ bool Car::update()
         m_soundEffectManager->update();
     }
 
-    const float offset = 2.0f;
+    const float offset = 5.0f;
     m_leftFrontTire->rotateRelative(m_tireAngle - offset);
     m_rightFrontTire->rotateRelative(m_tireAngle + offset);
 
