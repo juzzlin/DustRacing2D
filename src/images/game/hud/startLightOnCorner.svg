@@ -1,0 +1,2137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="startLightOnCorner.svg"
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/sourceforge-git/dustrac-code/data/images/startLightOffCorner.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4426">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4428" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4430" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4432" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4434">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4436" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4438" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4440" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4442">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4444" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4446" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4448" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4450">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4452" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4454" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4456" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4458">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4460" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4462" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4464" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4466">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4468" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4470" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4472" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4474">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4476" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4478" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4480" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4482">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4484" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4486" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4488" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4490">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4492" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4494" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4496" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4498">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4500" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4502" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4504" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4506">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4508" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4510" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4512" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4514">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4516" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4518" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4520" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4522">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4524" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4526" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4528" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4530">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4532" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4534" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4536" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4538">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4540" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4542" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4544" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4546">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4548" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4550" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4552" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4554">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4556" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4558" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4560" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4562">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4564" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4566" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4568" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4570">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4572" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4574" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4576" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4578">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4580" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4582" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4584" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4586">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4588" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4590" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4592" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4594">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4596" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4598" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4600" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4602">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4604" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4606" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4608" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4610">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4612" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4614" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4616" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4618">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4620" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4622" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4624" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4626">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4628" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4630" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4632" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4634">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4636" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4638" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4640" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4642">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4644" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4646" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4648" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4650">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4652" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4654" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4656" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4658">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4660" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4662" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4664" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4666">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4668" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4670" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4672" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4674">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4676" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4678" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4680" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4682">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4684" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4686" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4688" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4690">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4692" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4694" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4696" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4698">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4700" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4702" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4704" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4706">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4708" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4710" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4712" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4714">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4716" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4718" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4720" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4722">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4724" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4726" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4728" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4730">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4732" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4734" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4736" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4738">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4740" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4742" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4744" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4746">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4748" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4750" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4752" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4754">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4756" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4758" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4760" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4762">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4764" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4766" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4768" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4770">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4772" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4774" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4776" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4778">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4780" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4782" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4784" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4786">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4788" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4790" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4792" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4794">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4796" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4798" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4800" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4802">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4804" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4806" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4808" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4810">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4812" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4814" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4816" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4818">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4820" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4822" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4824" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4826">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4828" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4830" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4832" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4834">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4836" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4838" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4840" />
+    </filter>
+    <filter
+       inkscape:label="Fluorescence"
+       inkscape:menu="Color"
+       inkscape:menu-tooltip="Oversaturate colors which can be fluorescent in real world"
+       style="color-interpolation-filters:sRGB"
+       id="filter4842">
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         id="feColorMatrix4844" />
+      <feColorMatrix
+         type="saturate"
+         values="1"
+         id="feColorMatrix4846" />
+      <feColorMatrix
+         type="matrix"
+         values="2 -1 0 0 0 0 2 -1 0 0 -1 0 2 0 0 0 0 0 1 0 "
+         id="feColorMatrix4848" />
+    </filter>
+    <filter
+       inkscape:label="Refractive Gel B"
+       inkscape:menu="Ridges"
+       inkscape:menu-tooltip="Gel effect with strong refraction"
+       height="1.4"
+       width="1.4"
+       y="-0.2"
+       x="-0.2"
+       style="color-interpolation-filters:sRGB"
+       id="filter7129">
+      <feOffset
+         dx="3"
+         dy="3"
+         in="SourceAlpha"
+         result="result3"
+         id="feOffset7131" />
+      <feGaussianBlur
+         stdDeviation="8"
+         in="result3"
+         result="result1"
+         id="feGaussianBlur7133" />
+      <feComposite
+         operator="in"
+         in2="result1"
+         in="SourceGraphic"
+         result="result2"
+         id="feComposite7135" />
+      <feComposite
+         operator="out"
+         result="fbSourceGraphic"
+         in="result2"
+         in2="result2"
+         id="feComposite7137" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0 0 0 0 6 0 "
+         id="feColorMatrix7139" />
+      <feGaussianBlur
+         result="result0"
+         in="fbSourceGraphicAlpha"
+         stdDeviation="3"
+         id="feGaussianBlur7141" />
+      <feSpecularLighting
+         specularExponent="20"
+         specularConstant="2"
+         surfaceScale="5"
+         lighting-color="#ffffff"
+         result="result1"
+         in="result0"
+         id="feSpecularLighting7143">
+        <feDistantLight
+           azimuth="235"
+           elevation="35"
+           id="feDistantLight7145" />
+      </feSpecularLighting>
+      <feComposite
+         operator="in"
+         result="result2"
+         in="result1"
+         in2="fbSourceGraphicAlpha"
+         id="feComposite7147" />
+      <feComposite
+         in="fbSourceGraphic"
+         operator="arithmetic"
+         k2="1.5"
+         k3="3"
+         in2="result2"
+         result="result91"
+         id="feComposite7149"
+         k1="0"
+         k4="0" />
+      <feBlend
+         mode="screen"
+         in2="result91"
+         id="feBlend7151" />
+      <feConvolveMatrix
+         order="3 3"
+         kernelMatrix="2 0 1 0 1 0 0 0 0 "
+         targetX="1"
+         targetY="1"
+         divisor="3"
+         id="feConvolveMatrix7153" />
+    </filter>
+    <filter
+       y="-0.25"
+       height="1.5"
+       inkscape:menu-tooltip="Darkens the edge with an inner blur and adds a flexible glow"
+       inkscape:menu="Shadows and Glows"
+       inkscape:label="Dark And Glow"
+       style="color-interpolation-filters:sRGB"
+       id="filter7245">
+      <feGaussianBlur
+         stdDeviation="5"
+         result="result6"
+         id="feGaussianBlur7247" />
+      <feComposite
+         result="result8"
+         in="SourceGraphic"
+         operator="atop"
+         in2="result6"
+         id="feComposite7249" />
+      <feComposite
+         result="result9"
+         operator="over"
+         in2="SourceAlpha"
+         in="result8"
+         id="feComposite7251" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result10"
+         id="feColorMatrix7253" />
+      <feBlend
+         in="result10"
+         mode="normal"
+         in2="result6"
+         id="feBlend7255" />
+    </filter>
+    <filter
+       inkscape:menu-tooltip="In and out glow with a possible offset and colorizable flood"
+       inkscape:menu="Shadows and Glows"
+       inkscape:label="Cutout Glow"
+       style="color-interpolation-filters:sRGB;"
+       id="filter7278">
+      <feOffset
+         dy="3"
+         dx="3"
+         id="feOffset7280" />
+      <feGaussianBlur
+         stdDeviation="3"
+         result="blur"
+         id="feGaussianBlur7282" />
+      <feFlood
+         flood-color="rgb(0,0,0)"
+         flood-opacity="1"
+         result="flood"
+         id="feFlood7284" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite"
+         id="feComposite7286" />
+      <feBlend
+         in="blur"
+         in2="composite"
+         mode="normal"
+         id="feBlend7288" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="162.41921"
+     inkscape:cy="82.021314"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1855"
+     inkscape:window-height="1056"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     units="px" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-796.36216)">
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.91299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 76.882812,0.45703125 0.45703125,76.880859 c 0.0554109,44.988071 0,178.662111 0,178.662111 l 255.08593875,0 0,-255.08593875 c 0,0 -142.64368,-0.0306813 -178.660158,0 z"
+       transform="translate(0,796.36216)"
+       id="rect7276"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/sourceforge-git/dustrac-code/data/images/startLightOffCorner.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g6851"
+       style="fill:#ff2a2a;stroke:#ffaaaa;filter:url(#filter7278)"
+       transform="matrix(0.55941773,0,0,0.55941773,-92.50312,631.08745)">
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="372.04724"
+         id="path4136"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="348.50262"
+         id="path4136-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="324.91959"
+         id="path4136-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="301.37497"
+         id="path4136-3-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="277.94751"
+         id="path4136-6-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="525.68085"
+         cx="254.40288"
+         id="path4136-3-7-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-384.41803"
+         id="path4136-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-407.96265"
+         id="path4136-3-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-431.54568"
+         id="path4136-6-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-455.0903"
+         id="path4136-3-7-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-478.51773"
+         id="path4136-6-5-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="392.75037"
+         cx="-502.06241"
+         id="path4136-3-7-3-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         inkscape:transform-center-y="10.101525"
+         inkscape:transform-center-x="-8.0812204"
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-94.489586"
+         cx="-511.35486"
+         id="path4136-3-6-20"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-94.846733"
+         cx="-533.86652"
+         id="path4136-6-2-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-93.775299"
+         cx="-559.91107"
+         id="path4136-3-7-9-37"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-93.775307"
+         cx="-581.19562"
+         id="path4136-6-5-1-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,-0.70710678,0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-93.418159"
+         cx="-605.81177"
+         id="path4136-3-7-3-2-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="500.81894"
+         cx="255.56859"
+         id="path4136-6-5-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="475.56509"
+         cx="263.64981"
+         id="path4136-6-5-6-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="450.81638"
+         cx="276.2767"
+         id="path4136-6-5-6-5-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="409.90521"
+         cx="316.17773"
+         id="path4136-6-5-6-5-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="397.27829"
+         cx="338.90619"
+         id="path4136-6-5-6-5-9-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="388.69199"
+         cx="364.66507"
+         id="path4136-6-5-6-5-9-3-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="497.78845"
+         cx="280.82239"
+         id="path4136-6-5-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="468.99911"
+         cx="293.44931"
+         id="path4136-6-5-4-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="428.59299"
+         cx="332.34018"
+         id="path4136-6-5-4-5-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="415.96609"
+         cx="358.60416"
+         id="path4136-6-5-4-5-2-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="501.82904"
+         cx="305.57114"
+         id="path4136-3-7-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="480.11081"
+         cx="315.16757"
+         id="path4136-3-7-4-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="447.78589"
+         cx="345.97723"
+         id="path4136-3-7-4-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="437.17929"
+         cx="367.19043"
+         id="path4136-3-7-4-4-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="463.94836"
+         cx="367.19046"
+         id="path4136-3-7-4-4-4-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="500.81891"
+         cx="334.3605"
+         id="path4136-3-7-4-4-4-3-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-546.24249"
+         id="path4136-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-569.78711"
+         id="path4136-3-68"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-593.37012"
+         id="path4136-6-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-616.91473"
+         id="path4136-3-7-43"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-640.34222"
+         id="path4136-6-5-14"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="395.55536"
+         cx="-663.88684"
+         id="path4136-3-7-3-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-254.29237"
+         id="path4136-5-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-277.83698"
+         id="path4136-3-6-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-301.42001"
+         id="path4136-6-2-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-324.96463"
+         id="path4136-3-7-9-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-348.39206"
+         id="path4136-6-5-1-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-525.53918"
+         cx="-371.93674"
+         id="path4136-3-7-3-2-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         inkscape:transform-center-y="10.101525"
+         inkscape:transform-center-x="-8.0812204"
+         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-651.80573"
+         cx="229.98676"
+         id="path4136-3-6-20-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-652.1629"
+         cx="207.4751"
+         id="path4136-6-2-2-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-651.09143"
+         cx="181.43054"
+         id="path4136-3-7-9-37-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-651.09143"
+         cx="160.146"
+         id="path4136-6-5-1-5-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+         r="9.0913725"
+         cy="-650.73431"
+         cx="135.52985"
+         id="path4136-3-7-3-2-9-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="370.69327"
+         cx="-662.72113"
+         id="path4136-6-5-6-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="345.43942"
+         cx="-654.63989"
+         id="path4136-6-5-6-5-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="320.6907"
+         cx="-642.013"
+         id="path4136-6-5-6-5-6-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="279.77954"
+         cx="-602.112"
+         id="path4136-6-5-6-5-9-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="267.15262"
+         cx="-579.38354"
+         id="path4136-6-5-6-5-9-3-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="258.56631"
+         cx="-553.62463"
+         id="path4136-6-5-6-5-9-3-7-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="367.66278"
+         cx="-637.46735"
+         id="path4136-6-5-4-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="338.87344"
+         cx="-624.84039"
+         id="path4136-6-5-4-5-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="298.46732"
+         cx="-585.94952"
+         id="path4136-6-5-4-5-2-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="285.84042"
+         cx="-559.68555"
+         id="path4136-6-5-4-5-2-5-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="371.70337"
+         cx="-612.71857"
+         id="path4136-3-7-4-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="349.98514"
+         cx="-603.12213"
+         id="path4136-3-7-4-7-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="317.66022"
+         cx="-572.3125"
+         id="path4136-3-7-4-4-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="307.05362"
+         cx="-551.0993"
+         id="path4136-3-7-4-4-4-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="333.82269"
+         cx="-551.09924"
+         id="path4136-3-7-4-4-4-3-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,-1,1,0,0,0)"
+         r="9.0913725"
+         cy="370.69324"
+         cx="-583.9292"
+         id="path4136-3-7-4-4-4-3-0-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-416.28357"
+         id="path4136-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-439.82819"
+         id="path4136-3-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-463.41122"
+         id="path4136-6-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-486.95584"
+         id="path4136-3-7-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-510.3833"
+         id="path4136-6-5-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-522.91913"
+         cx="-533.92792"
+         id="path4136-3-7-3-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="664.08185"
+         id="path4136-5-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="640.53723"
+         id="path4136-3-6-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="616.95422"
+         id="path4136-6-2-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="593.40961"
+         id="path4136-3-7-9-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="569.98218"
+         id="path4136-6-5-1-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-395.58044"
+         cx="546.4375"
+         id="path4136-3-7-3-2-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         inkscape:transform-center-y="10.101525"
+         inkscape:transform-center-x="-8.0812204"
+         transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="89.477753"
+         cx="787.48059"
+         id="path4136-3-6-20-67"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="89.120605"
+         cx="764.96893"
+         id="path4136-6-2-2-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="90.192039"
+         cx="738.92438"
+         id="path4136-3-7-9-37-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="90.192032"
+         cx="717.63983"
+         id="path4136-6-5-1-5-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="90.549179"
+         cx="693.02368"
+         id="path4136-3-7-3-2-9-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-547.68097"
+         cx="-532.76221"
+         id="path4136-6-5-6-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-572.93481"
+         cx="-524.68097"
+         id="path4136-6-5-6-5-94"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-597.68353"
+         cx="-512.05408"
+         id="path4136-6-5-6-5-6-81"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-638.59467"
+         cx="-472.15308"
+         id="path4136-6-5-6-5-9-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-651.22162"
+         cx="-449.42462"
+         id="path4136-6-5-6-5-9-3-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-659.80792"
+         cx="-423.66574"
+         id="path4136-6-5-6-5-9-3-7-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-550.71143"
+         cx="-507.50842"
+         id="path4136-6-5-4-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-579.50079"
+         cx="-494.8815"
+         id="path4136-6-5-4-5-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-619.90692"
+         cx="-455.99063"
+         id="path4136-6-5-4-5-2-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-632.53381"
+         cx="-429.72665"
+         id="path4136-6-5-4-5-2-5-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-546.67084"
+         cx="-482.75967"
+         id="path4136-3-7-4-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-568.3891"
+         cx="-473.16324"
+         id="path4136-3-7-4-7-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-600.71399"
+         cx="-442.35358"
+         id="path4136-3-7-4-4-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-611.32062"
+         cx="-421.14038"
+         id="path4136-3-7-4-4-4-63"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-584.55151"
+         cx="-421.14035"
+         id="path4136-3-7-4-4-4-3-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="scale(-1,-1)"
+         r="9.0913725"
+         cy="-547.68097"
+         cx="-453.97031"
+         id="path4136-3-7-4-4-4-3-0-56"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="502.25745"
+         id="path4136-8-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="478.71283"
+         id="path4136-3-68-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="455.12979"
+         id="path4136-6-8-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="431.58517"
+         id="path4136-3-7-43-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="408.15771"
+         id="path4136-6-5-14-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-392.77542"
+         cx="384.61307"
+         id="path4136-3-7-3-9-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="534.03845"
+         id="path4136-5-2-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="510.4938"
+         id="path4136-3-6-0-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="486.91077"
+         id="path4136-6-2-6-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="463.36615"
+         id="path4136-3-7-9-8-0"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="439.93872"
+         id="path4136-6-5-1-9-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         r="9.0913725"
+         cy="523.06085"
+         cx="416.39404"
+         id="path4136-3-7-3-2-2-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         inkscape:transform-center-y="10.101525"
+         inkscape:transform-center-x="-8.0812204"
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="647.02972"
+         cx="46.019424"
+         id="path4136-3-6-20-6-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="646.67255"
+         cx="23.507767"
+         id="path4136-6-2-2-6-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="647.74402"
+         cx="-2.536788"
+         id="path4136-3-7-9-37-4-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="647.74402"
+         cx="-23.821335"
+         id="path4136-6-5-1-5-9-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+         r="9.0913725"
+         cy="648.10114"
+         cx="-48.437485"
+         id="path4136-3-7-3-2-9-5-3"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-417.63751"
+         cx="385.77878"
+         id="path4136-6-5-6-0-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-442.89136"
+         cx="393.86002"
+         id="path4136-6-5-6-5-4-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-467.64008"
+         cx="406.48691"
+         id="path4136-6-5-6-5-6-8-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-508.55124"
+         cx="446.38794"
+         id="path4136-6-5-6-5-9-7-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-521.17816"
+         cx="469.11639"
+         id="path4136-6-5-6-5-9-3-1-6"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-529.76447"
+         cx="494.87527"
+         id="path4136-6-5-6-5-9-3-7-7-2"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-420.668"
+         cx="411.03259"
+         id="path4136-6-5-4-2-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-449.45734"
+         cx="423.65952"
+         id="path4136-6-5-4-5-7-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-489.86346"
+         cx="462.55038"
+         id="path4136-6-5-4-5-2-2-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-502.49036"
+         cx="488.81436"
+         id="path4136-6-5-4-5-2-5-2-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-416.62741"
+         cx="435.78134"
+         id="path4136-3-7-4-6-7"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-438.34564"
+         cx="445.37778"
+         id="path4136-3-7-4-7-1-4"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-470.67056"
+         cx="476.18744"
+         id="path4136-3-7-4-4-0-1"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-481.27716"
+         cx="497.40063"
+         id="path4136-3-7-4-4-4-6-8"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-454.50809"
+         cx="497.40067"
+         id="path4136-3-7-4-4-4-3-1-5"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+      <circle
+         transform="matrix(0,1,-1,0,0,0)"
+         r="9.0913725"
+         cy="-417.63754"
+         cx="464.57071"
+         id="path4136-3-7-4-4-4-3-0-5-9"
+         style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#ffaaaa;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>
