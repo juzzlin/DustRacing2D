@@ -84,7 +84,7 @@ endif()
 
 add_library(MiniCore ${MiniCoreSRC})
 
-qt5_use_modules(MiniCore Core OpenGL Xml)
+target_link_libraries(MiniCore Qt5::OpenGL Qt5::Xml)
 
 add_subdirectory(UnitTests)
 

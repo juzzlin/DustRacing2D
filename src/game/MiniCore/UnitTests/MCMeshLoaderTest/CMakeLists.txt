@@ -4,7 +4,6 @@ set(SRC MCMeshLoaderTest.cpp)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/unittests)
 add_executable(MCMeshLoaderTest ${SRC} ${MOC_SRC})
-target_link_libraries(MCMeshLoaderTest MiniCore)
+target_link_libraries(MCMeshLoaderTest MiniCore Qt5::Test)
 add_test(MCMeshLoaderTest ${CMAKE_SOURCE_DIR}/unittests/MCMeshLoaderTest)
 
-qt5_use_modules(MCMeshLoaderTest Test)

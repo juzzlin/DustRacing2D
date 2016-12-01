@@ -83,6 +83,7 @@ find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
 find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
 find_package(Qt5Widgets ${QT_MIN_VER} REQUIRED)
 find_package(Qt5LinguistTools ${QT_MIN_VER} REQUIRED)
+find_package(Qt5Test ${QT_MIN_VER} REQUIRED)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)

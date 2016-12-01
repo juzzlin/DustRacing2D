@@ -78,7 +78,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS} ${QM})
 
-qt5_use_modules(${EDITOR_BINARY_NAME} Widgets Xml)
+target_link_libraries(${EDITOR_BINARY_NAME} Qt5::Widgets Qt5::Xml)
 
 foreach(TS_FILE ${TS})
     # Make targets to copy generated qm files to data dir. This is done the hard

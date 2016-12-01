@@ -148,7 +148,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${GAME_BINARY_NAME} WIN32 ${HDR} ${SRC} ${MOC_SRC} ${RC_SRC} ${QM})
 
 set(COMMON_LIBS
-    ${GAME_BINARY_NAME}
     MiniCore
     MTFH
     STFH
@@ -160,8 +159,7 @@ set(COMMON_LIBS
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-qt5_use_modules(${GAME_BINARY_NAME} OpenGL Xml)
-target_link_libraries(${COMMON_LIBS})
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml)
 
 foreach(TS_FILE ${TS})
     # Make targets to copy generated qm files to data dir. This is done the hard
