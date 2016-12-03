@@ -96,31 +96,28 @@ public slots:
 protected:
 
     //! \reimp
-    bool event(QEvent *);
+    bool event(QEvent *) override;
 
     //! \reimp
-    void exposeEvent(QExposeEvent *);
+    void exposeEvent(QExposeEvent *) override;
 
     //! \reimp
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     //! \reimp
-    void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
 
     //! \reimp
-    void keyReleaseEvent(QKeyEvent * event);
+    void keyReleaseEvent(QKeyEvent * event) override;
 
     //! \reimp
-    void mousePressEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event) override;
 
     //! \reimp
-    void mouseReleaseEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event) override;
 
     //! \reimp
-    void mouseMoveEvent(QMouseEvent * event);
-
-    //! \reimp
-    void closeEvent(QCloseEvent * event);
+    void mouseMoveEvent(QMouseEvent * event) override;
 
 private:
 

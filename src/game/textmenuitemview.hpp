@@ -34,7 +34,7 @@ public:
     virtual ~TextMenuItemView();
 
     //! \reimp
-    virtual void render(int x, int y);
+    virtual void render(int x, int y) override;
 
     //! Set the text size.
     virtual void setTextSize(int size);

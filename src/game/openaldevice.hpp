@@ -30,10 +30,10 @@ public:
     OpenALDevice();
 
     //! \reimp
-    virtual void initialize();
+    virtual void initialize() override;
 
     //! \reimp
-    virtual void shutDown();
+    virtual void shutDown() override;
 
     //! Destructor.
     virtual ~OpenALDevice();

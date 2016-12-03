@@ -36,8 +36,8 @@ static void initLogger()
 {
     QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
     MCLogger::init(logPath.toStdString().c_str());
-    MCLogger::setEchoMode(true);
-    MCLogger::setDateTime(true);
+    MCLogger::enableEchoMode(true);
+    MCLogger::enableDateTimePrefix(true);
     MCLogger().info() << "Dust Racing 2D version " << VERSION;
     MCLogger().info() << "Compiled against Qt version " << QT_VERSION_STR;
 }

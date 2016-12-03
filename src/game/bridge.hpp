@@ -36,10 +36,10 @@ public:
     Bridge(MCSurface & surface, MCSurface & rail);
 
     //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event);
+    virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
-    virtual void onStepTime(MCFloat step);
+    virtual void onStepTime(int step) override;
 
     void enterObject(MCObject & object);
 

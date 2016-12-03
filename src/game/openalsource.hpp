@@ -35,28 +35,28 @@ public:
     virtual ~OpenALSource();
 
     //! \reimp
-    virtual void setData(STFH::DataPtr data);
+    virtual void setData(STFH::DataPtr data) override;
 
     //! \reimp
-    virtual void play(bool loop = false);
+    virtual void play(bool loop = false) override;
 
     //! \reimp
-    virtual void stop();
+    virtual void stop() override;
 
     //! \reimp
-    virtual void setVolume(float volume);
+    virtual void setVolume(float volume) override;
 
     //! \reimp
-    virtual void setPitch(float pitch);
+    virtual void setPitch(float pitch) override;
 
     //! \reimp
-    virtual void setLocation(const STFH::Location & location);
+    virtual void setLocation(const STFH::Location & location) override;
 
     //! \reimp
-    virtual void setMaxDist(float maxDist);
+    virtual void setMaxDist(float maxDist) override;
 
     //! \reimp
-    virtual void setReferenceDist(float refDist);
+    virtual void setReferenceDist(float refDist) override;
 
 private:
 

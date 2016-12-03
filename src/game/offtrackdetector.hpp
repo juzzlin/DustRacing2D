@@ -16,7 +16,7 @@
 #ifndef OFFTRACKDETECTOR_HPP
 #define OFFTRACKDETECTOR_HPP
 
-#include "MiniCore/Core/MCVector2d"
+#include <MCVector2d>
 
 class Car;
 class Track;

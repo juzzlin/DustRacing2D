@@ -36,7 +36,7 @@ public:
     virtual ~SurfaceMenu() {}
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
 protected:
 

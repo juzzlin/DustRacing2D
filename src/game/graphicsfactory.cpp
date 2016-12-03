@@ -66,10 +66,11 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height    = {9, true};
-    surfaceData.width     = {9, true};
+    surfaceData.height = {9, true};
+    surfaceData.width = {9, true};
     surfaceData.minFilter = {GL_LINEAR, true};
     surfaceData.magFilter = {GL_LINEAR, true};
+    surfaceData.handle = "Number" + std::to_string(index);
 
     return MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
@@ -93,10 +94,11 @@ MCSurface & GraphicsFactory::generateMinimapMarker()
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height    = {9, true};
-    surfaceData.width     = {9, true};
+    surfaceData.height = {9, true};
+    surfaceData.width = {9, true};
     surfaceData.minFilter = {GL_LINEAR, true};
     surfaceData.magFilter = {GL_LINEAR, true};
+    surfaceData.handle = "Minimap";
 
     return MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, markerPixmap.toImage());
 }

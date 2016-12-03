@@ -27,7 +27,7 @@ public:
     BridgeTrigger(Bridge & bridge);
 
     //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event);
+    virtual void collisionEvent(MCCollisionEvent & event) override;
 
 private:
 

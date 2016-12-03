@@ -30,7 +30,6 @@ BridgeTrigger::BridgeTrigger(Bridge & bridge)
     MCRectShape * shape = new MCRectShape(nullptr, 8, 224);
     setShape(MCShapePtr(shape));
 
-    setRenderLayer(static_cast<int>(Layers::Render::Objects));
     setCollisionLayer(-1);
 
     setIsPhysicsObject(false);

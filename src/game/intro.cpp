@@ -32,7 +32,7 @@ Intro::Intro()
 
 void Intro::setFadeValue(float value)
 {
-    m_back.shaderProgram()->setFadeValue(value);
+    // TODO m_back.shaderProgram()->setFadeValue(value);
 }
 
 void Intro::setDimensions(int width, int height)

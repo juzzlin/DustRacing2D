@@ -40,7 +40,7 @@ public:
     PressKeyMenu(std::string id, int width, int height);
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
 private:
 

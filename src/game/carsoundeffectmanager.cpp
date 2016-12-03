@@ -93,7 +93,7 @@ void CarSoundEffectManager::processSkidSound()
     const MCVector2dF n(
         MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
     const MCVector2dF & v = m_car.physicsComponent().velocity().normalized();
-    const MCVector2dF   s = MCMathUtil::projection(v, n);
+    const MCVector2dF s = MCVector2dF::projection(v, n);
 
     if (m_car.absSpeed() > 7.5 && s.lengthFast() > 0.25)
     {

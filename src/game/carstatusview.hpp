@@ -30,7 +30,7 @@ public:
     CarStatusView();
 
     //! \reimp
-    virtual void render();
+    virtual void render() override;
 
     void setCarToFollow(const Car & car);
 

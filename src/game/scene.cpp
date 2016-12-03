@@ -141,9 +141,6 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 
     m_world.setMetersPerUnit(METERS_PER_UNIT);
 
-    m_world.renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Smoke), false);
-    m_world.renderer().enableDepthMaskOnLayer(static_cast<int>(Layers::Render::Ground), false);
-
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
         m_renderer.program("text"));
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShadowShaderProgram(
@@ -201,7 +198,6 @@ void Scene::createCars()
                 m_ai.push_back(AIPtr(new AI(*car)));
             }
 
-            car->setRenderLayer(static_cast<int>(Layers::Render::Objects));
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
 
             setupAudio(*car, i);
@@ -273,7 +269,7 @@ void Scene::createMenus()
     m_menuManager->enterMenu(*m_mainMenu);
 }
 
-void Scene::updateFrame(InputHandler & handler, float timeStep)
+void Scene::updateFrame(InputHandler & handler, int step)
 {
     if (m_stateMachine.state() == StateMachine::State::GameTransitionIn  ||
         m_stateMachine.state() == StateMachine::State::GameTransitionOut ||
@@ -288,7 +284,7 @@ void Scene::updateFrame(InputHandler & handler, float timeStep)
                 updateAi();
             }
 
-            updateWorld(timeStep);
+            updateWorld(step);
             updateRace();
 
             if (m_game.hasTwoHumanPlayers())
@@ -637,7 +633,7 @@ void Scene::renderTrack()
         MCGLScene & glScene = MCWorld::instance().renderer().glScene();
         if (m_fadeAnimation->isFading())
         {
-            glScene.setFadeValue(fadeValue);
+            // TODO glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -681,7 +677,7 @@ void Scene::renderObjectShadows()
 
         if (m_fadeAnimation->isFading())
         {
-            glScene.setFadeValue(fadeValue);
+            // TODO glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -729,7 +725,7 @@ void Scene::renderObjects()
     case StateMachine::State::MenuTransitionOut:
     case StateMachine::State::MenuTransitionIn:
 
-        glScene.setFadeValue(fadeValue);
+        // TODO glScene.setFadeValue(fadeValue);
         glScene.setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->render();
@@ -743,7 +739,7 @@ void Scene::renderObjects()
 
         if (m_fadeAnimation->isFading())
         {
-            glScene.setFadeValue(fadeValue);
+            // TODO glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())

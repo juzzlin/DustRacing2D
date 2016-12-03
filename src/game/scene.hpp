@@ -78,8 +78,8 @@ public:
     //! Set scene size.
     static void setSize(int width, int height);
 
-    //! Update physics and objects by the given time step.
-    void updateFrame(InputHandler & handler, float timeStep);
+    //! Update physics and objects by the given time step in ms.
+    void updateFrame(InputHandler & handler, int step);
 
     //! Update/trigger animations.
     void updateAnimations();

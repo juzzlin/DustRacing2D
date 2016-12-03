@@ -25,13 +25,12 @@ class VSyncMenu : public SurfaceMenu
 public:
 
     //! Constructor.
-    VSyncMenu(
-        ConfirmationMenu & confirmationMenu, std::string id, int width, int height);
+    VSyncMenu(ConfirmationMenu & confirmationMenu, std::string id, int width, int height);
 
 protected:
 
     //! \reimp
-    virtual void enter();
+    virtual void enter() override;
 
 private:
 

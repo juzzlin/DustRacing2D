@@ -61,10 +61,10 @@ public:
     StateMachine::State state() const;
 
     //! \reimp
-    virtual bool update();
+    virtual bool update() override;
 
     //! \reimp
-    virtual void reset();
+    virtual void reset() override;
 
 public slots:
 

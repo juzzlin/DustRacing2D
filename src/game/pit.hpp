@@ -36,10 +36,10 @@ public:
     Pit(MCSurface & surface);
 
     //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event);
+    virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
-    virtual void onStepTime(MCFloat step);
+    virtual void onStepTime(int step) override;
 
 signals:
 

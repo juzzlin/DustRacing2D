@@ -1,90 +1,68 @@
 project(MiniCore)
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Asset")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Core")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Graphics")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Physics")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Text")
+cmake_minimum_required(VERSION 2.8.12)
+cmake_policy(VERSION 2.8.12)
 
-set(MiniCoreSRC
-Asset/mcassetmanager.cc
-Asset/mcmeshconfigloader.cc
-Asset/mcmeshloader.cc
-Asset/mcmeshmanager.cc
-Asset/mcmeshobjectdata.cc
-Asset/mcsurfaceobjectdata.cc
-Asset/mcsurfaceconfigloader.cc
-Asset/mcsurfacemanager.cc
-Core/mcbbox.hh
-Core/mcbbox3d.hh
-Core/mcevent.cc
-Core/mclogger.cc
-Core/mcmacros.hh
-Core/mcobbox.hh
-Core/mcobject.cc
-Core/mcobjectcomponent.cc
-Core/mcobjectdata.cc
-Core/mcobjectfactory.cc
-Core/mcrandom.cc
-Core/mctimerevent.cc
-Core/mctrigonom.cc
-Core/mcvectoranimation.cc
-Core/mcvector2d.hh
-Core/mcvector3d.hh
-Core/mcworld.cc
-Graphics/mccamera.cc
-Graphics/mcglambientlight.cc
-Graphics/mcgldiffuselight.cc
-Graphics/mcglmaterial.cc
-Graphics/mcglobjectbase.cc
-Graphics/mcglscene.cc
-Graphics/mcglshaderprogram.cc
-Graphics/mcmesh.cc
-Graphics/mcmeshview.cc
-Graphics/mcparticle.cc
-Graphics/mcparticlerendererbase.cc
-Graphics/mcrenderlayer.cc
-Graphics/mcshaders.hh
-Graphics/mcshaders30.hh
-Graphics/mcshadersGLES.hh
-Graphics/mcshapeview.hh
-Graphics/mcsurfaceparticle.cc
-Graphics/mcsurfaceparticlerenderer.cc
-Graphics/mcsurface.cc
-Graphics/mcsurfaceview.cc
-Graphics/mcworldrenderer.cc
-Physics/mccircleshape.cc
-Physics/mccollisiondetector.cc
-Physics/mccollisionevent.cc
-Physics/mccontact.cc
-Physics/mcdragforcegenerator.cc
-Physics/mcforcegenerator.cc
-Physics/mcforceregistry.cc
-Physics/mcfrictiongenerator.cc
-Physics/mcgravitygenerator.cc
-Physics/mcimpulsegenerator.cc
-Physics/mcobjectgrid.cc
-Physics/mcoutofboundariesevent.cc
-Physics/mcphysicscomponent.cc
-Physics/mcrectshape.cc
-Physics/mcshape.cc
-Physics/mcspringforcegenerator.cc
-Physics/mcspringforcegenerator2dfast.cc
-Text/mctexturefont.cc
-Text/mctexturefontconfigloader.cc
-Text/mctexturefontdata.cc
-Text/mctexturefontmanager.cc
-Text/mctextureglyph.cc
-Text/mctexturetext.cc
-)
-
-if(NOT QOpenGLFunctions)
-set(MiniCoreSRC ${MiniCoreSRC} Graphics/contrib/glew/glew.c)
+if(POLICY CMP0005)
+    cmake_policy(SET CMP0005 NEW)
 endif()
 
-add_library(MiniCore ${MiniCoreSRC})
+if(POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)
+endif()
 
-target_link_libraries(MiniCore Qt5::OpenGL Qt5::Xml)
+if(POLICY CMP0054)
+    cmake_policy(SET CMP0054 NEW)
+endif()
 
-add_subdirectory(UnitTests)
+option(GLES "Build for OpenGL ES 2.0" OFF)
+
+option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
+
+option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
+
+if(GLES)
+    add_definitions(-D__MC_GLES__)
+    message(STATUS "Compiling for OpenGL ES 2.0")
+else()
+    message(STATUS "Compiling for OpenGL 2.1")
+endif()
+
+if(NO_GLEW)
+    add_definitions(-D__MC_NO_GLEW__)
+endif()
+
+if(QOpenGLFunctions)
+    message(STATUS "Using QOpenGLFunctions")
+    add_definitions(-D__MC_QOPENGLFUNCTIONS__)
+    add_definitions(-D__MC_NO_GLEW__)
+endif()
+
+add_definitions(-DGLEW_STATIC)
+add_definitions(-DGLEW_NO_GLU)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_compile_options(-std=c++11 -W -Wall -O3 -pedantic)
+    add_compile_options(-fomit-frame-pointer -finline-functions -ffast-math)
+elseif(MSVC)
+    add_definitions(-DNOMINMAX)
+endif()
+
+add_definitions(-DVERSION="${VERSION}")
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(QT_MIN_VER 5.2.1)
+find_package(Qt5Core ${QT_MIN_VER} REQUIRED)
+find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
+find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
+find_package(Qt5Widgets ${QT_MIN_VER} REQUIRED)
+
+# Find OpenGL
+find_package(OpenGL REQUIRED)
+
+# Enable CMake's unit test framework
+enable_testing()
+
+add_subdirectory(src)
 

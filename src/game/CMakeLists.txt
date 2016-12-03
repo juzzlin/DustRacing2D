@@ -8,12 +8,12 @@ add_subdirectory(MTFH)
 add_subdirectory(STFH)
 
 # Engine include paths
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Asset")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Core")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Graphics")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Particles")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Physics")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/Text")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Asset")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Core")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Graphics")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Particles")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Physics")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Text")
 
 # Menu toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")

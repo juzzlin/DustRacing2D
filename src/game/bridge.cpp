@@ -42,7 +42,6 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 , m_trigger0(MCObjectPtr(new BridgeTrigger(*this)))
 , m_trigger1(MCObjectPtr(new BridgeTrigger(*this)))
 {
-    setRenderLayer(static_cast<int>(Layers::Render::Objects));
     setCollisionLayer(-1);
 
     setIsPhysicsObject(false);
@@ -57,12 +56,10 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
     addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, RAIL_Z));
 
-    m_rail0->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     m_rail0->physicsComponent().setMass(0, true);
     m_rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    m_rail1->setRenderLayer(static_cast<int>(Layers::Render::Objects));
     m_rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     m_rail1->physicsComponent().setMass(0, true);
     m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
@@ -76,7 +73,6 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
 void Bridge::enterObject(MCObject & object)
 {
     object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-    object.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
     const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
     object.translate(newLocation);
@@ -103,7 +99,7 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
     }
 }
 
-void Bridge::onStepTime(MCFloat)
+void Bridge::onStepTime(int)
 {
     const int frameTolerance = 2;
     auto iter = m_objectsOnBridge.begin();

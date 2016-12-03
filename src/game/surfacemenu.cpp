@@ -39,7 +39,7 @@ SurfaceMenu::SurfaceMenu(
 , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
 , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
-    m_back.setShaderProgram(Renderer::instance().program("menu"));
+    m_back.setShaderProgram(Renderer::instance().program("default"));
     m_back.setColor(MCGLColor(0.5, 0.5, 0.5, 1.0));
 
     if (quitItem)
@@ -72,7 +72,7 @@ void SurfaceMenu::render()
     const int w2 = width()  / 2;
     const int h2 = height() / 2;
     assert(w2 > 0 && h2 > 0);
-    m_back.bindMaterial();
+    m_back.bind();
     m_back.setSize(width(), height());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
     Menu::render();

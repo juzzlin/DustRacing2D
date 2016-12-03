@@ -118,7 +118,6 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 
 void Car::setProperties(Description & desc)
 {
-    setRenderLayer(static_cast<int>(Layers::Render::Objects));
     physicsComponent().setMass(desc.mass);
     physicsComponent().setMomentOfInertia(desc.mass * 3);
     physicsComponent().setRestitution(desc.restitution);
@@ -259,12 +258,12 @@ MCVector3dF Car::rightFrontTireLocation() const
 
 MCVector3dF Car::leftRearTireLocation() const
 {
-    return MCTrigonom::rotatedVector(m_leftRearTirePos, angle()) + MCVector2dF(location());
+    return MCMathUtil::rotatedVector(m_leftRearTirePos, angle()) + MCVector2dF(location());
 }
 
 MCVector3dF Car::rightRearTireLocation() const
 {
-    return MCTrigonom::rotatedVector(m_rightRearTirePos, angle()) + MCVector2dF(location());
+    return MCMathUtil::rotatedVector(m_rightRearTirePos, angle()) + MCVector2dF(location());
 }
 
 void Car::render(MCCamera *p)
@@ -276,11 +275,11 @@ void Car::render(MCCamera *p)
     if (m_braking && m_speedInKmh > 0)
     {
         const MCVector2dF leftBrakeGlow =
-            MCTrigonom::rotatedVector(m_leftBrakeGlowPos, angle()) + MCVector2dF(location());
+            MCMathUtil::rotatedVector(m_leftBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, leftBrakeGlow, angle());
 
         const MCVector2dF rightBrakeGlow =
-            MCTrigonom::rotatedVector(m_rightBrakeGlowPos, angle()) + MCVector2dF(location());
+            MCMathUtil::rotatedVector(m_rightBrakeGlowPos, angle()) + MCVector2dF(location());
         m_brakeGlow.render(p, rightBrakeGlow, angle());
     }
 }
@@ -334,11 +333,11 @@ void Car::addDamage(float damage)
     }
 }
 
-void Car::wearOutTires(MCFloat step, MCFloat factor)
+void Car::wearOutTires(int step, MCFloat factor)
 {
     if (Game::instance().difficultyProfile().hasTireWearOut())
     {
-        const MCFloat wearOut = physicsComponent().velocity().lengthFast() * step * factor;
+        const MCFloat wearOut = physicsComponent().velocity().lengthFast() * step * factor / 1000;
         if (m_tireWearOutCapacity >= wearOut)
         {
             m_tireWearOutCapacity -= wearOut;
@@ -390,7 +389,7 @@ bool Car::hadHardCrash()
     return false;
 }
 
-void Car::onStepTime(MCFloat step)
+void Car::onStepTime(int step)
 {
     // Cache dx and dy.
     m_dx = MCTrigonom::cos(angle());

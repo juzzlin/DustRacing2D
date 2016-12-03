@@ -53,7 +53,6 @@ void ParticleFactory::preCreateSurfaceParticles(
     for (int i = 0; i < count; i++)
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle(typeId, surface);
-        particle->setRenderLayer(static_cast<int>(Layers::Render::Objects));
         particle->setFreeList(m_freeLists[typeEnum]);
         particle->setCustomDeathCondition([] (MCParticle & self) {
             return self.location().k() <= 0;
@@ -148,10 +147,9 @@ void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
         smoke->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.75f));
-        smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
+        smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->physicsComponent().setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.2f);
-        smoke->setRenderLayer(static_cast<int>(Layers::Render::DamageSmoke));
         smoke->addToWorld();
     }
 }
@@ -162,10 +160,9 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
         smoke->setColor(MCGLColor(0.75f, 0.75f, 0.75f, 0.5f));
-        smoke->setAnimationStyle(MCParticle::FadeOutAndExpand);
+        smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->physicsComponent().setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.1f);
-        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         smoke->addToWorld();
     }
 }
@@ -176,10 +173,9 @@ void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 10, 180);
         smoke->setColor(MCGLColor(0.6f, 0.4f, 0.0f, 0.5f));
-        smoke->setAnimationStyle(MCParticle::FadeOut);
+        smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->physicsComponent().setVelocity(MCRandom::randomVector3dPositiveZ() * 0.1f);
-        smoke->setRenderLayer(static_cast<int>(Layers::Render::Smoke));
         smoke->addToWorld();
     }
 }
@@ -190,11 +186,10 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 1000);
         skidMark->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 1.0f));
-        skidMark->setAnimationStyle(MCParticle::FadeOut);
+        skidMark->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         skidMark->rotate(angle);
         skidMark->physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
         skidMark->physicsComponent().setAcceleration(MCVector3dF(0, 0, 0));
-        skidMark->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         skidMark->addToWorld();
     }
 }
@@ -205,11 +200,10 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 1000);
         skidMark->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 1.0f));
-        skidMark->setAnimationStyle(MCParticle::FadeOut);
+        skidMark->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         skidMark->rotate(angle);
         skidMark->physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
         skidMark->physicsComponent().setAcceleration(MCVector3dF(0, 0, 0));
-        skidMark->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         skidMark->addToWorld();
     }
 }
@@ -220,10 +214,9 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
     {
         mud->init(location, 4, 180);
         mud->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 1.0f));
-        mud->setAnimationStyle(MCParticle::Shrink);
+        mud->setAnimationStyle(MCParticle::AnimationStyle::Shrink);
         mud->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         mud->physicsComponent().setAcceleration(MCWorld::instance().gravity());
-        mud->setRenderLayer(static_cast<int>(Layers::Render::Objects));
         mud->addToWorld();
     }
 }
@@ -234,10 +227,9 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
     {
         sparkle->init(location, 6, 120);
         sparkle->setColor(MCGLColor(1.0f, 0.75f, 0.0f, 1.0f));
-        sparkle->setAnimationStyle(MCParticle::FadeOut);
+        sparkle->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         sparkle->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         sparkle->physicsComponent().setAcceleration(MCWorld::instance().gravity() * 0.5f);
-        sparkle->setRenderLayer(static_cast<int>(Layers::Render::Sparkles));
         sparkle->addToWorld();
     }
 }
@@ -247,7 +239,7 @@ void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
     if (MCSurfaceParticle * leaf = newSurfaceParticle(Leaf))
     {
         leaf->init(location, 10, 360);
-        leaf->setAnimationStyle(MCParticle::Shrink);
+        leaf->setAnimationStyle(MCParticle::AnimationStyle::Shrink);
         leaf->rotate(MCRandom::getValue() * 360);
         leaf->setColor(MCGLColor(0.0, 0.75f, 0.0, 0.75f));
         leaf->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 2.0f) + MCRandom::randomVector3d());

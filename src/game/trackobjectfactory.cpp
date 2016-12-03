@@ -50,7 +50,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.5);
         data.setMass(1000);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
@@ -66,7 +65,6 @@ TrackObject * TrackObjectFactory::build(
         data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
@@ -82,7 +80,6 @@ TrackObject * TrackObjectFactory::build(
         data.setMeshId(role.toStdString());
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
     }
@@ -96,7 +93,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.5);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
@@ -114,7 +110,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.5);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
     }
@@ -132,7 +127,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.25);
         data.setShapeWidth(plantBodyRadius);
         data.setShapeHeight(plantBodyRadius);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
     }
@@ -146,7 +140,6 @@ TrackObject * TrackObjectFactory::build(
         data.setMass(5000);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
     }
@@ -161,7 +154,6 @@ TrackObject * TrackObjectFactory::build(
         data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
-        data.setRenderLayer(static_cast<int>(Layers::Render::Ground));
 
         object = m_objectFactory.build(data);
         object->setIsPhysicsObject(false);
@@ -173,7 +165,6 @@ TrackObject * TrackObjectFactory::build(
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
         object->physicsComponent().setMass(1, true); // Stationary
-        object->setRenderLayer(static_cast<int>(Layers::Render::Ground));
         object->setIsPhysicsObject(false);
         object->setIsTriggerObject(true);
         object->shape()->view()->setHasShadow(false);
@@ -191,7 +182,6 @@ TrackObject * TrackObjectFactory::build(
         data.setMass(500); // Exaggerate the mass on purpose
         data.setSurfaceId(role.toStdString());
         data.setXYFriction(0.25);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
@@ -213,7 +203,6 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.25);
         data.setShapeWidth(treeBodyRadius);
         data.setShapeHeight(treeBodyRadius);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
 
         // Create a custom view.
         MCShapeViewPtr view(new TreeView(
@@ -233,7 +222,6 @@ TrackObject * TrackObjectFactory::build(
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
-        data.setRenderLayer(static_cast<int>(Layers::Render::Objects));
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
         object = m_objectFactory.build(data);

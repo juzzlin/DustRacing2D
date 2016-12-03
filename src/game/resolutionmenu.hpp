@@ -31,7 +31,7 @@ public:
 protected:
 
     //! \reimp
-    virtual void enter();
+    virtual void enter() override;
 
 private:
 

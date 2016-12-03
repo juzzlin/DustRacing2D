@@ -60,9 +60,9 @@ public:
     , m_bestPos(Settings::instance().loadBestPos(
         m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
     {
-        m_star.setShaderProgram(Renderer::instance().program("menu"));
-        m_glow.setShaderProgram(Renderer::instance().program("menu"));
-        m_lock.setShaderProgram(Renderer::instance().program("menu"));
+        m_star.setShaderProgram(Renderer::instance().program("default"));
+        m_glow.setShaderProgram(Renderer::instance().program("default"));
+        m_lock.setShaderProgram(Renderer::instance().program("default"));
     }
 
     Track & track() const
@@ -173,8 +173,8 @@ void TrackItem::renderTiles()
             auto surface = tile->previewSurface();
             if (surface && !tile->excludeFromMinimap())
             {
-                surface->setShaderProgram(Renderer::instance().program("menu"));
-                surface->bindMaterial();
+                surface->setShaderProgram(Renderer::instance().program("default"));
+                surface->bind();
 
                 if (m_track.trackData().isLocked())
                 {

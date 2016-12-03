@@ -14,7 +14,6 @@ log.txt
 manifest*
 .excludes
 *__*
-*CMake*
 Makefile
 bin/
 dustrac.pro.user

@@ -18,18 +18,6 @@
 
 namespace Layers {
 
-/*! Define the rendering layer (group) for different kinds of objects.
- *  For example, some particle effects are rendered with depth test turned
- *  off, so the order matters. */
-enum class Render : int
-{
-    Ground      = 0,
-    Objects     = 1,
-    Smoke       = 2,
-    Sparkles    = 3,
-    DamageSmoke = 4
-};
-
 /*! Define the collision layers for different kinds of objects. */
 enum class Collision : int
 {

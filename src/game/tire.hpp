@@ -26,7 +26,7 @@ public:
 
     Tire(Car & car, MCFloat friction, MCFloat offTrackFriction);
 
-    virtual void onStepTime(MCFloat step);
+    virtual void onStepTime(int step) override;
 
     void setIsOffTrack(bool flag);
 

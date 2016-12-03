@@ -30,10 +30,10 @@ public:
     virtual ~OpenALOggData();
 
     //! \reimp
-    virtual void load(const std::string & path);
+    virtual void load(const std::string & path) override;
 
     //! \reimp
-    virtual ALuint buffer() const;
+    virtual ALuint buffer() const override;
 
 private:
 

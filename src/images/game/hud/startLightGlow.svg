@@ -9,20 +9,20 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="256"
+   height="256"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="startLightGlow.svg">
   <defs
      id="defs4">
     <filter
        inkscape:collect="always"
        id="filter3821"
-       x="-0.9"
+       x="-0.89999998"
        width="2.8"
-       y="-0.9"
+       y="-0.89999998"
        height="2.8">
       <feGaussianBlur
          inkscape:collect="always"
@@ -37,14 +37,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="-27.70719"
-     inkscape:cy="575.9084"
+     inkscape:zoom="1.4"
+     inkscape:cx="187.57143"
+     inkscape:cy="170.79691"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1535"
-     inkscape:window-height="876"
+     inkscape:window-width="1855"
+     inkscape:window-height="1056"
      inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1">
@@ -64,26 +64,23 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       sodipodi:type="arc"
-       style="opacity:0.75400002;fill:#000000;fill-opacity:1;stroke:#ff8080;stroke-width:80;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3821)"
+     id="layer1"
+     transform="translate(0,-796.36218)">
+    <circle
+       style="opacity:0.75400002;fill:#000000;fill-opacity:1;stroke:#ff8080;stroke-width:80;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3821)"
        id="path2987"
-       sodipodi:cx="120"
-       sodipodi:cy="232.36218"
-       sodipodi:rx="40"
-       sodipodi:ry="40"
-       d="m 160,232.36218 a 40,40 0 1 1 -80,0 40,40 0 1 1 80,0 z"
-       transform="translate(252.04724,293.81891)"
        inkscape:export-filename="/home/jussil/sourceforge/dustrac/data/images/startLightGlow.png"
        inkscape:export-xdpi="18.950001"
-       inkscape:export-ydpi="18.950001" />
+       inkscape:export-ydpi="18.950001"
+       cx="128"
+       cy="924.36218"
+       r="40" />
   </g>
 </svg>

@@ -114,7 +114,7 @@ void Minimap::renderMap()
     for (auto && i : m_map)
     {
         auto surface = i.first;
-        surface->bindMaterial();
+        surface->bind();
         surface->setColor(MCGLColor(1.0, 1.0, 1.0));
         surface->setSize(m_tileH, m_tileW);
 
