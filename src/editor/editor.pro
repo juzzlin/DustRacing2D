@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-editor
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.11.0\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"1.12.0\\\"
 QMAKE_CXXFLAGS += -std=gnu++11
 
 # Qt version check
@@ -86,7 +86,7 @@ TRANSLATIONS += \
     translations/dustrac-editor_fi.ts \
     translations/dustrac-editor_fr.ts \
     translations/dustrac-editor_it.ts \
-    translations/dustrac-editor_cs.ts 
+    translations/dustrac-editor_cs.ts
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target

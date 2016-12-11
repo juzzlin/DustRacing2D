@@ -1,3 +1,31 @@
+dustrac (1.12.0-4) xenial; urgency=medium
+
+  * Redo startlight graphics in SVG
+  * CMake: Switch to the recommended way to link Qt5
+  * Make the steering more stable
+  * Add a Linux AppData file.
+  * Add 3 new tracks by Wuzzy <almikes@aol.com>
+  * Remove CMake policy CMP0054 setting.
+  * Fix GitHub issue #7: Bad track preview images.
+  * Fix GitHub issue #6: Assertion failure when empty route cleared.
+  * Add 4 new tracks by Wuzzy <almikes@aol.com>
+  * Remove lower bridge rails for now.
+  * Add 'de' to lang options in README.
+  * Add German translation
+  * Track prop. dialog can set user track and name
+  * Fix VBO binding.
+  * Refactor trackselectionmenu.cpp
+  * Implement MCObject's physics properties as a separate component.
+  * Remove useless uniforms from shadow shaders.
+  * Eliminate copy-pasted web site url's.
+  * Improve log messages about translations.
+  * Editor: Improve override cursor logic.
+  * Editor: Remove dead code.
+  * Refactor TrackDataBase.
+  * Update Czech translations.
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 11 Dec 2016 23:45:55 +0200
+
 dustrac (1.11.0-3) vivid; urgency=medium
 
   * Show a red overlay on hard crashes.
@@ -586,7 +614,7 @@ dustrac (1.4.4-1) precise; urgency=low
   * Add DEPENDS to runtime targets.
   * Refactor runtime targets.
   * Don't set CMAKE_INSTALL_PREFIX in the code.
-  
+
  -- Jussi Lind <jussi.lind@iki.fi>  Sat, 14 Sep 2013 15:18:50 +0300
 
 dustrac (1.4.3-1) precise; urgency=low
@@ -752,7 +780,7 @@ dustrac (1.2.1-1) precise; urgency=low
   * Editor: Refactors mouse event handling in EditorView.
   * Generate desktop files only if ReleaseBuild defined.
   * Adds home site url to the Help page.
-  * Refactors the number plate generation to GraphicsFactory. 
+  * Refactors the number plate generation to GraphicsFactory.
 
  -- Jussi Lind <jussi.lind@iki.fi>  Wed, 10 Apr 2013 21:18:09 +0300
 

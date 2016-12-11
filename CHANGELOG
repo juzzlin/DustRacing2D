@@ -1,3 +1,30 @@
+1.12.0
+------
+
+* Redo startlight graphics in SVG
+* CMake: Switch to the recommended way to link Qt5
+* Make the steering more stable
+* Add a Linux AppData file.
+* Add 3 new tracks by Wuzzy <almikes@aol.com>
+* Remove CMake policy CMP0054 setting.
+* Fix GitHub issue #7: Bad track preview images.
+* Fix GitHub issue #6: Assertion failure when empty route cleared.
+* Add 4 new tracks by Wuzzy <almikes@aol.com>
+* Remove lower bridge rails for now.
+* Add 'de' to lang options in README.
+* Add German translation
+* Track prop. dialog can set user track and name
+* Fix VBO binding.
+* Refactor trackselectionmenu.cpp
+* Implement MCObject's physics properties as a separate component.
+* Remove useless uniforms from shadow shaders.
+* Eliminate copy-pasted web site url's.
+* Improve log messages about translations.
+* Editor: Improve override cursor logic.
+* Editor: Remove dead code.
+* Refactor TrackDataBase.
+* Update Czech translations.
+
 1.11.0
 ------
 
@@ -521,7 +548,7 @@
 * Add DEPENDS to runtime targets.
 * Refactor runtime targets.
 * Don't set CMAKE_INSTALL_PREFIX in the code.
-  
+
 1.4.3
 -----
 

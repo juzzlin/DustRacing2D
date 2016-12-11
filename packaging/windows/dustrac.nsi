@@ -6,7 +6,7 @@
 !define COMPANYNAME            "Jussi Lind"
 !define DESCRIPTION            "A traditional top-down racing game."
 !define VERSIONMAJOR           1
-!define VERSIONMINOR           11
+!define VERSIONMINOR           12
 !define VERSIONBUILD           0
 !define HELPURL                "http://dustrac.sourceforge.net"
 !define UPDATEURL              "http://dustrac.sourceforge.net"

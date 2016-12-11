@@ -1,3 +1,30 @@
+1.12.0
+======
+
+New features:
+
+* 7 new tracks by Wuzzy <almikes@aol.com>
+* Add German translation
+
+Improvements:
+
+* Make the steering more stable
+* Redo startlight graphics in SVG
+* Improve log messages about translations.
+* Editor: Improve override cursor logic.
+* Editor: Remove dead code.
+* Update Czech translations.
+
+Bug fixes:
+
+* Fix GitHub issue #7: Bad track preview images.
+* Fix GitHub issue #6: Assertion failure when empty route cleared.
+* Remove lower bridge rails for now.
+
+Other:
+
+* CMake: Switch to the recommended way to link Qt5
+
 1.11.0
 ======
 
