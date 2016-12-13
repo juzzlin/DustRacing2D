@@ -4,7 +4,7 @@
 # This for configuring static build of Qt5 itself, not the game.
 #
 
-PREFIX='/home/jussil/qt5'
+PREFIX='/home/juzzlin/qt5'
 ./configure \
             -opensource \
             -confirm-license \
@@ -25,5 +25,6 @@ PREFIX='/home/jussil/qt5'
             -qt-sql-sqlite \
             -qt-xcb \
             -qt-pcre \
+            -pulseaudio \
             -v
 
