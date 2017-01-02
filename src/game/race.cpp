@@ -376,6 +376,7 @@ bool isInsideCheckPoint(Car & car, TargetNodePtr tnode, int tolerance)
 
     return true;
 }
+
 void Race::updateRouteProgress(Car & car)
 {
     if (m_timing.isActive(car.index()))
@@ -406,7 +407,6 @@ void Race::updateRouteProgress(Car & car)
 
                 // Increase progress and update the positions hash
                 car.setRouteProgression(car.routeProgression() + 1);
-
                 m_positions[car.routeProgression()].push_back(car.index());
 
                 // Switch to next check point
@@ -416,7 +416,6 @@ void Race::updateRouteProgress(Car & car)
                     currentTargetNodeIndex = 0;
                 }
 
-                //seuraavan seuraava checkpoint
                 nextTargetNodeIndex = currentTargetNodeIndex;
                 if (++nextTargetNodeIndex >= route.numNodes()){
                     nextTargetNodeIndex = 0;
