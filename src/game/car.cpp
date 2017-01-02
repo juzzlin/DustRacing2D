@@ -457,6 +457,16 @@ bool Car::isOffTrack() const
     return leftSideOffTrack() || rightSideOffTrack();
 }
 
+void Car::setNextTargetNodeIndex(int index)
+{
+    m_nextTargetNodeIndex = index;
+}
+
+int Car::nextTargetNodeIndex() const
+{
+    return m_nextTargetNodeIndex;
+}
+
 void Car::setCurrentTargetNodeIndex(int index)
 {
     m_currentTargetNodeIndex = index;

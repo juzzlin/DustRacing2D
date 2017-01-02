@@ -129,6 +129,10 @@ public:
     bool isOffTrack() const;
 
     void setTurningImpulse(float impulse);
+    
+    void setNextTargetNodeIndex(int index);
+
+    int nextTargetNodeIndex() const;
 
     void setCurrentTargetNodeIndex(int index);
 
@@ -203,6 +207,7 @@ private:
     int                      m_speedInKmh;
     MCFloat                  m_absSpeed;
     MCFloat                  m_dx, m_dy;
+    int                      m_nextTargetNodeIndex;
     int                      m_currentTargetNodeIndex;
     int                      m_prevTargetNodeIndex;
     int                      m_routeProgression;
