@@ -123,6 +123,7 @@ void Race::initCars()
 
     for(Car * car : m_cars)
     {
+        car->setNextTargetNodeIndex(0);
         car->setCurrentTargetNodeIndex(0);
         car->setPrevTargetNodeIndex(0);
         car->setRouteProgression(0);
@@ -375,7 +376,6 @@ bool isInsideCheckPoint(Car & car, TargetNodePtr tnode, int tolerance)
 
     return true;
 }
-
 void Race::updateRouteProgress(Car & car)
 {
     if (m_timing.isActive(car.index()))
@@ -397,6 +397,7 @@ void Race::updateRouteProgress(Car & car)
             // Give a bit more tolerance for other than the finishing check point.
             const Route & route = m_track->trackData().route();
             unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
+            unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
             TargetNodePtr tnode = route.get(currentTargetNodeIndex);
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
@@ -405,6 +406,7 @@ void Race::updateRouteProgress(Car & car)
 
                 // Increase progress and update the positions hash
                 car.setRouteProgression(car.routeProgression() + 1);
+
                 m_positions[car.routeProgression()].push_back(car.index());
 
                 // Switch to next check point
@@ -413,9 +415,16 @@ void Race::updateRouteProgress(Car & car)
                 {
                     currentTargetNodeIndex = 0;
                 }
+
+                //seuraavan seuraava checkpoint
+                nextTargetNodeIndex = currentTargetNodeIndex;
+                if (++nextTargetNodeIndex >= route.numNodes()){
+                    nextTargetNodeIndex = 0;
+                }
             }
 
             car.setCurrentTargetNodeIndex(currentTargetNodeIndex);
+            car.setNextTargetNodeIndex(nextTargetNodeIndex);
         }
         else
         {
