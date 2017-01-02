@@ -129,6 +129,10 @@ public:
     bool isOffTrack() const;
 
     void setTurningImpulse(float impulse);
+    
+    void setNextTargetNodeIndex(int index);
+
+    int nextTargetNodeIndex() const;
 
     void setCurrentTargetNodeIndex(int index);
 
