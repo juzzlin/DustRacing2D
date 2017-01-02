@@ -207,6 +207,7 @@ private:
     int                      m_speedInKmh;
     MCFloat                  m_absSpeed;
     MCFloat                  m_dx, m_dy;
+    int                      m_nextTargetNodeIndex;
     int                      m_currentTargetNodeIndex;
     int                      m_prevTargetNodeIndex;
     int                      m_routeProgression;
