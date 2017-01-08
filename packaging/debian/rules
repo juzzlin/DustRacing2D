@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 # Sample debian/rules that uses debhelper.
-# This file is public domain software, originally written by Joey Hess. 
+# This file is public domain software, originally written by Joey Hess.
 #
 # This version is for packages that are architecture dependent.
 
@@ -12,7 +12,7 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
-	./configure -DReleaseBuild=1 -DUSC=1 -DCMAKE_INSTALL_PREFIX=/usr && $(MAKE) -j$(shell cat /proc/cpuinfo | grep processor | wc -l)
+	cmake . -DReleaseBuild=1 -DUSC=1 -DCMAKE_INSTALL_PREFIX=/usr && $(MAKE) -j$(shell cat /proc/cpuinfo | grep processor | wc -l)
 	touch build-stamp
 
 clean:
@@ -46,7 +46,7 @@ binary-arch: build install
 	dh_installexamples
 #	dh_install
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installcatalogs
