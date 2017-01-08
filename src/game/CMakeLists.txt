@@ -35,6 +35,7 @@ set(HDR
     layers.hpp
     shaders.h
     shaders30.h
+    userexception.hpp
 )
 
 # Set sources

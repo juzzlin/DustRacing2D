@@ -109,6 +109,7 @@ HEADERS += \
     tracktile.hpp \
     treeview.hpp \
     updateableif.hpp \
+    userexception.hpp \
     vsyncmenu.hpp \
     MTFH/menu.hpp \
     MTFH/menuitem.hpp \

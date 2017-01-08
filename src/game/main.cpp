@@ -17,17 +17,20 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QSettings>
-#include <QTranslator>
 
 #include "../common/config.hpp"
 #include "application.hpp"
 #include "game.hpp"
+#include "userexception.hpp"
 
 #include <MCLogger>
 
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <string>
+
+static const char * INIT_ERROR = "Initializing the game failed!";
 
 static void initLogger()
 {
@@ -39,35 +42,6 @@ static void initLogger()
     MCLogger().info() << "Compiled against Qt version " << QT_VERSION_STR;
 }
 
-static void printHelp()
-{
-    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT.toStdString() << std::endl << std::endl;
-    std::cout << "Options:" << std::endl;
-    std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
-    std::cout << "--no-vsync    Force vsync off." << std::endl;
-    std::cout << std::endl;
-}
-
-static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
-{
-    if (lang == "")
-    {
-        lang = QLocale::system().name();
-    }
-
-    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + lang))
-    {
-        app.installTranslator(&appTranslator);
-        MCLogger().info() << "Loaded translations for " << lang.toStdString();
-    }
-    else
-    {
-        MCLogger().warning() << "Failed to load translations for " << lang.toStdString();
-    }
-}
-
 int main(int argc, char ** argv)
 {
     QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
@@ -76,39 +50,31 @@ int main(int argc, char ** argv)
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    Application app(argc, argv);
-    QTranslator appTranslator;
-    QString lang = "";
+    std::unique_ptr<Game> game;
 
-    bool forceNoVSync = false;
-    std::vector<QString> args(argv, argv + argc);
-    if (std::find(args.begin(), args.end(), "--help") != args.end())
+    try
     {
-        printHelp();
-        exit(EXIT_SUCCESS);
+        initLogger();
+
+        // Create the main game object. The game loop starts immediately after
+        // the Renderer has been initialized.
+        MCLogger().info() << "Creating game object..";
+
+        game.reset(new Game(argc, argv));
+
+        return game->run();
     }
-    else
+    catch (std::exception & e)
     {
-        for (unsigned int i = 0; i < args.size(); i++)
+        if (!dynamic_cast<UserException *>(&e))
         {
-            if (args[i] == "--lang" && (i + i) < args.size())
-            {
-                lang = args[i + 1];
-            }
-            else if (args[i] == "--no-vsync")
-            {
-                forceNoVSync = true;
-            }
+            MCLogger().fatal() << e.what();
+            MCLogger().fatal() << INIT_ERROR;
         }
+
+        game.reset();
+
+        return EXIT_FAILURE;
     }
-
-    initLogger();
-    initTranslations(appTranslator, app, lang);
-
-    // Create the main game object. The game loop starts immediately after
-    // the Renderer has been initialized.
-    MCLogger().info() << "Creating game object..";
-    Game game(forceNoVSync);
-
-    return app.exec();
 }
+

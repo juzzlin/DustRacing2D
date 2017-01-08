@@ -28,6 +28,7 @@
 #include "trackdata.hpp"
 #include "trackloader.hpp"
 #include "trackselectionmenu.hpp"
+#include "userexception.hpp"
 
 #include <MCAssetManager>
 #include <MCCamera>
@@ -48,8 +49,10 @@ static const unsigned int MAX_PLAYERS = 2;
 
 Game * Game::m_instance = nullptr;
 
-Game::Game(bool forceNoVSync)
-: m_settings()
+Game::Game(int & argc, char ** argv)
+: m_app(argc, argv)
+, m_forceNoVSync(false)
+, m_settings()
 , m_difficultyProfile(m_settings.loadDifficulty())
 , m_inputHandler(new InputHandler(MAX_PLAYERS))
 , m_eventHandler(new EventHandler(*m_inputHandler))
@@ -77,7 +80,9 @@ Game::Game(bool forceNoVSync)
     assert(!Game::m_instance);
     Game::m_instance = this;
 
-    createRenderer(forceNoVSync);
+    parseArgs(argc, argv);
+
+    createRenderer();
 
     connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, [this] () {
         m_trackLoader->updateLockedTracks(m_lapCount, m_difficultyProfile.difficulty());
@@ -123,7 +128,61 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
-void Game::createRenderer(bool forceNoVSync)
+static void printHelp()
+{
+    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
+    std::cout << Config::Common::COPYRIGHT.toStdString() << std::endl << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "--help        Show this help." << std::endl;
+    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
+    std::cout << "--no-vsync    Force vsync off." << std::endl;
+    std::cout << std::endl;
+}
+
+static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
+{
+    if (lang == "")
+    {
+        lang = QLocale::system().name();
+    }
+
+    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + lang))
+    {
+        app.installTranslator(&appTranslator);
+        MCLogger().info() << "Loaded translations for " << lang.toStdString();
+    }
+    else
+    {
+        MCLogger().warning() << "Failed to load translations for " << lang.toStdString();
+    }
+}
+
+void Game::parseArgs(int argc, char ** argv)
+{
+    QString lang = "";
+
+    const std::vector<QString> args(argv, argv + argc);
+    for (unsigned int i = 0; i < args.size(); i++)
+    {
+        if (args[i] == "-h" || args[i] == "--help")
+        {
+            printHelp();
+            throw UserException("Exit due to help.");
+        }
+        else if (args[i] == "--lang" && (i + i) < args.size())
+        {
+            lang = args[i + 1];
+        }
+        else if (args[i] == "--no-vsync")
+        {
+            m_forceNoVSync = true;
+        }
+    }
+
+    initTranslations(m_appTranslator, m_app, lang);
+}
+
+void Game::createRenderer()
 {
     // Create the main window / renderer
     int hRes, vRes;
@@ -158,7 +217,7 @@ void Game::createRenderer(bool forceNoVSync)
 
 // Supported only in Qt 5.3+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
-    if (forceNoVSync)
+    if (m_forceNoVSync)
     {
         format.setSwapInterval(0);
     }
@@ -166,8 +225,6 @@ void Game::createRenderer(bool forceNoVSync)
     {
         format.setSwapInterval(Settings::instance().loadVSync());
     }
-#else
-    Q_UNUSED(forceNoVSync);
 #endif
 
     m_renderer = new Renderer(hRes, vRes, fullScreen, m_world.renderer().glScene());
@@ -266,6 +323,11 @@ Renderer & Game::renderer() const
     return *m_renderer;
 }
 
+int Game::run()
+{
+    return m_app.exec();
+}
+
 bool Game::loadTracks()
 {
     // Load track data
@@ -350,12 +412,13 @@ void Game::togglePause()
 void Game::exitGame()
 {
     stop();
+
     m_renderer->close();
 
     m_audioThread.quit();
     m_audioThread.wait();
 
-    QApplication::quit();
+    m_app.quit();
 }
 
 Game::~Game()
