@@ -19,7 +19,7 @@ namespace Config {
 
 const QString Common::dataPath                = DATA_PATH;
 
-const QString Common::COPYRIGHT               = "Copyright (c) 2011-2015 Jussi Lind.";
+const QString Common::COPYRIGHT               = "Copyright (c) 2011-2017 Jussi Lind";
 const QString Common::QSETTINGS_COMPANY_NAME  = "dustrac";
 const QString Common::TRACK_SEARCH_PATH       = "DustRacingTracks";
 const QString Common::WEB_SITE_URL            = "http://juzzlin.github.io/DustRacing2D";
