@@ -58,25 +58,26 @@ On Linux pkg-config is required.
 Dustrac also exploits some features of the C++11 standard,
 so a somewhat compliant compiler is required (GCC >= 4.7).
 
-Building in the command line on Linux (tested on Ubuntu 14.04)
-=====================================================================
+Building in the command line on Linux (tested on Ubuntu 16.04)
+==============================================================
 
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt5 development files (qt5-default on Ubuntu 14.04).
+1) Install Qt5 development files (qt5-default on Ubuntu).
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
 3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
 4) Install CMake (cmake on Debian/Ubuntu).
 5) Go to the source directory and run:
 
-$ ./configure
+$ mkdir build
+$ cd build
+$ cmake ..
 
 This runs CMake that generates the makefiles.
 
-You can also run cmake directly or use Qt Creator to open the top-level
-CMakeLists.txt and build inside Qt Creator. The configure script is only
-for convenience and is just a wrapper for cmake.
+You can also use Qt Creator to open the top-level CMakeLists.txt and build inside Qt Creator.
+There's also a convenience configure script which is just a wrapper for cmake.
 
 Anyway, if everything went ok with cmake, run:
 
@@ -99,7 +100,9 @@ $ ctest
 Release build (in this example game installs under /usr):
 --------------------------------------------------------
 
-$ ./configure -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
+$ mkdir build
+$ cd build
+$ cmake .. -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
 
 This runs CMake that generates the makefiles.
 If everything went ok, run:
@@ -144,7 +147,7 @@ This will generate .tar.gz and .sh binary packages on Linux.
 Building with Microsoft Visual C++
 ==================================
 
-The project has been successfully compiled and executed with MSVC with the following setup: 
+The project has been successfully compiled and executed with MSVC with the following setup:
 
 * Windows 8.1 Pro
 * Windows SDK for Windows 8.1
