@@ -193,6 +193,11 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 const std::string s = element.attribute("s", "").toStdString();
                 const std::string t = element.attribute("t", "").toStdString();
 
+                // Windows build hack
+                #ifndef GL_CLAMP_TO_EDGE
+                    #define GL_CLAMP_TO_EDGE 0x812F
+                #endif
+
                 if (s == "clamp")
                 {
                     newData->wrapS = std::pair<GLint, bool>(GL_CLAMP_TO_EDGE, true);
