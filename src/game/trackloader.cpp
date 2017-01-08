@@ -20,6 +20,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "../common/config.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -41,8 +42,14 @@ static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
 
 TrackLoader * TrackLoader::m_instance = nullptr;
 
-TrackLoader::TrackLoader(MCObjectFactory & objectFactory)
-    : m_trackObjectFactory(objectFactory)
+TrackLoader::TrackLoader()
+    : m_assetManager(
+        Config::Common::dataPath.toStdString(),
+        (Config::Common::dataPath + QDir::separator().toLatin1() + "surfaces.conf").toStdString(),
+        "",
+        (Config::Common::dataPath + QDir::separator().toLatin1() + "meshes.conf").toStdString())
+    , m_objectFactory(m_assetManager)
+    , m_trackObjectFactory(m_objectFactory)
     , m_paths()
     , m_tracks()
 {
@@ -59,6 +66,11 @@ TrackLoader & TrackLoader::instance()
 void TrackLoader::addTrackSearchPath(QString path)
 {
     m_paths.push_back(path);
+}
+
+void TrackLoader::loadAssets()
+{
+    m_assetManager.load();
 }
 
 int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficulty)

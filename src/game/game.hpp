@@ -26,6 +26,7 @@
 
 #include "application.hpp"
 #include "settings.hpp"
+#include "trackloader.hpp"
 
 class AudioWorker;
 class EventHandler;
@@ -153,10 +154,6 @@ private:
     Renderer * m_renderer;
 
     Scene * m_scene;
-
-    MCAssetManager * m_assetManager;
-
-    MCObjectFactory * m_objectFactory;
 
     TrackLoader * m_trackLoader;
 

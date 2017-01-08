@@ -59,13 +59,7 @@ Game::Game(int & argc, char ** argv)
 , m_stateMachine(new StateMachine(*m_inputHandler))
 , m_renderer(nullptr)
 , m_scene(nullptr)
-, m_assetManager(new MCAssetManager(
-    Config::Common::dataPath.toStdString(),
-    (Config::Common::dataPath + QDir::separator().toLatin1() + "surfaces.conf").toStdString(),
-    "",
-    (Config::Common::dataPath + QDir::separator().toLatin1() + "meshes.conf").toStdString()))
-, m_objectFactory(new MCObjectFactory(*m_assetManager))
-, m_trackLoader(new TrackLoader(*m_objectFactory))
+, m_trackLoader(new TrackLoader)
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1.0 / m_updateFps)
@@ -369,7 +363,7 @@ void Game::init()
     QMetaObject::invokeMethod(m_audioWorker, "init");
     QMetaObject::invokeMethod(m_audioWorker, "loadSounds");
 
-    m_assetManager->load();
+    m_trackLoader->loadAssets();
 
     if (loadTracks())
     {
@@ -426,9 +420,7 @@ Game::~Game()
     delete m_renderer;
     delete m_stateMachine;
     delete m_scene;
-    delete m_assetManager;
     delete m_trackLoader;
-    delete m_objectFactory;
     delete m_eventHandler;
     delete m_inputHandler;
     delete m_audioWorker;

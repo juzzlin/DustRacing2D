@@ -19,6 +19,9 @@
 #include <QString>
 #include <vector>
 
+#include <MCAssetManager>
+#include <MCObjectFactory>
+
 #include "difficultyprofile.hpp"
 #include "tracktile.hpp"
 #include "trackobjectfactory.hpp"
@@ -38,15 +41,16 @@ class TrackLoader
 {
 public:
 
-    /*! Constructor.
-     *  \param objectFactory  Object factory that creates objects other than tiles. */
-    TrackLoader(MCObjectFactory  & objectFactory);
+    //! Constructor.
+    TrackLoader();
 
     //! Destructor.
     ~TrackLoader();
 
     //! Add path to search level files for.
     void addTrackSearchPath(QString path);
+
+    void loadAssets();
 
     /*! Load all tracks found in the added paths.
      *  Lock/unlock tracks according to the given lap count.
@@ -83,6 +87,10 @@ private:
 
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);
+
+    MCAssetManager m_assetManager;
+
+    MCObjectFactory m_objectFactory;
 
     TrackObjectFactory m_trackObjectFactory;
 
