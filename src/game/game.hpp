@@ -17,7 +17,6 @@
 #define GAME_HPP
 
 #include <QObject>
-#include <QThread>
 #include <QTimer>
 #include <QTime>
 #include <QTranslator>
@@ -26,7 +25,6 @@
 
 #include "application.hpp"
 #include "settings.hpp"
-#include "trackloader.hpp"
 
 class AudioWorker;
 class EventHandler;
@@ -179,7 +177,7 @@ private:
 
     AudioWorker * m_audioWorker;
 
-    QThread m_audioThread;
+    QThread * m_audioThread;
 
     MCWorld m_world;
 

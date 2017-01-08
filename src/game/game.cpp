@@ -39,6 +39,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDir>
+#include <QThread>
 #include <QTime>
 #include <QScreen>
 #include <QSurfaceFormat>
@@ -70,6 +71,7 @@ Game::Game(int & argc, char ** argv)
 , m_splitType(SplitType::Vertical)
 , m_audioWorker(new AudioWorker(
       Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
+, m_audioThread(new QThread)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -358,8 +360,8 @@ void Game::initScene()
 
 void Game::init()
 {
-    m_audioThread.start();
-    m_audioWorker->moveToThread(&m_audioThread);
+    m_audioThread->start();
+    m_audioWorker->moveToThread(m_audioThread);
     QMetaObject::invokeMethod(m_audioWorker, "init");
     QMetaObject::invokeMethod(m_audioWorker, "loadSounds");
 
@@ -409,8 +411,8 @@ void Game::exitGame()
 
     m_renderer->close();
 
-    m_audioThread.quit();
-    m_audioThread.wait();
+    m_audioThread->quit();
+    m_audioThread->wait();
 
     m_app.quit();
 }
@@ -418,10 +420,23 @@ void Game::exitGame()
 Game::~Game()
 {
     delete m_renderer;
+    m_renderer = nullptr;
+
     delete m_stateMachine;
+    m_stateMachine = nullptr;
+
     delete m_scene;
+    m_scene = nullptr;
+
     delete m_trackLoader;
+    m_trackLoader = nullptr;
+
     delete m_eventHandler;
+    m_eventHandler = nullptr;
+
     delete m_inputHandler;
+    m_inputHandler = nullptr;
+
     delete m_audioWorker;
+    m_audioWorker = nullptr;
 }
