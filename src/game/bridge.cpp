@@ -70,12 +70,23 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     addChildObject(m_trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
 }
 
+void Bridge::raiseObject(MCObject & object, float raise)
+{
+    const auto x = object.location().i();
+    const auto y = object.location().j();
+    const auto z = location().k() + raise;
+
+    const MCVector3dF newLocation(x, y, z);
+    object.translate(newLocation);
+    const auto s = object.shape()->shadowOffset();
+    object.shape()->setShadowOffset(MCVector3dF(s.i(), s.j(), z));
+}
+
 void Bridge::enterObject(MCObject & object)
 {
     object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
 
-    const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
-    object.translate(newLocation);
+    raiseObject(object, OBJECT_Z_DELTA);
 
     m_objectsEntered[&object] = true;
     m_objectsOnBridge[&object] = m_tag;
@@ -91,8 +102,7 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
             object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
             object.physicsComponent().preventSleeping(true);
 
-            const MCVector3dF newLocation(object.location().i(), object.location().j(), location().k() + OBJECT_Z_DELTA);
-            object.translate(newLocation);
+            raiseObject(object, OBJECT_Z_DELTA);
 
             m_objectsOnBridge[&object] = m_tag;
         }
@@ -111,8 +121,7 @@ void Bridge::onStepTime(int)
             object.setCollisionLayer(0); // MCObject default collision layer
             object.physicsComponent().preventSleeping(false);
 
-            const MCVector3dF newLocation(object.location().i(), object.location().j(), OBJECT_Z_ZERO);
-            object.translate(newLocation);
+            raiseObject(object, OBJECT_Z_ZERO);
 
             m_objectsEntered.erase(&object);
             iter = m_objectsOnBridge.erase(iter);

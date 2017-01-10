@@ -45,6 +45,8 @@ public:
 
 private:
 
+    void raiseObject(MCObject & object, float raise);
+
     std::map<MCObject *, int> m_objectsOnBridge;
 
     std::map<MCObject *, bool> m_objectsEntered;
