@@ -13,10 +13,205 @@
    height="256"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="turn.svg"
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/data/images/right.png"
+   inkscape:export-xdpi="22.5"
+   inkscape:export-ydpi="22.5">
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       inkscape:label="Nudge RGB"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Displace the outside of shapes and pictures without altering their content"
+       height="1.4"
+       y="-0.2"
+       width="1.4"
+       x="-0.2"
+       style="color-interpolation-filters:sRGB;"
+       id="filter5049">
+      <feTurbulence
+         baseFrequency="0.05"
+         numOctaves="5"
+         type="fractalNoise"
+         result="result91"
+         id="feTurbulence5051" />
+      <feDisplacementMap
+         scale="25"
+         result="result5"
+         xChannelSelector="R"
+         in="SourceGraphic"
+         in2="result91"
+         id="feDisplacementMap5053" />
+      <feComposite
+         in="SourceGraphic"
+         operator="atop"
+         in2="result5"
+         id="feComposite5055"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix5463" />
+      <feFlood
+         id="feFlood5465"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         in="fbSourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix5467"
+         in="fbSourceGraphic"
+         values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 "
+         result="colormatrix1" />
+      <feOffset
+         id="feOffset5469"
+         dy="-6"
+         dx="-6"
+         result="offset1" />
+      <feBlend
+         id="feBlend5471"
+         in2="flood"
+         mode="screen"
+         result="blend1" />
+      <feColorMatrix
+         id="feColorMatrix5473"
+         in="fbSourceGraphic"
+         values="0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 "
+         result="colormatrix2" />
+      <feOffset
+         id="feOffset5475"
+         dy="6"
+         dx="7"
+         result="offset2" />
+      <feBlend
+         id="feBlend5477"
+         in2="blend1"
+         mode="screen"
+         result="blend2" />
+      <feOffset
+         id="feOffset5479"
+         dy="1"
+         dx="-16"
+         result="offset3" />
+      <feColorMatrix
+         id="feColorMatrix5481"
+         in="fbSourceGraphic"
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 "
+         result="colormatrix3" />
+      <feBlend
+         id="feBlend5483"
+         in2="offset3"
+         mode="screen"
+         result="blend3" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Nudge RGB"
+       id="filter5485">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood5487" />
+      <feColorMatrix
+         in="SourceGraphic"
+         values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 "
+         result="colormatrix1"
+         id="feColorMatrix5489" />
+      <feOffset
+         dy="-6"
+         dx="-6"
+         result="offset1"
+         id="feOffset5491" />
+      <feBlend
+         in2="flood"
+         mode="screen"
+         result="blend1"
+         id="feBlend5493" />
+      <feColorMatrix
+         in="SourceGraphic"
+         values="0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 "
+         result="colormatrix2"
+         id="feColorMatrix5495" />
+      <feOffset
+         dy="6"
+         dx="7"
+         result="offset2"
+         id="feOffset5497" />
+      <feBlend
+         in2="blend1"
+         mode="screen"
+         result="blend2"
+         id="feBlend5499" />
+      <feOffset
+         dy="1"
+         dx="-16"
+         result="offset3"
+         id="feOffset5501" />
+      <feColorMatrix
+         in="SourceGraphic"
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 "
+         result="colormatrix3"
+         id="feColorMatrix5503" />
+      <feBlend
+         in2="offset3"
+         mode="screen"
+         result="blend3"
+         id="feBlend5505" />
+    </filter>
+    <filter
+       inkscape:label="Chalk and Sponge"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Low turbulence gives sponge look and high turbulence chalk"
+       width="1.6"
+       height="2"
+       y="-0.5"
+       x="-0.3"
+       style="color-interpolation-filters:sRGB;"
+       id="filter5739">
+      <feTurbulence
+         baseFrequency="0.4"
+         type="fractalNoise"
+         seed="0"
+         numOctaves="5"
+         result="result1"
+         id="feTurbulence5741" />
+      <feDisplacementMap
+         xChannelSelector="R"
+         yChannelSelector="G"
+         scale="30"
+         in="SourceGraphic"
+         in2="result1"
+         id="feDisplacementMap5743" />
+    </filter>
+    <filter
+       inkscape:label="Chalk and Sponge"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Low turbulence gives sponge look and high turbulence chalk"
+       width="1.6"
+       height="2"
+       y="-0.5"
+       x="-0.3"
+       style="color-interpolation-filters:sRGB;"
+       id="filter5745">
+      <feTurbulence
+         baseFrequency="0.4"
+         type="fractalNoise"
+         seed="0"
+         numOctaves="5"
+         result="result1"
+         id="feTurbulence5747" />
+      <feDisplacementMap
+         xChannelSelector="R"
+         yChannelSelector="G"
+         scale="30"
+         in="SourceGraphic"
+         in2="result1"
+         id="feDisplacementMap5749" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#000000"
@@ -25,13 +220,13 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="279.92858"
-     inkscape:cy="129.64321"
+     inkscape:cx="285.05484"
+     inkscape:cy="132.71106"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1615"
-     inkscape:window-height="1026"
+     inkscape:window-width="1855"
+     inkscape:window-height="1056"
      inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1">
@@ -55,7 +250,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,25 +259,34 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-796.36218)">
+    <rect
+       style="opacity:0.25;fill:#1a1a1a;fill-opacity:1;stroke:#1a1a1a;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5745)"
+       id="rect5461"
+       width="630"
+       height="360"
+       x="-60"
+       y="744.36218"
+       transform="matrix(0.98271985,0,0,1.0021528,-1.6649913,-1.9899342)" />
     <g
        id="g3794"
-       transform="matrix(0.84117266,0,0,0.98886279,-5.0824749,8.5128078)">
+       transform="matrix(0.84117266,0,0,0.98886279,-5.0824749,8.5128078)"
+       style="filter:url(#filter5739);fill:#000000;stroke:#ffcc00">
       <path
          transform="translate(0,796.36218)"
          inkscape:connector-curvature="0"
          id="path2987"
          d="M 0,1 130,126 0,256"
-         style="fill:none;stroke:#ffff00;stroke-width:64;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+         style="fill:#000000;stroke:#ffcc00;stroke-width:64;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          inkscape:connector-curvature="0"
          id="path2987-1"
          d="m 220.76653,796.40275 129.9086,125.44543 -129.9086,130.46322"
-         style="fill:none;stroke:#ffff00;stroke-width:64.09138489;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+         style="fill:#000000;stroke:#ffcc00;stroke-width:64.09138489;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          inkscape:connector-curvature="0"
          id="path2987-1-0"
          d="m 440.15748,797.07792 129.9086,125.44543 -129.9086,130.46325"
-         style="fill:none;stroke:#ffff00;stroke-width:64.09138489;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+         style="fill:#000000;stroke:#ffcc00;stroke-width:64.09138489;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     </g>
   </g>
 </svg>
