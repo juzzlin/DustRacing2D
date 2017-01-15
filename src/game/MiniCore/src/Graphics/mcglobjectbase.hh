@@ -92,13 +92,6 @@ public:
     //! Get material if set.
     MCGLMaterialPtr material() const;
 
-protected:
-
-    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
-
-    //! Store a vertex, needed for batching
-    void addVertex(const MCGLVertex & vertex);
-
     template <typename T>
     using Container = std::vector<T>;
     using VertexVector = Container<MCGLVertex>;
@@ -138,6 +131,13 @@ protected:
     const MCGLTexCoord & texCoord(int index) const;
 
     const GLfloat * texCoordsAsGlArray() const;
+
+protected:
+
+    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
+
+    //! Store a vertex, needed for batching
+    void addVertex(const MCGLVertex & vertex);
 
     void addBufferSubData(
         MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);

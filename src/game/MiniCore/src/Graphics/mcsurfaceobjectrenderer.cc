@@ -30,11 +30,7 @@
 #include <QDebug>
 
 namespace {
-#ifdef __MC_GLES__
 const int NUM_VERTICES_PER_SURFACE = 6;
-#else
-const int NUM_VERTICES_PER_SURFACE = 4;
-#endif
 }
 
 MCSurfaceObjectRenderer::MCSurfaceObjectRenderer(int maxBatchSize)
@@ -82,44 +78,6 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
     const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
     const int COLOR_DATA_SIZE  = sizeof(MCGLColor) * NUM_VERTICES;
 
-    // Init vertice data for a quad
-
-    static const MCGLVertex vertices[NUM_VERTICES_PER_SURFACE] =
-    {
-    #ifdef __MC_GLES__
-        {-1, -1, 0},
-        { 1,  1, 0},
-    #endif
-        {-1,  1, 0},
-        {-1, -1, 0},
-        { 1, -1, 0},
-        { 1,  1, 0}
-    };
-
-    static const MCGLVertex normals[NUM_VERTICES_PER_SURFACE] =
-    {
-    #ifdef __MC_GLES__
-        { 0, 0, 1},
-        { 0, 0, 1},
-    #endif
-        { 0, 0, 1},
-        { 0, 0, 1},
-        { 0, 0, 1},
-        { 0, 0, 1}
-    };
-
-    const MCGLTexCoord texCoords[NUM_VERTICES_PER_SURFACE] =
-    {
-    #ifdef __MC_GLES__
-        {0, 0},
-        {1, 1},
-    #endif
-        {0, 1},
-        {0, 0},
-        {1, 0},
-        {1, 1}
-    };
-
     // Take common properties from the first Object in the batch
     MCObject * object = objects.at(0);
     MCSurfaceView * view = dynamic_cast<MCSurfaceView *>(object->shape()->view().get());
@@ -158,26 +116,45 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
             camera->mapToCamera(x, y);
         }
 
-        const MCGLColor & color = object->shape()->view()->color();
-
-        for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
+        if (!isShadow)
         {
-            MCFloat vertexX = vertices[j].x() * surface->width() / 2;
-            MCFloat vertexY = vertices[j].y() * surface->height() / 2;
+            for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
+            {
+                m_colors[vertexIndex] = surface->color(j);
 
-            m_colors[vertexIndex] = color;
+                auto vertex = surface->vertex(j);
+                m_vertices[vertexIndex] =
+                        MCGLVertex(
+                            x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
+                            y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
+                            z + vertex.z());
 
-            m_vertices[vertexIndex] =
-                MCGLVertex(
-                     x + MCMathUtil::rotatedX(vertexX, vertexY, object->angle()),
-                     y + MCMathUtil::rotatedY(vertexX, vertexY, object->angle()),
-                     z);
+                m_normals[vertexIndex] = surface->normal(j);
 
-            m_normals[vertexIndex] = normals[j];
+                m_texCoords[vertexIndex] = surface->texCoord(j);
 
-            m_texCoords[vertexIndex] = texCoords[j];
+                vertexIndex++;
+            }
+        }
+        else
+        {
+            for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
+            {
+                m_colors[vertexIndex] = surface->color(j);
 
-            vertexIndex++;
+                auto vertex = surface->vertex(j);
+                m_vertices[vertexIndex] =
+                        MCGLVertex(
+                            x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
+                            y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
+                            z);
+
+                m_normals[vertexIndex] = surface->normal(j);
+
+                m_texCoords[vertexIndex] = surface->texCoord(j);
+
+                vertexIndex++;
+            }
         }
     }
 
@@ -219,11 +196,7 @@ void MCSurfaceObjectRenderer::render()
     shaderProgram()->setScale(1.0f, 1.0f, 1.0f);
     shaderProgram()->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 
-#ifdef __MC_GLES__
     glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-#else
-    glDrawArrays(GL_QUADS, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-#endif
     glDisable(GL_BLEND);
 
     releaseVBO();
@@ -234,18 +207,13 @@ void MCSurfaceObjectRenderer::renderShadows()
 {
     assert(shadowShaderProgram());
 
-
     shadowShaderProgram()->bind();
     shadowShaderProgram()->bindMaterial(material());
 
     shadowShaderProgram()->setTransform(0, MCVector3dF(0, 0, 0));
     shadowShaderProgram()->setScale(1.0f, 1.0f, 1.0f);
 
-#ifdef __MC_GLES__
     glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-#else
-    glDrawArrays(GL_QUADS, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-#endif
 
     releaseVBO();
     releaseVAO();
