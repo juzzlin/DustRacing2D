@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "foundation-sites": "^6.3.0",
+    "motion-ui": "^1.2.2"
+  },
+  "scripts": {
+    "build": "node-sass styles.scss --include-path ./node_modules/foundation-sites/scss/ --include-path ./node_modules/motion-ui/ --output dist/css"
+  }
+}

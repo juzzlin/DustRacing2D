@@ -1,98 +1,129 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Dust Racing 2D Official Homepage">
-    <meta name="keywords" content="Dust Racing 2D,dustrac,car,racing,game,editor,Ubuntu,open source,opengl,c++">
-    <meta name="author" content="Jussi Lind">
-    <script src="angular.js"></script>
-    <script src="app.js"></script>
+    <head>
+        <link rel="stylesheet" type="text/css" href="dist/css/styles.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="Dust Racing 2D Official Homepage">
+        <meta name="keywords" content="Dust Racing 2D,dustrac,car,racing,game,editor,Ubuntu,open source,opengl,c++">
+        <meta name="author" content="Jussi Lind">
+    </head>
 
-</head>
+    <body>
 
-<body ng-app="App">
+        <title>Dust Racing 2D - A traditional top-down OpenGL car racing game and a level editor</title>
 
-    <title>Dust Racing 2D - A traditional top-down OpenGL car racing game and a level editor</title>
+        <header>
+        <p><time pubdate datetime="2012-12-30"></time></p>
+        </header>
 
-    <header>
-      <p><time pubdate datetime="2012-12-30"></time></p>
-    </header>
+        <div class="dr2d-title">
+            <h1>Dust Racing 2D</h1>
+        </div>
 
-    <div class="dr2-title">
-        <h1>Dust Racing 2D</h1>
-    </div>
+        <div class="dr2d-main-content">
 
-    <div class="dr2-main-content">
-        <div class="dr2-image-view container" ng-controller="ImageController">
-            <div class="row center-block">
-                <div class="col-xs-12 col-sm-4">
-                    <img class="image1" src="{{image1}}"/>
+            <div class="row">
+                <div class="small-12 medium-6 columns">
+                    <div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
+                        <ul class="orbit-container">
+                            <li class="is-active orbit-slide">
+                                <img class="orbit-image" src="screenshots/1.10.0/1.jpg" alt="1">
+                                <figcaption class="orbit-caption">'Monza'</figcaption>
+                            </li>
+                            <li class="orbit-slide">
+                                <img class="orbit-image" src="screenshots/1.10.0/2.jpg" alt="2">
+                                <figcaption class="orbit-caption">'Triangle'</figcaption>
+                            </li>
+                            <li class="orbit-slide">
+                                <img class="orbit-image" src="screenshots/1.10.0/3.jpg" alt="3">
+                                <figcaption class="orbit-caption">'Suzuka'</figcaption>
+                            </li>
+                            <li class="orbit-slide">
+                                <img class="orbit-image" src="screenshots/1.10.0/4.jpg" alt="4">
+                                <figcaption class="orbit-caption">The Level Editor</figcaption>
+                            </li>
+                        </ul>
+                        <nav class="orbit-bullets">
+                            <button class="is-active" data-slide="0"><span class="show-for-sr"></span><span class="show-for-sr">Current Slide</span></button>
+                            <button data-slide="1"><span class="show-for-sr"></span></button>
+                            <button data-slide="2"><span class="show-for-sr"></span></button>
+                            <button data-slide="3"><span class="show-for-sr"></span></button>
+                        </nav>
+                    </div>                    
                 </div>
-                <div class="col-xs-12 col-sm-4">
-                    <img class="image2" src="{{image2}}"/>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                    <img class="image3" src="{{image3}}"/>
+                <div class="small-12 medium-6 columns">
+                    <div class="responsive-embed">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/_0f7rpGYE5g" frameborder="0" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="dr2-text-area center-block">
-            <p><br>Dust Racing 2D (dustrac) is an open source, tile-based 2D racing game developed by Jussi Lind and contributors.</p>
+            <div class="row">
+                <div class="small-12 medium-6 columns">
+                    <div class="dr2d-text-area">
+                        <p>Dust Racing 2D (dustrac) is an open source, tile-based 2D racing game developed by Jussi Lind and contributors.</p>
 
-            <p>The first version of the game was published in 2012.</p>
-
-            <p>The purpose of the game is to race against 11 challenging computer players on different race tracks. Finishing in TOP-6 will unlock a new race track. Only a small portion of the race track is visible on the scrolling screen. There's also an option for a split-screen two player game, introduced in 0.12.0. Dust Racing 2D comes with a Qt-based level editor that makes creating new race tracks easy.</p>
-
-            <p>The source code of the game is licensed under GNU GPLv3. Dust Racing 2D is built on Qt development framework in C++ and it uses OpenGL for graphics. This means, that it is possible to port the game to multiple operating systems. Dust Racing 2D is currently available for Linux and Windows.</p>
-
-            <p>Dust Racing 2D was inspired by Super Cars and Slicks'n Slide and is under active development.</p>
-        </div>
-
-        <div class="container">
-            <div class="row center-block">
-                <div class="col-xs-12 col-md-2">
-                <p>
-                <a href="https://github.com/juzzlin/DustRacing2D">
-                  <h3>The project home</h3></a>
-                </p>
+                        <p>The purpose of the game is to race against challenging computer players on different race tracks. 
+                           Finishing in TOP-6 will unlock a new race track. Only a small portion of the race track is visible on the scrolling screen. </p>
+                        <p>There's also an option for a split-screen two player game, introduced in 0.12.0. 
+                           Dust Racing 2D comes with a Qt-based level editor that makes creating new race tracks easy.</p>
+                    </div>
                 </div>
+                <div class="small-12 medium-6 columns">
+                    <div class="dr2d-text-area">
+                        <p>The source code of the game is licensed under GNU GPLv3. 
+                           Dust Racing 2D is built on <a href="http://www.qt.io">Qt development framework</a> in C++ and it uses OpenGL for graphics. 
+                           This means, that it is possible to port the game to multiple operating systems. 
+                           Dust Racing 2D is currently available for Linux and Windows.</p>
 
-                <div class="col-xs-12 col-md-2">
-                <p>
-                <a href="https://github.com/juzzlin/DustRacing2D/releases">
-                  <h3>Downloads</h3></a>
-                </p>
-                </div>
-
-                <div class="col-xs-12 col-md-2">
-                <a href="https://github.com/juzzlin/DustRacing2D">
-                  <h3>Source Code</h3></a>
-                </div>
-
-                <div class="col-xs-12 col-md-2">
-                <a href="https://launchpad.net/~jussi-lind/+archive/ubuntu/dustrac/">
-                  <h3>PPA for Ubuntu</h3></a>
-                </div>
-
-                <div class="col-xs-12 col-md-2">
-                <a href="https://github.com/juzzlin/DustRacing2D/wiki">
-                  <h3>Wiki</h3></a>
-                </div>
-
-                <div class="col-xs-12 col-md-2">
-                <a href="http://www.youtube.com/results?search_query=dust+racing+2d&search_sort=video_date_uploaded">
-                  <h3>Videos</h3></a>
+                        <p>Dust Racing 2D was inspired by Super Cars and Slicks'n Slide and is under active development.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="dr2-footer">
-        <small>Copyright 2010-2015 (c) Jussi Lind &lt;jussi.lind@iki.fi&gt;</small>
-    </div>
 
-</body>
+            <nav>
+                <div class="row">
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://github.com/juzzlin/DustRacing2D"><h3>The project home</h3></a>
+                    </div>
+
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://github.com/juzzlin/DustRacing2D/releases"><h3>Downloads</h3></a>
+                    </div>
+
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://github.com/juzzlin/DustRacing2D"><h3>Source Code</h3></a>
+                    </div>
+
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://launchpad.net/~jussi-lind/+archive/ubuntu/dustrac/"><h3>PPA for Ubuntu</h3></a>
+                    </div>
+
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://github.com/juzzlin/DustRacing2D/wiki"><h3>Wiki</h3></a>
+                    </div>
+
+                    <div class="small-12 medium-2 columns">
+                        <a href="https://www.youtube.com/playlist?list=PL-_e22uBmMY_JXnWqHMS0tEwTIZb8dMRd"><h3>Videos</h3></a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="dr2d-footer">
+            <small>Copyright 2010-2017 (c) Jussi Lind &lt;jussi.lind@iki.fi&gt;</small>
+        </div>
+    </body>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.core.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.util.mediaQuery.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.util.keyboard.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.util.motion.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.util.timerAndImageLoader.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.util.touch.min.js"></script>
+    <script src="node_modules/foundation-sites/dist/js/plugins/foundation.orbit.min.js"></script>
+    <script src="node_modules/motion-ui/dist/motion-ui.min.js"></script>
+    <script>
+        $(document).foundation();
+    </script>
 </html>
 
