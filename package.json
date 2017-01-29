@@ -4,6 +4,11 @@
     "motion-ui": "^1.2.2"
   },
   "scripts": {
-    "build": "node-sass styles.scss --include-path ./node_modules/foundation-sites/scss/ --include-path ./node_modules/motion-ui/ --output dist/css"
+    "build": "gulp sass"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "node-sass": "^4.4.0"
   }
 }
