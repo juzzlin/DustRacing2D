@@ -4,10 +4,11 @@
     "motion-ui": "^1.2.2"
   },
   "scripts": {
-    "build": "gulp sass"
+    "build": "gulp"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.1.0",
     "node-sass": "^4.4.0"
   }
