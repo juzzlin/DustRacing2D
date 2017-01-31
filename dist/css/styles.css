@@ -4627,11 +4627,16 @@ body, html {
   text-align: center;
   height: 100%; }
 
-nav {
+.dr2d-title {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  opacity: 0.9; }
+
+.dr2d-links {
   width: calc(100% - 2 * $margin);
-  margin-left: 2em;
-  margin-right: 2em;
-  margin-top: 2em; }
+  max-width: 75rem;
+  margin: 1em auto 1em auto; }
 
 a:link {
   text-decoration: none;
@@ -4656,15 +4661,10 @@ a:active {
   .dr2d-main-content .container {
     padding: 0; }
 
-.dr2d-title {
-  margin-bottom: 10px; }
-  .dr2d-title h1 {
-    font-weight: bold; }
-
 .dr2d-text-area {
   width: 100%;
   color: #444444;
-  background-color: #e8e8e8;
+  background-color: #eeeeee;
   text-align: left;
   text-indent: 1em;
   border-radius: 1em;

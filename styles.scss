@@ -7,7 +7,7 @@
 
 $textColor: #444444; 
 $linkHoverColor: #aa8822; 
-$textAreaBgColor: #e8e8e8;
+$textAreaBgColor: #eeeeee;
 $bodyBgColor: #dddddd;
 $headerBgColor: $bodyBgColor;
 $footerBgColor: #444444;
@@ -32,13 +32,21 @@ body, html
     height: 100%;
 }
 
-nav
+.dr2d-title 
 {
-    $margin: 2em;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    opacity: 0.9;
+}
+
+.dr2d-links
+{
+    $margin: 1em;
     width: calc(100% - 2 * $margin);
-    margin-left: $margin;
-    margin-right: $margin;
-    margin-top: 2em;
+    max-width: $grid-row-width;
+    margin: $margin auto $margin auto;
 }
 
 a
@@ -77,16 +85,6 @@ a
     .container
     {
         padding: 0;
-    }
-}
-
-.dr2d-title 
-{
-    margin-bottom: 10px;
-
-    h1 
-    {
-        font-weight: bold;
     }
 }
 
