@@ -5,13 +5,16 @@
 @include motion-ui-transitions;
 @include foundation-everything;
 
-$textColor: #444444; 
+$textAreaTextColor: #ffffff; 
+$linkColor: #444444; 
 $linkHoverColor: #aa8822; 
-$textAreaBgColor: #eeeeee;
-$bodyBgColor: #dddddd;
+$bodyBgColor: #eeeeee;
 $headerBgColor: $bodyBgColor;
-$footerBgColor: #444444;
+$textAreaBgColor: #111111;
+$footerBgColor: #ee0000;
 $footerTextColor: #eeeeee;
+
+$elementBorderRadius: 0.5em;
 
 .row
 {
@@ -21,15 +24,20 @@ $footerTextColor: #eeeeee;
 header
 {
     background-color: $headerBgColor;
-    color: $textColor;
+    color: $textAreaTextColor;
 }
 
 body, html
 {
     background-color: $bodyBgColor;
-    color: $textColor;
+    color: $textAreaTextColor;
     text-align: center;
     height: 100%;
+}
+
+.orbit-container, .responsive-embed
+{
+    border-radius: $elementBorderRadius;
 }
 
 .dr2d-title 
@@ -49,12 +57,18 @@ body, html
     margin: $margin auto $margin auto;
 }
 
+.dr2d-2d
+{
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: red;   
+}
+
 a
 {
     &:link
     {
         text-decoration: none;
-        color: $textColor;
+        color: $linkColor;
     }
 
     &:visited
@@ -71,8 +85,18 @@ a
     &:active
     {
         text-decoration: none;
-        color: $textColor;
+        color: $linkColor;
     }
+}
+
+a.qt-link:link 
+{
+    color: #41cd52;
+}
+
+a.qt-link:hover 
+{
+    color: $linkHoverColor;
 }
 
 .dr2d-main-content
@@ -91,11 +115,11 @@ a
 .dr2d-text-area
 {
     width: 100%;
-    color: $textColor;
+    color: $textAreaTextColor;
     background-color: $textAreaBgColor;
     text-align: left;
     text-indent: 1em;
-    border-radius: 1em;
+    border-radius: $elementBorderRadius;
     padding: 0.75em;
     margin-bottom: 1em;
     min-height: 20em;

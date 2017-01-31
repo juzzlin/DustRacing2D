@@ -4618,14 +4618,17 @@ a.thumbnail {
   margin-top: 1em; }
 
 header {
-  background-color: #dddddd;
-  color: #444444; }
+  background-color: #eeeeee;
+  color: #ffffff; }
 
 body, html {
-  background-color: #dddddd;
-  color: #444444;
+  background-color: #eeeeee;
+  color: #ffffff;
   text-align: center;
   height: 100%; }
+
+.orbit-container, .responsive-embed {
+  border-radius: 0.5em; }
 
 .dr2d-title {
   margin-bottom: 10px;
@@ -4637,6 +4640,10 @@ body, html {
   width: calc(100% - 2 * $margin);
   max-width: 75rem;
   margin: 1em auto 1em auto; }
+
+.dr2d-2d {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: red; }
 
 a:link {
   text-decoration: none;
@@ -4653,27 +4660,33 @@ a:active {
   text-decoration: none;
   color: #444444; }
 
+a.qt-link:link {
+  color: #41cd52; }
+
+a.qt-link:hover {
+  color: #aa8822; }
+
 .dr2d-main-content {
   width: 100%;
   min-height: 100%;
   padding: 0;
-  background-color: #dddddd; }
+  background-color: #eeeeee; }
   .dr2d-main-content .container {
     padding: 0; }
 
 .dr2d-text-area {
   width: 100%;
-  color: #444444;
-  background-color: #eeeeee;
+  color: #ffffff;
+  background-color: #111111;
   text-align: left;
   text-indent: 1em;
-  border-radius: 1em;
+  border-radius: 0.5em;
   padding: 0.75em;
   margin-bottom: 1em;
   min-height: 20em; }
 
 .dr2d-footer {
-  background-color: #444444;
+  background-color: #ee0000;
   color: #eeeeee;
   width: 100%;
   height: 2em;
