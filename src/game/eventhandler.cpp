@@ -285,8 +285,10 @@ bool EventHandler::mapKeyToAction(int player, InputHandler::Action action, int k
             {
                 iter = m_keyToActionMap.erase(iter);
             }
-
-            iter++;
+            else
+            {
+                iter++;
+            }
         }
 
         m_keyToActionMap[key] = {player, action};
