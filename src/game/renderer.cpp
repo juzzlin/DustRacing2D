@@ -388,4 +388,13 @@ void Renderer::setEventHandler(EventHandler & eventHandler)
 
 Renderer::~Renderer()
 {
+    // Ensure that OpenGL stuff gets deleted before the OpenGL context deletion
+
+    m_fbo.reset(nullptr);
+
+    m_shadowFbo.reset(nullptr);
+
+    m_shaderHash.clear();
+
+    delete m_context;
 }

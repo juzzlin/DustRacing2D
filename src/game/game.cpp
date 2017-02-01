@@ -419,9 +419,6 @@ void Game::exitGame()
 
 Game::~Game()
 {
-    delete m_renderer;
-    m_renderer = nullptr;
-
     delete m_stateMachine;
     m_stateMachine = nullptr;
 
@@ -439,4 +436,7 @@ Game::~Game()
 
     delete m_audioWorker;
     m_audioWorker = nullptr;
+
+    delete m_renderer;
+    m_renderer = nullptr;
 }
