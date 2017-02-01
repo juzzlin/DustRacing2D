@@ -35,6 +35,7 @@
 #include "tracktile.hpp"
 
 #include <cassert>
+#include <cstdlib>
 
 EditorView::EditorView(EditorData & editorData, QWidget * parent)
 : QGraphicsView(parent)
