@@ -26,6 +26,7 @@ TrackTileBase::TrackTileBase(
 , m_matrixLocation(matrixLocation)
 , m_trackData(trackData)
 , m_computerHint(TrackTileBase::CH_NONE)
+, m_excludeFromMinimap(false)
 {
 }
 
@@ -75,6 +76,16 @@ void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)
 TrackTileBase::ComputerHint TrackTileBase::computerHint() const
 {
     return m_computerHint;
+}
+
+void TrackTileBase::setExcludeFromMinimap(bool exclude)
+{
+    m_excludeFromMinimap = exclude;
+}
+
+bool TrackTileBase::excludeFromMinimap() const
+{
+    return m_excludeFromMinimap;
 }
 
 TrackTileBase::~TrackTileBase()

@@ -195,7 +195,7 @@ void TimingOverlay::renderCurrentLap()
 
 void TimingOverlay::renderPosition()
 {
-    const int pos        = m_race->getPositionOfCar(*m_car);
+    const int pos        = m_car->position();
     const int lap        = m_timing->lap(m_car->index()) + 1;
     const int leadersLap = m_timing->leadersLap() + 1;
 
@@ -215,59 +215,44 @@ void TimingOverlay::renderPosition()
 
     m_text.setText(ss.str());
 
-    if (pos > 8)
-    {
-        m_text.setColor(RED);
-    }
-    else if (pos > 4)
-    {
-        m_text.setColor(YELLOW);
-    }
-    else if (pos > 1)
-    {
-        m_text.setColor(WHITE);
-    }
-    else if (pos == 1)
-    {
-        m_text.setColor(GREEN);
-    }
-    else
-    {
-        m_text.setColor(WHITE);
-    }
+    m_text.setColor(YELLOW);
 
     m_text.render(0, height() - m_text.height() * 2, nullptr, m_font);
 }
 
 void TimingOverlay::renderSpeed()
 {
-    int speed = m_car->speedInKmh();
-    speed = speed < 0 ? 0 : speed;
-
-    std::wstringstream ss;
-    ss << " " << speed;
-    if (speed < 100)
+    // Minimaps replace speedometer in the split modes
+    if (!Game::instance().hasTwoHumanPlayers())
     {
+        int speed = m_car->speedInKmh();
+        speed = speed < 0 ? 0 : speed;
+
+        std::wstringstream ss;
+        ss << " " << speed;
+        if (speed < 100)
+        {
+            m_text.setColor(WHITE);
+        }
+        else if (speed < 200)
+        {
+            m_text.setColor(YELLOW);
+        }
+        else
+        {
+            m_text.setColor(RED);
+        }
+
+        m_text.setText(ss.str());
+        m_text.setGlyphSize(40, 40);
+        const int h = m_text.height();
+        m_text.render(0, h, nullptr, m_font);
+
+        m_text.setText(QObject::tr(" KM/H").toStdWString());
+        m_text.setGlyphSize(20, 20);
         m_text.setColor(WHITE);
+        m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
     }
-    else if (speed < 200)
-    {
-        m_text.setColor(YELLOW);
-    }
-    else
-    {
-        m_text.setColor(RED);
-    }
-
-    m_text.setText(ss.str());
-    m_text.setGlyphSize(40, 40);
-    const int h = m_text.height();
-    m_text.render(0, h, nullptr, m_font);
-
-    m_text.setText(QObject::tr(" KM/H").toStdWString());
-    m_text.setGlyphSize(20, 20);
-    m_text.setColor(WHITE);
-    m_text.render(0, 2 * m_text.height() + h, nullptr, m_font);
 }
 
 void TimingOverlay::renderCurrentLapTime()

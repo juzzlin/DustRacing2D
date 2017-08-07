@@ -31,7 +31,6 @@ class EventHandler;
 class InputHandler;
 class Renderer;
 class Scene;
-class Speedometer;
 class Startlights;
 class StartlightsOverlay;
 class StateMachine;

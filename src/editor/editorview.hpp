@@ -133,6 +133,8 @@ private:
 
     QAction * m_deleteCol;
 
+    QAction * m_excludeFromMinimap;
+
     EditorData & m_editorData;
 };
 

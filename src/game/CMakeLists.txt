@@ -70,6 +70,7 @@ set(SRC
     mainmenu.cpp
     map.cpp
     messageoverlay.cpp
+    minimap.cpp
     particlefactory.cpp
     pit.cpp
     offtrackdetector.cpp

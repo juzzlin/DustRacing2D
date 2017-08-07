@@ -74,6 +74,7 @@ HEADERS += \
     mainmenu.hpp \
     map.hpp \
     messageoverlay.hpp \
+    minimap.hpp \
     offtrackdetector.hpp \
     openaldata.hpp \
     openaldevice.hpp \
@@ -240,6 +241,7 @@ SOURCES += \
     mainmenu.cpp \
     map.cpp \
     messageoverlay.cpp \
+    minimap.cpp \
     offtrackdetector.cpp \
     openaldata.cpp \
     openaldevice.cpp \

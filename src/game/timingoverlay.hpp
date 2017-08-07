@@ -32,7 +32,7 @@ class MCTextureFont;
 class Race;
 class Timing;
 
-//! Renders timeing information on top of the game scene.
+//! Renders the main information overlay on top of the game scene.
 class TimingOverlay : public QObject, public OverlayBase
 {
     Q_OBJECT

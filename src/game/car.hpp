@@ -146,6 +146,10 @@ public:
 
     int routeProgression() const;
 
+    void setPosition(int value);
+
+    int position() const;
+
     //! Get location of the left front tire.
     MCVector3dF leftFrontTireLocation() const;
 
@@ -211,6 +215,7 @@ private:
     int                      m_currentTargetNodeIndex;
     int                      m_prevTargetNodeIndex;
     int                      m_routeProgression;
+    int                      m_position;
     bool                     m_isHuman;
     CarParticleEffectManager m_particleEffectManager;
     CarSoundEffectManagerPtr m_soundEffectManager;

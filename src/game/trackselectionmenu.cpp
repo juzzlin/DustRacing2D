@@ -137,8 +137,8 @@ void TrackItem::renderTiles()
     m_xDisplacement = m_xDisplacement * 2 / 3;
 
     // Set tileW and tileH so that they are squares
-    MCFloat tileW = previewW / rMap.cols();
-    MCFloat tileH = previewH / rMap.rows();
+    float tileW = previewW / rMap.cols();
+    float tileH = previewH / rMap.rows();
 
     if (tileW > tileH)
     {
@@ -163,35 +163,33 @@ void TrackItem::renderTiles()
     initY = y() - rMap.rows() * tileH / 2;
 
     // Loop through the visible tile matrix and draw the tiles
-    MCFloat tileX, tileY;
-    tileY = initY;
-    const int j2 = rMap.rows();
-    const int i2 = rMap.cols();
-    for (int j = 0; j < j2; j++)
+    float tileY = initY;
+    for (unsigned int j = 0; j < rMap.rows(); j++)
     {
-        tileX = initX;
-        for (int i = 0; i < i2; i++)
+        float tileX = initX;
+        for (unsigned int i = 0; i < rMap.cols(); i++)
         {
-            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
-            if (MCSurface * pSurface = pTile->previewSurface())
+            auto tile = std::static_pointer_cast<TrackTile>(rMap.getTile(i, j));
+            auto surface = tile->previewSurface();
+            if (surface && !tile->excludeFromMinimap())
             {
-                pSurface->setShaderProgram(Renderer::instance().program("menu"));
-                pSurface->bindMaterial();
+                surface->setShaderProgram(Renderer::instance().program("menu"));
+                surface->bindMaterial();
 
                 if (m_track.trackData().isLocked())
                 {
-                    pSurface->setColor(MCGLColor(0.5, 0.5, 0.5));
+                    surface->setColor(MCGLColor(0.5, 0.5, 0.5));
                 }
                 else
                 {
-                    pSurface->setColor(MCGLColor(1.0, 1.0, 1.0));
+                    surface->setColor(MCGLColor(1.0, 1.0, 1.0));
                 }
 
-                pSurface->setSize(tileH, tileW);
-                pSurface->render(
-                            nullptr,
-                            MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
-                            pTile->rotation());
+                surface->setSize(tileH, tileW);
+                surface->render(
+                    nullptr,
+                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
+                    tile->rotation());
             }
 
             tileX += tileW;

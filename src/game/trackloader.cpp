@@ -273,6 +273,8 @@ void TrackLoader::readTile(
     tile->setComputerHint(
         static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toUInt()));
 
+    tile->setExcludeFromMinimap(element.attribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap(), "0").toInt());
+
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.

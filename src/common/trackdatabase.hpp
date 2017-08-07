@@ -22,6 +22,7 @@ class Objects;
 class Route;
 class MapBase;
 
+//! Common base class for track data shared by the editor and the game.
 class TrackDataBase
 {
 public:
@@ -139,6 +140,11 @@ public:
             static QString computerHint()
             {
                 return "c";
+            }
+
+            static QString excludeFromMinimap()
+            {
+                return "e";
             }
         };
 

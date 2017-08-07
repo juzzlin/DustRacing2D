@@ -206,7 +206,7 @@ void Scene::createCars()
 
             setupAudio(*car, i);
 
-            m_cars.push_back(CarPtr(car));
+            m_cars.push_back(car);
             m_race.addCar(*car);
         }
     }
@@ -219,6 +219,18 @@ void Scene::createCars()
 
     m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
     m_crashOverlay[0].setCarToFollow(*m_cars.at(0));
+}
+
+void Scene::setupMinimaps()
+{
+    const int minimapSize = m_width * 0.2f;
+
+    const int minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
+
+    for (int i = 0; i < 2; i++)
+    {
+        m_minimap[i].initialize(*m_cars[i], m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, minimapSize);
+    }
 }
 
 int Scene::width()
@@ -457,6 +469,8 @@ void Scene::setActiveTrack(Track & activeTrack)
     initRace();
 
     setupAI(activeTrack);
+
+    setupMinimaps();
 }
 
 void Scene::setWorldDimensions()
@@ -595,7 +609,7 @@ TrackSelectionMenu & Scene::trackSelectionMenu() const
     return *m_trackSelectionMenu;
 }
 
-void Scene::setSplitType(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1)
+void Scene::getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1)
 {
     if (m_game.splitType() == Game::SplitType::Vertical)
     {
@@ -629,7 +643,7 @@ void Scene::renderTrack()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            setSplitType(p1, p0);
+            getSplitPositions(p1, p0);
 
             glScene.setSplitType(p1);
             m_activeTrack->render(&m_camera[1]);
@@ -673,7 +687,7 @@ void Scene::renderObjectShadows()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            setSplitType(p1, p0);
+            getSplitPositions(p1, p0);
 
             glScene.setSplitType(p1);
             renderPlayerSceneShadows(m_camera[1]);
@@ -735,15 +749,18 @@ void Scene::renderObjects()
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
-            setSplitType(p1, p0);
+            getSplitPositions(p1, p0);
 
             glScene.setSplitType(p1);
             renderPlayerScene(m_camera[1]);
             m_timingOverlay[1].render();
+            m_minimap[1].render(m_cars, m_race);
 
             glScene.setSplitType(p0);
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
+            m_minimap[0].render(m_cars, m_race);
+
 
             // Setup for common scene
             glScene.setSplitType(MCGLScene::ShowFullScreen);
@@ -753,6 +770,8 @@ void Scene::renderObjects()
             renderPlayerScene(m_camera[0]);
             m_timingOverlay[0].render();
             m_crashOverlay[0].render();
+
+            m_minimap[0].render(m_cars, m_race);
         }
 
         break;

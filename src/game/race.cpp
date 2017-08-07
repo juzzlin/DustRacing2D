@@ -141,7 +141,11 @@ void Race::initCars()
 
 void Race::clearPositions()
 {
-    m_positions.clear();
+    m_progression.clear();
+
+    for (auto && car : m_cars) {
+        car->setPosition(0);
+    }
 }
 
 void Race::clearRaceFlags()
@@ -286,7 +290,7 @@ void Race::update()
     // Enable the checkered flag if leader has done at least 95% of the last lap.
     if (m_timing.leadersLap() + 1 == m_lapCount)
     {
-        auto && leader = getLeadingCar();
+        auto && leader = getLeader();
         auto && route = m_track->trackData().route();
         auto tnode = route.get(leader.currentTargetNodeIndex());
 
@@ -308,7 +312,7 @@ void Race::update()
         {
             m_winnerFinished = true;
 
-            auto && leader = getLeadingCar();
+            auto && leader = getLeader();
             m_timing.setRaceCompleted(leader.index(), true, leader.isHuman());
 
             if (m_game.mode() == Game::Mode::TimeTrial)
@@ -403,11 +407,13 @@ void Race::updateRouteProgress(Car & car)
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
+                updatePositions();
+
                 checkIfLapIsCompleted(car, route, currentTargetNodeIndex);
 
                 // Increase progress and update the positions hash
                 car.setRouteProgression(car.routeProgression() + 1);
-                m_positions[car.routeProgression()].push_back(car.index());
+                m_progression[car.routeProgression()].push_back(car.index());
 
                 // Switch to next check point
                 car.setPrevTargetNodeIndex(currentTargetNodeIndex);
@@ -434,6 +440,55 @@ void Race::updateRouteProgress(Car & car)
     }
 }
 
+void Race::updatePositions()
+{
+    CarVector positions = m_cars;
+
+    std::sort(positions.begin(), positions.end(), [=](Car * lhs, Car * rhs) -> bool {
+        // Easy comparison: cars have reached different checkpoints
+        if (lhs->routeProgression() > rhs->routeProgression())
+        {
+            return true;
+        }
+        else if (lhs->routeProgression() < rhs->routeProgression())
+        {
+            return false;
+        }
+        // For cars that have reached the same checkpoint do comparison
+        // by the position inside that checkpoint
+        else
+        {
+            int lhsPos = 0;
+            int rhsPos = 0;
+            int pos = 0;
+            auto && progression = m_progression[lhs->routeProgression()];
+            for (int index : progression)
+            {
+                if (m_cars[index] == lhs)
+                {
+                    lhsPos = pos;
+                }
+                else if (m_cars[index] == rhs)
+                {
+                    rhsPos = pos;
+                }
+
+                pos++;
+            }
+
+            return lhsPos < rhsPos;
+        }
+    });
+
+    // Store current position to car objects for fast access
+    int pos = 1;
+    for (auto && car : positions)
+    {
+        car->setPosition(pos);
+        pos++;
+    }
+}
+
 void Race::checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex)
 {
     if (currentTargetNodeIndex == 0 &&
@@ -457,7 +512,7 @@ void Race::checkForNewBestPosition(const Car & car)
     {
         if (car.isHuman())
         {
-            const int pos = getPositionOfCar(car);
+            const int pos = car.position();
             if (pos < m_bestPos || m_bestPos == -1)
             {
                 Settings::instance().saveBestPos(*m_track, pos, m_lapCount, m_game.difficultyProfile().difficulty());
@@ -547,32 +602,36 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     car.physicsComponent().reset();
 }
 
-unsigned int Race::getPositionOfCar(const Car & car) const
+Car & Race::getLeader() const
 {
-    auto && order = m_positions[car.routeProgression()];
-    for (unsigned int i = 0; i < order.size(); i++)
-    {
-        if (order[i] == static_cast<int>(car.index()))
-        {
-            return i + 1;
-        }
-    }
-
-    return 0; // Should return the last valid position?
-}
-
-Car & Race::getLeadingCar() const
-{
-    auto bestPos = m_cars.size();
+    int bestPos = m_cars.size();
     auto bestCar = m_cars.back();
 
     for (unsigned int i = 0; i < m_cars.size(); i++)
     {
-        const auto pos = getPositionOfCar(*m_cars[i]);
+        const auto pos = m_cars[i]->position();
         if (pos > 0 && pos < bestPos)
         {
             bestCar = m_cars[i];
             bestPos = pos;
+        }
+    }
+
+    return *bestCar;
+}
+
+Car & Race::getLoser() const
+{
+    int bestValue = 0;
+    auto bestCar = m_cars.back();
+
+    for (auto && car : m_cars)
+    {
+        const int pos = car->position();
+        if (pos > bestValue)
+        {
+            bestCar = car;
+            bestValue = pos;
         }
     }
 

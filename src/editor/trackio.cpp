@@ -56,6 +56,8 @@ void readTile(TrackData & newData, const QDomElement & element)
 
     tile->setComputerHint(
         static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toInt()));
+
+    tile->setExcludeFromMinimap(element.attribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap(), "0").toUInt());
 }
 
 void readObject(TrackData & newData, const QDomElement & element)
@@ -110,6 +112,10 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::i(), i);
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::j(), j);
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::orientation(), tile->rotation());
+
+            if (tile->excludeFromMinimap()) {
+                tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap(), true);
+            }
 
             if (tile->computerHint() != TrackTile::CH_NONE)
             {

@@ -24,7 +24,15 @@
 
 class TrackDataBase;
 
-//! Base class for track tiles used in the editor and in the game.
+/*! Base class for track tiles used in the editor and in the game.
+ *
+ *  This is not the most beautiful solution to share tile code between
+ *  the editor and the game because it requires us to downcast objects as
+ *  both have some incompatible additions to the base class.
+ *
+ *  However, we can avoid dynamic_cast<>'s because we "know" what the
+ *  objects really are.
+ */
 class TrackTileBase
 {
 public:
@@ -82,6 +90,12 @@ public:
     //! Get computer hint
     ComputerHint computerHint() const;
 
+    /*! Don't show the tile in minimap / preview even if an asphalt tile.
+     *  (Some tracks might include asphalt tiles just for looks) */
+    void setExcludeFromMinimap(bool exclude);
+
+    bool excludeFromMinimap() const;
+
 private:
 
     //! Type string.
@@ -98,6 +112,8 @@ private:
 
     //! Computer hint
     ComputerHint m_computerHint;
+
+    bool m_excludeFromMinimap;
 };
 
 using TrackTileBasePtr = std::shared_ptr<TrackTileBase>;

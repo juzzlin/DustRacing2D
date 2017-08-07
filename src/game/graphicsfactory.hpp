@@ -16,12 +16,16 @@
 #ifndef GRAPHICSFACTORY_HPP
 #define GRAPHICSFACTORY_HPP
 
+#include "minimap.hpp"
+
 class MCSurface;
 
 //! Helper functions to create miscellaneous graphic items.
 namespace GraphicsFactory {
 
 MCSurface & generateNumberSurface(int index);
+
+MCSurface & generateMinimapMarker();
 
 } // namespace GraphicsFactory
 

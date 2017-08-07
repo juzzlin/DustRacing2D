@@ -53,9 +53,6 @@ public:
     //! Return true, if race has started.
     bool started();
 
-    //! Get the position of the given car (0 == N/A, 1 == first, 2 == second..).
-    unsigned int getPositionOfCar(const Car & car) const;
-
     //! Get the number of laps.
     int lapCount() const;
 
@@ -70,7 +67,11 @@ public:
 
     bool checkeredFlagEnabled() const;
 
-    Car & getLeadingCar() const;
+    //! Get current last car in the race
+    Car & getLoser() const;
+
+    //! Get current leading car in the race
+    Car & getLeader() const;
 
 signals:
 
@@ -120,6 +121,8 @@ private:
 
     void updateRouteProgress(Car & car);
 
+    void updatePositions();
+
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
@@ -130,8 +133,8 @@ private:
 
     // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
-    typedef std::unordered_map<int, std::vector<int> > PositionHash;
-    mutable PositionHash m_positions;
+    typedef std::unordered_map<int, std::vector<int> > ProgressionHash;
+    mutable ProgressionHash m_progression;
 
     typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
     typedef std::vector<OffTrackDetectorPtr> OTDVector;

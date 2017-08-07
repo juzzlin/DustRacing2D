@@ -70,6 +70,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 , m_currentTargetNodeIndex(-1)
 , m_prevTargetNodeIndex(-1)
 , m_routeProgression(0)
+, m_position(0)
 , m_isHuman(isHuman)
 , m_particleEffectManager(*this)
 , m_numberPos(-5, 0, 0)
@@ -497,6 +498,16 @@ int Car::prevTargetNodeIndex() const
 void Car::setRouteProgression(int value)
 {
     m_routeProgression = value;
+}
+
+void Car::setPosition(int value)
+{
+    m_position = value;
+}
+
+int Car::position() const
+{
+    return m_position;
 }
 
 int Car::routeProgression() const

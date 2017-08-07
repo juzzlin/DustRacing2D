@@ -19,6 +19,7 @@
 #include "ai.hpp"
 #include "car.hpp"
 #include "crashoverlay.hpp"
+#include "minimap.hpp"
 #include "race.hpp"
 #include "timingoverlay.hpp"
 #include "treeview.hpp"
@@ -123,7 +124,8 @@ private:
     void setupAudio(Car & car, int index);
     void setupAI(Track & activeTrack);
     void setupCameras(Track & activeTrack);
-    void setSplitType(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1);
+    void setupMinimaps();
+    void getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1);
     void setWorldDimensions();
     void updateAi();
     void updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object);
@@ -155,11 +157,12 @@ private:
     Intro               * m_intro;
     ParticleFactory     * m_particleFactory;
     FadeAnimation       * m_fadeAnimation;
+    Minimap               m_minimap[2];
 
-    typedef std::vector<CarPtr> CarVector;
+    using CarVector = std::vector<CarPtr>;
     CarVector m_cars;
 
-    typedef std::vector<AIPtr> AIVector;
+    using AIVector = std::vector<AIPtr>;
     AIVector m_ai;
 
     // TreeViews need to be separately updated.
