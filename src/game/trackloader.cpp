@@ -192,22 +192,23 @@ TrackData * TrackLoader::loadTrack(QString path)
     QDomElement root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        const QString name =
-            root.attribute(TrackDataBase::DataKeywords::Header::name(), "undefined");
         const unsigned int cols =
             root.attribute(TrackDataBase::DataKeywords::Header::cols(), "0").toUInt();
         const unsigned int rows =
             root.attribute(TrackDataBase::DataKeywords::Header::rows(), "0").toUInt();
-        const unsigned int index =
-            root.attribute(TrackDataBase::DataKeywords::Header::index(), "999").toUInt();
-        const bool isUserTrack =
-            root.attribute(TrackDataBase::DataKeywords::Header::user(), "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
+            const QString name =
+                root.attribute(TrackDataBase::DataKeywords::Header::name(), "undefined");
+
+            const bool isUserTrack =
+                root.attribute(TrackDataBase::DataKeywords::Header::user(), "0").toUInt();
+
             newData = new TrackData(name, isUserTrack, cols, rows);
             newData->setFileName(path);
-            newData->setIndex(index);
+
+            newData->setIndex(root.attribute(TrackDataBase::DataKeywords::Header::index(), "999").toUInt());
 
             // A temporary route vector.
             std::vector<TargetNodePtr> route;
@@ -248,42 +249,36 @@ TrackData * TrackLoader::loadTrack(QString path)
 void TrackLoader::readTile(
     QDomElement & element, TrackData & newData)
 {
-    const std::string id =
-        element.attribute(TrackDataBase::DataKeywords::Tile::type(), "clear").toStdString();
-    const unsigned int computerHint =
-        element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toUInt();
-
     // X-coordinate in the tile matrix
-    unsigned int i = element.attribute(TrackDataBase::DataKeywords::Tile::i(), "0").toUInt();
+    const unsigned int i = element.attribute(TrackDataBase::DataKeywords::Tile::i(), "0").toUInt();
 
-    // Y-coordinate in the tile matrix
-    unsigned int j = element.attribute(TrackDataBase::DataKeywords::Tile::j(), "0").toUInt();
-
-    // Orientation angle in degrees.
-    int o = element.attribute("o", "0").toInt();
-
-    // Mirror the angle and y-index, because game has the
-    // y-axis pointing up.
-    o = -o;
-    j = newData.map().rows() - 1 - j;
+    // Mirror the y-index, because game has the y-axis pointing up.
+    const unsigned int j = newData.map().rows() - 1 - element.attribute(TrackDataBase::DataKeywords::Tile::j(), "0").toUInt();
 
     TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j).get());
     assert(tile);
 
+    const std::string type =
+        element.attribute(TrackDataBase::DataKeywords::Tile::type(), "clear").toStdString();
+    tile->setTileType(type.c_str());
+    tile->setTileTypeEnum(tileTypeEnumFromString(type.c_str()));
+
+    // Mirror the angle, because game has the y-axis pointing up.
+    const int o = -element.attribute("o", "0").toInt();
     tile->setRotation(o);
-    tile->setTileType(id.c_str());
-    tile->setTileTypeEnum(tileTypeEnumFromString(id.c_str()));
-    tile->setComputerHint(static_cast<TrackTileBase::ComputerHint>(computerHint));
+
+    tile->setComputerHint(
+        static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toUInt()));
 
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
-    tile->setSurface(&MCAssetManager::surfaceManager().surface(id));
+    tile->setSurface(&MCAssetManager::surfaceManager().surface(type));
 
     // Set preview surface, if found.
     try
     {
-        tile->setPreviewSurface(&MCAssetManager::surfaceManager().surface(id + "Preview"));
+        tile->setPreviewSurface(&MCAssetManager::surfaceManager().surface(type + "Preview"));
     }
     catch (...)
     {
@@ -293,91 +288,53 @@ void TrackLoader::readTile(
 
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 {
-    if (str == "bridge")
-    {
-        return TrackTile::TT_BRIDGE;
-    }
-    else if (str == "corner90")
-    {
-        return TrackTile::TT_CORNER_90;
-    }
-    else if (str == "corner45Left")
-    {
-        return TrackTile::TT_CORNER_45_LEFT;
-    }
-    else if (str == "corner45Right")
-    {
-        return TrackTile::TT_CORNER_45_RIGHT;
-    }
-    else if (str == "straight")
-    {
-        return TrackTile::TT_STRAIGHT;
-    }
-    else if (str == "straight45Male")
-    {
-        return TrackTile::TT_STRAIGHT_45_MALE;
-    }
-    else if (str == "straight45Female")
-    {
-        return TrackTile::TT_STRAIGHT_45_FEMALE;
-    }
-    else if (str == "grass")
-    {
-        return TrackTile::TT_GRASS;
-    }
-    else if (str == "sand")
-    {
-        return TrackTile::TT_SAND;
-    }
-    else if (str == "sandGrassStraight")
-    {
-        return TrackTile::TT_SAND_GRASS_STRAIGHT;
-    }
-    else if (str == "sandGrassCorner")
-    {
-        return TrackTile::TT_SAND_GRASS_CORNER;
-    }
-    else if (str == "sandGrassCorner2")
-    {
-        return TrackTile::TT_SAND_GRASS_CORNER_2;
-    }
-    else if (str == "finish")
-    {
-        return TrackTile::TT_FINISH;
-    }
-    else if (str == "clear")
-    {
+    static std::map<string, TrackTile::TileType> mappings = {
+        {"bridge", TrackTile::TT_BRIDGE},
+        {"corner90", TrackTile::TT_CORNER_90},
+        {"corner45Left", TrackTile::TT_CORNER_45_LEFT},
+        {"corner45Right", TrackTile::TT_CORNER_45_RIGHT},
+        {"straight", TrackTile::TT_STRAIGHT},
+        {"straight45Male", TrackTile::TT_STRAIGHT_45_MALE},
+        {"straight45Female", TrackTile::TT_STRAIGHT_45_FEMALE},
+        {"grass", TrackTile::TT_GRASS},
+        {"sand", TrackTile::TT_SAND},
+        {"sandGrassStraight", TrackTile::TT_SAND_GRASS_STRAIGHT},
+        {"sandGrassCorner", TrackTile::TT_SAND_GRASS_CORNER},
+        {"sandGrassCorner2", TrackTile::TT_SAND_GRASS_CORNER_2},
+        {"finish", TrackTile::TT_FINISH},
+        {"clear", TrackTile::TT_NONE}
+    };
+
+    if (!mappings.count(str)) {
+        MCLogger().error() << "No mapping for tile '" << str << "'..";
         return TrackTile::TT_NONE;
     }
-    else
-    {
-        MCLogger().error() << "No mapping for tile '" << str << "'..";
-    }
 
-    return TrackTile::TT_NONE;
+    return mappings[str];
 }
 
 void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 {
-    const QString role = element.attribute(TrackDataBase::DataKeywords::Object::role(), "");
-    const QString category = element.attribute(TrackDataBase::DataKeywords::Object::category(), "");
-
     // X-coordinate in the world
     const int x = element.attribute(TrackDataBase::DataKeywords::Object::x(), "0").toInt();
 
     // Y-coordinate in the world
     const int y = element.attribute(TrackDataBase::DataKeywords::Object::y(), "0").toInt();
 
-    // Mirror the angle, because the y-axis is pointing
-    // down in the editor's coordinate system.
-    const int angle = -element.attribute(TrackDataBase::DataKeywords::Object::orientation(), "0").toInt();
-
     // Height of the map.
     const int h = newData.map().rows() * TrackTile::TILE_H;
 
     // The y-coordinates needs to be mirrored, because the y-axis is pointing
     // down in the editor's coordinate system.
-    MCVector2dF location(x, h - y);
+    const MCVector2dF location(x, h - y);
+
+    // Mirror the angle, because the y-axis is pointing
+    // down in the editor's coordinate system.
+    const int angle = -element.attribute(TrackDataBase::DataKeywords::Object::orientation(), "0").toInt();
+
+    const QString category = element.attribute(TrackDataBase::DataKeywords::Object::category(), "");
+    const QString role = element.attribute(TrackDataBase::DataKeywords::Object::role(), "");
+
     if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle))
     {
         newData.objects().add(std::shared_ptr<TrackObject>(object));
@@ -386,19 +343,20 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 
 void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodePtr> & route)
 {
-    const int x = element.attribute(TrackDataBase::DataKeywords::Node::x(),      "0").toInt();
-    const int y = element.attribute(TrackDataBase::DataKeywords::Node::y(),      "0").toInt();
-    const int w = element.attribute(TrackDataBase::DataKeywords::Node::width(),  "0").toInt();
-    const int h = element.attribute(TrackDataBase::DataKeywords::Node::height(), "0").toInt();
-    const int i = element.attribute(TrackDataBase::DataKeywords::Node::index(),  "0").toInt();
-
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
     const int mapHeight = newData.map().rows() * TrackTile::TILE_H;
 
     TargetNodeBase * tnode = new TargetNodeBase;
-    tnode->setIndex(i);
+    tnode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index(), "0").toInt());
+
+    const int x = element.attribute(TrackDataBase::DataKeywords::Node::x(), "0").toInt();
+    const int y = element.attribute(TrackDataBase::DataKeywords::Node::y(), "0").toInt();
+
     tnode->setLocation(QPointF(x, mapHeight - y));
+
+    const int w = element.attribute(TrackDataBase::DataKeywords::Node::width(), "0").toInt();
+    const int h = element.attribute(TrackDataBase::DataKeywords::Node::height(), "0").toInt();
 
     if (w > 0 && h > 0)
     {
