@@ -92,11 +92,15 @@ private:
     //! Disable the string-based type getter. Use tileTypeEnum() instead.
     const QString & tileType() const;
 
-    int         m_rotation;
+    int m_rotation;
+
     MCSurface * m_surface;
+
     MCSurface * m_previewSurface;
-    TileType    m_typeEnum;
-    bool        m_hasAsphalt;
+
+    TileType m_typeEnum;
+
+    bool m_hasAsphalt;
 };
 
 #endif // TRACKTILE_HPP
