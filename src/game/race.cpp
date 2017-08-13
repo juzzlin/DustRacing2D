@@ -75,7 +75,7 @@ Race::Race(Game & game, unsigned int numCars)
         }
     });
 
-    connect(&m_timing, &Timing::lapCompleted, [this] (MCUint, int msecs) {
+    connect(&m_timing, &Timing::lapCompleted, [this] (unsigned int, int msecs) {
         emit messageRequested(QString::fromWCharArray(Timing::msecsToString(msecs).c_str()));
     });
 }
@@ -121,7 +121,7 @@ void Race::initCars()
 {
     translateCarsToStartPositions();
 
-    for(Car * car : m_cars)
+    for (auto && car : m_cars)
     {
         car->setNextTargetNodeIndex(0);
         car->setCurrentTargetNodeIndex(0);
@@ -152,15 +152,15 @@ void Race::clearRaceFlags()
     m_started              = false;
 }
 
-void placeCar(Car & car, MCFloat x, MCFloat y, int angle)
+void placeCar(Car & car, float x, float y, int angle)
 {
-    car.translate(MCVector2d<MCFloat>(x, y));
+    car.translate(MCVector2d<float>(x, y));
     car.rotate(angle);
 }
 
-void placeStartGrid(MCObject & grid, MCFloat x, MCFloat y, int angle)
+void placeStartGrid(MCObject & grid, float x, float y, int angle)
 {
-    grid.translate(MCVector2d<MCFloat>(x, y));
+    grid.translate(MCVector2dF(x, y));
     grid.rotate(angle);
     grid.addToWorld();
 }
@@ -171,16 +171,16 @@ void Race::translateCarsToStartPositions()
 
     if (TrackTilePtr finishLine = m_track->finishLine())
     {
-        const MCFloat startTileX = finishLine->location().x();
-        const MCFloat startTileY = finishLine->location().y();
-        const MCFloat tileWidth  = TrackTile::TILE_W;
-        const MCFloat tileHeight = TrackTile::TILE_H;
-        const MCFloat spacing    = 0.75 * TrackTile::TILE_W;
-        const MCFloat oddOffset  = TrackTile::TILE_W / 8;
-        const MCFloat gridOffset = 24;
+        const float startTileX = finishLine->location().x();
+        const float startTileY = finishLine->location().y();
+        const float tileWidth  = TrackTile::TILE_W;
+        const float tileHeight = TrackTile::TILE_H;
+        const float spacing    = 0.75 * TrackTile::TILE_W;
+        const float oddOffset  = TrackTile::TILE_W / 8;
+        const float gridOffset = 24;
 
         // Reverse order
-        std::vector<Car *> order = m_cars;
+        auto order = m_cars;
         std::reverse(order.begin(), order.end());
 
         // Move the human player to a starting place that equals the best position
@@ -201,10 +201,10 @@ void Race::translateCarsToStartPositions()
         {
         case 90:
         case -270:
-            for (MCUint i = 0; i < order.size(); i++)
+            for (unsigned int i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+                const float rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const float colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
                 placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 180);
                 placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos - gridOffset, startTileY + colPos, 180);
             }
@@ -213,20 +213,20 @@ void Race::translateCarsToStartPositions()
         default:
         case 270:
         case -90:
-            for (MCUint i = 0; i < order.size(); i++)
+            for (unsigned int i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                const MCFloat colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
+                const float rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const float colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
                 placeCar(*order.at(i), startTileX - rowPos, startTileY + colPos, 0);
                 placeStartGrid(*m_startGridObjects.at(i), startTileX - rowPos + gridOffset, startTileY + colPos, 0);
             }
             break;
 
         case 0:
-            for (MCUint i = 0; i < order.size(); i++)
+            for (unsigned int i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
-                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const float rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
+                const float colPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 placeCar(*order.at(i), startTileX + rowPos, startTileY - colPos, 90);
                 placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY - colPos + gridOffset, 90);
             }
@@ -234,10 +234,10 @@ void Race::translateCarsToStartPositions()
 
         case 180:
         case -180:
-            for (MCUint i = 0; i < order.size(); i++)
+            for (unsigned int i = 0; i < order.size(); i++)
             {
-                const MCFloat rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
-                const MCFloat colPos = (i / 2) * spacing + (i % 2) * oddOffset;
+                const float rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
+                const float colPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 270);
                 placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY + colPos - gridOffset, 270);
             }
@@ -262,7 +262,7 @@ void Race::start()
 
 void Race::stopEngineSounds()
 {
-    for(Car * car : m_cars)
+    for(auto && car : m_cars)
     {
         if (car->soundEffectManager())
         {
@@ -278,17 +278,17 @@ bool Race::started()
 
 void Race::update()
 {
-    for(Car * pCar : m_cars)
+    for (auto && car : m_cars)
     {
-        updateRouteProgress(*pCar);
+        updateRouteProgress(*car);
     }
 
     // Enable the checkered flag if leader has done at least 95% of the last lap.
     if (m_timing.leadersLap() + 1 == m_lapCount)
     {
-        Car               & leader = getLeadingCar();
-        const Route       & route  = m_track->trackData().route();
-        const TargetNodeBasePtr tnode  = route.get(leader.currentTargetNodeIndex());
+        auto && leader = getLeadingCar();
+        auto && route = m_track->trackData().route();
+        auto tnode = route.get(leader.currentTargetNodeIndex());
 
         if (tnode->index() >= static_cast<int>(9 * route.numNodes() / 10))
         {
@@ -308,7 +308,7 @@ void Race::update()
         {
             m_winnerFinished = true;
 
-            Car & leader = getLeadingCar();
+            auto && leader = getLeadingCar();
             m_timing.setRaceCompleted(leader.index(), true, leader.isHuman());
 
             if (m_game.mode() == Game::Mode::TimeTrial)
@@ -396,10 +396,10 @@ void Race::updateRouteProgress(Car & car)
             }
 
             // Give a bit more tolerance for other than the finishing check point.
-            const Route & route = m_track->trackData().route();
+            auto && route = m_track->trackData().route();
             unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
             unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
-            TargetNodeBasePtr tnode = route.get(currentTargetNodeIndex);
+            auto tnode = route.get(currentTargetNodeIndex);
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
@@ -464,7 +464,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 emit messageRequested(QObject::tr("A new best pos!"));
             }
 
-            Track * next = m_track->next();
+            auto next = m_track->next();
             if (next && next->trackData().isLocked())
             {
                 if (pos <= UNLOCK_LIMIT)
@@ -488,9 +488,8 @@ void Race::checkIfCarIsStuck(Car & car)
     {
         static const int STUCK_LIMIT = 60 * 5; // 5 secs.
 
-        TrackTilePtr currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
-
-        StuckTileCounter & counter = m_stuckHash[car.index()];
+        auto currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
+        auto && counter = m_stuckHash[car.index()];
         if (counter.first == nullptr || counter.first != currentTile)
         {
             counter.first = currentTile;
@@ -539,8 +538,8 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     // Randomize the target location a bit, because otherwise multiple
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
-    const Route & route = m_track->trackData().route();
-    TargetNodeBasePtr tnode = route.get(car.prevTargetNodeIndex());
+    auto && route = m_track->trackData().route();
+    auto tnode = route.get(car.prevTargetNodeIndex());
     const int randRadius = 64;
     car.translate(MCVector3dF(
         tnode->location().x() + rand() % randRadius - randRadius / 2,
@@ -550,7 +549,7 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
 
 unsigned int Race::getPositionOfCar(const Car & car) const
 {
-    const std::vector<int> & order = m_positions[car.routeProgression()];
+    auto && order = m_positions[car.routeProgression()];
     for (unsigned int i = 0; i < order.size(); i++)
     {
         if (order[i] == static_cast<int>(car.index()))
@@ -564,12 +563,12 @@ unsigned int Race::getPositionOfCar(const Car & car) const
 
 Car & Race::getLeadingCar() const
 {
-    unsigned int bestPos = m_cars.size();
-    Car        * bestCar = m_cars.back();
+    auto bestPos = m_cars.size();
+    auto bestCar = m_cars.back();
 
     for (unsigned int i = 0; i < m_cars.size(); i++)
     {
-        const unsigned int pos = getPositionOfCar(*m_cars[i]);
+        const auto pos = getPositionOfCar(*m_cars[i]);
         if (pos > 0 && pos < bestPos)
         {
             bestCar = m_cars[i];
