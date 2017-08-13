@@ -18,6 +18,8 @@
 
 #include <AL/alc.h>
 
+#include <memory>
+
 static bool checkError()
 {
     ALCenum error = alGetError();
@@ -42,7 +44,7 @@ void OpenALSource::setData(STFH::DataPtr data)
 {
     alGetError();
 
-    if (OpenALData * soundData = dynamic_cast<OpenALData *>(data.get()))
+    if (auto soundData = std::dynamic_pointer_cast<OpenALData>(data))
     {
         Source::setData(data);
         alSourcei(m_handle, AL_BUFFER, soundData->buffer());

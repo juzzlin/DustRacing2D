@@ -16,6 +16,7 @@
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
+#include "tracktile.hpp"
 #include "updateableif.hpp"
 
 #include <MCBBox>
@@ -23,7 +24,6 @@
 #include <MCTypes>
 
 class TrackData;
-class TrackTile;
 class MCCamera;
 class MCSurface;
 
@@ -33,10 +33,9 @@ class Track
 {
 public:
 
-    //! Constructor.
-    //! \param pTrackData The data that represents the track.
-    //!                   Track will take the ownership.
-    explicit Track(TrackData * pTrackData);
+    /*! Constructor.
+     * \param trackData The data that represents the track. Track will take the ownership. */
+    explicit Track(TrackData * trackData);
 
     //! Destructor.
     virtual ~Track();
@@ -54,10 +53,10 @@ public:
     TrackData & trackData() const;
 
     //! Return pointer to the tile at the given location.
-    TrackTile * trackTileAtLocation(MCUint x, MCUint y) const;
+    TrackTilePtr trackTileAtLocation(MCUint x, MCUint y) const;
 
     //! Return pointer to the finish line tile.
-    TrackTile * finishLine() const;
+    TrackTilePtr finishLine() const;
 
     //! Set the next track.
     void setNext(Track & next);
@@ -82,11 +81,16 @@ private:
     void renderTiles(
         MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
 
-    TrackData * m_pTrackData;
-    MCUint      m_rows, m_cols, m_width, m_height;
+
+    TrackData * m_trackData;
+
+    MCUint m_rows, m_cols, m_width, m_height;
+
     MCSurface & m_asphalt;
-    Track     * m_next;
-    Track     * m_prev;
+
+    Track * m_next;
+
+    Track * m_prev;
 };
 
 #endif // TRACK_HPP

@@ -76,6 +76,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <memory>
+
+using std::dynamic_pointer_cast;
 
 // Default visible scene size.
 int Scene::m_width  = 1024;
@@ -307,14 +310,14 @@ void Scene::updateOverlays()
 
 void Scene::updateAnimations()
 {
-    for (CarPtr car : m_cars)
+    for (auto && car : m_cars)
     {
         car->update();
     }
 
-    for (TreeView * view : m_treeViews)
+    for (auto && treeView : m_treeViews)
     {
-        view->update();
+        treeView->update();
     }
 }
 
@@ -496,9 +499,7 @@ void Scene::createNormalObjects()
 
     for (unsigned int i = 0; i < m_activeTrack->trackData().objects().count(); i++)
     {
-        TrackObject * trackObject = dynamic_cast<TrackObject *>(
-            m_activeTrack->trackData().objects().object(i).get());
-
+        auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
         assert(trackObject);
 
         MCObject & mcObject = trackObject->object();
@@ -506,11 +507,11 @@ void Scene::createNormalObjects()
         mcObject.translate(mcObject.initialLocation());
         mcObject.rotate(mcObject.initialAngle());
 
-        if (TreeView * treeView = dynamic_cast<TreeView *>(mcObject.shape()->view().get()))
+        if (auto treeView = dynamic_pointer_cast<TreeView>(mcObject.shape()->view()))
         {
             m_treeViews.push_back(treeView);
         }
-        else if (Pit * pit = dynamic_cast<Pit *>(&mcObject))
+        else if (auto pit = dynamic_cast<Pit *>(&mcObject))
         {
             connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
         }
@@ -530,8 +531,8 @@ void Scene::createBridgeObjects()
     {
         for (MCUint i = 0; i <= rMap.cols(); i++)
         {
-            TrackTile * pTile = dynamic_cast<TrackTile *>(rMap.getTile(i, j).get());
-            if (pTile && pTile->tileTypeEnum() == TrackTile::TT_BRIDGE)
+            auto tile = dynamic_pointer_cast<TrackTile>(rMap.getTile(i, j));
+            if (tile && tile->tileTypeEnum() == TrackTile::TT_BRIDGE)
             {
                 MCObjectPtr bridge(new Bridge(
                     MCAssetManager::instance().surfaceManager().surface("bridgeObject"),
@@ -539,7 +540,7 @@ void Scene::createBridgeObjects()
                 ));
 
                 bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset()));
-                bridge->rotate(pTile->rotation());
+                bridge->rotate(tile->rotation());
                 bridge->addToWorld();
 
                 m_bridges.push_back(bridge);

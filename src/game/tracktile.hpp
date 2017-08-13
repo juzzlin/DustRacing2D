@@ -103,4 +103,6 @@ private:
     bool m_hasAsphalt;
 };
 
+using TrackTilePtr = std::shared_ptr<TrackTile>;
+
 #endif // TRACKTILE_HPP

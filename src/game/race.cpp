@@ -169,7 +169,7 @@ void Race::translateCarsToStartPositions()
 {
     assert(m_track);
 
-    if (TrackTile * finishLine = m_track->finishLine())
+    if (TrackTilePtr finishLine = m_track->finishLine())
     {
         const MCFloat startTileX = finishLine->location().x();
         const MCFloat startTileY = finishLine->location().y();
@@ -488,12 +488,12 @@ void Race::checkIfCarIsStuck(Car & car)
     {
         static const int STUCK_LIMIT = 60 * 5; // 5 secs.
 
-        TrackTile * currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
+        TrackTilePtr currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
 
         StuckTileCounter & counter = m_stuckHash[car.index()];
         if (counter.first == nullptr || counter.first != currentTile)
         {
-            counter.first  = currentTile;
+            counter.first = currentTile;
             counter.second = 0;
         }
         else if (counter.first == currentTile)

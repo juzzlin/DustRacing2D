@@ -36,6 +36,7 @@
 #include "../common/mapbase.hpp"
 
 #include <cassert>
+#include <memory>
 #include <sstream>
 
 #include <QObject> // For QObject::tr()
@@ -351,7 +352,7 @@ void TrackSelectionMenu::down()
 void TrackSelectionMenu::selectCurrentItem()
 {
     Menu::selectCurrentItem();
-    Track & selection = static_cast<TrackItem *>(currentItem().get())->track();
+    auto && selection = std::static_pointer_cast<TrackItem>(currentItem())->track();
     if (!selection.trackData().isLocked())
     {
         m_selectedTrack = &selection;

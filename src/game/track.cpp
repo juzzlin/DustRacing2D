@@ -27,18 +27,21 @@
 #include <MCSurface>
 
 #include <cassert>
+#include <memory>
 
-Track::Track(TrackData * pTrackData)
-: m_pTrackData(pTrackData)
-, m_rows(m_pTrackData->map().rows())
-, m_cols(m_pTrackData->map().cols())
+using std::static_pointer_cast;
+
+Track::Track(TrackData * trackData)
+: m_trackData(trackData)
+, m_rows(m_trackData->map().rows())
+, m_cols(m_trackData->map().cols())
 , m_width(m_cols * TrackTile::TILE_W)
 , m_height(m_rows * TrackTile::TILE_H)
 , m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
 , m_next(nullptr)
 , m_prev(nullptr)
 {
-    assert(pTrackData);
+    assert(trackData);
 }
 
 MCUint Track::width() const
@@ -53,10 +56,10 @@ MCUint Track::height() const
 
 TrackData & Track::trackData() const
 {
-    return *m_pTrackData;
+    return *m_trackData;
 }
 
-TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
+TrackTilePtr Track::trackTileAtLocation(MCUint x, MCUint y) const
 {
     // X index
     MCUint i = x * m_cols / m_width;
@@ -66,17 +69,17 @@ TrackTile * Track::trackTileAtLocation(MCUint x, MCUint y) const
     MCUint j = y * m_rows / m_height;
     j = j >= m_rows ? m_rows - 1 : j;
 
-    return static_cast<TrackTile *>(m_pTrackData->map().getTile(i, j).get());
+    return static_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
 }
 
-TrackTile * Track::finishLine() const
+TrackTilePtr Track::finishLine() const
 {
-    const MapBase & rMap = m_pTrackData->map();
-    for (MCUint j = 0; j < rMap.rows(); j++)
+    const MapBase & map = m_trackData->map();
+    for (MCUint j = 0; j < map.rows(); j++)
     {
-        for (MCUint i = 0; i < rMap.cols(); i++)
+        for (MCUint i = 0; i < map.cols(); i++)
         {
-            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            TrackTilePtr pTile = static_pointer_cast<TrackTile>(map.getTile(i, j));
             if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
             {
                 return pTile;
@@ -134,8 +137,6 @@ void Track::render(MCCamera * camera)
 void Track::renderAsphalt(
     MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
-    const MapBase & rMap = m_pTrackData->map();
-
     static const int w = TrackTile::TILE_W;
     static const int h = TrackTile::TILE_H;
 
@@ -144,6 +145,8 @@ void Track::renderAsphalt(
     // Bind common geometry and textures for all asphalt tiles.
     m_asphalt.setShaderProgram(prog);
     m_asphalt.bind();
+
+    const MapBase & map = m_trackData->map();
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * w;
@@ -154,8 +157,8 @@ void Track::renderAsphalt(
         x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
-            TrackTile * pTile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
-            if (pTile->hasAsphalt())
+            auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
+            if (tile->hasAsphalt())
             {
                 x1 = x;
                 y1 = y;
@@ -174,8 +177,6 @@ void Track::renderAsphalt(
 void Track::renderTiles(
     MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
 {
-    const MapBase & rMap = m_pTrackData->map();
-
     static const int w = TrackTile::TILE_W;
     static const int h = TrackTile::TILE_H;
 
@@ -191,6 +192,8 @@ void Track::renderTiles(
     // to minimize GPU context switches.
     std::map<MCSurface *, std::vector<SortedTile> > sortedTiles;
 
+    const MapBase & map = m_trackData->map();
+
     // Loop through the visible tile matrix and sort the tiles.
     int initX = i0 * w;
     int x     = initX;
@@ -200,7 +203,7 @@ void Track::renderTiles(
         x = initX;
         for (MCUint i = i0; i <= i2; i++)
         {
-            TrackTile * tile = static_cast<TrackTile *>(rMap.getTile(i, j).get());
+            auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
             if (MCSurface * surface = tile->surface())
             {
                 x1 = x;
@@ -208,7 +211,7 @@ void Track::renderTiles(
                 camera->mapToCamera(x1, y1);
 
                 SortedTile sortedTile;
-                sortedTile.tile = tile;
+                sortedTile.tile = tile.get();
                 sortedTile.x1 = x1;
                 sortedTile.y1 = y1;
                 sortedTiles[surface].push_back(sortedTile);
@@ -264,5 +267,5 @@ Track * Track::prev() const
 
 Track::~Track()
 {
-    delete m_pTrackData;
+    delete m_trackData;
 }

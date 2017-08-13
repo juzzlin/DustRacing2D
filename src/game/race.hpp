@@ -26,13 +26,13 @@
 
 #include "audiosource.hpp"
 #include "timing.hpp"
+#include "tracktile.hpp"
 
 class Car;
 class Game;
 class OffTrackDetector;
 class Route;
 class Track;
-class TrackTile;
 
 //! Class that controls the race event, checkpoints and timing.
 class Race : public AudioSource
@@ -139,7 +139,7 @@ private:
 
     // Data structure to determine if a car is stuck.
     // In that case we move the car onto the previous check point.
-    typedef std::pair<TrackTile *, int> StuckTileCounter; // Tile pointer and counter.
+    typedef std::pair<TrackTilePtr, int> StuckTileCounter; // Tile pointer and counter.
     typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 

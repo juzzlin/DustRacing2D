@@ -38,7 +38,11 @@
 
 #include <cassert>
 #include <cmath>
+#include <memory>
 #include <string>
+
+using std::dynamic_pointer_cast;
+using std::static_pointer_cast;
 
 Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
 : MCObject(surface, "car")
@@ -119,8 +123,8 @@ void Car::setProperties(Description & desc)
     physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
-    const float width  = dynamic_cast<MCRectShape *>(shape().get())->width();
-    const float height = dynamic_cast<MCRectShape *>(shape().get())->height();
+    const float width = dynamic_pointer_cast<MCRectShape>(shape())->width();
+    const float height = dynamic_pointer_cast<MCRectShape>(shape())->height();
     m_length = std::max(width, height);
 }
 
@@ -399,33 +403,36 @@ void Car::onStepTime(MCFloat step)
     {
         if (m_braking || (m_accelerating && m_steer != Steer::Neutral))
         {
-            wearOutTires(step, 0.05f);
+            const float brakingTireWearFactor = 0.05f;
+            wearOutTires(step, brakingTireWearFactor);
         }
+
+        const float offTrackTireWearFactor = 0.10f;
 
         if (m_leftSideOffTrack)
         {
-            static_cast<Tire *>(m_leftFrontTire.get())->setIsOffTrack(true);
-            static_cast<Tire *>(m_leftRearTire.get())->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(true);
 
-            wearOutTires(step, 0.10f);
+            wearOutTires(step, offTrackTireWearFactor);
         }
         else
         {
-            static_cast<Tire *>(m_leftFrontTire.get())->setIsOffTrack(false);
-            static_cast<Tire *>(m_leftRearTire.get())->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(false);
         }
 
         if (m_rightSideOffTrack)
         {
-            static_cast<Tire *>(m_rightFrontTire.get())->setIsOffTrack(true);
-            static_cast<Tire *>(m_rightRearTire.get())->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(true);
 
-            wearOutTires(step, 0.10f);
+            wearOutTires(step, offTrackTireWearFactor);
         }
         else
         {
-            static_cast<Tire *>(m_rightFrontTire.get())->setIsOffTrack(false);
-            static_cast<Tire *>(m_rightRearTire.get())->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(false);
         }
     }
 }

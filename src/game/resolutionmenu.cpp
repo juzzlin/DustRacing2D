@@ -32,6 +32,7 @@
 #include <QObject> // for tr()
 #include <QScreen>
 
+#include <memory>
 #include <sstream>
 
 struct Resolution
@@ -107,7 +108,7 @@ public:
 
         // Change the virtual resolution immediately if changing from fullscreen to fullscreen
         if (Game::instance().renderer().fullScreen() &&
-            dynamic_cast<SaveResolutionAction *>(m_saveResolutionAction.get())->fullScreen())
+            std::dynamic_pointer_cast<SaveResolutionAction>(m_saveResolutionAction)->fullScreen())
         {
             m_saveResolutionAction->fire();
         }
@@ -173,7 +174,7 @@ void ResolutionMenu::enter()
     // Set the current active resolution selected
     for (unsigned int i = 0; i < itemCount(); i++)
     {
-        if (auto resolution = dynamic_cast<ResolutionItem *>(item(i).get()))
+        if (auto resolution = std::dynamic_pointer_cast<ResolutionItem>(item(i)))
         {
             int  hRes       = 0;
             int  vRes       = 0;

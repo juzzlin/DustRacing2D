@@ -21,6 +21,7 @@
 #include "crashoverlay.hpp"
 #include "race.hpp"
 #include "timingoverlay.hpp"
+#include "treeview.hpp"
 
 #include <QObject>
 #include <MCCamera>
@@ -44,7 +45,6 @@ class StartlightsOverlay;
 class StateMachine;
 class Track;
 class TrackSelectionMenu;
-class TreeView;
 
 namespace MTFH {
 class Menu;
@@ -163,7 +163,7 @@ private:
     AIVector m_ai;
 
     // TreeViews need to be separately updated.
-    std::vector<TreeView *> m_treeViews;
+    std::vector<TreeViewPtr> m_treeViews;
 
     // Bridges
     std::vector<MCObjectPtr> m_bridges;

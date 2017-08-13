@@ -19,6 +19,8 @@
 #include <Data>
 #include <AL/al.h>
 
+#include <memory>
+
 //! Abstract base class for ogg, wav etc. data loader classes.
 class OpenALData : public STFH::Data
 {
@@ -33,5 +35,7 @@ public:
     //! \return OpenAL buffer handle.
     virtual ALuint buffer() const = 0;
 };
+
+using OpenALDataPtr = std::shared_ptr<OpenALData>;
 
 #endif // OPENALDATA_HPP

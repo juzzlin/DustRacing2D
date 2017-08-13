@@ -37,6 +37,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <memory>
+
+using std::dynamic_pointer_cast;
 
 static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
 
@@ -255,7 +258,7 @@ void TrackLoader::readTile(
     // Mirror the y-index, because game has the y-axis pointing up.
     const unsigned int j = newData.map().rows() - 1 - element.attribute(TrackDataBase::DataKeywords::Tile::j(), "0").toUInt();
 
-    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(i, j).get());
+    auto tile = dynamic_pointer_cast<TrackTile>(newData.map().getTile(i, j));
     assert(tile);
 
     const std::string type =

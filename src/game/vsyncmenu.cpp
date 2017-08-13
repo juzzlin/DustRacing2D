@@ -28,6 +28,8 @@
 
 #include <QObject> // for tr()
 
+#include <memory>
+
 class VSyncItem : public MTFH::MenuItem
 {
 public:
@@ -99,13 +101,11 @@ VSyncMenu::VSyncMenu(
 {
     const int itemHeight = height / 10;
 
-    VSyncItem * off =
-        new VSyncItem(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());
+    auto off = new VSyncItem(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());
     off->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *off)));
     addItem(MTFH::MenuItemPtr(off));
 
-    VSyncItem * on =
-        new VSyncItem(m_confirmationMenu, 1, width, itemHeight, QObject::tr("On").toStdWString());
+    auto on = new VSyncItem(m_confirmationMenu, 1, width, itemHeight, QObject::tr("On").toStdWString());
     on->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *on)));
     addItem(MTFH::MenuItemPtr(on));
 
@@ -118,7 +118,7 @@ void VSyncMenu::enter()
     const int vsync = Settings::instance().loadVSync();
     for (unsigned int i = 0; i < itemCount(); i++)
     {
-        if (auto vsyncItem = dynamic_cast<VSyncItem *>(item(i).get()))
+        if (auto vsyncItem = std::dynamic_pointer_cast<VSyncItem>(item(i)))
         {
             if (vsyncItem->vsync() == vsync)
             {

@@ -19,6 +19,8 @@
 #include <MCSurfaceView>
 #include "updateableif.hpp"
 
+#include <memory>
+
 /*! Custom view used to render tree objects by using a
  *  couple of MCSurfaces.
  */
@@ -84,5 +86,7 @@ private:
 
     MCVector2dF m_top;
 };
+
+using TreeViewPtr = std::shared_ptr<TreeView>;
 
 #endif // TREEVIEW_HPP
