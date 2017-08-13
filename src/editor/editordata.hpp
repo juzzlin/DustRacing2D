@@ -85,7 +85,7 @@ public:
     void removeRouteFromScene();
 
     //! Removes given tile from the scene.
-    void removeTileFromScene(TrackTilePtr trackTile);
+    void removeTileFromScene(TrackTileBasePtr trackTile);
 
     //! Returns current track data object. Returns NULL if not set.
     TrackDataPtr trackData();
@@ -162,7 +162,7 @@ private:
 
     void clearScene();
 
-    void pushTargetNodeToRoute(TargetNodePtr tnode);
+    void pushTargetNodeToRoute(TargetNodeBasePtr tnode);
 
     void removeTilesFromScene();
 

@@ -46,23 +46,23 @@ public:
 
     /*! Set given tile to given coordinates.
      *  Returns false if impossible coordinates. */
-    bool setTile(unsigned int x, unsigned int y, TrackTilePtr tile);
+    bool setTile(unsigned int x, unsigned int y, TrackTileBasePtr tile);
 
     /*! Get tile at given coordinates.
      *  Returns nullptr if no tile set or impossible coordinates. */
-    TrackTilePtr getTile(unsigned int x, unsigned int y) const;
+    TrackTileBasePtr getTile(unsigned int x, unsigned int y) const;
 
     //! Insert column after given index.
     virtual void insertColumn(unsigned int at);
 
     //! Delete column at given index. Return deleted tiles.
-    virtual std::vector<TrackTilePtr> deleteColumn(unsigned int at);
+    virtual std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);
 
     //! Insert row after given index.
     virtual void insertRow(unsigned int at);
 
     //! Delete row at given index. Return deleted tiles.
-    virtual std::vector<TrackTilePtr> deleteRow(unsigned int at);
+    virtual std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
 
 protected:
 
@@ -75,7 +75,7 @@ private:
 
     unsigned int m_cols, m_rows;
 
-    typedef std::vector<TrackTilePtr> TrackTileRow;
+    typedef std::vector<TrackTileBasePtr> TrackTileRow;
     typedef std::vector<TrackTileRow> TrackTileMap;
     TrackTileMap m_map;
 };

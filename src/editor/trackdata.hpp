@@ -75,10 +75,10 @@ public:
     void insertRow(unsigned int at);
 
     //! Delete tile column at given index and move objects.
-    std::vector<TrackTilePtr> deleteColumn(unsigned int at);
+    std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);
 
     //! Delete tile row at given index and move objects.
-    std::vector<TrackTilePtr> deleteRow(unsigned int at);
+    std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
 
     //! Add item to undo stack.
     void addItemToUndoStack(UndoStackItemBase * item);

@@ -65,7 +65,7 @@ void AI::setRandomTolerance()
     m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::TILE_W / 8;
 }
 
-void AI::steerControl(TargetNodePtr tnode)
+void AI::steerControl(TargetNodeBasePtr tnode)
 {
     // Initial target coordinates
     MCVector3dF target(tnode->location().x(), tnode->location().y());

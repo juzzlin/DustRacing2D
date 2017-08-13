@@ -53,4 +53,6 @@ private:
     QGraphicsLineItem * m_routeLine;
 };
 
+using TargetNodePtr = std::shared_ptr<TargetNode>;
+
 #endif // TARGETNODE_HPP

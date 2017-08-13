@@ -57,7 +57,7 @@ void MapBase::resize(unsigned int newCols, unsigned int newRows)
     m_rows = newRows;
 }
 
-bool MapBase::setTile(unsigned int x, unsigned int y, TrackTilePtr tile)
+bool MapBase::setTile(unsigned int x, unsigned int y, TrackTileBasePtr tile)
 {
     if (x >= m_cols || y >= m_rows)
         return false;
@@ -67,7 +67,7 @@ bool MapBase::setTile(unsigned int x, unsigned int y, TrackTilePtr tile)
     return true;
 }
 
-TrackTilePtr MapBase::getTile(unsigned int x, unsigned int y) const
+TrackTileBasePtr MapBase::getTile(unsigned int x, unsigned int y) const
 {
     if (x >= m_cols || y >= m_rows)
         return nullptr;
@@ -85,9 +85,9 @@ void MapBase::insertColumn(unsigned int at)
     m_cols++;
 }
 
-std::vector<TrackTilePtr> MapBase::deleteColumn(unsigned int at)
+std::vector<TrackTileBasePtr> MapBase::deleteColumn(unsigned int at)
 {
-    std::vector<TrackTilePtr> deleted;
+    std::vector<TrackTileBasePtr> deleted;
 
     for (auto & row : m_map)
     {
@@ -107,9 +107,9 @@ void MapBase::insertRow(unsigned int at)
     m_rows++;
 }
 
-std::vector<TrackTilePtr> MapBase::deleteRow(unsigned int at)
+std::vector<TrackTileBasePtr> MapBase::deleteRow(unsigned int at)
 {
-    std::vector<TrackTilePtr> deleted = *(m_map.begin() + at);
+    std::vector<TrackTileBasePtr> deleted = *(m_map.begin() + at);
     m_map.erase(m_map.begin() + at);
 
     m_rows--;

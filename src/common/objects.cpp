@@ -21,7 +21,7 @@ Objects::Objects()
 {
 }
 
-void Objects::add(ObjectPtr object)
+void Objects::add(ObjectBasePtr object)
 {
     auto i = std::find(m_objects.begin(), m_objects.end(), object);
     if (i == m_objects.end())
@@ -47,7 +47,7 @@ unsigned int Objects::count() const
     return static_cast<int>(m_objects.size());
 }
 
-ObjectPtr Objects::object(unsigned int index) const
+ObjectBasePtr Objects::object(unsigned int index) const
 {
     return m_objects.at(index);
 }

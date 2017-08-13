@@ -40,7 +40,7 @@ void Map::createEmptyTiles()
                     QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                     TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
                     QPoint(i, j));
-                setTile(i, j, TrackTilePtr(newTile));
+                setTile(i, j, TrackTileBasePtr(newTile));
             }
             else
             {
@@ -100,7 +100,7 @@ void Map::insertColumn(unsigned int at)
     createEmptyTiles();
 }
 
-std::vector<TrackTilePtr> Map::deleteColumn(unsigned int at)
+std::vector<TrackTileBasePtr> Map::deleteColumn(unsigned int at)
 {
     moveTilesAfterColumnDeletion(at);
     return MapBase::deleteColumn(at);
@@ -113,7 +113,7 @@ void Map::insertRow(unsigned int at)
     createEmptyTiles();
 }
 
-std::vector<TrackTilePtr> Map::deleteRow(unsigned int at)
+std::vector<TrackTileBasePtr> Map::deleteRow(unsigned int at)
 {
     moveTilesAfterRowDeletion(at);
     return MapBase::deleteRow(at);

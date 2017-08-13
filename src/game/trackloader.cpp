@@ -211,7 +211,7 @@ TrackData * TrackLoader::loadTrack(QString path)
             newData->setIndex(root.attribute(TrackDataBase::DataKeywords::Header::index(), "999").toUInt());
 
             // A temporary route vector.
-            std::vector<TargetNodePtr> route;
+            std::vector<TargetNodeBasePtr> route;
 
             QDomNode node = root.firstChild();
             while(!node.isNull())
@@ -341,7 +341,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     }
 }
 
-void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodePtr> & route)
+void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodeBasePtr> & route)
 {
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
@@ -363,7 +363,7 @@ void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std
         tnode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(TargetNodePtr(tnode));
+    route.push_back(TargetNodeBasePtr(tnode));
 }
 
 unsigned int TrackLoader::tracks() const

@@ -33,7 +33,7 @@ void Route::clear()
     m_route.clear();
 }
 
-bool Route::push(TargetNodePtr tnode)
+bool Route::push(TargetNodeBasePtr tnode)
 {
     tnode->setIndex(static_cast<int>(m_route.size()));
     m_route.push_back(tnode);
@@ -58,7 +58,7 @@ unsigned int Route::numNodes() const
     return static_cast<unsigned int>(m_route.size());
 }
 
-TargetNodePtr Route::get(unsigned int index) const
+TargetNodeBasePtr Route::get(unsigned int index) const
 {
     assert (index < numNodes());
     return m_route[index];
@@ -74,12 +74,12 @@ void Route::buildFromVector(RouteVector & routeVector)
     clear();
 
     std::sort(routeVector.begin(), routeVector.end(),
-        [] (const TargetNodePtr lhs, const TargetNodePtr rhs)
+        [] (const TargetNodeBasePtr lhs, const TargetNodeBasePtr rhs)
         {
             return lhs->index() < rhs->index();
         });
 
-    for (TargetNodePtr tnode : routeVector)
+    for (TargetNodeBasePtr tnode : routeVector)
     {
         if (tnode && tnode->index() >= 0)
         {

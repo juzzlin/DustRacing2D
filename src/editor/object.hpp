@@ -46,4 +46,6 @@ private:
     QPixmap m_pixmap;
 };
 
+using ObjectPtr = std::shared_ptr<Object>;
+
 #endif // OBJECT_HPP

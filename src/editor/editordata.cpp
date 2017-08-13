@@ -23,6 +23,9 @@
 #include "trackio.hpp"
 
 #include <cassert>
+#include <memory>
+
+using std::dynamic_pointer_cast;
 
 EditorData::EditorData(MainWindow * mainWindow)
 : m_mode(EM_NONE)
@@ -100,10 +103,10 @@ void EditorData::addExistingRouteToScene()
     // Re-push existing (loaded) target nodes so that route lines
     // and links will be correctly created. A bit stupid,
     // but is enough for now, because the vectors are not long.
-    std::vector<TargetNodePtr> temp;
+    std::vector<TargetNodeBasePtr> temp;
     m_trackData->route().getAll(temp);
     m_trackData->route().clear();
-    for (TargetNodePtr tnode : temp)
+    for (auto tnode : temp)
     {
         pushTargetNodeToRoute(tnode);
     }
@@ -112,36 +115,36 @@ void EditorData::addExistingRouteToScene()
 void EditorData::pushNewTargetNodeToRoute(QPointF pos)
 {
     // Push location to the route
-    TargetNodePtr tnode(new TargetNode);
+    TargetNodeBasePtr tnode(new TargetNode);
     tnode->setLocation(pos);
     pushTargetNodeToRoute(tnode);
 }
 
-void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
+void EditorData::pushTargetNodeToRoute(TargetNodeBasePtr tnode)
 {
     Route & route = trackData()->route();
 
     if (route.numNodes())
     {
-        TargetNodePtr prev = route.get(route.numNodes() - 1);
+        auto prev = route.get(route.numNodes() - 1);
 
         prev->setNext(tnode);
         tnode->setPrev(prev);
 
-        dynamic_cast<TargetNode *>(prev.get())->updateRouteLine();
+        dynamic_pointer_cast<TargetNode>(prev)->updateRouteLine();
     }
 
     const bool loopClosed = route.push(tnode);
 
-    QGraphicsLineItem * routeLine = new QGraphicsLineItem;
-    TargetNode * ptr = dynamic_cast<TargetNode *>(tnode.get());
-    ptr->setRouteLine(routeLine);
+    auto node = dynamic_pointer_cast<TargetNode>(tnode);
+    auto routeLine = new QGraphicsLineItem;
+    node->setRouteLine(routeLine);
 
-    m_mainWindow->editorScene().addItem(ptr);
+    m_mainWindow->editorScene().addItem(node.get()); // The scene wants a raw pointer
     m_mainWindow->editorScene().addItem(routeLine);
 
     const int routeLineZ = 10;
-    ptr->setZValue(routeLineZ);
+    node->setZValue(routeLineZ);
     routeLine->setZValue(routeLineZ);
 
     // Check if we might have a loop => end
@@ -150,7 +153,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
         setMode(EditorData::EM_NONE);
         m_mainWindow->endSetRoute();
 
-        TargetNodePtr firstNode = route.get(0);
+        auto firstNode = route.get(0);
         route.get(route.numNodes() - 1)->setLocation(firstNode->location());
 
         tnode->setNext(firstNode);
@@ -160,15 +163,15 @@ void EditorData::pushTargetNodeToRoute(TargetNodePtr tnode)
 
 void EditorData::removeRouteFromScene()
 {
-    for (auto tnodePtr : m_trackData->route())
+    for (auto && tnode : m_trackData->route())
     {
-        TargetNode * tnode = dynamic_cast<TargetNode *>(tnodePtr.get());
-        assert(tnode);
+        auto node = dynamic_pointer_cast<TargetNode>(tnode);
+        assert(node);
 
-        m_mainWindow->editorScene().removeItem(tnode);
-        m_mainWindow->editorScene().removeItem(tnode->routeLine());
+        m_mainWindow->editorScene().removeItem(node.get()); // The scene wants a raw pointer
+        m_mainWindow->editorScene().removeItem(node->routeLine());
 
-        delete tnode->routeLine();
+        delete node->routeLine();
     }
 
     m_mainWindow->editorView().update();
@@ -260,18 +263,19 @@ void EditorData::addTilesToScene()
     {
         for (unsigned int j = 0; j < rows; j++)
         {
-            TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get());
+            auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
             assert(tile);
 
             if (!tile->added())
             {
-                m_mainWindow->editorScene().addItem(tile);
+                m_mainWindow->editorScene().addItem(tile.get()); // The scene wants a raw pointer
+
                 tile->setAdded(true);
             }
         }
     }
 
-    TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(0, 0).get());
+    auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(0, 0));
     assert(tile);
 
     tile->setActive(true);
@@ -283,22 +287,23 @@ void EditorData::addObjectsToScene()
 
     for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
     {
-        Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get());
+        auto object = dynamic_pointer_cast<Object>(m_trackData->objects().object(i));
         assert(object);
 
-        m_mainWindow->editorScene().addItem(object);
+        m_mainWindow->editorScene().addItem(object.get()); // The scene wants a raw pointer
+
         object->setZValue(10);
     }
 }
 
-void EditorData::removeTileFromScene(TrackTilePtr trackTile)
+void EditorData::removeTileFromScene(TrackTileBasePtr trackTile)
 {
     TrackTile::setActiveTile(nullptr);
 
-    TrackTile * tile = dynamic_cast<TrackTile *>(trackTile.get());
+    auto tile = dynamic_pointer_cast<TrackTile>(trackTile);
     assert(tile);
 
-    m_mainWindow->editorScene().removeItem(tile);
+    m_mainWindow->editorScene().removeItem(tile.get()); // The scene wants a raw pointer
 }
 
 void EditorData::removeTilesFromScene()
@@ -314,10 +319,10 @@ void EditorData::removeTilesFromScene()
         {
             for (unsigned int j = 0; j < rows; j++)
             {
-                TrackTile * tile = dynamic_cast<TrackTile *>(m_trackData->map().getTile(i, j).get());
+                auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
                 assert(tile);
 
-                m_mainWindow->editorScene().removeItem(tile);
+                m_mainWindow->editorScene().removeItem(tile.get()); // The scene wants a raw pointer
             }
         }
     }
@@ -329,14 +334,14 @@ void EditorData::removeObjectsFromScene()
     {
         for (unsigned int i = 0; i < m_trackData->objects().count(); i++)
         {
-            Object * object = dynamic_cast<Object *>(m_trackData->objects().object(i).get());
+            auto object = dynamic_pointer_cast<Object>(m_trackData->objects().object(i));
             assert(object);
 
-            m_mainWindow->editorScene().removeItem(object);
+            m_mainWindow->editorScene().removeItem(object.get()); // The scene wants a raw pointer
         }
     }
 
-    m_selectedObject    = nullptr;
+    m_selectedObject = nullptr;
     m_dragAndDropObject = nullptr;
 }
 
@@ -344,12 +349,12 @@ void EditorData::removeTargetNodesFromScene()
 {
     if (m_trackData)
     {
-        for (auto tnodePtr : m_trackData->route())
+        for (auto tnode : m_trackData->route())
         {
-            TargetNode * tnode = dynamic_cast<TargetNode *>(tnodePtr.get());
-            assert(tnode);
+            auto node = dynamic_pointer_cast<TargetNode>(tnode);
+            assert(node);
 
-            m_mainWindow->editorScene().removeItem(tnode);
+            m_mainWindow->editorScene().removeItem(node.get()); // The scene wants a raw pointer
         }
     }
 }

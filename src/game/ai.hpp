@@ -45,7 +45,7 @@ public:
 private:
 
     //! Steering logic.
-    void steerControl(TargetNodePtr tnode);
+    void steerControl(TargetNodeBasePtr tnode);
 
     //! Brake/accelerate logic.
     void speedControl(TrackTile & currentTile, bool isRaceCompleted);

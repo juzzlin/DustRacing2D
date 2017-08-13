@@ -33,6 +33,7 @@
 #include "../common/targetnodebase.hpp"
 
 #include <cassert>
+#include <memory>
 
 namespace {
 
@@ -40,7 +41,7 @@ void readTile(TrackData & newData, const QDomElement & element)
 {
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
-    TrackTile * tile = dynamic_cast<TrackTile *>(newData.map().getTile(
+    auto tile = dynamic_cast<TrackTile *>(newData.map().getTile(
         element.attribute(TrackDataBase::DataKeywords::Tile::i(), "0").toUInt(),
         element.attribute(TrackDataBase::DataKeywords::Tile::j(), "0").toUInt()).get());
     assert(tile);
@@ -69,14 +70,14 @@ void readObject(TrackData & newData, const QDomElement & element)
 
     object.setRotation(element.attribute(TrackDataBase::DataKeywords::Object::orientation(),  "0").toInt());
 
-    newData.objects().add(ObjectPtr(&object));
+    newData.objects().add(ObjectBasePtr(&object));
 }
 
-void readTargetNode(std::vector<TargetNodePtr> & route, const QDomElement & element)
+void readTargetNode(std::vector<TargetNodeBasePtr> & route, const QDomElement & element)
 {
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
-    TargetNode * tnode = new TargetNode;
+    auto tnode = new TargetNode;
     tnode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index(),  "0").toInt());
 
     const int x = element.attribute(TrackDataBase::DataKeywords::Node::x(), "0").toInt();
@@ -92,7 +93,7 @@ void readTargetNode(std::vector<TargetNodePtr> & route, const QDomElement & elem
         tnode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(TargetNodePtr(tnode));
+    route.push_back(TargetNodeBasePtr(tnode));
 }
 
 void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument & doc)
@@ -101,7 +102,7 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
     {
         for (unsigned int j = 0; j < trackData->map().rows(); j++)
         {
-            TrackTile * tile = dynamic_cast<TrackTile *>(trackData->map().getTile(i, j).get());
+            auto tile = std::dynamic_pointer_cast<TrackTile>(trackData->map().getTile(i, j));
             assert(tile);
 
             QDomElement tileElement = doc.createElement(TrackDataBase::DataKeywords::Track::tile());
@@ -124,7 +125,7 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
 {
     for (auto objectPtr : trackData->objects())
     {
-        Object * object = dynamic_cast<Object *>(objectPtr.get());
+        auto object = std::dynamic_pointer_cast<Object>(objectPtr);
         assert(object);
 
         QDomElement objectElement = doc.createElement(TrackDataBase::DataKeywords::Track::object());
@@ -227,7 +228,7 @@ TrackDataPtr TrackIO::open(QString path)
         newData->setIndex(index);
 
         // Temporary route vector.
-        std::vector<TargetNodePtr> route;
+        std::vector<TargetNodeBasePtr> route;
 
         QDomNode node = root.firstChild();
         while(!node.isNull())

@@ -27,7 +27,7 @@ class TargetNodeBase
 {
 public:
 
-    typedef std::shared_ptr<TargetNodeBase> TargetNodePtr;
+    typedef std::shared_ptr<TargetNodeBase> TargetNodeBasePtr;
 
     //! Constructor.
     TargetNodeBase();
@@ -48,13 +48,13 @@ public:
 
     virtual void setIndex(int index);
 
-    virtual void setNext(TargetNodePtr tnode);
+    virtual void setNext(TargetNodeBasePtr tnode);
 
-    virtual TargetNodePtr next() const;
+    virtual TargetNodeBasePtr next() const;
 
-    virtual void setPrev(TargetNodePtr tnode);
+    virtual void setPrev(TargetNodeBasePtr tnode);
 
-    virtual TargetNodePtr prev() const;
+    virtual TargetNodeBasePtr prev() const;
 
     virtual void setSize(QSizeF size);
 
@@ -71,11 +71,11 @@ private:
     //! Index in the route.
     int m_index;
 
-    TargetNodePtr m_next;
+    TargetNodeBasePtr m_next;
 
-    TargetNodePtr m_prev;
+    TargetNodeBasePtr m_prev;
 };
 
-typedef std::shared_ptr<TargetNodeBase> TargetNodePtr;
+using TargetNodeBasePtr = std::shared_ptr<TargetNodeBase>;
 
 #endif // TARGETNODEBASE_HPP

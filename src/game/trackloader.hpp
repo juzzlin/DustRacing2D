@@ -83,7 +83,7 @@ private:
     void readObject(QDomElement & element, TrackData & newData);
 
     //! Read a target node element and push to the given vector.
-    void readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodePtr> & route);
+    void readTargetNode(QDomElement & element, TrackData & newData, std::vector<TargetNodeBasePtr> & route);
 
     //! Convert tile type string to a type enum.
     TrackTile::TileType tileTypeEnumFromString(std::string str);

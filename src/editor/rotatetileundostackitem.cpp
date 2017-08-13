@@ -18,6 +18,8 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
+#include <memory>
+
 RotateTileUndoStackItem::RotateTileUndoStackItem(const QPoint & position, qreal oldRotation, qreal newRotation)
 : UndoStackItemBase()
 , m_position(position)
@@ -41,7 +43,7 @@ void RotateTileUndoStackItem::setRotation(TrackData * track, qreal rotation)
     int x = m_position.x();
     int y = m_position.y();
 
-    if (TrackTile * tile = dynamic_cast<TrackTile *>(track->map().getTile(x, y).get()))
+    if (auto tile = std::dynamic_pointer_cast<TrackTile>(track->map().getTile(x, y)))
     {
         tile->setRotation(rotation);
     }

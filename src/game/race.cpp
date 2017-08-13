@@ -288,7 +288,7 @@ void Race::update()
     {
         Car               & leader = getLeadingCar();
         const Route       & route  = m_track->trackData().route();
-        const TargetNodePtr tnode  = route.get(leader.currentTargetNodeIndex());
+        const TargetNodeBasePtr tnode  = route.get(leader.currentTargetNodeIndex());
 
         if (tnode->index() >= static_cast<int>(9 * route.numNodes() / 10))
         {
@@ -352,7 +352,7 @@ void Race::pitStop(Car & car)
     }
 }
 
-bool isInsideCheckPoint(Car & car, TargetNodePtr tnode, int tolerance)
+bool isInsideCheckPoint(Car & car, TargetNodeBasePtr tnode, int tolerance)
 {
     const int width2  = tnode->size().width()  / 2;
     const int height2 = tnode->size().height() / 2;
@@ -399,7 +399,7 @@ void Race::updateRouteProgress(Car & car)
             const Route & route = m_track->trackData().route();
             unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
             unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
-            TargetNodePtr tnode = route.get(currentTargetNodeIndex);
+            TargetNodeBasePtr tnode = route.get(currentTargetNodeIndex);
             const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
@@ -540,7 +540,7 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
     const Route & route = m_track->trackData().route();
-    TargetNodePtr tnode = route.get(car.prevTargetNodeIndex());
+    TargetNodeBasePtr tnode = route.get(car.prevTargetNodeIndex());
     const int randRadius = 64;
     car.translate(MCVector3dF(
         tnode->location().x() + rand() % randRadius - randRadius / 2,

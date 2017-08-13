@@ -22,22 +22,22 @@ TargetNodeBase::TargetNodeBase()
 {
 }
 
-void TargetNodeBase::setNext(TargetNodePtr tnode)
+void TargetNodeBase::setNext(TargetNodeBasePtr tnode)
 {
     m_next = tnode;
 }
 
-TargetNodePtr TargetNodeBase::next() const
+TargetNodeBasePtr TargetNodeBase::next() const
 {
     return m_next;
 }
 
-void TargetNodeBase::setPrev(TargetNodePtr tnode)
+void TargetNodeBase::setPrev(TargetNodeBasePtr tnode)
 {
     m_prev = tnode;
 }
 
-TargetNodePtr TargetNodeBase::prev() const
+TargetNodeBasePtr TargetNodeBase::prev() const
 {
     return m_prev;
 }

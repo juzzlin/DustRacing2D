@@ -35,14 +35,14 @@ public:
     Route(Route & other) = delete;
     Route & operator= (Route & other) = delete;
 
-    typedef std::vector<TargetNodePtr> RouteVector;
+    typedef std::vector<TargetNodeBasePtr> RouteVector;
 
     //! Clear the current route.
     void clear();
 
     //! Push new target to the route and return true
     //! if the route got closed.
-    bool push(TargetNodePtr target);
+    bool push(TargetNodeBasePtr target);
 
     //! Build route from an (unordered) vector of Targets.
     //! Will be sorted with respect to their indices.
@@ -52,7 +52,7 @@ public:
     unsigned int numNodes() const;
 
     //! Return Target for the given index.
-    TargetNodePtr get(unsigned int index) const;
+    TargetNodeBasePtr get(unsigned int index) const;
 
     //! Get all nodes.
     void getAll(RouteVector & routeVector) const;
@@ -72,7 +72,7 @@ private:
 
     bool isClosed() const;
 
-    std::vector<TargetNodePtr> m_route;
+    std::vector<TargetNodeBasePtr> m_route;
 };
 
 #endif // ROUTE_HPP

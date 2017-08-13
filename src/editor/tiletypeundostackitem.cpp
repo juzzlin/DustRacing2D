@@ -19,6 +19,8 @@
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
+#include <memory>
+
 TileTypeUndoStackItem::TileTypeUndoStackItem(const std::vector<QPoint> & positions, const QString & oldType, const QString & newType)
 : UndoStackItemBase()
 , m_positions(positions)
@@ -40,8 +42,8 @@ void TileTypeUndoStackItem::setTiles(TrackData * track, const ObjectModelLoader 
 {
     for (auto iter = m_positions.begin(); iter != m_positions.end(); ++iter)
     {
-        TrackTileBase * base = track->map().getTile(iter->x(), iter->y()).get();
-        TrackTile * tile = dynamic_cast<TrackTile *>(base);
+        auto base = track->map().getTile(iter->x(), iter->y());
+        auto tile = std::dynamic_pointer_cast<TrackTile>(base);
 
         tile->setTileType(type);
         tile->setPixmap(loader.getPixmapByRole(type));

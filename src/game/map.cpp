@@ -31,7 +31,7 @@ Map::Map(TrackData & trackData, unsigned int cols, unsigned int rows)
                 QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                 TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
                 QPoint(i, j));
-            setTile(i, j, TrackTilePtr(newTile));
+            setTile(i, j, TrackTileBasePtr(newTile));
         }
 }
 

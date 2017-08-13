@@ -93,7 +93,7 @@ void TrackData::insertRow(unsigned int at)
     moveTargetNodesAfterRowInsertion(at);
 }
 
-std::vector<TrackTilePtr> TrackData::deleteColumn(unsigned int at)
+std::vector<TrackTileBasePtr> TrackData::deleteColumn(unsigned int at)
 {
     moveObjectsAfterColumnDeletion(at);
 
@@ -102,7 +102,7 @@ std::vector<TrackTilePtr> TrackData::deleteColumn(unsigned int at)
     return m_map.deleteColumn(at);
 }
 
-std::vector<TrackTilePtr> TrackData::deleteRow(unsigned int at)
+std::vector<TrackTileBasePtr> TrackData::deleteRow(unsigned int at)
 {
     moveObjectsAfterRowDeletion(at);
 

@@ -21,6 +21,7 @@
 #include <QPen>
 
 #include <cassert>
+#include <memory>
 
 static const int LINE_WIDTH = 15;
 static const QColor ROUTE_LINE_COLOR(0, 0, 255, 128);
@@ -91,9 +92,9 @@ void TargetNode::setLocation(QPointF newLocation)
 
     updateRouteLine();
 
-    if (TargetNode * pPrev = dynamic_cast<TargetNode *>(prev().get()))
+    if (auto prevPtr = std::dynamic_pointer_cast<TargetNode>(prev()))
     {
-        pPrev->updateRouteLine();
+        prevPtr->updateRouteLine();
     }
 }
 

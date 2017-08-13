@@ -26,7 +26,7 @@ class Objects
 {
 public:
 
-    typedef std::vector<ObjectPtr> ObjectVector;
+    typedef std::vector<ObjectBasePtr> ObjectVector;
 
     //! Constructor.
     Objects();
@@ -35,7 +35,7 @@ public:
     Objects & operator= (Objects & other) = delete;
 
     //! Add an object.
-    void add(ObjectPtr object);
+    void add(ObjectBasePtr object);
 
     //! Remove an object.
     void remove(ObjectBase & object);
@@ -44,7 +44,7 @@ public:
     unsigned int count() const;
 
     //! Return given object.
-    ObjectPtr object(unsigned int index) const;
+    ObjectBasePtr object(unsigned int index) const;
 
     ObjectVector::iterator begin();
 

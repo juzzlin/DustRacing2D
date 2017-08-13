@@ -100,6 +100,6 @@ private:
     ComputerHint m_computerHint;
 };
 
-typedef std::shared_ptr<TrackTileBase> TrackTilePtr;
+using TrackTileBasePtr = std::shared_ptr<TrackTileBase>;
 
 #endif // TRACKTILEBASE_HPP

@@ -72,24 +72,23 @@ void EditorView::mouseMoveEvent(QMouseEvent * event)
     if (scene())
     {
         const QPointF mappedPos = mapToScene(event->pos());
-        if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos, QTransform())))
+        if (auto tile = dynamic_cast<TrackTile *>(scene()->itemAt(mappedPos, QTransform())))
         {
             tile->setActive(true);
         }
 
         // Tile drag'n'drop active?
-        if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
+        if (auto sourceTile = m_editorData.dragAndDropSourceTile())
         {
             sourceTile->setPos(mappedPos);
         }
         // Object drag'n'drop active?
-        else if (Object * object = m_editorData.dragAndDropObject())
+        else if (auto object = m_editorData.dragAndDropObject())
         {
             object->setLocation(mappedPos);
         }
         // Target node drag'n'drop active?
-        else if (TargetNode * tnode = m_editorData.dragAndDropTargetNode())
+        else if (auto tnode = m_editorData.dragAndDropTargetNode())
         {
             tnode->setLocation(mappedPos);
         }
@@ -126,7 +125,7 @@ void EditorView::createTileContextMenuActions()
     const QChar degreeSign(176);
     const QString dummy1(QString(QWidget::tr("Rotate 90")) + degreeSign + QWidget::tr(" CW.."));
 
-    QAction * rotate90CW = new QAction(dummy1, &m_tileContextMenu);
+    auto rotate90CW = new QAction(dummy1, &m_tileContextMenu);
     QObject::connect(rotate90CW, &QAction::triggered, [this] () {
         if (TrackTile * tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
@@ -142,9 +141,9 @@ void EditorView::createTileContextMenuActions()
 
     const QString dummy2(QString(QWidget::tr("Rotate 90")) + degreeSign + QWidget::tr(" CCW.."));
 
-    QAction * rotate90CCW = new QAction(dummy2, &m_tileContextMenu);
+    auto rotate90CCW = new QAction(dummy2, &m_tileContextMenu);
     QObject::connect(rotate90CCW, &QAction::triggered, [this] () {
-        if (TrackTile * tile =
+        if (auto tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
         {
             const qreal oldRotation = tile->rotation();
@@ -186,7 +185,7 @@ void EditorView::createTileContextMenuActions()
         QWidget::tr("Delete row.."), &m_tileContextMenu);
     QObject::connect(m_deleteRow, &QAction::triggered, [this] () {
         auto deleted = m_editorData.trackData()->deleteRow(m_editorData.activeRow());
-        for (auto tile : deleted) {
+        for (auto && tile : deleted) {
             m_editorData.removeTileFromScene(tile);
         }
         updateSceneRect();
@@ -206,7 +205,7 @@ void EditorView::createTileContextMenuActions()
         QWidget::tr("Delete column.."), &m_tileContextMenu);
     QObject::connect(m_deleteCol, &QAction::triggered, [this] () {
         auto deleted = m_editorData.trackData()->deleteColumn(m_editorData.activeColumn());
-        for (auto tile : deleted) {
+        for (auto && tile : deleted) {
             m_editorData.removeTileFromScene(tile);
         }
         updateSceneRect();
@@ -229,12 +228,12 @@ void EditorView::createTileContextMenuActions()
 void EditorView::createObjectContextMenuActions()
 {
     const QString dummy1(QString(QWidget::tr("Rotate..")));
-    QAction * rotate = new QAction(dummy1, &m_tileContextMenu);
+    auto rotate = new QAction(dummy1, &m_tileContextMenu);
     QObject::connect(rotate, &QAction::triggered, [this] () {
         RotateDialog dialog;
         if (dialog.exec() == QDialog::Accepted)
         {
-            if (Object * object = m_editorData.selectedObject())
+            if (auto object = m_editorData.selectedObject())
             {
                 object->setRotation(static_cast<int>(dialog.angle() + object->rotation()) % 360);
             }
@@ -248,9 +247,9 @@ void EditorView::createObjectContextMenuActions()
 void EditorView::createTargetNodeContextMenuActions()
 {
     const QString dummy1(QString(QWidget::tr("Set size..")));
-    QAction * setSize = new QAction(dummy1, &m_targetNodeContextMenu);
+    auto setSize = new QAction(dummy1, &m_targetNodeContextMenu);
     QObject::connect(setSize, &QAction::triggered, [this] () {
-        if (TargetNode * tnode = m_editorData.selectedTargetNode())
+        if (auto tnode = m_editorData.selectedTargetNode())
         {
             TargetNodeSizeDlg dialog(tnode->size());
             if (dialog.exec() == QDialog::Accepted)
@@ -296,8 +295,8 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                 auto iter = items.begin();
                 while (iter != items.end())
                 {
-                    QGraphicsItem * item = *iter;
-                    if (Object * object = dynamic_cast<Object *>(item))
+                    auto item = *iter;
+                    if (auto object = dynamic_cast<Object *>(item))
                     {
                         handleMousePressEventOnObject(*event, *object);
                         return;
@@ -306,12 +305,12 @@ void EditorView::mousePressEvent(QMouseEvent * event)
                     iter++;
                 }
 
-                QGraphicsItem * item = *items.begin();
-                if (TargetNode * tnode = dynamic_cast<TargetNode *>(item))
+                auto item = *items.begin();
+                if (auto tnode = dynamic_cast<TargetNode *>(item))
                 {
                     handleMousePressEventOnTargetNode(*event, *tnode);
                 }
-                else if (TrackTile * tile = dynamic_cast<TrackTile *>(item))
+                else if (auto tile = dynamic_cast<TrackTile *>(item))
                 {
                     handleMousePressEventOnTile(*event, *tile);
                 }
@@ -328,9 +327,9 @@ void EditorView::eraseObjectAtCurrentClickedPos()
 
     // We need to find the first object to be erased, because
     // there might be also overlapping TargetNodes.
-    for (QGraphicsItem * item : items)
+    for (auto item : items)
     {
-        if (Object * object = dynamic_cast<Object *>(item))
+        if (auto object = dynamic_cast<Object *>(item))
         {
             scene()->removeItem(object);
             m_editorData.trackData()->objects().remove(*object);
@@ -356,7 +355,7 @@ void EditorView::addCurrentToolBarObjectToScene()
 
             scene()->addItem(&object);
 
-            m_editorData.trackData()->objects().add(ObjectPtr(&object));
+            m_editorData.trackData()->objects().add(ObjectBasePtr(&object));
             m_editorData.setSelectedObject(&object);
         }
     }
@@ -551,7 +550,7 @@ void EditorView::mouseReleaseEvent(QMouseEvent * event)
 
 void EditorView::keyPressEvent(QKeyEvent * event)
 {
-    if (Object * object = m_editorData.selectedObject())
+    if (auto object = m_editorData.selectedObject())
     {
         if (!event->isAutoRepeat())
         {
@@ -581,14 +580,14 @@ void EditorView::handleTileDragRelease(QMouseEvent * event)
     if (scene())
     {
         // Tile drag'n'drop active?
-        if (TrackTile * sourceTile = m_editorData.dragAndDropSourceTile())
+        if (auto sourceTile = m_editorData.dragAndDropSourceTile())
         {
             // Determine the dest tile
-            TrackTile * destTile = sourceTile;
+            auto destTile = sourceTile;
             QList<QGraphicsItem *> items = scene()->items(mapToScene(event->pos()));
             for (QGraphicsItem * item : items)
             {
-                TrackTile * testTile = dynamic_cast<TrackTile *>(item);
+                auto testTile = dynamic_cast<TrackTile *>(item);
                 if (testTile && testTile != sourceTile)
                 {
                     destTile = testTile;
@@ -619,7 +618,7 @@ void EditorView::handleObjectDragRelease(QMouseEvent * event)
     if (scene())
     {
         // Object drag'n'drop active?
-        if (Object * object = m_editorData.dragAndDropObject())
+        if (auto object = m_editorData.dragAndDropObject())
         {
             // Set the new position position
             object->setLocation(mapToScene(event->pos()));
@@ -640,7 +639,7 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
     if (scene())
     {
         // Target node drag'n'drop active?
-        if (TargetNode * tnode = m_editorData.dragAndDropTargetNode())
+        if (auto tnode = m_editorData.dragAndDropTargetNode())
         {
             // Set the new position position
             tnode->setLocation(mapToScene(event->pos()));
@@ -658,8 +657,7 @@ void EditorView::handleTargetNodeDragRelease(QMouseEvent * event)
 
 void EditorView::setComputerHint(TrackTileBase::ComputerHint hint)
 {
-    if (TrackTile * tile =
-        dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
+    if (auto tile = dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
     {
         tile->setComputerHint(hint);
     }
@@ -672,7 +670,7 @@ void EditorView::doFloodFill(TrackTile & tile, QAction * action, QString typeToF
     floodFill(tile, action, typeToFill, positions);
 
     QString newType = action->data().toString();
-    UndoStackItemBase * item = new TileTypeUndoStackItem(positions, typeToFill, newType);
+    auto item = new TileTypeUndoStackItem(positions, typeToFill, newType);
     m_editorData.trackData()->addItemToUndoStack(item);
 
     emit itemAddedToUndoStack();
@@ -706,10 +704,10 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
         if (x >= 0 && y >= 0)
         {
-            TrackTile * tile = dynamic_cast<TrackTile *>(map.getTile(x, y).get());
-            if (tile != nullptr && tile->tileType() == typeToFill)
+            auto tile = std::dynamic_pointer_cast<TrackTile>(map.getTile(x, y));
+            if (tile && tile->tileType() == typeToFill)
             {
-                floodFill(*tile, action, typeToFill, positions);
+                floodFill(*(tile.get()), action, typeToFill, positions);
             }
         }
     }
@@ -725,7 +723,7 @@ void EditorView::changeTileType(TrackTile & tile, QAction * action)
 
     std::vector< QPoint > positions;
     positions.push_back(tile.matrixLocation());
-    UndoStackItemBase * item = new TileTypeUndoStackItem(positions, oldType, newType);
+    auto item = new TileTypeUndoStackItem(positions, oldType, newType);
     m_editorData.trackData()->addItemToUndoStack(item);
 
     emit itemAddedToUndoStack();
@@ -734,8 +732,7 @@ void EditorView::changeTileType(TrackTile & tile, QAction * action)
 void EditorView::addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation)
 {
     QPoint pos = tile->matrixLocation();
-    UndoStackItemBase * item = new RotateTileUndoStackItem(pos, oldRotation, newRotation);
-
+    auto item = new RotateTileUndoStackItem(pos, oldRotation, newRotation);
     m_editorData.trackData()->addItemToUndoStack(item);
 
     emit itemAddedToUndoStack();

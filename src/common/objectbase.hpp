@@ -59,6 +59,6 @@ private:
     QPointF m_location;
 };
 
-typedef std::shared_ptr<ObjectBase> ObjectPtr;
+using ObjectBasePtr = std::shared_ptr<ObjectBase>;
 
 #endif // OBJECTBASE_HPP
