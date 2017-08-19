@@ -23,6 +23,7 @@
 #include <QPointF>
 
 #include "trackdata.hpp"
+#include "trackio.hpp"
 
 class MainWindow;
 class Object;
@@ -39,13 +40,13 @@ class EditorData
 public:
 
     //! Editing modes.
-    enum EditorMode
+    enum class EditorMode
     {
-        EM_NONE = 0,
-        EM_SET_ROUTE,
-        EM_SET_TILE_TYPE,
-        EM_ADD_OBJECT,
-        EM_ERASE_OBJECT
+        None,
+        SetRoute,
+        SetTileType,
+        AddObject,
+        EraseObject
     };
 
     //! Constructor.
@@ -170,18 +171,31 @@ private:
 
     void removeTargetNodesFromScene();
 
-    TrackDataPtr                     m_trackData;
-    EditorMode                       m_mode;
-    TrackTile                      * m_dragAndDropSourceTile;
-    Object                         * m_dragAndDropObject;
-    Object                         * m_selectedObject;
-    TargetNode                     * m_selectedTargetNode;
-    TargetNode                     * m_dragAndDropTargetNode;
-    QPointF                          m_dragAndDropSourcePos;
-    MainWindow                     * m_mainWindow;
+    TrackIO m_trackIO;
+
+    TrackDataPtr m_trackData;
+
+    EditorMode m_mode;
+
+    TrackTile * m_dragAndDropSourceTile = nullptr;
+
+    Object * m_dragAndDropObject = nullptr;
+
+    Object * m_selectedObject = nullptr;
+
+    TargetNode * m_selectedTargetNode = nullptr;
+
+    TargetNode * m_dragAndDropTargetNode = nullptr;
+
+    QPointF m_dragAndDropSourcePos;
+
+    MainWindow * m_mainWindow = nullptr;
+
     std::vector<QGraphicsLineItem *> m_targetNodes;
-    unsigned int                     m_activeColumn;
-    unsigned int                     m_activeRow;
+
+    unsigned int m_activeColumn = 0;
+
+    unsigned int m_activeRow = 0;
 };
 
 #endif // EDITORDATA_HPP

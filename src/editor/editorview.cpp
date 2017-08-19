@@ -298,12 +298,12 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         m_clickedScenePos = mapToScene(m_clickedPos);
 
         // User is erasing an object
-        if (m_editorData.mode() == EditorData::EM_ERASE_OBJECT)
+        if (m_editorData.mode() == EditorData::EditorMode::EraseObject)
         {
             eraseObjectAtCurrentClickedPos();
         }
         // User is adding an object
-        else if (m_editorData.mode() == EditorData::EM_ADD_OBJECT)
+        else if (m_editorData.mode() == EditorData::EditorMode::AddObject)
         {
             addCurrentToolBarObjectToScene();
         }
@@ -435,7 +435,7 @@ void EditorView::handleMousePressEventOnTile(QMouseEvent & event, TrackTile & ti
 void EditorView::handleLeftButtonClickOnObject(Object & object)
 {
     // User is initiating a drag'n'drop
-    if (m_editorData.mode() == EditorData::EM_NONE)
+    if (m_editorData.mode() == EditorData::EditorMode::None)
     {
         object.setZValue(object.zValue() + 1);
         m_editorData.setDragAndDropObject(&object);
@@ -449,7 +449,7 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
 void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
 {
     // User is initiating a drag'n'drop
-    if (m_editorData.mode() == EditorData::EM_NONE)
+    if (m_editorData.mode() == EditorData::EditorMode::None)
     {
         tnode.setZValue(tnode.zValue() + 1);
         m_editorData.setDragAndDropTargetNode(&tnode);
@@ -458,7 +458,7 @@ void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
         QApplication::setOverrideCursor(QCursor(Qt::ClosedHandCursor));
     }
     // It's not possible to make nodes overlap if not handled also here.
-    else if (m_editorData.mode() == EditorData::EM_SET_ROUTE)
+    else if (m_editorData.mode() == EditorData::EditorMode::SetRoute)
     {
         m_editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
@@ -467,12 +467,12 @@ void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
 void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
 {
     // User is defining the route
-    if (m_editorData.mode() == EditorData::EM_SET_ROUTE)
+    if (m_editorData.mode() == EditorData::EditorMode::SetRoute)
     {
         m_editorData.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
     // User is setting the tile type
-    else if (m_editorData.mode() == EditorData::EM_SET_TILE_TYPE)
+    else if (m_editorData.mode() == EditorData::EditorMode::SetTileType)
     {
         if (QAction * action = MainWindow::instance()->currentToolBarAction())
         {
@@ -494,7 +494,7 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
         }
     }
     // User is initiating a drag'n'drop
-    else if (m_editorData.mode() == EditorData::EM_NONE)
+    else if (m_editorData.mode() == EditorData::EditorMode::None)
     {
         tile.setZValue(tile.zValue() + 1);
         m_editorData.setDragAndDropSourceTile(&tile);

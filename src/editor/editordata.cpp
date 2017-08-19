@@ -28,16 +28,9 @@
 using std::dynamic_pointer_cast;
 
 EditorData::EditorData(MainWindow * mainWindow)
-: m_mode(EM_NONE)
-, m_dragAndDropSourceTile(nullptr)
-, m_dragAndDropObject(nullptr)
-, m_selectedObject(nullptr)
-, m_selectedTargetNode(nullptr)
-, m_dragAndDropTargetNode(nullptr)
+: m_mode(EditorMode::None)
 , m_dragAndDropSourcePos()
 , m_mainWindow(mainWindow)
-, m_activeColumn(0)
-, m_activeRow(0)
 {}
 
 void EditorData::clearScene()
@@ -51,20 +44,20 @@ bool EditorData::loadTrackData(QString fileName)
 {
     clearScene();
 
-    m_trackData = TrackIO::open(fileName);
+    m_trackData = m_trackIO.open(fileName);
     return static_cast<bool>(m_trackData);
 }
 
 bool EditorData::saveTrackData()
 {
     assert(m_trackData);
-    return TrackIO::save(m_trackData, m_trackData->fileName());
+    return m_trackIO.save(m_trackData, m_trackData->fileName());
 }
 
 bool EditorData::saveTrackDataAs(QString fileName)
 {
     assert(m_trackData);
-    if (TrackIO::save(m_trackData, fileName))
+    if (m_trackIO.save(m_trackData, fileName))
     {
         m_trackData->setFileName(fileName);
         return true;
@@ -87,7 +80,7 @@ bool EditorData::canRouteBeSet() const
 void EditorData::beginSetRoute()
 {
     assert(m_trackData);
-    setMode(EditorData::EM_SET_ROUTE);
+    setMode(EditorMode::SetRoute);
     removeRouteFromScene();
     m_trackData->route().clear();
 }
@@ -95,7 +88,7 @@ void EditorData::beginSetRoute()
 void EditorData::endSetRoute()
 {
     // Reset the editing mode.
-    setMode(EditorData::EM_NONE);
+    setMode(EditorMode::None);
 }
 
 void EditorData::addExistingRouteToScene()
@@ -150,7 +143,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBasePtr tnode)
     // Check if we might have a loop => end
     if (loopClosed)
     {
-        setMode(EditorData::EM_NONE);
+        setMode(EditorMode::None);
         m_mainWindow->endSetRoute();
 
         auto firstNode = route.get(0);
@@ -187,7 +180,7 @@ EditorData::EditorMode EditorData::mode() const
     return m_mode;
 }
 
-void EditorData::setMode(EditorMode newMode)
+void EditorData::setMode(EditorData::EditorMode newMode)
 {
     m_mode = newMode;
 }
@@ -256,12 +249,9 @@ void EditorData::addTilesToScene()
 {
     assert(m_trackData);
 
-    const unsigned int cols = m_trackData->map().cols();
-    const unsigned int rows = m_trackData->map().rows();
-
-    for (unsigned int i = 0; i < cols; i++)
+    for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
     {
-        for (unsigned int j = 0; j < rows; j++)
+        for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
         {
             auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
             assert(tile);
@@ -312,12 +302,9 @@ void EditorData::removeTilesFromScene()
     {
         TrackTile::setActiveTile(nullptr);
 
-        const unsigned int cols = m_trackData->map().cols();
-        const unsigned int rows = m_trackData->map().rows();
-
-        for (unsigned int i = 0; i < cols; i++)
+        for (unsigned int i = 0; i < m_trackData->map().cols(); i++)
         {
-            for (unsigned int j = 0; j < rows; j++)
+            for (unsigned int j = 0; j < m_trackData->map().rows(); j++)
             {
                 auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
                 assert(tile);

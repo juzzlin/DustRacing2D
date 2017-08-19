@@ -470,14 +470,14 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EM_ERASE_OBJECT);
+            m_editorData->setMode(EditorData::EditorMode::EraseObject);
         }
         // The user wants to clear a tile.
         else if (action->data() == "clear")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
+            m_editorData->setMode(EditorData::EditorMode::SetTileType);
         }
         // The user wants to set a tile type or clear it.
         else if (m_objectModelLoader->getCategoryByRole(
@@ -485,7 +485,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EM_SET_TILE_TYPE);
+            m_editorData->setMode(EditorData::EditorMode::SetTileType);
         }
         // The user wants to add an object to the scene.
         else if (m_objectModelLoader->getCategoryByRole(
@@ -493,7 +493,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(":/cursor2.png")));
-            m_editorData->setMode(EditorData::EM_ADD_OBJECT);
+            m_editorData->setMode(EditorData::EditorMode::AddObject);
         }
     }
     else
@@ -819,7 +819,7 @@ void MainWindow::console(QString text)
 void MainWindow::clearEditMode()
 {
     QApplication::restoreOverrideCursor();
-    m_editorData->setMode(EditorData::EM_NONE);
+    m_editorData->setMode(EditorData::EditorMode::None);
 }
 
 void MainWindow::fitScale()
