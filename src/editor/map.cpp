@@ -93,11 +93,13 @@ void Map::resize(unsigned int newCols, unsigned int newRows)
     createEmptyTiles();
 }
 
-void Map::insertColumn(unsigned int at)
+unsigned int Map::insertColumn(unsigned int at, InsertDirection insertDirection)
 {
-    MapBase::insertColumn(at);
+    at = MapBase::insertColumn(at, insertDirection);
 
     createEmptyTiles();
+
+    return at;
 }
 
 std::vector<TrackTileBasePtr> Map::deleteColumn(unsigned int at)
@@ -106,11 +108,13 @@ std::vector<TrackTileBasePtr> Map::deleteColumn(unsigned int at)
     return MapBase::deleteColumn(at);
 }
 
-void Map::insertRow(unsigned int at)
+unsigned int Map::insertRow(unsigned int at, InsertDirection insertDirection)
 {
-    MapBase::insertRow(at);
+    at = MapBase::insertRow(at, insertDirection);
 
     createEmptyTiles();
+
+    return at;
 }
 
 std::vector<TrackTileBasePtr> Map::deleteRow(unsigned int at)

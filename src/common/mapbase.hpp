@@ -32,6 +32,12 @@ public:
     MapBase(MapBase & other) = delete;
     MapBase & operator= (MapBase & other) = delete;
 
+    enum class InsertDirection
+    {
+        Before,
+        After
+    };
+
     //! Destructor.
     virtual ~MapBase();
 
@@ -53,13 +59,13 @@ public:
     TrackTileBasePtr getTile(unsigned int x, unsigned int y) const;
 
     //! Insert column after given index.
-    virtual void insertColumn(unsigned int at);
+    virtual unsigned int insertColumn(unsigned int at, InsertDirection insertDirection);
 
     //! Delete column at given index. Return deleted tiles.
     virtual std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);
 
     //! Insert row after given index.
-    virtual void insertRow(unsigned int at);
+    virtual unsigned int insertRow(unsigned int at, InsertDirection insertDirection);
 
     //! Delete row at given index. Return deleted tiles.
     virtual std::vector<TrackTileBasePtr> deleteRow(unsigned int at);

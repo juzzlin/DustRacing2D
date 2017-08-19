@@ -119,21 +119,17 @@ private:
 
     QPointF m_clickedScenePos;
 
-    QAction * m_clearComputerHint;
+    QAction * m_clearComputerHint = nullptr;
 
-    QAction * m_setComputerHintBrakeHard;
+    QAction * m_setComputerHintBrakeHard = nullptr;
 
-    QAction * m_setComputerHintBrake;
+    QAction * m_setComputerHintBrake = nullptr;
 
-    QAction * m_insertRow;
+    QAction * m_deleteRow = nullptr;
 
-    QAction * m_deleteRow;
+    QAction * m_deleteCol = nullptr;
 
-    QAction * m_insertCol;
-
-    QAction * m_deleteCol;
-
-    QAction * m_excludeFromMinimap;
+    QAction * m_excludeFromMinimap = nullptr;
 
     EditorData & m_editorData;
 };

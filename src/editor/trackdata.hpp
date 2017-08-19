@@ -69,10 +69,10 @@ public:
     void enlargeVerSize();
 
     //! Insert tile column at given index and move objects.
-    void insertColumn(unsigned int at);
+    void insertColumn(unsigned int at, MapBase::InsertDirection insertDirection);
 
     //! Insert tile row at given index and move objects.
-    void insertRow(unsigned int at);
+    void insertRow(unsigned int at, MapBase::InsertDirection insertDirection);
 
     //! Delete tile column at given index and move objects.
     std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);

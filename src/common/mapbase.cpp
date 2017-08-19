@@ -75,14 +75,18 @@ TrackTileBasePtr MapBase::getTile(unsigned int x, unsigned int y) const
     return m_map[y][x];
 }
 
-void MapBase::insertColumn(unsigned int at)
+unsigned int MapBase::insertColumn(unsigned int at, MapBase::InsertDirection insertDirection)
 {
+    at = at + (insertDirection == MapBase::InsertDirection::Before ? 0 : 1);
+
     for (auto & row : m_map)
     {
         row.insert(row.begin() + at, nullptr);
     }
 
     m_cols++;
+
+    return at;
 }
 
 std::vector<TrackTileBasePtr> MapBase::deleteColumn(unsigned int at)
@@ -100,11 +104,15 @@ std::vector<TrackTileBasePtr> MapBase::deleteColumn(unsigned int at)
     return deleted;
 }
 
-void MapBase::insertRow(unsigned int at)
+unsigned int MapBase::insertRow(unsigned int at, MapBase::InsertDirection insertDirection)
 {
+    at = at + (insertDirection == MapBase::InsertDirection::Before ? 0 : 1);
+
     m_map.insert(m_map.begin() + at, TrackTileRow(m_cols, nullptr));
 
     m_rows++;
+
+    return at;
 }
 
 std::vector<TrackTileBasePtr> MapBase::deleteRow(unsigned int at)

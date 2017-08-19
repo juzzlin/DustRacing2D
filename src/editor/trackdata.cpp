@@ -75,18 +75,18 @@ void TrackData::enlargeVerSize()
     m_map.resize(m_map.cols(), m_map.rows() + 1);
 }
 
-void TrackData::insertColumn(unsigned int at)
+void TrackData::insertColumn(unsigned int at, MapBase::InsertDirection insertDirection)
 {
-    m_map.insertColumn(at);
+    at = m_map.insertColumn(at, insertDirection);
 
     moveObjectsAfterColumnInsertion(at);
 
     moveTargetNodesAfterColumnInsertion(at);
 }
 
-void TrackData::insertRow(unsigned int at)
+void TrackData::insertRow(unsigned int at, MapBase::InsertDirection insertDirection)
 {
-    m_map.insertRow(at);
+    at = m_map.insertRow(at, insertDirection);
 
     moveObjectsAfterRowInsertion(at);
 

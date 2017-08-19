@@ -30,11 +30,11 @@ public:
 
     void resize(unsigned int newCols, unsigned int newRows) override;
 
-    void insertColumn(unsigned int at) override;
+    unsigned int insertColumn(unsigned int at, InsertDirection insertDirection) override;
 
     std::vector<TrackTileBasePtr> deleteColumn(unsigned int at) override;
 
-    void insertRow(unsigned int at) override;
+    unsigned int insertRow(unsigned int at, InsertDirection insertDirection) override;
 
     std::vector<TrackTileBasePtr> deleteRow(unsigned int at) override;
 

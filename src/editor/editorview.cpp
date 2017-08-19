@@ -39,14 +39,6 @@
 
 EditorView::EditorView(EditorData & editorData, QWidget * parent)
 : QGraphicsView(parent)
-, m_clearComputerHint(nullptr)
-, m_setComputerHintBrakeHard(nullptr)
-, m_setComputerHintBrake(nullptr)
-, m_insertRow(nullptr)
-, m_deleteRow(nullptr)
-, m_insertCol(nullptr)
-, m_deleteCol(nullptr)
-, m_excludeFromMinimap(nullptr)
 , m_editorData(editorData)
 {
     createTileContextMenuActions();
@@ -183,10 +175,19 @@ void EditorView::createTileContextMenuActions()
         }
     });
 
-    m_insertRow = new QAction(
-        QWidget::tr("Insert row.."), &m_tileContextMenu);
-    QObject::connect(m_insertRow, &QAction::triggered, [this] () {
-        m_editorData.trackData()->insertRow(m_editorData.activeRow());
+    auto insertRowBefore = new QAction(
+        QWidget::tr("Insert row before.."), &m_tileContextMenu);
+    QObject::connect(insertRowBefore, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertRow(m_editorData.activeRow(), MapBase::InsertDirection::Before);
+        m_editorData.addTilesToScene();
+        updateSceneRect();
+        update();
+    });
+
+    auto insertRowAfter = new QAction(
+        QWidget::tr("Insert row after.."), &m_tileContextMenu);
+    QObject::connect(insertRowAfter, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertRow(m_editorData.activeRow(), MapBase::InsertDirection::After);
         m_editorData.addTilesToScene();
         updateSceneRect();
         update();
@@ -203,10 +204,19 @@ void EditorView::createTileContextMenuActions()
         update();
     });
 
-    m_insertCol = new QAction(
-        QWidget::tr("Insert column.."), &m_tileContextMenu);
-    QObject::connect(m_insertCol, &QAction::triggered, [this] () {
-        m_editorData.trackData()->insertColumn(m_editorData.activeColumn());
+    auto insertColBefore = new QAction(
+        QWidget::tr("Insert column before.."), &m_tileContextMenu);
+    QObject::connect(insertColBefore, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertColumn(m_editorData.activeColumn(), MapBase::InsertDirection::Before);
+        m_editorData.addTilesToScene();
+        updateSceneRect();
+        update();
+    });
+
+    auto insertColAfter = new QAction(
+        QWidget::tr("Insert column after.."), &m_tileContextMenu);
+    QObject::connect(insertColAfter, &QAction::triggered, [this] () {
+        m_editorData.trackData()->insertColumn(m_editorData.activeColumn(), MapBase::InsertDirection::After);
         m_editorData.addTilesToScene();
         updateSceneRect();
         update();
@@ -233,9 +243,12 @@ void EditorView::createTileContextMenuActions()
     m_tileContextMenu.addSeparator();
     m_tileContextMenu.addAction(m_excludeFromMinimap);
     m_tileContextMenu.addSeparator();
-    m_tileContextMenu.addAction(m_insertRow);
+    m_tileContextMenu.addAction(insertRowBefore);
+    m_tileContextMenu.addAction(insertRowAfter);
     m_tileContextMenu.addAction(m_deleteRow);
-    m_tileContextMenu.addAction(m_insertCol);
+    m_tileContextMenu.addSeparator();
+    m_tileContextMenu.addAction(insertColBefore);
+    m_tileContextMenu.addAction(insertColAfter);
     m_tileContextMenu.addAction(m_deleteCol);
 }
 
