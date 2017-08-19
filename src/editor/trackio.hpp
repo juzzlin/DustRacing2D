@@ -17,17 +17,21 @@
 #define TRACKIO_HPP
 
 #include <QString>
+#include <QTemporaryDir>
+#include <QUuid>
 
 #include "trackdata.hpp"
 
-namespace TrackIO
+class TrackIO
 {
+public:
+
     //! Save given track data. Returns false if failed.
     bool save(TrackDataPtr trackData, QString path);
 
     /*! Load given track data. Returns the new TrackData object,
      *  or nullptr if failed. */
     TrackDataPtr open(QString path);
-}
+};
 
 #endif // TRACKIO_HPP

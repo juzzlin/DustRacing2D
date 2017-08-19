@@ -18,15 +18,16 @@
 
 #include "../common/mapbase.hpp"
 
-class TrackData;
-
 //! Base class for the tile matrix used by TrackData.
 class Map : public MapBase
 {
 public:
 
     //! Constuctor.
-    Map(TrackData & trackData, unsigned int cols, unsigned int rows);
+    Map(unsigned int cols, unsigned int rows);
+
+    //! Copy constructor.
+    Map(const Map & other);
 
     void resize(unsigned int newCols, unsigned int newRows) override;
 
@@ -46,6 +47,8 @@ private:
     void moveTilesAfterColumnDeletion(unsigned int at);
 
     void moveTilesAfterRowDeletion(unsigned int at);
+
+    void copyTiles(const Map & other);
 
     void createEmptyTiles();
 };

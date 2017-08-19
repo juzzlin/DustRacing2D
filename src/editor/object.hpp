@@ -29,6 +29,9 @@ public:
     //! Constructor.
     Object(QString category, QString role, QSizeF size, QPixmap pixmap);
 
+    //! Copy constructor.
+    Object(const Object & other);
+
     virtual QRectF boundingRect () const override;
 
     virtual void paint(QPainter * painter,

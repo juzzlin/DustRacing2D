@@ -14,16 +14,55 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "trackdata.hpp"
+
+#include "targetnode.hpp"
 #include "tracktile.hpp"
-#include "undostackitembase.hpp"
+
+#include "object.hpp"
+#include "objectfactory.hpp"
+
+#include <memory>
 
 TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
-: TrackDataBase(name, isUserTrack)
-, m_map(*this, cols, rows)
-, m_route()
-, m_undoStack()
-, m_undoStackPosition()
+    : TrackDataBase(name, isUserTrack)
+    , m_map(cols, rows)
 {}
+
+TrackData::TrackData(const TrackData & other)
+    : TrackDataBase(other)
+    , m_fileName(other.m_fileName)
+    , m_map(other.m_map)
+{
+    copyObjects(other);
+
+    copyRoute(other);
+}
+
+void TrackData::copyObjects(const TrackData & other)
+{
+    m_objects.clear();
+
+    for (auto iter = other.m_objects.cbegin(); iter != other.m_objects.cend(); iter++)
+    {
+        auto object = std::dynamic_pointer_cast<Object>(*iter);
+        auto newObject = new Object(*(object.get()));
+
+        m_objects.add(ObjectBasePtr(newObject));
+    }
+}
+
+void TrackData::copyRoute(const TrackData & other)
+{
+    m_route.clear();
+
+    for (auto iter = other.m_route.cbegin(); iter != other.m_route.cend(); iter++)
+    {
+        auto node = std::dynamic_pointer_cast<TargetNode>(*iter);
+        auto newNode = new TargetNode(*(node.get()));
+
+        m_route.push(TargetNodeBasePtr(newNode));
+    }
+}
 
 QString TrackData::fileName() const
 {
@@ -197,42 +236,6 @@ void TrackData::moveTargetNodesAfterRowDeletion(unsigned int at)
             tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() - TrackTile::TILE_H));
         }
     }
-}
-
-void TrackData::addItemToUndoStack(UndoStackItemBase * item)
-{
-    // "Redo" actions are lost when new items are added to undo stack.
-    m_undoStack.erase(m_undoStackPosition, m_undoStack.end());
-
-    m_undoStack.push_back(std::shared_ptr< UndoStackItemBase >(item));
-
-    m_undoStackPosition = m_undoStack.end();
-}
-
-bool TrackData::undo(const ObjectModelLoader & loader)
-{
-    UndoStack::const_iterator begin = m_undoStack.begin();
-
-    if (m_undoStackPosition != begin)
-    {
-        --m_undoStackPosition;
-        m_undoStackPosition->get()->executeUndo(this, loader);
-    }
-
-    return m_undoStackPosition != begin;
-}
-
-bool TrackData::redo(const ObjectModelLoader & loader)
-{
-    UndoStack::const_iterator end = m_undoStack.end();
-
-    if (m_undoStackPosition != end)
-    {
-        m_undoStackPosition->get()->executeRedo(this, loader);
-        ++m_undoStackPosition;
-    }
-
-    return m_undoStackPosition != end;
 }
 
 TrackData::~TrackData()

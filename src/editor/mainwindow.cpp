@@ -71,18 +71,10 @@ MainWindow::MainWindow(QString trackFile)
 , m_editorScene(new EditorScene(this))
 , m_editorView(new EditorView(*m_editorData, this))
 , m_console(new QTextEdit(this))
-, m_saveAction(nullptr)
-, m_saveAsAction(nullptr)
-, m_currentToolBarAction(nullptr)
-, m_enlargeHorSize(nullptr)
-, m_enlargeVerSize(nullptr)
-, m_setRouteAction(nullptr)
-, m_setTrackPropertiesAction(nullptr)
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
 , m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
 , m_argTrackFile(trackFile)
-, m_saved(false)
 {
     if (!m_instance)
     {
@@ -217,8 +209,6 @@ void MainWindow::init()
     QList<int> sizes;
     sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
     splitter->setSizes(sizes);
-
-    connect(m_editorView, SIGNAL(itemAddedToUndoStack()), SLOT(handleItemAddedToUndoStack()));
 }
 
 void MainWindow::setTitle(QString openFileName)
@@ -371,14 +361,28 @@ void MainWindow::populateMenuBar()
     m_undoAction = new QAction(tr("Undo"), this);
     m_undoAction->setShortcut(QKeySequence("Ctrl+Z"));
     editMenu->addAction(m_undoAction);
-    connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
+    connect(m_undoAction, &QAction::triggered, [this](){
+        m_editorData->undo();
+
+        setupTrackAfterUndoOrRedo();
+
+        m_undoAction->setEnabled(m_editorData->isUndoable());
+        m_redoAction->setEnabled(m_editorData->isRedoable());
+    });
     m_undoAction->setEnabled(false);
 
     // Add "redo"-action
     m_redoAction = new QAction(tr("Redo"), this);
     m_redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
     editMenu->addAction(m_redoAction);
-    connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
+    connect(m_redoAction, &QAction::triggered, [this](){
+        m_editorData->redo();
+
+        setupTrackAfterUndoOrRedo();
+
+        m_undoAction->setEnabled(m_editorData->isUndoable());
+        m_redoAction->setEnabled(m_editorData->isRedoable());
+    });
     m_redoAction->setEnabled(false);
 
     // Add "enlarge hor size"-action
@@ -533,25 +537,10 @@ void MainWindow::showAboutQtDlg()
     QMessageBox::aboutQt(this, tr("About Qt"));
 }
 
-void MainWindow::undo()
-{
-    bool hasMoreItemsToUndo = m_editorData->undo(*m_objectModelLoader);
-
-    m_undoAction->setEnabled(hasMoreItemsToUndo);
-    m_redoAction->setEnabled(true);
-}
-
-void MainWindow::redo()
-{
-    bool hasMoreItemsToRedo = m_editorData->redo(*m_objectModelLoader);
-
-    m_undoAction->setEnabled(true);
-    m_redoAction->setEnabled(hasMoreItemsToRedo);
-}
-
 void MainWindow::clearRoute()
 {
     assert(m_editorData);
+    m_editorData->saveUndoPoint();
     m_editorData->clearRoute();
     m_clearRouteAction->setEnabled(false);
 }
@@ -612,6 +601,25 @@ bool MainWindow::doOpenTrack(QString fileName)
     }
 
     return false;
+}
+
+void MainWindow::setupTrackAfterUndoOrRedo()
+{
+    m_saveAction->setEnabled(true);
+
+    setActionStatesOnNewTrack();
+
+    delete m_editorScene;
+    m_editorScene = new EditorScene;
+
+    m_editorView->setScene(m_editorScene);
+    m_editorView->updateSceneRect();
+
+    m_editorData->addTilesToScene();
+    m_editorData->addObjectsToScene();
+    m_editorData->addExistingRouteToScene();
+
+    m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
 }
 
 void MainWindow::saveTrack()
@@ -768,11 +776,19 @@ void MainWindow::enlargeVerSize()
     }
 }
 
+void MainWindow::enableUndo(bool enable)
+{
+    m_undoAction->setEnabled(enable);
+}
+
 void MainWindow::beginSetRoute()
 {
     QApplication::restoreOverrideCursor();
 
     assert(m_editorData);
+
+    m_editorData->saveUndoPoint();
+
     if (m_editorData->canRouteBeSet())
     {
         console(tr("Set route: begin."));
@@ -802,12 +818,6 @@ void MainWindow::endSetRoute()
     m_editorData->endSetRoute();
     m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
     console(tr("Set route: route finished."));
-}
-
-void MainWindow::handleItemAddedToUndoStack()
-{
-    m_undoAction->setEnabled(true);
-    m_redoAction->setEnabled(false);
 }
 
 void MainWindow::console(QString text)

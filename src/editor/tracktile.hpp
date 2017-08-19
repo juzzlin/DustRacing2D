@@ -24,7 +24,6 @@
 
 class QGraphicsLineItem;
 class TileAnimator;
-class TrackData;
 
 /*! A race track is built of TrackTiles. The TrackTile class
  *  extends TrackTileBase with features needed to render
@@ -35,12 +34,16 @@ class TrackTile : public QGraphicsItem, public TrackTileBase
 public:
 
     /*! Constructor.
-     *  \param trackData Pointer to the "parent" TrackData.
      *  \param location Location (coordinates) in the track scene.
      *  \param matrixLocation Location in the tile matrix.
      *  \param type Type of the tile. See setType(). */
-    TrackTile(TrackData & trackData, QPointF location, QPoint matrixLocation,
+    TrackTile(QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
+
+    //! Copy constructor.
+    TrackTile(const TrackTile & other);
+
+    TrackTile & operator=(const TrackTile & other) = delete;
 
     //! Destructor
     virtual ~TrackTile();
@@ -67,10 +70,10 @@ public:
     static void setActiveTile(TrackTile * tile);
 
     //! Rotate 90 degrees CW
-    bool rotate90CW(qreal * newRotation);
+    bool rotate90CW();
 
     //! Rotate 90 degrees CCW
-    bool rotate90CCW(qreal * newRotation);
+    bool rotate90CCW();
 
     //! Get the current pixmap
     QPixmap pixmap() const;

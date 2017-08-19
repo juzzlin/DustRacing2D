@@ -32,8 +32,9 @@ public:
     //! Constructor.
     Route();
 
-    Route(Route & other) = delete;
-    Route & operator= (Route & other) = delete;
+    Route(const Route & other) = delete;
+
+    Route & operator= (const Route & other) = delete;
 
     typedef std::vector<TargetNodeBasePtr> RouteVector;
 

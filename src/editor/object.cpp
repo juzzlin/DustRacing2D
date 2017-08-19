@@ -17,10 +17,21 @@
 #include <QPainter>
 
 Object::Object(QString category, QString role, QSizeF size, QPixmap pixmap)
-: ObjectBase(category, role)
-, m_size(size)
-, m_pixmap(pixmap)
+    : ObjectBase(category, role)
+    , m_size(size)
+    , m_pixmap(pixmap)
 {
+}
+
+Object::Object(const Object & other)
+    : QGraphicsItem()
+    , ObjectBase(other.category(), other.role())
+    , m_size(other.m_size)
+    , m_pixmap(other.m_pixmap)
+{
+    setLocation(other.location());
+
+    setRotation(other.rotation());
 }
 
 QRectF Object::boundingRect () const

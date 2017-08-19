@@ -33,6 +33,7 @@ public:
     TargetNodeBase();
 
     TargetNodeBase(TargetNodeBase & other) = delete;
+
     TargetNodeBase & operator= (TargetNodeBase & other) = delete;
 
     //! Destructor.

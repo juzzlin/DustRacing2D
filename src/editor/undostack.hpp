@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2013 Markus Rinne <markus.ka.rinne@gmail.com>
+// Copyright (C) 2017 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,29 +13,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef UNDOSTACKITEMBASE_HPP
-#define UNDOSTACKITEMBASE_HPP
+#ifndef UNDOSTACK_HPP
+#define UNDOSTACK_HPP
 
-class ObjectModelLoader;
-class TrackData;
+#include "trackdata.hpp"
 
-//! An operation that can executed with 'undo' and 'redo'.
-class UndoStackItemBase
+#include <list>
+
+class UndoStack
 {
 public:
 
-    UndoStackItemBase()
-    {
-    }
+    UndoStack(unsigned int maxHistorySize = 100);
 
-    virtual void executeUndo(TrackData * track, const ObjectModelLoader & loader) = 0;
+    void pushUndoPoint(TrackDataPtr trackData);
 
-    virtual void executeRedo(TrackData * track, const ObjectModelLoader & loader) = 0;
+    void pushRedoPoint(TrackDataPtr trackData);
+
+    void clear();
+
+    bool isUndoable() const;
+
+    TrackDataPtr undo();
+
+    bool isRedoable() const;
+
+    TrackDataPtr redo();
 
 private:
 
-    UndoStackItemBase(const UndoStackItemBase &);
-    UndoStackItemBase & operator = (const UndoStackItemBase &);
+    using TrackDataVector = std::list<TrackDataPtr>;
+
+    TrackDataVector m_undoStack;
+
+    TrackDataVector m_redoStack;
+
+    unsigned int m_maxHistorySize;
 };
 
-#endif // UNDOSTACKITEMBASE_HPP
+#endif // UNDOSTACK_HPP

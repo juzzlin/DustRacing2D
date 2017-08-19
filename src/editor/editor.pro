@@ -38,16 +38,14 @@ HEADERS +=  \
     objectmodel.hpp \
     objectmodelloader.hpp \
     rotatedialog.hpp \
-    rotatetileundostackitem.hpp \
     targetnode.hpp \
     targetnodesizedlg.hpp \
     tileanimator.hpp \
-    tiletypeundostackitem.hpp \
     trackdata.hpp \
     trackio.hpp \
     trackpropertiesdialog.hpp \
     tracktile.hpp \
-    undostackitembase.hpp \
+    undostack.hpp \
 
 SOURCES += \
     ../common/config.cpp \
@@ -70,15 +68,14 @@ SOURCES += \
     objectfactory.cpp \
     objectmodelloader.cpp \
     rotatedialog.cpp \
-    rotatetileundostackitem.cpp \
     targetnode.cpp \
     targetnodesizedlg.cpp \
     tileanimator.cpp \
-    tiletypeundostackitem.cpp \
     trackdata.cpp \
     trackio.cpp \
     trackpropertiesdialog.cpp \
     tracktile.cpp \
+    undostack.cpp \
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsEditor.rc

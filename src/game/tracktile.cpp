@@ -14,15 +14,13 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.hpp"
-#include "trackdata.hpp"
 
 TrackTile::TrackTile(
-    TrackData & trackData,
     QPointF location,
     QPoint matrixLocation,
     const QString & type,
     TrackTile::TileType typeEnum)
-: TrackTileBase(trackData, location, matrixLocation, type)
+: TrackTileBase(location, matrixLocation, type)
 , m_rotation(0)
 , m_surface(nullptr)
 , m_previewSurface(nullptr)

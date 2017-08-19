@@ -19,18 +19,17 @@
 #include <vector>
 #include "tracktilebase.hpp"
 
-class TrackDataBase;
-
 //! Base class for the tile matrix used by TrackData.
 class MapBase
 {
 public:
 
     //! Constructor.
-    MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows);
+    MapBase(unsigned int cols, unsigned int rows);
 
-    MapBase(MapBase & other) = delete;
-    MapBase & operator= (MapBase & other) = delete;
+    MapBase(const MapBase & other) = delete;
+
+    MapBase & operator= (const MapBase & other) = delete;
 
     enum class InsertDirection
     {
@@ -70,14 +69,7 @@ public:
     //! Delete row at given index. Return deleted tiles.
     virtual std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
 
-protected:
-
-    //! Get track data reference.
-    TrackDataBase & trackData();
-
 private:
-
-    TrackDataBase & m_trackData;
 
     unsigned int m_cols, m_rows;
 

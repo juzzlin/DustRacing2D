@@ -42,6 +42,11 @@ void Objects::remove(ObjectBase & object)
     }
 }
 
+void Objects::clear()
+{
+    m_objects.clear();
+}
+
 unsigned int Objects::count() const
 {
     return static_cast<int>(m_objects.size());

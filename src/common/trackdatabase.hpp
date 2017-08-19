@@ -180,8 +180,10 @@ public:
     //! Constructor.
     TrackDataBase(QString name, bool isUserTrack);
 
-    TrackDataBase(TrackDataBase & other) = delete;
-    TrackDataBase & operator= (TrackDataBase & other) = delete;
+    //! Copy constructor.
+    TrackDataBase(const TrackDataBase & other);
+
+    TrackDataBase & operator= (const TrackDataBase & other) = delete;
 
     //! Destructor.
     virtual ~TrackDataBase();

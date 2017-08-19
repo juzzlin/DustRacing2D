@@ -22,8 +22,6 @@
 
 #include <memory>
 
-class TrackDataBase;
-
 /*! Base class for track tiles used in the editor and in the game.
  *
  *  This is not the most beautiful solution to share tile code between
@@ -52,21 +50,18 @@ public:
     };
 
     /*! Constructor.
-     *  \param trackData Reference to the "parent" TrackData.
      *  \param location Location (coordinates) in the track scene.
      *  \param matrixLocation Location in the tile matrix.
      *  \param type Type of the tile. See setType(). */
-    TrackTileBase(TrackDataBase & trackData, QPointF location, QPoint matrixLocation,
+    TrackTileBase(QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
     TrackTileBase(TrackTileBase & other) = delete;
+
     TrackTileBase & operator= (TrackTileBase & other) = delete;
 
     //! Destructor.
     virtual ~TrackTileBase();
-
-    //! Return reference to the "parent" track data.
-    TrackDataBase & trackData() const;
 
     //! Get location in world / scene.
     virtual QPointF location() const;
@@ -106,9 +101,6 @@ private:
 
     //! Location in the tile matrix.
     QPoint m_matrixLocation;
-
-    //! Pointer to the "parent" track data.
-    TrackDataBase & m_trackData;
 
     //! Computer hint
     ComputerHint m_computerHint;

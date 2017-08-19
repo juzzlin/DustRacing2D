@@ -14,25 +14,26 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "map.hpp"
-#include "trackdata.hpp"
 #include "tracktile.hpp"
 
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(TrackData & trackData, unsigned int cols, unsigned int rows)
-: MapBase(trackData, cols, rows)
+Map::Map(unsigned int cols, unsigned int rows)
+: MapBase(cols, rows)
 {
     // Create tiles and set coordinates.
     for (unsigned int i = 0; i < cols; i++)
+    {
         for (unsigned int j = 0; j < rows; j++)
         {
-            TrackTileBase * newTile = new TrackTile(trackData,
+            TrackTileBase * newTile = new TrackTile(
                 QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                 TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
                 QPoint(i, j));
             setTile(i, j, TrackTileBasePtr(newTile));
         }
+    }
 }
 
 Map::~Map()

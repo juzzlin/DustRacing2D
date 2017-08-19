@@ -20,15 +20,14 @@ set(SRC
     objectfactory.cpp
     objectmodelloader.cpp
     rotatedialog.cpp
-    rotatetileundostackitem.cpp
     targetnode.cpp
     targetnodesizedlg.cpp
-    tiletypeundostackitem.cpp
     tileanimator.cpp
     trackdata.cpp
     trackio.cpp
     tracktile.cpp
     trackpropertiesdialog.cpp
+    undostack.cpp
     ../common/config.cpp
     ../common/mapbase.cpp
     ../common/objectbase.cpp

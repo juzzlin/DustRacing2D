@@ -29,8 +29,20 @@ static const QColor FIRST_NODE_COLOR(255, 255, 255, 128);
 static const QColor NODE_COLOR(ROUTE_LINE_COLOR);
 
 TargetNode::TargetNode()
-: m_routeLine(nullptr)
+    : m_routeLine(nullptr)
 {
+}
+
+TargetNode::TargetNode(const TargetNode & other)
+    : QGraphicsItem()
+    , TargetNodeBase()
+    , m_routeLine(nullptr)
+{
+    setIndex(other.index());
+
+    setLocation(other.location());
+
+    setSize(other.size());
 }
 
 void TargetNode::setRouteLine(QGraphicsLineItem * routeLine)

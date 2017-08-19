@@ -26,7 +26,6 @@
 #include "map.hpp"
 
 class ObjectModelLoader;
-class UndoStackItemBase;
 
 class TrackData : public TrackDataBase
 {
@@ -34,6 +33,9 @@ public:
 
     //! Constructor.
     TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows);
+
+    //! Copy constructor
+    TrackData(const TrackData & other);
 
     //! Destructor.
     virtual ~TrackData();
@@ -80,16 +82,11 @@ public:
     //! Delete tile row at given index and move objects.
     std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
 
-    //! Add item to undo stack.
-    void addItemToUndoStack(UndoStackItemBase * item);
-
-    //! Returns true if there are more undoable operations left after the undo, false otherwise.
-    bool undo(const ObjectModelLoader & loader);
-
-    //! Returns true if there are more redoable operations left after the redo, false otherwise.
-    bool redo(const ObjectModelLoader & loader);
-
 private:
+
+    void copyObjects(const TrackData & other);
+
+    void copyRoute(const TrackData & other);
 
     void moveObjectsAfterColumnInsertion(unsigned int at);
 
@@ -107,14 +104,13 @@ private:
 
     void moveTargetNodesAfterRowDeletion(unsigned int at);
 
-    typedef std::vector< std::shared_ptr< UndoStackItemBase > > UndoStack;
+    QString m_fileName;
 
-    QString      m_fileName;
-    Map          m_map;
-    Objects      m_objects;
-    Route        m_route;
-    UndoStack    m_undoStack;
-    UndoStack::iterator m_undoStackPosition;
+    Map m_map;
+
+    Objects m_objects;
+
+    Route m_route;
 };
 
 typedef std::shared_ptr<TrackData> TrackDataPtr;

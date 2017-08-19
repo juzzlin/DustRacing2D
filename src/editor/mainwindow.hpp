@@ -82,12 +82,12 @@ public slots:
     //! Begin marking the route.
     void beginSetRoute();
 
+    void enableUndo(bool enable);
+
     //! End marking the route.
     void endSetRoute();
 
     void setVisible(bool visible) override;
-
-    void handleItemAddedToUndoStack();
 
 protected:
 
@@ -95,56 +95,97 @@ protected:
 
 private slots:
 
-    void undo();
-    void redo();
     void clearRoute();
+
     bool doOpenTrack(QString fileName);
+
     void enlargeHorSize();
+
     void enlargeVerSize();
+
     void handleToolBarActionClick(QAction * action);
+
     void initializeNewTrack();
-    void setTrackProperties();
-    void openArgTrack();
-    void openTrack();
+
     void saveTrack();
+
     void saveAsTrack();
+
+    void setTrackProperties();
+
+    void setupTrackAfterUndoOrRedo();
+
     void showAboutDlg();
+
     void showAboutQtDlg();
+
     void showTip();
+
+    void openArgTrack();
+
+    void openTrack();
+
     void updateScale(int value);
 
 private:
 
     void addObjectsToToolBar();
+
     void clearEditMode();
+
     void fitScale();
+
     void init();
+
     bool loadObjectModels(QString objectFilePath);
+
     void populateMenuBar();
+
     void populateToolBar();
+
     void setActionStatesOnNewTrack();
 
     ObjectModelLoader * m_objectModelLoader;
-    AboutDlg          * m_aboutDlg;
-    EditorData        * m_editorData;
-    EditorScene       * m_editorScene;
-    EditorView        * m_editorView;
-    QTextEdit         * m_console;
-    QAction           * m_saveAction;
-    QAction           * m_saveAsAction;
-    QAction           * m_currentToolBarAction;
-    QAction           * m_undoAction;
-    QAction           * m_redoAction;
-    QAction           * m_enlargeHorSize;
-    QAction           * m_enlargeVerSize;
-    QAction           * m_clearRouteAction;
-    QAction           * m_setRouteAction;
-    QAction           * m_setTrackPropertiesAction;
-    QSlider           * m_scaleSlider;
-    QToolBar          * m_toolBar;
-    QCheckBox         * m_randomRotationCheck;
-    QString             m_argTrackFile;
-    bool                m_saved;
+
+    AboutDlg * m_aboutDlg;
+
+    EditorData * m_editorData;
+
+    EditorScene * m_editorScene;
+
+    EditorView * m_editorView;
+
+    QTextEdit * m_console;
+
+    QAction * m_saveAction = nullptr;
+
+    QAction * m_saveAsAction = nullptr;
+
+    QAction * m_currentToolBarAction = nullptr;
+
+    QAction * m_undoAction = nullptr;
+
+    QAction * m_redoAction = nullptr;
+
+    QAction * m_enlargeHorSize = nullptr;
+
+    QAction * m_enlargeVerSize = nullptr;
+
+    QAction * m_clearRouteAction = nullptr;
+
+    QAction * m_setRouteAction = nullptr;
+
+    QAction * m_setTrackPropertiesAction = nullptr;
+
+    QSlider * m_scaleSlider = nullptr;
+
+    QToolBar * m_toolBar = nullptr;
+
+    QCheckBox * m_randomRotationCheck = nullptr;
+
+    QString m_argTrackFile;
+
+    bool m_saved = false;
 
     static MainWindow * m_instance;
 };

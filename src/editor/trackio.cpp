@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QFile>
+#include <QDir>
 #include <QTextStream>
 #include <QDomDocument>
 #include <QDomElement>
@@ -51,8 +52,6 @@ void readTile(TrackData & newData, const QDomElement & element)
     const auto type = element.attribute(TrackDataBase::DataKeywords::Tile::type(), "clear");
 
     tile->setTileType(type);
-
-    tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(type));
 
     tile->setComputerHint(
         static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint(), "0").toInt()));

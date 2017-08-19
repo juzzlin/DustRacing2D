@@ -39,10 +39,6 @@ public:
 
     void updateSceneRect();
 
-signals:
-
-    void itemAddedToUndoStack();
-
 protected:
 
     void mouseMoveEvent(QMouseEvent * event) override;
@@ -57,8 +53,6 @@ private:
 
     void addCurrentToolBarObjectToScene();
 
-    void addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation);
-
     void changeTileType(TrackTile & tile, QAction * action);
 
     void createTileContextMenuActions();
@@ -71,7 +65,7 @@ private:
 
     void eraseObjectAtCurrentClickedPos();
 
-    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions);
+    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill);
 
     void handleMousePressEventOnTile(QMouseEvent & event, TrackTile & tile);
 

@@ -18,7 +18,7 @@
 
 TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
 : TrackDataBase(name, isUserTrack)
-, m_map(*this, cols, rows)
+, m_map(cols, rows)
 , m_route()
 , m_isLocked(false)
 {}

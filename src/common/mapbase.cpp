@@ -16,14 +16,12 @@
 #include "mapbase.hpp"
 
 #include "tracktilebase.hpp"
-#include "trackdatabase.hpp"
 
 #include <QPoint>
 #include <QPointF>
 
-MapBase::MapBase(TrackDataBase & trackData, unsigned int cols, unsigned int rows)
-    : m_trackData(trackData)
-    , m_cols(cols)
+MapBase::MapBase(unsigned int cols, unsigned int rows)
+    : m_cols(cols)
     , m_rows(rows)
     , m_map(rows, TrackTileRow(m_cols, nullptr))
 {}
@@ -123,11 +121,6 @@ std::vector<TrackTileBasePtr> MapBase::deleteRow(unsigned int at)
     m_rows--;
 
     return deleted;
-}
-
-TrackDataBase & MapBase::trackData()
-{
-    return m_trackData;
 }
 
 MapBase::~MapBase()

@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.hpp"
-#include "trackdata.hpp"
 #include "tileanimator.hpp"
 #include "mainwindow.hpp"
 
@@ -28,15 +27,25 @@
 
 TrackTile * TrackTile::m_activeTile = nullptr;
 
-TrackTile::TrackTile(
-    TrackData & trackData, QPointF location, QPoint matrixLocation, const QString & type)
-: TrackTileBase(trackData, location, matrixLocation, type)
-, m_size(QSizeF(TILE_W, TILE_H))
-, m_active(false)
-, m_animator(new TileAnimator(this))
-, m_added(false)
+TrackTile::TrackTile(QPointF location, QPoint matrixLocation, const QString & type)
+    : TrackTileBase(location, matrixLocation, type)
+    , m_size(QSizeF(TILE_W, TILE_H))
+    , m_active(false)
+    , m_animator(new TileAnimator(this))
+    , m_added(false)
 {
     setPos(location);
+}
+
+TrackTile::TrackTile(const TrackTile & other)
+    : QGraphicsItem()
+    , TrackTileBase(other.location(), other.matrixLocation(), other.tileType())
+    , m_size(other.m_size)
+    , m_active(false)
+    , m_animator(new TileAnimator(this))
+    , m_added(false)
+{
+    setPos(other.location());
 }
 
 QRectF TrackTile::boundingRect () const
@@ -45,8 +54,7 @@ QRectF TrackTile::boundingRect () const
                    m_size.width(), m_size.height());
 }
 
-void TrackTile::paint(QPainter * painter,
-    const QStyleOptionGraphicsItem * option, QWidget * widget)
+void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
@@ -128,14 +136,14 @@ TrackTile * TrackTile::activeTile()
     return TrackTile::m_activeTile;
 }
 
-bool TrackTile::rotate90CW(qreal * newRotation)
+bool TrackTile::rotate90CW()
 {
-    return m_animator->rotate90CW(newRotation);
+    return m_animator->rotate90CW();
 }
 
-bool TrackTile::rotate90CCW(qreal * newRotation)
+bool TrackTile::rotate90CCW()
 {
-    return m_animator->rotate90CCW(newRotation);
+    return m_animator->rotate90CCW();
 }
 
 void TrackTile::setTileType(const QString & type)

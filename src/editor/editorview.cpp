@@ -27,10 +27,8 @@
 #include "objectfactory.hpp"
 #include "objectmodelloader.hpp"
 #include "rotatedialog.hpp"
-#include "rotatetileundostackitem.hpp"
 #include "targetnode.hpp"
 #include "targetnodesizedlg.hpp"
-#include "tiletypeundostackitem.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
 
@@ -123,12 +121,8 @@ void EditorView::createTileContextMenuActions()
         if (TrackTile * tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
         {
-            const qreal oldRotation = tile->rotation();
-            qreal newRotation;
-            if (tile->rotate90CW(&newRotation))
-            {
-                addRotateUndoStackItem(tile, oldRotation, newRotation);
-            }
+            m_editorData.saveUndoPoint();
+            tile->rotate90CW();
         }
     });
 
@@ -139,29 +133,28 @@ void EditorView::createTileContextMenuActions()
         if (auto tile =
             dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
         {
-            const qreal oldRotation = tile->rotation();
-            qreal newRotation;
-            if (tile->rotate90CCW(&newRotation))
-            {
-                addRotateUndoStackItem(tile, oldRotation, newRotation);
-            }
+            m_editorData.saveUndoPoint();
+            tile->rotate90CCW();
         }
     });
 
     m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_tileContextMenu);
     QObject::connect(m_clearComputerHint, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_NONE);
     });
 
     m_setComputerHintBrakeHard = new QAction(
         QWidget::tr("Set computer hint 'brake hard'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintBrakeHard, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_BRAKE_HARD);
     });
 
     m_setComputerHintBrake = new QAction(
         QWidget::tr("Set computer hint 'brake'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintBrake, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_BRAKE);
     });
 
@@ -171,6 +164,7 @@ void EditorView::createTileContextMenuActions()
     QObject::connect(m_excludeFromMinimap, &QAction::changed, [this] () {
         if (auto tile = dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(this->m_clickedPos), QTransform())))
         {
+            m_editorData.saveUndoPoint();
             tile->setExcludeFromMinimap(this->m_excludeFromMinimap->isChecked());
         }
     });
@@ -178,6 +172,7 @@ void EditorView::createTileContextMenuActions()
     auto insertRowBefore = new QAction(
         QWidget::tr("Insert row before.."), &m_tileContextMenu);
     QObject::connect(insertRowBefore, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         m_editorData.trackData()->insertRow(m_editorData.activeRow(), MapBase::InsertDirection::Before);
         m_editorData.addTilesToScene();
         updateSceneRect();
@@ -187,6 +182,7 @@ void EditorView::createTileContextMenuActions()
     auto insertRowAfter = new QAction(
         QWidget::tr("Insert row after.."), &m_tileContextMenu);
     QObject::connect(insertRowAfter, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         m_editorData.trackData()->insertRow(m_editorData.activeRow(), MapBase::InsertDirection::After);
         m_editorData.addTilesToScene();
         updateSceneRect();
@@ -196,6 +192,7 @@ void EditorView::createTileContextMenuActions()
     m_deleteRow = new QAction(
         QWidget::tr("Delete row.."), &m_tileContextMenu);
     QObject::connect(m_deleteRow, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         auto deleted = m_editorData.trackData()->deleteRow(m_editorData.activeRow());
         for (auto && tile : deleted) {
             m_editorData.removeTileFromScene(tile);
@@ -207,6 +204,7 @@ void EditorView::createTileContextMenuActions()
     auto insertColBefore = new QAction(
         QWidget::tr("Insert column before.."), &m_tileContextMenu);
     QObject::connect(insertColBefore, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         m_editorData.trackData()->insertColumn(m_editorData.activeColumn(), MapBase::InsertDirection::Before);
         m_editorData.addTilesToScene();
         updateSceneRect();
@@ -216,6 +214,7 @@ void EditorView::createTileContextMenuActions()
     auto insertColAfter = new QAction(
         QWidget::tr("Insert column after.."), &m_tileContextMenu);
     QObject::connect(insertColAfter, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         m_editorData.trackData()->insertColumn(m_editorData.activeColumn(), MapBase::InsertDirection::After);
         m_editorData.addTilesToScene();
         updateSceneRect();
@@ -225,6 +224,7 @@ void EditorView::createTileContextMenuActions()
     m_deleteCol = new QAction(
         QWidget::tr("Delete column.."), &m_tileContextMenu);
     QObject::connect(m_deleteCol, &QAction::triggered, [this] () {
+        m_editorData.saveUndoPoint();
         auto deleted = m_editorData.trackData()->deleteColumn(m_editorData.activeColumn());
         for (auto && tile : deleted) {
             m_editorData.removeTileFromScene(tile);
@@ -348,6 +348,8 @@ void EditorView::mousePressEvent(QMouseEvent * event)
 
 void EditorView::eraseObjectAtCurrentClickedPos()
 {
+    m_editorData.saveUndoPoint();
+
     // Fetch all items at the location
     QList<QGraphicsItem *> items = scene()->items(
         m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
@@ -372,6 +374,8 @@ void EditorView::addCurrentToolBarObjectToScene()
     {
         if (scene())
         {
+            m_editorData.saveUndoPoint();
+
             Object & object = ObjectFactory::createObject(action->data().toString());
             object.setLocation(m_clickedScenePos);
 
@@ -437,6 +441,8 @@ void EditorView::handleLeftButtonClickOnObject(Object & object)
     // User is initiating a drag'n'drop
     if (m_editorData.mode() == EditorData::EditorMode::None)
     {
+        m_editorData.saveUndoPoint();
+
         object.setZValue(object.zValue() + 1);
         m_editorData.setDragAndDropObject(&object);
         m_editorData.setSelectedObject(&object);
@@ -451,6 +457,8 @@ void EditorView::handleLeftButtonClickOnTargetNode(TargetNode & tnode)
     // User is initiating a drag'n'drop
     if (m_editorData.mode() == EditorData::EditorMode::None)
     {
+        m_editorData.saveUndoPoint();
+
         tnode.setZValue(tnode.zValue() + 1);
         m_editorData.setDragAndDropTargetNode(&tnode);
 
@@ -586,15 +594,19 @@ void EditorView::keyPressEvent(QKeyEvent * event)
             switch (event->key())
             {
             case Qt::Key_Left:
+                m_editorData.saveUndoPoint();
                 object->setLocation(QPointF(object->location().x() - 1, object->location().y()));
                 break;
             case Qt::Key_Right:
+                m_editorData.saveUndoPoint();
                 object->setLocation(QPointF(object->location().x() + 1, object->location().y()));
                 break;
             case Qt::Key_Up:
+                m_editorData.saveUndoPoint();
                 object->setLocation(QPointF(object->location().x(), object->location().y() - 1));
                 break;
             case Qt::Key_Down:
+                m_editorData.saveUndoPoint();
                 object->setLocation(QPointF(object->location().x(), object->location().y() + 1));
                 break;
             default:
@@ -688,24 +700,20 @@ void EditorView::setComputerHint(TrackTileBase::ComputerHint hint)
 {
     if (auto tile = dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
     {
+        m_editorData.saveUndoPoint();
+
         tile->setComputerHint(hint);
     }
 }
 
 void EditorView::doFloodFill(TrackTile & tile, QAction * action, QString typeToFill)
 {
-    std::vector< QPoint > positions;
+    m_editorData.saveUndoPoint();
 
-    floodFill(tile, action, typeToFill, positions);
-
-    QString newType = action->data().toString();
-    auto item = new TileTypeUndoStackItem(positions, typeToFill, newType);
-    m_editorData.trackData()->addItemToUndoStack(item);
-
-    emit itemAddedToUndoStack();
+    floodFill(tile, action, typeToFill);
 }
 
-void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, std::vector<QPoint> & positions)
+void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill)
 {
     static const int DIRECTION_COUNT = 4;
 
@@ -721,8 +729,6 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
     setTileType(tile, action);
 
-    positions.push_back(tile.matrixLocation());
-
     MapBase & map = m_editorData.trackData()->map();
     QPoint location = tile.matrixLocation();
 
@@ -736,7 +742,7 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
             auto tile = std::dynamic_pointer_cast<TrackTile>(map.getTile(x, y));
             if (tile && tile->tileType() == typeToFill)
             {
-                floodFill(*(tile.get()), action, typeToFill, positions);
+                floodFill(*(tile.get()), action, typeToFill);
             }
         }
     }
@@ -744,27 +750,9 @@ void EditorView::floodFill(TrackTile & tile, QAction * action, const QString & t
 
 void EditorView::changeTileType(TrackTile & tile, QAction * action)
 {
-    QString oldType = tile.tileType();
+    m_editorData.saveUndoPoint();
 
     setTileType(tile, action);
-
-    QString newType = tile.tileType();
-
-    std::vector< QPoint > positions;
-    positions.push_back(tile.matrixLocation());
-    auto item = new TileTypeUndoStackItem(positions, oldType, newType);
-    m_editorData.trackData()->addItemToUndoStack(item);
-
-    emit itemAddedToUndoStack();
-}
-
-void EditorView::addRotateUndoStackItem(TrackTile * tile, qreal oldRotation, qreal newRotation)
-{
-    QPoint pos = tile->matrixLocation();
-    auto item = new RotateTileUndoStackItem(pos, oldRotation, newRotation);
-    m_editorData.trackData()->addItemToUndoStack(item);
-
-    emit itemAddedToUndoStack();
 }
 
 void EditorView::setTileType(TrackTile & tile, QAction * action)

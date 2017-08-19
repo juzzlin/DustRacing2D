@@ -24,6 +24,7 @@
 
 #include "trackdata.hpp"
 #include "trackio.hpp"
+#include "undostack.hpp"
 
 class MainWindow;
 class Object;
@@ -56,11 +57,27 @@ public:
     //! Load track from the given file.
     bool loadTrackData(QString fileName);
 
+    bool isUndoable() const;
+
+    //! Load track from undo point.
+    void undo();
+
+    bool isRedoable() const;
+
+    //! Load track from redo point.
+    void redo();
+
     //! Save track data.
     bool saveTrackData();
 
     //! Sava track data to the given file.
     bool saveTrackDataAs(QString fileName);
+
+    //! Save undo point.
+    void saveUndoPoint();
+
+    //! Save redo point.
+    void saveRedoPoint();
 
     //! Set track data as the given data.
     void setTrackData(TrackDataPtr newTrackData);
@@ -142,12 +159,6 @@ public:
     //! Clear the current route only.
     void clearRoute();
 
-    //! Returns true if there are more undoable operations left after the undo, false otherwise.
-    bool undo(const ObjectModelLoader & loader);
-
-    //! Returns true if there are more redoable operations left after the redo, false otherwise.
-    bool redo(const ObjectModelLoader & loader);
-
     void setActiveColumn(unsigned int column);
 
     unsigned int activeColumn() const;
@@ -174,6 +185,8 @@ private:
     TrackIO m_trackIO;
 
     TrackDataPtr m_trackData;
+
+    UndoStack m_undoStack;
 
     EditorMode m_mode;
 

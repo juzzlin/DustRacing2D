@@ -14,17 +14,14 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktilebase.hpp"
-#include "trackdatabase.hpp"
 
 TrackTileBase::TrackTileBase(
-    TrackDataBase & trackData,
     QPointF location,
     QPoint matrixLocation,
     const QString & type)
 : m_tileType(type)
 , m_location(location)
 , m_matrixLocation(matrixLocation)
-, m_trackData(trackData)
 , m_computerHint(TrackTileBase::CH_NONE)
 , m_excludeFromMinimap(false)
 {
@@ -61,11 +58,6 @@ void TrackTileBase::setTileType(const QString & type)
 const QString & TrackTileBase::tileType() const
 {
     return m_tileType;
-}
-
-TrackDataBase & TrackTileBase::trackData() const
-{
-    return m_trackData;
 }
 
 void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)

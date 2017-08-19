@@ -31,14 +31,18 @@ public:
     //! Constructor.
     Objects();
 
-    Objects(Objects & other) = delete;
-    Objects & operator= (Objects & other) = delete;
+    Objects(const Objects & other) = delete;
+
+    Objects & operator= (const Objects & other) = delete;
 
     //! Add an object.
     void add(ObjectBasePtr object);
 
     //! Remove an object.
     void remove(ObjectBase & object);
+
+    //! Clear the container.
+    void clear();
 
     //! Return object count.
     unsigned int count() const;

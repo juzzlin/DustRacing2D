@@ -30,6 +30,7 @@ public:
     ObjectBase(QString category, QString role);
 
     ObjectBase(ObjectBase & other) = delete;
+
     ObjectBase & operator= (ObjectBase & other) = delete;
 
     //! Destructor.

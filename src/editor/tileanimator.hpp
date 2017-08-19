@@ -29,8 +29,9 @@ public:
 
     explicit TileAnimator(TrackTile * tile);
 
-    bool rotate90CW(qreal * newRotation);
-    bool rotate90CCW(qreal * newRotation);
+    bool rotate90CW();
+
+    bool rotate90CCW();
 
 private slots:
 
@@ -39,6 +40,7 @@ private slots:
 private:
 
     TrackTile * m_tile;
+
     int m_a0, m_a1;
 };
 

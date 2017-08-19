@@ -29,6 +29,9 @@ public:
     //! Constructor.
     TargetNode();
 
+    //! Copy constructor.
+    TargetNode(const TargetNode & other);
+
     virtual QRectF boundingRect () const override;
 
     virtual void paint(QPainter * painter,

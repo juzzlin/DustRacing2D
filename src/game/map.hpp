@@ -26,7 +26,7 @@ class Map : public MapBase
 public:
 
     //! Constuctor.
-    Map(TrackData & trackData, unsigned int cols, unsigned int rows);
+    Map(unsigned int cols, unsigned int rows);
 
     //! Destructor.
     virtual ~Map();

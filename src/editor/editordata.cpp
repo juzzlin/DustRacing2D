@@ -18,6 +18,7 @@
 #include "editorview.hpp"
 #include "mainwindow.hpp"
 #include "object.hpp"
+#include "objectmodelloader.hpp"
 #include "targetnode.hpp"
 #include "tracktile.hpp"
 #include "trackio.hpp"
@@ -42,16 +43,86 @@ void EditorData::clearScene()
 
 bool EditorData::loadTrackData(QString fileName)
 {
+    m_undoStack.clear();
+
     clearScene();
 
     m_trackData = m_trackIO.open(fileName);
     return static_cast<bool>(m_trackData);
 }
 
+bool EditorData::isUndoable() const
+{
+    return m_undoStack.isUndoable();
+}
+
+void EditorData::undo()
+{
+    if (m_undoStack.isUndoable())
+    {
+        m_dragAndDropSourceTile = nullptr;
+
+        m_dragAndDropObject = nullptr;
+
+        m_selectedObject = nullptr;
+
+        m_selectedTargetNode = nullptr;
+
+        m_dragAndDropTargetNode = nullptr;
+
+        saveRedoPoint();
+
+        clearScene();
+
+        m_trackData = m_undoStack.undo();
+    }
+}
+
+bool EditorData::isRedoable() const
+{
+    return m_undoStack.isRedoable();
+}
+
+void EditorData::redo()
+{
+    if (m_undoStack.isRedoable())
+    {
+        m_dragAndDropSourceTile = nullptr;
+
+        m_dragAndDropObject = nullptr;
+
+        m_selectedObject = nullptr;
+
+        m_selectedTargetNode = nullptr;
+
+        m_dragAndDropTargetNode = nullptr;
+
+        saveUndoPoint();
+
+        clearScene();
+
+        m_trackData = m_undoStack.redo();
+    }
+}
+
 bool EditorData::saveTrackData()
 {
     assert(m_trackData);
     return m_trackIO.save(m_trackData, m_trackData->fileName());
+}
+
+void EditorData::saveUndoPoint()
+{
+    assert(m_trackData);
+    m_undoStack.pushUndoPoint(m_trackData);
+
+    m_mainWindow->enableUndo(m_undoStack.isUndoable());
+}
+
+void EditorData::saveRedoPoint()
+{
+    assert(m_trackData);
+    m_undoStack.pushRedoPoint(m_trackData);
 }
 
 bool EditorData::saveTrackDataAs(QString fileName)
@@ -256,6 +327,8 @@ void EditorData::addTilesToScene()
             auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
             assert(tile);
 
+            tile->setPixmap(MainWindow::instance()->objectModelLoader().getPixmapByRole(tile->tileType()));
+
             if (!tile->added())
             {
                 m_mainWindow->editorScene().addItem(tile.get()); // The scene wants a raw pointer
@@ -267,8 +340,6 @@ void EditorData::addTilesToScene()
 
     auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(0, 0));
     assert(tile);
-
-    tile->setActive(true);
 }
 
 void EditorData::addObjectsToScene()
@@ -354,16 +425,6 @@ void EditorData::clearRoute()
     m_trackData->route().clear();
 
     m_mainWindow->console(QString(QObject::tr("Route cleared.")));
-}
-
-bool EditorData::undo(const ObjectModelLoader & loader)
-{
-    return m_trackData ? m_trackData->undo(loader) : false;
-}
-
-bool EditorData::redo(const ObjectModelLoader & loader)
-{
-    return m_trackData ? m_trackData->redo(loader) : false;
 }
 
 void EditorData::setActiveColumn(unsigned int column)
