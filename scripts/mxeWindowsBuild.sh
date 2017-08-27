@@ -58,7 +58,7 @@ cp -v ./src/game/release/dustrac-game.exe $PACKAGE_PATH     &&
 cp -v ./src/editor/release/dustrac-editor.exe $PACKAGE_PATH &&
 cp -rv data $PACKAGE_PATH || exit -1
 
-TEXT_FILES="AUTHORS CHANGELOG COPYING README"
+TEXT_FILES="AUTHORS CHANGELOG COPYING README.md"
 cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 cd $PACKAGE_PATH
 $UNIX2DOS $TEXT_FILES

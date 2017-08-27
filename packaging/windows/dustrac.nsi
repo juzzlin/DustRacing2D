@@ -6,7 +6,7 @@
 !define COMPANYNAME            "Jussi Lind"
 !define DESCRIPTION            "A traditional top-down racing game."
 !define VERSIONMAJOR           1
-!define VERSIONMINOR           12
+!define VERSIONMINOR           13
 !define VERSIONBUILD           0
 !define HELPURL                "http://dustrac.sourceforge.net"
 !define UPDATEURL              "http://dustrac.sourceforge.net"
@@ -73,7 +73,7 @@ Section "install"
 	File CHANGELOG
 	File COPYING
 	File AUTHORS
-	File README
+	File README.md
 	
 	WriteUninstaller "$INSTDIR\uninstall.exe"
  
@@ -146,7 +146,7 @@ Section "uninstall"
 	Delete   $INSTDIR\CHANGELOG
 	Delete   $INSTDIR\COPYING
 	Delete   $INSTDIR\AUTHORS
-	Delete   $INSTDIR\README
+	Delete   $INSTDIR\README.md
  
 	Delete   $INSTDIR\uninstall.exe
  

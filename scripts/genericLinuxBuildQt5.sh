@@ -50,7 +50,7 @@ cp -v ./src/game/dustrac-game $PACKAGE_PATH            &&
 cp -v ./src/editor/dustrac-editor $PACKAGE_PATH        &&
 cp -rv data $PACKAGE_PATH                              || exit -1
 
-TEXT_FILES="AUTHORS CHANGELOG COPYING README"
+TEXT_FILES="AUTHORS CHANGELOG COPYING README.md"
 cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
 
 # Copy some needed dependecies

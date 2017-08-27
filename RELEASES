@@ -1,3 +1,22 @@
+1.13.0
+======
+
+New features:
+
+* Implement a minimap
+* Editor: Implement universal undo stack
+* Editor: Add option to insert row/col before or after
+
+Bug fixes:
+
+* Fix GitHub issue #9: Editor segfaults when undoing a change on the last row/column which got deleted before
+* Fix GitHub issue #19: Crash on exit on FreeBSD
+* Fix a potential crash on settings loading
+
+Other:
+
+* Lots of code refactored
+
 1.12.0
 ======
 

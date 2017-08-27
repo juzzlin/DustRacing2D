@@ -1,3 +1,30 @@
+dustrac (1.13.0-5) xenial; urgency=medium
+
+  * Editor: Implement universal undo stack
+  * Editor: Add option to insert row/col before or after
+  * Implement a minimap
+  * Refactor editor/editordata.hpp
+  * Refactor race.cpp
+  * Refactor pointer use in the game
+  * Refactor pointer use in the editor
+  * Refactor game/trackloader.cpp
+  * Refactor editor/trackio.cpp
+  * Refactor game.cpp
+  * Refactor TrackLoader usage
+  * Refactor game init
+  * Cosmetic changes to tracktile.hpp
+  * Delete OpenGL context as the last object
+  * Fix crash on settings loading
+  * Include <cstdlib> for std::rand
+  * Make debian/rules use CMake directly
+  * Prefer out-of-source CMake build in INSTALL
+  * Update copyright text
+  * Fix build with MXE and Qt project files
+  * Add pulseaudio to static Qt5 build config
+  * Readiness to see the next target node for AI
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sun, 27 Aug 2017 21:55:14 +0300
+
 dustrac (1.12.0-4) xenial; urgency=medium
 
   * Redo startlight graphics in SVG
