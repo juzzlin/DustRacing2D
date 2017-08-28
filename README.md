@@ -3,10 +3,10 @@
 <table>
   <tr>
     <td>
-      <img src="https://cloud.githubusercontent.com/assets/2587783/7400283/69f106fa-eec4-11e4-9014-76c086f54d89.jpg" width="100%"></img>
+      <img src="https://github.com/juzzlin/DustRacing2D/blob/gh-pages/screenshots/1.13.0/1.jpg" width="100%"></img>
     </td>
     <td>
-      <img src="https://cloud.githubusercontent.com/assets/2587783/7400318/956180d0-eec4-11e4-9d3a-96e83d4b0e52.jpg" width="100%"></img>
+      <img src="https://github.com/juzzlin/DustRacing2D/blob/gh-pages/screenshots/1.13.0/3.jpg" width="100%"></img>
     </td>
   </tr>
 </table>
