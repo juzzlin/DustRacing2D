@@ -211,4 +211,4 @@ void MCMeshLoaderTest::testFace()
     QVERIFY(qFuzzyCompare(face11.vertices.at(2).k,  0.0f));
 }
 
-QTEST_MAIN(MCMeshLoaderTest)
+QTEST_GUILESS_MAIN(MCMeshLoaderTest)

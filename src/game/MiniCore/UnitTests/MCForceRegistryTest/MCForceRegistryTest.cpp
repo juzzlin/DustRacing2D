@@ -145,4 +145,4 @@ void MCForceRegistryTest::testClear()
     QVERIFY(static_cast<TestForceGenerator *>(force.get())->m_updated == false);
 }
 
-QTEST_MAIN(MCForceRegistryTest)
+QTEST_GUILESS_MAIN(MCForceRegistryTest)

@@ -558,4 +558,4 @@ void MCObjectTest::testVelocityIntegration()
     vector3dCompare(object.location(), location + velocity * DAMPING);
 }
 
-QTEST_MAIN(MCObjectTest)
+QTEST_GUILESS_MAIN(MCObjectTest)

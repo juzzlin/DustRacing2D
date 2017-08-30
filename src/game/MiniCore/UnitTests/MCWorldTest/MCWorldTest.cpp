@@ -117,4 +117,4 @@ void MCWorldTest::testSimpleCollision()
     QVERIFY(object2.m_collisionEventReceived);
 }
 
-QTEST_MAIN(MCWorldTest)
+QTEST_GUILESS_MAIN(MCWorldTest)
