@@ -388,10 +388,7 @@ T MCVector3d<T>::length() const
 template <typename T>
 T MCVector3d<T>::lengthFast() const
 {
-    const MCVector2d<T> ij(m_i, m_j);
-    const T l = ij.lengthFast();
-    const MCVector2d<T> lk(l, m_k);
-    return lk.lengthFast();
+    return length();
 }
 
 template <typename T>
