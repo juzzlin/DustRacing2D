@@ -7,7 +7,9 @@
       #include <windows.h>
       #include <wingdi.h>
     #endif
+    #define GL_GLEXT_PROTOTYPES
     #include <GL/gl.h>
+    #include <GL/glext.h>
   #else
     #include <GLES/gl.h>
   #endif
