@@ -6,8 +6,12 @@
     #ifdef _MSC_VER
       #include <windows.h>
       #include <wingdi.h>
+      #include <GL/gl.h>
+    #else
+      #define GL_GLEXT_PROTOTYPES
+      #include <GL/gl.h>
+      #include <GL/glext.h>
     #endif
-    #include <GL/gl.h>
   #else
     #include <GLES/gl.h>
   #endif
