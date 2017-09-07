@@ -123,23 +123,22 @@ void Renderer::createProgramFromSource(std::string handle, std::string vshSource
 #endif
 
     // Note: ShaderProgram throws on error.
-    MCGLShaderProgram * program = new MCGLShaderProgram(vshSource, fshSource);
-    m_shaderHash[handle].reset(program);
+    m_shaderHash[handle].reset(new MCGLShaderProgram(vshSource, fshSource));
 }
 
 void Renderer::loadShaders()
 {
     // Engine defaults
-    m_shaderHash["default"]             = MCGLScene::instance().defaultShaderProgram();
-    m_shaderHash["defaultSpecular"]     = MCGLScene::instance().defaultSpecularShaderProgram();
-    m_shaderHash["defaultShadow"]       = MCGLScene::instance().defaultShadowShaderProgram();
-    m_shaderHash["text"]                = MCGLScene::instance().defaultTextShaderProgram();
-    m_shaderHash["textShadow"]          = MCGLScene::instance().defaultTextShadowShaderProgram();
+    m_shaderHash["default"] = MCGLScene::instance().defaultShaderProgram();
+    m_shaderHash["defaultSpecular"] = MCGLScene::instance().defaultSpecularShaderProgram();
+    m_shaderHash["defaultShadow"] = MCGLScene::instance().defaultShadowShaderProgram();
+    m_shaderHash["text"] = MCGLScene::instance().defaultTextShaderProgram();
+    m_shaderHash["textShadow"] = MCGLScene::instance().defaultTextShadowShaderProgram();
 
     // Custom shaders
-    createProgramFromSource("car",    carVsh,  carFsh);
-    createProgramFromSource("fbo",    fboVsh,  fboFsh);
-    createProgramFromSource("menu",   menuVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
+    createProgramFromSource("car", carVsh, carFsh);
+    createProgramFromSource("fbo", fboVsh, fboFsh);
+    createProgramFromSource("menu", menuVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("tile2d", tileVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
     createProgramFromSource("tile3d", tileVsh, tile3dFsh);
 }
