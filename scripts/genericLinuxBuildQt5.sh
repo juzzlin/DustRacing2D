@@ -5,19 +5,19 @@
 QT5_QMAKE=~/qt5/bin/qmake
 if ! which $QT5_QMAKE; then
     echo "$QT5_QMAKE not found."
-    exit -1
+    exit 1
 fi
 
 TAR=tar
 if ! which $TAR; then
     echo "$TAR not found."
-    exit -1
+    exit 1
 fi
 
 LRELEASE=lrelease
 if ! which $LRELEASE; then
     echo "$LRELEASE not found."
-    exit -1
+    exit 1
 fi
 
 NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
@@ -25,17 +25,17 @@ NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 # Package naming
 
 NAME=dustrac
-VERSION=${DUSTRAC_RELEASE_VERSION?"is not set."}
+VERSION=${DUSTRAC_RELEASE_VERSION?"DUSTRAC_RELEASE_VERSION_NOT_SET"}
 ARCH=linux-x86_64
 QT=qt5
 
 # Build
 
-$QT5_QMAKE && make -j$NUM_CPUS || exit -1
+$QT5_QMAKE && make -j$NUM_CPUS || exit 1
 
 # Update translations
 
-$LRELEASE ./src/game/game.pro && $LRELEASE ./src/editor/editor.pro || exit -1
+$LRELEASE ./src/game/game.pro && $LRELEASE ./src/editor/editor.pro || exit 1
 
 # Install to packaging dir
 
@@ -48,10 +48,10 @@ cp -v ./src/game/translations/*.qm data/translations   &&
 cp -v ./src/editor/translations/*.qm data/translations &&
 cp -v ./src/game/dustrac-game $PACKAGE_PATH            &&
 cp -v ./src/editor/dustrac-editor $PACKAGE_PATH        &&
-cp -rv data $PACKAGE_PATH                              || exit -1
+cp -rv data $PACKAGE_PATH                              || exit 1
 
 TEXT_FILES="AUTHORS CHANGELOG COPYING README.md"
-cp -v $TEXT_FILES $PACKAGE_PATH || exit -1
+cp -v $TEXT_FILES $PACKAGE_PATH || exit 1
 
 # Copy some needed dependecies
 

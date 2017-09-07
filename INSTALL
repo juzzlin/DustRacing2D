@@ -128,7 +128,8 @@ Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 14.04)
 
 There's also a script to build the game with a Windows installer:
 1) export DUSTRAC_RELEASE_VERSION=x.y.z (use the latest version)
-2) ./scripts/mxeWindowsBuild
+2) source ./scripts/mxeEnv.sh (assumes that MXE is installed in /opt/mxe)
+3) ./scripts/mxeWindowsBuild.sh
 
 The script checks that needed binaries are found.
 
