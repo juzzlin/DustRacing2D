@@ -145,6 +145,10 @@ private:
 
     const float m_viewAngle;
 
+    const float m_zNear;
+
+    const float m_zFar;
+
     float m_fadeValue;
 
     ShaderHash m_shaderHash;

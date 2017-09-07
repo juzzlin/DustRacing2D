@@ -52,8 +52,10 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
 : m_context(nullptr)
 , m_scene(nullptr)
 , m_eventHandler(nullptr)
-, m_viewAngle(45.0)
-, m_fadeValue(1.0)
+, m_viewAngle(22.5f)
+, m_zNear(10.0f)
+, m_zFar(1500.0f)
+, m_fadeValue(1.0f)
 , m_enabled(false)
 , m_hRes(hRes)
 , m_vRes(vRes)
@@ -104,7 +106,7 @@ void Renderer::initialize()
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
     m_glScene.resize(
-        viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, 10.0, 1000.0);
+        viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
 }
 
 void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
