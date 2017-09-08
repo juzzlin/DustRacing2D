@@ -28,9 +28,9 @@ MCPhysicsComponent::MCPhysicsComponent()
     , m_angularDamping(0.999f)
     , m_angularImpulse(0)
     , m_torque(0)
-    , m_invMass(std::numeric_limits<MCFloat>::max())
+    , m_invMass(std::numeric_limits<float>::max())
     , m_mass(0)
-    , m_invMomentOfInertia(std::numeric_limits<MCFloat>::max())
+    , m_invMomentOfInertia(std::numeric_limits<float>::max())
     , m_momentOfInertia(0)
     , m_restitution(0.5f)
     , m_xyFriction(0.0f)
@@ -56,14 +56,14 @@ void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, bool)
 void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision)
 {
     m_linearImpulse += impulse;
-    const MCFloat r = (pos - object().location()).lengthFast();
+    const float r = (pos - object().location()).lengthFast();
     if (r > 0) {
         addAngularImpulse((-(impulse % (pos - object().location())).k()) / r, isCollision);
     }
     toggleSleep(false);
 }
 
-void MCPhysicsComponent::addAngularImpulse(MCFloat impulse, bool)
+void MCPhysicsComponent::addAngularImpulse(float impulse, bool)
 {
     m_angularImpulse += impulse;
 
@@ -82,24 +82,24 @@ const MCVector3dF & MCPhysicsComponent::velocity() const
     return m_velocity;
 }
 
-MCFloat MCPhysicsComponent::speed() const
+float MCPhysicsComponent::speed() const
 {
     return velocity().dot(MCVector3dF(object().direction()));
 }
 
-void MCPhysicsComponent::setMaxSpeed(MCFloat MaxSpeed)
+void MCPhysicsComponent::setMaxSpeed(float MaxSpeed)
 {
     m_maxSpeed = MaxSpeed;
 }
 
-void MCPhysicsComponent::setAngularVelocity(MCFloat newVelocity)
+void MCPhysicsComponent::setAngularVelocity(float newVelocity)
 {
     m_angularVelocity = newVelocity;
 
     toggleSleep(false);
 }
 
-MCFloat MCPhysicsComponent::angularVelocity() const
+float MCPhysicsComponent::angularVelocity() const
 {
     return m_angularVelocity;
 }
@@ -131,14 +131,14 @@ void MCPhysicsComponent::addForce(const MCVector3dF & force, const MCVector3dF &
     toggleSleep(false);
 }
 
-void MCPhysicsComponent::addTorque(MCFloat torque)
+void MCPhysicsComponent::addTorque(float torque)
 {
     m_torque += torque;
 
     toggleSleep(false);
 }
 
-void MCPhysicsComponent::setMass(MCFloat newMass, bool stationary)
+void MCPhysicsComponent::setMass(float newMass, bool stationary)
 {
     m_isStationary = stationary;
 
@@ -150,7 +150,7 @@ void MCPhysicsComponent::setMass(MCFloat newMass, bool stationary)
         }
         else
         {
-            m_invMass = std::numeric_limits<MCFloat>::max();
+            m_invMass = std::numeric_limits<float>::max();
         }
 
         m_mass = newMass;
@@ -161,25 +161,25 @@ void MCPhysicsComponent::setMass(MCFloat newMass, bool stationary)
     else
     {
         m_invMass  = 0;
-        m_mass     = std::numeric_limits<MCFloat>::max();
+        m_mass     = std::numeric_limits<float>::max();
 
         m_isSleeping = true;
 
-        setMomentOfInertia(std::numeric_limits<MCFloat>::max());
+        setMomentOfInertia(std::numeric_limits<float>::max());
     }
 }
 
-MCFloat MCPhysicsComponent::invMass() const
+float MCPhysicsComponent::invMass() const
 {
     return m_invMass;
 }
 
-MCFloat MCPhysicsComponent::mass() const
+float MCPhysicsComponent::mass() const
 {
     return m_mass;
 }
 
-void MCPhysicsComponent::setMomentOfInertia(MCFloat newMomentOfInertia)
+void MCPhysicsComponent::setMomentOfInertia(float newMomentOfInertia)
 {
     if (newMomentOfInertia > 0)
     {
@@ -187,40 +187,40 @@ void MCPhysicsComponent::setMomentOfInertia(MCFloat newMomentOfInertia)
     }
     else
     {
-        m_invMomentOfInertia = std::numeric_limits<MCFloat>::max();
+        m_invMomentOfInertia = std::numeric_limits<float>::max();
     }
 
     m_momentOfInertia = newMomentOfInertia;
 }
 
-MCFloat MCPhysicsComponent::momentOfInertia() const
+float MCPhysicsComponent::momentOfInertia() const
 {
     return m_momentOfInertia;
 }
 
-MCFloat MCPhysicsComponent::invMomentOfInertia() const
+float MCPhysicsComponent::invMomentOfInertia() const
 {
     return m_invMomentOfInertia;
 }
 
-void MCPhysicsComponent::setRestitution(MCFloat newRestitution)
+void MCPhysicsComponent::setRestitution(float newRestitution)
 {
     newRestitution = newRestitution < 0.0f ? 0.0f : newRestitution;
     newRestitution = newRestitution > 1.0f ? 1.0f : newRestitution;
     m_restitution = newRestitution;
 }
 
-MCFloat MCPhysicsComponent::restitution() const
+float MCPhysicsComponent::restitution() const
 {
     return m_restitution;
 }
 
-void MCPhysicsComponent::setXYFriction(MCFloat friction)
+void MCPhysicsComponent::setXYFriction(float friction)
 {
     m_xyFriction = friction;
 }
 
-MCFloat MCPhysicsComponent::xyFriction() const
+float MCPhysicsComponent::xyFriction() const
 {
     return m_xyFriction;
 }
@@ -241,7 +241,7 @@ void MCPhysicsComponent::resetZ()
     m_forces.setK(0);
 }
 
-void MCPhysicsComponent::setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit)
+void MCPhysicsComponent::setSleepLimits(float linearSleepLimit, float angularSleepLimit)
 {
     m_linearSleepLimit  = linearSleepLimit;
     m_angularSleepLimit = angularSleepLimit;
@@ -290,7 +290,7 @@ bool MCPhysicsComponent::isStationary() const
     return m_isStationary;
 }
 
-void MCPhysicsComponent::integrate(MCFloat step)
+void MCPhysicsComponent::integrate(float step)
 {
     // Integrate, if the object is not sleeping and it doesn't
     // have a parent object.
@@ -299,10 +299,10 @@ void MCPhysicsComponent::integrate(MCFloat step)
         m_isIntegrating = true;
 
         integrateLinear(step);
-        integrateAngular(step);
+        const float angleDiff = integrateAngular(step);
         object().checkBoundaries();
 
-        const MCFloat speed = m_velocity.lengthFast();
+        const float speed = m_velocity.lengthFast();
         if (speed < m_linearSleepLimit && m_angularVelocity < m_angularSleepLimit)
         {
             if (++m_sleepCount > 1)
@@ -319,6 +319,7 @@ void MCPhysicsComponent::integrate(MCFloat step)
             m_linearImpulse.setZero();
             m_angularImpulse = 0.0f;
 
+            object().rotate(object().angle() + angleDiff, false);
             object().translate(object().location() + m_velocity);
 
             m_sleepCount = 0;
@@ -328,33 +329,36 @@ void MCPhysicsComponent::integrate(MCFloat step)
     }
 }
 
-void MCPhysicsComponent::integrateLinear(MCFloat step)
+void MCPhysicsComponent::integrateLinear(float step)
 {
     MCVector3dF totAcceleration(m_acceleration);
     totAcceleration += m_forces * m_invMass;
-    m_velocity      += totAcceleration * step + m_linearImpulse;
-    m_velocity      *= m_linearDamping;
+    m_velocity += totAcceleration * step + m_linearImpulse;
+    m_velocity *= m_linearDamping;
 }
 
-void MCPhysicsComponent::integrateAngular(MCFloat step)
+float MCPhysicsComponent::integrateAngular(float step)
 {
     if (object().shape() && m_momentOfInertia > 0.0f)
     {
-        MCFloat totAngularAcceleration(m_angularAcceleration);
+        float totAngularAcceleration(m_angularAcceleration);
         totAngularAcceleration += m_torque * m_invMomentOfInertia;
-        m_angularVelocity      += totAngularAcceleration * step + m_angularImpulse;
-        m_angularVelocity      *= m_angularDamping;
+        m_angularVelocity += totAngularAcceleration * step + m_angularImpulse;
+        m_angularVelocity *= m_angularDamping;
 
-        const MCFloat newAngle = object().angle() + MCTrigonom::radToDeg(m_angularVelocity * step);
-        object().rotate(newAngle, false);
+        m_torque = 0.0f;
+
+        return MCTrigonom::radToDeg(m_angularVelocity * step);
     }
 
     m_torque = 0.0f;
+
+    return 0;
 }
 
 void MCPhysicsComponent::stepTime(int step)
 {
-    integrate(MCFloat(step) / 1000);
+    integrate(float(step) / 1000);
 }
 
 void MCPhysicsComponent::reset()
@@ -366,10 +370,10 @@ void MCPhysicsComponent::reset()
     m_linearImpulse.setZero();
 
     // Reset angular motion
-    m_torque              = 0.0f;
+    m_torque = 0.0f;
     m_angularAcceleration = 0.0f;
-    m_angularVelocity     = 0.0f;
-    m_angularImpulse      = 0.0f;
+    m_angularVelocity = 0.0f;
+    m_angularImpulse = 0.0f;
 
     for (auto child: object().children())
     {
@@ -397,12 +401,12 @@ int MCPhysicsComponent::neverCollideWithTag() const
     return m_neverCollideWithTag;
 }
 
-void MCPhysicsComponent::setAngularDamping(MCFloat angularDamping)
+void MCPhysicsComponent::setAngularDamping(float angularDamping)
 {
     m_angularDamping = angularDamping;
 }
 
-void MCPhysicsComponent::setLinearDamping(MCFloat linearDamping)
+void MCPhysicsComponent::setLinearDamping(float linearDamping)
 {
     m_linearDamping = linearDamping;
 }

@@ -47,7 +47,7 @@ public:
     virtual void addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision = false);
 
     //! Add rotational impulse in rad/s.
-    virtual void addAngularImpulse(MCFloat impulse, bool isCollision = false);
+    virtual void addAngularImpulse(float impulse, bool isCollision = false);
 
     /*! Set current velocity to the given value.
      *  \param newVelocity The new velocity. */
@@ -57,19 +57,19 @@ public:
     const MCVector3dF & velocity() const;
 
     //! Return current speed.
-    MCFloat speed() const;
+    float speed() const;
 
     //! Set maximum speed.
-    void setMaxSpeed(MCFloat maxSpeed);
+    void setMaxSpeed(float maxSpeed);
 
     /*! Set current angular velocity to the given value.
      *  Unit: rad/s.
      *  \param newVelocity The new velocity. */
-    void setAngularVelocity(MCFloat newVelocity);
+    void setAngularVelocity(float newVelocity);
 
     /*! Return current angular velocity.
      *  Unit: rad/s. */
-    MCFloat angularVelocity() const;
+    float angularVelocity() const;
 
     /*! Set constant acceleration (e.g. gravity). Use addForce()
      *  to cause acceleration that varies from frame to frame.
@@ -90,7 +90,7 @@ public:
 
     /*! Add torque (Nm) to the object for a single frame.
      *  \param torque Value to be added. */
-    void addTorque(MCFloat torque);
+    void addTorque(float torque);
 
     //! Clear accumulated forces.
     void clearForces();
@@ -99,31 +99,31 @@ public:
      *  \param newMass The new mass.
      *  \param stationary Sets inverse mass to zero if true.
      *         This results in "infinite" mass for stationary objects. */
-    void setMass(MCFloat newMass, bool stationary = false);
+    void setMass(float newMass, bool stationary = false);
 
     //! Get inverse mass.
-    MCFloat invMass() const;
+    float invMass() const;
 
     //! Get mass.
-    MCFloat mass() const;
+    float mass() const;
 
     //! Set moment of inertia.
-    void setMomentOfInertia(MCFloat momentOfInertia);
+    void setMomentOfInertia(float momentOfInertia);
 
     //! Get moment of inertia.
-    MCFloat momentOfInertia() const;
+    float momentOfInertia() const;
 
     //! Get inverse moment of inertia.
-    MCFloat invMomentOfInertia() const;
+    float invMomentOfInertia() const;
 
     /*! \brief Set restitution.
      *  \param newRestitution The new restitution [0.0..1.0]
      *  (0.0 means a totally "soft" object, 1.0 means hard).
      *  Default is 0.5. */
-    void setRestitution(MCFloat newRestitution);
+    void setRestitution(float newRestitution);
 
     //! Get restitution.
-    MCFloat restitution() const;
+    float restitution() const;
 
     /*! Set global friction. A friction coeff > 0 results in a
      *  implicit creation of a MCFrictionGenarator when the
@@ -133,17 +133,17 @@ public:
      *  DEPRECATED
      *  \see setLinearDamping();
      *  \see setAngularDamping(); */
-    void setXYFriction(MCFloat friction);
+    void setXYFriction(float friction);
 
     //! Get global friction.
-    MCFloat xyFriction() const;
+    float xyFriction() const;
 
     //! Return true, if the object is sleeping.
     bool isSleeping() const;
 
     /*! Object goes to sleep if linear and angular velocities drops below
      *  these values. The defaults are 0.01. */
-    void setSleepLimits(MCFloat linearSleepLimit, MCFloat angularSleepLimit);
+    void setSleepLimits(float linearSleepLimit, float angularSleepLimit);
 
     //! The object won't sleep if enabled.
     void preventSleeping(bool flag);
@@ -175,10 +175,10 @@ public:
     int neverCollideWithTag() const;
 
     //! Set damping factor for angular motion. Default is 0.999.
-    void setAngularDamping(MCFloat angularDamping);
+    void setAngularDamping(float angularDamping);
 
     //! Set damping factor for linear motion. Default is 0.999.
-    void setLinearDamping(MCFloat linearDamping);
+    void setLinearDamping(float linearDamping);
 
     //! \reimp
     virtual void stepTime(int step) override;
@@ -188,47 +188,47 @@ public:
 
 private:
 
-    void integrate(MCFloat step);
+    void integrate(float step);
 
-    void integrateLinear(MCFloat step);
+    void integrateLinear(float step);
 
-    void integrateAngular(MCFloat step);
+    float integrateAngular(float step);
 
-    MCFloat m_damping;
+    float m_damping;
 
     MCVector3dF m_acceleration;
 
     MCVector3dF m_velocity;
 
-    MCFloat m_maxSpeed;
+    float m_maxSpeed;
 
-    MCFloat m_linearDamping;
+    float m_linearDamping;
 
     MCVector3dF m_linearImpulse;
 
     MCVector3dF m_forces;
 
-    MCFloat m_angularAcceleration; // Radians / s^2
+    float m_angularAcceleration; // Radians / s^2
 
-    MCFloat m_angularVelocity; // Radians / s
+    float m_angularVelocity; // Radians / s
 
-    MCFloat m_angularDamping;
+    float m_angularDamping;
 
-    MCFloat m_angularImpulse;
+    float m_angularImpulse;
 
-    MCFloat m_torque;
+    float m_torque;
 
-    MCFloat m_invMass;
+    float m_invMass;
 
-    MCFloat m_mass;
+    float m_mass;
 
-    MCFloat m_invMomentOfInertia;
+    float m_invMomentOfInertia;
 
-    MCFloat m_momentOfInertia;
+    float m_momentOfInertia;
 
-    MCFloat m_restitution;
+    float m_restitution;
 
-    MCFloat m_xyFriction;
+    float m_xyFriction;
 
     bool m_isSleeping;
 
@@ -238,9 +238,9 @@ private:
 
     bool m_isIntegrating;
 
-    MCFloat m_linearSleepLimit;
+    float m_linearSleepLimit;
 
-    MCFloat m_angularSleepLimit;
+    float m_angularSleepLimit;
 
     int m_sleepCount;
 
