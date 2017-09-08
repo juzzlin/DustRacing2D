@@ -395,7 +395,17 @@ T MCVector2d<T>::length() const
 template <typename T>
 T MCVector2d<T>::lengthFast() const
 {
-    return length();
+    const T a = std::abs(m_i);
+    const T b = std::abs(m_j);
+
+    if (a > b)
+    {
+        return a + b / 2;
+    }
+    else
+    {
+        return b + a / 2;
+    }
 }
 
 template <typename T>
