@@ -172,10 +172,14 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             event.collidingObject().typeID() == MCObject::typeID("wallLong")           ||
             event.collidingObject().typeID() == MCObject::typeID("rock"))
         {
-            ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
-            ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
+            if (++m_sparkleCounter >= 10)
+            {
+                ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
+                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
+                ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
+                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
+                m_sparkleCounter = 0;
+            }
         }
         else if (event.collidingObject().typeID() == MCObject::typeID("tree"))
         {
