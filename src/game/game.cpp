@@ -72,6 +72,7 @@ Game::Game(int & argc, char ** argv)
 , m_audioWorker(new AudioWorker(
       Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
 , m_audioThread(new QThread)
+, m_world(new MCWorld)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -223,7 +224,7 @@ void Game::createRenderer()
     }
 #endif
 
-    m_renderer = new Renderer(hRes, vRes, fullScreen, m_world.renderer().glScene());
+    m_renderer = new Renderer(hRes, vRes, fullScreen, m_world->renderer().glScene());
     m_renderer->setFormat(format);
 
     if (fullScreen)
@@ -345,7 +346,7 @@ void Game::initScene()
     assert(m_renderer);
 
     // Create the scene
-    m_scene = new Scene(*this, *m_stateMachine, *m_renderer, m_world);
+    m_scene = new Scene(*this, *m_stateMachine, *m_renderer, *m_world);
 
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
@@ -436,6 +437,9 @@ Game::~Game()
 
     delete m_audioWorker;
     m_audioWorker = nullptr;
+
+    delete m_world;
+    m_world = nullptr;
 
     delete m_renderer;
     m_renderer = nullptr;

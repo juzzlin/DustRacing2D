@@ -178,7 +178,7 @@ private:
 
     QThread * m_audioThread;
 
-    MCWorld m_world;
+    MCWorld * m_world;
 
     static Game * m_instance;
 };
