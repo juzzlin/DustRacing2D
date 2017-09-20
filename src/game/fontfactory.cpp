@@ -85,13 +85,13 @@ static void addFallbacks(MCTextureFontData & fontData)
     fontData.fallback[L'ž'] = L'z';
 }
 
-MCTextureFontData FontFactory::generateFont()
+MCTextureFontData FontFactory::generateFontData(QString family)
 {
     const int cols        = 8;
     const int rows        = glyphs.size() / cols;
-    const int slotWidth   = 30;
-    const int slotHeight  = 64;
-    const int glyphHeight = 52;
+    const int slotWidth   = 64;
+    const int slotHeight  = 80;
+    const int glyphHeight = 64;
     const int textureW    = cols * slotWidth;
     const int textureH    = rows * slotHeight;
 
@@ -101,6 +101,12 @@ MCTextureFontData FontFactory::generateFont()
     fontPixmap.fill(Qt::transparent);
 
     MCTextureFontData fontData;
+
+    QFont font;
+    font.setFamily(family);
+    font.setStyleHint(QFont::Monospace);
+    font.setPixelSize(glyphHeight);
+    font.setBold(true);
 
     for (int j = 0; j < rows; j++)
     {
@@ -114,14 +120,9 @@ MCTextureFontData FontFactory::generateFont()
                 QPainter painter;
                 painter.begin(&fontPixmap);
 
-                QFont font;
-                font.setFamily("Ubuntu Mono");
-                font.setStyleHint(QFont::Monospace);
-                font.setPixelSize(glyphHeight);
-                font.setBold(true);
-
                 painter.setFont(font);
                 painter.setPen(QColor(255, 255, 255));
+
                 painter.drawText(
                     i * slotWidth,
                     j * slotHeight,
@@ -134,10 +135,10 @@ MCTextureFontData FontFactory::generateFont()
 
                 MCTextureFontData::Glyph glyph;
                 glyph.name = glyphs.at(glyphIndex);
-                glyph.x0   = i * textureW / cols;
-                glyph.y0   = (rows - j) * textureH / rows;
-                glyph.x1   = (i + 1) * textureW / cols;
-                glyph.y1   = (rows - j - 1) * textureH / rows;
+                glyph.x0 = i * textureW / cols;
+                glyph.y0 = (rows - j) * textureH / rows;
+                glyph.x1 = (i + 1) * textureW / cols;
+                glyph.y1 = (rows - j - 1) * textureH / rows;
 
                 fontData.glyphs.push_back(glyph);
             }
@@ -147,15 +148,19 @@ MCTextureFontData FontFactory::generateFont()
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height    = std::pair<int, bool>(textureH, true);
-    surfaceData.width     = std::pair<int, bool>(textureW, true);
+    surfaceData.height = std::pair<int, bool>(textureH, true);
+    surfaceData.width  = std::pair<int, bool>(textureW, true);
     surfaceData.minFilter = std::pair<GLint, bool>(GL_LINEAR, true);
     surfaceData.magFilter = std::pair<GLint, bool>(GL_LINEAR, true);
-    surfaceData.handle    = "generated";
+    surfaceData.handle = family.toStdString();
 
     MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, fontPixmap.toImage());
     fontData.name = Game::instance().fontName();
     fontData.surface = surfaceData.handle;
+
+    // Compensate the "too big" texture rectangle per glyph
+    fontData.xDensity = 46.0 / 64;
+    fontData.yDensity = 64.0 / 80;
 
     addFallbacks(fontData);
 

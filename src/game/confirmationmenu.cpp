@@ -75,7 +75,6 @@ void ConfirmationMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font(Game::instance().fontName());
 
     const int shadowY = -2;
     const int shadowX =  2;
@@ -84,5 +83,6 @@ void ConfirmationMenu::render()
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
 
-    text.render(width() / 2 - text.width() / 2 + 20, height() / 2 + 60, nullptr, defaultMonospace);
+    auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());
+    text.render(width() / 2 - text.width(font) / 2 + 20, height() / 2 + 60, nullptr, font);
 }

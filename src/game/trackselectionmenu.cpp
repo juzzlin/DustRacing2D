@@ -49,7 +49,7 @@ public:
     : MenuItem(width, height)
     , m_game(Game::instance())
     , m_track(track)
-    , m_monospace(MCAssetManager::textureFontManager().font(m_game.fontName()))
+    , m_font(MCAssetManager::textureFontManager().font(m_game.fontName()))
     , m_star(MCAssetManager::surfaceManager().surface("star"))
     , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
@@ -110,7 +110,7 @@ private:
 
     Track & m_track;
 
-    MCTextureFont & m_monospace;
+    MCTextureFont & m_font;
 
     MCSurface & m_star;
 
@@ -211,7 +211,7 @@ void TrackItem::renderTitle()
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
-    text.render(x() - text.width() / 2, y() + height() / 2 + text.height(), nullptr, m_monospace);
+    text.render(x() - text.width(m_font) / 2, y() + height() / 2 + text.height(m_font), nullptr, m_font);
 }
 
 void TrackItem::renderStars()
@@ -272,26 +272,26 @@ void TrackItem::renderTrackProperties()
     ss << QObject::tr("       Laps: ").toStdWString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
-    text.render(textX, y() - height() / 2 - text.height() * 2, nullptr, m_monospace);
+    text.render(textX, y() - height() / 2 - text.height(m_font) * 2, nullptr, m_font);
 
     ss.str(L"");
     ss << QObject::tr("     Length: ").toStdWString()
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerUnit())
        << QObject::tr(" m").toStdWString();
     text.setText(ss.str());
-    text.render(textX, y() - height() / 2 - text.height() * 3, nullptr, m_monospace);
+    text.render(textX, y() - height() / 2 - text.height(m_font) * 3, nullptr, m_font);
 
     if (!m_track.trackData().isLocked())
     {
         ss.str(L"");
         ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
-        text.render(textX, y() - height() / 2 - text.height() * 4, nullptr, m_monospace);
+        text.render(textX, y() - height() / 2 - text.height(m_font) * 4, nullptr, m_font);
 
         ss.str(L"");
         ss << QObject::tr("Race Record: ").toStdWString() << Timing::msecsToString(m_raceRecord);
         text.setText(ss.str());
-        text.render(textX, y() - height() / 2 - text.height() * 5, nullptr, m_monospace);
+        text.render(textX, y() - height() / 2 - text.height(m_font) * 5, nullptr, m_font);
     }
 }
 

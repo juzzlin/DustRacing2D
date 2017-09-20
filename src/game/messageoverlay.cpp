@@ -163,7 +163,7 @@ void MessageOverlay::renderMessages()
         m_text.setText(m.text);
 
         // Render the text
-        m_text.render(x - (m_text.width() >> 1), m.y, nullptr, m_font);
+        m_text.render(x - (m_text.width(m_font) / 2), m.y, nullptr, m_font);
 
         j++;
     }

@@ -42,7 +42,7 @@ void Intro::setDimensions(int width, int height)
 
 void Intro::render()
 {
-    const int w2 = width()  / 2;
+    const int w2 = width() / 2;
     const int h2 = height() / 2;
     m_back.setSize(width(), height());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
@@ -51,6 +51,6 @@ void Intro::render()
     static MCTextureText versionText(version.toStdWString());
     versionText.setGlyphSize(20, 20 * height() / 640);
     versionText.render(
-        versionText.height(),
-        versionText.height(), nullptr, m_font);
+        versionText.height(m_font),
+        versionText.height(m_font), nullptr, m_font);
 }

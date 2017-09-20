@@ -17,12 +17,13 @@
 #define FONTFACTORY_HPP
 
 #include <MCTextureFontData>
+#include <QString>
 
 class MCSurface;
 
 namespace FontFactory {
 
-MCTextureFontData generateFont();
+MCTextureFontData generateFontData(QString family);
 
 } // namespace FontFactory
 

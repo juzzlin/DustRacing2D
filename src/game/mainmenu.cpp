@@ -33,19 +33,19 @@ MainMenu::MainMenu(std::string id, int width, int height)
 
     const int itemHeight = height / 8;
 
-    MenuItem * play = new MenuItem(width, itemHeight, tr("Play").toStdWString());
+    MenuItem * play = new MenuItem(width, itemHeight, tr("Play").toUpper().toStdWString());
     play->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *play)));
     play->setMenuOpenAction("trackSelection");
 
-    MenuItem * help = new MenuItem(width, itemHeight, tr("Help").toStdWString());
+    MenuItem * help = new MenuItem(width, itemHeight, tr("Help").toUpper().toStdWString());
     help->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *help)));
     help->setMenuOpenAction("help");
 
-    MenuItem * credits = new MenuItem(width, itemHeight, tr("Credits").toStdWString());
+    MenuItem * credits = new MenuItem(width, itemHeight, tr("Credits").toUpper().toStdWString());
     credits->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *credits)));
     credits->setMenuOpenAction("credits");
 
-    MTFH::MenuItem * quit = new MenuItem(width, itemHeight, tr("Quit").toStdWString());
+    MTFH::MenuItem * quit = new MenuItem(width, itemHeight, tr("Quit").toUpper().toStdWString());
     quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *quit)));
     quit->setAction(
         [this]()
@@ -54,7 +54,7 @@ MainMenu::MainMenu(std::string id, int width, int height)
             emit exitGameRequested();
         });
 
-    MenuItem * settings = new MenuItem(width, itemHeight, tr("Settings").toStdWString());
+    MenuItem * settings = new MenuItem(width, itemHeight, tr("Settings").toUpper().toStdWString());
     settings->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(40, *settings)));
     settings->setMenuOpenAction("settings");
 

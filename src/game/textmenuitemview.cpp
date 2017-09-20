@@ -35,7 +35,6 @@ void TextMenuItemView::setTextSize(int size)
 void TextMenuItemView::render(int x, int y)
 {
     MCTextureText text(owner().text());
-    MCTextureFont defaultMonospace = MCAssetManager::textureFontManager().font(Game::instance().fontName());
 
     const int shadowY = -2;
     const int shadowX =  2;
@@ -59,7 +58,9 @@ void TextMenuItemView::render(int x, int y)
     }
 
     text.setShadowOffset(shadowX, shadowY);
-    text.render(x - text.width() / 2 + 20, y, nullptr, defaultMonospace);
+
+    auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());
+    text.render(x - text.width(font) / 2 + 20, y, nullptr, font);
 }
 
 TextMenuItemView::~TextMenuItemView()
