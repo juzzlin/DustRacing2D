@@ -33,9 +33,9 @@ MCTextureText::MCTextureText(const std::wstring & text)
 : m_text(text)
 , m_glyphWidth(32)
 , m_glyphHeight(32)
-, m_color(1.0, 1.0, 1.0, 1.0)
-, m_xOffset(2.0)
-, m_yOffset(-2.0)
+, m_color(1.0f, 1.0f, 1.0f, 1.0f)
+, m_xOffset(2.0f)
+, m_yOffset(-2.0f)
 {
     updateTextDimensions();
 }
@@ -47,18 +47,20 @@ MCTextureText::~MCTextureText()
 void MCTextureText::updateTextDimensions()
 {
     int maxLength = 0;
-    int length    = 0;
-    m_textHeight  = m_glyphHeight;
-    for (int i = 0; i < static_cast<int>(m_text.size()); i++)
+    int length = 0;
+
+    m_textHeight = m_glyphHeight;
+
+    for (unsigned int i = 0; i < m_text.size(); i++)
     {
         if (m_text.at(i) == '\n')
         {
             m_textHeight += m_glyphHeight;
-            length        = 0;
+            length = 0;
         }
         else
         {
-            length++;
+            length += m_glyphWidth;
             if (length > maxLength)
             {
                 maxLength = length;
@@ -66,7 +68,7 @@ void MCTextureText::updateTextDimensions()
         }
     }
 
-    m_textWidth = maxLength * m_glyphWidth;
+    m_textWidth = maxLength;
 }
 
 void MCTextureText::setText(const std::wstring & text)
@@ -113,25 +115,27 @@ void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
     m_yOffset = yOffset;
 }
 
-int MCTextureText::width() const
+int MCTextureText::width(MCTextureFont & font) const
 {
-    return m_textWidth;
+    return font.xDensity() * m_textWidth;
 }
 
-int MCTextureText::height() const
+int MCTextureText::height(MCTextureFont & font) const
 {
-    return m_textHeight;
+    return font.yDensity() * m_textHeight;
 }
 
-void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
-    MCTextureFont & font, bool shadow)
+void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera, MCTextureFont & font, bool shadow)
 {
     glDisable(GL_DEPTH_TEST);
 
     wchar_t prevGlyph = 0;
-    wchar_t glyph     = 0;
-    int     glyphXPos = x;
-    int     glyphYPos = y;
+
+    wchar_t glyph = 0;
+
+    float glyphXPos = x;
+
+    float glyphYPos = y;
 
     if (shadow)
     {
@@ -140,22 +144,22 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
         for (int i = 0; i < static_cast<int>(m_text.size()); i++)
         {
             prevGlyph = glyph;
-            glyph     = m_text[i];
+            glyph = m_text[i];
 
             if (glyph == '\n')
             {
                 glyphXPos  = x;
-                glyphYPos -= m_glyphHeight;
+                glyphYPos -= font.yDensity() * m_glyphHeight;
             }
             else if (glyph == ' ')
             {
-                glyphXPos += m_glyphWidth;
+                glyphXPos += font.xDensity() * m_glyphWidth;
             }
             else
             {
                 if (glyph != prevGlyph)
                 {
-                    MCTextureGlyph & texGlyph = font.glyph(glyph);
+                    auto && texGlyph = font.glyph(glyph);
                     const MCGLTexCoord uv[4] =
                     {
                         {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
@@ -168,10 +172,9 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
                 }
 
                 font.surface().setSize(m_glyphWidth, m_glyphHeight);
-                font.surface().renderShadow(camera,
-                    MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
+                font.surface().renderShadow(camera, MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
 
-                glyphXPos += m_glyphWidth;
+                glyphXPos += font.xDensity() * m_glyphWidth;
             }
         }
     }
@@ -187,22 +190,22 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
     for (int i = 0; i < static_cast<int>(m_text.size()); i++)
     {
         prevGlyph = glyph;
-        glyph     = m_text[i];
+        glyph = m_text[i];
 
         if (glyph == '\n')
         {
             glyphXPos  = x;
-            glyphYPos -= m_glyphHeight;
+            glyphYPos -= font.yDensity() * m_glyphHeight;
         }
         else if (glyph == ' ')
         {
-            glyphXPos += m_glyphWidth;
+            glyphXPos += font.xDensity() * m_glyphWidth;
         }
         else
         {
             if (glyph != prevGlyph)
             {
-                MCTextureGlyph & texGlyph = font.glyph(glyph);
+                auto && texGlyph = font.glyph(glyph);
                 const MCGLTexCoord uv[4] =
                 {
                     {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
@@ -215,10 +218,9 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera,
             }
 
             font.surface().setSize(m_glyphWidth, m_glyphHeight);
-            font.surface().render(camera,
-                MCVector3dF(glyphXPos, glyphYPos, 0), 0, false);
+            font.surface().render(camera, MCVector3dF(glyphXPos, glyphYPos, 0), 0, false);
 
-            glyphXPos += m_glyphWidth;
+            glyphXPos += font.xDensity() * m_glyphWidth;
         }
     }
 }

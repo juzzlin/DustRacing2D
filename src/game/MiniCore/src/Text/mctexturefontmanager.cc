@@ -74,6 +74,8 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
     // corresponding surface.
     MCTextureFont * newFont = new MCTextureFont(surface);
 
+    newFont->setDensities(data.xDensity, data.yDensity);
+
     // Generate glyph structures from the loaded data.
     // Loop thru glyphs.
     for (MCUint j = 0; j < data.glyphs.size(); j++)

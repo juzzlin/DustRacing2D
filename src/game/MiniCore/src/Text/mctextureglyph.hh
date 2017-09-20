@@ -52,7 +52,7 @@ public:
 
 private:
 
-    UV  m_uv[4];
+    UV m_uv[4];
 };
 
 #endif // MCTEXTUREGLYPH_HH

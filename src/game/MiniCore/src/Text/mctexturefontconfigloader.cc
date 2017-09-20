@@ -78,10 +78,10 @@ bool MCTextureFontConfigLoader::loadFonts()
                         if(!tag.isNull())
                         {
                             MCTextureFontData::Glyph glyph;
-                            glyph.x0   = tag.attribute("x0", "0").toInt();
-                            glyph.y0   = tag.attribute("y0", "0").toInt();
-                            glyph.x1   = tag.attribute("x1", "0").toInt();
-                            glyph.y1   = tag.attribute("y1", "0").toInt();
+                            glyph.x0 = tag.attribute("x0", "0").toInt();
+                            glyph.y0 = tag.attribute("y0", "0").toInt();
+                            glyph.x1 = tag.attribute("x1", "0").toInt();
+                            glyph.y1 = tag.attribute("y1", "0").toInt();
                             glyph.name = tag.attribute("name", "").toStdWString().at(0);
 
                             newData->glyphs.push_back(glyph);

@@ -25,6 +25,8 @@ MCTextureFont::MCTextureFont(MCSurface & surface)
       MCTextureGlyph::UV(0, 0),
       MCTextureGlyph::UV(1, 1))
 , m_glyphLookUp(256, m_default)
+, m_xDensity(1.0f)
+, m_yDensity(1.0f)
 , m_surface(surface)
 {
 }
@@ -77,4 +79,20 @@ void MCTextureFont::setShaderProgram(MCGLShaderProgramPtr program)
 void MCTextureFont::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
     surface().setShadowShaderProgram(program);
+}
+
+void MCTextureFont::setDensities(float xDensity, float yDensity)
+{
+    m_xDensity = xDensity;
+    m_yDensity = yDensity;
+}
+
+float MCTextureFont::xDensity() const
+{
+    return m_xDensity;
+}
+
+float MCTextureFont::yDensity() const
+{
+    return m_yDensity;
 }

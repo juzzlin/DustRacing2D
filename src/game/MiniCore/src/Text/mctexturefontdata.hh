@@ -27,7 +27,7 @@
 //! Data structure used by MCTextureFontConfigLoader.
 struct MCTextureFontData
 {
-    //! Glyph data in the XML config.
+    //! Glyph texture data
     struct Glyph
     {
         //! UPPER-LEFT coordinate. Y-axis points upwards.
@@ -48,6 +48,12 @@ struct MCTextureFontData
 
     //! Glyphs.
     std::vector<Glyph> glyphs;
+
+    //! Horizontal "density".
+    float xDensity = 1.0f;
+
+    //! Vertical "density".
+    float yDensity = 1.0f;
 
     //! Fallback map.
     std::map<wchar_t, wchar_t> fallback;

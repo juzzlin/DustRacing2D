@@ -38,7 +38,7 @@ public:
      * all the monospace glyphs. */
     MCTextureFont(MCSurface & surface);
 
-    /*! Add a mapping from given glyp to given MCTextureGlyph.
+    /*! Add a mapping from given glyph to given MCTextureGlyph.
      *  MCTextureGlyph includes e.g. uv-coordinates. */
     void addGlyphMapping(wchar_t glyph, MCTextureGlyph textureGlyph);
 
@@ -59,6 +59,12 @@ public:
     //! Set the shader program to be used for 2d shadows.
     void setShadowShaderProgram(MCGLShaderProgramPtr program);
 
+    void setDensities(float xDensity = 1.0f, float yDensity = 1.0f);
+
+    float xDensity() const;
+
+    float yDensity() const;
+
 private:
 
     MCTextureGlyph m_default;
@@ -68,6 +74,10 @@ private:
 
     typedef std::vector<MCTextureGlyph> GlyphLookUp;
     GlyphLookUp m_glyphLookUp;
+
+    float m_xDensity;
+
+    float m_yDensity;
 
     MCSurface & m_surface;
 };

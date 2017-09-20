@@ -57,7 +57,7 @@ public:
     const MCGLColor & color() const;
 
     //! Set shadow offset. Effective if renderWithShadow() is called.
-    void setShadowOffset(MCFloat xOffset, MCFloat yOffset);
+    void setShadowOffset(float xOffset, float yOffset);
 
     //! Get glyph width.
     int glyphWidth() const;
@@ -66,16 +66,13 @@ public:
     int glyphHeight() const;
 
     //! Get text width.
-    int width() const;
+    int width(MCTextureFont & font) const;
 
     //! Get text height.
-    int height() const;
+    int height(MCTextureFont & font) const;
 
-    //! Render at (x,y) as seen thru the
-    //! given camera window (can be nullptr) using the
-    //! given font.
-    void render(MCFloat x, MCFloat y, MCCamera * camera,
-        MCTextureFont & font, bool shadow = true);
+    //! Render at (x,y) as seen through the given camera window (can be nullptr) using the given font.
+    void render(float x, float y, MCCamera * camera, MCTextureFont & font, bool shadow = true);
 
 private:
 
@@ -85,13 +82,20 @@ private:
     void updateTextDimensions();
 
     std::wstring m_text;
-    int          m_glyphWidth;
-    int          m_glyphHeight;
-    int          m_textWidth;
-    int          m_textHeight;
-    MCGLColor    m_color;
-    MCFloat      m_xOffset;
-    MCFloat      m_yOffset;
+
+    int m_glyphWidth;
+
+    int m_glyphHeight;
+
+    int m_textWidth;
+
+    int m_textHeight;
+
+    MCGLColor m_color;
+
+    float m_xOffset;
+
+    float m_yOffset;
 };
 
 #endif // MCTEXTUREGLYPH_HH
