@@ -32,7 +32,6 @@ static const int    RAIL_Z         = 8;
 static const float  OBJECT_Z_DELTA = 5.0f;
 static const float  OBJECT_Z_ZERO  = 0.0f;
 static const int    WIDTH          = 256;
-static const int    RAIL_X_OFFSET  = 32;
 }
 
 Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)

@@ -38,19 +38,19 @@ public:
     Track * selectedTrack() const;
 
     //! \reimp
-    virtual void left();
+    virtual void left() override;
 
     //! \reimp
-    virtual void right();
+    virtual void right() override;
 
     //! \reimp
-    virtual void up();
+    virtual void up() override;
 
     //! \reimp
-    virtual void down();
+    virtual void down() override;
 
     //! \reimp
-    virtual void selectCurrentItem();
+    virtual void selectCurrentItem() override;
 
 private:
 

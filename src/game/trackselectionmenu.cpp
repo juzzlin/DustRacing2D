@@ -70,17 +70,17 @@ public:
         return m_track;
     }
 
-    virtual void onLeft()
+    virtual void onLeft() override
     {
         m_xDisplacement = -1000;
     }
 
-    virtual void onRight()
+    virtual void onRight() override
     {
         m_xDisplacement = 1000;
     }
 
-    virtual void setFocused(bool focused)
+    virtual void setFocused(bool focused) override
     {
         MenuItem::setFocused(focused);
 
