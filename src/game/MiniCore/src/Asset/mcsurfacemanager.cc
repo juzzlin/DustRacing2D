@@ -265,9 +265,17 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     // Take the maximum supported texture size into account
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-    while (textureImage.width() > maxTextureSize || textureImage.height() > maxTextureSize)
+    if (textureImage.width() > maxTextureSize && textureImage.height() > maxTextureSize)
     {
-        textureImage = textureImage.scaled(textureImage.width() / 2, textureImage.height() / 2);
+        textureImage = textureImage.scaled(maxTextureSize, maxTextureSize);
+    }
+    else if (textureImage.width() > maxTextureSize)
+    {
+        textureImage = textureImage.scaled(maxTextureSize, textureImage.height());
+    }
+    else if (textureImage.height() > maxTextureSize)
+    {
+        textureImage = textureImage.scaled(textureImage.width(), maxTextureSize);
     }
 
     // Flip if set active
