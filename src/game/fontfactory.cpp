@@ -87,26 +87,52 @@ static void addFallbacks(MCTextureFontData & fontData)
 
 MCTextureFontData FontFactory::generateFontData(QString family)
 {
-    const int cols        = 8;
-    const int rows        = glyphs.size() / cols;
-    const int slotWidth   = 64;
-    const int slotHeight  = 80;
+    const int cols = 8;
+    const int rows = glyphs.size() / cols;
+
+    int slotWidth = 64;
+    int slotHeight = 64;
     const int glyphHeight = 64;
-    const int textureW    = cols * slotWidth;
-    const int textureH    = rows * slotHeight;
-
-    MCLogger().info() << "Font texture size: " << textureW << "x" << textureH;
-
-    QPixmap fontPixmap(textureW, textureH);
-    fontPixmap.fill(Qt::transparent);
-
-    MCTextureFontData fontData;
 
     QFont font;
     font.setFamily(family);
     font.setStyleHint(QFont::Monospace);
     font.setPixelSize(glyphHeight);
     font.setBold(true);
+
+    // Calculate the widest glyph and tune the slot size accordingly
+    QFontMetrics fm(font);
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            const int glyphIndex = j * cols + i;
+            const QString text(glyphs.at(glyphIndex));
+            if (fm.width(text) > slotWidth)
+            {
+                slotWidth = fm.width(text);
+            }
+        }
+    }
+    if (fm.height() > slotHeight)
+    {
+        slotHeight = fm.height();
+    }
+
+    // Add a little margin
+    slotHeight += 4;
+
+    MCLogger().info() << "Font slot size: " << slotWidth << "x" << slotHeight;
+
+    const int textureW = cols * slotWidth;
+    const int textureH = rows * slotHeight;
+
+    MCLogger().info() << "Font texture size (initial): " << textureW << "x" << textureH;
+
+    QPixmap fontPixmap(textureW, textureH);
+    fontPixmap.fill(Qt::transparent);
+
+    MCTextureFontData fontData;
 
     for (int j = 0; j < rows; j++)
     {
@@ -159,8 +185,8 @@ MCTextureFontData FontFactory::generateFontData(QString family)
     fontData.surface = surfaceData.handle;
 
     // Compensate the "too big" texture rectangle per glyph
-    fontData.xDensity = 46.0 / 64;
-    fontData.yDensity = 64.0 / 80;
+    fontData.xDensity = 0.75f;
+    fontData.yDensity = 1.0f;
 
     addFallbacks(fontData);
 
