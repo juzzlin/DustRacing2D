@@ -82,19 +82,20 @@ const std::wstring & MCTextureText::text() const
     return m_text;
 }
 
-void MCTextureText::setGlyphSize(int width, int height)
+void MCTextureText::setGlyphSize(float width, float height)
 {
-    m_glyphWidth  = width;
+    m_glyphWidth = width;
     m_glyphHeight = height;
+
     updateTextDimensions();
 }
 
-int MCTextureText::glyphWidth() const
+float MCTextureText::glyphWidth() const
 {
     return m_glyphWidth;
 }
 
-int MCTextureText::glyphHeight() const
+float MCTextureText::glyphHeight() const
 {
     return m_glyphHeight;
 }

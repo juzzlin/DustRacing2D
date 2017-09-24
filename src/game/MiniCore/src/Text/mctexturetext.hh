@@ -48,7 +48,7 @@ public:
     const std::wstring & text() const;
 
     //! Set size of one glyph.
-    void setGlyphSize(int width, int height);
+    void setGlyphSize(float width, float height);
 
     //! Set color.
     void setColor(const MCGLColor & color);
@@ -60,10 +60,10 @@ public:
     void setShadowOffset(float xOffset, float yOffset);
 
     //! Get glyph width.
-    int glyphWidth() const;
+    float glyphWidth() const;
 
     //! Get glyph height.
-    int glyphHeight() const;
+    float glyphHeight() const;
 
     //! Get text width.
     int width(MCTextureFont & font) const;
@@ -83,9 +83,9 @@ private:
 
     std::wstring m_text;
 
-    int m_glyphWidth;
+    float m_glyphWidth;
 
-    int m_glyphHeight;
+    float m_glyphHeight;
 
     int m_textWidth;
 
