@@ -66,10 +66,10 @@ public:
     float glyphHeight() const;
 
     //! Get text width.
-    int width(MCTextureFont & font) const;
+    float width(MCTextureFont & font) const;
 
     //! Get text height.
-    int height(MCTextureFont & font) const;
+    float height(MCTextureFont & font) const;
 
     //! Render at (x,y) as seen through the given camera window (can be nullptr) using the given font.
     void render(float x, float y, MCCamera * camera, MCTextureFont & font, bool shadow = true);
@@ -87,9 +87,9 @@ private:
 
     float m_glyphHeight;
 
-    int m_textWidth;
+    float m_textWidth;
 
-    int m_textHeight;
+    float m_textHeight;
 
     MCGLColor m_color;
 
