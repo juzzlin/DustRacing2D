@@ -728,6 +728,7 @@ void Scene::renderObjects()
         // TODO glScene.setFadeValue(fadeValue);
         glScene.setSplitType(MCGLScene::ShowFullScreen);
 
+        m_menuManager->stepTime(17); // Assume 60 fps here, affects only text item animations
         m_menuManager->render();
 
         break;

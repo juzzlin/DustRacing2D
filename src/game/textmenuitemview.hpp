@@ -28,20 +28,25 @@ class TextMenuItemView : public MTFH::MenuItemView
 public:
 
     //! Constructor.
-    TextMenuItemView(int textSize, MTFH::MenuItem & owner);
+    TextMenuItemView(float textSize, MTFH::MenuItem & owner);
 
     //! Destructor.
     virtual ~TextMenuItemView();
 
     //! \reimp
-    virtual void render(int x, int y) override;
+    virtual void render(float x, float y) override;
+
+    //! \reimp
+    virtual void stepTime(int msecs) override;
 
     //! Set the text size.
-    virtual void setTextSize(int size);
+    virtual void setTextSize(float size);
 
 private:
 
-    int m_textSize;
+    float m_textSize;
+
+    float m_angle;
 };
 
 #endif // TEXTMENUITEMVIEW_HPP

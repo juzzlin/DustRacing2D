@@ -518,6 +518,14 @@ void Menu::exit()
     MenuManager::instance().popMenu();
 }
 
+void Menu::stepTime(int msec)
+{
+    for (auto item : m_items)
+    {
+        item->stepTime(msec);
+    }
+}
+
 Menu::~Menu()
 {
 }

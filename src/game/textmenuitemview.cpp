@@ -20,47 +20,61 @@
 #include <MCAssetManager>
 #include <MCTextureFont>
 #include <MCTextureText>
+#include <MCRandom>
 
-TextMenuItemView::TextMenuItemView(int textSize, MTFH::MenuItem & owner)
+#include <cmath>
+
+TextMenuItemView::TextMenuItemView(float textSize, MTFH::MenuItem & owner)
 : MenuItemView(owner)
 , m_textSize(textSize)
+, m_angle(MCRandom::getValue() * 2.0f * 3.1415f)
 {
 }
 
-void TextMenuItemView::setTextSize(int size)
+void TextMenuItemView::setTextSize(float size)
 {
     m_textSize = size;
 }
 
-void TextMenuItemView::render(int x, int y)
+void TextMenuItemView::stepTime(int)
+{
+    m_angle += 0.005f;
+}
+
+void TextMenuItemView::render(float x, float y)
 {
     MCTextureText text(owner().text());
 
-    const int shadowY = -2;
-    const int shadowX =  2;
-
-    text.setGlyphSize(m_textSize, m_textSize);
+    const float amp = 0.05f;
+    float animatedSize = m_textSize + std::sin(m_angle) * m_textSize * amp;
+    if (owner().focused())
+    {
+        animatedSize *= 1.25f;
+    }
+    text.setGlyphSize(animatedSize, animatedSize);
 
     if (owner().focused())
     {
-        const MCGLColor yellow(1.0, 1.0, 0.0, 1.0);
+        const MCGLColor yellow(1.0f, 1.0f, 0.0f, 1.0f);
         text.setColor(yellow);
     }
     else if (owner().selected())
     {
-        const MCGLColor red(1.0, 0.0, 0.0, 1.0);
+        const MCGLColor red(1.0f, 0.0f, 0.0f, 1.0f);
         text.setColor(red);
     }
     else
     {
-        const MCGLColor white(1.0, 1.0, 1.0, 1.0);
+        const MCGLColor white(1.0f, 1.0f, 1.0f, 1.0f);
         text.setColor(white);
     }
 
+    const float shadowY = -2;
+    const float shadowX =  2;
     text.setShadowOffset(shadowX, shadowY);
 
     auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());
-    text.render(x - text.width(font) / 2 + 20, y, nullptr, font);
+    text.render(x - text.width(font) / 2, y, nullptr, font);
 }
 
 TextMenuItemView::~TextMenuItemView()

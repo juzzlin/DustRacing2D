@@ -182,4 +182,12 @@ bool MenuManager::isDone() const
     }
 }
 
+void MenuManager::stepTime(int msecs)
+{
+    for (auto && menu : m_menuStack)
+    {
+        menu->stepTime(msecs);
+    }
+}
+
 } // namespace MTFH

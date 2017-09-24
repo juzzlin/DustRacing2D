@@ -20,7 +20,7 @@
 
 namespace MTFH {
 
-MenuItem::MenuItem(int width, int height, std::wstring text, bool selectable)
+MenuItem::MenuItem(float width, float height, std::wstring text, bool selectable)
 : m_text(text)
 , m_menuOpenActionMenuId("")
 , m_action(nullptr)
@@ -41,38 +41,38 @@ MenuItem::MenuItem(int width, int height, std::wstring text, bool selectable)
 {
 }
 
-int MenuItem::width() const
+float MenuItem::width() const
 {
     return m_width + m_lMargin + m_rMargin;
 }
 
-int MenuItem::height() const
+float MenuItem::height() const
 {
     return m_height + m_tMargin + m_bMargin;
 }
 
-void MenuItem::setIndex(int index)
+void MenuItem::setIndex(float index)
 {
     m_index = index;
 }
 
-int MenuItem::index() const
+float MenuItem::index() const
 {
     return m_index;
 }
 
-void MenuItem::setPos(int x, int y)
+void MenuItem::setPos(float x, float y)
 {
     m_x = x;
     m_y = y;
 }
 
-int MenuItem::x() const
+float MenuItem::x() const
 {
     return m_x;
 }
 
-int MenuItem::y() const
+float MenuItem::y() const
 {
     return m_y;
 }
@@ -151,7 +151,7 @@ void MenuItem::setFocused(bool focused)
     m_focused = focused;
 }
 
-void MenuItem::setContentsMargins(int left, int right, int top, int bottom)
+void MenuItem::setContentsMargins(float left, float right, float top, float bottom)
 {
     m_lMargin = left;
     m_rMargin = right;
@@ -159,7 +159,7 @@ void MenuItem::setContentsMargins(int left, int right, int top, int bottom)
     m_bMargin = bottom;
 }
 
-void MenuItem::getContentsMargins(int & left, int & right, int & top, int & bottom) const
+void MenuItem::getContentsMargins(float & left, float & right, float & top, float & bottom) const
 {
     left   = m_lMargin;
     right  = m_rMargin;
@@ -193,6 +193,14 @@ void MenuItem::render()
 const std::wstring & MenuItem::text() const
 {
     return m_text;
+}
+
+void MenuItem::stepTime(int msecs)
+{
+    if (m_view)
+    {
+        m_view->stepTime(msecs);
+    }
 }
 
 MenuItem::~MenuItem()

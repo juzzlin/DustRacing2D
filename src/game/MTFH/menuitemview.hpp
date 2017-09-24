@@ -34,10 +34,13 @@ public:
     virtual ~MenuItemView();
 
     //! Render the view.
-    virtual void render(int x, int y) = 0;
+    virtual void render(float x, float y) = 0;
 
     //! \return the owner item.
     MenuItem & owner() const;
+
+    //! Re-imp for animations etc.
+    virtual void stepTime(int msecs);
 
 private:
 

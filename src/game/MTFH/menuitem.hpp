@@ -33,23 +33,23 @@ class MenuItem
 {
 public:
 
-    MenuItem(int width, int height, std::wstring text = L"", bool selectable = false);
+    MenuItem(float width, float height, std::wstring text = L"", bool selectable = false);
 
     virtual ~MenuItem();
 
-    void setIndex(int index);
+    void setIndex(float index);
 
-    int index() const;
+    float index() const;
 
-    int width() const;
+    float width() const;
 
-    int height() const;
+    float height() const;
 
-    void setPos(int x, int y);
+    void setPos(float x, float y);
 
-    int x() const;
+    float x() const;
 
-    int y() const;
+    float y() const;
 
     const std::wstring & text() const;
 
@@ -80,9 +80,11 @@ public:
 
     virtual void setFocused(bool focused);
 
-    void setContentsMargins(int left, int right, int top, int bottom);
+    virtual void stepTime(int msecs);
 
-    void getContentsMargins(int & left, int & right, int & top, int & bottom) const;
+    void setContentsMargins(float left, float right, float top, float bottom);
+
+    void getContentsMargins(float & left, float & right, float & top, float & bottom) const;
 
     bool selected() const;
 
@@ -108,23 +110,23 @@ private:
 
     bool m_selectable;
 
-    int m_width;
+    float m_width;
 
-    int m_height;
+    float m_height;
 
-    int m_x;
+    float m_x;
 
-    int m_y;
+    float m_y;
 
-    int m_lMargin;
+    float m_lMargin;
 
-    int m_rMargin;
+    float m_rMargin;
 
-    int m_tMargin;
+    float m_tMargin;
 
-    int m_bMargin;
+    float m_bMargin;
 
-    int m_index;
+    float m_index;
 };
 
 typedef std::shared_ptr<MTFH::MenuItem> MenuItemPtr;

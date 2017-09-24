@@ -77,6 +77,9 @@ public:
     //! Select the current item.
     void selectCurrentItem();
 
+    //! Give a time tick to the whole menu tree.
+    void stepTime(int msecs);
+
     /*! Handle mouse press at given screen coordinates.
      *  \return true if on a valid item. */
     bool mousePress(int x, int y, int screenWidth, int screenHeight);

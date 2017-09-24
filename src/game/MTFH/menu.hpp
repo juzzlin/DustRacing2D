@@ -72,6 +72,9 @@ public:
     //! Select the current item.
     virtual void selectCurrentItem();
 
+    //! Steps time for animations etc. Re-implement in the menu items.
+    virtual void stepTime(int msecs);
+
     /*! Handle mouse press at given screen coordinates.
      *  \return true if on a valid item. */
     virtual bool handleMousePress(int x, int y, int screenWidth, int screenHeight);

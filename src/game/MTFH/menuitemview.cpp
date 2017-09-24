@@ -28,6 +28,10 @@ MenuItem & MenuItemView::owner() const
     return m_owner;
 }
 
+void MenuItemView::stepTime(int)
+{
+}
+
 MenuItemView::~MenuItemView()
 {
 }
