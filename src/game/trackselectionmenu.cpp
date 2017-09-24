@@ -94,6 +94,9 @@ public:
     //! \reimp
     virtual void render() override;
 
+    //! \reimp
+    virtual void stepTime(int msecs) override;
+
 private:
 
     void renderTiles();
@@ -127,14 +130,17 @@ private:
     int m_bestPos;
 };
 
+void TrackItem::stepTime(int)
+{
+    m_xDisplacement = m_xDisplacement * 2 / 3;
+}
+
 void TrackItem::renderTiles()
 {
     const MapBase & rMap = m_track.trackData().map();
 
     const int previewW = width();
     const int previewH = height();
-
-    m_xDisplacement = m_xDisplacement * 2 / 3;
 
     // Set tileW and tileH so that they are squares
     float tileW = previewW / rMap.cols();
