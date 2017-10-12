@@ -78,7 +78,7 @@ void ParticleFactory::preCreateParticles()
 
     preCreateSurfaceParticles(100, "LEAF", Leaf, MCAssetManager::surfaceManager().surface("leaf"), false, true);
 
-    preCreateSurfaceParticles(500, "MUD", Mud, MCAssetManager::surfaceManager().surface("smoke"), false, true);
+    preCreateSurfaceParticles(500, "MUD", Mud, MCAssetManager::surfaceManager().surface("mud"), false, true);
 
     preCreateSurfaceParticles(500, "ONSKID", OnTrackSkidMark, MCAssetManager::surfaceManager().surface("skid"), true);
 
@@ -212,8 +212,9 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 {
     if (MCSurfaceParticle * mud = newSurfaceParticle(Mud))
     {
-        mud->init(location, 4, 3000);
-        mud->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 0.5f));
+        mud->init(location, 12, 3000);
+        mud->rotate(MCRandom::getValue() * 360);
+        mud->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.5f));
         mud->setAnimationStyle(MCParticle::AnimationStyle::Shrink);
         mud->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         mud->physicsComponent().setAcceleration(MCWorld::instance().gravity());
