@@ -159,7 +159,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
     if (MCSurfaceParticle * smoke = ParticleFactory::newSurfaceParticle(Smoke))
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 12, 3000);
-        smoke->setColor(MCGLColor(0.75f, 0.75f, 0.75f, 0.25f));
+        smoke->setColor(MCGLColor(0.75f, 0.75f, 0.75f, 0.15f));
         smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->physicsComponent().setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.1f);
