@@ -226,9 +226,9 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
 {
     if (MCSurfaceParticle * sparkle = ParticleFactory::newSurfaceParticle(Sparkle))
     {
-        sparkle->init(location, 6, 2000);
-        sparkle->setColor(MCGLColor(1.0f, 0.75f, 0.0f, 0.5f));
-        sparkle->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
+        sparkle->init(location, 2 + MCRandom::getValue() * 2, 1500);
+        sparkle->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.33f));
+        sparkle->setAnimationStyle(MCParticle::AnimationStyle::Shrink);
         sparkle->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 4.0f));
         sparkle->physicsComponent().setAcceleration(MCWorld::instance().gravity() * 0.5f);
         sparkle->addToWorld();

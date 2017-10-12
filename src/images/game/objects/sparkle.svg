@@ -9,28 +9,42 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="256"
+   height="256"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="sparkle.svg"
-   inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/sparkle.png"
-   inkscape:export-xdpi="9.5662365"
-   inkscape:export-ydpi="9.5662365">
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/data/images/sparkle.png"
+   inkscape:export-xdpi="22.5"
+   inkscape:export-ydpi="22.5">
   <defs
      id="defs4">
     <filter
        inkscape:collect="always"
-       id="filter3810"
-       x="-0.384"
-       width="1.768"
-       y="-0.384"
-       height="1.768">
+       style="color-interpolation-filters:sRGB"
+       id="filter5017"
+       x="-0.059948305"
+       width="1.1198966"
+       y="-0.060051784"
+       height="1.1201036">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="62.171431"
-         id="feGaussianBlur3812" />
+         stdDeviation="5.5644159"
+         id="feGaussianBlur5019" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5035"
+       x="-0.096"
+       width="1.192"
+       y="-0.096"
+       height="1.192">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="8.8953882"
+         id="feGaussianBlur5037" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -40,15 +54,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="166.87457"
-     inkscape:cy="507.6811"
+     inkscape:zoom="2.8"
+     inkscape:cx="149.5399"
+     inkscape:cy="129.05428"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1615"
-     inkscape:window-height="1026"
-     inkscape:window-x="65"
+     inkscape:window-width="2489"
+     inkscape:window-height="1416"
+     inkscape:window-x="71"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -66,27 +80,21 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       sodipodi:type="star"
-       style="fill:#ffeeaa;fill-rule:evenodd;stroke:#ffff00;stroke-width:40;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:0.75000000000000000;filter:url(#filter3810)"
-       id="path2985"
-       sodipodi:sides="4"
-       sodipodi:cx="241.42857"
-       sodipodi:cy="343.79074"
-       sodipodi:r1="251.68819"
-       sodipodi:r2="125.84409"
-       sodipodi:arg1="0.88187194"
-       sodipodi:arg2="1.6672701"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="M 401.42858,538.07646 229.30674,469.04966 47.142852,503.79075 116.16965,331.66891 81.428568,149.50502 253.5504,218.53182 435.7143,183.79074 366.68749,355.91257 z"
-       inkscape:transform-center-x="4.7107915"
-       inkscape:transform-center-y="-19.509727"
-       transform="translate(135.32946,201.90008)"
-       inkscape:export-filename="/home/jussil/Home/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/sparkle.png"
-       inkscape:export-xdpi="12.72"
-       inkscape:export-ydpi="12.72" />
+     id="layer1"
+     transform="translate(0,-796.36219)">
+    <circle
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:22.48208155;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5035)"
+       id="path4936"
+       cx="120.89285"
+       cy="917.89795"
+       r="111.19235"
+       transform="matrix(0.89377845,0,0,0.89377845,19.984283,101.78625)" />
+    <circle
+       style="opacity:1;fill:#ffdd55;fill-opacity:1;stroke:#ffff00;stroke-width:12.20472431;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5017)"
+       id="path4936-5"
+       cx="127.85715"
+       cy="921.64789"
+       r="104.61192"
+       transform="matrix(0.89377845,0,0,0.89377845,27.12714,107.85768)" />
   </g>
 </svg>
