@@ -192,11 +192,11 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
 bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
 {
-    const MCUint id1 = object1.shape()->instanceTypeID();
-    const MCUint id2 = object2.shape()->instanceTypeID();
+    const MCUint id1 = object1.shape()->instanceTypeId();
+    const MCUint id2 = object2.shape()->instanceTypeId();
 
     // Rect against rect
-    if (id1 == MCRectShape::typeID() && id2 == MCRectShape::typeID())
+    if (id1 == MCRectShape::typeId() && id2 == MCRectShape::typeId())
     {
         // We must test first object1 against object2 and then
         // the other way around.
@@ -216,7 +216,7 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
         }
     }
     // Rect against circle
-    else if (id1 == MCRectShape::typeID() && id2 == MCCircleShape::typeID())
+    else if (id1 == MCRectShape::typeId() && id2 == MCCircleShape::typeId())
     {
         // Static cast because we know the types now.
         return testRectAgainstCircle(
@@ -224,7 +224,7 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
             *static_cast<MCCircleShape *>(object2.shape().get()));
     }
     // Circle against circle
-    else if (id1 == MCCircleShape::typeID() && id2 == MCCircleShape::typeID())
+    else if (id1 == MCCircleShape::typeId() && id2 == MCCircleShape::typeId())
     {
         // Static cast because we know the types now.
         return testCircleAgainstCircle(

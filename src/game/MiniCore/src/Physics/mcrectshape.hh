@@ -72,11 +72,11 @@ public:
     //! Get crossing edge for the given segment.
     MCEdgeF edgeForSegment(const MCSegmentF & p) const;
 
-    //! Return the typeID
-    static MCUint typeID();
+    //! Return the typeId
+    static MCUint typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeID() const override;
+    virtual MCUint instanceTypeId() const override;
 
     //! \reimp
     virtual void render(MCCamera * p) override;
@@ -92,7 +92,7 @@ private:
     DISABLE_COPY(MCRectShape);
     DISABLE_ASSI(MCRectShape);
 
-    static MCUint m_typeID;
+    static MCUint m_typeId;
 
     inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
 

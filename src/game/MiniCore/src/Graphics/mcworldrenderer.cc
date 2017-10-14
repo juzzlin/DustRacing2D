@@ -79,7 +79,8 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
 
             if (parent->isRenderable() && parent->shape() && parent->shape()->view())
             {
-                m_defaultLayer.objectBatches()[camera][parent->shape()->view()->viewId()].push_back(parent);
+                const int objectViewId = object->typeId() * 1024 + parent->shape()->view()->viewId();
+                m_defaultLayer.objectBatches()[camera][objectViewId].push_back(parent);
             }
 
             for (auto child : parent->children())
@@ -101,7 +102,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
 
         if (camera->isVisible(bbox))
         {
-            m_defaultLayer.particleBatches()[camera][particle.typeID()].push_back(&particle);
+            m_defaultLayer.particleBatches()[camera][particle.typeId()].push_back(&particle);
         }
         else
         {

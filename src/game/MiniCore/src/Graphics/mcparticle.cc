@@ -22,8 +22,8 @@
 
 int MCParticle::m_numActiveParticles = 0;
 
-MCParticle::MCParticle(const std::string & typeID)
-: MCObject(typeID)
+MCParticle::MCParticle(const std::string & typeId)
+: MCObject(typeId)
 , m_lifeTime(0)
 , m_initLifeTime(0)
 , m_animationStyle(MCParticle::AnimationStyle::None)

@@ -51,7 +51,7 @@ public:
     };
 
     //! Constructor.
-    MCParticle(const std::string & typeID);
+    MCParticle(const std::string & typeId);
 
     //! Destructor
     virtual ~MCParticle();

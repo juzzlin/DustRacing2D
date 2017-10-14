@@ -49,10 +49,10 @@ public:
     MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
 
     //! Return type id
-    static MCUint typeID();
+    static MCUint typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeID() const;
+    virtual MCUint instanceTypeId() const;
 
     //! \reimp
     virtual MCBBox<MCFloat> bbox() const;
@@ -62,7 +62,7 @@ private:
     DISABLE_COPY(MCCircleShape);
     DISABLE_ASSI(MCCircleShape);
 
-    static MCUint m_typeID;
+    static MCUint m_typeId;
     MCFloat m_radius;
 };
 

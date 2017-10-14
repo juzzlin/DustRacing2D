@@ -59,27 +59,27 @@ public:
     typedef std::map<MCObject *, std::vector<MCContact *> > ContactHash;
 
     /*! Constructor.
-     *  \param typeId Type ID string e.g. "MY_OBJECT_CLASS". */
-    explicit MCObject(const std::string & typeId);
+     *  \param typeId Type name string e.g. "CAR". All identical objects should have the same typeName. */
+    explicit MCObject(const std::string & typeName);
 
     /*! Constructor.
      *  Construct MCObject using the given shape.
      *  \param shape Pointer to the shape to be used.
-     *  \param typeId Type ID string e.g. "MY_OBJECT_CLASS". */
-    MCObject(MCShapePtr shape, const std::string & typeId);
+     *  \param typeId Type name string e.g. "CAR". All identical objects should have the same typeName. */
+    MCObject(MCShapePtr shape, const std::string & typeName);
 
     /*! Constructor.
-     *  Construct MCObject implicitly using MCRectShape with
-     *  MCSurfaceView for the given MCSurface.
+     *  Construct MCObject implicitly using MCRectShape with MCSurfaceView for the given MCSurface.
+     *  Handle of the surface will be used also as the surface view handle.
      *  \param surface Pointer to the (shared) surface to be used.
      *  MCObject won't take the ownership, because the same surface
      *  can be used to draw multiple objects and is managed by MCSurfaceManager.
-     *  \param typeId Type ID string e.g. "MY_OBJECT_CLASS".
+     *  \param typeName Type name string e.g. "CAR". All identical objects should have the same typeName.
      *  \param batchMode \see MCShapeView::setBatchMode(). */
-    MCObject(MCSurface & surface, const std::string & typeId, bool batchMode = false);
+    MCObject(MCSurface & surface, const std::string & typeName, bool batchMode = false);
 
     //! Return integer id corresponding to the given object name.
-    static MCUint getTypeIDForName(const std::string & typeName);
+    static MCUint getTypeIdForName(const std::string & typeName);
 
     /*! Destructor. It's the callers responsibility to first remove
      *  the object from MCWorld before deleting the object. */
@@ -90,7 +90,7 @@ public:
      *  against each others without need for dynamic_cast.
      *  The filtered collision detection system uses this
      *  to match given types of objects. */
-    virtual MCUint typeID() const;
+    virtual MCUint typeId() const;
 
     /*! Return typeId for the given typeName string from
      *  MCObject's hash table. Each object registers
@@ -98,7 +98,10 @@ public:
      *  derived classes, they only need to pass the desired
      *  typeId string to MCObject's constructor.
      *  Returns 0 if type is not registered. */
-    static MCUint typeID(const std::string & typeName);
+    static MCUint typeId(const std::string & typeName);
+
+    //! Return the type name given to constructor.
+    const std::string & typeName() const;
 
     /*! Send event to given object.
      *  \param object Destination object.
@@ -355,7 +358,8 @@ private:
     bool testStatus(int bit) const;
 
     static MCTypeRegistry        m_typeRegistry;
-    MCUint                       m_typeID;
+    MCUint                       m_typeId;
+    std::string                  m_typeName;
     MCFloat                      m_angle = 0; // Degrees
     MCFloat                      m_relativeAngle = 0; // Degrees
     int                          m_collisionLayer = 0;

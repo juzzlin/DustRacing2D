@@ -20,7 +20,7 @@
 #include "mctyperegistry.hh"
 
 MCTypeRegistry::MCTypeRegistry()
-    : m_typeIDCount(1)
+    : m_typeIdCount(1)
 {
 }
 
@@ -29,9 +29,9 @@ MCUint MCTypeRegistry::registerType(const std::string & typeName)
     auto i(m_typeHash.find(typeName));
     if (i == m_typeHash.end())
     {
-        m_typeIDCount++;
-        m_typeHash[typeName] = m_typeIDCount;
-        return m_typeIDCount;
+        m_typeIdCount++;
+        m_typeHash[typeName] = m_typeIdCount;
+        return m_typeIdCount;
     }
     else
     {
@@ -39,7 +39,7 @@ MCUint MCTypeRegistry::registerType(const std::string & typeName)
     }
 }
 
-MCUint MCTypeRegistry::getTypeIDForName(const std::string & typeName)
+MCUint MCTypeRegistry::getTypeIdForName(const std::string & typeName)
 {
     auto i(m_typeHash.find(typeName));
     return i == m_typeHash.end() ? 0 : i->second;

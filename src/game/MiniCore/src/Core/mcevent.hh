@@ -41,7 +41,7 @@ public:
   static MCUint registerType();
 
   //! Return class-wide type id
-  virtual MCUint instanceTypeID() const = 0;
+  virtual MCUint instanceTypeId() const = 0;
 
   //! Accept the event.
   void accept();

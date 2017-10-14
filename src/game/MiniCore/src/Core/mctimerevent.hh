@@ -42,18 +42,18 @@ public:
     //! Return the frequency.
     MCUint frequency() const;
 
-    //! Return the typeID.
-    static MCUint typeID();
+    //! Return the typeId.
+    static MCUint typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeID() const;
+    virtual MCUint instanceTypeId() const;
 
 private:
 
     DISABLE_COPY(MCTimerEvent);
     DISABLE_ASSI(MCTimerEvent);
 
-    static MCUint m_typeID;
+    static MCUint m_typeId;
     MCTimerEventImpl * const m_pImpl;
 };
 

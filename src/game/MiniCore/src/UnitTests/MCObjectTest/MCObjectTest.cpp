@@ -46,7 +46,7 @@ public:
 
     virtual bool event(MCEvent & event)
     {
-        if (event.instanceTypeID() == MCTimerEvent::typeID())
+        if (event.instanceTypeId() == MCTimerEvent::typeId())
         {
             m_timerEventReceived = true;
             return true;

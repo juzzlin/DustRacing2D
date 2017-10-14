@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-MCUint MCRectShape::m_typeID = MCShape::registerType();
+MCUint MCRectShape::m_typeId = MCShape::registerType();
 
 MCRectShape::MCRectShape(MCShapeViewPtr view, MCFloat width, MCFloat height)
 : MCShape(view)
@@ -149,14 +149,14 @@ MCVector2dF MCRectShape::contactNormal(const MCSegmentF &, const MCEdgeF & edge)
     return MCVector2dF(normal).normalized();
 }
 
-MCUint MCRectShape::typeID()
+MCUint MCRectShape::typeId()
 {
-    return m_typeID;
+    return m_typeId;
 }
 
-MCUint MCRectShape::instanceTypeID() const
+MCUint MCRectShape::instanceTypeId() const
 {
-    return m_typeID;
+    return m_typeId;
 }
 
 const MCOBBoxF & MCRectShape::obbox() const

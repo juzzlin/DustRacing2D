@@ -50,8 +50,9 @@ const int isParticleBit       = 128;
 MCTypeRegistry MCObject::m_typeRegistry;
 MCObject::TimerEventObjectsList MCObject::m_timerEventObjects;
 
-MCObject::MCObject(const std::string & typeId)
-    : m_typeID(MCObject::m_typeRegistry.registerType(typeId))
+MCObject::MCObject(const std::string & typeName)
+    : m_typeId(MCObject::m_typeRegistry.registerType(typeName))
+    , m_typeName(typeName)
     , m_status(physicsObjectBit | renderableBit)
     , m_parent(this)
     , m_physicsComponent(nullptr)
@@ -59,14 +60,14 @@ MCObject::MCObject(const std::string & typeId)
     setPhysicsComponent(*(new MCPhysicsComponent));
 }
 
-MCObject::MCObject(MCShapePtr shape, const std::string & typeId)
-    : MCObject(typeId)
+MCObject::MCObject(MCShapePtr shape, const std::string & typeName)
+    : MCObject(typeName)
 {
     setShape(shape);
 }
 
-MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMode)
-    : MCObject(typeId)
+MCObject::MCObject(MCSurface & surface, const std::string & typeName, bool batchMode)
+    : MCObject(typeName)
 {
     // Create an MCRectShape using surface with an MCSurfaceView
     MCShapePtr rectShape(new MCRectShape(
@@ -79,9 +80,14 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeId, bool batchMo
     setShape(rectShape);
 }
 
-MCUint MCObject::getTypeIDForName(const std::string & typeName)
+MCUint MCObject::getTypeIdForName(const std::string & typeName)
 {
-    return MCObject::m_typeRegistry.getTypeIDForName(typeName);
+    return MCObject::m_typeRegistry.getTypeIdForName(typeName);
+}
+
+const std::string & MCObject::typeName() const
+{
+    return m_typeName;
 }
 
 void MCObject::addChildObject(
@@ -215,24 +221,24 @@ void MCObject::checkZBoundariesAndSendEvent()
     }
 }
 
-MCUint MCObject::typeID() const
+MCUint MCObject::typeId() const
 {
-    return m_typeID;
+    return m_typeId;
 }
 
-MCUint MCObject::typeID(const std::string & typeName)
+MCUint MCObject::typeId(const std::string & typeName)
 {
-    return MCObject::getTypeIDForName(typeName);
+    return MCObject::getTypeIdForName(typeName);
 }
 
 bool MCObject::event(MCEvent & event)
 {
-    if (event.instanceTypeID() == MCCollisionEvent::typeID())
+    if (event.instanceTypeId() == MCCollisionEvent::typeId())
     {
         collisionEvent(static_cast<MCCollisionEvent &>(event));
         return true;
     }
-    else if (event.instanceTypeID() == MCOutOfBoundariesEvent::typeID())
+    else if (event.instanceTypeId() == MCOutOfBoundariesEvent::typeId())
     {
         outOfBoundariesEvent(static_cast<MCOutOfBoundariesEvent &>(event));
         return true;
@@ -522,7 +528,7 @@ void MCObject::rotateShape(MCFloat angle)
 {
     if (m_shape && std::abs(m_shape->angle() - angle) > std::numeric_limits<float>::epsilon())
     {
-        if (m_shape->instanceTypeID() == MCCircleShape::typeID() && m_centerIsZero)
+        if (m_shape->instanceTypeId() == MCCircleShape::typeId() && m_centerIsZero)
         {
             m_shape->rotate(angle);
         }

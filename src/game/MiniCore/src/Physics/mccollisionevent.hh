@@ -50,11 +50,11 @@ public:
     //! Get the contact point.
     const MCVector3dF & contactPoint() const;
 
-    //! Return the typeID.
-    static MCUint typeID();
+    //! Return the typeId.
+    static MCUint typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeID() const;
+    virtual MCUint instanceTypeId() const;
 
     /*! \return true if the event is a primary event. Non-primary events may be generated
      *  during collision resolution. */
@@ -71,7 +71,7 @@ private:
 
     bool m_isPrimary;
 
-    static MCUint m_typeID;
+    static MCUint m_typeId;
 };
 
 #endif // MCCOLLISIONEVENT_HH

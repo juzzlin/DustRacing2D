@@ -120,7 +120,7 @@ public:
     /*! Return class-wide static type id inited by calling
      *  MCShape::registerType(). This is used to optimize collision detection
      *  and to avoid dynamic_cast. */
-    virtual MCUint instanceTypeID() const = 0;
+    virtual MCUint instanceTypeId() const = 0;
 
     //! Return approximated radius.
     MCFloat radius() const;

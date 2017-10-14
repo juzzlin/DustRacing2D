@@ -19,7 +19,7 @@
 
 #include "mctimerevent.hh"
 
-MCUint MCTimerEvent::m_typeID = MCEvent::registerType();
+MCUint MCTimerEvent::m_typeId = MCEvent::registerType();
 
 class MCTimerEventImpl
 {
@@ -38,14 +38,14 @@ MCTimerEvent::MCTimerEvent(MCUint frequency)
 {
 }
 
-MCUint MCTimerEvent::typeID()
+MCUint MCTimerEvent::typeId()
 {
-    return MCTimerEvent::m_typeID;
+    return MCTimerEvent::m_typeId;
 }
 
-MCUint MCTimerEvent::instanceTypeID() const
+MCUint MCTimerEvent::instanceTypeId() const
 {
-    return MCTimerEvent::m_typeID;
+    return MCTimerEvent::m_typeId;
 }
 
 MCUint MCTimerEvent::frequency() const

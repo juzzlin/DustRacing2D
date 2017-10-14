@@ -35,14 +35,14 @@ public:
     MCUint registerType(const std::string & typeName);
 
     //! Return integer id corresponding to the given object name.
-    MCUint getTypeIDForName(const std::string & typeName);
+    MCUint getTypeIdForName(const std::string & typeName);
 
 private:
 
     typedef std::unordered_map<std::string, MCUint> TypeHash;
     TypeHash m_typeHash;
 
-    MCUint m_typeIDCount;
+    MCUint m_typeIdCount;
 };
 
 #endif // MCTYPEREGISTRY_HH
