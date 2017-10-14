@@ -125,12 +125,11 @@ public:
     //! Return approximated radius.
     MCFloat radius() const;
 
+    //! Set shape radius.
+    virtual void setRadius(MCFloat radius);
+
     //! Fast intersection test
     bool mayIntersect(MCShape & other);
-
-protected:
-
-    void setRadius(MCFloat radius);
 
 private:
 
