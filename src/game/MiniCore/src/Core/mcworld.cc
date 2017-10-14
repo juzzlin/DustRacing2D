@@ -321,11 +321,7 @@ void MCWorld::addObject(MCObject & object)
             m_objs.push_back(&object);
             object.setIndex(static_cast<int>(m_objs.size()) - 1);
 
-            // Add to ObjectTree
-            if ((object.isPhysicsObject() || object.isTriggerObject()) && !object.bypassCollisions())
-            {
-                m_objectGrid->insert(object);
-            }
+            m_objectGrid->insert(object);
 
             // Add xy friction
             const MCFloat FrictionThreshold = 0.001f;
