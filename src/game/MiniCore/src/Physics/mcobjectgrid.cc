@@ -231,9 +231,12 @@ const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinBBox(const MCBBox<
             const int index = j * m_horSize + i;
             for (auto && obj : m_matrix[index]->m_objects)
             {
-                if (bbox.intersects(obj->shape()->bbox()))
+                if (obj->shape()->view())
                 {
-                    resultObjs.insert(obj);
+                    if (bbox.intersects(obj->shape()->view()->bbox().translated(MCVector2dF(obj->location()))))
+                    {
+                        resultObjs.insert(obj);
+                    }
                 }
             }
         }

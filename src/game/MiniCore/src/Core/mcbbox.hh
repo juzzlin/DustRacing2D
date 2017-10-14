@@ -185,6 +185,20 @@ public:
         m_y2 += r.j();
     }
 
+    //! Get translated.
+    template <typename U>
+    MCBBox<T> translated(const MCVector2d<U> & r) const
+    {
+        return MCBBox<T>(m_x1 + r.i(), m_y1 + r.j(), m_x2 + r.i(), m_y2 + r.j());
+    }
+
+    //! Get translated.
+    template <typename U>
+    MCBBox<T> translated(const MCVector3d<U> & r) const
+    {
+        return MCBBox<T>(m_x1 + r.i(), m_y1 + r.j(), m_x2 + r.i(), m_y2 + r.j());
+    }
+
 private:
 
     //! Vertex coordinates
