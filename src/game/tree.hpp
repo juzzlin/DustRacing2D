@@ -25,11 +25,6 @@ class Tree : public MCObject
 public:
 
     Tree(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeight, int branches);
-
-    //! \reimp
-    virtual void onStepTime(int step) override;
-
-    virtual ~Tree() {}
 };
 
 #endif // TREE_HPP

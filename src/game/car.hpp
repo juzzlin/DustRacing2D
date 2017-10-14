@@ -20,7 +20,6 @@
 #include <MCObject>
 #include <MCVector2d>
 
-#include "updateableif.hpp"
 #include "carparticleeffectmanager.hpp"
 #include "carsoundeffectmanager.hpp"
 
@@ -31,7 +30,7 @@ class MCFrictionGenerator;
 class Route;
 
 //! Base class for race cars.
-class Car : public MCObject, public UpdateableIf
+class Car : public MCObject
 {
 public:
 
@@ -112,12 +111,6 @@ public:
     //! \reimp
     virtual void onStepTime(int ms) override;
 
-    //! \reimp
-    virtual bool update() override;
-
-    //! \reimp
-    virtual void reset() override;
-
     void setLeftSideOffTrack(bool state);
 
     bool leftSideOffTrack() const;
@@ -187,6 +180,10 @@ private:
     void initForceGenerators(Description & desc);
 
     void setProperties(Description & desc);
+
+    void updateAnimations();
+
+    void updateTireWear(int step);
 
     void wearOutTires(int step, MCFloat factor);
 

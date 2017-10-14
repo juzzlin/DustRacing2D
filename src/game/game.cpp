@@ -101,7 +101,6 @@ Game::Game(int & argc, char ** argv)
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
         m_stateMachine->update();
         m_scene->updateFrame(*m_inputHandler, m_timeStep);
-        m_scene->updateAnimations();
         m_scene->updateOverlays();
         m_renderer->renderNow();
     });

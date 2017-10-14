@@ -315,19 +315,6 @@ void Scene::updateOverlays()
     m_messageOverlay->update();
 }
 
-void Scene::updateAnimations()
-{
-    for (auto && car : m_cars)
-    {
-        car->update();
-    }
-
-    for (auto && treeView : m_treeViews)
-    {
-        treeView->update();
-    }
-}
-
 void Scene::updateWorld(float timeStep)
 {
     // Step time
@@ -504,8 +491,6 @@ void Scene::createNormalObjects()
 {
     assert(m_activeTrack);
 
-    m_treeViews.clear();
-
     for (unsigned int i = 0; i < m_activeTrack->trackData().objects().count(); i++)
     {
         auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
@@ -516,11 +501,7 @@ void Scene::createNormalObjects()
         mcObject.translate(mcObject.initialLocation());
         mcObject.rotate(mcObject.initialAngle());
 
-        if (auto treeView = dynamic_pointer_cast<TreeView>(mcObject.shape()->view()))
-        {
-            m_treeViews.push_back(treeView);
-        }
-        else if (auto pit = dynamic_cast<Pit *>(&mcObject))
+        if (auto pit = dynamic_cast<Pit *>(&mcObject))
         {
             connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
         }

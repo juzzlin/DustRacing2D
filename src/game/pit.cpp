@@ -17,6 +17,9 @@
 #include "car.hpp"
 
 #include <MCCollisionEvent>
+#include <MCPhysicsComponent>
+#include <MCShape>
+#include <MCShapeView>
 #include <MCSurface>
 
 Pit::Pit(MCSurface & surface)
@@ -32,9 +35,9 @@ Pit::Pit(MCSurface & surface)
 void Pit::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
-    static MCUint carType = MCObject::typeID("car");
+    static MCUint carType = MCObject::typeId("car");
 
-    if (event.collidingObject().typeID() == carType)
+    if (event.collidingObject().typeId() == carType)
     {
         Car & car = static_cast<Car &>(event.collidingObject());
         if (car.isHuman() && car.speedInKmh() < 25)

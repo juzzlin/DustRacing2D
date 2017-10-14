@@ -284,7 +284,7 @@ void Car::render(MCCamera *p)
     }
 }
 
-bool Car::update()
+void Car::updateAnimations()
 {
     m_particleEffectManager.update();
 
@@ -296,12 +296,54 @@ bool Car::update()
     const float offset = 5.0f;
     m_leftFrontTire->rotateRelative(m_tireAngle - offset);
     m_rightFrontTire->rotateRelative(m_tireAngle + offset);
-
-    return true;
 }
 
-void Car::reset()
+void Car::updateTireWear(int step)
 {
+    // Cache dx and dy.
+    m_dx = MCTrigonom::cos(angle());
+    m_dy = MCTrigonom::sin(angle());
+
+    // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
+    m_absSpeed   = physicsComponent().speed();
+    m_speedInKmh = m_absSpeed * 3.6 * 2.5;
+
+    if (m_isHuman)
+    {
+        if (m_braking || (m_accelerating && m_steer != Steer::Neutral))
+        {
+            const float brakingTireWearFactor = 0.05f;
+            wearOutTires(step, brakingTireWearFactor);
+        }
+
+        const float offTrackTireWearFactor = 0.10f;
+
+        if (m_leftSideOffTrack)
+        {
+            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(true);
+
+            wearOutTires(step, offTrackTireWearFactor);
+        }
+        else
+        {
+            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(false);
+        }
+
+        if (m_rightSideOffTrack)
+        {
+            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(true);
+            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(true);
+
+            wearOutTires(step, offTrackTireWearFactor);
+        }
+        else
+        {
+            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(false);
+            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(false);
+        }
+    }
 }
 
 void Car::collisionEvent(MCCollisionEvent & event)
@@ -391,50 +433,9 @@ bool Car::hadHardCrash()
 
 void Car::onStepTime(int step)
 {
-    // Cache dx and dy.
-    m_dx = MCTrigonom::cos(angle());
-    m_dy = MCTrigonom::sin(angle());
+    updateAnimations();
 
-    // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
-    m_absSpeed   = physicsComponent().speed();
-    m_speedInKmh = m_absSpeed * 3.6 * 2.5;
-
-    if (m_isHuman)
-    {
-        if (m_braking || (m_accelerating && m_steer != Steer::Neutral))
-        {
-            const float brakingTireWearFactor = 0.05f;
-            wearOutTires(step, brakingTireWearFactor);
-        }
-
-        const float offTrackTireWearFactor = 0.10f;
-
-        if (m_leftSideOffTrack)
-        {
-            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(true);
-            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(true);
-
-            wearOutTires(step, offTrackTireWearFactor);
-        }
-        else
-        {
-            static_pointer_cast<Tire>(m_leftFrontTire)->setIsOffTrack(false);
-            static_pointer_cast<Tire>(m_leftRearTire)->setIsOffTrack(false);
-        }
-
-        if (m_rightSideOffTrack)
-        {
-            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(true);
-            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(true);
-
-            wearOutTires(step, offTrackTireWearFactor);
-        }
-        else
-        {
-            static_pointer_cast<Tire>(m_rightFrontTire)->setIsOffTrack(false);
-            static_pointer_cast<Tire>(m_rightRearTire)->setIsOffTrack(false);
-        }
-    }
+    updateTireWear(step);
 }
 
 void Car::setLeftSideOffTrack(bool state)

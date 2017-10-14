@@ -152,7 +152,7 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
     if (m_car.physicsComponent().velocity().lengthFast() > 4.0f)
     {
         // Check if the car is colliding with another car.
-        if (event.collidingObject().typeID() == m_car.typeID())
+        if (event.collidingObject().typeId() == m_car.typeId())
         {
             if (++m_sparkleCounter >= 10)
             {
@@ -165,12 +165,12 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
         }
         // Check if the car is colliding with hard stationary objects.
         else if (
-            event.collidingObject().typeID() == MCObject::typeID("crate")              ||
-            event.collidingObject().typeID() == MCObject::typeID("dustRacing2DBanner") ||
-            event.collidingObject().typeID() == MCObject::typeID("grandstand")         ||
-            event.collidingObject().typeID() == MCObject::typeID("wall")               ||
-            event.collidingObject().typeID() == MCObject::typeID("wallLong")           ||
-            event.collidingObject().typeID() == MCObject::typeID("rock"))
+            event.collidingObject().typeId() == MCObject::typeId("crate")              ||
+            event.collidingObject().typeId() == MCObject::typeId("dustRacing2DBanner") ||
+            event.collidingObject().typeId() == MCObject::typeId("grandstand")         ||
+            event.collidingObject().typeId() == MCObject::typeId("wall")               ||
+            event.collidingObject().typeId() == MCObject::typeId("wallLong")           ||
+            event.collidingObject().typeId() == MCObject::typeId("rock"))
         {
             if (++m_sparkleCounter >= 10)
             {
@@ -181,7 +181,7 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
                 m_sparkleCounter = 0;
             }
         }
-        else if (event.collidingObject().typeID() == MCObject::typeID("tree"))
+        else if (event.collidingObject().typeId() == MCObject::typeId("tree"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
                 event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);

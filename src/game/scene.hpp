@@ -80,9 +80,6 @@ public:
     //! Update physics and objects by the given time step in ms.
     void updateFrame(InputHandler & handler, int step);
 
-    //! Update/trigger animations.
-    void updateAnimations();
-
     //! Update HUD overlays.
     void updateOverlays();
 
@@ -163,9 +160,6 @@ private:
 
     using AIVector = std::vector<AIPtr>;
     AIVector m_ai;
-
-    // TreeViews need to be separately updated.
-    std::vector<TreeViewPtr> m_treeViews;
 
     // Bridges
     std::vector<MCObjectPtr> m_bridges;

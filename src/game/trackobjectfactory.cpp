@@ -19,7 +19,7 @@
 #include "pit.hpp"
 #include "renderer.hpp"
 #include "trackobject.hpp"
-#include "treeview.hpp"
+#include "tree.hpp"
 
 #include <MCAssetManager>
 #include <MCLogger>
@@ -156,11 +156,6 @@ TrackObject * TrackObjectFactory::build(
         object = MCObjectPtr(new Pit(MCAssetManager::surfaceManager().surface("pit")));
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
-        object->physicsComponent().setMass(1, true); // Stationary
-        object->setIsPhysicsObject(false);
-        object->setIsTriggerObject(true);
-        object->shape()->view()->setHasShadow(false);
-        object->shape()->view()->setBatchMode(true);
     }
     else if (role == "tire")
     {
@@ -182,26 +177,9 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "tree")
     {
-        const MCFloat treeViewRadius = 48;
-        const MCFloat treeBodyRadius = 8;
-
-        MCSurfaceObjectData data(role.toStdString());
-        data.setInitialLocation(location);
-        data.setInitialAngle(angle);
-        data.setBatchMode(true);
-        data.setXYFriction(1.0);
-        data.setIsStationary(true);
-        data.setRestitution(0.25);
-        data.setShapeWidth(treeBodyRadius);
-        data.setShapeHeight(treeBodyRadius);
-
-        // Create a custom view.
-        MCShapeViewPtr view(new TreeView(
-            MCAssetManager::surfaceManager().surface("tree"), treeViewRadius, 2, 120, 5));
-        MCObjectPtr object = m_objectFactory.build(data, view);
-
-        // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, object);
+        object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"), 1.75f, 0.2f, 200, 8));
+        object->setInitialLocation(location);
+        object->setInitialAngle(angle);
     }
     else if (role == "wall" || role == "wallLong")
     {
