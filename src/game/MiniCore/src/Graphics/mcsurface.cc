@@ -161,9 +161,7 @@ void MCSurface::init(std::string handle, MCGLMaterialPtr material, MCFloat width
     m_src            = GL_SRC_ALPHA;
     m_dst            = GL_ONE_MINUS_SRC_ALPHA;
     m_color          = MCGLColor(1.0, 1.0, 1.0, 1.0);
-    m_sx             = 1.0;
-    m_sy             = 1.0;
-    m_sz             = 1.0;
+    m_scale          = MCVector3dF(1.0f, 1.0f, 1.0f);
 }
 
 void MCSurface::initVBOs()
@@ -221,17 +219,15 @@ void MCSurface::setColor(const MCGLColor & color)
     m_color = color;
 }
 
-void MCSurface::setScale(MCFloat x, MCFloat y, MCFloat z)
+void MCSurface::setScale(const MCVector3dF & scale)
 {
-    m_sx = x;
-    m_sy = y;
-    m_sz = z;
+    m_scale = scale;
 }
 
 void MCSurface::setSize(MCFloat w, MCFloat h)
 {
-    m_sx = w / m_w;
-    m_sy = h / m_h;
+    m_scale.setI(w / m_w);
+    m_scale.setJ(h / m_h);
 }
 
 void MCSurface::bind()
@@ -280,7 +276,7 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
     {
         bind();
 
-        shaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
         shaderProgram()->setColor(m_color);
         shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
@@ -290,7 +286,7 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
     }
     else
     {
-        shaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
         shaderProgram()->setColor(m_color);
         shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
@@ -312,7 +308,7 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle,
     {
         bindShadow();
 
-        shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
         shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
         render();
@@ -321,7 +317,7 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle,
     }
     else
     {
-        shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+        shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
         shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
         render();

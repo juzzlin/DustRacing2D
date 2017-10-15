@@ -107,7 +107,7 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
         {
             if (row < litRows || glowAlways)
             {
-                m_startLightGlow.setScale(glowScale, glowScale, 1.0);
+                m_startLightGlow.setScale(MCVector3dF(glowScale, glowScale, 1.0f));
                 m_startLightGlow.render(
                     nullptr,
                     MCVector3dF(

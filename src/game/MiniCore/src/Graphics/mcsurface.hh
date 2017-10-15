@@ -115,9 +115,9 @@ public:
     void setColor(const MCGLColor & color);
 
     //! Set scaling factors.
-    void setScale(MCFloat x, MCFloat y, MCFloat z);
+    void setScale(const MCVector3dF & scale);
 
-    //! Set texture size.
+    //! Set texture size. Actually this just calculates the corresponding scale.
     void setSize(MCFloat w, MCFloat h);
 
     /*! Render by using the default size.
@@ -187,7 +187,7 @@ private:
 
     MCGLColor m_color;
 
-    MCFloat m_sx, m_sy, m_sz;
+    MCVector3dF m_scale;
 };
 
 #endif // MCSURFACE_HH
