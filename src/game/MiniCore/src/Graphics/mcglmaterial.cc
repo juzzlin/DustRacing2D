@@ -22,6 +22,9 @@
 
 MCGLMaterial::MCGLMaterial()
     : m_specularCoeff(1.0)
+    , m_useAlphaBlend(false)
+    , m_src(GL_SRC_ALPHA)
+    , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {
     for (unsigned int i = 0; i < MAX_TEXTURES; i++)
     {
@@ -50,3 +53,24 @@ GLfloat MCGLMaterial::specularCoeff() const
 {
     return m_specularCoeff;
 }
+
+void MCGLMaterial::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
+{
+    m_useAlphaBlend = useAlphaBlend;
+    m_src           = src;
+    m_dst           = dst;
+}
+
+void MCGLMaterial::doAlphaBlend()
+{
+    if (m_useAlphaBlend)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(m_src, m_dst);
+    }
+    else
+    {
+        glDisable(GL_BLEND);
+    }
+}
+

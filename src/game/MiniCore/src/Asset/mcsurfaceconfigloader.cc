@@ -106,14 +106,25 @@ void MCSurfaceConfigLoader::parseAttributes(const QDomElement & element, Surface
         newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, specularCoeff > 1.0f);
     }
 }
-
+#include <iostream>
 void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPtr newData)
 {
     // Read child nodes of surface node.
     QDomNode childNode = node.firstChild();
     while (!childNode.isNull())
     {
-        if (childNode.nodeName() == "colorKey")
+        if (childNode.nodeName() == "color")
+        {
+            const QDomElement element = childNode.toElement();
+            if (!element.isNull())
+            {
+                newData->color.setR(element.attribute("r", "1").toFloat());
+                newData->color.setG(element.attribute("g", "1").toFloat());
+                newData->color.setB(element.attribute("b", "1").toFloat());
+                newData->color.setA(element.attribute("a", "1").toFloat());
+            }
+        }
+        else if (childNode.nodeName() == "colorKey")
         {
             const QDomElement element = childNode.toElement();
             if (!element.isNull())

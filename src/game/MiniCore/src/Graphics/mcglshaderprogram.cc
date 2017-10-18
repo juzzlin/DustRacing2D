@@ -450,6 +450,8 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
 {
     assert(material);
 
+    material->doAlphaBlend();
+
     const GLuint texture1 = material->texture(0);
     const GLuint texture2 = material->texture(1);
     const GLuint texture3 = material->texture(2);

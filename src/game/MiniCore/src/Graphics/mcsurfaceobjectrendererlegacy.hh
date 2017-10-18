@@ -68,6 +68,8 @@ private:
 
     MCGLColor * m_colors;
 
+    MCSurface * m_surface;
+
     friend class MCWorldRenderer;
 };
 

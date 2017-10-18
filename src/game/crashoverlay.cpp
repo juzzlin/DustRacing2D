@@ -26,7 +26,7 @@ CrashOverlay::CrashOverlay()
     , m_car(nullptr)
     , m_isTriggered(false)
 {
-    m_surface.setAlphaBlend(true);
+    m_surface.material()->setAlphaBlend(true);
 }
 
 void CrashOverlay::setDimensions(int width, int height)

@@ -150,18 +150,14 @@ void MCSurface::init(std::string handle, MCGLMaterialPtr material, MCFloat width
 {
     setMaterial(material);
 
-    m_handle         = handle;
-    m_w              = width;
-    m_w2             = width / 2;
-    m_h              = height;
-    m_h2             = height / 2;
-    m_minZ           = 0;
-    m_maxZ           = 0;
-    m_useAlphaBlend  = false;
-    m_src            = GL_SRC_ALPHA;
-    m_dst            = GL_ONE_MINUS_SRC_ALPHA;
-    m_color          = MCGLColor(1.0, 1.0, 1.0, 1.0);
-    m_scale          = MCVector3dF(1.0f, 1.0f, 1.0f);
+    m_handle = handle;
+    m_w = width;
+    m_w2 = width / 2;
+    m_h = height;
+    m_h2 = height / 2;
+    m_minZ = 0;
+    m_maxZ = 0;
+    m_scale = MCVector3dF(1.0f, 1.0f, 1.0f);
 }
 
 void MCSurface::initVBOs()
@@ -178,22 +174,6 @@ void MCSurface::initVBOs()
         MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, colorsAsGlArray());
 
     finishBufferData();
-}
-
-void MCSurface::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
-{
-    m_useAlphaBlend = useAlphaBlend;
-    m_src           = src;
-    m_dst           = dst;
-}
-
-void MCSurface::doAlphaBlend()
-{
-    if (m_useAlphaBlend)
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(m_src, m_dst);
-    }
 }
 
 void MCSurface::updateTexCoords(const MCGLTexCoord texCoords[4])
@@ -214,11 +194,6 @@ void MCSurface::updateTexCoords(const MCGLTexCoord texCoords[4])
         GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
 }
 
-void MCSurface::setColor(const MCGLColor & color)
-{
-    m_color = color;
-}
-
 void MCSurface::setScale(const MCVector3dF & scale)
 {
     m_scale = scale;
@@ -228,32 +203,6 @@ void MCSurface::setSize(MCFloat w, MCFloat h)
 {
     m_scale.setI(w / m_w);
     m_scale.setJ(h / m_h);
-}
-
-void MCSurface::bind()
-{
-    MCGLObjectBase::bind();
-
-    doAlphaBlend();
-}
-
-void MCSurface::bindShadow()
-{
-    MCGLObjectBase::bindShadow();
-}
-
-void MCSurface::release()
-{
-    MCGLObjectBase::release();
-
-    if (m_useAlphaBlend)
-    {
-        glDisable(GL_BLEND);
-    }
-}
-
-void MCSurface::releaseShadow()
-{
 }
 
 void MCSurface::render()
@@ -275,22 +224,17 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
     if (autoBind)
     {
         bind();
-
-        shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-        shaderProgram()->setColor(m_color);
-        shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
-
-        render();
-
-        release();
     }
-    else
-    {
-        shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-        shaderProgram()->setColor(m_color);
-        shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
-        render();
+    shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
+    shaderProgram()->setColor(color());
+    shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+
+    render();
+
+    if (autoBind)
+    {
+        release();
     }
 }
 
@@ -307,20 +251,16 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle,
     if (autoBind)
     {
         bindShadow();
-
-        shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-        shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
-
-        render();
-
-        releaseShadow();
     }
-    else
-    {
-        shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-        shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
-        render();
+    shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
+    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
+
+    render();
+
+    if (autoBind)
+    {
+        releaseShadow();
     }
 }
 

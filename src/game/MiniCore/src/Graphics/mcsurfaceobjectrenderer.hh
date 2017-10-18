@@ -28,6 +28,7 @@
 
 #include <vector>
 
+class MCSurface;
 class MCSurfaceObject;
 class MCCamera;
 class MCObject;
@@ -66,7 +67,9 @@ private:
 
     MCGLTexCoord * m_texCoords;
 
-    MCGLColor * m_colors;
+    MCGLColor * m_colors; // Vertex colors
+
+    MCSurface * m_surface;
 
     friend class MCWorldRenderer;
 };

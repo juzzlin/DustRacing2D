@@ -39,6 +39,7 @@ MCSurfaceObjectRendererLegacy::MCSurfaceObjectRendererLegacy(int maxBatchSize)
     , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
     , m_texCoords(new MCGLTexCoord[maxBatchSize * NUM_VERTICES_PER_SURFACE])
     , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+    , m_surface(nullptr)
 {
 }
 
@@ -58,12 +59,12 @@ void MCSurfaceObjectRendererLegacy::setBatch(MCObjectRendererBase::ObjectVector 
     MCSurfaceView * view = dynamic_cast<MCSurfaceView *>(object->shape()->view().get());
     assert(view);
 
-    MCSurface * surface = view->surface();
+    m_surface = view->surface();
 
-    setShaderProgram(surface->shaderProgram());
-    setShadowShaderProgram(surface->shadowShaderProgram());
+    setShaderProgram(m_surface->shaderProgram());
+    setShadowShaderProgram(m_surface->shadowShaderProgram());
 
-    setMaterial(surface->material());
+    setMaterial(m_surface->material());
     setHasShadow(view->hasShadow());
 
     int vertexIndex = 0;
@@ -95,18 +96,18 @@ void MCSurfaceObjectRendererLegacy::setBatch(MCObjectRendererBase::ObjectVector 
         {
             for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
             {
-                m_colors[vertexIndex] = surface->color(j);
+                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
 
-                auto vertex = surface->vertex(j);
+                auto vertex = m_surface->vertex(j);
                 m_vertices[vertexIndex] =
                         MCGLVertex(
                             x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
                             y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
                             z + vertex.z());
 
-                m_normals[vertexIndex] = surface->normal(j);
+                m_normals[vertexIndex] = m_surface->normal(j);
 
-                m_texCoords[vertexIndex] = surface->texCoord(j);
+                m_texCoords[vertexIndex] = m_surface->texCoord(j);
 
                 vertexIndex++;
             }
@@ -115,18 +116,18 @@ void MCSurfaceObjectRendererLegacy::setBatch(MCObjectRendererBase::ObjectVector 
         {
             for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
             {
-                m_colors[vertexIndex] = surface->color(j);
+                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
 
-                auto vertex = surface->vertex(j);
+                auto vertex = m_surface->vertex(j);
                 m_vertices[vertexIndex] =
                         MCGLVertex(
                             x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
                             y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
                             z);
 
-                m_normals[vertexIndex] = surface->normal(j);
+                m_normals[vertexIndex] = m_surface->normal(j);
 
-                m_texCoords[vertexIndex] = surface->texCoord(j);
+                m_texCoords[vertexIndex] = m_surface->texCoord(j);
 
                 vertexIndex++;
             }
@@ -150,18 +151,12 @@ void MCSurfaceObjectRendererLegacy::render()
 {
     assert(shaderProgram());
 
-    if (useAlphaBlend())
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(alphaSrc(), alphaDst());
-    }
-
     shaderProgram()->bind();
     shaderProgram()->bindMaterial(material());
 
     shaderProgram()->setTransform(0, MCVector3dF(0, 0, 1));
     shaderProgram()->setScale(1.0f, 1.0f, 1.0f);
-    shaderProgram()->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
+    shaderProgram()->setColor(m_surface->color());
 
     // Be sure active VBO is disabled because we are using client-side arrays here for dynamic data
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -170,7 +165,6 @@ void MCSurfaceObjectRendererLegacy::render()
     setAttributePointers();
 
     glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-    glDisable(GL_BLEND);
 }
 
 void MCSurfaceObjectRendererLegacy::renderShadows()

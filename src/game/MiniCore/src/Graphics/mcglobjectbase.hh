@@ -92,52 +92,69 @@ public:
     //! Get material if set.
     MCGLMaterialPtr material() const;
 
-    template <typename T>
-    using Container = std::vector<T>;
-    using VertexVector = Container<MCGLVertex>;
-    void setVertices(const VertexVector & vertices);
-
+    //! Get vertex
     const MCGLVertex & vertex(int index) const;
 
+    //! Get vertices
     const GLfloat * verticesAsGlArray() const;
 
     int vertexCount() const;
-
-    //! Store a normal, needed for batching
-    void addNormal(const MCGLVertex & normal);
-
-    void setNormals(const VertexVector & normals);
 
     const MCGLVertex & normal(int index) const;
 
     const GLfloat * normalsAsGlArray() const;
 
-    //! Store a color, needed for batching
-    void addColor(const MCGLColor & color);
+    //! Set mesh color.
+    void setColor(const MCGLColor & color);
 
-    using ColorVector = Container<MCGLColor>;
-    void setColors(const ColorVector & colors);
+    //! Get mesh color.
+    MCGLColor color() const;
 
+    //! Get a vertex color, needed for batching
     const MCGLColor & color(int index) const;
 
+    //! Get a vertex colors
     const GLfloat * colorsAsGlArray() const;
 
-    //! Store a tex coord, needed for batching
-    void addTexCoord(const MCGLTexCoord & texCoord);
-
-    using TexCoordVector = Container<MCGLTexCoord>;
-    void setTexCoords(const TexCoordVector & texCoords);
-
+    //! Get texture coord of a vertex
     const MCGLTexCoord & texCoord(int index) const;
 
+    //! Get texture coords
     const GLfloat * texCoordsAsGlArray() const;
 
 protected:
 
-    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
-
     //! Store a vertex, needed for batching
     void addVertex(const MCGLVertex & vertex);
+
+    //! Set vertices
+    template <typename T>
+    using Container = std::vector<T>;
+    using VertexVector = Container<MCGLVertex>;
+    void setVertices(const VertexVector & vertices);
+
+    //! Store a normal, needed for batching
+    void addNormal(const MCGLVertex & normal);
+
+    //! Set normals
+    void setNormals(const VertexVector & normals);
+
+    //! Store a tex coord, needed for batching
+    void addTexCoord(const MCGLTexCoord & texCoord);
+
+    //! Set texture coords
+    using TexCoordVector = Container<MCGLTexCoord>;
+    void setTexCoords(const TexCoordVector & texCoords);
+
+    //! Store a vertex color, needed for batching
+    void addColor(const MCGLColor & color);
+
+    //! Set vertex colors
+    using ColorVector = Container<MCGLColor>;
+    void setColors(const ColorVector & colors);
+
+    //! This should be called after setting vertices, texture coords, normals and colors
+    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
 
     void addBufferSubData(
         MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);
@@ -195,6 +212,8 @@ private:
     std::vector<MCGLTexCoord> m_texCoords;
 
     std::vector<MCGLColor> m_colors;
+
+    MCGLColor m_color;
 
     friend class MCGLRectParticle; // Direct access to protected methods without inheritance
 };

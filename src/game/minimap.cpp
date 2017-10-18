@@ -31,7 +31,7 @@ Minimap::Minimap()
     : m_markerSurface(&GraphicsFactory::generateMinimapMarker())
 {
     m_markerSurface->setShaderProgram(Renderer::instance().program("default"));
-    m_markerSurface->setAlphaBlend(true);
+    m_markerSurface->material()->setAlphaBlend(true);
 }
 
 Minimap::Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, int size)

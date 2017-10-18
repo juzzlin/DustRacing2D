@@ -43,11 +43,31 @@ public:
     //! \return coefficient for specular lighting.
     GLfloat specularCoeff() const;
 
+    /*! Enable / disable alpha blend.
+     *  \param useAlphaBlend Alpha blending is enabled if true.
+     *  \param src Source alpha function used in the alpha blending. Has no effect
+     *         if useAlphaBlend equals false.
+     *  \param dst Destination alpha function used in the alpha blending. Has no effect
+     *         if useAlphaBlend equals false. */
+    void setAlphaBlend(bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
+
+    /*! Runs the corresponding GL-commands defined in setAlphaBlend().
+     *  This is done automatically, but doAlphaBlend() can be used if
+     *  someone else renders the surface by using the texture
+     *  handle and wants to run the configured alpha blending. */
+    void doAlphaBlend();
+
 private:
 
     GLuint m_textures[MAX_TEXTURES];
 
     GLfloat m_specularCoeff;
+
+    bool m_useAlphaBlend;
+
+    GLenum m_src;
+
+    GLenum m_dst;
 };
 
 typedef std::shared_ptr<MCGLMaterial> MCGLMaterialPtr;

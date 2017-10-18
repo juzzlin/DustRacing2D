@@ -89,6 +89,8 @@ void MCGLObjectBase::releaseVAO()
     {
         m_vao.release();
     }
+#else
+    glBindVertexArray(0);
 #endif
 }
 
@@ -131,11 +133,7 @@ void MCGLObjectBase::bind()
     if (shaderProgram())
     {
         shaderProgram()->bind();
-
-        if (m_material)
-        {
-            shaderProgram()->bindMaterial(m_material);
-        }
+        shaderProgram()->bindMaterial(m_material);
 
         bindVBO();
         bindVAO();
@@ -152,11 +150,7 @@ void MCGLObjectBase::bindShadow()
     if (shadowShaderProgram())
     {
         shadowShaderProgram()->bind();
-
-        if (m_material)
-        {
-            shadowShaderProgram()->bindMaterial(m_material);
-        }
+        shadowShaderProgram()->bindMaterial(m_material);
 
         bindVBO();
         bindVAO();
@@ -246,6 +240,16 @@ const MCGLVertex & MCGLObjectBase::normal(int index) const
 const GLfloat * MCGLObjectBase::normalsAsGlArray() const
 {
     return reinterpret_cast<const GLfloat *>(&m_normals[0]);
+}
+
+void MCGLObjectBase::setColor(const MCGLColor & color)
+{
+    m_color = color;
+}
+
+MCGLColor MCGLObjectBase::color() const
+{
+    return m_color;
 }
 
 void MCGLObjectBase::addColor(const MCGLColor & color)

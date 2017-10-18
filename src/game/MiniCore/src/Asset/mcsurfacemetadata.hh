@@ -24,6 +24,7 @@
 #include "mcvector2d.hh"
 
 #include <MCGLEW> // For GLenum
+#include <MCGLColor>
 #include <map>
 #include <string>
 
@@ -47,6 +48,9 @@ struct MCSurfaceMetaData
 
     //! Width
     std::pair<int, bool> width;
+
+    //! Color
+    MCGLColor color;
 
     //! Possible colorkey setting
     struct ColorKey

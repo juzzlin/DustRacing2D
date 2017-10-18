@@ -25,7 +25,6 @@
 #include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcbbox.hh"
-#include "mcglcolor.hh"
 #include "mcglobjectbase.hh"
 #include "mcglmaterial.hh"
 #include "mcvector2d.hh"
@@ -94,25 +93,8 @@ public:
 
     const std::string & handle() const;
 
-    /*! Enable / disable alpha blend.
-     *  \param useAlphaBlend Alpha blending is enabled if true.
-     *  \param src Source alpha function used in the alpha blending. Has no effect
-     *         if useAlphaBlend equals false.
-     *  \param dst Destination alpha function used in the alpha blending. Has no effect
-     *         if useAlphaBlend equals false. */
-    void setAlphaBlend(bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
-
-    /*! Runs the corresponding GL-commands defined in setAlphaBlend().
-     *  This is done automatically, but doAlphaBlend() can be used if
-     *  someone else renders the surface by using the texture
-     *  handle and wants to run the configured alpha blending. */
-    void doAlphaBlend();
-
     //! Update texture coordinates.
     void updateTexCoords(const MCGLTexCoord texCoords[4]);
-
-    //! Set color.
-    void setColor(const MCGLColor & color);
 
     //! Set scaling factors.
     void setScale(const MCVector3dF & scale);
@@ -144,18 +126,6 @@ public:
     //! Get maximum Z
     MCFloat maxZ() const;
 
-    //! \reimp
-    virtual void bind() override;
-
-    //! \reimp
-    virtual void bindShadow() override;
-
-    //! \reimp
-    virtual void release() override;
-
-    //! \reimp
-    virtual void releaseShadow() override;
-
 private:
 
     DISABLE_COPY(MCSurface);
@@ -178,14 +148,6 @@ private:
     MCFloat m_minZ;
 
     MCFloat m_maxZ;
-
-    bool m_useAlphaBlend;
-
-    GLenum m_src;
-
-    GLenum m_dst;
-
-    MCGLColor m_color;
 
     MCVector3dF m_scale;
 };

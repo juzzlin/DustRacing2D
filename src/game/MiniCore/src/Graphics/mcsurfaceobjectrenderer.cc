@@ -39,6 +39,7 @@ MCSurfaceObjectRenderer::MCSurfaceObjectRenderer(int maxBatchSize)
     , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
     , m_texCoords(new MCGLTexCoord[maxBatchSize * NUM_VERTICES_PER_SURFACE])
     , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+    , m_surface(nullptr)
 {
     const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_SURFACE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -83,12 +84,12 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
     MCSurfaceView * view = dynamic_cast<MCSurfaceView *>(object->shape()->view().get());
     assert(view);
 
-    MCSurface * surface = view->surface();
+    m_surface = view->surface();
 
-    setShaderProgram(surface->shaderProgram());
-    setShadowShaderProgram(surface->shadowShaderProgram());
+    setShaderProgram(m_surface->shaderProgram());
+    setShadowShaderProgram(m_surface->shadowShaderProgram());
 
-    setMaterial(surface->material());
+    setMaterial(m_surface->material());
     setHasShadow(view->hasShadow());
 
     int vertexIndex = 0;
@@ -120,18 +121,18 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
         {
             for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
             {
-                m_colors[vertexIndex] = surface->color(j);
+                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
 
-                auto vertex = surface->vertex(j);
+                auto vertex = m_surface->vertex(j);
                 m_vertices[vertexIndex] =
                         MCGLVertex(
                             x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
                             y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
                             z + vertex.z());
 
-                m_normals[vertexIndex] = surface->normal(j);
+                m_normals[vertexIndex] = m_surface->normal(j);
 
-                m_texCoords[vertexIndex] = surface->texCoord(j);
+                m_texCoords[vertexIndex] = m_surface->texCoord(j);
 
                 vertexIndex++;
             }
@@ -140,18 +141,18 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
         {
             for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
             {
-                m_colors[vertexIndex] = surface->color(j);
+                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
 
-                auto vertex = surface->vertex(j);
+                auto vertex = m_surface->vertex(j);
                 m_vertices[vertexIndex] =
                         MCGLVertex(
                             x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
                             y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
                             z);
 
-                m_normals[vertexIndex] = surface->normal(j);
+                m_normals[vertexIndex] = m_surface->normal(j);
 
-                m_texCoords[vertexIndex] = surface->texCoord(j);
+                m_texCoords[vertexIndex] = m_surface->texCoord(j);
 
                 vertexIndex++;
             }
@@ -183,21 +184,15 @@ void MCSurfaceObjectRenderer::render()
 {
     assert(shaderProgram());
 
-    if (useAlphaBlend())
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(alphaSrc(), alphaDst());
-    }
+    bind();
 
-    shaderProgram()->bind();
-    shaderProgram()->bindMaterial(material());
+    material()->doAlphaBlend();
 
     shaderProgram()->setTransform(0, MCVector3dF(0, 0, 1));
     shaderProgram()->setScale(1.0f, 1.0f, 1.0f);
-    shaderProgram()->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
+    shaderProgram()->setColor(m_surface->color());
 
     glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_SURFACE);
-    glDisable(GL_BLEND);
 
     releaseVBO();
     releaseVAO();
@@ -207,8 +202,7 @@ void MCSurfaceObjectRenderer::renderShadows()
 {
     assert(shadowShaderProgram());
 
-    shadowShaderProgram()->bind();
-    shadowShaderProgram()->bindMaterial(material());
+    bindShadow();
 
     shadowShaderProgram()->setTransform(0, MCVector3dF(0, 0, 0));
     shadowShaderProgram()->setScale(1.0f, 1.0f, 1.0f);

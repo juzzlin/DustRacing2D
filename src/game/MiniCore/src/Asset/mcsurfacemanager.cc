@@ -194,6 +194,9 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
     MCSurface * surface =
         new MCSurface(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
+    // Maybe better place for this could be in the material?
+    surface->setColor(data.color);
+
     assert(surface);
     createSurfaceCommon(*surface, data);
 
@@ -203,7 +206,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
 void MCSurfaceManager::createSurfaceCommon(MCSurface & surface, const MCSurfaceMetaData & data)
 {
     // Enable alpha blend, if set
-    surface.setAlphaBlend(
+    surface.material()->setAlphaBlend(
         data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Store MCSurface to map

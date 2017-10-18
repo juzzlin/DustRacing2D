@@ -29,8 +29,8 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 , m_model(model)
 , m_alpha(1.0)
 {
-    m_startLightOff.setAlphaBlend(true);
-    m_startLightOffCorner.setAlphaBlend(true);
+    m_startLightOff.material()->setAlphaBlend(true);
+    m_startLightOffCorner.material()->setAlphaBlend(true);
     m_startLightGlow.setColor(MCGLColor(1.5f, 0.25f, 0.25f, 0.4f));
 }
 
