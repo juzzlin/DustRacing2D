@@ -45,7 +45,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
         data.setMass(1000);
@@ -62,7 +61,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
 
@@ -74,7 +72,6 @@ TrackObject * TrackObjectFactory::build(
         MCMeshObjectData data(role.toStdString());
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 12));
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setMass(1000);
         data.setMeshId(role.toStdString());
@@ -88,7 +85,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
         data.setIsStationary(true);
@@ -105,7 +101,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
         data.setIsStationary(true);
@@ -120,7 +115,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
@@ -135,7 +129,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setMass(5000);
         data.setSurfaceId(role.toStdString());
@@ -151,7 +144,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());
 
@@ -176,7 +168,6 @@ TrackObject * TrackObjectFactory::build(
         data.setDefaultCircleShape(true);
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
         data.setMass(500); // Exaggerate the mass on purpose
@@ -217,7 +208,6 @@ TrackObject * TrackObjectFactory::build(
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
-        data.setBatchMode(true);
         data.setXYFriction(1.0);
         data.setIsStationary(true);
         data.setSurfaceId(role.toStdString());

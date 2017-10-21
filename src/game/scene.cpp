@@ -46,7 +46,6 @@
 #include "trackobject.hpp"
 #include "trackselectionmenu.hpp"
 #include "tracktile.hpp"
-#include "treeview.hpp"
 
 #include "../common/config.hpp"
 #include "../common/targetnodebase.hpp"

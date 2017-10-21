@@ -48,12 +48,6 @@ public:
     //! Returns true if default circle shape is wanted.
     bool defaultCirleShape() const;
 
-    //! Sets whether the surface is rendered in batch mode.
-    void setBatchMode(bool state);
-
-    //! Returns whether the surface is rendered in batch mode.
-    bool batchMode() const;
-
 private:
 
     DISABLE_COPY(MCSurfaceObjectData);
@@ -61,7 +55,6 @@ private:
 
     std::string m_surfaceId;
     bool        m_defaultCircleShape;
-    bool        m_batchMode;
 };
 
 #endif // MCSURFACEOBJECTDATA_HH

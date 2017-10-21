@@ -210,7 +210,7 @@ void MCSurface::render()
     glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
 }
 
-void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
+void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -221,10 +221,7 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
         camera->mapToCamera(x, y);
     }
 
-    if (autoBind)
-    {
-        bind();
-    }
+    bind();
 
     shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
     shaderProgram()->setColor(color());
@@ -232,13 +229,10 @@ void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool 
 
     render();
 
-    if (autoBind)
-    {
-        release();
-    }
+    release();
 }
 
-void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
+void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
 {
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -248,20 +242,14 @@ void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle,
         camera->mapToCamera(x, y);
     }
 
-    if (autoBind)
-    {
-        bindShadow();
-    }
+    bindShadow();
 
     shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
     shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
     render();
 
-    if (autoBind)
-    {
-        releaseShadow();
-    }
+    releaseShadow();
 }
 
 MCFloat MCSurface::width() const

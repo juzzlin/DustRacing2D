@@ -86,7 +86,6 @@ void Race::createStartGridObjects()
     for (int i = 0; i < m_numCars; i++)
     {
         MCSurfaceObjectData data("grid");
-        data.setBatchMode(true);
         data.setIsStationary(true);
         data.setSurfaceId("grid");
 

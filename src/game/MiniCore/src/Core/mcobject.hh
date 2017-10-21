@@ -74,9 +74,8 @@ public:
      *  \param surface Pointer to the (shared) surface to be used.
      *  MCObject won't take the ownership, because the same surface
      *  can be used to draw multiple objects and is managed by MCSurfaceManager.
-     *  \param typeName Type name string e.g. "CAR". All identical objects should have the same typeName.
-     *  \param batchMode \see MCShapeView::setBatchMode(). */
-    MCObject(MCSurface & surface, const std::string & typeName, bool batchMode = false);
+     *  \param typeName Type name string e.g. "CAR". All identical objects should have the same typeName. */
+    MCObject(MCSurface & surface, const std::string & typeName);
 
     //! Return integer id corresponding to the given object name.
     static MCUint getTypeIdForName(const std::string & typeName);

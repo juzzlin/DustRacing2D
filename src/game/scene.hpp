@@ -22,7 +22,6 @@
 #include "minimap.hpp"
 #include "race.hpp"
 #include "timingoverlay.hpp"
-#include "treeview.hpp"
 
 #include <QObject>
 #include <MCCamera>

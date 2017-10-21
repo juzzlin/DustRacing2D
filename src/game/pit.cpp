@@ -23,6 +23,10 @@ Pit::Pit(MCSurface & surface)
 : MCObject(surface, "pit")
 , m_tag(0)
 {
+    physicsComponent().setMass(1, true); // Stationary
+    setIsPhysicsObject(false);
+    setIsTriggerObject(true);
+    shape()->view()->setHasShadow(false);
 }
 
 void Pit::collisionEvent(MCCollisionEvent & event)

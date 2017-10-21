@@ -80,30 +80,30 @@ void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 
 void MCSurfaceView::render(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 {
-    m_surface->render(p, l, angle, !batchMode());
+    m_surface->render(p, l, angle);
 }
 
 void MCSurfaceView::renderShadow(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 {
-    m_surface->renderShadow(p, l, angle, !batchMode());
+    m_surface->renderShadow(p, l, angle);
 }
 
-void MCSurfaceView::beginBatch()
+void MCSurfaceView::bind()
 {
     m_surface->bind();
 }
 
-void MCSurfaceView::beginShadowBatch()
+void MCSurfaceView::bindShadow()
 {
     m_surface->bindShadow();
 }
 
-void MCSurfaceView::endBatch()
+void MCSurfaceView::release()
 {
     m_surface->release();
 }
 
-void MCSurfaceView::endShadowBatch()
+void MCSurfaceView::releaseShadow()
 {
     m_surface->releaseShadow();
 }

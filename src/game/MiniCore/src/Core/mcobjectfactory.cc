@@ -53,14 +53,13 @@ MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
         {
             object = new MCObject(data.typeId());
             view.reset(new MCSurfaceView(data.typeId(), &surface));
-            view->setBatchMode(data.batchMode());
             shape.reset(new MCCircleShape(view, std::max(surface.width(), surface.height()) / 2));
             object->setShape(shape);
         }
         // Rect shape according to surface dimensions (default)
         else
         {
-            object = new MCObject(surface, data.typeId(), data.batchMode());
+            object = new MCObject(surface, data.typeId());
         }
         break;
 
@@ -68,7 +67,6 @@ MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Circle:
         object = new MCObject(data.typeId());
         view.reset(new MCSurfaceView(data.typeId(), &surface));
-        view->setBatchMode(data.batchMode());
         shape.reset(new MCCircleShape(view, data.shapeRadius()));
         object->setShape(shape);
         break;
@@ -77,7 +75,6 @@ MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
     case MCObjectData::Rect:
         object = new MCObject(data.typeId());
         view.reset(new MCSurfaceView(data.typeId(), &surface));
-        view->setBatchMode(data.batchMode());
         shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
         object->setShape(shape);
         break;
@@ -105,7 +102,6 @@ MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
         {
             object = new MCObject(data.typeId());
             view.reset(new MCMeshView(data.typeId(), &mesh));
-            view->setBatchMode(data.batchMode());
             shape.reset(new MCCircleShape(view, std::max(mesh.width(), mesh.height()) / 2));
             object->setShape(shape);
         }
@@ -114,7 +110,6 @@ MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
         {
             object = new MCObject(data.typeId());
             view.reset(new MCMeshView(data.typeId(), &mesh));
-            view->setBatchMode(data.batchMode());
             shape.reset(new MCRectShape(view, mesh.width(), mesh.height()));
             object->setShape(shape);
         }
@@ -124,7 +119,6 @@ MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
     case MCObjectData::Circle:
         object = new MCObject(data.typeId());
         view.reset(new MCMeshView(data.typeId(), &mesh));
-        view->setBatchMode(data.batchMode());
         shape.reset(new MCCircleShape(view, data.shapeRadius()));
         object->setShape(shape);
         break;
@@ -133,7 +127,6 @@ MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
     case MCObjectData::Rect:
         object = new MCObject(data.typeId());
         view.reset(new MCMeshView(data.typeId(), &mesh));
-        view->setBatchMode(data.batchMode());
         shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
         object->setShape(shape);
         break;

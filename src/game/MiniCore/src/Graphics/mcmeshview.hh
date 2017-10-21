@@ -65,10 +65,16 @@ public:
     virtual const MCBBoxF & bbox() const override;
 
     //! \reimp
-    virtual void beginBatch() override;
+    virtual void bind() override;
 
     //! \reimp
-    virtual void beginShadowBatch() override;
+    virtual void bindShadow() override;
+
+    //! \reimp
+    virtual void release() override;
+
+    //! \reimp
+    virtual void releaseShadow() override;
 
 private:
 

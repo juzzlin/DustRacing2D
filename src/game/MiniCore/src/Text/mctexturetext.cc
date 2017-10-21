@@ -174,7 +174,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera, MCTextureFon
                 }
 
                 font.surface().setSize(m_glyphWidth, m_glyphHeight);
-                font.surface().renderShadow(camera, MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0, false);
+                font.surface().renderShadow(camera, MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0);
 
                 glyphXPos += font.xDensity() * m_glyphWidth;
             }
@@ -220,7 +220,7 @@ void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera, MCTextureFon
             }
 
             font.surface().setSize(m_glyphWidth, m_glyphHeight);
-            font.surface().render(camera, MCVector3dF(glyphXPos, glyphYPos, 0), 0, false);
+            font.surface().render(camera, MCVector3dF(glyphXPos, glyphYPos, 0), 0);
 
             glyphXPos += font.xDensity() * m_glyphWidth;
         }

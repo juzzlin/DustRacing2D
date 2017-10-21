@@ -109,6 +109,7 @@ HEADERS += \
     trackselectionmenu.hpp \
     tracktile.hpp \
     treeview.hpp \
+    tree.hpp \
     updateableif.hpp \
     userexception.hpp \
     vsyncmenu.hpp \
@@ -276,6 +277,7 @@ SOURCES += \
     trackselectionmenu.cpp \
     tracktile.cpp \
     treeview.cpp \
+    tree.cpp \
     vsyncmenu.cpp \
     MTFH/menu.cpp \
     MTFH/menuitem.cpp \

@@ -26,7 +26,6 @@ MCShapeView::MCShapeView(const std::string & handle)
     , m_shaderProgram(MCGLScene::instance().defaultShaderProgram())
     , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
     , m_hasShadow(true)
-    , m_batchMode(false)
 {}
 
 MCShapeView::~MCShapeView()
@@ -68,32 +67,6 @@ void MCShapeView::render(const MCVector3d<MCFloat> &, MCFloat, MCCamera *)
 }
 
 void MCShapeView::renderShadow(const MCVector3d<MCFloat> &, MCFloat, MCCamera *)
-{
-}
-
-void MCShapeView::setBatchMode(bool enable)
-{
-    m_batchMode = enable;
-}
-
-bool MCShapeView::batchMode() const
-{
-    return m_batchMode;
-}
-
-void MCShapeView::beginBatch()
-{
-}
-
-void MCShapeView::endBatch()
-{
-}
-
-void MCShapeView::beginShadowBatch()
-{
-}
-
-void MCShapeView::endShadowBatch()
 {
 }
 

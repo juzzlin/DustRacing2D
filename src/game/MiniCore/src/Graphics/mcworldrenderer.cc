@@ -169,7 +169,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
             }
             else
             {
-                view->beginBatch();
+                view->bind();
                 object->render(camera);
 
                 for (int i = 1; i < itemCountInBatch - 1; i++)
@@ -179,9 +179,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
 
                 object = batch.second[itemCountInBatch - 1];
                 object->render(camera);
-
-                view = object->shape()->view();
-                view->endBatch();
+                view->release();
             }
         }
     }
@@ -266,7 +264,7 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
                 }
                 else
                 {
-                    view->beginShadowBatch();
+                    view->bindShadow();
                     object->renderShadow(camera);
 
                     for (int i = 1; i < itemCountInBatch - 1; i++)
@@ -276,9 +274,7 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
 
                     object = batch.second[itemCountInBatch - 1];
                     object->renderShadow(camera);
-
-                    view = object->shape()->view();
-                    view->endShadowBatch();
+                    view->releaseShadow();
                 }
             }
         }

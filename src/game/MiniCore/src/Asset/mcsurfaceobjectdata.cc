@@ -23,7 +23,6 @@ MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
 : MCObjectData(typeId)
 , m_surfaceId(typeId)
 , m_defaultCircleShape(false)
-, m_batchMode(false)
 {
 }
 
@@ -45,14 +44,4 @@ void MCSurfaceObjectData::setDefaultCircleShape(bool state)
 bool MCSurfaceObjectData::defaultCirleShape() const
 {
     return m_defaultCircleShape;
-}
-
-void MCSurfaceObjectData::setBatchMode(bool state)
-{
-    m_batchMode = state;
-}
-
-bool MCSurfaceObjectData::batchMode() const
-{
-    return m_batchMode;
 }

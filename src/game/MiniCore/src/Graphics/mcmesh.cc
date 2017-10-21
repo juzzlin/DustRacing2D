@@ -153,12 +153,9 @@ void MCMesh::setScale(MCFloat w, MCFloat h)
     m_sy = h / m_h;
 }
 
-void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool autoBind)
+void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
 {
-    if (autoBind)
-    {
-        bind();
-    }
+    bind();
 
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -176,18 +173,12 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle, bool aut
 
     render();
 
-    if (autoBind)
-    {
-        release();
-    }
+    release();
 }
 
-void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bool autoBind)
+void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle)
 {
-    if (autoBind)
-    {
-        bindShadow();
-    }
+    bindShadow();
 
     MCFloat x = pos.i();
     MCFloat y = pos.j();
@@ -204,10 +195,7 @@ void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle, bo
 
     render();
 
-    if (autoBind)
-    {
-        releaseShadow();
-    }
+    releaseShadow();
 }
 
 MCFloat MCMesh::width() const

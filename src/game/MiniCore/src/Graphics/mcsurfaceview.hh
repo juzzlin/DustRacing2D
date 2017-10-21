@@ -68,19 +68,19 @@ public:
         MCCamera * p = nullptr) override;
 
     //! \reimp
+    virtual void bind() override;
+
+    //! \reimp
+    virtual void bindShadow() override;
+
+    //! \reimp
+    virtual void release() override;
+
+    //! \reimp
+    virtual void releaseShadow() override;
+
+    //! \reimp
     virtual const MCBBoxF & bbox() const override;
-
-    //! \reimp
-    virtual void beginBatch() override;
-
-    //! \reimp
-    virtual void beginShadowBatch() override;
-
-    //! \reimp
-    virtual void endBatch() override;
-
-    //! \reimp
-    virtual void endShadowBatch() override;
 
     //! \reimp
     virtual void setColor(const MCGLColor & color) override;

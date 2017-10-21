@@ -81,38 +81,18 @@ public:
      * \param p Camera window. If nullptr, then no translation or clipping done. */
     virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr);
 
-    //! Enable/disable batch mode. \see the methods below.
-    void setBatchMode(bool enable);
-
-    //! \return batch mode.
-    bool batchMode() const;
-
-    /*! Called for the first object in a batch of same kind
-     *  of views when the render begins. E.g. VBOs can be
-     *  set here to be shared between multiple views.
-     *  The default implementation does nothing. */
-    virtual void beginBatch();
-
-    /*! Called for the last object in a batch of same kind
-     * of views when the render ends.
-     * The default implementation does nothing. */
-    virtual void endBatch();
-
-    /*! Called for the first object in a batch of same kind
-     * of views when the render of "shadows" begins. E.g. VBOs can be
-     * set here to be shared between multiple views.
-     * The default implementation does nothing. */
-    virtual void beginShadowBatch();
-
-    /*! Called for the last object in a batch of same kind
-     *  of views when the render of "shadows" ends.
-     *  The default implementation does nothing. */
-    virtual void endShadowBatch();
-
     /*! Return centered, non-rotated, non-translated bounding box of the view.
      *  This is used to optimize rendering. Shouldn't be used to detect
      *  collisions or anything that needs exact precision. */
     virtual const MCBBoxF & bbox() const = 0;
+
+    virtual void bind() = 0;
+
+    virtual void bindShadow() = 0;
+
+    virtual void release() = 0;
+
+    virtual void releaseShadow() = 0;
 
     //! Return the view ID.
     MCUint viewId() const;
@@ -141,8 +121,6 @@ private:
     MCGLShaderProgramPtr m_shadowShaderProgram;
 
     bool m_hasShadow;
-
-    bool m_batchMode;
 
     MCGLColor m_color;
 };

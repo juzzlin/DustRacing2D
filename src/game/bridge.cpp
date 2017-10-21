@@ -49,7 +49,6 @@ Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
     physicsComponent().setMass(0, true);
 
     shape()->view()->setHasShadow(false);
-    shape()->view()->setBatchMode(true);
 
     const int railYDisplacement = 110;
 

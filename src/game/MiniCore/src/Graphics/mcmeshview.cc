@@ -65,57 +65,50 @@ MCMesh * MCMeshView::mesh() const
 
 void MCMeshView::setShaderProgram(MCGLShaderProgramPtr program)
 {
-    if (m_mesh)
-    {
-        MCShapeView::setShaderProgram(program);
-        m_mesh->setShaderProgram(program);
-    }
+    MCShapeView::setShaderProgram(program);
+    m_mesh->setShaderProgram(program);
 }
 
 void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
-    if (m_mesh)
-    {
-        MCShapeView::setShadowShaderProgram(program);
-        m_mesh->setShadowShaderProgram(program);
-    }
+    MCShapeView::setShadowShaderProgram(program);
+    m_mesh->setShadowShaderProgram(program);
 }
 
 void MCMeshView::render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
-    if (m_mesh)
-    {
-        m_mesh->setScale(1.0, 1.0, 1.0);
-        m_mesh->render(p, l, angle, !batchMode());
-    }
+    m_mesh->setScale(1.0, 1.0, 1.0);
+    m_mesh->render(p, l, angle);
 }
 
 void MCMeshView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
-    if (m_mesh)
-    {
-        m_mesh->setScale(1.0, 1.0, 1.0);
-        m_mesh->renderShadow(p, l, angle, !batchMode());
-    }
-}
-
-void MCMeshView::beginBatch()
-{
-    if (batchMode() && m_mesh)
-    {
-        m_mesh->bind();
-    }
-}
-
-void MCMeshView::beginShadowBatch()
-{
-    if (batchMode() && m_mesh)
-    {
-        m_mesh->bindShadow();
-    }
+    m_mesh->setScale(1.0, 1.0, 1.0);
+    m_mesh->renderShadow(p, l, angle);
 }
 
 const MCBBoxF & MCMeshView::bbox() const
 {
     return m_bbox;
 }
+
+void MCMeshView::bind()
+{
+    m_mesh->bind();
+}
+
+void MCMeshView::bindShadow()
+{
+    m_mesh->bindShadow();
+}
+
+void MCMeshView::release()
+{
+    m_mesh->release();
+}
+
+void MCMeshView::releaseShadow()
+{
+    m_mesh->releaseShadow();
+}
+
