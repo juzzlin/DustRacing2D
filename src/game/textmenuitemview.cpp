@@ -38,7 +38,7 @@ void TextMenuItemView::setTextSize(float size)
 
 void TextMenuItemView::stepTime(int)
 {
-    m_angle += 0.005f;
+    m_angle += 0.010f;
 }
 
 void TextMenuItemView::render(float x, float y)
