@@ -176,12 +176,6 @@ void MCSurfaceParticleRendererLegacy::render()
 {
     assert(shaderProgram());
 
-    if (useAlphaBlend())
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(alphaSrc(), alphaDst());
-    }
-
     shaderProgram()->bind();
     shaderProgram()->bindMaterial(material());
 

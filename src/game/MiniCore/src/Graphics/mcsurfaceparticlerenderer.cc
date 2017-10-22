@@ -211,12 +211,6 @@ void MCSurfaceParticleRenderer::render()
 {
     assert(shaderProgram());
 
-    if (useAlphaBlend())
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(alphaSrc(), alphaDst());
-    }
-
     bind();
 
     shaderProgram()->setTransform(0, MCVector3dF(0, 0, 1));
