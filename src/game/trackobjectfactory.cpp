@@ -87,7 +87,8 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setIsStationary(true);
+
+        data.setMass(15000);
         data.setSurfaceId(role.toStdString());
 
         object = m_objectFactory.build(data);
@@ -103,7 +104,7 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setIsStationary(true);
+        data.setMass(20000);
         data.setSurfaceId(role.toStdString());
 
         object = m_objectFactory.build(data);
@@ -116,7 +117,7 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
-        data.setIsStationary(true);
+        data.setMass(250);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.25);
         data.setShapeWidth(plantBodyRadius);
@@ -130,7 +131,7 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
-        data.setMass(5000);
+        data.setMass(2500);
         data.setSurfaceId(role.toStdString());
         data.setRestitution(0.9);
 
@@ -187,8 +188,8 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
-        data.setIsStationary(true);
-        data.setSurfaceId(role.toStdString());
+        const int wallMass = 10000;
+        data.setMass(role == "wall" ? wallMass : wallMass * 4);
         data.setRestitution(0.9);
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
