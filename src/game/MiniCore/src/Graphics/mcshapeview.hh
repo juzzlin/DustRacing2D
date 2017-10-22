@@ -106,6 +106,12 @@ public:
     //! \return color of the view.
     const MCGLColor & color() const;
 
+    //! Set scaling factors.
+    virtual void setScale(const MCVector3dF & scale);
+
+    //! Get scaling factors.
+    const MCVector3dF & scale() const;
+
 private:
 
     //! Disable copy constructor and assignment
@@ -123,6 +129,8 @@ private:
     bool m_hasShadow;
 
     MCGLColor m_color;
+
+    MCVector3dF m_scale;
 };
 
 typedef std::shared_ptr<MCShapeView> MCShapeViewPtr;

@@ -76,6 +76,9 @@ public:
     //! \reimp
     virtual void releaseShadow() override;
 
+    //! \reimp
+    virtual void setScale(const MCVector3dF &scale) override;
+
 private:
 
     DISABLE_COPY(MCMeshView);

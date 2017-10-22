@@ -46,7 +46,7 @@ void MCMeshView::updateBBox()
     const MCFloat h = m_mesh->height() / 2;
     const MCFloat r = std::max(w, h);
 
-    m_bbox = MCBBoxF(-r, -r, r, r);
+    m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
 }
 
 void MCMeshView::setMesh(MCMesh & mesh)
@@ -111,4 +111,11 @@ void MCMeshView::releaseShadow()
 {
     m_mesh->releaseShadow();
 }
+
+void MCMeshView::setScale(const MCVector3dF & scale)
+{
+    MCShapeView::setScale(scale);
+    updateBBox();
+}
+
 

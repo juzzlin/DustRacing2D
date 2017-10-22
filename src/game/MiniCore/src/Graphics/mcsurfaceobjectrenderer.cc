@@ -96,6 +96,7 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
     for (int i = 0; i < batchSize(); i++)
     {
         object = objects[i];
+        MCSurfaceView * view = static_cast<MCSurfaceView *>(object->shape()->view().get());
         MCVector3dF location(object->shape()->location());
 
         MCFloat x, y, z;
@@ -117,45 +118,23 @@ void MCSurfaceObjectRenderer::setBatch(MCObjectRendererBase::ObjectVector & obje
             camera->mapToCamera(x, y);
         }
 
-        if (!isShadow)
+        for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
         {
-            for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
-            {
-                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
+            m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
 
-                auto vertex = m_surface->vertex(j);
-                m_vertices[vertexIndex] =
-                        MCGLVertex(
-                            x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
-                            y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
-                            z + vertex.z());
+            auto vertex = m_surface->vertex(j);
 
-                m_normals[vertexIndex] = m_surface->normal(j);
+            m_vertices[vertexIndex] =
+                    MCGLVertex(
+                        x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()) * view->scale().i(),
+                        y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()) * view->scale().j(),
+                        !isShadow ? z + vertex.z() : z);
 
-                m_texCoords[vertexIndex] = m_surface->texCoord(j);
+            m_normals[vertexIndex] = m_surface->normal(j);
 
-                vertexIndex++;
-            }
-        }
-        else
-        {
-            for (int j = 0; j < NUM_VERTICES_PER_SURFACE; j++)
-            {
-                m_colors[vertexIndex] = static_cast<MCGLObjectBase *>(m_surface)->color(j);
+            m_texCoords[vertexIndex] = m_surface->texCoord(j);
 
-                auto vertex = m_surface->vertex(j);
-                m_vertices[vertexIndex] =
-                        MCGLVertex(
-                            x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()),
-                            y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()),
-                            z);
-
-                m_normals[vertexIndex] = m_surface->normal(j);
-
-                m_texCoords[vertexIndex] = m_surface->texCoord(j);
-
-                vertexIndex++;
-            }
+            vertexIndex++;
         }
     }
 

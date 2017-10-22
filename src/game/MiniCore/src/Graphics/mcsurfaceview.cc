@@ -47,7 +47,7 @@ void MCSurfaceView::updateBBox()
     const MCFloat h = m_surface->height() / 2;
     const MCFloat r = std::max(w, h);
 
-    m_bbox = MCBBoxF(-r, -r, r, r);
+    m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
 }
 
 void MCSurfaceView::setSurface(MCSurface & surface)
@@ -80,11 +80,13 @@ void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 
 void MCSurfaceView::render(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 {
+    m_surface->setScale(scale());
     m_surface->render(p, l, angle);
 }
 
 void MCSurfaceView::renderShadow(const MCVector3dF & l, MCFloat angle, MCCamera * p)
 {
+    m_surface->setScale(scale());
     m_surface->renderShadow(p, l, angle);
 }
 
@@ -113,8 +115,14 @@ const MCBBoxF & MCSurfaceView::bbox() const
     return m_bbox;
 }
 
- void MCSurfaceView::setColor(const MCGLColor & color)
- {
-     MCShapeView::setColor(color);
-     m_surface->setColor(color);
- }
+void MCSurfaceView::setColor(const MCGLColor & color)
+{
+    MCShapeView::setColor(color);
+    m_surface->setColor(color);
+}
+
+void MCSurfaceView::setScale(const MCVector3dF &scale)
+{
+    MCShapeView::setScale(scale);
+    updateBBox();
+}

@@ -26,6 +26,7 @@ MCShapeView::MCShapeView(const std::string & handle)
     , m_shaderProgram(MCGLScene::instance().defaultShaderProgram())
     , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
     , m_hasShadow(true)
+    , m_scale(1.0f, 1.0f, 1.0f)
 {}
 
 MCShapeView::~MCShapeView()
@@ -89,3 +90,14 @@ const MCGLColor & MCShapeView::color() const
 {
     return m_color;
 }
+
+void MCShapeView::setScale(const MCVector3dF & scale)
+{
+    m_scale = scale;
+}
+
+const MCVector3dF & MCShapeView::scale() const
+{
+    return m_scale;
+}
+

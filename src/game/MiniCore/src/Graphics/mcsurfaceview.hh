@@ -85,6 +85,9 @@ public:
     //! \reimp
     virtual void setColor(const MCGLColor & color) override;
 
+    //! \reimp
+    virtual void setScale(const MCVector3dF &scale) override;
+
 private:
 
     DISABLE_COPY(MCSurfaceView);
