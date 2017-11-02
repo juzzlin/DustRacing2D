@@ -77,7 +77,7 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
             MCObject * parent = childStack.back();
             childStack.pop_back();
 
-            if (parent->isRenderable() && parent->shape() && parent->shape()->view())
+            if (parent->isRenderable() && parent->shape() && parent->shape()->view() && parent->shape()->view()->isVisible())
             {
                 const int objectViewId = object->typeId() * 1024 + parent->shape()->view()->viewId();
                 m_defaultLayer.objectBatches()[camera][objectViewId].push_back(parent);

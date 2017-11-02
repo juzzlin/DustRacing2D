@@ -112,8 +112,20 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_rightRearTire, m_rightRearTirePos + tireZ, 0);
 
-    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
-    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1);
+    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 5);
+    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 5);
+
+    m_leftBrakeGlow.reset(new MCObject(m_brakeGlow, "LeftBrakeGlow"));
+    m_leftBrakeGlow->setBypassCollisions(true);
+    m_leftBrakeGlow->shape()->view()->setHasShadow(false);
+    m_leftBrakeGlow->shape()->view()->setIsVisible(false);
+    addChildObject(m_leftBrakeGlow, m_leftBrakeGlowPos);
+
+    m_rightBrakeGlow.reset(new MCObject(m_brakeGlow, "RightBrakeGlow"));
+    m_rightBrakeGlow->setBypassCollisions(true);
+    m_rightBrakeGlow->shape()->view()->setHasShadow(false);
+    m_rightBrakeGlow->shape()->view()->setIsVisible(false);
+    addChildObject(m_rightBrakeGlow, m_rightBrakeGlowPos);
 }
 
 void Car::setProperties(Description & desc)
@@ -266,24 +278,6 @@ MCVector3dF Car::rightRearTireLocation() const
     return MCMathUtil::rotatedVector(m_rightRearTirePos, angle()) + MCVector2dF(location());
 }
 
-void Car::render(MCCamera *p)
-{
-    // Render body.
-    MCObject::render(p);
-
-    // Render brake light glows if braking.
-    if (m_braking && m_speedInKmh > 0)
-    {
-        const MCVector2dF leftBrakeGlow =
-            MCMathUtil::rotatedVector(m_leftBrakeGlowPos, angle()) + MCVector2dF(location());
-        m_brakeGlow.render(p, leftBrakeGlow, angle());
-
-        const MCVector2dF rightBrakeGlow =
-            MCMathUtil::rotatedVector(m_rightBrakeGlowPos, angle()) + MCVector2dF(location());
-        m_brakeGlow.render(p, rightBrakeGlow, angle());
-    }
-}
-
 void Car::updateAnimations()
 {
     m_particleEffectManager.update();
@@ -296,6 +290,10 @@ void Car::updateAnimations()
     const float offset = 5.0f;
     m_leftFrontTire->rotateRelative(m_tireAngle - offset);
     m_rightFrontTire->rotateRelative(m_tireAngle + offset);
+
+    const bool brakingGlowVisible = m_braking && speedInKmh() > 0;
+    m_leftBrakeGlow->shape()->view()->setIsVisible(brakingGlowVisible);
+    m_rightBrakeGlow->shape()->view()->setIsVisible(brakingGlowVisible);
 }
 
 void Car::updateTireWear(int step)

@@ -103,9 +103,6 @@ public:
     void addDamage(float damage);
 
     //! \reimp
-    virtual void render(MCCamera *p) override;
-
-    //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
@@ -220,6 +217,8 @@ private:
     MCObjectPtr              m_rightFrontTire;
     MCObjectPtr              m_leftRearTire;
     MCObjectPtr              m_rightRearTire;
+    MCObjectPtr              m_leftBrakeGlow;
+    MCObjectPtr              m_rightBrakeGlow;
     MCVector3dF              m_numberPos;
     MCVector3dF              m_leftFrontTirePos;
     MCVector3dF              m_rightFrontTirePos;
