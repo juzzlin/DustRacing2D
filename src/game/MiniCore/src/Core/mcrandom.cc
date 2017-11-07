@@ -21,7 +21,6 @@
 #include "mccast.hh"
 
 #include <cstdlib>
-#include <chrono>
 #include <limits>
 #include <random>
 #include <vector>
