@@ -25,6 +25,7 @@
 #include <MCLogger>
 #include <MCObject>
 #include <MCObjectFactory>
+#include <MCRandom>
 #include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCShapeView>
@@ -178,7 +179,12 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "tree")
     {
-        object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"), 1.75f, 0.2f, 200, 8));
+        int height = 200 + 200 * MCRandom::getValue();
+        object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"),
+            1.0f + 0.50f * MCRandom::getValue(),
+            0.2f + 0.33f * MCRandom::getValue(),
+            height,
+            height / 10));
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
     }
