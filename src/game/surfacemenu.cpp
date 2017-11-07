@@ -73,7 +73,7 @@ void SurfaceMenu::render()
     const int h2 = height() / 2;
     assert(w2 > 0 && h2 > 0);
     m_back.bind();
-    m_back.setSize(width(), height());
+    m_back.setSize(width(), width() * m_back.height() / m_back.width());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
     Menu::render();
 }
