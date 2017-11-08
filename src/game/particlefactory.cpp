@@ -185,7 +185,7 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
     if (MCSurfaceParticle * skidMark = newSurfaceParticle(OnTrackSkidMark))
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 50000);
-        skidMark->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.5f));
+        skidMark->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.25f));
         skidMark->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         skidMark->rotate(angle);
         skidMark->physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
@@ -199,7 +199,7 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
     if (MCSurfaceParticle * skidMark = newSurfaceParticle(OffTrackSkidMark))
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 50000);
-        skidMark->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 0.5f));
+        skidMark->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 0.25f));
         skidMark->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
         skidMark->rotate(angle);
         skidMark->physicsComponent().setVelocity(MCVector3dF(0, 0, 0));
