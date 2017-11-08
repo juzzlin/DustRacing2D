@@ -26,8 +26,8 @@ Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))
 , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
-    m_back.setShaderProgram(Renderer::instance().program("text"));
-    m_back.setColor(MCGLColor(0.9f, 0.9f, 0.9f, 1.0f));
+    m_back.setShaderProgram(Renderer::instance().program("default"));
+    m_back.setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 void Intro::setFadeValue(float value)
@@ -42,15 +42,18 @@ void Intro::setDimensions(int width, int height)
 
 void Intro::render()
 {
-    const int w2 = width() / 2;
+    const int w2 = width()  / 2;
     const int h2 = height() / 2;
-    m_back.setSize(width(), height());
+    assert(w2 > 0 && h2 > 0);
+    m_back.bind();
+    m_back.setSize(width(), width() * m_back.height() / m_back.width());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
 
     static QString version = QString("v") + VERSION;
     static MCTextureText versionText(version.toStdWString());
-    versionText.setGlyphSize(20, 20 * height() / 640);
+    versionText.setGlyphSize(20, height() / 32);
+    versionText.setColor(MCGLColor(0.75f, 0.75f, 0.75f));
     versionText.render(
         versionText.height(m_font),
-        versionText.height(m_font), nullptr, m_font);
+        versionText.height(m_font), nullptr, m_font, false);
 }
