@@ -63,14 +63,14 @@ MCSurfaceParticleRenderer::MCSurfaceParticleRenderer(int maxBatchSize)
     finishBufferData();
 }
 
-void MCSurfaceParticleRenderer::setBatch(MCParticleRendererBase::ParticleVector & particles, MCCamera * camera, bool isShadow)
+void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCamera * camera, bool isShadow)
 {
-    if (!particles.size()) {
+    if (!batch.objects.size()) {
         return;
     }
 
-    setBatchSize(std::min(static_cast<int>(particles.size()), maxBatchSize()));
-    std::sort(particles.begin(), particles.end(), [] (const MCObject * l, const MCObject * r) {
+    setBatchSize(std::min(static_cast<int>(batch.objects.size()), maxBatchSize()));
+    std::sort(batch.objects.begin(), batch.objects.end(), [] (const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();
     });
 
@@ -119,7 +119,7 @@ void MCSurfaceParticleRenderer::setBatch(MCParticleRendererBase::ParticleVector 
     };
 
     // Take common properties from the first particle in the batch
-    MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(particles.at(0));
+    MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(batch.objects.at(0));
     setMaterial(particle->surface().material());
     setHasShadow(particle->hasShadow());
     setAlphaBlend(particle->useAlphaBlend(), particle->alphaSrc(), particle->alphaDst());
@@ -127,7 +127,7 @@ void MCSurfaceParticleRenderer::setBatch(MCParticleRendererBase::ParticleVector 
     int vertexIndex = 0;
     for (int i = 0; i < batchSize(); i++)
     {
-        MCSurfaceParticle * particle = static_cast<MCSurfaceParticle *>(particles[i]);
+        MCSurfaceParticle * particle = static_cast<MCSurfaceParticle *>(batch.objects[i]);
         MCVector3dF location(particle->location());
 
         MCFloat x, y, z;

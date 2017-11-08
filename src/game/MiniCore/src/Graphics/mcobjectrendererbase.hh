@@ -25,6 +25,7 @@
 #include "mcglvertex.hh"
 #include "mcglcolor.hh"
 #include "mcgltexcoord.hh"
+#include "mcrenderlayer.hh"
 
 #include <memory>
 
@@ -37,7 +38,7 @@ public:
     virtual ~MCObjectRendererBase();
 
     typedef std::vector<MCObject *> ObjectVector;
-    virtual void setBatch(ObjectVector & objects, MCCamera * camera = nullptr, bool isShadow = false) = 0;
+    virtual void setBatch(MCRenderLayer::ObjectBatch & batch, MCCamera * camera = nullptr, bool isShadow = false) = 0;
 
     //! Render the current object batch.
     virtual void render() = 0;

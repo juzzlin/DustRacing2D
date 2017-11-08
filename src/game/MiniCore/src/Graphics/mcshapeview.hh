@@ -112,10 +112,6 @@ public:
     //! Get scaling factors.
     const MCVector3dF & scale() const;
 
-    bool isVisible() const;
-
-    void setIsVisible(bool isVisible);
-
 private:
 
     //! Disable copy constructor and assignment
@@ -135,8 +131,6 @@ private:
     MCGLColor m_color;
 
     MCVector3dF m_scale;
-
-    bool m_isVisible;
 };
 
 typedef std::shared_ptr<MCShapeView> MCShapeViewPtr;

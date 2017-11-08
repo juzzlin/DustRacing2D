@@ -25,6 +25,7 @@
 #include "mcglvertex.hh"
 #include "mcglcolor.hh"
 #include "mcgltexcoord.hh"
+#include "mcrenderlayer.hh"
 
 #include <memory>
 
@@ -40,7 +41,7 @@ public:
      *  \param particles The vector of particle data to be rendered.
      *  \param camera The camera window. */
     typedef std::vector<MCObject *> ParticleVector;
-    virtual void setBatch(ParticleVector & particles, MCCamera * camera = nullptr, bool isShadow = false) = 0;
+    virtual void setBatch(MCRenderLayer::ObjectBatch & batch, MCCamera * camera = nullptr, bool isShadow = false) = 0;
 
     //! Render the current particle batch.
     virtual void render() = 0;

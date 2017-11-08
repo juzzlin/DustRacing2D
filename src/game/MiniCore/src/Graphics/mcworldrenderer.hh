@@ -61,30 +61,34 @@ public:
     /*! Remove all particle visibility cameras. */
     void removeParticleVisibilityCameras();
 
-private:
+    void addObject(MCObject & object);
 
-    void add(MCObject & object);
+    void removeObject(MCObject & object);
 
     /*! Must be called before calls to render() or renderShadows() */
     void buildBatches(MCCamera * camera);
 
+    void render(MCCamera * camera);
+
+    void renderShadows(MCCamera * camera);
+
     void clear();
+
+private:
+
+    void buildObjectBatches(MCCamera * camera);
+
+    void buildParticleBatches(MCCamera * camera);
 
     void createSurfaceObjectRenderer();
 
     void createSurfaceParticleRenderer();
-
-    void remove(MCObject & object);
-
-    void render(MCCamera * camera);
 
     void renderBatches(MCCamera * camera = nullptr);
 
     void renderObjectBatches(MCCamera * camera, MCRenderLayer & layer);
 
     void renderParticleBatches(MCCamera * camera, MCRenderLayer & layer);
-
-    void renderShadows(MCCamera * camera);
 
     void renderObjectShadowBatches(MCCamera * camera, MCRenderLayer & layer);
 
@@ -103,7 +107,6 @@ private:
 
     MCGLScene m_glScene;
 
-    friend class MCWorld;
     friend class MCObject;
 };
 

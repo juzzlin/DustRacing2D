@@ -44,9 +44,14 @@ public:
 
     bool depthMaskEnabled() const;
 
-    typedef int ObjectTypeId;
-    typedef std::map<ObjectTypeId, std::vector<MCObject *> > BatchMap;
-    typedef std::map<MCCamera *, BatchMap> CameraBatchMap;
+    struct ObjectBatch
+    {
+        int objectViewId = -1;
+        float priority = 0;
+        std::vector<MCObject *> objects;
+    };
+
+    typedef std::map<MCCamera *, std::vector<ObjectBatch> > CameraBatchMap;
 
     CameraBatchMap & objectBatches();
 

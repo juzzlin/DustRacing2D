@@ -118,13 +118,13 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     m_leftBrakeGlow.reset(new MCObject(m_brakeGlow, "LeftBrakeGlow"));
     m_leftBrakeGlow->setBypassCollisions(true);
     m_leftBrakeGlow->shape()->view()->setHasShadow(false);
-    m_leftBrakeGlow->shape()->view()->setIsVisible(false);
+    m_leftBrakeGlow->setIsRenderable(false);
     addChildObject(m_leftBrakeGlow, m_leftBrakeGlowPos);
 
     m_rightBrakeGlow.reset(new MCObject(m_brakeGlow, "RightBrakeGlow"));
     m_rightBrakeGlow->setBypassCollisions(true);
     m_rightBrakeGlow->shape()->view()->setHasShadow(false);
-    m_rightBrakeGlow->shape()->view()->setIsVisible(false);
+    m_rightBrakeGlow->setIsRenderable(false);
     addChildObject(m_rightBrakeGlow, m_rightBrakeGlowPos);
 }
 
@@ -292,8 +292,8 @@ void Car::updateAnimations()
     m_rightFrontTire->rotateRelative(m_tireAngle + offset);
 
     const bool brakingGlowVisible = m_braking && speedInKmh() > 0;
-    m_leftBrakeGlow->shape()->view()->setIsVisible(brakingGlowVisible);
-    m_rightBrakeGlow->shape()->view()->setIsVisible(brakingGlowVisible);
+    m_leftBrakeGlow->setIsRenderable(brakingGlowVisible);
+    m_rightBrakeGlow->setIsRenderable(brakingGlowVisible);
 }
 
 void Car::updateTireWear(int step)

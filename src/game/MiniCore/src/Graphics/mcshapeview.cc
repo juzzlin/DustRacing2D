@@ -27,7 +27,6 @@ MCShapeView::MCShapeView(const std::string & handle)
     , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
     , m_hasShadow(true)
     , m_scale(1.0f, 1.0f, 1.0f)
-    , m_isVisible(true)
 {}
 
 MCShapeView::~MCShapeView()
@@ -101,14 +100,3 @@ const MCVector3dF & MCShapeView::scale() const
 {
     return m_scale;
 }
-
-bool MCShapeView::isVisible() const
-{
-    return m_isVisible;
-}
-
-void MCShapeView::setIsVisible(bool isVisible)
-{
-    m_isVisible = isVisible;
-}
-

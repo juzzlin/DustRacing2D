@@ -315,7 +315,7 @@ void MCWorld::addObject(MCObject & object)
     {
         if (object.index() == REMOVED_INDEX)
         {
-            m_renderer->add(object);
+            m_renderer->addObject(object);
 
             // Add to object vector (O(1))
             m_objs.push_back(&object);
@@ -373,7 +373,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     // Reset motion
     object.physicsComponent().reset();
 
-    m_renderer->remove(object);
+    m_renderer->removeObject(object);
 
     // Remove from object vector (O(1))
     removeObjectFromIntegration(object);

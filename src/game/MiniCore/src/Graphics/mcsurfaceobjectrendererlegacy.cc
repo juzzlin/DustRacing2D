@@ -43,19 +43,19 @@ MCSurfaceObjectRendererLegacy::MCSurfaceObjectRendererLegacy(int maxBatchSize)
 {
 }
 
-void MCSurfaceObjectRendererLegacy::setBatch(MCObjectRendererBase::ObjectVector & objects, MCCamera * camera, bool isShadow)
+void MCSurfaceObjectRendererLegacy::setBatch(MCRenderLayer::ObjectBatch & batch, MCCamera * camera, bool isShadow)
 {
-    if (!objects.size()) {
+    if (!batch.objects.size()) {
         return;
     }
 
-    setBatchSize(std::min(static_cast<int>(objects.size()), maxBatchSize()));
-    std::sort(objects.begin(), objects.end(), [] (const MCObject * l, const MCObject * r) {
+    setBatchSize(std::min(static_cast<int>(batch.objects.size()), maxBatchSize()));
+    std::sort(batch.objects.begin(), batch.objects.end(), [] (const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();
     });
 
     // Take common properties from the first Object in the batch
-    MCObject * object = objects.at(0);
+    MCObject * object = batch.objects.at(0);
     MCSurfaceView * view = dynamic_cast<MCSurfaceView *>(object->shape()->view().get());
     assert(view);
 
@@ -70,7 +70,7 @@ void MCSurfaceObjectRendererLegacy::setBatch(MCObjectRendererBase::ObjectVector 
     int vertexIndex = 0;
     for (int i = 0; i < batchSize(); i++)
     {
-        object = objects[i];
+        object = batch.objects[i];
         MCSurfaceView * view = static_cast<MCSurfaceView *>(object->shape()->view().get());
         MCVector3dF location(object->shape()->location());
 
