@@ -17,6 +17,7 @@
 #define CREDITS_HPP
 
 #include "surfacemenu.hpp"
+#include <MCTextureText>
 
 class MCTextureFont;
 
@@ -30,6 +31,14 @@ public:
 
     //! \reimp
     virtual void render() override;
+
+private:
+
+    std::vector<MCTextureText> m_texts;
+
+    int m_time = 0;
+
+    int m_textIndex = 0;
 };
 
 #endif // CREDITS_HPP
