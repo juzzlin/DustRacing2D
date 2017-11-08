@@ -76,9 +76,6 @@ public:
 
 private:
 
-    DISABLE_ASSI(MCTextureText);
-    DISABLE_COPY(MCTextureText);
-
     void updateTextDimensions();
 
     std::wstring m_text;
