@@ -213,13 +213,33 @@ void Renderer::render()
         m_fbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
 
-    static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
+    if (!m_shadowFbo)
+    {
+        m_shadowFbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
+        m_shadowFbo->setAttachment(QOpenGLFramebufferObject::Depth);
+    }
 
     m_fbo->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_scene->renderTrack();
     m_scene->renderObjects();
+    m_fbo->release();
+
+    m_shadowFbo->bind();
+    glClear(GL_COLOR_BUFFER_BIT);
+    QOpenGLFramebufferObject::blitFramebuffer(m_shadowFbo.get(), m_fbo.get(), GL_DEPTH_BUFFER_BIT);
     m_scene->renderObjectShadows();
+    m_shadowFbo->release();
+
+    m_fbo->bind();
+    static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
+    dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
+    dummyMaterial->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    MCSurface ss("dummy", dummyMaterial, 2.0f, 2.0f);
+    ss.setColor(MCGLColor(1, 1, 1, 0.5f));
+    ss.setShaderProgram(program("fbo"));
+    ss.bind();
+    ss.render(nullptr, MCVector3dF(), 0);
     m_scene->renderCommonHUD();
     m_fbo->release();
 
@@ -233,6 +253,7 @@ void Renderer::render()
     }
 
     dummyMaterial->setTexture(m_fbo->texture(), 0);
+    dummyMaterial->setAlphaBlend(false);
     MCSurface sd("dummy2", dummyMaterial, 2.0f, 2.0f);
     sd.setShaderProgram(program("fbo"));
     sd.bind();

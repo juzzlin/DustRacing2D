@@ -760,13 +760,13 @@ void Scene::renderObjects()
 
 void Scene::renderPlayerScene(MCCamera & camera)
 {
-    // Assume that m_world.prepareRendering(&camera) is already called.
+    m_world.prepareRendering(&camera);
     m_world.render(&camera);
 }
 
 void Scene::renderPlayerSceneShadows(MCCamera & camera)
 {
-    m_world.prepareRendering(&camera);
+    // Assume that m_world.prepareRendering(&camera) is already called.
     m_world.renderShadows(&camera);
 }
 
