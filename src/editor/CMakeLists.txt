@@ -9,6 +9,7 @@ endforeach()
 # Set sources
 set(SRC
     aboutdlg.cpp
+    application.cpp
     editordata.cpp
     editorview.cpp
     editorscene.cpp

@@ -19,9 +19,10 @@
 #include <QSettings>
 
 #include "../common/config.hpp"
+#include "../common/userexception.hpp"
+
 #include "application.hpp"
 #include "game.hpp"
-#include "userexception.hpp"
 
 #include <MCLogger>
 

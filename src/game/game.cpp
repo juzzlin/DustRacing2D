@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "../common/config.hpp"
+#include "../common/userexception.hpp"
 
 #include "game.hpp"
 
@@ -28,7 +29,6 @@
 #include "trackdata.hpp"
 #include "trackloader.hpp"
 #include "trackselectionmenu.hpp"
-#include "userexception.hpp"
 
 #include <MCAssetManager>
 #include <MCCamera>

@@ -14,26 +14,16 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
-#include <QFile>
-#include <QLocale>
 #include <QSettings>
-#include <QTranslator>
-#include <iostream>
 
 #include "../common/config.hpp"
-#include "mainwindow.hpp"
+#include "../common/userexception.hpp"
 
-static void initTranslations(QTranslator & appTranslator, QApplication & app)
-{
-    if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-editor_" + QLocale::system().name()))
-    {
-        app.installTranslator(&appTranslator);
-    }
-    else
-    {
-        std::cerr << "Translations for " << QLocale::system().name().toStdString() << " not found.." << std::endl;
-    }
-}
+#include "application.hpp"
+
+#include <iostream>
+#include <memory>
+#include <cstdlib>
 
 int main(int argc, char ** argv)
 {
@@ -43,16 +33,23 @@ int main(int argc, char ** argv)
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    QApplication app(argc, argv);
+    std::unique_ptr<Application> app;
 
-    QTranslator appTranslator;
-    initTranslations(appTranslator, app);
+    try
+    {
+        app.reset(new Application(argc, argv));
 
-    // Track file can be given as command line argument.
-    const QString trackFile = argc > 1 ? argv[1] : "";
+        return app->run();
+    }
+    catch (std::exception & e)
+    {
+        if (!dynamic_cast<UserException *>(&e))
+        {
+            std::cerr << e.what() << std::endl;
+        }
 
-    MainWindow mainWindow(trackFile);
-    mainWindow.show();
+        app.reset();
 
-    return app.exec();
+        return EXIT_FAILURE;
+    }
 }

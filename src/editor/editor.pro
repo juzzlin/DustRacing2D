@@ -26,7 +26,9 @@ HEADERS +=  \
     ../common/targetnodebase.hpp \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
+    ../common/userexception.hpp \
     aboutdlg.hpp \
+    application.hpp \
     editordata.hpp \
     editorscene.hpp \
     editorview.hpp \
@@ -57,6 +59,7 @@ SOURCES += \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
     aboutdlg.cpp \
+    application.cpp \
     editordata.cpp \
     editorscene.cpp \
     editorview.cpp \
