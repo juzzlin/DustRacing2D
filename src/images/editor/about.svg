@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="312"
+   height="312"
+   viewBox="0 0 312 312"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/data/images/about.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:docname="about.svg">
+  <defs
+     id="defs4">
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter4861">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood4863" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite4865" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.5"
+         result="blur"
+         id="feGaussianBlur4867" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset4869" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite4871" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter4873">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood4875" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite4877" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.5"
+         result="blur"
+         id="feGaussianBlur4879" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset4881" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite4883" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="202.37385"
+     inkscape:cy="139.09137"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="2489"
+     inkscape:window-height="1416"
+     inkscape:window-x="71"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-740.36216)">
+    <g
+       id="g4998"
+       transform="matrix(0.74845387,0,0,0.74845387,-652.33018,499.66181)">
+      <path
+         inkscape:export-ydpi="130.47089"
+         inkscape:export-xdpi="130.47089"
+         inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/dist/img/dr2d.png"
+         id="path4366"
+         d="m 906.05466,544.5505 c 23.43368,0.0582 159.32174,-16.43292 333.21424,-1.78571"
+         style="opacity:0.5;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:connector-curvature="0" />
+      <g
+         inkscape:export-ydpi="130.47089"
+         inkscape:export-xdpi="130.47089"
+         inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/dist/img/dr2d.png"
+         transform="translate(856.38694,-11.034595)"
+         id="g4768"
+         style="filter:url(#filter4873)">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:Molot;-inkscape-font-specification:'Molot, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           x="123.23861"
+           y="540.48773"
+           id="text4136"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             x="123.23861"
+             y="540.48773"
+             id="tspan4140">DUST</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:Molot;-inkscape-font-specification:'Molot, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="235.77164"
+           y="540.48773"
+           id="text4144"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4146"
+             x="235.77164"
+             y="540.48773">RACING</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:Molot;-inkscape-font-specification:'Molot, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           x="325.99722"
+           y="540.18109"
+           id="text4148"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4150"
+             x="325.99722"
+             y="540.18109">2D</tspan></text>
+      </g>
+      <g
+         inkscape:export-ydpi="130.47089"
+         inkscape:export-xdpi="130.47089"
+         inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/dist/img/dr2d.png"
+         transform="translate(856.38694,-11.034595)"
+         id="g4757"
+         style="filter:url(#filter4861)">
+        <rect
+           style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635"
+           width="39.901024"
+           height="62.124382"
+           x="388.95392"
+           y="460.60242"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9"
+           width="9.975256"
+           height="15.531096"
+           x="389.03485"
+           y="460.87506"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2"
+           width="9.975256"
+           height="15.531096"
+           x="398.98138"
+           y="476.40741"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8"
+           width="9.975256"
+           height="15.531096"
+           x="388.92731"
+           y="491.92001"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8-3"
+           width="9.975256"
+           height="15.531096"
+           x="408.8038"
+           y="491.97482"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8-3-0"
+           width="9.975256"
+           height="15.531096"
+           x="398.85257"
+           y="507.14795"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8-3-0-1"
+           width="9.975256"
+           height="15.531096"
+           x="418.69949"
+           y="507.1525"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8-3-0-1-7"
+           width="9.975256"
+           height="15.531096"
+           x="418.74667"
+           y="476.67596"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4635-9-2-8-3-0-1-7-8"
+           width="9.975256"
+           height="15.531096"
+           x="408.97385"
+           y="461.0787"
+           transform="matrix(0.99756405,0.06975648,-0.06975648,0.99756405,0,0)" />
+      </g>
+    </g>
+  </g>
+</svg>
