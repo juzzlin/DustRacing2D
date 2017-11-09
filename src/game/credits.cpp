@@ -44,7 +44,7 @@ Credits::Credits(std::string id, int width, int height)
         MCTextureText(margin(13) + QObject::tr("GRAPHICS").toStdWString() +
             L"\n\n" +
             L"Jussi Lind\n\n" +
-            L"Ville Mäkiranta (original graphics\n\n"),
+            L"Ville Mäkiranta (original graphics)\n\n"),
 
         MCTextureText(margin(5) + QObject::tr("LEVEL DESIGN").toStdWString() +
             L"\n\n" +
