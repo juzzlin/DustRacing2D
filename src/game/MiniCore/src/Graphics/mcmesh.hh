@@ -83,7 +83,7 @@ public:
     void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle);
+    void renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
 
     //! Render the vertex buffer only. bind() must be called separately.
     void render();

@@ -21,8 +21,6 @@
 
 #include "mccamera.hh"
 #include "mclogger.hh"
-#include "mcsurfaceobjectrenderer.hh"
-#include "mcsurfaceobjectrendererlegacy.hh"
 #include "mcsurfaceparticle.hh"
 #include "mcsurfaceparticlerenderer.hh"
 #include "mcsurfaceparticlerendererlegacy.hh"
@@ -37,8 +35,7 @@
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
-    : m_surfaceObjectRenderer(nullptr)
-    , m_surfaceParticleRenderer(nullptr)
+    : m_surfaceParticleRenderer(nullptr)
 {
 }
 
@@ -210,43 +207,19 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
             MCObject * object = batch.objects[0];
             std::shared_ptr<MCShapeView> view = object->shape()->view();
 
-            if (dynamic_cast<MCSurfaceView *>(view.get()))
+            view->bind();
+            object->render(camera);
+
+            for (int i = 1; i < itemCountInBatch - 1; i++)
             {
-                if (!m_surfaceObjectRenderer)
-                {
-                    createSurfaceObjectRenderer();
-                }
-
-                m_surfaceObjectRenderer->setBatch(batch, camera);
-                m_surfaceObjectRenderer->render();
+                batch.objects[i]->render(camera);
             }
-            else
-            {
-                view->bind();
-                object->render(camera);
 
-                for (int i = 1; i < itemCountInBatch - 1; i++)
-                {
-                    batch.objects[i]->render(camera);
-                }
-
-                object = batch.objects[itemCountInBatch - 1];
-                object->render(camera);
-                view->release();
-            }
+            object = batch.objects[itemCountInBatch - 1];
+            object->render(camera);
+            view->release();
         }
     }
-}
-
-void MCWorldRenderer::createSurfaceObjectRenderer()
-{
-#ifdef __MC_GLES__
-    MCLogger().info() << "Object renderer using vertex arrays.";
-    m_surfaceObjectRenderer = new MCSurfaceObjectRendererLegacy;
-#else
-    MCLogger().info() << "Object renderer using VAO.";
-    m_surfaceObjectRenderer = new MCSurfaceObjectRenderer;
-#endif
 }
 
 void MCWorldRenderer::createSurfaceParticleRenderer()
@@ -305,30 +278,17 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
             std::shared_ptr<MCShapeView> view = object->shape()->view();
             if (view && view->hasShadow())
             {
-                if (dynamic_cast<MCSurfaceView *>(view.get()))
+                view->bindShadow();
+                object->renderShadow(camera);
+
+                for (int i = 1; i < itemCountInBatch - 1; i++)
                 {
-                    if (!m_surfaceObjectRenderer)
-                    {
-                        createSurfaceObjectRenderer();
-                    }
-
-                    m_surfaceObjectRenderer->setBatch(batch, camera, true);
-                    m_surfaceObjectRenderer->renderShadows();
+                    batch.objects[i]->renderShadow(camera);
                 }
-                else
-                {
-                    view->bindShadow();
-                    object->renderShadow(camera);
 
-                    for (int i = 1; i < itemCountInBatch - 1; i++)
-                    {
-                        batch.objects[i]->renderShadow(camera);
-                    }
-
-                    object = batch.objects[itemCountInBatch - 1];
-                    object->renderShadow(camera);
-                    view->releaseShadow();
-                }
+                object = batch.objects[itemCountInBatch - 1];
+                object->renderShadow(camera);
+                view->releaseShadow();
             }
         }
     }
@@ -419,6 +379,5 @@ void MCWorldRenderer::clear()
 
 MCWorldRenderer::~MCWorldRenderer()
 {
-    delete m_surfaceObjectRenderer;
     delete m_surfaceParticleRenderer;
 }

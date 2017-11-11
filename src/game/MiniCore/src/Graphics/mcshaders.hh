@@ -131,7 +131,7 @@ static const char * MCDefaultShadowVsh =
 ""
 "void main()\n"
 "{\n"
-"    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
+"    gl_Position = vp * model * (vec4(inVertex.xy, 0, 1) * scale);\n"
 "    texCoord0   = inTexCoord;\n"
 "}\n";
 

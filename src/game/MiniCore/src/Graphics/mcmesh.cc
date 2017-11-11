@@ -176,22 +176,20 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
     release();
 }
 
-void MCMesh::renderShadow(MCCamera * camera, MCVector2dFR pos, MCFloat angle)
+void MCMesh::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
 {
-    bindShadow();
-
     MCFloat x = pos.i();
     MCFloat y = pos.j();
-    MCFloat z = 0;
 
     if (camera)
     {
         camera->mapToCamera(x, y);
     }
 
-    shadowShaderProgram()->bind();
+    bindShadow();
+
     shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
-    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
     render();
 

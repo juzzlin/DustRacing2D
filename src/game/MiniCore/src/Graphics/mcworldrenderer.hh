@@ -80,8 +80,6 @@ private:
 
     void buildParticleBatches(MCCamera * camera);
 
-    void createSurfaceObjectRenderer();
-
     void createSurfaceParticleRenderer();
 
     void renderBatches(MCCamera * camera = nullptr);
@@ -100,8 +98,6 @@ private:
     ParticleSet m_particleSet;
 
     std::vector<MCCamera *> m_visibilityCameras;
-
-    MCObjectRendererBase * m_surfaceObjectRenderer;
 
     MCParticleRendererBase * m_surfaceParticleRenderer;
 
