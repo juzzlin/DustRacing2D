@@ -194,7 +194,7 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
-        const int wallMass = 10000;
+        const int wallMass = 20000;
         data.setMass(role == "wall" ? wallMass : wallMass * 4);
         data.setRestitution(0.9);
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
