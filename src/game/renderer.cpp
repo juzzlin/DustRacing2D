@@ -191,6 +191,8 @@ void Renderer::setResolution(QSize resolution)
     m_vRes = resolution.height();
 
     m_fbo.reset();
+
+    m_shadowFbo.reset();
 }
 
 float Renderer::fadeValue() const
