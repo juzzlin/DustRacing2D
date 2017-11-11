@@ -46,6 +46,7 @@ TrackTile::TrackTile(const TrackTile & other)
     , m_added(false)
 {
     setPos(other.location());
+    setRotation(other.rotation());
 }
 
 QRectF TrackTile::boundingRect () const
