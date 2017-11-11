@@ -86,8 +86,8 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
 
     m_surface = view->surface();
 
-    setShaderProgram(m_surface->shaderProgram());
-    setShadowShaderProgram(m_surface->shadowShaderProgram());
+    setShaderProgram(view->shaderProgram());
+    setShadowShaderProgram(view->shadowShaderProgram());
 
     setMaterial(m_surface->material());
     setHasShadow(view->hasShadow());
