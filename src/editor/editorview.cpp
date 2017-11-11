@@ -262,6 +262,8 @@ void EditorView::createObjectContextMenuActions()
         {
             if (auto object = m_editorData.selectedObject())
             {
+                m_editorData.saveUndoPoint();
+
                 object->setRotation(static_cast<int>(dialog.angle() + object->rotation()) % 360);
             }
         }
@@ -281,6 +283,8 @@ void EditorView::createTargetNodeContextMenuActions()
             TargetNodeSizeDlg dialog(tnode->size());
             if (dialog.exec() == QDialog::Accepted)
             {
+                m_editorData.saveUndoPoint();
+
                 tnode->setSize(dialog.targetNodeSize());
             }
         }
