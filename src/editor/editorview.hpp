@@ -125,6 +125,8 @@ private:
 
     QAction * m_excludeFromMinimap = nullptr;
 
+    QAction * m_forceStationaryAction = nullptr;
+
     EditorData & m_editorData;
 };
 

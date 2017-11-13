@@ -340,7 +340,9 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     const QString category = element.attribute(TrackDataBase::DataKeywords::Object::category(), "");
     const QString role = element.attribute(TrackDataBase::DataKeywords::Object::role(), "");
 
-    if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle))
+    const bool forceStationary = element.attribute(TrackDataBase::DataKeywords::Object::forceStationary(), "0").toUInt();
+
+    if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
     {
         newData.objects().add(std::shared_ptr<TrackObject>(object));
     }

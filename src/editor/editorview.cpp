@@ -269,8 +269,21 @@ void EditorView::createObjectContextMenuActions()
         }
     });
 
+    const QString dummy2(QString(QWidget::tr("Force stationary")));
+    m_forceStationaryAction = new QAction(dummy2, &m_tileContextMenu);
+    m_forceStationaryAction->setCheckable(true);
+    QObject::connect(m_forceStationaryAction, &QAction::changed, [this] () {
+        if (auto object = m_editorData.selectedObject())
+        {
+            m_editorData.saveUndoPoint();
+            object->setForceStationary(m_forceStationaryAction->isChecked());
+        }
+    });
+
     // Populate the menu
     m_objectContextMenu.addAction(rotate);
+    m_objectContextMenu.addSeparator();
+    m_objectContextMenu.addAction(m_forceStationaryAction);
 }
 
 void EditorView::createTargetNodeContextMenuActions()
@@ -565,6 +578,8 @@ void EditorView::openObjectContextMenu()
 void EditorView::handleRightButtonClickOnObject(Object & object)
 {
     m_editorData.setSelectedObject(&object);
+
+    m_forceStationaryAction->setChecked(object.forceStationary());
 
     openObjectContextMenu();
 }

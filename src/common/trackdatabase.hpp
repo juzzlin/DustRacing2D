@@ -174,6 +174,11 @@ public:
             {
                 return "o";
             }
+
+            static QString forceStationary()
+            {
+                return "fs";
+            }
         };
     };
 

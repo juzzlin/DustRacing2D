@@ -37,7 +37,7 @@ TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 }
 
 TrackObject * TrackObjectFactory::build(
-    QString category, QString role, MCVector2dF location, int angle)
+    QString category, QString role, MCVector2dF location, int angle, bool forceStationary)
 {
     MCObjectPtr object;
 
@@ -53,9 +53,6 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
-        // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, object);
     }
     else if (role == "bushArea")
     {
@@ -94,9 +91,6 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
-        // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, object);
     }
     else if (role == "grandstand")
     {
@@ -173,9 +167,6 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
-        // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, object);
     }
     else if (role == "tree")
     {
@@ -201,9 +192,6 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
-        // Wrap the MCObject in a TrackObject
-        return new TrackObject(category, role, object);
     }
 
     if (!object)
@@ -213,6 +201,12 @@ TrackObject * TrackObjectFactory::build(
     }
     else
     {
+        // Override mass if object is forced as stationary
+        if (forceStationary)
+        {
+            object->physicsComponent().setMass(0, true);
+        }
+
         // Wrap the MCObject in a TrackObject
         return new TrackObject(category, role, object);
     }

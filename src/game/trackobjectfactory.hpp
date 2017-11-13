@@ -31,7 +31,7 @@ public:
 
     /*! Build and return an MCObject wrapped in TrackObject.
      *  \return nullptr on an unknown or deprecated object. */
-    TrackObject * build(QString category, QString role, MCVector2dF location, int angle);
+    TrackObject * build(QString category, QString role, MCVector2dF location, int angle, bool forceStationary);
 
 private:
 

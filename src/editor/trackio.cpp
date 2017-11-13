@@ -71,6 +71,8 @@ void readObject(TrackData & newData, const QDomElement & element)
 
     object.setRotation(element.attribute(TrackDataBase::DataKeywords::Object::orientation(),  "0").toInt());
 
+    object.setForceStationary(element.attribute(TrackDataBase::DataKeywords::Object::forceStationary(),  "0").toUInt());
+
     newData.objects().add(ObjectBasePtr(&object));
 }
 
@@ -139,6 +141,11 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
         objectElement.setAttribute(TrackDataBase::DataKeywords::Object::x(), static_cast<int>(object->location().x()));
         objectElement.setAttribute(TrackDataBase::DataKeywords::Object::y(), static_cast<int>(object->location().y()));
         objectElement.setAttribute(TrackDataBase::DataKeywords::Object::orientation(), static_cast<int>(object->rotation()));
+
+        if (object->forceStationary())
+        {
+            objectElement.setAttribute(TrackDataBase::DataKeywords::Object::forceStationary(), static_cast<int>(object->forceStationary()));
+        }
 
         root.appendChild(objectElement);
     }

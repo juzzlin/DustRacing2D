@@ -48,6 +48,10 @@ public:
     //! Get role.
     QString role() const;
 
+    bool forceStationary() const;
+
+    void setForceStationary(bool forceStationary);
+
 private:
 
     //! Category of this object.
@@ -58,6 +62,8 @@ private:
 
     //! Coordinates in the world.
     QPointF m_location;
+
+    bool m_forceStationary;
 };
 
 using ObjectBasePtr = std::shared_ptr<ObjectBase>;

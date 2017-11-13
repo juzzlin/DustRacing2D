@@ -18,6 +18,7 @@
 ObjectBase::ObjectBase(QString category, QString role)
 : m_category(category)
 , m_role(role)
+, m_forceStationary(false)
 {
 }
 
@@ -43,4 +44,14 @@ QString ObjectBase::category() const
 QString ObjectBase::role() const
 {
     return m_role;
+}
+
+bool ObjectBase::forceStationary() const
+{
+    return m_forceStationary;
+}
+
+void ObjectBase::setForceStationary(bool forceStationary)
+{
+    m_forceStationary = forceStationary;
 }
