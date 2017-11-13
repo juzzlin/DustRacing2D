@@ -28,10 +28,7 @@ class Bridge : public MCObject
 {
 public:
 
-    static MCFloat zOffset()
-    {
-        return 5.0f;
-    }
+    static constexpr MCFloat zOffset = 5.0f;
 
     Bridge(MCSurface & surface, MCSurface & rail);
 
@@ -45,7 +42,7 @@ public:
 
 private:
 
-    void raiseObject(MCObject & object, float raise);
+    void raiseObject(MCObject & object, bool raise);
 
     std::map<MCObject *, int> m_objectsOnBridge;
 

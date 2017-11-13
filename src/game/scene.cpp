@@ -529,7 +529,7 @@ void Scene::createBridgeObjects()
                     MCAssetManager::instance().surfaceManager().surface("wallLong")
                 ));
 
-                bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset()));
+                bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset));
                 bridge->rotate(tile->rotation());
                 bridge->addToWorld();
 
