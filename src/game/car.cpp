@@ -112,8 +112,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_rightRearTire, m_rightRearTirePos + tireZ, 0);
 
-    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 5);
-    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 5);
+    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1.0f);
+    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1.0f);
 
     m_leftBrakeGlow.reset(new MCObject(m_brakeGlow, "LeftBrakeGlow"));
     m_leftBrakeGlow->setBypassCollisions(true);
