@@ -25,8 +25,11 @@
 #include <memory>
 #include <cstdlib>
 
+extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
 int main(int argc, char ** argv)
 {
+    qt_qhash_seed.store(0);
+
     QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
     QApplication::setApplicationName(Config::Editor::QSETTINGS_SOFTWARE_NAME);
 #ifdef Q_OS_WIN32
