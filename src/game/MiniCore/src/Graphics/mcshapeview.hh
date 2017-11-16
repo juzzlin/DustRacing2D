@@ -31,6 +31,7 @@
 #include <memory>
 
 class MCCamera;
+class MCGLObjectBase;
 
 /*! \class MCShapeView.
  *  \brief MCShapeView is an abstract base class (2d) for view objects.
@@ -93,6 +94,9 @@ public:
     virtual void release() = 0;
 
     virtual void releaseShadow() = 0;
+
+    //! Get the underlying MCGLObjectBase-derived object
+    virtual MCGLObjectBase * object() const = 0;
 
     //! Return the view ID.
     MCUint viewId() const;

@@ -19,54 +19,73 @@
 #include "layers.hpp"
 #include "renderer.hpp"
 
+#include <MCAssetManager>
 #include <MCCollisionEvent>
+#include <MCObjectFactory>
+#include <MCPhysicsComponent>
 #include <MCRectShape>
 #include <MCSurface>
 #include <MCVector2d>
-#include <MCPhysicsComponent>
 
 namespace {
 static const char * BRIDGE_ID      = "bridge";
 static const char * BRIDGE_RAIL_ID = "bridgeRail";
-static const int    RAIL_Z         = 8;
-static const float  OBJECT_Z_DELTA = Bridge::zOffset;
+static const int    RAIL_Z         = 16;
+static const float  OBJECT_Z_DELTA = RAIL_Z;
 static const float  OBJECT_Z_ZERO  = 0.0f;
 static const int    WIDTH          = 256;
 }
 
-Bridge::Bridge(MCSurface & surface, MCSurface & railSurface)
-: MCObject(surface, BRIDGE_ID)
-, m_tag(0)
-, m_rail0(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
-, m_rail1(MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID)))
-, m_trigger0(MCObjectPtr(new BridgeTrigger(*this)))
-, m_trigger1(MCObjectPtr(new BridgeTrigger(*this)))
+Bridge::Bridge()
+    : MCObject(BRIDGE_ID)
+    , m_tag(0)
 {
+    auto && shape = MCShapePtr(new MCRectShape(nullptr, WIDTH, WIDTH));
+    setShape(shape);
+
     setCollisionLayer(-1);
 
     setIsPhysicsObject(false);
     setIsTriggerObject(true);
-    physicsComponent().setMass(0, true);
 
-    shape()->view()->setHasShadow(false);
+    physicsComponent().setMass(0, true);
 
     const int railYDisplacement = 110;
 
-    addChildObject(m_rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
-    addChildObject(m_rail1, MCVector3dF(0,  railYDisplacement, RAIL_Z));
+    auto && railSurface = MCAssetManager::instance().surfaceManager().surface("wallLong");
 
-    m_rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-    m_rail0->physicsComponent().setMass(0, true);
-    m_rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+    auto && rail0 = MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID));
+    addChildObject(rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
 
-    m_rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-    m_rail1->physicsComponent().setMass(0, true);
-    m_rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+    auto && rail1 = MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID));
+    addChildObject(rail1, MCVector3dF(0,  railYDisplacement, RAIL_Z));
+
+    rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    rail0->physicsComponent().setMass(0, true);
+    rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+
+    rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    rail1->physicsComponent().setMass(0, true);
+    rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
     const int triggerXDisplacement = WIDTH / 2;
 
-    addChildObject(m_trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
-    addChildObject(m_trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
+    auto && trigger0 = MCObjectPtr(new BridgeTrigger(*this));
+    addChildObject(trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
+
+    auto && trigger1 = MCObjectPtr(new BridgeTrigger(*this));
+    addChildObject(trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
+
+    MCMeshObjectData data("bridge");
+    data.setMeshId("bridge");
+    data.setSurfaceId("asphalt");
+    data.setRestitution(0.9);
+
+    MCObjectFactory objectFactory(MCAssetManager::instance());
+    auto bridgeMeshObject = objectFactory.build(data);
+    bridgeMeshObject->setIsPhysicsObject(false);
+    bridgeMeshObject->shape()->view()->setHasShadow(false);
+    addChildObject(bridgeMeshObject, MCVector3dF(0, 0, -bridgeMeshObject->shape()->view()->object()->minZ()));
 }
 
 void Bridge::raiseObject(MCObject & object, bool raise)
@@ -83,12 +102,15 @@ void Bridge::raiseObject(MCObject & object, bool raise)
 
 void Bridge::enterObject(MCObject & object)
 {
-    object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    if (!m_objectsEntered.count(&object))
+    {
+        object.setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
 
-    raiseObject(object, true);
+        raiseObject(object, true);
 
-    m_objectsEntered[&object] = true;
-    m_objectsOnBridge[&object] = m_tag;
+        m_objectsEntered[&object] = true;
+        m_objectsOnBridge[&object] = m_tag;
+    }
 }
 
 void Bridge::collisionEvent(MCCollisionEvent & event)

@@ -88,6 +88,9 @@ public:
     //! \reimp
     virtual void setScale(const MCVector3dF &scale) override;
 
+    //! \reimp
+    virtual MCGLObjectBase * object() const override;
+
 private:
 
     DISABLE_COPY(MCSurfaceView);

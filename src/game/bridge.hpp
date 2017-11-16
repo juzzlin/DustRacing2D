@@ -28,9 +28,7 @@ class Bridge : public MCObject
 {
 public:
 
-    static constexpr MCFloat zOffset = 5.0f;
-
-    Bridge(MCSurface & surface, MCSurface & rail);
+    Bridge();
 
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
@@ -49,11 +47,6 @@ private:
     std::map<MCObject *, bool> m_objectsEntered;
 
     int m_tag;
-
-    MCObjectPtr m_rail0;
-    MCObjectPtr m_rail1;
-    MCObjectPtr m_trigger0;
-    MCObjectPtr m_trigger1;
 };
 
 #endif // BRIDGE_HPP

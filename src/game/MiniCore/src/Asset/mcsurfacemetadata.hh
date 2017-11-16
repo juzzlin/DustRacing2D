@@ -28,7 +28,8 @@
 #include <map>
 #include <string>
 
-//! Surface metadata structure used by MCSurfaceConfigLoader.
+/*! Surface metadata structure returned by MCSurfaceConfigLoader.
+ *  MCSurfaceManager can create MCSurface objects based on this data. */
 struct MCSurfaceMetaData
 {
     //! Handle of the surface

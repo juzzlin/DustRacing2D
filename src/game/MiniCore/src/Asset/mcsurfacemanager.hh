@@ -30,7 +30,7 @@ class QImage;
 
 class MCSurface;
 
-/*! Surface (texture) manager base class.
+/*! Surface (texture) manager base class. Can be used via MCAssetManager.
  *
  * It loads texture images (all formats supported by QImage) listed in a special mapping
  * file and stores the OpenGL textures with original image dimensions using an
@@ -72,7 +72,7 @@ class MCSurfaceManager
 {
 public:
 
-    //! Constructor
+    //! Consturctor
     MCSurfaceManager();
 
     //! Destructor

@@ -50,9 +50,9 @@ public:
     {
         struct Vertex
         {
-            float x, y, z; // Location
-            float u, v;    // Texture coordinates
-            float i, j, k; // Normal
+            float x = 0, y = 0, z = 0; // Location
+            float u = 0, v = 0;    // Texture coordinates
+            float i = 0, j = 0, k = 0; // Normal
         };
 
         std::vector<Vertex> vertices;
@@ -61,56 +61,26 @@ public:
     typedef std::vector<Face> FaceVector;
 
     //! Constructor.
-    explicit MCMesh(const FaceVector & faces, MCGLMaterialPtr material);
+    MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material);
 
     //! Destructor.
     virtual ~MCMesh() {};
-
-    //! Set color.
-    void setColor(const MCGLColor & color);
-
-    //! Set scaling factors.
-    void setScale(MCFloat x, MCFloat y, MCFloat z);
-
-    //! Set scaling by dimensions.
-    void setScale(MCFloat w, MCFloat h);
 
     /*! Render by using the default size.
      * \param pos The position.
      * \param wr Half of the wanted width.
      * \param hr Half of the wanted height.
      */
-    void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
+    virtual void render(MCCamera * camera, MCVector3dFR pos, float angle) override;
 
     //! Render (fake) shadow
-    void renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
-
-    //! Render the vertex buffer only. bind() must be called separately.
-    void render();
-
-    //! Get width
-    MCFloat width() const;
-
-    //! Get height
-    MCFloat height() const;
-
-    //! Get minimum Z
-    MCFloat minZ() const;
-
-    //! Get maximum Z
-    MCFloat maxZ() const;
+    virtual void renderShadow(MCCamera * camera, MCVector3dFR pos, float angle) override;
 
 private:
 
     void init(const FaceVector & faces);
 
     void initVBOs();
-
-    int       m_numVertices;
-    MCFloat   m_w, m_h;
-    MCFloat   m_minZ, m_maxZ;
-    MCGLColor m_color;
-    MCFloat   m_sx, m_sy, m_sz;
 };
 
 #endif // MCMESH_HH

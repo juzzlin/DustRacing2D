@@ -20,7 +20,8 @@
 #include "mcobjectrendererbase.hh"
 
 MCObjectRendererBase::MCObjectRendererBase(int maxBatchSize)
-    : m_batchSize(0)
+    : MCGLObjectBase("mcobjectrendererbase")
+    , m_batchSize(0)
     , m_maxBatchSize(maxBatchSize)
     , m_hasShadow(false)
     , m_useAlphaBlend(false)

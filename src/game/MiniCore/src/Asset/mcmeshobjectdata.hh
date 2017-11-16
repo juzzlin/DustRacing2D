@@ -33,7 +33,7 @@ public:
     //! Destructor.
     virtual ~MCMeshObjectData();
 
-    //! Set the mesh id.
+    //! Set the id of the already created MCMesh.
     void setMeshId(const std::string & id);
 
     //! Return the mesh id.

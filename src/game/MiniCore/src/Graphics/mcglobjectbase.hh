@@ -26,6 +26,8 @@
 #include "mcgltexcoord.hh"
 #include "mcglvertex.hh"
 
+class MCCamera;
+
 /*! Base class for GL renderables in MiniCore. Automatically creates VBO, VAO and
  *  basic texturing support. */
 #ifdef __MC_QOPENGLFUNCTIONS__
@@ -39,7 +41,7 @@ class MCGLObjectBase
 public:
 
     //! Constructor.
-    MCGLObjectBase();
+    explicit MCGLObjectBase(std::string handle);
 
     //! Destructor.
     virtual ~MCGLObjectBase();
@@ -61,6 +63,18 @@ public:
 
     //! Release the VBO.
     void releaseVBO();
+
+    /*! Render by using the default size.
+     * \param pos The position.
+     * \param wr Half of the wanted width.
+     * \param hr Half of the wanted height. */
+    virtual void render(MCCamera * camera, MCVector3dFR pos, float angle);
+
+    //! Render (fake) shadow
+    virtual void renderShadow(MCCamera * camera, MCVector3dFR pos, float angle);
+
+    //! Render the vertex buffer only. bind() must be called separately.
+    virtual void render();
 
     //! Helper to bind texturing and VAO.
     virtual void bind();
@@ -122,6 +136,40 @@ public:
     //! Get texture coords
     const GLfloat * texCoordsAsGlArray() const;
 
+    //! Get scale
+    MCVector3dF scale() const;
+
+    //! Set scaling factors.
+    void setScale(const MCVector3dF & scale);
+
+    //! Set object size. Actually this just calculates the corresponding scale.
+    void setSize(float width, float height);
+
+    //! Get width
+    float width() const;
+
+    void setWidth(float width);
+
+    //! Get height
+    float height() const;
+
+    void setHeight(float height);
+
+    //! Get minimum Z
+    float minZ() const;
+
+    void setMinZ(float minZ);
+
+    //! Get maximum Z
+    float maxZ() const;
+
+    void setMaxZ(float maxZ);
+
+    std::string handle() const;
+
+    void setHandle(const std::string & handle);
+
+
 protected:
 
     //! Store a vertex, needed for batching
@@ -178,12 +226,14 @@ private:
 
     static GLuint m_boundVbo;
 
+    std::string m_handle;
+
 #ifdef __MC_QOPENGLFUNCTIONS__
     QOpenGLVertexArrayObject m_vao;
 #else
-    GLuint m_vao;
+    GLuint m_vao = 0;
 #endif
-    GLuint m_vbo;
+    GLuint m_vbo = 0;
 
     MCGLShaderProgramPtr m_program;
 
@@ -191,19 +241,19 @@ private:
 
     MCGLMaterialPtr m_material;
 
-    int m_bufferDataOffset;
+    int m_bufferDataOffset = 0;
 
-    int m_vertexDataSize;
+    int m_vertexDataSize = 0;
 
-    int m_normalDataSize;
+    int m_normalDataSize = 0;
 
-    int m_texCoordDataSize;
+    int m_texCoordDataSize = 0;
 
-    int m_colorDataSize;
+    int m_colorDataSize = 0;
 
-    int m_totalDataSize;
+    int m_totalDataSize = 0;
 
-    bool m_hasVao;
+    bool m_hasVao = false;
 
     VertexVector m_vertices;
 
@@ -214,6 +264,16 @@ private:
     std::vector<MCGLColor> m_colors;
 
     MCGLColor m_color;
+
+    float m_width = 0;
+
+    float m_height = 0;
+
+    float m_minZ = 0;
+
+    float m_maxZ = 0;
+
+    MCVector3dF m_scale = MCVector3dF(1.0f, 1.0f, 1.0f);
 
     friend class MCGLRectParticle; // Direct access to protected methods without inheritance
 };

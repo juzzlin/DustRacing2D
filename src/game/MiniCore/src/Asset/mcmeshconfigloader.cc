@@ -27,10 +27,6 @@
 
 #include <cassert>
 
-MCMeshConfigLoader::MCMeshConfigLoader()
-{
-}
-
 bool MCMeshConfigLoader::load(const std::string & filePath)
 {
     QDomDocument doc;
@@ -48,26 +44,19 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
 
     file.close();
 
-    QDomElement root = doc.documentElement();
+    const auto && root = doc.documentElement();
     if (root.nodeName() == "meshes")
     {
         const std::string baseModelPath = root.attribute("baseModelPath", "./").toStdString();
-        QDomNode node = root.firstChild();
+        auto && node = root.firstChild();
         while(!node.isNull() && node.nodeName() == "mesh")
         {
-            MeshMetaDataPtr newData(new MCMeshMetaData);
-            QDomElement tag = node.toElement();
-            if(!tag.isNull())
+            MeshDataPtr newData(new MCMeshMetaData);
+            const auto && element = node.toElement();
+            if (!element.isNull())
             {
-                const std::string model = tag.attribute("model", "").toStdString();
-                newData->handle         = tag.attribute("handle", "").toStdString();
-                newData->texture1       = tag.attribute("texture1", "").toStdString();
-                newData->texture2       = tag.attribute("texture2", "").toStdString();
-
-                if (!model.empty())
-                {
-                    newData->modelPath = baseModelPath + QDir::separator().toLatin1() + model;
-                }
+                parseAttributes(element, newData, baseModelPath);
+                parseChildNodes(node, newData);
             }
 
             m_meshes.push_back(newData);
@@ -77,6 +66,58 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
     }
 
     return true;
+}
+
+void MCMeshConfigLoader::parseAttributes(const QDomElement & element, MeshDataPtr newData, const std::string & baseModelPath)
+{
+    const std::string model = element.attribute("model", "").toStdString();
+
+    newData->handle = element.attribute("handle", "").toStdString();
+
+    newData->texture1 = element.attribute("texture1", "").toStdString();
+
+    newData->texture2 = element.attribute("texture2", "").toStdString();
+
+    if (!model.empty())
+    {
+        newData->modelPath = baseModelPath + QDir::separator().toLatin1() + model;
+    }
+}
+
+void MCMeshConfigLoader::parseChildNodes(const QDomNode & node, MeshDataPtr newData)
+{
+    auto && childNode = node.firstChild();
+    while (!childNode.isNull())
+    {
+        if (childNode.nodeName() == "color")
+        {
+            const auto && element = childNode.toElement();
+            if (!element.isNull())
+            {
+                newData->color.setR(element.attribute("r", "1").toFloat());
+                newData->color.setG(element.attribute("g", "1").toFloat());
+                newData->color.setB(element.attribute("b", "1").toFloat());
+                newData->color.setA(element.attribute("a", "1").toFloat());
+            }
+        }
+        else if (childNode.nodeName() == "scale")
+        {
+            const auto && element = childNode.toElement();
+            if (!element.isNull())
+            {
+                newData->scale.first.setI(element.attribute("x", "1").toFloat());
+                newData->scale.first.setJ(element.attribute("y", "1").toFloat());
+                newData->scale.first.setK(element.attribute("z", "1").toFloat());
+                newData->scale.second = true;
+            }
+        }
+        else
+        {
+            throw std::runtime_error("Unknown element '" + childNode.nodeName().toStdString() + "'");
+        }
+
+        childNode = childNode.nextSibling();
+    }
 }
 
 unsigned int MCMeshConfigLoader::meshCount() const

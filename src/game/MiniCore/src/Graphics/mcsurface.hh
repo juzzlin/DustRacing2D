@@ -57,12 +57,12 @@ public:
     MCSurface(
         std::string handle,
         MCGLMaterialPtr material,
-        MCFloat width,
-        MCFloat height,
-        MCFloat z0 = 0,
-        MCFloat z1 = 0,
-        MCFloat z2 = 0,
-        MCFloat z3 = 0);
+        float width,
+        float height,
+        float z0 = 0,
+        float z1 = 0,
+        float z2 = 0,
+        float z3 = 0);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
@@ -72,9 +72,9 @@ public:
     MCSurface(
         std::string handle,
         MCGLMaterialPtr material,
-        MCFloat width,
-        MCFloat height,
-        MCFloat z);
+        float width,
+        float height,
+        float z);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
@@ -84,72 +84,22 @@ public:
     MCSurface(
         std::string handle,
         MCGLMaterialPtr material,
-        MCFloat width,
-        MCFloat height,
+        float width,
+        float height,
         const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
     virtual ~MCSurface() {};
 
-    const std::string & handle() const;
-
     //! Update texture coordinates.
     void updateTexCoords(const MCGLTexCoord texCoords[4]);
-
-    //! Set scaling factors.
-    void setScale(const MCVector3dF & scale);
-
-    //! Set texture size. Actually this just calculates the corresponding scale.
-    void setSize(MCFloat w, MCFloat h);
-
-    /*! Render by using the default size.
-     * \param pos The position.
-     * \param wr Half of the wanted width.
-     * \param hr Half of the wanted height. */
-    void render(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
-
-    //! Render (fake) shadow
-    void renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle);
-
-    //! Render the vertex buffer only. bind() must be called separately.
-    void render();
-
-    //! Get width
-    MCFloat width() const;
-
-    //! Get height
-    MCFloat height() const;
-
-    //! Get minimum Z
-    MCFloat minZ() const;
-
-    //! Get maximum Z
-    MCFloat maxZ() const;
 
 private:
 
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 
-    void init(std::string handle, MCGLMaterialPtr material, MCFloat width, MCFloat height);
-
     void initVBOs();
-
-    std::string m_handle;
-
-    MCFloat m_w;
-
-    MCFloat m_w2;
-
-    MCFloat m_h;
-
-    MCFloat m_h2;
-
-    MCFloat m_minZ;
-
-    MCFloat m_maxZ;
-
-    MCVector3dF m_scale;
 };
 
 #endif // MCSURFACE_HH

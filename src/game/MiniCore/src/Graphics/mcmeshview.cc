@@ -30,6 +30,9 @@ MCMeshView::MCMeshView(const std::string & viewId, MCMesh * mesh)
 {
     if (m_mesh)
     {
+        // Take the initial view scale from the mesh
+        setScale(mesh->scale());
+
         updateBBox();
     }
 }
@@ -77,13 +80,13 @@ void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 
 void MCMeshView::render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
-    m_mesh->setScale(1.0, 1.0, 1.0);
+    m_mesh->setScale(scale());
     m_mesh->render(p, l, angle);
 }
 
 void MCMeshView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
 {
-    m_mesh->setScale(1.0, 1.0, 1.0);
+    m_mesh->setScale(scale());
     m_mesh->renderShadow(p, l, angle);
 }
 
@@ -118,4 +121,8 @@ void MCMeshView::setScale(const MCVector3dF & scale)
     updateBBox();
 }
 
+MCGLObjectBase * MCMeshView::object() const
+{
+    return m_mesh;
+}
 

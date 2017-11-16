@@ -89,11 +89,11 @@ static const char * carFsh =
 "    }\n"
 "    else\n"
 "    {\n"
-"        vec4  N = (normal - vec4(0.5, 0.5, 0.5, 0.0)) * 2.0;\n"
-"        float di = dot(-ddRotated, N) * dc.a;\n"
+"        vec3 N = normalize((normal.xyz - vec3(0.5, 0.5, 0.5)) * 2.0);\n"
+"        float di = dot(-ddRotated.xyz, N) * dc.a;\n"
 "        float refl = 0.33 * ((1.0 - texColor.r) + texColor.g + (1.0 - texColor.b));\n"
 "        refl *= refl * refl;\n"
-"        gl_FragColor = 0.80 * (sky * refl + texColor * (1.0 - refl) + (vec4(dc.rgb, 1.0) + vColor) * di);\n"
+"        gl_FragColor = 0.80 * ((sky * refl + texColor * (1.0 - refl)) + 0.5 * (vec4(dc.rgb, 1.0) + vColor) * di);\n"
 "    }\n"
 "}\n";
 
@@ -141,7 +141,7 @@ static const char * tileVsh =
 "void main()\n"
 "{\n"
 "    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
-"    float di = dot(dd, vec4(-inNormal, 1)) * dc.a;\n"
+"    float di = dot(dd.xyz, -inNormal) * dc.a;\n"
 "    vColor = inColor * (\n"
 "        vec4(ac.rgb, 1.0) * ac.a +\n"
 "        vec4(dc.rgb, 1.0) * di);\n"

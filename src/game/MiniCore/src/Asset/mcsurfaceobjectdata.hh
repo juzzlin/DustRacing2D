@@ -36,7 +36,7 @@ public:
     //! Destructor.
     virtual ~MCSurfaceObjectData() {};
 
-    //! Set the surface id.
+    //! Set the id of the already created MCSurface.
     void setSurfaceId(const std::string & id);
 
     //! Return the surface id.
@@ -54,7 +54,8 @@ private:
     DISABLE_ASSI(MCSurfaceObjectData);
 
     std::string m_surfaceId;
-    bool        m_defaultCircleShape;
+
+    bool m_defaultCircleShape;
 };
 
 #endif // MCSURFACEOBJECTDATA_HH

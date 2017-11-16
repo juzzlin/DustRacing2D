@@ -68,7 +68,7 @@ TrackObject * TrackObjectFactory::build(
     else if (role == "crate")
     {
         MCMeshObjectData data(role.toStdString());
-        data.setInitialLocation(MCVector3dF(location.i(), location.j(), 12));
+        data.setInitialLocation(MCVector3dF(location.i(), location.j(), 0));
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
         data.setMass(1000);

@@ -31,16 +31,13 @@
 
 static const int NUM_COLOR_COMPONENTS = 4;
 
-MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
-: m_w(1.0)
-, m_h(1.0)
-, m_minZ(0)
-, m_maxZ(0)
-, m_color(1.0, 1.0, 1.0, 1.0)
-, m_sx(1.0)
-, m_sy(1.0)
-, m_sz(1.0)
+MCMesh::MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material)
+    : MCGLObjectBase(handle)
 {
+    setWidth(1.0f);
+
+    setHeight(1.0f);
+
     init(faces);
 
     setMaterial(material);
@@ -49,7 +46,6 @@ MCMesh::MCMesh(const FaceVector & faces, MCGLMaterialPtr material)
 void MCMesh::init(const FaceVector & faces)
 {
     const int NUM_FACES = static_cast<int>(faces.size());
-    m_numVertices = NUM_FACES * 3; // Only triagles accepted
 
     float minX = std::numeric_limits<float>::max();
     float maxX = std::numeric_limits<float>::min();
@@ -86,9 +82,9 @@ void MCMesh::init(const FaceVector & faces)
             {
                 minX = std::min(minX, vertex.x());
                 maxX = std::max(maxX, vertex.x());
-                maxZ = std::max(maxZ, vertex.z());
                 minY = std::min(minY, vertex.y());
                 maxY = std::max(maxY, vertex.y());
+                minZ = std::min(minZ, vertex.z());
                 maxZ = std::max(maxZ, vertex.z());
             }
 
@@ -96,24 +92,30 @@ void MCMesh::init(const FaceVector & faces)
         }
     }
 
-    m_w = maxX - minX;
-    m_h = maxY - minY;
+    setWidth(maxX - minX);
 
-    m_minZ = minZ;
-    m_maxZ = maxZ;
+    setHeight(maxY - minY);
 
-    setColors(ColorVector(m_numVertices, m_color));
+    setMinZ(minZ);
+
+    setMaxZ(maxZ);
+
+    setColors(ColorVector(vertexCount(), color()));
 
     initVBOs();
 }
 
 void MCMesh::initVBOs()
 {
-    static const int VERTEX_DATA_SIZE   = sizeof(MCGLVertex)   * m_numVertices;
-    static const int NORMAL_DATA_SIZE   = sizeof(MCGLVertex)   * m_numVertices;
-    static const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * m_numVertices;
-    static const int COLOR_DATA_SIZE    = sizeof(GLfloat)      * m_numVertices * NUM_COLOR_COMPONENTS;
-    static const int TOTAL_DATA_SIZE    =
+    static const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * vertexCount();
+
+    static const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * vertexCount();
+
+    static const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * vertexCount();
+
+    static const int COLOR_DATA_SIZE = sizeof(GLfloat) * vertexCount() * NUM_COLOR_COMPONENTS;
+
+    static const int TOTAL_DATA_SIZE =
         VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
     initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
@@ -130,36 +132,13 @@ void MCMesh::initVBOs()
     finishBufferData();
 }
 
-void MCMesh::render()
-{
-    glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
-}
-
-void MCMesh::setColor(const MCGLColor & color)
-{
-    m_color = color;
-}
-
-void MCMesh::setScale(MCFloat x, MCFloat y, MCFloat z)
-{
-    m_sx = x;
-    m_sy = y;
-    m_sz = z;
-}
-
-void MCMesh::setScale(MCFloat w, MCFloat h)
-{
-    m_sx = w / m_w;
-    m_sy = h / m_h;
-}
-
-void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
+void MCMesh::render(MCCamera * camera, MCVector3dFR pos, float angle)
 {
     bind();
 
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-    MCFloat z = pos.k();
+    float x = pos.i();
+    float y = pos.j();
+    float z = pos.k();
 
     if (camera)
     {
@@ -167,19 +146,19 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
     }
 
     shaderProgram()->bind();
-    shaderProgram()->setScale(m_sx, m_sy, m_sz);
-    shaderProgram()->setColor(m_color);
+    shaderProgram()->setScale(scale().i(), scale().j(), scale().k());
+    shaderProgram()->setColor(color());
     shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
 
-    render();
+    MCGLObjectBase::render();
 
     release();
 }
 
-void MCMesh::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
+void MCMesh::renderShadow(MCCamera * camera, MCVector3dFR pos, float angle)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
+    float x = pos.i();
+    float y = pos.j();
 
     if (camera)
     {
@@ -188,30 +167,10 @@ void MCMesh::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
 
     bindShadow();
 
-    shadowShaderProgram()->setScale(m_sx, m_sy, m_sz);
+    shadowShaderProgram()->setScale(scale().i(), scale().j(), scale().k());
     shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
 
-    render();
+    MCGLObjectBase::render();
 
     releaseShadow();
-}
-
-MCFloat MCMesh::width() const
-{
-    return m_w;
-}
-
-MCFloat MCMesh::height() const
-{
-    return m_h;
-}
-
-MCFloat MCMesh::minZ() const
-{
-    return m_minZ;
-}
-
-MCFloat MCMesh::maxZ() const
-{
-    return m_maxZ;
 }

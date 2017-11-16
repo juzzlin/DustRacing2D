@@ -57,17 +57,26 @@ public:
 private:
 
     void loadSurfaces();
+
     void loadFonts();
+
     void loadMeshes();
 
     static MCAssetManager * m_instance;
-    MCSurfaceManager      * m_surfaceManager;
-    MCTextureFontManager  * m_textureFontManager;
-    MCMeshManager         * m_meshManager;
-    std::string             m_baseDataPath;
-    std::string             m_surfaceConfigPath;
-    std::string             m_fontConfigPath;
-    std::string             m_meshConfigPath;
+
+    MCSurfaceManager * m_surfaceManager;
+
+    MCTextureFontManager * m_textureFontManager;
+
+    MCMeshManager * m_meshManager;
+
+    std::string m_baseDataPath;
+
+    std::string m_surfaceConfigPath;
+
+    std::string m_fontConfigPath;
+
+    std::string m_meshConfigPath;
 };
 
 #endif // MCASSETMANAGER_HH

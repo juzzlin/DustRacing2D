@@ -126,3 +126,8 @@ void MCSurfaceView::setScale(const MCVector3dF &scale)
     MCShapeView::setScale(scale);
     updateBBox();
 }
+
+MCGLObjectBase * MCSurfaceView::object() const
+{
+    return m_surface;
+}

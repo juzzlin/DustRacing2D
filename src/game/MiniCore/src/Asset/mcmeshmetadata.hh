@@ -20,9 +20,14 @@
 #ifndef MCMESHMETADATA_HH
 #define MCMESHMETADATA_HH
 
+#include <MCGLColor>
+#include <MCVector3d>
+
+#include <map>
 #include <string>
 
-//! Mesh metadata structure used by MCMeshConfigLoader.
+/*! Mesh metadata structure returned by MCMeshConfigLoader.
+ *  MCMeshManager can create MCMesh objects based on this data. */
 struct MCMeshMetaData
 {
     MCMeshMetaData()
@@ -39,6 +44,12 @@ struct MCMeshMetaData
 
     //! Texture/surface handle (see MCSurfaceManager).
     std::string texture2;
+
+    //! Color
+    MCGLColor color;
+
+    //! Scale
+    std::pair<MCVector3dF, bool> scale;
 };
 
 #endif // MCMESHMETADATA_HH

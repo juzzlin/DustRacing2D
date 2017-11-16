@@ -18,6 +18,8 @@
 //
 
 #include "mcglobjectbase.hh"
+
+#include "mccamera.hh"
 #include "mcglscene.hh"
 #include "mclogger.hh"
 
@@ -26,18 +28,10 @@
 
 GLuint MCGLObjectBase::m_boundVbo = 0;
 
-MCGLObjectBase::MCGLObjectBase()
-: m_vao(0)
-, m_vbo(0)
-, m_program(MCGLScene::instance().defaultShaderProgram())
-, m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
-, m_bufferDataOffset(0)
-, m_vertexDataSize(0)
-, m_normalDataSize(0)
-, m_texCoordDataSize(0)
-, m_colorDataSize(0)
-, m_totalDataSize(0)
-, m_hasVao(false)
+MCGLObjectBase::MCGLObjectBase(std::string handle)
+    : m_handle(handle)
+    , m_program(MCGLScene::instance().defaultShaderProgram())
+    , m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -126,6 +120,53 @@ void MCGLObjectBase::createVBO()
     {
         glGenBuffers(1, &m_vbo);
     }
+}
+
+void MCGLObjectBase::render()
+{
+    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+}
+
+void MCGLObjectBase::render(MCCamera * camera, MCVector3dFR pos, float angle)
+{
+    float x = pos.i();
+    float y = pos.j();
+    float z = pos.k();
+
+    if (camera)
+    {
+        camera->mapToCamera(x, y);
+    }
+
+    bind();
+
+    shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
+    shaderProgram()->setColor(color());
+    shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
+
+    render();
+
+    release();
+}
+
+void MCGLObjectBase::renderShadow(MCCamera * camera, MCVector3dFR pos, float angle)
+{
+    float x = pos.i();
+    float y = pos.j();
+
+    if (camera)
+    {
+        camera->mapToCamera(x, y);
+    }
+
+    bindShadow();
+
+    shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
+    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
+
+    render();
+
+    releaseShadow();
 }
 
 void MCGLObjectBase::bind()
@@ -365,6 +406,72 @@ void MCGLObjectBase::disableAttributePointers()
     glDisableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
     glDisableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
     glDisableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+}
+
+MCVector3dF MCGLObjectBase::scale() const
+{
+    return m_scale;
+}
+
+std::string MCGLObjectBase::handle() const
+{
+    return m_handle;
+}
+
+void MCGLObjectBase::setHandle(const std::string & handle)
+{
+    m_handle = handle;
+}
+
+float MCGLObjectBase::width() const
+{
+    return m_width * m_scale.i();
+}
+
+void MCGLObjectBase::setWidth(float width)
+{
+    m_width = width;
+}
+
+float MCGLObjectBase::height() const
+{
+    return m_height * m_scale.j();
+}
+
+void MCGLObjectBase::setHeight(float height)
+{
+    m_height = height;
+}
+
+void MCGLObjectBase::setMaxZ(float maxZ)
+{
+    m_maxZ = maxZ;
+}
+
+void MCGLObjectBase::setMinZ(float minZ)
+{
+    m_minZ = minZ;
+}
+
+void MCGLObjectBase::setScale(const MCVector3dF & scale)
+{
+    m_scale = scale;
+}
+
+void MCGLObjectBase::setSize(float width, float height)
+{
+    m_scale.setI(width / m_width);
+    m_scale.setJ(height / m_height);
+}
+
+float MCGLObjectBase::minZ() const
+{
+    return m_minZ * m_scale.k();
+}
+
+float MCGLObjectBase::maxZ() const
+{
+    return m_maxZ * m_scale.k();
 }
 
 void MCGLObjectBase::finishBufferData()

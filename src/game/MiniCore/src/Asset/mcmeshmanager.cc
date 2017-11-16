@@ -54,7 +54,15 @@ MCMesh & MCMeshManager::createMesh(
         1);
 
     // Create a new MCMesh object
-    MeshPtr mesh(new MCMesh(faces, material));
+    MeshPtr mesh(new MCMesh(data.handle, faces, material));
+
+    // Maybe better place for this could be in the material?
+    mesh->setColor(data.color);
+
+    if (data.scale.second)
+    {
+        mesh->setScale(data.scale.first);
+    }
 
     m_meshMap[data.handle] = mesh;
 

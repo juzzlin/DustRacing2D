@@ -28,10 +28,12 @@
 #include "mcmesh.hh"
 #include "mcmeshmetadata.hh"
 
-/*! Mesh manager base class.
+/*! Mesh manager base class. Can be used via MCAssetManager.
  *
  * It loads model data (only .obj supported) listed in a special mapping
- * file and bulds MCMesh objects.
+ * file and bulds MCMesh objects. Doesn't support .mtl materials. Currently the
+ * texture is specified by MCSurface handle in the XML config. Originally the
+ * intention was to support 2D surface objects only. But things changed..
  *
  * MCMesh objects can be accessed via handles specified in the XML-based mapping file.
  *
@@ -45,7 +47,11 @@
  *      Maps handles used in the game to .obj files. -->
  *
  * <meshes baseModelPath="./models/">
- *   <mesh handle="crate" model="cube.obj" texture1="crate"/>
+ *   <mesh handle="crate" model="cube.obj" texture1="crate">
+ *     <color r="1" g="0" b="0"/>
+ *     <scale x="10" y="10" z="10"/>
+ *   </mesh>
+ *   <mesh handle="bridge" model="bridge.obj" texture1="asphalt"/>
  * </meshes>
  */
 class MCMeshManager
@@ -58,19 +64,19 @@ public:
     //! Destructor
     virtual ~MCMeshManager() {};
 
-    //! Loads mesh config from strBasePath using the given mapping file strFile.
-    //! \param configFilePath Path to the XML-based input file.
-    //! \param baseDataPath The absolute search path for an mesh is
-    //! baseDataPath + baseModelPath + fileName. baseModelPath and the fileName are
-    //! defined in the input file.
+    /*! Loads mesh config from strBasePath using the given mapping file strFile.
+     *  \param configFilePath Path to the XML-based input file.
+     *  \param baseDataPath The absolute search path for an mesh is
+     *  baseDataPath + baseModelPath + fileName. baseModelPath and the fileName are
+     *  defined in the input file. */
     virtual void load(
         const std::string & configFilePath, const std::string & baseDataPath);
 
-    //! Returns a mesh object associated with given strId.
-    //! MCMeshManager will keep the ownership.
-    //! \param handle Handle defined in the mesh config file.
-    //! \return Reference to the corresponding MCMesh.
-    //! \throws std::runtime_error on failure.
+    /*! Returns a mesh object associated with given strId.
+     *  MCMeshManager will keep the ownership.
+     *  \param handle Handle defined in the mesh config file.
+     *  \return Reference to the corresponding MCMesh.
+     *  \throws std::runtime_error on failure. */
     MCMesh & mesh(
         const std::string & handle) const;
 

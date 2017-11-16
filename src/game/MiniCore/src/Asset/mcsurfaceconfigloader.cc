@@ -106,16 +106,16 @@ void MCSurfaceConfigLoader::parseAttributes(const QDomElement & element, Surface
         newData->specularCoeff = std::pair<GLfloat, bool>(specularCoeff, specularCoeff > 1.0f);
     }
 }
-#include <iostream>
+
 void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPtr newData)
 {
     // Read child nodes of surface node.
-    QDomNode childNode = node.firstChild();
+    auto && childNode = node.firstChild();
     while (!childNode.isNull())
     {
         if (childNode.nodeName() == "color")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 newData->color.setR(element.attribute("r", "1").toFloat());
@@ -126,7 +126,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
         }
         else if (childNode.nodeName() == "colorKey")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 newData->colorKey.m_r = element.attribute("r", "0").toUInt();
@@ -137,7 +137,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
         }
         else if (childNode.nodeName() == "alphaBlend")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 newData->alphaBlend.first.m_src =
@@ -152,7 +152,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
         }
         else if (childNode.nodeName() == "alphaClamp")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 newData->alphaClamp.first = element.attribute("val", "0.5").toFloat();
@@ -161,7 +161,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
         }
         else if (childNode.nodeName() == "filter")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 const std::string min = element.attribute("min", "").toStdString();
@@ -196,7 +196,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
         }
         else if (childNode.nodeName() == "wrap")
         {
-            const QDomElement element = childNode.toElement();
+            const auto && element = childNode.toElement();
             if (!element.isNull())
             {
                 const std::string s = element.attribute("s", "").toStdString();
@@ -260,15 +260,15 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 
     file.close();
 
-    QDomElement root = doc.documentElement();
+    const auto && root = doc.documentElement();
     if (root.nodeName() == "surfaces")
     {
         const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
-        QDomNode node = root.firstChild();
+        auto && node = root.firstChild();
         while(!node.isNull() && node.nodeName() == "surface")
         {
             SurfaceDataPtr newData(new MCSurfaceMetaData);
-            QDomElement element = node.toElement();
+            auto && element = node.toElement();
             if(!element.isNull())
             {
                 parseAttributes(element, newData, baseImagePath);

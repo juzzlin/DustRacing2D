@@ -35,10 +35,6 @@
 #include <cmath>
 #include <exception>
 
-MCSurfaceManager::MCSurfaceManager()
-{
-}
-
 inline bool colorMatch(int val1, int val2, int threshold)
 {
     return (val1 >= val2 - threshold) && (val1 <= val2 + threshold);
@@ -163,6 +159,10 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
             }
         }
     }
+}
+
+MCSurfaceManager::MCSurfaceManager()
+{
 }
 
 MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image)

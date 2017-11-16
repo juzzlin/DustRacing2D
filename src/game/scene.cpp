@@ -60,6 +60,7 @@
 #include <MCGLScene>
 #include <MCGLShaderProgram>
 #include <MCLogger>
+#include <MCObjectFactory>
 #include <MCObject>
 #include <MCPhysicsComponent>
 #include <MCShape>
@@ -145,9 +146,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShadowShaderProgram(
         m_renderer.program("textShadow"));
 
-    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.7);
-    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.8, 0.3);
-    const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 0.8, 1.0);
+    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.75);
+    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.8, 0.75);
+    const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 0.8, 0.9);
 
     MCGLScene & glScene = MCWorld::instance().renderer().glScene();
     glScene.setAmbientLight(ambientLight);
@@ -496,12 +497,23 @@ void Scene::createNormalObjects()
         auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
         assert(trackObject);
 
-        MCObject & mcObject = trackObject->object();
-        mcObject.addToWorld();
-        mcObject.translate(mcObject.initialLocation());
-        mcObject.rotate(mcObject.initialAngle());
+        MCObject & object = trackObject->object();
+        object.addToWorld();
 
-        if (auto pit = dynamic_cast<Pit *>(&mcObject))
+        // Set the base Z of mesh objects at ground level instead of at the object center
+        float baseZ = 0;
+        if (object.shape() && object.shape()->view() && object.shape()->view()->object())
+        {
+            if (dynamic_cast<MCMesh*>(object.shape()->view()->object()))
+            {
+                baseZ = -object.shape()->view()->object()->minZ();
+            }
+        }
+
+        object.translate(object.initialLocation() + MCVector3dF(0, 0, baseZ));
+        object.rotate(object.initialAngle());
+
+        if (auto pit = dynamic_cast<Pit *>(&object))
         {
             connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
         }
@@ -524,15 +536,11 @@ void Scene::createBridgeObjects()
             auto tile = dynamic_pointer_cast<TrackTile>(rMap.getTile(i, j));
             if (tile && tile->tileTypeEnum() == TrackTile::TT_BRIDGE)
             {
-                MCObjectPtr bridge(new Bridge(
-                    MCAssetManager::instance().surfaceManager().surface("bridgeObject"),
-                    MCAssetManager::instance().surfaceManager().surface("wallLong")
-                ));
+                MCObjectPtr bridge(new Bridge);
 
-                bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, Bridge::zOffset));
+                bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, 0));
                 bridge->rotate(tile->rotation());
                 bridge->addToWorld();
-
                 m_bridges.push_back(bridge);
             }
         }

@@ -25,13 +25,13 @@
 #include <vector>
 #include <memory>
 
+class QDomElement;
+class QDomNode;
+
 //! Loads the mesh config.
 class MCMeshConfigLoader
 {
 public:
-
-    //! Constructor.
-    MCMeshConfigLoader();
 
     //! Load all meshes found in filePath.
     //! \return true if succeeded.
@@ -45,8 +45,13 @@ public:
 
 private:
 
-    typedef std::shared_ptr<MCMeshMetaData> MeshMetaDataPtr;
-    std::vector<MeshMetaDataPtr> m_meshes;
+    typedef std::shared_ptr<MCMeshMetaData> MeshDataPtr;
+
+    void parseAttributes(const QDomElement & element, MeshDataPtr newData, const std::string & baseModelPath);
+
+    void parseChildNodes(const QDomNode & node, MeshDataPtr newData);
+
+    std::vector<MeshDataPtr> m_meshes;
 };
 
 #endif // MCMESHCONFIGLOADER_HH

@@ -30,39 +30,52 @@
 #include <algorithm>
 #include <cassert>
 
-static const int NUM_VERTICES         = 6;
+static const int NUM_VERTICES = 6;
+
 static const int NUM_COLOR_COMPONENTS = 4;
 
-static const int VERTEX_DATA_SIZE     = sizeof(MCGLVertex)   * NUM_VERTICES;
-static const int NORMAL_DATA_SIZE     = sizeof(MCGLVertex)   * NUM_VERTICES;
-static const int TEXCOORD_DATA_SIZE   = sizeof(MCGLTexCoord) * NUM_VERTICES;
-static const int COLOR_DATA_SIZE      = sizeof(GLfloat)      * NUM_VERTICES * NUM_COLOR_COMPONENTS;
-static const int TOTAL_DATA_SIZE      =
+static const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+
+static const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+
+static const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
+
+static const int COLOR_DATA_SIZE = sizeof(GLfloat) * NUM_VERTICES * NUM_COLOR_COMPONENTS;
+
+static const int TOTAL_DATA_SIZE =
     VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
 MCSurface::MCSurface(
     std::string handle,
     MCGLMaterialPtr material,
-    MCFloat width,
-    MCFloat height,
-    MCFloat z0,
-    MCFloat z1,
-    MCFloat z2,
-    MCFloat z3)
+    float width,
+    float height,
+    float z0,
+    float z1,
+    float z2,
+    float z3)
+    : MCGLObjectBase(handle)
 {
-    init(handle, material, width, height);
+    setMaterial(material);
 
-    m_minZ = std::min(std::min(z0, z1), std::min(z2, z3));
-    m_maxZ = std::max(std::max(z0, z1), std::max(z2, z3));
+    setWidth(width);
+
+    setHeight(height);
+
+    setMinZ(std::min(std::min(z0, z1), std::min(z2, z3)));
+
+    setMaxZ(std::max(std::max(z0, z1), std::max(z2, z3)));
 
     // Init vertice data for two triangles.
+    const float w2 = this->width() / 2;
+    const float h2 = this->height() / 2;
     VertexVector vertices = {
-        MCGLVertex(-(GLfloat)m_w2, -(GLfloat)m_h2, z0),
-        MCGLVertex( (GLfloat)m_w2,  (GLfloat)m_h2, z2),
-        MCGLVertex(-(GLfloat)m_w2,  (GLfloat)m_h2, z1),
-        MCGLVertex(-(GLfloat)m_w2, -(GLfloat)m_h2, z0),
-        MCGLVertex( (GLfloat)m_w2, -(GLfloat)m_h2, z3),
-        MCGLVertex( (GLfloat)m_w2,  (GLfloat)m_h2, z2)
+        MCGLVertex(-(GLfloat)w2, -(GLfloat)h2, z0),
+        MCGLVertex( (GLfloat)w2,  (GLfloat)h2, z2),
+        MCGLVertex(-(GLfloat)w2,  (GLfloat)h2, z1),
+        MCGLVertex(-(GLfloat)w2, -(GLfloat)h2, z0),
+        MCGLVertex( (GLfloat)w2, -(GLfloat)h2, z3),
+        MCGLVertex( (GLfloat)w2,  (GLfloat)h2, z2)
     };
 
     setVertices(vertices);
@@ -106,23 +119,30 @@ MCSurface::MCSurface(
     initVBOs();
 }
 
-MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, MCFloat width, MCFloat height, MCFloat z)
+MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z)
     : MCSurface(handle, material, width, height, z, z, z, z)
 {}
 
 MCSurface::MCSurface(
-    std::string handle, MCGLMaterialPtr material, MCFloat width, MCFloat height, const MCGLTexCoord texCoords[4])
+    std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4])
+    : MCGLObjectBase(handle)
 {
-    init(handle, material, width, height);
+    setMaterial(material);
+
+    setWidth(width);
+
+    setHeight(height);
 
     // Init vertice data for two triangles.
+    const float w2 = width / 2;
+    const float h2 = height / 2;
     setVertices({
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        {-(GLfloat)m_w2,  (GLfloat)m_h2, 0},
-        {-(GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        { (GLfloat)m_w2, -(GLfloat)m_h2, 0},
-        { (GLfloat)m_w2,  (GLfloat)m_h2, 0}
+        {-(GLfloat)w2, -(GLfloat)h2, 0},
+        { (GLfloat)w2,  (GLfloat)h2, 0},
+        {-(GLfloat)w2,  (GLfloat)h2, 0},
+        {-(GLfloat)w2, -(GLfloat)h2, 0},
+        { (GLfloat)w2, -(GLfloat)h2, 0},
+        { (GLfloat)w2,  (GLfloat)h2, 0}
     });
 
     setTexCoords({
@@ -139,25 +159,6 @@ MCSurface::MCSurface(
     setColors(ColorVector(NUM_VERTICES, MCGLColor()));
 
     initVBOs();
-}
-
-const std::string & MCSurface::handle() const
-{
-    return m_handle;
-}
-
-void MCSurface::init(std::string handle, MCGLMaterialPtr material, MCFloat width, MCFloat height)
-{
-    setMaterial(material);
-
-    m_handle = handle;
-    m_w = width;
-    m_w2 = width / 2;
-    m_h = height;
-    m_h2 = height / 2;
-    m_minZ = 0;
-    m_maxZ = 0;
-    m_scale = MCVector3dF(1.0f, 1.0f, 1.0f);
 }
 
 void MCSurface::initVBOs()
@@ -192,82 +193,4 @@ void MCSurface::updateTexCoords(const MCGLTexCoord texCoords[4])
 
     glBufferSubData(
         GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
-}
-
-void MCSurface::setScale(const MCVector3dF & scale)
-{
-    m_scale = scale;
-}
-
-void MCSurface::setSize(MCFloat w, MCFloat h)
-{
-    m_scale.setI(w / m_w);
-    m_scale.setJ(h / m_h);
-}
-
-void MCSurface::render()
-{
-    glDrawArrays(GL_TRIANGLES, 0, NUM_VERTICES);
-}
-
-void MCSurface::render(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
-{
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-    MCFloat z = pos.k();
-
-    if (camera)
-    {
-        camera->mapToCamera(x, y);
-    }
-
-    bind();
-
-    shaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-    shaderProgram()->setColor(color());
-    shaderProgram()->setTransform(angle, MCVector3dF(x, y, z));
-
-    render();
-
-    release();
-}
-
-void MCSurface::renderShadow(MCCamera * camera, MCVector3dFR pos, MCFloat angle)
-{
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
-
-    if (camera)
-    {
-        camera->mapToCamera(x, y);
-    }
-
-    bindShadow();
-
-    shadowShaderProgram()->setScale(m_scale.i(), m_scale.j(), m_scale.k());
-    shadowShaderProgram()->setTransform(angle, MCVector3dF(x, y, pos.k()));
-
-    render();
-
-    releaseShadow();
-}
-
-MCFloat MCSurface::width() const
-{
-    return m_w;
-}
-
-MCFloat MCSurface::height() const
-{
-    return m_h;
-}
-
-MCFloat MCSurface::minZ() const
-{
-    return m_minZ;
-}
-
-MCFloat MCSurface::maxZ() const
-{
-    return m_maxZ;
 }
