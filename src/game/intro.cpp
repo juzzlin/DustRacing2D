@@ -30,11 +30,6 @@ Intro::Intro()
     m_back.setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
-void Intro::setFadeValue(float value)
-{
-    // TODO m_back.shaderProgram()->setFadeValue(value);
-}
-
 void Intro::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);

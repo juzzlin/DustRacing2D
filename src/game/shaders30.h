@@ -115,12 +115,13 @@ static const char * fboFsh =
 "#version 130\n"
 ""
 "uniform sampler2D tex0;\n"
-"in     vec2       texCoord0;\n"
-"out    vec4       fragColor;\n"
+"uniform float     fade = 1;\n"
+"in      vec2      texCoord0;\n"
+"out     vec4      fragColor;\n"
 ""
 "void main(void)\n"
 "{\n"
-"    fragColor = texture2D(tex0, texCoord0);\n"
+"    fragColor = texture2D(tex0, texCoord0) * fade;\n"
 "}\n";
 
 static const char * tileVsh =

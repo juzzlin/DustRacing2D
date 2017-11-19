@@ -41,6 +41,7 @@ MCGLScene::MCGLScene()
 , m_eyeZ(0)
 , m_zNear(0.1f)
 , m_zFar(1000.0f)
+, m_fadeValue(1.0f)
 , m_updateViewProjection(false)
 {
     if (!MCGLScene::m_instance) {
@@ -294,6 +295,14 @@ void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
     for (MCGLShaderProgram * p : m_shaders)
     {
         p->setSpecularLight(light);
+    }
+}
+
+void MCGLScene::setFadeValue(float value)
+{
+    for (MCGLShaderProgram * p : m_shaders)
+    {
+        p->setFadeValue(value);
     }
 }
 

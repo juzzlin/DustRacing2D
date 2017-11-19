@@ -621,7 +621,7 @@ void Scene::renderTrack()
         MCGLScene & glScene = MCWorld::instance().renderer().glScene();
         if (m_fadeAnimation->isFading())
         {
-            // TODO glScene.setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -665,7 +665,7 @@ void Scene::renderObjectShadows()
 
         if (m_fadeAnimation->isFading())
         {
-            // TODO glScene.setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())
@@ -704,7 +704,7 @@ void Scene::renderObjects()
     case StateMachine::State::DoIntro:
 
         glScene.setSplitType(MCGLScene::ShowFullScreen);
-        m_intro->setFadeValue(fadeValue);
+        glScene.setFadeValue(fadeValue);
         m_intro->render();
 
         break;
@@ -713,7 +713,7 @@ void Scene::renderObjects()
     case StateMachine::State::MenuTransitionOut:
     case StateMachine::State::MenuTransitionIn:
 
-        // TODO glScene.setFadeValue(fadeValue);
+        glScene.setFadeValue(fadeValue);
         glScene.setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->stepTime(17); // Assume 60 fps here, affects only text item animations
@@ -728,7 +728,7 @@ void Scene::renderObjects()
 
         if (m_fadeAnimation->isFading())
         {
-            // TODO glScene.setFadeValue(fadeValue);
+            glScene.setFadeValue(fadeValue);
         }
 
         if (m_game.hasTwoHumanPlayers())

@@ -75,6 +75,9 @@ public:
     /*! Set specular light for all registered shaders. */
     void setSpecularLight(const MCGLDiffuseLight & light);
 
+    //! Set fade value (0.0..1.0) to fade out/in the scene.
+    void setFadeValue(float value);
+
     //! \return default shader program.
     MCGLShaderProgramPtr defaultShaderProgram();
 
@@ -136,6 +139,8 @@ private:
     MCFloat m_zNear;
 
     MCFloat m_zFar;
+
+    MCFloat m_fadeValue;
 
     glm::mat4 m_viewMatrix;
 

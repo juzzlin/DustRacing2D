@@ -37,8 +37,6 @@ public:
     //! \reimp
     void setDimensions(int width, int height) override;
 
-    void setFadeValue(float value);
-
 private:
 
     MCSurface & m_back;

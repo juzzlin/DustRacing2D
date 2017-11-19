@@ -93,7 +93,7 @@ static const char * carFsh =
 "        float di = dot(-ddRotated.xyz, N) * dc.a;\n"
 "        float refl = 0.33 * ((1.0 - texColor.r) + texColor.g + (1.0 - texColor.b));\n"
 "        refl *= refl * refl;\n"
-"        gl_FragColor = 0.80 * ((sky * refl + texColor * (1.0 - refl)) + 0.5 * (vec4(dc.rgb, 1.0) + vColor) * di);\n"
+"        gl_FragColor = 0.80 * (sky * refl + texColor * (1.0 - refl)) + 0.5 * (vec4(dc.rgb, 1.0) + vColor) * di;\n"
 "    }\n"
 "}\n";
 
@@ -114,11 +114,12 @@ static const char * fboFsh =
 "#version 120\n"
 ""
 "uniform sampler2D tex0;\n"
+"uniform float fade = 1;\n"
 "varying vec2 texCoord0;\n"
 ""
 "void main(void)\n"
 "{\n"
-"    gl_FragColor = texture2D(tex0, texCoord0);\n"
+"    gl_FragColor = texture2D(tex0, texCoord0) * fade;\n"
 "}\n";
 
 static const char * tileVsh =

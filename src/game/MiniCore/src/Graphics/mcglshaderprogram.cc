@@ -87,6 +87,7 @@ void MCGLShaderProgram::initUniformNameMap()
     m_uniforms[Color]              = "color";
     m_uniforms[DiffuseLightDir]    = "dd";
     m_uniforms[DiffuseLightColor]  = "dc";
+    m_uniforms[FadeValue]          = "fade";
     m_uniforms[SpecularLightDir]   = "sd";
     m_uniforms[SpecularLightColor] = "sc";
     m_uniforms[SpecularCoeff]      = "sCoeff";
@@ -369,6 +370,11 @@ void MCGLShaderProgram::setColor(const MCGLColor & color)
 void MCGLShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
     glUniform4f(getUniformLocation(Scale), x, y, z, 1);
+}
+
+void MCGLShaderProgram::setFadeValue(GLfloat value)
+{
+    glUniform1f(getUniformLocation(FadeValue), value);
 }
 
 void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)

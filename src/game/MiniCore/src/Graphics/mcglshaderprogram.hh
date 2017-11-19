@@ -151,6 +151,9 @@ public:
     //! Set scale.
     virtual void setScale(GLfloat x = 1.0, GLfloat y = 1.0, GLfloat z = 1.0);
 
+    //! Set fade value. The master FBO program can use this to fade in/out the scene.
+    virtual void setFadeValue(GLfloat value);
+
     //! Bind given material.
     virtual void bindMaterial(MCGLMaterialPtr material);
 
@@ -179,6 +182,7 @@ private:
         AmbientLightColor,
         DiffuseLightDir,
         DiffuseLightColor,
+        FadeValue,
         SpecularLightDir,
         SpecularLightColor,
         SpecularCoeff,
