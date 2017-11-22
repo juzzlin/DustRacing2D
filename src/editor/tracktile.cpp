@@ -47,6 +47,8 @@ TrackTile::TrackTile(const TrackTile & other)
 {
     setPos(other.location());
     setRotation(other.rotation());
+    setComputerHint(other.computerHint());
+    setExcludeFromMinimap(other.excludeFromMinimap());
 }
 
 QRectF TrackTile::boundingRect () const

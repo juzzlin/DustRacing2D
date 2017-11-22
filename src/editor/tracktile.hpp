@@ -40,7 +40,8 @@ public:
     TrackTile(QPointF location, QPoint matrixLocation,
         const QString & type = "clear");
 
-    //! Copy constructor.
+    /*! Copy constructor.
+     *  NOTE!!: This is used when saving undo points so make sure all properties are copied! */
     TrackTile(const TrackTile & other);
 
     TrackTile & operator=(const TrackTile & other) = delete;
