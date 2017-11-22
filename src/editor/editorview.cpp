@@ -403,8 +403,13 @@ void EditorView::handleMousePressEventOnObject(QMouseEvent & event, Object & obj
     }
     else if (event.button() == Qt::LeftButton)
     {
+        // User is adding an object
+        if (m_editorData.mode() == EditorData::EditorMode::AddObject)
+        {
+            addCurrentToolBarObjectToScene();
+        }
         // User is erasing an object
-        if (m_editorData.mode() == EditorData::EditorMode::EraseObject)
+        else if (m_editorData.mode() == EditorData::EditorMode::EraseObject)
         {
             eraseObjectAtCurrentClickedPos();
         }
@@ -426,7 +431,15 @@ void EditorView::handleMousePressEventOnTargetNode(QMouseEvent & event, TargetNo
     }
     else if (event.button() == Qt::LeftButton)
     {
-        handleLeftButtonClickOnTargetNode(tnode);
+        // User is adding an object
+        if (m_editorData.mode() == EditorData::EditorMode::AddObject)
+        {
+            addCurrentToolBarObjectToScene();
+        }
+        else
+        {
+            handleLeftButtonClickOnTargetNode(tnode);
+        }
     }
 
     QWidget::mousePressEvent(&event);
