@@ -23,7 +23,7 @@
 
 #include <MCRandom>
 #include <MCTrigonom>
-#include <MCTypes>
+
 
 AI::AI(Car & car)
 : m_car(car)
@@ -71,9 +71,9 @@ void AI::steerControl(TargetNodeBasePtr tnode)
     MCVector3dF target(tnode->location().x(), tnode->location().y());
     target -= MCVector3dF(m_car.location() + MCVector3dF(m_randomTolerance));
 
-    MCFloat angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
-    MCFloat cur   = static_cast<int>(m_car.angle()) % 360;
-    MCFloat diff  = angle - cur;
+    float angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
+    float cur   = static_cast<int>(m_car.angle()) % 360;
+    float diff  = angle - cur;
 
     bool ok = false;
     while (!ok)
@@ -96,12 +96,12 @@ void AI::steerControl(TargetNodeBasePtr tnode)
 
     // PID-controller. This makes the computer players to turn and react faster
     // than the human player, but hey...they are stupid.
-    MCFloat control = diff * 0.025 + (diff - m_lastDiff) * 0.025;
-    const MCFloat maxControl = 1.5;
+    float control = diff * 0.025 + (diff - m_lastDiff) * 0.025;
+    const float maxControl = 1.5;
     control = control < 0 ? -control : control;
     control = control > maxControl ? maxControl : control;
 
-    const MCFloat maxDelta = 3.0;
+    const float maxDelta = 3.0;
     if (diff < -maxDelta)
     {
         m_car.steer(Car::Steer::Right, control);

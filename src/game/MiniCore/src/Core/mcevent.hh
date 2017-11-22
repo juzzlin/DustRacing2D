@@ -20,7 +20,6 @@
 #ifndef MCEVENT_HH
 #define MCEVENT_HH
 
-#include "mctypes.hh"
 #include "mcmacros.hh"
 
 class MCObject;
@@ -38,10 +37,10 @@ public:
   /*! Register a new event type
    * \return The new unique type ID
    */
-  static MCUint registerType();
+  static unsigned int registerType();
 
   //! Return class-wide type id
-  virtual MCUint instanceTypeId() const = 0;
+  virtual unsigned int instanceTypeId() const = 0;
 
   //! Accept the event.
   void accept();
@@ -56,7 +55,9 @@ private:
 
   DISABLE_COPY(MCEvent);
   DISABLE_ASSI(MCEvent);
-  static MCUint m_typeCount;
+
+  static unsigned int m_typeCount;
+
   bool m_accepted;
 };
 

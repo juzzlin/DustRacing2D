@@ -20,37 +20,37 @@
 #include "mcmathutil.hh"
 #include "mctrigonom.hh"
 
-MCFloat MCMathUtil::rotatedX(MCFloat x0, MCFloat y0, MCFloat angle)
+float MCMathUtil::rotatedX(float x0, float y0, float angle)
 {
     return MCTrigonom::cos(angle) * x0 -
         MCTrigonom::sin(angle) * y0;
 }
 
-MCFloat MCMathUtil::rotatedY(MCFloat x0, MCFloat y0, MCFloat angle)
+float MCMathUtil::rotatedY(float x0, float y0, float angle)
 {
     return MCTrigonom::sin(angle) * x0 +
         MCTrigonom::cos(angle) * y0;
 }
 
 void MCMathUtil::rotateVector(
-    const MCVector2dF & v0, MCVector2dF & v1, MCFloat angle)
+    const MCVector2dF & v0, MCVector2dF & v1, float angle)
 {
-    const MCFloat sin = MCTrigonom::sin(angle);
-    const MCFloat cos = MCTrigonom::cos(angle);
+    const float sin = MCTrigonom::sin(angle);
+    const float cos = MCTrigonom::cos(angle);
 
     v1.setI(cos * v0.i() - sin * v0.j());
     v1.setJ(sin * v0.i() + cos * v0.j());
 }
 
-MCVector2dF MCMathUtil::rotatedVector(const MCVector2dF & v0, MCFloat angle)
+MCVector2dF MCMathUtil::rotatedVector(const MCVector2dF & v0, float angle)
 {
-    const MCFloat sin = MCTrigonom::sin(angle);
-    const MCFloat cos = MCTrigonom::cos(angle);
+    const float sin = MCTrigonom::sin(angle);
+    const float cos = MCTrigonom::cos(angle);
 
     return MCVector2dF(cos * v0.i() - sin * v0.j(), sin * v0.i() + cos * v0.j());
 }
 
-MCFloat MCMathUtil::distanceFromVector(const MCVector2dF & p, const MCVector2dF & v)
+float MCMathUtil::distanceFromVector(const MCVector2dF & p, const MCVector2dF & v)
 {
     return abs(p.dot(MCVector2dF(-v.j(), v.i()).normalized()));
 }

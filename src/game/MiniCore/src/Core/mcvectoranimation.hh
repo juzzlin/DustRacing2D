@@ -20,7 +20,8 @@
 #ifndef MCVECTORANIMATION_HH
 #define MCVECTORANIMATION_HH
 
-#include "mctypes.hh"
+
+
 #include "mcmacros.hh"
 #include "mcvector3d.hh"
 
@@ -45,8 +46,8 @@ public:
 
     //! Initialize the animation.
     void init(
-        MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, MCUint steps,
-        MCUint preDelay = 0, MCUint postDelay = 0);
+        MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, unsigned int steps,
+        unsigned int preDelay = 0, unsigned int postDelay = 0);
 
     //! Update the animation. Returns true when done.
     bool update();
@@ -64,13 +65,13 @@ private:
 
     MCVector3dF m_delta;
 
-    MCUint m_steps;
+    unsigned int m_steps;
 
-    MCUint m_step;
+    unsigned int m_step;
 
-    MCUint m_preDelay;
+    unsigned int m_preDelay;
 
-    MCUint m_postDelay;
+    unsigned int m_postDelay;
 };
 
 #endif // MCVECTORANIMATION_HH

@@ -32,7 +32,7 @@
 #include <MCShape>
 #include <MCSurface>
 #include <MCTrigonom>
-#include <MCTypes>
+
 #include <MCVector2d>
 #include <MCWorld>
 
@@ -44,7 +44,7 @@
 using std::dynamic_pointer_cast;
 using std::static_pointer_cast;
 
-Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
+Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman)
 : MCObject(surface, "car")
 , m_desc(desc)
 , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
@@ -96,8 +96,8 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     numberPlate->setBypassCollisions(true);
     numberPlate->shape()->view()->setHasShadow(false);
 
-    const MCFloat offTrackFrictionFactor = 0.65f;
-    const MCFloat frontFriction = 0.85f;
+    const float offTrackFrictionFactor = 0.65f;
+    const float frontFriction = 0.85f;
     const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
     m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_leftFrontTirePos + tireZ, 0);
@@ -105,7 +105,7 @@ Car::Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman)
     m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_rightFrontTire, m_rightFrontTirePos + tireZ, 0);
 
-    const MCFloat rearFriction = 0.95f;
+    const float rearFriction = 0.95f;
     m_leftRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_leftRearTire, m_leftRearTirePos + tireZ, 0);
 
@@ -158,12 +158,12 @@ void Car::clearStatuses()
     m_skidding     = false;
 }
 
-MCUint Car::index() const
+unsigned int Car::index() const
 {
     return m_index;
 }
 
-void Car::steer(Steer direction, MCFloat control)
+void Car::steer(Steer direction, float control)
 {
     if (direction == Steer::Neutral)
     {
@@ -253,7 +253,7 @@ int Car::speedInKmh() const
     return m_speedInKmh;
 }
 
-MCFloat Car::absSpeed() const
+float Car::absSpeed() const
 {
     return m_absSpeed;
 }
@@ -373,11 +373,11 @@ void Car::addDamage(float damage)
     }
 }
 
-void Car::wearOutTires(int step, MCFloat factor)
+void Car::wearOutTires(int step, float factor)
 {
     if (Game::instance().difficultyProfile().hasTireWearOut())
     {
-        const MCFloat wearOut = physicsComponent().velocity().lengthFast() * step * factor / 1000;
+        const float wearOut = physicsComponent().velocity().lengthFast() * step * factor / 1000;
         if (m_tireWearOutCapacity >= wearOut)
         {
             m_tireWearOutCapacity -= wearOut;

@@ -34,7 +34,7 @@ Startlights::Startlights()
     m_timer.setInterval(1000 / m_stepsPerState);
 }
 
-bool Startlights::timeElapsed(MCUint limit)
+bool Startlights::timeElapsed(unsigned int limit)
 {
     if (++m_counter > limit)
     {
@@ -55,7 +55,7 @@ void Startlights::beginAnimation()
     m_timer.start();
 }
 
-void Startlights::setDimensions(MCUint width, MCUint height)
+void Startlights::setDimensions(unsigned int width, unsigned int height)
 {
     m_width  = width;
     m_height = height;
@@ -71,14 +71,14 @@ const MCVector3dF & Startlights::pos() const
     return m_pos;
 }
 
-MCFloat Startlights::glowScale() const
+float Startlights::glowScale() const
 {
     return m_glowScale;
 }
 
 void Startlights::stateInit()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
     m_animation.init(
@@ -93,7 +93,7 @@ void Startlights::stateInit()
 
 void Startlights::stateAppear()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     m_animation.update();
     if (timeElapsed(second))
@@ -105,7 +105,7 @@ void Startlights::stateAppear()
 
 void Startlights::stateFirstRow()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -116,7 +116,7 @@ void Startlights::stateFirstRow()
 
 void Startlights::stateSecondRow()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -127,7 +127,7 @@ void Startlights::stateSecondRow()
 
 void Startlights::stateThirdRow()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -140,7 +140,7 @@ void Startlights::stateThirdRow()
 
 void Startlights::stateGo()
 {
-    const MCUint second = m_stepsPerState;
+    const unsigned int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {

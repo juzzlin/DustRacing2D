@@ -35,7 +35,7 @@ Pit::Pit(MCSurface & surface)
 void Pit::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
-    static MCUint carType = MCObject::typeId("car");
+    static unsigned int carType = MCObject::typeId("car");
 
     if (event.collidingObject().typeId() == carType)
     {

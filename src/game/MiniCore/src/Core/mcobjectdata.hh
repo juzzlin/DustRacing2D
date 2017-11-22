@@ -21,7 +21,8 @@
 #define MCOBJECTDATA_HH
 
 #include "mcmacros.hh"
-#include "mctypes.hh"
+
+
 #include <string>
 
 #include <MCVector3d>
@@ -50,43 +51,43 @@ public:
     std::string typeId() const;
 
     //! Set mass.
-    void setMass(MCFloat mass);
+    void setMass(float mass);
 
     //! Get mass.
-    MCFloat mass() const;
+    float mass() const;
 
     //! Set shape radius (implicitly selects circle shape).
-    void setShapeRadius(MCFloat radius);
+    void setShapeRadius(float radius);
 
     //! Get shape radius.
-    MCFloat shapeRadius() const;
+    float shapeRadius() const;
 
     //! Set shape width (implicitly selects rect shape).
-    void setShapeWidth(MCFloat width);
+    void setShapeWidth(float width);
 
     //! Return shape width.
-    MCFloat shapeWidth() const;
+    float shapeWidth() const;
 
     //! Set shape height (implicitly selects rect shape).
-    void setShapeHeight(MCFloat height);
+    void setShapeHeight(float height);
 
     //! Return shape height.
-    MCFloat shapeHeight() const;
+    float shapeHeight() const;
 
     //! Return shape type.
     Shape shape() const;
 
     //! Set restitution.
-    void setRestitution(MCFloat restitution);
+    void setRestitution(float restitution);
 
     //! Get restitution.
-    MCFloat restitution() const;
+    float restitution() const;
 
     //! Set global friction.
-    void setXYFriction(MCFloat friction);
+    void setXYFriction(float friction);
 
     //! Get global friction.
-    MCFloat xyFriction() const;
+    float xyFriction() const;
 
     //! Set stationary.
     void setIsStationary(bool stationary);
@@ -112,13 +113,13 @@ private:
     DISABLE_ASSI(MCObjectData);
 
     std::string         m_typeId;
-    MCFloat             m_mass;
+    float             m_mass;
     MCObjectData::Shape m_shape;
-    MCFloat             m_shapeRadius;
-    MCFloat             m_shapeWidth;
-    MCFloat             m_shapeHeight;
-    MCFloat             m_restitution;
-    MCFloat             m_xyFriction;
+    float             m_shapeRadius;
+    float             m_shapeWidth;
+    float             m_shapeHeight;
+    float             m_restitution;
+    float             m_xyFriction;
     bool                m_stationary;
     MCVector3dF         m_location;
     int                 m_angle;

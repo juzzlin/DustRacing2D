@@ -24,15 +24,15 @@
 #include <algorithm>
 
 MCObjectGrid::MCObjectGrid(
-    MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-    MCFloat leafMaxW, MCFloat leafMaxH)
+    float x1, float y1, float x2, float y2,
+    float leafMaxW, float leafMaxH)
 : m_bbox(x1, y1, x2, y2)
 , m_leafMaxW(leafMaxW)
 , m_leafMaxH(leafMaxH)
 , m_horSize((x2 - x1) / m_leafMaxW)
 , m_verSize((y2 - y1) / m_leafMaxH)
-, m_helpHor(static_cast<MCFloat>(m_horSize) / (x2 - x1))
-, m_helpVer(static_cast<MCFloat>(m_verSize) / (y2 - y1))
+, m_helpHor(static_cast<float>(m_horSize) / (x2 - x1))
+, m_helpVer(static_cast<float>(m_verSize) / (y2 - y1))
 {
     build();
 }
@@ -45,27 +45,27 @@ MCObjectGrid::~MCObjectGrid()
     }
 }
 
-void MCObjectGrid::setIndexRange(const MCBBox<MCFloat> & bbox)
+void MCObjectGrid::setIndexRange(const MCBBox<float> & bbox)
 {
     int temp = static_cast<int>(bbox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i0 = static_cast<MCUint>(temp);
+    m_i0 = static_cast<unsigned int>(temp);
 
     temp = static_cast<int>(bbox.x2() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i1 = static_cast<MCUint>(temp);
+    m_i1 = static_cast<unsigned int>(temp);
 
     temp = static_cast<int>(bbox.y1() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j0 = static_cast<MCUint>(temp);
+    m_j0 = static_cast<unsigned int>(temp);
 
     temp = static_cast<int>(bbox.y2() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j1 = static_cast<MCUint>(temp);
+    m_j1 = static_cast<unsigned int>(temp);
 }
 
 void MCObjectGrid::insert(MCObject & object)
@@ -78,9 +78,9 @@ void MCObjectGrid::insert(MCObject & object)
     setIndexRange(object.shape()->bbox());
     object.cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
 
-    for (MCUint j = m_j0; j <= m_j1; j++)
+    for (unsigned int j = m_j0; j <= m_j1; j++)
     {
-        for (MCUint i = m_i0; i <= m_i1; i++)
+        for (unsigned int i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
             GridCell * cell = m_matrix[index];
@@ -100,9 +100,9 @@ bool MCObjectGrid::remove(MCObject & object)
     bool removed = false;
     object.restoreIndexRange(&m_i0, &m_i1, &m_j0, &m_j1);
 
-    for (MCUint j = m_j0; j <= m_j1; j++)
+    for (unsigned int j = m_j0; j <= m_j1; j++)
     {
-        for (MCUint i = m_i0; i <= m_i1; i++)
+        for (unsigned int i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
             GridCell * cell = m_matrix[index];
@@ -124,9 +124,9 @@ bool MCObjectGrid::remove(MCObject & object)
 
 void MCObjectGrid::removeAll()
 {
-    for (MCUint j = 0; j < m_verSize; j++)
+    for (unsigned int j = 0; j < m_verSize; j++)
     {
-        for (MCUint i = 0; i < m_horSize; i++)
+        for (unsigned int i = 0; i < m_horSize; i++)
         {
             const int index = j * m_horSize + i;
             m_matrix[index]->m_objects.clear();
@@ -147,9 +147,9 @@ void MCObjectGrid::build()
 
     m_matrix.clear();
 
-    for (MCUint j = 0; j < m_verSize; j++)
+    for (unsigned int j = 0; j < m_verSize; j++)
     {
-        for (MCUint i = 0; i < m_horSize; i++)
+        for (unsigned int i = 0; i < m_horSize; i++)
         {
             m_matrix.push_back(new GridCell);
         }
@@ -207,26 +207,26 @@ const MCObjectGrid::CollisionVector & MCObjectGrid::getPossibleCollisions()
     return collisions;
 }
 
-const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinDistance(const MCVector2dF & p, MCFloat d)
+const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinDistance(const MCVector2dF & p, float d)
 {
     return getObjectsWithinDistance(p.i(), p.j(), d);
 }
 
-const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d)
+const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinDistance(float x, float y, float d)
 {
-    return getObjectsWithinBBox(MCBBox<MCFloat>(x - d, y - d, x + d, y + d));
+    return getObjectsWithinBBox(MCBBox<float>(x - d, y - d, x + d, y + d));
 }
 
-const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinBBox(const MCBBox<MCFloat> & bbox)
+const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinBBox(const MCBBox<float> & bbox)
 {
     setIndexRange(bbox);
 
     static ObjectSet resultObjs;
     resultObjs.clear();
 
-    for (MCUint j = m_j0; j <= m_j1; j++)
+    for (unsigned int j = m_j0; j <= m_j1; j++)
     {
-        for (MCUint i = m_i0; i <= m_i1; i++)
+        for (unsigned int i = m_i0; i <= m_i1; i++)
         {
             const int index = j * m_horSize + i;
             for (auto && obj : m_matrix[index]->m_objects)
@@ -245,7 +245,7 @@ const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinBBox(const MCBBox<
     return resultObjs;
 }
 
-const MCBBox<MCFloat> & MCObjectGrid::bbox() const
+const MCBBox<float> & MCObjectGrid::bbox() const
 {
     return m_bbox;
 }

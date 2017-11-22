@@ -31,39 +31,39 @@ public:
     /*! Constructor
      * \param radius Radius of the shape
      * \param view View for the shape. May be nullptr. */
-    MCCircleShape(MCShapeViewPtr view, MCFloat radius);
+    MCCircleShape(MCShapeViewPtr view, float radius);
 
     //! Destructor
     virtual ~MCCircleShape();
 
     //! \reimp
-    bool contains(const MCVector2d<MCFloat> & p) const;
+    bool contains(const MCVector2d<float> & p) const;
 
     //! \reimp
-    MCFloat interpenetrationDepth(const MCSegment<MCFloat> & p, MCVector2dF & contactNormal) const;
+    float interpenetrationDepth(const MCSegment<float> & p, MCVector2dF & contactNormal) const;
 
     //! Specialized version to get interpenetration depth and contact normal.
-    MCFloat interpenetrationDepth(const MCCircleShape & p, MCVector2dF & contactNormal) const;
+    float interpenetrationDepth(const MCCircleShape & p, MCVector2dF & contactNormal) const;
 
     //! \reimp
-    MCVector2d<MCFloat> contactNormal(const MCSegment<MCFloat> & p) const;
+    MCVector2d<float> contactNormal(const MCSegment<float> & p) const;
 
     //! Return type id
-    static MCUint typeId();
+    static unsigned int typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeId() const;
+    virtual unsigned int instanceTypeId() const;
 
     //! \reimp
-    virtual MCBBox<MCFloat> bbox() const;
+    virtual MCBBox<float> bbox() const;
 
 private:
 
     DISABLE_COPY(MCCircleShape);
     DISABLE_ASSI(MCCircleShape);
 
-    static MCUint m_typeId;
-    MCFloat m_radius;
+    static unsigned int m_typeId;
+    float m_radius;
 };
 
 #endif // MCCIRCLESHAPE_HH

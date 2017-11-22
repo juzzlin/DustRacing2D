@@ -68,19 +68,19 @@ public:
     };
 
     //! Constructor.
-    Car(Description & desc, MCSurface & surface, MCUint index, bool isHuman);
+    Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman);
 
     //! Destructor.
     virtual ~Car();
 
     //! Return the index.
-    MCUint index() const;
+    unsigned int index() const;
 
     //! Clear statuses before setting any states.
     void clearStatuses();
 
     //! Steer.
-    void steer(Steer direction, MCFloat control = 1.0f);
+    void steer(Steer direction, float control = 1.0f);
 
     //! Accelerate.
     void accelerate(bool deccelerate = false);
@@ -98,7 +98,7 @@ public:
     int speedInKmh() const;
 
     //! Get cached speed.
-    MCFloat absSpeed() const;
+    float absSpeed() const;
 
     void addDamage(float damage);
 
@@ -182,51 +182,93 @@ private:
 
     void updateTireWear(int step);
 
-    void wearOutTires(int step, MCFloat factor);
+    void wearOutTires(int step, float factor);
 
-    Description              m_desc;
-    MCForceGeneratorPtr      m_onTrackFriction;
-    bool                     m_leftSideOffTrack;
-    bool                     m_rightSideOffTrack;
-    bool                     m_accelerating;
-    bool                     m_braking;
-    bool                     m_reverse;
-    bool                     m_skidding;
-    Steer                    m_steer;
-    MCUint                   m_index;
-    float                    m_tireAngle;
-    float                    m_initDamageCapacity;
-    float                    m_damageCapacity;
-    float                    m_initTireWearOutCapacity;
-    float                    m_tireWearOutCapacity;
-    MCSurface              & m_frontTire;
-    MCSurface              & m_brakeGlow;
-    MCFloat                  m_length;
-    int                      m_speedInKmh;
-    MCFloat                  m_absSpeed;
-    MCFloat                  m_dx, m_dy;
-    int                      m_nextTargetNodeIndex;
-    int                      m_currentTargetNodeIndex;
-    int                      m_prevTargetNodeIndex;
-    int                      m_routeProgression;
-    int                      m_position;
-    bool                     m_isHuman;
+    Description m_desc;
+
+    MCForceGeneratorPtr m_onTrackFriction;
+
+    bool m_leftSideOffTrack;
+
+    bool m_rightSideOffTrack;
+
+    bool m_accelerating;
+
+    bool m_braking;
+
+    bool m_reverse;
+
+    bool m_skidding;
+
+    Steer m_steer;
+
+    unsigned int m_index;
+
+    float m_tireAngle;
+
+    float m_initDamageCapacity;
+
+    float m_damageCapacity;
+
+    float m_initTireWearOutCapacity;
+
+    float m_tireWearOutCapacity;
+
+    MCSurface & m_frontTire;
+
+    MCSurface & m_brakeGlow;
+
+    float m_length;
+
+    int m_speedInKmh;
+
+    float m_absSpeed;
+
+    float m_dx, m_dy;
+
+    int m_nextTargetNodeIndex;
+
+    int m_currentTargetNodeIndex;
+
+    int m_prevTargetNodeIndex;
+
+    int m_routeProgression;
+
+    int m_position;
+
+    bool m_isHuman;
+
     CarParticleEffectManager m_particleEffectManager;
+
     CarSoundEffectManagerPtr m_soundEffectManager;
-    MCObjectPtr              m_leftFrontTire;
-    MCObjectPtr              m_rightFrontTire;
-    MCObjectPtr              m_leftRearTire;
-    MCObjectPtr              m_rightRearTire;
-    MCObjectPtr              m_leftBrakeGlow;
-    MCObjectPtr              m_rightBrakeGlow;
-    MCVector3dF              m_numberPos;
-    MCVector3dF              m_leftFrontTirePos;
-    MCVector3dF              m_rightFrontTirePos;
-    MCVector3dF              m_leftRearTirePos;
-    MCVector3dF              m_rightRearTirePos;
-    MCVector3dF              m_leftBrakeGlowPos;
-    MCVector3dF              m_rightBrakeGlowPos;
-    bool                     m_hadHardCrash;
+
+    MCObjectPtr m_leftFrontTire;
+
+    MCObjectPtr m_rightFrontTire;
+
+    MCObjectPtr m_leftRearTire;
+
+    MCObjectPtr m_rightRearTire;
+
+    MCObjectPtr m_leftBrakeGlow;
+
+    MCObjectPtr m_rightBrakeGlow;
+
+    MCVector3dF m_numberPos;
+
+    MCVector3dF m_leftFrontTirePos;
+
+    MCVector3dF m_rightFrontTirePos;
+
+    MCVector3dF m_leftRearTirePos;
+
+    MCVector3dF m_rightRearTirePos;
+
+    MCVector3dF m_leftBrakeGlowPos;
+
+    MCVector3dF m_rightBrakeGlowPos;
+
+    bool m_hadHardCrash;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

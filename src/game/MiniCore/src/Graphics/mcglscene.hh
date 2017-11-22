@@ -22,7 +22,7 @@
 
 #include <MCGLM>
 #include "mcglshaderprogram.hh"
-#include "mctypes.hh"
+
 #include <vector>
 
 class MCGLAmbientLight;
@@ -57,8 +57,8 @@ public:
     virtual void initialize();
 
     //! Resize / set projection matrices and viewport. Re-implement if desired.
-    virtual void resize(MCUint viewWidth, MCUint viewHeight,
-        MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle, MCFloat zNear, MCFloat zFar);
+    virtual void resize(unsigned int viewWidth, unsigned int viewHeight,
+        unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar);
 
     //! Set viewport split type.
     void setSplitType(SplitType splitType = ShowFullScreen);
@@ -97,18 +97,18 @@ public:
     MCGLShaderProgramPtr defaultFBOShaderProgram();
 
     //! \return current view angle
-    MCFloat viewAngle() const;
+    float viewAngle() const;
 
     //! \return current eye distance
-    MCFloat eyeZ() const;
+    float eyeZ() const;
 
 protected:
 
     //! Set viewer's position. Automatically called by resize().
-    virtual void setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle);
+    virtual void setViewerPosition(unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle);
 
     //! Set projection. Automatically called by resize().
-    virtual void setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, MCFloat viewAngle);
+    virtual void setProjection(float aspectRatio, float zNear, float zFar, float viewAngle);
 
 private:
 
@@ -124,23 +124,23 @@ private:
 
     SplitType m_splitType;
 
-    MCUint m_viewWidth;
+    unsigned int m_viewWidth;
 
-    MCUint m_viewHeight;
+    unsigned int m_viewHeight;
 
-    MCUint m_sceneWidth;
+    unsigned int m_sceneWidth;
 
-    MCUint m_sceneHeight;
+    unsigned int m_sceneHeight;
 
-    MCFloat m_viewAngle;
+    float m_viewAngle;
 
-    MCFloat m_eyeZ;
+    float m_eyeZ;
 
-    MCFloat m_zNear;
+    float m_zNear;
 
-    MCFloat m_zFar;
+    float m_zFar;
 
-    MCFloat m_fadeValue;
+    float m_fadeValue;
 
     glm::mat4 m_viewMatrix;
 

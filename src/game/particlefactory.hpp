@@ -18,7 +18,7 @@
 
 #include <MCParticle>
 #include <MCParticleRendererBase>
-#include <MCTypes>
+
 #include <MCVector3d>
 
 #include <vector>

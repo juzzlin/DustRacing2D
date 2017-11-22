@@ -99,7 +99,7 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
         MCSurfaceView * view = static_cast<MCSurfaceView *>(object->shape()->view().get());
         MCVector3dF location(object->shape()->location());
 
-        MCFloat x, y, z;
+        float x, y, z;
         if (isShadow)
         {
             x = location.i() + object->shape()->shadowOffset().i();

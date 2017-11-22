@@ -34,26 +34,26 @@ public:
     /*! Constructor.
      *  \param frequency The frequency of the timer.
      */
-    explicit MCTimerEvent(MCUint frequency);
+    explicit MCTimerEvent(unsigned int frequency);
 
     //! Destructor.
     ~MCTimerEvent();
 
     //! Return the frequency.
-    MCUint frequency() const;
+    unsigned int frequency() const;
 
     //! Return the typeId.
-    static MCUint typeId();
+    static unsigned int typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeId() const;
+    virtual unsigned int instanceTypeId() const;
 
 private:
 
     DISABLE_COPY(MCTimerEvent);
     DISABLE_ASSI(MCTimerEvent);
 
-    static MCUint m_typeId;
+    static unsigned int m_typeId;
     MCTimerEventImpl * const m_pImpl;
 };
 

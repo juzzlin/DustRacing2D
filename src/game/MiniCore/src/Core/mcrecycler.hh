@@ -20,8 +20,6 @@
 #ifndef MCRECYCLER_HH
 #define MCRECYCLER_HH
 
-#include "mctypes.hh"
-
 #include <vector>
 #include <stack>
 
@@ -57,9 +55,9 @@ public:
 
 private:
 
-    MCUint deleteFreeObjects();
+    unsigned int deleteFreeObjects();
 
-    MCUint deleteObjects();
+    unsigned int deleteObjects();
 
     typedef std::vector<T *> ObjectPool;
     ObjectPool m_objs;
@@ -87,9 +85,9 @@ T * MCRecycler<T>::newObject()
 }
 
 template <typename T>
-MCUint MCRecycler<T>::deleteObjects()
+unsigned int MCRecycler<T>::deleteObjects()
 {
-    MCUint count = 0;
+    unsigned int count = 0;
     for (auto iter = m_objs.begin(); iter != m_objs.end(); iter++) {
         delete *iter;
         count++;

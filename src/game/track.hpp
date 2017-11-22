@@ -21,7 +21,7 @@
 
 #include <MCBBox>
 #include <MCGLShaderProgram>
-#include <MCTypes>
+
 
 class TrackData;
 class MCCamera;
@@ -44,16 +44,16 @@ public:
     void render(MCCamera * camera);
 
     //! Return width in length units.
-    MCUint width() const;
+    unsigned int width() const;
 
     //! Return height in length units.
-    MCUint height() const;
+    unsigned int height() const;
 
     //! Return the track data.
     TrackData & trackData() const;
 
     //! Return pointer to the tile at the given location.
-    TrackTilePtr trackTileAtLocation(MCUint x, MCUint y) const;
+    TrackTilePtr trackTileAtLocation(unsigned int x, unsigned int y) const;
 
     //! Return pointer to the finish line tile.
     TrackTilePtr finishLine() const;
@@ -73,18 +73,18 @@ public:
 private:
 
     void calculateVisibleIndices(const MCBBox<int> & r,
-        MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2);
+        unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2);
 
     void renderAsphalt(
-        MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
 
     void renderTiles(
-        MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2);
+        MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
 
 
     TrackData * m_trackData;
 
-    MCUint m_rows, m_cols, m_width, m_height;
+    unsigned int m_rows, m_cols, m_width, m_height;
 
     MCSurface & m_asphalt;
 

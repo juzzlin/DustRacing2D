@@ -20,7 +20,6 @@
 #include <QString>
 #include <QTimer>
 
-#include <MCTypes>
 #include <MCVectorAnimation>
 
 #include <functional>
@@ -55,11 +54,11 @@ public:
 
     State state() const;
 
-    void setDimensions(MCUint width, MCUint height);
+    void setDimensions(unsigned int width, unsigned int height);
 
     const MCVector3dF & pos() const;
 
-    MCFloat glowScale() const;
+    float glowScale() const;
 
 signals:
 
@@ -91,17 +90,25 @@ private:
     void stateDisappear();
     void stateEnd();
 
-    bool timeElapsed(MCUint limit);
+    bool timeElapsed(unsigned int limit);
 
-    State             m_state;
-    MCUint            m_counter;
-    MCUint            m_stepsPerState;
-    MCVector3dF       m_pos;
-    MCUint            m_width;
-    MCUint            m_height;
-    MCFloat           m_glowScale;
+    State m_state;
+
+    unsigned int m_counter;
+
+    unsigned int m_stepsPerState;
+
+    MCVector3dF m_pos;
+
+    unsigned int m_width;
+
+    unsigned int m_height;
+
+    float m_glowScale;
+
     MCVectorAnimation m_animation;
-    QTimer            m_timer;
+
+    QTimer m_timer;
 };
 
 #endif // STARTLIGHTS_HPP

@@ -23,7 +23,6 @@
 #include <algorithm>
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
-#include "mctypes.hh"
 
 //! Bounding box structure in 2d
 template <typename T>
@@ -205,6 +204,6 @@ private:
     T m_x1, m_y1, m_x2, m_y2;
 };
 
-typedef MCBBox<MCFloat> MCBBoxF;
+typedef MCBBox<float> MCBBoxF;
 
 #endif // MCBBOX_HH

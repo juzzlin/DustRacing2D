@@ -22,7 +22,6 @@
 
 #include "mcbbox.hh"
 #include "mcmacros.hh"
-#include "mctypes.hh"
 
 /*! \class MCCamera.
  *  \brief Scene camera window.
@@ -49,7 +48,7 @@ public:
      *  \param maxX Maximum allowed x for the window.
      *  \param maxY Maximum allowed y for the window.
      */
-    MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
+    MCCamera(float w, float h, float x, float y, float maxX, float maxY);
 
     /*! \brief Re-init.
      *  \param w Width of the window.
@@ -59,13 +58,13 @@ public:
      *  \param maxX Maximum allowed x for the window.
      *  \param maxY Maximum allowed y for the window.
      */
-    void init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY);
+    void init(float w, float h, float x, float y, float maxX, float maxY);
 
     /*! \brief Set Camera location in the scene.
      *  \param x Center x of the window.
      *  \param y Center y of the window.
      */
-    void setPos(MCFloat x, MCFloat y);
+    void setPos(float x, float y);
 
     /*! \brief Set Camera location in the scene.
      *  \param pos Center location of the window.
@@ -74,52 +73,52 @@ public:
 
     const MCVector2dF & pos() const;
 
-    MCFloat x() const;
+    float x() const;
 
-    MCFloat y() const;
+    float y() const;
 
     //! Get bounding box
-    MCBBox<MCFloat> bbox() const;
+    MCBBox<float> bbox() const;
 
     //! Get width
-    MCFloat width() const;
+    float width() const;
 
     //! Get height
-    MCFloat height() const;
+    float height() const;
 
     //! Translate given scene x-coordinate into Camera coordinate
-    MCFloat mapXToCamera(MCFloat x) const
+    float mapXToCamera(float x) const
     {
         return x - m_pos.i() + m_halfW;
     }
 
     //! Translate given scene y-coordinate into Camera coordinate
-    MCFloat mapYToCamera(MCFloat y) const
+    float mapYToCamera(float y) const
     {
         return y - m_pos.j() + m_halfH;
     }
 
     //! Translate given scene coordinates in-place into Camera coordinates
-    void mapToCamera(MCFloat & x, MCFloat & y)
+    void mapToCamera(float & x, float & y)
     {
         x = x - m_pos.i() + m_halfW;
         y = y - m_pos.j() + m_halfH;
     }
 
     //! Translate given Camera x-coordinate into scene coordinate
-    MCFloat mapXToScene(MCFloat x) const
+    float mapXToScene(float x) const
     {
         return x + m_pos.i() - m_halfW;
     }
 
     //! Translate given Camera y-coordinate into scene coordinate
-    MCFloat mapYToScene(MCFloat y) const
+    float mapYToScene(float y) const
     {
         return y + m_pos.j() - m_halfH;
     }
 
     //! Translate given Camera coordinates in-place into scene coordinates
-    void mapToScene(MCFloat & x, MCFloat & y)
+    void mapToScene(float & x, float & y)
     {
         x = x + m_pos.i() - m_halfW;
         y = y + m_pos.j() - m_halfH;
@@ -127,13 +126,13 @@ public:
 
     //! Test if given BBox is visible through the current
     //! camera window
-    bool isVisible(const MCBBox<MCFloat> & r) const
+    bool isVisible(const MCBBox<float> & r) const
     {
-        const MCFloat w2 = r.width()  / 2;
-        const MCFloat h2 = r.height() / 2;
+        const float w2 = r.width()  / 2;
+        const float h2 = r.height() / 2;
 
         // Give some space to possible shadows, that's why we're adding w2 and h2.
-        return MCBBox<MCFloat>(
+        return MCBBox<float>(
             m_pos.i() - m_halfW - w2,
             m_pos.j() - m_halfH - h2,
             m_pos.i() + m_halfW + w2,
@@ -149,16 +148,16 @@ private:
   DISABLE_ASSI(MCCamera);
 
   //! Width and height of the camera window
-  MCFloat m_w, m_h;
+  float m_w, m_h;
 
   //! Width and height of the camera window divided by 2
-  MCFloat m_halfW, m_halfH;
+  float m_halfW, m_halfH;
 
   //! Coordinates of the center of the camera window
   MCVector2dF m_pos;
 
   //! Maximum camera coordinates
-  MCFloat m_maxX, m_maxY;
+  float m_maxX, m_maxY;
 };
 
 #endif // MCCAMERA_HH

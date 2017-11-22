@@ -103,7 +103,7 @@ void MCSurfaceParticleRendererLegacy::setBatch(MCRenderLayer::ObjectBatch & batc
         MCSurfaceParticle * particle = static_cast<MCSurfaceParticle *>(batch.objects[i]);
         MCVector3dF location(particle->location());
 
-        MCFloat x, y, z;
+        float x, y, z;
 
         if (isShadow)
         {
@@ -125,8 +125,8 @@ void MCSurfaceParticleRendererLegacy::setBatch(MCRenderLayer::ObjectBatch & batc
 
         for (int j = 0; j < NUM_VERTICES_PER_PARTICLE; j++)
         {
-            MCFloat vertexX = vertices[j].x() * particle->radius();
-            MCFloat vertexY = vertices[j].y() * particle->radius();
+            float vertexX = vertices[j].x() * particle->radius();
+            float vertexY = vertices[j].y() * particle->radius();
 
             m_colors[vertexIndex] = particle->color();
             if (particle->animationStyle() == MCParticle::AnimationStyle::FadeOut)

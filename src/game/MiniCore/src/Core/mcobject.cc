@@ -78,7 +78,7 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeName)
     setShape(rectShape);
 }
 
-MCUint MCObject::getTypeIdForName(const std::string & typeName)
+unsigned int MCObject::getTypeIdForName(const std::string & typeName)
 {
     return MCObject::m_typeRegistry.getTypeIdForName(typeName);
 }
@@ -89,7 +89,7 @@ const std::string & MCObject::typeName() const
 }
 
 void MCObject::addChildObject(
-    MCObjectPtr object, const MCVector3dF & relativeLocation, MCFloat relativeAngle)
+    MCObjectPtr object, const MCVector3dF & relativeLocation, float relativeAngle)
 {
     assert(object.get() != this);
     assert(object->m_parent != this);
@@ -168,7 +168,7 @@ void MCObject::checkBoundaries()
     checkZBoundariesAndSendEvent();
 }
 
-void MCObject::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
+void MCObject::checkXBoundariesAndSendEvent(float minX, float maxX)
 {
     const MCWorld & world = MCWorld::instance();
     if (minX < world.minX())
@@ -183,7 +183,7 @@ void MCObject::checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX)
     }
 }
 
-void MCObject::checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY)
+void MCObject::checkYBoundariesAndSendEvent(float minY, float maxY)
 {
     const MCWorld & world = MCWorld::instance();
     if (minY < world.minY())
@@ -219,12 +219,12 @@ void MCObject::checkZBoundariesAndSendEvent()
     }
 }
 
-MCUint MCObject::typeId() const
+unsigned int MCObject::typeId() const
 {
     return m_typeId;
 }
 
-MCUint MCObject::typeId(const std::string & typeName)
+unsigned int MCObject::typeId(const std::string & typeName)
 {
     return MCObject::getTypeIdForName(typeName);
 }
@@ -300,7 +300,7 @@ void MCObject::addToWorld()
     }
 }
 
-void MCObject::addToWorld(MCFloat x, MCFloat y, MCFloat z)
+void MCObject::addToWorld(float x, float y, float z)
 {
     MCWorld::instance().addObject(*this);
 
@@ -500,7 +500,7 @@ void MCObject::setCenter(MCVector2dF center)
     rotateShape(m_angle);
 }
 
-void MCObject::rotate(MCFloat newAngle, bool updateChildTransforms_)
+void MCObject::rotate(float newAngle, bool updateChildTransforms_)
 {
     doRotate(newAngle);
     m_angle = newAngle;
@@ -511,18 +511,18 @@ void MCObject::rotate(MCFloat newAngle, bool updateChildTransforms_)
     }
 }
 
-void MCObject::rotateRelative(MCFloat newAngle)
+void MCObject::rotateRelative(float newAngle)
 {
     m_relativeAngle = newAngle;
 }
 
-void MCObject::doRotate(MCFloat newAngle)
+void MCObject::doRotate(float newAngle)
 {
     updateCenter();
     rotateShape(newAngle);
 }
 
-void MCObject::rotateShape(MCFloat angle)
+void MCObject::rotateShape(float angle)
 {
     if (m_shape && std::abs(m_shape->angle() - angle) > std::numeric_limits<float>::epsilon())
     {
@@ -551,7 +551,7 @@ void MCObject::updateCenter()
     m_centerIsZero = m_center.isZero();
 }
 
-MCFloat MCObject::angle() const
+float MCObject::angle() const
 {
     return m_angle;
 }
@@ -601,7 +601,7 @@ int MCObject::index() const
     return m_index;
 }
 
-void MCObject::cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1)
+void MCObject::cacheIndexRange(unsigned int i0, unsigned int i1, unsigned int j0, unsigned int j1)
 {
     m_i0 = i0;
     m_i1 = i1;
@@ -609,7 +609,7 @@ void MCObject::cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1)
     m_j1 = j1;
 }
 
-void MCObject::restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1)
+void MCObject::restoreIndexRange(unsigned int * i0, unsigned int * i1, unsigned int * j0, unsigned int * j1)
 {
     *i0 = m_i0;
     *i1 = m_i1;
@@ -632,7 +632,7 @@ void MCObject::deleteContacts()
     auto i(m_contacts.begin());
     for (; i != m_contacts.end(); i++)
     {
-        for (MCUint j = 0; j < i->second.size(); j++)
+        for (unsigned int j = 0; j < i->second.size(); j++)
         {
             i->second[j]->free();
         }
@@ -645,7 +645,7 @@ void MCObject::deleteContacts(MCObject & object)
     auto i(m_contacts.find(&object));
     if (i != m_contacts.end())
     {
-        for (MCUint j = 0; j < i->second.size(); j++)
+        for (unsigned int j = 0; j < i->second.size(); j++)
         {
             i->second[j]->free();
         }
@@ -685,11 +685,11 @@ void MCObject::updateChildTransforms()
     }
 }
 
-MCFloat MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
+float MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    MCFloat linearBalance = 1.0;
+    float linearBalance = 1.0;
     if (shape()) {
-        const MCFloat r = shape()->radius();
+        const float r = shape()->radius();
         if (r > 0) {
             linearBalance = 1.0 - MCMathUtil::distanceFromVector(
                 MCVector2dF(pos - location()), MCVector2dF(force)) / r;

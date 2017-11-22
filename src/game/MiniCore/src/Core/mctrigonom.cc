@@ -25,8 +25,8 @@
 
 namespace
 {
-    const MCUint  LutSize = 7200;
-    const MCFloat PI      = 3.1415926536f;
+    const unsigned int LutSize = 7200;
+    const float PI = 3.1415926536f;
 }
 
 //! Implementation class for MCTrigonom
@@ -36,8 +36,8 @@ public:
     MCTrigonomImpl();
 
 private:
-    std::vector<MCFloat> m_sin;
-    std::vector<MCFloat> m_cos;
+    std::vector<float> m_sin;
+    std::vector<float> m_cos;
     friend class MCTrigonom;
 };
 
@@ -47,7 +47,7 @@ MCTrigonomImpl::MCTrigonomImpl()
 : m_sin(LutSize, 0)
 , m_cos(LutSize, 0)
 {
-    for (MCUint i = 0; i < LutSize; i++) {
+    for (unsigned int i = 0; i < LutSize; i++) {
         MCTrigonomImpl::m_sin.at(i) =
             std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
         MCTrigonomImpl::m_cos.at(i) =
@@ -55,19 +55,19 @@ MCTrigonomImpl::MCTrigonomImpl()
     }
 }
 
-MCFloat MCTrigonom::degToRad(MCFloat angle)
+float MCTrigonom::degToRad(float angle)
 {
-    static const MCFloat DegToRad(PI / 180.0f);
+    static const float DegToRad(PI / 180.0f);
     return angle * DegToRad;
 }
 
-MCFloat MCTrigonom::radToDeg(MCFloat angle)
+float MCTrigonom::radToDeg(float angle)
 {
-    static const MCFloat RadToDeg(180.0f / PI);
+    static const float RadToDeg(180.0f / PI);
     return angle * RadToDeg;
 }
 
-MCFloat MCTrigonom::sin(MCFloat angle)
+float MCTrigonom::sin(float angle)
 {
     const int index = static_cast<int>(angle * 10.0f) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))
@@ -77,7 +77,7 @@ MCFloat MCTrigonom::sin(MCFloat angle)
     return std::sin(degToRad(angle));
 }
 
-MCFloat MCTrigonom::cos(MCFloat angle)
+float MCTrigonom::cos(float angle)
 {
     const int index = static_cast<int>(angle * 10.0f) + 3600;
     if (index >= 0 && index < static_cast<int>(LutSize))

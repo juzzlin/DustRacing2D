@@ -20,8 +20,6 @@
 #ifndef MCVECTOR2D_HH
 #define MCVECTOR2D_HH
 
-#include "mctypes.hh"
-
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -207,8 +205,8 @@ private:
     T m_i, m_j;
 };
 
-typedef MCVector2d<MCFloat> MCVector2dF;
-typedef const MCVector2dF & MCVector2dFR;
+using MCVector2dF = MCVector2d<float>;
+using MCVector2dFR = const MCVector2dF &;
 
 template <typename T>
 MCVector2d<T>::MCVector2d() :

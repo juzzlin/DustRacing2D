@@ -44,12 +44,12 @@ Track::Track(TrackData * trackData)
     assert(trackData);
 }
 
-MCUint Track::width() const
+unsigned int Track::width() const
 {
     return m_width;
 }
 
-MCUint Track::height() const
+unsigned int Track::height() const
 {
     return m_height;
 }
@@ -59,14 +59,14 @@ TrackData & Track::trackData() const
     return *m_trackData;
 }
 
-TrackTilePtr Track::trackTileAtLocation(MCUint x, MCUint y) const
+TrackTilePtr Track::trackTileAtLocation(unsigned int x, unsigned int y) const
 {
     // X index
-    MCUint i = x * m_cols / m_width;
+    unsigned int i = x * m_cols / m_width;
     i = i >= m_cols ? m_cols - 1 : i;
 
     // Y index
-    MCUint j = y * m_rows / m_height;
+    unsigned int j = y * m_rows / m_height;
     j = j >= m_rows ? m_rows - 1 : j;
 
     return static_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
@@ -75,9 +75,9 @@ TrackTilePtr Track::trackTileAtLocation(MCUint x, MCUint y) const
 TrackTilePtr Track::finishLine() const
 {
     const MapBase & map = m_trackData->map();
-    for (MCUint j = 0; j < map.rows(); j++)
+    for (unsigned int j = 0; j < map.rows(); j++)
     {
-        for (MCUint i = 0; i < map.cols(); i++)
+        for (unsigned int i = 0; i < map.cols(); i++)
         {
             TrackTilePtr pTile = static_pointer_cast<TrackTile>(map.getTile(i, j));
             if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
@@ -91,7 +91,7 @@ TrackTilePtr Track::finishLine() const
 }
 
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
-    MCUint & i0, MCUint & i2, MCUint & j0, MCUint & j2)
+    unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2)
 
 {
     // Calculate which tiles are visible in the Camera window:
@@ -117,10 +117,10 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
 void Track::render(MCCamera * camera)
 {
     // Get the Camera window
-    MCBBox<MCFloat> cameraBox(camera->bbox());
+    MCBBox<float> cameraBox(camera->bbox());
 
     // Calculate which tiles are visible
-    MCUint i2, j2, i0, j0;
+    unsigned int i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
     MCGLShaderProgramPtr prog2d = Renderer::instance().program("tile2d");
@@ -135,9 +135,9 @@ void Track::render(MCCamera * camera)
 }
 
 void Track::renderAsphalt(
-    MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
 {
-    MCFloat x1, y1; // Coordinates mapped to camera
+    float x1, y1; // Coordinates mapped to camera
 
     // Bind common geometry and textures for all asphalt tiles.
     m_asphalt.setShaderProgram(prog);
@@ -149,10 +149,10 @@ void Track::renderAsphalt(
     int initX = i0 * TrackTile::TILE_W;
     int x     = initX;
     int y     = j0 * TrackTile::TILE_H;
-    for (MCUint j = j0; j <= j2; j++)
+    for (unsigned int j = j0; j <= j2; j++)
     {
         x = initX;
-        for (MCUint i = i0; i <= i2; i++)
+        for (unsigned int i = i0; i <= i2; i++)
         {
             auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
 
@@ -173,14 +173,14 @@ void Track::renderAsphalt(
 }
 
 void Track::renderTiles(
-    MCCamera * camera, MCGLShaderProgramPtr prog, MCUint i0, MCUint i2, MCUint j0, MCUint j2)
+    MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
 {
-    MCFloat x1, y1; // Coordinates mapped to camera
+    float x1, y1; // Coordinates mapped to camera
 
     struct SortedTile
     {
         TrackTile * tile;
-        MCFloat x1, y1;
+        float x1, y1;
     };
 
     // The tiles are sorted with respect to their surface in order
@@ -193,10 +193,10 @@ void Track::renderTiles(
     int initX = i0 * TrackTile::TILE_W;
     int x     = initX;
     int y     = j0 * TrackTile::TILE_H;
-    for (MCUint j = j0; j <= j2; j++)
+    for (unsigned int j = j0; j <= j2; j++)
     {
         x = initX;
-        for (MCUint i = i0; i <= i2; i++)
+        for (unsigned int i = i0; i <= i2; i++)
         {
             auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
             if (MCSurface * surface = tile->surface())

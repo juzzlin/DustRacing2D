@@ -32,7 +32,7 @@ void MCForceRegistry::update()
     while (iter != m_registryHash.end())
     {
         Registry & registry = iter->second;
-        for (MCUint i = 0; i < registry.size(); i++)
+        for (unsigned int i = 0; i < registry.size(); i++)
         {
             if (iter->first->index() != -1)
             {
@@ -62,7 +62,7 @@ void MCForceRegistry::removeForceGenerator(MCForceGeneratorPtr generator, MCObje
     if (iter != m_registryHash.end())
     {
         Registry & registry = iter->second;
-        for (MCUint i = 0; i < registry.size(); i++)
+        for (unsigned int i = 0; i < registry.size(); i++)
         {
             if (registry[i] == generator && iter->first == &object)
             {

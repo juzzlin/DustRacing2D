@@ -18,10 +18,8 @@
 //
 
 #include "mcmeshmanager.hh"
-
 #include "mcassetmanager.hh"
 #include "mcglmaterial.hh"
-#include "mctypes.hh"
 #include "mcmesh.hh"
 #include "mcmeshconfigloader.hh"
 #include "mcmeshloader.hh"

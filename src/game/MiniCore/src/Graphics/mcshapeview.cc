@@ -63,15 +63,15 @@ bool MCShapeView::hasShadow() const
     return m_hasShadow;
 }
 
-void MCShapeView::render(const MCVector3d<MCFloat> &, MCFloat, MCCamera *)
+void MCShapeView::render(const MCVector3d<float> &, float, MCCamera *)
 {
 }
 
-void MCShapeView::renderShadow(const MCVector3d<MCFloat> &, MCFloat, MCCamera *)
+void MCShapeView::renderShadow(const MCVector3d<float> &, float, MCCamera *)
 {
 }
 
-MCUint MCShapeView::viewId() const
+unsigned int MCShapeView::viewId() const
 {
     return m_viewId;
 }

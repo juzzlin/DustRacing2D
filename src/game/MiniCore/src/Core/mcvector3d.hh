@@ -209,8 +209,8 @@ private:
     T m_i, m_j, m_k, padding;
 };
 
-typedef MCVector3d<MCFloat> MCVector3dF;
-typedef const MCVector3dF & MCVector3dFR;
+using MCVector3dF = MCVector3d<float>;
+using MCVector3dFR = const MCVector3dF &;
 
 template <typename T>
 MCVector3d<T>::MCVector3d() :

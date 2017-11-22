@@ -25,12 +25,12 @@ MCCamera::MCCamera()
     init(0, 0, 0, 0, 0, 0);
 }
 
-MCCamera::MCCamera(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
+MCCamera::MCCamera(float w, float h, float x, float y, float maxX, float maxY)
 {
     init(w, h, x, y, maxX, maxY);
 }
 
-void MCCamera::init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MCFloat maxY)
+void MCCamera::init(float w, float h, float x, float y, float maxX, float maxY)
 {
     m_w     = w;
     m_h     = h;
@@ -42,15 +42,15 @@ void MCCamera::init(MCFloat w, MCFloat h, MCFloat x, MCFloat y, MCFloat maxX, MC
     setPos(x, y);
 }
 
-void MCCamera::setPos(MCFloat x, MCFloat y)
+void MCCamera::setPos(float x, float y)
 {
     setPos(MCVector2dF(x, y));
 }
 
 void MCCamera::setPos(const MCVector2dF & pos)
 {
-    MCFloat x = pos.i();
-    MCFloat y = pos.j();
+    float x = pos.i();
+    float y = pos.j();
 
     if (x < m_halfW)
     {
@@ -80,28 +80,28 @@ const MCVector2dF & MCCamera::pos() const
     return m_pos;
 }
 
-MCFloat MCCamera::x() const
+float MCCamera::x() const
 {
     return m_pos.i();
 }
 
-MCFloat MCCamera::y() const
+float MCCamera::y() const
 {
     return m_pos.j();
 }
 
-MCFloat MCCamera::width() const
+float MCCamera::width() const
 {
     return m_w;
 }
 
-MCFloat MCCamera::height() const
+float MCCamera::height() const
 {
     return m_h;
 }
 
-MCBBox<MCFloat> MCCamera::bbox() const
+MCBBox<float> MCCamera::bbox() const
 {
-    return MCBBox<MCFloat>(
+    return MCBBox<float>(
         m_pos.i() - m_halfW, m_pos.j() - m_halfH, m_pos.i() + m_halfW, m_pos.j() + m_halfH);
 }

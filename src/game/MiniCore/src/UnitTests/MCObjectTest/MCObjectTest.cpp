@@ -32,7 +32,7 @@
 #include <cmath>
 
 // Damping factor defined in MCObject
-static const MCFloat DAMPING = 0.999f;
+static const float DAMPING = 0.999f;
 
 class TestObject : public MCObject
 {
@@ -160,7 +160,7 @@ void MCObjectTest::testAngularVelocityAndSleep()
     MCObject object("TestObject");
     object.addToWorld();
 
-    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), float(0)));
 
     world.stepTime(1);
     world.stepTime(1);
@@ -171,11 +171,11 @@ void MCObjectTest::testAngularVelocityAndSleep()
 
     QVERIFY(object.physicsComponent().isSleeping() == false);
     QVERIFY(object.index() >= 0);
-    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(1)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), float(1)));
 
     object.physicsComponent().setAngularVelocity(0);
 
-    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), float(0)));
 
     world.stepTime(1);
     world.stepTime(1);
@@ -189,11 +189,11 @@ void MCObjectTest::testAngularVelocityIntegration()
     MCObject object("TestObject");
     object.addToWorld();
 
-    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), MCFloat(0)));
-    QVERIFY(qFuzzyCompare(object.angle(), MCFloat(0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().angularVelocity(), float(0)));
+    QVERIFY(qFuzzyCompare(object.angle(), float(0)));
 
     const int step = 1000;
-    MCFloat aVel = 1;
+    float aVel = 1;
 
     object.physicsComponent().setAngularVelocity(aVel);
     world.stepTime(step);
@@ -208,12 +208,12 @@ void MCObjectTest::testAngularVelocityIntegration()
 
     world.stepTime(step);
 
-    QVERIFY(qFuzzyCompare(object.angle(), MCTrigonom::radToDeg(aVel * MCFloat(step) / 1000 * DAMPING)));
-    const MCFloat angle = object.angle();
+    QVERIFY(qFuzzyCompare(object.angle(), MCTrigonom::radToDeg(aVel * float(step) / 1000 * DAMPING)));
+    const float angle = object.angle();
 
     world.stepTime(step);
     aVel *= DAMPING;
-    QVERIFY(qFuzzyCompare(object.angle(), angle + MCTrigonom::radToDeg(aVel * MCFloat(step) / 1000 * DAMPING)));
+    QVERIFY(qFuzzyCompare(object.angle(), angle + MCTrigonom::radToDeg(aVel * float(step) / 1000 * DAMPING)));
 }
 
 void MCObjectTest::testDefaultFlags()
@@ -401,36 +401,36 @@ void MCObjectTest::testLinearDamping()
 void MCObjectTest::testMass()
 {
     MCObject object("TestObject");
-    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), MCFloat(0.0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), float(0.0)));
 
-    object.physicsComponent().setMass(MCFloat(1000.0));
-    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), MCFloat(1000.0)));
-    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), MCFloat(1.0 / 1000.0)));
+    object.physicsComponent().setMass(float(1000.0));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().mass(), float(1000.0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), float(1.0 / 1000.0)));
 
     object.physicsComponent().setMass(1, true);
     QVERIFY(object.physicsComponent().isStationary());
     QVERIFY(object.physicsComponent().isSleeping());
-    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), MCFloat(0.0)));
+    QVERIFY(qFuzzyCompare(object.physicsComponent().invMass(), float(0.0)));
 }
 
 void MCObjectTest::testRotate()
 {
     MCObject object("TestObject");
-    QVERIFY(qFuzzyCompare(object.angle(), MCFloat(0.0)));
+    QVERIFY(qFuzzyCompare(object.angle(), float(0.0)));
     object.rotate(90);
-    QVERIFY(qFuzzyCompare(object.angle(), MCFloat(90)));
+    QVERIFY(qFuzzyCompare(object.angle(), float(90)));
 
     MCWorld world;
     MCShapePtr shape(new MCRectShape(nullptr, 10, 10));
     object.setShape(shape);
     object.rotate(45);
-    QVERIFY(qFuzzyCompare(object.angle(), MCFloat(45)));
-    QVERIFY(qFuzzyCompare(shape->angle(), MCFloat(45)));
+    QVERIFY(qFuzzyCompare(object.angle(), float(45)));
+    QVERIFY(qFuzzyCompare(shape->angle(), float(45)));
 
     object.addToWorld();
     object.rotate(22);
-    QVERIFY(qFuzzyCompare(object.angle(), MCFloat(22)));
-    QVERIFY(qFuzzyCompare(shape->angle(), MCFloat(22)));
+    QVERIFY(qFuzzyCompare(object.angle(), float(22)));
+    QVERIFY(qFuzzyCompare(shape->angle(), float(22)));
 }
 
 void MCObjectTest::testTimerEvent()

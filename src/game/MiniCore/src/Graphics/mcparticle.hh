@@ -64,19 +64,19 @@ public:
    *  \param radius   Initial radius.
    *  \param lifeTime Life time / number of frames. The life time is decremented
    *  each time stepTime() is called. */
-    void init(MCVector3dFR location, MCFloat radius, MCUint lifeTime);
+    void init(MCVector3dFR location, float radius, unsigned int lifeTime);
 
     //! Particle will be added to the given vector when it dies.
     void setFreeList(ParticleFreeList & freeList);
 
     //! Return radius
-    MCFloat radius() const;
+    float radius() const;
 
     //! Return life-time. It's decreased on each call to stepTime().
-    MCUint lifeTime() const;
+    unsigned int lifeTime() const;
 
     //! Return initial life-time set by init().
-    MCUint initLifeTime() const;
+    unsigned int initLifeTime() const;
 
     //! Return true if still active
     bool isActive() const;
@@ -108,7 +108,7 @@ public:
     virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent & event) override;
 
     //! Get timeline scale from 1.0 to 0.0
-    MCFloat scale() const;
+    float scale() const;
 
     /*! Set custom death condition function.
    *  The function will be called on each update with this as the parameter.
@@ -145,9 +145,9 @@ private:
 
     bool m_dieOnOutOfBoundariesEvent;
 
-    MCFloat m_radius;
+    float m_radius;
 
-    MCFloat m_scale;
+    float m_scale;
 
     MCParticle::ParticleFreeList * m_freeList;
 

@@ -19,7 +19,7 @@
 #include <QObject>
 #include <string>
 #include <vector>
-#include <MCTypes>
+
 
 class Car;
 
@@ -30,25 +30,25 @@ class Timing : public QObject
 public:
 
     //! Constructor.
-    explicit Timing(MCUint cars, QObject * parent = nullptr);
+    explicit Timing(unsigned int cars, QObject * parent = nullptr);
 
     //! Completes the current lap for the given car.
-    void setLapCompleted(MCUint index, bool isHuman);
+    void setLapCompleted(unsigned int index, bool isHuman);
 
     //! Completes the race for the given car.
-    void setRaceCompleted(MCUint index, bool state, bool isHuman);
+    void setRaceCompleted(unsigned int index, bool state, bool isHuman);
 
     //! \return if the race is completed for the given car.
-    bool raceCompleted(MCUint index) const;
+    bool raceCompleted(unsigned int index) const;
 
     //! Toggle timing activity of the given car.
-    void setIsActive(MCUint index, bool state);
+    void setIsActive(unsigned int index, bool state);
 
     //! \return timing activity of the given car.
-    bool isActive(MCUint index) const;
+    bool isActive(unsigned int index) const;
 
     //! \return the current lap for the given car.
-    int lap(MCUint index) const;
+    int lap(unsigned int index) const;
 
     //! \return the lap for the leading car.
     int leadersLap() const;
@@ -57,23 +57,23 @@ public:
     int raceTime() const;
 
     //! \return the race time of given car in msecs.
-    int raceTime(MCUint index) const;
+    int raceTime(unsigned int index) const;
 
     /*! \return the record race time for the given car in msecs or
      *  -1 if invalid car or time not set. */
-    int recordRaceTime(MCUint index) const;
+    int recordRaceTime(unsigned int index) const;
 
     /*! \return last lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int lastLapTime(MCUint index) const;
+    int lastLapTime(unsigned int index) const;
 
     /*! \return the current lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int currentLapTime(MCUint index) const;
+    int currentLapTime(unsigned int index) const;
 
     /*! \return the record lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int recordLapTime(MCUint index) const;
+    int recordLapTime(unsigned int index) const;
 
     //! \return the current lap record or -1 if not set.
     int lapRecord() const;
@@ -104,7 +104,7 @@ public:
 
 signals:
 
-    void lapCompleted(MCUint index, int msec);
+    void lapCompleted(unsigned int index, int msec);
 
     void lapRecordAchieved(int msec);
 

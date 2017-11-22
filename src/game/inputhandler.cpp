@@ -19,16 +19,16 @@
 
 bool InputHandler::m_enabled = true;
 
-InputHandler::InputHandler(MCUint maxPlayers)
+InputHandler::InputHandler(unsigned int maxPlayers)
   : m_playerActions(maxPlayers, std::bitset<static_cast<int>(Action::EndOfEnum)>())
 {}
 
-bool InputHandler::getActionState(MCUint playerIndex, Action action) const
+bool InputHandler::getActionState(unsigned int playerIndex, Action action) const
 {
     return InputHandler::m_enabled && m_playerActions[playerIndex][static_cast<int>(action)];
 }
 
-void InputHandler::setActionState(MCUint playerIndex, Action action, bool state)
+void InputHandler::setActionState(unsigned int playerIndex, Action action, bool state)
 {
     m_playerActions[playerIndex][static_cast<int>(action)] = state;
 }

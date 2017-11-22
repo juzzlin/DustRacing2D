@@ -21,7 +21,8 @@
 #define MCCOLLISIONDETECTOR_HH
 
 #include "mcmacros.hh"
-#include "mctypes.hh"
+
+
 
 #include <vector>
 
@@ -41,7 +42,7 @@ public:
     virtual ~MCCollisionDetector() {};
 
     //! Detect collisions and generate contacts. Contacts are stored to MCObject.
-    MCUint detectCollisions(MCObjectGrid & objectGrid);
+    unsigned int detectCollisions(MCObjectGrid & objectGrid);
 
     /*! Turn primary collision events on/off. This is used by MCWorld when iterating
      *  the collision resolution. */

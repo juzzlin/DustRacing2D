@@ -29,7 +29,7 @@ MCTextureGlyph::MCTextureGlyph(UV uv0, UV uv1)
     m_uv[3] = UV(uv0.m_u, uv1.m_v);
 }
 
-const MCTextureGlyph::UV & MCTextureGlyph::uv(MCUint vertex) const
+const MCTextureGlyph::UV & MCTextureGlyph::uv(unsigned int vertex) const
 {
     assert(vertex < 4);
     return m_uv[vertex];

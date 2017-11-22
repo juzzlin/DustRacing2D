@@ -27,7 +27,8 @@
 #include "mcglcolor.hh"
 #include "mcgldiffuselight.hh"
 #include "mcglmaterial.hh"
-#include "mctypes.hh"
+
+
 #include "mcvector3d.hh"
 
 #include <map>

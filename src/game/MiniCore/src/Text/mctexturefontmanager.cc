@@ -21,7 +21,8 @@
 #include "mctexturefont.hh"
 #include "mctexturefontdata.hh"
 #include "mctexturefontmanager.hh"
-#include "mctypes.hh"
+
+
 #include "mcsurface.hh"
 #include "mcsurfacemanager.hh"
 
@@ -58,7 +59,7 @@ void MCTextureFontManager::load(
     }
 }
 
-MCFloat clamp(MCFloat val)
+float clamp(float val)
 {
     val = val < 0.0 ? 0.0 : val;
     val = val > 1.0 ? 1.0 : val;
@@ -78,7 +79,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
     // Generate glyph structures from the loaded data.
     // Loop thru glyphs.
-    for (MCUint j = 0; j < data.glyphs.size(); j++)
+    for (unsigned int j = 0; j < data.glyphs.size(); j++)
     {
         // Loop through glyphs in the row.
         const MCTextureFontData::Glyph & glyph = data.glyphs.at(j);

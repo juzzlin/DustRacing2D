@@ -40,7 +40,7 @@ public:
 
     /*! Constructor
      * \param view View for the shape. May be nullptr. */
-    MCRectShape(MCShapeViewPtr view, MCFloat width, MCFloat height);
+    MCRectShape(MCShapeViewPtr view, float width, float height);
 
     //! Destructor
     virtual ~MCRectShape();
@@ -49,7 +49,7 @@ public:
     virtual void translate(const MCVector3dF & p) override;
 
     //! \reimp
-    virtual void rotate(MCFloat a) override;
+    virtual void rotate(float a) override;
 
     //! \reimp
     virtual MCBBoxF bbox() const override;
@@ -58,13 +58,13 @@ public:
     virtual bool contains(const MCVector2dF & p) const override;
 
     //! \reimp
-    virtual MCFloat interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const override;
+    virtual float interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const override;
 
     //! \reimp
     virtual MCVector2dF contactNormal(const MCSegmentF & p) const override;
 
     //! \brief Resize
-    void resize(MCFloat width, MCFloat height);
+    void resize(float width, float height);
 
     //! Return the oriented bbox to access vertices etc.
     const MCOBBoxF & obbox() const;
@@ -73,34 +73,34 @@ public:
     MCEdgeF edgeForSegment(const MCSegmentF & p) const;
 
     //! Return the typeId
-    static MCUint typeId();
+    static unsigned int typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeId() const override;
+    virtual unsigned int instanceTypeId() const override;
 
     //! \reimp
     virtual void render(MCCamera * p) override;
 
     //! Return width.
-    MCFloat width() const;
+    float width() const;
 
     //! Return height.
-    MCFloat height() const;
+    float height() const;
 
 private:
 
     DISABLE_COPY(MCRectShape);
     DISABLE_ASSI(MCRectShape);
 
-    static MCUint m_typeId;
+    static unsigned int m_typeId;
 
     inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
 
-    MCOBBox<MCFloat> m_obbox;
+    MCOBBox<float> m_obbox;
 
-    MCFloat m_width;
+    float m_width;
 
-    MCFloat m_height;
+    float m_height;
 };
 
 #endif // MCRECTSHAPE_HH

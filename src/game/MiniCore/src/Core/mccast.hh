@@ -21,10 +21,10 @@
 #define MCCAST_HH
 
 #define TO_CHAR(x) (static_cast<char>(x))
-#define TO_MCUchar(x) (static_cast<unsigned char>(x))
+#define TO_UCHAR(x) (static_cast<unsigned char>(x))
 #define TO_INT(x) (static_cast<int>(x))
-#define TO_MCUint(x) (static_cast<unsigned int>(x))
-#define TO_FLOAT(x) (static_cast<MCFloat>(x))
-#define TO_DOUBLE(x) (static_cast<MCFloat>(x))
+#define TO_UINT(x) (static_cast<unsigned int>(x))
+#define TO_FLOAT(x) (static_cast<float>(x))
+#define TO_DOUBLE(x) (static_cast<float>(x))
 
 #endif // MCCAST_HH

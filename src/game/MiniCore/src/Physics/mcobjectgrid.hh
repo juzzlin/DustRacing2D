@@ -49,8 +49,8 @@ public:
      *  \param x1,y1,x2,y2 represent the size of the first-level bounding box.
      *  \param leafMaxW,leafMaxH are the maximum dimensions for leaves. */
     MCObjectGrid(
-        MCFloat x1, MCFloat y1, MCFloat x2, MCFloat y2,
-        MCFloat leafMaxW, MCFloat leafMaxH);
+        float x1, float y1, float x2, float y2,
+        float leafMaxW, float leafMaxH);
 
     //! Destructor.
     ~MCObjectGrid();
@@ -68,13 +68,13 @@ public:
     void removeAll();
 
     //! Get objects within given distance.
-    const ObjectSet & getObjectsWithinDistance(const MCVector2dF & p, MCFloat d);
+    const ObjectSet & getObjectsWithinDistance(const MCVector2dF & p, float d);
 
     //! Get objects within given distance.
-    const ObjectSet & getObjectsWithinDistance(MCFloat x, MCFloat y, MCFloat d);
+    const ObjectSet & getObjectsWithinDistance(float x, float y, float d);
 
     //! Get all objects of given type overlapping given BBox.
-    const ObjectSet & getObjectsWithinBBox(const MCBBox<MCFloat> & bbox);
+    const ObjectSet & getObjectsWithinBBox(const MCBBox<float> & bbox);
 
     /*! Get possible collisions. Collisions between sleeping objects are ignored,
      *  because that gives a huge performance boost.
@@ -82,32 +82,32 @@ public:
     const CollisionVector & getPossibleCollisions();
 
     //! Get bounding box
-    const MCBBox<MCFloat> & bbox() const;
+    const MCBBox<float> & bbox() const;
 
 private:
 
     DISABLE_COPY(MCObjectGrid);
     DISABLE_ASSI(MCObjectGrid);
 
-    void setIndexRange(const MCBBox<MCFloat> & bbox);
+    void setIndexRange(const MCBBox<float> & bbox);
 
     void build();
 
-    MCBBox<MCFloat> m_bbox;
+    MCBBox<float> m_bbox;
 
-    MCFloat m_leafMaxW;
+    float m_leafMaxW;
 
-    MCFloat m_leafMaxH;
+    float m_leafMaxH;
 
-    MCUint m_horSize;
+    unsigned int m_horSize;
 
-    MCUint m_verSize;
+    unsigned int m_verSize;
 
-    MCUint m_i0, m_i1, m_j0, m_j1;
+    unsigned int m_i0, m_i1, m_j0, m_j1;
 
-    MCFloat m_helpHor;
+    float m_helpHor;
 
-    MCFloat m_helpVer;
+    float m_helpVer;
 
     std::vector<GridCell *> m_matrix;
 

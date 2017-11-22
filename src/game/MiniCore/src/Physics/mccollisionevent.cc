@@ -20,7 +20,7 @@
 #include "mcobject.hh"
 #include "mccollisionevent.hh"
 
-MCUint MCCollisionEvent::m_typeId = MCEvent::registerType();
+unsigned int MCCollisionEvent::m_typeId = MCEvent::registerType();
 
 MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint, bool isPrimary)
 : m_collidingObject(collidingObject)
@@ -28,12 +28,12 @@ MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF conta
 , m_isPrimary(isPrimary)
 {}
 
-MCUint MCCollisionEvent::typeId()
+unsigned int MCCollisionEvent::typeId()
 {
     return MCCollisionEvent::m_typeId;
 }
 
-MCUint MCCollisionEvent::instanceTypeId() const
+unsigned int MCCollisionEvent::instanceTypeId() const
 {
     return MCCollisionEvent::m_typeId;
 }

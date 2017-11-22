@@ -43,7 +43,7 @@ public:
     /*! Constructor.
      * \param coeffLin Linear friction coefficient.
      * \param coeffRot Rotational friction coefficient. */
-    explicit MCFrictionGenerator(MCFloat coeffLin, MCFloat coeffRot);
+    explicit MCFrictionGenerator(float coeffLin, float coeffRot);
 
     //! Destructor.
     virtual ~MCFrictionGenerator();
@@ -56,9 +56,9 @@ private:
     DISABLE_COPY(MCFrictionGenerator);
     DISABLE_ASSI(MCFrictionGenerator);
 
-    MCFloat m_coeffLinTot;
+    float m_coeffLinTot;
 
-    MCFloat m_coeffRotTot;
+    float m_coeffRotTot;
 };
 
 typedef std::shared_ptr<MCFrictionGenerator> MCFrictionGeneratorPtr;

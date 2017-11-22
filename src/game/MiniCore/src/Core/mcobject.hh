@@ -26,7 +26,6 @@
 #include "mcobjectgrid.hh"
 #include "mcshape.hh"
 #include "mctyperegistry.hh"
-#include "mctypes.hh"
 #include "mcvector3d.hh"
 #include "mcworld.hh"
 
@@ -78,7 +77,7 @@ public:
     MCObject(MCSurface & surface, const std::string & typeName);
 
     //! Return integer id corresponding to the given object name.
-    static MCUint getTypeIdForName(const std::string & typeName);
+    static unsigned int getTypeIdForName(const std::string & typeName);
 
     /*! Destructor. It's the callers responsibility to first remove
      *  the object from MCWorld before deleting the object. */
@@ -89,7 +88,7 @@ public:
      *  against each others without need for dynamic_cast.
      *  The filtered collision detection system uses this
      *  to match given types of objects. */
-    virtual MCUint typeId() const;
+    virtual unsigned int typeId() const;
 
     /*! Return typeId for the given typeName string from
      *  MCObject's hash table. Each object registers
@@ -97,7 +96,7 @@ public:
      *  derived classes, they only need to pass the desired
      *  typeId string to MCObject's constructor.
      *  Returns 0 if type is not registered. */
-    static MCUint typeId(const std::string & typeName);
+    static unsigned int typeId(const std::string & typeName);
 
     //! Return the type name given to constructor.
     const std::string & typeName() const;
@@ -138,7 +137,7 @@ public:
     virtual void addToWorld();
 
     //! \brief Combined addToWorld() and translate.
-    virtual void addToWorld(MCFloat x, MCFloat y, MCFloat z = 0);
+    virtual void addToWorld(float x, float y, float z = 0);
 
     /*! \brief Remove object from the World.
      *  Convenience method to remove object from the MCWorld instance.
@@ -210,13 +209,13 @@ public:
 
     /*! Set rotation ("yaw") angle about Z-axis.
      *  \param newAngle The new angle in degrees [0..360]. */
-    void rotate(MCFloat newAngle, bool updateChildTransforms = true);
+    void rotate(float newAngle, bool updateChildTransforms = true);
 
     //! Set object's center in local coordinates i.e. (0, 0) is the default original center.
     void setCenter(MCVector2dF center);
 
     //! Get rotation angle.
-    MCFloat angle() const;
+    float angle() const;
 
     //! Get direction vector.
     MCVector2dF direction() const;
@@ -273,7 +272,7 @@ public:
     void addChildObject(
         MCObjectPtr object,
         const MCVector3dF & relativeLocation = MCVector3dF(),
-        MCFloat relativeAngle = 0);
+        float relativeAngle = 0);
 
     //! Remove child object.
     void removeChildObject(MCObject & object);
@@ -289,7 +288,7 @@ public:
 
     /*! Set parent relative rotation ("yaw") angle about Z-axis.
      *  \param newAngle The new angle in degrees [0..360]. */
-    void rotateRelative(MCFloat newAngle);
+    void rotateRelative(float newAngle);
 
     void checkBoundaries();
 
@@ -312,21 +311,21 @@ protected:
 
 private:
 
-    MCFloat calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
+    float calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
 
     /*! Cache range of objectGrid cells the object is touching.
      *  Used by MCObjectGrid. */
-    void cacheIndexRange(MCUint i0, MCUint i1, MCUint j0, MCUint j1);
+    void cacheIndexRange(unsigned int i0, unsigned int i1, unsigned int j0, unsigned int j1);
 
-    void checkXBoundariesAndSendEvent(MCFloat minX, MCFloat maxX);
+    void checkXBoundariesAndSendEvent(float minX, float maxX);
 
-    void checkYBoundariesAndSendEvent(MCFloat minY, MCFloat maxY);
+    void checkYBoundariesAndSendEvent(float minY, float maxY);
 
     void checkZBoundariesAndSendEvent();
 
-    void doRotate(MCFloat newAngle);
+    void doRotate(float newAngle);
 
-    void rotateShape(MCFloat angle);
+    void rotateShape(float angle);
 
     /*! Return true, if object is to be removed.
      *  Used by MCWorld. */
@@ -334,7 +333,7 @@ private:
 
     /*! Get cached index range.
      *  Used by MCObjectGrid. */
-    void restoreIndexRange(MCUint * i0, MCUint * i1, MCUint * j0, MCUint * j1);
+    void restoreIndexRange(unsigned int * i0, unsigned int * i1, unsigned int * j0, unsigned int * j1);
 
     /*! Set index in worlds' object vector.
      *  Used by MCWorld. */
@@ -356,34 +355,59 @@ private:
 
     bool testStatus(int bit) const;
 
-    static MCTypeRegistry        m_typeRegistry;
-    MCUint                       m_typeId;
-    std::string                  m_typeName;
-    MCFloat                      m_angle = 0; // Degrees
-    MCFloat                      m_relativeAngle = 0; // Degrees
-    int                          m_collisionLayer = 0;
-    int                          m_index = -1;
-    MCUint                       m_i0 = 0;
-    MCUint                       m_i1 = 0;
-    MCUint                       m_j0 = 0;
-    MCUint                       m_j1 = 0;
-    MCVector3dF                  m_initialLocation;
-    int                          m_initialAngle = 0;
-    MCVector3dF                  m_location;
-    MCVector3dF                  m_relativeLocation;
-    MCVector2dF                  m_initialCenter;
-    MCVector2dF                  m_center;
-    bool                         m_centerIsZero = false;
-    MCShapePtr                   m_shape;
-    typedef std::vector<MCObject * > TimerEventObjectsList;
-    static TimerEventObjectsList m_timerEventObjects;
-    MCObject::ContactHash        m_contacts;
-    int                          m_timerEventObjectsIndex = -1;
-    int                          m_status;
-    Children                     m_children;
-    MCObject *                   m_parent;
+    static MCTypeRegistry m_typeRegistry;
 
-    MCPhysicsComponent *         m_physicsComponent;
+    unsigned int m_typeId;
+
+    std::string m_typeName;
+
+    float m_angle = 0; // Degrees
+
+    float m_relativeAngle = 0; // Degrees
+
+    int m_collisionLayer = 0;
+
+    int m_index = -1;
+
+    unsigned int m_i0 = 0;
+
+    unsigned int m_i1 = 0;
+
+    unsigned int m_j0 = 0;
+
+    unsigned int m_j1 = 0;
+
+    MCVector3dF m_initialLocation;
+
+    int m_initialAngle = 0;
+
+    MCVector3dF m_location;
+
+    MCVector3dF m_relativeLocation;
+
+    MCVector2dF m_initialCenter;
+
+    MCVector2dF m_center;
+
+    bool m_centerIsZero = false;
+
+    MCShapePtr m_shape;
+
+    typedef std::vector<MCObject * > TimerEventObjectsList;
+
+    static TimerEventObjectsList m_timerEventObjects;
+
+    MCObject::ContactHash m_contacts;
+
+    int m_timerEventObjectsIndex = -1;
+
+    int m_status;
+
+    Children m_children;
+
+    MCObject * m_parent;
+
+    MCPhysicsComponent * m_physicsComponent;
 
     //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);

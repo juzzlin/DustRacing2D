@@ -29,9 +29,9 @@ MCContact::MCContact()
 {}
 
 void MCContact::init(MCObject & object,
-    const MCVector2d<MCFloat> & newContactPoint,
-    const MCVector2d<MCFloat> & newContactNormal,
-    MCFloat newInterpenetrationDepth)
+    const MCVector2d<float> & newContactPoint,
+    const MCVector2d<float> & newContactNormal,
+    float newInterpenetrationDepth)
 {
     m_pObject               = &object;
     m_contactPoint          = newContactPoint;
@@ -45,17 +45,17 @@ MCObject & MCContact::object() const
     return *m_pObject;
 }
 
-const MCVector2d<MCFloat> & MCContact::contactPoint() const
+const MCVector2d<float> & MCContact::contactPoint() const
 {
     return m_contactPoint;
 }
 
-const MCVector2d<MCFloat> & MCContact::contactNormal() const
+const MCVector2d<float> & MCContact::contactNormal() const
 {
     return m_contactNormal;
 }
 
-MCFloat MCContact::interpenetrationDepth() const
+float MCContact::interpenetrationDepth() const
 {
     return m_interpenetrationDepth;
 }

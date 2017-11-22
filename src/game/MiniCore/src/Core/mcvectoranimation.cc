@@ -30,7 +30,7 @@ MCVectorAnimation::MCVectorAnimation()
 }
 
 void MCVectorAnimation::init(MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end,
-    MCUint steps, MCUint preDelay, MCUint postDelay)
+    unsigned int steps, unsigned int preDelay, unsigned int postDelay)
 {
     m_delta     = (end - start) / steps;
     m_vect      = &vect;

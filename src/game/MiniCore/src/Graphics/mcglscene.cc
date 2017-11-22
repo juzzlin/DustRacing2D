@@ -162,7 +162,7 @@ void MCGLScene::createDefaultShaderPrograms()
 }
 
 void MCGLScene::resize(
-    MCUint viewWidth, MCUint viewHeight, MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle, MCFloat zNear, MCFloat zFar)
+    unsigned int viewWidth, unsigned int viewHeight, unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar)
 {
     m_viewWidth   = viewWidth;
     m_viewHeight  = viewHeight;
@@ -175,12 +175,12 @@ void MCGLScene::resize(
     updateViewport();
 }
 
-void MCGLScene::setViewerPosition(MCUint sceneWidth, MCUint sceneHeight, MCFloat viewAngle)
+void MCGLScene::setViewerPosition(unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle)
 {
     // Set eye position so that the scene looks like a pure 2D-scene
-    const MCUint vH2 = sceneHeight / 2;
-    const MCUint vW2 = sceneWidth  / 2;
-    m_eyeZ = vH2 / std::tan(static_cast<MCFloat>(MCTrigonom::degToRad(viewAngle / 2)));
+    const unsigned int vH2 = sceneHeight / 2;
+    const unsigned int vW2 = sceneWidth  / 2;
+    m_eyeZ = vH2 / std::tan(static_cast<float>(MCTrigonom::degToRad(viewAngle / 2)));
 
     m_viewMatrix  = glm::mat4(1.0);
     m_viewMatrix *= glm::lookAt(
@@ -198,7 +198,7 @@ void MCGLScene::setSplitType(SplitType splitType)
     updateViewport();
 }
 
-void MCGLScene::setProjection(MCFloat aspectRatio, MCFloat zNear, MCFloat zFar, MCFloat viewAngle)
+void MCGLScene::setProjection(float aspectRatio, float zNear, float zFar, float viewAngle)
 {
     m_projectionMatrix  = glm::mat4(1.0);
     m_projectionMatrix *= glm::perspective(viewAngle, aspectRatio, zNear, zFar);
@@ -306,12 +306,12 @@ void MCGLScene::setFadeValue(float value)
     }
 }
 
-MCFloat MCGLScene::viewAngle() const
+float MCGLScene::viewAngle() const
 {
     return m_viewAngle;
 }
 
-MCFloat MCGLScene::eyeZ() const
+float MCGLScene::eyeZ() const
 {
     return m_eyeZ;
 }

@@ -111,7 +111,7 @@ const MCGLColor & MCTextureText::color() const
     return m_color;
 }
 
-void MCTextureText::setShadowOffset(MCFloat xOffset, MCFloat yOffset)
+void MCTextureText::setShadowOffset(float xOffset, float yOffset)
 {
     m_xOffset = xOffset;
     m_yOffset = yOffset;
@@ -127,7 +127,7 @@ float MCTextureText::height(MCTextureFont & font) const
     return font.yDensity() * m_textHeight;
 }
 
-void MCTextureText::render(MCFloat x, MCFloat y, MCCamera * camera, MCTextureFont & font, bool shadow)
+void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & font, bool shadow)
 {
     glDisable(GL_DEPTH_TEST);
 

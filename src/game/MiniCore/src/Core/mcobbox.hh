@@ -22,7 +22,6 @@
 
 #include "mcbbox.hh"
 #include "mcvector2d.hh"
-#include "mctypes.hh"
 #include "mctrigonom.hh"
 #include "mcmathutil.hh"
 
@@ -62,7 +61,7 @@ public:
     MCOBBox<T> & operator=(const MCOBBox<T> && other);
 
     //! Return current angle
-    inline MCFloat angle() const
+    inline float angle() const
     {
         return m_a;
     }
@@ -80,7 +79,7 @@ public:
     inline T hy() const {return m_hy;}
 
     //! Return given vertex
-    inline MCVector2d<T> vertex(MCUint index) const
+    inline MCVector2d<T> vertex(unsigned int index) const
     {
         return m_v[index & 0x3] + m_p;
     }
@@ -108,7 +107,7 @@ public:
     /*! Rotate
      * \param a Rotation angle in degrees (0..360)
      */
-    void rotate(MCFloat a);
+    void rotate(float a);
 
     /*! Translate
      * \param p The new location
@@ -130,13 +129,13 @@ private:
     MCVector2d<T> m_p;
 
     //! Rotation angle
-    MCFloat m_a;
+    float m_a;
 
     //! Vertex vectors
     MCVector2d<T> m_v[4];
 };
 
-typedef MCOBBox<MCFloat> MCOBBoxF;
+typedef MCOBBox<float> MCOBBoxF;
 
 template <typename T>
 MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
@@ -262,7 +261,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
 }
 
 template <typename T>
-void MCOBBox<T>::rotate(MCFloat a)
+void MCOBBox<T>::rotate(float a)
 {
     if (a != m_a)
     {

@@ -103,10 +103,10 @@ public:
 private:
 
     //! Apply alpha clamp (set alpha values off based on the given limit).
-    void applyAlphaClamp(QImage & textureImage, MCUint a) const;
+    void applyAlphaClamp(QImage & textureImage, unsigned int a) const;
 
     //! Apply given color key (set alpha values on / off based on the given color).
-    void applyColorKey(QImage & textureImage, MCUint r, MCUint g, MCUint b) const;
+    void applyColorKey(QImage & textureImage, unsigned int r, unsigned int g, unsigned int b) const;
 
     //! Helper to create the actual OpenGL texture.
     GLuint create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image);

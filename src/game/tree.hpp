@@ -24,7 +24,7 @@ class Tree : public MCObject
 {
 public:
 
-    Tree(MCSurface & surface, MCFloat r0, MCFloat r1, MCFloat treeHeight, int branches);
+    Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branches);
 };
 
 #endif // TREE_HPP

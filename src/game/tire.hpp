@@ -24,7 +24,7 @@ class Tire : public MCObject
 {
 public:
 
-    Tire(Car & car, MCFloat friction, MCFloat offTrackFriction);
+    Tire(Car & car, float friction, float offTrackFriction);
 
     virtual void onStepTime(int step) override;
 
@@ -34,9 +34,9 @@ private:
 
     bool m_isOffTrack;
 
-    MCFloat m_friction;
+    float m_friction;
 
-    MCFloat m_offTrackFriction;
+    float m_offTrackFriction;
 
     Car & m_car;
 };

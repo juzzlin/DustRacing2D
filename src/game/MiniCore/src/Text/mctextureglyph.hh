@@ -20,7 +20,8 @@
 #ifndef MCTEXTUREGLYPH_HH
 #define MCTEXTUREGLYPH_HH
 
-#include "mctypes.hh"
+
+
 
 #include <MCGLEW>
 
@@ -48,7 +49,7 @@ public:
      *  |   |
      *  3 - 2
      */
-    const UV & uv(MCUint vertex) const;
+    const UV & uv(unsigned int vertex) const;
 
 private:
 

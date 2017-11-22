@@ -20,7 +20,6 @@
 #ifndef MCSURFACEMETADATA_HH
 #define MCSURFACEMETADATA_HH
 
-#include "mctypes.hh"
 #include "mcvector2d.hh"
 
 #include <MCGLEW> // For GLenum
@@ -57,7 +56,7 @@ struct MCSurfaceMetaData
     struct ColorKey
     {
         //! red, green, blue
-        MCUint m_r, m_g, m_b;
+        unsigned int m_r, m_g, m_b;
     };
 
     //! Colorkey, if set

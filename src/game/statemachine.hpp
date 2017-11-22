@@ -19,7 +19,7 @@
 #include "renderer.hpp"
 #include "updateableif.hpp"
 
-#include <MCTypes>
+
 #include <QObject>
 
 #include <functional>

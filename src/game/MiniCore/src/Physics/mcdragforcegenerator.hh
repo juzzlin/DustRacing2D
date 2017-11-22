@@ -32,7 +32,7 @@ public:
      * \param coeff1 Linear coefficient
      * \param coeff2 Quadratic coefficient
      */
-    MCDragForceGenerator(MCFloat coeff1, MCFloat coeff2);
+    MCDragForceGenerator(float coeff1, float coeff2);
 
     //! Destructor
     virtual ~MCDragForceGenerator();
@@ -44,7 +44,7 @@ private:
 
     DISABLE_COPY(MCDragForceGenerator);
     DISABLE_ASSI(MCDragForceGenerator);
-    MCFloat m_coeff1, m_coeff2;
+    float m_coeff1, m_coeff2;
 };
 
 #endif // MCDRAGFORCEGENERATOR_HH

@@ -43,9 +43,9 @@ void MCSurfaceView::updateBBox()
     // TODO: Fix this! The view should know the angle of the
     // shape somehow. Now we just return a naive bbox.
 
-    const MCFloat w = m_surface->width() / 2;
-    const MCFloat h = m_surface->height() / 2;
-    const MCFloat r = std::max(w, h);
+    const float w = m_surface->width() / 2;
+    const float h = m_surface->height() / 2;
+    const float r = std::max(w, h);
 
     m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
 }
@@ -78,13 +78,13 @@ void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgramPtr program)
     m_surface->setShadowShaderProgram(program);
 }
 
-void MCSurfaceView::render(const MCVector3dF & l, MCFloat angle, MCCamera * p)
+void MCSurfaceView::render(const MCVector3dF & l, float angle, MCCamera * p)
 {
     m_surface->setScale(scale());
     m_surface->render(p, l, angle);
 }
 
-void MCSurfaceView::renderShadow(const MCVector3dF & l, MCFloat angle, MCCamera * p)
+void MCSurfaceView::renderShadow(const MCVector3dF & l, float angle, MCCamera * p)
 {
     m_surface->setScale(scale());
     m_surface->renderShadow(p, l, angle);

@@ -84,13 +84,13 @@ void MCWorldTest::testInstance()
 
 void MCWorldTest::testSetDimensions()
 {
-    const MCFloat minX = 0;
-    const MCFloat maxX = 1024;
-    const MCFloat minY = 0;
-    const MCFloat maxY = 768;
-    const MCFloat minZ = 0;
-    const MCFloat maxZ = 1000;
-    const MCFloat metersPerUnit = 0.4f;
+    const float minX = 0;
+    const float maxX = 1024;
+    const float minY = 0;
+    const float maxY = 768;
+    const float minZ = 0;
+    const float maxZ = 1000;
+    const float metersPerUnit = 0.4f;
 
     MCWorld world;
     world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, metersPerUnit);

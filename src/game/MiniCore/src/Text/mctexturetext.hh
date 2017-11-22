@@ -21,7 +21,8 @@
 #define MCTEXTURETEXT_HH
 
 #include "mcglcolor.hh"
-#include "mctypes.hh"
+
+
 #include "mcmacros.hh"
 
 #include <string>

@@ -46,10 +46,10 @@ public:
     ViolatedEdge violatedEdge() const;
 
     //! Return the typeId
-    static MCUint typeId();
+    static unsigned int typeId();
 
     //! \reimp
-    virtual MCUint instanceTypeId() const;
+    virtual unsigned int instanceTypeId() const;
 
     MCObject & violatingObject() const;
 
@@ -62,7 +62,7 @@ private:
 
     MCObject & m_violatingObject;
 
-    static MCUint m_typeId;
+    static unsigned int m_typeId;
 };
 
 #endif // MCOUTOFBOUNDARIESEVENT_HH

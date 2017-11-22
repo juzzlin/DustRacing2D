@@ -17,7 +17,7 @@
 #define OVERLAYBASE_HPP
 
 #include <MCBBox>
-#include <MCTypes>
+
 
 #include "renderable.hpp"
 #include "updateableif.hpp"

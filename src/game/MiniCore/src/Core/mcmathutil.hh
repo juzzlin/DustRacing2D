@@ -67,19 +67,19 @@ public:
      *  Uses a fast approximation.
      *  \param p Point to be tested
      *  \param v Vector that defines the line */
-    static MCFloat distanceFromVector(const MCVector2dF & p, const MCVector2dF & v);
+    static float distanceFromVector(const MCVector2dF & p, const MCVector2dF & v);
 
     //! Return X-coordinate of the given point rotated by given angle.
-    static MCFloat rotatedX(MCFloat x0, MCFloat y0, MCFloat angle);
+    static float rotatedX(float x0, float y0, float angle);
 
     //! Return Y-coordinate of the given point rotated by given angle.
-    static MCFloat rotatedY(MCFloat x0, MCFloat y0, MCFloat angle);
+    static float rotatedY(float x0, float y0, float angle);
 
     //! Rotate given vector v0 by given angle and store result to v1.
-    static void rotateVector(const MCVector2dF & v0, MCVector2dF & v1, MCFloat angle);
+    static void rotateVector(const MCVector2dF & v0, MCVector2dF & v1, float angle);
 
     //! Rotate given vector v0 by given angle.
-    static MCVector2dF rotatedVector(const MCVector2dF & v0, MCFloat angle);
+    static MCVector2dF rotatedVector(const MCVector2dF & v0, float angle);
 };
 
 template <typename T>

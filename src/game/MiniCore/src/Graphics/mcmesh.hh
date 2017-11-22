@@ -22,7 +22,8 @@
 
 #include <MCGLEW>
 
-#include "mctypes.hh"
+
+
 #include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcglcolor.hh"

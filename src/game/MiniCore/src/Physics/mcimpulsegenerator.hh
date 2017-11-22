@@ -20,7 +20,8 @@
 #ifndef MCIMPULSEGENERATOR_HH
 #define MCIMPULSEGENERATOR_HH
 
-#include "mctypes.hh"
+
+
 #include "mcvector3d.hh"
 #include <vector>
 
@@ -44,14 +45,14 @@ public:
 
     //! Resolve positions of the given objects according to current contacts.
     //! Delete contacts.
-    void resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy);
+    void resolvePositions(std::vector<MCObject *> & objs, float accuracy);
 
 private:
 
     void generateImpulsesFromContact(
         MCObject & pa, MCObject & pb, const MCContact & contact,
         const MCVector3dF & linearImpulse,
-        MCFloat restitution);
+        float restitution);
 
     void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);
 

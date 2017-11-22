@@ -89,7 +89,7 @@ void CarSoundEffectManager::processEngineSound()
 
 void CarSoundEffectManager::processSkidSound()
 {
-    const MCFloat bodyNormalAngle = m_car.angle() + 90;
+    const float bodyNormalAngle = m_car.angle() + 90;
     const MCVector2dF n(
         MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
     const MCVector2dF & v = m_car.physicsComponent().velocity().normalized();

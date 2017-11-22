@@ -67,7 +67,7 @@
 #include <MCSurface>
 #include <MCSurfaceView>
 #include <MCTextureFont>
-#include <MCTypes>
+
 #include <MCWorld>
 #include <MCWorldRenderer>
 
@@ -84,7 +84,7 @@ using std::dynamic_pointer_cast;
 int Scene::m_width  = 1024;
 int Scene::m_height = 768;
 
-static const MCFloat METERS_PER_UNIT = 0.05f;
+static const float METERS_PER_UNIT = 0.05f;
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world)
 : m_game(game)
@@ -330,7 +330,7 @@ void Scene::updateRace()
     emit listenerLocationChanged(m_cars[0]->location().i(), m_cars[0]->location().j());
 }
 
-void Scene::updateCameraLocation(MCCamera & camera, MCFloat & offset, MCObject & object)
+void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & object)
 {
     // Update camera location with respect to the car speed.
     // Make changes a bit smoother so that an abrupt decrease
@@ -462,12 +462,12 @@ void Scene::setWorldDimensions()
 
     // Update world dimensions according to the
     // active track.
-    const MCUint minX = 0;
-    const MCUint maxX = m_activeTrack->width();
-    const MCUint minY = 0;
-    const MCUint maxY = m_activeTrack->height();
-    const MCUint minZ = 0;
-    const MCUint maxZ = 1000;
+    const unsigned int minX = 0;
+    const unsigned int maxX = m_activeTrack->width();
+    const unsigned int minY = 0;
+    const unsigned int maxY = m_activeTrack->height();
+    const unsigned int minZ = 0;
+    const unsigned int maxZ = 1000;
 
     m_world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
 }
@@ -529,9 +529,9 @@ void Scene::createBridgeObjects()
     static const int w = TrackTile::TILE_W;
     static const int h = TrackTile::TILE_H;
 
-    for (MCUint j = 0; j <= rMap.rows(); j++)
+    for (unsigned int j = 0; j <= rMap.rows(); j++)
     {
-        for (MCUint i = 0; i <= rMap.cols(); i++)
+        for (unsigned int i = 0; i <= rMap.cols(); i++)
         {
             auto tile = dynamic_pointer_cast<TrackTile>(rMap.getTile(i, j));
             if (tile && tile->tileTypeEnum() == TrackTile::TT_BRIDGE)
@@ -609,7 +609,7 @@ void Scene::getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & 
 
 void Scene::renderTrack()
 {
-    const MCFloat fadeValue = m_renderer.fadeValue();
+    const float fadeValue = m_renderer.fadeValue();
 
     switch (m_stateMachine.state())
     {
@@ -652,7 +652,7 @@ void Scene::renderTrack()
 
 void Scene::renderObjectShadows()
 {
-    const MCFloat fadeValue = m_renderer.fadeValue();
+    const float fadeValue = m_renderer.fadeValue();
 
     switch (m_stateMachine.state())
     {
@@ -696,7 +696,7 @@ void Scene::renderObjectShadows()
 
 void Scene::renderObjects()
 {
-    const MCFloat fadeValue = m_renderer.fadeValue();
+    const float fadeValue = m_renderer.fadeValue();
     MCGLScene & glScene = MCWorld::instance().renderer().glScene();
 
     switch (m_stateMachine.state())

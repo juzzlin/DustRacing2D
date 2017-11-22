@@ -43,7 +43,7 @@ MCParticle::~MCParticle()
 {
 }
 
-void MCParticle::init(MCVector3dFR newLocation, MCFloat newRadius, MCUint newLifeTime)
+void MCParticle::init(MCVector3dFR newLocation, float newRadius, unsigned int newLifeTime)
 {
     m_lifeTime       = newLifeTime;
     m_initLifeTime   = newLifeTime;
@@ -63,7 +63,7 @@ void MCParticle::setFreeList(ParticleFreeList & freeList)
     m_freeList = &freeList;
 }
 
-MCFloat MCParticle::radius() const
+float MCParticle::radius() const
 {
     if (animationStyle() == MCParticle::AnimationStyle::Shrink)
     {
@@ -79,12 +79,12 @@ MCFloat MCParticle::radius() const
     }
 }
 
-MCUint MCParticle::lifeTime() const
+unsigned int MCParticle::lifeTime() const
 {
     return m_lifeTime;
 }
 
-MCUint MCParticle::initLifeTime() const
+unsigned int MCParticle::initLifeTime() const
 {
     return m_initLifeTime;
 }
@@ -125,7 +125,7 @@ void MCParticle::onStepTime(int step)
     {
         m_lifeTime -= step;
 
-        m_scale = MCFloat(m_lifeTime) / m_initLifeTime;
+        m_scale = float(m_lifeTime) / m_initLifeTime;
 
         if (m_customDeathCondition && m_customDeathCondition(*this))
         {
@@ -148,7 +148,7 @@ void MCParticle::outOfBoundariesEvent(MCOutOfBoundariesEvent &)
     }
 }
 
-MCFloat MCParticle::scale() const
+float MCParticle::scale() const
 {
     return m_scale;
 }

@@ -23,7 +23,8 @@
 #include "mcbbox.hh"
 #include "mcbbox3d.hh"
 #include "mcmacros.hh"
-#include "mctypes.hh"
+
+
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 #include "mcsegment.hh"
@@ -88,10 +89,10 @@ public:
 
     /*! Rotate.
      * \param a The new rotation angle in degrees */
-    virtual void rotate(MCFloat a);
+    virtual void rotate(float a);
 
     //! Return the current angle.
-    MCFloat angle() const;
+    float angle() const;
 
     //! Return non-rotated, translated bounding box of the shape in 2d.
     virtual MCBBoxF bbox() const = 0;
@@ -105,7 +106,7 @@ public:
      * Note!!: It must be first tested, that p.vertex0 is inside the shape.
      * \param p The crossing segment to be tested.
      * \return Interpenetration depth. Set contactNormal to the contactNormal. */
-    virtual MCFloat interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const = 0;
+    virtual float interpenetrationDepth(const MCSegmentF & p, MCVector2dF & contactNormal) const = 0;
 
     /*! \brief Returns contact normal for the given point
      * Note!!: It must be first tested, that p.vertex0 is inside the shape.
@@ -115,18 +116,18 @@ public:
 
     /*! Register a new shape type.
      * \return The new unique type ID. */
-    static MCUint registerType();
+    static unsigned int registerType();
 
     /*! Return class-wide static type id inited by calling
      *  MCShape::registerType(). This is used to optimize collision detection
      *  and to avoid dynamic_cast. */
-    virtual MCUint instanceTypeId() const = 0;
+    virtual unsigned int instanceTypeId() const = 0;
 
     //! Return approximated radius.
-    MCFloat radius() const;
+    float radius() const;
 
     //! Set shape radius.
-    virtual void setRadius(MCFloat radius);
+    virtual void setRadius(float radius);
 
     //! Fast intersection test
     bool mayIntersect(MCShape & other);
@@ -137,7 +138,7 @@ private:
     DISABLE_COPY(MCShape);
     DISABLE_ASSI(MCShape);
 
-    static MCUint m_typeCount;
+    static unsigned int m_typeCount;
 
     MCObject * m_parent;
 
@@ -147,9 +148,9 @@ private:
 
     static MCVector3dF m_defaultShadowOffset;
 
-    MCFloat m_angle;
+    float m_angle;
 
-    MCFloat m_radius;
+    float m_radius;
 
     MCShapeViewPtr m_view;
 };

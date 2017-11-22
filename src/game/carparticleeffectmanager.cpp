@@ -44,7 +44,7 @@ void CarParticleEffectManager::update()
     doDamageSmoke();
 }
 
-MCFloat CarParticleEffectManager::calculateSkidAngle(MCFloat distance, double dx, double dy)
+float CarParticleEffectManager::calculateSkidAngle(float distance, double dx, double dy)
 {
     return distance > NEW_SKID_LIMIT ? m_car.angle() : std::atan2(dy, dx) * 180 / 3.1415;
 }
@@ -52,7 +52,7 @@ MCFloat CarParticleEffectManager::calculateSkidAngle(MCFloat distance, double dx
 void CarParticleEffectManager::doLeftSkidMark(ParticleFactory::ParticleType type)
 {
     const MCVector2dF skidLocation(m_car.leftRearTireLocation());
-    const MCFloat distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
+    const float distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
     if (distance > SKID_MARK_DENSITY)
     {
         const double dx = skidLocation.i() - m_prevLeftSkidMarkLocation.i();
@@ -66,7 +66,7 @@ void CarParticleEffectManager::doLeftSkidMark(ParticleFactory::ParticleType type
 void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType type)
 {
     const MCVector2dF skidLocation(m_car.rightRearTireLocation());
-    const MCFloat distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
+    const float distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
     if (distance > SKID_MARK_DENSITY)
     {
         const double dx = skidLocation.i() - m_prevRightSkidMarkLocation.i();

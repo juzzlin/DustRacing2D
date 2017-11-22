@@ -46,10 +46,10 @@ public:
 
     bool m_updated;
 
-    static MCUint m_destructorCallCount;
+    static unsigned int m_destructorCallCount;
 };
 
-MCUint TestForceGenerator::m_destructorCallCount = 0;
+unsigned int TestForceGenerator::m_destructorCallCount = 0;
 
 MCForceRegistryTest::MCForceRegistryTest()
 {
@@ -75,7 +75,7 @@ void MCForceRegistryTest::testAddUpdateRemove()
 
 void MCForceRegistryTest::testAddUpdateRemoveMulti()
 {
-    const MCUint NUM_OBJECTS = 100;
+    const unsigned int NUM_OBJECTS = 100;
     TestForceGenerator::m_destructorCallCount = 0;
 
     {
@@ -85,7 +85,7 @@ void MCForceRegistryTest::testAddUpdateRemoveMulti()
         MCWorld world;
 
         std::vector<std::unique_ptr<MCObject> > objects;
-        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        for (unsigned int i = 0; i < NUM_OBJECTS; i++)
         {
             MCObject * object = new MCObject("TestObject");
             objects.push_back(std::unique_ptr<MCObject>(object));
@@ -95,14 +95,14 @@ void MCForceRegistryTest::testAddUpdateRemoveMulti()
             forces.push_back(force);
         }
 
-        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        for (unsigned int i = 0; i < NUM_OBJECTS; i++)
         {
             QVERIFY(static_cast<TestForceGenerator *>(forces[i].get())->m_updated == false);
         }
 
         dut.update();
 
-        for (MCUint i = 0; i < NUM_OBJECTS; i++)
+        for (unsigned int i = 0; i < NUM_OBJECTS; i++)
         {
             QVERIFY(static_cast<TestForceGenerator *>(forces[i].get())->m_updated == true);
         }

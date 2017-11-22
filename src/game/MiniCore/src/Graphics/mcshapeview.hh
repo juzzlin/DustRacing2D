@@ -25,7 +25,8 @@
 #include "mcglshaderprogram.hh"
 #include "mcmacros.hh"
 #include "mctyperegistry.hh"
-#include "mctypes.hh"
+
+
 #include "mcvector3d.hh"
 
 #include <memory>
@@ -74,13 +75,13 @@ public:
      * \param l Location.
      * \param angle Angle in degrees about the Z-axis.
      * \param p Camera window. If nullptr, then no translation or clipping done. */
-    virtual void render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr);
+    virtual void render(const MCVector3d<float> & l, float angle, MCCamera * p = nullptr);
 
     /*! Render shadow for the shape at the current location using given camera window.
      * \param l Location.
      * \param angle Angle in degrees about the Z-axis.
      * \param p Camera window. If nullptr, then no translation or clipping done. */
-    virtual void renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p = nullptr);
+    virtual void renderShadow(const MCVector3d<float> & l, float angle, MCCamera * p = nullptr);
 
     /*! Return centered, non-rotated, non-translated bounding box of the view.
      *  This is used to optimize rendering. Shouldn't be used to detect
@@ -99,7 +100,7 @@ public:
     virtual MCGLObjectBase * object() const = 0;
 
     //! Return the view ID.
-    MCUint viewId() const;
+    unsigned int viewId() const;
 
     //! Set view handle (e.g. if surface changes). Changes also the viewId integer.
     void setHandle(std::string handle);
@@ -124,7 +125,7 @@ private:
 
     static MCTypeRegistry m_typeRegistry;
 
-    MCUint m_viewId;
+    unsigned int m_viewId;
 
     MCGLShaderProgramPtr m_shaderProgram;
 

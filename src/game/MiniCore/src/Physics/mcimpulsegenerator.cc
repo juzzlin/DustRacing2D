@@ -30,7 +30,7 @@ MCImpulseGenerator::MCImpulseGenerator()
 MCContact * MCImpulseGenerator::getDeepestInterpenetration(
     const std::vector<MCContact *> & contacts)
 {
-    MCFloat maxDepth = 0;
+    float maxDepth = 0;
     MCContact * bestContact = nullptr;
     for (MCContact * contact : contacts)
     {
@@ -48,9 +48,9 @@ void MCImpulseGenerator::displace(
 {
     if (!pa.physicsComponent().isStationary())
     {
-        const MCFloat invMassA    = pa.physicsComponent().invMass();
-        const MCFloat invMassB    = pb.physicsComponent().invMass();
-        const MCFloat massScaling = invMassA / (invMassA + invMassB);
+        const float invMassA    = pa.physicsComponent().invMass();
+        const float invMassB    = pb.physicsComponent().invMass();
+        const float massScaling = invMassA / (invMassA + invMassB);
 
         pa.displace(displacement * massScaling);
     }
@@ -59,29 +59,29 @@ void MCImpulseGenerator::displace(
 void MCImpulseGenerator::generateImpulsesFromContact(
     MCObject & pa, MCObject & pb, const MCContact & contact,
     const MCVector3dF & linearImpulse,
-    MCFloat restitution)
+    float restitution)
 {
     if (!pa.physicsComponent().isStationary())
     {
-        const MCFloat invMassA = pa.physicsComponent().invMass();
-        const MCFloat invMassB = pb.physicsComponent().invMass();
+        const float invMassA = pa.physicsComponent().invMass();
+        const float invMassB = pb.physicsComponent().invMass();
 
         const MCVector3dF & contactPoint(contact.contactPoint());
 
         // Linear component
-        const MCFloat massScaling = invMassA / (invMassA + invMassB);
-        const MCFloat effRestitution = 1.0 + restitution;
+        const float massScaling = invMassA / (invMassA + invMassB);
+        const float effRestitution = 1.0 + restitution;
         pa.physicsComponent().addImpulse(linearImpulse * effRestitution * massScaling, true);
 
         // Angular component
         const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit();
         const MCVector3dF rotationalImpulse = linearImpulse % armA;
-        const MCFloat calibration = 0.5;
+        const float calibration = 0.5;
         pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
     }
 }
 
-void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, MCFloat accuracy)
+void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, float accuracy)
 {
     for (MCObject * object : objs)
     {
@@ -122,11 +122,11 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
                 MCObject & pa(*object);
                 MCObject & pb(contact->object());
 
-                const MCFloat restitution(
+                const float restitution(
                     std::min(pa.physicsComponent().restitution(), pb.physicsComponent().restitution()));
 
                 const MCVector2dF velocityDelta(pb.physicsComponent().velocity() - pa.physicsComponent().velocity());
-                const MCFloat projection = contact->contactNormal().dot(velocityDelta);
+                const float projection = contact->contactNormal().dot(velocityDelta);
 
                 if (projection > 0)
                 {

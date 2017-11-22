@@ -20,7 +20,6 @@
 #ifndef MCTRIGONOM_HH
 #define MCTRIGONOM_HH
 
-#include "mctypes.hh"
 #include "mcmacros.hh"
 #include "mcvector2d.hh"
 
@@ -41,16 +40,16 @@ class MCTrigonom
 public:
 
     //! Convert degree to radians
-    static MCFloat degToRad(MCFloat angle);
+    static float degToRad(float angle);
 
     //! Convert radian to degrees
-    static MCFloat radToDeg(MCFloat angle);
+    static float radToDeg(float angle);
 
     //! Get sine of given angle (0..360)
-    static MCFloat sin(MCFloat angle);
+    static float sin(float angle);
 
     //! Get cosine of given angle (0..360)
-    static MCFloat cos(MCFloat angle);
+    static float cos(float angle);
 
 private:
 

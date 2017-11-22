@@ -22,7 +22,8 @@
 
 #include "mcglscene.hh"
 #include "mcrenderlayer.hh"
-#include "mctypes.hh"
+
+
 #include "mcworld.hh"
 
 #include <set>

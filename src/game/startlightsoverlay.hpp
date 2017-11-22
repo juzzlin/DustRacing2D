@@ -17,7 +17,7 @@
 #define STARTLIGHTSOVERLAY_HPP
 
 #include "overlaybase.hpp"
-#include <MCTypes>
+
 
 class MCSurface;
 class MCTextureFontManager;

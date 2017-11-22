@@ -22,7 +22,7 @@
 #include <MCSurface>
 #include <MCTrigonom>
 
-Tire::Tire(Car & car, MCFloat friction, MCFloat offTrackFriction)
+Tire::Tire(Car & car, float friction, float offTrackFriction)
     : MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire")
     , m_isOffTrack(false)
     , m_friction(friction)
@@ -41,7 +41,7 @@ void Tire::onStepTime(int)
 {
     if (physicsComponent().velocity().lengthFast() > 0)
     {
-        const MCFloat tireNormalAngle = angle() + 90;
+        const float tireNormalAngle = angle() + 90;
         const MCVector2dF tire(
             MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
         MCVector2dF v = physicsComponent().velocity();

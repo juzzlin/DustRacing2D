@@ -20,13 +20,13 @@
 #include "mcevent.hh"
 #include "mcobject.hh"
 
-MCUint MCEvent::m_typeCount = 0;
+unsigned int MCEvent::m_typeCount = 0;
 
 MCEvent::MCEvent()
 : m_accepted(false)
 {}
 
-MCUint MCEvent::registerType()
+unsigned int MCEvent::registerType()
 {
     return ++MCEvent::m_typeCount;
 }

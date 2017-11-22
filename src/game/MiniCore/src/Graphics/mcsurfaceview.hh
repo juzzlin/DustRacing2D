@@ -58,13 +58,13 @@ public:
     //! \reimp
     virtual void render(
         const MCVector3dF & l,
-        MCFloat angle,
+        float angle,
         MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadow(
         const MCVector3dF & l,
-        MCFloat angle,
+        float angle,
         MCCamera * p = nullptr) override;
 
     //! \reimp

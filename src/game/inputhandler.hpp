@@ -19,7 +19,7 @@
 #include <vector>
 #include <bitset>
 
-#include <MCTypes>
+
 
 //! Handler for players' interactions.
 class InputHandler
@@ -37,13 +37,13 @@ public:
     };
 
     //! Constructor.
-    InputHandler(MCUint maxPlayers);
+    InputHandler(unsigned int maxPlayers);
 
     //! Set state of the given action of the given player.
-    void setActionState(MCUint playerIndex, Action action, bool state);
+    void setActionState(unsigned int playerIndex, Action action, bool state);
 
     //! Get state of the given action of the given player.
-    bool getActionState(MCUint playerIndex, Action action) const;
+    bool getActionState(unsigned int playerIndex, Action action) const;
 
     //! Reset the current actions.
     void reset();

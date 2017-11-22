@@ -43,7 +43,7 @@ public:
      * \param max     Max length of the spring.
      */
     MCSpringForceGenerator(
-        MCObject & object2, MCFloat coeff, MCFloat length, MCFloat min, MCFloat max);
+        MCObject & object2, float coeff, float length, float min, float max);
 
     //! Destructor
     virtual ~MCSpringForceGenerator();
@@ -58,10 +58,10 @@ private:
     DISABLE_COPY(MCSpringForceGenerator);
     DISABLE_ASSI(MCSpringForceGenerator);
     MCObject * m_p2;
-    MCFloat m_coeff;
-    MCFloat m_length;
-    MCFloat m_min;
-    MCFloat m_max;
+    float m_coeff;
+    float m_length;
+    float m_min;
+    float m_max;
 };
 
 typedef std::shared_ptr<MCSpringForceGenerator> MCSpringForceGeneratorPtr;

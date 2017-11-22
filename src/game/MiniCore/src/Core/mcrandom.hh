@@ -21,7 +21,8 @@
 #define MCRANDOM_HH
 
 #include "mcmacros.hh"
-#include "mctypes.hh"
+
+
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -35,7 +36,7 @@ class MCRandom
 public:
 
     //! Get next random value [0.0..1.0] in the table
-    static MCFloat getValue();
+    static float getValue();
 
     //! Return a random 2d vector
     static MCVector2dF randomVector2d();

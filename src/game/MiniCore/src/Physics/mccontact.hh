@@ -50,21 +50,21 @@ public:
      *  \param interpenetrationDepth The depth of interpenetration
      */
     void init(MCObject & object,
-        const MCVector2d<MCFloat> & contactPoint,
-        const MCVector2d<MCFloat> & contactNormal,
-        MCFloat interpenetrationDepth);
+        const MCVector2d<float> & contactPoint,
+        const MCVector2d<float> & contactNormal,
+        float interpenetrationDepth);
 
     //! Return the contacting object
     MCObject & object() const;
 
     //! Return the contact point
-    const MCVector2d<MCFloat> & contactPoint() const;
+    const MCVector2d<float> & contactPoint() const;
 
     //! Return the contact normal
-    const MCVector2d<MCFloat> & contactNormal() const;
+    const MCVector2d<float> & contactNormal() const;
 
     //! Return the interpenetration
-    MCFloat interpenetrationDepth() const;
+    float interpenetrationDepth() const;
 
 private:
 
@@ -78,9 +78,9 @@ private:
     DISABLE_ASSI(MCContact);
 
     MCObject * m_pObject;
-    MCVector2d<MCFloat> m_contactPoint;
-    MCVector2d<MCFloat> m_contactNormal;
-    MCFloat m_interpenetrationDepth;
+    MCVector2d<float> m_contactPoint;
+    MCVector2d<float> m_contactNormal;
+    float m_interpenetrationDepth;
     static MCRecycler<MCContact> m_recycler;
     friend class MCRecycler<MCContact>;
 };

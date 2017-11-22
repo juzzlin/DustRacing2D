@@ -45,9 +45,9 @@ void MCMeshView::updateBBox()
     // TODO: Fix this! The view should know the angle of the
     // shape somehow. Now we just return a naive bbox.
 
-    const MCFloat w = m_mesh->width() / 2;
-    const MCFloat h = m_mesh->height() / 2;
-    const MCFloat r = std::max(w, h);
+    const float w = m_mesh->width() / 2;
+    const float h = m_mesh->height() / 2;
+    const float r = std::max(w, h);
 
     m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
 }
@@ -78,13 +78,13 @@ void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
     m_mesh->setShadowShaderProgram(program);
 }
 
-void MCMeshView::render(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
+void MCMeshView::render(const MCVector3d<float> & l, float angle, MCCamera * p)
 {
     m_mesh->setScale(scale());
     m_mesh->render(p, l, angle);
 }
 
-void MCMeshView::renderShadow(const MCVector3d<MCFloat> & l, MCFloat angle, MCCamera * p)
+void MCMeshView::renderShadow(const MCVector3d<float> & l, float angle, MCCamera * p)
 {
     m_mesh->setScale(scale());
     m_mesh->renderShadow(p, l, angle);

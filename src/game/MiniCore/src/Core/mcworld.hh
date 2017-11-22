@@ -21,7 +21,6 @@
 #define MCWORLD_HH
 
 #include "mcmacros.hh"
-#include "mctypes.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -78,13 +77,13 @@ public:
      *  detection performance.
      */
     void setDimensions(
-        MCFloat minX,
-        MCFloat maxX,
-        MCFloat minY,
-        MCFloat maxY,
-        MCFloat minZ,
-        MCFloat maxZ,
-        MCFloat metersPerUnit = 1.0f,
+        float minX,
+        float maxX,
+        float minY,
+        float maxY,
+        float minZ,
+        float maxZ,
+        float metersPerUnit = 1.0f,
         bool addAreaWalls = true,
         int gridSize = 128);
 
@@ -96,13 +95,13 @@ public:
     const MCVector3dF & gravity() const;
 
     //! Set how many meters equal one unit in the scene.
-    static void setMetersPerUnit(MCFloat value);
+    static void setMetersPerUnit(float value);
 
     //! Get how many meters equal one unit in the scene.
-    static MCFloat metersPerUnit();
+    static float metersPerUnit();
 
     //! Convert scene units to meters.
-    static void toMeters(MCFloat & units);
+    static void toMeters(float & units);
 
     //! Convert scene units to meters.
     static void toMeters(MCVector2dF & units);
@@ -160,29 +159,29 @@ public:
     MCWorldRenderer & renderer() const;
 
     //! Get minimum X
-    MCFloat minX() const;
+    float minX() const;
 
     //! Get maximum X
-    MCFloat maxX() const;
+    float maxX() const;
 
     //! Get minimum Y
-    MCFloat minY() const;
+    float minY() const;
 
     //! Get maximum Y
-    MCFloat maxY() const;
+    float maxY() const;
 
     //! Get minimum Z
-    MCFloat minZ() const;
+    float minZ() const;
 
     //! Get maximum Z
-    MCFloat maxZ() const;
+    float maxZ() const;
 
     //! \return size of the current integration vector
     int objectCount() const;
 
     /*! \brief Set collision resolver loop count.
      *  Lower loop count results in faster collision calculations, but lower accuracy. */
-    void setResolverLoopCount(MCUint resolverLoopCount = 5);
+    void setResolverLoopCount(unsigned int resolverLoopCount = 5);
 
 protected:
 
@@ -195,33 +194,58 @@ private:
     DISABLE_ASSI(MCWorld);
 
     void integrate(int step);
+
     void processRemovedObjects();
+
     void processCollisions();
+
     void doRemoveObject(MCObject & object);
+
     void detectCollisions();
+
     void generateImpulses();
-    void resolvePositions(MCFloat accuracy);
+
+    void resolvePositions(float accuracy);
+
     MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
 
-    static MCWorld      * m_instance;
-    MCWorldRenderer     * m_renderer;
-    MCForceRegistry     * m_forceRegistry;
+    static MCWorld * m_instance;
+
+    MCWorldRenderer * m_renderer;
+
+    MCForceRegistry * m_forceRegistry;
+
     MCCollisionDetector * m_collisionDetector;
-    MCImpulseGenerator  * m_impulseGenerator;
-    MCObjectGrid        * m_objectGrid;
-    static MCFloat        m_metersPerUnit;
-    static MCFloat        m_metersPerUnitSquared;
-    MCFloat               m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
+
+    MCImpulseGenerator * m_impulseGenerator;
+
+    MCObjectGrid * m_objectGrid;
+
+    static float m_metersPerUnit;
+
+    static float m_metersPerUnitSquared;
+
+    float m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
+
     MCWorld::ObjectVector m_objs;
+
     MCWorld::ObjectVector m_removeObjs;
-    MCObject            * m_leftWallObject;
-    MCObject            * m_rightWallObject;
-    MCObject            * m_topWallObject;
-    MCObject            * m_bottomWallObject;
-    MCUint                m_numCollisions;
-    MCUint                m_resolverLoopCount;
-    MCFloat               m_resolverStep;
-    MCVector3dF           m_gravity;
+
+    MCObject * m_leftWallObject;
+
+    MCObject * m_rightWallObject;
+
+    MCObject * m_topWallObject;
+
+    MCObject * m_bottomWallObject;
+
+    unsigned int m_numCollisions;
+
+    unsigned int m_resolverLoopCount;
+
+    float m_resolverStep;
+
+    MCVector3dF m_gravity;
 };
 
 #endif // MCWORLD_HH

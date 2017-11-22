@@ -20,7 +20,7 @@
 
 #include <cassert>
 
-Timing::Timing(MCUint cars, QObject *parent)
+Timing::Timing(unsigned int cars, QObject *parent)
 : QObject(parent)
 , m_times(cars, Timing::Times())
 , m_time(0)
@@ -30,7 +30,7 @@ Timing::Timing(MCUint cars, QObject *parent)
 {
 }
 
-void Timing::setLapCompleted(MCUint index, bool isHuman)
+void Timing::setLapCompleted(unsigned int index, bool isHuman)
 {
     Timing::Times & times = m_times.at(index);
     times.lap++;
@@ -61,7 +61,7 @@ void Timing::setLapCompleted(MCUint index, bool isHuman)
     }
 }
 
-void Timing::setRaceCompleted(MCUint index, bool state, bool isHuman)
+void Timing::setRaceCompleted(unsigned int index, bool state, bool isHuman)
 {
     Timing::Times & times = m_times.at(index);
     times.raceCompleted = state;
@@ -78,25 +78,25 @@ void Timing::setRaceCompleted(MCUint index, bool state, bool isHuman)
     }
 }
 
-bool Timing::raceCompleted(MCUint index) const
+bool Timing::raceCompleted(unsigned int index) const
 {
     const Timing::Times & times = m_times.at(index);
     return times.raceCompleted;
 }
 
-void Timing::setIsActive(MCUint index, bool state)
+void Timing::setIsActive(unsigned int index, bool state)
 {
     Timing::Times & times = m_times.at(index);
     times.isActive = state;
 }
 
-bool Timing::isActive(MCUint index) const
+bool Timing::isActive(unsigned int index) const
 {
     const Timing::Times & times = m_times.at(index);
     return times.isActive;
 }
 
-int Timing::lap(MCUint index) const
+int Timing::lap(unsigned int index) const
 {
     return m_times.at(index).lap;
 }
@@ -117,7 +117,7 @@ int Timing::leadersLap() const
     return maxLap;
 }
 
-int Timing::currentLapTime(MCUint index) const
+int Timing::currentLapTime(unsigned int index) const
 {
     if (!m_started)
     {
@@ -128,7 +128,7 @@ int Timing::currentLapTime(MCUint index) const
     return m_time - times.raceTime;
 }
 
-int Timing::recordLapTime(MCUint index) const
+int Timing::recordLapTime(unsigned int index) const
 {
     if (!m_started)
     {
@@ -148,7 +148,7 @@ int Timing::raceTime() const
     return m_time;
 }
 
-int Timing::raceTime(MCUint index) const
+int Timing::raceTime(unsigned int index) const
 {
     if (!m_times.at(index).raceCompleted)
     {
@@ -160,7 +160,7 @@ int Timing::raceTime(MCUint index) const
     }
 }
 
-int Timing::recordRaceTime(MCUint index) const
+int Timing::recordRaceTime(unsigned int index) const
 {
     if (!m_started)
     {
@@ -190,7 +190,7 @@ void Timing::setRaceRecord(int msecs)
     m_raceRecord = msecs;
 }
 
-int Timing::lastLapTime(MCUint index) const
+int Timing::lastLapTime(unsigned int index) const
 {
     if (!m_started)
     {

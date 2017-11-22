@@ -38,45 +38,45 @@ std::string MCObjectData::typeId() const
     return m_typeId;
 }
 
-void MCObjectData::setMass(MCFloat newMass)
+void MCObjectData::setMass(float newMass)
 {
     m_mass = newMass;
 }
 
-MCFloat MCObjectData::mass() const
+float MCObjectData::mass() const
 {
     return m_mass;
 }
 
-void MCObjectData::setShapeRadius(MCFloat radius)
+void MCObjectData::setShapeRadius(float radius)
 {
     m_shape       = MCObjectData::Circle;
     m_shapeRadius = radius;
 }
 
-MCFloat MCObjectData::shapeRadius() const
+float MCObjectData::shapeRadius() const
 {
     return m_shapeRadius;
 }
 
-void MCObjectData::setShapeWidth(MCFloat width)
+void MCObjectData::setShapeWidth(float width)
 {
     m_shape       = MCObjectData::Rect;
     m_shapeWidth  = width;
 }
 
-MCFloat MCObjectData::shapeWidth() const
+float MCObjectData::shapeWidth() const
 {
     return m_shapeWidth;
 }
 
-void MCObjectData::setShapeHeight(MCFloat height)
+void MCObjectData::setShapeHeight(float height)
 {
     m_shape       = MCObjectData::Rect;
     m_shapeHeight = height;
 }
 
-MCFloat MCObjectData::shapeHeight() const
+float MCObjectData::shapeHeight() const
 {
     return m_shapeHeight;
 }
@@ -86,22 +86,22 @@ MCObjectData::Shape MCObjectData::shape() const
     return m_shape;
 }
 
-void MCObjectData::setRestitution(MCFloat restitution)
+void MCObjectData::setRestitution(float restitution)
 {
     m_restitution = restitution;
 }
 
-MCFloat MCObjectData::restitution() const
+float MCObjectData::restitution() const
 {
     return m_restitution;
 }
 
-void MCObjectData::setXYFriction(MCFloat friction)
+void MCObjectData::setXYFriction(float friction)
 {
     m_xyFriction = friction;
 }
 
-MCFloat MCObjectData::xyFriction() const
+float MCObjectData::xyFriction() const
 {
     return m_xyFriction;
 }

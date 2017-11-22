@@ -20,9 +20,9 @@
 #include "mccircleshape.hh"
 #include "mcobject.hh"
 
-MCUint MCCircleShape::m_typeId = MCShape::registerType();
+unsigned int MCCircleShape::m_typeId = MCShape::registerType();
 
-MCCircleShape::MCCircleShape(MCShapeViewPtr view, MCFloat radius)
+MCCircleShape::MCCircleShape(MCShapeViewPtr view, float radius)
     : MCShape(view)
 {
     setRadius(radius);
@@ -30,41 +30,41 @@ MCCircleShape::MCCircleShape(MCShapeViewPtr view, MCFloat radius)
 
 bool MCCircleShape::contains(const MCVector2dF & p) const
 {
-    return (MCVector2d<MCFloat>(location()) - p).lengthFast() <= radius();
+    return (MCVector2d<float>(location()) - p).lengthFast() <= radius();
 }
 
-MCFloat MCCircleShape::interpenetrationDepth(const MCCircleShape & p, MCVector2dF & contactNormal) const
+float MCCircleShape::interpenetrationDepth(const MCCircleShape & p, MCVector2dF & contactNormal) const
 {
     contactNormal = MCVector2dF(p.location() - location()).normalizedFast();
-    const MCFloat depth = radius() + p.radius() - MCVector2dF(p.location() - location()).lengthFast();
+    const float depth = radius() + p.radius() - MCVector2dF(p.location() - location()).lengthFast();
     return depth;
 }
 
-MCFloat MCCircleShape::interpenetrationDepth(const MCSegment<MCFloat> & p, MCVector2dF & contactNormal) const
+float MCCircleShape::interpenetrationDepth(const MCSegment<float> & p, MCVector2dF & contactNormal) const
 {
     contactNormal = this->contactNormal(p);
-    const MCFloat depth = radius() - (MCVector2dF(location()) - p.vertex0).lengthFast();
+    const float depth = radius() - (MCVector2dF(location()) - p.vertex0).lengthFast();
     return depth;
 }
 
-MCVector2dF MCCircleShape::contactNormal(const MCSegment<MCFloat> & p) const
+MCVector2dF MCCircleShape::contactNormal(const MCSegment<float> & p) const
 {
     return (p.vertex0 - MCVector2dF(location())).normalizedFast();
 }
 
-MCUint MCCircleShape::typeId()
+unsigned int MCCircleShape::typeId()
 {
     return m_typeId;
 }
 
-MCUint MCCircleShape::instanceTypeId() const
+unsigned int MCCircleShape::instanceTypeId() const
 {
     return m_typeId;
 }
 
-MCBBox<MCFloat> MCCircleShape::bbox() const
+MCBBox<float> MCCircleShape::bbox() const
 {
-    return MCBBox<MCFloat>(
+    return MCBBox<float>(
         MCVector2dF(location()) - MCVector2dF(radius(), radius()), radius() * 2, radius() * 2);
 }
 

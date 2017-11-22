@@ -32,7 +32,7 @@ public:
     /*! Constructor
      * \param g Gravity vector (G = m * g)
      */
-    MCGravityGenerator(const MCVector3d<MCFloat> & g);
+    MCGravityGenerator(const MCVector3d<float> & g);
 
     //! Destructor
     virtual ~MCGravityGenerator() {};
@@ -44,7 +44,7 @@ private:
 
     DISABLE_COPY(MCGravityGenerator);
     DISABLE_ASSI(MCGravityGenerator);
-    MCVector3d<MCFloat> m_g;
+    MCVector3d<float> m_g;
 };
 
 #endif // MCGRAVITYGENERATOR_HH

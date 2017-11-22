@@ -18,9 +18,7 @@
 //
 
 #include "mcsurfacemanager.hh"
-
 #include "mclogger.hh"
-#include "mctypes.hh"
 #include "mcsurface.hh"
 #include "mcsurfaceconfigloader.hh"
 
@@ -213,14 +211,14 @@ void MCSurfaceManager::createSurfaceCommon(MCSurface & surface, const MCSurfaceM
     m_surfaceMap[data.handle] = &surface;
 }
 #ifdef __MC_GLES__
-static bool isPowerOfTwo(MCUint x)
+static bool isPowerOfTwo(unsigned int x)
 {
     return (x != 0) && !(x & (x - 1));
 }
 
-static MCUint getNearestPowerOfTwo(MCUint x)
+static unsigned int getNearestPowerOfTwo(unsigned int x)
 {
-    const std::vector<MCUint> powers = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
+    const std::vector<unsigned int> powers = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
     for (auto power : powers) {
         if (power > x) {
             return power;
@@ -231,8 +229,8 @@ static MCUint getNearestPowerOfTwo(MCUint x)
 
 static QImage forceToNearestPowerOfTwoImage(const MCSurfaceMetaData & data, const QImage & image)
 {
-    MCUint width = image.width();
-    MCUint height = image.height();
+    unsigned int width = image.width();
+    unsigned int height = image.height();
 
     if (isPowerOfTwo(width) && isPowerOfTwo(height))
     {
@@ -293,7 +291,7 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     // Apply alpha clamp if it was set (clear alpha)
     if (data.alphaClamp.second)
     {
-        applyAlphaClamp(textureImage, static_cast<MCUint>(255.0f * data.alphaClamp.first));
+        applyAlphaClamp(textureImage, static_cast<unsigned int>(255.0f * data.alphaClamp.first));
     }
 
     // Apply colorkey if it was set (set or clear alpha)
@@ -358,7 +356,7 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     return textureHandle;
 }
 
-void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, MCUint b) const
+void MCSurfaceManager::applyColorKey(QImage & textureImage, unsigned int r, unsigned int g, unsigned int b) const
 {
     for (int i = 0; i < textureImage.width(); i++)
     {
@@ -378,7 +376,7 @@ void MCSurfaceManager::applyColorKey(QImage & textureImage, MCUint r, MCUint g, 
     }
 }
 
-void MCSurfaceManager::applyAlphaClamp(QImage & textureImage, MCUint a) const
+void MCSurfaceManager::applyAlphaClamp(QImage & textureImage, unsigned int a) const
 {
     for (int i = 0; i < textureImage.width(); i++)
     {

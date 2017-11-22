@@ -21,7 +21,7 @@
 #include "mcobject.hh"
 #include "mcphysicscomponent.hh"
 
-MCGravityGenerator::MCGravityGenerator(const MCVector3d<MCFloat> & g)
+MCGravityGenerator::MCGravityGenerator(const MCVector3d<float> & g)
 : m_g(g)
 {}
 

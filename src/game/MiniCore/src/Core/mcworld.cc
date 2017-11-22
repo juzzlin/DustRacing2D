@@ -40,8 +40,8 @@
 #include <cassert>
 
 MCWorld * MCWorld::m_instance             = nullptr;
-MCFloat   MCWorld::m_metersPerUnit        = 1.0;
-MCFloat   MCWorld::m_metersPerUnitSquared = 1.0;
+float   MCWorld::m_metersPerUnit        = 1.0;
+float   MCWorld::m_metersPerUnitSquared = 1.0;
 
 namespace {
 const int REMOVED_INDEX = -1;
@@ -126,7 +126,7 @@ void MCWorld::generateImpulses()
     m_impulseGenerator->generateImpulsesFromDeepestContacts(m_objs);
 }
 
-void MCWorld::resolvePositions(MCFloat accuracy)
+void MCWorld::resolvePositions(float accuracy)
 {
     m_impulseGenerator->resolvePositions(m_objs, accuracy);
 }
@@ -186,8 +186,8 @@ void MCWorld::clear()
 }
 
 void MCWorld::setDimensions(
-    MCFloat minX, MCFloat maxX, MCFloat minY, MCFloat maxY, MCFloat minZ, MCFloat maxZ,
-    MCFloat metersPerUnit, bool addAreaWalls, int gridSize)
+    float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
+    float metersPerUnit, bool addAreaWalls, int gridSize)
 {
     assert(maxX - minX > 0);
     assert(maxY - minY > 0);
@@ -204,8 +204,8 @@ void MCWorld::setDimensions(
     m_maxZ = maxZ;
 
     // Init objectGrid
-    const MCFloat leafWidth = (maxX - minX) / gridSize;
-    const MCFloat leafHeight = (maxY - minY) / gridSize;
+    const float leafWidth = (maxX - minX) / gridSize;
+    const float leafHeight = (maxY - minY) / gridSize;
     delete m_objectGrid;
     m_objectGrid = new MCObjectGrid(
         m_minX, m_minY,
@@ -215,8 +215,8 @@ void MCWorld::setDimensions(
     if (addAreaWalls)
     {
         // Create "wall" objects
-        const MCFloat w = m_maxX - m_minX;
-        const MCFloat h = m_maxY - m_minY;
+        const float w = m_maxX - m_minX;
+        const float h = m_maxY - m_minY;
 
         if (m_leftWallObject)
         {
@@ -224,7 +224,7 @@ void MCWorld::setDimensions(
             delete m_leftWallObject;
         }
 
-        const MCFloat wallRestitution = 0.25f;
+        const float wallRestitution = 0.25f;
 
         m_leftWallObject = new MCObject("LEFT_WALL");
         m_leftWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
@@ -274,32 +274,32 @@ void MCWorld::setDimensions(
     }
 }
 
-MCFloat MCWorld::minX() const
+float MCWorld::minX() const
 {
     return m_minX;
 }
 
-MCFloat MCWorld::maxX() const
+float MCWorld::maxX() const
 {
     return m_maxX;
 }
 
-MCFloat MCWorld::minY() const
+float MCWorld::minY() const
 {
     return m_minY;
 }
 
-MCFloat MCWorld::maxY() const
+float MCWorld::maxY() const
 {
     return m_maxY;
 }
 
-MCFloat MCWorld::minZ() const
+float MCWorld::minZ() const
 {
     return m_minZ;
 }
 
-MCFloat MCWorld::maxZ() const
+float MCWorld::maxZ() const
 {
     return m_maxZ;
 }
@@ -324,7 +324,7 @@ void MCWorld::addObject(MCObject & object)
             m_objectGrid->insert(object);
 
             // Add xy friction
-            const MCFloat FrictionThreshold = 0.001f;
+            const float FrictionThreshold = 0.001f;
             if (object.physicsComponent().xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(
@@ -432,7 +432,7 @@ void MCWorld::processCollisions()
 
         // Process contacts and generate impulses
         m_collisionDetector->enablePrimaryCollisionEvents(false);
-        for (MCUint i = 0; i < m_resolverLoopCount && m_numCollisions > 0; i++)
+        for (unsigned int i = 0; i < m_resolverLoopCount && m_numCollisions > 0; i++)
         {
             detectCollisions();
             resolvePositions(m_resolverStep);
@@ -486,19 +486,19 @@ const MCVector3dF & MCWorld::gravity() const
     return m_gravity;
 }
 
-void MCWorld::setMetersPerUnit(MCFloat value)
+void MCWorld::setMetersPerUnit(float value)
 {
     MCWorld::m_metersPerUnit        = value;
     MCWorld::m_metersPerUnitSquared = value * value;
 }
 
-MCFloat MCWorld::metersPerUnit()
+float MCWorld::metersPerUnit()
 {
     assert(MCWorld::m_instance);
     return MCWorld::m_metersPerUnit;
 }
 
-void MCWorld::toMeters(MCFloat & units)
+void MCWorld::toMeters(float & units)
 {
     units *= MCWorld::m_metersPerUnit;
 }
@@ -513,7 +513,7 @@ void MCWorld::toMeters(MCVector3dF & units)
     units *= MCWorld::m_metersPerUnit;
 }
 
-void MCWorld::setResolverLoopCount(MCUint resolverLoopCount)
+void MCWorld::setResolverLoopCount(unsigned int resolverLoopCount)
 {
     m_resolverLoopCount = resolverLoopCount;
     m_resolverStep = 1.0f / resolverLoopCount;

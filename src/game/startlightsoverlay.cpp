@@ -38,9 +38,9 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
 {
     const int cols = 8;
 
-    const MCFloat x = m_model.pos().i() - (cols - 1) * m_startLightOn.width()  / 2;
-    const MCFloat y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
-    const MCFloat h = rows * m_startLightOn.height();
+    const float x = m_model.pos().i() - (cols - 1) * m_startLightOn.width()  / 2;
+    const float y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
+    const float h = rows * m_startLightOn.height();
 
     // Body
     for (int row = 0; row < rows; row++)

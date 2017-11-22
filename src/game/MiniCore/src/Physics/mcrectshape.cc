@@ -24,9 +24,9 @@
 
 #include <cmath>
 
-MCUint MCRectShape::m_typeId = MCShape::registerType();
+unsigned int MCRectShape::m_typeId = MCShape::registerType();
 
-MCRectShape::MCRectShape(MCShapeViewPtr view, MCFloat width, MCFloat height)
+MCRectShape::MCRectShape(MCShapeViewPtr view, float width, float height)
 : MCShape(view)
 , m_obbox(width / 2, height / 2, MCVector2dF())
 , m_width(width)
@@ -110,13 +110,13 @@ void MCRectShape::translate(const MCVector3dF & p)
     m_obbox.translate(p);
 }
 
-void MCRectShape::rotate(MCFloat a)
+void MCRectShape::rotate(float a)
 {
     MCShape::rotate(a);
     m_obbox.rotate(a);
 }
 
-MCBBox<MCFloat> MCRectShape::bbox() const
+MCBBox<float> MCRectShape::bbox() const
 {
     return m_obbox.bbox();
 }
@@ -126,7 +126,7 @@ bool MCRectShape::contains(const MCVector2dF & point) const
     return m_obbox.contains(point);
 }
 
-MCFloat MCRectShape::interpenetrationDepth(const MCSegmentF & segment, MCVector2dF & contactNormal) const
+float MCRectShape::interpenetrationDepth(const MCSegmentF & segment, MCVector2dF & contactNormal) const
 {
     MCEdgeF edge(edgeForSegment(segment));
     contactNormal = this->contactNormal(segment, edge);
@@ -149,12 +149,12 @@ MCVector2dF MCRectShape::contactNormal(const MCSegmentF &, const MCEdgeF & edge)
     return MCVector2dF(normal).normalized();
 }
 
-MCUint MCRectShape::typeId()
+unsigned int MCRectShape::typeId()
 {
     return m_typeId;
 }
 
-MCUint MCRectShape::instanceTypeId() const
+unsigned int MCRectShape::instanceTypeId() const
 {
     return m_typeId;
 }
@@ -164,7 +164,7 @@ const MCOBBoxF & MCRectShape::obbox() const
     return m_obbox;
 }
 
-void MCRectShape::resize(MCFloat width, MCFloat height)
+void MCRectShape::resize(float width, float height)
 {
     m_obbox = MCOBBoxF(width / 2, height / 2, location());
     m_obbox.rotate(angle());
@@ -177,12 +177,12 @@ void MCRectShape::render(MCCamera * camera)
     MCShape::render(camera);
 }
 
-MCFloat MCRectShape::width() const
+float MCRectShape::width() const
 {
     return m_width;
 }
 
-MCFloat MCRectShape::height() const
+float MCRectShape::height() const
 {
     return m_height;
 }

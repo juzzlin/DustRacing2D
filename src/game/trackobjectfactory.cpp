@@ -106,7 +106,7 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "plant")
     {
-        const MCFloat plantBodyRadius = 4;
+        const float plantBodyRadius = 4;
 
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);

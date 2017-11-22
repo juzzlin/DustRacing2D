@@ -37,12 +37,12 @@ void MCCollisionDetector::enablePrimaryCollisionEvents(bool enable)
 
 bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
 {
-    const MCOBBox<MCFloat> & obbox1(rect1.obbox());
+    const MCOBBox<float> & obbox1(rect1.obbox());
 
     bool collided = false;
 
     // Loop thru all vertices of rect1 and generate contacts for colliding vertices.
-    for (MCUint i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 4; i++)
     {
         if (rect2.contains(obbox1.vertex(i)))
         {
@@ -60,8 +60,8 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
             {
                 MCVector2dF contactNormal;
                 MCVector2dF vertex = obbox1.vertex(i);
-                MCFloat depth = rect2.interpenetrationDepth(
-                    MCSegment<MCFloat>(vertex, rect1.location()), contactNormal);
+                float depth = rect2.interpenetrationDepth(
+                    MCSegment<float>(vertex, rect1.location()), contactNormal);
 
                 {
                     MCContact & contact = MCContact::create();
@@ -90,11 +90,11 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
 {
     bool collided = false;
 
-    const MCOBBox<MCFloat> & obbox(rect.obbox());
+    const MCOBBox<float> & obbox(rect.obbox());
 
     // Loop through all vertices of the rect and find possible contact points with
     // the circle. This algorithm is not perfectly accurate, but will do the job.
-    for (MCUint i = 0; i < 5; i++)
+    for (unsigned int i = 0; i < 5; i++)
     {
         MCVector2dF rectVertex;
         if (i < 4)
@@ -124,8 +124,8 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
             if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
             {
                 MCVector2dF contactNormal;
-                MCFloat depth = rect.interpenetrationDepth(
-                    MCSegment<MCFloat>(circleVertex, circle.location()), contactNormal);
+                float depth = rect.interpenetrationDepth(
+                    MCSegment<float>(circleVertex, circle.location()), contactNormal);
 
                 {
                     MCContact & contact = MCContact::create();
@@ -154,7 +154,7 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 {
     bool collided = false;
     MCVector2dF contactNormal;
-    const MCFloat depth = circle2.interpenetrationDepth(circle1, contactNormal);
+    const float depth = circle2.interpenetrationDepth(circle1, contactNormal);
     const MCVector2dF contactPoint(MCVector2dF(circle1.location()) - contactNormal * circle1.radius());
 
     if (depth > 0)
@@ -192,8 +192,8 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
 bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
 {
-    const MCUint id1 = object1.shape()->instanceTypeId();
-    const MCUint id2 = object2.shape()->instanceTypeId();
+    const unsigned int id1 = object1.shape()->instanceTypeId();
+    const unsigned int id2 = object2.shape()->instanceTypeId();
 
     // Rect against rect
     if (id1 == MCRectShape::typeId() && id2 == MCRectShape::typeId())
@@ -235,9 +235,9 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     return false;
 }
 
-MCUint MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
+unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
 {
-    MCUint numCollisions = 0;
+    unsigned int numCollisions = 0;
 
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
