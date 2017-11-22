@@ -314,50 +314,36 @@ void EditorView::mousePressEvent(QMouseEvent * event)
         m_clickedPos      = event->pos();
         m_clickedScenePos = mapToScene(m_clickedPos);
 
-        // User is erasing an object
-        if (m_editorData.mode() == EditorData::EditorMode::EraseObject)
-        {
-            eraseObjectAtCurrentClickedPos();
-        }
-        // User is adding an object
-        else if (m_editorData.mode() == EditorData::EditorMode::AddObject)
-        {
-            addCurrentToolBarObjectToScene();
-        }
-        // Default actions
-        else
-        {
-            // Fetch all items at the location
-            QList<QGraphicsItem *> items = scene()->items(
-                m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
+        // Fetch all items at the location
+        QList<QGraphicsItem *> items = scene()->items(
+                    m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
 
-            if (items.size())
+        if (items.size())
+        {
+            // Check if there's an object at the position and handle that.
+            // Otherwise it would be difficult to select objects that are surrounded
+            // by a target node area.
+            auto iter = items.begin();
+            while (iter != items.end())
             {
-                // Check if there's an object at the position and handle that.
-                // Otherwise it would be difficult to select objects that are surrounded
-                // by a target node area.
-                auto iter = items.begin();
-                while (iter != items.end())
+                auto item = *iter;
+                if (auto object = dynamic_cast<Object *>(item))
                 {
-                    auto item = *iter;
-                    if (auto object = dynamic_cast<Object *>(item))
-                    {
-                        handleMousePressEventOnObject(*event, *object);
-                        return;
-                    }
-
-                    iter++;
+                    handleMousePressEventOnObject(*event, *object);
+                    return;
                 }
 
-                auto item = *items.begin();
-                if (auto tnode = dynamic_cast<TargetNode *>(item))
-                {
-                    handleMousePressEventOnTargetNode(*event, *tnode);
-                }
-                else if (auto tile = dynamic_cast<TrackTile *>(item))
-                {
-                    handleMousePressEventOnTile(*event, *tile);
-                }
+                iter++;
+            }
+
+            auto item = *items.begin();
+            if (auto tnode = dynamic_cast<TargetNode *>(item))
+            {
+                handleMousePressEventOnTargetNode(*event, *tnode);
+            }
+            else if (auto tile = dynamic_cast<TrackTile *>(item))
+            {
+                handleMousePressEventOnTile(*event, *tile);
             }
         }
     }
@@ -417,7 +403,16 @@ void EditorView::handleMousePressEventOnObject(QMouseEvent & event, Object & obj
     }
     else if (event.button() == Qt::LeftButton)
     {
-        handleLeftButtonClickOnObject(object);
+        // User is erasing an object
+        if (m_editorData.mode() == EditorData::EditorMode::EraseObject)
+        {
+            eraseObjectAtCurrentClickedPos();
+        }
+        // Default actions
+        else
+        {
+            handleLeftButtonClickOnObject(object);
+        }
     }
 
     QWidget::mousePressEvent(&event);
@@ -447,7 +442,15 @@ void EditorView::handleMousePressEventOnTile(QMouseEvent & event, TrackTile & ti
     }
     else if (event.button() == Qt::LeftButton)
     {
-        handleLeftButtonClickOnTile(tile);
+        // User is adding an object
+        if (m_editorData.mode() == EditorData::EditorMode::AddObject)
+        {
+            addCurrentToolBarObjectToScene();
+        }
+        else
+        {
+            handleLeftButtonClickOnTile(tile);
+        }
     }
 
     QWidget::mousePressEvent(&event);
