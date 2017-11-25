@@ -220,7 +220,7 @@
  <t o="0" i="7" t="grass" j="8"/>
  <t o="0" i="7" t="grass" j="9"/>
  <t o="90" i="7" t="corner90" j="10"/>
- <t o="0" c="2" i="7" t="straight" j="11"/>
+ <t o="0" c="1" i="7" t="straight" j="11"/>
  <t o="0" i="7" t="straight" j="12"/>
  <t o="0" i="7" t="straight" j="13"/>
  <t o="0" i="7" t="straight" j="14"/>
@@ -266,7 +266,7 @@
  <t o="0" i="8" t="grass" j="24"/>
  <t o="0" i="8" t="grass" j="25"/>
  <t o="0" i="8" t="grass" j="26"/>
- <t o="90" c="2" i="8" t="straight" j="27"/>
+ <t o="90" c="1" i="8" t="straight" j="27"/>
  <t o="0" i="8" t="grass" j="28"/>
  <t o="0" i="8" t="grass" j="29"/>
  <t o="0" i="9" t="grass" j="0"/>
@@ -296,7 +296,7 @@
  <t o="0" i="9" t="grass" j="24"/>
  <t o="0" i="9" t="grass" j="25"/>
  <t o="0" i="9" t="grass" j="26"/>
- <t o="90" c="2" i="9" t="straight" j="27"/>
+ <t o="90" c="1" i="9" t="straight" j="27"/>
  <t o="0" i="9" t="grass" j="28"/>
  <t o="0" i="9" t="grass" j="29"/>
  <t o="0" i="10" t="grass" j="0"/>
@@ -326,7 +326,7 @@
  <t o="0" i="10" t="grass" j="24"/>
  <t o="0" i="10" t="grass" j="25"/>
  <t o="0" i="10" t="grass" j="26"/>
- <t o="90" i="10" t="straight" j="27"/>
+ <t o="90" c="2" i="10" t="straight" j="27"/>
  <t o="0" i="10" t="grass" j="28"/>
  <t o="0" i="10" t="grass" j="29"/>
  <t o="0" i="11" t="grass" j="0"/>
@@ -935,7 +935,7 @@
  <t o="0" i="31" t="grass" j="3"/>
  <t o="90" i="31" t="corner90" j="4"/>
  <t o="0" i="31" t="straight" j="5"/>
- <t o="0" c="2" i="31" t="straight" j="6"/>
+ <t o="0" c="1" i="31" t="straight" j="6"/>
  <t o="-90" i="31" t="corner90" j="7"/>
  <t o="0" i="31" t="grass" j="8"/>
  <t o="0" i="31" t="grass" j="9"/>
@@ -1023,7 +1023,7 @@
  <t o="0" i="34" t="grass" j="1"/>
  <t o="0" i="34" t="grass" j="2"/>
  <t o="0" i="34" t="corner90" j="3"/>
- <t o="0" c="2" i="34" t="straight" j="4"/>
+ <t o="0" c="1" i="34" t="straight" j="4"/>
  <t o="0" i="34" t="straight" j="5"/>
  <t o="0" i="34" t="straight" j="6"/>
  <t o="180" i="34" t="corner90" j="7"/>
@@ -1142,7 +1142,7 @@
  <t o="0" i="38" t="grass" j="0"/>
  <t o="0" i="38" t="grass" j="1"/>
  <t o="0" i="38" t="grass" j="2"/>
- <t o="90" c="2" i="38" t="straight" j="3"/>
+ <t o="90" c="1" i="38" t="straight" j="3"/>
  <t o="0" i="38" t="grass" j="4"/>
  <t o="0" i="38" t="grass" j="5"/>
  <t o="0" i="38" t="grass" j="6"/>
