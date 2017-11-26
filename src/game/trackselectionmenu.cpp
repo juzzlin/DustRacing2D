@@ -282,8 +282,7 @@ void TrackItem::renderTrackProperties()
 
     ss.str(L"");
     ss << QObject::tr("     Length: ").toStdWString()
-       << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerUnit())
-       << QObject::tr(" m").toStdWString();
+       << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerUnit());
     text.setText(ss.str());
     text.render(textX, y() - height() / 2 - text.height(m_font) * 3, nullptr, m_font);
 
