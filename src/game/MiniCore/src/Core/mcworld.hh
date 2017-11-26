@@ -23,6 +23,7 @@
 #include "mcmacros.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
+#include "mcrendergroup.hh"
 
 #include <vector>
 
@@ -144,13 +145,9 @@ public:
      *         no any translations or clipping done. */
     virtual void prepareRendering(MCCamera * camera);
 
-    /*! \brief Render all registered objects.
+    /*! \brief Render given component.
      *  \param camera Camera box, can be nullptr. */
-    virtual void render(MCCamera * camera);
-
-    /*! \brief Render shadows of all registered objects.
-     *  \param camera Camera box, can be nullptr. */
-    virtual void renderShadows(MCCamera * camera);
+    virtual void render(MCCamera * camera, MCRenderGroup renderGroup);
 
     //! \return Reference to the objectGrid.
     MCObjectGrid & objectGrid() const;

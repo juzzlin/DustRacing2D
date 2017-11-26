@@ -44,11 +44,6 @@ MCGLScene & MCWorldRenderer::glScene()
     return m_glScene;
 }
 
-void MCWorldRenderer::render(MCCamera * camera)
-{
-    renderBatches(camera);
-}
-
 void MCWorldRenderer::buildObjectBatches(MCCamera * camera)
 {
     m_defaultLayer.objectBatches()[camera].clear();
@@ -178,7 +173,28 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
     buildParticleBatches(camera);
 }
 
-void MCWorldRenderer::renderBatches(MCCamera * camera)
+void MCWorldRenderer::render(MCCamera * camera, MCRenderGroup renderGroup)
+{
+    switch (renderGroup)
+    {
+    case MCRenderGroup::Objects:
+        renderObjects(camera);
+        break;
+    case MCRenderGroup::ObjectShadows:
+        renderObjectShadows(camera);
+        break;
+    case MCRenderGroup::Particles:
+        renderParticles(camera);
+        break;
+    case MCRenderGroup::ParticleShadows:
+        renderParticleShadows(camera);
+        break;
+    default:
+        break;
+    }
+}
+
+void MCWorldRenderer::renderObjects(MCCamera * camera)
 {
     if (m_defaultLayer.depthTestEnabled())
     {
@@ -192,6 +208,23 @@ void MCWorldRenderer::renderBatches(MCCamera * camera)
     glDepthMask(m_defaultLayer.depthMaskEnabled());
 
     renderObjectBatches(camera, m_defaultLayer);
+
+    glDepthMask(GL_TRUE);
+}
+
+void MCWorldRenderer::renderParticles(MCCamera * camera)
+{
+    if (m_defaultLayer.depthTestEnabled())
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+
+    glDepthMask(m_defaultLayer.depthMaskEnabled());
+
     renderParticleBatches(camera, m_defaultLayer);
 
     glDepthMask(GL_TRUE);
@@ -253,13 +286,24 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
     }
 }
 
-void MCWorldRenderer::renderShadows(MCCamera * camera)
+void MCWorldRenderer::renderObjectShadows(MCCamera * camera)
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_DST_COLOR);
 
     renderObjectShadowBatches(camera, m_defaultLayer);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
+}
+
+void MCWorldRenderer::renderParticleShadows(MCCamera * camera)
+{
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_DST_COLOR);
+
     renderParticleShadowBatches(camera, m_defaultLayer);
 
     glDisable(GL_BLEND);

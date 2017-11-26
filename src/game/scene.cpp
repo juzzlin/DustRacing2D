@@ -300,6 +300,13 @@ void Scene::updateFrame(InputHandler & handler, int step)
             }
         }
     }
+
+    const float fadeValue = m_renderer.fadeValue();
+    if (m_fadeAnimation->isFading())
+    {
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
+        glScene.setFadeValue(fadeValue);
+    }
 }
 
 void Scene::updateOverlays()
@@ -609,8 +616,6 @@ void Scene::getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & 
 
 void Scene::renderTrack()
 {
-    const float fadeValue = m_renderer.fadeValue();
-
     switch (m_stateMachine.state())
     {
     case StateMachine::State::GameTransitionIn:
@@ -619,10 +624,6 @@ void Scene::renderTrack()
     case StateMachine::State::Play:
     {
         MCGLScene & glScene = MCWorld::instance().renderer().glScene();
-        if (m_fadeAnimation->isFading())
-        {
-            glScene.setFadeValue(fadeValue);
-        }
 
         if (m_game.hasTwoHumanPlayers())
         {
@@ -635,7 +636,6 @@ void Scene::renderTrack()
             glScene.setSplitType(p0);
             m_activeTrack->render(&m_camera[0]);
 
-            // Setup for common scene
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
@@ -650,53 +650,8 @@ void Scene::renderTrack()
     };
 }
 
-void Scene::renderObjectShadows()
+void Scene::renderMenu()
 {
-    const float fadeValue = m_renderer.fadeValue();
-
-    switch (m_stateMachine.state())
-    {
-    case StateMachine::State::GameTransitionIn:
-    case StateMachine::State::GameTransitionOut:
-    case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-    {
-        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
-
-        if (m_fadeAnimation->isFading())
-        {
-            glScene.setFadeValue(fadeValue);
-        }
-
-        if (m_game.hasTwoHumanPlayers())
-        {
-            MCGLScene::SplitType p1, p0;
-            getSplitPositions(p1, p0);
-
-            glScene.setSplitType(p1);
-            renderPlayerSceneShadows(m_camera[1]);
-
-            glScene.setSplitType(p0);
-            renderPlayerSceneShadows(m_camera[0]);
-
-            // Setup for common scene
-            glScene.setSplitType(MCGLScene::ShowFullScreen);
-        }
-        else
-        {
-            renderPlayerSceneShadows(m_camera[0]);
-        }
-
-        break;
-    }
-    default:
-        break;
-    };
-}
-
-void Scene::renderObjects()
-{
-    const float fadeValue = m_renderer.fadeValue();
     MCGLScene & glScene = MCWorld::instance().renderer().glScene();
 
     switch (m_stateMachine.state())
@@ -704,7 +659,7 @@ void Scene::renderObjects()
     case StateMachine::State::DoIntro:
 
         glScene.setSplitType(MCGLScene::ShowFullScreen);
-        glScene.setFadeValue(fadeValue);
+
         m_intro->render();
 
         break;
@@ -713,7 +668,6 @@ void Scene::renderObjects()
     case StateMachine::State::MenuTransitionOut:
     case StateMachine::State::MenuTransitionIn:
 
-        glScene.setFadeValue(fadeValue);
         glScene.setSplitType(MCGLScene::ShowFullScreen);
 
         m_menuManager->stepTime(17); // Assume 60 fps here, affects only text item animations
@@ -721,61 +675,9 @@ void Scene::renderObjects()
 
         break;
 
-    case StateMachine::State::GameTransitionIn:
-    case StateMachine::State::GameTransitionOut:
-    case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-
-        if (m_fadeAnimation->isFading())
-        {
-            glScene.setFadeValue(fadeValue);
-        }
-
-        if (m_game.hasTwoHumanPlayers())
-        {
-            MCGLScene::SplitType p1, p0;
-            getSplitPositions(p1, p0);
-
-            glScene.setSplitType(p1);
-            renderPlayerScene(m_camera[1]);
-            m_timingOverlay[1].render();
-            m_minimap[1].render(m_cars, m_race);
-
-            glScene.setSplitType(p0);
-            renderPlayerScene(m_camera[0]);
-            m_timingOverlay[0].render();
-            m_minimap[0].render(m_cars, m_race);
-
-
-            // Setup for common scene
-            glScene.setSplitType(MCGLScene::ShowFullScreen);
-        }
-        else
-        {
-            renderPlayerScene(m_camera[0]);
-            m_timingOverlay[0].render();
-            m_crashOverlay[0].render();
-
-            m_minimap[0].render(m_cars, m_race);
-        }
-
-        break;
-
     default:
         break;
     };
-}
-
-void Scene::renderPlayerScene(MCCamera & camera)
-{
-    m_world.prepareRendering(&camera);
-    m_world.render(&camera);
-}
-
-void Scene::renderPlayerSceneShadows(MCCamera & camera)
-{
-    // Assume that m_world.prepareRendering(&camera) is already called.
-    m_world.renderShadows(&camera);
 }
 
 void Scene::renderCommonHUD()
@@ -786,6 +688,11 @@ void Scene::renderCommonHUD()
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
     case StateMachine::State::Play:
+    {
+        // Setup for common scene
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
+        glScene.setSplitType(MCGLScene::ShowFullScreen);
+
         if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
         {
             m_checkeredFlag->render();
@@ -794,6 +701,96 @@ void Scene::renderCommonHUD()
         m_startlightsOverlay->render();
         m_messageOverlay->render();
         break;
+    }
+    default:
+        break;
+    };
+}
+
+void Scene::renderHUD()
+{
+    switch (m_stateMachine.state())
+    {
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
+    {
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
+
+        if (m_game.hasTwoHumanPlayers())
+        {
+            MCGLScene::SplitType p1, p0;
+            getSplitPositions(p1, p0);
+
+            glScene.setSplitType(p1);
+            m_timingOverlay[1].render();
+            m_minimap[1].render(m_cars, m_race);
+            m_crashOverlay[1].render();
+
+            glScene.setSplitType(p0);
+            m_timingOverlay[0].render();
+            m_minimap[0].render(m_cars, m_race);
+            m_crashOverlay[0].render();
+
+            glScene.setSplitType(MCGLScene::ShowFullScreen);
+        }
+        else
+        {
+            m_timingOverlay[0].render();
+            m_minimap[0].render(m_cars, m_race);
+            m_crashOverlay[0].render();
+        }
+
+        break;
+    }
+    default:
+        break;
+    };
+}
+
+void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
+{
+    switch (m_stateMachine.state())
+    {
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play:
+    {
+        MCGLScene & glScene = MCWorld::instance().renderer().glScene();
+
+        if (m_game.hasTwoHumanPlayers())
+        {
+            MCGLScene::SplitType p1, p0;
+            getSplitPositions(p1, p0);
+
+            if (prepareRendering)
+            {
+                m_world.prepareRendering(&m_camera[1]);
+                m_world.prepareRendering(&m_camera[0]);
+            }
+
+            glScene.setSplitType(p1);
+            m_world.render(&m_camera[1], renderGroup);
+
+            glScene.setSplitType(p0);
+            m_world.render(&m_camera[0], renderGroup);
+
+            glScene.setSplitType(MCGLScene::ShowFullScreen);
+        }
+        else
+        {
+            if (prepareRendering)
+            {
+                m_world.prepareRendering(&m_camera[0]);
+            }
+
+            m_world.render(&m_camera[0], renderGroup);
+        }
+
+        break;
+    }
     default:
         break;
     };

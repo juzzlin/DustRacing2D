@@ -224,13 +224,15 @@ void Renderer::render()
     m_fbo->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_scene->renderTrack();
-    m_scene->renderObjects();
+    m_scene->renderMenu();
+    m_scene->renderWorld(MCRenderGroup::Objects, true);
     m_fbo->release();
 
     m_shadowFbo->bind();
     glClear(GL_COLOR_BUFFER_BIT);
     QOpenGLFramebufferObject::blitFramebuffer(m_shadowFbo.get(), m_fbo.get(), GL_DEPTH_BUFFER_BIT);
-    m_scene->renderObjectShadows();
+    m_scene->renderWorld(MCRenderGroup::ObjectShadows);
+    m_scene->renderWorld(MCRenderGroup::ParticleShadows);
     m_shadowFbo->release();
 
     m_fbo->bind();
@@ -242,6 +244,8 @@ void Renderer::render()
     ss.setShaderProgram(program("fbo"));
     ss.bind();
     ss.render(nullptr, MCVector3dF(), 0);
+    m_scene->renderWorld(MCRenderGroup::Particles); // Render particles here to avoid glitches due to transparency
+    m_scene->renderHUD();
     m_scene->renderCommonHUD();
     m_fbo->release();
 

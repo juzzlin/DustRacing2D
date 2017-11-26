@@ -22,7 +22,7 @@
 
 #include "mcglscene.hh"
 #include "mcrenderlayer.hh"
-
+#include "mcrendergroup.hh"
 
 #include "mcworld.hh"
 
@@ -69,9 +69,8 @@ public:
     /*! Must be called before calls to render() or renderShadows() */
     void buildBatches(MCCamera * camera);
 
-    void render(MCCamera * camera);
-
-    void renderShadows(MCCamera * camera);
+    //! Render the given object group. \see MCRenderGroup.
+    void render(MCCamera * camera, MCRenderGroup renderGroup);
 
     void clear();
 
@@ -83,7 +82,13 @@ private:
 
     void createSurfaceParticleRenderer();
 
-    void renderBatches(MCCamera * camera = nullptr);
+    void renderObjects(MCCamera * camera);
+
+    void renderObjectShadows(MCCamera * camera);
+
+    void renderParticles(MCCamera * camera);
+
+    void renderParticleShadows(MCCamera * camera);
 
     void renderObjectBatches(MCCamera * camera, MCRenderLayer & layer);
 

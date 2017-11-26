@@ -92,13 +92,15 @@ public:
     //! Return track selection menu.
     TrackSelectionMenu & trackSelectionMenu() const;
 
+    void renderCommonHUD();
+
+    void renderHUD();
+
+    void renderMenu();
+
     void renderTrack();
 
-    void renderObjectShadows();
-
-    void renderObjects();
-
-    void renderCommonHUD();
+    void renderWorld(MCRenderGroup renderGroup, bool prepareRendering = false);
 
 signals:
 
