@@ -392,6 +392,8 @@ Renderer::~Renderer()
 
     m_fbo.reset(nullptr);
 
+    m_shadowFbo.reset(nullptr);
+
     m_shaderHash.clear();
 
     delete m_context;
