@@ -41,7 +41,11 @@
 
 #include <QObject> // For QObject::tr()
 
-const float SAIL_AWAY_HONEY_X = 2000;
+const float SAIL_AWAY_HONEY_X = 1000;
+
+const float ENTER_SPEED = 0.15f;
+
+const float EXIT_SPEED = 0.03f;
 
 class TrackItem : public MTFH::MenuItem
 {
@@ -64,6 +68,8 @@ public:
         m_star.setShaderProgram(Renderer::instance().program("default"));
         m_glow.setShaderProgram(Renderer::instance().program("default"));
         m_lock.setShaderProgram(Renderer::instance().program("default"));
+
+        setAnimationSpeed(ENTER_SPEED);
     }
 
     Track & track() const
@@ -331,26 +337,36 @@ void TrackSelectionMenu::left()
 {
     const int prevIndex = currentIndex();
 
-    currentItem()->setPos(width() / 2, height() / 2, SAIL_AWAY_HONEY_X, height() / 2);
+    if (prevIndex > 0)
+    {
+        currentItem()->setPos(width() / 2, height() / 2, width() + SAIL_AWAY_HONEY_X, height() / 2);
+        currentItem()->setAnimationSpeed(EXIT_SPEED);
 
-    Menu::left();
+        Menu::left();
 
-    currentItem()->setPos(-SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+        currentItem()->setPos(-SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+        currentItem()->setAnimationSpeed(ENTER_SPEED);
 
-    setItemsToShow({prevIndex, currentIndex()});
+        setItemsToShow({prevIndex, currentIndex()});
+    }
 }
 
 void TrackSelectionMenu::right()
 {
     const int prevIndex = currentIndex();
 
-    currentItem()->setPos(width() / 2, height() / 2, -SAIL_AWAY_HONEY_X, height() / 2);
+    if (prevIndex + 1 < static_cast<int>(itemCount()))
+    {
+        currentItem()->setPos(width() / 2, height() / 2, -SAIL_AWAY_HONEY_X, height() / 2);
+        currentItem()->setAnimationSpeed(EXIT_SPEED);
 
-    Menu::right();
+        Menu::right();
 
-    currentItem()->setPos(SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+        currentItem()->setPos(width() + SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+        currentItem()->setAnimationSpeed(ENTER_SPEED);
 
-    setItemsToShow({prevIndex, currentIndex()});
+        setItemsToShow({prevIndex, currentIndex()});
+    }
 }
 
 void TrackSelectionMenu::up()
