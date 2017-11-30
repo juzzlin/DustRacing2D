@@ -41,6 +41,8 @@
 
 #include <QObject> // For QObject::tr()
 
+const float SAIL_AWAY_HONEY_X = 2000;
+
 class TrackItem : public MTFH::MenuItem
 {
 public:
@@ -53,7 +55,6 @@ public:
     , m_star(MCAssetManager::surfaceManager().surface("star"))
     , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
     , m_lock(MCAssetManager::surfaceManager().surface("lock"))
-    , m_xDisplacement(-1000)
     , m_lapRecord(Settings::instance().loadLapRecord(m_track))
     , m_raceRecord(Settings::instance().loadRaceRecord(
         m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
@@ -70,16 +71,6 @@ public:
         return m_track;
     }
 
-    virtual void onLeft() override
-    {
-        m_xDisplacement = -1000;
-    }
-
-    virtual void onRight() override
-    {
-        m_xDisplacement = 1000;
-    }
-
     virtual void setFocused(bool focused) override
     {
         MenuItem::setFocused(focused);
@@ -93,9 +84,6 @@ public:
 
     //! \reimp
     virtual void render() override;
-
-    //! \reimp
-    virtual void stepTime(int msecs) override;
 
 private:
 
@@ -121,19 +109,12 @@ private:
 
     MCSurface & m_lock;
 
-    int m_xDisplacement;
-
     int m_lapRecord;
 
     int m_raceRecord;
 
     int m_bestPos;
 };
-
-void TrackItem::stepTime(int)
-{
-    m_xDisplacement = m_xDisplacement * 2 / 3;
-}
 
 void TrackItem::renderTiles()
 {
@@ -159,11 +140,11 @@ void TrackItem::renderTiles()
     int initX, initY;
     if (rMap.cols() % 2 == 0)
     {
-        initX = x() - rMap.cols() * tileW / 2 + tileW / 4 + m_xDisplacement;
+        initX = x() - rMap.cols() * tileW / 2 + tileW / 4;
     }
     else
     {
-        initX = x() - rMap.cols() * tileW / 2 + m_xDisplacement;
+        initX = x() - rMap.cols() * tileW / 2;
     }
 
     initY = y() - rMap.rows() * tileH / 2;
@@ -194,8 +175,7 @@ void TrackItem::renderTiles()
                 surface->setSize(tileH, tileW);
                 surface->render(
                     nullptr,
-                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2, std::abs(m_xDisplacement)),
-                    tile->rotation());
+                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2), tile->rotation() + std::fabs(x() - targetX()));
             }
 
             tileX += tileW;
@@ -226,7 +206,7 @@ void TrackItem::renderStars()
     {
         const int starW = m_star.width();
         const int starH = m_star.height();
-        const int startX = x() - 5 * starW + starW / 2 + m_xDisplacement;
+        const int startX = x() - 5 * starW + starW / 2;
         const int numStars = 10;
         const MCGLColor yellow(1.0, 1.0, 0.0);
         const MCGLColor grey(.75, .75, .75);
@@ -256,7 +236,7 @@ void TrackItem::renderLock()
 {
     if (m_track.trackData().isLocked())
     {
-        m_lock.render(nullptr, MCVector3dF(x() + m_xDisplacement, y(), 0), 0);
+        m_lock.render(nullptr, MCVector3dF(x(), y(), 0), 0);
     }
 }
 
@@ -271,32 +251,48 @@ void TrackItem::renderTrackProperties()
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
 
-    const int textX = x() - width() / 2;
+    const int textX = x();
+    int maxWidth = 0;
+
+    std::vector<MCTextureText> texts;
 
     // Render track properties
     ss.str(L"");
     ss << QObject::tr("       Laps: ").toStdWString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
-    text.render(textX, y() - height() / 2 - text.height(m_font) * 2, nullptr, m_font);
+    maxWidth = std::fmax(maxWidth, text.width(m_font));
+    texts.push_back(text);
 
     ss.str(L"");
     ss << QObject::tr("     Length: ").toStdWString()
        << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerUnit());
     text.setText(ss.str());
-    text.render(textX, y() - height() / 2 - text.height(m_font) * 3, nullptr, m_font);
+    maxWidth = std::fmax(maxWidth, text.width(m_font));
+    texts.push_back(text);
 
     if (!m_track.trackData().isLocked())
     {
         ss.str(L"");
         ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
         text.setText(ss.str());
-        text.render(textX, y() - height() / 2 - text.height(m_font) * 4, nullptr, m_font);
+        maxWidth = std::fmax(maxWidth, text.width(m_font));
+        texts.push_back(text);
 
         ss.str(L"");
         ss << QObject::tr("Race Record: ").toStdWString() << Timing::msecsToString(m_raceRecord);
         text.setText(ss.str());
-        text.render(textX, y() - height() / 2 - text.height(m_font) * 5, nullptr, m_font);
+        maxWidth = std::fmax(maxWidth, text.width(m_font));
+        texts.push_back(text);
+    }
+
+    const float yPos = y() - height() / 2;
+    float lineHeight = text.height(m_font);
+    int line = 2;
+    for (auto && text: texts)
+    {
+        text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
+        line++;
     }
 }
 
@@ -315,7 +311,7 @@ void TrackItem::render()
 
 TrackSelectionMenu::TrackSelectionMenu(std::string id,
     int width, int height, Scene & scene)
-    : SurfaceMenu("trackSelectionBack", id, width, height, Menu::Style::ShowOne, true, true, true)
+    : SurfaceMenu("trackSelectionBack", id, width, height, Menu::Style::ShowMany, true, true, true)
 , m_selectedTrack(nullptr)
 , m_scene(scene)
 {
@@ -324,32 +320,47 @@ TrackSelectionMenu::TrackSelectionMenu(std::string id,
 
 void TrackSelectionMenu::addTrack(Track & track)
 {
-    addItem(MTFH::MenuItemPtr(new TrackItem(width() / 2, height() / 2, track)));
+    auto item = MTFH::MenuItemPtr(new TrackItem(width() / 2, height() / 2, track));
+    item->setPos(width() / 2, height() / 2);
+    addItem(item);
     setCurrentIndex(0);
+    setItemsToShow({0});
 }
 
 void TrackSelectionMenu::left()
 {
+    const int prevIndex = currentIndex();
+
+    currentItem()->setPos(width() / 2, height() / 2, SAIL_AWAY_HONEY_X, height() / 2);
+
     Menu::left();
-    currentItem()->onLeft();
+
+    currentItem()->setPos(-SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+
+    setItemsToShow({prevIndex, currentIndex()});
 }
 
 void TrackSelectionMenu::right()
 {
+    const int prevIndex = currentIndex();
+
+    currentItem()->setPos(width() / 2, height() / 2, -SAIL_AWAY_HONEY_X, height() / 2);
+
     Menu::right();
-    currentItem()->onRight();
+
+    currentItem()->setPos(SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
+
+    setItemsToShow({prevIndex, currentIndex()});
 }
 
 void TrackSelectionMenu::up()
 {
-    Menu::up();
-    currentItem()->onRight();
+    left();
 }
 
 void TrackSelectionMenu::down()
 {
-    Menu::down();
-    currentItem()->onLeft();
+    right();
 }
 
 void TrackSelectionMenu::selectCurrentItem()

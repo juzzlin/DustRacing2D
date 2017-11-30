@@ -37,15 +37,17 @@ public:
 
     virtual ~MenuItem();
 
-    void setIndex(float index);
+    void setIndex(int index);
 
-    float index() const;
+    int index() const;
 
     float width() const;
 
     float height() const;
 
     void setPos(float x, float y);
+
+    void setPos(float x, float y, float targetX, float targetY);
 
     float x() const;
 
@@ -82,6 +84,8 @@ public:
 
     virtual void stepTime(int msecs);
 
+    virtual void positionAnimation(int msecs);
+
     void setContentsMargins(float left, float right, float top, float bottom);
 
     void getContentsMargins(float & left, float & right, float & top, float & bottom) const;
@@ -91,6 +95,16 @@ public:
     bool selectable() const;
 
     bool focused() const;
+
+    float animationSpeed() const;
+
+    void setAnimationSpeed(float animationSpeed);
+
+    //! Animation target X
+    float targetX() const;
+
+    //! Animation target Y
+    float targetY() const;
 
 private:
 
@@ -118,6 +132,10 @@ private:
 
     float m_y;
 
+    float m_targetX;
+
+    float m_targetY;
+
     float m_lMargin;
 
     float m_rMargin;
@@ -126,7 +144,9 @@ private:
 
     float m_bMargin;
 
-    float m_index;
+    int m_index;
+
+    float m_animationSpeed;
 };
 
 typedef std::shared_ptr<MTFH::MenuItem> MenuItemPtr;

@@ -36,7 +36,8 @@ public:
     {
         VerticalList,
         HorizontalList,
-        ShowOne // Show only one item at a time
+        ShowOne, // Show only one item at a time
+        ShowMany
     };
 
     enum class MouseItemType
@@ -131,6 +132,9 @@ public:
     //! Set current index. Wrap around if out-of-range.
     void setCurrentIndexWrapAround(int index);
 
+    //! \see Style::ShowMany
+    void setItemsToShow(const std::vector<int> & itemsToShow);
+
     //! Exits and pops the menu stack. The menu can call this
     //! also by itself.
     void exit();
@@ -147,6 +151,8 @@ private:
         MenuItemPtr item;
         MouseItemType type;
     };
+
+    void incrementIndex(int increment);
 
     bool isNextAllowed() const;
 
@@ -173,6 +179,8 @@ private:
     std::vector<MenuItemPtr > m_items;
 
     std::vector<MouseItem> m_mouseItems;
+
+    std::vector<int> m_itemsToShow;
 
     std::string m_id;
 

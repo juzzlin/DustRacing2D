@@ -33,11 +33,14 @@ MenuItem::MenuItem(float width, float height, std::wstring text, bool selectable
 , m_height(height)
 , m_x(0)
 , m_y(0)
+, m_targetX(0)
+, m_targetY(0)
 , m_lMargin(1)
 , m_rMargin(1)
 , m_tMargin(1)
 , m_bMargin(1)
 , m_index(-1)
+, m_animationSpeed(0.1f)
 {
 }
 
@@ -51,12 +54,12 @@ float MenuItem::height() const
     return m_height + m_tMargin + m_bMargin;
 }
 
-void MenuItem::setIndex(float index)
+void MenuItem::setIndex(int index)
 {
     m_index = index;
 }
 
-float MenuItem::index() const
+int MenuItem::index() const
 {
     return m_index;
 }
@@ -65,6 +68,16 @@ void MenuItem::setPos(float x, float y)
 {
     m_x = x;
     m_y = y;
+    m_targetX = x;
+    m_targetY = y;
+}
+
+void MenuItem::setPos(float x, float y, float targetX, float targetY)
+{
+    m_x = x;
+    m_y = y;
+    m_targetX = targetX;
+    m_targetY = targetY;
 }
 
 float MenuItem::x() const
@@ -172,6 +185,26 @@ bool MenuItem::focused() const
     return m_focused;
 }
 
+float MenuItem::animationSpeed() const
+{
+    return m_animationSpeed;
+}
+
+void MenuItem::setAnimationSpeed(float animationSpeed)
+{
+    m_animationSpeed = animationSpeed;
+}
+
+float MenuItem::targetY() const
+{
+    return m_targetY;
+}
+
+float MenuItem::targetX() const
+{
+    return m_targetX;
+}
+
 bool MenuItem::selected() const
 {
     return m_selected && m_selectable;
@@ -201,6 +234,14 @@ void MenuItem::stepTime(int msecs)
     {
         m_view->stepTime(msecs);
     }
+
+    positionAnimation(msecs);
+}
+
+void MenuItem::positionAnimation(int)
+{
+    m_x += (m_targetX - m_x) * m_animationSpeed;
+    m_y += (m_targetY - m_y) * m_animationSpeed;
 }
 
 MenuItem::~MenuItem()

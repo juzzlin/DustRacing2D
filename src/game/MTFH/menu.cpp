@@ -158,6 +158,16 @@ void Menu::renderItems()
         item->setPos(m_width / 2, m_height / 2);
         item->render();
     }
+    else if (m_style == Menu::Style::ShowMany)
+    {
+        for (auto index: m_itemsToShow)
+        {
+            if (index >= 0 && index < static_cast<int>(m_items.size()))
+            {
+                m_items.at(index)->render();
+            }
+        }
+    }
 }
 
 bool Menu::isNextAllowed() const
@@ -200,42 +210,38 @@ void Menu::renderMouseItems()
     }
 }
 
-void Menu::up()
+void Menu::incrementIndex(int increment)
 {
     if (m_wrapAround)
     {
-        setCurrentIndexWrapAround(m_currentIndex + 1);
+        setCurrentIndexWrapAround(m_currentIndex + increment);
     }
     else
     {
-        setCurrentIndex(m_currentIndex + 1);
+        setCurrentIndex(m_currentIndex + increment);
     }
 
     updateFocus();
+}
+
+void Menu::up()
+{
+    incrementIndex(1);
 }
 
 void Menu::down()
 {
-    if (m_wrapAround)
-    {
-        setCurrentIndexWrapAround(m_currentIndex - 1);
-    }
-    else
-    {
-        setCurrentIndex(m_currentIndex - 1);
-    }
-
-    updateFocus();
+    incrementIndex(-1);
 }
 
 void Menu::left()
 {
-    down();
+    incrementIndex(-1);
 }
 
 void Menu::right()
 {
-    up();
+    incrementIndex(1);
 }
 
 void Menu::selectCurrentItem()
@@ -489,6 +495,11 @@ void Menu::setCurrentIndexWrapAround(int index)
 
         updateFocus();
     }
+}
+
+void Menu::setItemsToShow(const std::vector<int> & itemsToShow)
+{
+    m_itemsToShow = itemsToShow;
 }
 
 bool Menu::isDone() const

@@ -55,7 +55,10 @@ public:
 private:
 
     Track * m_selectedTrack;
+
     Scene & m_scene;
+
+    int m_prevIndex = 0;
 };
 
 #endif // TRACKSELECTIONMENU_HPP
