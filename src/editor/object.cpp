@@ -30,8 +30,8 @@ Object::Object(const Object & other)
     , m_pixmap(other.m_pixmap)
 {
     setLocation(other.location());
-
     setRotation(other.rotation());
+    setForceStationary(other.forceStationary());
 }
 
 QRectF Object::boundingRect () const
