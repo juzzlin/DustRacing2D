@@ -21,6 +21,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/menu")
 
 # Sound toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/audio")
 
 # Translation files in src/game/translations (without .ts)
 set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs dustrac-game_fr dustrac-game_de)
@@ -43,8 +44,6 @@ set(HDR
 set(SRC
     ai.cpp
     application.cpp
-    audioworker.cpp
-    audiosource.cpp
     bridge.cpp
     bridgetrigger.cpp
     car.cpp
@@ -70,11 +69,6 @@ set(SRC
     particlefactory.cpp
     pit.cpp
     offtrackdetector.cpp
-    openaldata.cpp
-    openaldevice.cpp
-    openalsource.cpp
-    openaloggdata.cpp
-    openalwavdata.cpp
     overlaybase.cpp
     race.cpp
     renderer.cpp
@@ -101,6 +95,13 @@ set(SRC
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp
     ../common/mapbase.cpp
+    audio/audioworker.cpp
+    audio/audiosource.cpp
+    audio/openaldata.cpp
+    audio/openaldevice.cpp
+    audio/openalsource.cpp
+    audio/openaloggdata.cpp
+    audio/openalwavdata.cpp
     menu/confirmationmenu.cpp
     menu/credits.cpp
     menu/help.cpp

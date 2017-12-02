@@ -33,6 +33,7 @@ INCLUDEPATH += . \
     MTFH \
     STFH \
     menu \
+    audio \
 
 # Input
 HEADERS += \
@@ -44,6 +45,13 @@ HEADERS += \
     ../common/targetnodebase.hpp \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
+    audio/audiosource.hpp \
+    audio/audioworker.hpp \
+    audio/openaldata.hpp \
+    audio/openaldevice.hpp \
+    audio/openaloggdata.hpp \
+    audio/openalsource.hpp \
+    audio/openalwavdata.hpp \
     menu/confirmationmenu.hpp \
     menu/credits.hpp \
     menu/help.hpp \
@@ -57,8 +65,6 @@ HEADERS += \
     menu/vsyncmenu.hpp \
     ai.hpp \
     application.hpp \
-    audiosource.hpp \
-    audioworker.hpp \
     bridge.hpp \
     bridgetrigger.hpp \
     car.hpp \
@@ -83,11 +89,6 @@ HEADERS += \
     messageoverlay.hpp \
     minimap.hpp \
     offtrackdetector.hpp \
-    openaldata.hpp \
-    openaldevice.hpp \
-    openaloggdata.hpp \
-    openalsource.hpp \
-    openalwavdata.hpp \
     overlaybase.hpp \
     particlefactory.hpp \
     pit.hpp \
@@ -215,6 +216,13 @@ SOURCES += \
     ../common/targetnodebase.cpp \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
+    audio/audiosource.cpp \
+    audio/audioworker.cpp \
+    audio/openaldata.cpp \
+    audio/openaldevice.cpp \
+    audio/openaloggdata.cpp \
+    audio/openalsource.cpp \
+    audio/openalwavdata.cpp \
     menu/confirmationmenu.cpp \
     menu/credits.cpp \
     menu/help.cpp \
@@ -228,8 +236,6 @@ SOURCES += \
     menu/vsyncmenu.cpp \
     ai.cpp \
     application.cpp \
-    audiosource.cpp \
-    audioworker.cpp \
     bridge.cpp \
     bridgetrigger.cpp \
     car.cpp \
@@ -253,11 +259,6 @@ SOURCES += \
     messageoverlay.cpp \
     minimap.cpp \
     offtrackdetector.cpp \
-    openaldata.cpp \
-    openaldevice.cpp \
-    openaloggdata.cpp \
-    openalsource.cpp \
-    openalwavdata.cpp \
     overlaybase.cpp \
     particlefactory.cpp \
     pit.cpp \
