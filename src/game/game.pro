@@ -32,6 +32,7 @@ INCLUDEPATH += . \
     MiniCore/src/Particles \
     MTFH \
     STFH \
+    menu \
 
 # Input
 HEADERS += \
@@ -43,6 +44,17 @@ HEADERS += \
     ../common/targetnodebase.hpp \
     ../common/trackdatabase.hpp \
     ../common/tracktilebase.hpp \
+    menu/confirmationmenu.hpp \
+    menu/credits.hpp \
+    menu/help.hpp \
+    menu/keyconfigmenu.hpp \
+    menu/mainmenu.hpp \
+    menu/resolutionmenu.hpp \
+    menu/settingsmenu.hpp \
+    menu/surfacemenu.hpp \
+    menu/textmenuitemview.hpp \
+    menu/trackselectionmenu.hpp \
+    menu/vsyncmenu.hpp \
     ai.hpp \
     application.hpp \
     audiosource.hpp \
@@ -56,22 +68,17 @@ HEADERS += \
     carsoundeffectmanager.hpp \
     carstatusview.hpp \
     checkeredflag.hpp \
-    confirmationmenu.hpp \
     crashoverlay.hpp \
-    credits.hpp \
     difficultyprofile.hpp \
     eventhandler.hpp \
     fadeanimation.hpp \
     fontfactory.hpp \
     game.hpp \
     graphicsfactory.hpp \
-    help.hpp \
     inputhandler.hpp \
     intro.hpp \
     keycodes.hpp \
-    keyconfigmenu.hpp \
     layers.hpp \
-    mainmenu.hpp \
     map.hpp \
     messageoverlay.hpp \
     minimap.hpp \
@@ -87,17 +94,13 @@ HEADERS += \
     race.hpp \
     renderable.hpp \
     renderer.hpp \
-    resolutionmenu.hpp \
     scene.hpp \
     settings.hpp \
-    settingsmenu.hpp \
     shaders.h \
     shaders30.h \
     startlights.hpp \
     startlightsoverlay.hpp \
     statemachine.hpp \
-    surfacemenu.hpp \
-    textmenuitemview.hpp \
     timing.hpp \
     timingoverlay.hpp \
     tire.hpp \
@@ -106,12 +109,10 @@ HEADERS += \
     trackloader.hpp \
     trackobject.hpp \
     trackobjectfactory.hpp \
-    trackselectionmenu.hpp \
     tracktile.hpp \
     tree.hpp \
     updateableif.hpp \
     userexception.hpp \
-    vsyncmenu.hpp \
     MTFH/menu.hpp \
     MTFH/menuitem.hpp \
     MTFH/menuitemaction.hpp \
@@ -214,6 +215,17 @@ SOURCES += \
     ../common/targetnodebase.cpp \
     ../common/trackdatabase.cpp \
     ../common/tracktilebase.cpp \
+    menu/confirmationmenu.cpp \
+    menu/credits.cpp \
+    menu/help.cpp \
+    menu/keyconfigmenu.cpp \
+    menu/mainmenu.cpp \
+    menu/resolutionmenu.cpp \
+    menu/settingsmenu.cpp \
+    menu/surfacemenu.cpp \
+    menu/textmenuitemview.cpp \
+    menu/trackselectionmenu.cpp \
+    menu/vsyncmenu.cpp \
     ai.cpp \
     application.cpp \
     audiosource.cpp \
@@ -227,21 +239,16 @@ SOURCES += \
     carsoundeffectmanager.cpp \
     carstatusview.cpp \
     checkeredflag.cpp \
-    confirmationmenu.cpp \
     crashoverlay.cpp \
-    credits.cpp \
     difficultyprofile.cpp \
     eventhandler.cpp \
     fadeanimation.cpp \
     fontfactory.cpp \
     game.cpp \
     graphicsfactory.cpp \
-    help.cpp \
     inputhandler.cpp \
     intro.cpp \
-    keyconfigmenu.cpp \
     main.cpp \
-    mainmenu.cpp \
     map.cpp \
     messageoverlay.cpp \
     minimap.cpp \
@@ -256,15 +263,11 @@ SOURCES += \
     pit.cpp \
     race.cpp \
     renderer.cpp \
-    resolutionmenu.cpp \
     scene.cpp \
     settings.cpp \
-    settingsmenu.cpp \
     startlights.cpp \
     startlightsoverlay.cpp \
     statemachine.cpp \
-    surfacemenu.cpp \
-    textmenuitemview.cpp \
     timing.cpp \
     timingoverlay.cpp \
     tire.cpp \
@@ -273,10 +276,8 @@ SOURCES += \
     trackloader.cpp \
     trackobject.cpp \
     trackobjectfactory.cpp \
-    trackselectionmenu.cpp \
     tracktile.cpp \
     tree.cpp \
-    vsyncmenu.cpp \
     MTFH/menu.cpp \
     MTFH/menuitem.cpp \
     MTFH/menuitemaction.cpp \

@@ -15,8 +15,9 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Particles")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Physics")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MiniCore/src/Text")
 
-# Menu toolkit include paths
+# Menu toolkit and menu include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MTFH")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/menu")
 
 # Sound toolkit include paths
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
@@ -53,21 +54,16 @@ set(SRC
     carsoundeffectmanager.cpp
     carstatusview.cpp
     checkeredflag.cpp
-    confirmationmenu.cpp
     crashoverlay.cpp
-    credits.cpp
     difficultyprofile.cpp
     eventhandler.cpp
     fadeanimation.cpp
     fontfactory.cpp
     game.cpp
     graphicsfactory.cpp
-    help.cpp
     inputhandler.cpp
     intro.cpp
-    keyconfigmenu.cpp
     main.cpp
-    mainmenu.cpp
     map.cpp
     messageoverlay.cpp
     minimap.cpp
@@ -82,15 +78,11 @@ set(SRC
     overlaybase.cpp
     race.cpp
     renderer.cpp
-    resolutionmenu.cpp
     scene.cpp
     settings.cpp
-    settingsmenu.cpp
     startlights.cpp
     startlightsoverlay.cpp
     statemachine.cpp
-    surfacemenu.cpp
-    textmenuitemview.cpp
     timing.cpp
     timingoverlay.cpp
     tire.cpp
@@ -99,10 +91,8 @@ set(SRC
     trackloader.cpp
     trackobject.cpp
     trackobjectfactory.cpp
-    trackselectionmenu.cpp
     tracktile.cpp
     tree.cpp
-    vsyncmenu.cpp
     ../common/config.cpp
     ../common/objectbase.cpp
     ../common/objects.cpp
@@ -111,6 +101,17 @@ set(SRC
     ../common/trackdatabase.cpp
     ../common/tracktilebase.cpp
     ../common/mapbase.cpp
+    menu/confirmationmenu.cpp
+    menu/credits.cpp
+    menu/help.cpp
+    menu/keyconfigmenu.cpp
+    menu/mainmenu.cpp
+    menu/resolutionmenu.cpp
+    menu/settingsmenu.cpp
+    menu/surfacemenu.cpp
+    menu/textmenuitemview.cpp
+    menu/trackselectionmenu.cpp
+    menu/vsyncmenu.cpp
     )
 
 set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
