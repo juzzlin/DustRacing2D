@@ -54,8 +54,10 @@ HEADERS += \
     audio/openalwavdata.hpp \
     menu/confirmationmenu.hpp \
     menu/credits.hpp \
+    menu/difficultymenu.hpp \
     menu/help.hpp \
     menu/keyconfigmenu.hpp \
+    menu/lapcountmenu.hpp \
     menu/mainmenu.hpp \
     menu/resolutionmenu.hpp \
     menu/settingsmenu.hpp \
@@ -225,8 +227,10 @@ SOURCES += \
     audio/openalwavdata.cpp \
     menu/confirmationmenu.cpp \
     menu/credits.cpp \
+    menu/difficultymenu.cpp \
     menu/help.cpp \
     menu/keyconfigmenu.cpp \
+    menu/lapcountmenu.cpp \
     menu/mainmenu.cpp \
     menu/resolutionmenu.cpp \
     menu/settingsmenu.cpp \

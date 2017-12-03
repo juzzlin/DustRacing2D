@@ -22,7 +22,7 @@ A separate engine, MiniCore, is used for physics modeling.
 ## Features
 
 * 1-2 human players againts 11 challenging computer players
-* 3 difficulty settings: Easy, Medium, Senna
+* 3 difficulty settings: Easy, Medium, Hard
 * Split-screen two player game (vertical or horizontal)
 * Game modes: Race, Time Trial, Duel
 * 2D graphics with some 3D objects

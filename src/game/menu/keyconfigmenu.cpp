@@ -74,9 +74,8 @@ static const char * PRESS_KEY_MENU_ID = "pressKeyMenu";
 
 KeyConfigMenu::KeyConfigMenu(std::string id, int width, int height)
     : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
-, m_pressKeyMenu(new PressKeyMenu(PRESS_KEY_MENU_ID, width, height))
 {
-    MTFH::MenuManager::instance().addMenu(*m_pressKeyMenu);
+    MTFH::MenuManager::instance().addMenu(MTFH::MenuPtr(new PressKeyMenu(PRESS_KEY_MENU_ID, width, height)));
 
     addPlayerTwoConfig(width, height);
     addPlayerOneConfig(width, height);
@@ -190,5 +189,4 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
 
 KeyConfigMenu::~KeyConfigMenu()
 {
-    delete m_pressKeyMenu;
 }

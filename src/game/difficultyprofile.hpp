@@ -29,7 +29,7 @@ public:
     enum class Difficulty {
         Easy = 0,
         Medium,
-        Senna
+        Hard
     };
 
     /*! Constructor.

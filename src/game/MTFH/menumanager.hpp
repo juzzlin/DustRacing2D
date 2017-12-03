@@ -17,12 +17,15 @@
 #define MENUMANAGER_HPP
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
 namespace MTFH {
 
 class Menu;
+
+using MenuPtr = std::shared_ptr<Menu>;
 
 //! The singleton MenuManager manages menus.
 class MenuManager
@@ -33,19 +36,22 @@ public:
     MenuManager();
 
     //! Returns the active menu or nullptr.
-    Menu * activeMenu() const;
+    MenuPtr activeMenu() const;
 
     //! Add the given menu.
-    void addMenu(Menu & newMenu);
+    void addMenu(MenuPtr newMenu);
+
+    //! Returns matching menu or explode.
+    MenuPtr getMenuById(std::string menuId);
 
     //! Enter the given menu & clear the menu stack.
-    void enterMenu(Menu & newMenu);
+    void enterMenu(MenuPtr newMenu);
 
     //! Enter the given menu & clear the menu stack.
     void enterMenu(std::string menuId);
 
     //! Enter the given menu & push to stack.
-    void pushMenu(Menu & newMenu);
+    void pushMenu(MenuPtr newMenu);
 
     //! Enter the given menu & push to stack.
     void pushMenu(std::string menuId);
@@ -95,11 +101,11 @@ public:
 
 private:
 
-    std::map<std::string, Menu *> m_idToMenuMap;
+    std::map<std::string, MenuPtr> m_idToMenuMap;
 
-    std::vector<Menu *> m_menuStack;
+    std::vector<MenuPtr> m_menuStack;
 
-    static MenuManager * m_pInstance;
+    static MenuManager * m_instance;
 };
 
 } // namespace MTFH

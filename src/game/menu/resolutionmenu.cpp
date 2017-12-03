@@ -87,8 +87,7 @@ public:
     };
 
     //! Constructor.
-    ResolutionItem(
-        ConfirmationMenu & confirmationMenu,
+    ResolutionItem(ConfirmationMenuPtr confirmationMenu,
         int hRes, int vRes, bool fullScreen, int width, int height, std::wstring text = L"")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
@@ -114,10 +113,10 @@ public:
         }
         else
         {
-            MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-            m_confirmationMenu.setText(QObject::tr("Restart to change the resolution.").toStdWString());
-            m_confirmationMenu.setAcceptAction(m_saveResolutionAction);
-            m_confirmationMenu.setCurrentIndex(1);
+            MTFH::MenuManager::instance().pushMenu(m_confirmationMenu->id());
+            m_confirmationMenu->setText(QObject::tr("Restart to change the resolution.").toStdWString());
+            m_confirmationMenu->setAcceptAction(m_saveResolutionAction);
+            m_confirmationMenu->setCurrentIndex(1);
         }
     }
 
@@ -133,14 +132,17 @@ public:
 
 private:
 
-    ConfirmationMenu &      m_confirmationMenu;
+    ConfirmationMenuPtr m_confirmationMenu;
+
     MTFH::MenuItemActionPtr m_saveResolutionAction;
-    int                     m_hRes;
-    int                     m_vRes;
+
+    int m_hRes;
+
+    int m_vRes;
 };
 
 ResolutionMenu::ResolutionMenu(
-    ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen)
+    ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height, bool fullScreen)
 : SurfaceMenu("settingsBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
 {

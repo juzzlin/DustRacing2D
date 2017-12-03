@@ -245,8 +245,8 @@ Pause      : P</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="350"/>
-        <source>Senna</source>
-        <translation>Senna</translation>
+        <source>Hard</source>
+        <translation>Difficile</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="401"/>

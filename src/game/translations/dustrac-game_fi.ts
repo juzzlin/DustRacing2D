@@ -367,8 +367,8 @@ ERITYISKIITOKSET
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="354"/>
-        <source>Senna</source>
-        <translation>Senna</translation>
+        <source>Hard</source>
+        <translation>Vaikea</translation>
     </message>
     <message>
         <location filename="../settingsmenu.cpp" line="407"/>

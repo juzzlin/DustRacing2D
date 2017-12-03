@@ -135,9 +135,8 @@ public:
     //! \see Style::ShowMany
     void setItemsToShow(const std::vector<int> & itemsToShow);
 
-    //! Exits and pops the menu stack. The menu can call this
-    //! also by itself.
-    void exit();
+    //! Exits and pops the menu stack. The menu can call this also by itself.
+    virtual void exit();
 
 protected:
 

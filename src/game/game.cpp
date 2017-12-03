@@ -347,10 +347,13 @@ void Game::initScene()
     // Create the scene
     m_scene = new Scene(*this, *m_stateMachine, *m_renderer, *m_world);
 
+    auto trackSelectionMenu = std::dynamic_pointer_cast<TrackSelectionMenu>(m_scene->trackSelectionMenu());
+    assert(trackSelectionMenu);
+
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
     {
-        m_scene->trackSelectionMenu().addTrack(*m_trackLoader->track(i));
+        trackSelectionMenu->addTrack(*m_trackLoader->track(i));
     }
 
     // Set the current game scene. Renderer calls render()

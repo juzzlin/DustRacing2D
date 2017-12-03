@@ -16,6 +16,7 @@
 #ifndef RESOLUTIONMENU_HPP
 #define RESOLUTIONMENU_HPP
 
+#include "confirmationmenu.hpp"
 #include "surfacemenu.hpp"
 
 class ConfirmationMenu;
@@ -25,8 +26,7 @@ class ResolutionMenu : public SurfaceMenu
 public:
 
     //! Constructor.
-    ResolutionMenu(
-        ConfirmationMenu & confirmationMenu, std::string id, int width, int height, bool fullScreen);
+    ResolutionMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height, bool fullScreen);
 
 protected:
 
@@ -35,7 +35,7 @@ protected:
 
 private:
 
-    ConfirmationMenu & m_confirmationMenu;
+    ConfirmationMenuPtr m_confirmationMenu;
 };
 
 #endif // RESOLUTIONMENU_HPP

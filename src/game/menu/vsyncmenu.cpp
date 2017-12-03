@@ -59,9 +59,7 @@ public:
     };
 
     //! Constructor.
-    VSyncItem(
-        ConfirmationMenu & confirmationMenu,
-        int vsync, int width, int height, std::wstring text = L"")
+    VSyncItem(ConfirmationMenuPtr confirmationMenu, int vsync, int width, int height, std::wstring text = L"")
     : MenuItem(width, height, text)
     , m_confirmationMenu(confirmationMenu)
     , m_saveVSyncAction(new SaveVSyncAction(*this))
@@ -76,10 +74,10 @@ public:
     virtual void setSelected(bool flag)
     {
         MenuItem::setSelected(flag);
-        MTFH::MenuManager::instance().pushMenu(m_confirmationMenu.id());
-        m_confirmationMenu.setText(QObject::tr("Restart to change VSync setting.").toStdWString());
-        m_confirmationMenu.setAcceptAction(m_saveVSyncAction);
-        m_confirmationMenu.setCurrentIndex(1);
+        MTFH::MenuManager::instance().pushMenu(m_confirmationMenu->id());
+        m_confirmationMenu->setText(QObject::tr("Restart to change VSync setting.").toStdWString());
+        m_confirmationMenu->setAcceptAction(m_saveVSyncAction);
+        m_confirmationMenu->setCurrentIndex(1);
     }
 
     int vsync() const
@@ -89,13 +87,14 @@ public:
 
 private:
 
-    ConfirmationMenu &      m_confirmationMenu;
+    ConfirmationMenuPtr m_confirmationMenu;
+
     MTFH::MenuItemActionPtr m_saveVSyncAction;
-    int                     m_vsync;
+
+    int m_vsync;
 };
 
-VSyncMenu::VSyncMenu(
-    ConfirmationMenu & confirmationMenu, std::string id, int width, int height)
+VSyncMenu::VSyncMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height)
 : SurfaceMenu("settingsBack", id, width, height)
 , m_confirmationMenu(confirmationMenu)
 {

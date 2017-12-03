@@ -20,15 +20,15 @@
 
 namespace MTFH {
 
-MenuManager * MenuManager::m_pInstance = nullptr;
+MenuManager * MenuManager::m_instance = nullptr;
 
 MenuManager::MenuManager()
 {
-    assert(!m_pInstance);
-    m_pInstance = this;
+    assert(!m_instance);
+    m_instance = this;
 }
 
-Menu * MenuManager::activeMenu() const
+MenuPtr MenuManager::activeMenu() const
 {
     if (m_menuStack.size())
     {
@@ -38,39 +38,45 @@ Menu * MenuManager::activeMenu() const
     return nullptr;
 }
 
-void MenuManager::addMenu(Menu & newMenu)
+MenuPtr MenuManager::getMenuById(std::string menuId)
 {
-    m_idToMenuMap[newMenu.id()] = &newMenu;
+    assert(m_idToMenuMap[menuId]);
+    return m_idToMenuMap[menuId];
 }
 
-void MenuManager::enterMenu(Menu & newMenu)
+void MenuManager::addMenu(MenuPtr newMenu)
+{
+    m_idToMenuMap[newMenu->id()] = newMenu;
+}
+
+void MenuManager::enterMenu(MenuPtr newMenu)
 {
     m_menuStack.clear();
-    m_menuStack.push_back(&newMenu);
-    newMenu.enter();
-    newMenu.render();
+    m_menuStack.push_back(newMenu);
+    newMenu->enter();
+    newMenu->render();
 }
 
 void MenuManager::enterMenu(std::string menuId)
 {
     assert(m_idToMenuMap[menuId]);
-    enterMenu(*m_idToMenuMap[menuId]);
+    enterMenu(m_idToMenuMap[menuId]);
 }
 
-void MenuManager::pushMenu(Menu & newMenu)
+void MenuManager::pushMenu(MenuPtr newMenu)
 {
-    if (!m_menuStack.size() || m_menuStack.back() != &newMenu)
+    if (!m_menuStack.size() || m_menuStack.back() != newMenu)
     {
-        m_menuStack.push_back(&newMenu);
-        newMenu.enter();
-        newMenu.render();
+        m_menuStack.push_back(newMenu);
+        newMenu->enter();
+        newMenu->render();
     }
 }
 
 void MenuManager::pushMenu(std::string menuId)
 {
     assert(m_idToMenuMap[menuId]);
-    pushMenu(*m_idToMenuMap[menuId]);
+    pushMenu(m_idToMenuMap[menuId]);
 }
 
 void MenuManager::popMenu()
@@ -98,8 +104,8 @@ void MenuManager::exit()
 
 MenuManager & MenuManager::instance()
 {
-    assert(m_pInstance);
-    return *m_pInstance;
+    assert(m_instance);
+    return *m_instance;
 }
 
 void MenuManager::render()

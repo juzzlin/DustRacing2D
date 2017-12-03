@@ -18,7 +18,7 @@
 
 #include <algorithm>
 #include <cassert>
-
+#include <iostream>
 namespace MTFH {
 
 Menu::Menu(std::string id, int width, int height, Menu::Style style)
@@ -136,7 +136,7 @@ void Menu::renderItems()
     }
     else if (m_style == Menu::Style::HorizontalList)
     {
-        // Calculate total height
+        // Calculate total width
         int totalWidth = 0;
         for (auto item : m_items)
         {

@@ -17,6 +17,7 @@
 #define VSYNCMENU_HPP
 
 #include "surfacemenu.hpp"
+#include "confirmationmenu.hpp"
 
 class ConfirmationMenu;
 
@@ -25,7 +26,7 @@ class VSyncMenu : public SurfaceMenu
 public:
 
     //! Constructor.
-    VSyncMenu(ConfirmationMenu & confirmationMenu, std::string id, int width, int height);
+    VSyncMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height);
 
 protected:
 
@@ -34,7 +35,7 @@ protected:
 
 private:
 
-    ConfirmationMenu & m_confirmationMenu;
+    ConfirmationMenuPtr m_confirmationMenu;
 };
 
 #endif // VSYNCMENU_HPP

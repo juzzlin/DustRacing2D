@@ -19,6 +19,7 @@
 #include "statemachine.hpp"
 
 #include <MenuManager>
+#include <Menu>
 
 #include <cassert>
 
@@ -206,7 +207,7 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
         case Qt::Key_Escape:
         case Qt::Key_Q:
             emit soundRequested("menuClick");
-            MTFH::MenuManager::instance().popMenu();
+            MTFH::MenuManager::instance().activeMenu()->exit();
             if (MTFH::MenuManager::instance().isDone())
             {
                 emit gameExited();

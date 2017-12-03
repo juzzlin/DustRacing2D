@@ -17,7 +17,11 @@
 #define MAINMENU_HPP
 
 #include <QObject>
+
 #include "surfacemenu.hpp"
+
+namespace MTFH { class MenuManager; }
+class Scene;
 
 //! The main menu of the game.
 class MainMenu : public QObject, public SurfaceMenu
@@ -26,12 +30,24 @@ class MainMenu : public QObject, public SurfaceMenu
 
 public:
 
+    static std::string MenuId;
+
     //! Constructor.
-    MainMenu(std::string id, int width, int height);
+    MainMenu(MTFH::MenuManager & menuManager, Scene & scene, int width, int height);
 
 signals:
 
     void exitGameRequested();
+
+private:
+
+    void createMenuItems();
+
+    void createSubMenus();
+
+    MTFH::MenuManager & m_menuManager;
+
+    Scene & m_scene;
 };
 
 #endif // MAINMENU_HPP

@@ -17,6 +17,7 @@
 #define CONFIRMATIONMENU_HPP
 
 #include <functional>
+#include <memory>
 
 #include "surfacemenu.hpp"
 
@@ -54,5 +55,7 @@ private:
 
     std::wstring m_text;
 };
+
+using ConfirmationMenuPtr = std::shared_ptr<ConfirmationMenu>;
 
 #endif // CONFIRMATIONMENU_HPP

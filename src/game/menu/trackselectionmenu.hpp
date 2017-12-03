@@ -28,8 +28,10 @@ class TrackSelectionMenu : public SurfaceMenu
 {
 public:
 
+    static std::string MenuId;
+
     //! Constructor.
-    TrackSelectionMenu(std::string id, int width, int height, Scene & scene);
+    TrackSelectionMenu(int width, int height, Scene & scene);
 
     //! Add a track to the list of selectable tracks.
     void addTrack(Track & track);
@@ -48,6 +50,9 @@ public:
 
     //! \reimp
     virtual void down() override;
+
+    //! \reimp
+    virtual void exit() override;
 
     //! \reimp
     virtual void selectCurrentItem() override;

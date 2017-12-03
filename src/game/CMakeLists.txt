@@ -104,8 +104,10 @@ set(SRC
     audio/openalwavdata.cpp
     menu/confirmationmenu.cpp
     menu/credits.cpp
+    menu/difficultymenu.cpp
     menu/help.cpp
     menu/keyconfigmenu.cpp
+    menu/lapcountmenu.cpp
     menu/mainmenu.cpp
     menu/resolutionmenu.cpp
     menu/settingsmenu.cpp

@@ -62,7 +62,7 @@ float DifficultyProfile::accelerationFrictionMultiplier(bool isHuman) const
         return isHuman ? 0.70f : 0.70f * 0.85f;
     case Difficulty::Medium:
         return isHuman ? 0.85f : 0.85f * 0.85f;
-    case Difficulty::Senna:
+    case Difficulty::Hard:
         return isHuman ? 1.0f : 1.0f * 0.9f;
     }
 

@@ -28,6 +28,8 @@
 #include <memory>
 #include <vector>
 
+#include <MenuManager>
+
 class CheckeredFlag;
 class FadeAnimation;
 class Game;
@@ -48,7 +50,6 @@ class TrackSelectionMenu;
 
 namespace MTFH {
 class Menu;
-class MenuManager;
 }
 
 //! The game scene.
@@ -90,7 +91,7 @@ public:
     Track & activeTrack() const;
 
     //! Return track selection menu.
-    TrackSelectionMenu & trackSelectionMenu() const;
+    MTFH::MenuPtr trackSelectionMenu() const;
 
     void renderCommonHUD();
 
@@ -182,15 +183,7 @@ private:
 
     float m_cameraOffset[2];
 
-    TrackSelectionMenu * m_trackSelectionMenu;
-
-    MTFH::Menu * m_mainMenu;
-
-    MTFH::Menu * m_help;
-
-    MTFH::Menu * m_credits;
-
-    MTFH::Menu * m_settingsMenu;
+    MTFH::MenuPtr m_mainMenu;
 
     MTFH::MenuManager * m_menuManager;
 

@@ -22,12 +22,10 @@
 #include "carfactory.hpp"
 #include "carsoundeffectmanager.hpp"
 #include "checkeredflag.hpp"
-#include "credits.hpp"
 #include "fadeanimation.hpp"
 #include "game.hpp"
 #include "inputhandler.hpp"
 #include "intro.hpp"
-#include "help.hpp"
 #include "layers.hpp"
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
@@ -36,7 +34,6 @@
 #include "race.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
-#include "settingsmenu.hpp"
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "statemachine.hpp"
@@ -44,7 +41,6 @@
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "trackobject.hpp"
-#include "trackselectionmenu.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
@@ -97,11 +93,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 , m_startlights(new Startlights)
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
-, m_trackSelectionMenu(nullptr)
 , m_mainMenu(nullptr)
-, m_help(nullptr)
-, m_credits(nullptr)
-, m_settingsMenu(nullptr)
 , m_menuManager(nullptr)
 , m_intro(new Intro)
 , m_particleFactory(new ParticleFactory)
@@ -249,24 +241,12 @@ void Scene::createMenus()
 {
     m_menuManager = new MTFH::MenuManager;
 
-    m_mainMenu = new MainMenu("main", width(), height());
+    m_mainMenu = MTFH::MenuPtr(new MainMenu(*m_menuManager, *this, width(), height()));
     connect(
-        static_cast<MainMenu *>(m_mainMenu), SIGNAL(exitGameRequested()), &m_game, SLOT(exitGame()));
-    m_menuManager->addMenu(*m_mainMenu);
+        std::static_pointer_cast<MainMenu>(m_mainMenu).get(), SIGNAL(exitGameRequested()), &m_game, SLOT(exitGame()));
 
-    m_help = new Help("help", width(), height());
-    m_menuManager->addMenu(*m_help);
-
-    m_credits = new Credits("credits", width(), height());
-    m_menuManager->addMenu(*m_credits);
-
-    m_settingsMenu = new SettingsMenu("settings", width(), height());
-    m_menuManager->addMenu(*m_settingsMenu);
-
-    m_trackSelectionMenu = new TrackSelectionMenu("trackSelection", width(), height(), *this);
-    m_menuManager->addMenu(*m_trackSelectionMenu);
-
-    m_menuManager->enterMenu(*m_mainMenu);
+    m_menuManager->addMenu(m_mainMenu);
+    m_menuManager->enterMenu(m_mainMenu);
 }
 
 void Scene::updateFrame(InputHandler & handler, int step)
@@ -594,10 +574,9 @@ Track & Scene::activeTrack() const
     return *m_activeTrack;
 }
 
-TrackSelectionMenu & Scene::trackSelectionMenu() const
+MTFH::MenuPtr Scene::trackSelectionMenu() const
 {
-    assert(m_trackSelectionMenu);
-    return *m_trackSelectionMenu;
+    return m_menuManager->getMenuById("trackSelection");
 }
 
 void Scene::getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1)
@@ -798,16 +777,11 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
 
 Scene::~Scene()
 {
-    delete m_credits;
     delete m_fadeAnimation;
-    delete m_help;
     delete m_intro;
-    delete m_mainMenu;
     delete m_menuManager;
     delete m_messageOverlay;
     delete m_particleFactory;
-    delete m_settingsMenu;
     delete m_startlights;
     delete m_startlightsOverlay;
-    delete m_trackSelectionMenu;
 }

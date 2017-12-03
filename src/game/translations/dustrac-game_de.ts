@@ -153,8 +153,8 @@
         <translation>Los!</translation>
     </message>
     <message>
-        <source>Senna</source>
-        <translation>Senna</translation>
+        <source>Hard</source>
+        <translation>Schwierig</translation>
     </message>
     <message>
         <source>Horizontal</source>

@@ -16,11 +16,10 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
+#include <MenuManager>
+
 #include "confirmationmenu.hpp"
-#include "keyconfigmenu.hpp"
-#include "resolutionmenu.hpp"
 #include "surfacemenu.hpp"
-#include "vsyncmenu.hpp"
 
 //! The settings menu.
 class SettingsMenu : public SurfaceMenu
@@ -40,37 +39,31 @@ private:
 
     void populateGfxMenu(int width, int height);
 
-    void populateLapCountMenu(int width, int height);
-
     void populateSfxMenu(int width, int height);
 
     void populateSplitTypeMenu(int width, int height);
 
     void populateResetMenu(int width, int height);
 
-    ConfirmationMenu m_confirmationMenu;
+    ConfirmationMenuPtr m_confirmationMenu;
 
-    ResolutionMenu m_fullScreenResolutionMenu;
+    MTFH::MenuPtr m_fullScreenResolutionMenu;
 
-    ResolutionMenu m_windowedResolutionMenu;
+    MTFH::MenuPtr m_windowedResolutionMenu;
 
-    SurfaceMenu m_difficultyMenu;
+    MTFH::MenuPtr m_gameModeMenu;
 
-    SurfaceMenu m_gameModeMenu;
+    MTFH::MenuPtr m_gfxMenu;
 
-    SurfaceMenu m_gfxMenu;
+    MTFH::MenuPtr m_resetMenu;
 
-    SurfaceMenu m_lapCountMenu;
+    MTFH::MenuPtr m_sfxMenu;
 
-    SurfaceMenu m_resetMenu;
+    MTFH::MenuPtr m_splitTypeMenu;
 
-    SurfaceMenu m_sfxMenu;
+    MTFH::MenuPtr m_vsyncMenu;
 
-    SurfaceMenu m_splitTypeMenu;
-
-    VSyncMenu m_vsyncMenu;
-
-    KeyConfigMenu m_keyConfigMenu;
+    MTFH::MenuPtr m_keyConfigMenu;
 };
 
 #endif // SETTINGSMENU_HPP

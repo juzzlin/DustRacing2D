@@ -16,6 +16,7 @@
 #include "trackselectionmenu.hpp"
 
 #include "game.hpp"
+#include "mainmenu.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
 #include "renderer.hpp"
@@ -25,6 +26,7 @@
 #include "tracktile.hpp"
 
 #include <MenuItem>
+#include <MenuManager>
 
 #include <MCAssetManager>
 #include <MCLogger>
@@ -46,6 +48,8 @@ const float SAIL_AWAY_HONEY_X = 1000;
 const float ENTER_SPEED = 0.15f;
 
 const float EXIT_SPEED = 0.03f;
+
+std::string TrackSelectionMenu::MenuId = "trackSelection";
 
 class TrackItem : public MTFH::MenuItem
 {
@@ -199,9 +203,9 @@ void TrackItem::renderTitle()
     const int shadowX =  2;
 
     std::wstringstream ss;
-    ss << m_track.trackData().name().toStdWString();
+    ss << m_track.trackData().name().toUpper().toStdWString();
     text.setText(ss.str());
-    text.setGlyphSize(20, 20);
+    text.setGlyphSize(30, 30);
     text.setShadowOffset(shadowX, shadowY);
     text.render(x() - text.width(m_font) / 2, y() + height() / 2 + text.height(m_font), nullptr, m_font);
 }
@@ -315,11 +319,10 @@ void TrackItem::render()
     renderTrackProperties();
 }
 
-TrackSelectionMenu::TrackSelectionMenu(std::string id,
-    int width, int height, Scene & scene)
-    : SurfaceMenu("trackSelectionBack", id, width, height, Menu::Style::ShowMany, true, true, true)
-, m_selectedTrack(nullptr)
-, m_scene(scene)
+TrackSelectionMenu::TrackSelectionMenu(int width, int height, Scene & scene)
+    : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::ShowMany, true, true, true)
+    , m_selectedTrack(nullptr)
+    , m_scene(scene)
 {
     setWrapAround(false);
 }
@@ -377,6 +380,11 @@ void TrackSelectionMenu::up()
 void TrackSelectionMenu::down()
 {
     right();
+}
+
+void TrackSelectionMenu::exit()
+{
+    MTFH::MenuManager::instance().enterMenu(MainMenu::MenuId);
 }
 
 void TrackSelectionMenu::selectCurrentItem()

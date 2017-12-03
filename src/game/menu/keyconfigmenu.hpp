@@ -18,8 +18,6 @@
 
 #include "surfacemenu.hpp"
 
-class PressKeyMenu;
-
 //! Menu where user can configure the keys used to control the car.
 class KeyConfigMenu : public SurfaceMenu
 {
@@ -35,8 +33,6 @@ private:
 
     void addPlayerOneConfig(int width, int height);
     void addPlayerTwoConfig(int width, int height);
-
-    PressKeyMenu * m_pressKeyMenu;
 };
 
 #endif // KEYCONFIGMENU_HPP
