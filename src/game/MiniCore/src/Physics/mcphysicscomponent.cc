@@ -156,7 +156,7 @@ void MCPhysicsComponent::setMass(float newMass, bool stationary)
         m_mass = newMass;
 
         // This is just a default guess. The shape should set the "correct" value.
-        setMomentOfInertia(newMass);
+        setMomentOfInertia(newMass * 10.0f);
     }
     else
     {
