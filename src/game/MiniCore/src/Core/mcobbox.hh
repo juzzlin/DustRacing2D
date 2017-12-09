@@ -41,6 +41,9 @@ class MCOBBox
 {
 public:
 
+    //! Constructor.
+    MCOBBox();
+
     /*! Constructor
      * \param hx    Local half width of the bbox
      * \param hy    Local half height of the bbox
@@ -136,6 +139,15 @@ private:
 };
 
 typedef MCOBBox<float> MCOBBoxF;
+
+template <typename T>
+MCOBBox<T>::MCOBBox()
+: m_hx(0)
+, m_hy(0)
+, m_p(0, 0)
+, m_a(0)
+{
+}
 
 template <typename T>
 MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
