@@ -28,11 +28,10 @@ unsigned int MCRectShape::m_typeId = MCShape::registerType();
 
 MCRectShape::MCRectShape(MCShapeViewPtr view, float width, float height)
 : MCShape(view)
-, m_obbox(width / 2, height / 2, MCVector2dF())
 , m_width(width)
 , m_height(height)
 {
-    setRadius(std::sqrt(width * width + height * height) / 2);
+    resize(width, height);
 }
 
 MCEdgeF MCRectShape::edgeForSegment(const MCSegmentF & p) const
@@ -166,6 +165,8 @@ const MCOBBoxF & MCRectShape::obbox() const
 
 void MCRectShape::resize(float width, float height)
 {
+    setRadius(std::sqrt(width * width + height * height) / 2);
+
     m_obbox = MCOBBoxF(width / 2, height / 2, location());
     m_obbox.rotate(angle());
     m_width = width;
