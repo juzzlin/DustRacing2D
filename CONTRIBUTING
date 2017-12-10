@@ -18,7 +18,7 @@ Game / Editor
 Make your changes against the master branch.
 
 If you have fixed a bug or modified the game in some other acceptable way,
-I most likely want to receive the changes as a GitHub pull request 
+I most likely want to receive the changes as a GitHub pull request
 
 OR
 
@@ -42,7 +42,7 @@ You can just copy these files as a new locale and edit, but the recommended way 
 to generate/update the file from source code to make sure that the source strings
 are up-to-date:
 
-$ lupdate src/game/*.cpp -ts  src/game/translations/dustrac-game_fr.ts
+$ lupdate src/game/*.cpp src/game/menu/*.cpp -ts  src/game/translations/dustrac-game_fr.ts
 $ lupdate src/editor/*.cpp -ts  src/editor/translations/dustrac-editor_fr.ts
 
 ..as an example for French.
@@ -64,7 +64,10 @@ The .qm files are binary files that are actually used by the application:
 
 Add your file to the list for both the game and the editor.
 
-Remember to TEST the translations.
+Remember to TEST the translations. The editor and the game can be forced to given lang:
+
+$ ./dustrac-game --lang fr
+$ ./dustrac-editor --lang fr
 
 Coding style examples
 ---------------------
