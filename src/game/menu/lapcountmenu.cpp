@@ -8,7 +8,9 @@
 
 #include "game.hpp"
 
+#include <MCAssetManager>
 #include <MCLogger>
+#include <MCTextureText>
 
 static const QString LAP_COUNT_KEY(Settings::lapCountKey());
 
@@ -18,6 +20,7 @@ std::string LapCountMenu::MenuId = "lapCount";
 
 LapCountMenu::LapCountMenu(int width, int height)
     : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::HorizontalList)
+    , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
     static int LAP_COUNTS[] =
     {
@@ -59,4 +62,18 @@ LapCountMenu::LapCountMenu(int width, int height)
     }
 
     setCurrentIndex(selectedIndex);
+}
+
+void LapCountMenu::render()
+{
+    SurfaceMenu::render();
+
+    MCTextureText text(QObject::tr("Choose lap count").toUpper().toStdWString());
+
+    const int shadowY = -2;
+    const int shadowX =  2;
+
+    text.setGlyphSize(30, 30);
+    text.setShadowOffset(shadowX, shadowY);
+    text.render(x() + width() / 2 - text.width(m_font) / 2, y() + height() / 2 + text.height(m_font) * 2, nullptr, m_font);
 }
