@@ -28,7 +28,7 @@
     <name>QObject</name>
     <message>
         <source> m</source>
-        <translation> m</translation>
+        <translation type="vanished"> m</translation>
     </message>
     <message>
         <source>L:</source>
@@ -130,7 +130,7 @@
     </message>
     <message>
         <source>RACE TRACKS BY</source>
-        <translation>Rennstrecken von</translation>
+        <translation type="vanished">Rennstrecken von</translation>
     </message>
     <message>
         <source> KM/H</source>
@@ -299,7 +299,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>PROGRAMMING BY</source>
-        <translation>PROGRAMMIERUNG VON</translation>
+        <translation type="vanished">PROGRAMMIERUNG VON</translation>
     </message>
     <message>
         <source>       Laps: </source>
@@ -339,7 +339,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>CONTRIBUTORS</source>
-        <translation>MITWIRKENDE</translation>
+        <translation type="vanished">MITWIRKENDE</translation>
     </message>
     <message>
         <source>Reset best positions</source>
@@ -347,7 +347,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>Lap Count &gt;</source>
-        <translation>Rundenzahl &gt;</translation>
+        <translation type="vanished">Rundenzahl &gt;</translation>
     </message>
     <message>
         <source>     Length: </source>
@@ -375,7 +375,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>GRAPHICS BY</source>
-        <translation>GRAFIK VON</translation>
+        <translation type="vanished">GRAFIK VON</translation>
     </message>
     <message>
         <source>Vertical</source>
@@ -395,7 +395,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>Difficulty &gt;</source>
-        <translation>Schwierigkeitsgrad &gt;</translation>
+        <translation type="vanished">Schwierigkeitsgrad &gt;</translation>
     </message>
     <message>
         <source>Player Two Brake</source>
@@ -420,6 +420,30 @@ Pause: P</translation>
     <message>
         <source>Windowed resolution &gt;</source>
         <translation>Fensterauflösung &gt;</translation>
+    </message>
+    <message>
+        <source>PROGRAMMING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GRAPHICS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LEVEL DESIGN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TRANSLATIONS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PATCHES</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose lap count</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

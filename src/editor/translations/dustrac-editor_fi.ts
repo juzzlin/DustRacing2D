@@ -417,7 +417,12 @@ Klikkaa ensimmäistä asettamaasi solmupistettä lopettaaksesi.
         <translation>Pyöritä..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="276"/>
+        <location filename="../editorview.cpp" line="272"/>
+        <source>Force stationary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editorview.cpp" line="291"/>
         <source>Set size..</source>
         <translation>Aseta koko..</translation>
     </message>

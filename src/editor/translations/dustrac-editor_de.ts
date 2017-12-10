@@ -86,7 +86,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Index set to &apos;%1&apos;.</source>
-        <translation>Index auf »%1« gesetzt.</translation>
+        <translation type="vanished">Index auf »%1« gesetzt.</translation>
     </message>
     <message>
         <source>Choose &apos;File -&gt; New&apos; or &apos;File -&gt; Open&apos; to start.</source>
@@ -228,6 +228,10 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
         <source>Set route: begin.</source>
         <translation>Route setzen: Angefangen.</translation>
     </message>
+    <message>
+        <source>Track properties updated.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewTrackDialog</name>
@@ -307,7 +311,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Insert row..</source>
-        <translation>Zeile einfügen</translation>
+        <translation type="vanished">Zeile einfügen</translation>
     </message>
     <message>
         <source>Delete row..</source>
@@ -315,11 +319,35 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Insert column..</source>
-        <translation>Spalte einfügen</translation>
+        <translation type="vanished">Spalte einfügen</translation>
     </message>
     <message>
         <source>Delete column..</source>
         <translation>Spalte löschen</translation>
+    </message>
+    <message>
+        <source>Exclude from minimap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert row before..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert row after..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert column before..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert column after..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force stationary</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -381,6 +409,14 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     <message>
         <source>Index:</source>
         <translation>Index:</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User track:</source>
+        <translation type="unfinished">Benutzerstrecke:</translation>
     </message>
 </context>
 </TS>

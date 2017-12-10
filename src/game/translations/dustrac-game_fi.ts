@@ -355,17 +355,17 @@ ERITYISKIITOKSET
         <translation>Nollaus &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/difficultymenu.cpp" line="28"/>
+        <location filename="../menu/difficultymenu.cpp" line="43"/>
         <source>Easy</source>
         <translation>Helppo</translation>
     </message>
     <message>
-        <location filename="../menu/difficultymenu.cpp" line="38"/>
+        <location filename="../menu/difficultymenu.cpp" line="53"/>
         <source>Medium</source>
         <translation>Keskitaso</translation>
     </message>
     <message>
-        <location filename="../menu/difficultymenu.cpp" line="48"/>
+        <location filename="../menu/difficultymenu.cpp" line="63"/>
         <source>Hard</source>
         <translation>Vaikea</translation>
     </message>
@@ -614,12 +614,12 @@ ERITYISKIITOKSET
         <translation>KÄÄNNÖKSET</translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="61"/>
+        <location filename="../menu/credits.cpp" line="62"/>
         <source>PATCHES</source>
         <translation>PÄTSIT</translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="72"/>
+        <location filename="../menu/credits.cpp" line="73"/>
         <source>SPECIAL THANKS</source>
         <translation>ERITYISKIITOKSET</translation>
     </message>
@@ -660,7 +660,7 @@ ERITYISKIITOKSET
         <translation>Päälle</translation>
     </message>
     <message>
-        <location filename="../menu/lapcountmenu.cpp" line="71"/>
+        <location filename="../menu/lapcountmenu.cpp" line="86"/>
         <source>Choose lap count</source>
         <translation>Valitse kierrosmäärä</translation>
     </message>
