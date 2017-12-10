@@ -21,7 +21,8 @@
 namespace MTFH {
 
 MenuItem::MenuItem(float width, float height, std::wstring text, bool selectable)
-: m_text(text)
+: m_menu(nullptr)
+, m_text(text)
 , m_menuOpenActionMenuId("")
 , m_action(nullptr)
 , m_actionFunction(nullptr)
@@ -40,7 +41,7 @@ MenuItem::MenuItem(float width, float height, std::wstring text, bool selectable
 , m_tMargin(1)
 , m_bMargin(1)
 , m_index(-1)
-, m_animationSpeed(0.1f)
+, m_animationCurve(30, 3)
 {
 }
 
@@ -88,6 +89,12 @@ float MenuItem::x() const
 float MenuItem::y() const
 {
     return m_y;
+}
+
+void MenuItem::resetAnimationCurve(int steps, int exp)
+{
+    m_animationCurve = AnimationCurve(steps, exp);
+    m_animationCurve.reset();
 }
 
 void MenuItem::setView(MenuItemViewPtr view)
@@ -185,19 +192,19 @@ bool MenuItem::focused() const
     return m_focused;
 }
 
-float MenuItem::animationSpeed() const
-{
-    return m_animationSpeed;
-}
-
-void MenuItem::setAnimationSpeed(float animationSpeed)
-{
-    m_animationSpeed = animationSpeed;
-}
-
 float MenuItem::targetY() const
 {
     return m_targetY;
+}
+
+Menu * MenuItem::menu() const
+{
+    return m_menu;
+}
+
+void MenuItem::setMenu(Menu * menu)
+{
+    m_menu = menu;
 }
 
 float MenuItem::targetX() const
@@ -240,8 +247,10 @@ void MenuItem::stepTime(int msecs)
 
 void MenuItem::positionAnimation(int)
 {
-    m_x += (m_targetX - m_x) * m_animationSpeed;
-    m_y += (m_targetY - m_y) * m_animationSpeed;
+    m_animationCurve.step();
+
+    m_x = m_x + (m_targetX - m_x) * m_animationCurve.value();
+    m_y = m_y + (m_targetY - m_y) * m_animationCurve.value();
 }
 
 MenuItem::~MenuItem()

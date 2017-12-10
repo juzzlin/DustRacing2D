@@ -20,6 +20,7 @@
 #include <vector>
 #include <memory>
 
+#include "animationcurve.hpp"
 #include "menumanager.hpp"
 #include "menuitem.hpp"
 
@@ -76,6 +77,8 @@ public:
     //! Steps time for animations etc. Re-implement in the menu items.
     virtual void stepTime(int msecs);
 
+    virtual void positionAnimation(int msecs);
+
     /*! Handle mouse press at given screen coordinates.
      *  \return true if on a valid item. */
     virtual bool handleMousePress(int x, int y, int screenWidth, int screenHeight);
@@ -120,6 +123,20 @@ public:
     //! Returns the height of the menu.
     int height() const;
 
+    void setPos(float x, float y);
+
+    void setPos(float x, float y, float targetX, float targetY);
+
+    float x() const;
+
+    float y() const;
+
+    //! Animation target X
+    float targetX() const;
+
+    //! Animation target Y
+    float targetY() const;
+
     //! Return the current index.
     int currentIndex() const;
 
@@ -142,6 +159,14 @@ protected:
 
     //! Called when the menu is entered. Call parent implementation if overridden.
     virtual void enter();
+
+    virtual void pushEnter();
+
+    virtual void pushExit();
+
+    virtual void popEnter();
+
+    virtual void popExit();
 
 private:
 
@@ -187,6 +212,14 @@ private:
 
     int m_height;
 
+    float m_x;
+
+    float m_y;
+
+    float m_targetX;
+
+    float m_targetY;
+
     int m_currentIndex;
 
     int m_selectedIndex;
@@ -196,6 +229,8 @@ private:
     bool m_isDone;
 
     bool m_wrapAround;
+
+    AnimationCurve m_animationCurve;
 
     friend class MenuManager;
 };

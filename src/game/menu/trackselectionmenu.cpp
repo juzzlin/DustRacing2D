@@ -45,9 +45,9 @@
 
 const float SAIL_AWAY_HONEY_X = 1000;
 
-const float ENTER_SPEED = 0.15f;
+const int ANIMATION_STEPS = 15;
 
-const float EXIT_SPEED = 0.03f;
+const int ANIMATION_EXP = 3;
 
 std::string TrackSelectionMenu::MenuId = "trackSelection";
 
@@ -72,8 +72,6 @@ public:
         m_star.setShaderProgram(Renderer::instance().program("default"));
         m_glow.setShaderProgram(Renderer::instance().program("default"));
         m_lock.setShaderProgram(Renderer::instance().program("default"));
-
-        setAnimationSpeed(ENTER_SPEED);
     }
 
     Track & track() const
@@ -159,6 +157,9 @@ void TrackItem::renderTiles()
 
     initY = y() - rMap.rows() * tileH / 2;
 
+    initX += menu()->x();
+    initY += menu()->y();
+
     // Loop through the visible tile matrix and draw the tiles
     float tileY = initY;
     for (unsigned int j = 0; j < rMap.rows(); j++)
@@ -185,7 +186,7 @@ void TrackItem::renderTiles()
                 surface->setSize(tileH, tileW);
                 surface->render(
                     nullptr,
-                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2), tile->rotation() + std::fabs(x() - targetX()));
+                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2), tile->rotation());
             }
 
             tileX += tileW;
@@ -207,7 +208,7 @@ void TrackItem::renderTitle()
     text.setText(ss.str());
     text.setGlyphSize(30, 30);
     text.setShadowOffset(shadowX, shadowY);
-    text.render(x() - text.width(m_font) / 2, y() + height() / 2 + text.height(m_font), nullptr, m_font);
+    text.render(menu()->x() + x() - text.width(m_font) / 2, menu()->y() + y() + height() / 2 + text.height(m_font), nullptr, m_font);
 }
 
 void TrackItem::renderStars()
@@ -216,14 +217,14 @@ void TrackItem::renderStars()
     {
         const int starW = m_star.width();
         const int starH = m_star.height();
-        const int startX = x() - 5 * starW + starW / 2;
+        const int startX = menu()->x() + x() - 5 * starW + starW / 2;
         const int numStars = 10;
         const MCGLColor yellow(1.0, 1.0, 0.0);
         const MCGLColor grey(.75, .75, .75);
 
         for (int i = 0; i < numStars; i++)
         {
-            const MCVector3dF starPos(startX + i * starW, y() - height() / 2 + starH / 2, 0);
+            const MCVector3dF starPos(startX + i * starW, menu()->y() + y() - height() / 2 + starH / 2, 0);
 
             // The range of m_bestPos is 1..NUM_CARS
             if (m_bestPos != -1 &&
@@ -246,7 +247,7 @@ void TrackItem::renderLock()
 {
     if (m_track.trackData().isLocked())
     {
-        m_lock.render(nullptr, MCVector3dF(x(), y(), 0), 0);
+        m_lock.render(nullptr, MCVector3dF(menu()->x() + x(), menu()->y() + y(), 0), 0);
     }
 }
 
@@ -261,7 +262,7 @@ void TrackItem::renderTrackProperties()
     text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
 
-    const int textX = x();
+    const int textX = menu()->x() + x();
     int maxWidth = 0;
 
     std::vector<MCTextureText> texts;
@@ -296,7 +297,7 @@ void TrackItem::renderTrackProperties()
         texts.push_back(text);
     }
 
-    const float yPos = y() - height() / 2;
+    const float yPos = menu()->y() + y() - height() / 2;
     float lineHeight = text.height(m_font);
     int line = 2;
     for (auto && text: texts)
@@ -343,12 +344,12 @@ void TrackSelectionMenu::left()
     if (prevIndex > 0)
     {
         currentItem()->setPos(width() / 2, height() / 2, width() + SAIL_AWAY_HONEY_X, height() / 2);
-        currentItem()->setAnimationSpeed(EXIT_SPEED);
+        currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
         Menu::left();
 
         currentItem()->setPos(-SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
-        currentItem()->setAnimationSpeed(ENTER_SPEED);
+        currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
         setItemsToShow({prevIndex, currentIndex()});
     }
@@ -361,12 +362,12 @@ void TrackSelectionMenu::right()
     if (prevIndex + 1 < static_cast<int>(itemCount()))
     {
         currentItem()->setPos(width() / 2, height() / 2, -SAIL_AWAY_HONEY_X, height() / 2);
-        currentItem()->setAnimationSpeed(EXIT_SPEED);
+        currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
         Menu::right();
 
         currentItem()->setPos(width() + SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
-        currentItem()->setAnimationSpeed(ENTER_SPEED);
+        currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
         setItemsToShow({prevIndex, currentIndex()});
     }
@@ -384,7 +385,7 @@ void TrackSelectionMenu::down()
 
 void TrackSelectionMenu::exit()
 {
-    MTFH::MenuManager::instance().enterMenu(MainMenu::MenuId);
+    MTFH::MenuManager::instance().popToMenu(MainMenu::MenuId);
 }
 
 void TrackSelectionMenu::selectCurrentItem()

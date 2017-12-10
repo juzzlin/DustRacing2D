@@ -51,10 +51,14 @@ void MenuManager::addMenu(MenuPtr newMenu)
 
 void MenuManager::enterMenu(MenuPtr newMenu)
 {
+    if (m_menuStack.size())
+    {
+        m_prevMenu = m_menuStack.back();
+    }
+
     m_menuStack.clear();
     m_menuStack.push_back(newMenu);
     newMenu->enter();
-    newMenu->render();
 }
 
 void MenuManager::enterMenu(std::string menuId)
@@ -67,9 +71,14 @@ void MenuManager::pushMenu(MenuPtr newMenu)
 {
     if (!m_menuStack.size() || m_menuStack.back() != newMenu)
     {
+        if (m_menuStack.size())
+        {
+            m_prevMenu = m_menuStack.back();
+            m_prevMenu->pushExit();
+        }
+
         m_menuStack.push_back(newMenu);
-        newMenu->enter();
-        newMenu->render();
+        newMenu->pushEnter();
     }
 }
 
@@ -83,10 +92,32 @@ void MenuManager::popMenu()
 {
     if (m_menuStack.size())
     {
+        m_prevMenu = m_menuStack.back();
+        m_prevMenu->popExit();
         m_menuStack.pop_back();
+
+        if (m_menuStack.size())
+        {
+            m_menuStack.back()->popEnter();
+        }
+    }
+}
+
+void MenuManager::popToMenu(std::string menuId)
+{
+    if (m_menuStack.size())
+    {
+        m_prevMenu = m_menuStack.back();
+        m_prevMenu->popExit();
+
+        m_menuStack.clear();
     }
 
-    enterCurrentMenu();
+    assert(m_idToMenuMap[menuId]);
+
+    m_menuStack.push_back(m_idToMenuMap[menuId]);
+
+    m_idToMenuMap[menuId]->popEnter();
 }
 
 void MenuManager::enterCurrentMenu()
@@ -110,6 +141,11 @@ MenuManager & MenuManager::instance()
 
 void MenuManager::render()
 {
+    if (m_prevMenu)
+    {
+        m_prevMenu->render();
+    }
+
     if (m_menuStack.size())
     {
         m_menuStack.back()->render();
@@ -190,9 +226,9 @@ bool MenuManager::isDone() const
 
 void MenuManager::stepTime(int msecs)
 {
-    for (auto && menu : m_menuStack)
+    for (auto && menuIter : m_idToMenuMap)
     {
-        menu->stepTime(msecs);
+        menuIter.second->stepTime(msecs);
     }
 }
 

@@ -20,6 +20,7 @@
 #include <string>
 #include <memory>
 
+#include "animationcurve.hpp"
 #include "menuitemview.hpp"
 #include "menuitemaction.hpp"
 
@@ -37,6 +38,10 @@ public:
 
     virtual ~MenuItem();
 
+    void setMenu(Menu * menu);
+
+    Menu * menu() const;
+
     void setIndex(int index);
 
     int index() const;
@@ -52,6 +57,8 @@ public:
     float x() const;
 
     float y() const;
+
+    void resetAnimationCurve(int steps, int exp);
 
     const std::wstring & text() const;
 
@@ -96,10 +103,6 @@ public:
 
     bool focused() const;
 
-    float animationSpeed() const;
-
-    void setAnimationSpeed(float animationSpeed);
-
     //! Animation target X
     float targetX() const;
 
@@ -107,6 +110,8 @@ public:
     float targetY() const;
 
 private:
+
+    Menu * m_menu;
 
     std::wstring m_text;
 
@@ -146,7 +151,7 @@ private:
 
     int m_index;
 
-    float m_animationSpeed;
+    AnimationCurve m_animationCurve;
 };
 
 typedef std::shared_ptr<MTFH::MenuItem> MenuItemPtr;

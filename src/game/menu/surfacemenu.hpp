@@ -38,6 +38,21 @@ public:
     //! \reimp
     virtual void render() override;
 
+    //! \reimp
+    virtual void enter() override;
+
+    //! \reimp
+    virtual void pushEnter() override;
+
+    //! \reimp
+    virtual void pushExit() override;
+
+    //! \reimp
+    virtual void popEnter() override;
+
+    //! \reimp
+    virtual void popExit() override;
+
 protected:
 
     MCTextureFont & font() const;

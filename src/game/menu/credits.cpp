@@ -92,6 +92,6 @@ void Credits::render()
     auto text = m_texts.at(m_textIndex);
     text.setGlyphSize(20, 20 * height() / 640);
     text.render(
-        width() / 2 - text.width(font()) / 2,
-        height() / 2 + text.height(font()) / 2, nullptr, font());
+        x() + width() / 2 - text.width(font()) / 2,
+        y() + height() / 2 + text.height(font()) / 2, nullptr, font());
 }

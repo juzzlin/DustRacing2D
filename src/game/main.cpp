@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDir>
+#include <QDebug>
 #include <QLocale>
 #include <QMessageBox>
 #include <QSettings>

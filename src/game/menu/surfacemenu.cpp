@@ -69,13 +69,42 @@ SurfaceMenu::SurfaceMenu(
 
 void SurfaceMenu::render()
 {
-    const int w2 = width()  / 2;
-    const int h2 = height() / 2;
-    assert(w2 > 0 && h2 > 0);
+    const int w2 = x() + width() / 2;
+    const int h2 = y() + height() / 2;
     m_back.bind();
     m_back.setSize(width(), width() * m_back.height() / m_back.width());
     m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
     Menu::render();
+}
+
+void SurfaceMenu::enter()
+{
+    Menu::enter();
+    setPos(0, 0, 0, 0);
+}
+
+void SurfaceMenu::pushEnter()
+{
+    Menu::pushEnter();
+    setPos(width(), 0, 0, 0);
+}
+
+void SurfaceMenu::pushExit()
+{
+    Menu::pushExit();
+    setPos(0, 0, -width(), 0);
+}
+
+void SurfaceMenu::popEnter()
+{
+    Menu::popEnter();
+    setPos(-width(), 0, 0, 0);
+}
+
+void SurfaceMenu::popExit()
+{
+    Menu::popExit();
+    setPos(0, 0, width(), 0);
 }
 
 MCTextureFont & SurfaceMenu::font() const

@@ -59,6 +59,9 @@ public:
     //! Force exit on current menu and enter the previous menu.
     void popMenu();
 
+    //! Force exit on current menu and enter the given menu.
+    void popToMenu(std::string menuId);
+
     //! Force enter on current menu.
     void enterCurrentMenu();
 
@@ -104,6 +107,8 @@ private:
     std::map<std::string, MenuPtr> m_idToMenuMap;
 
     std::vector<MenuPtr> m_menuStack;
+
+    MenuPtr m_prevMenu;
 
     static MenuManager * m_instance;
 };

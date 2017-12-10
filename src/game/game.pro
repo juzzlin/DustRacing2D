@@ -116,6 +116,7 @@ HEADERS += \
     tree.hpp \
     updateableif.hpp \
     userexception.hpp \
+    MTFH/animationcurve.hpp \
     MTFH/menu.hpp \
     MTFH/menuitem.hpp \
     MTFH/menuitemaction.hpp \
@@ -283,6 +284,7 @@ SOURCES += \
     trackobjectfactory.cpp \
     tracktile.cpp \
     tree.cpp \
+    MTFH/animationcurve.cpp \
     MTFH/menu.cpp \
     MTFH/menuitem.cpp \
     MTFH/menuitemaction.cpp \

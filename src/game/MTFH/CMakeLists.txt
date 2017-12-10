@@ -3,6 +3,7 @@ project(MTFH)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(MTFHSRC
+    animationcurve.cpp
     menu.cpp
     menuitem.cpp
     menuitemaction.cpp

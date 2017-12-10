@@ -25,11 +25,16 @@ Menu::Menu(std::string id, int width, int height, Menu::Style style)
 : m_id(id)
 , m_width(width)
 , m_height(height)
+, m_x(0)
+, m_y(0)
+, m_targetX(0)
+, m_targetY(0)
 , m_currentIndex(-1)
 , m_selectedIndex(-1)
 , m_style(style)
 , m_isDone(false)
 , m_wrapAround(true)
+, m_animationCurve(15, 3)
 {
 }
 
@@ -43,6 +48,7 @@ void Menu::addItem(MenuItemPtr menuItem)
     m_items.push_back(menuItem);
     m_currentIndex = m_items.size() - 1;
     m_selectedIndex = m_currentIndex;
+    menuItem->setMenu(this);
     menuItem->setIndex(m_items.size() - 1);
 
     updateFocus();
@@ -126,10 +132,10 @@ void Menu::renderItems()
         }
 
         // Render centered items
-        int startY = m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
+        int startY = y() + m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
         for (auto item : m_items)
         {
-            item->setPos(m_width / 2, startY);
+            item->setPos(x() + m_width / 2, startY);
             item->render();
             startY += item->height();
         }
@@ -144,10 +150,10 @@ void Menu::renderItems()
         }
 
         // Render centered items
-        int startX = m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
+        int startX = x() + m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
         for (auto item : m_items)
         {
-            item->setPos(startX, m_height / 2);
+            item->setPos(startX, y() + m_height / 2);
             item->render();
             startX += item->width();
         }
@@ -155,7 +161,7 @@ void Menu::renderItems()
     else if (m_style == Menu::Style::ShowOne)
     {
         auto item = m_items.at(m_currentIndex);
-        item->setPos(m_width / 2, m_height / 2);
+        item->setPos(x() + m_width / 2, y() + m_height / 2);
         item->render();
     }
     else if (m_style == Menu::Style::ShowMany)
@@ -187,14 +193,14 @@ void Menu::renderMouseItems()
         switch (item.type)
         {
         case Menu::MouseItemType::Quit:
-            item.item->setPos(m_width - item.item->width(), m_height - item.item->height());
+            item.item->setPos(x() + m_width - item.item->width(), y() + m_height - item.item->height());
             item.item->render();
             break;
 
         case Menu::MouseItemType::Prev:
             if (isPrevAllowed())
             {
-                item.item->setPos(item.item->width(), m_height / 2);
+                item.item->setPos(x() + item.item->width(), y() + m_height / 2);
                 item.item->render();
             }
             break;
@@ -202,7 +208,7 @@ void Menu::renderMouseItems()
         case Menu::MouseItemType::Next:
             if (isNextAllowed())
             {
-                item.item->setPos(m_width - item.item->width(), m_height / 2);
+                item.item->setPos(x() + m_width - item.item->width(), y() + m_height / 2);
                 item.item->render();
             }
             break;
@@ -456,6 +462,42 @@ int Menu::height() const
     return m_height;
 }
 
+void Menu::setPos(float x, float y)
+{
+    m_x = x;
+    m_y = y;
+    m_targetX = x;
+    m_targetY = y;
+}
+
+void Menu::setPos(float x, float y, float targetX, float targetY)
+{
+    m_x = x;
+    m_y = y;
+    m_targetX = targetX;
+    m_targetY = targetY;
+}
+
+float Menu::x() const
+{
+    return m_x;
+}
+
+float Menu::y() const
+{
+    return m_y;
+}
+
+float Menu::targetY() const
+{
+    return m_targetY;
+}
+
+float Menu::targetX() const
+{
+    return m_targetX;
+}
+
 int Menu::currentIndex() const
 {
     return m_currentIndex;
@@ -516,7 +558,37 @@ void Menu::enter()
 {
     m_isDone = false;
 
+    m_animationCurve.reset();
+
     updateFocus();
+}
+
+void Menu::pushEnter()
+{
+    m_isDone = false;
+
+    m_animationCurve.reset();
+
+    updateFocus();
+}
+
+void Menu::pushExit()
+{
+    m_animationCurve.reset();
+}
+
+void Menu::popEnter()
+{
+    m_isDone = false;
+
+    m_animationCurve.reset();
+
+    updateFocus();
+}
+
+void Menu::popExit()
+{
+    m_animationCurve.reset();
 }
 
 void Menu::setWrapAround(bool wrapAround)
@@ -529,12 +601,22 @@ void Menu::exit()
     MenuManager::instance().popMenu();
 }
 
-void Menu::stepTime(int msec)
+void Menu::stepTime(int msecs)
 {
     for (auto item : m_items)
     {
-        item->stepTime(msec);
+        item->stepTime(msecs);
     }
+
+    positionAnimation(msecs);
+}
+
+void Menu::positionAnimation(int)
+{
+    m_animationCurve.step();
+
+    m_x = m_x + (m_targetX - m_x) * m_animationCurve.value();
+    m_y = m_y + (m_targetY - m_y) * m_animationCurve.value();
 }
 
 Menu::~Menu()
