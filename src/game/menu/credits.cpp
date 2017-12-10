@@ -54,6 +54,7 @@ Credits::Credits(std::string id, int width, int height)
         MCTextureText(margin(14) + QObject::tr("TRANSLATIONS").toStdWString() +
             L"\n\n" +
             L"Pavel Fric <pavelfric@seznam.cz> (cs)\n\n" +
+            L"Wuzzy <almikes@aol.com> (de)\n\n" +
             L"Paolo Straffi <p_straffi@hotmail.com> (it)\n\n" +
             L"Jussi Lind (fi)\n\n" +
             L"Rémi Verschelde <remi@verschelde.fr> (fr)\n\n"),
