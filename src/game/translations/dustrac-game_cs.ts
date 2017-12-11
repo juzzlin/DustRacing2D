@@ -587,27 +587,27 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../menu/credits.cpp" line="40"/>
         <source>PROGRAMMING</source>
-        <translation type="unfinished"></translation>
+        <translation>PROGRAMOVÁNÍ</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="44"/>
         <source>GRAPHICS</source>
-        <translation type="unfinished"></translation>
+        <translation>OBRAZOVÁ STRÁNKA</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="49"/>
         <source>LEVEL DESIGN</source>
-        <translation type="unfinished"></translation>
+        <translation>VNĚJŠÍ ÚPRAVA ÚROVNÍ</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="54"/>
         <source>TRANSLATIONS</source>
-        <translation type="unfinished"></translation>
+        <translation>PŘEKLAD</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="62"/>
         <source>PATCHES</source>
-        <translation type="unfinished"></translation>
+        <translation>ZÁPLATY</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="73"/>
@@ -631,7 +631,7 @@ ZVLÁŠTNÍ PODĚKOVÁNÍ
     <message>
         <location filename="../menu/lapcountmenu.cpp" line="86"/>
         <source>Choose lap count</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte počet kol</translation>
     </message>
 </context>
 </TS>
