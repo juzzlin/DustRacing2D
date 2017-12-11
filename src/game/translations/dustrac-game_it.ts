@@ -95,58 +95,58 @@ Pause      : P</translation>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="92"/>
         <source>Player One Accelerate</source>
-        <translation>Il giocatore 1 accelera</translation>
+        <translation>Giocatore 1 accelera</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="102"/>
         <source>Player One Brake</source>
-        <translation>Il giocatore 1 frena</translation>
+        <translation>Giocatore 1 frena</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="112"/>
         <source>Player One Turn Left</source>
-        <translation>Il giocatore 1 gira a sinistra</translation>
+        <translation>Giocatore 1 gira a sinistra</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="122"/>
         <source>Player One Turn Right</source>
-        <translation>Il giocatore 1 gira a destra</translation>
+        <translation>Giocatore 1 gira a destra</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="145"/>
         <source>Player Two Accelerate</source>
-        <translation>Il giocatore 2 accelera</translation>
+        <translation>Giocatore 2 accelera</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="155"/>
         <source>Player Two Brake</source>
-        <translation>Il giocatore 2 frena</translation>
+        <translation>Giocatore 2 frena</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="165"/>
         <source>Player Two Turn Left</source>
-        <translation>Il giocatore 2 gira a sinistra</translation>
+        <translation>Giocatore 2 gira a sinistra</translation>
     </message>
     <message>
         <location filename="../menu/keyconfigmenu.cpp" line="175"/>
         <source>Player Two Turn Right</source>
-        <translation>Il giocatore 2 gira a destra</translation>
+        <translation>Giocatore 2 gira a destra</translation>
     </message>
     <message>
         <source>At least OpenGL ES 2.0 is required!</source>
-        <translation type="vanished">È richiesta almeno OpenGL ES 2.0!</translation>
+        <translation type="obsolete">È richiesta almeno OpenGL ES 2.0!</translation>
     </message>
     <message>
         <source>Cannot start Dust Racing 2D</source>
-        <translation type="vanished">Impossibile avviare Dust Racing 2D</translation>
+        <translation type="obsolete">Impossibile avviare Dust Racing 2D</translation>
     </message>
     <message>
         <source>At least OpenGL 3.0 is required!</source>
-        <translation type="vanished">È richiesta almeno OpenGL 3.0!</translation>
+        <translation type="obsolete">È richiesta almeno OpenGL 3.0!</translation>
     </message>
     <message>
         <source>At least OpenGL 2.1 is required!</source>
-        <translation type="vanished">È richiesta almeno OpenGL 2.1!</translation>
+        <translation type="obsolete">È richiesta almeno OpenGL 2.1!</translation>
     </message>
     <message>
         <location filename="../race.cpp" line="318"/>
@@ -215,7 +215,7 @@ Pause      : P</translation>
     </message>
     <message>
         <source>Difficulty &gt;</source>
-        <translation type="vanished">Difficoltà &gt;</translation>
+        <translation type="obsolete">Difficoltà &gt;</translation>
     </message>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="208"/>
@@ -225,7 +225,7 @@ Pause      : P</translation>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="212"/>
         <source>GFX &gt;</source>
-        <translation>GFX &gt;</translation>
+        <translation>GRAFICA &gt;</translation>
     </message>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="220"/>
@@ -256,13 +256,13 @@ Pause      : P</translation>
         <location filename="../menu/settingsmenu.cpp" line="365"/>
         <location filename="../menu/vsyncmenu.cpp" line="103"/>
         <source>Off</source>
-        <translation>Spento</translation>
+        <translation>Disattivato</translation>
     </message>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="378"/>
         <location filename="../menu/vsyncmenu.cpp" line="107"/>
         <source>On</source>
-        <translation>Acceso</translation>
+        <translation>Attivato</translation>
     </message>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="412"/>
@@ -301,7 +301,7 @@ Pause      : P</translation>
     </message>
     <message>
         <source>Lap Count &gt;</source>
-        <translation type="vanished">Numero di giri &gt;</translation>
+        <translation type="obsolete">Numero di giri &gt;</translation>
     </message>
     <message>
         <location filename="../menu/settingsmenu.cpp" line="216"/>
@@ -465,7 +465,7 @@ Pause      : P</translation>
     </message>
     <message>
         <source> m</source>
-        <translation type="vanished"> m</translation>
+        <translation type="obsolete"> m</translation>
     </message>
     <message>
         <location filename="../menu/trackselectionmenu.cpp" line="288"/>
@@ -479,44 +479,44 @@ Pause      : P</translation>
     </message>
     <message>
         <source>PROGRAMMING BY</source>
-        <translation type="vanished">PROGRAMMATO DA</translation>
+        <translation type="obsolete">PROGRAMMATO DA</translation>
     </message>
     <message>
         <source>GRAPHICS BY</source>
-        <translation type="vanished">GRAFICA</translation>
+        <translation type="obsolete">GRAFICA</translation>
     </message>
     <message>
         <source>RACE TRACKS BY</source>
-        <translation type="vanished">TRACCIATI</translation>
+        <translation type="obsolete">TRACCIATI</translation>
     </message>
     <message>
         <source>CONTRIBUTORS</source>
-        <translation type="vanished">CON IL CONTRIBUTO DI</translation>
+        <translation type="obsolete">CON IL CONTRIBUTO DI</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="40"/>
         <source>PROGRAMMING</source>
-        <translation type="unfinished"></translation>
+        <translation>PROGRAMMAZIONE</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="44"/>
         <source>GRAPHICS</source>
-        <translation type="unfinished"></translation>
+        <translation>GRAFICA</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="49"/>
         <source>LEVEL DESIGN</source>
-        <translation type="unfinished"></translation>
+        <translation>PROGETTAZIONE LIVELLI</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="54"/>
         <source>TRANSLATIONS</source>
-        <translation type="unfinished"></translation>
+        <translation>TRADUZIONI</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="62"/>
         <source>PATCHES</source>
-        <translation type="unfinished"></translation>
+        <translation>PATCH</translation>
     </message>
     <message>
         <location filename="../menu/credits.cpp" line="73"/>
@@ -530,7 +530,7 @@ Pause      : P</translation>
     </message>
     <message>
         <source>Native resolution</source>
-        <translation type="vanished">Risoluzione nativa</translation>
+        <translation type="obsolete">Risoluzione nativa</translation>
     </message>
     <message>
         <location filename="../menu/confirmationmenu.cpp" line="31"/>
@@ -550,7 +550,7 @@ Pause      : P</translation>
     <message>
         <location filename="../menu/lapcountmenu.cpp" line="86"/>
         <source>Choose lap count</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegli conteggio dei giri</translation>
     </message>
 </context>
 </TS>

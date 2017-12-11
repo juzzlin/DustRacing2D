@@ -40,7 +40,7 @@
         <location filename="../mainwindow.cpp" line="136"/>
         <location filename="../mainwindow.cpp" line="720"/>
         <source>New file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo file</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="182"/>
@@ -109,7 +109,7 @@
     </message>
     <message>
         <source>&amp;Clear all</source>
-        <translation type="vanished">&amp;Cancella tutto</translation>
+        <translation type="obsolete">&amp;Cancella tutto</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="389"/>
@@ -237,11 +237,11 @@
     <message>
         <location filename="../mainwindow.cpp" line="751"/>
         <source>Track properties updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proprietà del tracciato aggiornate.</translation>
     </message>
     <message>
         <source>Index set to &apos;%1&apos;.</source>
-        <translation type="vanished">Indice impostato a &apos;%1&apos;.</translation>
+        <translation type="obsolete">Indice impostato a &apos;%1&apos;.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="794"/>
@@ -327,7 +327,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <message>
         <location filename="../newtrackdialog.cpp" line="37"/>
         <source>User track:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracciato utente:</translation>
     </message>
     <message>
         <location filename="../newtrackdialog.cpp" line="40"/>
@@ -339,7 +339,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <name>QObject</name>
     <message>
         <source>Tiles cleared.</source>
-        <translation type="vanished">Tessere eliminate.</translation>
+        <translation type="obsolete">Tessere eliminate.</translation>
     </message>
     <message>
         <location filename="../editordata.cpp" line="427"/>
@@ -383,37 +383,37 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <message>
         <location filename="../editorview.cpp" line="162"/>
         <source>Exclude from minimap</source>
-        <translation type="unfinished"></translation>
+        <translation>Escludi dalla minimappa</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="173"/>
         <source>Insert row before..</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una riga sopra..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="183"/>
         <source>Insert row after..</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una riga sotto..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="193"/>
         <source>Delete row..</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina riga..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="205"/>
         <source>Insert column before..</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una colonna prima..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="215"/>
         <source>Insert column after..</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci una colonna dopo..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="225"/>
         <source>Delete column..</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina colonna..</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="257"/>
@@ -423,7 +423,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <message>
         <location filename="../editorview.cpp" line="272"/>
         <source>Force stationary</source>
-        <translation type="unfinished"></translation>
+        <translation>Forza stazionario</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="291"/>
@@ -497,7 +497,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <message>
         <location filename="../trackpropertiesdialog.cpp" line="33"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome:</translation>
     </message>
     <message>
         <location filename="../trackpropertiesdialog.cpp" line="35"/>
@@ -507,7 +507,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
     <message>
         <location filename="../trackpropertiesdialog.cpp" line="37"/>
         <source>User track:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tracciato utente:</translation>
     </message>
     <message>
         <location filename="../trackpropertiesdialog.cpp" line="39"/>
