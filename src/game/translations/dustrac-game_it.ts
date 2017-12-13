@@ -156,7 +156,7 @@ Pause      : P</translation>
     <message>
         <location filename="../race.cpp" line="322"/>
         <source>The winner has finished!</source>
-        <translation>Il vincitore ha finito!</translation>
+        <translation>Il vincitore è arrivato!</translation>
     </message>
     <message>
         <location filename="../race.cpp" line="68"/>
@@ -550,7 +550,7 @@ Pause      : P</translation>
     <message>
         <location filename="../menu/lapcountmenu.cpp" line="86"/>
         <source>Choose lap count</source>
-        <translation>Scegli conteggio dei giri</translation>
+        <translation>Numero di giri</translation>
     </message>
 </context>
 </TS>
