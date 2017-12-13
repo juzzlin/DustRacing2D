@@ -21,6 +21,7 @@
 
 
 #include <QObject>
+#include <QTimer>
 
 #include <functional>
 #include <map>
@@ -117,10 +118,16 @@ private:
     typedef std::map<State, std::function<void()> > StateToFunctionMap;
 
     StateToFunctionMap m_stateToFunctionMap;
-    State              m_state;
-    State              m_oldState;
-    bool               m_raceFinished;
-    InputHandler     & m_inputHandler;
+
+    State m_state;
+
+    State m_oldState;
+
+    bool m_raceFinished;
+
+    InputHandler & m_inputHandler;
+
+    QTimer m_timer;
 };
 
 #endif // STATEMACHINE_HPP

@@ -89,9 +89,6 @@ void StateMachine::endFadeIn()
 {
     switch (m_state)
     {
-    case State::DoIntro:
-        m_state = State::Menu;
-        break;
     case State::GameTransitionIn:
         m_state = State::DoStartlights;
         break;
@@ -130,7 +127,13 @@ void StateMachine::stateInit()
 
 void StateMachine::stateDoIntro()
 {
-    emit fadeInRequested(0, 5000, 5000);
+    m_timer.singleShot(3000, [&] () {
+        if (m_state == State::DoIntro)
+        {
+            m_state = State::Menu;
+        }
+    });
+
     emit renderingEnabled(true);
 }
 
