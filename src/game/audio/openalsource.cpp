@@ -74,7 +74,7 @@ void OpenALSource::stop()
 void OpenALSource::setVolume(float volume)
 {
     STFH::Source::setVolume(volume);
-    alSourcef(m_handle, AL_GAIN, STFH::Source::volume());
+    alSourcef(m_handle, AL_GAIN, volume);
 }
 
 void OpenALSource::setPitch(float pitch)

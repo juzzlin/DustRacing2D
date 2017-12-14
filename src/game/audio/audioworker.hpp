@@ -68,11 +68,11 @@ private:
 
     void checkFile(QString path);
 
-    void loadCommonSound(QString handle, QString path);
+    void loadCommonSound(QString handle, QString path, float volume = 1.0f);
 
-    void loadSingleInstanceCarSound(QString handle, QString path);
+    void loadSingleInstanceCarSound(QString handle, QString path, float volume = 1.0f);
 
-    void loadMultiInstanceCarSound(QString baseName, QString path);
+    void loadMultiInstanceCarSound(QString baseName, QString path, float volume = 1.0f);
 
     STFH::DevicePtr m_openALDevice;
 

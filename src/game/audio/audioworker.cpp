@@ -33,7 +33,7 @@ static const int REFERENCE_DIST = 50;
 AudioWorker::AudioWorker(int numCars, bool enabled)
     : m_openALDevice(new OpenALDevice)
     , m_inited(false)
-    , m_defaultVolume(1.0)
+    , m_defaultVolume(0.5)
     , m_numCars(numCars)
     , m_enabled(enabled)
 {
@@ -90,21 +90,22 @@ void AudioWorker::disconnectAudioSource(AudioSource & source)
 
 void AudioWorker::loadSounds()
 {
-    loadCommonSound("bell", "bell.ogg");
-    loadCommonSound("cheering", "cheering.ogg");
-    loadCommonSound("menuBoom", "menuBoom.ogg");
-    loadCommonSound("menuClick", "menuClick.ogg");
-    loadCommonSound("pit", "pit.ogg");
+    loadCommonSound("bell", "bell.ogg", m_defaultVolume * 0.5f);
+    loadCommonSound("cheering", "cheering.ogg", m_defaultVolume * 0.5f);
+    loadCommonSound("menuBoom", "menuBoom.ogg", m_defaultVolume * 0.5f);
+    loadCommonSound("menuClick", "menuClick.ogg", m_defaultVolume * 1.0f);
+    loadCommonSound("pit", "pit.ogg", m_defaultVolume);
 
-    loadMultiInstanceCarSound("carEngine", "carEngine.ogg");
-    loadMultiInstanceCarSound("carHit", "carHit.ogg");
-    loadMultiInstanceCarSound("skid", "skid.ogg");
+    loadMultiInstanceCarSound("carEngine", "carEngine.ogg", m_defaultVolume * 0.25f);
 
-    loadSingleInstanceCarSound("carHit2", "carHit2.ogg");
-    loadSingleInstanceCarSound("carHit3", "carHit3.ogg");
+    loadMultiInstanceCarSound("carHit", "carHit.ogg", m_defaultVolume * 0.5f);
+    loadMultiInstanceCarSound("skid", "skid.ogg", m_defaultVolume * 0.5f);
+
+    loadSingleInstanceCarSound("carHit2", "carHit2.ogg", m_defaultVolume * 0.5f);
+    loadSingleInstanceCarSound("carHit3", "carHit3.ogg", m_defaultVolume * 0.5f);
 }
 
-void AudioWorker::loadSingleInstanceCarSound(QString handle, QString path)
+void AudioWorker::loadSingleInstanceCarSound(QString handle, QString path, float volume)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -114,10 +115,11 @@ void AudioWorker::loadSingleInstanceCarSound(QString handle, QString path)
         STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
     source->setMaxDist(MAX_DIST);
     source->setReferenceDist(REFERENCE_DIST);
+    source->setVolume(volume);
     m_soundMap[handle] = source;
 }
 
-void AudioWorker::loadCommonSound(QString handle, QString path)
+void AudioWorker::loadCommonSound(QString handle, QString path, float volume)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -126,9 +128,10 @@ void AudioWorker::loadCommonSound(QString handle, QString path)
     m_soundMap[handle] =
         STFH::SourcePtr(new OpenALSource(
             STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
+    m_soundMap[handle]->setVolume(volume);
 }
 
-void AudioWorker::loadMultiInstanceCarSound(QString baseName, QString path)
+void AudioWorker::loadMultiInstanceCarSound(QString baseName, QString path, float volume)
 {
     const QString soundPath =
         QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
@@ -144,6 +147,7 @@ void AudioWorker::loadMultiInstanceCarSound(QString baseName, QString path)
         m_soundMap[ss.str().c_str()] = source;
         source->setMaxDist(MAX_DIST);
         source->setReferenceDist(REFERENCE_DIST);
+        source->setVolume(volume);
     }
 }
 
