@@ -230,7 +230,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Track properties updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Streckeneigenschaften aktualisiert</translation>
     </message>
 </context>
 <context>
@@ -327,27 +327,27 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Exclude from minimap</source>
-        <translation type="unfinished"></translation>
+        <translation>Aus der Minikarte ausschließen</translation>
     </message>
     <message>
         <source>Insert row before..</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile vorher einfügen</translation>
     </message>
     <message>
         <source>Insert row after..</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeile danach einfügen</translation>
     </message>
     <message>
         <source>Insert column before..</source>
-        <translation type="unfinished"></translation>
+        <translation>Spalte vorher einfügen</translation>
     </message>
     <message>
         <source>Insert column after..</source>
-        <translation type="unfinished"></translation>
+        <translation>Spalte nach einfügen</translation>
     </message>
     <message>
         <source>Force stationary</source>
-        <translation type="unfinished"></translation>
+        <translation>Machen Sie stationär</translation>
     </message>
 </context>
 <context>
@@ -412,11 +412,11 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>User track:</source>
-        <translation type="unfinished">Benutzerstrecke:</translation>
+        <translation>Benutzerstrecke:</translation>
     </message>
 </context>
 </TS>

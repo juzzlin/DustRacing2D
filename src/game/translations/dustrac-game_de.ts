@@ -423,27 +423,27 @@ Pause: P</translation>
     </message>
     <message>
         <source>PROGRAMMING</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmierung</translation>
     </message>
     <message>
         <source>GRAPHICS</source>
-        <translation type="unfinished"></translation>
+        <translation>Grafik</translation>
     </message>
     <message>
         <source>LEVEL DESIGN</source>
-        <translation type="unfinished"></translation>
+        <translation>Level-Design</translation>
     </message>
     <message>
         <source>TRANSLATIONS</source>
-        <translation type="unfinished"></translation>
+        <translation>Übersetzungen</translation>
     </message>
     <message>
         <source>PATCHES</source>
-        <translation type="unfinished"></translation>
+        <translation>Patches</translation>
     </message>
     <message>
         <source>Choose lap count</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie die Rundenzahl</translation>
     </message>
 </context>
 </TS>
