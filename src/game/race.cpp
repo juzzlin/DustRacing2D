@@ -381,6 +381,14 @@ bool isInsideCheckPoint(Car & car, TargetNodeBasePtr tnode, int tolerance)
 
 void Race::updateRouteProgress(Car & car)
 {
+    auto && route = m_track->trackData().route();
+    unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
+    unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
+    auto tnode = route.get(currentTargetNodeIndex);
+    // Give a bit more tolerance for other than the finishing check point.
+    const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
+
+    // Car still racing
     if (m_timing.isActive(car.index()))
     {
         if (!m_timing.raceCompleted(car.index()))
@@ -397,12 +405,6 @@ void Race::updateRouteProgress(Car & car)
                 checkIfCarIsOffTrack(car);
             }
 
-            // Give a bit more tolerance for other than the finishing check point.
-            auto && route = m_track->trackData().route();
-            unsigned int currentTargetNodeIndex = car.currentTargetNodeIndex();
-            unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
-            auto tnode = route.get(currentTargetNodeIndex);
-            const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
             if (isInsideCheckPoint(car, tnode, tolerance))
             {
                 updatePositions();
@@ -435,6 +437,27 @@ void Race::updateRouteProgress(Car & car)
 
             m_timing.setIsActive(car.index(), false);
         }
+    }
+    // Car has finished: cooldown laps
+    else
+    {
+        if (isInsideCheckPoint(car, tnode, tolerance))
+        {
+            // Switch to next check point
+            car.setPrevTargetNodeIndex(currentTargetNodeIndex);
+            if (++currentTargetNodeIndex >= route.numNodes())
+            {
+                currentTargetNodeIndex = 0;
+            }
+
+            nextTargetNodeIndex = currentTargetNodeIndex;
+            if (++nextTargetNodeIndex >= route.numNodes()){
+                nextTargetNodeIndex = 0;
+            }
+        }
+
+        car.setCurrentTargetNodeIndex(currentTargetNodeIndex);
+        car.setNextTargetNodeIndex(nextTargetNodeIndex);
     }
 }
 

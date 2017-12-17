@@ -126,47 +126,52 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     bool brake      = false;
 
     const float absSpeed = m_car.absSpeed();
+
+    // The following speed limits are experimentally defined.
+    float scale = 0.9f;
+    if (currentTile.computerHint() == TrackTile::CH_BRAKE)
+    {
+        if (absSpeed > 14.0f * scale)
+        {
+            brake = true;
+        }
+    }
+
+    if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
+    {
+        if (absSpeed > 9.5f * scale)
+        {
+            brake = true;
+        }
+    }
+
+    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
+    {
+        if (absSpeed > 7.0f * scale)
+        {
+            accelerate = false;
+        }
+    }
+
+    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
+            currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
+    {
+        if (absSpeed > 8.3f * scale)
+        {
+            accelerate = false;
+        }
+    }
+
     if (isRaceCompleted)
     {
-        accelerate = false;
+        // Cool down lap speed
+        if (absSpeed > 2.5f)
+        {
+            accelerate = false;
+        }
     }
     else
     {
-        // The following speed limits are experimentally defined.
-        float scale = 0.9f;
-        if (currentTile.computerHint() == TrackTile::CH_BRAKE)
-        {
-            if (absSpeed > 14.0f * scale)
-            {
-                brake = true;
-            }
-        }
-
-        if (currentTile.computerHint() == TrackTile::CH_BRAKE_HARD)
-        {
-            if (absSpeed > 9.5f * scale)
-            {
-                brake = true;
-            }
-        }
-
-        if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
-        {
-            if (absSpeed > 7.0f * scale)
-            {
-                accelerate = false;
-            }
-        }
-
-        if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
-            currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
-        {
-            if (absSpeed > 8.3f * scale)
-            {
-                accelerate = false;
-            }
-        }
-
         if (absSpeed < 3.6f * scale)
         {
             accelerate = true;
