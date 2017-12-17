@@ -226,6 +226,7 @@ void Game::createRenderer()
 
     m_renderer = new Renderer(hRes, vRes, fullScreen, m_world->renderer().glScene());
     m_renderer->setFormat(format);
+    m_renderer->setCursor(Qt::BlankCursor);
 
     if (fullScreen)
     {
