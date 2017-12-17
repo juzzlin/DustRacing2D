@@ -173,6 +173,8 @@ ResolutionMenu::ResolutionMenu(
 
 void ResolutionMenu::enter()
 {
+    setCurrentIndex(itemCount() - 1);
+
     // Set the current active resolution selected
     for (unsigned int i = 0; i < itemCount(); i++)
     {
