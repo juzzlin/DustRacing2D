@@ -31,6 +31,10 @@
 #include <MCShapeView>
 #include <MCSurface>
 
+namespace {
+static const float DEFAULT_DIFFUSE_COEFF = 1.5f;
+}
+
 TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
 : m_objectFactory(objectFactory)
 {
@@ -53,6 +57,7 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
     }
     else if (role == "bushArea")
     {
@@ -77,6 +82,7 @@ TrackObject * TrackObjectFactory::build(
         data.setRestitution(0.9);
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
     }
     else if (role == "dustRacing2DBanner")
     {
@@ -91,6 +97,7 @@ TrackObject * TrackObjectFactory::build(
 
         object = m_objectFactory.build(data);
         object->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+        object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
     }
     else if (role == "grandstand")
     {
@@ -103,6 +110,7 @@ TrackObject * TrackObjectFactory::build(
         data.setSurfaceId(role.toStdString());
 
         object = m_objectFactory.build(data);
+        object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
     }
     else if (role == "plant")
     {

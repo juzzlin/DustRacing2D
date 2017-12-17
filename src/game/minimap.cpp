@@ -30,7 +30,7 @@
 Minimap::Minimap()
     : m_markerSurface(&GraphicsFactory::generateMinimapMarker())
 {
-    m_markerSurface->setShaderProgram(Renderer::instance().program("default"));
+    m_markerSurface->setShaderProgram(Renderer::instance().program("menu"));
     m_markerSurface->material()->setAlphaBlend(true);
 }
 
@@ -86,7 +86,7 @@ void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int
             auto surface = tile->previewSurface();
             if (surface && !tile->excludeFromMinimap())
             {
-                surface->setShaderProgram(Renderer::instance().program("default"));
+                surface->setShaderProgram(Renderer::instance().program("menu"));
                 surface->setColor(MCGLColor(1.0, 1.0, 1.0));
                 surface->setSize(m_tileH, m_tileW);
 
@@ -138,22 +138,22 @@ void Minimap::renderMarkers(const Minimap::CarVector & cars, const Race & race)
     {
         if (car.get() == m_carToFollow)
         {
-            const auto yellow = MCGLColor(0.9f, 0.9f, 0.1f, 0.8f);
+            const auto yellow = MCGLColor(0.9f, 0.9f, 0.1f, 0.9f);
             m_markerSurface->setColor(yellow);
         }
         else if (car.get() == &leader)
         {
-            const auto green = MCGLColor(0.1f, 0.9f, 0.1f, 0.8f);
+            const auto green = MCGLColor(0.1f, 0.9f, 0.1f, 0.9f);
             m_markerSurface->setColor(green);
         }
         else if (car.get() == &loser)
         {
-            const auto red = MCGLColor(0.9f, 0.1f, 0.1f, 0.8f);
+            const auto red = MCGLColor(0.9f, 0.1f, 0.1f, 0.9f);
             m_markerSurface->setColor(red);
         }
         else
         {
-            const auto gray = MCGLColor(0.2f, 0.2f, 0.2f, 0.8f);
+            const auto gray = MCGLColor(0.2f, 0.2f, 0.2f, 0.9f);
             m_markerSurface->setColor(gray);
         }
 

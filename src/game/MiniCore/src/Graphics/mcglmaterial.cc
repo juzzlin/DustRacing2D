@@ -22,6 +22,7 @@
 
 MCGLMaterial::MCGLMaterial()
     : m_specularCoeff(1.0)
+    , m_diffuseCoeff(1.0)
     , m_useAlphaBlend(false)
     , m_src(GL_SRC_ALPHA)
     , m_dst(GL_ONE_MINUS_SRC_ALPHA)
@@ -52,6 +53,16 @@ void MCGLMaterial::setSpecularCoeff(GLfloat coeff)
 GLfloat MCGLMaterial::specularCoeff() const
 {
     return m_specularCoeff;
+}
+
+void MCGLMaterial::setDiffuseCoeff(GLfloat coeff)
+{
+    m_diffuseCoeff = coeff;
+}
+
+GLfloat MCGLMaterial::diffuseCoeff() const
+{
+    return m_diffuseCoeff;
 }
 
 void MCGLMaterial::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)

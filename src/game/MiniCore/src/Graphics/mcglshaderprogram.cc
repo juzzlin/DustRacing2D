@@ -82,25 +82,25 @@ MCGLShaderProgram::MCGLShaderProgram(
 void MCGLShaderProgram::initUniformNameMap()
 {
     // Map uniform enums to uniform names used in the shaders
-    m_uniforms[AmbientLightColor]  = "ac";
-    m_uniforms[Camera]             = "camera";
-    m_uniforms[Color]              = "color";
-    m_uniforms[DiffuseLightDir]    = "dd";
-    m_uniforms[DiffuseLightColor]  = "dc";
-    m_uniforms[FadeValue]          = "fade";
-    m_uniforms[SpecularLightDir]   = "sd";
+    m_uniforms[AmbientLightColor] = "ac";
+    m_uniforms[Camera] = "camera";
+    m_uniforms[Color] = "color";
+    m_uniforms[DiffuseLightDir] = "dd";
+    m_uniforms[DiffuseLightColor] = "dc";
+    m_uniforms[FadeValue] = "fade";
+    m_uniforms[MaterialDiffuseCoeff] = "dCoeff";
+    m_uniforms[MaterialSpecularCoeff] = "sCoeff";
+    m_uniforms[MaterialTex0] = "tex0";
+    m_uniforms[MaterialTex1] = "tex1";
+    m_uniforms[MaterialTex2] = "tex2";
+    m_uniforms[Model] = "model";
+    m_uniforms[Scale] = "scale";
+    m_uniforms[SpecularLightDir] = "sd";
     m_uniforms[SpecularLightColor] = "sc";
-    m_uniforms[SpecularCoeff]      = "sCoeff";
-    m_uniforms[Tex0]               = "tex0";
-    m_uniforms[Tex1]               = "tex1";
-    m_uniforms[Tex2]               = "tex2";
-    m_uniforms[UserData1]          = "userData1";
-    m_uniforms[UserData2]          = "userData2";
-    m_uniforms[ViewProjection]     = "vp";
-    m_uniforms[View]               = "v";
-    m_uniforms[Model]              = "model";
-    m_uniforms[Scale]              = "scale";
-    m_uniforms[Camera]             = "camera";
+    m_uniforms[UserData1] = "userData1";
+    m_uniforms[UserData2] = "userData2";
+    m_uniforms[ViewProjection] = "vp";
+    m_uniforms[View] = "v";
 }
 
 MCGLShaderProgram::~MCGLShaderProgram()
@@ -157,9 +157,9 @@ void MCGLShaderProgram::link()
     initUniformLocationCache();
     m_scene.addShaderProgram(*this);
 
-    bindTextureUnit(0, Tex0);
-    bindTextureUnit(1, Tex1);
-    bindTextureUnit(2, Tex2);
+    bindTextureUnit(0, MaterialTex0);
+    bindTextureUnit(1, MaterialTex1);
+    bindTextureUnit(2, MaterialTex2);
 }
 
 bool MCGLShaderProgram::isLinked()
@@ -471,5 +471,6 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
 
     glActiveTexture(GL_TEXTURE0);
 
-    glUniform1f(getUniformLocation(SpecularCoeff), material->specularCoeff());
+    glUniform1f(getUniformLocation(MaterialSpecularCoeff), material->specularCoeff());
+    glUniform1f(getUniformLocation(MaterialDiffuseCoeff), material->diffuseCoeff());
 }

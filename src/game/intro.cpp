@@ -26,7 +26,7 @@ Intro::Intro()
 : m_back(MCAssetManager::surfaceManager().surface("intro"))
 , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
-    m_back.setShaderProgram(Renderer::instance().program("default"));
+    m_back.setShaderProgram(Renderer::instance().program("menu"));
     m_back.setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 }
 

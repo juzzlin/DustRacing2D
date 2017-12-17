@@ -43,6 +43,12 @@ public:
     //! \return coefficient for specular lighting.
     GLfloat specularCoeff() const;
 
+    //! Set coefficient for diffuse lighting.
+    void setDiffuseCoeff(GLfloat coeff);
+
+    //! \return coefficient for diffuse lighting.
+    GLfloat diffuseCoeff() const;
+
     /*! Enable / disable alpha blend.
      *  \param useAlphaBlend Alpha blending is enabled if true.
      *  \param src Source alpha function used in the alpha blending. Has no effect
@@ -62,6 +68,8 @@ private:
     GLuint m_textures[MAX_TEXTURES];
 
     GLfloat m_specularCoeff;
+
+    GLfloat m_diffuseCoeff;
 
     bool m_useAlphaBlend;
 

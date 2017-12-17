@@ -32,6 +32,7 @@ static const char * MCDefaultVsh =
 "uniform mat4  model;\n"
 "uniform vec4  dd = vec4(1, 1, 1, 1);\n"
 "uniform vec4  dc = vec4(1, 1, 1, 1);\n"
+"uniform float dCoeff = 1;\n"
 "uniform vec4  ac = vec4(1, 1, 1, 1);\n"
 "out     vec2  texCoord0;\n"
 "out     vec4  vColor;\n"
@@ -44,7 +45,7 @@ static const char * MCDefaultVsh =
 "    float di = dot(dd.xyz, (normalRot * vec4(-inNormal, 1)).xyz) * dc.a;\n"
 "    vColor = inColor * color * (\n"
 "        vec4(ac.rgb * ac.a, 1.0) +\n"
-"        vec4(dc.rgb * di, 1.0));\n"
+"        vec4(dc.rgb * di * dCoeff, 1.0));\n"
 ""
 "    texCoord0 = inTexCoord;\n"
 "}\n";
@@ -66,7 +67,8 @@ static const char * MCDefaultVshSpecular =
 "uniform   vec4  sd = vec4(1, 1, 1, 1);\n"
 "uniform   vec4  sc = vec4(1, 1, 1, 1);\n"
 "uniform   vec4  ac = vec4(1, 1, 1, 1);\n"
-"uniform   float sCoeff;\n"
+"uniform   float sCoeff = 1;\n"
+"uniform   float dCoeff = 1;\n"
 "varying   vec2  texCoord0;\n"
 "varying   vec4  vColor;\n"
 ""
@@ -90,7 +92,7 @@ static const char * MCDefaultVshSpecular =
 ""
 "    vColor = (inColor * color * (\n"
 "        vec4(ac.rgb * ac.a, 1.0) +\n"
-"        vec4(dc.rgb * di, 1.0)) + vec4(sc.xyz * si, 1.0));\n"
+"        vec4(dc.rgb * di * dCoeff, 1.0)) + vec4(sc.xyz * si, 1.0));\n"
 ""
 "    texCoord0 = inTexCoord;\n"
 "}\n";
@@ -128,7 +130,7 @@ static const char * MCDefaultShadowVsh =
 ""
 "void main()\n"
 "{\n"
-"    gl_Position = vp * model * (vec4(inVertex, 1) * scale);\n"
+"    gl_Position = vp * model * (vec4(inVertex.xy, 0, 1) * scale);\n"
 "    texCoord0   = inTexCoord;\n"
 "}\n";
 
@@ -152,7 +154,7 @@ static const char * MCDefaultShadowFsh =
 "    }\n"
 "}\n";
 
-static const char * MCDefaulTextVsh =
+static const char * MCDefaultTextVsh =
 "#version 130\n"
 ""
 "in      vec3  inVertex;\n"

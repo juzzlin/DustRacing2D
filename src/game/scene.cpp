@@ -139,7 +139,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
         m_renderer.program("textShadow"));
 
     const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.75);
-    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.8, 0.75);
+    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.5, 0.75);
     const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 0.8, 0.9);
 
     MCGLScene & glScene = MCWorld::instance().renderer().glScene();
@@ -191,6 +191,7 @@ void Scene::createCars()
             }
 
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
+            car->shape()->view()->object()->material()->setDiffuseCoeff(3.4f);
 
             setupAudio(*car, i);
 
