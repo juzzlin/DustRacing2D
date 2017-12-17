@@ -84,5 +84,5 @@ void ConfirmationMenu::render()
     text.setShadowOffset(shadowX, shadowY);
 
     auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());
-    text.render(width() / 2 - text.width(font) / 2 + 20, height() / 2 + 60, nullptr, font);
+    text.render(x() + width() / 2 - text.width(font) / 2 + 20, y() + height() / 2 + 60, nullptr, font);
 }
