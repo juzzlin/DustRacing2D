@@ -302,9 +302,9 @@ void Car::updateTireWear(int step)
     m_dx = MCTrigonom::cos(angle());
     m_dy = MCTrigonom::sin(angle());
 
-    // Cache speed in km/h. Use value of 2.5 as big as the "real" value.
+    // Cache speed in km/h.
     m_absSpeed   = physicsComponent().speed();
-    m_speedInKmh = m_absSpeed * 3.6 * 2.5;
+    m_speedInKmh = m_absSpeed * 3.6 * 2.75;
 
     if (m_isHuman)
     {
