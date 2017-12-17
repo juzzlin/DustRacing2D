@@ -57,7 +57,7 @@ void CarSoundEffectManager::update()
 
 void CarSoundEffectManager::processEngineSound()
 {
-    const int speed = static_cast<int>(m_car.absSpeed() * 9.0);
+    const int speed = static_cast<int>(m_car.absSpeed() * 10.0);
     if (speed != m_prevSpeed)
     {
         const float virtualRev = speed * 50;
