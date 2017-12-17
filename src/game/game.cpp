@@ -67,6 +67,7 @@ Game::Game(int & argc, char ** argv)
 , m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
 , m_paused(false)
 , m_renderElapsed(0)
+, m_fps(m_settings.loadValue(Settings::fpsKey()) == 30 ? Fps::Fps30 : Fps::Fps60)
 , m_mode(Mode::OnePlayerRace)
 , m_splitType(SplitType::Vertical)
 , m_audioWorker(new AudioWorker(
@@ -392,6 +393,16 @@ void Game::stop()
 {
     m_paused = true;
     m_updateTimer.stop();
+}
+
+Game::Fps Game::fps() const
+{
+    return m_fps;
+}
+
+void Game::setFps(Game::Fps fps)
+{
+    m_fps = fps;
 }
 
 void Game::togglePause()

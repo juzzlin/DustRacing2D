@@ -281,6 +281,10 @@ void Scene::updateFrame(InputHandler & handler, int step)
             }
         }
     }
+    else if (m_stateMachine.state() == StateMachine::State::Menu)
+    {
+        m_menuManager->stepTime(step);
+    }
 
     const float fadeValue = m_renderer.fadeValue();
     if (m_fadeAnimation->isFading())
@@ -650,7 +654,6 @@ void Scene::renderMenu()
 
         glScene.setSplitType(MCGLScene::ShowFullScreen);
 
-        m_menuManager->stepTime(17); // Assume 60 fps here, affects only text item animations
         m_menuManager->render();
 
         break;

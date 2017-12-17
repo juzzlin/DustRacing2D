@@ -85,6 +85,8 @@ public:
 
     virtual void onDown();
 
+    virtual void setCurrent();
+
     virtual void setSelected(bool flag);
 
     virtual void setFocused(bool focused);

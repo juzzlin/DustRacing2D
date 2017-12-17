@@ -160,6 +160,8 @@ private:
 
     int m_fullVRes;
 
+    int m_frameCounter;
+
     bool m_fullScreen;
 
     bool m_updatePending;

@@ -132,6 +132,8 @@ private:
 
 static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
 
+static const char * FPS_MENU_ID = "fpsMenu";
+
 static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 
 static const char * GAME_MODE_MENU_ID = "gameModeMenu";
@@ -153,6 +155,7 @@ static const char * WINDOWED_RESOLUTION_MENU_ID = "windowedResolutionMenu";
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
 : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
 , m_confirmationMenu(new ConfirmationMenu(CONFIRMATION_MENU_ID, width, height))
+, m_fpsMenu(new SurfaceMenu("settingsBack", FPS_MENU_ID, width, height, Menu::Style::VerticalList))
 , m_fullScreenResolutionMenu(new ResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true))
 , m_windowedResolutionMenu(new ResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false))
 , m_gameModeMenu(new SurfaceMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList))
@@ -164,6 +167,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 , m_keyConfigMenu(new KeyConfigMenu(KEY_CONFIG_MENU_ID, width, height))
 {
     populate(width, height);
+
+    populateFpsMenu(width, height);
 
     populateGameModeMenu(width, height);
 
@@ -178,6 +183,7 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     using MTFH::MenuManager;
 
     MenuManager::instance().addMenu(m_confirmationMenu);
+    MenuManager::instance().addMenu(m_fpsMenu);
     MenuManager::instance().addMenu(m_fullScreenResolutionMenu);
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_gfxMenu);
@@ -228,6 +234,51 @@ void SettingsMenu::populate(int width, int height)
     addItem(MenuItemPtr(sfx));
     addItem(MenuItemPtr(gfx));
     addItem(MenuItemPtr(gameMode));
+}
+
+void SettingsMenu::populateFpsMenu(int width, int height)
+{
+    const int numItems = 2;
+    const int itemHeight = height / (numItems + 4);
+    const int textSize = ITEM_TEXT_SIZE;
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+    using MTFH::MenuItemViewPtr;
+
+    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toUpper().toStdWString());
+    fps30->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps30)));
+    fps30->setAction(
+        []()
+        {
+            MCLogger().info() << "30 fps selected.";
+            Game::instance().setFps(Game::Fps::Fps30);
+            Settings::instance().saveValue(Settings::fpsKey(), 30);
+            MenuManager::instance().popMenu();
+        });
+
+    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toUpper().toStdWString());
+    fps60->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps60)));
+    fps60->setAction(
+        []()
+        {
+            MCLogger().info() << "60 fps selected.";
+            Game::instance().setFps(Game::Fps::Fps60);
+            Settings::instance().saveValue(Settings::fpsKey(), 60);
+            MenuManager::instance().popMenu();
+        });
+
+    m_fpsMenu->addItem(MTFH::MenuItemPtr(fps30));
+    m_fpsMenu->addItem(MTFH::MenuItemPtr(fps60));
+
+    if (Settings::instance().loadValue(Settings::fpsKey()) == 30)
+    {
+        fps30->setCurrent();
+    }
+    else
+    {
+        fps60->setCurrent();
+    }
 }
 
 void SettingsMenu::populateGameModeMenu(int width, int height)
@@ -339,6 +390,10 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     selectWindowedResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectWindowedResolution)));
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
+    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toUpper().toStdWString());
+    selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
+    selectFps->setMenuOpenAction(FPS_MENU_ID);
+
     MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toUpper().toStdWString());
     splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
     splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
@@ -349,6 +404,7 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     m_gfxMenu->addItem(MenuItemPtr(vsync));
 #endif
     m_gfxMenu->addItem(MenuItemPtr(splitType));
+    m_gfxMenu->addItem(MenuItemPtr(selectFps));
     m_gfxMenu->addItem(MenuItemPtr(selectWindowedResolution));
     m_gfxMenu->addItem(MenuItemPtr(selectFullScreenResolution));
 }
@@ -390,11 +446,11 @@ void SettingsMenu::populateSfxMenu(int width, int height)
 
     if (Game::instance().audioWorker().enabled())
     {
-        m_sfxMenu->setCurrentIndex(onItem->index());
+        onItem->setCurrent();
     }
     else
     {
-        m_sfxMenu->setCurrentIndex(offItem->index());
+        offItem->setCurrent();
     }
 }
 

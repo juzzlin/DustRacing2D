@@ -190,7 +190,7 @@ void ResolutionMenu::enter()
             Settings::instance().loadResolution(hRes, vRes, fullScreen);
             if (resolution->hRes() == hRes && resolution->vRes() == vRes)
             {
-                setCurrentIndex(resolution->index());
+                resolution->setCurrent();
                 break;
             }
         }

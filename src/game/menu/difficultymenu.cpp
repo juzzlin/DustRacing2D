@@ -78,15 +78,15 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     switch (difficulty)
     {
     case DifficultyProfile::Difficulty::Easy:
-        setCurrentIndex(easyItem->index());
+        easyItem->setCurrent();
         break;
 
     case DifficultyProfile::Difficulty::Medium:
-        setCurrentIndex(mediumItem->index());
+        mediumItem->setCurrent();
         break;
 
     case DifficultyProfile::Difficulty::Hard:
-        setCurrentIndex(hardItem->index());
+        hardItem->setCurrent();
         break;
     }
 }

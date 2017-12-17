@@ -60,6 +60,12 @@ public:
         Vertical
     };
 
+    enum class Fps
+    {
+        Fps30,
+        Fps60
+    };
+
     //! Constructor
     Game(int & argc, char ** argv);
 
@@ -85,6 +91,10 @@ public:
 
     //! Get the split type.
     SplitType splitType() const;
+
+    void setFps(Fps fps);
+
+    Fps fps() const;
 
     //! Set the lap count.
     void setLapCount(int lapCount);
@@ -169,6 +179,8 @@ private:
     QTime m_elapsed;
 
     int m_renderElapsed;
+
+    Fps m_fps;
 
     Mode m_mode;
 

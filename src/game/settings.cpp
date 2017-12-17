@@ -42,6 +42,11 @@ QString Settings::difficultyKey()
     return "difficulty";
 }
 
+QString Settings::fpsKey()
+{
+    return "fps";
+}
+
 QString Settings::lapCountKey()
 {
     return "lapCount";

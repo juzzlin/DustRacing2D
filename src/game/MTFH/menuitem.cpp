@@ -143,6 +143,14 @@ void MenuItem::onDown()
 {
 }
 
+void MenuItem::setCurrent()
+{
+    if (m_menu)
+    {
+        m_menu->setCurrentIndex(index());
+    }
+}
+
 void MenuItem::setSelected(bool flag)
 {
     if (flag)

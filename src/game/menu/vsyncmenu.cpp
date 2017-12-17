@@ -121,7 +121,7 @@ void VSyncMenu::enter()
         {
             if (vsyncItem->vsync() == vsync)
             {
-                setCurrentIndex(vsyncItem->index());
+                vsyncItem->setCurrent();
                 break;
             }
         }

@@ -17,6 +17,7 @@
 
 #include "eventhandler.hpp"
 #include "fontfactory.hpp"
+#include "game.hpp"
 #include "scene.hpp"
 
 #ifdef __MC_GL30__
@@ -61,6 +62,7 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
 , m_vRes(vRes)
 , m_fullHRes(QGuiApplication::primaryScreen()->geometry().width())
 , m_fullVRes(QGuiApplication::primaryScreen()->geometry().height())
+, m_frameCounter(0)
 , m_fullScreen(fullScreen)
 , m_updatePending(false)
 , m_glScene(glScene)
@@ -331,9 +333,14 @@ void Renderer::renderNow()
         initialize();
     }
 
-    render();
+    m_frameCounter++;
+    if (Game::instance().fps() == Game::Fps::Fps60 ||
+        (Game::instance().fps() == Game::Fps::Fps30 && m_frameCounter & 0x01))
+    {
+        render();
 
-    m_context->swapBuffers(this);
+        m_context->swapBuffers(this);
+    }
 }
 
 void Renderer::resizeEvent(QResizeEvent * event)

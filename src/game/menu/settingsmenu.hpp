@@ -33,7 +33,7 @@ private:
 
     void populate(int width, int height);
 
-    void populateDifficultyMenu(int width, int height);
+    void populateFpsMenu(int width, int height);
 
     void populateGameModeMenu(int width, int height);
 
@@ -46,6 +46,8 @@ private:
     void populateResetMenu(int width, int height);
 
     ConfirmationMenuPtr m_confirmationMenu;
+
+    MTFH::MenuPtr m_fpsMenu;
 
     MTFH::MenuPtr m_fullScreenResolutionMenu;
 
