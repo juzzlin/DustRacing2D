@@ -27,7 +27,7 @@ BridgeTrigger::BridgeTrigger(Bridge & bridge)
 : MCObject(BRIDGE_TRIGGER_ID)
 , m_bridge(bridge)
 {
-    MCRectShape * shape = new MCRectShape(nullptr, 8, 224);
+    MCRectShape * shape = new MCRectShape(nullptr, 16, 224);
     setShape(MCShapePtr(shape));
 
     setCollisionLayer(-1);
