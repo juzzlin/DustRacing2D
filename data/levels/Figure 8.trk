@@ -40,7 +40,7 @@
  <t o="0" i="2" t="straight" j="8"/>
  <t o="0" i="2" t="straight" j="9"/>
  <t o="0" i="2" t="straight" j="10"/>
- <t o="0" i="2" t="straight" j="11"/>
+ <t o="0" c="1" i="2" t="straight" j="11"/>
  <t o="-90" i="2" t="corner90" j="12"/>
  <t o="0" i="2" t="grass" j="13"/>
  <t o="0" i="2" t="grass" j="14"/>
@@ -51,7 +51,7 @@
  <t o="0" i="3" t="grass" j="4"/>
  <t o="0" i="3" t="grass" j="5"/>
  <t o="0" i="3" t="grass" j="6"/>
- <t o="90" c="2" i="3" t="straight" j="7"/>
+ <t o="90" c="1" i="3" t="straight" j="7"/>
  <t o="0" i="3" t="grass" j="8"/>
  <t o="0" i="3" t="grass" j="9"/>
  <t o="0" i="3" t="grass" j="10"/>
@@ -185,7 +185,7 @@
  <t o="0" i="12" t="straight" j="3"/>
  <t o="0" i="12" t="straight" j="4"/>
  <t o="0" i="12" t="straight" j="5"/>
- <t o="0" i="12" t="straight" j="6"/>
+ <t o="0" c="1" i="12" t="straight" j="6"/>
  <t o="-180" i="12" t="corner90" j="7"/>
  <t o="0" i="12" t="grass" j="8"/>
  <t o="0" i="12" t="grass" j="9"/>
@@ -228,7 +228,7 @@
  <o o="0" r="wallLong" fs="1" c="free" x="2165" y="2039"/>
  <o o="0" r="wallLong" c="free" x="2430" y="2039"/>
  <o o="0" r="wallLong" c="free" x="2696" y="2039"/>
- <o o="0" r="wallLong" c="free" x="2960" y="2042"/>
+ <o o="15" r="wallLong" c="free" x="2955" y="2075"/>
  <o o="0" r="wallLong" fs="1" c="free" x="2158" y="1799"/>
  <o o="0" r="wallLong" c="free" x="2423" y="1799"/>
  <o o="0" r="wallLong" c="free" x="2688" y="1799"/>
@@ -543,8 +543,6 @@
  <o o="0" r="tire" c="free" x="3295" y="2030"/>
  <o o="0" r="tire" c="free" x="3266" y="2050"/>
  <o o="0" r="tire" c="free" x="3220" y="2074"/>
- <o o="90" r="grandstand" c="free" x="433" y="2206"/>
- <o o="90" r="grandstand" c="free" x="433" y="2342"/>
  <o o="0" r="sandAreaBig" c="free" x="2264" y="506"/>
  <o o="180" r="sandAreaBig" c="free" x="978" y="3334"/>
  <o o="0" r="tire" c="free" x="668" y="3340"/>
@@ -576,9 +574,8 @@
  <o o="106" r="plant" c="free" x="1469" y="3392"/>
  <o o="135" r="plant" c="free" x="1561" y="3423"/>
  <o o="268" r="plant" c="free" x="1269" y="3480"/>
- <o o="90" r="wall" c="free" x="494" y="2092"/>
- <o o="90" r="wall" c="free" x="496" y="2014"/>
- <o o="120" r="wall" c="free" x="521" y="1933"/>
+ <o o="-90" r="sandAreaBig" c="free" x="509" y="2243"/>
+ <o o="90" r="sandAreaBig" c="free" x="3333" y="1020"/>
  <n h="256" i="0" x="1924" y="1926" w="256"/>
  <n h="256" i="1" x="1941" y="1111" w="300"/>
  <n h="256" i="2" x="1976" y="778" w="400"/>
