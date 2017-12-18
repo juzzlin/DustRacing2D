@@ -96,10 +96,10 @@ void AudioWorker::loadSounds()
     loadCommonSound("menuClick", "menuClick.ogg", m_defaultVolume * 1.0f);
     loadCommonSound("pit", "pit.ogg", m_defaultVolume);
 
-    loadMultiInstanceCarSound("carEngine", "carEngine.ogg", m_defaultVolume * 0.25f);
+    loadMultiInstanceCarSound("carEngine", "carEngine.ogg", m_defaultVolume * 0.33f);
 
     loadMultiInstanceCarSound("carHit", "carHit.ogg", m_defaultVolume * 0.5f);
-    loadMultiInstanceCarSound("skid", "skid.ogg", m_defaultVolume * 0.5f);
+    loadMultiInstanceCarSound("skid", "skid.ogg", m_defaultVolume * 0.25f);
 
     loadSingleInstanceCarSound("carHit2", "carHit2.ogg", m_defaultVolume * 0.5f);
     loadSingleInstanceCarSound("carHit3", "carHit3.ogg", m_defaultVolume * 0.5f);
