@@ -164,8 +164,8 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
     if (isRaceCompleted)
     {
-        // Cool down lap speed
-        if (absSpeed > 2.5f)
+        // Cool down lap speed (should be greater than tire spin threshold)
+        if (absSpeed > 5.0f)
         {
             accelerate = false;
         }
