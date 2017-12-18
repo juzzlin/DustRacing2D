@@ -30,6 +30,8 @@ public:
 
     void setIsOffTrack(bool flag);
 
+    void setSpinCoeff(float spinCoeff);
+
 private:
 
     bool m_isOffTrack;
@@ -37,6 +39,8 @@ private:
     float m_friction;
 
     float m_offTrackFriction;
+
+    float m_spinCoeff;
 
     Car & m_car;
 };

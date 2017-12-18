@@ -27,6 +27,7 @@ Tire::Tire(Car & car, float friction, float offTrackFriction)
     , m_isOffTrack(false)
     , m_friction(friction)
     , m_offTrackFriction(offTrackFriction)
+    , m_spinCoeff(1.0f)
     , m_car(car)
 {
     setBypassCollisions(true);
@@ -35,6 +36,11 @@ Tire::Tire(Car & car, float friction, float offTrackFriction)
 void Tire::setIsOffTrack(bool flag)
 {
     m_isOffTrack = flag;
+}
+
+void Tire::setSpinCoeff(float spinCoeff)
+{
+    m_spinCoeff = spinCoeff;
 }
 
 void Tire::onStepTime(int)
@@ -48,7 +54,7 @@ void Tire::onStepTime(int)
         v.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
         MCVector2dF impulse =
             MCVector2dF::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) *
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * m_spinCoeff *
                     -MCWorld::instance().gravity().k() * parent().physicsComponent().mass();
         impulse.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor());
         parent().physicsComponent().addForce(-impulse, location());

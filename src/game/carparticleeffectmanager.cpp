@@ -88,16 +88,19 @@ void CarParticleEffectManager::doDamageSmoke()
 
 void CarParticleEffectManager::doOnTrackAnimations()
 {
-    if (m_car.isBraking() && m_car.speedInKmh() > 5 && m_car.speedInKmh() < 100)
+    if ((m_car.isBraking() && m_car.speedInKmh() > 5 && m_car.speedInKmh() < 200) ||
+         m_car.isSkidding())
     {
         if (!m_car.leftSideOffTrack())
         {
             doLeftSkidMark(ParticleFactory::OnTrackSkidMark);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidSmoke, m_car.leftRearTireLocation(), m_car.physicsComponent().velocity() * 0.25f);
         }
 
         if (!m_car.rightSideOffTrack())
         {
             doRightSkidMark(ParticleFactory::OnTrackSkidMark);
+            ParticleFactory::instance().doParticle(ParticleFactory::SkidSmoke, m_car.rightRearTireLocation(), m_car.physicsComponent().velocity() * 0.25f);
         }
     }
 }
@@ -158,8 +161,6 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                     event.contactPoint(), m_car.physicsComponent().velocity() * 0.75f);
-                ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
                 m_sparkleCounter = 0;
             }
         }
@@ -176,8 +177,6 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                     event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
-                ParticleFactory::instance().doParticle(ParticleFactory::Smoke,
-                    event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
                 m_sparkleCounter = 0;
             }
         }

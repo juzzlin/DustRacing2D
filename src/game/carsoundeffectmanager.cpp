@@ -89,18 +89,12 @@ void CarSoundEffectManager::processEngineSound()
 
 void CarSoundEffectManager::processSkidSound()
 {
-    const float bodyNormalAngle = m_car.angle() + 90;
-    const MCVector2dF n(
-        MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
-    const MCVector2dF & v = m_car.physicsComponent().velocity().normalized();
-    const MCVector2dF s = MCVector2dF::projection(v, n);
-
-    if (m_car.absSpeed() > 7.5 && s.lengthFast() > 0.25)
+    if (m_car.isSliding())
     {
         if (!m_skidTimer.isActive())
         {
             emit locationChanged(m_handles.skidSoundHandle, m_car.location().i(), m_car.location().j());
-            emit volumeChanged(m_handles.skidSoundHandle, 0.25);
+            emit volumeChanged(m_handles.skidSoundHandle, 0.25f);
             emit playRequested(m_handles.skidSoundHandle, false);
             m_skidPlaying = true;
             m_skidTimer.start();

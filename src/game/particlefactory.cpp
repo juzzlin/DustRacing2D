@@ -94,6 +94,10 @@ void ParticleFactory::doParticle(
         doDamageSmoke(location, initialVelocity);
         break;
 
+    case SkidSmoke:
+        doSkidSmoke(location, initialVelocity);
+        break;
+
     case Smoke:
         doSmoke(location, initialVelocity);
         break;
@@ -150,6 +154,19 @@ void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity
         smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOutAndExpand);
         smoke->rotate(MCRandom::getValue() * 360);
         smoke->physicsComponent().setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.2f);
+        smoke->addToWorld();
+    }
+}
+
+void ParticleFactory::doSkidSmoke(MCVector3dFR location, MCVector3dFR velocity) const
+{
+    if (MCSurfaceParticle * smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    {
+        smoke->init(location + MCVector3dF(0, 0, 5), 6, 3000);
+        smoke->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.1f));
+        smoke->setAnimationStyle(MCParticle::AnimationStyle::FadeOutAndExpand);
+        smoke->rotate(MCRandom::getValue() * 360);
+        smoke->physicsComponent().setVelocity(velocity + MCRandom::randomVector3dPositiveZ() * 0.1f);
         smoke->addToWorld();
     }
 }

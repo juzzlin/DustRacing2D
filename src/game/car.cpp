@@ -96,13 +96,13 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
     numberPlate->setBypassCollisions(true);
     numberPlate->shape()->view()->setHasShadow(false);
 
-    const float offTrackFrictionFactor = 0.65f;
+    const float offTrackFrictionFactor = 0.8f;
     const float frontFriction = 0.85f;
     const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
-    m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
+    m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction));
     addChildObject(m_leftFrontTire, m_leftFrontTirePos + tireZ, 0);
 
-    m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
+    m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction));
     addChildObject(m_rightFrontTire, m_rightFrontTirePos + tireZ, 0);
 
     const float rearFriction = 0.95f;
@@ -188,18 +188,33 @@ void Car::steer(Steer direction, float control)
 
 void Car::accelerate(bool deccelerate)
 {
-    m_skidding = true;
+    m_skidding = false;
 
-    const float frictionLimit =
-        physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k()) * damageFactor();
-    float effForce = frictionLimit;
-    if (!physicsComponent().velocity().isZero())
+    static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(1.0f);
+    static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(1.0f);
+
+    const float maxForce =
+        physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
+    float currentForce = maxForce;
+    const float velocity = physicsComponent().velocity().length();
+    if (velocity > 0.001f)
     {
-        const float powerLimit = m_desc.power / physicsComponent().velocity().lengthFast();
-        if (powerLimit < frictionLimit)
+        currentForce = m_desc.power / velocity;
+        if (currentForce > maxForce)
         {
-            effForce   = powerLimit;
-            m_skidding = false;
+            currentForce = maxForce;
+            const float maxSpinVelocity = 4.5f;
+            if (!m_reverse && velocity > 0 && velocity < maxSpinVelocity)
+            {
+                if (isHuman()) // Don't enable tire spin for AI yet
+                {
+                    const float spinCoeff = 0.025f + 0.975f * std::pow(velocity / maxSpinVelocity, 2.0f);
+                    static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(spinCoeff);
+                    static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(spinCoeff);
+                }
+
+                m_skidding = true;
+            }
         }
     }
 
@@ -214,7 +229,7 @@ void Car::accelerate(bool deccelerate)
         m_reverse = false;
     }
 
-    physicsComponent().addForce(direction * effForce);
+    physicsComponent().addForce(direction * currentForce * damageFactor());
 
     m_braking = false;
 }
@@ -246,6 +261,16 @@ bool Car::isBraking() const
 bool Car::isSkidding() const
 {
     return m_skidding;
+}
+
+bool Car::isSliding()
+{
+    const float bodyNormalAngle = angle() + 90;
+    const MCVector2dF n(
+        MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
+    const MCVector2dF & v = physicsComponent().velocity().normalized();
+    const MCVector2dF s = MCVector2dF::projection(v, n);
+    return absSpeed() > 7.5 && s.lengthFast() > 0.25;
 }
 
 int Car::speedInKmh() const

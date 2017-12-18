@@ -92,6 +92,8 @@ public:
 
     bool isSkidding() const;
 
+    bool isSliding();
+
     void setBrakeLightState(bool state);
 
     //! Get estimated speed in km/h. This is used e.g. by the speedometer.
