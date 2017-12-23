@@ -37,6 +37,14 @@ option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
 
 option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
 
+# Default to release C++ flags if CMAKE_BUILD_TYPE not set
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE Release CACHE STRING
+       "Choose the type of build, options are: None Debug Release RelWithDebInfo
+MinSizeRel."
+       FORCE )
+endif()
+
 if(GLES)
     add_definitions(-D__MC_GLES__)
     message(STATUS "Compiling for OpenGL ES 2.0")
@@ -65,8 +73,8 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    add_compile_options(-W -Wall -O3 -pedantic)
-    add_compile_options(-fomit-frame-pointer -finline-functions -ffast-math)
+    add_compile_options("$<$<CONFIG:RELASE>:-W -Wall -O3 -pedantic -fomit-frame-pointer>")
+    add_compile_options("$<$<CONFIG:DEBUG>:-W -Wall -O0 -g -pedantic>")
 elseif(MSVC)
     add_definitions(-DNOMINMAX)
 endif()
