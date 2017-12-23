@@ -24,7 +24,8 @@
 namespace {
 static const int SKID_MARK_DENSITY = 8;
 static const int NEW_SKID_LIMIT = SKID_MARK_DENSITY * 4;
-static const int OFF_TRACK_ANIMATION_SPEED_MIN = 10;
+static const int OFF_TRACK_ANIMATION_SPEED_MIN = 5;
+static const int ON_TRACK_ANIMATION_SPEED_MIN = 5;
 }
 
 CarParticleEffectManager::CarParticleEffectManager(Car & car)
@@ -88,7 +89,7 @@ void CarParticleEffectManager::doDamageSmoke()
 
 void CarParticleEffectManager::doOnTrackAnimations()
 {
-    if ((m_car.isBraking() && m_car.speedInKmh() > 5 && m_car.speedInKmh() < 200) ||
+    if ((m_car.isBraking() && m_car.speedInKmh() > ON_TRACK_ANIMATION_SPEED_MIN && m_car.speedInKmh() < 200) ||
          m_car.isSkidding())
     {
         if (!m_car.leftSideOffTrack())
@@ -107,7 +108,7 @@ void CarParticleEffectManager::doOnTrackAnimations()
 
 void CarParticleEffectManager::doOffTrackAnimations()
 {
-    if (std::abs(m_car.speedInKmh()) > OFF_TRACK_ANIMATION_SPEED_MIN)
+    if (std::abs(m_car.speedInKmh()) > OFF_TRACK_ANIMATION_SPEED_MIN || m_car.isSkidding())
     {
         bool smoke = false;
 
