@@ -168,6 +168,11 @@ void MCWorldRenderer::buildBatches(MCCamera * camera)
         return;
     }
 
+    if (!m_surfaceParticleRenderer)
+    {
+        createSurfaceParticleRenderer();
+    }
+
     buildObjectBatches(camera);
 
     buildParticleBatches(camera);
@@ -274,11 +279,6 @@ void MCWorldRenderer::renderParticleBatches(MCCamera * camera, MCRenderLayer & l
         {
             if (dynamic_cast<MCSurfaceParticle *>(batch.objects[0]))
             {
-                if (!m_surfaceParticleRenderer)
-                {
-                    createSurfaceParticleRenderer();
-                }
-
                 m_surfaceParticleRenderer->setBatch(batch, camera);
                 m_surfaceParticleRenderer->render();
             }
@@ -349,11 +349,6 @@ void MCWorldRenderer::renderParticleShadowBatches(MCCamera * camera, MCRenderLay
             {
                 if (particle->hasShadow())
                 {
-                    if (!m_surfaceParticleRenderer)
-                    {
-                        createSurfaceParticleRenderer();
-                    }
-
                     m_surfaceParticleRenderer->setBatch(batch, camera, true);
                     m_surfaceParticleRenderer->renderShadows();
                 }

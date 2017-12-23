@@ -70,8 +70,7 @@ static bool loadWavFile(
             throw std::runtime_error(filename);
 
         // Read in the first chunk into the struct
-        size_t bytesRead = std::fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
-        (void)(bytesRead); // Suppress warnings about ignored return value of fread.
+        std::fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
 
         //check for RIFF and WAVE tag in memeory
         if ((riff_header.chunkID[0] != 'R' ||
@@ -85,7 +84,7 @@ static bool loadWavFile(
             throw std::runtime_error("Invalid RIFF or WAVE Header");
 
         //Read in the 2nd chunk for the wave info
-        bytesRead = std::fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
+        std::fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
         //check for fmt tag in memory
         if (wave_format.subChunkID[0] != 'f' ||
                 wave_format.subChunkID[1] != 'm' ||
@@ -98,7 +97,7 @@ static bool loadWavFile(
             std::fseek(soundFile, sizeof(int16_t), SEEK_CUR);
 
         //Read in the the last byte of data before the sound file
-        bytesRead = std::fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
+        std::fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
         //check for data tag in memory
         if (wave_data.subChunkID[0] != 'd' ||
                 wave_data.subChunkID[1] != 'a' ||

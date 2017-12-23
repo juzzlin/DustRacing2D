@@ -41,9 +41,7 @@ const int physicsObjectBit    = 1;
 const int triggerObjectBit    = 2;
 const int renderableBit       = 4;
 const int bypassCollisionsBit = 8;
-const int hasShadowBit        = 16;
 const int removingBit         = 32;
-const int renderOutlineBit    = 64;
 const int isParticleBit       = 128;
 }
 

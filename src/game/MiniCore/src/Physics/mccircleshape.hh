@@ -63,7 +63,6 @@ private:
     DISABLE_ASSI(MCCircleShape);
 
     static unsigned int m_typeId;
-    float m_radius;
 };
 
 #endif // MCCIRCLESHAPE_HH

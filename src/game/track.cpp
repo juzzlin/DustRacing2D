@@ -147,8 +147,8 @@ void Track::renderAsphalt(
 
     // Loop through the visible tile matrix and draw the tiles
     int initX = i0 * TrackTile::TILE_W;
-    int x     = initX;
-    int y     = j0 * TrackTile::TILE_H;
+    int x;
+    int y = j0 * TrackTile::TILE_H;
     for (unsigned int j = j0; j <= j2; j++)
     {
         x = initX;
@@ -191,8 +191,8 @@ void Track::renderTiles(
 
     // Loop through the visible tile matrix and sort the tiles.
     int initX = i0 * TrackTile::TILE_W;
-    int x     = initX;
-    int y     = j0 * TrackTile::TILE_H;
+    int x;
+    int y = j0 * TrackTile::TILE_H;
     for (unsigned int j = j0; j <= j2; j++)
     {
         x = initX;
