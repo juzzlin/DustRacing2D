@@ -11,6 +11,10 @@ if(POLICY CMP0020)
     cmake_policy(SET CMP0020 NEW)
 endif()
 
+if(POLICY CMP0043)
+    cmake_policy(SET CMP0043 NEW)
+endif()
+
 if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
 endif()
@@ -42,7 +46,6 @@ add_definitions(-DGLEW_STATIC)
 add_definitions(-DGLEW_NO_GLU)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     add_compile_options("$<$<CONFIG:RELASE>:-W -Wall -O3 -pedantic -fomit-frame-pointer>")
     add_compile_options("$<$<CONFIG:DEBUG>:-W -Wall -O0 -g -pedantic>")
 elseif(MSVC)
