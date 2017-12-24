@@ -34,7 +34,7 @@ NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 
 NAME=dustrac
 VERSION=${DUSTRAC_RELEASE_VERSION}
-if [[ !${VERSION} ]]; then
+if [[ -z ${VERSION} ]]; then
     echo "DUSTRAC_RELEASE_VERSION not set."
     VERSION="DUSTRAC_RELEASE_VERSION_NOT_SET"
 fi
