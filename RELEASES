@@ -1,3 +1,53 @@
+2.0.0
+=====
+
+This not a completely new game, but still so many fixes and changes that
+it deserves a major version bump.
+
+New features:
+
+* Animated game menus
+* Always select difficulty and lap count after selecting "Play"
+* "Cool down" laps for AI to prevent the destruction derby
+* Bridge object as a mesh
+* Font changed to DejaVu
+* FPS setting menu
+* Fully destructible tracks to make races more unpredictable
+* New intro image
+* New particle effects
+* New randomized tree objects
+* Editor: Add CLI option to force language
+* Editor: Add option to force object stationary
+* Editor: Lock qhash random seed so that XML output is not randomized
+
+Improvements:
+
+* Improved driving dynamics. It's now possible to do burnouts
+* Improved graphics and lighting
+* Improvements and additions to many tracks
+* Sound levels tuned
+
+Bug fixes:
+
+* Fix GitHub issue #26: Undo resets tile rotations
+* Fix GitHub issue #24: Change the game font to DejaVu
+* Fix qmake build
+* Fix some particle life times
+* Fix some compiler warnings
+* Fix shader deletion issues reported by Valgrind
+* Fix clang build which attributes wrongly std=c++11 into C compiler flags
+* Fix build with GLEW and QOpenGLFunctions=OFF
+* Fix CMake dev build
+* Editor: Fix object add on target nodes and other objects
+* Editor: Fix the behavior of right-click
+* Editor: Fix undo erasing computer hints
+* Editor: Fix undo on target node resize and object rotation
+
+Other:
+
+* Translation updates
+* Lots of code refactored
+
 1.13.0
 ======
 

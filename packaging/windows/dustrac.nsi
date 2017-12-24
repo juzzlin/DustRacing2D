@@ -5,12 +5,12 @@
 !define APPNAME-EDITOR         "Dust Racing 2D Level Editor"
 !define COMPANYNAME            "Jussi Lind"
 !define DESCRIPTION            "A traditional top-down racing game."
-!define VERSIONMAJOR           1
-!define VERSIONMINOR           13
+!define VERSIONMAJOR           2
+!define VERSIONMINOR           0
 !define VERSIONBUILD           0
-!define HELPURL                "http://dustrac.sourceforge.net"
-!define UPDATEURL              "http://dustrac.sourceforge.net"
-!define ABOUTURL               "http://dustrac.sourceforge.net"
+!define HELPURL                "http://juzzlin.github.io/DustRacing2D/"
+!define UPDATEURL              "https://github.com/juzzlin/DustRacing2D/releases"
+!define ABOUTURL               "http://juzzlin.github.io/DustRacing2D/"
 
 !define MUI_FILE               ""
 !define MUI_BRANDINGTEXT       ${PRODUCTNAME}

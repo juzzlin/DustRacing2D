@@ -1,3 +1,139 @@
+2.0.0
+-----
+
+* CMake: Set C++ standard with set_property()
+* Fix some Clang warnings
+* CMake: Set Debug and Release flags separately
+* Improve off-track particle effects
+* Improvements to 'Figure 8.trk'
+* Tune sound levels
+* Add ability to do burnouts
+* Tune virtual revs
+* Make speed in km/h a bit higher
+* Hide cursor by default
+* Add FPS menu
+* Fix all resolutions getting triggered
+* Add specific menu shader
+* Set selected resolution correctly
+* Switch AI to 'cool down' mode when the race is completed
+* Update (guess) German translations
+* Force upper case on titles in the credits page
+* Tune sound volume levels
+* Replace intro fade with a simple timer
+* Update Italian translations
+* Update Czech translations
+* Update Italian translations
+* Update all .ts-files
+* Add scripts/updateTranslationFiles.sh
+* Update authors and credits
+* Add some missing license headers
+* Add info text to lap count menu
+* Update translation instructions
+* Animate menu transitions
+* Set default moment of inertia factor to 10
+* Refactor MCRectShape init
+* Add default contructor to MCOBBox
+* Always select difficulty and lap count after selecting "Play"
+* Move audio-related files to audio/
+* Move menu-related files to menu/
+* Tune Twineburg.trk
+* Handle first and last menu item properly
+* Make track selection menu a way cooler!
+* Reset shadow FBO in ~Renderer()
+* Make track length unitless
+* Fixes to Radiator.trk
+* Refactor top-level rendering code
+* Add surrounding sand area to infinity.trk
+* Adjust AI braking in Far Lands
+* Editor: Fix object add on target nodes and other objects
+* Remove MCTypes
+* Editor: Fix the behavior of right-click
+* Editor: Fix undo erasing computer hints
+* Add more stuff to Far Lands
+* Fade in/out the FBO shader only
+* Create the bridge object as a mesh
+* Improve mesh support
+* Share code between surfaces and meshes
+* Fix lighting issues
+* New Dust Racing 2D banner object
+* Editor: Add option to force object stationary
+* Editor: Lock qhash random seed so that XML output is not randomized
+* Fix the bridge
+* Tune light colors
+* Double the wall mass
+* Improvements to twister.trk
+* Fix undo on target node resize and object rotation
+* Reset also shadowFbo on resolution change
+* Fix GitHub issue #26: Undo resets tile rotations
+* MiniCore: Don't use surface object batching
+* MiniCore: Use correct programs in surface object renderers
+* Editor: Add CLI option to force language
+* Update Finnish translations
+* Remove dustRacing2D.svg
+* New about.png
+* Remove dustRacing.png
+* Fix computer driving line in Desert Storm.trk
+* Set colors for skid marks
+* Set color for braking glow
+* MiniCore: Fix most problems with transparent particle / object batches
+* Refactor credits
+* MiniCore: Make MCTextureText copyable
+* Move settingsBack.svg to a correct dir
+* New intro image
+* More trees to triangle.trk
+* Randomize trees
+* Fix menu background images with respect to width
+* New settings back
+* Fix driving lines in Curvastone
+* Fix brake lights
+* Make all objects movable
+* Rewrite trees
+* MiniCore: Update legacy renderers
+* MiniCore: Make it possible to scale MCShapeView
+* MiniCore: Remove useless batchMode crap
+* MiniCore: Fix surface color and alpha blending mess
+* MiniCore: Refactor MCSurface::setScale()
+* MiniCore: Add all objects to the grid
+* MiniCore: Fix object clipping
+* MiniCore: Refactor object and view ID's
+* MiniCore: Move MCShape::setRadius() to public scope
+* Fix qmake build
+* More transparent smoke
+* New sparkle particle
+* New mud particle
+* Make TrackItem use the new stepTime(int) member
+* Animate menu items
+* MiniCore: MCTextureText sizes in floats
+* Improve texture font generation
+* MiniCore: Fix the use of GL_MAX_TEXTURE_SIZE
+* MiniCore: MCTextureText size as floats
+* Fix GitHub issue #24: Change the game font to DejaVu
+* MiniCore: Add support for texture font densities
+* Remove obsolete fonts.conf
+* Tune particle parameters
+* MiniCore: Improved MCVector2D::lengthFast()
+* Fix some particle life times
+* MiniCore: Fix angular integration
+* Take per-vertex Z-coordinate into account in MCSurfaceObjectRenderer
+* Update MiniCore
+* Sky as SVG
+* Fix some compiler warnings
+* Refactor MXE build scripts
+* Refactor renderer.cpp
+* Decrease view angle to 22.5 degrees
+* Add build scripts for Jenkins
+* Make unit tests guiless
+* Update brake sign, add SVG
+* Update left and right signs, add SVG
+* Install AppData file to the right location
+* Install also possible font licence files
+* Add licence for Ubuntu fonts
+* Fix shader deletion issues reported by Valgrind
+* Fixing clang build which attributes wrongly std=c++11 into C compiler flags.
+* Fixing build with GLEW and QOpenGLFunctions=OFF.
+* Update screenshots in README.md
+* Fix CMake dev build
+
 1.13.0
 ------
 

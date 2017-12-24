@@ -1,11 +1,9 @@
 VERSION=${DUSTRAC_RELEASE_VERSION?"is not set."}
 
-# $VERSION-1 for trusty
-# $VERSION-2 for utopic
-# $VERSION-3 for vivid
-# $VERSION-4 for xenial
+# $VERSION-1 for xenial
+# $VERSION-2 for artful
 
-DEBIAN_VERSION=$VERSION-4
+DEBIAN_VERSION=$VERSION-1
 rm -rf *${VERSION}*
 cp ../DustRacing2D/dustrac-$VERSION.tar.gz .
 tar xzvf dustrac-$VERSION.tar.gz
