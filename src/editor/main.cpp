@@ -25,10 +25,17 @@
 #include <memory>
 #include <cstdlib>
 
+#if QT_VERSION < 0x50600
 extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
+#endif
+
 int main(int argc, char ** argv)
 {
+#if QT_VERSION >= 0x50600
+    qSetGlobalQHashSeed(0);
+#else
     qt_qhash_seed.store(0);
+#endif
 
     QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
     QApplication::setApplicationName(Config::Editor::QSETTINGS_SOFTWARE_NAME);
