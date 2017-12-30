@@ -55,7 +55,7 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
 , m_eventHandler(nullptr)
 , m_viewAngle(22.5f)
 , m_zNear(10.0f)
-, m_zFar(1500.0f)
+, m_zFar(1.5f * Scene::height() / 2 / std::tan(MCTrigonom::degToRad(m_viewAngle / 2))) // See: https://github.com/juzzlin/DustRacing2D/issues/30
 , m_fadeValue(1.0f)
 , m_enabled(false)
 , m_hRes(hRes)
