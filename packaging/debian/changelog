@@ -1,3 +1,10 @@
+dustrac (2.0.1-1) xenial; urgency=medium
+
+  * Editor: use qSetGlobalQHashSeed with Qt 5.6+
+  * Properly check for empty version in mxeWindowsBuild.sh
+
+ -- Jussi Lind <jussi.lind@iki.fi>  Sat, 30 Dec 2017 15:08:11 +0200
+
 dustrac (2.0.0-1) xenial; urgency=medium
 
   * CMake: Set C++ standard with set_property()

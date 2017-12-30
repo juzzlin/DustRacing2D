@@ -1,3 +1,19 @@
+2.0.1
+=====
+
+A bug fix release to fix build on Qt 5.6+
+
+Bug fixes:
+
+* Editor: use qSetGlobalQHashSeed with Qt 5.6+
+
+  qt_qhash_seed is no more exported in recent Qt 5.9.x versions, so use
+  the public functions for it available since Qt 5.6.
+
+Other:
+
+* Properly check for empty version in mxeWindowsBuild.sh
+
 2.0.0
 =====
 

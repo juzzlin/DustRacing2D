@@ -1,3 +1,9 @@
+2.0.1
+-----
+
+* Editor: use qSetGlobalQHashSeed with Qt 5.6+
+* Properly check for empty version in mxeWindowsBuild.sh
+
 2.0.0
 -----
 
