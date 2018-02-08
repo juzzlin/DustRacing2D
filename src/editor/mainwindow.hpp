@@ -133,6 +133,8 @@ private:
 
     void clearEditMode();
 
+    void createWidgets();
+
     void fitScale();
 
     void init();
@@ -186,6 +188,16 @@ private:
     QString m_argTrackFile;
 
     bool m_saved = false;
+
+    const char * m_settingsGroup = "MainWindow";
+
+    const unsigned int m_minZoom = 0;
+
+    const unsigned int m_maxZoom = 200;
+
+    const unsigned int m_initZoom = 100;
+
+    const int m_consoleHeight = 64;
 
     static MainWindow * m_instance;
 };

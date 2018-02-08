@@ -55,15 +55,6 @@
 
 MainWindow * MainWindow::m_instance = nullptr;
 
-namespace
-{
-    const char *       SETTINGS_GROUP = "MainWindow";
-    const unsigned int MIN_ZOOM       = 0;
-    const unsigned int MAX_ZOOM       = 200;
-    const unsigned int INI_ZOOM       = 100;
-    const int          CONSOLE_HEIGHT = 64;
-}
-
 MainWindow::MainWindow(QString trackFile)
 : m_objectModelLoader(new ObjectModelLoader)
 , m_aboutDlg(new AboutDlg(this))
@@ -138,7 +129,7 @@ void MainWindow::init()
     QSettings settings;
 
     // Read dialog size data
-    settings.beginGroup(SETTINGS_GROUP);
+    settings.beginGroup(m_settingsGroup);
     resize(settings.value("size", QSize(640, 480)).toSize());
     settings.endGroup();
 
@@ -147,15 +138,19 @@ void MainWindow::init()
     move(geometry.width() / 2 - width() / 2,
         geometry.height() / 2 - height() / 2);
 
-    // Populate menu bar with actions
-    populateMenuBar();
-
     // Set scene to the view
     m_editorView->setScene(m_editorScene);
     m_editorView->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Expanding);
     m_editorView->setMouseTracking(true);
 
+    populateMenuBar();
+
+    createWidgets();
+}
+
+void MainWindow::createWidgets()
+{
     // Create a splitter
     QSplitter * splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
@@ -172,8 +167,8 @@ void MainWindow::init()
     populateToolBar();
 
     // Add zoom slider to the layout
-    m_scaleSlider->setRange(MIN_ZOOM, MAX_ZOOM);
-    m_scaleSlider->setValue(INI_ZOOM);
+    m_scaleSlider->setRange(m_minZoom, m_maxZoom);
+    m_scaleSlider->setValue(m_initZoom);
     m_scaleSlider->setTracking(false);
     m_scaleSlider->setTickInterval(10);
     m_scaleSlider->setTickPosition(QSlider::TicksBelow);
@@ -207,7 +202,7 @@ void MainWindow::init()
     setCentralWidget(splitter);
 
     QList<int> sizes;
-    sizes << height() - CONSOLE_HEIGHT << CONSOLE_HEIGHT;
+    sizes << height() - m_consoleHeight << m_consoleHeight;
     splitter->setSizes(sizes);
 }
 
@@ -310,7 +305,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
     QSettings settings;
 
     // Save window size
-    settings.beginGroup(SETTINGS_GROUP);
+    settings.beginGroup(m_settingsGroup);
     settings.setValue("size", size());
     settings.endGroup();
 
@@ -514,7 +509,7 @@ void MainWindow::openTrack()
     // Load recent path
     QSettings settings;
 
-    settings.beginGroup(SETTINGS_GROUP);
+    settings.beginGroup(m_settingsGroup);
     QString path = settings.value("recentPath",
     QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
     settings.endGroup();
@@ -568,7 +563,7 @@ bool MainWindow::doOpenTrack(QString fileName)
         // Save recent path
         QSettings settings;
 
-        settings.beginGroup(SETTINGS_GROUP);
+        settings.beginGroup(m_settingsGroup);
         settings.setValue("recentPath", fileName);
         settings.endGroup();
 
