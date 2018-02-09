@@ -14,9 +14,9 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "editordata.hpp"
-#include "editorscene.hpp"
 #include "editorview.hpp"
 #include "mainwindow.hpp"
+#include "mediator.hpp"
 #include "object.hpp"
 #include "objectmodelloader.hpp"
 #include "targetnode.hpp"
@@ -28,10 +28,8 @@
 
 using std::dynamic_pointer_cast;
 
-EditorData::EditorData(MainWindow * mainWindow)
-: m_mode(EditorMode::None)
-, m_dragAndDropSourcePos()
-, m_mainWindow(mainWindow)
+EditorData::EditorData(Mediator & mediator)
+    : m_mediator(mediator)
 {}
 
 void EditorData::clearScene()
@@ -39,6 +37,11 @@ void EditorData::clearScene()
     removeTilesFromScene();
     removeObjectsFromScene();
     removeTargetNodesFromScene();
+}
+
+DragAndDropStore & EditorData::dadStore()
+{
+    return m_dadStore;
 }
 
 bool EditorData::loadTrackData(QString fileName)
@@ -60,15 +63,11 @@ void EditorData::undo()
 {
     if (m_undoStack.isUndoable())
     {
-        m_dragAndDropSourceTile = nullptr;
-
-        m_dragAndDropObject = nullptr;
+        m_dadStore.clear();
 
         m_selectedObject = nullptr;
 
         m_selectedTargetNode = nullptr;
-
-        m_dragAndDropTargetNode = nullptr;
 
         saveRedoPoint();
 
@@ -87,15 +86,11 @@ void EditorData::redo()
 {
     if (m_undoStack.isRedoable())
     {
-        m_dragAndDropSourceTile = nullptr;
-
-        m_dragAndDropObject = nullptr;
+        m_dadStore.clear();
 
         m_selectedObject = nullptr;
 
         m_selectedTargetNode = nullptr;
-
-        m_dragAndDropTargetNode = nullptr;
 
         saveUndoPoint();
 
@@ -116,7 +111,7 @@ void EditorData::saveUndoPoint()
     assert(m_trackData);
     m_undoStack.pushUndoPoint(m_trackData);
 
-    m_mainWindow->enableUndo(m_undoStack.isUndoable());
+    m_mediator.enableUndo(m_undoStack.isUndoable());
 }
 
 void EditorData::saveRedoPoint()
@@ -151,15 +146,9 @@ bool EditorData::canRouteBeSet() const
 void EditorData::beginSetRoute()
 {
     assert(m_trackData);
-    setMode(EditorMode::SetRoute);
+    m_mediator.setMode(EditorMode::SetRoute);
     removeRouteFromScene();
     m_trackData->route().clear();
-}
-
-void EditorData::endSetRoute()
-{
-    // Reset the editing mode.
-    setMode(EditorMode::None);
 }
 
 void EditorData::addExistingRouteToScene()
@@ -204,8 +193,8 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBasePtr tnode)
     auto routeLine = new QGraphicsLineItem;
     node->setRouteLine(routeLine);
 
-    m_mainWindow->editorScene().addItem(node.get()); // The scene wants a raw pointer
-    m_mainWindow->editorScene().addItem(routeLine);
+    m_mediator.addItem(node.get()); // The scene wants a raw pointer
+    m_mediator.addItem(routeLine);
 
     const int routeLineZ = 10;
     node->setZValue(routeLineZ);
@@ -214,8 +203,7 @@ void EditorData::pushTargetNodeToRoute(TargetNodeBasePtr tnode)
     // Check if we might have a loop => end
     if (loopClosed)
     {
-        setMode(EditorMode::None);
-        m_mainWindow->endSetRoute();
+        m_mediator.endSetRoute();
 
         auto firstNode = route.get(0);
         route.get(route.numNodes() - 1)->setLocation(firstNode->location());
@@ -232,48 +220,18 @@ void EditorData::removeRouteFromScene()
         auto node = dynamic_pointer_cast<TargetNode>(tnode);
         assert(node);
 
-        m_mainWindow->editorScene().removeItem(node.get()); // The scene wants a raw pointer
-        m_mainWindow->editorScene().removeItem(node->routeLine());
+        m_mediator.removeItem(node.get()); // The scene wants a raw pointer
+        m_mediator.removeItem(node->routeLine());
 
         delete node->routeLine();
     }
 
-    m_mainWindow->editorView().update();
+    m_mediator.updateView();
 }
 
 TrackDataPtr EditorData::trackData()
 {
     return m_trackData;
-}
-
-EditorData::EditorMode EditorData::mode() const
-{
-    return m_mode;
-}
-
-void EditorData::setMode(EditorData::EditorMode newMode)
-{
-    m_mode = newMode;
-}
-
-void EditorData::setDragAndDropSourceTile(TrackTile * tile)
-{
-    m_dragAndDropSourceTile = tile;
-}
-
-TrackTile * EditorData::dragAndDropSourceTile() const
-{
-    return m_dragAndDropSourceTile;
-}
-
-void EditorData::setDragAndDropObject(Object * object)
-{
-    m_dragAndDropObject = object;
-}
-
-Object * EditorData::dragAndDropObject() const
-{
-    return m_dragAndDropObject;
 }
 
 void EditorData::setSelectedObject(Object * object)
@@ -296,26 +254,6 @@ TargetNode * EditorData::selectedTargetNode() const
     return m_selectedTargetNode;
 }
 
-void EditorData::setDragAndDropTargetNode(TargetNode * tnode)
-{
-    m_dragAndDropTargetNode = tnode;
-}
-
-TargetNode * EditorData::dragAndDropTargetNode() const
-{
-    return m_dragAndDropTargetNode;
-}
-
-void EditorData::setDragAndDropSourcePos(QPointF pos)
-{
-    m_dragAndDropSourcePos = pos;
-}
-
-QPointF EditorData::dragAndDropSourcePos() const
-{
-    return m_dragAndDropSourcePos;
-}
-
 void EditorData::addTilesToScene()
 {
     assert(m_trackData);
@@ -331,7 +269,7 @@ void EditorData::addTilesToScene()
 
             if (!tile->added())
             {
-                m_mainWindow->editorScene().addItem(tile.get()); // The scene wants a raw pointer
+                m_mediator.addItem(tile.get()); // The scene wants a raw pointer
 
                 tile->setAdded(true);
             }
@@ -351,7 +289,7 @@ void EditorData::addObjectsToScene()
         auto object = dynamic_pointer_cast<Object>(m_trackData->objects().object(i));
         assert(object);
 
-        m_mainWindow->editorScene().addItem(object.get()); // The scene wants a raw pointer
+        m_mediator.addItem(object.get()); // The scene wants a raw pointer
 
         object->setZValue(10);
     }
@@ -364,7 +302,7 @@ void EditorData::removeTileFromScene(TrackTileBasePtr trackTile)
     auto tile = dynamic_pointer_cast<TrackTile>(trackTile);
     assert(tile);
 
-    m_mainWindow->editorScene().removeItem(tile.get()); // The scene wants a raw pointer
+    m_mediator.removeItem(tile.get()); // The scene wants a raw pointer
 }
 
 void EditorData::removeTilesFromScene()
@@ -380,7 +318,7 @@ void EditorData::removeTilesFromScene()
                 auto tile = dynamic_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
                 assert(tile);
 
-                m_mainWindow->editorScene().removeItem(tile.get()); // The scene wants a raw pointer
+                m_mediator.removeItem(tile.get()); // The scene wants a raw pointer
             }
         }
     }
@@ -395,12 +333,13 @@ void EditorData::removeObjectsFromScene()
             auto object = dynamic_pointer_cast<Object>(m_trackData->objects().object(i));
             assert(object);
 
-            m_mainWindow->editorScene().removeItem(object.get()); // The scene wants a raw pointer
+            m_mediator.removeItem(object.get()); // The scene wants a raw pointer
         }
     }
 
     m_selectedObject = nullptr;
-    m_dragAndDropObject = nullptr;
+
+    m_dadStore.clear();
 }
 
 void EditorData::removeTargetNodesFromScene()
@@ -412,7 +351,7 @@ void EditorData::removeTargetNodesFromScene()
             auto node = dynamic_pointer_cast<TargetNode>(tnode);
             assert(node);
 
-            m_mainWindow->editorScene().removeItem(node.get()); // The scene wants a raw pointer
+            m_mediator.removeItem(node.get()); // The scene wants a raw pointer
         }
     }
 }
@@ -424,7 +363,7 @@ void EditorData::clearRoute()
     removeRouteFromScene();
     m_trackData->route().clear();
 
-    m_mainWindow->console(QString(QObject::tr("Route cleared.")));
+    m_mediator.console(QString(QObject::tr("Route cleared.")));
 }
 
 void EditorData::setActiveColumn(unsigned int column)

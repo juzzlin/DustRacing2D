@@ -29,11 +29,14 @@ HEADERS +=  \
     ../common/userexception.hpp \
     aboutdlg.hpp \
     application.hpp \
+    draganddropstore.hpp \
     editordata.hpp \
-    editorscene.hpp \
     editorview.hpp \
+    editormode.hpp \
+    floodfill.hpp \
     mainwindow.hpp \
     map.hpp \
+    mediator.hpp \
     newtrackdialog.hpp \
     object.hpp \
     objectfactory.hpp \
@@ -60,12 +63,14 @@ SOURCES += \
     ../common/tracktilebase.cpp \
     aboutdlg.cpp \
     application.cpp \
+    draganddropstore.cpp \
     editordata.cpp \
-    editorscene.cpp \
     editorview.cpp \
+    floodfill.cpp \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
+    mediator.cpp \
     newtrackdialog.cpp \
     object.cpp \
     objectfactory.cpp \

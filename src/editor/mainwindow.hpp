@@ -21,15 +21,14 @@
 #include <QString>
 
 class AboutDlg;
-class EditorData;
-class EditorView;
-class EditorScene;
 class ObjectModelLoader;
 class QAction;
 class QCheckBox;
 class QSlider;
 class QTextEdit;
 class QToolBar;
+
+class Mediator;
 class TrackData;
 
 /*! \class MainWindow
@@ -58,15 +57,6 @@ public:
 
     //! Print text to the console.
     void console(QString text);
-
-    //! Get reference to the view.
-    EditorView & editorView() const;
-
-    //! Get reference to the scene.
-    EditorScene & editorScene() const;
-
-    //! Get reference to the data.
-    EditorData & editorData() const;
 
     //! Get reference to the object loaded.
     ObjectModelLoader & objectModelLoader() const;
@@ -151,12 +141,6 @@ private:
 
     AboutDlg * m_aboutDlg;
 
-    EditorData * m_editorData;
-
-    EditorScene * m_editorScene;
-
-    EditorView * m_editorView;
-
     QTextEdit * m_console;
 
     QAction * m_saveAction = nullptr;
@@ -198,6 +182,8 @@ private:
     const unsigned int m_initZoom = 100;
 
     const int m_consoleHeight = 64;
+
+    Mediator * m_mediator = nullptr;
 
     static MainWindow * m_instance;
 };

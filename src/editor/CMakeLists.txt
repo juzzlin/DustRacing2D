@@ -10,12 +10,15 @@ endforeach()
 set(SRC
     aboutdlg.cpp
     application.cpp
+    draganddropstore.cpp
     editordata.cpp
     editorview.cpp
-    editorscene.cpp
+    editormode.hpp
+    floodfill.cpp
     main.cpp
     mainwindow.cpp
     map.cpp
+    mediator.cpp
     newtrackdialog.cpp
     object.cpp
     objectfactory.cpp

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2018 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,8 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include "editorscene.hpp"
+#ifndef FLOODFILL_HPP
+#define FLOODFILL_HPP
 
-EditorScene::EditorScene(QObject * parent) :
-    QGraphicsScene(parent)
-{}
+class MapBase;
+class QAction;
+class QString;
+class TrackTile;
+
+namespace FloodFill {
+void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, MapBase & map);
+}
+
+#endif // FLOODFILL_HPP

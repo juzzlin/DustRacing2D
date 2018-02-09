@@ -20,10 +20,10 @@
 #include <QMenu>
 #include "../common/tracktilebase.hpp"
 
+class Mediator;
 class QAction;
 class QMouseEvent;
 class QPaintEvent;
-class EditorData;
 class Object;
 class ObjectModelLoaderoader;
 class TargetNode;
@@ -35,7 +35,7 @@ class EditorView : public QGraphicsView
 
 public:
 
-    explicit EditorView(EditorData & editorData, QWidget * parent = 0);
+    explicit EditorView(Mediator & mediator);
 
     void updateSceneRect();
 
@@ -61,11 +61,7 @@ private:
 
     void createTargetNodeContextMenuActions();
 
-    void doFloodFill(TrackTile & tile, QAction * action, QString typeToFill);
-
     void eraseObjectAtCurrentClickedPos();
-
-    void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill);
 
     void handleMousePressEventOnTile(QMouseEvent & event, TrackTile & tile);
 
@@ -99,8 +95,6 @@ private:
 
     void setComputerHint(TrackTileBase::ComputerHint hint);
 
-    void updateCoordinates(QPointF mappedPos);
-
     static void setTileType(TrackTile & tile, QAction * action);
 
     QMenu m_tileContextMenu;
@@ -127,7 +121,7 @@ private:
 
     QAction * m_forceStationaryAction = nullptr;
 
-    EditorData & m_editorData;
+    Mediator & m_mediator;
 };
 
 #endif // EDITORVIEW_HPP

@@ -1,5 +1,5 @@
 // This file is part of Dust Racing 2D.
-// Copyright (C) 2011 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (C) 2018 Jussi Lind <jussi.lind@iki.fi>
 //
 // Dust Racing 2D is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,20 +13,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef EDITORSCENE_HPP
-#define EDITORSCENE_HPP
+#ifndef EDITORMODE_HPP
+#define EDITORMODE_HPP
 
-#include <QGraphicsScene>
-
-//! Graphics scene of the editor.
-class EditorScene : public QGraphicsScene
+//! Editing modes.
+enum class EditorMode
 {
-    Q_OBJECT
-
-public:
-
-    //! Constructor.
-    explicit EditorScene(QObject * parent = nullptr);
+    None,
+    SetRoute,
+    SetTileType,
+    AddObject,
+    EraseObject
 };
 
-#endif // EDITORSCENE_HPP
+#endif // EDITORMODE_HPP

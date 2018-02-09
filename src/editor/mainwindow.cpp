@@ -26,7 +26,7 @@
 #include "tracktile.hpp"
 #include "editordata.hpp"
 #include "editorview.hpp"
-#include "editorscene.hpp"
+#include "mediator.hpp"
 #include "newtrackdialog.hpp"
 
 #include <QAction>
@@ -58,14 +58,12 @@ MainWindow * MainWindow::m_instance = nullptr;
 MainWindow::MainWindow(QString trackFile)
 : m_objectModelLoader(new ObjectModelLoader)
 , m_aboutDlg(new AboutDlg(this))
-, m_editorData(new EditorData(this))
-, m_editorScene(new EditorScene(this))
-, m_editorView(new EditorView(*m_editorData, this))
 , m_console(new QTextEdit(this))
 , m_scaleSlider(new QSlider(Qt::Horizontal, this))
 , m_toolBar(new QToolBar(this))
 , m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
 , m_argTrackFile(trackFile)
+, m_mediator(new Mediator(*this))
 {
     if (!m_instance)
     {
@@ -138,11 +136,7 @@ void MainWindow::init()
     move(geometry.width() / 2 - width() / 2,
         geometry.height() / 2 - height() / 2);
 
-    // Set scene to the view
-    m_editorView->setScene(m_editorScene);
-    m_editorView->setSizePolicy(QSizePolicy::Preferred,
-        QSizePolicy::Expanding);
-    m_editorView->setMouseTracking(true);
+    m_mediator->initScene();
 
     populateMenuBar();
 
@@ -159,7 +153,7 @@ void MainWindow::createWidgets()
     QVBoxLayout * centralLayout = new QVBoxLayout;
     QHBoxLayout * viewToolBarLayout = new QHBoxLayout;
     m_toolBar->setOrientation(Qt::Vertical);
-    viewToolBarLayout->addWidget(m_editorView);
+    m_mediator->addViewToLayout(viewToolBarLayout);
     viewToolBarLayout->addWidget(m_toolBar);
     centralLayout->addLayout(viewToolBarLayout);
 
@@ -263,21 +257,6 @@ MainWindow * MainWindow::instance()
     return MainWindow::m_instance;
 }
 
-EditorView & MainWindow::editorView() const
-{
-    return *m_editorView;
-}
-
-EditorScene & MainWindow::editorScene() const
-{
-    return *m_editorScene;
-}
-
-EditorData & MainWindow::editorData() const
-{
-    return *m_editorData;
-}
-
 ObjectModelLoader & MainWindow::objectModelLoader() const
 {
     return *m_objectModelLoader;
@@ -290,11 +269,7 @@ QAction * MainWindow::currentToolBarAction() const
 
 void MainWindow::updateScale(int value)
 {
-    qreal scale = static_cast<qreal>(value) / 100;
-
-    QTransform transform;
-    transform.scale(scale, scale);
-    m_editorView->setTransform(transform);
+    m_mediator->setScale(value);
 
     console(QString(tr("Scale set to %1%")).arg(value));
 }
@@ -357,12 +332,12 @@ void MainWindow::populateMenuBar()
     m_undoAction->setShortcut(QKeySequence("Ctrl+Z"));
     editMenu->addAction(m_undoAction);
     connect(m_undoAction, &QAction::triggered, [this](){
-        m_editorData->undo();
+        m_mediator->undo();
 
         setupTrackAfterUndoOrRedo();
 
-        m_undoAction->setEnabled(m_editorData->isUndoable());
-        m_redoAction->setEnabled(m_editorData->isRedoable());
+        m_undoAction->setEnabled(m_mediator->isUndoable());
+        m_redoAction->setEnabled(m_mediator->isRedoable());
     });
     m_undoAction->setEnabled(false);
 
@@ -371,12 +346,12 @@ void MainWindow::populateMenuBar()
     m_redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
     editMenu->addAction(m_redoAction);
     connect(m_redoAction, &QAction::triggered, [this](){
-        m_editorData->redo();
+        m_mediator->redo();
 
         setupTrackAfterUndoOrRedo();
 
-        m_undoAction->setEnabled(m_editorData->isUndoable());
-        m_redoAction->setEnabled(m_editorData->isRedoable());
+        m_undoAction->setEnabled(m_mediator->isUndoable());
+        m_redoAction->setEnabled(m_mediator->isRedoable());
     });
     m_redoAction->setEnabled(false);
 
@@ -455,8 +430,6 @@ void MainWindow::handleToolBarActionClick(QAction * action)
 {
     if (action != m_currentToolBarAction)
     {
-        assert(m_editorData);
-
         m_currentToolBarAction = action;
 
         // Select-action
@@ -469,14 +442,14 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EditorMode::EraseObject);
+            m_mediator->setMode(EditorMode::EraseObject);
         }
         // The user wants to clear a tile.
         else if (action->data() == "clear")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EditorMode::SetTileType);
+            m_mediator->setMode(EditorMode::SetTileType);
         }
         // The user wants to set a tile type or clear it.
         else if (m_objectModelLoader->getCategoryByRole(
@@ -484,7 +457,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
-            m_editorData->setMode(EditorData::EditorMode::SetTileType);
+            m_mediator->setMode(EditorMode::SetTileType);
         }
         // The user wants to add an object to the scene.
         else if (m_objectModelLoader->getCategoryByRole(
@@ -492,7 +465,7 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(":/cursor2.png")));
-            m_editorData->setMode(EditorData::EditorMode::AddObject);
+            m_mediator->setMode(EditorMode::AddObject);
         }
     }
     else
@@ -534,9 +507,8 @@ void MainWindow::showAboutQtDlg()
 
 void MainWindow::clearRoute()
 {
-    assert(m_editorData);
-    m_editorData->saveUndoPoint();
-    m_editorData->clearRoute();
+    m_mediator->clearRoute();
+
     m_clearRouteAction->setEnabled(false);
 }
 
@@ -548,13 +520,11 @@ bool MainWindow::doOpenTrack(QString fileName)
         return false;
     }
 
-    assert(m_editorData);
-
     // Undo stack will be cleared.
     m_undoAction->setEnabled(false);
     m_redoAction->setEnabled(false);
 
-    if (m_editorData->loadTrackData(fileName))
+    if (m_mediator->openTrack(fileName))
     {
         console(QString(tr("Track '%1' opened.").arg(fileName)));
 
@@ -571,21 +541,11 @@ bool MainWindow::doOpenTrack(QString fileName)
 
         setActionStatesOnNewTrack();
 
-        delete m_editorScene;
-        m_editorScene = new EditorScene;
-
-        m_editorView->setScene(m_editorScene);
-        m_editorView->updateSceneRect();
-
-        m_editorData->addTilesToScene();
-        m_editorData->addObjectsToScene();
-        m_editorData->addExistingRouteToScene();
-
         fitScale();
 
         m_saved = true;
 
-        m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
+        m_clearRouteAction->setEnabled(m_mediator->routeHasNodes());
 
         return true;
     }
@@ -598,23 +558,97 @@ bool MainWindow::doOpenTrack(QString fileName)
     return false;
 }
 
-void MainWindow::setupTrackAfterUndoOrRedo()
+void MainWindow::beginSetRoute()
 {
-    m_saveAction->setEnabled(true);
+    if (m_mediator->beginSetRoute())
+    {
+        console(tr("Set route: begin."));
+        QMessageBox::information(
+            this,
+            tr("Set route, checkpoints and driving lines."),
+            tr("Setting the route defines checkpoints for the cars so\n"
+               "that no shortcuts can be taken. It also defines\n"
+               "driving lines for the computer players.\n\n"
+               "Click on the tiles one by one and make a closed loop\n"
+               "with the target nodes. You can adjust the nodes afterwads.\n"
+               "Start from the first tile after the finish line tile\n"
+               "to make the lap detection and timing work correctly.\n"
+               "Click on the first node again to finish."));
+    }
+    else
+    {
+        console(tr("Set route: not a valid track."));
+        QMessageBox::critical(this, tr("Set route"), tr("Invalid track. Route cannot be set."));
+    }
+}
 
-    setActionStatesOnNewTrack();
+void MainWindow::clearEditMode()
+{
+    m_mediator->clearEditMode();
+}
 
-    delete m_editorScene;
-    m_editorScene = new EditorScene;
+void MainWindow::console(QString text)
+{
+    QDateTime date = QDateTime::currentDateTime();
+    m_console->append(QString("(") + date.toString("hh:mm:ss") + "): " + text);
+}
 
-    m_editorView->setScene(m_editorScene);
-    m_editorView->updateSceneRect();
+void MainWindow::enableUndo(bool enable)
+{
+    m_undoAction->setEnabled(enable);
+}
 
-    m_editorData->addTilesToScene();
-    m_editorData->addObjectsToScene();
-    m_editorData->addExistingRouteToScene();
+void MainWindow::endSetRoute()
+{
+    m_mediator->endSetRoute();
 
-    m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
+    m_clearRouteAction->setEnabled(m_mediator->routeHasNodes());
+
+    console(tr("Set route: route finished."));
+}
+
+void MainWindow::enlargeHorSize()
+{
+    m_mediator->enlargeHorSize();
+}
+
+void MainWindow::enlargeVerSize()
+{
+    m_mediator->enlargeVerSize();
+}
+
+void MainWindow::fitScale()
+{
+    m_scaleSlider->setValue(m_mediator->fitScale());
+}
+
+void MainWindow::initializeNewTrack()
+{
+    QString nameOut;
+    int colsOut, rowsOut;
+    if (m_mediator->initializeNewTrack(nameOut, colsOut, rowsOut))
+    {
+        // Undo stack has been cleared.
+        m_undoAction->setEnabled(false);
+        m_redoAction->setEnabled(false);
+
+        fitScale();
+
+        setActionStatesOnNewTrack();
+
+        setTitle(tr("New file"));
+
+        m_clearRouteAction->setEnabled(false);
+
+        m_saved = false;
+
+        console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
+            .arg(nameOut)
+            .arg(colsOut)
+            .arg(rowsOut));
+    }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::saveTrack()
@@ -627,18 +661,15 @@ void MainWindow::saveTrack()
     }
     else
     {
-        assert(m_editorData);
-        if (m_editorData->saveTrackData())
+        if (m_mediator->saveTrackData())
         {
-            console(QString(
-                tr("Track '")) + m_editorData->trackData()->fileName() + tr("' saved."));
-            setTitle(m_editorData->trackData()->fileName());
+            console(QString(tr("Track '")) + m_mediator->currentFileName() + tr("' saved."));
+            setTitle(m_mediator->currentFileName());
             m_saved = true;
         }
         else
         {
-            console(QString(
-                tr("Failed to save track '")) + m_editorData->trackData()->fileName() + "'.");
+            console(QString(tr("Failed to save track '")) + m_mediator->currentFileName() + "'.");
         }
     }
 
@@ -660,8 +691,7 @@ void MainWindow::saveAsTrack()
         fileName += trackFileExtension;
     }
 
-    assert(m_editorData);
-    if (m_editorData->saveTrackDataAs(fileName))
+    if (m_mediator->saveTrackDataAs(fileName))
     {
         console(QString(tr("Track '")) + fileName + tr("' saved."));
         setTitle(fileName);
@@ -675,51 +705,15 @@ void MainWindow::saveAsTrack()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::initializeNewTrack()
+void MainWindow::setupTrackAfterUndoOrRedo()
 {
-    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+    m_saveAction->setEnabled(true);
 
-    // Show a dialog asking some questions about the track
-    NewTrackDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        const unsigned int cols = dialog.cols();
-        const unsigned int rows = dialog.rows();
+    setActionStatesOnNewTrack();
 
-        assert(m_editorData);
+    m_mediator->setupTrackAfterUndoOrRedo();
 
-        m_editorData->setTrackData(TrackDataPtr(new TrackData(dialog.name(), dialog.isUserTrack(), cols, rows)));
-
-        delete m_editorScene;
-        m_editorScene = new EditorScene;
-
-        m_editorView->setScene(m_editorScene);
-        m_editorView->updateSceneRect();
-
-        // Undo stack has been cleared.
-        m_undoAction->setEnabled(false);
-        m_redoAction->setEnabled(false);
-
-        m_editorData->addTilesToScene();
-        m_editorData->addObjectsToScene();
-
-        fitScale();
-
-        setActionStatesOnNewTrack();
-
-        console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
-            .arg(m_editorData->trackData()->name())
-            .arg(m_editorData->trackData()->map().cols())
-            .arg(m_editorData->trackData()->map().rows()));
-
-        setTitle(tr("New file"));
-
-        m_clearRouteAction->setEnabled(false);
-
-        m_saved = false;
-    }
-
-    QApplication::restoreOverrideCursor();
+    m_clearRouteAction->setEnabled(m_mediator->routeHasNodes());
 }
 
 void MainWindow::setActionStatesOnNewTrack()
@@ -735,106 +729,14 @@ void MainWindow::setActionStatesOnNewTrack()
 
 void MainWindow::setTrackProperties()
 {
-    // Show a dialog to set some properties e.g. lap count.
-    assert(m_editorData);
-    TrackPropertiesDialog dialog(m_editorData->trackData()->name(), m_editorData->trackData()->index(), m_editorData->trackData()->isUserTrack(), this);
-    if (dialog.exec() == QDialog::Accepted)
+    if (m_mediator->setTrackProperties())
     {
-        m_editorData->trackData()->setName(dialog.name());
-        m_editorData->trackData()->setIndex(dialog.index());
-        m_editorData->trackData()->setUserTrack(dialog.isUserTrack());
         console(QString(tr("Track properties updated.")));
     }
 }
 
-void MainWindow::enlargeHorSize()
-{
-    assert(m_editorData);
-    if (m_editorData->trackData())
-    {
-        m_editorData->trackData()->enlargeHorSize();
-        m_editorData->addTilesToScene();
-
-        m_editorView->updateSceneRect();
-    }
-}
-
-void MainWindow::enlargeVerSize()
-{
-    assert(m_editorData);
-    if (m_editorData->trackData())
-    {
-        m_editorData->trackData()->enlargeVerSize();
-        m_editorData->addTilesToScene();
-
-        m_editorView->updateSceneRect();
-    }
-}
-
-void MainWindow::enableUndo(bool enable)
-{
-    m_undoAction->setEnabled(enable);
-}
-
-void MainWindow::beginSetRoute()
-{
-    QApplication::restoreOverrideCursor();
-
-    assert(m_editorData);
-
-    m_editorData->saveUndoPoint();
-
-    if (m_editorData->canRouteBeSet())
-    {
-        console(tr("Set route: begin."));
-        QMessageBox::information(
-            this,
-            tr("Set route, checkpoints and driving lines."),
-            tr("Setting the route defines checkpoints for the cars so\n"
-               "that no shortcuts can be taken. It also defines\n"
-               "driving lines for the computer players.\n\n"
-               "Click on the tiles one by one and make a closed loop\n"
-               "with the target nodes. You can adjust the nodes afterwads.\n"
-               "Start from the first tile after the finish line tile\n"
-               "to make the lap detection and timing work correctly.\n"
-               "Click on the first node again to finish."));
-        m_editorData->beginSetRoute();
-    }
-    else
-    {
-        QMessageBox::critical(this, tr("Set route"), tr("Invalid track. Route cannot be set."));
-        console(tr("Set route: not a valid track."));
-    }
-}
-
-void MainWindow::endSetRoute()
-{
-    assert(m_editorData);
-    m_editorData->endSetRoute();
-    m_clearRouteAction->setEnabled(m_editorData->trackData()->route().numNodes());
-    console(tr("Set route: route finished."));
-}
-
-void MainWindow::console(QString text)
-{
-    QDateTime date = QDateTime::currentDateTime();
-    m_console->append(QString("(") + date.toString("hh:mm:ss") + "): " + text);
-}
-
-void MainWindow::clearEditMode()
-{
-    QApplication::restoreOverrideCursor();
-    m_editorData->setMode(EditorData::EditorMode::None);
-}
-
-void MainWindow::fitScale()
-{
-    m_editorView->centerOn(m_editorView->sceneRect().center());
-    m_scaleSlider->setValue(m_editorView->viewport()->height() * 100 / m_editorView->sceneRect().height());
-}
-
 MainWindow::~MainWindow()
 {
-    delete m_editorData;
+    delete m_mediator;
     delete m_objectModelLoader;
 }

@@ -22,11 +22,13 @@
 #include <QString>
 #include <QPointF>
 
+#include "draganddropstore.hpp"
+#include "editormode.hpp"
 #include "trackdata.hpp"
 #include "trackio.hpp"
 #include "undostack.hpp"
 
-class MainWindow;
+class Mediator;
 class Object;
 class ObjectModelLoader;
 class TargetNode;
@@ -40,19 +42,10 @@ class EditorData
 {
 public:
 
-    //! Editing modes.
-    enum class EditorMode
-    {
-        None,
-        SetRoute,
-        SetTileType,
-        AddObject,
-        EraseObject
-    };
-
     //! Constructor.
-    //! \param mainWindow Pointer to the main window.
-    EditorData(MainWindow * mainWindow);
+    explicit EditorData(Mediator & mediator);
+
+    DragAndDropStore & dadStore();
 
     //! Load track from the given file.
     bool loadTrackData(QString fileName);
@@ -89,10 +82,6 @@ public:
     //! setting the route.
     void beginSetRoute();
 
-    //! This should be called after user ends
-    //! setting the route.
-    void endSetRoute();
-
     //! Adds current target node objects to the scene.
     void addExistingRouteToScene();
 
@@ -108,24 +97,6 @@ public:
     //! Returns current track data object. Returns NULL if not set.
     TrackDataPtr trackData();
 
-    //! Returns current editing mode.
-    EditorMode mode() const;
-
-    //! Sets the current editing mode.
-    void setMode(EditorMode newMode);
-
-    //! Set tile that is being drag'n'dropped.
-    void setDragAndDropSourceTile(TrackTile * tile);
-
-    //! Returns the tile being drag'n'dropped or nullptr.
-    TrackTile * dragAndDropSourceTile() const;
-
-    //! Set object that is being drag'n'dropped.
-    void setDragAndDropObject(Object * object);
-
-    //! Returns the object being drag'n'dropped or nullptr.
-    Object * dragAndDropObject() const;
-
     //! Set selected object.
     void setSelectedObject(Object * object);
 
@@ -137,18 +108,6 @@ public:
 
     //! Returns the selected target node or nullptr.
     TargetNode * selectedTargetNode() const;
-
-    //! Set target node that is being drag'n'dropped.
-    void setDragAndDropTargetNode(TargetNode * tnode);
-
-    //! Returns the target node being drag'n'dropped or nullptr.
-    TargetNode * dragAndDropTargetNode() const;
-
-    //! Get source pos of the drag'n'drop.
-    QPointF dragAndDropSourcePos() const;
-
-    //! Set source pos of the drag'n'drop.
-    void setDragAndDropSourcePos(QPointF pos);
 
     //! Add tiles in current track data object to the scene.
     void addTilesToScene();
@@ -182,27 +141,19 @@ private:
 
     void removeTargetNodesFromScene();
 
+    DragAndDropStore m_dadStore;
+
     TrackIO m_trackIO;
 
     TrackDataPtr m_trackData;
 
     UndoStack m_undoStack;
 
-    EditorMode m_mode;
-
-    TrackTile * m_dragAndDropSourceTile = nullptr;
-
-    Object * m_dragAndDropObject = nullptr;
-
     Object * m_selectedObject = nullptr;
 
     TargetNode * m_selectedTargetNode = nullptr;
 
-    TargetNode * m_dragAndDropTargetNode = nullptr;
-
-    QPointF m_dragAndDropSourcePos;
-
-    MainWindow * m_mainWindow = nullptr;
+    Mediator & m_mediator;
 
     std::vector<QGraphicsLineItem *> m_targetNodes;
 
