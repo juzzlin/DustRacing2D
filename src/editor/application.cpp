@@ -58,7 +58,7 @@ void Application::parseArgs(int argc, char ** argv)
     QString lang = "";
 
     const std::vector<QString> args(argv, argv + argc);
-    for (unsigned int i = 0; i < args.size(); i++)
+    for (unsigned int i = 1; i < args.size(); i++)
     {
         if (args[i] == "-h" || args[i] == "--help")
         {
