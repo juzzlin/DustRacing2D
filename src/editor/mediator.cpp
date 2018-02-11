@@ -145,32 +145,6 @@ void Mediator::endSetRoute()
     setMode(EditorMode::None);
 }
 
-void Mediator::enlargeHorSize()
-{
-    assert(m_editorData);
-
-    if (m_editorData->trackData())
-    {
-        m_editorData->trackData()->enlargeHorSize();
-        m_editorData->addTilesToScene();
-
-        m_editorView->updateSceneRect();
-    }
-}
-
-void Mediator::enlargeVerSize()
-{
-    assert(m_editorData);
-
-    if (m_editorData->trackData())
-    {
-        m_editorData->trackData()->enlargeVerSize();
-        m_editorData->addTilesToScene();
-
-        m_editorView->updateSceneRect();
-    }
-}
-
 void Mediator::enableUndo(bool enable)
 {
     m_mainWindow.enableUndo(enable);

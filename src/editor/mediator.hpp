@@ -74,10 +74,6 @@ public:
 
     void endSetRoute();
 
-    void enlargeHorSize();
-
-    void enlargeVerSize();
-
     void enableUndo(bool enable);
 
     void floodFill(TrackTile & tile, QAction * action, const QString & typeToFill);

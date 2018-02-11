@@ -89,10 +89,6 @@ private slots:
 
     bool doOpenTrack(QString fileName);
 
-    void enlargeHorSize();
-
-    void enlargeVerSize();
-
     void handleToolBarActionClick(QAction * action);
 
     void initializeNewTrack();
@@ -152,10 +148,6 @@ private:
     QAction * m_undoAction = nullptr;
 
     QAction * m_redoAction = nullptr;
-
-    QAction * m_enlargeHorSize = nullptr;
-
-    QAction * m_enlargeVerSize = nullptr;
 
     QAction * m_clearRouteAction = nullptr;
 

@@ -64,12 +64,6 @@ public:
     //! Get objects object.
     const Objects & objects() const;
 
-    //! Enlarge horizontal size.
-    void enlargeHorSize();
-
-    //! Enlarge vertical size.
-    void enlargeVerSize();
-
     //! Insert tile column at given index and move objects.
     void insertColumn(unsigned int at, MapBase::InsertDirection insertDirection);
 

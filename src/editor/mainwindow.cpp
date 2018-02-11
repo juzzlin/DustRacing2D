@@ -355,18 +355,6 @@ void MainWindow::populateMenuBar()
     });
     m_redoAction->setEnabled(false);
 
-    // Add "enlarge hor size"-action
-    m_enlargeHorSize = new QAction(tr("Enlarge hor size"), this);
-    editMenu->addAction(m_enlargeHorSize);
-    connect(m_enlargeHorSize, SIGNAL(triggered()), this, SLOT(enlargeHorSize()));
-    m_enlargeHorSize->setEnabled(false);
-
-    // Add "enlarge ver size"-action
-    m_enlargeVerSize = new QAction(tr("Enlarge ver size"), this);
-    editMenu->addAction(m_enlargeVerSize);
-    connect(m_enlargeVerSize, SIGNAL(triggered()), this, SLOT(enlargeVerSize()));
-    m_enlargeVerSize->setEnabled(false);
-
     // Add "Set track properties"-action
     m_setTrackPropertiesAction = new QAction(tr("&Set properties.."), this);
     editMenu->addAction(m_setTrackPropertiesAction);
@@ -607,16 +595,6 @@ void MainWindow::endSetRoute()
     console(tr("Set route: route finished."));
 }
 
-void MainWindow::enlargeHorSize()
-{
-    m_mediator->enlargeHorSize();
-}
-
-void MainWindow::enlargeVerSize()
-{
-    m_mediator->enlargeVerSize();
-}
-
 void MainWindow::fitScale()
 {
     m_scaleSlider->setValue(m_mediator->fitScale());
@@ -721,8 +699,6 @@ void MainWindow::setActionStatesOnNewTrack()
     m_saveAction->setEnabled(true);
     m_saveAsAction->setEnabled(true);
     m_toolBar->setEnabled(true);
-    m_enlargeHorSize->setEnabled(true);
-    m_enlargeVerSize->setEnabled(true);
     m_setRouteAction->setEnabled(true);
     m_setTrackPropertiesAction->setEnabled(true);
 }

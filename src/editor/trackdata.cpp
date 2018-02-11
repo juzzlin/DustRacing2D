@@ -104,16 +104,6 @@ const Objects & TrackData::objects() const
     return m_objects;
 }
 
-void TrackData::enlargeHorSize()
-{
-    m_map.resize(m_map.cols() + 1, m_map.rows());
-}
-
-void TrackData::enlargeVerSize()
-{
-    m_map.resize(m_map.cols(), m_map.rows() + 1);
-}
-
 void TrackData::insertColumn(unsigned int at, MapBase::InsertDirection insertDirection)
 {
     at = m_map.insertColumn(at, insertDirection);
