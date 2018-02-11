@@ -49,6 +49,8 @@ protected:
 
     void keyPressEvent(QKeyEvent * event) override;
 
+    void wheelEvent(QWheelEvent * event) override;
+
 private:
 
     void addCurrentToolBarObjectToScene();

@@ -79,6 +79,8 @@ public slots:
 
     void setVisible(bool visible) override;
 
+    void updateScaleSlider(int value);
+
 protected:
 
     void closeEvent(QCloseEvent * event) override;

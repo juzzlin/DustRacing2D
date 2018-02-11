@@ -111,6 +111,11 @@ void MainWindow::setVisible(bool visible)
     }
 }
 
+void MainWindow::updateScaleSlider(int value)
+{
+    m_scaleSlider->setValue(value);
+}
+
 void MainWindow::showTip()
 {
     QMessageBox::information(

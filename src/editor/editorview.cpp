@@ -686,3 +686,15 @@ void EditorView::setTileType(TrackTile & tile, QAction * action)
     tile.setTileType(action->data().toString());
     tile.setPixmap(action->icon().pixmap(TrackTile::TILE_W, TrackTile::TILE_H));
 }
+
+void EditorView::wheelEvent(QWheelEvent * event)
+{
+    if (event->modifiers() & Qt::ControlModifier)
+    {
+        m_mediator.mouseWheelZoom(event->delta());
+    }
+    else
+    {
+        QGraphicsView::wheelEvent(event);
+    }
+}

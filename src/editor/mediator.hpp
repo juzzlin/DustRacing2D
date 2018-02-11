@@ -96,6 +96,8 @@ public:
 
     bool isRedoable() const;
 
+    void mouseWheelZoom(int delta);
+
     bool openTrack(QString fileName);
 
     void pushNewTargetNodeToRoute(QPointF pos);

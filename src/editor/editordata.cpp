@@ -356,6 +356,16 @@ void EditorData::removeTargetNodesFromScene()
     }
 }
 
+int EditorData::currentScale() const
+{
+    return m_currentScale;
+}
+
+void EditorData::setCurrentScale(int currentScale)
+{
+    m_currentScale = currentScale;
+}
+
 void EditorData::clearRoute()
 {
     assert(m_trackData);

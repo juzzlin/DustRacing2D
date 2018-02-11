@@ -271,6 +271,44 @@ bool Mediator::isRedoable() const
     return m_editorData->isRedoable();
 }
 
+void Mediator::mouseWheelZoom(int delta)
+{
+    const int sensitivity = 10;
+    const int currentScale = m_editorData->currentScale();
+    const int maxScale = 200;
+
+    int newScale = currentScale;
+
+    if (delta < 0)
+    {
+        if (currentScale > sensitivity)
+        {
+            newScale = currentScale - sensitivity;
+        }
+        else
+        {
+            newScale = 0;
+        }
+    }
+    else if (delta > 0)
+    {
+        if (currentScale + sensitivity < maxScale)
+        {
+            newScale = currentScale + sensitivity;
+        }
+        else
+        {
+            newScale = maxScale;
+        }
+    }
+
+    if (newScale != currentScale)
+    {
+        setScale(newScale);
+        m_mainWindow.updateScaleSlider(newScale);
+    }
+}
+
 void Mediator::pushNewTargetNodeToRoute(QPointF pos)
 {
     m_editorData->pushNewTargetNodeToRoute(pos);
@@ -343,6 +381,7 @@ void Mediator::setScale(int value)
     QTransform transform;
     transform.scale(scale, scale);
     m_editorView->setTransform(transform);
+    m_editorData->setCurrentScale(value);
 }
 
 EditorMode Mediator::mode() const

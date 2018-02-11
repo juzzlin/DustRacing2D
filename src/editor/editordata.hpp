@@ -126,6 +126,10 @@ public:
 
     unsigned int activeRow() const;
 
+    void setCurrentScale(int currentScale);
+
+    int currentScale() const;
+
 private:
 
     EditorData(const EditorData & e);
@@ -160,6 +164,9 @@ private:
     unsigned int m_activeColumn = 0;
 
     unsigned int m_activeRow = 0;
+
+    // Scale percentage
+    int m_currentScale = 50;
 };
 
 #endif // EDITORDATA_HPP
