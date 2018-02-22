@@ -45,13 +45,6 @@ endif()
 add_definitions(-DGLEW_STATIC)
 add_definitions(-DGLEW_NO_GLU)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_compile_options("$<$<CONFIG:RELASE>:-W -Wall -O3 -pedantic -fomit-frame-pointer>")
-    add_compile_options("$<$<CONFIG:DEBUG>:-W -Wall -O0 -g -pedantic>")
-elseif(MSVC)
-    add_definitions(-DNOMINMAX)
-endif()
-
 add_definitions(-DVERSION="${VERSION}")
 
 set(CMAKE_AUTOMOC ON)
