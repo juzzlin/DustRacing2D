@@ -11,4 +11,4 @@ set(STFHSRC
 )
 
 add_library(STFH ${STFHSRC})
-
+set_property(TARGET STFH PROPERTY CXX_STANDARD 11)

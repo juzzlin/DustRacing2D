@@ -72,7 +72,6 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     add_compile_options("$<$<CONFIG:RELEASE>:-W>")
     add_compile_options("$<$<CONFIG:RELEASE>:-Wall>")
     add_compile_options("$<$<CONFIG:RELEASE>:-O3>")
