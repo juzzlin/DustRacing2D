@@ -27,158 +27,76 @@ class TrackDataBase
 {
 public:
 
-    /** Keywords used in the track data files.
-     *  TODO: Use constexpr when MSVC supports it properly. */
+    /** Keywords used in the track data files. */
     struct DataKeywords
     {
         struct Header
         {
-            static QString ver()
-            {
-                return "version";
-            }
+            static constexpr auto version = "version";
 
-            static QString track()
-            {
-                return "track";
-            }
+            static constexpr auto track = "track";
 
-            static QString name()
-            {
-                return "name";
-            }
+            static constexpr auto name = "name";
 
-            static QString cols()
-            {
-                return "cols";
-            }
+            static constexpr auto cols = "cols";
 
-            static QString rows()
-            {
-                return "rows";
-            }
+            static constexpr auto rows = "rows";
 
-            static QString index()
-            {
-                return "index";
-            }
+            static constexpr auto index = "index";
 
-            static QString user()
-            {
-                return "isUserTrack";
-            }
+            static constexpr auto user = "isUserTrack";
         };
 
         struct Track
         {
-            static QString node()
-            {
-                return "n";
-            }
+            static constexpr auto node = "n";
 
-            static QString tile()
-            {
-                return "t";
-            }
+            static constexpr auto tile = "t";
 
-            static QString object()
-            {
-                return "o";
-            }
+            static constexpr auto object = "o";
         };
 
         struct Node
         {
-            static QString index()
-            {
-                return "i";
-            }
+            static constexpr auto index = "i";
 
-            static QString x()
-            {
-                return "x";
-            }
+            static constexpr auto x = "x";
 
-            static QString y()
-            {
-                return "y";
-            }
+            static constexpr auto y = "y";
 
-            static QString width()
-            {
-                return "w";
-            }
+            static constexpr auto width = "w";
 
-            static QString height()
-            {
-                return "h";
-            }
+            static constexpr auto height = "h";
         };
 
         struct Tile
         {
-            static QString type()
-            {
-                return "t";
-            }
+            static constexpr auto type = "t";
 
-            static QString i()
-            {
-                return "i";
-            }
+            static constexpr auto i = "i";
 
-            static QString j()
-            {
-                return "j";
-            }
+            static constexpr auto j = "j";
 
-            static QString orientation()
-            {
-                return "o";
-            }
+            static constexpr auto orientation = "o";
 
-            static QString computerHint()
-            {
-                return "c";
-            }
+            static constexpr auto computerHint = "c";
 
-            static QString excludeFromMinimap()
-            {
-                return "e";
-            }
+            static constexpr auto excludeFromMinimap = "e";
         };
 
         struct Object
         {
-            static QString role()
-            {
-                return "r";
-            }
+            static constexpr auto role = "r";
 
-            static QString category()
-            {
-                return "c";
-            }
+            static constexpr auto category = "c";
 
-            static QString x()
-            {
-                return "x";
-            }
+            static constexpr auto x= "x";
 
-            static QString y()
-            {
-                return "y";
-            }
+            static constexpr auto y = "y";
 
-            static QString orientation()
-            {
-                return "o";
-            }
+            static constexpr auto orientation = "o";
 
-            static QString forceStationary()
-            {
-                return "fs";
-            }
+            static constexpr auto forceStationary = "fs";
         };
     };
 
