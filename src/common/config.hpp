@@ -13,55 +13,50 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include <QString>
-
 //! Config variables for editor and for the game.
 namespace Config
 {
-    class Common
+    struct Common
     {
-    public:
         //! The base data path given by -DDATA_PATH.
-        static const QString dataPath;
+        static constexpr auto dataPath = DATA_PATH;
 
-        static const QString COPYRIGHT;
+        static constexpr auto COPYRIGHT = "Copyright (c) 2011-2018 Jussi Lind";
 
         //! "Company" name used in QSettings.
-        static const QString QSETTINGS_COMPANY_NAME;
+        static constexpr auto QSETTINGS_COMPANY_NAME = "dustrac";
 
         /*! Path used to search "3rd party" race tracks under the home dir:
          *  ~/TRACK_SEARCH_PATH/ */
-        static const QString TRACK_SEARCH_PATH;
+        static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
 
-        static const QString WEB_SITE_URL;
+        static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
     };
 
-    class Editor
+    struct Editor
     {
-    public:
-        static const QString EDITOR_NAME;
+        static constexpr auto EDITOR_NAME = "Dust Racing 2D Track Editor";
 
-        static const QString EDITOR_VERSION;
+        static constexpr auto EDITOR_VERSION = VERSION;
 
-        static const QString MODEL_CONFIG_FILE_NAME;
+        static constexpr auto MODEL_CONFIG_FILE_NAME = "editorModels.conf";
 
-        static const QString QSETTINGS_SOFTWARE_NAME;
+        static constexpr auto QSETTINGS_SOFTWARE_NAME = "Editor";
 
-        static const QString SELECT_ICON_PATH;
+        static constexpr auto SELECT_ICON_PATH = ":/cursor.png";
 
-        static const QString ERASE_ICON_PATH;
+        static constexpr auto ERASE_ICON_PATH = ":/cross.png";
 
-        static const QString CLEAR_ICON_PATH;
+        static constexpr auto CLEAR_ICON_PATH = ":/clear.png";
     };
 
-    class Game
+    struct Game
     {
-    public:
-        static const QString GAME_NAME;
+        static constexpr auto GAME_NAME = "Dust Racing 2D";
 
-        static const QString GAME_VERSION;
+        static constexpr auto GAME_VERSION = VERSION;
 
-        static const QString QSETTINGS_SOFTWARE_NAME;
+        static constexpr auto QSETTINGS_SOFTWARE_NAME = "Game";
     };
 
 } // Config

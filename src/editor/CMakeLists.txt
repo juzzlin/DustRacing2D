@@ -32,7 +32,7 @@ set(SRC
     tracktile.cpp
     trackpropertiesdialog.cpp
     undostack.cpp
-    ../common/config.cpp
+    ../common/config.hpp
     ../common/mapbase.cpp
     ../common/objectbase.cpp
     ../common/objects.cpp

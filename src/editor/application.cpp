@@ -27,7 +27,7 @@
 static void printHelp()
 {
     std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT.toStdString() << std::endl << std::endl;
+    std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
     std::cout << "Usage: dustrac-editor [options] [trackFile]" << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;

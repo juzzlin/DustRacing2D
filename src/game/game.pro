@@ -211,7 +211,6 @@ HEADERS += \
     STFH/source.hpp \
 
 SOURCES += \
-    ../common/config.cpp \
     ../common/mapbase.cpp \
     ../common/objectbase.cpp \
     ../common/objects.cpp \

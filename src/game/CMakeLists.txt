@@ -87,7 +87,7 @@ set(SRC
     trackobjectfactory.cpp
     tracktile.cpp
     tree.cpp
-    ../common/config.cpp
+    ../common/config.hpp
     ../common/objectbase.cpp
     ../common/objects.cpp
     ../common/route.cpp

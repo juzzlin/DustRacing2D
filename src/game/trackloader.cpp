@@ -47,10 +47,10 @@ TrackLoader * TrackLoader::m_instance = nullptr;
 
 TrackLoader::TrackLoader()
     : m_assetManager(
-        Config::Common::dataPath.toStdString(),
-        (Config::Common::dataPath + QDir::separator().toLatin1() + "surfaces.conf").toStdString(),
+        Config::Common::dataPath,
+        (Config::Common::dataPath + QDir::separator().toLatin1() + std::string("surfaces.conf")),
         "",
-        (Config::Common::dataPath + QDir::separator().toLatin1() + "meshes.conf").toStdString())
+        (Config::Common::dataPath + QDir::separator().toLatin1() + std::string("meshes.conf")))
     , m_objectFactory(m_assetManager)
     , m_trackObjectFactory(m_objectFactory)
     , m_paths()
