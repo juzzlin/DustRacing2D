@@ -30,10 +30,8 @@
 #include "trackloader.hpp"
 #include "trackselectionmenu.hpp"
 
-#include <MCAssetManager>
 #include <MCCamera>
 #include <MCLogger>
-#include <MCObjectFactory>
 #include <MCWorldRenderer>
 
 #include <QApplication>
