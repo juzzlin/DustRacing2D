@@ -36,8 +36,6 @@ class StartlightsOverlay;
 class StateMachine;
 class TimingOverlay;
 class TrackLoader;
-class MCObjectFactory;
-class MCAssetManager;
 
 //! The main game class.
 class Game : public QObject
