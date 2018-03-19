@@ -13,9 +13,9 @@
    height="512"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="straight.svg"
-   inkscape:export-filename="/home/jussil/Home-Laptop-12.04/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/straight.png"
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/data/images/straight.png"
    inkscape:export-xdpi="45"
    inkscape:export-ydpi="45">
   <defs
@@ -27,17 +27,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="257.19192"
-     inkscape:cy="281.02981"
+     inkscape:zoom="11.2"
+     inkscape:cx="390.54079"
+     inkscape:cy="48.112874"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1307"
-     inkscape:window-height="752"
-     inkscape:window-x="181"
-     inkscape:window-y="134"
-     inkscape:window-maximized="0">
+     inkscape:window-width="2489"
+     inkscape:window-height="1416"
+     inkscape:window-x="71"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid3005"
@@ -54,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -90,20 +90,6 @@
        width="9.8873196"
        height="512.88733"
        x="450.35635"
-       y="539.91852" />
-    <rect
-       style="fill:#1a1a1a;stroke:#1a1a1a;stroke-width:1.11268008;stroke-opacity:1"
-       id="rect3885-4"
-       width="9.8873196"
-       height="512.88733"
-       x="62.75634"
-       y="539.91852" />
-    <rect
-       style="fill:#1a1a1a;stroke:#1a1a1a;stroke-width:1.11268008;stroke-opacity:1"
-       id="rect3885-4-8"
-       width="9.8873196"
-       height="512.88733"
-       x="439.35635"
        y="539.91852" />
   </g>
 </svg>

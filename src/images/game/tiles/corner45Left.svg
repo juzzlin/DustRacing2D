@@ -14,9 +14,9 @@
    height="512"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="corner45Left.svg"
-   inkscape:export-filename="/home/jussil/Home-Laptop-12.04/Projects/Programming/Projects/dustrac/sourceforge-git/dustrac-code/data/images/corner45Left.png"
+   inkscape:export-filename="/home/juzzlin/Home/Desktop-16.04/Projects/Programming/dustrac/DustRacing2D/data/images/corner45Left.png"
    inkscape:export-xdpi="45"
    inkscape:export-ydpi="45">
   <defs
@@ -38,14 +38,14 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="226.26787"
+     inkscape:cx="47.696441"
      inkscape:cy="257.554"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1535"
-     inkscape:window-height="876"
-     inkscape:window-x="65"
+     inkscape:window-width="2489"
+     inkscape:window-height="1416"
+     inkscape:window-x="71"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:snap-global="false">
@@ -151,21 +151,9 @@
        x="260.68112"
        y="525.04327" />
     <path
-       style="fill:none;stroke:#1a1a1a;stroke-width:10.04291534;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="M 446,1052.3622 C 444.77537,777.12095 349.36183,647.71707 244,540.36218"
-       id="path2993-5-2"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
        style="fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke:#00ff00;stroke-width:1.00599003;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:76.87679205"
        d="m 461.26562,1041.9236 c -0.006,-6.2746 -0.47438,-21.6762 -1.04138,-34.2255 -8.55709,-189.39376 -59.84465,-319.67609 -174.65549,-443.66573 -5.68107,-6.13525 -12.96994,-14.00715 -16.19749,-17.4931 l -5.86826,-6.33808 124.34451,0 124.34449,0 0,256.56549 0,256.56552 -25.45795,0 -25.45796,0 -0.0104,-11.4086 10e-6,0 z"
        id="path4300"
        inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;stroke:#1a1a1a;stroke-width:11;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:76.87679205;marker-start:none"
-       d="M 67,1052.3622 C 67.76868,909.01401 61.588389,835.70187 0,782.36218"
-       id="path2993-59"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
   </g>
 </svg>
