@@ -85,7 +85,7 @@ add_definitions(-DVERSION="${VERSION}")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(QT_MIN_VER 5.2.1)
+set(QT_MIN_VER 5.4.0)
 find_package(Qt5Core ${QT_MIN_VER} REQUIRED)
 find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
 find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
