@@ -41,30 +41,23 @@ public:
     };
 
     //! Defines the (default) car properties.
-    class Description
+    struct Description
     {
-    public:
+        float accelerationFriction = 0.75f;
 
-        //! Constructor.
-        Description()
-        : accelerationFriction(0.75f)
-        , rollingFrictionOnTrack(0.1f)
-        , rotationFriction(1.0f)
-        , power(5000.0f)
-        , mass(1500.0f)
-        , restitution(0.05f)
-        , dragLinear(1.0f)
-        , dragQuadratic(5.0f)
-        {}
+        float rollingFrictionOnTrack = 0.1f;
 
-        float accelerationFriction;
-        float rollingFrictionOnTrack;
-        float rotationFriction;
-        float power;
-        float mass;
-        float restitution;
-        float dragLinear;
-        float dragQuadratic;
+        float rotationFriction = 1.0f;
+
+        float power = 5000.0f;
+
+        float mass = 1500.0f;
+
+        float restitution = 0.05f;
+
+        float dragLinear = 1.0f;
+
+        float dragQuadratic = 5.0f;
     };
 
     //! Constructor.
