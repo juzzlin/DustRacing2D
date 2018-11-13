@@ -31,11 +31,6 @@ Build systems
 
 The "official" build system for Linux is CMake.
 
-There are also qmake project files for easier cross-compilation for Windows and Android. Qt5 is required.
-
-I used to make Windows releases also with CMake, but in the future I'll cross-compile for Windows on Ubuntu host by using MXE and qmake. MXE is a cool cross-compilation environment
-and all libraries are linked statically by default (no DLLs needed).
-
 Toolchains
 ==========
 
@@ -58,13 +53,15 @@ On Linux pkg-config is required.
 Dustrac also exploits some features of the C++11 standard,
 so a somewhat compliant compiler is required (GCC >= 4.7).
 
-Building in the command line on Linux (tested on Ubuntu 16.04)
+Building in the command line on Linux (tested on Ubuntu 18.04)
 ==============================================================
 
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt5 development files (qt5-default on Ubuntu).
+1) Install Qt5 development files 
+   - qt5-default package on Ubuntu
+   - qttools5-dev might also be needed on newer systems
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
 3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
 4) Install CMake (cmake on Debian/Ubuntu).
