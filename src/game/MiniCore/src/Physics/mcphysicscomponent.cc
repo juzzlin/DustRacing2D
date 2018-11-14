@@ -290,6 +290,10 @@ bool MCPhysicsComponent::isStationary() const
     return m_isStationary;
 }
 
+/**
+ * @brief MCPhysicsComponent::integrate
+ * @param step: physical time step in seconds
+ */
 void MCPhysicsComponent::integrate(float step)
 {
     // Integrate, if the object is not sleeping and it doesn't
@@ -329,14 +333,23 @@ void MCPhysicsComponent::integrate(float step)
     }
 }
 
+/**
+ * @brief MCPhysicsComponent::integrateLinear
+ * @param step: physical time step in seconds
+ */
 void MCPhysicsComponent::integrateLinear(float step)
 {
     MCVector3dF totAcceleration(m_acceleration);
     totAcceleration += m_forces * m_invMass;
     m_velocity += totAcceleration * step + m_linearImpulse;
-    m_velocity *= m_linearDamping;
+    m_velocity *= m_linearDamping; // FIXME PHYSICS: a damping should be time step dependent. v(t) = v0 * exp(t/Tau)
 }
 
+/**
+ * @brief MCPhysicsComponent::integrateAngular
+ * @param step: physical time step in seconds
+ * @return 
+ */
 float MCPhysicsComponent::integrateAngular(float step)
 {
     if (object().shape() && m_momentOfInertia > 0.0f)
@@ -344,7 +357,7 @@ float MCPhysicsComponent::integrateAngular(float step)
         float totAngularAcceleration(m_angularAcceleration);
         totAngularAcceleration += m_torque * m_invMomentOfInertia;
         m_angularVelocity += totAngularAcceleration * step + m_angularImpulse;
-        m_angularVelocity *= m_angularDamping;
+        m_angularVelocity *= m_angularDamping; // FIXME PHYSICS: a damping should be time step dependent. v(t) = v0 * exp(t/Tau)
 
         m_torque = 0.0f;
 
@@ -356,6 +369,10 @@ float MCPhysicsComponent::integrateAngular(float step)
     return 0;
 }
 
+/**
+ * @brief MCPhysicsComponent::stepTime
+ * @param step: time step in milli seconds
+ */
 void MCPhysicsComponent::stepTime(int step)
 {
     integrate(float(step) / 1000);

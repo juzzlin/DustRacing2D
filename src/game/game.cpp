@@ -99,7 +99,7 @@ Game::Game(int & argc, char ** argv)
 
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
         m_stateMachine->update();
-        m_scene->updateFrame(*m_inputHandler, m_timeStep);
+        m_scene->updateFrame(*m_inputHandler, m_timeStep); // FIXME PHYSICS: rounding error when converted to integer! 16ms instead of 16.667ms for 60fps and 33ms instead of 33.333ms
         m_scene->updateOverlays();
         m_renderer->renderNow();
     });

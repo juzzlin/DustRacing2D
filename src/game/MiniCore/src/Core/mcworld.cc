@@ -100,6 +100,11 @@ MCWorld::~MCWorld()
     delete m_bottomWallObject;
 }
 
+/**
+ * @brief MCWorld::integrate
+ * calls stepTime(step) for each physical object that is movable
+ * @param step: time step in milli seconds
+ */
 void MCWorld::integrate(int step)
 {
     // Integrate and update all registered objects
@@ -442,6 +447,10 @@ MCForceRegistry & MCWorld::forceRegistry() const
     return *m_forceRegistry;
 }
 
+/**
+ * @brief MCWorld::stepTime
+ * @param step: time step in milli seconds
+ */
 void MCWorld::stepTime(int step)
 {
     // Integrate physics

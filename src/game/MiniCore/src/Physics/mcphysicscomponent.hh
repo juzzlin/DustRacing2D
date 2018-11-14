@@ -204,7 +204,7 @@ private:
 
     float m_linearDamping;
 
-    MCVector3dF m_linearImpulse;
+    MCVector3dF m_linearImpulse; // FIXME PHYSICS: has the unit of a velocity, should be renamed or scaled by the mass
 
     MCVector3dF m_forces;
 
@@ -214,7 +214,7 @@ private:
 
     float m_angularDamping;
 
-    float m_angularImpulse;
+    float m_angularImpulse; // FIXME PHYSICS: has unit of angular velocity: should be renamed or scaled by the inertia
 
     float m_torque;
 

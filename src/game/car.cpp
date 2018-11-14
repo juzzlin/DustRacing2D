@@ -131,13 +131,17 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 void Car::setProperties(Description & desc)
 {
     physicsComponent().setMass(desc.mass);
-    physicsComponent().setMomentOfInertia(desc.mass * 3);
-    physicsComponent().setRestitution(desc.restitution);
+	
+	// TODO PHYSICS: clarify center of rotation for this inertia
+    physicsComponent().setMomentOfInertia(desc.mass * 3); // FIXME Physics: suggested: 1.5 instead of 3	
+	// FIXME PHYSICS: the inertia should be calculated by the car's dimensions I = 1/12 * m*(width^2 + height^2), both in meters
+    
+	physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
     const float width = dynamic_pointer_cast<MCRectShape>(shape())->width();
     const float height = dynamic_pointer_cast<MCRectShape>(shape())->height();
-    m_length = std::max(width, height);
+    m_length = std::max(width, height); // FIXME: this is 48 scene units, but for physics we deal here with metrical units...
 }
 
 void Car::initForceGenerators(Description & desc)
@@ -199,11 +203,12 @@ void Car::accelerate(bool deccelerate)
     const float velocity = physicsComponent().velocity().length();
     if (velocity > 0.001f)
     {
-        currentForce = m_desc.power / velocity;
+		// Our gear box translate a constant power into a force, depending on the current speed. 
+        currentForce = m_desc.power / velocity; // FIXME: velocity is not in meters/s, therefore the force is incorrect too!
         if (currentForce > maxForce)
         {
             currentForce = maxForce;
-            const float maxSpinVelocity = 4.5f;
+            const float maxSpinVelocity = 4.5f; // FIXME: velocity is not in meters/s
             if (!m_reverse && velocity > 0 && velocity < maxSpinVelocity)
             {
                 if (isHuman()) // Don't enable tire spin for AI yet
@@ -283,6 +288,7 @@ float Car::absSpeed() const
     return m_absSpeed;
 }
 
+// FIXME Physics: why are front tires handled different than rear tires?
 MCVector3dF Car::leftFrontTireLocation() const
 {
     return m_leftFrontTire->location();
@@ -331,6 +337,8 @@ void Car::updateTireWear(int step)
     m_absSpeed   = physicsComponent().speed();
     m_speedInKmh = m_absSpeed * 3.6 * 2.75;
 
+	// TODO Physics 4: the tire wear should be proportinal to the product of 
+	// the tire force and the velocity difference. 
     if (m_isHuman)
     {
         if (m_braking || (m_accelerating && m_steer != Steer::Neutral))

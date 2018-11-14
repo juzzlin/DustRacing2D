@@ -126,7 +126,7 @@ void MCWorldTest::testSimpleCollision()
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
 
-    world.stepTime(1.0);
+    world.stepTime(1);
 
     QVERIFY(object1.m_collisionEventReceived);
     QVERIFY(object2.m_collisionEventReceived);

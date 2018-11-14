@@ -70,13 +70,15 @@ void MCImpulseGenerator::generateImpulsesFromContact(
 
         // Linear component
         const float massScaling = invMassA / (invMassA + invMassB);
-        const float effRestitution = 1.0 + restitution;
+        const float effRestitution = 1.0f + restitution;
         pa.physicsComponent().addImpulse(linearImpulse * effRestitution * massScaling, true);
 
         // Angular component
-        const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit();
+        const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit(); // NOTE PHYSICS: conversion to physical units
         const MCVector3dF rotationalImpulse = linearImpulse % armA;
-        const float calibration = 0.5;
+        const float calibration = 0.5; // FIXME PHYSICS: this factor is justified by what? Physics shouldn't have and fuzzy factors. 
+		
+		// FIXME PHYSICS: angular impulse introduced from a collision should take the angular momentum into account!
         pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
     }
 }

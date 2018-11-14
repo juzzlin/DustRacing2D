@@ -52,15 +52,25 @@ void Tire::onStepTime(int)
             MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
         MCVector2dF v = physicsComponent().velocity();
         v.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
+		
+		// FIXME Physics: again here is a force mixed with an "impulse". Should be renamed
         MCVector2dF impulse =
             MCVector2dF::projection(v, tire) *
                 (m_isOffTrack ? m_offTrackFriction : m_friction) * m_spinCoeff *
                     -MCWorld::instance().gravity().k() * parent().physicsComponent().mass();
+		
         impulse.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor());
         parent().physicsComponent().addForce(-impulse, location());
 
+		// NOTE PHYSICS: the braking distance ist about 4 car lengths with 100km/h speed. 
+		// with a car of 4m length this is about 16m. That is way too short. About 36m is the 
+		// minimum for top sports cars. 
         if (m_car.isBraking())
         {
+			// FIXME Physics: again here is a force mixed with an "impulse". Should be renamed
+			// FIXME Physics: the factor 0.5 should be changed to 0.25. --> 25% of mass on each tire. 
+			//                Gives more realistic braking distance. 
+			// TODO 3: improvement: for braking the front wheels create more force than the rear ones. 
             MCVector2dF impulse =
                 v * 0.5f * (m_isOffTrack ? m_offTrackFriction : m_friction) *
                     -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * m_car.tireWearFactor();

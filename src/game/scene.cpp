@@ -250,6 +250,11 @@ void Scene::createMenus()
     m_menuManager->enterMenu(m_mainMenu);
 }
 
+/**
+ * @brief Scene::updateFrame
+ * @param handler
+ * @param step: time step in milli seconds
+ */
 void Scene::updateFrame(InputHandler & handler, int step)
 {
     if (m_stateMachine.state() == StateMachine::State::GameTransitionIn  ||
@@ -308,6 +313,10 @@ void Scene::updateOverlays()
     m_messageOverlay->update();
 }
 
+/**
+ * @brief Scene::updateWorld
+ * @param timeStep: time step in milli seconds
+ */
 void Scene::updateWorld(float timeStep)
 {
     // Step time

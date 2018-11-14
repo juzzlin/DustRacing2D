@@ -166,7 +166,7 @@ private:
 
     int m_updateDelay;
 
-    float m_timeStep;
+    float m_timeStep; // unit in milli seconds, depends on frames per second
 
     int m_lapCount;
 
