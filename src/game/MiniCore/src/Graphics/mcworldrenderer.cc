@@ -239,7 +239,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
 {
     for (auto && batch : layer.objectBatches()[camera])
     {
-        const int itemCountInBatch = static_cast<const int>(batch.objects.size());
+        const size_t itemCountInBatch = batch.objects.size();
         if (itemCountInBatch > 0)
         {
             MCObject * object = batch.objects[0];
@@ -248,7 +248,7 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
             view->bind();
             object->render(camera);
 
-            for (int i = 1; i < itemCountInBatch - 1; i++)
+            for (size_t i = 1; i < itemCountInBatch - 1; i++)
             {
                 batch.objects[i]->render(camera);
             }
@@ -315,7 +315,7 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
     // Render batches
     for (auto && batch : layer.objectBatches()[camera])
     {
-        const int itemCountInBatch = static_cast<const int>(batch.objects.size());
+        const size_t itemCountInBatch = batch.objects.size();
         if (itemCountInBatch > 0)
         {
             MCObject * object = batch.objects[0];
@@ -325,7 +325,7 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
                 view->bindShadow();
                 object->renderShadow(camera);
 
-                for (int i = 1; i < itemCountInBatch - 1; i++)
+                for (size_t i = 1; i < itemCountInBatch - 1; i++)
                 {
                     batch.objects[i]->renderShadow(camera);
                 }
