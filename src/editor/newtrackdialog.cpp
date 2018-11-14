@@ -53,11 +53,11 @@ NewTrackDialog::NewTrackDialog(QWidget *parent) :
     m_layout->addWidget(m_okButton,     4, 0);
     m_layout->addWidget(m_cancelButton, 4, 1);
 
-    connect(m_nameEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
-    connect(m_rowsEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
-    connect(m_colsEdit, SIGNAL(textChanged(QString)), this, SLOT(validateData()));
-    connect(m_okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(m_nameEdit, &QLineEdit::textChanged, this, &NewTrackDialog::validateData);
+    connect(m_rowsEdit, &QLineEdit::textChanged, this, &NewTrackDialog::validateData);
+    connect(m_colsEdit, &QLineEdit::textChanged, this, &NewTrackDialog::validateData);
+    connect(m_okButton, &QPushButton::clicked, this, &NewTrackDialog::accept);
+    connect(m_cancelButton, &QPushButton::clicked, this, &NewTrackDialog::reject);
 }
 
 unsigned int NewTrackDialog::cols() const
