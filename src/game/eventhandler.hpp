@@ -52,7 +52,7 @@ signals:
 
     void gameExited();
 
-    void soundRequested(QString handle);
+    void soundRequested(QString handle, bool loop = false);
 
     void cursorRevealed();
 

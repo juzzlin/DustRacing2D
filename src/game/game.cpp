@@ -95,7 +95,7 @@ Game::Game(int & argc, char ** argv)
         m_renderer->setCursor(Qt::BlankCursor);
     });
 
-    connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
+    connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
         m_stateMachine->update();
