@@ -21,6 +21,7 @@
 #include <MCPhysicsComponent>
 #include <MCSurface>
 #include <MCTrigonom>
+#include <MCWorld>
 
 Tire::Tire(Car & car, float friction, float offTrackFriction)
     : MCObject(MCAssetManager::surfaceManager().surface("frontTire"), "Tire")
@@ -48,33 +49,29 @@ void Tire::onStepTime(int)
     if (physicsComponent().velocity().lengthFast() > 0)
     {
         const float tireNormalAngle = angle() + 90;
-        const MCVector2dF tire(
+        const MCVector2dF tireAxisVector(
             MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
-        MCVector2dF v = physicsComponent().velocity();
-        v.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
+        MCVector2dF tireVelocityMaxUnityVector = physicsComponent().velocity();
+		tireVelocityMaxUnityVector.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
 		
-		// FIXME Physics: again here is a force mixed with an "impulse". Should be renamed
-        MCVector2dF impulse =
-            MCVector2dF::projection(v, tire) *
-                (m_isOffTrack ? m_offTrackFriction : m_friction) * m_spinCoeff *
-                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass();
+		// FIXME Physics: what we calculate here is only a maximum force, the tire can handle, 
+		// but it isn't a force in first place...
+        MCVector2dF normalForceVector =
+            MCVector2dF::projection(tireVelocityMaxUnityVector, tireAxisVector) *
+                (m_isOffTrack ? m_offTrackFriction : m_friction) * /* m_spinCoeff * */ // TODO reenable spinCoeff
+                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * 0.25;
 		
-        impulse.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor());
-        parent().physicsComponent().addForce(-impulse, location());
+        //normalForceVector.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor()); // FIXME: what's this code for?
+        parent().physicsComponent().addForce( -normalForceVector, location() );  // TODO: transform to physics unit
 
-		// NOTE PHYSICS: the braking distance ist about 4 car lengths with 100km/h speed. 
-		// with a car of 4m length this is about 16m. That is way too short. About 36m is the 
-		// minimum for top sports cars. 
         if (m_car.isBraking())
         {
-			// FIXME Physics: again here is a force mixed with an "impulse". Should be renamed
-			// FIXME Physics: the factor 0.5 should be changed to 0.25. --> 25% of mass on each tire. 
-			//                Gives more realistic braking distance. 
+			// 25% of mass on each tire. 
 			// TODO 3: improvement: for braking the front wheels create more force than the rear ones. 
-            MCVector2dF impulse =
-                v * 0.5f * (m_isOffTrack ? m_offTrackFriction : m_friction) *
+            MCVector2dF brakingForceVector =
+                tireVelocityMaxUnityVector * 0.25f * (m_isOffTrack ? m_offTrackFriction : m_friction) *
                     -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * m_car.tireWearFactor();
-            parent().physicsComponent().addForce(-impulse, location());
+            parent().physicsComponent().addForce( -brakingForceVector, location() ); // TODO: transform to physics unit
         }
     }
 }

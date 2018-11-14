@@ -43,21 +43,23 @@ public:
     //! Defines the (default) car properties.
     struct Description
     {
-        float accelerationFriction = 0.75f;
+		Description();
+		
+        float accelerationFriction; // friction coefficient for tires on street, about 1.1 for best of class tires
 
-        float rollingFrictionOnTrack = 0.1f;
+        float rollingFrictionOnTrack; // braking friction coefficient for rolling on street, typically below 0.1
 
-        float rotationFriction = 1.0f;
+        float rotationFriction; 
 
-        float power = 5000.0f;
+        float power; // engine's power in Watts
 
-        float mass = 1500.0f;
+        float mass; // cars mass in kilo gramms
 
-        float restitution = 0.05f;
+        float restitution; // factor for remaining impulse for rebounce
 
-        float dragLinear = 1.0f;
+        float dragLinear; // driving resistance coefficient in N/(m/s)
 
-        float dragQuadratic = 5.0f;
+        float dragQuadratic; // driving resistance proportional to the squared speed in N/(m/s)²
     };
 
     //! Constructor.
@@ -199,25 +201,25 @@ private:
 
     unsigned int m_index;
 
-    float m_tireAngle;
+    float m_tireAngle; // -15...+15 degrees
 
-    float m_initDamageCapacity;
+    float m_initDamageCapacity; /// normally 100, in percent
 
-    float m_damageCapacity;
+    float m_damageCapacity; /// 0 to m_initDamageCapacity
 
-    float m_initTireWearOutCapacity;
+    float m_initTireWearOutCapacity; /// normally 100, in percent
 
-    float m_tireWearOutCapacity;
+    float m_tireWearOutCapacity; /// 0 to m_initTireWearOutCapacity
 
     MCSurface & m_frontTire;
 
     MCSurface & m_brakeGlow;
 
-    float m_length;
+    float m_length; // in meters
 
     int m_speedInKmh;
 
-    float m_absSpeed;
+    float m_absSpeed; // in meters/second
 
     float m_dx, m_dy;
 
@@ -249,19 +251,19 @@ private:
 
     MCObjectPtr m_rightBrakeGlow;
 
-    MCVector3dF m_numberPos;
+    MCVector3dF m_numberPos; // scene units
 
-    MCVector3dF m_leftFrontTirePos;
+    MCVector3dF m_leftFrontTirePos; // scene units
 
-    MCVector3dF m_rightFrontTirePos;
+    MCVector3dF m_rightFrontTirePos; // scene units
 
-    MCVector3dF m_leftRearTirePos;
+    MCVector3dF m_leftRearTirePos; // scene units
 
-    MCVector3dF m_rightRearTirePos;
+    MCVector3dF m_rightRearTirePos; // scene units
 
-    MCVector3dF m_leftBrakeGlowPos;
+    MCVector3dF m_leftBrakeGlowPos; // scene units
 
-    MCVector3dF m_rightBrakeGlowPos;
+    MCVector3dF m_rightBrakeGlowPos; // scene units
 
     bool m_hadHardCrash;
 };

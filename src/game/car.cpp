@@ -35,6 +35,7 @@
 
 #include <MCVector2d>
 #include <MCWorld>
+#include <MCWorld>
 
 #include <cassert>
 #include <cmath>
@@ -99,10 +100,10 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
     const float offTrackFrictionFactor = 0.8f;
     const float frontFriction = 0.85f;
     const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
-    m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction));
+    m_leftFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_leftFrontTire, m_leftFrontTirePos + tireZ, 0);
 
-    m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction));
+    m_rightFrontTire.reset(new Tire(*this, frontFriction, frontFriction * offTrackFrictionFactor));
     addChildObject(m_rightFrontTire, m_rightFrontTirePos + tireZ, 0);
 
     const float rearFriction = 0.95f;
@@ -132,16 +133,19 @@ void Car::setProperties(Description & desc)
 {
     physicsComponent().setMass(desc.mass);
 	
+	const float width = dynamic_pointer_cast<MCRectShape>(shape())->width() * MCWorld::metersPerUnit();
+    const float height = dynamic_pointer_cast<MCRectShape>(shape())->height() * MCWorld::metersPerUnit();
+	
+    m_length = std::max(width, height); // FIXME: this is 48 scene units, but for physics we deal here with metrical units...
+
+	
 	// TODO PHYSICS: clarify center of rotation for this inertia
-    physicsComponent().setMomentOfInertia(desc.mass * 3); // FIXME Physics: suggested: 1.5 instead of 3	
-	// FIXME PHYSICS: the inertia should be calculated by the car's dimensions I = 1/12 * m*(width^2 + height^2), both in meters
+	// the inertia is calculated by the car's dimensions I = 1/12 * m*(width^2 + height^2), both in meters:	
+    physicsComponent().setMomentOfInertia(desc.mass * 1.0f/12 * (width*width + height*height)); 
     
 	physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
-    const float width = dynamic_pointer_cast<MCRectShape>(shape())->width();
-    const float height = dynamic_pointer_cast<MCRectShape>(shape())->height();
-    m_length = std::max(width, height); // FIXME: this is 48 scene units, but for physics we deal here with metrical units...
 }
 
 void Car::initForceGenerators(Description & desc)
@@ -200,11 +204,11 @@ void Car::accelerate(bool deccelerate)
     const float maxForce =
         physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
     float currentForce = maxForce;
-    const float velocity = physicsComponent().velocity().length();
+    const float velocity = physicsComponent().velocity().length(); // in m/s
     if (velocity > 0.001f)
     {
 		// Our gear box translate a constant power into a force, depending on the current speed. 
-        currentForce = m_desc.power / velocity; // FIXME: velocity is not in meters/s, therefore the force is incorrect too!
+        currentForce = m_desc.power / velocity; 
         if (currentForce > maxForce)
         {
             currentForce = maxForce;
@@ -335,7 +339,7 @@ void Car::updateTireWear(int step)
 
     // Cache speed in km/h.
     m_absSpeed   = physicsComponent().speed();
-    m_speedInKmh = m_absSpeed * 3.6 * 2.75;
+    m_speedInKmh = m_absSpeed * 3.6;
 
 	// TODO Physics 4: the tire wear should be proportinal to the product of 
 	// the tire force and the velocity difference. 
@@ -427,6 +431,10 @@ void Car::resetTireWear()
     m_tireWearOutCapacity = m_initTireWearOutCapacity;
 }
 
+/**
+ * @brief Car::tireWearFactor
+ * @return a value between 1.0 for good tires and 0.5 for worn out tires
+ */
 float Car::tireWearFactor() const
 {
     return 0.5f + m_tireWearOutCapacity * 0.5f / m_initTireWearOutCapacity;
@@ -564,4 +572,16 @@ CarSoundEffectManagerPtr Car::soundEffectManager() const
 Car::~Car()
 {
     MCWorld::instance().forceRegistry().removeForceGenerators(*this);
+}
+
+Car::Description::Description()
+{
+	accelerationFriction = 0.95f;
+	rollingFrictionOnTrack = 0.05f;
+	rotationFriction = 1.0f;
+	power = 5000.0f;
+	mass = 1500.0f;
+	restitution = 0.05f;
+	dragLinear = 1.0f;
+	dragQuadratic = 5.0f;
 }

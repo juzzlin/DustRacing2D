@@ -80,7 +80,7 @@ using std::dynamic_pointer_cast;
 int Scene::m_width  = 1024;
 int Scene::m_height = 768;
 
-static const float METERS_PER_UNIT = 0.05f;
+static const float METERS_PER_UNIT = 4.2f/48; // a car has typically 48 scene units and is in real life about 4.2m long. 
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world)
 : m_game(game)
