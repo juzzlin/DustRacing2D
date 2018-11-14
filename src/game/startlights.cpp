@@ -30,7 +30,7 @@ Startlights::Startlights()
     m_stateToFunctionMap[Disappear] = std::bind(&Startlights::stateDisappear, this);
     m_stateToFunctionMap[End]       = std::bind(&Startlights::stateEnd,       this);
 
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateAnimation()));
+    connect(&m_timer, &QTimer::timeout, this, &Startlights::updateAnimation);
     m_timer.setInterval(1000 / m_stepsPerState);
 }
 
