@@ -54,8 +54,8 @@ TrackPropertiesDialog::TrackPropertiesDialog(QString name, unsigned int index, b
     m_layout->addWidget(m_okButton,      3, 0);
     m_layout->addWidget(m_cancelButton,  3, 1);
 
-    connect(m_okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(m_okButton, &QPushButton::clicked, this, &TrackPropertiesDialog::accept);
+    connect(m_cancelButton, &QPushButton::clicked, this, &TrackPropertiesDialog::reject);
 }
 
 unsigned int TrackPropertiesDialog::index() const
