@@ -52,8 +52,8 @@ TargetNodeSizeDlg::TargetNodeSizeDlg(QSizeF defaultSize, QWidget * parent)
     m_layout->addWidget(m_okButton,     3, 0);
     m_layout->addWidget(m_cancelButton, 3, 1);
 
-    connect(m_okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(m_okButton, &QPushButton::clicked, this, &TargetNodeSizeDlg::accept);
+    connect(m_cancelButton, &QPushButton::clicked, this, &TargetNodeSizeDlg::reject);
 }
 
 QSizeF TargetNodeSizeDlg::targetNodeSize() const
