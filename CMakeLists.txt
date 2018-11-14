@@ -3,12 +3,19 @@ project(DustRacing2D)
 cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(VERSION 2.8.12)
 
+# Use cmake --help-policy [POLICY] for more information about these:
+
 if(POLICY CMP0005)
     cmake_policy(SET CMP0005 NEW)
 endif()
 
 if(POLICY CMP0020)
     cmake_policy(SET CMP0020 NEW)
+endif()
+
+# Default to GLVND
+if(POLICY CMP0072)
+    cmake_policy(SET CMP0072 OLD)
 endif()
 
 # Global game version
