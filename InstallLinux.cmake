@@ -15,14 +15,11 @@ function(resolve_install_paths)
 
     if(ReleaseBuild)
         message(STATUS "Linux release build with system install targets.")
-        if(USC)
-            message(STATUS "Installing to /opt.")
-            set(BIN_PATH /opt/dustrac)
-            set(DATA_PATH /opt/dustrac/data)
-            set(DOC_PATH /opt/dustrac/)
-        endif()
+        setup_install_targets(${BIN_PATH} ${DATA_PATH} ${DOC_PATH})
     else()
-        message(STATUS "Linux development build with local install targets.")
+        message(STATUS "Linux development build without install targets.")
+        message(STATUS "Use -DReleaseBuild=ON to enable install targets.")
+        
         set(BIN_PATH .)
         set(DATA_PATH ./data)
         set(DOC_PATH .)
@@ -43,8 +40,6 @@ function(resolve_install_paths)
 
     # This is the main data path given to the game and editor binaries.
     add_definitions(-DDATA_PATH="${DATA_PATH}")
-
-    setup_install_targets(${BIN_PATH} ${DATA_PATH} ${DOC_PATH})
 
 endfunction()
 
