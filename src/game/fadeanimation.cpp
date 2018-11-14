@@ -22,7 +22,7 @@ FadeAnimation::FadeAnimation(int updateFps)
 , m_fadeIn(false)
 {
     m_timer.setInterval(1000 / updateFps);
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(updateAnimation()));
+    connect(&m_timer, &QTimer::timeout, this, &FadeAnimation::updateAnimation);
 }
 
 bool FadeAnimation::isFading() const
