@@ -99,24 +99,24 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 , m_particleFactory(new ParticleFactory)
 , m_fadeAnimation(new FadeAnimation)
 {
-    connect(m_startlights, SIGNAL(raceStarted()), &m_race, SLOT(start()));
-    connect(m_startlights, SIGNAL(animationEnded()), &m_stateMachine, SLOT(endStartlightAnimation()));
+    connect(m_startlights, &Startlights::raceStarted, &m_race, &Race::start);
+    connect(m_startlights, &Startlights::animationEnded, &m_stateMachine, &StateMachine::endStartlightAnimation);
 
-    connect(&m_stateMachine, SIGNAL(startlightAnimationRequested()), m_startlights, SLOT(beginAnimation()));
-    connect(&m_stateMachine, SIGNAL(fadeInRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeIn(int, int, int)));
-    connect(&m_stateMachine, SIGNAL(fadeOutRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOut(int, int, int)));
-    connect(&m_stateMachine, SIGNAL(fadeOutFlashRequested(int, int, int)), m_fadeAnimation, SLOT(beginFadeOutFlash(int, int, int)));
-    connect(&m_stateMachine, SIGNAL(soundsStopped()), &m_race, SLOT(stopEngineSounds()));
+    connect(&m_stateMachine, &StateMachine::startlightAnimationRequested, m_startlights, &Startlights::beginAnimation);
+    connect(&m_stateMachine, &StateMachine::fadeInRequested, m_fadeAnimation, &FadeAnimation::beginFadeIn);
+    connect(&m_stateMachine, &StateMachine::fadeOutRequested, m_fadeAnimation, &FadeAnimation::beginFadeOut);
+    connect(&m_stateMachine, &StateMachine::fadeOutFlashRequested, m_fadeAnimation, &FadeAnimation::beginFadeOutFlash);
+    connect(&m_stateMachine, &StateMachine::soundsStopped, &m_race, &Race::stopEngineSounds);
 
-    connect(m_fadeAnimation, SIGNAL(fadeValueChanged(float)), &m_renderer, SLOT(setFadeValue(float)));
-    connect(m_fadeAnimation, SIGNAL(fadeInFinished()), &m_stateMachine, SLOT(endFadeIn()));
-    connect(m_fadeAnimation, SIGNAL(fadeOutFinished()), &m_stateMachine, SLOT(endFadeOut()));
+    connect(m_fadeAnimation, &FadeAnimation::fadeValueChanged, &m_renderer, &Renderer::setFadeValue);
+    connect(m_fadeAnimation, &FadeAnimation::fadeInFinished, &m_stateMachine, &StateMachine::endFadeIn);
+    connect(m_fadeAnimation, &FadeAnimation::fadeOutFinished, &m_stateMachine, &StateMachine::endFadeOut);
 
-    connect(&m_race, SIGNAL(finished()), &m_stateMachine, SLOT(finishRace()));
-    connect(&m_race, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
+    connect(&m_race, &Race::finished, &m_stateMachine, &StateMachine::finishRace);
+    connect(&m_race, &Race::messageRequested, m_messageOverlay, static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
 
-    connect(m_startlights, SIGNAL(messageRequested(QString)), m_messageOverlay, SLOT(addMessage(QString)));
-    connect(this, SIGNAL(listenerLocationChanged(float, float)), &m_game.audioWorker(), SLOT(setListenerLocation(float, float)));
+    connect(m_startlights, &Startlights::messageRequested, m_messageOverlay, static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(this, &Scene::listenerLocationChanged, &m_game.audioWorker(), &AudioWorker::setListenerLocation);
 
     m_game.audioWorker().connectAudioSource(m_race);
 
@@ -244,7 +244,7 @@ void Scene::createMenus()
 
     m_mainMenu = MTFH::MenuPtr(new MainMenu(*m_menuManager, *this, width(), height()));
     connect(
-        std::static_pointer_cast<MainMenu>(m_mainMenu).get(), SIGNAL(exitGameRequested()), &m_game, SLOT(exitGame()));
+        std::static_pointer_cast<MainMenu>(m_mainMenu).get(), &MainMenu::exitGameRequested, &m_game, &Game::exitGame);
 
     m_menuManager->addMenu(m_mainMenu);
     m_menuManager->enterMenu(m_mainMenu);
@@ -507,7 +507,7 @@ void Scene::createNormalObjects()
 
         if (auto pit = dynamic_cast<Pit *>(&object))
         {
-            connect(pit, SIGNAL(pitStop(Car &)), &m_race, SLOT(pitStop(Car &)));
+            connect(pit, &Pit::pitStop, &m_race, &Race::pitStop);
         }
     }
 }
