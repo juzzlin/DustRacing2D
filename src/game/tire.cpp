@@ -52,26 +52,26 @@ void Tire::onStepTime(int)
         const MCVector2dF tireAxisVector(
             MCTrigonom::cos(tireNormalAngle), MCTrigonom::sin(tireNormalAngle));
         MCVector2dF tireVelocityMaxUnityVector = physicsComponent().velocity();
-		tireVelocityMaxUnityVector.clampFast(0.999f); // Clamp instead of normalizing to avoid artifacts on small values
+		tireVelocityMaxUnityVector.normalize();
 		
 		// FIXME Physics: what we calculate here is only a maximum force, the tire can handle, 
 		// but it isn't a force in first place...
         MCVector2dF normalForceVector =
             MCVector2dF::projection(tireVelocityMaxUnityVector, tireAxisVector) *
                 (m_isOffTrack ? m_offTrackFriction : m_friction) * /* m_spinCoeff * */ // TODO reenable spinCoeff
-                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * 0.25;
+                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass(); // TODO scale this to 25% load on one wheel
 		
         //normalForceVector.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor()); // FIXME: what's this code for?
         parent().physicsComponent().addForce( -normalForceVector, location() );  // TODO: transform to physics unit
 
         if (m_car.isBraking())
         {
-			// 25% of mass on each tire. 
+ 
 			// TODO 3: improvement: for braking the front wheels create more force than the rear ones. 
             MCVector2dF brakingForceVector =
-                tireVelocityMaxUnityVector * 0.25f * (m_isOffTrack ? m_offTrackFriction : m_friction) *
-                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * m_car.tireWearFactor();
-            parent().physicsComponent().addForce( -brakingForceVector, location() ); // TODO: transform to physics unit
+                tireVelocityMaxUnityVector * (m_isOffTrack ? m_offTrackFriction : m_friction) *
+                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * m_car.tireWearFactor()*0.25; // TODO scale this to 25% load on one wheel
+            parent().physicsComponent().addForce( -brakingForceVector, location() ); 
         }
     }
 }
