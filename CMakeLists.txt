@@ -24,6 +24,19 @@ set(VERSION_MINOR "0")
 set(VERSION_PATCH "1")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
+# Some common CPack variables
+set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
+
+set(CPACK_PACKAGE_NAME dustrac)
+set(CPACK_PACKAGE_VENDOR Juzzlin)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "")
+set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/data/images/about.png)
+
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
+set(CPACK_RESOURCE_FILE_README ${CMAKE_SOURCE_DIR}/README.md)
+
 option(ReleaseBuild "This should be used when creating a build with install targets" OFF)
 
 option(VorbisLibsPath "Optional path hint for vorbis libs (libvorbis, libvorbisfile)." "")

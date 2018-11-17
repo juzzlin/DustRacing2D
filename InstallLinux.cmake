@@ -16,10 +16,30 @@ function(resolve_install_paths)
     if(ReleaseBuild)
         message(STATUS "Linux release build with system install targets.")
         setup_install_targets(${BIN_PATH} ${DATA_PATH} ${DOC_PATH})
+
+        set(CPACK_DEBIAN_PACKAGE_NAME "dustrac")
+        set(CPACK_DEBIAN_PACKAGE_VERSION ${VERSION})
+        set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+        set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Jussi Lind <jussi.lind@iki.fi>")
+        set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Dust Racing 2D is a traditional top-down car racing game including a level editor. ")
+        set(CPACK_DEBIAN_PACKAGE_SECTION "Games")
+        set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+        set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS YES)
+
+        if(DISTRO_VERSION)
+            message(STATUS "Distro version: ${DISTRO_VERSION}")
+            set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${DISTRO_VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
+        else()
+            set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
+        endif()
+
+        include(CPack)
+
     else()
         message(STATUS "Linux development build without install targets.")
         message(STATUS "Use -DReleaseBuild=ON to enable install targets.")
-        
+
         set(BIN_PATH .)
         set(DATA_PATH ./data)
         set(DOC_PATH .)

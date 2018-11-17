@@ -59,11 +59,11 @@ Building in the command line on Linux (tested on Ubuntu 18.04)
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt5 development files 
+1) Install Qt5 development files
    - qt5-default package on Ubuntu/Debian/Mint should install everything needed
    - You might need to install also these manually depending on your system
      - qttools5-dev
-     - libqt5opengl5-dev 
+     - libqt5opengl5-dev
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
 3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
 4) Install CMake (cmake on Debian/Ubuntu).
@@ -101,7 +101,7 @@ Release build (in this example game installs under /usr):
 
 $ mkdir build
 $ cd build
-$ cmake .. -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
+$ cmake .. -DReleaseBuild=ON -DCMAKE_INSTALL_PREFIX=/usr
 
 This runs CMake that generates the makefiles.
 If everything went ok, run:
@@ -138,7 +138,7 @@ CPack
 Dust Racing 2D has a support for CPack. It's not complete, but can be used to generate
 some generic binary packages.
 
-After a successful build run CPack:
+After a successful build with ReleaseBuild=ON run CPack:
 
 $ cpack
 
@@ -167,7 +167,7 @@ all the runtime data. This can be set in the main CMakeLists.txt
 and is given to the game via -DDATA_PATH.
 
 The release build should be used when packaging (give
--DReleaseBuild=1 to cmake).
+-DReleaseBuild=ON to cmake).
 
 Currently the data files install to CMAKE_INSTALL_PREFIX/share/DustRacing
 and the binaries install to CMAKE_INSTALL_PREFIX/bin.

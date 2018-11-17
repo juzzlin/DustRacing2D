@@ -1,5 +1,8 @@
 ; Script for NSIS packaging.
 
+!include MUI2.nsh
+!include LogicLib.nsh
+
 !define PRODUCTNAME            "Dust Racing 2D"
 !define APPNAME-GAME           "Dust Racing 2D"
 !define APPNAME-EDITOR         "Dust Racing 2D Level Editor"
@@ -12,8 +15,8 @@
 !define UPDATEURL              "https://github.com/juzzlin/DustRacing2D/releases"
 !define ABOUTURL               "http://juzzlin.github.io/DustRacing2D/"
 
-!define MUI_FILE               ""
-!define MUI_BRANDINGTEXT       ${PRODUCTNAME}
+;!define MUI_FILE               ""
+!define MUI_BRANDINGTEXT       "Dust Racing 2D"
 ;!define MUI_HEADERIMAGE
 ;!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
 !define MUI_ICON               "data\icons\DustRacing.ico"
@@ -29,9 +32,6 @@
 !define MUI_FINISHPAGE  
 
 CRCCheck On
-
-!include MUI2.nsh
-!include LogicLib.nsh
   
 RequestExecutionLevel admin
  
