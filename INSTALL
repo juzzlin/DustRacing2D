@@ -60,8 +60,10 @@ Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
 1) Install Qt5 development files 
-   - qt5-default package on Ubuntu
-   - qttools5-dev might also be needed on newer systems
+   - qt5-default package on Ubuntu/Debian/Mint should install everything needed
+   - You might need to install also these manually depending on your system
+     - qttools5-dev
+     - libqt5opengl5-dev 
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
 3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
 4) Install CMake (cmake on Debian/Ubuntu).
