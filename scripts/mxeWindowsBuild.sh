@@ -36,7 +36,7 @@ NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 
 # Package naming
 
-NAME=dustrac
+NAME=dustracing2d
 VERSION=${DUSTRAC_RELEASE_VERSION}
 if [[ -z ${VERSION} ]]; then
     echo "DUSTRAC_RELEASE_VERSION not set."
@@ -44,7 +44,6 @@ if [[ -z ${VERSION} ]]; then
 fi
 
 ARCH=windows-x86
-QT=qt5
 
 # Build
 
@@ -62,7 +61,7 @@ ${LRELEASE} ${PROJECT_DIR}/src/game/game.pro && ${LRELEASE} ${PROJECT_DIR}/src/e
 
 # Install to packaging dir
 
-PACKAGE_PATH=build-windows
+PACKAGE_PATH=${NAME}-${VERSION}-${ARCH}
 
 rm -rf ${PACKAGE_PATH}
 mkdir ${PACKAGE_PATH}
@@ -88,14 +87,14 @@ cd ..
 
 # Create zip archive
 
-ZIP_ARCHIVE=${PACKAGE_PATH}.zip
+ZIP_ARCHIVE=${NAME}-${VERSION}-${ARCH}.zip
 rm -f ${ZIP_ARCHIVE}
 $ZIP -rv ${ZIP_ARCHIVE} ${PACKAGE_PATH}
 
 # Create NSIS installer
 
 cp ${PROJECT_DIR}/packaging/windows/dustrac.nsi ${PACKAGE_PATH} && cd ${PACKAGE_PATH} && ${MAKENSIS} dustrac.nsi || exit 1
-cd .. && cp ${PACKAGE_PATH}/*setup.exe . || exit 1
+cd .. && mv ${PACKAGE_PATH}/*setup.exe . || exit 1
 
 ls -ltr
 
