@@ -157,15 +157,13 @@ set(COMMON_LIBS
     MiniCore
     MTFH
     STFH
-    ${OPENGL_gl_LIBRARY}
-    ${OPENGL_glu_LIBRARY}
     ${OPENAL_LIBRARY}
     ${VORBISFILE_LIBRARIES}
     ${VORBISFILE_LIB} # Valid only with MSVC
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml OpenGL::OpenGL)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS})
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 11)
 
 foreach(TS_FILE ${TS})

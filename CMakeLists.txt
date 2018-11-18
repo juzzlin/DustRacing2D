@@ -102,6 +102,11 @@ find_package(Qt5Test ${QT_MIN_VER} REQUIRED)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
+    set(DUSTRAC_OPENGL_LIBS ${OPENGL_gl_LIBRARY})
+else()
+    set(DUSTRAC_OPENGL_LIBS OpenGL::OpenGL)
+endif()
 
 # OpenAL for sounds. OpenAL directory can be given by -DOPENALDIR=...
 set(ENV{OPENALDIR} ${OpenALDir})
