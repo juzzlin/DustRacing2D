@@ -94,14 +94,21 @@ where you can place your own race tracks.
 
 ## Command line options
 
---lang [lang] forces the language. Currently available: fi, cs, de, it, fr.
+`--lang [lang]` forces the language. Currently available: `fi`, `cs`, `de`, `it`, `fr`.
 
-E.g. ./dustrac-game --lang it
+E.g. `dustrac-game --lang it`
 
 ## Building the project
 
-Please refer to the INSTALL document for build/install instructions if you're
-going to build Dust Racing 2D from sources.
+Please refer to the `INSTALL` document for build/install instructions if you're
+going to build **Dust Racing 2D** from sources.
 
--- Jussi Lind <jussi.lind@iki.fi>
+In a nutshell, on Linux after installing `Qt5`, `OpenAL` and `Vorbis` dev libs you just:
 
+`$ mkdir build && cd build`
+
+`$ cmake ..`
+
+`$ make`
+
+..or open the top-level `CMakeLists.txt` in **Qt Creator** or other IDE that supports CMake.
