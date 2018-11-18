@@ -36,9 +36,9 @@ Toolchains
 
 GCC/MinGW and Clang are the only "officially" supported toolchains on Linux.
 
-Windows builds are done on Ubuntu with MXE (web: mxe.cc). The build script
+Windows builds are done in a Docker container with MXE (web: mxe.cc). The build script
 also generates automatically an NSIS Windows installer and a ZIP-archive.
-See scripts/mxeWindowsBuild.sh.
+See scripts/buildWindowsInstaller.sh and scripts/mxeWindowsBuild.sh.
 
 Building the project with Microsoft Visual C++ 2013 also works, but no automatic
 packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
@@ -117,32 +117,24 @@ $ sudo make install
 This installs also the desktop files so Dust Racing
 should appear in your application menu.
 
-Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 14.04)
-======================================================================
+Cross-compiling for Windows in Docker with MXE on Linux
+=======================================================
 
-1) Install MXE (http://mxe.cc)
-2) Install Qt5, Vorbis and OpenAL with MXE
-3) Run <Your MXE installation dir>/usr/i686-pc-mingw32/qt5/bin/qmake dustrac.pro
-4) make
+1) Install Docker
 
-There's also a script to build the game with a Windows installer:
-1) export DUSTRAC_RELEASE_VERSION=x.y.z (use the latest version)
-2) source ./scripts/mxeEnv.sh (assumes that MXE is installed in /opt/mxe)
-3) ./scripts/mxeWindowsBuild.sh
-
-The script checks that needed binaries are found.
+2) $ ./scripts/buildWindowsInstaller.sh
 
 CPack
 =====
 
 Dust Racing 2D has a support for CPack. It's not complete, but can be used to generate
-some generic binary packages.
+e.g. Debian packages.
 
 After a successful build with ReleaseBuild=ON run CPack:
 
-$ cpack
+$ cpack -G DEB
 
-This will generate .tar.gz and .sh binary packages on Linux.
+This will generate a Debian package.
 
 Building with Microsoft Visual C++
 ==================================
@@ -175,8 +167,6 @@ and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
 to cmake (or to the configure script).
-
-There's an example Debian packaging in packaging/debian/.
 
 
 -- Jussi Lind <jussi.lind@iki.fi>
