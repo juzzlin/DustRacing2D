@@ -74,7 +74,8 @@ pipeline {
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'build-windows/*.exe', fingerprint: true
+                    archiveArtifacts artifacts: '*.exe', fingerprint: true
+                    archiveArtifacts artifacts: '*.zip', fingerprint: true
                 }
             }
         }
