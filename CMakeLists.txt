@@ -29,7 +29,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 
-set(CPACK_PACKAGE_NAME dustrac)
+set(CPACK_PACKAGE_NAME dustracing2d)
 set(CPACK_PACKAGE_VENDOR Juzzlin)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "")
 set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/data/images/about.png)
@@ -42,8 +42,6 @@ option(ReleaseBuild "This should be used when creating a build with install targ
 option(VorbisLibsPath "Optional path hint for vorbis libs (libvorbis, libvorbisfile)." "")
 
 option(OggLibPath "Optional path hint for ogg lib (libogg)." "")
-
-option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
 option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
 
