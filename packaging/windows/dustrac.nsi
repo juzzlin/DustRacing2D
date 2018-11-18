@@ -39,7 +39,7 @@ InstallDir "$PROGRAMFILES\${PRODUCTNAME}"
  
 Name "${PRODUCTNAME}"
 Icon "data\icons\DustRacing.ico"
-OutFile "dustrac-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-windows-x86-qt5_setup.exe"
+OutFile "dustracing2d-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-windows-x86-qt5_setup.exe"
 
 !insertmacro MUI_LANGUAGE "English"
  
