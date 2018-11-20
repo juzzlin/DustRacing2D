@@ -98,6 +98,10 @@ where you can place your own race tracks.
 
 E.g. `dustrac-game --lang it`
 
+`--screen [index]` forces the screen on multi-display setups when in fullscreen mode. 
+
+E.g. `dustrac-game --screen 1` would start the game on the second display.
+
 ## Building the project
 
 Please refer to the `INSTALL` document for build/install instructions if you're

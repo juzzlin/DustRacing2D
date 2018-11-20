@@ -57,6 +57,11 @@ QString Settings::soundsKey()
     return "sounds";
 }
 
+QString Settings::screenKey()
+{
+    return "screen";
+}
+
 QString Settings::vsyncKey()
 {
     return "vsync";

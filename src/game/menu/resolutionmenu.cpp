@@ -27,8 +27,6 @@
 
 #include <MCLogger>
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QObject> // for tr()
 #include <QScreen>
 
@@ -150,8 +148,8 @@ ResolutionMenu::ResolutionMenu(
 , m_confirmationMenu(confirmationMenu)
 {
     const int numResolutions = 8;
-    const int fullHRes = QGuiApplication::primaryScreen()->geometry().width();
-    const int fullVRes = QGuiApplication::primaryScreen()->geometry().height();
+    const int fullHRes = Game::instance().screen()->geometry().width();
+    const int fullVRes = Game::instance().screen()->geometry().height();
     const int itemHeight = height / (numResolutions + 3);
 
     int itemHRes = fullHRes;

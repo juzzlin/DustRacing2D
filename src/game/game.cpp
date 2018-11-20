@@ -59,6 +59,7 @@ Game::Game(int & argc, char ** argv)
 , m_renderer(nullptr)
 , m_scene(nullptr)
 , m_trackLoader(new TrackLoader)
+, m_screenIndex(m_settings.loadValue(m_settings.screenKey(), 0))
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1000 / m_updateFps)
@@ -128,9 +129,10 @@ static void printHelp()
     std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
     std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
-    std::cout << "--no-vsync    Force vsync off." << std::endl;
+    std::cout << "--help            Show this help." << std::endl;
+    std::cout << "--screen [index]  Force a certain screen on multi-display setups." << std::endl;
+    std::cout << "--lang [lang]     Force language: fi, fr, it, cs." << std::endl;
+    std::cout << "--no-vsync        Force vsync off." << std::endl;
     std::cout << std::endl;
 }
 
@@ -164,6 +166,11 @@ void Game::parseArgs(int argc, char ** argv)
             printHelp();
             throw UserException("Exit due to help.");
         }
+        else if (args[i] == "--screen" && (i + i) < args.size())
+        {
+            m_screenIndex = args[i + 1].toInt();
+            m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
+        }
         else if (args[i] == "--lang" && (i + i) < args.size())
         {
             lang = args[i + 1];
@@ -179,25 +186,6 @@ void Game::parseArgs(int argc, char ** argv)
 
 void Game::createRenderer()
 {
-    // Create the main window / renderer
-    int hRes, vRes;
-    bool fullScreen = false;
-
-    m_settings.loadResolution(hRes, vRes, fullScreen);
-
-    if (!hRes || !vRes)
-    {
-        hRes = QGuiApplication::primaryScreen()->geometry().width();
-        vRes = QGuiApplication::primaryScreen()->geometry().height();
-    }
-
-    adjustSceneSize(hRes, vRes);
-
-    MCLogger().info()
-        << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
-
-    MCLogger().info() << "Creating the renderer..";
-
     QSurfaceFormat format;
 
 #ifdef __MC_GL30__
@@ -222,12 +210,39 @@ void Game::createRenderer()
     }
 #endif
 
+    // Create the main window / renderer
+    int hRes, vRes;
+    bool fullScreen = false;
+
+    m_settings.loadResolution(hRes, vRes, fullScreen);
+
+    const auto screens = QGuiApplication::screens();
+
+    MCLogger().info() << "Screen: " << m_screenIndex << "/" << screens.size();
+
+    m_screen = m_screenIndex < screens.size() ? screens.at(m_screenIndex) : screens.at(0);
+
+    if (!hRes || !vRes)
+    {
+        hRes = m_screen->geometry().width();
+        vRes = m_screen->geometry().height();
+    }
+
+    adjustSceneSize(m_screen->geometry().width(), m_screen->geometry().height());
+
+    MCLogger().info() << "Screen resolution: " << m_screen->geometry().width() << " " << m_screen->geometry().height();
+
+    MCLogger().info() << "Virtual resolution: " << hRes << " " << vRes << " " << fullScreen;
+
+    MCLogger().info() << "Creating the renderer..";
+
     m_renderer = new Renderer(hRes, vRes, fullScreen, m_world->renderer().glScene());
     m_renderer->setFormat(format);
     m_renderer->setCursor(Qt::BlankCursor);
 
     if (fullScreen)
     {
+        m_renderer->setGeometry(m_screen->geometry());
         m_renderer->showFullScreen();
     }
     else
@@ -322,6 +337,11 @@ Renderer & Game::renderer() const
 int Game::run()
 {
     return m_app.exec();
+}
+
+QScreen * Game::screen() const
+{
+  return m_screen;
 }
 
 bool Game::loadTracks()

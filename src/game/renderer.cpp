@@ -38,8 +38,6 @@
 #include <cmath>
 #include <cassert>
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFontDatabase>
 #include <QIcon>
@@ -60,8 +58,8 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
 , m_enabled(false)
 , m_hRes(hRes)
 , m_vRes(vRes)
-, m_fullHRes(QGuiApplication::primaryScreen()->geometry().width())
-, m_fullVRes(QGuiApplication::primaryScreen()->geometry().height())
+, m_fullHRes(Game::instance().screen()->geometry().width())
+, m_fullVRes(Game::instance().screen()->geometry().height())
 , m_frameCounter(0)
 , m_fullScreen(fullScreen)
 , m_updatePending(false)
