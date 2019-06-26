@@ -39,6 +39,7 @@
 #include <QDir>
 #include <QThread>
 #include <QTime>
+#include <QProcessEnvironment>
 #include <QScreen>
 #include <QSurfaceFormat>
 
@@ -109,11 +110,7 @@ Game::Game(int & argc, char ** argv)
 
     connect(m_stateMachine, &StateMachine::exitGameRequested, this, &Game::exitGame);
 
-    // Add race track search paths
-    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
-        QDir::separator() + "levels");
-    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
-        Config::Common::TRACK_SEARCH_PATH);
+    addTrackSearchPaths();
 
     m_elapsed.start();
 }
@@ -152,6 +149,22 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
     {
         MCLogger().warning() << "Failed to load translations for " << lang.toStdString();
     }
+}
+
+void Game::addTrackSearchPaths()
+{
+    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
+        QDir::separator() + "levels");
+    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
+        Config::Common::TRACK_SEARCH_PATH);
+
+    // See: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html,
+    //      https://github.com/juzzlin/DustRacing2D/issues/49
+#ifdef __unix__
+    const auto env = QProcessEnvironment::systemEnvironment();
+    const auto xdgDataHome = "XDG_DATA_HOME";
+    m_trackLoader->addTrackSearchPath(env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + Config::Common::TRACK_SEARCH_PATH_XDG);
+#endif
 }
 
 void Game::parseArgs(int argc, char ** argv)

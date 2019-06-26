@@ -39,7 +39,7 @@ A separate engine, MiniCore, is used for physics modeling.
 
 ## License
 
-Dust Racing source code is licensed under GNU GPLv3. 
+Dust Racing source code is licensed under GNU GPLv3.
 See COPYING for the complete license text.
 
 Dust Racing includes the source code for the GLEW library.
@@ -84,13 +84,14 @@ The record times and best positions are stored separately for each lap count.
 
 Your tires will wear out as the race progresses. This causes more and more sliding.
 
-Fortunately there's a pit (the yellow rectangle). 
+Fortunately there's a pit (the yellow rectangle).
 By stopping on the pit your tires will be repaired.
 
 ### Custom track files
 
-Dust Racing searches for race tracks also in ~/DustRacingTracks/
-where you can place your own race tracks.
+Dust Racing searches for race tracks in `~/DustRacingTracks/` where you can place your own race tracks.
+
+On Linux/Unix also `$XDG_DATA_HOME/DustRacing2D/tracks` is added to search paths, or `$HOME/.local/share/DustRacing2D/tracks` if `$XDG_DATA_HOME` is not defined.
 
 ## Command line options
 
@@ -98,7 +99,7 @@ where you can place your own race tracks.
 
 E.g. `dustrac-game --lang it`
 
-`--screen [index]` forces the screen on multi-display setups when in fullscreen mode. 
+`--screen [index]` forces the screen on multi-display setups when in fullscreen mode.
 
 E.g. `dustrac-game --screen 1` would start the game on the second display.
 

@@ -129,6 +129,8 @@ private slots:
 
 private:
 
+    void addTrackSearchPaths();
+
     void adjustSceneSize(int hRes, int vRes);
 
     void createRenderer();

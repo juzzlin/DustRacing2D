@@ -30,6 +30,8 @@ namespace Config
          *  ~/TRACK_SEARCH_PATH/ */
         static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
 
+        static constexpr auto TRACK_SEARCH_PATH_XDG = "DustRacing2D/tracks";
+
         static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
     };
 
