@@ -9,6 +9,34 @@ Bug fixes:
 
 Other:
 
+2.0.2
+-----
+
+New features:
+
+* Editor: Enable zooming with Ctrl+Wheel
+* Fix GitHub Issue #43: Add option to force screen on multi-display setups
+
+Bug fixes:
+
+* Fix GitHub issue #30: Add more slack to zFar
+* Fix GitHub Issue #40: cmake installs into /usr/local instead of /usr/local/bin
+* Fix GitHub Issue #41: libqt5opengl5-dev is also missing on Ubuntu 18.04
+* Editor: Fix mistake in argument parsing
+* Fix compiler options in CMakeLists.txt
+* CMake: Fix C++ standard setting
+* Fix GLES build: use explicitly GLES2/gl2.h
+* Fix linking to OpenGL libs on CMake < 3.11.0
+
+Other:
+
+* Improve AI braking points in Desert Storm
+* Hard-code zFar to 10000.0f
+* Editor: Remove edit->enlarge* because there's insert row/column
+* Add separate build scripts for Jenkins
+* Bump minimum required Qt version to 5.4.0
+* CMake: Default to GLVND, use the recommended way to link to GL
+
 2.0.1
 -----
 
