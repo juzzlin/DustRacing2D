@@ -167,10 +167,6 @@ public:
 
     CarSoundEffectManagerPtr soundEffectManager() const;
 
-    bool hasDamage() const;
-
-    bool hasTireWear() const;
-
 private:
 
     void initForceGenerators(Description & desc);

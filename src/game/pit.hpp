@@ -47,9 +47,8 @@ signals:
 
 private:
 
-    std::map<Car *, std::pair<int, bool>> m_collidingCars;
-
-    int m_timestamp;
+    std::map<Car *, int> m_pittingCars;
+    int                  m_tag;
 };
 
 #endif // PIT_HPP
