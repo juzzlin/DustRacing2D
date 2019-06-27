@@ -82,6 +82,7 @@ HEADERS += \
     fadeanimation.hpp \
     fontfactory.hpp \
     game.hpp \
+    gearbox.hpp \
     graphicsfactory.hpp \
     inputhandler.hpp \
     intro.hpp \
@@ -255,6 +256,7 @@ SOURCES += \
     fadeanimation.cpp \
     fontfactory.cpp \
     game.cpp \
+    gearbox.cpp \
     graphicsfactory.cpp \
     inputhandler.cpp \
     intro.cpp \

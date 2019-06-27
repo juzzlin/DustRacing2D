@@ -16,6 +16,7 @@
 #include "car.hpp"
 #include "carphysicscomponent.hpp"
 #include "game.hpp"
+#include "gearbox.hpp"
 #include "graphicsfactory.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
@@ -50,9 +51,6 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
-, m_accelerating(false)
-, m_braking(false)
-, m_reverse(false)
 , m_skidding(false)
 , m_steer(Steer::Neutral)
 , m_index(index)
@@ -81,6 +79,7 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 , m_leftBrakeGlowPos(-21, 8, 0)
 , m_rightBrakeGlowPos(-21, -8, 0)
 , m_hadHardCrash(false)
+, m_gearbox(new Gearbox)
 {
     // Override the default physics component to handle damage from impulses
     setPhysicsComponent(*(new CarPhysicsComponent(*this)));
@@ -150,14 +149,6 @@ void Car::initForceGenerators(Description & desc)
     MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
 }
 
-void Car::clearStatuses()
-{
-    m_accelerating = false;
-    m_braking      = false;
-    m_reverse      = false;
-    m_skidding     = false;
-}
-
 unsigned int Car::index() const
 {
     return m_index;
@@ -204,7 +195,7 @@ void Car::accelerate(bool deccelerate)
         {
             currentForce = maxForce;
             const float maxSpinVelocity = 4.5f;
-            if (!m_reverse && velocity > 0 && velocity < maxSpinVelocity)
+            if (m_gearbox->gear() != Gearbox::Gear::Reverse && velocity > 0 && velocity < maxSpinVelocity)
             {
                 if (isHuman()) // Don't enable tire spin for AI yet
                 {
@@ -223,39 +214,18 @@ void Car::accelerate(bool deccelerate)
     {
         direction *= -1;
     }
-    else
-    {
-        m_accelerating = true;
-        m_reverse = false;
-    }
 
     physicsComponent().addForce(direction * currentForce * damageFactor());
-
-    m_braking = false;
 }
 
-void Car::brake()
+bool Car::isAccelerating() const
 {
-    m_accelerating = false;
-
-    if (m_speedInKmh < 1)
-    {
-        m_reverse = true;
-    }
-
-    if (m_reverse && m_speedInKmh > -25)
-    {
-        accelerate(true);
-    }
-    else
-    {
-        m_braking = true;
-    }
+    return m_acceleratorEnabled && m_gearbox->gear() != Gearbox::Gear::Neutral;
 }
 
 bool Car::isBraking() const
 {
-    return m_braking;
+    return m_brakeEnabled && m_gearbox->gear() == Gearbox::Gear::Neutral;
 }
 
 bool Car::isSkidding() const
@@ -316,7 +286,7 @@ void Car::updateAnimations()
     m_leftFrontTire->rotateRelative(m_tireAngle - offset);
     m_rightFrontTire->rotateRelative(m_tireAngle + offset);
 
-    const bool brakingGlowVisible = m_braking && speedInKmh() > 0;
+    const bool brakingGlowVisible = isBraking() && speedInKmh() > 0;
     m_leftBrakeGlow->setIsRenderable(brakingGlowVisible);
     m_rightBrakeGlow->setIsRenderable(brakingGlowVisible);
 }
@@ -333,7 +303,7 @@ void Car::updateTireWear(int step)
 
     if (m_isHuman)
     {
-        if (m_braking || (m_accelerating && m_steer != Steer::Neutral))
+        if (isBraking() || (isAccelerating() && m_steer != Steer::Neutral))
         {
             const float brakingTireWearFactor = 0.05f;
             wearOutTires(step, brakingTireWearFactor);
@@ -414,6 +384,20 @@ void Car::wearOutTires(int step, float factor)
     }
 }
 
+void Car::setBrakeEnabled(bool brakeEnabled)
+{
+    m_brakeEnabled = brakeEnabled;
+
+    m_gearbox->setBrake(brakeEnabled);
+}
+
+void Car::setAcceleratorEnabled(bool acceleratorEnabled)
+{
+    m_acceleratorEnabled = acceleratorEnabled;
+
+    m_gearbox->setAccelerator(acceleratorEnabled);
+}
+
 void Car::resetTireWear()
 {
     m_tireWearOutCapacity = m_initTireWearOutCapacity;
@@ -459,6 +443,17 @@ void Car::onStepTime(int step)
     updateAnimations();
 
     updateTireWear(step);
+
+    m_gearbox->update(speedInKmh());
+
+    if (m_gearbox->gear() == Gearbox::Gear::Forward)
+    {
+        accelerate();
+    }
+    else if (m_gearbox->gear() == Gearbox::Gear::Reverse)
+    {
+        accelerate(true);
+    }
 }
 
 void Car::setLeftSideOffTrack(bool state)

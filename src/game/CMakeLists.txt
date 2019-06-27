@@ -59,6 +59,7 @@ set(SRC
     fadeanimation.cpp
     fontfactory.cpp
     game.cpp
+    gearbox.cpp
     graphicsfactory.cpp
     inputhandler.cpp
     intro.cpp

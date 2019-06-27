@@ -6,6 +6,7 @@ New features:
 * Fix GitHub Issue #49: Change custom track directory
   - On Linux/Unix also `$XDG_DATA_HOME/DustRacing2D/tracks` is added to search paths,
     or `$HOME/.local/share/DustRacing2D/tracks` if `$XDG_DATA_HOME` is not defined.
+* Fix GitHub Issue #53: Add a small delay before reverse engages
 
 Bug fixes:
 

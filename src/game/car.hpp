@@ -25,6 +25,7 @@
 
 #include <memory>
 
+class Gearbox;
 class MCSurface;
 class MCFrictionGenerator;
 class Route;
@@ -69,17 +70,9 @@ public:
     //! Return the index.
     unsigned int index() const;
 
-    //! Clear statuses before setting any states.
-    void clearStatuses();
-
-    //! Steer.
     void steer(Steer direction, float control = 1.0f);
 
-    //! Accelerate.
-    void accelerate(bool deccelerate = false);
-
-    //! Brake.
-    void brake();
+    bool isAccelerating() const;
 
     bool isBraking() const;
 
@@ -167,7 +160,17 @@ public:
 
     CarSoundEffectManagerPtr soundEffectManager() const;
 
+    bool hasDamage() const;
+
+    bool hasTireWear() const;
+
+    void setAcceleratorEnabled(bool acceleratorEnabled);
+
+    void setBrakeEnabled(bool brakeEnabled);
+
 private:
+
+    void accelerate(bool deccelerate = false);
 
     void initForceGenerators(Description & desc);
 
@@ -186,12 +189,6 @@ private:
     bool m_leftSideOffTrack;
 
     bool m_rightSideOffTrack;
-
-    bool m_accelerating;
-
-    bool m_braking;
-
-    bool m_reverse;
 
     bool m_skidding;
 
@@ -264,6 +261,12 @@ private:
     MCVector3dF m_rightBrakeGlowPos;
 
     bool m_hadHardCrash;
+
+    std::unique_ptr<Gearbox> m_gearbox;
+
+    bool m_acceleratorEnabled = false;
+
+    bool m_brakeEnabled = false;
 };
 
 typedef std::shared_ptr<Car> CarPtr;

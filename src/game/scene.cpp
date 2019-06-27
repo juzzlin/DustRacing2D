@@ -342,22 +342,29 @@ void Scene::processUserInput(InputHandler & handler)
 {
     for (int i = 0; i < (m_game.hasTwoHumanPlayers() ? 2 : 1); i++)
     {
-        m_cars.at(i)->clearStatuses();
-
         // Handle accelerating / braking
         if (handler.getActionState(i, InputHandler::Action::Down))
         {
             if (!m_race.timing().raceCompleted(i))
             {
-                m_cars.at(i)->brake();
+                m_cars.at(i)->setBrakeEnabled(true);
             }
         }
-        else if (handler.getActionState(i, InputHandler::Action::Up))
+        else
+        {
+            m_cars.at(i)->setBrakeEnabled(false);
+        }
+
+        if (handler.getActionState(i, InputHandler::Action::Up))
         {
             if (!m_race.timing().raceCompleted(i))
             {
-                m_cars.at(i)->accelerate();
+                m_cars.at(i)->setAcceleratorEnabled(true);
             }
+        }
+        else
+        {
+            m_cars.at(i)->setAcceleratorEnabled(false);
         }
 
         // Handle turning
