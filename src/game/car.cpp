@@ -444,6 +444,16 @@ float Car::damageLevel() const
     return m_damageCapacity / m_initDamageCapacity;
 }
 
+bool Car::hasDamage() const
+{
+    return m_damageCapacity < m_initDamageCapacity;
+}
+
+bool Car::hasTireWear() const
+{
+    return m_tireWearOutCapacity < m_initTireWearOutCapacity;
+}
+
 bool Car::hadHardCrash()
 {
     if (m_hadHardCrash)

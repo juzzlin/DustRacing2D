@@ -24,7 +24,7 @@
 
 Pit::Pit(MCSurface & surface)
 : MCObject(surface, "pit")
-, m_tag(0)
+, m_timestamp(0)
 {
     physicsComponent().setMass(1, true); // Stationary
     setIsPhysicsObject(false);
@@ -40,32 +40,42 @@ void Pit::collisionEvent(MCCollisionEvent & event)
     if (event.collidingObject().typeId() == carType)
     {
         Car & car = static_cast<Car &>(event.collidingObject());
-        if (car.isHuman() && car.speedInKmh() < 25)
+        if (!m_collidingCars.count(&car))
         {
-            if (m_pittingCars.find(&car) == m_pittingCars.end())
-            {
-                emit pitStop(car);
-            }
-
-            m_pittingCars[&car] = m_tag;
+            m_collidingCars[&car] = {m_timestamp, false};
+        }
+        else
+        {
+            m_collidingCars[&car].first = m_timestamp;
         }
     }
 }
 
 void Pit::onStepTime(int)
 {
-    auto i = m_pittingCars.begin();
-    while (i != m_pittingCars.end())
+    for (auto && car : m_collidingCars)
     {
-        if (i->second < m_tag)
+        if (!car.second.second && car.first->isHuman() && car.first->speedInKmh() < 25 && (car.first->hasDamage() || car.first->hasTireWear()))
         {
-            i = m_pittingCars.erase(i);
-        }
-        else
-        {
-            i++;
+            emit pitStop(*car.first);
+
+            car.second.second = true; // Mark the pit stop completed
         }
     }
 
-    m_tag++;
+    // Clear cars from the map that are not colliding anymore
+    auto iter = m_collidingCars.begin();
+    while (iter != m_collidingCars.end())
+    {
+        if (iter->second.first + 1 < m_timestamp)
+        {
+            iter = m_collidingCars.erase(iter);
+        }
+        else
+        {
+            iter++;
+        }
+    }
+
+    m_timestamp++;
 }
