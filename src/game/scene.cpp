@@ -138,9 +138,9 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
     MCAssetManager::textureFontManager().font(m_game.fontName()).setShadowShaderProgram(
         m_renderer.program("textShadow"));
 
-    const MCGLAmbientLight ambientLight(1.0, 0.9, 0.95, 0.75);
-    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 0.9, 0.5, 0.75);
-    const MCGLDiffuseLight specularLight(MCVector3dF(1.0, -1.0, -1.0), 1.0, 1.0, 0.8, 0.9);
+    const MCGLAmbientLight ambientLight(1.0f, 0.9f, 0.95f, 0.75f);
+    const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0f, -1.0f, -1.0f), 1.0f, 0.9f, 0.5f, 0.75f);
+    const MCGLDiffuseLight specularLight(MCVector3dF(1.0f, -1.0f, -1.0f), 1.0f, 1.0f, 0.8f, 0.9f);
 
     MCGLScene & glScene = MCWorld::instance().renderer().glScene();
     glScene.setAmbientLight(ambientLight);
@@ -212,11 +212,11 @@ void Scene::createCars()
 
 void Scene::setupMinimaps()
 {
-    const int minimapSize = m_width * 0.2f;
+    const int minimapSize = static_cast<int>(m_width * 0.2f);
 
     const int minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
 
-    for (int i = 0; i < 2; i++)
+    for (size_t i = 0; i < 2; i++)
     {
         m_minimap[i].initialize(*m_cars[i], m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, minimapSize);
     }
@@ -270,7 +270,7 @@ void Scene::updateFrame(InputHandler & handler, int step)
 
             if (m_game.hasTwoHumanPlayers())
             {
-                for (int i = 0; i < 2; i++)
+                for (size_t i = 0; i < 2; i++)
                 {
                     updateCameraLocation(m_camera[i], m_cameraOffset[i], *m_cars.at(i));
                 }
@@ -286,11 +286,10 @@ void Scene::updateFrame(InputHandler & handler, int step)
         m_menuManager->stepTime(step);
     }
 
-    const float fadeValue = m_renderer.fadeValue();
     if (m_fadeAnimation->isFading())
     {
         MCGLScene & glScene = MCWorld::instance().renderer().glScene();
-        glScene.setFadeValue(fadeValue);
+        glScene.setFadeValue(m_renderer.fadeValue());
     }
 }
 
@@ -308,7 +307,7 @@ void Scene::updateOverlays()
     m_messageOverlay->update();
 }
 
-void Scene::updateWorld(float timeStep)
+void Scene::updateWorld(int timeStep)
 {
     // Step time
     m_world.stepTime(timeStep);
@@ -329,8 +328,8 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
     // in the speed won't look bad.
     MCVector2dF loc(object.location());
 
-    const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6 : 13.8;
-    const float smooth              = 0.2;
+    const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6f : 13.8f;
+    const float smooth = 0.2f;
 
     offset += (object.physicsComponent().velocity().lengthFast() - offset) * smooth;
     loc    += object.direction() * offset * offsetAmplification;
@@ -340,7 +339,7 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
 
 void Scene::processUserInput(InputHandler & handler)
 {
-    for (int i = 0; i < (m_game.hasTwoHumanPlayers() ? 2 : 1); i++)
+    for (size_t i = 0; i < (m_game.hasTwoHumanPlayers() ? 2 : 1); i++)
     {
         // Handle accelerating / braking
         if (handler.getActionState(i, InputHandler::Action::Down))

@@ -149,7 +149,7 @@ private:
 
     void updateRace();
 
-    void updateWorld(float timeStep);
+    void updateWorld(int timeStep);
 
     static int m_width;
 
