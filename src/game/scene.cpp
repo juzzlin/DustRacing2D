@@ -93,33 +93,43 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 , m_startlights(new Startlights)
 , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
 , m_checkeredFlag(new CheckeredFlag)
-, m_mainMenu(nullptr)
-, m_menuManager(nullptr)
 , m_intro(new Intro)
 , m_particleFactory(new ParticleFactory)
 , m_fadeAnimation(new FadeAnimation)
 {
-    connect(m_startlights, &Startlights::raceStarted, &m_race, &Race::start);
-    connect(m_startlights, &Startlights::animationEnded, &m_stateMachine, &StateMachine::endStartlightAnimation);
+    initializeComponents();
 
-    connect(&m_stateMachine, &StateMachine::startlightAnimationRequested, m_startlights, &Startlights::beginAnimation);
-    connect(&m_stateMachine, &StateMachine::fadeInRequested, m_fadeAnimation, &FadeAnimation::beginFadeIn);
-    connect(&m_stateMachine, &StateMachine::fadeOutRequested, m_fadeAnimation, &FadeAnimation::beginFadeOut);
-    connect(&m_stateMachine, &StateMachine::fadeOutFlashRequested, m_fadeAnimation, &FadeAnimation::beginFadeOutFlash);
+    connectComponents();
+
+    createMenus();
+}
+
+void Scene::connectComponents()
+{
+    connect(m_startlights.get(), &Startlights::raceStarted, &m_race, &Race::start);
+    connect(m_startlights.get(), &Startlights::animationEnded, &m_stateMachine, &StateMachine::endStartlightAnimation);
+
+    connect(&m_stateMachine, &StateMachine::startlightAnimationRequested, m_startlights.get(), &Startlights::beginAnimation);
+    connect(&m_stateMachine, &StateMachine::fadeInRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeIn);
+    connect(&m_stateMachine, &StateMachine::fadeOutRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeOut);
+    connect(&m_stateMachine, &StateMachine::fadeOutFlashRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeOutFlash);
     connect(&m_stateMachine, &StateMachine::soundsStopped, &m_race, &Race::stopEngineSounds);
 
-    connect(m_fadeAnimation, &FadeAnimation::fadeValueChanged, &m_renderer, &Renderer::setFadeValue);
-    connect(m_fadeAnimation, &FadeAnimation::fadeInFinished, &m_stateMachine, &StateMachine::endFadeIn);
-    connect(m_fadeAnimation, &FadeAnimation::fadeOutFinished, &m_stateMachine, &StateMachine::endFadeOut);
+    connect(m_fadeAnimation.get(), &FadeAnimation::fadeValueChanged, &m_renderer, &Renderer::setFadeValue);
+    connect(m_fadeAnimation.get(), &FadeAnimation::fadeInFinished, &m_stateMachine, &StateMachine::endFadeIn);
+    connect(m_fadeAnimation.get(), &FadeAnimation::fadeOutFinished, &m_stateMachine, &StateMachine::endFadeOut);
 
     connect(&m_race, &Race::finished, &m_stateMachine, &StateMachine::finishRace);
-    connect(&m_race, &Race::messageRequested, m_messageOverlay, static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(&m_race, &Race::messageRequested, m_messageOverlay.get(), static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
 
-    connect(m_startlights, &Startlights::messageRequested, m_messageOverlay, static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(m_startlights.get(), &Startlights::messageRequested, m_messageOverlay.get(), static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
     connect(this, &Scene::listenerLocationChanged, &m_game.audioWorker(), &AudioWorker::setListenerLocation);
 
     m_game.audioWorker().connectAudioSource(m_race);
+}
 
+void Scene::initializeComponents()
+{
     for (int i = 0; i < 2; i++)
     {
         m_cameraOffset[i] = 0.0f;
@@ -148,25 +158,21 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
     glScene.setSpecularLight(specularLight);
 
     m_renderer.setFadeValue(0.0);
-
-    createMenus();
 }
 
 void Scene::setupAudio(Car & car, int index)
 {
-    std::stringstream engine;
-    engine << "carEngine" << index;
-
-    std::stringstream hit;
-    hit << "carHit" << index;
-
-    std::stringstream skid;
-    skid << "skid" << index;
-
     CarSoundEffectManager::MultiSoundHandles handles;
-    handles.engineSoundHandle = engine.str().c_str();
-    handles.hitSoundHandle    = hit.str().c_str();
-    handles.skidSoundHandle   = skid.str().c_str();
+
+    const auto indexStr = std::to_string(index);
+    const auto engine = "carEngine" + indexStr;
+    handles.engineSoundHandle = engine.c_str();
+
+    const auto hit = "carHit" + indexStr;
+    handles.hitSoundHandle = hit.c_str();
+
+    const auto skid = "skid" + indexStr;
+    handles.skidSoundHandle = skid.c_str();
 
     CarSoundEffectManagerPtr sfx(new CarSoundEffectManager(car, handles));
     m_game.audioWorker().connectAudioSource(*sfx);
@@ -212,9 +218,8 @@ void Scene::createCars()
 
 void Scene::setupMinimaps()
 {
-    const int minimapSize = static_cast<int>(m_width * 0.2f);
-
-    const int minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
+    const auto minimapSize = static_cast<int>(m_width * 0.2f);
+    const auto minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
 
     for (size_t i = 0; i < 2; i++)
     {
@@ -240,7 +245,7 @@ void Scene::setSize(int width, int height)
 
 void Scene::createMenus()
 {
-    m_menuManager = new MTFH::MenuManager;
+    m_menuManager.reset(new MTFH::MenuManager);
 
     m_mainMenu = MTFH::MenuPtr(new MainMenu(*m_menuManager, *this, width(), height()));
     connect(
@@ -332,7 +337,7 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
     const float smooth = 0.2f;
 
     offset += (object.physicsComponent().velocity().lengthFast() - offset) * smooth;
-    loc    += object.direction() * offset * offsetAmplification;
+    loc += object.direction() * offset * offsetAmplification;
 
     camera.setPos(loc.i(), loc.j());
 }
@@ -447,7 +452,7 @@ void Scene::setActiveTrack(Track & activeTrack)
 
     addTrackObjectsToWorld();
 
-    initRace();
+    initializeRace();
 
     setupAI(activeTrack);
 
@@ -573,7 +578,7 @@ void Scene::resizeOverlays()
     }
 }
 
-void Scene::initRace()
+void Scene::initializeRace()
 {
     assert(m_activeTrack);
     m_race.init(*m_activeTrack, m_game.lapCount());
@@ -785,13 +790,4 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
     };
 }
 
-Scene::~Scene()
-{
-    delete m_fadeAnimation;
-    delete m_intro;
-    delete m_menuManager;
-    delete m_messageOverlay;
-    delete m_particleFactory;
-    delete m_startlights;
-    delete m_startlightsOverlay;
-}
+Scene::~Scene() = default;
