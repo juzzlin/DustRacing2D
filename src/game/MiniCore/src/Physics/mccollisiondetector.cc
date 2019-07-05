@@ -32,15 +32,29 @@ MCCollisionDetector::MCCollisionDetector()
 bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
 {
     auto && iter = m_currentCollisions.find(&object1);
-    if (iter != m_currentCollisions.end())
-    {
-        if (iter->second.count(&object2))
-        {
-            return true;
-        }
-    }
+    return iter != m_currentCollisions.end() && iter->second.count(&object2);
+}
 
-    return false;
+void MCCollisionDetector::clear()
+{
+    m_currentCollisions.clear();
+}
+
+void MCCollisionDetector::remove(MCObject & object)
+{
+    auto && outer = m_currentCollisions.find(&object);
+    if (outer != m_currentCollisions.end())
+    {
+        for (auto && outerLinked : outer->second)
+        {
+            if (m_currentCollisions.count(outerLinked))
+            {
+                m_currentCollisions[outerLinked].erase(outer->first);
+            }
+        }
+
+        m_currentCollisions.erase(outer);
+    }
 }
 
 bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
@@ -59,30 +73,35 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
             MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
             MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i));
 
-            if (m_collisionEventsEnabled) {
+            const bool areColliding = areCurrentlyColliding(rect1.parent(), rect2.parent());
+            if (!areColliding)
+            {
                 MCObject::sendEvent(rect1.parent(), ev1);
                 MCObject::sendEvent(rect2.parent(), ev2);
+
+                m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
             }
 
-            if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
+            if ((ev1.accepted() && ev2.accepted()) || areColliding)
             {
-                m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
-
-                MCVector2dF contactNormal;
-                MCVector2dF vertex = obbox1.vertex(i);
-                float depth = rect2.interpenetrationDepth(
-                    MCSegment<float>(vertex, rect1.location()), contactNormal);
-
+                if (!triggerObjectInvolved)
                 {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect2.parent(), vertex, contactNormal, depth);
-                    rect1.parent().addContact(contact);
-                }
+                    MCVector2dF contactNormal;
+                    MCVector2dF vertex = obbox1.vertex(i);
+                    float depth = rect2.interpenetrationDepth(
+                        MCSegment<float>(vertex, rect1.location()), contactNormal);
 
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect1.parent(), vertex, -contactNormal, depth);
-                    rect2.parent().addContact(contact);
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect2.parent(), vertex, contactNormal, depth);
+                        rect1.parent().addContact(contact);
+                    }
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect1.parent(), vertex, -contactNormal, depth);
+                        rect2.parent().addContact(contact);
+                    }
                 }
 
                 collided = true;
@@ -126,30 +145,34 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
             MCCollisionEvent ev1(rect.parent(), circleVertex);
             MCCollisionEvent ev2(circle.parent(), circleVertex);
 
-            if (m_collisionEventsEnabled)
+            const bool areColliding = areCurrentlyColliding(rect.parent(), circle.parent());
+            if (!areColliding)
             {
                 MCObject::sendEvent(circle.parent(), ev1);
                 MCObject::sendEvent(rect.parent(), ev2);
+
+                m_currentCollisions[&rect.parent()].insert(&circle.parent());
             }
 
-            if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
+            if ((ev1.accepted() && ev2.accepted()) || areColliding)
             {
-                m_currentCollisions[&circle.parent()].insert(&rect.parent());
-
-                MCVector2dF contactNormal;
-                float depth = rect.interpenetrationDepth(
-                    MCSegment<float>(circleVertex, circle.location()), contactNormal);
-
+                if (!triggerObjectInvolved)
                 {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect.parent(), circleVertex, contactNormal, depth);
-                    circle.parent().addContact(contact);
-                }
+                    MCVector2dF contactNormal;
+                    float depth = rect.interpenetrationDepth(
+                        MCSegment<float>(circleVertex, circle.location()), contactNormal);
 
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(circle.parent(), circleVertex, -contactNormal, depth);
-                    rect.parent().addContact(contact);
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect.parent(), circleVertex, contactNormal, depth);
+                        circle.parent().addContact(contact);
+                    }
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(circle.parent(), circleVertex, -contactNormal, depth);
+                        rect.parent().addContact(contact);
+                    }
                 }
 
                 collided = true;
@@ -177,26 +200,30 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
         MCCollisionEvent ev1(circle1.parent(), contactPoint);
         MCCollisionEvent ev2(circle2.parent(), contactPoint);
 
-        if (m_collisionEventsEnabled)
+        const bool areColliding = areCurrentlyColliding(circle1.parent(), circle2.parent());
+        if (!areColliding)
         {
             MCObject::sendEvent(circle2.parent(), ev1);
             MCObject::sendEvent(circle1.parent(), ev2);
+
+            m_currentCollisions[&circle1.parent()].insert(&circle2.parent());
         }
 
-        if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
+        if ((ev1.accepted() && ev2.accepted()) || areColliding)
         {
-            m_currentCollisions[&circle2.parent()].insert(&circle1.parent());
-
+            if (!triggerObjectInvolved)
             {
-                MCContact & contact = MCContact::create();
-                contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
-                circle2.parent().addContact(contact);
-            }
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
+                    circle2.parent().addContact(contact);
+                }
 
-            {
-                MCContact & contact = MCContact::create();
-                contact.init(circle1.parent(), contactPoint, contactNormal, depth);
-                circle1.parent().addContact(contact);
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(circle1.parent(), contactPoint, contactNormal, depth);
+                    circle1.parent().addContact(contact);
+                }
             }
 
             collided = true;
@@ -253,11 +280,7 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
 
 unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
 {
-    m_currentCollisions.clear();
-
     unsigned int numCollisions = 0;
-
-    m_collisionEventsEnabled = true;
 
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
@@ -271,17 +294,27 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
 {
     unsigned int numCollisions = 0;
 
-    m_collisionEventsEnabled = false;
+    std::vector<std::pair<MCObject *, MCObject *>> removedCollisions;
 
     for (auto && outer : m_currentCollisions)
     {
         for (auto && inner : outer.second)
         {
-            numCollisions += processPossibleCollision(*outer.first, *inner);
+            if (!processPossibleCollision(*outer.first, *inner))
+            {
+                removedCollisions.push_back({outer.first, inner});
+            }
+            else
+            {
+                numCollisions++;
+            }
         }
     }
 
-    m_collisionEventsEnabled = true;
+    for (auto && collisionPair : removedCollisions)
+    {
+        m_currentCollisions[collisionPair.first].erase(collisionPair.second);
+    }
 
     return numCollisions;
 }

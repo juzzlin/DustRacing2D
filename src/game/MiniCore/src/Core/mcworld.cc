@@ -172,6 +172,7 @@ void MCWorld::clear()
     m_objectGrid->removeAll();
     m_objs.clear();
     m_removeObjs.clear();
+    m_collisionDetector->clear();
 }
 
 void MCWorld::setDimensions(
@@ -371,6 +372,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     if (object.isPhysicsObject() && !object.bypassCollisions())
     {
         m_objectGrid->remove(object);
+        m_collisionDetector->remove(object);
     }
 
     object.setRemoving(false);

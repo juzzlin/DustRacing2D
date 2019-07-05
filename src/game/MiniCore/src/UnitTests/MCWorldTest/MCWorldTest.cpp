@@ -20,6 +20,7 @@
 #include "MCWorldTest.hpp"
 #include "../../Core/mcworld.hh"
 #include "../../Core/mcobject.hh"
+#include "../../Physics/mccircleshape.hh"
 #include "../../Physics/mcrectshape.hh"
 #include "../../Physics/mccollisionevent.hh"
 #include "../../Physics/mcphysicscomponent.hh"
@@ -105,23 +106,143 @@ void MCWorldTest::testSetDimensions()
     QVERIFY(qFuzzyCompare(world.metersPerUnit(), metersPerUnit));
 }
 
-void MCWorldTest::testCollisionEvent()
+void MCWorldTest::testCollisionEvent_RectRect()
 {
     MCWorld world;
     world.setDimensions(-10, 10, -10, 10, -10, 10);
 
     TestObject object1;
-    MCRectShape * shape1 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
-    object1.setShape(MCShapePtr(shape1));
+    object1.setShape(MCShapePtr(new MCRectShape(nullptr, 2.0, 2.0)));
     object1.physicsComponent().preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
 
     TestObject object2;
-    MCRectShape * shape2 = new MCRectShape(MCShapeViewPtr(), 2.0, 2.0);
-    object2.setShape(MCShapePtr(shape2));
+    object2.setShape(MCShapePtr(new MCRectShape(nullptr, 2.0, 2.0)));
     object2.physicsComponent().preventSleeping(true);
 
     world.addObject(object1);
     world.addObject(object2);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
+
+    object1.m_collisionEventReceived = false;
+    object2.m_collisionEventReceived = false;
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
+
+    object1.translate(MCVector3dF(-1.5, 0.0));
+    object2.translate(MCVector3dF( 1.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
+}
+
+void MCWorldTest::testCollisionEvent_RectCircle()
+{
+    MCWorld world;
+    world.setDimensions(-10, 10, -10, 10, -10, 10);
+
+    TestObject object1;
+    object1.setShape(MCShapePtr(new MCRectShape(nullptr, 2.0, 2.0)));
+    object1.physicsComponent().preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
+
+    TestObject object2;
+    object2.setShape(MCShapePtr(new MCCircleShape(nullptr, 1.0)));
+    object2.physicsComponent().preventSleeping(true);
+
+    world.addObject(object1);
+    world.addObject(object2);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
+
+    object1.m_collisionEventReceived = false;
+    object2.m_collisionEventReceived = false;
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
+
+    object1.translate(MCVector3dF(-1.5, 0.0));
+    object2.translate(MCVector3dF( 1.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
+}
+
+void MCWorldTest::testCollisionEvent_CircleCircle()
+{
+    MCWorld world;
+    world.setDimensions(-10, 10, -10, 10, -10, 10);
+
+    TestObject object1;
+    object1.setShape(MCShapePtr(new MCCircleShape(nullptr, 1.0)));
+    object1.physicsComponent().preventSleeping(true); // Need to prevent sleeping, because we are testing with zero velocity
+
+    TestObject object2;
+    object2.setShape(MCShapePtr(new MCCircleShape(nullptr, 1.0)));
+    object2.physicsComponent().preventSleeping(true);
+
+    world.addObject(object1);
+    world.addObject(object2);
+
+    object1.translate(MCVector3dF(-0.5, 0.0));
+    object2.translate(MCVector3dF( 0.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(object1.m_collisionEventReceived);
+    QVERIFY(object2.m_collisionEventReceived);
+
+    object1.m_collisionEventReceived = false;
+    object2.m_collisionEventReceived = false;
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
+
+    object1.translate(MCVector3dF(-1.5, 0.0));
+    object2.translate(MCVector3dF( 1.5, 0.0));
+
+    world.stepTime(1);
+
+    QVERIFY(!object1.m_collisionEventReceived);
+    QVERIFY(!object2.m_collisionEventReceived);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));

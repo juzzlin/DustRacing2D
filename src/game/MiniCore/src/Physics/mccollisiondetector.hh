@@ -42,6 +42,10 @@ public:
     //! Destructor.
     virtual ~MCCollisionDetector() {}
 
+    void clear();
+
+    void remove(MCObject & object);
+
     //! Detect collisions and generate contacts. Contacts are stored to MCObject.
     unsigned int detectCollisions(MCObjectGrid & objectGrid);
 
@@ -62,8 +66,6 @@ private:
     bool testRectAgainstCircle(MCRectShape & object1, MCCircleShape & object2);
 
     bool testCircleAgainstCircle(MCCircleShape & object1, MCCircleShape & object2);
-
-    bool m_collisionEventsEnabled = true;
 
     using CollisionMap = std::map<MCObject *, std::set<MCObject *>>;
     CollisionMap m_currentCollisions;
