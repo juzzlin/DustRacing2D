@@ -22,10 +22,9 @@
 
 unsigned int MCCollisionEvent::m_typeId = MCEvent::registerType();
 
-MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint, bool isPrimary)
+MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint)
 : m_collidingObject(collidingObject)
 , m_contactPoint(contactPoint)
-, m_isPrimary(isPrimary)
 {}
 
 unsigned int MCCollisionEvent::typeId()
@@ -46,11 +45,6 @@ MCObject & MCCollisionEvent::collidingObject() const
 const MCVector3dF & MCCollisionEvent::contactPoint() const
 {
     return m_contactPoint;
-}
-
-bool MCCollisionEvent::isPrimary() const
-{
-    return m_isPrimary;
 }
 
 MCCollisionEvent::~MCCollisionEvent()

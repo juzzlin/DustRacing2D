@@ -420,13 +420,11 @@ void MCWorld::processCollisions()
         generateImpulses();
 
         // Process contacts and generate impulses
-        m_collisionDetector->enablePrimaryCollisionEvents(false);
         for (unsigned int i = 0; i < m_resolverLoopCount && m_numCollisions > 0; i++)
         {
             m_numCollisions = m_collisionDetector->iterateCurrentCollisions();
             resolvePositions(m_resolverStep);
         }
-        m_collisionDetector->enablePrimaryCollisionEvents(true);
     }
 }
 

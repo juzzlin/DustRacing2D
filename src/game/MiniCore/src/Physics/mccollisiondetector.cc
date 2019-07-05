@@ -27,7 +27,6 @@
 #include "mccollisionevent.hh"
 
 MCCollisionDetector::MCCollisionDetector()
-: m_arePrimaryCollisionEventsEnabled(true)
 {}
 
 bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
@@ -44,11 +43,6 @@ bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & o
     return false;
 }
 
-void MCCollisionDetector::enablePrimaryCollisionEvents(bool enable)
-{
-    m_arePrimaryCollisionEventsEnabled = enable;
-}
-
 bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
 {
     const MCOBBox<float> & obbox1(rect1.obbox());
@@ -62,15 +56,15 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
         {
             const bool triggerObjectInvolved = rect1.parent().isTriggerObject() || rect2.parent().isTriggerObject();
 
-            // Send collision event to owner of rect1
-            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i), m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect1.parent(), ev1);
+            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
+            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i));
 
-            // Send collision event to owner of rect2
-            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i), m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect2.parent(), ev2);
+            if (m_collisionEventsEnabled) {
+                MCObject::sendEvent(rect1.parent(), ev1);
+                MCObject::sendEvent(rect2.parent(), ev2);
+            }
 
-            if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+            if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
             {
                 m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
 
@@ -129,15 +123,16 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
         {
             const bool triggerObjectInvolved = rect.parent().isTriggerObject() || circle.parent().isTriggerObject();
 
-            // Send collision event to owner of circle
-            MCCollisionEvent ev1(rect.parent(), circleVertex, m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(circle.parent(), ev1);
+            MCCollisionEvent ev1(rect.parent(), circleVertex);
+            MCCollisionEvent ev2(circle.parent(), circleVertex);
 
-            // Send collision event to owner of rect
-            MCCollisionEvent ev2(circle.parent(), circleVertex, m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect.parent(), ev2);
+            if (m_collisionEventsEnabled)
+            {
+                MCObject::sendEvent(circle.parent(), ev1);
+                MCObject::sendEvent(rect.parent(), ev2);
+            }
 
-            if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+            if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
             {
                 m_currentCollisions[&circle.parent()].insert(&rect.parent());
 
@@ -179,15 +174,16 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
     {
         const bool triggerObjectInvolved = circle1.parent().isTriggerObject() || circle2.parent().isTriggerObject();
 
-        // Send collision event to owner of circle2
-        MCCollisionEvent ev1(circle1.parent(), contactPoint, m_arePrimaryCollisionEventsEnabled);
-        MCObject::sendEvent(circle2.parent(), ev1);
+        MCCollisionEvent ev1(circle1.parent(), contactPoint);
+        MCCollisionEvent ev2(circle2.parent(), contactPoint);
 
-        // Send collision event to owner of circle1
-        MCCollisionEvent ev2(circle2.parent(), contactPoint, m_arePrimaryCollisionEventsEnabled);
-        MCObject::sendEvent(circle1.parent(), ev2);
+        if (m_collisionEventsEnabled)
+        {
+            MCObject::sendEvent(circle2.parent(), ev1);
+            MCObject::sendEvent(circle1.parent(), ev2);
+        }
 
-        if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+        if (!triggerObjectInvolved && (!m_collisionEventsEnabled || (ev1.accepted() && ev2.accepted()))) // Trigger objects should only trigger events
         {
             m_currentCollisions[&circle2.parent()].insert(&circle1.parent());
 
@@ -261,6 +257,8 @@ unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
 
     unsigned int numCollisions = 0;
 
+    m_collisionEventsEnabled = true;
+
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
         numCollisions += processPossibleCollision(*iter.first, *iter.second);
@@ -273,6 +271,8 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
 {
     unsigned int numCollisions = 0;
 
+    m_collisionEventsEnabled = false;
+
     for (auto && outer : m_currentCollisions)
     {
         for (auto && inner : outer.second)
@@ -280,6 +280,8 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
             numCollisions += processPossibleCollision(*outer.first, *inner);
         }
     }
+
+    m_collisionEventsEnabled = true;
 
     return numCollisions;
 }

@@ -48,10 +48,6 @@ public:
     //! Iterate current collisions and generate contacts. Contacts are stored to MCObject.
     unsigned int iterateCurrentCollisions();
 
-    /*! Turn primary collision events on/off. This is used by MCWorld when iterating
-     *  the collision resolution. */
-    void enablePrimaryCollisionEvents(bool enable);
-
 private:
 
     DISABLE_COPY(MCCollisionDetector);
@@ -67,7 +63,7 @@ private:
 
     bool testCircleAgainstCircle(MCCircleShape & object1, MCCircleShape & object2);
 
-    bool m_arePrimaryCollisionEventsEnabled;
+    bool m_collisionEventsEnabled = true;
 
     using CollisionMap = std::map<MCObject *, std::set<MCObject *>>;
     CollisionMap m_currentCollisions;
