@@ -65,8 +65,8 @@ MCWorld::MCWorld()
 , m_bottomWallObject(nullptr)
 , m_numCollisions(0)
 , m_resolverLoopCount(5)
-, m_resolverStep(1.0 / m_resolverLoopCount)
-, m_gravity(MCVector3dF(0, 0, -9.81))
+, m_resolverStep(1.0f / m_resolverLoopCount)
+, m_gravity(MCVector3dF(0, 0, -9.81f))
 {
     if (!MCWorld::m_instance)
     {
@@ -381,8 +381,8 @@ void MCWorld::removeObjectFromIntegration(MCObject & object)
     // Remove from object vector (O(1))
     if (object.index() > REMOVED_INDEX && object.index() < static_cast<int>(m_objs.size()))
     {
-        m_objs[object.index()] = m_objs.back();
-        m_objs[object.index()]->setIndex(object.index());
+        m_objs[static_cast<size_t>(object.index())] = m_objs.back();
+        m_objs[static_cast<size_t>(object.index())]->setIndex(object.index());
         m_objs.pop_back();
         object.setIndex(REMOVED_INDEX);
     }
