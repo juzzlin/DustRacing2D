@@ -220,12 +220,12 @@ void Car::accelerate(bool deccelerate)
 
 bool Car::isAccelerating() const
 {
-    return m_acceleratorEnabled && m_gearbox->gear() != Gearbox::Gear::Neutral;
+    return m_acceleratorEnabled && (m_gearbox->gear() != Gearbox::Gear::Neutral || !m_isHuman);
 }
 
 bool Car::isBraking() const
 {
-    return m_brakeEnabled && m_gearbox->gear() == Gearbox::Gear::Neutral;
+    return m_brakeEnabled && (m_gearbox->gear() == Gearbox::Gear::Neutral || !m_isHuman);
 }
 
 bool Car::isSkidding() const
