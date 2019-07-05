@@ -77,7 +77,7 @@ public:
     MCObject(MCSurface & surface, const std::string & typeName);
 
     //! Return integer id corresponding to the given object name.
-    static unsigned int getTypeIdForName(const std::string & typeName);
+    static size_t getTypeIdForName(const std::string & typeName);
 
     /*! Destructor. It's the callers responsibility to first remove
      *  the object from MCWorld before deleting the object. */
@@ -88,7 +88,7 @@ public:
      *  against each others without need for dynamic_cast.
      *  The filtered collision detection system uses this
      *  to match given types of objects. */
-    virtual unsigned int typeId() const;
+    virtual size_t typeId() const;
 
     /*! Return typeId for the given typeName string from
      *  MCObject's hash table. Each object registers
@@ -96,7 +96,7 @@ public:
      *  derived classes, they only need to pass the desired
      *  typeId string to MCObject's constructor.
      *  Returns 0 if type is not registered. */
-    static unsigned int typeId(const std::string & typeName);
+    static size_t typeId(const std::string & typeName);
 
     //! Return the type name given to constructor.
     const std::string & typeName() const;
@@ -315,7 +315,7 @@ private:
 
     /*! Cache range of objectGrid cells the object is touching.
      *  Used by MCObjectGrid. */
-    void cacheIndexRange(unsigned int i0, unsigned int i1, unsigned int j0, unsigned int j1);
+    void cacheIndexRange(size_t i0, size_t i1, size_t j0, size_t j1);
 
     void checkXBoundariesAndSendEvent(float minX, float maxX);
 
@@ -333,7 +333,7 @@ private:
 
     /*! Get cached index range.
      *  Used by MCObjectGrid. */
-    void restoreIndexRange(unsigned int * i0, unsigned int * i1, unsigned int * j0, unsigned int * j1);
+    void restoreIndexRange(size_t * i0, size_t * i1, size_t * j0, size_t * j1);
 
     /*! Set index in worlds' object vector.
      *  Used by MCWorld. */
@@ -357,7 +357,7 @@ private:
 
     static MCTypeRegistry m_typeRegistry;
 
-    unsigned int m_typeId;
+    size_t m_typeId;
 
     std::string m_typeName;
 
@@ -369,13 +369,13 @@ private:
 
     int m_index = -1;
 
-    unsigned int m_i0 = 0;
+    size_t m_i0 = 0;
 
-    unsigned int m_i1 = 0;
+    size_t m_i1 = 0;
 
-    unsigned int m_j0 = 0;
+    size_t m_j0 = 0;
 
-    unsigned int m_j1 = 0;
+    size_t m_j1 = 0;
 
     MCVector3dF m_initialLocation;
 

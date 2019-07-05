@@ -42,6 +42,12 @@ class MCShape
 {
 public:
 
+    enum class Type
+    {
+        Circle,
+        Rect
+    };
+
     /*! Constructor.
      * \param pView View for the shape. */
     explicit MCShape(MCShapeViewPtr view = nullptr);
@@ -114,14 +120,7 @@ public:
      * \return Contact normal pointing outwards the shape. */
     virtual MCVector2dF contactNormal(const MCSegmentF & p) const = 0;
 
-    /*! Register a new shape type.
-     * \return The new unique type ID. */
-    static unsigned int registerType();
-
-    /*! Return class-wide static type id inited by calling
-     *  MCShape::registerType(). This is used to optimize collision detection
-     *  and to avoid dynamic_cast. */
-    virtual unsigned int instanceTypeId() const = 0;
+    virtual Type type() const = 0;
 
     //! Return approximated radius.
     float radius() const;
@@ -130,15 +129,13 @@ public:
     virtual void setRadius(float radius);
 
     //! Fast intersection test
-    bool mayIntersect(MCShape & other);
+    bool likelyIntersects(MCShape & other) const;
 
 private:
 
     //! Disable copy constructor and assignment
     DISABLE_COPY(MCShape);
     DISABLE_ASSI(MCShape);
-
-    static unsigned int m_typeCount;
 
     MCObject * m_parent;
 

@@ -43,7 +43,7 @@ public:
     MCRectShape(MCShapeViewPtr view, float width, float height);
 
     //! Destructor
-    virtual ~MCRectShape();
+    virtual ~MCRectShape() override;
 
     //! \reimp
     virtual void translate(const MCVector3dF & p) override;
@@ -72,11 +72,8 @@ public:
     //! Get crossing edge for the given segment.
     MCEdgeF edgeForSegment(const MCSegmentF & p) const;
 
-    //! Return the typeId
-    static unsigned int typeId();
-
     //! \reimp
-    virtual unsigned int instanceTypeId() const override;
+    virtual MCShape::Type type() const override;
 
     //! \reimp
     virtual void render(MCCamera * p) override;
@@ -91,8 +88,6 @@ private:
 
     DISABLE_COPY(MCRectShape);
     DISABLE_ASSI(MCRectShape);
-
-    static unsigned int m_typeId;
 
     inline MCVector2dF contactNormal(const MCSegmentF & p, const MCEdgeF & e) const;
 

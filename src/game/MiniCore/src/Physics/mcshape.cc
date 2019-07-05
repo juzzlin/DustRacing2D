@@ -20,8 +20,6 @@
 #include "mcshape.hh"
 #include "mccamera.hh"
 
-unsigned int MCShape::m_typeCount = 0;
-
 MCVector3dF MCShape::m_defaultShadowOffset = MCVector3dF(2, -2, 0.5f);
 
 MCShape::MCShape(MCShapeViewPtr view)
@@ -45,11 +43,6 @@ void MCShape::setParent(MCObject & parent)
 MCObject & MCShape::parent() const
 {
     return *m_parent;
-}
-
-unsigned int MCShape::registerType()
-{
-    return ++MCShape::m_typeCount;
 }
 
 MCShape::~MCShape()
@@ -133,7 +126,7 @@ void MCShape::setRadius(float radius)
     m_radius = radius;
 }
 
-bool MCShape::mayIntersect(MCShape & other)
+bool MCShape::likelyIntersects(MCShape & other) const
 {
     return !(m_location.i() + m_radius < other.m_location.i() - other.m_radius ||
         m_location.j() + m_radius < other.m_location.j() - other.m_radius ||

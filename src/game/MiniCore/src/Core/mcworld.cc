@@ -115,12 +115,6 @@ void MCWorld::integrate(int step)
     }
 }
 
-void MCWorld::detectCollisions()
-{
-    // Check collisions for all registered objects
-    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectGrid);
-}
-
 void MCWorld::generateImpulses()
 {
     m_impulseGenerator->generateImpulsesFromDeepestContacts(m_objs);
@@ -419,8 +413,8 @@ void MCWorld::processRemovedObjects()
 
 void MCWorld::processCollisions()
 {
-    detectCollisions();
-
+    // Check collisions for all registered objects
+    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectGrid);
     if (m_numCollisions)
     {
         generateImpulses();
@@ -429,7 +423,7 @@ void MCWorld::processCollisions()
         m_collisionDetector->enablePrimaryCollisionEvents(false);
         for (unsigned int i = 0; i < m_resolverLoopCount && m_numCollisions > 0; i++)
         {
-            detectCollisions();
+            m_numCollisions = m_collisionDetector->iterateCurrentCollisions();
             resolvePositions(m_resolverStep);
         }
         m_collisionDetector->enablePrimaryCollisionEvents(true);

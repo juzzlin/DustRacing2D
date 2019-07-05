@@ -76,7 +76,7 @@ MCObject::MCObject(MCSurface & surface, const std::string & typeName)
     setShape(rectShape);
 }
 
-unsigned int MCObject::getTypeIdForName(const std::string & typeName)
+size_t MCObject::getTypeIdForName(const std::string & typeName)
 {
     return MCObject::m_typeRegistry.getTypeIdForName(typeName);
 }
@@ -217,12 +217,12 @@ void MCObject::checkZBoundariesAndSendEvent()
     }
 }
 
-unsigned int MCObject::typeId() const
+size_t MCObject::typeId() const
 {
     return m_typeId;
 }
 
-unsigned int MCObject::typeId(const std::string & typeName)
+size_t MCObject::typeId(const std::string & typeName)
 {
     return MCObject::getTypeIdForName(typeName);
 }
@@ -524,7 +524,7 @@ void MCObject::rotateShape(float angle)
 {
     if (m_shape && std::abs(m_shape->angle() - angle) > std::numeric_limits<float>::epsilon())
     {
-        if (m_shape->instanceTypeId() == MCCircleShape::typeId() && m_centerIsZero)
+        if (m_shape->type() == MCShape::Type::Circle && m_centerIsZero)
         {
             m_shape->rotate(angle);
         }
@@ -599,7 +599,7 @@ int MCObject::index() const
     return m_index;
 }
 
-void MCObject::cacheIndexRange(unsigned int i0, unsigned int i1, unsigned int j0, unsigned int j1)
+void MCObject::cacheIndexRange(size_t i0, size_t i1, size_t j0, size_t j1)
 {
     m_i0 = i0;
     m_i1 = i1;
@@ -607,7 +607,7 @@ void MCObject::cacheIndexRange(unsigned int i0, unsigned int i1, unsigned int j0
     m_j1 = j1;
 }
 
-void MCObject::restoreIndexRange(unsigned int * i0, unsigned int * i1, unsigned int * j0, unsigned int * j1)
+void MCObject::restoreIndexRange(size_t * i0, size_t * i1, size_t * j0, size_t * j1)
 {
     *i0 = m_i0;
     *i1 = m_i1;
@@ -627,10 +627,9 @@ const MCObject::ContactHash & MCObject::contacts() const
 
 void MCObject::deleteContacts()
 {
-    auto i(m_contacts.begin());
-    for (; i != m_contacts.end(); i++)
+    for (auto i = m_contacts.begin(); i != m_contacts.end(); i++)
     {
-        for (unsigned int j = 0; j < i->second.size(); j++)
+        for (size_t j = 0; j < i->second.size(); j++)
         {
             i->second[j]->free();
         }
@@ -643,7 +642,7 @@ void MCObject::deleteContacts(MCObject & object)
     auto i(m_contacts.find(&object));
     if (i != m_contacts.end())
     {
-        for (unsigned int j = 0; j < i->second.size(); j++)
+        for (size_t j = 0; j < i->second.size(); j++)
         {
             i->second[j]->free();
         }
@@ -685,11 +684,11 @@ void MCObject::updateChildTransforms()
 
 float MCObject::calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    float linearBalance = 1.0;
+    float linearBalance = 1.0f;
     if (shape()) {
         const float r = shape()->radius();
         if (r > 0) {
-            linearBalance = 1.0 - MCMathUtil::distanceFromVector(
+            linearBalance = 1.0f - MCMathUtil::distanceFromVector(
                 MCVector2dF(pos - location()), MCVector2dF(force)) / r;
             linearBalance = linearBalance < 0 ? 0 : linearBalance;
             linearBalance = linearBalance > 1 ? 1 : linearBalance;

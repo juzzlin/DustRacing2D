@@ -23,9 +23,7 @@
 
 #include <algorithm>
 
-MCObjectGrid::MCObjectGrid(
-    float x1, float y1, float x2, float y2,
-    float leafMaxW, float leafMaxH)
+MCObjectGrid::MCObjectGrid(float x1, float y1, float x2, float y2, float leafMaxW, float leafMaxH)
 : m_bbox(x1, y1, x2, y2)
 , m_leafMaxW(leafMaxW)
 , m_leafMaxH(leafMaxH)
@@ -47,25 +45,25 @@ MCObjectGrid::~MCObjectGrid()
 
 void MCObjectGrid::setIndexRange(const MCBBox<float> & bbox)
 {
-    int temp = static_cast<int>(bbox.x1() * m_helpHor);
+    auto temp = static_cast<int>(bbox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i0 = static_cast<unsigned int>(temp);
+    m_i0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.x2() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
     else if (temp < 0) temp = 0;
-    m_i1 = static_cast<unsigned int>(temp);
+    m_i1 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y1() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j0 = static_cast<unsigned int>(temp);
+    m_j0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y2() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
     else if (temp < 0) temp = 0;
-    m_j1 = static_cast<unsigned int>(temp);
+    m_j1 = static_cast<size_t>(temp);
 }
 
 void MCObjectGrid::insert(MCObject & object)
@@ -78,12 +76,11 @@ void MCObjectGrid::insert(MCObject & object)
     setIndexRange(object.shape()->bbox());
     object.cacheIndexRange(m_i0, m_i1, m_j0, m_j1);
 
-    for (unsigned int j = m_j0; j <= m_j1; j++)
+    for (size_t j = m_j0; j <= m_j1; j++)
     {
-        for (unsigned int i = m_i0; i <= m_i1; i++)
+        for (size_t i = m_i0; i <= m_i1; i++)
         {
-            const int index = j * m_horSize + i;
-            GridCell * cell = m_matrix[index];
+            auto && cell = m_matrix[j * m_horSize + i];
             cell->m_objects.insert(&object);
             m_dirtyCellCache.insert(cell);
         }
@@ -100,12 +97,11 @@ bool MCObjectGrid::remove(MCObject & object)
     bool removed = false;
     object.restoreIndexRange(&m_i0, &m_i1, &m_j0, &m_j1);
 
-    for (unsigned int j = m_j0; j <= m_j1; j++)
+    for (size_t j = m_j0; j <= m_j1; j++)
     {
-        for (unsigned int i = m_i0; i <= m_i1; i++)
+        for (size_t i = m_i0; i <= m_i1; i++)
         {
-            const int index = j * m_horSize + i;
-            GridCell * cell = m_matrix[index];
+            const auto cell = m_matrix[j * m_horSize + i];
             const auto iter = cell->m_objects.find(&object);
             if (iter != cell->m_objects.end())
             {
@@ -124,12 +120,11 @@ bool MCObjectGrid::remove(MCObject & object)
 
 void MCObjectGrid::removeAll()
 {
-    for (unsigned int j = 0; j < m_verSize; j++)
+    for (size_t j = 0; j < m_verSize; j++)
     {
-        for (unsigned int i = 0; i < m_horSize; i++)
+        for (size_t i = 0; i < m_horSize; i++)
         {
-            const int index = j * m_horSize + i;
-            m_matrix[index]->m_objects.clear();
+            m_matrix[j * m_horSize + i]->m_objects.clear();
         }
     }
 
@@ -140,16 +135,16 @@ void MCObjectGrid::build()
 {
     m_dirtyCellCache.clear();
 
-    for (GridCell * cell : m_matrix)
+    for (auto cell : m_matrix)
     {
         delete cell;
     }
 
     m_matrix.clear();
 
-    for (unsigned int j = 0; j < m_verSize; j++)
+    for (size_t j = 0; j < m_verSize; j++)
     {
-        for (unsigned int i = 0; i < m_horSize; i++)
+        for (size_t i = 0; i < m_horSize; i++)
         {
             m_matrix.push_back(new GridCell);
         }
@@ -185,7 +180,7 @@ const MCObjectGrid::CollisionVector & MCObjectGrid::getPossibleCollisions()
                     obj1->physicsComponent().neverCollideWithTag() != obj2->physicsComponent().collisionTag() &&
                     obj2->physicsComponent().neverCollideWithTag() != obj1->physicsComponent().collisionTag() &&
                     (obj1->collisionLayer() == obj2->collisionLayer() || obj1->collisionLayer() == -1 || obj2->collisionLayer() == -1) &&
-                    obj1->shape()->mayIntersect(*obj2->shape().get()))
+                    obj1->shape()->likelyIntersects(*obj2->shape().get()))
                 {
                     collisions.push_back({obj1, obj2});
                     collisions.push_back({obj2, obj1});
@@ -224,12 +219,11 @@ const MCObjectGrid::ObjectSet & MCObjectGrid::getObjectsWithinBBox(const MCBBox<
     static ObjectSet resultObjs;
     resultObjs.clear();
 
-    for (unsigned int j = m_j0; j <= m_j1; j++)
+    for (size_t j = m_j0; j <= m_j1; j++)
     {
-        for (unsigned int i = m_i0; i <= m_i1; i++)
+        for (size_t i = m_i0; i <= m_i1; i++)
         {
-            const int index = j * m_horSize + i;
-            for (auto && obj : m_matrix[index]->m_objects)
+            for (auto && obj : m_matrix[j * m_horSize + i]->m_objects)
             {
                 if (obj->shape()->view())
                 {

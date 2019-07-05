@@ -22,9 +22,9 @@
 
 #include "mcmacros.hh"
 
-
-
 #include <vector>
+#include <map>
+#include <set>
 
 class MCCircleShape;
 class MCObject;
@@ -35,20 +35,29 @@ class MCRectShape;
 class MCCollisionDetector
 {
 public:
+
     //! Constructor.
     MCCollisionDetector();
 
     //! Destructor.
-    virtual ~MCCollisionDetector() {};
+    virtual ~MCCollisionDetector() {}
 
     //! Detect collisions and generate contacts. Contacts are stored to MCObject.
     unsigned int detectCollisions(MCObjectGrid & objectGrid);
+
+    //! Iterate current collisions and generate contacts. Contacts are stored to MCObject.
+    unsigned int iterateCurrentCollisions();
 
     /*! Turn primary collision events on/off. This is used by MCWorld when iterating
      *  the collision resolution. */
     void enablePrimaryCollisionEvents(bool enable);
 
 private:
+
+    DISABLE_COPY(MCCollisionDetector);
+    DISABLE_ASSI(MCCollisionDetector);
+
+    bool areCurrentlyColliding(MCObject & object1, MCObject & object2);
 
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
@@ -60,8 +69,8 @@ private:
 
     bool m_arePrimaryCollisionEventsEnabled;
 
-    DISABLE_COPY(MCCollisionDetector);
-    DISABLE_ASSI(MCCollisionDetector);
+    using CollisionMap = std::map<MCObject *, std::set<MCObject *>>;
+    CollisionMap m_currentCollisions;
 };
 
 #endif // MCCOLLISIONDETECTOR_HH

@@ -30,6 +30,20 @@ MCCollisionDetector::MCCollisionDetector()
 : m_arePrimaryCollisionEventsEnabled(true)
 {}
 
+bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
+{
+    auto && iter = m_currentCollisions.find(&object1);
+    if (iter != m_currentCollisions.end())
+    {
+        if (iter->second.count(&object2))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void MCCollisionDetector::enablePrimaryCollisionEvents(bool enable)
 {
     m_arePrimaryCollisionEventsEnabled = enable;
@@ -58,6 +72,8 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
 
             if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
             {
+                m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
+
                 MCVector2dF contactNormal;
                 MCVector2dF vertex = obbox1.vertex(i);
                 float depth = rect2.interpenetrationDepth(
@@ -123,6 +139,8 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
 
             if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
             {
+                m_currentCollisions[&circle.parent()].insert(&rect.parent());
+
                 MCVector2dF contactNormal;
                 float depth = rect.interpenetrationDepth(
                     MCSegment<float>(circleVertex, circle.location()), contactNormal);
@@ -171,6 +189,8 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
         if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
         {
+            m_currentCollisions[&circle2.parent()].insert(&circle1.parent());
+
             {
                 MCContact & contact = MCContact::create();
                 contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
@@ -192,11 +212,11 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
 bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
 {
-    const unsigned int id1 = object1.shape()->instanceTypeId();
-    const unsigned int id2 = object2.shape()->instanceTypeId();
+    const auto type1 = object1.shape()->type();
+    const auto type2 = object2.shape()->type();
 
     // Rect against rect
-    if (id1 == MCRectShape::typeId() && id2 == MCRectShape::typeId())
+    if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Rect)
     {
         // We must test first object1 against object2 and then
         // the other way around.
@@ -216,7 +236,7 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
         }
     }
     // Rect against circle
-    else if (id1 == MCRectShape::typeId() && id2 == MCCircleShape::typeId())
+    else if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Circle)
     {
         // Static cast because we know the types now.
         return testRectAgainstCircle(
@@ -224,7 +244,7 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
             *static_cast<MCCircleShape *>(object2.shape().get()));
     }
     // Circle against circle
-    else if (id1 == MCCircleShape::typeId() && id2 == MCCircleShape::typeId())
+    else if (type1 == MCShape::Type::Circle && type2 == MCShape::Type::Circle)
     {
         // Static cast because we know the types now.
         return testCircleAgainstCircle(
@@ -237,11 +257,28 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
 
 unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
 {
+    m_currentCollisions.clear();
+
     unsigned int numCollisions = 0;
 
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
         numCollisions += processPossibleCollision(*iter.first, *iter.second);
+    }
+
+    return numCollisions;
+}
+
+unsigned int MCCollisionDetector::iterateCurrentCollisions()
+{
+    unsigned int numCollisions = 0;
+
+    for (auto && outer : m_currentCollisions)
+    {
+        for (auto && inner : outer.second)
+        {
+            numCollisions += processPossibleCollision(*outer.first, *inner);
+        }
     }
 
     return numCollisions;

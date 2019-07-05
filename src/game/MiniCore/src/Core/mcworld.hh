@@ -198,8 +198,6 @@ private:
 
     void doRemoveObject(MCObject & object);
 
-    void detectCollisions();
-
     void generateImpulses();
 
     void resolvePositions(float accuracy);
