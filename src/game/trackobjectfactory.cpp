@@ -79,7 +79,7 @@ TrackObject * TrackObjectFactory::build(
         data.setMass(1000);
         data.setMeshId(role.toStdString());
         data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.9);
+        data.setRestitution(0.9f);
 
         object = m_objectFactory.build(data);
         object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
@@ -92,7 +92,7 @@ TrackObject * TrackObjectFactory::build(
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
 
-        data.setMass(15000);
+        data.setMass(100000);
         data.setSurfaceId(role.toStdString());
 
         object = m_objectFactory.build(data);
@@ -106,7 +106,7 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
         data.setRestitution(0.5);
-        data.setMass(20000);
+        data.setMass(100000);
         data.setSurfaceId(role.toStdString());
 
         object = m_objectFactory.build(data);
@@ -136,7 +136,7 @@ TrackObject * TrackObjectFactory::build(
         data.setXYFriction(1.0);
         data.setMass(2500);
         data.setSurfaceId(role.toStdString());
-        data.setRestitution(0.9);
+        data.setRestitution(0.9f);
 
         object = m_objectFactory.build(data);
     }
@@ -178,7 +178,7 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "tree")
     {
-        int height = 200 + 200 * MCRandom::getValue();
+        int height = static_cast<int>(200 + 200 * MCRandom::getValue());
         object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"),
             1.0f + 0.50f * MCRandom::getValue(),
             0.1f + 0.2f * MCRandom::getValue(),
@@ -193,9 +193,9 @@ TrackObject * TrackObjectFactory::build(
         data.setInitialLocation(location);
         data.setInitialAngle(angle);
         data.setXYFriction(1.0);
-        const int wallMass = 20000;
+        const int wallMass = 100000;
         data.setMass(role == "wall" ? wallMass : wallMass * 4);
-        data.setRestitution(0.9);
+        data.setRestitution(0.9f);
         data.setInitialLocation(MCVector3dF(location.i(), location.j(), 8));
 
         object = m_objectFactory.build(data);
