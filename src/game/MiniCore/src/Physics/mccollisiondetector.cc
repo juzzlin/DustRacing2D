@@ -25,6 +25,7 @@
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mccollisionevent.hh"
+#include "mcseparationevent.hh"
 
 MCCollisionDetector::MCCollisionDetector()
 {}
@@ -314,6 +315,9 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
     for (auto && collisionPair : removedCollisions)
     {
         m_currentCollisions[collisionPair.first].erase(collisionPair.second);
+
+        MCSeparationEvent event(*collisionPair.second);
+        collisionPair.first->event(event);
     }
 
     return numCollisions;

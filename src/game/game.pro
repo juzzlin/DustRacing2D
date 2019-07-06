@@ -197,6 +197,7 @@ HEADERS += \
     MiniCore/src/Physics/mcrectshape.hh \
     MiniCore/src/Physics/mcsegment.hh \
     MiniCore/src/Physics/mcshape.hh \
+    MiniCore/src/Physics/mcseparationevent.hh \
     MiniCore/src/Physics/mcspringforcegenerator.hh \
     MiniCore/src/Physics/mcspringforcegenerator2dfast.hh \
     MiniCore/src/Text/mctexturefont.hh \
@@ -346,6 +347,7 @@ SOURCES += \
     MiniCore/src/Physics/mcoutofboundariesevent.cc \
     MiniCore/src/Physics/mcphysicscomponent.cc \
     MiniCore/src/Physics/mcrectshape.cc \
+    MiniCore/src/Physics/mcseparationevent.cc \
     MiniCore/src/Physics/mcshape.cc \
     MiniCore/src/Physics/mcspringforcegenerator.cc \
     MiniCore/src/Physics/mcspringforcegenerator2dfast.cc \

@@ -24,6 +24,7 @@
 #include "../../Physics/mcrectshape.hh"
 #include "../../Physics/mccollisionevent.hh"
 #include "../../Physics/mcphysicscomponent.hh"
+#include "../../Physics/mcseparationevent.hh"
 
 class TestObject : public MCObject
 {
@@ -42,6 +43,14 @@ public:
     }
 
     bool m_collisionEventReceived;
+
+    virtual void separationEvent(MCSeparationEvent & event)
+    {
+        m_separationEventReceived = true;
+        event.accept();
+    }
+
+    bool m_separationEventReceived;
 };
 
 MCWorldTest::MCWorldTest()
@@ -137,6 +146,8 @@ void MCWorldTest::testCollisionEvent_RectRect()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
@@ -186,6 +197,8 @@ void MCWorldTest::testCollisionEvent_RectCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
@@ -235,6 +248,8 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));

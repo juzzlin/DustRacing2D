@@ -39,6 +39,7 @@ class MCShapeView;
 class MCSurface;
 class MCEvent;
 class MCCollisionEvent;
+class MCSeparationEvent;
 class MCOutOfBoundariesEvent;
 class MCPhysicsComponent;
 class MCTimerEvent;
@@ -304,6 +305,11 @@ protected:
      *  All collisions are accepted by default.
      *  \param event Event to be handled. */
     virtual void collisionEvent(MCCollisionEvent & event);
+
+    /*! Event handler for MCSeparationEvent. Override this to
+     *  filter out collision separations with certain objects.
+     *  \param event Event to be handled. */
+    virtual void separationEvent(MCSeparationEvent & event);
 
     /*! Event handler for MCOutOfBoundariesEvent.
      *  \param event Event to be handled. */

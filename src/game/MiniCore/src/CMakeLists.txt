@@ -71,6 +71,7 @@ Physics/mcobjectgrid.cc
 Physics/mcoutofboundariesevent.cc
 Physics/mcphysicscomponent.cc
 Physics/mcrectshape.cc
+Physics/mcseparationevent.cc
 Physics/mcshape.cc
 Physics/mcspringforcegenerator.cc
 Physics/mcspringforcegenerator2dfast.cc

@@ -27,6 +27,7 @@
 #include "mcphysicscomponent.hh"
 #include "mcrectshape.hh"
 #include "mcshapeview.hh"
+#include "mcseparationevent.hh"
 #include "mcsurface.hh"
 #include "mctimerevent.hh"
 #include "mctrigonom.hh"
@@ -234,6 +235,11 @@ bool MCObject::event(MCEvent & event)
         collisionEvent(static_cast<MCCollisionEvent &>(event));
         return true;
     }
+    else if (event.instanceTypeId() == MCSeparationEvent::typeId())
+    {
+        separationEvent(static_cast<MCSeparationEvent &>(event));
+        return true;
+    }
     else if (event.instanceTypeId() == MCOutOfBoundariesEvent::typeId())
     {
         outOfBoundariesEvent(static_cast<MCOutOfBoundariesEvent &>(event));
@@ -244,6 +250,11 @@ bool MCObject::event(MCEvent & event)
 }
 
 void MCObject::collisionEvent(MCCollisionEvent & event)
+{
+    event.accept();
+}
+
+void MCObject::separationEvent(MCSeparationEvent & event)
 {
     event.accept();
 }
