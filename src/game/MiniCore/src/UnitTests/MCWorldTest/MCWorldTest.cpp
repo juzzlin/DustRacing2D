@@ -146,8 +146,6 @@ void MCWorldTest::testCollisionEvent_RectRect()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
@@ -156,6 +154,8 @@ void MCWorldTest::testCollisionEvent_RectRect()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
@@ -197,8 +197,6 @@ void MCWorldTest::testCollisionEvent_RectCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
@@ -207,6 +205,8 @@ void MCWorldTest::testCollisionEvent_RectCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
@@ -248,8 +248,6 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
@@ -258,6 +256,8 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
 
     QVERIFY(!object1.m_collisionEventReceived);
     QVERIFY(!object2.m_collisionEventReceived);
+    QVERIFY(object1.m_separationEventReceived);
+    QVERIFY(object2.m_separationEventReceived);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
