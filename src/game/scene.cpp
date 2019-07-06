@@ -518,6 +518,7 @@ void Scene::createNormalObjects()
 
         if (auto pit = dynamic_cast<Pit *>(&object))
         {
+            pit->reset();
             connect(pit, &Pit::pitStop, &m_race, &Race::pitStop);
         }
     }
