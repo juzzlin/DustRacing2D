@@ -215,7 +215,7 @@ private:
 
     MCImpulseGenerator * m_impulseGenerator;
 
-    MCObjectGrid * m_objectGrid;
+    std::unique_ptr<MCObjectGrid> m_objectGrid;
 
     static float m_metersPerUnit;
 

@@ -55,7 +55,6 @@ MCWorld::MCWorld()
 , m_forceRegistry(new MCForceRegistry)
 , m_collisionDetector(new MCCollisionDetector)
 , m_impulseGenerator(new MCImpulseGenerator)
-, m_objectGrid(nullptr)
 , m_minX(0)
 , m_maxX(0)
 , m_minY(0)
@@ -89,7 +88,6 @@ MCWorld::~MCWorld()
     delete m_forceRegistry;
     delete m_collisionDetector;
     delete m_impulseGenerator;
-    delete m_objectGrid;
 
     MCWorld::m_instance = nullptr;
 }
@@ -190,11 +188,8 @@ void MCWorld::setDimensions(
     // Init objectGrid
     const float leafWidth = (maxX - minX) / gridSize;
     const float leafHeight = (maxY - minY) / gridSize;
-    delete m_objectGrid;
-    m_objectGrid = new MCObjectGrid(
-        m_minX, m_minY,
-        m_maxX, m_maxY,
-        leafWidth, leafHeight);
+
+    m_objectGrid.reset(new MCObjectGrid(m_minX, m_minY, m_maxX, m_maxY, leafWidth, leafHeight));
 
     if (addAreaWalls)
     {
