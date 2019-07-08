@@ -32,25 +32,24 @@ public:
 
     TestObject()
     : MCObject("TEST_OBJECT")
-    , m_collisionEventReceived(false)
     {
     }
 
     virtual void collisionEvent(MCCollisionEvent & event)
     {
-        m_collisionEventReceived = true;
+        collisionEventsReceived++;
         event.accept();
     }
 
-    bool m_collisionEventReceived;
+    int collisionEventsReceived = 0;
 
     virtual void separationEvent(MCSeparationEvent & event)
     {
-        m_separationEventReceived = true;
+        separationEventsReceived++;
         event.accept();
     }
 
-    bool m_separationEventReceived;
+    int separationEventsReceived = 0;
 };
 
 MCWorldTest::MCWorldTest()
@@ -118,7 +117,7 @@ void MCWorldTest::testSetDimensions()
 void MCWorldTest::testCollisionEvent_RectRect()
 {
     MCWorld world;
-    world.setDimensions(-10, 10, -10, 10, -10, 10);
+    world.setDimensions(-10, 10, -10, 10, -10, 10, 1, false);
 
     TestObject object1;
     object1.setShape(MCShapePtr(new MCRectShape(nullptr, 2.0, 2.0)));
@@ -131,45 +130,46 @@ void MCWorldTest::testCollisionEvent_RectRect()
     world.addObject(object1);
     world.addObject(object2);
 
-    object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object1.translate(MCVector3dF(-0.5f, 0.0f));
+    object2.translate(MCVector3dF( 0.5f, 0.5f));
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 
-    object1.m_collisionEventReceived = false;
-    object2.m_collisionEventReceived = false;
-
-    world.stepTime(1);
-
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
-
-    object1.translate(MCVector3dF(-1.5, 0.0));
-    object2.translate(MCVector3dF( 1.5, 0.0));
+    object1.collisionEventsReceived = false;
+    object2.collisionEventsReceived = false;
 
     world.stepTime(1);
 
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
+    QVERIFY(!object1.collisionEventsReceived);
+    QVERIFY(!object2.collisionEventsReceived);
 
-    object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object1.translate(MCVector3dF(-1.5f, 0.0f));
+    object2.translate(MCVector3dF( 1.5f, 0.5f));
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 0);
+    QCOMPARE(object2.collisionEventsReceived, 0);
+
+    QCOMPARE(object1.separationEventsReceived, 1);
+    QCOMPARE(object2.separationEventsReceived, 1);
+
+    object1.translate(MCVector3dF(-0.5f, 0.0f));
+    object2.translate(MCVector3dF( 0.5f, 0.5f));
+
+    world.stepTime(1);
+
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 }
 
 void MCWorldTest::testCollisionEvent_RectCircle()
 {
     MCWorld world;
-    world.setDimensions(-10, 10, -10, 10, -10, 10);
+    world.setDimensions(-10, 10, -10, 10, -10, 10, 1, false);
 
     TestObject object1;
     object1.setShape(MCShapePtr(new MCRectShape(nullptr, 2.0, 2.0)));
@@ -187,40 +187,41 @@ void MCWorldTest::testCollisionEvent_RectCircle()
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 
-    object1.m_collisionEventReceived = false;
-    object2.m_collisionEventReceived = false;
+    object1.collisionEventsReceived = false;
+    object2.collisionEventsReceived = false;
 
     world.stepTime(1);
 
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 0);
+    QCOMPARE(object2.collisionEventsReceived, 0);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
 
     world.stepTime(1);
 
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 0);
+    QCOMPARE(object2.collisionEventsReceived, 0);
+
+    QCOMPARE(object1.separationEventsReceived, 1);
+    QCOMPARE(object2.separationEventsReceived, 1);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 }
 
 void MCWorldTest::testCollisionEvent_CircleCircle()
 {
     MCWorld world;
-    world.setDimensions(-10, 10, -10, 10, -10, 10);
+    world.setDimensions(-10, 10, -10, 10, -10, 10, 1, false);
 
     TestObject object1;
     object1.setShape(MCShapePtr(new MCCircleShape(nullptr, 1.0)));
@@ -238,34 +239,35 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 
-    object1.m_collisionEventReceived = false;
-    object2.m_collisionEventReceived = false;
+    object1.collisionEventsReceived = false;
+    object2.collisionEventsReceived = false;
 
     world.stepTime(1);
 
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 0);
+    QCOMPARE(object2.collisionEventsReceived, 0);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
     object2.translate(MCVector3dF( 1.5, 0.0));
 
     world.stepTime(1);
 
-    QVERIFY(!object1.m_collisionEventReceived);
-    QVERIFY(!object2.m_collisionEventReceived);
-    QVERIFY(object1.m_separationEventReceived);
-    QVERIFY(object2.m_separationEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 0);
+    QCOMPARE(object2.collisionEventsReceived, 0);
+
+    QCOMPARE(object1.separationEventsReceived, 1);
+    QCOMPARE(object2.separationEventsReceived, 1);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
     object2.translate(MCVector3dF( 0.5, 0.0));
 
     world.stepTime(1);
 
-    QVERIFY(object1.m_collisionEventReceived);
-    QVERIFY(object2.m_collisionEventReceived);
+    QCOMPARE(object1.collisionEventsReceived, 1);
+    QCOMPARE(object2.collisionEventsReceived, 1);
 }
 
 void MCWorldTest::testSleepingObjectRemovalFromIntegration()

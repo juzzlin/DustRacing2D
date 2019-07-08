@@ -183,7 +183,6 @@ const MCObjectGrid::CollisionVector & MCObjectGrid::getPossibleCollisions()
                     obj1->shape()->likelyIntersects(*obj2->shape().get()))
                 {
                     collisions.push_back({obj1, obj2});
-                    collisions.push_back({obj2, obj1});
                     hadCollisions = true;
                 }
             }

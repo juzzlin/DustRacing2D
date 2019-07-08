@@ -33,7 +33,13 @@ MCCollisionDetector::MCCollisionDetector()
 bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
 {
     auto && iter = m_currentCollisions.find(&object1);
-    return iter != m_currentCollisions.end() && iter->second.count(&object2);
+    if (iter != m_currentCollisions.end() && iter->second.count(&object2))
+    {
+        return true;
+    }
+
+    iter = m_currentCollisions.find(&object2);
+    return iter != m_currentCollisions.end() && iter->second.count(&object1);
 }
 
 void MCCollisionDetector::clear()
@@ -79,9 +85,9 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
             {
                 MCObject::sendEvent(rect1.parent(), ev1);
                 MCObject::sendEvent(rect2.parent(), ev2);
-
-                m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
             }
+
+            m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
 
             if ((ev1.accepted() && ev2.accepted()) || areColliding)
             {
@@ -151,9 +157,9 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
             {
                 MCObject::sendEvent(circle.parent(), ev1);
                 MCObject::sendEvent(rect.parent(), ev2);
-
-                m_currentCollisions[&rect.parent()].insert(&circle.parent());
             }
+
+            m_currentCollisions[&rect.parent()].insert(&circle.parent());
 
             if ((ev1.accepted() && ev2.accepted()) || areColliding)
             {
@@ -206,9 +212,9 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
         {
             MCObject::sendEvent(circle2.parent(), ev1);
             MCObject::sendEvent(circle1.parent(), ev2);
-
-            m_currentCollisions[&circle1.parent()].insert(&circle2.parent());
         }
+
+        m_currentCollisions[&circle1.parent()].insert(&circle2.parent());
 
         if ((ev1.accepted() && ev2.accepted()) || areColliding)
         {
@@ -242,35 +248,32 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     // Rect against rect
     if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Rect)
     {
-        // We must test first object1 against object2 and then
-        // the other way around.
-        if (testRectAgainstRect(
-            // Static cast because we know the types now.
+        // Test is not symmetric: must be done both ways
+        return testRectAgainstRect(
             *static_cast<MCRectShape *>(object1.shape().get()),
-            *static_cast<MCRectShape *>(object2.shape().get())))
-        {
-            return true;
-        }
-        else if (testRectAgainstRect(
-            // Static cast because we know the types now.
-            *static_cast<MCRectShape *>(object2.shape().get()),
-            *static_cast<MCRectShape *>(object1.shape().get())))
-        {
-            return true;
-        }
+            *static_cast<MCRectShape *>(object2.shape().get())) ||
+                testRectAgainstRect(
+                    *static_cast<MCRectShape *>(object2.shape().get()),
+                    *static_cast<MCRectShape *>(object1.shape().get()));
     }
-    // Rect against circle
+    // Rect against circle: Case 1
     else if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Circle)
     {
-        // Static cast because we know the types now.
         return testRectAgainstCircle(
             *static_cast<MCRectShape *>(object1.shape().get()),
             *static_cast<MCCircleShape *>(object2.shape().get()));
     }
+    // Rect against circle: Case 2
+    else if (type2 == MCShape::Type::Rect && type1 == MCShape::Type::Circle)
+    {
+        return testRectAgainstCircle(
+            *static_cast<MCRectShape *>(object2.shape().get()),
+            *static_cast<MCCircleShape *>(object1.shape().get()));
+    }
     // Circle against circle
     else if (type1 == MCShape::Type::Circle && type2 == MCShape::Type::Circle)
     {
-        // Static cast because we know the types now.
+        // This test is symmetric
         return testCircleAgainstCircle(
             *static_cast<MCCircleShape *>(object1.shape().get()),
             *static_cast<MCCircleShape *>(object2.shape().get()));
@@ -286,6 +289,14 @@ unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
         numCollisions += processPossibleCollision(*iter.first, *iter.second);
+    }
+
+    // For completeness iterate here if no possible collisions, but there still
+    // are old collisions. This can happen if colliding objects gets separated by
+    // directly translating them elsewhere.
+    if (!numCollisions && !m_currentCollisions.empty())
+    {
+        return iterateCurrentCollisions();
     }
 
     return numCollisions;
@@ -315,9 +326,13 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
     for (auto && collisionPair : removedCollisions)
     {
         m_currentCollisions[collisionPair.first].erase(collisionPair.second);
+        m_currentCollisions[collisionPair.second].erase(collisionPair.first);
 
-        MCSeparationEvent event(*collisionPair.second);
-        collisionPair.first->event(event);
+        MCSeparationEvent ev1(*collisionPair.second);
+        collisionPair.first->event(ev1);
+
+        MCSeparationEvent ev2(*collisionPair.first);
+        collisionPair.second->event(ev2);
     }
 
     return numCollisions;

@@ -38,10 +38,13 @@
 #include "mcworldrenderer.hh"
 
 #include <cassert>
+#include <iostream>
 
-MCWorld * MCWorld::m_instance             = nullptr;
-float   MCWorld::m_metersPerUnit        = 1.0;
-float   MCWorld::m_metersPerUnitSquared = 1.0;
+MCWorld * MCWorld::m_instance = nullptr;
+
+float MCWorld::m_metersPerUnit = 1.0;
+
+float MCWorld::m_metersPerUnitSquared = 1.0;
 
 namespace {
 const int REMOVED_INDEX = -1;
