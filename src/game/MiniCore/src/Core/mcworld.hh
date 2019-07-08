@@ -25,6 +25,7 @@
 #include "mcvector3d.hh"
 #include "mcrendergroup.hh"
 
+#include <memory>
 #include <vector>
 
 class MCCamera;
@@ -226,13 +227,13 @@ private:
 
     MCWorld::ObjectVector m_removeObjs;
 
-    MCObject * m_leftWallObject;
+    std::unique_ptr<MCObject> m_leftWallObject;
 
-    MCObject * m_rightWallObject;
+    std::unique_ptr<MCObject> m_rightWallObject;
 
-    MCObject * m_topWallObject;
+    std::unique_ptr<MCObject> m_topWallObject;
 
-    MCObject * m_bottomWallObject;
+    std::unique_ptr<MCObject> m_bottomWallObject;
 
     unsigned int m_numCollisions;
 

@@ -59,10 +59,6 @@ MCWorld::MCWorld()
 , m_maxY(0)
 , m_minZ(0)
 , m_maxZ(0)
-, m_leftWallObject(nullptr)
-, m_rightWallObject(nullptr)
-, m_topWallObject(nullptr)
-, m_bottomWallObject(nullptr)
 , m_numCollisions(0)
 , m_resolverLoopCount(5)
 , m_resolverStep(1.0f / m_resolverLoopCount)
@@ -93,11 +89,6 @@ MCWorld::~MCWorld()
     delete m_objectGrid;
 
     MCWorld::m_instance = nullptr;
-
-    delete m_leftWallObject;
-    delete m_rightWallObject;
-    delete m_topWallObject;
-    delete m_bottomWallObject;
 }
 
 void MCWorld::integrate(int step)
@@ -211,12 +202,11 @@ void MCWorld::setDimensions(
         if (m_leftWallObject)
         {
             removeObjectNow(*m_leftWallObject);
-            delete m_leftWallObject;
         }
 
         const float wallRestitution = 0.25f;
 
-        m_leftWallObject = new MCObject("LEFT_WALL");
+        m_leftWallObject.reset(new MCObject("LEFT_WALL"));
         m_leftWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_leftWallObject->physicsComponent().setMass(0, true);
         m_leftWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -226,10 +216,9 @@ void MCWorld::setDimensions(
         if (m_rightWallObject)
         {
             removeObjectNow(*m_rightWallObject);
-            delete m_rightWallObject;
         }
 
-        m_rightWallObject = new MCObject("RIGHT_WALL");
+        m_rightWallObject.reset(new MCObject("RIGHT_WALL"));
         m_rightWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_rightWallObject->physicsComponent().setMass(0, true);
         m_rightWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -239,10 +228,9 @@ void MCWorld::setDimensions(
         if (m_topWallObject)
         {
             removeObjectNow(*m_topWallObject);
-            delete m_topWallObject;
         }
 
-        m_topWallObject = new MCObject("TOP_WALL");
+        m_topWallObject.reset(new MCObject("TOP_WALL"));
         m_topWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_topWallObject->physicsComponent().setMass(0, true);
         m_topWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -252,15 +240,40 @@ void MCWorld::setDimensions(
         if (m_bottomWallObject)
         {
             removeObjectNow(*m_bottomWallObject);
-            delete m_bottomWallObject;
         }
 
-        m_bottomWallObject = new MCObject("BOTTOM_WALL");
+        m_bottomWallObject.reset(new MCObject("BOTTOM_WALL"));
         m_bottomWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_bottomWallObject->physicsComponent().setMass(0, true);
         m_bottomWallObject->physicsComponent().setRestitution(wallRestitution);
         m_bottomWallObject->addToWorld();
         m_bottomWallObject->translate(MCVector3dF(w / 2, -h / 2, 0));
+    }
+    else
+    {
+        if (m_leftWallObject)
+        {
+            removeObjectNow(*m_leftWallObject);
+            m_leftWallObject.reset();
+        }
+
+        if (m_rightWallObject)
+        {
+            removeObjectNow(*m_rightWallObject);
+            m_rightWallObject.reset();
+        }
+
+        if (m_topWallObject)
+        {
+            removeObjectNow(*m_topWallObject);
+            m_topWallObject.reset();
+        }
+
+        if (m_bottomWallObject)
+        {
+            removeObjectNow(*m_bottomWallObject);
+            m_bottomWallObject.reset();
+        }
     }
 }
 
