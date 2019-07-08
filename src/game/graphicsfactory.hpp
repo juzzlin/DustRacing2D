@@ -23,7 +23,7 @@ class MCSurface;
 //! Helper functions to create miscellaneous graphic items.
 namespace GraphicsFactory {
 
-MCSurface & generateNumberSurface(int index);
+MCSurface & generateNumberSurface(size_t index);
 
 MCSurface & generateMinimapMarker();
 

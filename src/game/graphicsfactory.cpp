@@ -29,13 +29,13 @@
 
 #include <cassert>
 
-MCSurface & GraphicsFactory::generateNumberSurface(int index)
+MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
 {
-    static std::vector<std::string> numberPlates(
+    static const std::vector<std::string> numberPlates(
         {"1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x"});
-    assert(index < static_cast<int>(numberPlates.size()));
+    assert(index < numberPlates.size());
 
-    const int pixmapWidth  = 32;
+    const int pixmapWidth = 32;
     const int pixmapHeight = 32;
 
     QPixmap numberPixmap(pixmapWidth, pixmapHeight);
@@ -50,16 +50,13 @@ MCSurface & GraphicsFactory::generateNumberSurface(int index)
 
     painter.setFont(font);
     painter.setPen(QColor(0, 0, 0));
-    const QFontMetrics fm = painter.fontMetrics();
-    const QString text = numberPlates.at(index).c_str();
-
     painter.drawText(
         0,
         0,
         pixmapWidth,
         pixmapHeight,
         Qt::AlignCenter,
-        text);
+        numberPlates.at(index).c_str());
 
     painter.end();
 
