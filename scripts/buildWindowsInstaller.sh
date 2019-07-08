@@ -2,7 +2,7 @@
 
 # Builds NSIS installer for Windows in Docker
 
-DUSTRAC_RELEASE_VERSION=2.0.2
+DUSTRAC_RELEASE_VERSION=2.0.3
 QMAKE=/opt/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5
 MAKENSIS=/opt/mxe/usr/bin/i686-w64-mingw32.static-makensis
 

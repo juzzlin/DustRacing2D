@@ -1,5 +1,14 @@
 x.y.z
------
+=====
+
+New features:
+
+Bug fixes:
+
+Other:
+
+2.0.3
+=====
 
 New features:
 
@@ -12,14 +21,18 @@ Bug fixes:
 
 * Fix GitHub Issue #8: Confusing/weird stars
 * Fix GitHub Issue #5: Pit stop spam 
+  - Collision detection partly rewritten as a side effect
 * Fix GitHub Issue #48: Walls and grandstands are pushable
 
 Other:
 
 * Refactor sparkle effect due to changed collision event behavior
+* Use SimpleLogger instead of MCLogger
+  - Add --debug and --trace CLI options
+  - Throw on unknown arguments
 
 2.0.2
------
+=====
 
 New features:
 
@@ -47,312 +60,230 @@ Other:
 * CMake: Default to GLVND, use the recommended way to link to GL
 
 2.0.1
------
+=====
+
+A bug fix release to fix build on Qt 5.6+
+
+Bug fixes:
 
 * Editor: use qSetGlobalQHashSeed with Qt 5.6+
+
+  qt_qhash_seed is no more exported in recent Qt 5.9.x versions, so use
+  the public functions for it available since Qt 5.6.
+
+Other:
+
 * Properly check for empty version in mxeWindowsBuild.sh
 
 2.0.0
------
+=====
 
-* CMake: Set C++ standard with set_property()
-* Fix some Clang warnings
-* CMake: Set Debug and Release flags separately
-* Improve off-track particle effects
-* Improvements to 'Figure 8.trk'
-* Tune sound levels
-* Add ability to do burnouts
-* Tune virtual revs
-* Make speed in km/h a bit higher
-* Hide cursor by default
-* Add FPS menu
-* Fix all resolutions getting triggered
-* Add specific menu shader
-* Set selected resolution correctly
-* Switch AI to 'cool down' mode when the race is completed
-* Update (guess) German translations
-* Force upper case on titles in the credits page
-* Tune sound volume levels
-* Replace intro fade with a simple timer
-* Update Italian translations
-* Update Czech translations
-* Update Italian translations
-* Update all .ts-files
-* Add scripts/updateTranslationFiles.sh
-* Update authors and credits
-* Add some missing license headers
-* Add info text to lap count menu
-* Update translation instructions
-* Animate menu transitions
-* Set default moment of inertia factor to 10
-* Refactor MCRectShape init
-* Add default contructor to MCOBBox
+This not a completely new game, but still so many fixes and changes that
+it deserves a major version bump.
+
+New features:
+
+* Animated game menus
 * Always select difficulty and lap count after selecting "Play"
-* Move audio-related files to audio/
-* Move menu-related files to menu/
-* Tune Twineburg.trk
-* Handle first and last menu item properly
-* Make track selection menu a way cooler!
-* Reset shadow FBO in ~Renderer()
-* Make track length unitless
-* Fixes to Radiator.trk
-* Refactor top-level rendering code
-* Add surrounding sand area to infinity.trk
-* Adjust AI braking in Far Lands
-* Editor: Fix object add on target nodes and other objects
-* Remove MCTypes
-* Editor: Fix the behavior of right-click
-* Editor: Fix undo erasing computer hints
-* Add more stuff to Far Lands
-* Fade in/out the FBO shader only
-* Create the bridge object as a mesh
-* Improve mesh support
-* Share code between surfaces and meshes
-* Fix lighting issues
-* New Dust Racing 2D banner object
+* "Cool down" laps for AI to prevent the destruction derby
+* Bridge object as a mesh
+* Font changed to DejaVu
+* FPS setting menu
+* Fully destructible tracks to make races more unpredictable
+* New intro image
+* New particle effects
+* New randomized tree objects
+* Editor: Add CLI option to force language
 * Editor: Add option to force object stationary
 * Editor: Lock qhash random seed so that XML output is not randomized
-* Fix the bridge
-* Tune light colors
-* Double the wall mass
-* Improvements to twister.trk
-* Fix undo on target node resize and object rotation
-* Reset also shadowFbo on resolution change
+
+Improvements:
+
+* Improved driving dynamics. It's now possible to do burnouts
+* Improved graphics and lighting
+* Improvements and additions to many tracks
+* Sound levels tuned
+
+Bug fixes:
+
 * Fix GitHub issue #26: Undo resets tile rotations
-* MiniCore: Don't use surface object batching
-* MiniCore: Use correct programs in surface object renderers
-* Editor: Add CLI option to force language
-* Update Finnish translations
-* Remove dustRacing2D.svg
-* New about.png
-* Remove dustRacing.png
-* Fix computer driving line in Desert Storm.trk
-* Set colors for skid marks
-* Set color for braking glow
-* MiniCore: Fix most problems with transparent particle / object batches
-* Refactor credits
-* MiniCore: Make MCTextureText copyable
-* Move settingsBack.svg to a correct dir
-* New intro image
-* More trees to triangle.trk
-* Randomize trees
-* Fix menu background images with respect to width
-* New settings back
-* Fix driving lines in Curvastone
-* Fix brake lights
-* Make all objects movable
-* Rewrite trees
-* MiniCore: Update legacy renderers
-* MiniCore: Make it possible to scale MCShapeView
-* MiniCore: Remove useless batchMode crap
-* MiniCore: Fix surface color and alpha blending mess
-* MiniCore: Refactor MCSurface::setScale()
-* MiniCore: Add all objects to the grid
-* MiniCore: Fix object clipping
-* MiniCore: Refactor object and view ID's
-* MiniCore: Move MCShape::setRadius() to public scope
-* Fix qmake build
-* More transparent smoke
-* New sparkle particle
-* New mud particle
-* Make TrackItem use the new stepTime(int) member
-* Animate menu items
-* MiniCore: MCTextureText sizes in floats
-* Improve texture font generation
-* MiniCore: Fix the use of GL_MAX_TEXTURE_SIZE
-* MiniCore: MCTextureText size as floats
 * Fix GitHub issue #24: Change the game font to DejaVu
-* MiniCore: Add support for texture font densities
-* Remove obsolete fonts.conf
-* Tune particle parameters
-* MiniCore: Improved MCVector2D::lengthFast()
+* Fix qmake build
 * Fix some particle life times
-* MiniCore: Fix angular integration
-* Take per-vertex Z-coordinate into account in MCSurfaceObjectRenderer
-* Update MiniCore
-* Sky as SVG
 * Fix some compiler warnings
-* Refactor MXE build scripts
-* Refactor renderer.cpp
-* Decrease view angle to 22.5 degrees
-* Add build scripts for Jenkins
-* Make unit tests guiless
-* Update brake sign, add SVG
-* Update left and right signs, add SVG
-* Install AppData file to the right location
-* Install also possible font licence files
-* Add licence for Ubuntu fonts
 * Fix shader deletion issues reported by Valgrind
-* Fixing clang build which attributes wrongly std=c++11 into C compiler flags.
-* Fixing build with GLEW and QOpenGLFunctions=OFF.
-* Update screenshots in README.md
+* Fix clang build which attributes wrongly std=c++11 into C compiler flags
+* Fix build with GLEW and QOpenGLFunctions=OFF
 * Fix CMake dev build
+* Editor: Fix object add on target nodes and other objects
+* Editor: Fix the behavior of right-click
+* Editor: Fix undo erasing computer hints
+* Editor: Fix undo on target node resize and object rotation
+
+Other:
+
+* Translation updates
+* Lots of code refactored
 
 1.13.0
-------
+======
 
+New features:
+
+* Implement a minimap
 * Editor: Implement universal undo stack
 * Editor: Add option to insert row/col before or after
-* Implement a minimap
-* Refactor editor/editordata.hpp
-* Refactor race.cpp
-* Refactor pointer use in the game
-* Refactor pointer use in the editor
-* Refactor game/trackloader.cpp
-* Refactor editor/trackio.cpp
-* Refactor game.cpp
-* Refactor TrackLoader usage
-* Refactor game init
-* Cosmetic changes to tracktile.hpp
-* Delete OpenGL context as the last object
-* Fix crash on settings loading
-* Include <cstdlib> for std::rand
-* Make debian/rules use CMake directly
-* Prefer out-of-source CMake build in INSTALL
-* Update copyright text
-* Fix build with MXE and Qt project files
-* Add pulseaudio to static Qt5 build config
-* Readiness to see the next target node for AI
+
+Bug fixes:
+
+* Fix GitHub issue #9: Editor segfaults when undoing a change on the last row/column which got deleted before
+* Fix GitHub issue #19: Crash on exit on FreeBSD
+* Fix a potential crash on settings loading
+
+Other:
+
+* Lots of code refactored
 
 1.12.0
-------
+======
 
-* Redo startlight graphics in SVG
-* CMake: Switch to the recommended way to link Qt5
-* Make the steering more stable
-* Add a Linux AppData file.
-* Add 3 new tracks by Wuzzy <almikes@aol.com>
-* Remove CMake policy CMP0054 setting.
-* Fix GitHub issue #7: Bad track preview images.
-* Fix GitHub issue #6: Assertion failure when empty route cleared.
-* Add 4 new tracks by Wuzzy <almikes@aol.com>
-* Remove lower bridge rails for now.
-* Add 'de' to lang options in README.
+New features:
+
+* 7 new tracks by Wuzzy <almikes@aol.com>
 * Add German translation
-* Track prop. dialog can set user track and name
-* Fix VBO binding.
-* Refactor trackselectionmenu.cpp
-* Implement MCObject's physics properties as a separate component.
-* Remove useless uniforms from shadow shaders.
-* Eliminate copy-pasted web site url's.
+
+Improvements:
+
+* Make the steering more stable
+* Redo startlight graphics in SVG
 * Improve log messages about translations.
 * Editor: Improve override cursor logic.
 * Editor: Remove dead code.
-* Refactor TrackDataBase.
 * Update Czech translations.
 
-1.11.0
-------
+Bug fixes:
 
-* Show a red overlay on hard crashes.
-* Fix unit tests.
-* Own layer for damage smoke.
-* Remove misleading comments.
-* Eliminate copy-paste.
-* Editor: Fix wrong scale when track given as a CLI argument.
-* Add body damage system.
-* Stabilize the steering a bit.
-* Make difficulty setting affect game speed.
-* Add difficulty selection.
+* Fix GitHub issue #7: Bad track preview images.
+* Fix GitHub issue #6: Assertion failure when empty route cleared.
+* Remove lower bridge rails for now.
+
+Other:
+
+* CMake: Switch to the recommended way to link Qt5
+
+1.11.0
+======
+
+New features:
+
+* Finally a difficulty setting with three levels: Easy, Medium and Senna
+* Show a red overlay on hard crashes
+* Cars can get damaged
+
+Improvements:
+
+* Remove alpha blending from the plant object
+* Stabilize the steering a bit
+
+Bug fixes:
+
+* Editor: Fix wrong scale when track given as a CLI argument
+* Editor: Don't try to open a track if filename is empty
+* Fix unit tests
+
+Other:
+
 * Refactor settingsmenu.hpp
-* Refactor steering logic.
-* Editor: Don't try to open a track if filename is empty.
-* Use same renderer for all particle batches.
-* Sparkles as surface particles.
-* Remove alpha blending from the plant object.
-* Add screenshots of 1.10.0
-* Sort particles in place.
-* Update web/index.html
+* Refactor steering logic
+* Sparkles as surface particles
+* Use same renderer for all particle batches
 
 1.10.0
-------
+======
 
-* Remove some needless assert's.
-* Reduce quadratic drag.
-* Move brake signs a bit further.
-* Add a chicane to straight.trk and make it shorter.
-* Move MCGLScene to MCWorldRenderer.
-* Common base class for all particle renderers.
-* Refactor particle rendering.
-* Smaller tree swing amplitude.
-* Fix cppcheck warnings.
-* Mud particles as surface particles.
-* Make it possible to spin.
-* Take more car colors in to use.
-* Simple specular effect for the cars.
-* Fix specular lighting of the tire object.
-* No leaf particle when colliding with plants.
-* Higher z for the plant object.
-* Implement batching and shadows for MCSurfaceParticles.
-* New-style signal connections in Game.
-* Lambda slots for show/hide cursor.
-* Lambda slot for the update timer.
-* Eliminate magic numbers.
-* Add MCSurfaceParticleRenderer.
-* Longer start grid to Suzuka.
-* Editor: Implement row and col deletion.
-* Editor: replace some if's with asserts.
-* Editor: Fit track properly when loading a track.
-* More sane use of casts.
-* C++11 way to disable copy ctor's.
-* Cosmetic changes to tracktile.hpp.
-* Editor: Implement row and column insertion.
-* Refactor Config.
-* Remove unused class TileTypeDialog.
-* Editor: Use C++11's override specifier.
-* Editor: Replace private slots with lambdas in EditorView.
-* Editor: Cosmetic changes to EditorView.
-* Use add_compile_options() instead of appending CMAKE_CXX_FLAGS.
-* Render rect particles as quads if not GLES.
-* Add MCGLRectParticleRenderer.
-* Show lap time in message area.
-* Fix a typo.
-* Remove obsolete images.
-* Use GLSL's reflect().
-* Replace MCException with std::runtime_error.
-* Use C++11's move semantics in MCBBox and MCBBox3d.
-* Use C++11's move semantics in MCVector2d and MCVector3d.
-* Refactor child velocity logic.
-* Don't set render layer when on bridge.
-* Render hud after shadows.
-* Refactor MCSurfaceConfigLoader.
-* Enable depth test for smoke.
-* Fix depth test toggling in MCWorldRenderer.
-* Remove render layers from cars' sub-objects.
-* Render shadows with depth information.
-* Update point sizes after resolution change.
-* Refactor bridge creation.
-* Fix build with qmake.
-* Rescue corrupted dev branch.
-* Set z-offsets for car surfaces.
-* Add optional z attribute to MCSurface / surface config loader.
-* Fix exception handling.
+In this release multiple issues with shadow rendering are fixed.
+Particle rendering is completely reworked and also the track editor
+is given some love. Issues with depth testing are fixed. A lot of
+bug fixes and miscellaneous improvements and changes.
+
+New features:
+
+* Add a chicane to straight.trk and make it shorter
+* Instantly change the virtual resolution between fullscreen modes
+* Longer start grid to Suzuka
+* Make it possible to spin
+* Show lap time in message area
+* Simple specular effect for the cars
+* Take more car colors in to use
+* Editor: Different colors for brake and brake hard
+* Editor: Implement row and col deletion
+* Editor: Implement row and column insertion
+
+Improvements:
+
+* Enable depth test for smoke
+* Implement batching and shadows for MCSurfaceParticles
+* Make timing based on frames instead of QTime
+* Mud particles as surface particles
+* No leaf particle when colliding with plants
+* Reduce quadratic drag
+* Refactor particle rendering
 * Rename textures.conf => surfaces.conf
+* Render rect particles as quads if not GLES
+* Render shadows with depth information
+* Set z-offsets for car surfaces
+* Smaller tree swing amplitude
+* Use GLSL's reflect()
+* Editor: Fit track properly when loading a track
+* Editor: Improve some tile graphics
+* Editor: Replace private slots with lambdas in EditorView
+* Editor: Replace some if's with asserts
+* Editor: Use C++11's override specifier
+
+Bug fixes:
+
+* Fix a bug where mouse release outside pressed item caused two items being focused
+* Fix build with qmake
+* Fix cppcheck warnings
+* Fix depth buffering
+* Fix exception handling
+* Fix specular lighting of the tire object
+
+Other:
+
+* Add optional z attribute to MCSurface / surface config loader
 * Add mcvector2d.hh and mcvector3d.hh to CMakeLists.txt
-* Divide layers into render and collision layers.
-* Fix depth buffering.
-* Add option to filter layers to be rendered.
-* Use C++11 enum class in ResetAction.
-* Use C++11 enum class in InputHandler.
-* Use C++11 enum class in Game.
-* Use C++11 enum class in MTFH::Menu.
-* Use C++11 enum class for state.
-* Use C++11 enum class for layers.
-* Editor: Improve some tile graphics.
-* Editor: Different colors for brake and brake hard.
-* Refactor the use of gravity.
-* Make timing based on frames instead of QTime.
-* Fix a bug where mouse release outside pressed item caused two items being focused.
-* Instantly change the virtual resolution between fullscreen modes.
+* Add option to filter layers to be rendered
+* C++11 way to disable copy ctor's
+* Common base class for all particle renderers
+* Divide layers into render and collision layers
+* Lambda slots for show/hide cursor
+* Lambda slot for the update timer
+* More sane use of casts
+* Move MCGLScene to MCWorldRenderer
+* New-style signal connections in Game
+* Refactor bridge creation
+* Refactor Config
+* Refactor child velocity logic
+* Refactor MCSurfaceConfigLoader
+* Remove obsolete images
+* Remove render layers from cars' sub-objects
+* Replace MCException with std::runtime_error
+* Use add_compile_options() instead of appending CMAKE_CXX_FLAGS
+* Use C++11's move semantics in MCBBox and MCBBox3d
+* Use C++11's move semantics in MCVector2d and MCVector3d
 
 1.9.2
------
+=====
+
+Bug fixes:
 
 * Fix rendering of the windowed mode.
 * Fix rendering in other than native resolutions.
+
+Improvements:
+
 * Take maximum supported texture size into account.
-* Remove unused code.
-* Remove commented code.
 * QGLFramebufferObject => QOpenGLFramebufferObject.
 * Add camera location support to MCGLShaderProgram.
 * Simplify FBO shading.
@@ -362,116 +293,94 @@ Other:
 * Add getters for eyeZ and viewAngle.
 
 1.9.1
------
+=====
+
+New features:
+
+* Rotating leaf particles
+* Show game version in the intro screen.
+
+Improvements:
 
 * Set VSync default to 'ON'.
 * Force QSettings to .INI-format on Windows.
-* Show game version in the intro screen.
-* Fix broken OpenGL scene size on virtual desktops.
 * Make the code compile with MS Visual C++ 2013.
-* Adjustable object grid size.
-* Add unit test for sleep prevention.
-* Add MCWorldTest.
-* Fix crash when quitting.
-* Fix multiple bridge issues.
-* Fix a bug where tire objects couldn't get on a bridge.
-* Improve bridge graphics.
-* Improve tile graphics.
-* Re-license artwork under CC BY-SA.
-* Enable vsync menu if QT_VERSION >= 5.3.0
-* Make shaders able to have pending property changes.
-* Fix rendering of two-player game.
-* Darker asphalt tile.
-* New rotating leaf particles.
-* Switch to the new QSurface-based graphics stack.
-* Improve doc of MCSurfaceManager.
-* Fix MiniCore compatibility with QML.
-* Fix game.pro
-* Remove obsolete files.
-* Not mandatory to give paths to MCAssetManager.
-* MCObjectTree => MCObjectGrid
-* Move some MCWorldRenderer methods to private scope.
-* Update printHelp().
-* Add support for QOpenGLFunctions.
-* Move Particles/* to Graphics/
-* Refactor vertex attribute array stuff from MCGLRectParticle to MCGLObjectBase.
-* Move some default shaders from the game to engine's side.
-* Refactor vertex attribute array stuff from child classes to MCGLObjectBase.
-* Add proxy methods to set shaders for texture fonts.
-* Refactor CMakeLists.txt
-* Remove option to build for OpenGL 3.0 because shaders are not up-to-date.
-* Refactor MiniCore file layout.
+* Improved tile graphics
+* Re-license artwork under CC BY-SA
+* Switch to the new QSurface-based graphics stack
+* Engine improvements
+
+Bug fixes:
+
+* Fix broken OpenGL scene size on virtual desktops.
+* Fix multiple bridge issues
+* Fix crash when quitting
+* Fix rendering of two-player game
 
 1.8.3
------
+=====
 
-* Fix bug in child object velocity calculation.
-* Tune impulse calibration.
+Bug fixes:
+
+* Fix some physics issues
 
 1.8.2
------
+=====
 
-* More accurate contact normal calculations.
-* Fix bridges collision layers.
-* Add small collision margin.
-* More accurate distance from veactor calculations.
-* Improvements to physics regarding angular impulse.
-* Remove impulse generation loops.
-* Lighter tire object.
-* More agile car.
-* Add slightly more grip.
-* Fix some object layering issues.
-* Add suzuka.trk
-* Refactor layer logic.
-* Fix some compilation warnings.
-* Set CXX flags for Clang.
-* Move font generation from GraphicsFactory to FontFactory.
+New features:
+
+* New race track suzuka.trk
+
+Improvements:
+
+* Physics improvements
+  - More stable and agile car handling
+  - Lighter tire object
+
+Bug fixes:
+
+* Fix multiple bugs in the bridge component
+* Fix compilation with Clang
 
 1.8.1
------
+=====
 
-* Tune car parameters.
-* Drop support for Qt4.
+Improvements:
+
+* Tune car parameters
+
+Other:
+
+* Drop support for Qt4
 
 1.8.0
------
+=====
 
-* Improve target zones of ring.trk
-* Improvements to twister.trk
-* Linear filtering for the generated font texture.
-* Improve positioning of stuck cars.
-* Remove the crap brightness/contrast functionality.
-* Texture tuning.
-* Break after resolving the deepest contact.
-* Help stuck cars more eagerly.
-* Rewrite bridge logic.
-* Make the Dust Racing 2d banner stationary
-* Completely tire-controlled car.
-* Improve sky reflection.
-* Add shader headers to project.
-* Tune color of the yellow car.
-* Improve effect when off-track.
-* Remove redundant message print
-* Improvements for Visual Studio build.
-* Add names of static vorbis libs commonly used in Windows
-* Set cxx flags only if compiler is GNUCXX or MINGW
-* Fix tires appearing on top of the car on bridge.
-* Refactor scene.cpp
-* Refactor MCObject.
-* Render shadows onto a texture.
-* Decouple shadow rendering from object rendering.
-* Remove SlideFrictionGenerator.
-* Fix website image sizes on mobile.
-* Rewrite index.html
-* Refactor gravitational constant.
-* Optimize texture binding.
-* Optimize VAO release.
-* Optimize VBO binding.
+New features:
+
+* More realistic and dynamic car physics for funnier gameplay.
+* Rewritten bridge object that now actually even works
+* Some graphics improvements (they are still shitty, though)
+  - Transparent shadows
+  - Two-player game views separated by a narrow line
+  - Filtering added to some textures
+  - Some car graphics improved
+* Driving off-track is now more merciful
+
+Bug fixes:
+
 * Fix installing the game when not built in the source root. Patch by Rémi Verschelde.
 * Enhancement of the desktop files. Patch by Rémi Verschelde.
+* Fix bridge
+
+Other:
+
+* Improve target zones of ring.trk
 
 1.7.3
------
+=====
+
+Maintenance release:
 
 * Revert "Optimize VBO, VAO and texture binding."
   - Caused missing number plate of the first car
@@ -482,1010 +391,54 @@ Other:
 * Enable build on FreeBSD.
 
 1.7.2
------
+=====
 
-* Log the font texture size.
-* Add French translations.
-* Improve computer braking in twister.trk.
-* Add CONTRIBUTING instructions.
-* Add screenshots of 1.7.1
+New features
+
+* French translations
+
+Bug fixes:
+
+* Fix computer driving lines in twister.trk
 
 1.7.1
------
+=====
+
+Bug fixes:
 
 * Add missing bridge model for editor.
 
 1.7.0
------
+=====
+
+New features:
+
+* twister.trk
+* Bridge object.
+* Fade out flash transition.
+* Turn left and turn right signs.
+* CLI option to force vsync off.
+* New crash sound.
+* Editor: visualize computer hints.
+* Move user tracks to the beginning of the track array.
+* Increase the initial slide friction to 1.0
+
+Bug fixes:
 
 * Don't show prev/next if on first/last item.
-* Add twister.trk
-* Add bridge object.
 * Remove specular shaders from crate and tire.
-* Small improvements to render timing.
-* Move user tracks to the beginning of the track array.
 * Fix computer driving line in curvastone.trk
-* Editor: visualize computer hints.
 * Fix off-track detection on 'sand grass straight' tile.
+
+Other:
+
+* Small improvements to render timing.
 * Optimize VBO, VAO and texture binding.
-* Add fade out flash transition.
-* Add turn left and turn right signs.
-* Update brake.png
-* Add a new crash sound.
-* Increase the initial slide friction to 1.0
 * Optimize viewport switching.
 * Optimize the use of GL_DEPTH_TEST.
-* Add CLI option to force vsync off.
 * Use random functionality from C++11.
 * Improve sky reflection.
-* Add cache for uniform locations.
 * Update scripts/genericLinuxBuildQt5
-
-1.6.3
------
-
-* Add specular lighting.
-* Set race record only if race with computers.
-* Fix audio threading.
-* Cars 0 and 1 as pink and grey.
-* Introduce MCGLMaterial.
-* Rename master to default when referring to shaders.
-* Default argument value for MCWorldRenderer::enableDepthTestOnLayer()
-* Scene-level setters for ambient and diffuse lights.
-* Remove shadersGLES.h from game.pro
-* CMake option to statically link vorbis libs.
-* Move MCGLScene::updateViewProjectionMatrixAndShaders() to private scope.
-* Add MCGLScene::setFadeValue().
-* Use tile.hasAsphalt() instead of listing non-asphalt tiles.
-* Separate generic Linux build scripts for Qt4 and Qt5.
-* Remove needless shadersGLES.
-* Refactor lighting in shaders.
-* update mxeWindowsBuild.
-* Update Czech translations.
-* Move MXE script to scripts/
-* Refactor race.cpp.
-* Refactor car creation into CarFactory.
-
-1.6.2
------
-
-* Update README and INSTALL.
-* Fix time trial mode.
-
-1.6.1
------
-
-* Use colorful cars only in TOP-6.
-* Updates README.
-* Update Czech translations.
-* Add dark red car.
-* Add dark green car.
-* Update Italian translations.
-* Update cs and it source strings.
-* Add option to set sounds on/off.
-* Add fallback char for ď.
-* Add translations to mxeWindowsBuild.
-* Use wide strings in credits.cpp.
-* Add command line option to force language.
-* Update Finnish translations.
-* Remove the FPS menu and settings.
-* Use the vsync setting in Game.
-* Add VSyncMenu.
-* Rename 'Key configuration' to 'Controls'.
-* Update credits menu content.
-* Move reset settings to a new reset menu.
-* Move graphics settings to a new GFX menu.
-* New game loop.
-* Fix build for OpenGL 3.0
-* Refcator car image switching.
-* Add cyan car.
-* Add violet car.
-* Add green car.
-* Sort tiles before rendering.
-* Add notion of driver vsync.
-
-1.5.5
------
-
-* Full screen mode by default.
-* #ifdef for GL versions in game.cpp
-* Set version 120 for OpenGL 2.1 shaders.
-* Remove precision qualifiers from ver 1.00 desktop shaders.
-
-1.5.4
------
-
-* Remove swap interval setting.
-* Remove unused variable.
-* Less dramatic tire wear when off-track.
-* Remove FPS setting completely.
-* Add install target for fonts.
-* Add fallback glyphs.
-* Add unlimited FPS setting.
-* Use updateGL to update.
-* Use the bounding rect version of QPainter::drawText().
-* Make text more dense.
-* Font generator tries to use Ubuntu Mono.
-* Add Ubuntu Mono fonts to data/fonts.
-* Switch to wide chars.
-* Use wchar_t in the font map.
-* Update AUTHORS.
-* Add Czech translations for the editor.
-* Generate game font on-the-fly.
-* Fix some documentation formatting.
-* Make createFontFromData a public function.
-* Cosmetics.
-* Add message about missing translation.
-* Add Finnish translations for the editor.
-* Add Czech translations.
-* Update qmake project files.
-* Update Italian translations.
-* Add Italian translations for the editor.
-* Add blue car.
-
-1.5.2
------
-
-* Add script to build and package for Windows on Linux.
-* Move mxeEnv.sh to scripts/
-* Remove unused variable from MCTextureGlyph.
-* Don't send pit signal twice.
-* Add scissor tests for split screen modes.
-* Pass QString as const reference in audio signals.
-* More quiet skid sound.
-* Update .gitignore
-* Shorter audio signal names.
-* Reset input handler on race start.
-* Refactor CarSoundEffectManager.
-* Add skid sound.
-* Hit sounds.
-* Less aggressive tire wear on grass.
-* Remove some crates from curvastone.trk
-* A bit more acceleration friction.
-* More realistic kmh values.
-* Refactor Startlights.
-* Connect volume change signals.
-* Play cheering when winner finishes, not the human player.
-* Add bell sound when checkered flag appears.
-* Add predefined keys to Settings.
-* Save lap count.
-* Add generic value setter/getter to Settings.
-* Slide a bit more on worn-out tires.
-* Init race record when new track is set.
-* Reset tire wear on pit stop.
-* Blink car status view on pit stop.
-* Add pit stops.
-* Make tires wear when turning and accelerating or just braking.
-* Fix clang warnings.
-* New background image for settings.
-* Update Finnish translations.
-* Translate resolutionmenu.cpp
-* Fix documentation typos.
-* MCObjectFactory returns MCObjectPtr's instead of references.
-* Fix comment format in mcobject.hh
-* Support for trigger objects.
-* Cosmetics in MCObject.
-* Add red car.
-* Refactors Scene.
-* Render different positions with different colors.
-* Save and load race records.
-* Longer fade out from game.
-* Smaller font for timing data.
-* Show race time.
-* Fix editor crash on object deletion.
-* Add Italian translations.
-* Fix turning direction on reverse.
-* Add dirty cell cache to MCObjectTree.
-* Rename sound files.
-* Stop engine sounds after a race.
-* Update INSTALL.
-* Set listener location via a signal.
-* Use pkg_check_modules to find libvorbisfile.
-* Update qmake project files to link to libopenal and libvorbisfile.
-* Refactor Scene::updateFrame()
-* Tune engine sound parameters.
-* Common base class for OpenALWavData and OpenALOggData.
-* Update the example debian/rules
-* Add engine sound for all computers.
-* Ogg Vorbis support.
-* Drop dependency to ALUT.
-* Add sound for each car.
-* Optimize pitch changes.
-* LPF the engine sound.
-* Initial engine sound.
-* Remove throw()'s from STFH.
-* Add CarSoundEffectManager.
-* Add stopSound(), setPitch(), setVolume() to AudioThread.
-* Add mutex to OpenALSource.
-* Add engine sound wave.
-* Load sounds into a map.
-* Load sounds concurrently with the rest of init.
-* Use DATA_PATH in AudioThread::loadSounds()
-* Remove needless STFH::DataManager.
-* Add menu sounds.
-* OpenAL implementation of STFH.
-* Add STFH.
-* Move glew and glm under contrib/
-* Remove deps installation from InstallWindows.cmake
-* Remove obsolete/
-* Remove deps: assume statically linked libs on Windows builds.
-* Add experimental qmake project files.
-* Add mxeEnv.sh helper.
-* Use CMAKE_RC_COMPILER instead of hard-coded windres.exe
-* Correctly handle particle animation types in MCParticle.
-* Support varying point size also in GL30 and GLES shaders.
-* Reduce moment of inertia.
-* Revisit smoke particle effects.
-* Update AUTHORS
-* Fix loop limits in TrackSelectionMenu.
-* Small refactoring in MCObjectTree.
-* Set to initial slide friction to 0.90.
-* Rename some variables according to current naming convention.
-* Improve smoke particle.
-* Use smart pointers always when ownership is in question.
-* New dir layout for source images.
-* Fix translations on Qt5.
-
-1.4.6
------
-
-* Option for horizontal split.
-* Tune sliding parameters.
-* Remove deprecated sandAreaCurve45*.
-* Make track selection menu usable with mouse.
-* Refactor MCSurfaceConfigLoader.
-* Add blur to star.png
-* Rework tile graphics.
-* Remove sandGrassStraight45Female.
-* Remove glPushAttrib() from StartlightsOverlay.
-* Rework startlights.
-* Remove sandAreaCurve45*. Graphics to be added directly to the tile.
-* Remove unused src images.
-* Fix artifacts in the textured font.
-* Fix Help on wide screens.
-* Rename confusing MCSurface::setScale() to ::setSize().
-* Automatically show/hide mouse cursor.
-* Fade startlights out on GO.
-* Refactor view splitting.
-* Support translations via Qt.
-
-1.4.5
------
-
-* Improve documentation of CMake's options.
-* Optional DATA_PATH, BIN_PATH and DOC_PATH.
-
-1.4.4
------
-
-* Fix regression with install paths.
-* Set cmake policy to the required version.
-* Ubuntu => USC in CMakelists.txt
-* Add DEPENDS to runtime targets.
-* Refactor runtime targets.
-* Don't set CMAKE_INSTALL_PREFIX in the code.
-
-1.4.3
------
-
-* Support OpenGL 2.1 by default.
-* Add custom targets for doc files.
-* Fix CPack binary paths.
-* Add install targets for Windows deps.
-* Add deps for win32.
-
-1.4.2
------
-
-* Fix computer driving lines in monza.trk
-* Make the game a bit more challenging.
-* More sane shader API.
-* Fix normals.
-* Normal mapping for cars.
-* Tune car parameters.
-* Move ShaderProgram to MiniCore.
-* Refactor steering.
-* Improve steering stability.
-* Updates triangle.trk.
-* Updates rock.png.
-* No contrast setting for the grandstand.
-* Add some crates to straight.trk.
-* Fix batched rendering of surface shadows.
-* Collision detection for MCCircleShape.
-* Refactor MCCollisionDetector.
-* Remove unused variable from MCCircleShape.
-* Fix the contrast algorithm.
-* Less aggressive off track message.
-* Update INSTALL.
-* Move install stuff to InstallLinux.cmake and InstallWindows.cmake.
-
-1.4.1
------
-
-* Display a message when off track.
-* Refactor on-display messaging.
-* Android compatibility improvements.
-* GLES compatibility improvements.
-* Simplify texture and program binding.
-* Add MC_NO_GLEW define to allow compilation without GLEW.
-* Drop dependency to QGLWidget in MCSurfaceManager.
-* Add missing virtual destructor body to MCGravityGenerator.
-* Move common GL stuff into MCGLObjectBase.
-* Move aboutdlg.* to obsolete/
-* Remove useless variable.
-* Remove useless includes.
-* Fix CPack on out-of-source builds.
-* Load shaders from source code.
-* Multitextured sand.
-* Support third texture.
-* Update curvastone.trk
-* Update monza.trk
-* Editor: Object rotation can be set randomly.
-* Add bushArea object.
-* Tires wear out when off track.
-* Track locking and best positions per lap count.
-* Menus remember saved values.
-* Add a generic quit item (X) to menus.
-* Show cursor with --show-cursor.
-* Menu items can be selected with a mouse.
-* Don't try to swap buffers if not enabled.
-* Fix app shutdown on Windows.
-
-1.3.1
------
-
-* Log the game version on startup.
-* Fix point particles on OpenGL older than 3.3
-* Fix crashing shaders on OpenGL 3.3
-
-1.3.0
------
-
-* Include Qt version in CPack package names.
-* Point sprite skid marks.
-* Fix Z-buffering of grandstands.
-* Set brightness and contrast in the surface config.
-* Refactor MCSurfaceMetaData.
-* Mud particles as MCGLRectParticles.
-* Soften grandstand.png.
-* Off-track smoke.
-* Fix zero glPointSize().
-* Optimize batch rendering.
-* Rename pCamera to camera.
-* Add constructor for ActionMapping.
-* Renames m_vba => m_vao.
-* Optimize texture and VAO usage.
-* Adds starting grid to all race tracks.
-* Refactors rendering stuff out from MCWorld to MCWorldRenderer.
-* Adds ring.trk
-* Fix unlocking of new race tracks.
-* Fix performance issues due to faulty texture scaling.
-* Increase smoke timeout.
-* Scale particle point size with resolution.
-* GL_DYNAMIC_DRAW hint for particles.
-* Font improvements.
-* High contrast graphics.
-* Proper batching for point sprites.
-* Fix crash with OpenGL 3.3
-* Remove obsolete keyword maxGlyphsPerRow.
-
-1.2.2
------
-
-* Tune car parameters.
-* Fix track unlocking.
-* Add 3 and 5 to lap count selection.
-* CMake: Use target_link_libraries for MiniCore.
-* CMake: Support for CPack.
-* Fix build on Windows.
-
-1.2.1
------
-
-* Swap buffers only when renderer is enabled.
-* Add 1 lap to lap count selection.
-* Fine tune the font.
-* Editor: Delete objects after they have been removed from the scene. Patch by Markus Rinne.
-* Refactor StateMachine.
-* Use Qt signal and lambda to exit game from menu.
-* CMake: Print message about used Qt version.
-* Move Scene::translateCarsToStartPositions() to Race::
-* Simplify menu texts.
-* Removes useless QApplication::setGraphicsSystem("opengl")
-* Removes dead code.
-* Editor: The New Track Dialog validates entered values.
-* Editor: Add shortcuts for undo and redo.
-* Editor: Add Undo. Patch by Markus Rinne.
-* Remove lap count property from race tracks.
-* Add lap count menu.
-* Add sandAreaCurve45 and sandAreaCurve45Right.
-* Editor: Handle objects before target nodes.
-* Correctly fade alpha.
-* Adds sandAreaBig object.
-* Adds sandAreaCurve object.
-* Even smaller cars.
-* Smaller turning impulse.
-* More off-track friction.
-* Simplifies the texture font system and config.
-* Separate resolution menus for windowed and full screen.
-* Refactor main.cpp
-* Resolution scaling.
-* Remove obsolete OpenGL stuff from MCGLScene.
-* Remove obsolete OpenGL stuff from MCGLScene.
-* Editor: Add flood fill. Patch by Markus Rinne.
-* Prepare the project for Qt5.
-* Refactors Startlights.
-* More variance to computer speeds.
-* Full screen by default.
-* Add a comment about moment of intertia.
-* Refactors StateMachine.
-* Updates packaging.
-* Editor: Refactors mouse event handling in EditorView.
-* Generate desktop files only if ReleaseBuild defined.
-* Adds home site url to the Help page.
-* Refactors the number plate generation to GraphicsFactory.
-1.0.2
------
-
-* Fixes install targets.
-* Adds support for USC.
-* Make sure the first track is always unlocked.
-* Updates packaging.
-
-1.0.1
------
-
-* Unlock the first race track.
-* Generate desktop files only on Linux.
-* CMake: Output binaries to CMAKE_BINARY_DIR instead of CMAKE_SOURCE_DIR.
-* Limit the power to 200 kW.
-
-1.0.0
------
-
-* Updates curvastone.trk.
-* Updates infinity.trk.
-* Updates triangle.trk.
-* Removes irritating.trk (it was too irritating).
-* Improves the lighting model.
-* Improves the game dynamics.
-* Support for mesh objects.
-* Removes MCSurfaceConfigLoader::setConfigPath().
-* Adds cube.obj
-* Moves MCObject::hasShadow() to MCShapeView.
-* Configurable keys.
-* Refactors SettingsMenu::SettingsMenu()
-* Show all stars when best pos is 1.
-* Removes demo.trk and circle.trk as they are crap.
-* Less acceleration friction.
-* Friction limits acceleration.
-* Updates the car svg's.
-* Adds documentation to TrackObjectFactory.
-* Transparent background for the new application icons.
-* Rename Track Editor to Level Editor in dustrac-editor.desktop
-* Sets fixed limit to lateral friction.
-* Adds clamp() and clampFast() to MCVector2d and MCVector3d.
-
-0.16.0
-------
-
-* Fixes typo in surfaces.conf
-* New grandstand texture.
-* Refactors object creation in TrackLoader.
-* Updates the help text.
-* Correct shape radius for the plant object.
-* Removes h.trk.
-* Fixes loading of locked tracks.
-* Replaces square.trk with demo.trk.
-* Finish in TOP-6 to unlock a new race track.
-* Start pos will be the best pos of the current race track.
-* Increase car count to 12.
-* Generate number plates on-the-fly.
-* Refactors MCSurface.
-* Updates INSTALL.
-* New application icons.
-* Adds curvastone.trk.
-* Adds new resolutions to the Resolutions menu.
-* Editor: Automatically select the most recently added object.
-* Editor: Re-order toolbar icons.
-* Editor: Allow even larger target nodes.
-* Editor: Show open file name in the window title.
-* Updates index.html
-
-0.15.0
-------
-
-* Improves the startlight animation.
-* Resizeable target nodes.
-* Editor: Make TargetNodes darker.
-* Editor: Adds grassEditor.png
-* Editor: Rename computer hints.
-* Remove 15 and 45 fps from the FPS menu.
-* Correct layer for leaf particles.
-* Adds menu.vsh
-* Removes MCSurface::renderScaled().
-* Calculate color in the vertex shader.
-* Kill particles when the world is cleared.
-* The next starting pos will be the previous best pos.
-* Refactors Race.
-* Updates triagle.trk
-* Reduce braking friction.
-* Moves stuck cars onto the previous check point.
-* Show a message box error if OpenGL to old.
-* Updates monza.trk
-* More realistic friction.
-* New rock texture.
-* Small particle optimizations.
-* Adds skid marks.
-* Decrease the max number of particles.
-* Lazy release the active shader program.
-* Simplify particle alpha.
-* Refactors MCSurface.
-* Force OpenGL core profile 3.0
-* Upgrades shaders to version 1.30.
-* Fixes asphalt boundaries.
-* Updates the example debian packaging.
-
-0.14.0
-------
-
-* Adds sky reflection.
-* Updates square.trk
-* Fixes grandstand shadows.
-
-0.13.0
-------
-
-* Refactors EventHandler to use an action map.
-* Adds (L/R)SHIFT and (L/R)CTRL as alternative keys.
-* Editor: Fixes clear tile action.
-* Editor: Fixes a crash when clicking on empty track.
-* Adds StateMachine::isFading().
-* Configurable fps.
-* Revert "Use full screen mode as the default."
-* Fixes game logic on different game modes.
-* Adds Time Trial and Duel menu items.
-* Adds index.html
-* Adds screenshots of 0.12.0
-
-0.12.0
-------
-
-* Use full screen mode as the default.
-* Kill particles that are not visible.
-* Don't render checkered flag on two player race.
-* Makes smoke faster.
-* Change the color of blue car to grey.
-* Input handling for player two.
-* TimingOverlay for both players.
-* Correctly update TreeView.
-* Recreate cars again for each race.
-* Moves OffTrackDetectors from Scene to Race.
-* Renames car images.
-* Refactors Scene::Scene().
-* Don't kill particles that are outside the view.
-* Correctly setup and render cameras.
-* Refactors Car::render().
-* Improves the documentation of Car::collisionEvent().
-* Adds leaf particles.
-* New sparkle particle.
-* Adds 'About Qt' menu action.
-* Moves MCWorld from Physics/ to Core/
-* Removes some useless MCSurface::bindTexture()'s
-* Refactors particle stuff to ParticleManager.
-* Remove some banners from circle.trk
-* Dynamically remove and restore sleeping objects from integration.
-* Change the project name to DustRacing2D in CMakeLists.txt.
-* Updates Help with controls for player 2.
-* Adds support for permanently selected items.
-* Use C++11 lambdas in SettingsMenu.
-* Adds game mode menu.
-* Adds MenuItem::setMenuOpenAction().
-* Split-screen support.
-* Refactors MCGLScene.
-* Removes unused destructor.
-* Log info about GLEW and check failure on initialization error.
-* Render grass by using multitexturing.
-* Pass sin and cos to shaders.
-* Adds tile.png
-* Removes private implementation from MCSurfaceManager.
-* Removes unused images.
-* New grass and sand textures.
-* Adds a message text to ConfirmationMenu.
-* Makes trees darker.
-* Makes asphalt darker.
-* Windows-specific tweaks to CMakeList.txt's
-
-0.11.1
-------
-
-* Adds zip output to the archive script.
-* Use GLEW to improve portability.
-* Use shared_ptr in MCForceRegistry.
-* Cosmetic changes in Menu.
-* Updates license texts with Dust Racing 2D.
-* Cosmetic changes in MenuItem.
-* Use shared_ptr in Scene.
-* Renames AiLogic to AI.
-* Removes a useless QTimer include.
-* Replaces the explicit shader getters with a single getter and hash.
-* Merges Renderer and MainWindow.
-* Separates the menu toolkit from the game sources.
-* Adds example packaging for Ubuntu/Debian.
-* Adds screenshots of 0.11.0
-* Fixes game pause.
-
-0.11.0
-------
-
-* Take window aspect ratio in the account.
-* Adds resolution menu.
-
-0.10.0
-------
-
-* New static checkered flag.
-* Adds checkeredFlag.png
-* Fixes compilation warnings on GCC 4.7.
-* Increase restitution of the tire object.
-* Refactors MCWorld.
-* New broad phase algorithm.
-* Editor: Also a right-click on object makes it selected.
-* Editor: Objects can be properly added on top of other objects.
-* Moves MathUtil::SIGN to public scope.
-* Removes some plants from square.trk.
-* Updades circle.trk.
-* Removes some plants from monza.trk.
-* Removes some plants from irritating.trk.
-* Removes some plants from h.trk.
-* Removes some plants from triangle.trk.
-* Editor: Objects can be deleted under target nodes.
-* New trees and plants.
-* Makes plants stationary.
-* Updates monza.trk.
-* New smoother event loop.
-* Adds Dust Racing 2D banner.
-* Build object batches based on typeID.
-* Batch support for MCSurfaceParticle.
-
-0.9.0
------
-
-* Removes obsolete glEnable(GL_TEXTURE_2D) calls.
-* Adds type identifiers for particles.
-* Improves rendering performance.
-* Removes irritating rocks from irritating.trk.
-* Lowers the linear and angular sleep limits to 0.01.
-* New rock texture.
-* Adds grandstand objects.
-* Eliminate copy-paste initializations in MCObject.
-* Eliminate copy-paste initializations in MCSurface.
-* Editor: Arrow keys can be used to move objects.
-* Adds screenshots of 0.8.1
-* Fixes a bug in the computer power scaling.
-* Improves messages.
-* Editor: Adds a tip about saving to ~/DustRacingTracks.
-* Makes the game a bit faster and harder.
-* Adds simple ambient lighting.
-* Adds car number plates.
-
-0.8.1
------
-
-* Correctly reset QSettings.
-
-0.8.0
------
-
-* Adds functionality to the Settings menu.
-* Editor: Makes object rotation incremental.
-* Adds SurfaceMenu base class for game menus.
-* Removes TODO as it's obsolete.
-* Finishing in TOP-5 unlocks the next race track.
-* Use std::stable_sort in TrackLoader.
-* Disable wrapping around in TrackSelectionMenu.
-* Sets indices to the default race tracks.
-* Adds an arrow to the finish line preview tile.
-* Updates the Help menu.
-* Loads the unlock statuses of race tracks.
-* Adds a new track circle.trk
-* Refactors menu creation.
-* Refines the intro.
-* Improves the smoke effect.
-* Particle performance improvements.
-* Adds MessageOverlay.
-* Updates the credits menu.
-* Fixes turning on reverse.
-* Also 'B' brakes.
-* Moves all scattered QSettings related stuff to Settings.
-* Editor: Open the "save as" dialog when saving (CTRL+S) the first time.
-* Fixes the scaling of startLightGlow.
-* Adds stars to track selection menu.
-* Adds star.svg and star.png
-* Save and load best positions.
-* Adds index-based track ordering.
-* Show time as mm:ss.zz
-* Refactors TimingOverlay.
-* Adds error handling for shader loading.
-
-0.7.3
------
-
-* Use the same image file for credits and help menus.
-* Makes the race track data format a bit more compact.
-* Refactors event handling to EventHandler.
-* Fixes invalid categories in the desktop files.
-* Don't install under /opt by default.
-
-0.7.2
------
-
-* Don't set CMAKE_INSTALL_PREFIX in CMakeLists.txt
-* Batch support for MCSurfaceParticle.
-
-0.7.1
------
-
-* Moves curves.trk to obsolete/
-* Adds documentation to MCWorld::buildBatches().
-* Removes obsolete test.trk
-* Set the object also sleeping if it's stationary.
-* Ignore collisions between sleeping objects.
-* Refactors TrackLoader.
-* Adds triangle.trk
-* Refactors rendering functions in MCWorld.
-* Adds a missing vector include in editordata.hpp.
-* Don't bind program if already bound.
-* Cosmetic changes to MCVector2d and MCVector3d.
-* Adds irritating.trk
-* Refactors event handling in Renderer.
-* Pressing P pauses the game.
-* CMake: find_package() checks for Qt modules. Set CMake version to >= 2.8.7.
-* CC license changed from by to by-nc.
-
-0.7.0
------
-
-* Refactors track rendering.
-* New asphalt engine.
-* Refactors the menu classes.
-* Adds Intro.
-* Adds transition animations between the menu and the game.
-* Adds new background images for the menu.
-
-0.6.1
------
-
-* Adds documentation to shaderprogram.hpp
-* Render sparkles as points.
-* Adds mud particle.
-* New smoke.
-* Moves wall.hpp and wall.cpp to obsolete/
-
-0.6.0
------
-
-* Fixes SF#3546834: OffTrackDetector doesn't work correctly on some tiles.
-* Menu reacts on key press events, not key release events.
-* Menu::done() returns true, if stack is empty.
-* Adds Credits menu.
-* Adds Help menu.
-* Removes needless headers from mainmenu.cpp
-* Take linefeed into account in MCTextureText.
-* Updates README.
-* Show timing as 'hh:mm:ss.zz'
-* New track straight.trk
-* Moves woods.trk to obsolete/
-* Makes the wall wall object longer.
-* Adds CMake install targets.
-* Makes some MCObject's methods non-virtual.
-
-0.5.0
------
-
-* Adds the main menu.
-* Don't reset motion when adding object to the world.
-* Dedicated friction generator for off-track conditions.
-* Fixes SF#3547742: Some of the cars have a wrong orientation on the start grid.
-* Fixes SF#3547321: Pressing ESC while playing should take the game back to the main menu.
-* Fixes unit tests.
-
-0.4.0
------
-
-* Default lap count 5 for all tracks.
-* Render all objects by using GLSL shaders.
-* Renames basePath to baseImagePath in texture config.
-* Adds shader support to MCShapeView.
-* Improves the engine directory layout.
-* Render text using shaders.
-* MCSurface renders with shaders only.
-* Adds MCGLShaderProgram and ShaderProgram.
-* Render the track by using GLSL shaders.
-* Removes animation from tiles.
-* Slide more.
-* Don't take typeId into account in MCObjectTree.
-* Optimize collision detection of stationary objects.
-* Don't set text color if not needed.
-* Removes private class from MCTextureText.
-* Fixes some compilation warnings.
-* Adds infinity.trk
-
-0.3.2
------
-
-* Sets MCWorld::metersPerPixel earlier.
-* Search tracks also in ~/DustRacingTracks
-* Longer delay before fade out.
-* Disable only acceleration when the race is over.
-* Adds black and orange cars.
-* Moves data/images/raw to src/images.
-* Renames dustrac to dustrac-game and editor to dustrac-editor.
-* Makes the starting grid shorter.
-
-0.3.1
------
-
-* Updates monza.trk.
-* The game returns back to the main menu after a race.
-* Makes the checkered flag smaller.
-* Adds a plant object.
-* Freeze laps time when player has finished.
-* Disables car controls when race has finished.
-* Displays 'winner finished' text when the race is over.
-* Render MCGLRectParticle by using triangles instead of a quad.
-* Render MCSurface by using triangles instead of a quad.
-* Scales down the front tire texture.
-* Friction adjustments.
-* Use a simpler friction approach for stability (and more fun).
-* Adds a rock object.
-
-0.3.0
------
-
-* Updates TODO.
-* Draw the first checkpoint in white.
-* Adds TrackSelectionMenu.
-* Fixes some compilation warnings.
-* Introduces more variance to the computer players.
-* Use Car::Description instead of constants in anonymous namespace.
-* Free-hand routes.
-* Editor: Refactors Object creation to ObjectFactory.
-* Renames ObjectData => ObjectModel, ObjectLoader => ObjectModelLoader.
-* Fixes incorrect object dimensions when loading a track into the editor.
-* Makes wall stationary, heavier tire objects.
-* Braking spot hints.
-* Adds monza.trk
-* Increases slide friction.
-* Track number of active particles.
-* Don't update particle alpha on every frame.
-* Batch support for MCSurfaceView.
-* Simple batching of views.
-* Reduce the displayed precision of timing.
-* Refactors and optimizes MCTextureText.
-* NVIDIA-specific optimizations for VBO's.
-* Fixes compilation with -DMC_USE_DOUBLE.
-* Refactors TimingOverlay.
-* MCTextureText renders VBO's.
-* Adds MCSurface::setTexCoords().
-* A bit taller trees.
-* Physics improvements.
-* Optimizations when rendering the same surface multiple times.
-* Integer calculations in tree views.
-* Don't test stationary objects against stationary objects.
-* Enable depth tests for trees.
-* Refactors MCSurface.
-* Removes obsolete glColor4f()-calls.
-* Removes debug code from MCRectShape.
-* Track renders by using MCSurface instead of custom render.
-* TreeView to use MCSurface instead of custom render.
-* MCGLRectParticle uses VBO's.
-* MCSurface uses VBO's.
-* Updates AUTHORS.
-* New track woods.trk.
-* Rotation support for all objects in editor and in the game.
-* Removes obsolete test.trk
-* Log OpenGL version.
-* Lap records are saved and loaded.
-* Refactors TimingOverlay.
-* Removes the obsolete analog speedometer.
-
-0.2.2
------
-
-* Updates TODO.
-* Bigger start light glow.
-* OpenGL call lists for multiple objects.
-* Impulsegenerator improvements.
-* Handle only one deepest contact at a time.
-* Refactors MCObject properties.
-* Fixes Z-buffering.
-* Refactors MCWorld::setDimensions().
-* Adds missing include to mcrandom.cc
-* Less powerful cars.
-* Tunes steering so that it depends of speed.
-* Editor bug fixes.
-* Makes curves.trk longer.
-* Misleading "set track properties" => "set lap count".
-* Hor and ver size of the track can be enlarged separately.
-* Hor/Ver driving line hints.
-* Adds drag force to cars.
-* New km/h speed scaling.
-* Set higher possible max speed for Car.
-* Digital speedometer.
-
-0.2.1
------
-
-* Changes MCLogger into a stream-based logger.
-  - Fixes crashes on some platforms due to portability
-* issues with va_list.
-* Only one update timer.
-* Updates README.
-* Performance improvements by removing pimpl from the engine.
-
-0.2.0
------
-
-* Refactors MCWorld.
-* Collision improvements.
-* Vertical initial positions.
-* Object drag'n'drop.
-* Updates README.
-* Private class for MCTextureText.
-* Refactors TimingOverlay.
-* About dialog for editor.
-* Erase action.
-* Parameter tuning.
-* Improves friction policy when off-track.
-* Build binaries to the root of the source tree.
-* Use rectangular objects as the world "walls".
-* Physics improvements: friction, position resolving, KMS.
-* Updates CentrifugalForceGenerator.
-* Makes rendering of track smoother.
-* Separates scene and screen resolutions.
-* Adds MCGLScene.
-* Fade in animation using a fragment shader.
-* Adds the main state machine.
-* Set the data path in the main CMakeLists.txt.
-
-0.1-alpha4
-----------
-
-* Adds CHANGELOG.
-* Lap count can be set in the editor for each track.
-* Updates README.
-* Implementation class for MCVectorAnimation.
-* Refactors Track.
-* Adds a CMake target for runtime files.
-* Updates TODO.
-* Update impulses only on integrate.
-* Parameter tuning.
-* Change the order of scene update and render.
-* More power for reverse. Bug fixes related to reverse.
-* Refactors wall.cpp.
-* Disable culling after rendering walls.
-* Four pixels bigger car.
-* Separates position resolving and impulse generation.
-* Support for "sleeping" objects.
-* Simpler frame update timing.
-* Mechanism to send MCTimerEvent's.
-* Adds MCTimerEvent.
-* Disables mouse cursor.
-* Updates INSTALL.
-* Adds missing sand.png.
-
-0.1-alpha3
-----------
-
-* Use QWidget instead of QMainWindow. Also fixes rendering on Windows.
-* Refactors Car controlling.
-* Adds Car::Description.
-* Support for ten cars.
-* Don't spawn sparkles at low speeds.
-* New graphics: sand.
-* Updates graphics: asphalt.
-* Updates archive.sh
 
 -- Jussi Lind <jussi.lind@iki.fi>
 

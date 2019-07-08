@@ -10,7 +10,7 @@
 !define DESCRIPTION            "A traditional top-down racing game."
 !define VERSIONMAJOR           2
 !define VERSIONMINOR           0
-!define VERSIONBUILD           2
+!define VERSIONBUILD           3
 !define HELPURL                "http://juzzlin.github.io/DustRacing2D/"
 !define UPDATEURL              "https://github.com/juzzlin/DustRacing2D/releases"
 !define ABOUTURL               "http://juzzlin.github.io/DustRacing2D/"
