@@ -113,32 +113,21 @@ signals:
 private:
 
     //! Timing structure.
-    class Times
+    struct Times
     {
-    public:
-        Times()
-        : lastLapTime(-1)
-        , recordLapTime(-1)
-        , raceTime(0)
-        , recordRaceTime(0)
-        , lap(0)
-        , raceCompleted(false)
-        , isActive(true)
-        {}
+        int lastLapTime = -1;
 
-        int lastLapTime;
+        int recordLapTime = -1; // Personal best
 
-        int recordLapTime; // Personal best
+        int raceTime = 0;
 
-        int raceTime;
+        int recordRaceTime = 0; // Personal best
 
-        int recordRaceTime; // Personal best
+        int lap = 0;
 
-        int lap;
+        bool raceCompleted = false;
 
-        bool raceCompleted;
-
-        bool isActive;
+        bool isActive = true;
     };
 
     std::vector<Timing::Times> m_times;
