@@ -16,6 +16,8 @@
 #include "timing.hpp"
 #include "car.hpp"
 
+#include "simple_logger.hpp"
+
 #include <QString>
 
 #include <cassert>
@@ -37,22 +39,29 @@ void Timing::setLapCompleted(size_t index, bool isHuman)
 
     const int elapsed = m_time;
     times.lastLapTime = elapsed - times.raceTime;
-    times.raceTime    = elapsed;
+    times.raceTime = elapsed;
+
+    juzzlin::L().debug() << "Lap (" << times.lap << ") completed for car index=" << index << ": " << times.lastLapTime;
+    juzzlin::L().debug() << "Current personal best time: " << times.recordLapTime;
 
     // Check if a new personal record achieved.
-    if (times.lastLapTime < times.recordLapTime ||
-        times.recordLapTime == -1)
+    if (times.lastLapTime < times.recordLapTime || times.recordLapTime == -1)
     {
         times.recordLapTime = times.lastLapTime;
+        juzzlin::L().debug() << "New personal best time: " << times.recordLapTime;
     }
 
     // Check if a new lap record achieved.
     // Accept new lap records only by human players.
     if (isHuman)
     {
+        juzzlin::L().debug() << "Human lap completed: " << times.lastLapTime;
+        juzzlin::L().debug() << "Current lap record: " << m_lapRecord;
+
         if (times.lastLapTime < m_lapRecord || m_lapRecord == -1)
         {
             m_lapRecord = times.lastLapTime;
+            juzzlin::L().debug() << "New lap record: " << m_lapRecord;
 
             emit lapRecordAchieved(m_lapRecord);
         }
