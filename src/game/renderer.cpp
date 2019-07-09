@@ -30,10 +30,11 @@
 
 #include <MCGLScene>
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceManager>
 #include <MCTrigonom>
+
+#include "simple_logger.hpp"
 
 #include <cmath>
 #include <cassert>
@@ -82,7 +83,7 @@ Renderer & Renderer::instance()
 
 void Renderer::initialize()
 {
-    MCLogger().info() << "OpenGL Version: " << glGetString(GL_VERSION);
+    juzzlin::L().info() << "OpenGL Version: " << glGetString(GL_VERSION);
 
     if (!m_fullScreen)
     {
@@ -149,17 +150,17 @@ void Renderer::loadFonts()
     for (auto font : fonts)
     {
         const QString path = QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
-        MCLogger().info() << "Loading font " << path.toStdString() << "..";
+        juzzlin::L().info() << "Loading font " << path.toStdString() << "..";
         QFile fontFile(path);
         fontFile.open(QFile::ReadOnly);
         const int appFontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
         if (appFontId < 0)
         {
-            MCLogger().warning() << "Failed to load font " << path.toStdString() << "..";
+            juzzlin::L().warning() << "Failed to load font " << path.toStdString() << "..";
         }
         else
         {
-            MCLogger().info() << "Loaded font " << QFontDatabase::applicationFontFamilies(appFontId).at(0).toStdString();
+            juzzlin::L().info() << "Loaded font " << QFontDatabase::applicationFontFamilies(appFontId).at(0).toStdString();
         }
     }
 

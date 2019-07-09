@@ -29,9 +29,10 @@
 #include <MenuItemView>
 #include <MenuManager>
 
-#include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceManager>
+
+#include "simple_logger.hpp"
 
 static const int ITEM_TEXT_SIZE = 40;
 
@@ -70,7 +71,7 @@ void MainMenu::createMenuItems()
     quit->setAction(
         [this]()
         {
-            MCLogger().info() << "Quit selected from the main menu.";
+            juzzlin::L().info() << "Quit selected from the main menu.";
             emit exitGameRequested();
         });
 

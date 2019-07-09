@@ -55,7 +55,6 @@
 #include <MCGLDiffuseLight>
 #include <MCGLScene>
 #include <MCGLShaderProgram>
-#include <MCLogger>
 #include <MCObjectFactory>
 #include <MCObject>
 #include <MCPhysicsComponent>

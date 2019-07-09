@@ -22,7 +22,6 @@
 #include "tree.hpp"
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCObject>
 #include <MCObjectFactory>
 #include <MCRandom>
@@ -30,6 +29,8 @@
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
+
+#include "simple_logger.hpp"
 
 namespace {
 static const float DEFAULT_DIFFUSE_COEFF = 1.5f;
@@ -204,7 +205,7 @@ TrackObject * TrackObjectFactory::build(
 
     if (!object)
     {
-        MCLogger().warning() << "Unknown or deprecated object '" << role.toStdString() << "'";
+        juzzlin::L().warning() << "Unknown or deprecated object '" << role.toStdString() << "'";
         return nullptr;
     }
     else

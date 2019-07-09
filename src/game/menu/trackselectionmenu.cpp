@@ -29,7 +29,6 @@
 #include <MenuManager>
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCSurface>
 #include <MCTextureFont>
 #include <MCTextureText>

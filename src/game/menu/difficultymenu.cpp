@@ -24,7 +24,7 @@
 #include <MenuItem>
 #include <MenuManager>
 
-#include <MCLogger>
+#include "simple_logger.hpp"
 
 static const int ITEM_TEXT_SIZE = 40;
 
@@ -43,7 +43,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     MenuItem * easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
     easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
     easyItem->setAction([] () {
-        MCLogger().info() << "Easy selected.";
+        juzzlin::L().info() << "Easy selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Easy;
         Settings::instance().saveDifficulty(chosenDifficulty);
         Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);
@@ -53,7 +53,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     MenuItem * mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
     mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
     mediumItem->setAction([] () {
-        MCLogger().info() << "Medium selected.";
+        juzzlin::L().info() << "Medium selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Medium;
         Settings::instance().saveDifficulty(chosenDifficulty);
         Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);
@@ -63,7 +63,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     MenuItem * hardItem = new MenuItem(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
     hardItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *hardItem)));
     hardItem->setAction([] () {
-        MCLogger().info() << "Hard selected.";
+        juzzlin::L().info() << "Hard selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Hard;
         Settings::instance().saveDifficulty(chosenDifficulty);
         Game::instance().difficultyProfile().setDifficulty(chosenDifficulty);

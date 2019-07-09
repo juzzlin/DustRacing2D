@@ -33,13 +33,14 @@
 #include <algorithm>
 #include <cassert>
 
-#include <MCLogger>
 #include <MCAssetManager>
 #include <MCObjectFactory>
 #include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurfaceManager>
+
+#include "simple_logger.hpp"
 
 static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
@@ -248,7 +249,7 @@ void Race::translateCarsToStartPositions()
     }
     else
     {
-        MCLogger().error() << "Finish line tile not found in track '" <<
+        juzzlin::L().error() << "Finish line tile not found in track '" <<
             m_track->trackData().name().toStdString() << "'";
     }
 }

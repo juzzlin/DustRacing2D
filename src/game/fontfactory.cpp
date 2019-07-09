@@ -17,11 +17,12 @@
 #include "game.hpp"
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceMetaData>
 #include <MCSurfaceManager>
 #include <MCTextureGlyph>
+
+#include "simple_logger.hpp"
 
 #include <QFont>
 #include <QPainter>
@@ -122,12 +123,12 @@ MCTextureFontData FontFactory::generateFontData(QString family)
     // Add a little margin
     slotHeight += 4;
 
-    MCLogger().info() << "Font slot size: " << slotWidth << "x" << slotHeight;
+    juzzlin::L().debug() << "Font slot size: " << slotWidth << "x" << slotHeight;
 
     const int textureW = cols * slotWidth;
     const int textureH = rows * slotHeight;
 
-    MCLogger().info() << "Font texture size (initial): " << textureW << "x" << textureH;
+    juzzlin::L().debug() << "Font texture size (initial): " << textureW << "x" << textureH;
 
     QPixmap fontPixmap(textureW, textureH);
     fontPixmap.fill(Qt::transparent);

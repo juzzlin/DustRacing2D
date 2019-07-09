@@ -14,8 +14,8 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "application.hpp"
+#include "simple_logger.hpp"
 
-#include <MCLogger>
 #include <exception>
 
 namespace {
@@ -35,8 +35,8 @@ bool Application::notify(QObject * receiver, QEvent * event)
     }
     catch (std::exception & e)
     {
-        MCLogger().fatal() << e.what();
-        MCLogger().fatal() << INIT_ERROR;
+        juzzlin::L().fatal() << e.what();
+        juzzlin::L().fatal() << INIT_ERROR;
 
         QApplication::exit(EXIT_FAILURE);
 

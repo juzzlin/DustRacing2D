@@ -24,7 +24,7 @@
 #include <MenuItemView>
 #include <MenuManager>
 
-#include <MCLogger>
+#include "simple_logger.hpp"
 
 #include <QObject> // for tr()
 
@@ -49,7 +49,7 @@ public:
         {
             const int vsync = m_parent.vsync();
             Settings::instance().saveValue(Settings::vsyncKey(), vsync);
-            MCLogger().info() << "VSync set: " << vsync;
+            juzzlin::L().info() << "VSync set: " << vsync;
             Game::instance().exitGame();
         }
 

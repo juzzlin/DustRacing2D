@@ -16,7 +16,6 @@
 #include "graphicsfactory.hpp"
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCSurface>
 #include <MCSurfaceMetaData>
 #include <MCSurfaceManager>

@@ -34,6 +34,7 @@ INCLUDEPATH += . \
     STFH \
     menu \
     audio \
+    ../contrib/SimpleLogger/src
 
 # Input
 HEADERS += \
@@ -211,6 +212,7 @@ HEADERS += \
     STFH/listener.hpp \
     STFH/location.hpp \
     STFH/source.hpp \
+    ../contrib/SimpleLogger/src/simple_logger.hpp
 
 SOURCES += \
     ../common/mapbase.cpp \
@@ -363,6 +365,7 @@ SOURCES += \
     STFH/listener.cpp \
     STFH/location.cpp \
     STFH/source.cpp \
+    ../contrib/SimpleLogger/src/simple_logger.cpp
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsGame.rc

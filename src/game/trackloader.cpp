@@ -31,9 +31,10 @@
 #include "tracktile.hpp"
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCObjectFactory>
 #include <MCShapeView>
+
+#include "simple_logger.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -81,7 +82,7 @@ int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficul
     int numLoaded = 0;
     for (QString path : m_paths)
     {
-        MCLogger().info() << "Loading race tracks from '" << path.toStdString() << "'..";
+        juzzlin::L().info() << "Loading race tracks from '" << path.toStdString() << "'..";
         QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
         for (QString trackPath : trackPaths)
         {
@@ -91,18 +92,18 @@ int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficul
                 m_tracks.push_back(new Track(trackData));
                 numLoaded++;
 
-                MCLogger().info() << "  Found '" << trackPath.toStdString() << "', index="
+                juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index="
                     << trackData->index();
             }
             else
             {
-                MCLogger().error() << "Couldn't load '" << trackPath.toStdString() << "'..";
+                juzzlin::L().error() << "Couldn't load '" << trackPath.toStdString() << "'..";
             }
         }
 
         if (!trackPaths.size())
         {
-            MCLogger().info() << "  No race tracks found.";
+            juzzlin::L().info() << "  No race tracks found.";
         }
     }
 
@@ -311,7 +312,7 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
     };
 
     if (!mappings.count(str)) {
-        MCLogger().error() << "No mapping for tile '" << str << "'..";
+        juzzlin::L().error() << "No mapping for tile '" << str << "'..";
         return TrackTile::TT_NONE;
     }
 
