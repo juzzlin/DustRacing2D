@@ -15,6 +15,11 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+// Always enable asserts
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
 #include "openalwavdata.hpp"
 
 #include <cassert>
@@ -59,7 +64,7 @@ static bool loadWavFile(
     ALsizei* frequency,
     ALenum* format)
 {
-    FILE* soundFile = NULL;
+    FILE* soundFile = nullptr;
     WAVE_Format wave_format;
     RIFF_Header riff_header;
     WAVE_Data wave_data;
@@ -115,7 +120,7 @@ static bool loadWavFile(
         data = new unsigned char[wave_data.subChunk2Size];
 
         // Read in the sound data into the soundData variable
-        if (!std::fread(data, wave_data.subChunk2Size, 1, soundFile))
+        if (!std::fread(data, static_cast<size_t>(wave_data.subChunk2Size), 1, soundFile))
             throw std::runtime_error("error loading WAVE data into struct!");
 
         //Now we set the variables that we passed in with the
@@ -140,8 +145,7 @@ static bool loadWavFile(
         checkError();
         //now we put our data into the openAL buffer and
         //check for success
-        alBufferData(*buffer, *format, (void*)data,
-                     *size, *frequency);
+        alBufferData(*buffer, *format, reinterpret_cast<void*>(data), *size, *frequency);
         checkError();
         //clean up and return true if successful
         fclose(soundFile);
