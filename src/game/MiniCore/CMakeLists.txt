@@ -60,7 +60,7 @@ find_package(OpenGL REQUIRED)
 if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
     set(MINICORE_OPENGL_LIBS ${OPENGL_gl_LIBRARY})
 else()
-    set(MINICORE_OPENGL_LIBS OpenGL::OpenGL)
+    set(MINICORE_OPENGL_LIBS OpenGL::GL)
 endif()
 
 # Enable CMake's unit test framework
