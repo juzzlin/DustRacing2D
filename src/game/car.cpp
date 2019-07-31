@@ -130,7 +130,7 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 void Car::setProperties(Description & desc)
 {
     physicsComponent().setMass(desc.mass);
-    physicsComponent().setMomentOfInertia(desc.mass * 3);
+    physicsComponent().setMomentOfInertia(desc.mass * 2.5f);
     physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
 
