@@ -127,7 +127,11 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
         if (!track->trackData().isUserTrack() &&
             !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
         {
+#ifndef UNLOCK_ALL_TRACKS
             track->trackData().setIsLocked(true);
+#else
+            track->trackData().setIsLocked(false);
+#endif
         }
         else
         {

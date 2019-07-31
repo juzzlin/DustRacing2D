@@ -55,6 +55,8 @@ option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
 
 option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
 
+option(UnlockAllTracks "Unlock all tracks (for development purposes)" OFF)
+
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -78,6 +80,11 @@ if(QOpenGLFunctions)
     message(STATUS "Using QOpenGLFunctions")
     add_definitions(-D__MC_QOPENGLFUNCTIONS__)
     add_definitions(-D__MC_NO_GLEW__)
+endif()
+
+if (UnlockAllTracks)
+    message(STATUS "All tracks unlocked")
+    add_definitions(-DUNLOCK_ALL_TRACKS)
 endif()
 
 add_definitions(-DGLEW_STATIC)
