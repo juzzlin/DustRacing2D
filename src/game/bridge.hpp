@@ -17,11 +17,12 @@
 #define BRIDGE_HPP
 
 #include <MCObject>
-
 #include <map>
 
 class MCCollisionEvent;
+class MCSeparationEvent;
 class MCSurface;
+class BridgeTrigger;
 class Car;
 
 class Bridge : public MCObject
@@ -30,23 +31,23 @@ public:
 
     Bridge();
 
+    void enterObject(MCObject & object);
+
+    void exitObject(MCObject & object);
+
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
-    virtual void onStepTime(int step) override;
-
-    void enterObject(MCObject & object);
+    virtual void separationEvent(MCSeparationEvent & event) override;
 
 private:
 
+    void doExitObject(MCObject & object);
+
     void raiseObject(MCObject & object, bool raise);
 
-    std::map<MCObject *, int> m_objectsOnBridge;
-
-    std::map<MCObject *, bool> m_objectsEntered;
-
-    int m_tag;
+    std::map<MCObject *, int> m_edgeCount;
 };
 
 #endif // BRIDGE_HPP

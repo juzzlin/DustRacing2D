@@ -5,6 +5,8 @@ New features:
 
 Bug fixes:
 
+* Fix GitHub Issue #59: Regression: Bridge is broken due to changes in collision detection
+
 Other:
 
 2.0.3
