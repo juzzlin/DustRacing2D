@@ -186,12 +186,12 @@ void Game::parseArgs(int argc, char ** argv)
         }
         else if (args[i] == "--screen" && (i + i) < args.size())
         {
-            m_screenIndex = args[i + 1].toInt();
+            m_screenIndex = args[++i].toInt();
             m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
         }
         else if (args[i] == "--lang" && (i + i) < args.size())
         {
-            lang = args[i + 1];
+            lang = args[++i];
         }
         else if (args[i] == "--no-vsync")
         {
