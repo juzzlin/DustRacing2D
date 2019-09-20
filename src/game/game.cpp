@@ -133,7 +133,7 @@ static void printHelp()
     std::cout << "--help            Show this help." << std::endl;
     std::cout << "--screen [index]  Force a certain screen on multi-display setups." << std::endl;
     std::cout << "--trace           Set log level to trace." << std::endl;
-    std::cout << "--lang [lang]     Force language: fi, fr, it, cs." << std::endl;
+    std::cout << "--lang [lang]     Force language: fi, fr, it, cs, ru." << std::endl;
     std::cout << "--no-vsync        Force vsync off." << std::endl;
     std::cout << std::endl;
 }

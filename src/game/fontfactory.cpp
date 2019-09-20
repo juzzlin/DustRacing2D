@@ -35,7 +35,22 @@
 // matter whether there's a BOM or not.
 
 static const std::vector<wchar_t> glyphs(
-    {L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H',
+    {
+// Russian letters in UTF-8
+     L'А', L'Б', L'В', L'Г', L'Д', L'Е', L'Ё', L'Ж',
+     L'З', L'И', L'Й', L'К', L'Л', L'М', L'Н', L'О',
+     L'П', L'Р', L'С', L'Т', L'У', L'Ф', L'Х', L'Ц',
+     L'Ч', L'Ш', L'Щ', L'Ъ', L'Ы', L'Ь', L'Э', L'Ю',
+     L'Я',
+
+     L'а', L'б', L'в', L'г', L'д', L'е', L'ё', L'ж',
+     L'з', L'и', L'й', L'к', L'л', L'м', L'н', L'о',
+     L'п', L'р', L'с', L'т', L'у', L'ф', L'х', L'ц',
+     L'ч', L'ш', L'щ', L'ъ', L'ы', L'ь', L'э', L'ю',
+     L'я', L'№',
+// End of russian letters in UTF-8
+
+     L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H',
      L'I', L'J', L'K', L'L', L'M', L'N', L'O', L'P',
      L'Q', L'R', L'S', L'T', L'U', L'V', L'W', L'X',
      L'Y', L'Z', L' ', L'Ä', L'Ö', L'Ü', L'Å', L' ',
