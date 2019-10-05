@@ -14,19 +14,19 @@ if ! which ${UNIX2DOS}; then
     exit 1
 fi
 
-QMAKE=/opt/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5
+QMAKE=/mxe/usr/i686-w64-mingw32.static/qt5/bin/qmake
 if ! which ${QMAKE}; then
     echo "${QMAKE} not found."
     exit 1
 fi
 
-MAKENSIS=/opt/mxe/usr/bin/i686-w64-mingw32.static-makensis
+MAKENSIS=/mxe/usr/bin/i686-w64-mingw32.static-makensis
 if ! which ${MAKENSIS}; then
     echo "${MAKENSIS} not found."
     exit 1
 fi
 
-LRELEASE=/opt/mxe/usr/i686-w64-mingw32.static/qt5/bin/lrelease
+LRELEASE=/mxe/usr/i686-w64-mingw32.static/qt5/bin/lrelease
 if ! which ${LRELEASE}; then
     echo "${LRELEASE} not found."
     exit 1
