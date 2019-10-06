@@ -84,9 +84,9 @@ void TimingOverlay::setRace(Race & race)
     m_race   = &race;
     m_timing = &m_race->timing();
 
-    connect(m_timing, SIGNAL(lapRecordAchieved(int)), this, SLOT(setLapRecord(int)));
-    connect(m_timing, SIGNAL(raceRecordAchieved(int)), this, SLOT(setRaceRecord(int)));
-    connect(m_race, SIGNAL(tiresChanged(const Car &)), this, SLOT(blinkCarStatus(const Car &)));
+    connect(m_timing, &Timing::lapRecordAchieved, this, &TimingOverlay::setLapRecord);
+    connect(m_timing, &Timing::raceRecordAchieved, this, &TimingOverlay::setRaceRecord);
+    connect(m_race, &Race::tiresChanged, this, static_cast<void(TimingOverlay::*)()>(&TimingOverlay::blinkCarStatus));
 }
 
 void TimingOverlay::setLapRecord(int)
@@ -104,7 +104,7 @@ void TimingOverlay::blinkLapRecord()
     static int count = 0;
     if (count < 10)
     {
-        QTimer::singleShot(250, this, SLOT(blinkLapRecord()));
+        QTimer::singleShot(250, this, &TimingOverlay::blinkLapRecord);
         m_showLapRecordTime = !m_showLapRecordTime;
         count++;
     }
@@ -120,7 +120,7 @@ void TimingOverlay::blinkRaceRecord()
     static int count = 0;
     if (count < 10)
     {
-        QTimer::singleShot(250, this, SLOT(blinkRaceRecord()));
+        QTimer::singleShot(250, this, &TimingOverlay::blinkRaceRecord);
         m_showRaceTime = !m_showRaceTime;
         count++;
     }
@@ -136,7 +136,7 @@ void TimingOverlay::blinkCarStatus()
     static int count = 0;
     if (count < 10)
     {
-        QTimer::singleShot(250, this, SLOT(blinkCarStatus()));
+        QTimer::singleShot(250, this, static_cast<void(TimingOverlay::*)()>(&TimingOverlay::blinkCarStatus));
         m_showCarStatus = !m_showCarStatus;
         count++;
     }

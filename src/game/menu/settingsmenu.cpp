@@ -34,7 +34,7 @@
 #include <MenuItemView>
 #include <MenuManager>
 
-#include <MCLogger>
+#include "simple_logger.hpp"
 
 #include <memory>
 #include <sstream>
@@ -81,7 +81,7 @@ private:
             m_confirmationMenu->setAcceptAction(
                 []()
                 {
-                    MCLogger().info() << "Reset positions selected.";
+                    juzzlin::L().info() << "Reset positions selected.";
                     Settings::instance().resetBestPos();
                 });
             m_confirmationMenu->setCurrentIndex(1);
@@ -93,7 +93,7 @@ private:
             m_confirmationMenu->setAcceptAction(
                 []()
                 {
-                    MCLogger().info() << "Reset times selected.";
+                    juzzlin::L().info() << "Reset times selected.";
                     Settings::instance().resetLapRecords();
                     Settings::instance().resetRaceRecords();
                 });
@@ -106,7 +106,7 @@ private:
             m_confirmationMenu->setAcceptAction(
                 []()
                 {
-                    MCLogger().info() << "Reset tracks selected.";
+                    juzzlin::L().info() << "Reset tracks selected.";
                     TrackLoader & tl = TrackLoader::instance();
                     for (unsigned int i = 0; i < tl.tracks(); i++)
                     {
@@ -118,9 +118,6 @@ private:
                 }
                 Settings::instance().resetTrackUnlockStatuses();});
             m_confirmationMenu->setCurrentIndex(1);
-            break;
-
-        default:
             break;
         }
     }
@@ -251,7 +248,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     fps30->setAction(
         []()
         {
-            MCLogger().info() << "30 fps selected.";
+            juzzlin::L().info() << "30 fps selected.";
             Game::instance().setFps(Game::Fps::Fps30);
             Settings::instance().saveValue(Settings::fpsKey(), 30);
             MenuManager::instance().popMenu();
@@ -262,7 +259,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     fps60->setAction(
         []()
         {
-            MCLogger().info() << "60 fps selected.";
+            juzzlin::L().info() << "60 fps selected.";
             Game::instance().setFps(Game::Fps::Fps60);
             Settings::instance().saveValue(Settings::fpsKey(), 60);
             MenuManager::instance().popMenu();
@@ -295,7 +292,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     twoPlayers->setAction(
         []()
         {
-            MCLogger().info() << "Two player race selected.";
+            juzzlin::L().info() << "Two player race selected.";
             Game::instance().setMode(Game::Mode::TwoPlayerRace);
             MenuManager::instance().popMenu();
         });
@@ -305,7 +302,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     onePlayer->setAction(
         []()
         {
-            MCLogger().info() << "One player race selected.";
+            juzzlin::L().info() << "One player race selected.";
             Game::instance().setMode(Game::Mode::OnePlayerRace);
             MenuManager::instance().popMenu();
         });
@@ -315,7 +312,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     timeTrial->setAction(
         []()
         {
-            MCLogger().info() << "Time Trial selected.";
+            juzzlin::L().info() << "Time Trial selected.";
             Game::instance().setMode(Game::Mode::TimeTrial);
             MenuManager::instance().popMenu();
         });
@@ -325,7 +322,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     duel->setAction(
         []()
         {
-            MCLogger().info() << "Duel selected.";
+            juzzlin::L().info() << "Duel selected.";
             Game::instance().setMode(Game::Mode::Duel);
             MenuManager::instance().popMenu();
         });
@@ -353,7 +350,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
     vertical->setAction(
         []()
         {
-            MCLogger().info() << "Vertical split selected.";
+            juzzlin::L().info() << "Vertical split selected.";
             Game::instance().setSplitType(Game::SplitType::Vertical);
             MenuManager::instance().popMenu();
         });
@@ -363,7 +360,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
     horizontal->setAction(
         []()
         {
-            MCLogger().info() << "Horizontal split selected.";
+            juzzlin::L().info() << "Horizontal split selected.";
             Game::instance().setSplitType(Game::SplitType::Horizontal);
             MenuManager::instance().popMenu();
         });
@@ -423,7 +420,7 @@ void SettingsMenu::populateSfxMenu(int width, int height)
     offItem->setAction(
         []()
         {
-            MCLogger().info() << "Sounds off selected.";
+            juzzlin::L().info() << "Sounds off selected.";
             Game::instance().audioWorker().setEnabled(false);
             Settings::instance().saveValue(Settings::soundsKey(), false);
             MenuManager::instance().popMenu();
@@ -436,7 +433,7 @@ void SettingsMenu::populateSfxMenu(int width, int height)
     onItem->setAction(
         []()
         {
-            MCLogger().info() << "Sounds on selected.";
+            juzzlin::L().info() << "Sounds on selected.";
             Game::instance().audioWorker().setEnabled(true);
             Settings::instance().saveValue(Settings::soundsKey(), true);
             MenuManager::instance().popMenu();

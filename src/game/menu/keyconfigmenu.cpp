@@ -25,7 +25,6 @@
 #include <MenuManager>
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCTextureText>
 #include <MCTextureFont>
 
@@ -187,6 +186,4 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     addItem(MTFH::MenuItemPtr(playerTwoTurnLeft));
 }
 
-KeyConfigMenu::~KeyConfigMenu()
-{
-}
+KeyConfigMenu::~KeyConfigMenu() = default;

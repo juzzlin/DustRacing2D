@@ -30,7 +30,6 @@ static const int ON_TRACK_ANIMATION_SPEED_MIN = 5;
 
 CarParticleEffectManager::CarParticleEffectManager(Car & car)
 : m_car(car)
-, m_sparkleCounter(0)
 , m_smokeCounter(0)
 , m_mudCounter(0)
 {
@@ -158,11 +157,10 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
         // Check if the car is colliding with another car.
         if (event.collidingObject().typeId() == m_car.typeId())
         {
-            if (++m_sparkleCounter >= 10)
+            for (int i = 0; i < 10; i++)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                     event.contactPoint(), m_car.physicsComponent().velocity() * 0.75f);
-                m_sparkleCounter = 0;
             }
         }
         // Check if the car is colliding with hard stationary objects.
@@ -174,11 +172,10 @@ void CarParticleEffectManager::collision(const MCCollisionEvent & event)
             event.collidingObject().typeId() == MCObject::typeId("wallLong")           ||
             event.collidingObject().typeId() == MCObject::typeId("rock"))
         {
-            if (++m_sparkleCounter >= 10)
+            for (int i = 0; i < 10; i++)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
                     event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
-                m_sparkleCounter = 0;
             }
         }
         else if (event.collidingObject().typeId() == MCObject::typeId("tree"))

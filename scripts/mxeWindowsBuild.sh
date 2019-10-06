@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Assumes, that you have installed qt5, libopenal and libvorbisfile via MXE.
-
-MXE_QT5_QMAKE=${MXE_PATH}/usr/i686-w64-mingw32.static/qt5/bin/qmake
+# Assumes, that you have built and installed qt5, openal and vorbis via MXE.
 
 ZIP=zip
 if ! which ${ZIP}; then
@@ -16,13 +14,19 @@ if ! which ${UNIX2DOS}; then
     exit 1
 fi
 
-MAKENSIS=makensis
+QMAKE=/mxe/usr/i686-w64-mingw32.static/qt5/bin/qmake
+if ! which ${QMAKE}; then
+    echo "${QMAKE} not found."
+    exit 1
+fi
+
+MAKENSIS=/mxe/usr/bin/i686-w64-mingw32.static-makensis
 if ! which ${MAKENSIS}; then
     echo "${MAKENSIS} not found."
     exit 1
 fi
 
-LRELEASE=lrelease
+LRELEASE=/mxe/usr/i686-w64-mingw32.static/qt5/bin/lrelease
 if ! which ${LRELEASE}; then
     echo "${LRELEASE} not found."
     exit 1
@@ -32,15 +36,14 @@ NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 
 # Package naming
 
-NAME=dustrac
+NAME=dustracing2d
 VERSION=${DUSTRAC_RELEASE_VERSION}
 if [[ -z ${VERSION} ]]; then
     echo "DUSTRAC_RELEASE_VERSION not set."
-    VERSION="DUSTRAC_RELEASE_VERSION_NOT_SET"
+    exit 1
 fi
 
 ARCH=windows-x86
-QT=qt5
 
 # Build
 
@@ -50,7 +53,7 @@ if [[ $1 ]]; then
     echo "Project dir: ${PROJECT_DIR}"
 fi
 
-${MXE_QT5_QMAKE} ${PROJECT_DIR} && make -j${NUM_CPUS} || exit 1
+${QMAKE} ${PROJECT_DIR} && make -j${NUM_CPUS} || exit 1
 
 # Update translations
 
@@ -58,7 +61,7 @@ ${LRELEASE} ${PROJECT_DIR}/src/game/game.pro && ${LRELEASE} ${PROJECT_DIR}/src/e
 
 # Install to packaging dir
 
-PACKAGE_PATH=${NAME}-${VERSION}-${ARCH}-${QT}
+PACKAGE_PATH=${NAME}-${VERSION}-${ARCH}
 
 rm -rf ${PACKAGE_PATH}
 mkdir ${PACKAGE_PATH}
@@ -84,14 +87,14 @@ cd ..
 
 # Create zip archive
 
-ZIP_ARCHIVE=${PACKAGE_PATH}.zip
+ZIP_ARCHIVE=${NAME}-${VERSION}-${ARCH}.zip
 rm -f ${ZIP_ARCHIVE}
 $ZIP -rv ${ZIP_ARCHIVE} ${PACKAGE_PATH}
 
 # Create NSIS installer
 
 cp ${PROJECT_DIR}/packaging/windows/dustrac.nsi ${PACKAGE_PATH} && cd ${PACKAGE_PATH} && ${MAKENSIS} dustrac.nsi || exit 1
-cd .. && cp ${PACKAGE_PATH}/*setup.exe . || exit 1
+cd .. && mv ${PACKAGE_PATH}/*setup.exe . || exit 1
 
 ls -ltr
 

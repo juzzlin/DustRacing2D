@@ -37,13 +37,13 @@ public:
     };
 
     //! Constructor.
-    InputHandler(unsigned int maxPlayers);
+    InputHandler(size_t maxPlayers);
 
     //! Set state of the given action of the given player.
-    void setActionState(unsigned int playerIndex, Action action, bool state);
+    void setActionState(size_t playerIndex, Action action, bool state);
 
     //! Get state of the given action of the given player.
-    bool getActionState(unsigned int playerIndex, Action action) const;
+    bool getActionState(size_t playerIndex, Action action) const;
 
     //! Reset the current actions.
     void reset();

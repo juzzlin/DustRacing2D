@@ -29,7 +29,6 @@
 #include <MenuManager>
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCSurface>
 #include <MCTextureFont>
 #include <MCTextureText>
@@ -219,17 +218,16 @@ void TrackItem::renderStars()
         const int starW = m_star.width();
         const int starH = m_star.height();
         const int startX = menu()->x() + x() - 5 * starW + starW / 2;
-        const int numStars = 10;
         const MCGLColor yellow(1.0, 1.0, 0.0);
         const MCGLColor grey(.75, .75, .75);
 
+        const int numStars = 10;
         for (int i = 0; i < numStars; i++)
         {
             const MCVector3dF starPos(startX + i * starW, menu()->y() + y() - height() / 2 + starH / 2, 0);
 
             // The range of m_bestPos is 1..NUM_CARS
-            if (m_bestPos != -1 &&
-                Scene::NUM_CARS - (i + 1 ) * Scene::NUM_CARS / numStars >= m_bestPos - 1)
+            if (m_bestPos != -1 && numStars - i >= m_bestPos)
             {
                 m_star.setColor(yellow);
                 m_glow.render(nullptr, starPos, 0);

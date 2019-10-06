@@ -31,7 +31,6 @@
 #include "trackselectionmenu.hpp"
 
 #include <MCCamera>
-#include <MCLogger>
 #include <MCWorldRenderer>
 
 #include <QApplication>
@@ -39,14 +38,19 @@
 #include <QDir>
 #include <QThread>
 #include <QTime>
+#include <QProcessEnvironment>
 #include <QScreen>
 #include <QSurfaceFormat>
+
+#include "simple_logger.hpp"
 
 #include <cassert>
 
 static const unsigned int MAX_PLAYERS = 2;
 
 Game * Game::m_instance = nullptr;
+
+using juzzlin::L;
 
 Game::Game(int & argc, char ** argv)
 : m_app(argc, argv)
@@ -59,6 +63,7 @@ Game::Game(int & argc, char ** argv)
 , m_renderer(nullptr)
 , m_scene(nullptr)
 , m_trackLoader(new TrackLoader)
+, m_screenIndex(m_settings.loadValue(m_settings.screenKey(), 0))
 , m_updateFps(60)
 , m_updateDelay(1000 / m_updateFps)
 , m_timeStep(1000 / m_updateFps)
@@ -95,7 +100,7 @@ Game::Game(int & argc, char ** argv)
         m_renderer->setCursor(Qt::BlankCursor);
     });
 
-    connect(m_eventHandler, SIGNAL(soundRequested(QString)), m_audioWorker, SLOT(playSound(QString)));
+    connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
     connect(&m_updateTimer, &QTimer::timeout, [this] () {
         m_stateMachine->update();
@@ -108,11 +113,7 @@ Game::Game(int & argc, char ** argv)
 
     connect(m_stateMachine, &StateMachine::exitGameRequested, this, &Game::exitGame);
 
-    // Add race track search paths
-    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
-        QDir::separator() + "levels");
-    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
-        Config::Common::TRACK_SEARCH_PATH);
+    addTrackSearchPaths();
 
     m_elapsed.start();
 }
@@ -128,9 +129,12 @@ static void printHelp()
     std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
     std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
-    std::cout << "--no-vsync    Force vsync off." << std::endl;
+    std::cout << "--debug           Set log level to debug." << std::endl;
+    std::cout << "--help            Show this help." << std::endl;
+    std::cout << "--screen [index]  Force a certain screen on multi-display setups." << std::endl;
+    std::cout << "--trace           Set log level to trace." << std::endl;
+    std::cout << "--lang [lang]     Force language: fi, fr, it, cs, ru." << std::endl;
+    std::cout << "--no-vsync        Force vsync off." << std::endl;
     std::cout << std::endl;
 }
 
@@ -144,12 +148,28 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
     if (appTranslator.load(QString(DATA_PATH) + "/translations/dustrac-game_" + lang))
     {
         app.installTranslator(&appTranslator);
-        MCLogger().info() << "Loaded translations for " << lang.toStdString();
+        L().info() << "Loaded translations for " << lang.toStdString();
     }
     else
     {
-        MCLogger().warning() << "Failed to load translations for " << lang.toStdString();
+        L().warning() << "Failed to load translations for " << lang.toStdString();
     }
+}
+
+void Game::addTrackSearchPaths()
+{
+    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
+        QDir::separator() + "levels");
+    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
+        Config::Common::TRACK_SEARCH_PATH);
+
+    // See: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html,
+    //      https://github.com/juzzlin/DustRacing2D/issues/49
+#ifdef __unix__
+    const auto env = QProcessEnvironment::systemEnvironment();
+    const auto xdgDataHome = "XDG_DATA_HOME";
+    m_trackLoader->addTrackSearchPath(env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + Config::Common::TRACK_SEARCH_PATH_XDG);
+#endif
 }
 
 void Game::parseArgs(int argc, char ** argv)
@@ -157,20 +177,38 @@ void Game::parseArgs(int argc, char ** argv)
     QString lang = "";
 
     const std::vector<QString> args(argv, argv + argc);
-    for (unsigned int i = 0; i < args.size(); i++)
+    for (size_t i = 1; i < args.size(); i++)
     {
         if (args[i] == "-h" || args[i] == "--help")
         {
             printHelp();
             throw UserException("Exit due to help.");
         }
+        else if (args[i] == "--screen" && (i + i) < args.size())
+        {
+            m_screenIndex = args[++i].toInt();
+            m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
+        }
         else if (args[i] == "--lang" && (i + i) < args.size())
         {
-            lang = args[i + 1];
+            lang = args[++i];
         }
         else if (args[i] == "--no-vsync")
         {
             m_forceNoVSync = true;
+        }
+        else if (args[i] == "--debug")
+        {
+            L::setLoggingLevel(L::Level::Debug);
+        }
+        else if (args[i] == "--trace")
+        {
+            L::setLoggingLevel(L::Level::Trace);
+        }
+        else
+        {
+            printHelp();
+            throw std::runtime_error("Unknown argument: " + args[i].toStdString());
         }
     }
 
@@ -179,25 +217,6 @@ void Game::parseArgs(int argc, char ** argv)
 
 void Game::createRenderer()
 {
-    // Create the main window / renderer
-    int hRes, vRes;
-    bool fullScreen = false;
-
-    m_settings.loadResolution(hRes, vRes, fullScreen);
-
-    if (!hRes || !vRes)
-    {
-        hRes = QGuiApplication::primaryScreen()->geometry().width();
-        vRes = QGuiApplication::primaryScreen()->geometry().height();
-    }
-
-    adjustSceneSize(hRes, vRes);
-
-    MCLogger().info()
-        << "Resolution: " << hRes << " " << vRes << " " << fullScreen;
-
-    MCLogger().info() << "Creating the renderer..";
-
     QSurfaceFormat format;
 
 #ifdef __MC_GL30__
@@ -222,12 +241,39 @@ void Game::createRenderer()
     }
 #endif
 
+    // Create the main window / renderer
+    int hRes, vRes;
+    bool fullScreen = false;
+
+    m_settings.loadResolution(hRes, vRes, fullScreen);
+
+    const auto screens = QGuiApplication::screens();
+
+    L().info() << "Screen: " << m_screenIndex << "/" << screens.size();
+
+    m_screen = m_screenIndex < screens.size() ? screens.at(m_screenIndex) : screens.at(0);
+
+    if (!hRes || !vRes)
+    {
+        hRes = m_screen->geometry().width();
+        vRes = m_screen->geometry().height();
+    }
+
+    adjustSceneSize(m_screen->geometry().width(), m_screen->geometry().height());
+
+    L().info() << "Screen resolution: " << m_screen->geometry().width() << " " << m_screen->geometry().height();
+
+    L().info() << "Virtual resolution: " << hRes << " " << vRes << " " << fullScreen;
+
+    L().debug() << "Creating the renderer..";
+
     m_renderer = new Renderer(hRes, vRes, fullScreen, m_world->renderer().glScene());
     m_renderer->setFormat(format);
     m_renderer->setCursor(Qt::BlankCursor);
 
     if (fullScreen)
     {
+        m_renderer->setGeometry(m_screen->geometry());
         m_renderer->showFullScreen();
     }
     else
@@ -324,12 +370,17 @@ int Game::run()
     return m_app.exec();
 }
 
+QScreen * Game::screen() const
+{
+  return m_screen;
+}
+
 bool Game::loadTracks()
 {
     // Load track data
     if (int numLoaded = m_trackLoader->loadTracks(m_lapCount, m_difficultyProfile.difficulty()))
     {
-        MCLogger().info() << "A total of " << numLoaded << " race track(s) loaded.";
+        L().info() << "A total of " << numLoaded << " race track(s) loaded.";
     }
     else
     {
@@ -409,12 +460,12 @@ void Game::togglePause()
     if (m_paused)
     {
         start();
-        MCLogger().info() << "Game continued.";
+        L().info() << "Game continued.";
     }
     else
     {
         stop();
-        MCLogger().info() << "Game paused.";
+        L().info() << "Game paused.";
     }
 }
 

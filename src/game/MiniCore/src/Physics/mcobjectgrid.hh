@@ -48,9 +48,7 @@ public:
     /*! Constructor.
      *  \param x1,y1,x2,y2 represent the size of the first-level bounding box.
      *  \param leafMaxW,leafMaxH are the maximum dimensions for leaves. */
-    MCObjectGrid(
-        float x1, float y1, float x2, float y2,
-        float leafMaxW, float leafMaxH);
+    MCObjectGrid(float x1, float y1, float x2, float y2, float leafMaxW, float leafMaxH);
 
     //! Destructor.
     ~MCObjectGrid();
@@ -99,11 +97,11 @@ private:
 
     float m_leafMaxH;
 
-    unsigned int m_horSize;
+    size_t m_horSize;
 
-    unsigned int m_verSize;
+    size_t m_verSize;
 
-    unsigned int m_i0, m_i1, m_j0, m_j1;
+    size_t m_i0, m_i1, m_j0, m_j1;
 
     float m_helpHor;
 

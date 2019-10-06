@@ -39,7 +39,7 @@ A separate engine, MiniCore, is used for physics modeling.
 
 ## License
 
-Dust Racing source code is licensed under GNU GPLv3. 
+Dust Racing source code is licensed under GNU GPLv3.
 See COPYING for the complete license text.
 
 Dust Racing includes the source code for the GLEW library.
@@ -84,24 +84,36 @@ The record times and best positions are stored separately for each lap count.
 
 Your tires will wear out as the race progresses. This causes more and more sliding.
 
-Fortunately there's a pit (the yellow rectangle). 
+Fortunately there's a pit (the yellow rectangle).
 By stopping on the pit your tires will be repaired.
 
 ### Custom track files
 
-Dust Racing searches for race tracks also in ~/DustRacingTracks/
-where you can place your own race tracks.
+Dust Racing searches for race tracks in `~/DustRacingTracks/` where you can place your own race tracks.
+
+On Linux/Unix also `$XDG_DATA_HOME/DustRacing2D/tracks` is added to search paths, or `$HOME/.local/share/DustRacing2D/tracks` if `$XDG_DATA_HOME` is not defined.
 
 ## Command line options
 
---lang [lang] forces the language. Currently available: fi, cs, de, it, fr.
+`--lang [lang]` forces the language. Currently available: `fi`, `cs`, `de`, `it`, `fr`, `ru`.
 
-E.g. ./dustrac-game --lang it
+E.g. `dustrac-game --lang it`
+
+`--screen [index]` forces the screen on multi-display setups when in fullscreen mode.
+
+E.g. `dustrac-game --screen 1` would start the game on the second display.
 
 ## Building the project
 
-Please refer to the INSTALL document for build/install instructions if you're
-going to build Dust Racing 2D from sources.
+Please refer to the `INSTALL` document for build/install instructions if you're
+going to build **Dust Racing 2D** from sources.
 
--- Jussi Lind <jussi.lind@iki.fi>
+In a nutshell, on Linux after installing `Qt5`, `OpenAL` and `Vorbis` dev libs you just:
 
+`$ mkdir build && cd build`
+
+`$ cmake ..`
+
+`$ make`
+
+..or open the top-level `CMakeLists.txt` in **Qt Creator** or other IDE that supports CMake.

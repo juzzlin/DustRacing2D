@@ -49,7 +49,7 @@ void AboutDlg::initWidgets()
 
     QHBoxLayout * buttonLayout = new QHBoxLayout();
     QPushButton * button = new QPushButton("&Ok", this);
-    connect(button, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(button, &QPushButton::clicked, this, &AboutDlg::accept);
     buttonLayout->addWidget(button);
     buttonLayout->insertStretch(0);
     vLayout->addLayout(buttonLayout);

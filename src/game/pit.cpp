@@ -18,13 +18,13 @@
 
 #include <MCCollisionEvent>
 #include <MCPhysicsComponent>
+#include <MCSeparationEvent>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
 
 Pit::Pit(MCSurface & surface)
 : MCObject(surface, "pit")
-, m_tag(0)
 {
     physicsComponent().setMass(1, true); // Stationary
     setIsPhysicsObject(false);
@@ -32,40 +32,53 @@ Pit::Pit(MCSurface & surface)
     shape()->view()->setHasShadow(false);
 }
 
+void Pit::reset()
+{
+    m_possiblyPittingCars.clear();
+}
+
 void Pit::collisionEvent(MCCollisionEvent & event)
 {
     // Cache type id integers.
-    static unsigned int carType = MCObject::typeId("car");
-
+    static const auto carType = MCObject::typeId("car");
     if (event.collidingObject().typeId() == carType)
     {
         Car & car = static_cast<Car &>(event.collidingObject());
-        if (car.isHuman() && car.speedInKmh() < 25)
+        if (car.isHuman())
         {
-            if (m_pittingCars.find(&car) == m_pittingCars.end())
-            {
-                emit pitStop(car);
-            }
+            m_possiblyPittingCars.insert(&car);
+        }
+    }
+}
 
-            m_pittingCars[&car] = m_tag;
+void Pit::separationEvent(MCSeparationEvent & event)
+{
+    // Cache type id integers.
+    static const auto carType = MCObject::typeId("car");
+    if (event.separatedObject().typeId() == carType)
+    {
+        Car & car = static_cast<Car &>(event.separatedObject());
+        if (car.isHuman())
+        {
+            m_possiblyPittingCars.erase(&car);
         }
     }
 }
 
 void Pit::onStepTime(int)
 {
-    auto i = m_pittingCars.begin();
-    while (i != m_pittingCars.end())
+    auto iter = m_possiblyPittingCars.begin();
+    while (iter != m_possiblyPittingCars.end())
     {
-        if (i->second < m_tag)
+        if ((*iter)->speedInKmh() < 25)
         {
-            i = m_pittingCars.erase(i);
+            emit pitStop(**iter);
+
+            iter = m_possiblyPittingCars.erase(iter);
         }
         else
         {
-            i++;
+            iter++;
         }
     }
-
-    m_tag++;
 }

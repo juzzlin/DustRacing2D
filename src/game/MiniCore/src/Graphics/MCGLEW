@@ -13,6 +13,6 @@
       #include <GL/glext.h>
     #endif
   #else
-    #include <GLES/gl.h>
+    #include <GLES2/gl2.h>
   #endif
 #endif

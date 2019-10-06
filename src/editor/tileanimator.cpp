@@ -26,7 +26,7 @@ TileAnimator::TileAnimator(TrackTile * tile)
 {
     setFrameRange(0, FRAMES);
 
-    connect(this, SIGNAL(frameChanged(int)), this, SLOT(setTileRotation(int)));
+    connect(this, &TileAnimator::frameChanged, this, &TileAnimator::setTileRotation);
 }
 
 bool TileAnimator::rotate90CW()

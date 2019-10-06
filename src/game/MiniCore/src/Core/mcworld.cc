@@ -38,10 +38,13 @@
 #include "mcworldrenderer.hh"
 
 #include <cassert>
+#include <iostream>
 
-MCWorld * MCWorld::m_instance             = nullptr;
-float   MCWorld::m_metersPerUnit        = 1.0;
-float   MCWorld::m_metersPerUnitSquared = 1.0;
+MCWorld * MCWorld::m_instance = nullptr;
+
+float MCWorld::m_metersPerUnit = 1.0;
+
+float MCWorld::m_metersPerUnitSquared = 1.0;
 
 namespace {
 const int REMOVED_INDEX = -1;
@@ -52,21 +55,16 @@ MCWorld::MCWorld()
 , m_forceRegistry(new MCForceRegistry)
 , m_collisionDetector(new MCCollisionDetector)
 , m_impulseGenerator(new MCImpulseGenerator)
-, m_objectGrid(nullptr)
 , m_minX(0)
 , m_maxX(0)
 , m_minY(0)
 , m_maxY(0)
 , m_minZ(0)
 , m_maxZ(0)
-, m_leftWallObject(nullptr)
-, m_rightWallObject(nullptr)
-, m_topWallObject(nullptr)
-, m_bottomWallObject(nullptr)
 , m_numCollisions(0)
 , m_resolverLoopCount(5)
-, m_resolverStep(1.0 / m_resolverLoopCount)
-, m_gravity(MCVector3dF(0, 0, -9.81))
+, m_resolverStep(1.0f / m_resolverLoopCount)
+, m_gravity(MCVector3dF(0, 0, -9.81f))
 {
     if (!MCWorld::m_instance)
     {
@@ -90,14 +88,8 @@ MCWorld::~MCWorld()
     delete m_forceRegistry;
     delete m_collisionDetector;
     delete m_impulseGenerator;
-    delete m_objectGrid;
 
     MCWorld::m_instance = nullptr;
-
-    delete m_leftWallObject;
-    delete m_rightWallObject;
-    delete m_topWallObject;
-    delete m_bottomWallObject;
 }
 
 /**
@@ -118,12 +110,6 @@ void MCWorld::integrate(int step)
 
         object->onStepTime(step);
     }
-}
-
-void MCWorld::detectCollisions()
-{
-    // Check collisions for all registered objects
-    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectGrid);
 }
 
 void MCWorld::generateImpulses()
@@ -183,6 +169,7 @@ void MCWorld::clear()
     m_objectGrid->removeAll();
     m_objs.clear();
     m_removeObjs.clear();
+    m_collisionDetector->clear();
 }
 
 void MCWorld::setDimensions(
@@ -206,11 +193,8 @@ void MCWorld::setDimensions(
     // Init objectGrid
     const float leafWidth = (maxX - minX) / gridSize;
     const float leafHeight = (maxY - minY) / gridSize;
-    delete m_objectGrid;
-    m_objectGrid = new MCObjectGrid(
-        m_minX, m_minY,
-        m_maxX, m_maxY,
-        leafWidth, leafHeight);
+
+    m_objectGrid.reset(new MCObjectGrid(m_minX, m_minY, m_maxX, m_maxY, leafWidth, leafHeight));
 
     if (addAreaWalls)
     {
@@ -221,12 +205,11 @@ void MCWorld::setDimensions(
         if (m_leftWallObject)
         {
             removeObjectNow(*m_leftWallObject);
-            delete m_leftWallObject;
         }
 
         const float wallRestitution = 0.25f;
 
-        m_leftWallObject = new MCObject("LEFT_WALL");
+        m_leftWallObject.reset(new MCObject("LEFT_WALL"));
         m_leftWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_leftWallObject->physicsComponent().setMass(0, true);
         m_leftWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -236,10 +219,9 @@ void MCWorld::setDimensions(
         if (m_rightWallObject)
         {
             removeObjectNow(*m_rightWallObject);
-            delete m_rightWallObject;
         }
 
-        m_rightWallObject = new MCObject("RIGHT_WALL");
+        m_rightWallObject.reset(new MCObject("RIGHT_WALL"));
         m_rightWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_rightWallObject->physicsComponent().setMass(0, true);
         m_rightWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -249,10 +231,9 @@ void MCWorld::setDimensions(
         if (m_topWallObject)
         {
             removeObjectNow(*m_topWallObject);
-            delete m_topWallObject;
         }
 
-        m_topWallObject = new MCObject("TOP_WALL");
+        m_topWallObject.reset(new MCObject("TOP_WALL"));
         m_topWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_topWallObject->physicsComponent().setMass(0, true);
         m_topWallObject->physicsComponent().setRestitution(wallRestitution);
@@ -262,15 +243,40 @@ void MCWorld::setDimensions(
         if (m_bottomWallObject)
         {
             removeObjectNow(*m_bottomWallObject);
-            delete m_bottomWallObject;
         }
 
-        m_bottomWallObject = new MCObject("BOTTOM_WALL");
+        m_bottomWallObject.reset(new MCObject("BOTTOM_WALL"));
         m_bottomWallObject->setShape(MCShapePtr(new MCRectShape(nullptr, w, h)));
         m_bottomWallObject->physicsComponent().setMass(0, true);
         m_bottomWallObject->physicsComponent().setRestitution(wallRestitution);
         m_bottomWallObject->addToWorld();
         m_bottomWallObject->translate(MCVector3dF(w / 2, -h / 2, 0));
+    }
+    else
+    {
+        if (m_leftWallObject)
+        {
+            removeObjectNow(*m_leftWallObject);
+            m_leftWallObject.reset();
+        }
+
+        if (m_rightWallObject)
+        {
+            removeObjectNow(*m_rightWallObject);
+            m_rightWallObject.reset();
+        }
+
+        if (m_topWallObject)
+        {
+            removeObjectNow(*m_topWallObject);
+            m_topWallObject.reset();
+        }
+
+        if (m_bottomWallObject)
+        {
+            removeObjectNow(*m_bottomWallObject);
+            m_bottomWallObject.reset();
+        }
     }
 }
 
@@ -382,6 +388,7 @@ void MCWorld::doRemoveObject(MCObject & object)
     if (object.isPhysicsObject() && !object.bypassCollisions())
     {
         m_objectGrid->remove(object);
+        m_collisionDetector->remove(object);
     }
 
     object.setRemoving(false);
@@ -392,8 +399,8 @@ void MCWorld::removeObjectFromIntegration(MCObject & object)
     // Remove from object vector (O(1))
     if (object.index() > REMOVED_INDEX && object.index() < static_cast<int>(m_objs.size()))
     {
-        m_objs[object.index()] = m_objs.back();
-        m_objs[object.index()]->setIndex(object.index());
+        m_objs[static_cast<size_t>(object.index())] = m_objs.back();
+        m_objs[static_cast<size_t>(object.index())]->setIndex(object.index());
         m_objs.pop_back();
         object.setIndex(REMOVED_INDEX);
     }
@@ -424,20 +431,18 @@ void MCWorld::processRemovedObjects()
 
 void MCWorld::processCollisions()
 {
-    detectCollisions();
-
+    // Check collisions for all registered objects
+    m_numCollisions = m_collisionDetector->detectCollisions(*m_objectGrid);
     if (m_numCollisions)
     {
         generateImpulses();
 
         // Process contacts and generate impulses
-        m_collisionDetector->enablePrimaryCollisionEvents(false);
         for (unsigned int i = 0; i < m_resolverLoopCount && m_numCollisions > 0; i++)
         {
-            detectCollisions();
+            m_numCollisions = m_collisionDetector->iterateCurrentCollisions();
             resolvePositions(m_resolverStep);
         }
-        m_collisionDetector->enablePrimaryCollisionEvents(true);
     }
 }
 

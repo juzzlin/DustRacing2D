@@ -34,35 +34,30 @@ public:
     MCCircleShape(MCShapeViewPtr view, float radius);
 
     //! Destructor
-    virtual ~MCCircleShape();
+    virtual ~MCCircleShape() override;
 
     //! \reimp
-    bool contains(const MCVector2d<float> & p) const;
+    bool contains(const MCVector2d<float> & p) const override;
 
     //! \reimp
-    float interpenetrationDepth(const MCSegment<float> & p, MCVector2dF & contactNormal) const;
+    float interpenetrationDepth(const MCSegment<float> & p, MCVector2dF & contactNormal) const override;
 
     //! Specialized version to get interpenetration depth and contact normal.
     float interpenetrationDepth(const MCCircleShape & p, MCVector2dF & contactNormal) const;
 
     //! \reimp
-    MCVector2d<float> contactNormal(const MCSegment<float> & p) const;
-
-    //! Return type id
-    static unsigned int typeId();
+    MCVector2d<float> contactNormal(const MCSegment<float> & p) const override;
 
     //! \reimp
-    virtual unsigned int instanceTypeId() const;
+    virtual MCShape::Type type() const override;
 
     //! \reimp
-    virtual MCBBox<float> bbox() const;
+    virtual MCBBox<float> bbox() const override;
 
 private:
 
     DISABLE_COPY(MCCircleShape);
     DISABLE_ASSI(MCCircleShape);
-
-    static unsigned int m_typeId;
 };
 
 #endif // MCCIRCLESHAPE_HH

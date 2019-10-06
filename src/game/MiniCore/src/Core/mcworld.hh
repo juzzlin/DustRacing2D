@@ -25,6 +25,7 @@
 #include "mcvector3d.hh"
 #include "mcrendergroup.hh"
 
+#include <memory>
 #include <vector>
 
 class MCCamera;
@@ -198,8 +199,6 @@ private:
 
     void doRemoveObject(MCObject & object);
 
-    void detectCollisions();
-
     void generateImpulses();
 
     void resolvePositions(float accuracy);
@@ -216,7 +215,7 @@ private:
 
     MCImpulseGenerator * m_impulseGenerator;
 
-    MCObjectGrid * m_objectGrid;
+    std::unique_ptr<MCObjectGrid> m_objectGrid;
 
     static float m_metersPerUnit;
 
@@ -228,13 +227,13 @@ private:
 
     MCWorld::ObjectVector m_removeObjs;
 
-    MCObject * m_leftWallObject;
+    std::unique_ptr<MCObject> m_leftWallObject;
 
-    MCObject * m_rightWallObject;
+    std::unique_ptr<MCObject> m_rightWallObject;
 
-    MCObject * m_topWallObject;
+    std::unique_ptr<MCObject> m_topWallObject;
 
-    MCObject * m_bottomWallObject;
+    std::unique_ptr<MCObject> m_bottomWallObject;
 
     unsigned int m_numCollisions;
 

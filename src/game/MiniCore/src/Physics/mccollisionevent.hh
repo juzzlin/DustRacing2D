@@ -39,10 +39,10 @@ public:
 
     /*! Constructor.
      * \param collidingObject The colliding object. */
-    MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint, bool isPrimary = true);
+    MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint);
 
     //! Destructor.
-    ~MCCollisionEvent();
+    ~MCCollisionEvent() override;
 
     //! Get colling object.
     MCObject & collidingObject() const;
@@ -54,11 +54,7 @@ public:
     static unsigned int typeId();
 
     //! \reimp
-    virtual unsigned int instanceTypeId() const;
-
-    /*! \return true if the event is a primary event. Non-primary events may be generated
-     *  during collision resolution. */
-    bool isPrimary() const;
+    virtual unsigned int instanceTypeId() const override;
 
 private:
 
@@ -68,8 +64,6 @@ private:
     MCObject & m_collidingObject;
 
     MCVector3dF m_contactPoint;
-
-    bool m_isPrimary;
 
     static unsigned int m_typeId;
 };

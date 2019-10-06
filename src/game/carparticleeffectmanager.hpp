@@ -49,11 +49,14 @@ private:
 
     float calculateSkidAngle(float distance, double dx, double dy);
 
-    Car &       m_car;
-    int         m_sparkleCounter;
-    int         m_smokeCounter;
-    int         m_mudCounter;
+    Car & m_car;
+
+    int m_smokeCounter;
+
+    int m_mudCounter;
+
     MCVector2dF m_prevLeftSkidMarkLocation;
+
     MCVector2dF m_prevRightSkidMarkLocation;
 };
 

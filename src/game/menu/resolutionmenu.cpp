@@ -25,10 +25,8 @@
 #include <MenuItemView>
 #include <MenuManager>
 
-#include <MCLogger>
+#include "simple_logger.hpp"
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QObject> // for tr()
 #include <QScreen>
 
@@ -66,7 +64,7 @@ public:
             const int hRes = m_parent.hRes();
             const int vRes = m_parent.vRes();
             Settings::instance().saveResolution(hRes, vRes, m_fullScreen);
-            MCLogger().info()
+            juzzlin::L().info()
                 << "Resolution set: " << hRes << " " << vRes
                 << " Full screen: " << m_fullScreen;
 
@@ -150,8 +148,8 @@ ResolutionMenu::ResolutionMenu(
 , m_confirmationMenu(confirmationMenu)
 {
     const int numResolutions = 8;
-    const int fullHRes = QGuiApplication::primaryScreen()->geometry().width();
-    const int fullVRes = QGuiApplication::primaryScreen()->geometry().height();
+    const int fullHRes = Game::instance().screen()->geometry().width();
+    const int fullVRes = Game::instance().screen()->geometry().height();
     const int itemHeight = height / (numResolutions + 3);
 
     int itemHRes = fullHRes;

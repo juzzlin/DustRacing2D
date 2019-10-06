@@ -18,6 +18,7 @@
 #include "layers.hpp"
 
 #include <MCCollisionEvent>
+#include <MCSeparationEvent>
 #include <MCRectShape>
 #include <MCPhysicsComponent>
 
@@ -44,4 +45,9 @@ void BridgeTrigger::collisionEvent(MCCollisionEvent & event)
     {
         m_bridge.enterObject(event.collidingObject());
     }
+}
+
+void BridgeTrigger::separationEvent(MCSeparationEvent & event)
+{
+    m_bridge.exitObject(event.separatedObject());
 }

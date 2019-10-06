@@ -19,9 +19,10 @@
 #include <MCObject>
 #include <QObject>
 
-#include <map>
+#include <set>
 
 class MCCollisionEvent;
+class MCSeparationEvent;
 class MCSurface;
 class Car;
 
@@ -35,8 +36,13 @@ public:
     //! Constructor.
     Pit(MCSurface & surface);
 
+    void reset();
+
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
+
+    //! \reimp
+    virtual void separationEvent(MCSeparationEvent & event) override;
 
     //! \reimp
     virtual void onStepTime(int step) override;
@@ -47,8 +53,7 @@ signals:
 
 private:
 
-    std::map<Car *, int> m_pittingCars;
-    int                  m_tag;
+    std::set<Car *> m_possiblyPittingCars;
 };
 
 #endif // PIT_HPP

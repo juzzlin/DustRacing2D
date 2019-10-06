@@ -113,6 +113,8 @@ private:
 
     void addTrackObjectsToWorld();
 
+    void connectComponents();
+
     void createBridgeObjects();
 
     void createCars();
@@ -121,7 +123,9 @@ private:
 
     void createNormalObjects();
 
-    void initRace();
+    void initializeComponents();
+
+    void initializeRace();
 
     void processUserInput(InputHandler & handler);
 
@@ -149,7 +153,7 @@ private:
 
     void updateRace();
 
-    void updateWorld(float timeStep);
+    void updateWorld(int timeStep);
 
     static int m_width;
 
@@ -161,7 +165,7 @@ private:
 
     Renderer & m_renderer;
 
-    MessageOverlay * m_messageOverlay;
+    std::unique_ptr<MessageOverlay> m_messageOverlay;
 
     Race m_race;
 
@@ -173,11 +177,11 @@ private:
 
     TimingOverlay m_timingOverlay[2];
 
-    Startlights * m_startlights;
+    std::unique_ptr<Startlights> m_startlights;
 
-    StartlightsOverlay  * m_startlightsOverlay;
+    std::unique_ptr<StartlightsOverlay> m_startlightsOverlay;
 
-    CheckeredFlag * m_checkeredFlag;
+    std::unique_ptr<CheckeredFlag> m_checkeredFlag;
 
     MCCamera m_camera[2];
 
@@ -185,13 +189,13 @@ private:
 
     MTFH::MenuPtr m_mainMenu;
 
-    MTFH::MenuManager * m_menuManager;
+    std::unique_ptr<MTFH::MenuManager> m_menuManager;
 
-    Intro * m_intro;
+    std::unique_ptr<Intro> m_intro;
 
-    ParticleFactory * m_particleFactory;
+    std::unique_ptr<ParticleFactory> m_particleFactory;
 
-    FadeAnimation * m_fadeAnimation;
+    std::unique_ptr<FadeAnimation> m_fadeAnimation;
 
     Minimap m_minimap[2];
 

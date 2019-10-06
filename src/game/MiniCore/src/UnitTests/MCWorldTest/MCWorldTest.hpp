@@ -31,11 +31,15 @@ private slots:
 
     void testAddToWorld();
 
+    void testCollisionEvent_RectRect();
+
+    void testCollisionEvent_RectCircle();
+
+    void testCollisionEvent_CircleCircle();
+
     void testInstance();
 
     void testSetDimensions();
-
-    void testSimpleCollision();
 
     void testSleepingObjectRemovalFromIntegration();
 };

@@ -62,30 +62,20 @@ bool AudioWorker::enabled() const
 
 void AudioWorker::connectAudioSource(AudioSource & source)
 {
-    connect(&source, SIGNAL(playRequested(QString, bool)),
-        this, SLOT(playSound(QString, bool)));
-    connect(&source, SIGNAL(stopRequested(QString)),
-        this, SLOT(stopSound(QString)));
-    connect(&source, SIGNAL(pitchChanged(QString, float)),
-        this, SLOT(setPitch(QString, float)));
-    connect(&source, SIGNAL(volumeChanged(QString, float)),
-        this, SLOT(setVolume(QString, float)));
-    connect(&source, SIGNAL(locationChanged(QString, float, float)),
-        this, SLOT(setLocation(QString, float, float)));
+    connect(&source, &AudioSource::playRequested, this, &AudioWorker::playSound);
+    connect(&source, &AudioSource::stopRequested, this, &AudioWorker::stopSound);
+    connect(&source, &AudioSource::pitchChanged, this, &AudioWorker::setPitch);
+    connect(&source, &AudioSource::volumeChanged, this, &AudioWorker::setVolume);
+    connect(&source, &AudioSource::locationChanged, this, &AudioWorker::setLocation);
 }
 
 void AudioWorker::disconnectAudioSource(AudioSource & source)
 {
-    disconnect(&source, SIGNAL(playRequested(QString, bool)),
-        this, SLOT(playSound(QString, bool)));
-    disconnect(&source, SIGNAL(stopRequested(QString)),
-        this, SLOT(stopSound(QString)));
-    disconnect(&source, SIGNAL(pitchChanged(QString, float)),
-        this, SLOT(setPitch(QString, float)));
-    disconnect(&source, SIGNAL(volumeChanged(QString, float)),
-        this, SLOT(setVolume(QString, float)));
-    disconnect(&source, SIGNAL(locationChanged(QString, float, float)),
-        this, SLOT(setLocation(QString, float, float)));
+    disconnect(&source, &AudioSource::playRequested, this, &AudioWorker::playSound);
+    disconnect(&source, &AudioSource::stopRequested, this, &AudioWorker::stopSound);
+    disconnect(&source, &AudioSource::pitchChanged, this, &AudioWorker::setPitch);
+    disconnect(&source, &AudioSource::volumeChanged, this, &AudioWorker::setVolume);
+    disconnect(&source, &AudioSource::locationChanged, this, &AudioWorker::setLocation);
 }
 
 void AudioWorker::loadSounds()

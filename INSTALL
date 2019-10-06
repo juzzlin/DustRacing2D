@@ -6,10 +6,9 @@ These are build & install instructions for Dust Racing 2D.
 Source code
 ===========
 
-The source tree includes source code for the track editor and
-the game itself. The game uses an 2D engine called MiniCore
-written by Jussi Lind. The code is "documented" by using
-Doxygen tags.
+The source tree includes source code for the track editor and the game itself.
+
+The code is "documented" with Doxygen tags.
 
 The source tree layout:
 
@@ -20,11 +19,21 @@ src/game/STFH/     : Sound Toolkit From Hell.
 src/editor/        : Source files for the track editor.
 src/common/        : Shared files between the editor and the game.
 src/images/        : Some SVG-images used as the source for final images.
+
+Data directory structure:
+
 data/              : Data mapping and configuration files.
+data/fonts/        : Font used by the game.
+data/icons/        : Icon files for game and editor.
 data/images/       : Image files and textures loaded by the game.
 data/levels/       : Level data.
-data/shaders/      : GLSL shaders.
-packaging/         : Example packaging for Ubuntu/Debian.
+data/models/       : 3D models.
+data/sounds/       : Sound files.
+data/translations/ : Released Qt translation files.
+
+Other:
+
+packaging/windows/ : NSIS packaging for Windows.
 
 Build systems
 =============
@@ -36,9 +45,10 @@ Toolchains
 
 GCC/MinGW and Clang are the only "officially" supported toolchains on Linux.
 
-Windows builds are done on Ubuntu with MXE (web: mxe.cc). The build script
+Windows builds are done in a Docker container with MXE (http://mxe.cc). The build script
 also generates automatically an NSIS Windows installer and a ZIP-archive.
-See scripts/mxeWindowsBuild.sh.
+
+See scripts/buildWindowsInstaller.sh and scripts/mxeWindowsBuild.sh.
 
 Building the project with Microsoft Visual C++ 2013 also works, but no automatic
 packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
@@ -59,88 +69,76 @@ Building in the command line on Linux (tested on Ubuntu 18.04)
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt5 development files 
-   - qt5-default package on Ubuntu
-   - qttools5-dev might also be needed on newer systems
+1) Install Qt5 development files
+   - qt5-default package on Ubuntu/Debian/Mint should install everything needed
+   - You might need to install also these manually depending on your system
+     - qttools5-dev
+     - libqt5opengl5-dev
+
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
+
 3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
+
 4) Install CMake (cmake on Debian/Ubuntu).
+
 5) Go to the source directory and run:
 
-$ mkdir build
-$ cd build
-$ cmake ..
+`$ mkdir build && cd build`
 
-This runs CMake that generates the makefiles.
+`$ cmake ..`
 
-You can also use Qt Creator to open the top-level CMakeLists.txt and build inside Qt Creator.
-There's also a convenience configure script which is just a wrapper for cmake.
-
-Anyway, if everything went ok with cmake, run:
-
-$ make
+`$ make`
 
 This will build the editor and the game binaries.
 
 Run the game:
 
-$ ./dustrac-game
+`$ ./dustrac-game`
 
 Optionally run the track editor:
 
-$ ./dustrac-editor
+`$ ./dustrac-editor`
 
 Run unit tests:
 
-$ ctest
+`$ ctest`
 
 Release build (in this example game installs under /usr):
 --------------------------------------------------------
 
-$ mkdir build
-$ cd build
-$ cmake .. -DReleaseBuild=1 -DCMAKE_INSTALL_PREFIX=/usr
+`$ mkdir build && cd build`
 
-This runs CMake that generates the makefiles.
-If everything went ok, run:
+`$ cmake .. -DReleaseBuild=ON -DCMAKE_INSTALL_PREFIX=/usr`
 
-$ make
+`$ make`
 
 This will build the editor and the game binaries.
 
 Install the binaries and data files:
 
-$ sudo make install
+`$ sudo make install`
 
-This installs also the desktop files so Dust Racing
+This installs also the desktop files so Dust Racing 2D
 should appear in your application menu.
 
-Cross-compiling for Windows with MXE on Linux (tested on Ubuntu 14.04)
-======================================================================
+Cross-compiling for Windows in Docker with MXE on Linux
+=======================================================
 
-1) Install MXE (http://mxe.cc)
-2) Install Qt5, Vorbis and OpenAL with MXE
-3) Run <Your MXE installation dir>/usr/i686-pc-mingw32/qt5/bin/qmake dustrac.pro
-4) make
+1) Install Docker
 
-There's also a script to build the game with a Windows installer:
-1) export DUSTRAC_RELEASE_VERSION=x.y.z (use the latest version)
-2) source ./scripts/mxeEnv.sh (assumes that MXE is installed in /opt/mxe)
-3) ./scripts/mxeWindowsBuild.sh
-
-The script checks that needed binaries are found.
+2) `$ ./scripts/buildWindowsInstaller.sh`
 
 CPack
 =====
 
 Dust Racing 2D has a support for CPack. It's not complete, but can be used to generate
-some generic binary packages.
+e.g. Debian packages.
 
-After a successful build run CPack:
+After a successful build with ReleaseBuild=ON run CPack:
 
-$ cpack
+`$ cpack -G DEB`
 
-This will generate .tar.gz and .sh binary packages on Linux.
+This will generate a Debian package.
 
 Building with Microsoft Visual C++
 ==================================
@@ -154,8 +152,15 @@ The project has been successfully compiled and executed with MSVC with the follo
 * MS Visual Studio 2013 for Desktop Windows
 
 1) Download and build Vorbis libraries and OpenAL Soft with the same toolchain
+
 2) Open the top-level CMakeLists.txt in Qt Creator, configure and build
+
 3) Copy the runtime files, like OpenAL DLL, to the same directory with the game binary
+
+Jenkins CI
+==========
+
+Jenkinsfile includes pipelines configuration for Jenkins CI.
 
 For packagers
 =============
@@ -165,7 +170,7 @@ all the runtime data. This can be set in the main CMakeLists.txt
 and is given to the game via -DDATA_PATH.
 
 The release build should be used when packaging (give
--DReleaseBuild=1 to cmake).
+-DReleaseBuild=ON to cmake).
 
 Currently the data files install to CMAKE_INSTALL_PREFIX/share/DustRacing
 and the binaries install to CMAKE_INSTALL_PREFIX/bin.
@@ -173,9 +178,4 @@ and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
 to cmake (or to the configure script).
-
-There's an example Debian packaging in packaging/debian/.
-
-
--- Jussi Lind <jussi.lind@iki.fi>
 

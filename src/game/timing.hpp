@@ -30,25 +30,25 @@ class Timing : public QObject
 public:
 
     //! Constructor.
-    explicit Timing(unsigned int cars, QObject * parent = nullptr);
+    explicit Timing(size_t cars, QObject * parent = nullptr);
 
     //! Completes the current lap for the given car.
-    void setLapCompleted(unsigned int index, bool isHuman);
+    void setLapCompleted(size_t index, bool isHuman);
 
     //! Completes the race for the given car.
-    void setRaceCompleted(unsigned int index, bool state, bool isHuman);
+    void setRaceCompleted(size_t index, bool state, bool isHuman);
 
     //! \return if the race is completed for the given car.
-    bool raceCompleted(unsigned int index) const;
+    bool raceCompleted(size_t index) const;
 
     //! Toggle timing activity of the given car.
-    void setIsActive(unsigned int index, bool state);
+    void setIsActive(size_t index, bool state);
 
     //! \return timing activity of the given car.
-    bool isActive(unsigned int index) const;
+    bool isActive(size_t index) const;
 
     //! \return the current lap for the given car.
-    int lap(unsigned int index) const;
+    int lap(size_t index) const;
 
     //! \return the lap for the leading car.
     int leadersLap() const;
@@ -57,23 +57,23 @@ public:
     int raceTime() const;
 
     //! \return the race time of given car in msecs.
-    int raceTime(unsigned int index) const;
+    int raceTime(size_t index) const;
 
     /*! \return the record race time for the given car in msecs or
      *  -1 if invalid car or time not set. */
-    int recordRaceTime(unsigned int index) const;
+    int recordRaceTime(size_t index) const;
 
     /*! \return last lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int lastLapTime(unsigned int index) const;
+    int lastLapTime(size_t index) const;
 
     /*! \return the current lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int currentLapTime(unsigned int index) const;
+    int currentLapTime(size_t index) const;
 
     /*! \return the record lap time in msecs for the given car or
      *  -1 if invalid car or time not set. */
-    int recordLapTime(unsigned int index) const;
+    int recordLapTime(size_t index) const;
 
     //! \return the current lap record or -1 if not set.
     int lapRecord() const;
@@ -104,7 +104,7 @@ public:
 
 signals:
 
-    void lapCompleted(unsigned int index, int msec);
+    void lapCompleted(size_t index, int msec);
 
     void lapRecordAchieved(int msec);
 
@@ -113,32 +113,21 @@ signals:
 private:
 
     //! Timing structure.
-    class Times
+    struct Times
     {
-    public:
-        Times()
-        : lastLapTime(-1)
-        , recordLapTime(-1)
-        , raceTime(0)
-        , recordRaceTime(0)
-        , lap(0)
-        , raceCompleted(false)
-        , isActive(true)
-        {}
+        int lastLapTime = -1;
 
-        int lastLapTime;
+        int recordLapTime = -1; // Personal best
 
-        int recordLapTime; // Personal best
+        int raceTime = 0;
 
-        int raceTime;
+        int recordRaceTime = 0; // Personal best
 
-        int recordRaceTime; // Personal best
+        int lap = 0;
 
-        int lap;
+        bool raceCompleted = false;
 
-        bool raceCompleted;
-
-        bool isActive;
+        bool isActive = true;
     };
 
     std::vector<Timing::Times> m_times;

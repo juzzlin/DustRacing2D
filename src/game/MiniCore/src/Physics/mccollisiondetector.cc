@@ -25,14 +25,43 @@
 #include "mccircleshape.hh"
 #include "mcrectshape.hh"
 #include "mccollisionevent.hh"
+#include "mcseparationevent.hh"
 
 MCCollisionDetector::MCCollisionDetector()
-: m_arePrimaryCollisionEventsEnabled(true)
 {}
 
-void MCCollisionDetector::enablePrimaryCollisionEvents(bool enable)
+bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
 {
-    m_arePrimaryCollisionEventsEnabled = enable;
+    auto && iter = m_currentCollisions.find(&object1);
+    if (iter != m_currentCollisions.end() && iter->second.count(&object2))
+    {
+        return true;
+    }
+
+    iter = m_currentCollisions.find(&object2);
+    return iter != m_currentCollisions.end() && iter->second.count(&object1);
+}
+
+void MCCollisionDetector::clear()
+{
+    m_currentCollisions.clear();
+}
+
+void MCCollisionDetector::remove(MCObject & object)
+{
+    auto && outer = m_currentCollisions.find(&object);
+    if (outer != m_currentCollisions.end())
+    {
+        for (auto && outerLinked : outer->second)
+        {
+            if (m_currentCollisions.count(outerLinked))
+            {
+                m_currentCollisions[outerLinked].erase(outer->first);
+            }
+        }
+
+        m_currentCollisions.erase(outer);
+    }
 }
 
 bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
@@ -48,31 +77,38 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
         {
             const bool triggerObjectInvolved = rect1.parent().isTriggerObject() || rect2.parent().isTriggerObject();
 
-            // Send collision event to owner of rect1
-            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i), m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect1.parent(), ev1);
+            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
+            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i));
 
-            // Send collision event to owner of rect2
-            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i), m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect2.parent(), ev2);
-
-            if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+            const bool areColliding = areCurrentlyColliding(rect1.parent(), rect2.parent());
+            if (!areColliding)
             {
-                MCVector2dF contactNormal;
-                MCVector2dF vertex = obbox1.vertex(i);
-                float depth = rect2.interpenetrationDepth(
-                    MCSegment<float>(vertex, rect1.location()), contactNormal);
+                MCObject::sendEvent(rect1.parent(), ev1);
+                MCObject::sendEvent(rect2.parent(), ev2);
+            }
 
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect2.parent(), vertex, contactNormal, depth);
-                    rect1.parent().addContact(contact);
-                }
+            m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
 
+            if ((ev1.accepted() && ev2.accepted()) || areColliding)
+            {
+                if (!triggerObjectInvolved)
                 {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect1.parent(), vertex, -contactNormal, depth);
-                    rect2.parent().addContact(contact);
+                    MCVector2dF contactNormal;
+                    MCVector2dF vertex = obbox1.vertex(i);
+                    float depth = rect2.interpenetrationDepth(
+                        MCSegment<float>(vertex, rect1.location()), contactNormal);
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect2.parent(), vertex, contactNormal, depth);
+                        rect1.parent().addContact(contact);
+                    }
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect1.parent(), vertex, -contactNormal, depth);
+                        rect2.parent().addContact(contact);
+                    }
                 }
 
                 collided = true;
@@ -113,30 +149,37 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
         {
             const bool triggerObjectInvolved = rect.parent().isTriggerObject() || circle.parent().isTriggerObject();
 
-            // Send collision event to owner of circle
-            MCCollisionEvent ev1(rect.parent(), circleVertex, m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(circle.parent(), ev1);
+            MCCollisionEvent ev1(rect.parent(), circleVertex);
+            MCCollisionEvent ev2(circle.parent(), circleVertex);
 
-            // Send collision event to owner of rect
-            MCCollisionEvent ev2(circle.parent(), circleVertex, m_arePrimaryCollisionEventsEnabled);
-            MCObject::sendEvent(rect.parent(), ev2);
-
-            if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+            const bool areColliding = areCurrentlyColliding(rect.parent(), circle.parent());
+            if (!areColliding)
             {
-                MCVector2dF contactNormal;
-                float depth = rect.interpenetrationDepth(
-                    MCSegment<float>(circleVertex, circle.location()), contactNormal);
+                MCObject::sendEvent(circle.parent(), ev1);
+                MCObject::sendEvent(rect.parent(), ev2);
+            }
 
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(rect.parent(), circleVertex, contactNormal, depth);
-                    circle.parent().addContact(contact);
-                }
+            m_currentCollisions[&rect.parent()].insert(&circle.parent());
 
+            if ((ev1.accepted() && ev2.accepted()) || areColliding)
+            {
+                if (!triggerObjectInvolved)
                 {
-                    MCContact & contact = MCContact::create();
-                    contact.init(circle.parent(), circleVertex, -contactNormal, depth);
-                    rect.parent().addContact(contact);
+                    MCVector2dF contactNormal;
+                    float depth = rect.interpenetrationDepth(
+                        MCSegment<float>(circleVertex, circle.location()), contactNormal);
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(rect.parent(), circleVertex, contactNormal, depth);
+                        circle.parent().addContact(contact);
+                    }
+
+                    {
+                        MCContact & contact = MCContact::create();
+                        contact.init(circle.parent(), circleVertex, -contactNormal, depth);
+                        rect.parent().addContact(contact);
+                    }
                 }
 
                 collided = true;
@@ -161,26 +204,33 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
     {
         const bool triggerObjectInvolved = circle1.parent().isTriggerObject() || circle2.parent().isTriggerObject();
 
-        // Send collision event to owner of circle2
-        MCCollisionEvent ev1(circle1.parent(), contactPoint, m_arePrimaryCollisionEventsEnabled);
-        MCObject::sendEvent(circle2.parent(), ev1);
+        MCCollisionEvent ev1(circle1.parent(), contactPoint);
+        MCCollisionEvent ev2(circle2.parent(), contactPoint);
 
-        // Send collision event to owner of circle1
-        MCCollisionEvent ev2(circle2.parent(), contactPoint, m_arePrimaryCollisionEventsEnabled);
-        MCObject::sendEvent(circle1.parent(), ev2);
-
-        if (!triggerObjectInvolved && (ev1.accepted() && ev2.accepted())) // Trigger objects should only trigger events
+        const bool areColliding = areCurrentlyColliding(circle1.parent(), circle2.parent());
+        if (!areColliding)
         {
-            {
-                MCContact & contact = MCContact::create();
-                contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
-                circle2.parent().addContact(contact);
-            }
+            MCObject::sendEvent(circle2.parent(), ev1);
+            MCObject::sendEvent(circle1.parent(), ev2);
+        }
 
+        m_currentCollisions[&circle1.parent()].insert(&circle2.parent());
+
+        if ((ev1.accepted() && ev2.accepted()) || areColliding)
+        {
+            if (!triggerObjectInvolved)
             {
-                MCContact & contact = MCContact::create();
-                contact.init(circle1.parent(), contactPoint, contactNormal, depth);
-                circle1.parent().addContact(contact);
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
+                    circle2.parent().addContact(contact);
+                }
+
+                {
+                    MCContact & contact = MCContact::create();
+                    contact.init(circle1.parent(), contactPoint, contactNormal, depth);
+                    circle1.parent().addContact(contact);
+                }
             }
 
             collided = true;
@@ -192,41 +242,38 @@ bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCir
 
 bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
 {
-    const unsigned int id1 = object1.shape()->instanceTypeId();
-    const unsigned int id2 = object2.shape()->instanceTypeId();
+    const auto type1 = object1.shape()->type();
+    const auto type2 = object2.shape()->type();
 
     // Rect against rect
-    if (id1 == MCRectShape::typeId() && id2 == MCRectShape::typeId())
+    if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Rect)
     {
-        // We must test first object1 against object2 and then
-        // the other way around.
-        if (testRectAgainstRect(
-            // Static cast because we know the types now.
+        // Test is not symmetric: must be done both ways
+        return testRectAgainstRect(
             *static_cast<MCRectShape *>(object1.shape().get()),
-            *static_cast<MCRectShape *>(object2.shape().get())))
-        {
-            return true;
-        }
-        else if (testRectAgainstRect(
-            // Static cast because we know the types now.
-            *static_cast<MCRectShape *>(object2.shape().get()),
-            *static_cast<MCRectShape *>(object1.shape().get())))
-        {
-            return true;
-        }
+            *static_cast<MCRectShape *>(object2.shape().get())) ||
+                testRectAgainstRect(
+                    *static_cast<MCRectShape *>(object2.shape().get()),
+                    *static_cast<MCRectShape *>(object1.shape().get()));
     }
-    // Rect against circle
-    else if (id1 == MCRectShape::typeId() && id2 == MCCircleShape::typeId())
+    // Rect against circle: Case 1
+    else if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Circle)
     {
-        // Static cast because we know the types now.
         return testRectAgainstCircle(
             *static_cast<MCRectShape *>(object1.shape().get()),
             *static_cast<MCCircleShape *>(object2.shape().get()));
     }
-    // Circle against circle
-    else if (id1 == MCCircleShape::typeId() && id2 == MCCircleShape::typeId())
+    // Rect against circle: Case 2
+    else if (type2 == MCShape::Type::Rect && type1 == MCShape::Type::Circle)
     {
-        // Static cast because we know the types now.
+        return testRectAgainstCircle(
+            *static_cast<MCRectShape *>(object2.shape().get()),
+            *static_cast<MCCircleShape *>(object1.shape().get()));
+    }
+    // Circle against circle
+    else if (type1 == MCShape::Type::Circle && type2 == MCShape::Type::Circle)
+    {
+        // This test is symmetric
         return testCircleAgainstCircle(
             *static_cast<MCCircleShape *>(object1.shape().get()),
             *static_cast<MCCircleShape *>(object2.shape().get()));
@@ -242,6 +289,50 @@ unsigned int MCCollisionDetector::detectCollisions(MCObjectGrid & objectGrid)
     for (auto && iter : objectGrid.getPossibleCollisions())
     {
         numCollisions += processPossibleCollision(*iter.first, *iter.second);
+    }
+
+    // For completeness iterate here if no possible collisions, but there still
+    // are old collisions. This can happen if colliding objects gets separated by
+    // directly translating them elsewhere.
+    if (!numCollisions && !m_currentCollisions.empty())
+    {
+        return iterateCurrentCollisions();
+    }
+
+    return numCollisions;
+}
+
+unsigned int MCCollisionDetector::iterateCurrentCollisions()
+{
+    unsigned int numCollisions = 0;
+
+    std::vector<std::pair<MCObject *, MCObject *>> removedCollisions;
+
+    for (auto && outer : m_currentCollisions)
+    {
+        for (auto && inner : outer.second)
+        {
+            if (!processPossibleCollision(*outer.first, *inner))
+            {
+                removedCollisions.push_back({outer.first, inner});
+            }
+            else
+            {
+                numCollisions++;
+            }
+        }
+    }
+
+    for (auto && collisionPair : removedCollisions)
+    {
+        m_currentCollisions[collisionPair.first].erase(collisionPair.second);
+        m_currentCollisions[collisionPair.second].erase(collisionPair.first);
+
+        MCSeparationEvent ev1(*collisionPair.second);
+        collisionPair.first->event(ev1);
+
+        MCSeparationEvent ev2(*collisionPair.first);
+        collisionPair.second->event(ev2);
     }
 
     return numCollisions;

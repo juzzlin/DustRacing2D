@@ -3,7 +3,7 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"2.0.1\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"2.0.3\\\"
 QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
@@ -34,6 +34,7 @@ INCLUDEPATH += . \
     STFH \
     menu \
     audio \
+    ../contrib/SimpleLogger/src
 
 # Input
 HEADERS += \
@@ -82,6 +83,7 @@ HEADERS += \
     fadeanimation.hpp \
     fontfactory.hpp \
     game.hpp \
+    gearbox.hpp \
     graphicsfactory.hpp \
     inputhandler.hpp \
     intro.hpp \
@@ -196,6 +198,7 @@ HEADERS += \
     MiniCore/src/Physics/mcrectshape.hh \
     MiniCore/src/Physics/mcsegment.hh \
     MiniCore/src/Physics/mcshape.hh \
+    MiniCore/src/Physics/mcseparationevent.hh \
     MiniCore/src/Physics/mcspringforcegenerator.hh \
     MiniCore/src/Physics/mcspringforcegenerator2dfast.hh \
     MiniCore/src/Text/mctexturefont.hh \
@@ -209,6 +212,7 @@ HEADERS += \
     STFH/listener.hpp \
     STFH/location.hpp \
     STFH/source.hpp \
+    ../contrib/SimpleLogger/src/simple_logger.hpp
 
 SOURCES += \
     ../common/mapbase.cpp \
@@ -255,6 +259,7 @@ SOURCES += \
     fadeanimation.cpp \
     fontfactory.cpp \
     game.cpp \
+    gearbox.cpp \
     graphicsfactory.cpp \
     inputhandler.cpp \
     intro.cpp \
@@ -344,6 +349,7 @@ SOURCES += \
     MiniCore/src/Physics/mcoutofboundariesevent.cc \
     MiniCore/src/Physics/mcphysicscomponent.cc \
     MiniCore/src/Physics/mcrectshape.cc \
+    MiniCore/src/Physics/mcseparationevent.cc \
     MiniCore/src/Physics/mcshape.cc \
     MiniCore/src/Physics/mcspringforcegenerator.cc \
     MiniCore/src/Physics/mcspringforcegenerator2dfast.cc \
@@ -359,6 +365,7 @@ SOURCES += \
     STFH/listener.cpp \
     STFH/location.cpp \
     STFH/source.cpp \
+    ../contrib/SimpleLogger/src/simple_logger.cpp
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsGame.rc

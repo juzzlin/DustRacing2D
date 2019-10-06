@@ -31,7 +31,7 @@ static void printHelp()
     std::cout << "Usage: dustrac-editor [options] [trackFile]" << std::endl << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, fr, it, cs." << std::endl;
+    std::cout << "--lang [lang] Force language: fi, fr, it, cs, ru." << std::endl;
     std::cout << std::endl;
 }
 
@@ -67,7 +67,7 @@ void Application::parseArgs(int argc, char ** argv)
         }
         else if (args[i] == "--lang" && (i + i) < args.size())
         {
-            lang = args[i + 1];
+            lang = args[++i];
         }
         else
         {

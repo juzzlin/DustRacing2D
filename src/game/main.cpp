@@ -25,7 +25,7 @@
 #include "application.hpp"
 #include "game.hpp"
 
-#include <MCLogger>
+#include "simple_logger.hpp"
 
 #include <iostream>
 #include <memory>
@@ -34,14 +34,21 @@
 
 static const char * INIT_ERROR = "Initializing the game failed!";
 
+using juzzlin::L;
+
 static void initLogger()
 {
-    QString logPath = QDir::tempPath() + QDir::separator() + "dustrac.log";
-    MCLogger::init(logPath.toStdString().c_str());
-    MCLogger::enableEchoMode(true);
-    MCLogger::enableDateTimePrefix(true);
-    MCLogger().info() << "Dust Racing 2D version " << VERSION;
-    MCLogger().info() << "Compiled against Qt version " << QT_VERSION_STR;
+    QString logPath = QDir::tempPath() + QDir::separator() + "dr2d.log";
+    L::init(logPath.toStdString().c_str());
+    L::enableDateTime(true);
+    L::setLevelSymbol(L::Level::Trace, "<T>");
+    L::setLevelSymbol(L::Level::Debug, "<D>");
+    L::setLevelSymbol(L::Level::Info, "<I>");
+    L::setLevelSymbol(L::Level::Warning, "<W>");
+    L::setLevelSymbol(L::Level::Fatal, "<F>");
+    L::enableEchoMode(true);
+    L().info() << "Dust Racing 2D version " << VERSION;
+    L().info() << "Compiled against Qt version " << QT_VERSION_STR;
 }
 
 int main(int argc, char ** argv)
@@ -60,7 +67,7 @@ int main(int argc, char ** argv)
 
         // Create the main game object. The game loop starts immediately after
         // the Renderer has been initialized.
-        MCLogger().info() << "Creating game object..";
+        L().debug() << "Creating game object..";
 
         game.reset(new Game(argc, argv));
 
@@ -70,8 +77,8 @@ int main(int argc, char ** argv)
     {
         if (!dynamic_cast<UserException *>(&e))
         {
-            MCLogger().fatal() << e.what();
-            MCLogger().fatal() << INIT_ERROR;
+            L().fatal() << e.what();
+            L().fatal() << INIT_ERROR;
         }
 
         game.reset();

@@ -48,8 +48,6 @@ void AI::update(bool isRaceCompleted)
             setRandomTolerance();
         }
 
-        m_car.clearStatuses();
-
         const Route & route = m_track->trackData().route();
         steerControl(route.get(m_car.currentTargetNodeIndex()));
 
@@ -181,11 +179,18 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
     if (brake)
     {
-        m_car.brake();
+        m_car.setAcceleratorEnabled(false);
+        m_car.setBrakeEnabled(true);
     }
     else if (accelerate)
     {
-        m_car.accelerate();
+        m_car.setAcceleratorEnabled(true);
+        m_car.setBrakeEnabled(false);
+    }
+    else
+    {
+        m_car.setAcceleratorEnabled(false);
+        m_car.setBrakeEnabled(false);
     }
 }
 

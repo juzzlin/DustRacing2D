@@ -29,6 +29,9 @@ public:
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
 
+    //! \reimp
+    virtual void separationEvent(MCSeparationEvent & event) override;
+
 private:
 
     Bridge & m_bridge;

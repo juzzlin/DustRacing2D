@@ -1,7 +1,6 @@
 README
 ======
 
-debian  : Example packaging for Ubuntu/Debian.
 windows : Packaging script for NSIS.
 
 -- Jussi Lind <jussi.lind@iki.fi>

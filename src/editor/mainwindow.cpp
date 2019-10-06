@@ -87,7 +87,7 @@ MainWindow::MainWindow(QString trackFile)
 
     if (!m_argTrackFile.isEmpty())
     {
-        QTimer::singleShot(0, this, SLOT(openArgTrack()));
+        QTimer::singleShot(0, this, &MainWindow::openArgTrack);
     }
     else
     {
@@ -171,7 +171,7 @@ void MainWindow::createWidgets()
     m_scaleSlider->setTracking(false);
     m_scaleSlider->setTickInterval(10);
     m_scaleSlider->setTickPosition(QSlider::TicksBelow);
-    connect(m_scaleSlider, SIGNAL(valueChanged(int)), this, SLOT(updateScale(int)));
+    connect(m_scaleSlider, &QSlider::valueChanged, this, &MainWindow::updateScale);
     QHBoxLayout * sliderLayout = new QHBoxLayout;
     sliderLayout->addWidget(new QLabel(tr("Scale:")));
     sliderLayout->addWidget(m_scaleSlider);
@@ -301,33 +301,33 @@ void MainWindow::populateMenuBar()
     QAction * newAct = new QAction(tr("&New..."), this);
     newAct->setShortcut(QKeySequence("Ctrl+N"));
     fileMenu->addAction(newAct);
-    connect(newAct, SIGNAL(triggered()), this, SLOT(initializeNewTrack()));
+    connect(newAct, &QAction::triggered, this, &MainWindow::initializeNewTrack);
 
     // Add "open"-action
     QAction * openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcut(QKeySequence("Ctrl+O"));
     fileMenu->addAction(openAct);
-    connect(openAct, SIGNAL(triggered()), this, SLOT(openTrack()));
+    connect(openAct, &QAction::triggered, this, &MainWindow::openTrack);
 
     // Add "save"-action
     m_saveAction = new QAction(tr("&Save"), this);
     m_saveAction->setShortcut(QKeySequence("Ctrl+S"));
     fileMenu->addAction(m_saveAction);
-    connect(m_saveAction, SIGNAL(triggered()), this, SLOT(saveTrack()));
+    connect(m_saveAction, &QAction::triggered, this, &MainWindow::saveTrack);
     m_saveAction->setEnabled(false);
 
     // Add "save as"-action
     m_saveAsAction = new QAction(tr("&Save as..."), this);
     m_saveAsAction->setShortcut(QKeySequence("Ctrl+Shift+S"));
     fileMenu->addAction(m_saveAsAction);
-    connect(m_saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsTrack()));
+    connect(m_saveAsAction, &QAction::triggered, this, &MainWindow::saveAsTrack);
     m_saveAsAction->setEnabled(false);
 
     // Add "quit"-action
     QAction * quitAct = new QAction(tr("&Quit"), this);
     quitAct->setShortcut(QKeySequence("Ctrl+W"));
     fileMenu->addAction(quitAct);
-    connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
+    connect(quitAct, &QAction::triggered, this, &MainWindow::close);
 
     // Create "edit"-menu
     QMenu * editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -363,7 +363,7 @@ void MainWindow::populateMenuBar()
     // Add "Set track properties"-action
     m_setTrackPropertiesAction = new QAction(tr("&Set properties.."), this);
     editMenu->addAction(m_setTrackPropertiesAction);
-    connect(m_setTrackPropertiesAction, SIGNAL(triggered()), this, SLOT(setTrackProperties()));
+    connect(m_setTrackPropertiesAction, &QAction::triggered, this, &MainWindow::setTrackProperties);
     m_setTrackPropertiesAction->setEnabled(false);
 
     // Create "route"-menu
@@ -372,13 +372,13 @@ void MainWindow::populateMenuBar()
     // Add "clear"-action
     m_clearRouteAction = new QAction(tr("Clear &route"), this);
     routeMenu->addAction(m_clearRouteAction);
-    connect(m_clearRouteAction, SIGNAL(triggered()), this, SLOT(clearRoute()));
+    connect(m_clearRouteAction, &QAction::triggered, this, &MainWindow::clearRoute);
     m_clearRouteAction->setEnabled(false);
 
     // Add "set order"-action
     m_setRouteAction = new QAction(tr("&Set route.."), this);
     routeMenu->addAction(m_setRouteAction);
-    connect(m_setRouteAction, SIGNAL(triggered()), this, SLOT(beginSetRoute()));
+    connect(m_setRouteAction, &QAction::triggered, this, &MainWindow::beginSetRoute);
     m_setRouteAction->setEnabled(false);
 
     // Create "help"-menu
@@ -387,12 +387,12 @@ void MainWindow::populateMenuBar()
     // Add "about"-action
     QAction * aboutAct = new QAction(tr("&About"), this);
     helpMenu->addAction(aboutAct);
-    connect(aboutAct, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
+    connect(aboutAct, &QAction::triggered, this, &MainWindow::showAboutDlg);
 
     // Add "about Qt"-action
     QAction * aboutQtAct = new QAction(tr("About &Qt"), this);
     helpMenu->addAction(aboutQtAct);
-    connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(showAboutQtDlg()));
+    connect(aboutQtAct, &QAction::triggered, this, &MainWindow::showAboutQtDlg);
 }
 
 void MainWindow::populateToolBar()
@@ -413,8 +413,7 @@ void MainWindow::populateToolBar()
     p->setData(QVariant(QString("clear")));
     m_toolBar->addAction(p);
 
-    connect(m_toolBar, SIGNAL(actionTriggered(QAction*)),
-        this, SLOT(handleToolBarActionClick(QAction*)));
+    connect(m_toolBar, &QToolBar::actionTriggered, this, &MainWindow::handleToolBarActionClick);
 
     m_toolBar->setEnabled(false);
 }

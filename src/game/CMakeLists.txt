@@ -24,7 +24,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/audio")
 
 # Translation files in src/game/translations (without .ts)
-set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs dustrac-game_fr dustrac-game_de)
+set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs dustrac-game_fr dustrac-game_de dustrac-game_ru)
 set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
@@ -59,6 +59,7 @@ set(SRC
     fadeanimation.cpp
     fontfactory.cpp
     game.cpp
+    gearbox.cpp
     graphicsfactory.cpp
     inputhandler.cpp
     intro.cpp
@@ -157,15 +158,13 @@ set(COMMON_LIBS
     MiniCore
     MTFH
     STFH
-    ${OPENGL_gl_LIBRARY}
-    ${OPENGL_glu_LIBRARY}
     ${OPENAL_LIBRARY}
     ${VORBISFILE_LIBRARIES}
     ${VORBISFILE_LIB} # Valid only with MSVC
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 11)
 
 foreach(TS_FILE ${TS})

@@ -24,8 +24,9 @@
 #include "game.hpp"
 
 #include <MCAssetManager>
-#include <MCLogger>
 #include <MCTextureText>
+
+#include "simple_logger.hpp"
 
 static const QString LAP_COUNT_KEY(Settings::lapCountKey());
 
@@ -62,7 +63,7 @@ LapCountMenu::LapCountMenu(int width, int height)
         lapCountItem->setAction(
             [i]()
             {
-                MCLogger().info() << LAP_COUNTS[i] << " laps selected.";
+                juzzlin::L().info() << LAP_COUNTS[i] << " laps selected.";
                 Game::instance().setLapCount(LAP_COUNTS[i]);
                 Settings::instance().saveValue(LAP_COUNT_KEY, LAP_COUNTS[i]);
                 MenuManager::instance().pushMenu(TrackSelectionMenu::MenuId);

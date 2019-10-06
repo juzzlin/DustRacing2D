@@ -1,5 +1,8 @@
 ; Script for NSIS packaging.
 
+!include MUI2.nsh
+!include LogicLib.nsh
+
 !define PRODUCTNAME            "Dust Racing 2D"
 !define APPNAME-GAME           "Dust Racing 2D"
 !define APPNAME-EDITOR         "Dust Racing 2D Level Editor"
@@ -7,13 +10,13 @@
 !define DESCRIPTION            "A traditional top-down racing game."
 !define VERSIONMAJOR           2
 !define VERSIONMINOR           0
-!define VERSIONBUILD           1
+!define VERSIONBUILD           3
 !define HELPURL                "http://juzzlin.github.io/DustRacing2D/"
 !define UPDATEURL              "https://github.com/juzzlin/DustRacing2D/releases"
 !define ABOUTURL               "http://juzzlin.github.io/DustRacing2D/"
 
-!define MUI_FILE               ""
-!define MUI_BRANDINGTEXT       ${PRODUCTNAME}
+;!define MUI_FILE               ""
+!define MUI_BRANDINGTEXT       "Dust Racing 2D"
 ;!define MUI_HEADERIMAGE
 ;!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
 !define MUI_ICON               "data\icons\DustRacing.ico"
@@ -29,9 +32,6 @@
 !define MUI_FINISHPAGE  
 
 CRCCheck On
-
-!include MUI2.nsh
-!include LogicLib.nsh
   
 RequestExecutionLevel admin
  
@@ -39,7 +39,7 @@ InstallDir "$PROGRAMFILES\${PRODUCTNAME}"
  
 Name "${PRODUCTNAME}"
 Icon "data\icons\DustRacing.ico"
-OutFile "dustrac-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-windows-x86-qt5_setup.exe"
+OutFile "dustracing2d-${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONBUILD}-windows-x86-qt5_setup.exe"
 
 !insertmacro MUI_LANGUAGE "English"
  

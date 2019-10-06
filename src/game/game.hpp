@@ -36,6 +36,7 @@ class StartlightsOverlay;
 class StateMachine;
 class TimingOverlay;
 class TrackLoader;
+class QScreen;
 
 //! The main game class.
 class Game : public QObject
@@ -114,6 +115,8 @@ public:
 
     const std::string & fontName() const;
 
+    QScreen * screen() const;
+
 public slots:
 
     void exitGame();
@@ -125,6 +128,8 @@ private slots:
     void togglePause();
 
 private:
+
+    void addTrackSearchPaths();
 
     void adjustSceneSize(int hRes, int vRes);
 
@@ -161,6 +166,10 @@ private:
     Scene * m_scene;
 
     TrackLoader * m_trackLoader;
+
+    QScreen * m_screen = nullptr;
+
+    int m_screenIndex = 0;
 
     int m_updateFps;
 

@@ -3,6 +3,8 @@ project(DustRacing2D)
 cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(VERSION 2.8.12)
 
+# Use cmake --help-policy [POLICY] for more information about these:
+
 if(POLICY CMP0005)
     cmake_policy(SET CMP0005 NEW)
 endif()
@@ -11,19 +13,35 @@ if(POLICY CMP0020)
     cmake_policy(SET CMP0020 NEW)
 endif()
 
+# Default to GLVND
+if(POLICY CMP0072)
+    cmake_policy(SET CMP0072 OLD)
+endif()
+
 # Global game version
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "1")
+set(VERSION_PATCH "3")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-option(ReleaseBuild "This should be used when creating DEB and RPM packages." OFF)
+# Some common CPack variables
+set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
+
+set(CPACK_PACKAGE_NAME dustracing2d)
+set(CPACK_PACKAGE_VENDOR Juzzlin)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "")
+set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/data/images/about.png)
+
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
+set(CPACK_RESOURCE_FILE_README ${CMAKE_SOURCE_DIR}/README.md)
+
+option(ReleaseBuild "This should be used when creating a build with install targets" OFF)
 
 option(VorbisLibsPath "Optional path hint for vorbis libs (libvorbis, libvorbisfile)." "")
 
 option(OggLibPath "Optional path hint for ogg lib (libogg)." "")
-
-option(USC "Enable install layout required by Ubuntu Software Center i.e. installs to /opt." OFF)
 
 option(DATA_PATH "Optional DATA_PATH for Linux release build." "")
 
@@ -36,6 +54,8 @@ option(GLES "Build for OpenGL ES 2.0" OFF)
 option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
 
 option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
+
+option(UnlockAllTracks "Unlock all tracks (for development purposes)" OFF)
 
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if( NOT CMAKE_BUILD_TYPE )
@@ -62,6 +82,11 @@ if(QOpenGLFunctions)
     add_definitions(-D__MC_NO_GLEW__)
 endif()
 
+if (UnlockAllTracks)
+    message(STATUS "All tracks unlocked")
+    add_definitions(-DUNLOCK_ALL_TRACKS)
+endif()
+
 add_definitions(-DGLEW_STATIC)
 add_definitions(-DGLEW_NO_GLU)
 
@@ -74,6 +99,14 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     add_compile_options("$<$<CONFIG:RELEASE>:-W;-Wall;-O3;-pedantic;-fomit-frame-pointer>")
     add_compile_options("$<$<CONFIG:DEBUG>:-W;-Wall;-O0;-pedantic>")
+
+    # Automatically use ccache if found
+    find_program(CCACHE_FOUND ccache)
+    if(CCACHE_FOUND)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    endif(CCACHE_FOUND)
+
 elseif(MSVC)
     add_definitions(-DNOMINMAX)
 endif()
@@ -95,6 +128,11 @@ find_package(Qt5Test ${QT_MIN_VER} REQUIRED)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
+    set(DUSTRAC_OPENGL_LIBS ${OPENGL_gl_LIBRARY})
+else()
+    set(DUSTRAC_OPENGL_LIBS OpenGL::GL)
+endif()
 
 # OpenAL for sounds. OpenAL directory can be given by -DOPENALDIR=...
 set(ENV{OPENALDIR} ${OpenALDir})
@@ -122,6 +160,9 @@ enable_testing()
 
 # Install paths depend on the build type and target platform
 resolve_install_paths()
+
+add_subdirectory(src/contrib/SimpleLogger)
+include_directories(src/contrib/SimpleLogger/src)
 
 add_subdirectory(src/editor)
 add_subdirectory(src/game)

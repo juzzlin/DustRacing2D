@@ -66,9 +66,15 @@ public:
     int loadValue(QString key, int defaultValue = 0);
 
     static QString difficultyKey();
+
     static QString fpsKey();
+
     static QString lapCountKey();
+
     static QString soundsKey();
+
+    static QString screenKey();
+
     static QString vsyncKey();
 
 private:

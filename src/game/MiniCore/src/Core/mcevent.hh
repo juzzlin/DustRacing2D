@@ -28,6 +28,7 @@ class MCObject;
 class MCEvent
 {
 public:
+
   //! Constructor
   MCEvent();
 

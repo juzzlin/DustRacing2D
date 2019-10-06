@@ -45,7 +45,7 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 
     m_mouseCursorTimer.setSingleShot(true);
     m_mouseCursorTimer.setInterval(3000);
-    connect(&m_mouseCursorTimer, SIGNAL(timeout()), this, SIGNAL(cursorHid()));
+    connect(&m_mouseCursorTimer, &QTimer::timeout, this, &EventHandler::cursorHid);
 }
 
 void EventHandler::loadKeyMappings()
