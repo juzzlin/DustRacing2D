@@ -51,7 +51,7 @@ private:
 
     void generateImpulsesFromContact(
         MCObject & pa, MCObject & pb, const MCContact & contact,
-        const MCVector3dF & linearImpulse,
+        const MCVector3dF & normalVelocityDelta,
         float restitution);
 
     void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);

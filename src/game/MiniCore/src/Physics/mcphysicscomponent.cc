@@ -22,17 +22,17 @@
 
 MCPhysicsComponent::MCPhysicsComponent()
     : m_maxSpeed(1000.0f)
-    , m_linearDamping(0.999f)
+    , m_linearDamping(10) // in N/(m/s), TODO PHYSICS: what's the reason for damping?
     , m_angularAcceleration(0)
     , m_angularVelocity(0)
-    , m_angularDamping(0.999f)
+    , m_angularDamping(10) // in Nm/(rad/s), TODO PHYSICS: what's the reason for damping?
     , m_angularImpulse(0)
     , m_torque(0)
     , m_invMass(std::numeric_limits<float>::max())
     , m_mass(0)
     , m_invMomentOfInertia(std::numeric_limits<float>::max())
     , m_momentOfInertia(0)
-    , m_restitution(0.5f)
+    , m_restitution(0.5f) // TODO PHYSICS: describe this factor
     , m_xyFriction(0.0f)
     , m_isSleeping(false)
     , m_isSleepingPrevented(false)
@@ -341,8 +341,9 @@ void MCPhysicsComponent::integrateLinear(float step)
 {
     MCVector3dF totAcceleration(m_acceleration);
     totAcceleration += m_forces * m_invMass;
-    m_velocity += totAcceleration * step + m_linearImpulse;
-    m_velocity *= m_linearDamping; // FIXME PHYSICS: a damping should be time step dependent. v(t) = v0 * exp(t/Tau)
+    m_velocity += totAcceleration * step + 
+			m_linearImpulse * m_invMass - 
+			m_velocity * (m_linearDamping * m_invMass); // NOTE PHYSICS: a damping is speed dependent. 
 }
 
 /**
@@ -356,8 +357,9 @@ float MCPhysicsComponent::integrateAngular(float step)
     {
         float totAngularAcceleration(m_angularAcceleration);
         totAngularAcceleration += m_torque * m_invMomentOfInertia;
-        m_angularVelocity += totAngularAcceleration * step + m_angularImpulse;
-        m_angularVelocity *= m_angularDamping; // FIXME PHYSICS: a damping should be time step dependent. v(t) = v0 * exp(t/Tau)
+        m_angularVelocity += totAngularAcceleration * step + 
+				m_angularImpulse * m_invMomentOfInertia -
+				m_angularVelocity * m_angularDamping * m_invMomentOfInertia;
 
         m_torque = 0.0f;
 

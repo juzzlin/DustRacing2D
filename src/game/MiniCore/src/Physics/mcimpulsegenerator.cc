@@ -58,28 +58,32 @@ void MCImpulseGenerator::displace(
 
 void MCImpulseGenerator::generateImpulsesFromContact(
     MCObject & pa, MCObject & pb, const MCContact & contact,
-    const MCVector3dF & linearImpulse,
+    const MCVector3dF & normalVelocityDelta,
     float restitution)
 {
     if (!pa.physicsComponent().isStationary())
     {
-        const float invMassA = pa.physicsComponent().invMass();
-        const float invMassB = pb.physicsComponent().invMass();
 
         const MCVector3dF & contactPoint(contact.contactPoint());
 
         // Linear component
+		const float invMassA = pa.physicsComponent().invMass();
+        const float invMassB = pb.physicsComponent().invMass();
         const float massScaling = invMassA / (invMassA + invMassB);
         const float effRestitution = 1.0f + restitution;
-        pa.physicsComponent().addImpulse(linearImpulse * effRestitution * massScaling, true);
+        pa.physicsComponent().addImpulse(normalVelocityDelta * effRestitution * massScaling, true);
 
         // Angular component
         const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit(); // NOTE PHYSICS: conversion to physical units
-        const MCVector3dF rotationalImpulse = linearImpulse % armA;
-        const float calibration = 0.5; // FIXME PHYSICS: this factor is justified by what? Physics shouldn't have and fuzzy factors. 
+        const MCVector3dF rotationalImpulse = normalVelocityDelta % armA;
+        
+		const float invInertiaA = pa.physicsComponent().invMomentOfInertia();
+        const float invInertiaB = pb.physicsComponent().invMomentOfInertia();
+        const float inertiaScaling = invInertiaA / (invInertiaA + invInertiaB);
 		
-		// FIXME PHYSICS: angular impulse introduced from a collision should take the angular momentum into account!
-        pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
+		// TODO PHYSICS: clarify this calculation. It's not dimensions clean, since the rotationalImpulse is not a 
+		// true rotational impluse. 
+        pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling, true);
     }
 }
 
@@ -132,12 +136,12 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
 
                 if (projection > 0)
                 {
-                    const MCVector3dF linearImpulse(
+                    const MCVector3dF normalVelocityDelta(
                         contact->contactNormal() *
                         contact->contactNormal().dot(velocityDelta));
 
-                    generateImpulsesFromContact(pa, pb, *contact, linearImpulse, restitution);
-                    generateImpulsesFromContact(pb, pa, *contact, -linearImpulse, restitution);
+                    generateImpulsesFromContact(pa, pb, *contact, normalVelocityDelta, restitution);
+                    generateImpulsesFromContact(pb, pa, *contact, -normalVelocityDelta, restitution);
                 }
 
                 // Remove contact with pa from pb, because it was already handled here.
