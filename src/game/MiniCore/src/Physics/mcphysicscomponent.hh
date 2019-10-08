@@ -49,14 +49,18 @@ public:
     //! Add rotational impulse in rad/s.
     virtual void addAngularImpulse(float impulse, bool isCollision = false);
 
+	const MCVector3dF & physicalLocation();
+
+	void translate(const MCVector3dF & newLocation);
+	
     /*! Set current velocity to the given value.
-     *  \param newVelocity The new velocity. */
+     *  \param newVelocity The new velocity in m/s */
     void setVelocity(const MCVector3dF & newVelocity);
 
-    //! Return current velocity.
+    //! Return current velocity in m/s.
     const MCVector3dF & velocity() const;
 
-    //! Return current speed.
+    //! Return current speed in m/s.
     float speed() const;
 
     //! Set maximum speed.
@@ -106,6 +110,8 @@ public:
 
     //! Get mass.
     float mass() const;
+	
+	
 
     //! Set moment of inertia.
     void setMomentOfInertia(float momentOfInertia);
@@ -199,6 +205,8 @@ private:
     MCVector3dF m_acceleration;
 
     MCVector3dF m_velocity;
+	
+	MCVector3dF m_physicalLocation;
 
     float m_maxSpeed;
 

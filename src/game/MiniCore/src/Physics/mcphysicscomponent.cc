@@ -56,9 +56,9 @@ void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, bool)
 void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision)
 {
     m_linearImpulse += impulse;
-    const float r = (pos - object().location()).lengthFast();
+    const float r = (pos - physicalLocation()).lengthFast();
     if (r > 0) {
-        addAngularImpulse((-(impulse % (pos - object().location())).k()) / r, isCollision);
+        addAngularImpulse((-(impulse % (pos - physicalLocation())).k()) / r, isCollision);
     }
     toggleSleep(false);
 }
@@ -67,7 +67,19 @@ void MCPhysicsComponent::addAngularImpulse(float impulse, bool)
 {
     m_angularImpulse += impulse;
 
-    toggleSleep(false);
+	toggleSleep(false);
+}
+
+const MCVector3dF &MCPhysicsComponent::physicalLocation()
+{
+	m_physicalLocation = object().location() * MCWorld::metersPerUnit();
+	return m_physicalLocation;
+}
+
+void MCPhysicsComponent::translate(const MCVector3dF &newLocation)
+{
+	m_physicalLocation = newLocation;
+	object().translate(newLocation/MCWorld::metersPerUnit());
 }
 
 void MCPhysicsComponent::setVelocity(const MCVector3dF & newVelocity)
@@ -125,7 +137,7 @@ void MCPhysicsComponent::addForce(const MCVector3dF & force)
 
 void MCPhysicsComponent::addForce(const MCVector3dF & force, const MCVector3dF & pos)
 {
-    addTorque(-(force % (pos - object().location())).k());
+    addTorque(-(force % (pos - physicalLocation())).k());
     m_forces += force;
 
     toggleSleep(false);
@@ -324,7 +336,7 @@ void MCPhysicsComponent::integrate(float step)
             m_angularImpulse = 0.0f;
 
             object().rotate(object().angle() + angleDiff, false);
-            object().translate(object().location() + m_velocity);
+            translate(physicalLocation() + m_velocity*step); 
 
             m_sleepCount = 0;
         }
