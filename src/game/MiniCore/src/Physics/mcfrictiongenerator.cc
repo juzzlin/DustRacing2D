@@ -51,7 +51,10 @@ void MCFrictionGenerator::updateForce(MCObject & object)
     if (object.shape())
     {
         const float a = physicsComponent.angularVelocity();
-        physicsComponent.addAngularImpulse(-a * m_coeffRotTot);
+		if(a > 0)
+			physicsComponent.addTorque(- m_coeffRotTot * physicsComponent.mass() * 1.0f); // TODO: replace constant of 1.0m for average radius
+		if(a < 0)
+			physicsComponent.addTorque(+ m_coeffRotTot * physicsComponent.mass() * 1.0f); // TODO: replace constant of 1.0m for average radius
     }
 }
 
