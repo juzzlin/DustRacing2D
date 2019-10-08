@@ -49,7 +49,7 @@ using std::static_pointer_cast;
 Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman)
 : MCObject(surface, "car")
 , m_desc(desc)
-, m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
+, m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0)) // NOTE PHYSICS: no rotational friction, this is implemented by friction forces on the tires
 , m_leftSideOffTrack(false)
 , m_rightSideOffTrack(false)
 , m_skidding(false)
