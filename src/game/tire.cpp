@@ -56,17 +56,26 @@ void Tire::onStepTime(int)
 		
 		// FIXME Physics: what we calculate here is only a maximum force, the tire can handle, 
 		// but it isn't a force in first place...
+		// There should be a condition, if the tire slipps along the tire-axis. If so, we 
+		// must apply this normalForceVector, but if not, we only have to apply the needed centripedal force
+		// needed for the current steering radius. 
         MCVector2dF normalForceVector =
             MCVector2dF::projection(tireVelocityMaxUnityVector, tireAxisVector) *
                 (m_isOffTrack ? m_offTrackFriction : m_friction) * /* m_spinCoeff * */ // TODO reenable spinCoeff
-                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass(); // TODO scale this to 25% load on one wheel
+                    -MCWorld::instance().gravity().k() * parent().physicsComponent().mass() * 0.25f; // NOTE scale this to 25% load on one wheel
 		
         //normalForceVector.clampFast(parent().physicsComponent().mass() * 7.0f * m_car.tireWearFactor()); // FIXME: what's this code for?
-        parent().physicsComponent().addForce( -normalForceVector, location() );  // TODO: transform to physics unit
+		MCVector3dF physicalLocation = location(); // location() of a tire is in scene units, relative to a global origin. 
+		physicalLocation -= parent().location();
+		physicalLocation *= MCWorld::metersPerUnit();
+		physicalLocation += parent().location();
+		
+		// FIXME Physics: Using a metrical physicalLocation here, leads to very slippery steering. 
+		// It seems, there is still somewehre a unit-conversion error in the physics model. 
+        parent().physicsComponent().addForce( -normalForceVector, physicalLocation );  
 
         if (m_car.isBraking())
         {
- 
 			// TODO 3: improvement: for braking the front wheels create more force than the rear ones. 
             MCVector2dF brakingForceVector =
                 tireVelocityMaxUnityVector * (m_isOffTrack ? m_offTrackFriction : m_friction) *

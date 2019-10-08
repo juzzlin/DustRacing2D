@@ -73,10 +73,13 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 , m_isHuman(isHuman)
 , m_particleEffectManager(*this)
 , m_numberPos(-5, 0, 0)
+
+// Tire positions in graphics units:
 , m_leftFrontTirePos(14, 9, 0)
 , m_rightFrontTirePos(14, -9, 0)
 , m_leftRearTirePos(-14, 9, 0)
 , m_rightRearTirePos(-14, -9, 0)
+
 , m_leftBrakeGlowPos(-21, 8, 0)
 , m_rightBrakeGlowPos(-21, -8, 0)
 , m_hadHardCrash(false)
@@ -132,15 +135,15 @@ void Car::setProperties(Description & desc)
 {
     physicsComponent().setMass(desc.mass);
 	
-	const float width = dynamic_pointer_cast<MCRectShape>(shape())->width() * MCWorld::metersPerUnit();
-    const float height = dynamic_pointer_cast<MCRectShape>(shape())->height() * MCWorld::metersPerUnit();
+	const float width_m = dynamic_pointer_cast<MCRectShape>(shape())->width() * MCWorld::metersPerUnit();
+    const float height_m = dynamic_pointer_cast<MCRectShape>(shape())->height() * MCWorld::metersPerUnit();
 	
-    m_length = std::max(width, height); // FIXME: this is 48 scene units, but for physics we deal here with metrical units...
+    m_length = std::max(width_m, height_m) / MCWorld::metersPerUnit(); // note: the object's length is here in scene units. 
 
 	
 	// TODO PHYSICS: clarify center of rotation for this inertia
 	// the inertia is calculated by the car's dimensions I = 1/12 * m*(width^2 + height^2), both in meters:	
-    physicsComponent().setMomentOfInertia(desc.mass * 1.0f/12 * (width*width + height*height)); 
+    physicsComponent().setMomentOfInertia(desc.mass * 1.0f/12 * (width_m*width_m + height_m*height_m)); 
     
 	physicsComponent().setRestitution(desc.restitution);
     setShadowOffset(MCVector3dF(5, -5, 1));
