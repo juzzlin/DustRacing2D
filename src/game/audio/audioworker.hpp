@@ -31,7 +31,6 @@ class AudioWorker : public QObject
     Q_OBJECT
 
 public:
-
     AudioWorker(int numCars, bool enabled);
 
     virtual ~AudioWorker();
@@ -65,7 +64,6 @@ public slots:
     void setEnabled(bool enabled);
 
 private:
-
     void checkFile(QString path);
 
     void loadCommonSound(QString handle, QString path, float volume = 1.0f);

@@ -20,21 +20,25 @@
 #ifndef MCTEXTUREGLYPH_HH
 #define MCTEXTUREGLYPH_HH
 
-
-
-
 #include <MCGLEW>
 
 //! Textured glyph used by MCTextureFont.
 class MCTextureGlyph
 {
 public:
-
     //! Texture coordinates of a vertex.
     struct UV
     {
-        UV() : m_u(0), m_v(0) {}
-        UV(GLfloat u, GLfloat v) : m_u(u), m_v(v) {}
+        UV()
+          : m_u(0)
+          , m_v(0)
+        {
+        }
+        UV(GLfloat u, GLfloat v)
+          : m_u(u)
+          , m_v(v)
+        {
+        }
         GLfloat m_u, m_v;
     };
 
@@ -52,7 +56,6 @@ public:
     const UV & uv(unsigned int vertex) const;
 
 private:
-
     UV m_uv[4];
 };
 

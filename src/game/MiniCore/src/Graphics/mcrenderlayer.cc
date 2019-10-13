@@ -22,8 +22,8 @@
 #include "mcobject.hh"
 
 MCRenderLayer::MCRenderLayer()
-    : m_depthTestEnabled(true)
-    , m_depthMaskEnabled(true)
+  : m_depthTestEnabled(true)
+  , m_depthMaskEnabled(true)
 {
 }
 

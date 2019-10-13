@@ -30,7 +30,6 @@ class MCObject;
 class MCSeparationEvent : public MCEvent
 {
 public:
-
     /*! Constructor.
      * \param separatedObject The separated object. */
     MCSeparationEvent(MCObject & separatedObject);
@@ -48,7 +47,6 @@ public:
     virtual unsigned int instanceTypeId() const override;
 
 private:
-
     DISABLE_COPY(MCSeparationEvent);
     DISABLE_ASSI(MCSeparationEvent);
 

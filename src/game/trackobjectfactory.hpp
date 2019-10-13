@@ -16,8 +16,8 @@
 #ifndef TRACKOBJECTFACTORY_HPP
 #define TRACKOBJECTFACTORY_HPP
 
-#include <QString>
 #include <MCObjectFactory>
+#include <QString>
 
 class TrackObject;
 
@@ -25,7 +25,6 @@ class TrackObject;
 class TrackObjectFactory
 {
 public:
-
     //! Constructor.
     TrackObjectFactory(MCObjectFactory & objectFactory);
 
@@ -34,8 +33,7 @@ public:
     TrackObject * build(QString category, QString role, MCVector2dF location, int angle, bool forceStationary);
 
 private:
-
-    MCObjectFactory  & m_objectFactory;
+    MCObjectFactory & m_objectFactory;
 };
 
 #endif // TRACKOBJECTFACTORY_HPP

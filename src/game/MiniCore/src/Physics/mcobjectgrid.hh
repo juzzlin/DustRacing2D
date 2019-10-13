@@ -35,9 +35,8 @@
 class MCObjectGrid
 {
 public:
-
     typedef std::set<MCObject *> ObjectSet;
-    typedef std::vector<std::pair<MCObject *, MCObject *> > CollisionVector;
+    typedef std::vector<std::pair<MCObject *, MCObject *>> CollisionVector;
 
     //! Container for objects.
     struct GridCell
@@ -83,7 +82,6 @@ public:
     const MCBBox<float> & bbox() const;
 
 private:
-
     DISABLE_COPY(MCObjectGrid);
     DISABLE_ASSI(MCObjectGrid);
 

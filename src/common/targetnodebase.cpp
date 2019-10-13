@@ -17,8 +17,8 @@
 #include "tracktilebase.hpp"
 
 TargetNodeBase::TargetNodeBase()
-: m_size(QSize(TrackTileBase::TILE_H, TrackTileBase::TILE_W))
-, m_index(-1)
+  : m_size(QSize(TrackTileBase::TILE_H, TrackTileBase::TILE_W))
+  , m_index(-1)
 {
 }
 

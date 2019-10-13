@@ -28,38 +28,36 @@ class MCObject;
 class MCEvent
 {
 public:
+    //! Constructor
+    MCEvent();
 
-  //! Constructor
-  MCEvent();
+    //! Destructor
+    virtual ~MCEvent();
 
-  //! Destructor
-  virtual ~MCEvent();
-
-  /*! Register a new event type
+    /*! Register a new event type
    * \return The new unique type ID
    */
-  static unsigned int registerType();
+    static unsigned int registerType();
 
-  //! Return class-wide type id
-  virtual unsigned int instanceTypeId() const = 0;
+    //! Return class-wide type id
+    virtual unsigned int instanceTypeId() const = 0;
 
-  //! Accept the event.
-  void accept();
+    //! Accept the event.
+    void accept();
 
-  //! Ignore the event. This is the default state.
-  void ignore();
+    //! Ignore the event. This is the default state.
+    void ignore();
 
-  //! Return true, if event was accepted.
-  bool accepted() const;
+    //! Return true, if event was accepted.
+    bool accepted() const;
 
 private:
+    DISABLE_COPY(MCEvent);
+    DISABLE_ASSI(MCEvent);
 
-  DISABLE_COPY(MCEvent);
-  DISABLE_ASSI(MCEvent);
+    static unsigned int m_typeCount;
 
-  static unsigned int m_typeCount;
-
-  bool m_accepted;
+    bool m_accepted;
 };
 
 #endif // MCEVENT_HH

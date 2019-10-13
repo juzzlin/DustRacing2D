@@ -28,9 +28,9 @@
 #include <cstdio>
 #endif
 
-bool   MCLogger::m_echoMode = false;
-bool   MCLogger::m_dateTime = true;
-FILE * MCLogger::m_file     = nullptr;
+bool MCLogger::m_echoMode = false;
+bool MCLogger::m_dateTime = true;
+FILE * MCLogger::m_file = nullptr;
 
 MCLogger::MCLogger()
 {

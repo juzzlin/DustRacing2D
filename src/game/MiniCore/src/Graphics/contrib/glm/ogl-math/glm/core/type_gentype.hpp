@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,72 +31,75 @@
 
 #include "type_size.hpp"
 
-namespace glm
+namespace glm {
+enum profile
 {
-	enum profile
-	{
-		nice,
-		fast,
-		simd
-	};
+    nice,
+    fast,
+    simd
+};
 
-namespace detail
+namespace detail {
+template<
+  typename VALTYPE,
+  template<typename> class TYPE>
+struct genType
 {
-	template
-	<
-		typename VALTYPE, 
-		template <typename> class TYPE
-	>
-	struct genType
-	{
-	public:
-		enum ctor{null};
+public:
+    enum ctor
+    {
+        null
+    };
 
-		typedef VALTYPE value_type;
-		typedef VALTYPE & value_reference;
-		typedef VALTYPE * value_pointer;
-		typedef VALTYPE const * value_const_pointer;
-		typedef TYPE<bool> bool_type;
+    typedef VALTYPE value_type;
+    typedef VALTYPE & value_reference;
+    typedef VALTYPE * value_pointer;
+    typedef VALTYPE const * value_const_pointer;
+    typedef TYPE<bool> bool_type;
 
-		typedef sizeType size_type;
-		static bool is_vector();
-		static bool is_matrix();
-		
-		typedef TYPE<VALTYPE> type;
-		typedef TYPE<VALTYPE> * pointer;
-		typedef TYPE<VALTYPE> const * const_pointer;
-		typedef TYPE<VALTYPE> const * const const_pointer_const;
-		typedef TYPE<VALTYPE> * const pointer_const;
-		typedef TYPE<VALTYPE> & reference;
-		typedef TYPE<VALTYPE> const & const_reference;
-		typedef TYPE<VALTYPE> const & param_type;
+    typedef sizeType size_type;
+    static bool is_vector();
+    static bool is_matrix();
 
-		//////////////////////////////////////
-		// Address (Implementation details)
+    typedef TYPE<VALTYPE> type;
+    typedef TYPE<VALTYPE> * pointer;
+    typedef TYPE<VALTYPE> const * const_pointer;
+    typedef TYPE<VALTYPE> const * const const_pointer_const;
+    typedef TYPE<VALTYPE> * const pointer_const;
+    typedef TYPE<VALTYPE> & reference;
+    typedef TYPE<VALTYPE> const & const_reference;
+    typedef TYPE<VALTYPE> const & param_type;
 
-		value_const_pointer value_address() const{return value_pointer(this);}
-		value_pointer value_address(){return value_pointer(this);}
+    //////////////////////////////////////
+    // Address (Implementation details)
 
-	//protected:
-	//	enum kind
-	//	{
-	//		GEN_TYPE,
-	//		VEC_TYPE,
-	//		MAT_TYPE
-	//	};
+    value_const_pointer value_address() const
+    {
+        return value_pointer(this);
+    }
+    value_pointer value_address()
+    {
+        return value_pointer(this);
+    }
 
-	//	typedef typename TYPE::kind kind;
-	};
+    //protected:
+    //	enum kind
+    //	{
+    //		GEN_TYPE,
+    //		VEC_TYPE,
+    //		MAT_TYPE
+    //	};
 
-	template
-	<
-		typename VALTYPE, 
-		template <typename> class TYPE
-	>
-	bool genType<VALTYPE, TYPE>::is_vector()
-	{
-		return true;
-	}
+    //	typedef typename TYPE::kind kind;
+};
+
+template<
+  typename VALTYPE,
+  template<typename> class TYPE>
+bool genType<VALTYPE, TYPE>::is_vector()
+{
+    return true;
+}
 /*
 	template <typename valTypeT, unsigned int colT, unsigned int rowT, profile proT = nice>
 	class base
@@ -161,9 +164,9 @@ namespace detail
 		class_type& operator-- ();
 	};
 */
-	}//namespace detail
-}//namespace glm
+} //namespace detail
+} //namespace glm
 
 //#include "type_gentype.inl"
 
-#endif//glm_core_type_gentype
+#endif //glm_core_type_gentype

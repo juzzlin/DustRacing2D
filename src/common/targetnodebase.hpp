@@ -16,9 +16,9 @@
 #ifndef TARGETNODEBASE_HPP
 #define TARGETNODEBASE_HPP
 
+#include <QPointF>
 #include <QSizeF>
 #include <QString>
-#include <QPointF>
 
 #include <memory>
 
@@ -26,7 +26,6 @@
 class TargetNodeBase
 {
 public:
-
     typedef std::shared_ptr<TargetNodeBase> TargetNodeBasePtr;
 
     //! Constructor.
@@ -34,7 +33,7 @@ public:
 
     TargetNodeBase(TargetNodeBase & other) = delete;
 
-    TargetNodeBase & operator= (TargetNodeBase & other) = delete;
+    TargetNodeBase & operator=(TargetNodeBase & other) = delete;
 
     //! Destructor.
     virtual ~TargetNodeBase() {};
@@ -62,7 +61,6 @@ public:
     virtual QSizeF size() const;
 
 private:
-
     //! Coordinates in the world.
     QPointF m_location;
 

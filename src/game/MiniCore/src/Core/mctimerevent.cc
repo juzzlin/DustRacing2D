@@ -29,12 +29,12 @@ class MCTimerEventImpl
 };
 
 MCTimerEventImpl::MCTimerEventImpl(unsigned int frequency)
-: frequency(frequency)
+  : frequency(frequency)
 {
 }
 
 MCTimerEvent::MCTimerEvent(unsigned int frequency)
-: m_pImpl(new MCTimerEventImpl(frequency))
+  : m_pImpl(new MCTimerEventImpl(frequency))
 {
 }
 

@@ -31,7 +31,6 @@ class MCParticle;
 class MCRenderLayer
 {
 public:
-
     MCRenderLayer();
 
     void clear();
@@ -51,14 +50,13 @@ public:
         std::vector<MCObject *> objects;
     };
 
-    typedef std::map<MCCamera *, std::vector<ObjectBatch> > CameraBatchMap;
+    typedef std::map<MCCamera *, std::vector<ObjectBatch>> CameraBatchMap;
 
     CameraBatchMap & objectBatches();
 
     CameraBatchMap & particleBatches();
 
 private:
-
     bool m_depthTestEnabled;
 
     bool m_depthMaskEnabled;

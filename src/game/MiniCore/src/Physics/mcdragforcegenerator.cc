@@ -22,18 +22,19 @@
 #include "mcphysicscomponent.hh"
 
 MCDragForceGenerator::MCDragForceGenerator(float coeff1, float coeff2)
-: m_coeff1(coeff1)
-, m_coeff2(coeff2)
-{}
+  : m_coeff1(coeff1)
+  , m_coeff2(coeff2)
+{
+}
 
 void MCDragForceGenerator::updateForce(MCObject & object)
 {
-  MCVector3d<float> force(object.physicsComponent().velocity());
-  float v = force.length();
-  v = m_coeff1 * v + m_coeff2 * v * v;
-  force.normalize();
-  force *= -v;
-  object.physicsComponent().addForce(force);
+    MCVector3d<float> force(object.physicsComponent().velocity());
+    float v = force.length();
+    v = m_coeff1 * v + m_coeff2 * v * v;
+    force.normalize();
+    force *= -v;
+    object.physicsComponent().addForce(force);
 }
 
 MCDragForceGenerator::~MCDragForceGenerator()

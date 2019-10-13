@@ -36,7 +36,6 @@ class MCObject;
 class MCCollisionEvent : public MCEvent
 {
 public:
-
     /*! Constructor.
      * \param collidingObject The colliding object. */
     MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint);
@@ -57,7 +56,6 @@ public:
     virtual unsigned int instanceTypeId() const override;
 
 private:
-
     DISABLE_COPY(MCCollisionEvent);
     DISABLE_ASSI(MCCollisionEvent);
 

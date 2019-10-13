@@ -22,19 +22,19 @@
 namespace MTFH {
 
 Menu::Menu(std::string id, int width, int height, Menu::Style style)
-: m_id(id)
-, m_width(width)
-, m_height(height)
-, m_x(0)
-, m_y(0)
-, m_targetX(0)
-, m_targetY(0)
-, m_currentIndex(-1)
-, m_selectedIndex(-1)
-, m_style(style)
-, m_isDone(false)
-, m_wrapAround(true)
-, m_animationCurve(15, 3)
+  : m_id(id)
+  , m_width(width)
+  , m_height(height)
+  , m_x(0)
+  , m_y(0)
+  , m_targetX(0)
+  , m_targetY(0)
+  , m_currentIndex(-1)
+  , m_selectedIndex(-1)
+  , m_style(style)
+  , m_isDone(false)
+  , m_wrapAround(true)
+  , m_animationCurve(15, 3)
 {
 }
 
@@ -166,7 +166,7 @@ void Menu::renderItems()
     }
     else if (m_style == Menu::Style::ShowMany)
     {
-        for (auto index: m_itemsToShow)
+        for (auto index : m_itemsToShow)
         {
             if (index >= 0 && index < static_cast<int>(m_items.size()))
             {
@@ -266,8 +266,8 @@ void Menu::selectCurrentItem()
 
 bool Menu::checkIfHit(MenuItemPtr item, int x, int y)
 {
-    const int x1 = item->x() - item->width()  / 2;
-    const int x2 = item->x() + item->width()  / 2;
+    const int x1 = item->x() - item->width() / 2;
+    const int x2 = item->x() + item->width() / 2;
     const int y1 = item->y() - item->height() / 2;
     const int y2 = item->y() + item->height() / 2;
 
@@ -345,7 +345,7 @@ bool Menu::handleMousePressOnItem(int x, int y)
 
 bool Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
 {
-    x = x * width()  / screenWidth;
+    x = x * width() / screenWidth;
     y = y * height() / screenHeight;
 
     if (handleMousePressOnMouseItem(x, y) || handleMousePressOnItem(x, y))
@@ -428,7 +428,7 @@ bool Menu::handleMouseReleaseOnItem(int x, int y)
 
 bool Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
 {
-    x = x * width()  / screenWidth;
+    x = x * width() / screenWidth;
     y = y * height() / screenHeight;
 
     if (handleMouseReleaseOnMouseItem(x, y) || handleMouseReleaseOnItem(x, y))
@@ -514,7 +514,7 @@ void Menu::setCurrentIndex(int index)
     else
     {
         m_currentIndex = index;
-        m_currentIndex = m_currentIndex < 0         ? 0            : m_currentIndex;
+        m_currentIndex = m_currentIndex < 0 ? 0 : m_currentIndex;
         m_currentIndex = m_currentIndex >= numItems ? numItems - 1 : m_currentIndex;
 
         updateFocus();
@@ -532,8 +532,8 @@ void Menu::setCurrentIndexWrapAround(int index)
     else
     {
         m_currentIndex = index;
-        m_currentIndex = m_currentIndex < 0         ? numItems - 1 : m_currentIndex;
-        m_currentIndex = m_currentIndex >= numItems ? 0            : m_currentIndex;
+        m_currentIndex = m_currentIndex < 0 ? numItems - 1 : m_currentIndex;
+        m_currentIndex = m_currentIndex >= numItems ? 0 : m_currentIndex;
 
         updateFocus();
     }

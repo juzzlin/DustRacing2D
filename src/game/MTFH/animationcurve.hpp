@@ -23,7 +23,6 @@ namespace MTFH {
 class AnimationCurve
 {
 public:
-
     AnimationCurve(int steps, int exp = 2);
 
     virtual void step();
@@ -33,12 +32,11 @@ public:
     virtual float value() const;
 
 private:
-
     std::vector<float> m_values;
 
     int m_index = 0;
 };
 
-}
+} // namespace MTFH
 
 #endif // ANIMATIONCURVE_HPP

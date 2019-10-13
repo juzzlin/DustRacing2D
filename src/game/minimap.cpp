@@ -28,7 +28,7 @@
 #include <memory>
 
 Minimap::Minimap()
-    : m_markerSurface(&GraphicsFactory::generateMinimapMarker())
+  : m_markerSurface(&GraphicsFactory::generateMinimapMarker())
 {
     m_markerSurface->setShaderProgram(Renderer::instance().program("menu"));
     m_markerSurface->material()->setAlphaBlend(true);

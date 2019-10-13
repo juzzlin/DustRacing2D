@@ -24,14 +24,15 @@
 #include <memory>
 
 TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
-    : TrackDataBase(name, isUserTrack)
-    , m_map(cols, rows)
-{}
+  : TrackDataBase(name, isUserTrack)
+  , m_map(cols, rows)
+{
+}
 
 TrackData::TrackData(const TrackData & other)
-    : TrackDataBase(other)
-    , m_fileName(other.m_fileName)
-    , m_map(other.m_map)
+  : TrackDataBase(other)
+  , m_fileName(other.m_fileName)
+  , m_map(other.m_map)
 {
     copyObjects(other);
 

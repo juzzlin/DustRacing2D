@@ -25,7 +25,6 @@ class MCTextureFont;
 class Credits : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     Credits(std::string id, int width, int height);
 
@@ -33,7 +32,6 @@ public:
     virtual void render() override;
 
 private:
-
     std::vector<MCTextureText> m_texts;
 
     int m_time = 0;

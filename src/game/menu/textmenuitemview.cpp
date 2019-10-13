@@ -18,16 +18,16 @@
 #include <MenuItem>
 
 #include <MCAssetManager>
+#include <MCRandom>
 #include <MCTextureFont>
 #include <MCTextureText>
-#include <MCRandom>
 
 #include <cmath>
 
 TextMenuItemView::TextMenuItemView(float textSize, MTFH::MenuItem & owner)
-: MenuItemView(owner)
-, m_textSize(textSize)
-, m_angle(MCRandom::getValue() * 2.0f * 3.1415f)
+  : MenuItemView(owner)
+  , m_textSize(textSize)
+  , m_angle(MCRandom::getValue() * 2.0f * 3.1415f)
 {
 }
 
@@ -70,7 +70,7 @@ void TextMenuItemView::render(float x, float y)
     }
 
     const float shadowY = -2;
-    const float shadowX =  2;
+    const float shadowX = 2;
     text.setShadowOffset(shadowX, shadowY);
 
     auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());

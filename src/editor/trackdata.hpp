@@ -18,10 +18,10 @@
 
 #include <QString>
 
-#include "../common/trackdatabase.hpp"
 #include "../common/mapbase.hpp"
-#include "../common/route.hpp"
 #include "../common/objects.hpp"
+#include "../common/route.hpp"
+#include "../common/trackdatabase.hpp"
 
 #include "map.hpp"
 
@@ -30,7 +30,6 @@ class ObjectModelLoader;
 class TrackData : public TrackDataBase
 {
 public:
-
     //! Constructor.
     TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows);
 
@@ -77,7 +76,6 @@ public:
     std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
 
 private:
-
     void copyObjects(const TrackData & other);
 
     void copyRoute(const TrackData & other);

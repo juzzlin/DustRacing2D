@@ -21,7 +21,7 @@
 namespace MTFH {
 
 AnimationCurve::AnimationCurve(int steps, int exp)
-    : m_values(steps, 1)
+  : m_values(steps, 1)
 {
     assert(steps > 2);
     assert(exp >= 1);
@@ -52,4 +52,4 @@ float AnimationCurve::value() const
     return m_values.at(m_index);
 }
 
-}
+} // namespace MTFH

@@ -17,17 +17,17 @@
 
 #include "../common/config.hpp"
 #include "aboutdlg.hpp"
-#include "object.hpp"
-#include "objectmodel.hpp"
-#include "objectmodelloader.hpp"
-#include "trackio.hpp"
-#include "trackdata.hpp"
-#include "trackpropertiesdialog.hpp"
-#include "tracktile.hpp"
 #include "editordata.hpp"
 #include "editorview.hpp"
 #include "mediator.hpp"
 #include "newtrackdialog.hpp"
+#include "object.hpp"
+#include "objectmodel.hpp"
+#include "objectmodelloader.hpp"
+#include "trackdata.hpp"
+#include "trackio.hpp"
+#include "trackpropertiesdialog.hpp"
+#include "tracktile.hpp"
 
 #include <QAction>
 #include <QApplication>
@@ -36,19 +36,19 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QGraphicsLineItem>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QLabel>
 #include <QSettings>
 #include <QSlider>
 #include <QSplitter>
 #include <QStandardPaths>
 #include <QTextEdit>
 #include <QTimer>
-#include <QTransform>
 #include <QToolBar>
-#include <QHBoxLayout>
+#include <QTransform>
 #include <QVBoxLayout>
 
 #include <cassert>
@@ -56,14 +56,14 @@
 MainWindow * MainWindow::m_instance = nullptr;
 
 MainWindow::MainWindow(QString trackFile)
-: m_objectModelLoader(new ObjectModelLoader)
-, m_aboutDlg(new AboutDlg(this))
-, m_console(new QTextEdit(this))
-, m_scaleSlider(new QSlider(Qt::Horizontal, this))
-, m_toolBar(new QToolBar(this))
-, m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
-, m_argTrackFile(trackFile)
-, m_mediator(new Mediator(*this))
+  : m_objectModelLoader(new ObjectModelLoader)
+  , m_aboutDlg(new AboutDlg(this))
+  , m_console(new QTextEdit(this))
+  , m_scaleSlider(new QSlider(Qt::Horizontal, this))
+  , m_toolBar(new QToolBar(this))
+  , m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
+  , m_argTrackFile(trackFile)
+  , m_mediator(new Mediator(*this))
 {
     if (!m_instance)
     {
@@ -81,8 +81,7 @@ MainWindow::MainWindow(QString trackFile)
     console("CWD: " + QDir::currentPath());
 
     // Load object models that can be used to build tracks.
-    const QString objectFilePath = QString(Config::Common::dataPath) +
-        QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
+    const QString objectFilePath = QString(Config::Common::dataPath) + QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
     loadObjectModels(objectFilePath);
 
     if (!m_argTrackFile.isEmpty())
@@ -119,10 +118,12 @@ void MainWindow::updateScaleSlider(int value)
 void MainWindow::showTip()
 {
     QMessageBox::information(
-        this,
-        tr("Save your work to correct location."),
-        QString(tr("To make the game find your circuits, save them to %1%2%3%2"))
-            .arg(QDir::homePath()).arg(QDir::separator()).arg(Config::Common::TRACK_SEARCH_PATH));
+      this,
+      tr("Save your work to correct location."),
+      QString(tr("To make the game find your circuits, save them to %1%2%3%2"))
+        .arg(QDir::homePath())
+        .arg(QDir::separator())
+        .arg(Config::Common::TRACK_SEARCH_PATH));
 }
 
 void MainWindow::init()
@@ -139,7 +140,7 @@ void MainWindow::init()
     // Try to center the window.
     QRect geometry(QApplication::desktop()->availableGeometry());
     move(geometry.width() / 2 - width() / 2,
-        geometry.height() / 2 - height() / 2);
+         geometry.height() / 2 - height() / 2);
 
     m_mediator->initScene();
 
@@ -208,8 +209,7 @@ void MainWindow::createWidgets()
 void MainWindow::setTitle(QString openFileName)
 {
     setWindowTitle(
-        QString(Config::Editor::EDITOR_NAME) + " " + Config::Editor::EDITOR_VERSION + " - " +
-        openFileName);
+      QString(Config::Editor::EDITOR_NAME) + " " + Config::Editor::EDITOR_VERSION + " - " + openFileName);
 }
 
 bool MainWindow::randomlyRotateObjects() const
@@ -226,8 +226,7 @@ bool MainWindow::loadObjectModels(QString objectFilePath)
     }
     else
     {
-        const QString msg = tr("ERROR!!: Cannot load objects from '") +
-            objectFilePath + tr("'");
+        const QString msg = tr("ERROR!!: Cannot load objects from '") + objectFilePath + tr("'");
         console(msg);
         return false;
     }
@@ -238,11 +237,12 @@ void MainWindow::addObjectsToToolBar()
     // Loop through all object models loaded
     // by the object loader.
     QVector<QString> categories;
-    categories << "tile" << "free";
+    categories << "tile"
+               << "free";
     for (QString category : categories)
     {
         ObjectModelLoader::ObjectDataVector objects =
-            m_objectModelLoader->getObjectModelsByCategory(category);
+          m_objectModelLoader->getObjectModelsByCategory(category);
         for (const ObjectModel model : objects)
         {
             // Create the action.
@@ -336,7 +336,7 @@ void MainWindow::populateMenuBar()
     m_undoAction = new QAction(tr("Undo"), this);
     m_undoAction->setShortcut(QKeySequence("Ctrl+Z"));
     editMenu->addAction(m_undoAction);
-    connect(m_undoAction, &QAction::triggered, [this](){
+    connect(m_undoAction, &QAction::triggered, [this]() {
         m_mediator->undo();
 
         setupTrackAfterUndoOrRedo();
@@ -350,7 +350,7 @@ void MainWindow::populateMenuBar()
     m_redoAction = new QAction(tr("Redo"), this);
     m_redoAction->setShortcut(QKeySequence("Ctrl+Shift+Z"));
     editMenu->addAction(m_redoAction);
-    connect(m_redoAction, &QAction::triggered, [this](){
+    connect(m_redoAction, &QAction::triggered, [this]() {
         m_mediator->redo();
 
         setupTrackAfterUndoOrRedo();
@@ -404,7 +404,7 @@ void MainWindow::populateToolBar()
 
     // Add "erase"-action
     p = new QAction(
-        QIcon(QPixmap(Config::Editor::ERASE_ICON_PATH)), tr("Erase object"), this);
+      QIcon(QPixmap(Config::Editor::ERASE_ICON_PATH)), tr("Erase object"), this);
     p->setData(QVariant(QString("erase")));
     m_toolBar->addAction(p);
 
@@ -445,7 +445,8 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         }
         // The user wants to set a tile type or clear it.
         else if (m_objectModelLoader->getCategoryByRole(
-            action->data().toString()) == "tile")
+                   action->data().toString())
+                 == "tile")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(action->icon().pixmap(32, 32)));
@@ -453,7 +454,8 @@ void MainWindow::handleToolBarActionClick(QAction * action)
         }
         // The user wants to add an object to the scene.
         else if (m_objectModelLoader->getCategoryByRole(
-            action->data().toString()) == "free")
+                   action->data().toString())
+                 == "free")
         {
             QApplication::restoreOverrideCursor();
             QApplication::setOverrideCursor(QCursor(QPixmap(":/cursor2.png")));
@@ -476,11 +478,12 @@ void MainWindow::openTrack()
 
     settings.beginGroup(m_settingsGroup);
     QString path = settings.value("recentPath",
-    QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).toString();
+                                  QStandardPaths::writableLocation(QStandardPaths::HomeLocation))
+                     .toString();
     settings.endGroup();
 
     const QString fileName = QFileDialog::getOpenFileName(
-        this, tr("Open a track"), path, tr("Track Files (*.trk)"));
+      this, tr("Open a track"), path, tr("Track Files (*.trk)"));
     if (!fileName.isEmpty())
     {
         doOpenTrack(fileName);
@@ -556,16 +559,16 @@ void MainWindow::beginSetRoute()
     {
         console(tr("Set route: begin."));
         QMessageBox::information(
-            this,
-            tr("Set route, checkpoints and driving lines."),
-            tr("Setting the route defines checkpoints for the cars so\n"
-               "that no shortcuts can be taken. It also defines\n"
-               "driving lines for the computer players.\n\n"
-               "Click on the tiles one by one and make a closed loop\n"
-               "with the target nodes. You can adjust the nodes afterwads.\n"
-               "Start from the first tile after the finish line tile\n"
-               "to make the lap detection and timing work correctly.\n"
-               "Click on the first node again to finish."));
+          this,
+          tr("Set route, checkpoints and driving lines."),
+          tr("Setting the route defines checkpoints for the cars so\n"
+             "that no shortcuts can be taken. It also defines\n"
+             "driving lines for the computer players.\n\n"
+             "Click on the tiles one by one and make a closed loop\n"
+             "with the target nodes. You can adjust the nodes afterwads.\n"
+             "Start from the first tile after the finish line tile\n"
+             "to make the lap detection and timing work correctly.\n"
+             "Click on the first node again to finish."));
     }
     else
     {
@@ -625,9 +628,9 @@ void MainWindow::initializeNewTrack()
         m_saved = false;
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
-            .arg(nameOut)
-            .arg(colsOut)
-            .arg(rowsOut));
+                  .arg(nameOut)
+                  .arg(colsOut)
+                  .arg(rowsOut));
     }
 
     QApplication::restoreOverrideCursor();
@@ -663,9 +666,9 @@ void MainWindow::saveAsTrack()
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save a track"),
-        QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
-        tr("Track Files (*.trk)"));
+                                                    tr("Save a track"),
+                                                    QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
+                                                    tr("Track Files (*.trk)"));
 
     const QString trackFileExtension(".trk");
     if (!fileName.endsWith(trackFileExtension))

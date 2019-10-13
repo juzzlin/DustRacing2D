@@ -31,9 +31,9 @@
 #include "mcobjectgrid.hh"
 #include "mcparticle.hh"
 #include "mcphysicscomponent.hh"
+#include "mcrectshape.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
-#include "mcrectshape.hh"
 #include "mctrigonom.hh"
 #include "mcworldrenderer.hh"
 
@@ -51,20 +51,20 @@ const int REMOVED_INDEX = -1;
 }
 
 MCWorld::MCWorld()
-: m_renderer(new MCWorldRenderer)
-, m_forceRegistry(new MCForceRegistry)
-, m_collisionDetector(new MCCollisionDetector)
-, m_impulseGenerator(new MCImpulseGenerator)
-, m_minX(0)
-, m_maxX(0)
-, m_minY(0)
-, m_maxY(0)
-, m_minZ(0)
-, m_maxZ(0)
-, m_numCollisions(0)
-, m_resolverLoopCount(5)
-, m_resolverStep(1.0f / m_resolverLoopCount)
-, m_gravity(MCVector3dF(0, 0, -9.81f))
+  : m_renderer(new MCWorldRenderer)
+  , m_forceRegistry(new MCForceRegistry)
+  , m_collisionDetector(new MCCollisionDetector)
+  , m_impulseGenerator(new MCImpulseGenerator)
+  , m_minX(0)
+  , m_maxX(0)
+  , m_minY(0)
+  , m_maxY(0)
+  , m_minZ(0)
+  , m_maxZ(0)
+  , m_numCollisions(0)
+  , m_resolverLoopCount(5)
+  , m_resolverStep(1.0f / m_resolverLoopCount)
+  , m_gravity(MCVector3dF(0, 0, -9.81f))
 {
     if (!MCWorld::m_instance)
     {
@@ -168,8 +168,8 @@ void MCWorld::clear()
 }
 
 void MCWorld::setDimensions(
-    float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
-    float metersPerUnit, bool addAreaWalls, int gridSize)
+  float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
+  float metersPerUnit, bool addAreaWalls, int gridSize)
 {
     assert(maxX - minX > 0);
     assert(maxY - minY > 0);
@@ -329,8 +329,9 @@ void MCWorld::addObject(MCObject & object)
             if (object.physicsComponent().xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(
-                    MCForceGeneratorPtr(new MCFrictionGenerator(
-                        object.physicsComponent().xyFriction(), object.physicsComponent().xyFriction())), object);
+                  MCForceGeneratorPtr(new MCFrictionGenerator(
+                    object.physicsComponent().xyFriction(), object.physicsComponent().xyFriction())),
+                  object);
             }
         }
     }
@@ -488,7 +489,7 @@ const MCVector3dF & MCWorld::gravity() const
 
 void MCWorld::setMetersPerUnit(float value)
 {
-    MCWorld::m_metersPerUnit        = value;
+    MCWorld::m_metersPerUnit = value;
     MCWorld::m_metersPerUnitSquared = value * value;
 }
 

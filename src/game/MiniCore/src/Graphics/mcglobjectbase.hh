@@ -20,11 +20,11 @@
 #ifndef MCGLOBJECTBASE_HH
 #define MCGLOBJECTBASE_HH
 
-#include <MCGLEW>
 #include "mcglmaterial.hh"
 #include "mcglshaderprogram.hh"
 #include "mcgltexcoord.hh"
 #include "mcglvertex.hh"
+#include <MCGLEW>
 
 class MCCamera;
 
@@ -39,7 +39,6 @@ class MCGLObjectBase
 #endif
 {
 public:
-
     //! Constructor.
     explicit MCGLObjectBase(std::string handle);
 
@@ -169,14 +168,12 @@ public:
 
     void setHandle(const std::string & handle);
 
-
 protected:
-
     //! Store a vertex, needed for batching
     void addVertex(const MCGLVertex & vertex);
 
     //! Set vertices
-    template <typename T>
+    template<typename T>
     using Container = std::vector<T>;
     using VertexVector = Container<MCGLVertex>;
     void setVertices(const VertexVector & vertices);
@@ -205,10 +202,10 @@ protected:
     void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
 
     void addBufferSubData(
-        MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);
+      MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);
 
     void addBufferSubData(
-        MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data);
+      MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data);
 
     void finishBufferData();
 
@@ -223,7 +220,6 @@ protected:
     void disableAttributePointers();
 
 private:
-
     static GLuint m_boundVbo;
 
     std::string m_handle;

@@ -31,16 +31,16 @@
 #include <MCVector2d>
 
 namespace {
-static const char * BRIDGE_ID      = "bridge";
+static const char * BRIDGE_ID = "bridge";
 static const char * BRIDGE_RAIL_ID = "bridgeRail";
-static const int    RAIL_Z         = 16;
-static const float  OBJECT_Z_DELTA = RAIL_Z;
-static const float  OBJECT_Z_ZERO  = 0.0f;
-static const int    WIDTH          = 256;
-}
+static const int RAIL_Z = 16;
+static const float OBJECT_Z_DELTA = RAIL_Z;
+static const float OBJECT_Z_ZERO = 0.0f;
+static const int WIDTH = 256;
+} // namespace
 
 Bridge::Bridge()
-    : MCObject(BRIDGE_ID)
+  : MCObject(BRIDGE_ID)
 {
     auto && shape = MCShapePtr(new MCRectShape(nullptr, WIDTH, WIDTH));
     setShape(shape);
@@ -60,7 +60,7 @@ Bridge::Bridge()
     addChildObject(rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
 
     auto && rail1 = MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID));
-    addChildObject(rail1, MCVector3dF(0,  railYDisplacement, RAIL_Z));
+    addChildObject(rail1, MCVector3dF(0, railYDisplacement, RAIL_Z));
 
     rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     rail0->physicsComponent().setMass(0, true);
@@ -76,7 +76,7 @@ Bridge::Bridge()
     addChildObject(trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
 
     auto && trigger1 = MCObjectPtr(new BridgeTrigger(*this));
-    addChildObject(trigger1, MCVector3dF( triggerXDisplacement, 0, 0));
+    addChildObject(trigger1, MCVector3dF(triggerXDisplacement, 0, 0));
 
     MCMeshObjectData data("bridge");
     data.setMeshId("bridge");

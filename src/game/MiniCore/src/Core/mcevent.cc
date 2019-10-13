@@ -23,8 +23,9 @@
 unsigned int MCEvent::m_typeCount = 0;
 
 MCEvent::MCEvent()
-: m_accepted(false)
-{}
+  : m_accepted(false)
+{
+}
 
 unsigned int MCEvent::registerType()
 {
@@ -47,4 +48,5 @@ bool MCEvent::accepted() const
 }
 
 MCEvent::~MCEvent()
-{}
+{
+}

@@ -28,16 +28,16 @@
 
 #include "../common/config.hpp"
 
-#include <MCGLScene>
 #include <MCAssetManager>
+#include <MCGLScene>
 #include <MCSurface>
 #include <MCSurfaceManager>
 #include <MCTrigonom>
 
 #include "simple_logger.hpp"
 
-#include <cmath>
 #include <cassert>
+#include <cmath>
 
 #include <QDir>
 #include <QFontDatabase>
@@ -49,22 +49,22 @@
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
-: m_context(nullptr)
-, m_scene(nullptr)
-, m_eventHandler(nullptr)
-, m_viewAngle(22.5f)
-, m_zNear(10.0f)
-, m_zFar(10000.0f) // See: https://github.com/juzzlin/DustRacing2D/issues/30
-, m_fadeValue(1.0f)
-, m_enabled(false)
-, m_hRes(hRes)
-, m_vRes(vRes)
-, m_fullHRes(Game::instance().screen()->geometry().width())
-, m_fullVRes(Game::instance().screen()->geometry().height())
-, m_frameCounter(0)
-, m_fullScreen(fullScreen)
-, m_updatePending(false)
-, m_glScene(glScene)
+  : m_context(nullptr)
+  , m_scene(nullptr)
+  , m_eventHandler(nullptr)
+  , m_viewAngle(22.5f)
+  , m_zNear(10.0f)
+  , m_zFar(10000.0f) // See: https://github.com/juzzlin/DustRacing2D/issues/30
+  , m_fadeValue(1.0f)
+  , m_enabled(false)
+  , m_hRes(hRes)
+  , m_vRes(vRes)
+  , m_fullHRes(Game::instance().screen()->geometry().width())
+  , m_fullVRes(Game::instance().screen()->geometry().height())
+  , m_frameCounter(0)
+  , m_fullScreen(fullScreen)
+  , m_updatePending(false)
+  , m_glScene(glScene)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -107,7 +107,7 @@ void Renderer::initialize()
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
     m_glScene.resize(
-        viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
+      viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
 }
 
 void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
@@ -146,7 +146,7 @@ void Renderer::loadShaders()
 
 void Renderer::loadFonts()
 {
-    QStringList fonts = {"DejaVuSans-Bold.ttf"};
+    QStringList fonts = { "DejaVuSans-Bold.ttf" };
     for (auto font : fonts)
     {
         const QString path = QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
@@ -277,7 +277,7 @@ void Renderer::renderLater()
     }
 }
 
-bool Renderer::event(QEvent *event)
+bool Renderer::event(QEvent * event)
 {
     switch (event->type())
     {
@@ -316,8 +316,7 @@ void Renderer::renderNow()
         if (!m_context->isValid())
         {
             std::stringstream ss;
-            ss << "Cannot create context for OpenGL version " <<
-                  requestedFormat().majorVersion() << "." << requestedFormat().minorVersion();
+            ss << "Cannot create context for OpenGL version " << requestedFormat().majorVersion() << "." << requestedFormat().minorVersion();
             throw std::runtime_error(ss.str());
         }
 
@@ -333,8 +332,7 @@ void Renderer::renderNow()
     }
 
     m_frameCounter++;
-    if (Game::instance().fps() == Game::Fps::Fps60 ||
-        (Game::instance().fps() == Game::Fps::Fps30 && m_frameCounter & 0x01))
+    if (Game::instance().fps() == Game::Fps::Fps60 || (Game::instance().fps() == Game::Fps::Fps30 && m_frameCounter & 0x01))
     {
         render();
 

@@ -21,13 +21,13 @@
 #include <MCSurface>
 
 StartlightsOverlay::StartlightsOverlay(Startlights & model)
-: m_startLightOn(MCAssetManager::surfaceManager().surface("startLightOn"))
-, m_startLightOnCorner(MCAssetManager::surfaceManager().surface("startLightOnCorner"))
-, m_startLightOff(MCAssetManager::surfaceManager().surface("startLightOff"))
-, m_startLightOffCorner(MCAssetManager::surfaceManager().surface("startLightOffCorner"))
-, m_startLightGlow(MCAssetManager::surfaceManager().surface("startLightGlow"))
-, m_model(model)
-, m_alpha(1.0)
+  : m_startLightOn(MCAssetManager::surfaceManager().surface("startLightOn"))
+  , m_startLightOnCorner(MCAssetManager::surfaceManager().surface("startLightOnCorner"))
+  , m_startLightOff(MCAssetManager::surfaceManager().surface("startLightOff"))
+  , m_startLightOffCorner(MCAssetManager::surfaceManager().surface("startLightOffCorner"))
+  , m_startLightGlow(MCAssetManager::surfaceManager().surface("startLightGlow"))
+  , m_model(model)
+  , m_alpha(1.0)
 {
     m_startLightOff.material()->setAlphaBlend(true);
     m_startLightOffCorner.material()->setAlphaBlend(true);
@@ -38,7 +38,7 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
 {
     const int cols = 8;
 
-    const float x = m_model.pos().i() - (cols - 1) * m_startLightOn.width()  / 2;
+    const float x = m_model.pos().i() - (cols - 1) * m_startLightOn.width() / 2;
     const float y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
     const float h = rows * m_startLightOn.height();
 
@@ -48,8 +48,8 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
         for (int col = 0; col < cols; col++)
         {
             const MCVector3dF pos(
-                x + col * m_startLightOff.width(),
-                y + h - row * m_startLightOff.height());
+              x + col * m_startLightOff.width(),
+              y + h - row * m_startLightOff.height());
 
             if (row < litRows)
             {
@@ -109,11 +109,11 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
             {
                 m_startLightGlow.setScale(MCVector3dF(glowScale, glowScale, 1.0f));
                 m_startLightGlow.render(
-                    nullptr,
-                    MCVector3dF(
-                        x + col * m_startLightOn.width(),
-                        y + h - row * m_startLightOn.height()),
-                    0);
+                  nullptr,
+                  MCVector3dF(
+                    x + col * m_startLightOn.width(),
+                    y + h - row * m_startLightOn.height()),
+                  0);
             }
         }
     }

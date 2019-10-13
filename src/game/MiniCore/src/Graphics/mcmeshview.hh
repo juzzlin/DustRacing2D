@@ -20,8 +20,8 @@
 #ifndef MCMESHVIEW_HH
 #define MCMESHVIEW_HH
 
-#include "mcshapeview.hh"
 #include "mcmesh.hh"
+#include "mcshapeview.hh"
 
 /*! \class MCMeshView.
  *  \brief View class for MCShape. Renders the given MCMesh.
@@ -51,15 +51,15 @@ public:
 
     //! \reimp
     virtual void render(
-        const MCVector3d<float> & l,
-        float angle,
-        MCCamera * p = nullptr) override;
+      const MCVector3d<float> & l,
+      float angle,
+      MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadow(
-        const MCVector3d<float> & l,
-        float angle,
-        MCCamera * p = nullptr) override;
+      const MCVector3d<float> & l,
+      float angle,
+      MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual const MCBBoxF & bbox() const override;
@@ -77,13 +77,12 @@ public:
     virtual void releaseShadow() override;
 
     //! \reimp
-    virtual void setScale(const MCVector3dF &scale) override;
+    virtual void setScale(const MCVector3dF & scale) override;
 
     //! \reimp
     virtual MCGLObjectBase * object() const override;
 
 private:
-
     DISABLE_COPY(MCMeshView);
     DISABLE_ASSI(MCMeshView);
 

@@ -24,7 +24,6 @@ class Object;
 class ObjectFactory
 {
 public:
-
     /*! Create an Objects from given role.
      *  The caller gets the ownership. */
     static Object & createObject(QString role);

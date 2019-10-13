@@ -22,18 +22,16 @@
 
 float MCMathUtil::rotatedX(float x0, float y0, float angle)
 {
-    return MCTrigonom::cos(angle) * x0 -
-        MCTrigonom::sin(angle) * y0;
+    return MCTrigonom::cos(angle) * x0 - MCTrigonom::sin(angle) * y0;
 }
 
 float MCMathUtil::rotatedY(float x0, float y0, float angle)
 {
-    return MCTrigonom::sin(angle) * x0 +
-        MCTrigonom::cos(angle) * y0;
+    return MCTrigonom::sin(angle) * x0 + MCTrigonom::cos(angle) * y0;
 }
 
 void MCMathUtil::rotateVector(
-    const MCVector2dF & v0, MCVector2dF & v1, float angle)
+  const MCVector2dF & v0, MCVector2dF & v1, float angle)
 {
     const float sin = MCTrigonom::sin(angle);
     const float cos = MCTrigonom::cos(angle);

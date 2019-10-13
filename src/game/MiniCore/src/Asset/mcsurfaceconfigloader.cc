@@ -22,23 +22,23 @@
 #include <QDomElement>
 #include <QFile>
 
+#include "mclogger.hh"
 #include "mcsurfaceconfigloader.hh"
 #include "mcsurfacemetadata.hh"
-#include "mclogger.hh"
 
 #include <cassert>
 #include <exception>
 
 MCSurfaceConfigLoader::MCSurfaceConfigLoader()
-: m_surfaces()
+  : m_surfaces()
 {
-    m_blendFuncMap["one"]              = GL_ONE;
-    m_blendFuncMap["zero"]             = GL_ZERO;
-    m_blendFuncMap["srcColor"]         = GL_SRC_COLOR;
+    m_blendFuncMap["one"] = GL_ONE;
+    m_blendFuncMap["zero"] = GL_ZERO;
+    m_blendFuncMap["srcColor"] = GL_SRC_COLOR;
     m_blendFuncMap["oneMinusSrcColor"] = GL_ONE_MINUS_SRC_COLOR;
-    m_blendFuncMap["srcAlpha"]         = GL_SRC_ALPHA;
+    m_blendFuncMap["srcAlpha"] = GL_SRC_ALPHA;
     m_blendFuncMap["oneMinusSrcAlpha"] = GL_ONE_MINUS_SRC_ALPHA;
-    m_blendFuncMap["dstColor"]         = GL_DST_COLOR;
+    m_blendFuncMap["dstColor"] = GL_DST_COLOR;
     m_blendFuncMap["oneMinusDstColor"] = GL_ONE_MINUS_DST_COLOR;
 }
 
@@ -77,10 +77,7 @@ void MCSurfaceConfigLoader::parseAttributes(const QDomElement & element, Surface
         newData->z3 = z;
     }
     else if (
-        element.hasAttribute("z0") ||
-        element.hasAttribute("z1") ||
-        element.hasAttribute("z2") ||
-        element.hasAttribute("z3"))
+      element.hasAttribute("z0") || element.hasAttribute("z1") || element.hasAttribute("z2") || element.hasAttribute("z3"))
     {
         newData->z0 = element.attribute("z0", "0").toFloat();
         newData->z1 = element.attribute("z1", "0").toFloat();
@@ -132,7 +129,7 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 newData->colorKey.m_r = element.attribute("r", "0").toUInt();
                 newData->colorKey.m_g = element.attribute("g", "0").toUInt();
                 newData->colorKey.m_b = element.attribute("b", "0").toUInt();
-                newData->colorKeySet  = true;
+                newData->colorKeySet = true;
             }
         }
         else if (childNode.nodeName() == "alphaBlend")
@@ -141,12 +138,13 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
             if (!element.isNull())
             {
                 newData->alphaBlend.first.m_src =
-                    alphaBlendStringToEnum(
-                        element.attribute("src", "srcAlpha").toStdString());
+                  alphaBlendStringToEnum(
+                    element.attribute("src", "srcAlpha").toStdString());
                 newData->alphaBlend.first.m_dst =
-                    alphaBlendStringToEnum(
-                        element.attribute(
-                            "dst", "srcAlphaMinusOne").toStdString());
+                  alphaBlendStringToEnum(
+                    element.attribute(
+                             "dst", "srcAlphaMinusOne")
+                      .toStdString());
                 newData->alphaBlend.second = true;
             }
         }
@@ -202,10 +200,10 @@ void MCSurfaceConfigLoader::parseChildNodes(const QDomNode & node, SurfaceDataPt
                 const std::string s = element.attribute("s", "").toStdString();
                 const std::string t = element.attribute("t", "").toStdString();
 
-                // Windows build hack
-                #ifndef GL_CLAMP_TO_EDGE
-                    #define GL_CLAMP_TO_EDGE 0x812F
-                #endif
+// Windows build hack
+#ifndef GL_CLAMP_TO_EDGE
+#define GL_CLAMP_TO_EDGE 0x812F
+#endif
 
                 if (s == "clamp")
                 {
@@ -265,11 +263,11 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
     {
         const std::string baseImagePath = root.attribute("baseImagePath", "./").toStdString();
         auto && node = root.firstChild();
-        while(!node.isNull() && node.nodeName() == "surface")
+        while (!node.isNull() && node.nodeName() == "surface")
         {
             SurfaceDataPtr newData(new MCSurfaceMetaData);
             auto && element = node.toElement();
-            if(!element.isNull())
+            if (!element.isNull())
             {
                 parseAttributes(element, newData, baseImagePath);
                 parseChildNodes(node, newData);
@@ -285,13 +283,12 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
 }
 
 GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
-    const std::string & function) const
+  const std::string & function) const
 {
     try
     {
         return m_blendFuncMap.at(function);
-    }
-    catch (...)
+    } catch (...)
     {
         throw std::runtime_error("Unknown alpha blend function '" + function + "'");
     }

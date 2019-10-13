@@ -18,26 +18,26 @@
 #include "renderer.hpp"
 #include "textmenuitemview.hpp"
 
+#include <MCAssetManager>
 #include <MCSurface>
 #include <MCTextureFont>
-#include <MCAssetManager>
 
 #include <MenuItem>
 
 #include <cassert>
 
 SurfaceMenu::SurfaceMenu(
-    std::string surfaceId,
-    std::string id,
-    int width,
-    int height,
-    Menu::Style style,
-    bool quitItem,
-    bool prevItem,
-    bool nextItem)
-: Menu(id, width, height, style)
-, m_back(MCAssetManager::surfaceManager().surface(surfaceId))
-, m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
+  std::string surfaceId,
+  std::string id,
+  int width,
+  int height,
+  Menu::Style style,
+  bool quitItem,
+  bool prevItem,
+  bool nextItem)
+  : Menu(id, width, height, style)
+  , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
+  , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
     m_back.setShaderProgram(Renderer::instance().program("menu"));
     m_back.setColor(MCGLColor(0.5, 0.5, 0.5, 1.0));

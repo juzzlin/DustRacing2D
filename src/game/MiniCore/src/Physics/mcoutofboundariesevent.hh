@@ -30,9 +30,16 @@ class MCObject;
 class MCOutOfBoundariesEvent : public MCEvent
 {
 public:
-
     //! Edge that was violated
-    enum ViolatedEdge {West, East, North, South, Top, Bottom};
+    enum ViolatedEdge
+    {
+        West,
+        East,
+        North,
+        South,
+        Top,
+        Bottom
+    };
 
     /*! Constructor
      * \param edge The edge that has been violated by an object
@@ -54,7 +61,6 @@ public:
     MCObject & violatingObject() const;
 
 private:
-
     DISABLE_COPY(MCOutOfBoundariesEvent);
     DISABLE_ASSI(MCOutOfBoundariesEvent);
 

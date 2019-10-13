@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,9 @@
 ///
 /// @defgroup gtx_mixed_product GLM_GTX_mixed_producte: Mixed product
 /// @ingroup gtx
-/// 
+///
 /// @brief Mixed product of 3 vectors.
-/// 
+///
 /// <glm/gtx/mixed_product.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -41,25 +41,24 @@
 // Dependency:
 #include "../glm.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_mixed_product extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_mixed_product extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_mixed_product
-	/// @{
+namespace glm {
+/// @addtogroup gtx_mixed_product
+/// @{
 
-	/// @brief Mixed product of 3 vectors (from GLM_GTX_mixed_product extension)
-	template <typename valType> 
-	valType mixedProduct(
-		detail::tvec3<valType> const & v1, 
-		detail::tvec3<valType> const & v2, 
-		detail::tvec3<valType> const & v3);
+/// @brief Mixed product of 3 vectors (from GLM_GTX_mixed_product extension)
+template<typename valType>
+valType mixedProduct(
+  detail::tvec3<valType> const & v1,
+  detail::tvec3<valType> const & v2,
+  detail::tvec3<valType> const & v3);
 
-	/// @}
-}// namespace glm
+/// @}
+} // namespace glm
 
 #include "mixed_product.inl"
 
-#endif//GLM_GTX_mixed_product
+#endif //GLM_GTX_mixed_product

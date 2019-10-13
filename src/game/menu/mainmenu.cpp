@@ -39,9 +39,9 @@ static const int ITEM_TEXT_SIZE = 40;
 std::string MainMenu::MenuId = "main";
 
 MainMenu::MainMenu(MTFH::MenuManager & menuManager, Scene & scene, int width, int height)
-    : SurfaceMenu("mainMenuBack", MenuId, width, height, Menu::Style::VerticalList, false)
-    , m_menuManager(menuManager)
-    , m_scene(scene)
+  : SurfaceMenu("mainMenuBack", MenuId, width, height, Menu::Style::VerticalList, false)
+  , m_menuManager(menuManager)
+  , m_scene(scene)
 {
     createMenuItems();
     createSubMenus();
@@ -69,11 +69,10 @@ void MainMenu::createMenuItems()
     MenuItem * quit = new MenuItem(width(), itemHeight, tr("Quit").toUpper().toStdWString());
     quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *quit)));
     quit->setAction(
-        [this]()
-        {
-            juzzlin::L().info() << "Quit selected from the main menu.";
-            emit exitGameRequested();
-        });
+      [this]() {
+          juzzlin::L().info() << "Quit selected from the main menu.";
+          emit exitGameRequested();
+      });
 
     MenuItem * settings = new MenuItem(width(), itemHeight, tr("Settings").toUpper().toStdWString());
     settings->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *settings)));

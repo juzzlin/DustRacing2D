@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,9 +30,9 @@
 ///
 /// @defgroup gtx_int_10_10_10_2 GLM_GTX_int_10_10_10_2: Packed integer
 /// @ingroup gtx
-/// 
+///
 /// @brief Pack vector to 1010102 integers. Storage only.
-/// 
+///
 /// <glm/gtx/int_10_10_10_2.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -43,22 +43,21 @@
 #include "../glm.hpp"
 #include "../gtx/raw_data.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_int_10_10_10_2 extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_int_10_10_10_2 extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_int_10_10_10_2
-	/// @{
+namespace glm {
+/// @addtogroup gtx_int_10_10_10_2
+/// @{
 
-	//! From GLM_GTX_int_10_10_10_2 extension.
-	//! Cast a vec4 to an u_10_10_10_2.
-	dword uint10_10_10_2_cast(glm::vec4 const & v);
+//! From GLM_GTX_int_10_10_10_2 extension.
+//! Cast a vec4 to an u_10_10_10_2.
+dword uint10_10_10_2_cast(glm::vec4 const & v);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "int_10_10_10_2.inl"
 
-#endif//GLM_GTX_int_10_10_10_2
+#endif //GLM_GTX_int_10_10_10_2

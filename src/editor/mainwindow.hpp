@@ -16,8 +16,8 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
-#include <QMainWindow>
 #include <QCloseEvent>
+#include <QMainWindow>
 #include <QString>
 
 class AboutDlg;
@@ -39,7 +39,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-
     //! Constructor.
     //! The constructor tries to load object models from
     //! Config::DATA_PATH/objects.conf.
@@ -82,7 +81,6 @@ public slots:
     void updateScaleSlider(int value);
 
 protected:
-
     void closeEvent(QCloseEvent * event) override;
 
 private slots:
@@ -116,7 +114,6 @@ private slots:
     void updateScale(int value);
 
 private:
-
     void addObjectsToToolBar();
 
     void clearEditMode();
@@ -183,4 +180,3 @@ private:
 };
 
 #endif // MAINWINDOW_HPP
-

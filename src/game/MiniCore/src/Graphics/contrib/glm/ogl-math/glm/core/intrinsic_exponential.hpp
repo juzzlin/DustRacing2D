@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,13 +31,12 @@
 
 #include "setup.hpp"
 
-#if((GLM_ARCH & GLM_ARCH_SSE2) != GLM_ARCH_SSE2)
-#	error "SSE2 instructions not supported or enabled"
+#if ((GLM_ARCH & GLM_ARCH_SSE2) != GLM_ARCH_SSE2)
+#error "SSE2 instructions not supported or enabled"
 #else
 
-namespace glm{
-namespace detail
-{
+namespace glm {
+namespace detail {
 /*
 GLM_FUNC_QUALIFIER __m128 sse_rsqrt_nr_ss(__m128 const x)
 {
@@ -72,8 +71,8 @@ GLM_FUNC_QUALIFIER __m128 sse_normalize_fast_ps(  float * RESTRICT vOut, float *
         return _mm_mul_ss( l , rsqt );
 }
 */
-}//namespace detail
-}//namespace glm
+} //namespace detail
+} //namespace glm
 
-#endif//GLM_ARCH
-#endif//glm_detail_intrinsic_exponential
+#endif //GLM_ARCH
+#endif //glm_detail_intrinsic_exponential

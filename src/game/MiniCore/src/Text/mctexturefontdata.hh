@@ -20,9 +20,9 @@
 #ifndef MCTEXTUREFONTDATA_HH
 #define MCTEXTUREFONTDATA_HH
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 //! Data structure used by MCTextureFontConfigLoader.
 struct MCTextureFontData

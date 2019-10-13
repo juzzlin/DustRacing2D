@@ -23,7 +23,6 @@
 class LapCountMenu : public SurfaceMenu
 {
 public:
-
     static std::string MenuId;
 
     LapCountMenu(int width, int height);
@@ -31,7 +30,6 @@ public:
     virtual void render() override;
 
 private:
-
     MCTextureFont m_font;
 };
 

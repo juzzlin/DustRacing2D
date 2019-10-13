@@ -32,7 +32,6 @@ class Pit : public QObject, public MCObject
     Q_OBJECT
 
 public:
-
     //! Constructor.
     Pit(MCSurface & surface);
 
@@ -52,7 +51,6 @@ signals:
     void pitStop(Car & car);
 
 private:
-
     std::set<Car *> m_possiblyPittingCars;
 };
 

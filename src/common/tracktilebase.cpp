@@ -16,14 +16,14 @@
 #include "tracktilebase.hpp"
 
 TrackTileBase::TrackTileBase(
-    QPointF location,
-    QPoint matrixLocation,
-    const QString & type)
-: m_tileType(type)
-, m_location(location)
-, m_matrixLocation(matrixLocation)
-, m_computerHint(TrackTileBase::CH_NONE)
-, m_excludeFromMinimap(false)
+  QPointF location,
+  QPoint matrixLocation,
+  const QString & type)
+  : m_tileType(type)
+  , m_location(location)
+  , m_matrixLocation(matrixLocation)
+  , m_computerHint(TrackTileBase::CH_NONE)
+  , m_excludeFromMinimap(false)
 {
 }
 

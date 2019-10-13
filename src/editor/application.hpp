@@ -24,7 +24,6 @@ class MainWindow;
 class Application
 {
 public:
-
     Application(int & argc, char ** argv);
 
     ~Application();
@@ -32,7 +31,6 @@ public:
     int run();
 
 private:
-
     void parseArgs(int argc, char ** argv);
 
     QApplication m_app;

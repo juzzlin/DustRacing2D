@@ -16,9 +16,9 @@
 #ifndef EDITORVIEW_HPP
 #define EDITORVIEW_HPP
 
+#include "../common/tracktilebase.hpp"
 #include <QGraphicsView>
 #include <QMenu>
-#include "../common/tracktilebase.hpp"
 
 class Mediator;
 class QAction;
@@ -34,13 +34,11 @@ class EditorView : public QGraphicsView
     Q_OBJECT
 
 public:
-
     explicit EditorView(Mediator & mediator);
 
     void updateSceneRect();
 
 protected:
-
     void mouseMoveEvent(QMouseEvent * event) override;
 
     void mousePressEvent(QMouseEvent * event) override;
@@ -52,7 +50,6 @@ protected:
     void wheelEvent(QWheelEvent * event) override;
 
 private:
-
     void addCurrentToolBarObjectToScene();
 
     void changeTileType(TrackTile & tile, QAction * action);

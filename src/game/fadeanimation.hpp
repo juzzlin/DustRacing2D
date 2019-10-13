@@ -24,7 +24,6 @@ class FadeAnimation : public QObject
     Q_OBJECT
 
 public:
-
     explicit FadeAnimation(int updateFps = 60);
 
     bool isFading() const;
@@ -50,14 +49,13 @@ private slots:
     void updateAnimation();
 
 private:
-
     QTimer m_timer;
-    float  m_updateFps;
-    float  m_fadeValue;
-    float  m_step;
-    int    m_preDelayMSec;
-    int    m_postDelayMSec;
-    bool   m_fadeIn;
+    float m_updateFps;
+    float m_fadeValue;
+    float m_step;
+    int m_preDelayMSec;
+    int m_postDelayMSec;
+    bool m_fadeIn;
 };
 
 #endif // FADEANIMATION_HPP

@@ -35,4 +35,4 @@ Data::~Data()
 {
 }
 
-}
+} // namespace STFH

@@ -16,16 +16,13 @@
 #ifndef INPUTHANDLER_HPP
 #define INPUTHANDLER_HPP
 
-#include <vector>
 #include <bitset>
-
-
+#include <vector>
 
 //! Handler for players' interactions.
 class InputHandler
 {
 public:
-
     //! Possible actions.
     enum class Action : int
     {
@@ -55,7 +52,6 @@ public:
     static bool enabled();
 
 private:
-
     typedef std::vector<std::bitset<static_cast<int>(Action::EndOfEnum)>> ActionVector;
 
     ActionVector m_playerActions;

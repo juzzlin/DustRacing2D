@@ -23,8 +23,8 @@
 #include <MCObjectFactory>
 
 #include "difficultyprofile.hpp"
-#include "tracktile.hpp"
 #include "trackobjectfactory.hpp"
+#include "tracktile.hpp"
 
 #include "../common/targetnodebase.hpp"
 
@@ -40,7 +40,6 @@ class QDomElement;
 class TrackLoader
 {
 public:
-
     //! Constructor.
     TrackLoader();
 
@@ -69,7 +68,6 @@ public:
     static TrackLoader & instance();
 
 private:
-
     //! Load the given track.
     //! \return Valid data pointer or nullptr if fails.
     TrackData * loadTrack(QString path);

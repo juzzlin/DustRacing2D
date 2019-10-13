@@ -20,8 +20,8 @@
 #include "object.hpp"
 #include "objectmodelloader.hpp"
 #include "targetnode.hpp"
-#include "tracktile.hpp"
 #include "trackio.hpp"
+#include "tracktile.hpp"
 
 #include <cassert>
 #include <memory>
@@ -29,8 +29,9 @@
 using std::dynamic_pointer_cast;
 
 EditorData::EditorData(Mediator & mediator)
-    : m_mediator(mediator)
-{}
+  : m_mediator(mediator)
+{
+}
 
 void EditorData::clearScene()
 {

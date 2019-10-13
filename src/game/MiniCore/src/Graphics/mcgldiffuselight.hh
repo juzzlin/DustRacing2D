@@ -27,11 +27,10 @@
 class MCGLDiffuseLight : public MCGLAmbientLight
 {
 public:
-
     //! Constructor.
     MCGLDiffuseLight(
-        MCVector3dF direction,
-        GLfloat r, GLfloat g, GLfloat b, GLfloat i);
+      MCVector3dF direction,
+      GLfloat r, GLfloat g, GLfloat b, GLfloat i);
 
     MCGLDiffuseLight();
 
@@ -40,7 +39,6 @@ public:
     void setDirection(MCVector3dF direction);
 
 private:
-
     MCVector3dF m_direction;
 };
 

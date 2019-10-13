@@ -20,8 +20,6 @@
 #ifndef MCIMPULSEGENERATOR_HH
 #define MCIMPULSEGENERATOR_HH
 
-
-
 #include "mcvector3d.hh"
 #include <vector>
 
@@ -32,7 +30,6 @@ class MCContact;
 class MCImpulseGenerator
 {
 public:
-
     //! Constructor.
     MCImpulseGenerator();
 
@@ -48,11 +45,10 @@ public:
     void resolvePositions(std::vector<MCObject *> & objs, float accuracy);
 
 private:
-
     void generateImpulsesFromContact(
-        MCObject & pa, MCObject & pb, const MCContact & contact,
-        const MCVector3dF & linearImpulse,
-        float restitution);
+      MCObject & pa, MCObject & pb, const MCContact & contact,
+      const MCVector3dF & linearImpulse,
+      float restitution);
 
     void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);
 

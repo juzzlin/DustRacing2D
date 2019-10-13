@@ -21,8 +21,8 @@
 const int FRAMES = 30;
 
 TileAnimator::TileAnimator(TrackTile * tile)
-: QTimeLine(250)
-, m_tile(tile)
+  : QTimeLine(250)
+  , m_tile(tile)
 {
     setFrameRange(0, FRAMES);
 

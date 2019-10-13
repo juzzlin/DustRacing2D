@@ -27,7 +27,6 @@
 class MCDragForceGenerator : public MCForceGenerator
 {
 public:
-
     /*! Constructor
      * \param coeff1 Linear coefficient
      * \param coeff2 Quadratic coefficient
@@ -41,7 +40,6 @@ public:
     virtual void updateForce(MCObject & object);
 
 private:
-
     DISABLE_COPY(MCDragForceGenerator);
     DISABLE_ASSI(MCDragForceGenerator);
     float m_coeff1, m_coeff2;

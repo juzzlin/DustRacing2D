@@ -14,14 +14,15 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "inputhandler.hpp"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 bool InputHandler::m_enabled = true;
 
 InputHandler::InputHandler(size_t maxPlayers)
   : m_playerActions(maxPlayers, std::bitset<static_cast<int>(Action::EndOfEnum)>())
-{}
+{
+}
 
 bool InputHandler::getActionState(size_t playerIndex, Action action) const
 {

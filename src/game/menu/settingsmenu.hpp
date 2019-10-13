@@ -25,12 +25,10 @@
 class SettingsMenu : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     SettingsMenu(std::string id, int width, int height);
 
 private:
-
     void populate(int width, int height);
 
     void populateFpsMenu(int width, int height);

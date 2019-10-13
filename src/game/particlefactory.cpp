@@ -15,8 +15,8 @@
 
 #include "particlefactory.hpp"
 
-#include "renderer.hpp"
 #include "layers.hpp"
+#include "renderer.hpp"
 
 #include <MCAssetManager>
 #include <MCGLColor>
@@ -46,7 +46,7 @@ ParticleFactory & ParticleFactory::instance()
 }
 
 void ParticleFactory::preCreateSurfaceParticles(
-    int count, std::string typeId, ParticleFactory::ParticleType typeEnum, MCSurface & surface, bool alphaBlend, bool hasShadow)
+  int count, std::string typeId, ParticleFactory::ParticleType typeEnum, MCSurface & surface, bool alphaBlend, bool hasShadow)
 {
     m_particleRenderers[typeEnum] = MCParticleRendererPtr(new MCSurfaceParticleRenderer);
 
@@ -54,7 +54,7 @@ void ParticleFactory::preCreateSurfaceParticles(
     {
         MCSurfaceParticle * particle = new MCSurfaceParticle(typeId, surface);
         particle->setFreeList(m_freeLists[typeEnum]);
-        particle->setCustomDeathCondition([] (MCParticle & self) {
+        particle->setCustomDeathCondition([](MCParticle & self) {
             return self.location().k() <= 0;
         });
         particle->setAlphaBlend(alphaBlend);
@@ -86,7 +86,7 @@ void ParticleFactory::preCreateParticles()
 }
 
 void ParticleFactory::doParticle(
-    ParticleType type, MCVector3dFR location, MCVector3dFR initialVelocity, int angle)
+  ParticleType type, MCVector3dFR location, MCVector3dFR initialVelocity, int angle)
 {
     switch (type)
     {

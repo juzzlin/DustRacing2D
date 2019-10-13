@@ -25,7 +25,6 @@
 class ObjectModelLoader
 {
 public:
-
     typedef QVector<ObjectModel> ObjectDataVector;
 
     //! Constructor.
@@ -52,7 +51,6 @@ public:
     QPixmap getPixmapByRole(QString role) const;
 
 private:
-
     Q_DISABLE_COPY(ObjectModelLoader)
 
     ObjectDataVector m_objects;

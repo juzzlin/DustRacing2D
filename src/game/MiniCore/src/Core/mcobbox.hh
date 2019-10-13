@@ -21,9 +21,9 @@
 #define MCOBBOX_HH
 
 #include "mcbbox.hh"
-#include "mcvector2d.hh"
-#include "mctrigonom.hh"
 #include "mcmathutil.hh"
+#include "mctrigonom.hh"
+#include "mcvector2d.hh"
 
 #include <algorithm>
 
@@ -36,11 +36,10 @@
  * |    |
  * v0--v3
  */
-template <typename T>
+template<typename T>
 class MCOBBox
 {
 public:
-
     //! Constructor.
     MCOBBox();
 
@@ -76,10 +75,16 @@ public:
     }
 
     //! Return current half width
-    inline T hx() const {return m_hx;}
+    inline T hx() const
+    {
+        return m_hx;
+    }
 
     //! Return current half height
-    inline T hy() const {return m_hy;}
+    inline T hy() const
+    {
+        return m_hy;
+    }
 
     //! Return given vertex
     inline MCVector2d<T> vertex(unsigned int index) const
@@ -98,13 +103,13 @@ public:
     /*! Return true if intersects with given MCOBBox
      * \param r The MCOBBox to be tested
      */
-    template <typename U>
+    template<typename U>
     bool intersects(const MCOBBox<U> & r) const;
 
     /*! Return true if intersects with given BBox
      * \param r The BBox to be tested
      */
-    template <typename U>
+    template<typename U>
     bool intersects(const MCBBox<U> & r) const;
 
     /*! Rotate
@@ -121,7 +126,6 @@ public:
     void scale(T s);
 
 private:
-
     //! Initial half X-axis
     T m_hx;
 
@@ -140,34 +144,34 @@ private:
 
 typedef MCOBBox<float> MCOBBoxF;
 
-template <typename T>
+template<typename T>
 MCOBBox<T>::MCOBBox()
-: m_hx(0)
-, m_hy(0)
-, m_p(0, 0)
-, m_a(0)
+  : m_hx(0)
+  , m_hy(0)
+  , m_p(0, 0)
+  , m_a(0)
 {
 }
 
-template <typename T>
+template<typename T>
 MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
-: m_hx(newHx)
-, m_hy(newHy)
-, m_p(loc)
-, m_a(0)
+  : m_hx(newHx)
+  , m_hy(newHy)
+  , m_p(loc)
+  , m_a(0)
 {
     m_v[0] = MCVector2d<T>(-m_hx, -m_hy);
-    m_v[1] = MCVector2d<T>(-m_hx,  m_hy);
-    m_v[2] = MCVector2d<T>( m_hx,  m_hy);
-    m_v[3] = MCVector2d<T>( m_hx, -m_hy);
+    m_v[1] = MCVector2d<T>(-m_hx, m_hy);
+    m_v[2] = MCVector2d<T>(m_hx, m_hy);
+    m_v[3] = MCVector2d<T>(m_hx, -m_hy);
 }
 
-template <typename T>
+template<typename T>
 MCOBBox<T>::MCOBBox(const MCOBBox<T> & other)
-: m_hx(other.m_hx)
-, m_hy(other.m_hy)
-, m_p(other.m_p)
-, m_a(other.m_a)
+  : m_hx(other.m_hx)
+  , m_hy(other.m_hy)
+  , m_p(other.m_p)
+  , m_a(other.m_a)
 {
     m_v[0] = other.m_v[0];
     m_v[1] = other.m_v[1];
@@ -175,12 +179,12 @@ MCOBBox<T>::MCOBBox(const MCOBBox<T> & other)
     m_v[3] = other.m_v[3];
 }
 
-template <typename T>
+template<typename T>
 MCOBBox<T>::MCOBBox(const MCOBBox<T> && other)
-: m_hx(other.m_hx)
-, m_hy(other.m_hy)
-, m_p(other.m_p)
-, m_a(other.m_a)
+  : m_hx(other.m_hx)
+  , m_hy(other.m_hy)
+  , m_p(other.m_p)
+  , m_a(other.m_a)
 {
     std::swap(m_v[0], other.m_v[0]);
     std::swap(m_v[1], other.m_v[1]);
@@ -188,15 +192,15 @@ MCOBBox<T>::MCOBBox(const MCOBBox<T> && other)
     std::swap(m_v[3], other.m_v[3]);
 }
 
-template <typename T>
+template<typename T>
 MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
 {
     if (this != &other)
     {
-        m_hx   = other.m_hx;
-        m_hy   = other.m_hy;
-        m_p    = other.m_p;
-        m_a    = other.m_a;
+        m_hx = other.m_hx;
+        m_hy = other.m_hy;
+        m_p = other.m_p;
+        m_a = other.m_a;
         m_v[0] = other.m_v[0];
         m_v[1] = other.m_v[1];
         m_v[2] = other.m_v[2];
@@ -206,13 +210,13 @@ MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
     return *this;
 }
 
-template <typename T>
+template<typename T>
 MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> && other)
 {
-    m_hx   = other.m_hx;
-    m_hy   = other.m_hy;
-    m_p    = other.m_p;
-    m_a    = other.m_a;
+    m_hx = other.m_hx;
+    m_hy = other.m_hy;
+    m_p = other.m_p;
+    m_a = other.m_a;
     m_v[0] = other.m_v[0];
     m_v[1] = other.m_v[1];
     m_v[2] = other.m_v[2];
@@ -221,7 +225,7 @@ MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> && other)
     return *this;
 }
 
-template <typename T>
+template<typename T>
 bool MCOBBox<T>::contains(MCVector2d<T> p) const
 {
     // Translate the test point
@@ -234,7 +238,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
     const MCVector2d<T> e3 = m_v[0] - m_v[3];
 
     // Do the test by using cross products.
-    const MCMathUtil::Sign ref  = MCMathUtil::sign(e0 % (m_v[1] - p));
+    const MCMathUtil::Sign ref = MCMathUtil::sign(e0 % (m_v[1] - p));
     const MCMathUtil::Sign e1v2 = MCMathUtil::sign(e1 % (m_v[2] - p));
     const MCMathUtil::Sign e2v3 = MCMathUtil::sign(e2 % (m_v[3] - p));
     const MCMathUtil::Sign e3v0 = MCMathUtil::sign(e3 % (m_v[0] - p));
@@ -272,7 +276,7 @@ bool MCOBBox<T>::contains(MCVector2d<T> p) const
     return false;
 }
 
-template <typename T>
+template<typename T>
 void MCOBBox<T>::rotate(float a)
 {
     if (a != m_a)
@@ -283,7 +287,7 @@ void MCOBBox<T>::rotate(float a)
         // Update vertex vectors. Note that the original
         // vertex vectors must be used as the source.
         MCMathUtil::rotateVector(MCVector2d<T>(-m_hx, -m_hy), m_v[0], m_a);
-        MCMathUtil::rotateVector(MCVector2d<T>(-m_hx,  m_hy), m_v[1], m_a);
+        MCMathUtil::rotateVector(MCVector2d<T>(-m_hx, m_hy), m_v[1], m_a);
 
         // Mirror the other two vertices
         m_v[2].setI(-m_v[0].i());
@@ -293,31 +297,25 @@ void MCOBBox<T>::rotate(float a)
     }
 }
 
-template <typename T>
+template<typename T>
 void MCOBBox<T>::translate(const MCVector2d<T> & p)
 {
     m_p = p;
 }
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 bool MCOBBox<T>::intersects(const MCOBBox<U> & r) const
 {
     // Test if r includes at least one vertice
-    if (r.contains(m_p + m_v[0]) ||
-        r.contains(m_p + m_v[1]) ||
-        r.contains(m_p + m_v[2]) ||
-        r.contains(m_p + m_v[3]))
+    if (r.contains(m_p + m_v[0]) || r.contains(m_p + m_v[1]) || r.contains(m_p + m_v[2]) || r.contains(m_p + m_v[3]))
     {
         // Yes: intersection
         return true;
     }
     // Test if this includes at least one of r's vertices
     else if (
-        contains(r.m_p + r.m_v[0]) ||
-        contains(r.m_p + r.m_v[1]) ||
-        contains(r.m_p + r.m_v[2]) ||
-        contains(r.m_p + r.m_v[3]))
+      contains(r.m_p + r.m_v[0]) || contains(r.m_p + r.m_v[1]) || contains(r.m_p + r.m_v[2]) || contains(r.m_p + r.m_v[3]))
     {
         // Yes: intersection
         return true;
@@ -327,25 +325,19 @@ bool MCOBBox<T>::intersects(const MCOBBox<U> & r) const
     return false;
 }
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 bool MCOBBox<T>::intersects(const MCBBox<U> & r) const
 {
     // Test if r includes at least one vertice
-    if (r.contains(m_p + m_v[0]) ||
-        r.contains(m_p + m_v[1]) ||
-        r.contains(m_p + m_v[2]) ||
-        r.contains(m_p + m_v[3]))
+    if (r.contains(m_p + m_v[0]) || r.contains(m_p + m_v[1]) || r.contains(m_p + m_v[2]) || r.contains(m_p + m_v[3]))
     {
         // Yes: intersection
         return true;
     }
     // Test if this includes at least one of r's vertices
     else if (
-        contains(MCVector2d<U>(r.x1, r.y1)) ||
-        contains(MCVector2d<U>(r.x1, r.y2)) ||
-        contains(MCVector2d<U>(r.x2, r.y1)) ||
-        contains(MCVector2d<U>(r.x2, r.y2)))
+      contains(MCVector2d<U>(r.x1, r.y1)) || contains(MCVector2d<U>(r.x1, r.y2)) || contains(MCVector2d<U>(r.x2, r.y1)) || contains(MCVector2d<U>(r.x2, r.y2)))
     {
         // Yes: intersection
         return true;
@@ -355,7 +347,7 @@ bool MCOBBox<T>::intersects(const MCBBox<U> & r) const
     return false;
 }
 
-template <typename T>
+template<typename T>
 MCBBox<T> MCOBBox<T>::bbox() const
 {
     const MCVector2d<T> v0p = m_v[0] + m_p;
@@ -364,17 +356,17 @@ MCBBox<T> MCOBBox<T>::bbox() const
     const MCVector2d<T> v3p = m_v[3] + m_p;
 
     return MCBBox<T>(
-        std::min(std::min(v0p.i(), v1p.i()), std::min(v2p.i(), v3p.i())),
-        std::min(std::min(v0p.j(), v1p.j()), std::min(v2p.j(), v3p.j())),
-        std::max(std::max(v0p.i(), v1p.i()), std::max(v2p.i(), v3p.i())),
-        std::max(std::max(v0p.j(), v1p.j()), std::max(v2p.j(), v3p.j())));
+      std::min(std::min(v0p.i(), v1p.i()), std::min(v2p.i(), v3p.i())),
+      std::min(std::min(v0p.j(), v1p.j()), std::min(v2p.j(), v3p.j())),
+      std::max(std::max(v0p.i(), v1p.i()), std::max(v2p.i(), v3p.i())),
+      std::max(std::max(v0p.j(), v1p.j()), std::max(v2p.j(), v3p.j())));
 }
 
-template <typename T>
+template<typename T>
 void MCOBBox<T>::scale(T s)
 {
-    m_hx   *= s;
-    m_hy   *= s;
+    m_hx *= s;
+    m_hy *= s;
     m_v[0] *= s;
     m_v[1] *= s;
     m_v[2] *= s;

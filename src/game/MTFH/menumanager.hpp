@@ -31,7 +31,6 @@ using MenuPtr = std::shared_ptr<Menu>;
 class MenuManager
 {
 public:
-
     //! Constructor.
     MenuManager();
 
@@ -103,7 +102,6 @@ public:
     static MenuManager & instance();
 
 private:
-
     std::map<std::string, MenuPtr> m_idToMenuMap;
 
     std::vector<MenuPtr> m_menuStack;

@@ -22,13 +22,14 @@
 #include "mcphysicscomponent.hh"
 
 MCSpringForceGenerator2dFast::MCSpringForceGenerator2dFast(
-    MCObject & object2, float coeff, float length, float min, float max)
-: m_p2(&object2)
-, m_coeff(coeff)
-, m_length(length)
-, m_min(min)
-, m_max(max)
-{}
+  MCObject & object2, float coeff, float length, float min, float max)
+  : m_p2(&object2)
+  , m_coeff(coeff)
+  , m_length(length)
+  , m_min(min)
+  , m_max(max)
+{
+}
 
 void MCSpringForceGenerator2dFast::updateForce(MCObject & object1)
 {

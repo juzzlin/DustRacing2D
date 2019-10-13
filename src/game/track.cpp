@@ -15,11 +15,11 @@
 
 #include "track.hpp"
 
+#include "map.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
-#include "map.hpp"
 
 #include <MCAssetManager>
 #include <MCCamera>
@@ -32,14 +32,14 @@
 using std::static_pointer_cast;
 
 Track::Track(TrackData * trackData)
-: m_trackData(trackData)
-, m_rows(m_trackData->map().rows())
-, m_cols(m_trackData->map().cols())
-, m_width(m_cols * TrackTile::TILE_W)
-, m_height(m_rows * TrackTile::TILE_H)
-, m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
-, m_next(nullptr)
-, m_prev(nullptr)
+  : m_trackData(trackData)
+  , m_rows(m_trackData->map().rows())
+  , m_cols(m_trackData->map().cols())
+  , m_width(m_cols * TrackTile::TILE_W)
+  , m_height(m_rows * TrackTile::TILE_H)
+  , m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
+  , m_next(nullptr)
+  , m_prev(nullptr)
 {
     assert(trackData);
 }
@@ -91,7 +91,7 @@ TrackTilePtr Track::finishLine() const
 }
 
 void Track::calculateVisibleIndices(const MCBBox<int> & r,
-    unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2)
+                                    unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2)
 
 {
     // Calculate which tiles are visible in the Camera window:
@@ -103,7 +103,7 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
 
     // X high index
     i2 = r.x2() * m_cols / m_width;
-    i2 = i2  >= m_cols ? m_cols - 1 : i2;
+    i2 = i2 >= m_cols ? m_cols - 1 : i2;
 
     // Y low index
     j0 = r.y1() * m_rows / m_height;
@@ -111,7 +111,7 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r,
 
     // Y high index
     j2 = r.y2() * m_rows / m_height;
-    j2 = j2  >= m_rows ? m_rows - 1 : j2;
+    j2 = j2 >= m_rows ? m_rows - 1 : j2;
 }
 
 void Track::render(MCCamera * camera)
@@ -135,7 +135,7 @@ void Track::render(MCCamera * camera)
 }
 
 void Track::renderAsphalt(
-    MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
+  MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -173,7 +173,7 @@ void Track::renderAsphalt(
 }
 
 void Track::renderTiles(
-    MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
+  MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -185,7 +185,7 @@ void Track::renderTiles(
 
     // The tiles are sorted with respect to their surface in order
     // to minimize GPU context switches.
-    std::map<MCSurface *, std::vector<SortedTile> > sortedTiles;
+    std::map<MCSurface *, std::vector<SortedTile>> sortedTiles;
 
     const MapBase & map = m_trackData->map();
 

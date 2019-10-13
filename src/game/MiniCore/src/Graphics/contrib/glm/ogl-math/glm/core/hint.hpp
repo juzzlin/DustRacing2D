@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,12 +29,17 @@
 #ifndef glm_core_type
 #define glm_core_type
 
-namespace glm
+namespace glm {
+// Use dont_care, nicest and fastest to optimize implementations.
+class dont_care
 {
-	// Use dont_care, nicest and fastest to optimize implementations.
-	class dont_care {};
-	class nicest {};
-	class fastest {};
-}//namespace glm
+};
+class nicest
+{
+};
+class fastest
+{
+};
+} //namespace glm
 
-#endif//glm_core_type
+#endif //glm_core_type

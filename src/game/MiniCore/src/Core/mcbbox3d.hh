@@ -24,82 +24,143 @@
 #include "mcvector3d.hh"
 
 //! Bounding box structure in 3d
-template <typename T>
+template<typename T>
 class MCBBox3d
 {
 public:
+    //! Constructor
+    MCBBox3d()
+      : m_x1(0)
+      , m_y1(0)
+      , m_z1(0)
+      , m_x2(0)
+      , m_y2(0)
+      , m_z2(0)
+    {
+    }
 
     //! Constructor
-    MCBBox3d() :
-        m_x1(0), m_y1(0), m_z1(0),
-        m_x2(0), m_y2(0), m_z2(0)
-    {}
-
-    //! Constructor
-    MCBBox3d(T x1, T y1, T z1, T x2, T y2, T z2) :
-        m_x1(x1), m_y1(y1), m_z1(z1),
-        m_x2(x2), m_y2(y2), m_z2(z2)
-    {}
+    MCBBox3d(T x1, T y1, T z1, T x2, T y2, T z2)
+      : m_x1(x1)
+      , m_y1(y1)
+      , m_z1(z1)
+      , m_x2(x2)
+      , m_y2(y2)
+      , m_z2(z2)
+    {
+    }
 
     //! Copy constructor
-    template <typename U>
-    MCBBox3d(const MCBBox3d<U> & r) :
-        m_x1(r.x1()), m_y1(r.y1()), m_z1(r.z1()),
-        m_x2(r.x2()), m_y2(r.y2()), m_z2(r.z2())
-    {}
+    template<typename U>
+    MCBBox3d(const MCBBox3d<U> & r)
+      : m_x1(r.x1())
+      , m_y1(r.y1())
+      , m_z1(r.z1())
+      , m_x2(r.x2())
+      , m_y2(r.y2())
+      , m_z2(r.z2())
+    {
+    }
 
     //! Move constructor
-    template <typename U>
-    MCBBox3d(const MCBBox3d<U> && r) :
-        m_x1(r.x1()), m_y1(r.y1()), m_z1(r.z1()),
-        m_x2(r.x2()), m_y2(r.y2()), m_z2(r.z2())
-    {}
+    template<typename U>
+    MCBBox3d(const MCBBox3d<U> && r)
+      : m_x1(r.x1())
+      , m_y1(r.y1())
+      , m_z1(r.z1())
+      , m_x2(r.x2())
+      , m_y2(r.y2())
+      , m_z2(r.z2())
+    {
+    }
 
     //! Get the leftmost x
-    inline T x1() const {return m_x1;}
+    inline T x1() const
+    {
+        return m_x1;
+    }
 
     //! Get the lower y
-    inline T y1() const {return m_y1;}
+    inline T y1() const
+    {
+        return m_y1;
+    }
 
     //! Get the rightmost x
-    inline T x2() const {return m_x2;}
+    inline T x2() const
+    {
+        return m_x2;
+    }
 
     //! Get the higher y
-    inline T y2() const {return m_y2;}
+    inline T y2() const
+    {
+        return m_y2;
+    }
 
     //! Get the lower z
-    inline T z1() const {return m_z1;}
+    inline T z1() const
+    {
+        return m_z1;
+    }
 
     //! Get the higher z
-    inline T z2() const {return m_z2;}
+    inline T z2() const
+    {
+        return m_z2;
+    }
 
     //! Get width
-    inline T width() const {return m_x2 - m_x1;}
+    inline T width() const
+    {
+        return m_x2 - m_x1;
+    }
 
     //! Get height
-    inline T height() const {return m_y2 - m_y1;}
+    inline T height() const
+    {
+        return m_y2 - m_y1;
+    }
 
     //! Set the leftmost x
-    void setX1(T v) {m_x1 = v;}
+    void setX1(T v)
+    {
+        m_x1 = v;
+    }
 
     //! Set the lower y
-    void setY1(T v) {m_y1 = v;}
+    void setY1(T v)
+    {
+        m_y1 = v;
+    }
 
     //! Set the rightmost x
-    void setX2(T v) {m_x2 = v;}
+    void setX2(T v)
+    {
+        m_x2 = v;
+    }
 
     //! Set the higher y
-    void setY2(T v) {m_y2 = v;}
+    void setY2(T v)
+    {
+        m_y2 = v;
+    }
 
     //! Set the lower z
-    void setZ1(T v) {m_z1 = v;}
+    void setZ1(T v)
+    {
+        m_z1 = v;
+    }
 
     //! Set the higher z
-    void setZ2(T v) {m_z2 = v;}
+    void setZ2(T v)
+    {
+        m_z2 = v;
+    }
 
     //! Assignment operator
-    template <typename U>
-    MCBBox3d<T> & operator =(const MCBBox3d<U> & r)
+    template<typename U>
+    MCBBox3d<T> & operator=(const MCBBox3d<U> & r)
     {
         if (reinterpret_cast<void *>(const_cast<MCBBox3d<U> *>(&r)) != reinterpret_cast<void *>(this))
         {
@@ -115,8 +176,8 @@ public:
     }
 
     //! Move assignment operator
-    template <typename U>
-    MCBBox3d<T> & operator =(const MCBBox3d<U> && r)
+    template<typename U>
+    MCBBox3d<T> & operator=(const MCBBox3d<U> && r)
     {
         m_x1 = r.x1();
         m_x2 = r.x2();
@@ -129,40 +190,52 @@ public:
     }
 
     //! Test if MCBBox3d intersects another one
-    template <typename U>
+    template<typename U>
     bool intersects(const MCBBox3d<U> & r) const
     {
-        if (r.x1() >= m_x2) {return false;}
-        if (r.x2() <= m_x1) {return false;}
-        if (r.y1() >= m_y2) {return false;}
-        if (r.y2() <= m_y1) {return false;}
-        if (r.z1() >= m_z2) {return false;}
-        if (r.z2() <= m_z1) {return false;}
+        if (r.x1() >= m_x2)
+        {
+            return false;
+        }
+        if (r.x2() <= m_x1)
+        {
+            return false;
+        }
+        if (r.y1() >= m_y2)
+        {
+            return false;
+        }
+        if (r.y2() <= m_y1)
+        {
+            return false;
+        }
+        if (r.z1() >= m_z2)
+        {
+            return false;
+        }
+        if (r.z2() <= m_z1)
+        {
+            return false;
+        }
         return true;
     }
 
     //! Test if MCBBox3d contains another one
-    template <typename U>
+    template<typename U>
     bool contains(const MCBBox3d<U> & r) const
     {
-        return
-            r.x1() >= m_x1 && r.x2() <= m_x2 &&
-            r.y1() >= m_y1 && r.y2() <= m_y2 &&
-            r.z1() >= m_z1 && r.z2() <= m_z2;
+        return r.x1() >= m_x1 && r.x2() <= m_x2 && r.y1() >= m_y1 && r.y2() <= m_y2 && r.z1() >= m_z1 && r.z2() <= m_z2;
     }
 
     //! Test if MCBBox3d contains given point
-    template <typename U>
+    template<typename U>
     bool contains(const MCVector3d<U> & r) const
     {
-        return
-            r.i() >= m_x1 && r.i() <= m_x2 &&
-            r.j() >= m_y1 && r.j() <= m_y2 &&
-            r.k() >= m_z1 && r.k() <= m_z2;
+        return r.i() >= m_x1 && r.i() <= m_x2 && r.j() >= m_y1 && r.j() <= m_y2 && r.k() >= m_z1 && r.k() <= m_z2;
     }
 
     //! Translate.
-    template <typename U>
+    template<typename U>
     void translate(const MCVector3d<U> & r)
     {
         m_x1 += r.i();
@@ -179,7 +252,6 @@ public:
     }
 
 private:
-
     //! Vertex coordinates
     T m_x1, m_y1, m_z1, m_x2, m_y2, m_z2;
 };

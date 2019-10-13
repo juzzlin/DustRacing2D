@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,9 @@
 ///
 /// @defgroup gtx_raw_data GLM_GTX_raw_data: Raw data
 /// @ingroup gtx
-/// 
+///
 /// @brief Projection of a vector to other one
-/// 
+///
 /// <glm/gtx/raw_data.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -42,34 +42,33 @@
 #include "../glm.hpp"
 #include "../gtc/type_precision.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_raw_data extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_raw_data extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_raw_data
-	/// @{
+namespace glm {
+/// @addtogroup gtx_raw_data
+/// @{
 
-	//! Type for byte numbers. 
-	//! From GLM_GTX_raw_data extension.
-	typedef uint8		byte;
+//! Type for byte numbers.
+//! From GLM_GTX_raw_data extension.
+typedef uint8 byte;
 
-	//! Type for word numbers. 
-	//! From GLM_GTX_raw_data extension.
-	typedef uint16		word;
+//! Type for word numbers.
+//! From GLM_GTX_raw_data extension.
+typedef uint16 word;
 
-	//! Type for dword numbers. 
-	//! From GLM_GTX_raw_data extension.
-	typedef uint32		dword;
+//! Type for dword numbers.
+//! From GLM_GTX_raw_data extension.
+typedef uint32 dword;
 
-	//! Type for qword numbers. 
-	//! From GLM_GTX_raw_data extension.
-	typedef uint64		qword;
+//! Type for qword numbers.
+//! From GLM_GTX_raw_data extension.
+typedef uint64 qword;
 
-	/// @}
-}// namespace glm
+/// @}
+} // namespace glm
 
 #include "raw_data.inl"
 
-#endif//GLM_GTX_raw_data
+#endif //GLM_GTX_raw_data

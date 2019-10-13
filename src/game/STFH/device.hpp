@@ -20,7 +20,6 @@ namespace STFH {
 class Device
 {
 public:
-
     //! Constructor.
     Device();
 
@@ -36,4 +35,4 @@ public:
 
 typedef std::shared_ptr<Device> DevicePtr;
 
-} // STFH
+} // namespace STFH

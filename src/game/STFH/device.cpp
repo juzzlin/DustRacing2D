@@ -25,4 +25,4 @@ Device::~Device()
 {
 }
 
-} // STFH
+} // namespace STFH

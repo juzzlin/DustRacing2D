@@ -46,40 +46,40 @@ using std::dynamic_pointer_cast;
 using std::static_pointer_cast;
 
 Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman)
-: MCObject(surface, "car")
-, m_desc(desc)
-, m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
-, m_leftSideOffTrack(false)
-, m_rightSideOffTrack(false)
-, m_skidding(false)
-, m_steer(Steer::Neutral)
-, m_index(index)
-, m_tireAngle(0)
-, m_initDamageCapacity(100)
-, m_damageCapacity(m_initDamageCapacity)
-, m_initTireWearOutCapacity(100)
-, m_tireWearOutCapacity(m_initTireWearOutCapacity)
-, m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
-, m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
-, m_speedInKmh(0)
-, m_absSpeed(0)
-, m_dx(0)
-, m_dy(0)
-, m_currentTargetNodeIndex(-1)
-, m_prevTargetNodeIndex(-1)
-, m_routeProgression(0)
-, m_position(0)
-, m_isHuman(isHuman)
-, m_particleEffectManager(*this)
-, m_numberPos(-5, 0, 0)
-, m_leftFrontTirePos(14, 9, 0)
-, m_rightFrontTirePos(14, -9, 0)
-, m_leftRearTirePos(-14, 9, 0)
-, m_rightRearTirePos(-14, -9, 0)
-, m_leftBrakeGlowPos(-21, 8, 0)
-, m_rightBrakeGlowPos(-21, -8, 0)
-, m_hadHardCrash(false)
-, m_gearbox(new Gearbox)
+  : MCObject(surface, "car")
+  , m_desc(desc)
+  , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
+  , m_leftSideOffTrack(false)
+  , m_rightSideOffTrack(false)
+  , m_skidding(false)
+  , m_steer(Steer::Neutral)
+  , m_index(index)
+  , m_tireAngle(0)
+  , m_initDamageCapacity(100)
+  , m_damageCapacity(m_initDamageCapacity)
+  , m_initTireWearOutCapacity(100)
+  , m_tireWearOutCapacity(m_initTireWearOutCapacity)
+  , m_frontTire(MCAssetManager::surfaceManager().surface("frontTire"))
+  , m_brakeGlow(MCAssetManager::surfaceManager().surface("brakeGlow"))
+  , m_speedInKmh(0)
+  , m_absSpeed(0)
+  , m_dx(0)
+  , m_dy(0)
+  , m_currentTargetNodeIndex(-1)
+  , m_prevTargetNodeIndex(-1)
+  , m_routeProgression(0)
+  , m_position(0)
+  , m_isHuman(isHuman)
+  , m_particleEffectManager(*this)
+  , m_numberPos(-5, 0, 0)
+  , m_leftFrontTirePos(14, 9, 0)
+  , m_rightFrontTirePos(14, -9, 0)
+  , m_leftRearTirePos(-14, 9, 0)
+  , m_rightRearTirePos(-14, -9, 0)
+  , m_leftBrakeGlowPos(-21, 8, 0)
+  , m_rightBrakeGlowPos(-21, -8, 0)
+  , m_hadHardCrash(false)
+  , m_gearbox(new Gearbox)
 {
     // Override the default physics component to handle damage from impulses
     setPhysicsComponent(*(new CarPhysicsComponent(*this)));
@@ -185,7 +185,7 @@ void Car::accelerate(bool deccelerate)
     static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(1.0f);
 
     const float maxForce =
-        physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
+      physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
     float currentForce = maxForce;
     const float velocity = physicsComponent().velocity().length();
     if (velocity > 0.001f)
@@ -237,7 +237,7 @@ bool Car::isSliding()
 {
     const float bodyNormalAngle = angle() + 90;
     const MCVector2dF n(
-        MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
+      MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
     const MCVector2dF & v = physicsComponent().velocity().normalized();
     const MCVector2dF s = MCVector2dF::projection(v, n);
     return absSpeed() > 7.5 && s.lengthFast() > 0.25;
@@ -298,7 +298,7 @@ void Car::updateTireWear(int step)
     m_dy = MCTrigonom::sin(angle());
 
     // Cache speed in km/h.
-    m_absSpeed   = physicsComponent().speed();
+    m_absSpeed = physicsComponent().speed();
     m_speedInKmh = m_absSpeed * 3.6 * 2.75;
 
     if (m_isHuman)

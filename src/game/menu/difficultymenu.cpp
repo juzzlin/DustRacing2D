@@ -31,18 +31,18 @@ static const int ITEM_TEXT_SIZE = 40;
 std::string DifficultyMenu::MenuId = "difficulty";
 
 DifficultyMenu::DifficultyMenu(int width, int height)
-    : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::VerticalList)
+  : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::VerticalList)
 {
     const int itemHeight = height / 8;
     const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
     easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
-    easyItem->setAction([] () {
+    easyItem->setAction([]() {
         juzzlin::L().info() << "Easy selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Easy;
         Settings::instance().saveDifficulty(chosenDifficulty);
@@ -52,7 +52,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
 
     MenuItem * mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
     mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
-    mediumItem->setAction([] () {
+    mediumItem->setAction([]() {
         juzzlin::L().info() << "Medium selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Medium;
         Settings::instance().saveDifficulty(chosenDifficulty);
@@ -62,7 +62,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
 
     MenuItem * hardItem = new MenuItem(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
     hardItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *hardItem)));
-    hardItem->setAction([] () {
+    hardItem->setAction([]() {
         juzzlin::L().info() << "Hard selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Hard;
         Settings::instance().saveDifficulty(chosenDifficulty);

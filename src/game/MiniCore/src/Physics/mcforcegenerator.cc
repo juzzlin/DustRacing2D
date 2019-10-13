@@ -29,11 +29,13 @@ class MCForceGeneratorImpl
 
 MCForceGeneratorImpl::MCForceGeneratorImpl()
   : enabled(true)
-{}
+{
+}
 
 MCForceGenerator::MCForceGenerator()
   : m_pImpl(new MCForceGeneratorImpl)
-{}
+{
+}
 
 void MCForceGenerator::enable(bool status)
 {
@@ -49,4 +51,3 @@ MCForceGenerator::~MCForceGenerator()
 {
     delete m_pImpl;
 }
-

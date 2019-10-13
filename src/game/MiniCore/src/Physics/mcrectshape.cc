@@ -19,15 +19,15 @@
 
 #include "mcrectshape.hh"
 #include "mccamera.hh"
-#include "mcobject.hh"
 #include "mcmathutil.hh"
+#include "mcobject.hh"
 
 #include <cmath>
 
 MCRectShape::MCRectShape(MCShapeViewPtr view, float width, float height)
-: MCShape(view)
-, m_width(width)
-, m_height(height)
+  : MCShape(view)
+  , m_width(width)
+  , m_height(height)
 {
     resize(width, height);
 }

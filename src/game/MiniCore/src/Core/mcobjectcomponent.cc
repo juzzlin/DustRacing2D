@@ -20,7 +20,7 @@
 #include "mcobjectcomponent.hh"
 
 MCObjectComponent::MCObjectComponent()
-    : m_object(nullptr)
+  : m_object(nullptr)
 {
 }
 

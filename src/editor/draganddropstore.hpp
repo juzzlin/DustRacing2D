@@ -25,7 +25,6 @@ class TrackTile;
 class DragAndDropStore
 {
 public:
-
     DragAndDropStore();
 
     void clear();
@@ -47,7 +46,6 @@ public:
     Object * dragAndDropObject() const;
 
 private:
-
     TrackTile * m_dragAndDropSourceTile = nullptr;
 
     Object * m_dragAndDropObject = nullptr;

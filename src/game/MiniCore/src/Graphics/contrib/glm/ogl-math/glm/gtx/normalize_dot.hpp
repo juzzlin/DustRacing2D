@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,9 +30,9 @@
 ///
 /// @defgroup gtx_normalize_dot GLM_GTX_normalize_dot: Normalize dot product
 /// @ingroup gtx
-/// 
+///
 /// @brief Dot product of vectors that need to be normalize with a single square root.
-/// 
+///
 /// <glm/gtx/normalized_dot.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -43,34 +43,33 @@
 #include "../glm.hpp"
 #include "../gtx/fast_square_root.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_normalize_dot extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_normalize_dot extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_normalize_dot
-	/// @{
+namespace glm {
+/// @addtogroup gtx_normalize_dot
+/// @{
 
-	//! Normalize parameters and returns the dot product of x and y.
-	//! It's faster that dot(normalize(x), normalize(y)).
-	//! From GLM_GTX_normalize_dot extension.
-	template <typename genType> 
-	typename genType::value_type normalizeDot(
-		genType const & x, 
-		genType const & y);
+//! Normalize parameters and returns the dot product of x and y.
+//! It's faster that dot(normalize(x), normalize(y)).
+//! From GLM_GTX_normalize_dot extension.
+template<typename genType>
+typename genType::value_type normalizeDot(
+  genType const & x,
+  genType const & y);
 
-	//! Normalize parameters and returns the dot product of x and y.
-	//! Faster that dot(fastNormalize(x), fastNormalize(y)).
-	//! From GLM_GTX_normalize_dot extension.
-	template <typename genType> 
-	typename genType::value_type fastNormalizeDot(
-		genType const & x, 
-		genType const & y);
+//! Normalize parameters and returns the dot product of x and y.
+//! Faster that dot(fastNormalize(x), fastNormalize(y)).
+//! From GLM_GTX_normalize_dot extension.
+template<typename genType>
+typename genType::value_type fastNormalizeDot(
+  genType const & x,
+  genType const & y);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "normalize_dot.inl"
 
-#endif//GLM_GTX_normalize_dot
+#endif //GLM_GTX_normalize_dot

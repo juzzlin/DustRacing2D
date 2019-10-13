@@ -21,8 +21,8 @@
 
 #include "eventhandler.hpp"
 
-#include <QWindow>
 #include <QOpenGLFunctions>
+#include <QWindow>
 
 #include <memory>
 #include <string>
@@ -41,7 +41,6 @@ class Renderer : public QWindow, protected QOpenGLFunctions
     Q_OBJECT
 
 public:
-
     //! Constructor.
     Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene);
 
@@ -94,7 +93,6 @@ public slots:
     void renderNow();
 
 protected:
-
     //! \reimp
     bool event(QEvent *) override;
 
@@ -120,7 +118,6 @@ protected:
     void mouseMoveEvent(QMouseEvent * event) override;
 
 private:
-
     //! Load vertex and fragment shaders.
     void loadShaders();
 
@@ -132,9 +129,9 @@ private:
 
     void resizeGL(int viewWidth, int viewHeight);
 
-    typedef std::unordered_map<std::string, MCGLShaderProgramPtr > ShaderHash;
+    typedef std::unordered_map<std::string, MCGLShaderProgramPtr> ShaderHash;
 
-    QOpenGLContext  * m_context;
+    QOpenGLContext * m_context;
 
     Scene * m_scene;
 

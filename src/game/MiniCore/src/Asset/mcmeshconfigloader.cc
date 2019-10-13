@@ -22,8 +22,8 @@
 #include <QDomElement>
 #include <QFile>
 
-#include "mcmeshconfigloader.hh"
 #include "mclogger.hh"
+#include "mcmeshconfigloader.hh"
 
 #include <cassert>
 
@@ -49,7 +49,7 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
     {
         const std::string baseModelPath = root.attribute("baseModelPath", "./").toStdString();
         auto && node = root.firstChild();
-        while(!node.isNull() && node.nodeName() == "mesh")
+        while (!node.isNull() && node.nodeName() == "mesh")
         {
             MeshDataPtr newData(new MCMeshMetaData);
             const auto && element = node.toElement();

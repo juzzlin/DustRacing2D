@@ -15,20 +15,20 @@
 
 #include "tree.hpp"
 
-#include <MCSurface>
-#include <MCPhysicsComponent>
 #include <MCCircleShape>
+#include <MCPhysicsComponent>
 #include <MCRandom>
 #include <MCShape>
 #include <MCShapeView>
+#include <MCSurface>
 
 namespace {
 static const float treeBodyRadius = 8;
 static const float treeViewRadius = 48;
-}
+} // namespace
 
 Tree::Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branches)
-    : MCObject(MCShapePtr(new MCCircleShape(nullptr, treeBodyRadius)), "tree")
+  : MCObject(MCShapePtr(new MCCircleShape(nullptr, treeBodyRadius)), "tree")
 {
     physicsComponent().setMass(1, true); // Stationary
     physicsComponent().setRestitution(0.25f);

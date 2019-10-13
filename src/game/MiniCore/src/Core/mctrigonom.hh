@@ -38,7 +38,6 @@ class MCTrigonomImpl;
 class MCTrigonom
 {
 public:
-
     //! Convert degree to radians
     static float degToRad(float angle);
 
@@ -52,7 +51,6 @@ public:
     static float cos(float angle);
 
 private:
-
     //! Disabled constructor.
     MCTrigonom();
 
@@ -63,4 +61,3 @@ private:
 };
 
 #endif // MCTRIGONOM_HH
-

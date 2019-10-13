@@ -20,11 +20,11 @@
 #ifndef MCPARTICLERENDERERBASE_HH
 #define MCPARTICLERENDERERBASE_HH
 
-#include "mcobject.hh"
-#include "mcglobjectbase.hh"
-#include "mcglvertex.hh"
 #include "mcglcolor.hh"
+#include "mcglobjectbase.hh"
 #include "mcgltexcoord.hh"
+#include "mcglvertex.hh"
+#include "mcobject.hh"
 #include "mcrenderlayer.hh"
 
 #include <memory>
@@ -32,7 +32,6 @@
 class MCParticleRendererBase : public MCGLObjectBase
 {
 public:
-
     explicit MCParticleRendererBase(int maxBatchSize = 1024);
 
     virtual ~MCParticleRendererBase();
@@ -59,7 +58,6 @@ public:
     bool hasShadow() const;
 
 protected:
-
     //! Set current batch size
     void setBatchSize(int batchSize);
 
@@ -76,7 +74,6 @@ protected:
     GLenum alphaDst() const;
 
 private:
-
     DISABLE_COPY(MCParticleRendererBase);
     DISABLE_ASSI(MCParticleRendererBase);
 

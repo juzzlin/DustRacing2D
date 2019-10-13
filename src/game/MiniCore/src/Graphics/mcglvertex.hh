@@ -25,14 +25,17 @@
 class MCGLVertex
 {
 public:
-
     MCGLVertex()
-    : m_x(0), m_y(0), m_z(0)
+      : m_x(0)
+      , m_y(0)
+      , m_z(0)
     {
     }
 
     MCGLVertex(GLfloat x, GLfloat y, GLfloat z = 0)
-    : m_x(x), m_y(y), m_z(z)
+      : m_x(x)
+      , m_y(y)
+      , m_z(z)
     {
     }
 
@@ -67,7 +70,6 @@ public:
     }
 
 private:
-
     GLfloat m_x, m_y, m_z;
 };
 

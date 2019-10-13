@@ -20,8 +20,8 @@
 #ifndef MCTEXTUREFONTCONFIGLOADER_HH
 #define MCTEXTUREFONTCONFIGLOADER_HH
 
-#include <vector>
 #include <string>
+#include <vector>
 
 struct MCTextureFontData;
 
@@ -30,7 +30,6 @@ struct MCTextureFontData;
 class MCTextureFontConfigLoader
 {
 public:
-
     //! Constructor.
     MCTextureFontConfigLoader();
 
@@ -51,8 +50,7 @@ public:
     MCTextureFontData & font(unsigned int index) const;
 
 private:
-
-    typedef std::vector<MCTextureFontData*> FontVector;
+    typedef std::vector<MCTextureFontData *> FontVector;
     std::string m_filePath;
     FontVector m_fonts;
 };

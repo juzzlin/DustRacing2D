@@ -22,13 +22,14 @@
 #include "mcphysicscomponent.hh"
 
 MCSpringForceGenerator::MCSpringForceGenerator(
-    MCObject & object2, float coeff, float length, float min, float max)
-: m_p2(&object2)
-, m_coeff(coeff)
-, m_length(length)
-, m_min(min)
-, m_max(max)
-{}
+  MCObject & object2, float coeff, float length, float min, float max)
+  : m_p2(&object2)
+  , m_coeff(coeff)
+  , m_length(length)
+  , m_min(min)
+  , m_max(max)
+{
+}
 
 void MCSpringForceGenerator::updateForce(MCObject & object1)
 {
@@ -39,7 +40,8 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
 
     // Get length of diff and normalize
     const float length = diff.length();
-    if (length > 0) {
+    if (length > 0)
+    {
         diff /= length;
     }
 

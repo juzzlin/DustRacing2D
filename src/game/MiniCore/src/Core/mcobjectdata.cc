@@ -20,16 +20,16 @@
 #include "mcobjectdata.hh"
 
 MCObjectData::MCObjectData(const std::string & typeId)
-: m_typeId(typeId)
-, m_mass(0.0)
-, m_shape(MCObjectData::Default)
-, m_shapeRadius(0.0)
-, m_shapeWidth(0.0)
-, m_shapeHeight(0.0)
-, m_restitution(0.5)
-, m_xyFriction(0.0)
-, m_stationary(false)
-, m_angle(0)
+  : m_typeId(typeId)
+  , m_mass(0.0)
+  , m_shape(MCObjectData::Default)
+  , m_shapeRadius(0.0)
+  , m_shapeWidth(0.0)
+  , m_shapeHeight(0.0)
+  , m_restitution(0.5)
+  , m_xyFriction(0.0)
+  , m_stationary(false)
+  , m_angle(0)
 {
 }
 
@@ -50,7 +50,7 @@ float MCObjectData::mass() const
 
 void MCObjectData::setShapeRadius(float radius)
 {
-    m_shape       = MCObjectData::Circle;
+    m_shape = MCObjectData::Circle;
     m_shapeRadius = radius;
 }
 
@@ -61,8 +61,8 @@ float MCObjectData::shapeRadius() const
 
 void MCObjectData::setShapeWidth(float width)
 {
-    m_shape       = MCObjectData::Rect;
-    m_shapeWidth  = width;
+    m_shape = MCObjectData::Rect;
+    m_shapeWidth = width;
 }
 
 float MCObjectData::shapeWidth() const
@@ -72,7 +72,7 @@ float MCObjectData::shapeWidth() const
 
 void MCObjectData::setShapeHeight(float height)
 {
-    m_shape       = MCObjectData::Rect;
+    m_shape = MCObjectData::Rect;
     m_shapeHeight = height;
 }
 

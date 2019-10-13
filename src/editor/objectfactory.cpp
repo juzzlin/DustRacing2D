@@ -27,8 +27,8 @@ ObjectFactory::ObjectFactory()
 Object & ObjectFactory::createObject(QString role)
 {
     ObjectModel model =
-        MainWindow::instance()->objectModelLoader().getObjectModelByRole(
-            role);
+      MainWindow::instance()->objectModelLoader().getObjectModelByRole(
+        role);
 
     unsigned int w = model.width;
     w = w > 0 ? w : model.pixmap.width();
@@ -37,11 +37,10 @@ Object & ObjectFactory::createObject(QString role)
     h = h > 0 ? h : model.pixmap.height();
 
     Object * object = new Object(
-        model.category,
-        role,
-        QSizeF(w, h),
-        model.pixmap);
+      model.category,
+      role,
+      QSizeF(w, h),
+      model.pixmap);
 
     return *object;
 }
-

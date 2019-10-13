@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,11 +29,11 @@
 ///
 /// @defgroup gtx_noise GLM_GTX_noise: Procedural noise functions
 /// @ingroup gtx
-/// 
-/// Defines 2D, 3D and 4D procedural noise functions 
-/// Based on the work of Stefan Gustavson and Ashima Arts on "webgl-noise": 
-/// https://github.com/ashima/webgl-noise 
-/// Following Stefan Gustavson's paper "Simplex noise demystified": 
+///
+/// Defines 2D, 3D and 4D procedural noise functions
+/// Based on the work of Stefan Gustavson and Ashima Arts on "webgl-noise":
+/// https://github.com/ashima/webgl-noise
+/// Following Stefan Gustavson's paper "Simplex noise demystified":
 /// http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
 /// Defines the half-precision floating-point type, along with various typedefs for vectors and matrices.
 /// <glm/gtx/noise.hpp> need to be included to use these functionalities.
@@ -46,18 +46,17 @@
 #include "../glm.hpp"
 #include "../gtc/noise.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_noise extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_noise extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_noise
-	/// @{
+namespace glm {
+/// @addtogroup gtx_noise
+/// @{
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "noise.inl"
 
-#endif//glm_gtx_noise
+#endif //glm_gtx_noise

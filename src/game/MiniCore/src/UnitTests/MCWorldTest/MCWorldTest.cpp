@@ -18,20 +18,19 @@
 //
 
 #include "MCWorldTest.hpp"
-#include "../../Core/mcworld.hh"
 #include "../../Core/mcobject.hh"
+#include "../../Core/mcworld.hh"
 #include "../../Physics/mccircleshape.hh"
-#include "../../Physics/mcrectshape.hh"
 #include "../../Physics/mccollisionevent.hh"
 #include "../../Physics/mcphysicscomponent.hh"
+#include "../../Physics/mcrectshape.hh"
 #include "../../Physics/mcseparationevent.hh"
 
 class TestObject : public MCObject
 {
 public:
-
     TestObject()
-    : MCObject("TEST_OBJECT")
+      : MCObject("TEST_OBJECT")
     {
     }
 
@@ -131,7 +130,7 @@ void MCWorldTest::testCollisionEvent_RectRect()
     world.addObject(object2);
 
     object1.translate(MCVector3dF(-0.5f, 0.0f));
-    object2.translate(MCVector3dF( 0.5f, 0.5f));
+    object2.translate(MCVector3dF(0.5f, 0.5f));
 
     world.stepTime(1);
 
@@ -147,7 +146,7 @@ void MCWorldTest::testCollisionEvent_RectRect()
     QVERIFY(!object2.collisionEventsReceived);
 
     object1.translate(MCVector3dF(-1.5f, 0.0f));
-    object2.translate(MCVector3dF( 1.5f, 0.5f));
+    object2.translate(MCVector3dF(1.5f, 0.5f));
 
     world.stepTime(1);
 
@@ -158,7 +157,7 @@ void MCWorldTest::testCollisionEvent_RectRect()
     QCOMPARE(object2.separationEventsReceived, 1);
 
     object1.translate(MCVector3dF(-0.5f, 0.0f));
-    object2.translate(MCVector3dF( 0.5f, 0.5f));
+    object2.translate(MCVector3dF(0.5f, 0.5f));
 
     world.stepTime(1);
 
@@ -183,7 +182,7 @@ void MCWorldTest::testCollisionEvent_RectCircle()
     world.addObject(object2);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object2.translate(MCVector3dF(0.5, 0.0));
 
     world.stepTime(1);
 
@@ -199,7 +198,7 @@ void MCWorldTest::testCollisionEvent_RectCircle()
     QCOMPARE(object2.collisionEventsReceived, 0);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
-    object2.translate(MCVector3dF( 1.5, 0.0));
+    object2.translate(MCVector3dF(1.5, 0.0));
 
     world.stepTime(1);
 
@@ -210,7 +209,7 @@ void MCWorldTest::testCollisionEvent_RectCircle()
     QCOMPARE(object2.separationEventsReceived, 1);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object2.translate(MCVector3dF(0.5, 0.0));
 
     world.stepTime(1);
 
@@ -235,7 +234,7 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
     world.addObject(object2);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object2.translate(MCVector3dF(0.5, 0.0));
 
     world.stepTime(1);
 
@@ -251,7 +250,7 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
     QCOMPARE(object2.collisionEventsReceived, 0);
 
     object1.translate(MCVector3dF(-1.5, 0.0));
-    object2.translate(MCVector3dF( 1.5, 0.0));
+    object2.translate(MCVector3dF(1.5, 0.0));
 
     world.stepTime(1);
 
@@ -262,7 +261,7 @@ void MCWorldTest::testCollisionEvent_CircleCircle()
     QCOMPARE(object2.separationEventsReceived, 1);
 
     object1.translate(MCVector3dF(-0.5, 0.0));
-    object2.translate(MCVector3dF( 0.5, 0.0));
+    object2.translate(MCVector3dF(0.5, 0.0));
 
     world.stepTime(1);
 

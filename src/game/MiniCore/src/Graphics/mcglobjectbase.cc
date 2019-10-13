@@ -29,9 +29,9 @@
 GLuint MCGLObjectBase::m_boundVbo = 0;
 
 MCGLObjectBase::MCGLObjectBase(std::string handle)
-    : m_handle(handle)
-    , m_program(MCGLScene::instance().defaultShaderProgram())
-    , m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
+  : m_handle(handle)
+  , m_program(MCGLScene::instance().defaultShaderProgram())
+  , m_shadowProgram(MCGLScene::instance().defaultShadowShaderProgram())
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -344,13 +344,13 @@ void MCGLObjectBase::initUpdateBufferData()
 }
 
 void MCGLObjectBase::addBufferSubData(
-    MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data)
+  MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data)
 {
     addBufferSubData(dataType, dataSize, dataSize, data);
 }
 
 void MCGLObjectBase::addBufferSubData(
-    MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data)
+  MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data)
 {
     assert(dataSize <= offsetJump);
 
@@ -358,7 +358,8 @@ void MCGLObjectBase::addBufferSubData(
 
     m_bufferDataOffset += offsetJump;
 
-    switch (dataType) {
+    switch (dataType)
+    {
     case MCGLShaderProgram::VAL_Vertex:
         m_vertexDataSize = dataSize;
         break;
@@ -391,13 +392,13 @@ void MCGLObjectBase::setAttributePointers()
     glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(m_vertexDataSize));
+                          reinterpret_cast<GLvoid *>(m_vertexDataSize));
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize));
+                          reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize));
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Color, 4, GL_FLOAT, GL_FALSE, 0,
-        reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize + m_texCoordDataSize));
+                          reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize + m_texCoordDataSize));
 }
 
 void MCGLObjectBase::disableAttributePointers()

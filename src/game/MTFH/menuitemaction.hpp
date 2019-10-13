@@ -25,7 +25,6 @@ namespace MTFH {
 class MenuItemAction
 {
 public:
-
     //! Constructor.
     MenuItemAction();
 

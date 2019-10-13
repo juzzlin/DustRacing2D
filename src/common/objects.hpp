@@ -18,14 +18,13 @@
 
 #include "objectbase.hpp"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 //! Container for all objects.
 class Objects
 {
 public:
-
     typedef std::vector<ObjectBasePtr> ObjectVector;
 
     //! Constructor.
@@ -33,7 +32,7 @@ public:
 
     Objects(const Objects & other) = delete;
 
-    Objects & operator= (const Objects & other) = delete;
+    Objects & operator=(const Objects & other) = delete;
 
     //! Add an object.
     void add(ObjectBasePtr object);
@@ -59,7 +58,6 @@ public:
     ObjectVector::const_iterator cend() const;
 
 private:
-
     ObjectVector m_objects;
 };
 

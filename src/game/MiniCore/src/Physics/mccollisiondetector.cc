@@ -18,17 +18,18 @@
 //
 
 #include "mccollisiondetector.hh"
+#include "mccircleshape.hh"
+#include "mccollisionevent.hh"
 #include "mccontact.hh"
 #include "mcobject.hh"
-#include "mcsegment.hh"
-#include "mcshape.hh"
-#include "mccircleshape.hh"
 #include "mcrectshape.hh"
-#include "mccollisionevent.hh"
+#include "mcsegment.hh"
 #include "mcseparationevent.hh"
+#include "mcshape.hh"
 
 MCCollisionDetector::MCCollisionDetector()
-{}
+{
+}
 
 bool MCCollisionDetector::areCurrentlyColliding(MCObject & object1, MCObject & object2)
 {
@@ -96,7 +97,7 @@ bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape &
                     MCVector2dF contactNormal;
                     MCVector2dF vertex = obbox1.vertex(i);
                     float depth = rect2.interpenetrationDepth(
-                        MCSegment<float>(vertex, rect1.location()), contactNormal);
+                      MCSegment<float>(vertex, rect1.location()), contactNormal);
 
                     {
                         MCContact & contact = MCContact::create();
@@ -167,7 +168,7 @@ bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShap
                 {
                     MCVector2dF contactNormal;
                     float depth = rect.interpenetrationDepth(
-                        MCSegment<float>(circleVertex, circle.location()), contactNormal);
+                      MCSegment<float>(circleVertex, circle.location()), contactNormal);
 
                     {
                         MCContact & contact = MCContact::create();
@@ -250,33 +251,33 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     {
         // Test is not symmetric: must be done both ways
         return testRectAgainstRect(
-            *static_cast<MCRectShape *>(object1.shape().get()),
-            *static_cast<MCRectShape *>(object2.shape().get())) ||
-                testRectAgainstRect(
-                    *static_cast<MCRectShape *>(object2.shape().get()),
-                    *static_cast<MCRectShape *>(object1.shape().get()));
+                 *static_cast<MCRectShape *>(object1.shape().get()),
+                 *static_cast<MCRectShape *>(object2.shape().get()))
+          || testRectAgainstRect(
+                 *static_cast<MCRectShape *>(object2.shape().get()),
+                 *static_cast<MCRectShape *>(object1.shape().get()));
     }
     // Rect against circle: Case 1
     else if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Circle)
     {
         return testRectAgainstCircle(
-            *static_cast<MCRectShape *>(object1.shape().get()),
-            *static_cast<MCCircleShape *>(object2.shape().get()));
+          *static_cast<MCRectShape *>(object1.shape().get()),
+          *static_cast<MCCircleShape *>(object2.shape().get()));
     }
     // Rect against circle: Case 2
     else if (type2 == MCShape::Type::Rect && type1 == MCShape::Type::Circle)
     {
         return testRectAgainstCircle(
-            *static_cast<MCRectShape *>(object2.shape().get()),
-            *static_cast<MCCircleShape *>(object1.shape().get()));
+          *static_cast<MCRectShape *>(object2.shape().get()),
+          *static_cast<MCCircleShape *>(object1.shape().get()));
     }
     // Circle against circle
     else if (type1 == MCShape::Type::Circle && type2 == MCShape::Type::Circle)
     {
         // This test is symmetric
         return testCircleAgainstCircle(
-            *static_cast<MCCircleShape *>(object1.shape().get()),
-            *static_cast<MCCircleShape *>(object2.shape().get()));
+          *static_cast<MCCircleShape *>(object1.shape().get()),
+          *static_cast<MCCircleShape *>(object2.shape().get()));
     }
 
     return false;
@@ -314,7 +315,7 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
         {
             if (!processPossibleCollision(*outer.first, *inner))
             {
-                removedCollisions.push_back({outer.first, inner});
+                removedCollisions.push_back({ outer.first, inner });
             }
             else
             {
@@ -337,4 +338,3 @@ unsigned int MCCollisionDetector::iterateCurrentCollisions()
 
     return numCollisions;
 }
-

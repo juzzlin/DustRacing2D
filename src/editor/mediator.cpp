@@ -24,8 +24,8 @@
 #include "object.hpp"
 #include "objectfactory.hpp"
 #include "trackdata.hpp"
-#include "tracktile.hpp"
 #include "trackpropertiesdialog.hpp"
+#include "tracktile.hpp"
 
 #include <cassert>
 
@@ -36,10 +36,10 @@
 #include <QStatusBar>
 
 Mediator::Mediator(MainWindow & mainWindow)
-    : m_editorData(new EditorData(*this))
-    , m_editorScene(new QGraphicsScene)
-    , m_editorView(new EditorView(*this))
-    , m_mainWindow(mainWindow)
+  : m_editorData(new EditorData(*this))
+  , m_editorScene(new QGraphicsScene)
+  , m_editorView(new EditorView(*this))
+  , m_mainWindow(mainWindow)
 {
     m_editorView->setParent(&mainWindow);
 }
@@ -120,7 +120,8 @@ DragAndDropStore & Mediator::dadStore()
 void Mediator::deleteColumn()
 {
     auto deleted = m_editorData->trackData()->deleteColumn(m_editorData->activeColumn());
-    for (auto && tile : deleted) {
+    for (auto && tile : deleted)
+    {
         m_editorData->removeTileFromScene(tile);
     }
 }
@@ -128,7 +129,8 @@ void Mediator::deleteColumn()
 void Mediator::deleteRow()
 {
     auto deleted = m_editorData->trackData()->deleteRow(m_editorData->activeRow());
-    for (auto && tile : deleted) {
+    for (auto && tile : deleted)
+    {
         m_editorData->removeTileFromScene(tile);
     }
 }
@@ -404,7 +406,7 @@ bool Mediator::setTrackProperties()
 
     // Show a dialog to set some properties e.g. lap count.
     TrackPropertiesDialog dialog(
-        m_editorData->trackData()->name(), m_editorData->trackData()->index(), m_editorData->trackData()->isUserTrack(), &m_mainWindow);
+      m_editorData->trackData()->name(), m_editorData->trackData()->index(), m_editorData->trackData()->isUserTrack(), &m_mainWindow);
     if (dialog.exec() == QDialog::Accepted)
     {
         m_editorData->trackData()->setName(dialog.name());
@@ -472,4 +474,3 @@ Mediator::~Mediator()
 {
     delete m_editorData;
 }
-

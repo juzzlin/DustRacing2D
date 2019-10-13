@@ -17,19 +17,19 @@
 #include "car.hpp"
 
 #include <MCCollisionEvent>
+#include <MCMathUtil>
 #include <MCPhysicsComponent>
 #include <MCTrigonom>
-#include <MCMathUtil>
 
-static std::vector<float> gearRatios = {1.0f, 0.8f, 0.6f, 0.5f, 0.4f, 0.3f};
+static std::vector<float> gearRatios = { 1.0f, 0.8f, 0.6f, 0.5f, 0.4f, 0.3f };
 
 CarSoundEffectManager::CarSoundEffectManager(
-    Car & car, const CarSoundEffectManager::MultiSoundHandles & handles)
-    : m_car(car)
-    , m_gear(0)
-    , m_prevSpeed(0)
-    , m_handles(handles)
-    , m_skidPlaying(false)
+  Car & car, const CarSoundEffectManager::MultiSoundHandles & handles)
+  : m_car(car)
+  , m_gear(0)
+  , m_prevSpeed(0)
+  , m_handles(handles)
+  , m_skidPlaying(false)
 {
     m_hitTimer.setSingleShot(true);
     m_hitTimer.setInterval(500);
@@ -61,8 +61,8 @@ void CarSoundEffectManager::processEngineSound()
     if (speed != m_prevSpeed)
     {
         const float virtualRev = speed * 50;
-        const float effRev     = virtualRev * gearRatios[m_gear];
-        const float pitch      = 1.0 + effRev / 5000;
+        const float effRev = virtualRev * gearRatios[m_gear];
+        const float pitch = 1.0 + effRev / 5000;
 
         if (effRev > 3000)
         {
@@ -108,36 +108,24 @@ void CarSoundEffectManager::processSkidSound()
 
 void CarSoundEffectManager::collision(const MCCollisionEvent & event)
 {
-    const MCVector3dF speedDiff(event.collidingObject().physicsComponent().velocity() -
-        m_car.physicsComponent().velocity());
+    const MCVector3dF speedDiff(event.collidingObject().physicsComponent().velocity() - m_car.physicsComponent().velocity());
     if (!m_hitTimer.isActive() && speedDiff.lengthFast() > 4.0)
     {
-        if (event.collidingObject().typeId() == m_car.typeId()                 ||
-            event.collidingObject().typeId() == MCObject::typeId("grandstand") ||
-            event.collidingObject().typeId() == MCObject::typeId("tree")       ||
-            event.collidingObject().typeId() == MCObject::typeId("rock"))
+        if (event.collidingObject().typeId() == m_car.typeId() || event.collidingObject().typeId() == MCObject::typeId("grandstand") || event.collidingObject().typeId() == MCObject::typeId("tree") || event.collidingObject().typeId() == MCObject::typeId("rock"))
         {
             emit locationChanged(m_handles.hitSoundHandle, m_car.location().i(), m_car.location().j());
             emit playRequested(m_handles.hitSoundHandle, false);
             m_hitTimer.start();
         }
         else if (
-            event.collidingObject().typeId() == MCObject::typeId("wall")       ||
-            event.collidingObject().typeId() == MCObject::typeId("bridgeRail") ||
-            event.collidingObject().typeId() == MCObject::typeId("wallLong"))
+          event.collidingObject().typeId() == MCObject::typeId("wall") || event.collidingObject().typeId() == MCObject::typeId("bridgeRail") || event.collidingObject().typeId() == MCObject::typeId("wallLong"))
         {
             emit locationChanged("carHit2", m_car.location().i(), m_car.location().j());
             emit playRequested("carHit2", false);
             m_hitTimer.start();
         }
         else if (
-            event.collidingObject().typeId() == MCObject::typeId("dustRacing2DBanner") ||
-            event.collidingObject().typeId() == MCObject::typeId("brake")              ||
-            event.collidingObject().typeId() == MCObject::typeId("crate")              ||
-            event.collidingObject().typeId() == MCObject::typeId("left")               ||
-            event.collidingObject().typeId() == MCObject::typeId("plant")              ||
-            event.collidingObject().typeId() == MCObject::typeId("right")              ||
-            event.collidingObject().typeId() == MCObject::typeId("tire"))
+          event.collidingObject().typeId() == MCObject::typeId("dustRacing2DBanner") || event.collidingObject().typeId() == MCObject::typeId("brake") || event.collidingObject().typeId() == MCObject::typeId("crate") || event.collidingObject().typeId() == MCObject::typeId("left") || event.collidingObject().typeId() == MCObject::typeId("plant") || event.collidingObject().typeId() == MCObject::typeId("right") || event.collidingObject().typeId() == MCObject::typeId("tire"))
         {
             emit locationChanged("carHit3", m_car.location().i(), m_car.location().j());
             emit playRequested("carHit3", false);

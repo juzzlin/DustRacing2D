@@ -22,7 +22,6 @@
 
 #include "mcmacros.hh"
 
-
 #include <string>
 
 #include <MCVector3d>
@@ -35,11 +34,15 @@ class MCObjectDataImpl;
 class MCObjectData
 {
 public:
-
     /*! Possible shape types:
      *  Rect   = MCRectShape.
      *  Circle = MCCircleShape. */
-    enum Shape {Default, Rect, Circle};
+    enum Shape
+    {
+        Default,
+        Rect,
+        Circle
+    };
 
     //! Constructor.
     explicit MCObjectData(const std::string & typeId);
@@ -108,21 +111,20 @@ public:
     int initialAngle() const;
 
 private:
-
     DISABLE_COPY(MCObjectData);
     DISABLE_ASSI(MCObjectData);
 
-    std::string         m_typeId;
-    float             m_mass;
+    std::string m_typeId;
+    float m_mass;
     MCObjectData::Shape m_shape;
-    float             m_shapeRadius;
-    float             m_shapeWidth;
-    float             m_shapeHeight;
-    float             m_restitution;
-    float             m_xyFriction;
-    bool                m_stationary;
-    MCVector3dF         m_location;
-    int                 m_angle;
+    float m_shapeRadius;
+    float m_shapeWidth;
+    float m_shapeHeight;
+    float m_restitution;
+    float m_xyFriction;
+    bool m_stationary;
+    MCVector3dF m_location;
+    int m_angle;
 };
 
 #endif // MCOBJECTDATA_HH

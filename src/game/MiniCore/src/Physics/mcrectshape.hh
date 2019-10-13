@@ -20,10 +20,10 @@
 #ifndef MCRECTSHAPE_HH
 #define MCRECTSHAPE_HH
 
-#include "mcshape.hh"
-#include "mcobbox.hh"
 #include "mcedge.hh"
+#include "mcobbox.hh"
 #include "mcsegment.hh"
+#include "mcshape.hh"
 #include "mcshapeview.hh"
 
 class MCShapeView;
@@ -37,7 +37,6 @@ class MCObject;
 class MCRectShape : public MCShape
 {
 public:
-
     /*! Constructor
      * \param view View for the shape. May be nullptr. */
     MCRectShape(MCShapeViewPtr view, float width, float height);
@@ -85,7 +84,6 @@ public:
     float height() const;
 
 private:
-
     DISABLE_COPY(MCRectShape);
     DISABLE_ASSI(MCRectShape);
 

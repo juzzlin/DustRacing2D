@@ -25,17 +25,17 @@
 MCAssetManager * MCAssetManager::m_instance = nullptr;
 
 MCAssetManager::MCAssetManager(
-    const std::string & baseDataPath,
-    const std::string & surfaceConfigPath,
-    const std::string & fontConfigPath,
-    const std::string & meshConfigPath)
-: m_surfaceManager(new MCSurfaceManager)
-, m_textureFontManager(new MCTextureFontManager(*m_surfaceManager))
-, m_meshManager(new MCMeshManager)
-, m_baseDataPath(baseDataPath)
-, m_surfaceConfigPath(surfaceConfigPath)
-, m_fontConfigPath(fontConfigPath)
-, m_meshConfigPath(meshConfigPath)
+  const std::string & baseDataPath,
+  const std::string & surfaceConfigPath,
+  const std::string & fontConfigPath,
+  const std::string & meshConfigPath)
+  : m_surfaceManager(new MCSurfaceManager)
+  , m_textureFontManager(new MCTextureFontManager(*m_surfaceManager))
+  , m_meshManager(new MCMeshManager)
+  , m_baseDataPath(baseDataPath)
+  , m_surfaceConfigPath(surfaceConfigPath)
+  , m_fontConfigPath(fontConfigPath)
+  , m_meshConfigPath(meshConfigPath)
 {
     assert(!MCAssetManager::m_instance);
     MCAssetManager::m_instance = this;

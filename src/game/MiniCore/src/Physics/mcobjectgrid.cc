@@ -24,13 +24,13 @@
 #include <algorithm>
 
 MCObjectGrid::MCObjectGrid(float x1, float y1, float x2, float y2, float leafMaxW, float leafMaxH)
-: m_bbox(x1, y1, x2, y2)
-, m_leafMaxW(leafMaxW)
-, m_leafMaxH(leafMaxH)
-, m_horSize((x2 - x1) / m_leafMaxW)
-, m_verSize((y2 - y1) / m_leafMaxH)
-, m_helpHor(static_cast<float>(m_horSize) / (x2 - x1))
-, m_helpVer(static_cast<float>(m_verSize) / (y2 - y1))
+  : m_bbox(x1, y1, x2, y2)
+  , m_leafMaxW(leafMaxW)
+  , m_leafMaxH(leafMaxH)
+  , m_horSize((x2 - x1) / m_leafMaxW)
+  , m_verSize((y2 - y1) / m_leafMaxH)
+  , m_helpHor(static_cast<float>(m_horSize) / (x2 - x1))
+  , m_helpVer(static_cast<float>(m_verSize) / (y2 - y1))
 {
     build();
 }
@@ -46,23 +46,31 @@ MCObjectGrid::~MCObjectGrid()
 void MCObjectGrid::setIndexRange(const MCBBox<float> & bbox)
 {
     auto temp = static_cast<int>(bbox.x1() * m_helpHor);
-    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
-    else if (temp < 0) temp = 0;
+    if (temp >= static_cast<int>(m_horSize))
+        temp = m_horSize - 1;
+    else if (temp < 0)
+        temp = 0;
     m_i0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.x2() * m_helpHor);
-    if (temp >= static_cast<int>(m_horSize)) temp = m_horSize - 1;
-    else if (temp < 0) temp = 0;
+    if (temp >= static_cast<int>(m_horSize))
+        temp = m_horSize - 1;
+    else if (temp < 0)
+        temp = 0;
     m_i1 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y1() * m_helpVer);
-    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
-    else if (temp < 0) temp = 0;
+    if (temp >= static_cast<int>(m_verSize))
+        temp = m_verSize - 1;
+    else if (temp < 0)
+        temp = 0;
     m_j0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y2() * m_helpVer);
-    if (temp >= static_cast<int>(m_verSize)) temp = m_verSize - 1;
-    else if (temp < 0) temp = 0;
+    if (temp >= static_cast<int>(m_verSize))
+        temp = m_verSize - 1;
+    else if (temp < 0)
+        temp = 0;
     m_j1 = static_cast<size_t>(temp);
 }
 
@@ -172,17 +180,9 @@ const MCObjectGrid::CollisionVector & MCObjectGrid::getPossibleCollisions()
             for (auto && objIter2 = std::next(objIter1); objIter2 != end; objIter2++)
             {
                 auto * obj2 = *objIter2; // Note that ob1 != obj2 always holds
-                if (&obj1->parent() != obj2 &&
-                    &obj2->parent() != obj1 &&
-                    (!obj1->physicsComponent().isSleeping() || !obj2->physicsComponent().isSleeping()) &&
-                    (obj1->isPhysicsObject() || obj1->isTriggerObject()) && !obj1->bypassCollisions() &&
-                    (obj2->isPhysicsObject() || obj2->isTriggerObject()) && !obj2->bypassCollisions() &&
-                    obj1->physicsComponent().neverCollideWithTag() != obj2->physicsComponent().collisionTag() &&
-                    obj2->physicsComponent().neverCollideWithTag() != obj1->physicsComponent().collisionTag() &&
-                    (obj1->collisionLayer() == obj2->collisionLayer() || obj1->collisionLayer() == -1 || obj2->collisionLayer() == -1) &&
-                    obj1->shape()->likelyIntersects(*obj2->shape().get()))
+                if (&obj1->parent() != obj2 && &obj2->parent() != obj1 && (!obj1->physicsComponent().isSleeping() || !obj2->physicsComponent().isSleeping()) && (obj1->isPhysicsObject() || obj1->isTriggerObject()) && !obj1->bypassCollisions() && (obj2->isPhysicsObject() || obj2->isTriggerObject()) && !obj2->bypassCollisions() && obj1->physicsComponent().neverCollideWithTag() != obj2->physicsComponent().collisionTag() && obj2->physicsComponent().neverCollideWithTag() != obj1->physicsComponent().collisionTag() && (obj1->collisionLayer() == obj2->collisionLayer() || obj1->collisionLayer() == -1 || obj2->collisionLayer() == -1) && obj1->shape()->likelyIntersects(*obj2->shape().get()))
                 {
-                    collisions.push_back({obj1, obj2});
+                    collisions.push_back({ obj1, obj2 });
                     hadCollisions = true;
                 }
             }

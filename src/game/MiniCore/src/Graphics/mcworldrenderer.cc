@@ -21,13 +21,13 @@
 
 #include "mccamera.hh"
 #include "mclogger.hh"
-#include "mcsurfaceparticle.hh"
-#include "mcsurfaceparticlerenderer.hh"
-#include "mcsurfaceparticlerendererlegacy.hh"
 #include "mcobject.hh"
 #include "mcparticle.hh"
 #include "mcshape.hh"
 #include "mcshapeview.hh"
+#include "mcsurfaceparticle.hh"
+#include "mcsurfaceparticlerenderer.hh"
+#include "mcsurfaceparticlerendererlegacy.hh"
 #include "mcsurfaceview.hh"
 
 #include <algorithm>
@@ -35,7 +35,7 @@
 #include <MCGLEW>
 
 MCWorldRenderer::MCWorldRenderer()
-    : m_surfaceParticleRenderer(nullptr)
+  : m_surfaceParticleRenderer(nullptr)
 {
 }
 
@@ -100,10 +100,10 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
     {
         MCParticle & particle = *particleIter;
         const MCBBoxF bbox(
-            particle.location().i() - particle.radius(),
-            particle.location().j() - particle.radius(),
-            particle.location().i() + particle.radius(),
-            particle.location().j() + particle.radius());
+          particle.location().i() - particle.radius(),
+          particle.location().j() - particle.radius(),
+          particle.location().i() + particle.radius(),
+          particle.location().j() + particle.radius());
 
         if (camera->isVisible(bbox))
         {

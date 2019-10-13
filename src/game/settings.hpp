@@ -19,8 +19,8 @@
 #include "difficultyprofile.hpp"
 #include "inputhandler.hpp"
 
-#include <map>
 #include <QString>
+#include <map>
 
 class Track;
 
@@ -28,7 +28,6 @@ class Track;
 class Settings
 {
 public:
-
     //! Constructor.
     Settings();
 
@@ -78,7 +77,6 @@ public:
     static QString vsyncKey();
 
 private:
-
     QString combineActionAndPlayer(int player, InputHandler::Action action);
 
     static Settings * m_instance;

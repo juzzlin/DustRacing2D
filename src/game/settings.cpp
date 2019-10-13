@@ -22,9 +22,9 @@
 Settings * Settings::m_instance = nullptr;
 
 static const char * SETTINGS_GROUP_CONFIG = "Config";
-static const char * SETTINGS_GROUP_LAP    = "LapRecords";
-static const char * SETTINGS_GROUP_RACE   = "RaceRecords";
-static const char * SETTINGS_GROUP_POS    = "BestPositions";
+static const char * SETTINGS_GROUP_LAP = "LapRecords";
+static const char * SETTINGS_GROUP_RACE = "RaceRecords";
+static const char * SETTINGS_GROUP_POS = "BestPositions";
 static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracks";
 
 static QString combine(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty)
@@ -72,9 +72,9 @@ Settings::Settings()
     assert(!Settings::m_instance);
     Settings::m_instance = this;
 
-    m_actionToStringMap[InputHandler::Action::Up]    = "IA_UP";
-    m_actionToStringMap[InputHandler::Action::Down]  = "IA_DOWN";
-    m_actionToStringMap[InputHandler::Action::Left]  = "IA_LEFT";
+    m_actionToStringMap[InputHandler::Action::Up] = "IA_UP";
+    m_actionToStringMap[InputHandler::Action::Down] = "IA_DOWN";
+    m_actionToStringMap[InputHandler::Action::Left] = "IA_LEFT";
     m_actionToStringMap[InputHandler::Action::Right] = "IA_RIGHT";
 }
 
@@ -223,8 +223,8 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
     fullScreen = settings.value("fullScreen", true).toBool();
-    hRes       = settings.value("hRes", 0).toInt();
-    vRes       = settings.value("vRes", 0).toInt();
+    hRes = settings.value("hRes", 0).toInt();
+    vRes = settings.value("vRes", 0).toInt();
     settings.endGroup();
 }
 

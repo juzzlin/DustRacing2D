@@ -20,21 +20,21 @@
 #include "mcobjectrendererbase.hh"
 
 MCObjectRendererBase::MCObjectRendererBase(int maxBatchSize)
-    : MCGLObjectBase("mcobjectrendererbase")
-    , m_batchSize(0)
-    , m_maxBatchSize(maxBatchSize)
-    , m_hasShadow(false)
-    , m_useAlphaBlend(false)
-    , m_src(0)
-    , m_dst(0)
+  : MCGLObjectBase("mcobjectrendererbase")
+  , m_batchSize(0)
+  , m_maxBatchSize(maxBatchSize)
+  , m_hasShadow(false)
+  , m_useAlphaBlend(false)
+  , m_src(0)
+  , m_dst(0)
 {
 }
 
 void MCObjectRendererBase::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum dst)
 {
     m_useAlphaBlend = useAlphaBlend;
-    m_src           = src;
-    m_dst           = dst;
+    m_src = src;
+    m_dst = dst;
 }
 
 int MCObjectRendererBase::maxBatchSize() const

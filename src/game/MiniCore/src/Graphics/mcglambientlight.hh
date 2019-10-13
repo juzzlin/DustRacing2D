@@ -26,7 +26,6 @@
 class MCGLAmbientLight
 {
 public:
-
     /*! Constructor.
      *  \param r Red.
      *  \param g Green.
@@ -53,7 +52,6 @@ public:
     void setI(GLfloat i);
 
 private:
-
     GLfloat m_r;
     GLfloat m_g;
     GLfloat m_b;

@@ -22,7 +22,6 @@
 class KeyConfigMenu : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     KeyConfigMenu(std::string id, int width, int height);
 
@@ -30,7 +29,6 @@ public:
     virtual ~KeyConfigMenu();
 
 private:
-
     void addPlayerOneConfig(int width, int height);
     void addPlayerTwoConfig(int width, int height);
 };

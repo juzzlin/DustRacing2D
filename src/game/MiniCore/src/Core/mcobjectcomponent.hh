@@ -28,7 +28,6 @@
 class MCObjectComponent
 {
 public:
-
     MCObjectComponent();
 
     void setObject(MCObject & object);
@@ -40,11 +39,9 @@ public:
     virtual void reset();
 
 protected:
-
     MCObject & object() const;
 
 private:
-
     DISABLE_ASSI(MCObjectComponent);
     DISABLE_COPY(MCObjectComponent);
 

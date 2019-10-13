@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,46 +31,45 @@
 
 #include "setup.hpp"
 
-#if((GLM_ARCH & GLM_ARCH_SSE2) != GLM_ARCH_SSE2)
-#	error "SSE2 instructions not supported or enabled"
+#if ((GLM_ARCH & GLM_ARCH_SSE2) != GLM_ARCH_SSE2)
+#error "SSE2 instructions not supported or enabled"
 #else
 
 #include "intrinsic_common.hpp"
 
-namespace glm{
-namespace detail
-{
-	//length
-	__m128 sse_len_ps(__m128 x);
+namespace glm {
+namespace detail {
+//length
+__m128 sse_len_ps(__m128 x);
 
-	//distance
-	__m128 sse_dst_ps(__m128 p0, __m128 p1);
+//distance
+__m128 sse_dst_ps(__m128 p0, __m128 p1);
 
-	//dot
-	__m128 sse_dot_ps(__m128 v1, __m128 v2);
+//dot
+__m128 sse_dot_ps(__m128 v1, __m128 v2);
 
-	// SSE1
-	__m128 sse_dot_ss(__m128 v1, __m128 v2);
+// SSE1
+__m128 sse_dot_ss(__m128 v1, __m128 v2);
 
-	//cross
-	__m128 sse_xpd_ps(__m128 v1, __m128 v2);
+//cross
+__m128 sse_xpd_ps(__m128 v1, __m128 v2);
 
-	//normalize
-	__m128 sse_nrm_ps(__m128 v);
+//normalize
+__m128 sse_nrm_ps(__m128 v);
 
-	//faceforward
-	__m128 sse_ffd_ps(__m128 N, __m128 I, __m128 Nref);
+//faceforward
+__m128 sse_ffd_ps(__m128 N, __m128 I, __m128 Nref);
 
-	//reflect
-	__m128 sse_rfe_ps(__m128 I, __m128 N);
+//reflect
+__m128 sse_rfe_ps(__m128 I, __m128 N);
 
-	//refract
-	__m128 sse_rfa_ps(__m128 I, __m128 N, __m128 eta);
+//refract
+__m128 sse_rfa_ps(__m128 I, __m128 N, __m128 eta);
 
-}//namespace detail
-}//namespace glm
+} //namespace detail
+} //namespace glm
 
 #include "intrinsic_geometric.inl"
 
-#endif//GLM_ARCH
-#endif//glm_core_intrinsic_geometric
+#endif //GLM_ARCH
+#endif //glm_core_intrinsic_geometric

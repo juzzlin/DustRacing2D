@@ -20,8 +20,8 @@
 #ifndef MCTEXTUREFONT_HH
 #define MCTEXTUREFONT_HH
 
-#include "mctextureglyph.hh"
 #include "mcglshaderprogram.hh"
+#include "mctextureglyph.hh"
 
 #include <unordered_map>
 #include <vector>
@@ -32,7 +32,6 @@ class MCSurface;
 class MCTextureFont
 {
 public:
-
     /*! Constructor.
      * \param surface Reference to the surface object containing
      * all the monospace glyphs. */
@@ -66,7 +65,6 @@ public:
     float yDensity() const;
 
 private:
-
     MCTextureGlyph m_default;
 
     typedef std::unordered_map<wchar_t, MCTextureGlyph> GlyphHash;

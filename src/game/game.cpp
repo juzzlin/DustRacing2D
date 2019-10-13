@@ -19,8 +19,8 @@
 #include "game.hpp"
 
 #include "audioworker.hpp"
-#include "graphicsfactory.hpp"
 #include "eventhandler.hpp"
+#include "graphicsfactory.hpp"
 #include "inputhandler.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
@@ -36,11 +36,11 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDir>
-#include <QThread>
-#include <QTime>
 #include <QProcessEnvironment>
 #include <QScreen>
 #include <QSurfaceFormat>
+#include <QThread>
+#include <QTime>
 
 #include "simple_logger.hpp"
 
@@ -53,30 +53,30 @@ Game * Game::m_instance = nullptr;
 using juzzlin::L;
 
 Game::Game(int & argc, char ** argv)
-: m_app(argc, argv)
-, m_forceNoVSync(false)
-, m_settings()
-, m_difficultyProfile(m_settings.loadDifficulty())
-, m_inputHandler(new InputHandler(MAX_PLAYERS))
-, m_eventHandler(new EventHandler(*m_inputHandler))
-, m_stateMachine(new StateMachine(*m_inputHandler))
-, m_renderer(nullptr)
-, m_scene(nullptr)
-, m_trackLoader(new TrackLoader)
-, m_screenIndex(m_settings.loadValue(m_settings.screenKey(), 0))
-, m_updateFps(60)
-, m_updateDelay(1000 / m_updateFps)
-, m_timeStep(1000 / m_updateFps)
-, m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
-, m_paused(false)
-, m_renderElapsed(0)
-, m_fps(m_settings.loadValue(Settings::fpsKey()) == 30 ? Fps::Fps30 : Fps::Fps60)
-, m_mode(Mode::OnePlayerRace)
-, m_splitType(SplitType::Vertical)
-, m_audioWorker(new AudioWorker(
+  : m_app(argc, argv)
+  , m_forceNoVSync(false)
+  , m_settings()
+  , m_difficultyProfile(m_settings.loadDifficulty())
+  , m_inputHandler(new InputHandler(MAX_PLAYERS))
+  , m_eventHandler(new EventHandler(*m_inputHandler))
+  , m_stateMachine(new StateMachine(*m_inputHandler))
+  , m_renderer(nullptr)
+  , m_scene(nullptr)
+  , m_trackLoader(new TrackLoader)
+  , m_screenIndex(m_settings.loadValue(m_settings.screenKey(), 0))
+  , m_updateFps(60)
+  , m_updateDelay(1000 / m_updateFps)
+  , m_timeStep(1000 / m_updateFps)
+  , m_lapCount(m_settings.loadValue(Settings::lapCountKey(), 5))
+  , m_paused(false)
+  , m_renderElapsed(0)
+  , m_fps(m_settings.loadValue(Settings::fpsKey()) == 30 ? Fps::Fps30 : Fps::Fps60)
+  , m_mode(Mode::OnePlayerRace)
+  , m_splitType(SplitType::Vertical)
+  , m_audioWorker(new AudioWorker(
       Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
-, m_audioThread(new QThread)
-, m_world(new MCWorld)
+  , m_audioThread(new QThread)
+  , m_world(new MCWorld)
 {
     assert(!Game::m_instance);
     Game::m_instance = this;
@@ -85,24 +85,24 @@ Game::Game(int & argc, char ** argv)
 
     createRenderer();
 
-    connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, [this] () {
+    connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, [this]() {
         m_trackLoader->updateLockedTracks(m_lapCount, m_difficultyProfile.difficulty());
     });
 
     connect(m_eventHandler, &EventHandler::pauseToggled, this, &Game::togglePause);
     connect(m_eventHandler, &EventHandler::gameExited, this, &Game::exitGame);
 
-    connect(m_eventHandler, &EventHandler::cursorRevealed, [this] () {
+    connect(m_eventHandler, &EventHandler::cursorRevealed, [this]() {
         m_renderer->setCursor(Qt::ArrowCursor);
     });
 
-    connect(m_eventHandler, &EventHandler::cursorHid, [this] () {
+    connect(m_eventHandler, &EventHandler::cursorHid, [this]() {
         m_renderer->setCursor(Qt::BlankCursor);
     });
 
     connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
-    connect(&m_updateTimer, &QTimer::timeout, [this] () {
+    connect(&m_updateTimer, &QTimer::timeout, [this]() {
         m_stateMachine->update();
         m_scene->updateFrame(*m_inputHandler, m_timeStep);
         m_scene->updateOverlays();
@@ -126,8 +126,10 @@ Game & Game::instance()
 
 static void printHelp()
 {
-    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
+    std::cout << std::endl
+              << "Dust Racing 2D version " << VERSION << std::endl;
+    std::cout << Config::Common::COPYRIGHT << std::endl
+              << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--debug           Set log level to debug." << std::endl;
     std::cout << "--help            Show this help." << std::endl;
@@ -158,10 +160,8 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
 
 void Game::addTrackSearchPaths()
 {
-    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) +
-        QDir::separator() + "levels");
-    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() +
-        Config::Common::TRACK_SEARCH_PATH);
+    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) + QDir::separator() + "levels");
+    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() + Config::Common::TRACK_SEARCH_PATH);
 
     // See: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html,
     //      https://github.com/juzzlin/DustRacing2D/issues/49
@@ -372,7 +372,7 @@ int Game::run()
 
 QScreen * Game::screen() const
 {
-  return m_screen;
+    return m_screen;
 }
 
 bool Game::loadTracks()

@@ -18,7 +18,6 @@
 
 #include "overlaybase.hpp"
 
-
 class MCSurface;
 class MCTextureFontManager;
 
@@ -28,7 +27,6 @@ class Startlights;
 class StartlightsOverlay : public OverlayBase
 {
 public:
-
     //! Constructor.
     StartlightsOverlay(Startlights & model);
 
@@ -39,16 +37,15 @@ public:
     virtual void setDimensions(int width, int height) override;
 
 private:
-
     void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;
 
-    MCSurface   & m_startLightOn;
-    MCSurface   & m_startLightOnCorner;
-    MCSurface   & m_startLightOff;
-    MCSurface   & m_startLightOffCorner;
-    MCSurface   & m_startLightGlow;
+    MCSurface & m_startLightOn;
+    MCSurface & m_startLightOnCorner;
+    MCSurface & m_startLightOff;
+    MCSurface & m_startLightOffCorner;
+    MCSurface & m_startLightGlow;
     Startlights & m_model;
-    float         m_alpha;
+    float m_alpha;
 };
 
 #endif // STARTLIGHTSOVERLAY_HPP

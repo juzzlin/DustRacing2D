@@ -20,17 +20,19 @@
 class Renderable
 {
 public:
-
     //! Constructor.
     Renderable()
-    : m_x(0)
-    , m_y(0)
-    , m_w(0)
-    , m_h(0)
-    {}
+      : m_x(0)
+      , m_y(0)
+      , m_w(0)
+      , m_h(0)
+    {
+    }
 
     //! Destructor.
-    virtual ~Renderable() {}
+    virtual ~Renderable()
+    {
+    }
 
     //! Render.
     virtual void render() = 0;
@@ -74,7 +76,6 @@ public:
     }
 
 private:
-
     int m_x;
 
     int m_y;

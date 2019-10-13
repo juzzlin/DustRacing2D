@@ -20,7 +20,7 @@
 DifficultyProfile * DifficultyProfile::m_instance = nullptr;
 
 DifficultyProfile::DifficultyProfile(Difficulty difficulty)
-    : m_difficulty(difficulty)
+  : m_difficulty(difficulty)
 {
     assert(!m_instance);
     m_instance = this;

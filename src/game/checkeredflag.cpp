@@ -20,12 +20,12 @@
 #include <MCSurface>
 #include <MCVector3d>
 
-static const int   FLAG_W           = 32;
-static const int   FLAG_H           = 24;
-static const int   V_SPACING        = 20;
+static const int FLAG_W = 32;
+static const int FLAG_H = 24;
+static const int V_SPACING = 20;
 
 CheckeredFlag::CheckeredFlag()
-: m_surface(MCAssetManager::surfaceManager().surface("checkeredFlag"))
+  : m_surface(MCAssetManager::surfaceManager().surface("checkeredFlag"))
 {
 }
 

@@ -21,8 +21,8 @@
 
 #include <MCVector3d>
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 class MCSurfaceParticle;
 
@@ -30,7 +30,6 @@ class MCSurfaceParticle;
 class ParticleFactory
 {
 public:
-
     enum ParticleType
     {
         DamageSmoke = 0,
@@ -54,13 +53,12 @@ public:
     static ParticleFactory & instance();
 
     void doParticle(
-        ParticleType type,
-        MCVector3dFR location,
-        MCVector3dFR initialVelocity = MCVector3dF(0, 0, 0),
-        int angle = 0);
+      ParticleType type,
+      MCVector3dFR location,
+      MCVector3dFR initialVelocity = MCVector3dF(0, 0, 0),
+      int angle = 0);
 
 private:
-
     void doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
 
     void doSkidSmoke(MCVector3dFR location, MCVector3dFR velocity) const;
@@ -82,7 +80,7 @@ private:
     void preCreateParticles();
 
     void preCreateSurfaceParticles(
-        int count, std::string typeId, ParticleType typeEnum, MCSurface & surface, bool alphaBlend = false, bool hasShadow = false);
+      int count, std::string typeId, ParticleType typeEnum, MCSurface & surface, bool alphaBlend = false, bool hasShadow = false);
 
     MCSurfaceParticle * newSurfaceParticle(ParticleType typeEnum) const;
 
@@ -93,7 +91,7 @@ private:
     MCParticleRendererPtr m_particleRenderers[NumParticleTypes];
 
     // Particles to delete.
-    std::vector<std::unique_ptr<MCParticle> > m_delete;
+    std::vector<std::unique_ptr<MCParticle>> m_delete;
 
     static ParticleFactory * m_instance;
 };

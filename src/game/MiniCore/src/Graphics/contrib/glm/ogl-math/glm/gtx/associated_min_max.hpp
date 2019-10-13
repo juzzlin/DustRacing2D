@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@
 ///
 /// @defgroup gtx_associated_min_max GLM_GTX_associated_min_max: Associated Min/Max
 /// @ingroup gtx
-/// 
+///
 /// @brief Min and max functions that return associated values not the compared onces.
 /// <glm/gtx/associated_min_max.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
@@ -41,66 +41,65 @@
 // Dependency:
 #include "../glm.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_associated_min_max extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_associated_min_max extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_associated_min_max
-	/// @{
+namespace glm {
+/// @addtogroup gtx_associated_min_max
+/// @{
 
-	/// Min comparison between 2 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMin(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b);
+/// Min comparison between 2 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMin(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b);
 
-	/// Min comparison between 3 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMin(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b, 
-		const genTypeT& z, const genTypeU& c);
+/// Min comparison between 3 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMin(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b,
+  const genTypeT & z, const genTypeU & c);
 
-	/// Min comparison between 4 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMin(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b, 
-		const genTypeT& z, const genTypeU& c, 
-		const genTypeT& w, const genTypeU& d);
+/// Min comparison between 4 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMin(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b,
+  const genTypeT & z, const genTypeU & c,
+  const genTypeT & w, const genTypeU & d);
 
-	/// Max comparison between 2 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMax(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b);
+/// Max comparison between 2 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMax(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b);
 
-	/// Max comparison between 3 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMax(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b, 
-		const genTypeT& z, const genTypeU& c);
+/// Max comparison between 3 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMax(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b,
+  const genTypeT & z, const genTypeU & c);
 
-	/// Max comparison between 4 variables
-	/// @see gtx_associated_min_max
-	template<typename genTypeT, typename genTypeU>
-	genTypeU associatedMax(
-		const genTypeT& x, const genTypeU& a, 
-		const genTypeT& y, const genTypeU& b, 
-		const genTypeT& z, const genTypeU& c, 
-		const genTypeT& w, const genTypeU& d);
+/// Max comparison between 4 variables
+/// @see gtx_associated_min_max
+template<typename genTypeT, typename genTypeU>
+genTypeU associatedMax(
+  const genTypeT & x, const genTypeU & a,
+  const genTypeT & y, const genTypeU & b,
+  const genTypeT & z, const genTypeU & c,
+  const genTypeT & w, const genTypeU & d);
 
-	/// @}
+/// @}
 } //namespace glm
 
 #include "associated_min_max.inl"
 
-#endif//GLM_GTX_associated_min_max
+#endif //GLM_GTX_associated_min_max

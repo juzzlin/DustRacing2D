@@ -34,8 +34,8 @@ class Route;
 class Car : public MCObject
 {
 public:
-
-    enum class Steer {
+    enum class Steer
+    {
         Neutral,
         Left,
         Right
@@ -107,7 +107,7 @@ public:
     bool isOffTrack() const;
 
     void setTurningImpulse(float impulse);
-    
+
     void setNextTargetNodeIndex(int index);
 
     int nextTargetNodeIndex() const;
@@ -169,7 +169,6 @@ public:
     void setBrakeEnabled(bool brakeEnabled);
 
 private:
-
     void accelerate(bool deccelerate = false);
 
     void initForceGenerators(Description & desc);

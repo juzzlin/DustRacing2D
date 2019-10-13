@@ -35,14 +35,12 @@ class MCObject;
 class MCSurfaceObjectRendererLegacy : public MCObjectRendererBase
 {
 public:
-
     explicit MCSurfaceObjectRendererLegacy(int maxBatchSize = 1024);
 
     //! Destructor.
     virtual ~MCSurfaceObjectRendererLegacy();
 
 private:
-
     DISABLE_COPY(MCSurfaceObjectRendererLegacy);
     DISABLE_ASSI(MCSurfaceObjectRendererLegacy);
 

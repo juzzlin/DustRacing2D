@@ -17,12 +17,12 @@
 #define MENUITEM_HPP
 
 #include <functional>
-#include <string>
 #include <memory>
+#include <string>
 
 #include "animationcurve.hpp"
-#include "menuitemview.hpp"
 #include "menuitemaction.hpp"
+#include "menuitemview.hpp"
 
 namespace MTFH {
 
@@ -33,7 +33,6 @@ class MenuItemAction;
 class MenuItem
 {
 public:
-
     MenuItem(float width, float height, std::wstring text = L"", bool selectable = false);
 
     virtual ~MenuItem();
@@ -112,7 +111,6 @@ public:
     float targetY() const;
 
 private:
-
     Menu * m_menu;
 
     std::wstring m_text;

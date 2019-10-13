@@ -25,15 +25,16 @@ class MCTextureFont;
 class SurfaceMenu : public MTFH::Menu
 {
 public:
-
     //! Constructor.
     SurfaceMenu(
-        std::string surfaceId, std::string id, int width, int height,
-        Menu::Style style = Menu::Style::VerticalList,
-        bool quitItem = true, bool prevItem = false, bool nextItem = false);
+      std::string surfaceId, std::string id, int width, int height,
+      Menu::Style style = Menu::Style::VerticalList,
+      bool quitItem = true, bool prevItem = false, bool nextItem = false);
 
     //! Destructor.
-    virtual ~SurfaceMenu() {}
+    virtual ~SurfaceMenu()
+    {
+    }
 
     //! \reimp
     virtual void render() override;
@@ -54,12 +55,10 @@ public:
     virtual void popExit() override;
 
 protected:
-
     MCTextureFont & font() const;
 
 private:
-
-    MCSurface     & m_back;
+    MCSurface & m_back;
     MCTextureFont & m_font;
 };
 

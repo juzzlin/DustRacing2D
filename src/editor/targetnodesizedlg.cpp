@@ -16,22 +16,22 @@
 #include "targetnodesizedlg.hpp"
 #include "tracktile.hpp"
 
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QIntValidator>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QIntValidator>
+#include <QVBoxLayout>
 
 TargetNodeSizeDlg::TargetNodeSizeDlg(QSizeF defaultSize, QWidget * parent)
-: QDialog(parent)
-, m_layout(new QGridLayout(this))
-, m_okButton(new QPushButton(tr("Ok")))
-, m_cancelButton(new QPushButton(tr("Cancel")))
-, m_widthEdit(new QLineEdit)
-, m_widthLabel(new QLabel(tr("Width:")))
-, m_heightEdit(new QLineEdit)
-, m_heightLabel(new QLabel(tr("Height:")))
+  : QDialog(parent)
+  , m_layout(new QGridLayout(this))
+  , m_okButton(new QPushButton(tr("Ok")))
+  , m_cancelButton(new QPushButton(tr("Cancel")))
+  , m_widthEdit(new QLineEdit)
+  , m_widthLabel(new QLabel(tr("Width:")))
+  , m_heightEdit(new QLineEdit)
+  , m_heightLabel(new QLabel(tr("Height:")))
 {
     setWindowTitle(tr("Set target node size"));
 
@@ -45,11 +45,11 @@ TargetNodeSizeDlg::TargetNodeSizeDlg(QSizeF defaultSize, QWidget * parent)
     m_heightEdit->setValidator(widthValidator);
     m_heightEdit->setText(QString("%1").arg(defaultSize.height()));
 
-    m_layout->addWidget(m_widthLabel,   0, 0);
-    m_layout->addWidget(m_widthEdit,    0, 1);
-    m_layout->addWidget(m_heightLabel,  1, 0);
-    m_layout->addWidget(m_heightEdit,   1, 1);
-    m_layout->addWidget(m_okButton,     3, 0);
+    m_layout->addWidget(m_widthLabel, 0, 0);
+    m_layout->addWidget(m_widthEdit, 0, 1);
+    m_layout->addWidget(m_heightLabel, 1, 0);
+    m_layout->addWidget(m_heightEdit, 1, 1);
+    m_layout->addWidget(m_okButton, 3, 0);
     m_layout->addWidget(m_cancelButton, 3, 1);
 
     connect(m_okButton, &QPushButton::clicked, this, &TargetNodeSizeDlg::accept);

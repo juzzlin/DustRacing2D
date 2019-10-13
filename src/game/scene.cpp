@@ -55,8 +55,8 @@
 #include <MCGLDiffuseLight>
 #include <MCGLScene>
 #include <MCGLShaderProgram>
-#include <MCObjectFactory>
 #include <MCObject>
+#include <MCObjectFactory>
 #include <MCPhysicsComponent>
 #include <MCShape>
 #include <MCSurface>
@@ -66,8 +66,8 @@
 #include <MCWorld>
 #include <MCWorldRenderer>
 
-#include <QObject>
 #include <QApplication>
+#include <QObject>
 
 #include <algorithm>
 #include <cassert>
@@ -76,25 +76,25 @@
 using std::dynamic_pointer_cast;
 
 // Default visible scene size.
-int Scene::m_width  = 1024;
+int Scene::m_width = 1024;
 int Scene::m_height = 768;
 
 static const float METERS_PER_UNIT = 0.05f;
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world)
-: m_game(game)
-, m_stateMachine(stateMachine)
-, m_renderer(renderer)
-, m_messageOverlay(new MessageOverlay)
-, m_race(game, NUM_CARS)
-, m_activeTrack(nullptr)
-, m_world(world)
-, m_startlights(new Startlights)
-, m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
-, m_checkeredFlag(new CheckeredFlag)
-, m_intro(new Intro)
-, m_particleFactory(new ParticleFactory)
-, m_fadeAnimation(new FadeAnimation)
+  : m_game(game)
+  , m_stateMachine(stateMachine)
+  , m_renderer(renderer)
+  , m_messageOverlay(new MessageOverlay)
+  , m_race(game, NUM_CARS)
+  , m_activeTrack(nullptr)
+  , m_world(world)
+  , m_startlights(new Startlights)
+  , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
+  , m_checkeredFlag(new CheckeredFlag)
+  , m_intro(new Intro)
+  , m_particleFactory(new ParticleFactory)
+  , m_fadeAnimation(new FadeAnimation)
 {
     initializeComponents();
 
@@ -119,9 +119,9 @@ void Scene::connectComponents()
     connect(m_fadeAnimation.get(), &FadeAnimation::fadeOutFinished, &m_stateMachine, &StateMachine::endFadeOut);
 
     connect(&m_race, &Race::finished, &m_stateMachine, &StateMachine::finishRace);
-    connect(&m_race, &Race::messageRequested, m_messageOverlay.get(), static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(&m_race, &Race::messageRequested, m_messageOverlay.get(), static_cast<void (MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
 
-    connect(m_startlights.get(), &Startlights::messageRequested, m_messageOverlay.get(), static_cast<void(MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(m_startlights.get(), &Startlights::messageRequested, m_messageOverlay.get(), static_cast<void (MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
     connect(this, &Scene::listenerLocationChanged, &m_game.audioWorker(), &AudioWorker::setListenerLocation);
 
     m_game.audioWorker().connectAudioSource(m_race);
@@ -142,10 +142,8 @@ void Scene::initializeComponents()
 
     m_world.setMetersPerUnit(METERS_PER_UNIT);
 
-    MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(
-        m_renderer.program("text"));
-    MCAssetManager::textureFontManager().font(m_game.fontName()).setShadowShaderProgram(
-        m_renderer.program("textShadow"));
+    MCAssetManager::textureFontManager().font(m_game.fontName()).setShaderProgram(m_renderer.program("text"));
+    MCAssetManager::textureFontManager().font(m_game.fontName()).setShadowShaderProgram(m_renderer.program("textShadow"));
 
     const MCGLAmbientLight ambientLight(1.0f, 0.9f, 0.95f, 0.75f);
     const MCGLDiffuseLight diffuseLight(MCVector3dF(1.0f, -1.0f, -1.0f), 1.0f, 0.9f, 0.5f, 0.75f);
@@ -238,7 +236,7 @@ int Scene::height()
 
 void Scene::setSize(int width, int height)
 {
-    Scene::m_width  = width;
+    Scene::m_width = width;
     Scene::m_height = height;
 }
 
@@ -248,7 +246,7 @@ void Scene::createMenus()
 
     m_mainMenu = MTFH::MenuPtr(new MainMenu(*m_menuManager, *this, width(), height()));
     connect(
-        std::static_pointer_cast<MainMenu>(m_mainMenu).get(), &MainMenu::exitGameRequested, &m_game, &Game::exitGame);
+      std::static_pointer_cast<MainMenu>(m_mainMenu).get(), &MainMenu::exitGameRequested, &m_game, &Game::exitGame);
 
     m_menuManager->addMenu(m_mainMenu);
     m_menuManager->enterMenu(m_mainMenu);
@@ -256,10 +254,7 @@ void Scene::createMenus()
 
 void Scene::updateFrame(InputHandler & handler, int step)
 {
-    if (m_stateMachine.state() == StateMachine::State::GameTransitionIn  ||
-        m_stateMachine.state() == StateMachine::State::GameTransitionOut ||
-        m_stateMachine.state() == StateMachine::State::DoStartlights     ||
-        m_stateMachine.state() == StateMachine::State::Play)
+    if (m_stateMachine.state() == StateMachine::State::GameTransitionIn || m_stateMachine.state() == StateMachine::State::GameTransitionOut || m_stateMachine.state() == StateMachine::State::DoStartlights || m_stateMachine.state() == StateMachine::State::Play)
     {
         if (m_activeTrack)
         {
@@ -405,13 +400,13 @@ void Scene::setupCameras(Track & activeTrack)
             if (m_game.splitType() == Game::SplitType::Vertical)
             {
                 m_camera[i].init(
-                    Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+                  Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
                 m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
             }
             else
             {
                 m_camera[i].init(
-                    Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
+                  Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
                 m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
             }
         }
@@ -419,7 +414,7 @@ void Scene::setupCameras(Track & activeTrack)
     else
     {
         m_camera[0].init(
-            Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+          Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
         m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
     }
 }
@@ -506,7 +501,7 @@ void Scene::createNormalObjects()
         float baseZ = 0;
         if (object.shape() && object.shape()->view() && object.shape()->view()->object())
         {
-            if (dynamic_cast<MCMesh*>(object.shape()->view()->object()))
+            if (dynamic_cast<MCMesh *>(object.shape()->view()->object()))
             {
                 baseZ = -object.shape()->view()->object()->minZ();
             }
@@ -642,7 +637,7 @@ void Scene::renderTrack()
     }
     default:
         break;
-    };
+    }
 }
 
 void Scene::renderMenu()
@@ -671,7 +666,7 @@ void Scene::renderMenu()
 
     default:
         break;
-    };
+    }
 }
 
 void Scene::renderCommonHUD()
@@ -698,7 +693,7 @@ void Scene::renderCommonHUD()
     }
     default:
         break;
-    };
+    }
 }
 
 void Scene::renderHUD()
@@ -740,7 +735,7 @@ void Scene::renderHUD()
     }
     default:
         break;
-    };
+    }
 }
 
 void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
@@ -787,7 +782,7 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
     }
     default:
         break;
-    };
+    }
 }
 
 Scene::~Scene() = default;

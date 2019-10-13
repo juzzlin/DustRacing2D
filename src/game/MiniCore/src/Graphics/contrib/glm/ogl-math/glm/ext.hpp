@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,32 +25,32 @@
 /// @author Christophe Riccio
 ///
 /// @ref core (Dependence)
-/// 
+///
 /// @defgroup gtc GTC Extensions (Stable)
 ///
 /// @brief Functions and types that the GLSL specification doesn't define, but useful to have for a C++ program.
-/// 
-/// GTC extensions aim to be stable. 
-/// 
+///
+/// GTC extensions aim to be stable.
+///
 /// Even if it's highly unrecommended, it's possible to include all the extensions at once by
 /// including <glm/ext.hpp>. Otherwise, each extension needs to be included  a specific file.
-/// 
+///
 /// @defgroup gtx GTX Extensions (Experimental)
-/// 
-/// @brief Functions and types that the GLSL specification doesn't define, but 
+///
+/// @brief Functions and types that the GLSL specification doesn't define, but
 /// useful to have for a C++ program.
-/// 
+///
 /// Experimental extensions are useful functions and types, but the development of
-/// their API and functionality is not necessarily stable. They can change 
+/// their API and functionality is not necessarily stable. They can change
 /// substantially between versions. Backwards compatibility is not much of an issue
 /// for them.
-/// 
-/// Even if it's highly unrecommended, it's possible to include all the extensions 
-/// at once by including <glm/ext.hpp>. Otherwise, each extension needs to be 
+///
+/// Even if it's highly unrecommended, it's possible to include all the extensions
+/// at once by including <glm/ext.hpp>. Otherwise, each extension needs to be
 /// included  a specific file.
-/// 
+///
 /// @defgroup virtrev VIRTREV Extensions
-/// 
+///
 /// @brief Extensions develop and maintain by Mathieu [matrem] Roumillac
 /// (http://www.opengl.org/discussion_boards/ubbthreads.php?ubb=showprofile&User=22660).
 ///////////////////////////////////////////////////////////////////////////////////
@@ -58,10 +58,10 @@
 #ifndef glm_ext
 #define glm_ext
 
-#if(defined(GLM_MESSAGES) && !defined(GLM_MESSAGE_EXT_INCLUDED_DISPLAYED))
-#	define GLM_MESSAGE_EXT_INCLUDED_DISPLAYED
-#	pragma message("GLM: All extensions included (not recommanded)")
-#endif//GLM_MESSAGES
+#if (defined(GLM_MESSAGES) && !defined(GLM_MESSAGE_EXT_INCLUDED_DISPLAYED))
+#define GLM_MESSAGE_EXT_INCLUDED_DISPLAYED
+#pragma message("GLM: All extensions included (not recommanded)")
+#endif //GLM_MESSAGES
 
 #include "./gtc/half_float.hpp"
 #include "./gtc/matrix_access.hpp"
@@ -131,9 +131,9 @@
 #include "./gtx/verbose_operator.hpp"
 #include "./gtx/wrap.hpp"
 
-#if(GLM_ARCH & GLM_ARCH_SSE2)
-#	include "./gtx/simd_vec4.hpp"
-#	include "./gtx/simd_mat4.hpp"
+#if (GLM_ARCH & GLM_ARCH_SSE2)
+#include "./gtx/simd_mat4.hpp"
+#include "./gtx/simd_vec4.hpp"
 #endif
 
 #include "./virtrev/xstream.hpp"

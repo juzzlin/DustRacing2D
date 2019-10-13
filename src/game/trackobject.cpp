@@ -16,8 +16,8 @@
 #include "trackobject.hpp"
 
 TrackObject::TrackObject(QString category, QString role, MCObjectPtr object)
-: ObjectBase(category, role)
-, m_object(object)
+  : ObjectBase(category, role)
+  , m_object(object)
 {
 }
 

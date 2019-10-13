@@ -19,7 +19,7 @@
 namespace MTFH {
 
 MenuItemView::MenuItemView(MenuItem & owner)
-: m_owner(owner)
+  : m_owner(owner)
 {
 }
 

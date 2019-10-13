@@ -17,8 +17,8 @@
 #define TRACKTILE_HPP
 
 #include <QGraphicsItem>
-#include <QString>
 #include <QMenu>
+#include <QString>
 
 #include "../common/tracktilebase.hpp"
 
@@ -32,13 +32,12 @@ class TileAnimator;
 class TrackTile : public QGraphicsItem, public TrackTileBase
 {
 public:
-
     /*! Constructor.
      *  \param location Location (coordinates) in the track scene.
      *  \param matrixLocation Location in the tile matrix.
      *  \param type Type of the tile. See setType(). */
     TrackTile(QPointF location, QPoint matrixLocation,
-        const QString & type = "clear");
+              const QString & type = "clear");
 
     /*! Copy constructor.
      *  NOTE!!: This is used when saving undo points so make sure all properties are copied! */
@@ -49,10 +48,10 @@ public:
     //! Destructor
     virtual ~TrackTile();
 
-    virtual QRectF boundingRect () const override;
+    virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
+                       const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     //! Set tile active (a blue collar is drawn)
     void setActive(bool active);
@@ -90,7 +89,6 @@ public:
     bool added() const;
 
 private:
-
     //! Create the menu that is shown when right-clicking on the tile.
     void createContextMenu();
 

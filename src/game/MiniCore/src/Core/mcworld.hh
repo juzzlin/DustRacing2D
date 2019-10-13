@@ -21,9 +21,9 @@
 #define MCWORLD_HH
 
 #include "mcmacros.hh"
+#include "mcrendergroup.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
-#include "mcrendergroup.hh"
 
 #include <memory>
 #include <vector>
@@ -52,7 +52,6 @@ class MCWorldRenderer;
 class MCWorld
 {
 public:
-
     typedef std::vector<MCObject *> ObjectVector;
 
     //! Constructor.
@@ -79,15 +78,15 @@ public:
      *  detection performance.
      */
     void setDimensions(
-        float minX,
-        float maxX,
-        float minY,
-        float maxY,
-        float minZ,
-        float maxZ,
-        float metersPerUnit = 1.0f,
-        bool addAreaWalls = true,
-        int gridSize = 128);
+      float minX,
+      float maxX,
+      float minY,
+      float maxY,
+      float minZ,
+      float maxZ,
+      float metersPerUnit = 1.0f,
+      bool addAreaWalls = true,
+      int gridSize = 128);
 
     /*! Set gravity vector used by default friction generators (on XY-plane).
      *  The default is [0, 0, -9.81]. Set the gravity (acceleration) for objects
@@ -182,12 +181,10 @@ public:
     void setResolverLoopCount(unsigned int resolverLoopCount = 5);
 
 protected:
-
     //! Get registered objects
     ObjectVector objects() const;
 
 private:
-
     DISABLE_COPY(MCWorld);
     DISABLE_ASSI(MCWorld);
 

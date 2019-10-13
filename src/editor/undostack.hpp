@@ -23,7 +23,6 @@
 class UndoStack
 {
 public:
-
     UndoStack(unsigned int maxHistorySize = 100);
 
     void pushUndoPoint(TrackDataPtr trackData);
@@ -41,7 +40,6 @@ public:
     TrackDataPtr redo();
 
 private:
-
     using TrackDataVector = std::list<TrackDataPtr>;
 
     TrackDataVector m_undoStack;

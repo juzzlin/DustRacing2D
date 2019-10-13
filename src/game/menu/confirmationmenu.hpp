@@ -28,7 +28,6 @@
 class ConfirmationMenu : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     ConfirmationMenu(std::string id, int width, int height);
 
@@ -49,7 +48,6 @@ public:
     virtual void render();
 
 private:
-
     MTFH::MenuItemPtr m_acceptItem;
     MTFH::MenuItemPtr m_cancelItem;
 

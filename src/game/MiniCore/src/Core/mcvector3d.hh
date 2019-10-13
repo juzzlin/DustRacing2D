@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General
 // Public License along with this library; if not, write to the
 // Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-// Boston, MA 02110-1301 USA 
+// Boston, MA 02110-1301 USA
 //
 
 #ifndef MCVECTOR3D_HH
@@ -41,13 +41,12 @@
  *  // Dot product
  *  cout << a.dot(b) << endl;
  *
- */ 
+ */
 
-template <typename T>
+template<typename T>
 class MCVector3d
 {
 public:
-
     //! Constructor
     MCVector3d();
 
@@ -55,83 +54,85 @@ public:
     explicit MCVector3d(T i, T j = 0, T k = 0);
 
     //! Constructor
-    template <typename U>
+    template<typename U>
     MCVector3d(const MCVector2d<U> & r, U k = 0);
 
     //! Copy constructor
-    template <typename U>
+    template<typename U>
     MCVector3d(const MCVector3d<U> & r);
 
     //! Move constructor
-    template <typename U>
+    template<typename U>
     MCVector3d(const MCVector3d<U> && r);
 
     //! Destructor
-    inline ~MCVector3d() {}
+    inline ~MCVector3d()
+    {
+    }
 
     //! Type conversion to MCVector2d
-    template <typename U>
+    template<typename U>
     operator MCVector2d<U>() const;
 
     //! Assignment
-    template <typename U>
-    MCVector3d<T> & operator = (const MCVector3d<U> & r);
+    template<typename U>
+    MCVector3d<T> & operator=(const MCVector3d<U> & r);
 
     //! Move assignment
-    template <typename U>
-    MCVector3d<T> & operator = (const MCVector3d<U> && r);
+    template<typename U>
+    MCVector3d<T> & operator=(const MCVector3d<U> && r);
 
     //! Cross product. Returns the resulting vector.
-    template <typename U>
-    MCVector3d<T> operator % (const MCVector3d<U> & r) const;
+    template<typename U>
+    MCVector3d<T> operator%(const MCVector3d<U> & r) const;
 
     //! Dot product
-    template <typename U>
+    template<typename U>
     T dot(const MCVector3d<U> & r) const;
 
     //! Component product
-    template <typename U>
+    template<typename U>
     MCVector3d<T> comp(const MCVector3d<U> & r) const;
 
     //! Component product + store
-    template <typename U>
+    template<typename U>
     MCVector3d<T> & compStore(const MCVector3d<U> & r);
-    
+
     //! Multiplication
-    template <typename S>
-    MCVector3d<T> operator * (S n) const;
-    MCVector3d<T> operator * (const MCVector3d<T> & n) const;
+    template<typename S>
+    MCVector3d<T> operator*(S n) const;
+    MCVector3d<T> operator*(const MCVector3d<T> & n) const;
 
     //! Division
-    template <typename S>
-    MCVector3d<T> operator / (S n) const;
-    MCVector3d<T> operator / (const MCVector3d<T> & n) const;
+    template<typename S>
+    MCVector3d<T> operator/(S n) const;
+    MCVector3d<T> operator/(const MCVector3d<T> & n) const;
 
     //! Vector sum
-    template <typename U>
-    MCVector3d<T> operator + (const MCVector3d<U> & r) const;
+    template<typename U>
+    MCVector3d<T> operator+(const MCVector3d<U> & r) const;
 
     //! Vector subtraction
-    template <typename U>
-    MCVector3d<T> operator - (const MCVector3d<U> & r) const;
+    template<typename U>
+    MCVector3d<T> operator-(const MCVector3d<U> & r) const;
 
     //! *=
-    template <typename S>
-    MCVector3d<T> & operator *= (S n);
-    MCVector3d<T> & operator *= (const MCVector3d<T> & n);
+    template<typename S>
+    MCVector3d<T> & operator*=(S n);
+    MCVector3d<T> & operator*=(const MCVector3d<T> & n);
 
     //! /=
-    template <typename S>
-    MCVector3d<T> & operator /= (S n);
-    MCVector3d<T> & operator /= (const MCVector3d<T> & n);
+    template<typename S>
+    MCVector3d<T> & operator/=(S n);
+    MCVector3d<T> & operator/=(const MCVector3d<T> & n);
 
     //! +=
-    template <typename U>
-    MCVector3d<T> & operator += (const MCVector3d<U> & r);
+    template<typename U>
+    MCVector3d<T> & operator+=(const MCVector3d<U> & r);
 
     //! -=
-    template <typename U>
-    MCVector3d<T> & operator -= (const MCVector3d<U> & r);
+    template<typename U>
+    MCVector3d<T> & operator-=(const MCVector3d<U> & r);
 
     //! Get length.
     inline T length() const;
@@ -197,14 +198,13 @@ public:
     inline T k() const;
 
     //! Write to stream
-    friend std::ostream & operator << (std::ostream & out, const MCVector3d<T> & v)
+    friend std::ostream & operator<<(std::ostream & out, const MCVector3d<T> & v)
     {
         out << "[ " << v.i() << ", " << v.j() << ", " << v.k() << " ]";
         return out;
     }
 
 private:
-
     //! Components
     T m_i, m_j, m_k, padding;
 };
@@ -212,54 +212,59 @@ private:
 using MCVector3dF = MCVector3d<float>;
 using MCVector3dFR = const MCVector3dF &;
 
-template <typename T>
-MCVector3d<T>::MCVector3d() :
-    m_i(0),
-    m_j(0),
-    m_k(0)
-{}
+template<typename T>
+MCVector3d<T>::MCVector3d()
+  : m_i(0)
+  , m_j(0)
+  , m_k(0)
+{
+}
 
-template <typename T>
-MCVector3d<T>::MCVector3d(T newI, T newJ, T newK) :
-    m_i(newI),
-    m_j(newJ),
-    m_k(newK)
-{}
+template<typename T>
+MCVector3d<T>::MCVector3d(T newI, T newJ, T newK)
+  : m_i(newI)
+  , m_j(newJ)
+  , m_k(newK)
+{
+}
 
-template <typename T>
-template <typename U>
-MCVector3d<T>::MCVector3d(const MCVector3d<U> & r) :
-    m_i(r.i()),
-    m_j(r.j()),
-    m_k(r.k())
-{}
+template<typename T>
+template<typename U>
+MCVector3d<T>::MCVector3d(const MCVector3d<U> & r)
+  : m_i(r.i())
+  , m_j(r.j())
+  , m_k(r.k())
+{
+}
 
-template <typename T>
-template <typename U>
-MCVector3d<T>::MCVector3d(const MCVector3d<U> && r) :
-    m_i(r.i()),
-    m_j(r.j()),
-    m_k(r.k())
-{}
+template<typename T>
+template<typename U>
+MCVector3d<T>::MCVector3d(const MCVector3d<U> && r)
+  : m_i(r.i())
+  , m_j(r.j())
+  , m_k(r.k())
+{
+}
 
-template <typename T>
-template <typename U>
-MCVector3d<T>::MCVector3d(const MCVector2d<U> & r, U k) :
-    m_i(r.i()),
-    m_j(r.j()),
-    m_k(k)
-{}
+template<typename T>
+template<typename U>
+MCVector3d<T>::MCVector3d(const MCVector2d<U> & r, U k)
+  : m_i(r.i())
+  , m_j(r.j())
+  , m_k(k)
+{
+}
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 MCVector3d<T>::operator MCVector2d<U>() const
 {
     return MCVector2d<T>(m_i, m_j);
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> & r)
+template<typename T>
+template<typename U>
+MCVector3d<T> & MCVector3d<T>::operator=(const MCVector3d<U> & r)
 {
     if (reinterpret_cast<const void *>(&r) != reinterpret_cast<void *>(this))
     {
@@ -271,9 +276,9 @@ MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> & r)
     return *this;
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> && r)
+template<typename T>
+template<typename U>
+MCVector3d<T> & MCVector3d<T>::operator=(const MCVector3d<U> && r)
 {
     m_i = r.i();
     m_j = r.j();
@@ -282,9 +287,9 @@ MCVector3d<T> & MCVector3d<T>::operator = (const MCVector3d<U> && r)
     return *this;
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> MCVector3d<T>::operator % (const MCVector3d<U> & r) const
+template<typename T>
+template<typename U>
+MCVector3d<T> MCVector3d<T>::operator%(const MCVector3d<U> & r) const
 {
     T _i = m_j * r.k() - r.j() * m_k;
     T _j = m_i * r.k() - r.i() * m_k;
@@ -293,47 +298,47 @@ MCVector3d<T> MCVector3d<T>::operator % (const MCVector3d<U> & r) const
     return MCVector3d<T>(_i, -_j, _k);
 }
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 T MCVector3d<T>::dot(const MCVector3d<U> & r) const
 {
     return m_i * r.i() + m_j * r.j() + m_k * r.k();
 }
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 MCVector3d<T> MCVector3d<T>::comp(const MCVector3d<U> & r) const
 {
     return MCVector3d<T>(m_i * r.i(), m_j * r.j(), m_k * r.k());
 }
 
-template <typename T>
-template <typename U>
+template<typename T>
+template<typename U>
 MCVector3d<T> & MCVector3d<T>::compStore(const MCVector3d<U> & r)
 {
     m_i = m_i * r.i();
     m_j = m_j * r.j();
     m_k = m_k * r.k();
-    
+
     return *this;
 }
 
-template <typename T>
-template <typename S>
-MCVector3d<T> MCVector3d<T>::operator * (S n) const
+template<typename T>
+template<typename S>
+MCVector3d<T> MCVector3d<T>::operator*(S n) const
 {
     return MCVector3d<T>(m_i * n, m_j * n, m_k * n);
 }
 
-template <typename T>
-MCVector3d<T> MCVector3d<T>::operator * (const MCVector3d<T> & n) const
+template<typename T>
+MCVector3d<T> MCVector3d<T>::operator*(const MCVector3d<T> & n) const
 {
     return MCVector3d<T>(m_i * n.m_i, m_j * n.m_j, m_k * n.m_k);
 }
 
-template <typename T>
-template <typename S>
-MCVector3d<T> & MCVector3d<T>::operator *= (S n)
+template<typename T>
+template<typename S>
+MCVector3d<T> & MCVector3d<T>::operator*=(S n)
 {
     m_i *= n;
     m_j *= n;
@@ -341,8 +346,8 @@ MCVector3d<T> & MCVector3d<T>::operator *= (S n)
     return *this;
 }
 
-template <typename T>
-MCVector3d<T> & MCVector3d<T>::operator *= (const MCVector3d<T> & n)
+template<typename T>
+MCVector3d<T> & MCVector3d<T>::operator*=(const MCVector3d<T> & n)
 {
     m_i *= n.m_i;
     m_j *= n.m_j;
@@ -350,22 +355,22 @@ MCVector3d<T> & MCVector3d<T>::operator *= (const MCVector3d<T> & n)
     return *this;
 }
 
-template <typename T>
-template <typename S>
-MCVector3d<T> MCVector3d<T>::operator / (S n) const
+template<typename T>
+template<typename S>
+MCVector3d<T> MCVector3d<T>::operator/(S n) const
 {
     return MCVector3d<T>(m_i / n, m_j / n, m_k / n);
 }
 
-template <typename T>
-MCVector3d<T> MCVector3d<T>::operator / (const MCVector3d<T> & n) const
+template<typename T>
+MCVector3d<T> MCVector3d<T>::operator/(const MCVector3d<T> & n) const
 {
     return MCVector3d<T>(m_i / n.m_i, m_j / n.m_j, m_k / n.m_k);
 }
 
-template <typename T>
-template <typename S>
-MCVector3d<T> & MCVector3d<T>::operator /= (S n)
+template<typename T>
+template<typename S>
+MCVector3d<T> & MCVector3d<T>::operator/=(S n)
 {
     m_i /= n;
     m_j /= n;
@@ -373,8 +378,8 @@ MCVector3d<T> & MCVector3d<T>::operator /= (S n)
     return *this;
 }
 
-template <typename T>
-MCVector3d<T> & MCVector3d<T>::operator /= (const MCVector3d<T> & n)
+template<typename T>
+MCVector3d<T> & MCVector3d<T>::operator/=(const MCVector3d<T> & n)
 {
     m_i /= n.m_i;
     m_j /= n.m_j;
@@ -382,16 +387,16 @@ MCVector3d<T> & MCVector3d<T>::operator /= (const MCVector3d<T> & n)
     return *this;
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> MCVector3d<T>::operator + (const MCVector3d<U> & r) const
+template<typename T>
+template<typename U>
+MCVector3d<T> MCVector3d<T>::operator+(const MCVector3d<U> & r) const
 {
     return MCVector3d<T>(m_i + r.i(), m_j + r.j(), m_k + r.k());
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> & MCVector3d<T>::operator += (const MCVector3d<U> & r)
+template<typename T>
+template<typename U>
+MCVector3d<T> & MCVector3d<T>::operator+=(const MCVector3d<U> & r)
 {
     m_i += r.i();
     m_j += r.j();
@@ -399,16 +404,16 @@ MCVector3d<T> & MCVector3d<T>::operator += (const MCVector3d<U> & r)
     return *this;
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> MCVector3d<T>::operator - (const MCVector3d<U> & r) const
+template<typename T>
+template<typename U>
+MCVector3d<T> MCVector3d<T>::operator-(const MCVector3d<U> & r) const
 {
     return MCVector3d<T>(m_i - r.i(), m_j - r.j(), m_k - r.k());
 }
 
-template <typename T>
-template <typename U>
-MCVector3d<T> & MCVector3d<T>::operator -= (const MCVector3d<U> & r)
+template<typename T>
+template<typename U>
+MCVector3d<T> & MCVector3d<T>::operator-=(const MCVector3d<U> & r)
 {
     m_i -= r.i();
     m_j -= r.j();
@@ -416,13 +421,13 @@ MCVector3d<T> & MCVector3d<T>::operator -= (const MCVector3d<U> & r)
     return *this;
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::length() const
 {
     return std::sqrt(m_i * m_i + m_j * m_j + m_k * m_k);
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::lengthFast() const
 {
     const MCVector2d<T> ij(m_i, m_j);
@@ -431,13 +436,13 @@ T MCVector3d<T>::lengthFast() const
     return lk.lengthFast();
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::lengthSquared() const
 {
     return m_i * m_i + m_j * m_j + m_k * m_k;
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::normalize()
 {
     if (!isZero())
@@ -449,7 +454,7 @@ void MCVector3d<T>::normalize()
     }
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::normalizeFast()
 {
     if (!isZero())
@@ -461,7 +466,7 @@ void MCVector3d<T>::normalizeFast()
     }
 }
 
-template <typename T>
+template<typename T>
 MCVector3d<T> MCVector3d<T>::normalized() const
 {
     if (!isZero())
@@ -473,7 +478,7 @@ MCVector3d<T> MCVector3d<T>::normalized() const
     return MCVector3d<T>();
 }
 
-template <typename T>
+template<typename T>
 MCVector3d<T> MCVector3d<T>::normalizedFast() const
 {
     if (!isZero())
@@ -485,7 +490,7 @@ MCVector3d<T> MCVector3d<T>::normalizedFast() const
     return MCVector3d<T>();
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::invert()
 {
     m_i = -m_i;
@@ -493,19 +498,19 @@ void MCVector3d<T>::invert()
     m_k = -m_k;
 }
 
-template <typename T>
+template<typename T>
 MCVector3d<T> MCVector3d<T>::inverted() const
 {
     return MCVector3d<T>(-m_i, -m_j, -m_k);
 }
 
-template <typename T>
+template<typename T>
 MCVector3d<T> MCVector3d<T>::projection(const MCVector3d<T> & a, const MCVector3d<T> & b)
 {
     return b * a.dot(b) / b.lengthSquared();
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::set(T newI, T newJ, T newK)
 {
     m_i = newI;
@@ -513,43 +518,43 @@ void MCVector3d<T>::set(T newI, T newJ, T newK)
     m_k = newK;
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::setI(T newI)
 {
     m_i = newI;
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::setJ(T newJ)
 {
     m_j = newJ;
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::setK(T newK)
 {
     m_k = newK;
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::i() const
 {
     return m_i;
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::j() const
 {
     return m_j;
 }
 
-template <typename T>
+template<typename T>
 T MCVector3d<T>::k() const
 {
     return m_k;
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::setZero()
 {
     m_i = 0;
@@ -557,7 +562,7 @@ void MCVector3d<T>::setZero()
     m_k = 0;
 }
 
-template <typename T>
+template<typename T>
 bool MCVector3d<T>::isZero() const
 {
     if (std::numeric_limits<T>::is_exact)
@@ -566,14 +571,11 @@ bool MCVector3d<T>::isZero() const
     }
     else
     {
-        return
-            std::abs(m_i) <= std::numeric_limits<T>::epsilon() &&
-            std::abs(m_j) <= std::numeric_limits<T>::epsilon() &&
-            std::abs(m_k) <= std::numeric_limits<T>::epsilon();
+        return std::abs(m_i) <= std::numeric_limits<T>::epsilon() && std::abs(m_j) <= std::numeric_limits<T>::epsilon() && std::abs(m_k) <= std::numeric_limits<T>::epsilon();
     }
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::clamp(T maxLength)
 {
     const T l = length();
@@ -588,7 +590,7 @@ void MCVector3d<T>::clamp(T maxLength)
     }
 }
 
-template <typename T>
+template<typename T>
 void MCVector3d<T>::clampFast(T maxLength)
 {
     const T l = lengthFast();
@@ -604,8 +606,8 @@ void MCVector3d<T>::clampFast(T maxLength)
 }
 
 // Unary negation
-template <typename T>
-MCVector3d<T> operator - (const MCVector3d<T> & r)
+template<typename T>
+MCVector3d<T> operator-(const MCVector3d<T> & r)
 {
     return MCVector3d<T>(-r.i(), -r.j(), -r.k());
 }

@@ -39,7 +39,6 @@ class QLayout;
 class Mediator
 {
 public:
-
     explicit Mediator(MainWindow & mainWindow);
 
     ~Mediator();
@@ -142,7 +141,6 @@ public:
     void updateView();
 
 private:
-
     EditorData * m_editorData;
 
     QGraphicsScene * m_editorScene;

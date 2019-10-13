@@ -20,7 +20,6 @@
 #include <string>
 #include <vector>
 
-
 class Car;
 
 class Timing : public QObject
@@ -28,7 +27,6 @@ class Timing : public QObject
     Q_OBJECT
 
 public:
-
     //! Constructor.
     explicit Timing(size_t cars, QObject * parent = nullptr);
 
@@ -111,7 +109,6 @@ signals:
     void raceRecordAchieved(int msec);
 
 private:
-
     //! Timing structure.
     struct Times
     {

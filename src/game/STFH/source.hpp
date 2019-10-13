@@ -23,7 +23,6 @@ namespace STFH {
 class Source
 {
 public:
-
     //! Constructor.
     Source();
 
@@ -66,15 +65,14 @@ public:
     virtual void setReferenceDist(float refDist);
 
 private:
-
     Location m_location;
-    float    m_pitch;
-    float    m_volume;
-    float    m_maxDist;
-    float    m_refDist;
-    DataPtr  m_data;
+    float m_pitch;
+    float m_volume;
+    float m_maxDist;
+    float m_refDist;
+    DataPtr m_data;
 };
 
 typedef std::shared_ptr<Source> SourcePtr;
 
-} // STFH
+} // namespace STFH

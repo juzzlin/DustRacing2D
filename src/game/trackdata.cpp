@@ -17,11 +17,12 @@
 #include "tracktile.hpp"
 
 TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
-: TrackDataBase(name, isUserTrack)
-, m_map(cols, rows)
-, m_route()
-, m_isLocked(false)
-{}
+  : TrackDataBase(name, isUserTrack)
+  , m_map(cols, rows)
+  , m_route()
+  , m_isLocked(false)
+{
+}
 
 QString TrackData::fileName() const
 {

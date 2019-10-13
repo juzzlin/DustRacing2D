@@ -20,7 +20,7 @@
 #include <QPointF>
 
 Map::Map(unsigned int cols, unsigned int rows)
-: MapBase(cols, rows)
+  : MapBase(cols, rows)
 {
     // Create tiles and set coordinates.
     for (unsigned int i = 0; i < cols; i++)
@@ -28,9 +28,9 @@ Map::Map(unsigned int cols, unsigned int rows)
         for (unsigned int j = 0; j < rows; j++)
         {
             TrackTileBase * newTile = new TrackTile(
-                QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                QPoint(i, j));
+              QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                      TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+              QPoint(i, j));
             setTile(i, j, TrackTileBasePtr(newTile));
         }
     }

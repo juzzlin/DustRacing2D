@@ -38,7 +38,7 @@
 #include <cstdlib>
 
 EditorView::EditorView(Mediator & mediator)
-    : m_mediator(mediator)
+  : m_mediator(mediator)
 {
     createTileContextMenuActions();
     createObjectContextMenuActions();
@@ -48,10 +48,10 @@ EditorView::EditorView(Mediator & mediator)
 void EditorView::updateSceneRect()
 {
     const QRectF newSceneRect(
-        0,
-        0,
-        m_mediator.cols() * TrackTile::TILE_W,
-        m_mediator.rows() * TrackTile::TILE_H);
+      0,
+      0,
+      m_mediator.cols() * TrackTile::TILE_W,
+      m_mediator.rows() * TrackTile::TILE_H);
 
     setSceneRect(newSceneRect);
 
@@ -95,9 +95,9 @@ void EditorView::createTileContextMenuActions()
     const QString dummy1(QString(QWidget::tr("Rotate 90")) + degreeSign + QWidget::tr(" CW.."));
 
     auto rotate90CW = new QAction(dummy1, &m_tileContextMenu);
-    QObject::connect(rotate90CW, &QAction::triggered, [this] () {
+    QObject::connect(rotate90CW, &QAction::triggered, [this]() {
         if (TrackTile * tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
+              dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
         {
             m_mediator.saveUndoPoint();
             tile->rotate90CW();
@@ -107,9 +107,9 @@ void EditorView::createTileContextMenuActions()
     const QString dummy2(QString(QWidget::tr("Rotate 90")) + degreeSign + QWidget::tr(" CCW.."));
 
     auto rotate90CCW = new QAction(dummy2, &m_tileContextMenu);
-    QObject::connect(rotate90CCW, &QAction::triggered, [this] () {
+    QObject::connect(rotate90CCW, &QAction::triggered, [this]() {
         if (auto tile =
-            dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
+              dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(m_clickedPos), QTransform())))
         {
             m_mediator.saveUndoPoint();
             tile->rotate90CCW();
@@ -117,29 +117,29 @@ void EditorView::createTileContextMenuActions()
     });
 
     m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_tileContextMenu);
-    QObject::connect(m_clearComputerHint, &QAction::triggered, [this] () {
+    QObject::connect(m_clearComputerHint, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_NONE);
     });
 
     m_setComputerHintBrakeHard = new QAction(
-        QWidget::tr("Set computer hint 'brake hard'.."), &m_tileContextMenu);
-    QObject::connect(m_setComputerHintBrakeHard, &QAction::triggered, [this] () {
+      QWidget::tr("Set computer hint 'brake hard'.."), &m_tileContextMenu);
+    QObject::connect(m_setComputerHintBrakeHard, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_BRAKE_HARD);
     });
 
     m_setComputerHintBrake = new QAction(
-        QWidget::tr("Set computer hint 'brake'.."), &m_tileContextMenu);
-    QObject::connect(m_setComputerHintBrake, &QAction::triggered, [this] () {
+      QWidget::tr("Set computer hint 'brake'.."), &m_tileContextMenu);
+    QObject::connect(m_setComputerHintBrake, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         setComputerHint(TrackTileBase::CH_BRAKE);
     });
 
     m_excludeFromMinimap = new QAction(
-        QWidget::tr("Exclude from minimap"), &m_tileContextMenu);
+      QWidget::tr("Exclude from minimap"), &m_tileContextMenu);
     m_excludeFromMinimap->setCheckable(true);
-    QObject::connect(m_excludeFromMinimap, &QAction::changed, [this] () {
+    QObject::connect(m_excludeFromMinimap, &QAction::changed, [this]() {
         if (auto tile = dynamic_cast<TrackTile *>(scene()->itemAt(mapToScene(this->m_clickedPos), QTransform())))
         {
             m_mediator.saveUndoPoint();
@@ -148,8 +148,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     auto insertRowBefore = new QAction(
-        QWidget::tr("Insert row before.."), &m_tileContextMenu);
-    QObject::connect(insertRowBefore, &QAction::triggered, [this] () {
+      QWidget::tr("Insert row before.."), &m_tileContextMenu);
+    QObject::connect(insertRowBefore, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.insertRowBefore();
         updateSceneRect();
@@ -157,8 +157,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     auto insertRowAfter = new QAction(
-        QWidget::tr("Insert row after.."), &m_tileContextMenu);
-    QObject::connect(insertRowAfter, &QAction::triggered, [this] () {
+      QWidget::tr("Insert row after.."), &m_tileContextMenu);
+    QObject::connect(insertRowAfter, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.insertRowAfter();
         updateSceneRect();
@@ -166,8 +166,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     m_deleteRow = new QAction(
-        QWidget::tr("Delete row.."), &m_tileContextMenu);
-    QObject::connect(m_deleteRow, &QAction::triggered, [this] () {
+      QWidget::tr("Delete row.."), &m_tileContextMenu);
+    QObject::connect(m_deleteRow, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.deleteRow();
         updateSceneRect();
@@ -175,8 +175,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     auto insertColBefore = new QAction(
-        QWidget::tr("Insert column before.."), &m_tileContextMenu);
-    QObject::connect(insertColBefore, &QAction::triggered, [this] () {
+      QWidget::tr("Insert column before.."), &m_tileContextMenu);
+    QObject::connect(insertColBefore, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.insertColumnBefore();
         updateSceneRect();
@@ -184,8 +184,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     auto insertColAfter = new QAction(
-        QWidget::tr("Insert column after.."), &m_tileContextMenu);
-    QObject::connect(insertColAfter, &QAction::triggered, [this] () {
+      QWidget::tr("Insert column after.."), &m_tileContextMenu);
+    QObject::connect(insertColAfter, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.insertColumnAfter();
         updateSceneRect();
@@ -193,8 +193,8 @@ void EditorView::createTileContextMenuActions()
     });
 
     m_deleteCol = new QAction(
-        QWidget::tr("Delete column.."), &m_tileContextMenu);
-    QObject::connect(m_deleteCol, &QAction::triggered, [this] () {
+      QWidget::tr("Delete column.."), &m_tileContextMenu);
+    QObject::connect(m_deleteCol, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
         m_mediator.deleteColumn();
         updateSceneRect();
@@ -224,7 +224,7 @@ void EditorView::createObjectContextMenuActions()
 {
     const QString dummy1(QString(QWidget::tr("Rotate..")));
     auto rotate = new QAction(dummy1, &m_tileContextMenu);
-    QObject::connect(rotate, &QAction::triggered, [this] () {
+    QObject::connect(rotate, &QAction::triggered, [this]() {
         RotateDialog dialog;
         if (dialog.exec() == QDialog::Accepted)
         {
@@ -240,7 +240,7 @@ void EditorView::createObjectContextMenuActions()
     const QString dummy2(QString(QWidget::tr("Force stationary")));
     m_forceStationaryAction = new QAction(dummy2, &m_tileContextMenu);
     m_forceStationaryAction->setCheckable(true);
-    QObject::connect(m_forceStationaryAction, &QAction::changed, [this] () {
+    QObject::connect(m_forceStationaryAction, &QAction::changed, [this]() {
         if (auto object = m_mediator.selectedObject())
         {
             m_mediator.saveUndoPoint();
@@ -258,7 +258,7 @@ void EditorView::createTargetNodeContextMenuActions()
 {
     const QString dummy1(QString(QWidget::tr("Set size..")));
     auto setSize = new QAction(dummy1, &m_targetNodeContextMenu);
-    QObject::connect(setSize, &QAction::triggered, [this] () {
+    QObject::connect(setSize, &QAction::triggered, [this]() {
         if (auto tnode = m_mediator.selectedTargetNode())
         {
             TargetNodeSizeDlg dialog(tnode->size());
@@ -322,7 +322,7 @@ void EditorView::eraseObjectAtCurrentClickedPos()
 
     // Fetch all items at the location
     QList<QGraphicsItem *> items = scene()->items(
-        m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
+      m_clickedScenePos, Qt::IntersectsItemShape, Qt::DescendingOrder);
 
     // We need to find the first object to be erased, because
     // there might be also overlapping TargetNodes.

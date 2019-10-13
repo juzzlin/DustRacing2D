@@ -21,8 +21,8 @@
 
 #include <QObject>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <MCTextureText>
 
@@ -38,7 +38,6 @@ class TimingOverlay : public QObject, public OverlayBase
     Q_OBJECT
 
 public:
-
     //! Constructor.
     TimingOverlay();
 
@@ -72,7 +71,6 @@ private slots:
     void blinkCarStatus();
 
 private:
-
     void renderCarStatusView();
 
     void renderCurrentLap();
@@ -89,17 +87,17 @@ private:
 
     void renderSpeed();
 
-    MCTextureFontManager    & m_fontManager;
-    MCTextureFont           & m_font;
-    MCTextureText             m_text;
-    const Car               * m_car;
-    Timing                  * m_timing;
-    Race                    * m_race;
+    MCTextureFontManager & m_fontManager;
+    MCTextureFont & m_font;
+    MCTextureText m_text;
+    const Car * m_car;
+    Timing * m_timing;
+    Race * m_race;
     std::vector<std::wstring> m_posTexts;
-    bool                      m_showLapRecordTime;
-    bool                      m_showRaceTime;
-    bool                      m_showCarStatus;
-    CarStatusView             m_carStatusView;
+    bool m_showLapRecordTime;
+    bool m_showRaceTime;
+    bool m_showCarStatus;
+    CarStatusView m_carStatusView;
 };
 
 #endif // TIMINGOVERLAY_HPP

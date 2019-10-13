@@ -26,7 +26,6 @@
 class MCGLMaterial
 {
 public:
-
     static const unsigned int MAX_TEXTURES = 3;
 
     MCGLMaterial();
@@ -64,7 +63,6 @@ public:
     void doAlphaBlend();
 
 private:
-
     GLuint m_textures[MAX_TEXTURES];
 
     GLfloat m_specularCoeff;

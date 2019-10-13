@@ -18,17 +18,16 @@
 
 #include <QString>
 
-#include "../common/trackdatabase.hpp"
 #include "../common/mapbase.hpp"
-#include "../common/route.hpp"
 #include "../common/objects.hpp"
+#include "../common/route.hpp"
+#include "../common/trackdatabase.hpp"
 
 #include "map.hpp"
 
 class TrackData : public TrackDataBase
 {
 public:
-
     //! Constructor.
     TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows);
 
@@ -66,12 +65,11 @@ public:
     void setIsLocked(bool locked);
 
 private:
-
     QString m_fileName;
-    Map     m_map;
+    Map m_map;
     Objects m_objects;
-    Route   m_route;
-    bool    m_isLocked;
+    Route m_route;
+    bool m_isLocked;
 };
 
 #endif // TRACKDATA_HPP

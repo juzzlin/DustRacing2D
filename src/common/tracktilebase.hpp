@@ -34,7 +34,6 @@
 class TrackTileBase
 {
 public:
-
     //! Tile width in pixels
     static const unsigned int TILE_W = 256;
 
@@ -54,11 +53,11 @@ public:
      *  \param matrixLocation Location in the tile matrix.
      *  \param type Type of the tile. See setType(). */
     TrackTileBase(QPointF location, QPoint matrixLocation,
-        const QString & type = "clear");
+                  const QString & type = "clear");
 
     TrackTileBase(TrackTileBase & other) = delete;
 
-    TrackTileBase & operator= (TrackTileBase & other) = delete;
+    TrackTileBase & operator=(TrackTileBase & other) = delete;
 
     //! Destructor.
     virtual ~TrackTileBase();
@@ -92,7 +91,6 @@ public:
     bool excludeFromMinimap() const;
 
 private:
-
     //! Type string.
     QString m_tileType;
 

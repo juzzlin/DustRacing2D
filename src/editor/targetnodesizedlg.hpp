@@ -28,20 +28,18 @@ class TargetNodeSizeDlg : public QDialog
     Q_OBJECT
 
 public:
-
     explicit TargetNodeSizeDlg(QSizeF defaultSize, QWidget * parent = 0);
 
     QSizeF targetNodeSize() const;
 
 private:
-
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_widthEdit;
-    QLabel      * m_widthLabel;
-    QLineEdit   * m_heightEdit;
-    QLabel      * m_heightLabel;
+    QLineEdit * m_widthEdit;
+    QLabel * m_widthLabel;
+    QLineEdit * m_heightEdit;
+    QLabel * m_heightLabel;
 };
 
 #endif // TARGETNODESIZEDLG_HPP

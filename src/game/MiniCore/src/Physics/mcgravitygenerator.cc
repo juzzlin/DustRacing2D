@@ -22,8 +22,9 @@
 #include "mcphysicscomponent.hh"
 
 MCGravityGenerator::MCGravityGenerator(const MCVector3d<float> & g)
-: m_g(g)
-{}
+  : m_g(g)
+{
+}
 
 void MCGravityGenerator::updateForce(MCObject & object)
 {

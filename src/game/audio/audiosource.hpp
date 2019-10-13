@@ -25,7 +25,6 @@ class AudioSource : public QObject
     Q_OBJECT
 
 public:
-
     //! Constructor.
     AudioSource();
 

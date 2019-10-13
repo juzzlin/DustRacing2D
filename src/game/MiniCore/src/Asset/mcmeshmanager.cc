@@ -36,20 +36,18 @@ MCMeshManager::MCMeshManager()
 }
 
 MCMesh & MCMeshManager::createMesh(
-    const MCMeshMetaData & data, const MCMesh::FaceVector & faces)
+  const MCMeshMetaData & data, const MCMesh::FaceVector & faces)
 {
     // Create material
     MCGLMaterialPtr material(new MCGLMaterial);
 
     material->setTexture(
-        data.texture1 != "" ?
-        MCAssetManager::surfaceManager().surface(data.texture1).material()->texture(0) : 0,
-        0);
+      data.texture1 != "" ? MCAssetManager::surfaceManager().surface(data.texture1).material()->texture(0) : 0,
+      0);
 
     material->setTexture(
-        data.texture2 != "" ?
-        MCAssetManager::surfaceManager().surface(data.texture2).material()->texture(0) : 0,
-        1);
+      data.texture2 != "" ? MCAssetManager::surfaceManager().surface(data.texture2).material()->texture(0) : 0,
+      1);
 
     // Create a new MCMesh object
     MeshPtr mesh(new MCMesh(data.handle, faces, material));
@@ -68,10 +66,10 @@ MCMesh & MCMeshManager::createMesh(
 }
 
 void MCMeshManager::load(
-    const std::string & configFilePath, const std::string & baseDataPath)
+  const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCMeshConfigLoader configLoader;
-    MCMeshLoader       modelLoader;
+    MCMeshLoader modelLoader;
 
     if (configLoader.load(configFilePath))
     {
@@ -80,7 +78,7 @@ void MCMeshManager::load(
             const MCMeshMetaData & metaData = configLoader.mesh(i);
 
             QString modelPath =
-                QString(baseDataPath.c_str()) + QDir::separator().toLatin1() + metaData.modelPath.c_str();
+              QString(baseDataPath.c_str()) + QDir::separator().toLatin1() + metaData.modelPath.c_str();
             modelPath.replace("./", "");
             modelPath.replace("//", "/");
 
@@ -113,4 +111,3 @@ MCMesh & MCMeshManager::mesh(const std::string & handle) const
     assert(mesh);
     return *mesh;
 }
-

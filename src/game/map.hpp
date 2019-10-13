@@ -24,7 +24,6 @@ class TrackData;
 class Map : public MapBase
 {
 public:
-
     //! Constuctor.
     Map(unsigned int cols, unsigned int rows);
 

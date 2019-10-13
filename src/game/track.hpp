@@ -22,7 +22,6 @@
 #include <MCBBox>
 #include <MCGLShaderProgram>
 
-
 class TrackData;
 class MCCamera;
 class MCSurface;
@@ -32,7 +31,6 @@ class MCSurface;
 class Track
 {
 public:
-
     /*! Constructor.
      * \param trackData The data that represents the track. Track will take the ownership. */
     explicit Track(TrackData * trackData);
@@ -71,16 +69,14 @@ public:
     Track * prev() const;
 
 private:
-
     void calculateVisibleIndices(const MCBBox<int> & r,
-        unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2);
+                                 unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2);
 
     void renderAsphalt(
-        MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
+      MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
 
     void renderTiles(
-        MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
-
+      MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
 
     TrackData * m_trackData;
 

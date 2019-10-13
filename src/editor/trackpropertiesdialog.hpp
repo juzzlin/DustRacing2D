@@ -30,7 +30,6 @@ class TrackPropertiesDialog : public QDialog
     Q_OBJECT
 
 public:
-
     //! Constructor.
     TrackPropertiesDialog(QString name, unsigned int index, bool isUserTrack, QWidget * parent = nullptr);
 
@@ -44,16 +43,15 @@ public:
     bool isUserTrack() const;
 
 private:
-
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_nameEdit;
-    QLabel      * m_nameLabel;
-    QLineEdit   * m_indexEdit;
-    QLabel      * m_indexLabel;
-    QCheckBox   * m_isUserTrackCheckBox;
-    QLabel      * m_isUserTrackLabel;
+    QLineEdit * m_nameEdit;
+    QLabel * m_nameLabel;
+    QLineEdit * m_indexEdit;
+    QLabel * m_indexLabel;
+    QCheckBox * m_isUserTrackCheckBox;
+    QLabel * m_isUserTrackLabel;
 };
 
 #endif // TRACKPROPERTIESDIALOG_HPP

@@ -14,36 +14,36 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "tracktile.hpp"
-#include "tileanimator.hpp"
 #include "mainwindow.hpp"
+#include "tileanimator.hpp"
 
 #include "../common/config.hpp"
 
 #include <QAction>
 #include <QGraphicsLineItem>
-#include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QPainter>
 
 TrackTile * TrackTile::m_activeTile = nullptr;
 
 TrackTile::TrackTile(QPointF location, QPoint matrixLocation, const QString & type)
-    : TrackTileBase(location, matrixLocation, type)
-    , m_size(QSizeF(TILE_W, TILE_H))
-    , m_active(false)
-    , m_animator(new TileAnimator(this))
-    , m_added(false)
+  : TrackTileBase(location, matrixLocation, type)
+  , m_size(QSizeF(TILE_W, TILE_H))
+  , m_active(false)
+  , m_animator(new TileAnimator(this))
+  , m_added(false)
 {
     setPos(location);
 }
 
 TrackTile::TrackTile(const TrackTile & other)
-    : QGraphicsItem()
-    , TrackTileBase(other.location(), other.matrixLocation(), other.tileType())
-    , m_size(other.m_size)
-    , m_active(false)
-    , m_animator(new TileAnimator(this))
-    , m_added(false)
+  : QGraphicsItem()
+  , TrackTileBase(other.location(), other.matrixLocation(), other.tileType())
+  , m_size(other.m_size)
+  , m_active(false)
+  , m_animator(new TileAnimator(this))
+  , m_added(false)
 {
     setPos(other.location());
     setRotation(other.rotation());
@@ -51,10 +51,10 @@ TrackTile::TrackTile(const TrackTile & other)
     setExcludeFromMinimap(other.excludeFromMinimap());
 }
 
-QRectF TrackTile::boundingRect () const
+QRectF TrackTile::boundingRect() const
 {
     return QRectF(-m_size.width() / 2, -m_size.height() / 2,
-                   m_size.width(), m_size.height());
+                  m_size.width(), m_size.height());
 }
 
 void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -71,8 +71,8 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     if (tileType() != "clear")
     {
         painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-            boundingRect().width(), boundingRect().height(),
-            m_pixmap);
+                            boundingRect().width(), boundingRect().height(),
+                            m_pixmap);
 
         // Mark the tile if it has computer hints set
         if (computerHint() == TrackTile::CH_BRAKE_HARD)
@@ -87,8 +87,8 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     else
     {
         painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-            boundingRect().width(), boundingRect().height(),
-            QPixmap(Config::Editor::CLEAR_ICON_PATH));
+                            boundingRect().width(), boundingRect().height(),
+                            QPixmap(Config::Editor::CLEAR_ICON_PATH));
 
         pen.setColor(QColor(0, 0, 0));
         painter->setPen(pen);

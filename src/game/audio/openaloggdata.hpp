@@ -22,7 +22,6 @@
 class OpenALOggData : public OpenALData
 {
 public:
-
     //! Constructor.
     OpenALOggData(const std::string & path);
 
@@ -36,10 +35,9 @@ public:
     virtual ALuint buffer() const override;
 
 private:
-
     ALsizei m_freq;
-    ALenum  m_format;
-    ALuint  m_buffer;
+    ALenum m_format;
+    ALuint m_buffer;
 };
 
 #endif // OPENALOGGDATA_HPP

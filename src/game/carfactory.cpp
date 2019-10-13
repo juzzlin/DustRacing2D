@@ -19,23 +19,23 @@
 
 CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
 {
-    const int   defaultPower = 200000; // This in Watts
-    const float defaultDrag  = 2.5f;
+    const int defaultPower = 200000; // This in Watts
+    const float defaultDrag = 2.5f;
 
     static const int NUM_CARS = numCars;
     static std::map<int, std::string> carImageMap = {
-        {NUM_CARS - 1, "carBlack"    },
-        {NUM_CARS - 2, "carOrange"   },
-        {NUM_CARS - 3, "carRed"      },
-        {NUM_CARS - 4, "carBlue"     },
-        {NUM_CARS - 5, "carDarkGreen"},
-        {NUM_CARS - 6, "carBrown"    },
-        {NUM_CARS - 7, "carCyan"     },
-        {NUM_CARS - 8, "carViolet"   },
-        {NUM_CARS - 9, "carGreen"    },
-        {NUM_CARS - 10,"carDarkRed"  },
-        {1,            "carGrey"     },
-        {0,            "carPink"     }
+        { NUM_CARS - 1, "carBlack" },
+        { NUM_CARS - 2, "carOrange" },
+        { NUM_CARS - 3, "carRed" },
+        { NUM_CARS - 4, "carBlue" },
+        { NUM_CARS - 5, "carDarkGreen" },
+        { NUM_CARS - 6, "carBrown" },
+        { NUM_CARS - 7, "carCyan" },
+        { NUM_CARS - 8, "carViolet" },
+        { NUM_CARS - 9, "carGreen" },
+        { NUM_CARS - 10, "carDarkRed" },
+        { 1, "carGrey" },
+        { 0, "carPink" }
     };
 
     Car::Description desc;
@@ -50,8 +50,8 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
     CarPtr car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
     {
-        desc.power                = defaultPower;
-        desc.dragQuadratic        = defaultDrag;
+        desc.power = defaultPower;
+        desc.dragQuadratic = defaultDrag;
         desc.accelerationFriction = 0.55f * Game::instance().difficultyProfile().accelerationFrictionMultiplier(true);
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
@@ -61,10 +61,9 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         // Introduce some variance to the power of computer players so that the
         // slowest cars have less power than the human player and the fastest
         // cars have more power than the human player.
-        desc.power                = defaultPower / 2 + (index + 1) * defaultPower / NUM_CARS;
-        desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / NUM_CARS) *
-            Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
-        desc.dragQuadratic        = defaultDrag;
+        desc.power = defaultPower / 2 + (index + 1) * defaultPower / NUM_CARS;
+        desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / NUM_CARS) * Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
+        desc.dragQuadratic = defaultDrag;
 
         car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, false));
     }

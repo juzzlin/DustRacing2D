@@ -26,10 +26,10 @@
 
 MCMeshLoader::MCMeshLoader()
 {
-    m_keyToFunctionMap["v"]  = std::bind(&MCMeshLoader::parseV,  this, std::placeholders::_1);
+    m_keyToFunctionMap["v"] = std::bind(&MCMeshLoader::parseV, this, std::placeholders::_1);
     m_keyToFunctionMap["vt"] = std::bind(&MCMeshLoader::parseVT, this, std::placeholders::_1);
     m_keyToFunctionMap["vn"] = std::bind(&MCMeshLoader::parseVN, this, std::placeholders::_1);
-    m_keyToFunctionMap["f"]  = std::bind(&MCMeshLoader::parseF,  this, std::placeholders::_1);
+    m_keyToFunctionMap["f"] = std::bind(&MCMeshLoader::parseF, this, std::placeholders::_1);
 }
 
 bool MCMeshLoader::load(QString filePath)
@@ -67,11 +67,8 @@ bool MCMeshLoader::readStream(QTextStream & stream)
 void MCMeshLoader::processLine(QString line)
 {
     line.remove(QRegExp("^\\s+"));
-    if (!line.startsWith('#') &&
-        !line.startsWith('s') &&
-        !line.startsWith('o') &&
-        !line.startsWith('m') && // mtllib
-        !line.startsWith('u'))   // usemtl
+    if (!line.startsWith('#') && !line.startsWith('s') && !line.startsWith('o') && !line.startsWith('m') && // mtllib
+        !line.startsWith('u')) // usemtl
     {
         const QString key = line.split(QRegExp("\\s+")).at(0);
         auto iter = m_keyToFunctionMap.find(key);

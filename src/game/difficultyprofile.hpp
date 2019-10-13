@@ -25,8 +25,8 @@ class DifficultyProfile : public QObject
     Q_OBJECT
 
 public:
-
-    enum class Difficulty {
+    enum class Difficulty
+    {
         Easy = 0,
         Medium,
         Hard
@@ -61,10 +61,9 @@ signals:
     void difficultyChanged();
 
 private:
-
     DifficultyProfile(DifficultyProfile & other) = delete;
 
-    DifficultyProfile & operator =(DifficultyProfile & other) = delete;
+    DifficultyProfile & operator=(DifficultyProfile & other) = delete;
 
     static DifficultyProfile * m_instance;
 

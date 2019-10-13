@@ -20,10 +20,10 @@
 #ifndef MCOBJECTFACTORY_HH
 #define MCOBJECTFACTORY_HH
 
-#include "mcsurfaceobjectdata.hh"
 #include "mcmeshobjectdata.hh"
 #include "mcobject.hh"
 #include "mcshapeview.hh"
+#include "mcsurfaceobjectdata.hh"
 
 #include <memory>
 #include <vector>
@@ -34,7 +34,6 @@ class MCAssetManager;
 class MCObjectFactory
 {
 public:
-
     //! Constructor.
     MCObjectFactory(MCAssetManager & assetManager);
 
@@ -51,7 +50,6 @@ public:
     MCObjectPtr build(const MCObjectData & data, MCShapeViewPtr view);
 
 private:
-
     DISABLE_COPY(MCObjectFactory);
     DISABLE_ASSI(MCObjectFactory);
 

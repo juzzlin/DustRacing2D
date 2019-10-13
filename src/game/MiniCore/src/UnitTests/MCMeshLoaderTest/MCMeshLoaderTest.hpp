@@ -19,15 +19,14 @@
 
 #define MC_UNIT_TEST
 
-#include <QTest>
 #include "../Asset/mcmeshloader.hh"
+#include <QTest>
 
 class MCMeshLoaderTest : public QObject
 {
     Q_OBJECT
 
 public:
-
     MCMeshLoaderTest();
 
 private slots:
@@ -37,6 +36,5 @@ private slots:
     void testFace();
 
 private:
-
     MCMeshLoader m_dut;
 };

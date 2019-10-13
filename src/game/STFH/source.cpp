@@ -18,10 +18,10 @@
 namespace STFH {
 
 Source::Source()
-    : m_pitch(1.0)
-    , m_volume(1.0)
-    , m_maxDist(0.0)
-    , m_refDist(0.0)
+  : m_pitch(1.0)
+  , m_volume(1.0)
+  , m_maxDist(0.0)
+  , m_refDist(0.0)
 {
 }
 
@@ -74,4 +74,4 @@ Source::~Source()
 {
 }
 
-} // STFH
+} // namespace STFH

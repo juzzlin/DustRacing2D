@@ -23,7 +23,6 @@ class Car;
 class Tire : public MCObject
 {
 public:
-
     Tire(Car & car, float friction, float offTrackFriction);
 
     virtual void onStepTime(int step) override;
@@ -33,7 +32,6 @@ public:
     void setSpinCoeff(float spinCoeff);
 
 private:
-
     bool m_isOffTrack;
 
     float m_friction;

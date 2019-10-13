@@ -35,4 +35,4 @@ const Location & Listener::location() const
     return m_location;
 }
 
-} // STFH
+} // namespace STFH

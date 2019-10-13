@@ -21,28 +21,28 @@
 #include "mctrigonom.hh"
 
 MCPhysicsComponent::MCPhysicsComponent()
-    : m_maxSpeed(1000.0f)
-    , m_linearDamping(0.999f)
-    , m_angularAcceleration(0)
-    , m_angularVelocity(0)
-    , m_angularDamping(0.999f)
-    , m_angularImpulse(0)
-    , m_torque(0)
-    , m_invMass(std::numeric_limits<float>::max())
-    , m_mass(0)
-    , m_invMomentOfInertia(std::numeric_limits<float>::max())
-    , m_momentOfInertia(0)
-    , m_restitution(0.5f)
-    , m_xyFriction(0.0f)
-    , m_isSleeping(false)
-    , m_isSleepingPrevented(false)
-    , m_isStationary(false)
-    , m_isIntegrating(false)
-    , m_linearSleepLimit(0.01f)
-    , m_angularSleepLimit(0.01f)
-    , m_sleepCount(0)
-    , m_collisionTag(0)
-    , m_neverCollideWithTag(-1)
+  : m_maxSpeed(1000.0f)
+  , m_linearDamping(0.999f)
+  , m_angularAcceleration(0)
+  , m_angularVelocity(0)
+  , m_angularDamping(0.999f)
+  , m_angularImpulse(0)
+  , m_torque(0)
+  , m_invMass(std::numeric_limits<float>::max())
+  , m_mass(0)
+  , m_invMomentOfInertia(std::numeric_limits<float>::max())
+  , m_momentOfInertia(0)
+  , m_restitution(0.5f)
+  , m_xyFriction(0.0f)
+  , m_isSleeping(false)
+  , m_isSleepingPrevented(false)
+  , m_isStationary(false)
+  , m_isIntegrating(false)
+  , m_linearSleepLimit(0.01f)
+  , m_angularSleepLimit(0.01f)
+  , m_sleepCount(0)
+  , m_collisionTag(0)
+  , m_neverCollideWithTag(-1)
 {
 }
 
@@ -57,7 +57,8 @@ void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, const MCVector3
 {
     m_linearImpulse += impulse;
     const float r = (pos - object().location()).lengthFast();
-    if (r > 0) {
+    if (r > 0)
+    {
         addAngularImpulse((-(impulse % (pos - object().location())).k()) / r, isCollision);
     }
     toggleSleep(false);
@@ -160,8 +161,8 @@ void MCPhysicsComponent::setMass(float newMass, bool stationary)
     }
     else
     {
-        m_invMass  = 0;
-        m_mass     = std::numeric_limits<float>::max();
+        m_invMass = 0;
+        m_mass = std::numeric_limits<float>::max();
 
         m_isSleeping = true;
 
@@ -243,7 +244,7 @@ void MCPhysicsComponent::resetZ()
 
 void MCPhysicsComponent::setSleepLimits(float linearSleepLimit, float angularSleepLimit)
 {
-    m_linearSleepLimit  = linearSleepLimit;
+    m_linearSleepLimit = linearSleepLimit;
     m_angularSleepLimit = angularSleepLimit;
 }
 
@@ -283,7 +284,6 @@ void MCPhysicsComponent::preventSleeping(bool flag)
         toggleSleep(false);
     }
 }
-
 
 bool MCPhysicsComponent::isStationary() const
 {
@@ -375,7 +375,7 @@ void MCPhysicsComponent::reset()
     m_angularVelocity = 0.0f;
     m_angularImpulse = 0.0f;
 
-    for (auto child: object().children())
+    for (auto child : object().children())
     {
         child->physicsComponent().reset();
     }

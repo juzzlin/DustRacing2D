@@ -16,7 +16,7 @@
 #include "undostack.hpp"
 
 UndoStack::UndoStack(unsigned int maxHistorySize)
-    : m_maxHistorySize(maxHistorySize)
+  : m_maxHistorySize(maxHistorySize)
 {
 }
 

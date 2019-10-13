@@ -18,28 +18,28 @@
 #include "settings.hpp"
 #include "statemachine.hpp"
 
-#include <MenuManager>
 #include <Menu>
+#include <MenuManager>
 
 #include <cassert>
 
 EventHandler::EventHandler(InputHandler & inputHandler)
-: m_inputHandler(inputHandler)
-, m_captureMode(false)
+  : m_inputHandler(inputHandler)
+  , m_captureMode(false)
 {
     // Default key bindings
     m_keyToActionMap[KeyCodes::LSHIFT] = ActionMapping(1, InputHandler::Action::Up);
     m_keyToActionMap[KeyCodes::RSHIFT] = ActionMapping(0, InputHandler::Action::Up);
-    m_keyToActionMap[KeyCodes::LCTRL]  = ActionMapping(1, InputHandler::Action::Down);
-    m_keyToActionMap[KeyCodes::RCTRL]  = ActionMapping(0, InputHandler::Action::Down);
-    m_keyToActionMap[Qt::Key_Left]     = ActionMapping(0, InputHandler::Action::Left);
-    m_keyToActionMap[Qt::Key_Right]    = ActionMapping(0, InputHandler::Action::Right);
-    m_keyToActionMap[Qt::Key_A]        = ActionMapping(1, InputHandler::Action::Left);
-    m_keyToActionMap[Qt::Key_D]        = ActionMapping(1, InputHandler::Action::Right);
-    m_keyToActionMap[Qt::Key_Up]       = ActionMapping(0, InputHandler::Action::Up);
-    m_keyToActionMap[Qt::Key_Down]     = ActionMapping(0, InputHandler::Action::Down);
-    m_keyToActionMap[Qt::Key_W]        = ActionMapping(1, InputHandler::Action::Up);
-    m_keyToActionMap[Qt::Key_S]        = ActionMapping(1, InputHandler::Action::Down);
+    m_keyToActionMap[KeyCodes::LCTRL] = ActionMapping(1, InputHandler::Action::Down);
+    m_keyToActionMap[KeyCodes::RCTRL] = ActionMapping(0, InputHandler::Action::Down);
+    m_keyToActionMap[Qt::Key_Left] = ActionMapping(0, InputHandler::Action::Left);
+    m_keyToActionMap[Qt::Key_Right] = ActionMapping(0, InputHandler::Action::Right);
+    m_keyToActionMap[Qt::Key_A] = ActionMapping(1, InputHandler::Action::Left);
+    m_keyToActionMap[Qt::Key_D] = ActionMapping(1, InputHandler::Action::Right);
+    m_keyToActionMap[Qt::Key_Up] = ActionMapping(0, InputHandler::Action::Up);
+    m_keyToActionMap[Qt::Key_Down] = ActionMapping(0, InputHandler::Action::Down);
+    m_keyToActionMap[Qt::Key_W] = ActionMapping(1, InputHandler::Action::Up);
+    m_keyToActionMap[Qt::Key_S] = ActionMapping(1, InputHandler::Action::Down);
 
     loadKeyMappings();
 
@@ -50,8 +50,7 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 
 void EventHandler::loadKeyMappings()
 {
-    std::vector<InputHandler::Action> actions =
-    {
+    std::vector<InputHandler::Action> actions = {
         InputHandler::Action::Up,
         InputHandler::Action::Down,
         InputHandler::Action::Left,
@@ -64,9 +63,9 @@ void EventHandler::loadKeyMappings()
         for (InputHandler::Action action : actions)
         {
             mapKeyToAction(
-                player,
-                action,
-                Settings::instance().loadKeyMapping(player, action));
+              player,
+              action,
+              Settings::instance().loadKeyMapping(player, action));
         }
     }
 }
@@ -75,7 +74,7 @@ void EventHandler::enableCaptureMode(InputHandler::Action action, int player)
 {
     assert(player == 0 || player == 1);
 
-    m_captureMode   = true;
+    m_captureMode = true;
     m_captureAction = action;
     m_capturePlayer = player;
 }
@@ -273,10 +272,7 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
 
 bool EventHandler::mapKeyToAction(int player, InputHandler::Action action, int key)
 {
-    if (key &&
-        key != Qt::Key_Escape &&
-        key != Qt::Key_Q &&
-        key != Qt::Key_P)
+    if (key && key != Qt::Key_Escape && key != Qt::Key_Q && key != Qt::Key_P)
     {
         // Find the matching action and change the key
         auto iter = m_keyToActionMap.begin();
@@ -292,7 +288,7 @@ bool EventHandler::mapKeyToAction(int player, InputHandler::Action action, int k
             }
         }
 
-        m_keyToActionMap[key] = {player, action};
+        m_keyToActionMap[key] = { player, action };
 
         Settings::instance().saveKeyMapping(player, action, key);
 

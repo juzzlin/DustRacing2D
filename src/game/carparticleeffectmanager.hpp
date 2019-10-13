@@ -27,7 +27,6 @@ class MCCollisionEvent;
 class CarParticleEffectManager
 {
 public:
-
     //! Constructor.
     CarParticleEffectManager(Car & car);
 
@@ -36,7 +35,6 @@ public:
     void collision(const MCCollisionEvent & event);
 
 private:
-
     void doDamageSmoke();
 
     void doOnTrackAnimations();

@@ -19,7 +19,6 @@
 #include "renderer.hpp"
 #include "updateableif.hpp"
 
-
 #include <QObject>
 #include <QTimer>
 
@@ -34,7 +33,6 @@ class StateMachine : public QObject, public UpdateableIf
     Q_OBJECT
 
 public:
-
     enum class State
     {
         Init,
@@ -94,7 +92,6 @@ signals:
     void exitGameRequested();
 
 private:
-
     void stateInit();
 
     void stateDoIntro();
@@ -115,7 +112,7 @@ private:
 
     static StateMachine * m_instance;
 
-    typedef std::map<State, std::function<void()> > StateToFunctionMap;
+    typedef std::map<State, std::function<void()>> StateToFunctionMap;
 
     StateToFunctionMap m_stateToFunctionMap;
 

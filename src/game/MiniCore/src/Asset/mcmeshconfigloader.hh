@@ -22,8 +22,8 @@
 
 #include "mcmeshmetadata.hh"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 class QDomElement;
 class QDomNode;
@@ -32,7 +32,6 @@ class QDomNode;
 class MCMeshConfigLoader
 {
 public:
-
     //! Load all meshes found in filePath.
     //! \return true if succeeded.
     bool load(const std::string & filePath);
@@ -44,7 +43,6 @@ public:
     const MCMeshMetaData & mesh(unsigned int index) const;
 
 private:
-
     typedef std::shared_ptr<MCMeshMetaData> MeshDataPtr;
 
     void parseAttributes(const QDomElement & element, MeshDataPtr newData, const std::string & baseModelPath);

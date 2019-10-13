@@ -18,11 +18,11 @@
 //
 
 #include "mctexturetext.hh"
+#include "mccamera.hh"
+#include "mcgltexcoord.hh"
+#include "mcsurface.hh"
 #include "mctexturefont.hh"
 #include "mctextureglyph.hh"
-#include "mccamera.hh"
-#include "mcsurface.hh"
-#include "mcgltexcoord.hh"
 
 #include <MCGLEW>
 
@@ -30,12 +30,12 @@
 #include <vector>
 
 MCTextureText::MCTextureText(const std::wstring & text)
-: m_text(text)
-, m_glyphWidth(32)
-, m_glyphHeight(32)
-, m_color(1.0f, 1.0f, 1.0f, 1.0f)
-, m_xOffset(2.0f)
-, m_yOffset(-2.0f)
+  : m_text(text)
+  , m_glyphWidth(32)
+  , m_glyphHeight(32)
+  , m_color(1.0f, 1.0f, 1.0f, 1.0f)
+  , m_xOffset(2.0f)
+  , m_yOffset(-2.0f)
 {
     updateTextDimensions();
 }
@@ -150,7 +150,7 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
 
             if (glyph == '\n')
             {
-                glyphXPos  = x;
+                glyphXPos = x;
                 glyphYPos -= font.yDensity() * m_glyphHeight;
             }
             else if (glyph == ' ')
@@ -162,12 +162,11 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
                 if (glyph != prevGlyph)
                 {
                     auto && texGlyph = font.glyph(glyph);
-                    const MCGLTexCoord uv[4] =
-                    {
-                        {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
-                        {texGlyph.uv(0).m_u, texGlyph.uv(0).m_v},
-                        {texGlyph.uv(1).m_u, texGlyph.uv(1).m_v},
-                        {texGlyph.uv(2).m_u, texGlyph.uv(2).m_v}
+                    const MCGLTexCoord uv[4] = {
+                        { texGlyph.uv(3).m_u, texGlyph.uv(3).m_v },
+                        { texGlyph.uv(0).m_u, texGlyph.uv(0).m_v },
+                        { texGlyph.uv(1).m_u, texGlyph.uv(1).m_v },
+                        { texGlyph.uv(2).m_u, texGlyph.uv(2).m_v }
                     };
 
                     font.surface().updateTexCoords(uv);
@@ -185,7 +184,7 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
     font.surface().setColor(m_color);
 
     prevGlyph = 0;
-    glyph     = 0;
+    glyph = 0;
     glyphXPos = x;
     glyphYPos = y;
 
@@ -196,7 +195,7 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
 
         if (glyph == '\n')
         {
-            glyphXPos  = x;
+            glyphXPos = x;
             glyphYPos -= font.yDensity() * m_glyphHeight;
         }
         else if (glyph == ' ')
@@ -208,12 +207,11 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
             if (glyph != prevGlyph)
             {
                 auto && texGlyph = font.glyph(glyph);
-                const MCGLTexCoord uv[4] =
-                {
-                    {texGlyph.uv(3).m_u, texGlyph.uv(3).m_v},
-                    {texGlyph.uv(0).m_u, texGlyph.uv(0).m_v},
-                    {texGlyph.uv(1).m_u, texGlyph.uv(1).m_v},
-                    {texGlyph.uv(2).m_u, texGlyph.uv(2).m_v}
+                const MCGLTexCoord uv[4] = {
+                    { texGlyph.uv(3).m_u, texGlyph.uv(3).m_v },
+                    { texGlyph.uv(0).m_u, texGlyph.uv(0).m_v },
+                    { texGlyph.uv(1).m_u, texGlyph.uv(1).m_v },
+                    { texGlyph.uv(2).m_u, texGlyph.uv(2).m_v }
                 };
 
                 font.surface().updateTexCoords(uv);

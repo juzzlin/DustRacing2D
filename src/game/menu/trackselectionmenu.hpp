@@ -27,7 +27,6 @@ class MCSurface;
 class TrackSelectionMenu : public SurfaceMenu
 {
 public:
-
     static std::string MenuId;
 
     //! Constructor.
@@ -58,7 +57,6 @@ public:
     virtual void selectCurrentItem() override;
 
 private:
-
     Track * m_selectedTrack;
 
     Scene & m_scene;

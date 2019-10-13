@@ -24,7 +24,7 @@
 #include <MCSurface>
 
 Pit::Pit(MCSurface & surface)
-: MCObject(surface, "pit")
+  : MCObject(surface, "pit")
 {
     physicsComponent().setMass(1, true); // Stationary
     setIsPhysicsObject(false);

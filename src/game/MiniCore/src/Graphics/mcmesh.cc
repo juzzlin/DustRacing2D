@@ -19,20 +19,20 @@
 
 #include "mcmesh.hh"
 
-#include "mccamera.hh"
-#include "mcbbox.hh"
-#include "mcglshaderprogram.hh"
-#include "mcglvertex.hh"
-#include "mcgltexcoord.hh"
-#include "mctrigonom.hh"
 #include "mcassetmanager.hh"
+#include "mcbbox.hh"
+#include "mccamera.hh"
+#include "mcglshaderprogram.hh"
+#include "mcgltexcoord.hh"
+#include "mcglvertex.hh"
+#include "mctrigonom.hh"
 
 #include <algorithm>
 
 static const int NUM_COLOR_COMPONENTS = 4;
 
 MCMesh::MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material)
-    : MCGLObjectBase(handle)
+  : MCGLObjectBase(handle)
 {
     setWidth(1.0f);
 
@@ -63,13 +63,13 @@ void MCMesh::init(const FaceVector & faces)
 
         for (int faceVertexIndex = 0; faceVertexIndex < numFaceVertices; faceVertexIndex++)
         {
-            MCGLVertex vertex = {face.vertices.at(faceVertexIndex).x, face.vertices.at(faceVertexIndex).y, face.vertices.at(faceVertexIndex).z};
+            MCGLVertex vertex = { face.vertices.at(faceVertexIndex).x, face.vertices.at(faceVertexIndex).y, face.vertices.at(faceVertexIndex).z };
 
             addVertex(vertex);
 
-            addNormal({face.vertices.at(faceVertexIndex).i, face.vertices.at(faceVertexIndex).j, face.vertices.at(faceVertexIndex).k});
+            addNormal({ face.vertices.at(faceVertexIndex).i, face.vertices.at(faceVertexIndex).j, face.vertices.at(faceVertexIndex).k });
 
-            addTexCoord({face.vertices.at(faceVertexIndex).u, face.vertices.at(faceVertexIndex).v});
+            addTexCoord({ face.vertices.at(faceVertexIndex).u, face.vertices.at(faceVertexIndex).v });
 
             if (!vertexIndex)
             {
@@ -116,18 +116,18 @@ void MCMesh::initVBOs()
     static const int COLOR_DATA_SIZE = sizeof(GLfloat) * vertexCount() * NUM_COLOR_COMPONENTS;
 
     static const int TOTAL_DATA_SIZE =
-        VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
+      VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 
     initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
 
     addBufferSubData(
-        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, verticesAsGlArray());
+      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, verticesAsGlArray());
     addBufferSubData(
-        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, normalsAsGlArray());
+      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, normalsAsGlArray());
     addBufferSubData(
-        MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, texCoordsAsGlArray());
+      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, texCoordsAsGlArray());
     addBufferSubData(
-        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, colorsAsGlArray());
+      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, colorsAsGlArray());
 
     finishBufferData();
 }

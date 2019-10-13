@@ -20,15 +20,15 @@
 #include "mcgldiffuselight.hh"
 
 MCGLDiffuseLight::MCGLDiffuseLight(
-    MCVector3dF direction, GLfloat r, GLfloat g, GLfloat b, GLfloat i)
-: MCGLAmbientLight(r, g, b, i)
-, m_direction(direction.normalized())
+  MCVector3dF direction, GLfloat r, GLfloat g, GLfloat b, GLfloat i)
+  : MCGLAmbientLight(r, g, b, i)
+  , m_direction(direction.normalized())
 {
 }
 
 MCGLDiffuseLight::MCGLDiffuseLight()
-: MCGLAmbientLight(1.0f, 1.0f, 1.0f, 1.0f)
-, m_direction(MCVector3dF(0.0f, 0.0f, -1.0f))
+  : MCGLAmbientLight(1.0f, 1.0f, 1.0f, 1.0f)
+  , m_direction(MCVector3dF(0.0f, 0.0f, -1.0f))
 {
 }
 

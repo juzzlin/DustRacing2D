@@ -24,7 +24,6 @@ class MCTextureFont;
 class Help : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     Help(std::string id, int width, int height);
 

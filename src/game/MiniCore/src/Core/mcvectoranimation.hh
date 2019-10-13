@@ -13,14 +13,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
 
 #ifndef MCVECTORANIMATION_HH
 #define MCVECTORANIMATION_HH
-
-
 
 #include "mcmacros.hh"
 #include "mcvector3d.hh"
@@ -37,7 +35,6 @@ class MCVectorAnimationImpl;
 class MCVectorAnimation
 {
 public:
-
     //! Constructor.
     MCVectorAnimation();
 
@@ -46,14 +43,13 @@ public:
 
     //! Initialize the animation.
     void init(
-        MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, unsigned int steps,
-        unsigned int preDelay = 0, unsigned int postDelay = 0);
+      MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, unsigned int steps,
+      unsigned int preDelay = 0, unsigned int postDelay = 0);
 
     //! Update the animation. Returns true when done.
     bool update();
 
 private:
-
     DISABLE_COPY(MCVectorAnimation);
     DISABLE_ASSI(MCVectorAnimation);
 
@@ -75,4 +71,3 @@ private:
 };
 
 #endif // MCVECTORANIMATION_HH
-

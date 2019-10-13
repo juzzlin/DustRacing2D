@@ -22,13 +22,11 @@
 
 #include <MCGLEW>
 
-
-
-#include "mcmacros.hh"
 #include "mcbbox.hh"
 #include "mcglcolor.hh"
-#include "mcglobjectbase.hh"
 #include "mcglmaterial.hh"
+#include "mcglobjectbase.hh"
+#include "mcmacros.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -38,21 +36,20 @@
 
 using std::string;
 
-class  MCCamera;
+class MCCamera;
 struct MCGLTexCoord;
-class  MCGLVertex;
+class MCGLVertex;
 
 /** Renderable 3d mesh object. */
 class MCMesh : public MCGLObjectBase
 {
 public:
-
     struct Face
     {
         struct Vertex
         {
             float x = 0, y = 0, z = 0; // Location
-            float u = 0, v = 0;    // Texture coordinates
+            float u = 0, v = 0; // Texture coordinates
             float i = 0, j = 0, k = 0; // Normal
         };
 
@@ -78,7 +75,6 @@ public:
     virtual void renderShadow(MCCamera * camera, MCVector3dFR pos, float angle) override;
 
 private:
-
     void init(const FaceVector & faces);
 
     void initVBOs();

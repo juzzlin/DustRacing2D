@@ -27,7 +27,6 @@ class MCTextureFont;
 class Intro : public OverlayBase
 {
 public:
-
     //! Constructor.
     Intro();
 
@@ -38,7 +37,6 @@ public:
     void setDimensions(int width, int height) override;
 
 private:
-
     MCSurface & m_back;
 
     MCTextureFont & m_font;

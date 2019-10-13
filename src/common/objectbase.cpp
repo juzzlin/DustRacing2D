@@ -16,9 +16,9 @@
 #include "objectbase.hpp"
 
 ObjectBase::ObjectBase(QString category, QString role)
-: m_category(category)
-, m_role(role)
-, m_forceStationary(false)
+  : m_category(category)
+  , m_role(role)
+  , m_forceStationary(false)
 {
 }
 

@@ -20,7 +20,7 @@
 #include "game.hpp"
 
 CarPhysicsComponent::CarPhysicsComponent(Car & car)
-    : m_car(car)
+  : m_car(car)
 {
 }
 

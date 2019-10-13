@@ -16,25 +16,22 @@
 #ifndef VSYNCMENU_HPP
 #define VSYNCMENU_HPP
 
-#include "surfacemenu.hpp"
 #include "confirmationmenu.hpp"
+#include "surfacemenu.hpp"
 
 class ConfirmationMenu;
 
 class VSyncMenu : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     VSyncMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height);
 
 protected:
-
     //! \reimp
     virtual void enter() override;
 
 private:
-
     ConfirmationMenuPtr m_confirmationMenu;
 };
 

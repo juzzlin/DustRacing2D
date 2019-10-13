@@ -23,14 +23,12 @@ class Car;
 class CarPhysicsComponent : public MCPhysicsComponent
 {
 public:
-
     CarPhysicsComponent(Car & car);
 
     //! \reimp
     void addImpulse(const MCVector3dF & impulse, bool isCollision) override;
 
 private:
-
     Car & m_car;
 };
 

@@ -27,7 +27,6 @@
 class MCCircleShape : public MCShape
 {
 public:
-
     /*! Constructor
      * \param radius Radius of the shape
      * \param view View for the shape. May be nullptr. */
@@ -55,7 +54,6 @@ public:
     virtual MCBBox<float> bbox() const override;
 
 private:
-
     DISABLE_COPY(MCCircleShape);
     DISABLE_ASSI(MCCircleShape);
 };

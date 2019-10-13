@@ -22,7 +22,6 @@
 
 #include "mcglcolor.hh"
 
-
 #include "mcmacros.hh"
 
 #include <string>
@@ -35,7 +34,6 @@ class MCTextureFont;
 class MCTextureText
 {
 public:
-
     //! Constructor.
     explicit MCTextureText(const std::wstring & text);
 
@@ -76,7 +74,6 @@ public:
     void render(float x, float y, MCCamera * camera, MCTextureFont & font, bool shadow = true);
 
 private:
-
     void updateTextDimensions();
 
     std::wstring m_text;

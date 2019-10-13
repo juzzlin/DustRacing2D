@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
-#include <QFile>
 #include <QDir>
-#include <QTextStream>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QFile>
+#include <QTextStream>
 
 #include "mainwindow.hpp"
 #include "object.hpp"
@@ -43,8 +43,9 @@ void readTile(TrackData & newData, const QDomElement & element)
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
     auto tile = dynamic_cast<TrackTile *>(newData.map().getTile(
-        element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt(),
-        element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt()).get());
+                                                         element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt(),
+                                                         element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt())
+                                            .get());
     assert(tile);
 
     tile->setRotation(element.attribute(TrackDataBase::DataKeywords::Tile::orientation, "0").toInt());
@@ -54,7 +55,7 @@ void readTile(TrackData & newData, const QDomElement & element)
     tile->setTileType(type);
 
     tile->setComputerHint(
-        static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toInt()));
+      static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toInt()));
 
     tile->setExcludeFromMinimap(element.attribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap, "0").toUInt());
 }
@@ -66,8 +67,8 @@ void readObject(TrackData & newData, const QDomElement & element)
     Object & object = ObjectFactory::createObject(element.attribute(TrackDataBase::DataKeywords::Object::role, "clear"));
 
     object.setLocation(QPointF(
-        element.attribute(TrackDataBase::DataKeywords::Object::x, "0").toInt(),
-        element.attribute(TrackDataBase::DataKeywords::Object::y, "0").toInt()));
+      element.attribute(TrackDataBase::DataKeywords::Object::x, "0").toInt(),
+      element.attribute(TrackDataBase::DataKeywords::Object::y, "0").toInt()));
 
     object.setRotation(element.attribute(TrackDataBase::DataKeywords::Object::orientation, "0").toInt());
 
@@ -114,7 +115,8 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::j, j);
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::orientation, tile->rotation());
 
-            if (tile->excludeFromMinimap()) {
+            if (tile->excludeFromMinimap())
+            {
                 tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap, true);
             }
 
@@ -224,9 +226,9 @@ TrackDataPtr TrackIO::open(QString path)
     const QDomElement root = doc.documentElement();
 
     const unsigned int cols =
-        root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
+      root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
     const unsigned int rows =
-        root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
+      root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
 
     TrackData * newData = nullptr;
     if (cols && rows)
@@ -243,10 +245,10 @@ TrackDataPtr TrackIO::open(QString path)
         std::vector<TargetNodeBasePtr> route;
 
         QDomNode node = root.firstChild();
-        while(!node.isNull())
+        while (!node.isNull())
         {
             QDomElement element = node.toElement();
-            if(!element.isNull())
+            if (!element.isNull())
             {
                 // Read a tile element
                 if (element.nodeName() == TrackDataBase::DataKeywords::Track::tile)

@@ -26,7 +26,6 @@ class TileAnimator : public QTimeLine
     Q_OBJECT
 
 public:
-
     explicit TileAnimator(TrackTile * tile);
 
     bool rotate90CW();
@@ -38,7 +37,6 @@ private slots:
     void setTileRotation(int frame);
 
 private:
-
     TrackTile * m_tile;
 
     int m_a0, m_a1;

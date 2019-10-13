@@ -16,8 +16,8 @@
 #ifndef OBJECTBASE_HPP
 #define OBJECTBASE_HPP
 
-#include <QString>
 #include <QPointF>
+#include <QString>
 
 #include <memory>
 
@@ -25,13 +25,12 @@
 class ObjectBase
 {
 public:
-
     //! Constructor.
     ObjectBase(QString category, QString role);
 
     ObjectBase(ObjectBase & other) = delete;
 
-    ObjectBase & operator= (ObjectBase & other) = delete;
+    ObjectBase & operator=(ObjectBase & other) = delete;
 
     //! Destructor.
     virtual ~ObjectBase();
@@ -53,7 +52,6 @@ public:
     void setForceStationary(bool forceStationary);
 
 private:
-
     //! Category of this object.
     QString m_category;
 

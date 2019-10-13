@@ -24,18 +24,19 @@
 MCRecycler<MCContact> MCContact::m_recycler;
 
 MCContact::MCContact()
-: m_pObject(nullptr)
-, m_interpenetrationDepth(0.0)
-{}
+  : m_pObject(nullptr)
+  , m_interpenetrationDepth(0.0)
+{
+}
 
 void MCContact::init(MCObject & object,
-    const MCVector2d<float> & newContactPoint,
-    const MCVector2d<float> & newContactNormal,
-    float newInterpenetrationDepth)
+                     const MCVector2d<float> & newContactPoint,
+                     const MCVector2d<float> & newContactNormal,
+                     float newInterpenetrationDepth)
 {
-    m_pObject               = &object;
-    m_contactPoint          = newContactPoint;
-    m_contactNormal         = newContactNormal;
+    m_pObject = &object;
+    m_contactPoint = newContactPoint;
+    m_contactNormal = newContactNormal;
     m_interpenetrationDepth = newInterpenetrationDepth;
 }
 

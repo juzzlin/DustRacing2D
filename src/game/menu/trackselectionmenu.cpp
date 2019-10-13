@@ -17,9 +17,9 @@
 
 #include "game.hpp"
 #include "mainmenu.hpp"
+#include "renderer.hpp"
 #include "scene.hpp"
 #include "settings.hpp"
-#include "renderer.hpp"
 #include "timing.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -53,20 +53,19 @@ std::string TrackSelectionMenu::MenuId = "trackSelection";
 class TrackItem : public MTFH::MenuItem
 {
 public:
-
     TrackItem(int width, int height, Track & track)
-    : MenuItem(width, height)
-    , m_game(Game::instance())
-    , m_track(track)
-    , m_font(MCAssetManager::textureFontManager().font(m_game.fontName()))
-    , m_star(MCAssetManager::surfaceManager().surface("star"))
-    , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
-    , m_lock(MCAssetManager::surfaceManager().surface("lock"))
-    , m_lapRecord(Settings::instance().loadLapRecord(m_track))
-    , m_raceRecord(Settings::instance().loadRaceRecord(
-        m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
-    , m_bestPos(Settings::instance().loadBestPos(
-        m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
+      : MenuItem(width, height)
+      , m_game(Game::instance())
+      , m_track(track)
+      , m_font(MCAssetManager::textureFontManager().font(m_game.fontName()))
+      , m_star(MCAssetManager::surfaceManager().surface("star"))
+      , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
+      , m_lock(MCAssetManager::surfaceManager().surface("lock"))
+      , m_lapRecord(Settings::instance().loadLapRecord(m_track))
+      , m_raceRecord(Settings::instance().loadRaceRecord(
+          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
+      , m_bestPos(Settings::instance().loadBestPos(
+          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
     {
         auto && program = Renderer::instance().program("menu");
         m_star.setShaderProgram(program);
@@ -83,18 +82,17 @@ public:
     {
         MenuItem::setFocused(focused);
 
-        m_lapRecord  = Settings::instance().loadLapRecord(m_track);
+        m_lapRecord = Settings::instance().loadLapRecord(m_track);
         m_raceRecord = Settings::instance().loadRaceRecord(
-            m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
         m_bestPos = Settings::instance().loadBestPos(
-            m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
     }
 
     //! \reimp
     virtual void render() override;
 
 private:
-
     void renderTiles();
 
     void renderTitle();
@@ -185,8 +183,8 @@ void TrackItem::renderTiles()
 
                 surface->setSize(tileH, tileW);
                 surface->render(
-                    nullptr,
-                    MCVector3dF(tileX + tileW / 2, tileY + tileH / 2), tile->rotation());
+                  nullptr,
+                  MCVector3dF(tileX + tileW / 2, tileY + tileH / 2), tile->rotation());
             }
 
             tileX += tileW;
@@ -201,7 +199,7 @@ void TrackItem::renderTitle()
     MCTextureText text(L"");
 
     const int shadowY = -2;
-    const int shadowX =  2;
+    const int shadowX = 2;
 
     std::wstringstream ss;
     ss << m_track.trackData().name().toUpper().toStdWString();
@@ -255,7 +253,7 @@ void TrackItem::renderTrackProperties()
     MCTextureText text(L"");
 
     const int shadowY = -2;
-    const int shadowX =  2;
+    const int shadowX = 2;
 
     std::wstringstream ss;
     text.setGlyphSize(20, 20);
@@ -299,7 +297,7 @@ void TrackItem::renderTrackProperties()
     const float yPos = menu()->y() + y() - height() / 2;
     float lineHeight = text.height(m_font);
     int line = 2;
-    for (auto && text: texts)
+    for (auto && text : texts)
     {
         text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
         line++;
@@ -320,9 +318,9 @@ void TrackItem::render()
 }
 
 TrackSelectionMenu::TrackSelectionMenu(int width, int height, Scene & scene)
-    : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::ShowMany, true, true, true)
-    , m_selectedTrack(nullptr)
-    , m_scene(scene)
+  : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::ShowMany, true, true, true)
+  , m_selectedTrack(nullptr)
+  , m_scene(scene)
 {
     setWrapAround(false);
 }
@@ -333,7 +331,7 @@ void TrackSelectionMenu::addTrack(Track & track)
     item->setPos(width() / 2, height() / 2);
     addItem(item);
     setCurrentIndex(0);
-    setItemsToShow({0});
+    setItemsToShow({ 0 });
 }
 
 void TrackSelectionMenu::left()
@@ -350,7 +348,7 @@ void TrackSelectionMenu::left()
         currentItem()->setPos(-SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
         currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
-        setItemsToShow({prevIndex, currentIndex()});
+        setItemsToShow({ prevIndex, currentIndex() });
     }
 }
 
@@ -368,7 +366,7 @@ void TrackSelectionMenu::right()
         currentItem()->setPos(width() + SAIL_AWAY_HONEY_X, height() / 2, width() / 2, height() / 2);
         currentItem()->resetAnimationCurve(ANIMATION_STEPS, ANIMATION_EXP);
 
-        setItemsToShow({prevIndex, currentIndex()});
+        setItemsToShow({ prevIndex, currentIndex() });
     }
 }
 

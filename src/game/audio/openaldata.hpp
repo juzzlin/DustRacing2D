@@ -16,8 +16,8 @@
 #ifndef OPENALDATA_HPP
 #define OPENALDATA_HPP
 
-#include <Data>
 #include <AL/al.h>
+#include <Data>
 
 #include <memory>
 
@@ -25,7 +25,6 @@
 class OpenALData : public STFH::Data
 {
 public:
-
     //! Constructor.
     OpenALData();
 

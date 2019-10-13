@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,9 @@
 ///
 /// @defgroup gtx_matrix_interpolation GLM_GTX_matrix_interpolation: Rotation and translation matrix interpolation
 /// @ingroup gtx
-/// 
+///
 /// @brief Allows to directly interpolate two exiciting matrices.
-/// 
+///
 /// <glm/gtx/matrix_interpolation.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -41,42 +41,41 @@
 // Dependency:
 //#include "../glm.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_matrix_interpolation extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_matrix_interpolation extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_matrix_interpolation
-	/// @{
+namespace glm {
+/// @addtogroup gtx_matrix_interpolation
+/// @{
 
-	//! Get the axis and angle of the rotation from a matrix.
-    //! From GLM_GTX_matrix_interpolation extension.
-	template <typename T>
-    void axisAngle(
-        detail::tmat4x4<T> const & mat,
-        detail::tvec3<T> & axis,
-        T & angle);
+//! Get the axis and angle of the rotation from a matrix.
+//! From GLM_GTX_matrix_interpolation extension.
+template<typename T>
+void axisAngle(
+  detail::tmat4x4<T> const & mat,
+  detail::tvec3<T> & axis,
+  T & angle);
 
-    //! Build a matrix from axis and angle.
-    //! From GLM_GTX_matrix_interpolation extension.
-	template <typename T>
-    detail::tmat4x4<T> axisAngleMatrix(
-        detail::tvec3<T> const & axis,
-        T const angle);
+//! Build a matrix from axis and angle.
+//! From GLM_GTX_matrix_interpolation extension.
+template<typename T>
+detail::tmat4x4<T> axisAngleMatrix(
+  detail::tvec3<T> const & axis,
+  T const angle);
 
-	//! Build a interpolation of 4 * 4 matrixes.
-    //! From GLM_GTX_matrix_interpolation extension.
-    //! Warning! works only with rotation and/or translation matrixes, scale will generate unexpected results.
-	template <typename T>
-    detail::tmat4x4<T> interpolate(
-        detail::tmat4x4<T> const & m1,
-        detail::tmat4x4<T> const & m2,
-        T const delta);
+//! Build a interpolation of 4 * 4 matrixes.
+//! From GLM_GTX_matrix_interpolation extension.
+//! Warning! works only with rotation and/or translation matrixes, scale will generate unexpected results.
+template<typename T>
+detail::tmat4x4<T> interpolate(
+  detail::tmat4x4<T> const & m1,
+  detail::tmat4x4<T> const & m2,
+  T const delta);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "matrix_interpolation.inl"
 
-#endif//GLM_GTX_matrix_interpolation
+#endif //GLM_GTX_matrix_interpolation

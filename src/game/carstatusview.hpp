@@ -25,7 +25,6 @@ class Car;
 class CarStatusView : public Renderable
 {
 public:
-
     //! Constructor.
     CarStatusView();
 
@@ -35,7 +34,6 @@ public:
     void setCarToFollow(const Car & car);
 
 private:
-
     MCSurface & m_body;
     MCSurface & m_tires;
     const Car * m_car;

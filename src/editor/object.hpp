@@ -25,23 +25,21 @@
 class Object : public QGraphicsItem, public ObjectBase
 {
 public:
-
     //! Constructor.
     Object(QString category, QString role, QSizeF size, QPixmap pixmap);
 
     //! Copy constructor.
     Object(const Object & other);
 
-    virtual QRectF boundingRect () const override;
+    virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
+                       const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     //! Sets the Object and QGraphicsItem locations.
     virtual void setLocation(QPointF newLocation) override;
 
 private:
-
     //! Original size in pixels.
     QSizeF m_size;
 

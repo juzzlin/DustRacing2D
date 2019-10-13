@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
 
@@ -33,14 +33,13 @@ using std::sqrt;
 
 using std::max;
 
-#include "mcvector2d.hh"
 #include "mcsegment.hh"
+#include "mcvector2d.hh"
 
 //! Miscellaneous math utilities.
 class MCMathUtil
 {
 public:
-
     enum class Sign
     {
         Negative,
@@ -49,15 +48,15 @@ public:
     };
 
     //! \returns the absolute of x.
-    template <typename T>
+    template<typename T>
     inline static T abs(T x);
 
     //! \returns true if x == y. Can be used with integers / floats.
-    template <typename T>
+    template<typename T>
     inline static bool equals(T x, T y);
 
     //! \returns the sign of x.
-    template <typename T>
+    template<typename T>
     inline static MCMathUtil::Sign sign(T x);
 
     //! \returns true if the given segments cross.
@@ -82,7 +81,7 @@ public:
     static MCVector2dF rotatedVector(const MCVector2dF & v0, float angle);
 };
 
-template <typename T>
+template<typename T>
 bool MCMathUtil::equals(T x, T y)
 {
     if (numeric_limits<T>::is_exact)
@@ -103,7 +102,7 @@ bool MCMathUtil::equals(T x, T y)
     }
 }
 
-template <typename T>
+template<typename T>
 MCMathUtil::Sign MCMathUtil::sign(T x)
 {
     if (x < 0)
@@ -120,11 +119,10 @@ MCMathUtil::Sign MCMathUtil::sign(T x)
     }
 }
 
-template <typename T>
+template<typename T>
 T MCMathUtil::abs(T x)
 {
     return x < 0 ? -x : x;
 }
 
 #endif // MCMATHUTIL_HH
-

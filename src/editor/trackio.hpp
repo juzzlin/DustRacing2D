@@ -25,7 +25,6 @@
 class TrackIO
 {
 public:
-
     //! Save given track data. Returns false if failed.
     bool save(TrackDataPtr trackData, QString path);
 

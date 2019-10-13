@@ -22,7 +22,6 @@ namespace STFH {
 class Listener
 {
 public:
-
     Listener();
 
     virtual ~Listener();
@@ -34,10 +33,9 @@ public:
     virtual const Location & location() const;
 
 private:
-
     Location m_location;
 };
 
 typedef std::shared_ptr<Listener> ListenerPtr;
 
-} // STFH
+} // namespace STFH

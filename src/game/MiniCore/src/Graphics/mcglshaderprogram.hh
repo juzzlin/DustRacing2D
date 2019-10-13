@@ -28,7 +28,6 @@
 #include "mcgldiffuselight.hh"
 #include "mcglmaterial.hh"
 
-
 #include "mcvector3d.hh"
 
 #include <map>
@@ -50,14 +49,13 @@ class MCGLShaderProgram
 #endif
 {
 public:
-
     //! Assumed vertex attribute locations.
     enum VertexAttribLocations
     {
-        VAL_Vertex    = 0,
-        VAL_Normal    = 1,
+        VAL_Vertex = 0,
+        VAL_Normal = 1,
         VAL_TexCoords = 2,
-        VAL_Color     = 3
+        VAL_Color = 3
     };
 
     /*! Default constructor. MCGLScene must have been created before creating
@@ -67,7 +65,7 @@ public:
     /*! Constructor. MCGLScene must have been created before creating shader programs.
      *  Adds the given source and links the program. */
     MCGLShaderProgram(
-        const std::string & vertexShaderSource, const std::string & fragmentShaderSource);
+      const std::string & vertexShaderSource, const std::string & fragmentShaderSource);
 
     //! Destructor.
     virtual ~MCGLShaderProgram();
@@ -176,7 +174,6 @@ public:
     virtual void setUserData2(const MCVector2dF & data);
 
 private:
-
     //! Uniform enums used when caching uniform locations
     enum Uniform
     {

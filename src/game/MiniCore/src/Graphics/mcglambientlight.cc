@@ -20,18 +20,20 @@
 #include "mcglambientlight.hh"
 
 MCGLAmbientLight::MCGLAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat i)
-: m_r(r)
-, m_g(g)
-, m_b(b)
-, m_i(i)
-{}
+  : m_r(r)
+  , m_g(g)
+  , m_b(b)
+  , m_i(i)
+{
+}
 
 MCGLAmbientLight::MCGLAmbientLight()
-: m_r(1.0f)
-, m_g(1.0f)
-, m_b(1.0f)
-, m_i(1.0f)
-{}
+  : m_r(1.0f)
+  , m_g(1.0f)
+  , m_b(1.0f)
+  , m_i(1.0f)
+{
+}
 
 GLfloat MCGLAmbientLight::r() const
 {

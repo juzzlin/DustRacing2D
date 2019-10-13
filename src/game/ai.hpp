@@ -16,9 +16,9 @@
 #ifndef AI_HPP
 #define AI_HPP
 
+#include "../common/targetnodebase.hpp"
 #include <MCVector2d>
 #include <memory>
-#include "../common/targetnodebase.hpp"
 
 class Car;
 class Route;
@@ -29,7 +29,6 @@ class TrackTile;
 class AI
 {
 public:
-
     //! Constructor.
     AI(Car & car);
 
@@ -43,7 +42,6 @@ public:
     Car & car() const;
 
 private:
-
     //! Steering logic.
     void steerControl(TargetNodeBasePtr tnode);
 

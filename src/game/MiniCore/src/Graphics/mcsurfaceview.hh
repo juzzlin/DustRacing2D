@@ -32,13 +32,12 @@ class MCGLShaderProgram;
 class MCSurfaceView : public MCShapeView
 {
 public:
-
     /*! Constructor.
      * \param handle See MCShapeView::MCShapeView().
      * \param surface Surface to be used. Ownership of surface is not changed. */
     explicit MCSurfaceView(
-        const std::string & handle,
-        MCSurface * surface = nullptr);
+      const std::string & handle,
+      MCSurface * surface = nullptr);
 
     //! Destructor
     virtual ~MCSurfaceView();
@@ -57,15 +56,15 @@ public:
 
     //! \reimp
     virtual void render(
-        const MCVector3dF & l,
-        float angle,
-        MCCamera * p = nullptr) override;
+      const MCVector3dF & l,
+      float angle,
+      MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void renderShadow(
-        const MCVector3dF & l,
-        float angle,
-        MCCamera * p = nullptr) override;
+      const MCVector3dF & l,
+      float angle,
+      MCCamera * p = nullptr) override;
 
     //! \reimp
     virtual void bind() override;
@@ -86,13 +85,12 @@ public:
     virtual void setColor(const MCGLColor & color) override;
 
     //! \reimp
-    virtual void setScale(const MCVector3dF &scale) override;
+    virtual void setScale(const MCVector3dF & scale) override;
 
     //! \reimp
     virtual MCGLObjectBase * object() const override;
 
 private:
-
     DISABLE_COPY(MCSurfaceView);
     DISABLE_ASSI(MCSurfaceView);
 

@@ -20,8 +20,8 @@
 #ifndef MCRECYCLER_HH
 #define MCRECYCLER_HH
 
-#include <vector>
 #include <stack>
+#include <vector>
 
 /*! \class MCRecycler
  *  \brief Generic object recycler.
@@ -30,11 +30,10 @@
  *  cache. Objects to be stored must have a default constructor.
  *  "Freed" Objects are moved to a free-list for fast creation later.
  *  All created Objects are automatically deleted in the destructor of MCRecycler. */
-template <typename T>
+template<typename T>
 class MCRecycler
 {
 public:
-
     //! Constructor.
     MCRecycler();
 
@@ -54,7 +53,6 @@ public:
     void freeObjects();
 
 private:
-
     unsigned int deleteFreeObjects();
 
     unsigned int deleteObjects();
@@ -66,29 +64,34 @@ private:
     FreeObjectPool m_freeObjs;
 };
 
-template <typename T>
+template<typename T>
 MCRecycler<T>::MCRecycler()
-{}
+{
+}
 
-template <typename T>
+template<typename T>
 T * MCRecycler<T>::newObject()
 {
     T * p = nullptr;
-    if (m_freeObjs.size()) {
+    if (m_freeObjs.size())
+    {
         p = m_freeObjs.top();
         m_freeObjs.pop();
-    } else {
+    }
+    else
+    {
         p = new T;
         m_objs.push_back(p);
     }
     return p;
 }
 
-template <typename T>
+template<typename T>
 unsigned int MCRecycler<T>::deleteObjects()
 {
     unsigned int count = 0;
-    for (auto iter = m_objs.begin(); iter != m_objs.end(); iter++) {
+    for (auto iter = m_objs.begin(); iter != m_objs.end(); iter++)
+    {
         delete *iter;
         count++;
     }
@@ -96,21 +99,22 @@ unsigned int MCRecycler<T>::deleteObjects()
     return count;
 }
 
-template <typename T>
+template<typename T>
 void MCRecycler<T>::freeObject(T * p)
 {
     m_freeObjs.push(p);
 }
 
-template <typename T>
+template<typename T>
 void MCRecycler<T>::freeObjects()
 {
-    for (auto iter = m_objs.begin(); iter != m_objs.end(); iter++) {
+    for (auto iter = m_objs.begin(); iter != m_objs.end(); iter++)
+    {
         m_freeObjs.push(*iter);
     }
 }
 
-template <typename T>
+template<typename T>
 MCRecycler<T>::~MCRecycler()
 {
     deleteObjects();

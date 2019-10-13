@@ -25,8 +25,8 @@
 #include "mcmeshview.hh"
 
 MCMeshView::MCMeshView(const std::string & viewId, MCMesh * mesh)
-    : MCShapeView(viewId)
-    , m_mesh(mesh)
+  : MCShapeView(viewId)
+  , m_mesh(mesh)
 {
     if (m_mesh)
     {
@@ -38,7 +38,8 @@ MCMeshView::MCMeshView(const std::string & viewId, MCMesh * mesh)
 }
 
 MCMeshView::~MCMeshView()
-{}
+{
+}
 
 void MCMeshView::updateBBox()
 {
@@ -125,4 +126,3 @@ MCGLObjectBase * MCMeshView::object() const
 {
     return m_mesh;
 }
-

@@ -17,16 +17,17 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobject.hh"
 #include "mcoutofboundariesevent.hh"
+#include "mcobject.hh"
 
 unsigned int MCOutOfBoundariesEvent::m_typeId = MCEvent::registerType();
 
 MCOutOfBoundariesEvent::MCOutOfBoundariesEvent(
-        MCOutOfBoundariesEvent::ViolatedEdge edge, MCObject & violatingObject)
-    : m_violatedEdge(edge)
-    , m_violatingObject(violatingObject)
-{}
+  MCOutOfBoundariesEvent::ViolatedEdge edge, MCObject & violatingObject)
+  : m_violatedEdge(edge)
+  , m_violatingObject(violatingObject)
+{
+}
 
 unsigned int MCOutOfBoundariesEvent::typeId()
 {
@@ -51,4 +52,3 @@ MCObject & MCOutOfBoundariesEvent::violatingObject() const
 MCOutOfBoundariesEvent::~MCOutOfBoundariesEvent()
 {
 }
-

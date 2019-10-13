@@ -22,23 +22,23 @@
 StateMachine * StateMachine::m_instance = nullptr;
 
 StateMachine::StateMachine(InputHandler & inputHandler)
-: m_state(State::Init)
-, m_oldState(State::Init)
-, m_raceFinished(false)
-, m_inputHandler(inputHandler)
+  : m_state(State::Init)
+  , m_oldState(State::Init)
+  , m_raceFinished(false)
+  , m_inputHandler(inputHandler)
 {
     assert(!StateMachine::m_instance);
     StateMachine::m_instance = this;
 
-    m_stateToFunctionMap[State::Init]              = std::bind(&StateMachine::stateInit,              this);
-    m_stateToFunctionMap[State::DoIntro]           = std::bind(&StateMachine::stateDoIntro,           this);
-    m_stateToFunctionMap[State::Menu]              = std::bind(&StateMachine::stateMenu,              this);
-    m_stateToFunctionMap[State::MenuTransitionIn]  = std::bind(&StateMachine::stateMenuTransitionIn,  this);
+    m_stateToFunctionMap[State::Init] = std::bind(&StateMachine::stateInit, this);
+    m_stateToFunctionMap[State::DoIntro] = std::bind(&StateMachine::stateDoIntro, this);
+    m_stateToFunctionMap[State::Menu] = std::bind(&StateMachine::stateMenu, this);
+    m_stateToFunctionMap[State::MenuTransitionIn] = std::bind(&StateMachine::stateMenuTransitionIn, this);
     m_stateToFunctionMap[State::MenuTransitionOut] = std::bind(&StateMachine::stateMenuTransitionOut, this);
-    m_stateToFunctionMap[State::GameTransitionIn]  = std::bind(&StateMachine::stateGameTransitionIn,  this);
+    m_stateToFunctionMap[State::GameTransitionIn] = std::bind(&StateMachine::stateGameTransitionIn, this);
     m_stateToFunctionMap[State::GameTransitionOut] = std::bind(&StateMachine::stateGameTransitionOut, this);
-    m_stateToFunctionMap[State::DoStartlights]     = std::bind(&StateMachine::stateDoStartlights,     this);
-    m_stateToFunctionMap[State::Play]              = std::bind(&StateMachine::statePlay,              this);
+    m_stateToFunctionMap[State::DoStartlights] = std::bind(&StateMachine::stateDoStartlights, this);
+    m_stateToFunctionMap[State::Play] = std::bind(&StateMachine::statePlay, this);
 }
 
 StateMachine::~StateMachine()
@@ -127,7 +127,7 @@ void StateMachine::stateInit()
 
 void StateMachine::stateDoIntro()
 {
-    m_timer.singleShot(3000, [&] () {
+    m_timer.singleShot(3000, [&]() {
         if (m_state == State::DoIntro)
         {
             m_state = State::Menu;

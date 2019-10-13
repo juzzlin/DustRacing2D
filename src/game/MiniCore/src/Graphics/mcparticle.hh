@@ -37,13 +37,13 @@
 class MCParticle : public MCObject
 {
 public:
-
     friend class MCWorldRenderer;
 
     typedef std::vector<MCParticle *> ParticleFreeList;
 
     //! Style of the disappear animation
-    enum class AnimationStyle {
+    enum class AnimationStyle
+    {
         None,
         Shrink,
         FadeOut,
@@ -120,14 +120,12 @@ public:
     static int numActiveParticles();
 
 protected:
-
     /*! This is called when lifeTime reaches zero. Default implementation
    *  removes from the world. Re-imp if desired.
    */
     virtual void timeOut();
 
 private:
-
     static int m_numActiveParticles;
 
     DISABLE_COPY(MCParticle);

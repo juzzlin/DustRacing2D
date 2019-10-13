@@ -20,9 +20,9 @@
 #include "mcsurfaceobjectdata.hh"
 
 MCSurfaceObjectData::MCSurfaceObjectData(const std::string & typeId)
-: MCObjectData(typeId)
-, m_surfaceId(typeId)
-, m_defaultCircleShape(false)
+  : MCObjectData(typeId)
+  , m_surfaceId(typeId)
+  , m_defaultCircleShape(false)
 {
 }
 

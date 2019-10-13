@@ -34,12 +34,12 @@ const int NUM_VERTICES_PER_SURFACE = 6;
 }
 
 MCSurfaceObjectRenderer::MCSurfaceObjectRenderer(int maxBatchSize)
-    : MCObjectRendererBase(maxBatchSize)
-    , m_vertices(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
-    , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
-    , m_texCoords(new MCGLTexCoord[maxBatchSize * NUM_VERTICES_PER_SURFACE])
-    , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_SURFACE])
-    , m_surface(nullptr)
+  : MCObjectRendererBase(maxBatchSize)
+  , m_vertices(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+  , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+  , m_texCoords(new MCGLTexCoord[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+  , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_SURFACE])
+  , m_surface(nullptr)
 {
     const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_SURFACE;
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
@@ -51,25 +51,26 @@ MCSurfaceObjectRenderer::MCSurfaceObjectRenderer(int maxBatchSize)
     initBufferData(TOTAL_DATA_SIZE, GL_DYNAMIC_DRAW);
 
     addBufferSubData(
-        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_vertices));
+      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_vertices));
     addBufferSubData(
-        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_normals));
+      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_normals));
     addBufferSubData(
-        MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_texCoords));
+      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_texCoords));
     addBufferSubData(
-        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
+      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
 
     finishBufferData();
 }
 
 void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCamera * camera, bool isShadow)
 {
-    if (!batch.objects.size()) {
+    if (!batch.objects.size())
+    {
         return;
     }
 
     setBatchSize(std::min(static_cast<int>(batch.objects.size()), maxBatchSize()));
-    std::sort(batch.objects.begin(), batch.objects.end(), [] (const MCObject * l, const MCObject * r) {
+    std::sort(batch.objects.begin(), batch.objects.end(), [](const MCObject * l, const MCObject * r) {
         return l->location().k() < r->location().k();
     });
 
@@ -77,7 +78,7 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
     const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
     const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
-    const int COLOR_DATA_SIZE  = sizeof(MCGLColor) * NUM_VERTICES;
+    const int COLOR_DATA_SIZE = sizeof(MCGLColor) * NUM_VERTICES;
 
     // Take common properties from the first Object in the batch
     MCObject * object = batch.objects.at(0);
@@ -125,10 +126,10 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
             auto vertex = m_surface->vertex(j);
 
             m_vertices[vertexIndex] =
-                    MCGLVertex(
-                        x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()) * view->scale().i(),
-                        y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()) * view->scale().j(),
-                        !isShadow ? z + vertex.z() : z);
+              MCGLVertex(
+                x + MCMathUtil::rotatedX(vertex.x(), vertex.y(), object->angle()) * view->scale().i(),
+                y + MCMathUtil::rotatedY(vertex.x(), vertex.y(), object->angle()) * view->scale().j(),
+                !isShadow ? z + vertex.z() : z);
 
             m_normals[vertexIndex] = m_surface->normal(j);
 
@@ -142,21 +143,21 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
 
     const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_SURFACE;
     addBufferSubData(
-        MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
-        reinterpret_cast<const GLfloat *>(m_vertices));
+      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
+      reinterpret_cast<const GLfloat *>(m_vertices));
 
     const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_SURFACE;
     addBufferSubData(
-        MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
-        reinterpret_cast<const GLfloat *>(m_normals));
+      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
+      reinterpret_cast<const GLfloat *>(m_normals));
 
     const int MAX_TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * maxBatchSize() * NUM_VERTICES_PER_SURFACE;
     addBufferSubData(
-        MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, MAX_TEXCOORD_DATA_SIZE,
-        reinterpret_cast<const GLfloat *>(m_texCoords));
+      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, MAX_TEXCOORD_DATA_SIZE,
+      reinterpret_cast<const GLfloat *>(m_texCoords));
 
     addBufferSubData(
-        MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
+      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
 }
 
 void MCSurfaceObjectRenderer::render()
@@ -194,9 +195,8 @@ void MCSurfaceObjectRenderer::renderShadows()
 
 MCSurfaceObjectRenderer::~MCSurfaceObjectRenderer()
 {
-    delete [] m_vertices;
-    delete [] m_normals;
-    delete [] m_texCoords;
-    delete [] m_colors;
+    delete[] m_vertices;
+    delete[] m_normals;
+    delete[] m_texCoords;
+    delete[] m_colors;
 }
-

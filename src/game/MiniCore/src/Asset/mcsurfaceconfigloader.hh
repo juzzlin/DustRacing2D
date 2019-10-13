@@ -20,10 +20,10 @@
 #ifndef MCSURFACECONFIGLOADER_HH
 #define MCSURFACECONFIGLOADER_HH
 
-#include <string>
 #include <map>
-#include <vector>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <MCGLEW> // For GLenum.
 
@@ -36,7 +36,6 @@ class QDomNode;
 class MCSurfaceConfigLoader
 {
 public:
-
     //! Constructor.
     MCSurfaceConfigLoader();
 
@@ -51,7 +50,6 @@ public:
     const MCSurfaceMetaData & surface(unsigned int index) const;
 
 private:
-
     //! Convert alpha blend function string to enum.
     GLenum alphaBlendStringToEnum(const std::string & function) const;
 

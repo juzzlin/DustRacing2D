@@ -24,8 +24,8 @@
 #include <MCAssetManager>
 #include <MCObject>
 #include <MCObjectFactory>
-#include <MCRandom>
 #include <MCPhysicsComponent>
+#include <MCRandom>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
@@ -37,12 +37,12 @@ static const float DEFAULT_DIFFUSE_COEFF = 1.5f;
 }
 
 TrackObjectFactory::TrackObjectFactory(MCObjectFactory & objectFactory)
-: m_objectFactory(objectFactory)
+  : m_objectFactory(objectFactory)
 {
 }
 
 TrackObject * TrackObjectFactory::build(
-    QString category, QString role, MCVector2dF location, int angle, bool forceStationary)
+  QString category, QString role, MCVector2dF location, int angle, bool forceStationary)
 {
     MCObjectPtr object;
 
@@ -142,9 +142,7 @@ TrackObject * TrackObjectFactory::build(
         object = m_objectFactory.build(data);
     }
     else if (
-        role == "grid"          ||
-        role == "sandAreaCurve" ||
-        role == "sandAreaBig")
+      role == "grid" || role == "sandAreaCurve" || role == "sandAreaBig")
     {
         MCSurfaceObjectData data(role.toStdString());
         data.setInitialLocation(location);
@@ -181,10 +179,10 @@ TrackObject * TrackObjectFactory::build(
     {
         int height = static_cast<int>(200 + 200 * MCRandom::getValue());
         object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"),
-            1.0f + 0.50f * MCRandom::getValue(),
-            0.1f + 0.2f * MCRandom::getValue(),
-            height,
-            height / 10));
+                                      1.0f + 0.50f * MCRandom::getValue(),
+                                      0.1f + 0.2f * MCRandom::getValue(),
+                                      height,
+                                      height / 10));
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
     }

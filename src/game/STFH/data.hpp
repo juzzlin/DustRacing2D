@@ -24,7 +24,6 @@ namespace STFH {
 class Data
 {
 public:
-
     //! Constructor.
     Data();
 
@@ -38,12 +37,11 @@ public:
     const std::string & path() const;
 
 private:
-
     std::string m_path;
 };
 
 typedef std::shared_ptr<Data> DataPtr;
 
-} // STFH
+} // namespace STFH
 
 #endif // DATA_HPP

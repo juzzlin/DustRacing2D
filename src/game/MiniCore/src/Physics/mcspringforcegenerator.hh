@@ -34,7 +34,6 @@
 class MCSpringForceGenerator : public MCForceGenerator
 {
 public:
-
     /*! Constructor
      * \param object2 The another end of the spring.
      * \param coeff   Spring coefficient (F = -coeff * x)
@@ -43,7 +42,7 @@ public:
      * \param max     Max length of the spring.
      */
     MCSpringForceGenerator(
-        MCObject & object2, float coeff, float length, float min, float max);
+      MCObject & object2, float coeff, float length, float min, float max);
 
     //! Destructor
     virtual ~MCSpringForceGenerator();
@@ -54,7 +53,6 @@ public:
     virtual void updateForce(MCObject & object1);
 
 private:
-
     DISABLE_COPY(MCSpringForceGenerator);
     DISABLE_ASSI(MCSpringForceGenerator);
     MCObject * m_p2;

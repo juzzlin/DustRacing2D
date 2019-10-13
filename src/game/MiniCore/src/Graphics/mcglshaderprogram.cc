@@ -39,12 +39,12 @@ MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 std::vector<MCGLShaderProgram *> MCGLShaderProgram::m_programStack;
 
 MCGLShaderProgram::MCGLShaderProgram()
-    : m_scene(MCGLScene::instance())
-    , m_viewProjectionMatrixPending(false)
-    , m_viewMatrixPending(false)
-    , m_diffuseLightPending(false)
-    , m_specularLightPending(false)
-    , m_ambientLightPending(false)
+  : m_scene(MCGLScene::instance())
+  , m_viewProjectionMatrixPending(false)
+  , m_viewMatrixPending(false)
+  , m_diffuseLightPending(false)
+  , m_specularLightPending(false)
+  , m_ambientLightPending(false)
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -57,13 +57,13 @@ MCGLShaderProgram::MCGLShaderProgram()
 }
 
 MCGLShaderProgram::MCGLShaderProgram(
-    const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
-    : m_scene(MCGLScene::instance())
-    , m_viewProjectionMatrixPending(false)
-    , m_viewMatrixPending(false)
-    , m_diffuseLightPending(false)
-    , m_specularLightPending(false)
-    , m_ambientLightPending(false)
+  const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
+  : m_scene(MCGLScene::instance())
+  , m_viewProjectionMatrixPending(false)
+  , m_viewMatrixPending(false)
+  , m_diffuseLightPending(false)
+  , m_specularLightPending(false)
+  , m_ambientLightPending(false)
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
     initializeOpenGLFunctions();
@@ -173,7 +173,7 @@ std::string MCGLShaderProgram::getShaderLog(GLuint obj)
 {
     int logLength = 0;
     int charsWritten = 0;
-    char *rawLog;
+    char * rawLog;
 
     glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &logLength);
 
@@ -200,14 +200,13 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
     glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw std::runtime_error("Compiling a vertex shader failed.\n" +
-            getShaderLog(m_vertexShader) + "\n" + source);
+        throw std::runtime_error("Compiling a vertex shader failed.\n" + getShaderLog(m_vertexShader) + "\n" + source);
     }
 
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Vertex,    "inVertex");
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Normal,    "inNormal");
+    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Vertex, "inVertex");
+    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Normal, "inNormal");
     glBindAttribLocation(m_program, MCGLShaderProgram::VAL_TexCoords, "inTexCoord");
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Color,     "inColor");
+    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Color, "inColor");
 
     glAttachShader(m_program, m_vertexShader);
 
@@ -225,8 +224,7 @@ bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
     glGetShaderiv(m_fragmentShader, GL_COMPILE_STATUS, &compiled);
     if (!compiled)
     {
-        throw std::runtime_error("Compiling a fragment shader failed.\n" +
-            getShaderLog(m_fragmentShader) + "\n" + source);
+        throw std::runtime_error("Compiling a fragment shader failed.\n" + getShaderLog(m_fragmentShader) + "\n" + source);
     }
 
     glAttachShader(m_program, m_fragmentShader);
@@ -291,14 +289,16 @@ bool MCGLShaderProgram::addGeometryShaderFromSource(const std::string &)
 
 void MCGLShaderProgram::pushProgram()
 {
-    if (MCGLShaderProgram::m_activeProgram) {
+    if (MCGLShaderProgram::m_activeProgram)
+    {
         m_programStack.push_back(MCGLShaderProgram::m_activeProgram);
     }
 }
 
 void MCGLShaderProgram::popProgram()
 {
-    if (m_programStack.size()) {
+    if (m_programStack.size())
+    {
         m_programStack.back()->bind();
         m_programStack.pop_back();
     }
@@ -309,14 +309,16 @@ void MCGLShaderProgram::setViewProjectionMatrix(const glm::mat4x4 & viewProjecti
     m_viewProjectionMatrix = viewProjectionMatrix;
     m_viewProjectionMatrixPending = true;
 
-    if (isBound()) {
+    if (isBound())
+    {
         setPendingViewProjectionMatrix();
     }
 }
 
 void MCGLShaderProgram::setPendingViewProjectionMatrix()
 {
-    if (m_viewProjectionMatrixPending) {
+    if (m_viewProjectionMatrixPending)
+    {
         m_viewProjectionMatrixPending = false;
         glUniformMatrix4fv(getUniformLocation(ViewProjection), 1, GL_FALSE, &m_viewProjectionMatrix[0][0]);
     }
@@ -327,14 +329,16 @@ void MCGLShaderProgram::setViewMatrix(const glm::mat4x4 & viewMatrix)
     m_viewMatrix = viewMatrix;
     m_viewMatrixPending = true;
 
-    if (isBound()) {
+    if (isBound())
+    {
         setPendingViewMatrix();
     }
 }
 
 void MCGLShaderProgram::setPendingViewMatrix()
 {
-    if (m_viewMatrixPending) {
+    if (m_viewMatrixPending)
+    {
         m_viewMatrixPending = false;
         glUniformMatrix4fv(getUniformLocation(View), 1, GL_FALSE, &m_viewMatrix[0][0]);
     }
@@ -343,7 +347,7 @@ void MCGLShaderProgram::setPendingViewMatrix()
 void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
 {
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(pos.i(), pos.j(), pos.k()));
-    glm::mat4 rotation  = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotation = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(getUniformLocation(Model), 1, GL_FALSE, &rotation[0][0]);
 }
 
@@ -382,21 +386,23 @@ void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
     m_diffuseLight = light;
     m_diffuseLightPending = true;
 
-    if (isBound()) {
+    if (isBound())
+    {
         setPendingDiffuseLight();
     }
 }
 
 void MCGLShaderProgram::setPendingDiffuseLight()
 {
-    if (m_diffuseLightPending) {
+    if (m_diffuseLightPending)
+    {
         m_diffuseLightPending = false;
         glUniform4f(
-            getUniformLocation(DiffuseLightDir),
-                m_diffuseLight.direction().i(), m_diffuseLight.direction().j(), m_diffuseLight.direction().k(), 1);
+          getUniformLocation(DiffuseLightDir),
+          m_diffuseLight.direction().i(), m_diffuseLight.direction().j(), m_diffuseLight.direction().k(), 1);
         glUniform4f(
-            getUniformLocation(DiffuseLightColor),
-                m_diffuseLight.r(), m_diffuseLight.g(), m_diffuseLight.b(), m_diffuseLight.i());
+          getUniformLocation(DiffuseLightColor),
+          m_diffuseLight.r(), m_diffuseLight.g(), m_diffuseLight.b(), m_diffuseLight.i());
     }
 }
 
@@ -405,21 +411,23 @@ void MCGLShaderProgram::setSpecularLight(const MCGLDiffuseLight & light)
     m_specularLight = light;
     m_specularLightPending = true;
 
-    if (isBound()) {
+    if (isBound())
+    {
         setPendingSpecularLight();
     }
 }
 
 void MCGLShaderProgram::setPendingSpecularLight()
 {
-    if (m_specularLightPending) {
+    if (m_specularLightPending)
+    {
         m_specularLightPending = false;
         glUniform4f(
-            getUniformLocation(SpecularLightDir),
-                m_specularLight.direction().i(), m_specularLight.direction().j(), m_specularLight.direction().k(), 1);
+          getUniformLocation(SpecularLightDir),
+          m_specularLight.direction().i(), m_specularLight.direction().j(), m_specularLight.direction().k(), 1);
         glUniform4f(
-            getUniformLocation(SpecularLightColor),
-                m_specularLight.r(), m_specularLight.g(), m_specularLight.b(), m_specularLight.i());
+          getUniformLocation(SpecularLightColor),
+          m_specularLight.r(), m_specularLight.g(), m_specularLight.b(), m_specularLight.i());
     }
 }
 
@@ -428,18 +436,20 @@ void MCGLShaderProgram::setAmbientLight(const MCGLAmbientLight & light)
     m_ambientLight = light;
     m_ambientLightPending = true;
 
-    if (isBound()) {
+    if (isBound())
+    {
         setPendingAmbientLight();
     }
 }
 
 void MCGLShaderProgram::setPendingAmbientLight()
 {
-    if (m_ambientLightPending) {
+    if (m_ambientLightPending)
+    {
         m_ambientLightPending = false;
         glUniform4f(
-            getUniformLocation(AmbientLightColor),
-                m_ambientLight.r(), m_ambientLight.g(), m_ambientLight.b(), m_ambientLight.i());
+          getUniformLocation(AmbientLightColor),
+          m_ambientLight.r(), m_ambientLight.g(), m_ambientLight.b(), m_ambientLight.i());
     }
 }
 

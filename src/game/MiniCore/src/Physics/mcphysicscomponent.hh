@@ -29,7 +29,6 @@
 class MCPhysicsComponent : public MCObjectComponent
 {
 public:
-
     //! Constructor.
     MCPhysicsComponent();
 
@@ -187,7 +186,6 @@ public:
     virtual void reset() override;
 
 private:
-
     void integrate(float step);
 
     void integrateLinear(float step);

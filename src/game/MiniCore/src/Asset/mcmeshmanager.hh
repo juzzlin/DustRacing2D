@@ -57,7 +57,6 @@
 class MCMeshManager
 {
 public:
-
     //! Constructor.
     MCMeshManager();
 
@@ -70,7 +69,7 @@ public:
      *  baseDataPath + baseModelPath + fileName. baseModelPath and the fileName are
      *  defined in the input file. */
     virtual void load(
-        const std::string & configFilePath, const std::string & baseDataPath);
+      const std::string & configFilePath, const std::string & baseDataPath);
 
     /*! Returns a mesh object associated with given strId.
      *  MCMeshManager will keep the ownership.
@@ -78,14 +77,13 @@ public:
      *  \return Reference to the corresponding MCMesh.
      *  \throws std::runtime_error on failure. */
     MCMesh & mesh(
-        const std::string & handle) const;
+      const std::string & handle) const;
 
     //! Create a mesh from given meta data and face vector.
     MCMesh & createMesh(
-        const MCMeshMetaData & data, const MCMesh::FaceVector & faces);
+      const MCMeshMetaData & data, const MCMesh::FaceVector & faces);
 
 private:
-
     //! Map for resulting mesh objects
     typedef std::shared_ptr<MCMesh> MeshPtr;
     typedef std::unordered_map<std::string, MeshPtr> MeshHash;

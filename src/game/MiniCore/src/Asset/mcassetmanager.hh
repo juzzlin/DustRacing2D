@@ -22,22 +22,21 @@
 
 #include <string>
 
+#include "mcmeshmanager.hh"
 #include "mcsurfacemanager.hh"
 #include "mctexturefontmanager.hh"
-#include "mcmeshmanager.hh"
 
 /*! Singleton class that handles loading of assets and instantiates
  *  all sub-managers (MCSurfaceManager, MCTextureFontManager, MCMeshManager) */
 class MCAssetManager
 {
 public:
-
     //! Constructor.
     explicit MCAssetManager(
-        const std::string & baseDataPath = "",
-        const std::string & surfaceConfigPath = "",
-        const std::string & fontConfigPath = "",
-        const std::string & meshConfigPath = "");
+      const std::string & baseDataPath = "",
+      const std::string & surfaceConfigPath = "",
+      const std::string & fontConfigPath = "",
+      const std::string & meshConfigPath = "");
 
     //! \return The singleton instance.
     static MCAssetManager & instance();
@@ -55,7 +54,6 @@ public:
     ~MCAssetManager();
 
 private:
-
     void loadSurfaces();
 
     void loadFonts();

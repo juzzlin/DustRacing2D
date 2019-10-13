@@ -17,8 +17,8 @@
 
 #include "simple_logger.hpp"
 OpenALDevice::OpenALDevice()
-    : m_device(nullptr)
-    , m_context(nullptr)
+  : m_device(nullptr)
+  , m_context(nullptr)
 {
 }
 

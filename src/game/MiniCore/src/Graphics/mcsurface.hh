@@ -22,20 +22,20 @@
 
 #include <MCGLEW>
 
-#include "mcmacros.hh"
 #include "mcbbox.hh"
-#include "mcglobjectbase.hh"
 #include "mcglmaterial.hh"
+#include "mcglobjectbase.hh"
+#include "mcmacros.hh"
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
 #include <cmath>
 #include <string>
 
-class  MCCamera;
-class  MCGLShaderProgram;
+class MCCamera;
+class MCGLShaderProgram;
 struct MCGLTexCoord;
-class  MCGLVertex;
+class MCGLVertex;
 
 /*! MCSurface is a (2D) renderable object bound to an OpenGL texture handle.
  *  MCSurface can be rendered as a standalone object. Despite being a
@@ -44,7 +44,6 @@ class  MCGLVertex;
 class MCSurface : public MCGLObjectBase
 {
 public:
-
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
      *  \param width  Desired width of the surface when rendered 1:1.
@@ -54,14 +53,14 @@ public:
      *  \param z2 Z-coordinate for vertex[2]. Enables tilted surfaces.
      *  \param z3 Z-coordinate for vertex[3]. Enables tilted surfaces. */
     MCSurface(
-        std::string handle,
-        MCGLMaterialPtr material,
-        float width,
-        float height,
-        float z0 = 0,
-        float z1 = 0,
-        float z2 = 0,
-        float z3 = 0);
+      std::string handle,
+      MCGLMaterialPtr material,
+      float width,
+      float height,
+      float z0 = 0,
+      float z1 = 0,
+      float z2 = 0,
+      float z3 = 0);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
@@ -69,11 +68,11 @@ public:
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param z Z-coordinate common for all vertices. */
     MCSurface(
-        std::string handle,
-        MCGLMaterialPtr material,
-        float width,
-        float height,
-        float z);
+      std::string handle,
+      MCGLMaterialPtr material,
+      float width,
+      float height,
+      float z);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
@@ -81,11 +80,11 @@ public:
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param texCoords Array including texture coordinates of the four vertices. */
     MCSurface(
-        std::string handle,
-        MCGLMaterialPtr material,
-        float width,
-        float height,
-        const MCGLTexCoord texCoords[4]);
+      std::string handle,
+      MCGLMaterialPtr material,
+      float width,
+      float height,
+      const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
     virtual ~MCSurface() {};
@@ -94,7 +93,6 @@ public:
     void updateTexCoords(const MCGLTexCoord texCoords[4]);
 
 private:
-
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
 

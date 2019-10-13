@@ -21,8 +21,8 @@
 #define MCWORLDRENDERER_HH
 
 #include "mcglscene.hh"
-#include "mcrenderlayer.hh"
 #include "mcrendergroup.hh"
+#include "mcrenderlayer.hh"
 
 #include "mcworld.hh"
 
@@ -38,7 +38,6 @@ class MCParticleRendererBase;
 class MCWorldRenderer
 {
 public:
-
     MCWorldRenderer();
 
     ~MCWorldRenderer();
@@ -75,7 +74,6 @@ public:
     void clear();
 
 private:
-
     void buildObjectBatches(MCCamera * camera);
 
     void buildParticleBatches(MCCamera * camera);

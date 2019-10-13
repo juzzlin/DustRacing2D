@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 AboutDlg::AboutDlg(QWidget * parent)
-: QDialog(parent)
+  : QDialog(parent)
 {
     setWindowTitle(tr("About Dust Racing"));
     initWidgets();
@@ -31,19 +31,19 @@ AboutDlg::AboutDlg(QWidget * parent)
 
 void AboutDlg::initWidgets()
 {
-    QVBoxLayout * vLayout     = new QVBoxLayout(this);
-    QLabel      * pixmapLabel = new QLabel(this);
+    QVBoxLayout * vLayout = new QVBoxLayout(this);
+    QLabel * pixmapLabel = new QLabel(this);
 
     pixmapLabel->setPixmap(QPixmap(":/about.png"));
     vLayout->addWidget(pixmapLabel);
 
     QLabel * infoLabel = new QLabel(this);
     infoLabel->setText(
-        QString("<h2>") + Config::Game::GAME_NAME + " v" + Config::Game::GAME_VERSION + "</h2>"
-        + "<p>" + Config::Game::GAME_NAME + " is licenced under GNU GPLv3.</p>"
-        + "<p>" + Config::Common::COPYRIGHT + "</p>"
-        + "<a href='" + Config::Common::WEB_SITE_URL + "'>"
-        + Config::Common::WEB_SITE_URL + "</a>");
+      QString("<h2>") + Config::Game::GAME_NAME + " v" + Config::Game::GAME_VERSION + "</h2>"
+      + "<p>" + Config::Game::GAME_NAME + " is licenced under GNU GPLv3.</p>"
+      + "<p>" + Config::Common::COPYRIGHT + "</p>"
+      + "<a href='" + Config::Common::WEB_SITE_URL + "'>"
+      + Config::Common::WEB_SITE_URL + "</a>");
 
     vLayout->addWidget(infoLabel);
 

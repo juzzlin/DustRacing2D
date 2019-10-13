@@ -32,7 +32,6 @@
 class MCMeshLoader
 {
 public:
-
     struct V
     {
         float x, y, z;
@@ -65,7 +64,6 @@ public:
     const std::vector<VT> & textureCoords() const;
 
 protected:
-
     void processLine(QString line);
 
     void parseV(QString line);
@@ -77,10 +75,9 @@ protected:
     void parseF(QString line);
 
 private:
+    std::map<QString, std::function<void(QString)>> m_keyToFunctionMap;
 
-    std::map<QString, std::function<void(QString)> > m_keyToFunctionMap;
-
-    std::vector<V>  m_v;
+    std::vector<V> m_v;
 
     std::vector<VN> m_vn;
 

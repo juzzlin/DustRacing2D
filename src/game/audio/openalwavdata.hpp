@@ -22,7 +22,6 @@
 class OpenALWavData : public OpenALData
 {
 public:
-
     //! Constructor.
     OpenALWavData(const std::string & path);
 
@@ -36,10 +35,9 @@ public:
     virtual ALuint buffer() const override;
 
 private:
-
     ALsizei m_size, m_freq;
-    ALenum  m_format;
-    ALuint  m_buffer;
+    ALenum m_format;
+    ALuint m_buffer;
 };
 
 #endif // OPENALWAVDATA_HPP

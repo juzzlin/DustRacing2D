@@ -27,7 +27,6 @@
 class OpenALSource : public STFH::Source
 {
 public:
-
     //! Constructor.
     OpenALSource(STFH::DataPtr data);
 
@@ -59,7 +58,6 @@ public:
     virtual void setReferenceDist(float refDist) override;
 
 private:
-
     ALuint m_handle;
 };
 

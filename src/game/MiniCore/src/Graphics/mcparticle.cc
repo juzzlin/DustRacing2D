@@ -23,15 +23,15 @@
 int MCParticle::m_numActiveParticles = 0;
 
 MCParticle::MCParticle(const std::string & typeId)
-: MCObject(typeId)
-, m_lifeTime(0)
-, m_initLifeTime(0)
-, m_animationStyle(MCParticle::AnimationStyle::None)
-, m_isActive(false)
-, m_dieWhenOffScreen(true)
-, m_dieOnOutOfBoundariesEvent(true)
-, m_freeList(nullptr)
-, m_customDeathCondition(nullptr)
+  : MCObject(typeId)
+  , m_lifeTime(0)
+  , m_initLifeTime(0)
+  , m_animationStyle(MCParticle::AnimationStyle::None)
+  , m_isActive(false)
+  , m_dieWhenOffScreen(true)
+  , m_dieOnOutOfBoundariesEvent(true)
+  , m_freeList(nullptr)
+  , m_customDeathCondition(nullptr)
 {
     setShape(MCShapePtr(new MCCircleShape(nullptr, 0.0)));
     setBypassCollisions(true);
@@ -45,11 +45,11 @@ MCParticle::~MCParticle()
 
 void MCParticle::init(MCVector3dFR newLocation, float newRadius, unsigned int newLifeTime)
 {
-    m_lifeTime       = newLifeTime;
-    m_initLifeTime   = newLifeTime;
-    m_isActive       = true;
-    m_radius         = newRadius;
-    m_scale          = 1.0f;
+    m_lifeTime = newLifeTime;
+    m_initLifeTime = newLifeTime;
+    m_isActive = true;
+    m_radius = newRadius;
+    m_scale = 1.0f;
 
     setIsPhysicsObject(true);
 

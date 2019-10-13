@@ -17,14 +17,15 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobject.hh"
 #include "mcforceregistry.hh"
+#include "mcobject.hh"
 
 #include <algorithm>
 
 MCForceRegistry::MCForceRegistry()
-: m_registryHash()
-{}
+  : m_registryHash()
+{
+}
 
 void MCForceRegistry::update()
 {

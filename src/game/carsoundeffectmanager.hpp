@@ -19,10 +19,10 @@
 #include <QString>
 #include <QTimer>
 
-#include <memory>
+#include "audiosource.hpp"
 #include <Location>
 #include <MCVector3d>
-#include "audiosource.hpp"
+#include <memory>
 
 class Car;
 class MCCollisionEvent;
@@ -34,7 +34,6 @@ class CarSoundEffectManager : public AudioSource
     Q_OBJECT
 
 public:
-
     /*! Handles to special sounds that can be played simultaneously by each car */
     struct MultiSoundHandles
     {
@@ -60,19 +59,18 @@ public slots:
     void stopEngineSound();
 
 private:
-
     void processEngineSound();
 
     void processSkidSound();
 
-    Car &             m_car;
-    int               m_gear;
-    int               m_prevSpeed;
-    MCVector3dF       m_prevLocation;
-    QTimer            m_hitTimer;
-    QTimer            m_skidTimer;
+    Car & m_car;
+    int m_gear;
+    int m_prevSpeed;
+    MCVector3dF m_prevLocation;
+    QTimer m_hitTimer;
+    QTimer m_skidTimer;
     MultiSoundHandles m_handles;
-    bool              m_skidPlaying;
+    bool m_skidPlaying;
 };
 
 typedef std::shared_ptr<CarSoundEffectManager> CarSoundEffectManagerPtr;

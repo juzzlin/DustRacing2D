@@ -18,20 +18,20 @@
 //
 
 #include "MCForceRegistryTest.hpp"
+#include "../../Core/mcobject.hh"
+#include "../../Core/mcworld.hh"
 #include "../../Physics/mcforcegenerator.hh"
 #include "../../Physics/mcforceregistry.hh"
-#include "../../Core/mcworld.hh"
-#include "../../Core/mcobject.hh"
 
 #include <memory>
 
 class TestForceGenerator : public MCForceGenerator
 {
 public:
-
     TestForceGenerator()
-    : m_updated(false)
-    {}
+      : m_updated(false)
+    {
+    }
 
     ~TestForceGenerator()
     {
@@ -84,7 +84,7 @@ void MCForceRegistryTest::testAddUpdateRemoveMulti()
         MCForceRegistry dut;
         MCWorld world;
 
-        std::vector<std::unique_ptr<MCObject> > objects;
+        std::vector<std::unique_ptr<MCObject>> objects;
         for (unsigned int i = 0; i < NUM_OBJECTS; i++)
         {
             MCObject * object = new MCObject("TestObject");

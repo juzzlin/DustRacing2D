@@ -15,20 +15,20 @@
 
 #include "rotatedialog.hpp"
 
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QIntValidator>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QIntValidator>
+#include <QVBoxLayout>
 
 RotateDialog::RotateDialog(QWidget * parent)
-: QDialog(parent)
-, m_layout(new QGridLayout(this))
-, m_okButton(new QPushButton(tr("Ok")))
-, m_cancelButton(new QPushButton(tr("Cancel")))
-, m_angleEdit(new QLineEdit)
-, m_angleLabel(new QLabel(tr("Angle in degrees:")))
+  : QDialog(parent)
+  , m_layout(new QGridLayout(this))
+  , m_okButton(new QPushButton(tr("Ok")))
+  , m_cancelButton(new QPushButton(tr("Cancel")))
+  , m_angleEdit(new QLineEdit)
+  , m_angleLabel(new QLabel(tr("Angle in degrees:")))
 {
     setWindowTitle(tr("Rotate Object"));
 
@@ -37,9 +37,9 @@ RotateDialog::RotateDialog(QWidget * parent)
     m_angleEdit->setValidator(validator);
     m_angleEdit->setText("90");
 
-    m_layout->addWidget(m_angleLabel,   0, 0);
-    m_layout->addWidget(m_angleEdit,    0, 1);
-    m_layout->addWidget(m_okButton,     3, 0);
+    m_layout->addWidget(m_angleLabel, 0, 0);
+    m_layout->addWidget(m_angleEdit, 0, 1);
+    m_layout->addWidget(m_okButton, 3, 0);
     m_layout->addWidget(m_cancelButton, 3, 1);
 
     connect(m_okButton, &QPushButton::clicked, this, &RotateDialog::accept);

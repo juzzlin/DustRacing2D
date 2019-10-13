@@ -31,9 +31,9 @@
 
 #include <map>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <string>
 
 class MCShapeView;
 class MCSurface;
@@ -54,9 +54,8 @@ typedef std::shared_ptr<MCObject> MCObjectPtr;
 class MCObject
 {
 public:
-
     //! Hash container for contacts. Prefer map here for iteration performance.
-    typedef std::map<MCObject *, std::vector<MCContact *> > ContactHash;
+    typedef std::map<MCObject *, std::vector<MCContact *>> ContactHash;
 
     /*! Constructor.
      *  \param typeId Type name string e.g. "CAR". All identical objects should have the same typeName. */
@@ -271,9 +270,9 @@ public:
 
     //! Add child object. Used on composite objects.
     void addChildObject(
-        MCObjectPtr object,
-        const MCVector3dF & relativeLocation = MCVector3dF(),
-        float relativeAngle = 0);
+      MCObjectPtr object,
+      const MCVector3dF & relativeLocation = MCVector3dF(),
+      float relativeAngle = 0);
 
     //! Remove child object.
     void removeChildObject(MCObject & object);
@@ -294,7 +293,6 @@ public:
     void checkBoundaries();
 
 protected:
-
     /*! Event handler.
      *  \param pEvent Event to be handled.
      *  \return true if event was handled. */
@@ -316,7 +314,6 @@ protected:
     virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent & event);
 
 private:
-
     float calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
 
     /*! Cache range of objectGrid cells the object is touching.
@@ -399,7 +396,7 @@ private:
 
     MCShapePtr m_shape;
 
-    typedef std::vector<MCObject * > TimerEventObjectsList;
+    typedef std::vector<MCObject *> TimerEventObjectsList;
 
     static TimerEventObjectsList m_timerEventObjects;
 

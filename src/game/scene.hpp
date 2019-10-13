@@ -23,8 +23,8 @@
 #include "race.hpp"
 #include "timingoverlay.hpp"
 
-#include <QObject>
 #include <MCCamera>
+#include <QObject>
 #include <memory>
 #include <vector>
 
@@ -58,7 +58,6 @@ class Scene : public QObject
     Q_OBJECT
 
 public:
-
     static const int NUM_CARS = 12;
 
     //! Constructor.
@@ -108,7 +107,6 @@ signals:
     void listenerLocationChanged(float x, float y);
 
 private:
-
     void addCarsToWorld();
 
     void addTrackObjectsToWorld();

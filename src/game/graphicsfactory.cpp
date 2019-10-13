@@ -17,8 +17,8 @@
 
 #include <MCAssetManager>
 #include <MCSurface>
-#include <MCSurfaceMetaData>
 #include <MCSurfaceManager>
+#include <MCSurfaceMetaData>
 
 // These are needed to generate the number plate surface on top of the car.
 #include <QFont>
@@ -31,7 +31,7 @@
 MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
 {
     static const std::vector<std::string> numberPlates(
-        {"1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x"});
+      { "1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x" });
     assert(index < numberPlates.size());
 
     const int pixmapWidth = 32;
@@ -50,22 +50,22 @@ MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
     painter.setFont(font);
     painter.setPen(QColor(0, 0, 0));
     painter.drawText(
-        0,
-        0,
-        pixmapWidth,
-        pixmapHeight,
-        Qt::AlignCenter,
-        numberPlates.at(index).c_str());
+      0,
+      0,
+      pixmapWidth,
+      pixmapHeight,
+      Qt::AlignCenter,
+      numberPlates.at(index).c_str());
 
     painter.end();
 
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height = {9, true};
-    surfaceData.width = {9, true};
-    surfaceData.minFilter = {GL_LINEAR, true};
-    surfaceData.magFilter = {GL_LINEAR, true};
+    surfaceData.height = { 9, true };
+    surfaceData.width = { 9, true };
+    surfaceData.minFilter = { GL_LINEAR, true };
+    surfaceData.magFilter = { GL_LINEAR, true };
     surfaceData.handle = "Number" + std::to_string(index);
 
     return MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
@@ -73,7 +73,7 @@ MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
 
 MCSurface & GraphicsFactory::generateMinimapMarker()
 {
-    const int pixmapWidth  = 64;
+    const int pixmapWidth = 64;
     const int pixmapHeight = 64;
 
     QPixmap markerPixmap(pixmapWidth, pixmapHeight);
@@ -90,10 +90,10 @@ MCSurface & GraphicsFactory::generateMinimapMarker()
     // Note, that the size of the pixmap doesn't affect the size of the actual
     // surface / texture rendering that pixmap.
     MCSurfaceMetaData surfaceData;
-    surfaceData.height = {9, true};
-    surfaceData.width = {9, true};
-    surfaceData.minFilter = {GL_LINEAR, true};
-    surfaceData.magFilter = {GL_LINEAR, true};
+    surfaceData.height = { 9, true };
+    surfaceData.width = { 9, true };
+    surfaceData.minFilter = { GL_LINEAR, true };
+    surfaceData.magFilter = { GL_LINEAR, true };
     surfaceData.handle = "Minimap";
 
     return MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, markerPixmap.toImage());

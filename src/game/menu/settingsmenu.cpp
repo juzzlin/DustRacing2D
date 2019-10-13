@@ -17,8 +17,8 @@
 
 #include "audioworker.hpp"
 #include "confirmationmenu.hpp"
-#include "keyconfigmenu.hpp"
 #include "game.hpp"
+#include "keyconfigmenu.hpp"
 #include "renderer.hpp"
 #include "resolutionmenu.hpp"
 #include "settings.hpp"
@@ -47,12 +47,11 @@
 #endif
 
 static const int ITEM_HEIGHT_DIV = 10;
-static const int ITEM_TEXT_SIZE  = 20;
+static const int ITEM_TEXT_SIZE = 20;
 
 class ResetAction : public MTFH::MenuItemAction
 {
 public:
-
     enum class Type
     {
         Times,
@@ -61,13 +60,12 @@ public:
     };
 
     ResetAction(Type type, std::shared_ptr<ConfirmationMenu> menu)
-    : m_type(type)
-    , m_confirmationMenu(menu)
+      : m_type(type)
+      , m_confirmationMenu(menu)
     {
     }
 
 private:
-
     //! \reimp
     void fire()
     {
@@ -79,11 +77,10 @@ private:
             MenuManager::instance().pushMenu(m_confirmationMenu->id());
             m_confirmationMenu->setText(QObject::tr("Reset best positions?").toUpper().toStdWString());
             m_confirmationMenu->setAcceptAction(
-                []()
-                {
-                    juzzlin::L().info() << "Reset positions selected.";
-                    Settings::instance().resetBestPos();
-                });
+              []() {
+                  juzzlin::L().info() << "Reset positions selected.";
+                  Settings::instance().resetBestPos();
+              });
             m_confirmationMenu->setCurrentIndex(1);
             break;
 
@@ -91,12 +88,11 @@ private:
             MenuManager::instance().pushMenu(m_confirmationMenu->id());
             m_confirmationMenu->setText(QObject::tr("Reset record times?").toUpper().toStdWString());
             m_confirmationMenu->setAcceptAction(
-                []()
-                {
-                    juzzlin::L().info() << "Reset times selected.";
-                    Settings::instance().resetLapRecords();
-                    Settings::instance().resetRaceRecords();
-                });
+              []() {
+                  juzzlin::L().info() << "Reset times selected.";
+                  Settings::instance().resetLapRecords();
+                  Settings::instance().resetRaceRecords();
+              });
             m_confirmationMenu->setCurrentIndex(1);
             break;
 
@@ -104,8 +100,7 @@ private:
             MenuManager::instance().pushMenu(m_confirmationMenu->id());
             m_confirmationMenu->setText(QObject::tr("Reset unlocked tracks?").toUpper().toStdWString());
             m_confirmationMenu->setAcceptAction(
-                []()
-                {
+              []() {
                     juzzlin::L().info() << "Reset tracks selected.";
                     TrackLoader & tl = TrackLoader::instance();
                     for (unsigned int i = 0; i < tl.tracks(); i++)
@@ -116,7 +111,7 @@ private:
                             track.trackData().setIsLocked(true);
                         }
                 }
-                Settings::instance().resetTrackUnlockStatuses();});
+                Settings::instance().resetTrackUnlockStatuses(); });
             m_confirmationMenu->setCurrentIndex(1);
             break;
         }
@@ -150,18 +145,18 @@ static const char * VSYNC_MENU_ID = "vsyncMenu";
 static const char * WINDOWED_RESOLUTION_MENU_ID = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
-: SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
-, m_confirmationMenu(new ConfirmationMenu(CONFIRMATION_MENU_ID, width, height))
-, m_fpsMenu(new SurfaceMenu("settingsBack", FPS_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_fullScreenResolutionMenu(new ResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true))
-, m_windowedResolutionMenu(new ResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false))
-, m_gameModeMenu(new SurfaceMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_gfxMenu(new SurfaceMenu("settingsBack", GFX_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_resetMenu(new SurfaceMenu("settingsBack", RESET_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_sfxMenu(new SurfaceMenu("settingsBack", SFX_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_splitTypeMenu(new SurfaceMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList))
-, m_vsyncMenu(new VSyncMenu(m_confirmationMenu, VSYNC_MENU_ID, width, height))
-, m_keyConfigMenu(new KeyConfigMenu(KEY_CONFIG_MENU_ID, width, height))
+  : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
+  , m_confirmationMenu(new ConfirmationMenu(CONFIRMATION_MENU_ID, width, height))
+  , m_fpsMenu(new SurfaceMenu("settingsBack", FPS_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_fullScreenResolutionMenu(new ResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true))
+  , m_windowedResolutionMenu(new ResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false))
+  , m_gameModeMenu(new SurfaceMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_gfxMenu(new SurfaceMenu("settingsBack", GFX_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_resetMenu(new SurfaceMenu("settingsBack", RESET_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_sfxMenu(new SurfaceMenu("settingsBack", SFX_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_splitTypeMenu(new SurfaceMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_vsyncMenu(new VSyncMenu(m_confirmationMenu, VSYNC_MENU_ID, width, height))
+  , m_keyConfigMenu(new KeyConfigMenu(KEY_CONFIG_MENU_ID, width, height))
 {
     populate(width, height);
 
@@ -197,12 +192,12 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
 void SettingsMenu::populate(int width, int height)
 {
     const int itemHeight = height / ITEM_HEIGHT_DIV;
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
-    using MTFH::MenuItemViewPtr;
     using MTFH::MenuItemActionPtr;
+    using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toUpper().toStdWString());
     gameMode->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gameMode)));
@@ -240,30 +235,28 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toUpper().toStdWString());
     fps30->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps30)));
     fps30->setAction(
-        []()
-        {
-            juzzlin::L().info() << "30 fps selected.";
-            Game::instance().setFps(Game::Fps::Fps30);
-            Settings::instance().saveValue(Settings::fpsKey(), 30);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "30 fps selected.";
+          Game::instance().setFps(Game::Fps::Fps30);
+          Settings::instance().saveValue(Settings::fpsKey(), 30);
+          MenuManager::instance().popMenu();
+      });
 
     MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toUpper().toStdWString());
     fps60->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps60)));
     fps60->setAction(
-        []()
-        {
-            juzzlin::L().info() << "60 fps selected.";
-            Game::instance().setFps(Game::Fps::Fps60);
-            Settings::instance().saveValue(Settings::fpsKey(), 60);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "60 fps selected.";
+          Game::instance().setFps(Game::Fps::Fps60);
+          Settings::instance().saveValue(Settings::fpsKey(), 60);
+          MenuManager::instance().popMenu();
+      });
 
     m_fpsMenu->addItem(MTFH::MenuItemPtr(fps30));
     m_fpsMenu->addItem(MTFH::MenuItemPtr(fps60));
@@ -281,51 +274,47 @@ void SettingsMenu::populateFpsMenu(int width, int height)
 void SettingsMenu::populateGameModeMenu(int width, int height)
 {
     const int itemHeight = height / ITEM_HEIGHT_DIV;
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toUpper().toStdWString());
     twoPlayers->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *twoPlayers)));
     twoPlayers->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Two player race selected.";
-            Game::instance().setMode(Game::Mode::TwoPlayerRace);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Two player race selected.";
+          Game::instance().setMode(Game::Mode::TwoPlayerRace);
+          MenuManager::instance().popMenu();
+      });
 
     MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toUpper().toStdWString());
     onePlayer->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onePlayer)));
     onePlayer->setAction(
-        []()
-        {
-            juzzlin::L().info() << "One player race selected.";
-            Game::instance().setMode(Game::Mode::OnePlayerRace);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "One player race selected.";
+          Game::instance().setMode(Game::Mode::OnePlayerRace);
+          MenuManager::instance().popMenu();
+      });
 
     MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toUpper().toStdWString());
     timeTrial->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *timeTrial)));
     timeTrial->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Time Trial selected.";
-            Game::instance().setMode(Game::Mode::TimeTrial);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Time Trial selected.";
+          Game::instance().setMode(Game::Mode::TimeTrial);
+          MenuManager::instance().popMenu();
+      });
 
     MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toUpper().toStdWString());
     duel->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *duel)));
     duel->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Duel selected.";
-            Game::instance().setMode(Game::Mode::Duel);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Duel selected.";
+          Game::instance().setMode(Game::Mode::Duel);
+          MenuManager::instance().popMenu();
+      });
 
     using MTFH::MenuItemPtr;
 
@@ -337,33 +326,31 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
 
 void SettingsMenu::populateSplitTypeMenu(int width, int height)
 {
-    const int numItems   = 2;
+    const int numItems = 2;
     const int itemHeight = height / (numItems + 4);
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toUpper().toStdWString());
     vertical->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vertical)));
     vertical->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Vertical split selected.";
-            Game::instance().setSplitType(Game::SplitType::Vertical);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Vertical split selected.";
+          Game::instance().setSplitType(Game::SplitType::Vertical);
+          MenuManager::instance().popMenu();
+      });
 
     MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toUpper().toStdWString());
     horizontal->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *horizontal)));
     horizontal->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Horizontal split selected.";
-            Game::instance().setSplitType(Game::SplitType::Horizontal);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Horizontal split selected.";
+          Game::instance().setSplitType(Game::SplitType::Horizontal);
+          MenuManager::instance().popMenu();
+      });
 
     m_splitTypeMenu->addItem(MTFH::MenuItemPtr(horizontal));
     m_splitTypeMenu->addItem(MTFH::MenuItemPtr(vertical));
@@ -372,12 +359,12 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
 void SettingsMenu::populateGfxMenu(int width, int height)
 {
     const int itemHeight = height / ITEM_HEIGHT_DIV;
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
     using MTFH::MenuItemPtr;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toUpper().toStdWString());
     selectFullScreenResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFullScreenResolution)));
@@ -409,35 +396,33 @@ void SettingsMenu::populateGfxMenu(int width, int height)
 void SettingsMenu::populateSfxMenu(int width, int height)
 {
     const int itemHeight = height / ITEM_HEIGHT_DIV;
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuManager;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * offItem = new MenuItem(width, itemHeight, QObject::tr("Off").toUpper().toStdWString());
     offItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *offItem)));
     offItem->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Sounds off selected.";
-            Game::instance().audioWorker().setEnabled(false);
-            Settings::instance().saveValue(Settings::soundsKey(), false);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Sounds off selected.";
+          Game::instance().audioWorker().setEnabled(false);
+          Settings::instance().saveValue(Settings::soundsKey(), false);
+          MenuManager::instance().popMenu();
+      });
 
     m_sfxMenu->addItem(MTFH::MenuItemPtr(offItem));
 
     MenuItem * onItem = new MenuItem(width, itemHeight, QObject::tr("On").toUpper().toStdWString());
     onItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onItem)));
     onItem->setAction(
-        []()
-        {
-            juzzlin::L().info() << "Sounds on selected.";
-            Game::instance().audioWorker().setEnabled(true);
-            Settings::instance().saveValue(Settings::soundsKey(), true);
-            MenuManager::instance().popMenu();
-        });
+      []() {
+          juzzlin::L().info() << "Sounds on selected.";
+          Game::instance().audioWorker().setEnabled(true);
+          Settings::instance().saveValue(Settings::soundsKey(), true);
+          MenuManager::instance().popMenu();
+      });
 
     m_sfxMenu->addItem(MTFH::MenuItemPtr(onItem));
 
@@ -454,28 +439,28 @@ void SettingsMenu::populateSfxMenu(int width, int height)
 void SettingsMenu::populateResetMenu(int width, int height)
 {
     const int itemHeight = height / ITEM_HEIGHT_DIV;
-    const int textSize   = ITEM_TEXT_SIZE;
+    const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuItemPtr;
     using MTFH::MenuItemActionPtr;
-    using MTFH::MenuManager;
+    using MTFH::MenuItemPtr;
     using MTFH::MenuItemViewPtr;
+    using MTFH::MenuManager;
 
     MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toUpper().toStdWString());
     resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
     resetRecordTimes->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::Type::Times, m_confirmationMenu)));
+      MenuItemActionPtr(new ResetAction(ResetAction::Type::Times, m_confirmationMenu)));
 
     MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toUpper().toStdWString());
     resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
     resetBestPositions->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::Type::Positions, m_confirmationMenu)));
+      MenuItemActionPtr(new ResetAction(ResetAction::Type::Positions, m_confirmationMenu)));
 
     MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toUpper().toStdWString());
     resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
     resetUnlockedTracks->setAction(
-        MenuItemActionPtr(new ResetAction(ResetAction::Type::Tracks, m_confirmationMenu)));
+      MenuItemActionPtr(new ResetAction(ResetAction::Type::Tracks, m_confirmationMenu)));
 
     m_resetMenu->addItem(MenuItemPtr(resetRecordTimes));
     m_resetMenu->addItem(MenuItemPtr(resetBestPositions));

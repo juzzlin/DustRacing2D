@@ -21,9 +21,9 @@
 #include <MCSurface>
 
 CarStatusView::CarStatusView()
-: m_body(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorBody"))
-, m_tires(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorTires"))
-, m_car(nullptr)
+  : m_body(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorBody"))
+  , m_tires(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorTires"))
+  , m_car(nullptr)
 {
     setDimensions(m_body.height(), m_tires.width());
 

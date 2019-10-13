@@ -60,7 +60,7 @@ unsigned int Route::numNodes() const
 
 TargetNodeBasePtr Route::get(unsigned int index) const
 {
-    assert (index < numNodes());
+    assert(index < numNodes());
     return m_route[index];
 }
 
@@ -74,10 +74,9 @@ void Route::buildFromVector(RouteVector & routeVector)
     clear();
 
     std::sort(routeVector.begin(), routeVector.end(),
-        [] (const TargetNodeBasePtr lhs, const TargetNodeBasePtr rhs)
-        {
-            return lhs->index() < rhs->index();
-        });
+              [](const TargetNodeBasePtr lhs, const TargetNodeBasePtr rhs) {
+                  return lhs->index() < rhs->index();
+              });
 
     for (TargetNodeBasePtr tnode : routeVector)
     {

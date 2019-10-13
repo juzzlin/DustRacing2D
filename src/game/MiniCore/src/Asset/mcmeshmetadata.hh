@@ -31,7 +31,8 @@
 struct MCMeshMetaData
 {
     MCMeshMetaData()
-    {}
+    {
+    }
 
     //! Handle of the mesh.
     std::string handle;

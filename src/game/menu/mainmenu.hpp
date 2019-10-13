@@ -20,7 +20,9 @@
 
 #include "surfacemenu.hpp"
 
-namespace MTFH { class MenuManager; }
+namespace MTFH {
+class MenuManager;
+}
 class Scene;
 
 //! The main menu of the game.
@@ -29,7 +31,6 @@ class MainMenu : public QObject, public SurfaceMenu
     Q_OBJECT
 
 public:
-
     static std::string MenuId;
 
     //! Constructor.
@@ -40,7 +41,6 @@ signals:
     void exitGameRequested();
 
 private:
-
     void createMenuItems();
 
     void createSubMenus();

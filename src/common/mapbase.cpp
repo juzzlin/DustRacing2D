@@ -21,10 +21,11 @@
 #include <QPointF>
 
 MapBase::MapBase(unsigned int cols, unsigned int rows)
-    : m_cols(cols)
-    , m_rows(rows)
-    , m_map(rows, TrackTileRow(m_cols, nullptr))
-{}
+  : m_cols(cols)
+  , m_rows(rows)
+  , m_map(rows, TrackTileRow(m_cols, nullptr))
+{
+}
 
 unsigned int MapBase::cols() const
 {

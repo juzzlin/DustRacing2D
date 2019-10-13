@@ -20,11 +20,11 @@
 #ifndef MCOBJECTRENDERERBASE_HH
 #define MCOBJECTRENDERERBASE_HH
 
-#include "mcobject.hh"
-#include "mcglobjectbase.hh"
-#include "mcglvertex.hh"
 #include "mcglcolor.hh"
+#include "mcglobjectbase.hh"
 #include "mcgltexcoord.hh"
+#include "mcglvertex.hh"
+#include "mcobject.hh"
 #include "mcrenderlayer.hh"
 
 #include <memory>
@@ -32,7 +32,6 @@
 class MCObjectRendererBase : public MCGLObjectBase
 {
 public:
-
     explicit MCObjectRendererBase(int maxBatchSize = 1024);
 
     virtual ~MCObjectRendererBase();
@@ -56,7 +55,6 @@ public:
     bool hasShadow() const;
 
 protected:
-
     //! Set current batch size
     void setBatchSize(int batchSize);
 
@@ -73,7 +71,6 @@ protected:
     GLenum alphaDst() const;
 
 private:
-
     DISABLE_COPY(MCObjectRendererBase);
     DISABLE_ASSI(MCObjectRendererBase);
 

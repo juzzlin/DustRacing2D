@@ -76,4 +76,3 @@ Objects::ObjectVector::const_iterator Objects::cend() const
 {
     return m_objects.cend();
 }
-

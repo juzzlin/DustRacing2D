@@ -17,8 +17,8 @@
 #define GAME_HPP
 
 #include <QObject>
-#include <QTimer>
 #include <QTime>
+#include <QTimer>
 #include <QTranslator>
 
 #include <MCWorld>
@@ -44,7 +44,6 @@ class Game : public QObject
     Q_OBJECT
 
 public:
-
     enum class Mode
     {
         OnePlayerRace,
@@ -128,7 +127,6 @@ private slots:
     void togglePause();
 
 private:
-
     void addTrackSearchPaths();
 
     void adjustSceneSize(int hRes, int vRes);

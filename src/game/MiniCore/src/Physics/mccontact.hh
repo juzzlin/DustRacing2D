@@ -20,9 +20,9 @@
 #ifndef MCCONTACT_HH
 #define MCCONTACT_HH
 
-#include "mcvector2d.hh"
-#include "mcrecycler.hh"
 #include "mcmacros.hh"
+#include "mcrecycler.hh"
+#include "mcvector2d.hh"
 
 class MCObject;
 
@@ -36,7 +36,6 @@ class MCObject;
 class MCContact
 {
 public:
-
     //! Return a new (empty) contact
     static MCContact & create();
 
@@ -50,9 +49,9 @@ public:
      *  \param interpenetrationDepth The depth of interpenetration
      */
     void init(MCObject & object,
-        const MCVector2d<float> & contactPoint,
-        const MCVector2d<float> & contactNormal,
-        float interpenetrationDepth);
+              const MCVector2d<float> & contactPoint,
+              const MCVector2d<float> & contactNormal,
+              float interpenetrationDepth);
 
     //! Return the contacting object
     MCObject & object() const;
@@ -67,7 +66,6 @@ public:
     float interpenetrationDepth() const;
 
 private:
-
     //! Constructor disabled: use MCContact::create()
     MCContact();
 

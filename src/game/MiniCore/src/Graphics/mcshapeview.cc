@@ -22,12 +22,13 @@
 MCTypeRegistry MCShapeView::m_typeRegistry;
 
 MCShapeView::MCShapeView(const std::string & handle)
-    : m_viewId(MCShapeView::m_typeRegistry.registerType(handle))
-    , m_shaderProgram(MCGLScene::instance().defaultShaderProgram())
-    , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
-    , m_hasShadow(true)
-    , m_scale(1.0f, 1.0f, 1.0f)
-{}
+  : m_viewId(MCShapeView::m_typeRegistry.registerType(handle))
+  , m_shaderProgram(MCGLScene::instance().defaultShaderProgram())
+  , m_shadowShaderProgram(MCGLScene::instance().defaultShadowShaderProgram())
+  , m_hasShadow(true)
+  , m_scale(1.0f, 1.0f, 1.0f)
+{
+}
 
 MCShapeView::~MCShapeView()
 {

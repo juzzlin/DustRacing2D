@@ -36,7 +36,6 @@
 class MCCamera
 {
 public:
-
     //! Default constructor.
     MCCamera();
 
@@ -128,36 +127,36 @@ public:
     //! camera window
     bool isVisible(const MCBBox<float> & r) const
     {
-        const float w2 = r.width()  / 2;
+        const float w2 = r.width() / 2;
         const float h2 = r.height() / 2;
 
         // Give some space to possible shadows, that's why we're adding w2 and h2.
         return MCBBox<float>(
-            m_pos.i() - m_halfW - w2,
-            m_pos.j() - m_halfH - h2,
-            m_pos.i() + m_halfW + w2,
-            m_pos.j() + m_halfH + h2).intersects(r);
+                 m_pos.i() - m_halfW - w2,
+                 m_pos.j() - m_halfH - h2,
+                 m_pos.i() + m_halfW + w2,
+                 m_pos.j() + m_halfH + h2)
+          .intersects(r);
     }
 
 private:
+    //! Disable copy constructor
+    DISABLE_COPY(MCCamera);
 
-  //! Disable copy constructor
-  DISABLE_COPY(MCCamera);
+    //! Disable assignment
+    DISABLE_ASSI(MCCamera);
 
-  //! Disable assignment
-  DISABLE_ASSI(MCCamera);
+    //! Width and height of the camera window
+    float m_w, m_h;
 
-  //! Width and height of the camera window
-  float m_w, m_h;
+    //! Width and height of the camera window divided by 2
+    float m_halfW, m_halfH;
 
-  //! Width and height of the camera window divided by 2
-  float m_halfW, m_halfH;
+    //! Coordinates of the center of the camera window
+    MCVector2dF m_pos;
 
-  //! Coordinates of the center of the camera window
-  MCVector2dF m_pos;
-
-  //! Maximum camera coordinates
-  float m_maxX, m_maxY;
+    //! Maximum camera coordinates
+    float m_maxX, m_maxY;
 };
 
 #endif // MCCAMERA_HH

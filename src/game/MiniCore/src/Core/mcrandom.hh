@@ -22,7 +22,6 @@
 
 #include "mcmacros.hh"
 
-
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
@@ -34,7 +33,6 @@ class MCRandomImpl;
 class MCRandom
 {
 public:
-
     //! Get next random value [0.0..1.0] in the table
     static float getValue();
 
@@ -51,7 +49,6 @@ public:
     static void setSeed(int seed);
 
 private:
-
     //! Constructor disabled
     MCRandom();
 

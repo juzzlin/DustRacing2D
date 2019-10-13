@@ -35,7 +35,6 @@ class Startlights : public QObject
     Q_OBJECT
 
 public:
-
     //! Startlights animation sequence states.
     enum State
     {
@@ -77,8 +76,7 @@ private slots:
     void updateAnimation();
 
 private:
-
-    typedef std::map<State, std::function<void()> > StateToFunctionMap;
+    typedef std::map<State, std::function<void()>> StateToFunctionMap;
     StateToFunctionMap m_stateToFunctionMap;
 
     void stateInit();

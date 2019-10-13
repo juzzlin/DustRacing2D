@@ -23,11 +23,10 @@
 #include <cmath>
 #include <vector>
 
-namespace
-{
-    const unsigned int LutSize = 7200;
-    const float PI = 3.1415926536f;
-}
+namespace {
+const unsigned int LutSize = 7200;
+const float PI = 3.1415926536f;
+} // namespace
 
 //! Implementation class for MCTrigonom
 class MCTrigonomImpl
@@ -44,14 +43,15 @@ private:
 std::unique_ptr<MCTrigonomImpl> const MCTrigonom::m_pImpl(new MCTrigonomImpl);
 
 MCTrigonomImpl::MCTrigonomImpl()
-: m_sin(LutSize, 0)
-, m_cos(LutSize, 0)
+  : m_sin(LutSize, 0)
+  , m_cos(LutSize, 0)
 {
-    for (unsigned int i = 0; i < LutSize; i++) {
+    for (unsigned int i = 0; i < LutSize; i++)
+    {
         MCTrigonomImpl::m_sin.at(i) =
-            std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
+          std::sin(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
         MCTrigonomImpl::m_cos.at(i) =
-            std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
+          std::cos(MCTrigonom::degToRad(TO_FLOAT(i) / 10.0f - 3600));
     }
 }
 

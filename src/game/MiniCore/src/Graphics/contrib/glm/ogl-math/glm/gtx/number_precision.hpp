@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,9 +31,9 @@
 ///
 /// @defgroup gtx_number_precision GLM_GTX_number_precision: Number precision
 /// @ingroup gtx
-/// 
+///
 /// @brief Defined size types.
-/// 
+///
 /// <glm/gtx/number_precision.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -44,45 +44,44 @@
 #include "../glm.hpp"
 #include "../gtc/type_precision.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_number_precision extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_number_precision extension included")
 #endif
 
-namespace glm{
-namespace gtx
-{
-	/////////////////////////////
-	// Unsigned int vector types 
+namespace glm {
+namespace gtx {
+/////////////////////////////
+// Unsigned int vector types
 
-	/// @addtogroup gtx_number_precision
-	/// @{
+/// @addtogroup gtx_number_precision
+/// @{
 
-	typedef u8			u8vec1;		//!< \brief 8bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
-	typedef u16			u16vec1;    //!< \brief 16bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
-	typedef u32			u32vec1;    //!< \brief 32bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
-	typedef u64			u64vec1;    //!< \brief 64bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
+typedef u8 u8vec1; //!< \brief 8bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
+typedef u16 u16vec1; //!< \brief 16bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
+typedef u32 u32vec1; //!< \brief 32bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
+typedef u64 u64vec1; //!< \brief 64bit unsigned integer scalar. (from GLM_GTX_number_precision extension)
 
-	//////////////////////
-	// Float vector types 
+//////////////////////
+// Float vector types
 
-	typedef f16			f16vec1;    //!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f32			f32vec1;    //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f64			f64vec1;    //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f16 f16vec1; //!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f32 f32vec1; //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f64 f64vec1; //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
 
-	//////////////////////
-	// Float matrix types 
+//////////////////////
+// Float matrix types
 
-	typedef f16			f16mat1;    //!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f16			f16mat1x1;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f32			f32mat1;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f32			f32mat1x1;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f64			f64mat1;	//!< \brief Double-precision floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f64			f64mat1x1;	//!< \brief Double-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f16 f16mat1; //!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f16 f16mat1x1; //!< \brief Half-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f32 f32mat1; //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f32 f32mat1x1; //!< \brief Single-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f64 f64mat1; //!< \brief Double-precision floating-point scalar. (from GLM_GTX_number_precision extension)
+typedef f64 f64mat1x1; //!< \brief Double-precision floating-point scalar. (from GLM_GTX_number_precision extension)
 
-	/// @}
-}//namespace gtx
-}//namespace glm
+/// @}
+} //namespace gtx
+} //namespace glm
 
 #include "number_precision.inl"
 
-#endif//GLM_GTX_number_precision
+#endif //GLM_GTX_number_precision

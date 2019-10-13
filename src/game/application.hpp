@@ -23,7 +23,6 @@ class Application : public QApplication
     Q_OBJECT
 
 public:
-
     explicit Application(int & argc, char ** argv);
 
     /** Re-implementing this is required to make exceptions work with slots. */

@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,9 +32,9 @@
 ///
 /// @defgroup gtx_string_cast GLM_GTX_string_cast: String cast
 /// @ingroup gtx
-/// 
+///
 /// @brief Setup strings for GLM type values
-/// 
+///
 /// <glm/gtx/string_cast.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -48,23 +48,22 @@
 #include "../gtx/quaternion.hpp"
 #include <string>
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_string_cast extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_string_cast extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_string_cast
-	/// @{
+namespace glm {
+/// @addtogroup gtx_string_cast
+/// @{
 
-	/// Create a string from a GLM type value.
-	/// From GLM_GTX_string_cast extension.
-	template <typename genType> 
-	std::string to_string(genType const & x);
+/// Create a string from a GLM type value.
+/// From GLM_GTX_string_cast extension.
+template<typename genType>
+std::string to_string(genType const & x);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "string_cast.inl"
 
-#endif//GLM_GTX_string_cast
+#endif //GLM_GTX_string_cast

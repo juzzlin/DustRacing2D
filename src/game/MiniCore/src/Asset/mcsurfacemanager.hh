@@ -71,7 +71,6 @@ class MCSurface;
 class MCSurfaceManager
 {
 public:
-
     //! Consturctor
     MCSurfaceManager();
 
@@ -84,7 +83,7 @@ public:
      *  baseDataPath + baseImagePath + fileName. baseImagePath and the fileName are
      *  defined in the input file. */
     virtual void load(
-        const std::string & configFilePath, const std::string & baseDataPath);
+      const std::string & configFilePath, const std::string & baseDataPath);
 
     /*! Returns a surface object associated with given strId.
      *  Corresponding OpenGL texture handle can be obtained
@@ -94,14 +93,13 @@ public:
      *  \return Reference to the corresponding MCSurface.
      *  \throws std::runtime_error on failure. */
     MCSurface & surface(
-        const std::string & handle) const;
+      const std::string & handle) const;
 
     /*! Creates an MCSurface containing an OpenGL texture from a QImage + texture meta data.
      *  MCSurfaceManager keeps the ownership. */
     MCSurface & createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image);
 
 private:
-
     //! Apply alpha clamp (set alpha values off based on the given limit).
     void applyAlphaClamp(QImage & textureImage, unsigned int a) const;
 

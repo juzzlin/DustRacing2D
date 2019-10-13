@@ -33,16 +33,16 @@
 #include <vector>
 
 MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
-: m_assetManager(assetManager)
+  : m_assetManager(assetManager)
 {
 }
 
 MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
     MCShapeViewPtr view;
-    MCShapePtr     shape;
-    MCSurface    & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
-    MCObject     * object  = nullptr;
+    MCShapePtr shape;
+    MCSurface & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
+    MCObject * object = nullptr;
 
     switch (data.shape())
     {
@@ -89,9 +89,9 @@ MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
 MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
 {
     MCShapeViewPtr view;
-    MCShapePtr     shape;
-    MCObject     * object = nullptr;
-    MCMesh       & mesh   = m_assetManager.meshManager().mesh(data.meshId());
+    MCShapePtr shape;
+    MCObject * object = nullptr;
+    MCMesh & mesh = m_assetManager.meshManager().mesh(data.meshId());
 
     switch (data.shape())
     {
@@ -172,7 +172,7 @@ MCObjectPtr MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr vie
 }
 
 void MCObjectFactory::setCommonProperties(
-    MCObject & object, const MCObjectData & data) const
+  MCObject & object, const MCObjectData & data) const
 {
     object.physicsComponent().setMass(data.mass(), data.stationary());
     object.physicsComponent().setXYFriction(data.xyFriction());

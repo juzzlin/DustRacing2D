@@ -20,7 +20,7 @@
 #include "mctyperegistry.hh"
 
 MCTypeRegistry::MCTypeRegistry()
-    : m_typeIdCount(1)
+  : m_typeIdCount(1)
 {
 }
 

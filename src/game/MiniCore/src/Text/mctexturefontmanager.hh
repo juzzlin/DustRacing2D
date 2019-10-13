@@ -25,9 +25,9 @@
 
 #include "mcmacros.hh"
 
-class  MCTextureFont;
+class MCTextureFont;
 struct MCTextureFontData;
-class  MCSurfaceManager;
+class MCSurfaceManager;
 
 /*! A manager class for textured monospace fonts.
  *
@@ -78,7 +78,6 @@ class  MCSurfaceManager;
 class MCTextureFontManager
 {
 public:
-
     //! Constructor.
     MCTextureFontManager(const MCSurfaceManager & surfaceManager);
 
@@ -101,7 +100,6 @@ public:
     void createFontFromData(const MCTextureFontData & data);
 
 private:
-
     //! Disable copy constructor
     DISABLE_COPY(MCTextureFontManager);
 

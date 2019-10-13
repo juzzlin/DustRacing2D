@@ -14,11 +14,11 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDir>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QFile>
 #include <QStringList>
 #include <QTextStream>
-#include <QDomDocument>
-#include <QDomElement>
 
 #include "../common/config.hpp"
 #include "layers.hpp"
@@ -47,15 +47,15 @@ static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
 TrackLoader * TrackLoader::m_instance = nullptr;
 
 TrackLoader::TrackLoader()
-    : m_assetManager(
-        Config::Common::dataPath,
-        (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("surfaces.conf")),
-        "",
-        (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("meshes.conf")))
-    , m_objectFactory(m_assetManager)
-    , m_trackObjectFactory(m_objectFactory)
-    , m_paths()
-    , m_tracks()
+  : m_assetManager(
+    Config::Common::dataPath,
+    (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("surfaces.conf")),
+    "",
+    (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("meshes.conf")))
+  , m_objectFactory(m_assetManager)
+  , m_trackObjectFactory(m_objectFactory)
+  , m_paths()
+  , m_tracks()
 {
     assert(!TrackLoader::m_instance);
     TrackLoader::m_instance = this;
@@ -93,7 +93,7 @@ int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficul
                 numLoaded++;
 
                 juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index="
-                    << trackData->index();
+                                    << trackData->index();
             }
             else
             {
@@ -124,8 +124,7 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
     // Check if the tracks are locked/unlocked.
     for (Track * track : m_tracks)
     {
-        if (!track->trackData().isUserTrack() &&
-            !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
+        if (!track->trackData().isUserTrack() && !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
         {
 #ifndef UNLOCK_ALL_TRACKS
             track->trackData().setIsLocked(true);
@@ -163,11 +162,10 @@ void TrackLoader::sortTracks()
     // Sort tracks with respect to their indices. Move user tracks to the
     // beginning of the track array.
     std::stable_sort(m_tracks.begin(), m_tracks.end(),
-        [](Track * lhs, Track * rhs) -> bool
-        {
-             const int left = lhs->trackData().isUserTrack() ? -1 : lhs->trackData().index();
-             return left < static_cast<int>(rhs->trackData().index());
-        });
+                     [](Track * lhs, Track * rhs) -> bool {
+                         const int left = lhs->trackData().isUserTrack() ? -1 : lhs->trackData().index();
+                         return left < static_cast<int>(rhs->trackData().index());
+                     });
 
     // Cross-link the tracks
     for (unsigned int i = 0; i + 1 < m_tracks.size(); i++)
@@ -201,17 +199,17 @@ TrackData * TrackLoader::loadTrack(QString path)
     if (root.nodeName() == "track")
     {
         const unsigned int cols =
-            root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
+          root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
         const unsigned int rows =
-            root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
+          root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
             const QString name =
-                root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
+              root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
 
             const bool isUserTrack =
-                root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
+              root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
 
             newData = new TrackData(name, isUserTrack, cols, rows);
             newData->setFileName(path);
@@ -222,10 +220,10 @@ TrackData * TrackLoader::loadTrack(QString path)
             std::vector<TargetNodeBasePtr> route;
 
             QDomNode node = root.firstChild();
-            while(!node.isNull())
+            while (!node.isNull())
             {
                 QDomElement element = node.toElement();
-                if(!element.isNull())
+                if (!element.isNull())
                 {
                     // Read a tile element
                     if (element.nodeName() == TrackDataBase::DataKeywords::Track::tile)
@@ -255,7 +253,7 @@ TrackData * TrackLoader::loadTrack(QString path)
 }
 
 void TrackLoader::readTile(
-    QDomElement & element, TrackData & newData)
+  QDomElement & element, TrackData & newData)
 {
     // X-coordinate in the tile matrix
     const unsigned int i = element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt();
@@ -267,7 +265,7 @@ void TrackLoader::readTile(
     assert(tile);
 
     const std::string type =
-        element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear").toStdString();
+      element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear").toStdString();
     tile->setTileType(type.c_str());
     tile->setTileTypeEnum(tileTypeEnumFromString(type.c_str()));
 
@@ -276,7 +274,7 @@ void TrackLoader::readTile(
     tile->setRotation(o);
 
     tile->setComputerHint(
-        static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toUInt()));
+      static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toUInt()));
 
     tile->setExcludeFromMinimap(element.attribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap, "0").toInt());
 
@@ -289,8 +287,7 @@ void TrackLoader::readTile(
     try
     {
         tile->setPreviewSurface(&MCAssetManager::surfaceManager().surface(type + "Preview"));
-    }
-    catch (...)
+    } catch (...)
     {
         // Don't care
     }
@@ -299,23 +296,24 @@ void TrackLoader::readTile(
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 {
     static std::map<string, TrackTile::TileType> mappings = {
-        {"bridge", TrackTile::TT_BRIDGE},
-        {"corner90", TrackTile::TT_CORNER_90},
-        {"corner45Left", TrackTile::TT_CORNER_45_LEFT},
-        {"corner45Right", TrackTile::TT_CORNER_45_RIGHT},
-        {"straight", TrackTile::TT_STRAIGHT},
-        {"straight45Male", TrackTile::TT_STRAIGHT_45_MALE},
-        {"straight45Female", TrackTile::TT_STRAIGHT_45_FEMALE},
-        {"grass", TrackTile::TT_GRASS},
-        {"sand", TrackTile::TT_SAND},
-        {"sandGrassStraight", TrackTile::TT_SAND_GRASS_STRAIGHT},
-        {"sandGrassCorner", TrackTile::TT_SAND_GRASS_CORNER},
-        {"sandGrassCorner2", TrackTile::TT_SAND_GRASS_CORNER_2},
-        {"finish", TrackTile::TT_FINISH},
-        {"clear", TrackTile::TT_NONE}
+        { "bridge", TrackTile::TT_BRIDGE },
+        { "corner90", TrackTile::TT_CORNER_90 },
+        { "corner45Left", TrackTile::TT_CORNER_45_LEFT },
+        { "corner45Right", TrackTile::TT_CORNER_45_RIGHT },
+        { "straight", TrackTile::TT_STRAIGHT },
+        { "straight45Male", TrackTile::TT_STRAIGHT_45_MALE },
+        { "straight45Female", TrackTile::TT_STRAIGHT_45_FEMALE },
+        { "grass", TrackTile::TT_GRASS },
+        { "sand", TrackTile::TT_SAND },
+        { "sandGrassStraight", TrackTile::TT_SAND_GRASS_STRAIGHT },
+        { "sandGrassCorner", TrackTile::TT_SAND_GRASS_CORNER },
+        { "sandGrassCorner2", TrackTile::TT_SAND_GRASS_CORNER_2 },
+        { "finish", TrackTile::TT_FINISH },
+        { "clear", TrackTile::TT_NONE }
     };
 
-    if (!mappings.count(str)) {
+    if (!mappings.count(str))
+    {
         juzzlin::L().error() << "No mapping for tile '" << str << "'..";
         return TrackTile::TT_NONE;
     }

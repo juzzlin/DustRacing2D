@@ -22,8 +22,8 @@
 
 #include "mcvector2d.hh"
 
-#include <MCGLEW> // For GLenum
 #include <MCGLColor>
+#include <MCGLEW> // For GLenum
 #include <map>
 #include <string>
 

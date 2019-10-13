@@ -23,7 +23,6 @@ class Bridge;
 class BridgeTrigger : public MCObject
 {
 public:
-
     BridgeTrigger(Bridge & bridge);
 
     //! \reimp
@@ -33,7 +32,6 @@ public:
     virtual void separationEvent(MCSeparationEvent & event) override;
 
 private:
-
     Bridge & m_bridge;
 };
 

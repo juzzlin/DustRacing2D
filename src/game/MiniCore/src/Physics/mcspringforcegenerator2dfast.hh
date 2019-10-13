@@ -38,28 +38,26 @@
 class MCSpringForceGenerator2dFast : public MCForceGenerator
 {
 public:
-
-  /*! Constructor
+    /*! Constructor
    * \param object2 The another end of the spring.
    * \param coeff   Spring coefficient (F = -coeff * x)
    * \param length  Nominal length of the spring.
    * \param min     Min length of the spring.
    * \param max     Max length of the spring.
    */
-  MCSpringForceGenerator2dFast(MCObject & object2,
-      float coeff, float length, float min, float max);
+    MCSpringForceGenerator2dFast(MCObject & object2,
+                                 float coeff, float length, float min, float max);
 
-  //! Destructor
-  virtual ~MCSpringForceGenerator2dFast();
+    //! Destructor
+    virtual ~MCSpringForceGenerator2dFast();
 
-  /*! \brief Update the force with respect to object1.
+    /*! \brief Update the force with respect to object1.
    * Only x and y coordinates are considered.
    * NOTE!: You must create generators for the both ends of the spring.
    */
-  virtual void updateForce(MCObject & object1);
+    virtual void updateForce(MCObject & object1);
 
 private:
-
     DISABLE_COPY(MCSpringForceGenerator2dFast);
     DISABLE_ASSI(MCSpringForceGenerator2dFast);
     MCObject * m_p2;

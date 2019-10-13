@@ -17,15 +17,16 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobject.hh"
 #include "mccollisionevent.hh"
+#include "mcobject.hh"
 
 unsigned int MCCollisionEvent::m_typeId = MCEvent::registerType();
 
 MCCollisionEvent::MCCollisionEvent(MCObject & collidingObject, MCVector3dF contactPoint)
-: m_collidingObject(collidingObject)
-, m_contactPoint(contactPoint)
-{}
+  : m_collidingObject(collidingObject)
+  , m_contactPoint(contactPoint)
+{
+}
 
 unsigned int MCCollisionEvent::typeId()
 {
@@ -50,4 +51,3 @@ const MCVector3dF & MCCollisionEvent::contactPoint() const
 MCCollisionEvent::~MCCollisionEvent()
 {
 }
-

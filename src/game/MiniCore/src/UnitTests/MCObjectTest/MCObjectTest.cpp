@@ -18,16 +18,16 @@
 //
 
 #include "MCObjectTest.hpp"
-#include "../../Physics/mcforcegenerator.hh"
-#include "../../Physics/mcforceregistry.hh"
-#include "../../Physics/mcrectshape.hh"
-#include "../../Physics/mcphysicscomponent.hh"
-#include "../../Core/mcworld.hh"
+#include "../../Core/mcmathutil.hh"
 #include "../../Core/mcobject.hh"
 #include "../../Core/mctimerevent.hh"
-#include "../../Core/mcmathutil.hh"
 #include "../../Core/mctrigonom.hh"
 #include "../../Core/mcvector3d.hh"
+#include "../../Core/mcworld.hh"
+#include "../../Physics/mcforcegenerator.hh"
+#include "../../Physics/mcforceregistry.hh"
+#include "../../Physics/mcphysicscomponent.hh"
+#include "../../Physics/mcrectshape.hh"
 
 #include <cmath>
 
@@ -37,10 +37,9 @@ static const float DAMPING = 0.999f;
 class TestObject : public MCObject
 {
 public:
-
     TestObject()
-    : MCObject("TEST_OBJECT")
-    , m_timerEventReceived(false)
+      : MCObject("TEST_OBJECT")
+      , m_timerEventReceived(false)
     {
     }
 
@@ -280,10 +279,10 @@ void MCObjectTest::testChildRotate()
     QVERIFY(child2->angle() == child2Angle + rootAngle);
 
     vector3dCompare(child1->location(),
-        MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
+                    MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
 
     vector3dCompare(child2->location(),
-        MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(2.0, 2.0), rootAngle), 2.0f));
+                    MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(2.0, 2.0), rootAngle), 2.0f));
 
     // Now move the root
 
@@ -295,10 +294,10 @@ void MCObjectTest::testChildRotate()
     QVERIFY(child2->angle() == child2Angle + rootAngle);
 
     vector3dCompare(child1->location(),
-        rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
+                    rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
 
     vector3dCompare(child2->location(),
-        rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(2.0, 2.0), rootAngle), 2.0f));
+                    rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(2.0, 2.0), rootAngle), 2.0f));
 
     // Rotate child relatively
 
@@ -307,7 +306,7 @@ void MCObjectTest::testChildRotate()
     root.translate(rootLocation);
 
     vector3dCompare(child1->location(),
-        rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
+                    rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
 
     QVERIFY(child1->angle() == rootAngle + child1Angle);
 }

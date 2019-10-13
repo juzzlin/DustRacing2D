@@ -20,8 +20,8 @@
 #ifndef MCGLSCENE_HH
 #define MCGLSCENE_HH
 
-#include <MCGLM>
 #include "mcglshaderprogram.hh"
+#include <MCGLM>
 
 #include <vector>
 
@@ -33,7 +33,6 @@ class MCGLDiffuseLight;
 class MCGLScene
 {
 public:
-
     //! Viewport split type for two-player setup.
     enum SplitType
     {
@@ -58,7 +57,7 @@ public:
 
     //! Resize / set projection matrices and viewport. Re-implement if desired.
     virtual void resize(unsigned int viewWidth, unsigned int viewHeight,
-        unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar);
+                        unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar);
 
     //! Set viewport split type.
     void setSplitType(SplitType splitType = ShowFullScreen);
@@ -103,7 +102,6 @@ public:
     float eyeZ() const;
 
 protected:
-
     //! Set viewer's position. Automatically called by resize().
     virtual void setViewerPosition(unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle);
 
@@ -111,7 +109,6 @@ protected:
     virtual void setProjection(float aspectRatio, float zNear, float zFar, float viewAngle);
 
 private:
-
     /*! Adds a shader program. Added programs are updated when e.g.
      *  the projection changes. MCGLShaderProgram calls this when linked. */
     void addShaderProgram(MCGLShaderProgram & shader);

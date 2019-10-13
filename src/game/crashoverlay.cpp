@@ -21,10 +21,10 @@
 #include <MCSurface>
 
 CrashOverlay::CrashOverlay()
-    : m_surface(MCAssetManager::instance().surfaceManager().surface("crashOverlay"))
-    , m_alpha(1.0f)
-    , m_car(nullptr)
-    , m_isTriggered(false)
+  : m_surface(MCAssetManager::instance().surfaceManager().surface("crashOverlay"))
+  , m_alpha(1.0f)
+  , m_car(nullptr)
+  , m_isTriggered(false)
 {
     m_surface.material()->setAlphaBlend(true);
 }
@@ -45,7 +45,7 @@ void CrashOverlay::render()
     {
         glDisable(GL_DEPTH_TEST);
 
-        const int w2 = width()  / 2;
+        const int w2 = width() / 2;
         const int h2 = height() / 2;
 
         m_surface.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));

@@ -28,18 +28,16 @@ class RotateDialog : public QDialog
     Q_OBJECT
 
 public:
-
     explicit RotateDialog(QWidget * parent = 0);
 
     int angle() const;
 
 private:
-
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_angleEdit;
-    QLabel      * m_angleLabel;
+    QLineEdit * m_angleEdit;
+    QLabel * m_angleLabel;
 };
 
 #endif // ROTATEDIALOG_HPP

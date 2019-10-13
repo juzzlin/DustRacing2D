@@ -16,13 +16,13 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "animationcurve.hpp"
-#include "menumanager.hpp"
 #include "menuitem.hpp"
+#include "menumanager.hpp"
 
 namespace MTFH {
 
@@ -31,7 +31,6 @@ class MenuItem;
 class Menu
 {
 public:
-
     //! Default styles
     enum class Style
     {
@@ -156,7 +155,6 @@ public:
     virtual void exit();
 
 protected:
-
     //! Called when the menu is entered. Call parent implementation if overridden.
     virtual void enter();
 
@@ -169,7 +167,6 @@ protected:
     virtual void popExit();
 
 private:
-
     struct MouseItem
     {
         MenuItemPtr item;
@@ -200,7 +197,7 @@ private:
 
     void updateFocus();
 
-    std::vector<MenuItemPtr > m_items;
+    std::vector<MenuItemPtr> m_items;
 
     std::vector<MouseItem> m_mouseItems;
 

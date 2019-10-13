@@ -23,8 +23,8 @@
 #include <MCTextureText>
 
 Intro::Intro()
-: m_back(MCAssetManager::surfaceManager().surface("intro"))
-, m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
+  : m_back(MCAssetManager::surfaceManager().surface("intro"))
+  , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
     m_back.setShaderProgram(Renderer::instance().program("menu"));
     m_back.setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
@@ -37,7 +37,7 @@ void Intro::setDimensions(int width, int height)
 
 void Intro::render()
 {
-    const int w2 = width()  / 2;
+    const int w2 = width() / 2;
     const int h2 = height() / 2;
     assert(w2 > 0 && h2 > 0);
     m_back.bind();
@@ -49,6 +49,6 @@ void Intro::render()
     versionText.setGlyphSize(20, height() / 32);
     versionText.setColor(MCGLColor(0.75f, 0.75f, 0.75f));
     versionText.render(
-        versionText.height(m_font),
-        versionText.height(m_font), nullptr, m_font, false);
+      versionText.height(m_font),
+      versionText.height(m_font), nullptr, m_font, false);
 }

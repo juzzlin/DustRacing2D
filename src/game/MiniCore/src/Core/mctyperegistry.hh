@@ -20,16 +20,12 @@
 #ifndef MCTYPEREGISTRY_HH
 #define MCTYPEREGISTRY_HH
 
-
-
-
 #include <string>
 #include <unordered_map>
 
 class MCTypeRegistry
 {
 public:
-
     MCTypeRegistry();
 
     //! \brief Register a new type and get a unique type id.
@@ -39,7 +35,6 @@ public:
     unsigned int getTypeIdForName(const std::string & typeName);
 
 private:
-
     typedef std::unordered_map<std::string, unsigned int> TypeHash;
     TypeHash m_typeHash;
 

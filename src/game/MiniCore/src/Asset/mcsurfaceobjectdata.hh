@@ -29,7 +29,6 @@ class MCSurfaceObjectDataImpl;
 class MCSurfaceObjectData : public MCObjectData
 {
 public:
-
     //! Constructor.
     explicit MCSurfaceObjectData(const std::string & typeId);
 
@@ -49,7 +48,6 @@ public:
     bool defaultCirleShape() const;
 
 private:
-
     DISABLE_COPY(MCSurfaceObjectData);
     DISABLE_ASSI(MCSurfaceObjectData);
 

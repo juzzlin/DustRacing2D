@@ -22,13 +22,13 @@
 #include <memory>
 
 Map::Map(unsigned int cols, unsigned int rows)
-    : MapBase(cols, rows)
+  : MapBase(cols, rows)
 {
     createEmptyTiles();
 }
 
 Map::Map(const Map & other)
-    : MapBase(other.cols(), other.rows())
+  : MapBase(other.cols(), other.rows())
 {
     copyTiles(other);
 }
@@ -56,17 +56,17 @@ void Map::createEmptyTiles()
             if (!getTile(i, j))
             {
                 auto newTile = new TrackTile(
-                    QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                    TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                    QPoint(i, j));
+                  QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                          TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+                  QPoint(i, j));
                 setTile(i, j, TrackTileBasePtr(newTile));
             }
             else
             {
                 getTile(i, j)->setLocation(
-                    QPointF(
-                        TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                        TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
+                  QPointF(
+                    TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
+                    TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
                 getTile(i, j)->setMatrixLocation(QPoint(i, j));
             }
         }
@@ -81,9 +81,9 @@ void Map::moveTilesAfterColumnDeletion(unsigned int at)
         {
             const QPointF location(getTile(i, j)->location());
             getTile(i, j)->setLocation(
-                QPointF(
-                    location.x() - TrackTile::TILE_W,
-                    location.y()));
+              QPointF(
+                location.x() - TrackTile::TILE_W,
+                location.y()));
             getTile(i, j)->setMatrixLocation(QPoint(i - 1, j));
         }
     }
@@ -97,9 +97,9 @@ void Map::moveTilesAfterRowDeletion(unsigned int at)
         {
             const QPointF location(getTile(i, j)->location());
             getTile(i, j)->setLocation(
-                QPointF(
-                    location.x(),
-                    location.y() - TrackTile::TILE_H));
+              QPointF(
+                location.x(),
+                location.y() - TrackTile::TILE_H));
             getTile(i, j)->setMatrixLocation(QPoint(i, j - 1));
         }
     }

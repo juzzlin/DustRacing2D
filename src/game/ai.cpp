@@ -14,23 +14,22 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "ai.hpp"
+#include "../common/route.hpp"
+#include "../common/tracktilebase.hpp"
 #include "car.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
-#include "../common/route.hpp"
-#include "../common/tracktilebase.hpp"
 
 #include <MCRandom>
 #include <MCTrigonom>
 
-
 AI::AI(Car & car)
-: m_car(car)
-, m_track(nullptr)
-, m_route(nullptr)
-, m_lastDiff(0)
-, m_lastTargetNodeIndex(0)
+  : m_car(car)
+  , m_track(nullptr)
+  , m_route(nullptr)
+  , m_lastDiff(0)
+  , m_lastTargetNodeIndex(0)
 {
 }
 
@@ -70,8 +69,8 @@ void AI::steerControl(TargetNodeBasePtr tnode)
     target -= MCVector3dF(m_car.location() + MCVector3dF(m_randomTolerance));
 
     float angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
-    float cur   = static_cast<int>(m_car.angle()) % 360;
-    float diff  = angle - cur;
+    float cur = static_cast<int>(m_car.angle()) % 360;
+    float diff = angle - cur;
 
     bool ok = false;
     while (!ok)
@@ -121,7 +120,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
 
     // Braking / acceleration logic
     bool accelerate = true;
-    bool brake      = false;
+    bool brake = false;
 
     const float absSpeed = m_car.absSpeed();
 
@@ -151,8 +150,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
         }
     }
 
-    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT ||
-            currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
+    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT || currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
     {
         if (absSpeed > 8.3f * scale)
         {

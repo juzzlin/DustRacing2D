@@ -25,7 +25,7 @@ void setTileType(TrackTile & tile, QAction * action)
     tile.setTileType(action->data().toString());
     tile.setPixmap(action->icon().pixmap(TrackTile::TILE_W, TrackTile::TILE_H));
 }
-}
+} // namespace FloodFill
 
 void FloodFill::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, MapBase & map)
 {
@@ -33,12 +33,11 @@ void FloodFill::floodFill(TrackTile & tile, QAction * action, const QString & ty
 
     // Coordinates of neighbor tiles can be calculated by adding these
     // adjustments to tile coordinates.
-    static const QPoint neighborAdjustments[DIRECTION_COUNT] =
-    {
-        QPoint( 1,  0),  // right
-        QPoint( 0, -1),  // up
-        QPoint(-1,  0),  // left
-        QPoint( 0,  1)   // down
+    static const QPoint neighborAdjustments[DIRECTION_COUNT] = {
+        QPoint(1, 0), // right
+        QPoint(0, -1), // up
+        QPoint(-1, 0), // left
+        QPoint(0, 1) // down
     };
 
     setTileType(tile, action);

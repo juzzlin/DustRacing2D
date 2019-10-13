@@ -18,8 +18,8 @@
 //
 
 #include "mctexturefontconfigloader.hh"
-#include "mctexturefontdata.hh"
 #include "mclogger.hh"
+#include "mctexturefontdata.hh"
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -57,25 +57,25 @@ bool MCTextureFontConfigLoader::loadFonts()
     {
         MCTextureFontData * newData = nullptr;
         QDomNode node = root.firstChild();
-        while(!node.isNull() && node.nodeName() == "font")
+        while (!node.isNull() && node.nodeName() == "font")
         {
             newData = new MCTextureFontData;
             QDomElement tag = node.toElement();
-            if(!tag.isNull())
+            if (!tag.isNull())
             {
-                newData->name    = tag.attribute("name", "").toStdString();
+                newData->name = tag.attribute("name", "").toStdString();
                 newData->surface = tag.attribute("surface", "").toStdString();
 
                 MCLogger().info() << "Loading font '" << newData->name.c_str() << "'..";
 
                 // Read child nodes of font node.
                 QDomNode childNode = node.firstChild();
-                while(!childNode.isNull())
+                while (!childNode.isNull())
                 {
                     if (childNode.nodeName() == "glyph")
                     {
                         QDomElement tag = childNode.toElement();
-                        if(!tag.isNull())
+                        if (!tag.isNull())
                         {
                             MCTextureFontData::Glyph glyph;
                             glyph.x0 = tag.attribute("x0", "0").toInt();

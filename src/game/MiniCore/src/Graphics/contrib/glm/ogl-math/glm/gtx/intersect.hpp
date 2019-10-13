@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,9 +30,9 @@
 ///
 /// @defgroup gtx_intersect GLM_GTX_intersect: Intersection tests
 /// @ingroup gtx
-/// 
+///
 /// @brief Add intersection functions
-/// 
+///
 /// <glm/gtx/intersect.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -43,50 +43,49 @@
 #include "../glm.hpp"
 #include "../gtx/closest_point.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_closest_point extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_closest_point extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_intersect
-	/// @{
+namespace glm {
+/// @addtogroup gtx_intersect
+/// @{
 
-	//! Compute the intersection of a ray and a triangle.
-	//! From GLM_GTX_intersect extension.
-	template <typename genType>
-	bool intersectRayTriangle(
-		genType const & orig, genType const & dir,
-		genType const & vert0, genType const & vert1, genType const & vert2,
-		genType & baryPosition);
+//! Compute the intersection of a ray and a triangle.
+//! From GLM_GTX_intersect extension.
+template<typename genType>
+bool intersectRayTriangle(
+  genType const & orig, genType const & dir,
+  genType const & vert0, genType const & vert1, genType const & vert2,
+  genType & baryPosition);
 
-    //! Compute the intersection of a line and a triangle.
-	//! From GLM_GTX_intersect extension.
-	template <typename genType>
-	bool intersectLineTriangle(
-		genType const & orig, genType const & dir,
-		genType const & vert0, genType const & vert1, genType const & vert2,
-		genType & position);
+//! Compute the intersection of a line and a triangle.
+//! From GLM_GTX_intersect extension.
+template<typename genType>
+bool intersectLineTriangle(
+  genType const & orig, genType const & dir,
+  genType const & vert0, genType const & vert1, genType const & vert2,
+  genType & position);
 
-    //! Compute the intersection of a ray and a sphere.
-	//! From GLM_GTX_intersect extension.
-	template <typename genType>
-	bool intersectRaySphere(
-		genType const & orig, genType const & dir,
-		genType const & center, typename genType::value_type radius,
-		genType & position, genType & normal);
+//! Compute the intersection of a ray and a sphere.
+//! From GLM_GTX_intersect extension.
+template<typename genType>
+bool intersectRaySphere(
+  genType const & orig, genType const & dir,
+  genType const & center, typename genType::value_type radius,
+  genType & position, genType & normal);
 
-    //! Compute the intersection of a line and a sphere.
-	//! From GLM_GTX_intersect extension
-	template <typename genType>
-	bool intersectLineSphere(
-		genType const & point0, genType const & point1,
-		genType const & center, typename genType::value_type radius,
-		genType & position, genType & normal);
+//! Compute the intersection of a line and a sphere.
+//! From GLM_GTX_intersect extension
+template<typename genType>
+bool intersectLineSphere(
+  genType const & point0, genType const & point1,
+  genType const & center, typename genType::value_type radius,
+  genType & position, genType & normal);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "intersect.inl"
 
-#endif//GLM_GTX_intersect
+#endif //GLM_GTX_intersect

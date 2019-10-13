@@ -30,7 +30,6 @@ class MCTimerEventImpl;
 class MCTimerEvent : public MCEvent
 {
 public:
-
     /*! Constructor.
      *  \param frequency The frequency of the timer.
      */
@@ -49,7 +48,6 @@ public:
     virtual unsigned int instanceTypeId() const;
 
 private:
-
     DISABLE_COPY(MCTimerEvent);
     DISABLE_ASSI(MCTimerEvent);
 

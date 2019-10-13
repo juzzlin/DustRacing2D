@@ -41,15 +41,13 @@ struct Resolution
 class ResolutionItem : public MTFH::MenuItem
 {
 public:
-
     class SaveResolutionAction : public MTFH::MenuItemAction
     {
     public:
-
         //! Constructor.
         SaveResolutionAction(ResolutionItem & parent, bool fullScreen)
-        : m_parent(parent)
-        , m_fullScreen(fullScreen)
+          : m_parent(parent)
+          , m_fullScreen(fullScreen)
         {
         }
 
@@ -65,8 +63,8 @@ public:
             const int vRes = m_parent.vRes();
             Settings::instance().saveResolution(hRes, vRes, m_fullScreen);
             juzzlin::L().info()
-                << "Resolution set: " << hRes << " " << vRes
-                << " Full screen: " << m_fullScreen;
+              << "Resolution set: " << hRes << " " << vRes
+              << " Full screen: " << m_fullScreen;
 
             if (Game::instance().renderer().fullScreen() && m_fullScreen)
             {
@@ -79,24 +77,25 @@ public:
         }
 
     private:
-
         ResolutionItem & m_parent;
         bool m_fullScreen;
     };
 
     //! Constructor.
     ResolutionItem(ConfirmationMenuPtr confirmationMenu,
-        int hRes, int vRes, bool fullScreen, int width, int height, std::wstring text = L"")
-    : MenuItem(width, height, text)
-    , m_confirmationMenu(confirmationMenu)
-    , m_saveResolutionAction(new SaveResolutionAction(*this, fullScreen))
-    , m_hRes(hRes)
-    , m_vRes(vRes)
+                   int hRes, int vRes, bool fullScreen, int width, int height, std::wstring text = L"")
+      : MenuItem(width, height, text)
+      , m_confirmationMenu(confirmationMenu)
+      , m_saveResolutionAction(new SaveResolutionAction(*this, fullScreen))
+      , m_hRes(hRes)
+      , m_vRes(vRes)
     {
     }
 
     //! Destructor.
-    virtual ~ResolutionItem() {}
+    virtual ~ResolutionItem()
+    {
+    }
 
     //! \reimp
     virtual void setSelected(bool flag)
@@ -106,8 +105,7 @@ public:
         if (flag)
         {
             // Change the virtual resolution immediately if changing from fullscreen to fullscreen
-            if (Game::instance().renderer().fullScreen() &&
-                std::dynamic_pointer_cast<SaveResolutionAction>(m_saveResolutionAction)->fullScreen())
+            if (Game::instance().renderer().fullScreen() && std::dynamic_pointer_cast<SaveResolutionAction>(m_saveResolutionAction)->fullScreen())
             {
                 m_saveResolutionAction->fire();
             }
@@ -132,7 +130,6 @@ public:
     }
 
 private:
-
     ConfirmationMenuPtr m_confirmationMenu;
 
     MTFH::MenuItemActionPtr m_saveResolutionAction;
@@ -143,9 +140,9 @@ private:
 };
 
 ResolutionMenu::ResolutionMenu(
-    ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height, bool fullScreen)
-: SurfaceMenu("settingsBack", id, width, height)
-, m_confirmationMenu(confirmationMenu)
+  ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height, bool fullScreen)
+  : SurfaceMenu("settingsBack", id, width, height)
+  , m_confirmationMenu(confirmationMenu)
 {
     const int numResolutions = 8;
     const int fullHRes = Game::instance().screen()->geometry().width();
@@ -159,9 +156,9 @@ ResolutionMenu::ResolutionMenu(
         std::wstringstream resString;
         resString << itemHRes << "x" << itemVRes;
         ResolutionItem * resolution =
-            new ResolutionItem(m_confirmationMenu, itemHRes, itemVRes, fullScreen, width, itemHeight, resString.str());
-            resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
-            addItem(MTFH::MenuItemPtr(resolution));
+          new ResolutionItem(m_confirmationMenu, itemHRes, itemVRes, fullScreen, width, itemHeight, resString.str());
+        resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
+        addItem(MTFH::MenuItemPtr(resolution));
 
         itemHRes -= fullHRes / numResolutions;
         itemVRes -= fullVRes / numResolutions;
@@ -181,8 +178,8 @@ void ResolutionMenu::enter()
     {
         if (auto resolution = std::dynamic_pointer_cast<ResolutionItem>(item(i)))
         {
-            int  hRes       = 0;
-            int  vRes       = 0;
+            int hRes = 0;
+            int vRes = 0;
             bool fullScreen = false;
 
             Settings::instance().loadResolution(hRes, vRes, fullScreen);

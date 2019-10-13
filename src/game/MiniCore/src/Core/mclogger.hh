@@ -40,7 +40,6 @@
 class MCLogger
 {
 public:
-
     //! Constructor.
     MCLogger();
 
@@ -74,7 +73,6 @@ public:
     std::ostringstream & fatal();
 
 private:
-
     DISABLE_COPY(MCLogger);
     DISABLE_ASSI(MCLogger);
 

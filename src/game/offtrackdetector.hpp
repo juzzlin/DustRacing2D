@@ -26,7 +26,6 @@ class TrackTile;
 class OffTrackDetector
 {
 public:
-
     //! Constructor.
     OffTrackDetector(Car & car);
 
@@ -37,7 +36,6 @@ public:
     void update();
 
 private:
-
     //! Test if the given location is off the track on the given tile.
     bool isOffTrack(MCVector2dF tire, const TrackTile & tile) const;
 

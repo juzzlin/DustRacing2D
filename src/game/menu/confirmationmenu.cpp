@@ -27,10 +27,10 @@
 #include <QObject>
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
-    : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::Style::HorizontalList, false)
-, m_acceptItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Ok").toStdWString()))
-, m_cancelItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Cancel").toStdWString()))
-, m_text(L"")
+  : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::Style::HorizontalList, false)
+  , m_acceptItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Ok").toStdWString()))
+  , m_cancelItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Cancel").toStdWString()))
+  , m_text(L"")
 {
     m_acceptItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_acceptItem)));
     m_cancelItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_cancelItem)));
@@ -77,7 +77,7 @@ void ConfirmationMenu::render()
     MCTextureText text(m_text);
 
     const int shadowY = -2;
-    const int shadowX =  2;
+    const int shadowX = 2;
 
     text.setColor(MCGLColor(0.25, 0.75, 1.0, 1.0));
     text.setGlyphSize(20, 20);

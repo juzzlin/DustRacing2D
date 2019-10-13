@@ -17,11 +17,10 @@
 // MA  02110-1301, USA.
 //
 
-#include "mctexturefontconfigloader.hh"
-#include "mctexturefont.hh"
-#include "mctexturefontdata.hh"
 #include "mctexturefontmanager.hh"
-
+#include "mctexturefont.hh"
+#include "mctexturefontconfigloader.hh"
+#include "mctexturefontdata.hh"
 
 #include "mcsurface.hh"
 #include "mcsurfacemanager.hh"
@@ -30,14 +29,14 @@
 #include <exception>
 
 MCTextureFontManager::MCTextureFontManager(
-    const MCSurfaceManager & surfaceManager)
+  const MCSurfaceManager & surfaceManager)
   : m_fontHash()
   , m_surfaceManager(surfaceManager)
 {
 }
 
 void MCTextureFontManager::load(
-    const std::string & fileName)
+  const std::string & fileName)
 {
     MCTextureFontConfigLoader loader;
     loader.setConfigPath(fileName);
@@ -86,12 +85,12 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 
         // Calculate the uv-coordinates for the glyph.
         MCTextureGlyph newGlyph(
-            MCTextureGlyph::UV(
-                static_cast<float>(glyph.x0) / surface.width(),
-                static_cast<float>(glyph.y0) / surface.height()),
-            MCTextureGlyph::UV(
-                static_cast<float>(glyph.x1) / surface.width(),
-                static_cast<float>(glyph.y1) / surface.height()));
+          MCTextureGlyph::UV(
+            static_cast<float>(glyph.x0) / surface.width(),
+            static_cast<float>(glyph.y0) / surface.height()),
+          MCTextureGlyph::UV(
+            static_cast<float>(glyph.x1) / surface.width(),
+            static_cast<float>(glyph.y1) / surface.height()));
 
         // Add glyph mapping to the font.
         newFont->addGlyphMapping(glyph.name, newGlyph);
@@ -109,7 +108,7 @@ void MCTextureFontManager::createFontFromData(const MCTextureFontData & data)
 }
 
 MCTextureFont & MCTextureFontManager::font(
-    const std::string & name) const
+  const std::string & name) const
 {
     // Try to find existing texture for the surface
     if (m_fontHash.count(name) == 0)

@@ -23,9 +23,9 @@
 MCVector3dF MCShape::m_defaultShadowOffset = MCVector3dF(2, -2, 0.5f);
 
 MCShape::MCShape(MCShapeViewPtr view)
-    : m_parent(nullptr)
-    , m_angle(0)
-    , m_radius(0)
+  : m_parent(nullptr)
+  , m_angle(0)
+  , m_radius(0)
 {
     if (view)
     {
@@ -72,10 +72,9 @@ void MCShape::renderShadow(MCCamera * p)
     if (m_view)
     {
         const MCVector3dF shadowLocation(
-            m_shadowOffset.i() + m_location.i(),
-            m_shadowOffset.j() + m_location.j(),
-            m_shadowOffset.k()
-        );
+          m_shadowOffset.i() + m_location.i(),
+          m_shadowOffset.j() + m_location.j(),
+          m_shadowOffset.k());
 
         m_view->renderShadow(shadowLocation, m_angle, p);
     }
@@ -128,8 +127,5 @@ void MCShape::setRadius(float radius)
 
 bool MCShape::likelyIntersects(MCShape & other) const
 {
-    return !(m_location.i() + m_radius < other.m_location.i() - other.m_radius ||
-        m_location.j() + m_radius < other.m_location.j() - other.m_radius ||
-        m_location.i() - m_radius > other.m_location.i() + other.m_radius ||
-        m_location.j() - m_radius > other.m_location.j() + other.m_radius);
+    return !(m_location.i() + m_radius < other.m_location.i() - other.m_radius || m_location.j() + m_radius < other.m_location.j() - other.m_radius || m_location.i() - m_radius > other.m_location.i() + other.m_radius || m_location.j() - m_radius > other.m_location.j() + other.m_radius);
 }

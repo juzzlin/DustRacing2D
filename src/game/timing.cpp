@@ -22,13 +22,13 @@
 
 #include <cassert>
 
-Timing::Timing(size_t cars, QObject *parent)
-: QObject(parent)
-, m_times(cars, Timing::Times())
-, m_time(0)
-, m_started(false)
-, m_lapRecord(-1)
-, m_raceRecord(-1)
+Timing::Timing(size_t cars, QObject * parent)
+  : QObject(parent)
+  , m_times(cars, Timing::Times())
+  , m_time(0)
+  , m_started(false)
+  , m_lapRecord(-1)
+  , m_raceRecord(-1)
 {
 }
 
@@ -247,11 +247,10 @@ std::wstring Timing::msecsToString(int msec)
     }
 
     const int hr = msec % 3600000;
-    const int mm = hr   / 60000;
-    const int mr = hr   % 60000;
-    const int ss = mr   / 1000;
-    const int ms = mr   % 1000;
+    const int mm = hr / 60000;
+    const int mr = hr % 60000;
+    const int ss = mr / 1000;
+    const int ms = mr % 1000;
 
     return QString().sprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
 }
-

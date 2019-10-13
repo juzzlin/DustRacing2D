@@ -21,7 +21,6 @@ namespace STFH {
 class Location
 {
 public:
-
     Location();
 
     Location(float x, float y);
@@ -33,10 +32,9 @@ public:
     float y() const;
 
 private:
-
     float m_x, m_y;
 };
 
-} // STFH
+} // namespace STFH
 
 #endif // LOCATION_HPP

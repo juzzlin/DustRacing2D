@@ -24,7 +24,6 @@ class Car;
 class CrashOverlay : public OverlayBase
 {
 public:
-
     CrashOverlay();
 
     //! \reimp
@@ -39,7 +38,6 @@ public:
     void setCarToFollow(Car & car);
 
 private:
-
     MCSurface & m_surface;
 
     float m_alpha;

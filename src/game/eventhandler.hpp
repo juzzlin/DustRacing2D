@@ -30,7 +30,6 @@ class EventHandler : public QObject
     Q_OBJECT
 
 public:
-
     //! Constructor.
     EventHandler(InputHandler & inputHandler);
 
@@ -59,18 +58,18 @@ signals:
     void cursorHid();
 
 private:
-
     class ActionMapping
     {
     public:
-
         ActionMapping(int player, InputHandler::Action action)
-        : m_player(player)
-        , m_action(action)
-        {}
+          : m_player(player)
+          , m_action(action)
+        {
+        }
 
         ActionMapping()
-        {}
+        {
+        }
 
         int player() const
         {
@@ -83,7 +82,6 @@ private:
         }
 
     private:
-
         int m_player;
         InputHandler::Action m_action;
     };

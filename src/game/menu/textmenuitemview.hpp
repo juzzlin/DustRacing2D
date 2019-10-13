@@ -26,7 +26,6 @@ class MenuItem;
 class TextMenuItemView : public MTFH::MenuItemView
 {
 public:
-
     //! Constructor.
     TextMenuItemView(float textSize, MTFH::MenuItem & owner);
 
@@ -43,7 +42,6 @@ public:
     virtual void setTextSize(float size);
 
 private:
-
     float m_textSize;
 
     float m_angle;

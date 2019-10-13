@@ -20,7 +20,7 @@
 #include "mcmeshobjectdata.hh"
 
 MCMeshObjectData::MCMeshObjectData(const std::string & typeId)
-: MCSurfaceObjectData(typeId)
+  : MCSurfaceObjectData(typeId)
 {
 }
 

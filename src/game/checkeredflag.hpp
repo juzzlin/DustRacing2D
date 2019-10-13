@@ -24,7 +24,6 @@ class MCSurface;
 class CheckeredFlag : public OverlayBase
 {
 public:
-
     //! Constructor.
     CheckeredFlag();
 
@@ -32,7 +31,6 @@ public:
     virtual void render() override;
 
 private:
-
     MCSurface & m_surface;
 };
 

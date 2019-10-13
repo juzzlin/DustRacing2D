@@ -23,7 +23,6 @@ class MCSurface;
 class Tree : public MCObject
 {
 public:
-
     Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branches);
 };
 

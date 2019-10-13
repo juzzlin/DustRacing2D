@@ -21,12 +21,12 @@ namespace Layers {
 /*! Define the collision layers for different kinds of objects. */
 enum class Collision : int
 {
-    Ground      = 0,
-    Objects     = 1,
-    Bridge      = 2,
+    Ground = 0,
+    Objects = 1,
+    Bridge = 2,
     BridgeRails = 3
 };
 
-}
+} // namespace Layers
 
 #endif // LAYERS_HPP

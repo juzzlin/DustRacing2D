@@ -19,7 +19,6 @@
 class Gearbox
 {
 public:
-
     enum class Gear
     {
         Neutral,
@@ -39,7 +38,6 @@ public:
     void update(int speedInKmh);
 
 private:
-
     Gear m_gear = Gear::Neutral;
 
     bool m_accelerator = false;

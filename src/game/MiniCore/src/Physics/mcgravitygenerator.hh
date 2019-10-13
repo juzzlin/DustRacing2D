@@ -21,14 +21,13 @@
 #define MCGRAVITYGENERATOR_HH
 
 #include "mcforcegenerator.hh"
-#include "mcvector3d.hh"
 #include "mcmacros.hh"
+#include "mcvector3d.hh"
 
 //! Force generator for gravity
 class MCGravityGenerator : public MCForceGenerator
 {
 public:
-
     /*! Constructor
      * \param g Gravity vector (G = m * g)
      */
@@ -41,7 +40,6 @@ public:
     virtual void updateForce(MCObject & object);
 
 private:
-
     DISABLE_COPY(MCGravityGenerator);
     DISABLE_ASSI(MCGravityGenerator);
     MCVector3d<float> m_g;

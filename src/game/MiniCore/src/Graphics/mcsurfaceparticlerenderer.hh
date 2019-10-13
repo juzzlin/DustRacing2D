@@ -38,14 +38,12 @@ class MCObject;
 class MCSurfaceParticleRenderer : public MCParticleRendererBase
 {
 public:
-
     explicit MCSurfaceParticleRenderer(int maxBatchSize = 1024);
 
     //! Destructor.
     virtual ~MCSurfaceParticleRenderer();
 
 private:
-
     DISABLE_COPY(MCSurfaceParticleRenderer);
     DISABLE_ASSI(MCSurfaceParticleRenderer);
 

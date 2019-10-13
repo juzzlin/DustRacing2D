@@ -28,9 +28,10 @@
 static const float ROTATION_DECAY = 0.01f;
 
 MCFrictionGenerator::MCFrictionGenerator(float coeffLin, float coeffRot)
-    : m_coeffLinTot(std::fabs(coeffLin * MCWorld::instance().gravity().k()))
-    , m_coeffRotTot(std::fabs(coeffRot * MCWorld::instance().gravity().k() * ROTATION_DECAY))
-{}
+  : m_coeffLinTot(std::fabs(coeffLin * MCWorld::instance().gravity().k()))
+  , m_coeffRotTot(std::fabs(coeffRot * MCWorld::instance().gravity().k() * ROTATION_DECAY))
+{
+}
 
 void MCFrictionGenerator::updateForce(MCObject & object)
 {
@@ -58,4 +59,3 @@ void MCFrictionGenerator::updateForce(MCObject & object)
 MCFrictionGenerator::~MCFrictionGenerator()
 {
 }
-

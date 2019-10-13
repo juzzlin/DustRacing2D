@@ -39,7 +39,6 @@
 class MCFrictionGenerator : public MCForceGenerator
 {
 public:
-
     /*! Constructor.
      * \param coeffLin Linear friction coefficient.
      * \param coeffRot Rotational friction coefficient. */
@@ -52,7 +51,6 @@ public:
     virtual void updateForce(MCObject & object) override;
 
 private:
-
     DISABLE_COPY(MCFrictionGenerator);
     DISABLE_ASSI(MCFrictionGenerator);
 

@@ -26,9 +26,12 @@
 
 static void printHelp()
 {
-    std::cout << std::endl << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT << std::endl << std::endl;
-    std::cout << "Usage: dustrac-editor [options] [trackFile]" << std::endl << std::endl;
+    std::cout << std::endl
+              << "Dust Racing 2D version " << VERSION << std::endl;
+    std::cout << Config::Common::COPYRIGHT << std::endl
+              << std::endl;
+    std::cout << "Usage: dustrac-editor [options] [trackFile]" << std::endl
+              << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--help        Show this help." << std::endl;
     std::cout << "--lang [lang] Force language: fi, fr, it, cs, ru." << std::endl;
@@ -79,7 +82,7 @@ void Application::parseArgs(int argc, char ** argv)
 }
 
 Application::Application(int & argc, char ** argv)
-    : m_app(argc, argv)
+  : m_app(argc, argv)
 {
     parseArgs(argc, argv);
 

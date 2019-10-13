@@ -17,14 +17,15 @@
 // MA  02110-1301, USA.
 //
 
-#include "mcobject.hh"
 #include "mcseparationevent.hh"
+#include "mcobject.hh"
 
 unsigned int MCSeparationEvent::m_typeId = MCEvent::registerType();
 
 MCSeparationEvent::MCSeparationEvent(MCObject & separatedObject)
-: m_separatedObject(separatedObject)
-{}
+  : m_separatedObject(separatedObject)
+{
+}
 
 unsigned int MCSeparationEvent::typeId()
 {

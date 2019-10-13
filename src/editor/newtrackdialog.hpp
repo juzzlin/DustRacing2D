@@ -30,7 +30,6 @@ class NewTrackDialog : public QDialog
     Q_OBJECT
 
 public:
-
     //! Constructor.
     explicit NewTrackDialog(QWidget * parent = nullptr);
 
@@ -51,18 +50,17 @@ private slots:
     void validateData();
 
 private:
-
     QGridLayout * m_layout;
     QPushButton * m_okButton;
     QPushButton * m_cancelButton;
-    QLineEdit   * m_colsEdit;
-    QLineEdit   * m_rowsEdit;
-    QLineEdit   * m_nameEdit;
-    QLabel      * m_colsLabel;
-    QLabel      * m_rowsLabel;
-    QLabel      * m_nameLabel;
-    QLabel      * m_userLabel;
-    QCheckBox   * m_userCheck;
+    QLineEdit * m_colsEdit;
+    QLineEdit * m_rowsEdit;
+    QLineEdit * m_nameEdit;
+    QLabel * m_colsLabel;
+    QLabel * m_rowsLabel;
+    QLabel * m_nameLabel;
+    QLabel * m_userLabel;
+    QCheckBox * m_userCheck;
 };
 
 #endif // NEWTRACKDIALOG_HPP

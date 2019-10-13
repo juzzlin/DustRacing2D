@@ -24,7 +24,6 @@ class MCObjectTest : public QObject
     Q_OBJECT
 
 public:
-
     MCObjectTest();
 
 private slots:

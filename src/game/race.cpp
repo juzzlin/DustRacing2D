@@ -44,39 +44,40 @@
 
 static const int HUMAN_PLAYER_INDEX1 = 0;
 static const int HUMAN_PLAYER_INDEX2 = 1;
-static const int UNLOCK_LIMIT        = 6; // Position required to unlock a new track
+static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
 
 Race::Race(Game & game, unsigned int numCars)
-: m_numCars(numCars)
-, m_lapCount(5)
-, m_timing(numCars)
-, m_track(nullptr)
-, m_started(false)
-, m_checkeredFlagEnabled(false)
-, m_winnerFinished(false)
-, m_isfinishedSignalSent(false)
-, m_bestPos(-1)
-, m_offTrackCounter(0)
-, m_game(game)
+  : m_numCars(numCars)
+  , m_lapCount(5)
+  , m_timing(numCars)
+  , m_track(nullptr)
+  , m_started(false)
+  , m_checkeredFlagEnabled(false)
+  , m_winnerFinished(false)
+  , m_isfinishedSignalSent(false)
+  , m_bestPos(-1)
+  , m_offTrackCounter(0)
+  , m_game(game)
 {
     createStartGridObjects();
 
     m_offTrackMessageTimer.setSingleShot(true);
     m_offTrackMessageTimer.setInterval(30000);
 
-    connect(&m_timing, &Timing::lapRecordAchieved, [this] (int msecs) {
+    connect(&m_timing, &Timing::lapRecordAchieved, [this](int msecs) {
         Settings::instance().saveLapRecord(*m_track, msecs);
         emit messageRequested(QObject::tr("New lap record!"));
     });
 
-    connect(&m_timing, &Timing::raceRecordAchieved, [this] (int msecs) {
-        if (m_game.hasComputerPlayers()) {
+    connect(&m_timing, &Timing::raceRecordAchieved, [this](int msecs) {
+        if (m_game.hasComputerPlayers())
+        {
             Settings::instance().saveRaceRecord(*m_track, msecs, m_lapCount, m_game.difficultyProfile().difficulty());
             emit messageRequested(QObject::tr("New race record!"));
         }
     });
 
-    connect(&m_timing, &Timing::lapCompleted, [this] (unsigned int, int msecs) {
+    connect(&m_timing, &Timing::lapCompleted, [this](unsigned int, int msecs) {
         emit messageRequested(QString::fromWCharArray(Timing::msecsToString(msecs).c_str()));
     });
 }
@@ -142,7 +143,8 @@ void Race::clearPositions()
 {
     m_progression.clear();
 
-    for (auto && car : m_cars) {
+    for (auto && car : m_cars)
+    {
         car->setPosition(0);
     }
 }
@@ -150,9 +152,9 @@ void Race::clearPositions()
 void Race::clearRaceFlags()
 {
     m_checkeredFlagEnabled = false;
-    m_winnerFinished       = false;
+    m_winnerFinished = false;
     m_isfinishedSignalSent = false;
-    m_started              = false;
+    m_started = false;
 }
 
 void placeCar(Car & car, float x, float y, int angle)
@@ -176,10 +178,10 @@ void Race::translateCarsToStartPositions()
     {
         const float startTileX = finishLine->location().x();
         const float startTileY = finishLine->location().y();
-        const float tileWidth  = TrackTile::TILE_W;
+        const float tileWidth = TrackTile::TILE_W;
         const float tileHeight = TrackTile::TILE_H;
-        const float spacing    = 0.75 * TrackTile::TILE_W;
-        const float oddOffset  = TrackTile::TILE_W / 8;
+        const float spacing = 0.75 * TrackTile::TILE_W;
+        const float oddOffset = TrackTile::TILE_W / 8;
         const float gridOffset = 24;
 
         // Reverse order
@@ -239,7 +241,7 @@ void Race::translateCarsToStartPositions()
         case -180:
             for (unsigned int i = 0; i < order.size(); i++)
             {
-                const float rowPos = (i % 2) * tileWidth  / 3 - tileWidth / 6;
+                const float rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
                 const float colPos = (i / 2) * spacing + (i % 2) * oddOffset;
                 placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 270);
                 placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY + colPos - gridOffset, 270);
@@ -249,8 +251,7 @@ void Race::translateCarsToStartPositions()
     }
     else
     {
-        juzzlin::L().error() << "Finish line tile not found in track '" <<
-            m_track->trackData().name().toStdString() << "'";
+        juzzlin::L().error() << "Finish line tile not found in track '" << m_track->trackData().name().toStdString() << "'";
     }
 }
 
@@ -259,13 +260,13 @@ void Race::start()
     if (!m_started)
     {
         m_timing.start();
-        m_started  = true;
+        m_started = true;
     }
 }
 
 void Race::stopEngineSounds()
 {
-    for(auto && car : m_cars)
+    for (auto && car : m_cars)
     {
         if (car->soundEffectManager())
         {
@@ -357,7 +358,7 @@ void Race::pitStop(Car & car)
 
 bool isInsideCheckPoint(Car & car, TargetNodeBasePtr tnode, int tolerance)
 {
-    const int width2  = tnode->size().width()  / 2;
+    const int width2 = tnode->size().width() / 2;
     const int height2 = tnode->size().height() / 2;
 
     if (car.location().i() < tnode->location().x() - width2 - tolerance)
@@ -424,7 +425,8 @@ void Race::updateRouteProgress(Car & car)
                 }
 
                 nextTargetNodeIndex = currentTargetNodeIndex;
-                if (++nextTargetNodeIndex >= route.numNodes()){
+                if (++nextTargetNodeIndex >= route.numNodes())
+                {
                     nextTargetNodeIndex = 0;
                 }
             }
@@ -452,7 +454,8 @@ void Race::updateRouteProgress(Car & car)
             }
 
             nextTargetNodeIndex = currentTargetNodeIndex;
-            if (++nextTargetNodeIndex >= route.numNodes()){
+            if (++nextTargetNodeIndex >= route.numNodes())
+            {
                 nextTargetNodeIndex = 0;
             }
         }
@@ -513,8 +516,7 @@ void Race::updatePositions()
 
 void Race::checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex)
 {
-    if (currentTargetNodeIndex == 0 &&
-        car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
+    if (currentTargetNodeIndex == 0 && car.prevTargetNodeIndex() + 1 == static_cast<int>(route.numNodes()))
     {
         m_timing.setLapCompleted(car.index(), car.isHuman());
 
@@ -577,7 +579,7 @@ void Race::checkIfCarIsStuck(Car & car)
             if (++counter.second >= STUCK_LIMIT)
             {
                 moveCarOntoPreviousCheckPoint(car);
-                counter.first  = nullptr;
+                counter.first = nullptr;
                 counter.second = 0;
             }
         }
@@ -619,8 +621,8 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     auto tnode = route.get(car.prevTargetNodeIndex());
     const int randRadius = 64;
     car.translate(MCVector3dF(
-        tnode->location().x() + rand() % randRadius - randRadius / 2,
-        tnode->location().y() + rand() % randRadius - randRadius / 2));
+      tnode->location().x() + rand() % randRadius - randRadius / 2,
+      tnode->location().y() + rand() % randRadius - randRadius / 2));
     car.physicsComponent().reset();
 }
 
@@ -663,8 +665,8 @@ Car & Race::getLoser() const
 void Race::setTrack(Track & track, int lapCount)
 {
     m_lapCount = lapCount;
-    m_track    = &track;
-    m_bestPos  = Settings::instance().loadBestPos(*m_track, m_lapCount, m_game.difficultyProfile().difficulty());
+    m_track = &track;
+    m_bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount, m_game.difficultyProfile().difficulty());
 
     for (OffTrackDetectorPtr otd : m_offTrackDetectors)
     {
@@ -706,9 +708,7 @@ bool Race::isRaceFinished() const
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        return
-            m_timing.raceCompleted(HUMAN_PLAYER_INDEX1) &&
-            m_timing.raceCompleted(HUMAN_PLAYER_INDEX2);
+        return m_timing.raceCompleted(HUMAN_PLAYER_INDEX1) && m_timing.raceCompleted(HUMAN_PLAYER_INDEX2);
     }
 
     return m_timing.raceCompleted(HUMAN_PLAYER_INDEX1);

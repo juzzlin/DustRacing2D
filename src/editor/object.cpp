@@ -17,39 +17,39 @@
 #include <QPainter>
 
 Object::Object(QString category, QString role, QSizeF size, QPixmap pixmap)
-    : ObjectBase(category, role)
-    , m_size(size)
-    , m_pixmap(pixmap)
+  : ObjectBase(category, role)
+  , m_size(size)
+  , m_pixmap(pixmap)
 {
 }
 
 Object::Object(const Object & other)
-    : QGraphicsItem()
-    , ObjectBase(other.category(), other.role())
-    , m_size(other.m_size)
-    , m_pixmap(other.m_pixmap)
+  : QGraphicsItem()
+  , ObjectBase(other.category(), other.role())
+  , m_size(other.m_size)
+  , m_pixmap(other.m_pixmap)
 {
     setLocation(other.location());
     setRotation(other.rotation());
     setForceStationary(other.forceStationary());
 }
 
-QRectF Object::boundingRect () const
+QRectF Object::boundingRect() const
 {
     return QRectF(-m_size.width() / 2, -m_size.height() / 2,
-                   m_size.width(),      m_size.height());
+                  m_size.width(), m_size.height());
 }
 
 void Object::paint(QPainter * painter,
-    const QStyleOptionGraphicsItem * option, QWidget * widget)
+                   const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
 
     painter->save();
     painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-        boundingRect().width(), boundingRect().height(),
-        m_pixmap);
+                        boundingRect().width(), boundingRect().height(),
+                        m_pixmap);
     painter->restore();
 }
 

@@ -28,13 +28,12 @@ class TargetNodeBase;
 class Route
 {
 public:
-
     //! Constructor.
     Route();
 
     Route(const Route & other) = delete;
 
-    Route & operator= (const Route & other) = delete;
+    Route & operator=(const Route & other) = delete;
 
     typedef std::vector<TargetNodeBasePtr> RouteVector;
 
@@ -70,7 +69,6 @@ public:
     RouteVector::const_iterator cend() const;
 
 private:
-
     bool isClosed() const;
 
     std::vector<TargetNodeBasePtr> m_route;

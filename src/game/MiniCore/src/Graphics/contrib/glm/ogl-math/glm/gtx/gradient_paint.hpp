@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@
 ///
 /// @defgroup gtx_gradient_paint GLM_GTX_gradient_paint: Procedural gradient color
 /// @ingroup gtx
-/// 
+///
 /// @brief Functions that return the color of procedural gradient for specific coordinates.
 /// <glm/gtx/gradient_paint.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
@@ -42,35 +42,34 @@
 #include "../glm.hpp"
 #include "../gtx/optimum_pow.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_gradient_paint extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_gradient_paint extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_gradient_paint
-	/// @{
+namespace glm {
+/// @addtogroup gtx_gradient_paint
+/// @{
 
-	/// Return a color from a radial gradient.
-	/// @see - gtx_gradient_paint
-	template <typename valType>
-	valType radialGradient(
-		detail::tvec2<valType> const & Center,
-		valType const & Radius,
-		detail::tvec2<valType> const & Focal,
-		detail::tvec2<valType> const & Position);
+/// Return a color from a radial gradient.
+/// @see - gtx_gradient_paint
+template<typename valType>
+valType radialGradient(
+  detail::tvec2<valType> const & Center,
+  valType const & Radius,
+  detail::tvec2<valType> const & Focal,
+  detail::tvec2<valType> const & Position);
 
-	/// Return a color from a linear gradient.
-	/// @see - gtx_gradient_paint
-	template <typename valType>
-	valType linearGradient(
-		detail::tvec2<valType> const & Point0,
-		detail::tvec2<valType> const & Point1,
-		detail::tvec2<valType> const & Position);
+/// Return a color from a linear gradient.
+/// @see - gtx_gradient_paint
+template<typename valType>
+valType linearGradient(
+  detail::tvec2<valType> const & Point0,
+  detail::tvec2<valType> const & Point1,
+  detail::tvec2<valType> const & Position);
 
-	/// @}
-}// namespace glm
+/// @}
+} // namespace glm
 
 #include "gradient_paint.inl"
 
-#endif//GLM_GTX_gradient_paint
+#endif //GLM_GTX_gradient_paint

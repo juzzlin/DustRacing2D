@@ -24,11 +24,10 @@
 #include "mcbbox3d.hh"
 #include "mcmacros.hh"
 
-
-#include "mcvector2d.hh"
-#include "mcvector3d.hh"
 #include "mcsegment.hh"
 #include "mcshapeview.hh"
+#include "mcvector2d.hh"
+#include "mcvector3d.hh"
 
 #include <memory>
 
@@ -41,7 +40,6 @@ class MCCamera;
 class MCShape
 {
 public:
-
     enum class Type
     {
         Circle,
@@ -132,7 +130,6 @@ public:
     bool likelyIntersects(MCShape & other) const;
 
 private:
-
     //! Disable copy constructor and assignment
     DISABLE_COPY(MCShape);
     DISABLE_ASSI(MCShape);

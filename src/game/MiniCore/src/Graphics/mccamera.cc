@@ -32,12 +32,12 @@ MCCamera::MCCamera(float w, float h, float x, float y, float maxX, float maxY)
 
 void MCCamera::init(float w, float h, float x, float y, float maxX, float maxY)
 {
-    m_w     = w;
-    m_h     = h;
+    m_w = w;
+    m_h = h;
     m_halfW = w / 2;
     m_halfH = h / 2;
-    m_maxX  = maxX;
-    m_maxY  = maxY;
+    m_maxX = maxX;
+    m_maxY = maxY;
 
     setPos(x, y);
 }
@@ -103,5 +103,5 @@ float MCCamera::height() const
 MCBBox<float> MCCamera::bbox() const
 {
     return MCBBox<float>(
-        m_pos.i() - m_halfW, m_pos.j() - m_halfH, m_pos.i() + m_halfW, m_pos.j() + m_halfH);
+      m_pos.i() - m_halfW, m_pos.j() - m_halfH, m_pos.i() + m_halfW, m_pos.j() + m_halfH);
 }

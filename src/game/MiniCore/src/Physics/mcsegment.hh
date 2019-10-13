@@ -23,18 +23,20 @@
 #include "mcvector2d.hh"
 
 //! MCSegment is a structure for a geometrical segment.
-template <typename T>
+template<typename T>
 struct MCSegment
 {
     //! Constructor.
     MCSegment(const MCVector2d<T> & v0, const MCVector2d<T> & v1)
-    : vertex0(v0)
-    , vertex1(v1)
-    {}
+      : vertex0(v0)
+      , vertex1(v1)
+    {
+    }
 
     //! Constructor.
     MCSegment()
-    {}
+    {
+    }
 
     MCVector2d<T> vertex0;
     MCVector2d<T> vertex1;

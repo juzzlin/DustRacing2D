@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,9 @@
 ///
 /// @defgroup gtx_vector_access GLM_GTX_vector_access: Vector access
 /// @ingroup gtx
-/// 
+///
 /// @brief Function to set values to vectors
-/// 
+///
 /// <glm/gtx/vector_access.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -41,45 +41,44 @@
 // Dependency:
 #include "../glm.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_vector_access extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_vector_access extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_vector_access
-	/// @{
+namespace glm {
+/// @addtogroup gtx_vector_access
+/// @{
 
-	//! Set values to a 2 components vector.
-	//! From GLM_GTX_vector_access extension.
-    template <typename valType> 
-	void set(
-		detail::tvec2<valType> & v, 
-		valType const & x, 
-		valType const & y);
+//! Set values to a 2 components vector.
+//! From GLM_GTX_vector_access extension.
+template<typename valType>
+void set(
+  detail::tvec2<valType> & v,
+  valType const & x,
+  valType const & y);
 
-	//! Set values to a 3 components vector.
-	//! From GLM_GTX_vector_access extension.
-    template <typename valType> 
-	void set(
-		detail::tvec3<valType> & v, 
-		valType const & x, 
-		valType const & y, 
-		valType const & z);
+//! Set values to a 3 components vector.
+//! From GLM_GTX_vector_access extension.
+template<typename valType>
+void set(
+  detail::tvec3<valType> & v,
+  valType const & x,
+  valType const & y,
+  valType const & z);
 
-	//! Set values to a 4 components vector.
-	//! From GLM_GTX_vector_access extension.
-    template <typename valType> 
-	void set(
-		detail::tvec4<valType> & v, 
-		valType const & x, 
-		valType const & y, 
-		valType const & z, 
-		valType const & w);
+//! Set values to a 4 components vector.
+//! From GLM_GTX_vector_access extension.
+template<typename valType>
+void set(
+  detail::tvec4<valType> & v,
+  valType const & x,
+  valType const & y,
+  valType const & z,
+  valType const & w);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "vector_access.inl"
 
-#endif//GLM_GTX_vector_access
+#endif //GLM_GTX_vector_access

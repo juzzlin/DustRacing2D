@@ -20,8 +20,8 @@
 #ifndef MCFORCEREGISTRY_HH
 #define MCFORCEREGISTRY_HH
 
-#include "mcmacros.hh"
 #include "mcforcegenerator.hh"
+#include "mcmacros.hh"
 
 #include <map>
 #include <memory>
@@ -36,7 +36,6 @@ class MCObject;
 class MCForceRegistry
 {
 public:
-
     //! Constructor.
     MCForceRegistry();
 
@@ -61,7 +60,6 @@ public:
     void clear();
 
 private:
-
     DISABLE_COPY(MCForceRegistry);
     DISABLE_ASSI(MCForceRegistry);
 

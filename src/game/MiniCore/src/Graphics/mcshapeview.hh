@@ -26,7 +26,6 @@
 #include "mcmacros.hh"
 #include "mctyperegistry.hh"
 
-
 #include "mcvector3d.hh"
 
 #include <memory>
@@ -42,7 +41,6 @@ class MCGLObjectBase;
 class MCShapeView
 {
 public:
-
     /*! Constructor.
      *  \param handle Name shared between all views of the same kind.
      *  Used to batch objects during rendering. Internally the view name string is
@@ -118,7 +116,6 @@ public:
     const MCVector3dF & scale() const;
 
 private:
-
     //! Disable copy constructor and assignment
     DISABLE_ASSI(MCShapeView);
     DISABLE_COPY(MCShapeView);

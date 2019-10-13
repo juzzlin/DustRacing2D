@@ -32,9 +32,12 @@ class MessageOverlay : public QObject, public OverlayBase
     Q_OBJECT
 
 public:
-
     //! Alignment of the MessageOverlay messages.
-    enum class Alignment {Top, Bottom};
+    enum class Alignment
+    {
+        Top,
+        Bottom
+    };
 
     //! Constructor.
     MessageOverlay(Alignment align = Alignment::Bottom, int messageMaxTime = 180);
@@ -57,7 +60,6 @@ public slots:
     void addMessage(const wchar_t * msg);
 
 private:
-
     //! Render messages.
     void renderMessages();
 
@@ -86,11 +88,11 @@ private:
     };
 
     MCTextureFontManager & m_fontManager;
-    MCTextureFont        & m_font;
-    MCTextureText          m_text;
-    int                    m_messageMaxTime;
-    Alignment              m_align;
-    std::list<Message>     m_listMessages;
+    MCTextureFont & m_font;
+    MCTextureText m_text;
+    int m_messageMaxTime;
+    Alignment m_align;
+    std::list<Message> m_listMessages;
 };
 
 #endif // MESSAGEOVERLAY_HPP

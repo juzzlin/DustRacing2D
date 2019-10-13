@@ -28,7 +28,6 @@ class Car;
 class Bridge : public MCObject
 {
 public:
-
     Bridge();
 
     void enterObject(MCObject & object);
@@ -42,7 +41,6 @@ public:
     virtual void separationEvent(MCSeparationEvent & event) override;
 
 private:
-
     void doExitObject(MCObject & object);
 
     void raiseObject(MCObject & object, bool raise);

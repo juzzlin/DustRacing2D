@@ -19,8 +19,8 @@
 #include <memory>
 #include <vector>
 
-#include <QString>
 #include <QPointF>
+#include <QString>
 
 #include "draganddropstore.hpp"
 #include "editormode.hpp"
@@ -41,7 +41,6 @@ class QGraphicsLineItem;
 class EditorData
 {
 public:
-
     //! Constructor.
     explicit EditorData(Mediator & mediator);
 
@@ -131,9 +130,8 @@ public:
     int currentScale() const;
 
 private:
-
     EditorData(const EditorData & e);
-    EditorData & operator= (const EditorData & e);
+    EditorData & operator=(const EditorData & e);
 
     void clearScene();
 

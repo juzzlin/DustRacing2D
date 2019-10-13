@@ -26,7 +26,6 @@ class MapBase;
 class TrackDataBase
 {
 public:
-
     /** Keywords used in the track data files. */
     struct DataKeywords
     {
@@ -90,7 +89,7 @@ public:
 
             static constexpr auto category = "c";
 
-            static constexpr auto x= "x";
+            static constexpr auto x = "x";
 
             static constexpr auto y = "y";
 
@@ -106,7 +105,7 @@ public:
     //! Copy constructor.
     TrackDataBase(const TrackDataBase & other);
 
-    TrackDataBase & operator= (const TrackDataBase & other) = delete;
+    TrackDataBase & operator=(const TrackDataBase & other) = delete;
 
     //! Destructor.
     virtual ~TrackDataBase();
@@ -154,7 +153,6 @@ public:
     virtual const Objects & objects() const = 0;
 
 private:
-
     QString m_name;
 
     unsigned int m_index;

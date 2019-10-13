@@ -22,8 +22,6 @@
 
 #include "mcmacros.hh"
 
-
-
 #include <memory>
 
 class MCObject;
@@ -33,7 +31,6 @@ class MCForceGeneratorImpl;
 class MCForceGenerator
 {
 public:
-
     //! Constructor
     MCForceGenerator();
 
@@ -50,7 +47,6 @@ public:
     bool enabled() const;
 
 private:
-
     DISABLE_COPY(MCForceGenerator);
     DISABLE_ASSI(MCForceGenerator);
 

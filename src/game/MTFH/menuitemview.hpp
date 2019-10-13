@@ -26,7 +26,6 @@ class MenuItem;
 class MenuItemView
 {
 public:
-
     //! Constructor.
     MenuItemView(MenuItem & owner);
 
@@ -43,7 +42,6 @@ public:
     virtual void stepTime(int msecs);
 
 private:
-
     MenuItem & m_owner;
 };
 

@@ -21,7 +21,6 @@
 class DifficultyMenu : public SurfaceMenu
 {
 public:
-
     static std::string MenuId;
 
     DifficultyMenu(int width, int height);

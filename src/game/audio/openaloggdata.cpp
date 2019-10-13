@@ -17,8 +17,8 @@
 
 #include <AL/alc.h>
 
-#include <vector>
 #include <cstdio>
+#include <vector>
 
 #include <vorbis/vorbisfile.h>
 
@@ -34,16 +34,16 @@ static const int BUFFER_SIZE = 32768; // 32 KB buffers
 // http://www.gamedev.net/page/resources/_/technical/game-programming/introduction-to-ogg-vorbis-r2031
 static void loadOgg(const char * fileName, std::vector<char> & buffer, ALenum & format, ALsizei & freq)
 {
-    int endian = 0;             // 0 for Little-Endian, 1 for Big-Endian
+    int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
     int bitStream;
     long bytes;
-    char array[BUFFER_SIZE];    // Local fixed size array
-    FILE *f;
+    char array[BUFFER_SIZE]; // Local fixed size array
+    FILE * f;
 
     // Open for binary reading
     f = std::fopen(fileName, "rb");
 
-    vorbis_info *pInfo;
+    vorbis_info * pInfo;
     OggVorbis_File oggFile;
     ov_open(f, &oggFile, NULL, 0);
 
@@ -76,8 +76,8 @@ static void loadOgg(const char * fileName, std::vector<char> & buffer, ALenum & 
 }
 
 OpenALOggData::OpenALOggData(const std::string & path)
-    : m_freq(0)
-    , m_buffer(0)
+  : m_freq(0)
+  , m_buffer(0)
 {
     load(path);
 }

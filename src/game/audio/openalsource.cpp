@@ -27,15 +27,15 @@ static bool checkError()
 }
 
 OpenALSource::OpenALSource(STFH::DataPtr data)
-    : m_handle(0)
+  : m_handle(0)
 {
     alGenSources((ALuint)1, &m_handle);
 
-    alSourcef(m_handle,  AL_PITCH, pitch());
-    alSourcef(m_handle,  AL_GAIN, volume());
+    alSourcef(m_handle, AL_PITCH, pitch());
+    alSourcef(m_handle, AL_GAIN, volume());
     alSource3f(m_handle, AL_POSITION, 0, 0, 0);
     alSource3f(m_handle, AL_VELOCITY, 0, 0, 0);
-    alSourcei(m_handle,  AL_LOOPING, AL_FALSE);
+    alSourcei(m_handle, AL_LOOPING, AL_FALSE);
 
     setData(data);
 }

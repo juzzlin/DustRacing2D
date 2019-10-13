@@ -22,7 +22,6 @@
 class Map : public MapBase
 {
 public:
-
     //! Constuctor.
     Map(unsigned int cols, unsigned int rows);
 
@@ -43,7 +42,6 @@ public:
     virtual ~Map();
 
 private:
-
     void moveTilesAfterColumnDeletion(unsigned int at);
 
     void moveTilesAfterRowDeletion(unsigned int at);

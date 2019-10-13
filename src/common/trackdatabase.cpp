@@ -16,16 +16,16 @@
 #include "trackdatabase.hpp"
 
 TrackDataBase::TrackDataBase(QString name, bool isUserTrack)
-    : m_name(name)
-    , m_index(999)
-    , m_isUserTrack(isUserTrack)
+  : m_name(name)
+  , m_index(999)
+  , m_isUserTrack(isUserTrack)
 {
 }
 
 TrackDataBase::TrackDataBase(const TrackDataBase & other)
-    : m_name(other.m_name)
-    , m_index(other.m_index)
-    , m_isUserTrack(other.m_isUserTrack)
+  : m_name(other.m_name)
+  , m_index(other.m_index)
+  , m_isUserTrack(other.m_isUserTrack)
 {
 }
 
@@ -43,7 +43,6 @@ unsigned int TrackDataBase::index() const
 {
     return m_index;
 }
-
 
 void TrackDataBase::setName(QString name)
 {

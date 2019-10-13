@@ -15,42 +15,42 @@
 
 #include "newtrackdialog.hpp"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QCheckBox>
+#include <QHBoxLayout>
+#include <QIntValidator>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QIntValidator>
+#include <QVBoxLayout>
 
-NewTrackDialog::NewTrackDialog(QWidget *parent) :
-    QDialog(parent),
-    m_layout(new QGridLayout(this)),
-    m_okButton(new QPushButton(tr("Ok"))),
-    m_cancelButton(new QPushButton(tr("Cancel"))),
-    m_colsEdit(new QLineEdit),
-    m_rowsEdit(new QLineEdit),
-    m_nameEdit(new QLineEdit),
-    m_colsLabel(new QLabel(tr("Number of tile columns:"))),
-    m_rowsLabel(new QLabel(tr("Number of tile rows:"))),
-    m_nameLabel(new QLabel(tr("Track name:"))),
-    m_userLabel(new QLabel(tr("User track:"))),
-    m_userCheck(new QCheckBox)
+NewTrackDialog::NewTrackDialog(QWidget * parent)
+  : QDialog(parent)
+  , m_layout(new QGridLayout(this))
+  , m_okButton(new QPushButton(tr("Ok")))
+  , m_cancelButton(new QPushButton(tr("Cancel")))
+  , m_colsEdit(new QLineEdit)
+  , m_rowsEdit(new QLineEdit)
+  , m_nameEdit(new QLineEdit)
+  , m_colsLabel(new QLabel(tr("Number of tile columns:")))
+  , m_rowsLabel(new QLabel(tr("Number of tile rows:")))
+  , m_nameLabel(new QLabel(tr("Track name:")))
+  , m_userLabel(new QLabel(tr("User track:")))
+  , m_userCheck(new QCheckBox)
 {
     setWindowTitle(tr("Create a new track"));
 
     m_userCheck->setChecked(true);
     m_okButton->setEnabled(false);
 
-    m_layout->addWidget(m_nameLabel,    0, 0);
-    m_layout->addWidget(m_nameEdit,     0, 1);
-    m_layout->addWidget(m_userLabel,    1, 0);
-    m_layout->addWidget(m_userCheck,    1, 1);
-    m_layout->addWidget(m_colsLabel,    2, 0);
-    m_layout->addWidget(m_colsEdit,     2, 1);
-    m_layout->addWidget(m_rowsLabel,    3, 0);
-    m_layout->addWidget(m_rowsEdit,     3, 1);
-    m_layout->addWidget(m_okButton,     4, 0);
+    m_layout->addWidget(m_nameLabel, 0, 0);
+    m_layout->addWidget(m_nameEdit, 0, 1);
+    m_layout->addWidget(m_userLabel, 1, 0);
+    m_layout->addWidget(m_userCheck, 1, 1);
+    m_layout->addWidget(m_colsLabel, 2, 0);
+    m_layout->addWidget(m_colsEdit, 2, 1);
+    m_layout->addWidget(m_rowsLabel, 3, 0);
+    m_layout->addWidget(m_rowsEdit, 3, 1);
+    m_layout->addWidget(m_okButton, 4, 0);
     m_layout->addWidget(m_cancelButton, 4, 1);
 
     connect(m_nameEdit, &QLineEdit::textChanged, this, &NewTrackDialog::validateData);
@@ -83,8 +83,5 @@ bool NewTrackDialog::isUserTrack() const
 void NewTrackDialog::validateData()
 {
     m_okButton->setEnabled(
-        m_nameEdit->text().length() > 0 &&
-        m_colsEdit->text().toInt()  > 1 &&
-        m_rowsEdit->text().toInt()  > 1);
+      m_nameEdit->text().length() > 0 && m_colsEdit->text().toInt() > 1 && m_rowsEdit->text().toInt() > 1);
 }
-

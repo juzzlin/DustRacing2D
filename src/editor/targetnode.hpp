@@ -16,8 +16,8 @@
 #ifndef TARGETNODE_HPP
 #define TARGETNODE_HPP
 
-#include <QGraphicsItem>
 #include "../common/targetnodebase.hpp"
+#include <QGraphicsItem>
 
 class QGraphicsLineItem;
 
@@ -25,17 +25,16 @@ class QGraphicsLineItem;
 class TargetNode : public QGraphicsItem, public TargetNodeBase
 {
 public:
-
     //! Constructor.
     TargetNode();
 
     //! Copy constructor.
     TargetNode(const TargetNode & other);
 
-    virtual QRectF boundingRect () const override;
+    virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter * painter,
-        const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
+                       const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
 
     //! Sets the TargetNode and QGraphicsItem locations.
     virtual void setLocation(QPointF newLocation) override;
@@ -50,7 +49,6 @@ public:
     void updateRouteLine();
 
 private:
-
     //! Line that is drawn from a node to the next node
     //! according to the route vector.
     QGraphicsLineItem * m_routeLine;

@@ -23,18 +23,20 @@
 #include "mcvector2d.hh"
 
 //! MCEdge is a structure for an edge vector and its origin.
-template <typename T>
+template<typename T>
 struct MCEdge
 {
     //! Constructor.
     MCEdge(const MCVector2d<T> & newEdge, const MCVector2d<T> & newOrigin)
-    : edge(newEdge)
-    , origin(newOrigin)
-    {}
+      : edge(newEdge)
+      , origin(newOrigin)
+    {
+    }
 
     //! Constructor.
     MCEdge()
-    {}
+    {
+    }
 
     MCVector2d<T> edge;
     MCVector2d<T> origin;

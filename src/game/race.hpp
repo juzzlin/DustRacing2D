@@ -16,10 +16,10 @@
 #ifndef RACE_HPP
 #define RACE_HPP
 
+#include <MCObject>
 #include <QObject>
 #include <QString>
 #include <QTimer>
-#include <MCObject>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -40,7 +40,6 @@ class Race : public AudioSource
     Q_OBJECT
 
 public:
-
     //! Constructor.
     Race(Game & game, unsigned int numCars);
 
@@ -92,7 +91,6 @@ public slots:
     void pitStop(Car & car);
 
 private:
-
     void checkForNewBestPosition(const Car & car);
 
     void checkIfCarIsStuck(Car & car);
@@ -133,7 +131,7 @@ private:
 
     // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
-    typedef std::unordered_map<int, std::vector<int> > ProgressionHash;
+    typedef std::unordered_map<int, std::vector<int>> ProgressionHash;
     mutable ProgressionHash m_progression;
 
     typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;

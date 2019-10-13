@@ -31,7 +31,6 @@ class TrackTile;
 class Minimap
 {
 public:
-
     Minimap();
 
     Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, int size);
@@ -42,7 +41,6 @@ public:
     void render(const CarVector & cars, const Race & race);
 
 private:
-
     void renderMap();
 
     void renderMarkers(const CarVector & cars, const Race & race);
@@ -54,7 +52,7 @@ private:
         int rotation;
     };
 
-    std::map<MCSurface *, std::vector<MinimapTile> > m_map;
+    std::map<MCSurface *, std::vector<MinimapTile>> m_map;
 
     Car * m_carToFollow = nullptr;
 

@@ -24,17 +24,14 @@ class ConfirmationMenu;
 class ResolutionMenu : public SurfaceMenu
 {
 public:
-
     //! Constructor.
     ResolutionMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int width, int height, bool fullScreen);
 
 protected:
-
     //! \reimp
     virtual void enter() override;
 
 private:
-
     ConfirmationMenuPtr m_confirmationMenu;
 };
 

@@ -18,7 +18,6 @@
 
 #include <MCBBox>
 
-
 #include "renderable.hpp"
 #include "updateableif.hpp"
 
@@ -26,7 +25,6 @@
 class OverlayBase : public UpdateableIf, public Renderable
 {
 public:
-
     //! Constructor.
     OverlayBase();
 

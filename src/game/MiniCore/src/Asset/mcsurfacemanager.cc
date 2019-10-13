@@ -22,12 +22,12 @@
 #include "mcsurface.hh"
 #include "mcsurfaceconfigloader.hh"
 
+#include <MCGLEW>
 #include <QByteArray>
 #include <QDir>
 #include <QFile>
 #include <QImage>
 #include <QSysInfo>
-#include <MCGLEW>
 
 #include <cassert>
 #include <cmath>
@@ -43,43 +43,54 @@ static inline QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_
 {
 #ifdef __MC_GLES__
     (void)texture_format;
-    if (false) {
+    if (false)
+    {
 #else
-    if (texture_format == GL_BGRA) {
+    if (texture_format == GL_BGRA)
+    {
 #endif
-        if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+        {
             return ((src_pixel << 24) & 0xff000000)
-                 | ((src_pixel >> 24) & 0x000000ff)
-                 | ((src_pixel << 8)  & 0x00ff0000)
-                 | ((src_pixel >> 8)  & 0x0000ff00);
-        } else {
+              | ((src_pixel >> 24) & 0x000000ff)
+              | ((src_pixel << 8) & 0x00ff0000)
+              | ((src_pixel >> 8) & 0x0000ff00);
+        }
+        else
+        {
             return src_pixel;
         }
-    } else {  // GL_RGBA
-        if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+    }
+    else
+    { // GL_RGBA
+        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+        {
             return (src_pixel << 8) | ((src_pixel >> 24) & 0xff);
-        } else {
+        }
+        else
+        {
             return ((src_pixel << 16) & 0xff0000)
-                 | ((src_pixel >> 16) & 0xff)
-                 | (src_pixel & 0xff00ff00);
+              | ((src_pixel >> 16) & 0xff)
+              | (src_pixel & 0xff00ff00);
         }
     }
 }
 
 // This function is taken from Qt in order to drop dependency to QGLWidget::convertToGLFormat().
-static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format)
+static void convertToGLFormatHelper(QImage & dst, const QImage & img, GLenum texture_format)
 {
     Q_ASSERT(dst.depth() == 32);
     Q_ASSERT(img.depth() == 32);
 
-    if (dst.size() != img.size()) {
+    if (dst.size() != img.size())
+    {
         int target_width = dst.width();
         int target_height = dst.height();
         qreal sx = target_width / qreal(img.width());
         qreal sy = target_height / qreal(img.height());
 
-        quint32 *dest = (quint32 *) dst.scanLine(0); // NB! avoid detach here
-        uchar *srcPixels = (uchar *) img.scanLine(img.height() - 1);
+        quint32 * dest = (quint32 *)dst.scanLine(0); // NB! avoid detach here
+        uchar * srcPixels = (uchar *)img.scanLine(img.height() - 1);
         int sbpl = img.bytesPerLine();
         int dbpl = dst.bytesPerLine();
 
@@ -90,64 +101,85 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
         quint32 srcy = int(0.5 * iy);
 
         // scale, swizzle and mirror in one loop
-        while (target_height--) {
-            const uint *src = (const quint32 *) (srcPixels - (srcy >> 16) * sbpl);
+        while (target_height--)
+        {
+            const uint * src = (const quint32 *)(srcPixels - (srcy >> 16) * sbpl);
             int srcx = basex;
-            for (int x=0; x<target_width; ++x) {
+            for (int x = 0; x < target_width; ++x)
+            {
                 dest[x] = qt_gl_convertToGLFormatHelper(src[srcx >> 16], texture_format);
                 srcx += ix;
             }
-            dest = (quint32 *)(((uchar *) dest) + dbpl);
+            dest = (quint32 *)(((uchar *)dest) + dbpl);
             srcy += iy;
         }
-    } else {
+    }
+    else
+    {
         const int width = img.width();
         const int height = img.height();
-        const uint *p = (const uint*) img.scanLine(img.height() - 1);
-        uint *q = (uint*) dst.scanLine(0);
+        const uint * p = (const uint *)img.scanLine(img.height() - 1);
+        uint * q = (uint *)dst.scanLine(0);
 
 #ifdef __MC_GLES__
-        if (false) {
+        if (false)
+        {
 #else
-        if (texture_format == GL_BGRA) {
+        if (texture_format == GL_BGRA)
+        {
 #endif
-            if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+            if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+            {
                 // mirror + swizzle
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
+                for (int i = 0; i < height; ++i)
+                {
+                    const uint * end = p + width;
+                    while (p < end)
+                    {
                         *q = ((*p << 24) & 0xff000000)
-                           | ((*p >> 24) & 0x000000ff)
-                           | ((*p << 8)  & 0x00ff0000)
-                           | ((*p >> 8)  & 0x0000ff00);
+                          | ((*p >> 24) & 0x000000ff)
+                          | ((*p << 8) & 0x00ff0000)
+                          | ((*p >> 8) & 0x0000ff00);
                         p++;
                         q++;
                     }
                     p -= 2 * width;
                 }
-            } else {
+            }
+            else
+            {
                 const uint bytesPerLine = img.bytesPerLine();
-                for (int i=0; i < height; ++i) {
+                for (int i = 0; i < height; ++i)
+                {
                     memcpy(q, p, bytesPerLine);
                     q += width;
                     p -= width;
                 }
             }
-        } else {
-            if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
+        }
+        else
+        {
+            if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+            {
+                for (int i = 0; i < height; ++i)
+                {
+                    const uint * end = p + width;
+                    while (p < end)
+                    {
                         *q = (*p << 8) | ((*p >> 24) & 0xff);
                         p++;
                         q++;
                     }
                     p -= 2 * width;
                 }
-            } else {
-                for (int i=0; i < height; ++i) {
-                    const uint *end = p + width;
-                    while (p < end) {
+            }
+            else
+            {
+                for (int i = 0; i < height; ++i)
+                {
+                    const uint * end = p + width;
+                    while (p < end)
+                    {
                         *q = ((*p << 16) & 0xff0000) | ((*p >> 16) & 0xff) | (*p & 0xff00ff00);
                         p++;
                         q++;
@@ -174,7 +206,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
 
     // Store original width of the image
     int origH = data.height.second ? data.height.first : image.height();
-    int origW = data.width.second  ? data.width.first  : image.width();
+    int origW = data.width.second ? data.width.first : image.width();
 
     // Create material. Possible secondary textures are taken from surfaces
     // that are initialized before this surface.
@@ -190,7 +222,7 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
 
     // Create a new MCSurface object
     MCSurface * surface =
-        new MCSurface(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
+      new MCSurface(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Maybe better place for this could be in the material?
     surface->setColor(data.color);
@@ -205,7 +237,7 @@ void MCSurfaceManager::createSurfaceCommon(MCSurface & surface, const MCSurfaceM
 {
     // Enable alpha blend, if set
     surface.material()->setAlphaBlend(
-        data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
+      data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Store MCSurface to map
     m_surfaceMap[data.handle] = &surface;
@@ -218,9 +250,11 @@ static bool isPowerOfTwo(unsigned int x)
 
 static unsigned int getNearestPowerOfTwo(unsigned int x)
 {
-    const std::vector<unsigned int> powers = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
-    for (auto power : powers) {
-        if (power > x) {
+    const std::vector<unsigned int> powers = { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048 };
+    for (auto power : powers)
+    {
+        if (power > x)
+        {
             return power;
         }
     }
@@ -255,7 +289,7 @@ static QImage forceToNearestPowerOfTwoImage(const MCSurfaceMetaData & data, cons
 }
 #endif
 GLuint MCSurfaceManager::create2DTextureFromImage(
-    const MCSurfaceMetaData & data, const QImage & image)
+  const MCSurfaceMetaData & data, const QImage & image)
 {
 #ifdef __MC_GLES__
     QImage textureImage = forceToNearestPowerOfTwoImage(data, image);
@@ -350,8 +384,8 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
 
     // Edit image data using the information textureImage gives us
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-        glFormattedImage.width(), glFormattedImage.height(),
-        0, GL_RGBA, GL_UNSIGNED_BYTE, glFormattedImage.bits());
+                 glFormattedImage.width(), glFormattedImage.height(),
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, glFormattedImage.bits());
 
     return textureHandle;
 }
@@ -362,9 +396,7 @@ void MCSurfaceManager::applyColorKey(QImage & textureImage, unsigned int r, unsi
     {
         for (int j = 0; j < textureImage.height(); j++)
         {
-            if (colorMatch( textureImage.pixel(i, j) & 0x000000ff,        b, 2) &&
-                colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8,  g, 2) &&
-                colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, r, 2))
+            if (colorMatch(textureImage.pixel(i, j) & 0x000000ff, b, 2) && colorMatch((textureImage.pixel(i, j) & 0x0000ff00) >> 8, g, 2) && colorMatch((textureImage.pixel(i, j) & 0x00ff0000) >> 16, r, 2))
             {
                 textureImage.setPixel(i, j, 0x00000000);
             }
@@ -411,7 +443,7 @@ MCSurfaceManager::~MCSurfaceManager()
 }
 
 void MCSurfaceManager::load(
-    const std::string & configFilePath, const std::string & baseDataPath)
+  const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCSurfaceConfigLoader loader;
 

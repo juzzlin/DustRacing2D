@@ -18,14 +18,14 @@
 namespace STFH {
 
 Location::Location()
-    : m_x(0)
-    , m_y(0)
+  : m_x(0)
+  , m_y(0)
 {
 }
 
 Location::Location(float x, float y)
-    : m_x(x)
-    , m_y(y)
+  : m_x(x)
+  , m_y(y)
 {
 }
 
@@ -45,4 +45,4 @@ float Location::y() const
     return m_y;
 }
 
-} // STFH
+} // namespace STFH

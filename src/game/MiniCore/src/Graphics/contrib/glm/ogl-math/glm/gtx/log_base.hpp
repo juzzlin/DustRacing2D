@@ -8,10 +8,10 @@
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-/// 
+///
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-/// 
+///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,9 @@
 ///
 /// @defgroup gtx_log_base GLM_GTX_log_base: Log with base
 /// @ingroup gtx
-/// 
+///
 /// @brief Logarithm for any base. base can be a vector or a scalar.
-/// 
+///
 /// <glm/gtx/log_base.hpp> need to be included to use these functionalities.
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -41,25 +41,24 @@
 // Dependency:
 #include "../glm.hpp"
 
-#if(defined(GLM_MESSAGES) && !defined(glm_ext))
-#	pragma message("GLM: GLM_GTX_log_base extension included")
+#if (defined(GLM_MESSAGES) && !defined(glm_ext))
+#pragma message("GLM: GLM_GTX_log_base extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_log_base
-	/// @{
+namespace glm {
+/// @addtogroup gtx_log_base
+/// @{
 
-	//! Logarithm for any base.
-	//! From GLM_GTX_log_base.
-	template <typename genType> 
-	genType log(
-		genType const & x, 
-		genType const & base);
+//! Logarithm for any base.
+//! From GLM_GTX_log_base.
+template<typename genType>
+genType log(
+  genType const & x,
+  genType const & base);
 
-	/// @}
-}//namespace glm
+/// @}
+} //namespace glm
 
 #include "log_base.inl"
 
-#endif//GLM_GTX_log_base
+#endif //GLM_GTX_log_base

@@ -20,10 +20,10 @@
 #ifndef MCSURFACEPARTICLE_HH
 #define MCSURFACEPARTICLE_HH
 
-#include "mcparticle.hh"
 #include "mccamera.hh"
 #include "mcglcolor.hh"
 #include "mcglshaderprogram.hh"
+#include "mcparticle.hh"
 #include "mcsurface.hh"
 
 #include <string>
@@ -38,7 +38,6 @@ class MCSurface;
 class MCSurfaceParticle : public MCParticle
 {
 public:
-
     /*! Constructor.
      *  \param viewId id for the particle. All particles of a same kind should
      *  use the same id. E.g. batching is carried out based on this id.
@@ -72,7 +71,6 @@ public:
     bool hasShadow() const;
 
 private:
-
     DISABLE_COPY(MCSurfaceParticle);
     DISABLE_ASSI(MCSurfaceParticle);
 

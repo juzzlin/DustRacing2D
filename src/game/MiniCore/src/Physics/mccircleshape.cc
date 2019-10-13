@@ -21,7 +21,7 @@
 #include "mcobject.hh"
 
 MCCircleShape::MCCircleShape(MCShapeViewPtr view, float radius)
-    : MCShape(view)
+  : MCShape(view)
 {
     setRadius(radius);
 }
@@ -58,8 +58,9 @@ MCShape::Type MCCircleShape::type() const
 MCBBox<float> MCCircleShape::bbox() const
 {
     return MCBBox<float>(
-        MCVector2dF(location()) - MCVector2dF(radius(), radius()), radius() * 2, radius() * 2);
+      MCVector2dF(location()) - MCVector2dF(radius(), radius()), radius() * 2, radius() * 2);
 }
 
 MCCircleShape::~MCCircleShape()
-{}
+{
+}

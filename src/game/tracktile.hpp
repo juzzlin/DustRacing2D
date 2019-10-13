@@ -23,7 +23,6 @@
 class TrackTile : public TrackTileBase
 {
 public:
-
     //! All possible types.
     enum TileType
     {
@@ -46,7 +45,7 @@ public:
     /*! Constructor.
      *  \see TrackTileBase. */
     TrackTile(QPointF location, QPoint matrixLocation,
-        const QString & type = "", TileType typeEnum = TT_NONE);
+              const QString & type = "", TileType typeEnum = TT_NONE);
 
     //! Destructor
     virtual ~TrackTile();
@@ -86,7 +85,6 @@ public:
     bool hasAsphalt() const;
 
 private:
-
     //! Disable the string-based type getter. Use tileTypeEnum() instead.
     const QString & tileType() const;
 

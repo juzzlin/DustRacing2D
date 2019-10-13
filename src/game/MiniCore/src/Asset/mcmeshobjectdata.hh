@@ -26,7 +26,6 @@
 class MCMeshObjectData : public MCSurfaceObjectData
 {
 public:
-
     //! Constructor.
     explicit MCMeshObjectData(const std::string & typeId);
 
@@ -40,7 +39,6 @@ public:
     const std::string & meshId() const;
 
 private:
-
     DISABLE_COPY(MCMeshObjectData);
     DISABLE_ASSI(MCMeshObjectData);
 

@@ -22,9 +22,9 @@
 
 #include "mcmacros.hh"
 
-#include <vector>
 #include <map>
 #include <set>
+#include <vector>
 
 class MCCircleShape;
 class MCObject;
@@ -35,12 +35,13 @@ class MCRectShape;
 class MCCollisionDetector
 {
 public:
-
     //! Constructor.
     MCCollisionDetector();
 
     //! Destructor.
-    virtual ~MCCollisionDetector() {}
+    virtual ~MCCollisionDetector()
+    {
+    }
 
     void clear();
 
@@ -53,7 +54,6 @@ public:
     unsigned int iterateCurrentCollisions();
 
 private:
-
     DISABLE_COPY(MCCollisionDetector);
     DISABLE_ASSI(MCCollisionDetector);
 

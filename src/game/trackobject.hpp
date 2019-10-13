@@ -25,7 +25,6 @@
 class TrackObject : public ObjectBase
 {
 public:
-
     //! Constructor.
     TrackObject(QString category, QString role, MCObjectPtr object);
 
@@ -33,7 +32,6 @@ public:
     MCObject & object() const;
 
 private:
-
     //! The associated MCObject.
     MCObjectPtr m_object;
 };

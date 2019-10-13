@@ -25,7 +25,6 @@
 class OpenALDevice : public STFH::Device
 {
 public:
-
     //! Constructor.
     OpenALDevice();
 
@@ -39,8 +38,7 @@ public:
     virtual ~OpenALDevice();
 
 private:
-
-    ALCdevice  * m_device;
+    ALCdevice * m_device;
     ALCcontext * m_context;
 };
 
