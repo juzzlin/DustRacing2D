@@ -32,13 +32,13 @@
     </message>
     <message>
         <source>L:</source>
-        <translatorcomment>Rundenrekord</translatorcomment>
-        <translation>R: </translation>
+        <translatorcomment>Letzte Rundenzeit</translatorcomment>
+        <translation>L: </translation>
     </message>
     <message>
         <source>R:</source>
-        <translatorcomment>Streckenrekord</translatorcomment>
-        <translation>S: </translation>
+        <translatorcomment>Rundenrekord</translatorcomment>
+        <translation>R: </translation>
     </message>
     <message>
         <source>Ok</source>
@@ -259,7 +259,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>Race Record: </source>
-        <translation>Streckenrekord: </translation>
+        <translation>  Rennrekord: </translation>
     </message>
     <message>
         <source>Reset record times</source>
@@ -303,7 +303,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>       Laps: </source>
-        <translation>        Runden: </translation>
+        <translation>      Runden: </translation>
     </message>
     <message>
         <source>Time Trial</source>
@@ -351,7 +351,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>     Length: </source>
-        <translation>     Länge: </translation>
+        <translation>       Länge: </translation>
     </message>
     <message>
         <source>Restart to change VSync setting.</source>
@@ -391,7 +391,7 @@ Pause: P</translation>
     </message>
     <message>
         <source>Watch your tires!</source>
-        <translation>Achten Sie auf Ihre Reifen!</translation>
+        <translation>Schonen Sie Ihre Reifen!</translation>
     </message>
     <message>
         <source>Difficulty &gt;</source>
@@ -411,11 +411,11 @@ Pause: P</translation>
     </message>
     <message>
         <source> Lap Record: </source>
-        <translation> Rundenrekord: </translation>
+        <translation>Rundenrekord: </translation>
     </message>
     <message>
         <source>New race record!</source>
-        <translation>Neuer Streckenrekord!</translation>
+        <translation>Neuer Rennrekord!</translation>
     </message>
     <message>
         <source>Windowed resolution &gt;</source>
@@ -423,23 +423,23 @@ Pause: P</translation>
     </message>
     <message>
         <source>PROGRAMMING</source>
-        <translation>Programmierung</translation>
+        <translation>PROGRAMMIERUNG</translation>
     </message>
     <message>
         <source>GRAPHICS</source>
-        <translation>Grafik</translation>
+        <translation>GRAFIK</translation>
     </message>
     <message>
         <source>LEVEL DESIGN</source>
-        <translation>Level-Design</translation>
+        <translation>LEVEL-DESIGN</translation>
     </message>
     <message>
         <source>TRANSLATIONS</source>
-        <translation>Übersetzungen</translation>
+        <translation>ÜBERSETZUNGEN</translation>
     </message>
     <message>
         <source>PATCHES</source>
-        <translation>Patches</translation>
+        <translation>PATCHES</translation>
     </message>
     <message>
         <source>Choose lap count</source>
