@@ -201,6 +201,7 @@ void TimingOverlay::renderPosition()
     m_text.setGlyphSize(GLYPH_W_POS, GLYPH_H_POS);
 
     std::wstringstream ss;
+    //: Position/rank
     ss << QObject::tr(" POS:").toStdWString();
     ss << m_posTexts.at(pos);
 
@@ -304,6 +305,7 @@ void TimingOverlay::renderLastLapTime()
     m_text.setColor(WHITE);
 
     std::wstringstream ss;
+    //: Last lap time
     ss << QObject::tr("L:").toStdWString() << m_timing->msecsToString(lastLapTime);
     m_text.setText(ss.str());
     m_text.render(
@@ -323,6 +325,7 @@ void TimingOverlay::renderRecordLapTime()
         m_text.setColor(WHITE);
 
         std::wstringstream ss;
+        //: Lap record time
         ss << QObject::tr("R:").toStdWString() << m_timing->msecsToString(recordLapTime);
         m_text.setText(ss.str());
         m_text.render(
@@ -343,6 +346,7 @@ void TimingOverlay::renderRaceTime()
         m_text.setColor(WHITE);
 
         std::wstringstream ss;
+        //: Total race time
         ss << QObject::tr("TOT:").toStdWString() << m_timing->msecsToString(raceTime);
         m_text.setText(ss.str());
         m_text.render(
