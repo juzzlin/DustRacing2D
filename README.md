@@ -13,10 +13,10 @@
 
 <a href="https://www.youtube.com/watch?feature=player_embedded&v=3hrIzzItggQ">Video of the game</a>
 
-Dust Racing (Dustrac) is a tile-based, cross-platform 2D racing game written
+Dust Racing 2D (Dustrac) is a tile-based, cross-platform 2D racing game written
 in Qt (C++) and OpenGL.
 
-Dust Racing comes with a Qt-based level editor for easy level creation.
+Dust Racing 2D comes with a Qt-based level editor for easy level creation.
 A separate engine, MiniCore, is used for physics modeling.
 
 ## Features
@@ -39,13 +39,13 @@ A separate engine, MiniCore, is used for physics modeling.
 
 ## License
 
-Dust Racing source code is licensed under GNU GPLv3.
+Dust Racing 2D source code is licensed under GNU GPLv3.
 See COPYING for the complete license text.
 
-Dust Racing includes the source code for the GLEW library.
+Dust Racing 2D includes the source code for the GLEW library.
 See src/game/MiniCore/Graphics/glew/glew.h for the license text.
 
-Dust Racing includes the source code for the GLM library.
+Dust Racing 2D includes the source code for the GLM library.
 See src/game/MiniCore/Graphics/glm/ogl-math/glm/glm.hpp for the license text.
 
 All image files, except where otherwise noted, are licensed under
@@ -89,7 +89,7 @@ By stopping on the pit your tires will be repaired.
 
 ### Custom track files
 
-Dust Racing searches for race tracks in `~/DustRacingTracks/` where you can place your own race tracks.
+Dust Racing 2D searches for race tracks in `~/DustRacingTracks/` where you can place your own race tracks.
 
 On Linux/Unix also `$XDG_DATA_HOME/DustRacing2D/tracks` is added to search paths, or `$HOME/.local/share/DustRacing2D/tracks` if `$XDG_DATA_HOME` is not defined.
 
