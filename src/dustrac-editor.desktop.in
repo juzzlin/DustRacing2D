@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Dust Racing 2D Level Editor
 GenericName=2D racing game level editor
+GenericName[de]=2D-Rennspiel-Level-Editor
 Comment=2D racing game level editor
+Comment[de]=2D-Rennspiel-Level-Editor
 Exec=dustrac-editor
 Icon=dustrac-editor
 Type=Application

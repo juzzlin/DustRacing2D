@@ -5,31 +5,55 @@
   <project_license>GPL-3.0 and CC BY-SA-3.0</project_license>
   <name>Dust Racing 2D</name>
   <summary>Traditional top-down car racing game including a level editor.</summary>
+  <summary xml:lang="de">Traditionelles Autorennspiel aus der Vogelperspektive, mit Leveleditor.</summary>
   <description>
     <p>
       Dust Racing 2D (Dustrac) is a tile-based, cross-platform 2D racing game written in Qt (C++) and OpenGL.
     </p>
+    <p xml:lang="de">
+      Dust Racing 2D (Dustrac) ist ein kachelbasiertes, plattformübergreifendes 2D-Rennspiel, das in Qt (C++) und OpenGL geschrieben wurde.
+    </p>
     <p>
+      Features
+    </p>
+    <p xml:lang="de">
       Features
     </p>
     <ul>
       <li>1-2 human players againts 11 challenging computer players</li>
+      <li xml:lang="de">1-2 menschliche Spieler gegen 11 herausfordernde Computerspieler</li>
       <li>3 difficulty settings: Easy, Medium, Hard</li>
+      <li xml:lang="de">3 Schwierigkeitsstufen: Einfach, mittel, schwierig</li>
       <li>Split-screen two player game (vertical or horizontal)</li>
+      <li xml:lang="de">Zweispielerspiel mit geteiltem Bildschirm (vertikal/horizontal)</li>
       <li>Game modes: Race, Time Trial, Duel</li>
+      <li xml:lang="de">Spielmodi: Rennen, Zeitrennen, Duell</li>
       <li>2D graphics with some 3D objects</li>
+      <li xml:lang="de">2D-Grafik mit einigen 3D-Objekten</li>
       <li>Smooth game play and physics</li>
+      <li xml:lang="de">Flüssiges Spielgeschehen und Physik</li>
       <li>Multiple race tracks</li>
+      <li xml:lang="de">Mehrere Rennstrecken</li>
       <li>Finishing in TOP-6 will unlock the next race track</li>
+      <li xml:lang="de">Rennen auf dem 6. oder einem besseren Platz beenden, um die nächste Rennstrecke freizuschalten</li>
       <li>Star ratings based on the best positions on each race track</li>
+      <li xml:lang="de">Sternenbewertung basierend auf der Bestposition auf jeder einzelnen Rennstrecke</li>
       <li>Easy to create new race tracks with the level editor</li>
+      <li xml:lang="de">Neue Rennstrecken können leicht mit dem Level-Editor erstellt werden</li>
       <li>Engine and collision sounds</li>
+      <li xml:lang="de">Motoren- und Kollisionsgeräusche</li>
       <li>Pit stops</li>
+      <li xml:lang="de">Boxenstopps</li>
       <li>Runs windowed or fullscreen</li>
+      <li xml:lang="de">Läuft im Fenster- oder Vollbildmodus</li>
       <li>Will be forever completely free</li>
+      <li xml:lang="de">Wird für immer völlig frei und kostenlos sein</li>
     </ul>
     <p>
       Dust Racing 2D comes with a Qt-based level editor for easy level creation. A separate engine, MiniCore, is used for physics modeling.
+    </p>
+    <p xml:lang="de">
+      Dust Racing 2D hat einen Qt-basierten Level-Editor für die einfache Levelerstellung. Eine separate Engine, MiniCore, wird für die Physikmodellierung benutzt.
     </p>
   </description>
   <screenshots>
