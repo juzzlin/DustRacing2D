@@ -56,14 +56,12 @@ MCTrigonomImpl::MCTrigonomImpl()
 
 float MCTrigonom::degToRad(float angle)
 {
-    static const float DegToRad(PI / 180.0f);
-    return angle * DegToRad;
+    return angle * PI / 180.0f;
 }
 
 float MCTrigonom::radToDeg(float angle)
 {
-    static const float RadToDeg(180.0f / PI);
-    return angle * RadToDeg;
+    return angle * 180.0f / PI;
 }
 
 float MCTrigonom::sin(float angle)
