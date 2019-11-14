@@ -240,7 +240,7 @@ bool Car::isSliding()
       MCTrigonom::cos(bodyNormalAngle), MCTrigonom::sin(bodyNormalAngle));
     const MCVector2dF & v = physicsComponent().velocity().normalized();
     const MCVector2dF s = MCVector2dF::projection(v, n);
-    return absSpeed() > 7.5 && s.lengthFast() > 0.25;
+    return absSpeed() > 7.5f && s.lengthFast() > 0.25f;
 }
 
 int Car::speedInKmh() const
@@ -299,7 +299,7 @@ void Car::updateTireWear(int step)
 
     // Cache speed in km/h.
     m_absSpeed = physicsComponent().speed();
-    m_speedInKmh = m_absSpeed * 3.6 * 2.75;
+    m_speedInKmh = static_cast<int>(m_absSpeed * 3.6f * 2.75f);
 
     if (m_isHuman)
     {
