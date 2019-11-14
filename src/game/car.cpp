@@ -179,8 +179,6 @@ void Car::steer(Steer direction, float control)
 
 void Car::accelerate(bool deccelerate)
 {
-    m_skidding = false;
-
     static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(1.0f);
     static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(1.0f);
 
@@ -194,18 +192,6 @@ void Car::accelerate(bool deccelerate)
         if (currentForce > maxForce)
         {
             currentForce = maxForce;
-            const float maxSpinVelocity = 4.5f;
-            if (m_gearbox->gear() != Gearbox::Gear::Reverse && velocity > 0 && velocity < maxSpinVelocity)
-            {
-                if (isHuman()) // Don't enable tire spin for AI yet
-                {
-                    const float spinCoeff = 0.025f + 0.975f * std::pow(velocity / maxSpinVelocity, 2.0f);
-                    static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(spinCoeff);
-                    static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(spinCoeff);
-                }
-
-                m_skidding = true;
-            }
         }
     }
 
@@ -216,6 +202,26 @@ void Car::accelerate(bool deccelerate)
     }
 
     physicsComponent().addForce(direction * currentForce * damageFactor());
+}
+
+void Car::doTireSpinEffect()
+{
+    m_skidding = false;
+
+    const float minSpinVelocity = 0.1f;
+    const float maxSpinVelocity = 4.5f;
+    const float velocity = physicsComponent().velocity().length();
+    if (m_gearbox->gear() != Gearbox::Gear::Reverse && velocity > minSpinVelocity && velocity < maxSpinVelocity)
+    {
+        if (isHuman()) // Don't enable tire spin for AI yet
+        {
+            const float spinCoeff = 0.025f + 0.975f * std::pow(velocity / maxSpinVelocity, 2.0f);
+            static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(spinCoeff);
+            static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(spinCoeff);
+        }
+
+        m_skidding = true;
+    }
 }
 
 bool Car::isAccelerating() const
@@ -454,6 +460,8 @@ void Car::onStepTime(int step)
     {
         accelerate(true);
     }
+
+    doTireSpinEffect();
 }
 
 void Car::setLeftSideOffTrack(bool state)

@@ -171,6 +171,8 @@ public:
 private:
     void accelerate(bool deccelerate = false);
 
+    void doTireSpinEffect();
+
     void initForceGenerators(Description & desc);
 
     void setProperties(Description & desc);
