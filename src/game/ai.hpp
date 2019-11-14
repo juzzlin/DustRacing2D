@@ -56,7 +56,7 @@ private:
 
     const Route * m_route;
 
-    int m_lastDiff;
+    float m_lastDiff;
 
     int m_lastTargetNodeIndex;
 
