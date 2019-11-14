@@ -65,7 +65,7 @@ public:
     Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman);
 
     //! Destructor.
-    virtual ~Car();
+    virtual ~Car() override;
 
     //! Return the index.
     unsigned int index() const;
