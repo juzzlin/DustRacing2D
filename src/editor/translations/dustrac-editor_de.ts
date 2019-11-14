@@ -138,7 +138,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>ERROR!!: Cannot load objects from &apos;</source>
-        <translation>Fehler! Objekte können nicht geladen werden von: &apos;</translation>
+        <translation>FEHLER! Objekte können nicht geladen werden von: &apos;</translation>
     </message>
     <message>
         <source>Save a track</source>
@@ -158,7 +158,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>ERROR!!: %1 doesn&apos;t exist.</source>
-        <translation>Fehler! %1 existiert nicht.</translation>
+        <translation>FEHLER! %1 existiert nicht.</translation>
     </message>
     <message>
         <source>Save your work to correct location.</source>
@@ -331,23 +331,23 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Insert row before..</source>
-        <translation>Zeile vorher einfügen</translation>
+        <translation>Zeile davor einfügen</translation>
     </message>
     <message>
         <source>Insert row after..</source>
-        <translation>Zeile danach einfügen</translation>
+        <translation>Zeile dahinter einfügen</translation>
     </message>
     <message>
         <source>Insert column before..</source>
-        <translation>Spalte vorher einfügen</translation>
+        <translation>Spalte davor einfügen</translation>
     </message>
     <message>
         <source>Insert column after..</source>
-        <translation>Spalte nach einfügen</translation>
+        <translation>Spalte dahinter einfügen</translation>
     </message>
     <message>
         <source>Force stationary</source>
-        <translation>Machen Sie stationär</translation>
+        <translation>Stationär machen</translation>
     </message>
 </context>
 <context>
