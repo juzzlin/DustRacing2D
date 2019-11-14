@@ -8,6 +8,7 @@ Bug fixes:
 * Fix GitHub Issue #59: Regression: Bridge is broken due to changes in collision detection
 * Fix GitHub Issue #72: Apostrophe character is broken
   - The font is now initialized with the full ASCII table
+* Fix GitHub Issue #77: Pressing accelerate and brake at same time gives weird results
 
 Other:
 

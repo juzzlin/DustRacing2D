@@ -388,14 +388,14 @@ void Car::setBrakeEnabled(bool brakeEnabled)
 {
     m_brakeEnabled = brakeEnabled;
 
-    m_gearbox->setBrake(brakeEnabled);
+    m_gearbox->setBrakeEnabled(brakeEnabled);
 }
 
 void Car::setAcceleratorEnabled(bool acceleratorEnabled)
 {
     m_acceleratorEnabled = acceleratorEnabled;
 
-    m_gearbox->setAccelerator(acceleratorEnabled);
+    m_gearbox->setAcceleratorEnabled(acceleratorEnabled);
 }
 
 void Car::resetTireWear()

@@ -28,14 +28,11 @@ Gearbox::Gear Gearbox::gear() const
 
 void Gearbox::update(int speedInKmh)
 {
-    if (m_accelerator)
+    if (m_acceleratorEnabled && m_brakeEnabled)
     {
-        if (m_gear == Gear::Neutral || m_gear == Gear::Stop)
-        {
-            m_gear = Gear::Forward;
-        }
+        m_gear = Gear::Neutral;
     }
-    else if (m_brake)
+    else if (m_brakeEnabled)
     {
         if (speedInKmh == 0)
         {
@@ -53,18 +50,25 @@ void Gearbox::update(int speedInKmh)
             }
         }
     }
+    else if (m_acceleratorEnabled)
+    {
+        if (m_gear == Gear::Neutral || m_gear == Gear::Stop)
+        {
+            m_gear = Gear::Forward;
+        }
+    }
     else
     {
         m_gear = Gear::Neutral;
     }
 }
 
-void Gearbox::setAccelerator(bool enable)
+void Gearbox::setAcceleratorEnabled(bool enable)
 {
-    m_accelerator = enable;
+    m_acceleratorEnabled = enable;
 }
 
-void Gearbox::setBrake(bool enable)
+void Gearbox::setBrakeEnabled(bool enable)
 {
-    m_brake = enable;
+    m_brakeEnabled = enable;
 }

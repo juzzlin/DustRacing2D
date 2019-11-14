@@ -31,18 +31,18 @@ public:
 
     Gear gear() const;
 
-    void setAccelerator(bool enable);
+    void setAcceleratorEnabled(bool enable);
 
-    void setBrake(bool enable);
+    void setBrakeEnabled(bool enable);
 
     void update(int speedInKmh);
 
 private:
     Gear m_gear = Gear::Neutral;
 
-    bool m_accelerator = false;
+    bool m_acceleratorEnabled = false;
 
-    bool m_brake = false;
+    bool m_brakeEnabled = false;
 
     int m_stopCounter = 0;
 };
