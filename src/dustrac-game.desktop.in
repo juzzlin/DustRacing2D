@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Dust Racing 2D
 GenericName=Top-down 2D racing game
+GenericName[de]=2D-Rennspiel in Vogelperspektive
 Comment=2D racing game
+Comment[de]=2D-Rennspiel
 Exec=dustrac-game
 Icon=dustrac-game
 Type=Application
