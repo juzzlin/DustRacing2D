@@ -231,7 +231,8 @@ bool Car::isAccelerating() const
 
 bool Car::isBraking() const
 {
-    return m_brakeEnabled && (m_gearbox->gear() == Gearbox::Gear::Neutral || !m_isHuman);
+    // This is not entirely correct, but should work in most scenarios
+    return m_brakeEnabled && (m_gearbox->gear() != Gearbox::Gear::Reverse || !m_isHuman);
 }
 
 bool Car::isSkidding() const
