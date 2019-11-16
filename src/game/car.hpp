@@ -62,13 +62,13 @@ public:
     };
 
     //! Constructor.
-    Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman);
+    Car(Description & desc, MCSurface & surface, size_t index, bool isHuman);
 
     //! Destructor.
     virtual ~Car() override;
 
     //! Return the index.
-    unsigned int index() const;
+    size_t index() const;
 
     void steer(Steer direction, float control = 1.0f);
 
@@ -171,6 +171,10 @@ public:
 private:
     void accelerate(bool deccelerate = false);
 
+    void createChildObjects(float maxZ, size_t index);
+
+    void createTires();
+
     void doTireSpinEffect();
 
     void initForceGenerators(Description & desc);
@@ -195,7 +199,7 @@ private:
 
     Steer m_steer;
 
-    unsigned int m_index;
+    size_t m_index;
 
     float m_tireAngle;
 

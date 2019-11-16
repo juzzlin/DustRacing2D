@@ -45,7 +45,7 @@
 using std::dynamic_pointer_cast;
 using std::static_pointer_cast;
 
-Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHuman)
+Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
   : MCObject(surface, "car")
   , m_desc(desc)
   , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
@@ -85,16 +85,42 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
     setPhysicsComponent(*(new CarPhysicsComponent(*this)));
 
     setProperties(desc);
+
     initForceGenerators(desc);
 
+    createChildObjects(surface.maxZ(), index);
+}
+
+void Car::createChildObjects(float maxZ, size_t index)
+{
     // Note that the z-coordinate of the actual car body is 0. The small lift is done in the
     // surface vertex level and configured in surfaces.conf.
 
     MCObjectPtr numberPlate(new MCObject(GraphicsFactory::generateNumberSurface(index), "Number"));
-    addChildObject(numberPlate, m_numberPos + MCVector3dF(0, 0, surface.maxZ() + 1), 90);
+    addChildObject(numberPlate, m_numberPos + MCVector3dF(0, 0, maxZ + 1), 90);
     numberPlate->setBypassCollisions(true);
     numberPlate->shape()->view()->setHasShadow(false);
 
+    createTires();
+
+    m_leftBrakeGlowPos += MCVector3dF(0, 0, maxZ + 1.0f);
+    m_rightBrakeGlowPos += MCVector3dF(0, 0, maxZ + 1.0f);
+
+    m_leftBrakeGlow.reset(new MCObject(m_brakeGlow, "LeftBrakeGlow"));
+    m_leftBrakeGlow->setBypassCollisions(true);
+    m_leftBrakeGlow->shape()->view()->setHasShadow(false);
+    m_leftBrakeGlow->setIsRenderable(false);
+    addChildObject(m_leftBrakeGlow, m_leftBrakeGlowPos);
+
+    m_rightBrakeGlow.reset(new MCObject(m_brakeGlow, "RightBrakeGlow"));
+    m_rightBrakeGlow->setBypassCollisions(true);
+    m_rightBrakeGlow->shape()->view()->setHasShadow(false);
+    m_rightBrakeGlow->setIsRenderable(false);
+    addChildObject(m_rightBrakeGlow, m_rightBrakeGlowPos);
+}
+
+void Car::createTires()
+{
     const float offTrackFrictionFactor = 0.8f;
     const float frontFriction = 0.85f;
     const MCVector3dF tireZ = MCVector3dF(0, 0, 1);
@@ -110,21 +136,6 @@ Car::Car(Description & desc, MCSurface & surface, unsigned int index, bool isHum
 
     m_rightRearTire.reset(new Tire(*this, rearFriction, rearFriction * offTrackFrictionFactor));
     addChildObject(m_rightRearTire, m_rightRearTirePos + tireZ, 0);
-
-    m_leftBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1.0f);
-    m_rightBrakeGlowPos += MCVector3dF(0, 0, surface.maxZ() + 1.0f);
-
-    m_leftBrakeGlow.reset(new MCObject(m_brakeGlow, "LeftBrakeGlow"));
-    m_leftBrakeGlow->setBypassCollisions(true);
-    m_leftBrakeGlow->shape()->view()->setHasShadow(false);
-    m_leftBrakeGlow->setIsRenderable(false);
-    addChildObject(m_leftBrakeGlow, m_leftBrakeGlowPos);
-
-    m_rightBrakeGlow.reset(new MCObject(m_brakeGlow, "RightBrakeGlow"));
-    m_rightBrakeGlow->setBypassCollisions(true);
-    m_rightBrakeGlow->shape()->view()->setHasShadow(false);
-    m_rightBrakeGlow->setIsRenderable(false);
-    addChildObject(m_rightBrakeGlow, m_rightBrakeGlowPos);
 }
 
 void Car::setProperties(Description & desc)
@@ -149,7 +160,7 @@ void Car::initForceGenerators(Description & desc)
     MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
 }
 
-unsigned int Car::index() const
+size_t Car::index() const
 {
     return m_index;
 }
