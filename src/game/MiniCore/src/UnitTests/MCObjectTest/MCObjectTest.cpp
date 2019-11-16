@@ -31,8 +31,9 @@
 
 #include <cmath>
 
-// Damping factor defined in MCObject
-static const float DAMPING = 0.999f;
+// Default damping factors defined in MCPhysicsComponent
+static const float LINEAR_DAMPING = 0.999f;
+static const float ANGULAR_DAMPING = 0.99f;
 
 class TestObject : public MCObject
 {
@@ -207,12 +208,12 @@ void MCObjectTest::testAngularVelocityIntegration()
 
     world.stepTime(step);
 
-    QVERIFY(qFuzzyCompare(object.angle(), MCTrigonom::radToDeg(aVel * float(step) / 1000 * DAMPING)));
+    QVERIFY(qFuzzyCompare(object.angle(), MCTrigonom::radToDeg(aVel * float(step) / 1000 * ANGULAR_DAMPING)));
     const float angle = object.angle();
 
     world.stepTime(step);
-    aVel *= DAMPING;
-    QVERIFY(qFuzzyCompare(object.angle(), angle + MCTrigonom::radToDeg(aVel * float(step) / 1000 * DAMPING)));
+    aVel *= ANGULAR_DAMPING;
+    QVERIFY(qFuzzyCompare(object.angle(), angle + MCTrigonom::radToDeg(aVel * float(step) / 1000 * ANGULAR_DAMPING)));
 }
 
 void MCObjectTest::testDefaultFlags()
@@ -274,9 +275,9 @@ void MCObjectTest::testChildRotate()
     const float rootAngle = 69;
     root.rotate(rootAngle); // Rotate children only when root rotates
 
-    QVERIFY(root.angle() == rootAngle);
-    QVERIFY(child1->angle() == child1Angle + rootAngle);
-    QVERIFY(child2->angle() == child2Angle + rootAngle);
+    QVERIFY(qFuzzyCompare(root.angle(), rootAngle));
+    QVERIFY(qFuzzyCompare(child1->angle(), child1Angle + rootAngle));
+    QVERIFY(qFuzzyCompare(child2->angle(), child2Angle + rootAngle));
 
     vector3dCompare(child1->location(),
                     MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
@@ -289,9 +290,9 @@ void MCObjectTest::testChildRotate()
     const MCVector3dF rootLocation(3, 4, 5);
     root.translate(rootLocation);
 
-    QVERIFY(root.angle() == rootAngle);
-    QVERIFY(child1->angle() == child1Angle + rootAngle);
-    QVERIFY(child2->angle() == child2Angle + rootAngle);
+    QVERIFY(qFuzzyCompare(root.angle(), rootAngle));
+    QVERIFY(qFuzzyCompare(child1->angle(), child1Angle + rootAngle));
+    QVERIFY(qFuzzyCompare(child2->angle(), child2Angle + rootAngle));
 
     vector3dCompare(child1->location(),
                     rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
@@ -308,7 +309,7 @@ void MCObjectTest::testChildRotate()
     vector3dCompare(child1->location(),
                     rootLocation + MCVector3dF(MCMathUtil::rotatedVector(MCVector2dF(1.0, 1.0), rootAngle), 1.0f));
 
-    QVERIFY(child1->angle() == rootAngle + child1Angle);
+    QVERIFY(qFuzzyCompare(child1->angle(), rootAngle + child1Angle));
 }
 
 void MCObjectTest::testChildTranslate()
@@ -550,13 +551,13 @@ void MCObjectTest::testVelocityIntegration()
 
     world.stepTime(1);
 
-    vector3dCompare(object.location(), velocity * DAMPING);
+    vector3dCompare(object.location(), velocity * LINEAR_DAMPING);
     const MCVector3dF location = object.location();
 
     world.stepTime(1);
-    velocity *= DAMPING;
+    velocity *= LINEAR_DAMPING;
 
-    vector3dCompare(object.location(), location + velocity * DAMPING);
+    vector3dCompare(object.location(), location + velocity * LINEAR_DAMPING);
 }
 
 QTEST_GUILESS_MAIN(MCObjectTest)
