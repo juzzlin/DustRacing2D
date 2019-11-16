@@ -24,7 +24,6 @@
 namespace {
 static const int SKID_MARK_DENSITY = 8;
 static const int NEW_SKID_LIMIT = SKID_MARK_DENSITY * 4;
-static const int OFF_TRACK_ANIMATION_SPEED_MIN = 5;
 static const int ON_TRACK_ANIMATION_SPEED_MIN = 5;
 } // namespace
 
@@ -106,45 +105,55 @@ void CarParticleEffectManager::doOnTrackAnimations()
 
 void CarParticleEffectManager::doOffTrackAnimations()
 {
-    if (std::abs(m_car.speedInKmh()) > OFF_TRACK_ANIMATION_SPEED_MIN || m_car.isSkidding())
+    const bool leftSideOffTrack = m_car.leftSideOffTrack();
+    const bool rightSideOffTrack = m_car.rightSideOffTrack();
+    const float speed = std::abs(m_car.speedInKmh());
+    const float minSpeedMud = 15;
+    const float minSpeedSkidMark = 5;
+    const float minSpeedSmoke = 5;
+
+    // Left skid mark
+    if (leftSideOffTrack && speed > minSpeedSkidMark)
     {
-        bool smoke = false;
+        doLeftSkidMark(ParticleFactory::OffTrackSkidMark);
+    }
 
-        if (m_car.leftSideOffTrack())
+    // Left mud particle
+    if (leftSideOffTrack && speed > minSpeedMud)
+    {
+        if (++m_mudCounter >= 5) // This is to prevent a continuous spray of mud particles
         {
-            doLeftSkidMark(ParticleFactory::OffTrackSkidMark);
-
-            smoke = true;
-
-            if (++m_mudCounter >= 5)
-            {
-                ParticleFactory::instance().doParticle(
-                  ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
-                m_mudCounter = 0;
-            }
+            ParticleFactory::instance().doParticle(
+              ParticleFactory::Mud, m_car.leftRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
+            m_mudCounter = 0;
         }
+    }
 
-        if (m_car.rightSideOffTrack())
+    // Right skid mark
+    if (rightSideOffTrack && speed > minSpeedSkidMark)
+    {
+        doRightSkidMark(ParticleFactory::OffTrackSkidMark);
+    }
+
+    // Right mud particle
+    if (rightSideOffTrack && speed > minSpeedMud)
+    {
+        if (++m_mudCounter >= 5) // This is to prevent a continuous spray of mud particles
         {
-            doRightSkidMark(ParticleFactory::OffTrackSkidMark);
-
-            smoke = true;
-
-            if (++m_mudCounter >= 5)
-            {
-                ParticleFactory::instance().doParticle(
-                  ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
-                m_mudCounter = 0;
-            }
+            ParticleFactory::instance().doParticle(
+              ParticleFactory::Mud, m_car.rightRearTireLocation(), m_car.physicsComponent().velocity() * 0.5f);
+            m_mudCounter = 0;
         }
+    }
 
-        if (smoke)
+    // Smoke
+    const float angular = std::fabs(m_car.physicsComponent().angularVelocity());
+    if ((leftSideOffTrack || rightSideOffTrack) && (speed > minSpeedSmoke || angular > 0.1f))
+    {
+        if (++m_smokeCounter >= 2) // This is to prevent a continuous spray of smoke particles
         {
-            if (++m_smokeCounter >= 2)
-            {
-                MCVector3dF smokeLocation = (m_car.leftRearTireLocation() + m_car.rightRearTireLocation()) * 0.5f;
-                ParticleFactory::instance().doParticle(ParticleFactory::OffTrackSmoke, smokeLocation);
-            }
+            MCVector3dF smokeLocation = (m_car.leftRearTireLocation() + m_car.rightRearTireLocation()) * 0.5f;
+            ParticleFactory::instance().doParticle(ParticleFactory::OffTrackSmoke, smokeLocation);
         }
     }
 }
