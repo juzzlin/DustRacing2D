@@ -195,7 +195,7 @@ void Car::accelerate(bool deccelerate)
     MCVector2dF direction(m_dx, m_dy);
     if (deccelerate)
     {
-        direction *= -1;
+        direction *= -0.33f;
     }
 
     physicsComponent().addForce(direction * currentForce * damageFactor());
