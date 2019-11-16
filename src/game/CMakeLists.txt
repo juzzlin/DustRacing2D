@@ -175,3 +175,5 @@ foreach(TS_FILE ${TS})
             ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm
         DEPENDS ${GAME_BINARY_NAME})
 endforeach()
+
+add_subdirectory(unittests)
