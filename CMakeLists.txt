@@ -18,6 +18,10 @@ if(POLICY CMP0072)
     cmake_policy(SET CMP0072 OLD)
 endif()
 
+if(POLICY CMP0043)
+    cmake_policy(SET CMP0043 NEW)
+endif()
+
 # Global game version
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "0")
