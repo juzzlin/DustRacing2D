@@ -452,16 +452,15 @@ void Car::onStepTime(int step)
 
     m_gearbox->update(speedInKmh());
 
-    if (m_gearbox->gear() == Gearbox::Gear::Forward)
+    if (m_gearbox->gear() == Gearbox::Gear::Forward && m_acceleratorEnabled)
     {
+        doTireSpinEffect();
         accelerate();
     }
-    else if (m_gearbox->gear() == Gearbox::Gear::Reverse)
+    else if (m_gearbox->gear() == Gearbox::Gear::Reverse && m_brakeEnabled)
     {
         accelerate(true);
     }
-
-    doTireSpinEffect();
 }
 
 void Car::setLeftSideOffTrack(bool state)
