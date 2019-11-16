@@ -179,9 +179,6 @@ void Car::steer(Steer direction, float control)
 
 void Car::accelerate(bool deccelerate)
 {
-    static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(1.0f);
-    static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(1.0f);
-
     const float maxForce =
       physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
     float currentForce = maxForce;
@@ -206,12 +203,15 @@ void Car::accelerate(bool deccelerate)
 
 void Car::doTireSpinEffect()
 {
+    static_pointer_cast<Tire>(m_leftRearTire)->setSpinCoeff(1.0f);
+    static_pointer_cast<Tire>(m_rightRearTire)->setSpinCoeff(1.0f);
+
     m_skidding = false;
 
     const float minSpinVelocity = 0.1f;
     const float maxSpinVelocity = 4.5f;
     const float velocity = physicsComponent().velocity().length();
-    if (m_gearbox->gear() != Gearbox::Gear::Reverse && velocity > minSpinVelocity && velocity < maxSpinVelocity)
+    if (m_acceleratorEnabled && m_gearbox->gear() == Gearbox::Gear::Forward && velocity > minSpinVelocity && velocity < maxSpinVelocity)
     {
         if (isHuman()) // Don't enable tire spin for AI yet
         {
@@ -452,11 +452,11 @@ void Car::onStepTime(int step)
 
     m_gearbox->update(speedInKmh());
 
-    if (m_gearbox->gear() == Gearbox::Gear::Forward)
+    if (m_gearbox->gear() == Gearbox::Gear::Forward && m_acceleratorEnabled)
     {
         accelerate();
     }
-    else if (m_gearbox->gear() == Gearbox::Gear::Reverse)
+    else if (m_gearbox->gear() == Gearbox::Gear::Reverse && m_brakeEnabled)
     {
         accelerate(true);
     }
