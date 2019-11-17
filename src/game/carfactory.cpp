@@ -17,13 +17,13 @@
 
 #include <MCAssetManager>
 
-CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
+std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t numCars, Game & game)
 {
     const int defaultPower = 200000; // This in Watts
     const float defaultDrag = 2.5f;
 
-    static const int NUM_CARS = numCars;
-    static std::map<int, std::string> carImageMap = {
+    static const size_t NUM_CARS = numCars;
+    static std::map<size_t, std::string> carImageMap = {
         { NUM_CARS - 1, "carBlack" },
         { NUM_CARS - 2, "carOrange" },
         { NUM_CARS - 3, "carRed" },
@@ -47,7 +47,7 @@ CarPtr CarFactory::buildCar(int index, int numCars, Game & game)
         carImage = carImageMap[index];
     }
 
-    CarPtr car;
+    std::unique_ptr<Car> car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
     {
         desc.power = defaultPower;

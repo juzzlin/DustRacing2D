@@ -19,8 +19,10 @@
 #include "car.hpp"
 #include "game.hpp"
 
+#include <memory>
+
 namespace CarFactory {
-CarPtr buildCar(int index, int numCars, Game & game);
+std::unique_ptr<Car> buildCar(size_t index, size_t numCars, Game & game);
 }
 
 #endif // CARFACTORY_HPP
