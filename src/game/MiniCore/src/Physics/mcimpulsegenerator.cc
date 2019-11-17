@@ -33,7 +33,7 @@ MCContact * MCImpulseGenerator::getDeepestInterpenetration(
 {
     float maxDepth = 0;
     MCContact * bestContact = nullptr;
-    for (MCContact * contact : contacts)
+    for (auto && contact : contacts)
     {
         if (contact->interpenetrationDepth() > maxDepth)
         {
@@ -71,32 +71,31 @@ void MCImpulseGenerator::generateImpulsesFromContact(
 
         // Linear component
         const float massScaling = invMassA / (invMassA + invMassB);
-        const float effRestitution = 1.0 + restitution;
+        const float effRestitution = 1.0f + restitution;
         pa.physicsComponent().addImpulse(linearImpulse * effRestitution * massScaling, true);
 
         // Angular component
         const MCVector3dF armA = (contactPoint - pa.location()) * MCWorld::metersPerUnit();
         const MCVector3dF rotationalImpulse = linearImpulse % armA;
-        const float calibration = 0.5;
+        const float calibration = 0.5f;
         pa.physicsComponent().addAngularImpulse(-rotationalImpulse.k() * effRestitution * massScaling * calibration, true);
     }
 }
 
 void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, float accuracy)
 {
-    for (MCObject * object : objs)
+    for (auto && object : objs)
     {
-        auto iter(object->contacts().begin());
-        for (; iter != object->contacts().end(); iter++)
+        for (auto && contact : object->contacts())
         {
-            const MCContact * contact = getDeepestInterpenetration(iter->second);
-            if (contact)
+            const auto deepestContact = getDeepestInterpenetration(contact.second);
+            if (deepestContact)
             {
-                MCObject & pa(*object);
-                MCObject & pb(contact->object());
+                auto & pa(*object);
+                auto & pb(deepestContact->object());
 
                 const MCVector3dF displacement(
-                  contact->contactNormal() * contact->interpenetrationDepth() * accuracy);
+                  deepestContact->contactNormal() * deepestContact->interpenetrationDepth() * accuracy);
 
                 displace(pa, pb, displacement);
                 displace(pb, pa, -displacement);
@@ -112,30 +111,29 @@ void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, float 
 
 void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObject *> & objs)
 {
-    for (MCObject * object : objs)
+    for (auto && object : objs)
     {
-        auto iter(object->contacts().begin());
-        for (; iter != object->contacts().end(); iter++)
+        for (auto && contact : object->contacts())
         {
-            const MCContact * contact = getDeepestInterpenetration(iter->second);
-            if (contact)
+            const auto deepestContact = getDeepestInterpenetration(contact.second);
+            if (deepestContact)
             {
-                MCObject & pa(*object);
-                MCObject & pb(contact->object());
+                auto & pa(*object);
+                auto & pb(deepestContact->object());
 
                 const float restitution(
                   std::min(pa.physicsComponent().restitution(), pb.physicsComponent().restitution()));
 
                 const MCVector2dF velocityDelta(pb.physicsComponent().velocity() - pa.physicsComponent().velocity());
-                const float projection = contact->contactNormal().dot(velocityDelta);
+                const float projection = deepestContact->contactNormal().dot(velocityDelta);
 
                 if (projection > 0)
                 {
                     const MCVector3dF linearImpulse(
-                      contact->contactNormal() * contact->contactNormal().dot(velocityDelta));
+                      deepestContact->contactNormal() * deepestContact->contactNormal().dot(velocityDelta));
 
-                    generateImpulsesFromContact(pa, pb, *contact, linearImpulse, restitution);
-                    generateImpulsesFromContact(pb, pa, *contact, -linearImpulse, restitution);
+                    generateImpulsesFromContact(pa, pb, *deepestContact, linearImpulse, restitution);
+                    generateImpulsesFromContact(pb, pa, *deepestContact, -linearImpulse, restitution);
                 }
 
                 // Remove contact with pa from pb, because it was already handled here.
