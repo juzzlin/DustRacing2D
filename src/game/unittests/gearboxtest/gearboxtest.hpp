@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef GEARBOXTEST_HPP
+#define GEARBOXTEST_HPP
+
 #include <QTest>
 
 class GearboxTest : public QObject
@@ -32,3 +35,5 @@ private slots:
 
     void testBothPressed();
 };
+
+#endif // GEARBOXTEST_HPP
