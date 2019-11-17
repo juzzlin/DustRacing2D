@@ -26,6 +26,7 @@
 #include "mcvector2d.hh"
 
 #include <algorithm>
+#include <array>
 
 /*! \class MCOBBox
  *  \brief Oriented bounding-box template
@@ -139,7 +140,7 @@ private:
     float m_a;
 
     //! Vertex vectors
-    MCVector2d<T> m_v[4];
+    std::array<MCVector2d<T>, 4> m_v;
 };
 
 typedef MCOBBox<float> MCOBBoxF;
@@ -159,11 +160,8 @@ MCOBBox<T>::MCOBBox(T newHx, T newHy, const MCVector2d<T> & loc)
   , m_hy(newHy)
   , m_p(loc)
   , m_a(0)
+  , m_v({ MCVector2d<T>(-m_hx, -m_hy), MCVector2d<T>(-m_hx, m_hy), MCVector2d<T>(m_hx, m_hy), MCVector2d<T>(m_hx, -m_hy) })
 {
-    m_v[0] = MCVector2d<T>(-m_hx, -m_hy);
-    m_v[1] = MCVector2d<T>(-m_hx, m_hy);
-    m_v[2] = MCVector2d<T>(m_hx, m_hy);
-    m_v[3] = MCVector2d<T>(m_hx, -m_hy);
 }
 
 template<typename T>
@@ -172,11 +170,8 @@ MCOBBox<T>::MCOBBox(const MCOBBox<T> & other)
   , m_hy(other.m_hy)
   , m_p(other.m_p)
   , m_a(other.m_a)
+  , m_v({ other.m_v[0], other.m_v[1], other.m_v[2], other.m_v[3] })
 {
-    m_v[0] = other.m_v[0];
-    m_v[1] = other.m_v[1];
-    m_v[2] = other.m_v[2];
-    m_v[3] = other.m_v[3];
 }
 
 template<typename T>
@@ -186,10 +181,7 @@ MCOBBox<T>::MCOBBox(const MCOBBox<T> && other)
   , m_p(other.m_p)
   , m_a(other.m_a)
 {
-    std::swap(m_v[0], other.m_v[0]);
-    std::swap(m_v[1], other.m_v[1]);
-    std::swap(m_v[2], other.m_v[2]);
-    std::swap(m_v[3], other.m_v[3]);
+    std::swap(m_v, other.m_v);
 }
 
 template<typename T>
@@ -201,10 +193,7 @@ MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> & other)
         m_hy = other.m_hy;
         m_p = other.m_p;
         m_a = other.m_a;
-        m_v[0] = other.m_v[0];
-        m_v[1] = other.m_v[1];
-        m_v[2] = other.m_v[2];
-        m_v[3] = other.m_v[3];
+        m_v = other.m_v;
     }
 
     return *this;
@@ -217,10 +206,7 @@ MCOBBox<T> & MCOBBox<T>::operator=(const MCOBBox<T> && other)
     m_hy = other.m_hy;
     m_p = other.m_p;
     m_a = other.m_a;
-    m_v[0] = other.m_v[0];
-    m_v[1] = other.m_v[1];
-    m_v[2] = other.m_v[2];
-    m_v[3] = other.m_v[3];
+    m_v = other.m_v;
 
     return *this;
 }
