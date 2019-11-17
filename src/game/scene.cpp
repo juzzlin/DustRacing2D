@@ -325,14 +325,9 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
     // Update camera location with respect to the car speed.
     // Make changes a bit smoother so that an abrupt decrease
     // in the speed won't look bad.
-    MCVector2dF loc(object.location());
-
+    offset += (object.physicsComponent().velocity().lengthFast() - offset) * 0.2f;
     const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6f : 13.8f;
-    const float smooth = 0.2f;
-
-    offset += (object.physicsComponent().velocity().lengthFast() - offset) * smooth;
-    loc += object.direction() * offset * offsetAmplification;
-
+    const auto loc = MCVector2dF(object.location()) + object.direction() * offset * offsetAmplification;
     camera.setPos(loc.i(), loc.j());
 }
 
