@@ -133,7 +133,7 @@ private:
 
     void resizeOverlays();
 
-    void setupAudio(Car & car, int index);
+    void setupAudio(Car & car, size_t index);
 
     void setupAI(Track & activeTrack);
 
