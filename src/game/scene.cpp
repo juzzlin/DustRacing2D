@@ -534,7 +534,7 @@ void Scene::createBridgeObjects()
             auto tile = dynamic_pointer_cast<TrackTile>(rMap.getTile(i, j));
             if (tile && tile->tileTypeEnum() == TrackTile::TT_BRIDGE)
             {
-                MCObjectPtr bridge(new Bridge);
+                const auto bridge = std::make_shared<Bridge>();
 
                 bridge->translate(MCVector3dF(i * w + w / 2, j * h + h / 2, 0));
                 bridge->rotate(tile->rotation());

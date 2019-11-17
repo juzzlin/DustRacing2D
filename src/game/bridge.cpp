@@ -31,51 +31,40 @@
 #include <MCVector2d>
 
 namespace {
-static const char * BRIDGE_ID = "bridge";
-static const char * BRIDGE_RAIL_ID = "bridgeRail";
-static const int RAIL_Z = 16;
-static const float OBJECT_Z_DELTA = RAIL_Z;
-static const float OBJECT_Z_ZERO = 0.0f;
-static const int WIDTH = 256;
+static const float RAIL_Z = 16;
 } // namespace
 
 Bridge::Bridge()
-  : MCObject(BRIDGE_ID)
+  : MCObject("bridge")
 {
-    auto && shape = MCShapePtr(new MCRectShape(nullptr, WIDTH, WIDTH));
-    setShape(shape);
+    const int width = 256;
+    setShape(std::make_shared<MCRectShape>(nullptr, width, width));
 
     setCollisionLayer(-1);
-
     setIsPhysicsObject(false);
     setIsTriggerObject(true);
 
     physicsComponent().setMass(0, true);
 
-    const int railYDisplacement = 110;
-
+    const auto bridgeRailId = "bridgeRail";
     auto && railSurface = MCAssetManager::instance().surfaceManager().surface("wallLong");
-
-    auto && rail0 = MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID));
+    const auto rail0 = std::make_shared<MCObject>(railSurface, bridgeRailId);
+    const int railYDisplacement = 110;
     addChildObject(rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
-
-    auto && rail1 = MCObjectPtr(new MCObject(railSurface, BRIDGE_RAIL_ID));
+    const auto rail1 = std::make_shared<MCObject>(railSurface, bridgeRailId);
     addChildObject(rail1, MCVector3dF(0, railYDisplacement, RAIL_Z));
 
     rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     rail0->physicsComponent().setMass(0, true);
     rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-
     rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
     rail1->physicsComponent().setMass(0, true);
     rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
-    const int triggerXDisplacement = WIDTH / 2;
-
-    auto && trigger0 = MCObjectPtr(new BridgeTrigger(*this));
+    const auto trigger0 = std::make_shared<BridgeTrigger>(*this);
+    const int triggerXDisplacement = width / 2;
     addChildObject(trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
-
-    auto && trigger1 = MCObjectPtr(new BridgeTrigger(*this));
+    const auto trigger1 = std::make_shared<BridgeTrigger>(*this);
     addChildObject(trigger1, MCVector3dF(triggerXDisplacement, 0, 0));
 
     MCMeshObjectData data("bridge");
@@ -94,7 +83,7 @@ void Bridge::raiseObject(MCObject & object, bool raise)
 {
     const auto x = object.location().i();
     const auto y = object.location().j();
-    const auto z = raise ? location().k() + OBJECT_Z_DELTA : OBJECT_Z_ZERO;
+    const auto z = raise ? location().k() + RAIL_Z : 0.0f;
 
     const MCVector3dF newLocation(x, y, z);
     object.translate(newLocation);

@@ -22,17 +22,13 @@
 #include <MCRectShape>
 #include <MCSeparationEvent>
 
-static const char * BRIDGE_TRIGGER_ID = "bridgeTrigger";
-
 BridgeTrigger::BridgeTrigger(Bridge & bridge)
-  : MCObject(BRIDGE_TRIGGER_ID)
+  : MCObject("bridgeTrigger")
   , m_bridge(bridge)
 {
-    MCRectShape * shape = new MCRectShape(nullptr, 16, 224);
-    setShape(MCShapePtr(shape));
+    setShape(MCShapePtr(new MCRectShape(nullptr, 16, 224)));
 
     setCollisionLayer(-1);
-
     setIsPhysicsObject(false);
     setIsTriggerObject(true);
 
