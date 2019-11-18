@@ -60,10 +60,10 @@ public:
     void updateLockedTracks(int lapCount, DifficultyProfile::Difficulty difficulty);
 
     //! Get track count.
-    unsigned int tracks() const;
+    size_t tracks() const;
 
     //! Get a track of given index.
-    Track * track(unsigned int index) const;
+    Track * track(size_t index) const;
 
     static TrackLoader & instance();
 

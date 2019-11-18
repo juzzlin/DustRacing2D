@@ -80,20 +80,19 @@ void TrackLoader::loadAssets()
 int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficulty)
 {
     int numLoaded = 0;
-    for (QString path : m_paths)
+    for (auto && path : m_paths)
     {
         juzzlin::L().info() << "Loading race tracks from '" << path.toStdString() << "'..";
-        QStringList trackPaths(QDir(path).entryList(QStringList("*.trk")));
-        for (QString trackPath : trackPaths)
+        auto trackPaths(QDir(path).entryList(QStringList("*.trk")));
+        for (auto && trackPath : trackPaths)
         {
             trackPath = path + QDir::separator() + trackPath;
-            if (TrackData * trackData = loadTrack(trackPath))
+            if (auto trackData = loadTrack(trackPath))
             {
                 m_tracks.push_back(new Track(trackData));
                 numLoaded++;
 
-                juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index="
-                                    << trackData->index();
+                juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index=" << trackData->index();
             }
             else
             {
@@ -122,7 +121,7 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
     Track * firstOfficialTrack = nullptr;
 
     // Check if the tracks are locked/unlocked.
-    for (Track * track : m_tracks)
+    for (auto && track : m_tracks)
     {
         if (!track->trackData().isUserTrack() && !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
         {
@@ -163,12 +162,12 @@ void TrackLoader::sortTracks()
     // beginning of the track array.
     std::stable_sort(m_tracks.begin(), m_tracks.end(),
                      [](Track * lhs, Track * rhs) -> bool {
-                         const int left = lhs->trackData().isUserTrack() ? -1 : lhs->trackData().index();
+                         const int left = lhs->trackData().isUserTrack() ? -1 : static_cast<int>(lhs->trackData().index());
                          return left < static_cast<int>(rhs->trackData().index());
                      });
 
     // Cross-link the tracks
-    for (unsigned int i = 0; i + 1 < m_tracks.size(); i++)
+    for (size_t i = 0; i + 1 < m_tracks.size(); i++)
     {
         m_tracks[i]->setNext(*m_tracks[i + 1]);
         m_tracks[i + 1]->setPrev(*m_tracks[i]);
@@ -195,21 +194,17 @@ TrackData * TrackLoader::loadTrack(QString path)
 
     TrackData * newData = nullptr;
 
-    QDomElement root = doc.documentElement();
+    const auto root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        const unsigned int cols =
-          root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
-        const unsigned int rows =
-          root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
+        const auto cols = root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
+        const auto rows = root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
-            const QString name =
-              root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
+            const auto name = root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
 
-            const bool isUserTrack =
-              root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
+            const bool isUserTrack = root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
 
             newData = new TrackData(name, isUserTrack, cols, rows);
             newData->setFileName(path);
@@ -219,10 +214,10 @@ TrackData * TrackLoader::loadTrack(QString path)
             // A temporary route vector.
             std::vector<TargetNodeBasePtr> route;
 
-            QDomNode node = root.firstChild();
+            auto node = root.firstChild();
             while (!node.isNull())
             {
-                QDomElement element = node.toElement();
+                auto element = node.toElement();
                 if (!element.isNull())
                 {
                     // Read a tile element
@@ -252,30 +247,26 @@ TrackData * TrackLoader::loadTrack(QString path)
     return newData;
 }
 
-void TrackLoader::readTile(
-  QDomElement & element, TrackData & newData)
+void TrackLoader::readTile(QDomElement & element, TrackData & newData)
 {
     // X-coordinate in the tile matrix
-    const unsigned int i = element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt();
+    const auto i = element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt();
 
     // Mirror the y-index, because game has the y-axis pointing up.
-    const unsigned int j = newData.map().rows() - 1 - element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt();
+    const auto j = newData.map().rows() - 1 - element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt();
 
-    auto tile = dynamic_pointer_cast<TrackTile>(newData.map().getTile(i, j));
+    const auto tile = dynamic_pointer_cast<TrackTile>(newData.map().getTile(i, j));
     assert(tile);
 
-    const std::string type =
-      element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear").toStdString();
+    const auto type = element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear").toStdString();
     tile->setTileType(type.c_str());
     tile->setTileTypeEnum(tileTypeEnumFromString(type.c_str()));
 
     // Mirror the angle, because game has the y-axis pointing up.
     const int o = -element.attribute("o", "0").toInt();
     tile->setRotation(o);
-
     tile->setComputerHint(
       static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toUInt()));
-
     tile->setExcludeFromMinimap(element.attribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap, "0").toInt());
 
     // Associate with a surface object corresponging
@@ -330,7 +321,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     const int y = element.attribute(TrackDataBase::DataKeywords::Object::y, "0").toInt();
 
     // Height of the map.
-    const int h = newData.map().rows() * TrackTile::TILE_H;
+    const int h = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
 
     // The y-coordinates needs to be mirrored, because the y-axis is pointing
     // down in the editor's coordinate system.
@@ -340,12 +331,11 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     // down in the editor's coordinate system.
     const int angle = -element.attribute(TrackDataBase::DataKeywords::Object::orientation, "0").toInt();
 
-    const QString category = element.attribute(TrackDataBase::DataKeywords::Object::category, "");
-    const QString role = element.attribute(TrackDataBase::DataKeywords::Object::role, "");
-
+    const auto category = element.attribute(TrackDataBase::DataKeywords::Object::category, "");
+    const auto role = element.attribute(TrackDataBase::DataKeywords::Object::role, "");
     const bool forceStationary = element.attribute(TrackDataBase::DataKeywords::Object::forceStationary, "0").toUInt();
 
-    if (TrackObject * object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
+    if (auto object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
     {
         newData.objects().add(std::shared_ptr<TrackObject>(object));
     }
@@ -355,33 +345,33 @@ void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std
 {
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
-    const int mapHeight = newData.map().rows() * TrackTile::TILE_H;
+    const int mapHeight = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
 
-    TargetNodeBase * tnode = new TargetNodeBase;
-    tnode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index, "0").toInt());
+    auto targetNode = std::make_shared<TargetNodeBase>();
+    targetNode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index, "0").toInt());
 
     const int x = element.attribute(TrackDataBase::DataKeywords::Node::x, "0").toInt();
     const int y = element.attribute(TrackDataBase::DataKeywords::Node::y, "0").toInt();
 
-    tnode->setLocation(QPointF(x, mapHeight - y));
+    targetNode->setLocation(QPointF(x, mapHeight - y));
 
     const int w = element.attribute(TrackDataBase::DataKeywords::Node::width, "0").toInt();
     const int h = element.attribute(TrackDataBase::DataKeywords::Node::height, "0").toInt();
 
     if (w > 0 && h > 0)
     {
-        tnode->setSize(QSizeF(w, h));
+        targetNode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(TargetNodeBasePtr(tnode));
+    route.push_back(targetNode);
 }
 
-unsigned int TrackLoader::tracks() const
+size_t TrackLoader::tracks() const
 {
     return m_tracks.size();
 }
 
-Track * TrackLoader::track(unsigned int index) const
+Track * TrackLoader::track(size_t index) const
 {
     if (index < tracks())
     {
