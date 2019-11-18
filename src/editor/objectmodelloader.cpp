@@ -44,28 +44,26 @@ bool ObjectModelLoader::load(QString path)
 
     file.close();
 
-    QDomElement root = doc.documentElement();
-    QString version = root.attribute("version",
-                                     Config::Editor::EDITOR_VERSION);
+    const auto root = doc.documentElement();
+    const auto version = root.attribute("version", Config::Editor::EDITOR_VERSION);
 
     m_objects.clear();
 
-    QDomNode node = root.firstChild();
+    auto node = root.firstChild();
     while (!node.isNull())
     {
-        QDomElement tag = node.toElement();
+        const auto tag = node.toElement();
         if (!tag.isNull())
         {
             // Parse an object tag
             if (tag.nodeName() == "object")
             {
                 ObjectModel newData;
-
                 newData.category = tag.attribute("category", "undefined");
                 newData.role = tag.attribute("role", "undefined");
                 newData.width = tag.attribute("width", "0").toUInt();
                 newData.height = tag.attribute("height", "0").toUInt();
-                QString imagePath = tag.attribute("imagePath", "undefined");
+                auto imagePath = tag.attribute("imagePath", "undefined");
 
                 // The corresponding image is loaded
                 // from Config::DATA_PATH/model.imagePath.
@@ -90,16 +88,15 @@ bool ObjectModelLoader::load(QString path)
     return true;
 }
 
-ObjectModelLoader::ObjectDataVector ObjectModelLoader::getObjectModelsByCategory(
-  QString category) const
+ObjectModelLoader::ObjectDataVector ObjectModelLoader::getObjectModelsByCategory(QString category) const
 {
     ObjectDataVector result;
 
-    for (int i = 0; i < m_objects.size(); i++)
+    for (auto && object : m_objects)
     {
-        if (m_objects[i].category == category)
+        if (object.category == category)
         {
-            result << m_objects[i];
+            result << object;
         }
     }
 
@@ -108,28 +105,28 @@ ObjectModelLoader::ObjectDataVector ObjectModelLoader::getObjectModelsByCategory
 
 ObjectModel ObjectModelLoader::getObjectModelByRole(QString role) const
 {
-    for (int i = 0; i < m_objects.size(); i++)
+    for (auto && object : m_objects)
     {
-        if (m_objects[i].role == role)
+        if (object.role == role)
         {
-            return m_objects[i];
+            return object;
         }
     }
 
-    return ObjectModel();
+    return {};
 }
 
 QString ObjectModelLoader::getCategoryByRole(QString role) const
 {
-    for (int i = 0; i < m_objects.size(); i++)
+    for (auto && object : m_objects)
     {
-        if (m_objects[i].role == role)
+        if (object.role == role)
         {
-            return m_objects[i].category;
+            return object.category;
         }
     }
 
-    return QString();
+    return {};
 }
 
 ObjectModelLoader::ObjectDataVector ObjectModelLoader::objects() const
@@ -139,13 +136,13 @@ ObjectModelLoader::ObjectDataVector ObjectModelLoader::objects() const
 
 QPixmap ObjectModelLoader::getPixmapByRole(QString role) const
 {
-    for (int i = 0; i < m_objects.size(); i++)
+    for (auto && object : m_objects)
     {
-        if (m_objects[i].role == role)
+        if (object.role == role)
         {
-            return m_objects[i].pixmap;
+            return object.pixmap;
         }
     }
 
-    return QPixmap();
+    return {};
 }
