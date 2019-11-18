@@ -3,8 +3,9 @@
 TEMPLATE = app
 TARGET   = dustrac-game
 
+CONFIG += c++14
 DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"2.0.3\\\"
-QMAKE_CXXFLAGS += -O3 -std=gnu++11 -fomit-frame-pointer -finline-functions -ffast-math
+QMAKE_CXXFLAGS += -O3 -fomit-frame-pointer -finline-functions -ffast-math
 
 # Qt version check
 contains(QT_VERSION, ^5\\..*) {
