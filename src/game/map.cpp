@@ -19,19 +19,19 @@
 #include <QPoint>
 #include <QPointF>
 
-Map::Map(unsigned int cols, unsigned int rows)
+Map::Map(size_t cols, size_t rows)
   : MapBase(cols, rows)
 {
     // Create tiles and set coordinates.
-    for (unsigned int i = 0; i < cols; i++)
+    for (size_t i = 0; i < cols; i++)
     {
-        for (unsigned int j = 0; j < rows; j++)
+        for (size_t j = 0; j < rows; j++)
         {
-            TrackTileBase * newTile = new TrackTile(
+            auto newTile = std::make_shared<TrackTile>(
               QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                       TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-              QPoint(i, j));
-            setTile(i, j, TrackTileBasePtr(newTile));
+              QPoint(static_cast<int>(i), static_cast<int>(j)));
+            setTile(i, j, newTile);
         }
     }
 }

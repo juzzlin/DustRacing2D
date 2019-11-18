@@ -25,7 +25,7 @@ class Map : public MapBase
 {
 public:
     //! Constuctor.
-    Map(unsigned int cols, unsigned int rows);
+    Map(size_t cols, size_t rows);
 
     //! Destructor.
     virtual ~Map();

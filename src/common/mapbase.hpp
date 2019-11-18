@@ -24,7 +24,7 @@ class MapBase
 {
 public:
     //! Constructor.
-    MapBase(unsigned int cols, unsigned int rows);
+    MapBase(size_t cols, size_t rows);
 
     MapBase(const MapBase & other) = delete;
 
@@ -40,36 +40,36 @@ public:
     virtual ~MapBase();
 
     //! Get column count
-    unsigned int cols() const;
+    size_t cols() const;
 
     //! Get row count
-    unsigned int rows() const;
+    size_t rows() const;
 
     //! Resize the map.
-    virtual void resize(unsigned int newCols, unsigned int newRows);
+    virtual void resize(size_t newCols, size_t newRows);
 
     /*! Set given tile to given coordinates.
      *  Returns false if impossible coordinates. */
-    bool setTile(unsigned int x, unsigned int y, TrackTileBasePtr tile);
+    bool setTile(size_t x, size_t y, TrackTileBasePtr tile);
 
     /*! Get tile at given coordinates.
      *  Returns nullptr if no tile set or impossible coordinates. */
-    TrackTileBasePtr getTile(unsigned int x, unsigned int y) const;
+    TrackTileBasePtr getTile(size_t x, size_t y) const;
 
     //! Insert column after given index.
-    virtual unsigned int insertColumn(unsigned int at, InsertDirection insertDirection);
+    virtual size_t insertColumn(size_t at, InsertDirection insertDirection);
 
     //! Delete column at given index. Return deleted tiles.
-    virtual std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);
+    virtual std::vector<TrackTileBasePtr> deleteColumn(size_t at);
 
     //! Insert row after given index.
-    virtual unsigned int insertRow(unsigned int at, InsertDirection insertDirection);
+    virtual size_t insertRow(size_t at, InsertDirection insertDirection);
 
     //! Delete row at given index. Return deleted tiles.
-    virtual std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
+    virtual std::vector<TrackTileBasePtr> deleteRow(size_t at);
 
 private:
-    unsigned int m_cols, m_rows;
+    size_t m_cols, m_rows;
 
     typedef std::vector<TrackTileBasePtr> TrackTileRow;
     typedef std::vector<TrackTileRow> TrackTileMap;

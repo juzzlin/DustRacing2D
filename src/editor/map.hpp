@@ -23,28 +23,28 @@ class Map : public MapBase
 {
 public:
     //! Constuctor.
-    Map(unsigned int cols, unsigned int rows);
+    Map(size_t cols, size_t rows);
 
     //! Copy constructor.
     Map(const Map & other);
 
-    void resize(unsigned int newCols, unsigned int newRows) override;
+    void resize(size_t newCols, size_t newRows) override;
 
-    unsigned int insertColumn(unsigned int at, InsertDirection insertDirection) override;
+    size_t insertColumn(size_t at, InsertDirection insertDirection) override;
 
-    std::vector<TrackTileBasePtr> deleteColumn(unsigned int at) override;
+    std::vector<TrackTileBasePtr> deleteColumn(size_t at) override;
 
-    unsigned int insertRow(unsigned int at, InsertDirection insertDirection) override;
+    size_t insertRow(size_t at, InsertDirection insertDirection) override;
 
-    std::vector<TrackTileBasePtr> deleteRow(unsigned int at) override;
+    std::vector<TrackTileBasePtr> deleteRow(size_t at) override;
 
     //! Destructor.
-    virtual ~Map();
+    virtual ~Map() override;
 
 private:
-    void moveTilesAfterColumnDeletion(unsigned int at);
+    void moveTilesAfterColumnDeletion(size_t at);
 
-    void moveTilesAfterRowDeletion(unsigned int at);
+    void moveTilesAfterRowDeletion(size_t at);
 
     void copyTiles(const Map & other);
 

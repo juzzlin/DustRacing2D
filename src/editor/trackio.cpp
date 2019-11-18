@@ -177,8 +177,8 @@ bool TrackIO::save(TrackDataPtr trackData, QString path)
     QDomElement root = doc.createElement(TrackDataBase::DataKeywords::Header::track);
     root.setAttribute(TrackDataBase::DataKeywords::Header::version, Config::Editor::EDITOR_VERSION);
     root.setAttribute(TrackDataBase::DataKeywords::Header::name, trackData->name());
-    root.setAttribute(TrackDataBase::DataKeywords::Header::cols, trackData->map().cols());
-    root.setAttribute(TrackDataBase::DataKeywords::Header::rows, trackData->map().rows());
+    root.setAttribute(TrackDataBase::DataKeywords::Header::cols, static_cast<int>(trackData->map().cols()));
+    root.setAttribute(TrackDataBase::DataKeywords::Header::rows, static_cast<int>(trackData->map().rows()));
     root.setAttribute(TrackDataBase::DataKeywords::Header::index, trackData->index());
 
     if (trackData->isUserTrack()) // Don't add the attribute at all, if not set

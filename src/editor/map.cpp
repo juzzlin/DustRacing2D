@@ -21,7 +21,7 @@
 
 #include <memory>
 
-Map::Map(unsigned int cols, unsigned int rows)
+Map::Map(size_t cols, size_t rows)
   : MapBase(cols, rows)
 {
     createEmptyTiles();
@@ -36,12 +36,11 @@ Map::Map(const Map & other)
 void Map::copyTiles(const Map & other)
 {
     // Create tiles and set coordinates.
-    for (unsigned int j = 0; j < rows(); j++)
+    for (size_t j = 0; j < rows(); j++)
     {
-        for (unsigned int i = 0; i < cols(); i++)
+        for (size_t i = 0; i < cols(); i++)
         {
-            auto newTile = new TrackTile(*std::dynamic_pointer_cast<TrackTile>(other.getTile(i, j)));
-            setTile(i, j, TrackTileBasePtr(newTile));
+            setTile(i, j, std::make_shared<TrackTile>(*std::dynamic_pointer_cast<TrackTile>(other.getTile(i, j))));
         }
     }
 }
@@ -49,17 +48,17 @@ void Map::copyTiles(const Map & other)
 void Map::createEmptyTiles()
 {
     // Create tiles and set coordinates.
-    for (unsigned int j = 0; j < rows(); j++)
+    for (size_t j = 0; j < rows(); j++)
     {
-        for (unsigned int i = 0; i < cols(); i++)
+        for (size_t i = 0; i < cols(); i++)
         {
             if (!getTile(i, j))
             {
-                auto newTile = new TrackTile(
+                const auto newTile = std::make_shared<TrackTile>(
                   QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                           TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
-                  QPoint(i, j));
-                setTile(i, j, TrackTileBasePtr(newTile));
+                  QPoint(static_cast<int>(i), static_cast<int>(j)));
+                setTile(i, j, newTile);
             }
             else
             {
@@ -67,52 +66,52 @@ void Map::createEmptyTiles()
                   QPointF(
                     TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
                     TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
-                getTile(i, j)->setMatrixLocation(QPoint(i, j));
+                getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i), static_cast<int>(j)));
             }
         }
     }
 }
 
-void Map::moveTilesAfterColumnDeletion(unsigned int at)
+void Map::moveTilesAfterColumnDeletion(size_t at)
 {
-    for (unsigned int j = 0; j < rows(); j++)
+    for (size_t j = 0; j < rows(); j++)
     {
-        for (unsigned int i = at + 1; i < cols(); i++)
+        for (size_t i = at + 1; i < cols(); i++)
         {
             const QPointF location(getTile(i, j)->location());
             getTile(i, j)->setLocation(
               QPointF(
                 location.x() - TrackTile::TILE_W,
                 location.y()));
-            getTile(i, j)->setMatrixLocation(QPoint(i - 1, j));
+            getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i) - 1, static_cast<int>(j)));
         }
     }
 }
 
-void Map::moveTilesAfterRowDeletion(unsigned int at)
+void Map::moveTilesAfterRowDeletion(size_t at)
 {
-    for (unsigned int j = at + 1; j < rows(); j++)
+    for (size_t j = at + 1; j < rows(); j++)
     {
-        for (unsigned int i = 0; i < cols(); i++)
+        for (size_t i = 0; i < cols(); i++)
         {
             const QPointF location(getTile(i, j)->location());
             getTile(i, j)->setLocation(
               QPointF(
                 location.x(),
                 location.y() - TrackTile::TILE_H));
-            getTile(i, j)->setMatrixLocation(QPoint(i, j - 1));
+            getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i), static_cast<int>(j) - 1));
         }
     }
 }
 
-void Map::resize(unsigned int newCols, unsigned int newRows)
+void Map::resize(size_t newCols, size_t newRows)
 {
     MapBase::resize(newCols, newRows);
 
     createEmptyTiles();
 }
 
-unsigned int Map::insertColumn(unsigned int at, InsertDirection insertDirection)
+size_t Map::insertColumn(size_t at, InsertDirection insertDirection)
 {
     at = MapBase::insertColumn(at, insertDirection);
 
@@ -121,13 +120,13 @@ unsigned int Map::insertColumn(unsigned int at, InsertDirection insertDirection)
     return at;
 }
 
-std::vector<TrackTileBasePtr> Map::deleteColumn(unsigned int at)
+std::vector<TrackTileBasePtr> Map::deleteColumn(size_t at)
 {
     moveTilesAfterColumnDeletion(at);
     return MapBase::deleteColumn(at);
 }
 
-unsigned int Map::insertRow(unsigned int at, InsertDirection insertDirection)
+size_t Map::insertRow(size_t at, InsertDirection insertDirection)
 {
     at = MapBase::insertRow(at, insertDirection);
 
@@ -136,7 +135,7 @@ unsigned int Map::insertRow(unsigned int at, InsertDirection insertDirection)
     return at;
 }
 
-std::vector<TrackTileBasePtr> Map::deleteRow(unsigned int at)
+std::vector<TrackTileBasePtr> Map::deleteRow(size_t at)
 {
     moveTilesAfterRowDeletion(at);
     return MapBase::deleteRow(at);
