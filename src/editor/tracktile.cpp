@@ -59,8 +59,8 @@ QRectF TrackTile::boundingRect() const
 
 void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(option);
+    Q_UNUSED(widget)
+    Q_UNUSED(option)
 
     painter->save();
 
