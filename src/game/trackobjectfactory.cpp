@@ -156,7 +156,7 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "pit")
     {
-        object = MCObjectPtr(new Pit(MCAssetManager::surfaceManager().surface("pit")));
+        object = std::make_shared<Pit>(MCAssetManager::surfaceManager().surface("pit"));
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
     }
@@ -177,12 +177,12 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "tree")
     {
-        int height = static_cast<int>(200 + 200 * MCRandom::getValue());
-        object = MCObjectPtr(new Tree(MCAssetManager::surfaceManager().surface("tree"),
-                                      1.0f + 0.50f * MCRandom::getValue(),
-                                      0.1f + 0.2f * MCRandom::getValue(),
-                                      height,
-                                      height / 10));
+        const int height = static_cast<int>(200 + 200 * MCRandom::getValue());
+        object = std::make_shared<Tree>(MCAssetManager::surfaceManager().surface("tree"),
+                                        1.0f + 0.50f * MCRandom::getValue(),
+                                        0.1f + 0.2f * MCRandom::getValue(),
+                                        height,
+                                        height / 10);
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
     }

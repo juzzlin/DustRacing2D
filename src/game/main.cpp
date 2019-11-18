@@ -32,8 +32,6 @@
 #include <string>
 #include <vector>
 
-static const char * INIT_ERROR = "Initializing the game failed!";
-
 using juzzlin::L;
 
 static void initLogger()
@@ -69,7 +67,7 @@ int main(int argc, char ** argv)
         // the Renderer has been initialized.
         L().debug() << "Creating game object..";
 
-        game.reset(new Game(argc, argv));
+        game = std::make_unique<Game>(argc, argv);
 
         return game->run();
     } catch (std::exception & e)
@@ -77,7 +75,7 @@ int main(int argc, char ** argv)
         if (!dynamic_cast<UserException *>(&e))
         {
             L().fatal() << e.what();
-            L().fatal() << INIT_ERROR;
+            L().fatal() << "Initializing the game failed!";
         }
 
         game.reset();

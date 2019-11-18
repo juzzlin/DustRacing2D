@@ -47,14 +47,13 @@ std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t numCars, Game & g
         carImage = carImageMap[index];
     }
 
-    std::unique_ptr<Car> car;
     if (index == 0 || (index == 1 && game.hasTwoHumanPlayers()))
     {
         desc.power = defaultPower;
         desc.dragQuadratic = defaultDrag;
         desc.accelerationFriction = 0.55f * Game::instance().difficultyProfile().accelerationFrictionMultiplier(true);
 
-        car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, true));
+        return std::make_unique<Car>(desc, MCAssetManager::surfaceManager().surface(carImage), index, true);
     }
     else if (game.hasComputerPlayers())
     {
@@ -65,8 +64,8 @@ std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t numCars, Game & g
         desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / NUM_CARS) * Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
         desc.dragQuadratic = defaultDrag;
 
-        car.reset(new Car(desc, MCAssetManager::surfaceManager().surface(carImage), index, false));
+        return std::make_unique<Car>(desc, MCAssetManager::surfaceManager().surface(carImage), index, false);
     }
 
-    return car;
+    return nullptr;
 }

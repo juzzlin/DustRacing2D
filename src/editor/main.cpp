@@ -47,7 +47,7 @@ int main(int argc, char ** argv)
 
     try
     {
-        app.reset(new Application(argc, argv));
+        app = std::make_unique<Application>(argc, argv);
 
         return app->run();
     } catch (std::exception & e)
