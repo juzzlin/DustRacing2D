@@ -111,14 +111,11 @@ void Track::calculateVisibleIndices(const MCBBox<int> & r, size_t & i0, size_t &
     j2 = j2 >= m_rows ? m_rows - 1 : j2;
 }
 
-void Track::render(MCCamera * camera)
+void Track::render(MCCamera & camera)
 {
-    // Get the Camera window
-    MCBBox<float> cameraBox(camera->bbox());
-
     // Calculate which tiles are visible
     size_t i2, j2, i0, j0;
-    calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
+    calculateVisibleIndices(camera.bbox(), i0, i2, j0, j2);
 
     MCGLShaderProgramPtr prog2d = Renderer::instance().program("tile2d");
     prog2d->bind();
@@ -131,8 +128,7 @@ void Track::render(MCCamera * camera)
     prog3d->release();
 }
 
-void Track::renderAsphalt(
-  MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
+void Track::renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -143,9 +139,9 @@ void Track::renderAsphalt(
     const MapBase & map = m_trackData->map();
 
     // Loop through the visible tile matrix and draw the tiles
-    size_t initX = i0 * TrackTile::TILE_W;
     size_t x;
     size_t y = j0 * TrackTile::TILE_H;
+    const size_t initX = i0 * TrackTile::TILE_W;
     for (size_t j = j0; j <= j2; j++)
     {
         x = initX;
@@ -156,7 +152,7 @@ void Track::renderAsphalt(
             {
                 x1 = x;
                 y1 = y;
-                camera->mapToCamera(x1, y1);
+                camera.mapToCamera(x1, y1);
                 prog->setTransform(0, MCVector3dF(x1 + TrackTile::TILE_W / 2, y1 + TrackTile::TILE_H / 2, 0));
                 m_asphalt.render();
             }
@@ -168,8 +164,7 @@ void Track::renderAsphalt(
     }
 }
 
-void Track::renderTiles(
-  MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
+void Track::renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -199,7 +194,7 @@ void Track::renderTiles(
             {
                 x1 = x;
                 y1 = y;
-                camera->mapToCamera(x1, y1);
+                camera.mapToCamera(x1, y1);
 
                 sortedTiles[surface].push_back({ tile.get(), x1, y1 });
             }

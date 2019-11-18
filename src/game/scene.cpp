@@ -611,16 +611,16 @@ void Scene::renderTrack()
             auto & glScene = MCWorld::instance().renderer().glScene();
 
             glScene.setSplitType(p1);
-            m_activeTrack->render(&m_camera[1]);
+            m_activeTrack->render(m_camera[1]);
 
             glScene.setSplitType(p0);
-            m_activeTrack->render(&m_camera[0]);
+            m_activeTrack->render(m_camera[0]);
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
-            m_activeTrack->render(&m_camera[0]);
+            m_activeTrack->render(m_camera[0]);
         }
 
         break;

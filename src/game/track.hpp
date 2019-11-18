@@ -38,7 +38,7 @@ public:
     explicit Track(std::unique_ptr<TrackData> trackData);
 
     //! Render as seen through the given camera window.
-    void render(MCCamera * camera);
+    void render(MCCamera & camera);
 
     //! Return width in length units.
     size_t width() const;
@@ -70,9 +70,9 @@ public:
 private:
     void calculateVisibleIndices(const MCBBox<int> & r, size_t & i0, size_t & i2, size_t & j0, size_t & j2);
 
-    void renderAsphalt(MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
+    void renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
 
-    void renderTiles(MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
+    void renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
 
     std::unique_ptr<TrackData> m_trackData;
 
