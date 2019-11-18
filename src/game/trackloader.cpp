@@ -202,7 +202,7 @@ std::unique_ptr<TrackData> TrackLoader::loadTrack(QString path)
             const auto name = root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
             const bool isUserTrack = root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
 
-            newData.reset(new TrackData(name, isUserTrack, cols, rows));
+            newData = std::make_unique<TrackData>(name, isUserTrack, cols, rows);
             newData->setFileName(path);
             newData->setIndex(root.attribute(TrackDataBase::DataKeywords::Header::index, "999").toUInt());
 
