@@ -41,16 +41,16 @@ public:
     void render(MCCamera * camera);
 
     //! Return width in length units.
-    unsigned int width() const;
+    size_t width() const;
 
     //! Return height in length units.
-    unsigned int height() const;
+    size_t height() const;
 
     //! Return the track data.
     TrackData & trackData() const;
 
     //! Return pointer to the tile at the given location.
-    TrackTilePtr trackTileAtLocation(unsigned int x, unsigned int y) const;
+    TrackTilePtr trackTileAtLocation(size_t x, size_t y) const;
 
     //! Return pointer to the finish line tile.
     TrackTilePtr finishLine() const;
@@ -68,18 +68,15 @@ public:
     std::weak_ptr<Track> prev() const;
 
 private:
-    void calculateVisibleIndices(const MCBBox<int> & r,
-                                 unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2);
+    void calculateVisibleIndices(const MCBBox<int> & r, size_t & i0, size_t & i2, size_t & j0, size_t & j2);
 
-    void renderAsphalt(
-      MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
+    void renderAsphalt(MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
 
-    void renderTiles(
-      MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
+    void renderTiles(MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2);
 
     std::unique_ptr<TrackData> m_trackData;
 
-    unsigned int m_rows, m_cols, m_width, m_height;
+    size_t m_rows, m_cols, m_width, m_height;
 
     MCSurface & m_asphalt;
 

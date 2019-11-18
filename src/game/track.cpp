@@ -42,12 +42,12 @@ Track::Track(std::unique_ptr<TrackData> trackData)
     assert(trackData);
 }
 
-unsigned int Track::width() const
+size_t Track::width() const
 {
     return m_width;
 }
 
-unsigned int Track::height() const
+size_t Track::height() const
 {
     return m_height;
 }
@@ -57,14 +57,14 @@ TrackData & Track::trackData() const
     return *m_trackData;
 }
 
-TrackTilePtr Track::trackTileAtLocation(unsigned int x, unsigned int y) const
+TrackTilePtr Track::trackTileAtLocation(size_t x, size_t y) const
 {
     // X index
-    unsigned int i = x * m_cols / m_width;
+    size_t i = x * m_cols / m_width;
     i = i >= m_cols ? m_cols - 1 : i;
 
     // Y index
-    unsigned int j = y * m_rows / m_height;
+    size_t j = y * m_rows / m_height;
     j = j >= m_rows ? m_rows - 1 : j;
 
     return static_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
@@ -72,15 +72,15 @@ TrackTilePtr Track::trackTileAtLocation(unsigned int x, unsigned int y) const
 
 TrackTilePtr Track::finishLine() const
 {
-    const MapBase & map = m_trackData->map();
-    for (unsigned int j = 0; j < map.rows(); j++)
+    auto && map = m_trackData->map();
+    for (size_t j = 0; j < map.rows(); j++)
     {
-        for (unsigned int i = 0; i < map.cols(); i++)
+        for (size_t i = 0; i < map.cols(); i++)
         {
-            TrackTilePtr pTile = static_pointer_cast<TrackTile>(map.getTile(i, j));
-            if (pTile->tileTypeEnum() == TrackTile::TileType::Finish)
+            const auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
+            if (tile->tileTypeEnum() == TrackTile::TileType::Finish)
             {
-                return pTile;
+                return tile;
             }
         }
     }
@@ -88,8 +88,7 @@ TrackTilePtr Track::finishLine() const
     return nullptr;
 }
 
-void Track::calculateVisibleIndices(const MCBBox<int> & r,
-                                    unsigned int & i0, unsigned int & i2, unsigned int & j0, unsigned int & j2)
+void Track::calculateVisibleIndices(const MCBBox<int> & r, size_t & i0, size_t & i2, size_t & j0, size_t & j2)
 
 {
     // Calculate which tiles are visible in the Camera window:
@@ -118,7 +117,7 @@ void Track::render(MCCamera * camera)
     MCBBox<float> cameraBox(camera->bbox());
 
     // Calculate which tiles are visible
-    unsigned int i2, j2, i0, j0;
+    size_t i2, j2, i0, j0;
     calculateVisibleIndices(cameraBox, i0, i2, j0, j2);
 
     MCGLShaderProgramPtr prog2d = Renderer::instance().program("tile2d");
@@ -133,7 +132,7 @@ void Track::render(MCCamera * camera)
 }
 
 void Track::renderAsphalt(
-  MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
+  MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -144,16 +143,15 @@ void Track::renderAsphalt(
     const MapBase & map = m_trackData->map();
 
     // Loop through the visible tile matrix and draw the tiles
-    int initX = i0 * TrackTile::TILE_W;
-    int x;
-    int y = j0 * TrackTile::TILE_H;
-    for (unsigned int j = j0; j <= j2; j++)
+    size_t initX = i0 * TrackTile::TILE_W;
+    size_t x;
+    size_t y = j0 * TrackTile::TILE_H;
+    for (size_t j = j0; j <= j2; j++)
     {
         x = initX;
-        for (unsigned int i = i0; i <= i2; i++)
+        for (size_t i = i0; i <= i2; i++)
         {
-            auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
-
+            const auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
             if (tile->hasAsphalt())
             {
                 x1 = x;
@@ -171,7 +169,7 @@ void Track::renderAsphalt(
 }
 
 void Track::renderTiles(
-  MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2)
+  MCCamera * camera, MCGLShaderProgramPtr prog, size_t i0, size_t i2, size_t j0, size_t j2)
 {
     float x1, y1; // Coordinates mapped to camera
 
@@ -185,29 +183,25 @@ void Track::renderTiles(
     // to minimize GPU context switches.
     std::map<MCSurface *, std::vector<SortedTile>> sortedTiles;
 
-    const MapBase & map = m_trackData->map();
+    auto && map = m_trackData->map();
 
     // Loop through the visible tile matrix and sort the tiles.
-    int initX = i0 * TrackTile::TILE_W;
-    int x;
-    int y = j0 * TrackTile::TILE_H;
-    for (unsigned int j = j0; j <= j2; j++)
+    size_t initX = i0 * TrackTile::TILE_W;
+    size_t x;
+    size_t y = j0 * TrackTile::TILE_H;
+    for (size_t j = j0; j <= j2; j++)
     {
         x = initX;
-        for (unsigned int i = i0; i <= i2; i++)
+        for (size_t i = i0; i <= i2; i++)
         {
-            auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
-            if (MCSurface * surface = tile->surface())
+            const auto tile = static_pointer_cast<TrackTile>(map.getTile(i, j));
+            if (auto surface = tile->surface())
             {
                 x1 = x;
                 y1 = y;
                 camera->mapToCamera(x1, y1);
 
-                SortedTile sortedTile;
-                sortedTile.tile = tile.get();
-                sortedTile.x1 = x1;
-                sortedTile.y1 = y1;
-                sortedTiles[surface].push_back(sortedTile);
+                sortedTiles[surface].push_back({ tile.get(), x1, y1 });
             }
 
             x += TrackTile::TILE_W;
@@ -220,16 +214,16 @@ void Track::renderTiles(
     auto iter = sortedTiles.begin();
     while (iter != sortedTiles.end())
     {
-        MCSurface * surface = iter->first;
+        auto surface = iter->first;
         surface->setShaderProgram(prog);
         surface->bind();
 
-        for (unsigned int i = 0; i < iter->second.size(); i++)
+        for (size_t i = 0; i < iter->second.size(); i++)
         {
             x1 = iter->second[i].x1;
             y1 = iter->second[i].y1;
 
-            const TrackTile * tile = iter->second[i].tile;
+            const auto tile = iter->second[i].tile;
             prog->setTransform(tile->rotation(), MCVector3dF(x1 + TrackTile::TILE_W / 2, y1 + TrackTile::TILE_H / 2, 0));
             prog->setScale(TrackTile::TILE_W / surface->width(), TrackTile::TILE_H / surface->height(), 1.0f);
             surface->render();
