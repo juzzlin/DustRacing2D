@@ -40,7 +40,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
+    auto easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
     easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
     easyItem->setAction([]() {
         juzzlin::L().info() << "Easy selected.";
@@ -50,7 +50,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
         MenuManager::instance().pushMenu(LapCountMenu::MenuId);
     });
 
-    MenuItem * mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
+    auto mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
     mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
     mediumItem->setAction([]() {
         juzzlin::L().info() << "Medium selected.";
@@ -60,7 +60,7 @@ DifficultyMenu::DifficultyMenu(int width, int height)
         MenuManager::instance().pushMenu(LapCountMenu::MenuId);
     });
 
-    MenuItem * hardItem = new MenuItem(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
+    auto hardItem = new MenuItem(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
     hardItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *hardItem)));
     hardItem->setAction([]() {
         juzzlin::L().info() << "Hard selected.";

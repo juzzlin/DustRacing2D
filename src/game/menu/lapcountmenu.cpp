@@ -57,7 +57,7 @@ LapCountMenu::LapCountMenu(int width, int height)
         std::wstringstream itemText;
         itemText << LAP_COUNTS[i];
 
-        MenuItem * lapCountItem = new MenuItem(itemWidth, itemHeight, itemText.str());
+        auto lapCountItem = new MenuItem(itemWidth, itemHeight, itemText.str());
         lapCountItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCountItem)));
         lapCountItem->setAction(
           [i]() {

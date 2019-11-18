@@ -122,41 +122,41 @@ private:
     std::shared_ptr<ConfirmationMenu> m_confirmationMenu;
 };
 
-static const char * CONFIRMATION_MENU_ID = "confirmationMenu";
+static const auto CONFIRMATION_MENU_ID = "confirmationMenu";
 
-static const char * FPS_MENU_ID = "fpsMenu";
+static const auto FPS_MENU_ID = "fpsMenu";
 
-static const char * FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
+static const auto FULL_SCREEN_RESOLUTION_MENU_ID = "fullScreenResolutionMenu";
 
-static const char * GAME_MODE_MENU_ID = "gameModeMenu";
+static const auto GAME_MODE_MENU_ID = "gameModeMenu";
 
-static const char * GFX_MENU_ID = "gfxMenu";
+static const auto GFX_MENU_ID = "gfxMenu";
 
-static const char * KEY_CONFIG_MENU_ID = "keyConfigMenu";
+static const auto KEY_CONFIG_MENU_ID = "keyConfigMenu";
 
-static const char * RESET_MENU_ID = "resetMenu";
+static const auto RESET_MENU_ID = "resetMenu";
 
-static const char * SFX_MENU_ID = "sfxMenu";
+static const auto SFX_MENU_ID = "sfxMenu";
 
-static const char * SPLIT_TYPE_MENU_ID = "splitTypeMenu";
+static const auto SPLIT_TYPE_MENU_ID = "splitTypeMenu";
 
-static const char * VSYNC_MENU_ID = "vsyncMenu";
+static const auto VSYNC_MENU_ID = "vsyncMenu";
 
-static const char * WINDOWED_RESOLUTION_MENU_ID = "windowedResolutionMenu";
+static const auto WINDOWED_RESOLUTION_MENU_ID = "windowedResolutionMenu";
 
 SettingsMenu::SettingsMenu(std::string id, int width, int height)
   : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
-  , m_confirmationMenu(new ConfirmationMenu(CONFIRMATION_MENU_ID, width, height))
-  , m_fpsMenu(new SurfaceMenu("settingsBack", FPS_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_fullScreenResolutionMenu(new ResolutionMenu(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true))
-  , m_windowedResolutionMenu(new ResolutionMenu(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false))
-  , m_gameModeMenu(new SurfaceMenu("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_gfxMenu(new SurfaceMenu("settingsBack", GFX_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_resetMenu(new SurfaceMenu("settingsBack", RESET_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_sfxMenu(new SurfaceMenu("settingsBack", SFX_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_splitTypeMenu(new SurfaceMenu("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList))
-  , m_vsyncMenu(new VSyncMenu(m_confirmationMenu, VSYNC_MENU_ID, width, height))
-  , m_keyConfigMenu(new KeyConfigMenu(KEY_CONFIG_MENU_ID, width, height))
+  , m_confirmationMenu(std::make_shared<ConfirmationMenu>(CONFIRMATION_MENU_ID, width, height))
+  , m_fpsMenu(std::make_shared<SurfaceMenu>("settingsBack", FPS_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_fullScreenResolutionMenu(std::make_shared<ResolutionMenu>(m_confirmationMenu, FULL_SCREEN_RESOLUTION_MENU_ID, width, height, true))
+  , m_windowedResolutionMenu(std::make_shared<ResolutionMenu>(m_confirmationMenu, WINDOWED_RESOLUTION_MENU_ID, width, height, false))
+  , m_gameModeMenu(std::make_shared<SurfaceMenu>("settingsBack", GAME_MODE_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_gfxMenu(std::make_shared<SurfaceMenu>("settingsBack", GFX_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_resetMenu(std::make_shared<SurfaceMenu>("settingsBack", RESET_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_sfxMenu(std::make_shared<SurfaceMenu>("settingsBack", SFX_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_splitTypeMenu(std::make_shared<SurfaceMenu>("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_vsyncMenu(std::make_shared<VSyncMenu>(m_confirmationMenu, VSYNC_MENU_ID, width, height))
+  , m_keyConfigMenu(std::make_shared<KeyConfigMenu>(KEY_CONFIG_MENU_ID, width, height))
 {
     populate(width, height);
 
@@ -199,23 +199,23 @@ void SettingsMenu::populate(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toUpper().toStdWString());
+    auto gameMode = new MenuItem(width, itemHeight, QObject::tr("Game mode >").toUpper().toStdWString());
     gameMode->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gameMode)));
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
-    MenuItem * sfx = new MenuItem(width, itemHeight, QObject::tr("Sounds >").toUpper().toStdWString());
+    auto sfx = new MenuItem(width, itemHeight, QObject::tr("Sounds >").toUpper().toStdWString());
     sfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *sfx)));
     sfx->setMenuOpenAction(SFX_MENU_ID);
 
-    MenuItem * gfx = new MenuItem(width, itemHeight, QObject::tr("GFX >").toUpper().toStdWString());
+    auto gfx = new MenuItem(width, itemHeight, QObject::tr("GFX >").toUpper().toStdWString());
     gfx->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *gfx)));
     gfx->setMenuOpenAction(GFX_MENU_ID);
 
-    MenuItem * configureKeys = new MenuItem(width, itemHeight, QObject::tr("Controls >").toUpper().toStdWString());
+    auto configureKeys = new MenuItem(width, itemHeight, QObject::tr("Controls >").toUpper().toStdWString());
     configureKeys->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *configureKeys)));
     configureKeys->setMenuOpenAction(KEY_CONFIG_MENU_ID);
 
-    MenuItem * reset = new MenuItem(width, itemHeight, QObject::tr("Reset >").toUpper().toStdWString());
+    auto reset = new MenuItem(width, itemHeight, QObject::tr("Reset >").toUpper().toStdWString());
     reset->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *reset)));
     reset->setMenuOpenAction(RESET_MENU_ID);
 
@@ -238,7 +238,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toUpper().toStdWString());
+    auto fps30 = new MenuItem(width, itemHeight, QObject::tr("30 fps").toUpper().toStdWString());
     fps30->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps30)));
     fps30->setAction(
       []() {
@@ -248,7 +248,7 @@ void SettingsMenu::populateFpsMenu(int width, int height)
           MenuManager::instance().popMenu();
       });
 
-    MenuItem * fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toUpper().toStdWString());
+    auto fps60 = new MenuItem(width, itemHeight, QObject::tr("60 fps").toUpper().toStdWString());
     fps60->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *fps60)));
     fps60->setAction(
       []() {
@@ -280,7 +280,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toUpper().toStdWString());
+    auto twoPlayers = new MenuItem(width, itemHeight, QObject::tr("Two player race").toUpper().toStdWString());
     twoPlayers->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *twoPlayers)));
     twoPlayers->setAction(
       []() {
@@ -289,7 +289,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
           MenuManager::instance().popMenu();
       });
 
-    MenuItem * onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toUpper().toStdWString());
+    auto onePlayer = new MenuItem(width, itemHeight, QObject::tr("One player race").toUpper().toStdWString());
     onePlayer->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onePlayer)));
     onePlayer->setAction(
       []() {
@@ -298,7 +298,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
           MenuManager::instance().popMenu();
       });
 
-    MenuItem * timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toUpper().toStdWString());
+    auto timeTrial = new MenuItem(width, itemHeight, QObject::tr("Time Trial").toUpper().toStdWString());
     timeTrial->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *timeTrial)));
     timeTrial->setAction(
       []() {
@@ -307,7 +307,7 @@ void SettingsMenu::populateGameModeMenu(int width, int height)
           MenuManager::instance().popMenu();
       });
 
-    MenuItem * duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toUpper().toStdWString());
+    auto duel = new MenuItem(width, itemHeight, QObject::tr("Duel").toUpper().toStdWString());
     duel->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *duel)));
     duel->setAction(
       []() {
@@ -334,7 +334,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toUpper().toStdWString());
+    auto vertical = new MenuItem(width, itemHeight, QObject::tr("Vertical").toUpper().toStdWString());
     vertical->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vertical)));
     vertical->setAction(
       []() {
@@ -343,7 +343,7 @@ void SettingsMenu::populateSplitTypeMenu(int width, int height)
           MenuManager::instance().popMenu();
       });
 
-    MenuItem * horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toUpper().toStdWString());
+    auto horizontal = new MenuItem(width, itemHeight, QObject::tr("Horizontal").toUpper().toStdWString());
     horizontal->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *horizontal)));
     horizontal->setAction(
       []() {
@@ -366,23 +366,23 @@ void SettingsMenu::populateGfxMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toUpper().toStdWString());
+    auto selectFullScreenResolution = new MenuItem(width, itemHeight, QObject::tr("Full screen resolution >").toUpper().toStdWString());
     selectFullScreenResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFullScreenResolution)));
     selectFullScreenResolution->setMenuOpenAction(FULL_SCREEN_RESOLUTION_MENU_ID);
 
-    MenuItem * selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toUpper().toStdWString());
+    auto selectWindowedResolution = new MenuItem(width, itemHeight, QObject::tr("Windowed resolution >").toUpper().toStdWString());
     selectWindowedResolution->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectWindowedResolution)));
     selectWindowedResolution->setMenuOpenAction(WINDOWED_RESOLUTION_MENU_ID);
 
-    MenuItem * selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toUpper().toStdWString());
+    auto selectFps = new MenuItem(width, itemHeight, QObject::tr("FPS >").toUpper().toStdWString());
     selectFps->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *selectFps)));
     selectFps->setMenuOpenAction(FPS_MENU_ID);
 
-    MenuItem * splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toUpper().toStdWString());
+    auto splitType = new MenuItem(width, itemHeight, QObject::tr("Split type >").toUpper().toStdWString());
     splitType->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *splitType)));
     splitType->setMenuOpenAction(SPLIT_TYPE_MENU_ID);
 #ifdef VSYNC_MENU
-    MenuItem * vsync = new MenuItem(width, itemHeight, QObject::tr("VSync >").toUpper().toStdWString());
+    auto vsync = new MenuItem(width, itemHeight, QObject::tr("VSync >").toUpper().toStdWString());
     vsync->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *vsync)));
     vsync->setMenuOpenAction(VSYNC_MENU_ID);
     m_gfxMenu->addItem(MenuItemPtr(vsync));
@@ -402,7 +402,7 @@ void SettingsMenu::populateSfxMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * offItem = new MenuItem(width, itemHeight, QObject::tr("Off").toUpper().toStdWString());
+    auto offItem = new MenuItem(width, itemHeight, QObject::tr("Off").toUpper().toStdWString());
     offItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *offItem)));
     offItem->setAction(
       []() {
@@ -414,7 +414,7 @@ void SettingsMenu::populateSfxMenu(int width, int height)
 
     m_sfxMenu->addItem(MTFH::MenuItemPtr(offItem));
 
-    MenuItem * onItem = new MenuItem(width, itemHeight, QObject::tr("On").toUpper().toStdWString());
+    auto onItem = new MenuItem(width, itemHeight, QObject::tr("On").toUpper().toStdWString());
     onItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *onItem)));
     onItem->setAction(
       []() {
@@ -447,17 +447,17 @@ void SettingsMenu::populateResetMenu(int width, int height)
     using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    MenuItem * resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toUpper().toStdWString());
+    auto resetRecordTimes = new MenuItem(width, itemHeight, QObject::tr("Reset record times").toUpper().toStdWString());
     resetRecordTimes->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetRecordTimes)));
     resetRecordTimes->setAction(
       MenuItemActionPtr(new ResetAction(ResetAction::Type::Times, m_confirmationMenu)));
 
-    MenuItem * resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toUpper().toStdWString());
+    auto resetBestPositions = new MenuItem(width, itemHeight, QObject::tr("Reset best positions").toUpper().toStdWString());
     resetBestPositions->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetBestPositions)));
     resetBestPositions->setAction(
       MenuItemActionPtr(new ResetAction(ResetAction::Type::Positions, m_confirmationMenu)));
 
-    MenuItem * resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toUpper().toStdWString());
+    auto resetUnlockedTracks = new MenuItem(width, itemHeight, QObject::tr("Reset unlocked tracks").toUpper().toStdWString());
     resetUnlockedTracks->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *resetUnlockedTracks)));
     resetUnlockedTracks->setAction(
       MenuItemActionPtr(new ResetAction(ResetAction::Type::Tracks, m_confirmationMenu)));

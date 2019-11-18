@@ -54,19 +54,19 @@ void MainMenu::createMenuItems()
     const int itemHeight = height() / 8;
     const int textSize = ITEM_TEXT_SIZE;
 
-    MenuItem * play = new MenuItem(width(), itemHeight, tr("Play").toUpper().toStdWString());
+    auto play = new MenuItem(width(), itemHeight, tr("Play").toUpper().toStdWString());
     play->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *play)));
     play->setMenuOpenAction("difficulty");
 
-    MenuItem * help = new MenuItem(width(), itemHeight, tr("Help").toUpper().toStdWString());
+    auto help = new MenuItem(width(), itemHeight, tr("Help").toUpper().toStdWString());
     help->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *help)));
     help->setMenuOpenAction("help");
 
-    MenuItem * credits = new MenuItem(width(), itemHeight, tr("Credits").toUpper().toStdWString());
+    auto credits = new MenuItem(width(), itemHeight, tr("Credits").toUpper().toStdWString());
     credits->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *credits)));
     credits->setMenuOpenAction("credits");
 
-    MenuItem * quit = new MenuItem(width(), itemHeight, tr("Quit").toUpper().toStdWString());
+    auto quit = new MenuItem(width(), itemHeight, tr("Quit").toUpper().toStdWString());
     quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *quit)));
     quit->setAction(
       [this]() {
@@ -74,7 +74,7 @@ void MainMenu::createMenuItems()
           emit exitGameRequested();
       });
 
-    MenuItem * settings = new MenuItem(width(), itemHeight, tr("Settings").toUpper().toStdWString());
+    auto settings = new MenuItem(width(), itemHeight, tr("Settings").toUpper().toStdWString());
     settings->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *settings)));
     settings->setMenuOpenAction("settings");
 
