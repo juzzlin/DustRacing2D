@@ -106,8 +106,7 @@ void Renderer::initialize()
 
 void Renderer::resizeGL(int viewWidth, int viewHeight)
 {
-    m_glScene.resize(
-      viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
+    m_glScene.resize(viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
 }
 
 void Renderer::createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource)
@@ -147,9 +146,9 @@ void Renderer::loadShaders()
 void Renderer::loadFonts()
 {
     QStringList fonts = { "DejaVuSans-Bold.ttf" };
-    for (auto font : fonts)
+    for (auto && font : fonts)
     {
-        const QString path = QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
+        const auto path = QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
         juzzlin::L().info() << "Loading font " << path.toStdString() << "..";
         QFile fontFile(path);
         fontFile.open(QFile::ReadOnly);
@@ -174,7 +173,7 @@ void Renderer::setEnabled(bool enable)
 
 MCGLShaderProgramPtr Renderer::program(const std::string & id)
 {
-    MCGLShaderProgramPtr program(m_shaderHash[id]);
+    const auto program(m_shaderHash[id]);
     if (!program)
     {
         throw std::runtime_error("Cannot find shader program '" + id + "'");
@@ -213,13 +212,13 @@ void Renderer::render()
 
     if (!m_fbo)
     {
-        m_fbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
+        m_fbo = std::make_unique<QOpenGLFramebufferObject>(m_hRes, m_vRes);
         m_fbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
 
     if (!m_shadowFbo)
     {
-        m_shadowFbo.reset(new QOpenGLFramebufferObject(m_hRes, m_vRes));
+        m_shadowFbo = std::make_unique<QOpenGLFramebufferObject>(m_hRes, m_vRes);
         m_shadowFbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
 
@@ -238,7 +237,7 @@ void Renderer::render()
     m_shadowFbo->release();
 
     m_fbo->bind();
-    static MCGLMaterialPtr dummyMaterial(new MCGLMaterial);
+    static auto dummyMaterial = std::make_shared<MCGLMaterial>();
     dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
     dummyMaterial->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     MCSurface ss("dummy", dummyMaterial, 2.0f, 2.0f);
@@ -395,9 +394,9 @@ Renderer::~Renderer()
 {
     // Ensure that OpenGL stuff gets deleted before the OpenGL context deletion
 
-    m_fbo.reset(nullptr);
+    m_fbo.reset();
 
-    m_shadowFbo.reset(nullptr);
+    m_shadowFbo.reset();
 
     m_shaderHash.clear();
 
