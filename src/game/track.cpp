@@ -211,25 +211,22 @@ void Track::renderTiles(
     }
 
     // Render the tiles.
-    auto iter = sortedTiles.begin();
-    while (iter != sortedTiles.end())
+    for (auto && iter : sortedTiles)
     {
-        auto surface = iter->first;
+        const auto surface = iter.first;
         surface->setShaderProgram(prog);
         surface->bind();
 
-        for (size_t i = 0; i < iter->second.size(); i++)
+        for (size_t i = 0; i < iter.second.size(); i++)
         {
-            x1 = iter->second[i].x1;
-            y1 = iter->second[i].y1;
+            x1 = iter.second[i].x1;
+            y1 = iter.second[i].y1;
 
-            const auto tile = iter->second[i].tile;
+            const auto tile = iter.second[i].tile;
             prog->setTransform(tile->rotation(), MCVector3dF(x1 + TrackTile::TILE_W / 2, y1 + TrackTile::TILE_H / 2, 0));
             prog->setScale(TrackTile::TILE_W / surface->width(), TrackTile::TILE_H / surface->height(), 1.0f);
             surface->render();
         }
-
-        iter++;
     }
 }
 
