@@ -32,11 +32,8 @@ class Track
 {
 public:
     /*! Constructor.
-     * \param trackData The data that represents the track. Track will take the ownership. */
-    explicit Track(TrackData * trackData);
-
-    //! Destructor.
-    virtual ~Track();
+     * \param trackData The data that represents the track. */
+    explicit Track(std::unique_ptr<TrackData> trackData);
 
     //! Render as seen through the given camera window.
     void render(MCCamera * camera);
@@ -78,7 +75,7 @@ private:
     void renderTiles(
       MCCamera * camera, MCGLShaderProgramPtr prog, unsigned int i0, unsigned int i2, unsigned int j0, unsigned int j2);
 
-    TrackData * m_trackData;
+    std::unique_ptr<TrackData> m_trackData;
 
     unsigned int m_rows, m_cols, m_width, m_height;
 

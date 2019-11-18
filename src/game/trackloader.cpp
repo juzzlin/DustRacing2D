@@ -89,10 +89,9 @@ int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficul
             trackPath = path + QDir::separator() + trackPath;
             if (auto trackData = loadTrack(trackPath))
             {
-                m_tracks.push_back(new Track(trackData));
-                numLoaded++;
-
                 juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index=" << trackData->index();
+                m_tracks.push_back(new Track(std::move(trackData)));
+                numLoaded++;
             }
             else
             {
@@ -174,7 +173,7 @@ void TrackLoader::sortTracks()
     }
 }
 
-TrackData * TrackLoader::loadTrack(QString path)
+std::unique_ptr<TrackData> TrackLoader::loadTrack(QString path)
 {
     QDomDocument doc;
 
@@ -192,8 +191,7 @@ TrackData * TrackLoader::loadTrack(QString path)
 
     file.close();
 
-    TrackData * newData = nullptr;
-
+    std::unique_ptr<TrackData> newData;
     const auto root = doc.documentElement();
     if (root.nodeName() == "track")
     {
@@ -203,12 +201,10 @@ TrackData * TrackLoader::loadTrack(QString path)
         if (cols > 0 && rows > 0)
         {
             const auto name = root.attribute(TrackDataBase::DataKeywords::Header::name, "undefined");
-
             const bool isUserTrack = root.attribute(TrackDataBase::DataKeywords::Header::user, "0").toUInt();
 
-            newData = new TrackData(name, isUserTrack, cols, rows);
+            newData.reset(new TrackData(name, isUserTrack, cols, rows));
             newData->setFileName(path);
-
             newData->setIndex(root.attribute(TrackDataBase::DataKeywords::Header::index, "999").toUInt());
 
             // A temporary route vector.

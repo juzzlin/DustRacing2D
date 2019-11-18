@@ -70,7 +70,7 @@ public:
 private:
     //! Load the given track.
     //! \return Valid data pointer or nullptr if fails.
-    TrackData * loadTrack(QString path);
+    std::unique_ptr<TrackData> loadTrack(QString path);
 
     void sortTracks();
 

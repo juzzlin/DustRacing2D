@@ -31,8 +31,8 @@
 
 using std::static_pointer_cast;
 
-Track::Track(TrackData * trackData)
-  : m_trackData(trackData)
+Track::Track(std::unique_ptr<TrackData> trackData)
+  : m_trackData(std::move(trackData))
   , m_rows(m_trackData->map().rows())
   , m_cols(m_trackData->map().cols())
   , m_width(m_cols * TrackTile::TILE_W)
@@ -259,9 +259,4 @@ void Track::setPrev(Track & prev)
 Track * Track::prev() const
 {
     return m_prev;
-}
-
-Track::~Track()
-{
-    delete m_trackData;
 }
