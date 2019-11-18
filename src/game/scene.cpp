@@ -523,7 +523,7 @@ void Scene::createBridgeObjects()
         for (unsigned int i = 0; i <= map.cols(); i++)
         {
             auto tile = dynamic_pointer_cast<TrackTile>(map.getTile(i, j));
-            if (tile && tile->tileTypeEnum() == TrackTile::TT_BRIDGE)
+            if (tile && tile->tileTypeEnum() == TrackTile::TileType::Bridge)
             {
                 const auto bridge = std::make_shared<Bridge>();
                 bridge->translate(MCVector3dF(i * TrackTile::TILE_W + TrackTile::TILE_W / 2, j * TrackTile::TILE_H + TrackTile::TILE_H / 2, 0));

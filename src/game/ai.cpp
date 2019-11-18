@@ -142,7 +142,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
         }
     }
 
-    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_90)
+    if (currentTile.tileTypeEnum() == TrackTile::TileType::Corner90)
     {
         if (absSpeed > 7.0f * scale)
         {
@@ -150,7 +150,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
         }
     }
 
-    if (currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_LEFT || currentTile.tileTypeEnum() == TrackTile::TT_CORNER_45_RIGHT)
+    if (currentTile.tileTypeEnum() == TrackTile::TileType::Corner45Left || currentTile.tileTypeEnum() == TrackTile::TileType::Corner45Right)
     {
         if (absSpeed > 8.3f * scale)
         {

@@ -80,7 +80,7 @@ TrackTilePtr Track::finishLine() const
         for (unsigned int i = 0; i < map.cols(); i++)
         {
             TrackTilePtr pTile = static_pointer_cast<TrackTile>(map.getTile(i, j));
-            if (pTile->tileTypeEnum() == TrackTile::TT_FINISH)
+            if (pTile->tileTypeEnum() == TrackTile::TileType::Finish)
             {
                 return pTile;
             }

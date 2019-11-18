@@ -70,14 +70,14 @@ void TrackTile::setTileTypeEnum(TrackTile::TileType type)
 
     switch (type)
     {
-    case TT_BRIDGE:
-    case TT_CORNER_90:
-    case TT_CORNER_45_LEFT:
-    case TT_CORNER_45_RIGHT:
-    case TT_STRAIGHT:
-    case TT_STRAIGHT_45_MALE:
-    case TT_STRAIGHT_45_FEMALE:
-    case TT_FINISH:
+    case TileType::Bridge:
+    case TileType::Corner90:
+    case TileType::Corner45Left:
+    case TileType::Corner45Right:
+    case TileType::Straight:
+    case TileType::Straight45Male:
+    case TileType::Straight45Female:
+    case TileType::Finish:
         m_hasAsphalt = true;
         break;
     default:

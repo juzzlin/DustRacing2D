@@ -24,28 +24,28 @@ class TrackTile : public TrackTileBase
 {
 public:
     //! All possible types.
-    enum TileType
+    enum class TileType
     {
-        TT_NONE = 0,
-        TT_BRIDGE,
-        TT_CORNER_90,
-        TT_CORNER_45_LEFT,
-        TT_CORNER_45_RIGHT,
-        TT_STRAIGHT,
-        TT_STRAIGHT_45_MALE,
-        TT_STRAIGHT_45_FEMALE,
-        TT_GRASS,
-        TT_SAND,
-        TT_SAND_GRASS_STRAIGHT,
-        TT_SAND_GRASS_CORNER,
-        TT_SAND_GRASS_CORNER_2,
-        TT_FINISH
+        None = 0,
+        Bridge,
+        Corner90,
+        Corner45Left,
+        Corner45Right,
+        Straight,
+        Straight45Male,
+        Straight45Female,
+        Grass,
+        Sand,
+        SandGrassStraight,
+        SandGrassCorner,
+        SandGrassCorner2,
+        Finish
     };
 
     /*! Constructor.
      *  \see TrackTileBase. */
     TrackTile(QPointF location, QPoint matrixLocation,
-              const QString & type = "", TileType typeEnum = TT_NONE);
+              const QString & type = "", TileType typeEnum = TileType::None);
 
     //! Destructor
     virtual ~TrackTile();

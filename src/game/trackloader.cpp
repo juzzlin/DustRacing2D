@@ -296,26 +296,26 @@ void TrackLoader::readTile(
 TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 {
     static std::map<string, TrackTile::TileType> mappings = {
-        { "bridge", TrackTile::TT_BRIDGE },
-        { "corner90", TrackTile::TT_CORNER_90 },
-        { "corner45Left", TrackTile::TT_CORNER_45_LEFT },
-        { "corner45Right", TrackTile::TT_CORNER_45_RIGHT },
-        { "straight", TrackTile::TT_STRAIGHT },
-        { "straight45Male", TrackTile::TT_STRAIGHT_45_MALE },
-        { "straight45Female", TrackTile::TT_STRAIGHT_45_FEMALE },
-        { "grass", TrackTile::TT_GRASS },
-        { "sand", TrackTile::TT_SAND },
-        { "sandGrassStraight", TrackTile::TT_SAND_GRASS_STRAIGHT },
-        { "sandGrassCorner", TrackTile::TT_SAND_GRASS_CORNER },
-        { "sandGrassCorner2", TrackTile::TT_SAND_GRASS_CORNER_2 },
-        { "finish", TrackTile::TT_FINISH },
-        { "clear", TrackTile::TT_NONE }
+        { "bridge", TrackTile::TileType::Bridge },
+        { "corner90", TrackTile::TileType::Corner90 },
+        { "corner45Left", TrackTile::TileType::Corner45Left },
+        { "corner45Right", TrackTile::TileType::Corner45Right },
+        { "straight", TrackTile::TileType::Straight },
+        { "straight45Male", TrackTile::TileType::Straight45Male },
+        { "straight45Female", TrackTile::TileType::Straight45Female },
+        { "grass", TrackTile::TileType::Grass },
+        { "sand", TrackTile::TileType::Sand },
+        { "sandGrassStraight", TrackTile::TileType::SandGrassStraight },
+        { "sandGrassCorner", TrackTile::TileType::SandGrassCorner },
+        { "sandGrassCorner2", TrackTile::TileType::SandGrassCorner2 },
+        { "finish", TrackTile::TileType::Finish },
+        { "clear", TrackTile::TileType::None }
     };
 
     if (!mappings.count(str))
     {
         juzzlin::L().error() << "No mapping for tile '" << str << "'..";
-        return TrackTile::TT_NONE;
+        return TrackTile::TileType::None;
     }
 
     return mappings[str];
