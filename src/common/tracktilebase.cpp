@@ -22,7 +22,7 @@ TrackTileBase::TrackTileBase(
   : m_tileType(type)
   , m_location(location)
   , m_matrixLocation(matrixLocation)
-  , m_computerHint(TrackTileBase::CH_NONE)
+  , m_computerHint(TrackTileBase::ComputerHint::None)
   , m_excludeFromMinimap(false)
 {
 }

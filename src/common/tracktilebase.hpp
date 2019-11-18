@@ -41,11 +41,11 @@ public:
     static const unsigned int TILE_H = 256;
 
     //! Hints for computer players.
-    enum ComputerHint
+    enum class ComputerHint
     {
-        CH_NONE = 0,
-        CH_BRAKE_HARD,
-        CH_BRAKE
+        None = 0,
+        BrakeHard,
+        Brake
     };
 
     /*! Constructor.

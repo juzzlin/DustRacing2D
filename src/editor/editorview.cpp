@@ -119,21 +119,21 @@ void EditorView::createTileContextMenuActions()
     m_clearComputerHint = new QAction(QWidget::tr("Clear computer hint"), &m_tileContextMenu);
     QObject::connect(m_clearComputerHint, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
-        setComputerHint(TrackTileBase::CH_NONE);
+        setComputerHint(TrackTileBase::ComputerHint::None);
     });
 
     m_setComputerHintBrakeHard = new QAction(
       QWidget::tr("Set computer hint 'brake hard'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintBrakeHard, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
-        setComputerHint(TrackTileBase::CH_BRAKE_HARD);
+        setComputerHint(TrackTileBase::ComputerHint::BrakeHard);
     });
 
     m_setComputerHintBrake = new QAction(
       QWidget::tr("Set computer hint 'brake'.."), &m_tileContextMenu);
     QObject::connect(m_setComputerHintBrake, &QAction::triggered, [this]() {
         m_mediator.saveUndoPoint();
-        setComputerHint(TrackTileBase::CH_BRAKE);
+        setComputerHint(TrackTileBase::ComputerHint::Brake);
     });
 
     m_excludeFromMinimap = new QAction(
@@ -502,16 +502,14 @@ void EditorView::openTileContextMenu(TrackTile & tile)
 
     switch (tile.computerHint())
     {
-    case TrackTileBase::CH_NONE:
+    case TrackTileBase::ComputerHint::None:
         m_clearComputerHint->setEnabled(false);
         break;
-    case TrackTileBase::CH_BRAKE_HARD:
+    case TrackTileBase::ComputerHint::BrakeHard:
         m_setComputerHintBrakeHard->setEnabled(false);
         break;
-    case TrackTileBase::CH_BRAKE:
+    case TrackTileBase::ComputerHint::Brake:
         m_setComputerHintBrake->setEnabled(false);
-        break;
-    default:
         break;
     }
 

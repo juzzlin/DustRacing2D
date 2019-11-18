@@ -75,11 +75,11 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
                             m_pixmap);
 
         // Mark the tile if it has computer hints set
-        if (computerHint() == TrackTile::CH_BRAKE_HARD)
+        if (computerHint() == TrackTile::ComputerHint::BrakeHard)
         {
             painter->fillRect(boundingRect(), QBrush(QColor(255, 0, 0, 128)));
         }
-        else if (computerHint() == TrackTile::CH_BRAKE)
+        else if (computerHint() == TrackTile::ComputerHint::Brake)
         {
             painter->fillRect(boundingRect(), QBrush(QColor(128, 0, 0, 128)));
         }

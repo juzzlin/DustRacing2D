@@ -120,9 +120,9 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
                 tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::excludeFromMinimap, true);
             }
 
-            if (tile->computerHint() != TrackTile::CH_NONE)
+            if (tile->computerHint() != TrackTile::ComputerHint::None)
             {
-                tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::computerHint, tile->computerHint());
+                tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::computerHint, static_cast<int>(tile->computerHint()));
             }
 
             root.appendChild(tileElement);
