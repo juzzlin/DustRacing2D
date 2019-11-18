@@ -43,9 +43,6 @@ public:
     //! Constructor.
     TrackLoader();
 
-    //! Destructor.
-    ~TrackLoader();
-
     //! Add path to search level files for.
     void addTrackSearchPath(QString path);
 
@@ -63,7 +60,7 @@ public:
     size_t tracks() const;
 
     //! Get a track of given index.
-    Track * track(size_t index) const;
+    std::shared_ptr<Track> track(size_t index) const;
 
     static TrackLoader & instance();
 
@@ -94,7 +91,7 @@ private:
 
     std::vector<QString> m_paths;
 
-    std::vector<Track *> m_tracks;
+    std::vector<std::shared_ptr<Track>> m_tracks;
 
     static TrackLoader * m_instance;
 };

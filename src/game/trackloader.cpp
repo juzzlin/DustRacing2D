@@ -54,8 +54,6 @@ TrackLoader::TrackLoader()
     (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("meshes.conf")))
   , m_objectFactory(m_assetManager)
   , m_trackObjectFactory(m_objectFactory)
-  , m_paths()
-  , m_tracks()
 {
     assert(!TrackLoader::m_instance);
     TrackLoader::m_instance = this;
@@ -90,7 +88,7 @@ int TrackLoader::loadTracks(int lapCount, DifficultyProfile::Difficulty difficul
             if (auto trackData = loadTrack(trackPath))
             {
                 juzzlin::L().info() << "  Found '" << trackPath.toStdString() << "', index=" << trackData->index();
-                m_tracks.push_back(new Track(std::move(trackData)));
+                m_tracks.push_back(std::make_shared<Track>(std::move(trackData)));
                 numLoaded++;
             }
             else
@@ -117,7 +115,7 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
 {
     sortTracks();
 
-    Track * firstOfficialTrack = nullptr;
+    bool firstOfficialTrackUnlocked = false;
 
     // Check if the tracks are locked/unlocked.
     for (auto && track : m_tracks)
@@ -147,10 +145,10 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
         }
 
         // Always unlock the first official track
-        if (!track->trackData().isUserTrack() && !firstOfficialTrack)
+        if (!track->trackData().isUserTrack() && !firstOfficialTrackUnlocked)
         {
-            firstOfficialTrack = track;
-            firstOfficialTrack->trackData().setIsLocked(false);
+            track->trackData().setIsLocked(false);
+            firstOfficialTrackUnlocked = true;
         }
     }
 }
@@ -160,7 +158,7 @@ void TrackLoader::sortTracks()
     // Sort tracks with respect to their indices. Move user tracks to the
     // beginning of the track array.
     std::stable_sort(m_tracks.begin(), m_tracks.end(),
-                     [](Track * lhs, Track * rhs) -> bool {
+                     [](auto lhs, auto rhs) -> bool {
                          const int left = lhs->trackData().isUserTrack() ? -1 : static_cast<int>(lhs->trackData().index());
                          return left < static_cast<int>(rhs->trackData().index());
                      });
@@ -367,7 +365,7 @@ size_t TrackLoader::tracks() const
     return m_tracks.size();
 }
 
-Track * TrackLoader::track(size_t index) const
+std::shared_ptr<Track> TrackLoader::track(size_t index) const
 {
     if (index < tracks())
     {
@@ -375,14 +373,4 @@ Track * TrackLoader::track(size_t index) const
     }
 
     return nullptr;
-}
-
-TrackLoader::~TrackLoader()
-{
-    for (Track * track : m_tracks)
-    {
-        delete track;
-    }
-
-    m_tracks.clear();
 }

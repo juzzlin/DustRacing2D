@@ -102,10 +102,10 @@ private:
             m_confirmationMenu->setAcceptAction(
               []() {
                     juzzlin::L().info() << "Reset tracks selected.";
-                    TrackLoader & tl = TrackLoader::instance();
-                    for (unsigned int i = 0; i < tl.tracks(); i++)
+                    auto && trackLoader = TrackLoader::instance();
+                    for (size_t i = 0; i < trackLoader.tracks(); i++)
                     {
-                        Track & track = *tl.track(i);
+                        Track & track = *trackLoader.track(i);
                         if (track.trackData().index() > 0)
                         {
                             track.trackData().setIsLocked(true);
