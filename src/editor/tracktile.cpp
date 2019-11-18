@@ -53,8 +53,7 @@ TrackTile::TrackTile(const TrackTile & other)
 
 QRectF TrackTile::boundingRect() const
 {
-    return QRectF(-m_size.width() / 2, -m_size.height() / 2,
-                  m_size.width(), m_size.height());
+    return QRectF(-m_size.width() / 2, -m_size.height() / 2, m_size.width(), m_size.height());
 }
 
 void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -70,8 +69,8 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     // Render the tile pixmap if tile is not cleared.
     if (tileType() != "clear")
     {
-        painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-                            boundingRect().width(), boundingRect().height(),
+        painter->drawPixmap(static_cast<int>(boundingRect().x()), static_cast<int>(boundingRect().y()),
+                            static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()),
                             m_pixmap);
 
         // Mark the tile if it has computer hints set
@@ -86,8 +85,8 @@ void TrackTile::paint(QPainter * painter, const QStyleOptionGraphicsItem * optio
     }
     else
     {
-        painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-                            boundingRect().width(), boundingRect().height(),
+        painter->drawPixmap(static_cast<int>(boundingRect().x()), static_cast<int>(boundingRect().y()),
+                            static_cast<int>(boundingRect().width()), static_cast<int>(boundingRect().height()),
                             QPixmap(Config::Editor::CLEAR_ICON_PATH));
 
         pen.setColor(QColor(0, 0, 0));
@@ -111,7 +110,9 @@ void TrackTile::setActive(bool active)
     if (active && TrackTile::m_activeTile != this)
     {
         if (TrackTile::m_activeTile)
+        {
             TrackTile::m_activeTile->setActive(false);
+        }
 
         TrackTile::m_activeTile = this;
     }
@@ -128,7 +129,9 @@ void TrackTile::setActiveTile(TrackTile * tile)
     else
     {
         if (activeTile())
+        {
             activeTile()->setActive(false);
+        }
 
         TrackTile::m_activeTile = nullptr;
     }
@@ -183,22 +186,22 @@ void TrackTile::setPixmap(const QPixmap & pixmap)
 void TrackTile::swap(TrackTile & other)
 {
     // Swap tile types
-    const QString sourceType = tileType();
+    const auto sourceType = tileType();
     setTileType(other.tileType());
     other.setTileType(sourceType);
 
     // Swap tile pixmaps
-    const QPixmap sourcePixmap = pixmap();
+    const auto sourcePixmap = pixmap();
     setPixmap(other.pixmap());
     other.setPixmap(sourcePixmap);
 
     // Swap tile rotations
-    const int sourceAngle = rotation();
+    const auto sourceAngle = rotation();
     setRotation(other.rotation());
     other.setRotation(sourceAngle);
 
     // Swap computer hints
-    const TrackTileBase::ComputerHint sourceHint = computerHint();
+    const auto sourceHint = computerHint();
     setComputerHint(other.computerHint());
     other.setComputerHint(sourceHint);
 }
