@@ -38,8 +38,6 @@ Track::Track(std::unique_ptr<TrackData> trackData)
   , m_width(m_cols * TrackTile::TILE_W)
   , m_height(m_rows * TrackTile::TILE_H)
   , m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
-  , m_next(nullptr)
-  , m_prev(nullptr)
 {
     assert(trackData);
 }
@@ -241,22 +239,22 @@ void Track::renderTiles(
     }
 }
 
-void Track::setNext(Track & next)
+void Track::setNext(std::weak_ptr<Track> next)
 {
-    m_next = &next;
+    m_next = next;
 }
 
-Track * Track::next() const
+std::weak_ptr<Track> Track::next() const
 {
     return m_next;
 }
 
-void Track::setPrev(Track & prev)
+void Track::setPrev(std::weak_ptr<Track> prev)
 {
-    m_prev = &prev;
+    m_prev = prev;
 }
 
-Track * Track::prev() const
+std::weak_ptr<Track> Track::prev() const
 {
     return m_prev;
 }

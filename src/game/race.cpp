@@ -543,7 +543,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 emit messageRequested(QObject::tr("A new best pos!"));
             }
 
-            auto next = m_track->next();
+            auto && next = m_track->next().lock();
             if (next && next->trackData().isLocked())
             {
                 if (pos <= UNLOCK_LIMIT)

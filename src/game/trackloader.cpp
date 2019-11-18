@@ -136,10 +136,11 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
             const int bestPos = Settings::instance().loadBestPos(*track, lapCount, difficulty);
             if (bestPos >= 1 && bestPos <= UNLOCK_LIMIT)
             {
-                if (track->next())
+                auto && next = track->next().lock();
+                if (next)
                 {
-                    track->next()->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*track->next(), lapCount, difficulty);
+                    next->trackData().setIsLocked(false);
+                    Settings::instance().saveTrackUnlockStatus(*next, lapCount, difficulty);
                 }
             }
         }
@@ -166,8 +167,8 @@ void TrackLoader::sortTracks()
     // Cross-link the tracks
     for (size_t i = 0; i + 1 < m_tracks.size(); i++)
     {
-        m_tracks[i]->setNext(*m_tracks[i + 1]);
-        m_tracks[i + 1]->setPrev(*m_tracks[i]);
+        m_tracks[i]->setNext(m_tracks[i + 1]);
+        m_tracks[i + 1]->setPrev(m_tracks[i]);
     }
 }
 

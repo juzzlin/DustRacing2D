@@ -60,8 +60,8 @@ Build dependencies
 Currently the build depends on Qt, libopenal and libvorbisfile.
 On Linux pkg-config is required.
 
-Dustrac also exploits some features of the C++11 standard,
-so a somewhat compliant compiler is required (GCC >= 4.7).
+Dustrac also exploits some features of the C++14 standard,
+so a somewhat compliant compiler is required (GCC >= 5.0).
 
 Building in the command line on Linux (tested on Ubuntu 18.04)
 ==============================================================

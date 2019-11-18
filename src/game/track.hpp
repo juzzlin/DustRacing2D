@@ -22,6 +22,8 @@
 #include <MCBBox>
 #include <MCGLShaderProgram>
 
+#include <memory>
+
 class TrackData;
 class MCCamera;
 class MCSurface;
@@ -54,16 +56,16 @@ public:
     TrackTilePtr finishLine() const;
 
     //! Set the next track.
-    void setNext(Track & next);
+    void setNext(std::weak_ptr<Track> next);
 
     //! Return the next track or nullptr.
-    Track * next() const;
+    std::weak_ptr<Track> next() const;
 
     //! Set the prev track.
-    void setPrev(Track & prev);
+    void setPrev(std::weak_ptr<Track> prev);
 
     //! Return the prev track or nullptr.
-    Track * prev() const;
+    std::weak_ptr<Track> prev() const;
 
 private:
     void calculateVisibleIndices(const MCBBox<int> & r,
@@ -81,9 +83,9 @@ private:
 
     MCSurface & m_asphalt;
 
-    Track * m_next;
+    std::weak_ptr<Track> m_next;
 
-    Track * m_prev;
+    std::weak_ptr<Track> m_prev;
 };
 
 #endif // TRACK_HPP
