@@ -89,6 +89,7 @@ set(SRC
     tracktile.cpp
     tree.cpp
     ../common/config.hpp
+    ../common/datakeywords.hpp
     ../common/objectbase.cpp
     ../common/objects.cpp
     ../common/route.cpp

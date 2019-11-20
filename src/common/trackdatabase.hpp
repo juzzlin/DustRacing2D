@@ -26,78 +26,6 @@ class MapBase;
 class TrackDataBase
 {
 public:
-    /** Keywords used in the track data files. */
-    struct DataKeywords
-    {
-        struct Header
-        {
-            static constexpr auto version = "version";
-
-            static constexpr auto track = "track";
-
-            static constexpr auto name = "name";
-
-            static constexpr auto cols = "cols";
-
-            static constexpr auto rows = "rows";
-
-            static constexpr auto index = "index";
-
-            static constexpr auto user = "isUserTrack";
-        };
-
-        struct Track
-        {
-            static constexpr auto node = "n";
-
-            static constexpr auto tile = "t";
-
-            static constexpr auto object = "o";
-        };
-
-        struct Node
-        {
-            static constexpr auto index = "i";
-
-            static constexpr auto x = "x";
-
-            static constexpr auto y = "y";
-
-            static constexpr auto width = "w";
-
-            static constexpr auto height = "h";
-        };
-
-        struct Tile
-        {
-            static constexpr auto type = "t";
-
-            static constexpr auto i = "i";
-
-            static constexpr auto j = "j";
-
-            static constexpr auto orientation = "o";
-
-            static constexpr auto computerHint = "c";
-
-            static constexpr auto excludeFromMinimap = "e";
-        };
-
-        struct Object
-        {
-            static constexpr auto role = "r";
-
-            static constexpr auto category = "c";
-
-            static constexpr auto x = "x";
-
-            static constexpr auto y = "y";
-
-            static constexpr auto orientation = "o";
-
-            static constexpr auto forceStationary = "fs";
-        };
-    };
 
     //! Constructor.
     TrackDataBase(QString name, bool isUserTrack);
@@ -158,6 +86,6 @@ private:
     unsigned int m_index;
 
     bool m_isUserTrack;
-};
+}; // namespace DataKeywords
 
 #endif // TRACKDATABASE_HPP
