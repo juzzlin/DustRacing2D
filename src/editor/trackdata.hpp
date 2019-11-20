@@ -31,7 +31,7 @@ class TrackData : public TrackDataBase
 {
 public:
     //! Constructor.
-    TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows);
+    TrackData(QString name, bool isUserTrack, size_t cols, size_t rows);
 
     //! Copy constructor
     TrackData(const TrackData & other);
@@ -64,37 +64,37 @@ public:
     const Objects & objects() const;
 
     //! Insert tile column at given index and move objects.
-    void insertColumn(unsigned int at, MapBase::InsertDirection insertDirection);
+    void insertColumn(size_t at, MapBase::InsertDirection insertDirection);
 
     //! Insert tile row at given index and move objects.
-    void insertRow(unsigned int at, MapBase::InsertDirection insertDirection);
+    void insertRow(size_t at, MapBase::InsertDirection insertDirection);
 
     //! Delete tile column at given index and move objects.
-    std::vector<TrackTileBasePtr> deleteColumn(unsigned int at);
+    std::vector<TrackTileBasePtr> deleteColumn(size_t at);
 
     //! Delete tile row at given index and move objects.
-    std::vector<TrackTileBasePtr> deleteRow(unsigned int at);
+    std::vector<TrackTileBasePtr> deleteRow(size_t at);
 
 private:
     void copyObjects(const TrackData & other);
 
     void copyRoute(const TrackData & other);
 
-    void moveObjectsAfterColumnInsertion(unsigned int at);
+    void moveObjectsAfterColumnInsertion(size_t at);
 
-    void moveObjectsAfterRowInsertion(unsigned int at);
+    void moveObjectsAfterRowInsertion(size_t at);
 
-    void moveTargetNodesAfterColumnInsertion(unsigned int at);
+    void moveTargetNodesAfterColumnInsertion(size_t at);
 
-    void moveTargetNodesAfterRowInsertion(unsigned int at);
+    void moveTargetNodesAfterRowInsertion(size_t at);
 
-    void moveObjectsAfterColumnDeletion(unsigned int at);
+    void moveObjectsAfterColumnDeletion(size_t at);
 
-    void moveObjectsAfterRowDeletion(unsigned int at);
+    void moveObjectsAfterRowDeletion(size_t at);
 
-    void moveTargetNodesAfterColumnDeletion(unsigned int at);
+    void moveTargetNodesAfterColumnDeletion(size_t at);
 
-    void moveTargetNodesAfterRowDeletion(unsigned int at);
+    void moveTargetNodesAfterRowDeletion(size_t at);
 
     QString m_fileName;
 

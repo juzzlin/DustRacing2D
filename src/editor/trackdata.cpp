@@ -23,7 +23,7 @@
 
 #include <memory>
 
-TrackData::TrackData(QString name, bool isUserTrack, unsigned int cols, unsigned int rows)
+TrackData::TrackData(QString name, bool isUserTrack, size_t cols, size_t rows)
   : TrackDataBase(name, isUserTrack)
   , m_map(cols, rows)
 {
@@ -45,8 +45,8 @@ void TrackData::copyObjects(const TrackData & other)
 
     for (auto iter = other.m_objects.cbegin(); iter != other.m_objects.cend(); iter++)
     {
-        auto object = std::dynamic_pointer_cast<Object>(*iter);
-        auto newObject = new Object(*(object.get()));
+        const auto object = std::dynamic_pointer_cast<Object>(*iter);
+        const auto newObject = std::make_shared<Object>(*object);
 
         m_objects.add(ObjectBasePtr(newObject));
     }
@@ -58,10 +58,10 @@ void TrackData::copyRoute(const TrackData & other)
 
     for (auto iter = other.m_route.cbegin(); iter != other.m_route.cend(); iter++)
     {
-        auto node = std::dynamic_pointer_cast<TargetNode>(*iter);
-        auto newNode = new TargetNode(*(node.get()));
+        const auto node = std::dynamic_pointer_cast<TargetNode>(*iter);
+        const auto newNode = std::make_shared<TargetNode>(*node);
 
-        m_route.push(TargetNodeBasePtr(newNode));
+        m_route.push(newNode);
     }
 }
 
@@ -105,7 +105,7 @@ const Objects & TrackData::objects() const
     return m_objects;
 }
 
-void TrackData::insertColumn(unsigned int at, MapBase::InsertDirection insertDirection)
+void TrackData::insertColumn(size_t at, MapBase::InsertDirection insertDirection)
 {
     at = m_map.insertColumn(at, insertDirection);
 
@@ -114,7 +114,7 @@ void TrackData::insertColumn(unsigned int at, MapBase::InsertDirection insertDir
     moveTargetNodesAfterColumnInsertion(at);
 }
 
-void TrackData::insertRow(unsigned int at, MapBase::InsertDirection insertDirection)
+void TrackData::insertRow(size_t at, MapBase::InsertDirection insertDirection)
 {
     at = m_map.insertRow(at, insertDirection);
 
@@ -123,7 +123,7 @@ void TrackData::insertRow(unsigned int at, MapBase::InsertDirection insertDirect
     moveTargetNodesAfterRowInsertion(at);
 }
 
-std::vector<TrackTileBasePtr> TrackData::deleteColumn(unsigned int at)
+std::vector<TrackTileBasePtr> TrackData::deleteColumn(size_t at)
 {
     moveObjectsAfterColumnDeletion(at);
 
@@ -132,7 +132,7 @@ std::vector<TrackTileBasePtr> TrackData::deleteColumn(unsigned int at)
     return m_map.deleteColumn(at);
 }
 
-std::vector<TrackTileBasePtr> TrackData::deleteRow(unsigned int at)
+std::vector<TrackTileBasePtr> TrackData::deleteRow(size_t at)
 {
     moveObjectsAfterRowDeletion(at);
 
@@ -141,9 +141,9 @@ std::vector<TrackTileBasePtr> TrackData::deleteRow(unsigned int at)
     return m_map.deleteRow(at);
 }
 
-void TrackData::moveObjectsAfterColumnInsertion(unsigned int at)
+void TrackData::moveObjectsAfterColumnInsertion(size_t at)
 {
-    for (auto object : m_objects)
+    for (auto && object : m_objects)
     {
         if (object->location().x() > TrackTile::TILE_W * at)
         {
@@ -152,9 +152,9 @@ void TrackData::moveObjectsAfterColumnInsertion(unsigned int at)
     }
 }
 
-void TrackData::moveObjectsAfterRowInsertion(unsigned int at)
+void TrackData::moveObjectsAfterRowInsertion(size_t at)
 {
-    for (auto object : m_objects)
+    for (auto && object : m_objects)
     {
         if (object->location().y() > TrackTile::TILE_H * at)
         {
@@ -163,31 +163,31 @@ void TrackData::moveObjectsAfterRowInsertion(unsigned int at)
     }
 }
 
-void TrackData::moveTargetNodesAfterColumnInsertion(unsigned int at)
+void TrackData::moveTargetNodesAfterColumnInsertion(size_t at)
 {
-    for (auto tnode : m_route)
+    for (auto && targetNode : m_route)
     {
-        if (tnode->location().x() > TrackTile::TILE_W * at)
+        if (targetNode->location().x() > TrackTile::TILE_W * at)
         {
-            tnode->setLocation(QPointF(tnode->location().x() + TrackTile::TILE_W, tnode->location().y()));
+            targetNode->setLocation(QPointF(targetNode->location().x() + TrackTile::TILE_W, targetNode->location().y()));
         }
     }
 }
 
-void TrackData::moveTargetNodesAfterRowInsertion(unsigned int at)
+void TrackData::moveTargetNodesAfterRowInsertion(size_t at)
 {
-    for (auto tnode : m_route)
+    for (auto && targetNode : m_route)
     {
-        if (tnode->location().y() > TrackTile::TILE_H * at)
+        if (targetNode->location().y() > TrackTile::TILE_H * at)
         {
-            tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() + TrackTile::TILE_H));
+            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() + TrackTile::TILE_H));
         }
     }
 }
 
-void TrackData::moveObjectsAfterColumnDeletion(unsigned int at)
+void TrackData::moveObjectsAfterColumnDeletion(size_t at)
 {
-    for (auto object : m_objects)
+    for (auto && object : m_objects)
     {
         if (object->location().x() > TrackTile::TILE_W * at)
         {
@@ -196,9 +196,9 @@ void TrackData::moveObjectsAfterColumnDeletion(unsigned int at)
     }
 }
 
-void TrackData::moveObjectsAfterRowDeletion(unsigned int at)
+void TrackData::moveObjectsAfterRowDeletion(size_t at)
 {
-    for (auto object : m_objects)
+    for (auto && object : m_objects)
     {
         if (object->location().y() > TrackTile::TILE_H * at)
         {
@@ -207,24 +207,24 @@ void TrackData::moveObjectsAfterRowDeletion(unsigned int at)
     }
 }
 
-void TrackData::moveTargetNodesAfterColumnDeletion(unsigned int at)
+void TrackData::moveTargetNodesAfterColumnDeletion(size_t at)
 {
-    for (auto tnode : m_route)
+    for (auto && targetNode : m_route)
     {
-        if (tnode->location().x() > TrackTile::TILE_W * at)
+        if (targetNode->location().x() > TrackTile::TILE_W * at)
         {
-            tnode->setLocation(QPointF(tnode->location().x() - TrackTile::TILE_W, tnode->location().y()));
+            targetNode->setLocation(QPointF(targetNode->location().x() - TrackTile::TILE_W, targetNode->location().y()));
         }
     }
 }
 
-void TrackData::moveTargetNodesAfterRowDeletion(unsigned int at)
+void TrackData::moveTargetNodesAfterRowDeletion(size_t at)
 {
-    for (auto tnode : m_route)
+    for (auto && targetNode : m_route)
     {
-        if (tnode->location().y() > TrackTile::TILE_H * at)
+        if (targetNode->location().y() > TrackTile::TILE_H * at)
         {
-            tnode->setLocation(QPointF(tnode->location().x(), tnode->location().y() - TrackTile::TILE_H));
+            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() - TrackTile::TILE_H));
         }
     }
 }
