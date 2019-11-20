@@ -148,7 +148,7 @@ void Renderer::loadFonts()
     QStringList fonts = { "DejaVuSans-Bold.ttf" };
     for (auto && font : fonts)
     {
-        const auto path = QString(Config::Common::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
+        const auto path = QString(Config::General::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
         juzzlin::L().info() << "Loading font " << path.toStdString() << "..";
         QFile fontFile(path);
         fontFile.open(QFile::ReadOnly);

@@ -81,7 +81,7 @@ MainWindow::MainWindow(QString trackFile)
     console("CWD: " + QDir::currentPath());
 
     // Load object models that can be used to build tracks.
-    const QString objectFilePath = QString(Config::Common::dataPath) + QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
+    const QString objectFilePath = QString(Config::General::dataPath) + QDir::separator() + QString(Config::Editor::MODEL_CONFIG_FILE_NAME);
     loadObjectModels(objectFilePath);
 
     if (!m_argTrackFile.isEmpty())
@@ -123,7 +123,7 @@ void MainWindow::showTip()
       QString(tr("To make the game find your circuits, save them to %1%2%3%2"))
         .arg(QDir::homePath())
         .arg(QDir::separator())
-        .arg(Config::Common::TRACK_SEARCH_PATH));
+        .arg(Config::General::TRACK_SEARCH_PATH));
 }
 
 void MainWindow::init()

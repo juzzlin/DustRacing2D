@@ -44,33 +44,33 @@ void readTile(TrackData & newData, const QDomElement & element)
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
     auto tile = std::dynamic_pointer_cast<TrackTile>(newData.map().getTile(
-      element.attribute(Common::DataKeywords::Tile::i, "0").toUInt(),
-      element.attribute(Common::DataKeywords::Tile::j, "0").toUInt()));
+      element.attribute(DataKeywords::Tile::i, "0").toUInt(),
+      element.attribute(DataKeywords::Tile::j, "0").toUInt()));
     assert(tile);
 
-    tile->setRotation(element.attribute(Common::DataKeywords::Tile::orientation, "0").toInt());
+    tile->setRotation(element.attribute(DataKeywords::Tile::orientation, "0").toInt());
 
-    tile->setTileType(element.attribute(Common::DataKeywords::Tile::type, "clear"));
+    tile->setTileType(element.attribute(DataKeywords::Tile::type, "clear"));
 
     tile->setComputerHint(
-      static_cast<TrackTileBase::ComputerHint>(element.attribute(Common::DataKeywords::Tile::computerHint, "0").toInt()));
+      static_cast<TrackTileBase::ComputerHint>(element.attribute(DataKeywords::Tile::computerHint, "0").toInt()));
 
-    tile->setExcludeFromMinimap(element.attribute(Common::DataKeywords::Tile::excludeFromMinimap, "0").toUInt());
+    tile->setExcludeFromMinimap(element.attribute(DataKeywords::Tile::excludeFromMinimap, "0").toUInt());
 }
 
 void readObject(TrackData & newData, const QDomElement & element)
 {
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
-    Object & object = ObjectFactory::createObject(element.attribute(Common::DataKeywords::Object::role, "clear"));
+    Object & object = ObjectFactory::createObject(element.attribute(DataKeywords::Object::role, "clear"));
 
     object.setLocation(QPointF(
-      element.attribute(Common::DataKeywords::Object::x, "0").toInt(),
-      element.attribute(Common::DataKeywords::Object::y, "0").toInt()));
+      element.attribute(DataKeywords::Object::x, "0").toInt(),
+      element.attribute(DataKeywords::Object::y, "0").toInt()));
 
-    object.setRotation(element.attribute(Common::DataKeywords::Object::orientation, "0").toInt());
+    object.setRotation(element.attribute(DataKeywords::Object::orientation, "0").toInt());
 
-    object.setForceStationary(element.attribute(Common::DataKeywords::Object::forceStationary, "0").toUInt());
+    object.setForceStationary(element.attribute(DataKeywords::Object::forceStationary, "0").toUInt());
 
     newData.objects().add(ObjectBasePtr(&object));
 }
@@ -80,15 +80,15 @@ void readTargetNode(std::vector<TargetNodeBasePtr> & route, const QDomElement & 
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
     auto targetNode = std::make_shared<TargetNode>();
-    targetNode->setIndex(element.attribute(Common::DataKeywords::Node::index, "0").toInt());
+    targetNode->setIndex(element.attribute(DataKeywords::Node::index, "0").toInt());
 
-    const int x = element.attribute(Common::DataKeywords::Node::x, "0").toInt();
-    const int y = element.attribute(Common::DataKeywords::Node::y, "0").toInt();
+    const int x = element.attribute(DataKeywords::Node::x, "0").toInt();
+    const int y = element.attribute(DataKeywords::Node::y, "0").toInt();
 
     targetNode->setLocation(QPointF(x, y));
 
-    const int w = element.attribute(Common::DataKeywords::Node::width, "0").toInt();
-    const int h = element.attribute(Common::DataKeywords::Node::height, "0").toInt();
+    const int w = element.attribute(DataKeywords::Node::width, "0").toInt();
+    const int h = element.attribute(DataKeywords::Node::height, "0").toInt();
 
     if (w > 0 && h > 0)
     {
@@ -107,20 +107,20 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
             auto tile = std::dynamic_pointer_cast<TrackTile>(trackData->map().getTile(i, j));
             assert(tile);
 
-            QDomElement tileElement = doc.createElement(Common::DataKeywords::Track::tile);
-            tileElement.setAttribute(Common::DataKeywords::Tile::type, tile->tileType());
-            tileElement.setAttribute(Common::DataKeywords::Tile::i, static_cast<int>(i));
-            tileElement.setAttribute(Common::DataKeywords::Tile::j, static_cast<int>(j));
-            tileElement.setAttribute(Common::DataKeywords::Tile::orientation, tile->rotation());
+            QDomElement tileElement = doc.createElement(DataKeywords::Track::tile);
+            tileElement.setAttribute(DataKeywords::Tile::type, tile->tileType());
+            tileElement.setAttribute(DataKeywords::Tile::i, static_cast<int>(i));
+            tileElement.setAttribute(DataKeywords::Tile::j, static_cast<int>(j));
+            tileElement.setAttribute(DataKeywords::Tile::orientation, tile->rotation());
 
             if (tile->excludeFromMinimap())
             {
-                tileElement.setAttribute(Common::DataKeywords::Tile::excludeFromMinimap, true);
+                tileElement.setAttribute(DataKeywords::Tile::excludeFromMinimap, true);
             }
 
             if (tile->computerHint() != TrackTile::ComputerHint::None)
             {
-                tileElement.setAttribute(Common::DataKeywords::Tile::computerHint, static_cast<int>(tile->computerHint()));
+                tileElement.setAttribute(DataKeywords::Tile::computerHint, static_cast<int>(tile->computerHint()));
             }
 
             root.appendChild(tileElement);
@@ -135,16 +135,16 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
         auto object = std::dynamic_pointer_cast<Object>(objectPtr);
         assert(object);
 
-        QDomElement objectElement = doc.createElement(Common::DataKeywords::Track::object);
-        objectElement.setAttribute(Common::DataKeywords::Object::category, object->category());
-        objectElement.setAttribute(Common::DataKeywords::Object::role, object->role());
-        objectElement.setAttribute(Common::DataKeywords::Object::x, static_cast<int>(object->location().x()));
-        objectElement.setAttribute(Common::DataKeywords::Object::y, static_cast<int>(object->location().y()));
-        objectElement.setAttribute(Common::DataKeywords::Object::orientation, static_cast<int>(object->rotation()));
+        QDomElement objectElement = doc.createElement(DataKeywords::Track::object);
+        objectElement.setAttribute(DataKeywords::Object::category, object->category());
+        objectElement.setAttribute(DataKeywords::Object::role, object->role());
+        objectElement.setAttribute(DataKeywords::Object::x, static_cast<int>(object->location().x()));
+        objectElement.setAttribute(DataKeywords::Object::y, static_cast<int>(object->location().y()));
+        objectElement.setAttribute(DataKeywords::Object::orientation, static_cast<int>(object->rotation()));
 
         if (object->forceStationary())
         {
-            objectElement.setAttribute(Common::DataKeywords::Object::forceStationary, static_cast<int>(object->forceStationary()));
+            objectElement.setAttribute(DataKeywords::Object::forceStationary, static_cast<int>(object->forceStationary()));
         }
 
         root.appendChild(objectElement);
@@ -155,12 +155,12 @@ void writeTargetNodes(TrackDataPtr trackData, QDomElement & root, QDomDocument &
 {
     for (auto tnode : trackData->route())
     {
-        QDomElement tnodeElement = doc.createElement(Common::DataKeywords::Track::node);
-        tnodeElement.setAttribute(Common::DataKeywords::Node::index, tnode->index());
-        tnodeElement.setAttribute(Common::DataKeywords::Node::x, static_cast<int>(tnode->location().x()));
-        tnodeElement.setAttribute(Common::DataKeywords::Node::y, static_cast<int>(tnode->location().y()));
-        tnodeElement.setAttribute(Common::DataKeywords::Node::width, static_cast<int>(tnode->size().width()));
-        tnodeElement.setAttribute(Common::DataKeywords::Node::height, static_cast<int>(tnode->size().height()));
+        QDomElement tnodeElement = doc.createElement(DataKeywords::Track::node);
+        tnodeElement.setAttribute(DataKeywords::Node::index, tnode->index());
+        tnodeElement.setAttribute(DataKeywords::Node::x, static_cast<int>(tnode->location().x()));
+        tnodeElement.setAttribute(DataKeywords::Node::y, static_cast<int>(tnode->location().y()));
+        tnodeElement.setAttribute(DataKeywords::Node::width, static_cast<int>(tnode->size().width()));
+        tnodeElement.setAttribute(DataKeywords::Node::height, static_cast<int>(tnode->size().height()));
 
         root.appendChild(tnodeElement);
     }
@@ -172,16 +172,16 @@ bool TrackIO::save(TrackDataPtr trackData, QString path)
 {
     // Create content
     QDomDocument doc;
-    QDomElement root = doc.createElement(Common::DataKeywords::Header::track);
-    root.setAttribute(Common::DataKeywords::Header::version, Config::Editor::EDITOR_VERSION);
-    root.setAttribute(Common::DataKeywords::Header::name, trackData->name());
-    root.setAttribute(Common::DataKeywords::Header::cols, static_cast<int>(trackData->map().cols()));
-    root.setAttribute(Common::DataKeywords::Header::rows, static_cast<int>(trackData->map().rows()));
-    root.setAttribute(Common::DataKeywords::Header::index, trackData->index());
+    QDomElement root = doc.createElement(DataKeywords::Header::track);
+    root.setAttribute(DataKeywords::Header::version, Config::Editor::EDITOR_VERSION);
+    root.setAttribute(DataKeywords::Header::name, trackData->name());
+    root.setAttribute(DataKeywords::Header::cols, static_cast<int>(trackData->map().cols()));
+    root.setAttribute(DataKeywords::Header::rows, static_cast<int>(trackData->map().rows()));
+    root.setAttribute(DataKeywords::Header::index, trackData->index());
 
     if (trackData->isUserTrack()) // Don't add the attribute at all, if not set
     {
-        root.setAttribute(Common::DataKeywords::Header::user, true);
+        root.setAttribute(DataKeywords::Header::user, true);
     }
 
     doc.appendChild(root);
@@ -224,19 +224,19 @@ TrackDataPtr TrackIO::open(QString path)
     const QDomElement root = doc.documentElement();
 
     const size_t cols =
-      root.attribute(Common::DataKeywords::Header::cols, "0").toUInt();
+      root.attribute(DataKeywords::Header::cols, "0").toUInt();
     const size_t rows =
-      root.attribute(Common::DataKeywords::Header::rows, "0").toUInt();
+      root.attribute(DataKeywords::Header::rows, "0").toUInt();
 
     TrackData * newData = nullptr;
     if (cols && rows)
     {
-        const QString name = root.attribute(Common::DataKeywords::Header::name, "undefined");
-        const bool isUserTrack = root.attribute(Common::DataKeywords::Header::user, "0").toInt();
+        const QString name = root.attribute(DataKeywords::Header::name, "undefined");
+        const bool isUserTrack = root.attribute(DataKeywords::Header::user, "0").toInt();
         newData = new TrackData(name, isUserTrack, cols, rows);
         newData->setFileName(path);
 
-        const size_t index = root.attribute(Common::DataKeywords::Header::index, "0").toUInt();
+        const size_t index = root.attribute(DataKeywords::Header::index, "0").toUInt();
         newData->setIndex(index);
 
         // Temporary route vector.
@@ -249,17 +249,17 @@ TrackDataPtr TrackIO::open(QString path)
             if (!element.isNull())
             {
                 // Read a tile element
-                if (element.nodeName() == Common::DataKeywords::Track::tile)
+                if (element.nodeName() == DataKeywords::Track::tile)
                 {
                     readTile(*newData, element);
                 }
                 // Read an object element
-                else if (element.nodeName() == Common::DataKeywords::Track::object)
+                else if (element.nodeName() == DataKeywords::Track::object)
                 {
                     readObject(*newData, element);
                 }
                 // Read a target node element
-                else if (element.nodeName() == Common::DataKeywords::Track::node)
+                else if (element.nodeName() == DataKeywords::Track::node)
                 {
                     readTargetNode(route, element);
                 }

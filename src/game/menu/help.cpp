@@ -44,7 +44,7 @@ void Help::render()
                    "Brake      : S / LEFT CTRL\n\n"
                    "Quit       : ESC/Q\n"
                    "Pause      : P")
-       + "\n\n" + Config::Common::WEB_SITE_URL)
+       + "\n\n" + Config::General::WEB_SITE_URL)
         .toStdWString());
 
     SurfaceMenu::render();

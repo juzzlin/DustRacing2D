@@ -15,49 +15,46 @@
 
 //! Config variables for editor and for the game.
 namespace Config {
-struct Common
-{
-    //! The base data path given by -DDATA_PATH.
-    static constexpr auto dataPath = DATA_PATH;
+namespace General {
+//! The base data path given by -DDATA_PATH.
+static constexpr auto dataPath = DATA_PATH;
 
-    static constexpr auto COPYRIGHT = "Copyright (c) 2011-2018 Jussi Lind";
+static constexpr auto COPYRIGHT = "Copyright (c) 2011-2019 Jussi Lind";
 
-    //! "Company" name used in QSettings.
-    static constexpr auto QSETTINGS_COMPANY_NAME = "dustrac";
+//! "Company" name used in QSettings.
+static constexpr auto QSETTINGS_COMPANY_NAME = "dustrac";
 
-    /*! Path used to search "3rd party" race tracks under the home dir:
+/*! Path used to search "3rd party" race tracks under the home dir:
          *  ~/TRACK_SEARCH_PATH/ */
-    static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
+static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
 
-    static constexpr auto TRACK_SEARCH_PATH_XDG = "DustRacing2D/tracks";
+static constexpr auto TRACK_SEARCH_PATH_XDG = "DustRacing2D/tracks";
 
-    static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
-};
+static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
+} // namespace General
 
-struct Editor
-{
-    static constexpr auto EDITOR_NAME = "Dust Racing 2D Track Editor";
+namespace Editor {
+static constexpr auto EDITOR_NAME = "Dust Racing 2D Track Editor";
 
-    static constexpr auto EDITOR_VERSION = VERSION;
+static constexpr auto EDITOR_VERSION = VERSION;
 
-    static constexpr auto MODEL_CONFIG_FILE_NAME = "editorModels.conf";
+static constexpr auto MODEL_CONFIG_FILE_NAME = "editorModels.conf";
 
-    static constexpr auto QSETTINGS_SOFTWARE_NAME = "Editor";
+static constexpr auto QSETTINGS_SOFTWARE_NAME = "Editor";
 
-    static constexpr auto SELECT_ICON_PATH = ":/cursor.png";
+static constexpr auto SELECT_ICON_PATH = ":/cursor.png";
 
-    static constexpr auto ERASE_ICON_PATH = ":/cross.png";
+static constexpr auto ERASE_ICON_PATH = ":/cross.png";
 
-    static constexpr auto CLEAR_ICON_PATH = ":/clear.png";
-};
+static constexpr auto CLEAR_ICON_PATH = ":/clear.png";
+} // namespace Editor
 
-struct Game
-{
-    static constexpr auto GAME_NAME = "Dust Racing 2D";
+namespace Game {
+static constexpr auto GAME_NAME = "Dust Racing 2D";
 
-    static constexpr auto GAME_VERSION = VERSION;
+static constexpr auto GAME_VERSION = VERSION;
 
-    static constexpr auto QSETTINGS_SOFTWARE_NAME = "Game";
-};
+static constexpr auto QSETTINGS_SOFTWARE_NAME = "Game";
+} // namespace Game
 
 } // namespace Config

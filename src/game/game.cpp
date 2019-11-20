@@ -128,7 +128,7 @@ static void printHelp()
 {
     std::cout << std::endl
               << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::Common::COPYRIGHT << std::endl
+    std::cout << Config::General::COPYRIGHT << std::endl
               << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "--debug           Set log level to debug." << std::endl;
@@ -160,15 +160,15 @@ static void initTranslations(QTranslator & appTranslator, QGuiApplication & app,
 
 void Game::addTrackSearchPaths()
 {
-    m_trackLoader->addTrackSearchPath(QString(Config::Common::dataPath) + QDir::separator() + "levels");
-    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() + Config::Common::TRACK_SEARCH_PATH);
+    m_trackLoader->addTrackSearchPath(QString(Config::General::dataPath) + QDir::separator() + "levels");
+    m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() + Config::General::TRACK_SEARCH_PATH);
 
     // See: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html,
     //      https://github.com/juzzlin/DustRacing2D/issues/49
 #ifdef __unix__
     const auto env = QProcessEnvironment::systemEnvironment();
     const auto xdgDataHome = "XDG_DATA_HOME";
-    m_trackLoader->addTrackSearchPath(env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + Config::Common::TRACK_SEARCH_PATH_XDG);
+    m_trackLoader->addTrackSearchPath(env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + Config::General::TRACK_SEARCH_PATH_XDG);
 #endif
 }
 

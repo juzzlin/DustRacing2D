@@ -51,7 +51,7 @@ static void initLogger()
 
 int main(int argc, char ** argv)
 {
-    QApplication::setOrganizationName(Config::Common::QSETTINGS_COMPANY_NAME);
+    QApplication::setOrganizationName(Config::General::QSETTINGS_COMPANY_NAME);
     QApplication::setApplicationName(Config::Game::QSETTINGS_SOFTWARE_NAME);
 #ifdef Q_OS_WIN32
     QSettings::setDefaultFormat(QSettings::IniFormat);

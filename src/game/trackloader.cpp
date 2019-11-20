@@ -50,10 +50,10 @@ TrackLoader * TrackLoader::m_instance = nullptr;
 
 TrackLoader::TrackLoader()
   : m_assetManager(
-    Config::Common::dataPath,
-    (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("surfaces.conf")),
+    Config::General::dataPath,
+    (std::string(Config::General::dataPath) + QDir::separator().toLatin1() + std::string("surfaces.conf")),
     "",
-    (std::string(Config::Common::dataPath) + QDir::separator().toLatin1() + std::string("meshes.conf")))
+    (std::string(Config::General::dataPath) + QDir::separator().toLatin1() + std::string("meshes.conf")))
   , m_objectFactory(m_assetManager)
   , m_trackObjectFactory(m_objectFactory)
 {
@@ -196,17 +196,17 @@ std::unique_ptr<TrackData> TrackLoader::loadTrack(QString path)
     const auto root = doc.documentElement();
     if (root.nodeName() == "track")
     {
-        const auto cols = root.attribute(Common::DataKeywords::Header::cols, "0").toUInt();
-        const auto rows = root.attribute(Common::DataKeywords::Header::rows, "0").toUInt();
+        const auto cols = root.attribute(DataKeywords::Header::cols, "0").toUInt();
+        const auto rows = root.attribute(DataKeywords::Header::rows, "0").toUInt();
 
         if (cols > 0 && rows > 0)
         {
-            const auto name = root.attribute(Common::DataKeywords::Header::name, "undefined");
-            const bool isUserTrack = root.attribute(Common::DataKeywords::Header::user, "0").toUInt();
+            const auto name = root.attribute(DataKeywords::Header::name, "undefined");
+            const bool isUserTrack = root.attribute(DataKeywords::Header::user, "0").toUInt();
 
             newData = std::make_unique<TrackData>(name, isUserTrack, cols, rows);
             newData->setFileName(path);
-            newData->setIndex(root.attribute(Common::DataKeywords::Header::index, "999").toUInt());
+            newData->setIndex(root.attribute(DataKeywords::Header::index, "999").toUInt());
 
             // A temporary route vector.
             std::vector<TargetNodeBasePtr> route;
@@ -218,17 +218,17 @@ std::unique_ptr<TrackData> TrackLoader::loadTrack(QString path)
                 if (!element.isNull())
                 {
                     // Read a tile element
-                    if (element.nodeName() == Common::DataKeywords::Track::tile)
+                    if (element.nodeName() == DataKeywords::Track::tile)
                     {
                         readTile(element, *newData);
                     }
                     // Read an object element
-                    else if (element.nodeName() == Common::DataKeywords::Track::object)
+                    else if (element.nodeName() == DataKeywords::Track::object)
                     {
                         readObject(element, *newData);
                     }
                     // Read a target node element
-                    else if (element.nodeName() == Common::DataKeywords::Track::node)
+                    else if (element.nodeName() == DataKeywords::Track::node)
                     {
                         readTargetNode(element, *newData, route);
                     }
@@ -247,15 +247,15 @@ std::unique_ptr<TrackData> TrackLoader::loadTrack(QString path)
 void TrackLoader::readTile(QDomElement & element, TrackData & newData)
 {
     // X-coordinate in the tile matrix
-    const auto i = element.attribute(Common::DataKeywords::Tile::i, "0").toUInt();
+    const auto i = element.attribute(DataKeywords::Tile::i, "0").toUInt();
 
     // Mirror the y-index, because game has the y-axis pointing up.
-    const auto j = newData.map().rows() - 1 - element.attribute(Common::DataKeywords::Tile::j, "0").toUInt();
+    const auto j = newData.map().rows() - 1 - element.attribute(DataKeywords::Tile::j, "0").toUInt();
 
     const auto tile = dynamic_pointer_cast<TrackTile>(newData.map().getTile(i, j));
     assert(tile);
 
-    const auto type = element.attribute(Common::DataKeywords::Tile::type, "clear").toStdString();
+    const auto type = element.attribute(DataKeywords::Tile::type, "clear").toStdString();
     tile->setTileType(type.c_str());
     tile->setTileTypeEnum(tileTypeEnumFromString(type.c_str()));
 
@@ -263,8 +263,8 @@ void TrackLoader::readTile(QDomElement & element, TrackData & newData)
     const int o = -element.attribute("o", "0").toInt();
     tile->setRotation(o);
     tile->setComputerHint(
-      static_cast<TrackTileBase::ComputerHint>(element.attribute(Common::DataKeywords::Tile::computerHint, "0").toUInt()));
-    tile->setExcludeFromMinimap(element.attribute(Common::DataKeywords::Tile::excludeFromMinimap, "0").toInt());
+      static_cast<TrackTileBase::ComputerHint>(element.attribute(DataKeywords::Tile::computerHint, "0").toUInt()));
+    tile->setExcludeFromMinimap(element.attribute(DataKeywords::Tile::excludeFromMinimap, "0").toInt());
 
     // Associate with a surface object corresponging
     // to the tile type.
@@ -312,10 +312,10 @@ TrackTile::TileType TrackLoader::tileTypeEnumFromString(std::string str)
 void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 {
     // X-coordinate in the world
-    const int x = element.attribute(Common::DataKeywords::Object::x, "0").toInt();
+    const int x = element.attribute(DataKeywords::Object::x, "0").toInt();
 
     // Y-coordinate in the world
-    const int y = element.attribute(Common::DataKeywords::Object::y, "0").toInt();
+    const int y = element.attribute(DataKeywords::Object::y, "0").toInt();
 
     // Height of the map.
     const int h = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
@@ -326,11 +326,11 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
 
     // Mirror the angle, because the y-axis is pointing
     // down in the editor's coordinate system.
-    const int angle = -element.attribute(Common::DataKeywords::Object::orientation, "0").toInt();
+    const int angle = -element.attribute(DataKeywords::Object::orientation, "0").toInt();
 
-    const auto category = element.attribute(Common::DataKeywords::Object::category, "");
-    const auto role = element.attribute(Common::DataKeywords::Object::role, "");
-    const bool forceStationary = element.attribute(Common::DataKeywords::Object::forceStationary, "0").toUInt();
+    const auto category = element.attribute(DataKeywords::Object::category, "");
+    const auto role = element.attribute(DataKeywords::Object::role, "");
+    const bool forceStationary = element.attribute(DataKeywords::Object::forceStationary, "0").toUInt();
 
     if (auto object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
     {
@@ -345,15 +345,15 @@ void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std
     const int mapHeight = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
 
     auto targetNode = std::make_shared<TargetNodeBase>();
-    targetNode->setIndex(element.attribute(Common::DataKeywords::Node::index, "0").toInt());
+    targetNode->setIndex(element.attribute(DataKeywords::Node::index, "0").toInt());
 
-    const int x = element.attribute(Common::DataKeywords::Node::x, "0").toInt();
-    const int y = element.attribute(Common::DataKeywords::Node::y, "0").toInt();
+    const int x = element.attribute(DataKeywords::Node::x, "0").toInt();
+    const int y = element.attribute(DataKeywords::Node::y, "0").toInt();
 
     targetNode->setLocation(QPointF(x, mapHeight - y));
 
-    const int w = element.attribute(Common::DataKeywords::Node::width, "0").toInt();
-    const int h = element.attribute(Common::DataKeywords::Node::height, "0").toInt();
+    const int w = element.attribute(DataKeywords::Node::width, "0").toInt();
+    const int h = element.attribute(DataKeywords::Node::height, "0").toInt();
 
     if (w > 0 && h > 0)
     {
