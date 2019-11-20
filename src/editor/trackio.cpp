@@ -42,17 +42,14 @@ void readTile(TrackData & newData, const QDomElement & element)
 {
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
-    auto tile = dynamic_cast<TrackTile *>(newData.map().getTile(
-                                                         element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt(),
-                                                         element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt())
-                                            .get());
+    auto tile = std::dynamic_pointer_cast<TrackTile>(newData.map().getTile(
+      element.attribute(TrackDataBase::DataKeywords::Tile::i, "0").toUInt(),
+      element.attribute(TrackDataBase::DataKeywords::Tile::j, "0").toUInt()));
     assert(tile);
 
     tile->setRotation(element.attribute(TrackDataBase::DataKeywords::Tile::orientation, "0").toInt());
 
-    const auto type = element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear");
-
-    tile->setTileType(type);
+    tile->setTileType(element.attribute(TrackDataBase::DataKeywords::Tile::type, "clear"));
 
     tile->setComputerHint(
       static_cast<TrackTileBase::ComputerHint>(element.attribute(TrackDataBase::DataKeywords::Tile::computerHint, "0").toInt()));
@@ -81,38 +78,38 @@ void readTargetNode(std::vector<TargetNodeBasePtr> & route, const QDomElement & 
 {
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
-    auto tnode = new TargetNode;
-    tnode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index, "0").toInt());
+    auto targetNode = std::make_shared<TargetNode>();
+    targetNode->setIndex(element.attribute(TrackDataBase::DataKeywords::Node::index, "0").toInt());
 
     const int x = element.attribute(TrackDataBase::DataKeywords::Node::x, "0").toInt();
     const int y = element.attribute(TrackDataBase::DataKeywords::Node::y, "0").toInt();
 
-    tnode->setLocation(QPointF(x, y));
+    targetNode->setLocation(QPointF(x, y));
 
     const int w = element.attribute(TrackDataBase::DataKeywords::Node::width, "0").toInt();
     const int h = element.attribute(TrackDataBase::DataKeywords::Node::height, "0").toInt();
 
     if (w > 0 && h > 0)
     {
-        tnode->setSize(QSizeF(w, h));
+        targetNode->setSize(QSizeF(w, h));
     }
 
-    route.push_back(TargetNodeBasePtr(tnode));
+    route.push_back(targetNode);
 }
 
 void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument & doc)
 {
-    for (unsigned int i = 0; i < trackData->map().cols(); i++)
+    for (size_t i = 0; i < trackData->map().cols(); i++)
     {
-        for (unsigned int j = 0; j < trackData->map().rows(); j++)
+        for (size_t j = 0; j < trackData->map().rows(); j++)
         {
             auto tile = std::dynamic_pointer_cast<TrackTile>(trackData->map().getTile(i, j));
             assert(tile);
 
             QDomElement tileElement = doc.createElement(TrackDataBase::DataKeywords::Track::tile);
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::type, tile->tileType());
-            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::i, i);
-            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::j, j);
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::i, static_cast<int>(i));
+            tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::j, static_cast<int>(j));
             tileElement.setAttribute(TrackDataBase::DataKeywords::Tile::orientation, tile->rotation());
 
             if (tile->excludeFromMinimap())
@@ -225,9 +222,9 @@ TrackDataPtr TrackIO::open(QString path)
 
     const QDomElement root = doc.documentElement();
 
-    const unsigned int cols =
+    const size_t cols =
       root.attribute(TrackDataBase::DataKeywords::Header::cols, "0").toUInt();
-    const unsigned int rows =
+    const size_t rows =
       root.attribute(TrackDataBase::DataKeywords::Header::rows, "0").toUInt();
 
     TrackData * newData = nullptr;
@@ -238,7 +235,7 @@ TrackDataPtr TrackIO::open(QString path)
         newData = new TrackData(name, isUserTrack, cols, rows);
         newData->setFileName(path);
 
-        const unsigned int index = root.attribute(TrackDataBase::DataKeywords::Header::index, "0").toUInt();
+        const size_t index = root.attribute(TrackDataBase::DataKeywords::Header::index, "0").toUInt();
         newData->setIndex(index);
 
         // Temporary route vector.
