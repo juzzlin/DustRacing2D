@@ -243,10 +243,10 @@ void MainWindow::addObjectsToToolBar()
     {
         ObjectModelLoader::ObjectDataVector objects =
           m_objectModelLoader->getObjectModelsByCategory(category);
-        for (const ObjectModel model : objects)
+        for (const ObjectModel & model : objects)
         {
             // Create the action.
-            QAction * p = new QAction(QIcon(model.pixmap), model.role, this);
+            auto p = new QAction(QIcon(model.pixmap), model.role, this);
 
             // Set model role as the data.
             p->setData(QVariant(model.role));
