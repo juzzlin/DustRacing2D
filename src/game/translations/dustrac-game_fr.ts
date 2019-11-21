@@ -4,22 +4,22 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../menu/mainmenu.cpp" line="56"/>
+        <location filename="../menu/mainmenu.cpp" line="57"/>
         <source>Play</source>
         <translation>Jouer</translation>
     </message>
     <message>
-        <location filename="../menu/mainmenu.cpp" line="60"/>
+        <location filename="../menu/mainmenu.cpp" line="61"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../menu/mainmenu.cpp" line="64"/>
+        <location filename="../menu/mainmenu.cpp" line="65"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../menu/mainmenu.cpp" line="68"/>
+        <location filename="../menu/mainmenu.cpp" line="69"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -63,27 +63,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="44"/>
+        <location filename="../menu/credits.cpp" line="42"/>
         <source>GRAPHICS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="49"/>
+        <location filename="../menu/credits.cpp" line="44"/>
         <source>LEVEL DESIGN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="54"/>
+        <location filename="../menu/credits.cpp" line="46"/>
         <source>TRANSLATIONS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="62"/>
+        <location filename="../menu/credits.cpp" line="48"/>
         <source>PATCHES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../menu/credits.cpp" line="73"/>
+        <location filename="../menu/credits.cpp" line="50"/>
         <source>SPECIAL THANKS</source>
         <translation>REMERCIEMENTS PARTICULIERS</translation>
     </message>
@@ -138,47 +138,47 @@ Quitter          : Échap / Q
 Pause            : P</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="52"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="49"/>
         <source>Press a key..</source>
         <translation>Appuyez sur une touche...</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="92"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="89"/>
         <source>Player One Accelerate</source>
         <translation>Joueur 1 Accélérer</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="102"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="98"/>
         <source>Player One Brake</source>
         <translation>Joueur 1 Freiner</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="112"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="107"/>
         <source>Player One Turn Left</source>
         <translation>Joueur 1 Tourner à gauche</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="122"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="116"/>
         <source>Player One Turn Right</source>
         <translation>Joueur 1 Tourner à droite</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="145"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="138"/>
         <source>Player Two Accelerate</source>
         <translation>Joueur 2 Accélérer</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="155"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="147"/>
         <source>Player Two Brake</source>
         <translation>Joueur 2 Freiner</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="165"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="156"/>
         <source>Player Two Turn Left</source>
         <translation>Joueur 2 Tourner à gauche</translation>
     </message>
     <message>
-        <location filename="../menu/keyconfigmenu.cpp" line="175"/>
+        <location filename="../menu/keyconfigmenu.cpp" line="165"/>
         <source>Player Two Turn Right</source>
         <translation>Joueur 2 Tourner à droite</translation>
     </message>
@@ -199,57 +199,57 @@ Pause            : P</translation>
         <translation type="vanished">OpenGL 2.1 ou supérieur est nécessaire !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="74"/>
+        <location filename="../race.cpp" line="76"/>
         <source>New race record!</source>
         <translation>Nouveau record de la course !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="68"/>
+        <location filename="../race.cpp" line="69"/>
         <source>New lap record!</source>
         <translation>Nouveau record par tour !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="318"/>
+        <location filename="../race.cpp" line="320"/>
         <source>The Time Trial has ended!</source>
         <translation>Le Contre la montre est terminé !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="322"/>
+        <location filename="../race.cpp" line="324"/>
         <source>The winner has finished!</source>
         <translation>Le vainqueur est arrivé !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="347"/>
+        <location filename="../race.cpp" line="349"/>
         <source>Pit stop!</source>
         <translation>Arrêt au stand !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="517"/>
+        <location filename="../race.cpp" line="543"/>
         <source>A new best pos!</source>
         <translation>Une nouvelle meilleure position !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="527"/>
+        <location filename="../race.cpp" line="553"/>
         <source>A new track unlocked!</source>
         <translation>Un nouveau circuit a été débloqué !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="531"/>
+        <location filename="../race.cpp" line="557"/>
         <source>Better luck next time..</source>
         <translation>La prochaine fois sera la bonne...</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="574"/>
+        <location filename="../race.cpp" line="600"/>
         <source>You must stay on track!</source>
         <translation>Vous devez rester sur la piste !</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="578"/>
+        <location filename="../race.cpp" line="604"/>
         <source>Watch your tires!</source>
         <translation>Attention à vos roues !</translation>
     </message>
     <message>
-        <location filename="../menu/resolutionmenu.cpp" line="117"/>
+        <location filename="../menu/resolutionmenu.cpp" line="115"/>
         <source>Restart to change the resolution.</source>
         <translation>Redémarrez pour changer la résolution.</translation>
     </message>
@@ -258,22 +258,22 @@ Pause            : P</translation>
         <translation type="vanished">Résolution native</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="80"/>
+        <location filename="../menu/settingsmenu.cpp" line="78"/>
         <source>Reset best positions?</source>
         <translation>Réinitialiser les meilleures positions ?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="92"/>
+        <location filename="../menu/settingsmenu.cpp" line="89"/>
         <source>Reset record times?</source>
         <translation>Réinitialiser les temps records ?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="105"/>
+        <location filename="../menu/settingsmenu.cpp" line="101"/>
         <source>Reset unlocked tracks?</source>
         <translation>Réinitialiser les circuits débloqués ?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="204"/>
+        <location filename="../menu/settingsmenu.cpp" line="202"/>
         <source>Game mode &gt;</source>
         <translation>Mode de jeu &gt;</translation>
     </message>
@@ -286,52 +286,62 @@ Pause            : P</translation>
         <translation type="vanished">Difficulté</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="208"/>
+        <location filename="../menu/settingsmenu.cpp" line="206"/>
         <source>Sounds &gt;</source>
         <translation>Audio &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="212"/>
+        <location filename="../menu/settingsmenu.cpp" line="210"/>
         <source>GFX &gt;</source>
         <translation>Graphismes &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="216"/>
+        <location filename="../menu/settingsmenu.cpp" line="214"/>
         <source>Controls &gt;</source>
         <translation>Contrôles &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="220"/>
+        <location filename="../menu/settingsmenu.cpp" line="218"/>
         <source>Reset &gt;</source>
         <translation>Réinitialiser &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="242"/>
+        <location filename="../menu/settingsmenu.cpp" line="241"/>
+        <source>30 fps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/settingsmenu.cpp" line="251"/>
+        <source>60 fps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/settingsmenu.cpp" line="283"/>
         <source>Two player race</source>
         <translation>Course à deux joueurs</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="252"/>
+        <location filename="../menu/settingsmenu.cpp" line="292"/>
         <source>One player race</source>
         <translation>Course à un joueur</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="262"/>
+        <location filename="../menu/settingsmenu.cpp" line="301"/>
         <source>Time Trial</source>
         <translation>Contre la montre</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="272"/>
+        <location filename="../menu/settingsmenu.cpp" line="310"/>
         <source>Duel</source>
         <translation>Duel</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="300"/>
+        <location filename="../menu/settingsmenu.cpp" line="337"/>
         <source>Vertical</source>
         <translation>Verticale</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="310"/>
+        <location filename="../menu/settingsmenu.cpp" line="346"/>
         <source>Horizontal</source>
         <translation>Horizontale</translation>
     </message>
@@ -351,49 +361,54 @@ Pause            : P</translation>
         <translation>Difficile</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="334"/>
+        <location filename="../menu/settingsmenu.cpp" line="369"/>
         <source>Full screen resolution &gt;</source>
         <translation>Résolution plein écran &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="338"/>
+        <location filename="../menu/settingsmenu.cpp" line="373"/>
         <source>Windowed resolution &gt;</source>
         <translation>Résolution en mode fenêtré &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="342"/>
+        <location filename="../menu/settingsmenu.cpp" line="377"/>
+        <source>FPS &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/settingsmenu.cpp" line="381"/>
         <source>Split type &gt;</source>
         <translation>Séparation d&apos;écran &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="346"/>
+        <location filename="../menu/settingsmenu.cpp" line="385"/>
         <source>VSync &gt;</source>
         <translation>VSync &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="365"/>
-        <location filename="../menu/vsyncmenu.cpp" line="103"/>
+        <location filename="../menu/settingsmenu.cpp" line="405"/>
+        <location filename="../menu/vsyncmenu.cpp" line="101"/>
         <source>Off</source>
         <translation>Désactivé</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="378"/>
-        <location filename="../menu/vsyncmenu.cpp" line="107"/>
+        <location filename="../menu/settingsmenu.cpp" line="417"/>
+        <location filename="../menu/vsyncmenu.cpp" line="105"/>
         <source>On</source>
         <translation>Activé</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="412"/>
+        <location filename="../menu/settingsmenu.cpp" line="450"/>
         <source>Reset record times</source>
         <translation>Réinitialiser les temps records</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="417"/>
+        <location filename="../menu/settingsmenu.cpp" line="455"/>
         <source>Reset best positions</source>
         <translation>Réinitialiser les meilleures positions</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="422"/>
+        <location filename="../menu/settingsmenu.cpp" line="460"/>
         <source>Reset unlocked tracks</source>
         <translation>Réinitialiser les circuits débloqués</translation>
     </message>
@@ -403,78 +418,79 @@ Pause            : P</translation>
         <translation>GO !!!</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="55"/>
+        <location filename="../timingoverlay.cpp" line="54"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="56"/>
+        <location filename="../timingoverlay.cpp" line="55"/>
         <source>1st</source>
         <translation>1er</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="57"/>
+        <location filename="../timingoverlay.cpp" line="56"/>
         <source>2nd</source>
         <translation>2ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="58"/>
+        <location filename="../timingoverlay.cpp" line="57"/>
         <source>3rd</source>
         <translation>3ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="59"/>
+        <location filename="../timingoverlay.cpp" line="58"/>
         <source>4th</source>
         <translation>4ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="60"/>
+        <location filename="../timingoverlay.cpp" line="59"/>
         <source>5th</source>
         <translation>5ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="61"/>
+        <location filename="../timingoverlay.cpp" line="60"/>
         <source>6th</source>
         <translation>6ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="62"/>
+        <location filename="../timingoverlay.cpp" line="61"/>
         <source>7th</source>
         <translation>7ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="63"/>
+        <location filename="../timingoverlay.cpp" line="62"/>
         <source>8th</source>
         <translation>8ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="64"/>
+        <location filename="../timingoverlay.cpp" line="63"/>
         <source>9th</source>
         <translation>9ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="65"/>
+        <location filename="../timingoverlay.cpp" line="64"/>
         <source>10th</source>
         <translation>10ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="66"/>
+        <location filename="../timingoverlay.cpp" line="65"/>
         <source>11th</source>
         <translation>11ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="67"/>
+        <location filename="../timingoverlay.cpp" line="66"/>
         <source>12th</source>
         <translation>12ème</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="189"/>
+        <location filename="../timingoverlay.cpp" line="188"/>
         <source> LAP:</source>
         <translation> TOUR:</translation>
     </message>
     <message>
         <location filename="../timingoverlay.cpp" line="205"/>
         <source> POS:</source>
+        <extracomment>Position/rank</extracomment>
         <translation> POS:</translation>
     </message>
     <message>
@@ -498,27 +514,30 @@ Pause            : P</translation>
         <translation>TOUR:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="308"/>
+        <location filename="../timingoverlay.cpp" line="309"/>
         <source>L:</source>
+        <extracomment>Last lap time</extracomment>
         <translation>T:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="327"/>
+        <location filename="../timingoverlay.cpp" line="329"/>
         <source>R:</source>
+        <extracomment>Lap record time</extracomment>
         <translation>C:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="347"/>
+        <location filename="../timingoverlay.cpp" line="350"/>
         <source>TOT:</source>
+        <extracomment>Total race time</extracomment>
         <translation>TOTAL:</translation>
     </message>
     <message>
-        <location filename="../menu/trackselectionmenu.cpp" line="272"/>
+        <location filename="../menu/trackselectionmenu.cpp" line="269"/>
         <source>       Laps: </source>
         <translation>        Tours : </translation>
     </message>
     <message>
-        <location filename="../menu/trackselectionmenu.cpp" line="279"/>
+        <location filename="../menu/trackselectionmenu.cpp" line="276"/>
         <source>     Length: </source>
         <translation>     Longueur : </translation>
     </message>
@@ -527,22 +546,22 @@ Pause            : P</translation>
         <translation type="vanished"> m</translation>
     </message>
     <message>
-        <location filename="../menu/trackselectionmenu.cpp" line="288"/>
+        <location filename="../menu/trackselectionmenu.cpp" line="285"/>
         <source> Lap Record: </source>
         <translation>  Record par tour : </translation>
     </message>
     <message>
-        <location filename="../menu/trackselectionmenu.cpp" line="294"/>
+        <location filename="../menu/trackselectionmenu.cpp" line="291"/>
         <source>Race Record: </source>
         <translation>Record de la course : </translation>
     </message>
     <message>
-        <location filename="../menu/vsyncmenu.cpp" line="78"/>
+        <location filename="../menu/vsyncmenu.cpp" line="77"/>
         <source>Restart to change VSync setting.</source>
         <translation>Rédémarrez pour changer l&apos;option VSync.</translation>
     </message>
     <message>
-        <location filename="../menu/lapcountmenu.cpp" line="86"/>
+        <location filename="../menu/lapcountmenu.cpp" line="85"/>
         <source>Choose lap count</source>
         <translation type="unfinished"></translation>
     </message>

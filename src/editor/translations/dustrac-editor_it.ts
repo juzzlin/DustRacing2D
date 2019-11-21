@@ -12,98 +12,104 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="76"/>
+        <location filename="../mainwindow.cpp" line="64"/>
         <source>Randomly rotate objects</source>
         <translation>Ruota casualmente gli oggetti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="111"/>
+        <location filename="../mainwindow.cpp" line="99"/>
         <source>Loading &apos;%1&apos;..</source>
         <translation>Loading &apos;%1&apos;..</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="93"/>
         <source>Choose &apos;File -&gt; New&apos; or &apos;File -&gt; Open&apos; to start.</source>
         <translation>Scegli &apos;File -&gt; Nuovo&apos; o &apos;File -&gt; Apri&apos; per iniziare.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="129"/>
+        <location filename="../mainwindow.cpp" line="120"/>
         <source>Save your work to correct location.</source>
         <translation>Salva il tuo lavoro nella posizione corretta.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="125"/>
+        <location filename="../mainwindow.cpp" line="134"/>
         <source>To make the game find your circuits, save them to %1%2%3%2</source>
         <translation>Per far trovare al gioco i tuoi circuiti, salvali in %1%2%3%2</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="136"/>
-        <location filename="../mainwindow.cpp" line="720"/>
+        <location filename="../mainwindow.cpp" line="125"/>
+        <source>, %4%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="143"/>
+        <location filename="../mainwindow.cpp" line="636"/>
         <source>New file</source>
         <translation>Nuovo file</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="182"/>
+        <location filename="../mainwindow.cpp" line="189"/>
         <source>Scale:</source>
         <translation>Scala:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="235"/>
+        <location filename="../mainwindow.cpp" line="241"/>
         <source>ERROR!!: Cannot load objects from &apos;</source>
         <translation>Errore!!: Impossibile caricare gli oggetti da &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="241"/>
         <source>&apos;</source>
         <translation>&apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="304"/>
+        <location filename="../mainwindow.cpp" line="291"/>
         <source>Scale set to %1%</source>
         <translation>Scala impostata a %1%</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="310"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="326"/>
+        <location filename="../mainwindow.cpp" line="313"/>
         <source>&amp;New...</source>
         <translation>&amp;Nuovo...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="332"/>
+        <location filename="../mainwindow.cpp" line="319"/>
         <source>&amp;Open...</source>
         <translation>&amp;Apri...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="338"/>
+        <location filename="../mainwindow.cpp" line="325"/>
         <source>&amp;Save</source>
         <translation>&amp;Salva</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="345"/>
+        <location filename="../mainwindow.cpp" line="332"/>
         <source>&amp;Save as...</source>
         <translation>&amp;Salva come...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="352"/>
+        <location filename="../mainwindow.cpp" line="339"/>
         <source>&amp;Quit</source>
         <translation>&amp;Esci</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="358"/>
+        <location filename="../mainwindow.cpp" line="345"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifica</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="361"/>
+        <location filename="../mainwindow.cpp" line="348"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="375"/>
+        <location filename="../mainwindow.cpp" line="362"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
@@ -112,130 +118,128 @@
         <translation type="obsolete">&amp;Cancella tutto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="389"/>
         <source>Enlarge hor size</source>
-        <translation>Ingrandisci orizzontalmente</translation>
+        <translation type="vanished">Ingrandisci orizzontalmente</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="395"/>
         <source>Enlarge ver size</source>
-        <translation>Ingrandisci verticalmente</translation>
+        <translation type="vanished">Ingrandisci verticalmente</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="376"/>
         <source>&amp;Set properties..</source>
         <translation>&amp;Imposta proprietà..</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="407"/>
+        <location filename="../mainwindow.cpp" line="382"/>
         <source>&amp;Route</source>
         <translation>&amp;Itinerario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="410"/>
+        <location filename="../mainwindow.cpp" line="385"/>
         <source>Clear &amp;route</source>
         <translation>Cancella &amp;itinerario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="416"/>
+        <location filename="../mainwindow.cpp" line="391"/>
         <source>&amp;Set route..</source>
         <translation>&amp;Imposta itinerario..</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="422"/>
+        <location filename="../mainwindow.cpp" line="397"/>
         <source>&amp;Help</source>
         <translation>&amp;Aiuto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="425"/>
+        <location filename="../mainwindow.cpp" line="400"/>
         <source>&amp;About</source>
         <translation>&amp;Informazioni</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="430"/>
+        <location filename="../mainwindow.cpp" line="405"/>
         <source>About &amp;Qt</source>
         <translation>Informazioni su &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="438"/>
+        <location filename="../mainwindow.cpp" line="413"/>
         <source>Select</source>
         <translation>Seleziona</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="444"/>
+        <location filename="../mainwindow.cpp" line="419"/>
         <source>Erase object</source>
         <translation>Cancella oggetto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="449"/>
+        <location filename="../mainwindow.cpp" line="424"/>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="523"/>
+        <location filename="../mainwindow.cpp" line="498"/>
         <source>Open a track</source>
         <translation>Apri un tracciato</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="523"/>
-        <location filename="../mainwindow.cpp" line="660"/>
+        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="683"/>
         <source>Track Files (*.trk)</source>
         <translation>Files dei tracciati(*.trk)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="537"/>
+        <location filename="../mainwindow.cpp" line="512"/>
         <source>About Qt</source>
         <translation>Informazioni su Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="552"/>
+        <location filename="../mainwindow.cpp" line="526"/>
         <source>ERROR!!: %1 doesn&apos;t exist.</source>
         <translation>ERRORE!!: %1 non esiste.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="564"/>
+        <location filename="../mainwindow.cpp" line="536"/>
         <source>Track &apos;%1&apos; opened.</source>
         <translation>Tracciato &apos;%1&apos; aperto.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="599"/>
+        <location filename="../mainwindow.cpp" line="561"/>
         <source>Failed to open track &apos;</source>
         <translation>Impossibile aprire tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="663"/>
+        <location filename="../mainwindow.cpp" line="693"/>
         <source>Track &apos;</source>
         <translation>Tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="663"/>
+        <location filename="../mainwindow.cpp" line="693"/>
         <source>&apos; saved.</source>
         <translation>&apos; salvato.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="646"/>
+        <location filename="../mainwindow.cpp" line="669"/>
         <source>Failed to save track &apos;</source>
         <translation>Impossibile salvare il tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="658"/>
+        <location filename="../mainwindow.cpp" line="681"/>
         <source>Save a track</source>
         <translation>Salva un tracciato</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="677"/>
+        <location filename="../mainwindow.cpp" line="699"/>
         <source>Failed to save track as &apos;</source>
         <translation>Impossibile salvare il tracciato come &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="715"/>
+        <location filename="../mainwindow.cpp" line="642"/>
         <source>A new track &apos;%1&apos; created. Columns: %2, Rows: %3.</source>
         <translation>Nuovo tracciato &apos;%1&apos; creato. Colonne: %2, Righe: %3.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="751"/>
+        <location filename="../mainwindow.cpp" line="729"/>
         <source>Track properties updated.</source>
         <translation>Proprietà del tracciato aggiornate.</translation>
     </message>
@@ -244,17 +248,17 @@
         <translation type="obsolete">Indice impostato a &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="794"/>
+        <location filename="../mainwindow.cpp" line="572"/>
         <source>Set route: begin.</source>
         <translation>Imposta itinerario: inizio.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="797"/>
+        <location filename="../mainwindow.cpp" line="575"/>
         <source>Set route, checkpoints and driving lines.</source>
         <translation>Imposta itinerario, punti di controllo e linee di guida.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="798"/>
+        <location filename="../mainwindow.cpp" line="576"/>
         <source>Setting the route defines checkpoints for the cars so
 that no shortcuts can be taken. It also defines
 driving lines for the computer players.
@@ -277,22 +281,22 @@ a quella del traguardo per far funzionare
 correttamente la rilevazione del giro e del tempo.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="588"/>
         <source>Set route</source>
         <translation>Imposta l&apos;itinerario</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="588"/>
         <source>Invalid track. Route cannot be set.</source>
         <translation>Tracciato non valido. L&apos;itinerario non può essere impostato.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="587"/>
         <source>Set route: not a valid track.</source>
         <translation>Imposta itinerario: tracciato non valido.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="820"/>
+        <location filename="../mainwindow.cpp" line="614"/>
         <source>Set route: route finished.</source>
         <translation>Imposta itinerario: itinerario terminato.</translation>
     </message>
@@ -342,7 +346,7 @@ correttamente la rilevazione del giro e del tempo.</translation>
         <translation type="obsolete">Tessere eliminate.</translation>
     </message>
     <message>
-        <location filename="../editordata.cpp" line="427"/>
+        <location filename="../editordata.cpp" line="377"/>
         <source>Route cleared.</source>
         <translation>Itinerario eliminato.</translation>
     </message>
@@ -350,83 +354,83 @@ correttamente la rilevazione del giro e del tempo.</translation>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../editorview.cpp" line="117"/>
-        <location filename="../editorview.cpp" line="129"/>
+        <location filename="../editorview.cpp" line="95"/>
+        <location filename="../editorview.cpp" line="107"/>
         <source>Rotate 90</source>
         <translation>Ruota di 90</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="117"/>
+        <location filename="../editorview.cpp" line="95"/>
         <source> CW..</source>
         <translation> in senso orario..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="129"/>
+        <location filename="../editorview.cpp" line="107"/>
         <source> CCW..</source>
         <translation> in senso antiorario..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="141"/>
+        <location filename="../editorview.cpp" line="119"/>
         <source>Clear computer hint</source>
         <translation>Cancella suggerimenti al computer</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="148"/>
+        <location filename="../editorview.cpp" line="126"/>
         <source>Set computer hint &apos;brake hard&apos;..</source>
         <translation>Imposta suggerimento al computer &apos;frena forte&apos;..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="155"/>
+        <location filename="../editorview.cpp" line="133"/>
         <source>Set computer hint &apos;brake&apos;..</source>
         <translation>Imposta suggerimento al computer &apos;frena&apos;..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="162"/>
+        <location filename="../editorview.cpp" line="140"/>
         <source>Exclude from minimap</source>
         <translation>Escludi dalla minimappa</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="173"/>
+        <location filename="../editorview.cpp" line="151"/>
         <source>Insert row before..</source>
         <translation>Inserisci una riga sopra..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="183"/>
+        <location filename="../editorview.cpp" line="160"/>
         <source>Insert row after..</source>
         <translation>Inserisci una riga sotto..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="193"/>
+        <location filename="../editorview.cpp" line="169"/>
         <source>Delete row..</source>
         <translation>Elimina riga..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="205"/>
+        <location filename="../editorview.cpp" line="178"/>
         <source>Insert column before..</source>
         <translation>Inserisci una colonna prima..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="215"/>
+        <location filename="../editorview.cpp" line="187"/>
         <source>Insert column after..</source>
         <translation>Inserisci una colonna dopo..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="225"/>
+        <location filename="../editorview.cpp" line="196"/>
         <source>Delete column..</source>
         <translation>Elimina colonna..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="257"/>
+        <location filename="../editorview.cpp" line="225"/>
         <source>Rotate..</source>
         <translation>Ruota..</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="272"/>
+        <location filename="../editorview.cpp" line="240"/>
         <source>Force stationary</source>
         <translation>Forza stazionario</translation>
     </message>
     <message>
-        <location filename="../editorview.cpp" line="291"/>
+        <location filename="../editorview.cpp" line="259"/>
         <source>Set size..</source>
         <translation>Imposta dimensione..</translation>
     </message>

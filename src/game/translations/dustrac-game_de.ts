@@ -32,11 +32,13 @@
     </message>
     <message>
         <source>L:</source>
+        <extracomment>Last lap time</extracomment>
         <translatorcomment>Letzte Rundenzeit</translatorcomment>
         <translation>L: </translation>
     </message>
     <message>
         <source>R:</source>
+        <extracomment>Lap record time</extracomment>
         <translatorcomment>Rundenrekord</translatorcomment>
         <translation>R: </translation>
     </message>
@@ -126,6 +128,7 @@
     </message>
     <message>
         <source>TOT:</source>
+        <extracomment>Total race time</extracomment>
         <translation>Ges.: </translation>
     </message>
     <message>
@@ -142,6 +145,7 @@
     </message>
     <message>
         <source> POS:</source>
+        <extracomment>Position/rank</extracomment>
         <translation> Rang: </translation>
     </message>
     <message>
@@ -444,6 +448,18 @@ Pause: P</translation>
     <message>
         <source>Choose lap count</source>
         <translation>Wählen Sie die Rundenzahl</translation>
+    </message>
+    <message>
+        <source>30 fps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 fps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FPS &gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

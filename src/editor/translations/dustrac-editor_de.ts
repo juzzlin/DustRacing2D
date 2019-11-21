@@ -98,7 +98,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Enlarge ver size</source>
-        <translation>Vertikal vergrößern</translation>
+        <translation type="vanished">Vertikal vergrößern</translation>
     </message>
     <message>
         <source>Randomly rotate objects</source>
@@ -214,7 +214,7 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     </message>
     <message>
         <source>Enlarge hor size</source>
-        <translation>Horizontal vergrößern</translation>
+        <translation type="vanished">Horizontal vergrößern</translation>
     </message>
     <message>
         <source>&amp;Set properties..</source>
@@ -231,6 +231,10 @@ Klicken Sie nacheinander auf die entsprechenden Kacheln und erstellen Sie einen 
     <message>
         <source>Track properties updated.</source>
         <translation>Streckeneigenschaften aktualisiert</translation>
+    </message>
+    <message>
+        <source>, %4%2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
