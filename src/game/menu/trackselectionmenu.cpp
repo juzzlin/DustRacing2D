@@ -61,12 +61,9 @@ public:
       , m_star(MCAssetManager::surfaceManager().surface("star"))
       , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
       , m_lock(MCAssetManager::surfaceManager().surface("lock"))
-      , m_lapRecord(Settings::instance().loadLapRecord(m_track))
-      , m_raceRecord(Settings::instance().loadRaceRecord(
-          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
-      , m_bestPos(Settings::instance().loadBestPos(
-          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty()))
     {
+        updateData();
+
         auto && program = Renderer::instance().program("menu");
         m_star.setShaderProgram(program);
         m_glow.setShaderProgram(program);
@@ -78,21 +75,22 @@ public:
         return m_track;
     }
 
+    // This ensures that data has been updated when player returns to the menu after a race
     virtual void setFocused(bool focused) override
     {
         MenuItem::setFocused(focused);
-
-        m_lapRecord = Settings::instance().loadLapRecord(m_track);
-        m_raceRecord = Settings::instance().loadRaceRecord(
-          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
-        m_bestPos = Settings::instance().loadBestPos(
-          m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+        if (focused)
+        {
+            updateData();
+        }
     }
 
     //! \reimp
     virtual void render() override;
 
 private:
+    void updateData();
+
     void renderTiles();
 
     void renderTitle();
@@ -121,6 +119,15 @@ private:
 
     int m_bestPos;
 };
+
+void TrackItem::updateData()
+{
+    m_lapRecord = Settings::instance().loadLapRecord(m_track);
+    m_raceRecord = Settings::instance().loadRaceRecord(
+      m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+    m_bestPos = Settings::instance().loadBestPos(
+      m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+}
 
 void TrackItem::renderTiles()
 {
