@@ -40,7 +40,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="125"/>
         <source>, %4%2</source>
-        <translation type="unfinished"></translation>
+        <translation> tai %4%2</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="143"/>
@@ -423,7 +423,7 @@ Klikkaa ensimmäistä asettamaasi solmupistettä lopettaaksesi.
     <message>
         <location filename="../editorview.cpp" line="240"/>
         <source>Force stationary</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakota liikkumattomaksi</translation>
     </message>
     <message>
         <location filename="../editorview.cpp" line="259"/>
