@@ -4,8 +4,10 @@ set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
     list(APPEND TS_FILES ${CMAKE_SOURCE_DIR}/src/editor/translations/${TS_FILE}.ts)
-    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/src/editor/${TS_FILE}.qm)
+    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm)
 endforeach()
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION ${CMAKE_BINARY_DIR}/data/translations)
+
 # Set sources
 set(SRC
     aboutdlg.cpp
@@ -83,12 +85,3 @@ add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS
 
 target_link_libraries(${EDITOR_BINARY_NAME} Qt5::Widgets Qt5::Xml)
 set_property(TARGET ${EDITOR_BINARY_NAME} PROPERTY CXX_STANDARD 14)
-
-foreach(TS_FILE ${TS})
-    # Make targets to copy generated qm files to data dir. This is done the hard
-    # way, because qt4_add_translation() generates the qm files to ${CMAKE_CURRENT_SOURCE_DIR}
-    add_custom_target(copy-translation-file-${TS_FILE} ALL
-        COMMAND cmake -E copy ${CMAKE_BINARY_DIR}/src/editor/${TS_FILE}.qm
-            ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm
-        DEPENDS ${EDITOR_BINARY_NAME})
-endforeach()

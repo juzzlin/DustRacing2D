@@ -29,8 +29,9 @@ set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
     list(APPEND TS_FILES ${CMAKE_SOURCE_DIR}/src/game/translations/${TS_FILE}.ts)
-    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/src/game/${TS_FILE}.qm)
+    list(APPEND QM_FILES ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm)
 endforeach()
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION ${CMAKE_BINARY_DIR}/data/translations)
 
 # Set headers that don't have a corresponding cpp file
 set(HDR
@@ -167,14 +168,5 @@ set(COMMON_LIBS
 
 target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 14)
-
-foreach(TS_FILE ${TS})
-    # Make targets to copy generated qm files to data dir. This is done the hard
-    # way, because qt4_add_translation() generates the qm files to ${CMAKE_CURRENT_SOURCE_DIR}
-    add_custom_target(copy-translation-file-${TS_FILE} ALL
-        COMMAND cmake -E copy ${CMAKE_BINARY_DIR}/src/game/${TS_FILE}.qm
-            ${CMAKE_BINARY_DIR}/data/translations/${TS_FILE}.qm
-        DEPENDS ${GAME_BINARY_NAME})
-endforeach()
 
 add_subdirectory(unittests)
