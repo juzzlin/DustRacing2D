@@ -371,10 +371,12 @@ SOURCES += \
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsGame.rc
 TRANSLATIONS += \
+    translations/dustrac-game_cs.ts \
+    translations/dustrac-game_de.ts \
     translations/dustrac-game_fi.ts \
     translations/dustrac-game_fr.ts \
     translations/dustrac-game_it.ts \
-    translations/dustrac-game_cs.ts
+    translations/dustrac-game_ru.ts
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target
