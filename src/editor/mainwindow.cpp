@@ -117,13 +117,25 @@ void MainWindow::updateScaleSlider(int value)
 
 void MainWindow::showTip()
 {
+    const auto commonTitle = tr("Save your work to correct location.");
+#ifdef __unix__
     QMessageBox::information(
       this,
-      tr("Save your work to correct location."),
+      commonTitle,
+      QString(tr("To make the game find your circuits, save them to %1%2%3%2") + tr(", %4%2"))
+        .arg(QDir::homePath())
+        .arg(QDir::separator())
+        .arg(Config::General::TRACK_SEARCH_PATH)
+        .arg(Config::General::Unix::getXdgTrackSearchPath()));
+#else
+    QMessageBox::information(
+      this,
+      commonTitle,
       QString(tr("To make the game find your circuits, save them to %1%2%3%2"))
         .arg(QDir::homePath())
         .arg(QDir::separator())
         .arg(Config::General::TRACK_SEARCH_PATH));
+#endif
 }
 
 void MainWindow::init()

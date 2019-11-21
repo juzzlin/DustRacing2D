@@ -163,12 +163,10 @@ void Game::addTrackSearchPaths()
     m_trackLoader->addTrackSearchPath(QString(Config::General::dataPath) + QDir::separator() + "levels");
     m_trackLoader->addTrackSearchPath(QDir::homePath() + QDir::separator() + Config::General::TRACK_SEARCH_PATH);
 
+#ifdef __unix__
     // See: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html,
     //      https://github.com/juzzlin/DustRacing2D/issues/49
-#ifdef __unix__
-    const auto env = QProcessEnvironment::systemEnvironment();
-    const auto xdgDataHome = "XDG_DATA_HOME";
-    m_trackLoader->addTrackSearchPath(env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + Config::General::TRACK_SEARCH_PATH_XDG);
+    m_trackLoader->addTrackSearchPath(Config::General::Unix::getXdgTrackSearchPath());
 #endif
 }
 

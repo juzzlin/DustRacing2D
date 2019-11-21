@@ -10,6 +10,8 @@ Bug fixes:
   - The font is now initialized with the full ASCII table
 * Fix GitHub Issue #77: Pressing accelerate and brake at same time gives weird results
 * Fix GitHub Issue #76: Dirt particles appear even when not moving on grass
+* Fix GitHub Issue #66: Editor displays legacy track path on startup
+  - Effective only on Linux/Unix
 
 Other:
 

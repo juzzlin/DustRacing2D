@@ -13,8 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
+#include <QDir>
+#include <QProcessEnvironment>
+
 //! Config variables for editor and for the game.
 namespace Config {
+
 namespace General {
 //! The base data path given by -DDATA_PATH.
 static constexpr auto dataPath = DATA_PATH;
@@ -27,11 +31,20 @@ static constexpr auto QSETTINGS_COMPANY_NAME = "dustrac";
 //! Path used to search "3rd party" race tracks under the home dir: ~/TRACK_SEARCH_PATH/
 static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
 
+static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
+
+namespace Unix {
 //! Path used to search "3rd party" race tracks under `$XDG_DATA_HOME/TRACK_SEARCH_PATH_XDG` or
 //! $HOME/.local/share/TRACK_SEARCH_PATH_XDG` if `$XDG_DATA_HOME` is not defined.
 static constexpr auto TRACK_SEARCH_PATH_XDG = "DustRacing2D/tracks";
+inline QString getXdgTrackSearchPath()
+{
+    const auto env = QProcessEnvironment::systemEnvironment();
+    const auto xdgDataHome = "XDG_DATA_HOME";
+    return env.value(xdgDataHome, QDir::homePath() + "/.local/share") + "/" + TRACK_SEARCH_PATH_XDG;
+}
+} // namespace Unix
 
-static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
 } // namespace General
 
 namespace Editor {
