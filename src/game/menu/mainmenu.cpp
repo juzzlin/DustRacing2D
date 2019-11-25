@@ -54,48 +54,48 @@ void MainMenu::createMenuItems()
     const int itemHeight = height() / 8;
     const int textSize = ITEM_TEXT_SIZE;
 
-    auto play = new MenuItem(width(), itemHeight, tr("Play").toUpper().toStdWString());
-    play->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *play)));
+    const auto play = std::make_shared<MenuItem>(width(), itemHeight, tr("Play").toUpper().toStdWString());
+    play->setView(std::make_shared<TextMenuItemView>(textSize, *play));
     play->setMenuOpenAction("difficulty");
 
-    auto help = new MenuItem(width(), itemHeight, tr("Help").toUpper().toStdWString());
-    help->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *help)));
+    const auto help = std::make_shared<MenuItem>(width(), itemHeight, tr("Help").toUpper().toStdWString());
+    help->setView(std::make_shared<TextMenuItemView>(textSize, *help));
     help->setMenuOpenAction("help");
 
-    auto credits = new MenuItem(width(), itemHeight, tr("Credits").toUpper().toStdWString());
-    credits->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *credits)));
+    const auto credits = std::make_shared<MenuItem>(width(), itemHeight, tr("Credits").toUpper().toStdWString());
+    credits->setView(std::make_shared<TextMenuItemView>(textSize, *credits));
     credits->setMenuOpenAction("credits");
 
-    auto quit = new MenuItem(width(), itemHeight, tr("Quit").toUpper().toStdWString());
-    quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *quit)));
+    const auto quit = std::make_shared<MenuItem>(width(), itemHeight, tr("Quit").toUpper().toStdWString());
+    quit->setView(std::make_shared<TextMenuItemView>(textSize, *quit));
     quit->setAction(
       [this]() {
           juzzlin::L().info() << "Quit selected from the main menu.";
           emit exitGameRequested();
       });
 
-    auto settings = new MenuItem(width(), itemHeight, tr("Settings").toUpper().toStdWString());
-    settings->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *settings)));
+    const auto settings = std::make_shared<MenuItem>(width(), itemHeight, tr("Settings").toUpper().toStdWString());
+    settings->setView(std::make_shared<TextMenuItemView>(textSize, *settings));
     settings->setMenuOpenAction("settings");
 
-    addItem(MTFH::MenuItemPtr(quit));
-    addItem(MTFH::MenuItemPtr(credits));
-    addItem(MTFH::MenuItemPtr(settings));
-    addItem(MTFH::MenuItemPtr(help));
-    addItem(MTFH::MenuItemPtr(play));
+    addItem(quit);
+    addItem(credits);
+    addItem(settings);
+    addItem(help);
+    addItem(play);
 }
 
 void MainMenu::createSubMenus()
 {
-    m_menuManager.addMenu(MTFH::MenuPtr(new Help("help", width(), height())));
+    m_menuManager.addMenu(std::make_shared<Help>("help", width(), height()));
 
-    m_menuManager.addMenu(MTFH::MenuPtr(new Credits("credits", width(), height())));
+    m_menuManager.addMenu(std::make_shared<Credits>("credits", width(), height()));
 
-    m_menuManager.addMenu(MTFH::MenuPtr(new LapCountMenu(width(), height())));
+    m_menuManager.addMenu(std::make_shared<LapCountMenu>(width(), height()));
 
-    m_menuManager.addMenu(MTFH::MenuPtr(new SettingsMenu("settings", width(), height())));
+    m_menuManager.addMenu(std::make_shared<SettingsMenu>("settings", width(), height()));
 
-    m_menuManager.addMenu(MTFH::MenuPtr(new TrackSelectionMenu(width(), height(), m_scene)));
+    m_menuManager.addMenu(std::make_shared<TrackSelectionMenu>(width(), height(), m_scene));
 
-    m_menuManager.addMenu(MTFH::MenuPtr(new DifficultyMenu(width(), height())));
+    m_menuManager.addMenu(std::make_shared<DifficultyMenu>(width(), height()));
 }
