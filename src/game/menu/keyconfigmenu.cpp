@@ -72,7 +72,7 @@ static const char * PRESS_KEY_MENU_ID = "pressKeyMenu";
 KeyConfigMenu::KeyConfigMenu(std::string id, int width, int height)
   : SurfaceMenu("settingsBack", id, width, height, Menu::Style::VerticalList)
 {
-    MTFH::MenuManager::instance().addMenu(MTFH::MenuPtr(new PressKeyMenu(PRESS_KEY_MENU_ID, width, height)));
+    MTFH::MenuManager::instance().addMenu(std::make_shared<PressKeyMenu>(PRESS_KEY_MENU_ID, width, height));
 
     addPlayerTwoConfig(width, height);
     addPlayerOneConfig(width, height);
@@ -85,46 +85,46 @@ void KeyConfigMenu::addPlayerOneConfig(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
-    auto playerOneAccelerate =
-      new MenuItem(width, itemHeight, QObject::tr("Player One Accelerate").toUpper().toStdWString());
-    playerOneAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneAccelerate)));
+    const auto playerOneAccelerate =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player One Accelerate").toUpper().toStdWString());
+    playerOneAccelerate->setView(std::make_shared<TextMenuItemView>(20, *playerOneAccelerate));
     playerOneAccelerate->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Up, 0);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerOneBrake =
-      new MenuItem(width, itemHeight, QObject::tr("Player One Brake").toUpper().toStdWString());
-    playerOneBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneBrake)));
+    const auto playerOneBrake =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player One Brake").toUpper().toStdWString());
+    playerOneBrake->setView(std::make_shared<TextMenuItemView>(20, *playerOneBrake));
     playerOneBrake->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Down, 0);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerOneTurnLeft =
-      new MenuItem(width, itemHeight, QObject::tr("Player One Turn Left").toUpper().toStdWString());
-    playerOneTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnLeft)));
+    const auto playerOneTurnLeft =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player One Turn Left").toUpper().toStdWString());
+    playerOneTurnLeft->setView(std::make_shared<TextMenuItemView>(20, *playerOneTurnLeft));
     playerOneTurnLeft->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Left, 0);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerOneTurnRight =
-      new MenuItem(width, itemHeight, QObject::tr("Player One Turn Right").toUpper().toStdWString());
-    playerOneTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerOneTurnRight)));
+    const auto playerOneTurnRight =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player One Turn Right").toUpper().toStdWString());
+    playerOneTurnRight->setView(std::make_shared<TextMenuItemView>(20, *playerOneTurnRight));
     playerOneTurnRight->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Right, 0);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    addItem(MTFH::MenuItemPtr(playerOneBrake));
-    addItem(MTFH::MenuItemPtr(playerOneAccelerate));
-    addItem(MTFH::MenuItemPtr(playerOneTurnRight));
-    addItem(MTFH::MenuItemPtr(playerOneTurnLeft));
+    addItem(playerOneBrake);
+    addItem(playerOneAccelerate);
+    addItem(playerOneTurnRight);
+    addItem(playerOneTurnLeft);
 }
 
 void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
@@ -134,36 +134,36 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
     using MTFH::MenuItem;
     using MTFH::MenuManager;
 
-    auto playerTwoAccelerate =
-      new MenuItem(width, itemHeight, QObject::tr("Player Two Accelerate").toUpper().toStdWString());
-    playerTwoAccelerate->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoAccelerate)));
+    const auto playerTwoAccelerate =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player Two Accelerate").toUpper().toStdWString());
+    playerTwoAccelerate->setView(std::make_shared<TextMenuItemView>(20, *playerTwoAccelerate));
     playerTwoAccelerate->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Up, 1);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerTwoBrake =
-      new MenuItem(width, itemHeight, QObject::tr("Player Two Brake").toUpper().toStdWString());
-    playerTwoBrake->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoBrake)));
+    const auto playerTwoBrake =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player Two Brake").toUpper().toStdWString());
+    playerTwoBrake->setView(std::make_shared<TextMenuItemView>(20, *playerTwoBrake));
     playerTwoBrake->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Down, 1);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerTwoTurnLeft =
-      new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Left").toUpper().toStdWString());
-    playerTwoTurnLeft->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnLeft)));
+    const auto playerTwoTurnLeft =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player Two Turn Left").toUpper().toStdWString());
+    playerTwoTurnLeft->setView(std::make_shared<TextMenuItemView>(20, *playerTwoTurnLeft));
     playerTwoTurnLeft->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Left, 1);
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    auto playerTwoTurnRight =
-      new MenuItem(width, itemHeight, QObject::tr("Player Two Turn Right").toUpper().toStdWString());
-    playerTwoTurnRight->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *playerTwoTurnRight)));
+    const auto playerTwoTurnRight =
+      std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player Two Turn Right").toUpper().toStdWString());
+    playerTwoTurnRight->setView(std::make_shared<TextMenuItemView>(20, *playerTwoTurnRight));
     playerTwoTurnRight->setAction(
       []() {
           Game::instance().eventHandler().enableCaptureMode(InputHandler::Action::Right, 1);
