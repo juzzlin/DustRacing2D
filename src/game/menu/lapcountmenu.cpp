@@ -48,7 +48,6 @@ LapCountMenu::LapCountMenu(int width, int height)
     const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
     int selectedIndex = 0;
@@ -57,8 +56,8 @@ LapCountMenu::LapCountMenu(int width, int height)
         std::wstringstream itemText;
         itemText << LAP_COUNTS[i];
 
-        auto lapCountItem = new MenuItem(itemWidth, itemHeight, itemText.str());
-        lapCountItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *lapCountItem)));
+        const auto lapCountItem = std::make_shared<MenuItem>(itemWidth, itemHeight, itemText.str());
+        lapCountItem->setView(std::make_shared<TextMenuItemView>(textSize, *lapCountItem));
         lapCountItem->setAction(
           [i]() {
               juzzlin::L().info() << LAP_COUNTS[i] << " laps selected.";
@@ -67,7 +66,7 @@ LapCountMenu::LapCountMenu(int width, int height)
               MenuManager::instance().pushMenu(TrackSelectionMenu::MenuId);
           });
 
-        addItem(MTFH::MenuItemPtr(lapCountItem));
+        addItem(lapCountItem);
 
         if (Game::instance().lapCount() == LAP_COUNTS[i])
         {
