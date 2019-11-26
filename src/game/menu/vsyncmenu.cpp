@@ -65,9 +65,7 @@ public:
     }
 
     //! Destructor.
-    virtual ~VSyncItem()
-    {
-    }
+    virtual ~VSyncItem() = default;
 
     //! \reimp
     virtual void setSelected(bool flag)
@@ -98,13 +96,13 @@ VSyncMenu::VSyncMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int w
 {
     const int itemHeight = height / 10;
 
-    auto off = new VSyncItem(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());
-    off->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *off)));
-    addItem(MTFH::MenuItemPtr(off));
+    const auto off = std::make_shared<VSyncItem>(m_confirmationMenu, 0, width, itemHeight, QObject::tr("Off").toStdWString());
+    off->setView(std::make_shared<TextMenuItemView>(20, *off));
+    addItem(off);
 
-    auto on = new VSyncItem(m_confirmationMenu, 1, width, itemHeight, QObject::tr("On").toStdWString());
-    on->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *on)));
-    addItem(MTFH::MenuItemPtr(on));
+    auto on = std::make_shared<VSyncItem>(m_confirmationMenu, 1, width, itemHeight, QObject::tr("On").toStdWString());
+    on->setView(std::make_shared<TextMenuItemView>(20, *on));
+    addItem(on);
 
     enter();
 }
