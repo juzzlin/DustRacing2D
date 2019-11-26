@@ -45,35 +45,33 @@ SurfaceMenu::SurfaceMenu(
     if (quitItem)
     {
         const int textSize = 40;
-        auto quit = new MTFH::MenuItem(textSize, textSize, L"X");
-        quit->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *quit)));
-        addMouseItem(MTFH::Menu::MouseItemType::Quit, MTFH::MenuItemPtr(quit));
+        const auto quit = std::make_shared<MTFH::MenuItem>(textSize, textSize, L"X");
+        quit->setView(std::make_shared<TextMenuItemView>(textSize, *quit));
+        addMouseItem(MTFH::Menu::MouseItemType::Quit, quit);
     }
 
     if (prevItem)
     {
         const int textSize = 40;
-        auto prev = new MTFH::MenuItem(textSize, textSize, L"<");
-        prev->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *prev)));
-        addMouseItem(MTFH::Menu::MouseItemType::Prev, MTFH::MenuItemPtr(prev));
+        const auto prev = std::make_shared<MTFH::MenuItem>(textSize, textSize, L"<");
+        prev->setView(std::make_shared<TextMenuItemView>(textSize, *prev));
+        addMouseItem(MTFH::Menu::MouseItemType::Prev, prev);
     }
 
     if (nextItem)
     {
         const int textSize = 40;
-        auto next = new MTFH::MenuItem(textSize, textSize, L">");
-        next->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(textSize, *next)));
-        addMouseItem(MTFH::Menu::MouseItemType::Next, MTFH::MenuItemPtr(next));
+        const auto next = std::make_shared<MTFH::MenuItem>(textSize, textSize, L">");
+        next->setView(std::make_shared<TextMenuItemView>(textSize, *next));
+        addMouseItem(MTFH::Menu::MouseItemType::Next, next);
     }
 }
 
 void SurfaceMenu::render()
 {
-    const int w2 = x() + width() / 2;
-    const int h2 = y() + height() / 2;
     m_back.bind();
     m_back.setSize(width(), width() * m_back.height() / m_back.width());
-    m_back.render(nullptr, MCVector3dF(w2, h2, 0), 0);
+    m_back.render(nullptr, MCVector3dF(x() + width() / 2, y() + height() / 2, 0), 0);
     Menu::render();
 }
 
