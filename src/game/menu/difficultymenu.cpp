@@ -37,11 +37,10 @@ DifficultyMenu::DifficultyMenu(int width, int height)
     const int textSize = ITEM_TEXT_SIZE;
 
     using MTFH::MenuItem;
-    using MTFH::MenuItemViewPtr;
     using MTFH::MenuManager;
 
-    auto easyItem = new MenuItem(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
-    easyItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *easyItem)));
+    const auto easyItem = std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Easy").toUpper().toStdWString());
+    easyItem->setView(std::make_shared<TextMenuItemView>(textSize, *easyItem));
     easyItem->setAction([]() {
         juzzlin::L().info() << "Easy selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Easy;
@@ -50,8 +49,8 @@ DifficultyMenu::DifficultyMenu(int width, int height)
         MenuManager::instance().pushMenu(LapCountMenu::MenuId);
     });
 
-    auto mediumItem = new MenuItem(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
-    mediumItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *mediumItem)));
+    const auto mediumItem = std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Medium").toUpper().toStdWString());
+    mediumItem->setView(std::make_shared<TextMenuItemView>(textSize, *mediumItem));
     mediumItem->setAction([]() {
         juzzlin::L().info() << "Medium selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Medium;
@@ -60,8 +59,8 @@ DifficultyMenu::DifficultyMenu(int width, int height)
         MenuManager::instance().pushMenu(LapCountMenu::MenuId);
     });
 
-    auto hardItem = new MenuItem(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
-    hardItem->setView(MenuItemViewPtr(new TextMenuItemView(textSize, *hardItem)));
+    const auto hardItem = std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Hard").toUpper().toStdWString());
+    hardItem->setView(std::make_shared<TextMenuItemView>(textSize, *hardItem));
     hardItem->setAction([]() {
         juzzlin::L().info() << "Hard selected.";
         const DifficultyProfile::Difficulty chosenDifficulty = DifficultyProfile::Difficulty::Hard;
@@ -70,9 +69,9 @@ DifficultyMenu::DifficultyMenu(int width, int height)
         MenuManager::instance().pushMenu(LapCountMenu::MenuId);
     });
 
-    addItem(MTFH::MenuItemPtr(hardItem));
-    addItem(MTFH::MenuItemPtr(mediumItem));
-    addItem(MTFH::MenuItemPtr(easyItem));
+    addItem(hardItem);
+    addItem(mediumItem);
+    addItem(easyItem);
 
     const DifficultyProfile::Difficulty difficulty = Game::instance().difficultyProfile().difficulty();
     switch (difficulty)
