@@ -86,7 +86,7 @@ public:
                    int hRes, int vRes, bool fullScreen, int width, int height, std::wstring text = L"")
       : MenuItem(width, height, text)
       , m_confirmationMenu(confirmationMenu)
-      , m_saveResolutionAction(new SaveResolutionAction(*this, fullScreen))
+      , m_saveResolutionAction(std::make_shared<SaveResolutionAction>(*this, fullScreen))
       , m_hRes(hRes)
       , m_vRes(vRes)
     {
@@ -155,10 +155,10 @@ ResolutionMenu::ResolutionMenu(
     {
         std::wstringstream resString;
         resString << itemHRes << "x" << itemVRes;
-        ResolutionItem * resolution =
-          new ResolutionItem(m_confirmationMenu, itemHRes, itemVRes, fullScreen, width, itemHeight, resString.str());
-        resolution->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *resolution)));
-        addItem(MTFH::MenuItemPtr(resolution));
+        const auto resolution =
+          std::make_shared<ResolutionItem>(m_confirmationMenu, itemHRes, itemVRes, fullScreen, width, itemHeight, resString.str());
+        resolution->setView(std::make_shared<TextMenuItemView>(20, *resolution));
+        addItem(resolution);
 
         itemHRes -= fullHRes / numResolutions;
         itemVRes -= fullVRes / numResolutions;
@@ -171,7 +171,7 @@ ResolutionMenu::ResolutionMenu(
 
 void ResolutionMenu::enter()
 {
-    setCurrentIndex(itemCount() - 1);
+    setCurrentIndex(static_cast<int>(itemCount()) - 1);
 
     // Set the current active resolution selected
     for (unsigned int i = 0; i < itemCount(); i++)
