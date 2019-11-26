@@ -28,15 +28,15 @@
 
 ConfirmationMenu::ConfirmationMenu(std::string id, int width, int height)
   : SurfaceMenu("settingsBack", id, width, height, MTFH::Menu::Style::HorizontalList, false)
-  , m_acceptItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Ok").toStdWString()))
-  , m_cancelItem(new MTFH::MenuItem(width / 4, height, QObject::tr("Cancel").toStdWString()))
+  , m_acceptItem(std::make_shared<MTFH::MenuItem>(width / 4, height, QObject::tr("Ok").toStdWString()))
+  , m_cancelItem(std::make_shared<MTFH::MenuItem>(width / 4, height, QObject::tr("Cancel").toStdWString()))
   , m_text(L"")
 {
-    m_acceptItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_acceptItem)));
-    m_cancelItem->setView(MTFH::MenuItemViewPtr(new TextMenuItemView(20, *m_cancelItem)));
+    m_acceptItem->setView(std::make_shared<TextMenuItemView>(20, *m_acceptItem));
+    m_cancelItem->setView(std::make_shared<TextMenuItemView>(20, *m_cancelItem));
 
-    addItem(MTFH::MenuItemPtr(m_acceptItem));
-    addItem(MTFH::MenuItemPtr(m_cancelItem));
+    addItem(m_acceptItem);
+    addItem(m_cancelItem);
 }
 
 void ConfirmationMenu::setAcceptAction(MTFH::MenuItemActionPtr action)
@@ -75,12 +75,10 @@ void ConfirmationMenu::render()
     SurfaceMenu::render();
 
     MCTextureText text(m_text);
-
-    const int shadowY = -2;
-    const int shadowX = 2;
-
     text.setColor(MCGLColor(0.25, 0.75, 1.0, 1.0));
     text.setGlyphSize(20, 20);
+    const int shadowY = -2;
+    const int shadowX = 2;
     text.setShadowOffset(shadowX, shadowY);
 
     auto && font = MCAssetManager::textureFontManager().font(Game::instance().fontName());
