@@ -65,7 +65,7 @@ void Credits::render()
         m_textIndex = m_textIndex % m_texts.size();
     }
 
-    auto text = m_texts.at(m_textIndex);
+    auto && text = m_texts.at(m_textIndex);
     text.setGlyphSize(20, 20 * height() / 640);
     text.render(
       x() + width() / 2 - text.width(font()) / 2,

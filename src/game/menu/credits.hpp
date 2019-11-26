@@ -36,7 +36,7 @@ private:
 
     int m_time = 0;
 
-    int m_textIndex = 0;
+    size_t m_textIndex = 0;
 };
 
 #endif // CREDITS_HPP
