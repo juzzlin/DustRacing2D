@@ -133,8 +133,8 @@ void TrackItem::renderTiles()
 {
     const MapBase & rMap = m_track.trackData().map();
 
-    const int previewW = width();
-    const int previewH = height();
+    const auto previewW = width();
+    const auto previewH = height();
 
     // Set tileW and tileH so that they are squares
     float tileW = previewW / rMap.cols();
@@ -150,30 +150,25 @@ void TrackItem::renderTiles()
     }
 
     // Center the preview
-    int initX, initY;
+    float initX;
     if (rMap.cols() % 2 == 0)
     {
-        initX = x() - rMap.cols() * tileW / 2 + tileW / 4;
+        initX = x() - rMap.cols() * tileW / 2 + tileW / 4 + menu()->x();
     }
     else
     {
-        initX = x() - rMap.cols() * tileW / 2;
+        initX = x() - rMap.cols() * tileW / 2 + menu()->x();
     }
 
-    initY = y() - rMap.rows() * tileH / 2;
-
-    initX += menu()->x();
-    initY += menu()->y();
-
     // Loop through the visible tile matrix and draw the tiles
-    float tileY = initY;
-    for (unsigned int j = 0; j < rMap.rows(); j++)
+    float tileY = y() - rMap.rows() * tileH / 2 + menu()->y();
+    for (size_t j = 0; j < rMap.rows(); j++)
     {
         float tileX = initX;
-        for (unsigned int i = 0; i < rMap.cols(); i++)
+        for (size_t i = 0; i < rMap.cols(); i++)
         {
-            auto tile = std::static_pointer_cast<TrackTile>(rMap.getTile(i, j));
-            auto surface = tile->previewSurface();
+            const auto tile = std::static_pointer_cast<TrackTile>(rMap.getTile(i, j));
+            const auto surface = tile->previewSurface();
             if (surface && !tile->excludeFromMinimap())
             {
                 surface->setShaderProgram(Renderer::instance().program("menu"));
@@ -220,9 +215,9 @@ void TrackItem::renderStars()
 {
     if (!m_track.trackData().isLocked())
     {
-        const int starW = m_star.width();
-        const int starH = m_star.height();
-        const int startX = menu()->x() + x() - 5 * starW + starW / 2;
+        const auto starW = m_star.width();
+        const auto starH = m_star.height();
+        const auto startX = menu()->x() + x() - 5 * starW + starW / 2;
         const MCGLColor yellow(1.0, 1.0, 0.0);
         const MCGLColor grey(.75, .75, .75);
 
@@ -257,17 +252,12 @@ void TrackItem::renderLock()
 
 void TrackItem::renderTrackProperties()
 {
+    std::wstringstream ss;
     MCTextureText text(L"");
-
+    text.setGlyphSize(20, 20);
     const int shadowY = -2;
     const int shadowX = 2;
-
-    std::wstringstream ss;
-    text.setGlyphSize(20, 20);
     text.setShadowOffset(shadowX, shadowY);
-
-    const int textX = menu()->x() + x();
-    int maxWidth = 0;
 
     std::vector<MCTextureText> texts;
 
@@ -276,7 +266,7 @@ void TrackItem::renderTrackProperties()
     ss << QObject::tr("       Laps: ").toStdWString() << Game::instance().lapCount();
     text.setText(ss.str());
     text.setGlyphSize(20, 20);
-    maxWidth = std::fmax(maxWidth, text.width(m_font));
+    float maxWidth = text.width(m_font);
     texts.push_back(text);
 
     ss.str(L"");
@@ -302,10 +292,11 @@ void TrackItem::renderTrackProperties()
     }
 
     const float yPos = menu()->y() + y() - height() / 2;
-    float lineHeight = text.height(m_font);
+    const float lineHeight = text.height(m_font);
     int line = 2;
     for (auto && text : texts)
     {
+        const auto textX = menu()->x() + x();
         text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
         line++;
     }
