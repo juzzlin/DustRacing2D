@@ -170,10 +170,10 @@ void KeyConfigMenu::addPlayerTwoConfig(int width, int height)
           MenuManager::instance().pushMenu(PRESS_KEY_MENU_ID);
       });
 
-    addItem(MTFH::MenuItemPtr(playerTwoBrake));
-    addItem(MTFH::MenuItemPtr(playerTwoAccelerate));
-    addItem(MTFH::MenuItemPtr(playerTwoTurnRight));
-    addItem(MTFH::MenuItemPtr(playerTwoTurnLeft));
+    addItem(playerTwoBrake);
+    addItem(playerTwoAccelerate);
+    addItem(playerTwoTurnRight);
+    addItem(playerTwoTurnLeft);
 }
 
 KeyConfigMenu::~KeyConfigMenu() = default;
