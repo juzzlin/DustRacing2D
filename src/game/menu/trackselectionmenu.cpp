@@ -324,7 +324,7 @@ TrackSelectionMenu::TrackSelectionMenu(int width, int height, Scene & scene)
 
 void TrackSelectionMenu::addTrack(std::shared_ptr<Track> track)
 {
-    auto item = MTFH::MenuItemPtr(new TrackItem(width() / 2, height() / 2, track));
+    const auto item = std::make_shared<TrackItem>(width() / 2, height() / 2, track);
     item->setPos(width() / 2, height() / 2);
     addItem(item);
     setCurrentIndex(0);
