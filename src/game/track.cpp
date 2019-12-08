@@ -39,7 +39,7 @@ Track::Track(std::unique_ptr<TrackData> trackData)
   , m_height(m_rows * TrackTile::TILE_H)
   , m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
 {
-    assert(trackData);
+    assert(m_trackData);
 }
 
 size_t Track::width() const
