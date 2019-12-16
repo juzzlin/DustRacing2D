@@ -422,14 +422,14 @@ void Scene::setupAI(Track & activeTrack)
     }
 }
 
-void Scene::setActiveTrack(Track & activeTrack)
+void Scene::setActiveTrack(std::shared_ptr<Track> activeTrack)
 {
-    m_activeTrack = &activeTrack;
+    m_activeTrack = activeTrack;
 
     // Remove previous objects
     m_world.clear();
 
-    setupCameras(activeTrack);
+    setupCameras(*activeTrack);
 
     setWorldDimensions();
 
@@ -443,7 +443,7 @@ void Scene::setActiveTrack(Track & activeTrack)
 
     initializeRace();
 
-    setupAI(activeTrack);
+    setupAI(*activeTrack);
 
     setupMinimaps();
 }
@@ -566,13 +566,12 @@ void Scene::resizeOverlays()
 void Scene::initializeRace()
 {
     assert(m_activeTrack);
-    m_race.init(*m_activeTrack, m_game.lapCount());
+    m_race.init(m_activeTrack, m_game.lapCount());
 }
 
-Track & Scene::activeTrack() const
+std::shared_ptr<Track> Scene::activeTrack() const
 {
-    assert(m_activeTrack);
-    return *m_activeTrack;
+    return m_activeTrack;
 }
 
 MTFH::MenuPtr Scene::trackSelectionMenu() const

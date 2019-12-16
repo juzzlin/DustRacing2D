@@ -33,10 +33,10 @@ public:
     TrackSelectionMenu(int width, int height, Scene & scene);
 
     //! Add a track to the list of selectable tracks.
-    void addTrack(Track & track);
+    void addTrack(std::shared_ptr<Track> track);
 
     //! Returns the selected track or nullptr.
-    Track * selectedTrack() const;
+    std::shared_ptr<Track> selectedTrack() const;
 
     //! \reimp
     virtual void left() override;
@@ -57,7 +57,7 @@ public:
     virtual void selectCurrentItem() override;
 
 private:
-    Track * m_selectedTrack;
+    std::shared_ptr<Track> m_selectedTrack;
 
     Scene & m_scene;
 

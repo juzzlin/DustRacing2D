@@ -99,7 +99,7 @@ void Race::createStartGridObjects()
     }
 }
 
-void Race::init(Track & track, int lapCount)
+void Race::init(std::shared_ptr<Track> track, int lapCount)
 {
     setTrack(track, lapCount);
 
@@ -662,10 +662,10 @@ Car & Race::getLoser() const
     return *bestCar;
 }
 
-void Race::setTrack(Track & track, int lapCount)
+void Race::setTrack(std::shared_ptr<Track> track, int lapCount)
 {
     m_lapCount = lapCount;
-    m_track = &track;
+    m_track = track;
     m_bestPos = Settings::instance().loadBestPos(*m_track, m_lapCount, m_game.difficultyProfile().difficulty());
 
     for (OffTrackDetectorPtr otd : m_offTrackDetectors)

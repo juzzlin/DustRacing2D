@@ -47,7 +47,7 @@ public:
     virtual ~Race();
 
     //! Init the race.
-    void init(Track & track, int lapCount);
+    void init(std::shared_ptr<Track>, int lapCount);
 
     //! Return true, if race has started.
     bool started();
@@ -113,7 +113,7 @@ private:
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
-    void setTrack(Track & track, int lapCount);
+    void setTrack(std::shared_ptr<Track>, int lapCount);
 
     void translateCarsToStartPositions();
 
@@ -150,7 +150,7 @@ private:
 
     Timing m_timing;
 
-    Track * m_track;
+    std::shared_ptr<Track> m_track;
 
     bool m_started;
 

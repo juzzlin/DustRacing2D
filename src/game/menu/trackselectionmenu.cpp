@@ -53,7 +53,7 @@ std::string TrackSelectionMenu::MenuId = "trackSelection";
 class TrackItem : public MTFH::MenuItem
 {
 public:
-    TrackItem(int width, int height, Track & track)
+    TrackItem(int width, int height, std::shared_ptr<Track> track)
       : MenuItem(width, height)
       , m_game(Game::instance())
       , m_track(track)
@@ -70,7 +70,7 @@ public:
         m_lock.setShaderProgram(program);
     }
 
-    Track & track() const
+    std::shared_ptr<Track> track() const
     {
         return m_track;
     }
@@ -103,7 +103,7 @@ private:
 
     Game & m_game;
 
-    Track & m_track;
+    std::shared_ptr<Track> m_track;
 
     MCTextureFont & m_font;
 
@@ -122,16 +122,16 @@ private:
 
 void TrackItem::updateData()
 {
-    m_lapRecord = Settings::instance().loadLapRecord(m_track);
+    m_lapRecord = Settings::instance().loadLapRecord(*m_track);
     m_raceRecord = Settings::instance().loadRaceRecord(
-      m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+      *m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
     m_bestPos = Settings::instance().loadBestPos(
-      m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+      *m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
 }
 
 void TrackItem::renderTiles()
 {
-    const MapBase & rMap = m_track.trackData().map();
+    const MapBase & rMap = m_track->trackData().map();
 
     const auto previewW = width();
     const auto previewH = height();
@@ -174,7 +174,7 @@ void TrackItem::renderTiles()
                 surface->setShaderProgram(Renderer::instance().program("menu"));
                 surface->bind();
 
-                if (m_track.trackData().isLocked())
+                if (m_track->trackData().isLocked())
                 {
                     surface->setColor(MCGLColor(0.5, 0.5, 0.5));
                 }
@@ -204,7 +204,7 @@ void TrackItem::renderTitle()
     const int shadowX = 2;
 
     std::wstringstream ss;
-    ss << m_track.trackData().name().toUpper().toStdWString();
+    ss << m_track->trackData().name().toUpper().toStdWString();
     text.setText(ss.str());
     text.setGlyphSize(30, 30);
     text.setShadowOffset(shadowX, shadowY);
@@ -213,7 +213,7 @@ void TrackItem::renderTitle()
 
 void TrackItem::renderStars()
 {
-    if (!m_track.trackData().isLocked())
+    if (!m_track->trackData().isLocked())
     {
         const auto starW = m_star.width();
         const auto starH = m_star.height();
@@ -244,7 +244,7 @@ void TrackItem::renderStars()
 
 void TrackItem::renderLock()
 {
-    if (m_track.trackData().isLocked())
+    if (m_track->trackData().isLocked())
     {
         m_lock.render(nullptr, MCVector3dF(menu()->x() + x(), menu()->y() + y(), 0), 0);
     }
@@ -271,12 +271,12 @@ void TrackItem::renderTrackProperties()
 
     ss.str(L"");
     ss << QObject::tr("     Length: ").toStdWString()
-       << int(m_track.trackData().route().geometricLength() * MCWorld::metersPerUnit());
+       << int(m_track->trackData().route().geometricLength() * MCWorld::metersPerUnit());
     text.setText(ss.str());
     maxWidth = std::fmax(maxWidth, text.width(m_font));
     texts.push_back(text);
 
-    if (!m_track.trackData().isLocked())
+    if (!m_track->trackData().isLocked())
     {
         ss.str(L"");
         ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
@@ -317,13 +317,12 @@ void TrackItem::render()
 
 TrackSelectionMenu::TrackSelectionMenu(int width, int height, Scene & scene)
   : SurfaceMenu("trackSelectionBack", MenuId, width, height, Menu::Style::ShowMany, true, true, true)
-  , m_selectedTrack(nullptr)
   , m_scene(scene)
 {
     setWrapAround(false);
 }
 
-void TrackSelectionMenu::addTrack(Track & track)
+void TrackSelectionMenu::addTrack(std::shared_ptr<Track> track)
 {
     auto item = MTFH::MenuItemPtr(new TrackItem(width() / 2, height() / 2, track));
     item->setPos(width() / 2, height() / 2);
@@ -386,16 +385,16 @@ void TrackSelectionMenu::exit()
 void TrackSelectionMenu::selectCurrentItem()
 {
     Menu::selectCurrentItem();
-    auto && selection = std::static_pointer_cast<TrackItem>(currentItem())->track();
-    if (!selection.trackData().isLocked())
+    auto && selectedTrack = std::static_pointer_cast<TrackItem>(currentItem())->track();
+    if (!selectedTrack->trackData().isLocked())
     {
-        m_selectedTrack = &selection;
-        m_scene.setActiveTrack(*m_selectedTrack);
+        m_selectedTrack = selectedTrack;
+        m_scene.setActiveTrack(m_selectedTrack);
         setIsDone(true);
     }
 }
 
-Track * TrackSelectionMenu::selectedTrack() const
+std::shared_ptr<Track> TrackSelectionMenu::selectedTrack() const
 {
     return m_selectedTrack;
 }

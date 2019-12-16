@@ -402,7 +402,7 @@ void Game::initScene()
     // Add tracks to the menu.
     for (unsigned int i = 0; i < m_trackLoader->tracks(); i++)
     {
-        trackSelectionMenu->addTrack(*m_trackLoader->track(i));
+        trackSelectionMenu->addTrack(m_trackLoader->track(i));
     }
 
     // Set the current game scene. Renderer calls render()

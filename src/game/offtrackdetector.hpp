@@ -16,6 +16,8 @@
 #ifndef OFFTRACKDETECTOR_HPP
 #define OFFTRACKDETECTOR_HPP
 
+#include <memory>
+
 #include <MCVector2d>
 
 class Car;
@@ -30,7 +32,7 @@ public:
     OffTrackDetector(Car & car);
 
     //! Set the current track.
-    void setTrack(Track & track);
+    void setTrack(std::shared_ptr<Track> track);
 
     //! Update.
     void update();
@@ -41,7 +43,7 @@ private:
 
     Car & m_car;
 
-    Track * m_track;
+    std::shared_ptr<Track> m_track;
 
     float m_tileWLimit;
 

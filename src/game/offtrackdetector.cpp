@@ -30,9 +30,9 @@ OffTrackDetector::OffTrackDetector(Car & car)
 {
 }
 
-void OffTrackDetector::setTrack(Track & track)
+void OffTrackDetector::setTrack(std::shared_ptr<Track> track)
 {
-    m_track = &track;
+    m_track = track;
 }
 
 void OffTrackDetector::update()

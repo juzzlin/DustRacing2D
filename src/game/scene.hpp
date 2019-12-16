@@ -84,10 +84,10 @@ public:
     void updateOverlays();
 
     //! Set the active race track.
-    void setActiveTrack(Track & activeTrack);
+    void setActiveTrack(std::shared_ptr<Track> activeTrack);
 
     //! Return the active race track.
-    Track & activeTrack() const;
+    std::shared_ptr<Track> activeTrack() const;
 
     //! Return track selection menu.
     MTFH::MenuPtr trackSelectionMenu() const;
@@ -167,7 +167,7 @@ private:
 
     Race m_race;
 
-    Track * m_activeTrack;
+    std::shared_ptr<Track> m_activeTrack;
 
     MCWorld & m_world;
 
