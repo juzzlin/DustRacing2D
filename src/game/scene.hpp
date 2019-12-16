@@ -171,9 +171,9 @@ private:
 
     MCWorld & m_world;
 
-    CrashOverlay m_crashOverlay[2];
+    std::array<CrashOverlay, 2> m_crashOverlay;
 
-    TimingOverlay m_timingOverlay[2];
+    std::array<TimingOverlay, 2> m_timingOverlay;
 
     std::unique_ptr<Startlights> m_startlights;
 
@@ -181,9 +181,9 @@ private:
 
     std::unique_ptr<CheckeredFlag> m_checkeredFlag;
 
-    MCCamera m_camera[2];
+    std::array<MCCamera, 2> m_camera;
 
-    float m_cameraOffset[2];
+    std::array<float, 2> m_cameraOffset;
 
     MTFH::MenuPtr m_mainMenu;
 
@@ -195,7 +195,7 @@ private:
 
     std::unique_ptr<FadeAnimation> m_fadeAnimation;
 
-    Minimap m_minimap[2];
+    std::array<Minimap, 2> m_minimap;
 
     using CarVector = std::vector<CarPtr>;
     CarVector m_cars;

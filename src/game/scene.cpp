@@ -129,10 +129,10 @@ void Scene::connectComponents()
 
 void Scene::initializeComponents()
 {
-    for (int i = 0; i < 2; i++)
+    for (size_t i = 0; i < 2; i++)
     {
-        m_cameraOffset[i] = 0.0f;
-        m_timingOverlay[i].setRace(m_race);
+        m_cameraOffset.at(i) = 0.0f;
+        m_timingOverlay.at(i).setRace(m_race);
     }
 
     m_checkeredFlag->setDimensions(width(), height());
@@ -205,12 +205,12 @@ void Scene::createCars()
 
     if (m_game.hasTwoHumanPlayers())
     {
-        m_timingOverlay[1].setCarToFollow(*m_cars.at(1));
-        m_crashOverlay[1].setCarToFollow(*m_cars.at(1));
+        m_timingOverlay.at(1).setCarToFollow(*m_cars.at(1));
+        m_crashOverlay.at(1).setCarToFollow(*m_cars.at(1));
     }
 
-    m_timingOverlay[0].setCarToFollow(*m_cars.at(0));
-    m_crashOverlay[0].setCarToFollow(*m_cars.at(0));
+    m_timingOverlay.at(0).setCarToFollow(*m_cars.at(0));
+    m_crashOverlay.at(0).setCarToFollow(*m_cars.at(0));
 }
 
 void Scene::setupMinimaps()
@@ -220,7 +220,7 @@ void Scene::setupMinimaps()
 
     for (size_t i = 0; i < 2; i++)
     {
-        m_minimap[i].initialize(*m_cars[i], m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, minimapSize);
+        m_minimap.at(i).initialize(*m_cars.at(i), m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, minimapSize);
     }
 }
 
@@ -271,12 +271,12 @@ void Scene::updateFrame(InputHandler & handler, int step)
             {
                 for (size_t i = 0; i < 2; i++)
                 {
-                    updateCameraLocation(m_camera[i], m_cameraOffset[i], *m_cars.at(i));
+                    updateCameraLocation(m_camera.at(i), m_cameraOffset.at(i), *m_cars.at(i));
                 }
             }
             else
             {
-                updateCameraLocation(m_camera[0], m_cameraOffset[0], *m_cars.at(0));
+                updateCameraLocation(m_camera.at(0), m_cameraOffset.at(0), *m_cars.at(0));
             }
         }
     }
@@ -296,12 +296,12 @@ void Scene::updateOverlays()
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        m_timingOverlay[1].update();
-        m_crashOverlay[1].update();
+        m_timingOverlay.at(1).update();
+        m_crashOverlay.at(1).update();
     }
 
-    m_timingOverlay[0].update();
-    m_crashOverlay[0].update();
+    m_timingOverlay.at(0).update();
+    m_crashOverlay.at(0).update();
 
     m_messageOverlay->update();
 }
@@ -317,7 +317,7 @@ void Scene::updateRace()
     // Update race situation
     m_race.update();
 
-    emit listenerLocationChanged(m_cars[0]->location().i(), m_cars[0]->location().j());
+    emit listenerLocationChanged(m_cars.at(0)->location().i(), m_cars.at(0)->location().j());
 }
 
 void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & object)
@@ -390,27 +390,27 @@ void Scene::setupCameras(Track & activeTrack)
     m_world.renderer().removeParticleVisibilityCameras();
     if (m_game.hasTwoHumanPlayers())
     {
-        for (int i = 0; i < 2; i++)
+        for (size_t i = 0; i < 2; i++)
         {
             if (m_game.splitType() == Game::SplitType::Vertical)
             {
-                m_camera[i].init(
+                m_camera.at(i).init(
                   Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-                m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
+                m_world.renderer().addParticleVisibilityCamera(m_camera.at(i));
             }
             else
             {
-                m_camera[i].init(
+                m_camera.at(i).init(
                   Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
-                m_world.renderer().addParticleVisibilityCamera(m_camera[i]);
+                m_world.renderer().addParticleVisibilityCamera(m_camera.at(i));
             }
         }
     }
     else
     {
-        m_camera[0].init(
+        m_camera.at(0).init(
           Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
-        m_world.renderer().addParticleVisibilityCamera(m_camera[0]);
+        m_world.renderer().addParticleVisibilityCamera(m_camera.at(0));
     }
 }
 
@@ -541,25 +541,25 @@ void Scene::resizeOverlays()
     {
         if (m_game.splitType() == Game::SplitType::Vertical)
         {
-            for (int i = 0; i < 2; i++)
+            for (size_t i = 0; i < 2; i++)
             {
-                m_timingOverlay[i].setDimensions(width() / 2, height());
-                m_crashOverlay[i].setDimensions(width() / 2, height());
+                m_timingOverlay.at(i).setDimensions(width() / 2, height());
+                m_crashOverlay.at(i).setDimensions(width() / 2, height());
             }
         }
         else
         {
-            for (int i = 0; i < 2; i++)
+            for (size_t i = 0; i < 2; i++)
             {
-                m_timingOverlay[i].setDimensions(width(), height() / 2);
-                m_crashOverlay[i].setDimensions(width(), height() / 2);
+                m_timingOverlay.at(i).setDimensions(width(), height() / 2);
+                m_crashOverlay.at(i).setDimensions(width(), height() / 2);
             }
         }
     }
     else
     {
-        m_timingOverlay[0].setDimensions(width(), height());
-        m_crashOverlay[0].setDimensions(width(), height());
+        m_timingOverlay.at(0).setDimensions(width(), height());
+        m_crashOverlay.at(0).setDimensions(width(), height());
     }
 }
 
@@ -611,16 +611,16 @@ void Scene::renderTrack()
             auto & glScene = MCWorld::instance().renderer().glScene();
 
             glScene.setSplitType(p1);
-            m_activeTrack->render(m_camera[1]);
+            m_activeTrack->render(m_camera.at(1));
 
             glScene.setSplitType(p0);
-            m_activeTrack->render(m_camera[0]);
+            m_activeTrack->render(m_camera.at(0));
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
-            m_activeTrack->render(m_camera[0]);
+            m_activeTrack->render(m_camera.at(0));
         }
 
         break;
@@ -700,22 +700,22 @@ void Scene::renderHUD()
             auto & glScene = MCWorld::instance().renderer().glScene();
 
             glScene.setSplitType(p1);
-            m_timingOverlay[1].render();
-            m_minimap[1].render(m_cars, m_race);
-            m_crashOverlay[1].render();
+            m_timingOverlay.at(1).render();
+            m_minimap.at(1).render(m_cars, m_race);
+            m_crashOverlay.at(1).render();
 
             glScene.setSplitType(p0);
-            m_timingOverlay[0].render();
-            m_minimap[0].render(m_cars, m_race);
-            m_crashOverlay[0].render();
+            m_timingOverlay.at(0).render();
+            m_minimap.at(0).render(m_cars, m_race);
+            m_crashOverlay.at(0).render();
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
         {
-            m_timingOverlay[0].render();
-            m_minimap[0].render(m_cars, m_race);
-            m_crashOverlay[0].render();
+            m_timingOverlay.at(0).render();
+            m_minimap.at(0).render(m_cars, m_race);
+            m_crashOverlay.at(0).render();
         }
 
         break;
@@ -741,17 +741,17 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
 
             if (prepareRendering)
             {
-                m_world.prepareRendering(&m_camera[1]);
-                m_world.prepareRendering(&m_camera[0]);
+                m_world.prepareRendering(&m_camera.at(1));
+                m_world.prepareRendering(&m_camera.at(0));
             }
 
             auto & glScene = MCWorld::instance().renderer().glScene();
 
             glScene.setSplitType(p1);
-            m_world.render(&m_camera[1], renderGroup);
+            m_world.render(&m_camera.at(1), renderGroup);
 
             glScene.setSplitType(p0);
-            m_world.render(&m_camera[0], renderGroup);
+            m_world.render(&m_camera.at(0), renderGroup);
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
@@ -759,10 +759,10 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
         {
             if (prepareRendering)
             {
-                m_world.prepareRendering(&m_camera[0]);
+                m_world.prepareRendering(&m_camera.at(0));
             }
 
-            m_world.render(&m_camera[0], renderGroup);
+            m_world.render(&m_camera.at(0), renderGroup);
         }
 
         break;
