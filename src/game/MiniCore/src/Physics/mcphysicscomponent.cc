@@ -375,7 +375,7 @@ void MCPhysicsComponent::reset()
     m_angularVelocity = 0.0f;
     m_angularImpulse = 0.0f;
 
-    for (auto child : object().children())
+    for (auto && child : object().children())
     {
         child->physicsComponent().reset();
     }

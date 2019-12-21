@@ -29,11 +29,8 @@
 #include "mcvector3d.hh"
 #include "mcworld.hh"
 
-#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
-#include <vector>
 
 class MCShapeView;
 class MCSurface;
@@ -156,9 +153,8 @@ public:
     //! Return whether the object is a physics object.
     bool isPhysicsObject() const;
 
-    /*! Override the default physics component.
-     *  MCObject will take the ownership. */
-    void setPhysicsComponent(MCPhysicsComponent & physicsComponent);
+    /*! Override the default physics component. */
+    void setPhysicsComponent(std::unique_ptr<MCPhysicsComponent> physicsComponent);
 
     /*! \brief The physics component of the object.
      *  All physics functionality is accessed via this component. */
@@ -283,7 +279,7 @@ public:
     typedef std::vector<MCObjectPtr> Children;
     const Children & children() const;
 
-    //! Get parent or self;
+    //! \return parent or self
     MCObject & parent() const;
 
     /*! Set parent relative rotation ("yaw") angle about Z-axis.
@@ -314,107 +310,22 @@ protected:
     virtual void outOfBoundariesEvent(MCOutOfBoundariesEvent & event);
 
 private:
-    float calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos);
-
-    /*! Cache range of objectGrid cells the object is touching.
-     *  Used by MCObjectGrid. */
     void cacheIndexRange(size_t i0, size_t i1, size_t j0, size_t j1);
 
-    void checkXBoundariesAndSendEvent(float minX, float maxX);
-
-    void checkYBoundariesAndSendEvent(float minY, float maxY);
-
-    void checkZBoundariesAndSendEvent();
-
-    void doRotate(float newAngle);
-
-    void rotateShape(float angle);
-
-    /*! Return true, if object is to be removed.
-     *  Used by MCWorld. */
-    bool removing() const;
-
-    /*! Get cached index range.
-     *  Used by MCObjectGrid. */
     void restoreIndexRange(size_t * i0, size_t * i1, size_t * j0, size_t * j1);
 
-    /*! Set index in worlds' object vector.
-     *  Used by MCWorld. */
     void setIndex(int index);
 
-    //! Set parent object. Used on composite objects.
-    void setParent(MCObject & parent);
-
-    /*! Set object to be removed. Objects cannot be removed immediately, because
-     *  they might be involved in collision calculations of other objects yet to
-     *  be completed. Used by MCWorld. */
     void setRemoving(bool flag);
 
-    void updateChildTransforms();
+    bool removing() const;
 
-    void updateCenter();
+    class Impl;
+    std::unique_ptr<Impl> m_impl;
 
-    void setStatus(int bit, bool flag);
-
-    bool testStatus(int bit) const;
-
-    static MCTypeRegistry m_typeRegistry;
-
-    size_t m_typeId;
-
-    std::string m_typeName;
-
-    float m_angle = 0; // Degrees
-
-    float m_relativeAngle = 0; // Degrees
-
-    int m_collisionLayer = 0;
-
-    int m_index = -1;
-
-    size_t m_i0 = 0;
-
-    size_t m_i1 = 0;
-
-    size_t m_j0 = 0;
-
-    size_t m_j1 = 0;
-
-    MCVector3dF m_initialLocation;
-
-    int m_initialAngle = 0;
-
-    MCVector3dF m_location;
-
-    MCVector3dF m_relativeLocation;
-
-    MCVector2dF m_initialCenter;
-
-    MCVector2dF m_center;
-
-    bool m_centerIsZero = false;
-
-    MCShapePtr m_shape;
-
-    typedef std::vector<MCObject *> TimerEventObjectsList;
-
-    static TimerEventObjectsList m_timerEventObjects;
-
-    MCObject::ContactHash m_contacts;
-
-    int m_timerEventObjectsIndex = -1;
-
-    int m_status;
-
-    Children m_children;
-
-    MCObject * m_parent;
-
-    MCPhysicsComponent * m_physicsComponent;
-
-    //! Disable copy constructor and assignment.
     DISABLE_COPY(MCObject);
     DISABLE_ASSI(MCObject);
+    DISABLE_MOVE(MCObject);
 
     friend class MCObjectGrid;
     friend class MCObjectGridImpl;

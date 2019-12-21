@@ -23,7 +23,10 @@
 //! Disable copy constructor
 #define DISABLE_COPY(className) className(const className & r) = delete
 
-//! Disable assignment / assignment
+//! Disable assignment
 #define DISABLE_ASSI(className) className & operator=(const className & r) = delete
+
+//! Disable move
+#define DISABLE_MOVE(className) className & operator=(const className && r) = delete
 
 #endif // MCMACROS_HH

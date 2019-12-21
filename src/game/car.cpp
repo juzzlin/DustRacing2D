@@ -82,7 +82,7 @@ Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
   , m_gearbox(new Gearbox)
 {
     // Override the default physics component to handle damage from impulses
-    setPhysicsComponent(*(new CarPhysicsComponent(*this)));
+    setPhysicsComponent(std::make_unique<CarPhysicsComponent>(*this));
 
     setProperties(desc);
 
