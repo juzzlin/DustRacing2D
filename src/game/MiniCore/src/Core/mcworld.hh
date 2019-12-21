@@ -86,7 +86,7 @@ public:
       float maxZ,
       float metersPerUnit = 1.0f,
       bool addAreaWalls = true,
-      int gridSize = 128);
+      size_t gridSize = 128);
 
     /*! Set gravity vector used by default friction generators (on XY-plane).
      *  The default is [0, 0, -9.81]. Set the gravity (acceleration) for objects
@@ -173,20 +173,20 @@ public:
     //! Get maximum Z
     float maxZ() const;
 
-    //! \return size of the current integration vector
-    int objectCount() const;
-
     /*! \brief Set collision resolver loop count.
      *  Lower loop count results in faster collision calculations, but lower accuracy. */
-    void setResolverLoopCount(unsigned int resolverLoopCount = 5);
+    void setResolverLoopCount(size_t resolverLoopCount = 5);
 
-protected:
+    //! \return size of the current integration vector
+    size_t objectCount() const;
+
     //! Get registered objects
-    ObjectVector objects() const;
+    const ObjectVector & objects() const;
 
 private:
     DISABLE_COPY(MCWorld);
     DISABLE_ASSI(MCWorld);
+    DISABLE_MOVE(MCWorld);
 
     void integrate(int step);
 
@@ -220,7 +220,7 @@ private:
 
     float m_minX, m_maxX, m_minY, m_maxY, m_minZ, m_maxZ;
 
-    MCWorld::ObjectVector m_objs;
+    MCWorld::ObjectVector m_objects;
 
     MCWorld::ObjectVector m_removeObjs;
 
@@ -232,9 +232,9 @@ private:
 
     std::unique_ptr<MCObject> m_bottomWallObject;
 
-    unsigned int m_numCollisions;
+    size_t m_numCollisions;
 
-    unsigned int m_resolverLoopCount;
+    size_t m_resolverLoopCount;
 
     float m_resolverStep;
 
