@@ -20,8 +20,6 @@
 #include "renderer.hpp"
 #include "tracktile.hpp"
 
-#include "../contrib/SimpleLogger/src/simple_logger.hpp"
-
 #include <MCAssetManager>
 #include <MCCollisionEvent>
 #include <MCObjectFactory>
@@ -35,14 +33,18 @@ namespace {
 static const float RAIL_Z = 16;
 } // namespace
 
-class BridgeTrigger : public MCObject
+Bridge::ObjectStatusMap Bridge::m_onBridgeStatusMap;
+
+Bridge::ObjectStatusMap Bridge::m_underBridgeStatusMap;
+
+class UnderBridgeTrigger : public MCObject
 {
 public:
-    BridgeTrigger(Bridge & bridge)
-      : MCObject("bridgeTrigger")
+    UnderBridgeTrigger(Bridge & bridge)
+      : MCObject("under_bridge_trigger")
       , m_bridge(bridge)
     {
-        setShape(MCShapePtr(new MCRectShape(nullptr, 16, 224)));
+        setShape(MCShapePtr(new MCRectShape(nullptr, TrackTile::width() - TrackTile::width() / 8, TrackTile::height() + TrackTile::height() / 8)));
 
         setCollisionLayer(-1);
         setIsPhysicsObject(false);
@@ -56,14 +58,14 @@ public:
     {
         if (!event.collidingObject().physicsComponent().isStationary())
         {
-            m_bridge.enterObject(event.collidingObject());
+            m_bridge.objectUnderBridge(event.collidingObject(), true);
         }
     }
 
     //! \reimp
     inline void separationEvent(MCSeparationEvent & event) override
     {
-        m_bridge.exitObject(event.separatedObject());
+        m_bridge.objectUnderBridge(event.separatedObject(), false);
     }
 
 private:
@@ -81,10 +83,10 @@ Bridge::Bridge()
 
     physicsComponent().setMass(0, true);
 
-    const auto bridgeRailId = "bridgeRail";
+    const auto bridgeRailId = "bridge_rail";
     auto && railSurface = MCAssetManager::instance().surfaceManager().surface("wallLong");
     const auto rail0 = std::make_shared<MCObject>(railSurface, bridgeRailId);
-    const int railYDisplacement = 110;
+    const int railYDisplacement = 42 * static_cast<int>(TrackTile::height()) / 100;
     addChildObject(rail0, MCVector3dF(0, -railYDisplacement, RAIL_Z));
     const auto rail1 = std::make_shared<MCObject>(railSurface, bridgeRailId);
     addChildObject(rail1, MCVector3dF(0, railYDisplacement, RAIL_Z));
@@ -98,11 +100,8 @@ Bridge::Bridge()
     rail1->physicsComponent().setMass(0, true);
     rail1->shape()->view()->setShaderProgram(railShader);
 
-    const auto trigger0 = std::make_shared<BridgeTrigger>(*this);
-    const int triggerXDisplacement = static_cast<int>(TrackTile::width()) / 2;
-    addChildObject(trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
-    const auto trigger1 = std::make_shared<BridgeTrigger>(*this);
-    addChildObject(trigger1, MCVector3dF(triggerXDisplacement, 0, 0));
+    const auto underBridgeTrigger = std::make_shared<UnderBridgeTrigger>(*this);
+    addChildObject(underBridgeTrigger, MCVector3dF(0, 0, 0));
 
     MCMeshObjectData data("bridge");
     data.setMeshId("bridge");
@@ -133,20 +132,13 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
     if (!event.collidingObject().physicsComponent().isStationary())
     {
         const auto object = &event.collidingObject();
-        if (m_edgeCount.count(object))
+        juzzlin::L().debug() << "Object " << object->index() << " collided with bridge " << index();
+        if (!Bridge::m_underBridgeStatusMap[object].count(this))
         {
-            m_edgeCount[object]++;
-
-            if (m_edgeCount[object] >= 2)
-            {
-                juzzlin::L().debug() << "Object " << object->index() << " is on bridge";
-                object->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
-                raiseObject(*object, true);
-            }
-        }
-        else
-        {
-            m_edgeCount[object] = 1;
+            Bridge::m_onBridgeStatusMap[object].insert(this);
+            juzzlin::L().debug() << "Raising object " << object->index();
+            object->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+            raiseObject(*object, true);
         }
     }
 }
@@ -154,51 +146,36 @@ void Bridge::collisionEvent(MCCollisionEvent & event)
 void Bridge::separationEvent(MCSeparationEvent & event)
 {
     const auto object = &event.separatedObject();
-    if (m_edgeCount.count(object))
+    juzzlin::L().debug() << "Object " << object->index() << " separated with bridge " << index();
+    Bridge::m_onBridgeStatusMap[object].erase(this);
+    if (Bridge::m_onBridgeStatusMap[object].empty())
     {
-        juzzlin::L().debug() << "Object " << object->index() << " is exiting bridge";
-        m_edgeCount[object]--;
-
-        if (m_edgeCount[object] <= 0)
-        {
-            doExitObject(*object);
-        }
+        juzzlin::L().debug() << "Lowering object " << object->index();
+        object->setCollisionLayer(0); // MCObject default collision layer
+        object->physicsComponent().preventSleeping(false);
+        raiseObject(*object, false);
     }
 }
 
-void Bridge::enterObject(MCObject & object)
+void Bridge::objectUnderBridge(MCObject & object, bool isUnder)
 {
-    if (m_edgeCount.count(&object))
+    if (isUnder)
     {
-        m_edgeCount[&object]++;
+        if (!Bridge::m_onBridgeStatusMap[&object].count(this))
+        {
+            juzzlin::L().debug() << "Object " << object.index() << " under bridge " << index();
+            Bridge::m_underBridgeStatusMap[&object].insert(this);
+        }
     }
     else
     {
-        m_edgeCount[&object] = 1;
-    }
-
-    juzzlin::L().debug() << "Object " << object.index() << " is entering trigger";
-}
-
-void Bridge::exitObject(MCObject & object)
-{
-    if (m_edgeCount.count(&object))
-    {
-        juzzlin::L().debug() << "Object " << object.index() << " is exiting trigger";
-        m_edgeCount[&object]--;
-
-        if (m_edgeCount[&object] <= 0)
-        {
-            doExitObject(object);
-        }
+        juzzlin::L().debug() << "Object " << object.index() << " not under bridge " << index();
+        Bridge::m_underBridgeStatusMap[&object].erase(this);
     }
 }
 
-void Bridge::doExitObject(MCObject & object)
+void Bridge::reset()
 {
-    m_edgeCount[&object] = 0;
-    juzzlin::L().debug() << "Object " << object.index() << " is off bridge";
-    object.setCollisionLayer(0); // MCObject default collision layer
-    object.physicsComponent().preventSleeping(false);
-    raiseObject(object, false);
+    Bridge::m_onBridgeStatusMap.clear();
+    Bridge::m_underBridgeStatusMap.clear();
 }

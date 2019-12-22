@@ -538,6 +538,8 @@ void Scene::createBridgeObjects()
             }
         }
     }
+
+    Bridge::reset();
 }
 
 void Scene::resizeOverlays()

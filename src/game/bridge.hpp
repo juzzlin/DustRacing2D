@@ -28,22 +28,24 @@ class Bridge : public MCObject
 public:
     Bridge();
 
-    void enterObject(MCObject & object);
-
-    void exitObject(MCObject & object);
-
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
 
     //! \reimp
     virtual void separationEvent(MCSeparationEvent & event) override;
 
+    void objectUnderBridge(MCObject & object, bool isUnder);
+
+    static void reset();
+
 private:
     void doExitObject(MCObject & object);
 
     void raiseObject(MCObject & object, bool raise);
 
-    std::map<MCObject *, int> m_edgeCount;
+    using ObjectStatusMap = std::map<MCObject *, std::set<Bridge *>>;
+    static ObjectStatusMap m_onBridgeStatusMap;
+    static ObjectStatusMap m_underBridgeStatusMap;
 };
 
 #endif // BRIDGE_HPP
