@@ -14,7 +14,9 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
+#include "carparticleeffectmanager.hpp"
 #include "carphysicscomponent.hpp"
+#include "carsoundeffectmanager.hpp"
 #include "game.hpp"
 #include "gearbox.hpp"
 #include "graphicsfactory.hpp"
@@ -70,7 +72,7 @@ Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
   , m_routeProgression(0)
   , m_position(0)
   , m_isHuman(isHuman)
-  , m_particleEffectManager(*this)
+  , m_particleEffectManager(std::make_unique<CarParticleEffectManager>(*this))
   , m_numberPos(-5, 0, 0)
   , m_leftFrontTirePos(14, 9, 0)
   , m_rightFrontTirePos(14, -9, 0)
@@ -293,7 +295,7 @@ MCVector3dF Car::rightRearTireLocation() const
 
 void Car::updateAnimations()
 {
-    m_particleEffectManager.update();
+    m_particleEffectManager->update();
 
     if (m_soundEffectManager)
     {
@@ -361,7 +363,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
 {
     if (!event.collidingObject().isTriggerObject())
     {
-        m_particleEffectManager.collision(event);
+        m_particleEffectManager->collision(event);
         m_soundEffectManager->collision(event);
     }
 

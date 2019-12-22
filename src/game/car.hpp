@@ -20,11 +20,10 @@
 #include <MCObject>
 #include <MCVector2d>
 
-#include "carparticleeffectmanager.hpp"
-#include "carsoundeffectmanager.hpp"
-
 #include <memory>
 
+class CarParticleEffectManager;
+class CarSoundEffectManager;
 class Gearbox;
 class MCSurface;
 class MCFrictionGenerator;
@@ -156,6 +155,7 @@ public:
 
     bool hadHardCrash();
 
+    using CarSoundEffectManagerPtr = std::shared_ptr<CarSoundEffectManager>;
     void setSoundEffectManager(CarSoundEffectManagerPtr soundEffectManager);
 
     CarSoundEffectManagerPtr soundEffectManager() const;
@@ -235,7 +235,7 @@ private:
 
     bool m_isHuman;
 
-    CarParticleEffectManager m_particleEffectManager;
+    std::unique_ptr<CarParticleEffectManager> m_particleEffectManager;
 
     CarSoundEffectManagerPtr m_soundEffectManager;
 
