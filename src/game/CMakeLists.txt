@@ -46,7 +46,6 @@ set(SRC
     ai.cpp
     application.cpp
     bridge.cpp
-    bridgetrigger.cpp
     car.cpp
     carfactory.cpp
     carparticleeffectmanager.cpp

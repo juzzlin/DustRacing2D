@@ -14,7 +14,6 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "bridge.hpp"
-#include "bridgetrigger.hpp"
 #include "car.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
@@ -33,6 +32,41 @@
 namespace {
 static const float RAIL_Z = 16;
 } // namespace
+
+class BridgeTrigger : public MCObject
+{
+public:
+    BridgeTrigger(Bridge & bridge)
+      : MCObject("bridgeTrigger")
+      , m_bridge(bridge)
+    {
+        setShape(MCShapePtr(new MCRectShape(nullptr, 16, 224)));
+
+        setCollisionLayer(-1);
+        setIsPhysicsObject(false);
+        setIsTriggerObject(true);
+
+        physicsComponent().setMass(0, true);
+    }
+
+    //! \reimp
+    virtual void collisionEvent(MCCollisionEvent & event) override
+    {
+        if (!event.collidingObject().physicsComponent().isStationary())
+        {
+            m_bridge.enterObject(event.collidingObject());
+        }
+    }
+
+    //! \reimp
+    inline void separationEvent(MCSeparationEvent & event) override
+    {
+        m_bridge.exitObject(event.separatedObject());
+    }
+
+private:
+    Bridge & m_bridge;
+};
 
 Bridge::Bridge()
   : MCObject("bridge")

@@ -22,8 +22,6 @@
 class MCCollisionEvent;
 class MCSeparationEvent;
 class MCSurface;
-class BridgeTrigger;
-class Car;
 
 class Bridge : public MCObject
 {

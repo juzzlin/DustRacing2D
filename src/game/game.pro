@@ -70,7 +70,6 @@ HEADERS += \
     ai.hpp \
     application.hpp \
     bridge.hpp \
-    bridgetrigger.hpp \
     car.hpp \
     carfactory.hpp \
     carparticleeffectmanager.hpp \
@@ -246,7 +245,6 @@ SOURCES += \
     ai.cpp \
     application.cpp \
     bridge.cpp \
-    bridgetrigger.cpp \
     car.cpp \
     carfactory.cpp \
     carparticleeffectmanager.cpp \
