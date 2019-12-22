@@ -35,8 +35,8 @@ Track::Track(std::unique_ptr<TrackData> trackData)
   : m_trackData(std::move(trackData))
   , m_rows(m_trackData->map().rows())
   , m_cols(m_trackData->map().cols())
-  , m_width(m_cols * TrackTile::TILE_W)
-  , m_height(m_rows * TrackTile::TILE_H)
+  , m_width(m_cols * TrackTile::width())
+  , m_height(m_rows * TrackTile::height())
   , m_asphalt(MCAssetManager::surfaceManager().surface("asphalt"))
 {
     assert(m_trackData);
@@ -140,8 +140,8 @@ void Track::renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i
 
     // Loop through the visible tile matrix and draw the tiles
     size_t x;
-    size_t y = j0 * TrackTile::TILE_H;
-    const size_t initX = i0 * TrackTile::TILE_W;
+    size_t y = j0 * TrackTile::height();
+    const size_t initX = i0 * TrackTile::width();
     for (size_t j = j0; j <= j2; j++)
     {
         x = initX;
@@ -153,14 +153,14 @@ void Track::renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i
                 x1 = x;
                 y1 = y;
                 camera.mapToCamera(x1, y1);
-                prog->setTransform(0, MCVector3dF(x1 + TrackTile::TILE_W / 2, y1 + TrackTile::TILE_H / 2, 0));
+                prog->setTransform(0, MCVector3dF(x1 + TrackTile::width() / 2, y1 + TrackTile::height() / 2, 0));
                 m_asphalt.render();
             }
 
-            x += TrackTile::TILE_W;
+            x += TrackTile::width();
         }
 
-        y += TrackTile::TILE_H;
+        y += TrackTile::height();
     }
 }
 
@@ -181,9 +181,9 @@ void Track::renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0,
     auto && map = m_trackData->map();
 
     // Loop through the visible tile matrix and sort the tiles.
-    size_t initX = i0 * TrackTile::TILE_W;
+    size_t initX = i0 * TrackTile::width();
     size_t x;
-    size_t y = j0 * TrackTile::TILE_H;
+    size_t y = j0 * TrackTile::height();
     for (size_t j = j0; j <= j2; j++)
     {
         x = initX;
@@ -199,10 +199,10 @@ void Track::renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0,
                 sortedTiles[surface].push_back({ tile.get(), x1, y1 });
             }
 
-            x += TrackTile::TILE_W;
+            x += TrackTile::width();
         }
 
-        y += TrackTile::TILE_H;
+        y += TrackTile::height();
     }
 
     // Render the tiles.
@@ -218,8 +218,8 @@ void Track::renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0,
             y1 = iter.second[i].y1;
 
             const auto tile = iter.second[i].tile;
-            prog->setTransform(tile->rotation(), MCVector3dF(x1 + TrackTile::TILE_W / 2, y1 + TrackTile::TILE_H / 2, 0));
-            prog->setScale(TrackTile::TILE_W / surface->width(), TrackTile::TILE_H / surface->height(), 1.0f);
+            prog->setTransform(tile->rotation(), MCVector3dF(x1 + TrackTile::width() / 2, y1 + TrackTile::height() / 2, 0));
+            prog->setScale(TrackTile::width() / surface->width(), TrackTile::height() / surface->height(), 1.0f);
             surface->render();
         }
     }

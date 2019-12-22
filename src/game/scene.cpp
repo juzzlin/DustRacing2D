@@ -526,7 +526,7 @@ void Scene::createBridgeObjects()
             if (tile && tile->tileTypeEnum() == TrackTile::TileType::Bridge)
             {
                 const auto bridge = std::make_shared<Bridge>();
-                bridge->translate(MCVector3dF(i * TrackTile::TILE_W + TrackTile::TILE_W / 2, j * TrackTile::TILE_H + TrackTile::TILE_H / 2, 0));
+                bridge->translate(MCVector3dF(i * TrackTile::width() + TrackTile::width() / 2, j * TrackTile::height() + TrackTile::height() / 2, 0));
                 bridge->rotate(tile->rotation());
                 bridge->addToWorld();
                 m_bridges.push_back(bridge);

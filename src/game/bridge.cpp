@@ -14,9 +14,11 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "bridge.hpp"
+#include "../contrib/SimpleLogger/src/simple_logger.hpp"
 #include "car.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
+#include "tracktile.hpp"
 
 #include "../contrib/SimpleLogger/src/simple_logger.hpp"
 
@@ -71,8 +73,7 @@ private:
 Bridge::Bridge()
   : MCObject("bridge")
 {
-    const int width = 256;
-    setShape(std::make_shared<MCRectShape>(nullptr, width, width));
+    setShape(std::make_shared<MCRectShape>(nullptr, TrackTile::width(), TrackTile::height()));
 
     setCollisionLayer(-1);
     setIsPhysicsObject(false);
@@ -96,7 +97,7 @@ Bridge::Bridge()
     rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
 
     const auto trigger0 = std::make_shared<BridgeTrigger>(*this);
-    const int triggerXDisplacement = width / 2;
+    const int triggerXDisplacement = TrackTile::width() / 2;
     addChildObject(trigger0, MCVector3dF(-triggerXDisplacement, 0, 0));
     const auto trigger1 = std::make_shared<BridgeTrigger>(*this);
     addChildObject(trigger1, MCVector3dF(triggerXDisplacement, 0, 0));

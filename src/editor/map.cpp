@@ -55,8 +55,8 @@ void Map::createEmptyTiles()
             if (!getTile(i, j))
             {
                 const auto newTile = std::make_shared<TrackTile>(
-                  QPointF(TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                          TrackTile::TILE_H / 2 + j * TrackTile::TILE_H),
+                  QPointF(TrackTile::width() / 2 + i * TrackTile::width(),
+                          TrackTile::height() / 2 + j * TrackTile::height()),
                   QPoint(static_cast<int>(i), static_cast<int>(j)));
                 setTile(i, j, newTile);
             }
@@ -64,8 +64,8 @@ void Map::createEmptyTiles()
             {
                 getTile(i, j)->setLocation(
                   QPointF(
-                    TrackTile::TILE_W / 2 + i * TrackTile::TILE_W,
-                    TrackTile::TILE_H / 2 + j * TrackTile::TILE_H));
+                    TrackTile::width() / 2 + i * TrackTile::width(),
+                    TrackTile::height() / 2 + j * TrackTile::height()));
                 getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i), static_cast<int>(j)));
             }
         }
@@ -81,7 +81,7 @@ void Map::moveTilesAfterColumnDeletion(size_t at)
             const QPointF location(getTile(i, j)->location());
             getTile(i, j)->setLocation(
               QPointF(
-                location.x() - TrackTile::TILE_W,
+                location.x() - TrackTile::width(),
                 location.y()));
             getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i) - 1, static_cast<int>(j)));
         }
@@ -98,7 +98,7 @@ void Map::moveTilesAfterRowDeletion(size_t at)
             getTile(i, j)->setLocation(
               QPointF(
                 location.x(),
-                location.y() - TrackTile::TILE_H));
+                location.y() - TrackTile::height()));
             getTile(i, j)->setMatrixLocation(QPoint(static_cast<int>(i), static_cast<int>(j) - 1));
         }
     }

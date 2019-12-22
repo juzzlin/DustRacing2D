@@ -103,8 +103,8 @@ void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int
         tileY += m_tileH;
     }
 
-    m_sceneW = trackMap.cols() * TrackTile::TILE_W;
-    m_sceneH = trackMap.rows() * TrackTile::TILE_H;
+    m_sceneW = trackMap.cols() * TrackTile::width();
+    m_sceneH = trackMap.rows() * TrackTile::height();
 
     m_size = MCVector3dF(trackMap.cols() * m_tileW, trackMap.rows() * m_tileH);
 }

@@ -446,12 +446,12 @@ void Mediator::updateCoordinates(QPointF mappedPos)
     if (m_editorData->trackData())
     {
         const int maxCols = static_cast<int>(m_editorData->trackData()->map().cols());
-        int column = mappedPos.x() / TrackTile::TILE_W;
+        int column = mappedPos.x() / TrackTile::width();
         column = column >= maxCols ? maxCols - 1 : column;
         column = column < 0 ? 0 : column;
 
         const int maxRows = static_cast<int>(m_editorData->trackData()->map().rows());
-        int row = mappedPos.y() / TrackTile::TILE_H;
+        int row = mappedPos.y() / TrackTile::height();
         row = row >= maxRows ? maxRows - 1 : row;
         row = row < 0 ? 0 : row;
 

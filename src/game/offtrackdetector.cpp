@@ -25,8 +25,8 @@
 OffTrackDetector::OffTrackDetector(Car & car)
   : m_car(car)
   , m_track(nullptr)
-  , m_tileWLimit(TrackTile::TILE_W / 2 - TrackTile::TILE_W / 10)
-  , m_tileHLimit(TrackTile::TILE_H / 2 - TrackTile::TILE_H / 10)
+  , m_tileWLimit(TrackTile::width() / 2 - TrackTile::width() / 10)
+  , m_tileHLimit(TrackTile::height() / 2 - TrackTile::height() / 10)
 {
 }
 

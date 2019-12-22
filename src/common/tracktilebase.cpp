@@ -60,6 +60,16 @@ const QString & TrackTileBase::tileType() const
     return m_tileType;
 }
 
+size_t TrackTileBase::width()
+{
+    return 256;
+}
+
+size_t TrackTileBase::height()
+{
+    return 256;
+}
+
 void TrackTileBase::setComputerHint(TrackTileBase::ComputerHint hint)
 {
     m_computerHint = hint;

@@ -59,7 +59,7 @@ void AI::update(bool isRaceCompleted)
 
 void AI::setRandomTolerance()
 {
-    m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::TILE_W / 8;
+    m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::width() / 8;
 }
 
 void AI::steerControl(TargetNodeBasePtr tnode)

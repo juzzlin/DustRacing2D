@@ -145,9 +145,9 @@ void TrackData::moveObjectsAfterColumnInsertion(size_t at)
 {
     for (auto && object : m_objects)
     {
-        if (object->location().x() > TrackTile::TILE_W * at)
+        if (object->location().x() > TrackTile::width() * at)
         {
-            object->setLocation(QPointF(object->location().x() + TrackTile::TILE_W, object->location().y()));
+            object->setLocation(QPointF(object->location().x() + TrackTile::width(), object->location().y()));
         }
     }
 }
@@ -156,9 +156,9 @@ void TrackData::moveObjectsAfterRowInsertion(size_t at)
 {
     for (auto && object : m_objects)
     {
-        if (object->location().y() > TrackTile::TILE_H * at)
+        if (object->location().y() > TrackTile::height() * at)
         {
-            object->setLocation(QPointF(object->location().x(), object->location().y() + TrackTile::TILE_H));
+            object->setLocation(QPointF(object->location().x(), object->location().y() + TrackTile::height()));
         }
     }
 }
@@ -167,9 +167,9 @@ void TrackData::moveTargetNodesAfterColumnInsertion(size_t at)
 {
     for (auto && targetNode : m_route)
     {
-        if (targetNode->location().x() > TrackTile::TILE_W * at)
+        if (targetNode->location().x() > TrackTile::width() * at)
         {
-            targetNode->setLocation(QPointF(targetNode->location().x() + TrackTile::TILE_W, targetNode->location().y()));
+            targetNode->setLocation(QPointF(targetNode->location().x() + TrackTile::width(), targetNode->location().y()));
         }
     }
 }
@@ -178,9 +178,9 @@ void TrackData::moveTargetNodesAfterRowInsertion(size_t at)
 {
     for (auto && targetNode : m_route)
     {
-        if (targetNode->location().y() > TrackTile::TILE_H * at)
+        if (targetNode->location().y() > TrackTile::height() * at)
         {
-            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() + TrackTile::TILE_H));
+            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() + TrackTile::height()));
         }
     }
 }
@@ -189,9 +189,9 @@ void TrackData::moveObjectsAfterColumnDeletion(size_t at)
 {
     for (auto && object : m_objects)
     {
-        if (object->location().x() > TrackTile::TILE_W * at)
+        if (object->location().x() > TrackTile::width() * at)
         {
-            object->setLocation(QPointF(object->location().x() - TrackTile::TILE_W, object->location().y()));
+            object->setLocation(QPointF(object->location().x() - TrackTile::width(), object->location().y()));
         }
     }
 }
@@ -200,9 +200,9 @@ void TrackData::moveObjectsAfterRowDeletion(size_t at)
 {
     for (auto && object : m_objects)
     {
-        if (object->location().y() > TrackTile::TILE_H * at)
+        if (object->location().y() > TrackTile::height() * at)
         {
-            object->setLocation(QPointF(object->location().x(), object->location().y() - TrackTile::TILE_H));
+            object->setLocation(QPointF(object->location().x(), object->location().y() - TrackTile::height()));
         }
     }
 }
@@ -211,9 +211,9 @@ void TrackData::moveTargetNodesAfterColumnDeletion(size_t at)
 {
     for (auto && targetNode : m_route)
     {
-        if (targetNode->location().x() > TrackTile::TILE_W * at)
+        if (targetNode->location().x() > TrackTile::width() * at)
         {
-            targetNode->setLocation(QPointF(targetNode->location().x() - TrackTile::TILE_W, targetNode->location().y()));
+            targetNode->setLocation(QPointF(targetNode->location().x() - TrackTile::width(), targetNode->location().y()));
         }
     }
 }
@@ -222,9 +222,9 @@ void TrackData::moveTargetNodesAfterRowDeletion(size_t at)
 {
     for (auto && targetNode : m_route)
     {
-        if (targetNode->location().y() > TrackTile::TILE_H * at)
+        if (targetNode->location().y() > TrackTile::height() * at)
         {
-            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() - TrackTile::TILE_H));
+            targetNode->setLocation(QPointF(targetNode->location().x(), targetNode->location().y() - TrackTile::height()));
         }
     }
 }

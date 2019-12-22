@@ -50,8 +50,8 @@ void EditorView::updateSceneRect()
     const QRectF newSceneRect(
       0,
       0,
-      m_mediator.cols() * TrackTile::TILE_W,
-      m_mediator.rows() * TrackTile::TILE_H);
+      m_mediator.cols() * TrackTile::width(),
+      m_mediator.rows() * TrackTile::height());
 
     setSceneRect(newSceneRect);
 
@@ -682,7 +682,7 @@ void EditorView::changeTileType(TrackTile & tile, QAction * action)
 void EditorView::setTileType(TrackTile & tile, QAction * action)
 {
     tile.setTileType(action->data().toString());
-    tile.setPixmap(action->icon().pixmap(TrackTile::TILE_W, TrackTile::TILE_H));
+    tile.setPixmap(action->icon().pixmap(TrackTile::width(), TrackTile::height()));
 }
 
 void EditorView::wheelEvent(QWheelEvent * event)

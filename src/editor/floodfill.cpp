@@ -23,7 +23,7 @@ namespace FloodFill {
 void setTileType(TrackTile & tile, QAction * action)
 {
     tile.setTileType(action->data().toString());
-    tile.setPixmap(action->icon().pixmap(TrackTile::TILE_W, TrackTile::TILE_H));
+    tile.setPixmap(action->icon().pixmap(TrackTile::width(), TrackTile::height()));
 }
 } // namespace FloodFill
 

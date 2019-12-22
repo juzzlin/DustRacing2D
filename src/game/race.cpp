@@ -178,10 +178,10 @@ void Race::translateCarsToStartPositions()
     {
         const float startTileX = finishLine->location().x();
         const float startTileY = finishLine->location().y();
-        const float tileWidth = TrackTile::TILE_W;
-        const float tileHeight = TrackTile::TILE_H;
-        const float spacing = 0.75 * TrackTile::TILE_W;
-        const float oddOffset = TrackTile::TILE_W / 8;
+        const float tileWidth = TrackTile::width();
+        const float tileHeight = TrackTile::height();
+        const float spacing = 0.75f * TrackTile::width();
+        const float oddOffset = TrackTile::width() / 8;
         const float gridOffset = 24;
 
         // Reverse order
@@ -388,7 +388,7 @@ void Race::updateRouteProgress(Car & car)
     unsigned int nextTargetNodeIndex = car.nextTargetNodeIndex();
     auto tnode = route.get(currentTargetNodeIndex);
     // Give a bit more tolerance for other than the finishing check point.
-    const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::TILE_H / 20);
+    const int tolerance = (currentTargetNodeIndex == 0 ? 0 : TrackTile::height() / 20);
 
     // Car still racing
     if (m_timing.isActive(car.index()))

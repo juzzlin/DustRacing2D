@@ -29,7 +29,7 @@ TrackTile * TrackTile::m_activeTile = nullptr;
 
 TrackTile::TrackTile(QPointF location, QPoint matrixLocation, const QString & type)
   : TrackTileBase(location, matrixLocation, type)
-  , m_size(QSizeF(TILE_W, TILE_H))
+  , m_size(QSizeF(width(), height()))
   , m_active(false)
   , m_animator(new TileAnimator(this))
   , m_added(false)

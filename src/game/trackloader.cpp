@@ -318,7 +318,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     const int y = element.attribute(DataKeywords::Object::y, "0").toInt();
 
     // Height of the map.
-    const int h = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
+    const int h = static_cast<int>(newData.map().rows() * TrackTile::height());
 
     // The y-coordinates needs to be mirrored, because the y-axis is pointing
     // down in the editor's coordinate system.
@@ -342,7 +342,7 @@ void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std
 {
     // Height of the map. The y-coordinates needs to be mirrored, because
     // the coordinate system is y-wise mirrored in the editor.
-    const int mapHeight = static_cast<int>(newData.map().rows() * TrackTile::TILE_H);
+    const int mapHeight = static_cast<int>(newData.map().rows() * TrackTile::height());
 
     auto targetNode = std::make_shared<TargetNodeBase>();
     targetNode->setIndex(element.attribute(DataKeywords::Node::index, "0").toInt());
