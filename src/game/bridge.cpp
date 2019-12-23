@@ -89,12 +89,14 @@ Bridge::Bridge()
     const auto rail1 = std::make_shared<MCObject>(railSurface, bridgeRailId);
     addChildObject(rail1, MCVector3dF(0, railYDisplacement, RAIL_Z));
 
-    rail0->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    const auto railLayer = static_cast<int>(Layers::Collision::BridgeRails);
+    rail0->setCollisionLayer(railLayer);
     rail0->physicsComponent().setMass(0, true);
-    rail0->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
-    rail1->setCollisionLayer(static_cast<int>(Layers::Collision::BridgeRails));
+    const auto railShader = Renderer::instance().program("defaultSpecular");
+    rail0->shape()->view()->setShaderProgram(railShader);
+    rail1->setCollisionLayer(railLayer);
     rail1->physicsComponent().setMass(0, true);
-    rail1->shape()->view()->setShaderProgram(Renderer::instance().program("defaultSpecular"));
+    rail1->shape()->view()->setShaderProgram(railShader);
 
     const auto trigger0 = std::make_shared<BridgeTrigger>(*this);
     const int triggerXDisplacement = static_cast<int>(TrackTile::width()) / 2;
