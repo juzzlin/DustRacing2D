@@ -158,33 +158,33 @@ void CarParticleEffectManager::doOffTrackAnimations()
     }
 }
 
-void CarParticleEffectManager::collision(const MCCollisionEvent & event)
+void CarParticleEffectManager::collision(size_t typeId, const MCVector3dF & contactPoint)
 {
     if (m_car.physicsComponent().velocity().lengthFast() > 4.0f)
     {
         // Check if the car is colliding with another car.
-        if (event.collidingObject().typeId() == m_car.typeId())
+        const size_t particles = 10;
+        if (typeId == m_car.typeId())
         {
-            for (int i = 0; i < 10; i++)
+            for (size_t i = 0; i < particles; i++)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                                                       event.contactPoint(), m_car.physicsComponent().velocity() * 0.75f);
+                                                       contactPoint, m_car.physicsComponent().velocity() * 0.75f);
             }
         }
         // Check if the car is colliding with hard stationary objects.
-        else if (
-          event.collidingObject().typeId() == MCObject::typeId("crate") || event.collidingObject().typeId() == MCObject::typeId("dustRacing2DBanner") || event.collidingObject().typeId() == MCObject::typeId("grandstand") || event.collidingObject().typeId() == MCObject::typeId("wall") || event.collidingObject().typeId() == MCObject::typeId("wallLong") || event.collidingObject().typeId() == MCObject::typeId("rock"))
+        else if (typeId == MCObject::typeId("crate") || typeId == MCObject::typeId("dustRacing2DBanner") || typeId == MCObject::typeId("grandstand") || typeId == MCObject::typeId("wall") || typeId == MCObject::typeId("wallLong") || typeId == MCObject::typeId("rock"))
         {
-            for (int i = 0; i < 10; i++)
+            for (size_t i = 0; i < particles; i++)
             {
                 ParticleFactory::instance().doParticle(ParticleFactory::Sparkle,
-                                                       event.contactPoint(), m_car.physicsComponent().velocity() * 0.5f);
+                                                       contactPoint, m_car.physicsComponent().velocity() * 0.5f);
             }
         }
-        else if (event.collidingObject().typeId() == MCObject::typeId("tree"))
+        else if (typeId == MCObject::typeId("tree"))
         {
             ParticleFactory::instance().doParticle(ParticleFactory::Leaf,
-                                                   event.contactPoint(), m_car.physicsComponent().velocity() * 0.1f);
+                                                   contactPoint, m_car.physicsComponent().velocity() * 0.1f);
         }
     }
 }

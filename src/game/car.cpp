@@ -295,6 +295,13 @@ MCVector3dF Car::rightRearTireLocation() const
 
 void Car::updateAnimations()
 {
+    for (auto && collision : m_collisionEffectStack)
+    {
+        m_particleEffectManager->collision(collision.first->typeId(), collision.second);
+        m_soundEffectManager->collision(*collision.first);
+    }
+    m_collisionEffectStack.clear();
+
     m_particleEffectManager->update();
 
     if (m_soundEffectManager)
@@ -363,8 +370,7 @@ void Car::collisionEvent(MCCollisionEvent & event)
 {
     if (!event.collidingObject().isTriggerObject())
     {
-        m_particleEffectManager->collision(event);
-        m_soundEffectManager->collision(event);
+        m_collisionEffectStack.push_back({ &event.collidingObject(), event.contactPoint() });
     }
 
     event.accept();

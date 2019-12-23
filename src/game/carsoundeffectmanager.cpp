@@ -106,26 +106,26 @@ void CarSoundEffectManager::processSkidSound()
     }
 }
 
-void CarSoundEffectManager::collision(const MCCollisionEvent & event)
+void CarSoundEffectManager::collision(MCObject & collidingObject)
 {
-    const MCVector3dF speedDiff(event.collidingObject().physicsComponent().velocity() - m_car.physicsComponent().velocity());
+    const MCVector3dF speedDiff(collidingObject.physicsComponent().velocity() - m_car.physicsComponent().velocity());
     if (!m_hitTimer.isActive() && speedDiff.lengthFast() > 4.0)
     {
-        if (event.collidingObject().typeId() == m_car.typeId() || event.collidingObject().typeId() == MCObject::typeId("grandstand") || event.collidingObject().typeId() == MCObject::typeId("tree") || event.collidingObject().typeId() == MCObject::typeId("rock"))
+        if (collidingObject.typeId() == m_car.typeId() || collidingObject.typeId() == MCObject::typeId("grandstand") || collidingObject.typeId() == MCObject::typeId("tree") || collidingObject.typeId() == MCObject::typeId("rock"))
         {
             emit locationChanged(m_handles.hitSoundHandle, m_car.location().i(), m_car.location().j());
             emit playRequested(m_handles.hitSoundHandle, false);
             m_hitTimer.start();
         }
         else if (
-          event.collidingObject().typeId() == MCObject::typeId("wall") || event.collidingObject().typeId() == MCObject::typeId("bridgeRail") || event.collidingObject().typeId() == MCObject::typeId("wallLong"))
+          collidingObject.typeId() == MCObject::typeId("wall") || collidingObject.typeId() == MCObject::typeId("bridgeRail") || collidingObject.typeId() == MCObject::typeId("wallLong"))
         {
             emit locationChanged("carHit2", m_car.location().i(), m_car.location().j());
             emit playRequested("carHit2", false);
             m_hitTimer.start();
         }
         else if (
-          event.collidingObject().typeId() == MCObject::typeId("dustRacing2DBanner") || event.collidingObject().typeId() == MCObject::typeId("brake") || event.collidingObject().typeId() == MCObject::typeId("crate") || event.collidingObject().typeId() == MCObject::typeId("left") || event.collidingObject().typeId() == MCObject::typeId("plant") || event.collidingObject().typeId() == MCObject::typeId("right") || event.collidingObject().typeId() == MCObject::typeId("tire"))
+          collidingObject.typeId() == MCObject::typeId("dustRacing2DBanner") || collidingObject.typeId() == MCObject::typeId("brake") || collidingObject.typeId() == MCObject::typeId("crate") || collidingObject.typeId() == MCObject::typeId("left") || collidingObject.typeId() == MCObject::typeId("plant") || collidingObject.typeId() == MCObject::typeId("right") || collidingObject.typeId() == MCObject::typeId("tire"))
         {
             emit locationChanged("carHit3", m_car.location().i(), m_car.location().j());
             emit playRequested("carHit3", false);

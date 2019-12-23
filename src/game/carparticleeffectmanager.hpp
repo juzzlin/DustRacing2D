@@ -32,7 +32,7 @@ public:
 
     void update();
 
-    void collision(const MCCollisionEvent & event);
+    void collision(size_t typeId, const MCVector3dF & contactPoint);
 
 private:
     void doDamageSmoke();

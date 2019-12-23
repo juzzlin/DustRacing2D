@@ -58,6 +58,7 @@ public:
 private:
     DISABLE_COPY(MCCollisionEvent);
     DISABLE_ASSI(MCCollisionEvent);
+    DISABLE_MOVE(MCCollisionEvent);
 
     MCObject & m_collidingObject;
 

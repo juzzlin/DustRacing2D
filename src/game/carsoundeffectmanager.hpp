@@ -25,7 +25,7 @@
 #include <memory>
 
 class Car;
-class MCCollisionEvent;
+class MCObject;
 
 /*! Manages sound effects, like the engine sound. These are connected
  *  to the AudioThread via Qt signals. */
@@ -50,7 +50,7 @@ public:
 
     void update();
 
-    void collision(const MCCollisionEvent & event);
+    void collision(MCObject & collidingObject);
 
 public slots:
 
@@ -64,12 +64,19 @@ private:
     void processSkidSound();
 
     Car & m_car;
+
     int m_gear;
+
     int m_prevSpeed;
+
     MCVector3dF m_prevLocation;
+
     QTimer m_hitTimer;
+
     QTimer m_skidTimer;
+
     MultiSoundHandles m_handles;
+
     bool m_skidPlaying;
 };
 

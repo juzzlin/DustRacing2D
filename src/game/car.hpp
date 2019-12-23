@@ -16,10 +16,12 @@
 #ifndef CAR_HPP
 #define CAR_HPP
 
+#include <MCCollisionEvent>
 #include <MCForceGenerator>
 #include <MCObject>
 #include <MCVector2d>
 
+#include <deque>
 #include <memory>
 
 class CarParticleEffectManager;
@@ -272,6 +274,8 @@ private:
     bool m_acceleratorEnabled = false;
 
     bool m_brakeEnabled = false;
+
+    std::deque<std::pair<MCObject *, MCVector3dF>> m_collisionEffectStack;
 };
 
 typedef std::shared_ptr<Car> CarPtr;
