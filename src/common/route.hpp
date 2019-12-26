@@ -49,16 +49,16 @@ public:
     void buildFromVector(RouteVector & routeVector);
 
     //! Return number of target nodes.
-    unsigned int numNodes() const;
+    size_t numNodes() const;
 
     //! Return Target for the given index.
-    TargetNodeBasePtr get(unsigned int index) const;
+    TargetNodeBasePtr get(size_t index) const;
 
     //! Get all nodes.
     void getAll(RouteVector & routeVector) const;
 
     //! Return length based on target node locations.
-    unsigned int geometricLength() const;
+    double geometricLength() const;
 
     RouteVector::iterator begin();
 

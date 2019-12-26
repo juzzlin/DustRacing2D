@@ -67,10 +67,6 @@ Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
   , m_absSpeed(0)
   , m_dx(0)
   , m_dy(0)
-  , m_currentTargetNodeIndex(-1)
-  , m_prevTargetNodeIndex(-1)
-  , m_routeProgression(0)
-  , m_position(0)
   , m_isHuman(isHuman)
   , m_particleEffectManager(std::make_unique<CarParticleEffectManager>(*this))
   , m_numberPos(-5, 0, 0)
@@ -509,56 +505,6 @@ bool Car::rightSideOffTrack() const
 bool Car::isOffTrack() const
 {
     return leftSideOffTrack() || rightSideOffTrack();
-}
-
-void Car::setNextTargetNodeIndex(int index)
-{
-    m_nextTargetNodeIndex = index;
-}
-
-int Car::nextTargetNodeIndex() const
-{
-    return m_nextTargetNodeIndex;
-}
-
-void Car::setCurrentTargetNodeIndex(int index)
-{
-    m_currentTargetNodeIndex = index;
-}
-
-int Car::currentTargetNodeIndex() const
-{
-    return m_currentTargetNodeIndex;
-}
-
-void Car::setPrevTargetNodeIndex(int index)
-{
-    m_prevTargetNodeIndex = index;
-}
-
-int Car::prevTargetNodeIndex() const
-{
-    return m_prevTargetNodeIndex;
-}
-
-void Car::setRouteProgression(int value)
-{
-    m_routeProgression = value;
-}
-
-void Car::setPosition(int value)
-{
-    m_position = value;
-}
-
-int Car::position() const
-{
-    return m_position;
-}
-
-int Car::routeProgression() const
-{
-    return m_routeProgression;
 }
 
 bool Car::isHuman() const

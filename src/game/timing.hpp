@@ -46,10 +46,10 @@ public:
     bool isActive(size_t index) const;
 
     //! \return the current lap for the given car.
-    int lap(size_t index) const;
+    size_t lap(size_t index) const;
 
     //! \return the lap for the leading car.
-    int leadersLap() const;
+    size_t leadersLap() const;
 
     //! \return the race time in msecs.
     int raceTime() const;
@@ -120,7 +120,7 @@ private:
 
         int recordRaceTime = 0; // Personal best
 
-        int lap = 0;
+        size_t lap = 0;
 
         bool raceCompleted = false;
 

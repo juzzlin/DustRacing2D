@@ -86,7 +86,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
   , m_stateMachine(stateMachine)
   , m_renderer(renderer)
   , m_messageOverlay(new MessageOverlay)
-  , m_race(game, NUM_CARS)
+  , m_race(std::make_shared<Race>(game, carCount()))
   , m_activeTrack(nullptr)
   , m_world(world)
   , m_startlights(new Startlights)
@@ -105,26 +105,26 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
 
 void Scene::connectComponents()
 {
-    connect(m_startlights.get(), &Startlights::raceStarted, &m_race, &Race::start);
+    connect(m_startlights.get(), &Startlights::raceStarted, m_race.get(), &Race::start);
     connect(m_startlights.get(), &Startlights::animationEnded, &m_stateMachine, &StateMachine::endStartlightAnimation);
 
     connect(&m_stateMachine, &StateMachine::startlightAnimationRequested, m_startlights.get(), &Startlights::beginAnimation);
     connect(&m_stateMachine, &StateMachine::fadeInRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeIn);
     connect(&m_stateMachine, &StateMachine::fadeOutRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeOut);
     connect(&m_stateMachine, &StateMachine::fadeOutFlashRequested, m_fadeAnimation.get(), &FadeAnimation::beginFadeOutFlash);
-    connect(&m_stateMachine, &StateMachine::soundsStopped, &m_race, &Race::stopEngineSounds);
+    connect(&m_stateMachine, &StateMachine::soundsStopped, m_race.get(), &Race::stopEngineSounds);
 
     connect(m_fadeAnimation.get(), &FadeAnimation::fadeValueChanged, &m_renderer, &Renderer::setFadeValue);
     connect(m_fadeAnimation.get(), &FadeAnimation::fadeInFinished, &m_stateMachine, &StateMachine::endFadeIn);
     connect(m_fadeAnimation.get(), &FadeAnimation::fadeOutFinished, &m_stateMachine, &StateMachine::endFadeOut);
 
-    connect(&m_race, &Race::finished, &m_stateMachine, &StateMachine::finishRace);
-    connect(&m_race, &Race::messageRequested, m_messageOverlay.get(), static_cast<void (MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
+    connect(m_race.get(), &Race::finished, &m_stateMachine, &StateMachine::finishRace);
+    connect(m_race.get(), &Race::messageRequested, m_messageOverlay.get(), static_cast<void (MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
 
     connect(m_startlights.get(), &Startlights::messageRequested, m_messageOverlay.get(), static_cast<void (MessageOverlay::*)(QString)>(&MessageOverlay::addMessage));
     connect(this, &Scene::listenerLocationChanged, &m_game.audioWorker(), &AudioWorker::setListenerLocation);
 
-    m_game.audioWorker().connectAudioSource(m_race);
+    m_game.audioWorker().connectAudioSource(*m_race);
 }
 
 void Scene::initializeComponents()
@@ -178,19 +178,19 @@ void Scene::setupAudio(Car & car, size_t index)
 
 void Scene::createCars()
 {
-    m_race.removeCars();
+    m_race->removeCars();
     m_cars.clear();
     m_ai.clear();
 
     // Create and add cars.
-    for (size_t i = 0; i < NUM_CARS; i++)
+    for (size_t i = 0; i < carCount(); i++)
     {
-        CarPtr car(CarFactory::buildCar(i, NUM_CARS, m_game));
+        CarPtr car(CarFactory::buildCar(i, carCount(), m_game));
         if (car)
         {
             if (!car->isHuman())
             {
-                m_ai.push_back(std::make_shared<AI>(*car));
+                m_ai.push_back(std::make_shared<AI>(*car, m_race));
             }
 
             car->shape()->view()->setShaderProgram(m_renderer.program("car"));
@@ -199,7 +199,7 @@ void Scene::createCars()
             setupAudio(*car, i);
 
             m_cars.push_back(car);
-            m_race.addCar(*car);
+            m_race->addCar(*car);
         }
     }
 
@@ -240,6 +240,11 @@ void Scene::setSize(int width, int height)
     Scene::m_height = height;
 }
 
+size_t Scene::carCount()
+{
+    return 12;
+}
+
 void Scene::createMenus()
 {
     m_menuManager.reset(new MTFH::MenuManager);
@@ -258,7 +263,7 @@ void Scene::updateFrame(InputHandler & handler, int step)
     {
         if (m_activeTrack)
         {
-            if (m_race.started())
+            if (m_race->started())
             {
                 processUserInput(handler);
                 updateAi();
@@ -315,7 +320,7 @@ void Scene::updateWorld(int timeStep)
 void Scene::updateRace()
 {
     // Update race situation
-    m_race.update();
+    m_race->update();
 
     emit listenerLocationChanged(m_cars.at(0)->location().i(), m_cars.at(0)->location().j());
 }
@@ -338,7 +343,7 @@ void Scene::processUserInput(InputHandler & handler)
         // Handle accelerating / braking
         if (handler.getActionState(i, InputHandler::Action::Down))
         {
-            if (!m_race.timing().raceCompleted(i))
+            if (!m_race->timing().raceCompleted(i))
             {
                 m_cars.at(i)->setBrakeEnabled(true);
             }
@@ -350,7 +355,7 @@ void Scene::processUserInput(InputHandler & handler)
 
         if (handler.getActionState(i, InputHandler::Action::Up))
         {
-            if (!m_race.timing().raceCompleted(i))
+            if (!m_race->timing().raceCompleted(i))
             {
                 m_cars.at(i)->setAcceleratorEnabled(true);
             }
@@ -378,9 +383,9 @@ void Scene::processUserInput(InputHandler & handler)
 
 void Scene::updateAi()
 {
-    for (AIPtr ai : m_ai)
+    for (auto && ai : m_ai)
     {
-        const bool isRaceCompleted = m_race.timing().raceCompleted(ai->car().index());
+        const bool isRaceCompleted = m_race->timing().raceCompleted(ai->car().index());
         ai->update(isRaceCompleted);
     }
 }
@@ -414,7 +419,7 @@ void Scene::setupCameras(Track & activeTrack)
     }
 }
 
-void Scene::setupAI(Track & activeTrack)
+void Scene::setupAI(std::shared_ptr<Track> activeTrack)
 {
     for (auto && ai : m_ai)
     {
@@ -443,7 +448,7 @@ void Scene::setActiveTrack(std::shared_ptr<Track> activeTrack)
 
     initializeRace();
 
-    setupAI(*activeTrack);
+    setupAI(activeTrack);
 
     setupMinimaps();
 }
@@ -454,12 +459,12 @@ void Scene::setWorldDimensions()
 
     // Update world dimensions according to the
     // active track.
-    const unsigned int minX = 0;
-    const unsigned int maxX = m_activeTrack->width();
-    const unsigned int minY = 0;
-    const unsigned int maxY = m_activeTrack->height();
-    const unsigned int minZ = 0;
-    const unsigned int maxZ = 1000;
+    const size_t minX = 0;
+    const size_t maxX = m_activeTrack->width();
+    const size_t minY = 0;
+    const size_t maxY = m_activeTrack->height();
+    const size_t minZ = 0;
+    const size_t maxZ = 1000;
 
     m_world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
 }
@@ -484,9 +489,9 @@ void Scene::createNormalObjects()
 {
     assert(m_activeTrack);
 
-    for (unsigned int i = 0; i < m_activeTrack->trackData().objects().count(); i++)
+    for (size_t i = 0; i < m_activeTrack->trackData().objects().count(); i++)
     {
-        auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
+        const auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
         assert(trackObject);
 
         MCObject & object = trackObject->object();
@@ -508,7 +513,7 @@ void Scene::createNormalObjects()
         if (auto pit = dynamic_cast<Pit *>(&object))
         {
             pit->reset();
-            connect(pit, &Pit::pitStop, &m_race, &Race::pitStop);
+            connect(pit, &Pit::pitStop, m_race.get(), &Race::pitStop);
         }
     }
 }
@@ -518,9 +523,9 @@ void Scene::createBridgeObjects()
     assert(m_activeTrack);
 
     const auto & map = m_activeTrack->trackData().map();
-    for (unsigned int j = 0; j <= map.rows(); j++)
+    for (size_t j = 0; j <= map.rows(); j++)
     {
-        for (unsigned int i = 0; i <= map.cols(); i++)
+        for (size_t i = 0; i <= map.cols(); i++)
         {
             auto tile = dynamic_pointer_cast<TrackTile>(map.getTile(i, j));
             if (tile && tile->tileTypeEnum() == TrackTile::TileType::Bridge)
@@ -566,7 +571,7 @@ void Scene::resizeOverlays()
 void Scene::initializeRace()
 {
     assert(m_activeTrack);
-    m_race.init(m_activeTrack, m_game.lapCount());
+    m_race->init(m_activeTrack, static_cast<size_t>(m_game.lapCount()));
 }
 
 std::shared_ptr<Track> Scene::activeTrack() const
@@ -668,7 +673,7 @@ void Scene::renderCommonHUD()
         // Setup for common scene
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
 
-        if (m_race.checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
+        if (m_race->checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
         {
             m_checkeredFlag->render();
         }
@@ -700,12 +705,12 @@ void Scene::renderHUD()
 
             glScene.setSplitType(p1);
             m_timingOverlay.at(1).render();
-            m_minimap.at(1).render(m_cars, m_race);
+            m_minimap.at(1).render(m_cars, *m_race);
             m_crashOverlay.at(1).render();
 
             glScene.setSplitType(p0);
             m_timingOverlay.at(0).render();
-            m_minimap.at(0).render(m_cars, m_race);
+            m_minimap.at(0).render(m_cars, *m_race);
             m_crashOverlay.at(0).render();
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
@@ -713,7 +718,7 @@ void Scene::renderHUD()
         else
         {
             m_timingOverlay.at(0).render();
-            m_minimap.at(0).render(m_cars, m_race);
+            m_minimap.at(0).render(m_cars, *m_race);
             m_crashOverlay.at(0).render();
         }
 

@@ -47,12 +47,12 @@ void Objects::clear()
     m_objects.clear();
 }
 
-unsigned int Objects::count() const
+size_t Objects::count() const
 {
-    return static_cast<int>(m_objects.size());
+    return m_objects.size();
 }
 
-ObjectBasePtr Objects::object(unsigned int index) const
+ObjectBasePtr Objects::object(size_t index) const
 {
     return m_objects.at(index);
 }

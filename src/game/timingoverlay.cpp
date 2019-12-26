@@ -49,8 +49,6 @@ TimingOverlay::TimingOverlay()
   , m_font(m_fontManager.font(Game::instance().fontName()))
   , m_text(L"")
   , m_car(nullptr)
-  , m_timing(nullptr)
-  , m_race(nullptr)
   , m_posTexts({ QObject::tr("---").toStdWString(),
                  QObject::tr("1st").toStdWString(),
                  QObject::tr("2nd").toStdWString(),
@@ -68,7 +66,7 @@ TimingOverlay::TimingOverlay()
   , m_showRaceTime(true)
   , m_showCarStatus(true)
 {
-    assert(Scene::NUM_CARS <= static_cast<int>(m_posTexts.size()) - 1);
+    assert(Scene::carCount() + 1 <= m_posTexts.size());
     m_text.setShadowOffset(2, -2);
 }
 
@@ -78,14 +76,13 @@ void TimingOverlay::setCarToFollow(const Car & car)
     m_carStatusView.setCarToFollow(car);
 }
 
-void TimingOverlay::setRace(Race & race)
+void TimingOverlay::setRace(std::shared_ptr<Race> race)
 {
-    m_race = &race;
-    m_timing = &m_race->timing();
+    m_race = race;
 
-    connect(m_timing, &Timing::lapRecordAchieved, this, &TimingOverlay::setLapRecord);
-    connect(m_timing, &Timing::raceRecordAchieved, this, &TimingOverlay::setRaceRecord);
-    connect(m_race, &Race::tiresChanged, this, static_cast<void (TimingOverlay::*)()>(&TimingOverlay::blinkCarStatus));
+    connect(&m_race->timing(), &Timing::lapRecordAchieved, this, &TimingOverlay::setLapRecord);
+    connect(&m_race->timing(), &Timing::raceRecordAchieved, this, &TimingOverlay::setRaceRecord);
+    connect(m_race.get(), &Race::tiresChanged, this, static_cast<void (TimingOverlay::*)()>(&TimingOverlay::blinkCarStatus));
 }
 
 void TimingOverlay::setLapRecord(int)
@@ -156,7 +153,7 @@ void TimingOverlay::blinkCarStatus(const Car & car)
 
 void TimingOverlay::render()
 {
-    if (m_car && m_timing && m_race)
+    if (m_car && m_race)
     {
         renderCurrentLap();
 
@@ -178,8 +175,8 @@ void TimingOverlay::render()
 
 void TimingOverlay::renderCurrentLap()
 {
-    const int leadersLap = m_timing->leadersLap() + 1;
-    const int laps = m_race->lapCount();
+    const auto leadersLap = m_race->timing().leadersLap() + 1;
+    const auto laps = m_race->lapCount();
 
     m_text.setGlyphSize(GLYPH_W_POS, GLYPH_H_POS);
 
@@ -194,9 +191,9 @@ void TimingOverlay::renderCurrentLap()
 
 void TimingOverlay::renderPosition()
 {
-    const int pos = m_car->position();
-    const int lap = m_timing->lap(m_car->index()) + 1;
-    const int leadersLap = m_timing->leadersLap() + 1;
+    const auto pos = m_race->position(*m_car);
+    const auto lap = m_race->timing().lap(m_car->index()) + 1;
+    const auto leadersLap = m_race->timing().leadersLap() + 1;
 
     m_text.setGlyphSize(GLYPH_W_POS, GLYPH_H_POS);
 
@@ -205,7 +202,7 @@ void TimingOverlay::renderPosition()
     ss << QObject::tr(" POS:").toStdWString();
     ss << m_posTexts.at(pos);
 
-    const int lapDiff = leadersLap - lap;
+    const int lapDiff = static_cast<int>(leadersLap) - static_cast<int>(lap);
     if (lapDiff > 0)
     {
         ss << "+"
@@ -244,7 +241,7 @@ void TimingOverlay::renderSpeed()
         m_text.setText(ss.str());
         m_text.setGlyphSize(40, 40);
 
-        const int h = m_text.height(m_font);
+        const int h = static_cast<int>(m_text.height(m_font));
         m_text.render(0, h, nullptr, m_font);
 
         m_text.setText(QObject::tr(" KM/H").toStdWString());
@@ -256,20 +253,20 @@ void TimingOverlay::renderSpeed()
 
 void TimingOverlay::renderCurrentLapTime()
 {
-    const int lastLapTime = m_timing->lastLapTime(m_car->index());
-    const int currentLapTime = m_timing->currentLapTime(m_car->index());
+    const int lastLapTime = m_race->timing().lastLapTime(m_car->index());
+    const int currentLapTime = m_race->timing().currentLapTime(m_car->index());
 
     std::wstringstream ss;
     ss << QObject::tr("LAP:").toStdWString();
-    if (m_timing->raceCompleted(m_car->index()))
+    if (m_race->timing().raceCompleted(m_car->index()))
     {
-        ss << m_timing->msecsToString(lastLapTime);
+        ss << m_race->timing().msecsToString(lastLapTime);
 
         m_text.setColor(WHITE);
     }
     else
     {
-        ss << m_timing->msecsToString(currentLapTime);
+        ss << m_race->timing().msecsToString(currentLapTime);
 
         // Set color to WHITE, if lastLapTime is not set.
         if (lastLapTime == -1 || currentLapTime == lastLapTime)
@@ -299,14 +296,14 @@ void TimingOverlay::renderCurrentLapTime()
 
 void TimingOverlay::renderLastLapTime()
 {
-    const int lastLapTime = m_timing->lastLapTime(m_car->index());
+    const int lastLapTime = m_race->timing().lastLapTime(m_car->index());
 
     m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
     m_text.setColor(WHITE);
 
     std::wstringstream ss;
     //: Last lap time
-    ss << QObject::tr("L:").toStdWString() << m_timing->msecsToString(lastLapTime);
+    ss << QObject::tr("L:").toStdWString() << m_race->timing().msecsToString(lastLapTime);
     m_text.setText(ss.str());
     m_text.render(
       width() - m_text.width(m_font),
@@ -319,14 +316,14 @@ void TimingOverlay::renderRecordLapTime()
 {
     if (m_showLapRecordTime)
     {
-        const int recordLapTime = m_timing->lapRecord();
+        const int recordLapTime = m_race->timing().lapRecord();
 
         m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
         m_text.setColor(WHITE);
 
         std::wstringstream ss;
         //: Lap record time
-        ss << QObject::tr("R:").toStdWString() << m_timing->msecsToString(recordLapTime);
+        ss << QObject::tr("R:").toStdWString() << m_race->timing().msecsToString(recordLapTime);
         m_text.setText(ss.str());
         m_text.render(
           width() - m_text.width(m_font),
@@ -340,14 +337,14 @@ void TimingOverlay::renderRaceTime()
 {
     if (m_showRaceTime)
     {
-        const int raceTime = m_timing->raceTime(m_car->index());
+        const int raceTime = m_race->timing().raceTime(m_car->index());
 
         m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
         m_text.setColor(WHITE);
 
         std::wstringstream ss;
         //: Total race time
-        ss << QObject::tr("TOT:").toStdWString() << m_timing->msecsToString(raceTime);
+        ss << QObject::tr("TOT:").toStdWString() << m_race->timing().msecsToString(raceTime);
         m_text.setText(ss.str());
         m_text.render(
           width() - m_text.width(m_font),

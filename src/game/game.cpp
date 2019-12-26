@@ -74,7 +74,7 @@ Game::Game(int & argc, char ** argv)
   , m_mode(Mode::OnePlayerRace)
   , m_splitType(SplitType::Vertical)
   , m_audioWorker(new AudioWorker(
-      Scene::NUM_CARS, Settings::instance().loadValue(Settings::soundsKey(), true)))
+      Scene::carCount(), Settings::instance().loadValue(Settings::soundsKey(), true)))
   , m_audioThread(new QThread)
   , m_world(new MCWorld)
 {

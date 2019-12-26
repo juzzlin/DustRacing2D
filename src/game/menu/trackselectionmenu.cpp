@@ -271,7 +271,7 @@ void TrackItem::renderTrackProperties()
 
     ss.str(L"");
     ss << QObject::tr("     Length: ").toStdWString()
-       << int(m_track->trackData().route().geometricLength() * MCWorld::metersPerUnit());
+       << static_cast<int>(m_track->trackData().route().geometricLength() * MCWorld::metersPerUnit());
     text.setText(ss.str());
     maxWidth = std::fmax(maxWidth, text.width(m_font));
     texts.push_back(text);

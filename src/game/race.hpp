@@ -41,19 +41,19 @@ class Race : public AudioSource
 
 public:
     //! Constructor.
-    Race(Game & game, unsigned int numCars);
+    Race(Game & game, size_t numCars);
 
     //! Destructor.
     virtual ~Race();
 
     //! Init the race.
-    void init(std::shared_ptr<Track>, int lapCount);
+    void init(std::shared_ptr<Track>, size_t lapCount);
 
     //! Return true, if race has started.
     bool started();
 
     //! Get the number of laps.
-    int lapCount() const;
+    size_t lapCount() const;
 
     //! Add a car to the race.
     void addCar(Car & car);
@@ -66,11 +66,16 @@ public:
 
     bool checkeredFlagEnabled() const;
 
+    size_t getCurrentTargetNodeIndex(const Car & car) const;
+
     //! Get current last car in the race
     Car & getLoser() const;
 
     //! Get current leading car in the race
     Car & getLeader() const;
+
+    //! Get current position of a car.
+    size_t position(const Car & car) const;
 
 signals:
 
@@ -97,7 +102,7 @@ private:
 
     void checkIfCarIsOffTrack(Car & car);
 
-    void checkIfLapIsCompleted(Car & car, const Route & route, unsigned int currentTargetNodeIndex);
+    void checkIfLapIsCompleted(Car & car, const Route & route, size_t currentTargetNodeIndex);
 
     void clearPositions();
 
@@ -113,7 +118,7 @@ private:
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
-    void setTrack(std::shared_ptr<Track>, int lapCount);
+    void setTrack(std::shared_ptr<Track>, size_t lapCount);
 
     void translateCarsToStartPositions();
 
@@ -131,7 +136,7 @@ private:
 
     // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
-    typedef std::unordered_map<int, std::vector<int>> ProgressionHash;
+    typedef std::unordered_map<size_t, std::vector<size_t>> ProgressionHash;
     mutable ProgressionHash m_progression;
 
     typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
@@ -141,12 +146,27 @@ private:
     // Data structure to determine if a car is stuck.
     // In that case we move the car onto the previous check point.
     typedef std::pair<TrackTilePtr, int> StuckTileCounter; // Tile pointer and counter.
-    typedef std::unordered_map<int, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
+    typedef std::unordered_map<size_t, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
-    int m_numCars;
+    struct CarStatus
+    {
+        size_t currentTargetNodeIndex = 0;
 
-    int m_lapCount;
+        size_t nextTargetNodeIndex = 0;
+
+        size_t prevTargetNodeIndex = 0;
+
+        size_t routeProgression = 0;
+
+        size_t position = 0;
+    };
+    typedef std::unordered_map<size_t, CarStatus> StatusHash; // Car index to CarStatus.
+    StatusHash m_statusHash;
+
+    size_t m_numCars;
+
+    size_t m_lapCount;
 
     Timing m_timing;
 

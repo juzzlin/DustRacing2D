@@ -105,21 +105,19 @@ bool Timing::isActive(size_t index) const
     return times.isActive;
 }
 
-int Timing::lap(size_t index) const
+size_t Timing::lap(size_t index) const
 {
     return m_times.at(index).lap;
 }
 
-int Timing::leadersLap() const
+size_t Timing::leadersLap() const
 {
-    int maxLap = 0;
-
-    for (size_t index = 0; index < m_times.size(); index++)
+    size_t maxLap = 0;
+    for (auto && time : m_times)
     {
-        const int lap = m_times.at(index).lap;
-        if (lap > maxLap)
+        if (time.lap > maxLap)
         {
-            maxLap = lap;
+            maxLap = time.lap;
         }
     }
 

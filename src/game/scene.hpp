@@ -20,7 +20,6 @@
 #include "car.hpp"
 #include "crashoverlay.hpp"
 #include "minimap.hpp"
-#include "race.hpp"
 #include "timingoverlay.hpp"
 
 #include <MCCamera>
@@ -41,6 +40,7 @@ class MCSurface;
 class MCWorld;
 class MessageOverlay;
 class ParticleFactory;
+class Race;
 class Renderer;
 class Startlights;
 class StartlightsOverlay;
@@ -58,8 +58,6 @@ class Scene : public QObject
     Q_OBJECT
 
 public:
-    static const int NUM_CARS = 12;
-
     //! Constructor.
     Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world);
 
@@ -76,6 +74,8 @@ public:
 
     //! Set scene size.
     static void setSize(int width, int height);
+
+    static size_t carCount();
 
     //! Update physics and objects by the given time step in ms.
     void updateFrame(InputHandler & handler, int step);
@@ -135,7 +135,7 @@ private:
 
     void setupAudio(Car & car, size_t index);
 
-    void setupAI(Track & activeTrack);
+    void setupAI(std::shared_ptr<Track> activeTrack);
 
     void setupCameras(Track & activeTrack);
 
@@ -165,7 +165,7 @@ private:
 
     std::unique_ptr<MessageOverlay> m_messageOverlay;
 
-    Race m_race;
+    std::shared_ptr<Race> m_race;
 
     std::shared_ptr<Track> m_activeTrack;
 

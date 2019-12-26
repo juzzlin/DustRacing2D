@@ -44,10 +44,10 @@ public:
     void clear();
 
     //! Return object count.
-    unsigned int count() const;
+    size_t count() const;
 
     //! Return given object.
-    ObjectBasePtr object(unsigned int index) const;
+    ObjectBasePtr object(size_t index) const;
 
     ObjectVector::iterator begin();
 

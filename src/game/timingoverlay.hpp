@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -51,7 +52,7 @@ public:
     void setCarToFollow(const Car & car);
 
     //! Set current race.
-    void setRace(Race & race);
+    void setRace(std::shared_ptr<Race> race);
 
 public slots:
 
@@ -88,15 +89,23 @@ private:
     void renderSpeed();
 
     MCTextureFontManager & m_fontManager;
+
     MCTextureFont & m_font;
+
     MCTextureText m_text;
+
     const Car * m_car;
-    Timing * m_timing;
-    Race * m_race;
+
+    std::shared_ptr<Race> m_race;
+
     std::vector<std::wstring> m_posTexts;
+
     bool m_showLapRecordTime;
+
     bool m_showRaceTime;
+
     bool m_showCarStatus;
+
     CarStatusView m_carStatusView;
 };
 

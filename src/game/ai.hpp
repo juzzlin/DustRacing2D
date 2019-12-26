@@ -21,7 +21,7 @@
 #include <memory>
 
 class Car;
-class Route;
+class Race;
 class Track;
 class TrackTile;
 
@@ -30,13 +30,13 @@ class AI
 {
 public:
     //! Constructor.
-    AI(Car & car);
+    AI(Car & car, std::shared_ptr<Race> race);
 
     //! Update.
     void update(bool isRaceCompleted);
 
     //! Set the current race track.
-    void setTrack(Track & track);
+    void setTrack(std::shared_ptr<Track> track);
 
     //! Get associated car.
     Car & car() const;
@@ -52,13 +52,13 @@ private:
 
     Car & m_car;
 
-    Track * m_track;
+    std::shared_ptr<Race> m_race;
 
-    const Route * m_route;
+    std::shared_ptr<Track> m_track;
 
     float m_lastDiff;
 
-    int m_lastTargetNodeIndex;
+    size_t m_lastTargetNodeIndex;
 
     MCVector2dF m_randomTolerance;
 };

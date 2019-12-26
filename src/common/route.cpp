@@ -20,10 +20,6 @@
 #include <cassert>
 #include <cmath>
 
-namespace {
-static const int CLOSING_TH = 32;
-}
-
 Route::Route()
 {
 }
@@ -44,21 +40,21 @@ bool Route::isClosed() const
 {
     if (m_route.size() > 1)
     {
-        const int dx = std::abs(m_route[0]->location().x() - m_route.back()->location().x());
-        const int dy = std::abs(m_route[0]->location().y() - m_route.back()->location().y());
-
-        return dx < CLOSING_TH && dy < CLOSING_TH;
+        const auto dx = std::abs(m_route[0]->location().x() - m_route.back()->location().x());
+        const auto dy = std::abs(m_route[0]->location().y() - m_route.back()->location().y());
+        const auto closingThreshold = 32;
+        return dx < closingThreshold && dy < closingThreshold;
     }
 
     return false;
 }
 
-unsigned int Route::numNodes() const
+size_t Route::numNodes() const
 {
-    return static_cast<unsigned int>(m_route.size());
+    return static_cast<size_t>(m_route.size());
 }
 
-TargetNodeBasePtr Route::get(unsigned int index) const
+TargetNodeBasePtr Route::get(size_t index) const
 {
     assert(index < numNodes());
     return m_route[index];
@@ -87,21 +83,21 @@ void Route::buildFromVector(RouteVector & routeVector)
     }
 }
 
-unsigned int Route::geometricLength() const
+double Route::geometricLength() const
 {
-    unsigned int result = 0;
+    double result = 0;
 
     if (m_route.size() > 1)
     {
-        for (unsigned int i = 0; i < m_route.size() - 1; i++)
+        for (size_t i = 0; i < m_route.size() - 1; i++)
         {
-            int dx = m_route[i]->location().x() - m_route[i + 1]->location().x();
-            int dy = m_route[i]->location().y() - m_route[i + 1]->location().y();
+            const auto dx = m_route[i]->location().x() - m_route[i + 1]->location().x();
+            const auto dy = m_route[i]->location().y() - m_route[i + 1]->location().y();
             result += std::sqrt(dx * dx + dy * dy);
         }
 
-        int dx = m_route[m_route.size() - 1]->location().x() - m_route[0]->location().x();
-        int dy = m_route[m_route.size() - 1]->location().y() - m_route[0]->location().y();
+        const auto dx = m_route[m_route.size() - 1]->location().x() - m_route[0]->location().x();
+        const auto dy = m_route[m_route.size() - 1]->location().y() - m_route[0]->location().y();
         result += std::sqrt(dx * dx + dy * dy);
     }
 

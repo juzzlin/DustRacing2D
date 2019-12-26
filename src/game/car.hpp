@@ -109,26 +109,6 @@ public:
 
     void setTurningImpulse(float impulse);
 
-    void setNextTargetNodeIndex(int index);
-
-    int nextTargetNodeIndex() const;
-
-    void setCurrentTargetNodeIndex(int index);
-
-    int currentTargetNodeIndex() const;
-
-    void setPrevTargetNodeIndex(int index);
-
-    int prevTargetNodeIndex() const;
-
-    void setRouteProgression(int value);
-
-    int routeProgression() const;
-
-    void setPosition(int value);
-
-    int position() const;
-
     //! Get location of the left front tire.
     MCVector3dF leftFrontTireLocation() const;
 
@@ -224,16 +204,6 @@ private:
     float m_absSpeed;
 
     float m_dx, m_dy;
-
-    int m_nextTargetNodeIndex;
-
-    int m_currentTargetNodeIndex;
-
-    int m_prevTargetNodeIndex;
-
-    int m_routeProgression;
-
-    int m_position;
 
     bool m_isHuman;
 

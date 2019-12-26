@@ -17,6 +17,7 @@
 
 #include "game.hpp"
 #include "graphicsfactory.hpp"
+#include "race.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "tracktile.hpp"
@@ -131,7 +132,6 @@ void Minimap::renderMarkers(const Minimap::CarVector & cars, const Race & race)
     m_markerSurface->setSize(m_tileH * 0.75f, m_tileW * 0.75f);
 
     auto && leader = race.getLeader();
-
     auto && loser = race.getLoser();
 
     for (auto && car : cars)

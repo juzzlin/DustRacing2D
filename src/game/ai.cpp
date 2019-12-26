@@ -17,6 +17,7 @@
 #include "../common/route.hpp"
 #include "../common/tracktilebase.hpp"
 #include "car.hpp"
+#include "race.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
@@ -24,10 +25,9 @@
 #include <MCRandom>
 #include <MCTrigonom>
 
-AI::AI(Car & car)
+AI::AI(Car & car, std::shared_ptr<Race> race)
   : m_car(car)
-  , m_track(nullptr)
-  , m_route(nullptr)
+  , m_race(race)
   , m_lastDiff(0)
   , m_lastTargetNodeIndex(0)
 {
@@ -42,18 +42,18 @@ void AI::update(bool isRaceCompleted)
 {
     if (m_track)
     {
-        if (m_lastTargetNodeIndex != m_car.currentTargetNodeIndex())
+        if (m_lastTargetNodeIndex != m_race->getCurrentTargetNodeIndex(m_car))
         {
             setRandomTolerance();
         }
 
         const Route & route = m_track->trackData().route();
-        steerControl(route.get(m_car.currentTargetNodeIndex()));
+        steerControl(route.get(m_race->getCurrentTargetNodeIndex(m_car)));
 
-        TrackTile & currentTile = *m_track->trackTileAtLocation(static_cast<int>(m_car.location().i()), m_car.location().j());
+        TrackTile & currentTile = *m_track->trackTileAtLocation(static_cast<size_t>(m_car.location().i()), static_cast<size_t>(m_car.location().j()));
         speedControl(currentTile, isRaceCompleted);
 
-        m_lastTargetNodeIndex = m_car.currentTargetNodeIndex();
+        m_lastTargetNodeIndex = m_race->getCurrentTargetNodeIndex(m_car);
     }
 }
 
@@ -62,14 +62,14 @@ void AI::setRandomTolerance()
     m_randomTolerance = MCRandom::randomVector2d() * TrackTileBase::width() / 8;
 }
 
-void AI::steerControl(TargetNodeBasePtr tnode)
+void AI::steerControl(TargetNodeBasePtr targetNode)
 {
     // Initial target coordinates
-    MCVector3dF target(tnode->location().x(), tnode->location().y());
+    MCVector3dF target(static_cast<float>(targetNode->location().x()), static_cast<float>(targetNode->location().y()));
     target -= MCVector3dF(m_car.location() + MCVector3dF(m_randomTolerance));
 
-    float angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
-    float cur = static_cast<int>(m_car.angle()) % 360;
+    const float angle = MCTrigonom::radToDeg(std::atan2(target.j(), target.i()));
+    const float cur = static_cast<int>(m_car.angle()) % 360;
     float diff = angle - cur;
 
     bool ok = false;
@@ -192,8 +192,7 @@ void AI::speedControl(TrackTile & currentTile, bool isRaceCompleted)
     }
 }
 
-void AI::setTrack(Track & track)
+void AI::setTrack(std::shared_ptr<Track> track)
 {
-    m_track = &track;
-    m_route = &track.trackData().route();
+    m_track = track;
 }
