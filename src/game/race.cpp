@@ -565,7 +565,7 @@ void Race::checkIfCarIsStuck(Car & car)
     {
         static const int STUCK_LIMIT = 60 * 5; // 5 secs.
 
-        auto currentTile = m_track->trackTileAtLocation(static_cast<size_t>(car.location().i()), static_cast<size_t>(car.location().j()));
+        auto currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
         auto && counter = m_stuckHash[car.index()];
         if (counter.first == nullptr || counter.first != currentTile)
         {

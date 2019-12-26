@@ -50,8 +50,7 @@ void AI::update(bool isRaceCompleted)
         const Route & route = m_track->trackData().route();
         steerControl(route.get(m_race->getCurrentTargetNodeIndex(m_car)));
 
-        TrackTile & currentTile = *m_track->trackTileAtLocation(static_cast<size_t>(m_car.location().i()), static_cast<size_t>(m_car.location().j()));
-        speedControl(currentTile, isRaceCompleted);
+        speedControl(*m_track->trackTileAtLocation(m_car.location().i(), m_car.location().j()), isRaceCompleted);
 
         m_lastTargetNodeIndex = m_race->getCurrentTargetNodeIndex(m_car);
     }

@@ -50,7 +50,8 @@ public:
     TrackData & trackData() const;
 
     //! Return pointer to the tile at the given location.
-    TrackTilePtr trackTileAtLocation(size_t x, size_t y) const;
+    //! It is assumed that x >= 0 and y >= 0.
+    TrackTilePtr trackTileAtLocation(float x, float y) const;
 
     //! Return pointer to the finish line tile.
     TrackTilePtr finishLine() const;

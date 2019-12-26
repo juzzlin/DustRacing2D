@@ -57,14 +57,16 @@ TrackData & Track::trackData() const
     return *m_trackData;
 }
 
-TrackTilePtr Track::trackTileAtLocation(size_t x, size_t y) const
+TrackTilePtr Track::trackTileAtLocation(float x, float y) const
 {
     // X index
-    size_t i = x * m_cols / m_width;
+    x = x < 0 ? 0 : x;
+    size_t i = static_cast<size_t>(x * m_cols / m_width);
     i = i >= m_cols ? m_cols - 1 : i;
 
     // Y index
-    size_t j = y * m_rows / m_height;
+    y = y < 0 ? 0 : y;
+    size_t j = static_cast<size_t>(y * m_rows / m_height);
     j = j >= m_rows ? m_rows - 1 : j;
 
     return static_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
