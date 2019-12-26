@@ -49,7 +49,7 @@ public:
     MCVector2d();
 
     //! Constructor
-    explicit MCVector2d(T i, T j = 0);
+    MCVector2d(T i, T j);
 
     //! Copy constructor
     template<typename U>

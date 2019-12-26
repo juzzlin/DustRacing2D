@@ -51,7 +51,10 @@ public:
     MCVector3d();
 
     //! Constructor
-    explicit MCVector3d(T i, T j = 0, T k = 0);
+    MCVector3d(T i, T j);
+
+    //! Constructor
+    MCVector3d(T i, T j, T k);
 
     //! Constructor
     template<typename U>
@@ -216,6 +219,14 @@ template<typename T>
 MCVector3d<T>::MCVector3d()
   : m_i(0)
   , m_j(0)
+  , m_k(0)
+{
+}
+
+template<typename T>
+MCVector3d<T>::MCVector3d(T newI, T newJ)
+  : m_i(newI)
+  , m_j(newJ)
   , m_k(0)
 {
 }
