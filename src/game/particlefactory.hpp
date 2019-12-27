@@ -79,8 +79,7 @@ private:
 
     void preCreateParticles();
 
-    void preCreateSurfaceParticles(
-      int count, std::string typeId, ParticleType typeEnum, MCSurface & surface, bool alphaBlend = false, bool hasShadow = false);
+    void preCreateSurfaceParticles(size_t count, std::string typeId, ParticleType typeEnum, MCSurfacePtr surface, bool alphaBlend = false, bool hasShadow = false);
 
     MCSurfaceParticle * newSurfaceParticle(ParticleType typeEnum) const;
 

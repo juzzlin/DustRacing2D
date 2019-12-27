@@ -32,7 +32,7 @@
 class MCParticleRendererBase : public MCGLObjectBase
 {
 public:
-    explicit MCParticleRendererBase(int maxBatchSize = 1024);
+    explicit MCParticleRendererBase(size_t maxBatchSize = 1024);
 
     virtual ~MCParticleRendererBase();
 
@@ -59,13 +59,13 @@ public:
 
 protected:
     //! Set current batch size
-    void setBatchSize(int batchSize);
+    void setBatchSize(size_t batchSize);
 
     //! Get current batch size
-    int batchSize() const;
+    size_t batchSize() const;
 
     //! Set max batch size
-    int maxBatchSize() const;
+    size_t maxBatchSize() const;
 
     bool useAlphaBlend() const;
 
@@ -77,9 +77,9 @@ private:
     DISABLE_COPY(MCParticleRendererBase);
     DISABLE_ASSI(MCParticleRendererBase);
 
-    int m_batchSize;
+    size_t m_batchSize;
 
-    int m_maxBatchSize;
+    size_t m_maxBatchSize;
 
     bool m_hasShadow;
 

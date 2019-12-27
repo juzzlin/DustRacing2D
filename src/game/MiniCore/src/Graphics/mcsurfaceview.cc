@@ -22,113 +22,197 @@
 #include "mcglshaderprogram.hh"
 #include "mcsurface.hh"
 
-MCSurfaceView::MCSurfaceView(const std::string & viewId, MCSurface * surface)
-  : MCShapeView(viewId)
-  , m_surface(surface)
+class MCSurfaceView::Impl
 {
-    if (surface)
+public:
+    Impl(MCSurfaceView & self, MCSurfacePtr surface)
+      : m_self(self)
+      , m_surface(surface)
     {
-        m_surface->setShaderProgram(shaderProgram());
-        m_surface->setShadowShaderProgram(shadowShaderProgram());
+        if (surface)
+        {
+            m_surface->setShaderProgram(m_self.shaderProgram());
+            m_surface->setShadowShaderProgram(m_self.shadowShaderProgram());
+
+            updateBBox();
+        }
+    }
+
+    ~Impl()
+    {
+    }
+
+    void setSurface(MCSurfacePtr surface)
+    {
+        m_surface = surface;
+        m_surface->setShaderProgram(m_self.shaderProgram());
+        m_surface->setShadowShaderProgram(m_self.shadowShaderProgram());
+
+        m_self.setHandle(surface->handle());
 
         updateBBox();
     }
-}
 
-MCSurfaceView::~MCSurfaceView()
+    MCSurfacePtr surface() const
+    {
+        return m_surface;
+    }
+
+    void setShaderProgram(MCGLShaderProgramPtr program)
+    {
+        m_surface->setShaderProgram(program);
+    }
+
+    void setShadowShaderProgram(MCGLShaderProgramPtr program)
+    {
+        m_surface->setShadowShaderProgram(program);
+    }
+
+    void render(const MCVector3dF & l, float angle, MCCamera * p)
+    {
+        m_surface->setScale(m_self.scale());
+        m_surface->render(p, l, angle);
+    }
+
+    void renderShadow(const MCVector3dF & l, float angle, MCCamera * p)
+    {
+        m_surface->setScale(m_self.scale());
+        m_surface->renderShadow(p, l, angle);
+    }
+
+    void bind()
+    {
+        m_surface->bind();
+    }
+
+    void bindShadow()
+    {
+        m_surface->bindShadow();
+    }
+
+    void release()
+    {
+        m_surface->release();
+    }
+
+    void releaseShadow()
+    {
+        m_surface->releaseShadow();
+    }
+
+    const MCBBoxF & bbox() const
+    {
+        return m_bbox;
+    }
+
+    void setColor(const MCGLColor & color)
+    {
+        m_surface->setColor(color);
+    }
+
+    void updateBBox()
+    {
+        // TODO: Fix this! The view should know the angle of the
+        // shape somehow. Now we just return a naive bbox.
+
+        const float w = m_surface->width() / 2;
+        const float h = m_surface->height() / 2;
+        const float r = std::max(w, h);
+
+        m_bbox = MCBBoxF(-r * m_self.scale().i(), -r * m_self.scale().j(), r * m_self.scale().i(), r * m_self.scale().j());
+    }
+
+    MCGLObjectBase * object() const
+    {
+        return m_surface.get();
+    }
+
+private:
+    MCSurfaceView & m_self;
+
+    MCSurfacePtr m_surface;
+
+    MCBBoxF m_bbox;
+};
+
+MCSurfaceView::MCSurfaceView(const std::string & viewId, MCSurfacePtr surface)
+  : MCShapeView(viewId)
+  , m_impl(std::make_unique<Impl>(*this, surface))
 {
 }
 
-void MCSurfaceView::updateBBox()
+MCSurfaceView::~MCSurfaceView() = default;
+
+void MCSurfaceView::setSurface(MCSurfacePtr surface)
 {
-    // TODO: Fix this! The view should know the angle of the
-    // shape somehow. Now we just return a naive bbox.
-
-    const float w = m_surface->width() / 2;
-    const float h = m_surface->height() / 2;
-    const float r = std::max(w, h);
-
-    m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
+    m_impl->setSurface(surface);
 }
 
-void MCSurfaceView::setSurface(MCSurface & surface)
+MCSurfacePtr MCSurfaceView::surface() const
 {
-    m_surface = &surface;
-    m_surface->setShaderProgram(shaderProgram());
-    m_surface->setShadowShaderProgram(shadowShaderProgram());
-
-    setHandle(surface.handle());
-
-    updateBBox();
-}
-
-MCSurface * MCSurfaceView::surface() const
-{
-    return m_surface;
+    return m_impl->surface();
 }
 
 void MCSurfaceView::setShaderProgram(MCGLShaderProgramPtr program)
 {
     MCShapeView::setShaderProgram(program);
-    m_surface->setShaderProgram(program);
+    m_impl->setShaderProgram(program);
 }
 
 void MCSurfaceView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
     MCShapeView::setShadowShaderProgram(program);
-    m_surface->setShadowShaderProgram(program);
+    m_impl->setShadowShaderProgram(program);
 }
 
 void MCSurfaceView::render(const MCVector3dF & l, float angle, MCCamera * p)
 {
-    m_surface->setScale(scale());
-    m_surface->render(p, l, angle);
+    m_impl->render(l, angle, p);
 }
 
 void MCSurfaceView::renderShadow(const MCVector3dF & l, float angle, MCCamera * p)
 {
-    m_surface->setScale(scale());
-    m_surface->renderShadow(p, l, angle);
+    m_impl->renderShadow(l, angle, p);
 }
 
 void MCSurfaceView::bind()
 {
-    m_surface->bind();
+    m_impl->bind();
 }
 
 void MCSurfaceView::bindShadow()
 {
-    m_surface->bindShadow();
+    m_impl->bindShadow();
 }
 
 void MCSurfaceView::release()
 {
-    m_surface->release();
+    m_impl->release();
 }
 
 void MCSurfaceView::releaseShadow()
 {
-    m_surface->releaseShadow();
+    m_impl->releaseShadow();
 }
 
 const MCBBoxF & MCSurfaceView::bbox() const
 {
-    return m_bbox;
+    return m_impl->bbox();
 }
 
 void MCSurfaceView::setColor(const MCGLColor & color)
 {
     MCShapeView::setColor(color);
-    m_surface->setColor(color);
+    m_impl->setColor(color);
 }
 
 void MCSurfaceView::setScale(const MCVector3dF & scale)
 {
     MCShapeView::setScale(scale);
-    updateBBox();
+    m_impl->updateBBox();
 }
 
 MCGLObjectBase * MCSurfaceView::object() const
 {
-    return m_surface;
+    return m_impl->object();
 }

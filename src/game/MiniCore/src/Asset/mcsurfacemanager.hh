@@ -20,6 +20,7 @@
 #ifndef MCSURFACEMANAGER_HH
 #define MCSURFACEMANAGER_HH
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -88,16 +89,14 @@ public:
     /*! Returns a surface object associated with given strId.
      *  Corresponding OpenGL texture handle can be obtained
      *  by calling handle() of the resulting MCSurface.
-     *  MCSurfaceManager will keep the ownership.
      *  \param handle Handle defined in the textures XML file.
      *  \return Reference to the corresponding MCSurface.
      *  \throws std::runtime_error on failure. */
-    MCSurface & surface(
-      const std::string & handle) const;
+    std::shared_ptr<MCSurface> surface(const std::string & handle) const;
 
     /*! Creates an MCSurface containing an OpenGL texture from a QImage + texture meta data.
      *  MCSurfaceManager keeps the ownership. */
-    MCSurface & createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image);
+    std::shared_ptr<MCSurface> createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image);
 
 private:
     //! Apply alpha clamp (set alpha values off based on the given limit).
@@ -110,10 +109,10 @@ private:
     GLuint create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image);
 
     //! Helper to set surface meta data.
-    void createSurfaceCommon(MCSurface & surface, const MCSurfaceMetaData & data);
+    void createSurfaceCommon(std::shared_ptr<MCSurface> surface, const MCSurfaceMetaData & data);
 
     //! Map for resulting surface objects
-    typedef std::unordered_map<std::string, MCSurface *> SurfaceHash;
+    typedef std::unordered_map<std::string, std::shared_ptr<MCSurface>> SurfaceHash;
     SurfaceHash m_surfaceMap;
 
     DISABLE_COPY(MCSurfaceManager);

@@ -44,8 +44,7 @@ public:
 
     /*! Constructor.
      *  \see TrackTileBase. */
-    TrackTile(QPointF location, QPoint matrixLocation,
-              const QString & type = "", TileType typeEnum = TileType::None);
+    TrackTile(QPointF location, QPoint matrixLocation, const QString & type = "", TileType typeEnum = TileType::None);
 
     //! Destructor
     virtual ~TrackTile();
@@ -54,23 +53,17 @@ public:
     //! a track.
     void setRotation(int rotation);
 
-    //! Set the renderable surface object corresponding
-    //! to the track tile. TrackTile won't take the
-    //! ownership, because many TrackTile's might use
-    //! the same surface object.
-    void setSurface(MCSurface * surface);
+    //! Set the renderable surface object corresponding to the track tile.
+    void setSurface(MCSurfacePtr surface);
 
     //! Get the corresponding surface.
-    MCSurface * surface() const;
+    MCSurfacePtr surface() const;
 
-    //! Set the renderable surface object corresponding
-    //! to the preview of track tile. TrackTile won't take the
-    //! ownership, because many TrackTile's might use
-    //! the same surface object.
-    void setPreviewSurface(MCSurface * surface);
+    //! Set the renderable surface object corresponding to the preview of track tile.
+    void setPreviewSurface(MCSurfacePtr surface);
 
     //! Get the corresponding preview surface.
-    MCSurface * previewSurface() const;
+    MCSurfacePtr previewSurface() const;
 
     //! Get the orientation in XY-plane in degrees.
     int rotation() const;
@@ -90,9 +83,9 @@ private:
 
     int m_rotation;
 
-    MCSurface * m_surface;
+    MCSurfacePtr m_surface;
 
-    MCSurface * m_previewSurface;
+    MCSurfacePtr m_previewSurface;
 
     TileType m_typeEnum;
 

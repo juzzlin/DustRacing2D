@@ -40,7 +40,7 @@ public:
     };
 
     //! Constructor.
-    MessageOverlay(Alignment align = Alignment::Bottom, int messageMaxTime = 180);
+    MessageOverlay(Alignment align = Alignment::Bottom, size_t messageMaxTime = 180);
 
     //! \reimp
     virtual void render() override;
@@ -67,31 +67,36 @@ private:
     struct Message
     {
         //! Time the message has been shown
-        int timeShown;
+        size_t timeShown = 0;
 
         //! The time after which message will be deleted
-        int maxTime;
+        size_t maxTime = 0;
 
         //! Current y
-        float y;
+        float y = 0;
 
         //! Target y
-        float targetY;
+        float targetY = 0;
 
         //! Message
         std::wstring text;
 
         //! True, if y is initialized
-        bool isYInitialized;
+        bool isYInitialized = false;
 
-        bool isRemoving;
+        bool isRemoving = false;
     };
 
     MCTextureFontManager & m_fontManager;
+
     MCTextureFont & m_font;
+
     MCTextureText m_text;
-    int m_messageMaxTime;
+
+    size_t m_messageMaxTime;
+
     Alignment m_align;
+
     std::list<Message> m_listMessages;
 };
 

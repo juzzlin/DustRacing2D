@@ -31,6 +31,7 @@
 #include "mcvector3d.hh"
 
 #include <cmath>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -62,7 +63,7 @@ public:
     MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material);
 
     //! Destructor.
-    virtual ~MCMesh() {};
+    virtual ~MCMesh() override = default;
 
     /*! Render by using the default size.
      * \param pos The position.
@@ -79,5 +80,7 @@ private:
 
     void initVBOs();
 };
+
+using MCMeshPtr = std::shared_ptr<MCMesh>;
 
 #endif // MCMESH_HH

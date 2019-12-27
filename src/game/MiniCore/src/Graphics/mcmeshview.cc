@@ -24,7 +24,7 @@
 #include "mcmesh.hh"
 #include "mcmeshview.hh"
 
-MCMeshView::MCMeshView(const std::string & viewId, MCMesh * mesh)
+MCMeshView::MCMeshView(const std::string & viewId, MCMeshPtr mesh)
   : MCShapeView(viewId)
   , m_mesh(mesh)
 {
@@ -53,16 +53,16 @@ void MCMeshView::updateBBox()
     m_bbox = MCBBoxF(-r * scale().i(), -r * scale().j(), r * scale().i(), r * scale().j());
 }
 
-void MCMeshView::setMesh(MCMesh & mesh)
+void MCMeshView::setMesh(MCMeshPtr mesh)
 {
-    m_mesh = &mesh;
+    m_mesh = mesh;
     m_mesh->setShaderProgram(shaderProgram());
     m_mesh->setShadowShaderProgram(shadowShaderProgram());
 
     updateBBox();
 }
 
-MCMesh * MCMeshView::mesh() const
+MCMeshPtr MCMeshView::mesh() const
 {
     return m_mesh;
 }
@@ -79,16 +79,16 @@ void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
     m_mesh->setShadowShaderProgram(program);
 }
 
-void MCMeshView::render(const MCVector3d<float> & l, float angle, MCCamera * p)
+void MCMeshView::render(const MCVector3dF & location, float angle, MCCamera * camera)
 {
     m_mesh->setScale(scale());
-    m_mesh->render(p, l, angle);
+    m_mesh->render(camera, location, angle);
 }
 
-void MCMeshView::renderShadow(const MCVector3d<float> & l, float angle, MCCamera * p)
+void MCMeshView::renderShadow(const MCVector3dF & location, float angle, MCCamera * camera)
 {
     m_mesh->setScale(scale());
-    m_mesh->renderShadow(p, l, angle);
+    m_mesh->renderShadow(camera, location, angle);
 }
 
 const MCBBoxF & MCMeshView::bbox() const
@@ -124,5 +124,5 @@ void MCMeshView::setScale(const MCVector3dF & scale)
 
 MCGLObjectBase * MCMeshView::object() const
 {
-    return m_mesh;
+    return m_mesh.get();
 }

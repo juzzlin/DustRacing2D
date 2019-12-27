@@ -43,8 +43,8 @@ public:
 
     //! Initialize the animation.
     void init(
-      MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, unsigned int steps,
-      unsigned int preDelay = 0, unsigned int postDelay = 0);
+      MCVector3dF & vect, MCVector3dFR start, MCVector3dFR & end, size_t steps,
+      size_t preDelay = 0, size_t postDelay = 0);
 
     //! Update the animation. Returns true when done.
     bool update();
@@ -61,13 +61,13 @@ private:
 
     MCVector3dF m_delta;
 
-    unsigned int m_steps;
+    size_t m_steps;
 
-    unsigned int m_step;
+    size_t m_step;
 
-    unsigned int m_preDelay;
+    size_t m_preDelay;
 
-    unsigned int m_postDelay;
+    size_t m_postDelay;
 };
 
 #endif // MCVECTORANIMATION_HH

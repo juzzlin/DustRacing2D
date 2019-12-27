@@ -29,18 +29,18 @@
 #include <memory>
 
 Minimap::Minimap()
-  : m_markerSurface(&GraphicsFactory::generateMinimapMarker())
+  : m_markerSurface(GraphicsFactory::generateMinimapMarker())
 {
     m_markerSurface->setShaderProgram(Renderer::instance().program("menu"));
     m_markerSurface->material()->setAlphaBlend(true);
 }
 
-Minimap::Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, int size)
+Minimap::Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, size_t size)
 {
     initialize(carToFollow, trackMap, x, y, size);
 }
 
-void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int y, int size)
+void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int y, size_t size)
 {
     m_carToFollow = &carToFollow;
 
@@ -78,17 +78,17 @@ void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int
     // Loop through the visible tile matrix and store relevant tiles
     float tileX, tileY;
     tileY = initY;
-    for (unsigned int j = 0; j < trackMap.rows(); j++)
+    for (size_t j = 0; j < trackMap.rows(); j++)
     {
         tileX = initX;
-        for (unsigned int i = 0; i < trackMap.cols(); i++)
+        for (size_t i = 0; i < trackMap.cols(); i++)
         {
-            auto tile = std::static_pointer_cast<TrackTile>(trackMap.getTile(i, j));
-            auto surface = tile->previewSurface();
+            const auto tile = std::static_pointer_cast<TrackTile>(trackMap.getTile(i, j));
+            const auto surface = tile->previewSurface();
             if (surface && !tile->excludeFromMinimap())
             {
                 surface->setShaderProgram(Renderer::instance().program("menu"));
-                surface->setColor(MCGLColor(1.0, 1.0, 1.0));
+                surface->setColor({ 1.0, 1.0, 1.0 });
                 surface->setSize(m_tileH, m_tileW);
 
                 MinimapTile minimapTile;
@@ -116,7 +116,7 @@ void Minimap::renderMap()
     {
         auto surface = i.first;
         surface->bind();
-        surface->setColor(MCGLColor(1.0, 1.0, 1.0));
+        surface->setColor({ 1.0, 1.0, 1.0 });
         surface->setSize(m_tileH, m_tileW);
 
         for (auto && j : i.second)

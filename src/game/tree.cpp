@@ -22,13 +22,10 @@
 #include <MCShapeView>
 #include <MCSurface>
 
-namespace {
 static const float treeBodyRadius = 8;
-static const float treeViewRadius = 48;
-} // namespace
 
-Tree::Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branches)
-  : MCObject(MCShapePtr(new MCCircleShape(nullptr, treeBodyRadius)), "tree")
+Tree::Tree(MCSurfacePtr surface, float r0, float r1, float treeHeight, size_t branches)
+  : MCObject(std::make_shared<MCCircleShape>(nullptr, treeBodyRadius), "tree")
 {
     physicsComponent().setMass(1, true); // Stationary
     physicsComponent().setRestitution(0.25f);
@@ -38,26 +35,26 @@ Tree::Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branch
     shape()->setRadius(treeBodyRadius);
 
     const float branchHeight = treeHeight / branches;
-    for (int i = 0; i < branches; i++)
+    for (size_t i = 0; i < branches; i++)
     {
-        auto branch = new MCObject(surface, i == 0 ? "treeRoot" : "treeBranch");
+        const auto branch = std::make_shared<MCObject>(surface, i == 0 ? "treeRoot" : "treeBranch");
 
         if (i == 0)
         {
             branch->shape()->view()->setHasShadow(true);
             branch->shape()->view()->setHandle("branchShadowEnabled"); // Different handle for the only surface with shadow
             branch->setIsPhysicsObject(false);
-            addChildObject(MCObjectPtr(branch), MCVector3dF(0, 0, branchHeight) * (i + 1));
+            addChildObject(branch, MCVector3dF(0, 0, branchHeight) * (i + 1));
         }
         else
         {
             branch->shape()->view()->setHasShadow(false);
             branch->setIsPhysicsObject(false);
             const auto offset = MCRandom::randomVector2d() * 5;
-            addChildObject(MCObjectPtr(branch), MCVector3dF(0, 0, branchHeight) * (i + 1) + MCVector3dF(offset), MCRandom::getValue() * 360);
+            addChildObject(branch, MCVector3dF(0, 0, branchHeight) * (i + 1) + MCVector3dF(offset), MCRandom::getValue() * 360);
         }
 
         const float scale = r0 - (r0 - r1) / branches * i;
-        branch->shape()->view()->setScale(MCVector3dF(scale, scale, 1.0f));
+        branch->shape()->view()->setScale({ scale, scale, 1.0f });
     }
 }

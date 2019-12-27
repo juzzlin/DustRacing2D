@@ -45,12 +45,11 @@ ParticleFactory & ParticleFactory::instance()
     return *ParticleFactory::m_instance;
 }
 
-void ParticleFactory::preCreateSurfaceParticles(
-  int count, std::string typeId, ParticleFactory::ParticleType typeEnum, MCSurface & surface, bool alphaBlend, bool hasShadow)
+void ParticleFactory::preCreateSurfaceParticles(size_t count, std::string typeId, ParticleFactory::ParticleType typeEnum, MCSurfacePtr surface, bool alphaBlend, bool hasShadow)
 {
     m_particleRenderers[typeEnum] = std::make_shared<MCSurfaceParticleRenderer>();
 
-    for (int i = 0; i < count; i++)
+    for (size_t i = 0; i < count; i++)
     {
         auto particle = new MCSurfaceParticle(typeId, surface);
         particle->setFreeList(m_freeLists[typeEnum]);

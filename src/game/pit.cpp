@@ -23,7 +23,7 @@
 #include <MCShapeView>
 #include <MCSurface>
 
-Pit::Pit(MCSurface & surface)
+Pit::Pit(MCSurfacePtr surface)
   : MCObject(surface, "pit")
 {
     physicsComponent().setMass(1, true); // Stationary

@@ -44,14 +44,16 @@ public:
     bool loadFonts();
 
     //! Get font count.
-    unsigned int fonts() const;
+    size_t fonts() const;
 
     //! Get font data of the given index.
-    MCTextureFontData & font(unsigned int index) const;
+    MCTextureFontData & font(size_t index) const;
 
 private:
     typedef std::vector<MCTextureFontData *> FontVector;
+
     std::string m_filePath;
+
     FontVector m_fonts;
 };
 

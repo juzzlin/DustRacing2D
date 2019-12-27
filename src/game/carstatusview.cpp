@@ -25,20 +25,20 @@ CarStatusView::CarStatusView()
   , m_tires(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorTires"))
   , m_car(nullptr)
 {
-    setDimensions(m_body.height(), m_tires.width());
+    setDimensions(m_body->height(), m_tires->width());
 
-    m_body.setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.9f));
+    m_body->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.9f));
 }
 
 void CarStatusView::render()
 {
     const float damageLevel = m_car->damageLevel();
-    m_body.setColor(MCGLColor(1.0f, damageLevel, damageLevel, 0.9f));
-    m_body.render(nullptr, MCVector3dF(x(), y(), 0), 0);
+    m_body->setColor(MCGLColor(1.0f, damageLevel, damageLevel, 0.9f));
+    m_body->render(nullptr, MCVector3dF(x(), y(), 0), 0);
 
     const float tireWearLevel = m_car->tireWearLevel();
-    m_tires.setColor(MCGLColor(1.0f, tireWearLevel, tireWearLevel, 0.9f));
-    m_tires.render(nullptr, MCVector3dF(x(), y(), 0), 0);
+    m_tires->setColor(MCGLColor(1.0f, tireWearLevel, tireWearLevel, 0.9f));
+    m_tires->render(nullptr, MCVector3dF(x(), y(), 0), 0);
 }
 
 void CarStatusView::setCarToFollow(const Car & car)

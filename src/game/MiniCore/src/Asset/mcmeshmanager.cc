@@ -35,22 +35,21 @@ MCMeshManager::MCMeshManager()
 {
 }
 
-MCMesh & MCMeshManager::createMesh(
-  const MCMeshMetaData & data, const MCMesh::FaceVector & faces)
+MCMeshPtr MCMeshManager::createMesh(const MCMeshMetaData & data, const MCMesh::FaceVector & faces)
 {
     // Create material
-    MCGLMaterialPtr material(new MCGLMaterial);
+    const auto material = std::make_shared<MCGLMaterial>();
 
     material->setTexture(
-      data.texture1 != "" ? MCAssetManager::surfaceManager().surface(data.texture1).material()->texture(0) : 0,
+      data.texture1 != "" ? MCAssetManager::surfaceManager().surface(data.texture1)->material()->texture(0) : 0,
       0);
 
     material->setTexture(
-      data.texture2 != "" ? MCAssetManager::surfaceManager().surface(data.texture2).material()->texture(0) : 0,
+      data.texture2 != "" ? MCAssetManager::surfaceManager().surface(data.texture2)->material()->texture(0) : 0,
       1);
 
     // Create a new MCMesh object
-    MeshPtr mesh(new MCMesh(data.handle, faces, material));
+    const auto mesh = std::make_shared<MCMesh>(data.handle, faces, material);
 
     // Maybe better place for this could be in the material?
     mesh->setColor(data.color);
@@ -62,29 +61,28 @@ MCMesh & MCMeshManager::createMesh(
 
     m_meshMap[data.handle] = mesh;
 
-    return *mesh;
+    return mesh;
 }
 
-void MCMeshManager::load(
-  const std::string & configFilePath, const std::string & baseDataPath)
+void MCMeshManager::load(const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCMeshConfigLoader configLoader;
     MCMeshLoader modelLoader;
 
     if (configLoader.load(configFilePath))
     {
-        for (unsigned int i = 0; i < configLoader.meshCount(); i++)
+        for (size_t i = 0; i < configLoader.meshCount(); i++)
         {
-            const MCMeshMetaData & metaData = configLoader.mesh(i);
+            auto && metaData = configLoader.mesh(i);
 
             QString modelPath =
-              QString(baseDataPath.c_str()) + QDir::separator().toLatin1() + metaData.modelPath.c_str();
+              QString(baseDataPath.c_str()) + QDir::separator().toLatin1() + metaData->modelPath.c_str();
             modelPath.replace("./", "");
             modelPath.replace("//", "/");
 
             if (modelLoader.load(modelPath))
             {
-                createMesh(metaData, modelLoader.faces());
+                createMesh(*metaData, modelLoader.faces());
             }
             else
             {
@@ -98,7 +96,7 @@ void MCMeshManager::load(
     }
 }
 
-MCMesh & MCMeshManager::mesh(const std::string & handle) const
+MCMeshPtr MCMeshManager::mesh(const std::string & handle) const
 {
     // Try to find existing mesh for the handle
     if (m_meshMap.count(handle) == 0)
@@ -107,7 +105,5 @@ MCMesh & MCMeshManager::mesh(const std::string & handle) const
     }
 
     // Yes: return handle for the mesh
-    MeshPtr mesh = m_meshMap.find(handle)->second;
-    assert(mesh);
-    return *mesh;
+    return m_meshMap.find(handle)->second;
 }

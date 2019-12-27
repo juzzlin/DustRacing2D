@@ -63,7 +63,7 @@ public:
     };
 
     //! Constructor.
-    Car(Description & desc, MCSurface & surface, size_t index, bool isHuman);
+    Car(Description & desc, std::shared_ptr<MCSurface> surface, size_t index, bool isHuman);
 
     //! Destructor.
     virtual ~Car() override;
@@ -193,9 +193,9 @@ private:
 
     float m_tireWearOutCapacity;
 
-    MCSurface & m_frontTire;
+    std::shared_ptr<MCSurface> m_frontTire;
 
-    MCSurface & m_brakeGlow;
+    std::shared_ptr<MCSurface> m_brakeGlow;
 
     float m_length;
 

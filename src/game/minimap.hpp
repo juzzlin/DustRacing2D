@@ -17,6 +17,7 @@
 #define MINIMAP_HPP
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "car.hpp"
@@ -33,9 +34,9 @@ class Minimap
 public:
     Minimap();
 
-    Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, int size);
+    Minimap(Car & carToFollow, const MapBase & trackMap, int x, int y, size_t size);
 
-    void initialize(Car & carToFollow, const MapBase & trackMap, int x, int y, int size);
+    void initialize(Car & carToFollow, const MapBase & trackMap, int x, int y, size_t size);
 
     using CarVector = std::vector<CarPtr>;
     void render(const CarVector & cars, const Race & race);
@@ -52,11 +53,11 @@ private:
         int rotation;
     };
 
-    std::map<MCSurface *, std::vector<MinimapTile>> m_map;
+    std::map<std::shared_ptr<MCSurface>, std::vector<MinimapTile>> m_map;
 
     Car * m_carToFollow = nullptr;
 
-    MCSurface * m_markerSurface = nullptr;
+    std::shared_ptr<MCSurface> m_markerSurface;
 
     MCVector3dF m_center;
 

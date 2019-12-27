@@ -26,21 +26,13 @@
 
 #include <cassert>
 
-SurfaceMenu::SurfaceMenu(
-  std::string surfaceId,
-  std::string id,
-  int width,
-  int height,
-  Menu::Style style,
-  bool quitItem,
-  bool prevItem,
-  bool nextItem)
+SurfaceMenu::SurfaceMenu(std::string surfaceId, std::string id, int width, int height, Menu::Style style, bool quitItem, bool prevItem, bool nextItem)
   : Menu(id, width, height, style)
   , m_back(MCAssetManager::surfaceManager().surface(surfaceId))
   , m_font(MCAssetManager::textureFontManager().font(Game::instance().fontName()))
 {
-    m_back.setShaderProgram(Renderer::instance().program("menu"));
-    m_back.setColor(MCGLColor(0.5, 0.5, 0.5, 1.0));
+    m_back->setShaderProgram(Renderer::instance().program("menu"));
+    m_back->setColor({ 0.5, 0.5, 0.5, 1.0 });
 
     if (quitItem)
     {
@@ -69,9 +61,9 @@ SurfaceMenu::SurfaceMenu(
 
 void SurfaceMenu::render()
 {
-    m_back.bind();
-    m_back.setSize(width(), width() * m_back.height() / m_back.width());
-    m_back.render(nullptr, MCVector3dF(x() + width() / 2, y() + height() / 2, 0), 0);
+    m_back->bind();
+    m_back->setSize(width(), width() * m_back->height() / m_back->width());
+    m_back->render(nullptr, { x() + width() / 2, y() + height() / 2, 0 }, 0);
     Menu::render();
 }
 

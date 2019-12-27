@@ -17,24 +17,24 @@
 #include "inputhandler.hpp"
 
 Startlights::Startlights()
-  : m_state(Init)
+  : m_state(State::Init)
   , m_counter(0)
   , m_stepsPerState(60)
 {
-    m_stateToFunctionMap[Init] = std::bind(&Startlights::stateInit, this);
-    m_stateToFunctionMap[Appear] = std::bind(&Startlights::stateAppear, this);
-    m_stateToFunctionMap[FirstRow] = std::bind(&Startlights::stateFirstRow, this);
-    m_stateToFunctionMap[SecondRow] = std::bind(&Startlights::stateSecondRow, this);
-    m_stateToFunctionMap[ThirdRow] = std::bind(&Startlights::stateThirdRow, this);
-    m_stateToFunctionMap[Go] = std::bind(&Startlights::stateGo, this);
-    m_stateToFunctionMap[Disappear] = std::bind(&Startlights::stateDisappear, this);
-    m_stateToFunctionMap[End] = std::bind(&Startlights::stateEnd, this);
+    m_stateToFunctionMap[State::Init] = std::bind(&Startlights::stateInit, this);
+    m_stateToFunctionMap[State::Appear] = std::bind(&Startlights::stateAppear, this);
+    m_stateToFunctionMap[State::FirstRow] = std::bind(&Startlights::stateFirstRow, this);
+    m_stateToFunctionMap[State::SecondRow] = std::bind(&Startlights::stateSecondRow, this);
+    m_stateToFunctionMap[State::ThirdRow] = std::bind(&Startlights::stateThirdRow, this);
+    m_stateToFunctionMap[State::Go] = std::bind(&Startlights::stateGo, this);
+    m_stateToFunctionMap[State::Disappear] = std::bind(&Startlights::stateDisappear, this);
+    m_stateToFunctionMap[State::End] = std::bind(&Startlights::stateEnd, this);
 
     connect(&m_timer, &QTimer::timeout, this, &Startlights::updateAnimation);
     m_timer.setInterval(1000 / m_stepsPerState);
 }
 
-bool Startlights::timeElapsed(unsigned int limit)
+bool Startlights::timeElapsed(size_t limit)
 {
     if (++m_counter > limit)
     {
@@ -51,11 +51,11 @@ void Startlights::updateAnimation()
 
 void Startlights::beginAnimation()
 {
-    m_state = Init;
+    m_state = State::Init;
     m_timer.start();
 }
 
-void Startlights::setDimensions(unsigned int width, unsigned int height)
+void Startlights::setDimensions(size_t width, size_t height)
 {
     m_width = width;
     m_height = height;
@@ -78,7 +78,7 @@ float Startlights::glowScale() const
 
 void Startlights::stateInit()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
     m_animation.init(
@@ -86,52 +86,52 @@ void Startlights::stateInit()
       m_pos,
       MCVector3dF(m_pos.i(), m_height / 2, 0),
       second / 3);
-    m_state = Appear;
+    m_state = State::Appear;
     m_glowScale = 1.0;
     InputHandler::setEnabled(false);
 }
 
 void Startlights::stateAppear()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     m_animation.update();
     if (timeElapsed(second))
     {
-        m_state = FirstRow;
+        m_state = State::FirstRow;
         emit messageRequested("3");
     }
 }
 
 void Startlights::stateFirstRow()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
-        m_state = SecondRow;
+        m_state = State::SecondRow;
         emit messageRequested("2");
     }
 }
 
 void Startlights::stateSecondRow()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
-        m_state = ThirdRow;
+        m_state = State::ThirdRow;
         emit messageRequested("1");
     }
 }
 
 void Startlights::stateThirdRow()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
-        m_state = Go;
+        m_state = State::Go;
         emit messageRequested(QObject::tr("GO!!!"));
         emit raceStarted();
         InputHandler::setEnabled(true);
@@ -140,11 +140,11 @@ void Startlights::stateThirdRow()
 
 void Startlights::stateGo()
 {
-    const unsigned int second = m_stepsPerState;
+    const size_t second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
-        m_state = Disappear;
+        m_state = State::Disappear;
         m_animation.init(
           m_pos,
           m_pos,
@@ -152,14 +152,14 @@ void Startlights::stateGo()
           second / 3);
     }
 
-    m_glowScale *= 0.75;
+    m_glowScale *= 0.75f;
 }
 
 void Startlights::stateDisappear()
 {
     if (m_animation.update())
     {
-        m_state = End;
+        m_state = State::End;
     }
 }
 

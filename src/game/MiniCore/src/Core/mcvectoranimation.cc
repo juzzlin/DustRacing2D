@@ -30,7 +30,7 @@ MCVectorAnimation::MCVectorAnimation()
 }
 
 void MCVectorAnimation::init(MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end,
-                             unsigned int steps, unsigned int preDelay, unsigned int postDelay)
+                             size_t steps, size_t preDelay, size_t postDelay)
 {
     m_delta = (end - start) / steps;
     m_vect = &vect;
@@ -64,6 +64,4 @@ bool MCVectorAnimation::update()
     return true;
 }
 
-MCVectorAnimation::~MCVectorAnimation()
-{
-}
+MCVectorAnimation::~MCVectorAnimation() = default;

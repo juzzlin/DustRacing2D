@@ -47,7 +47,7 @@
 using std::dynamic_pointer_cast;
 using std::static_pointer_cast;
 
-Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
+Car::Car(Description & desc, MCSurfacePtr surface, size_t index, bool isHuman)
   : MCObject(surface, "car")
   , m_desc(desc)
   , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
@@ -86,7 +86,7 @@ Car::Car(Description & desc, MCSurface & surface, size_t index, bool isHuman)
 
     initForceGenerators(desc);
 
-    createChildObjects(surface.maxZ(), index);
+    createChildObjects(surface->maxZ(), index);
 }
 
 void Car::createChildObjects(float maxZ, size_t index)

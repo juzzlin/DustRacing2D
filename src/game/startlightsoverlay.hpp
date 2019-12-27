@@ -18,9 +18,10 @@
 
 #include "overlaybase.hpp"
 
+#include <memory>
+
 class MCSurface;
 class MCTextureFontManager;
-
 class Startlights;
 
 //! Renders startlights on top of the game scene.
@@ -34,17 +35,23 @@ public:
     virtual void render() override;
 
     //! \reimp
-    virtual void setDimensions(int width, int height) override;
+    virtual void setDimensions(size_t width, size_t height) override;
 
 private:
     void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;
 
-    MCSurface & m_startLightOn;
-    MCSurface & m_startLightOnCorner;
-    MCSurface & m_startLightOff;
-    MCSurface & m_startLightOffCorner;
-    MCSurface & m_startLightGlow;
+    std::shared_ptr<MCSurface> m_startLightOn;
+
+    std::shared_ptr<MCSurface> m_startLightOnCorner;
+
+    std::shared_ptr<MCSurface> m_startLightOff;
+
+    std::shared_ptr<MCSurface> m_startLightOffCorner;
+
+    std::shared_ptr<MCSurface> m_startLightGlow;
+
     Startlights & m_model;
+
     float m_alpha;
 };
 

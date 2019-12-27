@@ -19,7 +19,7 @@
 
 #include "mcobjectrendererbase.hh"
 
-MCObjectRendererBase::MCObjectRendererBase(int maxBatchSize)
+MCObjectRendererBase::MCObjectRendererBase(size_t maxBatchSize)
   : MCGLObjectBase("mcobjectrendererbase")
   , m_batchSize(0)
   , m_maxBatchSize(maxBatchSize)
@@ -37,17 +37,17 @@ void MCObjectRendererBase::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenum 
     m_dst = dst;
 }
 
-int MCObjectRendererBase::maxBatchSize() const
+size_t MCObjectRendererBase::maxBatchSize() const
 {
     return m_maxBatchSize;
 }
 
-int MCObjectRendererBase::batchSize() const
+size_t MCObjectRendererBase::batchSize() const
 {
     return m_batchSize;
 }
 
-void MCObjectRendererBase::setBatchSize(int batchSize)
+void MCObjectRendererBase::setBatchSize(size_t batchSize)
 {
     m_batchSize = batchSize;
 }

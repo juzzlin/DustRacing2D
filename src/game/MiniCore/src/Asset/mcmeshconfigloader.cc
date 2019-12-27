@@ -51,7 +51,7 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
         auto && node = root.firstChild();
         while (!node.isNull() && node.nodeName() == "mesh")
         {
-            MeshDataPtr newData(new MCMeshMetaData);
+            const auto newData = std::make_shared<MCMeshMetaData>();
             const auto && element = node.toElement();
             if (!element.isNull())
             {
@@ -68,7 +68,7 @@ bool MCMeshConfigLoader::load(const std::string & filePath)
     return true;
 }
 
-void MCMeshConfigLoader::parseAttributes(const QDomElement & element, MeshDataPtr newData, const std::string & baseModelPath)
+void MCMeshConfigLoader::parseAttributes(const QDomElement & element, MCMeshDataPtr newData, const std::string & baseModelPath)
 {
     const std::string model = element.attribute("model", "").toStdString();
 
@@ -84,7 +84,7 @@ void MCMeshConfigLoader::parseAttributes(const QDomElement & element, MeshDataPt
     }
 }
 
-void MCMeshConfigLoader::parseChildNodes(const QDomNode & node, MeshDataPtr newData)
+void MCMeshConfigLoader::parseChildNodes(const QDomNode & node, MCMeshDataPtr newData)
 {
     auto && childNode = node.firstChild();
     while (!childNode.isNull())
@@ -120,14 +120,12 @@ void MCMeshConfigLoader::parseChildNodes(const QDomNode & node, MeshDataPtr newD
     }
 }
 
-unsigned int MCMeshConfigLoader::meshCount() const
+size_t MCMeshConfigLoader::meshCount() const
 {
-    return static_cast<unsigned int>(m_meshes.size());
+    return m_meshes.size();
 }
 
-const MCMeshMetaData & MCMeshConfigLoader::mesh(unsigned int index) const
+MCMeshDataPtr MCMeshConfigLoader::mesh(size_t index) const
 {
-    assert(index < static_cast<unsigned int>(m_meshes.size()));
-    assert(m_meshes.at(index));
-    return *m_meshes.at(index);
+    return m_meshes.at(index);
 }

@@ -38,14 +38,15 @@ class MCObject;
 class MCSurfaceParticleRenderer : public MCParticleRendererBase
 {
 public:
-    explicit MCSurfaceParticleRenderer(int maxBatchSize = 1024);
+    explicit MCSurfaceParticleRenderer(size_t maxBatchSize = 1024);
 
     //! Destructor.
-    virtual ~MCSurfaceParticleRenderer();
+    virtual ~MCSurfaceParticleRenderer() override = default;
 
 private:
     DISABLE_COPY(MCSurfaceParticleRenderer);
     DISABLE_ASSI(MCSurfaceParticleRenderer);
+    DISABLE_MOVE(MCSurfaceParticleRenderer);
 
     /*! Populate the current batch.
      *  \param particles The vector of particle data to be rendered.
@@ -58,13 +59,15 @@ private:
     //! Render the current particle batch as shadows.
     void renderShadows() override;
 
-    MCGLVertex * m_vertices;
+    static const size_t m_numVerticesPerParticle;
 
-    MCGLVertex * m_normals;
+    std::vector<MCGLVertex> m_vertices;
 
-    MCGLTexCoord * m_texCoords;
+    std::vector<MCGLVertex> m_normals;
 
-    MCGLColor * m_colors;
+    std::vector<MCGLTexCoord> m_texCoords;
+
+    std::vector<MCGLColor> m_colors;
 
     friend class MCWorldRenderer;
 };

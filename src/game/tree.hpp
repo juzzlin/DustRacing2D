@@ -17,13 +17,14 @@
 #define TREE_HPP
 
 #include <MCObject>
+#include <memory>
 
 class MCSurface;
 
 class Tree : public MCObject
 {
 public:
-    Tree(MCSurface & surface, float r0, float r1, float treeHeight, int branches);
+    Tree(std::shared_ptr<MCSurface> surface, float r0, float r1, float treeHeight, size_t branches);
 };
 
 #endif // TREE_HPP

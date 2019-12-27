@@ -31,17 +31,17 @@ class MCMeshView : public MCShapeView
 public:
     /*! Constructor.
      * \param typeId See MCShapeView::MCShapeView().
-     * \param mesh mesh to be used. Ownership of mesh is not changed. */
-    explicit MCMeshView(const std::string & viewID, MCMesh * mesh = nullptr);
+     * \param mesh mesh to be used. */
+    explicit MCMeshView(const std::string & viewID, MCMeshPtr mesh);
 
     //! Destructor
-    virtual ~MCMeshView();
+    virtual ~MCMeshView() override;
 
     //! Set mesh
-    void setMesh(MCMesh & mesh);
+    void setMesh(MCMeshPtr mesh);
 
     //! Get mesh or nullptr if not set.
-    MCMesh * mesh() const;
+    MCMeshPtr mesh() const;
 
     //! \reimp
     void setShaderProgram(MCGLShaderProgramPtr program) override;
@@ -50,16 +50,10 @@ public:
     void setShadowShaderProgram(MCGLShaderProgramPtr program) override;
 
     //! \reimp
-    virtual void render(
-      const MCVector3d<float> & l,
-      float angle,
-      MCCamera * p = nullptr) override;
+    virtual void render(const MCVector3dF & location, float angle, MCCamera * camera = nullptr) override;
 
     //! \reimp
-    virtual void renderShadow(
-      const MCVector3d<float> & l,
-      float angle,
-      MCCamera * p = nullptr) override;
+    virtual void renderShadow(const MCVector3dF & location, float angle, MCCamera * camera = nullptr) override;
 
     //! \reimp
     virtual const MCBBoxF & bbox() const override;
@@ -88,7 +82,7 @@ private:
 
     void updateBBox();
 
-    MCMesh * m_mesh;
+    MCMeshPtr m_mesh;
 
     MCBBoxF m_bbox;
 };

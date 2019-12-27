@@ -37,19 +37,17 @@ public:
     bool load(const std::string & filePath);
 
     //! Get mesh count.
-    unsigned int meshCount() const;
+    size_t meshCount() const;
 
     //! Get mesh data of given index.
-    const MCMeshMetaData & mesh(unsigned int index) const;
+    MCMeshDataPtr mesh(size_t index) const;
 
 private:
-    typedef std::shared_ptr<MCMeshMetaData> MeshDataPtr;
+    void parseAttributes(const QDomElement & element, MCMeshDataPtr newData, const std::string & baseModelPath);
 
-    void parseAttributes(const QDomElement & element, MeshDataPtr newData, const std::string & baseModelPath);
+    void parseChildNodes(const QDomNode & node, MCMeshDataPtr newData);
 
-    void parseChildNodes(const QDomNode & node, MeshDataPtr newData);
-
-    std::vector<MeshDataPtr> m_meshes;
+    std::vector<MCMeshDataPtr> m_meshes;
 };
 
 #endif // MCMESHCONFIGLOADER_HH

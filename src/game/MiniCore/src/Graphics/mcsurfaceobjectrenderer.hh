@@ -39,14 +39,15 @@ class MCObject;
 class MCSurfaceObjectRenderer : public MCObjectRendererBase
 {
 public:
-    explicit MCSurfaceObjectRenderer(int maxBatchSize = 1024);
+    explicit MCSurfaceObjectRenderer(size_t maxBatchSize = 1024);
 
     //! Destructor.
-    virtual ~MCSurfaceObjectRenderer();
+    virtual ~MCSurfaceObjectRenderer() override = default;
 
 private:
     DISABLE_COPY(MCSurfaceObjectRenderer);
     DISABLE_ASSI(MCSurfaceObjectRenderer);
+    DISABLE_MOVE(MCSurfaceObjectRenderer);
 
     /*! Populate the current batch.
      *  \param Objects The vector of Object data to be rendered.
@@ -59,15 +60,17 @@ private:
     //! Render the current Object batch as shadows.
     void renderShadows() override;
 
-    MCGLVertex * m_vertices;
+    const size_t m_numVerticesPerSurface = 6;
 
-    MCGLVertex * m_normals;
+    std::vector<MCGLVertex> m_vertices;
 
-    MCGLTexCoord * m_texCoords;
+    std::vector<MCGLVertex> m_normals;
 
-    MCGLColor * m_colors; // Vertex colors
+    std::vector<MCGLTexCoord> m_texCoords;
 
-    MCSurface * m_surface;
+    std::vector<MCGLColor> m_colors; // Vertex colors
+
+    MCSurfacePtr m_surface;
 
     friend class MCWorldRenderer;
 };

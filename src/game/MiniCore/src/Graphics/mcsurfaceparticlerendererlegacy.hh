@@ -42,14 +42,15 @@ class MCObject;
 class MCSurfaceParticleRendererLegacy : public MCParticleRendererBase
 {
 public:
-    explicit MCSurfaceParticleRendererLegacy(int maxBatchSize = 1024);
+    explicit MCSurfaceParticleRendererLegacy(size_t maxBatchSize = 1024);
 
     //! Destructor.
-    virtual ~MCSurfaceParticleRendererLegacy();
+    virtual ~MCSurfaceParticleRendererLegacy() override = default;
 
 private:
     DISABLE_COPY(MCSurfaceParticleRendererLegacy);
     DISABLE_ASSI(MCSurfaceParticleRendererLegacy);
+    DISABLE_MOVE(MCSurfaceParticleRendererLegacy);
 
     /*! Populate the current batch.
      *  \param particles The vector of particle data to be rendered.
@@ -65,13 +66,15 @@ private:
     //! \reimp
     void setAttributePointers() override;
 
-    MCGLVertex * m_vertices;
+    static const size_t m_numVerticesPerParticle;
 
-    MCGLVertex * m_normals;
+    std::vector<MCGLVertex> m_vertices;
 
-    MCGLTexCoord * m_texCoords;
+    std::vector<MCGLVertex> m_normals;
 
-    MCGLColor * m_colors;
+    std::vector<MCGLTexCoord> m_texCoords;
+
+    std::vector<MCGLColor> m_colors;
 
     friend class MCWorldRenderer;
 };

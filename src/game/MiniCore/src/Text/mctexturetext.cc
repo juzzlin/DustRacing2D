@@ -51,7 +51,7 @@ void MCTextureText::updateTextDimensions()
 
     m_textHeight = m_glyphHeight;
 
-    for (unsigned int i = 0; i < m_text.size(); i++)
+    for (size_t i = 0; i < m_text.size(); i++)
     {
         if (m_text.at(i) == '\n')
         {
@@ -141,9 +141,9 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
 
     if (shadow)
     {
-        font.surface().bindShadow();
+        font.surface()->bindShadow();
 
-        for (int i = 0; i < static_cast<int>(m_text.size()); i++)
+        for (size_t i = 0; i < m_text.size(); i++)
         {
             prevGlyph = glyph;
             glyph = m_text[i];
@@ -169,26 +169,26 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
                         { texGlyph.uv(2).m_u, texGlyph.uv(2).m_v }
                     };
 
-                    font.surface().updateTexCoords(uv);
+                    font.surface()->updateTexCoords(uv);
                 }
 
-                font.surface().setSize(m_glyphWidth, m_glyphHeight);
-                font.surface().renderShadow(camera, MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0);
+                font.surface()->setSize(m_glyphWidth, m_glyphHeight);
+                font.surface()->renderShadow(camera, MCVector3dF(glyphXPos + m_xOffset, glyphYPos + m_yOffset, 0), 0);
 
                 glyphXPos += font.xDensity() * m_glyphWidth;
             }
         }
     }
 
-    font.surface().bind();
-    font.surface().setColor(m_color);
+    font.surface()->bind();
+    font.surface()->setColor(m_color);
 
     prevGlyph = 0;
     glyph = 0;
     glyphXPos = x;
     glyphYPos = y;
 
-    for (int i = 0; i < static_cast<int>(m_text.size()); i++)
+    for (size_t i = 0; i < m_text.size(); i++)
     {
         prevGlyph = glyph;
         glyph = m_text[i];
@@ -214,11 +214,11 @@ void MCTextureText::render(float x, float y, MCCamera * camera, MCTextureFont & 
                     { texGlyph.uv(2).m_u, texGlyph.uv(2).m_v }
                 };
 
-                font.surface().updateTexCoords(uv);
+                font.surface()->updateTexCoords(uv);
             }
 
-            font.surface().setSize(m_glyphWidth, m_glyphHeight);
-            font.surface().render(camera, MCVector3dF(glyphXPos, glyphYPos, 0), 0);
+            font.surface()->setSize(m_glyphWidth, m_glyphHeight);
+            font.surface()->render(camera, MCVector3dF(glyphXPos, glyphYPos, 0), 0);
 
             glyphXPos += font.xDensity() * m_glyphWidth;
         }

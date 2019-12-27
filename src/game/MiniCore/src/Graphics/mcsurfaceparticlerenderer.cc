@@ -25,40 +25,34 @@
 
 #include <algorithm>
 
-#include <QDebug>
-
-namespace {
 #ifdef __MC_GLES__
-const int NUM_VERTICES_PER_PARTICLE = 6;
+const size_t MCSurfaceParticleRenderer::m_numVerticesPerParticle = 6;
 #else
-const int NUM_VERTICES_PER_PARTICLE = 4;
+const size_t MCSurfaceParticleRenderer::m_numVerticesPerParticle = 4;
 #endif
-} // namespace
 
-MCSurfaceParticleRenderer::MCSurfaceParticleRenderer(int maxBatchSize)
+MCSurfaceParticleRenderer::MCSurfaceParticleRenderer(size_t maxBatchSize)
   : MCParticleRendererBase(maxBatchSize)
-  , m_vertices(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
-  , m_normals(new MCGLVertex[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
-  , m_texCoords(new MCGLTexCoord[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
-  , m_colors(new MCGLColor[maxBatchSize * NUM_VERTICES_PER_PARTICLE])
+  , m_vertices(maxBatchSize * m_numVerticesPerParticle)
+  , m_normals(maxBatchSize * m_numVerticesPerParticle)
+  , m_texCoords(maxBatchSize * m_numVerticesPerParticle)
+  , m_colors(maxBatchSize * m_numVerticesPerParticle)
 {
-    const int NUM_VERTICES = maxBatchSize * NUM_VERTICES_PER_PARTICLE;
-    const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
-    const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
-    const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
-    const int COLOR_DATA_SIZE = sizeof(MCGLColor) * NUM_VERTICES;
-    const int TOTAL_DATA_SIZE = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
+    const auto numVertices = maxBatchSize * m_numVerticesPerParticle;
 
-    initBufferData(TOTAL_DATA_SIZE, GL_DYNAMIC_DRAW);
+    const auto vertexDataSize = sizeof(MCGLVertex) * numVertices;
+    const auto normalDataSize = sizeof(MCGLVertex) * numVertices;
+    const auto texCoordDataSize = sizeof(MCGLTexCoord) * numVertices;
+    const auto colorDataSize = sizeof(MCGLColor) * numVertices;
 
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_vertices));
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_normals));
-    addBufferSubData(
-      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_texCoords));
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
+    const auto totalDataSize = vertexDataSize + normalDataSize + texCoordDataSize + colorDataSize;
+
+    initBufferData(totalDataSize, GL_DYNAMIC_DRAW);
+
+    addBufferSubData(MCGLShaderProgram::VAL_Vertex, vertexDataSize, reinterpret_cast<const GLfloat *>(m_vertices.data()));
+    addBufferSubData(MCGLShaderProgram::VAL_Normal, normalDataSize, reinterpret_cast<const GLfloat *>(m_normals.data()));
+    addBufferSubData(MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, reinterpret_cast<const GLfloat *>(m_texCoords.data()));
+    addBufferSubData(MCGLShaderProgram::VAL_Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
 
     finishBufferData();
 }
@@ -70,20 +64,20 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
         return;
     }
 
-    setBatchSize(std::min(static_cast<int>(batch.objects.size()), maxBatchSize()));
-    std::sort(batch.objects.begin(), batch.objects.end(), [](const MCObject * l, const MCObject * r) {
-        return l->location().k() < r->location().k();
+    setBatchSize(std::min(batch.objects.size(), maxBatchSize()));
+    std::sort(batch.objects.begin(), batch.objects.end(), [](auto lhs, auto rhs) {
+        return lhs->location().k() < rhs->location().k();
     });
 
-    const int NUM_VERTICES = batchSize() * NUM_VERTICES_PER_PARTICLE;
-    const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
-    const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
-    const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
-    const int COLOR_DATA_SIZE = sizeof(MCGLColor) * NUM_VERTICES;
+    const auto numVertices = batchSize() * m_numVerticesPerParticle;
+    const auto vertexDataSize = sizeof(MCGLVertex) * numVertices;
+    const auto normalDataSize = sizeof(MCGLVertex) * numVertices;
+    const auto texCoordDataSize = sizeof(MCGLTexCoord) * numVertices;
+    const auto colorDataSize = sizeof(MCGLColor) * numVertices;
 
     // Init vertice data for a quad
 
-    static const MCGLVertex vertices[NUM_VERTICES_PER_PARTICLE] = {
+    static const MCGLVertex vertices[m_numVerticesPerParticle] = {
 #ifdef __MC_GLES__
         { -1, -1, 0 },
         { 1, 1, 0 },
@@ -94,7 +88,7 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
         { 1, 1, 0 }
     };
 
-    static const MCGLVertex normals[NUM_VERTICES_PER_PARTICLE] = {
+    static const MCGLVertex normals[m_numVerticesPerParticle] = {
 #ifdef __MC_GLES__
         { 0, 0, 1 },
         { 0, 0, 1 },
@@ -105,7 +99,7 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
         { 0, 0, 1 }
     };
 
-    const MCGLTexCoord texCoords[NUM_VERTICES_PER_PARTICLE] = {
+    const MCGLTexCoord texCoords[m_numVerticesPerParticle] = {
 #ifdef __MC_GLES__
         { 0, 0 },
         { 1, 1 },
@@ -117,16 +111,16 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
     };
 
     // Take common properties from the first particle in the batch
-    MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(batch.objects.at(0));
-    setMaterial(particle->surface().material());
+    const auto particle = dynamic_cast<MCSurfaceParticle *>(batch.objects.at(0));
+    setMaterial(particle->surface()->material());
     setHasShadow(particle->hasShadow());
     setAlphaBlend(particle->useAlphaBlend(), particle->alphaSrc(), particle->alphaDst());
 
-    int vertexIndex = 0;
-    for (int i = 0; i < batchSize(); i++)
+    size_t vertexIndex = 0;
+    for (size_t i = 0; i < batchSize(); i++)
     {
-        MCSurfaceParticle * particle = static_cast<MCSurfaceParticle *>(batch.objects[i]);
-        MCVector3dF location(particle->location());
+        const auto particle = static_cast<MCSurfaceParticle *>(batch.objects[i]);
+        const auto location(particle->location());
 
         float x, y, z;
 
@@ -148,7 +142,7 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
             camera->mapToCamera(x, y);
         }
 
-        for (int j = 0; j < NUM_VERTICES_PER_PARTICLE; j++)
+        for (size_t j = 0; j < m_numVerticesPerParticle; j++)
         {
             float vertexX = vertices[j].x() * particle->radius();
             float vertexY = vertices[j].y() * particle->radius();
@@ -186,23 +180,23 @@ void MCSurfaceParticleRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCC
 
     initUpdateBufferData();
 
-    const int MAX_VERTEX_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_PARTICLE;
+    const auto maxVertexDataSize = sizeof(MCGLVertex) * maxBatchSize() * m_numVerticesPerParticle;
     addBufferSubData(
-      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, MAX_VERTEX_DATA_SIZE,
-      reinterpret_cast<const GLfloat *>(m_vertices));
+      MCGLShaderProgram::VAL_Vertex, vertexDataSize, maxVertexDataSize,
+      reinterpret_cast<const GLfloat *>(m_vertices.data()));
 
-    const int MAX_NORMAL_DATA_SIZE = sizeof(MCGLVertex) * maxBatchSize() * NUM_VERTICES_PER_PARTICLE;
+    const auto maxNormalDataSize = sizeof(MCGLVertex) * maxBatchSize() * m_numVerticesPerParticle;
     addBufferSubData(
-      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, MAX_NORMAL_DATA_SIZE,
-      reinterpret_cast<const GLfloat *>(m_normals));
+      MCGLShaderProgram::VAL_Normal, normalDataSize, maxNormalDataSize,
+      reinterpret_cast<const GLfloat *>(m_normals.data()));
 
-    const int MAX_TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * maxBatchSize() * NUM_VERTICES_PER_PARTICLE;
+    const auto maxTexCoordDataSize = sizeof(MCGLTexCoord) * maxBatchSize() * m_numVerticesPerParticle;
     addBufferSubData(
-      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, MAX_TEXCOORD_DATA_SIZE,
-      reinterpret_cast<const GLfloat *>(m_texCoords));
+      MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, maxTexCoordDataSize,
+      reinterpret_cast<const GLfloat *>(m_texCoords.data()));
 
     addBufferSubData(
-      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, reinterpret_cast<const GLfloat *>(m_colors));
+      MCGLShaderProgram::VAL_Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
 }
 
 void MCSurfaceParticleRenderer::render()
@@ -216,10 +210,11 @@ void MCSurfaceParticleRenderer::render()
     shaderProgram()->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 
 #ifdef __MC_GLES__
-    glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
+    const auto mode = GL_TRIANGLES;
 #else
-    glDrawArrays(GL_QUADS, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
+    const auto mode = GL_QUADS;
 #endif
+    glDrawArrays(mode, 0, static_cast<int>(batchSize() * m_numVerticesPerParticle));
     glDisable(GL_BLEND);
 
     releaseVBO();
@@ -236,19 +231,12 @@ void MCSurfaceParticleRenderer::renderShadows()
     shadowShaderProgram()->setScale(1.0f, 1.0f, 1.0f);
 
 #ifdef __MC_GLES__
-    glDrawArrays(GL_TRIANGLES, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
+    const auto mode = GL_TRIANGLES;
 #else
-    glDrawArrays(GL_QUADS, 0, batchSize() * NUM_VERTICES_PER_PARTICLE);
+    const auto mode = GL_QUADS;
 #endif
+    glDrawArrays(mode, 0, static_cast<int>(batchSize() * m_numVerticesPerParticle));
 
     releaseVBO();
     releaseVAO();
-}
-
-MCSurfaceParticleRenderer::~MCSurfaceParticleRenderer()
-{
-    delete[] m_vertices;
-    delete[] m_normals;
-    delete[] m_texCoords;
-    delete[] m_colors;
 }

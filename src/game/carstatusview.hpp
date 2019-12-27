@@ -18,6 +18,8 @@
 
 #include "renderable.hpp"
 
+#include <memory>
+
 class MCSurface;
 class Car;
 
@@ -34,8 +36,10 @@ public:
     void setCarToFollow(const Car & car);
 
 private:
-    MCSurface & m_body;
-    MCSurface & m_tires;
+    std::shared_ptr<MCSurface> m_body;
+
+    std::shared_ptr<MCSurface> m_tires;
+
     const Car * m_car;
 };
 

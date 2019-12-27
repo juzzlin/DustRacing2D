@@ -29,18 +29,18 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
   , m_model(model)
   , m_alpha(1.0)
 {
-    m_startLightOff.material()->setAlphaBlend(true);
-    m_startLightOffCorner.material()->setAlphaBlend(true);
-    m_startLightGlow.setColor(MCGLColor(1.5f, 0.25f, 0.25f, 0.4f));
+    m_startLightOff->material()->setAlphaBlend(true);
+    m_startLightOffCorner->material()->setAlphaBlend(true);
+    m_startLightGlow->setColor(MCGLColor(1.5f, 0.25f, 0.25f, 0.4f));
 }
 
 void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bool glowAlways) const
 {
     const int cols = 8;
 
-    const float x = m_model.pos().i() - (cols - 1) * m_startLightOn.width() / 2;
-    const float y = m_model.pos().j() - (rows - 1) * m_startLightOn.height() / 2;
-    const float h = rows * m_startLightOn.height();
+    const float x = m_model.pos().i() - (cols - 1) * m_startLightOn->width() / 2;
+    const float y = m_model.pos().j() - (rows - 1) * m_startLightOn->height() / 2;
+    const float h = rows * m_startLightOn->height();
 
     // Body
     for (int row = 0; row < rows; row++)
@@ -48,53 +48,53 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
         for (int col = 0; col < cols; col++)
         {
             const MCVector3dF pos(
-              x + col * m_startLightOff.width(),
-              y + h - row * m_startLightOff.height());
+              x + col * m_startLightOff->width(),
+              y + h - row * m_startLightOff->height());
 
             if (row < litRows)
             {
                 if (row == 0 && col == 0)
                 {
-                    m_startLightOnCorner.render(nullptr, pos, 0);
+                    m_startLightOnCorner->render(nullptr, pos, 0);
                 }
                 else if (row == rows - 1 && col == 0)
                 {
-                    m_startLightOnCorner.render(nullptr, pos, 90);
+                    m_startLightOnCorner->render(nullptr, pos, 90);
                 }
                 else if (row == rows - 1 && col == cols - 1)
                 {
-                    m_startLightOnCorner.render(nullptr, pos, 180);
+                    m_startLightOnCorner->render(nullptr, pos, 180);
                 }
                 else if (row == 0 && col == cols - 1)
                 {
-                    m_startLightOnCorner.render(nullptr, pos, 270);
+                    m_startLightOnCorner->render(nullptr, pos, 270);
                 }
                 else
                 {
-                    m_startLightOn.render(nullptr, pos, 0);
+                    m_startLightOn->render(nullptr, pos, 0);
                 }
             }
             else
             {
                 if (row == 0 && col == 0)
                 {
-                    m_startLightOffCorner.render(nullptr, pos, 0);
+                    m_startLightOffCorner->render(nullptr, pos, 0);
                 }
                 else if (row == rows - 1 && col == 0)
                 {
-                    m_startLightOffCorner.render(nullptr, pos, 90);
+                    m_startLightOffCorner->render(nullptr, pos, 90);
                 }
                 else if (row == rows - 1 && col == cols - 1)
                 {
-                    m_startLightOffCorner.render(nullptr, pos, 180);
+                    m_startLightOffCorner->render(nullptr, pos, 180);
                 }
                 else if (row == 0 && col == cols - 1)
                 {
-                    m_startLightOffCorner.render(nullptr, pos, 270);
+                    m_startLightOffCorner->render(nullptr, pos, 270);
                 }
                 else
                 {
-                    m_startLightOff.render(nullptr, pos, 0);
+                    m_startLightOff->render(nullptr, pos, 0);
                 }
             }
         }
@@ -107,19 +107,19 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
         {
             if (row < litRows || glowAlways)
             {
-                m_startLightGlow.setScale(MCVector3dF(glowScale, glowScale, 1.0f));
-                m_startLightGlow.render(
+                m_startLightGlow->setScale(MCVector3dF(glowScale, glowScale, 1.0f));
+                m_startLightGlow->render(
                   nullptr,
                   MCVector3dF(
-                    x + col * m_startLightOn.width(),
-                    y + h - row * m_startLightOn.height()),
+                    x + col * m_startLightOn->width(),
+                    y + h - row * m_startLightOn->height()),
                   0);
             }
         }
     }
 }
 
-void StartlightsOverlay::setDimensions(int width, int height)
+void StartlightsOverlay::setDimensions(size_t width, size_t height)
 {
     OverlayBase::setDimensions(width, height);
     m_model.setDimensions(width, height);
@@ -131,34 +131,34 @@ void StartlightsOverlay::render()
 
     switch (m_model.state())
     {
-    case Startlights::FirstRow:
+    case Startlights::State::FirstRow:
         m_alpha = 1.0;
         renderLights(3, 1, m_model.glowScale());
         break;
 
-    case Startlights::SecondRow:
+    case Startlights::State::SecondRow:
         renderLights(3, 2, m_model.glowScale());
         break;
 
-    case Startlights::ThirdRow:
+    case Startlights::State::ThirdRow:
         renderLights(3, 3, m_model.glowScale());
         break;
 
-    case Startlights::Go:
-        m_alpha *= 0.98;
-        m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
-        m_startLightOffCorner.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
+    case Startlights::State::Go:
+        m_alpha *= 0.98f;
+        m_startLightOff->setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
+        m_startLightOffCorner->setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
         renderLights(3, 0, m_model.glowScale(), true);
         break;
 
-    case Startlights::Disappear:
-    case Startlights::Appear:
-        m_startLightOff.setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
-        m_startLightOffCorner.setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
+    case Startlights::State::Disappear:
+    case Startlights::State::Appear:
+        m_startLightOff->setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
+        m_startLightOffCorner->setColor(MCGLColor(1.0, 1.0, 1.0, 1.0));
         renderLights(3, 0, m_model.glowScale());
         break;
 
-    case Startlights::End:
+    case Startlights::State::End:
         break;
 
     default:

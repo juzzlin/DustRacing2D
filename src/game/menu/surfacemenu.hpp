@@ -18,6 +18,8 @@
 
 #include <Menu>
 
+#include <memory>
+
 class MCSurface;
 class MCTextureFont;
 
@@ -32,9 +34,7 @@ public:
       bool quitItem = true, bool prevItem = false, bool nextItem = false);
 
     //! Destructor.
-    virtual ~SurfaceMenu()
-    {
-    }
+    virtual ~SurfaceMenu() override = default;
 
     //! \reimp
     virtual void render() override;
@@ -58,7 +58,8 @@ protected:
     MCTextureFont & font() const;
 
 private:
-    MCSurface & m_back;
+    std::shared_ptr<MCSurface> m_back;
+
     MCTextureFont & m_font;
 };
 

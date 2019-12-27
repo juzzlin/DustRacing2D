@@ -36,7 +36,7 @@ class Startlights : public QObject
 
 public:
     //! Startlights animation sequence states.
-    enum State
+    enum class State
     {
         Init,
         Appear,
@@ -53,7 +53,7 @@ public:
 
     State state() const;
 
-    void setDimensions(unsigned int width, unsigned int height);
+    void setDimensions(size_t width, size_t height);
 
     const MCVector3dF & pos() const;
 
@@ -80,27 +80,34 @@ private:
     StateToFunctionMap m_stateToFunctionMap;
 
     void stateInit();
+
     void stateAppear();
+
     void stateFirstRow();
+
     void stateSecondRow();
+
     void stateThirdRow();
+
     void stateGo();
+
     void stateDisappear();
+
     void stateEnd();
 
-    bool timeElapsed(unsigned int limit);
+    bool timeElapsed(size_t limit);
 
     State m_state;
 
-    unsigned int m_counter;
+    size_t m_counter;
 
-    unsigned int m_stepsPerState;
+    size_t m_stepsPerState;
 
     MCVector3dF m_pos;
 
-    unsigned int m_width;
+    size_t m_width;
 
-    unsigned int m_height;
+    size_t m_height;
 
     float m_glowScale;
 

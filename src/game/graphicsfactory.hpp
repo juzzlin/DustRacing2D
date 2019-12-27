@@ -18,14 +18,16 @@
 
 #include "minimap.hpp"
 
+#include <memory>
+
 class MCSurface;
 
 //! Helper functions to create miscellaneous graphic items.
 namespace GraphicsFactory {
 
-MCSurface & generateNumberSurface(size_t index);
+std::shared_ptr<MCSurface> generateNumberSurface(size_t index);
 
-MCSurface & generateMinimapMarker();
+std::shared_ptr<MCSurface> generateMinimapMarker();
 
 } // namespace GraphicsFactory
 

@@ -30,6 +30,7 @@
 #include "mcvector3d.hh"
 
 #include <cmath>
+#include <memory>
 #include <string>
 
 class MCCamera;
@@ -52,42 +53,24 @@ public:
      *  \param z1 Z-coordinate for vertex[1]. Enables tilted surfaces.
      *  \param z2 Z-coordinate for vertex[2]. Enables tilted surfaces.
      *  \param z3 Z-coordinate for vertex[3]. Enables tilted surfaces. */
-    MCSurface(
-      std::string handle,
-      MCGLMaterialPtr material,
-      float width,
-      float height,
-      float z0 = 0,
-      float z1 = 0,
-      float z2 = 0,
-      float z3 = 0);
+    MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z0 = 0, float z1 = 0, float z2 = 0, float z3 = 0);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param z Z-coordinate common for all vertices. */
-    MCSurface(
-      std::string handle,
-      MCGLMaterialPtr material,
-      float width,
-      float height,
-      float z);
+    MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z);
 
     /*! Constructor.
      *  \param handle Handle (or name) of the surface.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
      *  \param texCoords Array including texture coordinates of the four vertices. */
-    MCSurface(
-      std::string handle,
-      MCGLMaterialPtr material,
-      float width,
-      float height,
-      const MCGLTexCoord texCoords[4]);
+    MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
-    virtual ~MCSurface() {};
+    virtual ~MCSurface() = default;
 
     //! Update texture coordinates.
     void updateTexCoords(const MCGLTexCoord texCoords[4]);
@@ -95,8 +78,11 @@ public:
 private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
+    DISABLE_MOVE(MCSurface);
 
     void initVBOs();
 };
+
+using MCSurfacePtr = std::shared_ptr<MCSurface>;
 
 #endif // MCSURFACE_HH

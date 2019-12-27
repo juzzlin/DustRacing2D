@@ -35,14 +35,15 @@ class MCObject;
 class MCSurfaceObjectRendererLegacy : public MCObjectRendererBase
 {
 public:
-    explicit MCSurfaceObjectRendererLegacy(int maxBatchSize = 1024);
+    explicit MCSurfaceObjectRendererLegacy(size_t maxBatchSize = 1024);
 
     //! Destructor.
-    virtual ~MCSurfaceObjectRendererLegacy();
+    virtual ~MCSurfaceObjectRendererLegacy() override = default;
 
 private:
     DISABLE_COPY(MCSurfaceObjectRendererLegacy);
     DISABLE_ASSI(MCSurfaceObjectRendererLegacy);
+    DISABLE_MOVE(MCSurfaceObjectRendererLegacy);
 
     /*! Populate the current batch.
      *  \param Objects The vector of Object data to be rendered.
@@ -58,15 +59,17 @@ private:
     //! \reimp
     void setAttributePointers() override;
 
-    MCGLVertex * m_vertices;
+    const size_t m_numVerticesPerSurface = 6;
 
-    MCGLVertex * m_normals;
+    std::vector<MCGLVertex> m_vertices;
 
-    MCGLTexCoord * m_texCoords;
+    std::vector<MCGLVertex> m_normals;
 
-    MCGLColor * m_colors;
+    std::vector<MCGLTexCoord> m_texCoords;
 
-    MCSurface * m_surface;
+    std::vector<MCGLColor> m_colors;
+
+    MCSurfacePtr m_surface;
 
     friend class MCWorldRenderer;
 };

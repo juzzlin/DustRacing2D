@@ -32,7 +32,7 @@
 class MCObjectRendererBase : public MCGLObjectBase
 {
 public:
-    explicit MCObjectRendererBase(int maxBatchSize = 1024);
+    explicit MCObjectRendererBase(size_t maxBatchSize = 1024);
 
     virtual ~MCObjectRendererBase();
 
@@ -56,13 +56,13 @@ public:
 
 protected:
     //! Set current batch size
-    void setBatchSize(int batchSize);
+    void setBatchSize(size_t batchSize);
 
     //! Get current batch size
-    int batchSize() const;
+    size_t batchSize() const;
 
     //! Set max batch size
-    int maxBatchSize() const;
+    size_t maxBatchSize() const;
 
     bool useAlphaBlend() const;
 
@@ -73,10 +73,11 @@ protected:
 private:
     DISABLE_COPY(MCObjectRendererBase);
     DISABLE_ASSI(MCObjectRendererBase);
+    DISABLE_MOVE(MCObjectRendererBase);
 
-    int m_batchSize;
+    size_t m_batchSize;
 
-    int m_maxBatchSize;
+    size_t m_maxBatchSize;
 
     bool m_hasShadow;
 

@@ -34,19 +34,17 @@ class MCSurfaceView : public MCShapeView
 public:
     /*! Constructor.
      * \param handle See MCShapeView::MCShapeView().
-     * \param surface Surface to be used. Ownership of surface is not changed. */
-    explicit MCSurfaceView(
-      const std::string & handle,
-      MCSurface * surface = nullptr);
+     * \param surface Surface to be used. */
+    explicit MCSurfaceView(const std::string & handle, std::shared_ptr<MCSurface> surface);
 
     //! Destructor
-    virtual ~MCSurfaceView();
+    virtual ~MCSurfaceView() override;
 
     //! Sets surface and updates the view handle with the handle of the surface.
-    void setSurface(MCSurface & surface);
+    void setSurface(std::shared_ptr<MCSurface> surface);
 
     //! Get surface or nullptr if not set.
-    MCSurface * surface() const;
+    std::shared_ptr<MCSurface> surface() const;
 
     //! \reimp
     void setShaderProgram(MCGLShaderProgramPtr program) override;
@@ -93,12 +91,10 @@ public:
 private:
     DISABLE_COPY(MCSurfaceView);
     DISABLE_ASSI(MCSurfaceView);
+    DISABLE_MOVE(MCSurfaceView);
 
-    void updateBBox();
-
-    MCSurface * m_surface;
-
-    MCBBoxF m_bbox;
+    class Impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 #endif // MCSURFACEVIEW_HH

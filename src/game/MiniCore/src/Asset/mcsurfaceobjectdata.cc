@@ -41,7 +41,9 @@ void MCSurfaceObjectData::setDefaultCircleShape(bool state)
     m_defaultCircleShape = state;
 }
 
-bool MCSurfaceObjectData::defaultCirleShape() const
+bool MCSurfaceObjectData::defaultCircleShape() const
 {
     return m_defaultCircleShape;
 }
+
+MCSurfaceObjectData::~MCSurfaceObjectData() = default;

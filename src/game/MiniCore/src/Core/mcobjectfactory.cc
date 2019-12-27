@@ -39,47 +39,46 @@ MCObjectFactory::MCObjectFactory(MCAssetManager & assetManager)
 
 MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
 {
-    MCShapeViewPtr view;
-    MCShapePtr shape;
-    MCSurface & surface = m_assetManager.surfaceManager().surface(data.surfaceId());
-    MCObject * object = nullptr;
+    const auto surface = m_assetManager.surfaceManager().surface(data.surfaceId());
+
+    MCObjectPtr object;
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
     case MCObjectData::Default:
+    {
         // Circle shape according to surface dimensions
-        if (data.defaultCirleShape())
+        if (data.defaultCircleShape())
         {
-            object = new MCObject(data.typeId());
-            view.reset(new MCSurfaceView(data.typeId(), &surface));
-            shape.reset(new MCCircleShape(view, std::max(surface.width(), surface.height()) / 2));
-            object->setShape(shape);
+            object = std::make_shared<MCObject>(data.typeId());
+            object->setShape(std::make_shared<MCCircleShape>(
+              std::make_shared<MCSurfaceView>(data.typeId(), surface), std::max(surface->width(), surface->height()) / 2));
         }
         // Rect shape according to surface dimensions (default)
         else
         {
-            object = new MCObject(surface, data.typeId());
+            object = std::make_shared<MCObject>(surface, data.typeId());
         }
         break;
-
+    }
     // Explicit circle shape
     case MCObjectData::Circle:
-        object = new MCObject(data.typeId());
-        view.reset(new MCSurfaceView(data.typeId(), &surface));
-        shape.reset(new MCCircleShape(view, data.shapeRadius()));
-        object->setShape(shape);
-        break;
-
-    // Explicit rect shape
-    case MCObjectData::Rect:
-        object = new MCObject(data.typeId());
-        view.reset(new MCSurfaceView(data.typeId(), &surface));
-        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
-        object->setShape(shape);
+    {
+        object = std::make_shared<MCObject>(data.typeId());
+        object->setShape(std::make_shared<MCCircleShape>(
+          std::make_shared<MCSurfaceView>(data.typeId(), surface), data.shapeRadius()));
         break;
     }
-
+    // Explicit rect shape
+    case MCObjectData::Rect:
+    {
+        object = std::make_shared<MCObject>(data.typeId());
+        object->setShape(std::make_shared<MCRectShape>(
+          std::make_shared<MCSurfaceView>(data.typeId(), surface), data.shapeWidth(), data.shapeHeight()));
+        break;
+    }
+    }
     assert(object);
     setCommonProperties(*object, data);
 
@@ -88,91 +87,74 @@ MCObjectPtr MCObjectFactory::build(const MCSurfaceObjectData & data)
 
 MCObjectPtr MCObjectFactory::build(const MCMeshObjectData & data)
 {
-    MCShapeViewPtr view;
-    MCShapePtr shape;
-    MCObject * object = nullptr;
-    MCMesh & mesh = m_assetManager.meshManager().mesh(data.meshId());
+    const auto object = std::make_shared<MCObject>(data.typeId());
+    const auto mesh = m_assetManager.meshManager().mesh(data.meshId());
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
     case MCObjectData::Default:
         // Circle shape according to surface dimensions
-        if (data.defaultCirleShape())
+        if (data.defaultCircleShape())
         {
-            object = new MCObject(data.typeId());
-            view.reset(new MCMeshView(data.typeId(), &mesh));
-            shape.reset(new MCCircleShape(view, std::max(mesh.width(), mesh.height()) / 2));
-            object->setShape(shape);
+            object->setShape(std::make_shared<MCCircleShape>(std::make_shared<MCMeshView>(data.typeId(), mesh), std::max(mesh->width(), mesh->height()) / 2));
         }
         // Rect shape according to mesh dimensions (default)
         else
         {
-            object = new MCObject(data.typeId());
-            view.reset(new MCMeshView(data.typeId(), &mesh));
-            shape.reset(new MCRectShape(view, mesh.width(), mesh.height()));
-            object->setShape(shape);
+            object->setShape(std::make_shared<MCRectShape>(std::make_shared<MCMeshView>(data.typeId(), mesh), mesh->width(), mesh->height()));
         }
         break;
 
     // Explicit circle shape
     case MCObjectData::Circle:
-        object = new MCObject(data.typeId());
-        view.reset(new MCMeshView(data.typeId(), &mesh));
-        shape.reset(new MCCircleShape(view, data.shapeRadius()));
-        object->setShape(shape);
+        object->setShape(std::make_shared<MCCircleShape>(std::make_shared<MCMeshView>(data.typeId(), mesh), data.shapeRadius()));
         break;
 
     // Explicit rect shape
     case MCObjectData::Rect:
-        object = new MCObject(data.typeId());
-        view.reset(new MCMeshView(data.typeId(), &mesh));
-        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
-        object->setShape(shape);
+        object->setShape(std::make_shared<MCRectShape>(std::make_shared<MCMeshView>(data.typeId(), mesh), data.shapeWidth(), data.shapeHeight()));
         break;
     }
 
-    assert(object);
     setCommonProperties(*object, data);
 
-    return MCObjectPtr(object);
+    return object;
 }
 
 MCObjectPtr MCObjectFactory::build(const MCObjectData & data, MCShapeViewPtr view)
 {
-    MCShapePtr shape;
-    MCObject * object = nullptr;
+    MCObjectPtr object;
 
     switch (data.shape())
     {
     // Default shape, use surface dimensions
     case MCObjectData::Default:
         // Auto shape not supported.
-        break;
+        return nullptr;
 
     // Explicit circle shape
     case MCObjectData::Circle:
-        object = new MCObject(data.typeId());
-        shape.reset(new MCCircleShape(view, data.shapeRadius()));
-        object->setShape(shape);
-        break;
-
-    // Explicit rect shape
-    case MCObjectData::Rect:
-        object = new MCObject(data.typeId());
-        shape.reset(new MCRectShape(view, data.shapeWidth(), data.shapeHeight()));
-        object->setShape(shape);
+    {
+        object = std::make_shared<MCObject>(data.typeId());
+        object->setShape(std::make_shared<MCCircleShape>(view, data.shapeRadius()));
         break;
     }
+    // Explicit rect shape
+    case MCObjectData::Rect:
+    {
+        object = std::make_shared<MCObject>(data.typeId());
+        object->setShape(std::make_shared<MCRectShape>(view, data.shapeWidth(), data.shapeHeight()));
+        break;
+    }
+    }
 
-    assert(object);
     setCommonProperties(*object, data);
 
-    return MCObjectPtr(object);
+    return object;
 }
 
-void MCObjectFactory::setCommonProperties(
-  MCObject & object, const MCObjectData & data) const
+void MCObjectFactory::setCommonProperties(MCObject & object, const MCObjectData & data) const
 {
     object.physicsComponent().setMass(data.mass(), data.stationary());
     object.physicsComponent().setXYFriction(data.xyFriction());

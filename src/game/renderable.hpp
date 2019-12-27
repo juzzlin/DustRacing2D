@@ -16,6 +16,8 @@
 #ifndef RENDERABLE_HPP
 #define RENDERABLE_HPP
 
+#include <cstddef>
+
 //! Base class for items and overlays that are rendered on top of the game scene.
 class Renderable
 {
@@ -30,59 +32,57 @@ public:
     }
 
     //! Destructor.
-    virtual ~Renderable()
-    {
-    }
+    virtual ~Renderable() = default;
 
     //! Render.
     virtual void render() = 0;
 
     //! Set centered position.
-    void setPos(int x, int y)
+    void setPos(size_t x, size_t y)
     {
         m_x = x;
         m_y = y;
     }
 
     //! Get x.
-    int x() const
+    size_t x() const
     {
         return m_x;
     }
 
     //! Get y.
-    int y() const
+    size_t y() const
     {
         return m_y;
     }
 
     //! Set dimensions.
-    virtual void setDimensions(int width, int height)
+    virtual void setDimensions(size_t width, size_t height)
     {
         m_w = width;
         m_h = height;
     }
 
     //! Get width.
-    int width() const
+    size_t width() const
     {
         return m_w;
     }
 
     //! Get height.
-    int height() const
+    size_t height() const
     {
         return m_h;
     }
 
 private:
-    int m_x;
+    size_t m_x;
 
-    int m_y;
+    size_t m_y;
 
-    int m_w;
+    size_t m_w;
 
-    int m_h;
+    size_t m_h;
 };
 
 #endif // RENDERABLE_HPP

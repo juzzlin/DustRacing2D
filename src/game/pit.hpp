@@ -19,6 +19,7 @@
 #include <MCObject>
 #include <QObject>
 
+#include <memory>
 #include <set>
 
 class MCCollisionEvent;
@@ -33,7 +34,7 @@ class Pit : public QObject, public MCObject
 
 public:
     //! Constructor.
-    Pit(MCSurface & surface);
+    Pit(std::shared_ptr<MCSurface> surface);
 
     void reset();
 

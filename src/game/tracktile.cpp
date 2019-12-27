@@ -22,8 +22,6 @@ TrackTile::TrackTile(
   TrackTile::TileType typeEnum)
   : TrackTileBase(location, matrixLocation, type)
   , m_rotation(0)
-  , m_surface(nullptr)
-  , m_previewSurface(nullptr)
   , m_typeEnum(typeEnum)
   , m_hasAsphalt(false)
 {
@@ -39,22 +37,22 @@ int TrackTile::rotation() const
     return m_rotation;
 }
 
-void TrackTile::setSurface(MCSurface * surface)
+void TrackTile::setSurface(MCSurfacePtr surface)
 {
     m_surface = surface;
 }
 
-MCSurface * TrackTile::surface() const
+MCSurfacePtr TrackTile::surface() const
 {
     return m_surface;
 }
 
-void TrackTile::setPreviewSurface(MCSurface * surface)
+void TrackTile::setPreviewSurface(MCSurfacePtr surface)
 {
     m_previewSurface = surface;
 }
 
-MCSurface * TrackTile::previewSurface() const
+MCSurfacePtr TrackTile::previewSurface() const
 {
     return m_previewSurface;
 }

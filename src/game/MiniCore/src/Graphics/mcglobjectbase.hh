@@ -106,14 +106,14 @@ public:
     MCGLMaterialPtr material() const;
 
     //! Get vertex
-    const MCGLVertex & vertex(int index) const;
+    const MCGLVertex & vertex(size_t index) const;
 
     //! Get vertices
     const GLfloat * verticesAsGlArray() const;
 
-    int vertexCount() const;
+    size_t vertexCount() const;
 
-    const MCGLVertex & normal(int index) const;
+    const MCGLVertex & normal(size_t index) const;
 
     const GLfloat * normalsAsGlArray() const;
 
@@ -124,13 +124,13 @@ public:
     MCGLColor color() const;
 
     //! Get a vertex color, needed for batching
-    const MCGLColor & color(int index) const;
+    const MCGLColor & color(size_t index) const;
 
     //! Get a vertex colors
     const GLfloat * colorsAsGlArray() const;
 
     //! Get texture coord of a vertex
-    const MCGLTexCoord & texCoord(int index) const;
+    const MCGLTexCoord & texCoord(size_t index) const;
 
     //! Get texture coords
     const GLfloat * texCoordsAsGlArray() const;
@@ -199,19 +199,17 @@ protected:
     void setColors(const ColorVector & colors);
 
     //! This should be called after setting vertices, texture coords, normals and colors
-    void initBufferData(int totalDataSize, GLuint drawType = GL_STATIC_DRAW);
+    void initBufferData(size_t totalDataSize, GLuint drawType = GL_STATIC_DRAW);
 
-    void addBufferSubData(
-      MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data);
+    void addBufferSubData(MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, const GLfloat * data);
 
-    void addBufferSubData(
-      MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data);
+    void addBufferSubData(MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, size_t offsetJump, const GLfloat * data);
 
     void finishBufferData();
 
     void initUpdateBufferData();
 
-    int totalDataSize() const;
+    size_t totalDataSize() const;
 
     virtual void setAttributePointers();
 
@@ -237,17 +235,17 @@ private:
 
     MCGLMaterialPtr m_material;
 
-    int m_bufferDataOffset = 0;
+    size_t m_bufferDataOffset = 0;
 
-    int m_vertexDataSize = 0;
+    size_t m_vertexDataSize = 0;
 
-    int m_normalDataSize = 0;
+    size_t m_normalDataSize = 0;
 
-    int m_texCoordDataSize = 0;
+    size_t m_texCoordDataSize = 0;
 
-    int m_colorDataSize = 0;
+    size_t m_colorDataSize = 0;
 
-    int m_totalDataSize = 0;
+    size_t m_totalDataSize = 0;
 
     bool m_hasVao = false;
 

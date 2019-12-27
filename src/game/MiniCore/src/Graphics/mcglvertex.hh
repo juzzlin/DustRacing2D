@@ -25,17 +25,31 @@
 class MCGLVertex
 {
 public:
-    MCGLVertex()
-      : m_x(0)
+    MCGLVertex(GLfloat x, GLfloat y, GLfloat z)
+      : m_x(x)
+      , m_y(y)
+      , m_z(z)
+    {
+    }
+
+    MCGLVertex(GLfloat x, GLfloat y)
+      : m_x(x)
+      , m_y(y)
+      , m_z(0)
+    {
+    }
+
+    MCGLVertex(GLfloat x)
+      : m_x(x)
       , m_y(0)
       , m_z(0)
     {
     }
 
-    MCGLVertex(GLfloat x, GLfloat y, GLfloat z = 0)
-      : m_x(x)
-      , m_y(y)
-      , m_z(z)
+    MCGLVertex()
+      : m_x(0)
+      , m_y(0)
+      , m_z(0)
     {
     }
 

@@ -28,7 +28,7 @@
 
 #include <cassert>
 
-MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
+MCSurfacePtr GraphicsFactory::generateNumberSurface(size_t index)
 {
     const int pixmapWidth = 32;
     const int pixmapHeight = 32;
@@ -67,7 +67,7 @@ MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
     return MCAssetManager::surfaceManager().createSurfaceFromImage(surfaceData, numberPixmap.toImage());
 }
 
-MCSurface & GraphicsFactory::generateMinimapMarker()
+MCSurfacePtr GraphicsFactory::generateMinimapMarker()
 {
     const int pixmapWidth = 64;
     const int pixmapHeight = 64;

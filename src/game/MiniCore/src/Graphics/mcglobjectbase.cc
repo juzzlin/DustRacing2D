@@ -124,7 +124,7 @@ void MCGLObjectBase::createVBO()
 
 void MCGLObjectBase::render()
 {
-    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(m_vertices.size()));
 }
 
 void MCGLObjectBase::render(MCCamera * camera, MCVector3dFR pos, float angle)
@@ -223,7 +223,7 @@ MCGLMaterialPtr MCGLObjectBase::material() const
     return m_material;
 }
 
-void MCGLObjectBase::initBufferData(int totalDataSize, GLuint drawType)
+void MCGLObjectBase::initBufferData(size_t totalDataSize, GLuint drawType)
 {
     m_totalDataSize = totalDataSize;
 
@@ -233,7 +233,7 @@ void MCGLObjectBase::initBufferData(int totalDataSize, GLuint drawType)
     bindVAO();
     bindVBO();
 
-    glBufferData(GL_ARRAY_BUFFER, m_totalDataSize, nullptr, drawType);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<int>(m_totalDataSize), nullptr, drawType);
 
     m_bufferDataOffset = 0;
 }
@@ -248,7 +248,7 @@ void MCGLObjectBase::setVertices(const VertexVector & vertices)
     m_vertices = vertices;
 }
 
-const MCGLVertex & MCGLObjectBase::vertex(int index) const
+const MCGLVertex & MCGLObjectBase::vertex(size_t index) const
 {
     return m_vertices.at(index);
 }
@@ -258,7 +258,7 @@ const GLfloat * MCGLObjectBase::verticesAsGlArray() const
     return reinterpret_cast<const GLfloat *>(&m_vertices[0]);
 }
 
-int MCGLObjectBase::vertexCount() const
+size_t MCGLObjectBase::vertexCount() const
 {
     return m_vertices.size();
 }
@@ -273,7 +273,7 @@ void MCGLObjectBase::setNormals(const VertexVector & normals)
     m_normals = normals;
 }
 
-const MCGLVertex & MCGLObjectBase::normal(int index) const
+const MCGLVertex & MCGLObjectBase::normal(size_t index) const
 {
     return m_normals.at(index);
 }
@@ -303,7 +303,7 @@ void MCGLObjectBase::setColors(const ColorVector & colors)
     m_colors = colors;
 }
 
-const MCGLColor & MCGLObjectBase::color(int index) const
+const MCGLColor & MCGLObjectBase::color(size_t index) const
 {
     return m_colors.at(index);
 }
@@ -323,7 +323,7 @@ void MCGLObjectBase::setTexCoords(const TexCoordVector & texCoords)
     m_texCoords = texCoords;
 }
 
-const MCGLTexCoord & MCGLObjectBase::texCoord(int index) const
+const MCGLTexCoord & MCGLObjectBase::texCoord(size_t index) const
 {
     return m_texCoords.at(index);
 }
@@ -338,23 +338,23 @@ void MCGLObjectBase::initUpdateBufferData()
     bindVAO();
     bindVBO();
 
-    glBufferData(GL_ARRAY_BUFFER, m_totalDataSize, nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<int>(m_totalDataSize), nullptr, GL_DYNAMIC_DRAW);
 
     m_bufferDataOffset = 0;
 }
 
 void MCGLObjectBase::addBufferSubData(
-  MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, const GLfloat * data)
+  MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, const GLfloat * data)
 {
     addBufferSubData(dataType, dataSize, dataSize, data);
 }
 
 void MCGLObjectBase::addBufferSubData(
-  MCGLShaderProgram::VertexAttribLocations dataType, int dataSize, int offsetJump, const GLfloat * data)
+  MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, size_t offsetJump, const GLfloat * data)
 {
     assert(dataSize <= offsetJump);
 
-    glBufferSubData(GL_ARRAY_BUFFER, m_bufferDataOffset, dataSize, data);
+    glBufferSubData(GL_ARRAY_BUFFER, static_cast<int>(m_bufferDataOffset), static_cast<int>(dataSize), data);
 
     m_bufferDataOffset += offsetJump;
 
@@ -372,8 +372,6 @@ void MCGLObjectBase::addBufferSubData(
     case MCGLShaderProgram::VAL_Color:
         m_colorDataSize = dataSize;
         break;
-    default:
-        assert(false);
     }
 }
 
@@ -389,7 +387,7 @@ void MCGLObjectBase::setAttributePointers()
 {
     enableAttributePointers();
 
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
                           reinterpret_cast<GLvoid *>(m_vertexDataSize));
@@ -483,7 +481,7 @@ void MCGLObjectBase::finishBufferData()
     releaseVAO();
 }
 
-int MCGLObjectBase::totalDataSize() const
+size_t MCGLObjectBase::totalDataSize() const
 {
     return m_totalDataSize;
 }

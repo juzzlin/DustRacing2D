@@ -19,7 +19,7 @@
 
 #include "mcparticlerendererbase.hh"
 
-MCParticleRendererBase::MCParticleRendererBase(int maxBatchSize)
+MCParticleRendererBase::MCParticleRendererBase(size_t maxBatchSize)
   : MCGLObjectBase("mcparticlerendererbase")
   , m_batchSize(0)
   , m_maxBatchSize(maxBatchSize)
@@ -37,17 +37,17 @@ void MCParticleRendererBase::setAlphaBlend(bool useAlphaBlend, GLenum src, GLenu
     m_dst = dst;
 }
 
-int MCParticleRendererBase::maxBatchSize() const
+size_t MCParticleRendererBase::maxBatchSize() const
 {
     return m_maxBatchSize;
 }
 
-int MCParticleRendererBase::batchSize() const
+size_t MCParticleRendererBase::batchSize() const
 {
     return m_batchSize;
 }
 
-void MCParticleRendererBase::setBatchSize(int batchSize)
+void MCParticleRendererBase::setBatchSize(size_t batchSize)
 {
     m_batchSize = batchSize;
 }
@@ -77,6 +77,4 @@ GLenum MCParticleRendererBase::alphaDst() const
     return m_dst;
 }
 
-MCParticleRendererBase::~MCParticleRendererBase()
-{
-}
+MCParticleRendererBase::~MCParticleRendererBase() = default;

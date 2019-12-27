@@ -23,6 +23,7 @@
 #include "mcglshaderprogram.hh"
 #include "mctextureglyph.hh"
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -35,7 +36,7 @@ public:
     /*! Constructor.
      * \param surface Reference to the surface object containing
      * all the monospace glyphs. */
-    MCTextureFont(MCSurface & surface);
+    MCTextureFont(std::shared_ptr<MCSurface> surface);
 
     /*! Add a mapping from given glyph to given MCTextureGlyph.
      *  MCTextureGlyph includes e.g. uv-coordinates. */
@@ -50,7 +51,7 @@ public:
     void setGlyphFallback(wchar_t glyph, wchar_t fallback);
 
     //! Return the associated surface.
-    MCSurface & surface() const;
+    std::shared_ptr<MCSurface> surface() const;
 
     //! Set the shader program to be used.
     void setShaderProgram(MCGLShaderProgramPtr program);
@@ -67,17 +68,17 @@ public:
 private:
     MCTextureGlyph m_default;
 
-    typedef std::unordered_map<wchar_t, MCTextureGlyph> GlyphHash;
+    using GlyphHash = std::unordered_map<wchar_t, MCTextureGlyph>;
     GlyphHash m_glyphs;
 
-    typedef std::vector<MCTextureGlyph> GlyphLookUp;
+    using GlyphLookUp = std::vector<MCTextureGlyph>;
     GlyphLookUp m_glyphLookUp;
 
     float m_xDensity;
 
     float m_yDensity;
 
-    MCSurface & m_surface;
+    std::shared_ptr<MCSurface> m_surface;
 };
 
 #endif // MCTEXTUREFONT_HH

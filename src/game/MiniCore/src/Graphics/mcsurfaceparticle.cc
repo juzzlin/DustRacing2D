@@ -18,8 +18,9 @@
 //
 
 #include "mcsurfaceparticle.hh"
+#include "mcsurface.hh"
 
-MCSurfaceParticle::MCSurfaceParticle(const std::string & typeId, MCSurface & surface)
+MCSurfaceParticle::MCSurfaceParticle(const std::string & typeId, MCSurfacePtr surface)
   : MCParticle(typeId)
   , m_color(1.0, 1.0, 1.0, 1.0)
   , m_surface(surface)
@@ -40,7 +41,7 @@ const MCGLColor & MCSurfaceParticle::color() const
     return m_color;
 }
 
-MCSurface & MCSurfaceParticle::surface()
+MCSurfacePtr MCSurfaceParticle::surface()
 {
     return m_surface;
 }

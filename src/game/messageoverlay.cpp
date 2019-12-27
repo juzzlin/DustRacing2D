@@ -21,7 +21,7 @@
 static const int GLYPH_WIDTH = 20;
 static const int GLYPH_HEIGHT = 20;
 
-MessageOverlay::MessageOverlay(Alignment align, int messageMaxTime)
+MessageOverlay::MessageOverlay(Alignment align, size_t messageMaxTime)
   : m_fontManager(MCAssetManager::textureFontManager())
   , m_font(m_fontManager.font(Game::instance().fontName()))
   , m_text(L"")
@@ -120,51 +120,41 @@ void MessageOverlay::renderMessages()
     else
     {
         // Y-coordinate for the fist message
-        y = height() - 2 * GLYPH_HEIGHT;
+        y = static_cast<int>(height()) - 2 * GLYPH_HEIGHT;
         dY = -GLYPH_HEIGHT;
     }
 
     // Center X-coordinate
-    x = width() / 2;
+    x = static_cast<int>(width()) / 2;
 
     // Loop through active messages and init their targetY
-    auto i(m_listMessages.begin());
-    while (i != m_listMessages.end())
+    for (auto && message : m_listMessages)
     {
-        MessageOverlay::Message & m = *i;
-
-        if (!m.isYInitialized)
+        if (!message.isYInitialized)
         {
-            m.y = y;
-            m.targetY = y;
-            m.isYInitialized = true;
+            message.y = y;
+            message.targetY = y;
+            message.isYInitialized = true;
         }
         else
         {
-            if (!m.isRemoving)
+            if (!message.isRemoving)
             {
-                m.targetY = y;
+                message.targetY = y;
             }
         }
 
         // Increment / decrement y-coordinate
         y += dY;
-
-        i++;
     }
 
     // Loop trough active messages and render them stacked
-    auto j(m_listMessages.begin());
-    while (j != m_listMessages.end())
+    for (auto && message : m_listMessages)
     {
-        const MessageOverlay::Message & m = *j;
-
-        // Create a Text object from the std QString
-        m_text.setText(m.text);
+        // Create a Text object from the string
+        m_text.setText(message.text);
 
         // Render the text
-        m_text.render(x - (m_text.width(m_font) / 2), m.y, nullptr, m_font);
-
-        j++;
+        m_text.render(x - (m_text.width(m_font) / 2), message.y, nullptr, m_font);
     }
 }

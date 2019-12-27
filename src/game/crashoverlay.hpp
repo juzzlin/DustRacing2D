@@ -18,6 +18,8 @@
 
 #include "overlaybase.hpp"
 
+#include <memory>
+
 class MCSurface;
 class Car;
 
@@ -30,7 +32,7 @@ public:
     virtual void render() override;
 
     //! \reimp
-    virtual void setDimensions(int width, int height) override;
+    virtual void setDimensions(size_t width, size_t height) override;
 
     //! \reimp
     virtual bool update() override;
@@ -38,7 +40,7 @@ public:
     void setCarToFollow(Car & car);
 
 private:
-    MCSurface & m_surface;
+    std::shared_ptr<MCSurface> m_surface;
 
     float m_alpha;
 

@@ -195,7 +195,7 @@ MCSurfaceManager::MCSurfaceManager()
 {
 }
 
-MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image)
+std::shared_ptr<MCSurface> MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image)
 {
     if (data.handle.size() == 0)
     {
@@ -212,8 +212,8 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
     // that are initialized before this surface.
     MCGLMaterialPtr material(new MCGLMaterial);
     material->setTexture(create2DTextureFromImage(data, image), 0);
-    material->setTexture(data.handle2.length() ? surface(data.handle2).material()->texture(0) : 0, 1);
-    material->setTexture(data.handle3.length() ? surface(data.handle3).material()->texture(0) : 0, 2);
+    material->setTexture(data.handle2.length() ? surface(data.handle2)->material()->texture(0) : 0, 1);
+    material->setTexture(data.handle3.length() ? surface(data.handle3)->material()->texture(0) : 0, 2);
 
     if (data.specularCoeff.second)
     {
@@ -221,26 +221,23 @@ MCSurface & MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & d
     }
 
     // Create a new MCSurface object
-    MCSurface * surface =
-      new MCSurface(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
+    auto surface = std::make_shared<MCSurface>(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Maybe better place for this could be in the material?
     surface->setColor(data.color);
 
-    assert(surface);
-    createSurfaceCommon(*surface, data);
+    createSurfaceCommon(surface, data);
 
-    return *surface;
+    return surface;
 }
 
-void MCSurfaceManager::createSurfaceCommon(MCSurface & surface, const MCSurfaceMetaData & data)
+void MCSurfaceManager::createSurfaceCommon(std::shared_ptr<MCSurface> surface, const MCSurfaceMetaData & data)
 {
     // Enable alpha blend, if set
-    surface.material()->setAlphaBlend(
-      data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
+    surface->material()->setAlphaBlend(data.alphaBlend.second, data.alphaBlend.first.m_src, data.alphaBlend.first.m_dst);
 
     // Store MCSurface to map
-    m_surfaceMap[data.handle] = &surface;
+    m_surfaceMap[data.handle] = surface;
 }
 #ifdef __MC_GLES__
 static bool isPowerOfTwo(unsigned int x)
@@ -425,25 +422,21 @@ void MCSurfaceManager::applyAlphaClamp(QImage & textureImage, unsigned int a) co
 MCSurfaceManager::~MCSurfaceManager()
 {
     // Delete OpenGL textures and Textures
-    auto iter(m_surfaceMap.begin());
-    while (iter != m_surfaceMap.end())
+    for (auto && iter : m_surfaceMap)
     {
-        if (iter->second)
+        if (iter.second)
         {
-            MCSurface * p = iter->second;
+            const auto surface = iter.second;
             for (unsigned int i = 0; i < MCGLMaterial::MAX_TEXTURES; i++)
             {
-                GLuint dummyHandle1 = p->material()->texture(i);
+                GLuint dummyHandle1 = surface->material()->texture(i);
                 glDeleteTextures(1, &dummyHandle1);
             }
-            delete p;
         }
-        iter++;
     }
 }
 
-void MCSurfaceManager::load(
-  const std::string & configFilePath, const std::string & baseDataPath)
+void MCSurfaceManager::load(const std::string & configFilePath, const std::string & baseDataPath)
 {
     MCSurfaceConfigLoader loader;
 
@@ -479,7 +472,7 @@ void MCSurfaceManager::load(
     }
 }
 
-MCSurface & MCSurfaceManager::surface(const std::string & id) const
+std::shared_ptr<MCSurface> MCSurfaceManager::surface(const std::string & id) const
 {
     // Try to find existing texture for the surface
     if (m_surfaceMap.count(id) == 0)
@@ -488,7 +481,5 @@ MCSurface & MCSurfaceManager::surface(const std::string & id) const
     }
 
     // Yes: return handle for the texture
-    MCSurface * pSurface = m_surfaceMap.find(id)->second;
-    assert(pSurface);
-    return *pSurface;
+    return m_surfaceMap.find(id)->second;
 }

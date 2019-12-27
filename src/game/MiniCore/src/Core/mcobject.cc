@@ -72,16 +72,13 @@ public:
         setShape(shape);
     }
 
-    Impl(MCObject & parent, MCSurface & surface, const std::string & typeName)
+    Impl(MCObject & parent, MCSurfacePtr surface, const std::string & typeName)
       : Impl(parent, typeName)
     {
         // Create an MCRectShape using surface with an MCSurfaceView
-        MCShapePtr rectShape(new MCRectShape(
-          MCShapeViewPtr(new MCSurfaceView(surface.handle(), &surface)),
-          surface.width(),
-          surface.height()));
-
-        setShape(rectShape);
+        setShape(
+          std::make_shared<MCRectShape>(
+            std::make_shared<MCSurfaceView>(surface->handle(), surface), surface->width(), surface->height()));
     }
 
     void addToWorld()
@@ -743,7 +740,7 @@ MCObject::MCObject(MCShapePtr shape, const std::string & typeName)
 {
 }
 
-MCObject::MCObject(MCSurface & surface, const std::string & typeName)
+MCObject::MCObject(MCSurfacePtr surface, const std::string & typeName)
   : m_impl(std::make_unique<Impl>(*this, surface, typeName))
 {
 }

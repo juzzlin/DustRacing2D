@@ -135,8 +135,8 @@ void Track::renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i
     float x1, y1; // Coordinates mapped to camera
 
     // Bind common geometry and textures for all asphalt tiles.
-    m_asphalt.setShaderProgram(prog);
-    m_asphalt.bind();
+    m_asphalt->setShaderProgram(prog);
+    m_asphalt->bind();
 
     const MapBase & map = m_trackData->map();
 
@@ -156,7 +156,7 @@ void Track::renderAsphalt(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i
                 y1 = y;
                 camera.mapToCamera(x1, y1);
                 prog->setTransform(0, MCVector3dF(x1 + TrackTile::width() / 2, y1 + TrackTile::height() / 2, 0));
-                m_asphalt.render();
+                m_asphalt->render();
             }
 
             x += TrackTile::width();
@@ -178,7 +178,7 @@ void Track::renderTiles(MCCamera & camera, MCGLShaderProgramPtr prog, size_t i0,
 
     // The tiles are sorted with respect to their surface in order
     // to minimize GPU context switches.
-    std::map<MCSurface *, std::vector<SortedTile>> sortedTiles;
+    std::map<MCSurfacePtr, std::vector<SortedTile>> sortedTiles;
 
     auto && map = m_trackData->map();
 

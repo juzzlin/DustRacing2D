@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+#include <memory>
+
 class MCSurface;
 class MCTextureFont;
 
@@ -34,10 +36,10 @@ public:
     void render() override;
 
     //! \reimp
-    void setDimensions(int width, int height) override;
+    void setDimensions(size_t width, size_t height) override;
 
 private:
-    MCSurface & m_back;
+    std::shared_ptr<MCSurface> m_back;
 
     MCTextureFont & m_font;
 };

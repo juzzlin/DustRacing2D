@@ -33,7 +33,7 @@ public:
     explicit MCSurfaceObjectData(const std::string & typeId);
 
     //! Destructor.
-    virtual ~MCSurfaceObjectData() {};
+    virtual ~MCSurfaceObjectData();
 
     //! Set the id of the already created MCSurface.
     void setSurfaceId(const std::string & id);
@@ -45,7 +45,7 @@ public:
     void setDefaultCircleShape(bool state);
 
     //! Returns true if default circle shape is wanted.
-    bool defaultCirleShape() const;
+    bool defaultCircleShape() const;
 
 private:
     DISABLE_COPY(MCSurfaceObjectData);

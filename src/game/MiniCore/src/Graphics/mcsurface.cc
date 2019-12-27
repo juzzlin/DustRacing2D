@@ -30,30 +30,23 @@
 #include <algorithm>
 #include <cassert>
 
-static const int NUM_VERTICES = 6;
+namespace {
+static const auto NUM_VERTICES = 6;
 
-static const int NUM_COLOR_COMPONENTS = 4;
+static const auto NUM_COLOR_COMPONENTS = 4;
 
-static const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+static const auto VERTEX_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
 
-static const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
+static const auto NORMAL_DATA_SIZE = sizeof(MCGLVertex) * NUM_VERTICES;
 
-static const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
+static const auto TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * NUM_VERTICES;
 
-static const int COLOR_DATA_SIZE = sizeof(GLfloat) * NUM_VERTICES * NUM_COLOR_COMPONENTS;
+static const auto COLOR_DATA_SIZE = sizeof(GLfloat) * NUM_VERTICES * NUM_COLOR_COMPONENTS;
 
-static const int TOTAL_DATA_SIZE =
-  VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
+static const auto TOTAL_DATA_SIZE = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
+} // namespace
 
-MCSurface::MCSurface(
-  std::string handle,
-  MCGLMaterialPtr material,
-  float width,
-  float height,
-  float z0,
-  float z1,
-  float z2,
-  float z3)
+MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z0, float z1, float z2, float z3)
   : MCGLObjectBase(handle)
 {
     setMaterial(material);
@@ -67,15 +60,15 @@ MCSurface::MCSurface(
     setMaxZ(std::max(std::max(z0, z1), std::max(z2, z3)));
 
     // Init vertice data for two triangles.
-    const float w2 = this->width() / 2;
-    const float h2 = this->height() / 2;
+    const GLfloat w2 = this->width() / 2;
+    const GLfloat h2 = this->height() / 2;
     VertexVector vertices = {
-        MCGLVertex(-(GLfloat)w2, -(GLfloat)h2, z0),
-        MCGLVertex((GLfloat)w2, (GLfloat)h2, z2),
-        MCGLVertex(-(GLfloat)w2, (GLfloat)h2, z1),
-        MCGLVertex(-(GLfloat)w2, -(GLfloat)h2, z0),
-        MCGLVertex((GLfloat)w2, -(GLfloat)h2, z3),
-        MCGLVertex((GLfloat)w2, (GLfloat)h2, z2)
+        MCGLVertex(-w2, -h2, z0),
+        MCGLVertex(w2, h2, z2),
+        MCGLVertex(-w2, h2, z1),
+        MCGLVertex(-w2, -h2, z0),
+        MCGLVertex(w2, -h2, z3),
+        MCGLVertex(w2, h2, z2)
     };
 
     setVertices(vertices);
@@ -131,14 +124,15 @@ MCSurface::MCSurface(
     setHeight(height);
 
     // Init vertice data for two triangles.
-    const float w2 = width / 2;
-    const float h2 = height / 2;
-    setVertices({ { -(GLfloat)w2, -(GLfloat)h2, 0 },
-                  { (GLfloat)w2, (GLfloat)h2, 0 },
-                  { -(GLfloat)w2, (GLfloat)h2, 0 },
-                  { -(GLfloat)w2, -(GLfloat)h2, 0 },
-                  { (GLfloat)w2, -(GLfloat)h2, 0 },
-                  { (GLfloat)w2, (GLfloat)h2, 0 } });
+    const GLfloat w2 = width / 2;
+    const GLfloat h2 = height / 2;
+
+    setVertices({ { -w2, -h2, 0 },
+                  { w2, h2, 0 },
+                  { -w2, h2, 0 },
+                  { -w2, -h2, 0 },
+                  { w2, -h2, 0 },
+                  { w2, h2, 0 } });
 
     setTexCoords({ texCoords[0],
                    texCoords[2],
@@ -149,7 +143,7 @@ MCSurface::MCSurface(
 
     setNormals(VertexVector(NUM_VERTICES, { 0, 0, 1 }));
 
-    setColors(ColorVector(NUM_VERTICES, MCGLColor()));
+    setColors(ColorVector(NUM_VERTICES, { MCGLColor() }));
 
     initVBOs();
 }
@@ -183,6 +177,5 @@ void MCSurface::updateTexCoords(const MCGLTexCoord texCoords[4])
         texCoords[2]
     };
 
-    glBufferSubData(
-      GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
+    glBufferSubData(GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
 }

@@ -18,6 +18,8 @@
 
 #include "overlaybase.hpp"
 
+#include <memory>
+
 class MCSurface;
 
 //! Renders checkerflag on top of the game scene.
@@ -31,7 +33,7 @@ public:
     virtual void render() override;
 
 private:
-    MCSurface & m_surface;
+    std::shared_ptr<MCSurface> m_surface;
 };
 
 #endif // CHECKEREDFLAG_HPP

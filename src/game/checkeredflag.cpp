@@ -32,6 +32,6 @@ CheckeredFlag::CheckeredFlag()
 void CheckeredFlag::render()
 {
     MCVector3dF pos(width() / 2, height() - FLAG_H / 2 - V_SPACING);
-    m_surface.setSize(FLAG_W, FLAG_H);
-    m_surface.render(nullptr, pos, 0);
+    m_surface->setSize(FLAG_W, FLAG_H);
+    m_surface->render(nullptr, pos, 0);
 }

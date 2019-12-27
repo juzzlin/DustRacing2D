@@ -269,12 +269,12 @@ void TrackLoader::readTile(QDomElement & element, TrackData & newData)
     // Associate with a surface object corresponging
     // to the tile type.
     // surface() throws if fails. Handled of higher level.
-    tile->setSurface(&MCAssetManager::surfaceManager().surface(type));
+    tile->setSurface(MCAssetManager::surfaceManager().surface(type));
 
     // Set preview surface, if found.
     try
     {
-        tile->setPreviewSurface(&MCAssetManager::surfaceManager().surface(type + "Preview"));
+        tile->setPreviewSurface(MCAssetManager::surfaceManager().surface(type + "Preview"));
     } catch (...)
     {
         // Don't care

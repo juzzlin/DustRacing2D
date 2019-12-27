@@ -24,16 +24,13 @@
 #include <MCVector3d>
 
 #include <map>
+#include <memory>
 #include <string>
 
 /*! Mesh metadata structure returned by MCMeshConfigLoader.
  *  MCMeshManager can create MCMesh objects based on this data. */
 struct MCMeshMetaData
 {
-    MCMeshMetaData()
-    {
-    }
-
     //! Handle of the mesh.
     std::string handle;
 
@@ -52,5 +49,7 @@ struct MCMeshMetaData
     //! Scale
     std::pair<MCVector3dF, bool> scale;
 };
+
+using MCMeshDataPtr = std::shared_ptr<MCMeshMetaData>;
 
 #endif // MCMESHMETADATA_HH

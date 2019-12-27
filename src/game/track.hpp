@@ -79,7 +79,7 @@ private:
 
     size_t m_rows, m_cols, m_width, m_height;
 
-    MCSurface & m_asphalt;
+    std::shared_ptr<MCSurface> m_asphalt;
 
     std::weak_ptr<Track> m_next;
 

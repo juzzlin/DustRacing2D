@@ -25,11 +25,43 @@
 class MCGLColor
 {
 public:
-    explicit MCGLColor(GLfloat r = 1.0f, GLfloat g = 1.0f, GLfloat b = 1.0f, GLfloat a = 1.0f)
+    MCGLColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
       : m_r(r)
       , m_g(g)
       , m_b(b)
       , m_a(a)
+    {
+    }
+
+    MCGLColor(GLfloat r, GLfloat g, GLfloat b)
+      : m_r(r)
+      , m_g(g)
+      , m_b(b)
+      , m_a(1.0f)
+    {
+    }
+
+    MCGLColor(GLfloat r, GLfloat g)
+      : m_r(r)
+      , m_g(g)
+      , m_b(1.0f)
+      , m_a(1.0f)
+    {
+    }
+
+    MCGLColor(GLfloat r)
+      : m_r(r)
+      , m_g(1.0f)
+      , m_b(1.0f)
+      , m_a(1.0f)
+    {
+    }
+
+    MCGLColor()
+      : m_r(1.0f)
+      , m_g(1.0f)
+      , m_b(1.0f)
+      , m_a(1.0f)
     {
     }
 

@@ -20,7 +20,7 @@
 #include "mctexturefont.hh"
 #include "mcsurface.hh"
 
-MCTextureFont::MCTextureFont(MCSurface & surface)
+MCTextureFont::MCTextureFont(std::shared_ptr<MCSurface> surface)
   : m_default(
     MCTextureGlyph::UV(0, 0),
     MCTextureGlyph::UV(1, 1))
@@ -33,9 +33,9 @@ MCTextureFont::MCTextureFont(MCSurface & surface)
 
 void MCTextureFont::addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph)
 {
-    if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
+    if (static_cast<size_t>(glyphId) < m_glyphLookUp.size())
     {
-        m_glyphLookUp[glyphId] = textureGlyph;
+        m_glyphLookUp[static_cast<size_t>(glyphId)] = textureGlyph;
     }
     else
     {
@@ -45,13 +45,13 @@ void MCTextureFont::addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph
 
 MCTextureGlyph & MCTextureFont::glyph(wchar_t glyphId)
 {
-    if (static_cast<unsigned int>(glyphId) < m_glyphLookUp.size())
+    if (static_cast<size_t>(glyphId) < m_glyphLookUp.size())
     {
-        return m_glyphLookUp[glyphId];
+        return m_glyphLookUp[static_cast<size_t>(glyphId)];
     }
     else
     {
-        auto textureGlyph = m_glyphs.find(glyphId);
+        const auto textureGlyph = m_glyphs.find(glyphId);
         if (textureGlyph != m_glyphs.end())
         {
             return textureGlyph->second;
@@ -66,19 +66,19 @@ void MCTextureFont::setGlyphFallback(wchar_t glyph, wchar_t fallback)
     addGlyphMapping(glyph, this->glyph(fallback));
 }
 
-MCSurface & MCTextureFont::surface() const
+MCSurfacePtr MCTextureFont::surface() const
 {
     return m_surface;
 }
 
 void MCTextureFont::setShaderProgram(MCGLShaderProgramPtr program)
 {
-    surface().setShaderProgram(program);
+    surface()->setShaderProgram(program);
 }
 
 void MCTextureFont::setShadowShaderProgram(MCGLShaderProgramPtr program)
 {
-    surface().setShadowShaderProgram(program);
+    surface()->setShadowShaderProgram(program);
 }
 
 void MCTextureFont::setDensities(float xDensity, float yDensity)

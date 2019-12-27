@@ -24,7 +24,6 @@
 #include "mcglcolor.hh"
 #include "mcglshaderprogram.hh"
 #include "mcparticle.hh"
-#include "mcsurface.hh"
 
 #include <string>
 
@@ -42,10 +41,10 @@ public:
      *  \param viewId id for the particle. All particles of a same kind should
      *  use the same id. E.g. batching is carried out based on this id.
      *  \param surface Surface used by the particle. */
-    MCSurfaceParticle(const std::string & viewId, MCSurface & surface);
+    MCSurfaceParticle(const std::string & viewId, std::shared_ptr<MCSurface> surface);
 
     //! Destructor.
-    virtual ~MCSurfaceParticle() {};
+    virtual ~MCSurfaceParticle() = default;
 
     //! Set color
     void setColor(const MCGLColor & color);
@@ -53,7 +52,7 @@ public:
     //! Get the color.
     const MCGLColor & color() const;
 
-    MCSurface & surface();
+    std::shared_ptr<MCSurface> surface();
 
     //! Enable/disable blending.
     void setAlphaBlend(bool useAlphaBlend, GLenum src = GL_SRC_ALPHA, GLenum dst = GL_ONE_MINUS_SRC_ALPHA);
@@ -73,10 +72,11 @@ public:
 private:
     DISABLE_COPY(MCSurfaceParticle);
     DISABLE_ASSI(MCSurfaceParticle);
+    DISABLE_MOVE(MCSurfaceParticle);
 
     MCGLColor m_color;
 
-    MCSurface & m_surface;
+    std::shared_ptr<MCSurface> m_surface;
 
     bool m_hasShadow;
 

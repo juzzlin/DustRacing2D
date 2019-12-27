@@ -65,9 +65,9 @@ public:
         updateData();
 
         auto && program = Renderer::instance().program("menu");
-        m_star.setShaderProgram(program);
-        m_glow.setShaderProgram(program);
-        m_lock.setShaderProgram(program);
+        m_star->setShaderProgram(program);
+        m_glow->setShaderProgram(program);
+        m_lock->setShaderProgram(program);
     }
 
     std::shared_ptr<Track> track() const
@@ -107,11 +107,11 @@ private:
 
     MCTextureFont & m_font;
 
-    MCSurface & m_star;
+    MCSurfacePtr m_star;
 
-    MCSurface & m_glow;
+    MCSurfacePtr m_glow;
 
-    MCSurface & m_lock;
+    MCSurfacePtr m_lock;
 
     int m_lapRecord;
 
@@ -215,8 +215,8 @@ void TrackItem::renderStars()
 {
     if (!m_track->trackData().isLocked())
     {
-        const auto starW = m_star.width();
-        const auto starH = m_star.height();
+        const auto starW = m_star->width();
+        const auto starH = m_star->height();
         const auto startX = menu()->x() + x() - 5 * starW + starW / 2;
         const MCGLColor yellow(1.0, 1.0, 0.0);
         const MCGLColor grey(.75, .75, .75);
@@ -229,15 +229,15 @@ void TrackItem::renderStars()
             // The range of m_bestPos is 1..NUM_CARS
             if (m_bestPos != -1 && numStars - i >= m_bestPos)
             {
-                m_star.setColor(yellow);
-                m_glow.render(nullptr, starPos, 0);
+                m_star->setColor(yellow);
+                m_glow->render(nullptr, starPos, 0);
             }
             else
             {
-                m_star.setColor(grey);
+                m_star->setColor(grey);
             }
 
-            m_star.render(nullptr, starPos, 0);
+            m_star->render(nullptr, starPos, 0);
         }
     }
 }
@@ -246,7 +246,7 @@ void TrackItem::renderLock()
 {
     if (m_track->trackData().isLocked())
     {
-        m_lock.render(nullptr, MCVector3dF(menu()->x() + x(), menu()->y() + y(), 0), 0);
+        m_lock->render(nullptr, { menu()->x() + x(), menu()->y() + y(), 0 }, 0);
     }
 }
 

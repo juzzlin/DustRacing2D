@@ -52,11 +52,11 @@ bool MCTextureFontConfigLoader::loadFonts()
 
     file.close();
 
-    QDomElement root = doc.documentElement();
+    auto && root = doc.documentElement();
     if (root.nodeName() == "fonts")
     {
         MCTextureFontData * newData = nullptr;
-        QDomNode node = root.firstChild();
+        auto && node = root.firstChild();
         while (!node.isNull() && node.nodeName() == "font")
         {
             newData = new MCTextureFontData;
@@ -69,12 +69,12 @@ bool MCTextureFontConfigLoader::loadFonts()
                 MCLogger().info() << "Loading font '" << newData->name.c_str() << "'..";
 
                 // Read child nodes of font node.
-                QDomNode childNode = node.firstChild();
+                auto && childNode = node.firstChild();
                 while (!childNode.isNull())
                 {
                     if (childNode.nodeName() == "glyph")
                     {
-                        QDomElement tag = childNode.toElement();
+                        auto && tag = childNode.toElement();
                         if (!tag.isNull())
                         {
                             MCTextureFontData::Glyph glyph;
@@ -101,14 +101,14 @@ bool MCTextureFontConfigLoader::loadFonts()
     return true;
 }
 
-unsigned int MCTextureFontConfigLoader::fonts() const
+size_t MCTextureFontConfigLoader::fonts() const
 {
-    return static_cast<unsigned int>(m_fonts.size());
+    return m_fonts.size();
 }
 
-MCTextureFontData & MCTextureFontConfigLoader::font(unsigned int index) const
+MCTextureFontData & MCTextureFontConfigLoader::font(size_t index) const
 {
-    assert(index < static_cast<unsigned int>(m_fonts.size()));
+    assert(index < m_fonts.size());
     assert(m_fonts.at(index));
     return *m_fonts.at(index);
 }

@@ -26,10 +26,10 @@ CrashOverlay::CrashOverlay()
   , m_car(nullptr)
   , m_isTriggered(false)
 {
-    m_surface.material()->setAlphaBlend(true);
+    m_surface->material()->setAlphaBlend(true);
 }
 
-void CrashOverlay::setDimensions(int width, int height)
+void CrashOverlay::setDimensions(size_t width, size_t height)
 {
     OverlayBase::setDimensions(width, height);
 }
@@ -45,12 +45,12 @@ void CrashOverlay::render()
     {
         glDisable(GL_DEPTH_TEST);
 
-        const int w2 = width() / 2;
-        const int h2 = height() / 2;
+        const auto halfWidth = width() / 2;
+        const auto halfHeight = height() / 2;
 
-        m_surface.setColor(MCGLColor(1.0, 1.0, 1.0, m_alpha));
-        m_surface.setSize(width(), height());
-        m_surface.render(nullptr, MCVector3dF(w2, h2, 0), 0);
+        m_surface->setColor({ 1.0, 1.0, 1.0, m_alpha });
+        m_surface->setSize(width(), height());
+        m_surface->render(nullptr, MCVector3dF(halfWidth, halfHeight, 0), 0);
     }
 }
 

@@ -61,36 +61,34 @@ public:
     MCMeshManager();
 
     //! Destructor
-    virtual ~MCMeshManager() {};
+    virtual ~MCMeshManager()
+    {
+    }
 
     /*! Loads mesh config from strBasePath using the given mapping file strFile.
      *  \param configFilePath Path to the XML-based input file.
      *  \param baseDataPath The absolute search path for an mesh is
      *  baseDataPath + baseModelPath + fileName. baseModelPath and the fileName are
      *  defined in the input file. */
-    virtual void load(
-      const std::string & configFilePath, const std::string & baseDataPath);
+    virtual void load(const std::string & configFilePath, const std::string & baseDataPath);
 
     /*! Returns a mesh object associated with given strId.
      *  MCMeshManager will keep the ownership.
      *  \param handle Handle defined in the mesh config file.
      *  \return Reference to the corresponding MCMesh.
      *  \throws std::runtime_error on failure. */
-    MCMesh & mesh(
-      const std::string & handle) const;
+    MCMeshPtr mesh(const std::string & handle) const;
 
     //! Create a mesh from given meta data and face vector.
-    MCMesh & createMesh(
-      const MCMeshMetaData & data, const MCMesh::FaceVector & faces);
+    MCMeshPtr createMesh(const MCMeshMetaData & data, const MCMesh::FaceVector & faces);
 
 private:
-    //! Map for resulting mesh objects
-    typedef std::shared_ptr<MCMesh> MeshPtr;
-    typedef std::unordered_map<std::string, MeshPtr> MeshHash;
+    typedef std::unordered_map<std::string, MCMeshPtr> MeshHash;
     MeshHash m_meshMap;
 
     DISABLE_COPY(MCMeshManager);
     DISABLE_ASSI(MCMeshManager);
+    DISABLE_MOVE(MCMeshManager);
 };
 
 #endif // MCMESHMANAGER_HH

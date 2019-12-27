@@ -29,8 +29,6 @@
 
 #include <algorithm>
 
-static const int NUM_COLOR_COMPONENTS = 4;
-
 MCMesh::MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material)
   : MCGLObjectBase(handle)
 {
@@ -45,8 +43,6 @@ MCMesh::MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr mat
 
 void MCMesh::init(const FaceVector & faces)
 {
-    const int NUM_FACES = static_cast<int>(faces.size());
-
     float minX = std::numeric_limits<float>::max();
     float maxX = std::numeric_limits<float>::min();
     float minY = std::numeric_limits<float>::max();
@@ -54,14 +50,15 @@ void MCMesh::init(const FaceVector & faces)
     float minZ = std::numeric_limits<float>::max();
     float maxZ = std::numeric_limits<float>::min();
 
-    int vertexIndex = 0;
-    for (int faceIndex = 0; faceIndex < NUM_FACES; faceIndex++)
+    size_t vertexIndex = 0;
+    for (auto && face : faces)
     {
-        const MCMesh::Face & face = faces.at(faceIndex);
-        const int numFaceVertices = static_cast<int>(face.vertices.size());
-        assert(numFaceVertices == 3); // Only triagles accepted
+        if (face.vertices.size() != 3)
+        {
+            throw std::runtime_error("Only triangular faces supported!");
+        }
 
-        for (int faceVertexIndex = 0; faceVertexIndex < numFaceVertices; faceVertexIndex++)
+        for (size_t faceVertexIndex = 0; faceVertexIndex < face.vertices.size(); faceVertexIndex++)
         {
             MCGLVertex vertex = { face.vertices.at(faceVertexIndex).x, face.vertices.at(faceVertexIndex).y, face.vertices.at(faceVertexIndex).z };
 
@@ -107,27 +104,28 @@ void MCMesh::init(const FaceVector & faces)
 
 void MCMesh::initVBOs()
 {
-    static const int VERTEX_DATA_SIZE = sizeof(MCGLVertex) * vertexCount();
+    static const auto vertexDataSize = sizeof(MCGLVertex) * vertexCount();
 
-    static const int NORMAL_DATA_SIZE = sizeof(MCGLVertex) * vertexCount();
+    static const auto normalDataSize = sizeof(MCGLVertex) * vertexCount();
 
-    static const int TEXCOORD_DATA_SIZE = sizeof(MCGLTexCoord) * vertexCount();
+    static const auto texCoordDataSize = sizeof(MCGLTexCoord) * vertexCount();
 
-    static const int COLOR_DATA_SIZE = sizeof(GLfloat) * vertexCount() * NUM_COLOR_COMPONENTS;
+    static const auto numColorComponents = 4;
 
-    static const int TOTAL_DATA_SIZE =
-      VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
+    static const auto colorDataSize = sizeof(GLfloat) * vertexCount() * numColorComponents;
 
-    initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
+    static const auto totalDataSize = vertexDataSize + normalDataSize + texCoordDataSize + colorDataSize;
+
+    initBufferData(totalDataSize, GL_STATIC_DRAW);
 
     addBufferSubData(
-      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, verticesAsGlArray());
+      MCGLShaderProgram::VAL_Vertex, vertexDataSize, verticesAsGlArray());
     addBufferSubData(
-      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, normalsAsGlArray());
+      MCGLShaderProgram::VAL_Normal, normalDataSize, normalsAsGlArray());
     addBufferSubData(
-      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, texCoordsAsGlArray());
+      MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, texCoordsAsGlArray());
     addBufferSubData(
-      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, colorsAsGlArray());
+      MCGLShaderProgram::VAL_Color, colorDataSize, colorsAsGlArray());
 
     finishBufferData();
 }
