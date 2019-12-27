@@ -207,47 +207,76 @@ void Race::translateCarsToStartPositions()
         {
         case 90:
         case -270:
+        {
+            float moveDueToBridge = 0;
             for (size_t i = 0; i < order.size(); i++)
             {
-                const float rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                const float colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
-                placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 180);
-                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos - gridOffset, startTileY + colPos, 180);
+                const float y = startTileY + (i % 2) * tileHeight / 3 - tileHeight / 6;
+                float x = startTileX + (i / 2) * spacing + (i % 2) * oddOffset + moveDueToBridge;
+                while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
+                {
+                    moveDueToBridge += tileWidth;
+                    x += moveDueToBridge;
+                }
+                placeCar(*order.at(i), x, y, 180);
+                placeStartGrid(*m_startGridObjects.at(i), x - gridOffset, y, 180);
             }
             break;
-
+        }
         default:
         case 270:
         case -90:
+        {
+            float moveDueToBridge = 0;
             for (size_t i = 0; i < order.size(); i++)
             {
-                const float rowPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                const float colPos = (i % 2) * tileHeight / 3 - tileHeight / 6;
-                placeCar(*order.at(i), startTileX - rowPos, startTileY + colPos, 0);
-                placeStartGrid(*m_startGridObjects.at(i), startTileX - rowPos + gridOffset, startTileY + colPos, 0);
+                const float y = startTileY + (i % 2) * tileHeight / 3 - tileHeight / 6;
+                float x = startTileX - (i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
+                while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
+                {
+                    moveDueToBridge += tileWidth;
+                    x -= moveDueToBridge;
+                }
+                placeCar(*order.at(i), x, y, 0);
+                placeStartGrid(*m_startGridObjects.at(i), x + gridOffset, y, 0);
             }
             break;
-
+        }
         case 0:
+        {
+            float moveDueToBridge = 0;
             for (size_t i = 0; i < order.size(); i++)
             {
-                const float rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
-                const float colPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                placeCar(*order.at(i), startTileX + rowPos, startTileY - colPos, 90);
-                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY - colPos + gridOffset, 90);
+                const float x = startTileX + (i % 2) * tileWidth / 3 - tileWidth / 6;
+                float y = startTileY - (i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
+                while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
+                {
+                    moveDueToBridge += tileHeight;
+                    y -= moveDueToBridge;
+                }
+                placeCar(*order.at(i), x, y, 90);
+                placeStartGrid(*m_startGridObjects.at(i), x, y + gridOffset, 90);
             }
             break;
-
+        }
         case 180:
         case -180:
+        {
+            float moveDueToBridge = 0;
             for (size_t i = 0; i < order.size(); i++)
             {
-                const float rowPos = (i % 2) * tileWidth / 3 - tileWidth / 6;
-                const float colPos = (i / 2) * spacing + (i % 2) * oddOffset;
-                placeCar(*order.at(i), startTileX + rowPos, startTileY + colPos, 270);
-                placeStartGrid(*m_startGridObjects.at(i), startTileX + rowPos, startTileY + colPos - gridOffset, 270);
+                const float x = startTileX + (i % 2) * tileWidth / 3 - tileWidth / 6;
+                float y = startTileY + (i / 2) * spacing + (i % 2) * oddOffset + moveDueToBridge;
+                while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
+                {
+                    moveDueToBridge += tileHeight;
+                    y += moveDueToBridge;
+                }
+                placeCar(*order.at(i), x, y, 270);
+                placeStartGrid(*m_startGridObjects.at(i), x, y - gridOffset, 270);
             }
             break;
+        }
         }
     }
     else
