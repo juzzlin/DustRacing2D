@@ -22,7 +22,7 @@
 #include <memory>
 
 namespace CarFactory {
-std::unique_ptr<Car> buildCar(size_t index, size_t numCars, Game & game);
+std::unique_ptr<Car> buildCar(size_t index, size_t carCount, Game & game);
 }
 
 #endif // CARFACTORY_HPP

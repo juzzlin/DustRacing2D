@@ -30,10 +30,6 @@
 
 MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
 {
-    static const std::vector<std::string> numberPlates(
-      { "1", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "x" });
-    assert(index < numberPlates.size());
-
     const int pixmapWidth = 32;
     const int pixmapHeight = 32;
 
@@ -55,7 +51,7 @@ MCSurface & GraphicsFactory::generateNumberSurface(size_t index)
       pixmapWidth,
       pixmapHeight,
       Qt::AlignCenter,
-      numberPlates.at(index).c_str());
+      std::to_string(index + 1).c_str());
 
     painter.end();
 

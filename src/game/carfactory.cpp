@@ -17,25 +17,24 @@
 
 #include <MCAssetManager>
 
-std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t numCars, Game & game)
+std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t carCount, Game & game)
 {
     const int defaultPower = 200000; // This in Watts
     const float defaultDrag = 2.5f;
 
-    static const size_t NUM_CARS = numCars;
     static std::map<size_t, std::string> carImageMap = {
-        { NUM_CARS - 1, "carBlack" },
-        { NUM_CARS - 2, "carOrange" },
-        { NUM_CARS - 3, "carRed" },
-        { NUM_CARS - 4, "carBlue" },
-        { NUM_CARS - 5, "carDarkGreen" },
-        { NUM_CARS - 6, "carBrown" },
-        { NUM_CARS - 7, "carCyan" },
-        { NUM_CARS - 8, "carViolet" },
-        { NUM_CARS - 9, "carGreen" },
-        { NUM_CARS - 10, "carDarkRed" },
+        { 0, "carPink" },
         { 1, "carGrey" },
-        { 0, "carPink" }
+        { 2, "carDarkRed" },
+        { 3, "carGreen" },
+        { 4, "carViolet" },
+        { 5, "carCyan" },
+        { 6, "carBrown" },
+        { 7, "carDarkGreen" },
+        { 8, "carBlue" },
+        { 9, "carRed" },
+        { 10, "carOrange" },
+        { 11, "carBlack" }
     };
 
     Car::Description desc;
@@ -60,8 +59,8 @@ std::unique_ptr<Car> CarFactory::buildCar(size_t index, size_t numCars, Game & g
         // Introduce some variance to the power of computer players so that the
         // slowest cars have less power than the human player and the fastest
         // cars have more power than the human player.
-        desc.power = defaultPower / 2 + (index + 1) * defaultPower / NUM_CARS;
-        desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / NUM_CARS) * Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
+        desc.power = defaultPower / 2 + (index + 1) * defaultPower / carCount;
+        desc.accelerationFriction = (0.3f + 0.4f * float(index + 1) / carCount) * Game::instance().difficultyProfile().accelerationFrictionMultiplier(false);
         desc.dragQuadratic = defaultDrag;
 
         return std::make_unique<Car>(desc, MCAssetManager::surfaceManager().surface(carImage), index, false);

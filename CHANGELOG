@@ -13,6 +13,7 @@ Bug fixes:
 * Fix GitHub Issue #66: Editor displays legacy track path on startup
   - Effective only on Linux/Unix
 * Fix GitHub Issue #69: Cars teleport above and below bridges when driving horizontally in Radiator
+* Fix GitHub Issue #71: Confusing starting numbers in two player mode
 
 Other:
 
