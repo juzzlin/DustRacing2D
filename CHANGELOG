@@ -12,10 +12,12 @@ Bug fixes:
 * Fix GitHub Issue #76: Dirt particles appear even when not moving on grass
 * Fix GitHub Issue #66: Editor displays legacy track path on startup
   - Effective only on Linux/Unix
+* Fix GitHub Issue #69: Cars teleport above and below bridges when driving horizontally in Radiator
 
 Other:
 
 * Fix GitHub Issue #74: Twister track has no pit stop
+* Skip bridge tiles when placing car into start grid
 
 2.0.3
 =====
