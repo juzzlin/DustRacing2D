@@ -5,6 +5,21 @@ New features:
 
 Bug fixes:
 
+Other:
+
+2.0.4
+=====
+
+Mostly a bug fix and code refactoring release.
+
+One new track Crossroads (by Wuzzy) added.
+
+New features:
+
+* Fix GitHub Issue #67: New track: Crossroads
+
+Bug fixes:
+
 * Fix GitHub Issue #59: Regression: Bridge is broken due to changes in collision detection
 * Fix GitHub Issue #72: Apostrophe character is broken
   - The font is now initialized with the full ASCII table
@@ -19,6 +34,7 @@ Other:
 
 * Fix GitHub Issue #74: Twister track has no pit stop
 * Skip bridge tiles when placing car into start grid
+* Require C++14
 
 2.0.3
 =====
