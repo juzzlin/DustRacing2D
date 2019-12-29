@@ -40,7 +40,7 @@ void OffTrackDetector::update()
     assert(m_track);
 
     {
-        const MCVector3dF leftFrontTirePos(m_car.leftFrontTireLocation());
+        const auto leftFrontTirePos(m_car.leftFrontTireLocation());
         const auto tile = m_track->trackTileAtLocation(leftFrontTirePos.i(), leftFrontTirePos.j());
 
         m_car.setLeftSideOffTrack(false);
@@ -52,7 +52,7 @@ void OffTrackDetector::update()
     }
 
     {
-        const MCVector3dF rightFrontTirePos(m_car.rightFrontTireLocation());
+        const auto rightFrontTirePos(m_car.rightFrontTireLocation());
         const auto tile = m_track->trackTileAtLocation(rightFrontTirePos.i(), rightFrontTirePos.j());
 
         m_car.setRightSideOffTrack(false);
@@ -70,8 +70,7 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
     {
         return true;
     }
-    else if (
-      tile.tileTypeEnum() == TrackTile::TileType::Straight || tile.tileTypeEnum() == TrackTile::TileType::Finish)
+    else if (tile.tileTypeEnum() == TrackTile::TileType::Straight || tile.tileTypeEnum() == TrackTile::TileType::Finish)
     {
         if ((tile.rotation() + 90) % 180 == 0)
         {
@@ -92,19 +91,18 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
     }
     else if (tile.tileTypeEnum() == TrackTile::TileType::Straight45Male)
     {
-        const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
-        const MCVector2dF rotatedDiff = MCMathUtil::rotatedVector(diff, tile.rotation() - 45);
+        const auto diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
+        const auto rotatedDiff = MCMathUtil::rotatedVector(diff, tile.rotation() - 45);
 
         if (rotatedDiff.j() > m_tileHLimit || rotatedDiff.j() < -m_tileHLimit)
         {
             return true;
         }
     }
-    else if (
-      tile.tileTypeEnum() == TrackTile::TileType::Straight45Female)
+    else if (tile.tileTypeEnum() == TrackTile::TileType::Straight45Female)
     {
-        const MCVector2dF diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
-        const MCVector2dF rotatedDiff = MCMathUtil::rotatedVector(diff, 360 - tile.rotation() - 45);
+        const auto diff = tire - MCVector2dF(tile.location().x(), tile.location().y());
+        const auto rotatedDiff = MCMathUtil::rotatedVector(diff, 360 - tile.rotation() - 45);
 
         if (rotatedDiff.j() < m_tileHLimit)
         {
