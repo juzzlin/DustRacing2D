@@ -556,12 +556,8 @@ bool MainWindow::doOpenTrack(QString fileName)
 
         return true;
     }
-    else
-    {
-        console(QString(tr("Failed to open track '")) + fileName + "'.");
-        return false;
-    }
 
+    console(QString(tr("Failed to open track '")) + fileName + "'.");
     return false;
 }
 
