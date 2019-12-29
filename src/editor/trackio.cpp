@@ -43,7 +43,7 @@ void readTile(TrackData & newData, const QDomElement & element)
 {
     // Init a new tile. QGraphicsScene will take
     // the ownership eventually.
-    auto tile = std::dynamic_pointer_cast<TrackTile>(newData.map().getTile(
+    const auto tile = std::dynamic_pointer_cast<TrackTile>(newData.map().getTile(
       element.attribute(DataKeywords::Tile::i, "0").toUInt(),
       element.attribute(DataKeywords::Tile::j, "0").toUInt()));
     assert(tile);
@@ -79,7 +79,7 @@ void readTargetNode(std::vector<TargetNodeBasePtr> & route, const QDomElement & 
 {
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
-    auto targetNode = std::make_shared<TargetNode>();
+    const auto targetNode = std::make_shared<TargetNode>();
     targetNode->setIndex(element.attribute(DataKeywords::Node::index, "0").toInt());
 
     const int x = element.attribute(DataKeywords::Node::x, "0").toInt();
@@ -104,10 +104,8 @@ void writeTiles(const TrackDataPtr trackData, QDomElement & root, QDomDocument &
     {
         for (size_t j = 0; j < trackData->map().rows(); j++)
         {
-            auto tile = std::dynamic_pointer_cast<TrackTile>(trackData->map().getTile(i, j));
-            assert(tile);
-
-            QDomElement tileElement = doc.createElement(DataKeywords::Track::tile);
+            auto && tileElement = doc.createElement(DataKeywords::Track::tile);
+            const auto tile = std::dynamic_pointer_cast<TrackTile>(trackData->map().getTile(i, j));
             tileElement.setAttribute(DataKeywords::Tile::type, tile->tileType());
             tileElement.setAttribute(DataKeywords::Tile::i, static_cast<int>(i));
             tileElement.setAttribute(DataKeywords::Tile::j, static_cast<int>(j));
@@ -135,7 +133,7 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
         auto object = std::dynamic_pointer_cast<Object>(objectPtr);
         assert(object);
 
-        QDomElement objectElement = doc.createElement(DataKeywords::Track::object);
+        auto && objectElement = doc.createElement(DataKeywords::Track::object);
         objectElement.setAttribute(DataKeywords::Object::category, object->category());
         objectElement.setAttribute(DataKeywords::Object::role, object->role());
         objectElement.setAttribute(DataKeywords::Object::x, static_cast<int>(object->location().x()));
@@ -153,16 +151,16 @@ void writeObjects(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc
 
 void writeTargetNodes(TrackDataPtr trackData, QDomElement & root, QDomDocument & doc)
 {
-    for (auto tnode : trackData->route())
+    for (auto && targetNode : trackData->route())
     {
-        QDomElement tnodeElement = doc.createElement(DataKeywords::Track::node);
-        tnodeElement.setAttribute(DataKeywords::Node::index, tnode->index());
-        tnodeElement.setAttribute(DataKeywords::Node::x, static_cast<int>(tnode->location().x()));
-        tnodeElement.setAttribute(DataKeywords::Node::y, static_cast<int>(tnode->location().y()));
-        tnodeElement.setAttribute(DataKeywords::Node::width, static_cast<int>(tnode->size().width()));
-        tnodeElement.setAttribute(DataKeywords::Node::height, static_cast<int>(tnode->size().height()));
+        auto && targetNodeElement = doc.createElement(DataKeywords::Track::node);
+        targetNodeElement.setAttribute(DataKeywords::Node::index, targetNode->index());
+        targetNodeElement.setAttribute(DataKeywords::Node::x, static_cast<int>(targetNode->location().x()));
+        targetNodeElement.setAttribute(DataKeywords::Node::y, static_cast<int>(targetNode->location().y()));
+        targetNodeElement.setAttribute(DataKeywords::Node::width, static_cast<int>(targetNode->size().width()));
+        targetNodeElement.setAttribute(DataKeywords::Node::height, static_cast<int>(targetNode->size().height()));
 
-        root.appendChild(tnodeElement);
+        root.appendChild(targetNodeElement);
     }
 }
 
@@ -174,7 +172,7 @@ bool TrackIO::save(TrackDataPtr trackData, QString path)
     QDomDocument doc;
     doc.appendChild(doc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'"));
 
-    QDomElement root = doc.createElement(DataKeywords::Header::track);
+    auto && root = doc.createElement(DataKeywords::Header::track);
     root.setAttribute(DataKeywords::Header::version, Config::Editor::EDITOR_VERSION);
     root.setAttribute(DataKeywords::Header::name, trackData->name());
     root.setAttribute(DataKeywords::Header::cols, static_cast<int>(trackData->map().cols()));
@@ -223,31 +221,26 @@ TrackDataPtr TrackIO::open(QString path)
 
     file.close();
 
-    const QDomElement root = doc.documentElement();
+    auto && root = doc.documentElement();
+    const size_t cols = root.attribute(DataKeywords::Header::cols, "0").toUInt();
+    const size_t rows = root.attribute(DataKeywords::Header::rows, "0").toUInt();
 
-    const size_t cols =
-      root.attribute(DataKeywords::Header::cols, "0").toUInt();
-    const size_t rows =
-      root.attribute(DataKeywords::Header::rows, "0").toUInt();
-
-    TrackData * newData = nullptr;
+    TrackDataPtr newData;
     if (cols && rows)
     {
-        const QString name = root.attribute(DataKeywords::Header::name, "undefined");
+        const auto name = root.attribute(DataKeywords::Header::name, "undefined");
         const bool isUserTrack = root.attribute(DataKeywords::Header::user, "0").toInt();
-        newData = new TrackData(name, isUserTrack, cols, rows);
+        newData = std::make_shared<TrackData>(name, isUserTrack, cols, rows);
         newData->setFileName(path);
-
-        const size_t index = root.attribute(DataKeywords::Header::index, "0").toUInt();
-        newData->setIndex(index);
+        newData->setIndex(root.attribute(DataKeywords::Header::index, "0").toUInt());
 
         // Temporary route vector.
         std::vector<TargetNodeBasePtr> route;
 
-        QDomNode node = root.firstChild();
+        auto && node = root.firstChild();
         while (!node.isNull())
         {
-            QDomElement element = node.toElement();
+            auto element = node.toElement();
             if (!element.isNull())
             {
                 // Read a tile element
@@ -274,5 +267,5 @@ TrackDataPtr TrackIO::open(QString path)
         newData->route().buildFromVector(route);
     }
 
-    return TrackDataPtr(newData);
+    return newData;
 }
