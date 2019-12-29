@@ -5,6 +5,8 @@ New features:
 
 Bug fixes:
 
+* Fix GitHub Issue #87: Improve off-track detection accuracy on curves
+
 Other:
 
 2.0.4

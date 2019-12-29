@@ -20,8 +20,6 @@
 
 #include <MCMathUtil>
 
-#include <cassert>
-
 OffTrackDetector::OffTrackDetector(Car & car)
   : m_car(car)
   , m_track(nullptr)
@@ -37,8 +35,6 @@ void OffTrackDetector::setTrack(std::shared_ptr<Track> track)
 
 void OffTrackDetector::update()
 {
-    assert(m_track);
-
     {
         const auto leftFrontTirePos(m_car.leftFrontTireLocation());
         const auto tile = m_track->trackTileAtLocation(leftFrontTirePos.i(), leftFrontTirePos.j());
@@ -105,6 +101,19 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
         const auto rotatedDiff = MCMathUtil::rotatedVector(diff, 360 - tile.rotation() - 45);
 
         if (rotatedDiff.j() < m_tileHLimit)
+        {
+            return true;
+        }
+    }
+    else if (tile.tileTypeEnum() == TrackTile::TileType::Corner90)
+    {
+        // Let's pretend that this is a good enough approximation
+        const auto rotatedCorner = MCVector2dF(tile.location().x(), tile.location().y()) + //
+          MCMathUtil::rotatedVector(MCVector2dF(TrackTileBase::width() / 2, TrackTileBase::height() / 2), tile.rotation() + 270);
+        const auto diff = tire - rotatedCorner;
+        const auto r1 = TrackTileBase::width() / 10;
+        const auto r2 = TrackTileBase::width() - TrackTileBase::width() / 20;
+        if (diff.lengthSquared() < r1 * r1 || diff.lengthSquared() > r2 * r2)
         {
             return true;
         }
