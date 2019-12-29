@@ -172,6 +172,8 @@ bool TrackIO::save(TrackDataPtr trackData, QString path)
 {
     // Create content
     QDomDocument doc;
+    doc.appendChild(doc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'"));
+
     QDomElement root = doc.createElement(DataKeywords::Header::track);
     root.setAttribute(DataKeywords::Header::version, Config::Editor::EDITOR_VERSION);
     root.setAttribute(DataKeywords::Header::name, trackData->name());
