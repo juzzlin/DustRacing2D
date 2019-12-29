@@ -56,14 +56,14 @@
 MainWindow * MainWindow::m_instance = nullptr;
 
 MainWindow::MainWindow(QString trackFile)
-  : m_objectModelLoader(new ObjectModelLoader)
+  : m_objectModelLoader(std::make_unique<ObjectModelLoader>())
+  , m_mediator(std::make_unique<Mediator>(*this))
   , m_aboutDlg(new AboutDlg(this))
   , m_console(new QTextEdit(this))
   , m_scaleSlider(new QSlider(Qt::Horizontal, this))
   , m_toolBar(new QToolBar(this))
   , m_randomRotationCheck(new QCheckBox(tr("Randomly rotate objects"), this))
   , m_argTrackFile(trackFile)
-  , m_mediator(new Mediator(*this))
 {
     if (!m_instance)
     {
@@ -621,9 +621,8 @@ void MainWindow::fitScale()
 
 void MainWindow::initializeNewTrack()
 {
-    QString nameOut;
-    int colsOut, rowsOut;
-    if (m_mediator->initializeNewTrack(nameOut, colsOut, rowsOut))
+    const auto trackData = m_mediator->initializeNewTrack();
+    if (std::get<bool>(trackData))
     {
         // Undo stack has been cleared.
         m_undoAction->setEnabled(false);
@@ -640,9 +639,9 @@ void MainWindow::initializeNewTrack()
         m_saved = false;
 
         console(QString(tr("A new track '%1' created. Columns: %2, Rows: %3."))
-                  .arg(nameOut)
-                  .arg(colsOut)
-                  .arg(rowsOut));
+                  .arg(std::get<1>(trackData))
+                  .arg(std::get<2>(trackData))
+                  .arg(std::get<3>(trackData)));
     }
 
     QApplication::restoreOverrideCursor();
@@ -730,8 +729,4 @@ void MainWindow::setTrackProperties()
     }
 }
 
-MainWindow::~MainWindow()
-{
-    delete m_mediator;
-    delete m_objectModelLoader;
-}
+MainWindow::~MainWindow() = default;

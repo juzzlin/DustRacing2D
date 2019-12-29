@@ -36,7 +36,7 @@
 #include <QStatusBar>
 
 Mediator::Mediator(MainWindow & mainWindow)
-  : m_editorData(new EditorData(*this))
+  : m_editorData(std::make_unique<EditorData>(*this))
   , m_editorScene(new QGraphicsScene)
   , m_editorView(new EditorView(*this))
   , m_mainWindow(mainWindow)
@@ -155,10 +155,10 @@ void Mediator::enableUndo(bool enable)
 int Mediator::fitScale()
 {
     m_editorView->centerOn(m_editorView->sceneRect().center());
-    return m_editorView->viewport()->height() * 100 / m_editorView->sceneRect().height();
+    return static_cast<int>(m_editorView->viewport()->height() * 100 / m_editorView->sceneRect().height());
 }
 
-bool Mediator::initializeNewTrack(QString & name, int & cols, int & rows)
+std::tuple<bool, QString, int, int> Mediator::initializeNewTrack()
 {
     assert(m_editorData);
 
@@ -166,11 +166,7 @@ bool Mediator::initializeNewTrack(QString & name, int & cols, int & rows)
     NewTrackDialog dialog(&m_mainWindow);
     if (dialog.exec() == QDialog::Accepted)
     {
-        cols = dialog.cols();
-        rows = dialog.rows();
-        name = dialog.name();
-
-        m_editorData->setTrackData(TrackDataPtr(new TrackData(name, dialog.isUserTrack(), cols, rows)));
+        m_editorData->setTrackData(std::make_shared<TrackData>(dialog.name(), dialog.isUserTrack(), dialog.cols(), dialog.rows()));
 
         delete m_editorScene;
         m_editorScene = new QGraphicsScene;
@@ -181,10 +177,10 @@ bool Mediator::initializeNewTrack(QString & name, int & cols, int & rows)
         m_editorData->addTilesToScene();
         m_editorData->addObjectsToScene();
 
-        return true;
+        return std::make_tuple(true, dialog.name(), dialog.cols(), dialog.rows());
     }
 
-    return false;
+    return {};
 }
 
 void Mediator::insertColumnAfter()
@@ -241,7 +237,7 @@ int Mediator::cols()
 {
     if (m_editorData->trackData())
     {
-        return m_editorData->trackData()->map().cols();
+        return static_cast<int>(m_editorData->trackData()->map().cols());
     }
     return 0;
 }
@@ -395,7 +391,7 @@ int Mediator::rows()
 {
     if (m_editorData->trackData())
     {
-        return m_editorData->trackData()->map().rows();
+        return static_cast<int>(m_editorData->trackData()->map().rows());
     }
     return 0;
 }
@@ -446,12 +442,12 @@ void Mediator::updateCoordinates(QPointF mappedPos)
     if (m_editorData->trackData())
     {
         const int maxCols = static_cast<int>(m_editorData->trackData()->map().cols());
-        int column = mappedPos.x() / TrackTile::width();
+        int column = static_cast<int>(mappedPos.x() / TrackTile::width());
         column = column >= maxCols ? maxCols - 1 : column;
         column = column < 0 ? 0 : column;
 
         const int maxRows = static_cast<int>(m_editorData->trackData()->map().rows());
-        int row = mappedPos.y() / TrackTile::height();
+        int row = static_cast<int>(mappedPos.y() / TrackTile::height());
         row = row >= maxRows ? maxRows - 1 : row;
         row = row < 0 ? 0 : row;
 
@@ -470,7 +466,4 @@ void Mediator::updateView()
     m_editorView->update();
 }
 
-Mediator::~Mediator()
-{
-    delete m_editorData;
-}
+Mediator::~Mediator() = default;

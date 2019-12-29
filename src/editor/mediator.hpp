@@ -21,6 +21,9 @@
 #include "editormode.hpp"
 #include "targetnode.hpp"
 
+#include <memory>
+#include <tuple>
+
 class DragAndDropStore;
 class EditorData;
 class EditorView;
@@ -81,7 +84,7 @@ public:
 
     void initScene();
 
-    bool initializeNewTrack(QString & name, int & cols, int & rows);
+    std::tuple<bool, QString, int, int> initializeNewTrack();
 
     void insertColumnAfter();
 
@@ -141,7 +144,7 @@ public:
     void updateView();
 
 private:
-    EditorData * m_editorData;
+    std::unique_ptr<EditorData> m_editorData;
 
     QGraphicsScene * m_editorScene;
 

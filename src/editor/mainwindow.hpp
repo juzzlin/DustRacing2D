@@ -20,6 +20,8 @@
 #include <QMainWindow>
 #include <QString>
 
+#include <memory>
+
 class AboutDlg;
 class ObjectModelLoader;
 class QAction;
@@ -46,7 +48,7 @@ public:
     explicit MainWindow(QString trackFile = "");
 
     //! Destructor
-    ~MainWindow();
+    ~MainWindow() override;
 
     //! Return the singleton MainWindow.
     static MainWindow * instance();
@@ -132,7 +134,9 @@ private:
 
     void setActionStatesOnNewTrack();
 
-    ObjectModelLoader * m_objectModelLoader;
+    std::unique_ptr<ObjectModelLoader> m_objectModelLoader;
+
+    std::unique_ptr<Mediator> m_mediator;
 
     AboutDlg * m_aboutDlg;
 
@@ -173,8 +177,6 @@ private:
     const unsigned int m_initZoom = 100;
 
     const int m_consoleHeight = 64;
-
-    Mediator * m_mediator = nullptr;
 
     static MainWindow * m_instance;
 };
