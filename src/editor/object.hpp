@@ -31,10 +31,11 @@ public:
     //! Copy constructor.
     Object(const Object & other);
 
+    Object(std::unique_ptr<Object> other);
+
     virtual QRectF boundingRect() const override;
 
-    virtual void paint(QPainter * painter,
-                       const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
+    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
     //! Sets the Object and QGraphicsItem locations.
     virtual void setLocation(QPointF newLocation) override;

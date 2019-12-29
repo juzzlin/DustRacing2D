@@ -17,19 +17,14 @@
 #define OBJECTFACTORY_HPP
 
 #include <QString>
+#include <memory>
 
 class Object;
 
 //! Creates Objects from given role.
-class ObjectFactory
-{
-public:
-    /*! Create an Objects from given role.
-     *  The caller gets the ownership. */
-    static Object & createObject(QString role);
-
-private:
-    ObjectFactory();
-};
+namespace ObjectFactory {
+/*! Create an Objects from given role. */
+std::unique_ptr<Object> createObject(QString role);
+} // namespace ObjectFactory
 
 #endif // OBJECTFACTORY_HPP

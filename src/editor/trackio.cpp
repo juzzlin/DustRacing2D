@@ -62,17 +62,17 @@ void readObject(TrackData & newData, const QDomElement & element)
 {
     // Create a new object. QGraphicsScene will take
     // the ownership eventually.
-    Object & object = ObjectFactory::createObject(element.attribute(DataKeywords::Object::role, "clear"));
+    auto object = std::make_shared<Object>(ObjectFactory::createObject(element.attribute(DataKeywords::Object::role, "clear")));
 
-    object.setLocation(QPointF(
+    object->setLocation(QPointF(
       element.attribute(DataKeywords::Object::x, "0").toInt(),
       element.attribute(DataKeywords::Object::y, "0").toInt()));
 
-    object.setRotation(element.attribute(DataKeywords::Object::orientation, "0").toInt());
+    object->setRotation(element.attribute(DataKeywords::Object::orientation, "0").toInt());
 
-    object.setForceStationary(element.attribute(DataKeywords::Object::forceStationary, "0").toUInt());
+    object->setForceStationary(element.attribute(DataKeywords::Object::forceStationary, "0").toUInt());
 
-    newData.objects().add(ObjectBasePtr(&object));
+    newData.objects().add(object);
 }
 
 void readTargetNode(std::vector<TargetNodeBasePtr> & route, const QDomElement & element)

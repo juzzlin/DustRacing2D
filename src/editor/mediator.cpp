@@ -46,20 +46,20 @@ Mediator::Mediator(MainWindow & mainWindow)
 
 void Mediator::addCurrentToolBarObjectToScene(QPointF clickedScenePos)
 {
-    if (QAction * action = MainWindow::instance()->currentToolBarAction())
+    if (const auto action = MainWindow::instance()->currentToolBarAction())
     {
         saveUndoPoint();
 
-        Object & object = ObjectFactory::createObject(action->data().toString());
-        object.setLocation(clickedScenePos);
+        const auto object = std::make_shared<Object>(ObjectFactory::createObject(action->data().toString()));
+        object->setLocation(clickedScenePos);
 
         if (MainWindow::instance()->randomlyRotateObjects())
         {
-            object.setRotation(std::rand() % 360);
+            object->setRotation(std::rand() % 360);
         }
 
         addObject(object);
-        setSelectedObject(&object);
+        setSelectedObject(object.get());
     }
 }
 
@@ -68,10 +68,10 @@ void Mediator::addItem(QGraphicsItem * item)
     m_editorScene->addItem(item);
 }
 
-void Mediator::addObject(Object & object)
+void Mediator::addObject(std::shared_ptr<Object> object)
 {
-    m_editorScene->addItem(&object);
-    m_editorData->trackData()->objects().add(ObjectBasePtr(&object));
+    m_editorScene->addItem(object.get());
+    m_editorData->trackData()->objects().add(object);
 }
 
 void Mediator::addViewToLayout(QLayout * layout)

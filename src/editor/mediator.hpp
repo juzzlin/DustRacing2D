@@ -47,7 +47,7 @@ public:
 
     void addItem(QGraphicsItem * item);
 
-    void addObject(Object & object);
+    void addObject(std::shared_ptr<Object> object);
 
     void addViewToLayout(QLayout * layout);
 

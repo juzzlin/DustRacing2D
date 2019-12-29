@@ -34,22 +34,23 @@ Object::Object(const Object & other)
     setForceStationary(other.forceStationary());
 }
 
-QRectF Object::boundingRect() const
+Object::Object(std::unique_ptr<Object> other)
+  : Object(*other)
 {
-    return QRectF(-m_size.width() / 2, -m_size.height() / 2,
-                  m_size.width(), m_size.height());
 }
 
-void Object::paint(QPainter * painter,
-                   const QStyleOptionGraphicsItem * option, QWidget * widget)
+QRectF Object::boundingRect() const
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(option);
+    return QRectF(-m_size.width() / 2, -m_size.height() / 2, m_size.width(), m_size.height());
+}
+
+void Object::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+{
+    Q_UNUSED(widget)
+    Q_UNUSED(option)
 
     painter->save();
-    painter->drawPixmap(boundingRect().x(), boundingRect().y(),
-                        boundingRect().width(), boundingRect().height(),
-                        m_pixmap);
+    painter->drawPixmap(boundingRect().x(), boundingRect().y(), boundingRect().width(), boundingRect().height(), m_pixmap);
     painter->restore();
 }
 

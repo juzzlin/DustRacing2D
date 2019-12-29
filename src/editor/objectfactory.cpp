@@ -20,27 +20,19 @@
 #include "objectmodel.hpp"
 #include "objectmodelloader.hpp"
 
-ObjectFactory::ObjectFactory()
+std::unique_ptr<Object> ObjectFactory::createObject(QString role)
 {
-}
+    const auto model = MainWindow::instance()->objectModelLoader().getObjectModelByRole(role);
 
-Object & ObjectFactory::createObject(QString role)
-{
-    ObjectModel model =
-      MainWindow::instance()->objectModelLoader().getObjectModelByRole(
-        role);
+    size_t w = model.width;
+    w = w > 0 ? w : static_cast<size_t>(model.pixmap.width());
 
-    unsigned int w = model.width;
-    w = w > 0 ? w : model.pixmap.width();
+    size_t h = model.height;
+    h = h > 0 ? h : static_cast<size_t>(model.pixmap.height());
 
-    unsigned int h = model.height;
-    h = h > 0 ? h : model.pixmap.height();
-
-    Object * object = new Object(
+    return std::make_unique<Object>(
       model.category,
       role,
       QSizeF(w, h),
       model.pixmap);
-
-    return *object;
 }
