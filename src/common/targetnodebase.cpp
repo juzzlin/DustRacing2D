@@ -17,14 +17,14 @@
 #include "tracktilebase.hpp"
 
 TargetNodeBase::TargetNodeBase()
-  : m_size(QSize(TrackTileBase::height(), TrackTileBase::width()))
+  : m_size(QSize(static_cast<int>(TrackTileBase::height()), static_cast<int>(TrackTileBase::width())))
   , m_index(-1)
 {
 }
 
-void TargetNodeBase::setNext(TargetNodeBasePtr tnode)
+void TargetNodeBase::setNext(TargetNodeBasePtr nextNode)
 {
-    m_next = tnode;
+    m_next = nextNode;
 }
 
 TargetNodeBasePtr TargetNodeBase::next() const
@@ -32,9 +32,9 @@ TargetNodeBasePtr TargetNodeBase::next() const
     return m_next;
 }
 
-void TargetNodeBase::setPrev(TargetNodeBasePtr tnode)
+void TargetNodeBase::setPrev(TargetNodeBasePtr prevNode)
 {
-    m_prev = tnode;
+    m_prev = prevNode;
 }
 
 TargetNodeBasePtr TargetNodeBase::prev() const

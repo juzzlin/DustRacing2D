@@ -33,10 +33,12 @@ public:
 
     TargetNodeBase(TargetNodeBase & other) = delete;
 
+    TargetNodeBase(TargetNodeBase && other) = delete;
+
     TargetNodeBase & operator=(TargetNodeBase & other) = delete;
 
     //! Destructor.
-    virtual ~TargetNodeBase() {};
+    virtual ~TargetNodeBase() = default;
 
     //! Get location in world / scene.
     virtual QPointF location() const;
@@ -48,11 +50,11 @@ public:
 
     virtual void setIndex(int index);
 
-    virtual void setNext(TargetNodeBasePtr tnode);
+    virtual void setNext(TargetNodeBasePtr nextNnode);
 
     virtual TargetNodeBasePtr next() const;
 
-    virtual void setPrev(TargetNodeBasePtr tnode);
+    virtual void setPrev(TargetNodeBasePtr prevNode);
 
     virtual TargetNodeBasePtr prev() const;
 
