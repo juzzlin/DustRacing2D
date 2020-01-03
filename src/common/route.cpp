@@ -29,10 +29,10 @@ void Route::clear()
     m_route.clear();
 }
 
-bool Route::push(TargetNodeBasePtr tnode)
+bool Route::push(TargetNodeBasePtr node)
 {
-    tnode->setIndex(static_cast<int>(m_route.size()));
-    m_route.push_back(tnode);
+    node->setIndex(static_cast<int>(m_route.size()));
+    m_route.push_back(node);
     return isClosed();
 }
 
@@ -70,15 +70,15 @@ void Route::buildFromVector(RouteVector & routeVector)
     clear();
 
     std::sort(routeVector.begin(), routeVector.end(),
-              [](const TargetNodeBasePtr lhs, const TargetNodeBasePtr rhs) {
+              [](const auto lhs, const auto rhs) {
                   return lhs->index() < rhs->index();
               });
 
-    for (TargetNodeBasePtr tnode : routeVector)
+    for (auto && node : routeVector)
     {
-        if (tnode && tnode->index() >= 0)
+        if (node && node->index() >= 0)
         {
-            push(tnode);
+            push(node);
         }
     }
 }
