@@ -104,8 +104,8 @@ void Minimap::initialize(Car & carToFollow, const MapBase & trackMap, int x, int
         tileY += m_tileH;
     }
 
-    m_sceneW = trackMap.cols() * TrackTile::width();
-    m_sceneH = trackMap.rows() * TrackTile::height();
+    m_trackWidth = trackMap.cols() * TrackTile::width();
+    m_trackHeight = trackMap.rows() * TrackTile::height();
 
     m_size = MCVector3dF(trackMap.cols() * m_tileW, trackMap.rows() * m_tileH);
 }
@@ -129,24 +129,46 @@ void Minimap::renderMap()
 
 void Minimap::renderMarkers(const Minimap::CarVector & cars, const Race & race)
 {
-    m_markerSurface->setSize(m_tileH * 0.75f, m_tileW * 0.75f);
+    const auto size = std::max(Scene::width() * 0.01f, m_tileH * 0.75f);
+    m_markerSurface->setSize(size, size);
 
     auto && leader = race.getLeader();
     auto && loser = race.getLoser();
 
+    std::list<Car *> renderOrder;
     for (auto && car : cars)
     {
         if (car.get() == m_carToFollow)
         {
+            renderOrder.push_back(car.get());
+        }
+        else if (car.get() == &leader)
+        {
+            renderOrder.push_back(car.get());
+        }
+        else if (car.get() == &loser)
+        {
+            renderOrder.push_back(car.get());
+        }
+        else
+        {
+            renderOrder.push_front(car.get());
+        }
+    }
+
+    for (auto && car : renderOrder)
+    {
+        if (car == m_carToFollow)
+        {
             const auto yellow = MCGLColor(0.9f, 0.9f, 0.1f, 0.9f);
             m_markerSurface->setColor(yellow);
         }
-        else if (car.get() == &leader)
+        else if (car == &leader)
         {
             const auto green = MCGLColor(0.1f, 0.9f, 0.1f, 0.9f);
             m_markerSurface->setColor(green);
         }
-        else if (car.get() == &loser)
+        else if (car == &loser)
         {
             const auto red = MCGLColor(0.9f, 0.1f, 0.1f, 0.9f);
             m_markerSurface->setColor(red);
@@ -157,7 +179,7 @@ void Minimap::renderMarkers(const Minimap::CarVector & cars, const Race & race)
             m_markerSurface->setColor(gray);
         }
 
-        m_markerSurface->render(nullptr, m_center + car->location() * m_size.i() / m_sceneW - m_size * 0.5f, 0);
+        m_markerSurface->render(nullptr, m_center + car->location() * m_size.i() / m_trackWidth - m_size * 0.5f, 0);
     }
 }
 

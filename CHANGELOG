@@ -6,6 +6,7 @@ New features:
 Bug fixes:
 
 * Fix GitHub Issue #87: Improve off-track detection accuracy on curves
+* Fix GitHub Issue #83: Car dots in minimap are too small on very large tracks
 
 Other:
 

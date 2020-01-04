@@ -67,9 +67,9 @@ private:
 
     float m_tileH = 0;
 
-    float m_sceneW = 0;
+    float m_trackWidth = 0;
 
-    float m_sceneH = 0;
+    float m_trackHeight = 0;
 };
 
 #endif // MINIMAP_HPP
