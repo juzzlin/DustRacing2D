@@ -644,12 +644,14 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
     const auto targetNode = m_track->trackData().route().get(m_statusHash[car.index()].prevTargetNodeIndex);
-    const size_t randRadius = TrackTile::width() / 4;
+    const double randRadius = TrackTile::width() / 4;
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(-randRadius, randRadius);
-    car.translate({ static_cast<float>(targetNode->location().x() + dist(engine)),
-                    static_cast<float>(targetNode->location().y() + dist(engine)) });
+    const float x = static_cast<float>(targetNode->location().x() + dist(engine));
+    const float y = static_cast<float>(targetNode->location().y() + dist(engine));
+    car.translate({ x, y });
     car.physicsComponent().reset();
+    juzzlin::L().debug() << "Moved stuck car " << car.index() << " to (" << x << ", " << y << ")";
 }
 
 size_t Race::getCurrentTargetNodeIndex(const Car & car) const
