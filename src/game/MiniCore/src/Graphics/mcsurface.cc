@@ -46,8 +46,15 @@ static const auto COLOR_DATA_SIZE = sizeof(GLfloat) * NUM_VERTICES * NUM_COLOR_C
 static const auto TOTAL_DATA_SIZE = VERTEX_DATA_SIZE + NORMAL_DATA_SIZE + TEXCOORD_DATA_SIZE + COLOR_DATA_SIZE;
 } // namespace
 
+class MCSurface::Impl
+{
+public:
+    MCGLColor m_averageColor;
+};
+
 MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z0, float z1, float z2, float z3)
   : MCGLObjectBase(handle)
+  , m_impl(std::make_unique<Impl>())
 {
     setMaterial(material);
 
@@ -116,6 +123,7 @@ MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, 
 MCSurface::MCSurface(
   std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4])
   : MCGLObjectBase(handle)
+  , m_impl(std::make_unique<Impl>())
 {
     setMaterial(material);
 
@@ -179,3 +187,15 @@ void MCSurface::updateTexCoords(const MCGLTexCoord texCoords[4])
 
     glBufferSubData(GL_ARRAY_BUFFER, VERTEX_DATA_SIZE + NORMAL_DATA_SIZE, TEXCOORD_DATA_SIZE, texCoordsAll);
 }
+
+void MCSurface::setAverageColor(const MCGLColor & color)
+{
+    m_impl->m_averageColor = color;
+}
+
+const MCGLColor & MCSurface::averageColor() const
+{
+    return m_impl->m_averageColor;
+}
+
+MCSurface::~MCSurface() = default;

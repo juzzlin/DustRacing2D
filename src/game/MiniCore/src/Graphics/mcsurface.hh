@@ -37,6 +37,7 @@ class MCCamera;
 class MCGLShaderProgram;
 struct MCGLTexCoord;
 class MCGLVertex;
+class QImage;
 
 /*! MCSurface is a (2D) renderable object bound to an OpenGL texture handle.
  *  MCSurface can be rendered as a standalone object. Despite being a
@@ -70,10 +71,14 @@ public:
     MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4]);
 
     //! Destructor.
-    virtual ~MCSurface() = default;
+    virtual ~MCSurface();
 
     //! Update texture coordinates.
     void updateTexCoords(const MCGLTexCoord texCoords[4]);
+
+    void setAverageColor(const MCGLColor & color);
+
+    const MCGLColor & averageColor() const;
 
 private:
     DISABLE_COPY(MCSurface);
@@ -81,6 +86,9 @@ private:
     DISABLE_MOVE(MCSurface);
 
     void initVBOs();
+
+    class Impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 using MCSurfacePtr = std::shared_ptr<MCSurface>;

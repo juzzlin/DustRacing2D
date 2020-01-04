@@ -23,6 +23,7 @@
 #include "tracktile.hpp"
 
 #include <MCSurface>
+#include <MCSurfaceView>
 
 #include "../common/mapbase.hpp"
 
@@ -160,8 +161,9 @@ void Minimap::renderMarkers(const Minimap::CarVector & cars, const Race & race)
     {
         if (car == m_carToFollow)
         {
-            const auto yellow = MCGLColor(0.9f, 0.9f, 0.1f, 0.9f);
-            m_markerSurface->setColor(yellow);
+            auto color = std::dynamic_pointer_cast<MCSurfaceView>(car->shape()->view())->surface()->averageColor();
+            color.setA(0.9f);
+            m_markerSurface->setColor(color);
         }
         else if (car == &leader)
         {

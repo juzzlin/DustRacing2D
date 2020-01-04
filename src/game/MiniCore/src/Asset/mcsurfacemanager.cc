@@ -195,6 +195,39 @@ MCSurfaceManager::MCSurfaceManager()
 {
 }
 
+MCGLColor getAverageColor(QImage image)
+{
+    std::map<int, int> colorCounts;
+    const int scale = 8;
+    for (int i = 0; i < image.width(); i++)
+    {
+        for (int j = 0; j < image.height(); j++)
+        {
+            if (((image.pixel(i, j) & 0xff000000) >> 24) > 128)
+            {
+                const int r = ((image.pixel(i, j) & 0x00ff0000) >> 16) / scale;
+                const int g = ((image.pixel(i, j) & 0x0000ff00) >> 8) / scale;
+                const int b = ((image.pixel(i, j) & 0x000000ff)) / scale;
+                colorCounts[(r << 16) + (g << 8) + b]++;
+            }
+        }
+    }
+    int bestColor = 0;
+    int bestCount = 0;
+    for (auto && color : colorCounts)
+    {
+        if (color.second > bestCount)
+        {
+            bestCount = color.second;
+            bestColor = color.first;
+        }
+    }
+    return MCGLColor(
+      static_cast<float>(((bestColor & 0xff0000) >> 16) * scale) / 256,
+      static_cast<float>(((bestColor & 0x00ff00) >> 8) * scale) / 256,
+      static_cast<float>((bestColor & 0x0000ff) * scale) / 256);
+}
+
 std::shared_ptr<MCSurface> MCSurfaceManager::createSurfaceFromImage(const MCSurfaceMetaData & data, QImage image)
 {
     if (data.handle.size() == 0)
@@ -221,10 +254,11 @@ std::shared_ptr<MCSurface> MCSurfaceManager::createSurfaceFromImage(const MCSurf
     }
 
     // Create a new MCSurface object
-    auto surface = std::make_shared<MCSurface>(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
+    const auto surface = std::make_shared<MCSurface>(data.handle, material, origW, origH, data.z0, data.z1, data.z2, data.z3);
 
     // Maybe better place for this could be in the material?
     surface->setColor(data.color);
+    surface->setAverageColor(getAverageColor(image));
 
     createSurfaceCommon(surface, data);
 
@@ -285,8 +319,7 @@ static QImage forceToNearestPowerOfTwoImage(const MCSurfaceMetaData & data, cons
     return image.scaled(width, height);
 }
 #endif
-GLuint MCSurfaceManager::create2DTextureFromImage(
-  const MCSurfaceMetaData & data, const QImage & image)
+GLuint MCSurfaceManager::create2DTextureFromImage(const MCSurfaceMetaData & data, const QImage & image)
 {
 #ifdef __MC_GLES__
     QImage textureImage = forceToNearestPowerOfTwoImage(data, image);
@@ -380,9 +413,7 @@ GLuint MCSurfaceManager::create2DTextureFromImage(
     }
 
     // Edit image data using the information textureImage gives us
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                 glFormattedImage.width(), glFormattedImage.height(),
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, glFormattedImage.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glFormattedImage.width(), glFormattedImage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, glFormattedImage.bits());
 
     return textureHandle;
 }
