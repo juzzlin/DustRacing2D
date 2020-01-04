@@ -44,10 +44,10 @@ public:
     bool load(const std::string & filePath);
 
     //! Get surface count.
-    unsigned int surfaceCount() const;
+    size_t surfaceCount() const;
 
     //! Get surface data of given index.
-    const MCSurfaceMetaData & surface(unsigned int index) const;
+    const MCSurfaceMetaData & surface(size_t index) const;
 
 private:
     //! Convert alpha blend function string to enum.

@@ -265,8 +265,8 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
         auto && node = root.firstChild();
         while (!node.isNull() && node.nodeName() == "surface")
         {
-            SurfaceDataPtr newData(new MCSurfaceMetaData);
-            auto && element = node.toElement();
+            auto newData = std::make_shared<MCSurfaceMetaData>();
+            auto element = node.toElement();
             if (!element.isNull())
             {
                 parseAttributes(element, newData, baseImagePath);
@@ -282,8 +282,7 @@ bool MCSurfaceConfigLoader::load(const std::string & path)
     return true;
 }
 
-GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
-  const std::string & function) const
+GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(const std::string & function) const
 {
     try
     {
@@ -296,14 +295,14 @@ GLenum MCSurfaceConfigLoader::alphaBlendStringToEnum(
     return GL_SRC_ALPHA;
 }
 
-unsigned int MCSurfaceConfigLoader::surfaceCount() const
+size_t MCSurfaceConfigLoader::surfaceCount() const
 {
-    return static_cast<unsigned int>(m_surfaces.size());
+    return m_surfaces.size();
 }
 
-const MCSurfaceMetaData & MCSurfaceConfigLoader::surface(unsigned int index) const
+const MCSurfaceMetaData & MCSurfaceConfigLoader::surface(size_t index) const
 {
-    assert(index < static_cast<unsigned int>(m_surfaces.size()));
+    assert(index < m_surfaces.size());
     assert(m_surfaces.at(index));
     return *m_surfaces.at(index);
 }

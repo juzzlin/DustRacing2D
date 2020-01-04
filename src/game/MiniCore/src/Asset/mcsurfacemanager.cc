@@ -427,7 +427,7 @@ MCSurfaceManager::~MCSurfaceManager()
         if (iter.second)
         {
             const auto surface = iter.second;
-            for (unsigned int i = 0; i < MCGLMaterial::MAX_TEXTURES; i++)
+            for (size_t i = 0; i < MCGLMaterial::MAX_TEXTURES; i++)
             {
                 GLuint dummyHandle1 = surface->material()->texture(i);
                 glDeleteTextures(1, &dummyHandle1);
@@ -443,9 +443,9 @@ void MCSurfaceManager::load(const std::string & configFilePath, const std::strin
     // Parse the texture config file
     if (loader.load(configFilePath))
     {
-        for (unsigned int i = 0; i < loader.surfaceCount(); i++)
+        for (size_t i = 0; i < loader.surfaceCount(); i++)
         {
-            const MCSurfaceMetaData & metaData = loader.surface(i);
+            const auto metaData = loader.surface(i);
 
             // Load the image and create a 2D texture. Due to possible Android asset URLs,
             // an explicit QFile-based loading is used instead of directly using QImage::loadFromFile().
@@ -458,10 +458,9 @@ void MCSurfaceManager::load(const std::string & configFilePath, const std::strin
             {
                 throw std::runtime_error("Cannot read file '" + path.toStdString() + "'");
             }
-            QByteArray blob = imageFile.readAll();
 
             QImage textureImage;
-            textureImage.loadFromData(blob);
+            textureImage.loadFromData(imageFile.readAll());
             createSurfaceFromImage(metaData, textureImage);
         }
     }
@@ -475,7 +474,7 @@ void MCSurfaceManager::load(const std::string & configFilePath, const std::strin
 std::shared_ptr<MCSurface> MCSurfaceManager::surface(const std::string & id) const
 {
     // Try to find existing texture for the surface
-    if (m_surfaceMap.count(id) == 0)
+    if (!m_surfaceMap.count(id))
     {
         throw std::runtime_error("Cannot find texture object for handle '" + id + "'");
     }

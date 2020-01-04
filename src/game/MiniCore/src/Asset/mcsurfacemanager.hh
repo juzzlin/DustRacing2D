@@ -83,8 +83,7 @@ public:
      *  \param baseDataPath The absolute search path for an image is
      *  baseDataPath + baseImagePath + fileName. baseImagePath and the fileName are
      *  defined in the input file. */
-    virtual void load(
-      const std::string & configFilePath, const std::string & baseDataPath);
+    virtual void load(const std::string & configFilePath, const std::string & baseDataPath);
 
     /*! Returns a surface object associated with given strId.
      *  Corresponding OpenGL texture handle can be obtained

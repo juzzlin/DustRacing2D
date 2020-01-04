@@ -21,20 +21,22 @@
 #define MCGLMATERIAL_HH
 
 #include <MCGLEW>
+
+#include <array>
 #include <memory>
 
 class MCGLMaterial
 {
 public:
-    static const unsigned int MAX_TEXTURES = 3;
+    static const size_t MAX_TEXTURES = 3;
 
     MCGLMaterial();
 
     //! Set texture handle or zero.
-    void setTexture(GLuint handle, unsigned int index);
+    void setTexture(GLuint handle, size_t index);
 
     //! \return given texture handle.
-    GLuint texture(unsigned int index) const;
+    GLuint texture(size_t index) const;
 
     //! Set coefficient for specular lighting.
     void setSpecularCoeff(GLfloat coeff);
@@ -63,7 +65,7 @@ public:
     void doAlphaBlend();
 
 private:
-    GLuint m_textures[MAX_TEXTURES];
+    std::array<GLuint, MAX_TEXTURES> m_textures;
 
     GLfloat m_specularCoeff;
 

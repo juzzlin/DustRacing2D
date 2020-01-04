@@ -21,25 +21,22 @@
 #include <cassert>
 
 MCGLMaterial::MCGLMaterial()
-  : m_specularCoeff(1.0)
+  : m_textures({})
+  , m_specularCoeff(1.0)
   , m_diffuseCoeff(1.0)
   , m_useAlphaBlend(false)
   , m_src(GL_SRC_ALPHA)
   , m_dst(GL_ONE_MINUS_SRC_ALPHA)
 {
-    for (unsigned int i = 0; i < MAX_TEXTURES; i++)
-    {
-        m_textures[i] = 0;
-    }
 }
 
-void MCGLMaterial::setTexture(GLuint handle, unsigned int index)
+void MCGLMaterial::setTexture(GLuint handle, size_t index)
 {
     assert(index < MAX_TEXTURES);
     m_textures[index] = handle;
 }
 
-GLuint MCGLMaterial::texture(unsigned int index) const
+GLuint MCGLMaterial::texture(size_t index) const
 {
     assert(index < MAX_TEXTURES);
     return m_textures[index];
