@@ -43,12 +43,11 @@
 
 #include "simple_logger.hpp"
 
-static const int HUMAN_PLAYER_INDEX1 = 0;
-static const int HUMAN_PLAYER_INDEX2 = 1;
-static const int UNLOCK_LIMIT = 6; // Position required to unlock a new track
-
 Race::Race(Game & game, size_t numCars)
-  : m_numCars(numCars)
+  : m_humanPlayerIndex1(0)
+  , m_humanPlayerIndex2(1)
+  , m_unlockLimit(6) // Position required to unlock a new track
+  , m_numCars(numCars)
   , m_lapCount(5)
   , m_timing(numCars)
   , m_track(nullptr)
@@ -92,7 +91,7 @@ void Race::createStartGridObjects()
         data.setIsStationary(true);
         data.setSurfaceId("grid");
 
-        MCObjectPtr object = objectFactory.build(data);
+        const auto object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);
         object->setIsPhysicsObject(false);
 
@@ -355,7 +354,7 @@ void Race::update()
         }
     }
 
-    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+    for (auto && otd : m_offTrackDetectors)
     {
         otd->update();
     }
@@ -573,7 +572,7 @@ void Race::checkForNewBestPosition(const Car & car)
             auto && next = m_track->next().lock();
             if (next && next->trackData().isLocked())
             {
-                if (position <= UNLOCK_LIMIT)
+                if (position <= m_unlockLimit)
                 {
                     next->trackData().setIsLocked(false);
                     Settings::instance().saveTrackUnlockStatus(*next, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
@@ -705,7 +704,7 @@ void Race::setTrack(std::shared_ptr<Track> track, size_t lapCount)
     m_track = track;
     m_bestPos = Settings::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
 
-    for (OffTrackDetectorPtr otd : m_offTrackDetectors)
+    for (auto && otd : m_offTrackDetectors)
     {
         otd->setTrack(track);
     }
@@ -721,7 +720,7 @@ void Race::addCar(Car & car)
     if (find(m_cars.begin(), m_cars.end(), &car) == m_cars.end())
     {
         m_cars.push_back(&car);
-        m_offTrackDetectors.push_back(OffTrackDetectorPtr(new OffTrackDetector(car)));
+        m_offTrackDetectors.push_back(std::make_shared<OffTrackDetector>(car));
     }
 }
 
@@ -745,12 +744,10 @@ bool Race::isRaceFinished() const
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        return m_timing.raceCompleted(HUMAN_PLAYER_INDEX1) && m_timing.raceCompleted(HUMAN_PLAYER_INDEX2);
+        return m_timing.raceCompleted(m_humanPlayerIndex1) && m_timing.raceCompleted(m_humanPlayerIndex2);
     }
 
-    return m_timing.raceCompleted(HUMAN_PLAYER_INDEX1);
+    return m_timing.raceCompleted(m_humanPlayerIndex1);
 }
 
-Race::~Race()
-{
-}
+Race::~Race() = default;

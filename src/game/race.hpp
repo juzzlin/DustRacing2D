@@ -126,6 +126,13 @@ private:
 
     void updatePositions();
 
+    const size_t m_humanPlayerIndex1;
+
+    const size_t m_humanPlayerIndex2;
+
+    // Position required to unlock a new track
+    const size_t m_unlockLimit;
+
     typedef std::vector<Car *> CarVector;
     CarVector m_cars;
 
@@ -164,7 +171,7 @@ private:
     typedef std::unordered_map<size_t, CarStatus> StatusHash; // Car index to CarStatus.
     StatusHash m_statusHash;
 
-    size_t m_numCars;
+    const size_t m_numCars;
 
     size_t m_lapCount;
 
