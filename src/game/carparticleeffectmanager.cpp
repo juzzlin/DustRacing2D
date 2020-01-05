@@ -147,8 +147,7 @@ void CarParticleEffectManager::doOffTrackAnimations()
     }
 
     // Smoke
-    const float angular = std::fabs(m_car.physicsComponent().angularVelocity());
-    if ((leftSideOffTrack || rightSideOffTrack) && (speed > minSpeedSmoke || angular > 0.1f))
+    if ((leftSideOffTrack || rightSideOffTrack) && speed > minSpeedSmoke)
     {
         if (++m_smokeCounter >= 2) // This is to prevent a continuous spray of smoke particles
         {
