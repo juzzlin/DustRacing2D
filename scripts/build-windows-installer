@@ -7,7 +7,7 @@ DUSTRAC_RELEASE_VERSION=2.0.4
 CMD="export LANG=en_US.UTF-8 && \
      export LC_ALL=en_US.UTF-8 && \
      export PATH='$PATH':/mxe/usr/bin && \
-     cd /dr2d && DUSTRAC_RELEASE_VERSION=${DUSTRAC_RELEASE_VERSION} ./scripts/mxeWindowsBuild.sh"
+     cd /dr2d && DUSTRAC_RELEASE_VERSION=${DUSTRAC_RELEASE_VERSION} ./scripts/mxe-windows-build"
 
 if [ -f /.dockerenv ]; then
     echo "Script inside Docker"

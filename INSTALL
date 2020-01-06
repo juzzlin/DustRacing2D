@@ -48,7 +48,7 @@ GCC/MinGW and Clang are the only "officially" supported toolchains on Linux.
 Windows builds are done in a Docker container with MXE (http://mxe.cc). The build script
 also generates automatically an NSIS Windows installer and a ZIP-archive.
 
-See scripts/buildWindowsInstaller.sh and scripts/mxeWindowsBuild.sh.
+See scripts/build-windows-installer and scripts/mxe-windows-build.
 
 Building the project with Microsoft Visual C++ 2013 also works, but no automatic
 packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
@@ -126,7 +126,7 @@ Cross-compiling for Windows in Docker with MXE on Linux
 
 1) Install Docker
 
-2) `$ ./scripts/buildWindowsInstaller.sh`
+2) `$ ./scripts/build-windows-installer`
 
 CPack
 =====

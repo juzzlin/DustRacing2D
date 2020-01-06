@@ -105,7 +105,7 @@ Bug fixes:
 
 Other:
 
-* Properly check for empty version in mxeWindowsBuild.sh
+* Properly check for empty version in mxe-windows-build
 
 2.0.0
 =====
