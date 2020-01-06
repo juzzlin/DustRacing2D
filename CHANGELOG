@@ -5,10 +5,24 @@ New features:
 
 Bug fixes:
 
+Other:
+
+2.0.5
+=====
+
+New features:
+
+* Show the actual car color in minimap
+
+Bug fixes:
+
 * Fix GitHub Issue #87: Improve off-track detection accuracy on curves
 * Fix GitHub Issue #83: Car dots in minimap are too small on very large tracks
 
 Other:
+
+* Editor: Write processing instruction
+* Add processing instructions to all existing tracks
 
 2.0.4
 =====
