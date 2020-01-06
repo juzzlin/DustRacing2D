@@ -53,7 +53,7 @@ if [[ $1 ]]; then
     echo "Project dir: ${PROJECT_DIR}"
 fi
 
-${QMAKE} ${PROJECT_DIR} && make -j${NUM_CPUS} || exit 1
+${QMAKE} ${PROJECT_DIR} && make clean && make -j${NUM_CPUS} || exit 1
 
 # Update translations
 
