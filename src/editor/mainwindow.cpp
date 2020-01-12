@@ -512,6 +512,10 @@ void MainWindow::showAboutQtDlg()
     QMessageBox::aboutQt(this, tr("About Qt"));
 }
 
+void MainWindow::showWhatsNewDlg()
+{
+}
+
 void MainWindow::clearRoute()
 {
     m_mediator->clearRoute();
