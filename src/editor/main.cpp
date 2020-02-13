@@ -23,7 +23,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <memory>
 
 #if QT_VERSION < 0x50600
 extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
@@ -43,22 +42,16 @@ int main(int argc, char ** argv)
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    std::unique_ptr<Application> app;
-
     try
     {
-        app = std::make_unique<Application>(argc, argv);
-
-        return app->run();
-    } catch (std::exception & e)
+        return Application(argc, argv).run();
+    } //
+    catch (std::exception & e)
     {
         if (!dynamic_cast<UserException *>(&e))
         {
             std::cerr << e.what() << std::endl;
         }
-
-        app.reset();
-
         return EXIT_FAILURE;
     }
 }

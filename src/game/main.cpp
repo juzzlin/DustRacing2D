@@ -28,7 +28,6 @@
 #include "simple_logger.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -57,29 +56,18 @@ int main(int argc, char ** argv)
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-    std::unique_ptr<Game> game;
-
     try
     {
         initLogger();
-
-        // Create the main game object. The game loop starts immediately after
-        // the Renderer has been initialized.
-        L().debug() << "Creating game object..";
-
-        game = std::make_unique<Game>(argc, argv);
-
-        return game->run();
-    } catch (std::exception & e)
+        return Game(argc, argv).run();
+    } //
+    catch (std::exception & e)
     {
         if (!dynamic_cast<UserException *>(&e))
         {
             L().fatal() << e.what();
             L().fatal() << "Initializing the game failed!";
         }
-
-        game.reset();
-
         return EXIT_FAILURE;
     }
 }
