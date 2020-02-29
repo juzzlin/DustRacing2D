@@ -8,9 +8,16 @@
       #include <wingdi.h>
       #include <GL/gl.h>
     #else
-      #define GL_GLEXT_PROTOTYPES
-      #include <GL/gl.h>
-      #include <GL/glext.h>
+      #ifdef __APPLE__
+        #define GL_SILENCE_DEPRECATION
+        #define GL_GLEXT_PROTOTYPES
+        #include <OpenGL/gl.h>
+        #include <OpenGL/glext.h>
+      #else
+        #define GL_GLEXT_PROTOTYPES
+        #include <GL/gl.h>
+        #include <GL/glext.h>
+      #endif
     #endif
   #else
     #include <GLES2/gl2.h>
