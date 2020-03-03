@@ -165,7 +165,7 @@ set(COMMON_LIBS
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger Argengine)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 14)
 
 add_subdirectory(unittests)

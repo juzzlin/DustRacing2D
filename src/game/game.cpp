@@ -42,6 +42,7 @@
 #include <QThread>
 #include <QTime>
 
+#include "argengine.hpp"
 #include "simple_logger.hpp"
 
 #include <cassert>
@@ -124,22 +125,6 @@ Game & Game::instance()
     return *Game::m_instance;
 }
 
-static void printHelp()
-{
-    std::cout << std::endl
-              << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::General::COPYRIGHT << std::endl
-              << std::endl;
-    std::cout << "Options:" << std::endl;
-    std::cout << "--debug           Set log level to debug." << std::endl;
-    std::cout << "--help            Show this help." << std::endl;
-    std::cout << "--screen [index]  Force a certain screen on multi-display setups." << std::endl;
-    std::cout << "--trace           Set log level to trace." << std::endl;
-    std::cout << "--lang [lang]     Force language: fi, fr, it, cs, ru." << std::endl;
-    std::cout << "--no-vsync        Force vsync off." << std::endl;
-    std::cout << std::endl;
-}
-
 static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
 {
     if (lang == "")
@@ -174,41 +159,41 @@ void Game::parseArgs(int argc, char ** argv)
 {
     QString lang = "";
 
-    const std::vector<QString> args(argv, argv + argc);
-    for (size_t i = 1; i < args.size(); i++)
-    {
-        if (args[i] == "-h" || args[i] == "--help")
-        {
-            printHelp();
-            throw UserException("Exit due to help.");
-        }
-        else if (args[i] == "--screen" && (i + i) < args.size())
-        {
-            m_screenIndex = args[++i].toInt();
-            m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
-        }
-        else if (args[i] == "--lang" && (i + i) < args.size())
-        {
-            lang = args[++i];
-        }
-        else if (args[i] == "--no-vsync")
-        {
-            m_forceNoVSync = true;
-        }
-        else if (args[i] == "--debug")
-        {
-            L::setLoggingLevel(L::Level::Debug);
-        }
-        else if (args[i] == "--trace")
-        {
-            L::setLoggingLevel(L::Level::Trace);
-        }
-        else
-        {
-            printHelp();
-            throw std::runtime_error("Unknown argument: " + args[i].toStdString());
-        }
-    }
+    juzzlin::Argengine ae(argc, argv);
+    ae.addOption(
+      { "--screen" }, [=](std::string value) {
+          m_screenIndex = std::stoi(value);
+          m_settings.saveValue(m_settings.screenKey(), m_screenIndex);
+      },
+      false, "Force a certain screen on multi-display setups.");
+
+    ae.addOption(
+      { "--lang" }, [&](std::string value) {
+          lang = value.c_str();
+      },
+      false, "Force language: fi, fr, it, cs, ru.");
+
+    ae.addOption(
+      { "--no-vsync" }, [=]() {
+          m_forceNoVSync = true;
+      },
+      false, "Force vsync off.");
+
+    ae.addOption(
+      { "--debug" }, [=]() {
+          L::setLoggingLevel(L::Level::Debug);
+      },
+      false, "Set log level to debug.");
+
+    ae.addOption(
+      { "--trace" }, [=]() {
+          L::setLoggingLevel(L::Level::Trace);
+      },
+      false, "Set log level to trace.");
+
+    ae.setHelpText("\nUsage: " + std::string(argv[0]) + " [OPTIONS]");
+
+    ae.parse();
 
     initTranslations(m_appTranslator, m_app, lang);
 }

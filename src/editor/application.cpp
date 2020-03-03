@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "application.hpp"
+#include "argengine.hpp"
 #include "mainwindow.hpp"
 
 #include "../common/config.hpp"
@@ -23,20 +24,6 @@
 #include <QSettings>
 
 #include <iostream>
-
-static void printHelp()
-{
-    std::cout << std::endl
-              << "Dust Racing 2D version " << VERSION << std::endl;
-    std::cout << Config::General::COPYRIGHT << std::endl
-              << std::endl;
-    std::cout << "Usage: dustrac-editor [options] [trackFile]" << std::endl
-              << std::endl;
-    std::cout << "Options:" << std::endl;
-    std::cout << "--help        Show this help." << std::endl;
-    std::cout << "--lang [lang] Force language: fi, fr, it, cs, ru." << std::endl;
-    std::cout << std::endl;
-}
 
 static void initTranslations(QTranslator & appTranslator, QGuiApplication & app, QString lang = "")
 {
@@ -60,23 +47,22 @@ void Application::parseArgs(int argc, char ** argv)
 {
     QString lang = "";
 
-    const std::vector<QString> args(argv, argv + argc);
-    for (unsigned int i = 1; i < args.size(); i++)
-    {
-        if (args[i] == "-h" || args[i] == "--help")
-        {
-            printHelp();
-            throw UserException("Exit due to help.");
-        }
-        else if (args[i] == "--lang" && (i + i) < args.size())
-        {
-            lang = args[++i];
-        }
-        else
-        {
-            m_trackFile = args[i];
-        }
-    }
+    juzzlin::Argengine ae(argc, argv);
+
+    ae.addOption(
+      { "--lang" }, [&](std::string value) {
+          lang = value.c_str();
+      },
+      false, "Force language: fi, fr, it, cs, ru.");
+
+    ae.setHelpText(std::string("Dust Racing 2D version ") + VERSION + "\n" + //
+                   Config::General::COPYRIGHT + "\n\nUsage: " + std::string(argv[0]) + " [OPTIONS] [TRACK_FILE]");
+
+    ae.setPositionalArgumentCallback([=](juzzlin::Argengine::ArgumentVector args) {
+        m_trackFile = args.at(0).c_str();
+    });
+
+    ae.parse();
 
     initTranslations(m_appTranslator, m_app, lang);
 }
