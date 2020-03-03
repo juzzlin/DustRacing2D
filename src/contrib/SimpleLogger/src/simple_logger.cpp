@@ -22,20 +22,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "simple_logger.hpp"
 
+#include <chrono>
 #include <ctime>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <mutex>
 #include <stdexcept>
 
 #ifdef Q_OS_ANDROID
 #include <QDebug>
-#else
-#include <cstdio>
 #endif
 
 namespace juzzlin {
@@ -62,11 +60,13 @@ public:
 
     static void enableEchoMode(bool enable);
 
-    static void enableDateTime(bool enable);
-
     static void setLevelSymbol(Logger::Level level, std::string symbol);
 
     static void setLoggingLevel(Logger::Level level);
+
+    static void setTimestampMode(Logger::TimestampMode timestampMode, std::string separator);
+
+    static void setStream(Level level, std::ostream & stream);
 
     static void init(std::string filename, bool append);
 
@@ -74,15 +74,17 @@ public:
 
     std::ostringstream & getStream(Logger::Level level);
 
-    void prefixDateTime();
+    void prefixTimestamp();
 
 private:
 
     static bool m_echoMode;
 
-    static bool m_dateTime;
-
     static Logger::Level m_level;
+
+    static Logger::TimestampMode m_timestampMode;
+
+    static std::string m_timestampSeparator;
 
     static std::ofstream m_fout;
 
@@ -92,16 +94,22 @@ private:
     using StreamMap = std::map<Logger::Level, std::ostream *>;
     static StreamMap m_streams;
 
+    static std::recursive_mutex m_mutex;
+
     Logger::Level m_activeLevel = Logger::Level::Info;
+
+    std::lock_guard<std::recursive_mutex> m_lock;
 
     std::ostringstream m_oss;
 };
 
 bool Logger::Impl::m_echoMode = true;
 
-bool Logger::Impl::m_dateTime = true;
-
 Logger::Level Logger::Impl::m_level = Logger::Level::Info;
+
+Logger::TimestampMode Logger::Impl::m_timestampMode = Logger::TimestampMode::DateTime;
+
+std::string Logger::Impl::m_timestampSeparator = ": ";
 
 std::ofstream Logger::Impl::m_fout;
 
@@ -125,7 +133,10 @@ Logger::Impl::StreamMap Logger::Impl::m_streams = {
     {Logger::Level::Fatal,   &std::cerr}
 };
 
+std::recursive_mutex Logger::Impl::m_mutex;
+
 Logger::Impl::Impl()
+  : m_lock(Logger::Impl::m_mutex)
 {
 }
 
@@ -139,15 +150,10 @@ void Logger::Impl::enableEchoMode(bool enable)
     Impl::m_echoMode = enable;
 }
 
-void Logger::Impl::enableDateTime(bool enable)
-{
-    Impl::m_dateTime = enable;
-}
-
 std::ostringstream & Logger::Impl::getStream(Logger::Level level)
 {
     m_activeLevel = level;
-    Impl::prefixDateTime();
+    Impl::prefixTimestamp();
     m_oss << Impl::m_symbols[level] << " ";
     return m_oss;
 }
@@ -162,15 +168,45 @@ void Logger::Impl::setLoggingLevel(Logger::Level level)
     Impl::m_level = level;
 }
 
-void Logger::Impl::prefixDateTime()
+void Logger::Impl::setTimestampMode(TimestampMode timestampMode, std::string separator)
 {
-    if (Impl::m_dateTime)
+    Impl::m_timestampMode = timestampMode;
+    Impl::m_timestampSeparator = separator;
+}
+
+void Logger::Impl::prefixTimestamp()
+{
+    std::string timeStr;
+
+    using std::chrono::duration_cast;
+    using std::chrono::system_clock;
+
+    switch (Impl::m_timestampMode)
+    {
+    case Logger::TimestampMode::None:
+        break;
+    case Logger::TimestampMode::DateTime:
     {
         time_t rawTime;
         time(&rawTime);
-        std::string timeStr(ctime(&rawTime));
+        timeStr = ctime(&rawTime);
         timeStr.erase(timeStr.length() - 1);
-        m_oss << "[" << timeStr << "] ";
+    }
+        break;
+    case Logger::TimestampMode::EpochSeconds:
+        timeStr = std::to_string(duration_cast<std::chrono::seconds>(system_clock::now().time_since_epoch()).count());
+        break;
+    case Logger::TimestampMode::EpochMilliseconds:
+        timeStr = std::to_string(duration_cast<std::chrono::milliseconds>(system_clock::now().time_since_epoch()).count());
+        break;
+    case Logger::TimestampMode::EpochMicroseconds:
+        timeStr = std::to_string(duration_cast<std::chrono::microseconds>(system_clock::now().time_since_epoch()).count());
+        break;
+    }
+
+    if (!timeStr.empty())
+    {
+        m_oss << timeStr << m_timestampSeparator;
     }
 }
 
@@ -248,6 +284,11 @@ std::ostringstream & Logger::Impl::fatal()
     return getStream(Logger::Level::Fatal);
 }
 
+void Logger::Impl::setStream(Level level, std::ostream & stream)
+{
+    Logger::Impl::m_streams[level] = &stream;
+}
+
 Logger::Logger()
     : m_impl(new Logger::Impl)
 {
@@ -263,11 +304,6 @@ void Logger::enableEchoMode(bool enable)
     Impl::enableEchoMode(enable);
 }
 
-void Logger::enableDateTime(bool enable)
-{
-    Impl::enableDateTime(enable);
-}
-
 void Logger::setLoggingLevel(Level level)
 {
     Impl::setLoggingLevel(level);
@@ -276,6 +312,16 @@ void Logger::setLoggingLevel(Level level)
 void Logger::setLevelSymbol(Level level, std::string symbol)
 {
     Impl::setLevelSymbol(level, symbol);
+}
+
+void Logger::setTimestampMode(TimestampMode timestampMode, std::string separator)
+{
+    Impl::setTimestampMode(timestampMode, separator);
+}
+
+void Logger::setStream(Level level, std::ostream & stream)
+{
+    Impl::setStream(level, stream);
 }
 
 std::ostringstream & Logger::trace()
@@ -306,6 +352,11 @@ std::ostringstream & Logger::error()
 std::ostringstream & Logger::fatal()
 {
     return m_impl->fatal();
+}
+
+std::string Logger::version()
+{
+    return "1.4.0";
 }
 
 Logger::~Logger() = default;

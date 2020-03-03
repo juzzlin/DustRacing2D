@@ -46,15 +46,24 @@ namespace juzzlin {
 class Logger
 {
 public:
-
     enum class Level
     {
-        Trace = 0,
+        Trace,
         Debug,
         Info,
         Warning,
         Error,
-        Fatal
+        Fatal,
+        None
+    };
+
+    enum class TimestampMode
+    {
+        None,
+        DateTime,
+        EpochSeconds,
+        EpochMilliseconds,
+        EpochMicroseconds
     };
 
     //! Constructor.
@@ -73,10 +82,6 @@ public:
     //! \param enable Echo everything if true. Default is false.
     static void enableEchoMode(bool enable);
 
-    //! Enable/disable date and time prefix.
-    //! \param enable Prefix with date and time if true. Default is true.
-    static void enableDateTime(bool enable);
-
     //! Set the logging level.
     //! \param level The minimum level. Default is Info.
     static void setLoggingLevel(Level level);
@@ -85,6 +90,19 @@ public:
     //! \param level The level.
     //! \param symbol The symbol outputted for the messages of this level.
     static void setLevelSymbol(Level level, std::string symbol);
+
+    //! Set/enable timestamp mode.
+    //! \param timestampMode Timestamp mode enumeration.
+    //! \param separator Separator string outputted after timestamp.
+    static void setTimestampMode(TimestampMode timestampMode, std::string separator = " ");
+
+    //! Set specific stream.
+    //! \param level The level.
+    //! \param stream The output stream.
+    static void setStream(Level level, std::ostream & stream);
+
+    //! \return Library version in x.y.z
+    static std::string version();
 
     //! Get stream to the trace log message.
     std::ostringstream & trace();
@@ -105,7 +123,6 @@ public:
     std::ostringstream & fatal();
 
 private:
-
     Logger(const Logger & r) = delete;
     Logger & operator=(const Logger & r) = delete;
 
