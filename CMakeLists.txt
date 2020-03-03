@@ -165,7 +165,7 @@ enable_testing()
 # Install paths depend on the build type and target platform
 resolve_install_paths()
 
-add_subdirectory(src/contrib/SimpleLogger)
+add_subdirectory(src/contrib/SimpleLogger EXCLUDE_FROM_ALL)
 include_directories(src/contrib/SimpleLogger/src)
 
 add_subdirectory(src/editor)
