@@ -159,14 +159,17 @@ else()
     pkg_check_modules(VORBISFILE REQUIRED vorbisfile)
 endif()
 
+add_subdirectory(src/contrib/SimpleLogger EXCLUDE_FROM_ALL)
+include_directories(src/contrib/SimpleLogger/src)
+
+add_subdirectory(src/contrib/Argengine EXCLUDE_FROM_ALL)
+include_directories(src/contrib/Argengine/src)
+
 # Enable CMake's unit test framework
 enable_testing()
 
 # Install paths depend on the build type and target platform
 resolve_install_paths()
-
-add_subdirectory(src/contrib/SimpleLogger EXCLUDE_FROM_ALL)
-include_directories(src/contrib/SimpleLogger/src)
 
 add_subdirectory(src/editor)
 add_subdirectory(src/game)

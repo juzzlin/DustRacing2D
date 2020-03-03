@@ -1,8 +1,8 @@
 // MIT License
 //
-// Copyright (c) 2019 Jussi Lind <jussi.lind@iki.fi>
+// Copyright (c) 2020 Jussi Lind <jussi.lind@iki.fi>
 //
-// https://github.com/juzzlin/SimpleLogger
+// https://github.com/juzzlin/Argengine
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "simple_logger.hpp"
+#include "argengine.hpp"
 
 // Don't compile asserts away
 #ifdef NDEBUG
@@ -31,42 +31,48 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <fstream>
+#include <iostream>
+#include <sstream>
+
+using juzzlin::Argengine;
+
+const std::string name = "Argengine";
+
+void testUnknownArgumentBehavior_ShouldThrow()
+{
+    Argengine ae({ "test", "--foo2" });
+    ae.addOption({ "--bar" }, [] {
+    });
+
+    std::string error;
+    try {
+        ae.parse();
+    } catch (std::runtime_error & e) {
+        error = e.what();
+    }
+    assert(error == name + ": Uknown option '" + ae.arguments().at(1) + "'!");
+}
+
+void testUnknownArgument_SingleValueAssignment_ShouldThrow()
+{
+    Argengine ae({ "test", "--foo=42" });
+    ae.addOption({ "--bar" }, [](std::string) {
+    });
+
+    std::string error;
+    try {
+        ae.parse();
+    } catch (std::runtime_error & e) {
+        error = e.what();
+    }
+    assert(error == name + ": Uknown option '--foo=42'!");
+}
 
 int main(int, char **)
 {
-    using juzzlin::L;
+    testUnknownArgumentBehavior_ShouldThrow();
 
-    const auto logFile = "file_test.log";
-
-    L::init(logFile);
-    L::enableEchoMode(true);
-    L::setLoggingLevel(L::Level::Trace);
-
-    const std::string message = "Hello, world!";
-    const std::string timestampSeparator = " ## ";
-    L::setTimestampMode(L::TimestampMode::DateTime, timestampSeparator);
-
-    L().trace() << message;
-    L().debug() << message;
-    L().info() << message;
-    L().warning() << message;
-    L().error() << message;
-    L().fatal() << message;
-
-    std::ifstream fin{logFile};
-    assert(fin.is_open());
-
-    int lines = 0;
-    std::string line;
-    while (std::getline(fin, line))
-    {
-        assert(line.find(message) != std::string::npos);
-        assert(line.find(timestampSeparator) != std::string::npos);
-        lines++;
-    }
-
-    assert(lines == 6);
+    testUnknownArgument_SingleValueAssignment_ShouldThrow();
 
     return EXIT_SUCCESS;
 }

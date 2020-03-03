@@ -5,7 +5,7 @@ pipeline {
             agent {
                 docker {
                     image 'juzzlin/qt5-18.04:latest'
-                    args '--privileged -t -v $WORKSPACE:/SimpleLogger'
+                    args '--privileged -t -v $WORKSPACE:/Argengine'
                 }
             }
             steps {
@@ -18,7 +18,7 @@ pipeline {
             agent {
                 docker {
                     image 'juzzlin/qt5-18.04:latest'
-                    args '--privileged -t -v $WORKSPACE:/SimpleLogger'
+                    args '--privileged -t -v $WORKSPACE:/Argengine'
                 }
             }
             steps {

@@ -14,7 +14,7 @@ contains(QT_VERSION, ^5\\..*) {
     error("Qt5 is required!")
 }
 
-INCLUDEPATH += .
+INCLUDEPATH += . ../contrib/Argengine/src
 
 # Input
 HEADERS +=  \
@@ -51,6 +51,7 @@ HEADERS +=  \
     trackpropertiesdialog.hpp \
     tracktile.hpp \
     undostack.hpp \
+    ../contrib/Argengine/src/argengine.hpp
 
 SOURCES += \
     ../common/mapbase.cpp \
@@ -83,6 +84,7 @@ SOURCES += \
     trackpropertiesdialog.cpp \
     tracktile.cpp \
     undostack.cpp \
+    ../contrib/Argengine/src/argengine.cpp
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
 RC_FILE = ../../data/icons/WindowsEditor.rc

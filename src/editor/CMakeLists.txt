@@ -83,5 +83,5 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS} ${QM})
 
-target_link_libraries(${EDITOR_BINARY_NAME} Qt5::Widgets Qt5::Xml)
+target_link_libraries(${EDITOR_BINARY_NAME} Qt5::Widgets Qt5::Xml Argengine)
 set_property(TARGET ${EDITOR_BINARY_NAME} PROPERTY CXX_STANDARD 14)

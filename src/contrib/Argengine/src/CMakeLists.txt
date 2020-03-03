@@ -1,14 +1,14 @@
-set(SRC simple_logger.cpp)
-set(HDR simple_logger.hpp)
+set(SRC argengine.cpp)
+set(HDR argengine.hpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(SimpleLoggerLib OBJECT ${SRC})
-set_property(TARGET SimpleLoggerLib PROPERTY POSITION_INDEPENDENT_CODE 1)
+add_library(ArgengineLib OBJECT ${SRC})
+set_property(TARGET ArgengineLib PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-add_library(${LIBRARY_NAME} SHARED $<TARGET_OBJECTS:SimpleLoggerLib>)
+add_library(${LIBRARY_NAME} SHARED $<TARGET_OBJECTS:ArgengineLib>)
 set_target_properties(${LIBRARY_NAME} PROPERTIES PUBLIC_HEADER ${HDR})
 install(TARGETS ${LIBRARY_NAME}
     ARCHIVE DESTINATION lib
@@ -17,7 +17,7 @@ install(TARGETS ${LIBRARY_NAME}
 )
 
 set(STATIC_LIBRARY_NAME ${LIBRARY_NAME}_static)
-add_library(${STATIC_LIBRARY_NAME} STATIC $<TARGET_OBJECTS:SimpleLoggerLib>)
+add_library(${STATIC_LIBRARY_NAME} STATIC $<TARGET_OBJECTS:ArgengineLib>)
 set_target_properties(${STATIC_LIBRARY_NAME} PROPERTIES PUBLIC_HEADER ${HDR})
 install(TARGETS ${STATIC_LIBRARY_NAME}
     ARCHIVE DESTINATION lib
@@ -25,4 +25,7 @@ install(TARGETS ${STATIC_LIBRARY_NAME}
     PUBLIC_HEADER DESTINATION include
 )
 
-add_subdirectory(tests)
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+

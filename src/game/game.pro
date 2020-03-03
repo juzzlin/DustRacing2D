@@ -35,6 +35,7 @@ INCLUDEPATH += . \
     STFH \
     menu \
     audio \
+    ../contrib/Argengine/src \
     ../contrib/SimpleLogger/src
 
 # Input
@@ -212,6 +213,7 @@ HEADERS += \
     STFH/listener.hpp \
     STFH/location.hpp \
     STFH/source.hpp \
+    ../contrib/Argengine/src/argengine.hpp \
     ../contrib/SimpleLogger/src/simple_logger.hpp
 
 SOURCES += \
@@ -364,6 +366,7 @@ SOURCES += \
     STFH/listener.cpp \
     STFH/location.cpp \
     STFH/source.cpp \
+    ../contrib/Argengine/src/argengine.cpp \
     ../contrib/SimpleLogger/src/simple_logger.cpp
 
 RESOURCES += ../../data/icons/icons.qrc ../../data/images/editor.qrc
