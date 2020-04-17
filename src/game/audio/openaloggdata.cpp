@@ -19,6 +19,7 @@
 
 #include <cstdio>
 #include <vector>
+#include <stdexcept>
 
 #include <vorbis/vorbisfile.h>
 

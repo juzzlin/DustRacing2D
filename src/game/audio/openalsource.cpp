@@ -19,6 +19,7 @@
 #include <AL/alc.h>
 
 #include <memory>
+#include <stdexcept>
 
 static bool checkError()
 {
