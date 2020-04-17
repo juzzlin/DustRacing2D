@@ -25,6 +25,7 @@
 #include <AL/alc.h>
 #include <cassert>
 #include <cstdio>
+#include <stdexcept>
 
 static bool checkError()
 {
