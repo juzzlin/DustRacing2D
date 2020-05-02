@@ -218,9 +218,9 @@ void Scene::setupMinimaps()
     const auto minimapSize = static_cast<int>(m_width * 0.2f);
     const auto minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
 
-    for (size_t i = 0; i < 2; i++)
+    for (size_t i = 0; i < std::min(static_cast<size_t>(2), m_cars.size()); i++)
     {
-        m_minimap.at(i).initialize(*m_cars.at(i), m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, minimapSize);
+        m_minimap.at(i).initialize(*m_cars.at(i), m_activeTrack->trackData().map(), minimapSize / 2 + 10, minimapY, static_cast<size_t>(minimapSize));
     }
 }
 

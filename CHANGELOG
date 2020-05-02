@@ -5,6 +5,8 @@ New features:
 
 Bug fixes:
 
+* Fix GitHub Issue #95: Time Trials don't work, dustrac just exits
+
 Other:
 
 2.0.5
