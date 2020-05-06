@@ -300,6 +300,8 @@ void TrackItem::renderTrackProperties()
         line++;
     }
 
+    line++;
+
     if (m_track->trackData().isLocked())
     {
         ss.str(L"");
@@ -315,7 +317,7 @@ void TrackItem::renderTrackProperties()
         }
         text.setText(ss.str());
         maxWidth = std::fmax(maxWidth, text.width(m_font));
-	const auto textX = menu()->x() + x();
+        const auto textX = menu()->x() + x();
         text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
     }
 }
