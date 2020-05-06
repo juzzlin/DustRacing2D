@@ -22,10 +22,10 @@
 Settings * Settings::m_instance = nullptr;
 
 static const char * SETTINGS_GROUP_CONFIG = "Config";
-static const char * SETTINGS_GROUP_LAP = "LapRecords";
-static const char * SETTINGS_GROUP_RACE = "RaceRecords";
-static const char * SETTINGS_GROUP_POS = "BestPositions";
-static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracks";
+static const char * SETTINGS_GROUP_LAP = "LapRecordsV2";
+static const char * SETTINGS_GROUP_RACE = "RaceRecordsV2";
+static const char * SETTINGS_GROUP_POS = "BestPositionsV2";
+static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracksV2";
 
 static QString combine(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty)
 {
