@@ -107,8 +107,6 @@ private slots:
 
     void showAboutQtDlg();
 
-    void showWhatsNewDlg();
-
     void showTip();
 
     void openArgTrack();
