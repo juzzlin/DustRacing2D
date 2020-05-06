@@ -60,6 +60,9 @@ public:
       , m_font(MCAssetManager::textureFontManager().font(m_game.fontName()))
       , m_star(MCAssetManager::surfaceManager().surface("star"))
       , m_glow(MCAssetManager::surfaceManager().surface("starGlow"))
+      , m_star_half(MCAssetManager::surfaceManager().surface("starHalf"))
+      , m_star_half_r(MCAssetManager::surfaceManager().surface("starHalfR"))
+      , m_glow_half(MCAssetManager::surfaceManager().surface("starHalfGlow"))
       , m_lock(MCAssetManager::surfaceManager().surface("lock"))
     {
         updateData();
@@ -67,6 +70,9 @@ public:
         auto && program = Renderer::instance().program("menu");
         m_star->setShaderProgram(program);
         m_glow->setShaderProgram(program);
+        m_star_half->setShaderProgram(program);
+        m_star_half_r->setShaderProgram(program);
+        m_glow_half->setShaderProgram(program);
         m_lock->setShaderProgram(program);
     }
 
@@ -110,6 +116,12 @@ private:
     MCSurfacePtr m_star;
 
     MCSurfacePtr m_glow;
+
+    MCSurfacePtr m_star_half;
+
+    MCSurfacePtr m_star_half_r;
+
+    MCSurfacePtr m_glow_half;
 
     MCSurfacePtr m_lock;
 
@@ -231,13 +243,22 @@ void TrackItem::renderStars()
             {
                 m_star->setColor(yellow);
                 m_glow->render(nullptr, starPos, 0);
+                m_star->render(nullptr, starPos, 0);
+            }
+            // Award a half star for rank 11
+            else if (m_bestPos == 11 && i == 0)
+            {
+                m_star_half->setColor(yellow);
+                m_star_half_r->setColor(grey);
+                m_glow_half->render(nullptr, starPos, 0);
+                m_star_half_r->render(nullptr, starPos, 0);
+                m_star_half->render(nullptr, starPos, 0);
             }
             else
             {
                 m_star->setColor(grey);
+                m_star->render(nullptr, starPos, 0);
             }
-
-            m_star->render(nullptr, starPos, 0);
         }
     }
 }
