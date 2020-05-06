@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<track rows="25" index="14" version="1.11.0" cols="20" name="Diamond">
+<track rows="25" index="4" version="1.11.0" cols="20" name="Diamond">
  <t i="0" o="0" t="sand" j="0"/>
  <t i="0" o="180" t="sandGrassStraight" j="1"/>
  <t i="0" o="0" t="grass" j="2"/>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<track version="1.13.0" index="0" cols="22" name="Infinity" rows="8">
+<track version="1.13.0" index="1" cols="22" name="Infinity" rows="8">
  <t o="180" i="0" t="sandGrassCorner2" j="0"/>
  <t o="90" i="0" t="sandGrassStraight" j="1"/>
  <t o="90" i="0" t="sandGrassStraight" j="2"/>
