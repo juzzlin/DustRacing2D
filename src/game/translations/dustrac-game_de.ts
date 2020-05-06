@@ -463,10 +463,12 @@ Pause: P</translation>
     </message>
     <message>
         <source>Finish previous track in TOP-6 to unlock!</source>
+        <extracomment>Try to keep the translation as short as possible.</extracomment>
         <translation>6. Platz oder besser auf vorh. Strecke benötigt!</translation>
     </message>
     <message>
         <source>Unlock it in one/two player race!</source>
+        <extracomment>&quot;it&quot; = a locked track. Try to keep the translation as short as possible.</extracomment>
         <translation>Im Ein- oder Zweispielerrennen freischalten</translation>
     </message>
 </context>

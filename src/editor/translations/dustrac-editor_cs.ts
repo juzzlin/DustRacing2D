@@ -12,7 +12,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="64"/>
+        <location filename="../mainwindow.cpp" line="65"/>
         <source>Randomly rotate objects</source>
         <translation>Náhodně otočit předměty</translation>
     </message>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="143"/>
-        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="635"/>
         <source>New file</source>
         <translation>Nový soubor</translation>
     </message>
@@ -182,7 +182,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="498"/>
-        <location filename="../mainwindow.cpp" line="683"/>
+        <location filename="../mainwindow.cpp" line="682"/>
         <source>Track Files (*.trk)</source>
         <translation>Soubory s tratěmi (*.trk)</translation>
     </message>
@@ -192,54 +192,54 @@
         <translation>O Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="526"/>
+        <location filename="../mainwindow.cpp" line="530"/>
         <source>ERROR!!: %1 doesn&apos;t exist.</source>
         <translation>Chyba: %1 neexistuje.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="536"/>
+        <location filename="../mainwindow.cpp" line="540"/>
         <source>Track &apos;%1&apos; opened.</source>
         <translation>Trať &apos;%1&apos; otevřena.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="561"/>
+        <location filename="../mainwindow.cpp" line="564"/>
         <source>Failed to open track &apos;</source>
         <translation>Nepodařilo se otevřít trať </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="663"/>
-        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="692"/>
         <source>Track &apos;</source>
         <translation>Trať</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="663"/>
-        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="692"/>
         <source>&apos; saved.</source>
         <translation> uložena.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="669"/>
+        <location filename="../mainwindow.cpp" line="668"/>
         <source>Failed to save track &apos;</source>
         <translation>Nepodařilo se uložit trať </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="681"/>
+        <location filename="../mainwindow.cpp" line="680"/>
         <source>Save a track</source>
         <translation>Uložit trať</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="699"/>
+        <location filename="../mainwindow.cpp" line="698"/>
         <source>Failed to save track as &apos;</source>
         <translation>Nepodařilo se uložit trať jako </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
+        <location filename="../mainwindow.cpp" line="641"/>
         <source>A new track &apos;%1&apos; created. Columns: %2, Rows: %3.</source>
         <translation>Nová trať %1 vytvořena. Sloupce: %2, řádky: %3.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="729"/>
+        <location filename="../mainwindow.cpp" line="728"/>
         <source>Track properties updated.</source>
         <translation type="unfinished"></translation>
     </message>

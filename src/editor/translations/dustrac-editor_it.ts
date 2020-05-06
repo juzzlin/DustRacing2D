@@ -12,7 +12,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="64"/>
+        <location filename="../mainwindow.cpp" line="65"/>
         <source>Randomly rotate objects</source>
         <translation>Ruota casualmente gli oggetti</translation>
     </message>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="143"/>
-        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="635"/>
         <source>New file</source>
         <translation>Nuovo file</translation>
     </message>
@@ -182,7 +182,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="498"/>
-        <location filename="../mainwindow.cpp" line="683"/>
+        <location filename="../mainwindow.cpp" line="682"/>
         <source>Track Files (*.trk)</source>
         <translation>Files dei tracciati(*.trk)</translation>
     </message>
@@ -192,54 +192,54 @@
         <translation>Informazioni su Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="526"/>
+        <location filename="../mainwindow.cpp" line="530"/>
         <source>ERROR!!: %1 doesn&apos;t exist.</source>
         <translation>ERRORE!!: %1 non esiste.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="536"/>
+        <location filename="../mainwindow.cpp" line="540"/>
         <source>Track &apos;%1&apos; opened.</source>
         <translation>Tracciato &apos;%1&apos; aperto.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="561"/>
+        <location filename="../mainwindow.cpp" line="564"/>
         <source>Failed to open track &apos;</source>
         <translation>Impossibile aprire tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="663"/>
-        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="692"/>
         <source>Track &apos;</source>
         <translation>Tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="663"/>
-        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="692"/>
         <source>&apos; saved.</source>
         <translation>&apos; salvato.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="669"/>
+        <location filename="../mainwindow.cpp" line="668"/>
         <source>Failed to save track &apos;</source>
         <translation>Impossibile salvare il tracciato &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="681"/>
+        <location filename="../mainwindow.cpp" line="680"/>
         <source>Save a track</source>
         <translation>Salva un tracciato</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="699"/>
+        <location filename="../mainwindow.cpp" line="698"/>
         <source>Failed to save track as &apos;</source>
         <translation>Impossibile salvare il tracciato come &apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
+        <location filename="../mainwindow.cpp" line="641"/>
         <source>A new track &apos;%1&apos; created. Columns: %2, Rows: %3.</source>
         <translation>Nuovo tracciato &apos;%1&apos; creato. Colonne: %2, Righe: %3.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="729"/>
+        <location filename="../mainwindow.cpp" line="728"/>
         <source>Track properties updated.</source>
         <translation>Proprietà del tracciato aggiornate.</translation>
     </message>
