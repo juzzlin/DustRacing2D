@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<track name="Triangle" index="5" version="1.13.0" cols="14" rows="14">
+<track name="Triangle" index="3" version="1.13.0" cols="14" rows="14">
  <t o="180" t="sandGrassCorner2" i="0" j="0"/>
  <t o="90" t="sandGrassStraight" i="0" j="1"/>
  <t o="90" t="sandGrassStraight" i="0" j="2"/>
