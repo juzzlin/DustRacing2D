@@ -276,20 +276,19 @@ void TrackItem::renderTrackProperties()
     maxWidth = std::fmax(maxWidth, text.width(m_font));
     texts.push_back(text);
 
+    ss.str(L"");
+    ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
+    text.setText(ss.str());
+    maxWidth = std::fmax(maxWidth, text.width(m_font));
     if (!m_track->trackData().isLocked())
-    {
-        ss.str(L"");
-        ss << QObject::tr(" Lap Record: ").toStdWString() << Timing::msecsToString(m_lapRecord);
-        text.setText(ss.str());
-        maxWidth = std::fmax(maxWidth, text.width(m_font));
         texts.push_back(text);
 
-        ss.str(L"");
-        ss << QObject::tr("Race Record: ").toStdWString() << Timing::msecsToString(m_raceRecord);
-        text.setText(ss.str());
-        maxWidth = std::fmax(maxWidth, text.width(m_font));
+    ss.str(L"");
+    ss << QObject::tr("Race Record: ").toStdWString() << Timing::msecsToString(m_raceRecord);
+    text.setText(ss.str());
+    maxWidth = std::fmax(maxWidth, text.width(m_font));
+    if (!m_track->trackData().isLocked())
         texts.push_back(text);
-    }
 
     const float yPos = menu()->y() + y() - height() / 2;
     const float lineHeight = text.height(m_font);
@@ -299,6 +298,25 @@ void TrackItem::renderTrackProperties()
         const auto textX = menu()->x() + x();
         text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
         line++;
+    }
+
+    if (m_track->trackData().isLocked())
+    {
+        ss.str(L"");
+        if (m_game.hasComputerPlayers())
+        {
+            //: Try to keep the translation as short as possible.
+            ss << QObject::tr("Finish previous track in TOP-6 to unlock!").toStdWString();
+        }
+        else
+        {
+            //: "it" = a locked track. Try to keep the translation as short as possible.
+            ss << QObject::tr("Unlock it in one/two player race!").toStdWString();
+        }
+        text.setText(ss.str());
+        maxWidth = std::fmax(maxWidth, text.width(m_font));
+	const auto textX = menu()->x() + x();
+        text.render(textX - maxWidth / 2, yPos - lineHeight * line, nullptr, m_font);
     }
 }
 

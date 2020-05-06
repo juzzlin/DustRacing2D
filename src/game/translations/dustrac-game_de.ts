@@ -461,5 +461,13 @@ Pause: P</translation>
         <source>FPS &gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Finish previous track in TOP-6 to unlock!</source>
+        <translation>6. Platz oder besser auf vorh. Strecke benötigt!</translation>
+    </message>
+    <message>
+        <source>Unlock it in one/two player race!</source>
+        <translation>Im Ein- oder Zweispielerrennen freischalten</translation>
+    </message>
 </context>
 </TS>
