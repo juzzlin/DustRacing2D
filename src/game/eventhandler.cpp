@@ -21,6 +21,8 @@
 #include <Menu>
 #include <MenuManager>
 
+#include <QKeySequence>
+
 #include <cassert>
 
 EventHandler::EventHandler(InputHandler & inputHandler)

@@ -66,14 +66,21 @@ Race::Race(Game & game, size_t numCars)
     m_offTrackMessageTimer.setInterval(30000);
 
     connect(&m_timing, &Timing::lapRecordAchieved, [this](int msecs) {
-        Database::instance().saveLapRecord(*m_track, msecs);
+        m_settingsUpdateThread = std::make_unique<std::thread>([=] {
+            Database::instance()
+              .saveLapRecord(*m_track, msecs);
+        });
+        m_settingsUpdateThread->detach();
         emit messageRequested(QObject::tr("New lap record!"));
     });
 
     connect(&m_timing, &Timing::raceRecordAchieved, [this](int msecs) {
         if (m_game.hasComputerPlayers())
         {
-            Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+            m_settingsUpdateThread = std::make_unique<std::thread>([=] {
+                Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+            });
+            m_settingsUpdateThread->detach();
             emit messageRequested(QObject::tr("New race record!"));
         }
     });

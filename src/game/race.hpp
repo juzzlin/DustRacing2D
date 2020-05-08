@@ -21,6 +21,7 @@
 #include <QString>
 #include <QTimer>
 #include <memory>
+#include <thread>
 #include <unordered_map>
 #include <vector>
 
@@ -194,6 +195,8 @@ private:
     int m_offTrackCounter;
 
     Game & m_game;
+
+    std::unique_ptr<std::thread> m_settingsUpdateThread;
 };
 
 #endif // RACE_HPP
