@@ -54,6 +54,7 @@ set(SRC
     carstatusview.cpp
     checkeredflag.cpp
     crashoverlay.cpp
+    database.cpp
     difficultyprofile.cpp
     eventhandler.cpp
     fadeanimation.cpp
@@ -165,7 +166,7 @@ set(COMMON_LIBS
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Sql Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 14)
 
 add_subdirectory(unittests)

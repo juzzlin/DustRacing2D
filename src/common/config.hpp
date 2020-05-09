@@ -25,8 +25,8 @@ static constexpr auto dataPath = DATA_PATH;
 
 static constexpr auto COPYRIGHT = "Copyright (c) 2011-2019 Jussi Lind";
 
-//! "Company" name used in QSettings.
-static constexpr auto QSETTINGS_COMPANY_NAME = "dustrac";
+//! Organization name given to Qt. Affects QSettings and SQLite database file locations.
+static constexpr auto QT_ORGANIZATION_NAME = "DustRacing2D";
 
 //! Path used to search "3rd party" race tracks under the home dir: ~/TRACK_SEARCH_PATH/
 static constexpr auto TRACK_SEARCH_PATH = "DustRacingTracks";
@@ -36,6 +36,7 @@ static constexpr auto WEB_SITE_URL = "http://juzzlin.github.io/DustRacing2D";
 namespace Unix {
 //! Path used to search "3rd party" race tracks under `$XDG_DATA_HOME/TRACK_SEARCH_PATH_XDG` or
 //! $HOME/.local/share/TRACK_SEARCH_PATH_XDG` if `$XDG_DATA_HOME` is not defined.
+//! TODO: Make this use QStandardPaths like in database.cpp !
 static constexpr auto TRACK_SEARCH_PATH_XDG = "DustRacing2D/tracks";
 inline QString getXdgTrackSearchPath()
 {
@@ -54,7 +55,7 @@ static constexpr auto EDITOR_VERSION = VERSION;
 
 static constexpr auto MODEL_CONFIG_FILE_NAME = "editorModels.conf";
 
-static constexpr auto QSETTINGS_SOFTWARE_NAME = "Editor";
+static constexpr auto QT_APPLICATION_NAME = "Editor";
 
 static constexpr auto SELECT_ICON_PATH = ":/cursor.png";
 
@@ -68,7 +69,9 @@ static constexpr auto GAME_NAME = "Dust Racing 2D";
 
 static constexpr auto GAME_VERSION = VERSION;
 
-static constexpr auto QSETTINGS_SOFTWARE_NAME = "Game";
+static constexpr auto QT_APPLICATION_NAME = "Game";
+
+static constexpr auto SQLITE_DATABASE_FILE_NAME = "status.db";
 } // namespace Game
 
 } // namespace Config

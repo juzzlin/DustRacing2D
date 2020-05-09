@@ -19,6 +19,7 @@
 #include "game.hpp"
 
 #include "audioworker.hpp"
+#include "database.hpp"
 #include "eventhandler.hpp"
 #include "graphicsfactory.hpp"
 #include "inputhandler.hpp"
@@ -55,6 +56,7 @@ using juzzlin::L;
 
 Game::Game(int & argc, char ** argv)
   : m_app(argc, argv)
+  , m_database(std::make_unique<Database>())
   , m_forceNoVSync(false)
   , m_settings()
   , m_difficultyProfile(m_settings.loadDifficulty())

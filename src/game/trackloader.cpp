@@ -23,6 +23,7 @@
 #include "../common/config.hpp"
 #include "../common/datakeywords.hpp"
 
+#include "database.hpp"
 #include "layers.hpp"
 #include "renderer.hpp"
 #include "settings.hpp"
@@ -122,7 +123,7 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
     // Check if the tracks are locked/unlocked.
     for (auto && track : m_tracks)
     {
-        if (!track->trackData().isUserTrack() && !Settings::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
+        if (!track->trackData().isUserTrack() && !Database::instance().loadTrackUnlockStatus(*track, lapCount, difficulty))
         {
 #ifndef UNLOCK_ALL_TRACKS
             track->trackData().setIsLocked(true);
@@ -135,14 +136,14 @@ void TrackLoader::updateLockedTracks(int lapCount, DifficultyProfile::Difficulty
             track->trackData().setIsLocked(false);
 
             // This is needed in the case new tracks are added to the game afterwards.
-            const int bestPos = Settings::instance().loadBestPos(*track, lapCount, difficulty);
-            if (bestPos >= 1 && bestPos <= UNLOCK_LIMIT)
+            const auto bestPos = Database::instance().loadBestPos(*track, lapCount, difficulty);
+            if (bestPos.second && bestPos.first >= 1 && bestPos.first <= UNLOCK_LIMIT)
             {
                 auto && next = track->next().lock();
                 if (next)
                 {
                     next->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*next, lapCount, difficulty);
+                    Database::instance().saveTrackUnlockStatus(*next, lapCount, difficulty);
                 }
             }
         }

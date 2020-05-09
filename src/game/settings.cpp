@@ -19,23 +19,13 @@
 #include <QSettings>
 #include <cassert>
 
+namespace {
+
+static constexpr auto SETTINGS_GROUP_CONFIG = "Config";
+
+} // namespace
+
 Settings * Settings::m_instance = nullptr;
-
-static const char * SETTINGS_GROUP_CONFIG = "Config";
-static const char * SETTINGS_GROUP_LAP = "LapRecordsV2";
-static const char * SETTINGS_GROUP_RACE = "RaceRecordsV2";
-static const char * SETTINGS_GROUP_POS = "BestPositionsV2";
-static const char * SETTINGS_GROUP_UNLOCK = "UnlockedTracksV2";
-
-static QString combine(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty)
-{
-    return (QString("%1_%2_%3").arg(track.trackData().name()).arg(lapCount)).arg(static_cast<int>(difficulty));
-}
-
-static QString combineBase64(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty)
-{
-    return combine(track, lapCount, difficulty).toLatin1().toBase64();
-}
 
 QString Settings::difficultyKey()
 {
@@ -82,128 +72,6 @@ Settings & Settings::instance()
 {
     assert(Settings::m_instance);
     return *Settings::m_instance;
-}
-
-void Settings::saveLapRecord(const Track & track, int msecs)
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_LAP);
-    settings.setValue(track.trackData().name(), msecs);
-    settings.endGroup();
-}
-
-int Settings::loadLapRecord(const Track & track) const
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_LAP);
-    const int time = settings.value(track.trackData().name(), -1).toInt();
-    settings.endGroup();
-
-    return time;
-}
-
-void Settings::resetLapRecords()
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_LAP);
-    settings.remove("");
-    settings.endGroup();
-}
-
-void Settings::saveRaceRecord(const Track & track, int msecs, int lapCount, DifficultyProfile::Difficulty difficulty)
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combine(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_RACE);
-    settings.setValue(trackNameAndLapCount, msecs);
-    settings.endGroup();
-}
-
-int Settings::loadRaceRecord(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combine(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_RACE);
-    const int time = settings.value(trackNameAndLapCount, -1).toInt();
-    settings.endGroup();
-
-    return time;
-}
-
-void Settings::resetRaceRecords()
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_RACE);
-    settings.remove("");
-    settings.endGroup();
-}
-
-void Settings::saveBestPos(const Track & track, int pos, int lapCount, DifficultyProfile::Difficulty difficulty)
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combine(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_POS);
-    settings.setValue(trackNameAndLapCount, pos);
-    settings.endGroup();
-}
-
-int Settings::loadBestPos(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combine(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_POS);
-    const int pos = settings.value(trackNameAndLapCount, -1).toInt();
-    settings.endGroup();
-
-    return pos;
-}
-
-void Settings::resetBestPos()
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_POS);
-    settings.remove("");
-    settings.endGroup();
-}
-
-void Settings::saveTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty)
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combineBase64(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
-    settings.setValue(trackNameAndLapCount, !track.trackData().isLocked());
-    settings.endGroup();
-}
-
-bool Settings::loadTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const
-{
-    QSettings settings;
-    const QString trackNameAndLapCount = combineBase64(track, lapCount, difficulty);
-
-    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
-    const bool status = settings.value(trackNameAndLapCount, 0).toBool();
-    settings.endGroup();
-
-    return status;
-}
-
-void Settings::resetTrackUnlockStatuses()
-{
-    QSettings settings;
-
-    settings.beginGroup(SETTINGS_GROUP_UNLOCK);
-    settings.remove("");
-    settings.endGroup();
 }
 
 void Settings::saveResolution(int hRes, int vRes, bool fullScreen)

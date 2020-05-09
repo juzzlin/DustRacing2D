@@ -33,35 +33,24 @@ public:
 
     static Settings & instance();
 
-    void saveLapRecord(const Track & track, int msecs);
-    int loadLapRecord(const Track & track) const;
-    void resetLapRecords();
-
-    void saveRaceRecord(const Track & track, int msecs, int lapCount, DifficultyProfile::Difficulty difficulty);
-    int loadRaceRecord(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
-    void resetRaceRecords();
-
-    void saveBestPos(const Track & track, int pos, int lapCount, DifficultyProfile::Difficulty difficulty);
-    int loadBestPos(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
-    void resetBestPos();
-
-    void saveTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty);
-    bool loadTrackUnlockStatus(const Track & track, int lapCount, DifficultyProfile::Difficulty difficulty) const;
-    void resetTrackUnlockStatuses();
-
     void saveResolution(int hRes, int vRes, bool fullScreen);
+
     void loadResolution(int & hRes, int & vRes, bool & fullScreen);
 
     void saveKeyMapping(int player, InputHandler::Action action, int key);
+
     int loadKeyMapping(int player, InputHandler::Action action);
 
     void saveDifficulty(DifficultyProfile::Difficulty difficulty);
+
     DifficultyProfile::Difficulty loadDifficulty() const;
 
     void saveVSync(int value);
+
     int loadVSync();
 
     void saveValue(QString key, int value);
+
     int loadValue(QString key, int defaultValue = 0);
 
     static QString difficultyKey();

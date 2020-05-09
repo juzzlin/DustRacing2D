@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS += -O3 -fomit-frame-pointer -finline-functions -ffast-math
 # Qt version check
 contains(QT_VERSION, ^5\\..*) {
     message("Building for Qt version $${QT_VERSION}.")
-    QT += opengl widgets xml
+    QT += opengl widgets xml sql
 } else {
     error("Qt5 is required!")
 }
@@ -79,6 +79,7 @@ HEADERS += \
     carstatusview.hpp \
     checkeredflag.hpp \
     crashoverlay.hpp \
+    database.hpp \
     difficultyprofile.hpp \
     eventhandler.hpp \
     fadeanimation.hpp \
@@ -255,6 +256,7 @@ SOURCES += \
     carstatusview.cpp \
     checkeredflag.cpp \
     crashoverlay.cpp \
+    database.cpp \
     difficultyprofile.cpp \
     eventhandler.cpp \
     fadeanimation.cpp \

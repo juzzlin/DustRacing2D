@@ -15,6 +15,7 @@
 
 #include "trackselectionmenu.hpp"
 
+#include "database.hpp"
 #include "game.hpp"
 #include "mainmenu.hpp"
 #include "renderer.hpp"
@@ -134,11 +135,15 @@ private:
 
 void TrackItem::updateData()
 {
-    m_lapRecord = Settings::instance().loadLapRecord(*m_track);
-    m_raceRecord = Settings::instance().loadRaceRecord(
+    const int notSet = -1;
+    const auto lapRecord = Database::instance().loadLapRecord(*m_track);
+    m_lapRecord = lapRecord.second ? lapRecord.first : notSet;
+    const auto raceRecord = Database::instance().loadRaceRecord(
       *m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
-    m_bestPos = Settings::instance().loadBestPos(
+    m_raceRecord = raceRecord.second ? raceRecord.first : notSet;
+    const auto bestPos = Database::instance().loadBestPos(
       *m_track, m_game.lapCount(), m_game.difficultyProfile().difficulty());
+    m_bestPos = bestPos.second ? bestPos.first : notSet;
 }
 
 void TrackItem::renderTiles()

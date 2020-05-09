@@ -36,8 +36,8 @@ int main(int argc, char ** argv)
     qt_qhash_seed.store(0);
 #endif
 
-    QApplication::setOrganizationName(Config::General::QSETTINGS_COMPANY_NAME);
-    QApplication::setApplicationName(Config::Editor::QSETTINGS_SOFTWARE_NAME);
+    QApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
+    QApplication::setApplicationName(Config::Editor::QT_APPLICATION_NAME);
 #ifdef Q_OS_WIN32
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif

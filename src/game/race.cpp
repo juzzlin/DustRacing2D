@@ -17,6 +17,7 @@
 
 #include "car.hpp"
 #include "carsoundeffectmanager.hpp"
+#include "database.hpp"
 #include "game.hpp"
 #include "layers.hpp"
 #include "offtrackdetector.hpp"
@@ -65,14 +66,14 @@ Race::Race(Game & game, size_t numCars)
     m_offTrackMessageTimer.setInterval(30000);
 
     connect(&m_timing, &Timing::lapRecordAchieved, [this](int msecs) {
-        Settings::instance().saveLapRecord(*m_track, msecs);
+        Database::instance().saveLapRecord(*m_track, msecs);
         emit messageRequested(QObject::tr("New lap record!"));
     });
 
     connect(&m_timing, &Timing::raceRecordAchieved, [this](int msecs) {
         if (m_game.hasComputerPlayers())
         {
-            Settings::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+            Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
             emit messageRequested(QObject::tr("New race record!"));
         }
     });
@@ -112,8 +113,10 @@ void Race::init(std::shared_ptr<Track> track, size_t lapCount)
 
 void Race::initTiming()
 {
-    m_timing.setLapRecord(Settings::instance().loadLapRecord(*m_track));
-    m_timing.setRaceRecord(Settings::instance().loadRaceRecord(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty()));
+    const auto lapRecord = Database::instance().loadLapRecord(*m_track);
+    m_timing.setLapRecord(lapRecord.second ? lapRecord.first : -1);
+    const auto raceRecord = Database::instance().loadRaceRecord(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+    m_timing.setRaceRecord(raceRecord.second ? raceRecord.first : -1);
     m_timing.reset();
 }
 
@@ -174,7 +177,7 @@ void Race::translateCarsToStartPositions()
 {
     assert(m_track);
 
-    if (auto finishLine = m_track->finishLine())
+    if (const auto finishLine = m_track->finishLine())
     {
         // Reverse order
         auto order = m_cars;
@@ -184,10 +187,10 @@ void Race::translateCarsToStartPositions()
         // of the current race track.
         if (m_game.hasComputerPlayers() && !m_game.hasTwoHumanPlayers())
         {
-            const int bestPos = Settings::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
-            if (bestPos > 0)
+            const auto bestPos = Database::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+            if (bestPos.second)
             {
-                order.insert(order.begin() + bestPos - 1, *m_cars.begin());
+                order.insert(order.begin() + bestPos.first - 1, *m_cars.begin());
                 order.pop_back();
             }
         }
@@ -565,7 +568,7 @@ void Race::checkForNewBestPosition(const Car & car)
             const size_t position = m_statusHash[car.index()].position;
             if (static_cast<int>(position) < m_bestPos || m_bestPos == -1)
             {
-                Settings::instance().saveBestPos(*m_track, static_cast<int>(position), static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+                Database::instance().saveBestPos(*m_track, static_cast<int>(position), static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
                 emit messageRequested(QObject::tr("A new best pos!"));
             }
 
@@ -575,7 +578,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 if (position <= m_unlockLimit)
                 {
                     next->trackData().setIsLocked(false);
-                    Settings::instance().saveTrackUnlockStatus(*next, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+                    Database::instance().saveTrackUnlockStatus(*next, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
                     emit messageRequested(QObject::tr("A new track unlocked!"));
                 }
                 else
@@ -704,7 +707,8 @@ void Race::setTrack(std::shared_ptr<Track> track, size_t lapCount)
 {
     m_lapCount = lapCount;
     m_track = track;
-    m_bestPos = Settings::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+    const auto bestPos = Database::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+    m_bestPos = bestPos.second ? bestPos.first : -1;
 
     for (auto && otd : m_offTrackDetectors)
     {

@@ -17,6 +17,7 @@
 
 #include "audioworker.hpp"
 #include "confirmationmenu.hpp"
+#include "database.hpp"
 #include "game.hpp"
 #include "keyconfigmenu.hpp"
 #include "renderer.hpp"
@@ -79,7 +80,7 @@ private:
             m_confirmationMenu->setAcceptAction(
               []() {
                   juzzlin::L().info() << "Reset positions selected.";
-                  Settings::instance().resetBestPos();
+                  Database::instance().resetBestPos();
               });
             m_confirmationMenu->setCurrentIndex(1);
             break;
@@ -90,8 +91,8 @@ private:
             m_confirmationMenu->setAcceptAction(
               []() {
                   juzzlin::L().info() << "Reset times selected.";
-                  Settings::instance().resetLapRecords();
-                  Settings::instance().resetRaceRecords();
+                  Database::instance().resetLapRecords();
+                  Database::instance().resetRaceRecords();
               });
             m_confirmationMenu->setCurrentIndex(1);
             break;
@@ -111,7 +112,7 @@ private:
                             track.trackData().setIsLocked(true);
                         }
                 }
-                Settings::instance().resetTrackUnlockStatuses(); });
+                Database::instance().resetTrackUnlockStatuses(); });
             m_confirmationMenu->setCurrentIndex(1);
             break;
         }

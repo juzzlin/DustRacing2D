@@ -27,6 +27,7 @@
 #include "settings.hpp"
 
 class AudioWorker;
+class Database;
 class EventHandler;
 class InputHandler;
 class Renderer;
@@ -146,6 +147,8 @@ private:
     Application m_app;
 
     QTranslator m_appTranslator;
+
+    std::unique_ptr<Database> m_database;
 
     bool m_forceNoVSync;
 
