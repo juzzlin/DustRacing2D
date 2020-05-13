@@ -166,10 +166,7 @@ set(COMMON_LIBS
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Sql Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static Threads::Threads)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Sql Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 14)
 
 add_subdirectory(unittests)
