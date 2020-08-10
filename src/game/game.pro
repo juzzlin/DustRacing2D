@@ -379,6 +379,7 @@ TRANSLATIONS += \
     translations/dustrac-game_fi.ts \
     translations/dustrac-game_fr.ts \
     translations/dustrac-game_it.ts \
+    translations/dustrac-game_nl.ts \
     translations/dustrac-game_ru.ts
 
 target.path = $$OUT_PWD/../..
