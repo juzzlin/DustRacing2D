@@ -94,6 +94,7 @@ TRANSLATIONS += \
     translations/dustrac-editor_fi.ts \
     translations/dustrac-editor_fr.ts \
     translations/dustrac-editor_it.ts \
+    translations/dustrac-editor_nl.ts \
     translations/dustrac-editor_ru.ts
 
 target.path = $$OUT_PWD/../..

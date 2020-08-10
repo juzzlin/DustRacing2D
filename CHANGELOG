@@ -3,6 +3,8 @@ x.y.z
 
 New features:
 
+* Add Dutch translation
+
 Bug fixes:
 
 * Fix GitHub Issue #95: Time Trials don't work, dustrac just exits

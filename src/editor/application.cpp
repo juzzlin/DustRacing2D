@@ -53,7 +53,7 @@ void Application::parseArgs(int argc, char ** argv)
       { "--lang" }, [&](std::string value) {
           lang = value.c_str();
       },
-      false, "Force language: fi, fr, it, cs, ru.");
+      false, "Force language: fi, fr, it, cs, nl, ru.");
 
     ae.setHelpText(std::string("Dust Racing 2D version ") + VERSION + "\n" + //
                    Config::General::COPYRIGHT + "\n\nUsage: " + std::string(argv[0]) + " [OPTIONS] [TRACK_FILE]");

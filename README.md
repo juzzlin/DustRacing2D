@@ -95,7 +95,7 @@ On Linux/Unix also `$XDG_DATA_HOME/DustRacing2D/tracks` is added to search paths
 
 ## Command line options
 
-`--lang [lang]` forces the language. Currently available: `fi`, `cs`, `de`, `it`, `fr`, `ru`.
+`--lang [lang]` forces the language. Currently available: `fi`, `cs`, `de`, `it`, `fr`, `nl`, `ru`.
 
 E.g. `dustrac-game --lang it`
 
