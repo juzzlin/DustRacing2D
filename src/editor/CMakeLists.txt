@@ -1,6 +1,6 @@
 # Translation files in src/editor/translations (without .ts)
 set(TS dustrac-editor_fi dustrac-editor_it dustrac-editor_cs dustrac-editor_fr dustrac-editor_de dustrac-editor_ru 
-dustrac-game_nl)
+dustrac-editor_nl)
 set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
