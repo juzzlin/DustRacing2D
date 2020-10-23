@@ -4,7 +4,7 @@ TEMPLATE = app
 TARGET   = dustrac-editor
 
 CONFIG += c++14
-DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"2.0.5\\\"
+DEFINES += DATA_PATH=\\\"./data\\\" VERSION=\\\"2.1.0\\\"
 
 # Qt version check
 contains(QT_VERSION, ^5\\..*) {

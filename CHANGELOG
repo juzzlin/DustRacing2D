@@ -3,15 +3,36 @@ x.y.z
 
 New features:
 
+Bug fixes:
+
+Other:
+
+2.1.0
+=====
+
+New features:
+
 * Add Dutch translation
+* Add new image for finish tile in editor
+* Roughly sort tracks by length/complexity/difficulty
+* Show how to unlock track
 
 Bug fixes:
 
 * Fix GitHub Issue #95: Time Trials don't work, dustrac just exits
+* Fix early finish on 3 tracks
+* Include <stdexcept> for std::runtime_error
 
 Other:
 
+* build fix for darwin and avoiding suprious deprecated warnings.
+* Award a half star for rank 11
+* Update new lap record in a thread to avoid stutter
 * Fix GitHub Issue #57: Replace QSettings with SQLite
+  - Store lap records to an SQLite database
+  - Store race records to an SQLite database
+  - Store best positions to an SQLite database
+  - Store track unlock to an SQList database
 
 2.0.5
 =====
