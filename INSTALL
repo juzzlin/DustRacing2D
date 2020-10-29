@@ -177,5 +177,5 @@ and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
 can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
-to cmake (or to the configure script).
+to cmake.
 
