@@ -175,7 +175,10 @@ The release build should be used when packaging (give
 Currently the data files install to CMAKE_INSTALL_PREFIX/share/DustRacing
 and the binaries install to CMAKE_INSTALL_PREFIX/bin.
 
+Among the data files there are also fonts that are installed by default;
+in case they are available in the system, it is possible to not ship
+any font by giving -DSystemFonts=ON to cmake.
+
 CMAKE_INSTALL_PREFIX usually defaults to /usr/local and
-can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr
-to cmake.
+can be changed by giving, for example, -DCMAKE_INSTALL_PREFIX=/usr to cmake.
 
