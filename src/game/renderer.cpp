@@ -145,6 +145,7 @@ void Renderer::loadShaders()
 
 void Renderer::loadFonts()
 {
+#ifndef SYSTEM_FONTS
     QStringList fonts = { "DejaVuSans-Bold.ttf" };
     for (auto && font : fonts)
     {
@@ -162,6 +163,7 @@ void Renderer::loadFonts()
             juzzlin::L().info() << "Loaded font " << QFontDatabase::applicationFontFamilies(appFontId).at(0).toStdString();
         }
     }
+#endif
 
     MCAssetManager::instance().textureFontManager().createFontFromData(FontFactory::generateFontData("DejaVu Sans"));
 }

@@ -61,6 +61,8 @@ option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if en
 
 option(UnlockAllTracks "Unlock all tracks (for development purposes)" OFF)
 
+option(SystemFonts "Assume all the fonts are available in the system." OFF)
+
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -89,6 +91,11 @@ endif()
 if (UnlockAllTracks)
     message(STATUS "All tracks unlocked")
     add_definitions(-DUNLOCK_ALL_TRACKS)
+endif()
+
+if(SystemFonts)
+    message(STATUS "Assuming system fonts")
+    add_definitions(-DSYSTEM_FONTS)
 endif()
 
 add_definitions(-DGLEW_STATIC)
