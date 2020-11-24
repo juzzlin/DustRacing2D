@@ -98,9 +98,7 @@ function(setup_install_targets BIN_PATH DATA_PATH DOC_PATH)
     install(FILES src/dustrac.appdata.xml DESTINATION share/metainfo)
 
     # Install icons
-    install(FILES data/icons/dustrac-game.png DESTINATION share/pixmaps)
     install(FILES data/icons/dustrac-game.png DESTINATION share/icons/hicolor/64x64/apps)
-    install(FILES data/icons/dustrac-editor.png DESTINATION share/pixmaps)
     install(FILES data/icons/dustrac-editor.png DESTINATION share/icons/hicolor/64x64/apps)
 
 endfunction()
