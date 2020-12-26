@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QVariant>
 
 using juzzlin::L;
 
@@ -50,7 +51,7 @@ const QString TRACK_UNLOCK_TABLE = "track_unlock";
 
 const QString TRACK_UNLOCK_FILTER = "track_name = :track_name AND version = :version AND lap_count = :lap_count AND difficulty = :difficulty";
 
-const int TRACK_SET_VERSION = 1;
+const QVariant TRACK_SET_VERSION = QVariant::fromValue(1);
 
 QString getAppDataPath()
 {
@@ -130,9 +131,11 @@ void Database::saveLapRecord(const Track & track, int msecs)
     std::lock_guard<std::mutex> lock { m_mutex };
 
     QSqlQuery query;
+    QString track_name = track.trackData().name();
+    QVariant time = QVariant::fromValue(msecs);
     query.prepare("SELECT time FROM " + LAP_RECORD_TABLE + " WHERE " + LAP_RECORD_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
-    query.bindValue(":track_name", track.trackData().name());
+    query.bindValue(":track_name", track_name);
     if (!query.exec())
     {
         printError(query);
@@ -141,13 +144,13 @@ void Database::saveLapRecord(const Track & track, int msecs)
 
     if (!query.first())
     {
-        L().debug() << "New lap record database entry added for " << track.trackData().name().toStdString();
+        L().debug() << "New lap record database entry added for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("INSERT INTO " + LAP_RECORD_TABLE + " (track_name, version, time) VALUES (:track_name, :version, :time)");
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":time", msecs);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":time", time);
         if (!query.exec())
         {
             printError(query);
@@ -155,13 +158,13 @@ void Database::saveLapRecord(const Track & track, int msecs)
     }
     else
     {
-        L().debug() << "Updated lap record database entry for " << track.trackData().name().toStdString();
+        L().debug() << "Updated lap record database entry for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("UPDATE " + LAP_RECORD_TABLE + " SET track_name = :track_name, version = :version, time = :time WHERE " + LAP_RECORD_FILTER);
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":time", msecs);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":time", time);
         if (!query.exec())
         {
             printError(query);
@@ -209,11 +212,15 @@ void Database::saveRaceRecord(const Track & track, int msecs, int lapCount, Diff
     std::lock_guard<std::mutex> lock { m_mutex };
 
     QSqlQuery query;
+    QString track_name = track.trackData().name();
+    QVariant lap_count = QVariant::fromValue(lapCount);
+    QVariant level = QVariant::fromValue(static_cast<int>(difficulty));
+    QVariant time = QVariant::fromValue(msecs);
     query.prepare("SELECT time FROM " + RACE_RECORD_TABLE + " WHERE " + RACE_RECORD_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
-    query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":track_name", track_name);
+    query.bindValue(":lap_count", lap_count);
+    query.bindValue(":difficulty", level);
     if (!query.exec())
     {
         printError(query);
@@ -222,15 +229,15 @@ void Database::saveRaceRecord(const Track & track, int msecs, int lapCount, Diff
 
     if (!query.first())
     {
-        L().debug() << "New race record database entry added for " << track.trackData().name().toStdString();
+        L().debug() << "New race record database entry added for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("INSERT INTO " + RACE_RECORD_TABLE + " (track_name, version, lap_count, difficulty, time) VALUES (:track_name, :version, :lap_count, :difficulty, :time)");
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":lap_count", lapCount);
-        query.bindValue(":difficulty", static_cast<int>(difficulty));
-        query.bindValue(":time", msecs);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":lap_count", lap_count);
+        query.bindValue(":difficulty", level);
+        query.bindValue(":time", time);
         if (!query.exec())
         {
             printError(query);
@@ -238,15 +245,15 @@ void Database::saveRaceRecord(const Track & track, int msecs, int lapCount, Diff
     }
     else
     {
-        L().debug() << "Updated race record database entry for " << track.trackData().name().toStdString();
+        L().debug() << "Updated race record database entry for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("UPDATE " + RACE_RECORD_TABLE + " SET track_name = :track_name, version = :version, time = :time WHERE " + RACE_RECORD_FILTER);
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":lap_count", lapCount);
-        query.bindValue(":difficulty", static_cast<int>(difficulty));
-        query.bindValue(":time", msecs);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":lap_count", lap_count);
+        query.bindValue(":difficulty", level);
+        query.bindValue(":time", time);
         if (!query.exec())
         {
             printError(query);
@@ -262,8 +269,8 @@ std::pair<int, bool> Database::loadRaceRecord(const Track & track, int lapCount,
     query.prepare("SELECT time FROM " + RACE_RECORD_TABLE + " WHERE " + RACE_RECORD_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
     query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":lap_count", QVariant::fromValue(lapCount));
+    query.bindValue(":difficulty", QVariant::fromValue(static_cast<int>(difficulty)));
     if (!query.exec())
     {
         printError(query);
@@ -296,11 +303,15 @@ void Database::saveBestPos(const Track & track, int pos, int lapCount, Difficult
     std::lock_guard<std::mutex> lock { m_mutex };
 
     QSqlQuery query;
+    QString track_name = track.trackData().name();
+    QVariant lap_count = QVariant::fromValue(lapCount);
+    QVariant level = QVariant::fromValue(static_cast<int>(difficulty));
+    QVariant position = QVariant::fromValue(pos);
     query.prepare("SELECT position FROM " + BEST_POSITION_TABLE + " WHERE " + BEST_POSITION_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
-    query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":track_name", track_name);
+    query.bindValue(":lap_count", lap_count);
+    query.bindValue(":difficulty", level);
     if (!query.exec())
     {
         printError(query);
@@ -309,15 +320,15 @@ void Database::saveBestPos(const Track & track, int pos, int lapCount, Difficult
 
     if (!query.first())
     {
-        L().debug() << "New best position database entry added for " << track.trackData().name().toStdString();
+        L().debug() << "New best position database entry added for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("INSERT INTO " + BEST_POSITION_TABLE + " (track_name, version, lap_count, difficulty, position) VALUES (:track_name, :version, :lap_count, :difficulty, :position)");
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":lap_count", lapCount);
-        query.bindValue(":difficulty", static_cast<int>(difficulty));
-        query.bindValue(":position", pos);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":lap_count", lap_count);
+        query.bindValue(":difficulty", level);
+        query.bindValue(":position", position);
         if (!query.exec())
         {
             printError(query);
@@ -325,15 +336,15 @@ void Database::saveBestPos(const Track & track, int pos, int lapCount, Difficult
     }
     else
     {
-        L().debug() << "Updated best position database entry for " << track.trackData().name().toStdString();
+        L().debug() << "Updated best position database entry for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("UPDATE " + BEST_POSITION_TABLE + " SET track_name = :track_name, version = :version, position = :position WHERE " + BEST_POSITION_FILTER);
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":lap_count", lapCount);
-        query.bindValue(":difficulty", static_cast<int>(difficulty));
-        query.bindValue(":position", pos);
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":lap_count", lap_count);
+        query.bindValue(":difficulty", level);
+        query.bindValue(":position", position);
         if (!query.exec())
         {
             printError(query);
@@ -349,8 +360,8 @@ std::pair<int, bool> Database::loadBestPos(const Track & track, int lapCount, Di
     query.prepare("SELECT position FROM " + BEST_POSITION_TABLE + " WHERE " + BEST_POSITION_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
     query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":lap_count", QVariant::fromValue(lapCount));
+    query.bindValue(":difficulty", QVariant::fromValue(static_cast<int>(difficulty)));
     if (!query.exec())
     {
         printError(query);
@@ -383,11 +394,14 @@ void Database::saveTrackUnlockStatus(const Track & track, int lapCount, Difficul
     std::lock_guard<std::mutex> lock { m_mutex };
 
     QSqlQuery query;
+    QString track_name = track.trackData().name();
+    QVariant lap_count = QVariant::fromValue(lapCount);
+    QVariant level = QVariant::fromValue(static_cast<int>(difficulty));
     query.prepare("SELECT * FROM " + TRACK_UNLOCK_TABLE + " WHERE " + TRACK_UNLOCK_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
-    query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":track_name", track_name);
+    query.bindValue(":lap_count", lap_count);
+    query.bindValue(":difficulty", level);
     if (!query.exec())
     {
         printError(query);
@@ -396,14 +410,14 @@ void Database::saveTrackUnlockStatus(const Track & track, int lapCount, Difficul
 
     if (!query.first())
     {
-        L().debug() << "New track unlock database entry added for " << track.trackData().name().toStdString();
+        L().debug() << "New track unlock database entry added for " << track_name.toStdString();
 
         QSqlQuery query;
         query.prepare("INSERT INTO " + TRACK_UNLOCK_TABLE + " (track_name, version, lap_count, difficulty) VALUES (:track_name, :version, :lap_count, :difficulty)");
         query.bindValue(":version", TRACK_SET_VERSION);
-        query.bindValue(":track_name", track.trackData().name());
-        query.bindValue(":lap_count", lapCount);
-        query.bindValue(":difficulty", static_cast<int>(difficulty));
+        query.bindValue(":track_name", track_name);
+        query.bindValue(":lap_count", lap_count);
+        query.bindValue(":difficulty", level);
         if (!query.exec())
         {
             printError(query);
@@ -419,8 +433,8 @@ bool Database::loadTrackUnlockStatus(const Track & track, int lapCount, Difficul
     query.prepare("SELECT * FROM " + TRACK_UNLOCK_TABLE + " WHERE " + TRACK_UNLOCK_FILTER);
     query.bindValue(":version", TRACK_SET_VERSION);
     query.bindValue(":track_name", track.trackData().name());
-    query.bindValue(":lap_count", lapCount);
-    query.bindValue(":difficulty", static_cast<int>(difficulty));
+    query.bindValue(":lap_count", QVariant::fromValue(lapCount));
+    query.bindValue(":difficulty", QVariant::fromValue(static_cast<int>(difficulty)));
     if (!query.exec())
     {
         printError(query);
