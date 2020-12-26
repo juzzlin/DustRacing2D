@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QVariant>
 
 using juzzlin::L;
 
