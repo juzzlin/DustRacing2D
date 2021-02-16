@@ -573,7 +573,7 @@ void MainWindow::beginSetRoute()
              "that no shortcuts can be taken. It also defines\n"
              "driving lines for the computer players.\n\n"
              "Click on the tiles one by one and make a closed loop\n"
-             "with the target nodes. You can adjust the nodes afterwads.\n"
+             "with the target nodes. You can adjust the nodes afterwards.\n"
              "Start from the first tile after the finish line tile\n"
              "to make the lap detection and timing work correctly.\n"
              "Click on the first node again to finish."));
