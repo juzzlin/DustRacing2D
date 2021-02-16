@@ -173,7 +173,7 @@ void Game::parseArgs(int argc, char ** argv)
       { "--lang" }, [&](std::string value) {
           lang = value.c_str();
       },
-      false, "Force language: fi, fr, it, cs, nl, ru.");
+      false, "Force language: fi, fr, it, cs, nl, ru, tr.");
 
     ae.addOption(
       { "--no-vsync" }, [=]() {
