@@ -380,7 +380,8 @@ TRANSLATIONS += \
     translations/dustrac-game_fr.ts \
     translations/dustrac-game_it.ts \
     translations/dustrac-game_nl.ts \
-    translations/dustrac-game_ru.ts
+    translations/dustrac-game_ru.ts \
+    translations/dustrac-game_tr.ts
 
 target.path = $$OUT_PWD/../..
 INSTALLS += target
