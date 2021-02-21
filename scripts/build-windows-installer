@@ -2,7 +2,7 @@
 
 # Builds NSIS installer for Windows in Docker
 
-DUSTRAC_RELEASE_VERSION=2.1.0
+DUSTRAC_RELEASE_VERSION=2.1.1
 
 CMD="export LANG=en_US.UTF-8 && \
      export LC_ALL=en_US.UTF-8 && \
