@@ -8,8 +8,13 @@ New features:
 Bug fixes:
 
 * Fix GitHub Issue #117: Spelling Mistake in Track Editor
+* Fix build issues with -DQOpenGLFunctions=OFF
 
 Other:
+
+* Do not install app icons in pixmaps location
+* Add possibility to rely on system fonts
+* Drop the configure wrapper script
 
 2.1.0
 =====
