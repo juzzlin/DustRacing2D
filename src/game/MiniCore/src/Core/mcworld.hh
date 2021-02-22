@@ -204,13 +204,13 @@ private:
 
     static MCWorld * m_instance;
 
-    MCWorldRenderer * m_renderer;
+    std::unique_ptr<MCWorldRenderer> m_renderer;
 
-    MCForceRegistry * m_forceRegistry;
+    std::unique_ptr<MCForceRegistry> m_forceRegistry;
 
-    MCCollisionDetector * m_collisionDetector;
+    std::unique_ptr<MCCollisionDetector> m_collisionDetector;
 
-    MCImpulseGenerator * m_impulseGenerator;
+    std::unique_ptr<MCImpulseGenerator> m_impulseGenerator;
 
     std::unique_ptr<MCObjectGrid> m_objectGrid;
 
