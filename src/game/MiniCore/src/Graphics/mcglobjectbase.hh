@@ -201,9 +201,9 @@ protected:
     //! This should be called after setting vertices, texture coords, normals and colors
     void initBufferData(size_t totalDataSize, GLuint drawType = GL_STATIC_DRAW);
 
-    void addBufferSubData(MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, const GLfloat * data);
+    void addBufferSubData(MCGLShaderProgram::VertexAttributeLocation dataType, size_t dataSize, const GLfloat * data);
 
-    void addBufferSubData(MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, size_t offsetJump, const GLfloat * data);
+    void addBufferSubData(MCGLShaderProgram::VertexAttributeLocation dataType, size_t dataSize, size_t offsetJump, const GLfloat * data);
 
     void finishBufferData();
 

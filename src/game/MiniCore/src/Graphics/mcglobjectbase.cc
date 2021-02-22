@@ -343,14 +343,12 @@ void MCGLObjectBase::initUpdateBufferData()
     m_bufferDataOffset = 0;
 }
 
-void MCGLObjectBase::addBufferSubData(
-  MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, const GLfloat * data)
+void MCGLObjectBase::addBufferSubData(MCGLShaderProgram::VertexAttributeLocation dataType, size_t dataSize, const GLfloat * data)
 {
     addBufferSubData(dataType, dataSize, dataSize, data);
 }
 
-void MCGLObjectBase::addBufferSubData(
-  MCGLShaderProgram::VertexAttribLocations dataType, size_t dataSize, size_t offsetJump, const GLfloat * data)
+void MCGLObjectBase::addBufferSubData(MCGLShaderProgram::VertexAttributeLocation dataType, size_t dataSize, size_t offsetJump, const GLfloat * data)
 {
     assert(dataSize <= offsetJump);
 
@@ -360,16 +358,16 @@ void MCGLObjectBase::addBufferSubData(
 
     switch (dataType)
     {
-    case MCGLShaderProgram::VAL_Vertex:
+    case MCGLShaderProgram::VertexAttributeLocation::Vertex:
         m_vertexDataSize = dataSize;
         break;
-    case MCGLShaderProgram::VAL_Normal:
+    case MCGLShaderProgram::VertexAttributeLocation::Normal:
         m_normalDataSize = dataSize;
         break;
-    case MCGLShaderProgram::VAL_TexCoords:
+    case MCGLShaderProgram::VertexAttributeLocation::TexCoords:
         m_texCoordDataSize = dataSize;
         break;
-    case MCGLShaderProgram::VAL_Color:
+    case MCGLShaderProgram::VertexAttributeLocation::Color:
         m_colorDataSize = dataSize;
         break;
     }
@@ -377,34 +375,34 @@ void MCGLObjectBase::addBufferSubData(
 
 void MCGLObjectBase::enableAttributePointers()
 {
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
-    glEnableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+    glEnableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Vertex));
+    glEnableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Normal));
+    glEnableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::TexCoords));
+    glEnableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Color));
 }
 
 void MCGLObjectBase::setAttributePointers()
 {
     enableAttributePointers();
 
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Vertex), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE, 0,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Normal), 3, GL_FLOAT, GL_FALSE, 0,
                           reinterpret_cast<GLvoid *>(m_vertexDataSize));
 
-    glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE, 0,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::TexCoords), 2, GL_FLOAT, GL_FALSE, 0,
                           reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize));
 
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Color, 4, GL_FLOAT, GL_FALSE, 0,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Color), 4, GL_FLOAT, GL_FALSE, 0,
                           reinterpret_cast<GLvoid *>(m_vertexDataSize + m_normalDataSize + m_texCoordDataSize));
 }
 
 void MCGLObjectBase::disableAttributePointers()
 {
-    glDisableVertexAttribArray(MCGLShaderProgram::VAL_Vertex);
-    glDisableVertexAttribArray(MCGLShaderProgram::VAL_Normal);
-    glDisableVertexAttribArray(MCGLShaderProgram::VAL_TexCoords);
-    glDisableVertexAttribArray(MCGLShaderProgram::VAL_Color);
+    glDisableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Vertex));
+    glDisableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Normal));
+    glDisableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::TexCoords));
+    glDisableVertexAttribArray(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Color));
 }
 
 MCVector3dF MCGLObjectBase::scale() const

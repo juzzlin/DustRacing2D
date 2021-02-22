@@ -45,10 +45,10 @@ MCSurfaceObjectRenderer::MCSurfaceObjectRenderer(size_t maxBatchSize)
 
     initBufferData(totalDataSize, GL_DYNAMIC_DRAW);
 
-    addBufferSubData(MCGLShaderProgram::VAL_Vertex, vertexDataSize, reinterpret_cast<const GLfloat *>(m_vertices.data()));
-    addBufferSubData(MCGLShaderProgram::VAL_Normal, normalDataSize, reinterpret_cast<const GLfloat *>(m_normals.data()));
-    addBufferSubData(MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, reinterpret_cast<const GLfloat *>(m_texCoords.data()));
-    addBufferSubData(MCGLShaderProgram::VAL_Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Vertex, vertexDataSize, reinterpret_cast<const GLfloat *>(m_vertices.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Normal, normalDataSize, reinterpret_cast<const GLfloat *>(m_normals.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::TexCoords, texCoordDataSize, reinterpret_cast<const GLfloat *>(m_texCoords.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
 
     finishBufferData();
 }
@@ -133,15 +133,15 @@ void MCSurfaceObjectRenderer::setBatch(MCRenderLayer::ObjectBatch & batch, MCCam
     initUpdateBufferData();
 
     const auto maxVertexDataSize = sizeof(MCGLVertex) * maxBatchSize() * m_numVerticesPerSurface;
-    addBufferSubData(MCGLShaderProgram::VAL_Vertex, vertexDataSize, maxVertexDataSize, reinterpret_cast<const GLfloat *>(m_vertices.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Vertex, vertexDataSize, maxVertexDataSize, reinterpret_cast<const GLfloat *>(m_vertices.data()));
 
     const auto maxNormalDataSize = sizeof(MCGLVertex) * maxBatchSize() * m_numVerticesPerSurface;
-    addBufferSubData(MCGLShaderProgram::VAL_Normal, normalDataSize, maxNormalDataSize, reinterpret_cast<const GLfloat *>(m_normals.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Normal, normalDataSize, maxNormalDataSize, reinterpret_cast<const GLfloat *>(m_normals.data()));
 
     const auto maxTexCoordDataSize = sizeof(MCGLTexCoord) * maxBatchSize() * m_numVerticesPerSurface;
-    addBufferSubData(MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, maxTexCoordDataSize, reinterpret_cast<const GLfloat *>(m_texCoords.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::TexCoords, texCoordDataSize, maxTexCoordDataSize, reinterpret_cast<const GLfloat *>(m_texCoords.data()));
 
-    addBufferSubData(MCGLShaderProgram::VAL_Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Color, colorDataSize, reinterpret_cast<const GLfloat *>(m_colors.data()));
 }
 
 void MCSurfaceObjectRenderer::render()

@@ -158,20 +158,18 @@ void MCSurfaceParticleRendererLegacy::setBatch(MCRenderLayer::ObjectBatch & batc
 
 void MCSurfaceParticleRendererLegacy::setAttributePointers()
 {
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Vertex, 3, GL_FLOAT, GL_FALSE,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Vertex), 3, GL_FLOAT, GL_FALSE,
                           sizeof(MCGLVertex), reinterpret_cast<GLvoid *>(m_vertices.data()));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Normal, 3, GL_FLOAT, GL_FALSE,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Normal), 3, GL_FLOAT, GL_FALSE,
                           sizeof(MCGLVertex), reinterpret_cast<GLvoid *>(m_normals.data()));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_TexCoords, 2, GL_FLOAT, GL_FALSE,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::TexCoords), 2, GL_FLOAT, GL_FALSE,
                           sizeof(MCGLTexCoord), reinterpret_cast<GLvoid *>(m_texCoords.data()));
-    glVertexAttribPointer(MCGLShaderProgram::VAL_Color, 4, GL_FLOAT, GL_FALSE,
+    glVertexAttribPointer(static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Color), 4, GL_FLOAT, GL_FALSE,
                           sizeof(MCGLColor), reinterpret_cast<GLvoid *>(m_colors.data()));
 }
 
 void MCSurfaceParticleRendererLegacy::render()
 {
-    assert(shaderProgram());
-
     shaderProgram()->bind();
     shaderProgram()->bindMaterial(material());
 
@@ -196,8 +194,6 @@ void MCSurfaceParticleRendererLegacy::render()
 
 void MCSurfaceParticleRendererLegacy::renderShadows()
 {
-    assert(shadowShaderProgram());
-
     shadowShaderProgram()->bind();
     shadowShaderProgram()->bindMaterial(material());
 

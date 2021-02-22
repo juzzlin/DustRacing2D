@@ -82,37 +82,31 @@ void MCGLScene::addShaderProgram(MCGLShaderProgram & shader)
 
 MCGLShaderProgramPtr MCGLScene::defaultShaderProgram()
 {
-    assert(m_defaultShader.get());
     return m_defaultShader;
 }
 
 MCGLShaderProgramPtr MCGLScene::defaultSpecularShaderProgram()
 {
-    assert(m_defaultSpecularShader.get());
     return m_defaultSpecularShader;
 }
 
 MCGLShaderProgramPtr MCGLScene::defaultShadowShaderProgram()
 {
-    assert(m_defaultShadowShader.get());
     return m_defaultShadowShader;
 }
 
 MCGLShaderProgramPtr MCGLScene::defaultTextShaderProgram()
 {
-    assert(m_defaultTextShader.get());
     return m_defaultTextShader;
 }
 
 MCGLShaderProgramPtr MCGLScene::defaultTextShadowShaderProgram()
 {
-    assert(m_defaultTextShadowShader.get());
     return m_defaultTextShadowShader;
 }
 
 MCGLShaderProgramPtr MCGLScene::defaultFBOShaderProgram()
 {
-    assert(m_defaultFBOShader.get());
     return m_defaultFBOShader;
 }
 
@@ -164,8 +158,7 @@ void MCGLScene::createDefaultShaderPrograms()
       MCGLShaderProgram::getDefaultFBOVertexShaderSource(), MCGLShaderProgram::getDefaultFBOFragmentShaderSource()));
 }
 
-void MCGLScene::resize(
-  unsigned int viewWidth, unsigned int viewHeight, unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar)
+void MCGLScene::resize(int viewWidth, int viewHeight, int sceneWidth, int sceneHeight, float viewAngle, float zNear, float zFar)
 {
     m_viewWidth = viewWidth;
     m_viewHeight = viewHeight;
@@ -178,11 +171,11 @@ void MCGLScene::resize(
     updateViewport();
 }
 
-void MCGLScene::setViewerPosition(unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle)
+void MCGLScene::setViewerPosition(int sceneWidth, int sceneHeight, float viewAngle)
 {
     // Set eye position so that the scene looks like a pure 2D-scene
-    const unsigned int vH2 = sceneHeight / 2;
-    const unsigned int vW2 = sceneWidth / 2;
+    const int vH2 = sceneHeight / 2;
+    const int vW2 = sceneWidth / 2;
     m_eyeZ = vH2 / std::tan(static_cast<float>(MCTrigonom::degToRad(viewAngle / 2)));
 
     m_viewMatrix = glm::mat4(1.0);
@@ -213,7 +206,6 @@ void MCGLScene::updateViewport()
 {
     switch (m_splitType)
     {
-    default:
     case ShowFullScreen:
         setProjection(static_cast<float>(m_sceneWidth) / m_sceneHeight, m_zNear, m_zFar, m_viewAngle);
         glViewport(0, 0, m_viewWidth, m_viewHeight);
@@ -270,42 +262,42 @@ const glm::mat4 & MCGLScene::viewProjectionMatrix() const
 
 void MCGLScene::updateViewProjectionMatrixAndShaders()
 {
-    for (MCGLShaderProgram * p : m_shaders)
+    for (auto && shader : m_shaders)
     {
-        p->setViewProjectionMatrix(viewProjectionMatrix());
-        p->setViewMatrix(m_viewMatrix);
+        shader->setViewProjectionMatrix(viewProjectionMatrix());
+        shader->setViewMatrix(m_viewMatrix);
     }
 }
 
 void MCGLScene::setAmbientLight(const MCGLAmbientLight & light)
 {
-    for (MCGLShaderProgram * p : m_shaders)
+    for (auto && shader : m_shaders)
     {
-        p->setAmbientLight(light);
+        shader->setAmbientLight(light);
     }
 }
 
 void MCGLScene::setDiffuseLight(const MCGLDiffuseLight & light)
 {
-    for (MCGLShaderProgram * p : m_shaders)
+    for (auto && shader : m_shaders)
     {
-        p->setDiffuseLight(light);
+        shader->setDiffuseLight(light);
     }
 }
 
 void MCGLScene::setSpecularLight(const MCGLDiffuseLight & light)
 {
-    for (MCGLShaderProgram * p : m_shaders)
+    for (auto && shader : m_shaders)
     {
-        p->setSpecularLight(light);
+        shader->setSpecularLight(light);
     }
 }
 
 void MCGLScene::setFadeValue(float value)
 {
-    for (MCGLShaderProgram * p : m_shaders)
+    for (auto && shader : m_shaders)
     {
-        p->setFadeValue(value);
+        shader->setFadeValue(value);
     }
 }
 

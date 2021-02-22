@@ -56,8 +56,7 @@ public:
     virtual void initialize();
 
     //! Resize / set projection matrices and viewport. Re-implement if desired.
-    virtual void resize(unsigned int viewWidth, unsigned int viewHeight,
-                        unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle, float zNear, float zFar);
+    virtual void resize(int viewWidth, int viewHeight, int sceneWidth, int sceneHeight, float viewAngle, float zNear, float zFar);
 
     //! Set viewport split type.
     void setSplitType(SplitType splitType = ShowFullScreen);
@@ -103,7 +102,7 @@ public:
 
 protected:
     //! Set viewer's position. Automatically called by resize().
-    virtual void setViewerPosition(unsigned int sceneWidth, unsigned int sceneHeight, float viewAngle);
+    virtual void setViewerPosition(int sceneWidth, int sceneHeight, float viewAngle);
 
     //! Set projection. Automatically called by resize().
     virtual void setProjection(float aspectRatio, float zNear, float zFar, float viewAngle);
@@ -121,13 +120,13 @@ private:
 
     SplitType m_splitType;
 
-    unsigned int m_viewWidth;
+    int m_viewWidth;
 
-    unsigned int m_viewHeight;
+    int m_viewHeight;
 
-    unsigned int m_sceneWidth;
+    int m_sceneWidth;
 
-    unsigned int m_sceneHeight;
+    int m_sceneHeight;
 
     float m_viewAngle;
 

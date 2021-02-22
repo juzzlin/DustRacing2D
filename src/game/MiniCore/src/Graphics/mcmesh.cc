@@ -118,14 +118,10 @@ void MCMesh::initVBOs()
 
     initBufferData(totalDataSize, GL_STATIC_DRAW);
 
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Vertex, vertexDataSize, verticesAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Normal, normalDataSize, normalsAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_TexCoords, texCoordDataSize, texCoordsAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Color, colorDataSize, colorsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Vertex, vertexDataSize, verticesAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Normal, normalDataSize, normalsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::TexCoords, texCoordDataSize, texCoordsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Color, colorDataSize, colorsAsGlArray());
 
     finishBufferData();
 }

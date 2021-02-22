@@ -33,6 +33,7 @@
 
 #include <cassert>
 #include <exception>
+#include <vector>
 
 MCGLShaderProgram * MCGLShaderProgram::m_activeProgram = nullptr;
 
@@ -75,32 +76,34 @@ MCGLShaderProgram::MCGLShaderProgram(
     m_vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     addVertexShaderFromSource(vertexShaderSource);
+
     addFragmentShaderFromSource(fragmentShaderSource);
+
     link();
 }
 
 void MCGLShaderProgram::initUniformNameMap()
 {
     // Map uniform enums to uniform names used in the shaders
-    m_uniforms[AmbientLightColor] = "ac";
-    m_uniforms[Camera] = "camera";
-    m_uniforms[Color] = "color";
-    m_uniforms[DiffuseLightDir] = "dd";
-    m_uniforms[DiffuseLightColor] = "dc";
-    m_uniforms[FadeValue] = "fade";
-    m_uniforms[MaterialDiffuseCoeff] = "dCoeff";
-    m_uniforms[MaterialSpecularCoeff] = "sCoeff";
-    m_uniforms[MaterialTex0] = "tex0";
-    m_uniforms[MaterialTex1] = "tex1";
-    m_uniforms[MaterialTex2] = "tex2";
-    m_uniforms[Model] = "model";
-    m_uniforms[Scale] = "scale";
-    m_uniforms[SpecularLightDir] = "sd";
-    m_uniforms[SpecularLightColor] = "sc";
-    m_uniforms[UserData1] = "userData1";
-    m_uniforms[UserData2] = "userData2";
-    m_uniforms[ViewProjection] = "vp";
-    m_uniforms[View] = "v";
+    m_uniforms[Uniform::AmbientLightColor] = "ac";
+    m_uniforms[Uniform::Camera] = "camera";
+    m_uniforms[Uniform::Color] = "color";
+    m_uniforms[Uniform::DiffuseLightDir] = "dd";
+    m_uniforms[Uniform::DiffuseLightColor] = "dc";
+    m_uniforms[Uniform::FadeValue] = "fade";
+    m_uniforms[Uniform::MaterialDiffuseCoeff] = "dCoeff";
+    m_uniforms[Uniform::MaterialSpecularCoeff] = "sCoeff";
+    m_uniforms[Uniform::MaterialTex0] = "tex0";
+    m_uniforms[Uniform::MaterialTex1] = "tex1";
+    m_uniforms[Uniform::MaterialTex2] = "tex2";
+    m_uniforms[Uniform::Model] = "model";
+    m_uniforms[Uniform::Scale] = "scale";
+    m_uniforms[Uniform::SpecularLightDir] = "sd";
+    m_uniforms[Uniform::SpecularLightColor] = "sc";
+    m_uniforms[Uniform::UserData1] = "userData1";
+    m_uniforms[Uniform::UserData2] = "userData2";
+    m_uniforms[Uniform::ViewProjection] = "vp";
+    m_uniforms[Uniform::View] = "v";
 }
 
 MCGLShaderProgram::~MCGLShaderProgram()
@@ -117,13 +120,9 @@ int MCGLShaderProgram::getUniformLocation(Uniform uniform)
 
 void MCGLShaderProgram::initUniformLocationCache()
 {
-    assert(isLinked());
-
-    auto iter = m_uniforms.begin();
-    while (iter != m_uniforms.end())
+    for (auto && item : m_uniforms)
     {
-        m_uniformLocationHash[iter->first] = glGetUniformLocation(m_program, iter->second.c_str());
-        iter++;
+        m_uniformLocationHash[item.first] = glGetUniformLocation(m_program, item.second.c_str());
     }
 }
 
@@ -152,14 +151,18 @@ bool MCGLShaderProgram::isBound() const
 void MCGLShaderProgram::link()
 {
     glLinkProgram(m_program);
-    assert(isLinked());
+
+    if (!isLinked())
+    {
+        throw std::runtime_error("Shader program not linked!");
+    }
 
     initUniformLocationCache();
     m_scene.addShaderProgram(*this);
 
-    bindTextureUnit(0, MaterialTex0);
-    bindTextureUnit(1, MaterialTex1);
-    bindTextureUnit(2, MaterialTex2);
+    bindTextureUnit(0, Uniform::MaterialTex0);
+    bindTextureUnit(1, Uniform::MaterialTex1);
+    bindTextureUnit(2, Uniform::MaterialTex2);
 }
 
 bool MCGLShaderProgram::isLinked()
@@ -173,20 +176,18 @@ std::string MCGLShaderProgram::getShaderLog(GLuint obj)
 {
     int logLength = 0;
     int charsWritten = 0;
-    char * rawLog;
 
     glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &logLength);
 
     if (logLength > 0)
     {
-        rawLog = (char *)malloc(logLength);
-        glGetShaderInfoLog(obj, logLength, &charsWritten, rawLog);
-        std::string log = rawLog;
-        free(rawLog);
+        std::vector<char> rawLog(static_cast<size_t>(logLength));
+        glGetShaderInfoLog(obj, logLength, &charsWritten, rawLog.data());
+        const std::string log(rawLog.begin(), rawLog.end());
         return log;
     }
 
-    return "";
+    return {};
 }
 
 bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
@@ -203,10 +204,10 @@ bool MCGLShaderProgram::addVertexShaderFromSource(const std::string & source)
         throw std::runtime_error("Compiling a vertex shader failed.\n" + getShaderLog(m_vertexShader) + "\n" + source);
     }
 
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Vertex, "inVertex");
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Normal, "inNormal");
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_TexCoords, "inTexCoord");
-    glBindAttribLocation(m_program, MCGLShaderProgram::VAL_Color, "inColor");
+    glBindAttribLocation(m_program, static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Vertex), "inVertex");
+    glBindAttribLocation(m_program, static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Normal), "inNormal");
+    glBindAttribLocation(m_program, static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::TexCoords), "inTexCoord");
+    glBindAttribLocation(m_program, static_cast<int>(MCGLShaderProgram::VertexAttributeLocation::Color), "inColor");
 
     glAttachShader(m_program, m_vertexShader);
 
@@ -232,52 +233,52 @@ bool MCGLShaderProgram::addFragmentShaderFromSource(const std::string & source)
     return true;
 }
 
-const char * MCGLShaderProgram::getDefaultVertexShaderSource()
+std::string MCGLShaderProgram::getDefaultVertexShaderSource()
 {
     return MCDefaultVsh;
 }
 
-const char * MCGLShaderProgram::getDefaultSpecularVertexShaderSource()
+std::string MCGLShaderProgram::getDefaultSpecularVertexShaderSource()
 {
     return MCDefaultVshSpecular;
 }
 
-const char * MCGLShaderProgram::getDefaultFragmentShaderSource()
+std::string MCGLShaderProgram::getDefaultFragmentShaderSource()
 {
     return MCDefaultFsh;
 }
 
-const char * MCGLShaderProgram::getDefaultShadowVertexShaderSource()
+std::string MCGLShaderProgram::getDefaultShadowVertexShaderSource()
 {
     return MCDefaultShadowVsh;
 }
 
-const char * MCGLShaderProgram::getDefaultShadowFragmentShaderSource()
+std::string MCGLShaderProgram::getDefaultShadowFragmentShaderSource()
 {
     return MCDefaultShadowFsh;
 }
 
-const char * MCGLShaderProgram::getDefaultTextVertexShaderSource()
+std::string MCGLShaderProgram::getDefaultTextVertexShaderSource()
 {
     return MCDefaultTextVsh;
 }
 
-const char * MCGLShaderProgram::getDefaultTextFragmentShaderSource()
+std::string MCGLShaderProgram::getDefaultTextFragmentShaderSource()
 {
     return MCDefaultFsh;
 }
 
-const char * MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource()
+std::string MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource()
 {
     return MCDefaultTextShadowFsh;
 }
 
-const char * MCGLShaderProgram::getDefaultFBOVertexShaderSource()
+std::string MCGLShaderProgram::getDefaultFBOVertexShaderSource()
 {
     return MCDefaultFBOVsh;
 }
 
-const char * MCGLShaderProgram::getDefaultFBOFragmentShaderSource()
+std::string MCGLShaderProgram::getDefaultFBOFragmentShaderSource()
 {
     return MCDefaultFBOFsh;
 }
@@ -320,7 +321,7 @@ void MCGLShaderProgram::setPendingViewProjectionMatrix()
     if (m_viewProjectionMatrixPending)
     {
         m_viewProjectionMatrixPending = false;
-        glUniformMatrix4fv(getUniformLocation(ViewProjection), 1, GL_FALSE, &m_viewProjectionMatrix[0][0]);
+        glUniformMatrix4fv(getUniformLocation(Uniform::ViewProjection), 1, GL_FALSE, &m_viewProjectionMatrix[0][0]);
     }
 }
 
@@ -340,7 +341,7 @@ void MCGLShaderProgram::setPendingViewMatrix()
     if (m_viewMatrixPending)
     {
         m_viewMatrixPending = false;
-        glUniformMatrix4fv(getUniformLocation(View), 1, GL_FALSE, &m_viewMatrix[0][0]);
+        glUniformMatrix4fv(getUniformLocation(Uniform::View), 1, GL_FALSE, &m_viewMatrix[0][0]);
     }
 }
 
@@ -348,37 +349,37 @@ void MCGLShaderProgram::setTransform(GLfloat angle, const MCVector3dF & pos)
 {
     glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(pos.i(), pos.j(), pos.k()));
     glm::mat4 rotation = glm::rotate(translate, angle, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(getUniformLocation(Model), 1, GL_FALSE, &rotation[0][0]);
+    glUniformMatrix4fv(getUniformLocation(Uniform::Model), 1, GL_FALSE, &rotation[0][0]);
 }
 
 void MCGLShaderProgram::setUserData1(const MCVector2dF & data)
 {
-    glUniform2f(getUniformLocation(UserData1), data.i(), data.j());
+    glUniform2f(getUniformLocation(Uniform::UserData1), data.i(), data.j());
 }
 
 void MCGLShaderProgram::setUserData2(const MCVector2dF & data)
 {
-    glUniform2f(getUniformLocation(UserData2), data.i(), data.j());
+    glUniform2f(getUniformLocation(Uniform::UserData2), data.i(), data.j());
 }
 
 void MCGLShaderProgram::setCamera(const MCVector2dF & camera)
 {
-    glUniform2f(getUniformLocation(Camera), camera.i(), camera.j());
+    glUniform2f(getUniformLocation(Uniform::Camera), camera.i(), camera.j());
 }
 
 void MCGLShaderProgram::setColor(const MCGLColor & color)
 {
-    glUniform4f(getUniformLocation(Color), color.r(), color.g(), color.b(), color.a());
+    glUniform4f(getUniformLocation(Uniform::Color), color.r(), color.g(), color.b(), color.a());
 }
 
 void MCGLShaderProgram::setScale(GLfloat x, GLfloat y, GLfloat z)
 {
-    glUniform4f(getUniformLocation(Scale), x, y, z, 1);
+    glUniform4f(getUniformLocation(Uniform::Scale), x, y, z, 1);
 }
 
 void MCGLShaderProgram::setFadeValue(GLfloat value)
 {
-    glUniform1f(getUniformLocation(FadeValue), value);
+    glUniform1f(getUniformLocation(Uniform::FadeValue), value);
 }
 
 void MCGLShaderProgram::setDiffuseLight(const MCGLDiffuseLight & light)
@@ -398,10 +399,10 @@ void MCGLShaderProgram::setPendingDiffuseLight()
     {
         m_diffuseLightPending = false;
         glUniform4f(
-          getUniformLocation(DiffuseLightDir),
+          getUniformLocation(Uniform::DiffuseLightDir),
           m_diffuseLight.direction().i(), m_diffuseLight.direction().j(), m_diffuseLight.direction().k(), 1);
         glUniform4f(
-          getUniformLocation(DiffuseLightColor),
+          getUniformLocation(Uniform::DiffuseLightColor),
           m_diffuseLight.r(), m_diffuseLight.g(), m_diffuseLight.b(), m_diffuseLight.i());
     }
 }
@@ -423,10 +424,10 @@ void MCGLShaderProgram::setPendingSpecularLight()
     {
         m_specularLightPending = false;
         glUniform4f(
-          getUniformLocation(SpecularLightDir),
+          getUniformLocation(Uniform::SpecularLightDir),
           m_specularLight.direction().i(), m_specularLight.direction().j(), m_specularLight.direction().k(), 1);
         glUniform4f(
-          getUniformLocation(SpecularLightColor),
+          getUniformLocation(Uniform::SpecularLightColor),
           m_specularLight.r(), m_specularLight.g(), m_specularLight.b(), m_specularLight.i());
     }
 }
@@ -448,24 +449,22 @@ void MCGLShaderProgram::setPendingAmbientLight()
     {
         m_ambientLightPending = false;
         glUniform4f(
-          getUniformLocation(AmbientLightColor),
+          getUniformLocation(Uniform::AmbientLightColor),
           m_ambientLight.r(), m_ambientLight.g(), m_ambientLight.b(), m_ambientLight.i());
     }
 }
 
-void MCGLShaderProgram::bindTextureUnit(GLuint index, Uniform uniform)
+void MCGLShaderProgram::bindTextureUnit(GLint index, Uniform uniform)
 {
     const int location = getUniformLocation(uniform);
     if (location != -1)
     {
-        glUniform1i(getUniformLocation(uniform), index);
+        glUniform1i(location, index);
     }
 }
 
 void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
 {
-    assert(material);
-
     material->doAlphaBlend();
 
     const GLuint texture1 = material->texture(0);
@@ -481,6 +480,6 @@ void MCGLShaderProgram::bindMaterial(MCGLMaterialPtr material)
 
     glActiveTexture(GL_TEXTURE0);
 
-    glUniform1f(getUniformLocation(MaterialSpecularCoeff), material->specularCoeff());
-    glUniform1f(getUniformLocation(MaterialDiffuseCoeff), material->diffuseCoeff());
+    glUniform1f(getUniformLocation(Uniform::MaterialSpecularCoeff), material->specularCoeff());
+    glUniform1f(getUniformLocation(Uniform::MaterialDiffuseCoeff), material->diffuseCoeff());
 }

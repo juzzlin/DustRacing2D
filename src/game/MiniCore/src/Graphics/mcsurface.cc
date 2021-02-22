@@ -160,14 +160,10 @@ void MCSurface::initVBOs()
 {
     initBufferData(TOTAL_DATA_SIZE, GL_STATIC_DRAW);
 
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Vertex, VERTEX_DATA_SIZE, verticesAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Normal, NORMAL_DATA_SIZE, normalsAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_TexCoords, TEXCOORD_DATA_SIZE, texCoordsAsGlArray());
-    addBufferSubData(
-      MCGLShaderProgram::VAL_Color, COLOR_DATA_SIZE, colorsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Vertex, VERTEX_DATA_SIZE, verticesAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Normal, NORMAL_DATA_SIZE, normalsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::TexCoords, TEXCOORD_DATA_SIZE, texCoordsAsGlArray());
+    addBufferSubData(MCGLShaderProgram::VertexAttributeLocation::Color, COLOR_DATA_SIZE, colorsAsGlArray());
 
     finishBufferData();
 }
