@@ -85,7 +85,7 @@ public:
     {
         MCWorld::instance().addObject(m_this);
 
-        for (auto child : m_children)
+        for (auto && child : m_children)
         {
             MCWorld::instance().addObject(*child);
         }
@@ -95,7 +95,7 @@ public:
     {
         MCWorld::instance().addObject(m_this);
 
-        for (auto child : m_children)
+        for (auto && child : m_children)
         {
             MCWorld::instance().addObject(*child);
         }
@@ -109,7 +109,7 @@ public:
         {
             MCWorld::instance().removeObject(m_this);
 
-            for (auto child : m_children)
+            for (auto && child : m_children)
             {
                 MCWorld::instance().removeObjectNow(*child);
             }
@@ -122,7 +122,7 @@ public:
         {
             MCWorld::instance().removeObjectNow(m_this);
 
-            for (auto child : m_children)
+            for (auto && child : m_children)
             {
                 MCWorld::instance().removeObjectNow(*child);
             }
