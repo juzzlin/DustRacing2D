@@ -38,51 +38,51 @@ public:
     virtual void render() = 0;
 
     //! Set centered position.
-    void setPos(size_t x, size_t y)
+    void setPos(int x, int y)
     {
         m_x = x;
         m_y = y;
     }
 
     //! Get x.
-    size_t x() const
+    int x() const
     {
         return m_x;
     }
 
     //! Get y.
-    size_t y() const
+    int y() const
     {
         return m_y;
     }
 
     //! Set dimensions.
-    virtual void setDimensions(size_t width, size_t height)
+    virtual void setDimensions(int width, int height)
     {
         m_w = width;
         m_h = height;
     }
 
     //! Get width.
-    size_t width() const
+    int width() const
     {
         return m_w;
     }
 
     //! Get height.
-    size_t height() const
+    int height() const
     {
         return m_h;
     }
 
 private:
-    size_t m_x;
+    int m_x;
 
-    size_t m_y;
+    int m_y;
 
-    size_t m_w;
+    int m_w;
 
-    size_t m_h;
+    int m_h;
 };
 
 #endif // RENDERABLE_HPP

@@ -29,8 +29,7 @@ MCVectorAnimation::MCVectorAnimation()
 {
 }
 
-void MCVectorAnimation::init(MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end,
-                             size_t steps, size_t preDelay, size_t postDelay)
+void MCVectorAnimation::init(MCVector3dF & vect, const MCVector3dF & start, const MCVector3dF & end, int steps, int preDelay, int postDelay)
 {
     m_delta = (end - start) / steps;
     m_vect = &vect;

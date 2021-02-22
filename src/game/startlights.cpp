@@ -34,7 +34,7 @@ Startlights::Startlights()
     m_timer.setInterval(1000 / m_stepsPerState);
 }
 
-bool Startlights::timeElapsed(size_t limit)
+bool Startlights::timeElapsed(int limit)
 {
     if (++m_counter > limit)
     {
@@ -55,7 +55,7 @@ void Startlights::beginAnimation()
     m_timer.start();
 }
 
-void Startlights::setDimensions(size_t width, size_t height)
+void Startlights::setDimensions(int width, int height)
 {
     m_width = width;
     m_height = height;
@@ -78,7 +78,7 @@ float Startlights::glowScale() const
 
 void Startlights::stateInit()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     m_pos = MCVector3dF(m_width / 2, 3 * m_height / 2, 0);
     m_animation.init(
@@ -93,7 +93,7 @@ void Startlights::stateInit()
 
 void Startlights::stateAppear()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     m_animation.update();
     if (timeElapsed(second))
@@ -105,7 +105,7 @@ void Startlights::stateAppear()
 
 void Startlights::stateFirstRow()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -116,7 +116,7 @@ void Startlights::stateFirstRow()
 
 void Startlights::stateSecondRow()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -127,7 +127,7 @@ void Startlights::stateSecondRow()
 
 void Startlights::stateThirdRow()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {
@@ -140,7 +140,7 @@ void Startlights::stateThirdRow()
 
 void Startlights::stateGo()
 {
-    const size_t second = m_stepsPerState;
+    const int second = m_stepsPerState;
 
     if (timeElapsed(second))
     {

@@ -30,7 +30,7 @@ Intro::Intro()
     m_back->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
-void Intro::setDimensions(size_t width, size_t height)
+void Intro::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
 }

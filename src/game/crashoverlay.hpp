@@ -32,7 +32,7 @@ public:
     virtual void render() override;
 
     //! \reimp
-    virtual void setDimensions(size_t width, size_t height) override;
+    virtual void setDimensions(int width, int height) override;
 
     //! \reimp
     virtual bool update() override;

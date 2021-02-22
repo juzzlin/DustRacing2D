@@ -53,7 +53,7 @@ public:
 
     State state() const;
 
-    void setDimensions(size_t width, size_t height);
+    void setDimensions(int width, int height);
 
     const MCVector3dF & pos() const;
 
@@ -95,19 +95,19 @@ private:
 
     void stateEnd();
 
-    bool timeElapsed(size_t limit);
+    bool timeElapsed(int limit);
 
     State m_state;
 
-    size_t m_counter;
+    int m_counter;
 
-    size_t m_stepsPerState;
+    int m_stepsPerState;
 
     MCVector3dF m_pos;
 
-    size_t m_width;
+    int m_width;
 
-    size_t m_height;
+    int m_height;
 
     float m_glowScale;
 

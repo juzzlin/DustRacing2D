@@ -29,7 +29,7 @@ CrashOverlay::CrashOverlay()
     m_surface->material()->setAlphaBlend(true);
 }
 
-void CrashOverlay::setDimensions(size_t width, size_t height)
+void CrashOverlay::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
 }

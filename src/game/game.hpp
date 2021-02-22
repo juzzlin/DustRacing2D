@@ -69,7 +69,7 @@ public:
     Game(int & argc, char ** argv);
 
     //! Destructor
-    virtual ~Game();
+    virtual ~Game() override;
 
     //! Return the game instance.
     static Game & instance();

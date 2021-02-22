@@ -35,7 +35,7 @@ public:
     virtual void render() override;
 
     //! \reimp
-    virtual void setDimensions(size_t width, size_t height) override;
+    virtual void setDimensions(int width, int height) override;
 
 private:
     void renderLights(int rows, int litRows, float glowScale, bool glowAlways = false) const;

@@ -36,7 +36,7 @@ public:
     void render() override;
 
     //! \reimp
-    void setDimensions(size_t width, size_t height) override;
+    void setDimensions(int width, int height) override;
 
 private:
     std::shared_ptr<MCSurface> m_back;

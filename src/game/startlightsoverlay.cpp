@@ -119,7 +119,7 @@ void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bo
     }
 }
 
-void StartlightsOverlay::setDimensions(size_t width, size_t height)
+void StartlightsOverlay::setDimensions(int width, int height)
 {
     OverlayBase::setDimensions(width, height);
     m_model.setDimensions(width, height);
