@@ -89,12 +89,15 @@ MCWorld::~MCWorld()
 
 void MCWorld::integrate(int step)
 {
+    std::cout << "START INTEGRATION" << std::endl;
     // Integrate and update all registered objects
     m_forceRegistry->update();
     for (auto && object : m_objects)
     {
+        std::cout << "OBJ NAME: " << object->typeName() << ", INDEX: " << object->index() << std::endl;
         if (object->isPhysicsObject() && !object->physicsComponent().isStationary())
         {
+            std::cout << "1" << std::endl;
             object->physicsComponent().stepTime(step);
         }
 
