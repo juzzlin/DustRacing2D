@@ -51,10 +51,10 @@ const int REMOVED_INDEX = -1;
 }
 
 MCWorld::MCWorld()
-  : m_renderer(new MCWorldRenderer)
-  , m_forceRegistry(new MCForceRegistry)
-  , m_collisionDetector(new MCCollisionDetector)
-  , m_impulseGenerator(new MCImpulseGenerator)
+  : m_renderer(std::make_unique<MCWorldRenderer>())
+  , m_forceRegistry(std::make_unique<MCForceRegistry>())
+  , m_collisionDetector(std::make_unique<MCCollisionDetector>())
+  , m_impulseGenerator(std::make_unique<MCImpulseGenerator>())
   , m_minX(0)
   , m_maxX(0)
   , m_minY(0)
@@ -83,11 +83,6 @@ MCWorld::MCWorld()
 MCWorld::~MCWorld()
 {
     clear();
-
-    delete m_renderer;
-    delete m_forceRegistry;
-    delete m_collisionDetector;
-    delete m_impulseGenerator;
 
     MCWorld::m_instance = nullptr;
 }
