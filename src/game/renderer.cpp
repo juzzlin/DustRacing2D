@@ -123,7 +123,7 @@ void Renderer::createProgramFromSource(std::string handle, std::string vshSource
 #endif
 
     // Note: ShaderProgram throws on error.
-    m_shaderHash[handle].reset(new MCGLShaderProgram(vshSource, fshSource));
+    m_shaderHash[handle] = std::make_shared<MCGLShaderProgram>(vshSource, fshSource);
 }
 
 void Renderer::loadShaders()

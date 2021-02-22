@@ -85,16 +85,15 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
   : m_game(game)
   , m_stateMachine(stateMachine)
   , m_renderer(renderer)
-  , m_messageOverlay(new MessageOverlay)
+  , m_messageOverlay(std::make_unique<MessageOverlay>())
   , m_race(std::make_shared<Race>(game, carCount()))
-  , m_activeTrack(nullptr)
   , m_world(world)
-  , m_startlights(new Startlights)
-  , m_startlightsOverlay(new StartlightsOverlay(*m_startlights))
-  , m_checkeredFlag(new CheckeredFlag)
-  , m_intro(new Intro)
-  , m_particleFactory(new ParticleFactory)
-  , m_fadeAnimation(new FadeAnimation)
+  , m_startlights(std::make_unique<Startlights>())
+  , m_startlightsOverlay(std::make_unique<StartlightsOverlay>(*m_startlights))
+  , m_checkeredFlag(std::make_unique<CheckeredFlag>())
+  , m_intro(std::make_unique<Intro>())
+  , m_particleFactory(std::make_unique<ParticleFactory>())
+  , m_fadeAnimation(std::make_unique<FadeAnimation>())
 {
     initializeComponents();
 

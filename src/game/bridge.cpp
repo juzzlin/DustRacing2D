@@ -44,7 +44,7 @@ public:
       : MCObject("under_bridge_trigger")
       , m_bridge(bridge)
     {
-        setShape(MCShapePtr(new MCRectShape(nullptr, TrackTile::width() - TrackTile::width() / 8, TrackTile::height() + TrackTile::height() / 8)));
+        setShape(std::make_shared<MCRectShape>(nullptr, TrackTile::width() - TrackTile::width() / 8, TrackTile::height() + TrackTile::height() / 8));
 
         setCollisionLayer(-1);
         setIsPhysicsObject(false);
@@ -54,7 +54,7 @@ public:
     }
 
     //! \reimp
-    virtual void collisionEvent(MCCollisionEvent & event) override
+    void collisionEvent(MCCollisionEvent & event) override
     {
         if (!event.collidingObject().physicsComponent().isStationary())
         {
@@ -63,7 +63,7 @@ public:
     }
 
     //! \reimp
-    inline void separationEvent(MCSeparationEvent & event) override
+    void separationEvent(MCSeparationEvent & event) override
     {
         m_bridge.objectUnderBridge(event.separatedObject(), false);
     }

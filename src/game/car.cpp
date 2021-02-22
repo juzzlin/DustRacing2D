@@ -50,7 +50,7 @@ using std::static_pointer_cast;
 Car::Car(Description & desc, MCSurfacePtr surface, size_t index, bool isHuman)
   : MCObject(surface, "car")
   , m_desc(desc)
-  , m_onTrackFriction(new MCFrictionGenerator(desc.rollingFrictionOnTrack, 0.0))
+  , m_onTrackFriction(std::make_shared<MCFrictionGenerator>(desc.rollingFrictionOnTrack, 0.0))
   , m_leftSideOffTrack(false)
   , m_rightSideOffTrack(false)
   , m_skidding(false)
@@ -77,7 +77,7 @@ Car::Car(Description & desc, MCSurfacePtr surface, size_t index, bool isHuman)
   , m_leftBrakeGlowPos(-21, 8, 0)
   , m_rightBrakeGlowPos(-21, -8, 0)
   , m_hadHardCrash(false)
-  , m_gearbox(new Gearbox)
+  , m_gearbox(std::make_unique<Gearbox>())
 {
     // Override the default physics component to handle damage from impulses
     setPhysicsComponent(std::make_unique<CarPhysicsComponent>(*this));
@@ -154,8 +154,7 @@ void Car::initForceGenerators(Description & desc)
     MCWorld::instance().forceRegistry().addForceGenerator(m_onTrackFriction, *this);
     m_onTrackFriction->enable(true);
 
-    MCForceGeneratorPtr drag(new MCDragForceGenerator(desc.dragLinear, desc.dragQuadratic));
-    MCWorld::instance().forceRegistry().addForceGenerator(drag, *this);
+    MCWorld::instance().forceRegistry().addForceGenerator(std::make_shared<MCDragForceGenerator>(desc.dragLinear, desc.dragQuadratic), *this);
 }
 
 size_t Car::index() const
