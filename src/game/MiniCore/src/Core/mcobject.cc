@@ -536,12 +536,6 @@ public:
         return *m_parent;
     }
 
-    ~Impl()
-    {
-        removeFromWorldNow();
-        deleteContacts();
-    }
-
 private:
     float calculateLinearBalance(const MCVector3dF & force, const MCVector3dF & pos)
     {
@@ -1091,4 +1085,8 @@ MCPhysicsComponent & MCObject::physicsComponent()
     return m_impl->physicsComponent();
 }
 
-MCObject::~MCObject() = default;
+MCObject::~MCObject()
+{
+    removeFromWorldNow();
+    deleteContacts();
+}
