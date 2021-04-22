@@ -25,8 +25,6 @@
 
 #include <memory>
 
-class MCTrigonomImpl;
-
 /*!
  *  \class MCTrigonom
  *
@@ -57,7 +55,8 @@ private:
     DISABLE_COPY(MCTrigonom);
     DISABLE_ASSI(MCTrigonom);
 
-    static std::unique_ptr<MCTrigonomImpl> const m_pImpl;
+    struct Impl;
+    static std::unique_ptr<Impl> const m_impl;
 };
 
 #endif // MCTRIGONOM_HH
