@@ -25,7 +25,6 @@
 #include <memory>
 
 class MCObject;
-class MCForceGeneratorImpl;
 
 //! Abstract base class for different force generators
 class MCForceGenerator
@@ -50,7 +49,8 @@ private:
     DISABLE_COPY(MCForceGenerator);
     DISABLE_ASSI(MCForceGenerator);
 
-    MCForceGeneratorImpl * const m_pImpl;
+    struct Impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 typedef std::shared_ptr<MCForceGenerator> MCForceGeneratorPtr;

@@ -19,35 +19,31 @@
 
 #include "mcforcegenerator.hh"
 
-class MCForceGeneratorImpl
+struct MCForceGenerator::Impl
 {
-    MCForceGeneratorImpl();
+    Impl()
+      : enabled(true)
+    {
+    }
 
     bool enabled;
+
     friend class MCForceGenerator;
 };
 
-MCForceGeneratorImpl::MCForceGeneratorImpl()
-  : enabled(true)
-{
-}
-
 MCForceGenerator::MCForceGenerator()
-  : m_pImpl(new MCForceGeneratorImpl)
+  : m_impl(std::make_unique<Impl>())
 {
 }
 
 void MCForceGenerator::enable(bool status)
 {
-    m_pImpl->enabled = status;
+    m_impl->enabled = status;
 }
 
 bool MCForceGenerator::enabled() const
 {
-    return m_pImpl->enabled;
+    return m_impl->enabled;
 }
 
-MCForceGenerator::~MCForceGenerator()
-{
-    delete m_pImpl;
-}
+MCForceGenerator::~MCForceGenerator() = default;
