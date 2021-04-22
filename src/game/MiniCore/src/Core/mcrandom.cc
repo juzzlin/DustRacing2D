@@ -18,7 +18,6 @@
 //
 
 #include "mcrandom.hh"
-#include "mccast.hh"
 
 #include <cstdlib>
 #include <limits>
@@ -31,54 +30,52 @@ const unsigned int MOD_MASK = 0x3ff;
 } // namespace
 
 //! Implementation class for MCRandom
-class MCRandomImpl
+struct MCRandom::Impl
 {
-public:
-    MCRandomImpl();
-    inline float getValue();
+    Impl()
+      : m_valPtr(0)
+      , m_data(LUT_SIZE, 0)
+      , m_seed(0)
+      , m_isBuilt(false)
+    {
+    }
+
+    inline float getValue()
+    {
+        if (!Impl::m_isBuilt)
+        {
+            Impl::buildLUT();
+        }
+
+        return Impl::m_data[++m_valPtr & MOD_MASK];
+    }
 
 private:
-    void buildLUT();
+    void buildLUT()
+    {
+        std::mt19937 engine(m_seed);
+        std::uniform_real_distribution<float> dist(0, 1);
+
+        for (unsigned int i = 0; i < LUT_SIZE; i++)
+        {
+            m_data[i] = dist(engine);
+        }
+
+        m_isBuilt = true;
+    }
 
     mutable unsigned int m_valPtr;
+
     std::vector<float> m_data;
+
     int m_seed;
+
     bool m_isBuilt;
+
     friend class MCRandom;
 };
 
-std::unique_ptr<MCRandomImpl> const MCRandom::m_impl(new MCRandomImpl);
-
-MCRandomImpl::MCRandomImpl()
-  : m_valPtr(0)
-  , m_data(LUT_SIZE, 0)
-  , m_seed(0)
-  , m_isBuilt(false)
-{
-}
-
-void MCRandomImpl::buildLUT()
-{
-    std::mt19937 engine(m_seed);
-    std::uniform_real_distribution<float> dist(0, 1);
-
-    for (unsigned int i = 0; i < LUT_SIZE; i++)
-    {
-        m_data[i] = dist(engine);
-    }
-
-    m_isBuilt = true;
-}
-
-float MCRandomImpl::getValue()
-{
-    if (!MCRandomImpl::m_isBuilt)
-    {
-        MCRandomImpl::buildLUT();
-    }
-
-    return MCRandomImpl::m_data[++m_valPtr & MOD_MASK];
-}
+std::unique_ptr<MCRandom::Impl> const MCRandom::m_impl(std::make_unique<MCRandom::Impl>());
 
 float MCRandom::getValue()
 {

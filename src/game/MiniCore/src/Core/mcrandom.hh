@@ -27,8 +27,6 @@
 
 #include <memory>
 
-class MCRandomImpl;
-
 //! MCRandom number LUT.
 class MCRandom
 {
@@ -49,16 +47,13 @@ public:
     static void setSeed(int seed);
 
 private:
-    //! Constructor disabled
     MCRandom();
 
-    //! Disable copy constructor
     DISABLE_COPY(MCRandom);
-
-    //! Disable assignment
     DISABLE_ASSI(MCRandom);
 
-    static std::unique_ptr<MCRandomImpl> const m_impl;
+    struct Impl;
+    static std::unique_ptr<Impl> const m_impl;
 };
 
 #endif // MCRANDOM_HH
