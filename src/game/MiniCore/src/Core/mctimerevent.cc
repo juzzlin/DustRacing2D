@@ -21,20 +21,20 @@
 
 unsigned int MCTimerEvent::m_typeId = MCEvent::registerType();
 
-class MCTimerEventImpl
+struct MCTimerEvent::Impl
 {
-    MCTimerEventImpl(unsigned int frequency);
+    Impl(unsigned int frequency)
+      : frequency(frequency)
+    {
+    }
+
     unsigned int frequency;
+
     friend class MCTimerEvent;
 };
 
-MCTimerEventImpl::MCTimerEventImpl(unsigned int frequency)
-  : frequency(frequency)
-{
-}
-
 MCTimerEvent::MCTimerEvent(unsigned int frequency)
-  : m_pImpl(new MCTimerEventImpl(frequency))
+  : m_impl(std::make_unique<Impl>(frequency))
 {
 }
 
@@ -50,10 +50,7 @@ unsigned int MCTimerEvent::instanceTypeId() const
 
 unsigned int MCTimerEvent::frequency() const
 {
-    return m_pImpl->frequency;
+    return m_impl->frequency;
 }
 
-MCTimerEvent::~MCTimerEvent()
-{
-    delete m_pImpl;
-}
+MCTimerEvent::~MCTimerEvent() = default;

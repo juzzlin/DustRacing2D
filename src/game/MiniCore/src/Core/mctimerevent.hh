@@ -22,7 +22,7 @@
 
 #include "mcevent.hh"
 
-class MCTimerEventImpl;
+#include <memory>
 
 /*! Event that is send to all MCObject's that have subscribed to the event
     by calling MCWorld::subscribeTimerEvent(MCObject &).
@@ -52,7 +52,9 @@ private:
     DISABLE_ASSI(MCTimerEvent);
 
     static unsigned int m_typeId;
-    MCTimerEventImpl * const m_pImpl;
+
+    struct Impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 #endif // MCTIMEREVENT_HH
