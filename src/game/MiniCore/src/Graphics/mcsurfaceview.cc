@@ -26,29 +26,25 @@ class MCSurfaceView::Impl
 {
 public:
     Impl(MCSurfaceView & self, MCSurfacePtr surface)
-      : m_self(self)
+      : m_this(self)
       , m_surface(surface)
     {
         if (surface)
         {
-            m_surface->setShaderProgram(m_self.shaderProgram());
-            m_surface->setShadowShaderProgram(m_self.shadowShaderProgram());
+            m_surface->setShaderProgram(m_this.shaderProgram());
+            m_surface->setShadowShaderProgram(m_this.shadowShaderProgram());
 
             updateBBox();
         }
     }
 
-    ~Impl()
-    {
-    }
-
     void setSurface(MCSurfacePtr surface)
     {
         m_surface = surface;
-        m_surface->setShaderProgram(m_self.shaderProgram());
-        m_surface->setShadowShaderProgram(m_self.shadowShaderProgram());
+        m_surface->setShaderProgram(m_this.shaderProgram());
+        m_surface->setShadowShaderProgram(m_this.shadowShaderProgram());
 
-        m_self.setHandle(surface->handle());
+        m_this.setHandle(surface->handle());
 
         updateBBox();
     }
@@ -70,13 +66,13 @@ public:
 
     void render(const MCVector3dF & l, float angle, MCCamera * p)
     {
-        m_surface->setScale(m_self.scale());
+        m_surface->setScale(m_this.scale());
         m_surface->render(p, l, angle);
     }
 
     void renderShadow(const MCVector3dF & l, float angle, MCCamera * p)
     {
-        m_surface->setScale(m_self.scale());
+        m_surface->setScale(m_this.scale());
         m_surface->renderShadow(p, l, angle);
     }
 
@@ -119,7 +115,7 @@ public:
         const float h = m_surface->height() / 2;
         const float r = std::max(w, h);
 
-        m_bbox = MCBBoxF(-r * m_self.scale().i(), -r * m_self.scale().j(), r * m_self.scale().i(), r * m_self.scale().j());
+        m_bbox = MCBBoxF(-r * m_this.scale().i(), -r * m_this.scale().j(), r * m_this.scale().i(), r * m_this.scale().j());
     }
 
     MCGLObjectBase * object() const
@@ -128,7 +124,7 @@ public:
     }
 
 private:
-    MCSurfaceView & m_self;
+    MCSurfaceView & m_this;
 
     MCSurfacePtr m_surface;
 
