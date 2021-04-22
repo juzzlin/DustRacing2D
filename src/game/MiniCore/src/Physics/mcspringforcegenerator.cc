@@ -21,13 +21,10 @@
 #include "mcobject.hh"
 #include "mcphysicscomponent.hh"
 
-MCSpringForceGenerator::MCSpringForceGenerator(
-  MCObject & object2, float coeff, float length, float min, float max)
-  : m_p2(&object2)
+MCSpringForceGenerator::MCSpringForceGenerator(MCObject & object2, float coeff, float length)
+  : m_object2(object2)
   , m_coeff(coeff)
   , m_length(length)
-  , m_min(min)
-  , m_max(max)
 {
 }
 
@@ -36,7 +33,7 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
     object1.physicsComponent().preventSleeping(true);
 
     // Take diff vector of the node locations
-    MCVector3dF diff = object1.location() - m_p2->location();
+    MCVector3dF diff = object1.location() - m_object2.location();
 
     // Get length of diff and normalize
     const float length = diff.length();
@@ -49,12 +46,10 @@ void MCSpringForceGenerator::updateForce(MCObject & object1)
     diff *= (m_length - length) * m_coeff;
     object1.physicsComponent().addForce(diff);
 
-    if (m_p2->physicsComponent().isSleeping())
+    if (m_object2.physicsComponent().isSleeping())
     {
-        m_p2->physicsComponent().toggleSleep(false);
+        m_object2.physicsComponent().toggleSleep(false);
     }
 }
 
-MCSpringForceGenerator::~MCSpringForceGenerator()
-{
-}
+MCSpringForceGenerator::~MCSpringForceGenerator() = default;

@@ -37,12 +37,8 @@ public:
     /*! Constructor
      * \param object2 The another end of the spring.
      * \param coeff   Spring coefficient (F = -coeff * x)
-     * \param length  Nominal length of the spring.
-     * \param min     Min length of the spring.
-     * \param max     Max length of the spring.
-     */
-    MCSpringForceGenerator(
-      MCObject & object2, float coeff, float length, float min, float max);
+     * \param length  Nominal length of the spring. */
+    MCSpringForceGenerator(MCObject & object2, float coeff, float length);
 
     //! Destructor
     virtual ~MCSpringForceGenerator();
@@ -55,11 +51,12 @@ public:
 private:
     DISABLE_COPY(MCSpringForceGenerator);
     DISABLE_ASSI(MCSpringForceGenerator);
-    MCObject * m_p2;
+
+    MCObject & m_object2;
+
     float m_coeff;
+
     float m_length;
-    float m_min;
-    float m_max;
 };
 
 typedef std::shared_ptr<MCSpringForceGenerator> MCSpringForceGeneratorPtr;
