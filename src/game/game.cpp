@@ -88,24 +88,24 @@ Game::Game(int & argc, char ** argv)
 
     createRenderer();
 
-    connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, [this]() {
+    connect(&m_difficultyProfile, &DifficultyProfile::difficultyChanged, this, [this]() {
         m_trackLoader->updateLockedTracks(m_lapCount, m_difficultyProfile.difficulty());
     });
 
     connect(m_eventHandler, &EventHandler::pauseToggled, this, &Game::togglePause);
     connect(m_eventHandler, &EventHandler::gameExited, this, &Game::exitGame);
 
-    connect(m_eventHandler, &EventHandler::cursorRevealed, [this]() {
+    connect(m_eventHandler, &EventHandler::cursorRevealed, this, [this]() {
         m_renderer->setCursor(Qt::ArrowCursor);
     });
 
-    connect(m_eventHandler, &EventHandler::cursorHid, [this]() {
+    connect(m_eventHandler, &EventHandler::cursorHid, this, [this]() {
         m_renderer->setCursor(Qt::BlankCursor);
     });
 
     connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
-    connect(&m_updateTimer, &QTimer::timeout, [this]() {
+    connect(&m_updateTimer, &QTimer::timeout, this, [this]() {
         m_stateMachine->update();
         m_scene->updateFrame(*m_inputHandler, m_timeStep);
         m_scene->updateOverlays();
