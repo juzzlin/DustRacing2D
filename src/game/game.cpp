@@ -117,8 +117,6 @@ Game::Game(int & argc, char ** argv)
     connect(m_stateMachine, &StateMachine::exitGameRequested, this, &Game::exitGame);
 
     addTrackSearchPaths();
-
-    m_elapsed.start();
 }
 
 Game & Game::instance()

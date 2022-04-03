@@ -184,8 +184,6 @@ private:
 
     QTimer m_updateTimer;
 
-    QTime m_elapsed;
-
     int m_renderElapsed;
 
     Fps m_fps;
