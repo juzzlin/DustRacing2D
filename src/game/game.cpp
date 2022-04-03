@@ -77,7 +77,7 @@ Game::Game(int & argc, char ** argv)
   , m_mode(Mode::OnePlayerRace)
   , m_splitType(SplitType::Vertical)
   , m_audioWorker(new AudioWorker(
-      Scene::carCount(), Settings::instance().loadValue(Settings::soundsKey(), true)))
+      static_cast<int>(Scene::carCount()), Settings::instance().loadValue(Settings::soundsKey(), true)))
   , m_audioThread(new QThread)
   , m_world(new MCWorld)
 {
@@ -107,7 +107,7 @@ Game::Game(int & argc, char ** argv)
 
     connect(&m_updateTimer, &QTimer::timeout, this, [this]() {
         m_stateMachine->update();
-        m_scene->updateFrame(*m_inputHandler, m_timeStep);
+        m_scene->updateFrame(*m_inputHandler, static_cast<int>(m_timeStep));
         m_scene->updateOverlays();
         m_renderer->renderNow();
     });
