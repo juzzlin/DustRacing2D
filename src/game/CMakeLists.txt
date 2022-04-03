@@ -24,7 +24,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/STFH")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/audio")
 
 # Translation files in src/game/translations (without .ts)
-set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs dustrac-game_fr dustrac-game_de dustrac-game_ru dustrac-game_nl dustrac-game_tr)
+set(TS dustrac-game_fi dustrac-game_it dustrac-game_cs dustrac-game_fr dustrac-game_de dustrac-game_nl dustrac-game_tr)
 set(TS_FILES)
 set(QM_FILES)
 foreach(TS_FILE ${TS})
