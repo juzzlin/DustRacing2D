@@ -67,6 +67,7 @@
   <releases>
     <release version="2.1.1" date="2021-02-21" />
   </releases>
+  <content_rating type="oars-1.1" />
   <url type="homepage">https://juzzlin.github.io/DustRacing2D/</url>
   <update_contact>jussi.lind@iki.fi</update_contact>
 </component>
