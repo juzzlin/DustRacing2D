@@ -64,6 +64,9 @@
       <image>https://cloud.githubusercontent.com/assets/2587783/7400318/956180d0-eec4-11e4-9d3a-96e83d4b0e52.jpg</image>
     </screenshot>
   </screenshots>
+  <releases>
+    <release version="2.1.1" date="2021-02-21" />
+  </releases>
   <url type="homepage">https://juzzlin.github.io/DustRacing2D/</url>
   <update_contact>jussi.lind@iki.fi</update_contact>
 </component>
