@@ -150,6 +150,13 @@ endif()
 set(ENV{OPENALDIR} ${OpenALDir})
 find_package(OpenAL REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR}/..)
+if(PACKAGE_TYPE)
+    message(STATUS "Package type: ${PACKAGE_TYPE}")
+    # https://github.com/mosra/magnum/issues/412
+    if (${PACKAGE_TYPE} MATCHES "NSIS")
+        add_compile_definitions(AL_LIBTYPE_STATIC)
+    endif()
+endif()
 
 # Vorbis libs for reading Ogg files
 if(MSVC)

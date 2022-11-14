@@ -24,7 +24,7 @@ sed -i "s/^!define VERSIONMAJOR.*/!define VERSIONMAJOR ${VERSION_MAJOR}/" ${FILE
 sed -i "s/^!define VERSIONMINOR.*/!define VERSIONMINOR ${VERSION_MINOR}/" ${FILE} || exit 1
 sed -i "s/^!define VERSIONBUILD.*/!define VERSIONBUILD ${VERSION_PATCH}/" ${FILE} || exit 1
 
-for FILE in src/editor/editor.pro src/game/game.pro scripts/build-windows-installer; do
+for FILE in src/editor/editor.pro src/game/game.pro scripts/build-windows-nsis; do
     echo "Updating ${FILE} .."
     sed -i -E "s/[0-9]+\.[0-9]+\.[0-9]+/$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH/" ${FILE} || exit 1
 done

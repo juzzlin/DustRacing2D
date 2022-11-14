@@ -14,18 +14,6 @@ pipeline {
                 sh "cd build-debug && cmake --build . --target all -- -j3 && ctest --output-on-failure"
             }
         }
-        stage('QMake build') {
-            agent {
-                docker {
-                    image 'juzzlin/qt5-18.04:latest'
-                    args '--privileged -t -v $WORKSPACE:/dr2d'
-                }
-            }
-            steps {
-                sh "mkdir -p build-qmake"
-                sh "cd build-qmake && qmake .. && make -j3"
-            }
-        }
         stage('Debian package / Ubuntu 18.04') {
             agent {
                 docker {
@@ -83,17 +71,17 @@ pipeline {
         stage('NSIS installer') {
             agent {
                 docker {
-                    image 'juzzlin/mxe-qt5-18.04:latest'
+                    image 'juzzlin/mxe-qt5-20.04:latest'
                     args '--privileged -t -v $WORKSPACE:/dr2d'
                 }
             }
             steps {
-                sh "./scripts/build-windows-installer"
+                sh "./scripts/build-windows-nsis"
             }
             post {
                 always {
-                    archiveArtifacts artifacts: '*.exe', fingerprint: true
-                    archiveArtifacts artifacts: '*.zip', fingerprint: true
+                    archiveArtifacts artifacts: 'build-windows-nsis/*.exe', fingerprint: true
+                    archiveArtifacts artifacts: 'build-windows-nsis/*.zip', fingerprint: true
                 }
             }
         }

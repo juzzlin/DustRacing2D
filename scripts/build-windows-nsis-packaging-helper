@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# This scripts builds an NSIS installer and a ZIP archive.
+
+# It's assumed that we are in the build output dir in MXE cross-compilation environment.
+
+ZIP=zip
+if ! which ${ZIP}; then
+    echo "${ZIP} not found."
+    exit 1
+fi
+
+UNIX2DOS=unix2dos
+if ! which ${UNIX2DOS}; then
+    echo "${UNIX2DOS} not found."
+    exit 1
+fi
+
+MAKENSIS=/mxe/usr/bin/i686-w64-mingw32.static-makensis
+if ! which ${MAKENSIS}; then
+    echo "${MAKENSIS} not found."
+    exit 1
+fi
+
+NUM_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+
+# Package naming
+
+NAME=dustracing2d
+VERSION=${DUSTRAC_RELEASE_VERSION}
+if [[ -z ${VERSION} ]]; then
+    echo "DUSTRAC_RELEASE_VERSION not set."
+    exit 1
+fi
+
+# Copy existing build to the packaging dir. 
+
+ARCH=windows-x86
+PACKAGE_PATH=${NAME}-${VERSION}-${ARCH}
+rm -rf ${PACKAGE_PATH} && mkdir ${PACKAGE_PATH}
+cp -v dustrac-game.exe ${PACKAGE_PATH} &&
+cp -v dustrac-editor.exe ${PACKAGE_PATH} &&
+cp -rv data ${PACKAGE_PATH} || exit 1
+
+TEXT_FILES="AUTHORS CHANGELOG COPYING README.md"
+for i in ${TEXT_FILES}; do
+    cp -v $i ${PACKAGE_PATH} || exit 1
+done
+
+pushd ${PACKAGE_PATH}
+${UNIX2DOS} ${TEXT_FILES}
+popd
+
+# Create zip archive
+
+ZIP_ARCHIVE=${NAME}-${VERSION}-${ARCH}.zip
+rm -f ${ZIP_ARCHIVE}
+$ZIP -rv ${ZIP_ARCHIVE} ${PACKAGE_PATH}
+
+# Create NSIS installer
+
+cp ../packaging/windows/dustrac.nsi ${PACKAGE_PATH} && pushd ${PACKAGE_PATH} && ${MAKENSIS} dustrac.nsi || exit 1
+popd && mv ${PACKAGE_PATH}/*setup.exe . || exit 1
+
+ls -ltr
+
+echo "Done."
+

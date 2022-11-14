@@ -12,28 +12,28 @@ The code is "documented" with Doxygen tags.
 
 The source tree layout:
 
-src/game/          : Source files for the game.
-src/game/MiniCore/ : Graphics and physics engine.
-src/game/MTFH/     : Menu Toolkit From Hell.
-src/game/STFH/     : Sound Toolkit From Hell.
-src/editor/        : Source files for the track editor.
-src/common/        : Shared files between the editor and the game.
-src/images/        : Some SVG-images used as the source for final images.
+    src/game/          : Source files for the game.
+    src/game/MiniCore/ : Graphics and physics engine.
+    src/game/MTFH/     : Menu Toolkit From Hell.
+    src/game/STFH/     : Sound Toolkit From Hell.
+    src/editor/        : Source files for the track editor.
+    src/common/        : Shared files between the editor and the game.
+    src/images/        : Some SVG-images used as the source for final images.
 
 Data directory structure:
 
-data/              : Data mapping and configuration files.
-data/fonts/        : Font used by the game.
-data/icons/        : Icon files for game and editor.
-data/images/       : Image files and textures loaded by the game.
-data/levels/       : Level data.
-data/models/       : 3D models.
-data/sounds/       : Sound files.
-data/translations/ : Released Qt translation files.
+    data/              : Data mapping and configuration files.
+    data/fonts/        : Font used by the game.
+    data/icons/        : Icon files for game and editor.
+    data/images/       : Image files and textures loaded by the game.
+    data/levels/       : Level data.
+    data/models/       : 3D models.
+    data/sounds/       : Sound files.
+    data/translations/ : Released Qt translation files.
 
 Other:
 
-packaging/windows/ : NSIS packaging for Windows.
+    packaging/windows/ : NSIS packaging for Windows.
 
 Build systems
 =============
@@ -48,7 +48,7 @@ GCC/MinGW and Clang are the only "officially" supported toolchains on Linux.
 Windows builds are done in a Docker container with MXE (http://mxe.cc). The build script
 also generates automatically an NSIS Windows installer and a ZIP-archive.
 
-See scripts/build-windows-installer and scripts/mxe-windows-build.
+See scripts/build-windows-nsis and scripts/build-windows-nsis-packaging-helper.
 
 Building the project with Microsoft Visual C++ 2013 also works, but no automatic
 packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
@@ -70,10 +70,16 @@ Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
 1) Install Qt5 development files
-   - qt5-default package on Ubuntu/Debian/Mint should install everything needed
+
+   - `qt5-default` package on Ubuntu/Debian/Mint should install everything needed
+
    - You might need to install also these manually depending on your system
-     - qttools5-dev
-     - libqt5opengl5-dev
+
+     - `qttools5-dev`
+
+     - `libqt5opengl5-dev`
+
+   (Qt packaging might differ a bit in newer Ubuntu releases)
 
 2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
 
