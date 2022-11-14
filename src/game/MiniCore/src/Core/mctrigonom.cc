@@ -28,7 +28,7 @@ const size_t LUT_SIZE = 7200;
 const float SCALE = 10;
 const float PI = 3.1415926536f;
 
-float normalize( const float value, const float start, const float end )
+float normalize(const float value, const float start, const float end)
 {
     const float width = end - start;
     const float offsetValue = value - start;
@@ -72,7 +72,9 @@ float MCTrigonom::radToDeg(float angle)
 float MCTrigonom::sin(float angle)
 {
     if (angle > 360.0f || angle < -360.0f)
+    {
         angle = normalize(angle, -360.0f, 360.0f);
+    }
     const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2));
     if (index < LUT_SIZE)
     {
@@ -84,7 +86,9 @@ float MCTrigonom::sin(float angle)
 float MCTrigonom::cos(float angle)
 {
     if (angle > 360.0f || angle < -360.0f)
+    {
         angle = normalize(angle, -360.0f, 360.0f);
+    }
     const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2));
     if (index < LUT_SIZE)
     {
