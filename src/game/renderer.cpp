@@ -65,6 +65,7 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
   , m_fullScreen(fullScreen)
   , m_updatePending(false)
   , m_glScene(glScene)
+  , m_rendererInitialized(false)
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -101,6 +102,7 @@ void Renderer::initialize()
     loadShaders();
     loadFonts();
 
+    m_rendererInitialized = true;
     emit initialized();
 }
 
@@ -343,7 +345,8 @@ void Renderer::renderNow()
 
 void Renderer::resizeEvent(QResizeEvent * event)
 {
-    resizeGL(event->size().width(), event->size().height());
+    if (m_rendererInitialized)
+        resizeGL(event->size().width(), event->size().height());
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)

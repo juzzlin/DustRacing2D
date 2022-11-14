@@ -170,6 +170,7 @@ private:
     std::unique_ptr<QOpenGLFramebufferObject> m_shadowFbo;
 
     MCGLScene & m_glScene;
+    bool m_rendererInitialized;
 };
 
 #endif // RENDERER_HPP
