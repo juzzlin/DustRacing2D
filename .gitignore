@@ -16,10 +16,12 @@ manifest*
 *__*
 Makefile
 bin/
+build/
 dustrac.pro.user
 dustrac.pro.user.2.1pre1
 engine.txt
 header.txt
+src/contrib/
 src/editor/Makefile
 src/editor/editor
 src/game/Makefile
@@ -31,6 +33,7 @@ dustrac-editor
 dustrac-game
 test/
 unittests/
+CMakeLists.txt.user
 CTestTestfile.cmake
 cmake_install.cmake
 src/editor/CTestTestfile.cmake
