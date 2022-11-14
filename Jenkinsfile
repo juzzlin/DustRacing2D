@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh "mkdir -p build-debug"
                 sh "cd build-debug && cmake -DCMAKE_BUILD_TYPE=Debug .."
-                sh "cd build-debug && cmake --build . --target all -- -j3 && ctest"
+                sh "cd build-debug && cmake --build . --target all -- -j3 && ctest --output-on-failure"
             }
         }
         stage('QMake build') {
