@@ -30,9 +30,7 @@ MCShapeView::MCShapeView(const std::string & handle)
 {
 }
 
-MCShapeView::~MCShapeView()
-{
-}
+MCShapeView::~MCShapeView() = default;
 
 void MCShapeView::setShaderProgram(MCGLShaderProgramPtr shaderProgram)
 {

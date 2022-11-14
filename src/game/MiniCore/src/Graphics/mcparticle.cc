@@ -20,7 +20,7 @@
 #include "mcparticle.hh"
 #include "mccircleshape.hh"
 
-int MCParticle::m_numActiveParticles = 0;
+size_t MCParticle::m_numActiveParticles = 0;
 
 MCParticle::MCParticle(const std::string & typeId)
   : MCObject(typeId)
@@ -33,17 +33,15 @@ MCParticle::MCParticle(const std::string & typeId)
   , m_freeList(nullptr)
   , m_customDeathCondition(nullptr)
 {
-    setShape(MCShapePtr(new MCCircleShape(nullptr, 0.0)));
+    setShape(std::make_shared<MCCircleShape>(nullptr, 0.0));
     setBypassCollisions(true);
     setIsPhysicsObject(true);
     setIsParticle(true);
 }
 
-MCParticle::~MCParticle()
-{
-}
+MCParticle::~MCParticle() = default;
 
-void MCParticle::init(MCVector3dFR newLocation, float newRadius, unsigned int newLifeTime)
+void MCParticle::init(MCVector3dFR newLocation, float newRadius, size_t newLifeTime)
 {
     m_lifeTime = newLifeTime;
     m_initLifeTime = newLifeTime;
@@ -79,12 +77,12 @@ float MCParticle::radius() const
     }
 }
 
-unsigned int MCParticle::lifeTime() const
+size_t MCParticle::lifeTime() const
 {
     return m_lifeTime;
 }
 
-unsigned int MCParticle::initLifeTime() const
+size_t MCParticle::initLifeTime() const
 {
     return m_initLifeTime;
 }
@@ -121,9 +119,9 @@ bool MCParticle::dieOnOutOfBoundariesEvent() const
 
 void MCParticle::onStepTime(int step)
 {
-    if (m_lifeTime >= step)
+    if (m_lifeTime >= static_cast<size_t>(step))
     {
-        m_lifeTime -= step;
+        m_lifeTime -= static_cast<size_t>(step);
 
         m_scale = float(m_lifeTime) / m_initLifeTime;
 
@@ -169,7 +167,10 @@ void MCParticle::die()
     {
         m_isActive = false;
 
-        MCParticle::m_numActiveParticles--;
+        if (MCParticle::m_numActiveParticles)
+        {
+            MCParticle::m_numActiveParticles--;
+        }
 
         removeFromWorld();
 
@@ -180,7 +181,7 @@ void MCParticle::die()
     }
 }
 
-int MCParticle::numActiveParticles()
+size_t MCParticle::numActiveParticles()
 {
     return MCParticle::m_numActiveParticles;
 }

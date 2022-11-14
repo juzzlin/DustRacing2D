@@ -75,8 +75,7 @@ float MCTrigonom::sin(float angle)
     {
         angle = normalize(angle, -360.0f, 360.0f);
     }
-    const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2));
-    if (index < LUT_SIZE)
+    if (const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2)); index < LUT_SIZE)
     {
         return m_impl->m_sin[index];
     }
@@ -89,8 +88,7 @@ float MCTrigonom::cos(float angle)
     {
         angle = normalize(angle, -360.0f, 360.0f);
     }
-    const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2));
-    if (index < LUT_SIZE)
+    if (const size_t index = static_cast<size_t>((angle * SCALE) + (LUT_SIZE / 2)); index < LUT_SIZE)
     {
         return m_impl->m_cos[index];
     }

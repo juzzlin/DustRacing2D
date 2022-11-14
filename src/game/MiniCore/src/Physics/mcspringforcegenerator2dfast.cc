@@ -55,6 +55,4 @@ void MCSpringForceGenerator2dFast::updateForce(MCObject & object1)
     }
 }
 
-MCSpringForceGenerator2dFast::~MCSpringForceGenerator2dFast()
-{
-}
+MCSpringForceGenerator2dFast::~MCSpringForceGenerator2dFast() = default;

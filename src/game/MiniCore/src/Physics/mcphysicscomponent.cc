@@ -56,11 +56,12 @@ void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, bool)
 void MCPhysicsComponent::addImpulse(const MCVector3dF & impulse, const MCVector3dF & pos, bool isCollision)
 {
     m_linearImpulse += impulse;
-    const float r = (pos - object().location()).lengthFast();
-    if (r > 0)
+
+    if (const float r = (pos - object().location()).lengthFast(); r > 0)
     {
         addAngularImpulse((-(impulse % (pos - object().location())).k()) / r, isCollision);
     }
+
     toggleSleep(false);
 }
 
@@ -302,8 +303,7 @@ void MCPhysicsComponent::integrate(float step)
         const float angleDiff = integrateAngular(step);
         object().checkBoundaries();
 
-        const float speed = m_velocity.lengthFast();
-        if (speed < m_linearSleepLimit && m_angularVelocity < m_angularSleepLimit)
+        if (const float speed = m_velocity.lengthFast(); speed < m_linearSleepLimit && m_angularVelocity < m_angularSleepLimit)
         {
             if (++m_sleepCount > 1)
             {
@@ -411,6 +411,4 @@ void MCPhysicsComponent::setLinearDamping(float linearDamping)
     m_linearDamping = linearDamping;
 }
 
-MCPhysicsComponent::~MCPhysicsComponent()
-{
-}
+MCPhysicsComponent::~MCPhysicsComponent() = default;

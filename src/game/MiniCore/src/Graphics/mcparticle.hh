@@ -24,6 +24,7 @@
 #include "mcrecycler.hh"
 #include "mcworldrenderer.hh"
 
+#include <cstddef>
 #include <functional>
 #include <vector>
 
@@ -54,7 +55,7 @@ public:
     MCParticle(const std::string & typeId);
 
     //! Destructor
-    virtual ~MCParticle();
+    virtual ~MCParticle() override;
 
     //! Finish the particle. Automatically called on timeOut().
     void die();
@@ -64,7 +65,7 @@ public:
    *  \param radius   Initial radius.
    *  \param lifeTime Life time / number of frames. The life time is decremented
    *  each time stepTime() is called. */
-    void init(MCVector3dFR location, float radius, unsigned int lifeTime);
+    void init(MCVector3dFR location, float radius, size_t lifeTime);
 
     //! Particle will be added to the given vector when it dies.
     void setFreeList(ParticleFreeList & freeList);
@@ -73,10 +74,10 @@ public:
     float radius() const;
 
     //! Return life-time. It's decreased on each call to stepTime().
-    unsigned int lifeTime() const;
+    size_t lifeTime() const;
 
     //! Return initial life-time set by init().
-    unsigned int initLifeTime() const;
+    size_t initLifeTime() const;
 
     //! Return true if still active
     bool isActive() const;
@@ -117,7 +118,7 @@ public:
     void setCustomDeathCondition(CustomDeathConditionFunction customDeathCondition);
 
     //! Get number of active particles.
-    static int numActiveParticles();
+    static size_t numActiveParticles();
 
 protected:
     /*! This is called when lifeTime reaches zero. Default implementation
@@ -126,14 +127,14 @@ protected:
     virtual void timeOut();
 
 private:
-    static int m_numActiveParticles;
+    static size_t m_numActiveParticles;
 
     DISABLE_COPY(MCParticle);
     DISABLE_ASSI(MCParticle);
 
-    int m_lifeTime;
+    size_t m_lifeTime;
 
-    int m_initLifeTime;
+    size_t m_initLifeTime;
 
     MCParticle::AnimationStyle m_animationStyle;
 

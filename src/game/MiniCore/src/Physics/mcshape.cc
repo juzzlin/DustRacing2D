@@ -45,9 +45,7 @@ MCObject & MCShape::parent() const
     return *m_parent;
 }
 
-MCShape::~MCShape()
-{
-}
+MCShape::~MCShape() = default;
 
 void MCShape::setView(MCShapeViewPtr view)
 {

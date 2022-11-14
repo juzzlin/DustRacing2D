@@ -60,7 +60,7 @@ void MCWorldRenderer::buildObjectBatches(MCCamera * camera)
 
             if (parent->isRenderable() && parent->shape() && parent->shape()->view())
             {
-                const int objectViewId = object->typeId() * 1024 + parent->shape()->view()->viewId();
+                const int objectViewId = static_cast<int>(object->typeId()) * 1024 + static_cast<int>(parent->shape()->view()->viewId());
                 auto batchIter = std::find_if(batchVector.begin(), batchVector.end(), [&](const MCRenderLayer::ObjectBatch & batch) {
                     return batch.objectViewId == objectViewId;
                 });
@@ -80,7 +80,7 @@ void MCWorldRenderer::buildObjectBatches(MCCamera * camera)
                 }
             }
 
-            for (auto child : parent->children())
+            for (auto && child : parent->children())
             {
                 childStack.push_back(child.get());
             }
@@ -119,7 +119,7 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
             else
             {
                 MCRenderLayer::ObjectBatch batch;
-                batch.objectViewId = particle.typeId();
+                batch.objectViewId = static_cast<int>(particle.typeId());
                 batch.objects.push_back(&particle);
                 batch.priority = particle.location().k();
                 batchVector.push_back(batch);
@@ -131,7 +131,7 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
             if (particle.dieWhenOffScreen())
             {
                 bool isVisibleInAnyCamera = false;
-                for (MCCamera * visibilityCamera : m_visibilityCameras)
+                for (auto visibilityCamera : m_visibilityCameras)
                 {
                     if (visibilityCamera != camera && visibilityCamera->isVisible(bbox))
                     {
@@ -194,8 +194,6 @@ void MCWorldRenderer::render(MCCamera * camera, MCRenderGroup renderGroup)
     case MCRenderGroup::ParticleShadows:
         renderParticleShadows(camera);
         break;
-    default:
-        break;
     }
 }
 
@@ -239,11 +237,10 @@ void MCWorldRenderer::renderObjectBatches(MCCamera * camera, MCRenderLayer & lay
 {
     for (auto && batch : layer.objectBatches()[camera])
     {
-        const size_t itemCountInBatch = batch.objects.size();
-        if (itemCountInBatch > 0)
+        if (const size_t itemCountInBatch = batch.objects.size(); itemCountInBatch > 0)
         {
-            MCObject * object = batch.objects[0];
-            std::shared_ptr<MCShapeView> view = object->shape()->view();
+            auto object = batch.objects[0];
+            const auto view = object->shape()->view();
 
             view->bind();
             object->render(camera);
@@ -315,12 +312,10 @@ void MCWorldRenderer::renderObjectShadowBatches(MCCamera * camera, MCRenderLayer
     // Render batches
     for (auto && batch : layer.objectBatches()[camera])
     {
-        const size_t itemCountInBatch = batch.objects.size();
-        if (itemCountInBatch > 0)
+        if (const size_t itemCountInBatch = batch.objects.size(); itemCountInBatch > 0)
         {
-            MCObject * object = batch.objects[0];
-            std::shared_ptr<MCShapeView> view = object->shape()->view();
-            if (view && view->hasShadow())
+            auto object = batch.objects[0];
+            if (const auto view = object->shape()->view(); view && view->hasShadow())
             {
                 view->bindShadow();
                 object->renderShadow(camera);
@@ -345,7 +340,7 @@ void MCWorldRenderer::renderParticleShadowBatches(MCCamera * camera, MCRenderLay
         if (batch.objects.size())
         {
             // Currently support shadows only for surface particles.
-            if (MCSurfaceParticle * particle = dynamic_cast<MCSurfaceParticle *>(batch.objects[0]))
+            if (const auto particle = dynamic_cast<MCSurfaceParticle *>(batch.objects[0]); particle)
             {
                 if (particle->hasShadow())
                 {
@@ -371,10 +366,9 @@ void MCWorldRenderer::addObject(MCObject & object)
 {
     if (object.isParticle())
     {
-        MCParticle * particle = static_cast<MCParticle *>(&object);
-        if (particle->m_indexInRenderArray == -1)
+        if (auto particle = static_cast<MCParticle *>(&object); particle->m_indexInRenderArray == -1)
         {
-            particle->m_indexInRenderArray = m_particleSet.size();
+            particle->m_indexInRenderArray = static_cast<int>(m_particleSet.size());
             m_particleSet.push_back(static_cast<MCParticle *>(&object));
         }
     }
@@ -384,11 +378,10 @@ void MCWorldRenderer::removeObject(MCObject & object)
 {
     if (object.isParticle())
     {
-        MCParticle * particle = static_cast<MCParticle *>(&object);
-        if (particle->m_indexInRenderArray >= 0 && m_particleSet.size())
+        if (const auto particle = static_cast<MCParticle *>(&object); particle->m_indexInRenderArray >= 0 && m_particleSet.size())
         {
             m_particleSet.back()->m_indexInRenderArray = particle->m_indexInRenderArray;
-            m_particleSet[particle->m_indexInRenderArray] = m_particleSet.back();
+            m_particleSet[static_cast<size_t>(particle->m_indexInRenderArray)] = m_particleSet.back();
             m_particleSet.pop_back();
             particle->m_indexInRenderArray = -1;
         }

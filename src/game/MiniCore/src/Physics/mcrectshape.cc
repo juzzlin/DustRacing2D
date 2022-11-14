@@ -181,6 +181,4 @@ float MCRectShape::height() const
     return m_height;
 }
 
-MCRectShape::~MCRectShape()
-{
-}
+MCRectShape::~MCRectShape() = default;

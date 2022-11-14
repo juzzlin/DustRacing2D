@@ -542,8 +542,7 @@ private:
         float linearBalance = 1.0f;
         if (shape())
         {
-            const float r = shape()->radius();
-            if (r > 0)
+            if (const float r = shape()->radius(); r > 0)
             {
                 linearBalance = 1.0f - MCMathUtil::distanceFromVector(MCVector2dF(pos - location()), MCVector2dF(force)) / r;
                 linearBalance = linearBalance < 0 ? 0 : linearBalance;
@@ -555,8 +554,7 @@ private:
 
     void checkXBoundariesAndSendEvent(float minX, float maxX)
     {
-        const MCWorld & world = MCWorld::instance();
-        if (minX < world.minX())
+        if (const MCWorld & world = MCWorld::instance(); minX < world.minX())
         {
             MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::West, m_this);
             m_this.outOfBoundariesEvent(e);
@@ -570,8 +568,7 @@ private:
 
     void checkYBoundariesAndSendEvent(float minY, float maxY)
     {
-        const MCWorld & world = MCWorld::instance();
-        if (minY < world.minY())
+        if (const MCWorld & world = MCWorld::instance(); minY < world.minY())
         {
             MCOutOfBoundariesEvent e(MCOutOfBoundariesEvent::South, m_this);
             m_this.outOfBoundariesEvent(e);
@@ -585,8 +582,7 @@ private:
 
     void checkZBoundariesAndSendEvent()
     {
-        const MCWorld & world = MCWorld::instance();
-        if (m_location.k() < world.minZ())
+        if (const MCWorld & world = MCWorld::instance(); m_location.k() < world.minZ())
         {
             m_physicsComponent->resetZ();
             translate(
@@ -1087,6 +1083,6 @@ MCPhysicsComponent & MCObject::physicsComponent()
 
 MCObject::~MCObject()
 {
-    removeFromWorldNow();
+    MCObject::removeFromWorldNow();
     deleteContacts();
 }

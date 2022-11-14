@@ -59,8 +59,7 @@ void MCForceRegistry::addForceGenerator(MCForceGeneratorPtr generator, MCObject 
 
 void MCForceRegistry::removeForceGenerator(MCForceGeneratorPtr generator, MCObject & object)
 {
-    auto iter = m_registryHash.find(&object);
-    if (iter != m_registryHash.end())
+    if (auto iter = m_registryHash.find(&object); iter != m_registryHash.end())
     {
         Registry & registry = iter->second;
         for (unsigned int i = 0; i < registry.size(); i++)
@@ -82,8 +81,7 @@ void MCForceRegistry::removeForceGenerator(MCForceGeneratorPtr generator, MCObje
 
 void MCForceRegistry::removeForceGenerators(MCObject & object)
 {
-    auto iter = m_registryHash.find(&object);
-    if (iter != m_registryHash.end())
+    if (auto iter = m_registryHash.find(&object); iter != m_registryHash.end())
     {
         m_registryHash.erase(iter);
     }

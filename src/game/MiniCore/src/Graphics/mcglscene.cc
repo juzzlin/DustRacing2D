@@ -139,23 +139,23 @@ void MCGLScene::initialize()
 
 void MCGLScene::createDefaultShaderPrograms()
 {
-    m_defaultShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+    m_defaultShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource());
 
-    m_defaultSpecularShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultSpecularVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource()));
+    m_defaultSpecularShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultSpecularVertexShaderSource(), MCGLShaderProgram::getDefaultFragmentShaderSource());
 
-    m_defaultShadowShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultShadowVertexShaderSource(), MCGLShaderProgram::getDefaultShadowFragmentShaderSource()));
+    m_defaultShadowShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultShadowVertexShaderSource(), MCGLShaderProgram::getDefaultShadowFragmentShaderSource());
 
-    m_defaultTextShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextFragmentShaderSource()));
+    m_defaultTextShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextFragmentShaderSource());
 
-    m_defaultTextShadowShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource()));
+    m_defaultTextShadowShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultTextVertexShaderSource(), MCGLShaderProgram::getDefaultTextShadowFragmentShaderSource());
 
-    m_defaultFBOShader.reset(new MCGLShaderProgram(
-      MCGLShaderProgram::getDefaultFBOVertexShaderSource(), MCGLShaderProgram::getDefaultFBOFragmentShaderSource()));
+    m_defaultFBOShader = std::make_shared<MCGLShaderProgram>(
+      MCGLShaderProgram::getDefaultFBOVertexShaderSource(), MCGLShaderProgram::getDefaultFBOFragmentShaderSource());
 }
 
 void MCGLScene::resize(int viewWidth, int viewHeight, int sceneWidth, int sceneHeight, float viewAngle, float zNear, float zFar)

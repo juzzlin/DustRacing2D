@@ -26,8 +26,7 @@ MCTypeRegistry::MCTypeRegistry()
 
 unsigned int MCTypeRegistry::registerType(const std::string & typeName)
 {
-    auto i(m_typeHash.find(typeName));
-    if (i == m_typeHash.end())
+    if (const auto i(m_typeHash.find(typeName)); i == m_typeHash.end())
     {
         m_typeIdCount++;
         m_typeHash[typeName] = m_typeIdCount;
@@ -41,6 +40,6 @@ unsigned int MCTypeRegistry::registerType(const std::string & typeName)
 
 unsigned int MCTypeRegistry::getTypeIdForName(const std::string & typeName)
 {
-    auto i(m_typeHash.find(typeName));
+    const auto i(m_typeHash.find(typeName));
     return i == m_typeHash.end() ? 0 : i->second;
 }

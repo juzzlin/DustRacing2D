@@ -49,6 +49,4 @@ MCObject & MCOutOfBoundariesEvent::violatingObject() const
     return m_violatingObject;
 }
 
-MCOutOfBoundariesEvent::~MCOutOfBoundariesEvent()
-{
-}
+MCOutOfBoundariesEvent::~MCOutOfBoundariesEvent() = default;

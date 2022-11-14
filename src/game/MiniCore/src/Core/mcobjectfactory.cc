@@ -164,6 +164,4 @@ void MCObjectFactory::setCommonProperties(MCObject & object, const MCObjectData 
     object.setInitialAngle(data.initialAngle());
 }
 
-MCObjectFactory::~MCObjectFactory()
-{
-}
+MCObjectFactory::~MCObjectFactory() = default;

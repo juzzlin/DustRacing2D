@@ -88,8 +88,7 @@ void MCImpulseGenerator::resolvePositions(std::vector<MCObject *> & objs, float 
     {
         for (auto && contact : object->contacts())
         {
-            const auto deepestContact = getDeepestInterpenetration(contact.second);
-            if (deepestContact)
+            if (const auto deepestContact = getDeepestInterpenetration(contact.second); deepestContact)
             {
                 auto & pa(*object);
                 auto & pb(deepestContact->object());
@@ -115,8 +114,7 @@ void MCImpulseGenerator::generateImpulsesFromDeepestContacts(std::vector<MCObjec
     {
         for (auto && contact : object->contacts())
         {
-            const auto deepestContact = getDeepestInterpenetration(contact.second);
-            if (deepestContact)
+            if (const auto deepestContact = getDeepestInterpenetration(contact.second); deepestContact)
             {
                 auto & pa(*object);
                 auto & pb(deepestContact->object());

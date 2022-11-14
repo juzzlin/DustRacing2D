@@ -320,8 +320,7 @@ void MCWorld::addObject(MCObject & object)
             m_objectGrid->insert(object);
 
             // Add xy friction
-            const float FrictionThreshold = 0.001f;
-            if (object.physicsComponent().xyFriction() > FrictionThreshold)
+            if (const float FrictionThreshold = 0.001f; object.physicsComponent().xyFriction() > FrictionThreshold)
             {
                 m_forceRegistry->addForceGenerator(
                   std::make_shared<MCFrictionGenerator>(

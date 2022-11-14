@@ -42,6 +42,4 @@ void MCObjectComponent::reset()
 {
 }
 
-MCObjectComponent::~MCObjectComponent()
-{
-}
+MCObjectComponent::~MCObjectComponent() = default;

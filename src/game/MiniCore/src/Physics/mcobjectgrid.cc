@@ -27,8 +27,8 @@ MCObjectGrid::MCObjectGrid(float x1, float y1, float x2, float y2, float leafMax
   : m_bbox(x1, y1, x2, y2)
   , m_leafMaxW(leafMaxW)
   , m_leafMaxH(leafMaxH)
-  , m_horSize((x2 - x1) / m_leafMaxW)
-  , m_verSize((y2 - y1) / m_leafMaxH)
+  , m_horSize(static_cast<size_t>((x2 - x1) / m_leafMaxW))
+  , m_verSize(static_cast<size_t>((y2 - y1) / m_leafMaxH))
   , m_helpHor(static_cast<float>(m_horSize) / (x2 - x1))
   , m_helpVer(static_cast<float>(m_verSize) / (y2 - y1))
 {
@@ -37,7 +37,7 @@ MCObjectGrid::MCObjectGrid(float x1, float y1, float x2, float y2, float leafMax
 
 MCObjectGrid::~MCObjectGrid()
 {
-    for (GridCell * cell : m_matrix)
+    for (auto cell : m_matrix)
     {
         delete cell;
     }
@@ -47,30 +47,46 @@ void MCObjectGrid::setIndexRange(const MCBBox<float> & bbox)
 {
     auto temp = static_cast<int>(bbox.x1() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize))
-        temp = m_horSize - 1;
+    {
+        temp = static_cast<int>(m_horSize - 1);
+    }
     else if (temp < 0)
+    {
         temp = 0;
+    }
     m_i0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.x2() * m_helpHor);
     if (temp >= static_cast<int>(m_horSize))
-        temp = m_horSize - 1;
+    {
+        temp = static_cast<int>(m_horSize - 1);
+    }
     else if (temp < 0)
+    {
         temp = 0;
+    }
     m_i1 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y1() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize))
-        temp = m_verSize - 1;
+    {
+        temp = static_cast<int>(m_verSize - 1);
+    }
     else if (temp < 0)
+    {
         temp = 0;
+    }
     m_j0 = static_cast<size_t>(temp);
 
     temp = static_cast<int>(bbox.y2() * m_helpVer);
     if (temp >= static_cast<int>(m_verSize))
-        temp = m_verSize - 1;
+    {
+        temp = static_cast<int>(m_verSize - 1);
+    }
     else if (temp < 0)
+    {
         temp = 0;
+    }
     m_j1 = static_cast<size_t>(temp);
 }
 

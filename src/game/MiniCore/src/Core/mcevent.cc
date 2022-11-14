@@ -47,6 +47,4 @@ bool MCEvent::accepted() const
     return m_accepted;
 }
 
-MCEvent::~MCEvent()
-{
-}
+MCEvent::~MCEvent() = default;
