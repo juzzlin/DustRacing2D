@@ -250,7 +250,15 @@ void Game::createRenderer()
 
     L().debug() << "Creating the renderer..";
 
-    m_renderer = new Renderer(hRes, vRes, fullScreen, m_world->renderer().glScene());
+    double pixelScale = m_screen->devicePixelRatio();
+    
+    m_renderer = new Renderer(hRes,
+                              vRes,
+                              m_screen->geometry().width(),
+                              m_screen->geometry().height(),
+                              pixelScale,
+                              fullScreen,
+                              m_world->renderer().glScene());
     m_renderer->setFormat(format);
     m_renderer->setCursor(Qt::BlankCursor);
 

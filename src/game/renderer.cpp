@@ -48,7 +48,7 @@
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
+Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, int pixelScale, bool fullScreen, MCGLScene & glScene)
   : m_context(nullptr)
   , m_scene(nullptr)
   , m_eventHandler(nullptr)
@@ -57,10 +57,11 @@ Renderer::Renderer(int hRes, int vRes, bool fullScreen, MCGLScene & glScene)
   , m_zFar(10000.0f) // See: https://github.com/juzzlin/DustRacing2D/issues/30
   , m_fadeValue(1.0f)
   , m_enabled(false)
-  , m_hRes(hRes)
-  , m_vRes(vRes)
-  , m_fullHRes(Game::instance().screen()->geometry().width())
-  , m_fullVRes(Game::instance().screen()->geometry().height())
+  , m_hRes(hRes * pixelScale)
+  , m_vRes(vRes * pixelScale)
+  , m_fullHRes(fullHRes * pixelScale)
+  , m_fullVRes(fullVRes * pixelScale)
+  , m_pixelScale(pixelScale)
   , m_frameCounter(0)
   , m_fullScreen(fullScreen)
   , m_updatePending(false)
@@ -89,12 +90,16 @@ void Renderer::initialize()
     if (!m_fullScreen)
     {
         // Set window size & disable resize
-        resize(m_hRes, m_vRes);
-        setMinimumSize(QSize(m_hRes, m_vRes));
-        setMaximumSize(QSize(m_hRes, m_vRes));
+        int windowHRes = m_hRes / m_pixelScale;
+        int windowVRes = m_vRes / m_pixelScale;
+        resize(windowHRes, windowVRes);
+        setMinimumSize(QSize(windowHRes, windowVRes));
+        setMaximumSize(QSize(windowHRes, windowVRes));
 
         // Try to center the window
-        setPosition(m_fullHRes / 2 - m_hRes / 2, m_fullVRes / 2 - m_vRes / 2);
+        int screenHRes = m_fullHRes / m_pixelScale;
+        int screenVRes = m_fullVRes / m_pixelScale;
+        setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowHRes / 2);
     }
 
     m_glScene.initialize();
