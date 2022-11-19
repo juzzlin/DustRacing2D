@@ -26,7 +26,7 @@ public:
     OpenALOggData(const std::string & path);
 
     //! Destructor.
-    virtual ~OpenALOggData();
+    virtual ~OpenALOggData() override;
 
     //! \reimp
     virtual void load(const std::string & path) override;

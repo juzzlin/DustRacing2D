@@ -15,10 +15,6 @@
 
 #include "openaldata.hpp"
 
-OpenALData::OpenALData()
-{
-}
+OpenALData::OpenALData() = default;
 
-OpenALData::~OpenALData()
-{
-}
+OpenALData::~OpenALData() = default;

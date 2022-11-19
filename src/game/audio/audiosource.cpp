@@ -15,10 +15,6 @@
 
 #include "audiosource.hpp"
 
-AudioSource::AudioSource()
-{
-}
+AudioSource::AudioSource() = default;
 
-AudioSource::~AudioSource()
-{
-}
+AudioSource::~AudioSource() = default;

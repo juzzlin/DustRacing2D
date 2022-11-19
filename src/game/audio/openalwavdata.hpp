@@ -26,7 +26,7 @@ public:
     OpenALWavData(const std::string & path);
 
     //! Destructor.
-    virtual ~OpenALWavData();
+    virtual ~OpenALWavData() override;
 
     //! \reimp
     virtual void load(const std::string & path) override;

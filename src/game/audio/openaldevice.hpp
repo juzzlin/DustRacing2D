@@ -28,14 +28,13 @@ public:
     //! Constructor.
     OpenALDevice();
 
+    virtual ~OpenALDevice() override;
+
     //! \reimp
     virtual void initialize() override;
 
     //! \reimp
     virtual void shutDown() override;
-
-    //! Destructor.
-    virtual ~OpenALDevice();
 
 private:
     ALCdevice * m_device;

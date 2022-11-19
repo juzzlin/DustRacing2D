@@ -33,7 +33,7 @@ class AudioWorker : public QObject
 public:
     AudioWorker(int numCars, bool enabled);
 
-    virtual ~AudioWorker();
+    virtual ~AudioWorker() override;
 
     void connectAudioSource(AudioSource & source);
 

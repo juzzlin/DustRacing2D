@@ -29,7 +29,7 @@ public:
     AudioSource();
 
     //! Destructor.
-    virtual ~AudioSource();
+    virtual ~AudioSource() override;
 
 signals:
 

@@ -31,7 +31,7 @@ static const int MAX_DIST = 250;
 static const int REFERENCE_DIST = 50;
 
 AudioWorker::AudioWorker(int numCars, bool enabled)
-  : m_openALDevice(new OpenALDevice)
+  : m_openALDevice(std::make_shared<OpenALDevice>())
   , m_inited(false)
   , m_defaultVolume(0.5)
   , m_numCars(numCars)
@@ -97,12 +97,11 @@ void AudioWorker::loadSounds()
 
 void AudioWorker::loadSingleInstanceCarSound(QString handle, QString path, float volume)
 {
-    const QString soundPath =
+    const auto soundPath =
       QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
     checkFile(soundPath);
 
-    STFH::SourcePtr source(new OpenALSource(
-      STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
+    const auto source(std::make_shared<OpenALSource>(std::make_shared<OpenALOggData>(soundPath.toStdString())));
     source->setMaxDist(MAX_DIST);
     source->setReferenceDist(REFERENCE_DIST);
     source->setVolume(volume);
@@ -115,9 +114,7 @@ void AudioWorker::loadCommonSound(QString handle, QString path, float volume)
       QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
     checkFile(soundPath);
 
-    m_soundMap[handle] =
-      STFH::SourcePtr(new OpenALSource(
-        STFH::DataPtr(new OpenALOggData(soundPath.toStdString()))));
+    m_soundMap[handle] = std::make_shared<OpenALSource>(std::make_shared<OpenALOggData>(soundPath.toStdString()));
     m_soundMap[handle]->setVolume(volume);
 }
 
@@ -127,13 +124,13 @@ void AudioWorker::loadMultiInstanceCarSound(QString baseName, QString path, floa
       QString(DATA_PATH) + QDir::separator() + "sounds" + QDir::separator() + path;
     checkFile(soundPath);
 
-    STFH::DataPtr sharedData(new OpenALOggData(soundPath.toStdString()));
+    const auto sharedData = std::make_shared<OpenALOggData>(soundPath.toStdString());
 
     for (int i = 0; i < m_numCars; i++)
     {
         std::stringstream ss;
         ss << baseName.toStdString() << i;
-        STFH::SourcePtr source(new OpenALSource(sharedData));
+        const auto source = std::make_shared<OpenALSource>(sharedData);
         m_soundMap[ss.str().c_str()] = source;
         source->setMaxDist(MAX_DIST);
         source->setReferenceDist(REFERENCE_DIST);
@@ -186,6 +183,4 @@ void AudioWorker::setEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-AudioWorker::~AudioWorker()
-{
-}
+AudioWorker::~AudioWorker() = default;

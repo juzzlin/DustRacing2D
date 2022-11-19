@@ -159,7 +159,7 @@ OpenALWavData::OpenALWavData(const std::string & path)
   , m_freq(0)
   , m_buffer(0)
 {
-    load(path);
+    OpenALWavData::load(path);
 }
 
 void OpenALWavData::load(const std::string & path)

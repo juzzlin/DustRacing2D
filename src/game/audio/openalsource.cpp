@@ -30,7 +30,7 @@ static bool checkError()
 OpenALSource::OpenALSource(STFH::DataPtr data)
   : m_handle(0)
 {
-    alGenSources((ALuint)1, &m_handle);
+    alGenSources(1, &m_handle);
 
     alSourcef(m_handle, AL_PITCH, pitch());
     alSourcef(m_handle, AL_GAIN, volume());
@@ -38,17 +38,17 @@ OpenALSource::OpenALSource(STFH::DataPtr data)
     alSource3f(m_handle, AL_VELOCITY, 0, 0, 0);
     alSourcei(m_handle, AL_LOOPING, AL_FALSE);
 
-    setData(data);
+    OpenALSource::setData(data);
 }
 
 void OpenALSource::setData(STFH::DataPtr data)
 {
     alGetError();
 
-    if (auto soundData = std::dynamic_pointer_cast<OpenALData>(data))
+    if (const auto soundData = std::dynamic_pointer_cast<OpenALData>(data))
     {
         Source::setData(data);
-        alSourcei(m_handle, AL_BUFFER, soundData->buffer());
+        alSourcei(m_handle, AL_BUFFER, static_cast<ALint>(soundData->buffer()));
 
         if (!checkError())
         {

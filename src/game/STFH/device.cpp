@@ -17,12 +17,8 @@
 
 namespace STFH {
 
-Device::Device()
-{
-}
+Device::Device() = default;
 
-Device::~Device()
-{
-}
+Device::~Device() = default;
 
 } // namespace STFH

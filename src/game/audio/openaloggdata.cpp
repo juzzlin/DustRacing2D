@@ -46,7 +46,7 @@ static void loadOgg(const char * fileName, std::vector<char> & buffer, ALenum & 
 
     vorbis_info * pInfo;
     OggVorbis_File oggFile;
-    ov_open(f, &oggFile, NULL, 0);
+    ov_open(f, &oggFile, nullptr, 0);
 
     // Get some information about the OGG file
     pInfo = ov_info(&oggFile, -1);
@@ -61,7 +61,7 @@ static void loadOgg(const char * fileName, std::vector<char> & buffer, ALenum & 
         format = AL_FORMAT_STEREO16;
     }
 
-    freq = pInfo->rate;
+    freq = static_cast<ALsizei>(pInfo->rate);
 
     do
     {
@@ -80,7 +80,7 @@ OpenALOggData::OpenALOggData(const std::string & path)
   : m_freq(0)
   , m_buffer(0)
 {
-    load(path);
+    OpenALOggData::load(path);
 }
 
 void OpenALOggData::load(const std::string & path)

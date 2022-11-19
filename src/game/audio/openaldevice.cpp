@@ -14,8 +14,8 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "openaldevice.hpp"
-
 #include "simple_logger.hpp"
+
 OpenALDevice::OpenALDevice()
   : m_device(nullptr)
   , m_context(nullptr)

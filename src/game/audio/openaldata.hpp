@@ -29,7 +29,7 @@ public:
     OpenALData();
 
     //! Destructor.
-    virtual ~OpenALData();
+    virtual ~OpenALData() override;
 
     //! \return OpenAL buffer handle.
     virtual ALuint buffer() const = 0;
