@@ -17,12 +17,8 @@
 
 namespace MTFH {
 
-MenuItemAction::MenuItemAction()
-{
-}
+MenuItemAction::MenuItemAction() = default;
 
-MenuItemAction::~MenuItemAction()
-{
-}
+MenuItemAction::~MenuItemAction() = default;
 
 } // namespace MTFH

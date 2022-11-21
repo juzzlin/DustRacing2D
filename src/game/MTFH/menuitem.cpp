@@ -91,7 +91,7 @@ float MenuItem::y() const
     return m_y;
 }
 
-void MenuItem::resetAnimationCurve(int steps, int exp)
+void MenuItem::resetAnimationCurve(size_t steps, int exp)
 {
     m_animationCurve = AnimationCurve(steps, exp);
     m_animationCurve.reset();
@@ -261,8 +261,6 @@ void MenuItem::positionAnimation(int)
     m_y = m_y + (m_targetY - m_y) * m_animationCurve.value();
 }
 
-MenuItem::~MenuItem()
-{
-}
+MenuItem::~MenuItem() = default;
 
 } // namespace MTFH

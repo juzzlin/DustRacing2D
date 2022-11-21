@@ -32,8 +32,6 @@ void MenuItemView::stepTime(int)
 {
 }
 
-MenuItemView::~MenuItemView()
-{
-}
+MenuItemView::~MenuItemView() = default;
 
 } // namespace MTFH

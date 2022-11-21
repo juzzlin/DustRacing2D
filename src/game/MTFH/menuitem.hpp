@@ -57,7 +57,7 @@ public:
 
     float y() const;
 
-    void resetAnimationCurve(int steps, int exp);
+    void resetAnimationCurve(size_t steps, int exp);
 
     const std::wstring & text() const;
 

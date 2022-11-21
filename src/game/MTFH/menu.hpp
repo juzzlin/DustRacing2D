@@ -94,10 +94,10 @@ public:
     MenuItemPtr selectedItem() const;
 
     //! \return current item at given index or nullptr.
-    MenuItemPtr item(unsigned int index) const;
+    MenuItemPtr item(size_t index) const;
 
     //! \return number of currently added items.
-    unsigned int itemCount() const;
+    size_t itemCount() const;
 
     //! Add item to the menu.
     virtual void addItem(MenuItemPtr menuItem);

@@ -46,10 +46,10 @@ std::string Menu::id() const
 void Menu::addItem(MenuItemPtr menuItem)
 {
     m_items.push_back(menuItem);
-    m_currentIndex = m_items.size() - 1;
+    m_currentIndex = static_cast<int>(m_items.size()) - 1;
     m_selectedIndex = m_currentIndex;
     menuItem->setMenu(this);
-    menuItem->setIndex(m_items.size() - 1);
+    menuItem->setIndex(static_cast<int>(m_items.size()) - 1);
 
     updateFocus();
 }
@@ -57,12 +57,12 @@ void Menu::addItem(MenuItemPtr menuItem)
 void Menu::reverseItems()
 {
     std::reverse(m_items.begin(), m_items.end());
-    m_currentIndex = (m_items.size() - 1) - m_currentIndex;
+    m_currentIndex = static_cast<int>(m_items.size()) - 1 - m_currentIndex;
     m_selectedIndex = m_currentIndex;
 
     for (size_t i = 0; i < m_items.size(); i++)
     {
-        m_items.at(i)->setIndex(i);
+        m_items.at(i)->setIndex(static_cast<int>(i));
     }
 }
 
@@ -78,7 +78,7 @@ MenuItemPtr Menu::currentItem() const
 {
     if (m_items.size())
     {
-        return m_items.at(m_currentIndex);
+        return m_items.at(static_cast<size_t>(m_currentIndex));
     }
 
     return nullptr;
@@ -88,13 +88,13 @@ MenuItemPtr Menu::selectedItem() const
 {
     if (m_items.size())
     {
-        return m_items.at(m_selectedIndex);
+        return m_items.at(static_cast<size_t>(m_selectedIndex));
     }
 
     return nullptr;
 }
 
-MenuItemPtr Menu::item(unsigned int index) const
+MenuItemPtr Menu::item(size_t index) const
 {
     if (index < m_items.size())
     {
@@ -104,7 +104,7 @@ MenuItemPtr Menu::item(unsigned int index) const
     return nullptr;
 }
 
-unsigned int Menu::itemCount() const
+size_t Menu::itemCount() const
 {
     return m_items.size();
 }
@@ -125,15 +125,15 @@ void Menu::renderItems()
     if (m_style == Menu::Style::VerticalList)
     {
         // Calculate total height
-        int totalHeight = 0;
-        for (auto item : m_items)
+        float totalHeight = 0;
+        for (auto && item : m_items)
         {
             totalHeight += item->height();
         }
 
         // Render centered items
-        int startY = y() + m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
-        for (auto item : m_items)
+        float startY = y() + m_height / 2 - totalHeight / 2 + totalHeight / m_items.size() / 2;
+        for (auto && item : m_items)
         {
             item->setPos(x() + m_width / 2, startY);
             item->render();
@@ -143,15 +143,15 @@ void Menu::renderItems()
     else if (m_style == Menu::Style::HorizontalList)
     {
         // Calculate total width
-        int totalWidth = 0;
-        for (auto item : m_items)
+        float totalWidth = 0;
+        for (auto && item : m_items)
         {
             totalWidth += item->width();
         }
 
         // Render centered items
-        int startX = x() + m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
-        for (auto item : m_items)
+        float startX = x() + m_width / 2 - totalWidth / 2 + totalWidth / m_items.size() / 2;
+        for (auto && item : m_items)
         {
             item->setPos(startX, y() + m_height / 2);
             item->render();
@@ -160,7 +160,7 @@ void Menu::renderItems()
     }
     else if (m_style == Menu::Style::ShowOne)
     {
-        auto item = m_items.at(m_currentIndex);
+        const auto item = m_items.at(static_cast<size_t>(m_currentIndex));
         item->setPos(x() + m_width / 2, y() + m_height / 2);
         item->render();
     }
@@ -170,7 +170,7 @@ void Menu::renderItems()
         {
             if (index >= 0 && index < static_cast<int>(m_items.size()))
             {
-                m_items.at(index)->render();
+                m_items.at(static_cast<size_t>(index))->render();
             }
         }
     }
@@ -178,7 +178,7 @@ void Menu::renderItems()
 
 bool Menu::isNextAllowed() const
 {
-    return m_wrapAround || m_currentIndex + 1 < static_cast<int>(m_items.size());
+    return m_wrapAround || static_cast<size_t>(m_currentIndex) + 1 < m_items.size();
 }
 
 bool Menu::isPrevAllowed() const
@@ -188,7 +188,7 @@ bool Menu::isPrevAllowed() const
 
 void Menu::renderMouseItems()
 {
-    for (MouseItem item : m_mouseItems)
+    for (auto && item : m_mouseItems)
     {
         switch (item.type)
         {
@@ -259,29 +259,24 @@ void Menu::selectCurrentItem()
             item->setSelected(false);
         }
 
-        m_items.at(m_currentIndex)->setSelected(true);
+        m_items.at(static_cast<size_t>(m_currentIndex))->setSelected(true);
         m_selectedIndex = m_currentIndex;
     }
 }
 
 bool Menu::checkIfHit(MenuItemPtr item, int x, int y)
 {
-    const int x1 = item->x() - item->width() / 2;
-    const int x2 = item->x() + item->width() / 2;
-    const int y1 = item->y() - item->height() / 2;
-    const int y2 = item->y() + item->height() / 2;
+    const int x1 = static_cast<int>(item->x() - item->width() / 2);
+    const int x2 = static_cast<int>(item->x() + item->width() / 2);
+    const int y1 = static_cast<int>(item->y() - item->height() / 2);
+    const int y2 = static_cast<int>(item->y() + item->height() / 2);
 
-    if (x >= x1 && x <= x2 && y >= y1 && y <= y2)
-    {
-        return true;
-    }
-
-    return false;
+    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
 }
 
 bool Menu::handleMousePressOnMouseItem(int x, int y)
 {
-    for (MouseItem mouseItem : m_mouseItems)
+    for (auto && mouseItem : m_mouseItems)
     {
         auto item = mouseItem.item;
         switch (mouseItem.type)
@@ -293,6 +288,7 @@ bool Menu::handleMousePressOnMouseItem(int x, int y)
                 return true;
             }
             break;
+
         case MouseItemType::Prev:
             if (isPrevAllowed() && checkIfHit(item, x, y))
             {
@@ -300,14 +296,13 @@ bool Menu::handleMousePressOnMouseItem(int x, int y)
                 return true;
             }
             break;
+
         case MouseItemType::Next:
             if (isNextAllowed() && checkIfHit(item, x, y))
             {
                 item->setFocused(true);
                 return true;
             }
-            break;
-        default:
             break;
         }
     }
@@ -317,10 +312,9 @@ bool Menu::handleMousePressOnMouseItem(int x, int y)
 
 bool Menu::handleMousePressOnItem(int x, int y)
 {
-    for (MouseItem mouseItem : m_mouseItems)
+    for (auto && mouseItem : m_mouseItems)
     {
-        auto item = mouseItem.item;
-        if (checkIfHit(item, x, y))
+        if (const auto item = mouseItem.item; checkIfHit(item, x, y))
         {
             item->setFocused(true);
             return true;
@@ -329,12 +323,11 @@ bool Menu::handleMousePressOnItem(int x, int y)
 
     if (m_style != Menu::Style::ShowOne)
     {
-        for (unsigned int i = 0; i < m_items.size(); i++)
+        for (size_t i = 0; i < m_items.size(); i++)
         {
-            auto item = m_items.at(i);
-            if (checkIfHit(item, x, y))
+            if (auto item = m_items.at(i); checkIfHit(item, x, y))
             {
-                setCurrentIndex(i);
+                setCurrentIndex(static_cast<int>(i));
                 return true;
             }
         }
@@ -348,25 +341,19 @@ bool Menu::handleMousePress(int x, int y, int screenWidth, int screenHeight)
     x = x * width() / screenWidth;
     y = y * height() / screenHeight;
 
-    if (handleMousePressOnMouseItem(x, y) || handleMousePressOnItem(x, y))
-    {
-        return true;
-    }
-
-    return false;
+    return handleMousePressOnMouseItem(x, y) || handleMousePressOnItem(x, y);
 }
 
 bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
 {
-    for (MouseItem mouseItem : m_mouseItems)
+    for (auto && mouseItem : m_mouseItems)
     {
         mouseItem.item->setFocused(false);
     }
 
-    for (MouseItem mouseItem : m_mouseItems)
+    for (auto && mouseItem : m_mouseItems)
     {
-        auto item = mouseItem.item;
-        if (checkIfHit(item, x, y))
+        if (auto item = mouseItem.item; checkIfHit(item, x, y))
         {
             switch (mouseItem.type)
             {
@@ -381,6 +368,7 @@ bool Menu::handleMouseReleaseOnMouseItem(int x, int y)
                     return true;
                 }
                 break;
+
             case Menu::MouseItemType::Next:
                 if (isNextAllowed())
                 {
@@ -399,8 +387,7 @@ bool Menu::handleMouseReleaseOnItem(int x, int y)
 {
     if (m_style == Menu::Style::ShowOne)
     {
-        auto item = currentItem();
-        if (checkIfHit(item, x, y))
+        if (const auto item = currentItem(); checkIfHit(item, x, y))
         {
             selectCurrentItem();
             return true;
@@ -408,10 +395,9 @@ bool Menu::handleMouseReleaseOnItem(int x, int y)
     }
     else
     {
-        for (unsigned int i = 0; i < m_items.size(); i++)
+        for (size_t i = 0; i < m_items.size(); i++)
         {
-            auto item = m_items.at(i);
-            if (checkIfHit(item, x, y))
+            if (const auto item = m_items.at(i); checkIfHit(item, x, y))
             {
                 if (static_cast<int>(i) == m_currentIndex)
                 {
@@ -431,12 +417,7 @@ bool Menu::handleMouseRelease(int x, int y, int screenWidth, int screenHeight)
     x = x * width() / screenWidth;
     y = y * height() / screenHeight;
 
-    if (handleMouseReleaseOnMouseItem(x, y) || handleMouseReleaseOnItem(x, y))
-    {
-        return true;
-    }
-
-    return false;
+    return handleMouseReleaseOnMouseItem(x, y) || handleMouseReleaseOnItem(x, y);
 }
 
 void Menu::updateFocus()
@@ -448,7 +429,7 @@ void Menu::updateFocus()
             item->setFocused(false);
         }
 
-        m_items.at(m_currentIndex)->setFocused(true);
+        m_items.at(static_cast<size_t>(m_currentIndex))->setFocused(true);
     }
 }
 
@@ -505,9 +486,7 @@ int Menu::currentIndex() const
 
 void Menu::setCurrentIndex(int index)
 {
-    const int numItems = m_items.size();
-
-    if (!numItems)
+    if (const int numItems = static_cast<int>(m_items.size()); !numItems)
     {
         m_currentIndex = -1;
     }
@@ -523,9 +502,7 @@ void Menu::setCurrentIndex(int index)
 
 void Menu::setCurrentIndexWrapAround(int index)
 {
-    const int numItems = m_items.size();
-
-    if (!numItems)
+    if (const int numItems = static_cast<int>(m_items.size()); !numItems)
     {
         m_currentIndex = -1;
     }
@@ -619,8 +596,6 @@ void Menu::positionAnimation(int)
     m_y = m_y + (m_targetY - m_y) * m_animationCurve.value();
 }
 
-Menu::~Menu()
-{
-}
+Menu::~Menu() = default;
 
 } // namespace MTFH
