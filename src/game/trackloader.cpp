@@ -333,7 +333,7 @@ void TrackLoader::readObject(QDomElement & element, TrackData & newData)
     const auto role = element.attribute(DataKeywords::Object::role, "");
     const bool forceStationary = element.attribute(DataKeywords::Object::forceStationary, "0").toUInt();
 
-    if (auto object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
+    if (const auto object = m_trackObjectFactory.build(category, role, location, angle, forceStationary))
     {
         newData.objects().add(std::shared_ptr<TrackObject>(object));
     }
@@ -345,7 +345,7 @@ void TrackLoader::readTargetNode(QDomElement & element, TrackData & newData, std
     // the coordinate system is y-wise mirrored in the editor.
     const int mapHeight = static_cast<int>(newData.map().rows() * TrackTile::height());
 
-    auto targetNode = std::make_shared<TargetNodeBase>();
+    const auto targetNode = std::make_shared<TargetNodeBase>();
     targetNode->setIndex(element.attribute(DataKeywords::Node::index, "0").toInt());
 
     const int x = element.attribute(DataKeywords::Node::x, "0").toInt();

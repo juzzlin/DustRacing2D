@@ -28,6 +28,4 @@ void OverlayBase::reset()
 {
 }
 
-OverlayBase::~OverlayBase()
-{
-}
+OverlayBase::~OverlayBase() = default;

@@ -55,9 +55,8 @@ const int TRACK_SET_VERSION = 1;
 
 QString getAppDataPath()
 {
-    const QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QFileInfo path(dataPath);
-    if (!path.exists())
+    const auto dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    if (const QFileInfo path(dataPath); !path.exists())
     {
         QDir().mkpath(dataPath);
     }

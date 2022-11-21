@@ -51,8 +51,7 @@ float CarParticleEffectManager::calculateSkidAngle(float distance, double dx, do
 void CarParticleEffectManager::doLeftSkidMark(ParticleFactory::ParticleType type)
 {
     const MCVector2dF skidLocation(m_car.leftRearTireLocation());
-    const float distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast();
-    if (distance > SKID_MARK_DENSITY)
+    if (const float distance = (m_prevLeftSkidMarkLocation - skidLocation).lengthFast(); distance > SKID_MARK_DENSITY)
     {
         const double dx = skidLocation.i() - m_prevLeftSkidMarkLocation.i();
         const double dy = skidLocation.j() - m_prevLeftSkidMarkLocation.j();
@@ -65,8 +64,7 @@ void CarParticleEffectManager::doLeftSkidMark(ParticleFactory::ParticleType type
 void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType type)
 {
     const MCVector2dF skidLocation(m_car.rightRearTireLocation());
-    const float distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast();
-    if (distance > SKID_MARK_DENSITY)
+    if (const float distance = (m_prevRightSkidMarkLocation - skidLocation).lengthFast(); distance > SKID_MARK_DENSITY)
     {
         const double dx = skidLocation.i() - m_prevRightSkidMarkLocation.i();
         const double dy = skidLocation.j() - m_prevRightSkidMarkLocation.j();

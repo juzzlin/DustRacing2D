@@ -27,7 +27,7 @@ Map::Map(size_t cols, size_t rows)
     {
         for (size_t j = 0; j < rows; j++)
         {
-            auto newTile = std::make_shared<TrackTile>(
+            const auto newTile = std::make_shared<TrackTile>(
               QPointF(TrackTile::width() / 2 + i * TrackTile::width(),
                       TrackTile::height() / 2 + j * TrackTile::height()),
               QPoint(static_cast<int>(i), static_cast<int>(j)));
@@ -36,6 +36,4 @@ Map::Map(size_t cols, size_t rows)
     }
 }
 
-Map::~Map()
-{
-}
+Map::~Map() = default;

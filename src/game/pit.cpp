@@ -43,8 +43,7 @@ void Pit::collisionEvent(MCCollisionEvent & event)
     static const auto carType = MCObject::typeId("car");
     if (event.collidingObject().typeId() == carType)
     {
-        Car & car = static_cast<Car &>(event.collidingObject());
-        if (car.isHuman())
+        if (Car & car = static_cast<Car &>(event.collidingObject()); car.isHuman())
         {
             m_possiblyPittingCars.insert(&car);
         }
@@ -57,8 +56,7 @@ void Pit::separationEvent(MCSeparationEvent & event)
     static const auto carType = MCObject::typeId("car");
     if (event.separatedObject().typeId() == carType)
     {
-        Car & car = static_cast<Car &>(event.separatedObject());
-        if (car.isHuman())
+        if (Car & car = static_cast<Car &>(event.separatedObject()); car.isHuman())
         {
             m_possiblyPittingCars.erase(&car);
         }

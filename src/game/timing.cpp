@@ -250,5 +250,5 @@ std::wstring Timing::msecsToString(int msec)
     const int ss = mr / 1000;
     const int ms = mr % 1000;
 
-    return QString().sprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
+    return QString().asprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
 }

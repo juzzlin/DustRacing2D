@@ -170,9 +170,7 @@ void Car::steer(Steer direction, float control)
     }
     else
     {
-        const float maxAngle = 15.0f * (direction == Steer::Left ? 1 : -1);
-
-        if (!m_isHuman)
+        if (const float maxAngle = 15.0f * (direction == Steer::Left ? 1 : -1); !m_isHuman)
         {
             m_tireAngle = static_cast<int>(maxAngle * control);
         }
@@ -190,8 +188,8 @@ void Car::accelerate(bool deccelerate)
     const float maxForce =
       physicsComponent().mass() * m_desc.accelerationFriction * std::fabs(MCWorld::instance().gravity().k());
     float currentForce = maxForce;
-    const float velocity = physicsComponent().velocity().length();
-    if (velocity > 0.001f)
+
+    if (const float velocity = physicsComponent().velocity().length(); velocity > 0.001f)
     {
         currentForce = m_desc.power / velocity;
         if (currentForce > maxForce)
@@ -389,8 +387,7 @@ void Car::addDamage(float damage)
         m_damageCapacity = 0;
     }
 
-    const float hardCrashDamageLimit = 3.5f;
-    if (damage >= hardCrashDamageLimit)
+    if (const float hardCrashDamageLimit = 3.5f; damage >= hardCrashDamageLimit)
     {
         m_hadHardCrash = true;
     }
@@ -400,8 +397,7 @@ void Car::wearOutTires(int step, float factor)
 {
     if (Game::instance().difficultyProfile().hasTireWearOut())
     {
-        const float wearOut = physicsComponent().velocity().lengthFast() * step * factor / 1000;
-        if (m_tireWearOutCapacity >= wearOut)
+        if (const float wearOut = physicsComponent().velocity().lengthFast() * step * factor / 1000; m_tireWearOutCapacity >= wearOut)
         {
             m_tireWearOutCapacity -= wearOut;
         }

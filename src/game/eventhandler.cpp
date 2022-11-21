@@ -86,26 +86,12 @@ void EventHandler::disableCaptureMode()
 
 bool EventHandler::handleKeyPressEvent(QKeyEvent * event)
 {
-    if (StateMachine::instance().state() != StateMachine::State::Menu)
-    {
-        return handleGameKeyPressEvent(event);
-    }
-    else
-    {
-        return handleMenuKeyPressEvent(event);
-    }
-
-    return false;
+    return StateMachine::instance().state() != StateMachine::State::Menu ? handleGameKeyPressEvent(event) : handleMenuKeyPressEvent(event);
 }
 
 bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
 {
-    if (StateMachine::instance().state() != StateMachine::State::Menu)
-    {
-        return handleGameKeyReleaseEvent(event);
-    }
-
-    return false;
+    return StateMachine::instance().state() != StateMachine::State::Menu ? handleGameKeyReleaseEvent(event) : false;
 }
 
 bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)

@@ -115,7 +115,7 @@ void Minimap::renderMap()
 {
     for (auto && i : m_map)
     {
-        auto surface = i.first;
+        const auto surface = i.first;
         surface->bind();
         surface->setColor({ 1.0, 1.0, 1.0 });
         surface->setSize(m_tileH, m_tileW);

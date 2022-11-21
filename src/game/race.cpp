@@ -65,12 +65,12 @@ Race::Race(Game & game, size_t numCars)
     m_offTrackMessageTimer.setSingleShot(true);
     m_offTrackMessageTimer.setInterval(30000);
 
-    connect(&m_timing, &Timing::lapRecordAchieved, [this](int msecs) {
+    connect(&m_timing, &Timing::lapRecordAchieved, this, [this](int msecs) {
         Database::instance().saveLapRecord(*m_track, msecs);
         emit messageRequested(QObject::tr("New lap record!"));
     });
 
-    connect(&m_timing, &Timing::raceRecordAchieved, [this](int msecs) {
+    connect(&m_timing, &Timing::raceRecordAchieved, this, [this](int msecs) {
         if (m_game.hasComputerPlayers())
         {
             Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
@@ -78,7 +78,7 @@ Race::Race(Game & game, size_t numCars)
         }
     });
 
-    connect(&m_timing, &Timing::lapCompleted, [this](size_t, int msecs) {
+    connect(&m_timing, &Timing::lapCompleted, this, [this](size_t, int msecs) {
         emit messageRequested(QString::fromWCharArray(Timing::msecsToString(msecs).c_str()));
     });
 }

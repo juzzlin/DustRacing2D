@@ -282,8 +282,7 @@ void Game::createRenderer()
 void Game::adjustSceneSize(int hRes, int vRes)
 {
     // Adjust scene height so that view aspect ratio is taken into account.
-    const int newSceneHeight = Scene::width() * vRes / hRes;
-    Scene::setSize(Scene::width(), newSceneHeight);
+    Scene::setSize(Scene::width(), Scene::width() * vRes / hRes);
 }
 
 void Game::setMode(Game::Mode mode)

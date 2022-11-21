@@ -74,6 +74,4 @@ void TrackData::setIsLocked(bool locked)
     m_isLocked = locked;
 }
 
-TrackData::~TrackData()
-{
-}
+TrackData::~TrackData() = default;

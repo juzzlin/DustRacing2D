@@ -89,6 +89,4 @@ bool TrackTile::hasAsphalt() const
     return m_hasAsphalt;
 }
 
-TrackTile::~TrackTile()
-{
-}
+TrackTile::~TrackTile() = default;

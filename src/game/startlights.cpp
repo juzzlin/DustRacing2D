@@ -93,10 +93,9 @@ void Startlights::stateInit()
 
 void Startlights::stateAppear()
 {
-    const int second = m_stepsPerState;
-
     m_animation.update();
-    if (timeElapsed(second))
+
+    if (const int second = m_stepsPerState; timeElapsed(second))
     {
         m_state = State::FirstRow;
         emit messageRequested("3");
@@ -105,9 +104,7 @@ void Startlights::stateAppear()
 
 void Startlights::stateFirstRow()
 {
-    const int second = m_stepsPerState;
-
-    if (timeElapsed(second))
+    if (const int second = m_stepsPerState; timeElapsed(second))
     {
         m_state = State::SecondRow;
         emit messageRequested("2");
@@ -116,9 +113,7 @@ void Startlights::stateFirstRow()
 
 void Startlights::stateSecondRow()
 {
-    const int second = m_stepsPerState;
-
-    if (timeElapsed(second))
+    if (const int second = m_stepsPerState; timeElapsed(second))
     {
         m_state = State::ThirdRow;
         emit messageRequested("1");
@@ -127,9 +122,7 @@ void Startlights::stateSecondRow()
 
 void Startlights::stateThirdRow()
 {
-    const int second = m_stepsPerState;
-
-    if (timeElapsed(second))
+    if (const int second = m_stepsPerState; timeElapsed(second))
     {
         m_state = State::Go;
         emit messageRequested(QObject::tr("GO!!!"));
@@ -140,9 +133,7 @@ void Startlights::stateThirdRow()
 
 void Startlights::stateGo()
 {
-    const int second = m_stepsPerState;
-
-    if (timeElapsed(second))
+    if (const int second = m_stepsPerState; timeElapsed(second))
     {
         m_state = State::Disappear;
         m_animation.init(

@@ -62,7 +62,7 @@ void ParticleFactory::preCreateSurfaceParticles(size_t count, std::string typeId
         // Initially push to list of free particles
         m_freeLists[typeEnum].push_back(particle);
 
-        // Store for deletion
+        // Hack: Store for deletion
         m_delete.push_back(std::unique_ptr<MCParticle>(particle));
     }
 }
@@ -146,7 +146,7 @@ MCSurfaceParticle * ParticleFactory::newSurfaceParticle(ParticleType typeEnum) c
 
 void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    if (const auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 12, 3000);
         smoke->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.25f));
@@ -159,7 +159,7 @@ void ParticleFactory::doDamageSmoke(MCVector3dFR location, MCVector3dFR velocity
 
 void ParticleFactory::doSkidSmoke(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    if (const auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
     {
         smoke->init(location + MCVector3dF(0, 0, 5), 6, 3000);
         smoke->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.1f));
@@ -172,7 +172,7 @@ void ParticleFactory::doSkidSmoke(MCVector3dFR location, MCVector3dFR velocity) 
 
 void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
+    if (const auto smoke = ParticleFactory::newSurfaceParticle(Smoke))
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 12, 3000);
         smoke->setColor(MCGLColor(0.75f, 0.75f, 0.75f, 0.15f));
@@ -185,7 +185,7 @@ void ParticleFactory::doSmoke(MCVector3dFR location, MCVector3dFR velocity) cons
 
 void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
 {
-    if (auto smoke = ParticleFactory::newSurfaceParticle(OffTrackSmoke))
+    if (const auto smoke = ParticleFactory::newSurfaceParticle(OffTrackSmoke))
     {
         smoke->init(location + MCVector3dF(0, 0, 10), 15, 3000);
         smoke->setColor(MCGLColor(0.6f, 0.4f, 0.0f, 0.25f));
@@ -198,7 +198,7 @@ void ParticleFactory::doOffTrackSmoke(MCVector3dFR location) const
 
 void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
 {
-    if (auto skidMark = newSurfaceParticle(OnTrackSkidMark))
+    if (const auto skidMark = newSurfaceParticle(OnTrackSkidMark))
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 50000);
         skidMark->setColor(MCGLColor(0.1f, 0.1f, 0.1f, 0.25f));
@@ -212,7 +212,7 @@ void ParticleFactory::doOnTrackSkidMark(MCVector3dFR location, int angle) const
 
 void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
 {
-    if (auto skidMark = newSurfaceParticle(OffTrackSkidMark))
+    if (const auto skidMark = newSurfaceParticle(OffTrackSkidMark))
     {
         skidMark->init(location + MCVector3dF(0, 0, 1), 8, 50000);
         skidMark->setColor(MCGLColor(0.2f, 0.1f, 0.0f, 0.25f));
@@ -226,7 +226,7 @@ void ParticleFactory::doOffTrackSkidMark(MCVector3dFR location, int angle) const
 
 void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto mud = newSurfaceParticle(Mud))
+    if (const auto mud = newSurfaceParticle(Mud))
     {
         mud->init(location, 12, 3000);
         mud->rotate(MCRandom::getValue() * 360);
@@ -240,7 +240,7 @@ void ParticleFactory::doMud(MCVector3dFR location, MCVector3dFR velocity) const
 
 void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto sparkle = ParticleFactory::newSurfaceParticle(Sparkle))
+    if (const auto sparkle = ParticleFactory::newSurfaceParticle(Sparkle))
     {
         sparkle->init(location, 2 + MCRandom::getValue() * 2, 1500);
         sparkle->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.33f));
@@ -253,7 +253,7 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
 
 void ParticleFactory::doLeaf(MCVector3dFR location, MCVector3dFR velocity) const
 {
-    if (auto leaf = newSurfaceParticle(Leaf))
+    if (const auto leaf = newSurfaceParticle(Leaf))
     {
         leaf->init(location, 5, 3000);
         leaf->setAnimationStyle(MCParticle::AnimationStyle::Shrink);

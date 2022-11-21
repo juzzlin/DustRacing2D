@@ -16,6 +16,7 @@
 #ifndef ANIMATIONCURVE_HPP
 #define ANIMATIONCURVE_HPP
 
+#include <cstddef>
 #include <vector>
 
 namespace MTFH {

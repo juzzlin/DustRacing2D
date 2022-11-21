@@ -70,16 +70,14 @@ bool OffTrackDetector::isOffTrack(MCVector2dF tire, const TrackTile & tile) cons
     {
         if ((tile.rotation() + 90) % 180 == 0)
         {
-            const float y = tire.j();
-            if (y > tile.location().y() + m_tileHLimit || y < tile.location().y() - m_tileHLimit)
+            if (const float y = tire.j(); y > tile.location().y() + m_tileHLimit || y < tile.location().y() - m_tileHLimit)
             {
                 return true;
             }
         }
         else if (tile.rotation() % 180 == 0)
         {
-            const float x = tire.i();
-            if (x > tile.location().x() + m_tileWLimit || x < tile.location().x() - m_tileWLimit)
+            if (const float x = tire.i(); x > tile.location().x() + m_tileWLimit || x < tile.location().x() - m_tileWLimit)
             {
                 return true;
             }

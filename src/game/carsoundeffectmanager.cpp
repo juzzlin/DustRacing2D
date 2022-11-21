@@ -21,8 +21,6 @@
 #include <MCPhysicsComponent>
 #include <MCTrigonom>
 
-static std::vector<float> gearRatios = { 1.0f, 0.8f, 0.6f, 0.5f, 0.4f, 0.3f };
-
 CarSoundEffectManager::CarSoundEffectManager(
   Car & car, const CarSoundEffectManager::MultiSoundHandles & handles)
   : m_car(car)
@@ -57,11 +55,11 @@ void CarSoundEffectManager::update()
 
 void CarSoundEffectManager::processEngineSound()
 {
-    const int speed = static_cast<int>(m_car.absSpeed() * 10.0);
-    if (speed != m_prevSpeed)
+    if (const int speed = static_cast<int>(m_car.absSpeed() * 10.0); speed != m_prevSpeed)
     {
         const float virtualRev = speed * 50;
-        const float effRev = virtualRev * gearRatios[m_gear];
+        const std::vector<float> gearRatios = { 1.0f, 0.8f, 0.6f, 0.5f, 0.4f, 0.3f };
+        const float effRev = virtualRev * gearRatios[static_cast<size_t>(m_gear)];
         const float pitch = 1.0 + effRev / 5000;
 
         if (effRev > 3000)
@@ -134,6 +132,4 @@ void CarSoundEffectManager::collision(MCObject & collidingObject)
     }
 }
 
-CarSoundEffectManager::~CarSoundEffectManager()
-{
-}
+CarSoundEffectManager::~CarSoundEffectManager() = default;

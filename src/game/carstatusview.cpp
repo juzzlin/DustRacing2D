@@ -25,7 +25,7 @@ CarStatusView::CarStatusView()
   , m_tires(MCAssetManager::instance().surfaceManager().surface("tireStatusIndicatorTires"))
   , m_car(nullptr)
 {
-    setDimensions(m_body->height(), m_tires->width());
+    setDimensions(static_cast<int>(m_body->height()), static_cast<int>(m_tires->width()));
 
     m_body->setColor(MCGLColor(1.0f, 1.0f, 1.0f, 0.9f));
 }

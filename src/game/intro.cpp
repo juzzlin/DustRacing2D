@@ -47,7 +47,7 @@ void Intro::render()
     static auto version = QString("v") + VERSION;
     static MCTextureText versionText(version.toStdWString());
     versionText.setGlyphSize(20, height() / 32);
-    versionText.setColor(MCGLColor(0.75f, 0.75f, 0.75f));
+    versionText.setColor({ 0.75f, 0.75f, 0.75f });
     versionText.render(
       versionText.height(m_font),
       versionText.height(m_font), nullptr, m_font, false);
