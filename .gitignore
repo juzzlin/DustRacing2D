@@ -16,7 +16,7 @@ manifest*
 *__*
 Makefile
 bin/
-build/
+build*
 dustrac.pro.user
 dustrac.pro.user.2.1pre1
 engine.txt
