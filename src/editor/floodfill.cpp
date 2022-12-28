@@ -17,6 +17,8 @@
 #include "map.hpp"
 #include "tracktile.hpp"
 
+#include <deque>
+
 #include <QAction>
 
 namespace FloodFill {
@@ -29,32 +31,36 @@ void setTileType(TrackTile & tile, QAction * action)
 
 void FloodFill::floodFill(TrackTile & tile, QAction * action, const QString & typeToFill, MapBase & map)
 {
-    static const int DIRECTION_COUNT = 4;
-
-    // Coordinates of neighbor tiles can be calculated by adding these
-    // adjustments to tile coordinates.
-    static const QPoint neighborAdjustments[DIRECTION_COUNT] = {
-        QPoint(1, 0), // right
-        QPoint(0, -1), // up
-        QPoint(-1, 0), // left
-        QPoint(0, 1) // down
+    // Coordinates of neighbor tiles can be calculated by adding these offsets to tile coordinates.
+    const size_t directionCount = 4;
+    const QPoint neighborOffsets[directionCount] = {
+        { 1, 0 }, // right
+        { 0, -1 }, // up
+        { -1, 0 }, // left
+        { 0, 1 } // down
     };
 
-    setTileType(tile, action);
-
-    QPoint location = tile.matrixLocation();
-
-    for (int i = 0; i < DIRECTION_COUNT; ++i)
+    std::deque<QPoint> stack;
+    stack.push_back(tile.matrixLocation());
+    while (stack.size())
     {
-        int x = location.x() + neighborAdjustments[i].x();
-        int y = location.y() + neighborAdjustments[i].y();
-
-        if (x >= 0 && y >= 0)
+        const auto location = stack.back();
+        if (const auto tile = std::dynamic_pointer_cast<TrackTile>(map.getTile(location.x(), location.y())))
         {
-            auto tile = std::dynamic_pointer_cast<TrackTile>(map.getTile(x, y));
-            if (tile && tile->tileType() == typeToFill)
+            setTileType(*tile, action);
+        }
+        stack.pop_back();
+
+        for (size_t i = 0; i < directionCount; ++i)
+        {
+            const int x = location.x() + neighborOffsets[i].x();
+            const int y = location.y() + neighborOffsets[i].y();
+            if (x >= 0 && y >= 0 && x < static_cast<int>(map.cols()) && y < static_cast<int>(map.rows()))
             {
-                FloodFill::floodFill(*(tile.get()), action, typeToFill, map);
+                if (const auto tile = std::dynamic_pointer_cast<TrackTile>(map.getTile(x, y)); tile && tile->tileType() == typeToFill)
+                {
+                    stack.push_back({ x, y });
+                }
             }
         }
     }

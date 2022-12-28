@@ -459,18 +459,15 @@ void EditorView::handleLeftButtonClickOnTile(TrackTile & tile)
     {
         m_mediator.pushNewTargetNodeToRoute(m_clickedScenePos);
     }
+
     // User is setting the tile type
     else if (m_mediator.mode() == EditorMode::SetTileType)
     {
         if (QAction * action = m_mediator.currentToolBarAction())
         {
-            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
-
-            if (modifiers & Qt::ControlModifier)
+            if (const auto modifiers = QApplication::keyboardModifiers(); modifiers & Qt::ControlModifier)
             {
-                QString typeToFill = tile.tileType();
-
-                if (typeToFill != action->data().toString())
+                if (QString typeToFill = tile.tileType(); typeToFill != action->data().toString())
                 {
                     m_mediator.floodFill(tile, action, typeToFill);
                 }
