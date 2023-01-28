@@ -19,6 +19,11 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
 endif()
 
+# Automoc for .hh
+if(POLICY CMP0100)
+    cmake_policy(SET CMP0100 NEW)
+endif()
+
 option(GLES "Build for OpenGL ES 2.0" OFF)
 
 option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
