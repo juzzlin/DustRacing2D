@@ -63,6 +63,8 @@ option(UnlockAllTracks "Unlock all tracks (for development purposes)" OFF)
 
 option(SystemFonts "Assume all the fonts are available in the system." OFF)
 
+option(DisableFramebufferBlits "Render fake shadows without framebuffer blits. Will result in bad shadows." OFF)
+
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -96,6 +98,11 @@ endif()
 if(SystemFonts)
     message(STATUS "Assuming system fonts")
     add_definitions(-DSYSTEM_FONTS)
+endif()
+
+if (DisableFramebufferBlits)
+    message(STATUS "Framebuffer blits disabled")
+    add_definitions(-DDISABLE_FRAMEBUFFER_BLITS)
 endif()
 
 add_definitions(-DGLEW_STATIC)

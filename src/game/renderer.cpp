@@ -231,13 +231,23 @@ void Renderer::render()
         m_shadowFbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
 
+    static auto dummyMaterial = std::make_shared<MCGLMaterial>();
+
     m_fbo->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_scene->renderTrack();
     m_scene->renderMenu();
     m_scene->renderWorld(MCRenderGroup::Objects, true);
-    m_fbo->release();
 
+#ifdef DISABLE_FRAMEBUFFER_BLITS
+    m_scene->renderWorld(MCRenderGroup::ObjectShadows);
+    m_scene->renderWorld(MCRenderGroup::Particles);
+    m_scene->renderWorld(MCRenderGroup::ParticleShadows);
+    m_scene->renderHUD();
+    m_scene->renderCommonHUD();
+    m_fbo->release();
+#else
+    m_fbo->release();
     m_shadowFbo->bind();
     glClear(GL_COLOR_BUFFER_BIT);
     QOpenGLFramebufferObject::blitFramebuffer(m_shadowFbo.get(), m_fbo.get(), GL_DEPTH_BUFFER_BIT);
@@ -246,7 +256,6 @@ void Renderer::render()
     m_shadowFbo->release();
 
     m_fbo->bind();
-    static auto dummyMaterial = std::make_shared<MCGLMaterial>();
     dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
     dummyMaterial->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     MCSurface ss("dummy", dummyMaterial, 2.0f, 2.0f);
@@ -258,6 +267,7 @@ void Renderer::render()
     m_scene->renderHUD();
     m_scene->renderCommonHUD();
     m_fbo->release();
+#endif
 
     if (m_fullScreen)
     {
