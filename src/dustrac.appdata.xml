@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
   <id>dustrac-game.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0 and CC-BY-SA-3.0</project_license>
@@ -68,6 +68,12 @@
     <release version="2.1.1" date="2021-02-21" />
   </releases>
   <content_rating type="oars-1.1" />
+  <launchable type="desktop-id">dustrac-game.desktop</launchable>
+  <provides>
+    <binary>dustrac-game</binary>
+    <binary>dustrac-editor</binary>
+  </provides>
   <url type="homepage">https://juzzlin.github.io/DustRacing2D/</url>
+  <url type="bugtracker">https://github.com/juzzlin/DustRacing2D/issues</url>
   <update_contact>jussi.lind@iki.fi</update_contact>
 </component>
