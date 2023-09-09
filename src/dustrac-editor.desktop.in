@@ -9,3 +9,4 @@ Icon=dustrac-editor
 Type=Application
 Categories=Game;SportsGame;
 StartupNotify=true
+X-AppStream-Ignore=true
