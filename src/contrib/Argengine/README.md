@@ -39,7 +39,7 @@ include_directories(Argengine/src)
 Link to the library:
 
 ```
-target_link_libraries(${YOUR_TARGET_NAME} Argengine)
+target_link_libraries(${YOUR_TARGET_NAME} Argengine_static)
 ```
 
 In your code:
@@ -66,7 +66,7 @@ Link to `libArgengine_static.a` or `libArgengine.so`.
 
 The basic principle is that for each option a lambda callback is added.
 
-Valueless:
+A valueless callback:
 
 ```
     ...
@@ -80,7 +80,7 @@ Valueless:
     ...
 ```
 
-Single-value:
+A single-value callback:
 
 ```
     ...
@@ -94,7 +94,7 @@ Single-value:
     ...
 ```
 
-There can be as many option variants as liked, usually the short and long version e.g `-f` and `--foo`.
+There can be as many option variants as liked, usually the short and long versions, e.g `-f` and `--foo`.
 
 `Argengine` doesn't care about the naming of the options and they can be anything: `-f`, `a`, `/c`, `foo`, `--foo` ...
 
@@ -112,13 +112,13 @@ Positional arguments (for example a file name for a text editor after other opti
     ...
 ```
 
-If callback for positional arguments is set, then no errors about `unknown options` will occur as all additional options will be taken as positional arguments.
+If the callback for positional arguments is set, then no errors about `unknown options` will occur as all additional options will be taken as positional arguments.
 
 # Help
 
 By default, `Argengine` will create a simple help that is shown with `-h` or `--help`.
 
-Without any additional options possible output will look like this:
+Without any additional options a possible output will look like this:
 
 ```
 Usage: ./ex1 [OPTIONS]
@@ -216,6 +216,101 @@ In order to mark an option mandatory, there's an overload that accepts `bool req
     ...
 ```
 
+## General: Adding option documentation for the auto-generated help
+
+One can add option documentation for the auto-generated help.
+
+Consider this example code:
+
+```
+    ...
+
+    juzzlin::Argengine ae(argc, argv);
+    ae.addOption(
+      { "-p" }, [](std::string value) {
+          std::cout << value.size() << std::endl;
+      },
+      true, "Print length of given text. This option is required.", "TEXT");
+
+    ...
+```
+
+Here we have added a documentation string `Print length of given text. This option is required.` and also a variable name `TEXT` for option `-p`.
+
+Thus, this will generate a help content like this:
+
+```
+Options:
+
+-h, --help       Show this help.
+-p [TEXT]        Print length of given text. This option is required.
+
+```
+
+## General: Setting two or more options as conflicting
+
+Sometimes we want to prevent the user from giving a certain set of arguments.
+
+Consider this example code:
+
+```
+    ...
+
+    juzzlin::Argengine ae(argc, argv);
+    ae.addOption(
+      { "foo" }, [] {
+          std::cout << "Foo enabled!" << std::endl;
+      });
+
+    ae.addOption(
+      { "bar" }, [] {
+          std::cout << "Bar enabled!" << std::endl;
+      });
+
+    // Set "foo" and "bar" as conflicting options.
+    ae.addConflictingOptions({ "foo", "bar" });
+    ...
+```
+
+Now, if we give both `foo` and `bar` to the application, we'll get an error like this:
+
+
+```
+Argengine: Conflicting options: 'bar', 'foo'. These options cannot coexist.
+```
+
+## General: Adding option groups
+
+Option groups will make the given options depend on each other.
+
+Consider this example code:
+
+```
+    ...
+
+    juzzlin::Argengine ae(argc, argv);
+    ae.addOption(
+      { "foo" }, [] {
+          std::cout << "Foo enabled!" << std::endl;
+      });
+
+    ae.addOption(
+      { "bar" }, [] {
+          std::cout << "Bar enabled!" << std::endl;
+      });
+
+    // Add "foo" and "bar" as an option group.
+    ae.addOptionGroup({ "foo", "bar" });
+    ...
+```
+
+Now, if we give only `foo` to the application, we'll get an error like this:
+
+
+```
+Argengine: These options must coexist: 'bar', 'foo'. Missing options: 'bar'.
+```
+
 ## General: Error handling
 
 For error handling there are two options: exceptions or error value.
@@ -257,8 +352,14 @@ Example of handling error values:
 
 # Requirements
 
-C++11
+C++17
 
 # Licence
 
 MIT
+
+# Projects currently using Argengine
+
+* https://github.com/juzzlin/DustRacing2D
+
+* https://github.com/juzzlin/Heimer
