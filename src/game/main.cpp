@@ -36,7 +36,7 @@ using juzzlin::L;
 static void initLogger()
 {
     QString logPath = QDir::tempPath() + QDir::separator() + "dr2d.log";
-    L::init(logPath.toStdString().c_str());
+    L::initialize(logPath.toStdString().c_str());
     L::setTimestampMode(L::TimestampMode::DateTime);
     L::setLevelSymbol(L::Level::Trace, "<T>");
     L::setLevelSymbol(L::Level::Debug, "<D>");
