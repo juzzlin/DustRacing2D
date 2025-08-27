@@ -124,8 +124,8 @@ set(RCS ${CMAKE_SOURCE_DIR}/data/icons/icons.qrc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-qt5_add_resources(RC_SRC ${RCS})
-qt5_add_translation(QM ${TS_FILES})
+qt_add_resources(RC_SRC ${RCS})
+qt_add_translation(QM ${TS_FILES})
 
 # Copy desktop file
 if(ReleaseBuild AND UNIX)
@@ -166,7 +166,7 @@ set(COMMON_LIBS
     ${VORBIS_LIB}     # Valid only with MSVC
     ${OGG_LIB})       # Valid only with MSVC
 
-target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt5::OpenGL Qt5::Sql Qt5::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
+target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt6::OpenGL Qt6::Sql Qt6::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 17)
 
 add_subdirectory(unittests)

@@ -66,7 +66,7 @@
 #include <MCWorld>
 #include <MCWorldRenderer>
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QObject>
 
 #include <algorithm>

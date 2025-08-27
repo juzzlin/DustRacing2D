@@ -20,6 +20,7 @@
 #include "mcmeshloader.hh"
 
 #include <QFile>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <cassert>
@@ -34,16 +35,16 @@ MCMeshLoader::MCMeshLoader()
 
 bool MCMeshLoader::load(QString filePath)
 {
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (QFile file { filePath }; file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in { &file };
+        in.setEncoding(QStringConverter::Utf8);
+        return readStream(in);
+    }
+    else
     {
         return false;
     }
-
-    QTextStream in(&file);
-    in.setCodec("UTF-8");
-
-    return readStream(in);
 }
 
 bool MCMeshLoader::readStream(QTextStream & stream)
@@ -66,11 +67,15 @@ bool MCMeshLoader::readStream(QTextStream & stream)
 
 void MCMeshLoader::processLine(QString line)
 {
-    line.remove(QRegExp("^\\s+"));
+    // Remove leading whitespace
+    line.remove(QRegularExpression { "^\\s+" });
+
     if (!line.startsWith('#') && !line.startsWith('s') && !line.startsWith('o') && !line.startsWith('m') && // mtllib
         !line.startsWith('u')) // usemtl
     {
-        const QString key = line.split(QRegExp("\\s+")).at(0);
+        // Split on whitespace
+        const QString key = line.split(QRegularExpression { "\\s+" }).at(0);
+
         auto iter = m_keyToFunctionMap.find(key);
         if (iter != m_keyToFunctionMap.end())
         {
@@ -81,21 +86,21 @@ void MCMeshLoader::processLine(QString line)
 
 void MCMeshLoader::parseV(QString line)
 {
-    const QStringList atoms = line.split(QRegExp("\\s+"));
+    const QStringList atoms = line.split(QRegularExpression { "\\s+" });
     V vertex = { atoms.at(1).toFloat(), atoms.at(2).toFloat(), atoms.at(3).toFloat() };
     m_v.push_back(vertex);
 }
 
 void MCMeshLoader::parseVN(QString line)
 {
-    const QStringList atoms = line.split(QRegExp("\\s+"));
+    const QStringList atoms = line.split(QRegularExpression { "\\s+" });
     VN normal = { atoms.at(1).toFloat(), atoms.at(2).toFloat(), atoms.at(3).toFloat() };
     m_vn.push_back(normal);
 }
 
 void MCMeshLoader::parseVT(QString line)
 {
-    const QStringList atoms = line.split(QRegExp("\\s+"));
+    const QStringList atoms = line.split(QRegularExpression { "\\s+" });
     VT tcoord = { atoms.at(1).toFloat(), atoms.at(2).toFloat() };
     m_vt.push_back(tcoord);
 }
@@ -103,7 +108,7 @@ void MCMeshLoader::parseVT(QString line)
 void MCMeshLoader::parseF(QString line)
 {
     MCMesh::Face face;
-    QStringList vertices = line.split(QRegExp("\\s+"));
+    QStringList vertices = line.split(QRegularExpression { "\\s+" });
     vertices.removeFirst();
     for (QString vertex : vertices)
     {

@@ -33,7 +33,6 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QDateTime>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QGraphicsLineItem>
 #include <QHBoxLayout>
@@ -140,7 +139,7 @@ void MainWindow::showTip()
 
 void MainWindow::init()
 {
-    setTitle(tr("New file"));
+    setWindowTitle(tr("New file")); // also: setTitle() → setWindowTitle() in QMainWindow
 
     QSettings settings;
 
@@ -149,15 +148,13 @@ void MainWindow::init()
     resize(settings.value("size", QSize(640, 480)).toSize());
     settings.endGroup();
 
-    // Try to center the window.
-    QRect geometry(QApplication::desktop()->availableGeometry());
-    move(geometry.width() / 2 - width() / 2,
-         geometry.height() / 2 - height() / 2);
+    // Try to center the window on current screen
+    const auto geometry = screen()->availableGeometry();
+    move(geometry.center() - rect().center());
 
     m_mediator->initScene();
 
     populateMenuBar();
-
     createWidgets();
 }
 

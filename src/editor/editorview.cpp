@@ -686,7 +686,26 @@ void EditorView::wheelEvent(QWheelEvent * event)
 {
     if (event->modifiers() & Qt::ControlModifier)
     {
-        m_mediator.mouseWheelZoom(event->delta());
+        int delta = 0;
+
+        // High-precision devices (trackpads etc.)
+        if (!event->pixelDelta().isNull())
+        {
+            delta = event->pixelDelta().y();
+        }
+        else
+        {
+            // Classic mouse wheel (usually multiples of 120)
+            delta = event->angleDelta().y();
+        }
+
+        if (delta)
+        {
+            m_mediator.mouseWheelZoom(delta);
+        }
+
+        // Do not pass event further if zoom was handled
+        event->accept();
     }
     else
     {

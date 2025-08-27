@@ -18,12 +18,8 @@
 
 #include <exception>
 
-namespace {
-static const char * INIT_ERROR = "Initializing the game failed!";
-}
-
 Application::Application(int & argc, char ** argv)
-  : QApplication(argc, argv)
+  : QGuiApplication { argc, argv }
 {
 }
 
@@ -31,13 +27,13 @@ bool Application::notify(QObject * receiver, QEvent * event)
 {
     try
     {
-        return QApplication::notify(receiver, event);
+        return QGuiApplication::notify(receiver, event);
     } catch (std::exception & e)
     {
         juzzlin::L().fatal() << e.what();
-        juzzlin::L().fatal() << INIT_ERROR;
+        juzzlin::L().fatal() << "Initializing the game failed!";
 
-        QApplication::exit(EXIT_FAILURE);
+        QGuiApplication::exit(EXIT_FAILURE);
 
         return false;
     }

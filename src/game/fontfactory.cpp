@@ -111,10 +111,10 @@ MCTextureFontData FontFactory::generateFontData(QString family)
         for (int i = 0; i < cols; i++)
         {
             const int glyphIndex = j * cols + i;
-            const QString text(glyphs.at(static_cast<size_t>(glyphIndex)));
-            if (fm.width(text) > slotWidth)
+            const QString text { static_cast<QChar>(glyphs.at(static_cast<size_t>(glyphIndex))) };
+            if (fm.horizontalAdvance(text) > slotWidth)
             {
-                slotWidth = fm.width(text);
+                slotWidth = fm.horizontalAdvance(text);
             }
         }
     }
@@ -143,7 +143,7 @@ MCTextureFontData FontFactory::generateFontData(QString family)
         for (int i = 0; i < cols; i++)
         {
             const int glyphIndex = j * cols + i;
-            const QString text(glyphs.at(static_cast<size_t>(glyphIndex)));
+            const QString text { static_cast<QChar>(glyphs.at(static_cast<size_t>(glyphIndex))) };
 
             if (text.length())
             {

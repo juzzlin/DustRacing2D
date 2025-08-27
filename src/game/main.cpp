@@ -16,7 +16,6 @@
 #include <QDebug>
 #include <QDir>
 #include <QLocale>
-#include <QMessageBox>
 #include <QSettings>
 
 #include "../common/config.hpp"
@@ -50,8 +49,8 @@ static void initLogger()
 
 int main(int argc, char ** argv)
 {
-    QApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
-    QApplication::setApplicationName(Config::Game::QT_APPLICATION_NAME);
+    QGuiApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
+    QGuiApplication::setApplicationName(Config::Game::QT_APPLICATION_NAME);
 #ifdef Q_OS_WIN32
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif

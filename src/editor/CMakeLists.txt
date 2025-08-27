@@ -47,9 +47,9 @@ set(RCS ${CMAKE_SOURCE_DIR}/data/images/editor.qrc ${CMAKE_SOURCE_DIR}/data/icon
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common)
 
-qt5_add_resources(RC_SRC ${RCS})
-qt5_add_translation(QM ${TS_FILES})
-qt5_wrap_ui(UI_HDRS ${UIS})
+qt_add_resources(RC_SRC ${RCS})
+qt_add_translation(QM ${TS_FILES})
+qt_wrap_ui(UI_HDRS ${UIS})
 
 # We need this to be able to include headers produced by uic in our code
 include_directories(${CMAKE_BINARY_DIR})
@@ -83,5 +83,5 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(${EDITOR_BINARY_NAME} WIN32 ${SRC} ${MOC_SRC} ${RC_SRC} ${UI_HDRS} ${QM})
 
-target_link_libraries(${EDITOR_BINARY_NAME} Qt5::Widgets Qt5::Xml Argengine_static)
+target_link_libraries(${EDITOR_BINARY_NAME} Qt6::Widgets Qt6::Xml Argengine_static)
 set_property(TARGET ${EDITOR_BINARY_NAME} PROPERTY CXX_STANDARD 17)

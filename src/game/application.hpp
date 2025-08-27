@@ -16,9 +16,9 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include <QApplication>
+#include <QGuiApplication>
 
-class Application : public QApplication
+class Application : public QGuiApplication
 {
     Q_OBJECT
 

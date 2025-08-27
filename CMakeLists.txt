@@ -1,7 +1,7 @@
-project(DustRacing2D)
-
 cmake_minimum_required(VERSION 3.10)
 cmake_policy(VERSION 3.10)
+
+project(DustRacing2D)
 
 # Use cmake --help-policy [POLICY] for more information about these:
 
@@ -27,6 +27,12 @@ set(VERSION_MAJOR 2)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 1)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+message("\n${CMAKE_PROJECT_NAME} ${VERSION}\n")
+message(STATUS "System name       : ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "System version    : ${CMAKE_SYSTEM_VERSION}")
+message(STATUS "Compiler identity : ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Compiler version  : ${CMAKE_CXX_COMPILER_VERSION}")
 
 # Some common CPack variables
 set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
@@ -134,16 +140,18 @@ set(EDITOR_BINARY_NAME "dustrac-editor")
 
 add_definitions(-DVERSION="${VERSION}")
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(QT_MIN_VER 5.4.0)
-find_package(Qt5Core ${QT_MIN_VER} REQUIRED)
-find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Widgets ${QT_MIN_VER} REQUIRED)
-find_package(Qt5LinguistTools ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Sql ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Test ${QT_MIN_VER} REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
+find_package(Qt6 6.4 COMPONENTS Core OpenGL Xml Widgets LinguistTools Sql Test REQUIRED)
+if(QT_VERSION_MAJOR EQUAL 6 AND QT_VERSION_MINOR GREATER_EQUAL 5)
+    qt_standard_project_setup(REQUIRES 6.5)
+    qt_policy(SET QTP0001 NEW)
+    if(QT_KNOWN_POLICY_QTP0004)
+        qt_policy(SET QTP0004 NEW)
+    endif()
+else()
+    qt_standard_project_setup(REQUIRES 6.4)
+endif()
+message(STATUS "Qt version found  : ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}\n")
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)

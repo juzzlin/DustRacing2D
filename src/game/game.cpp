@@ -34,9 +34,8 @@
 #include <MCCamera>
 #include <MCWorldRenderer>
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QDir>
+#include <QGuiApplication>
 #include <QProcessEnvironment>
 #include <QScreen>
 #include <QSurfaceFormat>

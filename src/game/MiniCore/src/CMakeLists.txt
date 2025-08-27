@@ -89,7 +89,7 @@ endif()
 
 set(MiniCoreTargetName MiniCore)
 add_library(${MiniCoreTargetName} ${MiniCoreSRC})
-target_link_libraries(${MiniCoreTargetName} Qt5::Core Qt5::OpenGL Qt5::Xml ${MINICORE_OPENGL_LIBS})
+target_link_libraries(${MiniCoreTargetName} Qt6::Core Qt6::OpenGL Qt6::Xml ${MINICORE_OPENGL_LIBS})
 set_property(TARGET ${MiniCoreTargetName} PROPERTY CXX_STANDARD 17)
 
 add_subdirectory(UnitTests)
