@@ -50,7 +50,7 @@ also generates automatically an NSIS Windows installer and a ZIP-archive.
 
 See scripts/build-windows-nsis and scripts/build-windows-nsis-packaging-helper.
 
-Building the project with Microsoft Visual C++ 2013 also works, but no automatic
+Building the project with Microsoft Visual C++ also works, but no automatic
 packaging/deployment currently exist. The runtime files (data/, Qt, OpenAL..) must be
 manually copied in place. See more detailed instructions below.
 
@@ -60,34 +60,19 @@ Build dependencies
 Currently the build depends on Qt, libopenal and libvorbisfile.
 On Linux pkg-config is required.
 
-Dustrac also exploits some features of the C++14 standard,
-so a somewhat compliant compiler is required (GCC >= 5.0).
-
-Building in the command line on Linux (tested on Ubuntu 18.04)
-==============================================================
+Building in the command line on Linux (tested on Ubuntu 24.04 LTS)
+==================================================================
 
 Development build (the game can be run without installing anything):
 -------------------------------------------------------------------
 
-1) Install Qt5 development files
+1) Install Qt6 (>= 6.4) development files and other build tools:
 
-   - `qt5-default` package on Ubuntu/Debian/Mint should install everything needed
+`$ sudo apt install build-essential cmake pkg-config libqt6uitools6 linguist-qt6 qt6-base-dev qt6-l10n-tools qt6-tools-dev-tools qt6-tools-private-dev libopenal-dev libvorbis-dev`
 
-   - You might need to install also these manually depending on your system
+  (Qt packaging might change between Ubuntu releases)
 
-     - `qttools5-dev`
-
-     - `libqt5opengl5-dev`
-
-   (Qt packaging might differ a bit in newer Ubuntu releases)
-
-2) Install OpenAL development files (libopenal-dev on Debian/Ubuntu).
-
-3) Install Vorbis development files (libvorbis-dev on Debian/Ubuntu).
-
-4) Install CMake (cmake on Debian/Ubuntu).
-
-5) Go to the source directory and run:
+2) Go to the source directory and run:
 
 `$ mkdir build && cd build`
 
@@ -146,8 +131,8 @@ After a successful build with ReleaseBuild=ON run CPack:
 
 This will generate a Debian package.
 
-Building with Microsoft Visual C++
-==================================
+Building with Microsoft Visual C++ (OUTDATED)
+=============================================
 
 The project has been successfully compiled and executed with MSVC with the following setup:
 
