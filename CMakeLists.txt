@@ -114,6 +114,9 @@ endif()
 add_definitions(-DGLEW_STATIC)
 add_definitions(-DGLEW_NO_GLU)
 
+# Enable CMake's unit test framework
+include(CTest)
+
 if(UNIX)
     include("InstallLinux.cmake")
 elseif(WIN32)
@@ -196,9 +199,6 @@ include_directories(src/contrib/SimpleLogger/src)
 
 add_subdirectory(src/contrib/Argengine EXCLUDE_FROM_ALL)
 include_directories(src/contrib/Argengine/src)
-
-# Enable CMake's unit test framework
-enable_testing()
 
 # Install paths depend on the build type and target platform
 resolve_install_paths()

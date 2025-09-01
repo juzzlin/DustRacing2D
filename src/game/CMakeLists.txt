@@ -169,4 +169,6 @@ set(COMMON_LIBS
 target_link_libraries(${GAME_BINARY_NAME} ${COMMON_LIBS} Qt6::OpenGL Qt6::Sql Qt6::Xml ${DUSTRAC_OPENGL_LIBS} SimpleLogger_static Argengine_static)
 set_property(TARGET ${GAME_BINARY_NAME} PROPERTY CXX_STANDARD 17)
 
-add_subdirectory(unittests)
+if(BUILD_TESTING)
+    add_subdirectory(unittests)
+endif()

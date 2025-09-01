@@ -68,8 +68,5 @@ else()
     set(MINICORE_OPENGL_LIBS OpenGL::GL)
 endif()
 
-# Enable CMake's unit test framework
-enable_testing()
-
 add_subdirectory(src)
 
