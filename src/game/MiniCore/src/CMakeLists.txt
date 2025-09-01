@@ -92,5 +92,7 @@ add_library(${MiniCoreTargetName} ${MiniCoreSRC})
 target_link_libraries(${MiniCoreTargetName} Qt6::Core Qt6::OpenGL Qt6::Xml ${MINICORE_OPENGL_LIBS})
 set_property(TARGET ${MiniCoreTargetName} PROPERTY CXX_STANDARD 17)
 
-add_subdirectory(UnitTests)
+if(BUILD_TESTING)
+    add_subdirectory(UnitTests)
+endif()
 
