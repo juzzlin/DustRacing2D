@@ -10,5 +10,5 @@ set(STFHSRC
     source.cpp
 )
 
-add_library(STFH ${STFHSRC})
+add_library(STFH STATIC ${STFHSRC})
 set_property(TARGET STFH PROPERTY CXX_STANDARD 17)
