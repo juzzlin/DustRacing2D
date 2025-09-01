@@ -71,6 +71,8 @@ option(SystemFonts "Assume all the fonts are available in the system." OFF)
 
 option(DisableFramebufferBlits "Render fake shadows without framebuffer blits. Will result in bad shadows." OFF)
 
+option(USE_CCACHE "Auto detect and use ccache during compilation" ON)
+
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -127,13 +129,14 @@ if(CMAKE_COMPILER_IS_GNUCXX OR MINGW OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang
     add_compile_options("$<$<CONFIG:RELEASE>:-W;-Wall;-O3;-pedantic;-fomit-frame-pointer>")
     add_compile_options("$<$<CONFIG:DEBUG>:-W;-Wall;-O0;-pedantic>")
 
-    # Automatically use ccache if found
-    find_program(CCACHE_FOUND ccache)
-    if(CCACHE_FOUND)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    endif(CCACHE_FOUND)
-
+    if(USE_CCACHE)
+        # Automatically use ccache if found
+        find_program(CCACHE_FOUND ccache)
+        if(CCACHE_FOUND)
+            set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+            set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+        endif(CCACHE_FOUND)
+    endif()
 elseif(MSVC)
     add_definitions(-DNOMINMAX)
 endif()
