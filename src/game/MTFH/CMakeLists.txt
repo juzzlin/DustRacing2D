@@ -10,5 +10,5 @@ set(MTFHSRC
     menumanager.cpp
     menuitemview.cpp)
 
-add_library(MTFH ${MTFHSRC})
+add_library(MTFH STATIC ${MTFHSRC})
 set_property(TARGET MTFH PROPERTY CXX_STANDARD 17)
