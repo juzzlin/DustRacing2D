@@ -1,23 +1,7 @@
-project(MiniCore)
-
 cmake_minimum_required(VERSION 3.10)
 cmake_policy(VERSION 3.10)
 
-if(POLICY CMP0005)
-    cmake_policy(SET CMP0005 NEW)
-endif()
-
-if(POLICY CMP0020)
-    cmake_policy(SET CMP0020 NEW)
-endif()
-
-if(POLICY CMP0043)
-    cmake_policy(SET CMP0043 NEW)
-endif()
-
-if(POLICY CMP0054)
-    cmake_policy(SET CMP0054 NEW)
-endif()
+project(MiniCore)
 
 # Automoc for .hh
 if(POLICY CMP0100)
@@ -25,9 +9,7 @@ if(POLICY CMP0100)
 endif()
 
 option(GLES "Build for OpenGL ES 2.0" OFF)
-
 option(NO_GLEW "Don't use GLEW to resolve OpenGL extensions if enabled." ON)
-
 option(QOpenGLFunctions "Use QOpenGLFunctions to resolve OpenGL extensions if enabled." ON)
 
 if(GLES)
@@ -51,14 +33,6 @@ add_definitions(-DGLEW_STATIC)
 add_definitions(-DGLEW_NO_GLU)
 
 add_definitions(-DVERSION="${VERSION}")
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(QT_MIN_VER 5.2.1)
-find_package(Qt5Core ${QT_MIN_VER} REQUIRED)
-find_package(Qt5OpenGL ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Xml ${QT_MIN_VER} REQUIRED)
-find_package(Qt5Widgets ${QT_MIN_VER} REQUIRED)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
