@@ -3,9 +3,8 @@ cmake_policy(VERSION 3.10)
 
 project(Argengine)
 
-option(BUILD_EXAMPLES "Build example apps" ON)
-
-option(BUILD_TESTS "Build unit tests" ON)
+option(Argengine_BUILD_EXAMPLES "Build example apps" OFF)
+option(Argengine_BUILD_TESTS "Build unit tests" OFF)
 
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if(NOT CMAKE_BUILD_TYPE)
@@ -24,7 +23,7 @@ set(LIBRARY_NAME "Argengine")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(BUILD_TESTS)
+if(Argengine_BUILD_TESTS)
     enable_testing()
     add_subdirectory(src/tests)
 endif()

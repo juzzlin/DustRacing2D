@@ -3,7 +3,7 @@ cmake_policy(VERSION 3.10)
 
 project(SimpleLogger)
 
-option(BUILD_TESTS "Build unit tests" ON)
+option(SimpleLogger_BUILD_TESTS "Build unit tests" OFF)
 
 # Default to release C++ flags if CMAKE_BUILD_TYPE not set
 if(NOT CMAKE_BUILD_TYPE)
@@ -23,7 +23,7 @@ set(LIBRARY_NAME "SimpleLogger")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(BUILD_TESTS)
+if(SimpleLogger_BUILD_TESTS)
     enable_testing()
     add_subdirectory(src/tests)
 endif()
