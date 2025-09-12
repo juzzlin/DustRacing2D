@@ -52,16 +52,16 @@ public:
     MCOBBox(T hx, T hy, const MCVector2d<T> & loc);
 
     //! Copy constructor.
-    MCOBBox<T>(const MCOBBox<T> & other);
+    MCOBBox(const MCOBBox<T> & other);
 
     //! Move constructor.
-    MCOBBox<T>(const MCOBBox<T> && other);
+    MCOBBox(const MCOBBox<T> && other);
 
     //! Assignment operator.
-    MCOBBox<T> & operator=(const MCOBBox<T> & other);
+    MCOBBox & operator=(const MCOBBox<T> & other);
 
     //! Move assignment operator.
-    MCOBBox<T> & operator=(const MCOBBox<T> && other);
+    MCOBBox & operator=(const MCOBBox<T> && other);
 
     //! Return current angle
     inline float angle() const
