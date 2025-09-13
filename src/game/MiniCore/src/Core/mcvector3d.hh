@@ -27,12 +27,12 @@
 #include <limits>
 
 /*! 3-dimensional vector template. Template parameter represents
- *  the data type of the components. 
+ *  the data type of the components.
  *
- *  Examples: 
+ *  Examples:
  *
- *  MCVector3d<int> a(1, 1, 1);
- *  MCVector3d<int> b(-1, 2, 0);
+ *  MCVector3d<int> a { 1, 1, 1 };
+ *  MCVector3d<int> b {-1, 2, 0 };
  *  MCVector3d<int> z = a + b;
  *
  *  // Cross product
@@ -47,24 +47,14 @@ template<typename T>
 class MCVector3d
 {
 public:
-    //! Constructor
     MCVector3d();
-
-    //! Constructor
     MCVector3d(T i, T j);
-
-    //! Constructor
     MCVector3d(T i, T j, T k);
-
-    //! Constructor
     template<typename U>
     MCVector3d(const MCVector2d<U> & r, U k = 0);
 
-    //! Copy constructor
     template<typename U>
     MCVector3d(const MCVector3d<U> & r);
-
-    //! Move constructor
     template<typename U>
     MCVector3d(const MCVector3d<U> && r);
 
@@ -72,11 +62,8 @@ public:
     template<typename U>
     operator MCVector2d<U>() const;
 
-    //! Assignment
     template<typename U>
     MCVector3d<T> & operator=(const MCVector3d<U> & r);
-
-    //! Move assignment
     template<typename U>
     MCVector3d<T> & operator=(const MCVector3d<U> && r);
 
@@ -132,67 +119,36 @@ public:
     template<typename U>
     MCVector3d<T> & operator-=(const MCVector3d<U> & r);
 
-    //! Get length.
     inline T length() const;
-
     //! Get length using a fast approximation.
     inline T lengthFast() const;
-
-    //! Get length squared.
     inline T lengthSquared() const;
 
-    //! Normalize
     void normalize();
-
-    //! Return normalized vector
     inline MCVector3d<T> normalized() const;
-
-    //! Normalize
     void normalizeFast();
-
-    //! Return normalized vector
     inline MCVector3d<T> normalizedFast() const;
 
-    //! Invert vector
     void invert();
-
-    //! Return inverted vector
     inline MCVector3d<T> inverted() const;
 
-    //! Set the vector to zero vector
     void setZero();
-
-    //! Return true if a zero vector
     bool isZero() const;
 
-    //! Clamp to given length.
     void clamp(T maxLength);
-
     //! Clamp to given length. Inaccurate.
     void clampFast(T maxLength);
 
     //! \returns vector a projected on vector b.
     static MCVector3d<T> projection(const MCVector3d<T> & a, const MCVector3d<T> & b);
 
-    //! Set components
     void set(T i, T j = 0, T k = 0);
-
-    //! Set i-component
     void setI(T newI);
-
-    //! Set j-component
     void setJ(T newJ);
-
-    //! Set k-component
     void setK(T newK);
 
-    //! Get i-component
     inline T i() const;
-
-    //! Get j-component
     inline T j() const;
-
-    //! Get k-component
     inline T k() const;
 
     //! Write to stream
@@ -203,7 +159,6 @@ public:
     }
 
 private:
-    //! Components
     T m_i, m_j, m_k, padding;
 };
 
@@ -212,52 +167,52 @@ using MCVector3dFR = const MCVector3dF &;
 
 template<typename T>
 MCVector3d<T>::MCVector3d()
-  : m_i(0)
-  , m_j(0)
-  , m_k(0)
+  : m_i { 0 }
+  , m_j { 0 }
+  , m_k { 0 }
 {
 }
 
 template<typename T>
 MCVector3d<T>::MCVector3d(T newI, T newJ)
-  : m_i(newI)
-  , m_j(newJ)
-  , m_k(0)
+  : m_i { newI }
+  , m_j { newJ }
+  , m_k { 0 }
 {
 }
 
 template<typename T>
 MCVector3d<T>::MCVector3d(T newI, T newJ, T newK)
-  : m_i(newI)
-  , m_j(newJ)
-  , m_k(newK)
+  : m_i { newI }
+  , m_j { newJ }
+  , m_k { newK }
 {
 }
 
 template<typename T>
 template<typename U>
 MCVector3d<T>::MCVector3d(const MCVector3d<U> & r)
-  : m_i(r.i())
-  , m_j(r.j())
-  , m_k(r.k())
+  : m_i { r.i() }
+  , m_j { r.j() }
+  , m_k { r.k() }
 {
 }
 
 template<typename T>
 template<typename U>
 MCVector3d<T>::MCVector3d(const MCVector3d<U> && r)
-  : m_i(r.i())
-  , m_j(r.j())
-  , m_k(r.k())
+  : m_i { r.i() }
+  , m_j { r.j() }
+  , m_k { r.k() }
 {
 }
 
 template<typename T>
 template<typename U>
 MCVector3d<T>::MCVector3d(const MCVector2d<U> & r, U k)
-  : m_i(r.i())
-  , m_j(r.j())
-  , m_k(k)
+  : m_i { r.i() }
+  , m_j { r.j() }
+  , m_k { k }
 {
 }
 
@@ -265,7 +220,7 @@ template<typename T>
 template<typename U>
 MCVector3d<T>::operator MCVector2d<U>() const
 {
-    return MCVector2d<T>(m_i, m_j);
+    return { m_i, m_j };
 }
 
 template<typename T>
@@ -297,11 +252,11 @@ template<typename T>
 template<typename U>
 MCVector3d<T> MCVector3d<T>::operator%(const MCVector3d<U> & r) const
 {
-    T _i = m_j * r.k() - r.j() * m_k;
-    T _j = m_i * r.k() - r.i() * m_k;
-    T _k = m_i * r.j() - r.i() * m_j;
+    const T _i = m_j * r.k() - r.j() * m_k;
+    const T _j = m_i * r.k() - r.i() * m_k;
+    const T _k = m_i * r.j() - r.i() * m_j;
 
-    return MCVector3d<T>(_i, -_j, _k);
+    return { _i, -_j, _k };
 }
 
 template<typename T>
@@ -315,7 +270,7 @@ template<typename T>
 template<typename U>
 MCVector3d<T> MCVector3d<T>::comp(const MCVector3d<U> & r) const
 {
-    return MCVector3d<T>(m_i * r.i(), m_j * r.j(), m_k * r.k());
+    return { m_i * r.i(), m_j * r.j(), m_k * r.k() };
 }
 
 template<typename T>
@@ -333,13 +288,13 @@ template<typename T>
 template<typename S>
 MCVector3d<T> MCVector3d<T>::operator*(S n) const
 {
-    return MCVector3d<T>(m_i * n, m_j * n, m_k * n);
+    return { m_i * n, m_j * n, m_k * n };
 }
 
 template<typename T>
 MCVector3d<T> MCVector3d<T>::operator*(const MCVector3d<T> & n) const
 {
-    return MCVector3d<T>(m_i * n.m_i, m_j * n.m_j, m_k * n.m_k);
+    return { m_i * n.m_i, m_j * n.m_j, m_k * n.m_k };
 }
 
 template<typename T>
@@ -365,13 +320,13 @@ template<typename T>
 template<typename S>
 MCVector3d<T> MCVector3d<T>::operator/(S n) const
 {
-    return MCVector3d<T>(m_i / n, m_j / n, m_k / n);
+    return { m_i / n, m_j / n, m_k / n };
 }
 
 template<typename T>
 MCVector3d<T> MCVector3d<T>::operator/(const MCVector3d<T> & n) const
 {
-    return MCVector3d<T>(m_i / n.m_i, m_j / n.m_j, m_k / n.m_k);
+    return { m_i / n.m_i, m_j / n.m_j, m_k / n.m_k };
 }
 
 template<typename T>
@@ -397,7 +352,7 @@ template<typename T>
 template<typename U>
 MCVector3d<T> MCVector3d<T>::operator+(const MCVector3d<U> & r) const
 {
-    return MCVector3d<T>(m_i + r.i(), m_j + r.j(), m_k + r.k());
+    return { m_i + r.i(), m_j + r.j(), m_k + r.k() };
 }
 
 template<typename T>
@@ -414,7 +369,7 @@ template<typename T>
 template<typename U>
 MCVector3d<T> MCVector3d<T>::operator-(const MCVector3d<U> & r) const
 {
-    return MCVector3d<T>(m_i - r.i(), m_j - r.j(), m_k - r.k());
+    return { m_i - r.i(), m_j - r.j(), m_k - r.k() };
 }
 
 template<typename T>
@@ -436,9 +391,9 @@ T MCVector3d<T>::length() const
 template<typename T>
 T MCVector3d<T>::lengthFast() const
 {
-    const MCVector2d<T> ij(m_i, m_j);
+    const MCVector2d<T> ij { m_i, m_j };
     const T l = ij.lengthFast();
-    const MCVector2d<T> lk(l, m_k);
+    const MCVector2d<T> lk { l, m_k };
     return lk.lengthFast();
 }
 
@@ -478,10 +433,10 @@ MCVector3d<T> MCVector3d<T>::normalized() const
     if (!isZero())
     {
         const T l(length());
-        return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
+        return { m_i / l, m_j / l, m_k / l };
     }
 
-    return MCVector3d<T>();
+    return {};
 }
 
 template<typename T>
@@ -490,10 +445,10 @@ MCVector3d<T> MCVector3d<T>::normalizedFast() const
     if (!isZero())
     {
         const T l(lengthFast());
-        return MCVector3d<T>(m_i / l, m_j / l, m_k / l);
+        return { m_i / l, m_j / l, m_k / l };
     }
 
-    return MCVector3d<T>();
+    return {};
 }
 
 template<typename T>
@@ -507,7 +462,7 @@ void MCVector3d<T>::invert()
 template<typename T>
 MCVector3d<T> MCVector3d<T>::inverted() const
 {
-    return MCVector3d<T>(-m_i, -m_j, -m_k);
+    return { -m_i, -m_j, -m_k };
 }
 
 template<typename T>
@@ -584,8 +539,7 @@ bool MCVector3d<T>::isZero() const
 template<typename T>
 void MCVector3d<T>::clamp(T maxLength)
 {
-    const T l = length();
-    if (l > maxLength)
+    if (const T l = length(); l > maxLength)
     {
         m_i *= maxLength;
         m_i /= l;
@@ -599,8 +553,7 @@ void MCVector3d<T>::clamp(T maxLength)
 template<typename T>
 void MCVector3d<T>::clampFast(T maxLength)
 {
-    const T l = lengthFast();
-    if (l > maxLength)
+    if (const T l = lengthFast(); l > maxLength)
     {
         m_i *= maxLength;
         m_i /= l;
@@ -615,7 +568,7 @@ void MCVector3d<T>::clampFast(T maxLength)
 template<typename T>
 MCVector3d<T> operator-(const MCVector3d<T> & r)
 {
-    return MCVector3d<T>(-r.i(), -r.j(), -r.k());
+    return { -r.i(), -r.j(), -r.k() };
 }
 
 #endif // MCVECTOR3D_HH
