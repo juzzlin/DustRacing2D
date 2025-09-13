@@ -68,11 +68,6 @@ public:
     template<typename U>
     MCVector3d(const MCVector3d<U> && r);
 
-    //! Destructor
-    inline ~MCVector3d()
-    {
-    }
-
     //! Type conversion to MCVector2d
     template<typename U>
     operator MCVector2d<U>() const;
