@@ -25,12 +25,12 @@
 #include <limits>
 
 /*! 2-dimensional vector template. Template parameter represents
- *  the data type of the components. 
+ *  the data type of the components.
  *
- *  Examples: 
+ *  Examples:
  *
- *  MCVector2d<int> a(1, 1);
- *  MCVector2d<int> b(-1, 2);
+ *  MCVector2d<int> a { 1, 1 };
+ *  MCVector2d<int> b {-1, 2 } ;
  *  MCVector2d<int> z = a + b;
  *
  *  // Cross product
@@ -45,25 +45,16 @@ template<typename T>
 class MCVector2d
 {
 public:
-    //! Constructor
     MCVector2d();
-
-    //! Constructor
     MCVector2d(T i, T j);
 
-    //! Copy constructor
     template<typename U>
     MCVector2d(const MCVector2d<U> & r);
-
-    //! Move constructor
     template<typename U>
     MCVector2d(const MCVector2d<U> && r);
 
-    //! Assignment
     template<typename U>
     MCVector2d<T> & operator=(const MCVector2d<U> & r);
-
-    //! Move assignment
     template<typename U>
     MCVector2d<T> & operator=(const MCVector2d<U> && r);
 
@@ -131,18 +122,12 @@ public:
     template<typename U>
     MCVector2d<T> & operator-=(const MCVector2d<U> & r);
 
-    //! Get length
     inline T length() const;
-
     //! Get length using a fast approximation.
     inline T lengthFast() const;
-
-    //! Get length squared.
     inline T lengthSquared() const;
 
-    //! Normalize
     void normalize();
-
     //! Normalize, inaccurate
     void normalizeFast();
 
@@ -152,7 +137,6 @@ public:
     //! Return a normalized vector. Inaccurate.
     inline MCVector2d<T> normalizedFast() const;
 
-    //! Invert
     void invert();
 
     //! Return an inverted vector
@@ -173,19 +157,11 @@ public:
     //! \returns vector a projected on vector b.
     static MCVector2d<T> projection(const MCVector2d<T> & a, const MCVector2d<T> & b);
 
-    //! Set components
     void set(T newI, T newJ = 0);
-
-    //! Set i-component
     void setI(T newI);
-
-    //! Set j-component
     void setJ(T newJ);
 
-    //! Get i-component
     inline T i() const;
-
-    //! Get j-component
     inline T j() const;
 
     //! Write to stream
@@ -196,7 +172,6 @@ public:
     }
 
 private:
-    //! Components
     T m_i, m_j;
 };
 
@@ -205,31 +180,31 @@ using MCVector2dFR = const MCVector2dF &;
 
 template<typename T>
 MCVector2d<T>::MCVector2d()
-  : m_i(0)
-  , m_j(0)
+  : m_i { 0 }
+  , m_j { 0 }
 {
 }
 
 template<typename T>
 MCVector2d<T>::MCVector2d(T newI, T newJ)
-  : m_i(newI)
-  , m_j(newJ)
+  : m_i { newI }
+  , m_j { newJ }
 {
 }
 
 template<typename T>
 template<typename U>
 MCVector2d<T>::MCVector2d(const MCVector2d<U> & r)
-  : m_i(r.i())
-  , m_j(r.j())
+  : m_i { r.i() }
+  , m_j { r.j() }
 {
 }
 
 template<typename T>
 template<typename U>
 MCVector2d<T>::MCVector2d(const MCVector2d<U> && r)
-  : m_i(r.i())
-  , m_j(r.j())
+  : m_i { r.i() }
+  , m_j { r.j() }
 {
 }
 
@@ -274,7 +249,7 @@ template<typename T>
 template<typename U>
 MCVector2d<T> MCVector2d<T>::comp(const MCVector2d<U> & r) const
 {
-    return MCVector2d<T>(m_i * r.i(), m_j * r.j());
+    return { m_i * r.i(), m_j * r.j() };
 }
 
 template<typename T>
@@ -291,14 +266,14 @@ template<typename T>
 template<typename S>
 MCVector2d<T> MCVector2d<T>::operator*(S n) const
 {
-    return MCVector2d<T>(m_i * n, m_j * n);
+    return { m_i * n, m_j * n };
 }
 
 template<typename T>
 template<typename U>
 MCVector2d<T> MCVector2d<T>::operator*(const MCVector2d<U> & r) const
 {
-    return MCVector2d<T>(m_i * r.i(), m_j * r.j());
+    return { m_i * r.i(), m_j * r.j() };
 }
 
 template<typename T>
@@ -323,14 +298,14 @@ template<typename T>
 template<typename S>
 MCVector2d<T> MCVector2d<T>::operator/(S n) const
 {
-    return MCVector2d<T>(m_i / n, m_j / n);
+    return { m_i / n, m_j / n };
 }
 
 template<typename T>
 template<typename U>
 MCVector2d<T> MCVector2d<T>::operator/(const MCVector2d<U> & r) const
 {
-    return MCVector2d<T>(m_i / r.i(), m_j / r.j());
+    return { m_i / r.i(), m_j / r.j() };
 }
 
 template<typename T>
@@ -355,7 +330,7 @@ template<typename T>
 template<typename U>
 MCVector2d<T> MCVector2d<T>::operator+(const MCVector2d<U> & r) const
 {
-    return MCVector2d<T>(m_i + r.i(), m_j + r.j());
+    return { m_i + r.i(), m_j + r.j() };
 }
 
 template<typename T>
@@ -371,7 +346,7 @@ template<typename T>
 template<typename U>
 MCVector2d<T> MCVector2d<T>::operator-(const MCVector2d<U> & r) const
 {
-    return MCVector2d<T>(m_i - r.i(), m_j - r.j());
+    return { m_i - r.i(), m_j - r.j() };
 }
 
 template<typename T>
@@ -432,10 +407,10 @@ MCVector2d<T> MCVector2d<T>::normalized() const
     if (!isZero())
     {
         const T l(length());
-        return MCVector2d<T>(m_i / l, m_j / l);
+        return { m_i / l, m_j / l };
     }
 
-    return MCVector2d<T>();
+    return {};
 }
 
 template<typename T>
@@ -444,10 +419,10 @@ MCVector2d<T> MCVector2d<T>::normalizedFast() const
     if (!isZero())
     {
         const T l(lengthFast());
-        return MCVector2d<T>(m_i / l, m_j / l);
+        return { m_i / l, m_j / l };
     }
 
-    return MCVector2d<T>();
+    return {};
 }
 
 template<typename T>
@@ -460,7 +435,7 @@ void MCVector2d<T>::invert()
 template<typename T>
 MCVector2d<T> MCVector2d<T>::inverted() const
 {
-    return MCVector2d<T>(-m_i, -m_j);
+    return { -m_i, -m_j };
 }
 
 template<typename T>
@@ -523,8 +498,7 @@ bool MCVector2d<T>::isZero() const
 template<typename T>
 void MCVector2d<T>::clamp(T maxLength)
 {
-    const T l = length();
-    if (l > maxLength)
+    if (const T l = length(); l > maxLength)
     {
         m_i *= maxLength;
         m_i /= l;
@@ -536,8 +510,7 @@ void MCVector2d<T>::clamp(T maxLength)
 template<typename T>
 void MCVector2d<T>::clampFast(T maxLength)
 {
-    const T l = lengthFast();
-    if (l > maxLength)
+    if (const T l = lengthFast(); l > maxLength)
     {
         m_i *= maxLength;
         m_i /= l;
@@ -550,7 +523,7 @@ void MCVector2d<T>::clampFast(T maxLength)
 template<typename T>
 MCVector2d<T> operator-(const MCVector2d<T> & r)
 {
-    return MCVector2d<T>(-r.i(), -r.j());
+    return { -r.i(), -r.j() };
 }
 
 #endif // MCVECTOR2D_HH
