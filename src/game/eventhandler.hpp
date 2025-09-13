@@ -36,13 +36,10 @@ public:
     void enableCaptureMode(InputHandler::Action action, int player);
 
     bool handleKeyPressEvent(QKeyEvent * event);
-
     bool handleKeyReleaseEvent(QKeyEvent * event);
 
     bool handleMouseMoveEvent(QMouseEvent * event);
-
     bool handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
-
     bool handleMouseReleaseEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY);
 
 signals:
@@ -62,14 +59,12 @@ private:
     {
     public:
         ActionMapping(int player, InputHandler::Action action)
-          : m_player(player)
-          , m_action(action)
+          : m_player { player }
+          , m_action { action }
         {
         }
 
-        ActionMapping()
-        {
-        }
+        ActionMapping() = default;
 
         int player() const
         {
@@ -91,9 +86,7 @@ private:
     void disableCaptureMode();
 
     bool handleMenuKeyPressEvent(QKeyEvent * event);
-
     bool handleGameKeyPressEvent(QKeyEvent * event);
-
     bool handleGameKeyReleaseEvent(QKeyEvent * event);
 
     void loadKeyMappings();

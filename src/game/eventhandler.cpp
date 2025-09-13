@@ -24,8 +24,8 @@
 #include <cassert>
 
 EventHandler::EventHandler(InputHandler & inputHandler)
-  : m_inputHandler(inputHandler)
-  , m_captureMode(false)
+  : m_inputHandler { inputHandler }
+  , m_captureMode { false }
 {
     // Default key bindings
     m_keyToActionMap[KeyCodes::LSHIFT] = ActionMapping(1, InputHandler::Action::Up);
@@ -50,15 +50,14 @@ EventHandler::EventHandler(InputHandler & inputHandler)
 
 void EventHandler::loadKeyMappings()
 {
-    std::vector<InputHandler::Action> actions = {
+    const std::vector<InputHandler::Action> actions = {
         InputHandler::Action::Up,
         InputHandler::Action::Down,
         InputHandler::Action::Left,
         InputHandler::Action::Right
     };
 
-    const int numPlayers = 2;
-    for (int player = 0; player < numPlayers; player++)
+    for (int player = 0; player < 2; player++)
     {
         for (InputHandler::Action action : actions)
         {
@@ -98,19 +97,11 @@ bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, i
 {
     if (StateMachine::instance().state() == StateMachine::State::Menu)
     {
-        if (mirrorY)
+        const int y = mirrorY ? screenHeight - static_cast<int>(event->position().y()) : static_cast<int>(event->position().y());
+        if (MTFH::MenuManager::instance().mousePress(
+              static_cast<int>(event->position().x()), y, screenWidth, screenHeight))
         {
-            if (MTFH::MenuManager::instance().mousePress(event->x(), screenHeight - event->y(), screenWidth, screenHeight))
-            {
-                emit soundRequested("menuClick");
-            }
-        }
-        else
-        {
-            if (MTFH::MenuManager::instance().mousePress(event->x(), event->y(), screenWidth, screenHeight))
-            {
-                emit soundRequested("menuClick");
-            }
+            emit soundRequested("menuClick");
         }
     }
 
@@ -121,14 +112,9 @@ bool EventHandler::handleMouseReleaseEvent(QMouseEvent * event, int screenWidth,
 {
     if (StateMachine::instance().state() == StateMachine::State::Menu)
     {
-        if (mirrorY)
-        {
-            MTFH::MenuManager::instance().mouseRelease(event->x(), screenHeight - event->y(), screenWidth, screenHeight);
-        }
-        else
-        {
-            MTFH::MenuManager::instance().mouseRelease(event->x(), event->y(), screenWidth, screenHeight);
-        }
+        const int y = mirrorY ? screenHeight - static_cast<int>(event->position().y()) : static_cast<int>(event->position().y());
+        MTFH::MenuManager::instance().mouseRelease(
+          static_cast<int>(event->position().x()), y, screenWidth, screenHeight);
 
         if (MTFH::MenuManager::instance().isDone())
         {
@@ -151,7 +137,7 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
 {
     if (m_captureMode)
     {
-        if (mapKeyToAction(m_capturePlayer, m_captureAction, event->nativeScanCode()))
+        if (mapKeyToAction(m_capturePlayer, m_captureAction, static_cast<int>(event->nativeScanCode())))
         {
             disableCaptureMode();
             MTFH::MenuManager::instance().popMenu();
@@ -220,18 +206,18 @@ bool EventHandler::applyMatchingAction(QKeyEvent * event, bool press)
 {
     if (!event->isAutoRepeat())
     {
-        if (m_keyToActionMap.count(event->nativeScanCode()) > 0)
+        if (m_keyToActionMap.count(static_cast<int>(event->nativeScanCode())))
         {
-            const unsigned int player = m_keyToActionMap[event->nativeScanCode()].player();
-            const InputHandler::Action action = m_keyToActionMap[event->nativeScanCode()].action();
+            const unsigned int player = m_keyToActionMap.at(event->nativeScanCode()).player();
+            const InputHandler::Action action = m_keyToActionMap.at(event->nativeScanCode()).action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
 
-        if (m_keyToActionMap.count(event->key()) > 0)
+        if (m_keyToActionMap.count(event->key()))
         {
-            const unsigned int player = m_keyToActionMap[event->key()].player();
-            const InputHandler::Action action = m_keyToActionMap[event->key()].action();
+            const unsigned int player = m_keyToActionMap.at(event->key()).player();
+            const InputHandler::Action action = m_keyToActionMap.at(event->key()).action();
             m_inputHandler.setActionState(player, action, press);
             return true;
         }
