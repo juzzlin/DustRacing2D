@@ -59,11 +59,6 @@ public:
     template<typename U>
     MCVector2d(const MCVector2d<U> && r);
 
-    //! Destructor
-    inline ~MCVector2d()
-    {
-    }
-
     //! Assignment
     template<typename U>
     MCVector2d<T> & operator=(const MCVector2d<U> & r);
