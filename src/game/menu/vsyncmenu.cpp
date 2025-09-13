@@ -38,12 +38,12 @@ public:
     public:
         //! Constructor.
         SaveVSyncAction(VSyncItem & parent)
-          : m_parent(parent)
+          : m_parent { parent }
         {
         }
 
         //! \reimp
-        virtual void fire()
+        virtual void fire() override
         {
             const int vsync = m_parent.vsync();
             Settings::instance().saveValue(Settings::vsyncKey(), vsync);
@@ -65,10 +65,10 @@ public:
     }
 
     //! Destructor.
-    virtual ~VSyncItem() = default;
+    virtual ~VSyncItem() override = default;
 
     //! \reimp
-    virtual void setSelected(bool flag)
+    virtual void setSelected(bool flag) override
     {
         MenuItem::setSelected(flag);
         MTFH::MenuManager::instance().pushMenu(m_confirmationMenu->id());
@@ -104,16 +104,15 @@ VSyncMenu::VSyncMenu(ConfirmationMenuPtr confirmationMenu, std::string id, int w
     on->setView(std::make_shared<TextMenuItemView>(20, *on));
     addItem(on);
 
-    enter();
+    VSyncMenu::enter();
 }
 
 void VSyncMenu::enter()
 {
-    // Set the currently selected VSync setting
     const int vsync = Settings::instance().loadVSync();
     for (unsigned int i = 0; i < itemCount(); i++)
     {
-        if (auto vsyncItem = std::dynamic_pointer_cast<VSyncItem>(item(i)))
+        if (const auto vsyncItem = std::dynamic_pointer_cast<VSyncItem>(item(i)); vsyncItem)
         {
             if (vsyncItem->vsync() == vsync)
             {
