@@ -23,12 +23,12 @@
 #include <cassert>
 
 Timing::Timing(size_t cars, QObject * parent)
-  : QObject(parent)
-  , m_times(cars, Timing::Times())
-  , m_time(0)
-  , m_started(false)
-  , m_lapRecord(-1)
-  , m_raceRecord(-1)
+  : QObject { parent }
+  , m_times { cars, Timing::Times() }
+  , m_time { 0ms }
+  , m_started { false }
+  , m_lapRecord { -1 }
+  , m_raceRecord { -1 }
 {
 }
 
@@ -37,9 +37,8 @@ void Timing::setLapCompleted(size_t index, bool isHuman)
     Timing::Times & times = m_times.at(index);
     times.lap++;
 
-    const int elapsed = m_time;
-    times.lastLapTime = elapsed - times.raceTime;
-    times.raceTime = elapsed;
+    times.lastLapTime = static_cast<int>(m_time.count() - times.raceTime.count());
+    times.raceTime = m_time;
 
     juzzlin::L().debug() << "Lap (" << times.lap << ") completed for car index=" << index << ": " << times.lastLapTime;
     juzzlin::L().debug() << "Current personal best time: " << times.recordLapTime;
@@ -78,9 +77,9 @@ void Timing::setRaceCompleted(size_t index, bool state, bool isHuman)
 
     if (isHuman)
     {
-        if (times.raceTime < m_raceRecord || m_raceRecord == -1)
+        if (times.raceTime.count() < m_raceRecord || m_raceRecord == -1)
         {
-            m_raceRecord = times.raceTime;
+            m_raceRecord = times.raceTime.count();
 
             emit raceRecordAchieved(m_raceRecord);
         }
@@ -132,7 +131,7 @@ int Timing::currentLapTime(size_t index) const
     }
 
     const Timing::Times & times = m_times.at(index);
-    return m_time - times.raceTime;
+    return m_time.count() - times.raceTime.count();
 }
 
 int Timing::recordLapTime(size_t index) const
@@ -145,17 +144,12 @@ int Timing::recordLapTime(size_t index) const
     return m_times.at(index).recordLapTime;
 }
 
-int Timing::raceTime() const
+std::chrono::milliseconds Timing::raceTime() const
 {
-    if (!m_started)
-    {
-        return 0;
-    }
-
-    return m_time;
+    return m_started ? m_time : 0ms;
 }
 
-int Timing::raceTime(size_t index) const
+std::chrono::milliseconds Timing::raceTime(size_t index) const
 {
     if (!m_times.at(index).raceCompleted)
     {
@@ -209,7 +203,7 @@ int Timing::lastLapTime(size_t index) const
 
 void Timing::start()
 {
-    m_time = 0;
+    m_time = 0ms;
     m_started = true;
 }
 
@@ -220,7 +214,7 @@ void Timing::stop()
 
 void Timing::reset()
 {
-    m_time = 0;
+    m_time = 0ms;
     m_started = false;
 
     for (Timing::Times & time : m_times)
@@ -229,11 +223,11 @@ void Timing::reset()
     }
 }
 
-void Timing::tick()
+void Timing::tick(std::chrono::milliseconds timeStep)
 {
     if (m_started)
     {
-        m_time += 1000 / 60;
+        m_time += timeStep;
     }
 }
 

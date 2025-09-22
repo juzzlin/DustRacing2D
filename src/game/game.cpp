@@ -104,9 +104,16 @@ Game::Game(int & argc, char ** argv)
 
     connect(m_eventHandler, &EventHandler::soundRequested, m_audioWorker, &AudioWorker::playSound);
 
+    m_elapsedTimer.start();
+    m_lastUpdateTime = m_elapsedTimer.elapsed();
+
     connect(&m_updateTimer, &QTimer::timeout, this, [this]() {
+        const qint64 now = m_elapsedTimer.elapsed();
+        const qint64 deltaMs = now - m_lastUpdateTime;
+        m_lastUpdateTime = now;
         m_stateMachine->update();
-        m_scene->updateFrame(*m_inputHandler, static_cast<int>(m_timeStep));
+        m_scene->updateFrame(*m_inputHandler, std::chrono::milliseconds { (deltaMs + m_lastDeltaMs) / 2 });
+        m_lastDeltaMs = deltaMs;
         m_scene->updateOverlays();
         m_renderer->renderNow();
     });

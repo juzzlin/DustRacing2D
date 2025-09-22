@@ -224,11 +224,11 @@ bool MenuManager::isDone() const
     }
 }
 
-void MenuManager::stepTime(int msecs)
+void MenuManager::stepTime(std::chrono::milliseconds timeStep)
 {
     for (auto && menuIter : m_idToMenuMap)
     {
-        menuIter.second->stepTime(msecs);
+        menuIter.second->stepTime(static_cast<int>(timeStep.count()));
     }
 }
 

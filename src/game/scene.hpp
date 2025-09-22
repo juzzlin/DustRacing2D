@@ -58,48 +58,30 @@ class Scene : public QObject
     Q_OBJECT
 
 public:
-    //! Constructor.
     Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world);
+    ~Scene() override;
 
-    //! Destructor.
-    ~Scene();
-
-    //! Width of the scene. This is always constant and doesn't
-    //! depend on resolution.
     static int width();
-
-    //! Height of the scene. This is always constant and doesn't
-    //! depend on resolution.
     static int height();
 
-    //! Set scene size.
     static void setSize(int width, int height);
 
     static size_t carCount();
 
     //! Update physics and objects by the given time step in ms.
-    void updateFrame(InputHandler & handler, int step);
-
-    //! Update HUD overlays.
+    void updateFrame(InputHandler & handler, std::chrono::milliseconds timeStep);
     void updateOverlays();
 
-    //! Set the active race track.
     void setActiveTrack(std::shared_ptr<Track> activeTrack);
-
-    //! Return the active race track.
     std::shared_ptr<Track> activeTrack() const;
 
     //! Return track selection menu.
     MTFH::MenuPtr trackSelectionMenu() const;
 
     void renderCommonHUD();
-
     void renderHUD();
-
     void renderMenu();
-
     void renderTrack();
-
     void renderWorld(MCRenderGroup renderGroup, bool prepareRendering = false);
 
 signals:
@@ -108,37 +90,28 @@ signals:
 
 private:
     void addCarsToWorld();
-
     void addTrackObjectsToWorld();
 
     void connectComponents();
 
     void createBridgeObjects();
-
     void createCars();
-
     void createMenus();
-
     void createNormalObjects();
 
     void initializeComponents();
-
     void initializeRace();
 
     void processUserInput(InputHandler & handler);
 
     void renderPlayerScene(MCCamera & camera);
-
     void renderPlayerSceneShadows(MCCamera & camera);
 
     void resizeOverlays();
 
     void setupAudio(Car & car, size_t index);
-
     void setupAI(std::shared_ptr<Track> activeTrack);
-
     void setupCameras(Track & activeTrack);
-
     void setupMinimaps();
 
     void getSplitPositions(MCGLScene::SplitType & p0, MCGLScene::SplitType & p1);
@@ -146,15 +119,11 @@ private:
     void setWorldDimensions();
 
     void updateAi();
-
     void updateCameraLocation(MCCamera & camera, float & offset, MCObject & object);
-
-    void updateRace();
-
-    void updateWorld(int timeStep);
+    void updateRace(std::chrono::milliseconds timeStep);
+    void updateWorld(std::chrono::milliseconds timeStep);
 
     static int m_width;
-
     static int m_height;
 
     Game & m_game;
@@ -166,27 +135,20 @@ private:
     std::unique_ptr<MessageOverlay> m_messageOverlay;
 
     std::shared_ptr<Race> m_race;
-
     std::shared_ptr<Track> m_activeTrack;
 
     MCWorld & m_world;
 
     std::array<CrashOverlay, 2> m_crashOverlay;
-
     std::array<TimingOverlay, 2> m_timingOverlay;
-
     std::unique_ptr<Startlights> m_startlights;
-
     std::unique_ptr<StartlightsOverlay> m_startlightsOverlay;
-
     std::unique_ptr<CheckeredFlag> m_checkeredFlag;
 
     std::array<MCCamera, 2> m_camera;
-
     std::array<float, 2> m_cameraOffset;
 
     MTFH::MenuPtr m_mainMenu;
-
     std::unique_ptr<MTFH::MenuManager> m_menuManager;
 
     std::unique_ptr<Intro> m_intro;
@@ -203,7 +165,6 @@ private:
     using AIVector = std::vector<AIPtr>;
     AIVector m_ai;
 
-    // Bridges
     std::vector<MCObjectPtr> m_bridges;
 };
 

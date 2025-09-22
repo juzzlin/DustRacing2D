@@ -16,12 +16,15 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QTime>
 #include <QTimer>
 #include <QTranslator>
 
 #include <MCWorld>
+
+#include <chrono>
 
 #include "application.hpp"
 #include "settings.hpp"
@@ -65,10 +68,7 @@ public:
         Fps60
     };
 
-    //! Constructor
     Game(int & argc, char ** argv);
-
-    //! Destructor
     virtual ~Game() override;
 
     //! Return the game instance.
@@ -79,36 +79,22 @@ public:
 
     int run();
 
-    //! Set the game mode.
     void setMode(Mode mode);
-
-    //! Get the game mode.
     Mode mode() const;
 
-    //! Set the split type on two-player game.
     void setSplitType(SplitType splitType);
-
-    //! Get the split type.
     SplitType splitType() const;
 
     void setFps(Fps fps);
-
     Fps fps() const;
 
-    //! Set the lap count.
     void setLapCount(int lapCount);
-
-    //! Get the lap count.
     int lapCount() const;
 
-    //! \return True if the current mode has two human players.
     bool hasTwoHumanPlayers() const;
-
-    //! \return True if the current mode has computer players.
     bool hasComputerPlayers() const;
 
     EventHandler & eventHandler();
-
     AudioWorker & audioWorker();
 
     DifficultyProfile & difficultyProfile();
@@ -131,17 +117,14 @@ private:
     void addTrackSearchPaths();
 
     void adjustSceneSize(int hRes, int vRes);
-
     void createRenderer();
 
     void initScene();
-
     bool loadTracks();
 
     void parseArgs(int argc, char ** argv);
 
     void start();
-
     void stop();
 
     Application m_app;
@@ -157,13 +140,11 @@ private:
     DifficultyProfile m_difficultyProfile;
 
     InputHandler * m_inputHandler;
-
     EventHandler * m_eventHandler;
 
     StateMachine * m_stateMachine;
 
     Renderer * m_renderer;
-
     Scene * m_scene;
 
     TrackLoader * m_trackLoader;
@@ -173,7 +154,6 @@ private:
     int m_screenIndex = 0;
 
     int m_updateFps;
-
     int m_updateDelay;
 
     float m_timeStep;
@@ -183,7 +163,6 @@ private:
     bool m_paused;
 
     QTimer m_updateTimer;
-
     int m_renderElapsed;
 
     Fps m_fps;
@@ -193,10 +172,13 @@ private:
     SplitType m_splitType;
 
     AudioWorker * m_audioWorker;
-
     QThread * m_audioThread;
 
     MCWorld * m_world;
+
+    QElapsedTimer m_elapsedTimer;
+    qint64 m_lastUpdateTime = 0;
+    qint64 m_lastDeltaMs = 0;
 
     static Game * m_instance;
 };

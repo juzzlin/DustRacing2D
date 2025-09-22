@@ -312,7 +312,7 @@ bool Race::started()
     return m_started;
 }
 
-void Race::update()
+void Race::update(std::chrono::milliseconds timeStep)
 {
     for (auto && car : m_cars)
     {
@@ -368,7 +368,7 @@ void Race::update()
         m_isfinishedSignalSent = true;
     }
 
-    m_timing.tick();
+    m_timing.tick(timeStep);
 }
 
 void Race::pitStop(Car & car)

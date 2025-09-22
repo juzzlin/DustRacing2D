@@ -17,8 +17,12 @@
 #define TIMING_HPP
 
 #include <QObject>
+
+#include <chrono>
 #include <string>
 #include <vector>
+
+using namespace std::chrono_literals;
 
 class Car;
 
@@ -51,11 +55,8 @@ public:
     //! \return the lap for the leading car.
     size_t leadersLap() const;
 
-    //! \return the race time in msecs.
-    int raceTime() const;
-
-    //! \return the race time of given car in msecs.
-    int raceTime(size_t index) const;
+    std::chrono::milliseconds raceTime() const;
+    std::chrono::milliseconds raceTime(size_t index) const;
 
     /*! \return the record race time for the given car in msecs or
      *  -1 if invalid car or time not set. */
@@ -85,17 +86,11 @@ public:
     //! Set the current race record.
     void setRaceRecord(int msecs);
 
-    //! Starts the timing.
     void start();
-
-    //! Stops the timing.
     void stop();
-
-    //! Resets the timing.
     void reset();
 
-    //! Increase timer assuming 60 Hz update rate
-    void tick();
+    void tick(std::chrono::milliseconds timeStep);
 
     //! Converts msecs to string "mm:ss.zz".
     static std::wstring msecsToString(int msec);
@@ -113,11 +108,9 @@ private:
     struct Times
     {
         int lastLapTime = -1;
-
         int recordLapTime = -1; // Personal best
 
-        int raceTime = 0;
-
+        std::chrono::milliseconds raceTime = 0ms;
         int recordRaceTime = 0; // Personal best
 
         size_t lap = 0;
@@ -128,13 +121,11 @@ private:
     };
 
     std::vector<Timing::Times> m_times;
-
-    int m_time;
+    std::chrono::milliseconds m_time;
 
     bool m_started;
 
     int m_lapRecord;
-
     int m_raceRecord;
 };
 

@@ -214,7 +214,7 @@ void Scene::createCars()
 
 void Scene::setupMinimaps()
 {
-    const auto minimapSize = static_cast<int>(m_width * 0.2f);
+    const auto minimapSize = static_cast<int>(static_cast<float>(m_width) * 0.2f);
     const auto minimapY = !m_game.hasTwoHumanPlayers() ? minimapSize : minimapSize / 2 + 10;
 
     for (size_t i = 0; i < std::min(static_cast<size_t>(2), m_cars.size()); i++)
@@ -256,7 +256,7 @@ void Scene::createMenus()
     m_menuManager->enterMenu(m_mainMenu);
 }
 
-void Scene::updateFrame(InputHandler & handler, int step)
+void Scene::updateFrame(InputHandler & handler, std::chrono::milliseconds timeStep)
 {
     if (m_stateMachine.state() == StateMachine::State::GameTransitionIn || m_stateMachine.state() == StateMachine::State::GameTransitionOut || m_stateMachine.state() == StateMachine::State::DoStartlights || m_stateMachine.state() == StateMachine::State::Play)
     {
@@ -268,8 +268,8 @@ void Scene::updateFrame(InputHandler & handler, int step)
                 updateAi();
             }
 
-            updateWorld(step);
-            updateRace();
+            updateWorld(timeStep);
+            updateRace(timeStep);
 
             if (m_game.hasTwoHumanPlayers())
             {
@@ -286,7 +286,7 @@ void Scene::updateFrame(InputHandler & handler, int step)
     }
     else if (m_stateMachine.state() == StateMachine::State::Menu)
     {
-        m_menuManager->stepTime(step);
+        m_menuManager->stepTime(timeStep);
     }
 
     if (m_fadeAnimation->isFading())
@@ -310,16 +310,14 @@ void Scene::updateOverlays()
     m_messageOverlay->update();
 }
 
-void Scene::updateWorld(int timeStep)
+void Scene::updateWorld(std::chrono::milliseconds timeStep)
 {
-    // Step time
     m_world.stepTime(timeStep);
 }
 
-void Scene::updateRace()
+void Scene::updateRace(std::chrono::milliseconds timeStep)
 {
-    // Update race situation
-    m_race->update();
+    m_race->update(timeStep);
 
     emit listenerLocationChanged(m_cars.at(0)->location().i(), m_cars.at(0)->location().j());
 }

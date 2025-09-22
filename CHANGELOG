@@ -5,6 +5,8 @@ New features:
 
 Bug fixes:
 
+* Fix too slow physics especially with VSYNC on
+
 Other:
 
 2.1.1

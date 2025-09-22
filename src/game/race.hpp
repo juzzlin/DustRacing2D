@@ -20,6 +20,8 @@
 #include <QObject>
 #include <QString>
 #include <QTimer>
+
+#include <chrono>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -44,7 +46,7 @@ public:
     Race(Game & game, size_t numCars);
 
     //! Destructor.
-    virtual ~Race();
+    virtual ~Race() override;
 
     //! Init the race.
     void init(std::shared_ptr<Track>, size_t lapCount);
@@ -91,7 +93,7 @@ public slots:
 
     void stopEngineSounds();
 
-    void update();
+    void update(std::chrono::milliseconds timeStep);
 
     void pitStop(Car & car);
 

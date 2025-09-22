@@ -16,6 +16,7 @@
 #ifndef MENUMANAGER_HPP
 #define MENUMANAGER_HPP
 
+#include <chrono>
 #include <map>
 #include <memory>
 #include <string>
@@ -86,7 +87,7 @@ public:
     void selectCurrentItem();
 
     //! Give a time tick to the whole menu tree.
-    void stepTime(int msecs);
+    void stepTime(std::chrono::milliseconds timeStep);
 
     /*! Handle mouse press at given screen coordinates.
      *  \return true if on a valid item. */

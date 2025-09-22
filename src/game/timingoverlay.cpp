@@ -337,14 +337,14 @@ void TimingOverlay::renderRaceTime()
 {
     if (m_showRaceTime)
     {
-        const int raceTime = m_race->timing().raceTime(m_car->index());
+        const auto raceTime = m_race->timing().raceTime(m_car->index());
 
         m_text.setGlyphSize(GLYPH_W_TIMES, GLYPH_H_TIMES);
         m_text.setColor(WHITE);
 
         std::wstringstream ss;
         //: Total race time
-        ss << QObject::tr("TOT:").toStdWString() << m_race->timing().msecsToString(raceTime);
+        ss << QObject::tr("TOT:").toStdWString() << m_race->timing().msecsToString(raceTime.count());
         m_text.setText(ss.str());
         m_text.render(
           width() - m_text.width(m_font),

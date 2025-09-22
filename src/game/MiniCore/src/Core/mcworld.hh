@@ -25,6 +25,7 @@
 #include "mcvector2d.hh"
 #include "mcvector3d.hh"
 
+#include <chrono>
 #include <memory>
 #include <vector>
 
@@ -137,8 +138,9 @@ public:
 
     /*! \brief Step world time
      *  This causes the integration of physics and executes collision detections.
-     *  \param step Time step to be updated in msecs. */
-    void stepTime(int step);
+     *  \param timeStep Time step to be updated in msecs. */
+    void stepTime(int timeStep);
+    void stepTime(std::chrono::milliseconds timeStep);
 
     /*! \brief Call this (once) before calling render() or renderShadows().
      *  \param camera The camera window to be used. If nullptr, then
@@ -188,7 +190,7 @@ private:
     DISABLE_ASSI(MCWorld);
     DISABLE_MOVE(MCWorld);
 
-    void integrate(int step);
+    void integratePhysics(int step);
 
     void processRemovedObjects();
 

@@ -87,7 +87,7 @@ MCWorld::~MCWorld()
     MCWorld::m_instance = nullptr;
 }
 
-void MCWorld::integrate(int step)
+void MCWorld::integratePhysics(int step)
 {
     // Integrate and update all registered objects
     m_forceRegistry->update();
@@ -439,16 +439,18 @@ MCForceRegistry & MCWorld::forceRegistry() const
     return *m_forceRegistry;
 }
 
-void MCWorld::stepTime(int step)
+void MCWorld::stepTime(int timeStep)
 {
-    // Integrate physics
-    integrate(step);
+    integratePhysics(timeStep);
 
-    // Process collisions and generate impulses
     processCollisions();
 
-    // Remove objects that are marked to be removed
     processRemovedObjects();
+}
+
+void MCWorld::stepTime(std::chrono::milliseconds timeStep)
+{
+    stepTime(timeStep.count());
 }
 
 const MCWorld::ObjectVector & MCWorld::objects() const
