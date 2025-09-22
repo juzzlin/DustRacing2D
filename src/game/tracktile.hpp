@@ -47,7 +47,7 @@ public:
     TrackTile(QPointF location, QPoint matrixLocation, const QString & type = "", TileType typeEnum = TileType::None);
 
     //! Destructor
-    virtual ~TrackTile();
+    virtual ~TrackTile() override;
 
     //! Set the orientation in XY-plane in degrees when loading
     //! a track.
@@ -92,6 +92,6 @@ private:
     bool m_hasAsphalt;
 };
 
-using TrackTilePtr = std::shared_ptr<TrackTile>;
+using TrackTileS = std::shared_ptr<TrackTile>;
 
 #endif // TRACKTILE_HPP

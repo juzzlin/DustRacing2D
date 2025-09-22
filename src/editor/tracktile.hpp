@@ -110,6 +110,6 @@ private:
     bool m_added;
 };
 
-using TrackTilePtr = std::shared_ptr<TrackTile>;
+using TrackTileS = std::shared_ptr<TrackTile>;
 
 #endif // TRACKTILE_HPP

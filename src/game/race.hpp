@@ -99,21 +99,16 @@ public slots:
 
 private:
     void checkForNewBestPosition(const Car & car);
-
     void checkIfCarIsStuck(Car & car);
-
     void checkIfCarIsOffTrack(Car & car);
-
     void checkIfLapIsCompleted(Car & car, const Route & route, size_t currentTargetNodeIndex);
 
     void clearPositions();
-
     void clearRaceFlags();
 
     void createStartGridObjects();
 
     void initCars();
-
     void initTiming();
 
     bool isRaceFinished() const;
@@ -125,52 +120,48 @@ private:
     void translateCarsToStartPositions();
 
     void updateRouteProgress(Car & car);
-
     void updatePositions();
 
     const size_t m_humanPlayerIndex1;
-
     const size_t m_humanPlayerIndex2;
 
     // Position required to unlock a new track
     const size_t m_unlockLimit;
 
-    typedef std::vector<Car *> CarVector;
+    using CarVector = std::vector<Car *>;
     CarVector m_cars;
 
     // Used only to keep references to the start grid objects.
     // They are common for all races and created only once.
-    typedef std::vector<MCObjectPtr> StartGridObjectVector;
+    using StartGridObjectVector = std::vector<MCObjectPtr>;
     StartGridObjectVector m_startGridObjects;
 
     // Map from car route progression to car order vector.
     // Tracks the order of the cars in the route.
-    typedef std::unordered_map<size_t, std::vector<size_t>> ProgressionHash;
+    using ProgressionHash = std::unordered_map<size_t, std::vector<size_t>>;
     mutable ProgressionHash m_progression;
 
-    typedef std::shared_ptr<OffTrackDetector> OffTrackDetectorPtr;
-    typedef std::vector<OffTrackDetectorPtr> OTDVector;
+    using OffTrackDetectorS = std::shared_ptr<OffTrackDetector>;
+    using OTDVector = std::vector<OffTrackDetectorS>;
     OTDVector m_offTrackDetectors;
 
     // Data structure to determine if a car is stuck.
     // In that case we move the car onto the previous check point.
-    typedef std::pair<TrackTilePtr, int> StuckTileCounter; // Tile pointer and counter.
-    typedef std::unordered_map<size_t, StuckTileCounter> StuckHash; // Car index to StuckTileCounter.
+    using StuckTileCounter = std::pair<TrackTileS, int>; // Tile pointer and counter.
+    using StuckHash = std::unordered_map<size_t, StuckTileCounter>; // Car index to StuckTileCounter.
     StuckHash m_stuckHash;
 
     struct CarStatus
     {
         size_t currentTargetNodeIndex = 0;
-
         size_t nextTargetNodeIndex = 0;
-
         size_t prevTargetNodeIndex = 0;
 
         size_t routeProgression = 0;
 
         size_t position = 0;
     };
-    typedef std::unordered_map<size_t, CarStatus> StatusHash; // Car index to CarStatus.
+    using StatusHash = std::unordered_map<size_t, CarStatus>; // Car index to CarStatus.
     StatusHash m_statusHash;
 
     const size_t m_numCars;
@@ -182,11 +173,8 @@ private:
     std::shared_ptr<Track> m_track;
 
     bool m_started;
-
     bool m_checkeredFlagEnabled;
-
     bool m_winnerFinished;
-
     bool m_isfinishedSignalSent;
 
     int m_bestPos;

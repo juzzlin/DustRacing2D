@@ -57,7 +57,7 @@ TrackData & Track::trackData() const
     return *m_trackData;
 }
 
-TrackTilePtr Track::trackTileAtLocation(float x, float y) const
+TrackTileS Track::trackTileAtLocation(float x, float y) const
 {
     // X index
     x = x < 0 ? 0 : x;
@@ -72,7 +72,7 @@ TrackTilePtr Track::trackTileAtLocation(float x, float y) const
     return static_pointer_cast<TrackTile>(m_trackData->map().getTile(i, j));
 }
 
-TrackTilePtr Track::finishLine() const
+TrackTileS Track::finishLine() const
 {
     auto && map = m_trackData->map();
     for (size_t j = 0; j < map.rows(); j++)

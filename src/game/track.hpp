@@ -51,10 +51,10 @@ public:
 
     //! Return pointer to the tile at the given location.
     //! It is assumed that x >= 0 and y >= 0.
-    TrackTilePtr trackTileAtLocation(float x, float y) const;
+    TrackTileS trackTileAtLocation(float x, float y) const;
 
     //! Return pointer to the finish line tile.
-    TrackTilePtr finishLine() const;
+    TrackTileS finishLine() const;
 
     //! Set the next track.
     void setNext(std::weak_ptr<Track> next);
