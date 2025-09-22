@@ -14,12 +14,12 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "timing.hpp"
-#include "car.hpp"
 
 #include "simple_logger.hpp"
 
 #include <QString>
 
+#include <algorithm>
 #include <cassert>
 
 Timing::Timing(size_t cars, QObject * parent)
@@ -71,7 +71,7 @@ void Timing::setLapCompleted(size_t index, bool isHuman)
 
 void Timing::setRaceCompleted(size_t index, bool state, bool isHuman)
 {
-    Timing::Times & times = m_times.at(index);
+    auto && times = m_times.at(index);
     times.raceCompleted = state;
     times.raceTime = m_time;
 
@@ -79,8 +79,7 @@ void Timing::setRaceCompleted(size_t index, bool state, bool isHuman)
     {
         if (times.raceTime.count() < m_raceRecord || m_raceRecord == -1)
         {
-            m_raceRecord = times.raceTime.count();
-
+            m_raceRecord = static_cast<int>(times.raceTime.count());
             emit raceRecordAchieved(m_raceRecord);
         }
     }
@@ -88,20 +87,17 @@ void Timing::setRaceCompleted(size_t index, bool state, bool isHuman)
 
 bool Timing::raceCompleted(size_t index) const
 {
-    const Timing::Times & times = m_times.at(index);
-    return times.raceCompleted;
+    return m_times.at(index).raceCompleted;
 }
 
 void Timing::setIsActive(size_t index, bool state)
 {
-    Timing::Times & times = m_times.at(index);
-    times.isActive = state;
+    m_times.at(index).isActive = state;
 }
 
 bool Timing::isActive(size_t index) const
 {
-    const Timing::Times & times = m_times.at(index);
-    return times.isActive;
+    return m_times.at(index).isActive;
 }
 
 size_t Timing::lap(size_t index) const
@@ -111,37 +107,29 @@ size_t Timing::lap(size_t index) const
 
 size_t Timing::leadersLap() const
 {
-    size_t maxLap = 0;
-    for (auto && time : m_times)
+    if (m_times.empty())
     {
-        if (time.lap > maxLap)
-        {
-            maxLap = time.lap;
-        }
+        return 0;
     }
-
-    return maxLap;
+    else
+    {
+        return std::max_element(
+                 m_times.begin(), m_times.end(),
+                 [](auto const & a, auto const & b) {
+                     return a.lap < b.lap;
+                 })
+          ->lap;
+    }
 }
 
 int Timing::currentLapTime(size_t index) const
 {
-    if (!m_started)
-    {
-        return 0;
-    }
-
-    const Timing::Times & times = m_times.at(index);
-    return m_time.count() - times.raceTime.count();
+    return !m_started ? 0 : static_cast<int>(m_time.count() - m_times.at(index).raceTime.count());
 }
 
 int Timing::recordLapTime(size_t index) const
 {
-    if (!m_started)
-    {
-        return -1;
-    }
-
-    return m_times.at(index).recordLapTime;
+    return !m_started ? -1 : m_times.at(index).recordLapTime;
 }
 
 std::chrono::milliseconds Timing::raceTime() const
@@ -151,24 +139,12 @@ std::chrono::milliseconds Timing::raceTime() const
 
 std::chrono::milliseconds Timing::raceTime(size_t index) const
 {
-    if (!m_times.at(index).raceCompleted)
-    {
-        return raceTime();
-    }
-    else
-    {
-        return m_times.at(index).raceTime;
-    }
+    return !m_times.at(index).raceCompleted ? raceTime() : m_times.at(index).raceTime;
 }
 
 int Timing::recordRaceTime(size_t index) const
 {
-    if (!m_started)
-    {
-        return -1;
-    }
-
-    return m_times.at(index).recordRaceTime;
+    return !m_started ? -1 : m_times.at(index).recordRaceTime;
 }
 
 int Timing::lapRecord() const
@@ -193,12 +169,7 @@ void Timing::setRaceRecord(int msecs)
 
 int Timing::lastLapTime(size_t index) const
 {
-    if (!m_started)
-    {
-        return -1;
-    }
-
-    return m_times.at(index).lastLapTime;
+    return !m_started ? -1 : m_times.at(index).lastLapTime;
 }
 
 void Timing::start()
@@ -244,5 +215,5 @@ std::wstring Timing::msecsToString(int msec)
     const int ss = mr / 1000;
     const int ms = mr % 1000;
 
-    return QString().asprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
+    return QString {}.asprintf("%02d:%02d.%02d", mm, ss, ms / 10).toStdWString();
 }

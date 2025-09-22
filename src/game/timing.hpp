@@ -24,8 +24,6 @@
 
 using namespace std::chrono_literals;
 
-class Car;
-
 class Timing : public QObject
 {
     Q_OBJECT
@@ -100,7 +98,6 @@ signals:
     void lapCompleted(size_t index, int msec);
 
     void lapRecordAchieved(int msec);
-
     void raceRecordAchieved(int msec);
 
 private:
