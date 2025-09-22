@@ -248,6 +248,6 @@ private:
     std::deque<std::pair<MCObject *, MCVector3dF>> m_collisionEffectStack;
 };
 
-typedef std::shared_ptr<Car> CarPtr;
+using CarS = std::shared_ptr<Car>;
 
 #endif // CAR_HPP

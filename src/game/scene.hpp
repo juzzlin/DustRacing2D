@@ -150,16 +150,13 @@ private:
 
     MTFH::MenuPtr m_mainMenu;
     std::unique_ptr<MTFH::MenuManager> m_menuManager;
-
     std::unique_ptr<Intro> m_intro;
-
     std::unique_ptr<ParticleFactory> m_particleFactory;
-
     std::unique_ptr<FadeAnimation> m_fadeAnimation;
 
     std::array<Minimap, 2> m_minimap;
 
-    using CarVector = std::vector<CarPtr>;
+    using CarVector = std::vector<CarS>;
     CarVector m_cars;
 
     using AIVector = std::vector<AIPtr>;

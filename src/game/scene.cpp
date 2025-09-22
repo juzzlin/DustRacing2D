@@ -94,9 +94,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
   , m_fadeAnimation { std::make_unique<FadeAnimation>() }
 {
     initializeComponents();
-
     connectComponents();
-
     createMenus();
 }
 
@@ -181,8 +179,7 @@ void Scene::createCars()
 
     for (size_t i = 0; i < carCount(); i++)
     {
-        CarPtr car(CarFactory::buildCar(i, carCount(), m_game));
-        if (car)
+        if (CarS car { CarFactory::buildCar(i, carCount(), m_game) }; car)
         {
             if (!car->isHuman())
             {
@@ -332,7 +329,7 @@ void Scene::updateCameraLocation(MCCamera & camera, float & offset, MCObject & o
     // in the speed won't look bad.
     offset += (object.physicsComponent().velocity().lengthFast() - offset) * 0.2f;
     const float offsetAmplification = m_game.hasTwoHumanPlayers() ? 9.6f : 13.8f;
-    const auto loc = MCVector2dF(object.location()) + object.direction() * offset * offsetAmplification;
+    const auto loc = MCVector2dF { object.location() } + object.direction() * offset * offsetAmplification;
     camera.setPos(loc.i(), loc.j());
 }
 
@@ -400,13 +397,23 @@ void Scene::setupCameras(Track & activeTrack)
             if (m_game.splitType() == Game::SplitType::Vertical)
             {
                 m_camera.at(i).init(
-                  Scene::width() / 2, Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+                  static_cast<float>(Scene::width() / 2),
+                  static_cast<float>(Scene::height()),
+                  0,
+                  0,
+                  static_cast<float>(activeTrack.width()),
+                  static_cast<float>(activeTrack.height()));
                 m_world.renderer().addParticleVisibilityCamera(m_camera.at(i));
             }
             else
             {
                 m_camera.at(i).init(
-                  Scene::width(), Scene::height() / 2, 0, 0, activeTrack.width(), activeTrack.height());
+                  static_cast<float>(Scene::width()),
+                  static_cast<float>(Scene::height() / 2),
+                  0,
+                  0,
+                  static_cast<float>(activeTrack.width()),
+                  static_cast<float>(activeTrack.height()));
                 m_world.renderer().addParticleVisibilityCamera(m_camera.at(i));
             }
         }
@@ -414,7 +421,12 @@ void Scene::setupCameras(Track & activeTrack)
     else
     {
         m_camera.at(0).init(
-          Scene::width(), Scene::height(), 0, 0, activeTrack.width(), activeTrack.height());
+          static_cast<float>(Scene::width()),
+          static_cast<float>(Scene::height()),
+          0,
+          0,
+          static_cast<float>(activeTrack.width()),
+          static_cast<float>(activeTrack.height()));
         m_world.renderer().addParticleVisibilityCamera(m_camera.at(0));
     }
 }
@@ -462,12 +474,11 @@ void Scene::setWorldDimensions()
     const size_t minZ = 0;
     const size_t maxZ = 1000;
 
-    m_world.setDimensions(minX, maxX, minY, maxY, minZ, maxZ, METERS_PER_UNIT);
+    m_world.setDimensions(minX, static_cast<float>(maxX), minY, static_cast<float>(maxY), minZ, maxZ, METERS_PER_UNIT);
 }
 
 void Scene::addCarsToWorld()
 {
-    // Add objects to the world
     for (auto && car : m_cars)
     {
         car->addToWorld();
@@ -477,7 +488,6 @@ void Scene::addCarsToWorld()
 void Scene::addTrackObjectsToWorld()
 {
     createNormalObjects();
-
     createBridgeObjects();
 }
 
@@ -490,7 +500,7 @@ void Scene::createNormalObjects()
         const auto trackObject = dynamic_pointer_cast<TrackObject>(m_activeTrack->trackData().objects().object(i));
         assert(trackObject);
 
-        MCObject & object = trackObject->object();
+        auto && object = trackObject->object();
         object.addToWorld();
 
         // Set the base Z of mesh objects at ground level instead of at the object center
@@ -503,10 +513,10 @@ void Scene::createNormalObjects()
             }
         }
 
-        object.translate(object.initialLocation() + MCVector3dF(0, 0, baseZ));
-        object.rotate(object.initialAngle());
+        object.translate(object.initialLocation() + MCVector3dF { 0, 0, baseZ });
+        object.rotate(static_cast<float>(object.initialAngle()));
 
-        if (auto pit = dynamic_cast<Pit *>(&object))
+        if (const auto pit = dynamic_cast<Pit *>(&object); pit)
         {
             pit->reset();
             connect(pit, &Pit::pitStop, m_race.get(), &Race::pitStop);
@@ -518,17 +528,20 @@ void Scene::createBridgeObjects()
 {
     assert(m_activeTrack);
 
-    const auto & map = m_activeTrack->trackData().map();
+    auto && map = m_activeTrack->trackData().map();
     for (size_t j = 0; j <= map.rows(); j++)
     {
         for (size_t i = 0; i <= map.cols(); i++)
         {
-            auto tile = dynamic_pointer_cast<TrackTile>(map.getTile(i, j));
+            const auto tile = dynamic_pointer_cast<TrackTile>(map.getTile(i, j));
             if (tile && tile->tileTypeEnum() == TrackTile::TileType::Bridge)
             {
                 const auto bridge = std::make_shared<Bridge>();
-                bridge->translate(MCVector3dF(i * TrackTile::width() + TrackTile::width() / 2, j * TrackTile::height() + TrackTile::height() / 2, 0));
-                bridge->rotate(tile->rotation());
+                bridge->translate(MCVector3dF {
+                  static_cast<float>(i * TrackTile::width() + TrackTile::width() / 2),
+                  static_cast<float>(j * TrackTile::height() + TrackTile::height() / 2),
+                  0 });
+                bridge->rotate(static_cast<float>(tile->rotation()));
                 bridge->addToWorld();
                 m_bridges.push_back(bridge);
             }
@@ -636,21 +649,15 @@ void Scene::renderMenu()
     switch (m_stateMachine.state())
     {
     case StateMachine::State::DoIntro:
-
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
-
         m_intro->render();
-
         break;
 
     case StateMachine::State::Menu:
     case StateMachine::State::MenuTransitionOut:
     case StateMachine::State::MenuTransitionIn:
-
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
-
         m_menuManager->render();
-
         break;
 
     default:
@@ -668,12 +675,10 @@ void Scene::renderCommonHUD()
     case StateMachine::State::Play: {
         // Setup for common scene
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
-
         if (m_race->checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
         {
             m_checkeredFlag->render();
         }
-
         m_startlightsOverlay->render();
         m_messageOverlay->render();
         break;
@@ -696,7 +701,7 @@ void Scene::renderHUD()
             MCGLScene::SplitType p1, p0;
             getSplitPositions(p1, p0);
 
-            auto & glScene = MCWorld::instance().renderer().glScene();
+            auto && glScene = MCWorld::instance().renderer().glScene();
 
             glScene.setSplitType(p1);
             m_timingOverlay.at(1).render();
@@ -743,7 +748,7 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
                 m_world.prepareRendering(&m_camera.at(0));
             }
 
-            auto & glScene = MCWorld::instance().renderer().glScene();
+            auto && glScene = MCWorld::instance().renderer().glScene();
             glScene.setSplitType(p1);
             m_world.render(&m_camera.at(1), renderGroup);
             glScene.setSplitType(p0);

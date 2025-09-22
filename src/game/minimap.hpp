@@ -38,7 +38,7 @@ public:
 
     void initialize(Car & carToFollow, const MapBase & trackMap, int x, int y, size_t size);
 
-    using CarVector = std::vector<CarPtr>;
+    using CarVector = std::vector<CarS>;
     void render(const CarVector & cars, const Race & race);
 
 private:
