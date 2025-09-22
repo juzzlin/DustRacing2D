@@ -26,7 +26,6 @@
 #include "game.hpp"
 #include "inputhandler.hpp"
 #include "intro.hpp"
-#include "layers.hpp"
 #include "mainmenu.hpp"
 #include "messageoverlay.hpp"
 #include "particlefactory.hpp"
@@ -44,7 +43,6 @@
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
-#include "../common/targetnodebase.hpp"
 
 #include <MenuManager>
 
@@ -82,18 +80,18 @@ int Scene::m_height = 768;
 static const float METERS_PER_UNIT = 0.05f;
 
 Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWorld & world)
-  : m_game(game)
-  , m_stateMachine(stateMachine)
-  , m_renderer(renderer)
-  , m_messageOverlay(std::make_unique<MessageOverlay>())
-  , m_race(std::make_shared<Race>(game, carCount()))
-  , m_world(world)
-  , m_startlights(std::make_unique<Startlights>())
-  , m_startlightsOverlay(std::make_unique<StartlightsOverlay>(*m_startlights))
-  , m_checkeredFlag(std::make_unique<CheckeredFlag>())
-  , m_intro(std::make_unique<Intro>())
-  , m_particleFactory(std::make_unique<ParticleFactory>())
-  , m_fadeAnimation(std::make_unique<FadeAnimation>())
+  : m_game { game }
+  , m_stateMachine { stateMachine }
+  , m_renderer { renderer }
+  , m_messageOverlay { std::make_unique<MessageOverlay>() }
+  , m_race { std::make_shared<Race>(game, carCount()) }
+  , m_world { world }
+  , m_startlights { std::make_unique<Startlights>() }
+  , m_startlightsOverlay { std::make_unique<StartlightsOverlay>(*m_startlights) }
+  , m_checkeredFlag { std::make_unique<CheckeredFlag>() }
+  , m_intro { std::make_unique<Intro>() }
+  , m_particleFactory { std::make_unique<ParticleFactory>() }
+  , m_fadeAnimation { std::make_unique<FadeAnimation>() }
 {
     initializeComponents();
 
@@ -181,7 +179,6 @@ void Scene::createCars()
     m_cars.clear();
     m_ai.clear();
 
-    // Create and add cars.
     for (size_t i = 0; i < carCount(); i++)
     {
         CarPtr car(CarFactory::buildCar(i, carCount(), m_game));
@@ -246,11 +243,10 @@ size_t Scene::carCount()
 
 void Scene::createMenus()
 {
-    m_menuManager.reset(new MTFH::MenuManager);
+    m_menuManager = std::make_unique<MTFH::MenuManager>();
 
     m_mainMenu = std::make_shared<MainMenu>(*m_menuManager, *this, width(), height());
-    connect(
-      std::static_pointer_cast<MainMenu>(m_mainMenu).get(), &MainMenu::exitGameRequested, &m_game, &Game::exitGame);
+    connect(std::static_pointer_cast<MainMenu>(m_mainMenu).get(), &MainMenu::exitGameRequested, &m_game, &Game::exitGame);
 
     m_menuManager->addMenu(m_mainMenu);
     m_menuManager->enterMenu(m_mainMenu);
@@ -258,8 +254,12 @@ void Scene::createMenus()
 
 void Scene::updateFrame(InputHandler & handler, std::chrono::milliseconds timeStep)
 {
-    if (m_stateMachine.state() == StateMachine::State::GameTransitionIn || m_stateMachine.state() == StateMachine::State::GameTransitionOut || m_stateMachine.state() == StateMachine::State::DoStartlights || m_stateMachine.state() == StateMachine::State::Play)
+    switch (m_stateMachine.state())
     {
+    case StateMachine::State::GameTransitionIn:
+    case StateMachine::State::GameTransitionOut:
+    case StateMachine::State::DoStartlights:
+    case StateMachine::State::Play: {
         if (m_activeTrack)
         {
             if (m_race->started())
@@ -284,9 +284,12 @@ void Scene::updateFrame(InputHandler & handler, std::chrono::milliseconds timeSt
             }
         }
     }
-    else if (m_stateMachine.state() == StateMachine::State::Menu)
-    {
+    break;
+    case StateMachine::State::Menu:
         m_menuManager->stepTime(timeStep);
+        break;
+    default:
+        break;
     }
 
     if (m_fadeAnimation->isFading())
@@ -428,11 +431,9 @@ void Scene::setActiveTrack(std::shared_ptr<Track> activeTrack)
 {
     m_activeTrack = activeTrack;
 
-    // Remove previous objects
     m_world.clear();
 
     setupCameras(*activeTrack);
-
     setWorldDimensions();
 
     createCars();
@@ -440,13 +441,11 @@ void Scene::setActiveTrack(std::shared_ptr<Track> activeTrack)
     resizeOverlays();
 
     addCarsToWorld();
-
     addTrackObjectsToWorld();
 
     initializeRace();
 
     setupAI(activeTrack);
-
     setupMinimaps();
 }
 
@@ -604,8 +603,7 @@ void Scene::renderTrack()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-    {
+    case StateMachine::State::Play: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
@@ -667,8 +665,7 @@ void Scene::renderCommonHUD()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-    {
+    case StateMachine::State::Play: {
         // Setup for common scene
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
 
@@ -693,8 +690,7 @@ void Scene::renderHUD()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-    {
+    case StateMachine::State::Play: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
@@ -735,8 +731,7 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play:
-    {
+    case StateMachine::State::Play: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
@@ -749,13 +744,10 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
             }
 
             auto & glScene = MCWorld::instance().renderer().glScene();
-
             glScene.setSplitType(p1);
             m_world.render(&m_camera.at(1), renderGroup);
-
             glScene.setSplitType(p0);
             m_world.render(&m_camera.at(0), renderGroup);
-
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
         else
