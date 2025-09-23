@@ -39,7 +39,6 @@ class TimingOverlay : public QObject, public OverlayBase
     Q_OBJECT
 
 public:
-    //! Constructor.
     TimingOverlay();
 
     //! \reimp
@@ -51,8 +50,8 @@ public:
     //! Show timing for the given car.
     void setCarToFollow(const Car & car);
 
-    //! Set current race.
-    void setRace(std::shared_ptr<Race> race);
+    using RaceS = std::shared_ptr<Race>;
+    void setRace(RaceS race);
 
 public slots:
 
@@ -62,49 +61,34 @@ public slots:
 private slots:
 
     void setLapRecord(int msecs);
-
     void setRaceRecord(int msecs);
 
     void blinkLapRecord();
-
     void blinkRaceRecord();
-
     void blinkCarStatus();
 
 private:
     void renderCarStatusView();
-
     void renderCurrentLap();
-
     void renderCurrentLapTime();
-
     void renderLastLapTime();
-
     void renderPosition();
-
     void renderRaceTime();
-
     void renderRecordLapTime();
-
     void renderSpeed();
 
     MCTextureFontManager & m_fontManager;
-
     MCTextureFont & m_font;
-
     MCTextureText m_text;
 
-    const Car * m_car;
-
-    std::shared_ptr<Race> m_race;
+    const Car * m_car = nullptr;
+    RaceS m_race;
 
     std::vector<std::wstring> m_posTexts;
 
-    bool m_showLapRecordTime;
-
-    bool m_showRaceTime;
-
-    bool m_showCarStatus;
+    bool m_showLapRecordTime = true;
+    bool m_showRaceTime = true;
+    bool m_showCarStatus = true;
 
     CarStatusView m_carStatusView;
 };

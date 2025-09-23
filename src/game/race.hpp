@@ -56,7 +56,8 @@ public:
     void addCar(Car & car);
     void removeCars();
 
-    Timing & timing();
+    using TimingW = std::weak_ptr<Timing>;
+    TimingW timing() const;
 
     bool checkeredFlagEnabled() const;
 
@@ -70,10 +71,11 @@ public:
 signals:
 
     void finished();
-
     void messageRequested(QString message);
-
     void tiresChanged(const Car & car);
+
+    void lapRecordAchieved(int msec);
+    void raceRecordAchieved(int msec);
 
 public slots:
 
@@ -156,8 +158,8 @@ private:
 
     size_t m_lapCount;
 
-    Timing m_timing;
-
+    using TimingS = std::shared_ptr<Timing>;
+    TimingS m_timing;
     TrackS m_track;
 
     bool m_started = false;

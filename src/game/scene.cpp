@@ -340,7 +340,7 @@ void Scene::processUserInput(InputHandler & handler)
         // Handle accelerating / braking
         if (handler.getActionState(i, InputHandler::Action::Down))
         {
-            if (!m_race->timing().raceCompleted(i))
+            if (!m_race->timing().lock()->raceCompleted(i))
             {
                 m_cars.at(i)->setBrakeEnabled(true);
             }
@@ -352,7 +352,7 @@ void Scene::processUserInput(InputHandler & handler)
 
         if (handler.getActionState(i, InputHandler::Action::Up))
         {
-            if (!m_race->timing().raceCompleted(i))
+            if (!m_race->timing().lock()->raceCompleted(i))
             {
                 m_cars.at(i)->setAcceleratorEnabled(true);
             }
@@ -382,8 +382,7 @@ void Scene::updateAi()
 {
     for (auto && ai : m_ai)
     {
-        const bool isRaceCompleted = m_race->timing().raceCompleted(ai->car().index());
-        ai->update(isRaceCompleted);
+        ai->update(m_race->timing().lock()->raceCompleted(ai->car().index()));
     }
 }
 

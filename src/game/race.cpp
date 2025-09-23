@@ -46,7 +46,7 @@ Race::Race(Game & game, size_t numCars)
   , m_humanPlayerIndex2 { 1 }
   , m_numCars { numCars }
   , m_lapCount { 5 }
-  , m_timing { numCars }
+  , m_timing { std::make_shared<Timing>(numCars) }
   , m_game { game }
 {
     createStartGridObjects();
@@ -54,20 +54,22 @@ Race::Race(Game & game, size_t numCars)
     m_offTrackMessageTimer.setSingleShot(true);
     m_offTrackMessageTimer.setInterval(30000ms);
 
-    connect(&m_timing, &Timing::lapRecordAchieved, this, [this](int msecs) {
+    connect(m_timing.get(), &Timing::lapRecordAchieved, this, [this](int msecs) {
         Database::instance().saveLapRecord(*m_track, msecs);
         emit messageRequested(QObject::tr("New lap record!"));
+        emit lapRecordAchieved(msecs);
     });
 
-    connect(&m_timing, &Timing::raceRecordAchieved, this, [this](int msecs) {
+    connect(m_timing.get(), &Timing::raceRecordAchieved, this, [this](int msecs) {
         if (m_game.hasComputerPlayers())
         {
             Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
             emit messageRequested(QObject::tr("New race record!"));
+            emit raceRecordAchieved(msecs);
         }
     });
 
-    connect(&m_timing, &Timing::lapCompleted, this, [this](size_t, int msecs) {
+    connect(m_timing.get(), &Timing::lapCompleted, this, [this](size_t, int msecs) {
         emit messageRequested(QString::fromWCharArray(Timing::msecsToString(msecs).c_str()));
     });
 }
@@ -104,10 +106,10 @@ void Race::initialize(TrackS track, size_t lapCount)
 void Race::initTiming()
 {
     const auto lapRecord = Database::instance().loadLapRecord(*m_track);
-    m_timing.setLapRecord(lapRecord.second ? lapRecord.first : -1);
+    m_timing->setLapRecord(lapRecord.second ? lapRecord.first : -1);
     const auto raceRecord = Database::instance().loadRaceRecord(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
-    m_timing.setRaceRecord(raceRecord.second ? raceRecord.first : -1);
-    m_timing.reset();
+    m_timing->setRaceRecord(raceRecord.second ? raceRecord.first : -1);
+    m_timing->reset();
 }
 
 void Race::initCars()
@@ -282,7 +284,7 @@ void Race::start()
 {
     if (!m_started)
     {
-        m_timing.start();
+        m_timing->start();
         m_started = true;
     }
 }
@@ -311,7 +313,7 @@ void Race::update(std::chrono::milliseconds timeStep)
     }
 
     // Enable the checkered flag if leader has done at least 95% of the last lap.
-    if (m_timing.leadersLap() + 1 == m_lapCount)
+    if (m_timing->leadersLap() + 1 == m_lapCount)
     {
         auto && route = m_track->trackData().route();
         auto && targetNode = route.get(m_statusHash[getLeader().index()].currentTargetNodeIndex);
@@ -327,14 +329,14 @@ void Race::update(std::chrono::milliseconds timeStep)
         }
     }
     // Check if winner has finished
-    else if (m_timing.leadersLap() == m_lapCount)
+    else if (m_timing->leadersLap() == m_lapCount)
     {
         if (!m_winnerFinished)
         {
             m_winnerFinished = true;
 
             auto && leader = getLeader();
-            m_timing.setRaceCompleted(leader.index(), true, leader.isHuman());
+            m_timing->setRaceCompleted(leader.index(), true, leader.isHuman());
 
             if (m_game.mode() == Game::Mode::TimeTrial)
             {
@@ -359,12 +361,12 @@ void Race::update(std::chrono::milliseconds timeStep)
         m_isfinishedSignalSent = true;
     }
 
-    m_timing.tick(timeStep);
+    m_timing->tick(timeStep);
 }
 
 void Race::pitStop(Car & car)
 {
-    if (m_timing.lap(car.index()) > 0)
+    if (m_timing->lap(car.index()) > 0)
     {
         emit messageRequested(QObject::tr("Pit stop!"));
 
@@ -415,9 +417,9 @@ void Race::updateRouteProgress(Car & car)
     const float tolerance = (!currentTargetNodeIndex ? 0 : static_cast<float>(TrackTile::height()) / 20);
 
     // Car still racing
-    if (m_timing.isActive(car.index()))
+    if (m_timing->isActive(car.index()))
     {
-        if (!m_timing.raceCompleted(car.index()))
+        if (!m_timing->raceCompleted(car.index()))
         {
             // Check is car is stuck and if so, move onto nearest asphalt tile.
             if (!car.isHuman())
@@ -461,7 +463,7 @@ void Race::updateRouteProgress(Car & car)
         {
             checkForNewBestPosition(car);
 
-            m_timing.setIsActive(car.index(), false);
+            m_timing->setIsActive(car.index(), false);
         }
     }
     // Car has finished: cooldown laps
@@ -540,12 +542,12 @@ void Race::checkIfLapIsCompleted(Car & car, const Route & route, size_t currentT
 {
     if (currentTargetNodeIndex == 0 && m_statusHash[car.index()].prevTargetNodeIndex + 1 == route.numNodes())
     {
-        m_timing.setLapCompleted(car.index(), car.isHuman());
+        m_timing->setLapCompleted(car.index(), car.isHuman());
 
         // Finish the race if winner has already finished.
         if (m_winnerFinished)
         {
-            m_timing.setRaceCompleted(car.index(), true, car.isHuman());
+            m_timing->setRaceCompleted(car.index(), true, car.isHuman());
         }
     }
 }
@@ -742,7 +744,7 @@ void Race::removeCars()
     m_offTrackDetectors.clear();
 }
 
-Timing & Race::timing()
+Race::TimingW Race::timing() const
 {
     return m_timing;
 }
@@ -756,10 +758,10 @@ bool Race::isRaceFinished() const
 {
     if (m_game.hasTwoHumanPlayers())
     {
-        return m_timing.raceCompleted(m_humanPlayerIndex1) && m_timing.raceCompleted(m_humanPlayerIndex2);
+        return m_timing->raceCompleted(m_humanPlayerIndex1) && m_timing->raceCompleted(m_humanPlayerIndex2);
     }
 
-    return m_timing.raceCompleted(m_humanPlayerIndex1);
+    return m_timing->raceCompleted(m_humanPlayerIndex1);
 }
 
 Race::~Race() = default;
