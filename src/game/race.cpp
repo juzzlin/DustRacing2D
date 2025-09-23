@@ -20,7 +20,6 @@
 #include "database.hpp"
 #include "game.hpp"
 #include "offtrackdetector.hpp"
-#include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
 #include "tracktile.hpp"
