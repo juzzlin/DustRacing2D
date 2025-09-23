@@ -41,11 +41,8 @@ class Renderer : public QWindow, protected QOpenGLFunctions
     Q_OBJECT
 
 public:
-    //! Constructor.
     Renderer(int hRes, int vRes, int fullHRes, int fullVRes, int pixelScale, bool fullScreen, MCGLScene & glScene);
-
-    //! Destructor.
-    virtual ~Renderer();
+    virtual ~Renderer() override;
 
     //! \return the single instance.
     static Renderer & instance();
@@ -64,32 +61,21 @@ public:
     //! \return scene face factor 0.0..1.0.
     float fadeValue() const;
 
-    QSize resolution() const
-    {
-        return QSize(m_hRes, m_vRes);
-    }
-
-    bool fullScreen() const
-    {
-        return m_fullScreen;
-    }
+    QSize resolution() const;
+    bool fullScreen() const;
 
 signals:
 
     void closed();
-
     void initialized();
 
 public slots:
 
     void setEnabled(bool enable);
-
     void setFadeValue(float value);
-
     void setResolution(QSize resolution);
 
     void renderLater();
-
     void renderNow();
 
 protected:
@@ -118,61 +104,55 @@ protected:
     void mouseMoveEvent(QMouseEvent * event) override;
 
 private:
+    void initializeFrameBufferObjects();
+    void initializeMaterial();
+
     //! Load vertex and fragment shaders.
     void loadShaders();
-
     void loadFonts();
 
     void createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource);
 
     void render();
-
-    void resizeGL(int viewWidth, int viewHeight);
+    void renderHud();
+    void renderObjects();
+    void renderScreen();
+    void resizeGlScene(int viewWidth, int viewHeight);
 
     typedef std::unordered_map<std::string, MCGLShaderProgramPtr> ShaderHash;
 
-    QOpenGLContext * m_context;
+    QOpenGLContext * m_context = nullptr;
+    Scene * m_scene = nullptr;
+    EventHandler * m_eventHandler = nullptr;
 
-    Scene * m_scene;
+    const float m_viewAngle = 22.5f;
+    const float m_zNear = 10.0f;
+    const float m_zFar = 10'000.0f;
 
-    EventHandler * m_eventHandler;
-
-    const float m_viewAngle;
-
-    const float m_zNear;
-
-    const float m_zFar;
-
-    float m_fadeValue;
+    float m_fadeValue = 1.0f;
 
     ShaderHash m_shaderHash;
 
-    bool m_enabled;
+    bool m_enabled = false;
 
     int m_hRes;
-
     int m_vRes;
-
     int m_fullHRes;
-
     int m_fullVRes;
-
     int m_pixelScale;
-    
-    int m_frameCounter;
 
+    int m_frameCounter = 0;
     bool m_fullScreen;
-
-    bool m_updatePending;
+    bool m_updatePending = false;
 
     static Renderer * m_instance;
 
     std::unique_ptr<QOpenGLFramebufferObject> m_fbo;
-
     std::unique_ptr<QOpenGLFramebufferObject> m_shadowFbo;
 
     MCGLScene & m_glScene;
-    bool m_rendererInitialized;
+    std::shared_ptr<MCGLMaterial> m_material;
+    bool m_rendererInitialized = false;
 };
 
 #endif // RENDERER_HPP

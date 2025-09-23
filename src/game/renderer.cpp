@@ -49,24 +49,13 @@
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, int pixelScale, bool fullScreen, MCGLScene & glScene)
-  : m_context(nullptr)
-  , m_scene(nullptr)
-  , m_eventHandler(nullptr)
-  , m_viewAngle(22.5f)
-  , m_zNear(10.0f)
-  , m_zFar(10000.0f) // See: https://github.com/juzzlin/DustRacing2D/issues/30
-  , m_fadeValue(1.0f)
-  , m_enabled(false)
-  , m_hRes(hRes * pixelScale)
-  , m_vRes(vRes * pixelScale)
-  , m_fullHRes(fullHRes * pixelScale)
-  , m_fullVRes(fullVRes * pixelScale)
-  , m_pixelScale(pixelScale)
-  , m_frameCounter(0)
-  , m_fullScreen(fullScreen)
-  , m_updatePending(false)
-  , m_glScene(glScene)
-  , m_rendererInitialized(false)
+  : m_hRes { hRes * pixelScale }
+  , m_vRes { vRes * pixelScale }
+  , m_fullHRes { fullHRes * pixelScale }
+  , m_fullVRes { fullVRes * pixelScale }
+  , m_pixelScale { pixelScale }
+  , m_fullScreen { fullScreen }
+  , m_glScene { glScene }
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
@@ -90,15 +79,15 @@ void Renderer::initialize()
     if (!m_fullScreen)
     {
         // Set window size & disable resize
-        int windowHRes = m_hRes / m_pixelScale;
-        int windowVRes = m_vRes / m_pixelScale;
+        const int windowHRes = m_hRes / m_pixelScale;
+        const int windowVRes = m_vRes / m_pixelScale;
         resize(windowHRes, windowVRes);
         setMinimumSize(QSize(windowHRes, windowVRes));
         setMaximumSize(QSize(windowHRes, windowVRes));
 
         // Try to center the window
-        int screenHRes = m_fullHRes / m_pixelScale;
-        int screenVRes = m_fullVRes / m_pixelScale;
+        const int screenHRes = m_fullHRes / m_pixelScale;
+        const int screenVRes = m_fullVRes / m_pixelScale;
         setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowHRes / 2);
     }
 
@@ -111,7 +100,7 @@ void Renderer::initialize()
     emit initialized();
 }
 
-void Renderer::resizeGL(int viewWidth, int viewHeight)
+void Renderer::resizeGlScene(int viewWidth, int viewHeight)
 {
     m_glScene.resize(viewWidth, viewHeight, Scene::width(), Scene::height(), m_viewAngle, m_zNear, m_zFar);
 }
@@ -182,12 +171,14 @@ void Renderer::setEnabled(bool enable)
 
 MCGLShaderProgramPtr Renderer::program(const std::string & id)
 {
-    const auto program(m_shaderHash[id]);
-    if (!program)
+    if (const auto program { m_shaderHash[id] }; program)
+    {
+        return program;
+    }
+    else
     {
         throw std::runtime_error("Cannot find shader program '" + id + "'");
     }
-    return program;
 }
 
 void Renderer::setFadeValue(float value)
@@ -210,15 +201,18 @@ float Renderer::fadeValue() const
     return m_fadeValue;
 }
 
-void Renderer::render()
+QSize Renderer::resolution() const
 {
-    if (!m_scene)
-    {
-        return;
-    }
+    return { m_hRes, m_vRes };
+}
 
-    resizeGL(m_hRes, m_vRes);
+bool Renderer::fullScreen() const
+{
+    return m_fullScreen;
+}
 
+void Renderer::initializeFrameBufferObjects()
+{
     if (!m_fbo)
     {
         m_fbo = std::make_unique<QOpenGLFramebufferObject>(m_hRes, m_vRes);
@@ -230,15 +224,27 @@ void Renderer::render()
         m_shadowFbo = std::make_unique<QOpenGLFramebufferObject>(m_hRes, m_vRes);
         m_shadowFbo->setAttachment(QOpenGLFramebufferObject::Depth);
     }
+}
 
-    static auto dummyMaterial = std::make_shared<MCGLMaterial>();
+void Renderer::initializeMaterial()
+{
+    if (!m_material)
+    {
+        m_material = std::make_shared<MCGLMaterial>();
+    }
+}
 
+void Renderer::renderObjects()
+{
     m_fbo->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_scene->renderTrack();
     m_scene->renderMenu();
     m_scene->renderWorld(MCRenderGroup::Objects, true);
+}
 
+void Renderer::renderHud()
+{
 #ifdef DISABLE_FRAMEBUFFER_BLITS
     m_scene->renderWorld(MCRenderGroup::ObjectShadows);
     m_scene->renderWorld(MCRenderGroup::Particles);
@@ -256,34 +262,54 @@ void Renderer::render()
     m_shadowFbo->release();
 
     m_fbo->bind();
-    dummyMaterial->setTexture(m_shadowFbo->texture(), 0);
-    dummyMaterial->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    MCSurface ss("dummy", dummyMaterial, 2.0f, 2.0f);
-    ss.setColor(MCGLColor(1, 1, 1, 0.5f));
-    ss.setShaderProgram(program("fbo"));
-    ss.bind();
-    ss.render(nullptr, MCVector3dF(), 0);
+    m_material->setTexture(m_shadowFbo->texture(), 0);
+    m_material->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    MCSurface dummySurface { "dummy", m_material, 2.0f, 2.0f };
+    dummySurface.setColor(MCGLColor { 1, 1, 1, 0.5f });
+    dummySurface.setShaderProgram(program("fbo"));
+    dummySurface.bind();
+    dummySurface.render(nullptr, {}, 0);
     m_scene->renderWorld(MCRenderGroup::Particles); // Render particles here to avoid glitches due to transparency
     m_scene->renderHUD();
     m_scene->renderCommonHUD();
     m_fbo->release();
 #endif
+}
 
+void Renderer::renderScreen()
+{
     if (m_fullScreen)
     {
-        resizeGL(m_fullHRes, m_fullVRes);
+        resizeGlScene(m_fullHRes, m_fullVRes);
     }
     else
     {
-        resizeGL(m_hRes, m_vRes);
+        resizeGlScene(m_hRes, m_vRes);
     }
 
-    dummyMaterial->setTexture(m_fbo->texture(), 0);
-    dummyMaterial->setAlphaBlend(false);
-    MCSurface sd("dummy2", dummyMaterial, 2.0f, 2.0f);
-    sd.setShaderProgram(program("fbo"));
-    sd.bind();
-    sd.render(nullptr, MCVector3dF(), 0);
+    m_material->setTexture(m_fbo->texture(), 0);
+    m_material->setAlphaBlend(false);
+    MCSurface dummySurface { "dummy", m_material, 2.0f, 2.0f };
+    dummySurface.setShaderProgram(program("fbo"));
+    dummySurface.bind();
+    dummySurface.render(nullptr, {}, 0);
+}
+
+void Renderer::render()
+{
+    if (!m_scene)
+    {
+        return;
+    }
+
+    resizeGlScene(m_hRes, m_vRes);
+
+    initializeFrameBufferObjects();
+    initializeMaterial();
+
+    renderObjects();
+    renderHud();
+    renderScreen();
 }
 
 void Renderer::renderLater()
@@ -361,7 +387,7 @@ void Renderer::renderNow()
 void Renderer::resizeEvent(QResizeEvent * event)
 {
     if (m_rendererInitialized)
-        resizeGL(event->size().width(), event->size().height());
+        resizeGlScene(event->size().width(), event->size().height());
 }
 
 void Renderer::keyPressEvent(QKeyEvent * event)
@@ -415,9 +441,7 @@ Renderer::~Renderer()
     // Ensure that OpenGL stuff gets deleted before the OpenGL context deletion
 
     m_fbo.reset();
-
     m_shadowFbo.reset();
-
     m_shaderHash.clear();
 
     delete m_context;
