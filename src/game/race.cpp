@@ -90,7 +90,7 @@ void Race::createStartGridObjects()
     }
 }
 
-void Race::init(std::shared_ptr<Track> track, size_t lapCount)
+void Race::initialize(TrackS track, size_t lapCount)
 {
     setTrack(track, lapCount);
 
@@ -707,7 +707,7 @@ size_t Race::position(const Car & car) const
     return m_statusHash.at(car.index()).position;
 }
 
-void Race::setTrack(std::shared_ptr<Track> track, size_t lapCount)
+void Race::setTrack(TrackS track, size_t lapCount)
 {
     m_lapCount = lapCount;
 

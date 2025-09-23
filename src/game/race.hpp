@@ -46,7 +46,8 @@ public:
     Race(Game & game, size_t numCars);
     virtual ~Race() override;
 
-    void init(std::shared_ptr<Track>, size_t lapCount);
+    using TrackS = std::shared_ptr<Track>;
+    void initialize(TrackS track, size_t lapCount);
 
     bool started() const;
 
@@ -102,7 +103,7 @@ private:
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
-    void setTrack(std::shared_ptr<Track>, size_t lapCount);
+    void setTrack(TrackS track, size_t lapCount);
 
     void translateCarsToStartPositions();
 
@@ -157,7 +158,7 @@ private:
 
     Timing m_timing;
 
-    std::shared_ptr<Track> m_track;
+    TrackS m_track;
 
     bool m_started = false;
     bool m_checkeredFlagEnabled = false;

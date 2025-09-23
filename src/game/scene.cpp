@@ -582,7 +582,7 @@ void Scene::resizeOverlays()
 void Scene::initializeRace()
 {
     assert(m_activeTrack);
-    m_race->init(m_activeTrack, static_cast<size_t>(m_game.lapCount()));
+    m_race->initialize(m_activeTrack, static_cast<size_t>(m_game.lapCount()));
 }
 
 std::shared_ptr<Track> Scene::activeTrack() const
