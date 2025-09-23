@@ -23,6 +23,7 @@
 
 #include <chrono>
 #include <memory>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -42,41 +43,27 @@ class Race : public AudioSource
     Q_OBJECT
 
 public:
-    //! Constructor.
     Race(Game & game, size_t numCars);
-
-    //! Destructor.
     virtual ~Race() override;
 
-    //! Init the race.
     void init(std::shared_ptr<Track>, size_t lapCount);
 
-    //! Return true, if race has started.
     bool started();
 
-    //! Get the number of laps.
     size_t lapCount() const;
 
-    //! Add a car to the race.
     void addCar(Car & car);
-
-    //! Removes cars from the race.
     void removeCars();
 
-    //! Get the timing object.
     Timing & timing();
 
     bool checkeredFlagEnabled() const;
 
     size_t getCurrentTargetNodeIndex(const Car & car) const;
 
-    //! Get current last car in the race
     Car & getLoser() const;
-
-    //! Get current leading car in the race
     Car & getLeader() const;
 
-    //! Get current position of a car.
     size_t position(const Car & car) const;
 
 signals:
@@ -126,7 +113,7 @@ private:
     const size_t m_humanPlayerIndex2;
 
     // Position required to unlock a new track
-    const size_t m_unlockLimit;
+    const size_t m_unlockLimit = 6;
 
     using CarVector = std::vector<Car *>;
     CarVector m_cars;
@@ -172,16 +159,16 @@ private:
 
     std::shared_ptr<Track> m_track;
 
-    bool m_started;
-    bool m_checkeredFlagEnabled;
-    bool m_winnerFinished;
-    bool m_isfinishedSignalSent;
+    bool m_started = false;
+    bool m_checkeredFlagEnabled = false;
+    bool m_winnerFinished = false;
+    bool m_isfinishedSignalSent = false;
 
-    int m_bestPos;
+    std::optional<size_t> m_bestPos;
 
     QTimer m_offTrackMessageTimer;
 
-    int m_offTrackCounter;
+    int m_offTrackCounter = 0;
 
     Game & m_game;
 };

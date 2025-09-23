@@ -19,13 +19,10 @@
 #include "carsoundeffectmanager.hpp"
 #include "database.hpp"
 #include "game.hpp"
-#include "layers.hpp"
 #include "offtrackdetector.hpp"
-#include "renderer.hpp"
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
-#include "trackobjectfactory.hpp"
 #include "tracktile.hpp"
 
 #include "../common/config.hpp"
@@ -45,25 +42,17 @@
 #include "simple_logger.hpp"
 
 Race::Race(Game & game, size_t numCars)
-  : m_humanPlayerIndex1(0)
-  , m_humanPlayerIndex2(1)
-  , m_unlockLimit(6) // Position required to unlock a new track
-  , m_numCars(numCars)
-  , m_lapCount(5)
-  , m_timing(numCars)
-  , m_track(nullptr)
-  , m_started(false)
-  , m_checkeredFlagEnabled(false)
-  , m_winnerFinished(false)
-  , m_isfinishedSignalSent(false)
-  , m_bestPos(-1)
-  , m_offTrackCounter(0)
-  , m_game(game)
+  : m_humanPlayerIndex1 { 0 }
+  , m_humanPlayerIndex2 { 1 }
+  , m_numCars { numCars }
+  , m_lapCount { 5 }
+  , m_timing { numCars }
+  , m_game { game }
 {
     createStartGridObjects();
 
     m_offTrackMessageTimer.setSingleShot(true);
-    m_offTrackMessageTimer.setInterval(30000);
+    m_offTrackMessageTimer.setInterval(30000ms);
 
     connect(&m_timing, &Timing::lapRecordAchieved, this, [this](int msecs) {
         Database::instance().saveLapRecord(*m_track, msecs);
@@ -85,12 +74,13 @@ Race::Race(Game & game, size_t numCars)
 
 void Race::createStartGridObjects()
 {
-    static MCObjectFactory objectFactory(MCAssetManager::instance());
+    static MCObjectFactory objectFactory { MCAssetManager::instance() };
     for (size_t i = 0; i < m_numCars; i++)
     {
-        MCSurfaceObjectData data("grid");
+        const auto grid = "grid";
+        MCSurfaceObjectData data { grid };
         data.setIsStationary(true);
-        data.setSurfaceId("grid");
+        data.setSurfaceId(grid);
 
         const auto object = objectFactory.build(data);
         object->shape()->view()->setHasShadow(false);
@@ -157,7 +147,7 @@ void Race::clearRaceFlags()
 void placeCar(Car & car, float x, float y, int angle)
 {
     car.translate({ x, y });
-    car.rotate(angle);
+    car.rotate(static_cast<float>(angle));
 
     juzzlin::L().debug() << "Car " << car.index() << " location: " << car.location();
     juzzlin::L().debug() << "Car " << car.index() << " rotation: " << car.angle();
@@ -166,7 +156,7 @@ void placeCar(Car & car, float x, float y, int angle)
 void placeStartGrid(MCObject & grid, float x, float y, int angle)
 {
     grid.translate({ x, y });
-    grid.rotate(angle);
+    grid.rotate(static_cast<float>(angle));
     grid.addToWorld();
 
     juzzlin::L().debug() << "Start grid location: " << grid.location();
@@ -179,7 +169,6 @@ void Race::translateCarsToStartPositions()
 
     if (const auto finishLine = m_track->finishLine())
     {
-        // Reverse order
         auto order = m_cars;
         std::reverse(order.begin(), order.end());
 
@@ -196,15 +185,17 @@ void Race::translateCarsToStartPositions()
         }
 
         // Position the cars into two queues.
-        const float oddOffset = TrackTile::width() / 8;
-        const float gridOffset = TrackTile::width() / 12;
+        const float oddOffset = static_cast<float>(TrackTile::width() / 8);
+        const float gridOffset = static_cast<float>(TrackTile::width() / 12);
         const float tileWidth = static_cast<float>(TrackTile::width());
         const float tileHeight = static_cast<float>(TrackTile::height());
-        const float spacing = 0.75f * TrackTile::width();
+        const float spacing = 0.75f * static_cast<float>(TrackTile::width());
         const float startTileX = static_cast<float>(finishLine->location().x());
         const float startTileY = static_cast<float>(finishLine->location().y());
+
         const int routeDirection = finishLine->rotation() % 360;
         juzzlin::L().debug() << "Route direction: " << routeDirection;
+
         switch (routeDirection)
         {
         case 90:
@@ -214,7 +205,7 @@ void Race::translateCarsToStartPositions()
             for (size_t i = 0; i < order.size(); i++)
             {
                 const float y = startTileY + (i % 2) * tileHeight / 3 - tileHeight / 6;
-                float x = startTileX + (i / 2) * spacing + (i % 2) * oddOffset + moveDueToBridge;
+                float x = startTileX + (static_cast<float>(i / 2) * spacing) + (i % 2) * oddOffset + moveDueToBridge;
                 while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
                 {
                     moveDueToBridge += tileWidth;
@@ -233,7 +224,7 @@ void Race::translateCarsToStartPositions()
             for (size_t i = 0; i < order.size(); i++)
             {
                 const float y = startTileY + (i % 2) * tileHeight / 3 - tileHeight / 6;
-                float x = startTileX - (i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
+                float x = startTileX - static_cast<float>(i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
                 while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
                 {
                     moveDueToBridge += tileWidth;
@@ -250,7 +241,7 @@ void Race::translateCarsToStartPositions()
             for (size_t i = 0; i < order.size(); i++)
             {
                 const float x = startTileX + (i % 2) * tileWidth / 3 - tileWidth / 6;
-                float y = startTileY - (i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
+                float y = startTileY - static_cast<float>(i / 2) * spacing + (i % 2) * oddOffset - moveDueToBridge;
                 while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
                 {
                     moveDueToBridge += tileHeight;
@@ -268,7 +259,7 @@ void Race::translateCarsToStartPositions()
             for (size_t i = 0; i < order.size(); i++)
             {
                 const float x = startTileX + (i % 2) * tileWidth / 3 - tileWidth / 6;
-                float y = startTileY + (i / 2) * spacing + (i % 2) * oddOffset + moveDueToBridge;
+                float y = startTileY + static_cast<float>(i / 2) * spacing + (i % 2) * oddOffset + moveDueToBridge;
                 while (m_track->trackTileAtLocation(x, y)->tileTypeEnum() == TrackTile::TileType::Bridge)
                 {
                     moveDueToBridge += tileHeight;
@@ -375,10 +366,12 @@ void Race::pitStop(Car & car)
 {
     if (m_timing.lap(car.index()) > 0)
     {
-        const QString pitSoundHandle("pit");
         emit messageRequested(QObject::tr("Pit stop!"));
+
+        const QString pitSoundHandle { "pit" };
         emit locationChanged(pitSoundHandle, car.location().i(), car.location().j());
         emit playRequested(pitSoundHandle, false);
+
         emit tiresChanged(car);
 
         car.resetDamage();
@@ -386,10 +379,10 @@ void Race::pitStop(Car & car)
     }
 }
 
-bool isInsideCheckPoint(Car & car, TargetNodeBasePtr targetNode, size_t tolerance)
+bool isInsideCheckPoint(Car & car, TargetNodeBasePtr targetNode, float tolerance)
 {
-    const int halfWidth = static_cast<int>(targetNode->size().width() / 2);
-    const int halfHeight = static_cast<int>(targetNode->size().height() / 2);
+    const float halfWidth = static_cast<float>(targetNode->size().width() / 2);
+    const float halfHeight = static_cast<float>(targetNode->size().height() / 2);
 
     if (car.location().i() < static_cast<float>(targetNode->location().x()) - halfWidth - tolerance)
     {
@@ -419,7 +412,7 @@ void Race::updateRouteProgress(Car & car)
     const auto targetNode = route.get(currentTargetNodeIndex);
 
     // Give a bit more tolerance for other than the finishing check point.
-    const size_t tolerance = (!currentTargetNodeIndex ? 0 : TrackTile::height() / 20);
+    const float tolerance = (!currentTargetNodeIndex ? 0 : static_cast<float>(TrackTile::height()) / 20);
 
     // Car still racing
     if (m_timing.isActive(car.index()))
@@ -566,7 +559,7 @@ void Race::checkForNewBestPosition(const Car & car)
         if (car.isHuman())
         {
             const size_t position = m_statusHash[car.index()].position;
-            if (static_cast<int>(position) < m_bestPos || m_bestPos == -1)
+            if (!m_bestPos.has_value() || static_cast<int>(position) < m_bestPos)
             {
                 Database::instance().saveBestPos(*m_track, static_cast<int>(position), static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
                 emit messageRequested(QObject::tr("A new best pos!"));
@@ -596,7 +589,7 @@ void Race::checkIfCarIsStuck(Car & car)
     {
         static const int STUCK_LIMIT = 60 * 5; // 5 secs.
 
-        auto currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
+        const auto currentTile = m_track->trackTileAtLocation(car.location().i(), car.location().j());
         auto && counter = m_stuckHash[car.index()];
         if (counter.first == nullptr || counter.first != currentTile)
         {
@@ -624,7 +617,7 @@ void Race::checkIfCarIsOffTrack(Car & car)
         m_offTrackCounter++;
         if (m_offTrackCounter > OFF_TRACK_LIMIT)
         {
-            if (rand() % 2 == 0)
+            if (rand() % 2)
             {
                 emit messageRequested(QObject::tr("You must stay on track!"));
             }
@@ -647,9 +640,9 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
     const auto targetNode = m_track->trackData().route().get(m_statusHash[car.index()].prevTargetNodeIndex);
-    const double randRadius = TrackTile::width() / 4;
+    const auto randRadius = static_cast<double>(TrackTile::width()) / 4;
     std::mt19937 engine;
-    std::uniform_real_distribution<double> dist(-randRadius, randRadius);
+    std::uniform_real_distribution<double> dist { -randRadius, randRadius };
     const float x = static_cast<float>(targetNode->location().x() + dist(engine));
     const float y = static_cast<float>(targetNode->location().y() + dist(engine));
     car.translate({ x, y });
@@ -664,38 +657,49 @@ size_t Race::getCurrentTargetNodeIndex(const Car & car) const
 
 Car & Race::getLeader() const
 {
-    auto bestPos = m_cars.size();
-    auto bestCar = m_cars.back();
+    const auto it = std::min_element(
+      m_cars.begin(), m_cars.end(),
+      [&](const auto & a, const auto & b) {
+          const auto posA = m_statusHash.at(a->index()).position;
+          const auto posB = m_statusHash.at(b->index()).position;
 
-    for (auto && car : m_cars)
+          if (posA <= 0)
+          {
+              return false;
+          }
+
+          if (posB <= 0)
+          {
+              return true;
+          }
+
+          return posA < posB;
+      });
+
+    if (it == m_cars.end())
     {
-        const auto position = m_statusHash.at(car->index()).position;
-        if (position > 0 && position < bestPos)
-        {
-            bestCar = car;
-            bestPos = position;
-        }
+        throw std::runtime_error("No leader found");
     }
 
-    return *bestCar;
+    return **it; // because m_cars holds Car*
 }
 
 Car & Race::getLoser() const
 {
-    size_t bestValue = 0;
-    auto bestCar = m_cars.back();
+    const auto it = std::max_element(
+      m_cars.begin(), m_cars.end(),
+      [&](const auto & a, const auto & b) {
+          auto posA = m_statusHash.at(a->index()).position;
+          auto posB = m_statusHash.at(b->index()).position;
+          return posA < posB;
+      });
 
-    for (auto && car : m_cars)
+    if (it == m_cars.end())
     {
-        const auto position = m_statusHash.at(car->index()).position;
-        if (position > bestValue)
-        {
-            bestCar = car;
-            bestValue = position;
-        }
+        throw std::runtime_error("No loser found");
     }
 
-    return *bestCar;
+    return **it;
 }
 
 size_t Race::position(const Car & car) const
@@ -706,13 +710,15 @@ size_t Race::position(const Car & car) const
 void Race::setTrack(std::shared_ptr<Track> track, size_t lapCount)
 {
     m_lapCount = lapCount;
-    m_track = track;
-    const auto bestPos = Database::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
-    m_bestPos = bestPos.second ? bestPos.first : -1;
 
-    for (auto && otd : m_offTrackDetectors)
+    m_track = track;
+
+    const auto bestPos = Database::instance().loadBestPos(*m_track, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+    m_bestPos = bestPos.second ? std::optional { bestPos.first } : std::nullopt;
+
+    for (auto && offTrackDetector : m_offTrackDetectors)
     {
-        otd->setTrack(track);
+        offTrackDetector->setTrack(track);
     }
 }
 
