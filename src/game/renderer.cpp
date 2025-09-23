@@ -49,10 +49,10 @@
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, double pixelScale, bool fullScreen, MCGLScene & glScene)
-  : m_hRes { static_cast<int>(hRes * pixelScale) }
-  , m_vRes { static_cast<int>(vRes * pixelScale) }
-  , m_fullHRes { static_cast<int>(fullHRes * pixelScale) }
-  , m_fullVRes { static_cast<int>(fullVRes * pixelScale) }
+  : m_hRes { hRes } // logical
+  , m_vRes { vRes }
+  , m_fullHRes { fullHRes } // native framebuffer
+  , m_fullVRes { fullVRes }
   , m_pixelScale { pixelScale }
   , m_fullScreen { fullScreen }
   , m_glScene { glScene }
@@ -78,21 +78,17 @@ void Renderer::initialize()
 
     if (!m_fullScreen)
     {
-        // Set window size & disable resize
-        const int windowHRes = static_cast<int>(m_hRes / m_pixelScale);
-        const int windowVRes = static_cast<int>(m_vRes / m_pixelScale);
-        resize(windowHRes, windowVRes);
-        setMinimumSize(QSize(windowHRes, windowVRes));
-        setMaximumSize(QSize(windowHRes, windowVRes));
+        // Logical window size
+        resize(m_hRes, m_vRes);
+        setMinimumSize(QSize(m_hRes, m_vRes));
+        setMaximumSize(QSize(m_hRes, m_vRes));
 
-        // Try to center the window
-        const int screenHRes = static_cast<int>(m_fullHRes / m_pixelScale);
-        const int screenVRes = static_cast<int>(m_fullVRes / m_pixelScale);
-        setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowHRes / 2);
+        // Center using logical units
+        setPosition((m_fullHRes / m_pixelScale - m_hRes) / 2,
+                    (m_fullVRes / m_pixelScale - m_vRes) / 2);
     }
 
     m_glScene.initialize();
-
     loadShaders();
     loadFonts();
 

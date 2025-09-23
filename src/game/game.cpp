@@ -218,7 +218,6 @@ void Game::createRenderer()
 #endif
     format.setSamples(0);
 
-// Supported only in Qt 5.3+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
     if (m_forceNoVSync)
     {
@@ -230,57 +229,51 @@ void Game::createRenderer()
     }
 #endif
 
-    // Create the main window / renderer
     int hRes = 0, vRes = 0;
     bool fullScreen = false;
-
     m_settings.loadResolution(hRes, vRes, fullScreen);
 
     const auto screens = QGuiApplication::screens();
     L().info() << "Screen: " << m_screenIndex << "/" << screens.size();
-    m_screen = m_screenIndex < screens.size() ? screens.at(m_screenIndex) : screens.at(0);
+    m_screen = (m_screenIndex < screens.size()) ? screens.at(m_screenIndex) : screens.at(0);
 
-    // Scale factor
-    double pixelScale = m_screen->devicePixelRatio();
-
-    // Logical (Qt units, affected by scaling)
+    // Logical size (Qt coordinates, scaled by OS scaling)
     const QSize logicalSize = m_screen->geometry().size();
+    // Pixel scaling factor (devicePixelRatio)
+    const double pixelScale = m_screen->devicePixelRatio();
+    // Native framebuffer size in pixels
+    const QSize framebufferSize = logicalSize * pixelScale;
 
-    // Native pixels (physical resolution)
-    const QSize nativeSize = logicalSize * pixelScale;
-
+    // Default virtual resolution in logical units
     if (!hRes || !vRes)
     {
-        // Default to native pixels if no resolution was set
-        hRes = nativeSize.width();
-        vRes = nativeSize.height();
+        hRes = logicalSize.width();
+        vRes = logicalSize.height();
     }
 
-    adjustSceneSize(nativeSize.width(), nativeSize.height());
+    // Adjust scene in logical units
+    adjustSceneSize(hRes, vRes);
 
-    L().info() << "Logical resolution: "
-               << logicalSize.width() << "x" << logicalSize.height()
-               << " (scale " << pixelScale << ")";
-    L().info() << "Screen resolution (native): "
-               << nativeSize.width() << "x" << nativeSize.height();
-    L().info() << "Virtual resolution: "
-               << hRes << "x" << vRes << " fullscreen=" << fullScreen;
+    // Logging for clarity
+    L().info() << "Logical resolution:" << hRes << "x" << vRes << "(scale " << pixelScale << ")";
+    L().info() << "Framebuffer resolution:" << framebufferSize.width() << "x" << framebufferSize.height();
+    L().info() << "Virtual resolution:" << hRes << "x" << vRes << " fullscreen=" << fullScreen;
 
     L().debug() << "Creating the renderer..";
 
-    m_renderer = new Renderer(hRes,
-                              vRes,
-                              nativeSize.width(),
-                              nativeSize.height(),
-                              pixelScale,
-                              fullScreen,
-                              m_world->renderer().glScene());
+    m_renderer = new Renderer(
+      hRes, vRes, // logical coordinates for UI/layout
+      framebufferSize.width(), framebufferSize.height(), // native pixels for OpenGL
+      pixelScale,
+      fullScreen,
+      m_world->renderer().glScene());
+
     m_renderer->setFormat(format);
     m_renderer->setCursor(Qt::BlankCursor);
 
     if (fullScreen)
     {
-        m_renderer->setGeometry(m_screen->geometry());
+        m_renderer->setGeometry(m_screen->geometry()); // logical geometry is fine here
         m_renderer->showFullScreen();
     }
     else
