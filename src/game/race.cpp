@@ -298,7 +298,7 @@ void Race::stopEngineSounds()
     }
 }
 
-bool Race::started()
+bool Race::started() const
 {
     return m_started;
 }

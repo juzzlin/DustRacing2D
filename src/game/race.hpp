@@ -48,7 +48,7 @@ public:
 
     void init(std::shared_ptr<Track>, size_t lapCount);
 
-    bool started();
+    bool started() const;
 
     size_t lapCount() const;
 
