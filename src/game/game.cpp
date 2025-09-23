@@ -231,37 +231,47 @@ void Game::createRenderer()
 #endif
 
     // Create the main window / renderer
-    int hRes, vRes;
+    int hRes = 0, vRes = 0;
     bool fullScreen = false;
 
     m_settings.loadResolution(hRes, vRes, fullScreen);
 
     const auto screens = QGuiApplication::screens();
-
     L().info() << "Screen: " << m_screenIndex << "/" << screens.size();
-
     m_screen = m_screenIndex < screens.size() ? screens.at(m_screenIndex) : screens.at(0);
+
+    // Scale factor
+    double pixelScale = m_screen->devicePixelRatio();
+
+    // Logical (Qt units, affected by scaling)
+    const QSize logicalSize = m_screen->geometry().size();
+
+    // Native pixels (physical resolution)
+    const QSize nativeSize = logicalSize * pixelScale;
 
     if (!hRes || !vRes)
     {
-        hRes = m_screen->geometry().width();
-        vRes = m_screen->geometry().height();
+        // Default to native pixels if no resolution was set
+        hRes = nativeSize.width();
+        vRes = nativeSize.height();
     }
 
-    adjustSceneSize(m_screen->geometry().width(), m_screen->geometry().height());
+    adjustSceneSize(nativeSize.width(), nativeSize.height());
 
-    L().info() << "Screen resolution: " << m_screen->geometry().width() << " " << m_screen->geometry().height();
-
-    L().info() << "Virtual resolution: " << hRes << " " << vRes << " " << fullScreen;
+    L().info() << "Logical resolution: "
+               << logicalSize.width() << "x" << logicalSize.height()
+               << " (scale " << pixelScale << ")";
+    L().info() << "Screen resolution (native): "
+               << nativeSize.width() << "x" << nativeSize.height();
+    L().info() << "Virtual resolution: "
+               << hRes << "x" << vRes << " fullscreen=" << fullScreen;
 
     L().debug() << "Creating the renderer..";
 
-    double pixelScale = m_screen->devicePixelRatio();
-    
     m_renderer = new Renderer(hRes,
                               vRes,
-                              m_screen->geometry().width(),
-                              m_screen->geometry().height(),
+                              nativeSize.width(),
+                              nativeSize.height(),
                               pixelScale,
                               fullScreen,
                               m_world->renderer().glScene());
@@ -281,7 +291,6 @@ void Game::createRenderer()
     m_renderer->setEventHandler(*m_eventHandler);
 
     connect(m_renderer, &Renderer::initialized, this, &Game::init);
-
     connect(m_stateMachine, &StateMachine::renderingEnabled, m_renderer, &Renderer::setEnabled);
 }
 

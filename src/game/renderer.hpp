@@ -41,7 +41,7 @@ class Renderer : public QWindow, protected QOpenGLFunctions
     Q_OBJECT
 
 public:
-    Renderer(int hRes, int vRes, int fullHRes, int fullVRes, int pixelScale, bool fullScreen, MCGLScene & glScene);
+    Renderer(int hRes, int vRes, int fullHRes, int fullVRes, double pixelScale, bool fullScreen, MCGLScene & glScene);
     virtual ~Renderer() override;
 
     //! \return the single instance.
@@ -139,7 +139,7 @@ private:
     int m_vRes;
     int m_fullHRes;
     int m_fullVRes;
-    int m_pixelScale;
+    double m_pixelScale;
 
     int m_frameCounter = 0;
     bool m_fullScreen;
