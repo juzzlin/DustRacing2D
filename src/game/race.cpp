@@ -652,9 +652,9 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     juzzlin::L().debug() << "Moved stuck car " << car.index() << " to (" << x << ", " << y << ")";
 }
 
-size_t Race::getCurrentTargetNodeIndex(const Car & car) const
+size_t Race::getCurrentTargetNodeIndex(size_t carIndex) const
 {
-    return m_statusHash.at(car.index()).currentTargetNodeIndex;
+    return m_statusHash.at(carIndex).currentTargetNodeIndex;
 }
 
 Car & Race::getLeader() const
@@ -704,9 +704,9 @@ Car & Race::getLoser() const
     return **it;
 }
 
-size_t Race::position(const Car & car) const
+size_t Race::position(size_t carIndex) const
 {
-    return m_statusHash.at(car.index()).position;
+    return m_statusHash.at(carIndex).position;
 }
 
 void Race::setTrack(TrackS track, size_t lapCount)

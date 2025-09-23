@@ -42,17 +42,17 @@ void AI::update(bool isRaceCompleted)
 {
     if (m_track)
     {
-        if (m_lastTargetNodeIndex != m_race->getCurrentTargetNodeIndex(m_car))
+        if (m_lastTargetNodeIndex != m_race->getCurrentTargetNodeIndex(m_car.index()))
         {
             setRandomTolerance();
         }
 
         const Route & route = m_track->trackData().route();
-        steerControl(route.get(m_race->getCurrentTargetNodeIndex(m_car)));
+        steerControl(route.get(m_race->getCurrentTargetNodeIndex(m_car.index())));
 
         speedControl(*m_track->trackTileAtLocation(m_car.location().i(), m_car.location().j()), isRaceCompleted);
 
-        m_lastTargetNodeIndex = m_race->getCurrentTargetNodeIndex(m_car);
+        m_lastTargetNodeIndex = m_race->getCurrentTargetNodeIndex(m_car.index());
     }
 }
 

@@ -180,7 +180,7 @@ void TimingOverlay::renderCurrentLap()
 
 void TimingOverlay::renderPosition()
 {
-    const auto pos = m_race->position(*m_car);
+    const auto pos = m_race->position(m_car->index());
     const auto lap = m_race->timing().lock()->lap(m_car->index()) + 1;
     const auto leadersLap = m_race->timing().lock()->leadersLap() + 1;
 

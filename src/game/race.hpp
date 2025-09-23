@@ -61,12 +61,12 @@ public:
 
     bool checkeredFlagEnabled() const;
 
-    size_t getCurrentTargetNodeIndex(const Car & car) const;
+    size_t getCurrentTargetNodeIndex(size_t carIndex) const;
 
     Car & getLoser() const;
     Car & getLeader() const;
 
-    size_t position(const Car & car) const;
+    size_t position(size_t carIndex) const;
 
 signals:
 
