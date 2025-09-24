@@ -292,11 +292,13 @@ void Renderer::renderScreen()
 {
     if (m_fullScreen)
     {
-        resizeGlScene(m_fullHRes * devicePixelRatio(), m_fullVRes * devicePixelRatio());
+        resizeGlScene(static_cast<int>(m_fullHRes * devicePixelRatio()),
+                      static_cast<int>(m_fullVRes * devicePixelRatio()));
     }
     else
     {
-        resizeGlScene(m_hRes * devicePixelRatio(), m_vRes * devicePixelRatio());
+        resizeGlScene(static_cast<int>(m_hRes * devicePixelRatio()),
+                      static_cast<int>(m_vRes * devicePixelRatio()));
     }
 
     m_material->setTexture(m_fbo->texture(), 0);
