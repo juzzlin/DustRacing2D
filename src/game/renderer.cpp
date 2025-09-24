@@ -48,17 +48,19 @@
 
 Renderer * Renderer::m_instance = nullptr;
 
-Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, double pixelScale, bool fullScreen, MCGLScene & glScene)
-  : m_hRes { static_cast<int>(hRes * pixelScale) }
-  , m_vRes { static_cast<int>(vRes * pixelScale) }
-  , m_fullHRes { static_cast<int>(fullHRes * pixelScale) }
-  , m_fullVRes { static_cast<int>(fullVRes * pixelScale) }
-  , m_pixelScale { pixelScale }
+Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, bool fullScreen, MCGLScene & glScene)
+  : m_pixelScale { devicePixelRatio() }
+  , m_hRes { static_cast<int>(hRes * m_pixelScale) }
+  , m_vRes { static_cast<int>(vRes * m_pixelScale) }
+  , m_fullHRes { static_cast<int>(fullHRes * m_pixelScale) }
+  , m_fullVRes { static_cast<int>(fullVRes * m_pixelScale) }
   , m_fullScreen { fullScreen }
   , m_glScene { glScene }
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
+
+    juzzlin::L().info() << "Pixel scale: " << static_cast<int>(m_pixelScale * 100) << "%";
 
     setSurfaceType(QWindow::OpenGLSurface);
 

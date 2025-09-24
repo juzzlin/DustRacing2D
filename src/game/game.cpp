@@ -248,12 +248,10 @@ void Game::createRenderer()
         vRes = m_screen->geometry().height();
     }
 
-    const double pixelScale = m_screen->devicePixelRatio();
     adjustSceneSize(m_screen->geometry().width(), m_screen->geometry().height());
 
-    L().info() << "Screen resolution  : " << m_screen->geometry().width() << "x" << m_screen->geometry().height();
-    L().info() << "Pixel scale        : " << static_cast<int>(pixelScale * 100) << "%";
-    L().info() << "Virtual resolution : " << hRes << "x" << vRes << ", fullScreen: " << fullScreen;
+    L().info() << "Screen resolution: " << m_screen->geometry().width() << "x" << m_screen->geometry().height();
+    L().info() << "Virtual resolution: " << hRes << "x" << vRes << ", fullScreen: " << fullScreen;
 
     L().debug() << "Creating the renderer..";
     
@@ -261,7 +259,6 @@ void Game::createRenderer()
                               vRes,
                               m_screen->geometry().width(),
                               m_screen->geometry().height(),
-                              pixelScale,
                               fullScreen,
                               m_world->renderer().glScene());
     m_renderer->setFormat(format);
