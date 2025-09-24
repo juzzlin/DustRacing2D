@@ -73,23 +73,34 @@ Renderer & Renderer::instance()
     return *Renderer::m_instance;
 }
 
+void Renderer::resizeWindow()
+{
+    // Set window size & disable resize
+    const int windowHRes = static_cast<int>(m_hRes / devicePixelRatio());
+    const int windowVRes = static_cast<int>(m_vRes / devicePixelRatio());
+    resize(windowHRes, windowVRes);
+    setMinimumSize({ windowHRes, windowVRes });
+    setMaximumSize({ windowHRes, windowVRes });
+}
+
+void Renderer::centerWindow()
+{
+    // Try to center the window
+    const int windowHRes = static_cast<int>(m_hRes / devicePixelRatio());
+    const int windowVRes = static_cast<int>(m_vRes / devicePixelRatio());
+    const int screenHRes = static_cast<int>(m_fullHRes / devicePixelRatio());
+    const int screenVRes = static_cast<int>(m_fullVRes / devicePixelRatio());
+    setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowVRes / 2);
+}
+
 void Renderer::initialize()
 {
     juzzlin::L().info() << "OpenGL Version: " << glGetString(GL_VERSION);
 
     if (!m_fullScreen)
     {
-        // Set window size & disable resize
-        const int windowHRes = static_cast<int>(m_hRes);
-        const int windowVRes = static_cast<int>(m_vRes);
-        resize(windowHRes, windowVRes);
-        setMinimumSize({ windowHRes, windowVRes });
-        setMaximumSize({ windowHRes, windowVRes });
-
-        // Try to center the window
-        const int screenHRes = static_cast<int>(m_fullHRes / devicePixelRatio());
-        const int screenVRes = static_cast<int>(m_fullVRes / devicePixelRatio());
-        setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowHRes / 2);
+        resizeWindow();
+        centerWindow();
     }
 
     m_glScene.initialize();

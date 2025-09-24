@@ -113,6 +113,9 @@ private:
 
     void createProgramFromSource(std::string handle, std::string vshSource, std::string fshSource);
 
+    void resizeWindow();
+    void centerWindow();
+
     void render();
     void renderHud();
     void renderObjects();
