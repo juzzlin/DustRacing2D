@@ -49,18 +49,17 @@
 Renderer * Renderer::m_instance = nullptr;
 
 Renderer::Renderer(int hRes, int vRes, int fullHRes, int fullVRes, bool fullScreen, MCGLScene & glScene)
-  : m_pixelScale { devicePixelRatio() }
-  , m_hRes { static_cast<int>(hRes * m_pixelScale) }
-  , m_vRes { static_cast<int>(vRes * m_pixelScale) }
-  , m_fullHRes { static_cast<int>(fullHRes * m_pixelScale) }
-  , m_fullVRes { static_cast<int>(fullVRes * m_pixelScale) }
+  : m_hRes { hRes }
+  , m_vRes { vRes }
+  , m_fullHRes { fullHRes }
+  , m_fullVRes { fullVRes }
   , m_fullScreen { fullScreen }
   , m_glScene { glScene }
 {
     assert(!Renderer::m_instance);
     Renderer::m_instance = this;
 
-    juzzlin::L().info() << "Pixel scale: " << static_cast<int>(m_pixelScale * 100) << "%";
+    juzzlin::L().info() << "Pixel scale: " << static_cast<int>(devicePixelRatio() * 100) << "%";
 
     setSurfaceType(QWindow::OpenGLSurface);
 
@@ -81,15 +80,15 @@ void Renderer::initialize()
     if (!m_fullScreen)
     {
         // Set window size & disable resize
-        const int windowHRes = static_cast<int>(m_hRes / m_pixelScale);
-        const int windowVRes = static_cast<int>(m_vRes / m_pixelScale);
+        const int windowHRes = static_cast<int>(m_hRes);
+        const int windowVRes = static_cast<int>(m_vRes);
         resize(windowHRes, windowVRes);
         setMinimumSize({ windowHRes, windowVRes });
         setMaximumSize({ windowHRes, windowVRes });
 
         // Try to center the window
-        const int screenHRes = static_cast<int>(m_fullHRes / m_pixelScale);
-        const int screenVRes = static_cast<int>(m_fullVRes / m_pixelScale);
+        const int screenHRes = static_cast<int>(m_fullHRes / devicePixelRatio());
+        const int screenVRes = static_cast<int>(m_fullVRes / devicePixelRatio());
         setPosition(screenHRes / 2 - windowHRes / 2, screenVRes / 2 - windowHRes / 2);
     }
 
@@ -282,11 +281,11 @@ void Renderer::renderScreen()
 {
     if (m_fullScreen)
     {
-        resizeGlScene(m_fullHRes, m_fullVRes);
+        resizeGlScene(m_fullHRes * devicePixelRatio(), m_fullVRes * devicePixelRatio());
     }
     else
     {
-        resizeGlScene(m_hRes, m_vRes);
+        resizeGlScene(m_hRes * devicePixelRatio(), m_vRes * devicePixelRatio());
     }
 
     m_material->setTexture(m_fbo->texture(), 0);

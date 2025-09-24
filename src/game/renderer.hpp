@@ -135,8 +135,6 @@ private:
 
     bool m_enabled = false;
 
-    double m_pixelScale;
-
     int m_hRes;
     int m_vRes;
     int m_fullHRes;
