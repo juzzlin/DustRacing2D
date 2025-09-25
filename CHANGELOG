@@ -9,6 +9,9 @@ Bug fixes:
 
 Other:
 
+* DustRacing2D now requires Qt >= 6.4
+  - See https://github.com/juzzlin/DustRacing2D/issues/135
+
 2.1.1
 =====
 
