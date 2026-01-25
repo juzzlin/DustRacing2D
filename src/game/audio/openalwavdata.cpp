@@ -24,6 +24,7 @@
 
 #include <AL/alc.h>
 #include <cassert>
+#include <cstdint>
 #include <cstdio>
 #include <stdexcept>
 
