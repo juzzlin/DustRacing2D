@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0 and CC-BY-SA-3.0</project_license>
   <name>Dust Racing 2D</name>
+  <developer_name>Jussi Lind</developer_name>
   <summary>Traditional top-down car racing game including a level editor</summary>
   <summary xml:lang="de">Traditionelles Autorennspiel aus der Vogelperspektive, mit Leveleditor</summary>
   <description>
@@ -59,12 +60,15 @@
   <screenshots>
     <screenshot type="default">
       <image>https://cloud.githubusercontent.com/assets/2587783/7400283/69f106fa-eec4-11e4-9014-76c086f54d89.jpg</image>
+      <caption>Race is starting.</caption>
     </screenshot>
     <screenshot>
       <image>https://cloud.githubusercontent.com/assets/2587783/7400318/956180d0-eec4-11e4-9d3a-96e83d4b0e52.jpg</image>
+      <caption>Tracks also feature bridges and tunnels.</caption>
     </screenshot>
   </screenshots>
   <releases>
+    <release version="2.2.0" date="2026-01-25" />
     <release version="2.1.1" date="2021-02-21" />
   </releases>
   <content_rating type="oars-1.1" />
@@ -74,6 +78,7 @@
     <binary>dustrac-editor</binary>
   </provides>
   <url type="homepage">https://juzzlin.github.io/DustRacing2D/</url>
+  <url type="vcs-browser">https://github.com/juzzlin/DustRacing2D/</url>
   <url type="bugtracker">https://github.com/juzzlin/DustRacing2D/issues</url>
   <update_contact>jussi.lind@iki.fi</update_contact>
 </component>
