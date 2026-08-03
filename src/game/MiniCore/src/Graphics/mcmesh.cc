@@ -104,17 +104,17 @@ void MCMesh::init(const FaceVector & faces)
 
 void MCMesh::initVBOs()
 {
-    static const auto vertexDataSize = sizeof(MCGLVertex) * vertexCount();
+    const auto vertexDataSize = sizeof(MCGLVertex) * vertexCount();
 
-    static const auto normalDataSize = sizeof(MCGLVertex) * vertexCount();
+    const auto normalDataSize = sizeof(MCGLVertex) * vertexCount();
 
-    static const auto texCoordDataSize = sizeof(MCGLTexCoord) * vertexCount();
+    const auto texCoordDataSize = sizeof(MCGLTexCoord) * vertexCount();
 
-    static const auto numColorComponents = 4;
+    const auto numColorComponents = 4;
 
-    static const auto colorDataSize = sizeof(GLfloat) * vertexCount() * numColorComponents;
+    const auto colorDataSize = sizeof(GLfloat) * vertexCount() * numColorComponents;
 
-    static const auto totalDataSize = vertexDataSize + normalDataSize + texCoordDataSize + colorDataSize;
+    const auto totalDataSize = vertexDataSize + normalDataSize + texCoordDataSize + colorDataSize;
 
     initBufferData(totalDataSize, GL_STATIC_DRAW);
 
