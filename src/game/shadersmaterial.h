@@ -56,6 +56,64 @@
   "    color.rgb *= 0.86 + 0.28 * shade;\n"                                                 \
   "    color.rgb = mix(color.rgb, color.rgb * vec3(1.12, 1.02, 0.78), warmth * 0.6);\n"     \
   "    return color;\n"                                                                     \
-  "}\n"
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Track tile masks: transparent is asphalt, green is a material and other colors are\n"  \
+  "// painted details such as edge lines.\n"                                                \
+  "float isAsphalt(vec4 mask)\n"                                                            \
+  "{\n"                                                                                     \
+  "    return 1.0 - step(0.01, mask.a);\n"                                                  \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "float isMaterial(vec4 mask)\n"                                                           \
+  "{\n"                                                                                     \
+  "    return step(0.01, mask.a) * step(mask.r + mask.b, mask.g);\n"                        \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Fraction of mask samples around uv that are not of the same kind as the pixel itself.\n" \
+  "// 0.0 means deep inside an area, values towards 1.0 mean close to its border.\n"        \
+  "float edgeProximity(sampler2D mask, vec2 uv, float radius, bool asphalt)\n"              \
+  "{\n"                                                                                     \
+  "    float same = 0.0;\n"                                                                 \
+  "    for (int i = 0; i < 8; i++)\n"                                                       \
+  "    {\n"                                                                                 \
+  "        float angle = float(i) * 0.785398;\n"                                            \
+  "        vec2 dir = vec2(cos(angle), sin(angle)) * radius;\n"                             \
+  "        vec4 far = texture2D(mask, uv + dir);\n"                                         \
+  "        vec4 near = texture2D(mask, uv + dir * 0.5);\n"                                  \
+  "        same += asphalt ? isAsphalt(far) + isAsphalt(near) : isMaterial(far) + isMaterial(near);\n" \
+  "    }\n"                                                                                 \
+  "    return 1.0 - same / 16.0;\n"                                                         \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Anti-aliased mask pixels mix a painted color with the green material key.\n"         \
+  "// Returns the amount of material and stores the unmixed paint color.\n"                \
+  "float unmixPaint(vec4 mask, out vec3 paint)\n"                                           \
+  "{\n"                                                                                     \
+  "    float material = clamp(mask.g - max(mask.r, mask.b), 0.0, 0.99);\n"                  \
+  "    paint = (mask.rgb - vec3(0.0, material, 0.0)) / (1.0 - material);\n"                 \
+  "    return material;\n"                                                                  \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Worn, dusty grass and a soft contact shadow next to the track.\n"                     \
+  "vec4 weatherVerge(vec4 color, float edge, vec2 uv)\n"                                    \
+  "{\n"                                                                                     \
+  "    float wear = smoothstep(0.05, 0.6, edge * (0.5 + valueNoise(uv * 24.0)));\n"         \
+  "    float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));\n"                      \
+  "    vec3 dirt = luminance * vec3(1.35, 1.12, 0.78);\n"                                   \
+  "    color.rgb = mix(color.rgb, dirt, wear * 0.65);\n"                                    \
+  "    color.rgb *= 1.0 - 0.3 * smoothstep(0.35, 0.9, edge);\n"                             \
+  "    return color;\n"                                                                     \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Translucent grime and rubber on the asphalt along the track borders.\n"               \
+  "vec4 asphaltGrime(float edge, vec2 uv)\n"                                                \
+  "{\n"                                                                                     \
+  "    float amount = edge * (0.6 + 0.4 * valueNoise(uv * 16.0));\n"                        \
+  "    return vec4(0.06, 0.05, 0.04, smoothstep(0.0, 0.7, amount) * 0.45);\n"                \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Width of the verge and grime bands in tile texture coordinates.\n"                    \
+  "const float edgeRadius = 0.05;\n"
 
 #endif // SHADERSMATERIAL_H
