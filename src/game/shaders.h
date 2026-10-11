@@ -166,6 +166,30 @@ static const char * fboFsh =
   "    gl_FragColor = texture2D(tex0, texCoord0) * fade;\n"
   "}\n";
 
+static const char * screenFsh =
+  "#version 120\n"
+  ""
+  "uniform sampler2D tex0;\n"
+  "uniform float fade = 1;\n"
+  "varying vec2 texCoord0;\n"
+  ""
+  "const float contrast = 0.25;\n"
+  "const vec3 tint = vec3(1.03, 1.01, 0.97);\n"
+  "const float vignette = 0.3;\n"
+  ""
+  "void main(void)\n"
+  "{\n"
+  "    vec4 color = texture2D(tex0, texCoord0);\n"
+  ""
+  "    // Gentle S-curve for contrast and a warm, sunny tint\n"
+  "    vec3 graded = mix(color.rgb, color.rgb * color.rgb * (3.0 - 2.0 * color.rgb), contrast) * tint;\n"
+  ""
+  "    // Darken towards the corners\n"
+  "    graded *= 1.0 - vignette * smoothstep(0.4, 0.75, length(texCoord0 - 0.5));\n"
+  ""
+  "    gl_FragColor = vec4(graded, color.a) * fade;\n"
+  "}\n";
+
 static const char * tileVsh =
   "#version 120\n"
   ""

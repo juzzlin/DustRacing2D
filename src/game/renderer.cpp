@@ -146,6 +146,7 @@ void Renderer::loadShaders()
     // Custom shaders
     createProgramFromSource("car", carVsh, carFsh);
     createProgramFromSource("fbo", fboVsh, fboFsh);
+    createProgramFromSource("screen", fboVsh, screenFsh);
     createProgramFromSource("menu", menuVsh, menuFsh);
     createProgramFromSource("tile2d", tileVsh, asphaltFsh);
     createProgramFromSource("tile3d", tileVsh, tile3dFsh);
@@ -304,7 +305,7 @@ void Renderer::renderScreen()
     m_material->setTexture(m_fbo->texture(), 0);
     m_material->setAlphaBlend(false);
     MCSurface dummySurface { "dummy", m_material, 2.0f, 2.0f };
-    dummySurface.setShaderProgram(program("fbo"));
+    dummySurface.setShaderProgram(program("screen"));
     dummySurface.bind();
     dummySurface.render(nullptr, {}, 0);
 }
