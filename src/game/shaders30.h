@@ -192,7 +192,9 @@ static const char * screenFsh =
   "    // Darken towards the corners\n"
   "    graded *= 1.0 - vignette * smoothstep(0.4, 0.75, length(texCoord0 - 0.5));\n"
   ""
-  "    fragColor = vec4(graded, color.a) * fade;\n"
+  "    // The window must stay opaque even though translucent particles leave alpha < 1\n"
+  "    // in the frame. E.g. Wayland compositors would blend the window with the desktop.\n"
+  "    fragColor = vec4(graded * fade, 1.0);\n"
   "}\n";
 
 static const char * tileVsh =
