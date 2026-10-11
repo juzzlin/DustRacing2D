@@ -16,6 +16,8 @@
 #ifndef SHADERS30_H
 #define SHADERS30_H
 
+#include "shadersmaterial.h"
+
 static const char * carVsh =
   "#version 130\n"
   ""
@@ -213,9 +215,11 @@ static const char * asphaltFsh =
   "in      vec4      vColor;\n"
   "out     vec4      fragColor;\n"
   ""
+  MATERIAL_GLSL
+  ""
   "void main(void)\n"
   "{\n"
-  "    fragColor = texture2D(tex0, texCoord1) * vColor;\n"
+  "    fragColor = sampleMaterial(tex0, texCoord1) * vColor;\n"
   "}\n";
 
 static const char * tile3dFsh =
@@ -229,11 +233,11 @@ static const char * tile3dFsh =
   "in      vec4      vColor;\n"
   "out     vec4      fragColor;\n"
   ""
+  MATERIAL_GLSL
+  ""
   "void main(void)\n"
   "{\n"
   "    vec4 color0 = texture2D(tex0, texCoord0);\n"
-  "    vec4 color1 = texture2D(tex1, texCoord1);\n"
-  "    vec4 color2 = texture2D(tex2, texCoord1);\n"
   ""
   "    if (color0.a < 0.01)\n"
   "    {\n"
@@ -243,11 +247,13 @@ static const char * tile3dFsh =
   "    {\n"
   "        if (color0.r == 0.0 && color0.b == 0.0)\n"
   "        {\n"
+  "            vec4 color1 = sampleMaterial(tex1, texCoord1);\n"
+  "            vec4 color2 = sampleMaterial(tex2, texCoord1);\n"
   "            color0 = mix(color1, color2, color0.g);\n"
   "        }\n"
   "        else if (color0.g == 0.0 && color0.b == 0.0)\n"
   "        {\n"
-  "            color0 = color1;\n"
+  "            color0 = sampleMaterial(tex1, texCoord1);\n"
   "        }\n"
   ""
   "        fragColor = color0 * vColor;\n"

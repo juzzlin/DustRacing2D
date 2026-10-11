@@ -38,6 +38,7 @@ set(HDR
     layers.hpp
     shaders.h
     shaders30.h
+    shadersmaterial.h
     ../common/userexception.hpp
 )
 

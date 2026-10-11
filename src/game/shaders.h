@@ -16,6 +16,8 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
+#include "shadersmaterial.h"
+
 static const char * carVsh =
   "#version 120\n"
   ""
@@ -208,9 +210,11 @@ static const char * asphaltFsh =
   "varying vec2 texCoord1;\n"
   "varying vec4 vColor;\n"
   ""
+  MATERIAL_GLSL
+  ""
   "void main(void)\n"
   "{\n"
-  "    gl_FragColor = texture2D(tex0, texCoord1) * vColor;\n"
+  "    gl_FragColor = sampleMaterial(tex0, texCoord1) * vColor;\n"
   "}\n";
 
 static const char * tile3dFsh =
@@ -223,11 +227,11 @@ static const char * tile3dFsh =
   "varying vec2 texCoord1;\n"
   "varying vec4 vColor;\n"
   ""
+  MATERIAL_GLSL
+  ""
   "void main(void)\n"
   "{\n"
   "    vec4 color0 = texture2D(tex0, texCoord0);\n"
-  "    vec4 color1 = texture2D(tex1, texCoord1);\n"
-  "    vec4 color2 = texture2D(tex2, texCoord1);\n"
   ""
   "    if (color0.a < 0.01)\n"
   "    {\n"
@@ -237,6 +241,8 @@ static const char * tile3dFsh =
   "    {\n"
   "        if ((color0.r + color0.b) <= color0.g)\n"
   "        {\n"
+  "            vec4 color1 = sampleMaterial(tex1, texCoord1);\n"
+  "            vec4 color2 = sampleMaterial(tex2, texCoord1);\n"
   "            color0 = mix(color1, color2, color0.g);\n"
   "        }\n"
   ""
