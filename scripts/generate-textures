@@ -49,28 +49,23 @@ def leaf_polygon(x, y, length, width, angle):
     return points
 
 
-def deciduous_canopy(seed, size=128, leaves=1100, base_hue=(70, 125, 45)):
-    """A slice of a deciduous tree crown: a clump of leafy domes with gaps between the leaves."""
-    rng = np.random.default_rng(seed)
-    s = size * SUPERSAMPLING
-    center = s / 2
-    radius = s * 0.47
-
-    # Domes of foliage that together form the clump
-    domes = [(center, center, radius * 0.55)]
-    for _ in range(7):
+def draw_foliage(draw, rng, cx, cy, radius, leaves, leaf_length, base_hue, domes=7):
+    """Draws a clump of leafy domes centered at (cx, cy). Leaves are lit by their position on the domes.
+    leaf_length is the (min, max) length of the leaves in pixels."""
+    clump = [(cx, cy, radius * 0.55)]
+    for _ in range(domes):
         angle = rng.uniform(0, 2 * math.pi)
         distance = rng.uniform(0.25, 0.55) * radius
-        domes.append((center + math.cos(angle) * distance, center + math.sin(angle) * distance, rng.uniform(0.3, 0.45) * radius))
+        clump.append((cx + math.cos(angle) * distance, cy + math.sin(angle) * distance, rng.uniform(0.3, 0.45) * radius))
 
     items = []
     for _ in range(leaves):
-        dx, dy, dr = domes[rng.integers(len(domes))]
+        dx, dy, dr = clump[rng.integers(len(clump))]
         # Denser towards the center of a dome
         r = dr * math.sqrt(rng.uniform(0, 1)) ** 0.8
         a = rng.uniform(0, 2 * math.pi)
         x, y = dx + math.cos(a) * r, dy + math.sin(a) * r
-        if math.hypot(x - center, y - center) > radius:
+        if math.hypot(x - cx, y - cy) > radius:
             continue
         # Height and normal on the dome
         nx, ny = (x - dx) / dr, (y - dy) / dr
@@ -81,16 +76,75 @@ def deciduous_canopy(seed, size=128, leaves=1100, base_hue=(70, 125, 45)):
         normal /= np.linalg.norm(normal)
         items.append((nz, x, y, a, normal))
 
-    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(image)
     # Draw from the bottom to the top of the domes
     for height, x, y, a, normal in sorted(items, key=lambda item: item[0]):
         light = shade(normal) * (0.6 + 0.4 * height)
         variation = rng.normal(0, 0.07, 3)
         color = [int(np.clip(c * (light + v), 0, 255)) for c, v in zip(base_hue, variation)]
-        length = rng.uniform(9, 15) * SUPERSAMPLING / 2 * size / 64
+        length = rng.uniform(*leaf_length)
         angle = a + rng.normal(0, 0.6)
         draw.polygon(leaf_polygon(x, y, length, length * 0.55, angle), fill=(*color, 255))
+
+
+def deciduous_canopy(seed, size=128, leaves=1100, base_hue=(70, 125, 45)):
+    """A slice of a deciduous tree crown: a clump of leafy domes with gaps between the leaves."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    leaf_scale = SUPERSAMPLING / 2 * size / 64
+    draw_foliage(ImageDraw.Draw(image), rng, s / 2, s / 2, s * 0.47, leaves, (9 * leaf_scale, 15 * leaf_scale), base_hue)
+    return finish_sprite(image, size)
+
+
+def shrub(seed, size=64, base_hue=(75, 120, 45), flowers=(235, 215, 90)):
+    """A small leafy shrub with a few flowers."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    draw_foliage(draw, rng, s / 2, s / 2, s * 0.46, 420, (3 * SUPERSAMPLING, 5 * SUPERSAMPLING), base_hue, domes=5)
+    for _ in range(14):
+        r = s * 0.36 * math.sqrt(rng.uniform(0, 1))
+        a = rng.uniform(0, 2 * math.pi)
+        x, y = s / 2 + math.cos(a) * r, s / 2 + math.sin(a) * r
+        petal = SUPERSAMPLING * rng.uniform(0.9, 1.4)
+        draw.ellipse((x - petal, y - petal, x + petal, y + petal), fill=(*flowers, 255))
+    return finish_sprite(image, size)
+
+
+def grass_tuft(draw, rng, cx, cy, radius, base_hue):
+    """Blades of tall grass radiating from (cx, cy)."""
+    blades = []
+    for _ in range(int(radius * 3)):
+        angle = rng.uniform(0, 2 * math.pi)
+        length = radius * rng.uniform(0.4, 1.0)
+        bend = rng.normal(0, 0.3)
+        # Blades that point towards the light are lit
+        normal = np.array([math.cos(angle), math.sin(angle), 1.0]) / math.sqrt(2)
+        blades.append((length, angle, bend, normal))
+    for length, angle, bend, normal in sorted(blades, key=lambda blade: -blade[0]):
+        light = shade(normal) * rng.uniform(0.8, 1.1)
+        color = tuple(int(np.clip(c * light, 0, 255)) for c in base_hue)
+        points = [(cx + math.cos(angle + bend * t * t) * length * t, cy + math.sin(angle + bend * t * t) * length * t) for t in np.linspace(0, 1, 5)]
+        draw.line(points, fill=(*color, 255), width=SUPERSAMPLING)
+
+
+def bush_area(seed, size=128):
+    """A patch of low shrubs and tall grass with gaps between them."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    for _ in range(60):
+        r = s * 0.42 * math.sqrt(rng.uniform(0, 1))
+        a = rng.uniform(0, 2 * math.pi)
+        x, y = s / 2 + math.cos(a) * r, s / 2 + math.sin(a) * r
+        if rng.uniform() < 0.35:
+            hue = (int(rng.uniform(60, 80)), int(rng.uniform(105, 125)), 40)
+            draw_foliage(draw, rng, x, y, s * rng.uniform(0.05, 0.09), 90, (2 * SUPERSAMPLING, 4 * SUPERSAMPLING), hue, domes=3)
+        else:
+            hue = (int(rng.uniform(95, 130)), int(rng.uniform(125, 145)), 50)
+            grass_tuft(draw, rng, x, y, s * rng.uniform(0.04, 0.07), hue)
     return finish_sprite(image, size)
 
 
@@ -161,6 +215,8 @@ TEXTURES = {
     'pine': lambda: pine_canopy(seed=4),
     'pine2': lambda: pine_canopy(seed=5, branches=9, base_hue=(40, 88, 62)),
     'trunk': lambda: trunk(seed=6),
+    'plant': lambda: shrub(seed=7),
+    'bushArea': lambda: bush_area(seed=8),
 }
 
 
