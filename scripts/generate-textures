@@ -208,6 +208,64 @@ def trunk(seed, size=32, base_hue=(95, 70, 45)):
     return finish_sprite(image, size)
 
 
+def periodic_noise(rng, size, sigma):
+    """Smooth, tileable noise with unit variance. sigma is the feature size in pixels."""
+    frequencies = np.fft.fftfreq(size)
+    fx, fy = np.meshgrid(frequencies, frequencies)
+    spectrum = np.fft.fft2(rng.normal(size=(size, size))) * np.exp(-2 * (math.pi * sigma) ** 2 * (fx * fx + fy * fy))
+    noise = np.real(np.fft.ifft2(spectrum))
+    return (noise - noise.mean()) / noise.std()
+
+
+def sand_rgb(seed, size=256, base_color=(200, 172, 128)):
+    """Tileable sand with grain, wind ripples and some pebbles. Returns float RGB in 0..255."""
+    rng = np.random.default_rng(seed)
+    y, x = np.mgrid[0:size, 0:size]
+
+    # Wind ripples. Integer wave numbers keep them tileable.
+    warp = periodic_noise(rng, size, 18)
+    phase = 2 * math.pi * (5 * x + 14 * y) / size + 1.2 * warp
+    ripples = np.sin(phase) + 0.35 * np.sin(2 * phase)
+    height = 0.45 * periodic_noise(rng, size, 30) + 0.25 * ripples * (0.6 + 0.4 * periodic_noise(rng, size, 40))
+    grain = periodic_noise(rng, size, 0.6)
+
+    brightness = 1 + 0.07 * height + 0.05 * grain
+    rgb = np.array(base_color)[None, None, :] * brightness[..., None]
+    # Grains of different minerals
+    tint = periodic_noise(rng, size, 0.5)
+    rgb[..., 0] *= 1 + 0.03 * tint
+    rgb[..., 2] *= 1 - 0.05 * tint
+
+    # Pebbles lit from the scene light, drawn with wrap-around
+    image = Image.fromarray(rgb.clip(0, 255).astype(np.uint8), 'RGB')
+    draw = ImageDraw.Draw(image)
+    for _ in range(45):
+        px, py = rng.uniform(0, size, 2)
+        r = rng.uniform(0.8, 2.0)
+        color = np.array(base_color) * rng.uniform(0.55, 0.8) * np.array([1.0, 0.97, 0.95])
+        for ox in (-size, 0, size):
+            for oy in (-size, 0, size):
+                cx, cy = px + ox, py + oy
+                draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=tuple(color.astype(int)))
+                highlight = r * 0.45
+                draw.ellipse((cx - r * 0.5 - highlight, cy - r * 0.5 - highlight, cx - r * 0.5 + highlight, cy - r * 0.5 + highlight), fill=tuple((color * 1.35).clip(0, 255).astype(int)))
+    return np.asarray(image).astype(np.float32)
+
+
+def sand(seed, size=256):
+    return Image.fromarray(sand_rgb(seed, size).clip(0, 255).astype(np.uint8), 'RGB')
+
+
+def sand_area(source, seed):
+    """Fills the shape of a sand area object with sand. The alpha channel of the source stays."""
+    image = np.asarray(Image.open(IMAGE_PATH + source).convert('RGBA')).astype(np.float32)
+    h, w = image.shape[:2]
+    texture = sand_rgb(seed)
+    tiles = np.tile(texture, (h // texture.shape[0] + 1, w // texture.shape[1] + 1, 1))
+    image[..., :3] = tiles[:h, :w]
+    return Image.fromarray(image.clip(0, 255).astype(np.uint8), 'RGBA')
+
+
 KERB_RED = np.array([205, 35, 35])
 KERB_WHITE = np.array([238, 236, 228])
 
@@ -268,6 +326,9 @@ TEXTURES = {
     'trunk': lambda: trunk(seed=6),
     'plant': lambda: shrub(seed=7),
     'bushArea': lambda: bush_area(seed=8),
+    'sand': lambda: sand(seed=9),
+    'sandAreaCurve': lambda: sand_area('sandAreaCurve.png', seed=9),
+    'sandAreaBig': lambda: sand_area('sandAreaBig.png', seed=9),
     'cornerKerb': lambda: kerbed_mask('corner.png', lambda x, y: np.hypot(x - 512, y - 512) < 140),
     'corner45LeftKerb': lambda: kerbed_mask('corner45Left.png', lambda x, y: (x < 160) & (y > 200)),
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
