@@ -170,7 +170,7 @@ void Car::steer(Steer direction, float control)
     }
     else
     {
-        if (const float maxAngle = 15.0f * (direction == Steer::Left ? 1 : -1); !m_isHuman)
+        if (const float maxAngle = maxTireAngle() * (direction == Steer::Left ? 1 : -1); !m_isHuman)
         {
             m_tireAngle = static_cast<int>(maxAngle * control);
         }
@@ -181,6 +181,27 @@ void Car::steer(Steer direction, float control)
     }
 
     m_steer = direction;
+}
+
+float Car::maxTireAngle() const
+{
+    if (!m_isHuman)
+    {
+        return maxTireAngleHighSpeed;
+    }
+
+    const float speed = std::abs(static_cast<float>(m_speedInKmh));
+    if (speed <= maxTireAngleLowSpeedLimit)
+    {
+        return maxTireAngleLowSpeed;
+    }
+    if (speed >= maxTireAngleHighSpeedLimit)
+    {
+        return maxTireAngleHighSpeed;
+    }
+
+    const float t = (speed - maxTireAngleLowSpeedLimit) / (maxTireAngleHighSpeedLimit - maxTireAngleLowSpeedLimit);
+    return maxTireAngleLowSpeed + (maxTireAngleHighSpeed - maxTireAngleLowSpeed) * t;
 }
 
 void Car::accelerate(bool deccelerate)
