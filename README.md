@@ -1,5 +1,7 @@
 ## Dust Racing 2D
 
+![Build Status](https://github.com/juzzlin/DustRacing2D/actions/workflows/ci.yml/badge.svg)
+
 <table>
   <tr>
     <td>

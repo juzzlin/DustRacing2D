@@ -1,0 +1,73 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "master", "main", "dev" ]
+  pull_request:
+    branches: [ "master", "main", "dev" ]
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+  QT_QPA_PLATFORM: offscreen
+  DEPENDENCIES: >-
+    git build-essential cmake ninja-build pkg-config file
+    qt6-base-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools linguist-qt6
+    libgl-dev libopenal-dev libvorbis-dev
+
+jobs:
+  debug-build:
+    name: CMake Debug build and unit tests
+    runs-on: ubuntu-latest
+    container: ubuntu:24.04
+
+    steps:
+    - name: Install Dependencies
+      run: |
+        apt-get update
+        apt-get install -y $DEPENDENCIES
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: cmake -B build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build
+      run: cmake --build build-debug
+
+    - name: Test
+      run: |
+        cd build-debug
+        ctest --output-on-failure --parallel $(nproc)
+
+  deb-package:
+    name: Debian package / Ubuntu 24.04
+    runs-on: ubuntu-latest
+    container: ubuntu:24.04
+
+    steps:
+    - name: Install Dependencies
+      run: |
+        apt-get update
+        apt-get install -y $DEPENDENCIES
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: cmake -B build-deb-ubuntu-24.04 -G Ninja -D DISTRO_VERSION=Ubuntu-24.04 -D ReleaseBuild=ON -D CMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build-deb-ubuntu-24.04
+
+    - name: Create package
+      run: |
+        cd build-deb-ubuntu-24.04
+        cpack -G DEB
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dustracing2d-ubuntu-24.04-deb
+        path: build-deb-ubuntu-24.04/*.deb
