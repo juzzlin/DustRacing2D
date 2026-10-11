@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+
+# Generates procedural textures of Dust Racing 2D into data/images.
+# The output is deterministic, so the textures can be regenerated and tweaked at any time.
+# Requires Pillow and NumPy. Must be run in the project root.
+#
+# Usage: scripts/generate-textures [NAME...]
+# Without names all textures are generated.
+
+import math
+import sys
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+
+IMAGE_PATH = 'data/images/'
+
+# Scene light comes from the upper left (in image coordinates y grows downwards).
+LIGHT = np.array([-1.0, -1.0, 1.2]) / np.linalg.norm([-1.0, -1.0, 1.2])
+
+# Sprites are drawn supersampled and then scaled down for anti-aliasing.
+SUPERSAMPLING = 2
+
+
+def shade(normal):
+    """Lambertian shading with some ambient light."""
+    return 0.5 + 0.65 * max(0.0, float(np.dot(normal, LIGHT)))
+
+
+def finish_sprite(image, size):
+    """Scales a supersampled sprite down and keeps colors of the semi-transparent edges intact."""
+    image = image.resize((size, size), Image.LANCZOS)
+    pixels = np.asarray(image).astype(np.float32)
+    # The game discards nearly transparent pixels and draws the rest without blending,
+    # so make the silhouette crisp.
+    alpha = pixels[..., 3]
+    pixels[..., 3] = np.where(alpha > 96, 255, 0)
+    return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
+
+
+def leaf_polygon(x, y, length, width, angle):
+    """A pointed leaf as a polygon."""
+    points = []
+    for t in np.linspace(0, 2 * math.pi, 14, endpoint=False):
+        # Lemon-shaped outline: pointed at both ends
+        u = math.cos(t) * length / 2
+        v = math.sin(t) * width / 2 * abs(math.sin(t)) ** 0.3
+        points.append((x + u * math.cos(angle) - v * math.sin(angle), y + u * math.sin(angle) + v * math.cos(angle)))
+    return points
+
+
+def deciduous_canopy(seed, size=128, leaves=1100, base_hue=(70, 125, 45)):
+    """A slice of a deciduous tree crown: a clump of leafy domes with gaps between the leaves."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    center = s / 2
+    radius = s * 0.47
+
+    # Domes of foliage that together form the clump
+    domes = [(center, center, radius * 0.55)]
+    for _ in range(7):
+        angle = rng.uniform(0, 2 * math.pi)
+        distance = rng.uniform(0.25, 0.55) * radius
+        domes.append((center + math.cos(angle) * distance, center + math.sin(angle) * distance, rng.uniform(0.3, 0.45) * radius))
+
+    items = []
+    for _ in range(leaves):
+        dx, dy, dr = domes[rng.integers(len(domes))]
+        # Denser towards the center of a dome
+        r = dr * math.sqrt(rng.uniform(0, 1)) ** 0.8
+        a = rng.uniform(0, 2 * math.pi)
+        x, y = dx + math.cos(a) * r, dy + math.sin(a) * r
+        if math.hypot(x - center, y - center) > radius:
+            continue
+        # Height and normal on the dome
+        nx, ny = (x - dx) / dr, (y - dy) / dr
+        nz = math.sqrt(max(0.05, 1 - nx * nx - ny * ny))
+        normal = np.array([nx, ny, nz]) / math.sqrt(nx * nx + ny * ny + nz * nz)
+        # Leaves face roughly up but are tilted randomly
+        normal = normal + rng.normal(0, 0.35, 3)
+        normal /= np.linalg.norm(normal)
+        items.append((nz, x, y, a, normal))
+
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    # Draw from the bottom to the top of the domes
+    for height, x, y, a, normal in sorted(items, key=lambda item: item[0]):
+        light = shade(normal) * (0.6 + 0.4 * height)
+        variation = rng.normal(0, 0.07, 3)
+        color = [int(np.clip(c * (light + v), 0, 255)) for c, v in zip(base_hue, variation)]
+        length = rng.uniform(9, 15) * SUPERSAMPLING / 2 * size / 64
+        angle = a + rng.normal(0, 0.6)
+        draw.polygon(leaf_polygon(x, y, length, length * 0.55, angle), fill=(*color, 255))
+    return finish_sprite(image, size)
+
+
+def pine_canopy(seed, size=128, branches=11, base_hue=(45, 95, 60)):
+    """A slice of a pine crown: needle sprays radiating from the trunk."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    center = s / 2
+    radius = s * 0.47
+
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+
+    strokes = []
+    for i in range(branches):
+        angle = (i + rng.uniform(-0.3, 0.3)) * 2 * math.pi / branches
+        length = radius * rng.uniform(0.75, 1.0)
+        for t in np.linspace(0.08, 1.0, 26):
+            # Branch droops and slightly curves
+            curve = angle + 0.15 * math.sin(t * 3 + i)
+            bx, by = center + math.cos(curve) * length * t, center + math.sin(curve) * length * t
+            twig = length * 0.28 * (1.1 - t)
+            for side in (-1, 1):
+                for _ in range(3):
+                    needle_angle = curve + side * rng.uniform(0.5, 1.1)
+                    needle_length = twig * rng.uniform(0.5, 1.0) + 3 * SUPERSAMPLING
+                    ex, ey = bx + math.cos(needle_angle) * needle_length, by + math.sin(needle_angle) * needle_length
+                    # Needle sprays slope down from the branch
+                    normal = np.array([math.cos(needle_angle), math.sin(needle_angle), 1.3 - t * 0.5])
+                    normal /= np.linalg.norm(normal)
+                    strokes.append((1 - t, (bx, by, ex, ey), normal))
+
+    for height, (bx, by, ex, ey), normal in sorted(strokes, key=lambda item: item[0]):
+        light = shade(normal) * (0.65 + 0.35 * height)
+        variation = rng.normal(0, 0.06, 3)
+        color = tuple(int(np.clip(c * (light + v), 0, 255)) for c, v in zip(base_hue, variation))
+        draw.line((bx, by, ex, ey), fill=(*color, 255), width=max(1, SUPERSAMPLING * size // 96))
+    return finish_sprite(image, size)
+
+
+def trunk(seed, size=32, base_hue=(95, 70, 45)):
+    """A cross-section of a tree trunk seen from above: a rounded, shaded column of bark."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    y, x = (np.mgrid[0:s, 0:s] + 0.5) / s * 2 - 1
+    r = np.hypot(x, y)
+    inside = r < 0.92
+    # Cylinder-like normals: the column bulges towards the viewer
+    nz = np.sqrt(np.clip(1 - r * r, 0.05, 1))
+    normals = np.stack([x, y, nz], axis=-1) / np.sqrt(x * x + y * y + nz * nz)[..., None]
+    light = 0.45 + 0.75 * np.clip(normals @ LIGHT, 0, 1)
+    # Bark ridges run around the trunk
+    angle = np.arctan2(y, x)
+    ridges = 0.85 + 0.15 * np.sin(angle * 23 + rng.uniform(0, 6) + 3 * np.sin(angle * 5)) * r
+    grain = 1 + rng.normal(0, 0.06, (s, s))
+    shading = light * ridges * grain
+    pixels = np.zeros((s, s, 4))
+    pixels[..., :3] = np.array(base_hue)[None, None, :] * shading[..., None]
+    pixels[..., 3] = np.where(inside, 255, 0)
+    image = Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
+    return finish_sprite(image, size)
+
+
+TEXTURES = {
+    'tree': lambda: deciduous_canopy(seed=1),
+    'tree2': lambda: deciduous_canopy(seed=2, base_hue=(80, 130, 40)),
+    'tree3': lambda: deciduous_canopy(seed=3, base_hue=(62, 118, 50)),
+    'pine': lambda: pine_canopy(seed=4),
+    'pine2': lambda: pine_canopy(seed=5, branches=9, base_hue=(40, 88, 62)),
+    'trunk': lambda: trunk(seed=6),
+}
+
+
+def main(names):
+    for name in names or TEXTURES:
+        if name not in TEXTURES:
+            sys.exit(f'Unknown texture: {name}')
+        path = IMAGE_PATH + name + '.png'
+        print(f'Generating {path}..')
+        TEXTURES[name]().save(path, optimize=True)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
