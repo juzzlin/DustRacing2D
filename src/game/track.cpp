@@ -119,13 +119,18 @@ void Track::render(MCCamera & camera)
     size_t i2, j2, i0, j0;
     calculateVisibleIndices(camera.bbox(), i0, i2, j0, j2);
 
-    MCGLShaderProgramPtr prog2d = Renderer::instance().program("tile2d");
+    // Scene coordinates of the camera's origin. Tile shaders use this to map materials in world space.
+    const MCVector2dF cameraOrigin { camera.mapXToScene(0), camera.mapYToScene(0) };
+
+    const auto prog2d = Renderer::instance().program("tile2d");
     prog2d->bind();
+    prog2d->setCamera(cameraOrigin);
     renderAsphalt(camera, prog2d, i0, i2, j0, j2);
     prog2d->release();
 
-    MCGLShaderProgramPtr prog3d = Renderer::instance().program("tile3d");
+    const auto prog3d = Renderer::instance().program("tile3d");
     prog3d->bind();
+    prog3d->setCamera(cameraOrigin);
     renderTiles(camera, prog3d, i0, i2, j0, j2);
     prog3d->release();
 }

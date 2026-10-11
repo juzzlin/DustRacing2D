@@ -147,7 +147,7 @@ void Renderer::loadShaders()
     createProgramFromSource("car", carVsh, carFsh);
     createProgramFromSource("fbo", fboVsh, fboFsh);
     createProgramFromSource("menu", menuVsh, menuFsh);
-    createProgramFromSource("tile2d", tileVsh, MCGLShaderProgram::getDefaultFragmentShaderSource());
+    createProgramFromSource("tile2d", tileVsh, asphaltFsh);
     createProgramFromSource("tile3d", tileVsh, tile3dFsh);
 }
 
