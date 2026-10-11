@@ -89,6 +89,9 @@ public:
     //! Get cached speed.
     float absSpeed() const;
 
+    //! Whether a human-driven car is currently rolling backwards.
+    bool isMovingBackward() const;
+
     void addDamage(float damage);
 
     //! \reimp
