@@ -103,7 +103,7 @@ public:
     //! Set view handle (e.g. if surface changes). Changes also the viewId integer.
     void setHandle(std::string handle);
 
-    //! Set color of the view.
+    //! Set color of the view. It tints the view without affecting other views of the same surface.
     virtual void setColor(const MCGLColor & color);
 
     //! \return color of the view.

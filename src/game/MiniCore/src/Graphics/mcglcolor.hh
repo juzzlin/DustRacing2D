@@ -109,4 +109,10 @@ private:
     GLfloat m_r, m_g, m_b, m_a;
 };
 
+//! Component-wise product, e.g. for tinting.
+inline MCGLColor operator*(const MCGLColor & l, const MCGLColor & r)
+{
+    return { l.r() * r.r(), l.g() * r.g(), l.b() * r.b(), l.a() * r.a() };
+}
+
 #endif // MCGLCOLOR_HH

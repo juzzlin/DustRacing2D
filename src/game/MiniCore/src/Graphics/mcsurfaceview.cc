@@ -66,8 +66,12 @@ public:
 
     void render(const MCVector3dF & l, float angle, MCCamera * p)
     {
+        // The surface may be shared by many views, so tint it only for the duration of this render.
+        const auto surfaceColor = m_surface->color();
+        m_surface->setColor(surfaceColor * m_this.color());
         m_surface->setScale(m_this.scale());
         m_surface->render(p, l, angle);
+        m_surface->setColor(surfaceColor);
     }
 
     void renderShadow(const MCVector3dF & l, float angle, MCCamera * p)
@@ -99,11 +103,6 @@ public:
     const MCBBoxF & bbox() const
     {
         return m_bbox;
-    }
-
-    void setColor(const MCGLColor & color)
-    {
-        m_surface->setColor(color);
     }
 
     void updateBBox()
@@ -194,12 +193,6 @@ void MCSurfaceView::releaseShadow()
 const MCBBoxF & MCSurfaceView::bbox() const
 {
     return m_impl->bbox();
-}
-
-void MCSurfaceView::setColor(const MCGLColor & color)
-{
-    MCShapeView::setColor(color);
-    m_impl->setColor(color);
 }
 
 void MCSurfaceView::setScale(const MCVector3dF & scale)
