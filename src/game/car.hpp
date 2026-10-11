@@ -73,6 +73,21 @@ public:
 
     void steer(Steer direction, float control = 1.0f);
 
+    //! Maximum tire angle in degrees at low speed (easy turning after accidents).
+    static constexpr float maxTireAngleLowSpeed = 45.0f;
+
+    //! Maximum tire angle in degrees at high speed (normal driving stability).
+    static constexpr float maxTireAngleHighSpeed = 15.0f;
+
+    //! Speed at and below which maxTireAngleLowSpeed is used.
+    static constexpr float maxTireAngleLowSpeedLimit = 10.0f;
+
+    //! Speed at and above which maxTireAngleHighSpeed is used.
+    static constexpr float maxTireAngleHighSpeedLimit = 60.0f;
+
+    //! Get the current maximum tire angle in degrees, based on speed.
+    float maxTireAngle() const;
+
     bool isAccelerating() const;
 
     bool isBraking() const;
