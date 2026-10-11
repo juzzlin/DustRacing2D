@@ -273,6 +273,17 @@ float Car::absSpeed() const
     return m_absSpeed;
 }
 
+bool Car::isMovingBackward() const
+{
+    if (!m_isHuman)
+    {
+        return false;
+    }
+
+    const MCVector2dF forward(m_dx, m_dy);
+    return physicsComponent().velocity().dot(forward) < 0;
+}
+
 MCVector3dF Car::leftFrontTireLocation() const
 {
     return m_leftFrontTire->location();
@@ -468,7 +479,7 @@ void Car::onStepTime(int step)
 
     updateTireWear(step);
 
-    m_gearbox->update(speedInKmh());
+    m_gearbox->update(speedInKmh(), isMovingBackward());
 
     if (m_gearbox->gear() == Gearbox::Gear::Forward && m_acceleratorEnabled)
     {
