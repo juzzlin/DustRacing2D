@@ -216,6 +216,14 @@ void Game::createRenderer()
 #else
     format.setVersion(2, 1);
 #endif
+
+    // Be explicit, because e.g. on Wayland (EGL) the default may be OpenGL ES,
+    // which fails with the desktop OpenGL versions above.
+#ifdef __MC_GLES__
+    format.setRenderableType(QSurfaceFormat::OpenGLES);
+#else
+    format.setRenderableType(QSurfaceFormat::OpenGL);
+#endif
     format.setSamples(0);
 
 // Supported only in Qt 5.3+
