@@ -16,13 +16,38 @@
 #include "tree.hpp"
 
 #include <MCCircleShape>
+#include <MCGLColor>
 #include <MCPhysicsComponent>
 #include <MCRandom>
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
 
-static const float treeBodyRadius = 8;
+#include <algorithm>
+#include <cmath>
+
+namespace {
+
+const float treeBodyRadius = 8;
+
+/*! \return tint for a layer of the canopy.
+ *  \param height Relative height of the layer: 0.0 is the lowest and 1.0 is the topmost layer.
+ *  \param hue Per-tree variation of the green. */
+MCGLColor layerTint(float height, float hue)
+{
+    // Lower layers are in the shade of the canopy and get bluish sky light,
+    // upper layers catch the warm sunlight.
+    const float light = 0.5f + 0.8f * std::pow(height, 0.6f);
+    const float sun = std::clamp((height - 0.6f) / 0.4f, 0.0f, 1.0f);
+    const float shade = 1.0f - height;
+    return {
+        light * hue * (1.0f + 0.10f * sun),
+        light * (1.0f + 0.05f * sun),
+        light * (1.0f - 0.20f * sun + 0.15f * shade)
+    };
+}
+
+} // namespace
 
 Tree::Tree(MCSurfacePtr surface, float r0, float r1, float treeHeight, size_t branches)
   : MCObject(std::make_shared<MCCircleShape>(nullptr, treeBodyRadius), "tree")
@@ -35,9 +60,11 @@ Tree::Tree(MCSurfacePtr surface, float r0, float r1, float treeHeight, size_t br
     shape()->setRadius(treeBodyRadius);
 
     const float branchHeight = treeHeight / branches;
+    const float hue = 0.85f + 0.3f * MCRandom::getValue();
     for (size_t i = 0; i < branches; i++)
     {
         const auto branch = std::make_shared<MCObject>(surface, i == 0 ? "treeRoot" : "treeBranch");
+        branch->shape()->view()->setColor(layerTint(branches > 1 ? static_cast<float>(i) / (branches - 1) : 1.0f, hue));
 
         if (i == 0)
         {
