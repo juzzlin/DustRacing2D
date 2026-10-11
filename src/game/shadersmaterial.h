@@ -58,6 +58,28 @@
   "    return color;\n"                                                                     \
   "}\n"                                                                                     \
   ""                                                                                        \
+  "float luminance(vec3 color)\n"                                                           \
+  "{\n"                                                                                     \
+  "    return dot(color, vec3(0.299, 0.587, 0.114));\n"                                     \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "// Shading of a material's relief relative to a flat surface. The relief is estimated\n" \
+  "// from the brightness gradient of the texture: bright is high and dark is low.\n"       \
+  "// lightDir is the direction where the light travels to, as in the dd uniform.\n"        \
+  "float relief(sampler2D tex, vec2 uv, vec3 lightDir, float strength)\n"                   \
+  "{\n"                                                                                     \
+  "    const float texelStep = 1.0 / 256.0; // One world unit in material coordinates\n"    \
+  "    float h = luminance(texture2D(tex, uv).rgb);\n"                                      \
+  "    float hx = luminance(texture2D(tex, uv + vec2(texelStep, 0.0)).rgb);\n"              \
+  "    float hy = luminance(texture2D(tex, uv + vec2(0.0, texelStep)).rgb);\n"              \
+  "    vec3 normal = normalize(vec3((h - hx) * strength, (h - hy) * strength, 1.0));\n"     \
+  "    vec3 light = normalize(-lightDir);\n"                                                \
+  "    return clamp(dot(normal, light) / max(light.z, 0.2), 0.6, 1.4);\n"                   \
+  "}\n"                                                                                     \
+  ""                                                                                        \
+  "const float asphaltRelief = 4.0;\n"                                                     \
+  "const float materialRelief = 2.5;\n"                                                    \
+  ""                                                                                        \
   "// Track tile masks: transparent is asphalt, green is a material and other colors are\n"  \
   "// painted details such as edge lines.\n"                                                \
   "float isAsphalt(vec4 mask)\n"                                                            \
@@ -99,8 +121,7 @@
   "vec4 weatherVerge(vec4 color, float edge, vec2 uv)\n"                                    \
   "{\n"                                                                                     \
   "    float wear = smoothstep(0.05, 0.6, edge * (0.5 + valueNoise(uv * 24.0)));\n"         \
-  "    float luminance = dot(color.rgb, vec3(0.299, 0.587, 0.114));\n"                      \
-  "    vec3 dirt = luminance * vec3(1.35, 1.12, 0.78);\n"                                   \
+  "    vec3 dirt = luminance(color.rgb) * vec3(1.35, 1.12, 0.78);\n"                        \
   "    color.rgb = mix(color.rgb, dirt, wear * 0.65);\n"                                    \
   "    color.rgb *= 1.0 - 0.3 * smoothstep(0.35, 0.9, edge);\n"                             \
   "    return color;\n"                                                                     \
