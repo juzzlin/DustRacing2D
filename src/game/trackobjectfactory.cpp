@@ -177,12 +177,8 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "tree")
     {
-        const int height = static_cast<int>(200 + 200 * MCRandom::getValue());
-        object = std::make_shared<Tree>(MCAssetManager::surfaceManager().surface("tree"),
-                                        1.0f + 0.50f * MCRandom::getValue(),
-                                        0.1f + 0.2f * MCRandom::getValue(),
-                                        height,
-                                        height / 10);
+        const float pineProbability = 0.3f;
+        object = std::make_shared<Tree>(MCRandom::getValue() < pineProbability ? Tree::Species::Pine : Tree::Species::Deciduous);
         object->setInitialLocation(location);
         object->setInitialAngle(angle);
     }

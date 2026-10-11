@@ -15,6 +15,7 @@
 
 #include "tree.hpp"
 
+#include <MCAssetManager>
 #include <MCCircleShape>
 #include <MCGLColor>
 #include <MCMathUtil>
@@ -23,15 +24,74 @@
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurface>
+#include <MCSurfaceManager>
 
 #include <algorithm>
 #include <cmath>
+#include <string>
+#include <vector>
 
 namespace {
 
 const float treeBodyRadius = 8;
 
+const float layerSpacing = 10;
+
+const float trunkScale = 0.5f;
+
+const MCGLColor trunkTint { 0.7f, 0.7f, 0.7f };
+
+//! Shadows fall away from the light. The offset is relative to the height of the crown.
+const MCVector2dF shadowDirection = MCVector2dF(1.0f, -1.0f) * 0.08f;
+
 constexpr float twoPi = 6.2831853f;
+
+struct SpeciesTraits
+{
+    //! Surfaces of the layers of the crown. Each layer gets a random one.
+    std::vector<std::string> surfaces;
+
+    //! Range of tree heights in world units.
+    float minHeight, maxHeight;
+
+    //! Range of the scale of the widest layer of the crown.
+    float minRadius, maxRadius;
+
+    //! Maximum random horizontal offset of the layers.
+    float layerOffset;
+
+    //! Relative height where the crown starts. The trunk is visible below it.
+    float crownBase;
+
+    //! Width of the crown relative to its widest layer.
+    //! \param height Relative height within the crown: 0.0 is its bottom and 1.0 its top.
+    float (*profile)(float height);
+};
+
+const SpeciesTraits & speciesTraits(Tree::Species species)
+{
+    static const SpeciesTraits deciduous {
+        { "tree", "tree2", "tree3" },
+        200, 400,
+        1.1f, 1.6f,
+        7.0f,
+        0.35f,
+        // An ellipsoid
+        [](float height) { return 0.3f + 0.7f * std::sqrt(std::max(0.0f, 1.0f - (2 * height - 1) * (2 * height - 1))); }
+    };
+
+    static const SpeciesTraits pine {
+        { "pine", "pine2" },
+        300, 500,
+        1.1f, 1.5f,
+        1.5f,
+        0.1f,
+        // A narrow cone
+        [](float height) { return 0.08f + 0.92f * std::pow(1.0f - height, 1.2f); }
+    };
+
+    return species == Tree::Species::Pine ? pine : deciduous;
+}
 
 /*! \return tint for a layer of the canopy.
  *  \param height Relative height of the layer: 0.0 is the lowest and 1.0 is the topmost layer.
@@ -61,7 +121,7 @@ const float flutterAmplitude = 4.0f; // Rotation of the topmost layer in degrees
 
 } // namespace
 
-Tree::Tree(MCSurfacePtr surface, float r0, float r1, float treeHeight, size_t branches)
+Tree::Tree(Species species)
   : MCObject(std::make_shared<MCCircleShape>(nullptr, treeBodyRadius), "tree")
   , m_phase(MCRandom::getValue() * twoPi)
 {
@@ -72,37 +132,54 @@ Tree::Tree(MCSurfacePtr surface, float r0, float r1, float treeHeight, size_t br
 
     shape()->setRadius(treeBodyRadius);
 
-    const float branchHeight = treeHeight / branches;
+    const auto & traits = speciesTraits(species);
+    const float treeHeight = traits.minHeight + (traits.maxHeight - traits.minHeight) * MCRandom::getValue();
+    const float radius = traits.minRadius + (traits.maxRadius - traits.minRadius) * MCRandom::getValue();
     const float hue = 0.85f + 0.3f * MCRandom::getValue();
-    for (size_t i = 0; i < branches; i++)
+    const float crownBase = treeHeight * traits.crownBase;
+
+    const auto addLayer = [this, treeHeight](MCObjectPtr layer, MCVector3dF location, float angle) {
+        layer->setIsPhysicsObject(false);
+        layer->shape()->view()->setHasShadow(false);
+        addChildObject(layer, location, angle);
+        m_layers.push_back({ layer, location, angle, location.k() / treeHeight });
+    };
+
+    for (float z = layerSpacing; z < crownBase; z += layerSpacing)
     {
-        const auto branch = std::make_shared<MCObject>(surface, i == 0 ? "treeRoot" : "treeBranch");
-        const float height = branches > 1 ? static_cast<float>(i) / (branches - 1) : 1.0f;
-        branch->shape()->view()->setColor(layerTint(height, hue));
-
-        if (i == 0)
-        {
-            branch->shape()->view()->setHasShadow(true);
-            branch->shape()->view()->setHandle("branchShadowEnabled"); // Different handle for the only surface with shadow
-            branch->setIsPhysicsObject(false);
-            const auto location = MCVector3dF(0, 0, branchHeight) * (i + 1);
-            addChildObject(branch, location);
-            m_layers.push_back({ branch, location, 0, height });
-        }
-        else
-        {
-            branch->shape()->view()->setHasShadow(false);
-            branch->setIsPhysicsObject(false);
-            const auto offset = MCRandom::randomVector2d() * 5;
-            const auto location = MCVector3dF(0, 0, branchHeight) * (i + 1) + MCVector3dF(offset);
-            const float angle = MCRandom::getValue() * 360;
-            addChildObject(branch, location, angle);
-            m_layers.push_back({ branch, location, angle, height });
-        }
-
-        const float scale = r0 - (r0 - r1) / branches * i;
-        branch->shape()->view()->setScale({ scale, scale, 1.0f });
+        const auto layer = std::make_shared<MCObject>(MCAssetManager::surfaceManager().surface("trunk"), "treeTrunk");
+        layer->shape()->view()->setColor(trunkTint);
+        layer->shape()->view()->setScale({ trunkScale, trunkScale, 1.0f });
+        addLayer(layer, { 0, 0, z }, MCRandom::getValue() * 360);
     }
+
+    const auto crownLayers = std::max(static_cast<size_t>((treeHeight - crownBase) / layerSpacing), size_t { 2 });
+    MCObjectPtr widestLayer;
+    float widestScale = 0;
+    for (size_t i = 0; i < crownLayers; i++)
+    {
+        const auto & surfaceName = traits.surfaces.at(static_cast<size_t>(MCRandom::getValue() * traits.surfaces.size()) % traits.surfaces.size());
+        const auto layer = std::make_shared<MCObject>(MCAssetManager::surfaceManager().surface(surfaceName), "treeBranch");
+        const float crownHeight = static_cast<float>(i) / (crownLayers - 1);
+        layer->shape()->view()->setColor(layerTint(crownHeight, hue));
+
+        // Jitter the sizes so that the edges of the layers don't line up as rings.
+        const float scale = radius * traits.profile(crownHeight) * (0.88f + 0.24f * MCRandom::getValue());
+        layer->shape()->view()->setScale({ scale, scale, 1.0f });
+        if (scale > widestScale)
+        {
+            widestScale = scale;
+            widestLayer = layer;
+        }
+
+        const auto offset = MCVector3dF(MCRandom::randomVector2d() * traits.layerOffset);
+        addLayer(layer, offset + MCVector3dF(0, 0, crownBase + layerSpacing * (i + 1)), MCRandom::getValue() * 360);
+    }
+
+    // The widest layer of the crown casts the shadow.
+    widestLayer->shape()->view()->setHasShadow(true);
+    widestLayer->shape()->view()->setHandle("branchShadowEnabled"); // Different handle for the only surface with shadow
+    widestLayer->shape()->setShadowOffset(MCVector3dF(shadowDirection * (crownBase + (treeHeight - crownBase) / 2)));
 }
 
 void Tree::onStepTime(int step)

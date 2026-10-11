@@ -22,12 +22,17 @@
 #include <memory>
 #include <vector>
 
-class MCSurface;
-
 class Tree : public MCObject
 {
 public:
-    Tree(std::shared_ptr<MCSurface> surface, float r0, float r1, float treeHeight, size_t branches);
+    enum class Species
+    {
+        Deciduous,
+        Pine
+    };
+
+    //! Creates a randomly sized tree of the given species.
+    explicit Tree(Species species);
 
     //! Sways the canopy in the wind.
     void onStepTime(int step) override;
