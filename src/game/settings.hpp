@@ -49,6 +49,15 @@ public:
 
     int loadVSync();
 
+    //! Saves the name of the given human player (0 or 1).
+    void savePlayerName(size_t player, QString name);
+
+    //! \return The saved name of the given human player, or the default name.
+    QString loadPlayerName(size_t player) const;
+
+    //! \return The default name of the given human player, e.g. "Player 1".
+    static QString defaultPlayerName(size_t player);
+
     void saveValue(QString key, int value);
 
     int loadValue(QString key, int defaultValue = 0);
@@ -64,6 +73,8 @@ public:
     static QString screenKey();
 
     static QString vsyncKey();
+
+    static QString playerNameKey(size_t player);
 
 private:
     QString combineActionAndPlayer(int player, InputHandler::Action action);

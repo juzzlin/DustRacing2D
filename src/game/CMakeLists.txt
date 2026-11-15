@@ -76,6 +76,7 @@ set(SRC
     race.cpp
     renderer.cpp
     scene.cpp
+    playername.cpp
     settings.cpp
     startlights.cpp
     startlightsoverlay.cpp

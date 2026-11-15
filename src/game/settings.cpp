@@ -16,6 +16,7 @@
 #include "settings.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
+#include <QObject> // For QObject::tr()
 #include <QSettings>
 #include <cassert>
 
@@ -55,6 +56,11 @@ QString Settings::screenKey()
 QString Settings::vsyncKey()
 {
     return "vsync";
+}
+
+QString Settings::playerNameKey(size_t player)
+{
+    return QString { "playerName_%1" }.arg(player);
 }
 
 Settings::Settings()
@@ -104,6 +110,31 @@ void Settings::saveVSync(int value)
 int Settings::loadVSync()
 {
     return loadValue(Settings::vsyncKey(), 1); // On by default
+}
+
+void Settings::savePlayerName(size_t player, QString name)
+{
+    QSettings settings;
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    settings.setValue(playerNameKey(player), name);
+    settings.endGroup();
+}
+
+QString Settings::loadPlayerName(size_t player) const
+{
+    QSettings settings;
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    const QString name { settings.value(playerNameKey(player)).toString() };
+    settings.endGroup();
+
+    return name.isEmpty() ? defaultPlayerName(player) : name;
+}
+
+QString Settings::defaultPlayerName(size_t player)
+{
+    return QObject::tr("Player %1").arg(player + 1);
 }
 
 void Settings::saveValue(QString key, int value)
