@@ -245,3 +245,41 @@ void ResultsOverlay::render()
     const QString footer { QObject::tr("Enter: Continue") };
     renderText(footer.toUpper().toStdWString(), centerX, panelY + lineHeight * 0.5f, lineHeight * glyphScale * 0.8f, headerColor, Align::Center);
 }
+
+void ResultsOverlay::renderWaitingCard(size_t player, int width, int height)
+{
+    if (!m_race || player >= m_playerNames.size())
+    {
+        return;
+    }
+
+    const auto results { m_race->results() };
+    const auto result { std::find_if(results.begin(), results.end(), [player](auto && result) { return result.carIndex == player; }) };
+    if (result == results.end() || !result->finished)
+    {
+        return;
+    }
+
+    glDisable(GL_DEPTH_TEST);
+
+    const float lineHeight { static_cast<float>(height) / 12 };
+    const float cardWidth { std::min(static_cast<float>(width) * 0.9f, lineHeight * 14) };
+    const float cardHeight { lineHeight * 4 };
+    const float cardX { (static_cast<float>(width) - cardWidth) / 2 };
+    const float cardY { (static_cast<float>(height) - cardHeight) / 2 };
+    const float centerX { static_cast<float>(width) / 2 };
+
+    renderPanel(cardX, cardY, cardWidth, cardHeight, panelColor);
+
+    float y { cardY + cardHeight - lineHeight * 1.25f };
+    const std::wstring position { result->position < m_positionTexts.size() ? m_positionTexts.at(result->position) : std::to_wstring(result->position) };
+    const QString title { QObject::tr("Finished %1").arg(QString::fromStdWString(position)) };
+    renderText(title.toUpper().toStdWString(), centerX, y, lineHeight * glyphScale * 1.2f, titleColor, Align::Center);
+    y -= lineHeight;
+
+    renderText(Timing::msecsToString(static_cast<int>(result->raceTime.count())), centerX, y, lineHeight * glyphScale, finishedColor, Align::Center);
+    y -= lineHeight;
+
+    const QString & otherPlayer { m_playerNames.at(1 - player) };
+    renderText(QObject::tr("Waiting for %1..").arg(otherPlayer).toStdWString(), centerX, y, lineHeight * glyphScale * 0.8f, headerColor, Align::Center);
+}

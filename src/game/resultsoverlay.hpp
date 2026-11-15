@@ -45,6 +45,11 @@ public:
     //! Renders the full screen results table.
     void render() override;
 
+    /*! Renders a card telling that the given human player has finished and waits for the other one.
+     *  \param width Width of the player's split view.
+     *  \param height Height of the player's split view. */
+    void renderWaitingCard(size_t player, int width, int height);
+
 private:
     enum class Align
     {

@@ -719,11 +719,13 @@ void Scene::renderHUD()
             m_timingOverlay.at(1).render();
             m_minimap.at(1).render(m_cars, *m_race);
             m_crashOverlay.at(1).render();
+            renderWaitingCard(1);
 
             glScene.setSplitType(p0);
             m_timingOverlay.at(0).render();
             m_minimap.at(0).render(m_cars, *m_race);
             m_crashOverlay.at(0).render();
+            renderWaitingCard(0);
 
             glScene.setSplitType(MCGLScene::ShowFullScreen);
         }
@@ -738,6 +740,16 @@ void Scene::renderHUD()
     }
     default:
         break;
+    }
+}
+
+void Scene::renderWaitingCard(size_t player)
+{
+    // The full screen results replace the card when both players have finished
+    if (m_stateMachine.state() == StateMachine::State::Play)
+    {
+        auto && overlay { m_timingOverlay.at(player) };
+        m_resultsOverlay->renderWaitingCard(player, overlay.width(), overlay.height());
     }
 }
 

@@ -81,6 +81,7 @@ public:
 
     void renderCommonHUD();
     void renderHUD();
+    void renderWaitingCard(size_t player);
     void renderMenu();
     void renderTrack();
     void renderWorld(MCRenderGroup renderGroup, bool prepareRendering = false);
