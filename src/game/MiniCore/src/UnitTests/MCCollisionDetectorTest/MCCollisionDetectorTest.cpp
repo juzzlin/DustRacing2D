@@ -215,7 +215,6 @@ void MCCollisionDetectorTest::testCrossingBoxesWithoutCornersInsideCollide()
     auto && b = scene.addBox(2, 20, { 0, 0.5f });
     scene.detect();
 
-    QEXPECT_FAIL("", "Only corners inside the other box are detected", Abort);
     QVERIFY(!contacts(a, b).empty());
     QVERIFY(!contacts(b, a).empty());
 }
@@ -243,7 +242,6 @@ void MCCollisionDetectorTest::testCircleAgainstBoxEdge()
     auto && circle = scene.addCircle(3, { 20, 7 });
     scene.detect();
 
-    QEXPECT_FAIL("", "Circles are tested only against points towards the corners and the center of the box", Abort);
     const auto contact = deepest(circle, wall);
     QVERIFY(contact);
     QVERIFY(equals(contact->contactNormal(), { 0, 1 }));
@@ -263,7 +261,6 @@ void MCCollisionDetectorTest::testCircleAgainstBoxCorner()
     const auto contact = deepest(circle, box);
     QVERIFY(contact);
     const float diagonal = 1.0f / std::sqrt(2.0f);
-    QEXPECT_FAIL("", "Circle against box contacts are approximate", Abort);
     QVERIFY(equals(contact->contactNormal(), { diagonal, diagonal }));
     QVERIFY(std::fabs(contact->interpenetrationDepth() - 0.5f) < TOLERANCE);
 }
@@ -275,7 +272,6 @@ void MCCollisionDetectorTest::testCircleAgainstCircle()
     auto && b = scene.addCircle(2, { 4, 0 });
     scene.detect();
 
-    QEXPECT_FAIL("", "The contact of the first circle refers to the circle itself", Abort);
     const auto contact = deepest(b, a);
     QVERIFY(contact);
     QVERIFY(equals(contact->contactNormal(), { 1, 0 }));

@@ -290,7 +290,6 @@ void MCImpulseGeneratorTest::testCircleCircleContactRefersToTheOtherObject()
     //
     // Compare with testRectAgainstRect(), which correctly passes rect2.parent() and
     // rect1.parent() to the two contacts.
-    QEXPECT_FAIL("", "A circle-circle contact of the first object points back at itself", Abort);
     QVERIFY(&first.contacts().begin()->second.front()->object() == &second);
 }
 

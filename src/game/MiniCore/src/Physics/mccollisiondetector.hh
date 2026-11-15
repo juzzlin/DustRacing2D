@@ -21,6 +21,7 @@
 #define MCCOLLISIONDETECTOR_HH
 
 #include "mcmacros.hh"
+#include "mcvector2d.hh"
 
 #include <map>
 #include <set>
@@ -61,11 +62,35 @@ private:
 
     bool processPossibleCollision(MCObject & object1, MCObject & object2);
 
-    bool testRectAgainstRect(MCRectShape & object1, MCRectShape & object2);
+    //! Contact points between two shapes.
+    struct Manifold
+    {
+        struct Point
+        {
+            MCVector2dF location;
 
-    bool testRectAgainstCircle(MCRectShape & object1, MCCircleShape & object2);
+            float depth = 0;
+        };
 
-    bool testCircleAgainstCircle(MCCircleShape & object1, MCCircleShape & object2);
+        //! Normal that pushes the second shape out of the first one.
+        MCVector2dF normal;
+
+        //! One or two points. Empty if the shapes don't overlap.
+        std::vector<Point> points;
+    };
+
+    //! Separating axis test of two oriented boxes. Contact points are found by clipping
+    //! the incident edge of one box against the reference face of the other one.
+    bool testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2);
+
+    //! Exact test using the point of the box closest to the center of the circle.
+    bool testRectAgainstCircle(MCRectShape & rect, MCCircleShape & circle);
+
+    bool testCircleAgainstCircle(MCCircleShape & circle1, MCCircleShape & circle2);
+
+    //! Sends the collision events and stores the contacts to both objects.
+    //! \return true if the objects collide.
+    bool processManifold(MCObject & object1, MCObject & object2, const Manifold & manifold);
 
     using CollisionMap = std::map<MCObject *, std::set<MCObject *>>;
     CollisionMap m_currentCollisions;

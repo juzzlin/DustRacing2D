@@ -23,9 +23,13 @@
 #include "mccontact.hh"
 #include "mcobject.hh"
 #include "mcrectshape.hh"
-#include "mcsegment.hh"
 #include "mcseparationevent.hh"
 #include "mcshape.hh"
+
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <utility>
 
 MCCollisionDetector::MCCollisionDetector()
 {
@@ -65,180 +69,237 @@ void MCCollisionDetector::remove(MCObject & object)
     }
 }
 
+namespace {
+
+//! An oriented box in a form suitable for the separating axis test.
+struct Box
+{
+    explicit Box(const MCRectShape & rect)
+    {
+        const auto & obbox = rect.obbox();
+        center = obbox.location();
+        // Vertices are in the order (-x, -y), (-x, y), (x, y), (x, -y) in the frame of the box
+        axes[0] = (obbox.vertex(3) - obbox.vertex(0)).normalized();
+        axes[1] = (obbox.vertex(1) - obbox.vertex(0)).normalized();
+        half[0] = obbox.hx();
+        half[1] = obbox.hy();
+    }
+
+    //! \return the half length of the projection of the box on the given axis.
+    float projectedRadius(const MCVector2dF & axis) const
+    {
+        return half[0] * std::fabs(axes[0].dot(axis)) + half[1] * std::fabs(axes[1].dot(axis));
+    }
+
+    MCVector2dF center;
+
+    MCVector2dF axes[2];
+
+    float half[2];
+};
+
+} // namespace
+
+bool MCCollisionDetector::processManifold(MCObject & object1, MCObject & object2, const Manifold & manifold)
+{
+    if (manifold.points.empty())
+    {
+        return false;
+    }
+
+    const auto & eventLocation = manifold.points.front().location;
+    MCCollisionEvent ev1(object2, eventLocation);
+    MCCollisionEvent ev2(object1, eventLocation);
+
+    const bool areColliding = areCurrentlyColliding(object1, object2);
+    if (!areColliding)
+    {
+        MCObject::sendEvent(object1, ev1);
+        MCObject::sendEvent(object2, ev2);
+    }
+
+    m_currentCollisions[&object1].insert(&object2);
+
+    if ((ev1.accepted() && ev2.accepted()) || areColliding)
+    {
+        if (!object1.isTriggerObject() && !object2.isTriggerObject())
+        {
+            for (auto && point : manifold.points)
+            {
+                MCContact & contact2 = MCContact::create();
+                contact2.init(object1, point.location, manifold.normal, point.depth);
+                object2.addContact(contact2);
+
+                MCContact & contact1 = MCContact::create();
+                contact1.init(object2, point.location, -manifold.normal, point.depth);
+                object1.addContact(contact1);
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 bool MCCollisionDetector::testRectAgainstRect(MCRectShape & rect1, MCRectShape & rect2)
 {
-    const MCOBBox<float> & obbox1(rect1.obbox());
+    const Box box1(rect1);
+    const Box box2(rect2);
+    const MCVector2dF centerDelta(box2.center - box1.center);
 
-    bool collided = false;
-
-    // Loop thru all vertices of rect1 and generate contacts for colliding vertices.
-    for (unsigned int i = 0; i < 4; i++)
+    // Find the axis of least overlap. The axes of the first box are preferred on ties,
+    // so that the choice of the reference face doesn't flicker between steps.
+    float minOverlap = std::numeric_limits<float>::max();
+    const Box * reference = nullptr;
+    const Box * incident = nullptr;
+    size_t referenceAxis = 0;
+    for (auto && [owner, other] : { std::pair { &box1, &box2 }, std::pair { &box2, &box1 } })
     {
-        if (rect2.contains(obbox1.vertex(i)))
+        for (size_t i = 0; i < 2; i++)
         {
-            const bool triggerObjectInvolved = rect1.parent().isTriggerObject() || rect2.parent().isTriggerObject();
-
-            MCCollisionEvent ev1(rect2.parent(), obbox1.vertex(i));
-            MCCollisionEvent ev2(rect1.parent(), obbox1.vertex(i));
-
-            const bool areColliding = areCurrentlyColliding(rect1.parent(), rect2.parent());
-            if (!areColliding)
+            const auto & axis = owner->axes[i];
+            const float overlap = box1.projectedRadius(axis) + box2.projectedRadius(axis) - std::fabs(centerDelta.dot(axis));
+            if (overlap <= 0)
             {
-                MCObject::sendEvent(rect1.parent(), ev1);
-                MCObject::sendEvent(rect2.parent(), ev2);
+                return false; // Separating axis found
             }
 
-            m_currentCollisions[&rect1.parent()].insert(&rect2.parent());
-
-            if ((ev1.accepted() && ev2.accepted()) || areColliding)
+            if (overlap < minOverlap - 0.001f)
             {
-                if (!triggerObjectInvolved)
-                {
-                    MCVector2dF contactNormal;
-                    MCVector2dF vertex = obbox1.vertex(i);
-                    float depth = rect2.interpenetrationDepth(
-                      MCSegment<float>(vertex, rect1.location()), contactNormal);
-
-                    {
-                        MCContact & contact = MCContact::create();
-                        contact.init(rect2.parent(), vertex, contactNormal, depth);
-                        rect1.parent().addContact(contact);
-                    }
-
-                    {
-                        MCContact & contact = MCContact::create();
-                        contact.init(rect1.parent(), vertex, -contactNormal, depth);
-                        rect2.parent().addContact(contact);
-                    }
-                }
-
-                collided = true;
+                minOverlap = overlap;
+                reference = owner;
+                incident = other;
+                referenceAxis = i;
             }
-
-            // Don't break here in the case of a collision, because we don't know
-            // yet which contact is the deepest. MCImpulseGenerator handles that.
         }
     }
 
-    return collided;
+    // Normal of the reference face points towards the incident box
+    MCVector2dF normal(reference->axes[referenceAxis]);
+    if ((incident->center - reference->center).dot(normal) < 0)
+    {
+        normal = -normal;
+    }
+
+    const MCVector2dF faceCenter(reference->center + normal * reference->half[referenceAxis]);
+    const MCVector2dF faceTangent(reference->axes[1 - referenceAxis]);
+    const float faceHalfLength = reference->half[1 - referenceAxis];
+
+    // Incident edge: the face of the incident box most anti-parallel to the normal
+    size_t incidentAxis = 0;
+    float minDot = std::numeric_limits<float>::max();
+    float incidentSign = 1;
+    for (size_t i = 0; i < 2; i++)
+    {
+        for (float sign : { -1.0f, 1.0f })
+        {
+            if (const float dot = (incident->axes[i] * sign).dot(normal); dot < minDot)
+            {
+                minDot = dot;
+                incidentAxis = i;
+                incidentSign = sign;
+            }
+        }
+    }
+
+    const MCVector2dF edgeCenter(incident->center + incident->axes[incidentAxis] * incidentSign * incident->half[incidentAxis]);
+    const MCVector2dF edgeHalf(incident->axes[1 - incidentAxis] * incident->half[1 - incidentAxis]);
+    MCVector2dF edge[2] = { edgeCenter - edgeHalf, edgeCenter + edgeHalf };
+
+    // Clip the incident edge to the side planes of the reference face
+    for (float side : { -1.0f, 1.0f })
+    {
+        const float distances[2] = {
+            (edge[0] - faceCenter).dot(faceTangent) * side - faceHalfLength,
+            (edge[1] - faceCenter).dot(faceTangent) * side - faceHalfLength
+        };
+        if (distances[0] > 0 && distances[1] > 0)
+        {
+            return false;
+        }
+        if (distances[0] > 0 || distances[1] > 0)
+        {
+            const size_t outside = distances[0] > 0 ? 0 : 1;
+            const float t = distances[outside] / (distances[outside] - distances[1 - outside]);
+            edge[outside] = edge[outside] + (edge[1 - outside] - edge[outside]) * t;
+        }
+    }
+
+    // Points of the clipped edge below the reference face are the contact points
+    Manifold manifold;
+    for (auto && point : edge)
+    {
+        if (const float separation = (point - faceCenter).dot(normal); separation < 0)
+        {
+            manifold.points.push_back({ point, -separation });
+        }
+    }
+
+    // The manifold normal pushes the second object out of the first one
+    if (reference == &box1)
+    {
+        manifold.normal = normal;
+        return processManifold(rect1.parent(), rect2.parent(), manifold);
+    }
+
+    manifold.normal = normal;
+    return processManifold(rect2.parent(), rect1.parent(), manifold);
 }
 
 bool MCCollisionDetector::testRectAgainstCircle(MCRectShape & rect, MCCircleShape & circle)
 {
-    bool collided = false;
+    const Box box(rect);
+    const MCVector2dF circleCenter(circle.location());
+    const MCVector2dF local(circleCenter - box.center);
+    const float x = local.dot(box.axes[0]);
+    const float y = local.dot(box.axes[1]);
 
-    const MCOBBox<float> & obbox(rect.obbox());
-
-    // Loop through all vertices of the rect and find possible contact points with
-    // the circle. This algorithm is not perfectly accurate, but will do the job.
-    for (unsigned int i = 0; i < 5; i++)
+    Manifold manifold;
+    if (std::fabs(x) <= box.half[0] && std::fabs(y) <= box.half[1])
     {
-        MCVector2dF rectVertex;
-        if (i < 4)
+        // The center of the circle is inside the box: push it out through the nearest face
+        const float distanceX = box.half[0] - std::fabs(x);
+        const float distanceY = box.half[1] - std::fabs(y);
+        const size_t axis = distanceX < distanceY ? 0 : 1;
+        const float sign = (axis == 0 ? x : y) < 0 ? -1.0f : 1.0f;
+        manifold.normal = box.axes[axis] * sign;
+        const float distance = axis == 0 ? distanceX : distanceY;
+        manifold.points.push_back({ circleCenter + manifold.normal * distance, circle.radius() + distance });
+    }
+    else
+    {
+        const float closestX = std::clamp(x, -box.half[0], box.half[0]);
+        const float closestY = std::clamp(y, -box.half[1], box.half[1]);
+        const MCVector2dF closest(box.center + box.axes[0] * closestX + box.axes[1] * closestY);
+        const MCVector2dF delta(circleCenter - closest);
+        const float distance = delta.length();
+        if (distance >= circle.radius())
         {
-            rectVertex = obbox.vertex(i);
-        }
-        else
-        {
-            rectVertex = rect.location();
+            return false;
         }
 
-        MCVector2dF circleVertex(rectVertex - MCVector2dF(circle.location()));
-        circleVertex.clampFast(circle.radius());
-        circleVertex += MCVector2dF(circle.location());
-        if (rect.contains(circleVertex))
-        {
-            const bool triggerObjectInvolved = rect.parent().isTriggerObject() || circle.parent().isTriggerObject();
-
-            MCCollisionEvent ev1(rect.parent(), circleVertex);
-            MCCollisionEvent ev2(circle.parent(), circleVertex);
-
-            const bool areColliding = areCurrentlyColliding(rect.parent(), circle.parent());
-            if (!areColliding)
-            {
-                MCObject::sendEvent(circle.parent(), ev1);
-                MCObject::sendEvent(rect.parent(), ev2);
-            }
-
-            m_currentCollisions[&rect.parent()].insert(&circle.parent());
-
-            if ((ev1.accepted() && ev2.accepted()) || areColliding)
-            {
-                if (!triggerObjectInvolved)
-                {
-                    MCVector2dF contactNormal;
-                    float depth = rect.interpenetrationDepth(
-                      MCSegment<float>(circleVertex, circle.location()), contactNormal);
-
-                    {
-                        MCContact & contact = MCContact::create();
-                        contact.init(rect.parent(), circleVertex, contactNormal, depth);
-                        circle.parent().addContact(contact);
-                    }
-
-                    {
-                        MCContact & contact = MCContact::create();
-                        contact.init(circle.parent(), circleVertex, -contactNormal, depth);
-                        rect.parent().addContact(contact);
-                    }
-                }
-
-                collided = true;
-            }
-
-            // Don't break here in the case of a collision, because we don't know
-            // yet which contact is the deepest. MCImpulseGenerator handles that.
-        }
+        manifold.normal = delta * (1.0f / distance);
+        manifold.points.push_back({ closest, circle.radius() - distance });
     }
 
-    return collided;
+    return processManifold(rect.parent(), circle.parent(), manifold);
 }
 
 bool MCCollisionDetector::testCircleAgainstCircle(MCCircleShape & circle1, MCCircleShape & circle2)
 {
-    bool collided = false;
-    MCVector2dF contactNormal;
-    const float depth = circle2.interpenetrationDepth(circle1, contactNormal);
-    const MCVector2dF contactPoint(MCVector2dF(circle1.location()) - contactNormal * circle1.radius());
-
-    if (depth > 0)
+    const MCVector2dF delta(MCVector2dF(circle2.location()) - MCVector2dF(circle1.location()));
+    const float distance = delta.length();
+    const float overlap = circle1.radius() + circle2.radius() - distance;
+    if (overlap <= 0)
     {
-        const bool triggerObjectInvolved = circle1.parent().isTriggerObject() || circle2.parent().isTriggerObject();
-
-        MCCollisionEvent ev1(circle1.parent(), contactPoint);
-        MCCollisionEvent ev2(circle2.parent(), contactPoint);
-
-        const bool areColliding = areCurrentlyColliding(circle1.parent(), circle2.parent());
-        if (!areColliding)
-        {
-            MCObject::sendEvent(circle2.parent(), ev1);
-            MCObject::sendEvent(circle1.parent(), ev2);
-        }
-
-        m_currentCollisions[&circle1.parent()].insert(&circle2.parent());
-
-        if ((ev1.accepted() && ev2.accepted()) || areColliding)
-        {
-            if (!triggerObjectInvolved)
-            {
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(circle1.parent(), contactPoint, -contactNormal, depth);
-                    circle2.parent().addContact(contact);
-                }
-
-                {
-                    MCContact & contact = MCContact::create();
-                    contact.init(circle1.parent(), contactPoint, contactNormal, depth);
-                    circle1.parent().addContact(contact);
-                }
-            }
-
-            collided = true;
-        }
+        return false;
     }
 
-    return collided;
+    Manifold manifold;
+    manifold.normal = distance > 0 ? delta * (1.0f / distance) : MCVector2dF(1, 0);
+    manifold.points.push_back({ MCVector2dF(circle1.location()) + manifold.normal * (circle1.radius() - overlap / 2), overlap });
+    return processManifold(circle1.parent(), circle2.parent(), manifold);
 }
 
 bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject & object2)
@@ -249,13 +310,9 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     // Rect against rect
     if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Rect)
     {
-        // Test is not symmetric: must be done both ways
         return testRectAgainstRect(
-                 *static_cast<MCRectShape *>(object1.shape().get()),
-                 *static_cast<MCRectShape *>(object2.shape().get()))
-          || testRectAgainstRect(
-                 *static_cast<MCRectShape *>(object2.shape().get()),
-                 *static_cast<MCRectShape *>(object1.shape().get()));
+          *static_cast<MCRectShape *>(object1.shape().get()),
+          *static_cast<MCRectShape *>(object2.shape().get()));
     }
     // Rect against circle: Case 1
     else if (type1 == MCShape::Type::Rect && type2 == MCShape::Type::Circle)
@@ -274,7 +331,6 @@ bool MCCollisionDetector::processPossibleCollision(MCObject & object1, MCObject 
     // Circle against circle
     else if (type1 == MCShape::Type::Circle && type2 == MCShape::Type::Circle)
     {
-        // This test is symmetric
         return testCircleAgainstCircle(
           *static_cast<MCCircleShape *>(object1.shape().get()),
           *static_cast<MCCircleShape *>(object2.shape().get()));
