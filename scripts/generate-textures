@@ -266,6 +266,17 @@ def sand_area(source, seed):
     return Image.fromarray(image.clip(0, 255).astype(np.uint8), 'RGBA')
 
 
+def close_holes(mask, radius=2):
+    """Morphological closing: fills holes and seams narrower than about twice the radius."""
+    def dilate(m):
+        result = m.copy()
+        for dy in range(-radius, radius + 1):
+            for dx in range(-radius, radius + 1):
+                result |= np.roll(np.roll(m, dy, axis=0), dx, axis=1)
+        return result
+    return ~dilate(~dilate(mask))
+
+
 KERB_RED = np.array([205, 35, 35])
 KERB_WHITE = np.array([238, 236, 228])
 
@@ -283,6 +294,9 @@ def kerbed_mask(source, inside_region, stripe_length=16):
     # Painted line pixels, possibly anti-aliased with the green material key
     green = np.clip((rgb[..., 1] - np.maximum(rgb[..., 0], rgb[..., 2])) / 255, 0, 1)
     painted = (rgb.max(axis=-1) > 15) & (green < 0.95) & (pixels[..., 3] > 0) & inside_region(x, y)
+    # The masks have a seam of color keyed (transparent) pixels between the edge line and its
+    # dark band. Fill it, so that the kerb doesn't look like two kerbs with a gap between them.
+    painted = close_holes(painted) & inside_region(x, y) & (green < 0.95)
 
     # Trace the white line as a polyline. The line bends around a single point, so it can be
     # ordered by the angle around the center of a circle fitted to it.
@@ -295,20 +309,18 @@ def kerbed_mask(source, inside_region, stripe_length=16):
     directions = (x[white] - cx) + 1j * (y[white] - cy)
     mean_direction = directions.mean() / abs(directions.mean())
     angles = np.angle(directions * np.conj(mean_direction))
-    bins = np.linspace(angles.min(), angles.max(), 120)
-    index = np.digitize(angles, bins)
-    polyline = np.array([(x[white][index == i].mean(), y[white][index == i].mean()) for i in np.unique(index)])
-    arc_length = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(polyline, axis=0).T))])
+    radius = np.abs(directions).mean()
 
-    # Stripes follow the distance along the line. Supersample them for anti-aliasing.
+    # Stripes follow the angle around the center of the bend, so that their edges are straight
+    # radial lines across the whole width of the kerb. Supersample them for anti-aliasing.
     py, px = np.nonzero(painted)
     offsets = (np.arange(4) + 0.5) / 4
     red = np.zeros(len(px))
     for oy in offsets:
         for ox in offsets:
-            points = np.stack([px + ox, py + oy], axis=-1)
-            nearest = np.argmin(((points[:, None, :] - polyline[None, :, :]) ** 2).sum(axis=-1), axis=1)
-            red += (np.floor(arc_length[nearest] / stripe_length) % 2 == 0)
+            angle = np.angle(((px + ox - cx) + 1j * (py + oy - cy)) * np.conj(mean_direction))
+            arc_length = (angle - angles.min()) * radius
+            red += (np.floor(arc_length / stripe_length) % 2 == 0)
     red = (red / 16)[:, None]
     kerb = red * KERB_RED + (1 - red) * KERB_WHITE
 
