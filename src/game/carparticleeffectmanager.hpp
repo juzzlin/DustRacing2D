@@ -41,6 +41,9 @@ public:
 private:
     void doDamageSmoke();
 
+    //! Badly damaged cars burn, and wrecks burn fiercely.
+    void doFire();
+
     void doOnTrackAnimations();
 
     void doOffTrackAnimations();

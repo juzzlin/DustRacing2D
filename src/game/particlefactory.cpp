@@ -81,6 +81,14 @@ void ParticleFactory::preCreateParticles()
 
     preCreateSurfaceParticles(200, "CARPART", CarPart, MCAssetManager::surfaceManager().surface("debrisPart"), true, true);
 
+    preCreateSurfaceParticles(400, "FIRE", Fire, MCAssetManager::surfaceManager().surface("flame"), true);
+
+    // Flames are added to the scene, so that they glow and overlapping flames get brighter
+    for (auto && particle : m_freeLists[Fire])
+    {
+        static_cast<MCSurfaceParticle *>(particle)->setAlphaBlend(true, GL_SRC_ALPHA, GL_ONE);
+    }
+
     // Debris lands on the ground and rests there instead of dying
     for (auto type : { GlassShard, CarPart })
     {
@@ -149,6 +157,10 @@ void ParticleFactory::doParticle(
     case GlassShard:
     case CarPart:
         doDebris(type, location, initialVelocity);
+        break;
+
+    case Fire:
+        doFire(location, initialVelocity);
         break;
 
     default:
@@ -300,6 +312,25 @@ void ParticleFactory::doDebris(ParticleType type, MCVector3dFR location, MCVecto
         debris->physicsComponent().setMomentOfInertia(1.0f);
         debris->physicsComponent().setAcceleration(MCVector3dF(0, 0, -2.5f));
         debris->addToWorld();
+    }
+}
+
+void ParticleFactory::doFire(MCVector3dFR location, MCVector3dFR velocity) const
+{
+    if (const auto fire = newSurfaceParticle(Fire))
+    {
+        const auto jitter = MCRandom::randomVector2d() * 2.0f;
+        fire->init(location + MCVector3dF(jitter.i(), jitter.j(), 6), 3.0f + 3.0f * MCRandom::getValue(), static_cast<size_t>(300 + 400 * MCRandom::getValue()));
+        fire->setAnimationStyle(MCParticle::AnimationStyle::Shrink);
+        fire->rotate(MCRandom::getValue() * 360);
+
+        // From yellow to deep orange
+        const float heat = MCRandom::getValue();
+        fire->setColor(MCGLColor { 1.0f, 0.4f + 0.45f * heat, 0.08f + 0.27f * heat, 0.85f });
+
+        // Flames rise and trail behind a moving car
+        fire->physicsComponent().setVelocity(velocity * 0.8f + MCRandom::randomVector3dPositiveZ() * 0.3f);
+        fire->addToWorld();
     }
 }
 

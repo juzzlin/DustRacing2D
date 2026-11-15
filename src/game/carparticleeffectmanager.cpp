@@ -41,6 +41,8 @@ void CarParticleEffectManager::update()
 
     doOffTrackAnimations();
 
+    doFire();
+
     doDamageSmoke();
 }
 
@@ -107,6 +109,28 @@ void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType typ
         const int angle = static_cast<int>(calculateSkidAngle(distance, dx, dy));
         ParticleFactory::instance().doParticle(type, skidLocation, MCVector3dF(0, 0, 0), angle);
         m_prevRightSkidMarkLocation = skidLocation;
+    }
+}
+
+void CarParticleEffectManager::doFire()
+{
+    const float fireLimit = 0.25f;
+    int flames = 0;
+    if (m_car.isDestroyed())
+    {
+        flames = 3;
+    }
+    else if (m_car.damageLevel() <= fireLimit && MCRandom::getValue() > m_car.damageLevel() / fireLimit)
+    {
+        // The fire grows as the damage grows
+        flames = m_car.damageLevel() < fireLimit / 2 ? 2 : 1;
+    }
+
+    // The engine burns: between the front tires, like the damage smoke
+    const MCVector3dF engineLocation = (m_car.leftFrontTireLocation() + m_car.rightFrontTireLocation()) * 0.5f;
+    for (int i = 0; i < flames; i++)
+    {
+        ParticleFactory::instance().doParticle(ParticleFactory::Fire, engineLocation, m_car.physicsComponent().velocity());
     }
 }
 

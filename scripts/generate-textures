@@ -915,6 +915,22 @@ def debris(kind, seed, size=32):
     return finish_sprite(image, size)
 
 
+def flame(seed=50, size=64):
+    """A soft, irregular flame puff seen from above. White, because the particles tint it and add it
+    to the scene, so that overlapping flames glow."""
+    rng = np.random.default_rng(seed)
+    y, x = (np.mgrid[0:size, 0:size] + 0.5) / size * 2 - 1
+    r = np.hypot(x, y)
+    angle = np.arctan2(y, x)
+    # Flickering tongues around the edge
+    edge = 0.75 + 0.12 * np.sin(angle * 5 + rng.uniform(0, 6)) + 0.08 * np.sin(angle * 9 + rng.uniform(0, 6))
+    intensity = np.clip(1 - r / edge, 0, 1) ** 1.5
+    pixels = np.zeros((size, size, 4))
+    pixels[..., :3] = 255
+    pixels[..., 3] = intensity * 255
+    return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
+
+
 TEXTURES = {
     'tree': lambda: deciduous_canopy(seed=1),
     'tree2': lambda: deciduous_canopy(seed=2, base_hue=(80, 130, 40)),
@@ -932,6 +948,7 @@ TEXTURES = {
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
     'grandstand': lambda: grandstand(),
     'debrisGlass': lambda: debris('glass', seed=40),
+    'flame': lambda: flame(),
     'debrisPart': lambda: debris('part', seed=41),
     **{f'carDamage{side}{stage}': (lambda side=side, stage=stage: car_damage(side, stage)) for side in CAR_DAMAGE_SIDES for stage in (1, 2, 3)},
     'grandstandEditor': lambda: grandstand().resize((128, 128), Image.LANCZOS),

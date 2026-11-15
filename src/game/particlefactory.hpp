@@ -43,6 +43,7 @@ public:
         Leaf,
         GlassShard,
         CarPart,
+        Fire,
         NumParticleTypes
     };
 
@@ -78,6 +79,9 @@ private:
     void doMud(MCVector3dFR location, MCVector3dFR velocity) const;
 
     void doLeaf(MCVector3dFR location, MCVector3dFR velocity) const;
+
+    //! A flame of a burning car. It rises, shrinks and glows.
+    void doFire(MCVector3dFR location, MCVector3dFR velocity) const;
 
     //! Debris from a damaged car. It falls on the ground and stays there for a while.
     void doDebris(ParticleType type, MCVector3dFR location, MCVector3dFR velocity) const;
