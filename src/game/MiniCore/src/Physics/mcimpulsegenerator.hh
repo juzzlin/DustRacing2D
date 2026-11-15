@@ -16,41 +16,34 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 // MA  02110-1301, USA.
 //
-
 #ifndef MCIMPULSEGENERATOR_HH
 #define MCIMPULSEGENERATOR_HH
 
-#include "mcvector3d.hh"
+#include "mcvector2d.hh"
+
 #include <vector>
 
 class MCObject;
 class MCContact;
 
-//! Generates impulses due to detected collisions.
+/*! Resolves collisions with a sequential impulse solver: the impulses of all contact points
+ *  are iterated together and accumulated, so that e.g. a box lying flat against a wall is
+ *  supported by both of its corners. Impulses take the rotational inertia of the bodies into
+ *  account. Overlaps are corrected separately by moving the bodies apart. */
 class MCImpulseGenerator
 {
 public:
-    //! Constructor.
     MCImpulseGenerator();
 
-    //! Destructor.
-    ~MCImpulseGenerator() {};
+    /*! Generate impulses to the given objects according to their current contacts and delete the contacts.
+     *  \param timeStep Time step in seconds. */
+    void generateImpulses(std::vector<MCObject *> & objects, float timeStep);
 
-    //! Generate impulses to the given objects according to current contacts.
-    //! Delete contacts.
-    void generateImpulsesFromDeepestContacts(std::vector<MCObject *> & objs);
-
-    //! Resolve positions of the given objects according to current contacts.
-    //! Delete contacts.
-    void resolvePositions(std::vector<MCObject *> & objs, float accuracy);
+    //! Resolve positions of the given objects according to their current contacts and delete the contacts.
+    void resolvePositions(std::vector<MCObject *> & objects, float accuracy);
 
 private:
-    void generateImpulsesFromContact(
-      MCObject & pa, MCObject & pb, const MCContact & contact,
-      const MCVector3dF & linearImpulse,
-      float restitution);
-
-    void displace(MCObject & pa, MCObject & pb, const MCVector3dF & displacement);
+    void displace(MCObject & object, MCObject & other, const MCVector2dF & displacement);
 
     MCContact * getDeepestInterpenetration(const std::vector<MCContact *> & contacts);
 };

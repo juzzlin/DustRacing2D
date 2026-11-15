@@ -118,7 +118,7 @@ void MCWorld::integratePhysics(int step)
 
 void MCWorld::generateImpulses()
 {
-    m_impulseGenerator->generateImpulsesFromDeepestContacts(m_objects);
+    m_impulseGenerator->generateImpulses(m_objects, m_timeStep);
 }
 
 void MCWorld::resolvePositions(float accuracy)
@@ -454,6 +454,8 @@ MCForceRegistry & MCWorld::forceRegistry() const
 
 void MCWorld::stepTime(int timeStep)
 {
+    m_timeStep = static_cast<float>(timeStep) / 1000;
+
     integratePhysics(timeStep);
 
     processCollisions();

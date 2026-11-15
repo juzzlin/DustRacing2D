@@ -43,10 +43,11 @@ public:
         m_world.setDimensions(-1000, 1000, -1000, 1000, -1000, 1000, 1.0f, false);
     }
 
-    //! A static wall whose top face is at y = 5.
+    //! A static wall whose top face is at y = 5. Restitution is the minimum of the two
+    //! bodies, so the restitution of the wall is 1 to let the other body decide.
     MCObject & addWall()
     {
-        auto && wall = add(100, 10, { 0, 0 }, 0, 1, 0);
+        auto && wall = add(100, 10, { 0, 0 }, 0, 1, 1);
         wall.physicsComponent().setMass(1, true);
         return wall;
     }
@@ -109,7 +110,6 @@ void MCCollisionResponseTest::testFlatImpactDoesNotInduceSpin()
 
     scene.step(5);
 
-    QEXPECT_FAIL("", "Only the deepest contact point is used", Abort);
     QVERIFY(std::fabs(box.physicsComponent().angularVelocity()) < 0.01f);
     QVERIFY(std::fabs(box.angle()) < 0.5f);
 }
@@ -155,7 +155,6 @@ void MCCollisionResponseTest::testOffCenterImpactLeavesSomeLinearMotion()
     scene.step(3);
 
     const float vy = box.physicsComponent().velocity().j();
-    QEXPECT_FAIL("", "Impulses ignore the rotational inertia", Abort);
     QVERIFY(vy < -0.05f);
     QVERIFY(vy > -0.5f);
 }
@@ -219,7 +218,6 @@ void MCCollisionResponseTest::testBoxPushedIntoWallRestsStill()
         }
     }
 
-    QEXPECT_FAIL("", "Positions are corrected without slop", Abort);
     QVERIFY(maxY - minY < 0.05f);
     QVERIFY(minY > 6.5f);
     QVERIFY(std::fabs(box.angle()) < 0.5f);

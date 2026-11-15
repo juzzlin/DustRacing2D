@@ -238,6 +238,9 @@ private:
 
     size_t m_resolverLoopCount;
 
+    //! Time step of the current step in seconds.
+    float m_timeStep = 0;
+
     float m_resolverStep;
 
     MCVector3dF m_gravity;
