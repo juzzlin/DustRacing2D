@@ -91,7 +91,12 @@ void MCGLObjectBase::releaseVAO()
 bool MCGLObjectBase::createVAO()
 {
 #ifdef __MC_QOPENGLFUNCTIONS__
-    m_hasVao = m_vao.create();
+    // Create only once. Creating again fails, which would mark the object as having no VAO
+    // when its buffer data is initialized again, e.g. when a mesh is deformed.
+    if (!m_vao.isCreated())
+    {
+        m_hasVao = m_vao.create();
+    }
     return m_hasVao;
 #else
     if (m_vao == 0)
