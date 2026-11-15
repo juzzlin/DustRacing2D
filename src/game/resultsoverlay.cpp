@@ -244,7 +244,8 @@ void ResultsOverlay::renderRows(const std::vector<Race::Result> & results, float
             const float margin { panelWidth * 0.02f };
             MCGLColor highlight { humanRowColor };
             highlight.setA(highlight.a() * alpha);
-            renderPanel(rowX + margin, y - lineHeight * 0.3f, panelWidth - 2 * margin, lineHeight, highlight);
+            // Text is centered vertically at y
+            renderPanel(rowX + margin, y - lineHeight * 0.5f, panelWidth - 2 * margin, lineHeight, highlight);
         }
 
         const MCGLColor & color { result.finished ? finishedColor : racingColor };
