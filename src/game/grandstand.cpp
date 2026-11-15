@@ -38,7 +38,7 @@ const float grandstandSize { 128 };
 const float frontZ { 5 };
 const float backZ { 25 };
 
-//! Each section shows three seats of the 24 seats of a row, so that the edges of the sections never cut a spectator.
+//! Each section shows two seats of the 16 seats of a row, so that the edges of the sections don't cut spectators.
 constexpr size_t sectionCount { 8 };
 
 enum Frame : size_t
