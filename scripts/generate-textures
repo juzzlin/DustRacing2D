@@ -548,13 +548,19 @@ CROWD_POSES = [
     (0.08, 0.27, 0.65),  # Cheering
 ]
 
+def muted(color, amount=0.3, toward=(150, 140, 120)):
+    """Blends a color towards a warm gray, so that it fits the earthy palette of the game."""
+    return tuple(int(c * (1 - amount) + t * amount) for c, t in zip(color, toward))
+
+
 SHIRT_COLORS = [(185, 50, 45), (50, 80, 160), (220, 190, 60), (230, 228, 220), (40, 40, 45), (70, 130, 75),
                 (210, 120, 50), (120, 70, 130), (100, 150, 190), (160, 160, 165), (110, 85, 65), (200, 150, 160)]
 HAIR_COLORS = [(40, 28, 20), (70, 45, 25), (20, 18, 16), (190, 160, 90), (150, 150, 145), (140, 70, 30)]
 SKIN_COLORS = [(235, 195, 160), (215, 165, 125), (170, 120, 85), (120, 80, 55)]
-SEAT_BLUE = (35, 85, 170)
-SEAT_RED = (190, 35, 40)
-BOARD_COLORS = [(200, 40, 40), (240, 200, 40), (30, 100, 180), (245, 245, 240), (40, 140, 70), (230, 120, 30)]
+SHIRT_COLORS = [muted(color) for color in SHIRT_COLORS]
+SEAT_BLUE = (72, 98, 120)
+SEAT_RED = (150, 66, 50)
+BOARD_COLORS = [muted(color, 0.35) for color in [(200, 40, 40), (240, 200, 40), (30, 100, 180), (245, 245, 240), (40, 140, 70), (230, 120, 30)]]
 
 
 def lit(color, light):
@@ -620,7 +626,7 @@ def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
 
     # Back wall with advertising boards
     wall = GRANDSTAND_BACK_WALL * unit
-    draw.rectangle((0, 0, size, wall), fill=(120, 118, 115))
+    draw.rectangle((0, 0, size, wall), fill=(124, 118, 106))
     board_width = size / 4
     for board in range(4):
         x0 = board * board_width + 0.5 * unit
@@ -629,16 +635,16 @@ def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
         # A logo-like stripe on the board
         stripe = BOARD_COLORS[(board * 7 + 5) % len(BOARD_COLORS)]
         draw.rectangle((x0 + board_width * 0.2, wall / 2 - 0.8 * unit, x0 + board_width * 0.8, wall / 2 + 0.8 * unit), fill=stripe)
-    draw.rectangle((0, 0, size, 0.8 * unit), fill=(160, 158, 152))
+    draw.rectangle((0, 0, size, 0.8 * unit), fill=(165, 158, 144))
     row_depth = (size - wall) / GRANDSTAND_ROWS
     seat_width = size / GRANDSTAND_SEATS
     concrete = periodic_noise(np.random.default_rng(seed), size, 2 * SUPERSAMPLING)
     for row in range(GRANDSTAND_ROWS):
         top = wall + row * row_depth
         # Lower tiers are further from the light of the sky above the stand
-        tone = 175 - row * 1.5
-        draw.rectangle((0, top, size, top + row_depth), fill=(int(tone), int(tone * 0.98), int(tone * 0.94)))
-        draw.rectangle((0, top + row_depth - 1.0 * unit, size, top + row_depth), fill=(105, 103, 100))
+        tone = 172 - row * 1.5
+        draw.rectangle((0, top, size, top + row_depth), fill=(int(tone), int(tone * 0.96), int(tone * 0.88)))
+        draw.rectangle((0, top + row_depth - 1.0 * unit, size, top + row_depth), fill=(108, 102, 92))
         # Plastic seats cover the tier: a backrest and a seat pan, lit from the upper left.
         # One red row forms a stripe through the stand.
         for seat in range(GRANDSTAND_SEATS):
