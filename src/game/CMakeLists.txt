@@ -62,6 +62,7 @@ set(SRC
     fontfactory.cpp
     game.cpp
     gearbox.cpp
+    grandstand.cpp
     graphicsfactory.cpp
     inputhandler.cpp
     intro.cpp

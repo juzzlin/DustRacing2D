@@ -533,6 +533,141 @@ def menu_backdrop(seed, path, size=(1280, 960), road_width=190, trees=26, shrubs
     return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGB')
 
 
+# Grandstand layout in world units. Must match grandstand.cpp.
+GRANDSTAND_SIZE = 128
+GRANDSTAND_BACK_WALL = 8
+GRANDSTAND_ROWS = 12
+GRANDSTAND_SEATS = 24  # Per row, divisible by the 8 sections of grandstand.cpp
+
+# Probabilities of being seated, waving one arm or standing with both arms up in each crowd frame
+CROWD_POSES = [
+    (0.93, 0.07, 0.0),  # Calm
+    (0.93, 0.07, 0.0),  # Calm, different people moving
+    (0.45, 0.35, 0.20),  # Excited
+    (0.45, 0.35, 0.20),  # Excited, different people moving
+    (0.08, 0.27, 0.65),  # Cheering
+]
+
+SHIRT_COLORS = [(200, 40, 40), (40, 80, 190), (235, 200, 40), (240, 240, 235), (30, 30, 35), (60, 150, 70),
+                (230, 120, 30), (150, 60, 160), (90, 170, 210), (180, 180, 185)]
+HAIR_COLORS = [(40, 28, 20), (70, 45, 25), (20, 18, 16), (190, 160, 90), (150, 150, 145), (140, 70, 30)]
+SKIN_COLORS = [(235, 195, 160), (215, 165, 125), (170, 120, 85), (120, 80, 55)]
+SEAT_COLORS = [(55, 85, 125), (125, 115, 70)]
+
+
+def lit(color, light):
+    return tuple(int(np.clip(c * light, 0, 255)) for c in color)
+
+
+def draw_spectator(draw, rng, x, y, unit, pose, person):
+    """A spectator seen from above at (x, y), facing down in the image (towards the track).
+    person holds the colors that stay the same in every frame."""
+    shirt, hair, skin, cap, head_offset = person
+    standing = pose == 2
+    # Standing people are closer to the camera and lean forward a bit
+    scale = 1.15 if standing else 1.0
+    y += 0.8 * unit if standing else 0
+    shoulder_w, shoulder_h = 2.3 * unit * scale, 1.5 * unit * scale
+    head_r = 1.1 * unit * scale
+
+    # Shadow on the seats and steps away from the light
+    shadow = 0.5 * unit * (1.6 if standing else 1.0)
+    draw.ellipse((x - shoulder_w + shadow, y - shoulder_h + shadow, x + shoulder_w + shadow, y + shoulder_h + shadow), fill=(0, 0, 0, 70))
+
+    def arm(direction_x, length):
+        # A raised arm is seen foreshortened: a sleeve and a forearm from the shoulder up and out
+        sx, sy = x + direction_x * shoulder_w * 0.8, y - shoulder_h * 0.2
+        mx, my = sx + direction_x * length * 0.35, sy - length * 0.45
+        ex, ey = sx + direction_x * length * 0.6, sy - length
+        draw.line((sx, sy, mx, my), fill=lit(shirt, 0.95) + (255,), width=int(1.1 * unit))
+        draw.line((mx, my, ex, ey), fill=skin + (255,), width=int(0.8 * unit))
+        hand = 0.6 * unit
+        draw.ellipse((ex - hand, ey - hand, ex + hand, ey + hand), fill=lit(skin, 1.1) + (255,))
+
+    if pose == 1:
+        arm(1 if rng.uniform() < 0.5 else -1, rng.uniform(2.4, 3.2) * unit)
+    elif pose == 2:
+        arm(-1, rng.uniform(2.8, 3.6) * unit)
+        arm(1, rng.uniform(2.8, 3.6) * unit)
+
+    # Shoulders: lit from the upper left
+    draw.ellipse((x - shoulder_w, y - shoulder_h, x + shoulder_w, y + shoulder_h), fill=lit(shirt, 0.75) + (255,))
+    draw.ellipse((x - shoulder_w * 0.9, y - shoulder_h * 0.95, x + shoulder_w * 0.7, y + shoulder_h * 0.6), fill=lit(shirt, 1.0) + (255,))
+
+    # Head, turned a bit in some frames
+    hx, hy = x + head_offset[0] * unit, y + head_offset[1] * unit
+    draw.ellipse((hx - head_r, hy - head_r, hx + head_r, hy + head_r), fill=skin + (255,))
+    top = cap if cap else hair
+    draw.ellipse((hx - head_r * 0.95, hy - head_r * 1.0, hx + head_r * 0.95, hy + head_r * 0.55), fill=top + (255,))
+    if cap:
+        # The peak of the cap points towards the track
+        draw.ellipse((hx - head_r * 0.6, hy + head_r * 0.2, hx + head_r * 0.6, hy + head_r * 1.1), fill=lit(cap, 0.8) + (255,))
+    highlight = head_r * 0.35
+    draw.ellipse((hx - head_r * 0.5 - highlight, hy - head_r * 0.5 - highlight, hx - head_r * 0.5 + highlight, hy - head_r * 0.5 + highlight), fill=lit(top, 1.35) + (255,))
+
+
+def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
+    """A grandstand seen from above: a back wall and tiers of seats with spectators facing the track at
+    the bottom. The frames show the same people in different poses."""
+    rng = np.random.default_rng(seed)
+    unit = pixels_per_unit * SUPERSAMPLING
+    size = GRANDSTAND_SIZE * unit
+    image = Image.new('RGBA', (size, size), (0, 0, 0, 255))
+    draw = ImageDraw.Draw(image, 'RGBA')
+
+    # Concrete back wall and tiers. Each tier has a lit tread and a shadowed edge at its front.
+    wall = GRANDSTAND_BACK_WALL * unit
+    draw.rectangle((0, 0, size, wall), fill=(120, 118, 115))
+    draw.rectangle((0, 0, size, unit), fill=(160, 158, 152))
+    row_depth = (size - wall) / GRANDSTAND_ROWS
+    seat_width = size / GRANDSTAND_SEATS
+    concrete = periodic_noise(np.random.default_rng(seed), size, 2 * SUPERSAMPLING)
+    for row in range(GRANDSTAND_ROWS):
+        top = wall + row * row_depth
+        # Lower tiers are further from the light of the sky above the stand
+        tone = 175 - row * 1.5
+        draw.rectangle((0, top, size, top + row_depth), fill=(int(tone), int(tone * 0.98), int(tone * 0.94)))
+        draw.rectangle((0, top + row_depth - 1.2 * unit, size, top + row_depth), fill=(105, 103, 100))
+        for seat in range(GRANDSTAND_SEATS):
+            x0 = seat * seat_width + 0.5 * unit
+            color = SEAT_COLORS[(seat // 6 + row // 4) % len(SEAT_COLORS)]
+            draw.rectangle((x0, top + 1.2 * unit, x0 + seat_width - unit, top + 2.0 * unit), fill=lit(color, 0.8))
+            draw.rectangle((x0 + 0.3 * unit, top + 2.0 * unit, x0 + seat_width - 1.3 * unit, top + row_depth - 2.4 * unit), fill=color)
+
+    # Weathered concrete
+    pixels = np.asarray(image).astype(np.float32)
+    pixels[..., :3] *= (1 + 0.04 * concrete)[..., None]
+    image = Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
+    draw = ImageDraw.Draw(image, 'RGBA')
+
+    # Spectators. Their colors come from the same random sequence in every frame and
+    # their poses from a sequence of the frame.
+    pose_rng = np.random.default_rng(seed * 100 + frame)
+    seated, waving, _ = CROWD_POSES[frame]
+    for row in range(GRANDSTAND_ROWS):
+        for seat in range(GRANDSTAND_SEATS):
+            occupied = rng.uniform() < 0.82
+            person = (
+                SHIRT_COLORS[rng.integers(len(SHIRT_COLORS))],
+                HAIR_COLORS[rng.integers(len(HAIR_COLORS))],
+                SKIN_COLORS[rng.integers(len(SKIN_COLORS))],
+                SHIRT_COLORS[rng.integers(len(SHIRT_COLORS))] if rng.uniform() < 0.2 else None,
+                (0.0, 0.0),
+            )
+            roll = pose_rng.uniform()
+            pose = 0 if roll < seated else (1 if roll < seated + waving else 2)
+            # People turn their heads a bit
+            head_offset = tuple(pose_rng.normal(0, 0.25, 2))
+            person = person[:4] + (head_offset,)
+            if occupied:
+                x = (seat + 0.5) * seat_width
+                y = wall + row * row_depth + row_depth * 0.5
+                draw_spectator(draw, pose_rng, x, y, unit, pose, person)
+
+    image = image.resize((size // SUPERSAMPLING, size // SUPERSAMPLING), Image.LANCZOS)
+    return image.convert('RGB')
+
+
 TEXTURES = {
     'tree': lambda: deciduous_canopy(seed=1),
     'tree2': lambda: deciduous_canopy(seed=2, base_hue=(80, 130, 40)),
@@ -548,6 +683,12 @@ TEXTURES = {
     'cornerKerb': lambda: kerbed_mask('corner.png', lambda x, y: np.hypot(x - 512, y - 512) < 140),
     'corner45LeftKerb': lambda: kerbed_mask('corner45Left.png', lambda x, y: (x < 160) & (y > 200)),
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
+    'grandstandCrowd0': lambda: grandstand_crowd(0),
+    'grandstandCrowd1': lambda: grandstand_crowd(1),
+    'grandstandCrowd2': lambda: grandstand_crowd(2),
+    'grandstandCrowd3': lambda: grandstand_crowd(3),
+    'grandstandCrowd4': lambda: grandstand_crowd(4),
+    'grandstandEditor': lambda: grandstand_crowd(0).resize((128, 128), Image.LANCZOS),
     # Menu backgrounds: a sweeping S-curve, a hairpin, a start/finish straight and a corner with a sand trap
     'mainMenuBack': lambda: menu_backdrop(10, [(-150, 760), (250, 650), (520, 420), (760, 300), (1060, 330), (1450, 120)]),
     'trackSelectionBack': lambda: menu_backdrop(11, [(-150, 250), (450, 260), (850, 330), (980, 520), (830, 720), (420, 760), (-150, 800)]),
@@ -558,7 +699,8 @@ TEXTURES = {
 
 
 # Large opaque images are saved as JPEG to keep them small
-JPEG_TEXTURES = {'mainMenuBack', 'trackSelectionBack', 'settingsBack', 'creditsHelpBack'}
+JPEG_TEXTURES = {'mainMenuBack', 'trackSelectionBack', 'settingsBack', 'creditsHelpBack',
+                 'grandstandCrowd0', 'grandstandCrowd1', 'grandstandCrowd2', 'grandstandCrowd3', 'grandstandCrowd4'}
 
 
 def main(names):
