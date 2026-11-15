@@ -274,6 +274,8 @@ void Game::createRenderer()
 
     if (fullScreen)
     {
+        // Otherwise client-side decorations of Wayland size the window for a title bar and shadows.
+        m_renderer->setFlag(Qt::FramelessWindowHint);
         m_renderer->setGeometry(m_screen->geometry());
         m_renderer->showFullScreen();
     }
