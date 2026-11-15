@@ -20,6 +20,7 @@
 #include "car.hpp"
 #include "crashoverlay.hpp"
 #include "minimap.hpp"
+#include "resultsoverlay.hpp"
 #include "timingoverlay.hpp"
 
 #include <MCCamera>
@@ -141,6 +142,7 @@ private:
 
     std::array<CrashOverlay, 2> m_crashOverlay;
     std::array<TimingOverlay, 2> m_timingOverlay;
+    std::unique_ptr<ResultsOverlay> m_resultsOverlay;
     std::unique_ptr<Startlights> m_startlights;
     std::unique_ptr<StartlightsOverlay> m_startlightsOverlay;
     std::unique_ptr<CheckeredFlag> m_checkeredFlag;

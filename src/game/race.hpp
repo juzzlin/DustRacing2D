@@ -68,6 +68,50 @@ public:
 
     size_t position(size_t carIndex) const;
 
+    //! Result of a single car.
+    struct Result
+    {
+        size_t position = 0;
+
+        size_t carIndex = 0;
+
+        bool isHuman = false;
+
+        //! True if the car has completed the race.
+        bool finished = false;
+
+        //! Total race time if finished, otherwise the elapsed time.
+        std::chrono::milliseconds raceTime { 0 };
+
+        //! Personal best lap time, or -1 if no laps completed.
+        int bestLapTime = -1;
+
+        //! Number of completed laps.
+        size_t lapsCompleted = 0;
+    };
+
+    //! \return Results of all cars ordered by position.
+    std::vector<Result> results() const;
+
+    //! Things achieved by human players during the race.
+    struct Achievements
+    {
+        bool lapRecord = false;
+
+        bool raceRecord = false;
+
+        bool bestPosition = false;
+
+        bool trackUnlocked = false;
+    };
+
+    const Achievements & achievements() const;
+
+    //! \return true if all human players have finished.
+    bool isRaceFinished() const;
+
+    const Track & track() const;
+
 signals:
 
     void finished();
@@ -100,8 +144,6 @@ private:
 
     void initCars();
     void initTiming();
-
-    bool isRaceFinished() const;
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
@@ -174,6 +216,8 @@ private:
     bool m_isfinishedSignalSent = false;
 
     std::optional<size_t> m_bestPos;
+
+    Achievements m_achievements;
 
     QTimer m_offTrackMessageTimer;
 

@@ -75,6 +75,7 @@ set(SRC
     overlaybase.cpp
     race.cpp
     renderer.cpp
+    resultsoverlay.cpp
     scene.cpp
     playername.cpp
     settings.cpp

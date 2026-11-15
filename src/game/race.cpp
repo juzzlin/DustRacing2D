@@ -57,6 +57,7 @@ Race::Race(Game & game, size_t numCars)
 
     connect(m_timing.get(), &Timing::lapRecordAchieved, this, [this](int msecs) {
         Database::instance().saveLapRecord(*m_track, msecs);
+        m_achievements.lapRecord = true;
         emit messageRequested(QObject::tr("New lap record!"));
         emit lapRecordAchieved(msecs);
     });
@@ -65,6 +66,7 @@ Race::Race(Game & game, size_t numCars)
         if (m_game.hasComputerPlayers())
         {
             Database::instance().saveRaceRecord(*m_track, msecs, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+            m_achievements.raceRecord = true;
             emit messageRequested(QObject::tr("New race record!"));
             emit raceRecordAchieved(msecs);
         }
@@ -145,6 +147,7 @@ void Race::clearRaceFlags()
     m_winnerFinished = false;
     m_isfinishedSignalSent = false;
     m_started = false;
+    m_achievements = {};
 }
 
 void placeCar(Car & car, float x, float y, int angle)
@@ -605,6 +608,7 @@ void Race::checkForNewBestPosition(const Car & car)
             if (!m_bestPos.has_value() || static_cast<int>(position) < m_bestPos)
             {
                 Database::instance().saveBestPos(*m_track, static_cast<int>(position), static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+                m_achievements.bestPosition = true;
                 emit messageRequested(QObject::tr("A new best pos!"));
             }
 
@@ -615,6 +619,7 @@ void Race::checkForNewBestPosition(const Car & car)
                 {
                     next->trackData().setIsLocked(false);
                     Database::instance().saveTrackUnlockStatus(*next, static_cast<int>(m_lapCount), m_game.difficultyProfile().difficulty());
+                    m_achievements.trackUnlocked = true;
                     emit messageRequested(QObject::tr("A new track unlocked!"));
                 }
                 else
@@ -812,6 +817,38 @@ bool Race::isRaceFinished() const
     }
 
     return m_timing->raceCompleted(m_humanPlayerIndex1);
+}
+
+std::vector<Race::Result> Race::results() const
+{
+    std::vector<Result> results;
+    for (auto && car : m_cars)
+    {
+        const size_t index { car->index() };
+        Result result;
+        result.position = position(index);
+        result.carIndex = index;
+        result.isHuman = car->isHuman();
+        result.finished = m_timing->raceCompleted(index);
+        result.raceTime = m_timing->raceTime(index);
+        result.bestLapTime = m_timing->recordLapTime(index);
+        result.lapsCompleted = std::min(m_timing->lap(index), m_lapCount);
+        results.push_back(result);
+    }
+
+    std::sort(results.begin(), results.end(), [](auto && lhs, auto && rhs) { return lhs.position < rhs.position; });
+
+    return results;
+}
+
+const Race::Achievements & Race::achievements() const
+{
+    return m_achievements;
+}
+
+const Track & Race::track() const
+{
+    return *m_track;
 }
 
 Race::~Race() = default;

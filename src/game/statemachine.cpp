@@ -24,7 +24,6 @@ StateMachine * StateMachine::m_instance = nullptr;
 StateMachine::StateMachine(InputHandler & inputHandler)
   : m_state(State::Init)
   , m_oldState(State::Init)
-  , m_raceFinished(false)
   , m_inputHandler(inputHandler)
 {
     assert(!StateMachine::m_instance);
@@ -39,6 +38,7 @@ StateMachine::StateMachine(InputHandler & inputHandler)
     m_stateToFunctionMap[State::GameTransitionOut] = std::bind(&StateMachine::stateGameTransitionOut, this);
     m_stateToFunctionMap[State::DoStartlights] = std::bind(&StateMachine::stateDoStartlights, this);
     m_stateToFunctionMap[State::Play] = std::bind(&StateMachine::statePlay, this);
+    m_stateToFunctionMap[State::Results] = std::bind(&StateMachine::stateResults, this);
 }
 
 StateMachine::~StateMachine()
@@ -54,7 +54,7 @@ StateMachine & StateMachine::instance()
 
 void StateMachine::quit()
 {
-    if (m_state == StateMachine::State::Play)
+    if (m_state == StateMachine::State::Play || m_state == StateMachine::State::Results)
     {
         m_state = State::GameTransitionOut;
     }
@@ -163,14 +163,7 @@ void StateMachine::stateGameTransitionIn()
 
 void StateMachine::stateGameTransitionOut()
 {
-    if (m_raceFinished)
-    {
-        emit fadeOutRequested(10000, 10000, 0);
-    }
-    else
-    {
-        emit fadeOutRequested(0, 2000, 0);
-    }
+    emit fadeOutRequested(0, 2000, 0);
 }
 
 void StateMachine::stateDoStartlights()
@@ -180,13 +173,26 @@ void StateMachine::stateDoStartlights()
 
 void StateMachine::statePlay()
 {
-    m_raceFinished = false;
+}
+
+void StateMachine::stateResults()
+{
 }
 
 void StateMachine::finishRace()
 {
-    m_state = State::GameTransitionOut;
-    m_raceFinished = true;
+    if (m_state == State::Play)
+    {
+        m_state = State::Results;
+    }
+}
+
+void StateMachine::continueFromResults()
+{
+    if (m_state == State::Results)
+    {
+        m_state = State::GameTransitionOut;
+    }
 }
 
 StateMachine::State StateMachine::state() const

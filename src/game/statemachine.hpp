@@ -43,7 +43,8 @@ public:
         GameTransitionIn, // Active when a race starts
         GameTransitionOut, // Active when a race is over
         DoStartlights,
-        Play
+        Play,
+        Results // Active when the human players have finished and the results are shown
     };
 
     //! Constructor.
@@ -74,6 +75,9 @@ public slots:
     void endStartlightAnimation();
 
     void finishRace();
+
+    //! Leaves the results back to the menu.
+    void continueFromResults();
 
 signals:
 
@@ -110,6 +114,8 @@ private:
 
     void statePlay();
 
+    void stateResults();
+
     static StateMachine * m_instance;
 
     typedef std::map<State, std::function<void()>> StateToFunctionMap;
@@ -119,8 +125,6 @@ private:
     State m_state;
 
     State m_oldState;
-
-    bool m_raceFinished;
 
     InputHandler & m_inputHandler;
 

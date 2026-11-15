@@ -86,6 +86,7 @@ Scene::Scene(Game & game, StateMachine & stateMachine, Renderer & renderer, MCWo
   , m_messageOverlay { std::make_unique<MessageOverlay>() }
   , m_race { std::make_shared<Race>(game, carCount()) }
   , m_world { world }
+  , m_resultsOverlay { std::make_unique<ResultsOverlay>() }
   , m_startlights { std::make_unique<Startlights>() }
   , m_startlightsOverlay { std::make_unique<StartlightsOverlay>(*m_startlights) }
   , m_checkeredFlag { std::make_unique<CheckeredFlag>() }
@@ -134,6 +135,8 @@ void Scene::initializeComponents()
     m_intro->setDimensions(width(), height());
     m_startlightsOverlay->setDimensions(width(), height());
     m_messageOverlay->setDimensions(width(), height());
+    m_resultsOverlay->setDimensions(width(), height());
+    m_resultsOverlay->setRace(m_race);
 
     m_world.setMetersPerUnit(METERS_PER_UNIT);
 
@@ -256,7 +259,8 @@ void Scene::updateFrame(InputHandler & handler, std::chrono::milliseconds timeSt
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play: {
+    case StateMachine::State::Play:
+    case StateMachine::State::Results: {
         if (m_activeTrack)
         {
             if (m_race->started())
@@ -582,6 +586,7 @@ void Scene::initializeRace()
 {
     assert(m_activeTrack);
     m_race->initialize(m_activeTrack, static_cast<size_t>(m_game.lapCount()));
+    m_resultsOverlay->loadPlayerNames();
 }
 
 std::shared_ptr<Track> Scene::activeTrack() const
@@ -615,7 +620,8 @@ void Scene::renderTrack()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play: {
+    case StateMachine::State::Play:
+    case StateMachine::State::Results: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
@@ -671,9 +677,15 @@ void Scene::renderCommonHUD()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play: {
+    case StateMachine::State::Play:
+    case StateMachine::State::Results: {
         // Setup for common scene
         MCWorld::instance().renderer().glScene().setSplitType(MCGLScene::ShowFullScreen);
+        if (m_stateMachine.state() == StateMachine::State::Results)
+        {
+            m_resultsOverlay->render();
+            break;
+        }
         if (m_race->checkeredFlagEnabled() && !m_game.hasTwoHumanPlayers())
         {
             m_checkeredFlag->render();
@@ -694,7 +706,8 @@ void Scene::renderHUD()
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play: {
+    case StateMachine::State::Play:
+    case StateMachine::State::Results: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;
@@ -735,7 +748,8 @@ void Scene::renderWorld(MCRenderGroup renderGroup, bool prepareRendering)
     case StateMachine::State::GameTransitionIn:
     case StateMachine::State::GameTransitionOut:
     case StateMachine::State::DoStartlights:
-    case StateMachine::State::Play: {
+    case StateMachine::State::Play:
+    case StateMachine::State::Results: {
         if (m_game.hasTwoHumanPlayers())
         {
             MCGLScene::SplitType p1, p0;

@@ -95,7 +95,12 @@ bool EventHandler::handleKeyReleaseEvent(QKeyEvent * event)
 
 bool EventHandler::handleMousePressEvent(QMouseEvent * event, int screenWidth, int screenHeight, bool mirrorY)
 {
-    if (StateMachine::instance().state() == StateMachine::State::Menu)
+    if (StateMachine::instance().state() == StateMachine::State::Results)
+    {
+        emit soundRequested("menuClick");
+        StateMachine::instance().continueFromResults();
+    }
+    else if (StateMachine::instance().state() == StateMachine::State::Menu)
     {
         const int y = mirrorY ? screenHeight - static_cast<int>(event->position().y()) : static_cast<int>(event->position().y());
         if (MTFH::MenuManager::instance().mousePress(
@@ -235,6 +240,16 @@ bool EventHandler::handleMenuTextInputEvent(QKeyEvent * event)
 
 bool EventHandler::handleGameKeyPressEvent(QKeyEvent * event)
 {
+    if (StateMachine::instance().state() == StateMachine::State::Results && !event->isAutoRepeat())
+    {
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+        {
+            emit soundRequested("menuClick");
+            StateMachine::instance().continueFromResults();
+            return true;
+        }
+    }
+
     return applyMatchingAction(event, true);
 }
 
