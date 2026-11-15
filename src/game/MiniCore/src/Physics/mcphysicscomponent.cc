@@ -303,6 +303,12 @@ void MCPhysicsComponent::integrate(float step)
         const float angleDiff = integrateAngular(step);
         object().checkBoundaries();
 
+        // Forces and impulses are used up even if the object is about to sleep.
+        // Otherwise they would be applied again on the next step.
+        m_forces.setZero();
+        m_linearImpulse.setZero();
+        m_angularImpulse = 0.0f;
+
         if (const float speed = m_velocity.lengthFast(); speed < m_linearSleepLimit && m_angularVelocity < m_angularSleepLimit)
         {
             if (++m_sleepCount > 1)
@@ -314,10 +320,6 @@ void MCPhysicsComponent::integrate(float step)
         else
         {
             m_velocity.clampFast(m_maxSpeed);
-
-            m_forces.setZero();
-            m_linearImpulse.setZero();
-            m_angularImpulse = 0.0f;
 
             object().rotate(object().angle() + angleDiff, false);
             object().translate(object().location() + m_velocity);

@@ -209,7 +209,6 @@ void MCPhysicsComponentTest::testForcesAreClearedWhenBelowSleepLimit()
     // is still in the accumulator and gets applied a second time.
     const float expected = (velocityAfterFirstStep + 0.1f * 0.1f) * LINEAR_DAMPING;
 
-    QEXPECT_FAIL("", "Accumulated forces are not cleared when the object is below its sleep limit", Continue);
     QVERIFY(qFuzzyCompare(physics.velocity().i(), expected));
 }
 
