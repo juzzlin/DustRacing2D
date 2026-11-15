@@ -72,7 +72,7 @@ const SpeciesTraits & speciesTraits(Tree::Species species)
 {
     static const SpeciesTraits deciduous {
         { "tree", "tree2", "tree3" },
-        200, 400,
+        160, 320,
         1.1f, 1.6f,
         7.0f,
         0.35f,
@@ -82,7 +82,7 @@ const SpeciesTraits & speciesTraits(Tree::Species species)
 
     static const SpeciesTraits pine {
         { "pine", "pine2" },
-        300, 500,
+        240, 400,
         1.1f, 1.5f,
         1.5f,
         0.1f,
