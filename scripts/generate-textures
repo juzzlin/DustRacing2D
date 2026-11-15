@@ -308,19 +308,37 @@ def kerbed_mask(source, inside_region, stripe_length=16):
     # Measure angles relative to the mean direction so that they don't wrap around
     directions = (x[white] - cx) + 1j * (y[white] - cy)
     mean_direction = directions.mean() / abs(directions.mean())
-    angles = np.angle(directions * np.conj(mean_direction))
-    radius = np.abs(directions).mean()
 
-    # Stripes follow the angle around the center of the bend, so that their edges are straight
-    # radial lines across the whole width of the kerb. Supersample them for anti-aliasing.
+    # Midline of the kerb: average the painted pixels in bins of the angle around the bend,
+    # smooth it and resample it densely.
     py, px = np.nonzero(painted)
+    angles = np.angle(((px + 0.5 - cx) + 1j * (py + 0.5 - cy)) * np.conj(mean_direction))
+    bins = np.linspace(angles.min(), angles.max(), 160)
+    index = np.digitize(angles, bins)
+    midline = np.array([(px[index == i].mean() + 0.5, py[index == i].mean() + 0.5) for i in np.unique(index)])
+    window = 9
+    padded = np.vstack([np.repeat(midline[:1], window // 2, axis=0), midline, np.repeat(midline[-1:], window // 2, axis=0)])
+    midline = np.stack([np.convolve(padded[:, i], np.ones(window) / window, mode='valid') for i in range(2)], axis=-1)
+    step = np.hypot(*np.diff(midline, axis=0).T)
+    arc = np.concatenate([[0], np.cumsum(step)])
+    positions = np.arange(0, arc[-1], 0.5)
+    midline = np.stack([np.interp(positions, arc, midline[:, i]) for i in range(2)], axis=-1)
+
+    # Fit a whole number of stripes, so that both ends of the kerb end cleanly
+    stripe_length = positions[-1] / max(1, round(positions[-1] / stripe_length))
+
+    # Stripes follow the arc length of the nearest point on the midline, so that their edges are
+    # perpendicular to the kerb everywhere. Supersample them for anti-aliasing.
     offsets = (np.arange(4) + 0.5) / 4
     red = np.zeros(len(px))
     for oy in offsets:
         for ox in offsets:
-            angle = np.angle(((px + ox - cx) + 1j * (py + oy - cy)) * np.conj(mean_direction))
-            arc_length = (angle - angles.min()) * radius
-            red += (np.floor(arc_length / stripe_length) % 2 == 0)
+            points = np.stack([px + ox, py + oy], axis=-1)
+            nearest = np.empty(len(points), dtype=int)
+            for start in range(0, len(points), 4096):
+                chunk = points[start:start + 4096]
+                nearest[start:start + 4096] = np.argmin(((chunk[:, None, :] - midline[None, :, :]) ** 2).sum(axis=-1), axis=1)
+            red += (np.floor(positions[nearest] / stripe_length) % 2 == 0)
     red = (red / 16)[:, None]
     kerb = red * KERB_RED + (1 - red) * KERB_WHITE
 
