@@ -1,117 +1,205 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
     <head>
-        <link rel="stylesheet" type="text/css" href="dist/css/styles.css"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta name="description" content="Dust Racing 2D Official Homepage">
-        <meta name="keywords" content="Dust Racing 2D,dustrac,car,racing,game,editor,Ubuntu,open source,opengl,c++">
-        <meta name="author" content="Jussi Lind">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dust Racing 2D - A top-down racing game with a level editor</title>
+        <meta name="description" content="Dust Racing 2D is a free, open source top-down racing game for Linux and Windows: race eleven computer drivers or a friend on split screen, crash and burn, and build your own tracks with the level editor.">
+        <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#0f1113" media="(prefers-color-scheme: dark)">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Dust Racing 2D - top-down racing with dust, dents and drama">
+        <meta property="og:description" content="Race eleven computer drivers or a friend on split screen. Free and open source for Linux and Windows.">
+        <meta property="og:image" content="https://juzzlin.github.io/DustRacing2D/img/og.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="css/style.css">
     </head>
-
     <body>
-
-        <title>Dust Racing 2D - A traditional top-down OpenGL car racing game and a level editor</title>
-
-        <header>
-        <p><time pubdate datetime="2012-12-30"></time></p>
+        <header class="nav">
+            <div class="wrap nav-inner">
+                <a class="brand" href="#top">Dust Racing 2D</a>
+                <nav aria-label="Sections">
+                    <a href="#features">Features</a>
+                    <a href="#screenshots">Screenshots</a>
+                    <a href="#download">Download</a>
+                    <a href="https://github.com/juzzlin/DustRacing2D">GitHub</a>
+                </nav>
+            </div>
         </header>
 
-        <div class="dr2d-title">
-            <a href="https://github.com/juzzlin/DustRacing2D"><img src="dist/img/dr2d.png"/></a>
-        </div>
+        <main id="top">
+            <section class="hero">
+                <div class="wrap hero-inner">
+                    <div class="hero-text">
+                        <p class="eyebrow">Free &amp; open source &middot; GPLv3 &middot; Linux &amp; Windows</p>
+                        <h1>Top-down racing with dust, dents and drama.</h1>
+                        <p class="lead">Dust Racing 2D is a tile-based racing game in the spirit of the classics. Race eleven computer drivers or a friend on split screen, trade paint in the corners, and build your own tracks with the level editor.</p>
+                        <div class="actions">
+                            <a class="button primary" href="#download">Download</a>
+                            <a class="button" href="https://github.com/juzzlin/DustRacing2D">View on GitHub</a>
+                        </div>
+                    </div>
+                    <figure class="window hero-shot">
+                        <img src="img/Curve.webp" width="1920" height="1080" alt="Cars racing through a curve with kerbs past grandstands full of spectators">
+                    </figure>
+                </div>
+            </section>
 
-        <div class="dr2d-main-content">
+            <section class="stats" aria-label="At a glance">
+                <div class="wrap stats-inner">
+                    <div><strong>12</strong><span>cars on the grid</span></div>
+                    <div><strong>16</strong><span>race tracks</span></div>
+                    <div><strong>2</strong><span>players on split screen</span></div>
+                    <div><strong>100%</strong><span>free, forever</span></div>
+                </div>
+            </section>
 
-            <div class="row">
-                <div class="small-12 medium-6 columns">
-                    <div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
-                        <ul class="orbit-container">
-                            <li class="is-active orbit-slide">
-                                <img class="orbit-image" src="screenshots/1.10.0/1.jpg" alt="1">
-                                <figcaption class="orbit-caption">'Monza'</figcaption>
-                            </li>
-                            <li class="orbit-slide">
-                                <img class="orbit-image" src="screenshots/1.10.0/2.jpg" alt="2">
-                                <figcaption class="orbit-caption">'Triangle'</figcaption>
-                            </li>
-                            <li class="orbit-slide">
-                                <img class="orbit-image" src="screenshots/1.10.0/3.jpg" alt="3">
-                                <figcaption class="orbit-caption">'Suzuka'</figcaption>
-                            </li>
-                            <li class="orbit-slide">
-                                <img class="orbit-image" src="screenshots/1.10.0/4.jpg" alt="4">
-                                <figcaption class="orbit-caption">The Level Editor</figcaption>
-                            </li>
+            <section id="features" class="section">
+                <div class="wrap">
+                    <h2>Everything a race needs</h2>
+                    <p class="section-lead">Easy to pick up, hard to win.</p>
+
+                    <div class="feature">
+                        <figure class="window">
+                            <img src="img/Pack-960.webp" width="960" height="540" loading="lazy" alt="A pack of cars racing on a straight with tire smoke">
+                        </figure>
+                        <div>
+                            <h3>Racing</h3>
+                            <ul>
+                                <li>Race against eleven computer drivers on three difficulty levels</li>
+                                <li>Finish in the top six to unlock the next track</li>
+                                <li>Star ratings for your best positions, lap and race records</li>
+                                <li>Results at the finish with the times and gaps of every car</li>
+                                <li>Tires wear out as the race goes on, so stop at the pit to change them</li>
+                                <li>Race, Time Trial and Duel modes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="feature reverse">
+                        <figure class="window">
+                            <img src="img/Damage-960.webp" width="960" height="540" loading="lazy" alt="A crumpled, burning race car with a shattered windshield">
+                        </figure>
+                        <div>
+                            <h3>Crashes &amp; damage</h3>
+                            <ul>
+                                <li>The bodies of the cars dent and bend where they are hit</li>
+                                <li>Windshields crack and shatter, lights break and parts fly off</li>
+                                <li>Badly damaged cars lose power, smoke and catch fire</li>
+                                <li>Physics with proper contact points, spin and friction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <figure class="window">
+                            <img src="img/SplitScreen-960.webp" width="960" height="540" loading="lazy" alt="Two players racing on a vertically split screen">
+                        </figure>
+                        <div>
+                            <h3>Two players</h3>
+                            <ul>
+                                <li>Race a friend on a vertically or horizontally split screen</li>
+                                <li>Against the computer drivers, or in a one-on-one Duel</li>
+                                <li>Name the players and configure their keys</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="feature reverse">
+                        <figure class="window">
+                            <img src="img/Sand-960.webp" width="960" height="540" loading="lazy" alt="Tire tracks in the sand next to a grandstand and trees">
+                        </figure>
+                        <div>
+                            <h3>Tracks that feel alive</h3>
+                            <ul>
+                                <li>Packed grandstands, trees swaying in the wind and kerbs in the corners</li>
+                                <li>Skid marks on the asphalt and dust and mud off the track</li>
+                                <li>Grass, sand and weathered asphalt that change across the track</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <figure class="window">
+                            <img src="img/Editor.webp" width="640" height="436" loading="lazy" alt="The level editor with a track and its route">
+                        </figure>
+                        <div>
+                            <h3>Level editor</h3>
+                            <ul>
+                                <li>Build your own tracks from tiles and objects</li>
+                                <li>Set the route that the computer drivers follow</li>
+                                <li>Place your tracks in <code>~/DustRacingTracks</code> and race them in the game</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="feature text-only">
+                        <h3>And more</h3>
+                        <ul class="columns">
+                            <li>Runs on Linux and Windows, windowed or full screen</li>
+                            <li>Translated into Czech, Dutch, English, Finnish, French, German, Italian and Turkish</li>
+                            <li>Engine, collision and crowd sounds</li>
+                            <li>Written in C++ with Qt 6 and OpenGL, with its own physics engine, MiniCore</li>
+                            <li>Will always be 100% free</li>
                         </ul>
-                        <nav class="orbit-bullets">
-                            <button class="is-active" data-slide="0"><span class="show-for-sr"></span><span class="show-for-sr">Current Slide</span></button>
-                            <button data-slide="1"><span class="show-for-sr"></span></button>
-                            <button data-slide="2"><span class="show-for-sr"></span></button>
-                            <button data-slide="3"><span class="show-for-sr"></span></button>
-                        </nav>
                     </div>
                 </div>
-                <div class="small-12 medium-6 columns">
-                    <div class="responsive-embed">
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/3hrIzzItggQ" frameborder="0" allowfullscreen></iframe>
+            </section>
+
+            <section id="screenshots" class="section">
+                <div class="wrap">
+                    <h2>Screenshots</h2>
+                    <div class="gallery">
+                        <button type="button" data-full="img/Curve.webp"><img src="img/Curve-960.webp" width="960" height="540" loading="lazy" alt=""><span>Into the curve</span></button>
+                        <button type="button" data-full="img/Pack.webp"><img src="img/Pack-960.webp" width="960" height="540" loading="lazy" alt=""><span>The pack</span></button>
+                        <button type="button" data-full="img/Start.webp"><img src="img/Start-960.webp" width="960" height="540" loading="lazy" alt=""><span>Start lights</span></button>
+                        <button type="button" data-full="img/Sand.webp"><img src="img/Sand-960.webp" width="960" height="540" loading="lazy" alt=""><span>Off the track</span></button>
+                        <button type="button" data-full="img/Damage.webp"><img src="img/Damage-960.webp" width="960" height="540" loading="lazy" alt=""><span>Crashed and burning</span></button>
+                        <button type="button" data-full="img/SplitScreen.webp"><img src="img/SplitScreen-960.webp" width="960" height="540" loading="lazy" alt=""><span>Split screen</span></button>
+                        <button type="button" data-full="img/Menu.webp"><img src="img/Menu-960.webp" width="960" height="540" loading="lazy" alt=""><span>Main menu</span></button>
+                        <button type="button" data-full="img/TrackSelection.webp"><img src="img/TrackSelection-960.webp" width="960" height="540" loading="lazy" alt=""><span>Track selection</span></button>
+                        <button type="button" data-full="img/Editor.webp"><img src="img/Editor.webp" width="640" height="436" loading="lazy" alt=""><span>Level editor</span></button>
                     </div>
                 </div>
+            </section>
+
+            <section id="download" class="section">
+                <div class="wrap">
+                    <h2>Download</h2>
+                    <div class="downloads">
+                        <div class="card">
+                            <h3>Your distribution</h3>
+                            <p>Many Linux distributions package Dust Racing 2D in their own repositories.</p>
+                            <code>sudo apt install dustracing2d</code>
+                        </div>
+                        <a class="card" href="https://github.com/juzzlin/DustRacing2D/releases/latest">
+                            <h3>Debian package</h3>
+                            <p>The latest release for the supported Ubuntu LTS releases. Uses the Qt 6 of the distribution.</p>
+                            <code>sudo apt install ./dustracing2d-*.deb</code>
+                        </a>
+                        <a class="card" href="https://github.com/juzzlin/DustRacing2D/releases/latest">
+                            <h3>Windows</h3>
+                            <p>An installer with the game and the level editor.</p>
+                            <code>dustracing2d-*-windows-*_setup.exe</code>
+                        </a>
+                    </div>
+                    <p class="source">Or build it from <a href="https://github.com/juzzlin/DustRacing2D">the source</a>: C++, Qt 6 and OpenGL, licensed under GPLv3. The graphics are licensed under CC BY-SA 3.0.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="wrap footer-inner">
+                <span>&copy; 2010-2026 Jussi Lind</span>
+                <span><a href="https://github.com/juzzlin/DustRacing2D">GitHub</a> &middot; <a href="https://github.com/juzzlin/DustRacing2D/releases">Releases</a> &middot; GPLv3</span>
             </div>
+        </footer>
 
-            <div class="row">
-                <div class="small-12 medium-6 columns">
-                    <div class="dr2d-text-area">
-                        <p>Dust Racing <span class="dr2d-2d">2D</span> (dustrac) is an open source, tile-based 2D racing game developed by Jussi Lind and contributors.</p>
+        <dialog class="lightbox" aria-label="Screenshot">
+            <img alt="">
+        </dialog>
 
-                        <p>The purpose of the game is to race against challenging computer players on different race tracks.
-                           Finishing in TOP-6 will unlock a new race track. Only a small portion of the race track is visible on the scrolling screen. </p>
-                        <p>There's also an option for a split-screen two player game, introduced in 0.12.0.
-                           Dust Racing <span class="dr2d-2d">2D</span> comes with a Qt-based level editor that makes creating new race tracks easy.</p>
-                    </div>
-                </div>
-                <div class="small-12 medium-6 columns">
-                    <div class="dr2d-text-area">
-                        <p>The source code of the game is licensed under GNU GPLv3.
-                           Dust Racing <span class="dr2d-2d">2D</span> is built on <a class="qt-link" href="http://www.qt.io">Qt development framework</a> in C++ and it uses OpenGL for graphics.
-                           This means, that it is possible to port the game to multiple operating systems.
-                           Dust Racing <span class="dr2d-2d">2D</span> is currently available for Linux and Windows.</p>
-
-                        <p>Dust Racing <span class="dr2d-2d">2D</span> was inspired by Super Cars and Slicks'n Slide and is under active development.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dr2d-links">
-                <div class="row">
-                    <div class="small-12 medium-2 columns">
-                        <a href="https://github.com/juzzlin/DustRacing2D"><h3>The project home</h3></a>
-                    </div>
-
-                    <div class="small-12 medium-3 columns">
-                        <a href="https://github.com/juzzlin/DustRacing2D/releases"><h3>Downloads</h3></a>
-                    </div>
-
-                    <div class="small-12 medium-3 columns">
-                        <a href="https://launchpad.net/~jussi-lind/+archive/ubuntu/dustrac/"><h3>PPA for Ubuntu</h3></a>
-                    </div>
-
-                    <div class="small-12 medium-2 columns">
-                        <a href="https://github.com/juzzlin/DustRacing2D/wiki"><h3>Wiki</h3></a>
-                    </div>
-
-                    <div class="small-12 medium-2 columns">
-                        <a href="https://www.youtube.com/playlist?list=PL-_e22uBmMY_JXnWqHMS0tEwTIZb8dMRd"><h3>Videos</h3></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="dr2d-footer">
-            <small>Copyright 2010-2017 (c) Jussi Lind &lt;jussi.lind@iki.fi&gt;</small>
-        </div>
+        <script src="js/site.js" defer></script>
     </body>
-    <script src="dist/js/vendor.js"></script>
-    <script>
-        $(document).foundation();
-    </script>
 </html>
-
