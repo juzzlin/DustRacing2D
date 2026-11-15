@@ -317,6 +317,222 @@ def kerbed_mask(source, inside_region, stripe_length=16):
     return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
 
 
+def grass_rgb(seed, width, height, base_color=(92, 128, 60)):
+    """Grass with large patches of different shades and fine grain. Returns float RGB in 0..255."""
+    rng = np.random.default_rng(seed)
+    size = max(width, height)
+    patches = periodic_noise(rng, size, 60)[:height, :width]
+    detail = periodic_noise(rng, size, 6)[:height, :width]
+    grain = periodic_noise(rng, size, 0.7)[:height, :width]
+    brightness = 1 + 0.09 * patches + 0.05 * detail + 0.06 * grain
+    rgb = np.array(base_color)[None, None, :] * brightness[..., None]
+    # Dry, yellowish patches
+    dryness = np.clip(periodic_noise(rng, size, 45)[:height, :width], 0, None)[..., None]
+    return rgb * (1 - 0.15 * dryness) + np.array([150, 140, 80]) * 0.15 * dryness
+
+
+def smooth_path(points, samples_per_segment=40):
+    """A Catmull-Rom spline through the given points. Returns the samples and their unit normals."""
+    points = np.array(points, dtype=np.float64)
+    padded = np.vstack([2 * points[0] - points[1], points, 2 * points[-1] - points[-2]])
+    samples = []
+    for i in range(1, len(padded) - 2):
+        p0, p1, p2, p3 = padded[i - 1:i + 3]
+        for t in np.linspace(0, 1, samples_per_segment, endpoint=False):
+            samples.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t))
+    samples.append(points[-1])
+    samples = np.array(samples)
+    tangents = np.gradient(samples, axis=0)
+    tangents /= np.linalg.norm(tangents, axis=1)[:, None]
+    normals = np.stack([-tangents[:, 1], tangents[:, 0]], axis=-1)
+    return samples, normals
+
+
+def road_mask(size, samples, width):
+    """Mask of a road of the given width along the samples. It's stamped with discs, because
+    wide polylines of short segments leave gaps between the segments."""
+    mask = Image.new('L', size, 0)
+    draw = ImageDraw.Draw(mask)
+    r = width / 2
+    step = max(1.0, r / 8)
+    distance = 0.0
+    previous = samples[0]
+    for p in samples:
+        distance += np.linalg.norm(p - previous)
+        previous = p
+        if distance >= step or p is samples[0] or p is samples[-1]:
+            distance = 0.0
+            draw.ellipse((p[0] - r, p[1] - r, p[0] + r, p[1] + r), fill=255)
+    return mask
+
+
+def dense_path(samples, normals, spacing):
+    """Resamples a path so that its samples are at most the given spacing apart."""
+    step = np.linalg.norm(np.diff(samples, axis=0), axis=1)
+    arc_length = np.concatenate([[0], np.cumsum(step)])
+    positions = np.arange(0, arc_length[-1], spacing)
+    resampled = np.stack([np.interp(positions, arc_length, samples[:, i]) for i in range(2)], axis=-1)
+    resampled_normals = np.stack([np.interp(positions, arc_length, normals[:, i]) for i in range(2)], axis=-1)
+    resampled_normals /= np.linalg.norm(resampled_normals, axis=1)[:, None]
+    return resampled, resampled_normals
+
+
+def draw_kerbs(draw, samples, normals, road_width, kerb_width, stripe_length, min_length):
+    """Red and white kerbs at the inside of the bends, where the road curves enough.
+    Kerbs shorter than min_length are left out."""
+    tangents = np.gradient(samples, axis=0)
+    heading = np.unwrap(np.arctan2(tangents[:, 1], tangents[:, 0]))
+    step = np.linalg.norm(np.diff(samples, axis=0), axis=1)
+    curvature = np.gradient(heading) / np.maximum(np.concatenate([step, step[-1:]]), 1e-6)
+    curvature = np.convolve(curvature, np.ones(41) / 41, mode='same')
+    arc_length = np.concatenate([[0], np.cumsum(step)])
+
+    # Find runs of bends and drop the short ones
+    curved = np.abs(curvature) >= 0.0008
+    for start in np.flatnonzero(curved & ~np.concatenate([[False], curved[:-1]])):
+        end = start
+        while end + 1 < len(curved) and curved[end + 1] and np.sign(curvature[end + 1]) == np.sign(curvature[start]):
+            end += 1
+        if arc_length[end] - arc_length[start] < min_length:
+            curved[start:end + 1] = False
+
+    for i in range(len(samples) - 1):
+        if not curved[i]:
+            continue
+        # The inside of the bend is on the side the road turns to
+        side = 1 if curvature[i] > 0 else -1
+        outer, inner = side * road_width / 2, side * (road_width / 2 - kerb_width)
+        quad = [tuple(samples[i] + normals[i] * outer), tuple(samples[i + 1] + normals[i + 1] * outer),
+                tuple(samples[i + 1] + normals[i + 1] * inner), tuple(samples[i] + normals[i] * inner)]
+        red = int(arc_length[i] / stripe_length) % 2 == 0
+        draw.polygon(quad, fill=tuple(KERB_RED) if red else tuple(KERB_WHITE))
+
+
+def tree_sprite(rng, size):
+    """A random deciduous or pine crown sprite."""
+    seed = int(rng.integers(1000))
+    if rng.uniform() < 0.35:
+        return pine_canopy(seed, size=size, base_hue=(int(rng.uniform(38, 50)), int(rng.uniform(85, 100)), 60))
+    return deciduous_canopy(seed, size=size, leaves=int(1100 * (size / 128) ** 1.2), base_hue=(int(rng.uniform(62, 82)), int(rng.uniform(115, 132)), int(rng.uniform(40, 50))))
+
+
+def menu_backdrop(seed, path, size=(1280, 960), road_width=190, trees=26, shrubs=40, sand_trap=None, start_line=None):
+    """A top-down view of a piece of race track for menu backgrounds.
+    path holds the control points of the center line in pixels, sand_trap is an optional polygon of
+    sand next to the road and start_line an optional position of a checkered line as a fraction of the path."""
+    rng = np.random.default_rng(seed)
+    s = SUPERSAMPLING
+    w, h = size[0] * s, size[1] * s
+    samples, normals = smooth_path(np.array(path) * s)
+    samples, normals = dense_path(samples, normals, 2.0 * s)
+    road_w = road_width * s
+
+    rgb = grass_rgb(seed, w, h)
+
+    sand_area = Image.new('L', (w, h), 0)
+    if sand_trap:
+        ImageDraw.Draw(sand_area).polygon([(x * s, y * s) for x, y in sand_trap], fill=255)
+        sand_mask = np.asarray(sand_area.filter(ImageFilter.GaussianBlur(3 * s))).astype(np.float32)[..., None] / 255
+        texture = sand_rgb(seed)
+        tiles = np.tile(texture, (h // texture.shape[0] + 1, w // texture.shape[1] + 1, 1))[:h, :w]
+        rgb = rgb * (1 - sand_mask) + tiles * sand_mask
+
+    # Worn, dusty verge next to the road
+    road = road_mask((w, h), samples, road_w)
+    verge = np.asarray(road_mask((w, h), samples, road_w + 34 * s).filter(ImageFilter.GaussianBlur(12 * s))).astype(np.float32)[..., None] / 255
+    rgb = rgb * (1 - 0.35 * verge) + np.array([150, 135, 100]) * 0.35 * verge
+    contact_shadow = np.asarray(road_mask((w, h), samples, road_w + 8 * s).filter(ImageFilter.GaussianBlur(4 * s))).astype(np.float32)[..., None] / 255
+    rgb *= 1 - 0.25 * contact_shadow
+
+    # Asphalt with grain and a darker racing line
+    size_max = max(w, h)
+    asphalt = 1 + 0.05 * periodic_noise(rng, size_max, 1.0)[:h, :w] + 0.04 * periodic_noise(rng, size_max, 40)[:h, :w]
+    asphalt_rgb = np.array([82, 82, 86])[None, None, :] * asphalt[..., None]
+    racing_line = np.asarray(road_mask((w, h), samples, road_w * 0.35).filter(ImageFilter.GaussianBlur(20 * s))).astype(np.float32)[..., None] / 255
+    asphalt_rgb *= 1 - 0.12 * racing_line
+    road_alpha = np.asarray(road).astype(np.float32)[..., None] / 255
+    rgb = rgb * (1 - road_alpha) + asphalt_rgb * road_alpha
+
+    image = Image.fromarray(rgb.clip(0, 255).astype(np.uint8), 'RGB')
+    draw = ImageDraw.Draw(image)
+
+    # Tire marks
+    for _ in range(5):
+        start = int(rng.integers(0, len(samples) // 2))
+        length = int(rng.integers(len(samples) // 8, len(samples) // 3))
+        lateral = rng.uniform(-0.3, 0.3) * road_w
+        drift = rng.normal(0, 0.08) * road_w
+        part = slice(start, min(start + length, len(samples)))
+        t = np.linspace(0, 1, len(samples[part]))[:, None]
+        for track in (-1, 1):
+            points = samples[part] + normals[part] * (lateral + drift * t + track * 9 * s)
+            draw.line([tuple(p) for p in points], fill=(55, 55, 58), width=3 * s)
+
+    # Edge lines as the difference of two road masks, and kerbs over them
+    line_inset, line_width = 10 * s, 5 * s
+    outer = road_mask((w, h), samples, road_w - 2 * line_inset + line_width)
+    inner = road_mask((w, h), samples, road_w - 2 * line_inset - line_width)
+    lines = Image.fromarray((np.asarray(outer).astype(np.int16) - np.asarray(inner)).clip(0, 255).astype(np.uint8), 'L')
+    image.paste((225, 225, 220), (0, 0), lines)
+    draw_kerbs(draw, samples, normals, road_w, 20 * s, 18 * s, min_length=150 * s)
+
+    if start_line is not None:
+        index = int(start_line * (len(samples) - 1))
+        p, n = samples[index], normals[index]
+        tangent = np.array([n[1], -n[0]])
+        squares = 12
+        square = road_w / squares
+        for row in range(2):
+            for column in range(squares):
+                if (row + column) % 2:
+                    continue
+                a = p + n * (-road_w / 2 + column * square) + tangent * (row - 1) * square
+                quad = [tuple(a), tuple(a + n * square), tuple(a + n * square + tangent * square), tuple(a + tangent * square)]
+                draw.polygon(quad, fill=(235, 235, 230))
+
+    # Plants and trees away from the road, smaller first so that trees cover them.
+    # Trees need more clearance, because their crowns are wide.
+    # Grow the sand area by a margin: a blurred mask is nonzero up to about two sigmas outside it
+    sand_clearance = {kind: np.where(np.asarray(sand_area.filter(ImageFilter.GaussianBlur(margin * s / 2))) > 0, 255, 0)
+                      for kind, margin in (('shrub', 15), ('tree', 45))} if sand_trap else None
+    clearance = {
+        'shrub': np.maximum(np.asarray(road_mask((w, h), samples, road_w + 90 * s)), sand_clearance['shrub'] if sand_trap else 0),
+        'tree': np.maximum(np.asarray(road_mask((w, h), samples, road_w + 230 * s)), sand_clearance['tree'] if sand_trap else 0),
+    }
+
+    items = []
+    for _ in range(shrubs):
+        items.append(('shrub', int(rng.uniform(40, 70))))
+    for _ in range(trees):
+        items.append(('tree', int(rng.uniform(150, 240))))
+    for kind, sprite_size in items:
+        for _ in range(50):
+            x, y = rng.uniform(-60, w / s + 60) * s, rng.uniform(-60, h / s + 60) * s
+            if clearance[kind][int(min(max(y, 0), h - 1)), int(min(max(x, 0), w - 1))] == 0:
+                break
+        else:
+            continue
+        sprite = shrub(int(rng.integers(1000)), size=sprite_size) if kind == 'shrub' else tree_sprite(rng, sprite_size)
+        sprite = sprite.resize((sprite_size * s, sprite_size * s), Image.LANCZOS).rotate(rng.uniform(0, 360))
+        alpha = sprite.split()[3]
+        # Soft shadow away from the light
+        offset = int(sprite_size * s * (0.12 if kind == 'tree' else 0.06))
+        shadow = Image.new('RGBA', sprite.size, (0, 0, 0, 0))
+        shadow.putalpha(alpha.filter(ImageFilter.GaussianBlur(6 * s)).point(lambda a: int(a * 0.45)))
+        corner = (int(x - sprite.size[0] / 2), int(y - sprite.size[1] / 2))
+        image.paste(shadow, (corner[0] + offset, corner[1] + offset), shadow)
+        image.paste(sprite, corner, sprite)
+
+    image = image.resize(size, Image.LANCZOS)
+
+    # Soft vignette so that the menu in the center stands out
+    y, x = (np.mgrid[0:size[1], 0:size[0]] + 0.5)
+    r = np.hypot((x / size[0] - 0.5) * 1.3, (y / size[1] - 0.5) * 1.3)
+    vignette = 1 - 0.55 * np.clip(r - 0.25, 0, 1) ** 1.5
+    pixels = np.asarray(image).astype(np.float32) * vignette[..., None]
+    return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGB')
+
+
 TEXTURES = {
     'tree': lambda: deciduous_canopy(seed=1),
     'tree2': lambda: deciduous_canopy(seed=2, base_hue=(80, 130, 40)),
@@ -332,16 +548,31 @@ TEXTURES = {
     'cornerKerb': lambda: kerbed_mask('corner.png', lambda x, y: np.hypot(x - 512, y - 512) < 140),
     'corner45LeftKerb': lambda: kerbed_mask('corner45Left.png', lambda x, y: (x < 160) & (y > 200)),
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
+    # Menu backgrounds: a sweeping S-curve, a hairpin, a start/finish straight and a corner with a sand trap
+    'mainMenuBack': lambda: menu_backdrop(10, [(-150, 760), (250, 650), (520, 420), (760, 300), (1060, 330), (1450, 120)]),
+    'trackSelectionBack': lambda: menu_backdrop(11, [(-150, 250), (450, 260), (850, 330), (980, 520), (830, 720), (420, 760), (-150, 800)]),
+    'settingsBack': lambda: menu_backdrop(12, [(-150, 560), (300, 520), (700, 470), (1100, 420), (1450, 380)], start_line=0.3),
+    'creditsHelpBack': lambda: menu_backdrop(13, [(-150, 300), (400, 330), (760, 420), (930, 650), (980, 1120)],
+                                             sand_trap=[(880, 120), (1300, 80), (1300, 700), (1150, 760), (1060, 520), (960, 380)]),
 }
+
+
+# Large opaque images are saved as JPEG to keep them small
+JPEG_TEXTURES = {'mainMenuBack', 'trackSelectionBack', 'settingsBack', 'creditsHelpBack'}
 
 
 def main(names):
     for name in names or TEXTURES:
         if name not in TEXTURES:
             sys.exit(f'Unknown texture: {name}')
-        path = IMAGE_PATH + name + '.png'
-        print(f'Generating {path}..')
-        TEXTURES[name]().save(path, optimize=True)
+        if name in JPEG_TEXTURES:
+            path = IMAGE_PATH + name + '.jpg'
+            print(f'Generating {path}..')
+            TEXTURES[name]().save(path, quality=90, optimize=True)
+        else:
+            path = IMAGE_PATH + name + '.png'
+            print(f'Generating {path}..')
+            TEXTURES[name]().save(path, optimize=True)
 
 
 if __name__ == '__main__':
