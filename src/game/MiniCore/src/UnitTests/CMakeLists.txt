@@ -4,3 +4,7 @@ add_subdirectory(MCObjectTest)
 add_subdirectory(MCMeshLoaderTest)
 add_subdirectory(MCWorldTest)
 
+add_subdirectory(MCImpulseGeneratorTest)
+add_subdirectory(MCPhysicsComponentTest)
+add_subdirectory(MCTrigonomTest)
+add_subdirectory(MCVectorTest)
