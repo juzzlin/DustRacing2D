@@ -33,6 +33,7 @@
 #include <MCPhysicsComponent>
 #include <MCRectShape>
 #include <MCShape>
+#include <MCShapeView>
 #include <MCSurface>
 #include <MCTrigonom>
 
@@ -401,6 +402,22 @@ void Car::addDamage(float damage)
     {
         destroy();
     }
+
+    updateDamageTint();
+}
+
+void Car::updateDamageTint()
+{
+    if (m_isDestroyed)
+    {
+        shape()->view()->setColor(MCGLColor { 0.25f, 0.22f, 0.2f });
+    }
+    else
+    {
+        // Dents and scratches darken the paint gradually.
+        const float shade = 0.55f + 0.45f * damageLevel();
+        shape()->view()->setColor(MCGLColor { shade, shade, shade });
+    }
 }
 
 void Car::destroy()
@@ -480,6 +497,8 @@ void Car::resetDamage()
             m_soundEffectManager->startEngineSound();
         }
     }
+
+    updateDamageTint();
 }
 
 float Car::damageFactor() const

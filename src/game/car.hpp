@@ -161,6 +161,8 @@ private:
 
     void destroy();
 
+    void updateDamageTint();
+
     void createTires();
 
     void doTireSpinEffect();

@@ -76,7 +76,9 @@ void CarParticleEffectManager::doRightSkidMark(ParticleFactory::ParticleType typ
 
 void CarParticleEffectManager::doDamageSmoke()
 {
-    if (m_car.damageLevel() <= 0.3f && MCRandom::getValue() > m_car.damageLevel())
+    // Smoke gets thicker as the damage grows. Wrecks smoke all the time.
+    const float smokeLimit = 0.6f;
+    if (m_car.isDestroyed() || (m_car.damageLevel() <= smokeLimit && MCRandom::getValue() > m_car.damageLevel() / smokeLimit))
     {
         MCVector3dF smokeLocation = (m_car.leftFrontTireLocation() + m_car.rightFrontTireLocation()) * 0.5f;
         ParticleFactory::instance().doParticle(ParticleFactory::DamageSmoke, smokeLocation);

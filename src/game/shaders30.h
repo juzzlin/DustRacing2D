@@ -80,6 +80,7 @@ static const char * carFsh =
   "uniform vec4      dd = vec4(1, 1, 1, 1);\n"
   "uniform vec4      dc = vec4(1, 1, 1, 1);\n"
   "uniform float     dCoeff = 1;\n"
+  "uniform vec4      color;\n"
   "out     vec4      fragColor;\n"
   ""
   "void main(void)\n"
@@ -98,7 +99,8 @@ static const char * carFsh =
   "        float di = dot(-ddRotated.xyz, N) * dc.a;\n"
   "        float refl = 0.33 * ((1.0 - texColor.r) + texColor.g + (1.0 - texColor.b));\n"
   "        refl *= refl * refl;\n"
-  "        fragColor = 0.80 * (sky * refl + texColor * (1.0 - refl)) + 0.20 * (vec4(dc.rgb, 1.0) * di * dCoeff + vColor);\n"
+  "        vec4 lit = 0.80 * (sky * refl + texColor * (1.0 - refl)) + 0.20 * (vec4(dc.rgb, 1.0) * di * dCoeff + vColor);\n"
+  "        fragColor = vec4(lit.rgb * color.rgb, lit.a);\n"
   "    }\n"
   "}\n";
 
