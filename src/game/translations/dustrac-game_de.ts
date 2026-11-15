@@ -471,5 +471,81 @@ Pause: P</translation>
         <extracomment>&quot;it&quot; = a locked track. Try to keep the translation as short as possible.</extracomment>
         <translation>Im Ein- oder Zweispielerrennen freischalten</translation>
     </message>
+    <message>
+        <source>Car destroyed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lap %1/%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time Trial results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Race results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 · Laps: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Best lap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter: Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finished %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waiting for %1..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player %1 name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter: Save   Esc: Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player names &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Player %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

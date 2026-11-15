@@ -32,170 +32,257 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../race.cpp" line="70"/>
+        <location filename="../race.cpp" line="61"/>
+        <location filename="../resultsoverlay.cpp" line="199"/>
         <source>New lap record!</source>
         <translation>Nieuw ronderecord!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="77"/>
+        <location filename="../race.cpp" line="70"/>
+        <location filename="../resultsoverlay.cpp" line="195"/>
         <source>New race record!</source>
         <translation>Nieuw baanrecord!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="350"/>
+        <location filename="../race.cpp" line="348"/>
         <source>The Time Trial has ended!</source>
         <translation>De race tegen de klok is afgelopen!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="354"/>
+        <location filename="../race.cpp" line="352"/>
         <source>The winner has finished!</source>
         <translation>De winnaar is gefinisht!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="379"/>
+        <location filename="../race.cpp" line="386"/>
+        <source>Car destroyed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../race.cpp" line="415"/>
         <source>Pit stop!</source>
         <translation>Pitstop!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="572"/>
+        <location filename="../race.cpp" line="612"/>
+        <location filename="../resultsoverlay.cpp" line="203"/>
         <source>A new best pos!</source>
         <translation>Nieuwe beste positie!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="582"/>
+        <location filename="../race.cpp" line="623"/>
+        <location filename="../resultsoverlay.cpp" line="207"/>
         <source>A new track unlocked!</source>
         <translation>Nieuw circuit ontgrendeld!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="586"/>
+        <location filename="../race.cpp" line="627"/>
         <source>Better luck next time..</source>
         <translation>Volgende keer beter...</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="629"/>
+        <location filename="../race.cpp" line="670"/>
         <source>You must stay on track!</source>
         <translation>Blijf op de baan!</translation>
     </message>
     <message>
-        <location filename="../race.cpp" line="633"/>
+        <location filename="../race.cpp" line="674"/>
         <source>Watch your tires!</source>
         <translation>Let op je banden!</translation>
     </message>
     <message>
-        <location filename="../startlights.cpp" line="135"/>
+        <location filename="../startlights.cpp" line="128"/>
         <source>GO!!!</source>
         <translation>AF!!!</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="52"/>
+        <location filename="../resultsoverlay.cpp" line="63"/>
+        <location filename="../timingoverlay.cpp" line="51"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="53"/>
+        <location filename="../resultsoverlay.cpp" line="64"/>
+        <location filename="../timingoverlay.cpp" line="52"/>
         <source>1st</source>
         <translation>Eerste</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="54"/>
+        <location filename="../resultsoverlay.cpp" line="65"/>
+        <location filename="../timingoverlay.cpp" line="53"/>
         <source>2nd</source>
         <translation>Tweede</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="55"/>
+        <location filename="../resultsoverlay.cpp" line="66"/>
+        <location filename="../timingoverlay.cpp" line="54"/>
         <source>3rd</source>
         <translation>Derde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="56"/>
+        <location filename="../resultsoverlay.cpp" line="67"/>
+        <location filename="../timingoverlay.cpp" line="55"/>
         <source>4th</source>
         <translation>Vierde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="57"/>
+        <location filename="../resultsoverlay.cpp" line="68"/>
+        <location filename="../timingoverlay.cpp" line="56"/>
         <source>5th</source>
         <translation>Vijfde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="58"/>
+        <location filename="../resultsoverlay.cpp" line="69"/>
+        <location filename="../timingoverlay.cpp" line="57"/>
         <source>6th</source>
         <translation>Zesde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="59"/>
+        <location filename="../resultsoverlay.cpp" line="70"/>
+        <location filename="../timingoverlay.cpp" line="58"/>
         <source>7th</source>
         <translation>Zevende</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="60"/>
+        <location filename="../resultsoverlay.cpp" line="71"/>
+        <location filename="../timingoverlay.cpp" line="59"/>
         <source>8th</source>
         <translation>Achtste</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="61"/>
+        <location filename="../resultsoverlay.cpp" line="72"/>
+        <location filename="../timingoverlay.cpp" line="60"/>
         <source>9th</source>
         <translation>Negende</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="62"/>
+        <location filename="../resultsoverlay.cpp" line="73"/>
+        <location filename="../timingoverlay.cpp" line="61"/>
         <source>10th</source>
         <translation>Tiende</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="63"/>
+        <location filename="../resultsoverlay.cpp" line="74"/>
+        <location filename="../timingoverlay.cpp" line="62"/>
         <source>11th</source>
         <translation>Elfde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="64"/>
+        <location filename="../resultsoverlay.cpp" line="75"/>
+        <location filename="../timingoverlay.cpp" line="63"/>
         <source>12th</source>
         <translation>Twaalfde</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="185"/>
+        <location filename="../resultsoverlay.cpp" line="118"/>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="129"/>
+        <source>Lap %1/%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="145"/>
+        <source>Time Trial results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="145"/>
+        <source>Race results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="149"/>
+        <source>%1 · Laps: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="157"/>
+        <source>Pos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="159"/>
+        <source>Driver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="160"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="161"/>
+        <source>Gap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="162"/>
+        <source>Best lap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="245"/>
+        <source>Enter: Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="276"/>
+        <source>Finished %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resultsoverlay.cpp" line="284"/>
+        <source>Waiting for %1..</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../timingoverlay.cpp" line="174"/>
         <source> LAP:</source>
         <translation> RONDE:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="202"/>
+        <location filename="../timingoverlay.cpp" line="191"/>
         <source> POS:</source>
         <extracomment>Position/rank</extracomment>
         <translation> POSITIE:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="210"/>
+        <location filename="../timingoverlay.cpp" line="198"/>
         <source>LAP</source>
         <translation>RONDE</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="210"/>
+        <location filename="../timingoverlay.cpp" line="198"/>
         <source>LAPS</source>
         <translation>RONDEN</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="247"/>
+        <location filename="../timingoverlay.cpp" line="235"/>
         <source> KM/H</source>
         <translation> KM/U</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="260"/>
+        <location filename="../timingoverlay.cpp" line="248"/>
         <source>LAP:</source>
         <translation>RONDE:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="306"/>
+        <location filename="../timingoverlay.cpp" line="294"/>
         <source>L:</source>
         <extracomment>Last lap time</extracomment>
         <translation>L:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="326"/>
+        <location filename="../timingoverlay.cpp" line="314"/>
         <source>R:</source>
         <extracomment>Lap record time</extracomment>
         <translation>R:</translation>
     </message>
     <message>
-        <location filename="../timingoverlay.cpp" line="347"/>
+        <location filename="../timingoverlay.cpp" line="335"/>
         <source>TOT:</source>
         <extracomment>Total race time</extracomment>
         <translation>TOTAAL:</translation>
@@ -368,136 +455,146 @@ Onderbreken      : P</translation>
         <translation>Herstart om de nieuwe resolutie toe te passen.</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="79"/>
+        <location filename="../menu/settingsmenu.cpp" line="80"/>
         <source>Reset best positions?</source>
         <translation>Wil je de beste posities opnieuw instellen?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="90"/>
+        <location filename="../menu/settingsmenu.cpp" line="91"/>
         <source>Reset record times?</source>
         <translation>Wil je de records opnieuw instellen?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="102"/>
+        <location filename="../menu/settingsmenu.cpp" line="103"/>
         <source>Reset unlocked tracks?</source>
         <translation>Wil je de ontgrendelde circuits weer vergrendelen?</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="201"/>
+        <location filename="../menu/settingsmenu.cpp" line="212"/>
         <source>Game mode &gt;</source>
         <translation>Spelmodus &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="205"/>
+        <location filename="../menu/settingsmenu.cpp" line="216"/>
+        <source>Player names &gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/settingsmenu.cpp" line="220"/>
         <source>Sounds &gt;</source>
         <translation>Geluiden &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="209"/>
+        <location filename="../menu/settingsmenu.cpp" line="224"/>
         <source>GFX &gt;</source>
         <translation>Grafisch &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="213"/>
+        <location filename="../menu/settingsmenu.cpp" line="228"/>
         <source>Controls &gt;</source>
         <translation>Bediening &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="217"/>
+        <location filename="../menu/settingsmenu.cpp" line="232"/>
         <source>Reset &gt;</source>
         <translation>Herstellen &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="237"/>
+        <location filename="../menu/settingsmenu.cpp" line="253"/>
         <source>30 fps</source>
         <translation>30 fps</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="247"/>
+        <location filename="../menu/settingsmenu.cpp" line="263"/>
         <source>60 fps</source>
         <translation>60 fps</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="278"/>
+        <location filename="../menu/settingsmenu.cpp" line="294"/>
         <source>Two player race</source>
         <translation>Twee spelers</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="287"/>
+        <location filename="../menu/settingsmenu.cpp" line="303"/>
         <source>One player race</source>
         <translation>Eén speler</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="296"/>
+        <location filename="../menu/settingsmenu.cpp" line="312"/>
         <source>Time Trial</source>
         <translation>Race tegen de klok</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="305"/>
+        <location filename="../menu/settingsmenu.cpp" line="321"/>
         <source>Duel</source>
         <translation>Duel</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="329"/>
+        <location filename="../menu/settingsmenu.cpp" line="345"/>
         <source>Vertical</source>
         <translation>Verticaal</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="338"/>
+        <location filename="../menu/settingsmenu.cpp" line="354"/>
         <source>Horizontal</source>
         <translation>Horizontaal</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="359"/>
+        <location filename="../menu/settingsmenu.cpp" line="375"/>
         <source>Full screen resolution &gt;</source>
         <translation>Beeldvullende schermresolutie &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="363"/>
+        <location filename="../menu/settingsmenu.cpp" line="379"/>
         <source>Windowed resolution &gt;</source>
         <translation>Vensterschermresolutie &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="367"/>
+        <location filename="../menu/settingsmenu.cpp" line="383"/>
         <source>FPS &gt;</source>
         <translation>FPS &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="371"/>
+        <location filename="../menu/settingsmenu.cpp" line="387"/>
         <source>Split type &gt;</source>
         <translation>Soort splitsing &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="375"/>
+        <location filename="../menu/settingsmenu.cpp" line="391"/>
         <source>VSync &gt;</source>
         <translation>VSync &gt;</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="394"/>
+        <location filename="../menu/settingsmenu.cpp" line="410"/>
         <location filename="../menu/vsyncmenu.cpp" line="99"/>
         <source>Off</source>
         <translation>Uit</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="406"/>
+        <location filename="../menu/settingsmenu.cpp" line="422"/>
         <location filename="../menu/vsyncmenu.cpp" line="103"/>
         <source>On</source>
         <translation>Aan</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="436"/>
+        <location filename="../menu/settingsmenu.cpp" line="452"/>
         <source>Reset record times</source>
         <translation>Records herstellen</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="440"/>
+        <location filename="../menu/settingsmenu.cpp" line="456"/>
         <source>Reset best positions</source>
         <translation>Beste posities herstellen</translation>
     </message>
     <message>
-        <location filename="../menu/settingsmenu.cpp" line="444"/>
+        <location filename="../menu/settingsmenu.cpp" line="460"/>
         <source>Reset unlocked tracks</source>
         <translation>Ontgrendelde circuits vergrendelen</translation>
+    </message>
+    <message>
+        <location filename="../menu/settingsmenu.cpp" line="471"/>
+        <source>Player %1: %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../menu/trackselectionmenu.cpp" line="292"/>
@@ -535,6 +632,21 @@ Onderbreken      : P</translation>
         <location filename="../menu/vsyncmenu.cpp" line="75"/>
         <source>Restart to change VSync setting.</source>
         <translation>Herstart om de nieuwe VSync-instelling toe te passen.</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="137"/>
+        <source>Player %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/nameentrymenu.cpp" line="165"/>
+        <source>Player %1 name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../menu/nameentrymenu.cpp" line="181"/>
+        <source>Enter: Save   Esc: Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
