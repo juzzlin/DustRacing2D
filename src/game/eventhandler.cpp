@@ -143,6 +143,10 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
             MTFH::MenuManager::instance().popMenu();
         }
     }
+    else if (const auto activeMenu { MTFH::MenuManager::instance().activeMenu() }; activeMenu && activeMenu->wantsTextInput())
+    {
+        return handleMenuTextInputEvent(event);
+    }
     else
     {
         switch (event->key())
@@ -185,6 +189,43 @@ bool EventHandler::handleMenuKeyPressEvent(QKeyEvent * event)
             }
             break;
         default:
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool EventHandler::handleMenuTextInputEvent(QKeyEvent * event)
+{
+    auto && menuManager = MTFH::MenuManager::instance();
+    switch (event->key())
+    {
+    case Qt::Key_Left:
+        menuManager.left();
+        break;
+    case Qt::Key_Right:
+        menuManager.right();
+        break;
+    case Qt::Key_Backspace:
+        menuManager.activeMenu()->eraseCharacter();
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        emit soundRequested("menuClick");
+        menuManager.selectCurrentItem();
+        break;
+    case Qt::Key_Escape: // Q is a valid character here, so only Escape exits
+        emit soundRequested("menuClick");
+        menuManager.activeMenu()->exit();
+        break;
+    default:
+        if (const auto text { event->text() }; !text.isEmpty())
+        {
+            menuManager.activeMenu()->insertText(text.toStdWString());
+        }
+        else
+        {
             return false;
         }
     }

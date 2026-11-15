@@ -86,6 +86,8 @@ private:
     void disableCaptureMode();
 
     bool handleMenuKeyPressEvent(QKeyEvent * event);
+
+    bool handleMenuTextInputEvent(QKeyEvent * event);
     bool handleGameKeyPressEvent(QKeyEvent * event);
     bool handleGameKeyReleaseEvent(QKeyEvent * event);
 

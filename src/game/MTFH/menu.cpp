@@ -573,6 +573,19 @@ void Menu::setWrapAround(bool wrapAround)
     m_wrapAround = wrapAround;
 }
 
+bool Menu::wantsTextInput() const
+{
+    return false;
+}
+
+void Menu::insertText(const std::wstring &)
+{
+}
+
+void Menu::eraseCharacter()
+{
+}
+
 void Menu::exit()
 {
     MenuManager::instance().popMenu();

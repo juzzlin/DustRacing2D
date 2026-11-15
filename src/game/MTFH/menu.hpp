@@ -73,6 +73,15 @@ public:
     //! Select the current item.
     virtual void selectCurrentItem();
 
+    //! \return true if the menu takes typed text, e.g. for a text field. Default is false.
+    virtual bool wantsTextInput() const;
+
+    //! Called with typed text if wantsTextInput() returns true.
+    virtual void insertText(const std::wstring & text);
+
+    //! Called on backspace if wantsTextInput() returns true.
+    virtual void eraseCharacter();
+
     //! Steps time for animations etc. Re-implement in the menu items.
     virtual void stepTime(int msecs);
 
