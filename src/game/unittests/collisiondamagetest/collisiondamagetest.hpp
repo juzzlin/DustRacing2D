@@ -33,6 +33,12 @@ private slots:
     void testHardCrashIsDevastating();
 
     void testComputerPlayersTakeLessDamage();
+
+    void testLightDamageKeepsFullPower();
+
+    void testPowerDropsWithDamage();
+
+    void testBadlyDamagedCarIsClearlySlower();
 };
 
 #endif // COLLISIONDAMAGETEST_HPP

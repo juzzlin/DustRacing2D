@@ -16,6 +16,8 @@
 #include "collisiondamagetest.hpp"
 #include "../../collisiondamage.hpp"
 
+#include <cmath>
+
 void CollisionDamageTest::testScrapesCauseNoDamage()
 {
     QCOMPARE(CollisionDamage::damage(0.0f, true), 0.0f);
@@ -58,6 +60,36 @@ void CollisionDamageTest::testComputerPlayersTakeLessDamage()
 {
     QVERIFY(CollisionDamage::damage(10, false) < CollisionDamage::damage(10, true));
     QVERIFY(CollisionDamage::damage(10, false) > 0);
+}
+
+void CollisionDamageTest::testLightDamageKeepsFullPower()
+{
+    QCOMPARE(CollisionDamage::powerFactor(1.0f), 1.0f);
+    QCOMPARE(CollisionDamage::powerFactor(0.8f), 1.0f);
+}
+
+void CollisionDamageTest::testPowerDropsWithDamage()
+{
+    float previous = CollisionDamage::powerFactor(0.8f);
+    for (float level = 0.75f; level >= 0; level -= 0.05f)
+    {
+        const float factor = CollisionDamage::powerFactor(level);
+        QVERIFY(factor < previous);
+        previous = factor;
+    }
+
+    // Even a wreck can still crawl
+    QVERIFY(CollisionDamage::powerFactor(0) > 0);
+}
+
+void CollisionDamageTest::testBadlyDamagedCarIsClearlySlower()
+{
+    // Top speed scales with the cube root of the power
+    const auto topSpeed = [](float level) { return std::cbrt(CollisionDamage::powerFactor(level)); };
+
+    QVERIFY(topSpeed(0.5f) > 0.85f); // Half damaged is still competitive
+    QVERIFY(topSpeed(0.25f) < 0.7f); // Burning cars are clearly slower
+    QVERIFY(topSpeed(0.0f) < 0.5f);
 }
 
 QTEST_GUILESS_MAIN(CollisionDamageTest)

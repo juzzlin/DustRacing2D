@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 #include "collisiondamage.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace CollisionDamage {
@@ -27,6 +28,15 @@ float damage(float impulse, bool isHuman)
 
     const float scale = isHuman ? 0.5f : 0.25f;
     return scale * std::pow(impulse - minImpulse, 1.6f);
+}
+
+float powerFactor(float damageLevel)
+{
+    // Light damage doesn't matter, but below that the power drops smoothly towards the minimum
+    const float minFactor = 0.08f;
+    const float fullPowerLevel = 0.8f;
+    const float t = std::clamp(damageLevel / fullPowerLevel, 0.0f, 1.0f);
+    return minFactor + (1.0f - minFactor) * t * t * (3.0f - 2.0f * t);
 }
 
 } // namespace CollisionDamage

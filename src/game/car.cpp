@@ -15,6 +15,7 @@
 
 #include "car.hpp"
 #include "carbody.hpp"
+#include "collisiondamage.hpp"
 #include "carparticleeffectmanager.hpp"
 #include "carphysicscomponent.hpp"
 #include "carsoundeffectmanager.hpp"
@@ -623,7 +624,7 @@ void Car::resetDamage()
 
 float Car::damageFactor() const
 {
-    return 0.7f + (m_damageCapacity / m_initDamageCapacity) * 0.3f;
+    return CollisionDamage::powerFactor(damageLevel());
 }
 
 float Car::damageLevel() const

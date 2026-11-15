@@ -26,6 +26,11 @@ constexpr float minImpulse = 1.5f;
  *  \param impulse Length of the collision impulse. */
 float damage(float impulse, bool isHuman);
 
+/*! \return the factor of the engine power of a damaged car. Top speed scales with the cube root
+ *  of the power, so a badly damaged car needs to lose most of its power to get clearly slower.
+ *  \param damageLevel Remaining damage capacity from 0.0 (wrecked) to 1.0 (intact). */
+float powerFactor(float damageLevel);
+
 } // namespace CollisionDamage
 
 #endif // COLLISIONDAMAGE_HPP
