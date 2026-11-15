@@ -17,7 +17,6 @@
 #define PARTICLEFACTORY_HPP
 
 #include <MCParticle>
-#include <MCParticleRendererBase>
 
 #include <MCVector3d>
 
@@ -94,9 +93,6 @@ private:
 
     // Free lists (recycling) for different types of particles.
     mutable MCParticle::ParticleFreeList m_freeLists[NumParticleTypes];
-
-    // Renderers for different particle types.
-    MCParticleRendererPtr m_particleRenderers[NumParticleTypes];
 
     // Particles to delete.
     std::vector<std::unique_ptr<MCParticle>> m_delete;
