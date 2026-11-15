@@ -16,10 +16,9 @@
 #include "carphysicscomponent.hpp"
 
 #include "car.hpp"
+#include "collisiondamage.hpp"
 #include "difficultyprofile.hpp"
 #include "game.hpp"
-
-#include <cmath>
 
 CarPhysicsComponent::CarPhysicsComponent(Car & car)
   : m_car(car)
@@ -32,8 +31,9 @@ void CarPhysicsComponent::addImpulse(const MCVector3dF & impulse, bool isCollisi
 
     if (Game::instance().difficultyProfile().hasBodyDamage() && isCollision && !m_car.isDestroyed())
     {
-        // Light scrapes cause hardly any damage, but hard crashes are devastating.
-        const float damage = (m_car.isHuman() ? 0.5f : 0.25f) * std::pow(impulse.lengthFast(), 1.6f);
-        m_car.addDamage(damage);
+        if (const float damage = CollisionDamage::damage(impulse.length(), m_car.isHuman()); damage > 0)
+        {
+            m_car.addDamage(damage);
+        }
     }
 }

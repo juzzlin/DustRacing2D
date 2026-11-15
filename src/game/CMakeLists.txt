@@ -51,6 +51,7 @@ set(SRC
     carfactory.cpp
     carparticleeffectmanager.cpp
     carphysicscomponent.cpp
+    collisiondamage.cpp
     carsoundeffectmanager.cpp
     carstatusview.cpp
     checkeredflag.cpp
