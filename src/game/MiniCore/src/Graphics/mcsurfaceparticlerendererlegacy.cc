@@ -131,9 +131,8 @@ void MCSurfaceParticleRendererLegacy::setBatch(MCRenderLayer::ObjectBatch & batc
             }
             else if (particle->animationStyle() == MCParticle::AnimationStyle::FadeOutAndExpand)
             {
+                // radius() already expands the particle
                 m_colors[vertexIndex].setA(m_colors[vertexIndex].a() * particle->scale());
-                vertexX *= particle->scale();
-                vertexY *= particle->scale();
             }
             else if (particle->animationStyle() == MCParticle::AnimationStyle::Shrink)
             {
