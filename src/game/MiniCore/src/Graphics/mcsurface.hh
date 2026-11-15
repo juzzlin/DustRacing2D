@@ -67,8 +67,13 @@ public:
      *  \param handle Handle (or name) of the surface.
      *  \param width  Desired width of the surface when rendered 1:1.
      *  \param height Desired height of the surface when rendered 1:1.
-     *  \param texCoords Array including texture coordinates of the four vertices. */
-    MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4]);
+     *  \param texCoords Array including texture coordinates of the four vertices.
+     *  \param z0 Z-coordinate for vertex[0]. Enables tilted surfaces.
+     *  \param z1 Z-coordinate for vertex[1]. Enables tilted surfaces.
+     *  \param z2 Z-coordinate for vertex[2]. Enables tilted surfaces.
+     *  \param z3 Z-coordinate for vertex[3]. Enables tilted surfaces. */
+    MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4],
+              float z0 = 0, float z1 = 0, float z2 = 0, float z3 = 0);
 
     //! Destructor.
     virtual ~MCSurface();
@@ -84,6 +89,8 @@ private:
     DISABLE_COPY(MCSurface);
     DISABLE_ASSI(MCSurface);
     DISABLE_MOVE(MCSurface);
+
+    void initGeometry(const MCGLTexCoord texCoords[4], float z0, float z1, float z2, float z3);
 
     void initVBOs();
 

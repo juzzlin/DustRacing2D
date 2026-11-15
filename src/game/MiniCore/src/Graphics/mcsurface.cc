@@ -62,6 +62,31 @@ MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, 
 
     setHeight(height);
 
+    const MCGLTexCoord texCoords[4] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
+    initGeometry(texCoords, z0, z1, z2, z3);
+}
+
+MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z)
+  : MCSurface(handle, material, width, height, z, z, z, z)
+{
+}
+
+MCSurface::MCSurface(
+  std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4], float z0, float z1, float z2, float z3)
+  : MCGLObjectBase(handle)
+  , m_impl(std::make_unique<Impl>())
+{
+    setMaterial(material);
+
+    setWidth(width);
+
+    setHeight(height);
+
+    initGeometry(texCoords, z0, z1, z2, z3);
+}
+
+void MCSurface::initGeometry(const MCGLTexCoord texCoords[4], float z0, float z1, float z2, float z3)
+{
     setMinZ(std::min(std::min(z0, z1), std::min(z2, z3)));
 
     setMaxZ(std::max(std::max(z0, z1), std::max(z2, z3)));
@@ -103,45 +128,6 @@ MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, 
                  { n4.i(), n4.j(), n4.k() },
                  { n5.i(), n5.j(), n5.k() } });
 
-    setTexCoords({ { 0, 0 },
-                   { 1, 1 },
-                   { 0, 1 },
-                   { 0, 0 },
-                   { 1, 0 },
-                   { 1, 1 } });
-
-    setColors(ColorVector(NUM_VERTICES, MCGLColor()));
-
-    initVBOs();
-}
-
-MCSurface::MCSurface(std::string handle, MCGLMaterialPtr material, float width, float height, float z)
-  : MCSurface(handle, material, width, height, z, z, z, z)
-{
-}
-
-MCSurface::MCSurface(
-  std::string handle, MCGLMaterialPtr material, float width, float height, const MCGLTexCoord texCoords[4])
-  : MCGLObjectBase(handle)
-  , m_impl(std::make_unique<Impl>())
-{
-    setMaterial(material);
-
-    setWidth(width);
-
-    setHeight(height);
-
-    // Init vertice data for two triangles.
-    const GLfloat w2 = width / 2;
-    const GLfloat h2 = height / 2;
-
-    setVertices({ { -w2, -h2, 0 },
-                  { w2, h2, 0 },
-                  { -w2, h2, 0 },
-                  { -w2, -h2, 0 },
-                  { w2, -h2, 0 },
-                  { w2, h2, 0 } });
-
     setTexCoords({ texCoords[0],
                    texCoords[2],
                    texCoords[1],
@@ -149,9 +135,7 @@ MCSurface::MCSurface(
                    texCoords[3],
                    texCoords[2] });
 
-    setNormals(VertexVector(NUM_VERTICES, { 0, 0, 1 }));
-
-    setColors(ColorVector(NUM_VERTICES, { MCGLColor() }));
+    setColors(ColorVector(NUM_VERTICES, MCGLColor()));
 
     initVBOs();
 }
