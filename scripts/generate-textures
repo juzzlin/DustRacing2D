@@ -618,10 +618,10 @@ def draw_crowd_person(draw, rng, x, y, unit):
     """A spectator seen from above: shoulders in the color of their clothes and a head with hair or a hat."""
     size = rng.uniform(0.85, 1.15)
     shirt = muted(pick(rng, CROWD_CLOTHES))
-    shoulder_w, shoulder_h = 2.5 * unit * size, 1.9 * unit * size
-    head_r = 1.3 * unit * size
+    shoulder_w, shoulder_h = 3.5 * unit * size, 2.65 * unit * size
+    head_r = 1.8 * unit * size
 
-    draw.ellipse((x - shoulder_w + 0.6 * unit, y - shoulder_h + 0.6 * unit, x + shoulder_w + 0.6 * unit, y + shoulder_h + 0.6 * unit), fill=(0, 0, 0, 60))
+    draw.ellipse((x - shoulder_w + 0.8 * unit, y - shoulder_h + 0.8 * unit, x + shoulder_w + 0.8 * unit, y + shoulder_h + 0.8 * unit), fill=(0, 0, 0, 60))
     draw.ellipse((x - shoulder_w, y - shoulder_h, x + shoulder_w, y + shoulder_h), fill=lit(shirt, 0.85) + (255,))
     draw.ellipse((x - shoulder_w * 0.9, y - shoulder_h * 0.9, x + shoulder_w * 0.7, y + shoulder_h * 0.6), fill=shirt + (255,))
 
@@ -664,7 +664,7 @@ def grandstand(seed=20, pixels_per_unit=4, size_units=128):
     draw = ImageDraw.Draw(image, 'RGBA')
 
     wall, boards = 5 * unit, 6 * unit
-    rows = 16
+    rows = 12
     row_depth = (size - wall - boards) / rows
     stairs = [size * 0.32, size * 0.68]
     stair_w = 6 * unit
@@ -681,9 +681,9 @@ def grandstand(seed=20, pixels_per_unit=4, size_units=128):
         y_row = wall + (row + 0.5) * row_depth
         x = rng.uniform(0, 2) * unit
         while x < size:
-            if all(abs(x - stair) > stair_w / 2 + 2.0 * unit for stair in stairs) and rng.uniform() < 0.93:
-                draw_crowd_person(draw, rng, x, y_row + rng.normal(0, 0.6) * unit, unit)
-            x += rng.uniform(3.8, 5.0) * unit
+            if all(abs(x - stair) > stair_w / 2 + 3.0 * unit for stair in stairs) and rng.uniform() < 0.93:
+                draw_crowd_person(draw, rng, x, y_row + rng.normal(0, 0.8) * unit, unit)
+            x += rng.uniform(5.3, 7.0) * unit
 
     # Umbrellas and flags here and there
     for _ in range(5):
