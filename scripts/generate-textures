@@ -552,7 +552,9 @@ SHIRT_COLORS = [(185, 50, 45), (50, 80, 160), (220, 190, 60), (230, 228, 220), (
                 (210, 120, 50), (120, 70, 130), (100, 150, 190), (160, 160, 165), (110, 85, 65), (200, 150, 160)]
 HAIR_COLORS = [(40, 28, 20), (70, 45, 25), (20, 18, 16), (190, 160, 90), (150, 150, 145), (140, 70, 30)]
 SKIN_COLORS = [(235, 195, 160), (215, 165, 125), (170, 120, 85), (120, 80, 55)]
-SEAT_COLORS = [(110, 120, 135), (140, 132, 110)]
+SEAT_BLUE = (35, 85, 170)
+SEAT_RED = (190, 35, 40)
+BOARD_COLORS = [(200, 40, 40), (240, 200, 40), (30, 100, 180), (245, 245, 240), (40, 140, 70), (230, 120, 30)]
 
 
 def lit(color, light):
@@ -616,10 +618,18 @@ def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
     image = Image.new('RGBA', (size, size), (0, 0, 0, 255))
     draw = ImageDraw.Draw(image, 'RGBA')
 
-    # Concrete back wall and tiers. Each tier has a lit tread and a shadowed edge at its front.
+    # Back wall with advertising boards
     wall = GRANDSTAND_BACK_WALL * unit
     draw.rectangle((0, 0, size, wall), fill=(120, 118, 115))
-    draw.rectangle((0, 0, size, unit), fill=(160, 158, 152))
+    board_width = size / 4
+    for board in range(4):
+        x0 = board * board_width + 0.5 * unit
+        color = BOARD_COLORS[(board * 7 + 3) % len(BOARD_COLORS)]
+        draw.rectangle((x0, 1.5 * unit, x0 + board_width - unit, wall - 1.5 * unit), fill=color)
+        # A logo-like stripe on the board
+        stripe = BOARD_COLORS[(board * 7 + 5) % len(BOARD_COLORS)]
+        draw.rectangle((x0 + board_width * 0.2, wall / 2 - 0.8 * unit, x0 + board_width * 0.8, wall / 2 + 0.8 * unit), fill=stripe)
+    draw.rectangle((0, 0, size, 0.8 * unit), fill=(160, 158, 152))
     row_depth = (size - wall) / GRANDSTAND_ROWS
     seat_width = size / GRANDSTAND_SEATS
     concrete = periodic_noise(np.random.default_rng(seed), size, 2 * SUPERSAMPLING)
@@ -628,12 +638,16 @@ def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
         # Lower tiers are further from the light of the sky above the stand
         tone = 175 - row * 1.5
         draw.rectangle((0, top, size, top + row_depth), fill=(int(tone), int(tone * 0.98), int(tone * 0.94)))
-        draw.rectangle((0, top + row_depth - 1.2 * unit, size, top + row_depth), fill=(105, 103, 100))
+        draw.rectangle((0, top + row_depth - 1.0 * unit, size, top + row_depth), fill=(105, 103, 100))
+        # Plastic seats cover the tier: a backrest and a seat pan, lit from the upper left.
+        # One red row forms a stripe through the stand.
         for seat in range(GRANDSTAND_SEATS):
-            x0 = seat * seat_width + 0.5 * unit
-            color = SEAT_COLORS[(seat // 4 + row // 3) % len(SEAT_COLORS)]
-            draw.rectangle((x0, top + 1.2 * unit, x0 + seat_width - unit, top + 2.0 * unit), fill=lit(color, 0.8))
-            draw.rectangle((x0 + 0.3 * unit, top + 2.0 * unit, x0 + seat_width - 1.3 * unit, top + row_depth - 2.4 * unit), fill=color)
+            x0 = seat * seat_width + 0.3 * unit
+            x1 = x0 + seat_width - 0.6 * unit
+            color = SEAT_RED if row == 4 else SEAT_BLUE
+            draw.rectangle((x0, top + 0.5 * unit, x1, top + 2.5 * unit), fill=lit(color, 0.75))
+            draw.rectangle((x0 + 0.2 * unit, top + 2.5 * unit, x1 - 0.2 * unit, top + row_depth - 1.5 * unit), fill=color)
+            draw.rectangle((x0 + 0.2 * unit, top + 2.5 * unit, x0 + 1.0 * unit, top + row_depth - 1.5 * unit), fill=lit(color, 1.2))
 
     # Weathered concrete
     pixels = np.asarray(image).astype(np.float32)
