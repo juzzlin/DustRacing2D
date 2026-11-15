@@ -24,6 +24,7 @@
 #include <QString>
 
 #include <array>
+#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
@@ -42,6 +43,12 @@ public:
     //! Loads the names of the human players. Call when a new race starts.
     void loadPlayerNames();
 
+    //! Restarts the animations. Call when a new race starts.
+    void reset() override;
+
+    //! Advances the animations.
+    void stepTime(std::chrono::milliseconds timeStep);
+
     //! Renders the full screen results table.
     void render() override;
 
@@ -57,9 +64,14 @@ private:
         Center
     };
 
+    /*! \return Eased animation progress from 0.0 to 1.0 of an element that starts to animate at the given time.
+     *  \param elapsed Time since the animation of the whole view started. */
+    static float progress(std::chrono::milliseconds elapsed, std::chrono::milliseconds start);
+
     void renderPanel(float x, float y, float width, float height, const MCGLColor & color);
 
-    void renderText(const std::wstring & text, float x, float y, float size, const MCGLColor & color, Align align = Align::Left);
+    //! Text is rendered without shadow until it is fully opaque, because shadows can't fade.
+    void renderText(const std::wstring & text, float x, float y, float size, const MCGLColor & color, Align align = Align::Left, float alpha = 1.0f);
 
     void renderTitle(float centerX, float & y, float lineHeight);
 
@@ -67,7 +79,7 @@ private:
 
     void renderRows(const std::vector<Race::Result> & results, float x, float panelWidth, float & y, float lineHeight);
 
-    void renderAchievements(float centerX, float & y, float lineHeight);
+    void renderAchievements(float centerX, float & y, float lineHeight, size_t rowCount);
 
     std::wstring driverName(const Race::Result & result) const;
 
@@ -84,6 +96,12 @@ private:
     std::array<QString, 2> m_playerNames;
 
     std::vector<std::wstring> m_positionTexts;
+
+    //! Time since all human players finished and the results view started to animate.
+    std::chrono::milliseconds m_elapsed { 0 };
+
+    //! Time since each human player finished, for the waiting cards.
+    std::array<std::chrono::milliseconds, 2> m_cardElapsed {};
 };
 
 #endif // RESULTSOVERLAY_HPP

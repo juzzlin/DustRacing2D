@@ -271,6 +271,7 @@ void Scene::updateFrame(InputHandler & handler, std::chrono::milliseconds timeSt
 
             updateWorld(timeStep);
             updateRace(timeStep);
+            m_resultsOverlay->stepTime(timeStep);
 
             if (m_game.hasTwoHumanPlayers())
             {
@@ -587,6 +588,7 @@ void Scene::initializeRace()
     assert(m_activeTrack);
     m_race->initialize(m_activeTrack, static_cast<size_t>(m_game.lapCount()));
     m_resultsOverlay->loadPlayerNames();
+    m_resultsOverlay->reset();
 }
 
 std::shared_ptr<Track> Scene::activeTrack() const
