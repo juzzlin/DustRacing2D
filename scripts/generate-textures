@@ -617,10 +617,12 @@ def pick(rng, palette):
 # Size of a spectator relative to the cars. Rows and spacing scale with it.
 SPECTATOR_SCALE = 1.35
 
+SEAT_COLOR = muted((215, 85, 45), 0.2)
+
 CROWD_TROUSERS = [((60, 80, 120), 30), ((45, 45, 50), 25), ((160, 140, 100), 15), ((110, 110, 115), 15), ((90, 70, 55), 10), ((210, 205, 195), 5)]
 
 
-def draw_crowd_person(draw, rng, x, y, unit):
+def draw_crowd_person(draw, rng, x, ty, unit):
     """A seated spectator seen from above, facing the track at the bottom: thighs and knees in front,
     shoulders in the color of their clothes and a head with hair or a hat."""
     size = rng.uniform(0.9, 1.1) * SPECTATOR_SCALE
@@ -629,15 +631,12 @@ def draw_crowd_person(draw, rng, x, y, unit):
     shoulder_w, shoulder_h = 2.4 * unit * size, 1.6 * unit * size
     head_r = 1.15 * unit * size
 
-    # The torso is behind the center of the row, so that the knees fit in front of it
-    ty = y - 1.2 * unit * SPECTATOR_SCALE
-
     # Small shadow, because seated people are low
     draw.ellipse((x - shoulder_w + 0.5 * unit, ty - shoulder_h + 0.5 * unit, x + shoulder_w + 0.5 * unit, ty + 4.2 * unit * size + 0.5 * unit), fill=(0, 0, 0, 50))
 
     # Thighs reach forward from the seat, with the knees lit at their front ends
     for side in (-1, 1):
-        lx = x + side * 1.0 * unit * size + rng.normal(0, 0.1) * unit * SPECTATOR_SCALE
+        lx = x + side * 1.0 * unit * size
         half = 0.55 * unit * size
         top, bottom = ty + 0.3 * unit * SPECTATOR_SCALE, ty + 4.0 * unit * size
         draw.rounded_rectangle((lx - half, top, lx + half, bottom), radius=half, fill=trousers + (255,))
@@ -646,7 +645,8 @@ def draw_crowd_person(draw, rng, x, y, unit):
     draw.ellipse((x - shoulder_w, ty - shoulder_h, x + shoulder_w, ty + shoulder_h), fill=lit(shirt, 0.85) + (255,))
     draw.ellipse((x - shoulder_w * 0.9, ty - shoulder_h * 0.9, x + shoulder_w * 0.7, ty + shoulder_h * 0.6), fill=shirt + (255,))
 
-    hx, hy = x + rng.normal(0, 0.25) * unit * SPECTATOR_SCALE, ty + rng.normal(0, 0.25) * unit * SPECTATOR_SCALE
+    # People turn their heads a bit
+    hx, hy = x + rng.normal(0, 0.15) * unit * SPECTATOR_SCALE, ty + rng.normal(0, 0.15) * unit * SPECTATOR_SCALE
     if rng.uniform() < 0.12:
         # A sun hat with a wide brim
         hat = muted(pick(rng, CROWD_HATS))
@@ -697,14 +697,31 @@ def grandstand(seed=20, pixels_per_unit=4, size_units=128):
         draw.rectangle((0, top, size, top + row_depth), fill=(tone, int(tone * 0.96), int(tone * 0.9)))
         draw.rectangle((0, top + row_depth - 0.8 * unit, size, top + row_depth), fill=(95, 90, 82))
 
-    # Crowd, from the back to the front so that people in front overlap those behind
+    # Seats on a fixed pitch, centered in each block between the stairways, so that they line up from row to row
+    pitch = 6.2 * unit * SPECTATOR_SCALE
+    seat_width = pitch - 0.8 * unit
+    edges = [0] + [edge for stair in stairs for edge in (stair - stair_w / 2, stair + stair_w / 2)] + [size]
+    seat_columns = []
+    for start, end in zip(edges[0::2], edges[1::2]):
+        count = int((end - start - unit) // pitch)
+        first = (start + end) / 2 - (count - 1) * pitch / 2
+        seat_columns += [first + i * pitch for i in range(count)]
+
+    # Seats and the spectators on them, from the back to the front so that people in front overlap those behind
+    seat_back = 1.0 * unit
+    seat_depth = 5.4 * unit * SPECTATOR_SCALE
     for row in range(rows):
-        y_row = wall + (row + 0.5) * row_depth
-        x = rng.uniform(0, 2) * unit
-        while x < size:
-            if all(abs(x - stair) > stair_w / 2 + 3.0 * unit * SPECTATOR_SCALE for stair in stairs) and rng.uniform() < 0.93:
-                draw_crowd_person(draw, rng, x, y_row + rng.normal(0, 0.8) * unit, unit)
-            x += rng.uniform(5.3, 7.0) * unit * SPECTATOR_SCALE
+        top = wall + row * row_depth + 0.8 * unit
+        for x in seat_columns:
+            draw.rectangle((x - seat_width / 2, top, x + seat_width / 2, top + seat_back), fill=lit(SEAT_COLOR, 0.75))
+            draw.rounded_rectangle((x - seat_width / 2 + 0.3 * unit, top + seat_back, x + seat_width / 2 - 0.3 * unit, top + seat_back + seat_depth),
+                                   radius=unit, fill=SEAT_COLOR)
+            draw.rectangle((x - seat_width / 2 + 0.3 * unit, top + seat_back, x - seat_width / 2 + 1.0 * unit, top + seat_back + seat_depth - unit),
+                           fill=lit(SEAT_COLOR, 1.2))
+        for x in seat_columns:
+            # Some seats are empty
+            if rng.uniform() < 0.88:
+                draw_crowd_person(draw, rng, x + rng.normal(0, 0.2) * unit, top + seat_back + 1.2 * unit * SPECTATOR_SCALE, unit)
 
     # Umbrellas and flags here and there
     for _ in range(5):
