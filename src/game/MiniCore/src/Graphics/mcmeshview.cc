@@ -81,8 +81,12 @@ void MCMeshView::setShadowShaderProgram(MCGLShaderProgramPtr program)
 
 void MCMeshView::render(const MCVector3dF & location, float angle, MCCamera * camera)
 {
+    // The mesh may be shared by many views, so tint it only for the duration of this render.
+    const auto meshColor = m_mesh->color();
+    m_mesh->setColor(meshColor * color());
     m_mesh->setScale(scale());
     m_mesh->render(camera, location, angle);
+    m_mesh->setColor(meshColor);
 }
 
 void MCMeshView::renderShadow(const MCVector3dF & location, float angle, MCCamera * camera)

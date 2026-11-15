@@ -62,6 +62,10 @@ public:
     //! Constructor.
     MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr material);
 
+    /*! Replaces the geometry, e.g. to deform the mesh. The new geometry is uploaded when the mesh
+     *  is rendered the next time, because that is when the GL context is current. */
+    void setFaces(const FaceVector & faces);
+
     //! Destructor.
     virtual ~MCMesh() override = default;
 
@@ -77,6 +81,10 @@ public:
 
 private:
     void init(const FaceVector & faces);
+
+    void updatePendingFaces();
+
+    std::unique_ptr<FaceVector> m_pendingFaces;
 
     void initVBOs();
 };

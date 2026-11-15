@@ -18,6 +18,7 @@
 
 #include <MCCollisionEvent>
 #include <MCForceGenerator>
+#include <MCGLColor>
 #include <MCObject>
 #include <MCVector2d>
 
@@ -25,6 +26,7 @@
 #include <deque>
 #include <memory>
 
+class CarBody;
 class CarParticleEffectManager;
 class CarSoundEffectManager;
 class Gearbox;
@@ -101,7 +103,12 @@ public:
 
     static constexpr size_t damageSideCount = 4;
 
-    void addDamage(float damage, DamageSide side);
+    /*! Adds damage from a collision.
+     *  \param impulse Collision impulse in world coordinates. It dents the side that was hit. */
+    void addDamage(float damage, const MCVector3dF & impulse);
+
+    //! \return average color of the paint, e.g. for the minimap.
+    MCGLColor paintColor() const;
 
     //! \return the shape of the car, used e.g. to place debris.
     float length() const;
@@ -181,6 +188,9 @@ private:
     void updateDamageTint();
 
     void createDamageDecals(float maxZ);
+
+    //! \return the side that a collision impulse in the frame of the car hit.
+    static DamageSide hitSide(const MCVector2dF & localImpulse);
 
     //! Shows dents, scratches and broken windows on each side according to its damage.
     void updateDamageDecals();
@@ -277,6 +287,10 @@ private:
     std::array<size_t, damageSideCount> m_damageStage {};
 
     std::array<MCObjectPtr, damageSideCount> m_damageDecals;
+
+    std::unique_ptr<CarBody> m_body;
+
+    MCGLColor m_paintColor;
 
     std::unique_ptr<Gearbox> m_gearbox;
 

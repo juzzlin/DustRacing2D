@@ -41,6 +41,23 @@ MCMesh::MCMesh(std::string handle, const FaceVector & faces, MCGLMaterialPtr mat
     setMaterial(material);
 }
 
+void MCMesh::setFaces(const FaceVector & faces)
+{
+    m_pendingFaces = std::make_unique<FaceVector>(faces);
+}
+
+void MCMesh::updatePendingFaces()
+{
+    if (m_pendingFaces)
+    {
+        setVertices({});
+        setNormals({});
+        setTexCoords({});
+        init(*m_pendingFaces);
+        m_pendingFaces.reset();
+    }
+}
+
 void MCMesh::init(const FaceVector & faces)
 {
     float minX = std::numeric_limits<float>::max();
@@ -128,6 +145,8 @@ void MCMesh::initVBOs()
 
 void MCMesh::render(MCCamera * camera, MCVector3dFR pos, float angle)
 {
+    updatePendingFaces();
+
     bind();
 
     float x = pos.i();
@@ -151,6 +170,8 @@ void MCMesh::render(MCCamera * camera, MCVector3dFR pos, float angle)
 
 void MCMesh::renderShadow(MCCamera * camera, MCVector3dFR pos, float angle)
 {
+    updatePendingFaces();
+
     float x = pos.i();
     float y = pos.j();
 

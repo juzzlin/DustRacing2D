@@ -14,6 +14,7 @@
 // along with Dust Racing 2D. If not, see <http://www.gnu.org/licenses/>.
 
 #include "car.hpp"
+#include "carbody.hpp"
 #include "carparticleeffectmanager.hpp"
 #include "carphysicscomponent.hpp"
 #include "carsoundeffectmanager.hpp"
@@ -33,6 +34,7 @@
 #include <MCPhysicsComponent>
 #include <MCRectShape>
 #include <MCShape>
+#include <MCMeshView>
 #include <MCShapeView>
 #include <MCSurfaceManager>
 #include <MCSurfaceView>
@@ -90,6 +92,12 @@ Car::Car(Description & desc, MCSurfacePtr surface, size_t index, bool isHuman)
     initForceGenerators(desc);
 
     createChildObjects(surface->maxZ(), index);
+
+    // The body is a deformable mesh instead of the flat surface. Each car has its own view id,
+    // because the renderer batches objects by it and each body is deformed differently.
+    m_paintColor = surface->averageColor();
+    m_body = std::make_unique<CarBody>(surface->material(), surface->width(), surface->height(), surface->maxZ(), surface->shaderProgram(), surface->shadowShaderProgram());
+    shape()->setView(std::make_shared<MCMeshView>("carBody" + std::to_string(index), m_body->mesh()));
 }
 
 void Car::createChildObjects(float maxZ, size_t index)
@@ -397,9 +405,22 @@ const size_t maxDamageStage = damageStageLimits.size();
 
 } // namespace
 
-void Car::addDamage(float damage, DamageSide side)
+Car::DamageSide Car::hitSide(const MCVector2dF & localImpulse)
 {
-    m_sideDamage.at(static_cast<size_t>(side)) += damage;
+    // The impulse pushes the car away from the side that was hit. The car points to +x in its own frame.
+    if (std::fabs(localImpulse.i()) > std::fabs(localImpulse.j()))
+    {
+        return localImpulse.i() < 0 ? DamageSide::Front : DamageSide::Rear;
+    }
+
+    return localImpulse.j() < 0 ? DamageSide::Left : DamageSide::Right;
+}
+
+void Car::addDamage(float damage, const MCVector3dF & impulse)
+{
+    const auto localImpulse = MCMathUtil::rotatedVector(MCVector2dF { impulse }, -angle());
+    m_sideDamage.at(static_cast<size_t>(hitSide(localImpulse))) += damage;
+    m_body->deform(localImpulse, damage);
 
     if (m_damageCapacity > damage)
     {
@@ -428,7 +449,7 @@ void Car::createDamageDecals(float maxZ)
 {
     for (size_t side = 0; side < damageSideCount; side++)
     {
-        const auto surface = MCAssetManager::surfaceManager().surface(std::string { "carDamage" } + damageSideNames.at(side) + "1");
+        const auto surface = MCAssetManager::surfaceManager().surface(std::string { "carDamage" } + damageSideNames.at(side) + "2");
         const auto decal = std::make_shared<MCObject>(surface, "CarDamage");
         decal->setBypassCollisions(true);
         decal->setIsRenderable(false);
@@ -469,14 +490,21 @@ void Car::updateDamageDecals()
         }
 
         m_damageStage.at(side) = stage;
+
+        // The body itself dents, so the decals show only broken glass and lights from the second stage on
         auto && decal = m_damageDecals.at(side);
-        decal->setIsRenderable(stage > 0);
-        if (stage > 0)
+        decal->setIsRenderable(stage >= 2);
+        if (stage >= 2)
         {
             const auto surface = MCAssetManager::surfaceManager().surface(std::string { "carDamage" } + damageSideNames.at(side) + std::to_string(stage));
             std::static_pointer_cast<MCSurfaceView>(decal->shape()->view())->setSurface(surface);
         }
     }
+}
+
+MCGLColor Car::paintColor() const
+{
+    return m_paintColor;
 }
 
 float Car::length() const
@@ -505,6 +533,12 @@ void Car::updateDamageTint()
 
 void Car::destroy()
 {
+    // A wreck is crumpled all around
+    for (auto && direction : { MCVector2dF { -1, 0 }, MCVector2dF { 1, 0 }, MCVector2dF { 0, -1 }, MCVector2dF { 0, 1 } })
+    {
+        m_body->deform(direction, 15);
+    }
+
     setAcceleratorEnabled(false);
     setBrakeEnabled(false);
     steer(Steer::Neutral);
@@ -582,6 +616,7 @@ void Car::resetDamage()
     }
 
     m_sideDamage.fill(0);
+    m_body->reset();
     updateDamageTint();
     updateDamageDecals();
 }

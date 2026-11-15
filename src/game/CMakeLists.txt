@@ -48,6 +48,7 @@ set(SRC
     application.cpp
     bridge.cpp
     car.cpp
+    carbody.cpp
     carfactory.cpp
     carparticleeffectmanager.cpp
     carphysicscomponent.cpp
