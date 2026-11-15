@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <random>
 
 #include <MCAssetManager>
@@ -37,6 +38,7 @@
 #include <MCShape>
 #include <MCShapeView>
 #include <MCSurfaceManager>
+#include <MCTrigonom>
 
 #include "simple_logger.hpp"
 
@@ -640,13 +642,22 @@ void Race::moveCarOntoPreviousCheckPoint(Car & car)
     // Randomize the target location a bit, because otherwise multiple
     // stuck cars could be sent to the exactly same location and that would
     // result in really bad things.
-    const auto targetNode = m_track->trackData().route().get(m_statusHash[car.index()].prevTargetNodeIndex);
+    auto && route = m_track->trackData().route();
+    const auto & status = m_statusHash[car.index()];
+    const auto targetNode = route.get(status.prevTargetNodeIndex);
     const auto randRadius = static_cast<double>(TrackTile::width()) / 4;
-    std::mt19937 engine;
+    static std::mt19937 engine { std::random_device {}() };
     std::uniform_real_distribution<double> dist { -randRadius, randRadius };
     const float x = static_cast<float>(targetNode->location().x() + dist(engine));
     const float y = static_cast<float>(targetNode->location().y() + dist(engine));
     car.translate({ x, y });
+
+    // Face the next check point so that the car can continue right away.
+    const auto nextNode = route.get(status.currentTargetNodeIndex);
+    const float dx = static_cast<float>(nextNode->location().x()) - x;
+    const float dy = static_cast<float>(nextNode->location().y()) - y;
+    car.rotate(MCTrigonom::radToDeg(std::atan2(dy, dx)));
+
     car.physicsComponent().reset();
     juzzlin::L().debug() << "Moved stuck car " << car.index() << " to (" << x << ", " << y << ")";
 }
