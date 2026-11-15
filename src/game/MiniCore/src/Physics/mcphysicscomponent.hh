@@ -124,6 +124,13 @@ public:
     //! Get restitution.
     float restitution() const;
 
+    /*! Set the friction coefficient used when the object slides against another object.
+     *  The coefficients of the two objects are combined as their geometric mean, so
+     *  a frictionless object makes the contact frictionless. The default is 0.5. */
+    void setContactFriction(float contactFriction);
+
+    float contactFriction() const;
+
     /*! Set global friction. A friction coeff > 0 results in a
      *  implicit creation of a MCFrictionGenarator when the
      *  object is being added to the world.
@@ -225,6 +232,8 @@ private:
     float m_momentOfInertia;
 
     float m_restitution;
+
+    float m_contactFriction = 0.5f;
 
     float m_xyFriction;
 

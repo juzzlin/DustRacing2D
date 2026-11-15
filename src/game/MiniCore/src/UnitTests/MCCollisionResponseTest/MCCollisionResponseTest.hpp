@@ -33,6 +33,10 @@ private slots:
 
     void testFlatImpactStopsInelasticBody();
 
+    void testFrictionSlowsSlidingAlongWall();
+
+    void testFrictionNeverReversesSliding();
+
     void testOffCenterImpactSpinsTheBodyTheRightWay();
 
     void testOffCenterImpactLeavesSomeLinearMotion();

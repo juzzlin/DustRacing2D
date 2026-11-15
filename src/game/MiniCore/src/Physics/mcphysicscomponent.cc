@@ -20,6 +20,8 @@
 #include "mcphysicscomponent.hh"
 #include "mctrigonom.hh"
 
+#include <algorithm>
+
 MCPhysicsComponent::MCPhysicsComponent()
   : m_maxSpeed(1000.0f)
   , m_linearDamping(0.999f)
@@ -210,6 +212,16 @@ void MCPhysicsComponent::setRestitution(float newRestitution)
     newRestitution = newRestitution < 0.0f ? 0.0f : newRestitution;
     newRestitution = newRestitution > 1.0f ? 1.0f : newRestitution;
     m_restitution = newRestitution;
+}
+
+void MCPhysicsComponent::setContactFriction(float contactFriction)
+{
+    m_contactFriction = std::max(contactFriction, 0.0f);
+}
+
+float MCPhysicsComponent::contactFriction() const
+{
+    return m_contactFriction;
 }
 
 float MCPhysicsComponent::restitution() const

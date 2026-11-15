@@ -119,14 +119,45 @@ void MCCollisionResponseTest::testFlatImpactStopsInelasticBody()
     Scene scene;
     scene.addWall();
     auto && box = scene.addBox(8, 4, { 3, 7.1f }, 0, 1, 0);
+    box.physicsComponent().setContactFriction(0);
     box.physicsComponent().setVelocity({ 0.2f, -0.5f, 0 });
 
     scene.step(5);
 
-    // No bounce, no sinking into the wall, and no friction yet: the sideways motion stays.
+    // No bounce, no sinking into the wall, and without friction the sideways motion stays.
     QVERIFY(std::fabs(box.physicsComponent().velocity().j()) < 0.02f);
     QVERIFY(box.location().j() > 6.5f);
     QVERIFY(std::fabs(box.physicsComponent().velocity().i() - 0.2f) < 0.02f);
+}
+
+void MCCollisionResponseTest::testFrictionSlowsSlidingAlongWall()
+{
+    // Both the box and the wall have the default friction 0.5
+    Scene scene;
+    scene.addWall();
+    auto && box = scene.addBox(8, 4, { 3, 7.1f }, 0, 1, 0);
+    box.physicsComponent().setVelocity({ 0.6f, -0.5f, 0 });
+
+    scene.step(2);
+
+    // Coulomb friction: the sideways impulse is at most the friction times the normal impulse
+    const float normalImpulse = 0.5f;
+    const float vx = box.physicsComponent().velocity().i();
+    QVERIFY(vx < 0.55f);
+    QVERIFY(0.6f - vx <= box.physicsComponent().contactFriction() * normalImpulse + 0.01f);
+}
+
+void MCCollisionResponseTest::testFrictionNeverReversesSliding()
+{
+    // The friction impulse could stop much faster sliding, so this slow sliding just stops
+    Scene scene;
+    scene.addWall();
+    auto && box = scene.addBox(8, 4, { 3, 7.1f }, 0, 1, 0);
+    box.physicsComponent().setVelocity({ 0.1f, -0.5f, 0 });
+
+    scene.step(5);
+
+    QVERIFY(std::fabs(box.physicsComponent().velocity().i()) < 0.01f);
 }
 
 void MCCollisionResponseTest::testOffCenterImpactSpinsTheBodyTheRightWay()

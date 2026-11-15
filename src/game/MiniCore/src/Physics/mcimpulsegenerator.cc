@@ -23,6 +23,7 @@
 #include "mcworld.hh"
 
 #include <algorithm>
+#include <cmath>
 #include <unordered_map>
 
 namespace {
@@ -82,6 +83,13 @@ struct Constraint
 
     //! Accumulated impulse. Contacts can only push, so it stays positive.
     float impulse = 0;
+
+    float tangentMass = 0;
+
+    float friction = 0;
+
+    //! Accumulated friction impulse. Limited by the normal impulse.
+    float tangentImpulse = 0;
 };
 
 float cross(const MCVector2dF & a, const MCVector2dF & b)
@@ -114,6 +122,27 @@ float normalVelocity(const Constraint & constraint)
 void applyNormalImpulse(Constraint & constraint, float delta)
 {
     const MCVector2dF impulse = constraint.normal * delta;
+    applyImpulse(*constraint.a, constraint.ra, impulse);
+    applyImpulse(*constraint.b, constraint.rb, -impulse);
+}
+
+/*! Coulomb friction: stops the sliding of the contact point, but with an impulse that is at
+ *  most the friction coefficient times the normal impulse. So friction never reverses the motion. */
+void solveFriction(Constraint & constraint)
+{
+    if (constraint.friction <= 0 || constraint.tangentMass <= 0)
+    {
+        return;
+    }
+
+    const MCVector2dF tangent { -constraint.normal.j(), constraint.normal.i() };
+    const float velocity = (pointVelocity(*constraint.a, constraint.ra) - pointVelocity(*constraint.b, constraint.rb)).dot(tangent);
+    const float limit = constraint.friction * constraint.impulse;
+    const float newImpulse = std::clamp(constraint.tangentImpulse - velocity * constraint.tangentMass, -limit, limit);
+    const float delta = newImpulse - constraint.tangentImpulse;
+    constraint.tangentImpulse = newImpulse;
+
+    const MCVector2dF impulse = tangent * delta;
     applyImpulse(*constraint.a, constraint.ra, impulse);
     applyImpulse(*constraint.b, constraint.rb, -impulse);
 }
@@ -249,6 +278,7 @@ void MCImpulseGenerator::generateImpulses(std::vector<MCObject *> & objects, flo
             }
 
             const float restitution = std::min(object->physicsComponent().restitution(), other->physicsComponent().restitution());
+            const float friction = std::sqrt(object->physicsComponent().contactFriction() * other->physicsComponent().contactFriction());
             const int firstOfManifold = static_cast<int>(constraints.size());
             for (auto && contact : contacts)
             {
@@ -272,6 +302,13 @@ void MCImpulseGenerator::generateImpulses(std::vector<MCObject *> & objects, flo
                 }
                 constraint.normalMass = 1.0f / k;
 
+                const MCVector2dF tangent { -constraint.normal.j(), constraint.normal.i() };
+                const float rta = cross(constraint.ra, tangent);
+                const float rtb = cross(constraint.rb, tangent);
+                const float kt = constraint.a->invMass + constraint.b->invMass + constraint.a->invMomentOfInertia * rta * rta + constraint.b->invMomentOfInertia * rtb * rtb;
+                constraint.tangentMass = kt > 0 ? 1.0f / kt : 0;
+                constraint.friction = friction;
+
                 const float approachVelocity = (pointVelocity(*constraint.a, constraint.ra) - pointVelocity(*constraint.b, constraint.rb)).dot(constraint.normal);
                 if (approachVelocity < -restitutionThreshold)
                 {
@@ -285,6 +322,12 @@ void MCImpulseGenerator::generateImpulses(std::vector<MCObject *> & objects, flo
 
     for (int iteration = 0; iteration < VELOCITY_ITERATIONS; iteration++)
     {
+        // Friction first, because the normal impulses are more important and the last word wins
+        for (auto && constraint : constraints)
+        {
+            solveFriction(constraint);
+        }
+
         for (size_t i = 0; i < constraints.size(); i++)
         {
             auto && constraint = constraints.at(i);
