@@ -25,6 +25,7 @@ MCTextureFont::MCTextureFont(std::shared_ptr<MCSurface> surface)
     MCTextureGlyph::UV(0, 0),
     MCTextureGlyph::UV(1, 1))
   , m_glyphLookUp(256, m_default)
+  , m_hasLookUpGlyph(m_glyphLookUp.size(), false)
   , m_xDensity(1.0f)
   , m_yDensity(1.0f)
   , m_surface(surface)
@@ -36,6 +37,7 @@ void MCTextureFont::addGlyphMapping(wchar_t glyphId, MCTextureGlyph textureGlyph
     if (static_cast<size_t>(glyphId) < m_glyphLookUp.size())
     {
         m_glyphLookUp[static_cast<size_t>(glyphId)] = textureGlyph;
+        m_hasLookUpGlyph[static_cast<size_t>(glyphId)] = true;
     }
     else
     {
@@ -59,6 +61,16 @@ MCTextureGlyph & MCTextureFont::glyph(wchar_t glyphId)
     }
 
     return m_default;
+}
+
+bool MCTextureFont::hasGlyph(wchar_t glyphId) const
+{
+    if (static_cast<size_t>(glyphId) < m_hasLookUpGlyph.size())
+    {
+        return m_hasLookUpGlyph[static_cast<size_t>(glyphId)];
+    }
+
+    return m_glyphs.count(glyphId) > 0;
 }
 
 void MCTextureFont::setGlyphFallback(wchar_t glyph, wchar_t fallback)

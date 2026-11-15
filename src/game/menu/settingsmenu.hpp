@@ -18,7 +18,10 @@
 
 #include <MenuManager>
 
+#include <vector>
+
 #include "confirmationmenu.hpp"
+#include "nameentrymenu.hpp"
 #include "surfacemenu.hpp"
 
 //! The settings menu.
@@ -43,6 +46,8 @@ private:
 
     void populateResetMenu(int width, int height);
 
+    void populatePlayerNamesMenu(int width, int height);
+
     ConfirmationMenuPtr m_confirmationMenu;
 
     MTFH::MenuPtr m_fpsMenu;
@@ -64,6 +69,12 @@ private:
     MTFH::MenuPtr m_vsyncMenu;
 
     MTFH::MenuPtr m_keyConfigMenu;
+
+    MTFH::MenuPtr m_playerNamesMenu;
+
+    NameEntryMenuPtr m_nameEntryMenu;
+
+    std::vector<MTFH::MenuItemPtr> m_playerNameItems;
 };
 
 #endif // SETTINGSMENU_HPP

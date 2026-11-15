@@ -20,6 +20,7 @@
 #include "database.hpp"
 #include "game.hpp"
 #include "keyconfigmenu.hpp"
+#include "nameentrymenu.hpp"
 #include "renderer.hpp"
 #include "resolutionmenu.hpp"
 #include "settings.hpp"
@@ -135,6 +136,10 @@ static const auto GFX_MENU_ID = "gfxMenu";
 
 static const auto KEY_CONFIG_MENU_ID = "keyConfigMenu";
 
+static const auto NAME_ENTRY_MENU_ID = "nameEntryMenu";
+
+static const auto PLAYER_NAMES_MENU_ID = "playerNamesMenu";
+
 static const auto RESET_MENU_ID = "resetMenu";
 
 static const auto SFX_MENU_ID = "sfxMenu";
@@ -158,6 +163,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
   , m_splitTypeMenu(std::make_shared<SurfaceMenu>("settingsBack", SPLIT_TYPE_MENU_ID, width, height, Menu::Style::VerticalList))
   , m_vsyncMenu(std::make_shared<VSyncMenu>(m_confirmationMenu, VSYNC_MENU_ID, width, height))
   , m_keyConfigMenu(std::make_shared<KeyConfigMenu>(KEY_CONFIG_MENU_ID, width, height))
+  , m_playerNamesMenu(std::make_shared<SurfaceMenu>("settingsBack", PLAYER_NAMES_MENU_ID, width, height, Menu::Style::VerticalList))
+  , m_nameEntryMenu(std::make_shared<NameEntryMenu>(NAME_ENTRY_MENU_ID, width, height))
 {
     populate(width, height);
 
@@ -168,6 +175,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     populateGfxMenu(width, height);
 
     populateResetMenu(width, height);
+
+    populatePlayerNamesMenu(width, height);
 
     populateSfxMenu(width, height);
 
@@ -181,6 +190,8 @@ SettingsMenu::SettingsMenu(std::string id, int width, int height)
     MenuManager::instance().addMenu(m_gameModeMenu);
     MenuManager::instance().addMenu(m_gfxMenu);
     MenuManager::instance().addMenu(m_keyConfigMenu);
+    MenuManager::instance().addMenu(m_nameEntryMenu);
+    MenuManager::instance().addMenu(m_playerNamesMenu);
     MenuManager::instance().addMenu(m_resetMenu);
     MenuManager::instance().addMenu(m_sfxMenu);
     MenuManager::instance().addMenu(m_splitTypeMenu);
@@ -202,6 +213,10 @@ void SettingsMenu::populate(int width, int height)
     gameMode->setView(std::make_shared<TextMenuItemView>(textSize, *gameMode));
     gameMode->setMenuOpenAction(GAME_MODE_MENU_ID);
 
+    const auto playerNames = std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Player names >").toUpper().toStdWString());
+    playerNames->setView(std::make_shared<TextMenuItemView>(textSize, *playerNames));
+    playerNames->setMenuOpenAction(PLAYER_NAMES_MENU_ID);
+
     const auto sfx = std::make_shared<MenuItem>(width, itemHeight, QObject::tr("Sounds >").toUpper().toStdWString());
     sfx->setView(std::make_shared<TextMenuItemView>(textSize, *sfx));
     sfx->setMenuOpenAction(SFX_MENU_ID);
@@ -222,6 +237,7 @@ void SettingsMenu::populate(int width, int height)
     addItem(configureKeys);
     addItem(sfx);
     addItem(gfx);
+    addItem(playerNames);
     addItem(gameMode);
 }
 
@@ -448,4 +464,43 @@ void SettingsMenu::populateResetMenu(int width, int height)
     m_resetMenu->addItem(resetRecordTimes);
     m_resetMenu->addItem(resetBestPositions);
     m_resetMenu->addItem(resetUnlockedTracks);
+}
+
+static std::wstring playerNameItemText(size_t player, QString name)
+{
+    return QObject::tr("Player %1: %2").arg(player + 1).arg(name).toUpper().toStdWString();
+}
+
+void SettingsMenu::populatePlayerNamesMenu(int width, int height)
+{
+    const int itemHeight { height / ITEM_HEIGHT_DIV };
+    const int textSize { ITEM_TEXT_SIZE };
+
+    using MTFH::MenuItem;
+    using MTFH::MenuManager;
+
+    const size_t playerCount { 2 };
+    for (size_t player = 0; player < playerCount; player++)
+    {
+        const auto item = std::make_shared<MenuItem>(width, itemHeight, playerNameItemText(player, Settings::instance().loadPlayerName(player)));
+        item->setView(std::make_shared<TextMenuItemView>(textSize, *item));
+        item->setAction(
+          [this, player]() {
+              m_nameEntryMenu->setPlayer(player);
+              MenuManager::instance().pushMenu(NAME_ENTRY_MENU_ID);
+          });
+        m_playerNameItems.push_back(item);
+    }
+
+    m_nameEntryMenu->setSavedCallback(
+      [this](size_t player, QString name) {
+          juzzlin::L().info() << "Name of player " << player + 1 << " set to " << name.toStdString();
+          m_playerNameItems.at(player)->setText(playerNameItemText(player, name));
+      });
+
+    // Items are listed bottom-up
+    for (auto item = m_playerNameItems.rbegin(); item != m_playerNameItems.rend(); item++)
+    {
+        m_playerNamesMenu->addItem(*item);
+    }
 }

@@ -61,6 +61,8 @@ public:
 
     const std::wstring & text() const;
 
+    void setText(const std::wstring & text);
+
     void setView(MenuItemViewPtr view);
 
     MenuItemViewPtr view();

@@ -114,6 +114,7 @@ set(SRC
     menu/keyconfigmenu.cpp
     menu/lapcountmenu.cpp
     menu/mainmenu.cpp
+    menu/nameentrymenu.cpp
     menu/resolutionmenu.cpp
     menu/settingsmenu.cpp
     menu/surfacemenu.cpp

@@ -243,6 +243,11 @@ const std::wstring & MenuItem::text() const
     return m_text;
 }
 
+void MenuItem::setText(const std::wstring & text)
+{
+    m_text = text;
+}
+
 void MenuItem::stepTime(int msecs)
 {
     if (m_view)

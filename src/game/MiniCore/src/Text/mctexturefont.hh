@@ -46,6 +46,9 @@ public:
      *  the whole texture is returned if not found. */
     MCTextureGlyph & glyph(wchar_t glyph);
 
+    //! \return true if the given glyph or a fallback for it has been added.
+    bool hasGlyph(wchar_t glyph) const;
+
     /*! Set a fallback glyph for the given glyph. Must be call AFTER
      *  all other glyphs are added. */
     void setGlyphFallback(wchar_t glyph, wchar_t fallback);
@@ -73,6 +76,8 @@ private:
 
     using GlyphLookUp = std::vector<MCTextureGlyph>;
     GlyphLookUp m_glyphLookUp;
+
+    std::vector<bool> m_hasLookUpGlyph;
 
     float m_xDensity;
 
