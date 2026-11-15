@@ -18,6 +18,7 @@
 
 #include <MCVector2d>
 
+#include "car.hpp"
 #include "particlefactory.hpp"
 
 class Car;
@@ -33,6 +34,9 @@ public:
     void update();
 
     void collision(size_t typeId, const MCVector3dF & contactPoint);
+
+    //! Throws glass and parts off the given side when its damage reaches a new stage.
+    void doDebris(Car::DamageSide side, size_t stage);
 
 private:
     void doDamageSmoke();

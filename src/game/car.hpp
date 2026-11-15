@@ -21,6 +21,7 @@
 #include <MCObject>
 #include <MCVector2d>
 
+#include <array>
 #include <deque>
 #include <memory>
 
@@ -89,7 +90,23 @@ public:
     //! Get cached speed.
     float absSpeed() const;
 
-    void addDamage(float damage);
+    //! Side of the car that was hit.
+    enum class DamageSide
+    {
+        Front,
+        Rear,
+        Left,
+        Right
+    };
+
+    static constexpr size_t damageSideCount = 4;
+
+    void addDamage(float damage, DamageSide side);
+
+    //! \return the shape of the car, used e.g. to place debris.
+    float length() const;
+
+    float width() const;
 
     //! \reimp
     virtual void collisionEvent(MCCollisionEvent & event) override;
@@ -162,6 +179,11 @@ private:
     void destroy();
 
     void updateDamageTint();
+
+    void createDamageDecals(float maxZ);
+
+    //! Shows dents, scratches and broken windows on each side according to its damage.
+    void updateDamageDecals();
 
     void createTires();
 
@@ -248,6 +270,13 @@ private:
     bool m_hadHardCrash;
 
     bool m_isDestroyed = false;
+
+    //! Damage taken by each side. Only affects the looks, not the capacity of the car.
+    std::array<float, damageSideCount> m_sideDamage {};
+
+    std::array<size_t, damageSideCount> m_damageStage {};
+
+    std::array<MCObjectPtr, damageSideCount> m_damageDecals;
 
     std::unique_ptr<Gearbox> m_gearbox;
 

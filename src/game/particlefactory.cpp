@@ -77,6 +77,27 @@ void ParticleFactory::preCreateParticles()
 
     preCreateSurfaceParticles(100, "LEAF", Leaf, MCAssetManager::surfaceManager().surface("leaf"), false, true);
 
+    preCreateSurfaceParticles(300, "GLASS", GlassShard, MCAssetManager::surfaceManager().surface("debrisGlass"), true, true);
+
+    preCreateSurfaceParticles(200, "CARPART", CarPart, MCAssetManager::surfaceManager().surface("debrisPart"), true, true);
+
+    // Debris lands on the ground and rests there instead of dying
+    for (auto type : { GlassShard, CarPart })
+    {
+        for (auto && particle : m_freeLists[type])
+        {
+            particle->setCustomDeathCondition([](MCParticle & self) {
+                if (self.location().k() <= 0.5f)
+                {
+                    self.physicsComponent().setVelocity({ 0, 0, 0 });
+                    self.physicsComponent().setAngularVelocity(0);
+                    self.physicsComponent().setAcceleration({ 0, 0, 0 });
+                }
+                return false;
+            });
+        }
+    }
+
     preCreateSurfaceParticles(500, "MUD", Mud, MCAssetManager::surfaceManager().surface("mud"), false, true);
 
     preCreateSurfaceParticles(500, "ONSKID", OnTrackSkidMark, MCAssetManager::surfaceManager().surface("skid"), true);
@@ -123,6 +144,11 @@ void ParticleFactory::doParticle(
 
     case Leaf:
         doLeaf(location, initialVelocity);
+        break;
+
+    case GlassShard:
+    case CarPart:
+        doDebris(type, location, initialVelocity);
         break;
 
     default:
@@ -248,6 +274,32 @@ void ParticleFactory::doSparkle(MCVector3dFR location, MCVector3dFR velocity) co
         sparkle->physicsComponent().setVelocity(velocity * (0.75f + 0.25f * MCRandom::getValue()) + MCVector3dF(0, 0, 4.0f));
         sparkle->physicsComponent().setAcceleration(MCWorld::instance().gravity() * 0.5f);
         sparkle->addToWorld();
+    }
+}
+
+void ParticleFactory::doDebris(ParticleType type, MCVector3dFR location, MCVector3dFR velocity) const
+{
+    if (const auto debris = newSurfaceParticle(type))
+    {
+        const bool isGlass = type == GlassShard;
+        debris->init(location, isGlass ? 1.2f + MCRandom::getValue() : 1.5f + 2.0f * MCRandom::getValue(), 8000);
+        debris->setAnimationStyle(MCParticle::AnimationStyle::FadeOut);
+        debris->rotate(MCRandom::getValue() * 360);
+        if (isGlass)
+        {
+            debris->setColor(MCGLColor { 0.85f, 0.92f, 1.0f, 0.9f });
+        }
+        else
+        {
+            // Dark plastic and bare metal
+            const float shade = 0.15f + 0.4f * MCRandom::getValue();
+            debris->setColor(MCGLColor { shade, shade, shade * 1.05f, 1.0f });
+        }
+        debris->physicsComponent().setVelocity(velocity + MCVector3dF(0, 0, 1.5f));
+        debris->physicsComponent().setAngularVelocity((MCRandom::getValue() - 0.5f) * 20.0f);
+        debris->physicsComponent().setMomentOfInertia(1.0f);
+        debris->physicsComponent().setAcceleration(MCVector3dF(0, 0, -2.5f));
+        debris->addToWorld();
     }
 }
 

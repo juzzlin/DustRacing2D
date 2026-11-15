@@ -726,6 +726,195 @@ def grandstand(seed=20, pixels_per_unit=4, size_units=128):
     image = image.resize((size // SUPERSAMPLING, size // SUPERSAMPLING), Image.LANCZOS)
     return image.convert('RGB')
 
+# Car damage overlays. The car sprites share their silhouette: front to the right, left side at the top.
+CAR_DAMAGE_SIDES = ['Front', 'Rear', 'Left', 'Right']
+BARE_METAL = (175, 172, 168)
+
+
+def car_masks(supersampling):
+    """Body, window and headlight masks of the car sprites, scaled up for drawing."""
+    image = Image.open(IMAGE_PATH + 'carRed.png').convert('RGBA')
+    size = (image.size[0] * supersampling, image.size[1] * supersampling)
+    pixels = np.asarray(image).astype(np.int32).repeat(supersampling, axis=0).repeat(supersampling, axis=1)
+    body = pixels[..., 3] > 128
+    windows = body & (pixels[..., 1] > 200) & (pixels[..., 0] < 90) & (pixels[..., 2] < 90)
+    x = (np.mgrid[0:size[1], 0:size[0]][1] + 0.5) / size[0]
+    headlights = body & (pixels[..., :3].min(axis=-1) > 200) & (x > 0.7)
+    return body, windows, headlights, size
+
+
+def side_windows(side, windows, x, y):
+    """The windows that belong to a side: the windshield to the front, the rear window to the rear
+    and the side windows to the sides."""
+    middle = (y > 0.25) & (y < 0.75)
+    return windows & {
+        'Front': middle & (x > 0.45),
+        'Rear': middle & (x < 0.45),
+        'Left': y < 0.25,
+        'Right': y > 0.75,
+    }[side]
+
+
+def side_region(side, x, y):
+    """Weight of each pixel (x and y relative from 0 to 1) belonging to a side of the car."""
+    ramps = {
+        'Front': np.clip((x - 0.62) / 0.15, 0, 1),
+        'Rear': np.clip((0.38 - x) / 0.15, 0, 1),
+        'Left': np.clip((0.42 - y) / 0.15, 0, 1),
+        'Right': np.clip((y - 0.58) / 0.15, 0, 1),
+    }
+    return ramps[side]
+
+
+def side_point(side, rng):
+    """A random impact point on a side, relative from 0 to 1."""
+    along = rng.uniform(0.25, 0.75)
+    return {
+        'Front': (rng.uniform(0.86, 0.95), along),
+        'Rear': (rng.uniform(0.05, 0.14), along),
+        'Left': (rng.uniform(0.25, 0.75), rng.uniform(0.08, 0.2)),
+        'Right': (rng.uniform(0.25, 0.75), rng.uniform(0.8, 0.92)),
+    }[side]
+
+
+def draw_dent(layer, cx, cy, radius, strength):
+    """A dent lit from the upper left: dark on its upper left inner side and light on the lower right."""
+    h, w = layer.shape[:2]
+    y, x = np.mgrid[0:h, 0:w]
+    dx, dy = (x - cx) / radius, (y - cy) / (radius * 0.8)
+    r = np.hypot(dx, dy)
+    inside = np.clip(1 - r, 0, 1)
+    # Slope of the hollow facing the light gets light, the other side shadow
+    facing = (dx + dy) / np.maximum(r, 1e-3) * np.sin(np.clip(r, 0, 1) * math.pi)
+    shade = np.where(facing > 0, 1.0, 0.0)
+    alpha = inside ** 0.7 * strength * (0.35 + 0.45 * np.abs(facing))
+    color = shade[..., None] * np.array([235, 232, 225]) + (1 - shade[..., None]) * np.array([25, 22, 20])
+    over = alpha[..., None]
+    layer[..., :3] = layer[..., :3] * (1 - over) + color * over
+    layer[..., 3] = np.maximum(layer[..., 3], alpha * 255)
+
+
+def draw_scratches(draw, rng, side, w, h, count, width):
+    for _ in range(count):
+        px, py = side_point(side, rng)
+        x0, y0 = px * w, py * h
+        angle = rng.normal(0, 0.25) + (0 if side in ('Left', 'Right') else math.pi / 2)
+        length = rng.uniform(0.08, 0.2) * w
+        points = [(x0 + math.cos(angle) * length * t + rng.normal(0, width * 0.3), y0 + math.sin(angle) * length * t) for t in np.linspace(-0.5, 0.5, 6)]
+        draw.line(points, fill=BARE_METAL + (200,), width=width)
+
+
+def draw_cracks(draw, rng, cx, cy, radius, width, density):
+    """A web of cracks radiating from an impact point."""
+    spokes = int(6 + 6 * density)
+    for i in range(spokes):
+        angle = i * 2 * math.pi / spokes + rng.normal(0, 0.2)
+        points = [(cx, cy)]
+        length = radius * rng.uniform(0.6, 1.0)
+        for t in np.linspace(0.2, 1.0, 5):
+            jitter = rng.normal(0, 0.12)
+            points.append((cx + math.cos(angle + jitter) * length * t, cy + math.sin(angle + jitter) * length * t))
+        draw.line(points, fill=(240, 245, 250, 230), width=width)
+    for ring in range(int(1 + 2 * density)):
+        r = radius * (0.3 + 0.3 * ring) * rng.uniform(0.8, 1.1)
+        start = rng.uniform(0, 360)
+        draw.arc((cx - r, cy - r * 0.8, cx + r, cy + r * 0.8), start, start + rng.uniform(120, 300), fill=(240, 245, 250, 200), width=width)
+
+
+def car_damage(side, stage, seed=30, supersampling=4):
+    """Transparent overlay with the damage of one side of a car at the given stage (1 to 3)."""
+    rng = np.random.default_rng(seed + CAR_DAMAGE_SIDES.index(side) * 10 + stage)
+    body, windows, headlights, size = car_masks(supersampling)
+    w, h = size
+    yy, xx = (np.mgrid[0:h, 0:w] + 0.5) / np.array([h, w])[:, None, None]
+    region = side_region(side, xx, yy)
+    paint = body & ~windows & ~headlights
+
+    # Dents and crumples
+    layer = np.zeros((h, w, 4))
+    dents = {1: 2, 2: 4, 3: 7}[stage]
+    for _ in range(dents):
+        px, py = side_point(side, rng)
+        draw_dent(layer, px * w, py * h, rng.uniform(0.05, 0.08 + 0.03 * stage) * w, rng.uniform(0.5, 0.8) + 0.1 * stage)
+    if stage == 3 and side in ('Front', 'Rear'):
+        # Crumpled metal: folds across the nose or the tail
+        for i in range(6):
+            px = 0.8 + 0.035 * i if side == 'Front' else 0.2 - 0.035 * i
+            draw_dent(layer, px * w, rng.uniform(0.3, 0.7) * h, 0.06 * w, 0.9)
+
+    image = Image.fromarray(layer.clip(0, 255).astype(np.uint8), 'RGBA')
+    draw = ImageDraw.Draw(image, 'RGBA')
+    draw_scratches(draw, rng, side, w, h, {1: 3, 2: 6, 3: 10}[stage], supersampling)
+
+    # Broken lights and a missing bumper at the front and the rear
+    if stage == 3 and side == 'Front':
+        draw.rectangle((0.965 * w, 0.2 * h, w, 0.8 * h), fill=(45, 45, 48, 255))
+    if stage == 3 and side == 'Rear':
+        draw.rectangle((0, 0.15 * h, 0.03 * w, 0.85 * h), fill=(45, 45, 48, 255))
+        for ly in (0.15, 0.85):
+            draw.ellipse((0.01 * w, (ly - 0.08) * h, 0.07 * w, (ly + 0.08) * h), fill=(60, 25, 25, 235))
+    if stage == 3 and side in ('Left', 'Right'):
+        band = 0.12 if side == 'Left' else 0.88
+        draw.rectangle((0.3 * w, (band - 0.04) * h, 0.72 * w, (band + 0.04) * h), fill=BARE_METAL + (170,))
+
+    # Keep the damage on the paint and on this side of the car
+    pixels = np.asarray(image).astype(np.float32)
+    pixels[..., 3] *= paint * region
+
+    # Cracked and shattered windows of this side
+    if stage >= 2:
+        glass = Image.new('RGBA', size, (0, 0, 0, 0))
+        glass_draw = ImageDraw.Draw(glass, 'RGBA')
+        window_region = side_windows(side, windows, xx, yy)
+        if window_region.any():
+            ys, xs = np.nonzero(window_region)
+            cx, cy = xs.mean() + rng.normal(0, 2) * supersampling, ys.mean() + rng.normal(0, 2) * supersampling
+            radius = max(xs.max() - xs.min(), ys.max() - ys.min()) * 0.7
+            if stage == 3:
+                # Shattered safety glass turns milky
+                glass_draw.rectangle((0, 0, w, h), fill=(205, 215, 220, 150))
+            draw_cracks(glass_draw, rng, cx, cy, radius, supersampling, stage - 1)
+            glass_pixels = np.asarray(glass).astype(np.float32)
+            glass_pixels[..., 3] *= window_region
+            over = glass_pixels[..., 3:4] / 255
+            pixels[..., :3] = pixels[..., :3] * (1 - over) + glass_pixels[..., :3] * over
+            pixels[..., 3] = np.maximum(pixels[..., 3], glass_pixels[..., 3])
+
+    # Broken headlights: dark, cracked glass
+    if stage == 3 and side == 'Front':
+        lights = Image.new('RGBA', size, (40, 42, 46, 235))
+        draw_cracks(ImageDraw.Draw(lights, 'RGBA'), rng, 0.83 * w, 0.14 * h, 0.08 * w, supersampling, 0)
+        draw_cracks(ImageDraw.Draw(lights, 'RGBA'), rng, 0.83 * w, 0.86 * h, 0.08 * w, supersampling, 0)
+        light_pixels = np.asarray(lights).astype(np.float32)
+        light_pixels[..., 3] *= headlights
+        over = light_pixels[..., 3:4] / 255
+        pixels[..., :3] = pixels[..., :3] * (1 - over) + light_pixels[..., :3] * over
+        pixels[..., 3] = np.maximum(pixels[..., 3], light_pixels[..., 3])
+
+    image = Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
+    return image.resize((size[0] // supersampling, size[1] // supersampling), Image.LANCZOS)
+
+
+def debris(kind, seed, size=32):
+    """A piece of a broken car seen from above: a glass shard or a fragment of plastic or metal.
+    The particles tint the pieces, so they are drawn in light shades."""
+    rng = np.random.default_rng(seed)
+    s = size * SUPERSAMPLING
+    image = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    corners = 5 if kind == 'glass' else 7
+    radii = rng.uniform(0.25, 0.45, corners) * s
+    angles = np.sort(rng.uniform(0, 2 * math.pi, corners))
+    points = [(s / 2 + math.cos(a) * r, s / 2 + math.sin(a) * r) for a, r in zip(angles, radii)]
+    if kind == 'glass':
+        draw.polygon(points, fill=(215, 230, 240, 255))
+        draw.line(points + points[:1], fill=(250, 252, 255, 255), width=SUPERSAMPLING)
+    else:
+        draw.polygon(points, fill=(150, 150, 150, 255))
+        draw.line(points[:corners // 2 + 1], fill=(220, 220, 220, 255), width=SUPERSAMPLING * 2)
+    return finish_sprite(image, size)
+
+
 TEXTURES = {
     'tree': lambda: deciduous_canopy(seed=1),
     'tree2': lambda: deciduous_canopy(seed=2, base_hue=(80, 130, 40)),
@@ -742,6 +931,9 @@ TEXTURES = {
     'corner45LeftKerb': lambda: kerbed_mask('corner45Left.png', lambda x, y: (x < 160) & (y > 200)),
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
     'grandstand': lambda: grandstand(),
+    'debrisGlass': lambda: debris('glass', seed=40),
+    'debrisPart': lambda: debris('part', seed=41),
+    **{f'carDamage{side}{stage}': (lambda side=side, stage=stage: car_damage(side, stage)) for side in CAR_DAMAGE_SIDES for stage in (1, 2, 3)},
     'grandstandEditor': lambda: grandstand().resize((128, 128), Image.LANCZOS),
     # Menu backgrounds: a sweeping S-curve, a hairpin, a start/finish straight and a corner with a sand trap
     'mainMenuBack': lambda: menu_backdrop(10, [(-150, 760), (250, 650), (520, 420), (760, 300), (1060, 330), (1450, 120)]),

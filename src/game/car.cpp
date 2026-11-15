@@ -34,6 +34,8 @@
 #include <MCRectShape>
 #include <MCShape>
 #include <MCShapeView>
+#include <MCSurfaceManager>
+#include <MCSurfaceView>
 #include <MCSurface>
 #include <MCTrigonom>
 
@@ -101,6 +103,8 @@ void Car::createChildObjects(float maxZ, size_t index)
     numberPlate->shape()->view()->setHasShadow(false);
 
     createTires();
+
+    createDamageDecals(maxZ);
 
     m_leftBrakeGlowPos += MCVector3dF(0, 0, maxZ + 1.0f);
     m_rightBrakeGlowPos += MCVector3dF(0, 0, maxZ + 1.0f);
@@ -382,8 +386,21 @@ void Car::collisionEvent(MCCollisionEvent & event)
     event.accept();
 }
 
-void Car::addDamage(float damage)
+namespace {
+
+const std::array<const char *, Car::damageSideCount> damageSideNames { "Front", "Rear", "Left", "Right" };
+
+//! Damage of a side that shows as dents and scratches, cracked windows, and crumpled and shattered parts.
+const std::array<float, 3> damageStageLimits { 6, 18, 35 };
+
+const size_t maxDamageStage = damageStageLimits.size();
+
+} // namespace
+
+void Car::addDamage(float damage, DamageSide side)
 {
+    m_sideDamage.at(static_cast<size_t>(side)) += damage;
+
     if (m_damageCapacity > damage)
     {
         m_damageCapacity -= damage;
@@ -404,6 +421,72 @@ void Car::addDamage(float damage)
     }
 
     updateDamageTint();
+    updateDamageDecals();
+}
+
+void Car::createDamageDecals(float maxZ)
+{
+    for (size_t side = 0; side < damageSideCount; side++)
+    {
+        const auto surface = MCAssetManager::surfaceManager().surface(std::string { "carDamage" } + damageSideNames.at(side) + "1");
+        const auto decal = std::make_shared<MCObject>(surface, "CarDamage");
+        decal->setBypassCollisions(true);
+        decal->setIsRenderable(false);
+        decal->shape()->view()->setHasShadow(false);
+        // The unlit shader keeps the transparency of the damage as it is
+        decal->shape()->view()->setShaderProgram(Renderer::instance().program("menu"));
+        // On the body, but below the number plate
+        addChildObject(decal, MCVector3dF { 0, 0, maxZ + 0.5f });
+        m_damageDecals.at(side) = decal;
+    }
+}
+
+void Car::updateDamageDecals()
+{
+    for (size_t side = 0; side < damageSideCount; side++)
+    {
+        size_t stage = 0;
+        if (m_isDestroyed)
+        {
+            stage = maxDamageStage;
+        }
+        else
+        {
+            while (stage < maxDamageStage && m_sideDamage.at(side) >= damageStageLimits.at(stage))
+            {
+                stage++;
+            }
+        }
+
+        if (stage == m_damageStage.at(side))
+        {
+            continue;
+        }
+
+        if (stage > m_damageStage.at(side))
+        {
+            m_particleEffectManager->doDebris(static_cast<DamageSide>(side), stage);
+        }
+
+        m_damageStage.at(side) = stage;
+        auto && decal = m_damageDecals.at(side);
+        decal->setIsRenderable(stage > 0);
+        if (stage > 0)
+        {
+            const auto surface = MCAssetManager::surfaceManager().surface(std::string { "carDamage" } + damageSideNames.at(side) + std::to_string(stage));
+            std::static_pointer_cast<MCSurfaceView>(decal->shape()->view())->setSurface(surface);
+        }
+    }
+}
+
+float Car::length() const
+{
+    return std::dynamic_pointer_cast<MCRectShape>(shape())->width();
+}
+
+float Car::width() const
+{
+    return std::dynamic_pointer_cast<MCRectShape>(shape())->height();
 }
 
 void Car::updateDamageTint()
@@ -414,8 +497,8 @@ void Car::updateDamageTint()
     }
     else
     {
-        // Dents and scratches darken the paint gradually.
-        const float shade = 0.55f + 0.45f * damageLevel();
+        // Dirt and wear darken the paint a bit. The damage decals show the actual damage.
+        const float shade = 0.75f + 0.25f * damageLevel();
         shape()->view()->setColor(MCGLColor { shade, shade, shade });
     }
 }
@@ -498,7 +581,9 @@ void Car::resetDamage()
         }
     }
 
+    m_sideDamage.fill(0);
     updateDamageTint();
+    updateDamageDecals();
 }
 
 float Car::damageFactor() const

@@ -18,6 +18,7 @@
 
 #include <MCCollisionEvent>
 #include <MCPhysicsComponent>
+#include <MCMathUtil>
 #include <MCRandom>
 #include <cmath>
 
@@ -41,6 +42,41 @@ void CarParticleEffectManager::update()
     doOffTrackAnimations();
 
     doDamageSmoke();
+}
+
+void CarParticleEffectManager::doDebris(Car::DamageSide side, size_t stage)
+{
+    // Offset of the side from the center of the car in the frame of the car
+    MCVector2dF offset;
+    switch (side)
+    {
+    case Car::DamageSide::Front:
+        offset = { m_car.length() / 2, 0 };
+        break;
+    case Car::DamageSide::Rear:
+        offset = { -m_car.length() / 2, 0 };
+        break;
+    case Car::DamageSide::Left:
+        offset = { 0, m_car.width() / 2 };
+        break;
+    case Car::DamageSide::Right:
+        offset = { 0, -m_car.width() / 2 };
+        break;
+    }
+
+    const auto worldOffset = MCMathUtil::rotatedVector(offset, m_car.angle());
+    const MCVector3dF location { MCVector2dF { m_car.location() } + worldOffset, m_car.location().k() + 5 };
+    const MCVector3dF outwards { worldOffset.normalized() };
+    const auto carVelocity = m_car.physicsComponent().velocity() * 0.5f;
+
+    // Paint and plastic chips first, then glass when the windows break, and then bigger parts
+    const size_t parts = stage == 1 ? 2 : (stage == 2 ? 3 : 6);
+    const size_t glass = stage == 1 ? 0 : (stage == 2 ? 6 : 12);
+    for (size_t i = 0; i < parts + glass; i++)
+    {
+        const auto velocity = carVelocity + outwards * (0.5f + MCRandom::getValue()) + MCRandom::randomVector3d() * 0.5f;
+        ParticleFactory::instance().doParticle(i < parts ? ParticleFactory::CarPart : ParticleFactory::GlassShard, location, velocity);
+    }
 }
 
 float CarParticleEffectManager::calculateSkidAngle(float distance, double dx, double dy)
