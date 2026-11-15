@@ -563,166 +563,141 @@ def menu_backdrop(seed, path, size=(1280, 960), road_width=190, trees=26, shrubs
     return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGB')
 
 
-# Grandstand layout in world units. Must match grandstand.cpp.
-GRANDSTAND_SIZE = 128
-GRANDSTAND_BACK_WALL = 8
-GRANDSTAND_ROWS = 9
-GRANDSTAND_SEATS = 16  # Per row, divisible by the 8 sections of grandstand.cpp
-
-# Probabilities of being seated, waving one arm or standing with both arms up in each crowd frame
-CROWD_POSES = [
-    (0.93, 0.07, 0.0),  # Calm
-    (0.93, 0.07, 0.0),  # Calm, different people moving
-    (0.45, 0.35, 0.20),  # Excited
-    (0.45, 0.35, 0.20),  # Excited, different people moving
-    (0.08, 0.27, 0.65),  # Cheering
-]
-
-def muted(color, amount=0.3, toward=(150, 140, 120)):
+def muted(color, amount=0.25, toward=(150, 140, 120)):
     """Blends a color towards a warm gray, so that it fits the earthy palette of the game."""
     return tuple(int(c * (1 - amount) + t * amount) for c, t in zip(color, toward))
-
-
-SHIRT_COLORS = [(185, 50, 45), (50, 80, 160), (220, 190, 60), (230, 228, 220), (40, 40, 45), (70, 130, 75),
-                (210, 120, 50), (120, 70, 130), (100, 150, 190), (160, 160, 165), (110, 85, 65), (200, 150, 160)]
-HAIR_COLORS = [(40, 28, 20), (70, 45, 25), (20, 18, 16), (190, 160, 90), (150, 150, 145), (140, 70, 30)]
-SKIN_COLORS = [(235, 195, 160), (215, 165, 125), (170, 120, 85), (120, 80, 55)]
-SHIRT_COLORS = [muted(color) for color in SHIRT_COLORS]
-SEAT_BLUE = (72, 98, 120)
-SEAT_RED = (150, 66, 50)
-BOARD_COLORS = [muted(color, 0.35) for color in [(200, 40, 40), (240, 200, 40), (30, 100, 180), (245, 245, 240), (40, 140, 70), (230, 120, 30)]]
 
 
 def lit(color, light):
     return tuple(int(np.clip(c * light, 0, 255)) for c in color)
 
 
-def draw_spectator(draw, rng, x, y, unit, pose, person):
-    """A spectator seen from above at (x, y), facing down in the image (towards the track).
-    person holds the colors that stay the same in every frame."""
-    shirt, hair, skin, cap, head_offset, build = person
-    standing = pose == 2
-    # Standing people are closer to the camera and lean forward a bit
-    scale = build * (1.15 if standing else 1.0)
-    y += 1.0 * unit if standing else 0
-    shoulder_w, shoulder_h = 4.3 * unit * scale, 2.8 * unit * scale
-    head_r = 2.1 * unit * scale
+# Clothes of a race crowd: lots of team orange and red, white and dark, some other colors. (color, weight)
+CROWD_CLOTHES = [((225, 110, 35), 18), ((200, 45, 40), 14), ((235, 232, 222), 16), ((45, 45, 50), 10),
+                 ((235, 200, 60), 6), ((55, 90, 165), 8), ((95, 150, 205), 5), ((70, 130, 75), 4),
+                 ((210, 150, 160), 4), ((160, 160, 160), 5), ((120, 85, 60), 4), ((150, 60, 130), 2)]
+CROWD_HAIR = [((40, 28, 20), 30), ((70, 45, 25), 25), ((20, 18, 16), 20), ((190, 160, 90), 10), ((150, 150, 145), 8), ((140, 70, 30), 7)]
+CROWD_HATS = [((235, 232, 222), 5), ((225, 110, 35), 4), ((200, 45, 40), 3), ((45, 45, 50), 2), ((55, 90, 165), 2)]
+UMBRELLA_COLORS = [(225, 110, 35), (55, 90, 165), (200, 45, 40), (235, 232, 222), (70, 130, 75)]
+BOARD_YELLOW = (225, 190, 45)
 
-    # Shadow on the seats and steps away from the light
-    shadow = 0.8 * unit * (1.6 if standing else 1.0)
-    draw.ellipse((x - shoulder_w + shadow, y - shoulder_h + shadow, x + shoulder_w + shadow, y + shoulder_h + shadow), fill=(0, 0, 0, 70))
 
-    def arm(direction_x, length):
-        # A raised arm is seen foreshortened: a sleeve and a forearm from the shoulder up and out
-        sx, sy = x + direction_x * shoulder_w * 0.8, y - shoulder_h * 0.2
-        mx, my = sx + direction_x * length * 0.35, sy - length * 0.45
-        ex, ey = sx + direction_x * length * 0.6, sy - length
-        draw.line((sx, sy, mx, my), fill=lit(shirt, 0.95) + (255,), width=int(2.0 * unit))
-        draw.line((mx, my, ex, ey), fill=skin + (255,), width=int(1.4 * unit))
-        hand = 1.05 * unit
-        draw.ellipse((ex - hand, ey - hand, ex + hand, ey + hand), fill=lit(skin, 1.1) + (255,))
+def pick(rng, palette):
+    colors, weights = zip(*palette)
+    return colors[rng.choice(len(colors), p=np.array(weights) / sum(weights))]
 
-    if pose == 1:
-        arm(1 if rng.uniform() < 0.5 else -1, rng.uniform(4.5, 5.5) * unit * build)
-    elif pose == 2:
-        arm(-1, rng.uniform(5.0, 6.0) * unit * build)
-        arm(1, rng.uniform(5.0, 6.0) * unit * build)
 
-    # Shoulders: lit from the upper left
-    draw.ellipse((x - shoulder_w, y - shoulder_h, x + shoulder_w, y + shoulder_h), fill=lit(shirt, 0.82) + (255,))
-    draw.ellipse((x - shoulder_w * 0.92, y - shoulder_h * 0.95, x + shoulder_w * 0.75, y + shoulder_h * 0.7), fill=lit(shirt, 0.95) + (255,))
+def draw_crowd_person(draw, rng, x, y, unit):
+    """A spectator seen from above: shoulders in the color of their clothes and a head with hair or a hat."""
+    size = rng.uniform(0.85, 1.15)
+    shirt = muted(pick(rng, CROWD_CLOTHES))
+    shoulder_w, shoulder_h = 2.5 * unit * size, 1.9 * unit * size
+    head_r = 1.3 * unit * size
 
-    # Head, turned a bit in some frames
-    # Seen from above, hair covers most of the head and only the face peeks out towards the track
-    hx, hy = x + head_offset[0] * unit, y + head_offset[1] * unit
+    draw.ellipse((x - shoulder_w + 0.6 * unit, y - shoulder_h + 0.6 * unit, x + shoulder_w + 0.6 * unit, y + shoulder_h + 0.6 * unit), fill=(0, 0, 0, 60))
+    draw.ellipse((x - shoulder_w, y - shoulder_h, x + shoulder_w, y + shoulder_h), fill=lit(shirt, 0.85) + (255,))
+    draw.ellipse((x - shoulder_w * 0.9, y - shoulder_h * 0.9, x + shoulder_w * 0.7, y + shoulder_h * 0.6), fill=shirt + (255,))
+
+    hx, hy = x + rng.normal(0, 0.3) * unit, y + rng.normal(0, 0.3) * unit
+    if rng.uniform() < 0.12:
+        # A sun hat with a wide brim
+        hat = muted(pick(rng, CROWD_HATS))
+        brim = head_r * 1.6
+        draw.ellipse((hx - brim, hy - brim, hx + brim, hy + brim), fill=lit(hat, 0.9) + (255,))
+        draw.ellipse((hx - head_r * 0.9, hy - head_r * 0.9, hx + head_r * 0.7, hy + head_r * 0.7), fill=hat + (255,))
+        return
+    skin = (215, 170, 130)
+    hair = pick(rng, CROWD_HATS) if rng.uniform() < 0.2 else pick(rng, CROWD_HAIR)
     draw.ellipse((hx - head_r * 0.8, hy - head_r * 0.6, hx + head_r * 0.8, hy + head_r * 1.05), fill=skin + (255,))
-    top = cap if cap else hair
-    draw.ellipse((hx - head_r, hy - head_r, hx + head_r, hy + head_r * 0.75), fill=top + (255,))
-    if cap:
-        # The peak of the cap points towards the track
-        draw.ellipse((hx - head_r * 0.7, hy + head_r * 0.3, hx + head_r * 0.7, hy + head_r * 1.3), fill=lit(cap, 0.85) + (255,))
-    highlight = head_r * 0.45
-    draw.ellipse((hx - head_r * 0.35 - highlight, hy - head_r * 0.4 - highlight, hx - head_r * 0.35 + highlight, hy - head_r * 0.4 + highlight), fill=lit(top, 1.12) + (255,))
+    draw.ellipse((hx - head_r, hy - head_r, hx + head_r, hy + head_r * 0.75), fill=muted(hair, 0.15) + (255,))
 
 
-def grandstand_crowd(frame, seed=20, pixels_per_unit=4):
-    """A grandstand seen from above: a back wall and tiers of seats with spectators facing the track at
-    the bottom. The frames show the same people in different poses."""
+def draw_umbrella(draw, rng, x, y, unit):
+    """An open umbrella seen from above: colored panels lit from the upper left."""
+    r = rng.uniform(4.5, 6.0) * unit
+    color = muted(UMBRELLA_COLORS[rng.integers(len(UMBRELLA_COLORS))])
+    panels = 8
+    rotation = rng.uniform(0, 2 * math.pi)
+    draw.ellipse((x - r + unit, y - r + unit, x + r + unit, y + r + unit), fill=(0, 0, 0, 70))
+    for i in range(panels):
+        a0, a1 = rotation + i * 2 * math.pi / panels, rotation + (i + 1) * 2 * math.pi / panels
+        middle = (a0 + a1) / 2
+        light = 0.85 + 0.25 * math.cos(middle - math.radians(225))
+        tone = color if i % 2 == 0 else lit(color, 0.85)
+        draw.polygon([(x, y), (x + r * math.cos(a0), y + r * math.sin(a0)), (x + r * math.cos(a1), y + r * math.sin(a1))], fill=lit(tone, light) + (255,))
+
+
+def grandstand(seed=20, pixels_per_unit=4, size_units=128):
+    """A packed grandstand seen from above: a dense crowd on concrete tiers, split into blocks by steel
+    stairways, with a back wall and yellow advertising boards along the front towards the track at the bottom."""
     rng = np.random.default_rng(seed)
     unit = pixels_per_unit * SUPERSAMPLING
-    size = GRANDSTAND_SIZE * unit
+    size = size_units * unit
     image = Image.new('RGBA', (size, size), (0, 0, 0, 255))
     draw = ImageDraw.Draw(image, 'RGBA')
 
-    # Back wall with advertising boards
-    wall = GRANDSTAND_BACK_WALL * unit
-    draw.rectangle((0, 0, size, wall), fill=(124, 118, 106))
-    board_width = size / 4
-    for board in range(4):
-        x0 = board * board_width + 0.5 * unit
-        color = BOARD_COLORS[(board * 7 + 3) % len(BOARD_COLORS)]
-        draw.rectangle((x0, 1.5 * unit, x0 + board_width - unit, wall - 1.5 * unit), fill=color)
-        # A logo-like stripe on the board
-        stripe = BOARD_COLORS[(board * 7 + 5) % len(BOARD_COLORS)]
-        draw.rectangle((x0 + board_width * 0.2, wall / 2 - 0.8 * unit, x0 + board_width * 0.8, wall / 2 + 0.8 * unit), fill=stripe)
-    draw.rectangle((0, 0, size, 0.8 * unit), fill=(165, 158, 144))
-    row_depth = (size - wall) / GRANDSTAND_ROWS
-    seat_width = size / GRANDSTAND_SEATS
-    concrete = periodic_noise(np.random.default_rng(seed), size, 2 * SUPERSAMPLING)
-    for row in range(GRANDSTAND_ROWS):
+    wall, boards = 5 * unit, 6 * unit
+    rows = 16
+    row_depth = (size - wall - boards) / rows
+    stairs = [size * 0.32, size * 0.68]
+    stair_w = 6 * unit
+
+    # Concrete tiers, mostly hidden by the crowd
+    for row in range(rows):
         top = wall + row * row_depth
-        # Lower tiers are further from the light of the sky above the stand
-        tone = 172 - row * 1.5
-        draw.rectangle((0, top, size, top + row_depth), fill=(int(tone), int(tone * 0.96), int(tone * 0.88)))
-        draw.rectangle((0, top + row_depth - 1.0 * unit, size, top + row_depth), fill=(108, 102, 92))
-        # Plastic seats cover the tier: a backrest and a seat pan, lit from the upper left.
-        # One red row forms a stripe through the stand.
-        for seat in range(GRANDSTAND_SEATS):
-            x0 = seat * seat_width + 0.3 * unit
-            x1 = x0 + seat_width - 0.6 * unit
-            color = SEAT_RED if row == 4 else SEAT_BLUE
-            draw.rectangle((x0, top + 0.5 * unit, x1, top + 2.5 * unit), fill=lit(color, 0.75))
-            draw.rectangle((x0 + 0.2 * unit, top + 2.5 * unit, x1 - 0.2 * unit, top + row_depth - 1.5 * unit), fill=color)
-            draw.rectangle((x0 + 0.2 * unit, top + 2.5 * unit, x0 + 1.0 * unit, top + row_depth - 1.5 * unit), fill=lit(color, 1.2))
+        tone = 150 - row
+        draw.rectangle((0, top, size, top + row_depth), fill=(tone, int(tone * 0.96), int(tone * 0.9)))
+        draw.rectangle((0, top + row_depth - 0.8 * unit, size, top + row_depth), fill=(95, 90, 82))
 
-    # Weathered concrete
-    pixels = np.asarray(image).astype(np.float32)
-    pixels[..., :3] *= (1 + 0.04 * concrete)[..., None]
-    image = Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
-    draw = ImageDraw.Draw(image, 'RGBA')
+    # Crowd, from the back to the front so that people in front overlap those behind
+    for row in range(rows):
+        y_row = wall + (row + 0.5) * row_depth
+        x = rng.uniform(0, 2) * unit
+        while x < size:
+            if all(abs(x - stair) > stair_w / 2 + 2.0 * unit for stair in stairs) and rng.uniform() < 0.93:
+                draw_crowd_person(draw, rng, x, y_row + rng.normal(0, 0.6) * unit, unit)
+            x += rng.uniform(3.8, 5.0) * unit
 
-    # Spectators. Their colors come from the same random sequence in every frame and
-    # their poses from a sequence of the frame.
-    pose_rng = np.random.default_rng(seed * 100 + frame)
-    seated, waving, _ = CROWD_POSES[frame]
-    # Empty seats come in clusters
-    crowding = periodic_noise(np.random.default_rng(seed + 1), 64, 3)
-    for row in range(GRANDSTAND_ROWS):
-        for seat in range(GRANDSTAND_SEATS):
-            occupied = crowding[row * 5 % 64, seat * 4 % 64] + rng.normal(0, 0.5) > -0.9
-            person = (
-                SHIRT_COLORS[rng.integers(len(SHIRT_COLORS))],
-                HAIR_COLORS[rng.integers(len(HAIR_COLORS))],
-                SKIN_COLORS[rng.integers(len(SKIN_COLORS))],
-                SHIRT_COLORS[rng.integers(len(SHIRT_COLORS))] if rng.uniform() < 0.2 else None,
-                (0.0, 0.0),
-                rng.uniform(0.85, 1.1),
-            )
-            # People don't sit exactly in the middle of their seats
-            offset = rng.uniform(-1.0, 1.0, 2) * unit
-            roll = pose_rng.uniform()
-            pose = 0 if roll < seated else (1 if roll < seated + waving else 2)
-            # People turn their heads a bit
-            head_offset = tuple(pose_rng.normal(0, 0.3, 2))
-            person = person[:4] + (head_offset, person[5])
-            if occupied:
-                x = (seat + 0.5) * seat_width + offset[0]
-                y = wall + row * row_depth + row_depth * 0.5 + offset[1]
-                draw_spectator(draw, pose_rng, x, y, unit, pose, person)
+    # Umbrellas and flags here and there
+    for _ in range(5):
+        x = rng.uniform(0.05, 0.95) * size
+        if all(abs(x - stair) > stair_w / 2 + 6 * unit for stair in stairs):
+            draw_umbrella(draw, rng, x, wall + rng.uniform(0.1, 0.9) * (size - wall - boards), unit)
+    for _ in range(4):
+        x, y = rng.uniform(0.05, 0.95) * size, wall + rng.uniform(0.1, 0.9) * (size - wall - boards)
+        color = muted(UMBRELLA_COLORS[rng.integers(len(UMBRELLA_COLORS))])
+        draw.rectangle((x, y, x + 7 * unit, y + 4 * unit), fill=color + (255,))
+        draw.rectangle((x, y + 1.4 * unit, x + 7 * unit, y + 2.6 * unit), fill=lit(color, 0.7) + (255,))
+
+    # Steel stairways with railings between the blocks
+    for stair in stairs:
+        x0, x1 = stair - stair_w / 2, stair + stair_w / 2
+        draw.rectangle((x0, wall, x1, size - boards), fill=(140, 138, 132))
+        step = 2.0 * unit
+        y = wall
+        while y < size - boards:
+            draw.rectangle((x0, y, x1, y + 0.5 * unit), fill=(105, 103, 98))
+            y += step
+        for rail in (x0, x1):
+            draw.rectangle((rail - 0.5 * unit, wall, rail + 0.5 * unit, size - boards), fill=(70, 72, 75))
+
+    # Back wall and the advertising boards with a fence along the front
+    draw.rectangle((0, 0, size, wall), fill=(120, 115, 105))
+    draw.rectangle((0, 0, size, 0.8 * unit), fill=(160, 154, 142))
+    draw.rectangle((0, size - boards, size, size), fill=(60, 60, 62))
+    board = muted(BOARD_YELLOW, 0.15)
+    board_w = size / 4
+    for i in range(4):
+        x0 = i * board_w + 0.4 * unit
+        draw.rectangle((x0, size - boards + 1.5 * unit, x0 + board_w - 0.8 * unit, size - 0.5 * unit), fill=board)
+        # Lettering-like marks
+        for j in range(5):
+            lx = x0 + board_w * (0.15 + 0.14 * j)
+            draw.rectangle((lx, size - boards + 2.6 * unit, lx + board_w * 0.1, size - 1.6 * unit), fill=lit(board, 0.55))
+    draw.rectangle((0, size - boards, size, size - boards + 0.8 * unit), fill=(85, 87, 90))
 
     image = image.resize((size // SUPERSAMPLING, size // SUPERSAMPLING), Image.LANCZOS)
     return image.convert('RGB')
-
 
 TEXTURES = {
     'tree': lambda: deciduous_canopy(seed=1),
@@ -739,12 +714,8 @@ TEXTURES = {
     'cornerKerb': lambda: kerbed_mask('corner.png', lambda x, y: np.hypot(x - 512, y - 512) < 140),
     'corner45LeftKerb': lambda: kerbed_mask('corner45Left.png', lambda x, y: (x < 160) & (y > 200)),
     'corner45RightKerb': lambda: kerbed_mask('corner45Right.png', lambda x, y: (x > 352) & (y > 200)),
-    'grandstandCrowd0': lambda: grandstand_crowd(0),
-    'grandstandCrowd1': lambda: grandstand_crowd(1),
-    'grandstandCrowd2': lambda: grandstand_crowd(2),
-    'grandstandCrowd3': lambda: grandstand_crowd(3),
-    'grandstandCrowd4': lambda: grandstand_crowd(4),
-    'grandstandEditor': lambda: grandstand_crowd(0).resize((128, 128), Image.LANCZOS),
+    'grandstand': lambda: grandstand(),
+    'grandstandEditor': lambda: grandstand().resize((128, 128), Image.LANCZOS),
     # Menu backgrounds: a sweeping S-curve, a hairpin, a start/finish straight and a corner with a sand trap
     'mainMenuBack': lambda: menu_backdrop(10, [(-150, 760), (250, 650), (520, 420), (760, 300), (1060, 330), (1450, 120)]),
     'trackSelectionBack': lambda: menu_backdrop(11, [(-150, 250), (450, 260), (850, 330), (980, 520), (830, 720), (420, 760), (-150, 800)]),
@@ -755,8 +726,7 @@ TEXTURES = {
 
 
 # Large opaque images are saved as JPEG to keep them small
-JPEG_TEXTURES = {'mainMenuBack', 'trackSelectionBack', 'settingsBack', 'creditsHelpBack',
-                 'grandstandCrowd0', 'grandstandCrowd1', 'grandstandCrowd2', 'grandstandCrowd3', 'grandstandCrowd4'}
+JPEG_TEXTURES = {'mainMenuBack', 'trackSelectionBack', 'settingsBack', 'creditsHelpBack', 'grandstand'}
 
 
 def main(names):

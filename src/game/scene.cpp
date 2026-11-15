@@ -36,7 +36,6 @@
 #include "startlights.hpp"
 #include "startlightsoverlay.hpp"
 #include "statemachine.hpp"
-#include "grandstand.hpp"
 #include "timingoverlay.hpp"
 #include "track.hpp"
 #include "trackdata.hpp"
@@ -324,13 +323,6 @@ void Scene::updateWorld(std::chrono::milliseconds timeStep)
 void Scene::updateRace(std::chrono::milliseconds timeStep)
 {
     m_race->update(timeStep);
-
-    std::vector<MCVector2dF> carLocations;
-    for (auto && car : m_cars)
-    {
-        carLocations.push_back(MCVector2dF { car->location() });
-    }
-    Grandstand::setCarLocations(std::move(carLocations));
 
     emit listenerLocationChanged(m_cars.at(0)->location().i(), m_cars.at(0)->location().j());
 }

@@ -19,7 +19,6 @@
 #include "pit.hpp"
 #include "renderer.hpp"
 #include "trackobject.hpp"
-#include "grandstand.hpp"
 #include "tree.hpp"
 
 #include <MCAssetManager>
@@ -103,9 +102,16 @@ TrackObject * TrackObjectFactory::build(
     }
     else if (role == "grandstand")
     {
-        object = std::make_shared<Grandstand>();
-        object->setInitialLocation(location);
-        object->setInitialAngle(angle);
+        MCSurfaceObjectData data(role.toStdString());
+        data.setInitialLocation(location);
+        data.setInitialAngle(angle);
+        data.setXYFriction(1.0);
+        data.setRestitution(0.5);
+        data.setMass(100000);
+        data.setSurfaceId(role.toStdString());
+
+        object = m_objectFactory.build(data);
+        object->shape()->view()->object()->material()->setDiffuseCoeff(DEFAULT_DIFFUSE_COEFF);
     }
     else if (role == "plant")
     {
