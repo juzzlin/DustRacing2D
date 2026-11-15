@@ -18,11 +18,13 @@
 
 #include "overlaybase.hpp"
 
+#include <chrono>
 #include <memory>
+#include <vector>
 
 class MCSurface;
 
-//! Renders checkerflag on top of the game scene.
+//! Renders a checkered flag waving in the wind on top of the game scene.
 class CheckeredFlag : public OverlayBase
 {
 public:
@@ -34,6 +36,11 @@ public:
 
 private:
     std::shared_ptr<MCSurface> m_surface;
+
+    //! Vertical strips of the flag that are displaced and shaded separately to make it wave.
+    std::vector<std::shared_ptr<MCSurface>> m_strips;
+
+    std::chrono::steady_clock::time_point m_startTime;
 };
 
 #endif // CHECKEREDFLAG_HPP
