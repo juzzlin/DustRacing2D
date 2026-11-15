@@ -54,6 +54,7 @@ const MCGLColor headerColor { 0.6f, 0.6f, 0.6f };
 const MCGLColor finishedColor { 1.0f, 1.0f, 1.0f };
 const MCGLColor racingColor { 0.6f, 0.6f, 0.6f };
 const MCGLColor achievementColor { 1.0f, 1.0f, 0.0f };
+const MCGLColor fastestLapColor { 1.0f, 1.0f, 0.0f };
 
 //! Animation timeline of the results view.
 using std::chrono::milliseconds;
@@ -222,6 +223,16 @@ void ResultsOverlay::renderHeader(float x, float panelWidth, float & y, float li
 void ResultsOverlay::renderRows(const std::vector<Race::Result> & results, float x, float panelWidth, float & y, float lineHeight)
 {
     const float size { lineHeight * glyphScale };
+
+    int fastestLapTime { -1 };
+    for (auto && result : results)
+    {
+        if (result.bestLapTime >= 0 && (fastestLapTime < 0 || result.bestLapTime < fastestLapTime))
+        {
+            fastestLapTime = result.bestLapTime;
+        }
+    }
+
     for (size_t row = 0; row < results.size(); row++)
     {
         auto && result { results.at(row) };
@@ -243,7 +254,8 @@ void ResultsOverlay::renderRows(const std::vector<Race::Result> & results, float
         renderText(driverName(result), rowX + panelWidth * driverColumn, y, size, color, Align::Left, alpha);
         renderText(timeText(result), rowX + panelWidth * timeColumn, y, size, color, Align::Left, alpha);
         renderText(gapText(result, results.front()), rowX + panelWidth * gapColumn, y, size, color, Align::Left, alpha);
-        renderText(Timing::msecsToString(result.bestLapTime), rowX + panelWidth * bestLapColumn, y, size, color, Align::Left, alpha);
+        const bool isFastestLap { result.bestLapTime >= 0 && result.bestLapTime == fastestLapTime };
+        renderText(Timing::msecsToString(result.bestLapTime), rowX + panelWidth * bestLapColumn, y, size, isFastestLap ? fastestLapColor : color, Align::Left, alpha);
         y -= lineHeight;
     }
 }
