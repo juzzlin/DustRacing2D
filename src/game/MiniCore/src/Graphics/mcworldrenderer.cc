@@ -96,6 +96,8 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
 {
     m_defaultLayer.particleBatches()[camera].clear();
     auto & batchVector = m_defaultLayer.particleBatches()[camera];
+
+    std::vector<MCParticle *> visibleParticles;
     for (auto && particleIter : m_particleSet)
     {
         MCParticle & particle = *particleIter;
@@ -107,23 +109,7 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
 
         if (camera->isVisible(bbox))
         {
-            auto batchIter = std::find_if(batchVector.begin(), batchVector.end(), [&](const MCRenderLayer::ObjectBatch & batch) {
-                return batch.objectViewId == static_cast<int>(particle.typeId());
-            });
-            if (batchIter != batchVector.end())
-            {
-                auto & batch = (*batchIter);
-                batch.objects.push_back(&particle);
-                batch.priority = std::max(particle.location().k(), batch.priority);
-            }
-            else
-            {
-                MCRenderLayer::ObjectBatch batch;
-                batch.objectViewId = static_cast<int>(particle.typeId());
-                batch.objects.push_back(&particle);
-                batch.priority = particle.location().k();
-                batchVector.push_back(batch);
-            }
+            visibleParticles.push_back(&particle);
         }
         else
         {
@@ -148,9 +134,26 @@ void MCWorldRenderer::buildParticleBatches(MCCamera * camera)
         }
     }
 
-    std::stable_sort(batchVector.begin(), batchVector.end(), [](const MCRenderLayer::ObjectBatch & l, const MCRenderLayer::ObjectBatch & r) {
-        return l.priority < r.priority;
+    // Translucent particles of all types must be drawn back to front to blend correctly with each other,
+    // e.g. smoke over dust. Consecutive particles of the same type still form a batch.
+    std::stable_sort(visibleParticles.begin(), visibleParticles.end(), [](auto && l, auto && r) {
+        return l->location().k() < r->location().k() || (l->location().k() == r->location().k() && l->typeId() < r->typeId());
     });
+
+    const size_t maxBatchSize = m_surfaceParticleRenderer ? m_surfaceParticleRenderer->maxBatchSize() : visibleParticles.size();
+    for (auto && particle : visibleParticles)
+    {
+        const int typeId = static_cast<int>(particle->typeId());
+        if (batchVector.empty() || batchVector.back().objectViewId != typeId || batchVector.back().objects.size() >= maxBatchSize)
+        {
+            MCRenderLayer::ObjectBatch batch;
+            batch.objectViewId = typeId;
+            batch.priority = particle->location().k();
+            batchVector.push_back(batch);
+        }
+
+        batchVector.back().objects.push_back(particle);
+    }
 }
 
 void MCWorldRenderer::buildBatches(MCCamera * camera)
@@ -226,7 +229,9 @@ void MCWorldRenderer::renderParticles(MCCamera * camera)
         glDisable(GL_DEPTH_TEST);
     }
 
-    glDepthMask(m_defaultLayer.depthMaskEnabled());
+    // Particles are tested against the depth of the objects, but they don't write it. Otherwise the
+    // transparent parts of a particle would cut the particles that are drawn after it.
+    glDepthMask(GL_FALSE);
 
     renderParticleBatches(camera, m_defaultLayer);
 

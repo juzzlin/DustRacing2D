@@ -34,6 +34,9 @@ class MCParticleRendererBase : public MCGLObjectBase
 public:
     explicit MCParticleRendererBase(size_t maxBatchSize = 1024);
 
+    //! \return the maximum number of particles in a batch.
+    size_t maxBatchSize() const;
+
     virtual ~MCParticleRendererBase();
 
     /*! Populate the current batch.
@@ -63,9 +66,6 @@ protected:
 
     //! Get current batch size
     size_t batchSize() const;
-
-    //! Set max batch size
-    size_t maxBatchSize() const;
 
     bool useAlphaBlend() const;
 
