@@ -22,6 +22,7 @@
 #include "../common/userexception.hpp"
 
 #include "application.hpp"
+#include "denormals.hpp"
 #include "game.hpp"
 #include "settings.hpp"
 
@@ -65,6 +66,8 @@ static void preferXWaylandInFullScreen()
 
 int main(int argc, char ** argv)
 {
+    Denormals::disable();
+
     QGuiApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
     QGuiApplication::setApplicationName(Config::Game::QT_APPLICATION_NAME);
 #ifdef Q_OS_WIN32

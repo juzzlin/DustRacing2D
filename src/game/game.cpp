@@ -17,6 +17,7 @@
 #include "../common/userexception.hpp"
 
 #include "game.hpp"
+#include "denormals.hpp"
 
 #include "audioworker.hpp"
 #include "database.hpp"
@@ -418,6 +419,7 @@ void Game::init()
 {
     m_audioThread->start();
     m_audioWorker->moveToThread(m_audioThread);
+    QMetaObject::invokeMethod(m_audioWorker, [] { Denormals::disable(); });
     QMetaObject::invokeMethod(m_audioWorker, "init");
     QMetaObject::invokeMethod(m_audioWorker, "loadSounds");
 

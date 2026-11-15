@@ -57,6 +57,7 @@ set(SRC
     checkeredflag.cpp
     crashoverlay.cpp
     database.cpp
+    denormals.cpp
     difficultyprofile.cpp
     eventhandler.cpp
     fadeanimation.cpp

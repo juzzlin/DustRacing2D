@@ -3,3 +3,4 @@ add_subdirectory(gearboxtest)
 
 add_subdirectory(playernametest)
 add_subdirectory(collisiondamagetest)
+add_subdirectory(denormalstest)
