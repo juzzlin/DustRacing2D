@@ -31,7 +31,7 @@ StartlightsOverlay::StartlightsOverlay(Startlights & model)
 {
     m_startLightOff->material()->setAlphaBlend(true);
     m_startLightOffCorner->material()->setAlphaBlend(true);
-    m_startLightGlow->setColor(MCGLColor(1.5f, 0.25f, 0.25f, 0.4f));
+    m_startLightGlow->setColor(MCGLColor(1.5f, 0.25f, 0.25f, 0.8f));
 }
 
 void StartlightsOverlay::renderLights(int rows, int litRows, float glowScale, bool glowAlways) const

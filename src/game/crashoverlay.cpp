@@ -20,6 +20,8 @@
 #include <MCGLColor>
 #include <MCSurface>
 
+#include <algorithm>
+
 CrashOverlay::CrashOverlay()
   : m_surface(MCAssetManager::instance().surfaceManager().surface("crashOverlay"))
   , m_alpha(1.0f)
@@ -48,7 +50,7 @@ void CrashOverlay::render()
         const auto halfWidth = width() / 2;
         const auto halfHeight = height() / 2;
 
-        m_surface->setColor({ 1.0, 1.0, 1.0, m_alpha });
+        m_surface->setColor({ 1.0, 1.0, 1.0, std::min(1.0f, 2 * m_alpha) });
         m_surface->setSize(width(), height());
         m_surface->render(nullptr, MCVector3dF(halfWidth, halfHeight, 0), 0);
     }
