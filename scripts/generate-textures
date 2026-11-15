@@ -324,26 +324,53 @@ def kerbed_mask(source, inside_region, stripe_length=16):
     positions = np.arange(0, arc[-1], 0.5)
     midline = np.stack([np.interp(positions, arc, midline[:, i]) for i in range(2)], axis=-1)
 
+    def nearest(points):
+        result = np.empty(len(points), dtype=int)
+        for start in range(0, len(points), 4096):
+            chunk = points[start:start + 4096]
+            result[start:start + 4096] = np.argmin(((chunk[:, None, :] - midline[None, :, :]) ** 2).sum(axis=-1), axis=1)
+        return result
+
+    # End the kerb with flat ends perpendicular to it, where such a cut fits inside the tile.
+    # Otherwise a tile edge at an angle would cut the end of the kerb into a point.
+    centers = np.stack([px + 0.5, py + 0.5], axis=-1)
+    half_width = np.percentile(np.hypot(*(centers - midline[nearest(centers)]).T), 98) + 1
+    tangents = np.gradient(midline, axis=0)
+    tangents /= np.linalg.norm(tangents, axis=1)[:, None]
+    normals = np.stack([-tangents[:, 1], tangents[:, 0]], axis=-1)
+
+    def cut_fits(i):
+        ends = [midline[i] + side * half_width * normals[i] for side in (-1, 1)]
+        return all(1 <= ex < w - 1 and 1 <= ey < h - 1 and inside_region(ex, ey) for ex, ey in ends)
+
+    margin = 2
+    first = next(i for i in range(len(midline)) if cut_fits(i))
+    last = next(i for i in reversed(range(len(midline))) if cut_fits(i))
+    start_position, end_position = positions[first] + margin, positions[last] - margin
+
     # Fit a whole number of stripes, so that both ends of the kerb end cleanly
-    stripe_length = positions[-1] / max(1, round(positions[-1] / stripe_length))
+    length = end_position - start_position
+    stripe_length = length / max(1, round(length / stripe_length))
 
     # Stripes follow the arc length of the nearest point on the midline, so that their edges are
     # perpendicular to the kerb everywhere. Supersample them for anti-aliasing.
     offsets = (np.arange(4) + 0.5) / 4
     red = np.zeros(len(px))
+    coverage = np.zeros(len(px))
     for oy in offsets:
         for ox in offsets:
-            points = np.stack([px + ox, py + oy], axis=-1)
-            nearest = np.empty(len(points), dtype=int)
-            for start in range(0, len(points), 4096):
-                chunk = points[start:start + 4096]
-                nearest[start:start + 4096] = np.argmin(((chunk[:, None, :] - midline[None, :, :]) ** 2).sum(axis=-1), axis=1)
-            red += (np.floor(positions[nearest] / stripe_length) % 2 == 0)
+            position = positions[nearest(np.stack([px + ox, py + oy], axis=-1))]
+            inside = (position >= start_position) & (position <= end_position)
+            coverage += inside
+            red += inside & (np.floor((position - start_position) / stripe_length) % 2 == 0)
+    coverage = (coverage / 16)[:, None]
     red = (red / 16)[:, None]
-    kerb = red * KERB_RED + (1 - red) * KERB_WHITE
+    kerb = red * KERB_RED + (coverage - red) * KERB_WHITE
 
+    # Beyond the ends the original edge line stays
     f = green[py, px][:, None]
-    pixels[py, px, :3] = kerb * (1 - f) + np.array([0, 255, 0]) * f
+    kerbed = kerb * (1 - f) + np.array([0, 255, 0]) * f * coverage
+    pixels[py, px, :3] = kerbed + pixels[py, px, :3] * (1 - coverage)
     return Image.fromarray(pixels.clip(0, 255).astype(np.uint8), 'RGBA')
 
 
