@@ -26,7 +26,7 @@ Gearbox::Gear Gearbox::gear() const
     return m_gear;
 }
 
-void Gearbox::update(int speedInKmh)
+void Gearbox::update(int speedInKmh, bool movingBackward)
 {
     if (m_acceleratorEnabled && m_brakeEnabled)
     {
@@ -34,7 +34,13 @@ void Gearbox::update(int speedInKmh)
     }
     else if (m_brakeEnabled)
     {
-        if (speedInKmh == 0)
+        if (movingBackward)
+        {
+            // Already rolling backward: brake acts as reverse throttle, no need to stop first.
+            m_gear = Gear::Reverse;
+            m_stopCounter = 0;
+        }
+        else if (speedInKmh == 0)
         {
             if (m_gear != Gear::Stop && m_gear != Gear::Reverse)
             {

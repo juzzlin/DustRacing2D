@@ -35,7 +35,7 @@ public:
 
     void setBrakeEnabled(bool enable);
 
-    void update(int speedInKmh);
+    void update(int speedInKmh, bool movingBackward);
 
 private:
     Gear m_gear = Gear::Neutral;
