@@ -37,6 +37,9 @@ public:
 
     void loadResolution(int & hRes, int & vRes, bool & fullScreen);
 
+    //! Can be used before the application object is created.
+    static bool loadFullScreen();
+
     void saveKeyMapping(int player, InputHandler::Action action, int key);
 
     int loadKeyMapping(int player, InputHandler::Action action);

@@ -96,10 +96,21 @@ void Settings::loadResolution(int & hRes, int & vRes, bool & fullScreen)
     QSettings settings;
 
     settings.beginGroup(SETTINGS_GROUP_CONFIG);
-    fullScreen = settings.value("fullScreen", true).toBool();
+    fullScreen = loadFullScreen();
     hRes = settings.value("hRes", 0).toInt();
     vRes = settings.value("vRes", 0).toInt();
     settings.endGroup();
+}
+
+bool Settings::loadFullScreen()
+{
+    QSettings settings;
+
+    settings.beginGroup(SETTINGS_GROUP_CONFIG);
+    const bool fullScreen { settings.value("fullScreen", true).toBool() };
+    settings.endGroup();
+
+    return fullScreen;
 }
 
 void Settings::saveVSync(int value)

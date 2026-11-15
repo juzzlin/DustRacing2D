@@ -23,6 +23,7 @@
 
 #include "application.hpp"
 #include "game.hpp"
+#include "settings.hpp"
 
 #include "simple_logger.hpp"
 
@@ -47,6 +48,21 @@ static void initLogger()
     L().info() << "Compiled against Qt version " << QT_VERSION_STR;
 }
 
+//! Native Wayland full screen windows stay transparent at least on GNOME with NVIDIA,
+//! so prefer XWayland in full screen mode. Falls back to Wayland if XWayland isn't available.
+static void preferXWaylandInFullScreen()
+{
+    if (qEnvironmentVariableIsSet("QT_QPA_PLATFORM") || qgetenv("XDG_SESSION_TYPE") != "wayland")
+    {
+        return;
+    }
+
+    if (Settings::loadFullScreen())
+    {
+        qputenv("QT_QPA_PLATFORM", "xcb;wayland");
+    }
+}
+
 int main(int argc, char ** argv)
 {
     QGuiApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
@@ -54,6 +70,8 @@ int main(int argc, char ** argv)
 #ifdef Q_OS_WIN32
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
+
+    preferXWaylandInFullScreen();
 
     try
     {
