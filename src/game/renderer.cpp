@@ -161,7 +161,11 @@ void Renderer::loadFonts()
         const auto path = QString(Config::General::dataPath) + QDir::separator() + "fonts" + QDir::separator() + font;
         juzzlin::L().info() << "Loading font " << path.toStdString() << "..";
         QFile fontFile(path);
-        fontFile.open(QFile::ReadOnly);
+        if (!fontFile.open(QFile::ReadOnly))
+        {
+            juzzlin::L().warning() << "Failed to open font file " << path.toStdString() << "..";
+            continue;
+        }
         const int appFontId = QFontDatabase::addApplicationFontFromData(fontFile.readAll());
         if (appFontId < 0)
         {

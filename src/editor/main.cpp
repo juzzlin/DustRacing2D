@@ -24,17 +24,9 @@
 #include <cstdlib>
 #include <iostream>
 
-#if QT_VERSION < 0x50600
-extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
-#endif
-
 int main(int argc, char ** argv)
 {
-#if QT_VERSION >= 0x50600
-    qSetGlobalQHashSeed(0);
-#else
-    qt_qhash_seed.store(0);
-#endif
+    QHashSeed::setDeterministicGlobalSeed();
 
     QApplication::setOrganizationName(Config::General::QT_ORGANIZATION_NAME);
     QApplication::setApplicationName(Config::Editor::QT_APPLICATION_NAME);

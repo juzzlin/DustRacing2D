@@ -346,7 +346,14 @@ GLuint MCSurfaceManager::create2DTextureFromImage(const MCSurfaceMetaData & data
     // Flip if set active
     if (data.xAxisMirror || data.yAxisMirror)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+        Qt::Orientations orientations;
+        orientations.setFlag(Qt::Horizontal, data.xAxisMirror);
+        orientations.setFlag(Qt::Vertical, data.yAxisMirror);
+        textureImage = textureImage.flipped(orientations);
+#else
         textureImage = textureImage.mirrored(data.xAxisMirror, data.yAxisMirror);
+#endif
     }
 
     // Ensure alpha channel
