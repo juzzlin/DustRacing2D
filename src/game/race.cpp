@@ -311,6 +311,7 @@ void Race::update(std::chrono::milliseconds timeStep)
     for (auto && car : m_cars)
     {
         updateRouteProgress(*car);
+        updateWreck(*car, timeStep);
     }
 
     // Enable the checkered flag if leader has done at least 95% of the last lap.
@@ -365,8 +366,47 @@ void Race::update(std::chrono::milliseconds timeStep)
     m_timing->tick(timeStep);
 }
 
+void Race::updateWreck(Car & car, std::chrono::milliseconds timeStep)
+{
+    if (!car.isDestroyed())
+    {
+        return;
+    }
+
+    auto && wreckTime = m_statusHash[car.index()].wreckTime;
+    if (!wreckTime)
+    {
+        wreckTime = std::chrono::milliseconds { 0 };
+
+        if (car.isHuman())
+        {
+            emit messageRequested(QObject::tr("Car destroyed!"));
+        }
+
+        const QString destroyedSoundHandle { "menuBoom" };
+        emit locationChanged(destroyedSoundHandle, car.location().i(), car.location().j());
+        emit playRequested(destroyedSoundHandle, false);
+    }
+
+    *wreckTime += timeStep;
+
+    if (const std::chrono::milliseconds respawnDelay { 3000 }; *wreckTime >= respawnDelay)
+    {
+        moveCarOntoPreviousCheckPoint(car);
+        car.resetDamage();
+        wreckTime.reset();
+        m_stuckHash[car.index()] = StuckTileCounter(nullptr, 0);
+    }
+}
+
 void Race::pitStop(Car & car)
 {
+    // A wreck sliding into the pit can't be repaired.
+    if (car.isDestroyed())
+    {
+        return;
+    }
+
     if (m_timing->lap(car.index()) > 0)
     {
         emit messageRequested(QObject::tr("Pit stop!"));

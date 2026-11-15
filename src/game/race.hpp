@@ -105,6 +105,9 @@ private:
 
     void moveCarOntoPreviousCheckPoint(Car & car);
 
+    //! Respawns destroyed cars after a while.
+    void updateWreck(Car & car, std::chrono::milliseconds timeStep);
+
     void setTrack(TrackS track, size_t lapCount);
 
     void translateCarsToStartPositions();
@@ -150,6 +153,9 @@ private:
         size_t routeProgression = 0;
 
         size_t position = 0;
+
+        //! Time since the car was destroyed, if it is a wreck.
+        std::optional<std::chrono::milliseconds> wreckTime;
     };
     using StatusHash = std::unordered_map<size_t, CarStatus>; // Car index to CarStatus.
     StatusHash m_statusHash;

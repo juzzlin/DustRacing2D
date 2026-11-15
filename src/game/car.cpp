@@ -164,6 +164,11 @@ size_t Car::index() const
 
 void Car::steer(Steer direction, float control)
 {
+    if (m_isDestroyed)
+    {
+        direction = Steer::Neutral;
+    }
+
     if (direction == Steer::Neutral)
     {
         m_tireAngle = 0;
@@ -387,10 +392,35 @@ void Car::addDamage(float damage)
         m_damageCapacity = 0;
     }
 
-    if (const float hardCrashDamageLimit = 3.5f; damage >= hardCrashDamageLimit)
+    if (const float hardCrashDamageLimit = 12.0f; damage >= hardCrashDamageLimit)
     {
         m_hadHardCrash = true;
     }
+
+    if (m_damageCapacity <= 0 && !m_isDestroyed)
+    {
+        destroy();
+    }
+}
+
+void Car::destroy()
+{
+    setAcceleratorEnabled(false);
+    setBrakeEnabled(false);
+    steer(Steer::Neutral);
+
+    m_isDestroyed = true;
+    m_hadHardCrash = true;
+
+    if (m_soundEffectManager)
+    {
+        m_soundEffectManager->stopEngineSound();
+    }
+}
+
+bool Car::isDestroyed() const
+{
+    return m_isDestroyed;
 }
 
 void Car::wearOutTires(int step, float factor)
@@ -410,16 +440,16 @@ void Car::wearOutTires(int step, float factor)
 
 void Car::setBrakeEnabled(bool brakeEnabled)
 {
-    m_brakeEnabled = brakeEnabled;
+    m_brakeEnabled = brakeEnabled && !m_isDestroyed;
 
-    m_gearbox->setBrakeEnabled(brakeEnabled);
+    m_gearbox->setBrakeEnabled(m_brakeEnabled);
 }
 
 void Car::setAcceleratorEnabled(bool acceleratorEnabled)
 {
-    m_acceleratorEnabled = acceleratorEnabled;
+    m_acceleratorEnabled = acceleratorEnabled && !m_isDestroyed;
 
-    m_gearbox->setAcceleratorEnabled(acceleratorEnabled);
+    m_gearbox->setAcceleratorEnabled(m_acceleratorEnabled);
 }
 
 void Car::resetTireWear()
@@ -440,6 +470,16 @@ float Car::tireWearLevel() const
 void Car::resetDamage()
 {
     m_damageCapacity = m_initDamageCapacity;
+
+    if (m_isDestroyed)
+    {
+        m_isDestroyed = false;
+
+        if (m_soundEffectManager)
+        {
+            m_soundEffectManager->startEngineSound();
+        }
+    }
 }
 
 float Car::damageFactor() const

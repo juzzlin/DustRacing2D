@@ -133,7 +133,11 @@ public:
 
     float damageLevel() const;
 
+    //! Repairs the car completely, also a destroyed one.
     void resetDamage();
+
+    //! \return true if the car has been wrecked by damage. A wreck ignores its controls.
+    bool isDestroyed() const;
 
     bool hadHardCrash();
 
@@ -154,6 +158,8 @@ private:
     void accelerate(bool deccelerate = false);
 
     void createChildObjects(float maxZ, size_t index);
+
+    void destroy();
 
     void createTires();
 
@@ -238,6 +244,8 @@ private:
     MCVector3dF m_rightBrakeGlowPos;
 
     bool m_hadHardCrash;
+
+    bool m_isDestroyed = false;
 
     std::unique_ptr<Gearbox> m_gearbox;
 
